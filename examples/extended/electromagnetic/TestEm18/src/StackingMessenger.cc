@@ -23,45 +23,46 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StackingAction.hh,v 1.2 2010-11-19 12:17:50 vnivanch Exp $
+// $Id: StackingMessenger.cc,v 1.1 2010-11-19 12:17:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef StackingAction_h
-#define StackingAction_h 1
+#include "StackingMessenger.hh"
 
-#include "G4UserStackingAction.hh"
-#include "globals.hh"
-
-class RunAction;
-class EventAction;
-class HistoManager;
-class StackingMessenger;
+#include "StackingAction.hh"
+#include "G4UIdirectory.hh"
+#include "G4UIcmdWithABool.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class StackingAction : public G4UserStackingAction
+StackingMessenger::StackingMessenger(StackingAction* stack)
+:stackAction(stack)
 {
-  public:
-    StackingAction(RunAction*, EventAction*, HistoManager* );
-   ~StackingAction();
-     
-    G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
-
-    inline void SetKillStatus(G4bool value) {killSecondary = value;};
-    
-  private:
-    RunAction*    runaction;
-    EventAction*  eventaction;
-    HistoManager* histoManager;        
-
-    G4bool              killSecondary;
-    StackingMessenger*  stackMessenger;
-};
+  stackDir = new G4UIdirectory("/testem/stack/");
+  stackDir->SetGuidance("stacking control");
+   
+  killCmd = new G4UIcmdWithABool("/testem/stack/killSecondaries",this);
+  killCmd->SetGuidance(" Kill all secondary particles");
+  killCmd->SetParameterName("choice",true);
+  killCmd->SetDefaultValue(true);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+StackingMessenger::~StackingMessenger()
+{
+  delete killCmd;
+  delete stackDir;
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void StackingMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{     
+  if(command == killCmd)
+    {stackAction->SetKillStatus(killCmd->GetNewBoolValue(newValue));}               
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

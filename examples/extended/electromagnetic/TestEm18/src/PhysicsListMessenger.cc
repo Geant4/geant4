@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.cc,v 1.4 2010-11-18 18:26:16 vnivanch Exp $
+// $Id: PhysicsListMessenger.cc,v 1.5 2010-11-19 12:17:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,6 +35,7 @@
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithABool.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -57,14 +58,14 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
   gammaCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   electCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setECut",this);  
-  electCutCmd->SetGuidance("Set electron cut.");
+  electCutCmd->SetGuidance("Set electron and positron cuts.");
   electCutCmd->SetParameterName("Ecut",false);
   electCutCmd->SetUnitCategory("Length");
   electCutCmd->SetRange("Ecut>0.0");
   electCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   protoCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setPCut",this);  
-  protoCutCmd->SetGuidance("Set positron cut.");
+  protoCutCmd->SetGuidance("Set proton cut.");
   protoCutCmd->SetParameterName("Pcut",false);
   protoCutCmd->SetUnitCategory("Length");
   protoCutCmd->SetRange("Pcut>0.0");
@@ -76,6 +77,16 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
   allCutCmd->SetUnitCategory("Length");
   allCutCmd->SetRange("cut>0.0");
   allCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
+
+  fluoCmd = new G4UIcmdWithABool("/testem/phys/fluo",this);  
+  fluoCmd->SetGuidance("Set fluorescence on/off.");
+  fluoCmd->SetParameterName("fluo",false);
+  fluoCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
+
+  pixeCmd = new G4UIcmdWithABool("/testem/phys/pixe",this);  
+  pixeCmd->SetGuidance("Set PIXE on/off.");
+  pixeCmd->SetParameterName("pixe",false);
+  pixeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 
 }
 
@@ -89,6 +100,8 @@ PhysicsListMessenger::~PhysicsListMessenger()
   delete protoCutCmd;
   delete allCutCmd;
   delete physDir;
+  delete fluoCmd;
+  delete pixeCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -102,10 +115,14 @@ void PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
    { pPhysicsList->SetCutForGamma(gammaCutCmd->GetNewDoubleValue(newValue));}
      
   if( command == electCutCmd )
-   { pPhysicsList->SetCutForElectron(electCutCmd->GetNewDoubleValue(newValue));}
+   { 
+     G4double cut = electCutCmd->GetNewDoubleValue(newValue);
+     pPhysicsList->SetCutForElectron(cut);
+     pPhysicsList->SetCutForPositron(cut);
+   }
      
   if( command == protoCutCmd )
-   { pPhysicsList->SetCutForPositron(protoCutCmd->GetNewDoubleValue(newValue));}
+   { pPhysicsList->SetCutForProton(protoCutCmd->GetNewDoubleValue(newValue));}
 
   if( command == allCutCmd )
     {
@@ -113,7 +130,14 @@ void PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
       pPhysicsList->SetCutForGamma(cut);
       pPhysicsList->SetCutForElectron(cut);
       pPhysicsList->SetCutForPositron(cut);
+      pPhysicsList->SetCutForProton(cut);
     } 
+
+  if( command == fluoCmd )
+   { pPhysicsList->SetFluorescence(fluoCmd->GetNewBoolValue(newValue));}
+
+  if( command == pixeCmd )
+   { pPhysicsList->SetPIXE(fluoCmd->GetNewBoolValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,45 +23,39 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StackingAction.hh,v 1.2 2010-11-19 12:17:50 vnivanch Exp $
+// $Id: StackingMessenger.hh,v 1.1 2010-11-19 12:17:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef StackingAction_h
-#define StackingAction_h 1
+#ifndef StackingMessenger_h
+#define StackingMessenger_h 1
 
-#include "G4UserStackingAction.hh"
+#include "G4UImessenger.hh"
 #include "globals.hh"
 
-class RunAction;
-class EventAction;
-class HistoManager;
-class StackingMessenger;
+class StackingAction;
+class G4UIdirectory;
+class G4UIcmdWithABool;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class StackingAction : public G4UserStackingAction
+class StackingMessenger: public G4UImessenger
 {
   public:
-    StackingAction(RunAction*, EventAction*, HistoManager* );
-   ~StackingAction();
-     
-    G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
-
-    inline void SetKillStatus(G4bool value) {killSecondary = value;};
+    StackingMessenger(StackingAction*);
+   ~StackingMessenger();
+    
+    void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    RunAction*    runaction;
-    EventAction*  eventaction;
-    HistoManager* histoManager;        
-
-    G4bool              killSecondary;
-    StackingMessenger*  stackMessenger;
+    StackingAction*        stackAction;
+    
+    G4UIdirectory*         stackDir;          
+    G4UIcmdWithABool*  killCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

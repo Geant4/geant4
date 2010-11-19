@@ -23,45 +23,44 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StackingAction.hh,v 1.2 2010-11-19 12:17:50 vnivanch Exp $
+// $Id: PhysListEmStandardFLUO.hh,v 1.1 2010-11-19 12:18:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef StackingAction_h
-#define StackingAction_h 1
+#ifndef PhysListEmStandardFLUO_h
+#define PhysListEmStandardFLUO_h 1
 
-#include "G4UserStackingAction.hh"
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
-
-class RunAction;
-class EventAction;
-class HistoManager;
-class StackingMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class StackingAction : public G4UserStackingAction
+class PhysListEmStandardFLUO : public G4VPhysicsConstructor
 {
-  public:
-    StackingAction(RunAction*, EventAction*, HistoManager* );
-   ~StackingAction();
-     
-    G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
+public: 
+  PhysListEmStandardFLUO(const G4String& name = "emstandardFLUO");
+  virtual ~PhysListEmStandardFLUO();
 
-    inline void SetKillStatus(G4bool value) {killSecondary = value;};
-    
-  private:
-    RunAction*    runaction;
-    EventAction*  eventaction;
-    HistoManager* histoManager;        
-
-    G4bool              killSecondary;
-    StackingMessenger*  stackMessenger;
+public: 
+  // This method is dummy for physics
+  void ConstructParticle() {};
+ 
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type 
+  void ConstructProcess();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+
+
+
+
+
+
+
 

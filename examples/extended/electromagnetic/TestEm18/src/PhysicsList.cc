@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.6 2010-11-18 18:26:16 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.7 2010-11-19 12:17:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -32,14 +32,18 @@
 #include "PhysicsList.hh"
 #include "PhysicsListMessenger.hh"
 
+#include "G4LossTableManager.hh"
+
 #include "PhysListEmStandard.hh"
 
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
+#include "PhysListEmStandardFLUO.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
+#include "G4UAtomicDeexcitation.hh"
 
 #include "G4Decay.hh"
 #include "StepMax.hh"
@@ -67,6 +71,7 @@
 #include "G4AntiNeutrinoE.hh"
 
 // Hadrons
+#include "G4Proton.hh"
 #include "G4MesonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4IonConstructor.hh"
@@ -78,6 +83,7 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   pMessenger = new PhysicsListMessenger(this); 
    
   // EM physics
+  G4LossTableManager::Instance()->SetVerbose(1);
   emName = G4String("local");
   emPhysicsList = new PhysListEmStandard(emName);
       
@@ -86,6 +92,7 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   cutForGamma     = defaultCutValue;
   cutForElectron  = defaultCutValue;
   cutForPositron  = defaultCutValue;
+  cutForProton    = defaultCutValue;
 
   SetVerboseLevel(1);
 }
@@ -220,6 +227,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics_option2();
+
+  } else if (name == "emstandardFLUO") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmStandardFLUO();
     
   } else if (name == "emstandard_opt3") {
 
@@ -285,6 +298,34 @@ void PhysicsList::SetCutForPositron(G4double cut)
 {
   cutForPositron = cut;
   SetParticleCuts(cutForPositron, G4Positron::Positron());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PhysicsList::SetCutForProton(G4double cut)
+{
+  cutForProton = cut;
+  SetParticleCuts(cutForProton, G4Proton::Proton());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PhysicsList::SetFluorescence(G4bool value)
+{
+  G4VAtomDeexcitation* de = 0;
+  if(value) { 
+    de = new G4UAtomicDeexcitation(); 
+    de->SetDeexcitationActiveRegion("World");
+  }
+  G4LossTableManager::Instance()->SetAtomDeexcitation(de);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PhysicsList::SetPIXE(G4bool value)
+{
+  G4VAtomDeexcitation* de = G4LossTableManager::Instance()->AtomDeexcitation();
+  if(de) { de->SetPIXEActive(value); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
