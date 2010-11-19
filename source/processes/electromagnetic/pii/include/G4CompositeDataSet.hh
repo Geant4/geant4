@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompositeDataSet.hh,v 1.2 2010-11-19 17:16:09 pia Exp $
+// $Id: G4CompositeDataSet.hh,v 1.3 2010-11-19 17:18:21 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -38,7 +38,7 @@
 
 // Class description:
 // Composite data set 
-// Applies a Composite design pattern
+// Applies a Composite design pattern for data library management
 
 // -------------------------------------------------------------------
 
