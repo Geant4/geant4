@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularNavigation.cc,v 1.14 2010-11-11 16:15:00 gcosmo Exp $
+// $Id: G4RegularNavigation.cc,v 1.15 2010-11-19 15:13:39 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4RegularNavigation implementation
@@ -296,7 +296,6 @@ G4RegularNavigation::LevelLocate( G4NavigationHistory& history,
   G4VPhysicalVolume *motherPhysical, *pPhysical;
   G4PhantomParameterisation *pParam;
   G4LogicalVolume *motherLogical;
-  G4VSolid *pSolid;
   G4ThreeVector localDir;
   G4int replicaNo;
   
@@ -305,8 +304,6 @@ G4RegularNavigation::LevelLocate( G4NavigationHistory& history,
   
   pPhysical = motherLogical->GetDaughter(0);
   pParam = (G4PhantomParameterisation*)(pPhysical->GetParameterisation());
-  
-  pSolid = pParam->GetContainerSolid();
   
   // Save parent history in touchable history
   // ... for use as parent t-h in ComputeMaterial method of param
