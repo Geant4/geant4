@@ -103,7 +103,7 @@ G4PhotoNuclearCrossSection::GetCrossSection(const G4DynamicParticle* aPart,
     for (G4int i = 0; i < nIso; i++) {
       ZZ = (*isoVector)[i]->GetZ();
       AA = (*isoVector)[i]->GetN();
-      psig = GetIsoZACrossSection(aPart, ZZ, AA, temperature);
+      psig = GetZandACrossSection(aPart, ZZ, AA, temperature);
       cross_section += psig*abundVector[i];
     }
 
