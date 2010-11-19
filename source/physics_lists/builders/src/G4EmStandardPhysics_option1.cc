@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option1.cc,v 1.19 2010-10-10 15:18:34 vnivanch Exp $
+// $Id: G4EmStandardPhysics_option1.cc,v 1.20 2010-11-19 10:28:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -41,6 +41,8 @@
 // 13.02.2007 V.Ivanchenko set skin=0.0
 // 15.05.2007 V.Ivanchenko rename to _option1
 // 21.04.2008 V.Ivanchenko add long-lived D and B mesons
+// 19.11.2010 V.Ivanchenko added WentzelVI model for muons;
+//                         disable ApplyCut option for compatibility with 9.2 
 //
 //----------------------------------------------------------------------------
 //
@@ -58,7 +60,7 @@
 #include "G4eMultipleScattering.hh"
 #include "G4MuMultipleScattering.hh"
 #include "G4hMultipleScattering.hh"
-//#include "G4MscStepLimitType.hh"
+#include "G4CoulombScattering.hh"
 #include "G4WentzelVIModel.hh"
 
 #include "G4eIonisation.hh"
@@ -189,10 +191,13 @@ void G4EmStandardPhysics_option1::ConstructProcess()
     } else if (particleName == "mu+" ||
                particleName == "mu-"    ) {
 
-      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
-      pmanager->AddProcess(new G4MuIonisation,        -1, 2, 2);
-      pmanager->AddProcess(new G4MuBremsstrahlung,    -1,-3, 3);
-      pmanager->AddProcess(new G4MuPairProduction,    -1,-4, 4);
+      G4MuMultipleScattering* msc = new G4MuMultipleScattering();
+      msc->AddEmModel(0, new G4WentzelVIModel());
+      pmanager->AddProcess(msc,                     -1, 1, 1);
+      pmanager->AddProcess(new G4MuIonisation,      -1, 2, 2);
+      pmanager->AddProcess(new G4MuBremsstrahlung,  -1,-3, 3);
+      pmanager->AddProcess(new G4MuPairProduction,  -1,-4, 4);
+      pmanager->AddDiscreteProcess(new G4CoulombScattering());
 
     } else if (particleName == "alpha" ||
                particleName == "He3") {
@@ -254,7 +259,7 @@ void G4EmStandardPhysics_option1::ConstructProcess()
   }
   G4EmProcessOptions opt;
   opt.SetVerbose(verbose);
-  opt.SetApplyCuts(true);
+  //opt.SetApplyCuts(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
