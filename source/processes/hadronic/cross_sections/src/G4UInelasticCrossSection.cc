@@ -72,7 +72,7 @@ G4UInelasticCrossSection::~G4UInelasticCrossSection()
 G4bool G4UInelasticCrossSection::IsApplicable(const G4DynamicParticle* dp, 
 					      const G4Element*  elm)
 {
-  return IsZAApplicable(dp, elm->GetZ(), elm->GetN());
+  return IsIsoApplicable(dp, G4lrint(elm->GetZ()), G4lrint(elm->GetN()));
 }
 
 
@@ -99,7 +99,7 @@ G4UInelasticCrossSection::GetCrossSection(const G4DynamicParticle* dp,
 {
   G4int Z = G4lrint(elm->GetZ());
   G4int N = G4lrint(elm->GetN());
-  return GetIsoZACrossSection(dp, Z, N, temp);
+  return GetZandACrossSection(dp, Z, N, temp);
 }
 
 
@@ -118,7 +118,7 @@ G4UInelasticCrossSection::GetZandACrossSection(const G4DynamicParticle* dp,
     else if(ekin > thEnergy) {
       cross = theFac[Z]*fGlauber->GetInelasticGlauberGribov(dp, Z, A);
     } else {
-      cross = fNucleon->GetIsoZACrossSection(dp, Z, A);
+      cross = fNucleon->GetZandACrossSection(dp, Z, A);
     }
 
     // pions
@@ -192,7 +192,7 @@ void G4UInelasticCrossSection::Initialise(const G4ParticleDefinition* p)
 
       // proton and neutron
       if(fNucleon) { 
-	csdn = fNucleon->GetIsoZACrossSection(&dp, iz, A);
+	csdn = fNucleon->GetZandACrossSection(&dp, iz, A);
 
 	// pions
       } else if(fUPi) {

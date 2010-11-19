@@ -340,7 +340,7 @@ G4double G4TripathiLightCrossSection::GetCrossSection
   } else {
     G4int ZZ = G4lrint(theTarget->GetZ());
     G4int AA = G4lrint(theTarget->GetN());
-    xsection = GetIsoZACrossSection(theProjectile, ZZ, AA, theTemperature);
+    xsection = GetZandACrossSection(theProjectile, ZZ, AA, theTemperature);
   }
     
   return xsection;

@@ -71,7 +71,7 @@ G4UElasticCrossSection::~G4UElasticCrossSection()
 G4bool G4UElasticCrossSection::IsApplicable(const G4DynamicParticle* dp, 
 					      const G4Element*  elm)
 {
-  return IsZAApplicable(dp, elm->GetZ(), elm->GetN());
+  return IsIsoApplicable(dp, G4lrint(elm->GetZ()), G4lrint(elm->GetN()));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -182,7 +182,7 @@ void G4UElasticCrossSection::Initialise(const G4ParticleDefinition* p)
   G4NistManager* nist = G4NistManager::Instance();
   G4int A = G4lrint(nist->GetAtomicMassAmu(2));
 
-  if(fGlauber->IsZAApplicable(&dp, 2.0, A)) {
+  if(fGlauber->IsIsoApplicable(&dp, 2, A)) {
     hasGlauber = true;
 
     if(verboseLevel > 0) G4cout << "### G4UElasticCrossSection::Initialise for "

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BGGPionInelasticXS.cc,v 1.10 2010-11-11 01:53:07 dennis Exp $
+// $Id: G4BGGPionInelasticXS.cc,v 1.11 2010-11-19 08:15:55 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -105,7 +105,7 @@ G4BGGPionInelasticXS::GetZandACrossSection(const G4DynamicParticle* dp,
     cross = theGlauberFac[Z]*fGlauber->GetInelasticGlauberGribov(dp, Z, A);
 
   } else {
-    cross = fPion->GetIsoZACrossSection(dp, Z, A);
+    cross = fPion->GetZandACrossSection(dp, Z, A);
   }
 
   if(verboseLevel > 1) 
@@ -190,7 +190,7 @@ void G4BGGPionInelasticXS::Initialise()
     G4double Z = G4double(iz);
     A = G4lrint(nist->GetAtomicMassAmu(iz));
 
-    theCoulombFac[iz] = fPion->GetIsoZACrossSection(&dp, iz, A);
+    theCoulombFac[iz] = fPion->GetZandACrossSection(&dp, iz, A);
     if(isPiplus) { theCoulombFac[iz] /= CoulombFactor(fLowEnergy,A); }
 
     if(verboseLevel > 0) G4cout << "Z= " << Z <<  "  A= " << A 

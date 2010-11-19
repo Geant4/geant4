@@ -168,7 +168,7 @@ GetCrossSection(const G4DynamicParticle* aPart, const G4Element* anEle,
   } else {
     G4int ZZ = G4lrint(anEle->GetZ());
     G4int AA = G4lrint(anEle->GetN());
-    xsection = GetIsoZACrossSection(aPart, ZZ, AA, temperature);
+    xsection = GetZandACrossSection(aPart, ZZ, AA, temperature);
   }
 
   return xsection;

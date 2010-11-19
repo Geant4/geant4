@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VCrossSectionDataSet.cc,v 1.10 2010-11-18 10:33:27 gunter Exp $
+// $Id: G4VCrossSectionDataSet.cc,v 1.11 2010-11-19 08:15:55 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -63,7 +63,7 @@ G4VCrossSectionDataSet::IsZAApplicable(const G4DynamicParticle*,
   if ( onceOnly )
   {
       G4cerr << 
-      "G4VCrossSectionDataSet::IsZAApplicable() is obsolete, invoked by " 
+      "Warning: G4VCrossSectionDataSet::IsZAApplicable() is obsolete, invoked by " 
       <<  GetName() << G4endl;
       onceOnly=false;
   }
@@ -83,9 +83,9 @@ G4VCrossSectionDataSet::GetIsoCrossSection(const G4DynamicParticle* aParticle,
                                            const G4Isotope* anIsotope,
                                            G4double aTemperature)
 {
-  G4double ZZ = anIsotope->GetZ();
-  G4double AA = anIsotope->GetN();
-  return GetIsoZACrossSection(aParticle, ZZ, AA, aTemperature);
+  G4int ZZ = anIsotope->GetZ();
+  G4int AA = anIsotope->GetN();
+  return GetZandACrossSection(aParticle, ZZ, AA, aTemperature);
 }
 
 // Override this method to get real isotopic cross sections
@@ -99,7 +99,7 @@ G4VCrossSectionDataSet::GetIsoZACrossSection(const G4DynamicParticle*,
   if ( onceOnly )
   {
       G4cerr << 
-      "G4VCrossSectionDataSet::GetIsoZACrossSection() is obsolete, invoked by " 
+      "Warning: G4VCrossSectionDataSet::GetIsoZACrossSection() is obsolete, invoked by " 
       <<  GetName() << G4endl;
       onceOnly=false;
   }
