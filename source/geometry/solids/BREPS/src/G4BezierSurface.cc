@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BezierSurface.cc,v 1.15 2010-11-19 16:10:58 gcosmo Exp $
+// $Id: G4BezierSurface.cc,v 1.16 2010-11-19 16:14:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -563,13 +563,12 @@ void G4BezierSurface::ClipSurface()
     if ( (ch_ptr)
       && (Sign(ch_ptr->GetMin()) != Sign(ch_ptr->GetMax()))) smin = 0.0;
 
-    if ( !ch_tmp ) { continue; }
-    
-    i = Sign(ch_tmp->GetMin()); // ch_tmp points to last nvex()_hull in List
-    j = Sign(ch_tmp->GetMax());
-
-    //
-    if ( (std::abs(i-j) > kCarTolerance)) smax = 1.0;
+    if ( ch_tmp )
+    {
+      i = Sign(ch_tmp->GetMin()); // ch_tmp points to last nvex()_hull in List
+      j = Sign(ch_tmp->GetMax());
+      if ( (std::abs(i-j) > kCarTolerance)) smax = 1.0;
+    }
   }
 
   ch_ptr=ch_first;
