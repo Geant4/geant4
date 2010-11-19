@@ -11,8 +11,8 @@
  The purpose of this test is to validate the G4IonCoulombScatteringModel
   & G4IonCoulombCrossSection classes. These classes are suitable to simulate
   single Coulomb scattering of protons, alpha particles and heavy ions in all
-  target materials form 50-100 keV/nucleon to 10 TeV. These classes are in
-  the PHYSICS list "PhysListEmStandardSS". The default GEOMETRY consists of
+  target materials form 100 keV/nucleon to 10 TeV. These classes are in
+  the PHYSICS list "PhysListEmStandardISS". The default GEOMETRY consists of
   a silicon target (100um x 1cm x 1cm) immerse in the Galactic medium.
   Default PARTICLEGUN has a 10 MeV proton.
   In "StackingAction" the method "DamageEnergy" is implemented in order to

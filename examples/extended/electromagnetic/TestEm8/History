@@ -1,4 +1,4 @@
-$Id: History,v 1.41 2010-11-19 10:18:08 grichine Exp $
+$Id: History,v 1.42 2010-11-19 11:42:28 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,8 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-19-11-10 V. Grichine Histomanager.cc The preparation of distribution.out file was added. It has
-         NumOfEv and distribution(energy/keV)
+19-11-10 V.Ivant (testem8-V09-03-07)
+- V. Grichine Histomanager.cc The preparation of 
+              distribution.out file was added. It has
+              NumOfEv and distribution(energy/keV)
 
 27-10-10 V.Ivant (testem8-V09-03-06)
 - DetectorConstruction - added more printout
