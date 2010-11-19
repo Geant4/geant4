@@ -1,4 +1,4 @@
-$Id: History,v 1.77 2010-11-01 16:43:55 gcosmo Exp $
+$Id: History,v 1.78 2010-11-19 16:16:41 gcosmo Exp $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19/11/2010 : G.Cosmo           breps-V09-03-06
+- Fixed remaining cases of pointer handling in experimental G4BezierSurface
+  code.
 
 01/11/2010 : G.Cosmo           breps-V09-03-05
 - Fixed cases of null pointer forward in G4BREPSolid, G4BREPSolidPolyhedra
