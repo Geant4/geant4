@@ -1,4 +1,4 @@
-$Id: History,v 1.204 2010-10-29 14:24:49 mkelsey Exp $
+$Id: History,v 1.205 2010-11-19 19:43:58 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -14,6 +14,11 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+19 November 2010 Michael Kelsey (hadr-casc-V09-03-86)
+-----------------------------------------------------
+- G4NucleiModel.cc:  Put messages related to negative-path-length and
+  zero-interaction-partners behind verbosity flag.
 
 29 October 2010 Michael Kelsey (hadr-casc-V09-03-85)
 ----------------------------------------------------

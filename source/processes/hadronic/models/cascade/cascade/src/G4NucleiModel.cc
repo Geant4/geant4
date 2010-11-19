@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.94 2010-10-29 14:24:50 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.95 2010-11-19 19:43:58 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -74,6 +74,8 @@
 // 20101019  M. Kelsey -- CoVerity reports: unitialized constructor, dtor leak
 // 20101020  M. Kelsey -- Bug fixes to refactoring changes (5 Oct).  Back out
 //		worthToPropagate() changes for better regression testing.
+// 20101119  M. Kelsey -- Hide "negative path" and "no partners" messages in
+//		verbosity.
 
 #include "G4NucleiModel.hh"
 #include "G4CascadeCheckBalance.hh"
@@ -563,7 +565,9 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
   }
 
   if (path < -small) { 			// something wrong
-    G4cerr << " generateInteractionPartners-> negative path length" << G4endl;
+    if (verboseLevel)
+      G4cerr << " generateInteractionPartners-> negative path length" << G4endl;
+
     return;
   }
 
@@ -802,8 +806,10 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
   generateInteractionPartners(cparticle);	// Fills "thePartners" data
 
   if (thePartners.empty()) { // smth. is wrong -> needs special treatment
-    G4cerr << " generateParticleFate-> got empty interaction-partners list "
-	   << G4endl;
+    if (verboseLevel)
+      G4cerr << " generateParticleFate-> got empty interaction-partners list "
+	     << G4endl;
+
     return outgoing_cparticles;
   }
 
