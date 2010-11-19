@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PixeShellDataSet.cc,v 1.1 2010-11-19 15:38:57 pia Exp $
+// $Id: G4PixeShellDataSet.cc,v 1.2 2010-11-19 17:16:21 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -35,6 +35,7 @@
 // 09.10.01   V.Ivanchenko Add case z=0
 //  9 Mar 2008   MGP        Cleaned up unreadable code modified by former developer
 //                          (Further clean-up needed) 
+// 31 Jul 2008   MGP        Revised 
 //
 // -------------------------------------------------------------------
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hRDEnergyLoss.hh,v 1.1 2010-11-19 15:38:14 pia Exp $
+// $Id: G4hRDEnergyLoss.hh,v 1.2 2010-11-19 17:16:09 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -56,11 +56,20 @@
 // 22/01/03 V.Ivanchenko Cuts per region
 // 18/04/03 V.Ivanchenko Make dRoverRange protected
 //
+// 31 Jul 2008 MGP     Short term supply of energy loss of hadrons through clone of 
+//                     former G4hLowEnergyLoss (with some initial cleaning)
+//                     To be replaced by reworked class to deal with condensed/discrete 
+//                     issues properly
+//
+// --------------------------------------------------------------
+
 // Class description:
 // Short term supply of energy loss of hadrons through clone of former G4hLowEnergyLoss 
+// (with some initial cleaning)
 // To be replaced by reworked class to deal with condensed/discrete issues properly
 
-// ****************************************************************************
+// --------------------------------------------------------------
+
 
 #ifndef G4HRDENERGYLOSS_HH
 #define G4HRDENERGYLOSS_HH 1

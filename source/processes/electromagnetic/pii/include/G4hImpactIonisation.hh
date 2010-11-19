@@ -27,7 +27,7 @@
 // ------------------------------------------------------------
 // G4hImpactIonisation
 //
-// $Id: G4hImpactIonisation.hh,v 1.1 2010-11-19 15:38:14 pia Exp $
+// $Id: G4hImpactIonisation.hh,v 1.2 2010-11-19 17:16:09 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (MariaGrazia.Pia@ge.infn.it)
@@ -35,27 +35,21 @@
 // 08 Sep 2008 - MGP - Created (initially based on G4hLowEnergyIonisation) 
 //                     Added PIXE capabilities
 //                     Partial clean-up of the implementation (more needed)
-//                     calculation of MicroscopicCrossSection delegated to specialised class 
+//                     Calculation of MicroscopicCrossSection delegated to specialised class 
 //
 // ------------------------------------------------------------
  
 // Class Description:
-// RD project: Nano5
-// Ionisation process of charged hadrons and ions
+// Impact Ionisation process of charged hadrons and ions
 // Initially based on G4hLowEnergyIonisation, to be subject to redesign
 // and further evolution of physics capabilities
 //
-// The physics model of G4hLowEnergyIonisation is described in CERN-OPEN-99-121 and CERN-OPEN-99-300. 
-// The user may select parametrisation tables for electronic
-// stopping powers and nuclear stopping powers
-// The list of available tables:
-// Electronic stopping powers: "ICRU_49p" (default), "ICRU_49He",
-//                             "Ziegler1977p", "Ziegler1985p",
-//                             "Ziegler1977He" 
-// Nuclear stopping powers:    "ICRU_49" (default), "Ziegler1977",
-//                             "Ziegler1985"
-
-// Further documentation available from http://www.ge.infn.it/geant4/
+// The physics model of G4hLowEnergyIonisation is described in 
+// CERN-OPEN-99-121 and CERN-OPEN-99-300. 
+//
+// Documentation available in:
+// M.G. Pia et al., PIXE Simulation With Geant4,
+// IEEE Trans. Nucl. Sci., vol. 56, no. 6, pp. 3614-3649, Dec. 2009.
 
 // ------------------------------------------------------------
 
@@ -65,8 +59,6 @@
 #include "globals.hh"
 #include "G4hRDEnergyLoss.hh"
 #include "G4DataVector.hh"
-//#include "G4Track.hh"
-//#include "G4Step.hh"
 #include "G4AtomicDeexcitation.hh"
 #include "G4PixeCrossSectionHandler.hh"
 
@@ -84,7 +76,7 @@ class G4hImpactIonisation : public G4hRDEnergyLoss
 {
 public: // With description
   
-  G4hImpactIonisation(const G4String& processName = "RDhIoni"); 
+  G4hImpactIonisation(const G4String& processName = "hImpactIoni"); 
   // The ionisation process for hadrons/ions to be include in the
   // UserPhysicsList
 
@@ -141,6 +133,9 @@ public: // With description
   // This method defines the nuclear ionisation parametrisation method 
   // via the name of the table. Default is "ICRU_49".
 
+  // ---- MGP ---- The following design of On/Off is nonsense; to be modified
+  // in a following design iteration
+
   void SetNuclearStoppingOn() {nStopping = true;};
   // This method switch on calculation of the nuclear stopping power.
   
@@ -154,7 +149,7 @@ public: // With description
   // This method switch off calculation of the Barkas and Bloch effects.
 
   void SetPixe(const G4bool /* val */ ) {pixeIsActive = true;};
-  // This method switches atomic relaxation on/off 
+  // This method switches atomic relaxation on/off; currently always on
 
   G4VParticleChange* AlongStepDoIt(const G4Track& trackData ,
                                    const G4Step& stepData ) ;
@@ -303,7 +298,8 @@ inline G4double G4hImpactIonisation::GetContinuousStepLimit(const G4Track& track
 {
   G4double step = GetConstraints(track.GetDynamicParticle(),track.GetMaterialCutsCouple()) ;
 
-  // ---- MGP ---- The following line is meaningless: currentMinimumStep is passed by value,
+  // ---- MGP ---- The following line, taken as is from G4hLowEnergyIonisation,
+  // is meaningless: currentMinimumStep is passed by value,
   // therefore any local modification to it has no effect
 
   if ((step > 0.) && (step < currentMinimumStep)) currentMinimumStep = step ;
@@ -315,7 +311,7 @@ inline G4double G4hImpactIonisation::GetContinuousStepLimit(const G4Track& track
 inline G4bool G4hImpactIonisation::IsApplicable(const G4ParticleDefinition& particle)
 {
   // ---- MGP ---- Better criterion for applicability to be defined;
-  // now hard-coded 0.1 * proton_mass
+  // now hard-coded particle mass > 0.1 * proton_mass
 
   return (particle.GetPDGCharge() != 0.0 && particle.GetPDGMass() > proton_mass_c2*0.1);
 }

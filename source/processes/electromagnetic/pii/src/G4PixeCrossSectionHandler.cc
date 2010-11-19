@@ -24,14 +24,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4PixeCrossSectionHandler.cc,v 1.1 2010-11-19 15:38:57 pia Exp $
+// $Id: G4PixeCrossSectionHandler.cc,v 1.2 2010-11-19 17:16:21 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
 // History:
 // -----------
-// 16 Jun 2008   MGP   Created on the basis of G4CrossSectionHandler 
+// 16 Jun 2008 MGP   Created; Cross section manager for hadron impact ionization
+//                   Documented in:
+//                   M.G. Pia et al., PIXE Simulation With Geant4,
+//                   IEEE Trans. Nucl. Sci., vol. 56, no. 6, pp. 3614-3649, Dec. 2009
 //
 // -------------------------------------------------------------------
 

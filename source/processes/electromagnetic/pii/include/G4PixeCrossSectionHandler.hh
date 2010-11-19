@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PixeCrossSectionHandler.hh,v 1.1 2010-11-19 15:38:14 pia Exp $
+// $Id: G4PixeCrossSectionHandler.hh,v 1.2 2010-11-19 17:16:09 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -35,10 +35,11 @@
 
 // -------------------------------------------------------------------
 // Class description:
-// RD project: Nano5
-// Cross section manager for an electromagnetic physics process
+// Cross section manager for hadron impact ionization
+// Documented in:
+// M.G. Pia et al., PIXE Simulation With Geant4,
+// IEEE Trans. Nucl. Sci., vol. 56, no. 6, pp. 3614-3649, Dec. 2009.
 
-// Further documentation available from http://www.ge.infn.it/geant4
 // -------------------------------------------------------------------
 
 #ifndef G4PIXECROSSSECTIONHANDLER_HH
@@ -83,12 +84,7 @@ public:
 
   G4int SelectRandomAtom(const G4Material* material, G4double e) const;
 
-  //  const G4Element* SelectRandomElement(const G4MaterialCutsCouple* material,G4double e) const;
-
   G4int SelectRandomShell(G4int Z, G4double e) const;
-
-  // G4IDataSet* BuildMeanFreePathForMaterials(const G4DataVector* energyCuts = 0);
-
 
   G4double FindValue(G4int Z, G4double e) const;
 
@@ -147,7 +143,7 @@ private:
   std::map<G4int,G4IDataSet*,std::less<G4int> > dataMap;
 
   // Vector of composite cross sections for each material in the MaterialTable 
-  // The composite cross section is composed of cross sections for each element in meterial
+  // The composite cross section is composed of cross sections for each element in material
   std::vector<G4IDataSet*>* crossSections;
 
   std::vector<G4String> crossModel;

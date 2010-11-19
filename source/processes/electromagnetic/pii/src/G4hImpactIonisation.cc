@@ -28,12 +28,18 @@
 // ------------------------------------------------------------
 // G4RDHadronIonisation
 //
-// $Id: G4hImpactIonisation.cc,v 1.1 2010-11-19 15:38:57 pia Exp $
+// $Id: G4hImpactIonisation.cc,v 1.2 2010-11-19 17:16:21 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (MariaGrazia.Pia@ge.infn.it)
 //
 // 08 Sep 2008 - MGP - Created (initially based on G4hLowEnergyIonisation) 
+//                     Added PIXE capabilities
+//                     Partial clean-up of the implementation (more needed)
+//                     Calculation of MicroscopicCrossSection delegated to specialised cla// Documentation available in:
+// M.G. Pia et al., PIXE Simulation With Geant4,
+// IEEE Trans. Nucl. Sci., vol. 56, no. 6, pp. 3614-3649, Dec. 2009.
+
 //
 // ------------------------------------------------------------
  

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DataSet.cc,v 1.1 2010-11-19 15:38:57 pia Exp $
+// $Id: G4DataSet.cc,v 1.2 2010-11-19 17:16:21 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -32,6 +32,7 @@
 // History:
 // -----------
 // 31 Jul 2001   MGP        Created
+// 31 Jul 2008   MGP        Revised and renamed to G4DataSet
 //
 // -------------------------------------------------------------------
 

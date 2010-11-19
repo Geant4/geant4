@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hRDEnergyLoss.cc,v 1.1 2010-11-19 15:38:57 pia Exp $
+// $Id: G4hRDEnergyLoss.cc,v 1.2 2010-11-19 17:16:21 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------
@@ -51,6 +51,11 @@
 // 28/10/02   V.Ivanchenko Optimal binning for dE/dx
 // 21/01/03   V.Ivanchenko Cut per region
 // 23/01/03   V.Ivanchenko Fix in table build
+
+// 31 Jul 2008 MGP     Short term supply of energy loss of hadrons through clone of 
+//                     former G4hLowEnergyLoss (with some initial cleaning)
+//                     To be replaced by reworked class to deal with condensed/discrete 
+//                     issues properly
 // --------------------------------------------------------------
 
 #include "G4hRDEnergyLoss.hh"

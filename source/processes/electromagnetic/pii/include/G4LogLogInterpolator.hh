@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogLogInterpolator.hh,v 1.1 2010-11-19 15:38:14 pia Exp $
+// $Id: G4LogLogInterpolator.hh,v 1.2 2010-11-19 17:16:09 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -32,12 +32,12 @@
 // History:
 // -----------
 // 31 Jul 2001   MGP        Created
+// 31 Jul 2008   MGP        Revised and renamed to G4LogLogInterpolator
 //
 // -------------------------------------------------------------------
 // Class description:
 // Log-Log interpolation of a data set
-// Part of a strategy pattern to encapsulate algorithms for interpolation of data sets
-// Further documentation available from http://www.ge.infn.it/geant4/lowE/index.html
+// Part of a strategy pattern to encapsulate algorithms for interpolation 
 
 // -------------------------------------------------------------------
 

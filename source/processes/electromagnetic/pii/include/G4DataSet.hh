@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DataSet.hh,v 1.1 2010-11-19 15:38:14 pia Exp $
+// $Id: G4DataSet.hh,v 1.2 2010-11-19 17:16:09 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -32,15 +32,13 @@
 // History:
 // -----------
 // 31 Jul 2001   MGP        Created as G4EMDataSet
-// 31 Jul 2008   MGP        Revised
+// 31 Jul 2008   MGP        Revised and renamed to G4DataSet
 //
 // -------------------------------------------------------------------
 
 // Class description:
-// RD project: Nano5
-// Composite data set 
-// A strategy pattern is used to encapsulate algorithms for data interpolation
-// Further documentation available from http://www.ge.infn.it/geant4/
+// Leaf data set 
+// Applies a Composite design pattern for data library management
 
 // -------------------------------------------------------------------
 

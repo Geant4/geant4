@@ -24,23 +24,23 @@
 // ********************************************************************
 //
 //
-// $Id: G4PixeShellDataSet.hh,v 1.1 2010-11-19 15:38:14 pia Exp $
+// $Id: G4PixeShellDataSet.hh,v 1.2 2010-11-19 17:16:09 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
 // History:
 // -----------
-// 31 Jul 2001   MGP        Created
+// 31 Jul 2001   MGP        Created as G4EMShellDataSe
 //  9 Mar 2008   MGP        Cleaned up unreadable code modified by former developer
 //                          (Further clean-up needed) 
+// 31 Jul 2008   MGP        Revised and renamed to G4PixeShellDataSet
 //
 // -------------------------------------------------------------------
 
 // Class description:
-// Data set for a physics process
-// A strategy pattern is used to encapsulate algorithms for data interpolation
-// Further documentation available from http://www.ge.infn.it/geant4
+// Shell data set 
+// Applies a Composite design pattern for data library management
 
 // -------------------------------------------------------------------
 
