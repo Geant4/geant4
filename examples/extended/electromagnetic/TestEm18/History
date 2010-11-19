@@ -1,4 +1,4 @@
-$Id: History,v 1.18 2010-11-18 18:26:16 vnivanch Exp $
+$Id: History,v 1.19 2010-11-19 19:51:47 vnivanch Exp $
 ----------------------------------------------------
 
      =========================================================
@@ -15,9 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-18-11-10 V.Ivanchenko (testem18-V09-03-04)
+19-11-10 V.Ivanchenko (testem18-V09-03-04)
 - PhysicsList is taken from TestEm5, obsolete builders for 
-   Livermore and Penelope are removed
+   Livermore and Penelope are removed; fluorescence and PIXE
+   options are added
  
 09-11-10 M.Asai (testem18-V09-03-03)
 - Fix AIDA file option.
