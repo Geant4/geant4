@@ -50,7 +50,7 @@
 # Visualisation 
 #
 /vis/scene/create
-/vis/open OGL
+/vis/open OGLIX
 /vis/viewer/flush
 /vis/viewer/set/viewpointThetaPhi 50 130 deg
 /vis/viewer/zoom 3.5
@@ -93,13 +93,25 @@
 /vis/viewer/flush
 
 /modulator/angle 10 deg
-/run/beamOn 1
+/run/beamOn 5
 /vis/viewer/flush
 
 /modulator/angle 20 deg
-/run/beamOn 1
+/run/beamOn 5
 /vis/viewer/flush
 
 /modulator/angle 30 deg
-/run/beamOn 1
+/run/beamOn 5
+/vis/viewer/flush
+
+/modulator/angle 40 deg
+/run/beamOn 5
+/vis/viewer/flush
+
+/modulator/angle 50 deg
+/run/beamOn 5
+/vis/viewer/flush
+
+/modulator/angle 60 deg
+/run/beamOn 5
 /vis/viewer/flush

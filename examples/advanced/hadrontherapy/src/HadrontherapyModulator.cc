@@ -2077,14 +2077,16 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
   logicMod78 -> SetVisAttributes(red);
 }
 
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyModulator::SetModulatorAngle(G4double angle)
 {
   G4double rotationAngle = angle;
   rm -> rotateZ(rotationAngle);
+  G4cout << "!!!!!!!!!!!!! " << rotationAngle/deg << G4endl;
   physiMotherMod -> SetRotation(rm);  
-  G4cout << "MODULATOR HAS BEEN ROTATED OF   " << rotationAngle/deg 
+  G4cout << "MODULATOR HAS BEEN ROTATED OF " << rotationAngle/deg 
 	 << " deg" << G4endl;
-  G4RunManager::GetRunManager()-> GeometryHasBeenModified(); 
+  G4RunManager::GetRunManager() -> GeometryHasBeenModified(); 
 }
 
 
