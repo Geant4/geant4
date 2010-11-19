@@ -8,7 +8,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: CMakeLists.txt,v 1.1 2010-09-29 18:51:27 bmorgan Exp $
+# $Id: CMakeLists.txt,v 1.2 2010-11-19 08:43:44 gcosmo Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -34,6 +34,7 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
             electromagnetic/highenergy/sources.cmake
             electromagnetic/lowenergy/sources.cmake
             electromagnetic/muons/sources.cmake
+            electromagnetic/pii/sources.cmake
             electromagnetic/polarisation/sources.cmake
             electromagnetic/standard/sources.cmake
             electromagnetic/utils/sources.cmake

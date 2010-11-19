@@ -7,7 +7,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: CMakeLists.txt,v 1.1 2010-09-29 18:52:24 bmorgan Exp $
+# $Id: CMakeLists.txt,v 1.2 2010-11-19 08:39:52 gcosmo Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -15,6 +15,7 @@ add_subdirectory(adjoint)
 add_subdirectory(highenergy)
 add_subdirectory(lowenergy)
 add_subdirectory(muons)
+add_subdirectory(pii)
 add_subdirectory(polarisation)
 add_subdirectory(standard)
 add_subdirectory(utils)
