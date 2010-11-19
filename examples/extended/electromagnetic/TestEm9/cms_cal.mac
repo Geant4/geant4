@@ -1,4 +1,4 @@
-# $Id: cms_cal.mac,v 1.4 2010-11-19 16:09:59 vnivanch Exp $
+# $Id: cms_cal.mac,v 1.5 2010-11-19 18:33:42 vnivanch Exp $
 #
 # Macro file for "TestEm9.cc" 
 #
@@ -26,9 +26,9 @@
 #/random/setSavingFlag true
 #/random/resetEngineFrom first.rndm
 #
-/process/em/applyCuts      true
 /testem/phys/setCuts 0.1 mm
 /run/initialize
+/process/em/applyCuts      true
 #
 /gun/particle e-
 /gun/energy 10 GeV

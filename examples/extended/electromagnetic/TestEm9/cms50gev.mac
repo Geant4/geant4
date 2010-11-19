@@ -1,4 +1,4 @@
-# $Id: cms50gev.mac,v 1.3 2010-11-19 16:09:59 vnivanch Exp $
+# $Id: cms50gev.mac,v 1.4 2010-11-19 18:33:42 vnivanch Exp $
 #
 # Macro file for TestEm9 
 #
@@ -14,7 +14,6 @@
 #
 #/testem/phys/addPhysics  emstandard
 /testem/phys/addPhysics  emstandard_opt1
-/process/em/applyCuts      true
 #/testem/phys/addPhysics  emstandard_opt2
 #/testem/phys/addPhysics  standardLPM
 #
@@ -45,5 +44,6 @@
 /testem/histo/setHisto 12  40 0.94 0.98 
 #
 /run/initialize
+/process/em/applyCuts      true
 /run/beamOn 10000
 #
