@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionElastic.cc,v 1.1 2010-11-19 11:08:36 vnivanch Exp $
+// $Id: G4CrossSectionElastic.cc,v 1.2 2010-11-19 11:12:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -68,9 +68,7 @@ G4CrossSectionElastic::~G4CrossSectionElastic()
 G4bool G4CrossSectionElastic::IsApplicable(const G4DynamicParticle* p, 
 					   const G4Element* elm)
 {
-  G4bool res = (p->GetDefinition() == particle);
-  if(res) { res = IsIsoApplicable(p, G4int(elm->GetZ()), 0); }
-  return res;
+  return IsIsoApplicable(p, G4int(elm->GetZ()), 0); 
 }
 
 G4bool 
