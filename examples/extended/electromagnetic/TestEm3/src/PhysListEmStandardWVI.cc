@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardWVI.cc,v 1.1 2010-01-24 17:25:07 vnivanch Exp $
+// $Id: PhysListEmStandardWVI.cc,v 1.2 2010-11-19 15:50:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,6 +40,7 @@
 #include "G4eMultipleScattering.hh"
 #include "G4WentzelVIModel.hh"
 #include "G4CoulombScattering.hh"
+#include "G4IonCoulombScatteringModel.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
@@ -137,7 +138,7 @@ void PhysListEmStandardWVI::ConstructProcess()
 	       particleName == "He3"    ) {
       //alpha
       G4hMultipleScattering* msc = new G4hMultipleScattering();
-      msc->AddEmModel(0, new G4WentzelVIModel());
+      msc->AddEmModel(0, new G4IonCoulombScatteringModel());
       pmanager->AddProcess(msc,                       -1, 1, 1);
       pmanager->AddProcess(new G4ionIonisation,       -1, 2, 2);
       pmanager->AddProcess(new G4CoulombScattering,   -1,-1, 3);
@@ -146,7 +147,7 @@ void PhysListEmStandardWVI::ConstructProcess()
     } else if( particleName == "GenericIon" ) {
       //Ions
       G4hMultipleScattering* msc = new G4hMultipleScattering();
-      msc->AddEmModel(0, new G4WentzelVIModel());
+      msc->AddEmModel(0, new G4IonCoulombScatteringModel());
       pmanager->AddProcess(msc,                       -1, 1, 1);
       G4ionIonisation* ionIoni = new G4ionIonisation();
       ionIoni->SetEmModel(new G4IonParametrisedLossModel());
