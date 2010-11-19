@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.394 2010-11-05 08:20:08 gcosmo Exp $
+cvs log $Id: History,v 1.395 2010-11-19 08:59:55 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19th November 2010  Gabriele Cosmo (config-V09-03-15)
+- Added electromagnetic/pii module to binmake.gmk.
 
 4th November 2010  Mike Kelsey (config-V09-03-14)
 - Fixed typo in OGLLIBS definition for MacOSX Leopard.
