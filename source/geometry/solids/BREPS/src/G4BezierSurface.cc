@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BezierSurface.cc,v 1.14 2010-11-01 16:43:13 gcosmo Exp $
+// $Id: G4BezierSurface.cc,v 1.15 2010-11-19 16:10:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -552,7 +552,7 @@ void G4BezierSurface::ClipSurface()
       }
 
       ch_ptr=ch_ptr->GetNextHull();
-      }
+    }
     
     ch_tmp=ch_ptr;
     ch_ptr=ch_first;
@@ -562,6 +562,8 @@ void G4BezierSurface::ClipSurface()
     
     if ( (ch_ptr)
       && (Sign(ch_ptr->GetMin()) != Sign(ch_ptr->GetMax()))) smin = 0.0;
+
+    if ( !ch_tmp ) { continue; }
     
     i = Sign(ch_tmp->GetMin()); // ch_tmp points to last nvex()_hull in List
     j = Sign(ch_tmp->GetMax());
@@ -571,8 +573,9 @@ void G4BezierSurface::ClipSurface()
   }
 
   ch_ptr=ch_first;
-  while(ch_ptr!=ch_ptr->GetNextHull())
+  while(ch_ptr && (ch_ptr!=ch_ptr->GetNextHull()))
   {
+    delete ch_tmp;
     ch_tmp=ch_ptr;
     ch_ptr=ch_ptr->GetNextHull();
     delete ch_tmp;
