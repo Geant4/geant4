@@ -1,4 +1,4 @@
-$Id: History,v 1.133 2010-10-19 15:42:24 gcosmo Exp $
+$Id: History,v 1.134 2010-11-19 16:26:02 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 19, 2010  G.Cosmo                    geom-csg-V09-03-12
+- Fixed one left case of cout precision restoring in G4Sphere.
 
 Oct 19, 2010  G.Cosmo                    geom-csg-V09-03-11
 - Implemented Clone() virtual method for all solids, returning a pointer to a
