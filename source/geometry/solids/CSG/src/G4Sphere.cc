@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.88 2010-10-19 15:42:10 gcosmo Exp $
+// $Id: G4Sphere.cc,v 1.89 2010-11-19 16:26:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -2730,7 +2730,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
         break;
 
       default:
-        G4cout.precision(16);
+        G4int old_prc = G4cout.precision(16);
         G4cout << G4endl;
         DumpInfo();
         G4cout << "Position:"  << G4endl << G4endl;
@@ -2743,6 +2743,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
         G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
         G4cout << "Proposed distance :" << G4endl << G4endl;
         G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl;
+        G4cout.precision(old_prc);
         G4Exception("G4Sphere::DistanceToOut(p,v,..)",
                     "Notification", JustWarning,
                     "Undefined side for valid surface normal to solid.");
@@ -2790,13 +2791,14 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p ) const
 #ifdef G4CSGDEBUG
   if( Inside(p) == kOutside )
   {
-     G4cout.precision(16) ;
-     G4cout << G4endl ;
+     G4int old_prc = G4cout.precision(16);
+     G4cout << G4endl;
      DumpInfo();
      G4cout << "Position:"  << G4endl << G4endl ;
      G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
+     G4cout.precision(old_prc) ;
      G4Exception("G4Sphere::DistanceToOut(p)",
                  "Notification", JustWarning, "Point p is outside !?" );
   }
@@ -2937,9 +2939,9 @@ G4Sphere::CreateRotatedVertices( const G4AffineTransform& pTransform,
   G4double* cosCrossTheta = new G4double[noThetaSections];
   G4double* sinCrossTheta = new G4double[noThetaSections];    
   vertices=new G4ThreeVectorList();
-  vertices->reserve(noPhiCrossSections*(noThetaSections*2));
   if (vertices && cosCrossTheta && sinCrossTheta)
   {
+    vertices->reserve(noPhiCrossSections*(noThetaSections*2));
     for (crossSectionPhi=0;
          crossSectionPhi<noPhiCrossSections; crossSectionPhi++)
     {
