@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSP_BERT_CHIPS.hh,v 1.2 2010-06-03 10:42:44 gunter Exp $
+// $Id: HadronPhysicsQGSP_BERT_CHIPS.hh,v 1.3 2010-11-19 16:22:06 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -46,10 +46,12 @@
 #include "G4VPhysicsConstructor.hh"
 #include "G4MiscCHIPSBuilder.hh"
 
-#include "G4PiKBuilder.hh"
-#include "G4LEPPiKBuilder.hh"
-#include "G4QGSPPiKBuilder.hh"
-#include "G4BertiniPiKBuilder.hh"
+#include "G4PionBuilder.hh"
+#include "G4LEPPionBuilder.hh"
+#include "G4QGSPPionBuilder.hh"
+#include "G4BertiniPionBuilder.hh"
+
+#include "G4ChipsKaonBuilder.hh"
 
 #include "G4ProtonBuilder.hh"
 #include "G4LEPProtonBuilder.hh"
@@ -84,10 +86,12 @@ class HadronPhysicsQGSP_BERT_CHIPS : public G4VPhysicsConstructor
     G4QGSPNeutronBuilder * theQGSPNeutron;
     G4BertiniNeutronBuilder * theBertiniNeutron;
     
-    G4PiKBuilder * thePiK;
-    G4LEPPiKBuilder * theLEPPiK;
-    G4QGSPPiKBuilder * theQGSPPiK;
-    G4BertiniPiKBuilder * theBertiniPiK;
+    G4PionBuilder * thePion;
+    G4LEPPionBuilder * theLEPPion;
+    G4QGSPPionBuilder * theQGSPPion;
+    G4BertiniPionBuilder * theBertiniPion;
+
+    G4ChipsKaonBuilder * theKaon;
     
     G4ProtonBuilder * thePro;
     G4LEPProtonBuilder * theLEPPro;

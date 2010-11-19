@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSP_BERT_CHIPS.cc,v 1.2 2010-06-03 10:42:44 gunter Exp $
+// $Id: HadronPhysicsQGSP_BERT_CHIPS.cc,v 1.3 2010-11-19 16:22:06 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -86,14 +86,17 @@ void HadronPhysicsQGSP_BERT_CHIPS::CreateModels()
   thePro->RegisterMe(theBertiniPro=new G4BertiniProtonBuilder);
   theBertiniPro->SetMaxEnergy(9.9*GeV);
   
-  thePiK=new G4PiKBuilder;
-  thePiK->RegisterMe(theQGSPPiK=new G4QGSPPiKBuilder(QuasiElastic));
-  thePiK->RegisterMe(theLEPPiK=new G4LEPPiKBuilder);
-  theLEPPiK->SetMaxEnergy(25*GeV);
-  theLEPPiK->SetMinEnergy(9.5*GeV);
+  thePion=new G4PionBuilder;
+  thePion->RegisterMe(theQGSPPion=new G4QGSPPionBuilder(QuasiElastic));
+  thePion->RegisterMe(theLEPPion=new G4LEPPionBuilder);
+  theLEPPion->SetMaxEnergy(25*GeV);
+  theLEPPion->SetMinEnergy(9.5*GeV);
 
-  thePiK->RegisterMe(theBertiniPiK=new G4BertiniPiKBuilder);
-  theBertiniPiK->SetMaxEnergy(9.9*GeV);
+  thePion->RegisterMe(theBertiniPion=new G4BertiniPionBuilder);
+  theBertiniPion->SetMaxEnergy(9.9*GeV);
+
+  G4int verbosity(1);
+  theKaon=new G4ChipsKaonBuilder(verbosity);  // is self contained, use G4QInelastic   
   
   theMiscCHIPS=new G4MiscCHIPSBuilder;
 }
@@ -108,10 +111,11 @@ HadronPhysicsQGSP_BERT_CHIPS::~HadronPhysicsQGSP_BERT_CHIPS()
    delete theLEPPro;
    delete thePro;
    delete theBertiniPro;
-   delete theQGSPPiK;
-   delete theLEPPiK;
-   delete theBertiniPiK;
-   delete thePiK;
+   delete theQGSPPion;
+   delete theLEPPion;
+   delete theBertiniPion;
+   delete thePion;
+   delete theKaon;
    delete theCHIPSInelastic;
 }
 
@@ -133,7 +137,8 @@ void HadronPhysicsQGSP_BERT_CHIPS::ConstructProcess()
   CreateModels();
   theNeutrons->Build();
   thePro->Build();
-  thePiK->Build();
+  thePion->Build();
+  theKaon->Build();
   // use CHIPS cross sections also for Kaons
   theCHIPSInelastic = new G4QHadronInelasticDataSet();
   
