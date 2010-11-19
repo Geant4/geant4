@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QBBC.cc,v 1.9 2010-08-17 14:08:38 vnivanch Exp $
+// $Id: QBBC.cc,v 1.10 2010-11-19 19:50:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -80,20 +80,12 @@ QBBC::QBBC( G4int ver, const G4String& type )
   RegisterPhysics( new G4DecayPhysics(ver) );
 
    // Hadron Physics
-  if(type == "QBBC") {
-    RegisterPhysics( new G4HadronElasticPhysicsXS(ver) );
-  } else if(type == "QBBC_XGG") { 
-    RegisterPhysics( new G4HadronElasticPhysics(ver) );
-  } else if(type == "QBBC_XGGSN") { 
-    RegisterPhysics( new G4HadronElasticPhysics93(ver) );
-  } else if(type == "QBBC_HP") { 
-    RegisterPhysics( new G4HadronElasticPhysicsHP(ver) );
-  }
+  RegisterPhysics( new G4HadronElasticPhysicsXS(ver) );
 
   RegisterPhysics( new G4QStoppingPhysics(ver) );
   RegisterPhysics( new G4IonBinaryCascadePhysics(ver) );
 
-  RegisterPhysics( new G4HadronInelasticQBBC(type, ver));
+  RegisterPhysics( new G4HadronInelasticQBBC(ver));
 
   // Neutron tracking cut
   RegisterPhysics( new G4NeutronTrackingCut(ver) );

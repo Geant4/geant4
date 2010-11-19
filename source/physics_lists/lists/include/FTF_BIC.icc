@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FTF_BIC.icc,v 1.8 2010-08-16 07:14:44 kurasige Exp $
+// $Id: FTF_BIC.icc,v 1.9 2010-11-19 19:50:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -57,6 +57,7 @@
 #include "G4QStoppingPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
+#include "G4NeutronCrossSectionXS.hh"
 
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsFTF_BIC.hh"
@@ -101,6 +102,9 @@ template<class T> TFTF_BIC<T>::TFTF_BIC(G4int ver):  T()
   
   // Neutron tracking cut
   this->RegisterPhysics( new G4NeutronTrackingCut(ver));
+
+  // Neutron cross sections
+  this->RegisterPhysics( new G4NeutronCrossSectionXS(ver) );
 
 }
 

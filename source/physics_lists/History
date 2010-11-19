@@ -1,4 +1,4 @@
-q$Id: History,v 1.165 2010-11-19 16:32:29 gunter Exp $
+q$Id: History,v 1.166 2010-11-19 19:50:15 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19-11-2010, G.Folger, V.Ivanchenko      (phys-lists-V09-03-39)
+- G4PhysListFactory - removed obsolete Physics Lists (26 are supported)
+- QBBC - simplified, only one variant left;
+- G4HadronInelasticQBBC - simplified
+- QGS_BIC and FTF_BIC use G4NeutronXS cross sections
 
 18-11-2010, G.Folger, V.Ivanchenko      (phys-lists-V09-03-38)
 GF:

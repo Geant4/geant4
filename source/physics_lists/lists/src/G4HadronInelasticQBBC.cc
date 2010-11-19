@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.cc,v 1.28 2010-06-04 13:48:51 vnivanch Exp $
+// $Id: G4HadronInelasticQBBC.cc,v 1.29 2010-11-19 19:50:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -106,23 +106,18 @@ void G4HadronInelasticQBBC::ConstructProcess()
   if(wasActivated) return;
   wasActivated = true;
 
-  // select type
-  QBBCType fType = fQBBC;
-  if("QBBC_XGG" == htype)        { fType = fQBBC_XGG; }
-  else if("QBBC_XGGSN" == htype) { fType = fQBBC_XGGSN; }
-
   if(verbose > 1) {
     G4cout << "### HadronInelasticQBBC Construct Process with type <"
 	   << htype << ">" << G4endl;
   }
 
   // PreCompound and Evaporation models are instantiated here
-  theEvaporation = new G4Evaporation();
-  theEvaporation->SetCombinedChannel();
+  //theEvaporation = new G4Evaporation();
+  //theEvaporation->SetCombinedChannel();
   theHandler = new G4ExcitationHandler();
-  theHandler->SetEvaporation(theEvaporation);
-  theHandler->SetMinEForMultiFrag(3.0*GeV);
-  theHandler->SetMaxAandZForFermiBreakUp(17,9);
+  //theHandler->SetEvaporation(theEvaporation);
+  //theHandler->SetMinEForMultiFrag(3.0*GeV);
+  //theHandler->SetMaxAandZForFermiBreakUp(17,9);
   G4PreCompoundModel* thePreCompound = new G4PreCompoundModel(theHandler);
 
   // configure models
@@ -161,11 +156,8 @@ void G4HadronInelasticQBBC::ConstructProcess()
     //
     if(pname == "proton") {
       G4HadronicProcess* hp = FindInelasticProcess(particle);
-      if(fType == fQBBC_XGGSN) { 
-	hp->AddDataSet(new G4ProtonInelasticCrossSection()); 
-      } else {
-	hp->AddDataSet(new G4BGGNucleonInelasticXS(particle));
-      }
+      hp->AddDataSet(new G4BGGNucleonInelasticXS(particle));
+      
       hp->RegisterMe(theQGSP);
       hp->RegisterMe(theFTFP);
       hp->RegisterMe(theBERT);
@@ -173,34 +165,19 @@ void G4HadronInelasticQBBC::ConstructProcess()
 
     } else if(pname == "neutron") {
       G4HadronicProcess* hp = FindInelasticProcess(particle);
-      if(fType == fQBBC) { 
-	hp->AddDataSet(new G4NeutronInelasticXS());
-      } else if(fType == fQBBC_XGG) {
-	hp->AddDataSet(new G4BGGNucleonInelasticXS(particle));
-      } else {
-	hp->AddDataSet(new G4NeutronInelasticCrossSection()); 
-      }
-
+      hp->AddDataSet(new G4NeutronInelasticXS());
       hp->RegisterMe(theQGSP);
       hp->RegisterMe(theFTFP);
        
       G4HadronicProcess* capture = FindCaptureProcess();
-
+      capture->AddDataSet(new G4NeutronCaptureXS());
       hp->RegisterMe(theBERT);
       hp->RegisterMe(theBIC);
       capture->RegisterMe(new G4NeutronRadCapture());
-      //capture->RegisterMe(new G4LCapture());
-      if(fType == fQBBC) {
-	capture->AddDataSet(new G4NeutronCaptureXS());
-      }
 
     } else if(pname == "pi-" || pname == "pi+") {
       G4HadronicProcess* hp = FindInelasticProcess(particle);
-      if(fType == fQBBC_XGGSN) { 
-	hp->AddDataSet(new G4PiNuclearCrossSection()); 
-      } else {
-	hp->AddDataSet(new G4BGGPionInelasticXS(particle));
-      }
+      hp->AddDataSet(new G4BGGPionInelasticXS(particle));
       hp->RegisterMe(theQGSP);
       hp->RegisterMe(theFTFP);
       hp->RegisterMe(theBERT1);
