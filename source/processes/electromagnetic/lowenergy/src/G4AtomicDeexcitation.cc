@@ -58,8 +58,8 @@ std::vector<G4DynamicParticle*>* G4AtomicDeexcitation::GenerateParticles(G4int Z
 { 
 
   std::vector<G4DynamicParticle*>* vectorOfParticles;
-  
   vectorOfParticles = new std::vector<G4DynamicParticle*>;
+
   G4DynamicParticle* aParticle;
   G4int provShellId = 0;
   G4int counter = 0;
