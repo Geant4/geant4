@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WHadronElasticProcess.cc,v 1.4 2010-11-18 22:49:57 vnivanch Exp $
+// $Id: G4WHadronElasticProcess.cc,v 1.5 2010-11-19 18:50:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Hadron Elastic Scattering Process 
@@ -105,9 +105,10 @@ G4VParticleChange* G4WHadronElasticProcess::PostStepDoIt(
   G4HadProjectile thePro(track);
   if(verboseLevel>1) {
     G4cout << "G4WHadronElasticProcess::PostStepDoIt for " 
-	   << part->GetParticleName() 
-	   << " Target Z= " << targetNucleus.GetZ() 
-	   << " A= " << targetNucleus.GetZ() << G4endl; 
+	   << part->GetParticleName()
+	   << " in " << material->GetName() 
+	   << " Target Z= " << targetNucleus.GetZ_asInt() 
+	   << " A= " << targetNucleus.GetA_asInt() << G4endl; 
   }
   G4HadFinalState* result = hadi->ApplyYourself(thePro, targetNucleus);
   G4ThreeVector indir = track.GetMomentumDirection();

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VHadronElastic.cc,v 1.5 2010-11-18 22:49:57 vnivanch Exp $
+// $Id: G4VHadronElastic.cc,v 1.6 2010-11-19 18:50:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Header : G4VHadronElastic
@@ -74,7 +74,7 @@ G4HadFinalState* G4VHadronElastic::ApplyYourself(
     return &theParticleChange;
   }
 
-  G4int A = targetNucleus.GetN_asInt();
+  G4int A = targetNucleus.GetA_asInt();
   G4int Z = targetNucleus.GetZ_asInt();
 
   G4double plab = aParticle->GetTotalMomentum();

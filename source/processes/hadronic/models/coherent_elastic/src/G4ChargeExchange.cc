@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchange.cc,v 1.17 2010-11-18 22:49:57 vnivanch Exp $
+// $Id: G4ChargeExchange.cc,v 1.18 2010-11-19 18:50:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -92,7 +92,7 @@ G4HadFinalState* G4ChargeExchange::ApplyYourself(
   const G4HadProjectile* aParticle = &aTrack;
   G4double ekin = aParticle->GetKineticEnergy();
 
-  G4int A = targetNucleus.GetN_asInt();
+  G4int A = targetNucleus.GetA_asInt();
   G4int Z = targetNucleus.GetZ_asInt();
 
   if(ekin <= lowestEnergyLimit || A < 3) {
