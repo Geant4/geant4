@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreSplittingProcess.hh,v 1.2 2010-11-18 18:22:47 japost Exp $
+// $Id: G4ScoreSplittingProcess.hh,v 1.3 2010-11-19 17:17:04 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -156,18 +156,10 @@ private:
   G4TouchableHandle    fInitialTouchableH;
   G4TouchableHandle    fFinalTouchableH;
 
-  // G4FieldTrack         fFieldTrack;
-  // G4double             fSplitSafety;
-  // G4bool               fOnBoundary;
-
   G4EnergySplitter     *fpEnergySplitter; 
 
   // ******************************************************
-  // ******************************************************
-  //
   //  For TESTS:
-  //
-  // ******************************************************
   // ******************************************************
 public:
   void Verbose(const G4Step&) const;
