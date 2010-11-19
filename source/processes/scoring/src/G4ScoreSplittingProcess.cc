@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreSplittingProcess.cc,v 1.1 2010-11-18 18:24:27 japost Exp $
+// $Id: G4ScoreSplittingProcess.cc,v 1.2 2010-11-19 08:17:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -237,21 +237,18 @@ G4VParticleChange* G4ScoreSplittingProcess::PostStepDoIt(
 G4TouchableHistory*
 G4ScoreSplittingProcess::CreateTouchableForSubStep( G4int newVoxelNum, G4ThreeVector newPosition )
 {
-  // Copy the Touchable 
-  // const G4TouchableHistory& oldTouchableHistory= *fOldTouchableH;
-
   G4cout << " Creating touchable handle for voxel-no " << newVoxelNum << G4endl;
 
-  G4TouchableHistory*  oldTouchableHistory= (*fOldTouchableH);
+  G4TouchableHistory*  oldTouchableHistory= dynamic_cast<G4TouchableHistory*>(fOldTouchableH());
   G4TouchableHistory*  ptrTouchableHistory= new G4TouchableHistory( *oldTouchableHistory );
-  // *fOldTouchableH );
 
   // Change the history
   G4NavigationHistory* ptrNavHistory= const_cast<G4NavigationHistory*>(ptrTouchableHistory->GetHistory());
   G4VPhysicalVolume*   curPhysicalVol= ptrNavHistory->GetTopVolume();
 
-  EVolume             curVolumeType=  ptrNavHistory->GetTopVolumeType();
-  if( curVolumeType == kParameterised ){ 
+  EVolume curVolumeType=  ptrNavHistory->GetTopVolumeType();
+  if( curVolumeType == kParameterised )
+  { 
     ptrNavHistory->BackLevel(); 
     // G4VPVParameterised parameterisedPV= pNewMother
     G4VPVParameterisation* curParamstn=  curPhysicalVol->GetParameterisation();
@@ -262,7 +259,9 @@ G4ScoreSplittingProcess::CreateTouchableForSubStep( G4int newVoxelNum, G4ThreeVe
     curParamstn->ComputeTransformation(newVoxelNum, curPhysicalVol);
 
     ptrNavHistory->NewLevel( curPhysicalVol, kParameterised, newVoxelNum );
-  }else{
+  }
+  else
+  {
     G4cout << " Current volume type is not Parameterised. " << G4endl; 
   }
   return ptrTouchableHistory; 
