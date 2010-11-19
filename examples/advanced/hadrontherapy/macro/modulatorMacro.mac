@@ -30,10 +30,16 @@
 ##########################
 # Set of the physic models
 #
-/Physics/addPhysics emstandard_opt3  # Electromagnetic model
-/Physics/addPhysics elastic          # Hadronic elastic model
-/Physics/addPhysics binary           # Hadronic inelastic model
-/Physics/addPhysics radioactive_decay                   # Radioactive decay
+/Physics/addPhysics emstandard_opt3                     # Electromagnetic model
+/Physics/addPhysics Em_extra_physics			
+/Physics/addPhysics Elastic                             # Hadronic elastic model
+/Physics/addPhysics decay
+/Physics/addPhysics radioactive_decay
+/Physics/addPhysics Stopping_physics
+/Physics/addPhysics Neutron_tracking_cut
+/Physics/addPhysics binary                              # Hadronic inelastic model
+
+#/Physics/addPhysics local_ion_ion_inelastic            # Optional Hadronic inelastic model for ions (local physic list)
  
 ##########################
 # Initialisation procedure
@@ -50,8 +56,9 @@
 /vis/viewer/zoom 3.5
 /vis/viewer/pan -60  40 cm
 /vis/scene/add/trajectories
-/vis/scene/endOfEventAction accumulate
 /vis/viewer/update
+/vis/scene/add/trajectories
+/vis/scene/endOfEventAction accumulate
 #########################
 # Set the primary particle type,
 # energy and position along the X direction
@@ -60,7 +67,7 @@
 
 /beam/energy/meanEnergy 62 MeV
 /beam/energy/sigmaEnergy 400 keV
-/beam/position/Xposition -270 mm
+/beam/position/Xposition -3000 mm
 
 ##########################
 # Set here the cut and the step max for the tracking. 
@@ -85,11 +92,14 @@
 /run/beamOn 10
 /vis/viewer/flush
 
-/modulator/angle 1 deg
-/run/beamOn 10
+/modulator/angle 10 deg
+/run/beamOn 1
 /vis/viewer/flush
 
-/modulator/angle 1 deg
-/run/beamOn 10
+/modulator/angle 20 deg
+/run/beamOn 1
 /vis/viewer/flush
 
+/modulator/angle 30 deg
+/run/beamOn 1
+/vis/viewer/flush

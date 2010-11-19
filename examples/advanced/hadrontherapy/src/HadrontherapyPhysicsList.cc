@@ -341,7 +341,6 @@ void HadrontherapyPhysicsList::SetCutForPositron(G4double cut)
 
 void HadrontherapyPhysicsList::SetDetectorCut(G4double cut)
 {
-
   G4String regionName = "DetectorLog";
   G4Region* region = G4RegionStore::GetInstance()->GetRegion(regionName);
 
