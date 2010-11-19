@@ -14,6 +14,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+19 October 2010 Vladimir Ivanchenko (hadr-deex-V09-03-26)
+----------------------------------------------------------
+- G4ParaFissionModel - use GetA_asInt()
+
 18 October 2010 Vladimir Ivanchenko (hadr-deex-V09-03-25)
 ----------------------------------------------------------
 G4GEMChannel - cleanup: integer Z,A; G4Pow; use the same formulas as in

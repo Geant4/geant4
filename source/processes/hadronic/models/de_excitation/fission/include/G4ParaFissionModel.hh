@@ -60,7 +60,7 @@ public:
     
     // prepare the fragment
 
-    G4int A = theNucleus.GetN_asInt();
+    G4int A = theNucleus.GetA_asInt();
     G4int Z = theNucleus.GetZ_asInt();
     G4double nucMass = 
       G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(Z,A);
