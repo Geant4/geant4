@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option3.cc,v 1.22 2010-11-10 19:29:33 vnivanch Exp $
+// $Id: G4EmStandardPhysics_option3.cc,v 1.23 2010-11-20 21:07:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -50,6 +50,8 @@
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 #include "G4RayleighScattering.hh"
+#include "G4PEEffectFluoModel.hh"
+#include "G4KleinNishinaModel.hh"
 
 #include "G4eMultipleScattering.hh"
 #include "G4MuMultipleScattering.hh"
@@ -62,6 +64,7 @@
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
+#include "G4UAtomicDeexcitation.hh"
 
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
@@ -160,8 +163,12 @@ void G4EmStandardPhysics_option3::ConstructProcess()
 
     if (particleName == "gamma") {
 
-      pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
-      pmanager->AddDiscreteProcess(new G4ComptonScattering);
+      G4PhotoElectricEffect* pe = new G4PhotoElectricEffect;
+      pe->SetModel(new G4PEEffectFluoModel());
+      G4ComptonScattering* cs   = new G4ComptonScattering;
+      cs->SetModel(new G4KleinNishinaModel());
+      pmanager->AddDiscreteProcess(pe);
+      pmanager->AddDiscreteProcess(cs);
       pmanager->AddDiscreteProcess(new G4GammaConversion);
       //pmanager->AddDiscreteProcess(new G4RayleighScattering);
 
@@ -291,6 +298,14 @@ void G4EmStandardPhysics_option3::ConstructProcess()
   // Ionization
   //
   //opt.SetSubCutoff(true);    
+
+  // Deexcitation
+  G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
+  de->SetDeexcitationActiveRegion("World");
+  de->SetAugerActive(false);
+  de->SetPIXEActive(false);
+  G4LossTableManager::Instance()->SetAtomDeexcitation(de);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,4 +1,4 @@
-q$Id: History,v 1.166 2010-11-19 19:50:15 vnivanch Exp $
+q$Id: History,v 1.167 2010-11-20 21:07:26 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-19-11-2010, G.Folger, V.Ivanchenko      (phys-lists-V09-03-39)
+20-11-2010, V.Ivanchenko                (phys-lists-V09-03-40)
+- G4EmStandardPhysics_option1 - enable back ApplyCuts option (CPU effect)
+- G4EmStandardPhysics_option3 - minor cleanup
+ 
+19-11-2010, V.Ivanchenko                (phys-lists-V09-03-39)
 - G4PhysListFactory - removed obsolete Physics Lists (26 are supported)
 - QBBC - simplified, only one variant left;
 - G4HadronInelasticQBBC - simplified
