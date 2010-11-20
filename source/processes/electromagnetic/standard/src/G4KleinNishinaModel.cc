@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KleinNishinaModel.cc,v 1.2 2010-11-20 20:58:35 vnivanch Exp $
+// $Id: G4KleinNishinaModel.cc,v 1.3 2010-11-20 21:00:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -284,7 +284,7 @@ void G4KleinNishinaModel::SampleSecondaries(
     size_t nafter = fvect->size();
     if(nafter > nbefore) {
       for (size_t i=nbefore; i<nafter; ++i) {
-        edep -= ((*fvect)[i])-GetKineticEnergy();
+        edep -= ((*fvect)[i])->GetKineticEnergy();
       } 
     }
   }
