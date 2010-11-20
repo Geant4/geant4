@@ -23,20 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HEKaonZeroLongInelastic.cc,v 1.11 2010-02-09 21:59:10 dennis Exp $
+// $Id: G4HEKaonZeroLongInelastic.cc,v 1.12 2010-11-20 04:01:33 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 //
 
 #include "globals.hh"
 #include "G4ios.hh"
 
-//
 // G4 Process: Gheisha High Energy Collision model.
 // This includes the high energy cascading model, the two-body-resonance model
-// and the low energy two-body model. Not included are the low energy stuff like
-// nuclear reactions, nuclear fission without any cascading and all processes for
-// particles at rest.
+// and the low energy two-body model. Not included are the low energy stuff
+// like nuclear reactions, nuclear fission without any cascading and all
+// processes for particles at rest.
 //  
 // New version by D.H. Wright (SLAC) to fix seg fault in old version
 // 26 January 2010
@@ -44,18 +42,19 @@
  
 #include "G4HEKaonZeroLongInelastic.hh"
 
-G4HadFinalState* G4HEKaonZeroLongInelastic::
-ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus &targetNucleus)
+G4HadFinalState*
+G4HEKaonZeroLongInelastic::ApplyYourself(const G4HadProjectile& aTrack,
+                                         G4Nucleus& targetNucleus)
 {
-  G4HEVector * pv = new G4HEVector[MAXPART];
+  G4HEVector* pv = new G4HEVector[MAXPART];
   const G4HadProjectile *aParticle = &aTrack;
   const G4double atomicWeight = targetNucleus.GetN();
   const G4double atomicNumber = targetNucleus.GetZ();
   G4HEVector incidentParticle(aParticle);
 
-  G4int    incidentCode          = incidentParticle.getCode();
-  G4double incidentMass          = incidentParticle.getMass();
-  G4double incidentTotalEnergy   = incidentParticle.getEnergy();
+  G4int incidentCode = incidentParticle.getCode();
+  G4double incidentMass = incidentParticle.getMass();
+  G4double incidentTotalEnergy = incidentParticle.getEnergy();
   G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
   G4double incidentKineticEnergy = incidentTotalEnergy - incidentMass;
 
@@ -95,7 +94,6 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus &targetNucleus)
   incidentTotalMomentum  = std::sqrt( (incidentTotalEnergy-incidentMass)                    
                                   *(incidentTotalEnergy+incidentMass));
 
-
   G4HEVector targetParticle;
   if(G4UniformRand() < atomicNumber/atomicWeight) { 
     targetParticle.setDefinition("Proton");
@@ -104,18 +102,12 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus &targetNucleus)
   }
 
   G4double targetMass = targetParticle.getMass();
-  G4double centerOfMassEnergy = std::sqrt( incidentMass*incidentMass + targetMass*targetMass
-                                       + 2.0*targetMass*incidentTotalEnergy);
+  G4double centerOfMassEnergy = std::sqrt(incidentMass*incidentMass
+                                        + targetMass*targetMass
+                                        + 2.0*targetMass*incidentTotalEnergy);
   G4double availableEnergy = centerOfMassEnergy - targetMass - incidentMass;
-                                    // this was the meaning of inElastic in the
-                                    // original Gheisha stand-alone version. 
-//  G4bool inElastic = InElasticCrossSectionInFirstInt
-//                      (availableEnergy, incidentCode, incidentTotalMomentum);  
-// for unknown reasons, it has been replaced by the following code in Geant???
 
   G4bool inElastic = true;
-//    if (G4UniformRand() < elasticCrossSection/totalCrossSection) inElastic = false;    
-
   vecLength = 0;           
         
   if(verboseLevel > 1)
@@ -124,47 +116,44 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus &targetNucleus)
 
   G4bool successful = false; 
     
-  if(inElastic || (!inElastic && atomicWeight < 1.5)) {
- 
-    // Split K0L into K0 and K0bar
-    if (G4UniformRand() < 0.5)
-      FirstIntInCasAntiKaonZero(inElastic, availableEnergy, pv, vecLength,
-                                incidentParticle, targetParticle );
-    else
-      FirstIntInCasKaonZero(inElastic, availableEnergy, pv, vecLength,
-                            incidentParticle, targetParticle, atomicWeight );
+  // Split K0L into K0 and K0bar
+  if (G4UniformRand() < 0.5)
+    FirstIntInCasAntiKaonZero(inElastic, availableEnergy, pv, vecLength,
+                              incidentParticle, targetParticle);
+  else
+    FirstIntInCasKaonZero(inElastic, availableEnergy, pv, vecLength,
+                          incidentParticle, targetParticle, atomicWeight);
 
-    // Do nuclear interaction with either K0 or K0bar 
-    if ((vecLength > 0) && (availableEnergy > 1.)) 
-      StrangeParticlePairProduction(availableEnergy, centerOfMassEnergy,
-                                    pv, vecLength,
-                                    incidentParticle, targetParticle);
-    HighEnergyCascading(successful, pv, vecLength,
-                        excitationEnergyGNP, excitationEnergyDTA,
-                        incidentParticle, targetParticle,
-                        atomicWeight, atomicNumber);
-    if (!successful)
-      HighEnergyClusterProduction(successful, pv, vecLength,
-                                  excitationEnergyGNP, excitationEnergyDTA,
+  // Do nuclear interaction with either K0 or K0bar 
+  if ((vecLength > 0) && (availableEnergy > 1.)) 
+    StrangeParticlePairProduction(availableEnergy, centerOfMassEnergy,
+                                  pv, vecLength,
+                                  incidentParticle, targetParticle);
+  HighEnergyCascading(successful, pv, vecLength,
+                      excitationEnergyGNP, excitationEnergyDTA,
+                      incidentParticle, targetParticle,
+                      atomicWeight, atomicNumber);
+  if (!successful)
+    HighEnergyClusterProduction(successful, pv, vecLength,
+                                excitationEnergyGNP, excitationEnergyDTA,
+                                incidentParticle, targetParticle,
+                                atomicWeight, atomicNumber);
+  if (!successful) 
+    MediumEnergyCascading(successful, pv, vecLength, 
+                          excitationEnergyGNP, excitationEnergyDTA, 
+                          incidentParticle, targetParticle,
+                          atomicWeight, atomicNumber);
+
+  if (!successful)
+    MediumEnergyClusterProduction(successful, pv, vecLength,
+                                  excitationEnergyGNP, excitationEnergyDTA,       
                                   incidentParticle, targetParticle,
                                   atomicWeight, atomicNumber);
-    if (!successful) 
-      MediumEnergyCascading(successful, pv, vecLength, 
-                            excitationEnergyGNP, excitationEnergyDTA, 
-                            incidentParticle, targetParticle,
-                            atomicWeight, atomicNumber);
-
-    if (!successful)
-      MediumEnergyClusterProduction(successful, pv, vecLength,
-                                    excitationEnergyGNP, excitationEnergyDTA,       
-                                    incidentParticle, targetParticle,
-                                    atomicWeight, atomicNumber);
-    if (!successful)
-      QuasiElasticScattering(successful, pv, vecLength,
-                             excitationEnergyGNP, excitationEnergyDTA,
-                             incidentParticle, targetParticle, 
-                             atomicWeight, atomicNumber);
-  }
+  if (!successful)
+    QuasiElasticScattering(successful, pv, vecLength,
+                           excitationEnergyGNP, excitationEnergyDTA,
+                           incidentParticle, targetParticle, 
+                           atomicWeight, atomicNumber);
 
   if (!successful) 
     ElasticScattering(successful, pv, vecLength,
@@ -192,15 +181,15 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus &targetNucleus)
   FillParticleChange(pv,  vecLength);
   delete [] pv;
   theParticleChange.SetStatusChange(stopAndKill);
-  return & theParticleChange;
+  return &theParticleChange;
 }
 
 
 void
-G4HEKaonZeroLongInelastic::FirstIntInCasKaonZero(G4bool &inElastic,
+G4HEKaonZeroLongInelastic::FirstIntInCasKaonZero(G4bool& inElastic,
                                                  const G4double availableEnergy,
                                                  G4HEVector pv[],
-                                                 G4int &vecLen,
+                                                 G4int& vecLen,
                                                  G4HEVector incidentParticle,
                                                  G4HEVector targetParticle,
                                                  const G4double atomicWeight)
@@ -212,7 +201,6 @@ G4HEKaonZeroLongInelastic::FirstIntInCasKaonZero(G4bool &inElastic,
 // produced using an interpolation to multiplicity data.  Replace some pions or
 // protons/neutrons by kaons or strange baryons according to the average
 // multiplicity per inelastic reaction.
-
 {
   static const G4double expxu =  std::log(MAXFLOAT); // upper bound for arg. of exp
   static const G4double expxl = -expxu;         // lower bound for arg. of exp

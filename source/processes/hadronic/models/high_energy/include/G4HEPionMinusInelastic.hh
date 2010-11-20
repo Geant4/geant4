@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEPionMinusInelastic.hh,v 1.15 2007-04-11 18:11:30 dennis Exp $
+// $Id: G4HEPionMinusInelastic.hh,v 1.16 2010-11-20 04:00:20 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -56,6 +56,7 @@ class G4HEPionMinusInelastic : public G4HEInelastic
  public:  // with description
    G4HEPionMinusInelastic() : G4HEInelastic("G4HEPionMinusInelastic")
    {
+     vecLength = 0;
      theMinEnergy =  45*GeV;
      theMaxEnergy = 10*TeV;
      MAXPART      = 2048;
@@ -66,17 +67,16 @@ class G4HEPionMinusInelastic : public G4HEInelastic
          
    G4int vecLength;
         
-   G4HadFinalState* ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus &targetNucleus);
+   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+                                  G4Nucleus& targetNucleus);
 
-   G4int GetNumberOfSecondaries()
-        { return vecLength; }         
+   G4int GetNumberOfSecondaries() {return vecLength;}
 
-   void FirstIntInCasPionMinus(G4bool &inElastic, const G4double availableEnergy,
+   void FirstIntInCasPionMinus(G4bool& inElastic,
+                               const G4double availableEnergy,
                                G4HEVector pv[],
                                G4int &vecLen, 
                                G4HEVector incidentParticle,
                                G4HEVector targetParticle);
 };
-#endif                     
-                                         
-
+#endif

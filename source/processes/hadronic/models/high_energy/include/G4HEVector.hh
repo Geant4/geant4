@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEVector.hh,v 1.12 2006-06-29 20:29:48 gunter Exp $
+// $Id: G4HEVector.hh,v 1.13 2010-11-20 04:00:20 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -90,6 +90,10 @@ class G4HEVector
      particleType     = "";
      baryon           = 0;
      strangeness      = 0;
+     for (G4int i = 0; i < NumberOfQuarkFlavor; i++) {
+       theQuarkContent[i] = 0;
+       theAntiQuarkContent[i] = 0;
+     }
    }
 
 

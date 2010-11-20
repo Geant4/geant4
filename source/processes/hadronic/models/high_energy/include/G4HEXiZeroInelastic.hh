@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEXiZeroInelastic.hh,v 1.14 2007-04-11 18:11:30 dennis Exp $
+// $Id: G4HEXiZeroInelastic.hh,v 1.15 2010-11-20 04:00:20 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -56,6 +56,7 @@ class G4HEXiZeroInelastic : public G4HEInelastic
  public:  // with description
    G4HEXiZeroInelastic() : G4HEInelastic("G4HEXiZeroInelastic")
    {
+     vecLength = 0;
      theMinEnergy =  20*GeV;
      theMaxEnergy = 10*TeV;
      MAXPART      = 2048;
@@ -66,18 +67,18 @@ class G4HEXiZeroInelastic : public G4HEInelastic
          
    G4int vecLength;
         
-   G4HadFinalState* ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus &targetNucleus);
+   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+                                  G4Nucleus& targetNucleus);
 
-   G4int GetNumberOfSecondaries()
-       { return vecLength; }         
+   G4int GetNumberOfSecondaries() {return vecLength;}
 
-   void FirstIntInCasXiZero(G4bool &inElastic, const G4double availableEnergy,
+   void FirstIntInCasXiZero(G4bool& inElastic,
+                            const G4double availableEnergy,
                             G4HEVector pv[],
                             G4int &vecLen, 
                             G4HEVector incidentParticle,
                             G4HEVector targetParticle,
                             const G4double atomicWeight);
 };
-#endif                     
-                                         
+#endif
 

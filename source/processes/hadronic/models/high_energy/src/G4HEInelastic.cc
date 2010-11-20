@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-//
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -54,7 +53,7 @@
 #include "G4Triton.hh"
 #include "G4Alpha.hh"
 
-void  G4HEInelastic::FillParticleChange(G4HEVector pv[], G4int aVecLength)
+void G4HEInelastic::FillParticleChange(G4HEVector pv[], G4int aVecLength)
 {
   theParticleChange.Clear();
   for (G4int i=0; i<aVecLength; i++)
@@ -81,57 +80,56 @@ void  G4HEInelastic::FillParticleChange(G4HEVector pv[], G4int aVecLength)
   }
 }
 
-void
-G4HEInelastic::SetParticles()
-  {
-    PionPlus.setDefinition("PionPlus");
-    PionZero.setDefinition("PionZero");
-    PionMinus.setDefinition("PionMinus");
-    KaonPlus.setDefinition("KaonPlus");
-    KaonZero.setDefinition("KaonZero");
-    AntiKaonZero.setDefinition("AntiKaonZero");
-    KaonMinus.setDefinition("KaonMinus"); 
-    KaonZeroShort.setDefinition("KaonZeroShort");
-    KaonZeroLong.setDefinition("KaonZeroLong"); 
-    Proton.setDefinition("Proton");
-    AntiProton.setDefinition("AntiProton");
-    Neutron.setDefinition("Neutron");
-    AntiNeutron.setDefinition("AntiNeutron");
-    Lambda.setDefinition("Lambda");
-    AntiLambda.setDefinition("AntiLambda");
-    SigmaPlus.setDefinition("SigmaPlus"); 
-    SigmaZero.setDefinition("SigmaZero");
-    SigmaMinus.setDefinition("SigmaMinus");
-    AntiSigmaPlus.setDefinition("AntiSigmaPlus");
-    AntiSigmaZero.setDefinition("AntiSigmaZero");
-    AntiSigmaMinus.setDefinition("AntiSigmaMinus");
-    XiZero.setDefinition("XiZero");
-    XiMinus.setDefinition("XiMinus"); 
-    AntiXiZero.setDefinition("AntiXiZero");
-    AntiXiMinus.setDefinition("AntiXiMinus");
-    OmegaMinus.setDefinition("OmegaMinus");
-    AntiOmegaMinus.setDefinition("AntiOmegaMinus");
-    Deuteron.setDefinition("Deuteron"); 
-    Triton.setDefinition("Triton"); 
-    Alpha.setDefinition("Alpha");
-    Gamma.setDefinition("Gamma");
-    return;
-  }
+void G4HEInelastic::SetParticles()
+{
+  PionPlus.setDefinition("PionPlus");
+  PionZero.setDefinition("PionZero");
+  PionMinus.setDefinition("PionMinus");
+  KaonPlus.setDefinition("KaonPlus");
+  KaonZero.setDefinition("KaonZero");
+  AntiKaonZero.setDefinition("AntiKaonZero");
+  KaonMinus.setDefinition("KaonMinus"); 
+  KaonZeroShort.setDefinition("KaonZeroShort");
+  KaonZeroLong.setDefinition("KaonZeroLong"); 
+  Proton.setDefinition("Proton");
+  AntiProton.setDefinition("AntiProton");
+  Neutron.setDefinition("Neutron");
+  AntiNeutron.setDefinition("AntiNeutron");
+  Lambda.setDefinition("Lambda");
+  AntiLambda.setDefinition("AntiLambda");
+  SigmaPlus.setDefinition("SigmaPlus"); 
+  SigmaZero.setDefinition("SigmaZero");
+  SigmaMinus.setDefinition("SigmaMinus");
+  AntiSigmaPlus.setDefinition("AntiSigmaPlus");
+  AntiSigmaZero.setDefinition("AntiSigmaZero");
+  AntiSigmaMinus.setDefinition("AntiSigmaMinus");
+  XiZero.setDefinition("XiZero");
+  XiMinus.setDefinition("XiMinus"); 
+  AntiXiZero.setDefinition("AntiXiZero");
+  AntiXiMinus.setDefinition("AntiXiMinus");
+  OmegaMinus.setDefinition("OmegaMinus");
+  AntiOmegaMinus.setDefinition("AntiOmegaMinus");
+  Deuteron.setDefinition("Deuteron"); 
+  Triton.setDefinition("Triton"); 
+  Alpha.setDefinition("Alpha");
+  Gamma.setDefinition("Gamma");
+  return;
+}
  
-G4double
-G4HEInelastic::Amin(G4double a, G4double b)
-  {
-    G4double c = a;
-    if(b < a) c = b;
-    return c;
-  } 
-G4double
-G4HEInelastic::Amax(G4double a, G4double b)
-  {
-    G4double c = a;
-    if(b > a) c = b;
-    return c;
-  } 
+G4double G4HEInelastic::Amin(G4double a, G4double b)
+{
+  G4double c = a;
+  if(b < a) c = b;
+  return c;
+}
+
+G4double G4HEInelastic::Amax(G4double a, G4double b)
+{
+  G4double c = a;
+  if(b > a) c = b;
+  return c;
+}
+ 
 G4int
 G4HEInelastic::Imin(G4int a, G4int b)
   {
