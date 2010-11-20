@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KleinNishinaModel.cc,v 1.1 2010-09-03 14:11:16 vnivanch Exp $
+// $Id: G4KleinNishinaModel.cc,v 1.2 2010-11-20 20:58:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -170,13 +170,14 @@ void G4KleinNishinaModel::SampleSecondaries(
   G4double gamEnergy1 = 0.0;
 
   // Loop on sampling
+  G4double bindingEnergy;
   do {
     G4double xprob = totprob*G4UniformRand();
 
     for(i=0; i<nShells; ++i) { if(xprob <= fProbabilities[i]) {break;} }
     if( i == nShells ) { return; }
    
-    G4double bindingEnergy  = elm->GetAtomicShell(i);
+    bindingEnergy  = elm->GetAtomicShell(i);
     G4double tkin =  bindingEnergy*0.5;
     G4double eEnergy = tkin + electron_mass_c2;
     G4double eTotMomentum = sqrt(tkin*(tkin + electron_mass_c2*2));
@@ -256,14 +257,15 @@ void G4KleinNishinaModel::SampleSecondaries(
 
   // gamma kinematics
   gamEnergy1 = lv1.e();
+  G4double edep = bindingEnergy;
   if(gamEnergy1 > lowestGammaEnergy) {
     fParticleChange->SetProposedKineticEnergy(gamEnergy1);
     fParticleChange->ProposeMomentumDirection((lv1.vect()).unit());
   } else { 
     fParticleChange->ProposeTrackStatus(fStopAndKill);
-    fParticleChange->ProposeLocalEnergyDeposit(gamEnergy1);
+    fParticleChange->SetProposedKineticEnergy(0.0);
+    edep += gamEnergy1;
   }
-
   //
   // kinematic of the scattered electron
   //
@@ -277,8 +279,17 @@ void G4KleinNishinaModel::SampleSecondaries(
   if(fAtomDeexcitation) {
     G4AtomicShellEnumerator as = G4AtomicShellEnumerator(i);
     const G4AtomicShell* shell = fAtomDeexcitation->GetAtomicShell(Z, as);    
+    size_t nbefore = fvect->size();
     fAtomDeexcitation->GenerateParticles(fvect, shell, Z, couple->GetIndex());
+    size_t nafter = fvect->size();
+    if(nafter > nbefore) {
+      for (size_t i=nbefore; i<nafter; ++i) {
+        edep -= ((*fvect)[i])-GetKineticEnergy();
+      } 
+    }
   }
+  // energy balance
+  fParticleChange->ProposeLocalEnergyDeposit(edep);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

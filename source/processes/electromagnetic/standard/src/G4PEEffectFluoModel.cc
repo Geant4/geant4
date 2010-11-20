@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PEEffectFluoModel.cc,v 1.1 2010-09-03 14:11:16 vnivanch Exp $
+// $Id: G4PEEffectFluoModel.cc,v 1.2 2010-11-20 20:58:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -171,17 +171,25 @@ G4PEEffectFluoModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
 
   // sample deexcitation
   //
+  G4double edep = bindingEnergy;
   if(fAtomDeexcitation) {
     G4int Z = (G4int)anElement->GetZ();
     G4AtomicShellEnumerator as = G4AtomicShellEnumerator(i);
-    const G4AtomicShell* shell = fAtomDeexcitation->GetAtomicShell(Z, as);    
+    const G4AtomicShell* shell = fAtomDeexcitation->GetAtomicShell(Z, as);
+    size_t nbefore = fvect->size();
     fAtomDeexcitation->GenerateParticles(fvect, shell, Z, couple->GetIndex());
+    size_t nafter = fvect->size();
+    if(nafter > nbefore) {
+      for (size_t i=nbefore; i<nafter; ++i) {
+        edep -= ((*fvect)[i])-GetKineticEnergy();
+      } 
+    }
   }
 
   // kill primary photon
   fParticleChange->SetProposedKineticEnergy(0.);
   fParticleChange->ProposeTrackStatus(fStopAndKill);
-  fParticleChange->ProposeLocalEnergyDeposit(bindingEnergy);
+  fParticleChange->ProposeLocalEnergyDeposit(edep);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
