@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.hh,v 1.16 2009-10-29 19:25:28 vnivanch Exp $
+// $Id: G4EmProcessOptions.hh,v 1.17 2010-11-20 20:56:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -108,6 +108,17 @@ public:
 
   void ActivateDeexcitation(const G4String& proc, G4bool val, 
 			    const G4String& reg = "");
+
+  void SetDeexcitationActive(G4bool val);
+
+  void SetDeexcitationActiveRegion(const G4String& rname = "", 
+				   G4bool valDeexcitation = true,
+				   G4bool valAuger = true,
+				   G4bool valPIXE = true);
+
+  void SetAugerActive(G4bool val);
+
+  void SetPIXEActive(G4bool val);
 
   void SetMscStepLimitation(G4MscStepLimitType val);
 

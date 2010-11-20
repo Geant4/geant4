@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.cc,v 1.28 2010-04-27 16:59:52 vnivanch Exp $
+// $Id: G4EmProcessOptions.cc,v 1.29 2010-11-20 20:56:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -59,6 +59,7 @@
 #include "G4VMultipleScattering.hh"
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
+#include "G4VAtomDeexcitation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -275,6 +276,45 @@ void G4EmProcessOptions::ActivateDeexcitation(const G4String& pname,
       if(pname == q->GetProcessName()) { q->ActivateDeexcitation(val,r); }
     }
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmProcessOptions::SetDeexcitationActive(G4bool val)
+{
+  G4VAtomDeexcitation* ad = theManager-> AtomDeexcitation();
+  if(ad) { ad->SetActive(val); }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void 
+G4EmProcessOptions::SetDeexcitationActiveRegion(const G4String& rname, 
+						G4bool valDeexcitation,
+						G4bool valAuger,
+						G4bool valPIXE)
+{
+  G4VAtomDeexcitation* ad = theManager-> AtomDeexcitation();
+  if(ad) { 
+    ad->SetDeexcitationActiveRegion(rname, valDeexcitation,
+				    valAuger,valPIXE); 
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmProcessOptions::SetAugerActive(G4bool val)
+{
+  G4VAtomDeexcitation* ad = theManager-> AtomDeexcitation();
+  if(ad) { ad->SetAugerActive(val); }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmProcessOptions::SetPIXEActive(G4bool val)
+{
+  G4VAtomDeexcitation* ad = theManager-> AtomDeexcitation();
+  if(ad) { ad->SetPIXEActive(val); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
