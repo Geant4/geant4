@@ -65,6 +65,7 @@ WLSDetectorConstruction::WLSDetectorConstruction()
 
   detectorMessenger = new WLSDetectorMessenger(this);
   materials = NULL;
+  mppcSD    = NULL;
 
   numOfCladLayers = 0;
  
@@ -101,7 +102,7 @@ WLSDetectorConstruction::WLSDetectorConstruction()
   holeLength       = barLength;
   coatingThickness = 0.25*mm;
   coatingRadius    = 1.875*mm;
- 
+
   UpdateGeometryParameters();
 }
 
@@ -649,12 +650,15 @@ void WLSDetectorConstruction::ConstructFiber()
  
   new G4LogicalSkinSurface("PhotonDetSurface",logicPhotonDet,PhotonDetSurface); 
 
+  if (!mppcSD) {
+     G4String mppcSDName = "WLS/PhotonDet";
+     mppcSD = new WLSPhotonDetSD(mppcSDName);
+
+     G4SDManager* SDman = G4SDManager::GetSDMpointer();
+     SDman->AddNewDetector(mppcSD);
+  }
+
   // Setting the detector to be sensitive
-  G4SDManager* SDman = G4SDManager::GetSDMpointer();
- 
-  G4String mppcSDName = "WLS/PhotonDet";
-  WLSPhotonDetSD* mppcSD = new WLSPhotonDetSD(mppcSDName);
-  SDman->AddNewDetector(mppcSD);
   logicPhotonDet->SetSensitiveDetector(mppcSD);
 
 }
@@ -671,7 +675,7 @@ void WLSDetectorConstruction::UpdateGeometry()
   G4SolidStore::GetInstance()->Clean();
   G4LogicalSkinSurface::CleanSurfaceTable();
   G4LogicalBorderSurface::CleanSurfaceTable();
- 
+
   //define new one
   UpdateGeometryParameters();
  

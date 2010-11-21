@@ -50,6 +50,8 @@ class G4Material;
 
 class WLSDetectorMessenger;
 
+class WLSPhotonDetSD;
+
 #include "G4VUserDetectorConstruction.hh"
 
 class WLSDetectorConstruction : public G4VUserDetectorConstruction
@@ -194,6 +196,8 @@ class WLSDetectorConstruction : public G4VUserDetectorConstruction
     G4double holeLength;
     G4double coatingThickness;
     G4double coatingRadius;
+
+    static WLSPhotonDetSD* mppcSD;
 
   private:
 
