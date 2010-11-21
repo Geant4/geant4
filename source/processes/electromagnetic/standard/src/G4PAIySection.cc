@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PAIySection.cc,v 1.6 2010-11-04 17:30:32 vnivanch Exp $
+// $Id: G4PAIySection.cc,v 1.7 2010-11-21 10:55:44 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,6 +41,8 @@
 // 01.10.07, V.Ivanchenko create using V.Grichine G4PAIxSection class
 // 26.07.09, V.Ivanchenko added protection for mumerical exceptions for 
 //              low-density materials
+// 21.11.10 V. Grichine bug fixed in Initialise for reading sandia table from
+//            material. Warning: the table is tuned for photo-effect not PAI model.
 //
 
 #include "G4PAIySection.hh"
@@ -89,84 +91,96 @@ void G4PAIySection::Initialize( const G4Material* material,
 				G4double maxEnergyTransfer,
 				G4double betaGammaSq)
 {
-   G4int i, j, numberOfElements ;   
-   
-   fDensity         = material->GetDensity();
-   fElectronDensity = material->GetElectronDensity() ;
-   numberOfElements = material->GetNumberOfElements() ;
+  G4int i, j, numberOfElements ;   
+  // fVerbose = 1;   
+  fDensity         = material->GetDensity();
+  fElectronDensity = material->GetElectronDensity() ;
+  numberOfElements = material->GetNumberOfElements() ;
 
-   fSandia = material->GetSandiaTable();
+  fSandia = material->GetSandiaTable();
 
-   fIntervalNumber = fSandia->GetMaxInterval();
+  fIntervalNumber = fSandia->GetMaxInterval();
 
-   fIntervalNumber--;
+  fIntervalNumber--;
 
-   for(i=1;i<=fIntervalNumber;i++)
-     {
-       G4double e = fSandia->GetSandiaMatTablePAI(i,0); 
-       if(e >= maxEnergyTransfer || i > fIntervalNumber)
-	 {
-	   fEnergyInterval[i] = maxEnergyTransfer ;
-	   fIntervalNumber = i ;
-	   break;
-	 }
-       fEnergyInterval[i] = e;
-       fA1[i]             = fSandia->GetSandiaMatTablePAI(i,1);
-       fA2[i]             = fSandia->GetSandiaMatTablePAI(i,2);
-       fA3[i]             = fSandia->GetSandiaMatTablePAI(i,3);
-       fA4[i]             = fSandia->GetSandiaMatTablePAI(i,4);
+  for( i = 1; i <= fIntervalNumber; i++ )
+  {
+    G4double e = fSandia->GetSandiaMatTablePAI(i-1,0); //vmg 20.11.10
 
-     }   
-   if(fEnergyInterval[fIntervalNumber] != maxEnergyTransfer)
-     {
-       fIntervalNumber++;
-       fEnergyInterval[fIntervalNumber] = maxEnergyTransfer ;
-       fA1[fIntervalNumber] = fA1[fIntervalNumber-1] ;
-       fA2[fIntervalNumber] = fA2[fIntervalNumber-1] ;
-       fA3[fIntervalNumber] = fA3[fIntervalNumber-1] ;
-       fA4[fIntervalNumber] = fA4[fIntervalNumber-1] ;
-     }
+    if( e >= maxEnergyTransfer || i > fIntervalNumber )
+    {
+      fEnergyInterval[i] = maxEnergyTransfer ;
+      fIntervalNumber = i ;
+      break;
+    }
+    fEnergyInterval[i] = e;
+    fA1[i]             = fSandia->GetSandiaMatTablePAI(i-1,1);
+    fA2[i]             = fSandia->GetSandiaMatTablePAI(i-1,2);
+    fA3[i]             = fSandia->GetSandiaMatTablePAI(i-1,3);
+    fA4[i]             = fSandia->GetSandiaMatTablePAI(i-1,4);
+
+  }   
+  if( fEnergyInterval[fIntervalNumber] != maxEnergyTransfer )
+  {
+    fIntervalNumber++;
+    fEnergyInterval[fIntervalNumber] = maxEnergyTransfer ;
+    fA1[fIntervalNumber] = fA1[fIntervalNumber-1] ;
+    fA2[fIntervalNumber] = fA2[fIntervalNumber-1] ;
+    fA3[fIntervalNumber] = fA3[fIntervalNumber-1] ;
+    fA4[fIntervalNumber] = fA4[fIntervalNumber-1] ;
+  }
 
    // Now checking, if two borders are too close together
-   for(i=1;i<fIntervalNumber;i++)
-      {
+  for( i = 1; i < fIntervalNumber; i++ )
+  {
 	// G4cout<<fEnergyInterval[i]<<"\t"<<fA1[i]<<"\t"<<fA2[i]<<"\t"
 	//   <<fA3[i]<<"\t"<<fA4[i]<<"\t"<<G4endl ;
-        if(fEnergyInterval[i+1]-fEnergyInterval[i] <
+    if(fEnergyInterval[i+1]-fEnergyInterval[i] <
            1.5*fDelta*(fEnergyInterval[i+1]+fEnergyInterval[i]))
-	  {
-	    for(j=i;j<fIntervalNumber;j++)
-	      {
-		fEnergyInterval[j] = fEnergyInterval[j+1] ;
-		fA1[j] = fA1[j+1] ;
-		fA2[j] = fA2[j+1] ;
-		fA3[j] = fA3[j+1] ;
-		fA4[j] = fA4[j+1] ;
-	      }
-	    fIntervalNumber-- ;
-	    i-- ;
-	  }
+    {
+      for( j = i; j < fIntervalNumber; j++ )
+      {
+	fEnergyInterval[j] = fEnergyInterval[j+1] ;
+	fA1[j] = fA1[j+1] ;
+	fA2[j] = fA2[j+1] ;
+	fA3[j] = fA3[j+1] ;
+	fA4[j] = fA4[j+1] ;
       }
+      fIntervalNumber-- ;
+      i-- ;
+    }
+  }
+  if( fVerbose > 0 && std::fabs( betaGammaSq - 8. ) < 0.4 )
+  {
+    G4cout<<"Sandia cofs in G4PAIySection::Initialize(), mat = "<<material->GetName()<<G4endl;
+    G4cout<<"for bg2 = "<<betaGammaSq<<G4endl;
+    G4cout<<"energy \t"<<"a1 \t"<<"a2 \t"<<"a3 \t"<<"a4 \t"<<G4endl;
+
+      for( j = 1; j < fIntervalNumber; j++ )
+      {
+	G4cout<<j<<"\t"<<fEnergyInterval[j]<<"\t"<<fA1[j]<<"\t"<<fA2[j] <<"\t"<<fA3[j] <<"\t"<<fA4[j]<<G4endl;
+      }
+  }
 
       // Preparation of fSplineEnergy array corresponding to min ionisation, G~4
       
-   G4double   betaGammaSqRef = 
+  G4double   betaGammaSqRef = 
      fLorentzFactor[fRefGammaNumber]*fLorentzFactor[fRefGammaNumber] - 1;
 
-   NormShift(betaGammaSqRef) ;             
-   SplainPAI(betaGammaSqRef) ;
+  NormShift(betaGammaSqRef) ;             
+  SplainPAI(betaGammaSqRef) ;
       
    // Preparation of integral PAI cross section for input betaGammaSq
    
-   for(i = 1 ; i <= fSplineNumber ; i++)
-     {
-       fDifPAIySection[i] = DifPAIySection(i,betaGammaSq);
-       fdNdxCerenkov[i]   = PAIdNdxCerenkov(i,betaGammaSq);
-       fdNdxPlasmon[i]    = PAIdNdxPlasmon(i,betaGammaSq);
-     }
-   IntegralPAIySection() ;
-   IntegralCerenkov() ;
-   IntegralPlasmon() ;
+  for( i = 1; i <= fSplineNumber; i++ )
+  {
+    fDifPAIySection[i] = DifPAIySection(i,betaGammaSq);
+    fdNdxCerenkov[i]   = PAIdNdxCerenkov(i,betaGammaSq);
+    fdNdxPlasmon[i]    = PAIdNdxPlasmon(i,betaGammaSq);
+  }
+  IntegralPAIySection() ;
+  IntegralCerenkov() ;
+  IntegralPlasmon() ;
 }
 
 /////////////////////////////////////////////////////////////////////////

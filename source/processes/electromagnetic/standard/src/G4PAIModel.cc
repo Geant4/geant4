@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PAIModel.cc,v 1.54 2010-11-04 17:30:32 vnivanch Exp $
+// $Id: G4PAIModel.cc,v 1.55 2010-11-21 10:55:44 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -41,6 +41,7 @@
 // 16.08.04 V.Grichine, bug fixed in massRatio for DEDX, CrossSection, SampleSecondary
 // 08.04.05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 26.07.09 Fixed logic to work with several materials (V.Ivantchenko)
+// 21.11.10 V. Grichine verbose flag for protons and G4PAYySection to check sandia table 
 //
 
 #include "G4Region.hh"
@@ -154,7 +155,13 @@ void G4PAIModel::SetParticle(const G4ParticleDefinition* p)
 void G4PAIModel::Initialise(const G4ParticleDefinition* p,
 			    const G4DataVector&)
 {
-  //G4cout<<"G4PAIModel::Initialise for "<<p->GetParticleName()<<G4endl;
+  if( fVerbose > 0 && p->GetParticleName()=="proton") 
+  {
+    G4cout<<"G4PAIModel::Initialise for "<<p->GetParticleName()<<G4endl;
+    fPAIySection.SetVerbose(1);
+  }
+  else fPAIySection.SetVerbose(0);
+
   if(isInitialised) { return; }
   isInitialised = true;
 
@@ -176,6 +183,7 @@ void G4PAIModel::Initialise(const G4ParticleDefinition* p,
   for(size_t iReg = 0; iReg < numRegions; ++iReg) // region loop
   {
     const G4Region* curReg = fPAIRegionVector[iReg];
+
     for(size_t jMat = 0; jMat < numOfMat; ++jMat) // region material loop
     {
       fMaterial  = (*theMaterialTable)[jMat];
@@ -184,7 +192,8 @@ void G4PAIModel::Initialise(const G4ParticleDefinition* p,
       //G4cout << "Reg <" <<curReg->GetName() << ">  mat <" 
       //	     << fMaterial->GetName() << ">  fCouple= " 
       //	     << fCutCouple<<"  " << p->GetParticleName() <<G4endl;
-      if( fCutCouple ) {
+      if( fCutCouple ) 
+      {
 	fMaterialCutsCoupleVector.push_back(fCutCouple);
 
 	fPAItransferTable = new G4PhysicsTable(fTotBin+1);
