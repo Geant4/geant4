@@ -59,6 +59,7 @@ class G4QMDMeanField
       G4bool IsPauliBlocked( G4int ); 
 
       G4double GetTotalPotential(); 
+      G4double GetPotential( G4int );
 
       void DoPropagation( G4double );
 
