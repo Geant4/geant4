@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option3.cc,v 1.23 2010-11-20 21:07:26 vnivanch Exp $
+// $Id: G4EmStandardPhysics_option3.cc,v 1.24 2010-11-21 15:47:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -283,8 +283,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
   
   // Multiple Coulomb scattering
   //
-  //opt.SetMscStepLimitation(fUseDistanceToBoundary);
-  //opt.SetMscRangeFactor(0.02);
+  opt.SetPolarAngleLimit(0.2);
     
   // Physics tables
   //
@@ -292,8 +291,6 @@ void G4EmStandardPhysics_option3::ConstructProcess()
   opt.SetMaxEnergy(10*TeV);
   opt.SetDEDXBinning(220);
   opt.SetLambdaBinning(220);
-  //opt.SetSplineFlag(true);
-  opt.SetPolarAngleLimit(0.2);
     
   // Ionization
   //
@@ -301,9 +298,6 @@ void G4EmStandardPhysics_option3::ConstructProcess()
 
   // Deexcitation
   G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
-  de->SetDeexcitationActiveRegion("World");
-  de->SetAugerActive(false);
-  de->SetPIXEActive(false);
   G4LossTableManager::Instance()->SetAtomDeexcitation(de);
 
 }

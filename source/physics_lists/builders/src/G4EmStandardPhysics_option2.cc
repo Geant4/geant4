@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option2.cc,v 1.28 2010-11-10 19:29:33 vnivanch Exp $
+// $Id: G4EmStandardPhysics_option2.cc,v 1.29 2010-11-21 15:47:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -56,6 +56,8 @@
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
+#include "G4PEEffectFluoModel.hh"
+#include "G4KleinNishinaModel.hh"
 
 #include "G4eMultipleScattering.hh"
 #include "G4hMultipleScattering.hh"
@@ -70,6 +72,7 @@
 #include "G4eBremsstrahlungModel.hh"
 #include "G4eplusAnnihilation.hh"
 #include "G4Generator2BS.hh"
+#include "G4UAtomicDeexcitation.hh"
 
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
@@ -168,8 +171,12 @@ void G4EmStandardPhysics_option2::ConstructProcess()
 
     if (particleName == "gamma") {
 
-      pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
-      pmanager->AddDiscreteProcess(new G4ComptonScattering);
+      G4PhotoElectricEffect* pe = new G4PhotoElectricEffect;
+      pe->SetModel(new G4PEEffectFluoModel());
+      G4ComptonScattering* cs   = new G4ComptonScattering;
+      cs->SetModel(new G4KleinNishinaModel());
+      pmanager->AddDiscreteProcess(pe);
+      pmanager->AddDiscreteProcess(cs);
       pmanager->AddDiscreteProcess(new G4GammaConversion);
 
     } else if (particleName == "e-") {
@@ -287,18 +294,19 @@ void G4EmStandardPhysics_option2::ConstructProcess()
   opt.SetVerbose(verbose);
   opt.SetApplyCuts(true);
   
-  // Physics tables
+  // Scattering options
   //
-  //opt.SetMinEnergy(0.1*keV);
-  // opt.SetMaxEnergy(10*TeV);
-  //opt.SetDEDXBinning(77);
-  //opt.SetLambdaBinning(77);
-  //opt.SetSplineFlag(true);
   opt.SetPolarAngleLimit(0.2);
     
   // Ionization
   //
   //opt.SetSubCutoff(true);  
+
+  // Deexcitation
+  //
+  G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
+  G4LossTableManager::Instance()->SetAtomDeexcitation(de);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
