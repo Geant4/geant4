@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 
-// $Id: G4SandiaTable.cc,v 1.38 2010-11-19 14:52:12 grichine Exp $
+// $Id: G4SandiaTable.cc,v 1.39 2010-11-21 13:02:33 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //
@@ -68,7 +68,7 @@ G4SandiaTable::G4SandiaTable(G4Material* material)
 
  
   fMaxInterval        = 0;
-  fVerbose            = 1;  
+  fVerbose            = 0;  
 
   //build the CumulInterval array
 
@@ -84,8 +84,9 @@ G4SandiaTable::G4SandiaTable(G4Material* material)
   fMaxInterval = 0;
 
   //compute macroscopic Sandia coefs for a material   
-  ComputeMatSandiaMatrix();
-  // ComputeMatSandiaMatrixPAI();
+  ComputeMatSandiaMatrix(); // mma
+
+  // ComputeMatTable();  // vmg
 }
 							
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -169,87 +170,97 @@ void G4SandiaTable::ComputeMatSandiaMatrix()
   const G4ElementVector* ElementVector = fMaterial->GetElementVector();
   
   G4int* Z = new G4int[NbElm];               //Atomic number
-
-  //   
+   
   //determine the maximum number of energy-intervals for this material
-  //
+  
   G4int MaxIntervals = 0;
-  G4int elm;    
-  for (elm=0; elm<NbElm; elm++) {
+  G4int elm;
+    
+  for ( elm = 0; elm < NbElm; elm++ ) 
+  {
     Z[elm] = (G4int)(*ElementVector)[elm]->GetZ();
     MaxIntervals += fNbOfIntervals[Z[elm]];
   }  
      
-  //
   //copy the Energy bins in a tmp1 array
   //(take care of the Ionization Potential of each element)
-  //
+  
   G4double* tmp1 = new G4double[MaxIntervals]; 
   G4double IonizationPot;
-  G4int interval1=0;
-  for (elm=0; elm<NbElm; elm++) {
+  G4int interval1 = 0;
 
+  for ( elm = 0; elm < NbElm; elm++ ) 
+  {
     IonizationPot = GetIonizationPot(Z[elm]);
-    for (G4int row=fCumulInterval[Z[elm]-1];row<fCumulInterval[Z[elm]];row++) {
+
+    for (G4int row = fCumulInterval[ Z[elm]-1 ]; row < fCumulInterval[Z[elm]]; row++ ) 
+    {
       tmp1[interval1++] = std::max(fSandiaTable[row][0]*keV,IonizationPot);
     }
   }   
-  //       
+        
   //sort the energies in strickly increasing values in a tmp2 array
   //(eliminate redondances)
-  //
+  
   G4double* tmp2 = new G4double[MaxIntervals];
   G4double Emin;
   G4int interval2 = 0;
   
-  do {
+  do 
+  {
     Emin = DBL_MAX;
-    for (G4int i1=0; i1<MaxIntervals; i1++) {
+
+    for ( G4int i1 = 0; i1 < MaxIntervals; i1++ ) 
+    {
       if (tmp1[i1] < Emin) Emin = tmp1[i1];          //find the minimum
     }
-    if (Emin < DBL_MAX) tmp2[interval2++] = Emin;    //copy Emin in tmp2
-    for (G4int j1=0; j1<MaxIntervals; j1++) {
+    if (Emin < DBL_MAX) tmp2[interval2++] = Emin;
+    //copy Emin in tmp2
+    for ( G4int j1 = 0; j1 < MaxIntervals; j1++ ) 
+    {
       if (tmp1[j1] <= Emin) tmp1[j1] = DBL_MAX;      //eliminate from tmp1	    
     }
   } while (Emin < DBL_MAX);
-        	         	   
-  //	
+        	         	   	
   //create the sandia matrix for this material
-  //  
+    
   fMatSandiaMatrix = new G4OrderedTable();
   G4int interval;
-  for (interval=0; interval<interval2; interval++) {
-    fMatSandiaMatrix->push_back(new G4DataVector(5,0.));
+
+  for (interval = 0; interval < interval2; interval++ ) 
+  {
+    fMatSandiaMatrix->push_back( new G4DataVector(5,0.) );
   }
-  //
+  
   //ready to compute the Sandia coefs for the material
-  //
+  
   const G4double* NbOfAtomsPerVolume = fMaterial->GetVecNbOfAtomsPerVolume();
   
   const G4double prec = 1.e-03*eV;
   G4double coef, oldsum(0.), newsum(0.);
   fMatNbOfIntervals = 0;
          
-  for (interval=0; interval<interval2; interval++) {
-
+  for ( interval = 0; interval < interval2; interval++ ) 
+  {
     Emin = (*(*fMatSandiaMatrix)[fMatNbOfIntervals])[0] = tmp2[interval];
-    for (G4int k=1; k<5; k++) {
-      (*(*fMatSandiaMatrix)[fMatNbOfIntervals])[k]=0.;      
-    }
+
+    for ( G4int k = 1; k < 5; k++ )   (*(*fMatSandiaMatrix)[fMatNbOfIntervals])[k] = 0.;      
+    
     newsum = 0.;
       
-    for (elm=0; elm<NbElm; elm++) {
-        
+    for ( elm = 0; elm < NbElm; elm++ ) 
+    {    
       GetSandiaCofPerAtom(Z[elm], Emin+prec);
-      for (G4int j=1; j<5; j++) {
 
+      for ( G4int j = 1; j < 5; j++ ) 
+      {
 	coef = NbOfAtomsPerVolume[elm]*fSandiaCofPerAtom[j-1];
 	(*(*fMatSandiaMatrix)[fMatNbOfIntervals])[j] += coef;
 	newsum += std::abs(coef);
       }						       
-    }	      
-			      			      	 
-    //check for null or redondant intervals	 
+    }	      			      			      	 
+    //check for null or redondant intervals
+	 
     if (newsum != oldsum) { oldsum = newsum; fMatNbOfIntervals++;}
   }
   delete [] Z;
@@ -258,13 +269,13 @@ void G4SandiaTable::ComputeMatSandiaMatrix()
 
   if ( fVerbose > 0 )
   {
-    G4cout<<fMaterial->GetName()<<G4endl;
+    G4cout<<"mma, G4SandiaTable::ComputeMatSandiaMatrix(), mat = "<<fMaterial->GetName()<<G4endl;
 
-    for( G4int i = 0; i <= interval2; i++)
+    for( G4int i = 0; i < fMatNbOfIntervals; i++)
     {
-      G4cout<<i<<"\t"<<GetSandiaMatTablePAI(i,0)/eV<<"\t"<<this->GetSandiaMatTablePAI(i,1)
-       <<"\t"<<this->GetSandiaMatTablePAI(i,2)<<"\t"<<this->GetSandiaMatTablePAI(i,3)
-       <<"\t"<<this->GetSandiaMatTablePAI(i,4)<<G4endl;
+      G4cout<<i<<"\t"<<GetSandiaCofForMaterial(i,0)/keV<<" keV \t"<<this->GetSandiaCofForMaterial(i,1)
+       <<"\t"<<this->GetSandiaCofForMaterial(i,2)<<"\t"<<this->GetSandiaCofForMaterial(i,3)
+       <<"\t"<<this->GetSandiaCofForMaterial(i,4)<<G4endl;
     }   
   }
 }
@@ -854,6 +865,8 @@ void G4SandiaTable::ComputeMatTable()
   while(c < fMaxInterval - 1);
   	
   // create the sandia matrix for this material
+
+  fMaxInterval--;  // vmg 20.11.10
     
   fMatSandiaMatrix = new G4OrderedTable();
  
@@ -861,12 +874,29 @@ void G4SandiaTable::ComputeMatTable()
   {
      fMatSandiaMatrix->push_back(new G4DataVector(5,0.));
   }	         	
-  for (i = 0; i < fMaxInterval; i++)
+  for ( i = 0; i < fMaxInterval; i++ )
   {
-    for(j = 0; j < 5; j++)
+    for( j = 0; j < 5; j++ )
     {
       (*(*fMatSandiaMatrix)[i])[j] = fPhotoAbsorptionCof[i+1][j];
     }     
+  }
+  fMatNbOfIntervals = fMaxInterval; 
+	         	    
+  if ( fVerbose > 0 )
+  {
+    G4cout<<"vmg, G4SandiaTable::ComputeMatTable(), mat = "<<fMaterial->GetName()<<G4endl;
+
+    for ( i = 0; i < fMaxInterval; i++ )
+    {
+      // G4cout<<i<<"\t"<<(*(*fMatSandiaMatrix)[i])[0]<<" keV \t"<<(*(*fMatSandiaMatrix)[i])[1]
+      //       <<"\t"<<(*(*fMatSandiaMatrix)[i])[2]<<"\t"<<(*(*fMatSandiaMatrix)[i])[3]
+      //   <<"\t"<<(*(*fMatSandiaMatrix)[i])[4]<<G4endl;
+
+      G4cout<<i<<"\t"<<GetSandiaCofForMaterial(i,0)/keV<<" keV \t"<<this->GetSandiaCofForMaterial(i,1)
+       <<"\t"<<this->GetSandiaCofForMaterial(i,2)<<"\t"<<this->GetSandiaCofForMaterial(i,3)
+       <<"\t"<<this->GetSandiaCofForMaterial(i,4)<<G4endl;
+    }
   }	         	    
   delete [] Z;
   return;
