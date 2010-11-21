@@ -10,7 +10,7 @@
 #    /testem/setGasRad      20 cm
 #    /testem/setWindowThick 50 um
 # List of available materials (basically gases at STP): G4_Ar, G4_Kr, G4_Xe, G4CARBON_DIOXIDE, G4_MYLAR, G4_METHANE, 
-# G4_PROPANE, empty (G4_Galactic), Kr7CH4, Ar_80-CO2_20, Xe20CO2, Kr20CO2,  
+# G4_PROPANE, empty (G4_Galactic), Kr7CH4, ArCO2, Xe20CO2, Kr20CO2,  
 # Now few gas mixtures from experiments:
 # 
 
@@ -26,13 +26,14 @@
 #
 #/testem/phys/addPhysics  pai_photon
 #
-#/testem/phys/addPhysics  estandard_opt3
+#/testem/phys/addPhysics  emtandard_opt3
 #
 #/testem/stepMax         10 mm
 #
 /testem/phys/setNbinsE 20
 /testem/phys/setMaxE 0.010  MeV  
 #
+#/testem/setGasMat      ArCO2
 /testem/setGasMat      G4_Ar
 /testem/setGasThick    1.5 cm
 #

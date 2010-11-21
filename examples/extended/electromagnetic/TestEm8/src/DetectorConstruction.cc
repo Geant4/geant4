@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.2 2010-10-27 14:52:07 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.3 2010-11-21 13:00:29 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -209,7 +209,7 @@ void DetectorConstruction::DefineMaterials()
   fWindowMat = Mylar;
   fWorldMaterial = empty; 
 
-  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+  // G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 
 /////////////////////////////////////////////////////////////////////////

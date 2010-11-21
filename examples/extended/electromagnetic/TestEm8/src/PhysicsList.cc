@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.21 2010-10-27 14:52:07 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.22 2010-11-21 13:00:29 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -286,11 +286,16 @@ void PhysicsList::NewPAIModel(const G4ParticleDefinition* part,
 			      const G4String& procname)
 {
   G4String partname = part->GetParticleName();
-  if(modname == "pai") {
+
+  if(modname == "pai") 
+  {
     G4PAIModel* pai = new G4PAIModel(part,"PAIModel");
+    pai->SetVerboseLevel(1);
     em_config->SetExtraEmModel(partname,procname,pai,"GasDetector",
 			      0.0,100.*TeV,pai);
-  } else if(modname == "pai_photon") {
+  } 
+  else if(modname == "pai_photon") 
+  {
     G4PAIPhotonModel* pai = new G4PAIPhotonModel(part,"PAIPhotModel");
     em_config->SetExtraEmModel(partname,procname,pai,"GasDetector",
 			      0.0,100.*TeV,pai);
