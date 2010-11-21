@@ -1,4 +1,4 @@
-$Id: History,v 1.520 2010-11-20 20:58:35 vnivanch Exp $
+$Id: History,v 1.521 2010-11-21 16:08:37 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-20 November 2010: V.Ivant (emstand-V09-03-29)
-- G4PEEffectFluoModel, G4KleinNishinaModel -fixed energy balance
+21 November 2010: V.Ivant (emstand-V09-03-29)
+- G4PEEffectFluoModel, G4KleinNishinaModel - fixed energy balance
 
 17 November 2010: V.Ivant (emstand-V09-03-28)
 - G4ICRU73QOModel (A.Bagulya) - fine tuning for 9.4, low limit is

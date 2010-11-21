@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PEEffectFluoModel.cc,v 1.3 2010-11-20 21:00:11 vnivanch Exp $
+// $Id: G4PEEffectFluoModel.cc,v 1.4 2010-11-21 16:08:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -173,16 +173,19 @@ G4PEEffectFluoModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
   //
   G4double edep = bindingEnergy;
   if(fAtomDeexcitation) {
-    G4int Z = (G4int)anElement->GetZ();
-    G4AtomicShellEnumerator as = G4AtomicShellEnumerator(i);
-    const G4AtomicShell* shell = fAtomDeexcitation->GetAtomicShell(Z, as);
-    size_t nbefore = fvect->size();
-    fAtomDeexcitation->GenerateParticles(fvect, shell, Z, couple->GetIndex());
-    size_t nafter = fvect->size();
-    if(nafter > nbefore) {
-      for (size_t i=nbefore; i<nafter; ++i) {
-        edep -= ((*fvect)[i])->GetKineticEnergy();
-      } 
+    G4int index = couple->GetIndex();
+    if(fAtomDeexcitation->CheckDeexcitationActiveRegion(index)) {
+      G4int Z = (G4int)anElement->GetZ();
+      G4AtomicShellEnumerator as = G4AtomicShellEnumerator(i);
+      const G4AtomicShell* shell = fAtomDeexcitation->GetAtomicShell(Z, as);
+      size_t nbefore = fvect->size();
+      fAtomDeexcitation->GenerateParticles(fvect, shell, Z, index);
+      size_t nafter = fvect->size();
+      if(nafter > nbefore) {
+	for (size_t i=nbefore; i<nafter; ++i) {
+	  edep -= ((*fvect)[i])->GetKineticEnergy();
+	} 
+      }
     }
   }
 
