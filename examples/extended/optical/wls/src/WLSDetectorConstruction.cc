@@ -59,13 +59,14 @@
 
 #include "G4UserLimits.hh"
 
+WLSPhotonDetSD* WLSDetectorConstruction::mppcSD = NULL;
+
 WLSDetectorConstruction::WLSDetectorConstruction()
  : physiWorld(NULL)
 {
 
   detectorMessenger = new WLSDetectorMessenger(this);
   materials = NULL;
-  mppcSD    = NULL;
 
   numOfCladLayers = 0;
  
