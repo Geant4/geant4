@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VAtomDeexcitation.hh,v 1.6 2010-11-20 20:56:41 vnivanch Exp $
+// $Id: G4VAtomDeexcitation.hh,v 1.7 2010-11-21 16:45:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -99,7 +99,7 @@ public:
   // Activation of deexcitation per detector region
   void SetDeexcitationActiveRegion(const G4String& rname = "", 
 				   G4bool valDeexcitation = true,
-				   G4bool valAuger = true,
+				   G4bool valAuger = false,
 				   G4bool valPIXE = true);
 
   // Activation of Auger electron production
@@ -270,13 +270,15 @@ G4VAtomDeexcitation::GenerateParticles(std::vector<G4DynamicParticle*>* v,
 				       G4int Z,
 				       G4int idx)
 {
-  G4double gCut = (*theCoupleTable->GetEnergyCutsVector(idx))[0];
-  if(gCut < as->BindingEnergy()) {
-    G4double eCut = DBL_MAX;
-    if(flagAuger && CheckAugerActiveRegion(idx)) { 
-      eCut = (*theCoupleTable->GetEnergyCutsVector(idx))[1];
+  if(CheckDeexcitationActiveRegion(idx)) {
+    G4double gCut = (*theCoupleTable->GetEnergyCutsVector(idx))[0];
+    if(gCut < as->BindingEnergy()) {
+      G4double eCut = DBL_MAX;
+      if(flagAuger && CheckAugerActiveRegion(idx)) { 
+	eCut = (*theCoupleTable->GetEnergyCutsVector(idx))[1];
+      }
+      GenerateParticles(v, as, Z, gCut, eCut);
     }
-    GenerateParticles(v, as, Z, gCut, eCut);
   }
 }
 

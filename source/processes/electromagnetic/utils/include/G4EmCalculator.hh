@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.hh,v 1.20 2010-04-13 10:58:03 vnivanch Exp $
+// $Id: G4EmCalculator.hh,v 1.21 2010-11-21 16:45:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -60,6 +60,7 @@
 #include "globals.hh"
 #include "G4DataVector.hh"
 #include "G4DynamicParticle.hh"
+#include "G4VAtomDeexcitation.hh"
 
 class G4LossTableManager;
 class G4Material;
@@ -126,6 +127,11 @@ public:
                    G4double kinEnergy, const G4String& part, const G4String& proc,
                    const G4String& mat, const G4String& s = "world");
 
+  G4double GetShellIonisationCrossSectionPerAtom(
+                   const G4String& part, G4int Z, 
+		   G4AtomicShellEnumerator shell,
+                   G4double kinEnergy);
+
   G4double GetMeanFreePath(G4double kinEnergy, const G4ParticleDefinition*,
                    const G4String& processName,  const G4Material*,
 		   const G4Region* r = 0);
@@ -180,6 +186,11 @@ public:
                        G4double kinEnergy, const G4String& part,
                        const G4String& processName, const G4Element*,
 		       G4double cut = 0.0);
+
+  G4double ComputeShellIonisationCrossSectionPerAtom(
+                   const G4String& part, G4int Z, 
+		   G4AtomicShellEnumerator shell,
+                   G4double kinEnergy);
 
   G4double ComputeMeanFreePath(
                        G4double kinEnergy, const G4ParticleDefinition*,

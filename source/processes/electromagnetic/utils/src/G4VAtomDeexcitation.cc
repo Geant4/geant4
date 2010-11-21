@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VAtomDeexcitation.cc,v 1.5 2010-11-20 20:56:41 vnivanch Exp $
+// $Id: G4VAtomDeexcitation.cc,v 1.6 2010-11-21 16:45:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -68,6 +68,7 @@ G4VAtomDeexcitation::G4VAtomDeexcitation(const G4String& modname,
   vdyn.reserve(5);
   secVect.reserve(5);
   theCoupleTable = 0;
+  SetDeexcitationActiveRegion("World");
 }
 
 G4VAtomDeexcitation::~G4VAtomDeexcitation()
@@ -82,6 +83,9 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
   activeAugerMedia.resize(numOfCouples, false);
   activePIXEMedia.resize(numOfCouples, false);
   activeZ.resize(93, false);
+
+  // check if deexcitation is active for the given run
+  if( !isActive ) { return; }
 
   // Define list of regions
   size_t nRegions = activeRegions.size();

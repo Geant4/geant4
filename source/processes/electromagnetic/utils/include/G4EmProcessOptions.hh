@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.hh,v 1.17 2010-11-20 20:56:41 vnivanch Exp $
+// $Id: G4EmProcessOptions.hh,v 1.18 2010-11-21 16:45:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -106,6 +106,7 @@ public:
 
   void SetLinearLossLimit(G4double val);
 
+  // obsolete will be removed
   void ActivateDeexcitation(const G4String& proc, G4bool val, 
 			    const G4String& reg = "");
 

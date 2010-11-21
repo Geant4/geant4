@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.57 2010-11-04 12:55:09 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.58 2010-11-21 16:45:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -344,6 +344,23 @@ G4double G4EmCalculator::GetCrossSectionPerVolume(G4double kinEnergy,
 {
   return GetCrossSectionPerVolume(kinEnergy,FindParticle(particle),processName,
                                   FindMaterial(material),FindRegion(reg));
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4EmCalculator::GetShellIonisationCrossSectionPerAtom(
+					 const G4String& particle, 
+                                         G4int Z, 
+					 G4AtomicShellEnumerator shell,
+					 G4double kinEnergy)
+{
+  G4double res = 0.0;
+  const G4ParticleDefinition* p = FindParticle(particle);
+  G4VAtomDeexcitation* ad = manager->AtomDeexcitation();
+  if(p && ad) { 
+    res = ad->GetShellIonisationCrossSectionPerAtom(p, Z, shell, kinEnergy); 
+  }
+  return res;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -696,6 +713,24 @@ G4double G4EmCalculator::ComputeCrossSectionPerAtom(G4double kinEnergy,
   return ComputeCrossSectionPerAtom(kinEnergy,FindParticle(particle),
 				    processName,
                                     elm->GetZ(),elm->GetN(),cut);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4EmCalculator::ComputeShellIonisationCrossSectionPerAtom(
+					 const G4String& particle, 
+                                         G4int Z, 
+					 G4AtomicShellEnumerator shell,
+					 G4double kinEnergy)
+{
+  G4double res = 0.0;
+  const G4ParticleDefinition* p = FindParticle(particle);
+  G4VAtomDeexcitation* ad = manager->AtomDeexcitation();
+  if(p && ad) { 
+    res = 
+      ad->ComputeShellIonisationCrossSectionPerAtom(p, Z, shell, kinEnergy); 
+  }
+  return res;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
