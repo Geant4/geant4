@@ -1,4 +1,4 @@
-# $Id: pixe.mac,v 1.1 2010-11-19 12:17:50 vnivanch Exp $
+# $Id: pixe.mac,v 1.2 2010-11-22 18:32:59 vnivanch Exp $
 #
 # macro file for TestEm18.cc
 #
@@ -9,18 +9,21 @@
 /testem/det/setSize 1 cm
 #
 /testem/phys/addPhysics emstandardFLUO
+#/testem/phys/addPhysics emstandard_opt2
+#/testem/phys/addPhysics emlivermore
+#/testem/phys/addPhysics empenelope
 #
 /testem/phys/setCuts 0.01 mm
-/testem/phys/fluo true
-/testem/phys/pixe true
 /testem/stack/killSecondaries false
 #
 /run/initialize
+/testem/phys/fluo true
+/testem/phys/pixe true
 #
 /gun/particle proton
 /gun/energy 100 MeV
 #
-/testem/histo/setFileName proton100mev
+/testem/histo/setFileName proton100mev_fluo
 /testem/histo/setHisto 4 80  0 800 keV  #e- energy spectrum
 /testem/histo/setHisto 5 500 0 50   keV  #g energy spectrum
 #

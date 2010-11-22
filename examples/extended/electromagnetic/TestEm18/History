@@ -1,4 +1,4 @@
-$Id: History,v 1.19 2010-11-19 19:51:47 vnivanch Exp $
+$Id: History,v 1.20 2010-11-22 18:32:59 vnivanch Exp $
 ----------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22-11-10 V.Ivanchenko (testem18-V09-03-05)
+- PhysicsList, PhysListEmStandardFLUO - changed coherently with
+   emutils upgrade
 
 19-11-10 V.Ivanchenko (testem18-V09-03-04)
 - PhysicsList is taken from TestEm5, obsolete builders for 

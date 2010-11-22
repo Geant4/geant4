@@ -1,4 +1,4 @@
-# $Id: fluo.mac,v 1.1 2010-11-19 12:17:50 vnivanch Exp $
+# $Id: fluo.mac,v 1.2 2010-11-22 18:32:59 vnivanch Exp $
 #
 # macro file for TestEm18.cc
 #
@@ -9,18 +9,21 @@
 /testem/det/setSize 1 cm
 #
 /testem/phys/addPhysics emstandardFLUO
+#/testem/phys/addPhysics emstandard_opt2
+#/testem/phys/addPhysics emlivermore
+#/testem/phys/addPhysics empenelope
 #
 /testem/phys/setCuts 0.01 mm
-/testem/phys/fluo true
-/testem/phys/pixe false
 /testem/stack/killSecondaries false
 #
 /run/initialize
+/testem/phys/fluo true
+/testem/phys/pixe false
 #
 /gun/particle e-
 /gun/energy 10 MeV
 #
-/testem/histo/setFileName e-10mev
+/testem/histo/setFileName e-10mev_fluo
 /testem/histo/setHisto 4 80  0 800 keV  #e- energy spectrum
 /testem/histo/setHisto 5 500 0 50   keV  #g energy spectrum
 #
@@ -29,7 +32,7 @@
 /gun/particle gamma
 /gun/energy 10 MeV
 #
-/testem/histo/setFileName gamma10mev
+/testem/histo/setFileName gamma10mev_fluo
 /testem/histo/setHisto 4 80  0 800 keV  #e- energy spectrum
 /testem/histo/setHisto 5 500 0 50   keV  #g energy spectrum
 #

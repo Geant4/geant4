@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.7 2010-11-19 12:17:50 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.8 2010-11-22 18:32:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -312,12 +312,8 @@ void PhysicsList::SetCutForProton(G4double cut)
 
 void PhysicsList::SetFluorescence(G4bool value)
 {
-  G4VAtomDeexcitation* de = 0;
-  if(value) { 
-    de = new G4UAtomicDeexcitation(); 
-    de->SetDeexcitationActiveRegion("World");
-  }
-  G4LossTableManager::Instance()->SetAtomDeexcitation(de);
+  G4VAtomDeexcitation* de = G4LossTableManager::Instance()->AtomDeexcitation();
+  if(de) { de->SetActive(value); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

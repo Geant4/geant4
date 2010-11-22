@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardFLUO.cc,v 1.1 2010-11-19 12:18:15 vnivanch Exp $
+// $Id: PhysListEmStandardFLUO.cc,v 1.2 2010-11-22 18:32:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,6 +38,7 @@
 #include "G4PhotoElectricEffect.hh"
 #include "G4PEEffectFluoModel.hh"
 #include "G4KleinNishinaModel.hh"
+#include "G4UAtomicDeexcitation.hh"
 
 #include "G4eMultipleScattering.hh"
 #include "G4UrbanMscModel93.hh"
@@ -59,6 +60,7 @@
 #include "G4IonParametrisedLossModel.hh"
 #include "G4NuclearStopping.hh"
 
+#include "G4LossTableManager.hh"
 #include "G4EmProcessOptions.hh"
 #include "G4MscStepLimitType.hh"
 
@@ -182,6 +184,13 @@ void PhysListEmStandardFLUO::ConstructProcess()
   //ionization
   //
   //emOptions.SetSubCutoff(false);	//default
+
+  //deexcitation
+  G4VAtomDeexcitation* de = new G4UAtomicDeexcitation(); 
+  de->SetActive(true);
+  de->SetPIXEActive(true);
+  G4LossTableManager::Instance()->SetAtomDeexcitation(de);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
