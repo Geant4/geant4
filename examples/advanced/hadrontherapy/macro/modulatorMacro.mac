@@ -99,10 +99,6 @@
 /run/beamOn 100
 /vis/viewer/flush
 
-<<<<<<< modulatorMacro.mac
-/modulator/angle 1 deg
-/run/beamOn 110
-=======
 /modulator/angle 10 deg
 /run/beamOn 5
 /vis/viewer/flush
@@ -117,20 +113,10 @@
 
 /modulator/angle 40 deg
 /run/beamOn 5
->>>>>>> 1.9
 /vis/viewer/flush
 
-<<<<<<< modulatorMacro.mac
-/modulator/angle 15 deg
-/run/beamOn 110
-/vis/viewer/flush
-
-/modulator/angle 15 deg
-/run/beamOn 110
-=======
 /modulator/angle 50 deg
 /run/beamOn 5
->>>>>>> 1.9
 /vis/viewer/flush
 
 /modulator/angle 60 deg
