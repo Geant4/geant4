@@ -13,6 +13,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+18-November-2010 Tatsumi Koi (hadr-qmd-V09-03-00)
+- Enable RQMD
+	include/G4QMDReaction.hh  
+	src/G4QMDReaction.cc  
+	include/G4QMDMeanField.hh
+	src/G4QMDMeanField.cc
+
 20-November-2009 Tatsumi Koi (hadr-qmd-V09-02-03)
 - Delete obviously unnecessary dependency in GNUMakefile 
 	GNUmakefile
