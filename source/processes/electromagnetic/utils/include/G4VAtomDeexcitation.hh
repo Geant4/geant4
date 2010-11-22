@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VAtomDeexcitation.hh,v 1.7 2010-11-21 16:45:12 vnivanch Exp $
+// $Id: G4VAtomDeexcitation.hh,v 1.8 2010-11-22 18:18:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -176,6 +176,7 @@ private:
   G4VAtomDeexcitation & operator=(const G4VAtomDeexcitation &right);
 
   G4ProductionCutsTable* theCoupleTable;
+  G4double lowestKinEnergy;
   G4int    verbose;
   G4String name;
   G4String namePIXE;
@@ -271,11 +272,11 @@ G4VAtomDeexcitation::GenerateParticles(std::vector<G4DynamicParticle*>* v,
 				       G4int idx)
 {
   if(CheckDeexcitationActiveRegion(idx)) {
-    G4double gCut = (*theCoupleTable->GetEnergyCutsVector(idx))[0];
+    G4double gCut = (*(theCoupleTable->GetEnergyCutsVector(0)))[idx];
     if(gCut < as->BindingEnergy()) {
       G4double eCut = DBL_MAX;
       if(flagAuger && CheckAugerActiveRegion(idx)) { 
-	eCut = (*theCoupleTable->GetEnergyCutsVector(idx))[1];
+	eCut = (*(theCoupleTable->GetEnergyCutsVector(1)))[idx];
       }
       GenerateParticles(v, as, Z, gCut, eCut);
     }

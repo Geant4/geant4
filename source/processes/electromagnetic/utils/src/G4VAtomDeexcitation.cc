@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VAtomDeexcitation.cc,v 1.6 2010-11-21 16:45:12 vnivanch Exp $
+// $Id: G4VAtomDeexcitation.cc,v 1.7 2010-11-22 18:18:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -62,8 +62,8 @@
 
 G4VAtomDeexcitation::G4VAtomDeexcitation(const G4String& modname, 
 					 const G4String& pname) 
-  : verbose(1), name(modname), namePIXE(pname), isActive(false),
-    flagAuger(false), flagPIXE(false)
+  : lowestKinEnergy(keV), verbose(1), name(modname), namePIXE(pname), 
+    isActive(false), flagAuger(false), flagPIXE(false)
 {
   vdyn.reserve(5);
   secVect.reserve(5);
@@ -132,13 +132,14 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
     }
   }
 
-  if(0 < verbose && "" != namePIXE) {
-    G4cout << "### ===  PIXE model: " << namePIXE 
-	   << G4endl;  
-  }
-
   // Initialise derived class
   InitialiseForNewRun();
+
+  if(0 < verbose && flagPIXE) {
+    G4cout << "### ===  PIXE model: " << namePIXE
+	   << "  " <<  IsPIXEActive()
+	   << G4endl;  
+  }
 }
 
 void 
@@ -192,61 +193,69 @@ G4VAtomDeexcitation::AlongStepDeexcitation(G4VParticleChange* pParticleChange,
   const G4Track* track = step.GetTrack();
   const G4ParticleDefinition* part = track->GetDefinition();
   G4double ekin = preStep->GetKineticEnergy() - 0.5*eLoss;
+  if(ekin <= lowestKinEnergy) { return; }
 
   // media parameters
-  G4double gCut = (*theCoupleTable->GetEnergyCutsVector(coupleIndex))[0];
-  G4double eCut = (*theCoupleTable->GetEnergyCutsVector(coupleIndex))[1];
-  if(!flagAuger || !CheckAugerActiveRegion(coupleIndex)) { eCut = DBL_MAX; }
+  G4double gCut = (*(theCoupleTable->GetEnergyCutsVector(0)))[coupleIndex];
+  G4double eCut = DBL_MAX;
+  if(flagAuger && CheckAugerActiveRegion(coupleIndex)) { 
+    eCut = (*(theCoupleTable->GetEnergyCutsVector(1)))[coupleIndex];
+  }
 
   const G4Material* material = preStep->GetMaterial();
   const G4ElementVector* theElementVector = material->GetElementVector();
   const G4double* theAtomNumDensityVector = material->GetVecNbOfAtomsPerVolume();
   G4int nelm = material->GetNumberOfElements();
 
+  //G4cout<<"!Sample PIXE gCut(MeV)= "<<gCut<<"  eCut(MeV)= "<<eCut
+  //	<<" Ekin(MeV)= " << ekin/MeV <<G4endl;
+
   // loop over deexcitations
   secVect.clear();
   for(G4int i=0; i<nelm; ++i) {
     G4int Z = G4int((*theElementVector)[i]->GetZ());
-    if(Z >= 93)    { continue; } 
+    if(Z >= 93)     { continue; } 
     if(!activeZ[Z]) { continue; }
-    G4double x = truelength*theAtomNumDensityVector[i];
-    if(x > 0.0) {
+    G4double rho = theAtomNumDensityVector[i];
+    //G4cout << "   Z " << Z <<" is active  x(mm)= " << truelength/mm << G4endl;
+    if(truelength*rho > 0.0) {
       for(G4int ii=0; ii<9; ++ii) {
 	G4AtomicShellEnumerator as = G4AtomicShellEnumerator(ii);
 	const G4AtomicShell* shell = GetAtomicShell(Z, as);
 	if(gCut < shell->BindingEnergy()) {
-	  G4double mfp = 
+	  G4double sig = rho*
 	    GetShellIonisationCrossSectionPerAtom(part, Z, as, ekin); 
 
 	  // mfp is mean free path in units of step size
-	  if(mfp > 0.0) {
-	    mfp = 1.0/(x*mfp);
+	  if(sig > 0.0) {
+	    G4double mfp = 1.0/(sig*truelength);
 	    G4double stot = 0.0;
-
+	    //G4cout << " Shell " << ii << " mfp(mm)= " << mfp/mm << G4endl;
 	    // sample ionisation points
 	    do {
 	      stot -= mfp*std::log(G4UniformRand());
-	      if( stot > 1.0) { break; }
+	      if( stot <= 1.0) { 
 
-	      // sample deexcitation
-	      vdyn.clear();
-	      GenerateParticles(&vdyn, shell, Z, gCut, eCut); 
-	      G4int nsec = vdyn.size();
-	      if(nsec > 0) {
-		G4ThreeVector r = prePos  + stot*delta;
-		G4double time   = preTime + stot*dt;
-		for(G4int j=0; j<nsec; ++j) {
-		  G4DynamicParticle* dp = vdyn[j];
-		  G4double e = dp->GetKineticEnergy();
+		// sample deexcitation
+		vdyn.clear();
+		GenerateParticles(&vdyn, shell, Z, gCut, eCut); 
+		G4int nsec = vdyn.size();
+		if(nsec > 0) {
+		  G4ThreeVector r = prePos  + stot*delta;
+		  G4double time   = preTime + stot*dt;
+		  for(G4int j=0; j<nsec; ++j) {
+		    G4DynamicParticle* dp = vdyn[j];
+		    G4double e = dp->GetKineticEnergy();
 
-		  // save new secondary if there is enough energy
-		  if(e <= eLoss) {
-		    G4Track* t = new G4Track(dp, time, r);
-		    secVect.push_back(t); 
-		    eLoss -= e;
-		  } else {
-		    delete dp;
-		  }                   
+		    // save new secondary if there is enough energy
+		    if(e <= eLoss) {
+		      G4Track* t = new G4Track(dp, time, r);
+		      secVect.push_back(t); 
+		      eLoss -= e;
+		    } else {
+		      delete dp;
+		    }           
+		  }        
 		}
 	      }
 	    } while ( stot < 1.0 && eLoss > 0.0);
@@ -256,6 +265,7 @@ G4VAtomDeexcitation::AlongStepDeexcitation(G4VParticleChange* pParticleChange,
     } 
   }
   G4int nsec = secVect.size(); 
+  //G4cout << " !!!! Nsec= " << nsec << G4endl;
   if(nsec > 0) {
     G4int secondariesBefore = pParticleChange->GetNumberOfSecondaries();
     pParticleChange->SetNumberOfSecondaries(nsec+secondariesBefore);
