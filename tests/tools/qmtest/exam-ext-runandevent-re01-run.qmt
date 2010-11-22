@@ -15,7 +15,6 @@ Warning : Region &lt;CalorimeterRegion&gt; does not have specific production cut
 even though it appears in the current tracking world.
 Default cuts are used for this region.</text>
   </argument>
-  <argument name="resources">
   <argument name="stdout">
     <text/>
   </argument>
