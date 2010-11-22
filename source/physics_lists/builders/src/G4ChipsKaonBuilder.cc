@@ -56,29 +56,27 @@ G4ChipsKaonBuilder::
 
 void G4ChipsKaonBuilder::Build()
 {
-    if (verb > 0 ) 
-      {G4cout << "Info - G4ChipsKaonBuilder::Build() not adding elastic" <<
-                  G4endl;}
-    
-    attachProcess(G4KaonPlus::KaonPlus());
-    attachProcess(G4KaonMinus::KaonMinus());
-    attachProcess(G4KaonZeroShort::KaonZeroShort());
-    attachProcess(G4KaonZeroLong::KaonZeroLong());
+     static G4bool onceOnly(true);
+     if ( onceOnly )
+     {
+	if (verb > 0 ) 
+	  {G4cout << "Info - G4ChipsKaonBuilder::Build() not adding elastic" <<
+                      G4endl;}
 
+	attachProcess(G4KaonPlus::KaonPlus());
+	attachProcess(G4KaonMinus::KaonMinus());
+	attachProcess(G4KaonZeroShort::KaonZeroShort());
+	attachProcess(G4KaonZeroLong::KaonZeroLong());
+        onceOnly=false;
+     }
 }
 
 void G4ChipsKaonBuilder::attachProcess(G4ParticleDefinition * pDef)
 {
-     static G4bool onceOnly(true);
-     if ( onceOnly )
-     { 
-	if ( verb > 0 ) {
-           G4cout << " Using G4Qinelastic for " << pDef->GetParticleName()
-	         << G4endl; 
-	}
-	G4ProcessManager* pMan = pDef->GetProcessManager();
-	pMan->AddDiscreteProcess(theInelastic);
-
-        onceOnly=false;
+     if ( verb > 0 ) {
+        G4cout << " Using G4Qinelastic for " << pDef->GetParticleName()
+	      << G4endl; 
      }
+     G4ProcessManager* pMan = pDef->GetProcessManager();
+     pMan->AddDiscreteProcess(theInelastic);
 }
