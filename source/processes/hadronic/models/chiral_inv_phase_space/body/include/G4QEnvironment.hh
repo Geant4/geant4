@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QEnvironment.hh,v 1.37 2010-02-04 09:32:33 mkossov Exp $
+// $Id: G4QEnvironment.hh,v 1.38 2010-11-22 07:07:27 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -49,10 +49,11 @@
 class G4QEnvironment 
 {
 public:
-  G4QEnvironment(const G4QNucleus theEnv);             // Create Env and add Quasmons later
+  G4QEnvironment(const G4QNucleus& theEnv); // Create Env and add Quasmons
+                                            // later
   G4QEnvironment(const G4QHadronVector& projHadrons, const G4int targPDG);
-  G4QEnvironment(const G4QEnvironment& right);         // copy QEnvironment by value
-  G4QEnvironment(G4QEnvironment* right);               // copy QEnvironment by pointer
+  G4QEnvironment(const G4QEnvironment& right);  // copy QEnvironment by value
+  G4QEnvironment(G4QEnvironment* right);        // copy QEnvironment by pointer
   ~G4QEnvironment();                                   // Public Destructor
 
   // Overloaded operators
@@ -113,7 +114,7 @@ private:
   G4double           f2all;          // Ratio of freeNucleons to free+denseNucleons
   G4QuasmonVector    theQuasmons;    // Intermediate vectorOfQuasmons before fragmentation
   G4QCandidateVector theQCandidates; // Vector of possible candidates to clusters
-  G4QNucleus         theEnvironment; // InitialNucleus (later ResidualNuclearEnvironment)
+  G4QNucleus theEnvironment; // InitialNucleus (later ResidualNuclearEnvironment)
   G4LorentzVector    tot4Mom;        // Total 4-momentum in the reaction
   G4int              totCharge;      // Total charge in the reaction (for current control)
   G4int              totBaryoN;      // Total baryon number in the reaction (for cur.cont)

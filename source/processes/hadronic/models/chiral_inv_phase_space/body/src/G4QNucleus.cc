@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.120 2010-06-24 16:20:11 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.121 2010-11-22 07:08:22 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -4044,8 +4044,15 @@ G4int G4QNucleus::HadrToNucPDG(G4int hPDG)
   else if(hPDG== 211) nPDG=90000999; // pi+
   else if(hPDG==-211) nPDG=89999001; // pi-
   else if(hPDG== 213) nPDG=89000001; // K0 (anti-strange)
-  else if(hPDG== 213) nPDG=89001000; // K+ (anti-strange)
+
+  // DHW 11 Nov 2010: following line never reached 
+  // (same PDG code as K0) => comment out DHW
+  // Note that 213 is the PDG code for rho, not K+ or K0
+  // K+ is 321, K0 is 311 
+  // else if(hPDG== 213) nPDG=89001000; // K+ (anti-strange)
   else if(hPDG==-213) nPDG=90999999; // anti-K0 (strange)
+
+  // Following line never reached (same PDG code as anti-K0) => comment out DHW
   else if(hPDG==-213) nPDG=90999000; // K-      (strange)
   else if(hPDG==1114) nPDG=89999002; // Delta-
   else if(hPDG==2224) nPDG=90001999; // Delta++

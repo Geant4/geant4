@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//       1         2         3         4         5         6         7         8         9
-//34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
+//       1         2         3         4         5         6         7         
+//34567890123456789012345678901234567890123456789012345678901234567890123456789
 //
 //
-// $Id: G4QEnvironment.cc,v 1.171 2010-06-25 14:03:44 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.172 2010-11-22 07:07:43 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -63,49 +63,68 @@
 #include <cstdlib>
 using namespace std;
 
-G4QEnvironment::G4QEnvironment(const G4QNucleus theEnv) : theEnvironment(theEnv)
+// DHW 11 Nov 2010: change to pass by reference instead of by value
+G4QEnvironment::G4QEnvironment(const G4QNucleus& theEnv)
+ : theEnvironment(theEnv)
 {
-  G4int envPDG=theEnv.GetPDG();
+  G4int envPDG = theEnv.GetPDG();
   G4QPDGCode envQPDG(envPDG);
-  G4int    envA=envQPDG.GetBaryNum();
-  G4double envM=envQPDG.GetMass();
-  totCharge=envQPDG.GetCharge();
-  totBaryoN=envA;
-  tot4Mom=G4LorentzVector(0.,0.,0.,envM);
+  G4int envA = envQPDG.GetBaryNum();
+  G4double envM = envQPDG.GetMass();
+  theWorld = 0;
+  totCharge = envQPDG.GetCharge();
+  totBaryoN = envA;
+  tot4Mom = G4LorentzVector(0.,0.,0.,envM);
 #ifdef debug
-  G4cout<<"G4QEnviron::Const: t4M="<<tot4Mom<<",tC="<<totCharge<<",tB="<<totBaryoN<<G4endl;
+  G4cout << "G4QEnviron::Const: t4M=" << tot4Mom << ",tC=" << totCharge
+         << ",tB=" << totBaryoN << G4endl;
 #endif
 }
 
-G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int targPDG) :
-  theEnvironment(90000000)                   // User is responsible for projHadrons(Vector)
+
+G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons,
+                               const G4int targPDG)
+ : theEnvironment(90000000)     // User is responsible for projHadrons(Vector)
 {
   //static const G4double mNeut= G4QPDGCode(2112).GetMass();
   //static const G4QContent neutQC(2,1,0,0,0,0);
   static const G4QPDGCode pimQPDG(-211);
-  theWorld= G4QCHIPSWorld::Get();            // Get a pointer to the CHIPS World
-  G4bool fake=false;                         // At present only fake pi-
-  theTargetPDG=targPDG;                      // Remenber it for error message
-  G4int nHadrons=projHadrons.size();         // A#of hadrons in the input Vector
+  theWorld = G4QCHIPSWorld::Get();        // Get a pointer to the CHIPS World
+  nBarClust = 0;
+  totCharge = 0;
+  totBaryoN = 0;
+  f2all = 0;
+  G4bool fake=false;                      // At present only fake pi-
+  theTargetPDG=targPDG;                   // Remenber it for error message
+  G4int nHadrons=projHadrons.size();      // A#of hadrons in the input Vector
+
 #ifdef debug
-  G4cout<<">>>>>>G4QE::Const: Called targPDG="<<targPDG<<", nInpHadr="<<nHadrons<<G4endl;
+  G4cout << ">>>>>>G4QE::Const: Called targPDG=" << targPDG
+         << ", nInpHadr=" << nHadrons << G4endl;
 #endif
-  if(nHadrons<1 || targPDG==90000000)        // No projectile Hadrons or no target Nucleus
+  if(nHadrons<1 || targPDG==90000000)    // No projectile Hadrons or no target Nucleus
   {
-    G4cout<<"---Warning---G4QEnv::Const:a#ofINPHadr="<<nHadrons<<",tPDG="<<targPDG<<G4endl;
+    G4cout << "---Warning---G4QEnv::Const:a#ofINPHadr=" << nHadrons
+           << ",tPDG=" << targPDG << G4endl;
     //throw G4QException("***G4QEnvironment: There is no one projectile or vacuum target");
-    if(nHadrons)                             // The projectiles are copied to the output
+    if(nHadrons)              // The projectiles are copied to the output
     {
-      for(G4int ih=0; ih<nHadrons; ih++)
+      for (G4int ih=0; ih<nHadrons; ih++)
       {
         G4QHadron* curQH    = new G4QHadron(projHadrons[ih]);
 #ifdef debug
-        G4cout<<"*G4QE::Const:iH#"<<ih<<","<<curQH->GetQC()<<curQH->Get4Momentum()<<G4endl;
+        G4cout << "*G4QE::Const:iH#" << ih << "," << curQH->GetQC()
+               << curQH->Get4Momentum() << G4endl;
 #endif
-        if(curQH->GetPDGCode() == 10)        // Chipolino is found in the input -> Decay
-        {
-          G4QContent   chQC=curQH->GetQC();  // Quark content of the Hadron-Chipolino
-          G4QChipolino QCh(chQC);            // Define a Chipolino instance for the Hadron
+
+        if (curQH->GetPDGCode() == 10) {
+          // Chipolino is found in the input -> Decay
+
+          G4QContent   chQC=curQH->GetQC();
+          // Quark content of the Hadron-Chipolino
+          G4QChipolino QCh(chQC);
+          // Define a Chipolino instance for the Hadron
+
           G4LorentzVector ch4M=curQH->Get4Momentum(); // 4Mom of the Hadron-Chipolino
           G4QPDGCode h1QPDG=QCh.GetQPDG1();  // QPDG of the first hadron
           G4double   h1M   =h1QPDG.GetMass();// Mass of the first hadron
@@ -539,6 +558,7 @@ G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int t
 #endif
 } // End of the G4QEnvironment constructor
 
+
 G4QEnvironment::G4QEnvironment(const G4QEnvironment &right)
 {
   // theQHadrons (Vector)
@@ -815,8 +835,10 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
 #ifdef debug
     G4cout<<"G4QE::CrQ:ClusterProbabCalculation tC="<<totCharge<<",tB="<<totBaryoN<<G4endl;
 #endif
-    G4bool efFlag=false;                    // EnergyFlowFlag=FALSE (@@=DEFOLT=@@ make par)
-    // ********** Change if necessary to compare Energy Flux & Multy Quasmon **************
+
+    G4bool efFlag = false;     // EnergyFlowFlag=FALSE (@@=DEFOLT=@@ make par)
+    // ***** Change if necessary to compare Energy Flux & Multy Quasmon ******
+
     G4int efCounter=0;                      // Counter of Energy Flux particles
     G4QContent EnFlQC(0,0,0,0,0,0);         // Quark Content of Energy Flux
     G4LorentzVector ef4Mom(0.,0.,0.,0.);    // Summed 4-momentum of Energy Flux
@@ -929,35 +951,44 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
           G4cout<<"G4QE::CQ:>H="<<shPDG<<":"<<dir.dot(shDIR)<<">"<<solAnCut<<G4endl; // ^ ^
 #endif
           //if((dir.dot(shDIR)>solAnCut||shMOM<120.) && abs(shPDG)>99) // Absorb mesons ^ ^
-          if(dir.dot(shDIR)>solAnCut && abs(shPDG)>99) // Absorb mesons                 ^ ^
+          if(dir.dot(shDIR)>solAnCut && abs(shPDG)>99) // Absorb mesons
           {
 #ifdef debug
-            G4cout<<"G4QE::CQ:>H="<<shPDG<<":"<<dir.dot(shDIR)<<">"<<solAnCut<<", P="// ^ ^
-                  <<shMOM<<" < 120"<<G4endl;                           //               ^ ^
+            G4cout << "G4QE::CQ:>H=" << shPDG << ":" << dir.dot(shDIR)
+                   << ">" << solAnCut << ", P="// ^ ^
+                   << shMOM <<" < 120" << G4endl;           //          ^ ^
 #endif
-            if(efFlag)                           // => Case of "Energy Flux approach"   ^ ^
-            {
-              G4QContent shQC = curHadr->GetQC();// QuarkContent of the Current Hadron  ^ ^
+            // DHW 11 Nov 2010: Comment out because efFlag always false
+	    /* 
+            if (efFlag) {        // => Case of "Energy Flux approach"   ^ ^
+              G4QContent shQC = curHadr->GetQC();
+              // QuarkContent of the Current Hadron  ^ ^
+
               ef4Mom+=sh4m;
               EnFlQC+=shQC;
               efCounter++;
 #ifdef debug
-              G4int hPDG=curHadr->GetPDGCode();    // Only for gebug printing           ^ ^
+              G4int hPDG=curHadr->GetPDGCode();   // Only for gebug printing
               G4LorentzVector h4M = curHadr->Get4Momentum();  // Only for gebug printing^ ^
-              G4cout<<"G4QE::CrQ:#"<<efCounter<<", PDG="<<hPDG<<", h4M="<<h4M<<G4endl;//^ ^
+              G4cout << "G4QE::CrQ:#" << efCounter << ", PDG=" << hPDG
+                     <<", h4M=" << h4M << G4endl;   //^ ^
 #endif
             }
             else                                   //=>"MultyQuasFragmentation"(!efFlag)^ ^
             {
+            */
               G4QHadron* mqHadron = new G4QHadron(curHadr);
-              input.push_back(mqHadron);           // Fill hadron-copy (del equiv)  <...^ ^
+              input.push_back(mqHadron);    // Fill hadron-copy (del equiv)
 #ifdef debug
               G4int hPDG=curHadr->GetPDGCode();    // Only for debug printing           ^ ^
               G4LorentzVector h4M = curHadr->Get4Momentum(); // Only for gebug printing ^ ^
-              G4cout<<"G4QE::CrQ:Absorb#"<<ind<<", PDG="<<hPDG<<", h4M="<<h4M<<G4endl;//^ ^
+              G4cout << "G4QE::CrQ:Absorb#" << ind << ", PDG=" << hPDG 
+                     << ", h4M=" << h4M << G4endl;   //^ ^
 #endif
-            }                                      //                                   ^ ^
-          }                                        //                                   ^ ^
+	      // DHW 11 Nov 2010: Comment out following line because efFlag always false 
+	      // }                                      //    ^ ^
+
+          }                                        //    ^ ^
           else                                     // DirectFilling of the output vector^ ^
           {                                        //                                   ^ ^
 #ifdef debug
