@@ -201,7 +201,7 @@ G4UAtomicDeexcitation::ComputeShellIonisationCrossSectionPerAtom(
 			       G4AtomicShellEnumerator shell,
 			       G4double kinE)
 {
-  return GetShellIonisationCrossSectionPerAtom(p,A,shell,kinE);
+  return GetShellIonisationCrossSectionPerAtom(p,Z,shell,kinE);
 }
 
 G4int G4UAtomicDeexcitation::SelectTypeOfTransition(G4int Z, G4int shellId)
