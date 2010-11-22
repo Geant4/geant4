@@ -244,95 +244,54 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
     }
     else if (name == "Em_extra_physics")
     {
-	if(!helIsRegistered) 
-	{
 	    hadronPhys.push_back( new G4EmExtraPhysics());
-	    helIsRegistered = true;
-	}
-	else  G4cout << "AN ELASTIC PHYSICS HAS BEEN ALREADY ACTIVATED!" << G4endl;
-
     }
     else if (name == "Stopping_physics")
     {
-	if(!helIsRegistered) 
-	{
 	    hadronPhys.push_back( new G4QStoppingPhysics());
-	    helIsRegistered = true;
-	}
-	else  G4cout << "AN ELASTIC PHYSICS HAS BEEN ALREADY ACTIVATED!" << G4endl;
     }
     else if (name == "Neutron_tracking_cut")
     {
-	if(!helIsRegistered) 
-	{
 	    hadronPhys.push_back( new G4NeutronTrackingCut());
-	    helIsRegistered = true;
-	}
-	else  G4cout << "AN ELASTIC PHYSICS HAS BEEN ALREADY ACTIVATED!" << G4endl;
-
     }
     else if (name == "Hadron_QGSP_BIC")
     {
-	if(!helIsRegistered) 
-	{
 	    hadronPhys.push_back( new HadronPhysicsQGSP_BIC());
-	    helIsRegistered = true;
-	}
-	else  G4cout << "AN ELASTIC PHYSICS HAS BEEN ALREADY ACTIVATED!" << G4endl;
-
+	   // helIsRegistered = true;
     }
     else if (name == "Hadron_QBBC") 
     {
-	if(!bicIsRegistered)
-	{
 	    hadronPhys.push_back(new G4HadronInelasticQBBC());
-	    bicIsRegistered = true;
+	    //bicIsRegistered = true;
 	    G4cout << "THE FOLLOWING HADRONIC INELASTIC PHYSICS LIST HAS BEEN ACTIVATED: G4HadronInelasticQBBC()" << G4endl;
-	}
-	else G4cout << "AN INELASTIC PHYSICS HAS BEEN ALREADY ACTIVATED!" << G4endl;
     } 
 
-    /*
-     else if (name == "binary" && !bicIsRegisted) 
+    else if (name == "binary") 
     {
     hadronPhys.push_back(new G4HadronInelasticQBBC());
-    bicIsRegisted = true;
+    //bicIsRegisted = true;
     G4cout << "THE FOLLOWING HADRONIC INELASTIC PHYSICS LIST HAS BEEN ACTIVATED: G4HadronInelasticQBBC()" << G4endl;
     }
-    */
+    
     else if (name == "binary_ion")
     {
-	if(!bicIsRegistered)
-	{
 	    hadronPhys.push_back(new G4IonBinaryCascadePhysics());
-	    biciIsRegistered = true;
-	}
-	else G4cout << "AN INELASTIC PHYSICS HAS BEEN ALREADY ACTIVATED!" << G4endl;
+	    //biciIsRegistered = true;
     }
     else if (name == "local_ion_ion_inelastic")
     {
-	if(!locIonIonInelasticIsRegistered)
-	{
 	    hadronPhys.push_back(new LocalIonIonInelasticPhysic());
 	    locIonIonInelasticIsRegistered = true;
-	}
-	else G4cout << "A LOCAL ION ION INELASTIC PHYSICS HAS BEEN ALREADY ACTIVATED!" << G4endl;
-
-    } else if (name == "local_incl_ion_ion_inelastic")
+    }
+    else if (name == "local_incl_ion_ion_inelastic")
     {
-	if(!locIonIonInelasticIsRegistered)
-	{
 	    hadronPhys.push_back(new LocalINCLIonIonInelasticPhysic());
 	    locIonIonInelasticIsRegistered = true;
-	}
-	else G4cout << "A LOCAL ION ION INELASTIC PHYSICS HAS BEEN ALREADY ACTIVATED!" << G4endl;
-
     } 
-    else if (name == "decay" && !radioactiveDecayIsRegistered )
+    else if (name == "decay")
     {
 	hadronPhys.push_back(new G4DecayPhysics());
-	radioactiveDecayIsRegistered = true;
-
+	//radioactiveDecayIsRegistered = true;
     }
     else if (name == "radioactive_decay" && !radioactiveDecayIsRegistered )
     {
