@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SandiaTable.hh,v 1.22 2010-11-12 14:55:41 grichine Exp $
+// $Id: G4SandiaTable.hh,v 1.23 2010-11-22 08:21:04 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -143,7 +143,7 @@ public:  // without description
 			 G4int el );
 
   G4int SandiaMixing(       G4int Z[],
-			    const G4double fractionW[],
+			    const G4double* fractionW,
 			    G4int el,
 			    G4int mi );
 
