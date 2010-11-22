@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 
-// $Id: G4SandiaTable.cc,v 1.40 2010-11-22 08:21:04 grichine Exp $
+// $Id: G4SandiaTable.cc,v 1.41 2010-11-22 10:35:22 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //
@@ -473,9 +473,9 @@ void G4SandiaTable::ComputeMatSandiaMatrixPAI()
 
     for( G4int i = 0; i < fMaxInterval; i++)
     {
-      G4cout<<i<<"\t"<<GetSandiaCofForMaterial(i,0)/keV<<" keV \t"<<this->GetSandiaCofForMaterial(i,1)
-       <<"\t"<<this->GetSandiaCofForMaterial(i,2)<<"\t"<<this->GetSandiaCofForMaterial(i,3)
-       <<"\t"<<this->GetSandiaCofForMaterial(i,4)<<G4endl;
+      G4cout<<i<<"\t"<<GetSandiaMatTablePAI(i,0)/keV<<" keV \t"<<this->GetSandiaMatTablePAI(i,1)
+       <<"\t"<<this->GetSandiaMatTablePAI(i,2)<<"\t"<<this->GetSandiaMatTablePAI(i,3)
+       <<"\t"<<this->GetSandiaMatTablePAI(i,4)<<G4endl;
     }   
   }
 
