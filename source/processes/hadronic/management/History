@@ -14,8 +14,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+21 November 2010  Dennis Wright  (hadr-man-V09-03-05)
+-----------------------------------------------------
+- G4EnergyRangeManager: initialize theHadronicInteractionCounter
+  and ptr theHadronicInteraction as per CoVerity
+
 17 August 2010  Vladimir Ivanchenko (hadr-man-V09-03-04)
-------------------------------------------------
+--------------------------------------------------------
 - G4HadronicProcess - use const GetParticleDefinition method of 
                       G4DynamicParticle
 - G4HadronicProcessStore - remove const_cast 
