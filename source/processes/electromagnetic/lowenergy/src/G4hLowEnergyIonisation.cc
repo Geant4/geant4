@@ -1485,6 +1485,9 @@ std::vector<G4DynamicParticle*>* G4hLowEnergyIonisation::DeexciteAtom(const G4Ma
           grej = 1.0 - beta2 * tkin/tmax;
 
         } while( G4UniformRand() > grej );
+
+	// Atom total cross section     
+	shellCS->SetTotalCS(totalCrossSectionMap[Z]);  
 	
         shell = shellCS->SelectRandomShell(Z,incidentEnergy,hMass,tkin);
 	
