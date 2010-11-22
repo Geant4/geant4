@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyRangeManager.hh,v 1.9 2006-06-29 19:58:05 gunter Exp $
+// $Id: G4EnergyRangeManager.hh,v 1.10 2010-11-22 07:45:33 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Energy Range Manager
@@ -42,15 +42,14 @@
      
  public:
     
-    G4EnergyRangeManager()
-    { theHadronicInteractionCounter = 0; }
-    
+    G4EnergyRangeManager();
+ 
     ~G4EnergyRangeManager()
     { }
     
-    G4EnergyRangeManager( const G4EnergyRangeManager &right );
+    G4EnergyRangeManager(const G4EnergyRangeManager& right);
     
-    G4EnergyRangeManager & operator=( const G4EnergyRangeManager &right );
+    G4EnergyRangeManager& operator=( const G4EnergyRangeManager &right );
     
  public:
     
