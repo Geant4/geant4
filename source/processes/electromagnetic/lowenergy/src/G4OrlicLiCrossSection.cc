@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: G4OrlicLiCrossSection.cc,v 1.5 2010-06-06 23:40:35 mantero Exp $
+//$Id: G4OrlicLiCrossSection.cc,v 1.6 2010-11-22 18:32:00 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Haifa Ben Abdelouahed
@@ -217,7 +217,7 @@ G4double analyticalFunction = a0 + (a1*x)+(a2*x*x)+(a3*std::pow(x,3))+(a4*std::p
 
 
   if (L1crossSection >= 0) {
-    return L1crossSection;
+    return L1crossSection * barn;
   }
   else {return 0;}
 
@@ -341,7 +341,7 @@ G4double G4OrlicLiCrossSection::CalculateL2CrossSection(G4int zTarget, G4double 
    } 
 
   if (L2crossSection >= 0) {
-    return L2crossSection;
+    return L2crossSection * barn;
   }
   else {return 0;}
    
@@ -460,7 +460,7 @@ G4double G4OrlicLiCrossSection::CalculateL3CrossSection(G4int zTarget, G4double 
                                                                             
    } 
   if (L3crossSection >= 0) {
-    return L3crossSection;
+    return L3crossSection * barn;
   }
   else {return 0;}
 

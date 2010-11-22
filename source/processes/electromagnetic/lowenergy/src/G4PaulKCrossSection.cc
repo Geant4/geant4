@@ -100,7 +100,7 @@ G4double G4PaulKCrossSection::CalculateKCrossSection(G4int zTarget,G4double mass
   if (massIncident == aProtone->GetPDGMass() )
     {
       
-      sigma = protonDataSetMap[zTarget]->FindValue(energyIncident/MeV) / barn; 
+      sigma = protonDataSetMap[zTarget]->FindValue(energyIncident/MeV); 
       
     }
   else
@@ -108,7 +108,7 @@ G4double G4PaulKCrossSection::CalculateKCrossSection(G4int zTarget,G4double mass
       if (massIncident == aAlpha->GetPDGMass())
 	{
 	  
-          sigma = alphaDataSetMap[zTarget]->FindValue(energyIncident/MeV) / barn; 
+          sigma = alphaDataSetMap[zTarget]->FindValue(energyIncident/MeV); 
 	  
 	}
       else
@@ -119,7 +119,7 @@ G4double G4PaulKCrossSection::CalculateKCrossSection(G4int zTarget,G4double mass
     }
   
   
-  
+  // sigma is in internal units (mm^2)
   return sigma;
 }
 

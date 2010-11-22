@@ -1,4 +1,4 @@
-$Id: History,v 1.469 2010-11-19 21:02:09 mantero Exp $
+$Id: History,v 1.470 2010-11-22 18:32:00 mantero Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+
+22.11.2010, A.Mantero, tag emlowen-V09-03-62
+	    units management in PIXE fixed
+            calculation bug in G4UAtomicDeexcitation fixed
 
 19.11.2010, A.Mantero, tag emlowen-V09-03-61
             bug removal from G4LivermoreIonisation

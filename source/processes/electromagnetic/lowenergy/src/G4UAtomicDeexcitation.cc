@@ -173,7 +173,7 @@ G4UAtomicDeexcitation::GetShellIonisationCrossSectionPerAtom(
 {
   // scaling to protons
   G4double mass = proton_mass_c2;
-  G4double escaled = kineticEnergy*mass/(pdef->GetPDGMass()*c_squared);
+  G4double escaled = kineticEnergy*mass/(pdef->GetPDGMass());
   G4double q = pdef->GetPDGCharge()/eplus;
 
 

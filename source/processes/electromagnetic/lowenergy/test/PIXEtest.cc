@@ -42,7 +42,7 @@
 // ------------------
 // Test of second implementation of the Empiric Model for shell cross sections in proton ionisation
 // --------------------------------------------------------------------
-// $Id: PIXEtest.cc,v 1.5 2010-11-14 20:08:35 mantero Exp $
+// $Id: PIXEtest.cc,v 1.6 2010-11-22 18:32:00 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "globals.hh"
@@ -150,7 +150,7 @@ int main()
 	   std::vector<G4double> CS = shellCS->GetCrossSection(Z,incidentEnergy,mass,deltaEnergy,false);
 	   
 	   
-	   myfile << incidentEnergy << "\t\t" << CS[shellNumber] << G4endl;  //barn  //error in ecpssr/orlic class: correct units management!
+	   myfile << incidentEnergy << "\t\t" << CS[shellNumber]/barn << G4endl;  
 	   
 	   
 	 }
