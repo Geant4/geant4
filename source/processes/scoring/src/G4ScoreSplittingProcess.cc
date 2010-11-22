@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreSplittingProcess.cc,v 1.3 2010-11-22 14:30:49 japost Exp $
+// $Id: G4ScoreSplittingProcess.cc,v 1.4 2010-11-22 18:02:55 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -160,6 +160,7 @@ G4VParticleChange* G4ScoreSplittingProcess::PostStepDoIt(
      fSplitPreStepPoint->SetSensitiveDetector(ptrSD);
      fOldTouchableH = fInitialTouchableH;
      fNewTouchableH= 0; 
+     *fSplitPostStepPoint= *(step.GetPreStepPoint()); 
      
      // Split the energy
      // ----------------
@@ -169,6 +170,9 @@ G4VParticleChange* G4ScoreSplittingProcess::PostStepDoIt(
      finalPostStepPosition= step.GetPostStepPoint()->GetPosition(); 
      direction= (finalPostStepPosition - preStepPosition).unit(); 
 
+     fFinalTouchableH= track.GetNextTouchableHandle(); 
+       // step.GetPostStepPoint()->GetTouchableHandle();
+
      postStepPosition= preStepPosition;
      // Loop over the sub-parts of this step
      G4int iStep;
@@ -176,7 +180,7 @@ G4VParticleChange* G4ScoreSplittingProcess::PostStepDoIt(
         G4int     idVoxel=  -1;  // Voxel ID
         G4double  stepLength=0.0, energyLoss= 0.0;
 
-        *fSplitPostStepPoint  = *fSplitPreStepPoint;
+        *fSplitPreStepPoint  = *fSplitPostStepPoint;
         fOldTouchableH = fNewTouchableH; 
 
         preStepPosition= postStepPosition;
@@ -186,11 +190,10 @@ G4VParticleChange* G4ScoreSplittingProcess::PostStepDoIt(
         fpEnergySplitter->GetLengthAndEnergyDeposited( iStep, idVoxel, stepLength, energyLoss);
 
         // Correct the material, so that the track->GetMaterial gives correct answer
-        pLogicalVolume->SetMaterial( fpEnergySplitter->GetVoxelMaterial(idVoxel) ); 
+        pLogicalVolume->SetMaterial( fpEnergySplitter->GetVoxelMaterial( iStep) );  // idVoxel) ); 
 
         postStepPosition= preStepPosition + stepLength * direction; 
 	fSplitPostStepPoint->SetPosition(postStepPosition); 
-        fSplitPostStepPoint->SetTouchableHandle(fNewTouchableH);
 
         // Load the Step with the new values
         fSplitStep->SetStepLength(stepLength);
@@ -205,7 +208,8 @@ G4VParticleChange* G4ScoreSplittingProcess::PostStepDoIt(
 	  // Create new "next" touchable for each section ??
           G4VTouchable* fNewTouchablePtr= 
 	      CreateTouchableForSubStep( nextVoxelId, postStepPosition );
-	  fSplitPostStepPoint->SetTouchableHandle( G4TouchableHandle(fNewTouchablePtr) ); 
+	  fNewTouchableH= G4TouchableHandle(fNewTouchablePtr); 
+  	  fSplitPostStepPoint->SetTouchableHandle( fNewTouchableH ); // G4TouchableHandle(fNewTouchablePtr) ); 
 	} else { 
 	  fSplitStep->GetPostStepPoint()->SetStepStatus( fullStepStatus );
 	  // fNewTouchableH= fFinalPostStepTouchable; 
