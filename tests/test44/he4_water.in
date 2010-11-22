@@ -26,6 +26,6 @@
 #
 /gun/particle alpha
 /gun/energy 577.2 MeV
-/run/beamOn 100
+/run/beamOn 10000
 #
 

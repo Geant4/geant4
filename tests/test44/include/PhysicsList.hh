@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.hh,v 1.2 2010-07-29 14:37:15 vnivanch Exp $
+// $Id: PhysicsList.hh,v 1.3 2010-11-22 18:26:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -73,11 +73,9 @@ private:
 
   void SetBuilderList0(G4bool flagHP = false);
   void SetBuilderList1(G4bool flagHP = false);
-  void SetBuilderList2(G4bool flagHP = false);
-  void SetBuilderList3(G4bool flagHP = false);
-  void SetBuilderList4(G4bool flagHP = false);
-  void SetBuilderList5(G4bool flagHP = false);
-  void SetBuilderList6(G4bool flagHP = false);
+  void SetBuilderList2(G4bool addStopping = false);
+  void SetBuilderList3();
+  void SetBuilderList4();
 
   G4double cutForGamma;
   G4double cutForElectron;
