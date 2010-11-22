@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.50 2010-11-18 13:46:06 asaim Exp $
+// $Id: G4RunManagerKernel.cc,v 1.51 2010-11-22 18:11:02 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -554,11 +554,11 @@ void G4RunManagerKernel::SetScoreSplitter()
   G4ParticleTable* theParticleTable = G4ParticleTable::GetParticleTable();
   G4ParticleTable::G4PTblDicIterator* theParticleIterator = theParticleTable->GetIterator();
   theParticleIterator->reset();
-  if((*theParticleIterator)())
+  while ( (*theParticleIterator)() )  
   {
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
-    pmanager->AddDiscreteProcess(pSplitter);
+    if( pmanager )  { pmanager->AddDiscreteProcess(pSplitter); } 
   }
 
   if(verboseLevel>0) 
