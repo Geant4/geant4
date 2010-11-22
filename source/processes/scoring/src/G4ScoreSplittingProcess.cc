@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreSplittingProcess.cc,v 1.2 2010-11-19 08:17:20 gcosmo Exp $
+// $Id: G4ScoreSplittingProcess.cc,v 1.3 2010-11-22 14:30:49 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -53,17 +53,14 @@
 G4ScoreSplittingProcess::
 G4ScoreSplittingProcess(const G4String& processName,G4ProcessType theType)
   :G4VProcess(processName,theType)
-   // , fSplitNavigator(0),  fNavigatorID(-1),  fFieldTrack('0')
 {
-  pParticleChange = &aDummyParticleChange;
+  pParticleChange = &xParticleChange;
 
   fSplitStep = new G4Step();
   fSplitPreStepPoint =  fSplitStep->GetPreStepPoint();
   fSplitPostStepPoint = fSplitStep->GetPostStepPoint();
   fOldTouchableH = fNewTouchableH = 0; 
   fInitialTouchableH = fFinalTouchableH = 0; 
-  // fTransportationManager = G4TransportationManager::GetTransportationManager();
-  // fPathFinder = G4PathFinder::GetInstance();
 
   if (verboseLevel>0)
   {
@@ -381,8 +378,8 @@ G4VParticleChange* G4ScoreSplittingProcess::AlongStepDoIt(
 {
   // Dummy ParticleChange ie: does nothing
   // Expecting G4Transportation to move the track
-  pParticleChange->Initialize(track);
-  return pParticleChange; 
+  dummyParticleChange.Initialize(track);
+  return &dummyParticleChange;
 }
 
 //------------------------------------

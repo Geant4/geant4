@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreSplittingProcess.hh,v 1.3 2010-11-19 17:17:04 japost Exp $
+// $Id: G4ScoreSplittingProcess.hh,v 1.4 2010-11-22 14:30:49 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -79,7 +79,7 @@ public: // with description
   // Constructor/Destructor
   //------------------------
   
-  G4ScoreSplittingProcess(const G4String& processName = "ParaWorldScore",
+  G4ScoreSplittingProcess(const G4String& processName = "ScoreSplittingProc",
 				 G4ProcessType theType = fParameterisation);
   virtual ~G4ScoreSplittingProcess();
   
@@ -140,7 +140,7 @@ private:
   G4StepPoint *fSplitPreStepPoint;
   G4StepPoint *fSplitPostStepPoint;
 
-  G4VParticleChange aDummyParticleChange;
+  G4VParticleChange dummyParticleChange;
   G4ParticleChange xParticleChange;
 
   // G4TransportationManager* fTransportationManager;
