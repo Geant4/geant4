@@ -4,7 +4,7 @@
 # 
 # i.e. simply typing $G4WORKDIR/bin/Linux-++/Hadrontherapy <no argument here!> 
 #
-# This macro can be used for a proton beam in water. Both electrmagnetic and
+# This macro can be used for a proton beam in water. Both electromagnetic and
 # hadronic models are swiched on
 
 #########################
@@ -86,7 +86,7 @@
 # Default material is water liquid
 #/changePhantom/material G4_PLEXIGLASS
 
-/run/beamOn 100
+/run/beamOn 500
 # Create the SimulationOutputs/proton/BraggPeak directory before to use the following command
 # /control/shell mv DoseDistribution.root SimulationOutputs/proton/BraggPeak/protonBraggPeak.root
 

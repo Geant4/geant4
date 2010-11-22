@@ -80,11 +80,6 @@ HadrontherapyPhysicsListMessenger::HadrontherapyPhysicsListMessenger(Hadronthera
   pListCmd->SetGuidance("Add physics list.");
   pListCmd->SetParameterName("PList",false);
   pListCmd->AvailableForStates(G4State_PreInit, G4State_Idle);  
-
-  packageListCmd = new G4UIcmdWithAString("/Physics/addPackage",this);
-  packageListCmd->SetGuidance("Add physics package.");
-  packageListCmd->SetParameterName("package",false);
-  packageListCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -97,7 +92,6 @@ HadrontherapyPhysicsListMessenger::~HadrontherapyPhysicsListMessenger()
   delete allDetectorCmd;
   delete pListCmd;
   delete physDir;    
-  delete packageListCmd;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -127,10 +121,4 @@ void HadrontherapyPhysicsListMessenger::SetNewValue(G4UIcommand* command,
   }
   else if( command == pListCmd )
    { pPhysicsList->AddPhysicsList(newValue);}
-
-
-  else if( command == packageListCmd )
-   { pPhysicsList->AddPackage(newValue);}
-
-
 }

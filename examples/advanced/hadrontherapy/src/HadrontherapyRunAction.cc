@@ -56,12 +56,6 @@ void HadrontherapyRunAction::BeginOfRunAction(const G4Run* aRun)
     G4RunManager::GetRunManager()-> SetRandomNumberStore(true);
     G4cout << "Run " << aRun -> GetRunID() << " starts ..." << G4endl;
 
-#ifdef G4ANALYSIS_USE_ROOT
-    HadrontherapyAnalysisManager::GetInstance() -> flush();     // Finalize the root file 
-    // Initialize root analysis ----> book
-    HadrontherapyAnalysisManager::GetInstance() -> book();
-#endif
-
     electromagnetic = 0;
     hadronic = 0;
 }

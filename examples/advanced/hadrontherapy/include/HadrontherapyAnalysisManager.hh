@@ -71,7 +71,10 @@ public:
    * Clear analysis manager heap.
    */
   void Clear();
-
+  /**
+   * Check if TFile is there!
+   */
+  G4bool IsTheTFile();
   /**
    * Book the histograms and ntuples in an AIDA or ROOT file.
    */

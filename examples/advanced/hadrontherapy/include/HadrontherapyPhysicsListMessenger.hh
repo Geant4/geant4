@@ -60,7 +60,6 @@ private:
   G4UIcmdWithADoubleAndUnit* allCutCmd;    
   G4UIcmdWithADoubleAndUnit* allDetectorCmd;    
   G4UIcmdWithAString*        pListCmd;
-  G4UIcmdWithAString* packageListCmd;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

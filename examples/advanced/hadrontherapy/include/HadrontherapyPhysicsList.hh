@@ -67,11 +67,11 @@ private:
   G4double cutForElectron;
   G4double cutForPositron;
 
-  G4bool helIsRegisted;
-  G4bool bicIsRegisted;
-  G4bool biciIsRegisted;
+  G4bool helIsRegistered;
+  G4bool bicIsRegistered;
+  G4bool biciIsRegistered;
   G4bool locIonIonInelasticIsRegistered;
-  G4bool radioactiveDecayIsRegisted;
+  G4bool radioactiveDecayIsRegistered;
 
   G4String                             emName;
   G4VPhysicsConstructor*               emPhysicsList;

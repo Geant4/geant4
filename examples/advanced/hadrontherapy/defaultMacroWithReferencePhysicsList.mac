@@ -1,10 +1,12 @@
- # G.A.P.Cirrone
+# G.A.P.Cirrone
 #
-# Default macro file. It is called if no argument is provided at run
+# Default macro file. It is called 
+# a) If no argument is provided at run i.e. by simply typing $G4WORKDIR/bin/Linux-++/Hadrontherapy <no argument here!>
+#
+# b) If the user set the PHISLIST environment variable with one of the reference physics list
+#    contained in $G4INSTALL/source/physics_lists/lists folder list
 # 
-# i.e. simply typing $G4WORKDIR/bin/Linux-++/Hadrontherapy <no argument here!> 
-#
-# This macro can be used for a proton beam in water. Both electrmagnetic and
+# This macro can be used for a proton beam in water. Both electromagnetic and
 # hadronic models are swiched on
 
 #########################
@@ -75,10 +77,12 @@
 #
 # If secondary particles dose & fluence are needed
 #/analysis/secondary true 
+
 # Default material is water liquid
 #/changePhantom/material G4_PLEXIGLASS
 
-/run/beamOn 100
+/run/beamOn 100 
+
 # Create the SimulationOutputs/proton/BraggPeak directory before to use the following command
 # /control/shell mv DoseDistribution.root SimulationOutputs/proton/BraggPeak/protonBraggPeak.root
 

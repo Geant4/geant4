@@ -94,6 +94,7 @@ void HadrontherapyAnalysisFileMessenger::SetNewValue(G4UIcommand* command, G4Str
 	    pMatrix -> StoreDoseFluenceAscii(newValue);
 #ifdef G4ANALYSIS_USE_ROOT
 	    pMatrix -> StoreDoseFluenceRoot();
+	    HadrontherapyAnalysisManager::GetInstance() -> flush();     // Finalize & write the root file 
 #endif
 	}
     }
@@ -101,6 +102,7 @@ void HadrontherapyAnalysisFileMessenger::SetNewValue(G4UIcommand* command, G4Str
     else if (command == FileNameCmd)
     {
 	AnalysisManager->SetAnalysisFileName(newValue);
+	HadrontherapyAnalysisManager::GetInstance() -> book(); // Book for a new ROOT TFile 
     }
 #endif
 }

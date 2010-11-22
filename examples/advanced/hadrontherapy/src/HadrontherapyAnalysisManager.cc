@@ -70,70 +70,68 @@ HadrontherapyAnalysisManager* HadrontherapyAnalysisManager::GetInstance()
 #ifdef G4ANALYSIS_USE_ROOT
 void HadrontherapyAnalysisManager::Clear()
 {
-    // XXX delete ALL variables!!
-    // but this seems to be automatically done by 
-    // theTFile->Close() command!
-    // so we get a *double free or corruption* 
+    if (theTFile)
+    {
+	delete metaData;
+	metaData = 0;
 
-    delete metaData;
-    metaData = 0;
+	delete fragmentNtuple;
+	fragmentNtuple = 0;
 
-    delete fragmentNtuple;
-    fragmentNtuple = 0;
+	delete theROOTIonTuple;
+	theROOTIonTuple = 0;
 
-    delete theROOTIonTuple;
-    theROOTIonTuple = 0;
+	delete theROOTNtuple;
+	theROOTNtuple = 0;
 
-    delete theROOTNtuple;
-    theROOTNtuple = 0;
+	delete histo16;
+	histo16 = 0;
 
-    delete histo16;
-    histo16 = 0;
+	delete histo15;
+	histo15 = 0;
 
-    delete histo15;
-    histo15 = 0;
+	delete histo14;
+	histo14 = 0;
 
-    delete histo14;
-    histo14 = 0;
+	delete histo13;
+	histo13 = 0;
 
-    delete histo13;
-    histo13 = 0;
+	delete histo12;
+	histo12 = 0;
 
-    delete histo12;
-    histo12 = 0;
+	delete histo11;
+	histo11 = 0;
 
-    delete histo11;
-    histo11 = 0;
+	delete histo10;
+	histo10 = 0;
 
-    delete histo10;
-    histo10 = 0;
+	delete histo9;
+	histo9 = 0;
 
-    delete histo9;
-    histo9 = 0;
+	delete histo8;
+	histo8 = 0;
 
-    delete histo8;
-    histo8 = 0;
+	delete histo7;
+	histo7 = 0;
 
-    delete histo7;
-    histo7 = 0;
+	delete histo6;
+	histo6 = 0;
 
-    delete histo6;
-    histo6 = 0;
+	delete histo5;
+	histo5 = 0;
 
-    delete histo5;
-    histo5 = 0;
+	delete histo4;
+	histo4 = 0;
 
-    delete histo4;
-    histo4 = 0;
+	delete histo3;
+	histo3 = 0;
 
-    delete histo3;
-    histo3 = 0;
+	delete histo2;
+	histo2 = 0;
 
-    delete histo2;
-    histo2 = 0;
-
-    delete histo1;
-    histo1 = 0;
+	delete histo1;
+	histo1 = 0;
+    }
 }
 /////////////////////////////////////////////////////////////////////////////
 
@@ -143,6 +141,10 @@ void HadrontherapyAnalysisManager::SetAnalysisFileName(G4String aFileName)
 }
 
 	/////////////////////////////////////////////////////////////////////////////
+G4bool HadrontherapyAnalysisManager::IsTheTFile()
+{
+    return (theTFile) ? true:false; 
+}
 void HadrontherapyAnalysisManager::book()
 {
 	delete theTFile; // this is similar to theTFile->Close() => delete all associated variables created via new, moreover it delete itself.  
@@ -206,11 +208,12 @@ void HadrontherapyAnalysisManager::book()
 
 	/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::FillEnergyDeposit(G4int i,
-													 G4int j,
-													 G4int k,
-													 G4double energy)
+						     G4int j,
+						     G4int k,
+						     G4double energy)
 {
-	if (theROOTNtuple) {
+	if (theROOTNtuple) 
+	{
 		theROOTNtuple->Fill(i, j, k, energy);
 	}
 }
@@ -391,6 +394,7 @@ void HadrontherapyAnalysisManager::flush()
 	theTFile -> Write(); 
 	theTFile -> Close();
     }
+    theTFile = 0;
     eventCounter = 0;
 }
 

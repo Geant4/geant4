@@ -104,17 +104,22 @@ G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* R
 	if ( *hitTrack != trackID )
 	{
 	    *hitTrack = trackID;
-		// Fill FLUENCE data for every single nuclide 
-		if ( Z>= 1)    //  exclude e-, neutrons, gamma, ...
-		    matrix-> Fill(trackID, particleDef, i, j, k, 0, true);
+		/*
+		 * Fill FLUENCE data for every single nuclide 
+		 * Exclude e-, neutrons, gamma, ...
+		 */
+		if ( Z >= 1)      
+		    matrix -> Fill(trackID, particleDef, i, j, k, 0, true);
 #ifdef G4ANALYSIS_USE_ROOT
 /*
-	    // First step kinetic energy (ntuple)
-	    if (Z>=1) 
+	    // Fragments kinetic energy (ntuple)
+	    if (trackID !=1 && Z>=1) 
 	    {
 		// First step kinetic energy for every fragment 
 		 analysis -> FillKineticFragmentTuple(i, j, k, A, Z, kineticEnergy/MeV);
 	    }	 
+	    // Kinetic energy spectra for primary particles 
+
 	    if ( trackID == 1 && i == 0) 
 	    {
 		// First step kinetic energy for primaries only
@@ -126,18 +131,12 @@ G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* R
 
 	if(energyDeposit != 0)
 	{
-
-	    // This method will fill a dose matrix for every single nuclide. 
-	    // ASCII files, with the dose, can be generated through the method StoreDoseData() 
-	    // into the HadrontherapyMatrix class (StoreFluenceData for fluence).
-	    // A method of the HadrontherapyMatrix class (StoreDoseFluenceAscii())
-	    // is called automatically at the end of main.
-	    // It permits to store all dose/fluence data into a single plane ASCII file. 
-	    
-	    /*
-	     * Accumulate dose for ALL particles
-	     *
-	     */
+/*
+ *  This method will fill a dose matrix for every single nuclide. 
+ *  A method of the HadrontherapyMatrix class (StoreDoseFluenceAscii())
+ *  is called automatically at the end of main (or via the macro command /analysis/writeDoseFile.
+ *  It permits to store all dose/fluence data into a single plane ASCII file. 
+*/	    
 	    // if (A==1 && Z==1) // primary and sec. protons 
 	    if ( Z>=1 )    //  exclude e-, neutrons, gamma, ...
 		    matrix -> Fill(trackID, particleDef, i, j, k, energyDeposit);

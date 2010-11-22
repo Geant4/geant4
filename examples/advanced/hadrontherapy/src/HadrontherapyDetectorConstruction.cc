@@ -67,10 +67,11 @@ HadrontherapyDetectorConstruction::HadrontherapyDetectorConstruction(G4VPhysical
 {
   HadrontherapyAnalysisManager::GetInstance();
 
-  // NOTE! that the HadrontherapyDetectorConstruction class
-  // does NOT inherit from G4VUserDetectorConstruction G4 class
-  // So the Construct() mandatory virtual method is inside another geometric class
-  // (like the passiveProtonBeamLIne, ...)
+  /* NOTE! that the HadrontherapyDetectorConstruction class
+   * does NOT inherit from G4VUserDetectorConstruction G4 class
+   * So the Construct() mandatory virtual method is inside another geometric class
+   * like the passiveProtonBeamLIne, ...
+   */
 
   // Messenger to change parameters of the phantom/detector geometry
   detectorMessenger = new HadrontherapyDetectorMessenger(this);
@@ -340,16 +341,18 @@ void HadrontherapyDetectorConstruction::SetDetectorToPhantomPosition(G4ThreeVect
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapyDetectorConstruction::UpdateGeometry()
 {
+    /* 
+     * Check parameters consistency
+     */
     ParametersCheck();
 
-    //G4RunManager::GetRunManager() -> PhysicsHasBeenModified();
     G4GeometryManager::GetInstance() -> OpenGeometry();
     if (phantom)
     {
-            phantom -> SetXHalfLength(phantomSizeX/2);
-            phantom -> SetYHalfLength(phantomSizeY/2);
-            phantom -> SetZHalfLength(phantomSizeZ/2);
-	    phantomPhysicalVolume -> SetTranslation(phantomPosition);
+	phantom -> SetXHalfLength(phantomSizeX/2);
+	phantom -> SetYHalfLength(phantomSizeY/2);
+	phantom -> SetZHalfLength(phantomSizeZ/2);
+	phantomPhysicalVolume -> SetTranslation(phantomPosition);
     }
     else   ConstructPhantom();
 
@@ -357,22 +360,22 @@ void HadrontherapyDetectorConstruction::UpdateGeometry()
     SetDetectorPosition();
     if (detector)
     {
-		        detector -> SetXHalfLength(detectorSizeX/2);
-		        detector -> SetYHalfLength(detectorSizeY/2);
-		        detector -> SetZHalfLength(detectorSizeZ/2);
-			detectorPhysicalVolume -> SetTranslation(detectorPosition);
+	detector -> SetXHalfLength(detectorSizeX/2);
+	detector -> SetYHalfLength(detectorSizeY/2);
+	detector -> SetZHalfLength(detectorSizeZ/2);
+	detectorPhysicalVolume -> SetTranslation(detectorPosition);
     }
     else    ConstructDetector();
-    
-// Round to nearest integer number of voxel 
-	numberOfVoxelsAlongX = lrint(detectorSizeX / sizeOfVoxelAlongX);
-	sizeOfVoxelAlongX = ( detectorSizeX / numberOfVoxelsAlongX );
 
-	numberOfVoxelsAlongY = lrint(detectorSizeY / sizeOfVoxelAlongY);
-	sizeOfVoxelAlongY = ( detectorSizeY / numberOfVoxelsAlongY );
+    // Round to nearest integer number of voxel 
+    numberOfVoxelsAlongX = lrint(detectorSizeX / sizeOfVoxelAlongX);
+    sizeOfVoxelAlongX = ( detectorSizeX / numberOfVoxelsAlongX );
 
-	numberOfVoxelsAlongZ = lrint(detectorSizeZ / sizeOfVoxelAlongZ);
-	sizeOfVoxelAlongZ = ( detectorSizeZ / numberOfVoxelsAlongZ );
+    numberOfVoxelsAlongY = lrint(detectorSizeY / sizeOfVoxelAlongY);
+    sizeOfVoxelAlongY = ( detectorSizeY / numberOfVoxelsAlongY );
+
+    numberOfVoxelsAlongZ = lrint(detectorSizeZ / sizeOfVoxelAlongZ);
+    sizeOfVoxelAlongZ = ( detectorSizeZ / numberOfVoxelsAlongZ );
 
     //G4cout << "*************** DetectorToWorldPosition " << GetDetectorToWorldPosition()/cm << "\n";
     ConstructSensitiveDetector(GetDetectorToWorldPosition());
@@ -381,10 +384,16 @@ void HadrontherapyDetectorConstruction::UpdateGeometry()
     massOfVoxel = detectorMaterial -> GetDensity() * volumeOfVoxel;
     //  This will clear the existing matrix (together with all data inside it)! 
     matrix = HadrontherapyMatrix::GetInstance(numberOfVoxelsAlongX, 
-					      numberOfVoxelsAlongY,
-					      numberOfVoxelsAlongZ,
-					      massOfVoxel);
+	    numberOfVoxelsAlongY,
+	    numberOfVoxelsAlongZ,
+	    massOfVoxel);
 
+    // Initialize analysis
+    HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::GetInstance();
+#ifdef G4ANALYSIS_USE_ROOT
+    analysis -> flush();     // Finalize the root file 
+    analysis -> book();
+#endif
     // Inform the kernel about the new geometry
     G4RunManager::GetRunManager() -> GeometryHasBeenModified();
     G4RunManager::GetRunManager() -> PhysicsHasBeenModified();

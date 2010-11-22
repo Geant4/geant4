@@ -1552,6 +1552,6 @@ void PassiveProtonBeamLine::SetRSMaterial(G4String materialChoice)
 void PassiveProtonBeamLine::SetModulatorAngle(G4double value)
 {  
   modulator -> SetModulatorAngle(value);
-  G4RunManager::GetRunManager() -> GeometryHasBeenModified();
+  //G4RunManager::GetRunManager() -> GeometryHasBeenModified();
 }
 /////////////////////////////////////////////////////////////////////////////

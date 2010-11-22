@@ -30,6 +30,12 @@
 ##########################
 # Set of the physic models
 #
+<<<<<<< modulatorMacro.mac
+/Physics/addPhysics emstandard_opt3  # Electromagnetic model
+#/Physics/addPhysics elastic          # Hadronic elastic model
+#/Physics/addPhysics binary           # Hadronic inelastic model
+#/Physics/addPhysics radioactive_decay                   # Radioactive decay
+=======
 /Physics/addPhysics emstandard_opt3                     # Electromagnetic model
 /Physics/addPhysics Em_extra_physics			
 /Physics/addPhysics Elastic                             # Hadronic elastic model
@@ -40,6 +46,7 @@
 /Physics/addPhysics binary                              # Hadronic inelastic model
 
 #/Physics/addPhysics local_ion_ion_inelastic            # Optional Hadronic inelastic model for ions (local physic list)
+>>>>>>> 1.9
  
 ##########################
 # Initialisation procedure
@@ -89,9 +96,13 @@
 # IT CONSISTS IN A COMPLETE ROTATION 
 # OF THE WHEEL (360 DEG)
 
-/run/beamOn 10
+/run/beamOn 100
 /vis/viewer/flush
 
+<<<<<<< modulatorMacro.mac
+/modulator/angle 1 deg
+/run/beamOn 110
+=======
 /modulator/angle 10 deg
 /run/beamOn 5
 /vis/viewer/flush
@@ -106,10 +117,20 @@
 
 /modulator/angle 40 deg
 /run/beamOn 5
+>>>>>>> 1.9
 /vis/viewer/flush
 
+<<<<<<< modulatorMacro.mac
+/modulator/angle 15 deg
+/run/beamOn 110
+/vis/viewer/flush
+
+/modulator/angle 15 deg
+/run/beamOn 110
+=======
 /modulator/angle 50 deg
 /run/beamOn 5
+>>>>>>> 1.9
 /vis/viewer/flush
 
 /modulator/angle 60 deg

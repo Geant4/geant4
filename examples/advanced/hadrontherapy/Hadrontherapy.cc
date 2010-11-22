@@ -129,8 +129,6 @@ int main(int argc ,char ** argv)
   if(!phys) { phys = new HadrontherapyPhysicsList(); }
 
   runManager->SetUserInitialization(phys);
-
-
   
   //  runManager -> SetUserInitialization(new HadrontherapyPhysicsList());
 
@@ -151,6 +149,12 @@ int main(int argc ,char ** argv)
   // Interaction data: stopping powers
   HadrontherapyInteractionParameters* pInteraction = new HadrontherapyInteractionParameters(true);
 	
+  // Initialize analysis
+  HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::GetInstance();
+#ifdef G4ANALYSIS_USE_ROOT
+  analysis -> book();
+#endif
+
 #ifdef G4VIS_USE
   // Visualization manager
   G4VisManager* visManager = new G4VisExecutive;
@@ -202,7 +206,7 @@ int main(int argc ,char ** argv)
     }
 
 #ifdef G4ANALYSIS_USE_ROOT
-  HadrontherapyAnalysisManager::GetInstance() -> flush();     // Finalize the root file 
+  if (analysis -> IsTheTFile()) analysis -> flush();     // Finalize & write the root file 
 #endif
 
 

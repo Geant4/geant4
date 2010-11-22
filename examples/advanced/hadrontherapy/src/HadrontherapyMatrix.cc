@@ -351,24 +351,27 @@ void HadrontherapyMatrix::StoreDoseFluenceAscii(G4String file)
 void HadrontherapyMatrix::StoreDoseFluenceRoot()
 {
     HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::GetInstance();
-    for(G4int i = 0; i < numberOfVoxelAlongX; i++) 
-	for(G4int j = 0; j < numberOfVoxelAlongY; j++) 
-	    for(G4int k = 0; k < numberOfVoxelAlongZ; k++) 
-	    {
-		G4int n = Index(i, j, k);
-		for (size_t l=0; l < ionStore.size(); l++)
-
+    if (analysis -> IsTheTFile())
+    {
+	for(G4int i = 0; i < numberOfVoxelAlongX; i++) 
+	    for(G4int j = 0; j < numberOfVoxelAlongY; j++) 
+		for(G4int k = 0; k < numberOfVoxelAlongZ; k++) 
 		{
-		    // Do the same work for .root file: fill dose/fluence ntuple  
-		    analysis -> FillVoxelFragmentTuple( i, j, k, 
-							ionStore[l].A, 
-							ionStore[l].Z, 
-							ionStore[l].dose[n]/massOfVoxel/doseUnit, 
-							ionStore[l].fluence[n] );
+		    G4int n = Index(i, j, k);
+		    for (size_t l=0; l < ionStore.size(); l++)
+
+		    {
+			// Do the same work for .root file: fill dose/fluence ntuple  
+			analysis -> FillVoxelFragmentTuple( i, j, k, 
+				ionStore[l].A, 
+				ionStore[l].Z, 
+				ionStore[l].dose[n]/massOfVoxel/doseUnit, 
+				ionStore[l].fluence[n] );
 
 
+		    }
 		}
-	    }
+    }
 }
 #endif
 
@@ -383,9 +386,9 @@ void HadrontherapyMatrix::Fill(G4int i, G4int j, G4int k,
 }
 void HadrontherapyMatrix::TotalEnergyDeposit()
 {
-  // Convert energy deposited to dose.
-  // Store the information of the matrix in a ntuple and in 
-  // a 1D Histogram
+    // Convert energy deposited to dose.
+    // Store the information of the matrix in a ntuple and in 
+    // a 1D Histogram
 
     HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::GetInstance();
     if (matrix)
@@ -396,8 +399,11 @@ void HadrontherapyMatrix::TotalEnergyDeposit()
 		{
 		    G4int n = Index(i,j,k);
 #ifdef G4ANALYSIS_USE_ROOT
-		    analysis -> FillEnergyDeposit(i, j, k, matrix[n]/massOfVoxel/doseUnit);
-		    analysis -> BraggPeak(i, matrix[n]/massOfVoxel/doseUnit);
+		    if (analysis -> IsTheTFile() )
+		    {
+			analysis -> FillEnergyDeposit(i, j, k, matrix[n]/massOfVoxel/doseUnit);
+			analysis -> BraggPeak(i, matrix[n]/massOfVoxel/doseUnit);
+		    }
 #endif
 		}
     }

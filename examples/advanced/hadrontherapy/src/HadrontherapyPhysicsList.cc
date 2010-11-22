@@ -108,11 +108,11 @@ HadrontherapyPhysicsList::HadrontherapyPhysicsList() : G4VModularPhysicsList()
   cutForElectron  = defaultCutValue;
   cutForPositron  = defaultCutValue;
 
-  helIsRegisted  = false;
-  bicIsRegisted  = false;
-  biciIsRegisted = false;
+  helIsRegistered  = false;
+  bicIsRegistered  = false;
+  biciIsRegistered = false;
   locIonIonInelasticIsRegistered = false;
-  radioactiveDecayIsRegisted = false;
+  radioactiveDecayIsRegistered = false;
 
   stepMaxProcess  = 0;
 
@@ -124,7 +124,7 @@ HadrontherapyPhysicsList::HadrontherapyPhysicsList() : G4VModularPhysicsList()
   emPhysicsList = new G4EmStandardPhysics_option3(1);
   emName = G4String("emstandard_opt3");
 
-  // Deacy physics and all particles
+  // Decay physics and all particles
   decPhysicsList = new G4DecayPhysics();
 }
 
@@ -158,7 +158,7 @@ void HadrontherapyPhysicsList::ConstructProcess()
 
   // hadronic physics lists
   for(size_t i=0; i<hadronPhys.size(); i++) {
-    hadronPhys[i]->ConstructProcess();
+    hadronPhys[i] -> ConstructProcess();
   }
 
   // step limitation (as a full process)
@@ -170,114 +170,197 @@ void HadrontherapyPhysicsList::ConstructProcess()
 void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 {
 
-  if (verboseLevel>1) {
-    G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
-  }
-  if (name == emName) return;
-
-  /////////////////////////////////////////////////////////////////////////////
-  //   ELECTROMAGNETIC MODELS
-  /////////////////////////////////////////////////////////////////////////////
-  if (name == "standard_opt3") {
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics_option3();
-    G4RunManager::GetRunManager() -> PhysicsHasBeenModified();
-    G4cout << "THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmStandardPhysics_option3" << G4endl;
-
-  } else if (name == "LowE_Livermore") {
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmLivermorePhysics();
-    G4RunManager::GetRunManager()-> PhysicsHasBeenModified();
-    G4cout << "THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmLivermorePhysics" << G4endl;
-
-  } else if (name == "LowE_Penelope") {
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmPenelopePhysics();
-    G4cout << "THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmLivermorePhysics" << G4endl;
+    if (verboseLevel>1) {
+	G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
+    }
+    if (name == emName) return;
 
     /////////////////////////////////////////////////////////////////////////////
-    //   HADRONIC MODELS
+    //   ELECTROMAGNETIC MODELS
     /////////////////////////////////////////////////////////////////////////////
-  } else if (name == "Elastic" && !helIsRegisted) {
-    G4cout << "THE FOLLOWING HADRONIC ELASTIC PHYSICS LIST HAS BEEN ACTIVATED: G4HadronElasticPhysics()" << G4endl;
-    hadronPhys.push_back( new G4HadronElasticPhysics());
-    helIsRegisted = true;
+    if (name == "standard_opt3") {
+	emName = name;
+	delete emPhysicsList;
+	emPhysicsList = new G4EmStandardPhysics_option3();
+	G4RunManager::GetRunManager() -> PhysicsHasBeenModified();
+	G4cout << "THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmStandardPhysics_option3" << G4endl;
 
-  } else if (name == "DElastic" && !helIsRegisted) {
-    hadronPhys.push_back( new G4HadronDElasticPhysics());
-    helIsRegisted = true;
+    } else if (name == "LowE_Livermore") {
+	emName = name;
+	delete emPhysicsList;
+	emPhysicsList = new G4EmLivermorePhysics();
+	G4RunManager::GetRunManager()-> PhysicsHasBeenModified();
+	G4cout << "THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmLivermorePhysics" << G4endl;
 
-  } else if (name == "HElastic" && !helIsRegisted) {
-    hadronPhys.push_back( new G4HadronHElasticPhysics());
-    helIsRegisted = true;
+    } else if (name == "LowE_Penelope") {
+	emName = name;
+	delete emPhysicsList;
+	emPhysicsList = new G4EmPenelopePhysics();
+	G4RunManager::GetRunManager()-> PhysicsHasBeenModified();
+	G4cout << "THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmLivermorePhysics" << G4endl;
 
-  } else if (name == "QElastic" && !helIsRegisted) {
-    hadronPhys.push_back( new G4HadronQElasticPhysics());
-    helIsRegisted = true;
+	/////////////////////////////////////////////////////////////////////////////
+	//   HADRONIC MODELS
+	/////////////////////////////////////////////////////////////////////////////
+    } else if (name == "Elastic")
+    {
+	if(!helIsRegistered) 
+	{
+	    G4cout << "THE FOLLOWING HADRONIC ELASTIC PHYSICS LIST HAS BEEN ACTIVATED: G4HadronElasticPhysics()" << G4endl;
+	    hadronPhys.push_back( new G4HadronElasticPhysics());
+	    helIsRegistered = true;
+	}
+	else  G4cout << "AN ELASTIC PHYSICS HAS BEEN ALREADY ACTIVATED!" << G4endl;
+    }
+    else if (name == "DElastic")
+    {
+	if(!helIsRegistered) 
+	{
+	    hadronPhys.push_back( new G4HadronDElasticPhysics());
+	    helIsRegistered = true;
+	}
+	else  G4cout << "AN ELASTIC PHYSICS HAS BEEN ALREADY ACTIVATED!" << G4endl;
 
-  } else if (name == "Em_extra_physics" && !helIsRegisted) {
-    hadronPhys.push_back( new G4EmExtraPhysics());
-    helIsRegisted = true;
+    }
+    else if (name == "HElastic")
+    {
+	if(!helIsRegistered) 
+	{
+	    hadronPhys.push_back( new G4HadronHElasticPhysics());
+	    helIsRegistered = true;
+	}
+	else  G4cout << "AN ELASTIC PHYSICS HAS BEEN ALREADY ACTIVATED!" << G4endl;
 
- } else if (name == "Stopping_physics" && !helIsRegisted) {
-    hadronPhys.push_back( new G4QStoppingPhysics());
-    helIsRegisted = true;
+    }
+    else if (name == "QElastic")
+    {
+	if(!helIsRegistered) 
+	{
+	    hadronPhys.push_back( new G4HadronQElasticPhysics());
+	    helIsRegistered = true;
+	}
+	else  G4cout << "AN ELASTIC PHYSICS HAS BEEN ALREADY ACTIVATED!" << G4endl;
 
-} else if (name == "Neutron_tracking_cut" && !helIsRegisted) {
-    hadronPhys.push_back( new G4NeutronTrackingCut());
-    helIsRegisted = true;
+    }
+    else if (name == "Em_extra_physics")
+    {
+	if(!helIsRegistered) 
+	{
+	    hadronPhys.push_back( new G4EmExtraPhysics());
+	    helIsRegistered = true;
+	}
+	else  G4cout << "AN ELASTIC PHYSICS HAS BEEN ALREADY ACTIVATED!" << G4endl;
 
-} else if (name == "Hadron_QGSP_BIC" && !helIsRegisted) {
-    hadronPhys.push_back( new HadronPhysicsQGSP_BIC());
-    helIsRegisted = true;
+    }
+    else if (name == "Stopping_physics")
+    {
+	if(!helIsRegistered) 
+	{
+	    hadronPhys.push_back( new G4QStoppingPhysics());
+	    helIsRegistered = true;
+	}
+	else  G4cout << "AN ELASTIC PHYSICS HAS BEEN ALREADY ACTIVATED!" << G4endl;
+    }
+    else if (name == "Neutron_tracking_cut")
+    {
+	if(!helIsRegistered) 
+	{
+	    hadronPhys.push_back( new G4NeutronTrackingCut());
+	    helIsRegistered = true;
+	}
+	else  G4cout << "AN ELASTIC PHYSICS HAS BEEN ALREADY ACTIVATED!" << G4endl;
 
-  } else if (name == "Hadron_QBBC" && !bicIsRegisted) {
+    }
+    else if (name == "Hadron_QGSP_BIC")
+    {
+	if(!helIsRegistered) 
+	{
+	    hadronPhys.push_back( new HadronPhysicsQGSP_BIC());
+	    helIsRegistered = true;
+	}
+	else  G4cout << "AN ELASTIC PHYSICS HAS BEEN ALREADY ACTIVATED!" << G4endl;
+
+    }
+    else if (name == "Hadron_QBBC") 
+    {
+	if(!bicIsRegistered)
+	{
+	    hadronPhys.push_back(new G4HadronInelasticQBBC());
+	    bicIsRegistered = true;
+	    G4cout << "THE FOLLOWING HADRONIC INELASTIC PHYSICS LIST HAS BEEN ACTIVATED: G4HadronInelasticQBBC()" << G4endl;
+	}
+	else G4cout << "AN INELASTIC PHYSICS HAS BEEN ALREADY ACTIVATED!" << G4endl;
+    } 
+
+    /*
+     else if (name == "binary" && !bicIsRegisted) 
+    {
     hadronPhys.push_back(new G4HadronInelasticQBBC());
     bicIsRegisted = true;
     G4cout << "THE FOLLOWING HADRONIC INELASTIC PHYSICS LIST HAS BEEN ACTIVATED: G4HadronInelasticQBBC()" << G4endl;
+    }
+    */
+    else if (name == "binary_ion")
+    {
+	if(!bicIsRegistered)
+	{
+	    hadronPhys.push_back(new G4IonBinaryCascadePhysics());
+	    biciIsRegistered = true;
+	}
+	else G4cout << "AN INELASTIC PHYSICS HAS BEEN ALREADY ACTIVATED!" << G4endl;
+    }
+    else if (name == "local_ion_ion_inelastic")
+    {
+	if(!locIonIonInelasticIsRegistered)
+	{
+	    hadronPhys.push_back(new LocalIonIonInelasticPhysic());
+	    locIonIonInelasticIsRegistered = true;
+	}
+	else G4cout << "A LOCAL ION ION INELASTIC PHYSICS HAS BEEN ALREADY ACTIVATED!" << G4endl;
 
-  } else if (name == "binary_ion" && !biciIsRegisted) {
-    hadronPhys.push_back(new G4IonBinaryCascadePhysics());
-    biciIsRegisted = true;
+    } else if (name == "local_incl_ion_ion_inelastic")
+    {
+	if(!locIonIonInelasticIsRegistered)
+	{
+	    hadronPhys.push_back(new LocalINCLIonIonInelasticPhysic());
+	    locIonIonInelasticIsRegistered = true;
+	}
+	else G4cout << "A LOCAL ION ION INELASTIC PHYSICS HAS BEEN ALREADY ACTIVATED!" << G4endl;
 
-  } else if (name == "local_ion_ion_inelastic" && !locIonIonInelasticIsRegistered) {
-    hadronPhys.push_back(new LocalIonIonInelasticPhysic());
-    locIonIonInelasticIsRegistered = true;
+    } 
+    else if (name == "decay" && !radioactiveDecayIsRegistered )
+    {
+	hadronPhys.push_back(new G4DecayPhysics());
+	radioactiveDecayIsRegistered = true;
 
-  } else if (name == "local_incl_ion_ion_inelastic" && !locIonIonInelasticIsRegistered) {
-    hadronPhys.push_back(new LocalINCLIonIonInelasticPhysic());
-    locIonIonInelasticIsRegistered = true;
-    
-  } else if (name == "decay" && !radioactiveDecayIsRegisted ) {
-    hadronPhys.push_back(new G4DecayPhysics());
-    radioactiveDecayIsRegisted = true;
-  
-  } else if (name == "radioactive_decay" && !radioactiveDecayIsRegisted ) {
-    hadronPhys.push_back(new G4RadioactiveDecayPhysics());
-    radioactiveDecayIsRegisted = true;
-      
-    // The following is the construction of the QGSP_BIC_EMY Reference physics list 
-    // reconstructed here like a builder: it should be identical to the
-    // one contained inside the $G4INSTALL/physics_lists/lists folder
-  } else if (name == "QGSP_BIC_EMY") {
-    AddPhysicsList("emstandard_opt3");
-    hadronPhys.push_back( new G4EmExtraPhysics());
-    hadronPhys.push_back( new G4HadronElasticPhysics());
-    hadronPhys.push_back( new G4QStoppingPhysics());
-    hadronPhys.push_back( new G4IonBinaryCascadePhysics());
-    hadronPhys.push_back( new G4NeutronTrackingCut());
-    hadronPhys.push_back( new HadronPhysicsQGSP_BIC());
-    hadronPhys.push_back( new G4DecayPhysics());
-      
-  } else {
-      
-    G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
-           << " is not defined"
-           << G4endl;
-  }
+    }
+    else if (name == "radioactive_decay" && !radioactiveDecayIsRegistered )
+    {
+	hadronPhys.push_back(new G4RadioactiveDecayPhysics());
+	radioactiveDecayIsRegistered = true;
+
+	// The following is the construction of the QGSP_BIC_EMY Reference physics list 
+	// reconstructed here like a builder: it should be identical to the
+	// one contained inside the $G4INSTALL/physics_lists/lists folder
+    }
+    else if (name == "QGSP_BIC_EMY")
+    {
+	AddPhysicsList("emstandard_opt3");
+	hadronPhys.push_back( new G4EmExtraPhysics());
+	hadronPhys.push_back( new G4HadronElasticPhysics());
+	hadronPhys.push_back( new G4QStoppingPhysics());
+	hadronPhys.push_back( new G4IonBinaryCascadePhysics());
+	hadronPhys.push_back( new G4NeutronTrackingCut());
+	hadronPhys.push_back( new HadronPhysicsQGSP_BIC());
+	hadronPhys.push_back( new G4DecayPhysics());
+
+    }
+    else {
+
+	G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
+	    << " is not defined"
+	    << G4endl;
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////
