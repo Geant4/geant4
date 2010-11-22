@@ -18,6 +18,11 @@ Summarize all code modifications & keep track of all tags in this file.
 
 <<<<<<< History (please, make changes only with Mikhail.Kossov@cern.ch approval)
 
+21-Nov-2010 Dennis Wright                       (hadr-chips-V09-03-09)
+----------------------------------------------------------------------
+Overall CHIPS tag which includes integer Z and A conversion and some
+correction of CoVerity errors
+
 25-Jun-2010 M.Kosov                             (hadr-chips-V09-03-08)
 -----------------------------------------------------------------------
 Mutual CHIPS tag: Final implementation of the CHIPS Physics package
