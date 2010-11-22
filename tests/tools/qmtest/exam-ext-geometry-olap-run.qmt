@@ -8,7 +8,7 @@
     <integer>3000</integer>
   </argument>
   <argument name="stderr">
-    <text>>===== collected overlaps of run [0] (ol=1)
+    <text>===== collected overlaps of run [0] (ol=1)
 --[1]--------------------------
 delta=1970.91
 vol 1: point=(0,1176.34,0) vol 2: point=(0,-794.571,0) axis=1  [0] 
