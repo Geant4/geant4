@@ -58,10 +58,7 @@ G4UAtomicDeexcitation::G4UAtomicDeexcitation():
   G4VAtomDeexcitation("UAtomDeexcitation"),
   minGammaEnergy(DBL_MAX), 
   minElectronEnergy(DBL_MAX)
-{
-  SetAugerActive(false);
-
-}
+{}
 
 G4UAtomicDeexcitation::~G4UAtomicDeexcitation()
 {}
@@ -70,10 +67,8 @@ void G4UAtomicDeexcitation::InitialiseForNewRun()
 {
   transitionManager = G4AtomicTransitionManager::Instance();
 
-  // initializing PIXE
-  
-  SetPIXEActive(true);
-  if ( !PIXECrossSectionModel()) {
+  // initializing PIXE  
+  if ("" == PIXECrossSectionModel()) {
     SetPIXECrossSectionModel("ECPSSR_Analytical");
   }
   
@@ -175,10 +170,17 @@ G4UAtomicDeexcitation::GetShellIonisationCrossSectionPerAtom(
 			       G4AtomicShellEnumerator shellEnum/*shell*/,
 			       G4double kineticEnergy/*kinE*/)
 {
+  // scaling to protons
+  G4double mass = proton_mass_c2;
+  G4double escaled = kineticEnergy*mass/pdef->GetPDGMass();
 
-  std::vector<G4double> atomXSs =  PIXEshellCS->GetCrossSection(Z,kineticEnergy,pdef->GetPDGMass(),0);
+  std::vector<G4double> atomXSs =  PIXEshellCS->GetCrossSection(Z,escaled,mass,0);
+  G4double res = 0.0;
+  G4int idx = G4int(shellEnum);
+  G4int length = atomXSs.size();
+  if(idx < length) { res = atomXSs[idx]; }
 
-  return atomXSs[shellEnum];
+  return res;
 }
 
 void G4UAtomicDeexcitation::SetCutForSecondaryPhotons(G4double cut)
@@ -193,12 +195,12 @@ void G4UAtomicDeexcitation::SetCutForAugerElectrons(G4double cut)
 
 G4double 
 G4UAtomicDeexcitation::ComputeShellIonisationCrossSectionPerAtom(
-                               const G4ParticleDefinition*, 
-			       G4int /*Z*/, 
-			       G4AtomicShellEnumerator /*shell*/,
-			       G4double /*kinE*/)
+                               const G4ParticleDefinition* p, 
+			       G4int Z, 
+			       G4AtomicShellEnumerator shell,
+			       G4double kinE)
 {
-  return 0.0;
+  return GetShellIonisationCrossSectionPerAtom(p,A,shell,kinE);
 }
 
 G4int G4UAtomicDeexcitation::SelectTypeOfTransition(G4int Z, G4int shellId)
