@@ -173,12 +173,13 @@ G4UAtomicDeexcitation::GetShellIonisationCrossSectionPerAtom(
   // scaling to protons
   G4double mass = proton_mass_c2;
   G4double escaled = kineticEnergy*mass/pdef->GetPDGMass();
+  G4double q = pdef->GetPDGCharge()/eplus;
 
   std::vector<G4double> atomXSs =  PIXEshellCS->GetCrossSection(Z,escaled,mass,0);
   G4double res = 0.0;
   G4int idx = G4int(shellEnum);
   G4int length = atomXSs.size();
-  if(idx < length) { res = atomXSs[idx]; }
+  if(idx < length) { res = q*q*CLHEP::barn*atomXSs[idx]; }
 
   return res;
 }
