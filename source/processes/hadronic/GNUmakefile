@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.29 2010-11-22 08:19:30 dennis Exp $
+# $Id: GNUmakefile,v 1.30 2010-11-22 09:00:01 dennis Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for hadronic processes library.  G.Folger 10-Dec-97.
 # ----------------------------------------------------------------
@@ -71,7 +71,7 @@ SUBLIBS +=  G4hadronic_RPG
 SUBLIBS +=  G4hadronic_qmd
 SUBLIBS +=  G4had_mod_man
 SUBLIBS +=  G4had_neu_hp
-SUBDIRS +=  G4had_lend
+SUBLIBS +=  G4had_lend
 SUBLIBS +=  G4had_lll_fis
 SUBLIBS +=  G4hadronic_radioactivedecay
 SUBLIBS +=  G4had_theo_max
