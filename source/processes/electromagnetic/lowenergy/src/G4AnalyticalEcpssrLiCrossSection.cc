@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: G4AnalyticalEcpssrLiCrossSection.cc,v 1.3 2010-11-12 18:09:44 mantero Exp $
+//$Id: G4AnalyticalEcpssrLiCrossSection.cc,v 1.4 2010-11-22 17:25:45 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "globals.hh"
@@ -352,7 +352,7 @@ G4double crossSection_L1 = coulombDeflectionFunction_l1 * sigmaPSSR_l1;
 
   if (crossSection_L1 >= 0) {
 
-    return crossSection_L1;
+    return crossSection_L1 * barn;
   }
   
   else {return 0;}
@@ -518,7 +518,7 @@ G4double energyLossl2 = std::pow(1-pssDeltal2,0.5);
     if (verboseLevel>0) G4cout << "  crossSection_L2 =" << crossSection_L2 << G4endl;
 
   if (crossSection_L2 >= 0) {
-     return crossSection_L2;
+     return crossSection_L2 * barn;
       }
   else {return 0;}
 }
@@ -685,7 +685,7 @@ if (verboseLevel>0) G4cout << "  energyLossl3=" << energyLossl3<< G4endl;
     if (verboseLevel>0) G4cout << "  crossSection_L3 =" << crossSection_L3 << G4endl;
  
   if (crossSection_L3 >= 0) {
-    return crossSection_L3;
+    return crossSection_L3 * barn;
   }
   else {return 0;}
 }

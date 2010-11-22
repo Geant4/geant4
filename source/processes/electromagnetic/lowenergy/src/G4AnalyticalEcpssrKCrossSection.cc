@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: G4AnalyticalEcpssrKCrossSection.cc,v 1.3 2010-11-12 18:09:44 mantero Exp $
+//$Id: G4AnalyticalEcpssrKCrossSection.cc,v 1.4 2010-11-22 17:25:45 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -476,7 +476,7 @@ G4double G4AnalyticalEcpssrKCrossSection::CalculateCrossSection(G4int zTarget,G4
   //--------------------------------------------------------------------------------------------------------------------------------------------------   
 
   if (crossSection >= 0) {
-    return crossSection;
+    return crossSection * barn;
   }
   else {return 0;}
 
