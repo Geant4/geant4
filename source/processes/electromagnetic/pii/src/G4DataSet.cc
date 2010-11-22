@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DataSet.cc,v 1.2 2010-11-19 17:16:21 pia Exp $
+// $Id: G4DataSet.cc,v 1.3 2010-11-22 11:29:38 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -304,9 +304,9 @@ size_t G4DataSet::FindLowerBound(G4double x, G4DataVector* values) const
 
 G4String G4DataSet::FullFileName(const G4String& name) const
 {
-  char* path = getenv("G4PIXEDATA");
+  char* path = getenv("G4PIIDATA");
   if (!path)
-    G4Exception("G4DataSet::FullFileName - G4PIXEDATA environment variable not set");
+    G4Exception("G4DataSet::FullFileName - G4PIIDATA environment variable not set");
   
   std::ostringstream fullFileName;
   fullFileName << path << '/' << name << z << ".dat";

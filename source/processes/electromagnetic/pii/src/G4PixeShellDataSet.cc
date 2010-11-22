@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PixeShellDataSet.cc,v 1.2 2010-11-19 17:16:21 pia Exp $
+// $Id: G4PixeShellDataSet.cc,v 1.3 2010-11-22 11:29:38 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -197,9 +197,9 @@ void G4PixeShellDataSet::CleanUpComponents(void)
 G4String G4PixeShellDataSet::FullFileName(const G4String& file,
 					  const G4String& subShell) const
 {
-  char* path = getenv("G4PIXEDATA");
+  char* path = getenv("G4PIIDATA");
   if (!path)
-    G4Exception("G4PixeShellDataSet::FullFileName - G4PIXEDATA environment variable not set");
+    G4Exception("G4PixeShellDataSet::FullFileName - G4PIIDATA environment variable not set");
   
   // Identify the shell this subshell belongs to
   G4int shellIndex = TranslateShell(subShell);

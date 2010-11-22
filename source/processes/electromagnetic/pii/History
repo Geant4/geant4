@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2010-11-19 17:18:19 pia Exp $
+$Id: History,v 1.4 2010-11-22 11:29:38 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21.11.2010, MGP, tag empii-V09-03-02
+            Changed the name of the environment variable identifying
+            the associated data library from G4PIXEDATA to G4PIIDATA
+            as imposed by Geant4 spokesman M. Asai (apparently we are
+            not allowed to use the word "PIXE", even if the code in
+            this package simulates the physical phenomenon of PIXE)
 
 19.11.2010, MGP, tag empii-V09-03-01
             Some cleaning of comments and aesthetics
