@@ -16,6 +16,14 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+11 Nov 2010 Dennis Wright                   (hadr-chips-body-V09-03-15) 
+-----------------------------------------------------------------------
+- G4QContent.cc : fix bug 1131 by removing dead code in quark ctor
+  and remove dead code indicated by CoVerity in method MakePartonPair.
+  Remove dead code due to efFlag being set permanently false. 
+- G4QNucleus.cc - remove dead code
+- G4QEnvironment.cc - remove dead code
+
 10 Nov 2010 Dennis Wright                   (hadr-chips-body-V09-03-14) 
 -----------------------------------------------------------------------
 Bring up to geant4-09-03-ref-09 and tag
