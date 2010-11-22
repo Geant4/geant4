@@ -32,7 +32,7 @@
 #include "Tst12SteppingAction.hh"
 #include "Tst12StackingAction.hh"
 
-#include "FTFP.hh"
+#include "FTFP_BERT.hh"
 #include "FTF_BIC.hh"
 #include "QGS_BIC.hh"
 #include "QGSP_BERT.hh"
@@ -55,7 +55,7 @@ int main(int argc,char** argv) {
   G4String inputFileName="-";
   if (argc > 2) { // second arg is PhysicsList
      G4String opt = argv[2];
-     if (opt == "FTFP" ) thePL=new FTFP;
+     if (opt == "FTFP_BERT" ) thePL=new FTFP_BERT;
      else if (opt == "FTF_BIC" ) thePL=new FTF_BIC;
      else if (opt == "QGS_BIC" ) thePL=new QGS_BIC;
      else if (opt == "QGSP_BERT" ) thePL=new QGSP_BERT;
@@ -63,8 +63,8 @@ int main(int argc,char** argv) {
      if ( thePL ) G4cout << "Test12 using physics list " << opt << G4endl;
   }
   if ( !thePL ) {
-     thePL=new FTFP;
-     G4cout << "Test12 using physics list FTFP (default)" << G4endl;
+     thePL=new FTFP_BERT;
+     G4cout << "Test12 using physics list FTFP_BERT (default)" << G4endl;
   }
   
   if (argc>1 ) inputFileName=argv[1];
