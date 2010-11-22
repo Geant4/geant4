@@ -1,4 +1,4 @@
-$Id: History,v 1.80 2010-11-19 17:24:02 gunter Exp $
+$Id: History,v 1.81 2010-11-22 17:50:59 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -11,6 +11,9 @@ $Id: History,v 1.80 2010-11-19 17:24:02 gunter Exp $
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22-Nov-2010,G.Folger                 (testtools-QMtest-V09-03-27)
+- Fix typo in stderr of olap-run
 
 19-Nov-2010,G.Folger                 (testtools-QMtest-V09-03-26)
 - provide expected stderr for advanced example gammaraytelescope
