@@ -1,4 +1,4 @@
-q$Id: History,v 1.168 2010-11-21 15:47:03 vnivanch Exp $
+q$Id: History,v 1.169 2010-11-22 17:22:37 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,10 +15,15 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22-11-2010, G.Folger                    (phys-lists-V09-03-41)
+-  Fix bug in new G4CHIPSKaonBuilder
+
 21-11-2010, V.Ivanchenko                (phys-lists-V09-03-40)
 - G4EmStandardPhysics_option1 - enable back ApplyCuts option (CPU effect)
 - G4EmStandardPhysics_option2, G4EmStandardPhysics_option3 - minor cleanup
- 
+- QGS_BIC: using G4NeutronCrossSectionXS
+- QBBC: 
+
 19-11-2010, V.Ivanchenko                (phys-lists-V09-03-39)
 - G4PhysListFactory - removed obsolete Physics Lists (26 are supported)
 - QBBC - simplified, only one variant left;
