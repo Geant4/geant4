@@ -1,4 +1,4 @@
-$Id: History,v 1.470 2010-11-22 18:32:00 mantero Exp $
+$Id: History,v 1.471 2010-11-22 22:49:51 mantero Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+
+22.11.2010, A.Mantero, tag emlowen-V09-03-63
+            minor fixes
 
 22.11.2010, A.Mantero, tag emlowen-V09-03-62
 	    units management in PIXE fixed
