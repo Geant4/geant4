@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.cc,v 1.25 2010-06-09 11:56:47 vnivanch Exp $
+// $Id: G4Evaporation.cc,v 1.26 2010-11-23 18:10:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -141,12 +141,12 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
     // check if it is stable, then finish evaporation
     G4int Z = theResidualNucleus->GetZ_asInt();
     G4double abun = nist->GetIsotopeAbundance(Z, A); 
-    /*
-    G4cout << "### G4Evaporation::BreakItUp step " << ia << " Z= " << Z
-	   << " A= " << A << " Eex(MeV)= " 
-	   << theResidualNucleus->GetExcitationEnergy()
-	   << " aban= " << abun << G4endl;
-    */
+    
+    // G4cout << "### G4Evaporation::BreakItUp step " << ia << " Z= " << Z
+    //	   << " A= " << A << " Eex(MeV)= " 
+    //	   << theResidualNucleus->GetExcitationEnergy()
+    //	   << " aban= " << abun << G4endl;
+   
     if(theResidualNucleus->GetExcitationEnergy() <= minExcitation && 
        (abun > 0.0)) 
       {
@@ -183,6 +183,7 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
     // photon evaporation in the case of no other channels available
     // do evaporation chain and reset total probability
     if(0.0 < totprob && probabilities[0] == totprob) {
+      //G4cout << "Start gamma evaporation" << G4endl;
       theTempResult = (*theChannels)[0]->BreakUpFragment(theResidualNucleus);
       if(theTempResult) {
 	size_t nsec = theTempResult->size();
@@ -227,11 +228,13 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
 
     // single photon evaporation, primary pointer is kept
     if(0 == i) {
+      //G4cout << "Single gamma" << G4endl;
       G4Fragment* gamma = (*theChannels)[0]->EmittedFragment(theResidualNucleus);
       if(gamma) { theResult->push_back(gamma); }
 
       // fission, return results to the main loop if fission is succesful
     } else if(1 == i) {
+      //G4cout << "Fission" << G4endl;
       theTempResult = (*theChannels)[1]->BreakUp(*theResidualNucleus);
       if(theTempResult) {
 	size_t nsec = theTempResult->size();
@@ -247,6 +250,7 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
 
       // other channels
     } else {
+      //G4cout << "Channel # " << i << G4endl;
       theTempResult = (*theChannels)[i]->BreakUp(*theResidualNucleus);
       if(theTempResult) {
 	size_t nsec = theTempResult->size();

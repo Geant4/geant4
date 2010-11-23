@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EvaporationChannel.cc,v 1.17 2010-11-18 10:21:03 vnivanch Exp $
+// $Id: G4EvaporationChannel.cc,v 1.18 2010-11-23 18:10:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //J.M. Quesada (August2008). Based on:
@@ -45,6 +45,7 @@
 #include "G4Pow.hh"
 #include "G4EvaporationLevelDensityParameter.hh"
 #include "Randomize.hh"
+#include "G4Alpha.hh"
 
 G4EvaporationChannel::G4EvaporationChannel(G4int anA, G4int aZ, 
 					   const G4String & aName,
@@ -106,29 +107,31 @@ void G4EvaporationChannel::Initialize(const G4Fragment & fragment)
   // Only channels which are physically allowed are taken into account 
   if (ResidualA <= 0 || ResidualZ <= 0 || ResidualA < ResidualZ ||
       (ResidualA == ResidualZ && ResidualA > 1) || ExEnergy <= 0.0) {
-    CoulombBarrier=ResidualMass =0.0;
+    CoulombBarrier = ResidualMass = 0.0;
     MaximalKineticEnergy = -1000.0*MeV;
     EmissionProbability = 0.0;
   } else {
     ResidualMass = G4NucleiProperties::GetNuclearMass(ResidualA, ResidualZ);
     CoulombBarrier = theCoulombBarrierPtr->GetCoulombBarrier(ResidualA,ResidualZ,ExEnergy);
     // Maximal Kinetic Energy
-    MaximalKineticEnergy = CalcMaximalKineticEnergy(fragment.GetGroundStateMass()+ExEnergy);
+    // MaximalKineticEnergy = CalcMaximalKineticEnergy(fragment.GetGroundStateMass()+ExEnergy);
+    MaximalKineticEnergy = ExEnergy + fragment.GetGroundStateMass() 
+      - EvaporatedMass - ResidualMass;
     
     // Emission probability
     // Protection for the case Tmax<V. If not set in this way we could end up in an 
     // infinite loop in  the method GetKineticEnergy if OPTxs!=0 && useSICB=true. 
     // Of course for OPTxs=0 we have the Coulomb barrier 
     
-    G4double limit;
-    if (OPTxs==0 || (OPTxs!=0 && useSICB)) 
-      limit= CoulombBarrier;
-    else limit=0.;
+    //G4double limit;
+    //if (OPTxs==0 || (OPTxs!=0 && useSICB)) 
+    //  limit= CoulombBarrier;
+    //else limit=0.;
   
     // The threshold for charged particle emission must be  set to 0 if Coulomb 
     //cutoff  is included in the cross sections
-    //if (MaximalKineticEnergy <= 0.0) EmissionProbability = 0.0;  
-    if (MaximalKineticEnergy <= limit) EmissionProbability = 0.0;
+    if (MaximalKineticEnergy <= CoulombBarrier) { EmissionProbability = 0.0; } 
+    //    if (MaximalKineticEnergy <= limit) EmissionProbability = 0.0;
     else { 
       // Total emission probability for this channel
       EmissionProbability = theEvaporationProbabilityPtr->
@@ -142,32 +145,24 @@ void G4EvaporationChannel::Initialize(const G4Fragment & fragment)
 
 G4FragmentVector * G4EvaporationChannel::BreakUp(const G4Fragment & theNucleus)
 {
-  G4double EvaporatedKineticEnergy=GetKineticEnergy(theNucleus);
+  G4double Ecm = GetKineticEnergy(theNucleus) + ResidualMass + EvaporatedMass;
   
-  G4double EvaporatedEnergy = EvaporatedKineticEnergy + EvaporatedMass;
+  G4double EvaporatedEnergy = 
+    ((Ecm-ResidualMass)*(Ecm+ResidualMass) + EvaporatedMass*EvaporatedMass)/(2*Ecm);
   
   G4ThreeVector momentum(IsotropicVector
-                         (std::sqrt(EvaporatedKineticEnergy*
-                                    (EvaporatedKineticEnergy+2.0*EvaporatedMass))));
-  
-  momentum.rotateUz(theNucleus.GetMomentum().vect().unit());
+                         (std::sqrt((EvaporatedEnergy - EvaporatedMass)*
+                                    (EvaporatedEnergy + EvaporatedMass))));
   
   G4LorentzVector EvaporatedMomentum(momentum,EvaporatedEnergy);
-  EvaporatedMomentum.boost(theNucleus.GetMomentum().boostVector());
+  G4LorentzVector ResidualMomentum = theNucleus.GetMomentum();
+  EvaporatedMomentum.boost(ResidualMomentum.boostVector());
   
   G4Fragment * EvaporatedFragment = new G4Fragment(theA,theZ,EvaporatedMomentum);
+  ResidualMomentum -= EvaporatedMomentum;
 
-  // ** And now the residual nucleus ** 
-  G4double theExEnergy = theNucleus.GetExcitationEnergy();
-  G4double theMass = theNucleus.GetGroundStateMass();
-  G4double ResidualEnergy = theMass + 
-    (theExEnergy - EvaporatedKineticEnergy) - EvaporatedMass;
-  
-  G4LorentzVector ResidualMomentum(-momentum,ResidualEnergy);
-  ResidualMomentum.boost(theNucleus.GetMomentum().boostVector());
-  
-  G4Fragment * ResidualFragment = new G4Fragment(ResidualA, ResidualZ, ResidualMomentum );
-  
+  G4Fragment * ResidualFragment = new G4Fragment(ResidualA, ResidualZ, ResidualMomentum);
+ 
   G4FragmentVector * theResult = new G4FragmentVector;
   
 #ifdef debug
@@ -257,9 +252,10 @@ G4double G4EvaporationChannel::GetKineticEnergy(const G4Fragment & aFragment)
     return result;
   } else if (OPTxs==1 || OPTxs==2 || OPTxs==3 || OPTxs==4) {
     
-    G4double V;
-    if(useSICB) V= CoulombBarrier;
-    else V=0.;
+    G4double V = std::max(CoulombBarrier,
+			  aFragment.GetGroundStateMass()-EvaporatedMass-ResidualMass);
+    //if(useSICB) V= CoulombBarrier;
+    //else V=0.;
     //If Coulomb barrier is just included  in the cross sections
     // 	G4double V=0.;
 
