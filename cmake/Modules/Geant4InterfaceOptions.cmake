@@ -5,6 +5,9 @@
 #
 # Specific UI/Vis options are also handled here.
 #
+# $Id: Geant4InterfaceOptions.cmake,v 1.2 2010-11-23 20:32:47 bmorgan Exp $
+# GEANT4 Tag $Name: not supported by cvs2svn $
+#
 
 if(UNIX)
     #--------------------------------------------------------------------------
@@ -34,12 +37,11 @@ if(UNIX)
     #-------------------------------------------------------------------------
     # Support for Client/Server DAWN driver
     # mark as advanced because user should know what they're doing to use this
-    #option(GEANT4_USE_NETWORKDAWN "Build Dawn driver with Client/Server
-    #support" OFF)
+    option(GEANT4_USE_NETWORKDAWN "Build Dawn driver with Client/Server support" OFF)
     #
     # Possible headers checks for needed network parts?
     #
-    #mark_as_advanced(GEANT4_USE_NETWORKDAWN)
+    mark_as_advanced(GEANT4_USE_NETWORKDAWN)
 
     #--------------------------------------------------------------------------
     # Support for Client/Server VRML driver
