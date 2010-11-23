@@ -5,7 +5,7 @@
 #
 # Specific UI/Vis options are also handled here.
 #
-# $Id: Geant4InterfaceOptions.cmake,v 1.3 2010-11-23 20:42:55 bmorgan Exp $
+# $Id: Geant4InterfaceOptions.cmake,v 1.4 2010-11-23 23:50:36 bmorgan Exp $
 # GEANT4 Tag $Name: not supported by cvs2svn $
 #
 
@@ -55,19 +55,18 @@ endif()
 
 #------------------------------------------------------------------------------
 # Qt Support (UI and Vis)
-#option(GEANT4_USE_QT "Build Geant4 with Qt support" OFF)
+option(GEANT4_USE_QT "Build Geant4 with Qt support" OFF)
 
 if(GEANT4_USE_QT)
-    # Find and configure Qt - we prefer Qt4, but fall back to Qt3...
-    # This may need improvement... and need to work out how to use
-    # flags in builds - i.e. don't compile Qt stuff if Qt not found...
+    # Find and configure Qt - require 4
     find_package(Qt4 COMPONENTS QtCore QtGui QtOpenGL)
 
-    if(NOT QT_FOUND)
-        message(STATUS "failed to find Qt4, trying Qt3...")
-        find_package(Qt3 REQUIRED)
-        if(NOT QT_FOUND)
-            message(SEND_ERROR "Qt3 could not be found.")
-        endif()
-    endif()
+    # Info on how tofall back to Qt3 kept below for information
+    #if(NOT QT_FOUND)
+    #   message(STATUS "failed to find Qt4, trying Qt3...")
+    #   find_package(Qt3 REQUIRED)
+    #   if(NOT QT_FOUND)
+    #       message(SEND_ERROR "Qt3 could not be found.")
+    #   endif()
+    #endif()
 endif()
