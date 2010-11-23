@@ -13,6 +13,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+23rg November 2010 Ben Morgan
+Geant4MacroDefineModule.cmake - Added new macro GEANT4_ADD_COMPILE_DEFINITIONS
+for easy adding of compile definitions to one or more source files.
+
 
 30th September 2010 Ben Morgan
 Geant4MacroLibraryTargets.cmake - Used new variable name for global sources and
