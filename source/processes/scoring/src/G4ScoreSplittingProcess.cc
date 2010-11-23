@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreSplittingProcess.cc,v 1.4 2010-11-22 18:02:55 japost Exp $
+// $Id: G4ScoreSplittingProcess.cc,v 1.5 2010-11-23 12:27:29 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -159,7 +159,7 @@ G4VParticleChange* G4ScoreSplittingProcess::PostStepDoIt(
      CopyStepStart(step);
      fSplitPreStepPoint->SetSensitiveDetector(ptrSD);
      fOldTouchableH = fInitialTouchableH;
-     fNewTouchableH= 0; 
+     fNewTouchableH=  fOldTouchableH; 
      *fSplitPostStepPoint= *(step.GetPreStepPoint()); 
      
      // Split the energy
