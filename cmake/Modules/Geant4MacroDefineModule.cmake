@@ -25,7 +25,10 @@
 # It assumes that it will be called from a CMake located in the module
 # root directory (i.e. the directory containing the include and src
 # subdirectories). It uses this location to define absolute paths to the
-# headers and sources, defining the variables
+# headers and sources, and will ignore any absolute paths passed in HEADERS
+# or SOURCES so that generated files can be passed in.
+#
+# The macro defines the variables
 #
 # G4MODULENAME = name
 # ${G4MODULENAME}_HEADERS = List of absolute paths to files given in HEADERS
@@ -68,13 +71,23 @@ MACRO(GEANT4_DEFINE_MODULE)
     set(${G4MODULENAME}_SRCDIR ${${G4MODULENAME}_BASEDIR}/src)
     set(${G4MODULENAME}_INCDIR ${${G4MODULENAME}_BASEDIR}/include)
 
+    # We now create absolute paths to the headers and sources,
+    # ignoring any already absolute paths
     foreach(_HDR ${G4DEFMOD_HEADERS})
-        list(APPEND ${G4MODULENAME}_HEADERS ${${G4MODULENAME}_INCDIR}/${_HDR})
+        if(IS_ABSOLUTE ${_HDR})
+            list(APPEND ${G4MODULENAME}_HEADERS ${_HDR})
+        else()
+            list(APPEND ${G4MODULENAME}_HEADERS ${${G4MODULENAME}_INCDIR}/${_HDR})
+        endif()
     endforeach()
 
 
     foreach(_SRC ${G4DEFMOD_SOURCES})
-        list(APPEND ${G4MODULENAME}_SOURCES ${${G4MODULENAME}_SRCDIR}/${_SRC})
+        if(IS_ABSOLUTE ${_SRC})
+            list(APPEND ${G4MODULENAME}_SOURCES ${_SRC})
+        else()
+            list(APPEND ${G4MODULENAME}_SOURCES ${${G4MODULENAME}_SRCDIR}/${_SRC})
+        endif()
     endforeach()
 
 
