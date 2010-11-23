@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreSplittingProcess.cc,v 1.5 2010-11-23 12:27:29 japost Exp $
+// $Id: G4ScoreSplittingProcess.cc,v 1.6 2010-11-23 17:57:23 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -52,15 +52,14 @@
 //--------------------------------
 G4ScoreSplittingProcess::
 G4ScoreSplittingProcess(const G4String& processName,G4ProcessType theType)
-  :G4VProcess(processName,theType)
+  :G4VProcess(processName,theType),
+   fOldTouchableH(),  fNewTouchableH(), fInitialTouchableH(), fFinalTouchableH()
 {
   pParticleChange = &xParticleChange;
 
   fSplitStep = new G4Step();
   fSplitPreStepPoint =  fSplitStep->GetPreStepPoint();
   fSplitPostStepPoint = fSplitStep->GetPostStepPoint();
-  fOldTouchableH = fNewTouchableH = 0; 
-  fInitialTouchableH = fFinalTouchableH = 0; 
 
   if (verboseLevel>0)
   {
@@ -74,8 +73,6 @@ G4ScoreSplittingProcess(const G4String& processName,G4ProcessType theType)
 // -----------
 G4ScoreSplittingProcess::~G4ScoreSplittingProcess()
 {
-  fOldTouchableH = fNewTouchableH = 0;
-
   delete fSplitStep;
   delete fpEnergySplitter; 
 }
@@ -100,8 +97,6 @@ void G4ScoreSplittingProcess::StartTracking(G4Track* trk)
   fSplitPostStepPoint->SetTouchableHandle(fNewTouchableH);
 
   ///  Initialize 
-  // fSplitSafety = -1.;
-  // fOnBoundary = false;
   fSplitPreStepPoint ->SetStepStatus(fUndefined);
   fSplitPostStepPoint->SetStepStatus(fUndefined);
 }
@@ -171,7 +166,6 @@ G4VParticleChange* G4ScoreSplittingProcess::PostStepDoIt(
      direction= (finalPostStepPosition - preStepPosition).unit(); 
 
      fFinalTouchableH= track.GetNextTouchableHandle(); 
-       // step.GetPostStepPoint()->GetTouchableHandle();
 
      postStepPosition= preStepPosition;
      // Loop over the sub-parts of this step
@@ -184,7 +178,7 @@ G4VParticleChange* G4ScoreSplittingProcess::PostStepDoIt(
         fOldTouchableH = fNewTouchableH; 
 
         preStepPosition= postStepPosition;
-	fSplitPreStepPoint->SetPosition( preStepPosition );
+        fSplitPreStepPoint->SetPosition( preStepPosition );
         fSplitPreStepPoint->SetTouchableHandle(fOldTouchableH);
         
         fpEnergySplitter->GetLengthAndEnergyDeposited( iStep, idVoxel, stepLength, energyLoss);
@@ -193,33 +187,30 @@ G4VParticleChange* G4ScoreSplittingProcess::PostStepDoIt(
         pLogicalVolume->SetMaterial( fpEnergySplitter->GetVoxelMaterial( iStep) );  // idVoxel) ); 
 
         postStepPosition= preStepPosition + stepLength * direction; 
-	fSplitPostStepPoint->SetPosition(postStepPosition); 
+        fSplitPostStepPoint->SetPosition(postStepPosition); 
 
         // Load the Step with the new values
         fSplitStep->SetStepLength(stepLength);
         fSplitStep->SetTotalEnergyDeposit(energyLoss);
-	if( iStep < numberVoxelsInStep -1 ){ 
-	  fSplitStep->GetPostStepPoint()->SetStepStatus( fGeomBoundary );
-	  G4int  nextVoxelId= -1;
+        if( iStep < numberVoxelsInStep -1 ){ 
+          fSplitStep->GetPostStepPoint()->SetStepStatus( fGeomBoundary );
+          G4int  nextVoxelId= -1;
           fpEnergySplitter->GetVoxelID( iStep+1, nextVoxelId );
-	  // Create new touchable (and handle )
-	  // fNewTouchableH= new G4TouchableHandle();
 
-	  // Create new "next" touchable for each section ??
+          // Create new "next" touchable for each section ??
           G4VTouchable* fNewTouchablePtr= 
-	      CreateTouchableForSubStep( nextVoxelId, postStepPosition );
-	  fNewTouchableH= G4TouchableHandle(fNewTouchablePtr); 
-  	  fSplitPostStepPoint->SetTouchableHandle( fNewTouchableH ); // G4TouchableHandle(fNewTouchablePtr) ); 
-	} else { 
-	  fSplitStep->GetPostStepPoint()->SetStepStatus( fullStepStatus );
-	  // fNewTouchableH= fFinalPostStepTouchable; 
-	  // fSplitPostStepPoint->SetTouchableHandle( fNewTouchableH ); 
-	  fSplitPostStepPoint->SetTouchableHandle( fFinalTouchableH );
-	}
+              CreateTouchableForSubStep( nextVoxelId, postStepPosition );
+          fNewTouchableH= G4TouchableHandle(fNewTouchablePtr); 
+          fSplitPostStepPoint->SetTouchableHandle( fNewTouchableH );
+        } else { 
+          fSplitStep->GetPostStepPoint()->SetStepStatus( fullStepStatus );
+          fSplitPostStepPoint->SetTouchableHandle( fFinalTouchableH );
+        }
 
 
         // As first approximation, split the NIEL in the same fractions as the energy deposit
-        G4double eLossFraction = energyLoss / totalEnergyDeposit; 
+        G4double eLossFraction; 
+        eLossFraction= (totalEnergyDeposit>0.0) ? energyLoss / totalEnergyDeposit : 1.0 ; 
         fSplitStep->SetNonIonizingEnergyDeposit(step.GetNonIonizingEnergyDeposit()*eLossFraction);
         
         fSplitPostStepPoint->SetSensitiveDetector( ptrSD ); 
@@ -238,7 +229,7 @@ G4VParticleChange* G4ScoreSplittingProcess::PostStepDoIt(
 G4TouchableHistory*
 G4ScoreSplittingProcess::CreateTouchableForSubStep( G4int newVoxelNum, G4ThreeVector newPosition )
 {
-  G4cout << " Creating touchable handle for voxel-no " << newVoxelNum << G4endl;
+  // G4cout << " Creating touchable handle for voxel-no " << newVoxelNum << G4endl;
 
   G4TouchableHistory*  oldTouchableHistory= dynamic_cast<G4TouchableHistory*>(fOldTouchableH());
   G4TouchableHistory*  ptrTouchableHistory= new G4TouchableHistory( *oldTouchableHistory );
@@ -264,6 +255,9 @@ G4ScoreSplittingProcess::CreateTouchableForSubStep( G4int newVoxelNum, G4ThreeVe
   else
   {
     G4cout << " Current volume type is not Parameterised. " << G4endl; 
+    G4Exception("G4ScoreSplittingProcess::CreateTouchableForSubStep",
+          "ErrorRegularParamaterisation", JustWarning,
+         "Score Splitting Process is used for Regular Structure - but did not find one here.");
   }
   return ptrTouchableHistory; 
 }
@@ -354,7 +348,7 @@ G4ScoreSplittingProcess::AtRestGetPhysicalInteractionLength(
          const G4Track& /*track*/, 
          G4ForceCondition* condition)
 {
-  *condition = Forced;
+  *condition = NotForced;  // Was Forced
   return DBL_MAX;
 }
 
@@ -364,10 +358,10 @@ G4ScoreSplittingProcess::AtRestGetPhysicalInteractionLength(
 //---------------------------------------
 G4double G4ScoreSplittingProcess::AlongStepGetPhysicalInteractionLength(
             const G4Track&   , // track, 
-	    G4double         , // previousStepSize, 
-	    G4double         , // currentMinimumStep,
+            G4double         , // previousStepSize, 
+            G4double         , // currentMinimumStep,
             G4double&        , // proposedSafety, 
-	    G4GPILSelection* selection)
+            G4GPILSelection* selection)
 {
   *selection = NotCandidateForSelection;
   return DBL_MAX;
