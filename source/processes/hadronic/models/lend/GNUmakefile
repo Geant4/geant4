@@ -1,3 +1,8 @@
+# $Id: GNUmakefile,v 1.2 2010-11-23 13:58:03 gcosmo Exp $
+# -----------------------------------------------------------
+# GNUmakefile for hadronic library.
+# -----------------------------------------------------------
+
 name := G4had_lend
 
 ifndef G4INSTALL
@@ -30,9 +35,5 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/particles/hadrons/barions/include \
             -I$(G4BASE)/particles/hadrons/ions/include \
             -I$(G4BASE)/materials/include
-
-CPPFLAGS += -I$(G4ENDL_BASE)/tpi4GEANT/Accessing/GEANT/include
-
-all:lib
 
 include $(G4INSTALL)/config/common.gmk
