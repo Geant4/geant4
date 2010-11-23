@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: eRositaTrackerHit.hh,v 1.2 2010-11-23 20:51:55 pia Exp $
+// $Id: eRositaTrackerHit.hh,v 1.3 2010-11-23 23:34:32 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -57,7 +57,7 @@ public:
 
   void Draw();
   void Print();
-  void PrintToFile(ofstream& out);
+  void PrintToFile();
 
 public:
   
