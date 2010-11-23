@@ -1,9 +1,12 @@
-# This file defines the following macro for Geant4 developers needing to
+# - Macros for organizing and specializing code in Geant4 modules
+#
+# This file defines the following macros for Geant4 developers needing to
 # define the sources, headers and library dependencies for a standard 
-# Geant4 granular library module:
+# Geant4 granular library module, plus utlities for specializing source file
+# properties
 #
 # GEANT4_DEFINE_MODULE      - define a standard Geant4 Granular Library Module
-#
+# ======================
 # A Geant4 Module is defined as a directory containing subdirectories
 #
 #   include - holds all header files for the module
@@ -36,6 +39,19 @@
 #
 # It will also add the module include directory to the list of directories
 # using include_directories
+#
+#
+# GEANT4_ADD_COMPILE_DEFINITIONS - add compile defintions to a list of files
+# ================================
+# GEANT4_ADD_COMPILE_DEFINITIONS(SOURCES src1 src2 ...
+#                                COMPILE_DEFINITIONS def1 def 2)
+#
+# Here, SOURCES is the list of source files to which compile definitions
+# will be added. COMPILE_DEFINITIONS gives the list of definitions that
+# should be added. At present, any existing user set definitions on the
+# SOURCES are reset
+#
+
 
 include(CMakeMacroParseArguments)
 
@@ -77,5 +93,26 @@ MACRO(GEANT4_DEFINE_MODULE)
     endforeach()
 
     include_directories(${${G4MODULENAME}_INCDIR})
+ENDMACRO()
+
+
+# GEANT4_ADD_COMPILE_DEFINITIONS
+MACRO(GEANT4_ADD_COMPILE_DEFINITIONS)
+    PARSE_ARGUMENTS(G4ADDDEF
+        "SOURCES;COMPILE_DEFINITIONS"    
+        ""
+        ${ARGN}
+    )
+
+    # We assume that the sources have been added at the level of a
+    # a sources.cmake, so are inside the src subdir of the sources.cmake
+    get_filename_component(_ACD_BASE_PATH ${CMAKE_CURRENT_LIST_FILE} PATH)
+    
+    # Now for each file, add the definitions
+    foreach(_acd_source ${G4ADDDEF_SOURCES})
+        # quote compile defs because this must epand to space separated list
+        set_source_files_properties(${_ACD_BASE_PATH}/src/${_acd_source}
+            PROPERTIES COMPILE_DEFINITIONS "${G4ADDDEF_COMPILE_DEFINITIONS}")
+    endforeach()
 ENDMACRO()
 
