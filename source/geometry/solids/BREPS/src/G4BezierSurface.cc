@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BezierSurface.cc,v 1.16 2010-11-19 16:14:51 gcosmo Exp $
+// $Id: G4BezierSurface.cc,v 1.17 2010-11-23 15:14:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -373,7 +373,7 @@ void G4BezierSurface::ClipSurface()
       else
       {
 	G4cout << "\n  RETURNING FROm CLIP..";
-	smin = 0; smax = 1;
+	smin = 0; smax = 1; delete ch_tmp;
 	return;
       }
 
@@ -443,8 +443,7 @@ void G4BezierSurface::ClipSurface()
       ch_tmp=ch_ptr->GetNextHull();
       for(G4int m = l+1; m < col_size; m++)
       {
-	register G4double d;
-	register G4double param1, param2;
+	register G4double d, param1, param2;
 	param1 = ch_ptr->GetParam();
 	param2 = ch_tmp->GetParam();
 	
@@ -523,7 +522,6 @@ void G4BezierSurface::ClipSurface()
     
     ch_ptr=ch_first;
     delete ch_tmp;
-    ch_tmp=ch_first;
     
     for(G4int q = 0; q < row_size - 1; q++)
     {
@@ -574,7 +572,6 @@ void G4BezierSurface::ClipSurface()
   ch_ptr=ch_first;
   while(ch_ptr && (ch_ptr!=ch_ptr->GetNextHull()))
   {
-    delete ch_tmp;
     ch_tmp=ch_ptr;
     ch_ptr=ch_ptr->GetNextHull();
     delete ch_tmp;
