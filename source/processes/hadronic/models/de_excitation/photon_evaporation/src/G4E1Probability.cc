@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4E1Probability.cc,v 1.10 2010-11-17 17:59:04 vnivanch Exp $
+// $Id: G4E1Probability.cc,v 1.11 2010-11-23 18:05:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------
@@ -143,14 +143,17 @@ G4double G4E1Probability::EmissionProbability(const G4Fragment& frag,
   // the probability for photon evaporation down to last ground level.
   // fragment = nuclear fragment BEFORE de-excitation
 
-  G4double upperLim = frag.GetExcitationEnergy();
-  G4double lowerLim = std::max(0.0, upperLim - gammaE);
+  G4double upperLim = gammaE;
+  G4double lowerLim = 0.0; 
+
+  //G4cout << "G4E1Probability::EmissionProbability:  Emin= " << lowerLim
+  //	 << " Emax= " << upperLim << G4endl;
   if( upperLim - lowerLim <= CLHEP::keV ) { return 0.0; } 
 
   // Need to integrate EmissionProbDensity from lowerLim to upperLim 
   // and multiply by factor 3 (?!)
 
-  G4double integ = 3 * EmissionIntegration(frag,lowerLim,upperLim);
+  G4double integ = 3.0 * EmissionIntegration(frag,lowerLim,upperLim);
 
   return integ;
 

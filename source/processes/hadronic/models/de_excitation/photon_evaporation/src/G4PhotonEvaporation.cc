@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotonEvaporation.cc,v 1.15 2010-11-17 16:50:53 vnivanch Exp $
+// $Id: G4PhotonEvaporation.cc,v 1.16 2010-11-23 18:03:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -289,10 +289,8 @@ G4FragmentVector* G4PhotonEvaporation::BreakItUp(const G4Fragment& nucleus)
 
 G4double G4PhotonEvaporation::GetEmissionProbability() const
 {
-  G4double prob = 0.;
-  if (_probAlgorithm != 0) {
-    prob = _probAlgorithm->EmissionProbability(*_nucleus,_gammaE);
-  }
+  G4double prob = 
+    _probAlgorithm->EmissionProbability(*_nucleus,_nucleus->GetExcitationEnergy());
   return prob;
 }
 
