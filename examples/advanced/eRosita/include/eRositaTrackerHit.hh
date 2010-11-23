@@ -24,11 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: eRositaTrackerHit.hh,v 1.1 2010-11-23 16:17:03 pia Exp $
+// $Id: eRositaTrackerHit.hh,v 1.2 2010-11-23 20:51:55 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef eRositaTrackerHit_h
 #define eRositaTrackerHit_h 1
@@ -43,52 +41,49 @@
 using namespace std;
 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class eRositaTrackerHit : public G4VHit
 {
-  public:
+public:
 
-      eRositaTrackerHit();
-     ~eRositaTrackerHit();
-      eRositaTrackerHit(const eRositaTrackerHit&);
-      const eRositaTrackerHit& operator=(const eRositaTrackerHit&);
-      G4int operator==(const eRositaTrackerHit&) const;
+  eRositaTrackerHit();
+  ~eRositaTrackerHit();
+  eRositaTrackerHit(const eRositaTrackerHit&);
+  const eRositaTrackerHit& operator=(const eRositaTrackerHit&);
+  G4int operator==(const eRositaTrackerHit&) const;
 
-      inline void* operator new(size_t);
-      inline void  operator delete(void*);
+  inline void* operator new(size_t);
+  inline void  operator delete(void*);
 
-      void Draw();
-      void Print();
-      void PrintToFile(ofstream& out);
+  void Draw();
+  void Print();
+  void PrintToFile(ofstream& out);
 
-  public:
+public:
   
-      void SetTrackID  (G4int track)      { trackID = track; };
-      void SetChamberNb(G4int chamb)      { chamberNb = chamb; };  
-      void SetEdep     (G4double de)      { edep = de; };
-      void SetPos      (G4ThreeVector xyz){ pos = xyz; };
+  void SetTrackID  (G4int track)      { trackID = track; };
+  void SetChamberNb(G4int chamb)      { chamberNb = chamb; };  
+  void SetEdep     (G4double de)      { edep = de; };
+  void SetPos      (G4ThreeVector xyz){ pos = xyz; };
       
-      G4int GetTrackID()    { return trackID; };
-      G4int GetChamberNb()  { return chamberNb; };
-      G4double GetEdep()    { return edep; };      
-      G4ThreeVector GetPos(){ return pos; };
+  G4int GetTrackID()    { return trackID; };
+  G4int GetChamberNb()  { return chamberNb; };
+  G4double GetEdep()    { return edep; };      
+  G4ThreeVector GetPos(){ return pos; };
       
-  private:
+private:
   
-      G4int         trackID;
-      G4int         chamberNb;
-      G4double      edep;
-      G4ThreeVector pos;
+  G4int         trackID;
+  G4int         chamberNb;
+  G4double      edep;
+  G4ThreeVector pos;
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 typedef G4THitsCollection<eRositaTrackerHit> eRositaTrackerHitsCollection;
 
 extern G4Allocator<eRositaTrackerHit> eRositaTrackerHitAllocator;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void* eRositaTrackerHit::operator new(size_t)
 {
@@ -97,13 +92,11 @@ inline void* eRositaTrackerHit::operator new(size_t)
   return aHit;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void eRositaTrackerHit::operator delete(void *aHit)
 {
   eRositaTrackerHitAllocator.FreeSingle((eRositaTrackerHit*) aHit);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

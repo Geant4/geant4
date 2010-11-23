@@ -24,11 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: eRositaTrackerHit.cc,v 1.1 2010-11-23 16:17:16 pia Exp $
+// $Id: eRositaTrackerHit.cc,v 1.2 2010-11-23 20:51:55 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "eRositaTrackerHit.hh"
 #include "G4UnitsTable.hh"
@@ -40,15 +38,12 @@
 
 G4Allocator<eRositaTrackerHit> eRositaTrackerHitAllocator;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 eRositaTrackerHit::eRositaTrackerHit() {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 eRositaTrackerHit::~eRositaTrackerHit() {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 eRositaTrackerHit::eRositaTrackerHit(const eRositaTrackerHit& right)
   : G4VHit()
@@ -59,7 +54,6 @@ eRositaTrackerHit::eRositaTrackerHit(const eRositaTrackerHit& right)
   pos       = right.pos;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 const eRositaTrackerHit& eRositaTrackerHit::operator=(const eRositaTrackerHit& right)
 {
@@ -70,14 +64,12 @@ const eRositaTrackerHit& eRositaTrackerHit::operator=(const eRositaTrackerHit& r
   return *this;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4int eRositaTrackerHit::operator==(const eRositaTrackerHit& right) const
 {
   return (this==&right) ? 1 : 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void eRositaTrackerHit::Draw()
 {
@@ -94,7 +86,6 @@ void eRositaTrackerHit::Draw()
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void eRositaTrackerHit::Print()
 {
@@ -103,11 +94,14 @@ void eRositaTrackerHit::Print()
 	 << "  position: " << G4BestUnit(pos,"Length") << G4endl;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void eRositaTrackerHit::PrintToFile(ofstream& out)
 {
-         out<<trackID<<"  "<<edep<<"   "<<pos.x()<<" "<<pos.y()<<" "<<pos.z()<<G4endl;
-	
+  out << trackID 
+      << " " << edep 
+      << " " << pos.x() 
+      << " " << pos.y() 
+      << " " << pos.z() 
+      << std::endl; 
 }
 

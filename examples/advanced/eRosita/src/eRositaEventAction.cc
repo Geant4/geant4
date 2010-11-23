@@ -24,36 +24,30 @@
 // ********************************************************************
 //
 //
-// $Id: eRositaEventAction.cc,v 1.1 2010-11-23 16:17:16 pia Exp $
+// $Id: eRositaEventAction.cc,v 1.2 2010-11-23 20:51:55 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 #include "eRositaEventAction.hh"
 
 #include "G4Event.hh"
-#include "G4EventManager.hh"
+//#include "G4EventManager.hh"
 #include "G4TrajectoryContainer.hh"
 #include "G4Trajectory.hh"
 #include "G4ios.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 eRositaEventAction::eRositaEventAction()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 eRositaEventAction::~eRositaEventAction()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 void eRositaEventAction::BeginOfEventAction(const G4Event*)
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 void eRositaEventAction::EndOfEventAction(const G4Event* evt)
 {
@@ -74,4 +68,3 @@ void eRositaEventAction::EndOfEventAction(const G4Event* evt)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

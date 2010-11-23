@@ -24,11 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: eRositaTrackerSD.cc,v 1.1 2010-11-23 16:17:16 pia Exp $
+// $Id: eRositaTrackerSD.cc,v 1.2 2010-11-23 20:51:55 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "eRositaTrackerSD.hh"
 #include "G4HCofThisEvent.hh"
@@ -39,50 +37,48 @@
 
 #include <iostream>
 #include <fstream>
-using namespace std;
+//using namespace std;
 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 eRositaTrackerSD::eRositaTrackerSD(G4String name)
-:G4VSensitiveDetector(name)
+  :G4VSensitiveDetector(name)
 {
   G4String HCname;
   collectionName.insert(HCname="trackerCollection");
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 eRositaTrackerSD::~eRositaTrackerSD(){ }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void eRositaTrackerSD::Initialize(G4HCofThisEvent* HCE)
 {
   trackerCollection = new eRositaTrackerHitsCollection
-                          (SensitiveDetectorName,collectionName[0]); 
+    (SensitiveDetectorName,collectionName[0]); 
   static G4int HCID = -1;
-  if(HCID<0)
-  { HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]); }
+  if (HCID < 0)
+    { 
+      HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]); 
+    }
   HCE->AddHitsCollection( HCID, trackerCollection ); 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool eRositaTrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
-   //if(aStep->GetTrack()->GetDefinition() != G4Gamma::GammaDefinition()) return false;
+  //if(aStep->GetTrack()->GetDefinition() != G4Gamma::GammaDefinition()) return false;
 
   G4double edep = aStep->GetTotalEnergyDeposit();
 
-  if(edep==0.) return false;
+  if (edep == 0.) return false;
 
   eRositaTrackerHit* newHit = new eRositaTrackerHit();
   newHit->SetTrackID  (aStep->GetTrack()->GetTrackID());
   //newHit->SetChamberNb(aStep->GetPreStepPoint()->GetTouchableHandle()
   //                                             ->GetCopyNumber());
-  newHit->SetEdep     (edep);
-  newHit->SetPos      (aStep->GetPostStepPoint()->GetPosition());
+  newHit->SetEdep(edep);
+  newHit->SetPos(aStep->GetPostStepPoint()->GetPosition());
   trackerCollection->insert( newHit );
   
   //newHit->Print();
@@ -92,31 +88,34 @@ G4bool eRositaTrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   //newHit->PrintToFile(out);
   //out.close();
 
-
-
   return true;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4RunManager.hh"
 void eRositaTrackerSD::EndOfEvent(G4HCofThisEvent*)
 {
   G4int NbHits = trackerCollection->entries();
  
-  if (verboseLevel>0) { 
-     
-     G4cout << "\n-------->Hits Collection: in this event they are " << NbHits 
-            << " hits in the tracker chambers: " << G4endl;
-     for (G4int i=0;i<NbHits;i++) (*trackerCollection)[i]->Print();
-    } 
-     ofstream out("ASCII");
-     if(!out.is_open()){G4cout<<"...opening ASCII file failed";}
-     for (G4int i=0;i<NbHits;i++){(*trackerCollection)[i]->PrintToFile(out);}
-     out.close();
+  //  if (verboseLevel > 0) 
+  //{ 
+      
+  G4cout << std::endl
+	 << "Hits Collection: in this event they are " << NbHits 
+	 << " hits in the tracker chambers: " << G4endl;
+  for (G4int i=0;i<NbHits;i++) (*trackerCollection)[i]->Print();
+  // } 
+  ofstream out("ASCII");
+  if (!out.is_open())
+    {
+      G4cout <<"...opening ASCII file failed";
+    }
+  for (G4int i=0;i<NbHits;i++)
+    {
+      (*trackerCollection)[i]->PrintToFile(out);
+    }
+  out.close();
 }
 
 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
