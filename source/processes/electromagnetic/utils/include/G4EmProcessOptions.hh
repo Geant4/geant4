@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.hh,v 1.18 2010-11-21 16:45:12 vnivanch Exp $
+// $Id: G4EmProcessOptions.hh,v 1.19 2010-11-23 19:01:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -120,6 +120,8 @@ public:
   void SetAugerActive(G4bool val);
 
   void SetPIXEActive(G4bool val);
+
+  void SetPIXECrossSectionModel(const G4String& val);
 
   void SetMscStepLimitation(G4MscStepLimitType val);
 

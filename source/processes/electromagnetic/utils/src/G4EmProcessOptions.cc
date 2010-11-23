@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.cc,v 1.29 2010-11-20 20:56:41 vnivanch Exp $
+// $Id: G4EmProcessOptions.cc,v 1.30 2010-11-23 19:01:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -315,6 +315,14 @@ void G4EmProcessOptions::SetPIXEActive(G4bool val)
 {
   G4VAtomDeexcitation* ad = theManager-> AtomDeexcitation();
   if(ad) { ad->SetPIXEActive(val); }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmProcessOptions::SetPIXECrossSectionModel(const G4String& mname)
+{
+  G4VAtomDeexcitation* ad = theManager-> AtomDeexcitation();
+  if(ad) { ad->SetPIXECrossSectionModel(mname); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

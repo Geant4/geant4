@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.cc,v 1.39 2010-11-21 16:45:12 vnivanch Exp $
+// $Id: G4EnergyLossMessenger.cc,v 1.40 2010-11-23 19:01:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -195,6 +195,11 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   pixeCmd->SetDefaultValue(false);
   pixeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  pixeXsCmd = new G4UIcmdWithAString("/process/em/pixeXSmodel",this);
+  pixeXsCmd->SetGuidance("The name of PIXE cross section");
+  pixeXsCmd->SetParameterName("pixeXS",true);
+  pixeXsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
   deexCmd = new G4UIcommand("/process/em/deexcitation",this);
   deexCmd->SetGuidance("Set deexcitation flags per G4Region.");
   deexCmd->SetGuidance("  regName   : G4Region name");
@@ -321,6 +326,7 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
   delete deCmd;
   delete auCmd;
   delete pixeCmd;
+  delete pixeXsCmd;
   delete frCmd;
   delete fgCmd;
   delete lllCmd;
@@ -389,6 +395,10 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   }
   if (command == pixeCmd) {
     opt->SetPIXEActive(pixeCmd->GetNewBoolValue(newValue));
+    return;
+  }
+  if (command == pixeXsCmd) {
+    opt->SetPIXECrossSectionModel(newValue);
     return;
   }
   if (command == mscCmd) {
