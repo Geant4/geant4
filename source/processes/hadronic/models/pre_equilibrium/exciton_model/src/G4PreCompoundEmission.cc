@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundEmission.cc,v 1.33 2010-11-02 17:33:28 vnivanch Exp $
+// $Id: G4PreCompoundEmission.cc,v 1.34 2010-11-23 17:59:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -115,6 +115,11 @@ G4ReactionProduct * G4PreCompoundEmission::PerformEmission(G4Fragment & aFragmen
 
   // Kinetic Energy of emitted fragment
   G4double kinEnergyOfEmittedFragment = thePreFragment->GetKineticEnergy(aFragment);
+  //  if(kinEnergyOfEmittedFragment < MeV) {
+  //  G4cout << "Chosen fragment: " << G4endl;
+  //  G4cout << *thePreFragment << G4endl;
+  //  G4cout << "Ekin= " << kinEnergyOfEmittedFragment << G4endl;
+    // }
   if(kinEnergyOfEmittedFragment < 0.0) { kinEnergyOfEmittedFragment = 0.0; }
   
   // Calculate the fragment momentum (three vector)
@@ -142,16 +147,16 @@ G4ReactionProduct * G4PreCompoundEmission::PerformEmission(G4Fragment & aFragmen
   // Update nucleus parameters:
   // --------------------------
 
+  // Z and A
+  aFragment.SetZandA_asInt(thePreFragment->GetRestZ(),
+			   thePreFragment->GetRestA());
+    
   // Number of excitons
   aFragment.SetNumberOfParticles(aFragment.GetNumberOfParticles()-
 				 thePreFragment->GetA());
   // Number of charges
   aFragment.SetNumberOfCharged(aFragment.GetNumberOfCharged()-
 			       thePreFragment->GetZ());
-    
-  // Z and A
-  aFragment.SetZandA_asInt(thePreFragment->GetRestZ(),
-			   thePreFragment->GetRestA());
     
   // Update nucleus momentum 
   // A check on consistence of Z, A, and mass will be performed
@@ -160,9 +165,10 @@ G4ReactionProduct * G4PreCompoundEmission::PerformEmission(G4Fragment & aFragmen
   // Create a G4ReactionProduct 
   G4ReactionProduct * MyRP = thePreFragment->GetReactionProduct();
 
-  //G4cout << "G4PreCompoundEmission::Fragment emitted" << G4endl;
-  //G4cout << thePreFragment << G4endl;
-
+  //  if(kinEnergyOfEmittedFragment < MeV) {
+  //  G4cout << "G4PreCompoundEmission::Fragment emitted" << G4endl;
+  //  G4cout << thePreFragment << G4endl;
+    // }
   return MyRP;
 }
 
