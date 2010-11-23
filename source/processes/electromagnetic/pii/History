@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2010-11-22 11:29:38 pia Exp $
+$Id: History,v 1.5 2010-11-23 23:49:59 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21.11.2010, MGP, tag empii-V09-03-03
+            Removed leftover debug printing
 
 21.11.2010, MGP, tag empii-V09-03-02
             Changed the name of the environment variable identifying

@@ -28,7 +28,7 @@
 // ------------------------------------------------------------
 // G4RDHadronIonisation
 //
-// $Id: G4hImpactIonisation.cc,v 1.2 2010-11-19 17:16:21 pia Exp $
+// $Id: G4hImpactIonisation.cc,v 1.3 2010-11-23 23:48:53 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (MariaGrazia.Pia@ge.infn.it)
@@ -55,17 +55,12 @@
 #include "G4ParticleDefinition.hh"
 #include "G4AtomicDeexcitation.hh"
 #include "G4AtomicTransitionManager.hh"
-//#include "G4ShellVacancy.hh"
 #include "G4PixeCrossSectionHandler.hh"
 #include "G4IInterpolator.hh"
 #include "G4LogLogInterpolator.hh"
-//#include "G4IDataSet.hh"
-//#include "G4DataSet.hh"
-//#include "G4CompositeDataSet.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Proton.hh"               
-//#include "G4SemiLogInterpolation.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4PhysicsLogVector.hh"       
@@ -958,7 +953,7 @@ G4VParticleChange* G4hImpactIonisation::PostStepDoIt(const G4Track& track,
 {
   // Units are expressed in GEANT4 internal units.
 
-  std::cout << "----- Calling PostStepDoIt ----- " << std::endl;
+  //  std::cout << "----- Calling PostStepDoIt ----- " << std::endl;
 
   aParticleChange.Initialize(track) ;
   const G4MaterialCutsCouple* couple = track.GetMaterialCutsCouple();  
@@ -1075,27 +1070,25 @@ G4VParticleChange* G4hImpactIonisation::PostStepDoIt(const G4Track& track,
       G4int Z = pixeCrossSectionHandler->SelectRandomAtom(material,kineticEnergy);
       //      std::cout << "G4hImpactIonisation::PostStepDoIt - Z = " << Z << std::endl;
 
-      G4double microscopicCross = MicroscopicCrossSection(*definition,
-							  kineticEnergy,
-							  Z, deltaCut);
-      G4double crossFromShells = pixeCrossSectionHandler->FindValue(Z,kineticEnergy);
+      //      G4double microscopicCross = MicroscopicCrossSection(*definition,
+      //       			         	  kineticEnergy,
+      //					  Z, deltaCut);
+  //    G4double crossFromShells = pixeCrossSectionHandler->FindValue(Z,kineticEnergy);
 
-      std::cout << "G4hImpactIonisation: Z= "
-		<< Z
-		<< ", energy = "
-		<< kineticEnergy/MeV
-		<<" MeV, microscopic = "
-		<< microscopicCross/barn 
-		<< " barn, from shells = "
-		<< crossFromShells/barn
-		<< " barn" 
-		<< std::endl;
+      //std::cout << "G4hImpactIonisation: Z= "
+      //		<< Z
+      //		<< ", energy = "
+      //		<< kineticEnergy/MeV
+      //		<<" MeV, microscopic = "
+      //		<< microscopicCross/barn 
+      //		<< " barn, from shells = "
+      //		<< crossFromShells/barn
+      //		<< " barn" 
+      //		<< std::endl;
 
       // Select a shell in the target atom based on the individual shell cross sections
       G4int shellIndex = pixeCrossSectionHandler->SelectRandomShell(Z,kineticEnergy);
-
-      //      std::cout << "G4hImpactIonisation::PostStepDoIt - shellIndex = " << shellIndex << std::endl;
-     
+    
       G4AtomicTransitionManager* transitionManager = G4AtomicTransitionManager::Instance();
       const G4AtomicShell* atomicShell = transitionManager->Shell(Z,shellIndex);
       G4double bindingEnergy = atomicShell->BindingEnergy();
@@ -1143,8 +1136,13 @@ G4VParticleChange* G4hImpactIonisation::PostStepDoIt(const G4Track& track,
 		      type = aSecondary->GetDefinition();
 
 		      // ---- Debug ----
-		      if (type == G4Gamma::GammaDefinition())
-			std::cout << "PIXE photon energy (keV) = " << e/keV << std::endl;
+		      //if (type == G4Gamma::GammaDefinition())
+		      //	{			
+		      //	  std::cout << "Z = " << Z 
+		      //		    << ", shell: " << shellId
+		      //		    << ", PIXE photon energy (keV) = " << e/keV 
+		      //		    << std::endl;
+		      //	}
 		      // ---- End debug ---
 
 		      if (e < finalKineticEnergy &&
@@ -1204,13 +1202,13 @@ G4VParticleChange* G4hImpactIonisation::PostStepDoIt(const G4Track& track,
   aParticleChange.AddSecondary(deltaRay);
 
   // ---- Debug ----
-  std::cout << "RDHadronIonisation - finalKineticEnergy (MeV) = " 
-	    << finalKineticEnergy/MeV 
-	    << ", delta KineticEnergy (keV) = " 
-	    << deltaKineticEnergy/keV 
-	    << ", energy deposit (MeV) = "
-	    << eDeposit/MeV
-	    << std::endl;
+  //  std::cout << "RDHadronIonisation - finalKineticEnergy (MeV) = " 
+  //	    << finalKineticEnergy/MeV 
+  //	    << ", delta KineticEnergy (keV) = " 
+  //	    << deltaKineticEnergy/keV 
+  //	    << ", energy deposit (MeV) = "
+  //	    << eDeposit/MeV
+  //	    << std::endl;
   // ---- End debug ---
   
   // Save Fluorescence and Auger
