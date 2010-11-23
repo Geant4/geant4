@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 19:13:19 bmorgan Exp $
+# $Id: sources.cmake,v 1.2 2010-11-23 20:40:23 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -34,6 +34,8 @@ include_directories(${CMAKE_SOURCE_DIR}/source/visualization/modeling/include)
 #
 # Module has optional sources
 #
+include(Geant4MacroDefineModule)
+
 # List those always built
 set(G4VIS_VRML_MODULE_HEADERS
     G4VRML1File.hh
@@ -81,13 +83,14 @@ if(GEANT4_USE_NETWORKVRML)
     #
     # Add extra needed defs here
     #
+    GEANT4_ADD_COMPILE_DEFINITIONS(SOURCES ${G4VIS_VRML_MODULE_SOURCES}
+        COMPILE_DEFINITIONS G4VIS_BUILD_VRML_DRIVER)
 endif()
 
 
 #
 # Define the Geant4 Module.
 #
-include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4VRML
     HEADERS
         ${G4VIS_VRML_MODULE_HEADERS}
