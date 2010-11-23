@@ -5,7 +5,7 @@
 #
 # Specific UI/Vis options are also handled here.
 #
-# $Id: Geant4InterfaceOptions.cmake,v 1.2 2010-11-23 20:32:47 bmorgan Exp $
+# $Id: Geant4InterfaceOptions.cmake,v 1.3 2010-11-23 20:42:55 bmorgan Exp $
 # GEANT4 Tag $Name: not supported by cvs2svn $
 #
 
@@ -46,12 +46,11 @@ if(UNIX)
     #--------------------------------------------------------------------------
     # Support for Client/Server VRML driver
     # mark as advanced because user should know what they're doing to use this
-    #option(GEANT4_USE_NETWORKVRML "Build VRML driver with Client/Server
-    #support" OFF)
+    option(GEANT4_USE_NETWORKVRML "Build VRML driver with Client/Server support" OFF)
     #
     # Possible header checks for needed network parts?
     #
-    #mark_as_advanced(GEANT4_USE_NETWORKVRML)
+    mark_as_advanced(GEANT4_USE_NETWORKVRML)
 endif()
 
 #------------------------------------------------------------------------------
