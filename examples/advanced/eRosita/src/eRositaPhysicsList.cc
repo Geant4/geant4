@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: eRositaPhysicsList.cc,v 1.2 2010-11-23 18:40:04 pia Exp $
+// $Id: eRositaPhysicsList.cc,v 1.3 2010-11-23 20:09:32 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -61,6 +61,24 @@ eRositaPhysicsList::eRositaPhysicsList():  G4VUserPhysicsList()
   defaultCutValue = 0.001*mm;
    SetVerboseLevel(1);
 
+   std::cout << "==============================================================================="
+	     << std::endl
+	     << "Geant4 eRosita example - based on a simplified version of eROSITA simulation"
+	     << std::endl
+	     << "Further details can be found in:"
+	     << std::endl
+	     << " M.G. Pia et al., PIXE Simulation With Geant4"
+	     << "IEEE Trans. Nucl. Sci., vol. 56, no. 6, pp. 3614-3649, 2009"
+	     << std::endl
+	     << "N. Meidinger et al., Development of the focal plane PNCCD camera system for the X-ray space telescope eROSITA" 
+	     << std::endl
+	     <<"NIM A 624, 321-329, 2010"
+	     << std::endl
+	     << "==============================================================================="
+	     << std::endl;
+
+   std::cout<< std::endl;
+   
    std::cout << "==============================================================================="
 	     << std::endl
 	     << " The use of G4LowEnergyIonisation, G4LowEnergyBremsstrahlung, "

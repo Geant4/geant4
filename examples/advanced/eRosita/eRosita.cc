@@ -24,12 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: eRosita.cc,v 1.1 2010-11-23 16:15:19 pia Exp $
+// $Id: eRosita.cc,v 1.2 2010-11-23 20:09:32 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "eRositaDetectorConstruction.hh"
 #include "eRositaPhysicsList.hh"
@@ -48,7 +46,6 @@
 #include "G4VisExecutive.hh"
 #endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv)
 {
@@ -59,7 +56,7 @@ int main(int argc,char** argv)
   
   // Run manager
   //
-  G4RunManager * runManager = new G4RunManager;
+  G4RunManager* runManager = new G4RunManager;
 
   // User Initialization classes (mandatory)
   //
@@ -71,17 +68,17 @@ int main(int argc,char** argv)
    
   // User Action classes
   //
-  G4VUserPrimaryGeneratorAction* gen_action = new eRositaPrimaryGeneratorAction(detector);
-  runManager->SetUserAction(gen_action);
+  G4VUserPrimaryGeneratorAction* genAction = new eRositaPrimaryGeneratorAction(detector);
+  runManager->SetUserAction(genAction);
   //
-  G4UserRunAction* run_action = new eRositaRunAction;
-  runManager->SetUserAction(run_action);
+  G4UserRunAction* runAction = new eRositaRunAction;
+  runManager->SetUserAction(runAction);
   //
-  G4UserEventAction* event_action = new eRositaEventAction;
-  runManager->SetUserAction(event_action);
+  G4UserEventAction* eventAction = new eRositaEventAction;
+  runManager->SetUserAction(eventAction);
   //
-  G4UserSteppingAction* stepping_action = new eRositaSteppingAction;
-  runManager->SetUserAction(stepping_action);
+  G4UserSteppingAction* steppingAction = new eRositaSteppingAction;
+  runManager->SetUserAction(steppingAction);
 
   // Initialize G4 kernel
   //
@@ -130,5 +127,4 @@ int main(int argc,char** argv)
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

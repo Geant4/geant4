@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2010-11-23 19:00:03 pia Exp $
+$Id: History,v 1.5 2010-11-23 20:09:32 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,7 +20,7 @@ committal in the CVS repository !
 23.11.2010, GW-MGP, tag eRosita-V09-03-01
             First version of eROSITA example
             Verified to produce characteristic K, L and M X-rays from copper
-            of expected energies
+            of expected energy
 
 19.11.2010, MGP, tag eRosita-V09-03-00
             Initial empty directory to host the eROSITA example
