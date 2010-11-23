@@ -13,7 +13,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-23rg November 2010 Ben Morgan
+23rd November 2010 Ben Morgan
+Geant4InterfaceOptions.cmake - Added advanced option to enable network component
+of VRML library.
+Geant4InterfaceOptions.cmake - Added advanced option to enable network component
+of Fukui Renderer library.
 Geant4MacroDefineModule.cmake - Added new macro GEANT4_ADD_COMPILE_DEFINITIONS
 for easy adding of compile definitions to one or more source files.
 
