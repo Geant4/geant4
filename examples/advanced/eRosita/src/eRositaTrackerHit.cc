@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: eRositaTrackerHit.cc,v 1.2 2010-11-23 20:51:55 pia Exp $
+// $Id: eRositaTrackerHit.cc,v 1.3 2010-11-23 23:35:18 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -35,6 +35,7 @@
 #include "G4Colour.hh"
 #include "G4VisAttributes.hh"
 #include "G4ios.hh"
+#include "AnalysisManager.hh"
 
 G4Allocator<eRositaTrackerHit> eRositaTrackerHitAllocator;
 
@@ -95,13 +96,15 @@ void eRositaTrackerHit::Print()
 }
 
 
-void eRositaTrackerHit::PrintToFile(ofstream& out)
+void eRositaTrackerHit::PrintToFile()
 {
-  out << trackID 
-      << " " << edep 
-      << " " << pos.x() 
-      << " " << pos.y() 
-      << " " << pos.z() 
-      << std::endl; 
+  //out << trackID 
+  //    << " " << edep 
+  //    << " " << pos.x() 
+  //    << " " << pos.y() 
+  //    << " " << pos.z() 
+  //   << std::endl; 
+  AnalysisManager::Instance()->Score(trackID,edep,pos.x(),pos.y(),pos.z());
+
 }
 

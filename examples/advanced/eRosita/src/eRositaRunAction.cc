@@ -24,39 +24,46 @@
 // ********************************************************************
 //
 //
-// $Id: eRositaRunAction.cc,v 1.1 2010-11-23 16:17:16 pia Exp $
+// $Id: eRositaRunAction.cc,v 1.2 2010-11-23 23:35:18 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "eRositaRunAction.hh"
+#include "AnalysisManager.hh"
 
 #include "G4Run.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 eRositaRunAction::eRositaRunAction()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 eRositaRunAction::~eRositaRunAction()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void eRositaRunAction::BeginOfRunAction(const G4Run* aRun)
+
+void eRositaRunAction::BeginOfRunAction(const G4Run* run)
 {
-  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
+  G4cout << "--- Run " << run->GetRunID() << " start." << G4endl;
+  AnalysisManager::Instance();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void eRositaRunAction::EndOfRunAction(const G4Run*)
-{ }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void eRositaRunAction::EndOfRunAction(const G4Run* run)
+{ 
+
+  AnalysisManager::Instance()->Destroy();
+
+  G4cout << "--- Run " << run->GetRunID() 
+	 << run -> GetRunID()
+         << " ends (Number of events = "
+         << run -> GetNumberOfEvent() << ")." 
+	 << G4endl;
+}
+
+
 
 
 

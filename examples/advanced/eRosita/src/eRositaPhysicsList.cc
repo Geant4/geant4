@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: eRositaPhysicsList.cc,v 1.3 2010-11-23 20:09:32 pia Exp $
+// $Id: eRositaPhysicsList.cc,v 1.4 2010-11-23 23:35:18 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -188,7 +188,7 @@ void eRositaPhysicsList::ConstructEM()
       // photon   
 
       G4LowEnergyPhotoElectric* photoelectric = new G4LowEnergyPhotoElectric();
-      photoelectric->ActivateAuger(true);
+      //photoelectric->ActivateAuger(true);
       photoelectric->SetCutForLowEnSecPhotons(0.250 * keV);
       photoelectric->SetCutForLowEnSecElectrons(0.250 * keV);
       G4LowEnergyCompton* compton = new G4LowEnergyCompton;
