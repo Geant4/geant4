@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test90Ne10CO2pai.cc,v 1.8 2009-12-30 12:57:41 grichine Exp $
+// $Id: test90Ne10CO2pai.cc,v 1.9 2010-11-23 15:31:10 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -331,9 +331,9 @@ int main()
 
   // G4String testName = "N2";
   // G4String testName = "Ne10CO2";
-  G4String testName = "t2kGasMixture";
+  // G4String testName = "t2kGasMixture";
   // G4String testName = "Ar";
-  //  G4String testName = "Argon";
+   G4String testName = "Argon";
   // G4String testName = "Ne10CO2T293";
   // G4String testName = "Ne857CO295N2T292";
 
@@ -363,6 +363,7 @@ int main()
                                       GetElement(iSan)->GetZ();
      }
      G4SandiaTable sandia(k);
+     // sandia.SetVerbose(1);
      sanIndex = sandia.SandiaIntervals(thisMaterialZ,nbOfElements);    
      sanIndex = sandia.SandiaMixing( thisMaterialZ ,
                              (*theMaterialTable)[k]->GetFractionVector(),
@@ -448,9 +449,9 @@ int main()
 
      // kineticEnergy = 5*GeV; // for electrons
 
-     kineticEnergy = 5*GeV*proton_mass_c2/electron_mass_c2;
+     // kineticEnergy = 5*GeV*proton_mass_c2/electron_mass_c2;
 
-     // kineticEnergy = 5*GeV;
+     kineticEnergy = 3.*GeV;
 
      //     for(j=1;j<testPAIproton.GetNumberOfGammas();j++)
 
@@ -528,7 +529,8 @@ int main()
        
        outFile<<testPAIproton.GetSplineSize()-1<<G4endl;
 
-       for( i = 1; i < testPAIproton.GetSplineSize(); i++)
+       // for( i = 1; i < testPAIproton.GetSplineSize(); i++)
+       for( i = 1; i < 10; i++)
        {
        outFile 
                << testPAIproton.GetSplineEnergy(i)/keV       << "\t"
