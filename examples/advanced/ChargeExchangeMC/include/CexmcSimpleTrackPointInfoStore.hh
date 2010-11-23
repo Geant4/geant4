@@ -19,6 +19,8 @@
 #ifndef CEXMC_SIMPLE_TRACK_POINT_INFO_STORE_HH
 #define CEXMC_SIMPLE_TRACK_POINT_INFO_STORE_HH
 
+#ifdef CEXMC_USE_PERSISTENCY
+
 #include <boost/serialization/access.hpp>
 #include "CexmcSimpleThreeVectorStore.hh"
 #include "CexmcCommon.hh"
@@ -78,6 +80,7 @@ void  CexmcSimpleTrackPointInfoStore::serialize( Archive &  archive,
     archive & trackType;
 }
 
+#endif
 
 #endif
 

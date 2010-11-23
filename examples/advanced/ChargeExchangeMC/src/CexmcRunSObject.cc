@@ -16,8 +16,9 @@
  * ============================================================================
  */
 
-#include "CexmcRunSObject.hh"
+#ifdef CEXMC_USE_PERSISTENCY
 
+#include "CexmcRunSObject.hh"
 
 CexmcRunSObject::CexmcRunSObject()
 {
@@ -115,4 +116,6 @@ CexmcRunSObject::CexmcRunSObject(
     proposedMaxIL( proposedMaxIL ), actualVersion( CEXMC_RUN_SOBJECT_VERSION )
 {
 }
+
+#endif
 

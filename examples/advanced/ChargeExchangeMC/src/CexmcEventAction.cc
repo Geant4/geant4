@@ -16,7 +16,9 @@
  * ============================================================================
  */
 
+#ifdef CEXMC_USE_PERSISTENCY
 #include <boost/archive/binary_oarchive.hpp>
+#endif
 #include <G4DigiManager.hh>
 #include <G4Event.hh>
 #include <G4Circle.hh>
@@ -698,6 +700,8 @@ void  CexmcEventAction::UpdateRunHits(
 }
 
 
+#ifdef CEXMC_USE_PERSISTENCY
+
 void  CexmcEventAction::SaveEvent( const G4Event *  event,
                                    G4bool  edDigitizerHasTriggered,
                                    const CexmcEnergyDepositStore *  edStore,
@@ -772,6 +776,8 @@ void  CexmcEventAction::SaveEventFast( const G4Event *  event,
         theRun->IncrementNmbOfSavedFastEvents();
     }
 }
+
+#endif
 
 
 void  CexmcEventAction::EndOfEventAction( const G4Event *  event )
@@ -906,6 +912,7 @@ void  CexmcEventAction::EndOfEventAction( const G4Event *  event )
             }
         }
 
+#ifdef CEXMC_USE_PERSISTENCY
         if ( edDigitizerHasTriggered || tpDigitizerHasTriggered )
         {
             SaveEventFast( event, tpDigitizerHasTriggered,
@@ -915,15 +922,14 @@ void  CexmcEventAction::EndOfEventAction( const G4Event *  event )
             SaveEvent( event, edDigitizerHasTriggered, edStore, tpStore,
                        pmData );
         }
+#endif
 
+#ifdef CEXMC_USE_ROOT
         if ( edDigitizerHasTriggered )
         {
-#ifdef CEXMC_USE_ROOT
             FillEDTHistos( edStore, triggeredAngularRanges );
-#endif
         }
 
-#ifdef CEXMC_USE_ROOT
         if ( tpDigitizerHasTriggered )
         {
             FillTPTHistos( tpStore, pmData, triggeredAngularRanges );

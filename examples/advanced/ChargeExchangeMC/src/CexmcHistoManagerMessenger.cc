@@ -18,11 +18,6 @@
 
 #ifdef CEXMC_USE_ROOT
 
-#ifdef CEXMC_USE_ROOTQT
-#include <vector>
-#include <string>
-#include <boost/algorithm/string.hpp>
-#endif
 #include <G4UIcmdWithoutParameter.hh>
 #include <G4UIcmdWithAString.hh>
 #include <G4String.hh>
@@ -89,16 +84,13 @@ void CexmcHistoManagerMessenger::SetNewValue(
 #ifdef CEXMC_USE_ROOTQT
         if ( cmd == drawHisto )
         {
-            G4String                    histoName;
-            G4String                    histoDrawOptions;
-            std::vector< std::string >  tokens;
-            boost::split( tokens, value, boost::is_any_of( " \t" ) );
-            size_t                      tokensSize( tokens.size() );
-            if ( tokensSize > 0 )
-                histoName = tokens[ 0 ];
-            if ( tokensSize > 1 )
-                histoDrawOptions = tokens[ 1 ];
-            histoManager->Draw( histoName, histoDrawOptions );
+            size_t  delimPos( value.find_first_of( " \t" ) );
+            size_t  delimPosEnd( G4String::npos );
+            if ( delimPos != G4String::npos )
+                delimPosEnd = value.find_first_not_of( " \t", delimPos );
+            histoManager->Draw( std::string( value, 0, delimPos ),
+                                delimPosEnd == G4String::npos ? "" :
+                                                value.c_str() + delimPosEnd );
         }
 #endif
     } while ( false );

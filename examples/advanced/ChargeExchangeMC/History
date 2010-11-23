@@ -7,6 +7,11 @@ cirrone@lns.infn.it
              History file of the ChargeExchangeMC application
          ====================================================
 
+23.11.2010, G.A.P.Cirrone & A.Radkov,  Tag: ChargeExchangeMC-V09-03-03
+            - Possibility to remove the boost dependence
+	    - Documentation updated
+	    - README updated 
+
 18.11.2010, G.A.P.Cirrone & A.Radkov,  Tag: ChargeExchangeMC-V09-03-02
             - Corrected tag name erroneously assigned 
 

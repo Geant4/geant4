@@ -19,6 +19,8 @@
 #ifndef CEXMC_SIMPLE_PRODUCTION_MODEL_DATA_STORE_HH
 #define CEXMC_SIMPLE_PRODUCTION_MODEL_DATA_STORE_HH
 
+#ifdef CEXMC_USE_PERSISTENCY
+
 #include <boost/serialization/access.hpp>
 #include "CexmcSimpleLorentzVectorStore.hh"
 
@@ -90,6 +92,7 @@ void  CexmcSimpleProductionModelDataStore::serialize( Archive &  archive,
     archive & nucleusOutputParticle;
 }
 
+#endif
 
 #endif
 

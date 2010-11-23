@@ -17,10 +17,12 @@
  */
 
 #include <set>
+#ifdef CEXMC_USE_PERSISTENCY
 #include <boost/algorithm/string.hpp>
 #include <boost/archive/archive_exception.hpp>
 #ifdef CEXMC_USE_CUSTOM_FILTER
 #include <boost/variant/get.hpp>
+#endif
 #endif
 #include <G4Version.hh>
 #include <G4UImanager.hh>
@@ -84,18 +86,27 @@ struct  CexmcCmdLineData
 
 void  printUsage( void )
 {
-    G4cout << "Usage: cexmc [-i] "
+#ifdef CEXMC_PROG_NAME
+    const char *  progName( CEXMC_PROG_NAME );
+#else
+    const char *  progName( "cexmc" );
+#endif
+
+    G4cout << "Usage: " << progName << " [-i] "
 #ifdef G4UI_USE_QT
                            "[-g] "
 #endif
                            "[-p preinit_macro] [-m init_macro] "
+#ifdef CEXMC_USE_PERSISTENCY
                            "[[-y] -w project]" << G4endl <<
               "             [-r project "
 #ifdef CEXMC_USE_CUSTOM_FILTER
                            "[-f filter_script] "
 #endif
-                           "[-o list]]" << G4endl;
-    G4cout << "or     cexmc [--help | -h]" << G4endl;
+                           "[-o list]]"
+#endif
+           << G4endl;
+    G4cout << "or     " << progName << " [--help | -h]" << G4endl;
     G4cout << "           -i - run in interactive mode" << G4endl;
 #ifdef G4UI_USE_QT
     G4cout << "           -g - start graphical interface (Qt), implies "
@@ -103,6 +114,7 @@ void  printUsage( void )
 #endif
     G4cout << "           -p - use specified preinit macro file " << G4endl;
     G4cout << "           -m - use specified init macro file " << G4endl;
+#ifdef CEXMC_USE_PERSISTENCY
     G4cout << "           -w - save data in specified project files" << G4endl;
     G4cout << "           -r - read data from specified project files" <<
               G4endl;
@@ -113,6 +125,7 @@ void  printUsage( void )
                               "possible values:" << G4endl <<
               "                run, geom, events" << G4endl;
     G4cout << "           -y - force project override" << G4endl;
+#endif
     G4cout << "  --help | -h - print this message and exit " << G4endl;
 }
 
@@ -169,6 +182,7 @@ G4bool  parseArgs( int  argc, char ** argv, CexmcCmdLineData &  cmdLineData )
                 }
                 break;
             }
+#ifdef CEXMC_USE_PERSISTENCY
             if ( G4String( argv[ i ], 2 ) == "-w" )
             {
                 cmdLineData.wProject = argv[ i ] + 2;
@@ -246,6 +260,7 @@ G4bool  parseArgs( int  argc, char ** argv, CexmcCmdLineData &  cmdLineData )
                 break;
             }
 #endif
+#endif
 
             throw CexmcException( CexmcCmdLineParseException );
 
@@ -259,11 +274,13 @@ G4bool  parseArgs( int  argc, char ** argv, CexmcCmdLineData &  cmdLineData )
 int  main( int  argc, char **  argv )
 {
 #ifdef G4UI_USE
-    G4UIsession *  session( NULL );
+    G4UIsession *     session( NULL );
 #endif
 
     CexmcCmdLineData  cmdLineData;
+#ifdef CEXMC_USE_PERSISTENCY
     G4bool            outputDataOnly( false );
+#endif
 
     try
     {
@@ -272,6 +289,7 @@ int  main( int  argc, char **  argv )
             printUsage();
             return 0;
         }
+#ifdef CEXMC_USE_PERSISTENCY
         if ( cmdLineData.rProject != "" &&
              cmdLineData.rProject == cmdLineData.wProject )
             throw CexmcException( CexmcCmdLineParseException );
@@ -284,6 +302,7 @@ int  main( int  argc, char **  argv )
         if ( cmdLineData.wProject != "" && ! cmdLineData.outputData.empty() )
             throw CexmcException( CexmcCmdLineParseException );
         outputDataOnly = ! cmdLineData.outputData.empty();
+#endif
     }
     catch ( CexmcException &  e )
     {
@@ -311,6 +330,7 @@ int  main( int  argc, char **  argv )
         runManager = new CexmcRunManager( cmdLineData.wProject,
                                           cmdLineData.rProject,
                                           cmdLineData.overrideExistingProject );
+#ifdef CEXMC_USE_PERSISTENCY
 #ifdef CEXMC_USE_CUSTOM_FILTER
         runManager->SetCustomFilter( cmdLineData.customFilter );
 #endif
@@ -329,6 +349,7 @@ int  main( int  argc, char **  argv )
             delete runManager;
             return 0;
         }
+#endif
 
         G4UImanager *  uiManager( G4UImanager::GetUIpointer() );
 
@@ -393,11 +414,13 @@ int  main( int  argc, char **  argv )
         }
 #endif
 
+#ifdef CEXMC_USE_PERSISTENCY
         if ( runManager->ProjectIsRead() )
         {
             runManager->ReadProject();
             runManager->PrintReadRunData();
         }
+#endif
 
         if ( cmdLineData.initMacro != "" )
             uiManager->ApplyCommand( "/control/execute " +
@@ -437,15 +460,18 @@ int  main( int  argc, char **  argv )
         }
 #endif
 
+#ifdef CEXMC_USE_PERSISTENCY
         if ( runManager->ProjectIsSaved() )
         {
             runManager->SaveProject();
         }
+#endif
     }
     catch ( CexmcException &  e )
     {
         G4cout << e.what() << G4endl;
     }
+#ifdef CEXMC_USE_PERSISTENCY
     catch ( boost::archive::archive_exception &  e )
     {
         G4cout << CEXMC_LINE_START << "Serialization error: " << e.what() <<
@@ -457,6 +483,7 @@ int  main( int  argc, char **  argv )
         G4cout << CEXMC_LINE_START << "Custom filter error: " << e.what() <<
                   G4endl;
     }
+#endif
 #endif
     catch ( ... )
     {

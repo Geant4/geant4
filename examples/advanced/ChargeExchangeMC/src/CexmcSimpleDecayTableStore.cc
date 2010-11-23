@@ -16,6 +16,8 @@
  * ============================================================================
  */
 
+#ifdef CEXMC_USE_PERSISTENCY
+
 #include <G4DecayTable.hh>
 #include "CexmcSimpleDecayTableStore.hh"
 
@@ -35,4 +37,6 @@ CexmcSimpleDecayTableStore::CexmcSimpleDecayTableStore(
                             decayTable->GetDecayChannel( i )->GetBR() ) );
     }
 }
+
+#endif
 

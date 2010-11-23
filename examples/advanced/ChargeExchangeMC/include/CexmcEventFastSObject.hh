@@ -19,6 +19,8 @@
 #ifndef CEXMC_EVENT_FAST_SOBJECT_HH
 #define CEXMC_EVENT_FAST_SOBJECT_HH
 
+#ifdef CEXMC_USE_PERSISTENCY
+
 #include <boost/serialization/access.hpp>
 #include <G4Types.hh>
 
@@ -62,6 +64,7 @@ void  CexmcEventFastSObject::serialize( Archive &  archive, const unsigned int )
     archive & edDigitizerMonitorHasTriggered;
 }
 
+#endif
 
 #endif
 

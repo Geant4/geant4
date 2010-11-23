@@ -28,8 +28,11 @@ CexmcRunManagerMessenger::CexmcRunManagerMessenger(
                                 CexmcRunManager *  runManager ) :
     runManager( runManager ), setProductionModel( NULL ), setGdmlFile( NULL ),
     setGuiMacro( NULL ), setEventCountPolicy( NULL ),
-    setEventDataVerboseLevel( NULL ),replayEvents( NULL ), seekTo( NULL ),
-    skipInteractionsWithoutEDT( NULL ), validateGdmlFile( NULL )
+    setEventDataVerboseLevel( NULL ),
+#ifdef CEXMC_USE_PERSISTENCY
+    replayEvents( NULL ), seekTo( NULL ), skipInteractionsWithoutEDT( NULL ), 
+#endif
+    validateGdmlFile( NULL )
 {
     setProductionModel = new G4UIcmdWithAString(
         ( CexmcMessenger::physicsDirName + "productionModel" ).c_str(), this );
@@ -75,6 +78,7 @@ CexmcRunManagerMessenger::CexmcRunManagerMessenger(
     setEventDataVerboseLevel->AvailableForStates( G4State_PreInit,
                                                   G4State_Idle );
 
+#ifdef CEXMC_USE_PERSISTENCY
     replayEvents = new G4UIcmdWithAnInteger(
         ( CexmcMessenger::runDirName + "replay" ).c_str(), this );
     replayEvents->SetGuidance( "Replay specified number of events "
@@ -110,6 +114,7 @@ CexmcRunManagerMessenger::CexmcRunManagerMessenger(
     skipInteractionsWithoutEDT->SetDefaultValue( true );
     skipInteractionsWithoutEDT->AvailableForStates( G4State_PreInit,
                                                     G4State_Idle );
+#endif
 
     validateGdmlFile = new G4UIcmdWithABool(
         ( CexmcMessenger::geometryDirName + "validateGdmlFile" ).c_str(),
@@ -128,9 +133,11 @@ CexmcRunManagerMessenger::~CexmcRunManagerMessenger()
     delete setGuiMacro;
     delete setEventCountPolicy;
     delete setEventDataVerboseLevel;
+#ifdef CEXMC_USE_PERSISTENCY
     delete replayEvents;
     delete seekTo;
     delete skipInteractionsWithoutEDT;
+#endif
     delete validateGdmlFile;
 }
 
@@ -214,6 +221,7 @@ void  CexmcRunManagerMessenger::SetNewValue( G4UIcommand *  cmd,
             runManager->SetEventDataVerboseLevel( eventDataVerboseLevel );
             break;
         }
+#ifdef CEXMC_USE_PERSISTENCY
         if ( cmd == replayEvents )
         {
             runManager->ReplayEvents(
@@ -231,6 +239,7 @@ void  CexmcRunManagerMessenger::SetNewValue( G4UIcommand *  cmd,
                                 G4UIcmdWithABool::GetNewBoolValue( value ) );
             break;
         }
+#endif
         if ( cmd == validateGdmlFile )
         {
             runManager->SetGdmlFileValidation(

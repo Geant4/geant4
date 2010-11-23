@@ -19,6 +19,8 @@
 #ifndef CEXMC_SIMPLE_THREE_VECTOR_STORE_HH
 #define CEXMC_SIMPLE_THREE_VECTOR_STORE_HH
 
+#ifdef CEXMC_USE_PERSISTENCY
+
 #include <boost/serialization/access.hpp>
 #include <G4ThreeVector.hh>
 
@@ -60,6 +62,7 @@ void  CexmcSimpleThreeVectorStore::serialize( Archive &  archive,
     archive & z;
 }
 
+#endif
 
 #endif
 

@@ -21,7 +21,9 @@
 
 #include <set>
 #include <limits>
+#ifdef CEXMC_USE_PERSISTENCY
 #include <boost/archive/binary_oarchive.hpp>
+#endif
 #include <G4RunManager.hh>
 #include "CexmcRunSObject.hh"
 #include "CexmcException.hh"
@@ -59,14 +61,11 @@ class  CexmcRunManager : public G4RunManager
 
         void  SetGuiMacroName( const G4String &  guiMacroName_ );
 
-#ifdef CEXMC_USE_CUSTOM_FILTER
-        void  SetCustomFilter( const G4String &  cfFileName_ );
-#endif
-
         void  SetEventCountPolicy( CexmcEventCountPolicy  value );
 
         void  SetEventDataVerboseLevel( CexmcEventDataVerboseLevel  value );
 
+#ifdef CEXMC_USE_PERSISTENCY
         void  ReadProject( void );
 
         void  SaveProject( void );
@@ -81,9 +80,14 @@ class  CexmcRunManager : public G4RunManager
 
         void  SeekTo( G4int  eventNmb = 1 );
 
-        void  EnableLiveHistograms( G4bool  on = true );
-
         void  SkipInteractionsWithoutEDTonWrite( G4bool  on = true );
+
+#ifdef CEXMC_USE_CUSTOM_FILTER
+        void  SetCustomFilter( const G4String &  cfFileName_ );
+#endif
+#endif
+
+        void  EnableLiveHistograms( G4bool  on = true );
 
     public:
         CexmcPhysicsManager *     GetPhysicsManager( void );
@@ -104,9 +108,11 @@ class  CexmcRunManager : public G4RunManager
 
         G4String                  GetProjectId( void ) const;
 
+#ifdef CEXMC_USE_PERSISTENCY
         boost::archive::binary_oarchive *  GetEventsArchive( void ) const;
 
         boost::archive::binary_oarchive *  GetFastEventsArchive( void ) const;
+#endif
 
         G4bool                    AreLiveHistogramsEnabled( void ) const;
 
@@ -122,11 +128,13 @@ class  CexmcRunManager : public G4RunManager
         void  DoCommonEventLoop( G4int  nEvent, const G4String &  cmd,
                                  G4int  nSelect );
 
+#ifdef CEXMC_USE_PERSISTENCY
         void  DoReadEventLoop( G4int  nEvent );
 
         void  SaveCurrentTPTEvent( const CexmcEventFastSObject &  evFastSObject,
                                    const CexmcAngularRangeList &  angularRanges,
                                    G4bool  writeToDatabase );
+#endif
 
     private:
         void  ReadPreinitProjectData( void );
@@ -152,10 +160,6 @@ class  CexmcRunManager : public G4RunManager
 
         G4String                    cfFileName;
 
-#ifdef CEXMC_USE_CUSTOM_FILTER
-        CexmcCustomFilterEval *     customFilter;
-#endif
-
         CexmcEventCountPolicy       eventCountPolicy;
 
         G4bool                      areLiveHistogramsEnabled;
@@ -166,8 +170,6 @@ class  CexmcRunManager : public G4RunManager
 
         CexmcEventDataVerboseLevel  rEvDataVerboseLevel;
 
-        CexmcRunSObject             sObject;
-
     private:
         G4int                       numberOfEventsProcessed;
 
@@ -175,10 +177,18 @@ class  CexmcRunManager : public G4RunManager
 
         G4int                       curEventRead;
 
+#ifdef CEXMC_USE_PERSISTENCY
     private:
         boost::archive::binary_oarchive *  eventsArchive;
 
         boost::archive::binary_oarchive *  fastEventsArchive;
+
+        CexmcRunSObject             sObject;
+
+#ifdef CEXMC_USE_CUSTOM_FILTER
+        CexmcCustomFilterEval *     customFilter;
+#endif
+#endif
 
     private:
         CexmcPhysicsManager *       physicsManager;
@@ -301,6 +311,8 @@ inline G4String  CexmcRunManager::GetProjectId( void ) const
 }
 
 
+#ifdef CEXMC_USE_PERSISTENCY
+
 inline boost::archive::binary_oarchive *  CexmcRunManager::GetEventsArchive(
                                                                     void ) const
 {
@@ -336,6 +348,14 @@ inline void  CexmcRunManager::SeekTo( G4int  eventNmb )
 }
 
 
+inline void  CexmcRunManager::SkipInteractionsWithoutEDTonWrite( G4bool  on )
+{
+    skipInteractionsWithoutEDTonWrite = on;
+}
+
+#endif
+
+
 inline void  CexmcRunManager::EnableLiveHistograms( G4bool  on )
 {
     areLiveHistogramsEnabled = on;
@@ -352,12 +372,6 @@ inline CexmcEventDataVerboseLevel  CexmcRunManager::GetEventDataVerboseLevel(
                                                                     void ) const
 {
     return evDataVerboseLevel;
-}
-
-
-inline void  CexmcRunManager::SkipInteractionsWithoutEDTonWrite( G4bool  on )
-{
-    skipInteractionsWithoutEDTonWrite = on;
 }
 
 

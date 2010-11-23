@@ -16,6 +16,8 @@
  * ============================================================================
  */
 
+#ifdef CEXMC_USE_PERSISTENCY
+
 #include "CexmcSimpleLorentzVectorStore.hh"
 
 
@@ -38,4 +40,6 @@ CexmcSimpleLorentzVectorStore::operator G4LorentzVector() const
 {
     return G4LorentzVector( px, py, pz, e );
 }
+
+#endif
 

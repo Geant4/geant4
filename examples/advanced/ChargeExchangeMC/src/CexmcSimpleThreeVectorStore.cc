@@ -16,6 +16,8 @@
  * ============================================================================
  */
 
+#ifdef CEXMC_USE_PERSISTENCY
+
 #include "CexmcSimpleThreeVectorStore.hh"
 
 
@@ -37,4 +39,6 @@ CexmcSimpleThreeVectorStore::operator G4ThreeVector() const
 {
     return G4ThreeVector( x, y, z );
 }
+
+#endif
 

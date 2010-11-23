@@ -16,6 +16,8 @@
  * ============================================================================
  */
 
+#ifdef CEXMC_USE_PERSISTENCY
+
 #include "CexmcEventFastSObject.hh"
 
 
@@ -32,4 +34,6 @@ CexmcEventFastSObject::CexmcEventFastSObject( G4int  eventId,
     edDigitizerMonitorHasTriggered( edDigitizerMonitorHasTriggered )
 {
 }
+
+#endif
 

@@ -19,6 +19,8 @@
 #ifndef CEXMC_SIMPLE_LORENTZ_VECTOR_STORE_HH
 #define CEXMC_SIMPLE_LORENTZ_VECTOR_STORE_HH
 
+#ifdef CEXMC_USE_PERSISTENCY
+
 #include <boost/serialization/access.hpp>
 #include <G4LorentzVector.hh>
 
@@ -63,6 +65,7 @@ void  CexmcSimpleLorentzVectorStore::serialize( Archive &  archive,
     archive & e;
 }
 
+#endif
 
 #endif
 

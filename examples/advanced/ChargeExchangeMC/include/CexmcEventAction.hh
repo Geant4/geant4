@@ -91,6 +91,7 @@ class  CexmcEventAction : public G4UserEventAction
                              G4bool  reconstructorHasTriggered,
                              const CexmcAngularRange &  aGap );
 
+#ifdef CEXMC_USE_PERSISTENCY
         void  SaveEvent( const G4Event *  event,
                          G4bool  edDigitizerMonitorHasTriggered,
                          const CexmcEnergyDepositStore *  edStore,
@@ -102,6 +103,7 @@ class  CexmcEventAction : public G4UserEventAction
                              G4bool  edDigitizerHasTriggered,
                              G4bool  edDigitizerMonitorHasTriggered,
                              G4double  opCosThetaSCM );
+#endif
 
     public:
         static CexmcEnergyDepositStore *  MakeEnergyDepositStore(

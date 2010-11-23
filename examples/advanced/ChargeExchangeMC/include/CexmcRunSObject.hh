@@ -19,6 +19,8 @@
 #ifndef CEXMC_RUN_SOBJECT_HH
 #define CEXMC_RUN_SOBJECT_HH
 
+#ifdef CEXMC_USE_PERSISTENCY
+
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/map.hpp>
@@ -313,6 +315,7 @@ void  CexmcRunSObject::serialize( Archive &  archive,
 
 BOOST_CLASS_VERSION( CexmcRunSObject, CEXMC_RUN_SOBJECT_VERSION )
 
+#endif
 
 #endif
 

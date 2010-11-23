@@ -16,6 +16,8 @@
  * ============================================================================
  */
 
+#ifdef CEXMC_USE_PERSISTENCY
+
 #include "CexmcEventSObject.hh"
 #include "CexmcTrackPointInfo.hh"
 
@@ -68,4 +70,6 @@ CexmcEventSObject::CexmcEventSObject( G4int  eventId,
     productionModelData( productionModelData )
 {
 }
+
+#endif
 

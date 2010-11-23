@@ -19,6 +19,8 @@
 #ifndef CEXMC_SIMPLE_DECAY_TABLE_STORE_HH
 #define CEXMC_SIMPLE_DECAY_TABLE_STORE_HH
 
+#ifdef CEXMC_USE_PERSISTENCY
+
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/map.hpp>
 #include <G4Types.hh>
@@ -64,6 +66,7 @@ void  CexmcSimpleDecayTableStore::serialize( Archive &  archive,
     archive & decayBranches;
 }
 
+#endif
 
 #endif
 

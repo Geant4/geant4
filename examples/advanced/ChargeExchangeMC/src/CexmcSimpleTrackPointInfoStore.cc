@@ -16,6 +16,8 @@
  * ============================================================================
  */
 
+#ifdef CEXMC_USE_PERSISTENCY
+
 #include <G4ParticleTable.hh>
 #include "CexmcSimpleTrackPointInfoStore.hh"
 #include "CexmcTrackPointInfo.hh"
@@ -56,4 +58,6 @@ CexmcSimpleTrackPointInfoStore::operator CexmcTrackPointInfo() const
                         directionWorld, momentumAmp, particleDefinition,
                         trackId, trackType );
 }
+
+#endif
 

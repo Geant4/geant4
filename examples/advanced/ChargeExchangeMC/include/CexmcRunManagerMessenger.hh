@@ -51,11 +51,13 @@ class  CexmcRunManagerMessenger : public G4UImessenger
 
         G4UIcmdWithAString *    setEventDataVerboseLevel;
 
+#ifdef CEXMC_USE_PERSISTENCY
         G4UIcmdWithAnInteger *  replayEvents;
 
         G4UIcmdWithAnInteger *  seekTo;
 
         G4UIcmdWithABool *      skipInteractionsWithoutEDT;
+#endif
 
         G4UIcmdWithABool *      validateGdmlFile;
 };

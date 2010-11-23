@@ -34,7 +34,6 @@
 #include <TCanvas.h>
 #include <QApplication>
 #include <QFont>
-#include "CexmcHistoWidget.hh"
 #endif
 #include <G4LogicalVolume.hh>
 #include <G4Box.hh>
@@ -46,6 +45,7 @@
 #include "CexmcRunManager.hh"
 #include "CexmcSetup.hh"
 #include "CexmcException.hh"
+#include "CexmcHistoWidget.hh"
 
 extern TDirectory *  gDirectory;
 

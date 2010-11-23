@@ -19,8 +19,10 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <fstream>
+#ifdef CEXMC_USE_PERSISTENCY
 #include <boost/archive/binary_iarchive.hpp>
 #include <boost/archive/binary_oarchive.hpp>
+#endif
 #include <G4Eta.hh>
 #include <G4DigiManager.hh>
 #include <G4SDManager.hh>
@@ -59,10 +61,7 @@
 #include "CexmcEventInfo.hh"
 #include "CexmcBasicPhysicsSettings.hh"
 #include "CexmcSensitiveDetectorsAttributes.hh"
-
-#ifdef CEXMC_USE_CUSTOM_FILTER
 #include "CexmcCustomFilterEval.hh"
-#endif
 
 
 namespace
@@ -80,16 +79,18 @@ CexmcRunManager::CexmcRunManager( const G4String &  projectId,
     gdmlFileName( "default.gdml" ), shouldGdmlFileBeValidated( true ),
     zipGdmlFile( false ), projectsDir( "." ), projectId( projectId ),
     rProject( rProject ), guiMacroName( "" ), cfFileName( "" ),
-#ifdef CEXMC_USE_CUSTOM_FILTER
-    customFilter( NULL ),
-#endif
     eventCountPolicy( CexmcCountAllEvents ), areLiveHistogramsEnabled( false ),
     skipInteractionsWithoutEDTonWrite( true ),
     evDataVerboseLevel( CexmcWriteEventDataOnEveryEDT ),
     rEvDataVerboseLevel( CexmcWriteNoEventData ), numberOfEventsProcessed( 0 ),
     numberOfEventsProcessedEffective( 0 ), curEventRead( 0 ),
-    eventsArchive( NULL ), fastEventsArchive( NULL ), physicsManager( NULL ),
-    messenger( NULL )
+#ifdef CEXMC_USE_PERSISTENCY
+    eventsArchive( NULL ), fastEventsArchive( NULL ),
+#ifdef CEXMC_USE_CUSTOM_FILTER
+    customFilter( NULL ),
+#endif
+#endif
+    physicsManager( NULL ), messenger( NULL )
 {
     /* this exception must be caught before creating the object! */
     if ( rProject != "" && rProject == projectId )
@@ -101,14 +102,17 @@ CexmcRunManager::CexmcRunManager( const G4String &  projectId,
         projectsDir = projectsDirEnv;
 
     struct stat  tmp;
-    if ( stat( ( projectsDir + "/" + projectId + ".rdb" ).c_str(), &tmp ) == 0
+    if ( ProjectIsSaved() &&
+         stat( ( projectsDir + "/" + projectId + ".rdb" ).c_str(), &tmp ) == 0
          && ! overrideExistingProject )
         throw CexmcException( CexmcProjectExists );
 
     messenger = new CexmcRunManagerMessenger( this );
 
+#ifdef CEXMC_USE_PERSISTENCY
     if ( ProjectIsRead() )
         ReadPreinitProjectData();
+#endif
 }
 
 
@@ -127,6 +131,7 @@ void  CexmcRunManager::BeamParticleChangeHook( void )
 
 CexmcRunManager::~CexmcRunManager()
 {
+#ifdef CEXMC_USE_PERSISTENCY
     if ( ProjectIsRead() && zipGdmlFile )
     {
         G4String  cmd( G4String( "bzip2 " ) + projectsDir + "/" + rProject +
@@ -138,10 +143,13 @@ CexmcRunManager::~CexmcRunManager()
 #ifdef CEXMC_USE_CUSTOM_FILTER
     delete customFilter;
 #endif
+#endif
 
     delete messenger;
 }
 
+
+#ifdef CEXMC_USE_PERSISTENCY
 
 void  CexmcRunManager::ReadPreinitProjectData( void )
 {
@@ -448,6 +456,8 @@ void  CexmcRunManager::SaveProject( void )
         throw CexmcException( exceptionType );
 }
 
+#endif
+
 
 void  CexmcRunManager::DoCommonEventLoop( G4int  nEvent, const G4String &  cmd,
                                           G4int  nSelect )
@@ -492,6 +502,8 @@ void  CexmcRunManager::DoCommonEventLoop( G4int  nEvent, const G4String &  cmd,
     numberOfEventsProcessedEffective = iEventEffective;
 }
 
+
+#ifdef CEXMC_USE_PERSISTENCY
 
 void  CexmcRunManager::DoReadEventLoop( G4int  nEvent )
 {
@@ -866,6 +878,8 @@ void  CexmcRunManager::SaveCurrentTPTEvent(
     }
 }
 
+#endif
+
 
 /* mostly adopted from G4RunManager::DoEventLoop() */
 void  CexmcRunManager::DoEventLoop( G4int  nEvent, const char *  macroFile,
@@ -887,11 +901,12 @@ void  CexmcRunManager::DoEventLoop( G4int  nEvent, const char *  macroFile,
         nSelect = -1;
     }
 
-    eventsArchive = NULL;
-    fastEventsArchive = NULL;
     numberOfEventsProcessed = 0;
     numberOfEventsProcessedEffective = 0;
 
+#ifdef CEXMC_USE_PERSISTENCY
+    eventsArchive = NULL;
+    fastEventsArchive = NULL;
     if ( ProjectIsRead() )
     {
         if ( ProjectIsSaved() )
@@ -933,6 +948,11 @@ void  CexmcRunManager::DoEventLoop( G4int  nEvent, const char *  macroFile,
             DoCommonEventLoop( nEvent, cmd, nSelect );
         }
     }
+    eventsArchive = NULL;
+    fastEventsArchive = NULL;
+#else
+    DoCommonEventLoop( nEvent, cmd, nSelect );
+#endif
 
     if( verboseLevel > 0 )
     {
@@ -952,11 +972,10 @@ void  CexmcRunManager::DoEventLoop( G4int  nEvent, const char *  macroFile,
         }
         G4cout << "  "  << *timer << G4endl;
     }
-
-    eventsArchive = NULL;
-    fastEventsArchive = NULL;
 }
 
+
+#ifdef CEXMC_USE_PERSISTENCY
 
 void  CexmcRunManager::PrintReadRunData( void ) const
 {
@@ -1249,6 +1268,8 @@ void  CexmcRunManager::SetCustomFilter( const G4String &  cfFileName_ )
 
     customFilter = new CexmcCustomFilterEval( cfFileName );
 }
+
+#endif
 
 #endif
 

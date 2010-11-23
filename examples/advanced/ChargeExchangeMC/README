@@ -17,24 +17,25 @@ found in directory doc/ of this example.
 
 ------> Compilation
 
-Basic modules of Cexmc must compile with Geant4 version 9.4 provided boost is
-installed in your system. Cexmc won't compile with Geant4 version 9.3 (if you
-still need to compile with this version then remove qualifier const in the
-first argument of prototype of CexmcSetup::ReadTransforms()). Cexmc consists of
-different optional and mandatory modules, optional modules can be enabled or
-disabled in the makefile by setting dedicated macros. Modules may involve
-additional dependencies. In the following table the dependencies and related
-modules are shown.
+Basic modules of Cexmc must compile with Geant4 version 9.4. Cexmc won't compile
+with Geant4 version 9.3 (if you still need to build the program against this
+version then remove qualifier const in the first argument of prototype of
+CexmcSetup::ReadTransforms()). Cexmc contains several optional modules which can
+be enabled or disabled in the makefile by setting dedicated macros: most of them
+are listed in the beginning of the makefile and well commented. Modules may
+involve additional dependencies. In the following table the dependencies and
+related modules are shown.
 
 Dependency        Requirement  Makefile Macro / Module      Comment
 --------------------------------------------------------------------------------
-boost::split      Mandatory     -- / Main                   used when parsing
-                                                            command line
-                                                            arguments
-
-boost::serialize  Mandatory     -- / Persistency            used when
-                                                            (de)serialization of
+boost::serialize  Optional      CEXMC_USE_PERSISTENCY /     used when
+                                Persistency                 (de)serialization of
                                                             events and run data
+
+boost::split      Optional      CEXMC_USE_PERSISTENCY /     used when parsing
+                                Main                        command line
+                                                            arguments related to
+                                                            persistency module
 
 boost::spirit     Optional      CEXMC_USE_CUSTOM_FILTER /   used in custom
                                 Custom filter               filter engine
@@ -55,14 +56,13 @@ binding                         Histograming                histograms in Qt
 The persistency module is compatible with a pretty old boost::serialize version
 (compilation was tested under Scientific Linux 4.8 with gcc 3.4.6 and boost
 version 1.32). Custom filter requires a newer boost as far as it uses modern
-boost::spirit library which requires boost version 1.37 and higher. If you do
-not want to (or cannot) use Custom filter then comment line which contains macro
--DCEXMC_USE_CUSTOM_FILTER in the makefile.
-Presence of CERN ROOT libraries is tested automatically in the makefile, but you
-can disable or enable the dedicated flag manually.
-Compilation of visualization modules and interactive sessions also depends on
-whether standard Geant4 macros like G4VIS_USE, G4UI_USE, G4UI_USE_TCSH and
-G4UI_USE_QT have been set.
+boost::spirit library which requires boost version 1.37 and higher.
+Presence of CERN ROOT libraries is tested automatically in the makefile, but it
+is possible to disable or enable the histograming framework manually using flag
+CEXMC_USE_HISTOGRAMING in the makefile.
+Compilation of visualization modules and interactive sessions depends on whether
+standard Geant4 macros like G4VIS_USE, G4UI_USE, G4UI_USE_TCSH and G4UI_USE_QT
+have been set.
 If boost is installed in a special path in your system then you may need to
 properly set environment variables BOOST_INCLUDE_PATH and BOOST_LIBRARY_PATH
 which denote directories where boost include files and libraries are located.
@@ -70,7 +70,9 @@ which denote directories where boost include files and libraries are located.
 ------> Run modes
 
 Run modes are set from command-line options. To see available command-line
-options type in terminal 'cexmc -h' or just 'cexmc'.
+options type in terminal 'cexmc -h' or just 'cexmc'. Some run modes can be
+unavailable if certain modules were not compiled.
+
 Here is list of run modes categorized by type of interaction with user:
 
    1. Batch mode. The simplest mode without any interaction with user.

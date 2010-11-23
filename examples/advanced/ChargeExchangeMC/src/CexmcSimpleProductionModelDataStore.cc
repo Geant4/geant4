@@ -16,6 +16,8 @@
  * ============================================================================
  */
 
+#ifdef CEXMC_USE_PERSISTENCY
+
 #include <G4ParticleTable.hh>
 #include "CexmcSimpleProductionModelDataStore.hh"
 #include "CexmcProductionModelData.hh"
@@ -75,4 +77,6 @@ CexmcSimpleProductionModelDataStore::operator CexmcProductionModelData() const
                     incidentParticleDefinition, nucleusParticleDefinition,
                     outputParticleDefinition, nucleusOutputParticleDefinition );
 }
+
+#endif
 

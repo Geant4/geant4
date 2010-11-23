@@ -19,6 +19,8 @@
 #ifndef CEXMC_EVENT_SOBJECT_HH
 #define CEXMC_EVENT_SOBJECT_HH
 
+#ifdef CEXMC_USE_PERSISTENCY
+
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/vector.hpp>
 #include "CexmcSimpleTrackPointInfoStore.hh"
@@ -136,6 +138,7 @@ void  CexmcEventSObject::serialize( Archive &  archive, const unsigned int )
     archive & productionModelData;
 }
 
+#endif
 
 #endif
 
