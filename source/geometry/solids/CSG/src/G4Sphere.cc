@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.89 2010-11-19 16:26:32 gcosmo Exp $
+// $Id: G4Sphere.cc,v 1.90 2010-11-23 14:45:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -2752,7 +2752,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
   }
   if (snxt == kInfinity)
   {
-    G4cout.precision(24);
+    G4int old_prc = G4cout.precision(24);
     G4cout << G4endl;
     DumpInfo();
     G4cout << "Position:"  << G4endl << G4endl;
@@ -2767,6 +2767,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
     G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
     G4cout << "Proposed distance :" << G4endl << G4endl;
     G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl;
+    G4cout.precision(old_prc);
     G4Exception("G4Sphere::DistanceToOut(p,v,..)",
                 "Notification", JustWarning,
                 "Logic error: snxt = kInfinity  ???");
