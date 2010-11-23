@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 
-// $Id: G4SandiaTable.cc,v 1.41 2010-11-22 10:35:22 grichine Exp $
+// $Id: G4SandiaTable.cc,v 1.42 2010-11-23 15:23:27 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //
@@ -68,7 +68,7 @@ G4SandiaTable::G4SandiaTable(G4Material* material)
 
  
   fMaxInterval        = 0;
-  fVerbose            = 1;  
+  fVerbose            = 0;  
 
   //build the CumulInterval array
 
@@ -291,22 +291,24 @@ void G4SandiaTable::ComputeMatSandiaMatrixPAI()
   const G4ElementVector* ElementVector = fMaterial->GetElementVector();  
   G4int* Z = new G4int[noElm];               //Atomic number
 
-  for (elm = 0; elm<noElm; elm++)
-    { 
-      Z[elm] = (G4int)(*ElementVector)[elm]->GetZ();
-      MaxIntervals += fNbOfIntervals[Z[elm]];
-    }  
+  for ( elm = 0; elm < noElm; elm++ )
+  { 
+    Z[elm] = (G4int)(*ElementVector)[elm]->GetZ();
+    MaxIntervals += fNbOfIntervals[Z[elm]];
+  }  
   fMaxInterval = MaxIntervals + 2;
 
-  //  G4cout<<"fMaxInterval = "<<fMaxInterval<<G4endl;
- 
+  if ( fVerbose > 0 && fMaterial->GetName() == "G4_Ar" )
+  {
+    G4cout<<"fMaxInterval = "<<fMaxInterval<<G4endl;
+  } 
   G4double* fPhotoAbsorptionCof0 = new G4double[fMaxInterval];
   G4double* fPhotoAbsorptionCof1 = new G4double[fMaxInterval];
   G4double* fPhotoAbsorptionCof2 = new G4double[fMaxInterval];
   G4double* fPhotoAbsorptionCof3 = new G4double[fMaxInterval];
   G4double* fPhotoAbsorptionCof4 = new G4double[fMaxInterval];
 
-  for(c = 0; c<fMaxInterval; c++)   // just in case
+  for( c = 0; c < fMaxInterval; c++ )   // just in case
   {
     fPhotoAbsorptionCof0[c] = 0.;
     fPhotoAbsorptionCof1[c] = 0.;
@@ -318,18 +320,16 @@ void G4SandiaTable::ComputeMatSandiaMatrixPAI()
 
   for(i = 0; i < noElm; i++)
   {
-    G4double I1 = fIonizationPotentials[Z[i]]*keV;  // First ionization
-    n1 = 1;                                     // potential in keV
+    G4double I1 = fIonizationPotentials[Z[i]]*keV;  // I1 in keV
+    n1          = 1;                                    
  
-    for(j = 1; j < Z[i]; j++)
-    {
-      n1 += fNbOfIntervals[j];
-    }
+    for( j = 1; j < Z[i]; j++ )  n1 += fNbOfIntervals[j];
+    
     G4int n2 = n1 + fNbOfIntervals[Z[i]];
     
-    for(k1 = n1; k1 < n2; k1++)
+    for( k1 = n1; k1 < n2; k1++ )
     {
-      if(I1  > fSandiaTable[k1][0])
+      if( I1  > fSandiaTable[k1][0] )
       {
 	 continue;    // no ionization for energies smaller than I1 (first
       }		       // ionisation potential)		     
@@ -337,9 +337,9 @@ void G4SandiaTable::ComputeMatSandiaMatrixPAI()
     }
     G4int flag = 0;
     
-    for(c1 = 1; c1 < c; c1++)
+    for( c1 = 1; c1 < c; c1++ )
     {
-      if(fPhotoAbsorptionCof0[c1] == I1) // this value already has existed
+      if( fPhotoAbsorptionCof0[c1] == I1 ) // this value already has existed
       {
 	flag = 1;                      
 	break;                         
@@ -350,13 +350,13 @@ void G4SandiaTable::ComputeMatSandiaMatrixPAI()
       fPhotoAbsorptionCof0[c] = I1;
       c++;
     }
-    for(k2 = k1; k2 < n2; k2++)
+    for( k2 = k1; k2 < n2; k2++ )
     {
       flag = 0;
 
-      for(c1 = 1; c1 < c; c1++)
+      for( c1 = 1; c1 < c; c1++ )
       {
-        if(fPhotoAbsorptionCof0[c1] == fSandiaTable[k2][0])
+        if( fPhotoAbsorptionCof0[c1] == fSandiaTable[k2][0] )
         {
 	  flag = 1;
  	  break;
@@ -369,104 +369,120 @@ void G4SandiaTable::ComputeMatSandiaMatrixPAI()
       }
     }       
   }   // end for(i)
-
   // sort out
-  for(i = 1; i < c; i++ ) 
+
+  for( i = 1; i < c; i++ ) 
+  {
+    for( j = i + 1; j < c;  j++ )
     {
-      for(j = i + 1; j < c;  j++ )
-	{
-	  if(fPhotoAbsorptionCof0[i] > fPhotoAbsorptionCof0[j]) 
-	    {
-	      G4double tmp = fPhotoAbsorptionCof0[i];
-	      fPhotoAbsorptionCof0[i] = fPhotoAbsorptionCof0[j];
-	      fPhotoAbsorptionCof0[j] = tmp;
-	    }
-	}
+      if( fPhotoAbsorptionCof0[i] > fPhotoAbsorptionCof0[j] ) 
+      {
+        G4double tmp = fPhotoAbsorptionCof0[i];
+	fPhotoAbsorptionCof0[i] = fPhotoAbsorptionCof0[j];
+	fPhotoAbsorptionCof0[j] = tmp;
+      }
     }
-  
+    if ( fVerbose > 0 && fMaterial->GetName() == "G4_Ar" )
+    {
+      G4cout<<i<<"\t energy = "<<fPhotoAbsorptionCof0[i]<<G4endl;
+    }
+  } 
   fMaxInterval = c;
  
   const G4double* fractionW = fMaterial->GetFractionVector();
+
+  if ( fVerbose > 0 && fMaterial->GetName() == "G4_Ar" )
+  {
+    for( i = 0; i < noElm; i++ )  G4cout<<i<<" = elN, fraction = "<<fractionW[i]<<G4endl;
+  }      
    
-  for(i = 0; i < noElm; i++)
+  for( i = 0; i < noElm; i++ )
+  {
+    n1 = 1;
+    G4double I1 = fIonizationPotentials[Z[i]]*keV;
+
+    for( j = 1; j < Z[i]; j++ )  n1 += fNbOfIntervals[j];
+	
+    G4int n2 = n1 + fNbOfIntervals[Z[i]] - 1;
+
+    for(k = n1; k < n2; k++)
     {
-      n1 = 1;
-      G4double I1 = fIonizationPotentials[Z[i]]*keV;
+      G4double B1 = fSandiaTable[k][0];
+      G4double B2 = fSandiaTable[k+1][0];
 
-      for(j = 1; j < Z[i]; j++)
-	{
-	  n1 += fNbOfIntervals[j];
-	}
-      G4int n2 = n1 + fNbOfIntervals[Z[i]] - 1;
+      for(G4int c = 1; c < fMaxInterval-1; c++)
+      {
+	G4double E1 = fPhotoAbsorptionCof0[c];
+	G4double E2 = fPhotoAbsorptionCof0[c+1];
 
-      for(k = n1; k < n2; k++)
+        if ( fVerbose > 0 && fMaterial->GetName() == "G4_Ar" )
+        {
+          G4cout<<"k = "<<k<<", c = "<<c<<", B1 = "<<B1<<", B2 = "<<B2<<", E1 = "<<E1<<", E2 = "<<E2<<G4endl;
+        }      
+	if( B1 > E1 || B2 < E2 || E1 < I1 )  
 	{
-	  G4double B1 = fSandiaTable[k][0];
-	  G4double B2 = fSandiaTable[k+1][0];
-	  for(G4int c = 1; c < fMaxInterval-1; c++)
-	    {
-	      G4double E1 = fPhotoAbsorptionCof0[c];
-	      G4double E2 = fPhotoAbsorptionCof0[c+1];
-	      if(B1 > E1 || B2 < E2 || E1 < I1)
-		{
-		  continue;
-		}
-	      fPhotoAbsorptionCof1[c] += fSandiaTable[k][1]*fractionW[i];
-	      fPhotoAbsorptionCof2[c] += fSandiaTable[k][2]*fractionW[i];
-	      fPhotoAbsorptionCof3[c] += fSandiaTable[k][3]*fractionW[i];
-	      fPhotoAbsorptionCof4[c] += fSandiaTable[k][4]*fractionW[i];
-	    }  
-	}   
-      // Last interval
-      fPhotoAbsorptionCof1[fMaxInterval-1] += fSandiaTable[k][1]*fractionW[i];
-      fPhotoAbsorptionCof2[fMaxInterval-1] += fSandiaTable[k][2]*fractionW[i];
-      fPhotoAbsorptionCof3[fMaxInterval-1] += fSandiaTable[k][3]*fractionW[i];
-      fPhotoAbsorptionCof4[fMaxInterval-1] += fSandiaTable[k][4]*fractionW[i];
-    }     // for(i)
-  
+          if ( fVerbose > 0 && fMaterial->GetName() == "G4_Ar" )
+          {
+            G4cout<<"continue for: B1 = "<<B1<<", B2 = "<<B2<<", E1 = "<<E1<<", E2 = "<<E2<<G4endl;
+          }      
+          continue;
+	}		
+	fPhotoAbsorptionCof1[c] += fSandiaTable[k][1]*fractionW[i];
+	fPhotoAbsorptionCof2[c] += fSandiaTable[k][2]*fractionW[i];
+	fPhotoAbsorptionCof3[c] += fSandiaTable[k][3]*fractionW[i];
+	fPhotoAbsorptionCof4[c] += fSandiaTable[k][4]*fractionW[i];
+      }  
+    }   
+    // Last interval
+
+    fPhotoAbsorptionCof1[fMaxInterval-1] += fSandiaTable[k][1]*fractionW[i];
+    fPhotoAbsorptionCof2[fMaxInterval-1] += fSandiaTable[k][2]*fractionW[i];
+    fPhotoAbsorptionCof3[fMaxInterval-1] += fSandiaTable[k][3]*fractionW[i];
+    fPhotoAbsorptionCof4[fMaxInterval-1] += fSandiaTable[k][4]*fractionW[i];
+  }     // for(i)  
   c = 0;     // Deleting of first intervals where all coefficients = 0
 
   do                        
-    {
-      c++;
+  {
+    c++;
 
-      if( fPhotoAbsorptionCof1[c] != 0.0 ||
-	  fPhotoAbsorptionCof2[c] != 0.0 ||
-	  fPhotoAbsorptionCof3[c] != 0.0 || 
-	  fPhotoAbsorptionCof4[c] != 0.0     )  continue;
-       
-      for(jj = 2; jj < fMaxInterval; jj++)
-	{
-	  fPhotoAbsorptionCof0[jj-1] = fPhotoAbsorptionCof0[jj];
-	  fPhotoAbsorptionCof1[jj-1] = fPhotoAbsorptionCof1[jj];
-	  fPhotoAbsorptionCof2[jj-1] = fPhotoAbsorptionCof2[jj];
-	  fPhotoAbsorptionCof3[jj-1] = fPhotoAbsorptionCof3[jj];
-	  fPhotoAbsorptionCof4[jj-1] = fPhotoAbsorptionCof4[jj];
-	}
-      fMaxInterval--;
-      c--;
+    if( fPhotoAbsorptionCof1[c] != 0.0 ||
+	fPhotoAbsorptionCof2[c] != 0.0 ||
+        fPhotoAbsorptionCof3[c] != 0.0 || 
+	fPhotoAbsorptionCof4[c] != 0.0     )  continue;
+
+    if ( fVerbose > 0 && fMaterial->GetName() == "G4_Ar" )
+    {
+      G4cout<<c<<" = number with zero cofs"<<G4endl;
+    }      
+    for( jj = 2; jj < fMaxInterval; jj++ )
+    {
+      fPhotoAbsorptionCof0[jj-1] = fPhotoAbsorptionCof0[jj];
+      fPhotoAbsorptionCof1[jj-1] = fPhotoAbsorptionCof1[jj];
+      fPhotoAbsorptionCof2[jj-1] = fPhotoAbsorptionCof2[jj];
+      fPhotoAbsorptionCof3[jj-1] = fPhotoAbsorptionCof3[jj];
+      fPhotoAbsorptionCof4[jj-1] = fPhotoAbsorptionCof4[jj];
     }
-  while(c < fMaxInterval - 1);
+    fMaxInterval--;
+    c--;
+  }
+  while( c < fMaxInterval - 1 );
   	
   // create the sandia matrix for this material
     
   fMatSandiaMatrixPAI = new G4OrderedTable();
   G4double density = fMaterial->GetDensity();
  
+  for (i = 0; i < fMaxInterval; i++)  fMatSandiaMatrixPAI->push_back(new G4DataVector(5,0.));
+    	         	
   for (i = 0; i < fMaxInterval; i++)
-    {
-      fMatSandiaMatrixPAI->push_back(new G4DataVector(5,0.));
-    }	         	
-  for (i = 0; i < fMaxInterval; i++)
-    {
-      (*(*fMatSandiaMatrixPAI)[i])[0] = fPhotoAbsorptionCof0[i+1];
-      (*(*fMatSandiaMatrixPAI)[i])[1] = fPhotoAbsorptionCof1[i+1]*density;
-      (*(*fMatSandiaMatrixPAI)[i])[2] = fPhotoAbsorptionCof2[i+1]*density;
-      (*(*fMatSandiaMatrixPAI)[i])[3] = fPhotoAbsorptionCof3[i+1]*density;
-      (*(*fMatSandiaMatrixPAI)[i])[4] = fPhotoAbsorptionCof4[i+1]*density;
-
-    }
-
+  {
+    (*(*fMatSandiaMatrixPAI)[i])[0] = fPhotoAbsorptionCof0[i+1];
+    (*(*fMatSandiaMatrixPAI)[i])[1] = fPhotoAbsorptionCof1[i+1]*density;
+    (*(*fMatSandiaMatrixPAI)[i])[2] = fPhotoAbsorptionCof2[i+1]*density;
+    (*(*fMatSandiaMatrixPAI)[i])[3] = fPhotoAbsorptionCof3[i+1]*density;
+    (*(*fMatSandiaMatrixPAI)[i])[4] = fPhotoAbsorptionCof4[i+1]*density;
+  }
   if ( fVerbose > 0 && fMaterial->GetName() == "G4_Ar" )
   {
     G4cout<<"mma, G4SandiaTable::ComputeMatSandiaMatrixPAI(), mat = "<<fMaterial->GetName()<<G4endl;
