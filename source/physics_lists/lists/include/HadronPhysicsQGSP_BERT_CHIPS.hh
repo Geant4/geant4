@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSP_BERT_CHIPS.hh,v 1.3 2010-11-19 16:22:06 gunter Exp $
+// $Id: HadronPhysicsQGSP_BERT_CHIPS.hh,v 1.4 2010-11-23 15:09:30 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -79,7 +79,6 @@ class HadronPhysicsQGSP_BERT_CHIPS : public G4VPhysicsConstructor
 
   private:
     void CreateModels();
-    G4HadronicProcess * FindInelasticProcess(const G4ParticleDefinition *);
     
     G4NeutronBuilder * theNeutrons;
     G4LEPNeutronBuilder * theLEPNeutron;
@@ -102,7 +101,6 @@ class HadronPhysicsQGSP_BERT_CHIPS : public G4VPhysicsConstructor
     
     G4bool QuasiElastic;
     G4bool ProjectileDiffraction;
-    G4VCrossSectionDataSet * theCHIPSInelastic;
 };
 
 #endif

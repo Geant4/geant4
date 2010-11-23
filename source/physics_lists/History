@@ -1,4 +1,4 @@
-q$Id: History,v 1.169 2010-11-22 17:22:37 gunter Exp $
+q$Id: History,v 1.170 2010-11-23 15:09:30 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22-11-2010, G.Folger                    (phys-lists-V09-03-42)
+-  Fix bug in QGSP_BERT_CHIPS physics list, Kaon cross sections are in CHIPS 
+     process, not in hadronic framework.
+     
 22-11-2010, G.Folger                    (phys-lists-V09-03-41)
 -  Fix bug in new G4CHIPSKaonBuilder
 

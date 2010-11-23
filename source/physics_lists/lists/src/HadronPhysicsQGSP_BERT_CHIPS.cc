@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSP_BERT_CHIPS.cc,v 1.3 2010-11-19 16:22:06 gunter Exp $
+// $Id: HadronPhysicsQGSP_BERT_CHIPS.cc,v 1.4 2010-11-23 15:09:30 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -95,7 +95,7 @@ void HadronPhysicsQGSP_BERT_CHIPS::CreateModels()
   thePion->RegisterMe(theBertiniPion=new G4BertiniPionBuilder);
   theBertiniPion->SetMaxEnergy(9.9*GeV);
 
-  G4int verbosity(1);
+  G4int verbosity(0);
   theKaon=new G4ChipsKaonBuilder(verbosity);  // is self contained, use G4QInelastic   
   
   theMiscCHIPS=new G4MiscCHIPSBuilder;
@@ -116,7 +116,6 @@ HadronPhysicsQGSP_BERT_CHIPS::~HadronPhysicsQGSP_BERT_CHIPS()
    delete theBertiniPion;
    delete thePion;
    delete theKaon;
-   delete theCHIPSInelastic;
 }
 
 void HadronPhysicsQGSP_BERT_CHIPS::ConstructParticle()
@@ -138,33 +137,7 @@ void HadronPhysicsQGSP_BERT_CHIPS::ConstructProcess()
   theNeutrons->Build();
   thePro->Build();
   thePion->Build();
-  theKaon->Build();
-  // use CHIPS cross sections also for Kaons
-  theCHIPSInelastic = new G4QHadronInelasticDataSet();
-  
-  FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(theCHIPSInelastic);
-  FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(theCHIPSInelastic);
-  FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(theCHIPSInelastic);
-  FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(theCHIPSInelastic);
+  theKaon->Build();   // has CHIPS cross sections for Kaons
 
   theMiscCHIPS->Build();
-}
-
-G4HadronicProcess* 
-HadronPhysicsQGSP_BERT_CHIPS::FindInelasticProcess(const G4ParticleDefinition* p)
-{
-  G4HadronicProcess* had = 0;
-  if(p) {
-     G4ProcessVector*  pvec = p->GetProcessManager()->GetProcessList();
-     size_t n = pvec->size();
-     if(0 < n) {
-       for(size_t i=0; i<n; ++i) {
-	 if(fHadronInelastic == ((*pvec)[i])->GetProcessSubType()) {
-	   had = static_cast<G4HadronicProcess*>((*pvec)[i]);
-	   break;
-	 }
-       }
-     }
-  }
-  return had;
 }
