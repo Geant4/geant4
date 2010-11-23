@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 18:46:03 bmorgan Exp $
+# $Id: sources.cmake,v 1.2 2010-11-23 23:47:13 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -26,6 +26,8 @@ include_directories(${CMAKE_SOURCE_DIR}/source/interfaces/common/include)
 #
 # Module has optional sources
 #
+include(Geant4MacroDefineModule)
+
 # List those always built
 set(G4INTERFACES_BASIC_MODULE_HEADERS 
     G4UIArrayString.hh
@@ -70,7 +72,31 @@ if(GEANT4_USE_QT)
     list(APPEND G4INTERFACES_BASIC_MODULE_HEADERS G4UIQt.hh)
     list(APPEND G4INTERFACES_BASIC_MODULE_SOURCES G4UIQt.cc)
 
-    # Any other moc things, extra libraries here
+    # Now need to add Qt in
+    include(${QT_USE_FILE})
+
+    # Add the moc sources - must use an absolute path
+    QT4_WRAP_CPP(G4INTERFACES_MOC_SOURCES 
+        ${CMAKE_SOURCE_DIR}/source/interfaces/basic/include/G4UIQt.hh 
+        OPTIONS -DG4UI_BUILD_QT_SESSION)
+
+    list(APPEND G4INTERFACES_BASIC_MODULE_SOURCES ${G4INTERFACES_MOC_SOURCES})
+
+    # Add the definitions
+    # We have to also add in G4INTY_BUILD_QT 'cause G4QT header needs that...
+    GEANT4_ADD_COMPILE_DEFINITIONS(SOURCES G4UIQt.cc
+        COMPILE_DEFINITIONS G4UI_BUILD_QT_SESSION;G4INTY_BUILD_QT)
+
+    # and for the moc file...
+    set_source_files_properties(${G4INTERFACES_MOC_SOURCES}
+        PROPERTIES COMPILE_DEFINITIONS G4UI_BUILD_QT_SESSION)
+
+    # Add the extra libraries - seem to need to quote variables to get
+    # both linked in.
+    list(APPEND G4INTERFACES_BASIC_MODULE_LINK_LIBRARIES 
+        "${QT_QTGUI_LIBRARY} ${QT_QTCORE_LIBRARY}") 
+
+    message(STATUS "libs: ${G4INTERFACES_BASIC_MODULE_LINK_LIBRARIES}")
 endif()
 
 
@@ -100,7 +126,6 @@ endif()
 #
 # Define the Geant4 Module.
 #
-include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4UIbasic
     HEADERS
         ${G4INTERFACES_BASIC_MODULE_HEADERS}
