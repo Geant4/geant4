@@ -24,25 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: eRositaPhysicsList.hh,v 1.1 2010-11-23 16:17:03 pia Exp $
+// $Id: eRositaPhysicsList.hh,v 1.2 2010-11-23 18:40:21 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef eRositaPhysicsList_h
-#define eRositaPhysicsList_h 1
+#ifndef EROSITAPHYSICSLIST_HH
+#define EROSITAPHYSICSLIST_HH 1
 
 #include "G4VUserPhysicsList.hh"
 #include "globals.hh"
-
-class G4LowEnergyIonisation;
-class G4LowEnergyPhotoElectric;
-class G4LowEnergyBremsstrahlung;
-class G4eIonisation;
-
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class eRositaPhysicsList: public G4VUserPhysicsList
 {
@@ -56,29 +46,21 @@ class eRositaPhysicsList: public G4VUserPhysicsList
     void ConstructProcess();
  
     void SetCuts();
-
-   
-  protected:
-    // these methods Construct particles 
+    // These methods Construct particles 
     void ConstructBosons();
     void ConstructLeptons();
     void ConstructMesons();
     void ConstructBaryons();
 
-  protected:
-  // these methods Construct physics processes and register them
+  // These methods Construct physics processes and register them
     void ConstructGeneral();
     void ConstructEM();
   //  void AddStepMax();
   
   private:
-    G4LowEnergyIonisation*  LeIoprocess;
-    G4LowEnergyPhotoElectric* LePeprocess;
-    G4LowEnergyBremsstrahlung* LeBrprocess;
-  
+   
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 
