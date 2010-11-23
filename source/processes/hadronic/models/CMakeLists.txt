@@ -7,7 +7,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: CMakeLists.txt,v 1.1 2010-09-29 18:55:29 bmorgan Exp $
+# $Id: CMakeLists.txt,v 1.2 2010-11-23 13:35:03 gcosmo Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -22,6 +22,7 @@ add_subdirectory(high_energy)
 add_subdirectory(im_r_matrix)
 add_subdirectory(incl)
 add_subdirectory(isotope_production)
+add_subdirectory(lend)
 add_subdirectory(lll_fission)
 add_subdirectory(low_energy)
 add_subdirectory(management)
