@@ -3,7 +3,8 @@
 #
 # 21st September 2010 Ben Morgan
 #
-# $Id: CMakeLists.txt,v 1.1 2010-09-29 18:34:38 bmorgan Exp $
+# $Id: CMakeLists.txt,v 1.2 2010-11-23 17:29:29 bmorgan Exp $
+# GEANT4 Tag $Name: not supported by cvs2svn $
 #
 
 #------------------------------------------------------------------------------
@@ -57,7 +58,12 @@ set(CMAKE_MODULE_PATH
 # If further tuning of compiler flags is needed then it should be done here.
 # (It can't be done in the make rules override section).
 # However, exercise care when doing this not to override existing flags!!
-include(Geant4BuildModes)
+# We don't do this on WIN32 platforms because of some teething issues
+# with compiler specifics and linker flags
+if(NOT WIN32)
+    include(Geant4BuildModes)
+endif(NOT WIN32)
+
 
 #------------------------------------------------------------------------------
 # Includes for common utilities
@@ -77,9 +83,14 @@ option(GEANT4_BUILD_GRANULAR_LIBS "Build Geant4 with granular libraries" OFF)
 mark_as_advanced(GEANT4_BUILD_GRANULAR_LIBS)
 GEANT4_ADD_FEATURE(GEANT4_BUILD_GRANULAR_LIBS "Build granular Geant4 libraries")
 
-
-option(BUILD_STATIC_LIBS "Build Geant4 static libraries" OFF)
-option(BUILD_SHARED_LIBS "Build Geant4 dynamic libraries" ON)
+# Default to static libraries on win32 until declspec issues resolved
+if(WIN32)
+    option(BUILD_STATIC_LIBS "Build Geant4 static libraries" ON)
+    option(BUILD_SHARED_LIBS "Build Geant4 dynamic libraries" OFF)
+else(WIN32)
+    option(BUILD_STATIC_LIBS "Build Geant4 static libraries" OFF)
+    option(BUILD_SHARED_LIBS "Build Geant4 dynamic libraries" ON)
+endif(WIN32)
 
 #------------------------------------------------------------------------------
 # Build output
