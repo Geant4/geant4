@@ -16,8 +16,8 @@ code and to keep track of all tags.
 
 23-November 2010 V.Ivanchenko   hadr-pre-V09-03-17
 ---------------------------------------------------
-G4PreCompoundFragment, G4PreCompoundEmission - more accurate usage of
-  Coulomb barrier
+G4PreCompoundFragment, G4PreCompoundEmission, G4PreCompoundModel -
+  return back ref-09 computations
 
 18-November 2010 V.Ivanchenko   hadr-pre-V09-03-16
 ---------------------------------------------------
