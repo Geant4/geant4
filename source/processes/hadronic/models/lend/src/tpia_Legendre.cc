@@ -94,7 +94,8 @@ int tpia_Legendre_getFromElement( statusMessageReporting *smr, xData_element *Le
 /*
 ************************************************************
 */
-static int _tpia_Legendre_getOrder( statusMessageReporting *smr, xData_element *LegendreOrder, tpia_Legendre *Legendre, tpia_EqualProbableBinSpectra *l ) {
+//static int _tpia_Legendre_getOrder( statusMessageReporting *smr, xData_element *LegendreOrder, tpia_Legendre *Legendre, tpia_EqualProbableBinSpectra *l ) {
+static int _tpia_Legendre_getOrder( statusMessageReporting *smr, xData_element *LegendreOrder, tpia_Legendre *, tpia_EqualProbableBinSpectra *l ) {
 
     int status = 1;
     xData_Int n, nBins, lOrder;

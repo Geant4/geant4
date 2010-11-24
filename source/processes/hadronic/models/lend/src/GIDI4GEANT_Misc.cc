@@ -95,7 +95,8 @@ int GIDI4GEANT_Misc_channelProductsCompare( tpia_channel *channel, int nProducts
 /*
 ***************************************************************
 */
-int getNamesOfAvailableTargets_walker( tpia_mapEntry *entry, int level, void *userData ) {
+//int getNamesOfAvailableTargets_walker( tpia_mapEntry *entry, int level, void *userData ) {
+int getNamesOfAvailableTargets_walker( tpia_mapEntry *entry, int , void *userData ) {
 
     vector<string> *listOfTargets = (vector<string> *) userData;
     vector<string>::iterator iter;

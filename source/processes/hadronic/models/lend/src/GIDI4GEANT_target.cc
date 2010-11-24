@@ -317,7 +317,8 @@ int GIDI4GEANT_target::sampleChannelCrossSectionAtE( int nIndices, int *indices,
 /*
 ***************************************************************
 */
-double GIDI4GEANT_target::getElasticFinalState( double e_in, double temperature, double (*rng)( void * ), void *rngState ) {
+//double GIDI4GEANT_target::getElasticFinalState( double e_in, double temperature, double (*rng)( void * ), void *rngState ) {
+double GIDI4GEANT_target::getElasticFinalState( double e_in, double , double (*rng)( void * ), void *rngState ) {
 
     tpia_decaySamplingInfo decaySamplingInfo;
     tpia_channel *channel = tpia_target_heated_getChannelAtIndex_smr( &smr, target->baseHeatedTarget, elasticIndices[0] );

@@ -68,7 +68,8 @@ int tpia_kinetics_2BodyReaction( statusMessageReporting *smr, tpia_decayChannel 
 /*
 ************************************************************
 */
-int tpia_kinetics_COMKineticEnergy2LabEnergyAndMomentum( statusMessageReporting *smr, double beta, double e_kinetic_com, double mu, double phi, 
+//int tpia_kinetics_COMKineticEnergy2LabEnergyAndMomentum( statusMessageReporting *smr, double beta, double e_kinetic_com, double mu, double phi, 
+int tpia_kinetics_COMKineticEnergy2LabEnergyAndMomentum( statusMessageReporting *, double beta, double e_kinetic_com, double mu, double phi, 
         double m3cc, double m4cc, tpia_productOutgoingData *outgoingData ) {
 /*
 *   beta            the velocity/speedOflight of the com frame relative to the lab frame.

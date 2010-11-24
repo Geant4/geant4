@@ -57,7 +57,8 @@ char *xData_parseReconstructXML( xData_document *xData_doc ) {
     xmlTextStruct XML = { 0, 0, NULL };
 
     err = xData_parseReconstructXML2( &(xData_doc->root), &XML, NULL, 0 );
-    if( err == 0 ) addStringToXML( &XML, "\n", -1 );
+    //if( err == 0 ) addStringToXML( &XML, "\n", -1 );
+    if( err == 0 ) addStringToXML( &XML, (char*) "\n", -1 );
     return( XML.text );
 }
 /*
@@ -73,20 +74,27 @@ static int xData_parseReconstructXML2( xData_rootElement *root, xmlTextStruct *X
             if( addStringToXML( XML, &(text[textOffset]), child->textOffset - textOffset ) ) return( 1 );
             textOffset = child->textOffset;
         }
-        if( addStringToXML( XML, "<", -1 ) != 0 ) return( 1 );
+        //if( addStringToXML( XML, "<", -1 ) != 0 ) return( 1 );
+        if( addStringToXML( XML, (char*) "<", -1 ) != 0 ) return( 1 );
         if( addStringToXML( XML, child->name, -1 ) != 0 ) return( 1 );
         for( i = 0; i < child->attributes.number; i++ ) {
-            if( addStringToXML( XML, " ", -1 ) != 0 ) return( 1 );
+            //if( addStringToXML( XML, " ", -1 ) != 0 ) return( 1 );
+            if( addStringToXML( XML, (char*) " ", -1 ) != 0 ) return( 1 );
             if( addStringToXML( XML, child->attributes.attributes[i].name, -1 ) != 0 ) return( 1 );
-            if( addStringToXML( XML, "=\"", -1 ) != 0 ) return( 1 );
+            //if( addStringToXML( XML, "=\"", -1 ) != 0 ) return( 1 );
+            if( addStringToXML( XML, (char*) "=\"", -1 ) != 0 ) return( 1 );
             if( addStringToXML( XML, child->attributes.attributes[i].value, -1 ) != 0 ) return( 1 );
-            if( addStringToXML( XML, "\"", -1 ) != 0 ) return( 1 );
+            //if( addStringToXML( XML, "\"", -1 ) != 0 ) return( 1 );
+            if( addStringToXML( XML, (char*) "\"", -1 ) != 0 ) return( 1 );
         }
-        if( addStringToXML( XML, ">", -1 ) != 0 ) return( 1 );
+        //if( addStringToXML( XML, ">", -1 ) != 0 ) return( 1 );
+        if( addStringToXML( XML, (char*) ">", -1 ) != 0 ) return( 1 );
         if( xData_parseReconstructXML2( &(child->childrenRoot), XML, child->text.text, child->text.length ) != 0 ) return( 1 );
-        if( addStringToXML( XML, "</", -1 ) != 0 ) return( 1 );
+        //if( addStringToXML( XML, "</", -1 ) != 0 ) return( 1 );
+        if( addStringToXML( XML, (char*) "</", -1 ) != 0 ) return( 1 );
         if( addStringToXML( XML, child->name, -1 ) != 0 ) return( 1 );
-        if( addStringToXML( XML, ">", -1 ) != 0 ) return( 1 );
+        //if( addStringToXML( XML, ">", -1 ) != 0 ) return( 1 );
+        if( addStringToXML( XML, (char*) ">", -1 ) != 0 ) return( 1 );
     }
     if( textOffset < textLength ) if( addStringToXML( XML, &(text[textOffset]), textLength - textOffset ) ) return( 1 );
     return( 0 );

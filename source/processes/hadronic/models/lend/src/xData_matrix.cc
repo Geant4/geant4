@@ -180,7 +180,8 @@ static int toData( statusMessageReporting *smr, xDataType *xDT, xData_attributio
 /*
 ************************************************************
 */
-static char *toString( statusMessageReporting *smr, xDataType *xDT ) {
+//static char *toString( statusMessageReporting *smr, xDataType *xDT ) {
+static char *toString( statusMessageReporting *, xDataType *xDT ) {
 
     xData_Int i, n = 1, start, end, iRow, iColumn;
     char *str, *p;

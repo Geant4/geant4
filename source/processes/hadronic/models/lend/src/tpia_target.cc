@@ -235,14 +235,16 @@ int tpia_target_read( statusMessageReporting *smr, tpia_target *target, const ch
 /*
 ************************************************************
 */
-char *tpia_target_getAttributesValue( statusMessageReporting *smr, tpia_target *target, char const *name ) {
+//char *tpia_target_getAttributesValue( statusMessageReporting *smr, tpia_target *target, char const *name ) {
+char *tpia_target_getAttributesValue( statusMessageReporting *, tpia_target *target, char const *name ) {
 
     return( xData_getAttributesValue( &(target->attributes), name ) );
 }
 /*
 ************************************************************
 */
-int tpia_target_getTemperatures( statusMessageReporting *smr, tpia_target *target, double *temperatures ) {
+//int tpia_target_getTemperatures( statusMessageReporting *smr, tpia_target *target, double *temperatures ) {
+int tpia_target_getTemperatures( statusMessageReporting *, tpia_target *target, double *temperatures ) {
 
     int i;
 
@@ -389,7 +391,8 @@ double tpia_target_getIndexChannelCrossSectionAtE( statusMessageReporting *smr, 
 /*
 ************************************************************
 */
-int tpia_target_sampleIndexChannelProductsAtE( statusMessageReporting *smr, tpia_target *target, int index, double T, 
+//int tpia_target_sampleIndexChannelProductsAtE( statusMessageReporting *smr, tpia_target *target, int index, double T, 
+int tpia_target_sampleIndexChannelProductsAtE( statusMessageReporting *smr, tpia_target *target, int index, double , 
         tpia_decaySamplingInfo *decaySamplingInfo, int nProductData, tpia_productOutgoingData *productData ) {
 
     return( tpia_target_heated_sampleIndexChannelProductsAtE( smr, target->baseHeatedTarget, index, decaySamplingInfo,

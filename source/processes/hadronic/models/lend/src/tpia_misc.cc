@@ -224,7 +224,8 @@ double *tpia_misc_get2dx_y_data( statusMessageReporting *smr, xData_element *ele
     xData_Int length_;
 
     xData_addToAccessed( smr, element, 1 );
-    if( ( xDataElement = xData_getOneElementByTagName( smr, element, "xData", 1 ) ) != NULL ) {
+    //if( ( xDataElement = xData_getOneElementByTagName( smr, element, "xData", 1 ) ) != NULL ) {
+    if( ( xDataElement = xData_getOneElementByTagName( smr, element, (char*)"xData", 1 ) ) != NULL ) {
         xData_addToAccessed( smr, xDataElement, 1 );
         if( xData_is_2d_xy( smr, &(xDataElement->xDataTypeInfo), 1 ) ) {
             d = xData_2d_xy_allocateCopyData( smr, xDataElement, &length_ );
@@ -242,7 +243,8 @@ double *tpia_misc_get2dxindex_y_data( statusMessageReporting *smr, xData_element
     double *d = NULL;
 
     xData_addToAccessed( smr, element, 1 );
-    if( ( xDataElement = xData_getOneElementByTagName( smr, element, "xData", 1 ) ) != NULL ) {
+    //if( ( xDataElement = xData_getOneElementByTagName( smr, element, "xData", 1 ) ) != NULL ) {
+    if( ( xDataElement = xData_getOneElementByTagName( smr, element, (char*) "xData", 1 ) ) != NULL ) {
         xData_addToAccessed( smr, xDataElement, 1 );
         if( xData_is_2d_xindex_y( smr, &(xDataElement->xDataTypeInfo), 1 ) ) {
             if( start != NULL ) *start = xDataElement->xDataTypeInfo.start;
@@ -262,7 +264,8 @@ double *tpia_misc_get2d_xShared_yHistogram_data( statusMessageReporting *smr, xD
     double *d = NULL;
 
     xData_addToAccessed( smr, element, 1 );
-    if( ( xDataElement = xData_getOneElementByTagName( smr, element, "xData", 1 ) ) != NULL ) {
+    //if( ( xDataElement = xData_getOneElementByTagName( smr, element, "xData", 1 ) ) != NULL ) {
+    if( ( xDataElement = xData_getOneElementByTagName( smr, element, (char*) "xData", 1 ) ) != NULL ) {
         xData_addToAccessed( smr, xDataElement, 1 );
         if( ( d = xData_2d_xShared_yHistogram_copyData( smr, xDataElement, &i ) ) != NULL ) {
             if( start != NULL ) *start = xDataElement->xDataTypeInfo.start;
@@ -283,7 +286,8 @@ int tpia_misc_get2d_xShared_yHistogram_data_Grouped( statusMessageReporting *smr
 /*
 ************************************************************
 */
-double tpia_misc_getPointwiseCrossSectionAtE( statusMessageReporting *smr, tpia_1dData *crossSection, double *energyGrid, xData_Int index, double e_in ) {
+//double tpia_misc_getPointwiseCrossSectionAtE( statusMessageReporting *smr, tpia_1dData *crossSection, double *energyGrid, xData_Int index, double e_in ) {
+double tpia_misc_getPointwiseCrossSectionAtE( statusMessageReporting *, tpia_1dData *crossSection, double *energyGrid, xData_Int index, double e_in ) {
 
     double xsec = 0.0, e1, e2;
 
@@ -307,7 +311,8 @@ tpia_EqualProbableBinSpectrum *tpia_misc_getEqualProbableBin( statusMessageRepor
     xData_element *element;
 
     xData_addToAccessed( smr, parent, 1 );
-    if( ( element = xData_getOneElementByTagName( smr, parent, "equalProbableBins", 0 ) ) == NULL ) return( NULL );
+    //if( ( element = xData_getOneElementByTagName( smr, parent, "equalProbableBins", 0 ) ) == NULL ) return( NULL );
+    if( ( element = xData_getOneElementByTagName( smr, parent, (char*) "equalProbableBins", 0 ) ) == NULL ) return( NULL );
     if( xData_convertAttributeTo_xData_Int( smr, element, "nBins", nBins ) != 0 ) {
         tpia_misc_setMessageError_Element( smr, NULL, element, __FILE__, __LINE__, 1, "missing or invalid nBins attribute" );
         return( NULL );
@@ -401,7 +406,8 @@ double tpia_misc_drng( double (*rng)( void * ), void *rngState ) {
 /*
 ************************************************************
 */
-int tpia_misc_sampleEqualProbableBin( statusMessageReporting *smr, tpia_decaySamplingInfo *decaySamplingInfo, double e_in, int nBins, 
+//int tpia_misc_sampleEqualProbableBin( statusMessageReporting *smr, tpia_decaySamplingInfo *decaySamplingInfo, double e_in, int nBins, 
+int tpia_misc_sampleEqualProbableBin( statusMessageReporting *, tpia_decaySamplingInfo *decaySamplingInfo, double e_in, int nBins, 
         tpia_EqualProbableBinSpectra *binned, double *value_ ) {
 
     int i, j, index1, index2, method = 0;

@@ -55,7 +55,8 @@ tpia_particle *tpia_particle_create( statusMessageReporting *smr ) {
 /*
 ************************************************************
 */
-int tpia_particle_initialize( statusMessageReporting *smr, tpia_particle *particle ) {
+//int tpia_particle_initialize( statusMessageReporting *smr, tpia_particle *particle ) {
+int tpia_particle_initialize( statusMessageReporting *, tpia_particle *particle ) {
 
     memset( particle, 0, sizeof( tpia_particle ) );
     return( 0 );
@@ -179,7 +180,8 @@ tpia_particle *tpia_particle_getInternalID( statusMessageReporting *smr, const c
 /*
 ************************************************************
 */
-int tpia_particle_printInternalSortedList( statusMessageReporting *smr ) {
+//int tpia_particle_printInternalSortedList( statusMessageReporting *smr ) {
+int tpia_particle_printInternalSortedList( statusMessageReporting * ) {
 
     int i;
 

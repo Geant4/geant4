@@ -55,7 +55,8 @@ tpia_channel *tpia_channel_create( statusMessageReporting *smr ) {
 /*
 ************************************************************
 */
-int tpia_channel_initialize( statusMessageReporting *smr, tpia_channel *channel ) {
+//int tpia_channel_initialize( statusMessageReporting *smr, tpia_channel *channel ) {
+int tpia_channel_initialize( statusMessageReporting *, tpia_channel *channel ) {
 
     memset( channel, 0, sizeof( tpia_channel ) );
     return( 0 );
@@ -135,22 +136,26 @@ int tpia_channel_getFromElement( statusMessageReporting *smr, tpia_target_heated
             channel->QIsFloat = 0;
             channel->Q = 0.;
         }
-        if( ( element = xData_getOneElementByTagName( smr, channelElement, "crossSection", 1 ) ) != NULL ) {
+        //if( ( element = xData_getOneElementByTagName( smr, channelElement, "crossSection", 1 ) ) != NULL ) {
+        if( ( element = xData_getOneElementByTagName( smr, channelElement, (char*) "crossSection", 1 ) ) != NULL ) {
             if( ( tpia_frame_setFromElement( smr, element, 2, &channel->crossSectionFrame ) ) == 0 ) {
                 xData_addToAccessed( smr, element, 1 );
-                if( ( pElement = xData_getOneElementByTagName( smr, element, "indexed", 1 ) ) != NULL ) {
+                //if( ( pElement = xData_getOneElementByTagName( smr, element, "indexed", 1 ) ) != NULL ) {
+                if( ( pElement = xData_getOneElementByTagName( smr, element, (char*) "indexed", 1 ) ) != NULL ) {
                     channel->crossSectionPointwise.data = tpia_misc_get2dxindex_y_data( smr, pElement,
                         &(channel->crossSectionPointwise.start), &(channel->crossSectionPointwise.end), target->energyGrid );
                 }
-                if( ( gElement = xData_getOneElementByTagName( smr, element, "grouped", 1 ) ) != NULL ) {
+                if( ( gElement = xData_getOneElementByTagName( smr, element, (char*) "grouped", 1 ) ) != NULL ) {
                     tpia_misc_get2d_xShared_yHistogram_data_Grouped( smr, gElement, &(channel->crossSectionGrouped) );
                 }
                 if( ( channel->crossSectionGrouped.data != NULL ) && ( ( channel->crossSectionPointwise.data != NULL ) || !pointwiseRequired ) ) {
                     if( target->contents == NULL ) {                /* Only supported "crossSection" currently. */
                         if( !tpia_channel_isProduction( smr, channel ) ) {
-                            if( ( eElement = xData_getOneElementByTagName( smr, channelElement, "availableEnergy", 1 ) ) != NULL ) {
+                            //if( ( eElement = xData_getOneElementByTagName( smr, channelElement, "availableEnergy", 1 ) ) != NULL ) {
+                            if( ( eElement = xData_getOneElementByTagName( smr, channelElement, (char*) "availableEnergy", 1 ) ) != NULL ) {
                                 xData_addToAccessed( smr, eElement, 1 );
-                                if( ( gElement = xData_getOneElementByTagName( smr, eElement, "grouped", 1 ) ) != NULL ) {
+                                //if( ( gElement = xData_getOneElementByTagName( smr, eElement, "grouped", 1 ) ) != NULL ) {
+                                if( ( gElement = xData_getOneElementByTagName( smr, eElement, (char*) "grouped", 1 ) ) != NULL ) {
                                     tpia_misc_get2d_xShared_yHistogram_data_Grouped( smr, gElement, &(channel->availableEnergyGrouped) );
                                 }
                             }
@@ -180,7 +185,8 @@ tpia_product *tpia_channel_getFirstProduct( tpia_channel *channel ) {
 /*
 ************************************************************
 */
-tpia_product *tpia_channel_getProductByIndex( statusMessageReporting *smr, tpia_channel *channel, int index ) {
+//tpia_product *tpia_channel_getProductByIndex( statusMessageReporting *smr, tpia_channel *channel, int index ) {
+tpia_product *tpia_channel_getProductByIndex( statusMessageReporting *, tpia_channel *channel, int index ) {
 
     int i = 0;
     tpia_product *p;
@@ -192,21 +198,24 @@ tpia_product *tpia_channel_getProductByIndex( statusMessageReporting *smr, tpia_
 /*
 ************************************************************
 */
-int tpia_channel_numberOfProducts( statusMessageReporting *smr, tpia_channel *channel ) {
+//int tpia_channel_numberOfProducts( statusMessageReporting *smr, tpia_channel *channel ) {
+int tpia_channel_numberOfProducts( statusMessageReporting *, tpia_channel *channel ) {
 
     return( channel->decayChannel.numberOfProducts );
 }
 /*
 ************************************************************
 */
-int tpia_channel_isProduction( statusMessageReporting *smr, tpia_channel *channel ) {
+//int tpia_channel_isProduction( statusMessageReporting *smr, tpia_channel *channel ) {
+int tpia_channel_isProduction( statusMessageReporting *, tpia_channel *channel ) {
 
     return( strcmp( channel->genre, "production" ) == 0 );
 }
 /*
 ************************************************************
 */
-double tpia_channel_getCrossSectionAtE( statusMessageReporting *smr, tpia_channel *channel, xData_Int iEg, double e_in,
+//double tpia_channel_getCrossSectionAtE( statusMessageReporting *smr, tpia_channel *channel, xData_Int iEg, double e_in,
+double tpia_channel_getCrossSectionAtE( statusMessageReporting *smr, tpia_channel *channel, xData_Int , double e_in,
         int crossSectionType ) {
 
     double xsec = 0.;

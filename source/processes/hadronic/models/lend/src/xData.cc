@@ -528,7 +528,8 @@ const char *xData_getAttributesValueInElement( xData_element *element, const cha
 /*
 ************************************************************
 */
-int xData_initializeAttributionList( statusMessageReporting *smr, xData_attributionList *attributes ) {
+//int xData_initializeAttributionList( statusMessageReporting *smr, xData_attributionList *attributes ) {
+int xData_initializeAttributionList( statusMessageReporting *, xData_attributionList *attributes ) {
 
     attributes->number = 0;
     attributes->size = 0;
@@ -598,7 +599,8 @@ int xData_releaseAttributionList( statusMessageReporting *smr, xData_attribution
 */
 xData_element *xData_getElements_xDataElement( statusMessageReporting *smr, xData_element *element ) {
 
-    return( xData_getOneElementByTagName( smr, element, "xData", 1 ) );
+    //return( xData_getOneElementByTagName( smr, element, "xData", 1 ) );
+    return( xData_getOneElementByTagName( smr, element, (char*) "xData", 1 ) );
 }
 /*
 ************************************************************
@@ -721,7 +723,8 @@ int xData_convertAttributeToDouble( statusMessageReporting *smr, xData_element *
 /*
 ************************************************************
 */
-int xData_numberOfElementsByTagName( statusMessageReporting *smr, xData_element *element, const char *tagName ) {
+//int xData_numberOfElementsByTagName( statusMessageReporting *smr, xData_element *element, const char *tagName ) {
+int xData_numberOfElementsByTagName( statusMessageReporting *, xData_element *element, const char *tagName ) {
 
     int n = 0;
     xData_element *child;
@@ -1047,7 +1050,8 @@ int xData_stringTo_double( statusMessageReporting *smr, void *smrUserInterface, 
 /*
 ************************************************************
 */
-int xData_addToAccessed( statusMessageReporting *smr, xData_element *element, int increment ) {
+//int xData_addToAccessed( statusMessageReporting *smr, xData_element *element, int increment ) {
+int xData_addToAccessed( statusMessageReporting *, xData_element *element, int increment ) {
 
     element->accessed += increment;
     return( element->accessed );
@@ -1055,7 +1059,8 @@ int xData_addToAccessed( statusMessageReporting *smr, xData_element *element, in
 /*
 ************************************************************
 */
-int xData_getAccessed( statusMessageReporting *smr, xData_element *element ) {
+//int xData_getAccessed( statusMessageReporting *smr, xData_element *element ) {
+int xData_getAccessed( statusMessageReporting *, xData_element *element ) {
 
     return( element->accessed );
 }

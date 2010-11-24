@@ -44,7 +44,8 @@ static char lab_Str[] = "lab", COM_Str[] = "centerOfMass";
 /*
 ************************************************************
 */
-int tpia_frame_clear( statusMessageReporting *smr, tpia_data_frame *frame ) {
+//int tpia_frame_clear( statusMessageReporting *smr, tpia_data_frame *frame ) {
+int tpia_frame_clear( statusMessageReporting *, tpia_data_frame *frame ) {
 
     frame->frames = 0;
     return( 0 );
@@ -111,7 +112,8 @@ int tpia_frame_setFromString( statusMessageReporting *smr, const char *forItem, 
 /*
 ************************************************************
 */
-int tpia_frame_getDimensions( statusMessageReporting *smr, tpia_data_frame *frame ) {
+//int tpia_frame_getDimensions( statusMessageReporting *smr, tpia_data_frame *frame ) {
+int tpia_frame_getDimensions( statusMessageReporting *, tpia_data_frame *frame ) {
 
     int i, dimension = 0;
     unsigned value = frame->frames;
@@ -126,7 +128,8 @@ int tpia_frame_getDimensions( statusMessageReporting *smr, tpia_data_frame *fram
 /*
 ************************************************************
 */
-char *tpia_frame_toString( statusMessageReporting *smr, const char *fromItem, tpia_data_frame *frame ) {
+//char *tpia_frame_toString( statusMessageReporting *smr, const char *fromItem, tpia_data_frame *frame ) {
+char *tpia_frame_toString( statusMessageReporting *smr, const char *, tpia_data_frame *frame ) {
 
     int i, n = tpia_frame_getDimensions( smr, frame ), value, nStr = 0;
     char *str = NULL, *p;

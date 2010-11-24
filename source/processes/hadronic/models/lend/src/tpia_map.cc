@@ -61,7 +61,8 @@ tpia_map *tpia_map_create( statusMessageReporting *smr ) {
 /*
 ************************************************************
 */
-int tpia_map_initialize( statusMessageReporting *smr, tpia_map *map ) {
+//int tpia_map_initialize( statusMessageReporting *smr, tpia_map *map ) {
+int tpia_map_initialize( statusMessageReporting *, tpia_map *map ) {
 
     memset( map, 0, sizeof( tpia_map ) );
     map->status = tpia_map_status_Ok;

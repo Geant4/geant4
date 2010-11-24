@@ -72,7 +72,8 @@ void *xData_realloc( statusMessageReporting *smr, void *pOld, size_t size, const
 /*
 ************************************************************
 */
-void *xData_free( statusMessageReporting *smr, void *p ) {
+//void *xData_free( statusMessageReporting *smr, void *p ) {
+void *xData_free( statusMessageReporting *, void *p ) {
 
     if( p != NULL ) free( p );
     return( NULL );

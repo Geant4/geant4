@@ -121,7 +121,8 @@ int xData_1d_x_free_copyData( statusMessageReporting *smr, void *data ) {
 /*
 ************************************************************
 */
-static int toData( statusMessageReporting *smr, xDataType *xDT, xData_attributionList *attributes, const char *text ) {
+//static int toData( statusMessageReporting *smr, xDataType *xDT, xData_attributionList *attributes, const char *text ) {
+static int toData( statusMessageReporting *smr, xDataType *xDT, xData_attributionList *, const char *text ) {
 
     xData_Int i, n, status = 0;
     char *e;
@@ -150,7 +151,8 @@ static int toData( statusMessageReporting *smr, xDataType *xDT, xData_attributio
 /*
 ************************************************************
 */
-static char *toString( statusMessageReporting *smr, xDataType *xDT ) {
+//static char *toString( statusMessageReporting *smr, xDataType *xDT ) {
+static char *toString( statusMessageReporting *, xDataType *xDT ) {
 
     xData_Int i, n;
     char *str, *p;

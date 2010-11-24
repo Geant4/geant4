@@ -77,7 +77,8 @@ int xData_isElement_2d_xindex_y( statusMessageReporting *smr, xData_element *ele
 /*
 ************************************************************
 */
-static int toData( statusMessageReporting *smr, xDataType *xDT, xData_attributionList *attributes, const char *text ) {
+//static int toData( statusMessageReporting *smr, xDataType *xDT, xData_attributionList *attributes, const char *text ) {
+static int toData( statusMessageReporting *smr, xDataType *xDT, xData_attributionList *, const char *text ) {
 
     xData_Int i, status = 0;
     char *e;
@@ -106,7 +107,8 @@ static int toData( statusMessageReporting *smr, xDataType *xDT, xData_attributio
 /*
 ************************************************************
 */
-static char *toString( statusMessageReporting *smr, xDataType *xDT ) {
+//static char *toString( statusMessageReporting *smr, xDataType *xDT ) {
+static char *toString( statusMessageReporting *, xDataType *xDT ) {
 
     xData_Int i, n = xDT->length, recordSize = 5 + 16 + 1, indexMax = 9;
     int iFmt = 4;

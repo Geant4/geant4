@@ -69,7 +69,8 @@ int gString_release( statusMessageReporting *smr, gString *gStr ) {
 /*
 ***************************************************
 */
-int gString_clear( statusMessageReporting *smr, gString *gStr ) {
+//int gString_clear( statusMessageReporting *smr, gString *gStr ) {
+int gString_clear( statusMessageReporting *, gString *gStr ) {
 
     if( gStr->gStr != NULL ) {
         gStr->length = 1;
@@ -100,28 +101,32 @@ int gString_addTo( statusMessageReporting *smr, gString *gStr, char const *str )
 /*
 ***************************************************
 */
-char const *gString_string( statusMessageReporting *smr, gString *gStr ) {
+//char const *gString_string( statusMessageReporting *smr, gString *gStr ) {
+char const *gString_string( statusMessageReporting *, gString *gStr ) {
 
     return( gStr->gStr );
 }
 /*
 ***************************************************
 */
-int gString_length( statusMessageReporting *smr, gString *gStr ) {
+//int gString_length( statusMessageReporting *smr, gString *gStr ) {
+int gString_length( statusMessageReporting *, gString *gStr ) {
 
     return( gStr->length );
 }
 /*
 ***************************************************
 */
-int gString_allocated( statusMessageReporting *smr, gString *gStr ) {
+//int gString_allocated( statusMessageReporting *smr, gString *gStr ) {
+int gString_allocated( statusMessageReporting *, gString *gStr ) {
 
     return( gStr->allocated );
 }
 /*
 ***************************************************
 */
-int gString_increment( statusMessageReporting *smr, gString *gStr ) {
+//int gString_increment( statusMessageReporting *smr, gString *gStr ) {
+int gString_increment( statusMessageReporting *, gString *gStr ) {
 
     return( gStr->increment );
 }

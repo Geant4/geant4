@@ -95,7 +95,8 @@ tpia_multiplicity *tpia_multiplicity_createGetFromElement( statusMessageReportin
 /*
 ************************************************************
 */
-int tpia_multiplicity_getFromElement( statusMessageReporting *smr, xData_element *multiplicityElement, tpia_multiplicity *multiplicity, int nGroups ) {
+//int tpia_multiplicity_getFromElement( statusMessageReporting *smr, xData_element *multiplicityElement, tpia_multiplicity *multiplicity, int nGroups ) {
+int tpia_multiplicity_getFromElement( statusMessageReporting *smr, xData_element *multiplicityElement, tpia_multiplicity *multiplicity, int ) {
 
     const char *timeScale;
     int isDelayedNeutrons;

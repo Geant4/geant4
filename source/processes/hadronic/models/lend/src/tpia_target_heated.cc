@@ -57,7 +57,8 @@ tpia_target_heated *tpia_target_heated_create( statusMessageReporting *smr ) {
 /*
 ************************************************************
 */
-int tpia_target_heated_initialize( statusMessageReporting *smr, tpia_target_heated *target ) {
+//int tpia_target_heated_initialize( statusMessageReporting *smr, tpia_target_heated *target ) {
+int tpia_target_heated_initialize( statusMessageReporting *, tpia_target_heated *target ) {
 
     memset( target, 0, sizeof( tpia_target_heated ) );
     return( 0 );
@@ -149,7 +150,8 @@ int tpia_target_heated_read( statusMessageReporting *smr, tpia_target_heated *ta
             target->targetID = tpia_particle_getInternalID( smr, name );
         if( smr_isOk( smr ) ) _tpia_target_heated_getEnergyGridAndAllocateTotalCrossSections( smr, target, element );
         if( smr_isOk( smr ) ) {            /* Get channels. */
-            if( ( channels = xData_getOneElementByTagName( smr, element, "channels", 1 ) ) == NULL ) 
+            //if( ( channels = xData_getOneElementByTagName( smr, element, "channels", 1 ) ) == NULL ) 
+            if( ( channels = xData_getOneElementByTagName( smr, element, (char*)"channels", 1 ) ) == NULL ) 
                 return( _tpia_target_heated_releaseAndReturnOne( smr, doc, target ) );
             xData_addToAccessed( smr, channels, 1 );
             if( ( nChannels = xData_numberOfElementsByTagName( smr, channels, "channel" ) ) > 0 ) {
@@ -170,7 +172,8 @@ int tpia_target_heated_read( statusMessageReporting *smr, tpia_target_heated *ta
             }
         }
         if( smr_isOk( smr ) ) {            /* Get production channels. */
-            if( ( channels = xData_getOneElementByTagName( smr, element, "productionChannels", 0 ) ) == NULL ) {
+            //if( ( channels = xData_getOneElementByTagName( smr, element, "productionChannels", 0 ) ) == NULL ) {
+            if( ( channels = xData_getOneElementByTagName( smr, element, (char*) "productionChannels", 0 ) ) == NULL ) {
                 if( !smr_isOk( smr ) ) return( _tpia_target_heated_releaseAndReturnOne( smr, doc, target ) ); }
             else {
                 xData_addToAccessed( smr, channels, 1 );
@@ -204,7 +207,8 @@ static void _tpia_target_heated_getEnergyGridAndAllocateTotalCrossSections( stat
     xData_element *energyGrid, *kerma;
 
     if( !smr_isOk( smr ) ) return;
-    if( ( energyGrid = xData_getOneElementByTagName( smr, element, "energyGrid", 1 ) ) == NULL ) return;
+    //if( ( energyGrid = xData_getOneElementByTagName( smr, element, "energyGrid", 1 ) ) == NULL ) return;
+    if( ( energyGrid = xData_getOneElementByTagName( smr, element, (char*) "energyGrid", 1 ) ) == NULL ) return;
     xData_addToAccessed( smr, energyGrid, 1 );
     if( ( energyGrid = xData_getElements_xDataElement( smr, energyGrid ) ) == NULL ) return;
     xData_addToAccessed( smr, energyGrid, 1 );
@@ -224,7 +228,8 @@ static void _tpia_target_heated_getEnergyGridAndAllocateTotalCrossSections( stat
     //if( ( target->totalCrossSectionGrouped.data = xData_malloc2( smr, target->nGroups * sizeof( double ), 0, "totalCrossSectionGrouped" ) ) == NULL ) return;
     if( ( target->totalCrossSectionGrouped.data = (double*) xData_malloc2( smr, target->nGroups * sizeof( double ), 0, "totalCrossSectionGrouped" ) ) == NULL ) return;
     for( i = 0; i < target->nGroups; i++ ) target->totalCrossSectionGrouped.data[i] = 0.;
-    if( ( kerma = xData_getOneElementByTagName( smr, element, "kerma", 1 ) ) != NULL ) { 
+    //if( ( kerma = xData_getOneElementByTagName( smr, element, "kerma", 1 ) ) != NULL ) { 
+    if( ( kerma = xData_getOneElementByTagName( smr, element, (char*) "kerma", 1 ) ) != NULL ) { 
         xData_addToAccessed( smr, kerma, 1 );
         if( ( kerma = xData_getElements_xDataElement( smr, kerma ) ) == NULL ) return;
         xData_addToAccessed( smr, kerma, 1 );
@@ -234,14 +239,16 @@ static void _tpia_target_heated_getEnergyGridAndAllocateTotalCrossSections( stat
 /*
 ************************************************************
 */
-int tpia_target_heated_numberOfChannels( statusMessageReporting *smr, tpia_target_heated *target ) {
+//int tpia_target_heated_numberOfChannels( statusMessageReporting *smr, tpia_target_heated *target ) {
+int tpia_target_heated_numberOfChannels( statusMessageReporting *, tpia_target_heated *target ) {
 
     return( target->nChannels );
 }
 /*
 ************************************************************
 */
-int tpia_target_heated_numberOfProductionChannels( statusMessageReporting *smr, tpia_target_heated *target ) {
+//int tpia_target_heated_numberOfProductionChannels( statusMessageReporting *smr, tpia_target_heated *target ) {
+int tpia_target_heated_numberOfProductionChannels( statusMessageReporting *, tpia_target_heated *target ) {
 
     return( target->nProductionChannels );
 }
@@ -281,7 +288,8 @@ tpia_channel *tpia_target_heated_getProductionChannelAtIndex( tpia_target_heated
 /*
 ************************************************************
 */
-xData_Int tpia_target_heated_getEnergyGrid( statusMessageReporting *smr, tpia_target_heated *target, double **energyGrid ) {
+//xData_Int tpia_target_heated_getEnergyGrid( statusMessageReporting *smr, tpia_target_heated *target, double **energyGrid ) {
+xData_Int tpia_target_heated_getEnergyGrid( statusMessageReporting *, tpia_target_heated *target, double **energyGrid ) {
 
     if( energyGrid != NULL ) *energyGrid = target->energyGrid;
     return( target->energyGridLength );
@@ -296,7 +304,8 @@ xData_Int tpia_target_heated_getEIndex( tpia_target_heated *target, double e_in 
 /*
 ************************************************************
 */
-double tpia_target_heated_getTotalCrossSectionAtE( statusMessageReporting *smr, tpia_target_heated *target, xData_Int iEg, double e_in, 
+//double tpia_target_heated_getTotalCrossSectionAtE( statusMessageReporting *smr, tpia_target_heated *target, xData_Int iEg, double e_in, 
+double tpia_target_heated_getTotalCrossSectionAtE( statusMessageReporting *smr, tpia_target_heated *target, xData_Int , double e_in, 
         int crossSectionType ) {
 
     double xsec = 0.;

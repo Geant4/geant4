@@ -22,7 +22,7 @@ G4HadFinalState * G4LENDElastic::ApplyYourself(const G4HadProjectile& aTrack, G4
 
    G4double phi = twopi*G4UniformRand();
    G4double theta = std::acos( aMu );
-   G4double sinth = std::sin( theta );
+   //G4double sinth = std::sin( theta );
 
    G4ReactionProduct theNeutron( const_cast<G4ParticleDefinition *>( aTrack.GetDefinition() ) );
    theNeutron.SetMomentum( aTrack.Get4Momentum().vect() );

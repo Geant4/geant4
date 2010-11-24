@@ -195,20 +195,24 @@ static int _tpia_product_getProductOutgoingData( statusMessageReporting *smr, xD
 
     for( data = xData_getFirstElement( productElement ); data != NULL; data = xData_getNextElement( data ) ) {
         if( strcmp( data->name, "depositionEnergy" ) == 0 ) {
-            if( _tpia_product_checkRequiredData( smr, allowMany, tpia_m_depositionEnergy, productElement, product, "deposition energy" ) ) return( 1 );
+            //if( _tpia_product_checkRequiredData( smr, allowMany, tpia_m_depositionEnergy, productElement, product, "deposition energy" ) ) return( 1 );
+            if( _tpia_product_checkRequiredData( smr, allowMany, tpia_m_depositionEnergy, productElement, product, (char*)"deposition energy" ) ) return( 1 );
             if( _tpia_product_getDepositionEnergy( smr, data, product ) != 0 ) return( 1 ); }
         else if( strcmp( data->name, "multiplicity" ) == 0 ) {
             allowMany = ( product->channel->fission != NULL ) && ( strcmp( product->productID->name, "n_1" ) == 0 );
-            if( _tpia_product_checkRequiredData( smr, allowMany, tpia_m_multiplicity, productElement, product, "multiplicity" ) ) return( 1 );
+            //if( _tpia_product_checkRequiredData( smr, allowMany, tpia_m_multiplicity, productElement, product, "multiplicity" ) ) return( 1 );
+            if( _tpia_product_checkRequiredData( smr, allowMany, tpia_m_multiplicity, productElement, product, (char*) "multiplicity" ) ) return( 1 );
             if( _tpia_product_getMultiplicityFromElement( smr, data, product ) != 0 ) return( 1 ); }
         else if( strcmp( data->name, "angular" ) == 0 ) {
-            if( _tpia_product_checkRequiredData( smr, allowMany, tpia_m_angular, productElement, product, "angular" ) ) return( 1 );
+            //if( _tpia_product_checkRequiredData( smr, allowMany, tpia_m_angular, productElement, product, "angular" ) ) return( 1 );
+            if( _tpia_product_checkRequiredData( smr, allowMany, tpia_m_angular, productElement, product, (char*) "angular" ) ) return( 1 );
             if( tpia_angular_getFromElement( smr, data, &(product->angular) ) != 0 ) return( 1 ); }
         else if( strcmp( data->name, "Legendre" ) == 0 ) {
-            if( _tpia_product_checkRequiredData( smr, allowMany, tpia_m_Legendre, productElement, product, "Legendre" ) ) return( 1 );
+            //if( _tpia_product_checkRequiredData( smr, allowMany, tpia_m_Legendre, productElement, product, "Legendre" ) ) return( 1 );
+            if( _tpia_product_checkRequiredData( smr, allowMany, tpia_m_Legendre, productElement, product, (char*) "Legendre" ) ) return( 1 );
             if( tpia_Legendre_getFromElement( smr, data, &(product->Legendre) ) != 0 ) return( 1 ); }
         else if( strcmp( data->name, "angularEnergy" ) == 0 ) {
-            if( _tpia_product_checkRequiredData( smr, allowMany, tpia_m_angular_energy, productElement, product, "angularEnergy" ) ) return( 1 );
+            if( _tpia_product_checkRequiredData( smr, allowMany, tpia_m_angular_energy, productElement, product, (char*) "angularEnergy" ) ) return( 1 );
             if( tpia_angularEnergy_getFromElement( smr, data, &(product->angularEnergy) ) != 0 ) return( 1 ); }
         else if( strcmp( data->name, "decayChannel" ) == 0 ) {
             xData_addToAccessed( smr, data, 1 );
@@ -346,7 +350,8 @@ static int _tpia_product_getMultiplicityFromElement( statusMessageReporting *smr
 /*
 ************************************************************
 */
-long tpia_product_dataRequired( statusMessageReporting *smr, tpia_product *product ) {
+//long tpia_product_dataRequired( statusMessageReporting *smr, tpia_product *product ) {
+long tpia_product_dataRequired( statusMessageReporting *, tpia_product *product ) {
 
     return( product->b_dataRequired );
 }
@@ -360,7 +365,8 @@ tpia_product *tpia_product_getFirstProduct( tpia_product *product ) {
 /*
 ************************************************************
 */
-tpia_product *tpia_product_getProductByIndex( statusMessageReporting *smr, tpia_product *product, int index ) {
+//tpia_product *tpia_product_getProductByIndex( statusMessageReporting *smr, tpia_product *product, int index ) {
+tpia_product *tpia_product_getProductByIndex( statusMessageReporting *, tpia_product *product, int index ) {
 
     int i = 0;
     tpia_product *p;
@@ -372,28 +378,32 @@ tpia_product *tpia_product_getProductByIndex( statusMessageReporting *smr, tpia_
 /*
 ************************************************************
 */
-int tpia_product_doesDecay( statusMessageReporting *smr, tpia_product *product ) {
+//int tpia_product_doesDecay( statusMessageReporting *smr, tpia_product *product ) {
+int tpia_product_doesDecay( statusMessageReporting *, tpia_product *product ) {
 
     return( product->decayChannel.products != NULL );
 }
 /*
 ************************************************************
 */
-int tpia_product_numberOfProducts( statusMessageReporting *smr, tpia_product *product ) {
+//int tpia_product_numberOfProducts( statusMessageReporting *smr, tpia_product *product ) {
+int tpia_product_numberOfProducts( statusMessageReporting *, tpia_product *product ) {
 
     return( product->decayChannel.numberOfProducts );
 }
 /*
 ************************************************************
 */
-int tpia_product_isDataPresent( statusMessageReporting *smr, tpia_product *product, int b_data ) {
+//int tpia_product_isDataPresent( statusMessageReporting *smr, tpia_product *product, int b_data ) {
+int tpia_product_isDataPresent( statusMessageReporting *, tpia_product *product, int b_data ) {
 
     return( product->b_dataPresent && b_data );
 }
 /*
 ************************************************************
 */
-int tpia_product_sampleMultiplicity( statusMessageReporting *smr, tpia_product *product, double e_in, double r ) {
+//int tpia_product_sampleMultiplicity( statusMessageReporting *smr, tpia_product *product, double e_in, double r ) {
+int tpia_product_sampleMultiplicity( statusMessageReporting *, tpia_product *product, double e_in, double r ) {
 
     int i, multiplicity;
     tpia_multiplicity *multiplicityVsEnergy = product->multiplicityVsEnergy;

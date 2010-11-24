@@ -192,7 +192,8 @@ char *GIDI4GEANT::dataFilename( string &lib_name, int iZ, int iA, int iM ) {
 */
 char *GIDI4GEANT::dataFilename( string &lib_name, string &targetSymbol ) {
 
-    char *path, *projectile = "n_1";
+    //char *path, *projectile = "n_1";
+    char *path, *projectile = (char*)"n_1";
     list<GIDI4GEANT_map *>::iterator iter;
 
     for( iter = dataDirectories.begin( ); iter != dataDirectories.end( ); iter++ ) {
@@ -221,7 +222,8 @@ vector<string> *GIDI4GEANT::getNamesOfAvailableLibraries( int iZ, int iA, int iM
 */
 vector<string> *GIDI4GEANT::getNamesOfAvailableLibraries( string &targetName ) {
 
-    char *projectile = "n_1";
+    //char *projectile = "n_1";
+    char *projectile = (char*)"n_1";
     list<GIDI4GEANT_map *>::iterator iter;
     vector<string> *listOfLibraries = new vector<string>( );
 

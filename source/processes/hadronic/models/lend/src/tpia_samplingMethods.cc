@@ -41,7 +41,8 @@ const char *tpia_samplingMethods_linear = "linear";
 /*
 ************************************************************
 */
-int tpia_samplingMethods_initialize( statusMessageReporting *smr, tpia_samplingMethods *samplingMethods ) {
+//int tpia_samplingMethods_initialize( statusMessageReporting *smr, tpia_samplingMethods *samplingMethods ) {
+int tpia_samplingMethods_initialize( statusMessageReporting *, tpia_samplingMethods *samplingMethods ) {
 
     memset( samplingMethods, 0, sizeof( tpia_samplingMethods ) );
     samplingMethods->angular_equalProbableBinMethod = tpia_samplingMethods_linear;

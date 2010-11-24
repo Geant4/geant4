@@ -76,7 +76,8 @@ int tpia_angularEnergy_getFromElement( statusMessageReporting *smr, xData_elemen
 
     xData_addToAccessed( smr, angularEnergyElement, 1 );
     if( ( tpia_frame_setFromElement( smr, angularEnergyElement, 4, &(angularEnergy->frame) ) ) != 0 ) return( 1 );
-    if( ( epbElement = xData_getOneElementByTagName( smr, angularEnergyElement, "equalProbableBins", 0 ) ) == NULL ) return( 1 );
+    //if( ( epbElement = xData_getOneElementByTagName( smr, angularEnergyElement, "equalProbableBins", 0 ) ) == NULL ) return( 1 );
+    if( ( epbElement = xData_getOneElementByTagName( smr, angularEnergyElement, (char*)"equalProbableBins", 0 ) ) == NULL ) return( 1 );
     xData_addToAccessed( smr, epbElement, 1 );
     if( xData_convertAttributeTo_xData_Int( smr, epbElement, "nBins", &nBins ) != 0 ) {
         tpia_misc_setMessageError_Element( smr, NULL, epbElement, __FILE__, __LINE__, 1, "missing or invalid nBins attribute" );

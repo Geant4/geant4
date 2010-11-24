@@ -94,7 +94,8 @@ int tpia_depot_release( tpia_depot *depot, int freeMap ) {
 /*
 ************************************************************
 */
-int tpia_depot_setMap( statusMessageReporting *smr, tpia_depot *depot, tpia_map *map ) {
+//int tpia_depot_setMap( statusMessageReporting *smr, tpia_depot *depot, tpia_map *map ) {
+int tpia_depot_setMap( statusMessageReporting *, tpia_depot *depot, tpia_map *map ) {
 
     depot->map = map;
     return( 0 );

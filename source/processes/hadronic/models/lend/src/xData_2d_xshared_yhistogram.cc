@@ -76,7 +76,8 @@ int xData_isElement_2d_xShared_yHistogram( statusMessageReporting *smr, xData_el
 /*
 ************************************************************
 */
-double *xData_2d_xShared_yHistogram_copyData( statusMessageReporting *smr, xData_element *element, xData_Int *n ) {
+//double *xData_2d_xShared_yHistogram_copyData( statusMessageReporting *smr, xData_element *element, xData_Int *n ) {
+double *xData_2d_xShared_yHistogram_copyData( statusMessageReporting *, xData_element *element, xData_Int *n ) {
 
     xDataType *xDT = &(element->xDataTypeInfo);
     xData_Int i;
@@ -103,7 +104,8 @@ int xData_2d_xShared_yHistogram_free_copyData( statusMessageReporting *smr, void
 /*
 ************************************************************
 */
-static int toData( statusMessageReporting *smr, xDataType *xDT, xData_attributionList *attributes, const char *text ) {
+//static int toData( statusMessageReporting *smr, xDataType *xDT, xData_attributionList *attributes, const char *text ) {
+static int toData( statusMessageReporting *smr, xDataType *xDT, xData_attributionList *, const char *text ) {
 
     xData_Int i, n = xDT->end - xDT->start, status = 0;
     char *e;
@@ -130,7 +132,8 @@ static int toData( statusMessageReporting *smr, xDataType *xDT, xData_attributio
 /*
 ************************************************************
 */
-static char *toString( statusMessageReporting *smr, xDataType *xDT ) {
+//static char *toString( statusMessageReporting *smr, xDataType *xDT ) {
+static char *toString( statusMessageReporting *, xDataType *xDT ) {
 
     xData_Int i, n = xDT->length, recordSize = 16 + 1;
     char *str, *p, fmt[32] = " %15.7e\n";

@@ -57,7 +57,8 @@ tpi_channelID *tpi_channelID_allocate( statusMessageReporting *smr ) {
 /*
 ***************************************************
 */
-int tpi_channelID_initialize( statusMessageReporting *smr, tpi_channelID *channelID ) {
+//int tpi_channelID_initialize( statusMessageReporting *smr, tpi_channelID *channelID ) {
+int tpi_channelID_initialize( statusMessageReporting *, tpi_channelID *channelID ) {
 
     memset( channelID, 0, sizeof( tpi_channelID ) );
     return( 0 );
@@ -138,7 +139,8 @@ int tpi_channelID_toString( statusMessageReporting *smr, tpi_channelID *channelI
 */
 int tpi_channelID_toStringSanRevision( statusMessageReporting *smr, tpi_channelID *channelID, gString *gStr ) {
 
-    char *sans[] = { "revision", NULL };
+    //char *sans[] = { "revision", NULL };
+    char *sans[] = { (char*)"revision", NULL };
 
     return( tpi_channelID_toStringSans( smr, channelID, gStr, sans ) );
 }
@@ -172,7 +174,8 @@ tpi_spectralID *tpi_spectralID_allocate( statusMessageReporting *smr ) {
 /*
 ***************************************************
 */
-int tpi_spectralID_initialize( statusMessageReporting *smr, tpi_spectralID *spectralID ) {
+//int tpi_spectralID_initialize( statusMessageReporting *smr, tpi_spectralID *spectralID ) {
+int tpi_spectralID_initialize( statusMessageReporting *, tpi_spectralID *spectralID ) {
 
     memset( spectralID, 0, sizeof( tpi_spectralID ) );
     return( 0 );
@@ -351,7 +354,8 @@ int tpi_spectralID_toString( statusMessageReporting *smr, tpi_spectralID *spectr
 */
 int tpi_spectralID_toStringSanRevision( statusMessageReporting *smr, tpi_spectralID *spectralID, gString *gStr ) {
 
-    char *sans[] = { "revision", NULL };
+    //char *sans[] = { "revision", NULL };
+    char *sans[] = { (char*)"revision", NULL };
 
     return( tpi_spectralID_toStringSans( smr, spectralID, gStr, sans ) );
 }
@@ -406,7 +410,8 @@ int tpi_spectralID_toStringSans( statusMessageReporting *smr, tpi_spectralID *sp
 /*
 ***************************************************
 */
-char const *tpi_misc_firstNonWhiteSpace( statusMessageReporting *smr, char const *str ) {
+//char const *tpi_misc_firstNonWhiteSpace( statusMessageReporting *smr, char const *str ) {
+char const *tpi_misc_firstNonWhiteSpace( statusMessageReporting *, char const *str ) {
 
     char const *s;
 
