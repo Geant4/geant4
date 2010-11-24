@@ -35,7 +35,7 @@
 //    *                                *
 //    **********************************
 //
-// $Id: BrachyPhysicsList.cc,v 1.14 2009-11-12 02:50:51 cirrone Exp $
+// $Id: BrachyPhysicsList.cc,v 1.15 2010-11-24 15:56:19 cirrone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPhysicsList.hh"
@@ -46,7 +46,6 @@
 #include "G4ParticleTypes.hh"
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"              
-#include "G4MultipleScattering.hh"
 // gamma
 #include "G4PhotoElectricEffect.hh"
 #include "G4LivermorePhotoElectricModel.hh"
