@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartTrackStack.cc,v 1.4 2010-04-19 18:21:52 asaim Exp $
+// $Id: G4SmartTrackStack.cc,v 1.5 2010-11-24 22:56:57 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -92,6 +92,8 @@ void G4SmartTrackStack::PushToStack( G4StackedTrack * aStackedTrack )
   static G4ParticleDefinition* elecDef = G4Electron::Definition();
   static G4ParticleDefinition* gammDef = G4Gamma::Definition();
   static G4ParticleDefinition* posiDef = G4Positron::Definition();
+
+  if(!aStackedTrack) return;
 
   G4int iDest = 0;
   if( aStackedTrack->GetTrack()->GetParentID() == 0 )
