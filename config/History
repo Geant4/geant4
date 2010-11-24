@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.396 2010-11-23 13:21:37 gcosmo Exp $
+cvs log $Id: History,v 1.397 2010-11-24 10:54:30 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,10 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-23rd November 2010  Gabriele Cosmo (config-V09-03-16)
+24th November 2010  Gabriele Cosmo (config-V09-03-17 & V09-03-16)
 - Added hadronic/models/lend module to binmake.gmk and cleanup of obsolete
   include paths.
-- Added -lexpat to LOADLIBS in architecture.gmk, as required by 'lend' module.
 
 19th November 2010  Gabriele Cosmo (config-V09-03-15)
 - Added electromagnetic/pii module to binmake.gmk.
