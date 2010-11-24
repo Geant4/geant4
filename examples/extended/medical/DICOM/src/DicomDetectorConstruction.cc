@@ -309,7 +309,7 @@ void DicomDetectorConstruction::ReadPhantomDataFile(const G4String& fname)
 #endif 
   std::ifstream fin(fname.c_str(), std::ios_base::in);
   if( !fin.is_open() ) {
-    G4Exception("DicomDetectorConstruction::ReadPhantomDataFileº. File not found " + fname );
+    G4Exception("DicomDetectorConstruction::ReadPhantomDataFile. File not found " + fname );
   }
   //----- Define density differences (maximum density difference to create a new material)
   char* part = getenv( "DICOM_CHANGE_MATERIAL_DENSITY" );
@@ -438,11 +438,11 @@ void DicomDetectorConstruction::ConstructPhantomContainer()
 #endif
 
   //----- Define the volume that contains all the voxels
-  container_solid = new G4Box("PhantomContainer",nVoxelX*voxelHalfDimX,nVoxelY*voxelHalfDimY,nVoxelZ*voxelHalfDimZ);
+  container_solid = new G4Box("phantomContainer",nVoxelX*voxelHalfDimX,nVoxelY*voxelHalfDimY,nVoxelZ*voxelHalfDimZ);
   container_logic = 
     new G4LogicalVolume( container_solid, 
 			 fMaterials[0],  //the material is not important, it will be fully filled by the voxels
-			 "PhantomContainer", 
+			 "phantomContainer", 
 			 0, 0, 0 );
   //--- Place it on the world
   G4double offsetX = (fZSliceHeaderMerged->GetMaxX() + fZSliceHeaderMerged->GetMinX() ) /2.;
@@ -456,7 +456,7 @@ void DicomDetectorConstruction::ConstructPhantomContainer()
     new G4PVPlacement(0,  // rotation
 		      posCentreVoxels,
 		      container_logic,     // The logic volume
-		      "PhantomContainer",  // Name
+		      "phantomContainer",  // Name
 		      world_logic,  // Mother
 		      false,           // No op. bool.
 		      1);              // Copy number
@@ -475,7 +475,7 @@ void DicomDetectorConstruction::SetScorer(G4LogicalVolume* voxel_logic)
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
   //
   // Sensitive Detector Name
-  G4String concreteSDname = "PhantomSD";
+  G4String concreteSDname = "phantomSD";
 
   //------------------------
   // MultiFunctionalDetector

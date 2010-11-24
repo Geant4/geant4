@@ -412,14 +412,14 @@ void DicomPartialDetectorConstruction::ConstructPhantom()
     phantom_phys = new G4PVParameterised(voxelName,phantom_logic,container_logic,
 					 //					  kXAxis, nVoxelX*nVoxelY*nVoxelZ, thePartialPhantomParam);
 					  kXAxis, theNVoxels, thePartialPhantomParam);
-    phantom_phys->SetRegularStructureId(regStructureID);
     thePartialPhantomParam->SetSkipEqualMaterials(bSkipEqualMaterials);
   } else {
     G4Exception("GmReadPhantomGeometry::ConstructPhantom","Wrong argument to parameter GmReadPhantomGeometry:Phantom:OptimAxis",FatalErrorInArgument,(G4String("Only allowed 'kUndefined' or 'kXAxis', it is: "+OptimAxis).c_str()));
   }
+
+  phantom_phys->SetRegularStructureId(regStructureID);  
   
-  
-  //  G4cout << " GmReadPhantomGeometry  phantom_phys " << phantom_phys << " trans " << phantom_phys->GetTranslation() << G4endl;
+    //    G4cout << " GmReadPhantomGeometry  phantom_phys " << phantom_phys << " trans " << phantom_phys->GetTranslation() << G4endl;
   //-  thePartialPhantomParam->BuildContainerSolid(cont_phys);
   
   //  G4cout << " GmReadPhantomGeometry::constructPhantom ended " << G4endl;

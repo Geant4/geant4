@@ -88,7 +88,7 @@ void RegularDicomDetectorConstruction::ConstructPhantom()
 
 
   //----- The G4PVParameterised object that uses the created parameterisation should be placed in the container logical volume
-  G4PVParameterised * phantom_phys = new G4PVParameterised("Phantom",voxel_logic,container_logic,
+  G4PVParameterised * phantom_phys = new G4PVParameterised("phantom",voxel_logic,container_logic,
 			kXAxis, nVoxelX*nVoxelY*nVoxelZ, param);
   // if axis is set as kUndefined instead of kXAxis, GEANT4 will do an smart voxel optimisation (not needed if G4RegularNavigation is used)
 

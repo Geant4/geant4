@@ -75,8 +75,8 @@ void NestedParamDicomDetectorConstruction::ConstructPhantom()
   //----- Voxel solid and logical volumes
   //--- Z Slice
   G4VSolid* solVoxel = 
-    new G4Box("Phantom",voxelHalfDimX,voxelHalfDimY,voxelHalfDimZ);
-  G4LogicalVolume* logicVoxel = new G4LogicalVolume(solVoxel,air,"Phantom");
+    new G4Box("phantom",voxelHalfDimX,voxelHalfDimY,voxelHalfDimZ);
+  G4LogicalVolume* logicVoxel = new G4LogicalVolume(solVoxel,air,"phantom");
 
   //
   // Parameterisation for transformation of voxels.
@@ -86,7 +86,7 @@ void NestedParamDicomDetectorConstruction::ConstructPhantom()
   DicomNestedPhantomParameterisation* param
     = new DicomNestedPhantomParameterisation(voxelSize,fMaterials);
 
-  new G4PVParameterised("Phantom",    // their name
+  new G4PVParameterised("phantom",    // their name
 			logicVoxel, // their logical volume
 			logXRep,      // Mother logical volume
 			kXAxis,       // Are placed along this axis 
