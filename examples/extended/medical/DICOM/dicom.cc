@@ -63,10 +63,13 @@
 #include "DicomRunAction.hh"
 #include "DicomHandler.hh"
 #include "DicomIntersectVolume.hh"
-#include "QGSP_BIC_HP.hh"
+#include "QGSP.hh"
+#include "G4tgrMessenger.hh"
+
 int main(int argc,char** argv)
 {
-				
+
+  new G4tgrMessenger;				
   char* part = getenv( "DICOM_PARTIAL_PARAM" );
   G4bool bPartial = FALSE;
   if( part && G4String(part) == "1" ) {
@@ -94,7 +97,7 @@ int main(int argc,char** argv)
   }
 
   // runManager->SetUserInitialization(new DicomPhysicsList);
-   runManager->SetUserInitialization(new QGSP_BIC_HP);
+   runManager->SetUserInitialization(new QGSP);
   runManager->SetUserInitialization(theGeometry);
   runManager->SetUserAction(new DicomPrimaryGeneratorAction());
   runManager->SetUserAction(new DicomRunAction);
