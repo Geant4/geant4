@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EvaporationChannel.cc,v 1.18 2010-11-23 18:10:10 vnivanch Exp $
+// $Id: G4EvaporationChannel.cc,v 1.19 2010-11-24 15:30:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //J.M. Quesada (August2008). Based on:
@@ -112,26 +112,27 @@ void G4EvaporationChannel::Initialize(const G4Fragment & fragment)
     EmissionProbability = 0.0;
   } else {
     ResidualMass = G4NucleiProperties::GetNuclearMass(ResidualA, ResidualZ);
+    G4double FragmentMass = fragment.GetGroundStateMass();
     CoulombBarrier = theCoulombBarrierPtr->GetCoulombBarrier(ResidualA,ResidualZ,ExEnergy);
     // Maximal Kinetic Energy
-    // MaximalKineticEnergy = CalcMaximalKineticEnergy(fragment.GetGroundStateMass()+ExEnergy);
-    MaximalKineticEnergy = ExEnergy + fragment.GetGroundStateMass() 
-      - EvaporatedMass - ResidualMass;
+    MaximalKineticEnergy = CalcMaximalKineticEnergy(FragmentMass + ExEnergy);
+    //MaximalKineticEnergy = ExEnergy + fragment.GetGroundStateMass() 
+    //  - EvaporatedMass - ResidualMass;
     
     // Emission probability
     // Protection for the case Tmax<V. If not set in this way we could end up in an 
     // infinite loop in  the method GetKineticEnergy if OPTxs!=0 && useSICB=true. 
     // Of course for OPTxs=0 we have the Coulomb barrier 
     
-    //G4double limit;
-    //if (OPTxs==0 || (OPTxs!=0 && useSICB)) 
-    //  limit= CoulombBarrier;
-    //else limit=0.;
+    G4double limit;
+    if (OPTxs==0 || (OPTxs!=0 && useSICB)) 
+      limit= CoulombBarrier;
+    else limit=0.;
+    limit = std::max(limit, FragmentMass - ResidualMass - EvaporatedMass);
   
     // The threshold for charged particle emission must be  set to 0 if Coulomb 
     //cutoff  is included in the cross sections
-    if (MaximalKineticEnergy <= CoulombBarrier) { EmissionProbability = 0.0; } 
-    //    if (MaximalKineticEnergy <= limit) EmissionProbability = 0.0;
+    if (MaximalKineticEnergy <= limit) EmissionProbability = 0.0;
     else { 
       // Total emission probability for this channel
       EmissionProbability = theEvaporationProbabilityPtr->
@@ -145,11 +146,14 @@ void G4EvaporationChannel::Initialize(const G4Fragment & fragment)
 
 G4FragmentVector * G4EvaporationChannel::BreakUp(const G4Fragment & theNucleus)
 {
+  /*
   G4double Ecm = GetKineticEnergy(theNucleus) + ResidualMass + EvaporatedMass;
   
   G4double EvaporatedEnergy = 
     ((Ecm-ResidualMass)*(Ecm+ResidualMass) + EvaporatedMass*EvaporatedMass)/(2*Ecm);
-  
+  */
+  G4double EvaporatedEnergy = GetKineticEnergy(theNucleus) + EvaporatedMass;
+
   G4ThreeVector momentum(IsotropicVector
                          (std::sqrt((EvaporatedEnergy - EvaporatedMass)*
                                     (EvaporatedEnergy + EvaporatedMass))));
@@ -194,8 +198,9 @@ G4FragmentVector * G4EvaporationChannel::BreakUp(const G4Fragment & theNucleus)
 G4double G4EvaporationChannel::CalcMaximalKineticEnergy(G4double NucleusTotalE)
 {
   // This is the "true" assimptotic kinetic energy (from energy conservation)	
-  G4double Tmax = (NucleusTotalE*NucleusTotalE + EvaporatedMass*EvaporatedMass - 		
-                   ResidualMass*ResidualMass)/(2.0*NucleusTotalE) - EvaporatedMass;
+  G4double Tmax = 
+    ((NucleusTotalE-ResidualMass)*(NucleusTotalE+ResidualMass) + EvaporatedMass*EvaporatedMass)
+    /(2.0*NucleusTotalE) - EvaporatedMass;
   
   //JMQ (13-09-08) bug fixed: in the original version the Tmax is calculated
   //at the Coulomb barrier
@@ -252,18 +257,17 @@ G4double G4EvaporationChannel::GetKineticEnergy(const G4Fragment & aFragment)
     return result;
   } else if (OPTxs==1 || OPTxs==2 || OPTxs==3 || OPTxs==4) {
     
-    G4double V = std::max(CoulombBarrier,
-			  aFragment.GetGroundStateMass()-EvaporatedMass-ResidualMass);
-    //if(useSICB) V= CoulombBarrier;
-    //else V=0.;
-    //If Coulomb barrier is just included  in the cross sections
-    // 	G4double V=0.;
+    // Coulomb barrier is just included  in the cross sections
+    G4double V = 0;
+    if(useSICB) { V= CoulombBarrier; }
+
+    V = std::max(V, aFragment.GetGroundStateMass()-EvaporatedMass-ResidualMass);
 
     G4double Tmax=MaximalKineticEnergy;
     G4double T(0.0);
     G4double NormalizedProbability(1.0);
 
-    // This is very ineffective - create new objects at each call to the method    
+    // VI: This is very ineffective - create new objects at each call to the method    
     /*
     // A pointer is created in order to access the distribution function.
     G4EvaporationProbability * G4EPtemp = 0;

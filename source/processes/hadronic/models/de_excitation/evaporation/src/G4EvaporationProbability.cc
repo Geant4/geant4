@@ -125,11 +125,10 @@ G4EvaporationProbability::CalculateProbability(const G4Fragment & fragment,
 
    G4double EvaporatedMass = fragment.ComputeGroundStateMass(theZ,theA);
    G4double ResidulalMass = fragment.ComputeGroundStateMass(ResidualZ,ResidualA);
-   G4double limit = std::max(theCoulombBarrierptr->GetCoulombBarrier(ResidualA,ResidualZ,U),
-			     fragment.GetGroundStateMass()-EvaporatedMass-ResidulalMass);
-   //   if (useSICB) {
-   //  limit=theCoulombBarrierptr->GetCoulombBarrier(ResidualA,ResidualZ,U);
-   //}
+   G4double limit = std::max(0.0,fragment.GetGroundStateMass()-EvaporatedMass-ResidulalMass);
+   if (useSICB) {
+     limit = std::max(limit,theCoulombBarrierptr->GetCoulombBarrier(ResidualA,ResidualZ,U));
+   }
 
    if (MaximalKineticEnergy <= limit) { return 0.0; }
 
