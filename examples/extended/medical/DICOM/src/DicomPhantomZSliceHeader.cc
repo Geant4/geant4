@@ -30,10 +30,10 @@
 #include "G4Material.hh"
 #include "G4GeometryTolerance.hh"
 
-#include "DicomPatientZSliceHeader.hh"
+#include "DicomPhantomZSliceHeader.hh"
 
 //-------------------------------------------------------------
-DicomPatientZSliceHeader::DicomPatientZSliceHeader( const DicomPatientZSliceHeader& rhs )
+DicomPhantomZSliceHeader::DicomPhantomZSliceHeader( const DicomPhantomZSliceHeader& rhs )
 {
   fNoVoxelX = rhs.GetNoVoxelX();
   fNoVoxelY = rhs.GetNoVoxelY();
@@ -49,7 +49,7 @@ DicomPatientZSliceHeader::DicomPatientZSliceHeader( const DicomPatientZSliceHead
 }
 
 //-------------------------------------------------------------
-DicomPatientZSliceHeader::DicomPatientZSliceHeader( std::ifstream& fin )
+DicomPhantomZSliceHeader::DicomPhantomZSliceHeader( std::ifstream& fin )
 {
   //----- Read material indices and names
   G4int nmate;
@@ -57,17 +57,17 @@ DicomPatientZSliceHeader::DicomPatientZSliceHeader( std::ifstream& fin )
   G4String matename;
   fin >> nmate;
 #ifdef G4VERBOSE
-  G4cout << " DicomPatientZSliceHeader reading number of materials " << nmate << G4endl;
+  G4cout << " DicomPhantomZSliceHeader reading number of materials " << nmate << G4endl;
 #endif
 
   for( G4int im = 0; im < nmate; im++ ){
     fin >> mateindex >> matename;
 #ifdef G4VERBOSE
-    G4cout << " DicomPatientZSliceHeader reading material " << im << " : " << mateindex << "  " << matename << G4endl;
+    G4cout << " DicomPhantomZSliceHeader reading material " << im << " : " << mateindex << "  " << matename << G4endl;
 #endif
 
     if( ! CheckMaterialExists( matename ) ) {
-      G4Exception("DicomPatientZSliceHeader::DicomPatientZSliceHeader","A material is found in file that is not built in the C++ code",FatalErrorInArgument,matename.c_str());
+      G4Exception("DicomPhantomZSliceHeader::DicomPhantomZSliceHeader","A material is found in file that is not built in the C++ code",FatalErrorInArgument,matename.c_str());
     }
 
     fMaterialNames.push_back(matename);
@@ -79,7 +79,7 @@ DicomPatientZSliceHeader::DicomPatientZSliceHeader( std::ifstream& fin )
   G4cout << " Number of voxels " << fNoVoxelX << " " << fNoVoxelY << " " << fNoVoxelZ << G4endl; 
 #endif
 
-  //----- Read minimal and maximal extensions (= walls of patient)
+  //----- Read minimal and maximal extensions (= walls of phantom)
   fin >> fMinX >> fMaxX;
   fin >> fMinY >> fMaxY;
   fin >> fMinZ >> fMaxZ;
@@ -92,7 +92,7 @@ DicomPatientZSliceHeader::DicomPatientZSliceHeader( std::ifstream& fin )
 }
 
 //-------------------------------------------------------------
-G4bool DicomPatientZSliceHeader::CheckMaterialExists( const G4String& mateName )
+G4bool DicomPhantomZSliceHeader::CheckMaterialExists( const G4String& mateName )
 {
   G4bool bFound = FALSE;
 
@@ -111,18 +111,18 @@ G4bool DicomPatientZSliceHeader::CheckMaterialExists( const G4String& mateName )
 
 
 //-------------------------------------------------------------
-void DicomPatientZSliceHeader::operator+=( const DicomPatientZSliceHeader& rhs )
+void DicomPhantomZSliceHeader::operator+=( const DicomPhantomZSliceHeader& rhs )
 {
   *this = *this + rhs;
 }
 
 //-------------------------------------------------------------
-DicomPatientZSliceHeader DicomPatientZSliceHeader::operator+( const DicomPatientZSliceHeader& rhs )
+DicomPhantomZSliceHeader DicomPhantomZSliceHeader::operator+( const DicomPhantomZSliceHeader& rhs )
 {
   //----- Check that both slices has the same dimensions
   if( fNoVoxelX != rhs.GetNoVoxelX() 
       || fNoVoxelY != rhs.GetNoVoxelY() ) {
-    G4cerr << "DicomPatientZSliceHeader error adding two slice headers: !!! Different number of voxels: " 
+    G4cerr << "DicomPhantomZSliceHeader error adding two slice headers: !!! Different number of voxels: " 
 	   << "  X= " << fNoVoxelX << " =? " << rhs.GetNoVoxelX() 
 	   << "  Y=  " << fNoVoxelY << " =? " << rhs.GetNoVoxelY()  
 	   << "  Z=  " << fNoVoxelZ << " =? " << rhs.GetNoVoxelZ() 
@@ -132,7 +132,7 @@ DicomPatientZSliceHeader DicomPatientZSliceHeader::operator+( const DicomPatient
   //----- Check that both slices has the same extensions
   if( fMinX != rhs.GetMinX() || fMaxX != rhs.GetMaxX() 
       || fMinY != rhs.GetMinY() || fMaxY != rhs.GetMaxY() ) {
-    G4cerr << "DicomPatientZSliceHeader error adding two slice headers: !!! Different extensions: " 
+    G4cerr << "DicomPhantomZSliceHeader error adding two slice headers: !!! Different extensions: " 
 	   << "  Xmin= " << fMinX << " =? " << rhs.GetMinX() 
 	   << "  Xmax= " << fMaxX << " =? " << rhs.GetMaxX() 
 	   << "  Ymin= " << fMinY << " =? " << rhs.GetMinY() 
@@ -144,12 +144,12 @@ DicomPatientZSliceHeader DicomPatientZSliceHeader::operator+( const DicomPatient
   //----- Check that both slices has the same materials
   std::vector<G4String> fMaterialNames2 = rhs.GetMaterialNames();
   if( fMaterialNames.size() != fMaterialNames2.size() ) {
-    G4cerr << "DicomPatientZSliceHeader error adding two slice headers: !!! Different number of materials: " << fMaterialNames.size() << " =? " << fMaterialNames2.size() << G4endl;
+    G4cerr << "DicomPhantomZSliceHeader error adding two slice headers: !!! Different number of materials: " << fMaterialNames.size() << " =? " << fMaterialNames2.size() << G4endl;
     G4Exception("");
   }
   for( unsigned int ii = 0; ii < fMaterialNames.size(); ii++ ) {
     if( fMaterialNames[ii] != fMaterialNames2[ii] ) {
-      G4cerr << "DicomPatientZSliceHeader error adding two slice headers: !!! Different material number " << ii << " : " << fMaterialNames[ii] << " =? " << fMaterialNames2[ii] << G4endl;
+      G4cerr << "DicomPhantomZSliceHeader error adding two slice headers: !!! Different material number " << ii << " : " << fMaterialNames[ii] << " =? " << fMaterialNames2[ii] << G4endl;
       G4Exception("");
     }
   }
@@ -157,7 +157,7 @@ DicomPatientZSliceHeader DicomPatientZSliceHeader::operator+( const DicomPatient
   //----- Check that the slices are contiguous in Z
   if( std::fabs( fMinZ - rhs.GetMaxZ() ) > G4GeometryTolerance::GetInstance()->GetRadialTolerance() && 
       std::fabs( fMaxZ - rhs.GetMinZ() ) > G4GeometryTolerance::GetInstance()->GetRadialTolerance() ){
-    G4cerr << "DicomPatientZSliceHeader error adding two slice headers: !!! Slices are not contiguous in Z "
+    G4cerr << "DicomPhantomZSliceHeader error adding two slice headers: !!! Slices are not contiguous in Z "
 	   << "  Zmin= " << fMinZ << " & " << rhs.GetMinZ() 
 	   << "  Zmax= " << fMaxZ << " & " << rhs.GetMaxZ() 
 	   << G4endl;
@@ -165,7 +165,7 @@ DicomPatientZSliceHeader DicomPatientZSliceHeader::operator+( const DicomPatient
   }
 
   //----- Build slice header copying first one
-  DicomPatientZSliceHeader temp( *this );
+  DicomPhantomZSliceHeader temp( *this );
 
   //----- Add data from second slice header
   temp.SetMinZ( std::min( fMinZ, rhs.GetMinZ() ) );

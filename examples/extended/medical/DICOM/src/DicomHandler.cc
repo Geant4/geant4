@@ -341,10 +341,10 @@ void DicomHandler::GetInformation(G4int & tagDictionary, char * data) {
       pixelSpacingY = atof( datas.substr(iss+2,datas.length()).c_str() );
 
     } else if(tagDictionary == 0x00200037 ) { // Image Orientation ( not used )
-	std::printf("[0x00200037] Image Orientation (Patient) -> %s\n", data);
+	std::printf("[0x00200037] Image Orientation (Phantom) -> %s\n", data);
 
     } else if(tagDictionary == 0x00200032 ) { // Image Position ( not used )
-	std::printf("[0x00200032] Image Position (Patient,mm) -> %s\n", data);
+	std::printf("[0x00200032] Image Position (Phantom,mm) -> %s\n", data);
 
     } else if(tagDictionary == 0x00180050 ) { // Slice Thickness
 	sliceThickness = atof(data);

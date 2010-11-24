@@ -40,7 +40,9 @@
 
 #include "globals.hh"
 #include "G4UImanager.hh"
+#include "G4UIterminal.hh"
 #include "G4RunManager.hh"
+#include "G4UItcsh.hh"
 #include "Randomize.hh"
 
 #include "DicomPhysicsList.hh"
@@ -55,27 +57,42 @@
 
 #include "RegularDicomDetectorConstruction.hh"
 #include "NestedParamDicomDetectorConstruction.hh"
+#include "DicomPartialDetectorConstruction.hh"
 #include "DicomPrimaryGeneratorAction.hh"
 #include "DicomEventAction.hh"
 #include "DicomRunAction.hh"
 #include "DicomHandler.hh"
+#include "DicomIntersectVolume.hh"
 
 int main(int argc,char** argv)
 {
 				
-  // Treatment of DICOM images before creating the G4runManager
-  DicomHandler* dcmHandler = new DicomHandler;
-  dcmHandler->CheckFileFormat();
+  char* part = getenv( "DICOM_PARTIAL_PARAM" );
+  G4bool bPartial = FALSE;
+  if( part && G4String(part) == "1" ) {
+    bPartial = TRUE;
+  }
 
-  // Initialisation of physics, geometry, primary particles ... 
   G4RunManager* runManager = new G4RunManager;
   DicomDetectorConstruction* theGeometry;
-  char* nest = getenv( "DICOM_NESTED_PARAM" );
-  if( nest && G4String(nest) == "1" ) {
-    theGeometry = new NestedParamDicomDetectorConstruction();
+  DicomHandler* dcmHandler;
+  
+  if( !bPartial ){
+    // Treatment of DICOM images before creating the G4runManager
+    dcmHandler = new DicomHandler;
+    dcmHandler->CheckFileFormat();
+
+    // Initialisation of physics, geometry, primary particles ... 
+    char* nest = getenv( "DICOM_NESTED_PARAM" );
+    if( nest && G4String(nest) == "1" ) {
+      theGeometry = new NestedParamDicomDetectorConstruction();
+    } else {
+      theGeometry = new RegularDicomDetectorConstruction();
+    }
   } else {
-    theGeometry = new RegularDicomDetectorConstruction();
+    theGeometry = new DicomPartialDetectorConstruction();
   }
+
   runManager->SetUserInitialization(new DicomPhysicsList);
   runManager->SetUserInitialization(theGeometry);
   runManager->SetUserAction(new DicomPrimaryGeneratorAction());
@@ -83,6 +100,8 @@ int main(int argc,char** argv)
   runManager->SetUserAction(new DicomEventAction);
 
   runManager->Initialize();
+
+  new DicomIntersectVolume();
 
 #ifdef G4VIS_USE
   // visualisation manager
@@ -94,6 +113,7 @@ int main(int argc,char** argv)
 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
  
+ 
   if (argc==1)
     {
 #ifdef G4UI_USE
@@ -104,7 +124,7 @@ int main(int argc,char** argv)
       ui->SessionStart();
       delete ui;
 #endif
-    }
+     }
   else
     {
       G4String command = "/control/execute ";
@@ -118,7 +138,9 @@ int main(int argc,char** argv)
   delete visManager;
 #endif
 
-  delete dcmHandler;
+  if( !bPartial ){
+    delete dcmHandler;
+  }
 
   return 0;
 }

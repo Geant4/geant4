@@ -27,12 +27,12 @@
 // History: 30.11.07  First version
 //*******************************************************
 //
-// DicomPatientZSliceHeader.hh :
+// DicomPhantomZSliceHeader.hh :
 //	- Contains the meta data information corresponding to one or several Z slices (number of voxels, dimension)
 //*******************************************************
 
-#ifndef DicomPatientZSliceHeader_h
-#define DicomPatientZSliceHeader_h 1
+#ifndef DicomPhantomZSliceHeader_h
+#define DicomPhantomZSliceHeader_h 1
 
 #include "globals.hh"
 class G4material;
@@ -40,17 +40,17 @@ class G4material;
 #include <vector>
 
 
-class DicomPatientZSliceHeader 
+class DicomPhantomZSliceHeader 
 {
 public:
 
-  DicomPatientZSliceHeader( const DicomPatientZSliceHeader& rhs );
+  DicomPhantomZSliceHeader( const DicomPhantomZSliceHeader& rhs );
   // build object copying an existing one (except Z dimensions)
 
-  DicomPatientZSliceHeader( std::ifstream& fin );
+  DicomPhantomZSliceHeader( std::ifstream& fin );
   // build object reading data from a file
 
-  ~DicomPatientZSliceHeader(){};
+  ~DicomPhantomZSliceHeader(){};
 
   // Get and set methods
   G4int GetNoVoxelX() const { return fNoVoxelX; };
@@ -86,8 +86,8 @@ public:
   void SetMaterialNames(std::vector<G4String>& mn ){ fMaterialNames = mn; }
 
 
-  void operator+=( const DicomPatientZSliceHeader& rhs );  
-  DicomPatientZSliceHeader operator+( const DicomPatientZSliceHeader& rhs );
+  void operator+=( const DicomPhantomZSliceHeader& rhs );  
+  DicomPhantomZSliceHeader operator+( const DicomPhantomZSliceHeader& rhs );
   // add two slices that have the same dimensions, merging them in Z 
 
 private:

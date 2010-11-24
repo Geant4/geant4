@@ -37,7 +37,7 @@
 //
 // + Université Laval, Québec (QC) Canada
 //
-// History: 30.11.07  P.Arce modified so that some particles reach patient voxels
+// History: 30.11.07  P.Arce modified so that some particles reach phantom voxels
 // 
 //*******************************************************
 

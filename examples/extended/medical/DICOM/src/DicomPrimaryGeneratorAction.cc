@@ -66,7 +66,7 @@ void DicomPrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent)
   G4ParticleDefinition* particle
     = particleTable->FindParticle(particleName="e-");
   particleGun->SetParticleDefinition(particle);
-  // put the e- in the x direction of the patient (z in the accelerator axs) to hit patient in the central slice of the phantom
+  // put the e- in the x direction of the phantom (z in the accelerator axs) to hit phantom in the central slice of the phantom
   G4ThreeVector dir(0,1,0);
   //G4ThreeVector dir(2.*CLHEP::RandFlat::shoot()-1.,2.*CLHEP::RandFlat::shoot()-1.,-CLHEP::RandFlat::shoot());
   dir /= dir.mag();
