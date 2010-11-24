@@ -24,11 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: eRositaTrackerSD.hh,v 1.1 2010-11-23 16:17:03 pia Exp $
+// $Id: eRositaTrackerSD.hh,v 1.2 2010-11-24 19:25:08 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef eRositaTrackerSD_h
 #define eRositaTrackerSD_h 1
@@ -39,7 +37,6 @@
 class G4Step;
 class G4HCofThisEvent;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class eRositaTrackerSD : public G4VSensitiveDetector
 {
@@ -56,7 +53,6 @@ class eRositaTrackerSD : public G4VSensitiveDetector
 
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

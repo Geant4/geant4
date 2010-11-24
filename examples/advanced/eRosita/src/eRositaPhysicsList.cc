@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: eRositaPhysicsList.cc,v 1.4 2010-11-23 23:35:18 pia Exp $
+// $Id: eRositaPhysicsList.cc,v 1.5 2010-11-24 19:25:08 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -238,6 +238,8 @@ void eRositaPhysicsList::ConstructEM()
       hIonisation->SetPixeCrossSectionM("ecpssr");
       hIonisation->SetPixeProjectileMinEnergy(1.*keV);
       hIonisation->SetPixeProjectileMaxEnergy(200.*MeV);
+      hIonisation->SetCutForSecondaryPhotons(250. * eV);
+      hIonisation->SetCutForAugerElectrons(250 * keV);
 
       G4hMultipleScattering* hMultipleScattering = new G4hMultipleScattering();
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2010-11-23 20:51:55 pia Exp $
+$Id: History,v 1.7 2010-11-24 19:25:08 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24.11.2010, GW-MGP, tag eRosita-V09-03-05
+            Set threshold for PIXE photons and Auger electrons explicitly 
+            to 250 eV in PhysicsList
+
+24.11.2010, GW-MGP, tag eRosita-V09-03-04
+            Added AnalysisManager
+            The example now produces two output files: 
+            eTot.out (total energy deposit in the detector)
+            hits.out (hits)
 
 23.11.2010, GW-MGP, tag eRosita-V09-03-03
             Minor cosmetic modifications
