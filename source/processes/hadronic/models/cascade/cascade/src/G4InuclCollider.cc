@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclCollider.cc,v 1.51 2010-10-19 19:48:39 mkelsey Exp $
+// $Id: G4InuclCollider.cc,v 1.52 2010-11-24 21:16:17 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -236,6 +236,7 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
     if (globalOutput.acceptable()) {
       if (verboseLevel) 
 	G4cout << " InuclCollider output after trials " << itry << G4endl;
+      delete zbullet;
       return;
     }
   }	// while (itry < itry_max)
@@ -246,5 +247,7 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
   }
   
   globalOutput.trivialise(bullet, target);
+
+  delete zbullet;
   return;
 }
