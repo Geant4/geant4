@@ -25,6 +25,10 @@
 ##########################
 # Initialisation procedure
 #
+#/geometry/textInput/verbose 3
+
 /run/initialize
+
+#/dicom/intersectWithUserVolume 0. 0. 0. 45.*deg 0. 0. TUBE 0. 150. 100.
 
 /run/beamOn 100
