@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundModel.cc,v 1.29 2010-11-18 15:23:13 vnivanch Exp $
+// $Id: G4PreCompoundModel.cc,v 1.30 2010-11-24 11:55:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -138,7 +138,9 @@ G4HadFinalState* G4PreCompoundModel::ApplyYourself(const G4HadProjectile & thePr
   for(G4ReactionProductVector::iterator i= result->begin(); i != result->end(); ++i)
     {
       G4DynamicParticle * aNew = 
-	new G4DynamicParticle((*i)->GetDefinition(),(*i)->GetMomentum());
+	new G4DynamicParticle((*i)->GetDefinition(),
+			      (*i)->GetTotalEnergy(),
+			      (*i)->GetMomentum());
       delete (*i);
       theResult.AddSecondary(aNew);
     }

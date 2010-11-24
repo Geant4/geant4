@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundFragment.cc,v 1.10 2010-11-23 17:59:47 vnivanch Exp $
+// $Id: G4PreCompoundFragment.cc,v 1.11 2010-11-24 11:55:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // J. M. Quesada (August 2008).  
@@ -52,27 +52,22 @@ CalcEmissionProbability(const G4Fragment & aFragment)
   //G4cout << theCoulombBarrier << "  " << GetMaximalKineticEnergy() << G4endl;
   // If  theCoulombBarrier effect is included in the emission probabilities
   //if (GetMaximalKineticEnergy() <= 0.0) 
-  //G4double limit = 0.0;
-  //if(OPTxs==0 ||  useSICB) { limit = theCoulombBarrier; }
-  //if (GetMaximalKineticEnergy() <= limit) 
-  //  {
-  //    theEmissionProbability = 0.0;
-  //    return 0.0;
-  //  }    
+  G4double limit = 0.0;
+  if(OPTxs==0 ||  useSICB) { limit = theCoulombBarrier; }
+  if (GetMaximalKineticEnergy() <= limit) 
+    {
+      theEmissionProbability = 0.0;
+      return 0.0;
+    }    
   // If  theCoulombBarrier effect is included in the emission probabilities
   //  G4double LowerLimit = 0.;
   // Coulomb barrier is the lower limit 
   // of integration over kinetic energy
-  G4double LowerLimit = theCoulombBarrier;
+  G4double LowerLimit = limit;
 
   // Excitation energy of nucleus after fragment emission is the upper 
   //limit of integration over kinetic energy
   G4double UpperLimit = GetMaximalKineticEnergy();
-
-  if( LowerLimit >= UpperLimit) {
-    theEmissionProbability = 0.0;
-    return 0.0;
-  }
   
   theEmissionProbability = 
     IntegrateEmissionProbability(LowerLimit,UpperLimit,aFragment);
@@ -134,8 +129,8 @@ G4double G4PreCompoundFragment::
 GetKineticEnergy(const G4Fragment & aFragment) 
 {
   //let's keep this way for consistency with CalcEmissionProbability method
-  G4double V = theCoulombBarrier;
-  //if(OPTxs==0 || useSICB) { V = theCoulombBarrier; }
+  G4double V = 0.0;
+  if(OPTxs==0 || useSICB) { V = theCoulombBarrier; }
 
   G4double Tmax = GetMaximalKineticEnergy();  
   if(Tmax < V) { return 0.0; }
