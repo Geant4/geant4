@@ -1,4 +1,4 @@
-$Id: History,v 1.265 2010-11-09 22:48:10 tkoi Exp $
+$Id: History,v 1.266 2010-11-24 10:58:00 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,11 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 24, 2010  G.Cosmo (global-V09-03-24)
+- Changed date for release 9.4.
+
 Nov 09, 2010  T.Koi (global-V09-03-23)
-- Fixed error in calculation of SLOPE.
-  Fixed incorrect initialization of noTotal
-  Modified some output
-  G4ConvergenceTester
+- G4ConvergenceTester: fixed error in calculation of SLOPE;
+  fixed incorrect initialization of 'noTotal'. Modified some output
 
 Nov 01, 2010  G.Cosmo (global-V09-03-22)
 - Fixed dummy initialisation in constructor for G4SimplexDownhill and
