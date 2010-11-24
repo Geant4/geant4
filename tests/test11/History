@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2010-11-24 15:18:24 tkoi Exp $
+$Id: History,v 1.24 2010-11-24 15:22:19 tkoi Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24 November 2010 Tatsumi Koi (test65-V09-03-01)
+   delete unnessary files from tag
 
 24 November 2010 Tatsumi Koi (test65-V09-03-00)
     new test for LEND (Low Energy Nucler Data)
