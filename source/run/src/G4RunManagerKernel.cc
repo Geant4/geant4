@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.51 2010-11-22 18:11:02 japost Exp $
+// $Id: G4RunManagerKernel.cc,v 1.52 2010-11-24 14:37:06 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -546,19 +546,17 @@ G4bool G4RunManagerKernel::ConfirmCoupledTransportation()
 }
 
 #include "G4ScoreSplittingProcess.hh"
-//#include "G4ParallelWorldScoringProcess.hh"
 void G4RunManagerKernel::SetScoreSplitter()
 {
   G4ScoreSplittingProcess* pSplitter = new G4ScoreSplittingProcess();
-//  G4ParallelWorldScoringProcess* pSplitter = new G4ParallelWorldScoringProcess("Temp");
   G4ParticleTable* theParticleTable = G4ParticleTable::GetParticleTable();
   G4ParticleTable::G4PTblDicIterator* theParticleIterator = theParticleTable->GetIterator();
   theParticleIterator->reset();
-  while ( (*theParticleIterator)() )  
+  while( (*theParticleIterator)() )  
   {
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
-    if( pmanager )  { pmanager->AddDiscreteProcess(pSplitter); } 
+    pmanager->AddDiscreteProcess(pSplitter);  
   }
 
   if(verboseLevel>0) 
