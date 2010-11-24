@@ -1,4 +1,4 @@
-$Id: History,v 1.201 2010-11-24 14:37:06 asaim Exp $
+$Id: History,v 1.202 2010-11-24 19:39:15 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,6 +20,7 @@ committal in the CVS repository !
 November 24th, 2010, M.Asai (run-V09-03-08)
 - Adding Score Splitter process if the geometry has a regular
   parameterized volume.
+- Adding protection against particle without process manager.
 
 November 15th, 2010, M.Asai (run-V09-03-07)
 - Change methods name to remove ambiguity.

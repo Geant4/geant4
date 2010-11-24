@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.52 2010-11-24 14:37:06 asaim Exp $
+// $Id: G4RunManagerKernel.cc,v 1.53 2010-11-24 19:39:15 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -534,13 +534,16 @@ G4bool G4RunManagerKernel::ConfirmCoupledTransportation()
   G4ParticleTable* theParticleTable = G4ParticleTable::GetParticleTable();
   G4ParticleTable::G4PTblDicIterator* theParticleIterator = theParticleTable->GetIterator();
   theParticleIterator->reset();
-  if((*theParticleIterator)())
+  while((*theParticleIterator)())
   {
     G4ParticleDefinition* pd = theParticleIterator->value();
     G4ProcessManager* pm = pd->GetProcessManager();
-    G4ProcessVector* pv = pm->GetAlongStepProcessVector(typeDoIt);
-    G4VProcess* p = (*pv)[0];
-    return ( (p->GetProcessName()) == "CoupledTransportation" );
+    if(pm)
+    {
+      G4ProcessVector* pv = pm->GetAlongStepProcessVector(typeDoIt);
+      G4VProcess* p = (*pv)[0];
+      return ( (p->GetProcessName()) == "CoupledTransportation" );
+    }
   }
   return false;
 }
@@ -556,7 +559,8 @@ void G4RunManagerKernel::SetScoreSplitter()
   {
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
-    pmanager->AddDiscreteProcess(pSplitter);  
+    if(pmanager)
+    { pmanager->AddDiscreteProcess(pSplitter); }
   }
 
   if(verboseLevel>0) 

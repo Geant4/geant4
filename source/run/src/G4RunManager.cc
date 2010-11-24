@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.113 2010-11-15 09:49:32 asaim Exp $
+// $Id: G4RunManager.cc,v 1.114 2010-11-24 19:39:15 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -524,10 +524,13 @@ void G4RunManager::ConstructScoringWorlds()
       while( (*theParticleIterator)() ){
         G4ParticleDefinition* particle = theParticleIterator->value();
         G4ProcessManager* pmanager = particle->GetProcessManager();
-        pmanager->AddProcess(theParallelWorldScoringProcess);
-        pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess, idxAtRest);
-        pmanager->SetProcessOrderingToSecond(theParallelWorldScoringProcess, idxAlongStep);
-        pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess, idxPostStep);
+        if(pmanager)
+        {
+          pmanager->AddProcess(theParallelWorldScoringProcess);
+          pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess, idxAtRest);
+          pmanager->SetProcessOrderingToSecond(theParallelWorldScoringProcess, idxAlongStep);
+          pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess, idxPostStep);
+        }
       }
     }
     mesh->Construct(pWorld);
