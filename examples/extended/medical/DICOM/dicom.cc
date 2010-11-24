@@ -63,7 +63,7 @@
 #include "DicomRunAction.hh"
 #include "DicomHandler.hh"
 #include "DicomIntersectVolume.hh"
-
+#include "QGSP_BIC_HP.hh"
 int main(int argc,char** argv)
 {
 				
@@ -93,7 +93,8 @@ int main(int argc,char** argv)
     theGeometry = new DicomPartialDetectorConstruction();
   }
 
-  runManager->SetUserInitialization(new DicomPhysicsList);
+  // runManager->SetUserInitialization(new DicomPhysicsList);
+   runManager->SetUserInitialization(new QGSP_BIC_HP);
   runManager->SetUserInitialization(theGeometry);
   runManager->SetUserAction(new DicomPrimaryGeneratorAction());
   runManager->SetUserAction(new DicomRunAction);
