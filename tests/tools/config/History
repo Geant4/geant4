@@ -1,4 +1,4 @@
-$Id: History,v 1.44 2010-11-16 12:28:55 bmorgan Exp $
+$Id: History,v 1.45 2010-11-25 12:32:36 bmorgan Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+25th November 2010 Ben Morgan
+- Configure: regenerated following changes below.
+- config/scripts/enn.csh.SH: Added setting of new data variable G4PIIDATA
+- config/scripts/enn.sh.SH: Added setting of new data variable G4PIIDATA
+- U/g4_03_dirs_data.U: Added new data variable G4PIIDATA with initial version G4PII1.1
+
 16th November 2010 Ben Morgan
 - Configure: regenerated following changes below
 - U/g4_03_dirs_data.U: Update G4EMLOW to version 6.19 and G4NDL to version 3.14
