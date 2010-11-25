@@ -1,4 +1,4 @@
-q$Id: History,v 1.170 2010-11-23 15:09:30 stesting Exp $
+q$Id: History,v 1.171 2010-11-25 07:44:55 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25-11-2010, S.Incerti                   (phys-lists-V09-03-43)
+- changed default elastic model in G4EmDNAPhysics.cc
 
 22-11-2010, G.Folger                    (phys-lists-V09-03-42)
 -  Fix bug in QGSP_BERT_CHIPS physics list, Kaon cross sections are in CHIPS 
