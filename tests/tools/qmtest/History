@@ -1,4 +1,4 @@
-$Id: History,v 1.82 2010-11-22 17:51:41 gunter Exp $
+$Id: History,v 1.83 2010-11-25 18:12:57 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -11,6 +11,11 @@ $Id: History,v 1.82 2010-11-22 17:51:41 gunter Exp $
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25-Nov-2010, G.Folger                (testtools-QMtest-V09-03-28)
+- add advanced example eRosita testing pii
+- remove runs for HadCalCMS for deleted lists QBBC_XGG, QBBC_XGGSN,
+   and QGSC_CHIPS.
 
 22-Nov-2010,G.Folger                 (testtools-QMtest-V09-03-27)
 - Fix typo in stderr of olap-run
