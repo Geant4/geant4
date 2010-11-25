@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.32 2010-11-24 15:56:19 cirrone Exp $
+$Id: History,v 1.33 2010-11-25 10:49:59 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History,v 1.32 2010-11-24 15:56:19 cirrone Exp $
 
                       Category History file
                       ---------------------
+
+
+25 November 2010 - J.Allison; tag brachy-V09-03-03
+                 - Cleaned up use of G4UIExecutive.
 
 24 November 2010 - G.A.P.Cirrone; tag brachy-V09-03-02
    	    	 - Fixed compilation error for a missing obsolete include file
