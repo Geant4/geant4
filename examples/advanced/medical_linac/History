@@ -1,4 +1,4 @@
-$Id: History,v 1.30 2010-11-25 22:24:06 cirrone Exp $
+$Id: History,v 1.31 2010-11-25 23:19:58 cirrone Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ and keep track of all category-tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25.11.2010   G.A.P.Cirrone, tag medical_linac-V09-03-03
+	     - Created launches folder
 
 25.11.2010   G.A.P.Cirrone, tag medical_linac-V09-03-02
 	     - removed no more useful files and folders
