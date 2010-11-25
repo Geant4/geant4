@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.397 2010-11-24 10:54:30 gcosmo Exp $
+cvs log $Id: History,v 1.398 2010-11-25 15:42:18 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25th November 2010  Gabriele Cosmo (config-V09-03-18)
+- Updated internal Configure scripts for adding new data module G4PIIDATA.
 
 24th November 2010  Gabriele Cosmo (config-V09-03-17 & V09-03-16)
 - Added hadronic/models/lend module to binmake.gmk and cleanup of obsolete
