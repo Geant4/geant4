@@ -41,6 +41,7 @@ unsetenv  G4RADIOACTIVEDATA
 unsetenv  G4ABLADATA
 unsetenv  G4REALSURFACEDATA
 unsetenv  G4NEUTRONXSDATA
+unsetenv  G4PIIDATA
 
 unsetenv  G4LIB
 unsetenv  G4LIB_BUILD_G3TOG4
@@ -168,6 +169,13 @@ if ( X$g4neutronxsdata != X ) then
     setenv G4NEUTRONXSDATA "$g4neutronxsdata"
     echo "On this machine the G4NEUTRONXSDATA=\$G4NEUTRONXSDATA"
 endif
+
+#+
+if ( X$g4piidata != X ) then
+    setenv G4PIIDATA "$g4piidata"
+    echo "On this machine the G4PIIDATA=\$G4PIIDATA"
+endif
+
 
 
 #
