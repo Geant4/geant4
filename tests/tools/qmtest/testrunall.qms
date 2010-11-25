@@ -19,10 +19,7 @@
       <text>bench-calo-HadCalCMS-run1-QGSP_BERT_EMX</text>
       <text>bench-calo-HadCalCMS-run1-QGSP_BERT_EMV</text>
       <text>bench-calo-HadCalCMS-run1-QGSP_BERT_CHIPS</text>
-      <text>bench-calo-HadCalCMS-run1-QGSC_CHIPS</text>
       <text>bench-calo-HadCalCMS-run1-QGSC_BERT</text>
-      <text>bench-calo-HadCalCMS-run1-QBBC_XGGSN</text>
-      <text>bench-calo-HadCalCMS-run1-QBBC_XGG</text>
       <text>bench-calo-HadCalCMS-run1-QBBC</text>
       <text>bench-calo-HadCalCMS-run1-LHEP</text>
       <text>bench-calo-HadCalCMS-run1-LHEP_EMV</text>
@@ -36,6 +33,7 @@
       <text>bench-calo-FullCMS-run1-QGSP_BERT</text>
       <text>bench-calo-FullCMS-run1-LHEP</text>
       <text>exam-adv-amsEcal-run</text>
+      <text>exam-adv-eRosita-run</text>
       <text>exam-adv-gammaray_telescope-run</text>
       <text>exam-adv-microdosimetry-run</text>
       <text>exam-adv-nanobeam-run</text>
