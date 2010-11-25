@@ -1,4 +1,4 @@
-# $Id: pixe.mac,v 1.2 2010-11-22 18:32:59 vnivanch Exp $
+# $Id: pixe.mac,v 1.3 2010-11-25 19:13:54 vnivanch Exp $
 #
 # macro file for TestEm18.cc
 #
@@ -19,6 +19,7 @@
 /run/initialize
 /testem/phys/fluo true
 /testem/phys/pixe true
+#/process/em/pixeXSmodel ECPSSR_Analytical
 #
 /gun/particle proton
 /gun/energy 100 MeV
