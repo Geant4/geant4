@@ -38,7 +38,7 @@
 
 #include <vector>
 #include <string>
-using namespace std;
+//using namespace std;
 
 #include <tpia_target.h>
 
@@ -55,7 +55,8 @@ struct channelID_s {
     string ID;
 };
 
-typedef struct GIDI4GEANT_Product_s {
+//typedef struct GIDI4GEANT_Product_s {
+struct GIDI4GEANT_Product_s {
     int A, Z, m;
     double kineticEnergy, px, py, pz;
 };
