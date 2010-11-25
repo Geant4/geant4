@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: eRositaDetectorConstruction.cc,v 1.1 2010-11-23 16:17:16 pia Exp $
+// $Id: eRositaDetectorConstruction.cc,v 1.2 2010-11-25 17:32:05 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -85,6 +85,10 @@ G4VPhysicalVolume* eRositaDetectorConstruction::Construct()
   //Copper
   G4Material* Cu = 
   new G4Material("Copper", z=29., a= 63.55*g/mole, density= 8.92*g/cm3);
+
+//   //Aluminium for testing
+//   G4Material* Cu = 
+//   new G4Material("Aluminium", z=13., a= 26.98*g/mole, density= 2.7*g/cm3);
   
   //Silicon
   G4Material* Si = 

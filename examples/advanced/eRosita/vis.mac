@@ -6,6 +6,7 @@
 #
 /control/verbose 2
 /run/verbose 2
+#/tracking/verbose 2
 #
 # Create a scene handler for a specific graphics system
 # (Edit the next line(s) to choose another graphics system)
@@ -17,7 +18,7 @@
 #
 /vis/open DAWNFILE
 #
-# draw scene
+#draw scene
 #
 /vis/drawVolume
 #
@@ -32,4 +33,4 @@
 # (if you prefer refreshing each event, comment out next line)
 /vis/scene/endOfEventAction accumulate
 #
-/run/beamOn 10
+/run/beamOn 100

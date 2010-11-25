@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: eRositaTrackerSD.cc,v 1.3 2010-11-23 23:35:18 pia Exp $
+// $Id: eRositaTrackerSD.cc,v 1.4 2010-11-25 17:32:05 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -69,9 +69,10 @@ void eRositaTrackerSD::Initialize(G4HCofThisEvent* HCE)
 
 G4bool eRositaTrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
-  //  if(aStep->GetTrack()->GetDefinition() != G4Gamma::GammaDefinition()) return false;
+  if(aStep->GetTrack()->GetDefinition() != G4Gamma::GammaDefinition()) return false;
 
-  G4double edep = aStep->GetTotalEnergyDeposit();
+//   G4double edep = aStep->GetTotalEnergyDeposit();
+  G4double edep = aStep->GetPreStepPoint()->GetKineticEnergy();
 
   if (edep == 0.) return false;
 
@@ -122,7 +123,8 @@ void eRositaTrackerSD::EndOfEvent(G4HCofThisEvent*)
       eTot += (*trackerCollection)[i]->GetEdep();
     };
 
-  if (eTot > 0.) AnalysisManager::Instance()->ScoreTot(eTot);
+//   if (eTot > 0.) AnalysisManager::Instance()->ScoreTot(eTot);
+
 //out.close();
 }
 

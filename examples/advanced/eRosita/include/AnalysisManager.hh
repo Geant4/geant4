@@ -21,11 +21,11 @@ class AnalysisManager {
    // called directly):
    static void Destroy(); 
 
-   // Member function used to score the total energy deposit
-  void ScoreTot(G4double eTot);
+//    // Member function used to score the total energy deposit
+//   void ScoreTot(G4double eTot);
 
    // Member function used to dump hits
-  void Score(G4int id, G4double eDep, G4double x, G4double y, G4double z);
+  void Score(G4double eDep);
 
  protected:
    // Constructor (protected):

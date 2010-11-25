@@ -32,8 +32,8 @@ void AnalysisManager::Destroy()
 
 AnalysisManager::AnalysisManager() 
 {
-  outFile.open("hits.out");
-  outFileT.open("eTot.out"); 
+  outFile.open("TrackerPhotonEnergy.out");
+//   outFileT.open("eTot.out"); 
 }
 
 
@@ -44,17 +44,18 @@ AnalysisManager::~AnalysisManager()
 }
 
 
-void AnalysisManager::Score(G4int id, G4double eDep, G4double x, G4double y, G4double z) 
+void AnalysisManager::Score(G4double eDep) 
 {
-  outFile << id << " "
-	  << eDep << " "
-	  << x << " "
-	  << y << " "
-	  << z << " "
-	  << std::endl;
+//   outFile << id << " "
+// 	  << eDep << " "
+// 	  << x << " "
+// 	  << y << " "
+// 	  << z << " "
+// 	  << std::endl;
+  outFile << eDep << std::endl;
 }
 
-void AnalysisManager::ScoreTot(G4double eTot) 
-{
-  outFileT << eTot << std::endl;
-}
+// void AnalysisManager::ScoreTot(G4double eTot) 
+// {
+//   outFileT << eTot << std::endl;
+// }

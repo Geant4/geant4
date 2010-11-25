@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.4 2010-11-23 20:09:32 pia Exp $
+$Id: README.txt,v 1.5 2010-11-25 17:32:05 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -58,9 +58,26 @@ cm, and z = 4 cm. The initial direction of the protons is given by the
 vector (0.0, -0.5, -1.0). The initial kinetic energy of the protons is
 150 MeV.
 
-The physics processes relevant to this simulation are defined in 
-eRositaPhysicsList. The key process for generation of PIXE is 
-G4hImpactIonisation.
+The physics processes relevant to this simulation are defined in
+eRositaPhysicsList. The key process for generation of PIXE is
+G4hImpactIonisation. In the example, proton cross sections based on
+the ECPSSR model are used. Cross sections are computed for an energy
+range from 1 keV to 200 MeV. The energy thresholds for the production
+of fluorescence photons and Auger electrons by PIXE are set to a value
+of 250 eV.
+
+The output of the example is an ASCII file named
+TrackerPhotonEnergy.out. It contains the energy, in MeV, of every
+photon that finds its way to the tracker (or which is created as a
+secondary inside the tracker). If the batch mode example is run, the
+entries 0.00798467, 0.00800571, and 0.00886534 correspond to Cu
+fluorescence lines K_alpha2, K_alpha1, and K_beta1,
+respectively. Other photons originate e.g. from bremsstrahlung of
+delta rays in Cu. A histogram of the energies in
+TrackerPhotonEnergy.out, in particular if generated for more protons,
+clearly shows the PIXE photons from Cu on top of a continuous
+distribution.
+
 
 Instructions on how to build and run the example:
 
@@ -70,20 +87,29 @@ Instructions on how to build and run the example:
   If the environment variable G4WORKDIR and has been defined, an executable
   named eRosita will be generated in $G4WORKDIR/bin/$G4SYSTEM
 
-- To run the example interactively:
+- To run the example:
+
   Do not forget to define the G4PIIDATA environment variable as appropriate
-  to get access to the PIXE data library 
+  to get access to the PIXE data library (e.g. G4PII1.1)
   
-  To run without visualisation:
-  $G4WORKDIR/bin/$G4SYSTEM/eRosita eRosita.in
-  
-  To run with visualisation:
-  Copy eRosita/vis.mac to $G4WORKDIR/bin/$G4SYSTEM
-  Then go to $G4WORKDIR/bin/$G4SYSTEM and run eRosita
-  The main is written such that the example will automatically read 
-  the macro vis.mac when running in interactive mode.
+  + To run without visualisation (batch mode):
 
+    Go to $G4WORKDIR/bin/$G4SYSTEM
+    Copy the file eRosita/eRosita.in to this directory. 
+    The input file eRosita.in defines a simulation with 10000 protons 
+    of energy 100 MeV.
+    Start the simulation with: eRosita eRosita.in > eRosita.out
 
-Description of output:
+    The resulting files eRosita.out and the ASCII output file 
+    TrackerPhotonEnergy.out are included in the example. Format
+    and content of the output file are described below.
 
+  + To run with visualisation:
+    Go to $G4WORKDIR/bin/$G4SYSTEM
+    Copy eRosita/vis.mac to to this directory.
+    The macro file vis.mac calls the DAWN visualization driver to
+    display the simulation of 100 protons with energy 100 MeV.
 
+    An ASCII output file TrackerPhotonEnergy.out is created. However,
+    this file may be empty in case the first 100 protons do not 
+    produce any fluorescence photons that reach the tracker.

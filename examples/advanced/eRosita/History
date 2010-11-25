@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2010-11-24 19:25:08 pia Exp $
+$Id: History,v 1.8 2010-11-25 17:32:05 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25.11.2010, GW-MGP, tag eRosita-V09-03-06
+            Simplified hits to better highlight PIXE
 
 24.11.2010, GW-MGP, tag eRosita-V09-03-05
             Set threshold for PIXE photons and Auger electrons explicitly 

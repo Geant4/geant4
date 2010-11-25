@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: eRositaPhysicsList.cc,v 1.5 2010-11-24 19:25:08 pia Exp $
+// $Id: eRositaPhysicsList.cc,v 1.6 2010-11-25 17:32:05 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -67,10 +67,10 @@ eRositaPhysicsList::eRositaPhysicsList():  G4VUserPhysicsList()
 	     << std::endl
 	     << "Further details can be found in:"
 	     << std::endl
-	     << " M.G. Pia et al., PIXE Simulation With Geant4"
+	     << "M.G. Pia et al., 'PIXE Simulation With Geant4', "
 	     << "IEEE Trans. Nucl. Sci., vol. 56, no. 6, pp. 3614-3649, 2009"
 	     << std::endl
-	     << "N. Meidinger et al., Development of the focal plane PNCCD camera system for the X-ray space telescope eROSITA" 
+	     << "N. Meidinger et al., 'Development of the focal plane PNCCD camera system for the X-ray space telescope eROSITA', " 
 	     << std::endl
 	     <<"NIM A 624, 321-329, 2010"
 	     << std::endl
@@ -188,7 +188,7 @@ void eRositaPhysicsList::ConstructEM()
       // photon   
 
       G4LowEnergyPhotoElectric* photoelectric = new G4LowEnergyPhotoElectric();
-      //photoelectric->ActivateAuger(true);
+      photoelectric->ActivateAuger(true);
       photoelectric->SetCutForLowEnSecPhotons(0.250 * keV);
       photoelectric->SetCutForLowEnSecElectrons(0.250 * keV);
       G4LowEnergyCompton* compton = new G4LowEnergyCompton;
@@ -236,10 +236,10 @@ void eRositaPhysicsList::ConstructEM()
       hIonisation->SetPixeCrossSectionK("ecpssr");
       hIonisation->SetPixeCrossSectionL("ecpssr");
       hIonisation->SetPixeCrossSectionM("ecpssr");
-      hIonisation->SetPixeProjectileMinEnergy(1.*keV);
-      hIonisation->SetPixeProjectileMaxEnergy(200.*MeV);
+      hIonisation->SetPixeProjectileMinEnergy(1.* keV);
+      hIonisation->SetPixeProjectileMaxEnergy(200. * MeV);
       hIonisation->SetCutForSecondaryPhotons(250. * eV);
-      hIonisation->SetCutForAugerElectrons(250 * keV);
+      hIonisation->SetCutForAugerElectrons(250. * eV);
 
       G4hMultipleScattering* hMultipleScattering = new G4hMultipleScattering();
 

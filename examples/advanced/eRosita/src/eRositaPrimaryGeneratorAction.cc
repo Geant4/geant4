@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: eRositaPrimaryGeneratorAction.cc,v 1.1 2010-11-23 16:17:16 pia Exp $
+// $Id: eRositaPrimaryGeneratorAction.cc,v 1.2 2010-11-25 17:32:05 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,16 +52,16 @@ eRositaPrimaryGeneratorAction::eRositaPrimaryGeneratorAction(
 // default particle
 
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+
   G4ParticleDefinition* particle = particleTable->FindParticle("proton");
   
   particleGun->SetParticleDefinition(particle);
   xdirection =  0.0;     // x component of initial momentum vector
   ydirection = -0.5;     // y              -"-
   zdirection = -1.0;     // z              -"-
-  //  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,-1.));
-//   particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,-3.,-30.));
   particleGun->SetParticleMomentumDirection(G4ThreeVector(xdirection,ydirection,zdirection));
-  particleGun->SetParticleEnergy(150.0*MeV);
+  particleGun->SetParticleEnergy(100.0*MeV);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,10 +75,11 @@ eRositaPrimaryGeneratorAction::~eRositaPrimaryGeneratorAction()
 
 void eRositaPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 { 
+
   xposition = 0.0*cm;
-//   G4double yposition = 0.5*cm;
   yposition = 2.25*cm;
   zposition = 4.0*cm;
+
   particleGun->SetParticlePosition(G4ThreeVector(xposition,yposition,zposition));
 
   particleGun->GeneratePrimaryVertex(anEvent);
