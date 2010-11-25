@@ -35,11 +35,9 @@
 //
 // G.A.P. Cirrone(a)°, G.Cuttone(a), S.E.Mazzaglia(a), F.Romano(a)
 // 
-// Contributor authors:
-// P.Kaitaniemi(d), A.Heikkinen(d), G.Danielsen (d)
-//
 // Past authors:
-// F.Di Rosa(a), S.Guatelli(c), A.Lechner(e), M.G.Pia(b), G.Russo(a), M.Russo(a), 
+// F.Di Rosa(a), S.Guatelli(c), A.Lechner(e), M.G.Pia(b), G.Russo(a), M.Russo(a),
+// P.Kaitaniemi(d), A.Heikkinen(d), G.Danielsen (d) 
 //
 // (a) Laboratori Nazionali del Sud 
 //     of the INFN, Catania, Italy
