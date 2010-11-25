@@ -39,7 +39,7 @@
 #include <string>
 #include <list>
 #include <vector>
-using namespace std;
+//using namespace std;
 
 #include <GIDI4GEANT_Misc.hpp>
 #include <GIDI4GEANT_map.hpp>

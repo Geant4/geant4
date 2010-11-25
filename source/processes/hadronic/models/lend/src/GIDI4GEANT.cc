@@ -33,6 +33,8 @@
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 # <<END-copyright>>
 */
+
+using namespace std;
 #include <iostream>
 
 #include "GIDI4GEANT.hpp"
