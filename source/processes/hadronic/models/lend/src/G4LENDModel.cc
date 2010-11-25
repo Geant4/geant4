@@ -12,6 +12,7 @@
 // 071025 First implementation done by T. Koi (SLAC/SCCS)
 // 101118 Name modifications for release T. Koi (SLAC/PPA)
 
+using namespace std;
 #include "G4LENDModel.hh"
 #include "G4NistManager.hh"
 

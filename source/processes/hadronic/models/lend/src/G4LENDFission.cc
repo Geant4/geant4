@@ -1,3 +1,4 @@
+using namespace std;
 #include "G4LENDFission.hh"
 
 #include "G4Nucleus.hh"

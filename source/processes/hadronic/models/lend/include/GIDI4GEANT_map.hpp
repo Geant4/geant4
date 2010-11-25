@@ -33,11 +33,12 @@
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 # <<END-copyright>>
 */
+
 #ifndef GIDI4GEANT_map_h_included
 #define GIDI4GEANT_map_h_included 1
 
 #include <string>
-using namespace std;
+//using namespace std;
 
 #include <tpia_map.h>
 

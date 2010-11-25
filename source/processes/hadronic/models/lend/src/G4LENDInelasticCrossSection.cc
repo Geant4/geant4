@@ -1,4 +1,5 @@
 
+using namespace std;
 #include "G4LENDInelasticCrossSection.hh"
 
 G4double G4LENDInelasticCrossSection::getLENDCrossSection( GIDI4GEANT_target* target , G4double ke , G4double temperature ) 

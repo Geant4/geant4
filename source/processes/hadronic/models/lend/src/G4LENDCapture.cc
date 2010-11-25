@@ -1,3 +1,4 @@
+using namespace std;
 
 #include "G4LENDCapture.hh"
 

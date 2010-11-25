@@ -1,3 +1,4 @@
+using namespace std;
 #include "G4LENDCaptureCrossSection.hh"
 
 G4double G4LENDCaptureCrossSection::getLENDCrossSection( GIDI4GEANT_target* target , G4double ke , G4double temperature ) 

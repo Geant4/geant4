@@ -1,3 +1,5 @@
+using namespace std;
+
 #include "G4LENDElastic.hh"
 
 #include "G4Nucleus.hh"
