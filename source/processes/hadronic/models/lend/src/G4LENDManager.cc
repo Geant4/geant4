@@ -62,7 +62,7 @@ G4cout << " <<END-copyright>> " << G4endl;
 
    //G4String xmcf ( "/afs/slac.stanford.edu/package/geant4/vol49/LEND/xmcf/xmcf.map" );
    G4String xmcf = getenv("G4LENDDATA");
-   //xmcf = xmcf+"/xmcf.map";
+   xmcf = xmcf+"/xmcf.map";
 
 // for neutron
 
