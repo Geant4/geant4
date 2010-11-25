@@ -22,11 +22,46 @@ G4LENDManager* G4LENDManager::endl_manager = NULL;
 G4LENDManager::G4LENDManager()
 {
 
+G4cout << " <<BEGIN-copyright>> " << G4endl;
+G4cout << " Copyright (c) 2010, Lawrence Livermore National Security, LLC.  " << G4endl;
+G4cout << " Produced at the Lawrence Livermore National Laboratory " << G4endl;
+G4cout << " Written by Bret R. Beck, beck6@llnl.gov.  " << G4endl;
+G4cout << " CODE-461393 " << G4endl;
+G4cout << " All rights reserved.  " << G4endl;
+G4cout << "  " << G4endl;
+G4cout << " This file is part of GIDI. For details, see nuclear.llnl.gov.  " << G4endl;
+G4cout << " Please also read the \"Additional BSD Notice\" at nuclear.llnl.gov.  " << G4endl;
+G4cout << " " << G4endl;
+G4cout << " Redistribution and use in source and binary forms, with or without modification, " << G4endl;
+G4cout << " are permitted provided that the following conditions are met: " << G4endl;
+G4cout << " " << G4endl;
+G4cout << "      1) Redistributions of source code must retain the above copyright notice, " << G4endl;
+G4cout << "         this list of conditions and the disclaimer below.  " << G4endl;
+G4cout << "      2) Redistributions in binary form must reproduce the above copyright notice, " << G4endl;
+G4cout << "         this list of conditions and the disclaimer (as noted below) in the " << G4endl;
+G4cout << "          documentation and/or other materials provided with the distribution.  " << G4endl;
+G4cout << "      3) Neither the name of the LLNS/LLNL nor the names of its contributors may be " << G4endl;
+G4cout << "         used to endorse or promote products derived from this software without " << G4endl;
+G4cout << "         specific prior written permission.  " << G4endl;
+G4cout << " " << G4endl;
+G4cout << " THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY " << G4endl;
+G4cout << " EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES " << G4endl;
+G4cout << " OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT " << G4endl;
+G4cout << " SHALL LAWRENCE LIVERMORE NATIONAL SECURITY, LLC, THE U.S. DEPARTMENT OF ENERGY OR " << G4endl;
+G4cout << " CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR " << G4endl;
+G4cout << " CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS " << G4endl;
+G4cout << " OR SERVICES;  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED " << G4endl; 
+G4cout << " AND ON  ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT " << G4endl; 
+G4cout << " (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, " << G4endl;
+G4cout << " EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  " << G4endl;
+G4cout << " <<END-copyright>> " << G4endl;
+
    if(!getenv("G4LENDDATA")) 
       throw G4HadronicException(__FILE__, __LINE__, " Please setenv G4LENDDATA to point to the LEND files." );
 
    //G4String xmcf ( "/afs/slac.stanford.edu/package/geant4/vol49/LEND/xmcf/xmcf.map" );
    G4String xmcf = getenv("G4LENDDATA");
+   //xmcf = xmcf+"/xmcf.map";
 
 // for neutron
 
