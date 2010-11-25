@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreBremsstrahlungModel.cc,v 1.6 2009-06-11 15:47:08 mantero Exp $
+// $Id: G4LivermoreBremsstrahlungModel.cc,v 1.7 2010-11-25 09:43:06 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -195,6 +195,7 @@ G4LivermoreBremsstrahlungModel::ComputeCrossSectionPerAtom(const G4ParticleDefin
       G4cout << "G4LivermoreBremsstrahlungModel::ComputeCrossSectionPerAtom" << G4endl;
       G4cout << "The cross section handler is not correctly initialized" << G4endl;
       G4Exception();
+      return 0;
     }
   
   //The cut is already included in the crossSectionHandler
