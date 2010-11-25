@@ -39,6 +39,7 @@
 #include <xData.h>
 #include <tpia_target.h>
 #include <tpia_misc.h>
+#include <string.h>
 #include "GIDI4GEANT_Misc.hpp"
 using namespace std;
 
