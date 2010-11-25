@@ -67,7 +67,6 @@
 #include "HadrontherapyMatrix.hh"
 #include "Randomize.hh"  
 #include "G4RunManager.hh"
-#include "G4UImanager.hh"
 #include "G4UImessenger.hh"
 #include "globals.hh"
 #include "HadrontherapySteppingAction.hh"
@@ -164,11 +163,9 @@ int main(int argc ,char ** argv)
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   if (argc!=1)   // batch mode
     {
-      
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
       UImanager->ApplyCommand(command+fileName);    
-     
     }
   else
     {  // interactive mode : define UI session
@@ -182,9 +179,8 @@ int main(int argc ,char ** argv)
 	  UImanager->ApplyCommand("/control/execute defaultMacroWithReferencePhysicsList.mac");
 	}
       else
-	{
+	{     
 	  UImanager->ApplyCommand("/control/execute defaultMacro.mac");  
-	  ui->SessionStart();
 	}
       
 #endif

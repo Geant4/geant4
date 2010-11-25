@@ -14,16 +14,15 @@
 ##########################
 # Set of the physic models
 #
-#/Physics/addPhysics standard_opt3                       # Electromagnetic model
-#/Physics/addPhysics elastic                             # Hadronic elastic model
-#/Physics/addPhysics binary                              # Hadronic inelastic model
-#/Physics/addPhysics local_ion_ion_inelastic             # Hadronic inelastic model for ions (local Physics list)
-#/Physics/addPhysics radioactive_decay
+/Physics/addPhysics emstandard_opt3                     # Electromagnetic model
+/Physics/addPhysics Em_extra_physics			
+/Physics/addPhysics Elastic                             # Hadronic elastic model
+/Physics/addPhysics decay
+/Physics/addPhysics radioactive_decay
+/Physics/addPhysics Stopping_physics
+/Physics/addPhysics Neutron_tracking_cut
+/Physics/addPhysics binary                              # Hadronic inelastic model
 
-#
-# Or alternatively:
-#
-/Physics/addPhysics QGSP_BIC_EMY
 
 # Initialize geometry and physic 
 /run/initialize
@@ -33,7 +32,7 @@
 #############################
 # 
 /vis/scene/create
-/vis/open OGLIX
+/vis/open OGLI
 /vis/viewer/flush
 /vis/viewer/set/viewpointThetaPhi 30 140 deg
 /tracking/storeTrajectory 1
