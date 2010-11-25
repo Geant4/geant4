@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DataSet.cc,v 1.3 2010-11-22 11:29:38 pia Exp $
+// $Id: G4DataSet.cc,v 1.4 2010-11-25 19:49:43 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -185,7 +185,10 @@ G4bool G4DataSet::LoadData(const G4String& fileName)
       if (a!=-1 && a!=-2)
 	{
 	  if (energyColumn)
-	    argEnergies->push_back(a*unitEnergies);
+	    {
+	      // std::cout << fullFileName << ", a = " << a <<std::endl;
+	      argEnergies->push_back(a*unitEnergies);
+	    }
 	  else
 	    argData->push_back(a*unitData);
 	  energyColumn=(!energyColumn);

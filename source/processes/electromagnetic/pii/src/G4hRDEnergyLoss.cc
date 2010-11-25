@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hRDEnergyLoss.cc,v 1.2 2010-11-19 17:16:21 pia Exp $
+// $Id: G4hRDEnergyLoss.cc,v 1.3 2010-11-25 19:49:43 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------
@@ -56,6 +56,9 @@
 //                     former G4hLowEnergyLoss (with some initial cleaning)
 //                     To be replaced by reworked class to deal with condensed/discrete 
 //                     issues properly
+
+// 25 Nov 2010 MGP     Added some protections for FPE (mostly division by 0)
+//                     The whole energy loss domain would profit from a design iteration
 // --------------------------------------------------------------
 
 #include "G4hRDEnergyLoss.hh"
@@ -790,11 +793,13 @@ void G4hRDEnergyLoss::BuildRangeCoeffATable(
       G4PhysicsLinearVector* aVector = 
 	new G4PhysicsLinearVector(0.,binmax, TotBin);
       Ti = LowestKineticEnergy ;
+      if (Ti < DBL_MIN) Ti = 1.e-8;
       G4PhysicsVector* rangeVector= (*theRangeTable)[J];
 
       for ( G4int i=0; i<TotBin; i++)
 	{
 	  Ri = rangeVector->GetValue(Ti,isOut) ;
+	  if (Ti < DBL_MIN) Ti = 1.e-8;
 	  if ( i==0 )
 	    Rim = 0. ;
 	  else
@@ -861,6 +866,7 @@ void G4hRDEnergyLoss::BuildRangeCoeffBTable(
   G4double R2 = RTable*RTable ;
   G4double R1 = RTable+1.;
   G4double w = R1*(RTable-1.)*(RTable-1.);
+  if (w < DBL_MIN) w = DBL_MIN;
   G4double w1 = -R1/w , w2 = R1*(R2+1.)/w , w3 = -R2*R1/w ;
   G4double Ti , Tim , Tip , Ri , Rim , Rip , Value ;
   G4bool isOut;
@@ -872,15 +878,18 @@ void G4hRDEnergyLoss::BuildRangeCoeffBTable(
       G4PhysicsLinearVector* aVector =
 	new G4PhysicsLinearVector(0.,binmax, TotBin);
       Ti = LowestKineticEnergy ;
+      if (Ti < DBL_MIN) Ti = 1.e-8;
       G4PhysicsVector* rangeVector= (*theRangeTable)[J];
    
       for ( G4int i=0; i<TotBin; i++)
 	{
 	  Ri = rangeVector->GetValue(Ti,isOut) ;
+	  if (Ti < DBL_MIN) Ti = 1.e-8;
 	  if ( i==0 )
 	    Rim = 0. ;
 	  else
 	    {
+	      if (RTable < DBL_MIN) RTable = DBL_MIN;
 	      Tim = Ti/RTable ;
 	      Rim = rangeVector->GetValue(Tim,isOut);
 	    }
@@ -891,6 +900,7 @@ void G4hRDEnergyLoss::BuildRangeCoeffBTable(
 	      Tip = Ti*RTable ;
 	      Rip = rangeVector->GetValue(Tip,isOut);
 	    }
+	  if (Ti < DBL_MIN) Ti = DBL_MIN;
 	  Value = (w1*Rip + w2*Ri + w3*Rim)/Ti;
 
 	  aVector->PutValue(i,Value);
@@ -1022,7 +1032,18 @@ void G4hRDEnergyLoss::BuildInverseRangeTable(
       G4double rlow  = pv->GetValue(elow, b);
       G4double rhigh = pv->GetValue(ehigh, b);
 
-      rhigh *= std::exp(std::log(rhigh/rlow)/((G4double)(nbins-1)));
+      if (rlow <DBL_MIN) rlow = 1.e-8;
+      if (rhigh > 1.e16) rhigh = 1.e16;
+      if (rhigh < 1.e-8) rhigh =1.e-8;
+      G4double tmpTrick = rhigh/rlow;
+
+      //std::cout << nbins << ", elow " << elow << ", ehigh " << ehigh 
+      //		<< ", rlow " << rlow << ", rhigh " << rhigh << ", trick " << tmpTrick << std::endl;
+
+      if (tmpTrick <= 0. || tmpTrick < DBL_MIN) tmpTrick = 1.e-8; 
+      if (tmpTrick > 1.e16) tmpTrick = 1.e16; 
+     
+      rhigh *= std::exp(std::log(tmpTrick)/((G4double)(nbins-1)));
 
       G4PhysicsLogVector* v = new G4PhysicsLogVector(rlow, rhigh, nbins);
 

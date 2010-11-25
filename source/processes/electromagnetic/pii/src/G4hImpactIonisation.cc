@@ -28,7 +28,7 @@
 // ------------------------------------------------------------
 // G4RDHadronIonisation
 //
-// $Id: G4hImpactIonisation.cc,v 1.3 2010-11-23 23:48:53 pia Exp $
+// $Id: G4hImpactIonisation.cc,v 1.4 2010-11-25 19:49:43 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (MariaGrazia.Pia@ge.infn.it)
@@ -112,8 +112,8 @@ void G4hImpactIonisation::InitializeMe()
   protonHighEnergy     = 100.*MeV ;
   antiprotonLowEnergy  = 25.*keV ;
   antiprotonHighEnergy = 2.*MeV ;
-  minGammaEnergy       = 25.*keV;
-  minElectronEnergy    = 25.*keV;
+  minGammaEnergy       = 100 * eV;
+  minElectronEnergy    = 250.* eV;
   verboseLevel         = 0;
  
   // Min and max energy of incident particle for the calculation of shell cross sections
@@ -1152,10 +1152,30 @@ G4VParticleChange* G4hImpactIonisation::PostStepDoIt(const G4Track& track,
 			  // Subtract the energy of the emitted secondary from the primary
 			  finalKineticEnergy -= e;
 			  totalNumber++;
+			  // ---- Debug ----
+			  //if (type == G4Gamma::GammaDefinition())
+			  //	{			
+			  //	  std::cout << "Z = " << Z 
+			  //		    << ", shell: " << shellId
+			  //		    << ", PIXE photon energy (keV) = " << e/keV
+			  //		    << std::endl;
+			  //	}
+			  // ---- End debug ---
 			} 
 		      else 
 			{
 			  // The atomic relaxation product has energy below the cut
+			  // ---- Debug ----
+			  // if (type == G4Gamma::GammaDefinition())
+			  //	{			
+			  //	  std::cout << "Z = " << Z 
+			  //
+			  //		    << ", PIXE photon energy = " << e/keV 
+			  //  		    << " keV below threshold " << minGammaEnergy/keV << " keV"
+			  //		    << std::endl;
+			  //	}   
+			  // ---- End debug ---
+     
 			  delete aSecondary;
 			  (*secondaryVector)[i] = 0;
 			}
@@ -1213,12 +1233,26 @@ G4VParticleChange* G4hImpactIonisation::PostStepDoIt(const G4Track& track,
   
   // Save Fluorescence and Auger
 
-  if (secondaryVector) 
+  if (secondaryVector != 0) 
     { 
       for (size_t l = 0; l < nSecondaries; l++) 
 	{ 
 	  G4DynamicParticle* secondary = (*secondaryVector)[l];
 	  if (secondary) aParticleChange.AddSecondary(secondary);
+
+	  // ---- Debug ----
+	  //if (secondary != 0) 
+	  // {
+	  //   if (secondary->GetDefinition() == G4Gamma::GammaDefinition())
+	  //	{
+	  //	  G4double eX = secondary->GetKineticEnergy();			
+	  //	  std::cout << " PIXE photon of energy " << eX/keV 
+	  //		    << " keV added to ParticleChange; total number of secondaries is " << totalNumber 
+	  //		    << std::endl;
+	  //	}
+	  //}
+	  // ---- End debug ---	  
+
 	}
       delete secondaryVector;
     }
