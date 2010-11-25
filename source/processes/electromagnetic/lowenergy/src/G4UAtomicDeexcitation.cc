@@ -59,10 +59,14 @@ G4UAtomicDeexcitation::G4UAtomicDeexcitation():
   G4VAtomDeexcitation("UAtomDeexcitation"),
   minGammaEnergy(DBL_MAX), 
   minElectronEnergy(DBL_MAX)
-{}
+{
+  PIXEshellCS = 0;
+}
 
 G4UAtomicDeexcitation::~G4UAtomicDeexcitation()
-{}
+{
+  delete PIXEshellCS;
+}
 
 void G4UAtomicDeexcitation::InitialiseForNewRun()
 {
@@ -74,14 +78,21 @@ void G4UAtomicDeexcitation::InitialiseForNewRun()
   }
   
   if (PIXECrossSectionModel() == "ECPSSR_Analytical") {
+    delete PIXEshellCS;
     PIXEshellCS = new G4teoCrossSection("analytical");
   }
   
-  else if (PIXECrossSectionModel() == "empirical") {
+  else if (PIXECrossSectionModel() == "Empirical") {
+    delete PIXEshellCS;
     PIXEshellCS = new G4empCrossSection;
   }
-  else {SetPIXEActive(false);}
-
+  else {
+    G4cout << "### G4UAtomicDeexcitation::InitialiseForNewRun WARNING "
+	   << G4endl;
+    G4cout << "    PIXE cross section name " << PIXECrossSectionModel()
+	   << " is unknown, PIXE is disabled" << G4endl; 
+    SetPIXEActive(false);
+  }
 }
 
 void G4UAtomicDeexcitation::InitialiseForExtraAtom(G4int /*Z*/)
