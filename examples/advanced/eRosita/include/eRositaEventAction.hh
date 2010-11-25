@@ -24,20 +24,18 @@
 // ********************************************************************
 //
 //
-// $Id: eRositaEventAction.hh,v 1.1 2010-11-23 16:17:03 pia Exp $
+// $Id: eRositaEventAction.hh,v 1.2 2010-11-25 21:35:44 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 #ifndef eRositaEventAction_h
 #define eRositaEventAction_h 1
 
 #include "G4UserEventAction.hh"
+#include "G4Timer.hh"
 
 class G4Event;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class eRositaEventAction : public G4UserEventAction
 {
@@ -48,9 +46,9 @@ class eRositaEventAction : public G4UserEventAction
   public:
     void BeginOfEventAction(const G4Event*);
     void EndOfEventAction(const G4Event*);
+ 
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

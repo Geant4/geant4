@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: eRositaRunAction.cc,v 1.2 2010-11-23 23:35:18 pia Exp $
+// $Id: eRositaRunAction.cc,v 1.3 2010-11-25 21:35:44 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
@@ -45,7 +45,10 @@ eRositaRunAction::~eRositaRunAction()
 
 void eRositaRunAction::BeginOfRunAction(const G4Run* run)
 {
+  timerRun.Start();	
+
   G4cout << "--- Run " << run->GetRunID() << " start." << G4endl;
+
   AnalysisManager::Instance();
 }
 
@@ -61,6 +64,9 @@ void eRositaRunAction::EndOfRunAction(const G4Run* run)
          << " ends (Number of events = "
          << run -> GetNumberOfEvent() << ")." 
 	 << G4endl;
+
+  timerRun.Stop();
+  std::cout << "  "  << timerRun << std::endl;
 }
 
 

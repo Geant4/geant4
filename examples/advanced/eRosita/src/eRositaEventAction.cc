@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: eRositaEventAction.cc,v 1.2 2010-11-23 20:51:55 pia Exp $
+// $Id: eRositaEventAction.cc,v 1.3 2010-11-25 21:35:44 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -45,8 +45,19 @@ eRositaEventAction::~eRositaEventAction()
 {}
 
  
-void eRositaEventAction::BeginOfEventAction(const G4Event*)
-{}
+void eRositaEventAction::BeginOfEventAction(const G4Event* evt)
+{
+  G4int nEvent = evt->GetEventID() + 1;
+  
+  G4int frequency = 100;
+  if (nEvent > 1000 ) frequency = 1000;
+  if (nEvent > 10000) frequency = 10000;
+  if (nEvent > 100000) frequency = 100000;
+ 
+  G4int remainder = nEvent % frequency;
+  if (remainder == 0) G4cout << "---- eRosita event counter: " << nEvent
+			     << std::endl;
+}
 
  
 void eRositaEventAction::EndOfEventAction(const G4Event* evt)

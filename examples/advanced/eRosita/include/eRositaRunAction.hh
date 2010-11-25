@@ -24,34 +24,36 @@
 // ********************************************************************
 //
 //
-// $Id: eRositaRunAction.hh,v 1.1 2010-11-23 16:17:03 pia Exp $
+// $Id: eRositaRunAction.hh,v 1.2 2010-11-25 21:35:44 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 
 #ifndef eRositaRunAction_h
 #define eRositaRunAction_h 1
 
 #include "G4UserRunAction.hh"
 #include "globals.hh"
+#include "G4Timer.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4Run;
 
 class eRositaRunAction : public G4UserRunAction
 {
-  public:
-    eRositaRunAction();
-   ~eRositaRunAction();
+public:
+  eRositaRunAction();
+  ~eRositaRunAction();
 
-  public:
-    void BeginOfRunAction(const G4Run*);
-    void EndOfRunAction(const G4Run*);
+public:
+  void BeginOfRunAction(const G4Run*);
+  void EndOfRunAction(const G4Run*);
+
+private: 
+  G4Timer timerRun;
+
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 
