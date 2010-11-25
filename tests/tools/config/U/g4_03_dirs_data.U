@@ -1,5 +1,5 @@
 ?RCS:
-?MAKE:g4data g4levelgammadata g4radioactivedata g4ledata g4neutronhpcrosssections g4abladata g4neutronxsdata g4elasticdata: \
+?MAKE:g4data g4levelgammadata g4radioactivedata g4ledata g4neutronhpcrosssections g4abladata g4neutronxsdata g4elasticdata g4realsurfacedata g4piidata: \
 	g4debug Myread Getfile cat rm g4system echo n c
 ?MAKE:	-pick add $@ %<
 ?S:g4osname:
@@ -30,6 +30,9 @@
 ?S:g4neutronxsdata:
 ?S: This variable defines the path to the G4NEUTRONXSDATA data libraries
 ?S.
+?S:g4piidata:
+?S: This variable defines the path to the G4PIIDATA data libraries
+?S:.
 g4data_photonevaporation_version='PhotonEvaporation2.0'
 g4data_radioactivedecay_version='RadioactiveDecay3.2'
 g4data_g4emlow_version='G4EMLOW6.19'
@@ -37,6 +40,7 @@ g4data_g4ndl_version='G4NDL3.14'
 g4data_g4abla_version='G4ABLA3.0'
 g4data_realsurface_version='RealSurface1.0'
 g4data_neutronxs_version='G4NEUTRONXS1.0'
+g4data_pii_version='G4PII1.1'
 #END GEANT4 DATA OPTIONS
 echo " "
 echo "*CHECKS AND OPTIONS FOR GEANT4 PHYSICS DATA FILES*"
@@ -93,11 +97,17 @@ case "$g4neutronxsdata" in
 	;;
 esac
 
+case "$g4piidata" in
+'')
+	g4piidata=$g4data/$g4data_pii_version
+	;;
+esac
+
 
 #
 # Now we have defaults, prompt user to see if this is where they want to use
 # 
-g4data_alllibs="$g4data_photonevaporation_version $g4data_radioactivedecay_version $g4data_g4emlow_version $g4data_g4ndl_version $g4data_g4abla_version $g4data_realsurface_version $g4data_neutronxs_version"
+g4data_alllibs="$g4data_photonevaporation_version $g4data_radioactivedecay_version $g4data_g4emlow_version $g4data_g4ndl_version $g4data_g4abla_version $g4data_realsurface_version $g4data_neutronxs_version $g4data_pii_version"
 
 g4message=`cat <<EOM
 Specify the path where the Geant4 data libraries are installed:
@@ -187,6 +197,16 @@ while test "x$promptend" = "xno" ; do
         	g4data_foundall="no"
 	fi
 
+	### G4PII
+	$echo $n "checking for $g4data_pii_version... $c"
+	if test -d "$g4data/$g4data_pii_version" ; then
+        	$echo "yes"
+        	g4piidata=$g4data/$g4data_pii_version
+	else
+        	$echo "no"
+        	g4data_foundall="no"
+	fi
+
 
 
 	#
@@ -227,6 +247,7 @@ EOM`
 			g4abladata="$g4data/$g4data_g4abla_version"
 			g4realsurfacedata="$g4data/$g4data_realsurface_version"
             g4neutronxsdata="$g4data/$g4data_neutronxs_version"
+            g4piidata="$g4data/$g4data_pii_version"
 			
 
 		elif test "x$gans" = "xc" ; then
@@ -242,6 +263,7 @@ EOM`
             g4abladata="$g4data/$g4data_g4abla_version"
             g4realsurfacedata="$g4data/$g4data_realsurface_version"
             g4neutronxsdata="$g4data/$g4data_neutronxs_version"
+            g4piidata="$g4data/$g4data_pii_version"
 
 		else
 			#try again
@@ -276,6 +298,8 @@ You have chosen to customize the Geant4 data library paths.
 	$g4realsurfacedata
 7) $g4data_neutronxs_version:
     $g4neutronxsdata
+8) $g4data_pii_version:
+    $g4piidata
 
 Choose a number from the list above to customize that path (e.g. 2)
 EOM`
@@ -342,6 +366,14 @@ EOM`
 		. ./getfile
 		g4neutronxsdata=$ans
 		;;
+    
+    "8")
+        dflt=$g4piidata
+        fn='d~'
+        rp="Custom path to $g4data_pii_version?"
+        . ./getfile
+        g4piidata=$ans
+        ;;
 
 	*)
 		break
