@@ -23,7 +23,9 @@ URLstart=http://lcgapp.cern.ch/spi/aaLibrarian/nightlies/
 
 slc4="slc4_amd64_gcc34 slc4_ia32_gcc34"
 slc5="x86_64-slc5-gcc43 i686-slc5-gcc43"
-slc5="$slc5 x86_64-slc5-gcc41"
+slc5="$slc5 x86_64-slc5-gcc41 i686-slc5-gcc41"
+slc5="$slc5 x86_64-slc5-icc11 i686-slc5-icc11"
+slc5="$slc5 x86_64-slc5-icc12 i686-slc5-icc12"
 mac5="osx105_ia32_gcc401"
 mac6="x86_64-mac106-gcc42"
 win="i686-winxp-vc9"
