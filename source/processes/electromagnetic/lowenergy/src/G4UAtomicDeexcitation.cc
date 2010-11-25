@@ -70,7 +70,7 @@ void G4UAtomicDeexcitation::InitialiseForNewRun()
 
   // initializing PIXE  
   if ("" == PIXECrossSectionModel()) {
-    SetPIXECrossSectionModel("ECPSSR_Analytical");
+    SetPIXECrossSectionModel("Empirical");
   }
   
   if (PIXECrossSectionModel() == "ECPSSR_Analytical") {

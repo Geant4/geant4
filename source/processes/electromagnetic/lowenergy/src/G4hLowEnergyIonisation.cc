@@ -1522,13 +1522,17 @@ std::vector<G4DynamicParticle*>* G4hLowEnergyIonisation::DeexciteAtom(const G4Ma
 		aSecondary = 0;
 	      }
 	      (*secVector)[l] = 0;
+	      delete (*secVector)[l];
 	    }
 	    
-	    delete secVector;
+	    //	    secVector = 0;
+
 	  }
       }
     }
   }
+
+  delete secVector;
 
   if(partVector->empty()) {
     delete partVector;
