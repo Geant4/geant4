@@ -150,7 +150,8 @@ static void xData_parseOutlinePrintRoot( FILE *f, xData_rootElement *root, int o
     for( child = root->children; child != NULL; child = child->next ) {
         for( i = 0; i < depth; i++ ) fprintf( f, "  " );
         fprintf( f, "name = %s at line = %ld column = %ld textOffset = %ld; attris:", 
-            child->name, child->docInfo.line, child->docInfo.column, child->textOffset );
+            //child->name, child->docInfo.line, child->docInfo.column, child->textOffset );
+            child->name, (long int)child->docInfo.line, (long int)child->docInfo.column, (long int)child->textOffset );
         for( i = 0; i < child->attributes.number; i++ ) {
             fprintf( f, " %s = \"%s\"", child->attributes.attributes[i].name, child->attributes.attributes[i].value );
         }
