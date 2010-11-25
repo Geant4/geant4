@@ -301,11 +301,13 @@ static void XMLCALL xData_parseCharacterData( void *userData, const XML_Char *s,
 
     if( !smr_isOk( doc->smr ) ) return;
     if( needSize < 8  ) needSize = 8;
-    if( needSize > text->allocated ) {
+    //if( needSize > text->allocated ) {
+    if( needSize > (int) text->allocated ) {
         if( text->allocated != 0 ) {
             l = ( 20 * text->allocated ) / 100;
             if( l < 100 ) l = 100;
-            if( needSize < ( text->allocated + l ) ) needSize = text->allocated + l;
+            //if( needSize < ( text->allocated + l ) ) needSize = text->allocated + l;
+            if( needSize < ( (int) text->allocated + l ) ) needSize = text->allocated + l;
         }
         text->allocated = needSize;
         //text->text = xData_realloc2( doc->smr, text->text, text->allocated, "text" );

@@ -70,7 +70,8 @@ static int xData_parseReconstructXML2( xData_rootElement *root, xmlTextStruct *X
     xData_element *child;
 
     for( child = root->children; child != NULL; child = child->next ) {
-        if( textOffset < child->textOffset ) {
+        //if( textOffset < child->textOffset ) {
+        if( textOffset < (int) child->textOffset ) {
             if( addStringToXML( XML, &(text[textOffset]), child->textOffset - textOffset ) ) return( 1 );
             textOffset = child->textOffset;
         }

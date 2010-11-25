@@ -50,8 +50,10 @@ void *xData_malloc( statusMessageReporting *smr, size_t size, int zero, const ch
     long long *l;
 
     if( ( p != NULL ) && zero ) {
-        for( i = 0, l = (long long *) p; i < size / sizeof( long long ); i++, l++ ) *l = 0;
-        for( i = sizeof( long long ) * i, c = (char *) l; i < size; i++, c++ ) *c = 0;
+        //for( i = 0, l = (long long *) p; i < size / sizeof( long long ); i++, l++ ) *l = 0;
+        for( i = 0, l = (long long *) p; i < (int)( size / sizeof( long long ) ); i++, l++ ) *l = 0;
+        //for( i = sizeof( long long ) * i, c = (char *) l; i < size; i++, c++ ) *c = 0;
+        for( i = sizeof( long long ) * i, c = (char *) l; i < (int) size; i++, c++ ) *c = 0;
     }
 
     return( p );

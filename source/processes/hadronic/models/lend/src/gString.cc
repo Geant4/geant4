@@ -53,7 +53,8 @@ int gString_initialize( statusMessageReporting *smr, gString *gStr, int size, in
         gStr->gStr = NULL;
     }
     gStr->allocated = size;
-    if( increment < gString_minIncrement ) increment = gString_minIncrement;
+    //if( increment < gString_minIncrement ) increment = gString_minIncrement;
+    if( increment < (int) gString_minIncrement ) increment = gString_minIncrement;
     gStr->increment = increment;
     return( 0 );
 }

@@ -84,7 +84,8 @@ int xData_1d_x_copyData( statusMessageReporting *smr, xData_element *element, xD
 
     if( !xData_isElement_1d_x( smr, element, 1 ) ) return( 1 );
     n = xDT->end - xDT->start;
-    if( n * sizeof( double ) > nAllocatedBytes ) {
+    //if( n * sizeof( double ) > nAllocatedBytes ) {
+    if( n * sizeof( double ) > (size_t) nAllocatedBytes ) {
         void *smrUser = xData_get_smrUserInterfaceFromElement( element );
         smr_setMessageError( smr, smrUser, __FILE__, __LINE__, 1, "allocated memory = %lld to small, need %lld", nAllocatedBytes, n );
         return( 1 );

@@ -122,8 +122,10 @@ int GIDI4GEANT::removeDataDirectory( string &dataDirectory ) {
 /*
 ***************************************************************
 */
-string GIDI4GEANT::getDataDirectoryAtIndex( int index ) {
+//string GIDI4GEANT::getDataDirectoryAtIndex( int index ) {
+string GIDI4GEANT::getDataDirectoryAtIndex( int ) {
 
+#if 0
     list<GIDI4GEANT_map *>::iterator iter;
     unsigned i = (unsigned) index;
 
@@ -132,7 +134,7 @@ string GIDI4GEANT::getDataDirectoryAtIndex( int index ) {
     for( iter = dataDirectories.begin( ); iter != dataDirectories.end( ); iter++, i-- ) {
         if( i == 0 ) return( (*iter)->fileName( ) );
     }
-
+#endif
     return( "" );
 }
 /*
