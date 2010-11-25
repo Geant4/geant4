@@ -1,4 +1,4 @@
-$Id: History,v 1.472 2010-11-25 00:11:21 mantero Exp $
+$Id: History,v 1.473 2010-11-25 09:46:36 pandola Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25.11.2010, L.Pandola, tag emlowen-V09-03-65
+	    Address Coverity reports for a few Penelope/Livermore 
+	    classes
 
 22.11.2010, A.Mantero, tag emlowen-V09-03-64
 	    changed dfault for PIXE model
