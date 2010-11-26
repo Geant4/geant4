@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2010-11-23 18:01:28 japost Exp $
+$Id: History,v 1.22 2010-11-26 10:19:44 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,11 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 26, 2010 G.Cosmo (procscore-V09-03-01)
+- Fixed compilation warnings for unused parameters.
+
 November 23, 2010 J.Apostolakis (procscore-V09-03-00)
 - G4ScoreSplittingProcess spread values for all steps
   in a Voxel-based "Regular" volume.
-   ==> In order to be activated requires tag in "run" 
-          (expected to be run-V09-03-08)
+  Requires tag in run, "run-V09-03-08".
 
 November 18, 2010 J.Apostolakis 
 - Added G4EnergySplitter (created by Pedro Arce) 
