@@ -18,7 +18,7 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.137 2010-11-25 12:33:15 bmorgan Exp $
+# $Id: Configure,v 1.138 2010-11-26 09:25:43 gcosmo Exp $
 #
 # Generated on Thu Nov 25 12:29:48 GMT 2010 [metaconfig 3.0 PL70]
 
@@ -3296,7 +3296,7 @@ g4data_g4ndl_version='G4NDL3.14'
 g4data_g4abla_version='G4ABLA3.0'
 g4data_realsurface_version='RealSurface1.0'
 g4data_neutronxs_version='G4NEUTRONXS1.0'
-g4data_pii_version='G4PII1.1'
+g4data_pii_version='G4PII1.2'
 #END GEANT4 DATA OPTIONS
 echo " "
 echo "*CHECKS AND OPTIONS FOR GEANT4 PHYSICS DATA FILES*"
