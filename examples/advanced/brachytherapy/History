@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.33 2010-11-25 10:49:59 allison Exp $
+$Id: History,v 1.34 2010-11-26 16:23:10 cirrone Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,30 +9,33 @@ $Id: History,v 1.33 2010-11-25 10:49:59 allison Exp $
                       Category History file
                       ---------------------
 
+26.11.2010 -  G.A.P. Cirrone & S. Guatelli; tag brachy-V09-03-04
+   	      General code review 
 
-25 November 2010 - J.Allison; tag brachy-V09-03-03
-                 - Cleaned up use of G4UIExecutive.
+25.11.2010 -- J.Allison; tag brachy-V09-03-03
+              Cleaned up use of G4UIExecutive.
 
-24 November 2010 - G.A.P.Cirrone; tag brachy-V09-03-02
-   	    	 - Fixed compilation error for a missing obsolete include file
+24.11.2010 -- G.A.P.Cirrone; tag brachy-V09-03-02
+   	      Fixed compilation error for a missing obsolete include file
 
-03 June 2010 - Joseph Perl; tag brachy-V09-03-01
-   	       Updated vis usage 
+03.06.2010 -- Joseph Perl; tag brachy-V09-03-01
+   	      Updated vis usage 
 
-01 Jun 2010 - G.A.P. Cirrone; tag brachy-V09-03-00
+01.06.2010 -- G.A.P. Cirrone; tag brachy-V09-03-00
               G4UIExecutiveand minor revisions
 
-12 Nov 2009 - L. Pandola; tag brachy-V09-02-02
- Fixed AIDA 
+12.11.2009 -- L. Pandola; tag brachy-V09-02-02
+       	      Fixed AIDA 
 
-12 Nov. 2009 - S. Guatelli; brachy-V09-02-01
-- Update of Physics List
+12.11.2009 -- S. Guatelli; brachy-V09-02-01
+   	      Update of Physics List
 
-22.Feb 2009 - G.Folger;  tag brachy-V09-02-00
--  Correct compilation  errors and warnings when G4ANALYSIS is NOT set
+22.02 2009 -- G.Folger;  tag brachy-V09-02-00
+     	      Correct compilation  errors and warnings when G4ANALYSIS is NOT set
 
 24.11.2008 -- G.A.P.Cirrone; tag: brachy-V09-01-03
               Updated macro files
+
 21.11.2008 -- G.A.P.Cirrone; Tag: brachy-V09-01-02
               Corrected and updated macro files
 

@@ -23,10 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: Brachy.cc
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 // --------------------------------------------------------------
 //                 GEANT 4 - Brachytherapy example
 // --------------------------------------------------------------
