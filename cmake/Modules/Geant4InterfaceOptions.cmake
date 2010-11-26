@@ -5,7 +5,7 @@
 #
 # Specific UI/Vis options are also handled here.
 #
-# $Id: Geant4InterfaceOptions.cmake,v 1.4 2010-11-23 23:50:36 bmorgan Exp $
+# $Id: Geant4InterfaceOptions.cmake,v 1.5 2010-11-26 18:52:16 bmorgan Exp $
 # GEANT4 Tag $Name: not supported by cvs2svn $
 #
 
@@ -59,7 +59,7 @@ option(GEANT4_USE_QT "Build Geant4 with Qt support" OFF)
 
 if(GEANT4_USE_QT)
     # Find and configure Qt - require 4
-    find_package(Qt4 COMPONENTS QtCore QtGui QtOpenGL)
+    find_package(Qt4 REQUIRED COMPONENTS QtCore QtGui QtOpenGL)
 
     # Info on how tofall back to Qt3 kept below for information
     #if(NOT QT_FOUND)
@@ -70,3 +70,23 @@ if(GEANT4_USE_QT)
     #   endif()
     #endif()
 endif()
+
+
+#-----------------------------------------------------------------------------
+# OpenGL support
+# We have several options Xm, Qt, that require OpenGL.
+# If we have any of these, find OpenGL
+#
+
+if(GEANT4_USE_QT)
+    # Find OpenGL. NB will use framework on Mac... (no X11)
+    find_package(OpenGL REQUIRED)
+
+    if(OPENGL_FOUND)
+        set(GEANT4_USE_OPENGL TRUE)
+    endif()
+else()
+    set(GEANT4_USE_OPENGL FALSE)
+endif()
+
+
