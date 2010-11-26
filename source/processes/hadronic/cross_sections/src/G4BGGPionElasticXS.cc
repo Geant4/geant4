@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BGGPionElasticXS.cc,v 1.10 2010-11-26 10:55:22 vnivanch Exp $
+// $Id: G4BGGPionElasticXS.cc,v 1.11 2010-11-26 14:45:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -82,12 +82,10 @@ G4BGGPionElasticXS::GetZandACrossSection(const G4DynamicParticle* dp,
 {
   G4double cross = 0.0;
   G4double ekin = dp->GetKineticEnergy();
-//  G4int iz = G4int(Z);
   if(Z > 92) Z = 92;
 
   if(ekin <= fLowEnergy) {
     cross = theCoulombFac[Z];
-    if(isPiplus) { cross *= CoulombFactor(ekin, A); } 
 
   } else if(Z == 1) {
     if( A < 2) {
@@ -178,7 +176,6 @@ void G4BGGPionElasticXS::Initialise()
   dp.SetKineticEnergy(fLowEnergy);
   fHadron->GetHadronNucleonXscNS(&dp, G4Proton::Proton());
   theCoulombFac[1] = fHadron->GetElasticHadronNucleonXsc();
-  //if(isPiplus) { theCoulombFac[1] /= CoulombFactor(fLowEnergy,1); }
 
   for(G4int iz=2; iz<93; iz++) {
 
@@ -186,7 +183,6 @@ void G4BGGPionElasticXS::Initialise()
     A = G4lrint(nist->GetAtomicMassAmu(iz));
 
     theCoulombFac[iz] = fPion->GetElasticCrossSection(&dp, iz, A);
-    //if(isPiplus) { theCoulombFac[iz] /= CoulombFactor(fLowEnergy,A); }
     if(verboseLevel > 0) G4cout << "Z= " << Z <<  "  A= " << A 
 				<< " factor= " << theCoulombFac[iz] << G4endl; 
   }
