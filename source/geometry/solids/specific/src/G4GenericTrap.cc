@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.cc,v 1.19 2010-11-10 10:00:16 gcosmo Exp $
+// $Id: G4GenericTrap.cc,v 1.20 2010-11-26 10:51:46 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -404,7 +404,7 @@ G4ThreeVector G4GenericTrap::SurfaceNormal( const G4ThreeVector& p ) const
     }
     lnorm = (p1-p0).cross(p2-p0);
     lnorm = lnorm.unit();
-
+    if(zPlusSide)lnorm=-lnorm;
     // Adjust Normal for Twisted Surface
     //
     if ( (fIsTwisted) && (GetTwistAngle(s)!=0) )
@@ -605,7 +605,7 @@ G4double G4GenericTrap::DistToPlane(const G4ThreeVector& p,
     {
       if (s<halfCarTolerance)
       {
-        if (NormalToPlane(p,ipl).dot(v)<=0) { return 0.; }
+        if (NormalToPlane(p,ipl).dot(v)<=0) {if(Inside(p) != kOutside) return 0.; }
         else                                { return kInfinity; }
       }
 
@@ -638,7 +638,7 @@ G4double G4GenericTrap::DistToPlane(const G4ThreeVector& p,
     {
       if(s<halfCarTolerance)
       {
-        if (NormalToPlane(p,ipl).dot(v)<=0)  { return 0.;}
+        if (NormalToPlane(p,ipl).dot(v)<=0)  { if(Inside(p)!= kOutside) return 0.;}
         else  // Check second root; return kInfinity
         {
           if (a>0) { s=0.5*(-b+std::sqrt(d))/a; }
@@ -670,7 +670,7 @@ G4double G4GenericTrap::DistToPlane(const G4ThreeVector& p,
     {
       if(s<halfCarTolerance)
       {
-        if (NormalToPlane(p,ipl).dot(v)<=0)  { return 0.; }
+        if (NormalToPlane(p,ipl).dot(v)<=0)  {if(Inside(p) != kOutside) return 0.; }
         else   // Check second root; return kInfinity.
         {
           if (a>0) { s=0.5*(-b-std::sqrt(d))/a; }
@@ -1167,7 +1167,7 @@ G4bool G4GenericTrap::CalculateExtent(const EAxis pAxis,
   G4double Dx,Dy;
   G4ThreeVector minVec = GetMinimumBBox();
   G4ThreeVector maxVec = GetMaximumBBox();
-  Dx = 0.5*(maxVec.x()- minVec.y());
+  Dx = 0.5*(maxVec.x()- minVec.x());
   Dy = 0.5*(maxVec.y()- minVec.y());
 
   if (!pTransform.IsRotated())
@@ -2099,7 +2099,7 @@ G4VisExtent G4GenericTrap::GetExtent() const
   G4double Dx,Dy;
   G4ThreeVector minVec = GetMinimumBBox();
   G4ThreeVector maxVec = GetMaximumBBox();
-  Dx = 0.5*(maxVec.x()- minVec.y());
+  Dx = 0.5*(maxVec.x()- minVec.x());
   Dy = 0.5*(maxVec.y()- minVec.y());
 
   return G4VisExtent (-Dx, Dx, -Dy, Dy, -fDz, fDz); 
