@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BGGNucleonInelasticXS.cc,v 1.11 2010-11-26 10:55:22 vnivanch Exp $
+// $Id: G4BGGNucleonInelasticXS.cc,v 1.12 2010-11-26 10:58:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -207,22 +207,14 @@ G4double G4BGGNucleonInelasticXS::CoulombFactor(G4double kinEnergy, G4int A)
 
   // from G4ProtonInelasticCrossSection
   if(isProton) {
-    G4double f1 = 8.0  - 8.0/aa - 0.008*aa;
-    G4double f2 = 2.34 - 5.4/aa - 0.0028*aa;
 
-    res = 1.0/(1.0 + std::exp(-f1*(elog + f2)));
- 
-    f1 = 5.6 - 0.016*aa;
-    f2 = 1.37 + 1.37/aa;
-    res *= ( 1.0 + (0.8 + 18./aa - 0.002*aa)/(1.0 + std::exp(f1*(elog + f2))));
-
-    G4double ff1 = 0.70-0.002*a;       // slope of the drop at medium energies.
-    G4double ff2 = 1.00+1/a;           // start of the slope.
-    G4double ff3 = 0.8+18/a-0.002*a;   // stephight
+    G4double ff1 = 0.70 - 0.002*aa;           // slope of the drop at medium energies.
+    G4double ff2 = 1.00 + 1/aa;               // start of the slope.
+    G4double ff3 = 0.8  + 18/aa - 0.002*aa;   // stephight
     res = 1.0 + ff3*(1.0 - (1.0/(1+std::exp(-8*ff1*(elog + 1.37*ff2)))));
 
-    ff1 = 1.-1/a-0.001*a; // slope of the rise
-    ff2 = 1.17-2.7/a-0.0014*a; // start of the rise
+    ff1 = 1.   - 1./aa - 0.001*aa; // slope of the rise
+    ff2 = 1.17 - 2.7/aa-0.0014*aa; // start of the rise
     res /= (1 + std::exp(-8.*ff1*(elog + 2*ff2)));
 
   } else {
@@ -234,8 +226,8 @@ G4double G4BGGNucleonInelasticXS::CoulombFactor(G4double kinEnergy, G4int A)
     G4double p6 = 1. + 200./aa + 0.02*aa;
     G4double p7 = 3.0 - (aa-70.)*(aa-200.)/11000.;
 
-    G4double firstexp  = std::exp(-p4*(elog+p5));
-    G4double secondexp = std::exp(-p6*(kineticEnergy-p7));
+    G4double firstexp  = std::exp(-p4*(elog + p5));
+    G4double secondexp = std::exp(-p6*(elog + p7));
 
     res = (1.+p3*firstexp/(1. + firstexp))/(1. + secondexp);
 

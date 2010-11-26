@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BGGPionElasticXS.cc,v 1.9 2010-11-11 01:52:53 dennis Exp $
+// $Id: G4BGGPionElasticXS.cc,v 1.10 2010-11-26 10:55:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -178,7 +178,7 @@ void G4BGGPionElasticXS::Initialise()
   dp.SetKineticEnergy(fLowEnergy);
   fHadron->GetHadronNucleonXscNS(&dp, G4Proton::Proton());
   theCoulombFac[1] = fHadron->GetElasticHadronNucleonXsc();
-  if(isPiplus) { theCoulombFac[1] /= CoulombFactor(fLowEnergy,1); }
+  //if(isPiplus) { theCoulombFac[1] /= CoulombFactor(fLowEnergy,1); }
 
   for(G4int iz=2; iz<93; iz++) {
 
@@ -186,7 +186,7 @@ void G4BGGPionElasticXS::Initialise()
     A = G4lrint(nist->GetAtomicMassAmu(iz));
 
     theCoulombFac[iz] = fPion->GetElasticCrossSection(&dp, iz, A);
-    if(isPiplus) { theCoulombFac[iz] /= CoulombFactor(fLowEnergy,A); }
+    //if(isPiplus) { theCoulombFac[iz] /= CoulombFactor(fLowEnergy,A); }
     if(verboseLevel > 0) G4cout << "Z= " << Z <<  "  A= " << A 
 				<< " factor= " << theCoulombFac[iz] << G4endl; 
   }
