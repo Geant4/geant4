@@ -1,34 +1,32 @@
 //
 // ********************************************************************
-// * License and Disclaimer                                           *
+// * DISCLAIMER                                                       *
 // *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
+// * use.                                                             *
 // *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
 // ********************************************************************
 //
 // The code was written by :
-//	^Claudio Andenna claudio.andenna@iss.infn.it, claudio.andenna@ispesl.it
+//	^Claudio Andenna  claudio.andenna@ispesl.it, claudio.andenna@iss.infn.it
 //      *Barbara Caccia barbara.caccia@iss.it
 //      with the support of Pablo Cirrone (LNS, INFN Catania Italy)
+//	with the contribute of Alessandro Occhigrossi*
 //
-// ^ISPESL and INFN Roma, gruppo collegato Sanità, Italy
+// ^INAIL DIPIA - ex ISPESL and INFN Roma, gruppo collegato Sanità, Italy
 // *Istituto Superiore di Sanità and INFN Roma, gruppo collegato Sanità, Italy
 //  Viale Regina Elena 299, 00161 Roma (Italy)
 //  tel (39) 06 49902246
@@ -44,30 +42,17 @@
 
 #include <fstream>
 
-CML2ExpVoxels::CML2ExpVoxels(G4bool bHasExperimentalData, G4int saving_in_Selected_Voxels_every_events, G4int seed, G4String FileExperimentalData):startCurve(0), stopCurve(0),chi2Factor(0)
+CML2ExpVoxels::CML2ExpVoxels(G4bool bHasExperimentalData, G4int saving_in_Selected_Voxels_every_events, G4int seed, G4String FileExperimentalData, G4String FileExperimentalDataOut):startCurve(0), stopCurve(0),chi2Factor(0)
 {
 	char a[10];
 	sprintf(a,"%d", seed);
 	this->seedName=(G4String)a;
 	this->saving_in_Selected_Voxels_every_events=saving_in_Selected_Voxels_every_events;
+	this->nRecycling=1;
 
-	this->fullFileOut="EXP_seed_"+this->seedName+".m";
-#ifdef ML2FILEOUT
-// full path of the output data
-	char *MyDir=new char[1000];
-	MyDir=getenv("ML2FILEOUT");
-	G4String myDir=(G4String) MyDir;
-	this->fullFileOut=myDir+"/EXP_seed_"+this->seedName+".m";
-#endif
-
+	
+	this->fullFileOut=FileExperimentalDataOut+this->seedName+".m";
 	this->fullFileIn=FileExperimentalData;
-#ifdef ML2FILEIN
-// full path of the experimental data
-	MyDir=getenv("ML2FILEIN");
-	myDir=(G4String) MyDir;
-	this->fullFileIn=myDir+"/"+FileExperimentalData;
-#endif
-
 	this->nParticle=this->nTotalEvents=0;
 
 // define the extremes of global-volume containing all experimental voxels
@@ -162,10 +147,18 @@ G4bool CML2ExpVoxels::loadData(void)
 		return false;
 	}
 	in.close();
+
 	return true;
 }
-void CML2ExpVoxels::add(G4ThreeVector pos, G4double depEnergy, G4double density)
+void CML2ExpVoxels::add(const G4Step* aStep)
 {
+	G4ThreeVector pos;
+	G4double depEnergy, density, voxelVolume;
+	
+	pos=aStep->GetPreStepPoint()->GetPosition();
+	depEnergy=aStep->GetTotalEnergyDeposit();
+	density=aStep->GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume()->GetMaterial()->GetDensity();
+
 	G4ThreeVector minPos, maxPos;
 	G4bool newEvent=false;
 	G4double voxelMass, dose;
@@ -184,18 +177,24 @@ void CML2ExpVoxels::add(G4ThreeVector pos, G4double depEnergy, G4double density)
 				minPos.getY()<= pos.getY() && pos.getY()<maxPos.getY() && 
 				minPos.getZ()<= pos.getZ() && pos.getZ()<maxPos.getZ())
 			{
-				G4double a1, a2, a3;
-				a1=this->voxels[i].halfSize.getX();
-				a2=this->voxels[i].halfSize.getY();
-				a3=this->voxels[i].halfSize.getZ();
-
-				voxelMass=density*this->voxels[i].halfSize.getX()*this->voxels[i].halfSize.getY()*this->voxels[i].halfSize.getZ();
+				voxelVolume=this->voxels[i].halfSize.getX()*this->voxels[i].halfSize.getY()*this->voxels[i].halfSize.getZ()*8.;
+				voxelMass=density*voxelVolume;
 // calculate the dose 
-				dose=depEnergy/voxelMass;
+				dose=depEnergy/(voxelMass*this->nRecycling);
 				this->voxels[i].nEvents++;
 				this->voxels[i].depEnergy+=dose;
 				this->voxels[i].depEnergy2+=dose*dose;
 				newEvent=true;
+
+				Sparticle *particle=new Sparticle;
+				particle->dir=aStep->GetPreStepPoint()->GetMomentumDirection();
+				particle->pos=aStep->GetPreStepPoint()->GetPosition();
+				particle->kinEnergy=dose; // I use the same kinEnergy name to store the dose
+				particle->nPrimaryPart=-1;
+				particle->partPDGE=aStep->GetTrack()->GetDefinition()->GetPDGEncoding();
+				particle->primaryParticlePDGE=-1;
+				particle->volumeId=i; // voxel index where the dose is accumulating
+				particle->volumeName="-1";
 			}
 		}
 		if (newEvent)
@@ -204,7 +203,7 @@ void CML2ExpVoxels::add(G4ThreeVector pos, G4double depEnergy, G4double density)
 			this->nTotalEvents++;
 			if (this->nTotalEvents%this->saving_in_Selected_Voxels_every_events==0 && this->nTotalEvents>0)
 			{
-				this->saveResults(this->fullFileOut, this->voxels);
+				this->saveResults();
 			}
 		}
 	}
@@ -212,17 +211,26 @@ void CML2ExpVoxels::add(G4ThreeVector pos, G4double depEnergy, G4double density)
 
 G4int CML2ExpVoxels::getMinNumberOfEvents()
 {
-	int n=10000000;
-	for (int i=this->startCurve[0];i<this->stopCurve[this->nCurves];i++)
+	int n=voxels[0].nEvents;
+	for (int i=0;i<(int)this->voxels.size();i++)
 	{ 
 		if (n>voxels[i].nEvents){n = voxels[i].nEvents;}
 	}
 	return n;
 }
-void CML2ExpVoxels::saveHeader(G4String fullOutFileName)
+G4int CML2ExpVoxels::getMaxNumberOfEvents()
+{
+	int n=voxels[0].nEvents;
+	for (int i=0;i<(int)this->voxels.size();i++)
+	{ 
+		if (n<voxels[i].nEvents){n = voxels[i].nEvents;}
+	}
+	return n;
+}
+void CML2ExpVoxels::saveHeader()
 {
 	std::ofstream out;
-	out.open(fullOutFileName, std::ios::out);
+	out.open(this->fullFileOut, std::ios::out);
 	out <<"% "<< this->headerText1 << G4endl;
 	out <<"n"<< this->seedName<<"="<< this->nCurves<<";" << G4endl;
 	out <<"fh"<< this->seedName<<"=["<< G4endl;
@@ -233,26 +241,33 @@ void CML2ExpVoxels::saveHeader(G4String fullOutFileName)
 		out << this->chi2Factor[i]<< G4endl;
 	}
 	out << "];"<<G4endl;
-	out <<"% x [mm], y [mm], z [mm], expDose [Gy], Calculated dose [Gy], Calculated dose2 [Gy^2], nEvents, normDose [Gy], normDoseError [Gy]"<< G4endl;
+	out <<"% x [mm], y [mm], z [mm], Dx [mm], Dy [mm], Dz [mm], expDose [Gy], Calculated dose [Gy], Calculated dose2 [Gy^2], nEvents, normDose [Gy], normDoseError [Gy]";
+	out << G4endl;
 	out.close();	
 }
 
-void CML2ExpVoxels::saveResults(G4String fullOutFileName, std::vector <Svoxel> voxels)
+void CML2ExpVoxels::saveResults()
 {
-	this->calculateNormalizedEd(voxels);
-	this->saveHeader(fullOutFileName);
-	std::ofstream out;
-	out.open(fullOutFileName, std::ios::app);
-	out <<"d"<< this->seedName<<"=["<< G4endl;
-	for (int i=0; i<(int)voxels.size(); i++)
+	if (this->nTotalEvents>0)
 	{
-		out <<voxels[i].pos.getX()/mm<<'\t'<<voxels[i].pos.getY()/mm<<'\t'<<voxels[i].pos.getZ()/mm<<'\t';
-		out <<voxels[i].expDose/(joule/kg)<<'\t'<<voxels[i].depEnergy/(joule/kg)<<'\t'<<voxels[i].depEnergy2/((joule/kg)*(joule/kg))<<'\t'<<voxels[i].nEvents<< '\t';
-		out <<voxels[i].depEnergyNorm/(joule/kg)<<'\t'<<voxels[i].depEnergyNormError/(joule/kg)<<G4endl;
+		this->calculateNormalizedEd(voxels);
+		this->saveHeader();
+		std::ofstream out;
+		out.open(this->fullFileOut, std::ios::app);
+		out <<"d"<< this->seedName<<"=["<< G4endl;
+		for (int i=0; i<(int)this->voxels.size(); i++)
+		{
+			out <<this->voxels[i].pos.getX()/mm<<'\t'<<this->voxels[i].pos.getY()/mm<<'\t'<<this->voxels[i].pos.getZ()/mm<<'\t';
+			out <<this->voxels[i].halfSize.getX()/mm<<'\t'<<this->voxels[i].halfSize.getY()/mm<<'\t'<<this->voxels[i].halfSize.getZ()/mm<<'\t';
+			out <<this->voxels[i].expDose/(joule/kg)<<'\t'<<this->voxels[i].depEnergy/(joule/kg)<<'\t'<<this->voxels[i].depEnergy2/((joule/kg)*(joule/kg))<<'\t'<<this->voxels[i].nEvents<< '\t';
+			out <<this->voxels[i].depEnergyNorm/(joule/kg)<<'\t'<<this->voxels[i].depEnergyNormError/(joule/kg);
+			out << G4endl;
+		}
+		out << "];"<<G4endl;
+		out.close();
 	}
-	out << "];"<<G4endl;
-	out.close();
 }
+
 void CML2ExpVoxels::calculateNormalizedEd(std::vector <Svoxel> &voxels)
 {
 	int i,j;
@@ -263,7 +278,7 @@ void CML2ExpVoxels::calculateNormalizedEd(std::vector <Svoxel> &voxels)
 	for (j=0;j<this->nCurves;j++)
 	{
 		cs=cc=0.;
-		for (i=this->startCurve[j];i<this->stopCurve[j];i++)
+		for (i=this->startCurve[j]-1;i<this->stopCurve[j];i++)
 		{
 			cs+=voxels[i].depEnergy*voxels[i].expDose;
 			cc+=voxels[i].depEnergy*voxels[i].depEnergy;
@@ -272,7 +287,7 @@ void CML2ExpVoxels::calculateNormalizedEd(std::vector <Svoxel> &voxels)
 		{
 			this->chi2Factor[j]=cs/cc; 
 		}
-		for (i=this->startCurve[j];i<this->stopCurve[j];i++)
+		for (i=this->startCurve[j]-1;i<this->stopCurve[j];i++)
 		{
 			dd=voxels[i].depEnergy*voxels[i].depEnergy;
 			d2=voxels[i].depEnergy2;
@@ -283,7 +298,7 @@ void CML2ExpVoxels::calculateNormalizedEd(std::vector <Svoxel> &voxels)
 			appoo=voxels[i].depEnergyNorm;
 			v=n*d2-dd;
 			if (v<0.){v=0;}
-			if (n>1){voxels[i].depEnergyNormError=this->chi2Factor[j]*std::sqrt(v/(n-1));}
+			if (n>1){voxels[i].depEnergyNormError=this->chi2Factor[j]*sqrt(v/(n-1));}
 			if (n==1){voxels[i].depEnergyNormError=voxels[i].depEnergyNorm;}
 		}
 	}

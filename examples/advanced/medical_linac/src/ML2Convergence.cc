@@ -1,34 +1,32 @@
 //
 // ********************************************************************
-// * License and Disclaimer                                           *
+// * DISCLAIMER                                                       *
 // *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
+// * use.                                                             *
 // *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
 // ********************************************************************
 //
 // The code was written by :
-//	^Claudio Andenna claudio.andenna@iss.infn.it, claudio.andenna@ispesl.it
+//	^Claudio Andenna  claudio.andenna@ispesl.it, claudio.andenna@iss.infn.it
 //      *Barbara Caccia barbara.caccia@iss.it
 //      with the support of Pablo Cirrone (LNS, INFN Catania Italy)
+//	with the contribute of Alessandro Occhigrossi*
 //
-// ^ISPESL and INFN Roma, gruppo collegato Sanità, Italy
+// ^INAIL DIPIA - ex ISPESL and INFN Roma, gruppo collegato Sanità, Italy
 // *Istituto Superiore di Sanità and INFN Roma, gruppo collegato Sanità, Italy
 //  Viale Regina Elena 299, 00161 Roma (Italy)
 //  tel (39) 06 49902246
@@ -42,22 +40,34 @@
 
 #include "ML2Convergence.hh"
 
-CML2Convergence::CML2Convergence(G4int seed, G4int saving_in_Selected_Voxels_every_events, G4String FileExperimentalData, G4bool bCompareExp, G4int minNumberOfEvents)
+CML2Convergence::CML2Convergence(void)
+{}
+
+CML2Convergence::CML2Convergence(G4int seed, G4int saving_in_Selected_Voxels_every_events, G4String FileExperimentalData, G4String FileExperimentalDataOut, G4bool bCompareExp, G4int maxNumberOfEvents, G4int nRecycling, G4int nMaxLoops)
 :ML2ExpVoxels(0)
 {
+	this->nGeometry=0;
+	this->nMaxLoops=nMaxLoops;
+	this->idCurrentLoop=this->nMaxLoops;
 	this->bCompareExp=bCompareExp;
+	if (this->bCompareExp){this->nMaxLoops=-1;};
 	this->fileExperimentalData=FileExperimentalData;
 
 // if the flag compareExp if true and the experimental data is given create the class CML2ExpVoxels
 	if (this->bCompareExp && this->fileExperimentalData!="")
 	{
-		this->ML2ExpVoxels=new CML2ExpVoxels(this->bCompareExp, saving_in_Selected_Voxels_every_events, seed, FileExperimentalData);
+		this->ML2ExpVoxels=new CML2ExpVoxels(this->bCompareExp, saving_in_Selected_Voxels_every_events, seed, FileExperimentalData, FileExperimentalDataOut);
 		if (!this->ML2ExpVoxels->loadData())
 		{
 			this->ML2ExpVoxels=0;
+		std::cout <<"I don't have any convergence criteria set, I'll do " << this->nMaxLoops << " loop(s) for each rotation"<< G4endl;
+		}
+		else
+		{
+			this->ML2ExpVoxels->setRecycling(nRecycling);
 		}
 	}
-	this->minNumberOfEvents=minNumberOfEvents;
+	this->maxNumberOfEvents=maxNumberOfEvents;
 }
 
 CML2Convergence::~CML2Convergence(void)
@@ -71,32 +81,39 @@ void CML2Convergence::add(const G4Step* aStep)
 // accumulate events in the CML2ExpVoxels class (if created)
 	if (this->ML2ExpVoxels!=0)
 	{
-		G4double energyDep=aStep->GetTotalEnergyDeposit();
-		if (energyDep>0.)
-		{
-			G4double density=aStep->GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume()->GetMaterial()->GetDensity();
-			this->ML2ExpVoxels->add(aStep->GetPreStepPoint()->GetPosition(), energyDep, density);
-		}
+		if (aStep->GetTotalEnergyDeposit()>0.)
+		{this->ML2ExpVoxels->add(aStep);}
 	}
 }
-G4bool CML2Convergence::runAgain()
+G4bool CML2Convergence::stopRun()
 {
-	G4bool bAgain=true;
-	if (this->ML2ExpVoxels!=0)
+	G4bool bStopRun=false;
+	if (this->ML2ExpVoxels!=0) // true if the experimental data file exists and is used to check the convergence
 	{
-		bAgain=!this->convergenceCriteria();
-		return bAgain;
+		bStopRun=this->convergenceCriteria();
+		return bStopRun;
 	}
-	return bAgain;
+	else // true if no experiemental data file is used. In this case it runs "nMaxLoops" loops.
+	{
+		this->idCurrentLoop--;
+		if (this->idCurrentLoop==0)
+		{
+			bStopRun=true;
+		}
+	}
+	return bStopRun;
 }
 G4bool CML2Convergence::convergenceCriteria()
 {
+	G4bool bStopRun=true;
 	if (this->bCompareExp)
 	{
-		if (this->ML2ExpVoxels->getMinNumberOfEvents() > this->minNumberOfEvents)
-		{return false;}
+// It checks if the maximum number of events is reached at least in one voxel. Having more rotations the limits is incremented each rotation
+		if (this->ML2ExpVoxels->getMaxNumberOfEvents() >= this->maxNumberOfEvents*this->nGeometry)
+		{bStopRun = true;}
 		else
-		{return true;}
+		{bStopRun = false;}
 	}
-	return false;
+	std::cout << "max n. of events accumulated:"<<this->ML2ExpVoxels->getMaxNumberOfEvents() <<"; max n. of events to be accumulated:" <<this->maxNumberOfEvents<<"  current geometry: " << this->nGeometry<<G4endl;
+	return bStopRun;
 }

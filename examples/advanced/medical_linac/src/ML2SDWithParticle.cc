@@ -1,34 +1,32 @@
 //
 // ********************************************************************
-// * License and Disclaimer                                           *
+// * DISCLAIMER                                                       *
 // *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
+// * use.                                                             *
 // *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
 // ********************************************************************
 //
 // The code was written by :
-//	^Claudio Andenna claudio.andenna@iss.infn.it, claudio.andenna@ispesl.it
+//	^Claudio Andenna  claudio.andenna@ispesl.it, claudio.andenna@iss.infn.it
 //      *Barbara Caccia barbara.caccia@iss.it
 //      with the support of Pablo Cirrone (LNS, INFN Catania Italy)
+//	with the contribute of Alessandro Occhigrossi*
 //
-// ^ISPESL and INFN Roma, gruppo collegato Sanità, Italy
+// ^INAIL DIPIA - ex ISPESL and INFN Roma, gruppo collegato Sanità, Italy
 // *Istituto Superiore di Sanità and INFN Roma, gruppo collegato Sanità, Italy
 //  Viale Regina Elena 299, 00161 Roma (Italy)
 //  tel (39) 06 49902246
@@ -42,6 +40,7 @@
 
 #include "ML2SDWithParticle.hh"
 #include "ML2ExpVoxels.hh"
+#include "ML2AcceleratorConstruction.hh"
 
 CML2SDWithParticle::CML2SDWithParticle()
 : G4VSensitiveDetector("killer_plane"),particles(0)
@@ -51,9 +50,10 @@ CML2SDWithParticle::CML2SDWithParticle()
 	this->nTotalParticles=0;
 	this->bActive=true;
 }
-CML2SDWithParticle::CML2SDWithParticle(G4int idType, G4int max_N_particles_in_PhSp_File, G4int seed, G4int nMaxParticlesInRamPhaseSpace, G4String name, G4String PhaseSpaceOutFile, G4bool bSavePhaseSpace, G4bool bStopAtPhaseSpace, SPrimaryParticle *primaryParticleData)
+CML2SDWithParticle::CML2SDWithParticle(G4int idType, G4int max_N_particles_in_PhSp_File, G4int seed, G4int nMaxParticlesInRamPhaseSpace, G4String name, G4String PhaseSpaceOutFile, G4bool bSavePhaseSpace, G4bool bStopAtPhaseSpace, SPrimaryParticle *primaryParticleData, G4double  accTargetZPosition)
 : G4VSensitiveDetector(name),particles(0)
 {
+	this->accTargetZPosition=accTargetZPosition;
 	this->max_N_particles_in_PhSp_File=max_N_particles_in_PhSp_File;
 	this->nMaxParticlesInRamPhaseSpace = nMaxParticlesInRamPhaseSpace;
 	this->idType=idType;
@@ -65,21 +65,13 @@ CML2SDWithParticle::CML2SDWithParticle(G4int idType, G4int max_N_particles_in_Ph
 	this->bStopAtPhaseSpace=bStopAtPhaseSpace;
 	if (this->bSavePhaseSpace)
 	{this->particles=new Sparticle[nMaxParticlesInRamPhaseSpace];}
-	this->bContinueRun=true;
 	G4String seedName;
 	char a[10];
 	sprintf(a,"%d", seed);
 	seedName=(G4String)a;
 
 	this->fullOutFileData=PhaseSpaceOutFile+"_"+seedName+".txt";
-#ifdef ML2FILEOUT
 	this->fullOutFileData=PhaseSpaceOutFile+"_"+seedName+".txt";
-	char *MyDirOut=new char[1000];
-	MyDirOut=getenv("ML2FILEOUT");
-	G4String myDirOut=(G4String) MyDirOut;
-	this->fullOutFileData=myDirOut+"/"+PhaseSpaceOutFile+"_"+seedName+".txt";
-#endif
-
 }
 CML2SDWithParticle::~CML2SDWithParticle()
 {
@@ -105,10 +97,10 @@ void CML2SDWithParticle::saveDataParticles(G4int nParticle)
 	for (int i=0; i< nParticle; i++)
 	{
 		out << nTotalParticles++ << '\t';
-		out << this->particles[i].volumeName << '\t';
+//		out << this->particles[i].volumeName << '\t';
 		out << this->particles[i].pos.getX()/mm  << '\t';
 		out << this->particles[i].pos.getY()/mm  << '\t';
-		out << this->particles[i].pos.getZ()/mm  << '\t';
+		out << (this->accTargetZPosition + this->particles[i].pos.getZ())/mm  << '\t'; // it translates the current z value in global coordinates to the accelerator local coordinates (only z)
 		out << this->particles[i].dir.getX() << '\t';
 		out << this->particles[i].dir.getY() << '\t';
 		out << this->particles[i].dir.getZ() << '\t';
@@ -120,9 +112,9 @@ void CML2SDWithParticle::saveDataParticles(G4int nParticle)
 	out.close();
 }
 
-G4bool CML2SDWithParticle::ProcessHits(G4Step *aStep, G4TouchableHistory *ROHist)
+G4bool CML2SDWithParticle::ProcessHits(G4Step *aStep, G4TouchableHistory *)
 {
-	if (this->bActive)
+	if (this->bActive &&  (CML2AcceleratorConstruction::GetInstance()->getPhysicalVolume()->GetRotation()->isIdentity()))
 	{
 		G4double energyKin= aStep->GetTrack()->GetKineticEnergy();
 		static bool bFirstTime=true;
@@ -144,11 +136,19 @@ G4bool CML2SDWithParticle::ProcessHits(G4Step *aStep, G4TouchableHistory *ROHist
 				this->particles[this->nParticle].nPrimaryPart=this->primaryParticleData->nPrimaryParticle;
 				this->nParticle++;
 				this->nTotalParticles++;
-				this->primaryParticleData->nParticlesInPhSp++;
 				if (this->nTotalParticles==this->max_N_particles_in_PhSp_File)
 				{
-					this->bContinueRun=false;
-					this->bSavePhaseSpace=false;
+					if (bFirstTime)
+					{
+						bFirstTime=false;
+						this->saveHeaderParticles();
+					}
+					this->saveDataParticles(this->nParticle);
+					this->nParticle=0;
+					this->bActive =false;// to stop the phase space creation
+				}
+				if (this->nParticle==this->nMaxParticlesInRamPhaseSpace)
+				{
 					if (bFirstTime)
 					{
 						bFirstTime=false;
@@ -157,28 +157,34 @@ G4bool CML2SDWithParticle::ProcessHits(G4Step *aStep, G4TouchableHistory *ROHist
 					this->saveDataParticles(this->nParticle);
 					this->nParticle=0;
 				}
-				if (this->nParticle==this->nMaxParticlesInRamPhaseSpace)
-				{
-					if (this->bSavePhaseSpace)
-					{
-						if (bFirstTime)
-						{
-							bFirstTime=false;
-							this->saveHeaderParticles();
-						}
-						this->saveDataParticles(this->nParticle);
-					}
-					if (this->nTotalParticles>=max_N_particles_in_PhSp_File)
-					{
-						this->bSavePhaseSpace=false;
-					}
-					this->nParticle=0;
-				}
+
+				Sparticle *particle=new Sparticle;
+				particle->dir=aStep->GetPreStepPoint()->GetMomentumDirection();
+				particle->pos=aStep->GetPreStepPoint()->GetPosition();
+				particle->kinEnergy=energyKin; 
+				particle->nPrimaryPart=this->nTotalParticles; // to pass the id of this phase space particle 
+				particle->partPDGE=aStep->GetTrack()->GetDefinition()->GetPDGEncoding();
+				particle->primaryParticlePDGE=this->primaryParticleData->partPDGE;
+				particle->volumeId=-1;
+				particle->volumeName="-1";
 			}
-		if (this->bStopAtPhaseSpace)
-		{aStep->GetTrack()->SetTrackStatus(fStopAndKill);}
+			if (this->bStopAtPhaseSpace)
+			{aStep->GetTrack()->SetTrackStatus(fStopAndKill);}
 		}
 	}
+	else
+	{
+		if (this->bStopAtPhaseSpace)
+		{aStep->GetTrack()->SetTrackStatus(fStopAndKill);}
+	}
+
 	return true;
 }
+
+void CML2SDWithParticle::save()
+{
+	if ((this->bActive) && (this->nParticle>0) && (CML2AcceleratorConstruction::GetInstance()->getPhysicalVolume()->GetRotation()->isIdentity()))
+	{this->saveDataParticles(this->nParticle);this->nParticle=0;}
+}
+
 

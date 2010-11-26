@@ -1,34 +1,32 @@
 //
 // ********************************************************************
-// * License and Disclaimer                                           *
+// * DISCLAIMER                                                       *
 // *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
+// * use.                                                             *
 // *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
 // ********************************************************************
 //
 // The code was written by :
-//	^Claudio Andenna claudio.andenna@iss.infn.it, claudio.andenna@ispesl.it
+//	^Claudio Andenna  claudio.andenna@ispesl.it, claudio.andenna@iss.infn.it
 //      *Barbara Caccia barbara.caccia@iss.it
 //      with the support of Pablo Cirrone (LNS, INFN Catania Italy)
+//	with the contribute of Alessandro Occhigrossi*
 //
-// ^ISPESL and INFN Roma, gruppo collegato Sanità, Italy
+// ^INAIL DIPIA - ex ISPESL and INFN Roma, gruppo collegato Sanità, Italy
 // *Istituto Superiore di Sanità and INFN Roma, gruppo collegato Sanità, Italy
 //  Viale Regina Elena 299, 00161 Roma (Italy)
 //  tel (39) 06 49902246
@@ -61,15 +59,18 @@ CML2Acc1* CML2Acc1::GetInstance(void)
     }
   return instance;
 }
-
+void CML2Acc1::writeInfo()
+{
+	std::cout <<"\n\n\tnominal beam energy: "<<this->idEnergy << G4endl;
+	std::cout <<"\tJaw X aperture: 1) "<< this->jaw1XAperture/mm<<"[mm]\t2) " << this->jaw2XAperture/mm<< " [mm]"<< G4endl;
+	std::cout <<"\tJaw Y aperture: 1) "<< this->jaw1YAperture/mm<<"[mm]\t2) " << this->jaw2YAperture/mm<< " [mm]\n"<< G4endl;
+}
 G4Material * CML2Acc1::otherMaterials(const G4String materialName)
 {
 	G4Material * material=0;
 	G4double A, Z, d;
 	G4String name;
 
-	// code taken and modified from G4MIRDRightLung.cc of the human_phantom advanced example written by S. Guatelli and M. G. Pia
-	// start
    // General elements
  
 	A = 12.011*g/mole;
@@ -148,9 +149,10 @@ G4Material * CML2Acc1::otherMaterials(const G4String materialName)
 	}
 	return material;
 }
-void CML2Acc1::Construct(G4VPhysicalVolume *PVWorld)
+void CML2Acc1::Construct(G4VPhysicalVolume *PVWorld, G4double isoCentre)
 {
 	this->PVWorld=PVWorld;
+	this->setIsoCentre(isoCentre);
 	this->target();
 	this->BeWindow();
 	this->ionizationChamber();
@@ -163,12 +165,18 @@ void CML2Acc1::Construct(G4VPhysicalVolume *PVWorld)
 	this->Jaw1Y();
 	this->Jaw2Y();
 }
+void CML2Acc1::reset()
+{
+	this->leavesA.clear();
+	this->leavesB.clear();
+}
+
 bool CML2Acc1::target()
 {
 	switch (this->idEnergy)
 	{
 		case 6:
-  //    materials  // changed to call the NIST class materials
+  //    materials  
 
 	G4Material* Cu = G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu");
 	G4Material* W = G4NistManager::Instance()->FindOrBuildMaterial("G4_W");
@@ -226,10 +234,10 @@ bool CML2Acc1::target()
 	G4VisAttributes* simpleWSVisAtt, *simpleCuSVisAtt;
 	simpleWSVisAtt= new G4VisAttributes(magenta);
 	simpleWSVisAtt->SetVisibility(true);
-	simpleWSVisAtt->SetForceSolid(true);
+// 	simpleWSVisAtt->SetForceSolid(true);
 	simpleCuSVisAtt= new G4VisAttributes(cyan);
 	simpleCuSVisAtt->SetVisibility(true);
-	simpleCuSVisAtt->SetForceSolid(true);
+// 	simpleCuSVisAtt->SetForceSolid(true);
 	targetA_log->SetVisAttributes(simpleWSVisAtt);
 	targetB_log->SetVisAttributes(simpleCuSVisAtt);
 
@@ -321,7 +329,7 @@ bool CML2Acc1::primaryCollimator()
 //--------- Visualization attributes -------------------------------
    G4VisAttributes* simpleTungstenWVisAtt= new G4VisAttributes(magenta);
    simpleTungstenWVisAtt->SetVisibility(true);
-   simpleTungstenWVisAtt->SetForceSolid(true);
+//    simpleTungstenWVisAtt->SetForceSolid(true);
    collim_log->SetVisAttributes(simpleTungstenWVisAtt);
    
  
@@ -366,7 +374,7 @@ bool CML2Acc1::BeWindow()
 
 	simpleAlSVisAtt= new G4VisAttributes(G4Colour::Yellow());
 	simpleAlSVisAtt->SetVisibility(true);
-	simpleAlSVisAtt->SetForceSolid(true);
+// 	simpleAlSVisAtt->SetForceSolid(true);
 	BeWTubeLV->SetVisAttributes(simpleAlSVisAtt);
 	BeWTubeLV->SetRegion(regVol);
 	regVol->AddRootLogicalVolume(BeWTubeLV);
@@ -392,7 +400,7 @@ bool CML2Acc1::flatteningFilter()
 	G4VisAttributes* simpleAlSVisAtt;
 
 	// one
-	z0=150.0*mm;
+	z0=130.0*mm;
 	h0=5.0/2.*cm;
 	centre.set(0.,0.,z0);
 	G4Cons *FFL1A_1Cone = new G4Cons("FFL1A_1", 0.*cm, 0.3*cm, 0.*cm, 5.*cm, h0, 0.*deg, 360.*deg);
@@ -413,7 +421,7 @@ bool CML2Acc1::flatteningFilter()
 
 	simpleAlSVisAtt= new G4VisAttributes(G4Colour::Red());
 	simpleAlSVisAtt->SetVisibility(true);
-	simpleAlSVisAtt->SetForceSolid(true);
+// 	simpleAlSVisAtt->SetForceSolid(true);
 	FFL1A_1LV->SetVisAttributes(simpleAlSVisAtt);
 	FFL2_1LV->SetVisAttributes(simpleAlSVisAtt);
 
@@ -445,73 +453,73 @@ bool CML2Acc1::ionizationChamber()
 
 	G4ThreeVector centre;
 	// W1
-	centre.set(0.,0.,177.*mm);
+	centre.set(0.,0.,157.*mm);
 	G4LogicalVolume *PCUTubeW1LV = new G4LogicalVolume(ICTubeW, material, "ionizationChamberTubeW1LV", 0, 0, 0);
 	G4VPhysicalVolume *PCUtubeW1PV=0;
 	PCUtubeW1PV=new G4PVPlacement(0, centre, "ionizationChamberTubeW1PV", PCUTubeW1LV, this->PVWorld, false, 0);
 	simpleAlSVisAtt= new G4VisAttributes(G4Colour::Blue());
 	simpleAlSVisAtt->SetVisibility(true);
-	simpleAlSVisAtt->SetForceSolid(true);
+// 	simpleAlSVisAtt->SetForceSolid(true);
 	PCUTubeW1LV->SetVisAttributes(simpleAlSVisAtt);
 	PCUTubeW1LV->SetRegion(regVol);
 	regVol->AddRootLogicalVolume(PCUTubeW1LV);
 
 	// P1
-	centre.set(0.,0.,178.*mm);
+	centre.set(0.,0.,158.*mm);
 	G4LogicalVolume *PCUTubeP1LV = new G4LogicalVolume(ICTubeP, material, "ionizationChamberTubeP1LV", 0, 0, 0);
 	G4VPhysicalVolume *PCUtubeP1PV=0;
 	PCUtubeP1PV=new G4PVPlacement(0, centre, "ionizationChamberTubeP1PV", PCUTubeP1LV, this->PVWorld, false, 0);
 	simpleAlSVisAtt= new G4VisAttributes(G4Colour::Yellow());
 	simpleAlSVisAtt->SetVisibility(true);
-	simpleAlSVisAtt->SetForceSolid(true);
+// 	simpleAlSVisAtt->SetForceSolid(true);
 	PCUTubeP1LV->SetVisAttributes(simpleAlSVisAtt);
 	PCUTubeP1LV->SetRegion(regVol);
 	regVol->AddRootLogicalVolume(PCUTubeP1LV);
 
 	// W2
-	centre.set(0.,0.,179.*mm);
+	centre.set(0.,0.,159.*mm);
 	G4LogicalVolume *PCUTubeW2LV = new G4LogicalVolume(ICTubeW, material, "ionizationChamberTubeW2LV", 0, 0, 0);
 	G4VPhysicalVolume *PCUtubeW2PV=0;
 	PCUtubeW2PV=new G4PVPlacement(0, centre, "ionizationChamberTubeW2PV", PCUTubeW2LV, this->PVWorld, false, 0);
 	simpleAlSVisAtt= new G4VisAttributes(G4Colour::Blue());
 	simpleAlSVisAtt->SetVisibility(true);
-	simpleAlSVisAtt->SetForceSolid(true);
+// 	simpleAlSVisAtt->SetForceSolid(true);
 	PCUTubeW2LV->SetVisAttributes(simpleAlSVisAtt);
 	PCUTubeW2LV->SetRegion(regVol);
 	regVol->AddRootLogicalVolume(PCUTubeW2LV);
 
 	// P2
-	centre.set(0.,0.,180.*mm);
+	centre.set(0.,0.,160.*mm);
 	G4LogicalVolume *PCUTubeP2LV = new G4LogicalVolume(ICTubeP, material, "ionizationChamberTubeP2LV", 0, 0, 0);
 	G4VPhysicalVolume *PCUtubeP2PV=0;
 	PCUtubeP2PV=new G4PVPlacement(0, centre, "ionizationChamberTubeP2PV", PCUTubeP2LV, this->PVWorld, false, 0);
 	simpleAlSVisAtt= new G4VisAttributes(G4Colour::Yellow());
 	simpleAlSVisAtt->SetVisibility(true);
-	simpleAlSVisAtt->SetForceSolid(true);
+// 	simpleAlSVisAtt->SetForceSolid(true);
 	PCUTubeP2LV->SetVisAttributes(simpleAlSVisAtt);
 	PCUTubeP2LV->SetRegion(regVol);
 	regVol->AddRootLogicalVolume(PCUTubeP2LV);
 
 	// W3
-	centre.set(0.,0.,181.*mm);
+	centre.set(0.,0.,161.*mm);
 	G4LogicalVolume *PCUTubeW3LV = new G4LogicalVolume(ICTubeW, material, "ionizationChamberTubeW3LV", 0, 0, 0);
 	G4VPhysicalVolume *PCUtubeW3PV=0;
 	PCUtubeW3PV=new G4PVPlacement(0, centre, "ionizationChamberTubeW3PV", PCUTubeW3LV, this->PVWorld, false, 0);
 	simpleAlSVisAtt= new G4VisAttributes(G4Colour::Blue());
 	simpleAlSVisAtt->SetVisibility(true);
-	simpleAlSVisAtt->SetForceSolid(true);
+// 	simpleAlSVisAtt->SetForceSolid(true);
 	PCUTubeW3LV->SetVisAttributes(simpleAlSVisAtt);
 	PCUTubeW3LV->SetRegion(regVol);
 	regVol->AddRootLogicalVolume(PCUTubeW3LV);
 
 	// P3
-	centre.set(0.,0.,182.*mm);
+	centre.set(0.,0.,162.*mm);
 	G4LogicalVolume *PCUTubeP3LV = new G4LogicalVolume(ICTubeP, material, "ionizationChamberTubeP3LV", 0, 0, 0);
 	G4VPhysicalVolume *PCUtubeP3PV=0;
 	PCUtubeP3PV=new G4PVPlacement(0, centre, "ionizationChamberTubeP3PV", PCUTubeP3LV, this->PVWorld, false, 0);
 	simpleAlSVisAtt= new G4VisAttributes(G4Colour::Yellow());
 	simpleAlSVisAtt->SetVisibility(true);
-	simpleAlSVisAtt->SetForceSolid(true);
+// 	simpleAlSVisAtt->SetForceSolid(true);
 	PCUTubeP3LV->SetVisAttributes(simpleAlSVisAtt);
 	PCUTubeP3LV->SetRegion(regVol);
 	regVol->AddRootLogicalVolume(PCUTubeP3LV);
@@ -536,11 +544,11 @@ bool CML2Acc1::mirror()
 	G4RotationMatrix *cRotation=new G4RotationMatrix();
 	cRotation->rotateY(12.0*deg);
 	G4VPhysicalVolume *MirrorTubePV=0;
-	MirrorTubePV=new G4PVPlacement(cRotation, G4ThreeVector(0., 0., 195.*mm), "MirrorTubePV", MirrorTubeLV,this->PVWorld, false, 0);
+	MirrorTubePV=new G4PVPlacement(cRotation, G4ThreeVector(0., 0., 175.*mm), "MirrorTubePV", MirrorTubeLV,this->PVWorld, false, 0);
 
 	simpleAlSVisAtt= new G4VisAttributes(G4Colour::Green());
 	simpleAlSVisAtt->SetVisibility(true);
-	simpleAlSVisAtt->SetForceSolid(true);
+// 	simpleAlSVisAtt->SetForceSolid(true);
 	MirrorTubeLV->SetVisAttributes(simpleAlSVisAtt);
 	MirrorTubeLV->SetRegion(regVol);
 	regVol->AddRootLogicalVolume(MirrorTubeLV);
@@ -556,7 +564,7 @@ void CML2Acc1::SetJawAperture(G4int idJaw, G4ThreeVector &centre, G4ThreeVector 
 	y=centre.getY();
 	z=centre.getZ();
 	top=z-78./2.;
-	theta=fabs(atan(aperture/this->SSD));
+	theta=fabs(atan(aperture/this->isoCentre));
 	dx=halfSize.getX();
 	dy=halfSize.getY();
 	dz=halfSize.getZ();
@@ -652,7 +660,7 @@ bool CML2Acc1::Jaw1X()
 	// Visibility
 	simpleAlSVisAtt= new G4VisAttributes(G4Colour::Blue());
 	simpleAlSVisAtt->SetVisibility(true);
-	simpleAlSVisAtt->SetForceSolid(true);
+// 	simpleAlSVisAtt->SetForceSolid(true);
 	logVol->SetVisAttributes(simpleAlSVisAtt);
 
 	bCreated=true;
@@ -689,7 +697,7 @@ bool CML2Acc1::Jaw2X()
 	// Visibility
 	simpleAlSVisAtt= new G4VisAttributes(G4Colour::Cyan());
 	simpleAlSVisAtt->SetVisibility(true);
-	simpleAlSVisAtt->SetForceSolid(true);
+// 	simpleAlSVisAtt->SetForceSolid(true);
 	logVol->SetVisAttributes(simpleAlSVisAtt);
 
 	bCreated=true;
@@ -726,7 +734,7 @@ bool CML2Acc1::Jaw1Y()
 	// Visibility
 	simpleAlSVisAtt= new G4VisAttributes(G4Colour::Red());
 	simpleAlSVisAtt->SetVisibility(true);
-	simpleAlSVisAtt->SetForceSolid(true);
+// 	simpleAlSVisAtt->SetForceSolid(true);
 	logVol->SetVisAttributes(simpleAlSVisAtt);
 
 	bCreated=true;
@@ -764,7 +772,7 @@ bool CML2Acc1::Jaw2Y()
 	// Visibility
 	simpleAlSVisAtt= new G4VisAttributes(G4Colour::Magenta());
 	simpleAlSVisAtt->SetVisibility(true);
-	simpleAlSVisAtt->SetForceSolid(true);
+// 	simpleAlSVisAtt->SetForceSolid(true);
 	logVol->SetVisAttributes(simpleAlSVisAtt);
 
 	bCreated=true;
@@ -798,14 +806,14 @@ bool CML2Acc1::MLC()
 
 	simpleAlSVisAtt= new G4VisAttributes(G4Colour::Cyan());
 	simpleAlSVisAtt->SetVisibility(true);
-	simpleAlSVisAtt->SetForceSolid(true);
+// 	simpleAlSVisAtt->SetForceSolid(true);
 	leafLVA->SetVisAttributes(simpleAlSVisAtt);
 	leafLVA->SetRegion(regVol);
 	regVol->AddRootLogicalVolume(leafLVA);
 	
 	simpleAlSVisAtt= new G4VisAttributes(G4Colour::Green());
 	simpleAlSVisAtt->SetVisibility(true);
-	simpleAlSVisAtt->SetForceSolid(true);
+// 	simpleAlSVisAtt->SetForceSolid(true);
 	leafLVB->SetVisAttributes(simpleAlSVisAtt);
 	leafLVB->SetRegion(regVol);
 	regVol->AddRootLogicalVolume(leafLVB);
@@ -818,7 +826,7 @@ bool CML2Acc1::MLC()
 	G4ThreeVector centre;
 	int nhalfLeaves=(int)(this->leavesA.size()/2.);
 	centre= centreStart + G4ThreeVector(-nhalfLeaves*boxSize.getX(), 0.,0.);
-	for (i=0;i<(int)this->leavesA.size(); i++)
+	for (i=1;i<(int)this->leavesA.size(); i++)
 	{
 		G4String s;
 		char appo[10];
@@ -832,7 +840,7 @@ bool CML2Acc1::MLC()
 	}
 	nhalfLeaves=(int)(this->leavesB.size()/2.);
 	centre=centreStart+G4ThreeVector(-nhalfLeaves*boxSize.getX(), 0.,0.);
-	for (i=0;i<(int)this->leavesB.size(); i++)
+	for (i=1;i<(int)this->leavesB.size(); i++)
 	{
 		G4String s;
 		char appo[10];
