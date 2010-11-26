@@ -51,8 +51,8 @@
 #
 # Here, SOURCES is the list of source files to which compile definitions
 # will be added. COMPILE_DEFINITIONS gives the list of definitions that
-# should be added. At present, any existing user set definitions on the
-# SOURCES are reset
+# should be added. These definitions will be appended to any existing
+# definitions given to the sources.
 #
 
 
@@ -123,9 +123,22 @@ MACRO(GEANT4_ADD_COMPILE_DEFINITIONS)
     
     # Now for each file, add the definitions
     foreach(_acd_source ${G4ADDDEF_SOURCES})
+        # Extract any existing compile definitions
+        get_source_file_property(
+            _acd_existing_properties 
+            ${_ACD_BASE_PATH}/src/${_acd_source}
+            COMPILE_DEFINITIONS)
+
+        if(_acd_existing_properties)
+            set(_acd_new_defs ${_acd_existing_properties}
+                ${G4ADDDEF_COMPILE_DEFINITIONS})
+        else()
+            set(_acd_new_defs ${G4ADDDEF_COMPILE_DEFINITIONS})
+        endif()
+
         # quote compile defs because this must epand to space separated list
         set_source_files_properties(${_ACD_BASE_PATH}/src/${_acd_source}
-            PROPERTIES COMPILE_DEFINITIONS "${G4ADDDEF_COMPILE_DEFINITIONS}")
+            PROPERTIES COMPILE_DEFINITIONS "${_acd_new_defs}")
     endforeach()
 ENDMACRO()
 
