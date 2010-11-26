@@ -55,6 +55,9 @@
 // 15 March 2004, P R Truscott, QinetiQ Ltd, UK
 // Beta release
 //
+// J. M. Quesada 24 November 2010 bug fixed in X_m 
+//(according to eq. 14 in  R.K. Tripathi et al. Nucl. Instr. and Meth. in Phys. Res. B 155 (1999) 349-356)
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -246,7 +249,9 @@ G4TripathiLightCrossSection::GetZandACrossSection(const G4DynamicParticle* thePr
     X1     = 2.83 - 3.1E-2*AP + 1.7E-4*AP*AP;
   }
   G4double S_L = 1.2 + 1.6*(1.0-std::exp(-E/15.0));
-  G4double X_m = 1.0 - X1*std::exp(-E/X1*S_L);
+//JMQ 241110 bug fixed 
+//  G4double X_m = 1.0 - X1*std::exp(-E/X1*S_L);
+  G4double X_m = 1.0 - X1*std::exp(-E/(X1*S_L));
 //
 //
 // R_c is also highly dependent upon the A and Z of the projectile and
