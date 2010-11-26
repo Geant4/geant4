@@ -1,4 +1,4 @@
-$Id: History,v 1.474 2010-11-25 19:21:44 vnivanch Exp $
+$Id: History,v 1.475 2010-11-26 11:52:24 pandola Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26.11.2010, L.Pandola, tag emlowen-V09-03-67
+            Address Coverity reports for a few Penelope/Livermore
+
+25.11.2010  tag emlowen-V09-03-66
             V.Ivanchenko fixed initialisation in
             G4UAtomicDeexcitation: delete objects, use consistent names
 
