@@ -1047,6 +1047,7 @@ void G4PenelopeOscillatorManager::ReadElementData()
     {
       G4String excep = "G4PenelopeOscillatorManager - G4LEDATA environment variable not set!";
       G4Exception(excep);
+      return;
     }
   G4String pathString(path);
   G4String pathFile = pathString + "/penelope/pdatconf.p08";

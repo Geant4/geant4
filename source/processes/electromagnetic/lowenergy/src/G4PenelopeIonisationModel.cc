@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisationModel.cc,v 1.16 2010-04-29 07:28:50 pandola Exp $
+// $Id: G4PenelopeIonisationModel.cc,v 1.17 2010-11-26 11:51:11 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -127,23 +127,30 @@ G4PenelopeIonisationModel::~G4PenelopeIonisationModel()
 
   
   std::map <G4int,G4DataVector*>::iterator i;
-  for (i=ionizationEnergy->begin();i != ionizationEnergy->end();i++)
-    if (i->second) delete i->second;
-  for (i=resonanceEnergy->begin();i != resonanceEnergy->end();i++)
-    if (i->second) delete i->second;
-  for (i=occupationNumber->begin();i != occupationNumber->end();i++)
-    if (i->second) delete i->second;
-  for (i=shellFlag->begin();i != shellFlag->end();i++)
-    if (i->second) delete i->second;
-
   if (ionizationEnergy)
-    delete ionizationEnergy;
+    {
+      for (i=ionizationEnergy->begin();i != ionizationEnergy->end();i++)
+	if (i->second) delete i->second;
+      delete ionizationEnergy;
+    }
   if (resonanceEnergy)
-    delete resonanceEnergy;
+    {
+      for (i=resonanceEnergy->begin();i != resonanceEnergy->end();i++)
+	if (i->second) delete i->second;
+      delete resonanceEnergy;
+    }
   if (occupationNumber)
-    delete occupationNumber;
+    {
+      for (i=occupationNumber->begin();i != occupationNumber->end();i++)
+	if (i->second) delete i->second;
+      delete occupationNumber;
+    }
   if (shellFlag)
-    delete shellFlag;
+    {
+      for (i=shellFlag->begin();i != shellFlag->end();i++)
+	if (i->second) delete i->second;
+      delete shellFlag;
+    }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -183,8 +190,12 @@ void G4PenelopeIonisationModel::Initialise(const G4ParticleDefinition* particle,
      crossSectionFile = "penelope/ion-cs-po-"; 
   crossSectionHandler->LoadData(crossSectionFile);
   //This is used to retrieve cross section values later on
-  crossSectionHandler->BuildMeanFreePathForMaterials();
-  
+  G4VEMDataSet* emdata =  
+    crossSectionHandler->BuildMeanFreePathForMaterials();
+  //The method BuildMeanFreePathForMaterials() is required here only to force 
+  //the building of an internal table: the output pointer can be deleted
+  delete emdata;
+
   if (verboseLevel > 2) 
     G4cout << "Loaded cross section files for PenelopeIonisationModel" << G4endl;
 
@@ -633,6 +644,7 @@ void G4PenelopeIonisationModel::ReadData()
     {
       G4String excep = "G4PenelopeIonisationModel - G4LEDATA environment variable not set!";
       G4Exception(excep);
+      return;
     }
   G4String pathString(path);
   G4String pathFile = pathString + "/penelope/ion-pen.dat";
@@ -648,6 +660,7 @@ void G4PenelopeIonisationModel::ReadData()
     {
       G4String excep = "G4PenelopeIonisationModel: problem with reading data from file";
       G4Exception(excep);
+      return;
     }
 
  G4int Z=1,nLevels=0;
@@ -659,6 +672,13 @@ void G4PenelopeIonisationModel::ReadData()
    G4DataVector* resEVector = new G4DataVector;
    G4DataVector* shellIndVector = new G4DataVector;
    file >> Z >> nLevels;
+   //Check for nLevels validity, before using it in a loop
+   if (nLevels<0 || nLevels>64)
+     {
+       G4String excep = "G4PenelopeIonisationModel: corrupted data file ?";
+       G4Exception(excep);
+       return;
+     }
    G4double a1,a2,a3,a4;
    G4int k1,k2,k3;
    for (G4int h=0;h<nLevels;h++)
@@ -1658,6 +1678,7 @@ G4PenelopeIonisationModel::BuildCrossSectionTable(const G4ParticleDefinition* th
   std::vector<G4VEMDataSet*>* set = new std::vector<G4VEMDataSet*>;
 
   size_t nOfBins = 200;
+  //Temporary vector, a quick way to produce a log-spaced energy grid
   G4PhysicsLogVector* theLogVector = new G4PhysicsLogVector(LowEnergyLimit(),
 							    HighEnergyLimit(), 
 							    nOfBins);
@@ -1711,6 +1732,7 @@ G4PenelopeIonisationModel::BuildCrossSectionTable(const G4ParticleDefinition* th
     }
     set->push_back(setForMat);
   }
+  delete theLogVector;
   return set;
 }
 

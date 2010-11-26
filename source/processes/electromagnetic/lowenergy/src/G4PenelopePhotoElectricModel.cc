@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopePhotoElectricModel.cc,v 1.12 2010-03-26 09:32:50 pandola Exp $
+// $Id: G4PenelopePhotoElectricModel.cc,v 1.13 2010-11-26 11:51:11 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -61,6 +61,7 @@
 #include "G4AtomicShell.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
+#include "G4VEMDataSet.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -126,7 +127,11 @@ void G4PenelopePhotoElectricModel::Initialise(const G4ParticleDefinition*,
   crossSectionFile = "penelope/ph-ss-cs-pen-";
   shellCrossSectionHandler->LoadShellData(crossSectionFile);
   //This is used to retrieve cross section values later on
-  crossSectionHandler->BuildMeanFreePathForMaterials();
+  G4VEMDataSet* emdata = 
+    crossSectionHandler->BuildMeanFreePathForMaterials();
+  //The method BuildMeanFreePathForMaterials() is required here only to force 
+  //the building of an internal table: the output pointer can be deleted
+  delete emdata;
 
   if (verboseLevel > 2) 
     G4cout << "Loaded cross section files for PenelopePhotoElectric" << G4endl;

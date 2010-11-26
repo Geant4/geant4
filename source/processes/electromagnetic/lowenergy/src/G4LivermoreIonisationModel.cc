@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreIonisationModel.cc,v 1.11 2010-11-23 23:52:23 mantero Exp $
+// $Id: G4LivermoreIonisationModel.cc,v 1.12 2010-11-26 11:51:11 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -147,8 +147,12 @@ void G4LivermoreIonisationModel::Initialise(const G4ParticleDefinition* particle
   crossSectionHandler->Clear();
   crossSectionHandler->LoadShellData("ioni/ion-ss-cs-");
   //This is used to retrieve cross section values later on
-  crossSectionHandler->BuildMeanFreePathForMaterials(&cuts);
-  
+  G4VEMDataSet* emdata = 
+    crossSectionHandler->BuildMeanFreePathForMaterials(&cuts);
+  //The method BuildMeanFreePathForMaterials() is required here only to force 
+  //the building of an internal table: the output pointer can be deleted
+  delete emdata;  
+ 
   //Fluorescence data
   transitionManager = G4AtomicTransitionManager::Instance();
   if (shellVacancy) delete shellVacancy;
@@ -199,6 +203,7 @@ G4double G4LivermoreIonisationModel::ComputeCrossSectionPerAtom(const G4Particle
       G4cout << "G4LivermoreIonisationModel::ComputeCrossSectionPerAtom" << G4endl;
       G4cout << "The cross section handler is not correctly initialized" << G4endl;
       G4Exception();
+      return 0;
     }
   
   //The cut is already included in the crossSectionHandler
@@ -620,6 +625,7 @@ void G4LivermoreIonisationModel::InitialiseFluorescence()
   G4DataVector* energyVector = 0;
   size_t binForFluo = fNBinEnergyLoss/10;
 
+  //Used to produce a log-spaced energy grid. To be deleted at the end.
   G4PhysicsLogVector* eVector = new G4PhysicsLogVector(LowEnergyLimit(),HighEnergyLimit(),
 						       binForFluo);
   const G4ProductionCutsTable* theCoupleTable=
@@ -699,6 +705,8 @@ void G4LivermoreIonisationModel::InitialiseFluorescence()
        if(verboseLevel>3) xsis->PrintData();
        shellVacancy->AddXsiTable(xsis);
     }
+  if (eVector) 
+    delete eVector;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

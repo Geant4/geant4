@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeRayleighModel.cc,v 1.7 2009-12-21 12:49:01 pandola Exp $
+// $Id: G4PenelopeRayleighModel.cc,v 1.8 2010-11-26 11:51:11 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -507,8 +507,10 @@ void G4PenelopeRayleighModel::InitialiseSampling()
   if (!samplingFunction_x || !samplingFunction_xNoLog)
     {
       G4cout << "G4PenelopeRayleighModel::InitialiseSampling(), something wrong" << G4endl;
-      G4cout << "It looks like G4PenelopeRayleighModel::PrepareConstants() has not been called" << G4endl;
+      G4cout << "It looks like G4PenelopeRayleighModel::PrepareConstants() has not been called" 
+	     << G4endl;
       G4Exception();
+      return;
     }
   if (!SamplingTable.count(theMaterial)) //material not defined yet
     { 
