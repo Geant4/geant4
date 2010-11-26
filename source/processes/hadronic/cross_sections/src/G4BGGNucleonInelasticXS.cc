@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BGGNucleonInelasticXS.cc,v 1.10 2010-11-11 01:51:31 dennis Exp $
+// $Id: G4BGGNucleonInelasticXS.cc,v 1.11 2010-11-26 10:55:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -215,15 +215,29 @@ G4double G4BGGNucleonInelasticXS::CoulombFactor(G4double kinEnergy, G4int A)
     f1 = 5.6 - 0.016*aa;
     f2 = 1.37 + 1.37/aa;
     res *= ( 1.0 + (0.8 + 18./aa - 0.002*aa)/(1.0 + std::exp(f1*(elog + f2))));
+
+    G4double ff1 = 0.70-0.002*a;       // slope of the drop at medium energies.
+    G4double ff2 = 1.00+1/a;           // start of the slope.
+    G4double ff3 = 0.8+18/a-0.002*a;   // stephight
+    res = 1.0 + ff3*(1.0 - (1.0/(1+std::exp(-8*ff1*(elog + 1.37*ff2)))));
+
+    ff1 = 1.-1/a-0.001*a; // slope of the rise
+    ff2 = 1.17-2.7/a-0.0014*a; // start of the rise
+    res /= (1 + std::exp(-8.*ff1*(elog + 2*ff2)));
+
   } else {
 
+    // from G4NeutronInelasticCrossSection
     G4double p3 = 0.6 + 13./aa - 0.0005*aa;
     G4double p4 = 7.2449 - 0.018242*aa;
     G4double p5 = 1.36 + 1.8/aa + 0.0005*aa;
     G4double p6 = 1. + 200./aa + 0.02*aa;
     G4double p7 = 3.0 - (aa-70.)*(aa-200.)/11000.;
 
-    res = (1.+p3/(1. + std::exp(p4*(elog+p5))))/(1.+std::exp(-p6*(elog+p7)));
+    G4double firstexp  = std::exp(-p4*(elog+p5));
+    G4double secondexp = std::exp(-p6*(kineticEnergy-p7));
+
+    res = (1.+p3*firstexp/(1. + firstexp))/(1. + secondexp);
 
   }
   return res;  
