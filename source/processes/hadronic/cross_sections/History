@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+26 November 2010 Vladimir Ivanchenko (hadr-cross-V09-03-20)
+----------------------------------------------------------
+- G4BGGPionElasticXS, G4BGGNucleonElasticXS,G4BGGNucleonInelasticXS 
+        fixed low-energy (E < 20 MeV) models
+- G4TripathiLightCrossSection - J.M.Quesada fix for threshold shape
+
 23 November 2010 Vladimir Ivanchenko (hadr-cross-V09-03-19)
 ----------------------------------------------------------
 - added G4CrossSectionInelastic and G4CrossSectionElastic - wrappers 
