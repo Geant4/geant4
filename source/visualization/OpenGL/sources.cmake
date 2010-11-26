@@ -11,7 +11,8 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 19:12:14 bmorgan Exp $
+# $Id: sources.cmake,v 1.2 2010-11-26 18:43:09 bmorgan Exp $
+# GEANT4 Tag $Name: not supported by cvs2svn $
 #
 #------------------------------------------------------------------------------
 
@@ -35,113 +36,117 @@ include_directories(${CMAKE_SOURCE_DIR}/source/visualization/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/visualization/modeling/include)
 
 #
-# Define the Geant4 Module.
+# Module has optional sources
 #
 include(Geant4MacroDefineModule)
-GEANT4_DEFINE_MODULE(NAME G4OpenGL
-    HEADERS
-        G4OpenGL.hh
-        G4OpenGLBitMapStore.hh
-        G4OpenGLFontBaseStore.hh
+
+#
+# Define the core sources, includes and libraries which all Geant4 
+# OpenGL implementations use
+#
+set(G4VIS_MODULE_OPENGL_HEADERS 
+    G4OpenGL.hh
+    G4OpenGLImmediateViewer.hh
+    G4OpenGLImmediateSceneHandler.hh
+    G4OpenGLViewer.hh
+    G4OpenGLStoredViewer.hh
+    G4OpenGLStoredSceneHandler.hh
+    G4OpenGLBitMapStore.hh
+    G4OpenGLSceneHandler.hh
+    G4OpenGLSceneHandler.icc
+    G4OpenGLViewerMessenger.hh
+    G4OpenGLTransform3D.hh
+)
+
+set(G4VIS_MODULE_OPENGL_SOURCES 
+    G4OpenGLImmediateViewer.cc
+    G4OpenGLImmediateSceneHandler.cc
+    G4OpenGLViewer.cc
+    G4OpenGLStoredViewer.cc
+    G4OpenGLStoredSceneHandler.cc
+    G4OpenGLBitMapStore.cc
+    G4OpenGLSceneHandler.cc
+    G4OpenGLViewerMessenger.cc
+    G4OpenGLTransform3D.cc
+)
+
+#
+# May need OpenGL include here
+#
+set(G4VIS_MODULE_OPENGL_LINK_LIBRARIES ${OPENGL_LIBRARIES})
+
+#
+# All of the above files must have the G4VIS_BUILD_OPENGL_DRIVER definition
+#
+GEANT4_ADD_COMPILE_DEFINITIONS(SOURCES ${G4VIS_MODULE_OPENGL_SOURCES}
+    COMPILE_DEFINITIONS G4VIS_BUILD_OPENGL_DRIVER)
+
+
+#
+# Qt only if selected
+#
+if(GEANT4_USE_QT)
+    #
+    # Add in the extra Qt GL sources
+    #
+    list(APPEND G4VIS_MODULE_OPENGL_HEADERS
         G4OpenGLImmediateQt.hh
         G4OpenGLImmediateQtViewer.hh
-        G4OpenGLImmediateSceneHandler.hh
-        G4OpenGLImmediateViewer.hh
-        G4OpenGLImmediateWin32.hh
-        G4OpenGLImmediateWin32Viewer.hh
-        G4OpenGLImmediateX.hh
-        G4OpenGLImmediateXViewer.hh
-        G4OpenGLImmediateXm.hh
-        G4OpenGLImmediateXmViewer.hh
         G4OpenGLQtExportDialog.hh
         G4OpenGLQtMovieDialog.hh
         G4OpenGLQtViewer.hh
-        G4OpenGLSceneHandler.hh
-        G4OpenGLSceneHandler.icc
         G4OpenGLStoredQt.hh
-        G4OpenGLStoredQtViewer.hh
-        G4OpenGLStoredSceneHandler.hh
-        G4OpenGLStoredViewer.hh
-        G4OpenGLStoredWin32.hh
-        G4OpenGLStoredWin32Viewer.hh
-        G4OpenGLStoredX.hh
-        G4OpenGLStoredXViewer.hh
-        G4OpenGLStoredXm.hh
-        G4OpenGLStoredXmViewer.hh
-        G4OpenGLTransform3D.hh
-        G4OpenGLViewer.hh
-        G4OpenGLViewerMessenger.hh
-        G4OpenGLWin32Viewer.hh
-        G4OpenGLXViewer.hh
-        G4OpenGLXmBox.hh
-        G4OpenGLXmFourArrowButtons.hh
-        G4OpenGLXmFramedBox.hh
-        G4OpenGLXmPushButton.hh
-        G4OpenGLXmRadioButton.hh
-        G4OpenGLXmResources.hh
-        G4OpenGLXmSeparator.hh
-        G4OpenGLXmSliderBar.hh
-        G4OpenGLXmTextField.hh
-        G4OpenGLXmTopLevelShell.hh
-        G4OpenGLXmVWidgetComponent.hh
-        G4OpenGLXmVWidgetContainer.hh
-        G4OpenGLXmVWidgetObject.hh
-        G4OpenGLXmVWidgetShell.hh
-        G4OpenGLXmViewer.hh
-        G4OpenGLXmViewerMessenger.hh
-    SOURCES
-        G4OpenGLBitMapStore.cc
-        G4OpenGLFontBaseStore.cc
+        G4OpenGLStoredQtViewer.hh)
+
+    list(APPEND G4VIS_MODULE_OPENGL_SOURCES
         G4OpenGLImmediateQt.cc
         G4OpenGLImmediateQtViewer.cc
-        G4OpenGLImmediateSceneHandler.cc
-        G4OpenGLImmediateViewer.cc
-        G4OpenGLImmediateWin32.cc
-        G4OpenGLImmediateWin32Viewer.cc
-        G4OpenGLImmediateX.cc
-        G4OpenGLImmediateXViewer.cc
-        G4OpenGLImmediateXm.cc
-        G4OpenGLImmediateXmViewer.cc
         G4OpenGLQtExportDialog.cc
         G4OpenGLQtMovieDialog.cc
         G4OpenGLQtViewer.cc
-        G4OpenGLSceneHandler.cc
         G4OpenGLStoredQt.cc
-        G4OpenGLStoredQtViewer.cc
-        G4OpenGLStoredSceneHandler.cc
-        G4OpenGLStoredViewer.cc
-        G4OpenGLStoredWin32.cc
-        G4OpenGLStoredWin32Viewer.cc
-        G4OpenGLStoredX.cc
-        G4OpenGLStoredXViewer.cc
-        G4OpenGLStoredXm.cc
-        G4OpenGLStoredXmViewer.cc
-        G4OpenGLTransform3D.cc
-        G4OpenGLViewer.cc
-        G4OpenGLViewerMessenger.cc
-        G4OpenGLWin32Viewer.cc
-        G4OpenGLXViewer.cc
-        G4OpenGLXmBox.cc
-        G4OpenGLXmConvenienceRoutines.cc
-        G4OpenGLXmFourArrowButtons.cc
-        G4OpenGLXmFramedBox.cc
-        G4OpenGLXmMainMenubarCallbacks.cc
-        G4OpenGLXmPanningCallbacks.cc
-        G4OpenGLXmPushButton.cc
-        G4OpenGLXmRadioButton.cc
-        G4OpenGLXmRotationCallbacks.cc
-        G4OpenGLXmSeparator.cc
-        G4OpenGLXmSliderBar.cc
-        G4OpenGLXmStyleCallbacks.cc
-        G4OpenGLXmTextField.cc
-        G4OpenGLXmTopLevelShell.cc
-        G4OpenGLXmVWidgetComponent.cc
-        G4OpenGLXmVWidgetContainer.cc
-        G4OpenGLXmVWidgetObject.cc
-        G4OpenGLXmVWidgetShell.cc
-        G4OpenGLXmViewer.cc
-        G4OpenGLXmViewerMessenger.cc
-        G4OpenGLXmWindowHandlingCallbacks.cc
+        G4OpenGLStoredQtViewer.cc)
+
+
+    # Include the UseQt file to build the moc wrappers
+    include(${QT_USE_FILE})
+
+    # Add the moc sources - must use absolute path to the files
+    QT4_WRAP_CPP(G4OPENGL_MOC_SOURCES
+        ${CMAKE_SOURCE_DIR}/source/visualization/OpenGL/include/G4OpenGLQtExportDialog.hh
+        ${CMAKE_SOURCE_DIR}/source/visualization/OpenGL/include/G4OpenGLQtMovieDialog.hh
+        ${CMAKE_SOURCE_DIR}/source/visualization/OpenGL/include/G4OpenGLQtViewer.hh
+         OPTIONS -DG4VIS_BUILD_OPENGLQT_DRIVER)
+
+    list(APPEND G4VIS_MODULE_OPENGL_SOURCES ${G4OPENGL_MOC_SOURCES})
+
+    # Add the definitions
+    # Argh.. Have to remember about INTY and UI because of their use...
+    GEANT4_ADD_COMPILE_DEFINITIONS(SOURCES ${G4VIS_MODULE_OPENGL_SOURCES}
+        COMPILE_DEFINITIONS
+        G4VIS_BUILD_OPENGL_DRIVER;G4VIS_BUILD_OPENGLQT_DRIVER;G4INTY_BUILD_QT;G4UI_BUILD_QT_SESSION)
+
+    # And for the moc files because these are in the build tree
+    message(STATUS "glqt moc: ${G4OPENGL_MOC_SOURCES}")
+    set_source_files_properties(${G4OPENGL_MOC_SOURCES}
+       PROPERTIES 
+       COMPILE_DEFINITIONS
+       "G4VIS_BUILD_OPENGL_DRIVER;G4VIS_BUILD_OPENGLQT_DRIVER"
+    )
+
+    # Add in Qt libraries
+    list(APPEND G4VIS_MODULE_OPENGL_LINK_LIBRARIES ${QT_LIBRARIES})
+
+endif()
+
+#
+# Define the Geant4 Module.
+#
+GEANT4_DEFINE_MODULE(NAME G4OpenGL
+    HEADERS
+        ${G4VIS_MODULE_OPENGL_HEADERS}
+    SOURCES
+        ${G4VIS_MODULE_OPENGL_SOURCES}
     GRANULAR_DEPENDENCIES
         G4UIbasic
         G4UIcommon
@@ -168,6 +173,7 @@ GEANT4_DEFINE_MODULE(NAME G4OpenGL
         G4tracking
         G4vis_management
     LINK_LIBRARIES
+        ${G4VIS_MODULE_OPENGL_LINK_LIBRARIES}
 )
 
 # List any source specific properties here
