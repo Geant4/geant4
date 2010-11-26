@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreSplittingProcess.cc,v 1.6 2010-11-23 17:57:23 japost Exp $
+// $Id: G4ScoreSplittingProcess.cc,v 1.7 2010-11-26 10:19:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -227,7 +227,7 @@ G4VParticleChange* G4ScoreSplittingProcess::PostStepDoIt(
 }
 
 G4TouchableHistory*
-G4ScoreSplittingProcess::CreateTouchableForSubStep( G4int newVoxelNum, G4ThreeVector newPosition )
+G4ScoreSplittingProcess::CreateTouchableForSubStep( G4int newVoxelNum, G4ThreeVector )
 {
   // G4cout << " Creating touchable handle for voxel-no " << newVoxelNum << G4endl;
 
@@ -385,7 +385,7 @@ G4VParticleChange* G4ScoreSplittingProcess::AlongStepDoIt(
 //------------------------------------
 G4VParticleChange* G4ScoreSplittingProcess::AtRestDoIt(
      const G4Track& track,
-     const G4Step& step)
+     const G4Step&)
 { 
   pParticleChange->Initialize(track);
   return pParticleChange;
