@@ -1,4 +1,4 @@
-$Id: History,v 1.30 2010-11-19 09:00:27 cirrone Exp $
+$Id: History,v 1.31 2010-11-26 02:43:36 guatelli Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+November 26, 2010, S. Guatelli
+- G4LIB_USE_GDML variable introduced
 
 November 19, 2010, G.A.P.Cirrone, tag: human_phantom-V09-03-04
 - Corrected a bug in Event action

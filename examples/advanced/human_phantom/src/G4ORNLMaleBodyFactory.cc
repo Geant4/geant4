@@ -32,6 +32,8 @@
 // design and code review.
 //
 //
+#ifdef G4LIB_USE_GDML
+
 #include "G4ORNLMaleBodyFactory.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4GDMLParser.hh"
@@ -94,3 +96,4 @@ G4VPhysicalVolume* G4ORNLMaleBodyFactory::CreateOrgan(const G4String& gdmlFile,
 
   return physOrgan;
 }
+#endif
