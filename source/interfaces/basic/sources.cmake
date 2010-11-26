@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.2 2010-11-23 23:47:13 bmorgan Exp $
+# $Id: sources.cmake,v 1.3 2010-11-26 13:40:51 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -72,10 +72,11 @@ if(GEANT4_USE_QT)
     list(APPEND G4INTERFACES_BASIC_MODULE_HEADERS G4UIQt.hh)
     list(APPEND G4INTERFACES_BASIC_MODULE_SOURCES G4UIQt.cc)
 
-    # Now need to add Qt in
+    # Now need to add Qt in to build moc wrappers
     include(${QT_USE_FILE})
 
-    # Add the moc sources - must use an absolute path
+    # Add the moc sources - must use an absolute path to the files being
+    # wrapped
     QT4_WRAP_CPP(G4INTERFACES_MOC_SOURCES 
         ${CMAKE_SOURCE_DIR}/source/interfaces/basic/include/G4UIQt.hh 
         OPTIONS -DG4UI_BUILD_QT_SESSION)
@@ -94,9 +95,7 @@ if(GEANT4_USE_QT)
     # Add the extra libraries - seem to need to quote variables to get
     # both linked in.
     list(APPEND G4INTERFACES_BASIC_MODULE_LINK_LIBRARIES 
-        "${QT_QTGUI_LIBRARY} ${QT_QTCORE_LIBRARY}") 
-
-    message(STATUS "libs: ${G4INTERFACES_BASIC_MODULE_LINK_LIBRARIES}")
+        "${QT_QTGUI_LIBRARY};${QT_QTCORE_LIBRARY}") 
 endif()
 
 
