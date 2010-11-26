@@ -77,8 +77,8 @@ int main(int argc,char** argv)
   }
 
   G4RunManager* runManager = new G4RunManager;
-  DicomDetectorConstruction* theGeometry;
-  DicomHandler* dcmHandler;
+  DicomDetectorConstruction* theGeometry = 0;
+  DicomHandler* dcmHandler = 0;
   
   if( !bPartial ){
     // Treatment of DICOM images before creating the G4runManager
@@ -97,7 +97,7 @@ int main(int argc,char** argv)
   }
 
   // runManager->SetUserInitialization(new DicomPhysicsList);
-   runManager->SetUserInitialization(new QGSP_BIC);
+  runManager->SetUserInitialization(new QGSP_BIC);
   runManager->SetUserInitialization(theGeometry);
   runManager->SetUserAction(new DicomPrimaryGeneratorAction());
   runManager->SetUserAction(new DicomRunAction);

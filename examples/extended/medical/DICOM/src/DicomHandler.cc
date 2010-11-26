@@ -98,7 +98,7 @@ G4int DicomHandler::ReadFile(FILE *dicom, char * filename2)
     short readElementId;  // identify a particular type information
     short elementLength2; // deal with element length in 2 bytes
     //unsigned int elementLength4; // deal with element length in 4 bytes
-    long elementLength4; // deal with element length in 4 bytes
+    unsigned long elementLength4; // deal with element length in 4 bytes
 
     char * data = new char[DATABUFFSIZE];
 
@@ -890,7 +890,7 @@ void DicomHandler::read_undefined_nested(FILE * nested)
   //      VARIABLES
   unsigned short item_GroupNumber;
   unsigned short item_ElementNumber;
-  long item_Length;
+  unsigned long item_Length;
   char * buffer= new char[LINEBUFFSIZE];
   
 

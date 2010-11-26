@@ -269,7 +269,7 @@ void DicomPartialDetectorConstruction::ReadVoxelDensitiesPartial( std::ifstream&
 	  //	float densityBin = densityDiffs[mateID] * (G4int(dens1/densityDiffs[mateID])+0.5);
 	  G4String newMateName = mate->GetName();
 
-	  G4int densityBin;
+	  G4int densityBin = 0;
 	  //	G4cout << " densityBin " << densityBin << " " << dens1 << " " <<densityDiffs[mateID] << G4endl; 	  
 
 	  if( densityDiff != -1.) {
@@ -403,7 +403,7 @@ void DicomPartialDetectorConstruction::ConstructPhantom()
   //  G4cout << " Number of Materials " << thePhantomMaterials.size() << G4endl;
   //  G4cout << " SetMaterialIndices(0) " << mateIDs[0] << G4endl;
 
-  G4PVParameterised * phantom_phys;
+  G4PVParameterised * phantom_phys = 0;
   if( OptimAxis == "kUndefined" ) {
     phantom_phys = new G4PVParameterised(voxelName,phantom_logic,container_logic,
 					 kUndefined, theNVoxels, thePartialPhantomParam);

@@ -361,7 +361,7 @@ void DicomDetectorConstruction::ReadPhantomDataFile(const G4String& fname)
 
     //-- Get density bin: middle point of the bin in which the current density is included 
     G4String newMateName = mateOrig->GetName();
-    float densityBin;
+    float densityBin = 0.;
    if( densityDiff != -1.) {
      densityBin = fDensityDiffs[mateID] * (G4int(density/fDensityDiffs[mateID])+0.5);
      //-- Build the new material name 
