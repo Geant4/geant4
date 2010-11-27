@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEAntiLambdaInelastic.hh,v 1.15 2010-11-20 04:00:19 dennis Exp $
+// $Id: G4HEAntiLambdaInelastic.hh,v 1.16 2010-11-27 02:02:59 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -67,17 +67,17 @@ class G4HEAntiLambdaInelastic : public G4HEInelastic
          
    G4int vecLength;
         
-   G4HadFinalState* ApplyYourself(const G4HadProjectile &aTrack,
-                                  G4Nucleus &targetNucleus);
+   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+                                  G4Nucleus& targetNucleus);
 
    G4int GetNumberOfSecondaries() {return vecLength;}
 
-   void FirstIntInCasAntiLambda(G4bool &inElastic,
+   void FirstIntInCasAntiLambda(G4bool& inElastic,
                                 const G4double availableEnergy,
                                 G4HEVector pv[],
-                                G4int &vecLen, 
-                                G4HEVector incidentParticle,
-                                G4HEVector targetParticle,
+                                G4int& vecLen, 
+                                const G4HEVector& incidentParticle,
+                                const G4HEVector& targetParticle,
                                 const G4double atomicWeight);
 };
 #endif                     

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEAntiLambdaInelastic.cc,v 1.16 2010-11-20 04:01:33 dennis Exp $
+// $Id: G4HEAntiLambdaInelastic.cc,v 1.17 2010-11-27 02:00:07 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -173,8 +173,8 @@ G4HEAntiLambdaInelastic::FirstIntInCasAntiLambda(G4bool& inElastic,
                                                  const G4double availableEnergy,
                                                  G4HEVector pv[],
                                                  G4int &vecLen,
-                                                 G4HEVector incidentParticle,
-                                                 G4HEVector targetParticle,
+                                                 const G4HEVector& incidentParticle,
+                                                 const G4HEVector& targetParticle,
                                                  const G4double atomicWeight)
 
 // AntiLambda undergoes interaction with nucleon within a nucleus.
@@ -185,10 +185,9 @@ G4HEAntiLambdaInelastic::FirstIntInCasAntiLambda(G4bool& inElastic,
 // produced using an interpolation to multiplicity data.  Replace some pions or
 // protons/neutrons by kaons or strange baryons according to the average
 // multiplicity per inelastic reaction.
-
 {
-  static const G4double expxu =  std::log(MAXFLOAT); // upper bound for arg. of exp
-  static const G4double expxl = -expxu;         // lower bound for arg. of exp
+  static const G4double expxu = std::log(MAXFLOAT); // upper bound for arg. of exp
+  static const G4double expxl = -expxu;             // lower bound for arg. of exp
 
   static const G4double protb = 0.7;
   static const G4double neutb = 0.7;
@@ -215,7 +214,7 @@ G4HEAntiLambdaInelastic::FirstIntInCasAntiLambda(G4bool& inElastic,
   G4int i, counter, nt, np, nm, nz;
 
    if( first ) 
-     {                         // compute normalization constants, this will only be done once
+     {                 // compute normalization constants, this will only be done once
        first = false;
        for( i=0; i<numMul  ; i++ ) protmul[i]  = 0.0;
        for( i=0; i<numSec  ; i++ ) protnorm[i] = 0.0;
