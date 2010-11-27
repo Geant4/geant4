@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HEInelastic.hh,v 1.15 2010-11-20 04:00:20 dennis Exp $
+// $Id: G4HEInelastic.hh,v 1.16 2010-11-27 02:03:55 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -69,6 +69,7 @@ class G4HEInelastic : public G4HadronicInteraction
     : G4HadronicInteraction(modelName)
    { 
      SetParticles();
+     verboseLevel = 0;
      MAXPART = 0;
      conserveEnergy = true;
    };
