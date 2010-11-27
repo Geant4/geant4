@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEVector.hh,v 1.13 2010-11-20 04:00:20 dennis Exp $
+// $Id: G4HEVector.hh,v 1.14 2010-11-27 01:57:33 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -153,7 +153,7 @@ class G4HEVector
 
    const G4ParticleMomentum getMomentum() const ;
 
-   G4double getTotalMomentum();
+   G4double getTotalMomentum() const;
 
    void setMomentum( G4double x, G4double y, G4double z);
 
@@ -203,7 +203,7 @@ class G4HEVector
 
    void setCode( G4int c ); 
 
-   G4int getCode(); 
+   G4int getCode() const; 
 
    G4String getName();
 

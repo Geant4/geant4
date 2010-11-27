@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEVector.cc,v 1.20 2006-11-22 23:52:32 dennis Exp $
+// $Id: G4HEVector.cc,v 1.21 2010-11-27 01:57:46 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -163,39 +163,38 @@ G4HEVector::getMomentum() const
      return mom; 
    }
 
-G4double 
-G4HEVector::getTotalMomentum()
-   {
-     return std::sqrt(px*px + py*py + pz*pz);
-   }
+G4double G4HEVector::getTotalMomentum() const
+{
+  return std::sqrt(px*px + py*py + pz*pz);
+}
 
 void
-G4HEVector::setMomentum( G4double x, G4double y, G4double z)
-   { 
-     px = x;
-     py = y;
-     pz = z;
-     return;
-   } 
+G4HEVector::setMomentum(G4double x, G4double y, G4double z)
+{ 
+  px = x;
+  py = y;
+  pz = z;
+  return;
+} 
 
 void 
-G4HEVector::setMomentumAndUpdate( G4double x, G4double y, G4double z )
-   {
-     px = x;
-     py = y;
-     pz = z;
-     energy        = std::sqrt(mass*mass + px*px + py*py + pz*pz);
-     kineticEnergy = Amax(0.,energy-mass);
-     return;
-   }
+G4HEVector::setMomentumAndUpdate(G4double x, G4double y, G4double z)
+{
+  px = x;
+  py = y;
+  pz = z;
+  energy = std::sqrt(mass*mass + px*px + py*py + pz*pz);
+  kineticEnergy = Amax(0.,energy-mass);
+  return;
+}
 
 void 
-G4HEVector::setMomentum( G4double x, G4double y )
-   {
-     px = x;
-     py = y;
-     return;
-   }
+G4HEVector::setMomentum(G4double x, G4double y)
+{
+  px = x;
+  py = y;
+  return;
+}
 
 void 
 G4HEVector::setMomentumAndUpdate( G4double x, G4double y )
@@ -432,11 +431,10 @@ G4HEVector::setCode( G4int c )
      return; 
    }
 
-G4int 
-G4HEVector::getCode() 
-   { 
-     return code; 
-   } 
+G4int G4HEVector::getCode() const 
+{ 
+  return code; 
+} 
 
 G4String
 G4HEVector::getName()
