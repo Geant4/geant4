@@ -23,9 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// LocalIonIonInelasticPhysic.cc
+// This is the *BASIC* version of Hadrontherapy, a Geant4-based application
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+//
+// Visit the Hadrontherapy web site (http://www.lns.infn.it/link/Hadrontherapy) to request 
+// the *COMPLETE* version of this program, together with its documentation;
+// Hadrontherapy (both basic and full version) are supported by the Italian INFN
+// Institute in the framework of the MC-INFN Group
+//
 //
 // In this class the models for ion-ion interactions at intermediate energies (0 - 1 GeV per nucleon)
 // can be activate. This class can be used alternatively to the "binary_ion" physics list

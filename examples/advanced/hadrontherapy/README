@@ -3,12 +3,17 @@
                      Text version of the Hadrontherapy README file
              =========================================================
 
-Last revsion: G.A.P.Cirrone, October 20010;
-Released with the Geant4 9.3 version (December 2010)
+Last revsion: G.A.P.Cirrone, November 20010;
+Released with the Geant4 9.4 version (December 2011)
 
 ------------------------------------------------------------------------------------------------
-ADVERTISEMENT: this is the text version of the README file of the hadrontherapy application, 
+ADVERTISEMENT: this is the text version of the README file of the 'basic' hadrontherapy, 
 as it has been released in the official Geant4 9.4 release
+
+Visit the Hadrontherapy web site (http://www.lns.infn.it/link/Hadrontherapy) to request 
+the complete version of this program, together with its documentation;
+Hadrontherapy (both basic and full version) are supported by the Italian INFN
+Institute in the framework of the MC-INFN Group
 
 A more complete and updated version of this file is published inside the web pages of Hadrontherapy:
 http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
