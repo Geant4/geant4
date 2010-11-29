@@ -11,7 +11,8 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 19:14:08 bmorgan Exp $
+# $Id: sources.cmake,v 1.2 2010-11-29 19:00:10 bmorgan Exp $
+# GEANT4 Tag $Name: not supported by cvs2svn $
 #
 #------------------------------------------------------------------------------
 
@@ -20,6 +21,17 @@ include_directories(${CLHEP_INCLUDE_DIRS})
 
 # List internal includes needed.
 include_directories(${CMAKE_SOURCE_DIR}/source/visualization/externals/zlib/include)
+
+#
+# We need to add definitions depending on what GL drivers are built
+#
+if(GEANT4_USE_OPENGL)
+    ADD_DEFINITIONS(-DG4VIS_BUILD_OPENGL_DRIVER)
+endif()
+
+if(GEANT4_USE_INVENTOR)
+    ADD_DEFINITIONS(-DG4VIS_BUILD_OI_DRIVER)
+endif()
 
 #
 # Define the Geant4 Module.
