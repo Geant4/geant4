@@ -11,7 +11,8 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 19:01:22 bmorgan Exp $
+# $Id: sources.cmake,v 1.2 2010-11-29 17:48:07 bmorgan Exp $
+# GEANT4 Tag $Name: not supported by cvs2svn $
 #
 #------------------------------------------------------------------------------
 
@@ -55,17 +56,8 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_photon_evaporation
         G4ContinuumGammaTransition.hh
         G4DiscreteGammaDeexcitation.hh
         G4DiscreteGammaTransition.hh
-        G4DummyProbability.hh
         G4E1Probability.hh
-        G4E1Probability001.hh
-        G4E1Probability01.hh
-        G4E1Probability10.hh
-        G4E1Probability100.hh
-        G4E1SingleProbability001.hh
-        G4E1SingleProbability01.hh
         G4E1SingleProbability1.hh
-        G4E1SingleProbability10.hh
-        G4E1SingleProbability100.hh
         G4NeutronRadCapture.hh
         G4NuclearLevel.hh
         G4NuclearLevelManager.hh
@@ -81,23 +73,15 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_photon_evaporation
         G4ContinuumGammaTransition.cc
         G4DiscreteGammaDeexcitation.cc
         G4DiscreteGammaTransition.cc
-        G4DummyProbability.cc
         G4E1Probability.cc
-        G4E1Probability001.cc
-        G4E1Probability01.cc
-        G4E1Probability10.cc
-        G4E1Probability100.cc
-        G4E1SingleProbability001.cc
-        G4E1SingleProbability01.cc
         G4E1SingleProbability1.cc
-        G4E1SingleProbability10.cc
-        G4E1SingleProbability100.cc
         G4NeutronRadCapture.cc
         G4NuclearLevel.cc
         G4NuclearLevelManager.cc
         G4NuclearLevelStore.cc
         G4PhotonEvaporation.cc
         G4VGammaDeexcitation.cc
+        G4VGammaTransition.cc
         G4VPhotonEvaporation.cc
     GRANULAR_DEPENDENCIES
         G4baryons
