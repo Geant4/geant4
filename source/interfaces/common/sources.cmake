@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.2 2010-11-29 17:01:30 bmorgan Exp $
+# $Id: sources.cmake,v 1.3 2010-11-29 17:08:28 bmorgan Exp $
 # GEANT4 Tag $Name: not supported by cvs2svn $
 #
 #------------------------------------------------------------------------------
@@ -59,7 +59,7 @@ if(GEANT4_USE_QT)
 
     # It uses Qt core and gui(?) libs
     list(APPEND ${G4INTERFACES_COMMON_MODULE_LINK_LIBRARIES}
-        "${QT_QTGUI_LIBRARY} ${QT_QTCORE_LIBRARY}") 
+        "${QT_QTGUI_LIBRARY};${QT_QTCORE_LIBRARY}") 
 endif()
 
 #
