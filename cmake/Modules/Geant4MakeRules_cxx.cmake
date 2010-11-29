@@ -25,7 +25,7 @@ endif()
 if(MSVC)
     # Hmm, WIN32-VC.gmk uses dashes, but cmake uses slashes, latter probably
     # best for native build.
-    set(CMAKE_CXX_FLAGS_INIT "-MD -GR -EHsc -Zm200 -nologo -D_CONSOLE -D_WIN32 -DOS")
+    set(CMAKE_CXX_FLAGS_INIT "-MD -GR -EHsc -Zm200 -nologo -D_CONSOLE -D_WIN32 -DWIN32 -DOS")
     set(CMAKE_CXX_FLAGS_DEBUG_INIT "-Od -Zi") 
     set(CMAKE_CXX_FLAGS_RELEASE_INIT "-O2 -DNDEBUG")
     set(CMAKE_CXX_FLAGS_MINSIZEREL_INIT "-Os -DNDEBUG")
