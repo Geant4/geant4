@@ -1,5 +1,5 @@
 # Use this open statement to create an OpenGL view:
-/vis/open OGL 600x600-0+0
+/vis/open OGLIX 600x600-0+0
 #
 # Use this open statement to create a .prim file suitable for
 # viewing in DAWN:
@@ -15,7 +15,7 @@
 #
 # Disable auto refresh and quieten vis messages whilst scene and
 # trajectories are established:
-/vis/viewer/set/autoRefresh false
+/vis/viewer/set/autoRefresh true
 /vis/verbose errors
 #
 # Draw geometry:
@@ -31,7 +31,7 @@
 #/vis/viewer/set/style wireframe
 #
 # Draw coordinate axes:
-#/vis/scene/add/axes 0 0 0 1 m
+/vis/scene/add/axes 0 0 0 1 m
 #
 # Draw smooth trajectories at end of event, showing trajectory points
 # as markers 2 pixels wide:
@@ -61,13 +61,49 @@
 /vis/scene/endOfEventAction accumulate 100
 #
 # Re-establish auto refreshing and verbosity:
-/vis/viewer/set/autoRefresh true
+/vis/viewer/set/autoRefresh false
 /vis/verbose warnings
 #
 # For file-based drivers, use this to create an empty detector view:
 #/vis/viewer/flush
 
-/run/beamOn 100
+/accelerator/rotation90Y false
+/phantom/centre 0 0 0 # phantom centre coordinates in the world [mm]
+
+/accelerator/rotationX 0 deg  # angles of rotation along X  [deg]
+/run/beamOn 800
+
+/phantom/centre 0 0 0 # phantom centre coordinates in the world [mm]
+/accelerator/rotationX 45 deg  # angles of rotation along X  [deg]
+/run/beamOn 800
+
+/phantom/centre 0 0 0 # phantom centre coordinates in the world [mm]
+/accelerator/rotationX 90 deg  # angles of rotation along X  [deg]
+/run/beamOn 800
+
+/phantom/centre 0 0 0 # phantom centre coordinates in the world [mm]
+/accelerator/rotationX 135 deg  # angles of rotation along X  [deg]
+/run/beamOn 800
+
+
+/accelerator/rotation90Y true
+/phantom/centre 0 0 0 # phantom centre coordinates in the world [mm]
+
+/accelerator/rotationX 0 deg  # angles of rotation along X  [deg]
+/run/beamOn 800
+
+/phantom/centre 0 0 0 # phantom centre coordinates in the world [mm]
+/accelerator/rotationX 45 deg  # angles of rotation along X  [deg]
+/run/beamOn 800
+
+/phantom/centre 0 0 0 # phantom centre coordinates in the world [mm]
+/accelerator/rotationX 90 deg  # angles of rotation along X  [deg]
+/run/beamOn 800
+
+/phantom/centre 0 0 0 # phantom centre coordinates in the world [mm]
+/accelerator/rotationX 135 deg  # angles of rotation along X  [deg]
+/run/beamOn 800
+
 
 # acceleratorBox
 # targetA

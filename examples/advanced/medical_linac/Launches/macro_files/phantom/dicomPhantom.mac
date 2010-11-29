@@ -1,4 +1,4 @@
-/dicom/dicomDirectory MyDirectory/launches/dicom/
+/dicom/dicomDirectory MyDirectory/Launches/dicom/
 /dicom/fileData Data.dat
 /dicom/calibrationDensityFileName CT2Density.dat
 /dicom/dicomColorMap ColourMap.dat
