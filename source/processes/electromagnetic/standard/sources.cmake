@@ -11,7 +11,8 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.3 2010-10-26 09:01:23 gcosmo Exp $
+# $Id: sources.cmake,v 1.4 2010-11-29 17:35:45 bmorgan Exp $
+# GEANT4 Tag $Name: not supported by cvs2svn $
 #
 #------------------------------------------------------------------------------
 
@@ -63,6 +64,8 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4ICRU49NuclearStoppingModel.hh
         G4ICRU73QOModel.hh
         G4InitXscPAI.hh
+        G4IonCoulombCrossSection.hh
+        G4IonCoulombScatteringModel.hh
         G4IonFluctuations.hh
         G4KleinNishinaCompton.hh
         G4KleinNishinaModel.hh
@@ -118,6 +121,8 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4ICRU49NuclearStoppingModel.cc
         G4ICRU73QOModel.cc
         G4InitXscPAI.cc
+        G4IonCoulombCrossSection.cc
+        G4IonCoulombScatteringModel.cc
         G4IonFluctuations.cc
         G4KleinNishinaCompton.cc
         G4KleinNishinaModel.cc
