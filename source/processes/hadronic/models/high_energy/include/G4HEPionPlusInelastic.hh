@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEPionPlusInelastic.hh,v 1.16 2010-11-20 04:00:20 dennis Exp $
+// $Id: G4HEPionPlusInelastic.hh,v 1.17 2010-11-29 05:45:06 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -57,7 +57,7 @@ class G4HEPionPlusInelastic : public G4HEInelastic
    G4HEPionPlusInelastic() : G4HEInelastic("G4HEPionPlusInelastic")
    {
      vecLength = 0;
-     theMinEnergy =  45*GeV;
+     theMinEnergy = 45*GeV;
      theMaxEnergy = 10*TeV;
      MAXPART      = 2048;
      verboseLevel = 0; 
@@ -75,9 +75,9 @@ class G4HEPionPlusInelastic : public G4HEInelastic
    void FirstIntInCasPionPlus(G4bool& inElastic,
                               const G4double availableEnergy,
                               G4HEVector pv[],
-                              G4int &vecLen, 
-                              G4HEVector incidentParticle,
-                              G4HEVector targetParticle,
+                              G4int& vecLen, 
+                              const G4HEVector& incidentParticle,
+                              const G4HEVector& targetParticle,
                               const G4double atomicWeight);
 };
 #endif

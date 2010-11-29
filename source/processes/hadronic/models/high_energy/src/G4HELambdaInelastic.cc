@@ -23,14 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HELambdaInelastic.cc,v 1.16 2010-11-20 04:01:33 dennis Exp $
+// $Id: G4HELambdaInelastic.cc,v 1.17 2010-11-29 05:44:44 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "globals.hh"
 #include "G4ios.hh"
 
-//
 // G4 Process: Gheisha High Energy Collision model.
 // This includes the high energy cascading model, the two-body-resonance model
 // and the low energy two-body model. Not included are the low energy stuff
@@ -129,6 +128,7 @@ G4HELambdaInelastic::ApplyYourself(const G4HadProjectile& aTrack,
     StrangeParticlePairProduction(availableEnergy, centerOfMassEnergy,
                                   pv, vecLength,
                                   incidentParticle, targetParticle);
+
   HighEnergyCascading(successful, pv, vecLength,
                       excitationEnergyGNP, excitationEnergyDTA,
                       incidentParticle, targetParticle,
@@ -162,7 +162,7 @@ G4HELambdaInelastic::ApplyYourself(const G4HadProjectile& aTrack,
   if (!successful)
     G4cout << "GHEInelasticInteraction::ApplyYourself fails to produce final state particles"
            << G4endl;
-  FillParticleChange(pv,  vecLength);
+  FillParticleChange(pv, vecLength);
   delete [] pv;
   theParticleChange.SetStatusChange(stopAndKill);
   return &theParticleChange;
@@ -174,8 +174,8 @@ G4HELambdaInelastic::FirstIntInCasLambda(G4bool& inElastic,
                                          const G4double availableEnergy,
                                          G4HEVector pv[],
                                          G4int& vecLen,
-                                         G4HEVector incidentParticle,
-                                         G4HEVector targetParticle,
+                                         const G4HEVector& incidentParticle,
+                                         const G4HEVector& targetParticle,
                                          const G4double atomicWeight)
 
 // Lambda undergoes interaction with nucleon within a nucleus.  Check if it is
@@ -186,32 +186,29 @@ G4HELambdaInelastic::FirstIntInCasLambda(G4bool& inElastic,
 // data.  Replace some pions or protons/neutrons by kaons or strange baryons 
 // according to the average multiplicity per inelastic reaction.
 {
-  static const G4double expxu =  std::log(MAXFLOAT); // upper bound for arg. of exp
-  static const G4double expxl = -expxu;         // lower bound for arg. of exp
+  static const G4double expxu = std::log(MAXFLOAT); // upper bound for arg. of exp
+  static const G4double expxl = -expxu;             // lower bound for arg. of exp
 
-   static const G4double protb = 0.7;
-   static const G4double neutb = 0.7;              
-   static const G4double     c = 1.25;
+  static const G4double protb = 0.7;
+  static const G4double neutb = 0.7;              
+  static const G4double     c = 1.25;
 
-   static const G4int   numMul = 1200;
-   static const G4int   numSec = 60;
+  static const G4int numMul = 1200;
+  static const G4int numSec = 60;
 
-//   G4int              neutronCode = Neutron.getCode();
-   G4int              protonCode  = Proton.getCode();
+  G4int protonCode  = Proton.getCode();
 
-   G4int               targetCode = targetParticle.getCode();
-//   G4double          incidentMass = incidentParticle.getMass();
-//   G4double        incidentEnergy = incidentParticle.getEnergy();
-   G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
+  G4int targetCode = targetParticle.getCode();
+  G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
 
-   static G4bool first = true;
-   static G4double protmul[numMul], protnorm[numSec];  // proton constants
-   static G4double neutmul[numMul], neutnorm[numSec];  // neutron constants
+  static G4bool first = true;
+  static G4double protmul[numMul], protnorm[numSec];  // proton constants
+  static G4double neutmul[numMul], neutnorm[numSec];  // neutron constants
 
-   //  misc. local variables
-   //  np = number of pi+,  nm = number of pi-,  nz = number of pi0
+  //  misc. local variables
+  //  np = number of pi+,  nm = number of pi-,  nz = number of pi0
 
-   G4int i, counter, nt, np, nm, nz;
+  G4int i, counter, nt, np, nm, nz;
 
    if( first ) 
      {        // compute normalization constants, this will only be done once

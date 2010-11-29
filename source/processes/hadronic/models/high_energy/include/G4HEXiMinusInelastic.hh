@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEXiMinusInelastic.hh,v 1.15 2010-11-20 04:00:20 dennis Exp $
+// $Id: G4HEXiMinusInelastic.hh,v 1.16 2010-11-29 05:45:06 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -75,9 +75,9 @@ class G4HEXiMinusInelastic : public G4HEInelastic
    void FirstIntInCasXiMinus(G4bool& inElastic,
                              const G4double availableEnergy,
                              G4HEVector pv[],
-                             G4int &vecLen, 
-                             G4HEVector incidentParticle,
-                             G4HEVector targetParticle,
+                             G4int& vecLen, 
+                             const G4HEVector& incidentParticle,
+                             const G4HEVector& targetParticle,
                              const G4double atomicWeight);
 };
 #endif

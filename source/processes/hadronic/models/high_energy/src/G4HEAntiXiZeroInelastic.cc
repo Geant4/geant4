@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HEAntiXiZeroInelastic.cc,v 1.16 2010-11-20 04:01:33 dennis Exp $
+// $Id: G4HEAntiXiZeroInelastic.cc,v 1.17 2010-11-29 05:44:44 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -45,8 +45,8 @@ G4HadFinalState*
 G4HEAntiXiZeroInelastic::ApplyYourself(const G4HadProjectile& aTrack,
                                        G4Nucleus& targetNucleus)
 {
-  G4HEVector * pv = new G4HEVector[MAXPART];
-  const G4HadProjectile *aParticle = &aTrack;
+  G4HEVector* pv = new G4HEVector[MAXPART];
+  const G4HadProjectile* aParticle = &aTrack;
   const G4double A = targetNucleus.GetN();
   const G4double Z = targetNucleus.GetZ();
   G4HEVector incidentParticle(aParticle);
@@ -87,85 +87,85 @@ G4HEAntiXiZeroInelastic::ApplyYourself(const G4HadProjectile& aTrack,
                                           atomicWeight, atomicNumber,
                                           excitationEnergyGNP,
                                           excitationEnergyDTA);
-    if(verboseLevel > 1)
-      G4cout << "nuclear excitation = " << excitation << excitationEnergyGNP 
+  if (verboseLevel > 1)
+    G4cout << "nuclear excitation = " << excitation << excitationEnergyGNP 
            << excitationEnergyDTA << G4endl;             
 
-    incidentKineticEnergy -= excitation;
-    incidentTotalEnergy = incidentKineticEnergy + incidentMass;
-    incidentTotalMomentum = std::sqrt( (incidentTotalEnergy-incidentMass)                    
-                                      *(incidentTotalEnergy+incidentMass));
+  incidentKineticEnergy -= excitation;
+  incidentTotalEnergy = incidentKineticEnergy + incidentMass;
+  incidentTotalMomentum = std::sqrt((incidentTotalEnergy-incidentMass)                    
+                                   *(incidentTotalEnergy+incidentMass));
 
-    G4HEVector targetParticle;
-    if (G4UniformRand() < atomicNumber/atomicWeight) { 
-      targetParticle.setDefinition("Proton");
-    } else { 
-      targetParticle.setDefinition("Neutron");
-    }
+  G4HEVector targetParticle;
+  if (G4UniformRand() < atomicNumber/atomicWeight) { 
+    targetParticle.setDefinition("Proton");
+  } else { 
+    targetParticle.setDefinition("Neutron");
+  }
 
-    G4double targetMass = targetParticle.getMass();
-    G4double centerOfMassEnergy = std::sqrt(incidentMass*incidentMass
-                                          + targetMass*targetMass
-                                          + 2.0*targetMass*incidentTotalEnergy);
-    G4double availableEnergy = centerOfMassEnergy - targetMass - incidentMass;
+  G4double targetMass = targetParticle.getMass();
+  G4double centerOfMassEnergy = std::sqrt(incidentMass*incidentMass
+                                        + targetMass*targetMass
+                                        + 2.0*targetMass*incidentTotalEnergy);
+  G4double availableEnergy = centerOfMassEnergy - targetMass - incidentMass;
 
-    G4bool inElastic = true;
-    vecLength = 0;           
+  G4bool inElastic = true;
+  vecLength = 0;           
         
-    if (verboseLevel > 1)
-      G4cout << "ApplyYourself: CallFirstIntInCascade for particle "
-             << incidentCode << G4endl;
+  if (verboseLevel > 1)
+    G4cout << "ApplyYourself: CallFirstIntInCascade for particle "
+           << incidentCode << G4endl;
 
-    G4bool successful = false; 
+  G4bool successful = false; 
     
-    FirstIntInCasAntiXiZero(inElastic, availableEnergy, pv, vecLength,
-                            incidentParticle, targetParticle, atomicWeight);
+  FirstIntInCasAntiXiZero(inElastic, availableEnergy, pv, vecLength,
+                          incidentParticle, targetParticle, atomicWeight);
 
-    if (verboseLevel > 1)
-      G4cout << "ApplyYourself::StrangeParticlePairProduction" << G4endl;
+  if (verboseLevel > 1)
+    G4cout << "ApplyYourself::StrangeParticlePairProduction" << G4endl;
 
-    if ((vecLength > 0) && (availableEnergy > 1.)) 
-      StrangeParticlePairProduction(availableEnergy, centerOfMassEnergy,
-                                    pv, vecLength,
-                                    incidentParticle, targetParticle);
+  if ((vecLength > 0) && (availableEnergy > 1.)) 
+    StrangeParticlePairProduction(availableEnergy, centerOfMassEnergy,
+                                  pv, vecLength,
+                                  incidentParticle, targetParticle);
 
-    HighEnergyCascading(successful, pv, vecLength,
-                        excitationEnergyGNP, excitationEnergyDTA,
-                        incidentParticle, targetParticle,
-                        atomicWeight, atomicNumber);
-    if (!successful)
-      HighEnergyClusterProduction(successful, pv, vecLength,
-                                  excitationEnergyGNP, excitationEnergyDTA,
+  HighEnergyCascading(successful, pv, vecLength,
+                      excitationEnergyGNP, excitationEnergyDTA,
+                      incidentParticle, targetParticle,
+                      atomicWeight, atomicNumber);
+  if (!successful)
+    HighEnergyClusterProduction(successful, pv, vecLength,
+                                excitationEnergyGNP, excitationEnergyDTA,
+                                incidentParticle, targetParticle,
+                                atomicWeight, atomicNumber);
+  if (!successful) 
+    MediumEnergyCascading(successful, pv, vecLength, 
+                          excitationEnergyGNP, excitationEnergyDTA, 
+                          incidentParticle, targetParticle,
+                          atomicWeight, atomicNumber);
+
+  if (!successful)
+    MediumEnergyClusterProduction(successful, pv, vecLength,
+                                  excitationEnergyGNP, excitationEnergyDTA,       
                                   incidentParticle, targetParticle,
                                   atomicWeight, atomicNumber);
-    if (!successful) 
-      MediumEnergyCascading(successful, pv, vecLength, 
-                            excitationEnergyGNP, excitationEnergyDTA, 
-                            incidentParticle, targetParticle,
-                            atomicWeight, atomicNumber);
+  if (!successful)
+    QuasiElasticScattering(successful, pv, vecLength,
+                           excitationEnergyGNP, excitationEnergyDTA,
+                           incidentParticle, targetParticle, 
+                           atomicWeight, atomicNumber);
+  if (!successful)
+    ElasticScattering(successful, pv, vecLength,
+                      incidentParticle,    
+                      atomicWeight, atomicNumber);
+  if (!successful)
+    G4cout << "GHEInelasticInteraction::ApplyYourself fails to produce final state particles"
+           << G4endl;
 
-    if (!successful)
-      MediumEnergyClusterProduction(successful, pv, vecLength,
-                                    excitationEnergyGNP, excitationEnergyDTA,       
-                                    incidentParticle, targetParticle,
-                                    atomicWeight, atomicNumber);
-    if (!successful)
-      QuasiElasticScattering(successful, pv, vecLength,
-                             excitationEnergyGNP, excitationEnergyDTA,
-                             incidentParticle, targetParticle, 
-                             atomicWeight, atomicNumber);
-    if (!successful)
-      ElasticScattering(successful, pv, vecLength,
-                        incidentParticle,    
-                        atomicWeight, atomicNumber);
-    if (!successful)
-      G4cout << "GHEInelasticInteraction::ApplyYourself fails to produce final state particles"
-             << G4endl;
-
-    FillParticleChange(pv,  vecLength);
-    delete [] pv;
-    theParticleChange.SetStatusChange(stopAndKill);
-    return &theParticleChange;
+  FillParticleChange(pv, vecLength);
+  delete [] pv;
+  theParticleChange.SetStatusChange(stopAndKill);
+  return &theParticleChange;
 }
 
 
@@ -174,8 +174,8 @@ G4HEAntiXiZeroInelastic::FirstIntInCasAntiXiZero(G4bool& inElastic,
                                                  const G4double availableEnergy,
                                                  G4HEVector pv[],
                                                  G4int& vecLen,
-                                                 G4HEVector incidentParticle,
-                                                 G4HEVector targetParticle,
+                                                 const G4HEVector& incidentParticle,
+                                                 const G4HEVector& targetParticle,
                                                  const G4double atomicWeight)
 
 // AntiXi0 undergoes interaction with nucleon within a nucleus.  
@@ -183,38 +183,35 @@ G4HEAntiXiZeroInelastic::FirstIntInCasAntiXiZero(G4bool& inElastic,
 // on the whole performance of the program. Take AntiLambda instaed. 
 // ( decay Xi0 -> L Pi > 99 % )
 {
-  static const G4double expxu =  std::log(MAXFLOAT); // upper bound for arg. of exp
-  static const G4double expxl = -expxu;         // lower bound for arg. of exp
+  static const G4double expxu = std::log(MAXFLOAT); // upper bound for arg. of exp
+  static const G4double expxl = -expxu;             // lower bound for arg. of exp
 
-   static const G4double protb = 0.7;
-   static const G4double neutb = 0.7;
-   static const G4double     c = 1.25;
+  static const G4double protb = 0.7;
+  static const G4double neutb = 0.7;
+  static const G4double     c = 1.25;
 
-   static const G4int   numMul   = 1200;
-   static const G4int   numMulAn = 400;
-   static const G4int   numSec   = 60;
+  static const G4int numMul   = 1200;
+  static const G4int numMulAn = 400;
+  static const G4int numSec   = 60;
 
-//   G4int              neutronCode = Neutron.getCode();
-   G4int              protonCode  = Proton.getCode();
+  G4int protonCode  = Proton.getCode();
 
-   G4int               targetCode = targetParticle.getCode();
-//   G4double          incidentMass = incidentParticle.getMass();
-//   G4double        incidentEnergy = incidentParticle.getEnergy();
-   G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
+  G4int targetCode = targetParticle.getCode();
+  G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
 
-   static G4bool first = true;
-   static G4double protmul[numMul],  protnorm[numSec];   // proton constants
-   static G4double protmulAn[numMulAn],protnormAn[numSec]; 
-   static G4double neutmul[numMul],  neutnorm[numSec];   // neutron constants
-   static G4double neutmulAn[numMulAn],neutnormAn[numSec];
+  static G4bool first = true;
+  static G4double protmul[numMul],  protnorm[numSec];   // proton constants
+  static G4double protmulAn[numMulAn],protnormAn[numSec]; 
+  static G4double neutmul[numMul],  neutnorm[numSec];   // neutron constants
+  static G4double neutmulAn[numMulAn],neutnormAn[numSec];
 
-                              //  misc. local variables
-                              //  np = number of pi+,  nm = number of pi-,  nz = number of pi0
+  //  misc. local variables
+  //  np = number of pi+,  nm = number of pi-,  nz = number of pi0
 
-   G4int i, counter, nt, np, nm, nz;
+  G4int i, counter, nt, np, nm, nz;
 
    if( first ) 
-     {                         // compute normalization constants, this will only be done once
+     {           // compute normalization constants, this will only be done once
        first = false;
        for( i=0; i<numMul  ; i++ ) protmul[i]  = 0.0;
        for( i=0; i<numSec  ; i++ ) protnorm[i] = 0.0;

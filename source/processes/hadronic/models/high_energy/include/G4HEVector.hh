@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEVector.hh,v 1.14 2010-11-27 01:57:33 dennis Exp $
+// $Id: G4HEVector.hh,v 1.15 2010-11-29 05:45:06 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -175,19 +175,19 @@ class G4HEVector
 
    void setKineticEnergyAndUpdate(G4double ekin); 
 
-   G4double getEnergy(); 
+   G4double getEnergy() const; 
 
-   G4double getKineticEnergy(); 
+   G4double getKineticEnergy() const; 
 
    void setMass( G4double m ); 
 
    void setMassAndUpdate( G4double m );
 
-   G4double getMass(); 
+   G4double getMass() const; 
 
    void setCharge( G4double c ); 
 
-   G4double getCharge(); 
+   G4double getCharge() const; 
 
    void setTOF( G4double t ); 
 
@@ -205,11 +205,11 @@ class G4HEVector
 
    G4int getCode() const; 
 
-   G4String getName();
+   G4String getName() const;
 
-   G4int getBaryonNumber();
+   G4int getBaryonNumber() const;
 
-   G4int getStrangenessNumber();
+   G4int getStrangenessNumber() const;
 
    G4int getQuarkContent(G4int flavor);
 
@@ -217,7 +217,7 @@ class G4HEVector
 
    void setZero();
 
-   G4String getType();
+   G4String getType() const;
 
    void Add( const G4HEVector & p1, const G4HEVector & p2 );
 
@@ -225,7 +225,7 @@ class G4HEVector
 
    void Lor( const G4HEVector & p1, const G4HEVector & p2 );
 
-   G4double CosAng( const G4HEVector & p );
+   G4double CosAng(const G4HEVector& p) const;
 
    G4double Ang(const G4HEVector & p );
 
@@ -247,7 +247,7 @@ class G4HEVector
 
    void Norz( const G4HEVector & p );
 
-   G4double Length();
+   G4double Length() const;
 
    void Exch( G4HEVector & p1);
 
@@ -263,9 +263,8 @@ class G4HEVector
 
    G4int FillQuarkContent();
 
-   void Print( G4int L);
+   void Print(G4int L) const;
 };
 
 #endif
-
 

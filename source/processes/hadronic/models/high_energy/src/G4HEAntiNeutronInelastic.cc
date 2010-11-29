@@ -23,14 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HEAntiNeutronInelastic.cc,v 1.16 2010-11-20 04:01:33 dennis Exp $
+// $Id: G4HEAntiNeutronInelastic.cc,v 1.17 2010-11-29 05:44:44 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "globals.hh"
 #include "G4ios.hh"
 
-//
 // G4 Process: Gheisha High Energy Collision model.
 // This includes the high energy cascading model, the two-body-resonance model
 // and the low energy two-body model.  Not included is the low energy stuff
@@ -52,9 +51,9 @@ G4HEAntiNeutronInelastic::ApplyYourself(const G4HadProjectile &aTrack,
   const G4double atomicNumber = targetNucleus.GetZ();
   G4HEVector incidentParticle(aParticle);
 
-  G4int    incidentCode          = incidentParticle.getCode();
-  G4double incidentMass          = incidentParticle.getMass();
-  G4double incidentTotalEnergy   = incidentParticle.getEnergy();
+  G4int incidentCode = incidentParticle.getCode();
+  G4double incidentMass = incidentParticle.getMass();
+  G4double incidentTotalEnergy = incidentParticle.getEnergy();
   G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
   G4double incidentKineticEnergy = incidentTotalEnergy - incidentMass;
 
@@ -71,8 +70,8 @@ G4HEAntiNeutronInelastic::ApplyYourself(const G4HadProjectile &aTrack,
            << atomicWeight << "," << atomicNumber << ")" << G4endl;
   }
 
-  G4double inelasticity  = NuclearInelasticity(incidentKineticEnergy, 
-                                               atomicWeight, atomicNumber);
+  G4double inelasticity = NuclearInelasticity(incidentKineticEnergy, 
+                                              atomicWeight, atomicNumber);
   if (verboseLevel > 1)
     G4cout << "nuclear inelasticity = " << inelasticity << G4endl;
     
@@ -172,8 +171,8 @@ G4HEAntiNeutronInelastic::FirstIntInCasAntiNeutron(G4bool& inElastic,
                                                    const G4double availableEnergy,
                                                    G4HEVector pv[],
                                                    G4int& vecLen,
-                                                   G4HEVector incidentParticle,
-                                                   G4HEVector targetParticle,
+                                                   const G4HEVector& incidentParticle,
+                                                   const G4HEVector& targetParticle,
                                                    const G4double atomicWeight)
 
 // AntiNeutron undergoes interaction with nucleon within a nucleus.  Check if
@@ -184,40 +183,37 @@ G4HEAntiNeutronInelastic::FirstIntInCasAntiNeutron(G4bool& inElastic,
 // produced using an interpolation to multiplicity data.  Replace some pions or
 // protons/neutrons by kaons or strange baryons according to the average
 // multiplicity per inelastic reaction.
-
 {
-  static const G4double expxu =  std::log(MAXFLOAT); // upper bound for arg. of exp
-  static const G4double expxl = -expxu;         // lower bound for arg. of exp
+  static const G4double expxu = std::log(MAXFLOAT); // upper bound for arg. of exp
+  static const G4double expxl = -expxu;             // lower bound for arg. of exp
 
-   static const G4double protb = 0.7;
-   static const G4double neutb = 0.7;
-   static const G4double     c = 1.25;
+  static const G4double protb = 0.7;
+  static const G4double neutb = 0.7;
+  static const G4double     c = 1.25;
 
-   static const G4int   numMul   = 1200;
-   static const G4int   numMulAn = 400;
-   static const G4int   numSec   = 60;
+  static const G4int numMul   = 1200;
+  static const G4int numMulAn = 400;
+  static const G4int numSec   = 60;
 
-   G4int              neutronCode = Neutron.getCode();
-   G4int              protonCode  = Proton.getCode();
+  G4int neutronCode = Neutron.getCode();
+  G4int protonCode = Proton.getCode();
 
-   G4int               targetCode = targetParticle.getCode();
-//   G4double          incidentMass = incidentParticle.getMass();
-//   G4double        incidentEnergy = incidentParticle.getEnergy();
-   G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
+  G4int targetCode = targetParticle.getCode();
+  G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
 
-   static G4bool first = true;
-   static G4double protmul[numMul],  protnorm[numSec];   // proton constants
-   static G4double protmulAn[numMulAn],protnormAn[numSec]; 
-   static G4double neutmul[numMul],  neutnorm[numSec];   // neutron constants
-   static G4double neutmulAn[numMulAn],neutnormAn[numSec];
+  static G4bool first = true;
+  static G4double protmul[numMul],  protnorm[numSec];   // proton constants
+  static G4double protmulAn[numMulAn],protnormAn[numSec]; 
+  static G4double neutmul[numMul],  neutnorm[numSec];   // neutron constants
+  static G4double neutmulAn[numMulAn],neutnormAn[numSec];
 
-                              //  misc. local variables
-                              //  np = number of pi+,  nm = number of pi-,  nz = number of pi0
+  //  misc. local variables
+  //  np = number of pi+,  nm = number of pi-,  nz = number of pi0
 
-   G4int i, counter, nt, np, nm, nz;
+  G4int i, counter, nt, np, nm, nz;
 
    if( first ) 
-     {                         // compute normalization constants, this will only be done once
+     {                 // compute normalization constants, this will only be done once
        first = false;
        for( i=0; i<numMul  ; i++ ) protmul[i]  = 0.0;
        for( i=0; i<numSec  ; i++ ) protnorm[i] = 0.0;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HEKaonZeroShortInelastic.hh,v 1.15 2010-02-09 21:58:33 dennis Exp $
+// $Id: G4HEKaonZeroShortInelastic.hh,v 1.16 2010-11-29 05:45:06 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -55,7 +55,7 @@ class G4HEKaonZeroShortInelastic : public G4HEInelastic
  public:  // with description
    G4HEKaonZeroShortInelastic() : G4HEInelastic("G4HEKaonZeroShortInelastic") 
    {
-     theMinEnergy =  20*GeV;
+     theMinEnergy = 20*GeV;
      theMaxEnergy = 10*TeV;
      MAXPART      = 2048;
      verboseLevel = 0; 
@@ -65,25 +65,26 @@ class G4HEKaonZeroShortInelastic : public G4HEInelastic
          
    G4int vecLength;
 
-   G4HadFinalState* ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus &targetNucleus);
+   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+                                  G4Nucleus& targetNucleus);
 
    G4int GetNumberOfSecondaries()
         { return vecLength;};           
 
-   void FirstIntInCasKaonZero(G4bool &inElastic, const G4double availableEnergy,
+   void FirstIntInCasKaonZero(G4bool& inElastic,
+                              const G4double availableEnergy,
                               G4HEVector pv[],
-                              G4int &vecLen,
-                              G4HEVector incidentParticle,
-                              G4HEVector targetParticle,
+                              G4int& vecLen,
+                              const G4HEVector& incidentParticle,
+                              const G4HEVector& targetParticle,
                               const G4double atomicWeight);
 
-   void FirstIntInCasAntiKaonZero(G4bool &inElastic, const G4double availableEnergy,
+   void FirstIntInCasAntiKaonZero(G4bool& inElastic,
+                                  const G4double availableEnergy,
                                   G4HEVector pv[],
-                                  G4int &vecLen,
-                                  G4HEVector incidentParticle,
-                                  G4HEVector targetParticle);
-
+                                  G4int& vecLen,
+                                  const G4HEVector& incidentParticle,
+                                  const G4HEVector& targetParticle);
 };
-#endif                     
-                                         
+#endif
 

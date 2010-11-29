@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEAntiXiMinusInelastic.hh,v 1.15 2010-11-20 04:00:20 dennis Exp $
+// $Id: G4HEAntiXiMinusInelastic.hh,v 1.16 2010-11-29 05:45:06 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -57,7 +57,7 @@ class G4HEAntiXiMinusInelastic : public G4HEInelastic
    G4HEAntiXiMinusInelastic() : G4HEInelastic("G4HEAntiXiMinusInelastic")
    {
      vecLength = 0;
-     theMinEnergy =  20*GeV;
+     theMinEnergy = 20*GeV;
      theMaxEnergy = 10*TeV;
      MAXPART      = 2048;
      verboseLevel = 0; 
@@ -75,11 +75,10 @@ class G4HEAntiXiMinusInelastic : public G4HEInelastic
    void FirstIntInCasAntiXiMinus(G4bool& inElastic,
                                  const G4double availableEnergy,
                                  G4HEVector pv[],
-                                 G4int &vecLen, 
-                                 G4HEVector incidentParticle,
-                                 G4HEVector targetParticle,
+                                 G4int& vecLen, 
+                                 const G4HEVector& incidentParticle,
+                                 const G4HEVector& targetParticle,
                                  const G4double atomicWeight);
 };
-#endif                     
-                                         
+#endif
 

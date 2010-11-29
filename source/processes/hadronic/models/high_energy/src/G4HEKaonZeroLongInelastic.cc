@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HEKaonZeroLongInelastic.cc,v 1.12 2010-11-20 04:01:33 dennis Exp $
+// $Id: G4HEKaonZeroLongInelastic.cc,v 1.13 2010-11-29 05:44:44 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -47,7 +47,7 @@ G4HEKaonZeroLongInelastic::ApplyYourself(const G4HadProjectile& aTrack,
                                          G4Nucleus& targetNucleus)
 {
   G4HEVector* pv = new G4HEVector[MAXPART];
-  const G4HadProjectile *aParticle = &aTrack;
+  const G4HadProjectile* aParticle = &aTrack;
   const G4double atomicWeight = targetNucleus.GetN();
   const G4double atomicNumber = targetNucleus.GetZ();
   G4HEVector incidentParticle(aParticle);
@@ -91,11 +91,11 @@ G4HEKaonZeroLongInelastic::ApplyYourself(const G4HadProjectile& aTrack,
 
   incidentKineticEnergy -= excitation;
   incidentTotalEnergy    = incidentKineticEnergy + incidentMass;
-  incidentTotalMomentum  = std::sqrt( (incidentTotalEnergy-incidentMass)                    
-                                  *(incidentTotalEnergy+incidentMass));
+  incidentTotalMomentum  = std::sqrt( (incidentTotalEnergy-incidentMass)
+                                     *(incidentTotalEnergy+incidentMass));
 
   G4HEVector targetParticle;
-  if(G4UniformRand() < atomicNumber/atomicWeight) { 
+  if (G4UniformRand() < atomicNumber/atomicWeight) { 
     targetParticle.setDefinition("Proton");
   } else { 
     targetParticle.setDefinition("Neutron");
@@ -129,6 +129,7 @@ G4HEKaonZeroLongInelastic::ApplyYourself(const G4HadProjectile& aTrack,
     StrangeParticlePairProduction(availableEnergy, centerOfMassEnergy,
                                   pv, vecLength,
                                   incidentParticle, targetParticle);
+
   HighEnergyCascading(successful, pv, vecLength,
                       excitationEnergyGNP, excitationEnergyDTA,
                       incidentParticle, targetParticle,
@@ -190,8 +191,8 @@ G4HEKaonZeroLongInelastic::FirstIntInCasKaonZero(G4bool& inElastic,
                                                  const G4double availableEnergy,
                                                  G4HEVector pv[],
                                                  G4int& vecLen,
-                                                 G4HEVector incidentParticle,
-                                                 G4HEVector targetParticle,
+                                                 const G4HEVector& incidentParticle,
+                                                 const G4HEVector& targetParticle,
                                                  const G4double atomicWeight)
 
 // Kaon0 undergoes interaction with nucleon within a nucleus.  Check if it is
@@ -202,8 +203,8 @@ G4HEKaonZeroLongInelastic::FirstIntInCasKaonZero(G4bool& inElastic,
 // protons/neutrons by kaons or strange baryons according to the average
 // multiplicity per inelastic reaction.
 {
-  static const G4double expxu =  std::log(MAXFLOAT); // upper bound for arg. of exp
-  static const G4double expxl = -expxu;         // lower bound for arg. of exp
+  static const G4double expxu = std::log(MAXFLOAT); // upper bound for arg. of exp
+  static const G4double expxl = -expxu;             // lower bound for arg. of exp
 
   static const G4double protb = 0.7;
   static const G4double neutb = 0.7;
@@ -508,12 +509,12 @@ G4HEKaonZeroLongInelastic::FirstIntInCasKaonZero(G4bool& inElastic,
 
 
 void
-G4HEKaonZeroLongInelastic::FirstIntInCasAntiKaonZero(G4bool &inElastic,
+G4HEKaonZeroLongInelastic::FirstIntInCasAntiKaonZero(G4bool& inElastic,
                                                      const G4double availableEnergy,
                                                      G4HEVector pv[],
-                                                     G4int &vecLen,
-                                                     G4HEVector incidentParticle,
-                                                     G4HEVector targetParticle )
+                                                     G4int& vecLen,
+                                                     const G4HEVector& incidentParticle,
+                                                     const G4HEVector& targetParticle)
 
 // AntiKaon0 undergoes interaction with nucleon within a nucleus.  Check if it is
 // energetically possible to produce pions/kaons.  In not, assume nuclear excitation
@@ -547,12 +548,12 @@ G4HEKaonZeroLongInelastic::FirstIntInCasAntiKaonZero(G4bool &inElastic,
   static G4double protmul[numMul], protnorm[numSec];  // proton constants
   static G4double neutmul[numMul], neutnorm[numSec];  // neutron constants
 
-//  misc. local variables
-//  np = number of pi+,  nm = number of pi-,  nz = number of pi0
+  //  misc. local variables
+  //  np = number of pi+,  nm = number of pi-,  nz = number of pi0
 
   G4int i, counter, nt, np, nm, nz;
 
-  if(first) {
+  if (first) {
     // compute normalization constants, this will only be done once
     first = false;
     for( i=0; i<numMul; i++ )protmul[i]  = 0.0;

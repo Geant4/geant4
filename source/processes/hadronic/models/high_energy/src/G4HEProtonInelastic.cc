@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HEProtonInelastic.cc,v 1.15 2010-11-20 04:01:33 dennis Exp $
+// $Id: G4HEProtonInelastic.cc,v 1.16 2010-11-29 05:44:44 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -139,6 +139,7 @@ G4HEProtonInelastic::ApplyYourself(const G4HadProjectile& aTrack,
     StrangeParticlePairProduction(availableEnergy, centerOfMassEnergy,
                                   pv, vecLength,
                                   incidentParticle, targetParticle);
+
   HighEnergyCascading(successful, pv, vecLength,
                       excitationEnergyGNP, excitationEnergyDTA,
                       incidentParticle, targetParticle,
@@ -173,7 +174,7 @@ G4HEProtonInelastic::ApplyYourself(const G4HadProjectile& aTrack,
     G4cout << "GHEInelasticInteraction::ApplyYourself fails to produce final state particles" 
            << G4endl;
 
-  FillParticleChange(pv,  vecLength);
+  FillParticleChange(pv, vecLength);
   delete [] pv;
   theParticleChange.SetStatusChange(stopAndKill);
   return &theParticleChange;
@@ -185,8 +186,8 @@ G4HEProtonInelastic::FirstIntInCasProton(G4bool& inElastic,
                                          const G4double availableEnergy,
                                          G4HEVector pv[],
                                          G4int& vecLen,
-                                         G4HEVector incidentParticle,
-                                         G4HEVector targetParticle,
+                                         const G4HEVector& incidentParticle,
+                                         const G4HEVector& targetParticle,
                                          const G4double atomicWeight)
 
 // Proton undergoes interaction with nucleon within a nucleus.  Check if it is
@@ -197,94 +198,82 @@ G4HEProtonInelastic::FirstIntInCasProton(G4bool& inElastic,
 // protons/neutrons by kaons or strange baryons according to the average
 // multiplicity per inelastic reaction.
 {
-  static const G4double expxu =  std::log(MAXFLOAT); // upper bound for arg. of exp
-  static const G4double expxl = -expxu;         // lower bound for arg. of exp
+  static const G4double expxu = std::log(MAXFLOAT); // upper bound for arg. of exp
+  static const G4double expxl = -expxu;             // lower bound for arg. of exp
 
-   static const G4double protb = 0.7;
-   static const G4double neutb = 0.35;
-   static const G4double     c = 1.25;
+  static const G4double protb = 0.7;
+  static const G4double neutb = 0.35;
+  static const G4double     c = 1.25;
 
-   static const G4int   numMul = 1200;
-   static const G4int   numSec = 60;
+  static const G4int numMul = 1200;
+  static const G4int numSec = 60;
 
-   G4int              neutronCode = Neutron.getCode();
-   G4int              protonCode  = Proton.getCode();
-   G4double           pionMass    = PionPlus.getMass();
+  G4int neutronCode = Neutron.getCode();
+  G4int protonCode = Proton.getCode();
+  G4double pionMass = PionPlus.getMass();
 
-   G4int               targetCode = targetParticle.getCode();
-//   G4double          incidentMass = incidentParticle.getMass();
-//   G4double        incidentEnergy = incidentParticle.getEnergy();
-   G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
+  G4int targetCode = targetParticle.getCode();
+  G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
 
-   static G4bool first = true;
-   static G4double protmul[numMul], protnorm[numSec];  // proton constants
-   static G4double neutmul[numMul], neutnorm[numSec];  // neutron constants
+  static G4bool first = true;
+  static G4double protmul[numMul], protnorm[numSec];  // proton constants
+  static G4double neutmul[numMul], neutnorm[numSec];  // neutron constants
 
-                              //  misc. local variables
-                              //  np = number of pi+,  nm = number of pi-,  nz = number of pi0
+  //  misc. local variables
+  //  np = number of pi+,  nm = number of pi-,  nz = number of pi0
 
-   G4int i, counter, nt, np, nm, nz;
+  G4int i, counter, nt, np, nm, nz;
 
-   if( first ) 
-     {                         // compute normalization constants, this will only be done once
-       first = false;
-       for( i=0; i<numMul; i++ )protmul[i]  = 0.0;
-       for( i=0; i<numSec; i++ )protnorm[i] = 0.0;
-       counter = -1;
-       for( np=0; np<(numSec/3); np++ ) 
-          {
-            for( nm=Imax(0,np-2); nm<=np; nm++ ) 
-               {
-                 for( nz=0; nz<numSec/3; nz++ ) 
-                    {
-                      if( ++counter < numMul ) 
-                        {
-                          nt = np+nm+nz;
-                          if( (nt>0) && (nt<=numSec) ) 
-                            {
-                              protmul[counter] = pmltpc(np,nm,nz,nt,protb,c)
-                                                 /(Factorial(2-np+nm)*Factorial(np-nm)) ;
-                              protnorm[nt-1] += protmul[counter];
-                            }
-                        }
-                    }
-               }
+  if (first) { 
+    // compute normalization constants, this will only be done once
+    first = false;
+    for (i=0; i<numMul; i++) protmul[i] = 0.0;
+    for (i=0; i<numSec; i++) protnorm[i] = 0.0;
+    counter = -1;
+    for (np=0; np<(numSec/3); np++) {
+      for (nm=Imax(0,np-2); nm<=np; nm++) {
+        for (nz=0; nz<numSec/3; nz++) {
+          if (++counter < numMul) {
+            nt = np+nm+nz;
+            if ( (nt>0) && (nt<=numSec) ) {
+              protmul[counter] = pmltpc(np,nm,nz,nt,protb,c)
+                                 /(Factorial(2-np+nm)*Factorial(np-nm)) ;
+              protnorm[nt-1] += protmul[counter];
+            }
           }
-       for( i=0; i<numMul; i++ )neutmul[i]  = 0.0;
-       for( i=0; i<numSec; i++ )neutnorm[i] = 0.0;
-       counter = -1;
-       for( np=0; np<numSec/3; np++ ) 
-          {
-            for( nm=Imax(0,np-1); nm<=(np+1); nm++ ) 
-               {
-                 for( nz=0; nz<numSec/3; nz++ ) 
-                    {
-                      if( ++counter < numMul ) 
-                        {
-                          nt = np+nm+nz;
-                          if( (nt>0) && (nt<=numSec) ) 
-                            {
-                               neutmul[counter] = pmltpc(np,nm,nz,nt,neutb,c)
-                                                  /(Factorial(1-np+nm)*Factorial(1+np-nm));
-                               neutnorm[nt-1] += neutmul[counter];
-                            }
-                        }
-                    }
-               }
+        }
+      }
+    }
+
+    for( i=0; i<numMul; i++ )neutmul[i]  = 0.0;
+    for( i=0; i<numSec; i++ )neutnorm[i] = 0.0;
+    counter = -1;
+    for (np=0; np<numSec/3; np++) {
+      for (nm=Imax(0,np-1); nm<=(np+1); nm++) {
+        for (nz=0; nz<numSec/3; nz++) {
+          if (++counter < numMul) {
+            nt = np+nm+nz;
+            if ( (nt>0) && (nt<=numSec) ) {
+              neutmul[counter] = pmltpc(np,nm,nz,nt,neutb,c)
+                                 /(Factorial(1-np+nm)*Factorial(1+np-nm));
+              neutnorm[nt-1] += neutmul[counter];
+            }
           }
-       for( i=0; i<numSec; i++ ) 
-          {
-            if( protnorm[i] > 0.0 )protnorm[i] = 1.0/protnorm[i];
-            if( neutnorm[i] > 0.0 )neutnorm[i] = 1.0/neutnorm[i];
-          }
-     }                                          // end of initialization
+        }
+      }
+    }
+    for (i=0; i<numSec; i++) {
+      if( protnorm[i] > 0.0 )protnorm[i] = 1.0/protnorm[i];
+      if( neutnorm[i] > 0.0 )neutnorm[i] = 1.0/neutnorm[i];
+    }
+  }                   // end of initialization
 
          
-                                              // initialize the first two places
-                                              // the same as beam and target                                    
-   pv[0] = incidentParticle;
-   pv[1] = targetParticle;
-   vecLen = 2;
+  // initialize the first two places
+  // the same as beam and target                                    
+  pv[0] = incidentParticle;
+  pv[1] = targetParticle;
+  vecLen = 2;
 
    if( !inElastic ) 
      {                                     // quasi-elastic scattering, no pions produced

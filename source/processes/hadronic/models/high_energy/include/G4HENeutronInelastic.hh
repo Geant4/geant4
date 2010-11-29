@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HENeutronInelastic.hh,v 1.16 2010-11-20 04:00:20 dennis Exp $
+// $Id: G4HENeutronInelastic.hh,v 1.17 2010-11-29 05:45:06 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -57,7 +57,7 @@ public:  // with description
   G4HENeutronInelastic() : G4HEInelastic("G4HENeutronInelastic")
   {
     vecLength = 0;
-    theMinEnergy =  45*GeV;
+    theMinEnergy = 45*GeV;
     theMaxEnergy = 10*TeV;
     MAXPART      = 2048;
     verboseLevel = 0; 
@@ -75,9 +75,10 @@ public:  // with description
   void FirstIntInCasNeutron(G4bool& inElastic,
                             const G4double availableEnergy,
                             G4HEVector pv[],
-                            G4int &vecLen, 
-                            G4HEVector incidentParticle,
-                            G4HEVector targetParticle,
+                            G4int& vecLen, 
+                            const G4HEVector& incidentParticle,
+                            const G4HEVector& targetParticle,
                             const G4double atomicWeight);
 };
 #endif
+

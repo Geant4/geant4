@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HEInelastic.hh,v 1.16 2010-11-27 02:03:55 dennis Exp $
+// $Id: G4HEInelastic.hh,v 1.17 2010-11-29 05:45:06 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -114,65 +114,65 @@ class G4HEInelastic : public G4HadronicInteraction
    
    void HighEnergyCascading(G4bool& successful,
                             G4HEVector pv[],
-                            G4int &vecLen,
-                            G4double &excitationEnergyGNP,
-                            G4double &excitationEnergyDTA, 
-                            G4HEVector incidentParticle,
-                            G4HEVector targetParticle,
+                            G4int& vecLen,
+                            G4double& excitationEnergyGNP,
+                            G4double& excitationEnergyDTA, 
+                            const G4HEVector& incidentParticle,
+                            const G4HEVector& targetParticle,
                             G4double atomicWeight,
                             G4double atomicNumber);
 
    void HighEnergyClusterProduction(G4bool& successful,
                                     G4HEVector pv[],
-                                    G4int &vecLen,
-                                    G4double &excitationEnergyGNP,
-                                    G4double &excitationEnergyDTA, 
-                                    G4HEVector incidentParticle,
-                                    G4HEVector targetParticle,
+                                    G4int& vecLen,
+                                    G4double& excitationEnergyGNP,
+                                    G4double& excitationEnergyDTA, 
+                                    const G4HEVector& incidentParticle,
+                                    const G4HEVector& targetParticle,
                                     G4double atomicWeight,
                                     G4double atomicNumber);             
 
    void TuningOfHighEnergyCascading(G4HEVector pv[],
-                                    G4int &vecLen,
-                                    G4HEVector incidentParticle,
-                                    G4HEVector targetParticle,
+                                    G4int& vecLen,
+                                    const G4HEVector& incidentParticle,
+                                    const G4HEVector& targetParticle,
                                     G4double atomicWeight,
                                     G4double atomicNumber);   
 
    void MediumEnergyCascading(G4bool& successful,
                               G4HEVector pv[],
-                              G4int &vecLen,
-                              G4double &excitationEnergyGNP,
-                              G4double &excitationEnergyDTA,
-                              G4HEVector incidentParticle,
-                              G4HEVector targetParticle,
+                              G4int& vecLen,
+                              G4double& excitationEnergyGNP,
+                              G4double& excitationEnergyDTA,
+                              const G4HEVector& incidentParticle,
+                              const G4HEVector& targetParticle,
                               G4double atomicWeight,
                               G4double atomicNumber);            
 
    void MediumEnergyClusterProduction(G4bool& successful,
                                       G4HEVector pv[],
-                                      G4int &vecLen,
-                                      G4double &excitationEnergyGNP,
-                                      G4double &excitationEnergyDTA,
-                                      G4HEVector incidentParticle,
-                                      G4HEVector targetParticle,
+                                      G4int& vecLen,
+                                      G4double& excitationEnergyGNP,
+                                      G4double& excitationEnergyDTA,
+                                      const G4HEVector& incidentParticle,
+                                      const G4HEVector& targetParticle,
                                       G4double atomicWeight,
                                       G4double atomicNumber);            
 
    void QuasiElasticScattering(G4bool& successful,
                                G4HEVector pv[],
-                               G4int &vecLen,
-                               G4double &excitationEnergyGNP,
-                               G4double &excitationEnergyDTA, 
-                               G4HEVector incidentParticle,
-                               G4HEVector targetParticle,
+                               G4int& vecLen,
+                               G4double& excitationEnergyGNP,
+                               G4double& excitationEnergyDTA, 
+                               const G4HEVector& incidentParticle,
+                               const G4HEVector& targetParticle,
                                G4double atomicWeight,
                                G4double atomicNumber);
 
    void ElasticScattering(G4bool& successful,
                           G4HEVector pv[],
-                          G4int &vecLen,                      
-                          G4HEVector incidentParticle,
+                          G4int& vecLen,                      
+                          const G4HEVector& incidentParticle,
                           G4double atomicWeight,
                           G4double atomicNumber); 
 
@@ -186,9 +186,9 @@ class G4HEInelastic : public G4HadronicInteraction
    void StrangeParticlePairProduction(const G4double availableEnergy,
                                       const G4double centerOfMassEnergy,
                                       G4HEVector pv[],
-                                      G4int &vecLen,
-                                      G4HEVector incidentParticle,
-                                      G4HEVector targetParticle); 
+                                      G4int& vecLen,
+                                      const G4HEVector& incidentParticle,
+                                      const G4HEVector& targetParticle); 
 
    G4double NBodyPhaseSpace(const G4double totalEnergy,
                             const G4bool   constantCrossSection,

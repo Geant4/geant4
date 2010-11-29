@@ -75,8 +75,6 @@ void G4HEInelastic::FillParticleChange(G4HEVector pv[], G4int aVecLength)
     aParticle->SetDefinition(aDefinition);
     aParticle->SetMomentum(pv[i].getMomentum()*GeV);
     theParticleChange.AddSecondary(aParticle);
-    G4ParticleDefinition * dummy = G4KaonZero::KaonZero();
-    dummy = G4AntiKaonZero::AntiKaonZero();
   }
 }
 
@@ -335,8 +333,8 @@ G4HEInelastic::StrangeParticlePairProduction(
                        const G4double centerOfMassEnergy,
                        G4HEVector pv[],
                        G4int &vecLen,
-                       G4HEVector incidentParticle,
-                       G4HEVector targetParticle )
+                       const G4HEVector& incidentParticle,
+                       const G4HEVector& targetParticle)
 
    // Choose charge combinations K+ K-, K+ K0, K0 K0, K0 K-,
    //                            K+ Y0, K0 Y+,  K0 Y-
@@ -601,82 +599,77 @@ G4HEInelastic::StrangeParticlePairProduction(
 void
 G4HEInelastic::HighEnergyCascading(G4bool &successful,
                                    G4HEVector pv[],
-                                   G4int &vecLen,	
-                                   G4double &excitationEnergyGNP,
-                                   G4double &excitationEnergyDTA,
-                                   G4HEVector incidentParticle,
-                                   G4HEVector targetParticle,
+                                   G4int& vecLen,	
+                                   G4double& excitationEnergyGNP,
+                                   G4double& excitationEnergyDTA,
+                                   const G4HEVector& incidentParticle,
+                                   const G4HEVector& targetParticle,
                                    G4double atomicWeight,
                                    G4double atomicNumber)
- {   
-//
-//  The multiplicity of particles produced in the first interaction has been
-//  calculated in one of the FirstIntInNuc.... routines. The nuclear
-//  cascading particles are parameterized from experimental data.
-//  A simple single variable description E D3S/DP3= F(Q) with
-//  Q^2 = (M*X)^2 + PT^2 is used. Final state kinematics are produced
-//  by an FF-type iterative cascade method.
-//  Nuclear evaporation particles are added at the end of the routine.
+{   
+  //  The multiplicity of particles produced in the first interaction has been
+  //  calculated in one of the FirstIntInNuc.... routines. The nuclear
+  //  cascading particles are parameterized from experimental data.
+  //  A simple single variable description E D3S/DP3= F(Q) with
+  //  Q^2 = (M*X)^2 + PT^2 is used. Final state kinematics are produced
+  //  by an FF-type iterative cascade method.
+  //  Nuclear evaporation particles are added at the end of the routine.
 
-//  All quantities in the G4HEVector Array pv are in GeV- units.
-//  The method is a copy of MediumEnergyCascading with some special tuning
-//  for high energy interactions.
+  //  All quantities in the G4HEVector Array pv are in GeV- units.
+  //  The method is a copy of MediumEnergyCascading with some special tuning
+  //  for high energy interactions.
 
+  G4int protonCode = Proton.getCode();
+  G4double protonMass = Proton.getMass();
+  G4int neutronCode = Neutron.getCode();
+  G4double neutronMass = Neutron.getMass();
+  G4double kaonPlusMass = KaonPlus.getMass();
+  G4int kaonPlusCode = KaonPlus.getCode();   
+  G4int kaonMinusCode = KaonMinus.getCode();
+  G4int kaonZeroSCode = KaonZeroShort.getCode(); 
+  G4int kaonZeroLCode = KaonZeroLong.getCode();
+  G4int kaonZeroCode = KaonZero.getCode();
+  G4int antiKaonZeroCode = AntiKaonZero.getCode(); 
+  G4int pionPlusCode = PionPlus.getCode();    
+  G4int pionZeroCode = PionZero.getCode();    
+  G4int pionMinusCode = PionMinus.getCode(); 
+  G4String mesonType = PionPlus.getType();
+  G4String baryonType = Proton.getType(); 
+  G4String antiBaryonType = AntiProton.getType(); 
 
-   G4int protonCode       = Proton.getCode();
-   G4double protonMass    = Proton.getMass();
-   G4int neutronCode      = Neutron.getCode();
-   G4double neutronMass   = Neutron.getMass();
-   G4double kaonPlusMass  = KaonPlus.getMass();
-   G4int kaonPlusCode     = KaonPlus.getCode();   
-   G4int kaonMinusCode    = KaonMinus.getCode();
-   G4int kaonZeroSCode    = KaonZeroShort.getCode(); 
-   G4int kaonZeroLCode    = KaonZeroLong.getCode();
-   G4int kaonZeroCode     = KaonZero.getCode();
-   G4int antiKaonZeroCode = AntiKaonZero.getCode(); 
-   G4int pionPlusCode     = PionPlus.getCode();    
-   G4int pionZeroCode     = PionZero.getCode();    
-   G4int pionMinusCode    = PionMinus.getCode(); 
-   G4String mesonType     = PionPlus.getType();
-   G4String baryonType    = Proton.getType(); 
-   G4String antiBaryonType= AntiProton.getType(); 
+  G4double targetMass = targetParticle.getMass();
 
-   G4double targetMass   = targetParticle.getMass();
-
-   G4int    incidentCode          = incidentParticle.getCode();
-   G4double incidentMass          = incidentParticle.getMass();
-   G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
-   G4double incidentEnergy        = incidentParticle.getEnergy();
-   G4double incidentKineticEnergy = incidentParticle.getKineticEnergy();
-   G4String incidentType          = incidentParticle.getType();
+  G4int incidentCode = incidentParticle.getCode();
+  G4double incidentMass = incidentParticle.getMass();
+  G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
+  G4double incidentEnergy = incidentParticle.getEnergy();
+  G4double incidentKineticEnergy = incidentParticle.getKineticEnergy();
+  G4String incidentType = incidentParticle.getType();
 //   G4double incidentTOF           = incidentParticle.getTOF();   
-   G4double incidentTOF           = 0.;
+  G4double incidentTOF = 0.;
    
-     // some local variables
+  // some local variables
 
-   G4int i, j, l;
+  G4int i, j, l;
 
-   if (verboseLevel > 1) 
-            G4cout << " G4HEInelastic::HighEnergyCascading " << G4endl;
-   successful = false; 
-   if(incidentTotalMomentum < 25. + G4UniformRand()*25.) return;
+  if (verboseLevel > 1) 
+    G4cout << " G4HEInelastic::HighEnergyCascading " << G4endl;
+  successful = false; 
+  if (incidentTotalMomentum < 25. + G4UniformRand()*25.) return;
  
-     // define annihilation channels.
+  // define annihilation channels.
                                  
-   G4bool annihilation = false;
-   if (incidentCode < 0 && incidentType == antiBaryonType && 
-       pv[0].getType() != antiBaryonType &&
-       pv[1].getType() != antiBaryonType   )
-         { 
-           annihilation = true;
-         }   
-     
+  G4bool annihilation = false;
+  if (incidentCode < 0 && incidentType == antiBaryonType && 
+      pv[0].getType() != antiBaryonType &&
+      pv[1].getType() != antiBaryonType) { 
+    annihilation = true;
+  }   
 
+  G4double twsup[] = { 1., 1., 0.7, 0.5, 0.3, 0.2, 0.1, 0.0 };
 
-   G4double twsup[] = { 1., 1., 0.7, 0.5, 0.3, 0.2, 0.1, 0.0 };
-
-   if( annihilation ) goto start;
-   if( vecLen >= 8)   goto start;
+  if (annihilation) goto start;
+  if (vecLen >= 8)   goto start;
    if( incidentKineticEnergy < 1.) return; 
    if(   (   incidentCode == kaonPlusCode  || incidentCode == kaonMinusCode
           || incidentCode == kaonZeroCode  || incidentCode == antiKaonZeroCode
@@ -701,7 +694,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
         if (incidentKineticEnergy < excitationEnergyDTA) incidentKineticEnergy = 0.;
         incidentEnergy = incidentKineticEnergy + incidentMass;
         incidentTotalMomentum =
-                 std::sqrt( Amax(0., incidentEnergy*incidentEnergy - incidentMass*incidentMass));
+             std::sqrt( Amax(0., incidentEnergy*incidentEnergy - incidentMass*incidentMass));
       }  
     
    G4HEVector pTemp;
@@ -757,8 +750,8 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
                   }
          }
 
-     // Distribute particles in forward and backward hemispheres in center 
-     // of mass system.  Incident particle goes in forward hemisphere.
+  // Distribute particles in forward and backward hemispheres in center 
+  // of mass system.  Incident particle goes in forward hemisphere.
    
    G4HEVector pvI = incidentParticle;  // for the incident particle
    pvI.setSide( 1 );
@@ -925,16 +918,16 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
        nshhmf--;
      }
                                          
-     //  assume conservation of kinetic energy 
-     //  in forward & backward hemispheres
+  //  assume conservation of kinetic energy 
+  //  in forward & backward hemispheres
 
-   G4int is, iskip, iavai1;
-   if(vecLen <= 1) return;
+  G4int is, iskip, iavai1;
+  if (vecLen <= 1) return;
 
-   tavai1 = centerOfMassEnergy/2.;
-   iavai1 = 0;
+  tavai1 = centerOfMassEnergy/2.;
+  iavai1 = 0;
  
-   for (i = 0; i < vecLen; i++) 
+  for (i = 0; i < vecLen; i++) 
        { 
          if (pv[i].getSide() > 0)
             { 
@@ -942,37 +935,29 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
                iavai1++;
             }    
        } 
-   if ( iavai1 == 0) return;
+  if ( iavai1 == 0) return;
 
-   while( tavai1 <= 0.0 ) 
-        {                   // must eliminate a particle from the forward side
-           iskip = G4int(G4UniformRand()*iavai1) + 1; 
-           is = 0;  
-           for( i=vecLen-1; i>=0; i-- ) 
-              {
-                if( pv[i].getSide() > 0 ) 
-                  {
-                    if (++is == iskip) 
-                        {
-                           tavai1 += pv[i].getMass();
-                           iavai1--;            
-                           if ( i != vecLen-1)
-                              { 
-                                 for( j=i; j<vecLen; j++ ) 
-                                    {         
-                                       pv[j] = pv[j+1];
-                                    }
-                              }
-                           if( --vecLen == 0 ) return;     // all the secondaries except of the 
-                           break;            // --+
-                        }                    //   |
-                  }                          //   v
-              }                              // break goes down to here
-        }                                    // to the end of the for- loop.
-                                       
+  while (tavai1 <= 0.0) {
+    // must eliminate a particle from the forward side
+    iskip = G4int(G4UniformRand()*iavai1) + 1; 
+    is = 0;  
+    for (i = vecLen-1; i >= 0; i--) {
+      if (pv[i].getSide() > 0) {
+        if (++is == iskip) {
+          tavai1 += pv[i].getMass();
+          iavai1--;            
+          if (i != vecLen-1) { 
+            for (j = i; j < vecLen; j++) pv[j] = pv[j+1];
+          }
+          if (--vecLen == 0) return;  // all the secondaries except the
+          break;                 // --+
+        }                        //   |
+      }                          //   v
+    }                            // break goes down to here
+  }                              // to the end of the for- loop.                          
 
-     tavai2 = (targ+1)*centerOfMassEnergy/2.;
-     G4int iavai2 = 0;
+  tavai2 = (targ+1)*centerOfMassEnergy/2.;
+  G4int iavai2 = 0;
 
      for (i = 0; i < vecLen; i++)
          {
@@ -1011,57 +996,58 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
               }
         }
 
-   if (verboseLevel > 1)
-      { G4cout << " pv Vector after Energy checks "
-             << vecLen << " " << tavai1 << " " << iavai1 << " " << tavai2
-             << " " <<  iavai2 << " " << ntarg << G4endl;
-        pvI.Print(-1);
-        pvT.Print(-1);
-        for (i=0; i < vecLen ; i++) pv[i].Print(i);
-      } 
+  if (verboseLevel > 1) {
+    G4cout << " pv Vector after Energy checks "
+           << vecLen << " " << tavai1 << " " << iavai1 << " " << tavai2
+           << " " <<  iavai2 << " " << ntarg << G4endl;
+    pvI.Print(-1);
+    pvT.Print(-1);
+    for (i=0; i < vecLen ; i++) pv[i].Print(i);
+  } 
    
-    //  define some vectors for Lorentz transformations
+  //  define some vectors for Lorentz transformations
    
-   G4HEVector* pvmx = new G4HEVector [10];
+  G4HEVector* pvmx = new G4HEVector [10];
    
-   pvmx[0].setMass( incidentMass );
-   pvmx[0].setMomentumAndUpdate( 0.0, 0.0, incidentTotalMomentum );
-   pvmx[1].setMass( protonMass);
-   pvmx[1].setMomentumAndUpdate( 0.0, 0.0, 0.0 );
-   pvmx[3].setMass( protonMass*(1+targ));
-   pvmx[3].setMomentumAndUpdate( 0.0, 0.0, 0.0 );
-   pvmx[4].setZero();
-   pvmx[5].setZero();
-   pvmx[7].setZero();
-   pvmx[8].setZero();
-   pvmx[8].setMomentum( 1.0, 0.0 );
-   pvmx[2].Add( pvmx[0], pvmx[1] );
-   pvmx[3].Add( pvmx[3], pvmx[0] );
-   pvmx[0].Lor( pvmx[0], pvmx[2] );
-   pvmx[1].Lor( pvmx[1], pvmx[2] );
+  pvmx[0].setMass( incidentMass );
+  pvmx[0].setMomentumAndUpdate( 0.0, 0.0, incidentTotalMomentum );
+  pvmx[1].setMass( protonMass);
+  pvmx[1].setMomentumAndUpdate( 0.0, 0.0, 0.0 );
+  pvmx[3].setMass( protonMass*(1+targ));
+  pvmx[3].setMomentumAndUpdate( 0.0, 0.0, 0.0 );
+  pvmx[4].setZero();
+  pvmx[5].setZero();
+  pvmx[7].setZero();
+  pvmx[8].setZero();
+  pvmx[8].setMomentum( 1.0, 0.0 );
+  pvmx[2].Add( pvmx[0], pvmx[1] );
+  pvmx[3].Add( pvmx[3], pvmx[0] );
+  pvmx[0].Lor( pvmx[0], pvmx[2] );
+  pvmx[1].Lor( pvmx[1], pvmx[2] );
 
-   if (verboseLevel > 1)
-     { G4cout << " General Vectors after Definition " << G4endl;
-       for (i=0; i<10; i++) pvmx[i].Print(i);
-     }
+  if (verboseLevel > 1) {
+    G4cout << " General Vectors after Definition " << G4endl;
+    for (i=0; i<10; i++) pvmx[i].Print(i);
+  }
 
-   // Main loop for 4-momentum generation - see Pitha-report (Aachen) 
-   // for a detailed description of the method.
-   // Process the secondary particles in reverse order.
+  // Main loop for 4-momentum generation - see Pitha-report (Aachen) 
+  // for a detailed description of the method.
+  // Process the secondary particles in reverse order.
 
-   G4double dndl[20];
-   G4double binl[20];
-   G4double pvMass(0), pvEnergy(0);
-   G4int    pvCode; 
-   G4double aspar, pt, phi, et, xval;
-   G4double ekin  = 0.;
-   G4double ekin1 = 0.;
-   G4double ekin2 = 0.;
-   G4int npg   = 0;
-   G4double rmg0 = 0.;
-   G4int targ1 = 0;                // No fragmentation model for nucleons from
-   phi = G4UniformRand()*twopi;
-   for( i=vecLen-1; i>=0; i-- )    // the intranuclear cascade. Mark them with
+  G4double dndl[20];
+  G4double binl[20];
+  G4double pvMass(0), pvEnergy(0);
+  G4int pvCode; 
+  G4double aspar, pt, phi, et, xval;
+  G4double ekin  = 0.;
+  G4double ekin1 = 0.;
+  G4double ekin2 = 0.;
+  G4int npg   = 0;
+  G4double rmg0 = 0.;
+  G4int targ1 = 0;                // No fragmentation model for nucleons from
+  phi = G4UniformRand()*twopi;
+
+   for (i = vecLen-1; i >= 0; i--)    // the intranuclear cascade. Mark them with
       {                            // -3 and leave the loop
         if( i == 1)
           {
@@ -1294,19 +1280,19 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
             pvmx[6].setMomentum( 0.0 );          // set z-momentum
           }
       }                                          // closes main for loop
-   if (verboseLevel > 1)
-      { G4cout << " pv Vector after lambda fragmentation " << vecLen << G4endl;
-        pvI.Print(-1);
-        pvT.Print(-1);
-        for (i=0; i < vecLen ; i++) pv[i].Print(i);
-        for (i=0; i < 10; i++) pvmx[i].Print(i);
-      } 
-   
-   
-   // Backward nucleons produced with a cluster model
 
-   G4double gpar[] = {2.6, 2.6, 1.80, 1.30, 1.20};
-   G4double cpar[] = {0.6, 0.6, 0.35, 0.15, 0.10};
+  if (verboseLevel > 1) {
+    G4cout << " pv Vector after lambda fragmentation " << vecLen << G4endl;
+    pvI.Print(-1);
+    pvT.Print(-1);
+    for (i=0; i < vecLen ; i++) pv[i].Print(i);
+    for (i=0; i < 10; i++) pvmx[i].Print(i);
+  } 
+
+  // Backward nucleons produced with a cluster model
+
+  G4double gpar[] = {2.6, 2.6, 1.80, 1.30, 1.20};
+  G4double cpar[] = {0.6, 0.6, 0.35, 0.15, 0.10};
  
    if (npg > 0)
      {
@@ -1343,12 +1329,12 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
           } 
      }
         
-   if (vecLen <= 2) {
-     successful = false;
-     return;
-   }  
+  if (vecLen <= 2) {
+    successful = false;
+    return;
+  }  
 
-   // Lorentz transformation in lab system
+  // Lorentz transformation in lab system
 
    targ = 0;
    for( i=0; i < vecLen; i++ ) 
@@ -1395,16 +1381,16 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
          }
      }
 
-   pvmx[3].setMass( incidentMass);
-   pvmx[3].setMomentumAndUpdate( 0.0, 0.0, incidentTotalMomentum );
+  pvmx[3].setMass( incidentMass);
+  pvmx[3].setMomentumAndUpdate( 0.0, 0.0, incidentTotalMomentum );
    
-   G4double ekin0 = pvmx[3].getKineticEnergy();
+  G4double ekin0 = pvmx[3].getKineticEnergy();
    
-   pvmx[4].setMass( protonMass * targ);
-   pvmx[4].setEnergy( protonMass * targ);
-   pvmx[4].setKineticEnergy(0.);
-   pvmx[4].setMomentum(0., 0., 0.);
-   ekin = pvmx[3].getEnergy() + pvmx[4].getEnergy();
+  pvmx[4].setMass( protonMass * targ);
+  pvmx[4].setEnergy( protonMass * targ);
+  pvmx[4].setKineticEnergy(0.);
+  pvmx[4].setMomentum(0., 0., 0.);
+  ekin = pvmx[3].getEnergy() + pvmx[4].getEnergy();
 
    pvmx[5].Add( pvmx[3], pvmx[4] );
    pvmx[3].Lor( pvmx[3], pvmx[5] );
@@ -1468,7 +1454,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
        }
      }
 
-   // Do some smearing in the transverse direction due to Fermi motion
+  // Do some smearing in the transverse direction due to Fermi motion
    
    G4double ry   = G4UniformRand();
    G4double rz   = G4UniformRand();
@@ -1488,87 +1474,82 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
      G4cout << " After smearing " << teta << G4endl;
    }
 
-   // Rotate in the direction of the primary particle momentum (z-axis).
-   // This does disturb our inclusive distributions somewhat, but it is 
-   // necessary for momentum conservation
+  // Rotate in the direction of the primary particle momentum (z-axis).
+  // This does disturb our inclusive distributions somewhat, but it is 
+  // necessary for momentum conservation
 
-   // Also subtract binding energies and make some further corrections 
-   // if required
+  // Also subtract binding energies and make some further corrections 
+  // if required
 
-   G4double dekin = 0.0;
-   G4int npions = 0;    
-   G4double ek1 = 0.0;
-   G4double alekw, xxh;
-   G4double cfa = 0.025*((atomicWeight-1.)/120.)*std::exp(-(atomicWeight-1.)/120.);
-   G4double alem[] = {1.40, 2.30, 2.70, 3.00, 3.40, 4.60, 7.00, 10.00};
-   G4double val0[] = {0.00, 0.40, 0.48, 0.51, 0.54, 0.60, 0.65,  0.70};
+  G4double dekin = 0.0;
+  G4int npions = 0;    
+  G4double ek1 = 0.0;
+  G4double alekw, xxh;
+  G4double cfa = 0.025*((atomicWeight-1.)/120.)*std::exp(-(atomicWeight-1.)/120.);
+  G4double alem[] = {1.40, 2.30, 2.70, 3.00, 3.40, 4.60, 7.00, 10.00};
+  G4double val0[] = {0.00, 0.40, 0.48, 0.51, 0.54, 0.60, 0.65,  0.70};
    
-   if (verboseLevel > 1)
-     G4cout << " Rotation in Direction  of primary particle (Defs1)" << G4endl;
+  if (verboseLevel > 1)
+    G4cout << " Rotation in Direction  of primary particle (Defs1)" << G4endl;
 
-   for (i = 0; i < vecLen; i++)
-      { 
-        if(verboseLevel > 1) pv[i].Print(i);
-        pv[i].Defs1( pv[i], pvI );
-        if(verboseLevel > 1) pv[i].Print(i);
-        if (atomicWeight > 1.5)
-           {
-             ekin  = Amax( 1.e-6,pv[i].getKineticEnergy() - cfa*( 1. + 0.5*normal()));
-             alekw = std::log( incidentKineticEnergy );
-             xxh   = 1.;
-             if(incidentCode == pionPlusCode || incidentCode == pionMinusCode)
-	       {
-                 if(pv[i].getCode() == pionZeroCode)
-                   {
-                     if(G4UniformRand() < std::log(atomicWeight))
-                       { 
-                         if (alekw > alem[0])
-                           {
-                              for (j = 1; j < 8; j++)
-                                 {
-                                    if(alekw < alem[j]) break;
-                                 } 
-                              xxh =   (val0[j]-val0[j-1])/(alem[j]-alem[j-1])*alekw
-                                     + val0[j-1] - (val0[j]-val0[j-1])/(alem[j]-alem[j-1])*alem[j-1];
-                              xxh = 1. - xxh;
-                           }
-                       }      
-                    }
-               }  
-             dekin += ekin*(1.-xxh);
-             ekin *= xxh;
-             pv[i].setKineticEnergyAndUpdate( ekin );
-             pvCode = pv[i].getCode();
-             if ((pvCode == pionPlusCode) || (pvCode == pionMinusCode) || (pvCode == pionZeroCode))
-                {
-                  npions += 1;
-                  ek1 += ekin; 
-                }
-           }
-      }
-   if( (ek1 > 0.0) && (npions > 0) ) 
-      {
-        dekin = 1.+dekin/ek1;
-        for (i = 0; i < vecLen; i++)
-          {
-            pvCode = pv[i].getCode();
-            if((pvCode == pionPlusCode) || (pvCode == pionMinusCode) || (pvCode == pionZeroCode)) 
-              {
-                ekin = Amax( 1.0e-6, pv[i].getKineticEnergy() * dekin );
-                pv[i].setKineticEnergyAndUpdate( ekin );
+  for (i = 0; i < vecLen; i++) { 
+    if(verboseLevel > 1) pv[i].Print(i);
+    pv[i].Defs1( pv[i], pvI );
+    if(verboseLevel > 1) pv[i].Print(i);
+    if (atomicWeight > 1.5) {
+      ekin = Amax( 1.e-6,pv[i].getKineticEnergy() - cfa*( 1. + 0.5*normal()));
+      alekw = std::log( incidentKineticEnergy );
+      xxh = 1.;
+      if (incidentCode == pionPlusCode || incidentCode == pionMinusCode) {
+        if (pv[i].getCode() == pionZeroCode) {
+          if (G4UniformRand() < std::log(atomicWeight)) { 
+            if (alekw > alem[0]) {
+              for (j = 1; j < 8; j++) {
+                if (alekw < alem[j]) break;
               }
-          }
+              xxh = (val0[j]-val0[j-1])/(alem[j]-alem[j-1])*alekw
+                   + val0[j-1] - (val0[j]-val0[j-1])/(alem[j]-alem[j-1])*alem[j-1];
+              xxh = 1. - xxh;
+            }
+          }      
+        }
       }
-   if (verboseLevel > 1)
-      { G4cout << " Lab-System " <<  ek1 << " " << npions << G4endl;
-        incidentParticle.Print(0);
-        targetParticle.Print(1);
-        for (i=0; i<vecLen; i++) pv[i].Print(i);
+      dekin += ekin*(1.-xxh);
+      ekin *= xxh;
+      pv[i].setKineticEnergyAndUpdate( ekin );
+      pvCode = pv[i].getCode();
+      if ((pvCode == pionPlusCode) ||
+          (pvCode == pionMinusCode) ||
+          (pvCode == pionZeroCode)) {
+        npions += 1;
+        ek1 += ekin; 
       }
+    }
+  }
 
-   // Add black track particles
-   // the total number of particles produced is restricted to 198
-   // this may have influence on very high energies
+  if ( (ek1 > 0.0) && (npions > 0) ) {
+    dekin = 1.+dekin/ek1;
+    for (i = 0; i < vecLen; i++) {
+      pvCode = pv[i].getCode();
+      if ((pvCode == pionPlusCode) ||
+          (pvCode == pionMinusCode) ||
+          (pvCode == pionZeroCode)) {
+        ekin = Amax(1.0e-6, pv[i].getKineticEnergy() * dekin);
+        pv[i].setKineticEnergyAndUpdate( ekin );
+      }
+    }
+  }
+
+  if (verboseLevel > 1) {
+    G4cout << " Lab-System " <<  ek1 << " " << npions << G4endl;
+    incidentParticle.Print(0);
+    targetParticle.Print(1);
+    for (i = 0; i < vecLen; i++) pv[i].Print(i);
+  }
+
+  // Add black track particles
+  // the total number of particles produced is restricted to 198
+  // this may have influence on very high energies
 
    if (verboseLevel > 1) 
       G4cout << " Evaporation : " <<  atomicWeight << " " 
@@ -1778,14 +1759,14 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
       }
    }
    
-   return;
- }
+  return;
+}
 
 void
 G4HEInelastic::TuningOfHighEnergyCascading(G4HEVector pv[],
-                                           G4int &vecLen,
-                                           G4HEVector incidentParticle,
-                                           G4HEVector targetParticle,
+                                           G4int& vecLen,
+                                           const G4HEVector& incidentParticle,
+                                           const G4HEVector& targetParticle,
                                            G4double atomicWeight,
                                            G4double atomicNumber)
 {
@@ -2124,16 +2105,16 @@ G4HEInelastic::TuningOfHighEnergyCascading(G4HEVector pv[],
  }     
 
 void
-G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
+G4HEInelastic::HighEnergyClusterProduction(G4bool& successful,
                                            G4HEVector pv[],
-                                           G4int &vecLen,	
-                                           G4double &excitationEnergyGNP,
-                                           G4double &excitationEnergyDTA,
-                                           G4HEVector incidentParticle,
-                                           G4HEVector targetParticle,
+                                           G4int& vecLen,	
+                                           G4double& excitationEnergyGNP,
+                                           G4double& excitationEnergyDTA,
+                                           const G4HEVector& incidentParticle,
+                                           const G4HEVector& targetParticle,
                                            G4double atomicWeight,
                                            G4double atomicNumber)
- {   
+{   
 // For low multiplicity in the first intranuclear interaction the cascading process
 // as described in G4HEInelastic::MediumEnergyCascading does not work 
 // satisfactorily. From experimental data it is strongly suggested to use 
@@ -2141,18 +2122,18 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
 //  
 //  All quantities on the G4HEVector Array pv are in GeV- units.
 
-   G4int protonCode       = Proton.getCode();
-   G4double protonMass    = Proton.getMass();
-   G4int neutronCode      = Neutron.getCode();
-   G4double kaonPlusMass  = KaonPlus.getMass();
-   G4int pionPlusCode     = PionPlus.getCode();    
-   G4int pionZeroCode     = PionZero.getCode();    
-   G4int pionMinusCode    = PionMinus.getCode(); 
-   G4String mesonType     = PionPlus.getType();
-   G4String baryonType    = Proton.getType(); 
-   G4String antiBaryonType= AntiProton.getType(); 
+  G4int protonCode       = Proton.getCode();
+  G4double protonMass    = Proton.getMass();
+  G4int neutronCode      = Neutron.getCode();
+  G4double kaonPlusMass  = KaonPlus.getMass();
+  G4int pionPlusCode     = PionPlus.getCode();    
+  G4int pionZeroCode     = PionZero.getCode();    
+  G4int pionMinusCode    = PionMinus.getCode(); 
+  G4String mesonType = PionPlus.getType();
+  G4String baryonType = Proton.getType(); 
+  G4String antiBaryonType = AntiProton.getType(); 
   
-   G4double targetMass   = targetParticle.getMass();
+  G4double targetMass = targetParticle.getMass();
 
    G4int    incidentCode          = incidentParticle.getCode();
    G4double incidentMass          = incidentParticle.getMass();
@@ -3007,17 +2988,16 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
  }
 
 void
-G4HEInelastic::MediumEnergyCascading(G4bool &successful,
+G4HEInelastic::MediumEnergyCascading(G4bool& successful,
                                      G4HEVector pv[],
-                                     G4int &vecLen,	
-                                     G4double &excitationEnergyGNP,
-                                     G4double &excitationEnergyDTA,
-                                     G4HEVector incidentParticle,
-                                     G4HEVector targetParticle,
+                                     G4int& vecLen,	
+                                     G4double& excitationEnergyGNP,
+                                     G4double& excitationEnergyDTA,
+                                     const G4HEVector& incidentParticle,
+                                     const G4HEVector& targetParticle,
                                      G4double atomicWeight,
                                      G4double atomicNumber)
- {   
-//
+{
 //  The multiplicity of particles produced in the first interaction has been
 //  calculated in one of the FirstIntInNuc.... routines. The nuclear
 //  cascading particles are parametrized from experimental data.
@@ -3028,24 +3008,24 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
 
 //  All quantities on the G4HEVector Array pv are in GeV- units.
 
-   G4int protonCode       = Proton.getCode();
-   G4double protonMass    = Proton.getMass();
-   G4int neutronCode      = Neutron.getCode();
-   G4double kaonPlusMass  = KaonPlus.getMass();
-   G4int kaonPlusCode     = KaonPlus.getCode();   
-   G4int kaonMinusCode    = KaonMinus.getCode();
-   G4int kaonZeroSCode    = KaonZeroShort.getCode(); 
-   G4int kaonZeroLCode    = KaonZeroLong.getCode();
-   G4int kaonZeroCode     = KaonZero.getCode();
-   G4int antiKaonZeroCode = AntiKaonZero.getCode(); 
-   G4int pionPlusCode     = PionPlus.getCode();    
-   G4int pionZeroCode     = PionZero.getCode();    
-   G4int pionMinusCode    = PionMinus.getCode(); 
-   G4String mesonType     = PionPlus.getType();
-   G4String baryonType    = Proton.getType(); 
-   G4String antiBaryonType= AntiProton.getType(); 
+  G4int protonCode       = Proton.getCode();
+  G4double protonMass    = Proton.getMass();
+  G4int neutronCode      = Neutron.getCode();
+  G4double kaonPlusMass  = KaonPlus.getMass();
+  G4int kaonPlusCode     = KaonPlus.getCode();   
+  G4int kaonMinusCode    = KaonMinus.getCode();
+  G4int kaonZeroSCode    = KaonZeroShort.getCode(); 
+  G4int kaonZeroLCode    = KaonZeroLong.getCode();
+  G4int kaonZeroCode     = KaonZero.getCode();
+  G4int antiKaonZeroCode = AntiKaonZero.getCode(); 
+  G4int pionPlusCode     = PionPlus.getCode();    
+  G4int pionZeroCode     = PionZero.getCode();    
+  G4int pionMinusCode = PionMinus.getCode(); 
+  G4String mesonType = PionPlus.getType();
+  G4String baryonType = Proton.getType(); 
+  G4String antiBaryonType = AntiProton.getType(); 
 
-   G4double targetMass   = targetParticle.getMass();
+  G4double targetMass = targetParticle.getMass();
 
    G4int    incidentCode          = incidentParticle.getCode();
    G4double incidentMass          = incidentParticle.getMass();
@@ -4084,16 +4064,16 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
  }
 
 void
-G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
+G4HEInelastic::MediumEnergyClusterProduction(G4bool& successful,
                                              G4HEVector pv[],
-                                             G4int &vecLen,	
-                                             G4double &excitationEnergyGNP,
-                                             G4double &excitationEnergyDTA,
-                                             G4HEVector incidentParticle,
-                                             G4HEVector targetParticle,
+                                             G4int& vecLen,	
+                                             G4double& excitationEnergyGNP,
+                                             G4double& excitationEnergyDTA,
+                                             const G4HEVector& incidentParticle,
+                                             const G4HEVector& targetParticle,
                                              G4double atomicWeight,
                                              G4double atomicNumber)
- {   
+{
 // For low multiplicity in the first intranuclear interaction the cascading 
 // process as described in G4HEInelastic::MediumEnergyCascading does not work 
 // satisfactorily. From experimental data it is strongly suggested to use 
@@ -4101,18 +4081,18 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
 //  
 //  All quantities on the G4HEVector Array pv are in GeV- units.
 
-   G4int protonCode       = Proton.getCode();
-   G4double protonMass    = Proton.getMass();
-   G4int neutronCode      = Neutron.getCode();
-   G4double kaonPlusMass  = KaonPlus.getMass();
-   G4int pionPlusCode     = PionPlus.getCode();    
-   G4int pionZeroCode     = PionZero.getCode();    
-   G4int pionMinusCode    = PionMinus.getCode(); 
-   G4String mesonType     = PionPlus.getType();
-   G4String baryonType    = Proton.getType(); 
-   G4String antiBaryonType= AntiProton.getType(); 
+  G4int protonCode       = Proton.getCode();
+  G4double protonMass    = Proton.getMass();
+  G4int neutronCode      = Neutron.getCode();
+  G4double kaonPlusMass  = KaonPlus.getMass();
+  G4int pionPlusCode     = PionPlus.getCode();    
+  G4int pionZeroCode     = PionZero.getCode();    
+  G4int pionMinusCode = PionMinus.getCode(); 
+  G4String mesonType = PionPlus.getType();
+  G4String baryonType = Proton.getType(); 
+  G4String antiBaryonType = AntiProton.getType(); 
    
-   G4double targetMass   = targetParticle.getMass();
+  G4double targetMass = targetParticle.getMass();
 
    G4int    incidentCode          = incidentParticle.getCode();
    G4double incidentMass          = incidentParticle.getMass();
@@ -4938,27 +4918,27 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
  }
 
 void
-G4HEInelastic::QuasiElasticScattering(G4bool &successful,
-                                            G4HEVector pv[],
-                                            G4int &vecLen,	
-                                            G4double &excitationEnergyGNP,
-                                            G4double &excitationEnergyDTA,
-                                            G4HEVector incidentParticle,
-                                            G4HEVector targetParticle,
-                                            G4double atomicWeight,
-                                            G4double atomicNumber )
- {   
-// if the Cascading or Resonance - model fails, we try this,
-// QuasiElasticScattering. 
-//    
-//  All quantities on the G4HEVector Array pv are in GeV- units.
+G4HEInelastic::QuasiElasticScattering(G4bool& successful,
+                                      G4HEVector pv[],
+                                      G4int& vecLen,	
+                                      G4double& excitationEnergyGNP,
+                                      G4double& excitationEnergyDTA,
+                                      const G4HEVector& incidentParticle,
+                                      const G4HEVector& targetParticle,
+                                      G4double atomicWeight,
+                                      G4double atomicNumber)
+{
+  // if the Cascading or Resonance - model fails, we try this,
+  // QuasiElasticScattering. 
+  //    
+  //  All quantities on the G4HEVector Array pv are in GeV- units.
 
-   G4int protonCode       = Proton.getCode();
-   G4String mesonType     = PionPlus.getType();
-   G4String baryonType    = Proton.getType(); 
-   G4String antiBaryonType= AntiProton.getType(); 
+  G4int protonCode = Proton.getCode();
+  G4String mesonType = PionPlus.getType();
+  G4String baryonType = Proton.getType(); 
+  G4String antiBaryonType = AntiProton.getType(); 
    
-   G4double targetMass   = targetParticle.getMass();
+  G4double targetMass = targetParticle.getMass();
 
    G4double incidentMass          = incidentParticle.getMass();
    G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
@@ -5028,7 +5008,7 @@ G4HEInelastic::QuasiElasticScattering(G4bool &successful,
         pvmx[2].Lor( pvT, pvmx[0] );
         G4double pin = pvmx[1].Length();
         G4double bvalue = Amax(0.01 , 4.225+1.795*std::log(incidentTotalMomentum));
-        G4double pf =   sqr( sqr(centerOfMassEnergy) + sqr(pv[1].getMass()) - sqr(pv[0].getMass()))
+        G4double pf = sqr(sqr(centerOfMassEnergy) + sqr(pv[1].getMass()) - sqr(pv[0].getMass()))
                       - 4 * sqr(centerOfMassEnergy) * sqr(pv[1].getMass());
         if ( pf < 0.001)
            {
@@ -5233,25 +5213,25 @@ G4HEInelastic::QuasiElasticScattering(G4bool &successful,
  }
 
 void
-G4HEInelastic::ElasticScattering(G4bool &successful,
+G4HEInelastic::ElasticScattering(G4bool& successful,
                                  G4HEVector pv[],
-                                 G4int &vecLen,  
-                                 G4HEVector incidentParticle,
+                                 G4int& vecLen,  
+                                 const G4HEVector& incidentParticle,
                                  G4double atomicWeight,
                                  G4double /* atomicNumber*/)
- {
-   if(verboseLevel > 1) 
-     G4cout << " G4HEInelastic::ElasticScattering " << G4endl;
+{
+  if (verboseLevel > 1) 
+    G4cout << " G4HEInelastic::ElasticScattering " << G4endl;
 
-   G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
-   if (verboseLevel > 1)
-     G4cout << "DoIt: Incident particle momentum=" 
-            << incidentTotalMomentum << " GeV" << G4endl;
-   if (incidentTotalMomentum < 0.01) 
-      { 
-        successful = false;
-        return;
-      }
+  G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
+  if (verboseLevel > 1)
+    G4cout << "DoIt: Incident particle momentum=" 
+           << incidentTotalMomentum << " GeV" << G4endl;
+  if (incidentTotalMomentum < 0.01) { 
+      successful = false;
+      return;
+  }
+
    if (atomicWeight < 0.5) 
       { 
         successful = false;
