@@ -11,7 +11,8 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 18:46:19 bmorgan Exp $
+# $Id: sources.cmake,v 1.2 2010-11-29 17:01:30 bmorgan Exp $
+# GEANT4 Tag $Name: not supported by cvs2svn $
 #
 #------------------------------------------------------------------------------
 
@@ -50,6 +51,15 @@ if(GEANT4_USE_QT)
     list(APPEND G4INTERFACES_COMMON_MODULE_SOURCES G4Qt.cc)
     
     # Stuff for Moc etc, plus LINK_LIBRARIES here
+    include(${QT_USE_FILE})
+    
+    # Must enable Qt source with a def...
+    GEANT4_ADD_COMPILE_DEFINITIONS(SOURCES G4Qt.cc
+        COMPILE_DEFINITIONS G4INTY_BUILD_QT)
+
+    # It uses Qt core and gui(?) libs
+    list(APPEND ${G4INTERFACES_COMMON_MODULE_LINK_LIBRARIES}
+        "${QT_QTGUI_LIBRARY} ${QT_QTCORE_LIBRARY}") 
 endif()
 
 #
