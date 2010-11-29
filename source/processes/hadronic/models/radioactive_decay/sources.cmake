@@ -11,7 +11,8 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 19:06:53 bmorgan Exp $
+# $Id: sources.cmake,v 1.2 2010-11-29 17:54:52 bmorgan Exp $
+# GEANT4 Tag $Name: not supported by cvs2svn $
 #
 #------------------------------------------------------------------------------
 
@@ -68,6 +69,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_radioactivedecay
         G4RadioactiveDecayRate.hh
         G4RadioactiveDecayRateVector.hh
         G4RadioactiveDecaymessenger.hh
+        G4RadioactivityTable.hh
         G4UIcmdWithNucleusLimits.hh
         G4UserLimitsForRD.hh
     SOURCES
@@ -80,6 +82,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_radioactivedecay
         G4RadioactiveDecayRate.cc
         G4RadioactiveDecayRateVector.cc
         G4RadioactiveDecaymessenger.cc
+        G4RadioactivityTable.cc
         G4UIcmdWithNucleusLimits.cc
     GRANULAR_DEPENDENCIES
         G4baryons
