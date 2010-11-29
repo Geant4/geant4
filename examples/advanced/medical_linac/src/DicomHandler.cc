@@ -160,7 +160,7 @@ G4int DicomHandler::ReadFile(FILE *dicom, char * filename2)
 	    // beginning of the pixels
 	    if(tagDictionary == 0x7FE00010) break;
 	    
-	    if(elementLength4 == 0xFFFFFFFF) G4cerr << "Too difficult for me!" << G4endl; // VR = SQ with undefined length
+	    if(elementLength4 ==(G4int) 0xFFFFFFFF) G4cerr << "Too difficult for me!" << G4endl; // VR = SQ with undefined length
 	    
 	    // Reading the information with data
 	    std::fread(data, elementLength4,1,dicom);
@@ -194,7 +194,7 @@ G4int DicomHandler::ReadFile(FILE *dicom, char * filename2)
 
 	          //G4cout <<  std::hex<< elementLength4 << G4endl;
 	      
-	          if(elementLength4 == 0xFFFFFFFF) {
+	          if(elementLength4 ==(G4int) 0xFFFFFFFF) {
 	          short momreadGroupId;
 		  short momreadElementId;
 		  unsigned int momelementLength4 ; // deal with element length in 4 bytes

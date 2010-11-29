@@ -64,5 +64,5 @@ void CML2EventAction::BeginOfEventAction(const G4Event*)
 {}
 
  
-void CML2EventAction::EndOfEventAction(const G4Event* evt)
+void CML2EventAction::EndOfEventAction(const G4Event* )
 {}
