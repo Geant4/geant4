@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 19:09:43 bmorgan Exp $
+# $Id: sources.cmake,v 1.2 2010-11-29 10:06:02 gcosmo Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -33,6 +33,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/materials/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/cuts/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/muons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/utils/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/transportation/include)
@@ -44,12 +45,17 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4scoring
     HEADERS
+        G4EnergySplitter.hh
         G4ParallelWorldScoringProcess.hh
+        G4ScoreSplittingProcess.hh
     SOURCES
+        G4EnergySplitter.cc
         G4ParallelWorldScoringProcess.cc
+        G4ScoreSplittingProcess.cc
     GRANULAR_DEPENDENCIES
         G4cuts
         G4detector
+        G4muons
         G4emutils
         G4geombias
         G4geometrymng
