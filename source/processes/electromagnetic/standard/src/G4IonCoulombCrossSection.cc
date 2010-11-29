@@ -45,9 +45,10 @@
 //      Accepted for publication in the Proceedings of  the  ICATPP Conference
 //      on Cosmic Rays for Particle and Astroparticle Physics, Villa  Olmo, 7-8
 //      October,  2010, to be published by World Scientific (Singapore).
-//      Consolandi_Rancoita.pdf available for downloading at:
-//      http://villaolmo.mib.infn.it/ICATPP_CR_2010/manuscripts/accepted 
-//              /Broader_ImpactS_Activities_and_Treatments/
+//
+//      Available for downloading at:
+//      http://arxiv.org/abs/1011.4822
+//
 // -------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -149,7 +150,7 @@ void G4IonCoulombCrossSection::SetupKinematic(G4double ekin,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
-void G4IonCoulombCrossSection::SetupTarget(G4double Z, G4double e)
+void G4IonCoulombCrossSection::SetupTarget(G4double Z, G4double e, G4int heavycorr)
 {
         if(Z != targetZ || e != etag) {
                 etag    = e;
@@ -157,10 +158,22 @@ void G4IonCoulombCrossSection::SetupTarget(G4double Z, G4double e)
                 G4int iz= G4int(Z);
 
                 SetScreenRSquare(iz);
+  		screenZ =0;
+        	screenZ = ScreenRSquare/mom2;
 
-                screenZ = ScreenRSquare/mom2;
-                screenZ *=(1.13 + 3.76*Z*Z*chargeSquare*invbeta2*alpha2)/2.;
+	//	G4cout<< "heavycorr "<<heavycorr<<G4endl;
 
+		if(heavycorr!=0 && particle != theProton){
+			G4double corr=5.*twopi*Z*std::sqrt(chargeSquare*alpha2);
+			corr=std::pow(corr,0.12);
+			screenZ *=(1.13 + corr*3.76*Z*Z*chargeSquare*invbeta2*alpha2)/2.;
+//			G4cout<<" heavycorr Z e corr....2As "<< heavycorr << "\t"
+//				<<Z <<"\t"<<e/MeV <<"\t"<<screenZ<<G4endl;
+
+		}else{ screenZ *=(1.13 + 3.76*Z*Z*chargeSquare*invbeta2*alpha2)/2.;
+//                        G4cout<<"  heavycorr Z e....2As "<< heavycorr << "\t"
+//				<<Z <<"\t"<< e/MeV <<"\t"  <<screenZ<<G4endl;
+		}
 
                 if(1 == iz && particle == theProton && cosTetMaxNuc < 0.0) {
                         cosTetMaxNuc = 0.0;
@@ -229,17 +242,9 @@ G4double G4IonCoulombCrossSection::SampleCosineTheta()
   	G4double dx = cosTetMinNuc - cosTetMaxNuc;
   	G4double grej, z1;
 
-  	do {
     		z1 = x1*x2/(x1 + G4UniformRand()*dx) - screenZ;
                 grej = 1.0/(1.0 + z1);
   
-	} while ( G4UniformRand() > grej*grej );
-
-   // 	if(G4UniformRand() > (1. - z1*0.5)/(1.0 + z1*sqrt(momLab2)/targetMass)) {
-   //		return 0.0;
- //   		}
-
-
 
   return z1;
 }

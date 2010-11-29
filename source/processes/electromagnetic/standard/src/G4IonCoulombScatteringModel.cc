@@ -45,9 +45,10 @@
 //      Accepted for publication in the Proceedings of  the  ICATPP Conference
 //      on Cosmic Rays for Particle and Astroparticle Physics, Villa  Olmo, 7-8
 //      October,  2010, to be published by World Scientific (Singapore).
-//      Consolandi_Rancoita.pdf available for downloading at:
-//      http://villaolmo.mib.infn.it/ICATPP_CR_2010/manuscripts/accepted
-//              /Broader_ImpactS_Activities_and_Treatments/
+//
+//      Available for downloading at:
+//	http://arxiv.org/abs/1011.4822
+//
 // -------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -61,15 +62,17 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4NucleiProperties.hh"
 
+#include "G4UnitsTable.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 using namespace std;
 
 G4IonCoulombScatteringModel::G4IonCoulombScatteringModel(const G4String& nam)
   : G4VEmModel(nam),
+
     cosThetaMin(1.0),
     isInitialised(false)
-
 {
   	fNistManager = G4NistManager::Instance();
   	theParticleTable = G4ParticleTable::GetParticleTable();
@@ -80,8 +83,9 @@ G4IonCoulombScatteringModel::G4IonCoulombScatteringModel(const G4String& nam)
   	currentElement  = 0;
         currentCouple = 0;
 
-        lowEnergyLimit  = 100*keV;
-  	recoilThreshold = 0.*keV;
+        lowEnergyLimit  = 100*eV;
+  	recoilThreshold = 0.*eV;
+	heavycorr =0;
   	particle = 0;
 	mass=0;
 
@@ -94,7 +98,6 @@ G4IonCoulombScatteringModel::G4IonCoulombScatteringModel(const G4String& nam)
 
 G4IonCoulombScatteringModel::~G4IonCoulombScatteringModel()
 { delete  ioncross;}
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -139,12 +142,12 @@ G4double G4IonCoulombScatteringModel::ComputeCrossSectionPerAtom(
         ioncross->SetupKinematic(kinEnergy, cutEnergy,iz);
 
 
-        ioncross->SetupTarget(Z, kinEnergy);
+        ioncross->SetupTarget(Z, kinEnergy, heavycorr);
 
 
   	xsec = ioncross->NuclearCrossSection();
 
-//cout<< "..........xsec "<<xsec <<endl;
+//cout<< "..........xsec "<<G4BestUnit(xsec,"Surface") <<endl;
   return xsec;
 }
 
@@ -232,7 +235,10 @@ void G4IonCoulombScatteringModel::SampleSecondaries(
   	fParticleChange->SetProposedKineticEnergy(finalT);
 
   	G4double tcut = recoilThreshold;
-        if(pCuts) { tcut= std::max(tcut,(*pCuts)[currentMaterialIndex]); }
+        if(pCuts) { tcut= std::max(tcut,(*pCuts)[currentMaterialIndex]); 
+
+			//G4cout<<" tcut eV "<<tcut/eV<<endl;
+			}
  
   	if(trec > tcut) {
     		G4ParticleDefinition* ion = theParticleTable->FindIon(iz, ia, 0, iz);

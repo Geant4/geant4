@@ -46,9 +46,10 @@
 //	Accepted for publication in the Proceedings of  the  ICATPP Conference
 //	on Cosmic Rays for Particle and Astroparticle Physics, Villa  Olmo, 7-8
 //	October,  2010, to be published by World Scientific (Singapore).
-//	Consolandi_Rancoita.pdf available for downloading at:
-//	http://villaolmo.mib.infn.it/ICATPP_CR_2010/manuscripts/accepted
-//		/Broader_ImpactS_Activities_and_Treatments/
+//
+//      Available for downloading at:
+//      http://arxiv.org/abs/1011.4822
+//
 // -------------------------------------------------------------------
 //
 
@@ -94,12 +95,15 @@ public:
 
   	
   	inline void SetRecoilThreshold(G4double eth);
+        void        SetHeavyIonCorr(G4int b) {heavycorr=b; };
+        G4int       GetHeavyIonCorr() {return heavycorr; };
+
 
 
 
 protected: 
 
-
+	 
   	inline void DefineMaterial(const G4MaterialCutsCouple*);
   
   	inline void SetupParticle(const G4ParticleDefinition*);
@@ -129,6 +133,8 @@ protected:
         G4int                       currentMaterialIndex;
 
 
+	G4int 			  heavycorr;
+
   	G4double                  cosThetaMin;
   	G4double                  recoilThreshold;
 				
@@ -141,7 +147,6 @@ protected:
 
 
 private:
-
 
   	G4bool                    isInitialised;	
 

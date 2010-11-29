@@ -45,9 +45,10 @@
 //      Accepted for publication in the Proceedings of  the  ICATPP Conference
 //      on Cosmic Rays for Particle and Astroparticle Physics, Villa  Olmo, 7-8
 //      October,  2010, to be published by World Scientific (Singapore).
-//      Consolandi_Rancoita.pdf available for downloading at:
-//      http://villaolmo.mib.infn.it/ICATPP_CR_2010/manuscripts/accepted
-//              /Broader_ImpactS_Activities_and_Treatments/
+//
+//      Available for downloading at:
+//      http://arxiv.org/abs/1011.4822
+//
 // -------------------------------------------------------------------
 
 //
@@ -88,7 +89,7 @@ public:
 
   	void SetupKinematic(G4double kinEnergy, G4double cut,G4int iz);
 
-  	void SetupTarget(G4double Z, G4double kinEnergy);
+  	void SetupTarget(G4double Z, G4double kinEnergy,G4int heavycorr);
 
 	inline G4double GetMomentum2();
 

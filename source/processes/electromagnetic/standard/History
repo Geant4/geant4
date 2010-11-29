@@ -1,4 +1,4 @@
-$Id: History,v 1.522 2010-11-23 17:38:57 vnivanch Exp $
+$Id: History,v 1.523 2010-11-29 15:30:05 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29 November 2010: V.Ivant (emstand-V09-03-31)
+- G4IonCoulombScatteringModel, G4IonCoulombCrossSection - C.Consolandi 
+  added extra screening factor for low-energy heavy ions. 
 
 23 November 2010: V.Ivant (emstand-V09-03-30)
 - G4PAIModel, G4PAIySection - V.Grichine fix of a bug in G4_Ar
