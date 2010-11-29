@@ -24,8 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4MonopolePhysics.hh,v 1.3 2010-03-23 14:12:08 vnivanch Exp $
+// $Id: G4MonopolePhysics.hh,v 1.4 2010-11-29 15:14:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+//  12.07.10  S.Burdin (changed the magnetic and electric charge variables from integer to double)
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,8 +58,8 @@ public:
   // registered to the process manager of each particle type
   virtual void ConstructProcess();
 
-  void SetMagneticCharge(G4int);
-  void SetElectricCharge(G4int);
+  void SetMagneticCharge(G4double);
+  void SetElectricCharge(G4double);
   void SetMonopoleMass(G4double);
 
 private:
@@ -66,8 +68,8 @@ private:
   G4MonopolePhysics & operator=(const G4MonopolePhysics &right);
   G4MonopolePhysics(const G4MonopolePhysics&);
 
-  G4int    magCharge;
-  G4int    elCharge;
+  G4double    magCharge;
+  G4double    elCharge;
   G4double monopoleMass;
 
   G4MonopolePhysicsMessenger*  theMessenger;

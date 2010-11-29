@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MonopoleEquation.hh,v 1.1 2010-06-04 19:03:36 vnivanch Exp $
+// $Id: G4MonopoleEquation.hh,v 1.2 2010-11-29 15:14:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,6 +40,7 @@
 // History:
 // - Created. V.Grichine, 10.11.98
 // - Modified. S.Burdin, 30.04.10
+// 	       B.Bozsogi, 15.06.10
 // -------------------------------------------------------------------
 
 #ifndef G4MONOPOLEEQUATION_hh
@@ -57,10 +58,10 @@ class G4MonopoleEquation : public G4EquationOfMotion
 
     ~G4MonopoleEquation() {;} 
 
-    void  SetChargeMomentumMass(G4double particleCharge, // in e+ units
-                                G4double MomentumXc,
+    void  SetChargeMomentumMass(G4double particleMagneticCharge,
+                                G4double particleElectricCharge,
                                 G4double mass);
-
+                                 
     void EvaluateRhsGivenB(const G4double y[],
                            const G4double Field[],
                                  G4double dydx[] ) const;
@@ -69,7 +70,8 @@ class G4MonopoleEquation : public G4EquationOfMotion
 
   private:
 
-    G4double        fElectroMagCof ;
+    G4double        fMagCharge ;
+    G4double        fElCharge;
     G4double        fMassCof;
 };
 

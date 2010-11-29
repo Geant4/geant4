@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MonopolePhysics.cc,v 1.5 2010-06-04 19:03:36 vnivanch Exp $
+// $Id: G4MonopolePhysics.cc,v 1.6 2010-11-29 15:14:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -34,6 +34,7 @@
 //
 // Modified:
 //
+//  12.07.10  S.Burdin (changed the magnetic and electric charge variables from integer to double)
 //----------------------------------------------------------------------------
 //
 //
@@ -52,15 +53,19 @@
 #include "G4MonopoleTransportation.hh"
 #include "G4hMultipleScattering.hh"
 #include "G4mplIonisation.hh"
+#include "G4mplIonisationWithDeltaModel.hh"
 #include "G4hhIonisation.hh"
+#include "G4hIonisation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4MonopolePhysics::G4MonopolePhysics(const G4String& nam)
   : G4VPhysicsConstructor(nam)
 {
-  magCharge = 1;
-  elCharge  = 0;
+  magCharge = 1.0;
+  //  magCharge = -1.0;
+  //  elCharge  = -50.0;
+  elCharge  = 0.0;
   monopoleMass = 100.*GeV;
   theMessenger = new G4MonopolePhysicsMessenger(this);
 }
@@ -109,7 +114,7 @@ void G4MonopolePhysics::ConstructProcess()
     //G4hMultipleScattering* hmsc = new G4hMultipleScattering();
     //pmanager->AddProcess(hmsc,  -1, idx, idx);
     //++idx;
-    G4hhIonisation* hhioni = new G4hhIonisation();
+    G4hIonisation* hhioni = new G4hIonisation();
     hhioni->SetDEDXBinning(nbin);
     hhioni->SetMinKinEnergy(emin);
     hhioni->SetMaxKinEnergy(emax);
@@ -121,6 +126,9 @@ void G4MonopolePhysics::ConstructProcess()
     mplioni->SetDEDXBinning(nbin);
     mplioni->SetMinKinEnergy(emin);
     mplioni->SetMaxKinEnergy(emax);
+    G4mplIonisationWithDeltaModel* mod = 
+      new G4mplIonisationWithDeltaModel(magn,"PAI");
+    mplioni->AddEmModel(0,mod,mod);
     pmanager->AddProcess(mplioni, -1, idx, idx);
     ++idx;
   }
@@ -128,12 +136,12 @@ void G4MonopolePhysics::ConstructProcess()
 
 }
 
-void G4MonopolePhysics::SetMagneticCharge(G4int val)
+void G4MonopolePhysics::SetMagneticCharge(G4double val)
 {
   magCharge = val;
 }
 
-void G4MonopolePhysics::SetElectricCharge(G4int val)
+void G4MonopolePhysics::SetElectricCharge(G4double val)
 {
   elCharge = val;
 }

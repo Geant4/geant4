@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MonopoleFieldSetup.hh,v 1.1 2010-06-04 19:03:36 vnivanch Exp $
+// $Id: G4MonopoleFieldSetup.hh,v 1.2 2010-11-29 15:14:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,10 +56,13 @@ class G4Mag_UsualEqRhs;
 class G4MagIntegratorStepper;
 class G4MonopoleEquation;
 
+class G4MonopoleFieldMessenger;
+
 class G4MonopoleFieldSetup
 {
 public:  
   void InitialiseAll();    //  Set parameters and call method below
+  void SetMagField(G4double fieldValue);
   void SetStepperAndChordFinder(G4int val);
 
   static G4MonopoleFieldSetup* GetMonopoleFieldSetup();
@@ -86,6 +89,8 @@ protected:
   
 private:  
   static G4MonopoleFieldSetup*  fMonopoleFieldSetup;
+  
+  G4MonopoleFieldMessenger*     fMonopoleFieldMessenger;
  
 };
 

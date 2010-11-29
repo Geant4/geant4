@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MonopoleTransportation.cc,v 1.1 2010-06-04 19:03:36 vnivanch Exp $
+// $Id: G4MonopoleTransportation.cc,v 1.2 2010-11-29 15:14:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -123,11 +123,10 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
                                              G4double  currentMinimumStep,
                                              G4double& currentSafety,
                                              G4GPILSelection* selection )
-{
-  
+{  
   magSetup->SetStepperAndChordFinder(1); 
   // change to monopole equation
-  
+
   G4double geometryStepLength, newSafety ; 
   fParticleIsLooping = false ;
 
@@ -167,7 +166,8 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 
   // Is the monopole charged ?
   //
-  G4double particleCharge = pParticleDef->MagneticCharge() ; 
+  G4double particleMagneticCharge = pParticleDef->MagneticCharge() ; 
+  G4double particleElectricCharge = pParticle->GetCharge();
 
   fGeometryLimitedStep = false ;
   // fEndGlobalTimeComputed = false ;
@@ -181,7 +181,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   G4FieldManager* fieldMgr=0;
   G4bool          fieldExertsForce = false ;
     
-  if( (particleCharge != 0.0) )
+  if( (particleMagneticCharge != 0.0) )
   {      
      fieldMgr= fFieldPropagator->FindAndSetFieldManager( track.GetVolume() ); 
      if (fieldMgr != 0) {
@@ -258,14 +258,18 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   }
   else   //  A field exerts force
   {
-     G4double       momentumMagnitude = pParticle->GetTotalMomentum() ;
+     // G4double       momentumMagnitude = pParticle->GetTotalMomentum() ;
      G4ThreeVector  EndUnitMomentum ;
      G4double       lengthAlongCurve ;
      G4double       restMass = pParticleDef->GetPDGMass() ;
  
-     fFieldPropagator->SetChargeMomentumMass( particleCharge,    // in e+ units
-                                              momentumMagnitude, // in Mev/c 
+     fFieldPropagator->SetChargeMomentumMass( particleMagneticCharge,    // in Mev/c 
+                                              particleElectricCharge,    // in e+ units
                                               restMass           ) ;  
+     
+     // SetChargeMomentumMass is _not_ used here as it would in everywhere else, 
+     // it's just a workaround to pass the electric charge as well.
+     
 
      G4ThreeVector spin        = track.GetPolarization() ;
      G4FieldTrack  aFieldTrack = G4FieldTrack( startPosition, 
@@ -406,10 +410,10 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   //
   if( currentSafety < endpointDistance ) 
   {
-      // if( particleCharge == 0.0 ) 
+      // if( particleMagneticCharge == 0.0 ) 
       //    G4cout  << "  Avoiding call to ComputeSafety : charge = 0.0 " << G4endl;
  
-      if( particleCharge != 0.0 ) {
+      if( particleMagneticCharge != 0.0 ) {
 
 	 G4double endSafety =
                fLinearNavigator->ComputeSafety( fTransportEndPosition) ;
@@ -435,6 +439,9 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   }            
 
   fParticleChange.ProposeTrueStepLength(geometryStepLength) ;
+
+  magSetup->SetStepperAndChordFinder(0);
+  // change back to usual equation
 
   return geometryStepLength ;
 }
@@ -586,9 +593,6 @@ PostStepGetPhysicalInteractionLength( const G4Track&,
                                             G4double, // previousStepSize
                                             G4ForceCondition* pForceCond )
 {  
-  magSetup->SetStepperAndChordFinder(0);
-  // change back to usual equation
-  
   *pForceCond = Forced ; 
   return DBL_MAX ;  // was kInfinity ; but convention now is DBL_MAX
 }

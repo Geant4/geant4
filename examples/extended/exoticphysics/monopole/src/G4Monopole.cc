@@ -33,6 +33,7 @@
 //
 // Modified:
 //
+//  12.07.10  S.Burdin (changed the magnetic and electric charge variables from integer to double)
 //----------------------------------------------------------------------------
 //
 
@@ -80,18 +81,18 @@ G4Monopole::~G4Monopole()
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4Monopole* G4Monopole::MonopoleDefinition(G4double mass, G4int mCharge, G4int eCharge)
+G4Monopole* G4Monopole::MonopoleDefinition(G4double mass, G4double mCharge, G4double eCharge)
 {    
   if(!theMonopole) {
-    magCharge = eplus * G4double(mCharge) / fine_structure_const * 0.5;
+    magCharge = eplus * mCharge / fine_structure_const * 0.5;
     theMonopole = new G4Monopole(
-              "monopole",         mass,       0.0*MeV,       eplus*G4double(eCharge), 
-		    0,               0,             0,          
-		    0,               0,             0,             
-	      "boson",               0,             0,           0,
-	         true,            -1.0,             0);
-
-
+				 "monopole",         mass,       0.0*MeV,       eplus*eCharge, 
+				 0,               0,             0,          
+				 0,               0,             0,             
+				 "boson",               0,             0,           0,
+				 true,            -1.0,             0);
+    
+    
     G4cout << "Monopole is created: m(GeV)= " << theMonopole->GetPDGMass()/GeV 
 	   << " Qel= " << theMonopole->GetPDGCharge()/eplus
 	   << " Qmag= " << magCharge/eplus

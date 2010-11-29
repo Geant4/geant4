@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MonopoleFieldSetup.cc,v 1.1 2010-06-04 19:03:36 vnivanch Exp $
+// $Id: G4MonopoleFieldSetup.cc,v 1.2 2010-11-29 15:14:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,6 +41,7 @@
 // =======================================================================
 
 #include "G4MonopoleFieldSetup.hh"
+#include "G4MonopoleFieldMessenger.hh"
 
 #include "G4MagneticField.hh"
 #include "G4UniformMagField.hh"
@@ -75,8 +76,9 @@ G4MonopoleFieldSetup::G4MonopoleFieldSetup()
   {
     fChordFinder = 0;
     fStepper = 0;
-    fMagneticField = new G4UniformMagField( G4ThreeVector( 0.0, 0.0, 3.0*tesla) ); 
-    InitialiseAll();
+    fMagneticField = 0;
+    
+    fMonopoleFieldMessenger = new G4MonopoleFieldMessenger(this);
   }
   else
   {
@@ -102,31 +104,53 @@ G4MonopoleFieldSetup* G4MonopoleFieldSetup::GetMonopoleFieldSetup()
    return fMonopoleFieldSetup;
 }
 
-void
-G4MonopoleFieldSetup::InitialiseAll()
-{
-  fEquation = new G4Mag_UsualEqRhs(fMagneticField); 
-  fMonopoleEquation = new G4MonopoleEquation(fMagneticField);
- 
-  fMinStep     = 0.01*mm ; // minimal step of 1 mm is default
-
-  fFieldManager = G4TransportationManager::GetTransportationManager()
-                                         ->GetFieldManager();
-                                         
-  fMonopoleStepper = new G4ClassicalRK4( fMonopoleEquation );       
-  fStepper = new G4ClassicalRK4( fEquation );                                         
-                                         
-  SetStepperAndChordFinder(0);
-}
-
 ////////////////////////////////////////////////////////////////////////////////
 
 G4MonopoleFieldSetup::~G4MonopoleFieldSetup()
 {
+  delete fMonopoleFieldMessenger;
   if(fMagneticField) delete fMagneticField;
   if(fChordFinder)   delete fChordFinder;
   if(fStepper)       delete fStepper;
   if(fMonopoleStepper)  delete fMonopoleStepper;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void G4MonopoleFieldSetup::SetMagField(G4double fieldValue)
+{
+  //apply a global uniform magnetic field along Z axis  
+  if (fMagneticField) { delete fMagneticField; }  //delete the existing magn field
+
+  if (fieldValue != 0.)     // create a new one if non nul
+    {
+      fMagneticField = new G4UniformMagField(G4ThreeVector(0., 0., fieldValue));        
+      InitialiseAll();
+    }
+   else
+    {
+      fMagneticField = 0;
+      fFieldManager->SetDetectorField(fMagneticField);
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void
+G4MonopoleFieldSetup::InitialiseAll()
+{
+  fFieldManager = G4TransportationManager::GetTransportationManager()
+                                          ->GetFieldManager();
+                                          
+  fEquation = new G4Mag_UsualEqRhs(fMagneticField); 
+  fMonopoleEquation = new G4MonopoleEquation(fMagneticField);
+ 
+  fMinStep     = 0.01*mm ; // minimal step of 1 mm is default
+                                        
+  fMonopoleStepper = new G4ClassicalRK4( fMonopoleEquation, 8 ); // for time information..
+  fStepper = new G4ClassicalRK4( fEquation );                                         
+                                         
+  SetStepperAndChordFinder(0);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -135,29 +159,24 @@ G4MonopoleFieldSetup::~G4MonopoleFieldSetup()
 //
 void G4MonopoleFieldSetup::SetStepperAndChordFinder(G4int val)
 {
-  switch (val)
+  if (fMagneticField)
   {
-    case 0:
-      fStepper = new G4ClassicalRK4( fEquation );       
-//      G4cout<<"G4ClassicalRK4 (default) is called"<<G4endl;     
-      break;
-    case 1: 
-      fStepper = new G4ClassicalRK4( fMonopoleEquation );       
-//      G4cout<<"G4ClassicalRK4 (default) is called"<<G4endl;     
-      break;
-  }   
+    fFieldManager->SetDetectorField(fMagneticField );
+
+    if(fChordFinder) delete fChordFinder;
+
+    switch (val)
+    {
+      case 0:
+        fChordFinder = new G4ChordFinder( fMagneticField, fMinStep, fStepper);      
+        break;
+      case 1: 
+	fChordFinder = new G4ChordFinder( fMagneticField, fMinStep, fMonopoleStepper);
+        break;
+    }   
   
-//  G4cout<<"The minimal step is equal to "<<fMinStep/mm<<" mm"<<G4endl ;
-
-  fFieldManager->SetDetectorField(fMagneticField );
-
-  if(fChordFinder) delete fChordFinder;
-
-  fChordFinder = new G4ChordFinder( fMagneticField, fMinStep, fStepper);
-
-  fFieldManager->SetChordFinder( fChordFinder );
-
-  return;
+    fFieldManager->SetChordFinder( fChordFinder );
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
