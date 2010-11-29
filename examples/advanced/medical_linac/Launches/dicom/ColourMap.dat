@@ -1,0 +1,9 @@
+7
+Water             0.0     0.0     0.0     0.0
+Air             0.0     0.0     0.0     0.0
+G4_B-100_BONE   1.0     1.0     0.0     1.0 
+LungInhale       0.0     0.     0.     1.0
+AdiposeTissue   0.6 0.6 0.6     1.0
+Breast   .3     0.3     .3    1.0
+TrabecularBone       1.0     1.0     1.0     1.0
+material        red     green   blue    opacity
