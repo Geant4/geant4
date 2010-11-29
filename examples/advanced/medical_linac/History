@@ -1,4 +1,4 @@
-$Id: History,v 1.34 2010-11-29 00:11:53 cirrone Exp $
+$Id: History,v 1.35 2010-11-29 00:28:07 cirrone Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ and keep track of all category-tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+
+29.11.2010   G.A.P.Cirrone, tag medical_linac-V09-03-07
+	     - Completed the DICOM files transfer
 
 29.11.2010   G.A.P.Cirrone, tag medical_linac-V09-03-06
 	     - Updating directories
