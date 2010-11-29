@@ -38,6 +38,7 @@ processes                    John Apostolakis                John Apostolakis
 "/cuts                       kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
 "/electromagnetic            Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
 "/"/lowenergy                incerti@cenbg.in2p3.fr          Sebastien Incerti
+"/"/pii                      Maria.Grazia.Pia@ge.infn.it     Maria Grazia Pia
 "/decay                      kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
 "/hadronic                   dwright@slac.stanford.edu       Dennis Wright
 "/"/cross_sections           dwright@slac.stanford.edu       Dennis Wright
@@ -67,6 +68,7 @@ processes                    John Apostolakis                John Apostolakis
 "/"/"/incl                   kaitanie@cc.helsinki.fi	     Pekka Kaitaniemi
 "/"/"/isotope_production     dwright@slac.stanford.edu       Dennis Wright
 "/"/"/leading_particle       asai@slac.stanford.edu          Makoto Asai
+"/"/"/lend                   tkoi@slac.stanford.edu          Tatsumi Koi
 "/"/"/lll_fission            dwright@slac.stanford.edu       Dennis Wright
 "/"/"/low_energy             dwright@slac.stanford.edu       Dennis Wright
 "/"/"/management             Gunter.Folger@cern.ch           Gunter Folger
@@ -115,7 +117,9 @@ examples/advanced            cirrone@lns.infn.it             Pablo Cirrone
   air_shower                 bernardo@lip.pt                 Bernardo Tome
   amsEcal                    Michel.Maire@lapp.in2p3.fr      Michel Maire
   brachytherapy              susanna@uow.edu.au              Susanna Guatelli
+  ChargeExchangeMC           cirrone@lns.infn.it             Pablo Cirrone
   composite_calorimeter      Andrea.Dotti@cern.ch            Andrea Dotti
+  eRosita                    Maria.Grazia.Pia@ge.infn.it     Maria Grazia Pia
   gammaray_telescope         longof@ts.infn.it               Francesco Longo
   hadrontherapy              cirrone@lns.infn.it             Pablo Cirrone
   human_phantom              susanna@uow.edu.au              Susanna Guatelli
@@ -173,7 +177,6 @@ examples/extended
     wls                      gum@triumf.ca                   Peter Gumplinger
   parallel:
     ParN02, ParN04           gene@ccs.neu.edu                Gene Cooperman
-    ExDiane                  susanna@uow.edu.au              Susanna Guatelli
     MPI                      Koichi.Murakami@kek.jp          Koichi Murakami
   parameterisations/gflash   Marc.Verderi@in2p3.fr           Marc Verderi
   persistency
@@ -249,5 +252,6 @@ tests                        Gunter.Folger@cern.ch           Gunter Folger
       test60                 incerti@cenbg.in2p3.fr          Sebastien Incerti
       test61                 tkoi@slac.stanford.edu          Tatsumi Koi
       test62                 kaitanie@cc.helsinki.fi	     Pekka Kaitaniemi
+      test65                 tkoi@slac.stanford.edu          Tatsumi Koi
       test201                barrand@lal.in2p3.fr            Guy Barrand
       test202                John.Allison@man.ac.uk          John Allison
