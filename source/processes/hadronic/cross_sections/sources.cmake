@@ -11,7 +11,8 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 18:55:04 bmorgan Exp $
+# $Id: sources.cmake,v 1.2 2010-11-29 17:44:25 bmorgan Exp $
+# GEANT4 Tag $Name: not supported by cvs2svn $
 #
 #------------------------------------------------------------------------------
 
@@ -47,8 +48,12 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
         G4BGGNucleonInelasticXS.hh
         G4BGGPionElasticXS.hh
         G4BGGPionInelasticXS.hh
+        G4ComponentAntiNuclNuclearXS.hh
         G4CrossSectionDataSetRegistry.hh
         G4CrossSectionDataStore.hh
+        G4CrossSectionElastic.hh
+        G4CrossSectionInelastic.hh
+        G4CrossSectionPairGG.hh
         G4EMDissociationCrossSection.hh
         G4EMDissociationSpectrum.hh
         G4ElectroNuclearCrossSection.hh
@@ -89,6 +94,10 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
         G4BGGPionInelasticXS.cc
         G4CrossSectionDataSetRegistry.cc
         G4CrossSectionDataStore.cc
+        G4CrossSectionElastic.cc
+        G4CrossSectionInelastic.cc
+        G4CrossSectionPairGG.cc
+        G4ComponentAntiNuclNuclearXS.cc
         G4EMDissociationCrossSection.cc
         G4EMDissociationSpectrum.cc
         G4ElectroNuclearCrossSection.cc
