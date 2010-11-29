@@ -1,7 +1,7 @@
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                        MedLinac2                        |
-+                                                         +
-|                        README                           |
+|                        MedLinac2											     |
++                                                         								           +
+|                        README                           								      |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 The MedLinac2 advanced example (ML2) is a renewed version of the MedLinac advanced example developed by Michela Piergentili with the support of M.G.Pia and Franca Foppiano in 2004.
