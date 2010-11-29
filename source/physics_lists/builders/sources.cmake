@@ -11,7 +11,8 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 18:51:02 bmorgan Exp $
+# $Id: sources.cmake,v 1.2 2010-11-29 17:23:53 bmorgan Exp $
+# GEANT4 Tag $Name: not supported by cvs2svn $
 #
 #------------------------------------------------------------------------------
 
@@ -93,49 +94,29 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4phys_builders
     HEADERS
-        G4LHEPPiKBuilder.hh
         CompileTimeConstraints.hh
-        G4ProtonBuilder.hh
         G4BertiniNeutronBuilder.hh
-        G4NeutronHPBuilder.hh
         G4BertiniPiKBuilder.hh
-        G4OpticalPhysics.hh
+        G4BertiniPionBuilder.hh
         G4BertiniProtonBuilder.hh
-        G4PiKBuilder.hh
         G4BinaryNeutronBuilder.hh
-        G4QAtomicPhysics.hh
         G4BinaryPiKBuilder.hh
-        G4QEmExtraPhysics.hh
         G4BinaryProtonBuilder.hh
-        G4QElasticPhysics.hh
         G4ChargeExchangePhysics.hh
-        G4QGSCPiKBuilder.hh
+        G4ChipsKaonBuilder.hh
         G4DataQuestionaire.hh
-        G4QGSBuilder.hh
         G4DecayPhysics.hh
-        G4QGSPPiKBuilder.hh
         G4ElectroNuclearBuilder.hh
-        G4QIonPhysics.hh
         G4EmDNAPhysics.hh
-        G4QMessenger.hh
         G4EmExtraPhysics.hh
-        G4QNeutrinoPhysics.hh
         G4EmLivermorePhysics.hh
-        G4QNeutronBuilder.hh
         G4EmLivermorePolarizedPhysics.hh
-        G4QStoppingPhysics.hh
         G4EmMessenger.hh
-        G4QProtonBuilder.hh
         G4EmPenelopePhysics.hh
-        G4VPiKBuilder.hh
         G4EmStandardPhysics.hh
-        G4VNeutronBuilder.hh
         G4EmStandardPhysics_option1.hh
-        G4VProtonBuilder.hh
         G4EmStandardPhysics_option2.hh
-        G4WarnPLStatus.hh
         G4EmStandardPhysics_option3.hh
-        TheoModelFactory.hh
         G4FTFBinaryNeutronBuilder.hh
         G4FTFBinaryPiKBuilder.hh
         G4FTFBinaryProtonBuilder.hh
@@ -147,8 +128,8 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4FTFPPiKBuilder.hh
         G4FTFPProtonBuilder.hh
         G4HadronDElasticPhysics.hh
-        G4HadronElasticPhysics.hh
         G4HadronElasticPhysics93.hh
+        G4HadronElasticPhysics.hh
         G4HadronElasticPhysicsHP.hh
         G4HadronElasticPhysicsLHEP.hh
         G4HadronElasticPhysicsXS.hh
@@ -161,10 +142,13 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4IonInclAblaPhysics.hh
         G4IonPhysics.hh
         G4IonQMDPhysics.hh
+        G4KaonBuilder.hh
         G4LEPNeutronBuilder.hh
         G4LEPPiKBuilder.hh
+        G4LEPPionBuilder.hh
         G4LEPProtonBuilder.hh
         G4LHEPNeutronBuilder.hh
+        G4LHEPPiKBuilder.hh
         G4LHEPProtonBuilder.hh
         G4LHEPStoppingPhysics.hh
         G4MiscCHIPSBuilder.hh
@@ -172,70 +156,78 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4MiscQGSCBuilder.hh
         G4NeutronBuilder.hh
         G4NeutronCrossSectionXS.hh
+        G4NeutronHPBuilder.hh
         G4NeutronTrackingCut.hh
+        G4OpticalPhysics.hh
         G4OpticalPhysicsMessenger.hh
+        G4PiKBuilder.hh
+        G4PionBuilder.hh
         G4PrecoNeutronBuilder.hh
         G4PrecoProtonBuilder.hh
+        G4ProtonBuilder.hh
+        G4QAtomicPhysics.hh
         G4QCaptureAtRestPhysics.hh
+        G4QElasticPhysics.hh
+        G4QEmExtraPhysics.hh
         G4QGSBinaryNeutronBuilder.hh
         G4QGSBinaryPiKBuilder.hh
         G4QGSBinaryProtonBuilder.hh
+        G4QGSBuilder.hh
+        G4QGSC_CHIPSNeutronBuilder.hh
+        G4QGSC_CHIPSPiKBuilder.hh
+        G4QGSC_CHIPSProtonBuilder.hh
         G4QGSCEflowNeutronBuilder.hh
         G4QGSCEflowPiKBuilder.hh
         G4QGSCEflowProtonBuilder.hh
         G4QGSCNeutronBuilder.hh
+        G4QGSCPiKBuilder.hh
         G4QGSCProtonBuilder.hh
-        G4QGSC_CHIPSNeutronBuilder.hh
-        G4QGSC_CHIPSPiKBuilder.hh
-        G4QGSC_CHIPSProtonBuilder.hh
         G4QGSC_QGSCNeutronBuilder.hh
         G4QGSC_QGSCPiKBuilder.hh
         G4QGSC_QGSCProtonBuilder.hh
         G4QGSPNeutronBuilder.hh
+        G4QGSPPiKBuilder.hh
+        G4QGSPPionBuilder.hh
         G4QGSPProtonBuilder.hh
         G4QInelasticCHIPSBuilder.hh
+        G4QIonPhysics.hh
+        G4QMessenger.hh
+        G4QNeutrinoPhysics.hh
+        G4QNeutronBuilder.hh
         G4QPhotoNuclearPhysics.hh
+        G4QProtonBuilder.hh
+        G4QStoppingPhysics.hh
         G4RadioactiveDecayPhysics.hh
         G4StoppingHadronBuilder.hh
         G4VHadronModelBuilder.hh
+        G4VKaonBuilder.hh
+        G4VNeutronBuilder.hh
+        G4VPiKBuilder.hh
+        G4VPionBuilder.hh
+        G4VProtonBuilder.hh
+        G4WarnPLStatus.hh
+        TheoModelFactory.hh
     SOURCES
-        G4OpticalPhysics.cc
         G4BertiniNeutronBuilder.cc
-        G4PiKBuilder.cc
         G4BertiniPiKBuilder.cc
-        G4ProtonBuilder.cc
+        G4BertiniPionBuilder.cc
         G4BertiniProtonBuilder.cc
-        G4QAtomicPhysics.cc
         G4BinaryNeutronBuilder.cc
-        G4QElasticPhysics.cc
         G4BinaryPiKBuilder.cc
-        G4QEmExtraPhysics.cc
         G4BinaryProtonBuilder.cc
-        G4QGSBuilder.cc
         G4ChargeExchangePhysics.cc
-        G4QGSCPiKBuilder.cc
+        G4ChipsKaonBuilder.cc
         G4DecayPhysics.cc
-        G4QGSPPiKBuilder.cc
         G4ElectroNuclearBuilder.cc
-        G4QIonPhysics.cc
         G4EmDNAPhysics.cc
-        G4QMessenger.cc
         G4EmExtraPhysics.cc
-        G4QNeutrinoPhysics.cc
         G4EmLivermorePhysics.cc
-        G4QNeutronBuilder.cc
         G4EmLivermorePolarizedPhysics.cc
-        G4QProtonBuilder.cc
         G4EmMessenger.cc
-        G4QStoppingPhysics.cc
         G4EmPenelopePhysics.cc
-        G4VNeutronBuilder.cc
         G4EmStandardPhysics.cc
-        G4VPiKBuilder.cc
         G4EmStandardPhysics_option1.cc
-        G4VProtonBuilder.cc
         G4EmStandardPhysics_option2.cc
-        G4WarnPLStatus.cc
         G4EmStandardPhysics_option3.cc
         G4FTFBinaryNeutronBuilder.cc
         G4FTFBinaryPiKBuilder.cc
@@ -248,8 +240,8 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4FTFPPiKBuilder.cc
         G4FTFPProtonBuilder.cc
         G4HadronDElasticPhysics.cc
-        G4HadronElasticPhysics.cc
         G4HadronElasticPhysics93.cc
+        G4HadronElasticPhysics.cc
         G4HadronElasticPhysicsHP.cc
         G4HadronElasticPhysicsLHEP.cc
         G4HadronElasticPhysicsXS.cc
@@ -262,8 +254,10 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4IonInclAblaPhysics.cc
         G4IonPhysics.cc
         G4IonQMDPhysics.cc
+        G4KaonBuilder.cc
         G4LEPNeutronBuilder.cc
         G4LEPPiKBuilder.cc
+        G4LEPPionBuilder.cc
         G4LEPProtonBuilder.cc
         G4LHEPNeutronBuilder.cc
         G4LHEPPiKBuilder.cc
@@ -276,31 +270,54 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4NeutronCrossSectionXS.cc
         G4NeutronHPBuilder.cc
         G4NeutronTrackingCut.cc
+        G4OpticalPhysics.cc
         G4OpticalPhysicsMessenger.cc
+        G4PiKBuilder.cc
+        G4PionBuilder.cc
         G4PrecoNeutronBuilder.cc
         G4PrecoProtonBuilder.cc
+        G4ProtonBuilder.cc
+        G4QAtomicPhysics.cc
         G4QCaptureAtRestPhysics.cc
+        G4QElasticPhysics.cc
+        G4QEmExtraPhysics.cc
         G4QGSBinaryNeutronBuilder.cc
         G4QGSBinaryPiKBuilder.cc
         G4QGSBinaryProtonBuilder.cc
+        G4QGSBuilder.cc
+        G4QGSC_CHIPSNeutronBuilder.cc
+        G4QGSC_CHIPSPiKBuilder.cc
+        G4QGSC_CHIPSProtonBuilder.cc
         G4QGSCEflowNeutronBuilder.cc
         G4QGSCEflowPiKBuilder.cc
         G4QGSCEflowProtonBuilder.cc
         G4QGSCNeutronBuilder.cc
+        G4QGSCPiKBuilder.cc
         G4QGSCProtonBuilder.cc
-        G4QGSC_CHIPSNeutronBuilder.cc
-        G4QGSC_CHIPSPiKBuilder.cc
-        G4QGSC_CHIPSProtonBuilder.cc
         G4QGSC_QGSCNeutronBuilder.cc
         G4QGSC_QGSCPiKBuilder.cc
         G4QGSC_QGSCProtonBuilder.cc
         G4QGSPNeutronBuilder.cc
+        G4QGSPPiKBuilder.cc
+        G4QGSPPionBuilder.cc
         G4QGSPProtonBuilder.cc
         G4QInelasticCHIPSBuilder.cc
+        G4QIonPhysics.cc
+        G4QMessenger.cc
+        G4QNeutrinoPhysics.cc
+        G4QNeutronBuilder.cc
         G4QPhotoNuclearPhysics.cc
+        G4QProtonBuilder.cc
+        G4QStoppingPhysics.cc
         G4RadioactiveDecayPhysics.cc
         G4StoppingHadronBuilder.cc
         G4VHadronModelBuilder.cc
+        G4VKaonBuilder.cc
+        G4VNeutronBuilder.cc
+        G4VPiKBuilder.cc
+        G4VPionBuilder.cc
+        G4VProtonBuilder.cc
+        G4WarnPLStatus.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons
