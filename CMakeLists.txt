@@ -3,7 +3,7 @@
 #
 # 21st September 2010 Ben Morgan
 #
-# $Id: CMakeLists.txt,v 1.2 2010-11-23 17:29:29 bmorgan Exp $
+# $Id: CMakeLists.txt,v 1.3 2010-11-29 16:42:33 bmorgan Exp $
 # GEANT4 Tag $Name: not supported by cvs2svn $
 #
 
@@ -111,7 +111,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/archive)
 # Use REQUIRED - we MUST have it. An EXACT version number is not used at 
 # present, but can be added later as needed.
 #
-find_package(CLHEP 2.0.4.5 REQUIRED)
+find_package(CLHEP 2.1.0.1 REQUIRED)
 
 
 #------------------------------------------------------------------------------
