@@ -11,7 +11,8 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 18:51:19 bmorgan Exp $
+# $Id: sources.cmake,v 1.2 2010-11-29 17:29:30 bmorgan Exp $
+# GEANT4 Tag $Name: not supported by cvs2svn $
 #
 #------------------------------------------------------------------------------
 
@@ -102,123 +103,87 @@ include_directories(${CMAKE_SOURCE_DIR}/source/tracking/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4phys_lists
     HEADERS
-        QGS_BIC.icc
         CHIPS.hh
-        QGSC.icc
         CHIPS.icc
-        Shielding.hh
-        FTFC.hh
-        Shielding.icc
-        FTFC.icc
-        FTFP.hh
-        FTFP.icc
-        LHEP_BERT_HP.icc
-        FTFP_BERT.hh
-        QGSC_BERT.hh
-        FTFP_BERT.icc
-        QGSC_BERT.icc
-        FTFP_BERT_EMV.hh
-        QGSC_CHIPS.hh
-        FTFP_BERT_EMV.icc
-        QGSC_CHIPS.icc
-        FTFP_BERT_EMX.hh
-        QGSC_EMV.hh
-        FTFP_BERT_EMX.icc
-        QGSC_EMV.icc
-        FTFP_BERT_TRV.hh
-        QGSC_QGSC.hh
-        FTFP_BERT_TRV.icc
-        QGSC_QGSC.icc
         FTF_BIC.hh
-        QGSP.hh
         FTF_BIC.icc
-        QGSP.icc
+        FTFP_BERT_EMV.hh
+        FTFP_BERT_EMV.icc
+        FTFP_BERT_EMX.hh
+        FTFP_BERT_EMX.icc
+        FTFP_BERT.hh
+        FTFP_BERT.icc
+        FTFP_BERT_TRV.hh
+        FTFP_BERT_TRV.icc
         G4HadronInelasticQBBC.hh
-        QGSP_BERT.hh
         G4HadronInelasticQLHEP.hh
-        QGSP_BERT.icc
         G4PhysListFactory.hh
-        QGSP_BERT_CHIPS.hh
         G4VHadronPhysics.hh
-        QGSP_BERT_CHIPS.icc
         HadronPhysicsCHIPS.hh
-        QGSP_BERT_DIF.hh
-        HadronPhysicsFTFC.hh
-        QGSP_BERT_DIF.icc
-        HadronPhysicsFTFP.hh
-        QGSP_BERT_EMV.hh
-        HadronPhysicsFTFP_BERT.hh
-        QGSP_BERT_EMV.icc
-        HadronPhysicsFTFP_BERT_TRV.hh
-        QGSP_BERT_EMX.hh
         HadronPhysicsFTF_BIC.hh
-        QGSP_BERT_EMX.icc
-        HadronPhysicsLHEP.hh
-        QGSP_BERT_HP.hh
-        HadronPhysicsLHEP_BERT.hh
-        QGSP_BERT_HP.icc
-        HadronPhysicsLHEP_BERT_HP.hh
-        QGSP_BERT_NOLEP.hh
+        HadronPhysicsFTFP_BERT.hh
+        HadronPhysicsFTFP_BERT_TRV.hh
         HadronPhysicsLHEP_EMV.hh
-        QGSP_BERT_NOLEP.icc
-        HadronPhysicsLHEP_PRECO_HP.hh
-        QGSP_BERT_NQE.hh
-        HadronPhysicsQGSC.hh
-        QGSP_BERT_NQE.icc
-        HadronPhysicsQGSC_BERT.hh
-        QGSP_BERT_TRV.hh
-        HadronPhysicsQGSC_CHIPS.hh
-        QGSP_BERT_TRV.icc
-        HadronPhysicsQGSC_EFLOW.hh
-        QGSP_BIC.hh
-        HadronPhysicsQGSC_QGSC.hh
-        QGSP_BIC.icc
-        HadronPhysicsQGSP.hh
-        QGSP_BIC_EMY.hh
-        HadronPhysicsQGSP_BERT.hh
-        QGSP_BIC_EMY.icc
-        HadronPhysicsQGSP_BERT_CHIPS.hh
-        QGSP_BIC_HP.hh
-        HadronPhysicsQGSP_BERT_HP.hh
-        QGSP_BIC_HP.icc
-        HadronPhysicsQGSP_BERT_NOLEP.hh
-        QGSP_DIF.hh
-        HadronPhysicsQGSP_BERT_TRV.hh
-        QGSP_DIF.icc
-        HadronPhysicsQGSP_BIC.hh
-        QGSP_EMV.hh
-        HadronPhysicsQGSP_BIC_HP.hh
-        QGSP_EMV.icc
-        HadronPhysicsQGSP_FTFP_BERT.hh
-        QGSP_EMV_NQE.hh
-        HadronPhysicsQGSP_INCL_ABLA.hh
-        QGSP_EMV_NQE.icc
+        HadronPhysicsLHEP.hh
         HadronPhysicsQGS_BIC.hh
-        QGSP_FTFP_BERT.hh
+        HadronPhysicsQGSC_BERT.hh
+        HadronPhysicsQGSC_CHIPS.hh
+        HadronPhysicsQGSP_BERT_CHIPS.hh
+        HadronPhysicsQGSP_BERT.hh
+        HadronPhysicsQGSP_BERT_HP.hh
+        HadronPhysicsQGSP_BERT_NOLEP.hh
+        HadronPhysicsQGSP_BERT_TRV.hh
+        HadronPhysicsQGSP_BIC.hh
+        HadronPhysicsQGSP_BIC_HP.hh
+        HadronPhysicsQGSP_FTFP_BERT.hh
+        HadronPhysicsQGSP.hh
+        HadronPhysicsQGSP_INCL_ABLA.hh
         HadronPhysicsShielding.hh
         LBE.hh
         LBE.icc
+        LHEP_EMV.hh
+        LHEP_EMV.icc
         LHEP.hh
         LHEP.icc
-        QGSP_FTFP_BERT.icc
-        LHEP_BERT.hh
-        QGSP_INCL_ABLA.hh
-        LHEP_BERT.icc
-        QGSP_INCL_ABLA.icc
-        LHEP_BERT_HP.hh
-        LHEP_EMV.hh
-        QGSP_NQE.hh
-        LHEP_EMV.icc
-        QGSP_NQE.icc
-        LHEP_PRECO_HP.hh
-        QGSP_QEL.hh
-        LHEP_PRECO_HP.icc
-        QGSP_QEL.icc
         MaxTimeCuts.hh
-        QGS_BIC.hh
         MinEkineCuts.hh
         QBBC.hh
-        QGSC.hh
+        QGS_BIC.hh
+        QGS_BIC.icc
+        QGSC_BERT.hh
+        QGSC_BERT.icc
+        QGSC_CHIPS.hh
+        QGSC_CHIPS.icc
+        QGSP_BERT_CHIPS.hh
+        QGSP_BERT_CHIPS.icc
+        QGSP_BERT_EMV.hh
+        QGSP_BERT_EMV.icc
+        QGSP_BERT_EMX.hh
+        QGSP_BERT_EMX.icc
+        QGSP_BERT.hh
+        QGSP_BERT_HP.hh
+        QGSP_BERT_HP.icc
+        QGSP_BERT.icc
+        QGSP_BERT_NOLEP.hh
+        QGSP_BERT_NOLEP.icc
+        QGSP_BERT_TRV.hh
+        QGSP_BERT_TRV.icc
+        QGSP_BIC_EMY.hh
+        QGSP_BIC_EMY.icc
+        QGSP_BIC.hh
+        QGSP_BIC_HP.hh
+        QGSP_BIC_HP.icc
+        QGSP_BIC.icc
+        QGSP_FTFP_BERT.hh
+        QGSP_FTFP_BERT.icc
+        QGSP.hh
+        QGSP.icc
+        QGSP_INCL_ABLA.hh
+        QGSP_INCL_ABLA.icc
+        QGSP_QEL.hh
+        QGSP_QEL.icc
+        Shielding.hh
+        Shielding.icc
         SpecialCuts.hh
     SOURCES
         G4HadronInelasticQBBC.cc
@@ -226,22 +191,14 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         G4PhysListFactory.cc
         G4VHadronPhysics.cc
         HadronPhysicsCHIPS.cc
-        HadronPhysicsFTFC.cc
-        HadronPhysicsFTFP.cc
+        HadronPhysicsFTF_BIC.cc
         HadronPhysicsFTFP_BERT.cc
         HadronPhysicsFTFP_BERT_TRV.cc
-        HadronPhysicsFTF_BIC.cc
         HadronPhysicsLHEP.cc
-        HadronPhysicsLHEP_BERT.cc
-        HadronPhysicsLHEP_BERT_HP.cc
         HadronPhysicsLHEP_EMV.cc
-        HadronPhysicsLHEP_PRECO_HP.cc
-        HadronPhysicsQGSC.cc
+        HadronPhysicsQGS_BIC.cc
         HadronPhysicsQGSC_BERT.cc
         HadronPhysicsQGSC_CHIPS.cc
-        HadronPhysicsQGSC_EFLOW.cc
-        HadronPhysicsQGSC_QGSC.cc
-        HadronPhysicsQGSP.cc
         HadronPhysicsQGSP_BERT.cc
         HadronPhysicsQGSP_BERT_CHIPS.cc
         HadronPhysicsQGSP_BERT_HP.cc
@@ -249,9 +206,9 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         HadronPhysicsQGSP_BERT_TRV.cc
         HadronPhysicsQGSP_BIC.cc
         HadronPhysicsQGSP_BIC_HP.cc
+        HadronPhysicsQGSP.cc
         HadronPhysicsQGSP_FTFP_BERT.cc
         HadronPhysicsQGSP_INCL_ABLA.cc
-        HadronPhysicsQGS_BIC.cc
         HadronPhysicsShielding.cc
         MaxTimeCuts.cc
         MinEkineCuts.cc
