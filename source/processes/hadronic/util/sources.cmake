@@ -11,7 +11,8 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 19:08:39 bmorgan Exp $
+# $Id: sources.cmake,v 1.2 2010-11-29 17:58:56 bmorgan Exp $
+# GEANT4 Tag $Name: not supported by cvs2svn $
 #
 #------------------------------------------------------------------------------
 
@@ -58,7 +59,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_util
         G4LightMedia.hh
         G4Nucleus.hh
         G4Pair.hh
-        G4Pair.hhnew
         G4ReactionDynamics.hh
         G4ReactionKinematics.hh
         G4ReactionProduct.hh
