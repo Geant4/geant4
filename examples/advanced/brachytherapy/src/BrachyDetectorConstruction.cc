@@ -37,9 +37,6 @@
 //    *                                      *
 //    ****************************************
 //
-// $Id: BrachyDetectorConstruction.cc,v 1.29 2006-06-29 15:48:09 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 #include "G4CSGSolid.hh"
 #include "G4MaterialPropertyVector.hh"
 #include "G4SDManager.hh"

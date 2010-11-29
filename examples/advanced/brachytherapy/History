@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.34 2010-11-26 16:23:10 cirrone Exp $
+$Id: History,v 1.35 2010-11-29 10:56:53 cirrone Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.34 2010-11-26 16:23:10 cirrone Exp $
 
                       Category History file
                       ---------------------
+
+29.11.2010 -  G.A.P. Cirron; tag brachy-V09-03-05
+   	      Compilation warnigs removed
 
 26.11.2010 -  G.A.P. Cirrone & S. Guatelli; tag brachy-V09-03-04
    	      General code review 
