@@ -279,12 +279,32 @@ processes/hadronic                               hadr-V09-03-01
   o G4EMDissociationCrossSection: is now applicable for Hydrogen but
     cross-section for Hydrogen is zero
   o Add missing inline for GetCrossSection() method in G4BGGPionElasticXS header.
-- models/abrasion (had-abrasion-V09-03-00)
-  o 
+- management (hadr-man-V09-03-05)
+  o Fixed data initialisation in G4EnergyRangeManager.
+- models/abrasion (had-abrasion-V09-03-01)
+  o Fixed initialization in G4WilsonAbrasionModel constructor.
+  o Fixed memory leak in method GetExcitationEnergyOfTarget() for
+    G4NuclearAbrasionGeometry.
+- models/binary_cascade (had-binary-V09-03-05)
+  o Lowered 'CaptureThreshold' in G4GeneratorPrecompoundInterface
+    from 80 to 10 MeV. 
+  o Fixed memory leak for products in Propagate().
 - models/cascade (hadr-casc-V09-03-87)
   o G4InuclCollider: fixed memory leak for local data 'zbullet' not deleted.
   o G4NucleiModel: put messages related to negative-path-length and
     zero-interaction-partners behind verbosity flag.
+- models/chiral_inv_phase_space (hadr-chips-V09-03-09)
+  o G4QContent: removed dead code in quark constructor; addressing problem
+    report #1131. Removed dead code also in method MakePartonPair().
+  o Removed dead code in G4QNucleus and G4QEnvironment.
+  o G4ChiralInvariantPhaseSpace: migrated to use integer value of Z and A.
+  o G4ElectroNuclearReaction: cross section classes are included by pointer 
+    and not by value; addresses old problem reported in HyperNews.
+- models/coherent_elastic (hadr-cohe-V09-03-07)
+  o Added new model G4NuclNuclDiffuseElastic, final state production model
+    for nucleus-nucleus elastic scattering, where Coulomb amplitude is not
+    considered as correction.
+  o Migrated classes to use integer Z an A.
 - models/de_excitation (hadr-deex-V09-03-27)
   o G4Evaporation, G4EvaporationChannel, G4EvaporationProbability:
     improved computation of minimal and maximal evaporation energy
@@ -303,8 +323,33 @@ processes/hadronic                               hadr-V09-03-01
     initialisation); moved constructors and destructors to source.
     Code cleanup: make usese integer Z, A; usage of G4Pow...
   o Add README file explaining the photo-evaporation data files.
-- models/incl (hadr-incl-V09-03-05)
-  o 
+- models/high_energy (hadr-hep-V09-03-01)
+  o Fixed uninitialized data and removed dead code where applicable.
+- models/incl (hadr-incl-V09-03-10)
+  o Fixed fragment vector and Fermi break-up related memory leaks in
+    INCL/ABLA interfaces.
+  o Corrected initialisation of INCL internal data and added checks on
+    array boundaries in datafile reader.
+  o Fixed insufficient array index safeguard in ABLA.
+  o Updated interfaces: INCL + built-in ABLA de-excitation and
+    INCL + PreCompound model.
+- models/management (hadr-modman-V09-03-05)
+  o Fixed initialisation of data in G4VNuclearDensity constructor.
+- models/neutron_hp (hadr-hpn-V09-03-09)
+  o Bug fix in MF=6, LAW=2 case in G4NeutronHPDiscreteTwoBody; on kind
+    contribution by E.Mendoza, D.Cano-Ott (CIEMAT) 
+  o Set lower limit for gamma energy in G4NeutronHPFinalState.
+  o Added special treatment for Be9(n,2n)Be8(2a) case in
+    G4NeutronHPInelasticBaseFS.
+  o Added safety for _nat_ data in G4NeutronHPInelasticCompFS.
+  o Changed warning message for "repFlag == 2 && isoFlag != 1" case in
+    G4NeutronHPPhotonDist.
+- models/parton_string/diffraction (hadr-string-diff-V09-03-04)
+  o Tuned parameters to FTF for pA and PiA interactions; also tuned quark
+    exchange and Reggeon cascade parameters.
+  o Improved low mass string fragmentation.
+- models/parton_string/hadronization (had-hadronization-V09-03-02)
+  o Minor fixes for Coverity reports in G4HadronBuilder .
 - models/pre_equilibrium (hadr-pre-V09-03-17)
   o G4PreCompoundProton, G4PreCompoundNeutron, G4PreCompoundHe3,
     G4LowEIonFragmentation: complete transition to usage of integer Z and A.
@@ -313,61 +358,88 @@ processes/hadronic                               hadr-V09-03-01
     use number of particles instead of number of excitons.
 - models/qmd (hadr-qmd-V09-03-00)
   o Enabled RQMD in G4QMDReaction and G4QMDMeanField.
-- models/radioactive_decay (radioactive_decay-V09-03-01)
-  o 
+- models/radioactive_decay (radioactive_decay-V09-03-04)
+  o Completed implementation for generating the activity table in VR mode.
+  o Added class G4RadioactivityTable for tallying the accumulated
+    radioactivitties in VR mode; modified G4RadioactiveDecay accordingly,
+    with changes needed to setup the radioactivity tables
+  o G4RadioactiveDecayMessenger: icmCMD,armCMD & hlThreshold are available
+    at all states. 
+  o Improved code formatting.
+- models/rpg (hadr-rpg-V09-03-00)
+  o Fixed initialisation of data in G4RPGFragmentation constructor.
+- models/util (hadr-mod-util-V09-03-07)
+  o Migrated to use integer Z and A in G4Nuclear*Density classes.
+  o Fixed minor leak in G4KineticTrack.
+  o G4Fragment: improved printout of negative excitation energy.
+  o Moved constructor and destructor to source and fixed minor Coverity
+    warnings in G4DecayStrongResonances.
+- stopping (hadr-stopping-V09-03-01)
+  o G4MuonMinusCaptureAtRest::DoMuCapture(): fixed unused branch in mass
+    calculation
+  o Fixed initialisation of data in G4PiMinusStopMaterial and
+    G4StopDummyDeexcitation constructors.
+  o Removed null test for vector pointer in G4PiMinusAbsorptionAtRest
+    destructor 
 
-
-
-
-
-
-
-processes/management                             procman-V09-03-00
+processes/management                             procman-V09-03-01
 --------------------
-- Fixed initialization of data in constructors for G4VProces, G4ProcessTable
-  and G4ProcessAttribute.
+- Fixed cases of uninitialised data reported by Valgrind
 
-processes/optical                                op-V09-03-05
+processes/optical                                op-V09-03-06
 -----------------
-- Added Mie Scattering of Optical Photons; courtesy of Xin Qian (Kellogg
-  Radiation Lab of Caltech), based on work from Vlasios Vasileiou (University
-  of Maryland)
-- Implemented Henyey-Greenstein phase functions.
-- Fix for long-standing problem report #207.
+- Fixed minor Coverity reports.
 
-run                                              run-V09-03-05
+processes/scoring                                procscore-V09-03-01
+-----------------
+- Introduced new class G4EnergySplitter, a class to calculate the split of
+  energy in voxels when G4RegularNavigation is used. It takes into account
+  of the energy loss and multiple scattering corrections as the particles
+  loses energies from voxel to voxel.
+- Added new G4ScoreSplittingProcess to split the length and energy of a step
+  in a regular structure into sub-steps, and to call the scorers for each
+  sub-volume.
+
+run                                              run-V09-03-08
 ---
-- Restored original DLL setup. No functional changes.
+- Add G4ScoreSplittingProcess if geometry includes a regular structure.
+- Added protection against particle without process manager.
+- Introducing two new methods in G4RunManager class, ReOptimize() and
+  ReOptimizeMotherOf(); these will cause re-optimization (re-voxelization)
+  of one particular logical volume without forcing re-optimization of the
+  entire geometrical hierarchy.
 
-track                                            track-V09-03-08
------
-- Added method GetSecondaryInCurrentStep() in G4Step, providing the list of
-  secondaries in the current step.
-- G4Step::GetSecondary() gives back a 'const G4TrackVector*', while
-  G4Step::GetfSecondary() gives back non-const pointer
-
-tracking                                         tracking-V09-03-08
+tracking                                         tracking-V09-03-09
 --------
-- Modified G4SteppingManager::GetSecondary() to return a
-  'const G4TrackVector*'.
+- G4Trajectory, G4SmoothTrajectory: reverted to original interface
+  for DrawTrajectory(G4int i_mode = 0).
 
-visualization                                    vis-V09-03-09
+visualization                                    vis-V09-03-13
 -------------
-- externals:
-  o G4OpenGL2PSAction: added new method to set viewport.
 - management:
-  o Added /vis/viewer/set/defaultColour and defaultTextColour commands.
-- OpenGL:
-  o Improved kernel visit trigger.
-  o Time-slices fade to background colour.
-  o Many improvements to Qt.
-- OpenInventor, XXX:
-  o Improved kernel visit trigger.
+  o Fixed G4VisExecutive inlined constructor.
+  o Fixed some Coverity reports.
+- modeling:
+  o Fixed time-slicing problem.
+- DAWN, gMocren, VRML:
+  o Replaced G4cerr with G4cout and added verbosity control.
+- Opengl:
+  o Added verbosity control.
+  o Tidied display list limit.
+- OpenInventor:
+  o Protected output with G4VisManager::confirmations.
+- externals:
+  o Updated gl2ps to version 1.3.5.
 
 data
 ----
-- G4EMLOW-6.17:
-  o Updated sigma elastic data.
+- G4EMLOW-6.19:
+  o Added extra stopping power data for ions; data are obtained from
+    computations of PASS code by A.Schinner.
+  o Updated sigma ionisation Rudd data.
+- G4PII-1.2:
+  o New data set of shell ionisation cross-sections for precise impact
+    ionisation simulation.
 
 examples                                         examples-V09-04-00
 --------
