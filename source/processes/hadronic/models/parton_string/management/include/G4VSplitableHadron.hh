@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSplitableHadron.hh,v 1.6 2009-07-17 12:36:41 vuzhinsk Exp $
+// $Id: G4VSplitableHadron.hh,v 1.7 2010-11-30 16:07:35 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -108,7 +108,7 @@ class G4VSplitableHadron
       G4ThreeVector thePosition;
       G4int theCollisionCount;
 
-      G4int  Status;             // Uzhi 17.07.09
+      G4int  curStatus;             // Uzhi 17.07.09
       G4bool isSplit;
 
 };
@@ -170,12 +170,12 @@ inline const G4ThreeVector & G4VSplitableHadron::GetPosition() const
 
 inline void G4VSplitableHadron::SetStatus(G4int aStatus)          // Uzhi 17.07.09
 {
-        Status=aStatus;
+        curStatus=aStatus;
 }
 
 inline G4int G4VSplitableHadron::GetStatus()                      // Uzhi 17.07.09
 {
-        return Status; 
+        return curStatus; 
 }
 
 
