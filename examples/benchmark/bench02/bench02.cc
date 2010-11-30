@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: bench02.cc,v 1.1 2002-05-21 11:50:28 stesting Exp $
+// $Id: bench02.cc,v 1.2 2010-11-30 11:50:09 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -29,12 +29,14 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
-#include "Em2VisManager.hh"
+#include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 #include "Em2DetectorConstruction.hh"
@@ -81,24 +83,21 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(new Em2SteppingAction(detector,RunAct)); 
   
   // get the pointer to the User Interface manager 
-  G4UImanager* UI = G4UImanager::GetUIpointer();  
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
 
   if (argc==1)   // Define UI terminal for interactive mode.
     {
-      G4UIsession * session = 0;
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);      
-#else
-      session = new G4UIterminal();
-#endif           
-      session->SessionStart();
-      delete session;
+#ifdef G4UI_USE
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+      ui->SessionStart();
+      delete ui;
+#endif
     }
   else           // Batch mode
     { 
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-      UI->ApplyCommand(command+fileName);
+      UImanager->ApplyCommand(command+fileName);
     }
 
   // job termination
