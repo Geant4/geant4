@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.6 2010-11-30 11:25:57 bmorgan Exp $
+# $Id: sources.cmake,v 1.7 2010-11-30 11:38:26 bmorgan Exp $
 # GEANT4 Tag $Name: not supported by cvs2svn $
 #
 #------------------------------------------------------------------------------
@@ -99,8 +99,10 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_incl_cascade
         G4globman
         G4had_mod_man
         G4had_mod_util
+        G4had_preequ_exciton
         G4hadronic_deex_evaporation
         G4hadronic_deex_fermi_breakup
+        G4hadronic_deex_handler
         G4hadronic_mgt
         G4hadronic_proc
         G4hadronic_util
