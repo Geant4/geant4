@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.2 2010-11-26 18:43:09 bmorgan Exp $
+# $Id: sources.cmake,v 1.3 2010-11-30 16:46:37 bmorgan Exp $
 # GEANT4 Tag $Name: not supported by cvs2svn $
 #
 #------------------------------------------------------------------------------
@@ -52,6 +52,7 @@ set(G4VIS_MODULE_OPENGL_HEADERS
     G4OpenGLStoredViewer.hh
     G4OpenGLStoredSceneHandler.hh
     G4OpenGLBitMapStore.hh
+    G4OpenGLFontBaseStore.hh
     G4OpenGLSceneHandler.hh
     G4OpenGLSceneHandler.icc
     G4OpenGLViewerMessenger.hh
@@ -65,6 +66,7 @@ set(G4VIS_MODULE_OPENGL_SOURCES
     G4OpenGLStoredViewer.cc
     G4OpenGLStoredSceneHandler.cc
     G4OpenGLBitMapStore.cc
+    G4OpenGLFontBaseStore.cc
     G4OpenGLSceneHandler.cc
     G4OpenGLViewerMessenger.cc
     G4OpenGLTransform3D.cc
