@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: eBenchmarkV1.cc,v 1.1 2009-05-19 16:08:44 maire Exp $
+// $Id: eBenchmarkV1.cc,v 1.2 2010-11-30 12:45:44 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -32,8 +32,6 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 #include "Randomize.hh"
 
 #include "DetectorConstruction.hh"
@@ -47,6 +45,10 @@
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -89,31 +91,28 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(trackingaction);
    
   // get the pointer to the User Interface manager 
-    G4UImanager* UI = G4UImanager::GetUIpointer();  
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
  
   if (argc!=1)   // batch mode  
     {
      G4String command = "/control/execute ";
      G4String fileName = argv[1];
-     UI->ApplyCommand(command+fileName);
+     UImanager->ApplyCommand(command+fileName);
     }
     
   else           //define visualization and UI terminal for interactive mode
     { 
 #ifdef G4VIS_USE
-   G4VisManager* visManager = new G4VisExecutive;
-   visManager->Initialize();
+     G4VisManager* visManager = new G4VisExecutive;
+     visManager->Initialize();
 #endif    
-     
-     G4UIsession * session = 0;
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);      
-#else
-      session = new G4UIterminal();
-#endif     
-     session->SessionStart();
-     delete session;
-     
+
+#ifdef G4UI_USE
+     G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+     ui->SessionStart();
+     delete ui;
+#endif
+
 #ifdef G4VIS_USE
      delete visManager;
 #endif     
