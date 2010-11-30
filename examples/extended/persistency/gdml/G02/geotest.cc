@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: geotest.cc,v 1.4 2010-11-07 12:40:28 allison Exp $
+// $Id: geotest.cc,v 1.5 2010-11-30 10:53:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -39,14 +39,6 @@
 #include "G4UImanager.hh"
 #include "globals.hh"
 
-#ifdef G4VIS_USE
-#include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
-#include "G4UIExecutive.hh"
-#endif
-
 // A pre-built physics list
 //
 #include "QGSP_BERT_EMV.hh"
@@ -57,6 +49,13 @@
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 
+#ifdef G4VIS_USE
+#include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
+#endif
 
 int main(int argc, char** argv)
 {
