@@ -1,7 +1,6 @@
-
+/control/verbose 2
 /run/initialize
 # Use this open statement to create an OpenGL view:
-/vis/scene/create
 /vis/open OGLIX
 #
 # Use this open statement to create a .prim file suitable for
@@ -18,7 +17,7 @@
 #
 # Disable auto refresh and quieten vis messages whilst scene and
 # trajectories are established:
-/vis/viewer/set/autoRefresh true
+/vis/viewer/set/autoRefresh false
 /vis/verbose errors
 #
 # Draw geometry:
@@ -64,7 +63,7 @@
 /vis/scene/endOfEventAction accumulate 100
 #
 # Re-establish auto refreshing and verbosity:
-/vis/viewer/set/autoRefresh false
+/vis/viewer/set/autoRefresh true
 /vis/verbose warnings
 #
 # For file-based drivers, use this to create an empty detector view:
@@ -107,6 +106,7 @@
 /accelerator/rotationX 135 deg  # angles of rotation along X  [deg]
 /run/beamOn 800
 
+/vis/open OGL
 
 # acceleratorBox
 # targetA
