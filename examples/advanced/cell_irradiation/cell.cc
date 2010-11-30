@@ -29,8 +29,6 @@
 #include "G4ios.hh"
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 #include "CellDetectorConstruction.hh"
 #include "CellPhysicsList.hh"
 #include "CellPrimaryGeneratorAction.hh"
@@ -41,6 +39,9 @@
 #include "CellAnalysisManager.hh"
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
+#endif
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 int main(int argc,char** argv) {
@@ -83,22 +84,17 @@ int main(int argc,char** argv) {
   analysis -> book("cell");
   
   //get the pointer to the User Interface manager 
-  G4UImanager * UI = G4UImanager::GetUIpointer();  
+  G4UImanager * UImanager = G4UImanager::GetUIpointer();  
   
   if (argc == 1)
     // Define (G)UI terminal for interactive mode  
     { 
-      // G4UIterminal is a (dumb) terminal.
-      G4UIsession * session = 0;
-
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);      
-#else
-      session = new G4UIterminal();
-#endif    
-      UI->ApplyCommand("/control/execute default.mac");
-      session->SessionStart();
-      delete session;
+#ifdef G4UI_USE
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+      UImanager->ApplyCommand("/control/execute default.mac");
+      ui->SessionStart();
+      delete ui;
+#endif
     }
   else
     // Batch mode
@@ -106,7 +102,7 @@ int main(int argc,char** argv) {
       G4String command =("/control/execute ");
       G4String fileName = argv[1];
       G4cout <<"macro --> "<< fileName << G4endl;
-      UI->ApplyCommand(command+fileName);
+      UImanager->ApplyCommand(command+fileName);
     }
 
   analysis->finish();
