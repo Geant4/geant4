@@ -56,7 +56,7 @@ namespace AIDA
   class ITupleFactory;
   class ITuple;
   class ITreeFactory;
-};
+}
 
 
 class CellAnalysisManager { 
