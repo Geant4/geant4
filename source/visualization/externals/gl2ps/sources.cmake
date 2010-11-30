@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.2 2010-11-29 19:00:10 bmorgan Exp $
+# $Id: sources.cmake,v 1.3 2010-11-30 11:49:01 bmorgan Exp $
 # GEANT4 Tag $Name: not supported by cvs2svn $
 #
 #------------------------------------------------------------------------------
@@ -49,6 +49,7 @@ GEANT4_DEFINE_MODULE(NAME G4gl2ps
         G4zlib
     GLOBAL_DEPENDENCIES
     LINK_LIBRARIES
+        ${OPENGL_LIBRARIES}
 )
 
 # List any source specific properties here
