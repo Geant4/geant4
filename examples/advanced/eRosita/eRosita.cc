@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: eRosita.cc,v 1.2 2010-11-23 20:09:32 pia Exp $
+// $Id: eRosita.cc,v 1.3 2010-11-30 11:59:44 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,11 +39,13 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 
@@ -86,13 +88,13 @@ int main(int argc,char** argv)
       
   // Get the pointer to the User Interface manager
   //
-  G4UImanager * UI = G4UImanager::GetUIpointer();  
+  G4UImanager * UImanager = G4UImanager::GetUIpointer();  
 
   if (argc!=1)   // batch mode  
     {
      G4String command = "/control/execute ";
      G4String fileName = argv[1];
-     UI->ApplyCommand(command+fileName);
+     UImanager->ApplyCommand(command+fileName);
     }
     
   else           // interactive mode : define visualization and UI terminal
@@ -102,16 +104,13 @@ int main(int argc,char** argv)
       visManager->Initialize();
 #endif    
      
-      G4UIsession * session = 0;
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);      
-#else
-      session = new G4UIterminal();
+#ifdef G4UI_USE
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+      UImanager->ApplyCommand("/control/execute vis.mac");     
+      ui->SessionStart();
+      delete ui;
 #endif
-      UI->ApplyCommand("/control/execute vis.mac");     
-      session->SessionStart();
-      delete session;
-     
+
 #ifdef G4VIS_USE
       delete visManager;
 #endif     

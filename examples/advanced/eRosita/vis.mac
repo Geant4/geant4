@@ -11,7 +11,7 @@
 # Create a scene handler for a specific graphics system
 # (Edit the next line(s) to choose another graphics system)
 #
-#/vis/open OGLIX 600x600-0+0
+#/vis/open OGL 600x600-0+0
 #
 ####/vis/open OGLSXm
 ####/vis/open HepRepXML
