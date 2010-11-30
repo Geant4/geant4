@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh,v 1.65 2010-11-17 10:47:02 gcosmo Exp $
+// $Id: G4GDMLParser.hh,v 1.66 2010-11-30 08:55:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -85,7 +85,7 @@ class G4GDMLParser
      // the URL to the GDML web site is used.
 
    inline void Write(const G4String& filename,
-                     const G4LogicalVolume* lvol = 0,
+                     const G4LogicalVolume* lvol,
                            G4bool storeReferences = true,
                      const G4String& SchemaLocation = G4GDML_DEFAULT_SCHEMALOCATION);
      //
@@ -94,7 +94,7 @@ class G4GDMLParser
      // is guaranteed by storing pointer-references by default.
      // Alternative path for the schema location can be specified; by default
      // the URL to the GDML web site is used. Same as method above except
-     // that the logical volume is provided here.
+     // that the logical volume must be provided here.
 
    inline G4LogicalVolume* ParseST(const G4String& name,
                                          G4Material* medium,
