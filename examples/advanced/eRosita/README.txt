@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.5 2010-11-25 17:32:05 pia Exp $
+$Id: README.txt,v 1.6 2010-11-30 13:44:05 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -96,7 +96,7 @@ Instructions on how to build and run the example:
 
     Go to $G4WORKDIR/bin/$G4SYSTEM
     Copy the file eRosita/eRosita.in to this directory. 
-    The input file eRosita.in defines a simulation with 10000 protons 
+    The input file eRosita.in defines a simulation with 1000 protons 
     of energy 100 MeV.
     Start the simulation with: eRosita eRosita.in > eRosita.out
 
