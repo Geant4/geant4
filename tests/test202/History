@@ -1,8 +1,12 @@
-$Id: History,v 1.8 2010-07-11 09:10:28 allison Exp $
+$Id: History,v 1.9 2010-11-30 17:22:40 gunter Exp $
 -----------------------------------------------------------------------------
 
 History file for test/test202 subdirectory
 ------------------------------------------------
+
+30th November 2010  Gunter Folger (test202-V09-03-01)
+- fix for windows compilation, use CLHEP::pi instead of M_PI 
+   in Tst202DetectorConstruction.cc
 
 10th July 2010  John Allison  (test202-V09-03-00)
 - test202.cc: Changed to QGSP_BERT.
