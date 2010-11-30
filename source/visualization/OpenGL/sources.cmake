@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.3 2010-11-30 16:46:37 bmorgan Exp $
+# $Id: sources.cmake,v 1.4 2010-11-30 16:51:37 bmorgan Exp $
 # GEANT4 Tag $Name: not supported by cvs2svn $
 #
 #------------------------------------------------------------------------------
@@ -129,7 +129,6 @@ if(GEANT4_USE_QT)
         G4VIS_BUILD_OPENGL_DRIVER;G4VIS_BUILD_OPENGLQT_DRIVER;G4INTY_BUILD_QT;G4UI_BUILD_QT_SESSION)
 
     # And for the moc files because these are in the build tree
-    message(STATUS "glqt moc: ${G4OPENGL_MOC_SOURCES}")
     set_source_files_properties(${G4OPENGL_MOC_SOURCES}
        PROPERTIES 
        COMPILE_DEFINITIONS
