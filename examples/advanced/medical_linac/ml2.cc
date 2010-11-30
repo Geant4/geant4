@@ -51,35 +51,29 @@
 #include "G4Timer.hh"
 	
 
-#include "G4UIterminal.hh"
-#ifdef G4UI_USE_XM
-	#include "G4UIXm.hh"
-#endif
 #ifdef G4VIS_USE
 	#include "G4VisExecutive.hh"
 #endif
+#ifdef G4UI_USE
+	#include "G4UIExecutive.hh"
+#endif
 
 
 
 #ifdef G4VIS_USE
-void visio()
+void visio(int argc, char* argv[])
 {
-	G4UIsession *session=0;
-	session=new G4UIterminal();
-
-		G4VisManager * visManager=new G4VisExecutive;
+		G4VisManager *visManager=new G4VisExecutive;
 		visManager->Initialize();
-
-		G4UImanager *UI=G4UImanager::GetUIpointer();
-		if (session)
-		{
-			UI->ApplyCommand("/control/execute vis.mac");
-			session->SessionStart();
-			delete session;
-		}
-    delete visManager;
+#ifdef G4UI_USE
+		G4UIExecutive *ui = new G4UIExecutive(argc, argv);
+                G4UImanager *UImanager = G4UImanager::GetUIpointer();
+		//UImanager->ApplyCommand("/control/execute vis.mac");     
+		ui->SessionStart();
+		delete ui;
+#endif
+		delete visManager;
 }
-
 #endif
 
 int main(int argc, char* argv[])
@@ -120,9 +114,9 @@ int main(int argc, char* argv[])
 	}
 
 	// read the main mac file and execute the commands
-	G4UImanager* UI = G4UImanager::GetUIpointer();
+	G4UImanager* UImanager = G4UImanager::GetUIpointer();
 	G4String command = "/control/execute ";
-	UI->ApplyCommand(command+myInputData->inputData.generalData.StartFileInputData); 
+	UImanager->ApplyCommand(command+myInputData->inputData.generalData.StartFileInputData); 
 
 
 	// set and initialize the random generator
@@ -170,7 +164,7 @@ int main(int argc, char* argv[])
 		// visualization
 		myWorld->newGeometry();
 		convergence->setNewGeometry();
-		visio();
+		visio(argc, argv);
 #endif
 	}
 	else
