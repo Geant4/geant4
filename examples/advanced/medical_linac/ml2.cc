@@ -68,7 +68,7 @@ void visio(int argc, char* argv[])
 #ifdef G4UI_USE
 		G4UIExecutive *ui = new G4UIExecutive(argc, argv);
                 G4UImanager *UImanager = G4UImanager::GetUIpointer();
-		//UImanager->ApplyCommand("/control/execute vis.mac");     
+		UImanager->ApplyCommand("/control/execute vis.mac");     
 		ui->SessionStart();
 		delete ui;
 #endif
