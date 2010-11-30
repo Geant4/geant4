@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN03.cc,v 1.1 2002-05-21 11:38:07 stesting Exp $
+// $Id: exampleN03.cc,v 1.2 2010-11-30 11:43:32 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,17 +35,15 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
-
-#ifdef G4UI_USE_XM
-#include "G4UIXm.hh"
-#endif
 
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
-#include "ExN03VisManager.hh"
+#include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 #include "ExN03DetectorConstruction.hh"
@@ -72,22 +70,6 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new ExN03PhysicsList);
   
- G4UIsession* session=0;
-  
-  if (argc==1)   // Define UI session for interactive mode.
-    {
-      // G4UIterminal is a (dumb) terminal.
-#ifdef G4UI_USE_XM
-      session = new G4UIXm(argc,argv);
-#else           
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);      
-#else
-      session = new G4UIterminal();
-#endif
-#endif
-    }
-  
 #ifdef G4VIS_USE
   // visualization manager
   G4VisManager* visManager = new ExN03VisManager;
@@ -104,24 +86,26 @@ int main(int argc,char** argv) {
   runManager->Initialize();
     
   // get the pointer to the User Interface manager 
-  G4UImanager* UI = G4UImanager::GetUIpointer();  
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
 
-  if (session)   // Define UI session for interactive mode.
+  if (argc == 1)   // Define UI session for interactive mode.
     {
-      // G4UIterminal is a (dumb) terminal.
-      UI->ApplyCommand("/control/execute vis.mac");    
-#ifdef G4UI_USE_XM
-      // Customize the G4UIXm menubar with a macro file :
-      UI->ApplyCommand("/control/execute visTutor/gui.mac");
+#ifdef G4UI_USE
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+#ifdef G4VIS_USE
+      UImanager->ApplyCommand("/control/execute vis.mac");     
 #endif
-      session->SessionStart();
-      delete session;
+      if (ui->IsGUI())
+        UImanager->ApplyCommand("/control/execute visTutor/gui.mac");     
+      ui->SessionStart();
+      delete ui;
+#endif
     }
   else           // Batch mode
     { 
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-      UI->ApplyCommand(command+fileName);
+      UImanager->ApplyCommand(command+fileName);
     }
 
   // job termination
