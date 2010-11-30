@@ -47,14 +47,6 @@
 
 #include "DicomPhysicsList.hh"
 
-#ifdef G4VIS_USE
-#include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
-#include "G4UIExecutive.hh"
-#endif
-
 #include "RegularDicomDetectorConstruction.hh"
 #include "NestedParamDicomDetectorConstruction.hh"
 #include "DicomPartialDetectorConstruction.hh"
@@ -65,6 +57,14 @@
 #include "DicomIntersectVolume.hh"
 #include "QGSP_BIC.hh"
 #include "G4tgrMessenger.hh"
+
+#ifdef G4VIS_USE
+#include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
+#endif
 
 int main(int argc,char** argv)
 {
