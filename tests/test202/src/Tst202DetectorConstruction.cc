@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst202DetectorConstruction.cc,v 1.5 2009-11-21 12:03:15 allison Exp $
+// $Id: Tst202DetectorConstruction.cc,v 1.6 2010-11-30 17:20:47 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -717,7 +717,7 @@ G4VPhysicalVolume* Tst202DetectorConstruction::Construct()
       G4Box("alSLayer_box",alSLayer_x/2.,alSLayer_y/2.,alSLayer_z/2.);
 
     G4Tubs* Cylinder1 = new G4Tubs
-      ("Cylinder#1",0.*mm,alSLayer_x/2.,alSLayer_x/2.,0.,2.*M_PI); 
+      ("Cylinder#1",0.*mm,alSLayer_x/2.,alSLayer_x/2.,0.,2.*CLHEP::pi); 
 
     G4UnionSolid* b1UnionC1 = new G4UnionSolid("Box+Cylinder", box1B,
 					       Cylinder1); 
