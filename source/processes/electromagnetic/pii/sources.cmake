@@ -11,7 +11,7 @@
 #
 # Generated on : 19/11/2010
 #
-# $Id: sources.cmake,v 1.1 2010-11-19 16:05:03 gcosmo Exp $
+# $Id: sources.cmake,v 1.2 2010-11-30 11:41:53 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -66,6 +66,7 @@ GEANT4_DEFINE_MODULE(NAME G4empii
         G4baryons
         G4bosons
         G4cuts
+        G4emlowenergy
         G4emstandard
         G4emutils
         G4geometrymng
