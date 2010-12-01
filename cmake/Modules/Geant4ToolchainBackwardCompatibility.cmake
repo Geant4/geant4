@@ -30,7 +30,7 @@
 # users to work with the new CMake built libraries transparently if
 # their application relies on the old style toolchain.
 #
-# $Id: Geant4ToolchainBackwardCompatibility.cmake,v 1.2 2010-12-01 15:06:10 bmorgan Exp $
+# $Id: Geant4ToolchainBackwardCompatibility.cmake,v 1.3 2010-12-01 16:00:53 bmorgan Exp $
 # GEANT4 Tag $Name: not supported by cvs2svn $
 #
 
@@ -60,4 +60,20 @@ else()
 endif()
 
 message(STATUS "Geant4 backwards compatible compiler name: ${GEANT4_COMPILER}")
+
+
+#------------------------------------------------------------------------------
+# Construct backward compatible variables
+#
+set(G4SYSTEM  "${GEANT4_SYSTEM}-${GEANT4_COMPILER}")
+set(G4INSTALL ${GEANT4_DATADIR}/geant4-${geant4_VERSION})
+set(G4INCLUDE ${GEANT4_INCLUDEDIR}/geant4)
+set(G4LIB     ${GEANT4_LIBDIR})
+
+message(STATUS "Geant4 backwards compatible variable G4SYSTEM : ${G4SYSTEM}")
+message(STATUS "Geant4 backwards compatible variable G4INSTALL: ${G4INSTALL}")
+message(STATUS "Geant4 backwards compatible variable G4INCLUDE: ${G4INCLUDE}")
+message(STATUS "Geant4 backwards compatible variable G4LIB    : ${G4LIB}")
+
+
 
