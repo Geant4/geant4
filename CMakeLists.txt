@@ -3,7 +3,7 @@
 #
 # 21st September 2010 Ben Morgan
 #
-# $Id: CMakeLists.txt,v 1.3 2010-11-29 16:42:33 bmorgan Exp $
+# $Id: CMakeLists.txt,v 1.4 2010-12-01 18:11:31 bmorgan Exp $
 # GEANT4 Tag $Name: not supported by cvs2svn $
 #
 
@@ -192,46 +192,25 @@ add_subdirectory(source)
 # Generate any Use/Config files here once everything else has been processed
 # e.g. "UseGeant4.cmake", "Geant4Config.cmake" - library dependencies etc
 #
-if(UNIX)
-    # Create the sh and csh environment setup files
-    configure_file(${CMAKE_SOURCE_DIR}/cmake/Templates/geant4-env.sh.in
-        ${CMAKE_BINARY_DIR}/outputs/runtime/geant4-${geant4_VERSION}.sh
-        @ONLY)
+set(GEANT4_PREFIX ${CMAKE_INSTALL_PREFIX})
+set(GEANT4_EXEC_PREFIX ${GEANT4_PREFIX})
+set(GEANT4_BINDIR ${GEANT4_EXEC_PREFIX}/bin)
+set(GEANT4_LIBDIR ${GEANT4_PREFIX}/lib)
+set(GEANT4_DATAROOTDIR ${GEANT4_PREFIX}/share)
+set(GEANT4_DATADIR ${GEANT4_DATAROOTDIR})
+set(GEANT4_INCLUDEDIR ${GEANT4_PREFIX}/include)
+set(GEANT4_DOCDIR ${GEANT4_DATAROOTDIR}/doc/geant4-${geant4_VERSION})
 
-    configure_file(${CMAKE_SOURCE_DIR}/cmake/Templates/geant4-env.csh.in
-        ${CMAKE_BINARY_DIR}/outputs/runtime/geant4-${geant4_VERSION}.csh
-        @ONLY)
-
-    # Install targets
-    install(FILES
-        ${CMAKE_BINARY_DIR}/outputs/runtime/geant4-${geant4_VERSION}.sh
-        ${CMAKE_BINARY_DIR}/outputs/runtime/geant4-${geant4_VERSION}.csh
-        DESTINATION share/${PROJECT_NAME}-${geant4_VERSION}
-        PERMISSIONS 
-            OWNER_READ OWNER_WRITE OWNER_EXECUTE
-            GROUP_READ GROUP_EXECUTE
-            WORLD_READ WORLD_EXECUTE)
-
-endif()
-
+include(Geant4ToolchainBackwardCompatibility)
 
 
 #------------------------------------------------------------------------------
 # Install any extra files needed such as documentation and legacy Makefiles
 #
-# Old config files
-install(DIRECTORY config
-    DESTINATION share/${PROJECT_NAME}-${geant4_VERSION}
-    FILES_MATCHING PATTERN "*.gmk"
-    PATTERN "CVS" EXCLUDE
-    PATTERN "scripts/" EXCLUDE)
-
 # User example code
 install(DIRECTORY examples
-    DESTINATION share/${PROJECT_NAME}-${geant4_VERSION}
+    DESTINATION ${GEANT4_DATAROOTDIR}/geant4-${geant4_VERSION}
     PATTERN "CVS" EXCLUDE)
-
-
 
 
 #
