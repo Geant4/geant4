@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN03.cc,v 1.38 2010-10-18 15:56:17 maire Exp $
+// $Id: exampleN03.cc,v 1.39 2010-12-01 05:56:17 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -98,45 +98,45 @@ int main(int argc,char** argv)
   
 #ifdef G4VIS_USE
   // Initialize visualization
-  //
   G4VisManager* visManager = new G4VisExecutive;
+  // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
+  // G4VisManager* visManager = new G4VisExecutive("Quiet");
   visManager->Initialize();
 #endif
-  
+
   // Get the pointer to the User Interface manager
-  //
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
-  
+
   if (argc!=1)   // batch mode
     {
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-      UImanager->ApplyCommand(command+fileName);    
+      UImanager->ApplyCommand(command+fileName);
     }
   else
     {  // interactive mode : define UI session
 #ifdef G4UI_USE
       G4UIExecutive* ui = new G4UIExecutive(argc, argv);
 #ifdef G4VIS_USE
-      UImanager->ApplyCommand("/control/execute vis.mac");     
+      UImanager->ApplyCommand("/control/execute vis.mac"); 
 #endif
       if (ui->IsGUI())
-	UImanager->ApplyCommand("/control/execute visTutor/gui.mac");     
+	UImanager->ApplyCommand("/control/execute gui.mac");
       ui->SessionStart();
       delete ui;
 #endif
     }
-  
+
   // Job termination
   // Free the store: user actions, physics_list and detector_description are
   //                 owned and deleted by the run manager, so they should not
   //                 be deleted in the main() program !
 #ifdef G4VIS_USE
   delete visManager;
-#endif                
+#endif
   delete runManager;
 
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
