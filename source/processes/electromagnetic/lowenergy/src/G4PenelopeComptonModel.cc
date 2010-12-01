@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeComptonModel.cc,v 1.10 2010-11-25 09:44:50 pandola Exp $
+// $Id: G4PenelopeComptonModel.cc,v 1.11 2010-12-01 15:20:26 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -658,10 +658,7 @@ void G4PenelopeComptonModel::ReadData()
 
   do{
     G4double harOfElectronsBelowThreshold = 0;
-    G4int nbOfElectronsBelowThreshold = 0;
-    G4DataVector* occVector = new G4DataVector;
-    G4DataVector* harVector = new G4DataVector;
-    G4DataVector* bindingEVector = new G4DataVector;
+    G4int nbOfElectronsBelowThreshold = 0; 
     file >> Z >> nLevels;
     //Check for nLevels validity, before using it in a loop
     if (nLevels<0 || nLevels>64)
@@ -670,6 +667,9 @@ void G4PenelopeComptonModel::ReadData()
 	G4Exception(excep);
 	return;
       }
+    G4DataVector* occVector = new G4DataVector;
+    G4DataVector* harVector = new G4DataVector;
+    G4DataVector* bindingEVector = new G4DataVector;
     for (G4int h=0;h<nLevels;h++)
       {
 	file >> k1 >> a1 >> a2;

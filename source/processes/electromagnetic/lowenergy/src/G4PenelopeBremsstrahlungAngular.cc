@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlungAngular.cc,v 1.9 2010-11-25 09:43:26 pandola Exp $
+// $Id: G4PenelopeBremsstrahlungAngular.cc,v 1.10 2010-12-01 15:20:20 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -93,10 +93,11 @@ void G4PenelopeBremsstrahlungAngular::InterpolationTableForZ()
   G4double a1,a2;
   while(i != -1) {
     file >> i >> j >> k >> a1 >> a2; 
-    if (i > -1){
-      QQ1[i][j][k]=a1;
-      QQ2[i][j][k]=a2;
-    }
+    if (i > -1 && j > -1 && k >- 1)
+      {
+	QQ1[i][j][k]=a1;
+	QQ2[i][j][k]=a2;
+      }
   } 
   file.close();
   

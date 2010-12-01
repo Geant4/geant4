@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisationModel.cc,v 1.17 2010-11-26 11:51:11 pandola Exp $
+// $Id: G4PenelopeIonisationModel.cc,v 1.18 2010-12-01 15:20:35 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -667,10 +667,6 @@ void G4PenelopeIonisationModel::ReadData()
  G4int test,test1;
 
  do{
-   G4DataVector* occVector = new G4DataVector;
-   G4DataVector* ionEVector = new G4DataVector;
-   G4DataVector* resEVector = new G4DataVector;
-   G4DataVector* shellIndVector = new G4DataVector;
    file >> Z >> nLevels;
    //Check for nLevels validity, before using it in a loop
    if (nLevels<0 || nLevels>64)
@@ -679,6 +675,12 @@ void G4PenelopeIonisationModel::ReadData()
        G4Exception(excep);
        return;
      }
+   //Allocate space for storage
+   G4DataVector* occVector = new G4DataVector;
+   G4DataVector* ionEVector = new G4DataVector;
+   G4DataVector* resEVector = new G4DataVector;
+   G4DataVector* shellIndVector = new G4DataVector;
+   //
    G4double a1,a2,a3,a4;
    G4int k1,k2,k3;
    for (G4int h=0;h<nLevels;h++)
