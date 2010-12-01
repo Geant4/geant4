@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.4 2010-11-30 15:48:33 bmorgan Exp $
+# $Id: sources.cmake,v 1.5 2010-12-01 16:59:36 bmorgan Exp $
 # GEANT4 Tag $Name: not supported by cvs2svn $
 #
 #------------------------------------------------------------------------------
@@ -21,6 +21,9 @@ include_directories(${CLHEP_INCLUDE_DIRS})
 
 # List internal includes needed.
 include_directories(${CMAKE_SOURCE_DIR}/source/visualization/externals/zlib/include)
+
+# Must have GL headers available
+include_directories(${OPENGL_INCLUDE_DIR})
 
 #
 # We need to add definitions depending on what GL drivers are built
