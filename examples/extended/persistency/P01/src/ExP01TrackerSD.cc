@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExP01TrackerSD.cc,v 1.2 2006-06-29 17:39:43 gunter Exp $
+// $Id: ExP01TrackerSD.cc,v 1.3 2010-12-01 14:18:27 witoldp Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,7 +50,10 @@ ExP01TrackerSD::ExP01TrackerSD(G4String name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExP01TrackerSD::~ExP01TrackerSD(){ }
+ExP01TrackerSD::~ExP01TrackerSD()
+{ 
+  RootIO::GetInstance()->Close();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

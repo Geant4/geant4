@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleP01.cc,v 1.3 2010-11-07 14:09:10 allison Exp $
+// $Id: exampleP01.cc,v 1.4 2010-12-01 14:18:27 witoldp Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -106,6 +106,7 @@ int main(int argc,char** argv) {
 #ifdef G4VIS_USE
   delete visManager;
 #endif
+
   delete runManager;
 
   return 0;

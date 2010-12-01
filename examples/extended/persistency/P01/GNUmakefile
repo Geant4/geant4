@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2010-01-11 17:01:48 gcosmo Exp $
+# $Id: GNUmakefile,v 1.4 2010-12-01 14:18:27 witoldp Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -20,7 +20,8 @@ ifndef PLATFORM
 endif
 
 CPPFLAGS += -I$(ROOTSYS)/include
-EXTRALIBS := -L$(ROOTSYS)/lib -lCore -lTree -lCint -lReflex -lCintex -ldl
+#EXTRALIBS := -L$(ROOTSYS)/lib -lCore -lTree -lCint -lReflex -lCintex -ldl
+EXTRALIBS := $(shell $(ROOTSYS)/bin/root-config --libs) -lReflex -lCintex
 
 DICTIONARYPATH := ${G4WORKDIR}/tmp/${G4SYSTEM}/${G4TARGET}/dictionary
 
