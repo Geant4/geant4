@@ -1,4 +1,4 @@
-$Id: README,v 1.19 2010-11-15 10:48:20 maire Exp $
+$Id: README,v 1.20 2010-12-01 05:55:04 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -98,32 +98,29 @@ $Id: README,v 1.19 2010-11-15 10:48:20 maire Exp $
    in the macro vis.mac. This macro is automatically read from 
    the main in case of interactive running mode.
 
-   By default, vis.mac opens a DAWNFILE, suitable for viewing in DAWN,
-   and an OGLX for OpenGl.
+   By default, vis.mac opens an OpenGL viewer.
    You can switch to other graphics systems by commenting out this line
    and instead uncommenting one of the other /vis/open statements, such as
-   HepRepFile or HepRepXML.
+   HepRepFile or DAWNFILE (which produce files that can be viewed with
+   HepRApp and DAWN respectively).
 	
-   The DAWNFILE, HepRepFile and HepRepXML drivers are always available 
+   The DAWNFILE, HepRepFile drivers are always available 
    (since they require no external libraries), but the OGL driver requires:
      1- the visualisation & interfaces categories have been compiled
 	with the environment variable G4VIS_BUILD_OPENGLX_DRIVER.
      2- exampleN03.cc has been compiled with G4VIS_USE_OPENGLX.
-
-   The HepRepXML driver outputs a zip file that can be unzipped into 
-   several individual HepRep files, each viewable in WIRED.
+   (This is best done through Configure or CMake.)
 
    For more information on visualization, including information on how to
-   install and run DAWN, OpenGL and WIRED, see the visualization tutorials
-   on the Geant4 Workshop Tutorial CD available at:
-   http://geant4.slac.stanford.edu/g4cd/Welcome.html
+   install and run DAWN, OpenGL and HepRApp, see the visualization tutorials,
+   for example,
+   http://geant4.slac.stanford.edu/Presentations/vis/G4OpenGLTutorial/G4OpenGLTutorial.html
  	
    The detector has a default view which is a longitudinal view of the 
    calorimeter.
  	
-   The tracks are drawn at the end of event, and erased at the end of run.
-   Optionaly one can choose to draw all particles, only the charged,
-   or neutral or none. This command is build in EventActionMessenger class.
+   The tracks are drawn at the end of event, and accumulated to end of run.
+   vis.mac shows how to draw and filter trajectories.
  	
    Additional visualization tutorial macros are available in the visTutor
    subdirectory.  They can be tried as:
