@@ -1,0 +1,22 @@
+How to use momo-src.jar
+
+momo-src.jar is the Java archive file which contains all Java source files and
+relevant data files, as well as a Geant4.9.4 example in ./MomoHome directory.
+
+If you use MOMO.jar to run MOMO, momo-src.jar isn't necessary.
+When you have new JDK or other JDK like OpenJDK etc, momo-src.jar can be used
+to create your own MOMO.jar.
+
+The required tools are
+1) JDK-1.6 or later   (OpenJDK isn't tested fully)
+2) Apache ant (1.7 or later)
+
+To compile,
+
+
+1) copy momo-src.jar to any clean directory and change directory to there
+2) jar fvx momo-src.jar   and you have the full codes and data.
+3) ant    (build.xml is use by default)        and you have MOMO.jar the executable MOMO jar file
+4) java -jar ./MOMO.jar
+
+you may have a warning on the unsecure use of the HashTable but you can neglect it.
