@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcess.cc,v 1.92 2010-08-17 09:48:20 vnivanch Exp $
+// $Id: G4HadronicProcess.cc,v 1.93 2010-12-01 02:04:39 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -164,10 +164,40 @@ GetMicroscopicCrossSection(const G4DynamicParticle *aParticle,
   return x;
 }
 
-G4VParticleChange *G4HadronicProcess::PostStepDoIt(
-                   const G4Track &aTrack, const G4Step &)
+
+G4VParticleChange*
+G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
 {
-  if(aTrack.GetTrackStatus() != fAlive && aTrack.GetTrackStatus() != fSuspend) {
+  // Find cross section at end of step and check if <= 0
+  //
+  const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
+  G4Material* aMaterial = aTrack.GetMaterial();
+  G4double aTemp = aMaterial->GetTemperature();
+   
+  G4Element* anElement = 0;
+  try
+  {
+     anElement = theCrossSectionDataStore->SampleZandA(aParticle, 
+						      aMaterial, 
+						      targetNucleus);
+  }
+  catch(G4HadronicException & aR)
+  {
+    DumpState(aTrack,"SampleZandA");
+    G4Exception("G4HadronicProcess", "007", FatalException,
+    "PostStepDoIt failed on element selection.");
+  }
+
+  if (GetMicroscopicCrossSection(aParticle, anElement, aTemp) <= 0.0) {
+    // No interaction
+    theTotalResult->Clear();
+    theTotalResult->Initialize(aTrack);
+    return theTotalResult;
+  }    
+
+  // Next check for illegal track status
+  //
+  if (aTrack.GetTrackStatus() != fAlive && aTrack.GetTrackStatus() != fSuspend) {
     if (aTrack.GetTrackStatus() == fStopAndKill ||
         aTrack.GetTrackStatus() == fKillTrackAndSecondaries ||
         aTrack.GetTrackStatus() == fPostponeToNextEvent) {
@@ -183,29 +213,14 @@ G4VParticleChange *G4HadronicProcess::PostStepDoIt(
     return theTotalResult;
   }
 
-  const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
-  G4Material* aMaterial = aTrack.GetMaterial();
+  // Go on to regular case
+  //
   G4double originalEnergy = aParticle->GetKineticEnergy();
   G4double kineticEnergy = originalEnergy;
 
   // Get kinetic energy per nucleon for ions
   if(aParticle->GetParticleDefinition()->GetBaryonNumber() > 1.5)
           kineticEnergy/=aParticle->GetParticleDefinition()->GetBaryonNumber();
-
-  G4Element* anElement = 0;
-  try
-  {
-    //    anElement = ChooseAandZ( aParticle, aMaterial );
-    anElement = theCrossSectionDataStore->SampleZandA(aParticle, 
-						      aMaterial, 
-						      targetNucleus);
-  }
-  catch(G4HadronicException & aR)
-  {
-    DumpState(aTrack,"SampleZandA");
-    G4Exception("G4HadronicProcess", "007", FatalException,
-    "PostStepDoIt failed on element selection.");
-  }
 
   try
   {
