@@ -30,7 +30,7 @@
 # users to work with the new CMake built libraries transparently if
 # their application relies on the old style toolchain.
 #
-# $Id: Geant4ToolchainBackwardCompatibility.cmake,v 1.4 2010-12-01 17:13:20 bmorgan Exp $
+# $Id: Geant4ToolchainBackwardCompatibility.cmake,v 1.5 2010-12-01 18:10:07 bmorgan Exp $
 # GEANT4 Tag $Name: not supported by cvs2svn $
 #
 
@@ -98,6 +98,42 @@ if(UNIX)
 else()
     set(G4_HAVE_TCSH "no")
 endif()
+
+
+#------------------------------------------------------------------------------
+# Add configure files for generating backward compatible shell scripts
+# and install these together with the old GNU make toolchain
+#
+if(UNIX)
+    # Create the sh and csh environment setup files
+    configure_file(${CMAKE_SOURCE_DIR}/cmake/Templates/geant4-env.sh.in
+        ${CMAKE_BINARY_DIR}/outputs/runtime/geant4-${geant4_VERSION}.sh
+        @ONLY)
+
+    configure_file(${CMAKE_SOURCE_DIR}/cmake/Templates/geant4-env.csh.in
+        ${CMAKE_BINARY_DIR}/outputs/runtime/geant4-${geant4_VERSION}.csh
+        @ONLY)
+
+    # Install targets
+    # toolchain
+    install(DIRECTORY config
+        DESTINATION ${GEANT4_DATAROOTDIR}/geant4-${geant4_VERSION}
+        FILES_MATCHING PATTERN "*.gmk"
+        PATTERN "CVS" EXCLUDE
+        PATTERN "scripts/" EXCLUDE)
+
+    # setup scripts
+    install(FILES
+        ${CMAKE_BINARY_DIR}/outputs/runtime/geant4-${geant4_VERSION}.sh
+        ${CMAKE_BINARY_DIR}/outputs/runtime/geant4-${geant4_VERSION}.csh
+        DESTINATION ${GEANT4_DATAROOTDIR}/geant4-${geant4_VERSION}/config
+        PERMISSIONS 
+            OWNER_READ OWNER_WRITE OWNER_EXECUTE
+            GROUP_READ GROUP_EXECUTE
+            WORLD_READ WORLD_EXECUTE)
+
+endif()
+
 
 
 
