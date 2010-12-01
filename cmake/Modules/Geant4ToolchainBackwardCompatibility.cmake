@@ -30,7 +30,7 @@
 # users to work with the new CMake built libraries transparently if
 # their application relies on the old style toolchain.
 #
-# $Id: Geant4ToolchainBackwardCompatibility.cmake,v 1.1 2010-12-01 15:03:10 bmorgan Exp $
+# $Id: Geant4ToolchainBackwardCompatibility.cmake,v 1.2 2010-12-01 15:06:10 bmorgan Exp $
 # GEANT4 Tag $Name: not supported by cvs2svn $
 #
 
@@ -43,6 +43,8 @@ if(NOT WIN32)
 else()
     set(GEANT4_SYSTEM "WIN32")
 endif()
+
+message(STATUS "Geant4 backwards compatible system name: ${GEANT4_SYSTEM}")
 
 #------------------------------------------------------------------------------
 # Determine the backward compatible compiler name
@@ -57,5 +59,5 @@ else()
     set(GEANT4_COMPILER "UNSUPPORTED")
 endif()
 
-
+message(STATUS "Geant4 backwards compatible compiler name: ${GEANT4_COMPILER}")
 
