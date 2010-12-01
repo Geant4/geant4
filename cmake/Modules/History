@@ -13,7 +13,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-26th November 2010 ben Morgan
+
+1st December 2010 Ben Morgan
+Geant4ToolChainBackwardCompatibility.cmake - New script file to support
+setup of shell scripts enabling use by users of older GNU make toolchain for
+user applications with newer CMake build of Geant4.
+
+26th November 2010 Ben Morgan
 Geant4InterfaceOptions.cmake - Added find_package for OpenGL as this is needed
 for core OGL support.
 Geant4MacroDefineModule.cmake - Updated GEANT4_ADD_COMPILE_DEFINITIONS to
