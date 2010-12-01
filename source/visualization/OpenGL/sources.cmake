@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.4 2010-11-30 16:51:37 bmorgan Exp $
+# $Id: sources.cmake,v 1.5 2010-12-01 16:57:53 bmorgan Exp $
 # GEANT4 Tag $Name: not supported by cvs2svn $
 #
 #------------------------------------------------------------------------------
@@ -75,6 +75,7 @@ set(G4VIS_MODULE_OPENGL_SOURCES
 #
 # May need OpenGL include here
 #
+include_directories(${OPENGL_INCLUDE_DIR})
 set(G4VIS_MODULE_OPENGL_LINK_LIBRARIES ${OPENGL_LIBRARIES})
 
 #
