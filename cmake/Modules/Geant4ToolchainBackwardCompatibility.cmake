@@ -30,7 +30,7 @@
 # users to work with the new CMake built libraries transparently if
 # their application relies on the old style toolchain.
 #
-# $Id: Geant4ToolchainBackwardCompatibility.cmake,v 1.3 2010-12-01 16:00:53 bmorgan Exp $
+# $Id: Geant4ToolchainBackwardCompatibility.cmake,v 1.4 2010-12-01 17:13:20 bmorgan Exp $
 # GEANT4 Tag $Name: not supported by cvs2svn $
 #
 
@@ -68,12 +68,36 @@ message(STATUS "Geant4 backwards compatible compiler name: ${GEANT4_COMPILER}")
 set(G4SYSTEM  "${GEANT4_SYSTEM}-${GEANT4_COMPILER}")
 set(G4INSTALL ${GEANT4_DATADIR}/geant4-${geant4_VERSION})
 set(G4INCLUDE ${GEANT4_INCLUDEDIR}/geant4)
-set(G4LIB     ${GEANT4_LIBDIR})
+set(G4LIB     ${GEANT4_LIBDIR}/geant4-${geant4_VERSION})
 
 message(STATUS "Geant4 backwards compatible variable G4SYSTEM : ${G4SYSTEM}")
 message(STATUS "Geant4 backwards compatible variable G4INSTALL: ${G4INSTALL}")
 message(STATUS "Geant4 backwards compatible variable G4INCLUDE: ${G4INCLUDE}")
 message(STATUS "Geant4 backwards compatible variable G4LIB    : ${G4LIB}")
+
+
+#------------------------------------------------------------------------------
+# CLHEP setup
+# Unless CLHEP is setup very oddly, the base directory should be sufficient
+execute_process(COMMAND ${CLHEP_CONFIG_EXECUTABLE} --prefix 
+    OUTPUT_VARIABLE CLHEP_BASE_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+
+
+#------------------------------------------------------------------------------
+# Optional variables which are set only if certain features are enabled
+#
+if(GEANT4_USE_QT)
+    set(G4_HAVE_QT "yes")
+else()
+    set(G4_HAVE_QT "no")
+endif()
+
+if(UNIX)
+    set(G4_HAVE_TCSH "yes")
+else()
+    set(G4_HAVE_TCSH "no")
+endif()
 
 
 
