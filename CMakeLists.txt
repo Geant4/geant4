@@ -3,7 +3,7 @@
 #
 # 21st September 2010 Ben Morgan
 #
-# $Id: CMakeLists.txt,v 1.4 2010-12-01 18:11:31 bmorgan Exp $
+# $Id: CMakeLists.txt,v 1.5 2010-12-02 13:03:04 bmorgan Exp $
 # GEANT4 Tag $Name: not supported by cvs2svn $
 #
 
@@ -202,6 +202,7 @@ set(GEANT4_INCLUDEDIR ${GEANT4_PREFIX}/include)
 set(GEANT4_DOCDIR ${GEANT4_DATAROOTDIR}/doc/geant4-${geant4_VERSION})
 
 include(Geant4ToolchainBackwardCompatibility)
+include(Geant4ConfigureConfigScript)
 
 
 #------------------------------------------------------------------------------
