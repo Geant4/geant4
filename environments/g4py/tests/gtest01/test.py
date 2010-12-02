@@ -8,7 +8,7 @@
 from Geant4 import *
 import gtest01
 import random
-import thread
+#import thread
 
 # ==================================================================
 # user actions in python
