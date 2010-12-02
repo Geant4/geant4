@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.63 2010-11-15 19:23:54 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.64 2010-12-02 12:19:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -92,6 +92,7 @@ G4EmCorrections::G4EmCorrections()
   eCorrMax   = 250.*MeV;
   nist = G4NistManager::Instance();
   ionTable = G4ParticleTable::GetParticleTable()->GetIonTable();
+  BarkasCorr = ThetaK = ThetaL = 0;
   Initialise();
 }
 
@@ -100,6 +101,9 @@ G4EmCorrections::G4EmCorrections()
 G4EmCorrections::~G4EmCorrections()
 {
   for(G4int i=0; i<nIons; ++i) {delete stopData[i];}
+  delete BarkasCorr;
+  delete ThetaK;
+  delete ThetaL;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
