@@ -8,9 +8,9 @@
 #  Hava A Fun!
 # ==================================================================
 """
-# $Id: __init__.py,v 1.22 2010-06-04 05:47:44 kmura Exp $
-__version__ ='9.4.0 beta'
-__date__ = '25/June/2010'
+# $Id: __init__.py,v 1.23 2010-12-02 08:24:22 kmura Exp $
+__version__ ='9.4.0'
+__date__ = '17/December/2010'
 __author__ = 'K.Murakami (Koichi.Murakami@kek.jp)'
 
 # import submodules
@@ -233,12 +233,12 @@ import signal
 import threading
 
 def _run_abort(signum, frame):
-  state = gStateManager.GetCurrentState();
+  state = gStateManager.GetCurrentState()
 
   if(state == G4ApplicationState.G4State_GeomClosed or
      state == G4ApplicationState.G4State_EventProc):
-    print "aborting Run ...";
-    gRunManager.AbortRun(True);
+    print "aborting Run ..."
+    gRunManager.AbortRun(True)
   else:
     raise KeyboardInterrupt
 
