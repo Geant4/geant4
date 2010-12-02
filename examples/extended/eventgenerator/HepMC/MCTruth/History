@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2006-11-22 14:51:26 gcosmo Exp $
+$Id: History,v 1.2 2010-12-02 15:55:56 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+2 December 2010 W.Pokosrki (mctruth-V09-03-00)
+- Updated to use HepMC-2.06.03; reviewd use of 4-vectors.
+- Migrated to use particle-based multiple-scattering.
 
 22 November 2006 G.Cosmo (mctruth-V08-01-00)
 - Created from original example provided by W.Pokorski.
