@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCrossSectionHandler.cc,v 1.19 2009-09-25 07:41:34 sincerti Exp $
+// $Id: G4VCrossSectionHandler.cc,v 1.20 2010-12-02 17:39:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -151,6 +151,7 @@ void G4VCrossSectionHandler::Initialise(G4VDataSetAlgorithm* algorithm,
     }
   else
     {
+      delete interpolation;
       interpolation = CreateInterpolation();
     }
 
@@ -496,6 +497,7 @@ G4VEMDataSet* G4VCrossSectionHandler::BuildMeanFreePathForMaterials(const G4Data
 
   G4VDataSetAlgorithm* algo = CreateInterpolation();
   G4VEMDataSet* materialSet = new G4CompositeEMDataSet(algo);
+  //G4cout << "G4VCrossSectionHandler  new dataset " << materialSet << G4endl; 
 
   G4DataVector* energies;
   G4DataVector* data;
