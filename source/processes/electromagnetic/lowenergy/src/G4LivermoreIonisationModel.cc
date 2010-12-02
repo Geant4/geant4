@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreIonisationModel.cc,v 1.12 2010-11-26 11:51:11 pandola Exp $
+// $Id: G4LivermoreIonisationModel.cc,v 1.13 2010-12-02 16:06:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -407,7 +407,7 @@ void G4LivermoreIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle
 			}
 		    }
 		}
-	      secondaryVector = 0; 
+	      //secondaryVector = 0; 
 	      delete secondaryVector;
 	    }
 	}
