@@ -167,8 +167,6 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
                                            G4int nDef)
 {
 
-G4cout << "G4NeutronHPInelasticBaseFS::BaseApply" << G4endl;
-
 // prepare neutron
   theResult.Clear();
   G4double eKinetic = theTrack.GetKineticEnergy();
@@ -363,9 +361,7 @@ if ( targetMass == 0 ) G4cout << "080731a It looks like something wrong value in
   else if(theEnergyAngData!=0)
   {
 
-G4cout << "TKDB check 0" << G4endl;
     G4double theGammaEnergy = theEnergyAngData->GetTotalMeanEnergy();
-G4cout << "TKDB check 0 theEnergyAngData->GetTotalMeanEnergy() = " << theEnergyAngData->GetTotalMeanEnergy() << G4endl;
     G4double anEnergy = boosted.GetKineticEnergy();
     theGammaEnergy = anEnergy-theGammaEnergy;
     theGammaEnergy += theNuclearMassDifference;
