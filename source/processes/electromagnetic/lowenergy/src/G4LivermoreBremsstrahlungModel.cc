@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreBremsstrahlungModel.cc,v 1.7 2010-11-25 09:43:06 pandola Exp $
+// $Id: G4LivermoreBremsstrahlungModel.cc,v 1.8 2010-12-02 16:07:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -141,7 +141,7 @@ void G4LivermoreBremsstrahlungModel::Initialise(const G4ParticleDefinition* part
       delete crossSectionHandler;
       crossSectionHandler = 0;
     }
-  G4VDataSetAlgorithm* interpolation = new G4SemiLogInterpolation();
+  G4VDataSetAlgorithm* interpolation = 0;//new G4SemiLogInterpolation();
   crossSectionHandler = new G4BremsstrahlungCrossSectionHandler(energySpectrum,interpolation);
   crossSectionHandler->Initialise(0,LowEnergyLimit(),HighEnergyLimit(),
 				  fNBinEnergyLoss);
