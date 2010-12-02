@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4RunManager.cc,v 1.5 2010-06-21 12:28:29 kmura Exp $
+// $Id: pyG4RunManager.cc,v 1.6 2010-12-02 08:23:05 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4RunManager.cc
@@ -73,7 +73,7 @@ void (G4RunManager::*f6_SetUserAction)(G4UserSteppingAction*)
   = &G4RunManager::SetUserAction;
 
 // DumpRegion
-#if G4VERSION_NUMBER >= 940
+#if G4VERSION_NUMBER >= 932
 void (G4RunManager::*f1_DumpRegion)(const G4String&) const
   = &G4RunManager::DumpRegion;
 #else
@@ -173,13 +173,13 @@ void export_G4RunManager()
     return_value_policy<reference_existing_object>())
     .def("SetRunIDCounter",        &G4RunManager::SetRunIDCounter)
 
-#if G4VERSION_NUMBER >= 940
+#if G4VERSION_NUMBER >= 932
     .def("GetVersionString",     &G4RunManager::GetVersionString,
     return_value_policy<reference_existing_object>())
     .def("GetRandomNumberStoreDir", &G4RunManager::GetRandomNumberStoreDir,
     return_internal_reference<>())
 #else
-    .def("GetVersionString",     &G4RunManager::GetVersionString)
+    .def("GetVersionString",        &G4RunManager::GetVersionString)
     .def("GetRandomNumberStoreDir", &G4RunManager::GetRandomNumberStoreDir)
 #endif
     ;
