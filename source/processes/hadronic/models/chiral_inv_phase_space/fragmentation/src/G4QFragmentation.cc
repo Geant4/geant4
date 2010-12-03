@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.17 2010-06-25 14:03:44 mkossov Exp $
+// $Id: G4QFragmentation.cc,v 1.18 2010-12-03 16:50:39 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -1836,10 +1836,10 @@ G4QHadronVector* G4QFragmentation::Fragment()
     G4QHadron* resNuc = (*theResult)[theRS-1];              // Pointer to Residual Nucleus
     G4LorentzVector resNuc4M = resNuc->Get4Momentum();      // 4-Momentum of the Nucleuz
     G4int           resNucPDG= resNuc->GetPDGCode();        // PDG Code of the Nucleus
-    if(resNucPDG==90000000)
+    if(resNucPDG==90000000 || resNuc4M.m2()<800000.)        // m_N^2 = 880000 MeV^2
     {
       resNuc4M=G4LorentzVector(0.,0.,0.,0.);
-      resNuc->Set4Momentum(resNuc4M);
+      if(resNucPDG == 90000000) resNuc->Set4Momentum(resNuc4M);
     }
 #ifdef edebug
     G4int rnChg=resNuc->GetCharge();
@@ -1926,7 +1926,7 @@ G4QHadronVector* G4QFragmentation::Fragment()
       }
     }
     G4double nucE=resNuc4M.e();                             // Total energy of the nuclEnv
-    if(nucE<1.E-12) nucE=0.;                                // Computer accuracy safety
+    if(nucE < 1.E-12) nucE=0.;                              // Computer accuracy safety
     G4ThreeVector   nucVel(0.,0.,0.);                       // Proto of the NucleusVelocity
     G4QHadronVector* output=0;                              // NucleusFragmentation Hadrons
     G4QEnvironment* pan= new G4QEnvironment(theEnv);        // ---> DELETED --->----------+
