@@ -7,14 +7,14 @@
 # The script is generated froma template file and then installed to the
 # known bindir as an executable.
 #
-# $Id: Geant4ConfigureConfigScript.cmake,v 1.2 2010-12-02 16:59:12 bmorgan Exp $
+# $Id: Geant4ConfigureConfigScript.cmake,v 1.3 2010-12-03 11:28:00 bmorgan Exp $
 # GEANT4 Tag $Name: not supported by cvs2svn $
 #
 
 #-----------------------------------------------------------------------------
-# Only create script if we have a global shared library build...
+# Only create script if we have a global library build...
 #
-if(NOT GEANT4_BUILD_GRANULAR_LIBS AND BUILD_SHARED_LIBS AND UNIX)
+if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
     # Setup variables needed for expansion in configuration file
     # - GDML
     if(GEANT4_USE_GDML)
