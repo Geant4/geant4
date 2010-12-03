@@ -1,4 +1,4 @@
-$Id: History,v 1.45 2010-11-25 12:32:36 bmorgan Exp $
+$Id: History,v 1.46 2010-12-03 11:09:44 bmorgan Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+3rd December 2010 Ben Morgan
+- Configure: regenerated following changes below.
+- U/g4_03_dirs_data.U: Updated data versions PhotonEvaporation -> 2.1
+RadioactiveDecay -> 3.3 and G4PII -> 1.2
+
 25th November 2010 Ben Morgan
 - Configure: regenerated following changes below.
 - config/scripts/enn.csh.SH: Added setting of new data variable G4PIIDATA
