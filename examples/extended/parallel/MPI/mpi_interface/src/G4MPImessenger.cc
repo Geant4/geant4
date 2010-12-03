@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MPImessenger.cc,v 1.2 2010-05-18 06:06:21 kmura Exp $
+// $Id: G4MPImessenger.cc,v 1.3 2010-12-03 08:21:29 kmura Exp $
 // $Name: not supported by cvs2svn $
 //
 // ====================================================================
@@ -105,11 +105,6 @@ G4MPImessenger::G4MPImessenger( G4MPImanager* manager)
   masterWeight-> SetParameterName("weight", false, false);
   masterWeight-> SetRange("weight>=0. && weight<=1.");
 
-  // /mpi/wait
-  waitall= new G4UIcmdWithoutParameter("/mpi/wait", this);
-  waitall-> SetGuidance( "Wait until beamOn-s on all nodes are done. "
-                         "(batch mode only)");
-
   // /mpi/showSeeds
   showSeeds= new G4UIcmdWithoutParameter("/mpi/showSeeds", this);
   showSeeds-> SetGuidance("Show seeds of MPI nodes.");
@@ -142,7 +137,6 @@ G4MPImessenger::~G4MPImessenger()
   delete beamOn;
   delete dotbeamOn;
   delete masterWeight;
-  delete waitall;
   delete showSeeds;
   delete setMasterSeed;
   delete setSeed;
@@ -182,9 +176,6 @@ void G4MPImessenger::SetNewValue( G4UIcommand* command, G4String newValue)
   } else if (command == masterWeight){ // /mpi/masterWeight
     G4double weight= masterWeight-> GetNewDoubleValue(newValue);
     g4MPI-> SetMasterWeight(weight);
-
-  } else if (command == waitall) {
-    g4MPI-> WaitBeamOn();
 
   } else if (command == showSeeds){ // /mpi/showSeeds
     g4MPI-> ShowSeeds();

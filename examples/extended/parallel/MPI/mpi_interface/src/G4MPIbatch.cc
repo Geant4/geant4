@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MPIbatch.cc,v 1.2 2010-05-18 06:06:21 kmura Exp $
+// $Id: G4MPIbatch.cc,v 1.3 2010-12-03 08:21:29 kmura Exp $
 // $Name: not supported by cvs2svn $
 //
 // ====================================================================
@@ -175,7 +175,10 @@ G4UIsession* G4MPIbatch::SessionStart()
     if (isMaster) newCommand = ReadCommand();
     // broadcast a new G4 command
     scommand = g4MPI-> BcastCommand(newCommand);
-    if(scommand == "exit") return 0;
+    if(scommand == "exit") {
+      g4MPI-> WaitBeamOn();
+      return 0;
+    }
 
     // just echo something
     if( scommand[(size_t)0] == '#') {
