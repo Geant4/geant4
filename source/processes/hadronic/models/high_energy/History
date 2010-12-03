@@ -14,6 +14,16 @@ code and to keep track of all tags.
   * Please list in reverse chronological order (last date on top)
   ---------------------------------------------------------------
 
+ 3 Dec 2010 - Dennis Wright (hadr-hep-V09-03-03)
+------------------------------------------------
+- more CoVerity bug fixes in G4HEInelastic.cc :
+  array overrun in method QuasiElasticScattering (change pvmx[4] to 
+    pvmx[0]
+  dead code due to bools dummy and dum always being false
+  memory leak in methods HighEnergyCascading, MediumEnergyCascading,
+    QuasiElasticScattering
+  use of loop variable outside of for loop
+
 27 Nov 2010 - Dennis Wright (hadr-hep-V09-03-02)
 ------------------------------------------------
 - more CoVerity bug fixes:  G4HEInelastic.hh (init verboseLevel),
