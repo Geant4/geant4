@@ -30,7 +30,7 @@
 # users to work with the new CMake built libraries transparently if
 # their application relies on the old style toolchain.
 #
-# $Id: Geant4ToolchainBackwardCompatibility.cmake,v 1.5 2010-12-01 18:10:07 bmorgan Exp $
+# $Id: Geant4ToolchainBackwardCompatibility.cmake,v 1.6 2010-12-03 13:39:05 bmorgan Exp $
 # GEANT4 Tag $Name: not supported by cvs2svn $
 #
 
@@ -131,6 +131,12 @@ if(UNIX)
             OWNER_READ OWNER_WRITE OWNER_EXECUTE
             GROUP_READ GROUP_EXECUTE
             WORLD_READ WORLD_EXECUTE)
+
+    # compatibility softlink to library directory
+    install(CODE
+        "execute_process(COMMAND 
+        ${CMAKE_COMMAND} -E create_symlink . ${GEANT4_SYSTEM}-${GEANT4_COMPILER}
+        WORKING_DIRECTORY ${GEANT4_LIBDIR})")
 
 endif()
 
