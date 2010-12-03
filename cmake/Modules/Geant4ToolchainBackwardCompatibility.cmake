@@ -1,9 +1,9 @@
 # - Script for setting up backward compatibility with GNU make user toolchain
 #
-# The GNU make based buildsystem for Geant4 provides a toolchain for user
-# building simple Geant4 applications. The build and install of Geant4 
-# provides a customized set of non-standard install paths with use of the
-# toolchain dependent on environment variables pointing to the install
+# The GNU make based buildsystem for Geant4 provides a toolchain for users
+# building simple Geant4 applications. The old style build and install of 
+# Geant4 provides a customized set of non-standard install paths with use of 
+# the toolchain dependent on environment variables pointing to the install
 # paths.
 #
 # This script processes information on the CMake install paths, system and
@@ -30,7 +30,15 @@
 # users to work with the new CMake built libraries transparently if
 # their application relies on the old style toolchain.
 #
-# $Id: Geant4ToolchainBackwardCompatibility.cmake,v 1.8 2010-12-03 15:50:28 bmorgan Exp $
+# Compatibility with the library path style:
+#
+#     <prefix>/lib/G4SYSTEM-G4COMPILER
+#
+# is provided by installing a directory 'geant4-<version>' in the actual
+# library directory and creating a symbolic link inside this directory
+# pointing up one directory level.
+#
+# $Id: Geant4ToolchainBackwardCompatibility.cmake,v 1.9 2010-12-03 15:55:05 bmorgan Exp $
 # GEANT4 Tag $Name: not supported by cvs2svn $
 #
 
