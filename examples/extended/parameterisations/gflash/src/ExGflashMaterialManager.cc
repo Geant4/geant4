@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 #include "ExGflashMaterialManager.hh"
-
+using namespace std;
 ExGflashMaterialManager* ExGflashMaterialManager::mpointer=0;
 
 void ExGflashMaterialManager::storeElement(G4String name,G4String symbol, double z, double a)

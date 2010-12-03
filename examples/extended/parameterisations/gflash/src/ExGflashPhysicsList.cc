@@ -41,6 +41,7 @@
 
 #include "G4FastSimulationManagerProcess.hh"
 
+using namespace std;
 
 ExGflashPhysicsList::ExGflashPhysicsList():  G4VUserPhysicsList()
 {

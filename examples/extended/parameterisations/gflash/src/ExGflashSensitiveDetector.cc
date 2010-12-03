@@ -33,7 +33,7 @@
 #include "G4TouchableHistory.hh"
 #include "G4SDManager.hh"
 #include <iostream>
-
+using namespace std;
 //WARNING :  You have to use also  G4VGFlashSensitiveDetector() as base class
 ExGflashSensitiveDetector::ExGflashSensitiveDetector(G4String name, ExGflashDetectorConstruction* det):
 G4VSensitiveDetector(name), G4VGFlashSensitiveDetector(), Detector(det)

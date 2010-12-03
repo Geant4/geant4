@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // Created by Joanna Weng 26.11.2004
-using namespace std;
+
 
 #include "ExGflashEventAction.hh"
 #include "ExGflashHit.hh"
@@ -37,7 +37,7 @@ using namespace std;
 #include <iostream>
 #include <algorithm>
 //Gflash
-
+using namespace std;
 
 #include "G4Timer.hh"
 extern G4Timer Timer;

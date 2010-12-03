@@ -52,6 +52,7 @@
 #include "GFlashHitMaker.hh"
 #include "GFlashParticleBounds.hh"
 
+using namespace std;
 
 ExGflashDetectorConstruction::ExGflashDetectorConstruction()
 :m_experimentalHall_log(0), 
