@@ -26,10 +26,16 @@ Some of the development/fixes included since the last development tag are:
 
 Summarised, the list of changes is the following:
 
+cmake                                            cmake-V09-03-01
+-----
+- Added generation of geant4-config script.
+- Added simple installation guide for using CMake.
+
 config                                           config-V09-03-18
 ------
 - Updated scripts for Configure, to allow for parallel builds. Added
-  new data module G4PIIDATA (Configure-V09-03-18).
+  new data module G4PIIDATA and new versions of G4RadioactiveDecay
+  and G4photonEvaporation data sets (Configure-V09-03-09).
 - Added electromagnetic/pii module to binmake.gmk; cleanup of obsolete
   include paths.
 - Fixed typo in OGLLIBS definition for MacOSX Leopard in Darwin-g++.gmk.
@@ -44,6 +50,16 @@ digits_hits                                      digits_hits-V09-03-07
 - Fixed signature in G4VPrimitiveScorer for Set/GetUnit() methods.
 - Moved some inlined methods in G4VScoringMesh to source file to avoid
   potential linking problems.
+
+environments                                     envs-V09-03-02
+------------
+- G4py:
+  o Added new example using GTK (examples/emplot/emcalc_gui.py)
+  o Added experimental support for Python3.
+  o Updated to support changes in kernel.
+- Momo:
+  o Using QGSP_BERT physics-list instead of GPE
+  o JAVA source codes is now included (momo-src.jar).
 
 event                                            event-V09-03-09
 -----
@@ -186,9 +202,9 @@ processes/electromagnetic/adjoint                emadjoint-V09-03-02
   RapidSampleSecondaries().
 - G4VEmAdjointModel: added a check on null cross section to avoid FPE.
 
-processes/electromagnetic/lowenergy              emlowen-V09-03-67
+processes/electromagnetic/lowenergy              emlowen-V09-03-69
 -----------------------------------
-- Addressed Coverity reports for Penelope/Livermore processes.
+- Addressed Coverity reports for Penelope/Livermore processes and models.
 - Fixed initialisation in G4UAtomicDeexcitation: delete objects, use
   consistent names.
 - Bug fix in G4LivermoreIonisation and in G4LivermorePolarizedPhotoElectricModel.
@@ -209,6 +225,8 @@ processes/electromagnetic/lowenergy              emlowen-V09-03-67
 - Fixed warnings in Rudd ionization classes.
 - G4IonParametrisedLossModel: moved few virtual methods from inline to source,
   minor cleanup of initialisation.
+- Fixed minor memory leaks in G4VCrossSectinDataSet, G4EMDataSet,
+  G4LivermoreBremsstrahlungModel and G4LivermoreIonisationModel.
 
 processes/electromagnetic/muons                  emmuons-V09-03-03
 -------------------------------
@@ -225,7 +243,7 @@ processes/electromagnetic/polarisation           empolar-V09-03-02
 --------------------------------------
 - Fixed issues reported by the Coverity tool.
 
-processes/electromagnetic/standard               emstand-V09-03-30
+processes/electromagnetic/standard               emstand-V09-03-31
 ----------------------------------
 - G4IonCoulombCrossSection and G4IonCoulombScatteringModel: new model of
   single scattering of ions.
@@ -242,7 +260,7 @@ processes/electromagnetic/standard               emstand-V09-03-30
 - G4PAIModel, G4PAIySection: fixed a bug in G4_Ar.
 - Fixed warnings of the Coverity tool for missing initialisation of data.
 
-processes/electromagnetic/utils                  emutils-V09-03-29
+processes/electromagnetic/utils                  emutils-V09-03-30
 -------------------------------
 - G4EmProcessOptions, G4EnergyLossMessenger: added forgotten option.
 - G4VAtomDeexcitation, G4EmProcessOptions: fixed initialisation.
@@ -251,6 +269,7 @@ processes/electromagnetic/utils                  emutils-V09-03-29
 - G4EmCorrections: fixed computation of shell corrections according to
   prescriptions of original papers; added Bichsel approximation for Barkas
   corrections for the large Z > 47, and use G4PhysicsVector.
+  Fixed minor memory leak at initialisation.
 - Fixed part of problems reported by the Coverity tool (mainly missing
   initialisation of data).
 
@@ -290,7 +309,10 @@ processes/hadronic                               hadr-V09-03-01
   o G4EMDissociationCrossSection: is now applicable for Hydrogen but
     cross-section for Hydrogen is zero
   o Add missing inline for GetCrossSection() method in G4BGGPionElasticXS header.
-- management (hadr-man-V09-03-05)
+- management (hadr-man-V09-03-06)
+  o Check cross-section value before calling ApplyYourself() in
+    G4HadronicProcess::PostStepDoIt(). If less than or equal to zero,
+    return track unchanged.
   o Fixed data initialisation in G4EnergyRangeManager.
 - models/abrasion (had-abrasion-V09-03-01)
   o Fixed initialization in G4WilsonAbrasionModel constructor.
@@ -334,7 +356,10 @@ processes/hadronic                               hadr-V09-03-01
     initialisation); moved constructors and destructors to source.
     Code cleanup: make usese integer Z, A; usage of G4Pow...
   o Add README file explaining the photo-evaporation data files.
-- models/high_energy (hadr-hep-V09-03-01)
+- models/high_energy (hadr-hep-V09-03-03)
+  o Fixed in G4HEInelastic array overrun in method QuasiElasticScattering();
+    get rid of dead code and a memory leak in methods HighEnergyCascading(),
+    MediumEnergyCascading() and QuasiElasticScattering().
   o Fixed uninitialized data and removed dead code where applicable.
 - models/incl (hadr-incl-V09-03-10)
   o Fixed fragment vector and Fermi break-up related memory leaks in
@@ -346,12 +371,13 @@ processes/hadronic                               hadr-V09-03-01
     INCL + PreCompound model.
 - models/management (hadr-modman-V09-03-05)
   o Fixed initialisation of data in G4VNuclearDensity constructor.
-- models/neutron_hp (hadr-hpn-V09-03-09)
+- models/neutron_hp (hadr-hpn-V09-03-12)
   o Bug fix in MF=6, LAW=2 case in G4NeutronHPDiscreteTwoBody; on kind
     contribution by E.Mendoza, D.Cano-Ott (CIEMAT) 
+  o Fixed bug in G4NeutronHPCaptureFS; addressing problem report #1155.
   o Set lower limit for gamma energy in G4NeutronHPFinalState.
   o Added special treatment for Be9(n,2n)Be8(2a) case in
-    G4NeutronHPInelasticBaseFS.
+    G4NeutronHPInelasticBaseFS; removed unnecessary warnings.
   o Added safety for _nat_ data in G4NeutronHPInelasticCompFS.
   o Changed warning message for "repFlag == 2 && isoFlag != 1" case in
     G4NeutronHPPhotonDist.
@@ -361,6 +387,9 @@ processes/hadronic                               hadr-V09-03-01
   o Improved low mass string fragmentation.
 - models/parton_string/hadronization (had-hadronization-V09-03-02)
   o Minor fixes for Coverity reports in G4HadronBuilder .
+- models/parton_string/management (had-partonstring-mgt-V09-03-01)
+  o Changed data member 'Status' in G4VSplitableHadron to 'curStatus', to
+    avoid unforeseen system clashes on gcc-4.5.1.
 - models/pre_equilibrium (hadr-pre-V09-03-17)
   o G4PreCompoundProton, G4PreCompoundNeutron, G4PreCompoundHe3,
     G4LowEIonFragmentation: complete transition to usage of integer Z and A.
@@ -411,7 +440,7 @@ processes/scoring                                procscore-V09-03-01
   in a regular structure into sub-steps, and to call the scorers for each
   sub-volume.
 
-run                                              run-V09-03-08
+run                                              run-V09-03-09
 ---
 - Add G4ScoreSplittingProcess if geometry includes a regular structure.
 - Added protection against particle without process manager.
@@ -419,6 +448,8 @@ run                                              run-V09-03-08
   ReOptimizeMotherOf(); these will cause re-optimization (re-voxelization)
   of one particular logical volume without forcing re-optimization of the
   entire geometrical hierarchy.
+- G4RunManagerKernel: in RunInitialization(), notify G4VisManager when
+  geometry needs to be closed.
 
 track                                            track-V09-03-11
 -----
@@ -472,7 +503,7 @@ examples                                         examples-V09-04-00
   o New application for Monte Carlo simulation of charge exchange.
 - advanced/composite_calorimeter (ccal-V09-03-02)
   o Introduced G4UIExecutive. Improved comments.
-- advanced/eRosita (eRosita-V09-03-07)
+- advanced/eRosita (eRosita-V09-03-08)
   o New example simulation the eROSITA X-ray telescope simplified setup
     for instrumental background simulations and fluorescence measurements.
 - advanced/gammaray_telescope (gammaraytel-V09-03-03)
@@ -506,7 +537,7 @@ examples                                         examples-V09-04-00
 - advanced/human_phantom (human_phantom-V09-03-04)
   o Corrected a bug in Event action.
   o Introduced G4UIExecutive.
-- advanced/medical_linac (medical_linac-V09-03-09)
+- advanced/medical_linac (medical_linac-V09-03-11)
   o Corrected and updated the vis.mac file
   o Added 'Launches' folders to store simulation outputs and macros...
   o Added a phantom based on dicom CT images.
@@ -514,7 +545,7 @@ examples                                         examples-V09-04-00
     around the Y axis of a fix 90 deg angle). Added the capability to
     translate the phantom.
   o Modified the format of the output files and removed obsolete files.
-  o Introduced G4UIExecutive.
+  o Introduced G4UIExecutive and fixed bug in vis macro.
 - advanced/microbeam (microbeam-V09-03-09)
   o Introduced G4UIExecutive. Fixed AIDA file option.
   o Updated visualization options and commands.
@@ -540,6 +571,8 @@ examples                                         examples-V09-04-00
   o Added class HistoManager to replace AnaEx01AnalysisManager.
 - extended/analysis/N03Con (exampleN03Con-V09-03-03)
   o Renamed classes. Introduced NIST materials. Added vis macro.
+- extended/biasing/B02 (B02-V09-03-00)
+  o Migrated to use particle-based multiple-scattering.
 - extended/biasing/ReverseMC01 (ReverseMC01-V09-03-04)
   o Added initialisation of data in G4AdjointPhysicsList constructor.
   o Modified some tests in RMC01AnalysisManager::ComputeMeanEdepAndError()
@@ -559,7 +592,8 @@ examples                                         examples-V09-04-00
 - extended/electromagnetic/TestEm5 (testem5-V09-03-04)
   o Added ion scattering model into WVI Physics constructor.
   o Fixed AIDA file option.
-- extended/electromagnetic/TestEm6 (testem6-V09-03-04)
+- extended/electromagnetic/TestEm6 (testem6-V09-03-05)
+  o Fixed compilation error on gcc-4.5.1.
   o Fixed AIDA file option.
 - extended/electromagnetic/TestEm7 (testem7-V09-03-08)
   o Added ion scattering model into SS physics constructor.
@@ -585,6 +619,11 @@ examples                                         examples-V09-04-00
     and to import energy spectrum in ascii file.
   o Changed analysis macro files; added plotfiles.py and plotall.py scripts
     afor plotting the results.
+- extended/eventgenerator/HepMC/MCTruth (mctruthex-V09-03-00)
+  o Updated to use HepMC-2.06.03; reviewd use of 4-vectors.
+  o Migrated to use particle-based multiple-scattering.
+- extended/eventgenerator/pythia/decayer6 (p6decayer-V09-03-02)
+  o Migrated to use particle-based multiple-scattering.
 - extended/exoticphysics/monopole (monopole-V09-03-07)
   o Use most recent version of monopole transportation, delta-electron
     production enabled, non-integer monopole charge allowed.
@@ -605,7 +644,7 @@ examples                                         examples-V09-04-00
   o Fixed AIDA file option.
 - extended/medical/fanoCavity2 (fano2-V09-03-06)
   o Introduced G4UIExecutive. Fixed AIDA file option.
-- extended/medical/DICOM (DICOM-V09-03-08)
+- extended/medical/DICOM (DICOM-V09-03-09)
   o Introduced partial phantom definition.
   o Deleted G4PSDoseDeposit_RegNav and use new G4ScoreSplittingProcess instead.
   o Fixed compilation warning on virtual methods hiding and minor others.
@@ -614,6 +653,9 @@ examples                                         examples-V09-04-00
   o Introduced G4UIExecutive.
 - extended/optical/wls (WLS-V09-03-04)
   o Corrected bug in definition of sensitive detector, when updating geometry.
+- extended/parallel/MPI (MPI-V09-03-02)
+  o Removed /mpi/wait command. It is automatically called at the end of
+    macro(batch) execution.
 - extended/parallel/ParN02 (ParN02-V09-03-01)
 - extended/parallel/ParN04 (ParN04-V09-03-02)
 - extended/parameterisations/gflash (exgflash-V09-03-03)
@@ -621,15 +663,15 @@ examples                                         examples-V09-04-00
 - extended/persistency/gdml/G01 (G01-V09-03-07)
   o Added commented command for de-activating names stripping while reading.
   o Use world volume for tracking to dump to GDML file.
-- extended/persistency/gdml/G02 (G02-V09-03-03)
+- extended/persistency/gdml/G02 (G02-V09-03-04)
   o Restored generic OGL viewer in macros.
 - extended/persistency/gdml/G03 (G03-V09-03-06)
   o Introduced G4UIExecutive. Restored generic OGL viewer in macros.
 - extended/persistency/gdml/G04 (G04-V09-03-03)
   o Introduced G4UIExecutive.
-- extended/persistency/P01 (exampleP01-V09-03-01)
-- extended/persistency/P02 (exampleP02-V09-03-01)
-  o Introduced G4UIExecutive.
+- extended/persistency/P01 (exampleP01-V09-03-02)
+- extended/persistency/P02 (exampleP02-V09-03-02)
+  o Introduced G4UIExecutive. Updated setup.
 - extended/persistency/P03 (exampleP03-V09-03-03)
   o Introduced G4UIExecutive.
   o Synchronized files to HEAD and corrected README.
@@ -653,7 +695,10 @@ examples                                         examples-V09-04-00
 - extended/visualization/standalone (exam-ext-vis-V09-03-00)
 - extended/visualization/userVisAction (exam-ext-vis-UVA-V09-03-02)
   o Introduced G4UIExecutive.
-- novice/N03 (exampleN03-V09-03-04)
+- novice/N03 (exampleN03-V09-03-05)
+  o Rationalised visTutor: several obsolete macros deleted; 6 macros improved
+    and retained (Tree0, Vis0,5,12,13, heprep); updated gui.mac accordingly and
+    moved to main directory; updated main() program.
   o Updated README.
 
 tests                                            tests-V09-04-00
@@ -677,3 +722,5 @@ tests                                            tests-V09-04-00
   o Fixed AIDA file option.
 - test58 (test58-V09-03-00)
   o New test for the validation of single Coulomb scattering of protons.
+- test202 (test202-V09-03-01)
+  o Fix for compilation on Windows.
