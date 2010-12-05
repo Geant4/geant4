@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.53 2010-11-24 19:39:15 asaim Exp $
+// $Id: G4RunManagerKernel.cc,v 1.54 2010-12-05 12:12:43 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -329,6 +329,9 @@ G4bool G4RunManagerKernel::RunInitialization()
   {
     ResetNavigator();
     CheckRegularGeometry();
+    // Notify the VisManager as well
+    G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
+    if(pVVisManager) pVVisManager->GeometryHasChanged();
   }
  
   GetPrimaryTransformer()->CheckUnknown();
