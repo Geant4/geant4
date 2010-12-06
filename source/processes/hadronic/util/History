@@ -14,6 +14,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+ 6 Dec 2010  Dennis Wright              (hadr-util-V09-03-02)
+-------------------------------------------------------------
+- G4NUcleus::ChooseParameters : fix fall-through case in which element = 0:
+  make last element in list the default
+- G4HadronicWhiteBoard: fix uninitialized ptrs (theZ, theA, theE, thePx,
+    thePy, thePz)
+ 
 11 Nov 2010  Dennis Wright              (hadr-util-V09-03-01)
 -------------------------------------------------------------
 - G4HadronicWhiteBoard: fix uninitialized ptrs (theProjectile, theDef,
