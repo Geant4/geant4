@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: eRositaDetectorConstruction.hh,v 1.1 2010-11-23 16:17:03 pia Exp $
+// $Id: eRositaDetectorConstruction.hh,v 1.2 2010-12-06 15:30:32 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,6 +35,7 @@
 
 #include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
+#include "G4VisAttributes.hh"
 
 
 class G4Box;
@@ -70,14 +71,17 @@ private:
   G4Box*             solidWorld;    // pointer to the solid envelope 
   G4LogicalVolume*   logicWorld;    // pointer to the logical envelope
   G4VPhysicalVolume* physiWorld;    // pointer to the physical envelope
+  G4VisAttributes*   visWorld;      // pointer to visualization attributes
   
   G4Box*             solidTarget;   // pointer to the solid Target
   G4LogicalVolume*   logicTarget;   // pointer to the logical Target
   G4VPhysicalVolume* physiTarget;   // pointer to the physical Target
+  G4VisAttributes*   visTarget;     // pointer to visualization attributes
   
   G4Box*             solidTracker;  // pointer to the solid Tracker
   G4LogicalVolume*   logicTracker;  // pointer to the logical Tracker
   G4VPhysicalVolume* physiTracker;  // pointer to the physical Tracker
+  G4VisAttributes*   visTracker;    // pointer to visualization attributes
   
   G4Material*         TargetMater;  // pointer to the target  material
   G4Material*         TrackerMater; // pointer to the tracker material

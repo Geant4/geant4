@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: eRositaDetectorConstruction.cc,v 1.2 2010-11-25 17:32:05 pia Exp $
+// $Id: eRositaDetectorConstruction.cc,v 1.3 2010-12-06 15:30:32 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -142,6 +142,7 @@ G4VPhysicalVolume* eRositaDetectorConstruction::Construct()
       
 //--------- Definitions of Solids, Logical Volumes, Physical Volumes ---------
   
+
   //------------------------------ 
   // World
   //------------------------------ 
@@ -158,7 +159,8 @@ G4VPhysicalVolume* eRositaDetectorConstruction::Construct()
                                  0,               // its mother  volume
                                  false,           // no boolean operations
                                  0);              // copy number
-				 
+
+			 
   //------------------------------ 
   // Target
   //------------------------------
@@ -197,6 +199,8 @@ G4VPhysicalVolume* eRositaDetectorConstruction::Construct()
 				  0);              // copy number 
 
 
+
+
   //------------------------------------------------ 
   // Sensitive detectors
   //------------------------------------------------ 
@@ -208,30 +212,27 @@ G4VPhysicalVolume* eRositaDetectorConstruction::Construct()
   SDman->AddNewDetector( aTrackerSD );
   logicTracker->SetSensitiveDetector( aTrackerSD );
 
+
 //--------- Visualization attributes -------------------------------
 
-  G4VisAttributes* BoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
-  logicWorld  ->SetVisAttributes(BoxVisAtt);  
-  logicTarget ->SetVisAttributes(BoxVisAtt);
-  logicTracker->SetVisAttributes(BoxVisAtt);
-  
-//--------- example of User Limits -------------------------------
+  // use this to make world volume invisible
+  visWorld = new G4VisAttributes();
+  visWorld->SetVisibility(false);
+  logicWorld->SetVisAttributes(visWorld);
 
-  // below is an example of how to set tracking constraints in a given
-  // logical volume(see also in N02PhysicsList how to setup the processes
-  // G4StepLimiter or G4UserSpecialCuts).
-    
-  // Sets a max Step length in the tracker region, with G4StepLimiter
-  //
-//  G4double maxStep = 0.5*ChamberWidth;
-//  stepLimit = new G4UserLimits(maxStep);
-//  logicTracker->SetUserLimits(stepLimit);
-  
-  // Set additional contraints on the track, with G4UserSpecialCuts
-  //
-  // G4double maxLength = 2*fTrackerLength, maxTime = 0.1*ns, minEkin = 10*MeV;
-  // logicTracker->SetUserLimits(new G4UserLimits(maxStep,maxLength,maxTime,
-  //                                               minEkin));
+  // render target in redish color
+  visTarget = new G4VisAttributes();
+//   visTarget->SetColor(G4Color(1.0,0.3,0.3));  // redish
+  visTarget->SetColor(G4Color(1.0,1.0,1.0));  // black
+  logicTarget->SetVisAttributes(visTarget);
+
+  // render tracker in blueish color
+  visTracker = new G4VisAttributes();
+//   visTracker->SetColor(G4Color(0.3,0.3,1.0));   // blueish
+  visTracker->SetColor(G4Color(1.0,1.0,1.0));   // black
+  logicTracker->SetVisAttributes(visTracker);
+
+
   
   return physiWorld;
 }
