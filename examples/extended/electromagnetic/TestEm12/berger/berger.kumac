@@ -30,9 +30,10 @@ atitle 'r/r0'  'DPK'
 
 * *** data
 * Berger & Seltzer, Appl. Radiat. Isot. 42(1991) page 917
-*  
-*fname = 'data/1MeV-DPK.ascii'
-fname = 'data/500keV-DPK.ascii'
+* Mainegra et al. Med. Phys. 32, 685-699 (2005)    
+*    
+*fname = 'EGSnrc/1MeV-DPK.ascii'
+fname = 'Etran/500keV-DPK.ascii'
 
 vector/create nb(1)
 vector/read nb [fname] ! 'O'
@@ -50,7 +51,7 @@ vector/create mark(1)
 vector/input xmark 0.15
 vector/input mark  0.45
 graph 1 xmark mark P
-itx   0.24 0.45 'Etran simul'
+itx   0.24 0.45 'EGSnrc simul'
 			           
 exec Redraw-Axis
 close 1

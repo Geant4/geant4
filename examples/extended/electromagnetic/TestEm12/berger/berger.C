@@ -1,14 +1,15 @@
 {
    gROOT->Reset();
 
-  /* data 
-   * Seltzer, Appl. Radiat. Isot. 42(1991) page 917  
+  /*
+   * Mainegra et al. Med. Phys. 32, 685-699 (2005)    
+   * Seltzer, Appl. Radiat. Isot. 42 (1991) page 917  
    * L. Ferrer et al. Cancer Bio. Rad. 22-1 (2007)
    */   
 
    ifstream in;
-   in.open("./data/10keV-DPK.ascii");
-   //in.open("./data/1MeV-DPK.ascii");
+   in.open("./EGSnrc/10keV-DPK.ascii");
+   //in.open("./Etran/10keV-DPK.ascii");
    
    // Create a new histogram
    double x_min = 0;
@@ -37,7 +38,7 @@
 
 
    // Draw histograms fill by Geant4 TestEm12 simulation
-   TFile f1("./10keV.opt2.root");
+   TFile f1("./10keV.opt0.root");
    TH1D* h1 = (TH1D*) f1.Get("8");
    h1->SetLineColor(4);      
    h1->Draw("SAME HIST");
@@ -49,9 +50,9 @@
    
    // Print the histograms legend
    TLegend *legend = new TLegend(0.7,0.65,0.9,0.78);
-   legend->AddEntry(h1,"opt2 ","l");
+   legend->AddEntry(h1,"opt0 ","l");
    legend->AddEntry(h2,"opt3 ","l");   
-   legend->AddEntry(h1d,"Etran simul","l");
+   legend->AddEntry(h1d,"EGSnrc simul","l");
    legend->Draw();
 
 }
