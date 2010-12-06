@@ -228,42 +228,39 @@ protected:
 
 	G4int GetDecayTimeBin(const G4double aDecayTime);
 
-private:
+  private:
 
-	G4RadioactiveDecay(const G4RadioactiveDecay &right);
-	G4RadioactiveDecay & operator=(const G4RadioactiveDecay &right);
+    G4RadioactiveDecay(const G4RadioactiveDecay &right);
+    G4RadioactiveDecay & operator=(const G4RadioactiveDecay &right);
 
-private:
+  private:
 
-	G4RadioactiveDecaymessenger  *theRadioactiveDecaymessenger;
+    G4RadioactiveDecaymessenger* theRadioactiveDecaymessenger;
+    G4PhysicsTable* aPhysicsTable;
+    G4RIsotopeTable* theIsotopeTable;
 
-	G4PhysicsTable               *aPhysicsTable;
+    G4NucleusLimits theNucleusLimits;
 
-	G4RIsotopeTable              *theIsotopeTable;
+    const G4double HighestBinValue;
+    const G4double LowestBinValue;
 
-	G4NucleusLimits               theNucleusLimits;
+    const G4int TotBin;
 
-	const G4double                HighestBinValue;
-	const G4double                LowestBinValue;
+    G4bool AnalogueMC;
+    G4bool BRBias;
+    G4bool FBeta;
+    G4int NSplit;
 
-	const G4int                   TotBin;
+    G4double halflifethreshold;
+    G4bool applyICM;
+    G4bool applyARM;
 
-	G4bool                        AnalogueMC;
-	G4bool                        BRBias;
-	G4bool                        FBeta;
-	G4int                         NSplit;
-
-	G4double                      halflifethreshold;
-	G4bool                        applyICM;
-	G4bool                        applyARM;
-
-	G4int                         NSourceBin;
-	G4double                      SBin[99];
-	G4double                      SProfile[99];
-
-	G4int                         NDecayBin;
-	G4double                      DBin[99];
-	G4double                      DProfile[99];
+    G4int NSourceBin;
+    G4double SBin[100];
+    G4double SProfile[100];
+    G4int NDecayBin;
+    G4double DBin[100];
+    G4double DProfile[100];
 
 	std::vector<G4String>         LoadedNuclei;
 	std::vector<G4String>         ValidVolumes;
