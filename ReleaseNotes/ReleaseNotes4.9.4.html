@@ -1403,29 +1403,23 @@ please refer to the corresponding History files provided in most packages):
 <H3><I>Particles</I></H3></A>
 <UL>
 <LI>Updated mass/width of muons, taus, mesons, and baryons to PDG-2010.</LI>
-<LI>Allow creation of shortlived particles other than in 'PreInit' state.</LI>
+<LI>Added light anti_nuclei inside hadrons/ions sub-module.</LI>
+<LI>Added methods <TT>IsLightAntiIon()</TT> and <TT>GetLightAntiIon()</TT> to
+    <TT>G4IonTable</TT>.</LI>
+<LI>Fix to <TT>G4IonTable::IsLightIon()</TT> method; do not classify neutron
+    and genericIon as light ions.</LI>
+<LI>Modified <TT>G4ParticleDefiniton::Dump()</TT> to print AtomicNumber/Mass.</LI>
 <LI>ElectronOccupancy in <TT>G4DynamicParticle</TT> is now created on demand, i.e.
     it is not created at construction of <TT>G4DynamicParticle</TT> but when
     <TT>AddElectron()</TT> or <TT>RemoveElectron()</TT> are invoked.</LI>
-<LI>Fixed problems that error messages appear in cout and not in cerr.</LI>
-<LI>Added anti-nuclei as short-lived particles.</LI>
-<LI>Code cleanup in <TT>G4DynamicParticle</TT> constructors.</LI>
+<LI>Allow creation of shortlived particles other than in 'PreInit' state.</LI>
 <LI>Added <TT>G4DynamicParticle::GetParticleDefinition()</TT> giving
     'const' pointer. Code clean up to use const pointer of
     <TT>G4ParticleDefinition</TT> where possible.</LI>
 <LI>Fixed signature for std::pair in <TT>G4IonTable</TT> source code for
     compliance to ISO/C++ Standard.</LI>
-<LI>Removed anti_nuclei from shortlived; added anti_nuclei classes inside
-    hadrons/ions sub-module.</LI>
-<LI>Fix to <TT>G4IonTable::IsLightIon()</TT> method; do not classify neutron
-    and genericIon as light ions.</LI>
-<LI>Fix to <TT>G4IonTable::IsIon()</TT>; anti_nuclei were identified as normal
-    ions and contained in the IonTable.</LI>
-<LI>Fixed a bug in <TT>G4PDGCodeChecker</TT> for anti_nuclei.</LI>
-<LI>Fixed particle type for anti_alpha.</LI>
-<LI>Added methods <TT>IsLightAntiIon()</TT> and <TT>GetLightAntiIon()</TT> to
-    <TT>G4IonTable</TT>.</LI>
-<LI>Modified <TT>G4ParticleDefiniton::Dump()</TT> to print AtomicNumber/Mass.</LI>
+<LI>Fixed problems that error messages appear in cout and not in cerr.</LI>
+<LI>Code cleanup in <TT>G4DynamicParticle</TT> constructors.</LI>
 <LI>Fixed cases of uninitialised data reported by Coverity.</LI>
 </UL>
 
@@ -1591,21 +1585,22 @@ please refer to the corresponding History files provided in most packages):
 <A NAME="track-notes">
 <H3><I>Track & Tracking</I></H3></A>
 <UL>
-<LI>Added <TT>G4Track::GetParticleDefinition()</TT> returning 'const' pointer.</LI>
-<LI>Added protection against possible null pointer in <TT>G4Track::GetVelocity()</TT>.
-    Use PhysicsVector for calculation of <TT>GetVelocity()</TT>.</LI>
-<LI>Added touchable history of the origin to <TT>G4Track</TT>.</LI>
-<LI>Fixed cases of restoring cout/cerr precision formatting in several classes.</LI>
-<LI>Added dummy initialisation to data members in constructors.</LI>
+<LI>Added <TT>G4Track::GetParticleDefinition()</TT> returning 'const' pointer,
+    if possible.</LI>
 <LI>Added warning exception if <TT>GetDeltaEnergy/Momentum()</TT> methods are
     invoked. These methods are now obsolete and planned to be removed.</LI>
+<LI>Added touchable history of the origin to <TT>G4Track</TT>.</LI>
+<LI>Added protection against possible null pointer in <TT>G4Track::GetVelocity()</TT>.
+    Use PhysicsVector for calculation of <TT>GetVelocity()</TT> for better
+    performance.</LI>
 <LI><TT>G4SteppingManager</TT>: use canonical form for <TT>G4Exception</TT>.
     Added protection for possible negative index in method
     <TT>ApplyProductionCut()</TT> and some printout formatting.</LI>
-<LI>Fixed restoring of output settings in <TT>G4SteppingVerbose</TT>.</LI>
-<LI>Use 0 instead of NULL where applicable.</LI>
 <LI><TT>G4Step::GetSecondary()</TT> gives back a <TT>const G4TrackVector*</TT>,
     while <TT>G4Step::GetfSecondary()</TT> gives back non-const pointer.</LI>
+<LI>Fixed restoring of output settings in <TT>G4SteppingVerbose</TT>.
+    Fixed cases of restoring cout/cerr precision formatting in several classes.</LI>
+<LI>Use 0 instead of NULL where applicable.</LI>
 <LI>Fixed minor reports from Coverity.</LI>
 </UL>
 
