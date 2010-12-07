@@ -125,13 +125,6 @@ Note that for all users a full re-installation of libraries (or a full
 recompilation) and a recompilation of user applications is required.
 
 <P> </P>
-<B>Run</B>
-<P> </P>
-<UL>
-<LI>!!!!!!!! FILL IN HERE IF REQUIRED !!!!!!! </LI> 
-</UL>
-
-<P> </P>
 <B>Low Energy Electromagnetic physics</B>
 <P> </P>
 <UL>
@@ -229,6 +222,14 @@ Please see the corresponding details in
 <LI>Introduced new UI commands from the GDML parser to allow for importing and
     exporting GDML files through macros or interactively, supporting all
     various options provided by the parser.</LI>
+</UL>
+
+<B>Digitization &amp; Hits</B>
+<UL>
+<LI>Cylindrical scoring mesh is now fully released.</LI>
+<LI>Most of primitive scorers now take their default units, and units may
+    by altered by their UI commands. These units are used for drawing and
+    dumping the scores.</LI>
 </UL>
 
 <B>Low Energy Electromagnetic physics</B>
@@ -398,6 +399,7 @@ please refer to the corresponding History files provided in most packages):
 <A NAME="digits-notes">
 <H3><I>Digitization & Hits</I></H3></A>
 <UL>
+  <LI>Cylindrical scoring mesh is now fully released.</LI>
   <LI>Improved some UI commands for defining scorers.</LI>
   <LI>Fixed signature in <TT>G4VPrimitiveScorer</TT> for <TT>Set/GetUnit()</TT>
       methods.</LI>
@@ -732,21 +734,22 @@ please refer to the corresponding History files provided in most packages):
 <A NAME="event-notes">
 <H3><I>Event</I></H3></A>
 <UL>
-<LI>Added automatic energy biasing scheme. Users now can bias the energy
-    distribution sampling to a given power-law distribution (index alpha) via
-    the UI command: <TT>/gps/ene/biasAlpha alpha</TT>.
-    Possibility to specify arbitrary energy distribution by supplying the data
-    points in a 2-column (energy in <TT>MeV</TT> and flux) ASCII file, via the
-    UI command: <TT>/gps/hist/file [your_file_name]</TT>.</LI>
-<LI>Bug fix in the Spline interpolation implementation.</LI>
-<LI>Bug fix in the logarithm interpolation implementation (alpha = -1 case).</LI>
-<LI>Added few accessors methods and implemented concrete destructor for
-    <TT>G4SPSEneDistribution</TT>.
-    Addressing problem report
-    <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1149">#1149</A>.</LI>
 <LI>Added setting of touchable history of the origin to <TT>G4Track</TT>.</LI>
-<LI>Added protection against null pointer in <TT>G4TrackStack</TT> and
-    <TT>G4SmartTrackStack</TT>.</LI>
+<LI>Added protection against null pointer in <TT>G4TrackStack</TT> and <TT>G4SmartTrackStack</TT>.</LI>
+<LI>General Particle Source
+    <UL>
+    <LI>Added automatic energy biasing scheme. Users now can bias the energy
+        distribution sampling to a given power-law distribution (index alpha)
+        via the UI command: <TT>/gps/ene/biasAlpha alpha</TT>.
+        Possibility to specify arbitrary energy distribution by supplying the
+        data points in a 2-column (energy in <TT>MeV</TT> and flux) ASCII file,
+        via the UI command: <TT>/gps/hist/file [your_file_name]</TT>.</LI>
+    <LI>Bug fix in the Spline interpolation implementation.</LI>
+    <LI>Bug fix in the logarithm interpolation implementation (alpha = -1 case).</LI>
+    <LI>Added few accessors methods and implemented concrete destructor for
+        <TT>G4SPSEneDistribution</TT>. Addressing problem report
+        <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1149">#1149</A>.</LI>
+    </UL></LI>
 </UL>
 
 <A NAME="gen-notes">
