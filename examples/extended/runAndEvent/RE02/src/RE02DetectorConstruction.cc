@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: RE02DetectorConstruction.cc,v 1.4 2010-11-08 22:32:25 asaim Exp $
+// $Id: RE02DetectorConstruction.cc,v 1.5 2010-12-07 15:17:13 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  
@@ -357,7 +357,7 @@ RE02DetectorConstruction::~RE02DetectorConstruction()
   //  100 keV  to   1 MeV,        gammaSurfCurr002
   //    1 MeV  to  10 MeV.        gammaSurfCurr003
   //
-  char name[16];
+  char name[17];
   for ( G4int i = 0; i < 4; i++){
       std::sprintf(name,"gammaSurfCurr%03d",i);
       G4String psgName(name);
