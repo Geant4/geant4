@@ -24,60 +24,52 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveSplitableHadron.hh,v 1.7 2010-12-07 10:42:40 vuzhinsk Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
+// $Id: G4FTFAnnihilation.hh,v 1.1 2010-12-07 10:42:40 vuzhinsk Exp $
 
-#ifndef G4DiffractiveSplitableHadron_h
-#define G4DiffractiveSplitableHadron_h 1
-
+#ifndef G4FTFAnnihilation_h
+#define G4FTFAnnihilation_h 1
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
-//      ---------------- G4DiffractiveSplitableHadron----------------
-//             by Gunter Folger, August 1998.
-//       class splitting an interacting particle. Used by FTF String Model.
+//      ---------------- G4FTFAnnihilation       --------------
+//             by Vladimir Uzhinsky, November 2010.
+//          Annihilation used by Fritiof (FTF) model
+//	          Takes a projectile and a target
+//	        Produces strings (excited hadrons)
 // ------------------------------------------------------------
 
-#include "G4VSplitableHadron.hh"
-#include "G4Nucleon.hh"
-#include "G4Parton.hh"
+#include "globals.hh"
+class G4VSplitableHadron;
+class G4ExcitedString;
+#include "G4FTFParameters.hh"
+#include "G4ThreeVector.hh"
 
-class G4DiffractiveSplitableHadron : public G4VSplitableHadron
+class G4FTFAnnihilation 
 {
 
-public:
+  public:
 
-	G4DiffractiveSplitableHadron(const G4ReactionProduct & aPrimary);
-	G4DiffractiveSplitableHadron(const G4Nucleon & aNucleon);
-	G4DiffractiveSplitableHadron(const G4VKineticNucleon * aNucleon);
-	~G4DiffractiveSplitableHadron();
+      G4FTFAnnihilation();
+      virtual ~G4FTFAnnihilation();
 
+      virtual G4bool         Annihilate (G4VSplitableHadron *aPartner, 
+                                         G4VSplitableHadron * bPartner,
+                                         G4VSplitableHadron *& AdditionalString,
+                                         G4FTFParameters *theParameters) const;
 
-	int operator==(const G4DiffractiveSplitableHadron &right) const;
-	int operator!=(const G4DiffractiveSplitableHadron &right) const;
+  private:
 
+      G4FTFAnnihilation(const G4FTFAnnihilation &right);
+      
+      G4ThreeVector GaussianPt(G4double  AveragePt2, G4double maxPtSquare) const;
+      G4double ChooseX(G4double Alpha, G4double Beta) const;
 
-	void SplitUp();
-	G4Parton * GetNextParton() ;
-	G4Parton * GetNextAntiParton();
+      void UnpackBaryon(G4int IdPDG, G4int &Q1, G4int &Q2, G4int &Q3) const;
 
-        void SetFirstParton(G4int PDGcode);  // Uzhi 24.11.10
-        void SetSecondParton(G4int PDGcode); // Uzhi 24.11.10
-
-//private:    // Uzhi 29.11.2010
-	G4DiffractiveSplitableHadron();
-	G4DiffractiveSplitableHadron(const G4DiffractiveSplitableHadron &right);
-	const G4DiffractiveSplitableHadron & operator=(const G4DiffractiveSplitableHadron &right);
-
-//implementation
-	G4int Diquark(G4int aquark,G4int bquark,G4int Spin) const; // to splitable hadron
-	void ChooseStringEnds(G4int PDGcode,G4int * aEnd, G4int * bEnd) const; // to splitable hadron
-
-private:
-	G4Parton *Parton[2];
-	G4int    PartonIndex; 
+      const G4FTFAnnihilation & operator=(const G4FTFAnnihilation &right);
+      int operator==(const G4FTFAnnihilation &right) const;
+      int operator!=(const G4FTFAnnihilation &right) const;
 
 };
 
-#endif	
+#endif

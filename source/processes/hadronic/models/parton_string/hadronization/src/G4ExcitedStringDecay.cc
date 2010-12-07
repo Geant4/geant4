@@ -74,6 +74,8 @@ G4KineticTrackVector *G4ExcitedStringDecay::FragmentStrings
 				(const G4ExcitedStringVector * theStrings)
 {
   G4LorentzVector KTsum(0.,0.,0.,0.);
+
+//G4cout<<"theStrings->size() "<<theStrings->size()<<G4endl;
   for ( unsigned int astring=0; astring < theStrings->size(); astring++)
   {
 	KTsum+= theStrings->operator[](astring)->Get4Momentum();
@@ -89,22 +91,25 @@ G4KineticTrackVector *G4ExcitedStringDecay::FragmentStrings
   G4int attempts(0);
   G4bool success=false;
   do {
-
+//G4cout<<"Check of momentum at string fragmentations. New try."<<G4endl;
 	std::for_each(theResult->begin() , theResult->end() , DeleteKineticTrack());
 	theResult->clear();
 
 	attempts++;
+//G4cout<<G4endl<<"attempts "<<attempts<<G4endl;
 	G4LorentzVector KTsecondaries(0.,0.,0.,0.);
 	G4bool NeedEnergyCorrector=false;
 
 	for ( unsigned int astring=0; astring < theStrings->size(); astring++)
 	{
-//G4cout<<G4endl<<"String No "<<astring+1<<" "<<theStrings->operator[](astring)->Get4Momentum().mag()<<G4endl;
+//G4cout<<"String No "<<astring+1<<" "<<theStrings->operator[](astring)->Get4Momentum().mag()<<G4endl;
+//G4cout<<"          "<<astring+1<<" "<<theStrings->operator[](astring)->GetRightParton()->GetPDGcode()<<" "<<theStrings->operator[](astring)->GetLeftParton()->GetPDGcode()<<G4endl;
 
           G4KineticTrackVector * generatedKineticTracks = NULL;
   
 	  if ( theStrings->operator[](astring)->IsExcited() )
 	  {
+//G4cout<<"Fragment String"<<G4endl;
   	     generatedKineticTracks=FragmentString(*theStrings->operator[](astring));
 	  } else {
 	     generatedKineticTracks = new G4KineticTrackVector;
@@ -139,8 +144,9 @@ G4KineticTrackVector *G4ExcitedStringDecay::FragmentStrings
 //--DEBUG  G4cout << "Strings/secs total  4 momentum " << KTsum << " " <<KTsecondaries << G4endl;
 
         success=true;
+//G4cout<<"success "<<success<<G4endl;
 	if ( NeedEnergyCorrector ) success=EnergyAndMomentumCorrector(theResult, KTsum);
-
+//G4cout<<"success after Ecorr "<<success<<G4endl;
   } while(!success && (attempts < 100));
 
 #ifdef debug_ExcitedStringDecay

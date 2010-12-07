@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParticipants.cc,v 1.17 2010-09-20 15:50:46 vuzhinsk Exp $
+// $Id: G4FTFParticipants.cc,v 1.18 2010-12-07 10:42:40 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -43,6 +43,7 @@
 #include "G4VSplitableHadron.hh"
 #include "Randomize.hh"
 #include <utility>                                        // Uzhi 29.03.08
+#include "G4ios.hh"
 
 // Class G4FTFParticipants 
 
@@ -72,8 +73,7 @@ G4FTFParticipants::~G4FTFParticipants()
 
 void G4FTFParticipants::GetList(const G4ReactionProduct  &thePrimary,
                                       G4FTFParameters    *theParameters) 
-{
-    
+{ 
     StartLoop();  // reset Loop over Interactions
 
     for(unsigned int i=0; i<theInteractions.size(); i++) delete theInteractions[i];
@@ -82,7 +82,7 @@ void G4FTFParticipants::GetList(const G4ReactionProduct  &thePrimary,
     G4double deltaxy=2 * fermi;                       // Extra nuclear radius
 
     G4VSplitableHadron * primarySplitable=new G4DiffractiveSplitableHadron(thePrimary);
-
+//G4cout<<"Prim in Part "<<primarySplitable->Get4Momentum()<<G4endl;
     G4double xyradius;                          
     xyradius =theNucleus->GetOuterRadius() + deltaxy; // Impact parameter sampling
                                                       // radius
@@ -117,6 +117,8 @@ void G4FTFParticipants::GetList(const G4ReactionProduct  &thePrimary,
 	   	    targetSplitable= new G4DiffractiveSplitableHadron(*nucleon);
 	   	    nucleon->Hit(targetSplitable);
 	   	    nucleon->SetBindingEnergy(3.*nucleon->GetBindingEnergy()); 
+//G4cout<<" Part nucl "<<nucleon->Get4Momentum()<<G4endl;
+//G4cout<<" Part nucl "<<G4endl;
                     targetSplitable->SetStatus(1);     // It takes part in the interaction
 	   	}
 	   	G4InteractionContent * aInteraction = 
