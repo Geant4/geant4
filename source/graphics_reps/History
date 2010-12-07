@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.142 2010-12-06 14:39:28 allison Exp $
+cvs log $Id: History,v 1.143 2010-12-07 09:36:59 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+7th December 2010  John Allison
+- Fixed Coverity warnings.
 
 6th December 2010  John Allison
 - G4Visible.cc::operator!=: protect zero vis attributes pointers.
