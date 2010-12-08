@@ -3,7 +3,7 @@
 #
 # 21st September 2010 Ben Morgan
 #
-# $Id: CMakeLists.txt,v 1.5 2010-12-02 13:03:04 bmorgan Exp $
+# $Id: CMakeLists.txt,v 1.6 2010-12-08 16:36:34 bmorgan Exp $
 # GEANT4 Tag $Name: not supported by cvs2svn $
 #
 
@@ -39,9 +39,9 @@ project(geant4)
 # Define the version of the project - can be used to generate sources,
 # but just used for CPack the the moment
 #
-set(${PROJECT_NAME}_VERSION "9.3.0")
+set(${PROJECT_NAME}_VERSION "9.4.0")
 set(${PROJECT_NAME}_VERSION_MAJOR "9")
-set(${PROJECT_NAME}_VERSION_MINOR "3")
+set(${PROJECT_NAME}_VERSION_MINOR "4")
 set(${PROJECT_NAME}_VERSION_PATCH "0")
 
 #------------------------------------------------------------------------------
