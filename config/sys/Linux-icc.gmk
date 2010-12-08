@@ -24,6 +24,7 @@ ifeq ($(G4SYSTEM),Linux-icc)
     CXXFLAGS  += -fPIC
     FCFLAGS   += -fPIC
     CCFLAGS   += -fPIC
+    LDFLAGS   += -i-dynamic
   endif
   G4RUNPATHOPTION := -Wl,-rpath -Wl,
   CC := icc
