@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.398 2010-11-25 15:42:18 gcosmo Exp $
+cvs log $Id: History,v 1.399 2010-12-08 13:46:18 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+8th December 2010  Gunter Folger   (config-V09-03-19)
+- Updated linux-icc to suppress warning when linking to shared libs
 
 25th November 2010  Gabriele Cosmo (config-V09-03-18)
 - Updated internal Configure scripts for adding new data module G4PIIDATA.
