@@ -503,7 +503,7 @@ examples                                         examples-V09-04-00
   o New application for Monte Carlo simulation of charge exchange.
 - advanced/composite_calorimeter (ccal-V09-03-02)
   o Introduced G4UIExecutive. Improved comments.
-- advanced/eRosita (eRosita-V09-03-08)
+- advanced/eRosita (eRosita-V09-03-09)
   o New example simulation the eROSITA X-ray telescope simplified setup
     for instrumental background simulations and fluorescence measurements.
 - advanced/gammaray_telescope (gammaraytel-V09-03-03)
@@ -602,8 +602,10 @@ examples                                         examples-V09-04-00
   o Added reation of distribution output file in Histomanager.
 - extended/electromagnetic/TestEm9 (testem9-V09-03-05)
   o Added applyCuts option to macro files.
-- extended/electromagnetic/TestEm11 (testem11-V09-03-04)
-- extended/electromagnetic/TestEm12 (testem12-V09-03-04)
+- extended/electromagnetic/TestEm11 (testem11-V09-03-05)
+- extended/electromagnetic/TestEm12 (testem12-V09-03-05)
+  o Added EGSnrc data in 'sandia' subdirectory.
+  o Fixed AIDA file option.
 - extended/electromagnetic/TestEm14 (testem14-V09-03-05)
 - extended/electromagnetic/TestEm15 (testem15-V09-03-03)
 - extended/electromagnetic/TestEm16 (testem16-V09-03-04)
@@ -686,7 +688,9 @@ examples                                         examples-V09-04-00
   o Added a protection against empty stack in RE01StackingAction.
   o Fixed warning messages in RE01Trajectory class.
   o Introduced G4UIExecutive.
-- extended/runAndEvent/RE02 (exampleRE02-V09-03-04)
+- extended/runAndEvent/RE02 (exampleRE02-V09-03-05)
+  o Bug fix in RE02DetectorConstruction, correcting size of array and
+    fixing crash on Windows.
   o Fixed warning messages.
   o Introduced G4UIExecutive.
 - extended/runAndEvent/RE03 (exampleRE03-V09-03-01)
