@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroNuclearCrossSection.cc,v 1.31 2010-11-11 01:51:54 dennis Exp $
+// $Id: G4ElectroNuclearCrossSection.cc,v 1.32 2010-12-09 08:45:32 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -2417,7 +2417,7 @@ G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy()
   static const G4double mel=0.5109989;       // Mass of electron in MeV
   static const G4double lmel=std::log(mel);  // Log of electron mass
   G4double phLE=0.;                   // Prototype of the std::log(nu=E_gamma)
-  G4double Y[nE] = {0.0};             // Prepare the array for randomization
+  G4double Y[nE];                     // Prepare the array for randomization
 
 #ifdef debug
   G4cout << "G4ElectroNuclearCrossSection::GetEguPhotE:B="
