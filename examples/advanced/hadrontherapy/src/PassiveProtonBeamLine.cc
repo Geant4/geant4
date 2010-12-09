@@ -1544,12 +1544,20 @@ void PassiveProtonBeamLine::SetInnerRadiusFinalCollimator(G4double value)
 /////////////////////////////////////////////////////////////////////////////
 void PassiveProtonBeamLine::SetRSMaterial(G4String materialChoice)
 {
-  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);
- 
-  if (pttoMaterial) 
+    if (G4Material* pttoMaterial = G4NistManager::Instance()->FindOrBuildMaterial(materialChoice, false) )
     {
-      rangeShifterMaterial  = pttoMaterial;
-      logicRangeShifterBox -> SetMaterial(pttoMaterial);  
+	if (pttoMaterial) 
+	{
+	    rangeShifterMaterial  = pttoMaterial;
+	    logicRangeShifterBox -> SetMaterial(pttoMaterial);  
+	    G4cout << "The material of the Range Shifter has been changed to " << materialChoice << G4endl;
+	}
+    }
+    else
+    {
+	G4cout << "WARNING: material \"" << materialChoice << "\" doesn't exist in NIST elements/materials"
+	    " table [located in $G4INSTALL/source/materials/src/G4NistMaterialBuilder.cc]" << G4endl; 
+	G4cout << "Use command \"/parameter/nist\" to see full materials list!" << G4endl; 
     }
 }
 

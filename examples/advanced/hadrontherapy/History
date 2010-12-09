@@ -8,6 +8,11 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
              History file of the Hadrontherapy application
          ====================================================
 
+09.12.2010 S.E.Mazzaglia; Tag: hadrontherapy-V09-03-17
+           - Changed materials definition (by macro command) for Range Shifter with the NIST one. 
+	     The same macro /beamLine/RangeShifter/RSMat must be used, but with 
+	     NIST material name as parameter.
+
 26.11.2010 G.A.P.Cirrone; Tag: hadrontherapy-V09-03-16
 	   - General code review
 

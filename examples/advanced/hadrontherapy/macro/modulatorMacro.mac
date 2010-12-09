@@ -83,7 +83,7 @@
 # THE FOLLOWIG PARAMETERS
 # SETTING FOR THE RANGE SHIFTER
 
-/beamLine/RangeShifter/RSMat Air
+/beamLine/RangeShifter/RSMat G4_AIR
 /beamLine/RangeShifter/thickness 1 cm
 
 
