@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+ 9 December 2010 Dennis Wright (hadr-cross-V09-03-21)
+-----------------------------------------------------
+- G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy() : remove
+  initialization of array Y[]. This forced expensive re-calculation 
+  at each call.
+ 
 26 November 2010 Vladimir Ivanchenko (hadr-cross-V09-03-20)
 ----------------------------------------------------------
 - G4BGGPionElasticXS, G4BGGNucleonElasticXS,G4BGGNucleonInelasticXS 
