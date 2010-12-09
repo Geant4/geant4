@@ -31,7 +31,7 @@ cmake                                            cmake-V09-03-01
 - Added generation of geant4-config script.
 - Added simple installation guide for using CMake.
 
-config                                           config-V09-03-18
+config                                           config-V09-03-19
 ------
 - Updated scripts for Configure, to allow for parallel builds. Added
   new data module G4PIIDATA and new versions of G4RadioactiveDecay
@@ -39,6 +39,7 @@ config                                           config-V09-03-18
 - Added electromagnetic/pii module to binmake.gmk; cleanup of obsolete
   include paths.
 - Fixed typo in OGLLIBS definition for MacOSX Leopard in Darwin-g++.gmk.
+- Fixed linking options for shared libraries in Linux-icc.gmk.
 - Replaced use of strcat() with more secure strncat() in liblist.c, and
   protected uses of strcpy().
 - Restore positional qualifier for LDFLAGS in architecture.gmk to allow for
@@ -488,6 +489,10 @@ data
 - G4PII-1.2:
   o New data set of shell ionisation cross-sections for precise impact
     ionisation simulation.
+- G4PhotonEvaporation-2.1:
+  o Added README document.
+- G4RadioactiveDecay-3.3:
+  o Added README document.
 
 examples                                         examples-V09-04-00
 --------
@@ -626,7 +631,7 @@ examples                                         examples-V09-04-00
   o Migrated to use particle-based multiple-scattering.
 - extended/eventgenerator/pythia/decayer6 (p6decayer-V09-03-02)
   o Migrated to use particle-based multiple-scattering.
-- extended/exoticphysics/monopole (monopole-V09-03-07)
+- extended/exoticphysics/monopole (monopole-V09-03-08)
   o Use most recent version of monopole transportation, delta-electron
     production enabled, non-integer monopole charge allowed.
   o Fixed AIDA file option.

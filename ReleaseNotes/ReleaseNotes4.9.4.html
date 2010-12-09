@@ -389,6 +389,7 @@ please refer to the corresponding History files provided in most packages):
       <TT>WIN32-VC</TT>.</LI>
   <LI><TT>Darwin-g++.gmk</TT>: corrected and simplified Qt setup for use of
       Native OpenGL.</LI>
+  <LI>Fixed linking options for shared libraries in <TT>Linux-icc.gmk</TT>.</LI>
   <LI>Corrected definition of <TT>LDFLAGS</TT> in <TT>binmake.gmk</TT> to
       avoid occasional fatal clashes with settings in user's environment.
       Added include paths to new modules and cleaned obsolete paths.</LI>
@@ -1652,11 +1653,13 @@ please refer to the corresponding History files provided in most packages):
         trajectory or where the trajectory made a sharp change of direction.
         Use of <TT>i_mode</TT> is now trapped and a warning gets printed.</LI>
     <LI>Changed order of flags to follow <TT>G4UIExecutive</TT>.</LI>
+    <LI>Moved all non-fatal output messages from <TT>G4cerr</TT> to <TT>G4cout</TT>
+        for DAWN, VRML and gMocren drivers.</LI>
     <LI><TT>G4VisManager, G4VisExecutive</TT>: introduced optional verbosity
         string argument in constructor; made 'fVerbosity' and
         <TT>GetVerbosity()</TT> static.</LI>
     <LI>Added virtual destructors to fix compilation warnings.</LI>
-    <LI>Added <TT>/vis/viewer/set/defaultColour</TT> and defaultTextColour
+    <LI>Added <TT>/vis/viewer/set/defaultColour</TT> and <TT>defaultTextColour</TT>
         commands.</LI>
     <LI>Fixed <TT>G4VisExecutive</TT> inlined constructor.</LI>
     <LI>Fixed some Coverity reports.</LI>
@@ -1684,25 +1687,24 @@ please refer to the corresponding History files provided in most packages):
     </UL></LI>
 <LI><B>OpenGL</B>
     <UL>
-    <LI>Some improvements with auto rotation mode.</LI>
     <LI><TT>G4OpenGLQtViewer</TT>: better inclusion of new tabs in UI part.
         Many improvements to OpenGL Qt.</LI>
     <LI>Speed improvements for polymarkers (e.g., trajectories).</LI>
+    <LI>Some improvements with auto rotation mode.</LI>
     <LI>Corrected strdup usage in <TT>G4OpenGLViewer</TT>.</LI>
     <LI>Use generic section and cutaway algorithm.</LI>
     <LI>Added protection against multiple repaint call, and protection against
         resizeGl with bad values.</LI>
     <LI>Improved kernel visit trigger.</LI>
     <LI>Time-slices fade to background colour.</LI>
-    <LI>Many improvements to Qt.</LI>
     <LI>Added verbosity control.</LI>
     <LI>Tidied display list limit.</LI>
     </UL></LI>
 <LI><B>OpenInventor</B>
     <UL>
     <LI>Added protection against repeated initialisation.</LI>
-    <LI>Improved kernel visit trigger.</LI>
     <LI>Protected output with <TT>G4VisManager::confirmations</TT>.</LI>
+    <LI>Improved kernel visit trigger.</LI>
     </UL></LI>
 <LI><B>RayTracer</B>
     <UL>
