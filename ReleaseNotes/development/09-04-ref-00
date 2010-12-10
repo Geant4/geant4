@@ -282,7 +282,7 @@ processes/electromagnetic/xrays                  xrays-V09-03-06
 
 processes/hadronic                               hadr-V09-03-01
 ------------------
-- cross_sections (hadr-cross-V09-03-20)
+- cross_sections (hadr-cross-V09-03-21)
   o Added G4CrossSectionInelastic and G4CrossSectionElastic, wrappers for
     components.
   o New class G4ComponentAntiNuclNuclearXS for the calculation of the total
