@@ -498,9 +498,9 @@ examples                                         examples-V09-04-00
 --------
 - Updated reference outputs.
 - Removed example ExDiane.
-- air_shower (air_shower-V09-03-01)
+- advanced/air_shower (air_shower-V09-03-01)
   o Introduced G4UIExecutive.
-- amsEcal (amsEcal-V09-03-02)
+- advanced/amsEcal (amsEcal-V09-03-02)
   o Fixed AIDA file option.
 - advanced/brachytherapy (brachy-V09-03-05)
   o General code review. Cleaned up use of G4UIExecutive.
