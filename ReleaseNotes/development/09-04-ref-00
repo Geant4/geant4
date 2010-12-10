@@ -626,11 +626,10 @@ examples                                         examples-V09-04-00
     and to import energy spectrum in ascii file.
   o Changed analysis macro files; added plotfiles.py and plotall.py scripts
     afor plotting the results.
-- extended/eventgenerator/HepMC/MCTruth (mctruthex-V09-03-00)
-  o Updated to use HepMC-2.06.03; reviewd use of 4-vectors.
+- extended/eventgenerator/HepMC (exHepMC-V09-03-03)
+  o Updated examples to use HepMC-2.06.03.
   o Migrated to use particle-based multiple-scattering.
-- extended/eventgenerator/pythia/decayer6 (p6decayer-V09-03-02)
-  o Migrated to use particle-based multiple-scattering.
+  o Corrected use of 4-vectors in MCTruth example.
 - extended/exoticphysics/monopole (monopole-V09-03-08)
   o Use most recent version of monopole transportation, delta-electron
     production enabled, non-integer monopole charge allowed.
