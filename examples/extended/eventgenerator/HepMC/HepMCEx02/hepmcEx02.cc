@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: hepmcEx02.cc,v 1.7 2010-11-02 15:10:13 allison Exp $
+// $Id: hepmcEx02.cc,v 1.8 2010-12-10 06:22:25 kmura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,7 +36,7 @@
 #include "G4UImanager.hh"
 
 #include "H02DetectorConstruction.hh"
-#include "QGSP.hh"
+#include "QGSP_BERT.hh"
 #include "H02PrimaryGeneratorAction.hh"
 #include "H02EventAction.hh"
 #include "H02SteppingAction.hh"
@@ -58,7 +58,7 @@ int main(int argc, char** argv)
   G4VUserDetectorConstruction* detector = new H02DetectorConstruction;
   runManager-> SetUserInitialization(detector);
   //
-  G4VUserPhysicsList* physics = new QGSP;
+  G4VUserPhysicsList* physics = new QGSP_BERT;
   runManager-> SetUserInitialization(physics);
 
   runManager-> Initialize();

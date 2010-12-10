@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2010-11-02 15:10:13 allison Exp $
+$Id: History,v 1.11 2010-12-10 06:22:25 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+December 10th 2010 K.Murakami
+- change physics list from GGSP to QGSP_BERT
+- update outputs
+- update data/ directory for latest HEPMC version
 
 Nov 2, 2010 J.Allison
 - hepmcEx02.cc: Removed #include "G4UIterminal.hh" and #include "G4UItcsh.hh".
