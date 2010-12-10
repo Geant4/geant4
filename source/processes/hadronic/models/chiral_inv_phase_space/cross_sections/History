@@ -12,6 +12,11 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+10-Dec-2010 M.Kosov                             (hadr-chips-cs-V09-03-08)
+-------------------------------------------------------------------------
+Unlock inelastic h+p cross-sections below 1 GeV (G4Q...NuclearCrossSection)
+K+ + p low energy inelastic CS blocking below 600 MeV/c
+
 3-Sep-2010 G.Cosmo                              (hadr-chips-cs-V09-03-07)
 -------------------------------------------------------------------------
 Simplified initialisation of pairs in G4QNeutronCaptureRatio,
