@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2010-06-06 04:51:10 perl Exp $
+$Id: History,v 1.22 2010-12-10 06:23:16 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+December 10th 2010 K.Murakami (exHepMC-V09-03-03)
+- HepMCEx01: update for latest HepMC version (2.06.03)
+- HepMCEx01/02 : use QGSP_BERT physics list
+                 update outputs
+                 update data/ directory for latest HepMC
 
 June 4, 2010 J. Perl (exHepMC-V09-03-02)
 
