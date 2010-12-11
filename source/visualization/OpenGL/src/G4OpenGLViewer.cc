@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.63 2010-10-05 15:45:19 lgarnier Exp $
+// $Id: G4OpenGLViewer.cc,v 1.64 2010-12-11 17:04:07 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,6 +85,8 @@ fPrintSizeX(-1),
 fPrintSizeY(-1),
 fPrintFilename ("G4OpenGL"),
 fPrintFilenameIndex(0),
+fWinSize_x(0),
+fWinSize_y(0),
 fPointSize (0),
 fSizeHasChanged(0)
 {
@@ -102,7 +104,10 @@ fSizeHasChanged(0)
 
 }
 
-G4OpenGLViewer::~G4OpenGLViewer () {}
+G4OpenGLViewer::~G4OpenGLViewer ()
+{
+  delete fGL2PSAction;
+}
 
 void G4OpenGLViewer::InitializeGLView () 
 {

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.56 2010-11-10 17:57:16 allison Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.57 2010-12-11 17:04:07 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -77,7 +77,7 @@ int G4OpenGLXViewer::dblBuf_RGBA[13] =
   None };
 
 #define NewString(str) \
- ((str) != NULL ? (strcpy((char*)malloc((unsigned)strlen(str) + 1), str)) : (char*)NULL)
+  ((str) != 0 ? (strncpy((char*)malloc((unsigned)strlen(str) + 1), str, (unsigned)strlen(str) + 1)) : (char*)0)
 
 #define USE_DEFAULT_COLORMAP 1
 #define USE_STANDARD_COLORMAP 0
@@ -256,7 +256,7 @@ void G4OpenGLXViewer::CreateMainWindow () {
   }
   if (G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "Window name: " << fName << G4endl;
-  strncpy (charViewName, fName, 100);
+  strncpy (charViewName, fName, 99); charViewName[99] = '\0';
   char *window_name = charViewName;
   char *icon_name = charViewName;
   //char tmpatom[] = "XA_WM_NORMAL_HINTS"; 
@@ -350,6 +350,12 @@ vi_stored (0),
 vi (0),
 cmap (0)
 {
+  // To satisfy Coverity
+  xwa.visual = 0;
+  iconName.value = 0;
+  xwa.screen = 0;
+  windowName.value = 0;
+
   GetXConnection ();
   if (fViewId < 0) return;
   
