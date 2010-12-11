@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.84 2010-11-06 18:34:26 allison Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.85 2010-12-11 16:50:10 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -65,8 +65,12 @@
 #include "G4IdentityTrajectoryFilter.hh"
 #include "G4TransportationManager.hh"
 #include "G4PropagatorInField.hh"
+#include "G4Trajectory.hh"
+#include "G4TrajectoryPoint.hh"
 #include "G4RichTrajectory.hh"
 #include "G4RichTrajectoryPoint.hh"
+#include "G4SmoothTrajectory.hh"
+#include "G4SmoothTrajectoryPoint.hh"
 #include "G4AttDef.hh"
 #include "G4ios.hh"
 #include <sstream>
@@ -1458,14 +1462,21 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
   }
   UImanager->SetVerboseLevel(keepVerbose);
 
-  if (rich) {
-    if (verbosity >= G4VisManager::warnings) {
-      G4cout <<
-	"Attributes available for modeling and filtering with"
-	"\n\"/vis/modeling/trajectories/create/drawByAttribute\" and"
-	"\n\"/vis/filtering/trajectories/create/attributeFilter\" commands:\n"
-	     << G4RichTrajectory().GetAttDefs()
+  if (verbosity >= G4VisManager::warnings) {
+    G4cout <<
+      "Attributes available for modeling and filtering with"
+      "\n\"/vis/modeling/trajectories/create/drawByAttribute\" and"
+      "\n\"/vis/filtering/trajectories/create/attributeFilter\" commands:"
+	   << G4endl;
+    if (rich) {
+      G4cout << G4RichTrajectory().GetAttDefs()
 	     << G4RichTrajectoryPoint().GetAttDefs();
+    } else if (smooth) {
+      G4cout << G4SmoothTrajectory().GetAttDefs()
+	     << G4SmoothTrajectoryPoint().GetAttDefs();
+    } else {
+      G4cout << G4Trajectory().GetAttDefs()
+	     << G4TrajectoryPoint().GetAttDefs();
     }
   }
 
