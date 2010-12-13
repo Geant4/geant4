@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 19:02:10 bmorgan Exp $
+# $Id: sources.cmake,v 1.2 2010-12-13 12:08:19 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -64,7 +64,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_HE
         G4HEOmegaMinusInelastic.hh
         G4HEPionMinusInelastic.hh
         G4HEPionPlusInelastic.hh
-        G4HEPlot.hh
         G4HEProtonInelastic.hh
         G4HESigmaMinusInelastic.hh
         G4HESigmaPlusInelastic.hh
@@ -94,7 +93,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_HE
         G4HEOmegaMinusInelastic.cc
         G4HEPionMinusInelastic.cc
         G4HEPionPlusInelastic.cc
-        G4HEPlot.cc
         G4HEProtonInelastic.cc
         G4HESigmaMinusInelastic.cc
         G4HESigmaPlusInelastic.cc
