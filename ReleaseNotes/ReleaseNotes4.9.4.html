@@ -129,13 +129,13 @@ recompilation) and a recompilation of user applications is required.
 <B>Standard Electromagnetic physics</B>
 <P> </P>
 <UL>
-<LI>Changed to use WentzelVI model of multiple scattering for muons, 
-    and refined Urban93 model for electrons.</LI> 
 <LI>Obsolete classes <TT>G4MultipleScattering, G4UrbanMscModel</TT> and
     <TT>G4UrbanMscModel2</TT> are removed in this release; multiple-scattering
     particle-based processes, <TT>G4eMultipleScattering, G4hMultipleScattering</TT>
-    and <TT>G4MuMultipleScattering</TT> are now mandatory; <TT>G4UrbanMscModel93</TT>
-    is now introduced.</LI>
+    and <TT>G4MuMultipleScattering</TT> are now mandatory;
+<LI>Default multiple scattering models are <TT>G4UrbanMscModel93</TT>
+    for electrons and positron, <TT>G4WentzelVIModel</TT> for muons, 
+    and <TT>G4UrbanMscModel90</TT> remains for other particles.</LI>
 <LI></LI> 
 </UL>
 
@@ -240,13 +240,19 @@ Please see the corresponding details in
 
 <B>Standard Electromagnetic physics</B>
 <UL>
-<LI>New model for ionisation of negative-charge projectiles (including anti-ions) 
-using ICRU'73 data for oscillator strengths.</LI> 
+<LI>New model for low-energy ionisation of negative-charge projectiles (including anti-ions) 
+using ICRU'73 data for oscillator strengths <TT>G4ICRU73QOModel</TT> is used in 
+<TT>G4hIonisation</TT> process class by default.</LI> 
 <LI>Improvement of the modeling of fluctuations in energy deposition, relevant 
 deposit in gasses and silicon.  Increases stability when step size changes.</LI> 
-<LI> </LI> 
-<LI> </LI> 
-<LI> </LI> 
+<LI>The new model of single scattering and NIEL for ions G4IonCoulombScatteringModel is available.</LI> 
+<LI>New ionisation models <TT>G4BraggIonGasModel</TT>, <TT>G4BetheBlochIonGasModel</TT> 
+are available for simulation of ion
+transport in low density media, for example, in vacuum; 
+effective charge approach is not used; initial ion charge
+is not changed by these models.</LI> 
+<LI>The default angular distribution of gamma in the bremsstrahlung process can be substituted by alternative
+model in Physics List.</LI> 
 </UL>
 
 <B>Low Energy Electromagnetic physics</B>
@@ -296,6 +302,8 @@ deposit in gasses and silicon.  Increases stability when step size changes.</LI>
 <B>Physics Lists</B>
 <UL>
 <LI>!!!!!!!! FILL IN HERE IF REQUIRED !!!!!!! </LI> 
+<LI>G4EmConfigurator class to define alternative models per particle type, energy range, and detector region is
+established and proposed to be used for configuration of EM physics.</LI>
 </UL>
 
 <B>Visualization, Graphical Representations & Interfaces</B>
@@ -589,7 +597,7 @@ please refer to the corresponding History files provided in most packages):
     <LI><TT>G4MuPairProductionModel</TT>: added sampling recoil of a primary
         particle.</LI>
     <LI><TT>G4MuIonisation</TT>: use <TT>G4ICRU73QOModel</TT> for <TT>mu-</TT>
-        for <TT>E< 0.2 MeV</TT>.</LI>
+        for <TT>E< 0.2 MeV</TT> (<TT>G4BraggModel</TT> in past).</LI>
     <LI>Fixed defects reported by Coverity tool, mainly related to
         initialization of static data.</LI>
     </UL></LI>
@@ -611,38 +619,39 @@ please refer to the corresponding History files provided in most packages):
         <UL>
         <LI><TT>G4GoudsmitSaundersonMscModel</TT>: fixed problems of small
             angle theta distributions. Improved numerical stability of
-            computations for small angles by direct cross-section calculation,
-            now inverse of the inverse angular sampling without large angle
-            rejection method longitudinal displacement is computed exactly
-            from <TT>z</TT>.</LI>
+            computations for small angles by direct cross-section calculation;
+            the inverse angular sampling
+            is performed without large angle rejection method.</LI>
+        <LI><TT>G4GoudsmitSaundersonTable</TT>: improved numerical stability by minimum 
+            of used arrays in computation
+            within the dichotomy finding method; optimized code to 
+            improve speed by addition extra class members.</LI>
         <LI><TT>G4eMultipleScattering, G4hMultipleScattering</TT>: improved
-            printout at initialisation. </LI>
+            printout at initialisation; removed old unused
+            header of <TT>G4UrbanMscModel</TT>. </LI>
         <LI><TT>G4UrbanMscModel93</TT>: added randomization of step limit for
-            the first step in any volume for option "UseDistanceTo Boundary".</LI>
-        <LI><TT>G4WentzelVIModel</TT>: added protections; added
-            <TT>DefineMaterial()</TT> call to cross-section class.
-            Optimized method of step limitation.
-            Added usage of geometry factor and the option
-            'UseDistanceToBoundary'.</LI>
+            the first step in any volume for option <TT>UseDistanceToBoundary</TT>.</LI>
+        <LI><TT>G4WentzelVIModel</TT>: added numerical protections; added
+            <TT>DefineMaterial()</TT> call to the cross-section class;
+            optimized method of step limitation; 
+            added usage of geometry factor and the option
+            <TT>UseDistanceToBoundary<TT>.</LI>
         <LI><TT>G4WentzelOKandVIxSection</TT>: new class to compute cross
-            sections and sample scattering angle. Modified <TT>G4WentzelVIModel,
+            sections and sample scattering angle; modified <TT>G4WentzelVIModel,
             G4eCoulombScatteringModel, G4CoulombScatteringModel</TT> to
-            use this new class.</LI>
+            use this new class; added momentum
+            dependent limit of scattering angle between single and multiple scattering 
+            which allows to use coherently <TT>G4WentzelVIModel</TT>
+            with optical model of hadron scattering.</LI>
         <LI><TT>G4eCoulombScatteringModel</TT>: fixed computation of nuclear
             recoil.</LI>
-        <LI><TT>G4WentzelVIModel, G4eCoulombScatteringModel</TT>: added momentum
-            dependent limit of scattering angle between single and multiple
-            scattering which allows to use <TT>G4WentzelVIModel</TT> with
-            optical model of hadron scattering.</LI>
-        <LI><TT>G4PairProductionRelModel, G4eBremsstrahlungRelModel</TT>: use
-            general interface to sample polar angular distribution with
-            <TT>G4ModifiedTsai</TT> as default.</LI>
+	<LI><TT>G4IonCoulombCrossSection, G4IonCoulombScatteringModel</TT>: new
+            model of single scattering and NIEL of ions.</LI>
         <LI><TT>G4UrbanMscModel90, G4UrbanMscModel92, G4UrbanMscModel93</TT>:
             added warning messages.</LI>
-        <LI>Removed obsolete models: <TT>G4UrbanMscModel</TT>,
+        <LI>Removed obsolete classes: <TT>G4UrbanMscModel</TT>,
             <TT>G4UrbanMscModel2</TT>, <TT>G4UrbanMscModel71</TT>,
-            <TT>G4MultipleScattering</TT>, <TT>G4ComptonScattering52</TT>,
-            <TT>G4PolarizedComptonScattering</TT>.</LI>
+            <TT>G4MultipleScattering</TT>.</LI>
         </UL></LI>
     <LI>Bremsstrahlung models:
         <UL>
@@ -650,54 +659,46 @@ please refer to the corresponding History files provided in most packages):
             method. Addressing problem report
             <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1115">#1115</A>.</LI>
         <LI><TT>G4eBremsstrahlungModel</TT>: reduced <TT>minThreshold</TT>
-            to <TT>0.1 keV</TT>. Same value as minimum cut for
-            <TT>G4eBremsstrahlungRelModel</TT> and <TT>G4MollerBhabhaModel</TT>.</LI>
+            to <TT>0.1 keV</TT>.</LI>
+	<LI>Added <TT>G4ModifiedTsai</TT> class, moved from 'lowenergy' module.</LI>
+        <LI><TT>G4PairProductionRelModel, G4eBremsstrahlungRelModel</TT>: use
+            general interface to sample polar angular distribution with
+            <TT>G4ModifiedTsai</TT> as default.</LI>
         </UL></LI>
     <LI><TT>G4UniversalFluctuation</TT>: revision of width correction
-        providing better results for thin targets and a good tail.
-        Fixed anomaly at the tail of distribution for thin targets and revised
-        width correction. Improved comments.</LI>
+        providing better results for thin targets and a good tail;
+        fixed anomaly at the tail of distribution for thin targets and revised
+        width correction.</LI>
     <LI>New class <TT>G4UniversalFluctuation93</TT> keeping original version
         as in release 9.3 for <TT>G4UniversalFluctuation</TT>.</LI>
-    <LI><TT>G4GoudsmitSaundersonTable</TT>: improved numerical stability by
-        minimum of used arrays in computation within the dichotomy finding
-        method. Optimized code to improve speed by addition extra class
-        members.</LI>
-    <LI><TT>G4MollerBhabhaModel</TT>: reduced minimum cut value to mean
-        ionisation potential.</LI>
     <LI><TT>G4ASTARStopping, G4PSTARTStopping</TT>: replaced C-arrays with
         <TT>G4PhysicsVector</TT> with Spline interpolation. Reviewed names
-        of materials (<TT>G4_PHOTO_EMULSION, G4_He, G4_NYLON-6-6</TT>).
-        Cleanup in <TT>GetElectronicDEDX()</TT> method in
-        <TT>G4WaterStopping</TT>.</LI>
-    <LI><TT>G4WaterStopping</TT>: fixed bug in index of data for Fe ion.</LI>
+        of materials (<TT>G4_PHOTO_EMULSION, G4_He, G4_NYLON-6-6</TT>).</LI>
+    <LI><TT>G4WaterStopping</TT>: fixed bug in index of data for Fe ion;
+        cleanup in <TT>GetElectronicDEDX()</TT> method.</LI>
     <LI><TT>G4BraggIonGasModel, G4BetheBlochIonGasModel</TT>: new ionisation
         models for low density media.</LI>
-    <LI><TT>G4BraggModel</TT>: above <TT>2 MeV</TT> use ICRU'49 parameterisation
-        for all atoms.</LI>
+    <LI><TT>G4BraggModel</TT>: extended validity range above <TT>2 MeV</TT> 
+        using ICRU'49 parameterisation for comparison purposes.</LI>
+    <LI>New <TT>G4ICRU73QOModel</TT> for low-energy negatively charged 
+         particles applicable from <TT>5 keV</TT> to <TT>15 MeV</TT> for anti-proton.</LI>
     <LI><TT>G4hIonisation</TT>: use new <TT>G4ICRU73QOModel</TT> for negatively
-        charged particles instead of <TT>G4BraggModel</TT>, which used to be
-        applied for positive-charged particles only. This modification
+        charged particles instead of <TT>G4BraggModel</TT>, which now used to be
+        applied for positive-charged particles only; this modification
         provides simulation of Barkas effect at low energies (before the effect
-        was simulated at higher energies in <TT>G4BetheBlochModel</TT>).
-        The high energy limit for the new model is the same as for
+        was simulated at higher energies in <TT>G4BetheBlochModel</TT>);
+        the high energy limit for the new model is the same as for
         <TT>G4BraggModel</TT> (<TT>2 MeV</TT> for protons/anti-protons).</LI>
-    <LI><TT>G4PAIModel, G4PAIPhotonModel</TT>: added printout for the model
-        initialisation.</LI>
     <LI><TT>G4PAIModel, G4PAIySection</TT>: fixed a bug in <TT>G4_Ar</TT>.</LI>
     <LI><TT>G4ionIonisation, G4alphaIonisation</TT>: removed obsolete nuclear
         stopping flag and <TT>Get/Set</TT> methods (nuclear stopping is
         simulated by the dedicated <TT>G4NuclearStopping</TT> process).</LI>
-    <LI>Added <TT>G4ModifiedTsai</TT>, moved from 'lowenergy' module.</LI>
     <LI><TT>G4BetheHeitlerModel, G4PairProductionRelModel</TT>: removed unused
         internal table of cross section.</LI>
-    <LI><TT>G4IonCoulombCrossSection, G4IonCoulombScatteringModel</TT>: new
-        model of single scattering of ions.</LI>
-    <LI>New model <TT>G4ICRU73QOModel</TT> for anti-particles.</LI>
-    <LI><TT>G4ICRU73QOModel</TT>: fine tuning, low limit is reduced from
-        <TT>10 keV</TT> to <TT>5 keV</TT>.</LI>
-    <LI><TT>G4PEEffectFluoModel, G4KleinNishinaModel</TT>: fixed energy
-        balance.</LI>
+    <LI><TT>G4PEEffectFluoModel, G4KleinNishinaModel</TT>: new models providing 
+        sampling of atomic relaxations.</LI>
+    <LI>Removed obsolete classes: <TT>G4ComptonScattering52</TT>,
+            <TT>G4PolarizedComptonScattering</TT>.</LI>
     <LI>Fixed defects reported by Coverity tool, mainly related to
         initialization of static data.</LI>
     </UL></LI>
@@ -747,19 +748,18 @@ please refer to the corresponding History files provided in most packages):
     <LI><TT>G4EmConfigurator</TT>: fix for case of more than one model added per a
         process.</LI>
     <LI><TT>G4EmCorrections</TT>: moved <TT>G4AtomicShell</TT> header into
-        source.</LI>
+        source; fixed computation of shell corrections
+        according to prescriptions of original papers; added Bichsel
+        approximation for Barkas corrections for the large <TT>Z > 47</TT>,
+        and use <TT>G4PhysicsVector</TT> instead of C-arrays; these 
+        modifications improving energy loss computations for protons at the energies 
+        below <TT>10 MeV</TT>, which improving energy loss of heavy negatively
+        charged objects (ATLAS problem).</LI>
     <LI><TT>G4ElectronIonPair</TT>: added method SampleNumberOfIonsAlongStep().
     <LI><TT>G4VEmAngularDistribution</TT>: new general interface for angular distribution.
     <LI>Added class <TT>G4VBremAngularDistribution</TT>, moved from 'lowenergy'
         module.</LI>
-    <LI><TT>G4VAtomDeexcitation, G4EmProcessOptions</TT>: fixed initialisation.
-        Added 'lowestKinEnergy' in <TT>G4VAtomDeexcitation</TT>, fixing FPE
-        case.</LI>
-    <LI><TT>G4EmCalculator</TT>: improved cross section calculation.</LI>
-    <LI><TT>G4EmCorrections</TT>: fixed computation of shell corrections
-        according to prescriptions of original papers; added Bichsel
-        approximation for Barkas corrections for the large <TT>Z > 47</TT>,
-        and use <TT>G4PhysicsVector</TT>.</LI>
+    <LI>Added <TT>G4VAtomDeexcitation</TT>: new general interface to deexcitation module.</LI>
     <LI>Fixed defects reported by Coverity tool.</LI>
     </UL></LI>
 <LI><B>Xrays</B>
@@ -997,7 +997,9 @@ please refer to the corresponding History files provided in most packages):
     <UL>
     <LI><TT>G4NeutronElasticXS, G4NeutronInelasticXS, G4NeutronCaptureXS</TT>:
         added path to new data set through environment variable
-        <TT>G4NEUTRONXSDATA</TT>.</LI>
+        <TT>G4NEUTRONXSDATA</TT>; use vectors instead of C arrays; use <TT>G4HadronNucleonXsc</TT>
+        class and PDG parameterisation for high energy cross sections of
+        Hydrogen; code cleanup.</LI>
     <LI><TT>G4UPiNuclearCrossSection</TT>: fixed memory leak at destruction.</LI>
     <LI>Updated <TT>G4GlauberGribovCrossSection</TT> for anti-protons.</LI>
     <LI><TT>G4VComponentCrossSection</TT>: new interface for cross sections.</LI>
@@ -1007,10 +1009,6 @@ please refer to the corresponding History files provided in most packages):
         methods to source, added constructor and destructor, make
         <TT>G4ProtonInelasticCrossSection</TT> class member. Fixed bug in
         kinematics.</LI>
-    <LI><TT>G4NeutronElasticXS, G4NeutronInelasticXS, G4NeutronCaptureXS</TT>
-        cleanup: use vectors instead of C arrays; use <TT>G4HadronNucleonXsc</TT>
-        class and PDG parameterisation for high energy cross sections of
-        Hydrogen; removed accessors and modifiers for 'verboseLevel'.</LI>
     <LI>Added <TT>G4CrossSectionInelastic</TT> and <TT>G4CrossSectionElastic</TT>,
         wrappers for components.</LI>
     <LI>New class <TT>G4ComponentAntiNuclNuclearXS</TT> for the calculation of
@@ -1021,8 +1019,6 @@ please refer to the corresponding History files provided in most packages):
         smooth transition.</LI>
     <LI><TT>G4BGGPionElasticXS, G4BGGNucleonElasticXS, G4BGGNucleonInelasticXS</TT>:
         fixed low-energy (<TT>E < 20 MeV</TT>) models.</LI>
-    <LI><TT>G4NeutronCaptureXS, G4NeutronElasticXS, G4NeutronInelasticXS</TT>:
-        do not use directly <TT>G4Element</TT>, only <TT>G4NistManager</TT>.</LI>
     <LI><TT>G4TripathiLightCrossSection</TT>: fix for threshold shape.</LI>
     <LI><TT>G4VCrossSectionDataSet</TT>: introduced new methods,
         <TT>IsIsoApplicable()</TT> and <TT>GetZandACrossSection()</TT>,
@@ -1162,82 +1158,79 @@ please refer to the corresponding History files provided in most packages):
     </UL></LI>
 <LI><B>De-excitation</B>
     <UL>
-    <LI><TT>G4StatMFMacroTemperature</TT>: cleanup logic of solving equation for
-        temperature; moved constructors and destructor to source.</LI>
-    <LI><TT>G4FermiFragmentsPool</TT>: extended list of stable fragments.</LI>
-    <LI><TT>G4UnstableFragmentBreakUp</TT>: new class to decay exotic fragment
-        (like 2n or 2p).</LI>
-    <LI><TT>G4DiscreteGammaTransition</TT>: make transition depended on Z and A (before
-        was only Z) and added energy tolerance</LI>
-    <LI><TT>G4VGammaDeexcitation</TT>: rewritten kinematic of 2-body decay.
-        Fix to take into account electron mass in the case of electron emission.
-        Take into account bounding energy of electron in the case of electron
-        emission; fixed kinematic.</LI>
-    <LI><TT>G4DiscreteGammaTransition, G4DiscreteGammaDeexcitation, 
-        G4ContinuumGammaDeexcitation</TT>: set energy tolerance <TT>1 keV</TT>.
-        More accurate Lorentz computations. Define destructors to be virtual.</LI>
-    <LI><TT>G4DiscreteGammaTransition</TT>: removed unphysical corrections of
-        gamma energy; fixed default particle as gamma; avoid subtracting binding
-        energy in case of electron emission.</LI>
     <LI><TT>G4ExcitationHandler</TT>: apply FermiBreakUp to fragments with
         <TT>A>1</TT> (before was <TT>A>4</TT>) in order to reduce number of
         fake gamma produced in deexcitation of light fragments; added parameter
-        'minExcitation' equal to <TT>1 keV</TT>. Added check on stability of
-        primary; do evaporation if FermiBreakUp cannot deexcite a fragment.
-        Added <TT>SetParameters()</TT> method.</LI>
+        'minExcitation' equal to <TT>1 keV</TT>; added check on stability of
+        primary; do evaporation if FermiBreakUp cannot deexcite a fragment;
+        added <TT>SetParameters()</TT> method.</LI>
+    <LI><TT>G4StatMFMacroTemperature</TT>: cleanup logic of solving equation for
+        temperature to avoid exception; moved constructors and destructor to source.</LI>
+    <LI><TT>G4FermiFragmentsPool</TT>: extended list of stable fragments to be coherent with the list
+        of fragments in the GEM model; fix for fragment 111.</LI>
+    <LI><TT>G4FermiConfiguration</TT>: parameter of Coulomb energy Kappa is
+        changed from 1 to 6 according to recommendation of original author of
+        the model A.Botvina.</LI>
+    <LI><TT>G4FermiPhaseSpaceDecay</TT>: improved model of sampling of kinetic
+        energy; cleanup of the code to use <TT>G4Pow</TT>.</LI>
+    <LI><TT>G4UnstableFragmentBreakUp</TT>: new class to decay exotic fragment
+        (like 2n or 2p).</LI>
     <LI><TT>G4Evaporation</TT>: rewritten <TT>BreakUp()</TT> method; added
         <TT>Initialise()</TT> method at construction, to setup all options and
         not at run time.
         Added <TT>InitialiseEvaporation()</TT> method to setup decay channels;
         changed order of decay channels: first photon evaporation, then fission,
         finally all other channels as before. Improved condition on how to
-        stop deexcitation loop.
-        Added call to <TT>G4UnstableFragmentBreakUp</TT> if natural abundances
+        stop deexcitation loop;
+        added call to <TT>G4UnstableFragmentBreakUp</TT> if natural abundances
         of cold fragment is zero and <TT>Z < 20</TT>; optimized logic of
-        stopping of evaporation loop. Set as a default variant evaporation
+        stopping of evaporation loop; set as a default variant evaporation
         combining standard plus GEM probabilities.</LI>
-    <LI><TT>G4PhotonEvaporation</TT>: added correction of electron state after
-        emission.</LI>
-    <LI><TT>G4VEvaporationChannel, G4PhotonEvaporation</TT>: added two new
-        virtual methods <TT>EmittedFragment()</TT> and <TT>BreakUpFragment()</TT>.</LI>
-    <LI><TT>G4FermiConfiguration</TT>: parameter of Coulomb energy Kappa is
-        changed from 1 to 6 according to recommendation of original author of
-        the model A.Botvina.</LI>
-    <LI><TT>G4FermiPhaseSpaceDecay</TT>: improved model of sampling of kinetic
-        energy. Cleanup of the code to use <TT>G4Pow</TT>.</LI>
-    <LI><TT>G4FermiFragmentsPool</TT>: fix for fragment 111.</LI>
-    <LI><TT>G4E1Probability</TT>: code cleanup. Added numerical protection
-        to avoid division by zero.</LI>
+    <LI><TT>G4Evaporation, G4EvaporationChannel, G4EvaporationProbability</TT>:
+        improved computation of minimal and maximal evaporation energy.</LI>
+    <LI><TT>G4EvaporationChannel</TT>: removed new and delete of probability
+        objects at each to the class, use instead local
+        <TT>G4EvaporationProbability</TT> of the channel.</LI>
+    <LI><TT>G4GEMChannel</TT>: use the same formulas as in <TT>G4GEMProbability</TT>
+        class.</LI>
     <LI><TT>G4GEMProbability</TT>: fixed numerical problem (division by zero), code
         cleanup.</LI>
-    <LI><TT>G4NeutronRadCapture</TT>: use <TT>G4PhotonEvaporation</TT> instead
-        of simplified one gamma emission method.</LI>
+    <LI><TT>G4VEvaporationChannel, G4PhotonEvaporation</TT>: added two new
+        virtual methods <TT>EmittedFragment()</TT> and <TT>BreakUpFragment()</TT>.</LI>
+    <LI><TT>G4DiscreteGammaTransition</TT>: make transition depended on Z and A (before
+        was only Z) and added energy tolerance</LI>
+    <LI><TT>G4VGammaDeexcitation</TT>: rewritten kinematic of 2-body decay;
+        fix in kinematics to take into account the electron mass and the bounding energy 
+        in the case of electron emission.</LI>
+    <LI><TT>G4DiscreteGammaTransition, G4DiscreteGammaDeexcitation, 
+        G4ContinuumGammaDeexcitation</TT>: set energy tolerance <TT>1 keV</TT>;
+        more accurate Lorentz computations; define destructors to be virtual.</LI>
+    <LI><TT>G4DiscreteGammaTransition</TT>: removed unphysical corrections of
+        gamma energy; fixed default particle as gamma; avoid extra subtracting binding
+        energy in case of electron emission; use const-ref for <TT>G4NuclerLevel</TT>
+        data member</LI>
+    <LI><TT>G4ContinuumGammaTransition</TT>: use exponential law for sampling
+        of decay time.</LI>
+    <LI><TT>G4PhotonEvaporation</TT>: added correction of electron state after
+        emission; fixed probability computation.</LI>
+    <LI><TT>G4E1Probability</TT>: code cleanup; added numerical protection
+        to avoid division by zero; fixed probability computation.</LI>
     <LI><TT>G4NuclearLevelManager</TT>: replaced stream input in <TT>Read()</TT>
         with char[] input and manual conversion to double; reduces 142 MB of
         memory churn and some CPU speedup.</LI>
     <LI><TT>G4NuclearLevelStore, G4NuclearLevelManager, G4NuclearLevel</TT>:
         eliminate passing and copying of vectors; fill NuclearLevel directly by
-        Manager. Modified <TT>G4ContinuumGammaTransition</TT> accordingly.</LI>
-    <LI><TT>G4DiscreteGammaTransition</TT>: use const-ref for <TT>G4NuclerLevel</TT>
-        data member.</LI>
-    <LI><TT>G4Evaporation, G4EvaporationChannel, G4EvaporationProbability</TT>:
-        improved computation of minimal and maximal evaporation energy.</LI>
-    <LI><TT>G4E1Probability, G4PhotonEvaporation</TT>: fixed probability.</LI>
-    <LI><TT>G4GEMChannel</TT>: use the same formulas as in <TT>G4GEMProbability</TT>
-        class.</LI>
-    <LI><TT>G4ContinuumGammaTransition</TT>: use exponential law for sampling
-        of decay time.</LI>
+        Manager; modified <TT>G4ContinuumGammaTransition</TT> accordingly.</LI>
+    <LI>Add README file explaining the photo-evaporation data files.</LI>
     <LI>Removed unused classes: <TT>G4DummyProbability, G4E1ProbabilityXXX,
         G4E1SingleProbabilityXXX</TT>, where <TT>XXX=001,01,1,10,100</TT>
         differing only by the scale factor for the probability;
         scale factor may be applied in the main class if needed.</LI>
-    <LI><TT>G4EvaporationChannel</TT>: removed new and delete of probability
-        objects at each to the class, use instead local
-        <TT>G4EvaporationProbability</TT> of the channel.</LI>
+    <LI><TT>G4NeutronRadCapture</TT>: use <TT>G4PhotonEvaporation</TT> instead
+        of simplified one gamma emission method.</LI>
     <LI>Fixed problems reported by the Coveruty tool (mainly missing data
-        initialisation); moved constructors and destructors to source.
-        Code cleanup.</LI>
-    <LI>Add README file explaining the photo-evaporation data files.</LI>
+        initialisation); moved constructors and destructors to source;
+        code cleanup.</LI>
     </UL></LI>
 <LI><B>Elastic scattering</B>
     <UL>
@@ -1250,8 +1243,7 @@ please refer to the corresponding History files provided in most packages):
     <LI><TT>G4UHadronElasticProcess</TT>: fixed CHIPS warning for Cu, due to
         wrong isotope selected; addressing problem report from ALICE.</LI>
     <LI>New class <TT>G4CHIPSElasticXS</TT> extracted from
-        <TT>G4UHadronElasticProcess</TT>, following hadronic framework design
-        and with limited applicability to <TT>19 MeV</TT>.</LI>
+        <TT>G4UHadronElasticProcess</TT>, following <TT>G4VCrossSectionDataSet</TT> interface.</LI>
     </UL></LI>
 <LI><B>High Energy Theoretical</B>
     <UL>
@@ -1436,7 +1428,8 @@ please refer to the corresponding History files provided in most packages):
     Hydrogen and solid states, renamed it to <TT>GetElementIndex()</TT>.</LI>
 <LI><TT>G4IonisParamMat</TT>: added member and method <TT>GetInvA23()</TT>;
     use <TT>GetElementIndex()</TT>.</LI>
-<LI><TT>G4IonisParamElm</TT>: use mean excitation energy from NIST DB;
+<LI><TT>G4IonisParamElm</TT>: use mean excitation energy from NIST DB
+    instead of data of the ICRU37 report;
     addressing a problem reported for mean energy deposition in compound
     materials.</LI>
 <LI><TT>G4AtomicShells</TT>: improved performance by adding indexing array.</LI>
