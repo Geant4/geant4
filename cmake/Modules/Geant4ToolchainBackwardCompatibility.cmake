@@ -38,7 +38,7 @@
 # library directory and creating a symbolic link inside this directory
 # pointing up one directory level.
 #
-# $Id: Geant4ToolchainBackwardCompatibility.cmake,v 1.9 2010-12-03 15:55:05 bmorgan Exp $
+# $Id: Geant4ToolchainBackwardCompatibility.cmake,v 1.10 2010-12-13 19:03:34 bmorgan Exp $
 # GEANT4 Tag $Name: not supported by cvs2svn $
 #
 
@@ -141,14 +141,9 @@ if(UNIX)
             WORLD_READ WORLD_EXECUTE)
 
     # compatibility softlink to library directory
-    install(CODE
-        "execute_process(COMMAND
-        ${CMAKE_COMMAND} -E make_directory
-        \$ENV{DESTDIR}${GEANT4_LIBDIR}/geant4-${geant4_VERSION})")
-    install(CODE
-        "execute_process(COMMAND 
-        ${CMAKE_COMMAND} -E create_symlink .. ${GEANT4_SYSTEM}-${GEANT4_COMPILER}
-        WORKING_DIRECTORY \$ENV{DESTDIR}${GEANT4_LIBDIR}/geant4-${geant4_VERSION})")
+    install(CODE "execute_process(COMMAND \${CMAKE_COMMAND} -E make_directory \$ENV{DESTDIR}${GEANT4_LIBDIR}/geant4-${geant4_VERSION})")
+
+    install(CODE "execute_process(COMMAND \${CMAKE_COMMAND} -E create_symlink .. ${GEANT4_SYSTEM}-${GEANT4_COMPILER} WORKING_DIRECTORY \$ENV{DESTDIR}${GEANT4_LIBDIR}/geant4-${geant4_VERSION})")
 
 endif()
 
