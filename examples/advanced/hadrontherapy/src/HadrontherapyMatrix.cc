@@ -169,7 +169,7 @@ G4bool HadrontherapyMatrix::Fill(G4int trackID,
 		{   // Is it a primary or a secondary particle? 
 			if ( trackID ==1 && ionStore[l].isPrimary || trackID !=1 && !ionStore[l].isPrimary)
 			{
-				if (energyDeposit > 0.) ionStore[l].dose[Index(i, j, k)] += energyDeposit/massOfVoxel;
+				if (energyDeposit > 0.) ionStore[l].dose[Index(i, j, k)] += energyDeposit;
 				
 					// Fill a matrix per each ion with the fluence
 				if (fluence) ionStore[l].fluence[Index(i, j, k)]++;
@@ -203,7 +203,7 @@ G4bool HadrontherapyMatrix::Fill(G4int trackID,
 			newIon.dose[m] = 0.;
 			newIon.fluence[m] = 0;
 		}
-		if (energyDeposit > 0.) newIon.dose[Index(i, j, k)] += energyDeposit/massOfVoxel;
+		if (energyDeposit > 0.) newIon.dose[Index(i, j, k)] += energyDeposit;
 		if (fluence) newIon.fluence[Index(i, j, k)]++;
 		
 		ionStore.push_back(newIon);
