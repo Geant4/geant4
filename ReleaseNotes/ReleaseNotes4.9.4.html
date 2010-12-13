@@ -128,7 +128,10 @@ recompilation) and a recompilation of user applications is required.
 <B>Low Energy Electromagnetic physics</B>
 <P> </P>
 <UL>
-<LI>!!!!!!!! FILL IN HERE IF REQUIRED !!!!!!! </LI> 
+<LI>If used in a user application, the Geant4-DNA
+    <TT>G4DNAEmfietzoglouExcitationModel</TT> class for the modeling of
+    electron excitation in liquid water is obsolete and should be replaced
+    by the <TT>G4DNABornExcitationModel</TT> class.</LI> 
 </UL>
 
 <P> </P>
@@ -234,7 +237,40 @@ Please see the corresponding details in
 
 <B>Low Energy Electromagnetic physics</B>
 <UL>
-<LI>!!!!!!!! FILL IN HERE IF REQUIRED !!!!!!! </LI> 
+<LI>Photon Livermore models:
+    first implementation of pair production in the electric field of the
+    electron. The <TT>G4BoldyshevTripletModel</TT> should be used in
+    conjunction with the <TT>G4LivermoreNuclearGammaConversionModel</TT>
+    model (using <TT>G4MultiModel</TT>) in order not to account twice
+    for the pair production cross section in the electron field.</LI>
+<LI>Electron Livermore models:
+    <TT>G4LivermoreIonisationModel</TT> is able to generate fluorescence
+    along the step. Addressing problem report
+    <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1141">#1141</A>.</LI>
+<LI>Penelope models:
+    added four new models (gamma ray models: Compton, GammaConversion,
+    PhotoElectric and Rayleigh). Upgrades of Penelope from version 2001 to
+    version 2008, named as <TT>G4Penelope08xxxxModel</TT>. To be considered
+    as beta.</LI>
+<LI>For all low energy EM models: no customized production cuts are allowed
+    anymore for fluorescence/Auger.
+    Main cuts from the <TT>G4ProductionCutsTable</TT> are always used, for
+    consistency.</LI>
+<LI>Geant4-DNA (in liquid water):
+    <UL>
+    <LI>New process and model classes for electron attachment and vibrational
+        excitation.</LI>
+    <LI>New electronic excitation model for electrons.</LI>
+    <LI>Extended very low energy coverage of Champion's electron elastic
+        scattering.</LI>
+    <LI>New excitation model for neutral hydrogen.</LI>
+    <LI>Preliminary new ionization models for <TT>C, N, O</TT> and <TT>Fe</TT>.
+        To be considered as beta.</LI>
+    <LI>Multi-scale combination of Geant4-DNA discrete processes with Standard
+        or low energy EM physics processes adopting the unified software
+        approach of both EM physics sub-categories (see the
+        <TT>microdosimetry</TT> advanced example for illustration).</LI>
+    </UL></LI>
 </UL>
 
 <B>Standard Electromagnetic physics</B>
@@ -468,8 +504,8 @@ please refer to the corresponding History files provided in most packages):
         <UL>
         <LI>New excitation model for electrons in <TT>G4DNABornExcitationModel</TT>
             and for H.</LI>
-        <LI>Added new G4DNA processes and e- models for vibrational and attachment as in
-            <A HREF="http://dx.doi.org/10.1016/j.apradiso.2010.08.011">Z. Francis et al., Appl. Rad. Isot. (2010)</A>.</LI>
+        <LI>Added new G4DNA processes and e- models for vibrational and attachment
+            as in: Z. Francis et al., Appl. Radiat. Isot. 69 (2011) 220-226.</LI>
         <LI>Extended low energy coverage of G4DNA electron models.</LI>
         <LI>New preliminary Geant4-DNA ionisation class for ions to be used
             with new data set, G4LEDATA-6.19.</LI>
