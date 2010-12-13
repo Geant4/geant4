@@ -7,7 +7,7 @@
 # The script is generated froma template file and then installed to the
 # known bindir as an executable.
 #
-# $Id: Geant4ConfigureConfigScript.cmake,v 1.3 2010-12-03 11:28:00 bmorgan Exp $
+# $Id: Geant4ConfigureConfigScript.cmake,v 1.4 2010-12-13 17:31:59 bmorgan Exp $
 # GEANT4 Tag $Name: not supported by cvs2svn $
 #
 
@@ -37,7 +37,7 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
 
     # Install it
     install(FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/geant4-config
-        DESTINATION ${GEANT4_BINDIR}/geant4-config
+        DESTINATION ${GEANT4_BINDIR}
         PERMISSIONS
             OWNER_READ OWNER_WRITE OWNER_EXECUTE
             GROUP_READ GROUP_EXECUTE
