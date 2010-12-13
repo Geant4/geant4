@@ -124,15 +124,6 @@ Geant4 features) in order to upgrade from release 9.3 to release 9.4.
 Note that for all users a full re-installation of libraries (or a full
 recompilation) and a recompilation of user applications is required.
 
-<P> </P>
-<B>Low Energy Electromagnetic physics</B>
-<P> </P>
-<UL>
-<LI>If used in a user application, the Geant4-DNA
-    <TT>G4DNAEmfietzoglouExcitationModel</TT> class for the modeling of
-    electron excitation in liquid water is obsolete and should be replaced
-    by the <TT>G4DNABornExcitationModel</TT> class.</LI> 
-</UL>
 
 <P> </P>
 <B>Standard Electromagnetic physics</B>
@@ -144,6 +135,16 @@ recompilation) and a recompilation of user applications is required.
     and <TT>G4MuMultipleScattering</TT> are now mandatory; <TT>G4UrbanMscModel93</TT>
     is now introduced.</LI>
 <LI>!!!!!!!! FILL IN HERE IF REQUIRED !!!!!!! </LI> 
+</UL>
+
+<P> </P>
+<B>Low Energy Electromagnetic physics</B>
+<P> </P>
+<UL>
+<LI>If used in a user application, the Geant4-DNA
+    <TT>G4DNAEmfietzoglouExcitationModel</TT> class for the modeling of
+    electron excitation in liquid water is obsolete and should be replaced
+    by the <TT>G4DNABornExcitationModel</TT> class.</LI> 
 </UL>
 
 <P> </P>
@@ -235,6 +236,17 @@ Please see the corresponding details in
     dumping the scores.</LI>
 </UL>
 
+<B>Standard Electromagnetic physics</B>
+<UL>
+<LI>New model for ionisation of negative-charge projectiles (including anti-ions) 
+using ICRU'73 data for oscillator strengths.</LI> 
+<LI>Improvement of the modeling of fluctuations in energy deposition, relevant 
+deposit in gasses and silicon.  Increases stability when step size changes.</LI> 
+<LI> </LI> 
+<LI> </LI> 
+<LI> </LI> 
+</UL>
+
 <B>Low Energy Electromagnetic physics</B>
 <UL>
 <LI>Photon Livermore models:
@@ -271,11 +283,6 @@ Please see the corresponding details in
         approach of both EM physics sub-categories (see the
         <TT>microdosimetry</TT> advanced example for illustration).</LI>
     </UL></LI>
-</UL>
-
-<B>Standard Electromagnetic physics</B>
-<UL>
-<LI>!!!!!!!! FILL IN HERE IF REQUIRED !!!!!!! </LI> 
 </UL>
 
 <B>Hadronic physics</B>
@@ -458,11 +465,11 @@ please refer to the corresponding History files provided in most packages):
     </UL></LI>
 <LI><B>High Energy</B>
     <UL>
-    <LI>New model <TT>G4ICRU73NoDeltaModel</TT>, derived from
-        <TT>G4ICRU73QOModel</TT>.</LI>
-    <LI>Added <TT>G4mplIonisationWithDeltaModel</TT> which substitutes
-        <TT>G4mplIonisationModel</TT> as default. Delta-ray production is
-        required both by ATLAS and CMS.</LI>
+    <LI>New model <TT>G4ICRU73NoDeltaModel</TT> 
+        derived from  <TT>G4ICRU73QOModel</TT>.</LI>
+    <LI>Added <TT>G4mplIonisationWithDeltaModel</TT> for ionization of monopoles, 
+        to substitute <TT>G4mplIonisationModel</TT> as default. 
+	This enables delta-ray production, which is needed by ATLAS and CMS.</LI>
     <LI>Fixed defects reported by Coverity tool, mainly related to initialization
         of static data.</LI>
     </UL></LI>
@@ -607,8 +614,7 @@ please refer to the corresponding History files provided in most packages):
             rejection method longitudinal displacement is computed exactly
             from <TT>z</TT>.</LI>
         <LI><TT>G4eMultipleScattering, G4hMultipleScattering</TT>: improved
-            printout at initialisation. Removed old unused header of
-            <TT>G4UrbanMscModel</TT> in <TT>G4hMultipleScattering</TT>.</LI>
+            printout at initialisation. </LI>
         <LI><TT>G4UrbanMscModel93</TT>: added randomization of step limit for
             the first step in any volume for option "UseDistanceTo Boundary".</LI>
         <LI><TT>G4WentzelVIModel</TT>: added protections; added
@@ -669,7 +675,7 @@ please refer to the corresponding History files provided in most packages):
         for all atoms.</LI>
     <LI><TT>G4hIonisation</TT>: use new <TT>G4ICRU73QOModel</TT> for negatively
         charged particles instead of <TT>G4BraggModel</TT>, which used to be
-        applied for positevely charged particles only. This modification
+        applied for positive-charged particles only. This modification
         provides simulation of Barkas effect at low energies (before the effect
         was simulated at higher energies in <TT>G4BetheBlochModel</TT>).
         The high energy limit for the new model is the same as for
