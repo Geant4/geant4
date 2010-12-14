@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.18 2010-12-03 16:50:39 mkossov Exp $
+// $Id: G4QFragmentation.cc,v 1.19 2010-12-14 09:41:04 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -1927,6 +1927,12 @@ G4QHadronVector* G4QFragmentation::Fragment()
     }
     G4double nucE=resNuc4M.e();                             // Total energy of the nuclEnv
     if(nucE < 1.E-12) nucE=0.;                              // Computer accuracy safety
+    else if(resNucPDG==22 && nQuas==1)                      // NuclEnv for nQ=1 is a photon
+    {
+      G4Quasmon* aQuasm=theQuasmons[0];                     // the only Quasmon
+      aQuasm->Set4Momentum(aQuasm->Get4Momentum()+resNuc4M);// add the gammaEnv to the Q
+      nucE=0.;
+    }
     G4ThreeVector   nucVel(0.,0.,0.);                       // Proto of the NucleusVelocity
     G4QHadronVector* output=0;                              // NucleusFragmentation Hadrons
     G4QEnvironment* pan= new G4QEnvironment(theEnv);        // ---> DELETED --->----------+
