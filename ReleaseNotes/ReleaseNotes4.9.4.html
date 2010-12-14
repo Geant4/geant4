@@ -75,7 +75,6 @@ More verified configurations:
 <UL>
 <LI>Linux, gcc-4.5.1, gcc-3.4.6 (SLC4)</LI>
 <LI>Linux, Intel-icc 11.1</LI>
-<LI>Windows 7 and CygWin Tools with: Visual C++ 10.0 (Visual Studio 2010)</LI>
 </UL>
 
 Platforms configured but neither tested nor supported:
@@ -181,7 +180,6 @@ recompilation) and a recompilation of user applications is required.
 <LI>In some examples, visualization that used to draw trajectories as simple
     lines now also draws step points. Users who wish to disable step point
     drawing can do so by commenting out a line in the visualization macro.</LI>
-<LI>!!!!!!!! FILL IN HERE IF REQUIRED !!!!!!! </LI> 
 </UL>
 
 <P> </P>
@@ -240,19 +238,20 @@ Please see the corresponding details in
 
 <B>Standard Electromagnetic physics</B>
 <UL>
-<LI>New model for low-energy ionisation of negative-charge projectiles (including anti-ions) 
-using ICRU'73 data for oscillator strengths <TT>G4ICRU73QOModel</TT> is used in 
-<TT>G4hIonisation</TT> process class by default.</LI> 
-<LI>Improvement of the modeling of fluctuations in energy deposition, relevant 
-deposit in gasses and silicon.  Increases stability when step size changes.</LI> 
-<LI>The new model of single scattering and NIEL for ions G4IonCoulombScatteringModel is available.</LI> 
-<LI>New ionisation models <TT>G4BraggIonGasModel</TT>, <TT>G4BetheBlochIonGasModel</TT> 
-are available for simulation of ion
-transport in low density media, for example, in vacuum; 
-effective charge approach is not used; initial ion charge
-is not changed by these models.</LI> 
-<LI>The default angular distribution of gamma in the bremsstrahlung process can be substituted by alternative
-model in Physics List.</LI> 
+<LI>New model for low-energy ionisation of negative-charge projectiles
+    (including anti-ions) using ICRU'73 data for oscillator strengths;
+    <TT>G4ICRU73QOModel</TT> is used in <TT>G4hIonisation</TT> process class
+    by default.</LI> 
+<LI>Improvement of the modeling of fluctuations in energy deposition, relevant
+    deposit in gasses and silicon. Increases stability when step size changes.</LI> 
+<LI>The new model of single scattering and NIEL for ions
+    <TT>G4IonCoulombScatteringModel</TT> is now available.</LI> 
+<LI>New ionisation models <TT>G4BraggIonGasModel</TT>,
+    <TT>G4BetheBlochIonGasModel</TT> are available for simulation of ion
+    transport in low density media, for example, in vacuum; effective charge
+    approach is not used; initial ion charge is not changed by these models.</LI> 
+<LI>The default angular distribution of gamma in the Bremsstrahlung process
+    can be substituted by alternative model in physics-list.</LI> 
 </UL>
 
 <B>Low Energy Electromagnetic physics</B>
@@ -302,13 +301,9 @@ model in Physics List.</LI>
 <B>Physics Lists</B>
 <UL>
 <LI>!!!!!!!! FILL IN HERE IF REQUIRED !!!!!!! </LI> 
-<LI>G4EmConfigurator class to define alternative models per particle type, energy range, and detector region is
-established and proposed to be used for configuration of EM physics.</LI>
-</UL>
-
-<B>Visualization, Graphical Representations & Interfaces</B>
-<UL>
-<LI>!!!!!!!! FILL IN HERE IF REQUIRED !!!!!!! </LI> 
+<LI><TT>G4EmConfigurator</TT> class to define alternative models per particle
+    type, energy range, and detector region is established and proposed to be
+    used for configuration of EM physics.</LI>
 </UL>
 
 <P> </P>
@@ -317,16 +312,6 @@ established and proposed to be used for configuration of EM physics.</LI>
 <!-- ============================================== -->
 
 <H2>5. Expected effects on physics and performance</H2>
-
-<B>Geometry</B>
-<UL>
-<LI>!!!!!!!! FILL IN HERE IF REQUIRED !!!!!!! </LI> 
-</UL>
-
-<B>Low-energy Electromagnetic physics</B>
-<UL>
-<LI>!!!!!!!! FILL IN HERE IF REQUIRED !!!!!!! </LI> 
-</UL>
 
 <B>Standard Electromagnetic physics and cuts</B>
 <UL>
@@ -635,7 +620,7 @@ please refer to the corresponding History files provided in most packages):
             <TT>DefineMaterial()</TT> call to the cross-section class;
             optimized method of step limitation; 
             added usage of geometry factor and the option
-            <TT>UseDistanceToBoundary<TT>.</LI>
+            <TT>UseDistanceToBoundary</TT>.</LI>
         <LI><TT>G4WentzelOKandVIxSection</TT>: new class to compute cross
             sections and sample scattering angle; modified <TT>G4WentzelVIModel,
             G4eCoulombScatteringModel, G4CoulombScatteringModel</TT> to
