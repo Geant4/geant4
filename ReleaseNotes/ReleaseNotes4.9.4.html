@@ -194,7 +194,7 @@ Please see the corresponding details in
 <LI>G4PII-1.2, new data set for shell ionisation cross-sections (controlled
     by variable <TT>G4PIIDATA</TT>).</LI>
 <LI>New data set versions: <TT>G4EMLOW.6.19, G4RadioactiveDecay.3.3,
-    G4PhotonEvaporation.2.1</TT>.</LI>
+    G4PhotonEvaporation.2.1, G4NDL.3.14</TT>.</LI>
 </UL>
 
 <P> </P>
@@ -383,7 +383,7 @@ In case either of these reported energies is significant, we recommend
 increasing the verbosity of <TT>G4Transportation</TT> to obtain information for
 each track killed. A user can change the threshold energy above which particles
 are killed more reluctantly (only after significant additional effort) using
-the method <TT>SetThresholdImportantEnergy</TT> of <TT>G4Transportation</TT>.
+the method <TT>SetThresholdImportantEnergy()</TT> of <TT>G4Transportation</TT>.
 The default value is <TT>100 MeV</TT>.
 
 <P> </P>
@@ -425,7 +425,7 @@ please refer to the corresponding History files provided in most packages):
           and <TT>G4PII</TT> (shell ionization cross section data, version 1.2),
           controlled by variable <TT>G4PIIDATA</TT>.</LI>
       <LI>Added new versions of data sets for <TT>G4EMLOW.6.19, G4RadioactiveDecay.3.3,
-          G4PhotonEvaporation.2.1</TT>.</LI>
+          G4PhotonEvaporation.2.1, G4NDL.3.14</TT>.</LI>
       </UL></LI> 
   <LI>cmake:
       <UL>
@@ -608,7 +608,7 @@ please refer to the corresponding History files provided in most packages):
 <LI><B>Precise Impact Ionisation</B>
     <UL>
     <LI>New module for precise impact ionisation, as described in:
-        IEEE-TNS, vol. 56, no. 6, pp. 3614-3649, 2009.
+        M.G.Pia et al., PIXE Simulation With Geant4, IEEE-TNS, vol. 56, no. 6, pp. 3614-3649, 2009.
         Requires new data set G4PIIDATA-1.2.</LI>
     </UL></LI>
 <LI><B>Standard</B>
@@ -1791,6 +1791,11 @@ please refer to the corresponding History files provided in most packages):
         computations of PASS code by A.Schinner.</LI>
     <LI>Updated sigma ionisation Rudd data.</LI>
     <LI>Updated PDF.dat to msc_GS module.</LI>
+    </UL></LI>
+<LI>New neutron data set with thermal cross sections, G4NDL.3.14:
+    <UL>
+    <LI>Added Zinc and Tantalum data.</LI>
+    <LI>Updated Lithium and Boron data.</LI>
     </UL></LI>
 <LI>New photon-evaporation data set, G4PhotonEvaporation.2.1:
     <UL>
