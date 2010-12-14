@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.130 2010-11-07 11:14:07 allison Exp $
+// $Id: G4VisManager.cc,v 1.131 2010-12-14 15:53:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1580,6 +1580,10 @@ G4VisManager::Verbosity G4VisManager::GetVerbosityValue(G4int intVerbosity) {
   else if (intVerbosity > all)   verbosity = all;
   else                           verbosity = Verbosity(intVerbosity);
   return verbosity;
+}
+
+G4VisManager::Verbosity G4VisManager::GetVerbosity () {
+  return fVerbosity;
 }
 
 void G4VisManager::SetVerboseLevel (G4int intVerbosity) {
