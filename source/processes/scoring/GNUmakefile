@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2010-11-18 11:57:41 japost Exp $
+# $Id: GNUmakefile,v 1.5 2010-12-14 15:39:27 gcosmo Exp $
 # ------------------------------------------------------------
 # GNUmakefile for scoring process library.  
 # ------------------------------------------------------------
@@ -11,6 +11,7 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
+CPPFLAGS += -DG4GEOM_ALLOC_EXPORT
 CPPFLAGS += \
 	    -I$(G4BASE)/global/management/include \
 	    -I$(G4BASE)/global/HEPRandom/include \
