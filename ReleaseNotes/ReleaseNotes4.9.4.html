@@ -238,20 +238,27 @@ Please see the corresponding details in
 
 <B>Standard Electromagnetic physics</B>
 <UL>
-<LI>New model for low-energy ionisation of negative-charge projectiles
-    (including anti-ions) using ICRU'73 data for oscillator strengths;
-    <TT>G4ICRU73QOModel</TT> is used in <TT>G4hIonisation</TT> process class
-    by default.</LI> 
+<LI>New model <TT>G4ICRU73QOModel</TT> is available 
+    for low-energy ionisation of negative-charge projectiles
+    (including anti-ions); it is  based on ICRU'73 data for oscillator strengths;
+    this model is the default for negative-charge particles in <TT>G4hIonisation</TT> process class.</LI> 
 <LI>Improvement of the modeling of fluctuations in energy deposition, relevant
     deposit in gasses and silicon. Increases stability when step size changes.</LI> 
 <LI>The new model of single scattering and NIEL for ions
-    <TT>G4IonCoulombScatteringModel</TT> is now available.</LI> 
+    <TT>G4IonCoulombScatteringModel</TT> is available; the model is applicable 
+    from <TT>50 keV</TT> to <TT>100 TeV</TT>.</LI> 
 <LI>New ionisation models <TT>G4BraggIonGasModel</TT>,
     <TT>G4BetheBlochIonGasModel</TT> are available for simulation of ion
     transport in low density media, for example, in vacuum; effective charge
-    approach is not used; initial ion charge is not changed by these models.</LI> 
+    approach is not used; initial ion charge is not changed during tracking by these models.</LI> 
 <LI>The default angular distribution of gamma in the Bremsstrahlung process
     can be substituted by alternative model in physics-list.</LI> 
+<LI>The fluorescence and Auger electron production can be activated via UI commands 
+    if new models <TT>G4PEEffectFluoModel</TT> and <TT>G4KleinNishinaModel</TT> are used.</LI> 
+<LI>Disabled usage of min energy threshold defined by models, so
+    production threshold is defined only by range to energy conversion and
+    is limited only by low limit of energy threshold defined in 'cut' category; this is necessary
+    for proper combining standrad and low-enegry models in one process.</LI>
 </UL>
 
 <B>Low Energy Electromagnetic physics</B>
@@ -303,7 +310,7 @@ Please see the corresponding details in
 <LI>!!!!!!!! FILL IN HERE IF REQUIRED !!!!!!! </LI> 
 <LI><TT>G4EmConfigurator</TT> class to define alternative models per particle
     type, energy range, and detector region is established and proposed to be
-    used for configuration of EM physics.</LI>
+    used for additional configuration on top of already instantiated EM physics.</LI>
 </UL>
 
 <P> </P>
@@ -315,12 +322,16 @@ Please see the corresponding details in
 
 <B>Standard Electromagnetic physics and cuts</B>
 <UL>
-<LI>!!!!!!!! FILL IN HERE IF REQUIRED !!!!!!! </LI> 
+<LI>Small increase of visible eenrgy deposition in sampling calorimeters
+(0.5% for ATLAS barrel structure) due to improvements in the multiple scattering model</LI> 
+<LI>Improved tails of energy depoision in thin absorbers.</LI> 
 </UL>
 
 <B>Hadronic physics</B>
 <UL>
-<LI>!!!!!!!! FILL IN HERE IF REQUIRED !!!!!!! </LI> 
+<LI>Fermi Break-up Model and GEM evaporation are used by default providing improved production
+of light fragments in nuclear fragmentation at low energy.</LI> 
+<LI>Improved spectra of nuclear gamma deexcitation including Doppler broading simulation.</LI> 
 </UL>
 
 <P> </P>
@@ -462,9 +473,9 @@ please refer to the corresponding History files provided in most packages):
     <UL>
     <LI>New model <TT>G4ICRU73NoDeltaModel</TT> 
         derived from  <TT>G4ICRU73QOModel</TT>.</LI>
-    <LI>Added <TT>G4mplIonisationWithDeltaModel</TT> for ionization of monopoles, 
-        to substitute <TT>G4mplIonisationModel</TT> as default. 
-	This enables delta-ray production, which is needed by ATLAS and CMS.</LI>
+    <LI>Added new <TT>G4mplIonisationWithDeltaModel</TT> for ionization of monopoles, 
+        to be used in the <TT>G4mplIonisation</TT> process class as a default model; 
+	this enables delta-ray production, which is needed by ATLAS and CMS.</LI>
     <LI>Fixed defects reported by Coverity tool, mainly related to initialization
         of static data.</LI>
     </UL></LI>
@@ -603,7 +614,7 @@ please refer to the corresponding History files provided in most packages):
     <LI>Single and multiple scattering:
         <UL>
         <LI><TT>G4GoudsmitSaundersonMscModel</TT>: fixed problems of small
-            angle theta distributions. Improved numerical stability of
+            angle theta distributions; improved numerical stability of
             computations for small angles by direct cross-section calculation;
             the inverse angular sampling
             is performed without large angle rejection method.</LI>
@@ -612,26 +623,26 @@ please refer to the corresponding History files provided in most packages):
             within the dichotomy finding method; optimized code to 
             improve speed by addition extra class members.</LI>
         <LI><TT>G4eMultipleScattering, G4hMultipleScattering</TT>: improved
-            printout at initialisation; removed old unused
-            header of <TT>G4UrbanMscModel</TT>. </LI>
+            printout at initialisation.</LI>
         <LI><TT>G4UrbanMscModel93</TT>: added randomization of step limit for
             the first step in any volume for option <TT>UseDistanceToBoundary</TT>.</LI>
         <LI><TT>G4WentzelVIModel</TT>: added numerical protections; added
-            <TT>DefineMaterial()</TT> call to the cross-section class;
+            <TT>DefineMaterial()</TT> call to the <TT>G4WentzelOKandVIxSection</TT> class
+            to keep conssitency of two classes in run time;
             optimized method of step limitation; 
             added usage of geometry factor and the option
             <TT>UseDistanceToBoundary</TT>.</LI>
         <LI><TT>G4WentzelOKandVIxSection</TT>: new class to compute cross
-            sections and sample scattering angle; modified <TT>G4WentzelVIModel,
-            G4eCoulombScatteringModel, G4CoulombScatteringModel</TT> to
-            use this new class; added momentum
+            sections and sample scattering angle in <TT>G4WentzelVIModel,
+            G4eCoulombScatteringModel, G4CoulombScatteringModel</TT> classes;
+            added momentum
             dependent limit of scattering angle between single and multiple scattering 
             which allows to use coherently <TT>G4WentzelVIModel</TT>
             with optical model of hadron scattering.</LI>
         <LI><TT>G4eCoulombScatteringModel</TT>: fixed computation of nuclear
             recoil.</LI>
 	<LI><TT>G4IonCoulombCrossSection, G4IonCoulombScatteringModel</TT>: new
-            model of single scattering and NIEL of ions.</LI>
+            model of single scattering and NIEL for ions.</LI>
         <LI><TT>G4UrbanMscModel90, G4UrbanMscModel92, G4UrbanMscModel93</TT>:
             added warning messages.</LI>
         <LI>Removed obsolete classes: <TT>G4UrbanMscModel</TT>,
@@ -648,30 +659,31 @@ please refer to the corresponding History files provided in most packages):
 	<LI>Added <TT>G4ModifiedTsai</TT> class, moved from 'lowenergy' module.</LI>
         <LI><TT>G4PairProductionRelModel, G4eBremsstrahlungRelModel</TT>: use
             general interface to sample polar angular distribution with
-            <TT>G4ModifiedTsai</TT> as default.</LI>
+            the <TT>G4ModifiedTsai</TT> generator as a default.</LI>
         </UL></LI>
     <LI><TT>G4UniversalFluctuation</TT>: revision of width correction
         providing better results for thin targets and a good tail;
-        fixed anomaly at the tail of distribution for thin targets and revised
-        width correction.</LI>
-    <LI>New class <TT>G4UniversalFluctuation93</TT> keeping original version
+        fixed anomaly at the tail of distribution for thin targets.</LI>
+    <LI>New class <TT>G4UniversalFluctuation93</TT> is a backcup of original version
         as in release 9.3 for <TT>G4UniversalFluctuation</TT>.</LI>
     <LI><TT>G4ASTARStopping, G4PSTARTStopping</TT>: replaced C-arrays with
-        <TT>G4PhysicsVector</TT> with Spline interpolation. Reviewed names
+        <TT>G4PhysicsVector</TT> with spline interpolation; reviewed names
         of materials (<TT>G4_PHOTO_EMULSION, G4_He, G4_NYLON-6-6</TT>).</LI>
     <LI><TT>G4WaterStopping</TT>: fixed bug in index of data for Fe ion;
         cleanup in <TT>GetElectronicDEDX()</TT> method.</LI>
     <LI><TT>G4BraggIonGasModel, G4BetheBlochIonGasModel</TT>: new ionisation
-        models for low density media.</LI>
+        models for low density media; charge of projectile ion is not changed
+        by these models during tracking in contrary with the default models.</LI>
     <LI><TT>G4BraggModel</TT>: extended validity range above <TT>2 MeV</TT> 
         using ICRU'49 parameterisation for comparison purposes.</LI>
     <LI>New <TT>G4ICRU73QOModel</TT> for low-energy negatively charged 
-         particles applicable from <TT>5 keV</TT> to <TT>15 MeV</TT> for anti-proton.</LI>
+         particles; it is applicable from <TT>5 keV</TT> to <TT>15 MeV</TT> for anti-proton.</LI>
     <LI><TT>G4hIonisation</TT>: use new <TT>G4ICRU73QOModel</TT> for negatively
         charged particles instead of <TT>G4BraggModel</TT>, which now used to be
         applied for positive-charged particles only; this modification
-        provides simulation of Barkas effect at low energies (before the effect
-        was simulated at higher energies in <TT>G4BetheBlochModel</TT>);
+        improves simulation of Barkas effect at low energies (before the effect
+        was simulated precisely in <TT>G4BetheBlochModel</TT> which 
+	is used above <TT>2 MeV</TT> for protons/anti-protons);
         the high energy limit for the new model is the same as for
         <TT>G4BraggModel</TT> (<TT>2 MeV</TT> for protons/anti-protons).</LI>
     <LI><TT>G4PAIModel, G4PAIySection</TT>: fixed a bug in <TT>G4_Ar</TT>.</LI>
@@ -690,15 +702,15 @@ please refer to the corresponding History files provided in most packages):
 <LI><B>Utils</B>
     <UL>
     <LI><TT>G4VMscModel, G4VMultipleScattering</TT>: set <TT>skin=1.0</TT> as
-        default. Added more detailed printout for kaon+.</LI>
+        a default; added more detailed printout for kaon+.</LI>
     <LI><TT>G4VMscModel</TT>: added protection in computation of the displacement
-        to limit it inside current volume. Addressing problem report
+        to limit it inside current volume - addressing problem report
         <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1128">#1128</A>.
     <LI><TT>G4LossTableManager</TT>: added new method <TT>GetNumberOfBinsPerDecade()</TT>,
         which is used in <TT>G4VEmModel</TT> for initialisation of
-        <TT>G4EmElementSelector</TT>. Addressing problem report
-        <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1115">#1115</A>.
-        Added methods <TT>PreparePhsyicsTables(), BuildPhysicsTables()</TT>,
+        <TT>G4EmElementSelector</TT> - addressing problem report
+        <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1115">#1115</A>;
+        added methods <TT>PreparePhsyicsTables(), BuildPhysicsTables()</TT>,
         fixing initialisation of models via <TT>G4EmConfigurator</TT>.</LI>
     <LI><TT>G4EmProcessOptions</TT>: removed extra initialisation code, already existing
         in <TT>G4LossTableManager</TT>.</LI>
@@ -713,10 +725,10 @@ please refer to the corresponding History files provided in most packages):
         access current charge of an ion; use this method in
         <TT>G4VEnergyLossProcess</TT>.</LI>
     <LI><TT>G4VEnergyLossProcess</TT>: call <TT>CorrectionsAlongStep()</TT> only
-        for ions (minor CPU saving). Use the same method to build cross section
-        table as DEDX table (use copy constructors to reduce number of calls to
-        <TT>exp()</TT>). Minor optimisation to <TT>PostStepDoIt()</TT> to reduce
-        calls to <TT>log()</TT> for random numbers.</LI>
+        for ions (minor CPU saving); use copy constructors to reduce number of calls to
+        <TT>exp()</TT> for building of the cross section
+        table; minor optimisation in <TT>PostStepDoIt()</TT> to reduce
+        number of calls to <TT>log()</TT>.</LI>
     <LI><TT>G4VEnergyLossProcess</TT>: fix addressing problem report
         <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1141">#1141</A>.</LI>
     <LI><TT>G4VEmProcess, G4VEnergyLossProcess, G4VMultipleScattering,
@@ -724,7 +736,7 @@ please refer to the corresponding History files provided in most packages):
         <TT>GetDefinition()</TT> of <TT>G4DynamicParticle</TT> with
         <TT>GetParticleDefinition()</TT>.</LI>
     <LI><TT>G4EmCalculator</TT>: fix in <TT>GetCrossSection()</TT> method.</LI>
-    <LI><TT>G4EmElementSelector</TT>: use Spline flag to construct vectors
+    <LI><TT>G4EmElementSelector</TT>: use spline flag to construct vectors
         probabilities.</LI>
     <LI><TT>G4EmModelManager</TT>: do not use min energy cut defined by models, so
         production threshold is defined only by range to energy conversion and
@@ -744,7 +756,7 @@ please refer to the corresponding History files provided in most packages):
     <LI><TT>G4VEmAngularDistribution</TT>: new general interface for angular distribution.
     <LI>Added class <TT>G4VBremAngularDistribution</TT>, moved from 'lowenergy'
         module.</LI>
-    <LI>Added <TT>G4VAtomDeexcitation</TT>: new general interface to deexcitation module.</LI>
+    <LI>Added <TT>G4VAtomDeexcitation</TT>: new general interface to atomic deexcitation module.</LI>
     <LI>Fixed defects reported by Coverity tool.</LI>
     </UL></LI>
 <LI><B>Xrays</B>
