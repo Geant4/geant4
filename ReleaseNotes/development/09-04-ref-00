@@ -113,8 +113,7 @@ geometry
   o More fixes on Coverity reports for classes G4TessellatedSolid and
     G4ReduciblePolygon.
 - volumes (geomvol-V09-03-09)
-  o Added export of dummy G4AllocStat object from G4NavigationHistory, to
-    allow for symbol export/import on Windows.
+  o Use normal allocator in G4NavigationHistory if building DLLs on Windows.
 
 global                                           global-V09-03-24
 ------
