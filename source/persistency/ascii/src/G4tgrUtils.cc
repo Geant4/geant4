@@ -346,7 +346,7 @@ G4double G4tgrUtils::GetDouble( const G4String& str, G4double unitval )
         
         //----- Check if it is a function
         G4bool bWordOK = false;      
-        if( G4tgrUtils::WordIsFunction( word ) )
+        if( G4tgrUtils::IsFunction( word ) )
         {
           //--- It must be followed by '('
           if( (*site2 == strlen) || (cstr[*site2] != '(') )
@@ -360,7 +360,7 @@ G4double G4tgrUtils::GetDouble( const G4String& str, G4double unitval )
           bWordOK = true;      
         //----- Check if it is a unit      
         }
-        else if( G4tgrUtils::WordIsUnit( word ) )
+        else if( !G4tgrUtils::IsNumber( word ) )
         {
           //--- It must be preceded by a *
           if( (*site == -1)
@@ -550,45 +550,7 @@ G4bool G4tgrUtils::CheckListSize( unsigned int nWreal, unsigned int nWcheck,
 
 
 //-------------------------------------------------------------
-G4bool G4tgrUtils::WordIsUnit( const G4String& word ) 
-{
-  if(    word == "mm"
-      || word == "cm"
-      || word == "m" 
-      || word == "km"
-      || word == "millimeter"
-      || word == "centimeter"
-      || word == "meter"
-      || word == "kilometer"
-      || word == "parsec"
-      || word == "micrometer"
-      || word == "nanometer"
-      || word == "angstrom"
-      || word == "fermi"
-      || word == "nm"
-      || word == "um"
-      || word == "pc"
-      || word == "radian"
-      || word == "milliradian"
-      || word == "degree"
-      || word == "rad"
-      || word == "mrad"
-      || word == "deg"
-      || word == "ns"
-      || word == "curie"
-      || word == "curie"   )
-  { 
-    return true;
-  }
-  else
-  { 
-    return false;
-  }
-}
-
-
-//-------------------------------------------------------------
-G4bool G4tgrUtils::WordIsFunction( const G4String& word ) 
+G4bool G4tgrUtils::IsFunction( const G4String& word ) 
 {
   if(    word == "sin"
       || word == "cos"

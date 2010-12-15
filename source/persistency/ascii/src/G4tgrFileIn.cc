@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrFileIn.cc,v 1.12 2010-10-13 15:20:01 gcosmo Exp $
+// $Id: G4tgrFileIn.cc,v 1.13 2010-12-15 11:29:54 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -50,7 +50,7 @@ std::vector<G4tgrFileIn*> G4tgrFileIn::theInstances;
 
 //-----------------------------------------------------------------------
 G4tgrFileIn::G4tgrFileIn()
-  : theCurrentFile(-1), theName("geom.txt")
+  : theCurrentFile(-1), theName("")
 {
 }
 
