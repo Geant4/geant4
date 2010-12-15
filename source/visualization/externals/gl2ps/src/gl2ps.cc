@@ -70,7 +70,7 @@
 #include "Geant4_gl2ps.h"
 
 #include <cmath>
-#include <string>
+#include <string.h>
 #include <sys/types.h>
 #include <stdarg.h>
 #include <time.h>
