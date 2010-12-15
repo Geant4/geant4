@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationHistory.hh,v 1.18 2010-04-22 09:06:50 gcosmo Exp $
+// $Id: G4NavigationHistory.hh,v 1.19 2010-12-15 17:05:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4NavigationHistory
@@ -141,10 +141,14 @@ class G4NavigationHistory
 
  private:
 
+#ifdef G4LIB_BUILD_DLL
+  std::vector<G4NavigationLevel> fNavHistory;
+#else
   std::vector<G4NavigationLevel,
               G4EnhancedVecAllocator<G4NavigationLevel> > fNavHistory;
     // The geometrical tree; uses specialized allocator to optimize
     // memory handling and reduce possible fragmentation
+#endif
 
   G4int fStackDepth;
     // Depth of stack: effectively depth in geometrical tree

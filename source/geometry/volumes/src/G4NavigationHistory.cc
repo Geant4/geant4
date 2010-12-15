@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationHistory.cc,v 1.16 2010-07-05 13:28:33 gcosmo Exp $
+// $Id: G4NavigationHistory.cc,v 1.17 2010-12-15 17:05:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,12 +37,14 @@
 #include "G4NavigationHistory.hh"
 #include "G4ios.hh"
 
-// Initialise static data for the specialized memory pool
-// for the internal STL vector of histories  ...
-//
-G4ChunkIndexType* G4AllocStats::allocStat = 0;
-G4int             G4AllocStats::totSpace = 0;
-G4int             G4AllocStats::numCat = 0;
+#ifndef G4LIB_BUILD_DLL
+  // Initialise static data for the specialized memory pool
+  // for the internal STL vector of histories  ...
+  //
+  G4ChunkIndexType* G4AllocStats::allocStat = 0;
+  G4int             G4AllocStats::totSpace = 0;
+  G4int             G4AllocStats::numCat = 0;
+#endif
 
 G4NavigationHistory::G4NavigationHistory()
   : fNavHistory(kHistoryMax), fStackDepth(0)
