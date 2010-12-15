@@ -300,14 +300,15 @@ Please see the corresponding details in
 
 <B>Hadronic physics</B>
 <UL>
-<LI>Implemented integer Z and A in hadronic interfaces. Effective or average values
-    of Z and A are no longer allowed.</LI>
+<LI>Hadronic interfaces now require integer Z and A arguments.  Elements or
+    materials with effective or average values of Z and A are no longer 
+    allowed.</LI>
 <LI>Energy/momentum conservation checking is now available for all hadronic
     processes, along with methods to set the level of detail of the output.</LI>
 <LI>All hadronic processes now check to see if the cross section has become negative
     at the end of a step, before invoking the model.</LI>
 <LI>Quark exchange, Reggeon cascade and nuclear destruction parameters in the FTF 
-    were tuned.   Tuning of the nuclear destruction parameters was based on
+    model were tuned.   Tuning of the nuclear destruction parameters was based on
     HARP-CDP data. Low mass string fragmentation was improved.</LI>
 <LI>An isomer decay table was added to extend the number of existing isomers in the 
     radioactive decay model.  All of them will be decayed by isomeric transition
@@ -318,21 +319,23 @@ Please see the corresponding details in
     re-written and improved.  An interface to the G4Precompound model is now 
     available.</LI> 
 <LI>Anti-baryon-nucleon elastic scattering was added to the CHIPS model.</LI>
-<LI>Fermi breakup was extended to include fragments with 1 < A < 5.  Several
-    improvements were made to bring the model closer to the original one of Botvina.
-    Use hybrid of Fermi breakup and GEM models for A < 20.  Several other
-    improvements were made to the evaporation models.  A README file was added
-    explaining the photo-evaporation data files.</LI>
+<LI>Fermi breakup was extended to include fragments with <TT>1 < A < 5 </TT>.
+    Several improvements were made to bring the model closer to the original
+    one of Botvina.  Use hybrid of Fermi breakup and GEM models for
+    <TT>A < 20</TT>.  Several other improvements were made to the evaporation
+    models.  A README file was added explaining the photo-evaporation data
+    files.</LI>
 <LI>RQMD (relativistic quantum molecular dynamics) code was enabled in the QMD
     model to allow treatment of higher collision energies.</LI>
-<LI>A new model, G4NuclNuclDiffuseElastic is now available for nucleus-nucleus
-    elastic scattering.</LI>
+<LI>A new model, <TT>G4NuclNuclDiffuseElastic</TT> is now available for 
+    nucleus-nucleus elastic scattering.</LI>
 <LI>New, fast models and cross sections for neutron elastic, inelastic and capture
-    now available: G4NeutronElasticXS, G4NeutronInelasticXS and G4NeutronCaptureXS.
+    are now available: G4NeutronElasticXS, G4NeutronInelasticXS and 
+    G4NeutronCaptureXS.
     </LI>
-<LI>New class <TT>G4ComponentAntiNuclNuclearXS</TT> developed for the calculation
-    of the total elastic and inelastic cross-sections of anti-nucleon and
-    anti-nucleus interactions with nuclei based on Glauber approach.</LI>
+<LI>A new class <TT>G4ComponentAntiNuclNuclearXS</TT> was developed for the
+    calculation of the total elastic and inelastic cross sections of anti-nucleon
+    and anti-nucleus interactions with nuclei based on the Glauber approach.</LI>
 </UL>
 
 <P> </P>
@@ -361,11 +364,20 @@ Please see the corresponding details in
 
 <B>Hadronic physics</B>
 <UL>
+<LI>Improved treatment of low mass strings in the FTF model allows the model
+    to be used at lower energies and provides a smoother transition in energy
+    response in the region where string models give way to cascade models.</LI>
+<LI>Improved memory management in the Bertini cascade model results in a
+    10-fold reduction of object creation and destruction. The model also now
+    does a much better job of conserving energy and momentum.</LI> 
 <LI>Fermi Break-up Model and GEM evaporation are used by default providing
     improved production of light fragments in nuclear fragmentation at low
     energy.</LI> 
 <LI>Improved spectra of nuclear gamma deexcitation including Doppler
-    broadening simulation.</LI> 
+    broadening simulation.</LI>
+<LI>Fast neutron models provide significant CPU savings for applications
+    dealing with neutrons below 20 MeV.</LI>
+<LI>Materials defined with an effective Z or A can no longer be used.</LI>
 </UL>
 
 <P> </P>
@@ -1230,8 +1242,8 @@ please refer to the corresponding History files provided in most packages):
         virtual methods <TT>EmittedFragment()</TT> and <TT>BreakUpFragment()</TT>.</LI>
     <LI><TT>G4DiscreteGammaTransition</TT>: make transition depended on Z and A (before
         was only Z) and added energy tolerance</LI>
-    <LI><TT>G4VGammaDeexcitation</TT>: rewritten kinematic of 2-body decay;
-        fix in kinematics to take into account the electron mass and the bounding energy 
+    <LI><TT>G4VGammaDeexcitation</TT>: rewritten kinematics of 2-body decay;
+        fix in kinematics to take into account the electron mass and the binding energy 
         in the case of electron emission.</LI>
     <LI><TT>G4DiscreteGammaTransition, G4DiscreteGammaDeexcitation, 
         G4ContinuumGammaDeexcitation</TT>: set energy tolerance <TT>1 keV</TT>;
@@ -1278,7 +1290,7 @@ please refer to the corresponding History files provided in most packages):
     </UL></LI>
 <LI><B>High Energy Theoretical</B>
     <UL>
-    <LI>Fixed in <TT>G4HEInelastic</TT> case of array overrun; got rid of dead
+    <LI>In <TT>G4HEInelastic</TT> fixed case of array overrun; got rid of dead
         code and a memory leak in methods <TT>HighEnergyCascading(),
         MediumEnergyCascading()</TT> and <TT>QuasiElasticScattering()</TT>.</LI>
     <LI>Fixed uninitialized data and removed dead code where applicable.</LI>
