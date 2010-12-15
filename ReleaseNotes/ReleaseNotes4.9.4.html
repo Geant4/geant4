@@ -300,7 +300,39 @@ Please see the corresponding details in
 
 <B>Hadronic physics</B>
 <UL>
-<LI>!!!!!!!! FILL IN HERE IF REQUIRED !!!!!!! </LI> 
+<LI>Implemented integer Z and A in hadronic interfaces. Effective or average values
+    of Z and A are no longer allowed.</LI>
+<LI>Energy/momentum conservation checking is now available for all hadronic
+    processes, along with methods to set the level of detail of the output.</LI>
+<LI>All hadronic processes now check to see if the cross section has become negative
+    at the end of a step, before invoking the model.</LI>
+<LI>Quark exchange, Reggeon cascade and nuclear destruction parameters in the FTF 
+    were tuned.   Tuning of the nuclear destruction parameters was based on
+    HARP-CDP data. Low mass string fragmentation was improved.</LI>
+<LI>An isomer decay table was added to extend the number of existing isomers in the 
+    radioactive decay model.  All of them will be decayed by isomeric transition
+    (IT).  A README file was added to explain the radioactive decay data files. </LI>
+<LI>The Bertini cascade model was re-written to employ more code re-use, improve
+    memory management, and provide better energy/momentum conservation.  Angular 
+    distributions of the two-body final states of hadron-nucleon interactions were 
+    re-written and improved.  An interface to the G4Precompound model is now 
+    available.</LI> 
+<LI>Anti-baryon-nucleon elastic scattering was added to the CHIPS model.</LI>
+<LI>Fermi breakup was extended to include fragments with 1 < A < 5.  Several
+    improvements were made to bring the model closer to the original one of Botvina.
+    Use hybrid of Fermi breakup and GEM models for A < 20.  Several other
+    improvements were made to the evaporation models.  A README file was added
+    explaining the photo-evaporation data files.</LI>
+<LI>RQMD (relativistic quantum molecular dynamics) code was enabled in the QMD
+    model to allow treatment of higher collision energies.</LI>
+<LI>A new model, G4NuclNuclDiffuseElastic is now available for nucleus-nucleus
+    elastic scattering.</LI>
+<LI>New, fast models and cross sections for neutron elastic, inelastic and capture
+    now available: G4NeutronElasticXS, G4NeutronInelasticXS and G4NeutronCaptureXS.
+    </LI>
+<LI>New class <TT>G4ComponentAntiNuclNuclearXS</TT> developed for the calculation
+    of the total elastic and inelastic cross-sections of anti-nucleon and
+    anti-nucleus interactions with nuclei based on Glauber approach.</LI>
 </UL>
 
 <P> </P>
@@ -1085,7 +1117,7 @@ please refer to the corresponding History files provided in most packages):
         with a new parameterization of elastic scattering data using the sum of
         two exponentials.</LI>
     <LI>Improved angular distributions for 2-body final states of pi-nucleon,
-        nucleon-nucleon, kaon-nucleon anf hyperon-nucleon scattering.</LI>
+        nucleon-nucleon, kaon-nucleon and hyperon-nucleon scattering.</LI>
     <LI>Replaced <TT>G4CascadeMomentum</TT> internal class with
         <TT>G4LorentzVector</TT>.</LI>
     <LI>Added energy/momentum checks to remove large energy non-conservation
@@ -1125,7 +1157,7 @@ please refer to the corresponding History files provided in most packages):
     <LI>Updated proton elastic and CHIPS parameters.</LI>
     <LI>Implemented anti-baryon elastic interactions.</LI>
     <LI>Added pion elastic and fixed a bug in CHIPS fragmentation.</LI>
-    <LI>Implemented isotope wise CHIPS elastic for neutrons.</LI>
+    <LI>Implemented isotope-wise CHIPS elastic for neutrons.</LI>
     <LI>Fix in <TT>G4QElasticCrossSection</TT> in parameter order for nH. </LI>
     <LI>Bug fix in <TT>G4QNeutronNuclearCrossSection</TT> for Ba isotopes.</LI>
     <LI>Bug fix for K0 in <TT>G4QKaonMinusElasticCrossSection::GetExchangeT()</TT>.</LI>
