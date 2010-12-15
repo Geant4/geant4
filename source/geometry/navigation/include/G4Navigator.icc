@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.icc,v 1.17 2010-11-10 11:20:11 gcosmo Exp $
+// $Id: G4Navigator.icc,v 1.18 2010-12-15 13:46:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -304,6 +304,19 @@ inline
 G4TouchableHistory* G4Navigator::CreateTouchableHistory() const
 {
   return new G4TouchableHistory(fHistory);
+}
+
+// ********************************************************************
+// CreateTouchableHistory(history)
+//
+// `Touchable' creation method: caller has deletion responsibility
+// ********************************************************************
+//
+inline
+G4TouchableHistory*
+G4Navigator::CreateTouchableHistory(const G4NavigationHistory* history) const
+{
+  return new G4TouchableHistory(*history);
 }
 
 // ********************************************************************

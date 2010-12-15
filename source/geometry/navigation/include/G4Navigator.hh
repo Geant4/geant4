@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.33 2010-11-10 11:20:11 gcosmo Exp $
+// $Id: G4Navigator.hh,v 1.34 2010-12-15 13:46:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -199,6 +199,7 @@ class G4Navigator
   inline G4GRSVolume* CreateGRSVolume() const;
   inline G4GRSSolid* CreateGRSSolid() const; 
   inline G4TouchableHistory* CreateTouchableHistory() const;
+  inline G4TouchableHistory* CreateTouchableHistory(const G4NavigationHistory*) const;
     // `Touchable' creation methods: caller has deletion responsibility.
 
   virtual G4TouchableHistoryHandle CreateTouchableHistoryHandle() const;
