@@ -24,22 +24,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreSplittingProcess.cc,v 1.7 2010-11-26 10:19:12 gcosmo Exp $
+// $Id: G4ScoreSplittingProcess.cc,v 1.8 2010-12-15 10:22:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4ios.hh"
 #include "G4ScoreSplittingProcess.hh"
 #include "G4Step.hh"
-#include "G4Navigator.hh"
 #include "G4VTouchable.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4ParticleChange.hh"
-// #include "G4PathFinder.hh"
 #include "G4TransportationManager.hh"
 #include "G4ParticleChange.hh"
 #include "G4StepPoint.hh"
-// #include "G4FieldTrackUpdator.hh"
 
 #include "G4SDManager.hh"
 #include "G4VSensitiveDetector.hh"
@@ -231,9 +228,9 @@ G4ScoreSplittingProcess::CreateTouchableForSubStep( G4int newVoxelNum, G4ThreeVe
 {
   // G4cout << " Creating touchable handle for voxel-no " << newVoxelNum << G4endl;
 
-  G4TouchableHistory*  oldTouchableHistory= dynamic_cast<G4TouchableHistory*>(fOldTouchableH());
-  G4TouchableHistory*  ptrTouchableHistory= new G4TouchableHistory( *oldTouchableHistory );
-
+  G4TouchableHistory*  ptrTouchableHistory= G4TransportationManager::GetTransportationManager()->
+                                            GetNavigatorForTracking()->CreateTouchableHistory();
+  
   // Change the history
   G4NavigationHistory* ptrNavHistory= const_cast<G4NavigationHistory*>(ptrTouchableHistory->GetHistory());
   G4VPhysicalVolume*   curPhysicalVol= ptrNavHistory->GetTopVolume();
