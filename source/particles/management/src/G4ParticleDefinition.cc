@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.cc,v 1.37 2010-10-11 03:33:56 kurasige Exp $
+// $Id: G4ParticleDefinition.cc,v 1.38 2010-12-15 07:39:08 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -151,8 +151,8 @@ G4ParticleDefinition::G4ParticleDefinition(
    }
   
    if (theParticleTable->GetIonTable()->IsAntiIon(this)) {
-     SetAtomicNumber( abs(G4int(GetPDGCharge()/eplus)) );
-     SetAtomicMass( abs(GetBaryonNumber()) );
+     SetAtomicNumber( std::abs(G4int(GetPDGCharge()/eplus)) );
+     SetAtomicMass( std::abs(GetBaryonNumber()) );
    }
    
    // check name and register this particle into ParticleTable

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PDGCodeChecker.cc,v 1.15 2010-10-30 07:55:00 kurasige Exp $
+// $Id: G4PDGCodeChecker.cc,v 1.16 2010-12-15 07:39:05 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -367,7 +367,7 @@ G4bool G4PDGCodeChecker::CheckCharge(G4double thePDGCharge) const
 /////////////
 G4int G4PDGCodeChecker::CheckForNuclei()
 {
-  G4int pcode = abs(code);
+  G4int pcode = std::abs(code);
   if (pcode < 1000000000) {
     // non-nuclei   
     return 0;

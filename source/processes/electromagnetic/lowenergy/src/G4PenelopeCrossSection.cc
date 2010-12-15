@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeCrossSection.cc,v 1.1 2010-07-26 09:56:42 pandola Exp $
+// $Id: G4PenelopeCrossSection.cc,v 1.2 2010-12-15 07:39:14 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -130,35 +130,35 @@ void G4PenelopeCrossSection::AddCrossSectionPoint(size_t binNumber,G4double ener
       G4cout << "Trying to register more points than originally declared" << G4endl;
       return;     
     }
-   G4double logEne = log(energy);
+   G4double logEne = std::log(energy);
 
    //XS0
-   G4double val = log(std::max(XS0,1e-42*cm2)); //avoid log(0)
+   G4double val = std::log(std::max(XS0,1e-42*cm2)); //avoid log(0)
    theVector->PutValue(binNumber,logEne,val);
 
    //XS1
    theVector = (G4PhysicsFreeVector*) (*softCrossSections)[1];
-   val =  log(std::max(XS1,1e-42*eV*cm2)); //avoid log(0)
+   val =  std::log(std::max(XS1,1e-42*eV*cm2)); //avoid log(0)
    theVector->PutValue(binNumber,logEne,val);
 
    //XS2
    theVector = (G4PhysicsFreeVector*) (*softCrossSections)[2];
-   val =  log(std::max(XS2,1e-42*eV*eV*cm2)); //avoid log(0)
+   val =  std::log(std::max(XS2,1e-42*eV*eV*cm2)); //avoid log(0)
    theVector->PutValue(binNumber,logEne,val);
 
    //XH0
    theVector = (G4PhysicsFreeVector*) (*hardCrossSections)[0];
-   val =  log(std::max(XH0,1e-42*cm2)); //avoid log(0)
+   val =  std::log(std::max(XH0,1e-42*cm2)); //avoid log(0)
    theVector->PutValue(binNumber,logEne,val);
 
    //XH1
    theVector = (G4PhysicsFreeVector*) (*hardCrossSections)[1];
-   val =  log(std::max(XH1,1e-42*eV*cm2)); //avoid log(0)
+   val =  std::log(std::max(XH1,1e-42*eV*cm2)); //avoid log(0)
    theVector->PutValue(binNumber,logEne,val);
 
     //XH2
    theVector = (G4PhysicsFreeVector*) (*hardCrossSections)[2];
-   val =  log(std::max(XH2,1e-42*eV*eV*cm2)); //avoid log(0)
+   val =  std::log(std::max(XH2,1e-42*eV*eV*cm2)); //avoid log(0)
    theVector->PutValue(binNumber,logEne,val);
    
    return;
@@ -198,8 +198,8 @@ void G4PenelopeCrossSection::AddShellCrossSectionPoint(size_t binNumber,
       G4cout << "Trying to register more points than originally declared" << G4endl;
       return;     
     }
-   G4double logEne = log(energy);
-   G4double val = log(std::max(xs,1e-42*cm2)); //avoid log(0)
+   G4double logEne = std::log(energy);
+   G4double val = std::log(std::max(xs,1e-42*cm2)); //avoid log(0)
    theVector->PutValue(binNumber,logEne,val);
 
    return;
@@ -228,9 +228,9 @@ G4double G4PenelopeCrossSection::GetTotalCrossSection(G4double energy)
       G4cout << "Soft cross section table looks not filled" << G4endl;
       return result;
     }
-  G4double logene = log(energy);
+  G4double logene = std::log(energy);
   G4double logXS = theVector->Value(logene);
-  G4double softXS = exp(logXS);
+  G4double softXS = std::exp(logXS);
 
    // 2) hard part
   theVector = (G4PhysicsFreeVector*) (*hardCrossSections)[0];
@@ -242,7 +242,7 @@ G4double G4PenelopeCrossSection::GetTotalCrossSection(G4double energy)
       return result;
     }
   logXS = theVector->Value(logene);
-  G4double hardXS = exp(logXS);
+  G4double hardXS = std::exp(logXS);
 
   result = hardXS + softXS;
   return result;  
@@ -271,9 +271,9 @@ G4double G4PenelopeCrossSection::GetHardCrossSection(G4double energy)
       G4cout << "Hard cross section table looks not filled" << G4endl;
       return result;
     }
-  G4double logene = log(energy);
+  G4double logene = std::log(energy);
   G4double logXS = theVector->Value(logene);
-  result = exp(logXS);
+  result = std::exp(logXS);
 
   return result;
 }
@@ -301,9 +301,9 @@ G4double G4PenelopeCrossSection::GetSoftStoppingPower(G4double energy)
       G4cout << "Soft cross section table looks not filled" << G4endl;
       return result;
     }
-  G4double logene = log(energy);
+  G4double logene = std::log(energy);
   G4double logXS = theVector->Value(logene);
-  result = exp(logXS);
+  result = std::exp(logXS);
 
   return result;
 }
@@ -338,9 +338,9 @@ G4double G4PenelopeCrossSection::GetShellCrossSection(size_t shellID,G4double en
       G4cout << "Soft cross section table looks not filled" << G4endl;
       return result;
     }
-  G4double logene = log(energy);
+  G4double logene = std::log(energy);
   G4double logXS = theVector->Value(logene);
-  result = exp(logXS);
+  result = std::exp(logXS);
 
   return result;
 }
@@ -368,9 +368,9 @@ void G4PenelopeCrossSection::NormalizeShellCrossSections()
 	  G4PhysicsFreeVector* theVec = 
 	    (G4PhysicsFreeVector*) (*shellCrossSections)[shellID];
 	  
-	  normFactor += exp((*theVec)[i]);
+	  normFactor += std::exp((*theVec)[i]);
 	}
-      G4double logNormFactor = log(normFactor);
+      G4double logNormFactor = std::log(normFactor);
       //Normalize
       for (size_t shellID=0;shellID<numberOfShells;shellID++)
 	{
@@ -396,7 +396,7 @@ void G4PenelopeCrossSection::NormalizeShellCrossSections()
       for (size_t i=0;i<numberOfEnergyPoints;i++) //loop on energy
 	{
 	  G4double logene = theVec->GetLowEdgeEnergy(i);
-	  G4cout << exp(logene)/MeV << " " << exp((*theVec)[i]) << G4endl;
+	  G4cout << std::exp(logene)/MeV << " " << std::exp((*theVec)[i]) << G4endl;
 	}
     }
   */

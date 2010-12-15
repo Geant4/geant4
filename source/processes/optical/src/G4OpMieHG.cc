@@ -103,9 +103,9 @@ G4OpMieHG::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         G4double Theta;
         //sample the direction
         if (g!=0) {
-          Theta = acos(2*r*(1+g)*(1+g)*(1-g+g*r)/((1-g+2*g*r)*(1-g+2*g*r)) -1);
+          Theta = std::acos(2*r*(1+g)*(1+g)*(1-g+g*r)/((1-g+2*g*r)*(1-g+2*g*r)) -1);
         } else {
-          Theta = acos(2*r-1.);
+          Theta = std::acos(2*r-1.);
 	}
         G4double Phi = G4UniformRand()*2*pi;
 
@@ -115,7 +115,7 @@ G4OpMieHG::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         G4ThreeVector OldPolarization, NewPolarization;
 
         NewMomentumDirection.set
-                       (sin(Theta)*cos(Phi), sin(Theta)*sin(Phi), cos(Theta));
+                       (std::sin(Theta)*std::cos(Phi), std::sin(Theta)*std::sin(Phi), std::cos(Theta));
         OldMomentumDirection = aParticle->GetMomentumDirection();
         NewMomentumDirection.rotateUz(OldMomentumDirection);
         NewMomentumDirection = NewMomentumDirection.unit();

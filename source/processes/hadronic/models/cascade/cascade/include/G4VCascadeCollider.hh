@@ -1,5 +1,3 @@
-#ifndef G4V_CASCADE_COLLIDER_HH
-#define G4V_CASCADE_COLLIDER_HH
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -24,7 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4VCascadeCollider.hh,v 1.4 2010-07-14 15:41:12 mkelsey Exp $
+//
+#ifndef G4V_CASCADE_COLLIDER_HH
+#define G4V_CASCADE_COLLIDER_HH
+// $Id: G4VCascadeCollider.hh,v 1.5 2010-12-15 07:40:04 gunter Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100615  M. Kelsey -- Split constructor to have verbose separately

@@ -22,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4PreCompoundDeexcitation.cc,v 1.6 2010-09-27 04:03:43 mkelsey Exp $
+//
+// $Id: G4PreCompoundDeexcitation.cc,v 1.7 2010-12-15 07:41:19 gunter Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Takes an arbitrary excited or unphysical nuclear state and produces

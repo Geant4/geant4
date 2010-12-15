@@ -22,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: nucleiLevelDensity.cc,v 1.8 2010-09-14 17:51:36 mkelsey Exp $
+//
+// $Id: nucleiLevelDensity.cc,v 1.9 2010-12-15 07:41:27 gunter Exp $
 //
 // 20100914  M. Kelsey -- Migrate to integer A and Z; simplify code
 

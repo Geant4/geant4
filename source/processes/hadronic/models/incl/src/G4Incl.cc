@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.cc,v 1.36 2010-11-17 20:19:09 kaitanie Exp $ 
+// $Id: G4Incl.cc,v 1.37 2010-12-15 07:41:31 gunter Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -8729,7 +8729,7 @@ void G4Incl::projo_spec(G4int, G4int ips,
       if(bl1->ind2[i_c] == 1) ps->z_projspec=ps->z_projspec+1;
     } // enddo
     G4double p_spec2=std::pow(p1_spec,2)+std::pow(p2_spec,2)+std::pow(p3_spec,2);
-    G4double s_spec = sqrt(std::pow(e_spec,2)-p_spec2);
+    G4double s_spec = std::sqrt(std::pow(e_spec,2)-p_spec2);
 
     // no projectile spectator if a>=4 and a=z or a=n (no dresner breakup)
     if(ips >= 4 && (ps->z_projspec == ips || ps->z_projspec == 0)) {

@@ -22,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeFunctions.hh,v 1.7 2010-08-03 23:09:36 mkelsey Exp $
+//
+// $Id: G4CascadeFunctions.hh,v 1.8 2010-12-15 07:39:38 gunter Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100407  M. Kelsey -- Return particle types std::vector<> by const ref,

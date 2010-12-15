@@ -22,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeRecoilMaker.cc,v 1.7 2010-09-25 06:44:30 mkelsey Exp $
+//
+// $Id: G4CascadeRecoilMaker.cc,v 1.8 2010-12-15 07:40:35 gunter Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Collects generated cascade data (using Collider::collide() interface)

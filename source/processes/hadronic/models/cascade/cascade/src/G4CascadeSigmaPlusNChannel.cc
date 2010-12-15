@@ -22,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeSigmaPlusNChannel.cc,v 1.6 2010-08-04 05:28:24 mkelsey Exp $
+//
+// $Id: G4CascadeSigmaPlusNChannel.cc,v 1.7 2010-12-15 07:40:41 gunter Exp $
 //
 // 20100804  M. Kelsey -- Add name string to ctor
 

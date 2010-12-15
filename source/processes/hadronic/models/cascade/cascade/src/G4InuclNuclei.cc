@@ -22,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclNuclei.cc,v 1.22 2010-09-25 06:44:30 mkelsey Exp $
+//
+// $Id: G4InuclNuclei.cc,v 1.23 2010-12-15 07:41:11 gunter Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100301  M. Kelsey -- Add function to create unphysical nuclei for use

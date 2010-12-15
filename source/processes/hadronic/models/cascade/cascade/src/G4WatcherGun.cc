@@ -22,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4WatcherGun.cc,v 1.15 2010-10-22 20:41:05 mkelsey Exp $
+//
+// $Id: G4WatcherGun.cc,v 1.16 2010-12-15 07:41:23 gunter Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // To include numerous high-Z watchers (e.g., for proton-lead collisions)

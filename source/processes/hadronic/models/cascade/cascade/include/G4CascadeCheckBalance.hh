@@ -1,5 +1,3 @@
-#ifndef G4CASCADE_CHECK_BALANCE_HH
-#define G4CASCADE_CHECK_BALANCE_HH
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -25,7 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeCheckBalance.hh,v 1.11 2010-09-24 06:26:06 mkelsey Exp $
+#ifndef G4CASCADE_CHECK_BALANCE_HH
+#define G4CASCADE_CHECK_BALANCE_HH
+// $Id: G4CascadeCheckBalance.hh,v 1.12 2010-12-15 07:39:30 gunter Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Verify and report four-momentum conservation for collision output; uses

@@ -22,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.hh,v 1.21 2010-09-16 05:21:00 mkelsey Exp $
+//
+// $Id: G4IntraNucleiCascader.hh,v 1.22 2010-12-15 07:39:54 gunter Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100315  M. Kelsey -- Remove "using" directory and unnecessary #includes.

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: MCTruthManager.cc,v 1.3 2010-12-02 15:37:20 witoldp Exp $
+// $Id: MCTruthManager.cc,v 1.4 2010-12-15 07:38:50 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -275,8 +275,8 @@ void MCTruthManager::printTree(HepMC::GenParticle* particle, G4String offset)
   {
     G4String deltaoffset = "";
 
-    G4int curr = fmod((*it)->barcode(),10000000);
-    G4int part = fmod(particle->barcode(),10000000);
+    G4int curr = std::fmod((*it)->barcode(),10000000);
+    G4int part = std::fmod(particle->barcode(),10000000);
     if( curr != part )
       {
         deltaoffset = " | ";

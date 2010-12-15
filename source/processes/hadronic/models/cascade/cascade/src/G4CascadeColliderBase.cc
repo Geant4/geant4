@@ -22,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeColliderBase.cc,v 1.5 2010-09-26 04:06:03 mkelsey Exp $
+//
+// $Id: G4CascadeColliderBase.cc,v 1.6 2010-12-15 07:40:08 gunter Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100714  M. Kelsey -- Move functionality from G4VCascadeCollider, and

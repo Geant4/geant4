@@ -97,27 +97,27 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 	//total energy loss
   EnergyDeposit /= TotNbofEvents; EnergyDeposit2 /= TotNbofEvents;
   G4double rmsEdep = EnergyDeposit2 - EnergyDeposit*EnergyDeposit;
-	if(rmsEdep >0.)rmsEdep=sqrt(rmsEdep/TotNbofEvents);
+	if(rmsEdep >0.)rmsEdep=std::sqrt(rmsEdep/TotNbofEvents);
 	else rmsEdep =0;
 
 	//nuclear energy loss
   NonIonEnergyDeposit /= TotNbofEvents; NonIonEnergyDeposit2 /= TotNbofEvents;
   G4double rmsEnondep = NonIonEnergyDeposit2 - NonIonEnergyDeposit*NonIonEnergyDeposit;
-	if(rmsEnondep>0.) rmsEnondep= sqrt(rmsEnondep/TotNbofEvents);
+	if(rmsEnondep>0.) rmsEnondep= std::sqrt(rmsEnondep/TotNbofEvents);
 	else rmsEnondep=0;
 
 
 	//mean sum of T( kinetic energy of secondary)x L(T) partition energy 
    sum_TL/=TotNbofEvents;     sum_TL2/=TotNbofEvents;
    G4double rmssum_TL =sum_TL2- sum_TL*sum_TL;
-   	if(rmssum_TL>0.) rmssum_TL=sqrt(rmssum_TL/TotNbofEvents);
+   	if(rmssum_TL>0.) rmssum_TL=std::sqrt(rmssum_TL/TotNbofEvents);
 	else rmssum_TL =0;
 
 
      //mean kinetic energy of secondary particles (IDp==1) 
    sum_T/=N_rec;     sum_T2/=N_rec;
    G4double rmssum_T =sum_T2- sum_T*sum_T;
-        if(rmssum_T>0.) rmssum_T=sqrt(rmssum_T/N_rec);
+        if(rmssum_T>0.) rmssum_T=std::sqrt(rmssum_T/N_rec);
         else rmssum_T =0;
 
 

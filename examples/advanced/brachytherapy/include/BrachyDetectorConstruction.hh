@@ -21,7 +21,8 @@
 // * any work based  on the software)  you  agree  to acknowledge its *
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
-// ******************************************************************** 
+// ********************************************************************
+//
 //    ****************************************
 //    *                                      *
 //    *    BrachyDetectorConstruction.hh     *

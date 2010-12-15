@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ions.cc,v 1.17 2010-10-09 10:36:02 kurasige Exp $
+// $Id: G4Ions.cc,v 1.18 2010-12-15 07:39:02 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,8 +67,8 @@ G4Ions::G4Ions(
 
    if (GetAtomicNumber() == 0  ) {
      // AtomicNumber/Mass is positve even for anti_nulceus
-     SetAtomicNumber( abs(G4int(GetPDGCharge()/eplus)) );
-     SetAtomicMass( abs(GetBaryonNumber()) );
+     SetAtomicNumber( std::abs(G4int(GetPDGCharge()/eplus)) );
+     SetAtomicMass( std::abs(GetBaryonNumber()) );
    }
 }
 

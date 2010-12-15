@@ -1,3 +1,4 @@
+//
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -23,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PartialPhantomParameterisation.cc,v 1.2 2010-11-10 11:20:45 gcosmo Exp $
+// $Id: G4PartialPhantomParameterisation.cc,v 1.3 2010-12-15 07:39:00 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

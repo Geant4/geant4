@@ -22,6 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
 // This is the *basic* version of Hadrontherapy, a Geant4-based application
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 //

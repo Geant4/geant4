@@ -22,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4ExitonConfiguration.hh,v 1.7 2010-09-24 06:26:06 mkelsey Exp $
+//
+// $Id: G4ExitonConfiguration.hh,v 1.8 2010-12-15 07:39:50 gunter Exp $
 //
 // 20100909  Add function to reset values to zero
 // 20100924  Migrate to integer A and Z

@@ -22,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4Analyser.hh,v 1.10 2010-10-14 20:55:10 mkelsey Exp $
+//
+// $Id: G4Analyser.hh,v 1.11 2010-12-15 07:39:28 gunter Exp $
 //
 // 20101010  M. Kelsey -- Migrate to integer A and Z
 

@@ -96,7 +96,7 @@
 #define GL2PS_ZSCALE        1000.0F
 #define GL2PS_ZOFFSET       5.0e-2F
 #define GL2PS_ZOFFSET_LARGE 20.0F
-#define GL2PS_ZERO(arg)     (fabs(arg) < 1.e-20)
+#define GL2PS_ZERO(arg)     (std::fabs(arg) < 1.e-20)
 
 /* Primitive types */
 
@@ -724,9 +724,9 @@ static GLboolean gl2psSameColorThreshold(int n, GL2PSrgba rgba[],
   if(n < 2) return GL_TRUE;
   
   for(i = 1; i < n; i++){
-    if(fabs(rgba[0][0] - rgba[i][0]) > threshold[0] ||
-       fabs(rgba[0][1] - rgba[i][1]) > threshold[1] ||
-       fabs(rgba[0][2] - rgba[i][2]) > threshold[2])
+    if(std::fabs(rgba[0][0] - rgba[i][0]) > threshold[0] ||
+       std::fabs(rgba[0][1] - rgba[i][1]) > threshold[1] ||
+       std::fabs(rgba[0][2] - rgba[i][2]) > threshold[2])
       return GL_FALSE;
   }
   

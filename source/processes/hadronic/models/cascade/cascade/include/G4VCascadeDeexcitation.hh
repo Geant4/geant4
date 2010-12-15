@@ -1,5 +1,3 @@
-#ifndef G4VCASCADE_DEEXCITATION_HH
-#define G4VCASCADE_DEEXCITATION_HH
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -24,7 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4VCascadeDeexcitation.hh,v 1.1 2010-09-27 04:07:23 mkelsey Exp $
+//
+#ifndef G4VCASCADE_DEEXCITATION_HH
+#define G4VCASCADE_DEEXCITATION_HH
+// $Id: G4VCascadeDeexcitation.hh,v 1.2 2010-12-15 07:40:06 gunter Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Base class to define a common interface for post-cascade processing.

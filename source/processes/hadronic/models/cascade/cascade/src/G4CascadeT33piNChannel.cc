@@ -22,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeT33piNChannel.cc,v 1.3 2010-08-04 05:28:24 mkelsey Exp $
+//
+// $Id: G4CascadeT33piNChannel.cc,v 1.4 2010-12-15 07:40:49 gunter Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100612  M. Kelsey -- BUG FIX:  Swapped eight-body channel final-states

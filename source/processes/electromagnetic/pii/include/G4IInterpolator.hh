@@ -1,3 +1,4 @@
+//
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -23,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IInterpolator.hh,v 1.2 2010-11-19 17:16:09 pia Exp $
+// $Id: G4IInterpolator.hh,v 1.3 2010-12-15 07:39:16 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)

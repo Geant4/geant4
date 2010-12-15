@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: G4AnalyticalEcpssrKCrossSection.cc,v 1.4 2010-11-22 17:25:45 mantero Exp $
+//$Id: G4AnalyticalEcpssrKCrossSection.cc,v 1.5 2010-12-15 07:39:10 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -546,11 +546,11 @@ G4double G4AnalyticalEcpssrKCrossSection::FunctionFK(G4double k, G4double theta)
     {
       G4cout << "x1= " << valueT1 << G4endl;
       G4cout << " vector of y for x1" << G4endl;
-        for_each (aVecMap[(*t1)].begin(),aVecMap[(*t1)].end(), print);
+        std::for_each (aVecMap[(*t1)].begin(),aVecMap[(*t1)].end(), print);
       G4cout << G4endl;
       G4cout << "x2= " << valueT2 << G4endl;
       G4cout << " vector of y for x2" << G4endl;
-        for_each (aVecMap[(*t2)].begin(),aVecMap[(*t2)].end(), print);
+        std::for_each (aVecMap[(*t2)].begin(),aVecMap[(*t2)].end(), print);
 
       G4cout << G4endl;
       G4cout 

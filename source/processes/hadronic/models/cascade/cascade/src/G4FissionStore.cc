@@ -22,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4FissionStore.cc,v 1.16 2010-10-19 21:33:58 mkelsey Exp $
+//
+// $Id: G4FissionStore.cc,v 1.17 2010-12-15 07:41:05 gunter Exp $
 //
 // 20100728  Move ::addConfig() implementation to .cc file
 

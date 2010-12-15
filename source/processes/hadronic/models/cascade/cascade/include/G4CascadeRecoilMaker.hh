@@ -1,5 +1,3 @@
-#ifndef G4CASCADE_RECOIL_MAKER_HH
-#define G4CASCADE_RECOIL_MAKER_HH
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -24,7 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeRecoilMaker.hh,v 1.6 2010-09-25 06:44:30 mkelsey Exp $
+//
+#ifndef G4CASCADE_RECOIL_MAKER_HH
+#define G4CASCADE_RECOIL_MAKER_HH
+// $Id: G4CascadeRecoilMaker.hh,v 1.7 2010-12-15 07:39:44 gunter Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Collects generated cascade data (using Collider::collide() interface)

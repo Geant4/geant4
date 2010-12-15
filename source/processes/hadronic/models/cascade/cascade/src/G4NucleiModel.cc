@@ -22,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.95 2010-11-19 19:43:58 mkelsey Exp $
+//
+// $Id: G4NucleiModel.cc,v 1.96 2010-12-15 07:41:17 gunter Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly

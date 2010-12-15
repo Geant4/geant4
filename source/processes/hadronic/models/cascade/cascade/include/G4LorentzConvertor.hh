@@ -22,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4LorentzConvertor.hh,v 1.17 2010-09-15 20:16:16 mkelsey Exp $
+//
+// $Id: G4LorentzConvertor.hh,v 1.18 2010-12-15 07:39:58 gunter Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100108  Michael Kelsey -- Use G4LorentzVector internally

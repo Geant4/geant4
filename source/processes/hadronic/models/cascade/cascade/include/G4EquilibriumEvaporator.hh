@@ -22,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4EquilibriumEvaporator.hh,v 1.15 2010-09-26 04:06:03 mkelsey Exp $
+//
+// $Id: G4EquilibriumEvaporator.hh,v 1.16 2010-12-15 07:39:48 gunter Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()

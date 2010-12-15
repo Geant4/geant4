@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Penelope08IonisationModel.cc,v 1.1 2010-07-28 07:12:13 pandola Exp $
+// $Id: G4Penelope08IonisationModel.cc,v 1.2 2010-12-15 07:39:12 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -110,7 +110,7 @@ void G4Penelope08IonisationModel::Initialise(const G4ParticleDefinition*,
   theDeltaTable = new std::map<const G4Material*,G4PhysicsFreeVector*>;
 
   //Set the number of bins for the tables. 20 points per decade
-  nBins = (size_t) (20*log10(HighEnergyLimit()/LowEnergyLimit()));
+  nBins = (size_t) (20*std::log10(HighEnergyLimit()/LowEnergyLimit()));
   nBins = std::max(nBins,(size_t)100);
 
   energyGrid = new G4PhysicsLogVector(LowEnergyLimit(),
@@ -765,7 +765,7 @@ G4double G4Penelope08IonisationModel::GetDensityCorrection(const G4Material* mat
       G4cout << "Invalid energy " << energy/eV << " eV " << G4endl;
       return 0;
     }
-  G4double logene = log(energy);
+  G4double logene = std::log(energy);
 
   //check if the material has been built
   if (!(theDeltaTable->count(mat)))
@@ -878,12 +878,12 @@ void G4Penelope08IonisationModel::BuildDeltaTable(const G4Material* mat)
 	      G4PenelopeOscillator* theOsc = (*theTable)[i];
 	      G4double wri = theOsc->GetResonanceEnergy();
 	      delta += theOsc->GetOscillatorStrength()*
-		log(1.0+(wl2/(wri*wri)));	  	     
+		std::log(1.0+(wl2/(wri*wri)));	  	     
 	    }
 	  delta = (delta/totalZ)-wl2/(gamSq*plasmaSq);
 	}
       energy = std::max(1e-9*eV,energy); //prevents log(0)
-      theVector->PutValue(bin,log(energy),delta);
+      theVector->PutValue(bin,std::log(energy),delta);
     }
   theDeltaTable->insert(std::make_pair(mat,theVector));
   return;
@@ -921,10 +921,10 @@ G4DataVector* G4Penelope08IonisationModel::ComputeShellCrossSectionsElectron(G4P
   G4double beta = (gammaSq-1.0)/gammaSq;
   G4double pielr2 = pi*classic_electr_radius*classic_electr_radius; //pi*re^2
   G4double constant = pielr2*2.0*electron_mass_c2/beta;
-  G4double XHDT0 = log(gammaSq)-beta;
+  G4double XHDT0 = std::log(gammaSq)-beta;
 
   G4double cpSq = energy*(energy+2.0*electron_mass_c2);
-  G4double cp = sqrt(cpSq);
+  G4double cp = std::sqrt(cpSq);
   G4double amol = (energy/(energy+electron_mass_c2))*(energy/(energy+electron_mass_c2));
 
   //
@@ -935,12 +935,12 @@ G4DataVector* G4Penelope08IonisationModel::ComputeShellCrossSectionsElectron(G4P
   if (energy > resEne)
     {
       G4double cp1Sq = (energy-resEne)*(energy-resEne+2.0*electron_mass_c2);
-      G4double cp1 = sqrt(cp1Sq);
+      G4double cp1 = std::sqrt(cp1Sq);
       
       //Distant longitudinal interactions
       G4double QM = 0;
       if (resEne > 1e-6*energy)
-	QM = sqrt((cp-cp1)*(cp-cp1)+electron_mass_c2*electron_mass_c2)-electron_mass_c2;
+	QM = std::sqrt((cp-cp1)*(cp-cp1)+electron_mass_c2*electron_mass_c2)-electron_mass_c2;
       else
 	{
 	  QM = resEne*resEne/(beta*2.0*electron_mass_c2);
@@ -948,7 +948,7 @@ G4DataVector* G4Penelope08IonisationModel::ComputeShellCrossSectionsElectron(G4P
 	}
       G4double SDL1 = 0;
       if (QM < cutoffEne)
-	SDL1 = log(cutoffEne*(QM+2.0*electron_mass_c2)/(QM*(cutoffEne+2.0*electron_mass_c2)));
+	SDL1 = std::log(cutoffEne*(QM+2.0*electron_mass_c2)/(QM*(cutoffEne+2.0*electron_mass_c2)));
       
       //Distant transverse interactions
       if (SDL1)
@@ -978,14 +978,14 @@ G4DataVector* G4Penelope08IonisationModel::ComputeShellCrossSectionsElectron(G4P
   if (wl < wu-(1e-5*eV))
     {
       H0 += (1.0/(ee-wu)) - (1.0/(ee-wl)) - (1.0/wu) + (1.0/wl) + 
-	(1.0-amol)*log(((ee-wu)*wl)/((ee-wl)*wu))/ee + 
+	(1.0-amol)*std::log(((ee-wu)*wl)/((ee-wl)*wu))/ee + 
 	amol*(wu-wl)/(ee*ee);
-      H1 += log(wu/wl)+(ee/(ee-wu))-(ee/(ee-wl)) + 
-	(2.0-amol)*log((ee-wu)/(ee-wl)) + 
+      H1 += std::log(wu/wl)+(ee/(ee-wu))-(ee/(ee-wl)) + 
+	(2.0-amol)*std::log((ee-wu)/(ee-wl)) + 
 	amol*(wu*wu-wl*wl)/(2.0*ee*ee);
       H2 += (2.0-amol)*(wu-wl)+(wu*(2.0*ee-wu)/(ee-wu)) - 
 	(wl*(2.0*ee-wl)/(ee-wl)) + 
-	(3.0-amol)*ee*log((ee-wu)/(ee-wl)) + 	
+	(3.0-amol)*ee*std::log((ee-wu)/(ee-wl)) + 	
 	amol*(wu*wu*wu-wl*wl*wl)/(3.0*ee*ee);
       wu = wl;
     }
@@ -1003,14 +1003,14 @@ G4DataVector* G4Penelope08IonisationModel::ComputeShellCrossSectionsElectron(G4P
     }
 
   S0 += (1.0/(ee-wu))-(1.0/(ee-wl)) - (1.0/wu) + (1.0/wl) + 
-    (1.0-amol)*log(((ee-wu)*wl)/((ee-wl)*wu))/ee +
+    (1.0-amol)*std::log(((ee-wu)*wl)/((ee-wl)*wu))/ee +
     amol*(wu-wl)/(ee*ee);
-  S1 += log(wu/wl)+(ee/(ee-wu))-(ee/(ee-wl)) + 
-    (2.0-amol)*log((ee-wu)/(ee-wl)) + 
+  S1 += std::log(wu/wl)+(ee/(ee-wu))-(ee/(ee-wl)) + 
+    (2.0-amol)*std::log((ee-wu)/(ee-wl)) + 
     amol*(wu*wu-wl*wl)/(2.0*ee*ee);
   S2 += (2.0-amol)*(wu-wl)+(wu*(2.0*ee-wu)/(ee-wu)) - 
     (wl*(2.0*ee-wl)/(ee-wl)) + 
-    (3.0-amol)*ee*log((ee-wu)/(ee-wl)) + 
+    (3.0-amol)*ee*std::log((ee-wu)/(ee-wl)) + 
     amol*(wu*wu*wu-wl*wl*wl)/(3.0*ee*ee);
 
   (*result)[0] = constant*H0;
@@ -1054,10 +1054,10 @@ G4DataVector* G4Penelope08IonisationModel::ComputeShellCrossSectionsPositron(G4P
   G4double beta = (gammaSq-1.0)/gammaSq;
   G4double pielr2 = pi*classic_electr_radius*classic_electr_radius; //pi*re^2
   G4double constant = pielr2*2.0*electron_mass_c2/beta;
-  G4double XHDT0 = log(gammaSq)-beta;
+  G4double XHDT0 = std::log(gammaSq)-beta;
 
   G4double cpSq = energy*(energy+2.0*electron_mass_c2);
-  G4double cp = sqrt(cpSq);
+  G4double cp = std::sqrt(cpSq);
   G4double amol = (energy/(energy+electron_mass_c2))*(energy/(energy+electron_mass_c2));
   G4double g12 = (gamma+1.0)*(gamma+1.0);
   //Bhabha coefficients
@@ -1074,12 +1074,12 @@ G4DataVector* G4Penelope08IonisationModel::ComputeShellCrossSectionsPositron(G4P
   if (energy > resEne)
     {
       G4double cp1Sq = (energy-resEne)*(energy-resEne+2.0*electron_mass_c2);
-      G4double cp1 = sqrt(cp1Sq);
+      G4double cp1 = std::sqrt(cp1Sq);
       
       //Distant longitudinal interactions
       G4double QM = 0;
       if (resEne > 1e-6*energy)
-	QM = sqrt((cp-cp1)*(cp-cp1)+electron_mass_c2*electron_mass_c2)-electron_mass_c2;
+	QM = std::sqrt((cp-cp1)*(cp-cp1)+electron_mass_c2*electron_mass_c2)-electron_mass_c2;
       else
 	{
 	  QM = resEne*resEne/(beta*2.0*electron_mass_c2);
@@ -1087,7 +1087,7 @@ G4DataVector* G4Penelope08IonisationModel::ComputeShellCrossSectionsPositron(G4P
 	}
       G4double SDL1 = 0;
       if (QM < cutoffEne)
-	SDL1 = log(cutoffEne*(QM+2.0*electron_mass_c2)/(QM*(cutoffEne+2.0*electron_mass_c2)));
+	SDL1 = std::log(cutoffEne*(QM+2.0*electron_mass_c2)/(QM*(cutoffEne+2.0*electron_mass_c2)));
       
       //Distant transverse interactions
       if (SDL1)
@@ -1119,11 +1119,11 @@ G4DataVector* G4Penelope08IonisationModel::ComputeShellCrossSectionsPositron(G4P
     {
       G4double wlSq = wl*wl;
       G4double wuSq = wu*wu;
-      H0 += (1.0/wl) - (1.0/wu)- bha1*log(wu/wl)/energy  
+      H0 += (1.0/wl) - (1.0/wu)- bha1*std::log(wu/wl)/energy  
 	+ bha2*(wu-wl)/energySq  
 	- bha3*(wuSq-wlSq)/(2.0*energySq*energy)
 	+ bha4*(wuSq*wu-wlSq*wl)/(3.0*energySq*energySq);
-      H1 += log(wu/wl) - bha1*(wu-wl)/energy
+      H1 += std::log(wu/wl) - bha1*(wu-wl)/energy
 	+ bha2*(wuSq-wlSq)/(2.0*energySq)
 	- bha3*(wuSq*wu-wlSq*wl)/(3.0*energySq*energy)
 	+ bha4*(wuSq*wuSq-wlSq*wlSq)/(4.0*energySq*energySq);
@@ -1149,12 +1149,12 @@ G4DataVector* G4Penelope08IonisationModel::ComputeShellCrossSectionsPositron(G4P
   G4double wlSq = wl*wl;
   G4double wuSq = wu*wu;
 
-  S0 += (1.0/wl) - (1.0/wu) - bha1*log(wu/wl)/energy 
+  S0 += (1.0/wl) - (1.0/wu) - bha1*std::log(wu/wl)/energy 
     + bha2*(wu-wl)/energySq  
     - bha3*(wuSq-wlSq)/(2.0*energySq*energy)
     + bha4*(wuSq*wu-wlSq*wl)/(3.0*energySq*energySq);
 
-  S1 += log(wu/wl) - bha1*(wu-wl)/energy
+  S1 += std::log(wu/wl) - bha1*(wu-wl)/energy
     + bha2*(wuSq-wlSq)/(2.0*energySq)
     - bha3*(wuSq*wu-wlSq*wl)/(3.0*energySq*energy)
     + bha4*(wuSq*wuSq-wlSq*wlSq)/(4.0*energySq*energySq);
@@ -1240,12 +1240,12 @@ void G4Penelope08IonisationModel::SampleFinalStateElectron(const G4Material* mat
   if (resEne > cutEnergy && resEne < kineticEnergy)
     {
       cps = kineticEnergy*rb;
-      cp = sqrt(cps);
-      G4double XHDT0 = std::max(log(gam2)-beta2-delta,0.);
+      cp = std::sqrt(cps);
+      G4double XHDT0 = std::max(std::log(gam2)-beta2-delta,0.);
       if (resEne > 1.0e-6*kineticEnergy)
 	{
-	  G4double cpp = sqrt((kineticEnergy-resEne)*(kineticEnergy-resEne+2.0*electron_mass_c2));
-	  QM = sqrt((cp-cpp)*(cp-cpp)+electron_mass_c2*electron_mass_c2)-electron_mass_c2;
+	  G4double cpp = std::sqrt((kineticEnergy-resEne)*(kineticEnergy-resEne+2.0*electron_mass_c2));
+	  QM = std::sqrt((cp-cpp)*(cp-cpp)+electron_mass_c2*electron_mass_c2)-electron_mass_c2;
 	}
       else
 	{
@@ -1254,7 +1254,7 @@ void G4Penelope08IonisationModel::SampleFinalStateElectron(const G4Material* mat
 	}
       if (QM < cutoffEne)
 	{
-	  XHDL = log(cutoffEne*(QM+2.0*electron_mass_c2)/(QM*(cutoffEne+2.0*electron_mass_c2)))
+	  XHDL = std::log(cutoffEne*(QM+2.0*electron_mass_c2)/(QM*(cutoffEne+2.0*electron_mass_c2)))
 	    *invResEne;
 	  XHDT = XHDT0*invResEne;	  
 	}
@@ -1285,7 +1285,7 @@ void G4Penelope08IonisationModel::SampleFinalStateElectron(const G4Material* mat
       G4double rl1 = 1.0-rcl;
       G4double rrl1 = 1.0/rl1;
       XHC = (amol*(0.5-rcl)+1.0/rcl-rrl1+
-	     (1.0-amol)*log(rcl*rrl1))/EE;
+	     (1.0-amol)*std::log(rcl*rrl1))/EE;
     }
 
   //Total cross section per molecule for the active shell, in cm2
@@ -1333,10 +1333,10 @@ void G4Penelope08IonisationModel::SampleFinalStateElectron(const G4Material* mat
       G4double deltaE = rk*EE;
       
       kineticEnergy1 = kineticEnergy - deltaE;
-      cosThetaPrimary = sqrt(kineticEnergy1*rb/(kineticEnergy*(rb-deltaE)));
+      cosThetaPrimary = std::sqrt(kineticEnergy1*rb/(kineticEnergy*(rb-deltaE)));
       //energy and scattering angle of the delta ray
       energySecondary = deltaE - ionEne; //subtract ionisation energy
-      cosThetaSecondary= sqrt(deltaE*rb/(kineticEnergy*(deltaE+2.0*electron_mass_c2)));
+      cosThetaSecondary= std::sqrt(deltaE*rb/(kineticEnergy*(deltaE+2.0*electron_mass_c2)));
       if (verboseLevel > 3)
 	G4cout << "SampleFinalStateElectron: sampled close collision " << G4endl;
       return;     			     
@@ -1350,16 +1350,16 @@ void G4Penelope08IonisationModel::SampleFinalStateElectron(const G4Material* mat
   if (TST < TS1)
     {
       G4double QS = QM/(1.0+QM*0.5/electron_mass_c2);
-      G4double Q = QS/(pow((QS/cutoffEne)*(1.0+cutoffEne*0.5/electron_mass_c2),G4UniformRand())
+      G4double Q = QS/(std::pow((QS/cutoffEne)*(1.0+cutoffEne*0.5/electron_mass_c2),G4UniformRand())
 		       - (QS*0.5/electron_mass_c2));
       G4double QTREV = Q*(Q+2.0*electron_mass_c2);
       G4double cpps = kineticEnergy1*(kineticEnergy1+2.0*electron_mass_c2);
-      cosThetaPrimary = (cpps+cps-QTREV)/(2.0*cp*sqrt(cpps));
+      cosThetaPrimary = (cpps+cps-QTREV)/(2.0*cp*std::sqrt(cpps));
       if (cosThetaPrimary > 1.) 
 	cosThetaPrimary = 1.0;
       //energy and emission angle of the delta ray
       energySecondary = deltaE - ionEne;
-      cosThetaSecondary = 0.5*(deltaE*(kineticEnergy+rb-deltaE)+QTREV)/sqrt(cps*QTREV);
+      cosThetaSecondary = 0.5*(deltaE*(kineticEnergy+rb-deltaE)+QTREV)/std::sqrt(cps*QTREV);
       if (cosThetaSecondary > 1.0)
 	cosThetaSecondary = 1.0;
       if (verboseLevel > 3)
@@ -1453,12 +1453,12 @@ void G4Penelope08IonisationModel::SampleFinalStatePositron(const G4Material* mat
   if (resEne > cutEnergy && resEne < kineticEnergy)
     {
       cps = kineticEnergy*rb;
-      cp = sqrt(cps);
-      G4double XHDT0 = std::max(log(gam2)-beta2-delta,0.);
+      cp = std::sqrt(cps);
+      G4double XHDT0 = std::max(std::log(gam2)-beta2-delta,0.);
       if (resEne > 1.0e-6*kineticEnergy)
 	{
-	  G4double cpp = sqrt((kineticEnergy-resEne)*(kineticEnergy-resEne+2.0*electron_mass_c2));
-	  QM = sqrt((cp-cpp)*(cp-cpp)+electron_mass_c2*electron_mass_c2)-electron_mass_c2;
+	  G4double cpp = std::sqrt((kineticEnergy-resEne)*(kineticEnergy-resEne+2.0*electron_mass_c2));
+	  QM = std::sqrt((cp-cpp)*(cp-cpp)+electron_mass_c2*electron_mass_c2)-electron_mass_c2;
 	}
       else
 	{
@@ -1467,7 +1467,7 @@ void G4Penelope08IonisationModel::SampleFinalStatePositron(const G4Material* mat
 	}
       if (QM < cutoffEne)
 	{
-	  XHDL = log(cutoffEne*(QM+2.0*electron_mass_c2)/(QM*(cutoffEne+2.0*electron_mass_c2)))
+	  XHDL = std::log(cutoffEne*(QM+2.0*electron_mass_c2)/(QM*(cutoffEne+2.0*electron_mass_c2)))
 	    *invResEne;
 	  XHDT = XHDT0*invResEne;	  
 	}
@@ -1494,7 +1494,7 @@ void G4Penelope08IonisationModel::SampleFinalStatePositron(const G4Material* mat
   if (wcl < wmaxc)
     {
       G4double rl1 = 1.0-rcl;
-      XHC = ((1.0/rcl-1.0)+bha1*log(rcl)+bha2*rl1
+      XHC = ((1.0/rcl-1.0)+bha1*std::log(rcl)+bha2*rl1
 	     + (bha3/2.0)*(rcl*rcl-1.0) 
 	     + (bha4/3.0)*(1.0-rcl*rcl*rcl))/kineticEnergy;
     }
@@ -1534,10 +1534,10 @@ void G4Penelope08IonisationModel::SampleFinalStatePositron(const G4Material* mat
       //energy and scattering angle (primary electron)
       G4double deltaE = rk*kineticEnergy;      
       kineticEnergy1 = kineticEnergy - deltaE;
-      cosThetaPrimary = sqrt(kineticEnergy1*rb/(kineticEnergy*(rb-deltaE)));
+      cosThetaPrimary = std::sqrt(kineticEnergy1*rb/(kineticEnergy*(rb-deltaE)));
       //energy and scattering angle of the delta ray
       energySecondary = deltaE - ionEne; //subtract ionisation energy
-      cosThetaSecondary= sqrt(deltaE*rb/(kineticEnergy*(deltaE+2.0*electron_mass_c2)));
+      cosThetaSecondary= std::sqrt(deltaE*rb/(kineticEnergy*(deltaE+2.0*electron_mass_c2)));
       if (verboseLevel > 3)
 	G4cout << "SampleFinalStatePositron: sampled close collision " << G4endl;
       return;     			     
@@ -1550,16 +1550,16 @@ void G4Penelope08IonisationModel::SampleFinalStatePositron(const G4Material* mat
   if (TST < TS1)
     {
       G4double QS = QM/(1.0+QM*0.5/electron_mass_c2);
-      G4double Q = QS/(pow((QS/cutoffEne)*(1.0+cutoffEne*0.5/electron_mass_c2),G4UniformRand())
+      G4double Q = QS/(std::pow((QS/cutoffEne)*(1.0+cutoffEne*0.5/electron_mass_c2),G4UniformRand())
 		       - (QS*0.5/electron_mass_c2));
       G4double QTREV = Q*(Q+2.0*electron_mass_c2);
       G4double cpps = kineticEnergy1*(kineticEnergy1+2.0*electron_mass_c2);
-      cosThetaPrimary = (cpps+cps-QTREV)/(2.0*cp*sqrt(cpps));
+      cosThetaPrimary = (cpps+cps-QTREV)/(2.0*cp*std::sqrt(cpps));
       if (cosThetaPrimary > 1.) 
 	cosThetaPrimary = 1.0;
       //energy and emission angle of the delta ray
       energySecondary = deltaE - ionEne;
-      cosThetaSecondary = 0.5*(deltaE*(kineticEnergy+rb-deltaE)+QTREV)/sqrt(cps*QTREV);
+      cosThetaSecondary = 0.5*(deltaE*(kineticEnergy+rb-deltaE)+QTREV)/std::sqrt(cps*QTREV);
       if (cosThetaSecondary > 1.0)
 	cosThetaSecondary = 1.0;
       if (verboseLevel > 3)
