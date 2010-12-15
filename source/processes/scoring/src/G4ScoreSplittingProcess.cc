@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreSplittingProcess.cc,v 1.8 2010-12-15 10:22:42 gcosmo Exp $
+// $Id: G4ScoreSplittingProcess.cc,v 1.9 2010-12-15 13:55:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -228,8 +228,9 @@ G4ScoreSplittingProcess::CreateTouchableForSubStep( G4int newVoxelNum, G4ThreeVe
 {
   // G4cout << " Creating touchable handle for voxel-no " << newVoxelNum << G4endl;
 
+  G4TouchableHistory*  oldTouchableHistory= dynamic_cast<G4TouchableHistory*>(fOldTouchableH());
   G4TouchableHistory*  ptrTouchableHistory= G4TransportationManager::GetTransportationManager()->
-                                            GetNavigatorForTracking()->CreateTouchableHistory();
+                                            GetNavigatorForTracking()->CreateTouchableHistory(oldTouchableHistory->GetHistory());
   
   // Change the history
   G4NavigationHistory* ptrNavHistory= const_cast<G4NavigationHistory*>(ptrTouchableHistory->GetHistory());
