@@ -341,15 +341,15 @@ Please see the corresponding details in
 <P> </P>
 <B>Physics Lists</B>
 <UL>
-<LI><TT>G4UrbanMscModel93</TT> is used by default for e+,e- in all EM physics builders
-except <TT>G4EmLivermorePhysics</TT> and <TT>G4EmPenelopePhysics</TT> where
-new <TT>G4GoudsmitSaundersonMscModel</TT> is used.</LI> 
+<LI><TT>G4UrbanMscModel93</TT> is used by default for e+,e- in all EM physics
+    builders except <TT>G4EmLivermorePhysics</TT> and <TT>G4EmPenelopePhysics</TT>
+    where new <TT>G4GoudsmitSaundersonMscModel</TT> is used.</LI> 
 <LI><TT>G4WentzelVIModel93</TT> and <TT>G4CoulombScattering</TT> are 
-used by default for mu+,mu- in all builders.</TT>
+    used by default for mu+,mu- in all builders.</TT>
 <LI>In <TT>G4EmStandardPhysics_option2</TT> for small angle multiple scattering
 <TT>G4WentzelVIModel93</TT> is used for protons, pions, and kaons; 
-for angular distribution of bremmstrahlung gamma <TT>G4GeneratorBS</TT> 
-is applied.</LI> 
+    for angular distribution of bremmstrahlung gamma <TT>G4GeneratorBS</TT> 
+    is applied.</LI> 
 <LI><TT>G4EmConfigurator</TT> class to define alternative models per particle
     type, energy range, and detector region is established and proposed to be
     used for additional configuration on top of already instantiated EM physics.</LI>
@@ -931,7 +931,9 @@ please refer to the corresponding History files provided in most packages):
     <LI>Increased unit value to 100 times <TT>kCarTolerance</TT> to make push
         more effective in <TT>G4Navigator::ComputeStep()</TT>. Added possibility
         to switch off push notifications in <TT>G4Navigator</TT>; also added
-        related UI command.</LI>
+        related UI command.
+        Added inline method for creation of a touchable-history given a
+        navigation history pointer as argument.</LI>
     </UL></LI>
 <LI><B>Solids (Boolean)</B>
     <UL>
@@ -1415,7 +1417,6 @@ please refer to the corresponding History files provided in most packages):
     </UL></LI>
 <LI><B>Stopping</B>
     <UL>
-    <LI>
     <LI><TT>G4MuonMinusCaptureAtRest::DoMuCapture()</TT>: fixed unused branch
         in mass calculation</LI>
     <LI>Fixed initialisation of data in <TT>G4PiMinusStopMaterial</TT> and
@@ -1587,8 +1588,8 @@ please refer to the corresponding History files provided in most packages):
         Introduced new constructor for G4NeutronTrackingCut.</LI>
     <LI>EM physics builders and options:
     <UL>
-    <LI>Included anti_deuteron, anti_triton, anti_alpha, anti_He3 in all EM builders
-    except the DNA builder.</LI>
+    <LI>Included anti_deuteron, anti_triton, anti_alpha, anti_He3 in all EM
+        builders except the DNA builder.</LI>
     <LI>Added <TT>G4WentzelVIModel</TT> for multiple-scattering and
         <TT>G4CoulombScattering</TT> process for muons in all builders.</LI>
     <LI>Use <TT>G4ionIonisation</TT> for He3 and He4 ions in all EM builders.</LI>
@@ -1612,27 +1613,28 @@ please refer to the corresponding History files provided in most packages):
     <LI>Added new e- G4DNA processes to <TT>G4EmDNAPhysics</TT> in builders.</LI>
         Added also new H-excitation model.
     </UL></LI>
-    <LI>Hadronic builders:
-    <UL><LI>Allow for separate physics for pion and Kaon, i.e. separate builders
-            <TT>G4{V,}{Pion,Kaon}Builder, G4{LEP,Bertini, QGSP}PionBuilder</TT>,
-            and <TT>G4ChipKaonBuilder</TT>. In QGSP_BERT_CHIPS, use CHIPS
-            <TT>G4QInelastic</TT> via <TT>G4ChipKaonBuilder</TT> for Kaons.</LI>
-        <LI>In builders <TT>G4QGSP{Proton, Neutron,Pik}Builder</TT> and
-            <TT>G4QGSBinary</TT>, FTFP and FTFBinary builders use cross-section
-            with relativistic rise, using a combination of previously used
-            cross-section and <TT>G4GlauberGribovCrossSection</TT> above
-            <TT>91 GeV</TT>.</LI>
-        <LI><TT>G4FTFPNeutronBuilder, G4FTFPPiKBuilder, G4FTFPProtonBuilder,
-            G4QGSPNeutronBuilder, G4QGSPPiKBuilder, G4QGSPProtonBuilder, G4QGSBuilder</TT>:
-            added deletion of <TT>G4ExcitationHandler</TT> and <TT>G4QGSMFragmentation</TT>;
-            added deletion of neutron builder for QGSP_BERT, FTFP_BERT, QGSP_FTFP_BERT.</LI>
-        <LI>Replaced <TT>G4HadronQElasticPhysics</TT> with <TT>G4QElasticPhysics</TT>
-            and <TT>G4IonPhysics</TT> with <TT>G4QIonPhysics</TT> in the CHIPS
-            physics-list. Particles are restricted to SU(3) hadrons (no pi0 & eta) in
-            <TT>G4QElasticPhysics</TT>. Fix in <TT>G4QPhotoNuclearPhysics</TT> to
-            reset particles iterator.
-        <LI><TT>G4IonBinaryCascadePhysics</TT>: added <TT>G4IonProtonCrossSection</TT>.</LI>
-        </UL></LI>
+<LI>Hadronic builders:
+    <UL>
+    <LI>Allow for separate physics for pion and Kaon, i.e. separate builders
+        <TT>G4{V,}{Pion,Kaon}Builder, G4{LEP,Bertini, QGSP}PionBuilder</TT>,
+        and <TT>G4ChipKaonBuilder</TT>. In QGSP_BERT_CHIPS, use CHIPS
+        <TT>G4QInelastic</TT> via <TT>G4ChipKaonBuilder</TT> for Kaons.</LI>
+    <LI>In builders <TT>G4QGSP{Proton, Neutron,Pik}Builder</TT> and
+        <TT>G4QGSBinary</TT>, FTFP and FTFBinary builders use cross-section
+        with relativistic rise, using a combination of previously used
+        cross-section and <TT>G4GlauberGribovCrossSection</TT> above
+        <TT>91 GeV</TT>.</LI>
+    <LI><TT>G4FTFPNeutronBuilder, G4FTFPPiKBuilder, G4FTFPProtonBuilder,
+        G4QGSPNeutronBuilder, G4QGSPPiKBuilder, G4QGSPProtonBuilder, G4QGSBuilder</TT>:
+        added deletion of <TT>G4ExcitationHandler</TT> and <TT>G4QGSMFragmentation</TT>;
+        added deletion of neutron builder for QGSP_BERT, FTFP_BERT, QGSP_FTFP_BERT.</LI>
+    <LI>Replaced <TT>G4HadronQElasticPhysics</TT> with <TT>G4QElasticPhysics</TT>
+        and <TT>G4IonPhysics</TT> with <TT>G4QIonPhysics</TT> in the CHIPS
+        physics-list. Particles are restricted to SU(3) hadrons (no pi0 & eta) in
+        <TT>G4QElasticPhysics</TT>. Fix in <TT>G4QPhotoNuclearPhysics</TT> to
+        reset particles iterator.</LI>
+    <LI><TT>G4IonBinaryCascadePhysics</TT>: added <TT>G4IonProtonCrossSection</TT>.</LI>
+    </UL></LI>
 <LI><TT>G4HadronElasticPhysics</TT> renamed to <TT>G4HadronElasticPhysics93</TT>
     <TT>G4HadronElasticPhysics</TT> is now a copy of <TT>G4HadronHElasticPhysics</TT>.
     Applied related changes to QGSP_BERT_EMV. <TT>G4HadronHElasticPhysics</TT>
@@ -1641,7 +1643,7 @@ please refer to the corresponding History files provided in most packages):
     with BIC; also use QMD for d, alpha.</LI>
 <LI><TT>G4HadronElasticPhysicsHP</TT>: added CHIPS cross  sections for p and
     n on Hydrogen and Helium targets.</LI>
-    <LI>Updates to lists:
+<LI>Updates to lists:
     <UL>
     <LI>Revised QGSP_FTFP_BERT and FTFP_BERT lists to use CHIPS G4QInelastic
         for all "misc" particles, including anti-proton, anti-neutron  and
@@ -1659,6 +1661,7 @@ please refer to the corresponding History files provided in most packages):
     for optical physics, to correctly check on <TT>G4REALSURFACEDATA</TT> path.</LI>
 <LI>Added check on new <TT>G4NEUTRONXSDATA</TT> data set for QBBC and in
     <TT>G4NeutronCrossSectionXS</TT>.</LI>
+</UL>
 
 <A NAME="run-notes">
 <H3><I>Run</I></H3></A>

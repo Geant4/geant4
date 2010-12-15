@@ -82,7 +82,7 @@ geometry
 - divisions (geomdiv-V09-03-02)
   o Introducing G4ReplicatedSlice, allowing for gaps in between divided
     daughter volumes.
-- navigation (geomnav-V09-03-09)
+- navigation (geomnav-V09-03-10)
   o Added first implementation of G4VoxelSafety, a new class for the
     computation of exact safety.
   o Added new class G4PartialPhantomParameterisation allowing for envelopes
@@ -95,6 +95,8 @@ geometry
   o Increased unit value to 100 times kCarTolerance to make push more
     effective in G4Navigator::ComputeStep(). Added possibility to switch off
     push notifications in G4Navigator; also added related UI command.
+    Added inline method for creation of a touchable-history given a navigation
+    history pointer as argument.
 - solids/BREPS (breps-V09-03-07)
   o Fixed more cases of null pointer forward in G4BREPSolid,
     G4BREPSolidPolyhedra and G4BezierSurface classes.
@@ -110,6 +112,9 @@ geometry
   o Fixed case of division by zero in G4TwistedTubs.
   o More fixes on Coverity reports for classes G4TessellatedSolid and
     G4ReduciblePolygon.
+- volumes (geomvol-V09-03-09)
+  o Added export of dummy G4AllocStat object from G4NavigationHistory, to
+    allow for symbol export/import on Windows.
 
 global                                           global-V09-03-24
 ------
@@ -145,7 +150,7 @@ particles                                        particles-V09-03-15
 ---------
 - Fixed cases of uninitialised data reported by Coverity.
 
-persistency/ascii                                ascii-V09-03-04
+persistency/ascii                                ascii-V09-03-05
 -----------------
 - Fixed some minor Coverity reports.
 
@@ -431,7 +436,7 @@ processes/optical                                op-V09-03-06
 -----------------
 - Fixed minor Coverity reports.
 
-processes/scoring                                procscore-V09-03-01
+processes/scoring                                procscore-V09-03-02
 -----------------
 - Introduced new class G4EnergySplitter, a class to calculate the split of
   energy in voxels when G4RegularNavigation is used. It takes into account
