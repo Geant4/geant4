@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-09    (25-June-2010)
+ Geant4 version Name: geant4-09-04-ref-00    (17-December-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -70,35 +70,35 @@ G4NistElementBuilder: Build Element <C>  Z= 6  A= 12.0107  with natural isotope 
 G4NistElementBuilder: Build Element <N>  Z= 7  A= 14.0068  with natural isotope composition
 G4NistElementBuilder: Build Element <O>  Z= 8  A= 15.9994  with natural isotope composition
 G4NistElementBuilder: Build Element <Ar>  Z= 18  A= 39.9477  with natural isotope composition
-New material PMMA is prepeared;  nMaterials= 310 nComponents= 818 nCurrent= 3
+New material PMMA is prepeared;  nMaterials= 315 nComponents= 843 nCurrent= 3
 ### NIST DataBase for Elements is used
 G4NistMaterialBuilder: BuildMaterial PMMA
-G4NistMaterialBuilder: BuildMaterial #309
+G4NistMaterialBuilder: BuildMaterial #314
 New material nComponents= 3
-New material Pethylene is prepeared;  nMaterials= 311 nComponents= 821 nCurrent= 2
+New material Pethylene is prepeared;  nMaterials= 316 nComponents= 846 nCurrent= 2
 G4NistMaterialBuilder: BuildMaterial Pethylene
-G4NistMaterialBuilder: BuildMaterial #310
+G4NistMaterialBuilder: BuildMaterial #315
 New material nComponents= 2
-New material FPethylene is prepeared;  nMaterials= 312 nComponents= 823 nCurrent= 2
+New material FPethylene is prepeared;  nMaterials= 317 nComponents= 848 nCurrent= 2
 G4NistMaterialBuilder: BuildMaterial FPethylene
-G4NistMaterialBuilder: BuildMaterial #311
+G4NistMaterialBuilder: BuildMaterial #316
 New material nComponents= 2
-New material Polystyrene is prepeared;  nMaterials= 313 nComponents= 825 nCurrent= 2
+New material Polystyrene is prepeared;  nMaterials= 318 nComponents= 850 nCurrent= 2
 G4NistMaterialBuilder: BuildMaterial Polystyrene
-G4NistMaterialBuilder: BuildMaterial #312
+G4NistMaterialBuilder: BuildMaterial #317
 New material nComponents= 2
-New material Silicone is prepeared;  nMaterials= 314 nComponents= 827 nCurrent= 2
+New material Silicone is prepeared;  nMaterials= 319 nComponents= 852 nCurrent= 2
 G4NistMaterialBuilder: BuildMaterial Silicone
-G4NistMaterialBuilder: BuildMaterial #313
+G4NistMaterialBuilder: BuildMaterial #318
 New material nComponents= 2
 G4NistMaterialBuilder::FindOrBuildMaterial G4_Al
 G4NistMaterialBuilder: BuildMaterial #12
 New material nComponents= 1
 G4NistElementBuilder: Build Element <Al>  Z= 13  A= 26.9815  with natural isotope composition
-New material TiO2 is prepeared;  nMaterials= 315 nComponents= 829 nCurrent= 2
+New material TiO2 is prepeared;  nMaterials= 320 nComponents= 854 nCurrent= 2
 G4NistElementBuilder: Build Element <Ti>  Z= 22  A= 47.8667  with natural isotope composition
 G4NistMaterialBuilder: BuildMaterial TiO2
-G4NistMaterialBuilder: BuildMaterial #314
+G4NistMaterialBuilder: BuildMaterial #319
 New material nComponents= 2
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 WLSExtraPhysics:: Add Extra Physics Processes
@@ -260,11 +260,11 @@ hPairProd:   for  kaon-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :   Emin=        0 eV       Emax=         10 TeV
 
-msc:   for mu+    SubType= 10
+muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :   Emin=        0 eV       Emax=         10 TeV
+        WentzelVIUni :   Emin=        0 eV       Emax=         10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -287,6 +287,12 @@ muPairProd:   for  mu+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :   Emin=        0 eV       Emax=         10 TeV
 
+CoulombScat:   for  mu+, applyCuts: 1     SubType= 1
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      0 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
+
 muIoni:   for  mu-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -307,6 +313,12 @@ muPairProd:   for  mu-    SubType= 4
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :   Emin=        0 eV       Emax=         10 TeV
+
+CoulombScat:   for  mu-, applyCuts: 1     SubType= 1
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      0 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins

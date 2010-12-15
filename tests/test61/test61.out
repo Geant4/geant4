@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-09    (25-June-2010)
+ Geant4 version Name: geant4-09-04-ref-00    (17-December-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -210,6 +210,10 @@ hIoni:   for  pi-    SubType= 2
 ============================================================================================
              HADRONIC PROCESSES SUMMARY (verbose level 1)
 
+                     Hadronic Processes for <GenericIon>
+        IonInelastic  Models:            Binary Cascade: Emin(GeV)=     0  Emax(GeV)= 0.1
+                                          HadronicModel: Emin(GeV)=  0.09  Emax(GeV)= 10
+
                      Hadronic Processes for <anti_neutron>
        HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
            inelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(GeV)= 25
@@ -284,7 +288,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=36.84s Real=36.88s Sys=0.01s
+  User=29.28s Real=30s Sys=0.01s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
@@ -495,7 +499,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0s Real=0s Sys=0s
+  User=0.03s Real=0.04s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Silicon
 #
@@ -711,7 +715,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=6.72s Real=6.72s Sys=0s
+  User=4.6s Real=4.66s Sys=0.01s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -932,7 +936,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=4.78s Real=5.51s Sys=0s
+  User=3.2s Real=3.41s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1027,7 +1031,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0.02s Real=0.02s Sys=0s
+  User=0.02s Real=0.03s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on Silicon
 #
@@ -1074,7 +1078,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0.45s Real=0.45s Sys=0s
+  User=0.11s Real=0.11s Sys=0s
 #
 #  .....end C(12,6)++............
 #
@@ -1303,7 +1307,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=37.59s Real=37.62s Sys=0.02s
+  User=15.92s Real=15.93s Sys=0.01s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.

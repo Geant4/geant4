@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-09    (25-June-2010)
+ Geant4 version Name: geant4-09-04-ref-00    (17-December-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -77,17 +77,12 @@ phot:   for  gamma    SubType= 12
 compt:   for  gamma    SubType= 13
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Klein-Nishina :   Emin=        0 eV       Emax=         10 TeV
+        KleinNishina :   Emin=        0 eV       Emax=         10 TeV
 
 conv:   for  gamma    SubType= 14
       Lambda tables from 1.022 MeV to 10 TeV in 220 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :   Emin=        0 eV       Emax=         10 TeV
-
-Rayl:   for  gamma    SubType= 11
-      Lambda tables from 100 eV  to 10 TeV in 200 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   LivermoreRayleigh :   Emin=        0 eV       Emax=        100 GeV
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
@@ -386,28 +381,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=13.05s Real=13.35s Sys=0.29s
+  User=9.75s Real=10.22s Sys=0.38s
 
  The run consists of 10000 proton of 160 MeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
- Projected Range= 17.8371 cm    rms= 1.88878 mm 
- Mean number of primary steps = 189.258
- Total energy deposit= 160 MeV
+ Projected Range= 17.7594 cm    rms= 2.23313 mm 
+ Mean number of primary steps = 188.481
+ Total energy deposit= 159.968 MeV
  niel energy deposit = 0 eV 
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	4.5063 GeV	0.281644 % 	9.02486e-05 Gy
- tally 1: 	 	4.89844 GeV	0.306152 % 	9.8102e-05 Gy
- tally 2: 	 	3.26845 GeV	0.204278 % 	6.5458e-05 Gy
- tally 3: 	 	1.86282 GeV	0.116426 % 	3.73071e-05 Gy
+ tally 0: 	 	4.50091 GeV	0.281307 % 	9.01407e-05 Gy
+ tally 1: 	 	4.94668 GeV	0.309168 % 	9.90683e-05 Gy
+ tally 2: 	 	3.3704 GeV	0.21065 % 	6.74997e-05 Gy
+ tally 3: 	 	1.97088 GeV	0.12318 % 	3.94712e-05 Gy
 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 522942939, 986585145
+ Current couple of seeds = 523607080, 1885213620
 ----------------------------------------
 /testem/stepMax 100 mm
 /gun/particle ion
@@ -437,7 +432,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 522942939, 986585145
+ Current couple of seeds = 523607080, 1885213620
 ----------------------------------------
 ----> SetHisto 1: Edep (MeV/mm) along absorber  (mm);  100 bins from 0 mm to 200 mm
 Start Run processing.
@@ -446,28 +441,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.13s Real=5.6s Sys=0.03s
+  User=4.25s Real=4.66s Sys=0.03s
 
  The run consists of 1000 C12[0.0] of 3.5 GeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
- Projected Range= 16.4882 cm    rms= 490.917 um 
- Mean number of primary steps = 126.733
+ Projected Range= 16.4901 cm    rms= 460.523 um 
+ Mean number of primary steps = 126.726
  Total energy deposit= 3.49997 GeV
- niel energy deposit = 1.33959 MeV
+ niel energy deposit = 1.33994 MeV
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	11.2827 GeV	0.322362 % 	0.000225961 Gy
- tally 1: 	 	12.4986 GeV	0.357102 % 	0.000250311 Gy
- tally 2: 	 	15.6539 GeV	0.447255 % 	0.000313504 Gy
- tally 3: 	 	23.0055 GeV	0.6573 % 	0.000460736 Gy
+ tally 0: 	 	11.3229 GeV	0.32351 % 	0.000226765 Gy
+ tally 1: 	 	13.3651 GeV	0.381861 % 	0.000267666 Gy
+ tally 2: 	 	15.6286 GeV	0.446531 % 	0.000312997 Gy
+ tally 3: 	 	22.3733 GeV	0.639237 % 	0.000448074 Gy
 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 270731854, 1652912222
+ Current couple of seeds = 1582101882, 1972663789
 ----------------------------------------
 /testem/det/setMat G4_Cu
 /testem/det/tallyMat G4_Cu
@@ -528,17 +523,12 @@ phot:   for  gamma    SubType= 12
 compt:   for  gamma    SubType= 13
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Klein-Nishina :   Emin=        0 eV       Emax=         10 TeV
+        KleinNishina :   Emin=        0 eV       Emax=         10 TeV
 
 conv:   for  gamma    SubType= 14
       Lambda tables from 1.022 MeV to 10 TeV in 220 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :   Emin=        0 eV       Emax=         10 TeV
-
-Rayl:   for  gamma    SubType= 11
-      Lambda tables from 100 eV  to 10 TeV in 200 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   LivermoreRayleigh :   Emin=        0 eV       Emax=        100 GeV
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
@@ -815,7 +805,7 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 270731854, 1652912222
+ Current couple of seeds = 1582101882, 1972663789
 ----------------------------------------
 ----> SetHisto 1: Edep (MeV/mm) along absorber  (mm);  100 bins from 0 mm to 200 mm
 Start Run processing.
@@ -824,20 +814,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=4.73s Real=4.75s Sys=0.03s
+  User=2.68s Real=2.7s Sys=0.03s
 
  The run consists of 1000 kaon+ of 100 MeV through 20 cm  of G4_Cu (density: 8.96 g/cm3 )
 
- Projected Range= 2.1222 cm    rms= 1.6077 mm 
- Mean number of primary steps = 19.998
- Total energy deposit= 282.992 MeV
+ Projected Range= 2.07701 cm    rms= 1.18551 mm 
+ Mean number of primary steps = 19.942
+ Total energy deposit= 285.724 MeV
  niel energy deposit = 0 eV 
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	2.49046 GeV	2.49046 % 	5.56662e-06 Gy
- tally 1: 	 	5.64061 MeV	0.00564061 % 	1.26078e-08 Gy
- tally 2: 	 	3.91957 MeV	0.00391957 % 	8.76095e-09 Gy
+ tally 0: 	 	2.7242 GeV	2.7242 % 	6.08907e-06 Gy
+ tally 1: 	 	0 eV 	0 % 	0 Gy
+ tally 2: 	 	0 eV 	0 % 	0 Gy
  tally 3: 	 	0 eV 	0 % 	0 Gy
 
 ---------------------------------------------------------
@@ -845,7 +835,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 885517185, 2109349039
+ Current couple of seeds = 279794962, 1831587299
 ----------------------------------------
 /testem/det/setMat TechVacuum
 /testem/det/tallyMat TechVacuum
@@ -906,17 +896,12 @@ phot:   for  gamma    SubType= 12
 compt:   for  gamma    SubType= 13
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Klein-Nishina :   Emin=        0 eV       Emax=         10 TeV
+        KleinNishina :   Emin=        0 eV       Emax=         10 TeV
 
 conv:   for  gamma    SubType= 14
       Lambda tables from 1.022 MeV to 10 TeV in 220 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :   Emin=        0 eV       Emax=         10 TeV
-
-Rayl:   for  gamma    SubType= 11
-      Lambda tables from 100 eV  to 10 TeV in 200 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   LivermoreRayleigh :   Emin=        0 eV       Emax=        100 GeV
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
@@ -1198,7 +1183,7 @@ Index : 3     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 885517185, 2109349039
+ Current couple of seeds = 279794962, 1831587299
 ----------------------------------------
 ----> SetHisto 1: Edep (MeV/mm) along absorber  (mm);  100 bins from 0 mm to 200 mm
 Start Run processing.
@@ -1207,18 +1192,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.01s Real=0.01s Sys=0s
+  User=0.01s Real=0.01s Sys=0.01s
 
  The run consists of 100 alpha of 265 eV  through 20 cm  of TechVacuum (density: 0.01 kg/m3 )
 
- Projected Range= 348.588 um    rms= 89.2581 um 
- Mean number of primary steps = 5.28
+ Projected Range= 333.282 um    rms= 92.1669 um 
+ Mean number of primary steps = 5.41
  Total energy deposit= 265 eV 
- niel energy deposit = 176.836 eV 
+ niel energy deposit = 177.711 eV 
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	10.1345 keV	38.2435 % 	2.02966e-05 Gy
+ tally 0: 	 	13.0387 keV	49.2025 % 	2.61128e-05 Gy
  tally 1: 	 	0 eV 	0 % 	0 Gy
  tally 2: 	 	0 eV 	0 % 	0 Gy
  tally 3: 	 	0 eV 	0 % 	0 Gy
@@ -1228,7 +1213,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 230049722, 925291233
+ Current couple of seeds = 30587785, 1288276993
 ----------------------------------------
 /testem/det/setMat G4_WATER
 /testem/det/tallyMat G4_WATER
@@ -1289,17 +1274,12 @@ phot:   for  gamma    SubType= 12
 compt:   for  gamma    SubType= 13
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Klein-Nishina :   Emin=        0 eV       Emax=         10 TeV
+        KleinNishina :   Emin=        0 eV       Emax=         10 TeV
 
 conv:   for  gamma    SubType= 14
       Lambda tables from 1.022 MeV to 10 TeV in 220 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :   Emin=        0 eV       Emax=         10 TeV
-
-Rayl:   for  gamma    SubType= 11
-      Lambda tables from 100 eV  to 10 TeV in 200 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   LivermoreRayleigh :   Emin=        0 eV       Emax=        100 GeV
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
@@ -1581,7 +1561,7 @@ Index : 3     used in the geometry : No      recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 230049722, 925291233
+ Current couple of seeds = 30587785, 1288276993
 ----------------------------------------
 ----> SetHisto 1: Edep (MeV/mm) along absorber  (mm);  100 bins from 0 mm to 200 mm
 Start Run processing.
@@ -1590,18 +1570,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.04s Real=0.04s Sys=0s
+  User=0.03s Real=0.04s Sys=0s
 
  The run consists of 100 alpha of 100 MeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
- Projected Range= 6.42248 mm    rms= 43.1607 um 
- Mean number of primary steps = 30.42
+ Projected Range= 6.41782 mm    rms= 45.4125 um 
+ Mean number of primary steps = 30.54
  Total energy deposit= 100 MeV
- niel energy deposit = 57.4342 keV
+ niel energy deposit = 57.6142 keV
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	788.061 MeV	7.88061 % 	1.57827e-05 Gy
+ tally 0: 	 	1.02554 GeV	10.2554 % 	2.05387e-05 Gy
  tally 1: 	 	0 eV 	0 % 	0 Gy
  tally 2: 	 	0 eV 	0 % 	0 Gy
  tally 3: 	 	0 eV 	0 % 	0 Gy
@@ -1611,7 +1591,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1312548723, 1323488922
+ Current couple of seeds = 830612461, 2139546157
 ----------------------------------------
 G4 kernel has come to Quit state.
 

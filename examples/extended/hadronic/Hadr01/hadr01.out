@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-09    (25-June-2010)
+ Geant4 version Name: geant4-09-04-ref-00    (17-December-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -53,7 +53,7 @@ phot:   for  gamma, applyCuts: 1     SubType= 12
 compt:   for  gamma, applyCuts: 1     SubType= 13
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Klein-Nishina :   Emin=        0 eV       Emax=         10 TeV
+        KleinNishina :   Emin=        0 eV       Emax=         10 TeV
 
 conv:   for  gamma, applyCuts: 1     SubType= 14
       Lambda tables from 1.022 MeV to 10 TeV in 77 bins, spline: 1
@@ -64,7 +64,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :   Emin=        0 eV       Emax=         10 TeV
+          UrbanMsc93 :   Emin=        0 eV       Emax=         10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -78,14 +78,8 @@ eBrem:   for  e-    SubType= 3
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGen2BS
             eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
-
-CoulombScat:   for  e-, applyCuts: 1     SubType= 1
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10000; pLimit(GeV^1)= 0.139531
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -99,19 +93,13 @@ eBrem:   for  e+    SubType= 3
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGen2BS
             eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+, applyCuts: 1     SubType= 5
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
-
-CoulombScat:   for  e+, applyCuts: 1     SubType= 1
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10000; pLimit(GeV^1)= 0.139531
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
@@ -321,6 +309,9 @@ hPairProd:   for  pi-    SubType= 4
                      Hadronic Processes for <anti_proton>
           CHIPS_Inelastic
 
+                     Hadronic Processes for <GenericIon>
+        ionInelastic  Models:            Binary Cascade: Emin(GeV)=     0  Emax(GeV)= 20
+
                      Hadronic Processes for <e->
       ElectroNuclear  Models:                     CHIPS: Emin(GeV)=     0  Emax(GeV)= 30000
 
@@ -400,33 +391,33 @@ EventAction: Event # 90 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.37s Real=0.38s Sys=0s
+  User=0.21s Real=0.22s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        proton
 Beam Energy(MeV)                     3000
 Number of events                     100
-Average energy deposit (MeV)         60.26   RMS(MeV) 44.68
-Average number of steps              331.5
-Average number of gamma              1.9
-Average number of e-                 3.1
-Average number of e+                 0.03
-Average number of neutrons           1.14
-Average number of protons            1.02
+Average energy deposit (MeV)         56.33   RMS(MeV) 46.71
+Average number of steps              214.2
+Average number of gamma              1.2
+Average number of e-                 2.92
+Average number of e+                 0.02
+Average number of neutrons           0.7
+Average number of protons            0.7
 Average number of antiprotons        0
-Average number of pi+ & pi-          0.19
-Average number of pi0                0.18
-Average number of kaons              0.01
+Average number of pi+ & pi-          0.14
+Average number of pi0                0.05
+Average number of kaons              0
 Average number of muons              0
-Average number of deuterons+tritons  0.1
-Average number of He3+alpha          0.17
-Average number of ions               0.31
-Average number of forward neutrons   0.15
-Average number of reflected neutrons 0.91
-Average number of leaked neutrons    0.01
-Average number of proton leak        0.5
-Average number of pion leak          0.19
+Average number of deuterons+tritons  0.09
+Average number of He3+alpha          0.14
+Average number of ions               0.17
+Average number of forward neutrons   0.03
+Average number of reflected neutrons 0.62
+Average number of leaked neutrons    0.03
+Average number of proton leak        0.33
+Average number of pion leak          0.12
 ========================================================
 
 #

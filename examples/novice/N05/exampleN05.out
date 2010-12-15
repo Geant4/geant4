@@ -5,7 +5,7 @@ RunManager construction starting....
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-09    (25-June-2010)
+ Geant4 version Name: geant4-09-04-ref-00    (17-December-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -1657,7 +1657,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0     1e+03        0        0         0 WorldPhysical initStep
     1 -0.00114       16     26.7     1e+03  0.00502     31.1      31.1 WorldPhysical hIoni
     2 -0.00436     29.9     49.8     1e+03  0.00515     26.9        58 WorldPhysical hIoni
-    3 -0.00517     33.9     56.5     1e+03 0.000882      7.8      65.8 WorldPhysical hIoni
+    3 -0.00517     33.9     56.5     1e+03 0.000883      7.8      65.8 WorldPhysical hIoni
     4 -0.00573     35.9     59.9     1e+03 0.000343     4.03      69.9 WorldPhysical hIoni
     5 -0.00621     37.5     62.5     1e+03 5.98e-05        3      72.9 WorldPhysical hIoni
     6  -0.0073     40.3     67.1     1e+03  0.00124     5.41      78.3 WorldPhysical hIoni
@@ -1754,9 +1754,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1   0.0118       16     26.7         0  0.00118   0.0722    0.0722 WorldPhysical eIoni
 >>> Event 0
      3 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.1599880926027524 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.1599880890769028 (GeV)
      9 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.7599434398630738 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.7599434231152881 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -1768,7 +1768,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     2  -0.0012       60      100     1e+03   0.0175      110       117 DriftChamberPhysical CoupledTransportation
     3  -0.0018     86.3      144     1e+03 0.000892     51.3       168 DriftChamberPhysical hIoni
     4    0.056      540      900     1e+03    0.021      882  1.05e+03 WorldPhysical CoupledTransportation
-    5   0.0657      570      950     1e+03  0.00734     58.3  1.11e+03 WorldPhysical G4FSMP_parallelGeom
+    5   0.0657      570      950     1e+03  0.00735     58.3  1.11e+03 WorldPhysical G4FSMP_parallelGeom
     6   0.0657      570      950         0    1e+03        0  1.11e+03 WorldPhysical G4FSMP_parallelGeom
 
 *********************************************************************************************************
@@ -1802,9 +1802,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1    0.355      3.5     5.78         0    0.001    0.058     0.058 WorldPhysical eIoni
 >>> Event 1
      6 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.1999867546768942 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.1999867487217892 (GeV)
      10 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.7399509923045084 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.73995097027062 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -1849,9 +1849,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     5     8.39     92.3      147         0  0.00211    0.955      10.9 DriftChamberPhysical eIoni
 >>> Event 2
      5 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.1599909562620387 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.1599909521750737 (GeV)
      11 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.8199536508429485 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.8199536298972526 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -1860,7 +1860,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0     1e+03        0        0         0 WorldPhysical initStep
     1 -0.00157     10.7     17.8     1e+03  0.00234     20.8      20.8 WorldPhysical hIoni
-    2  -0.0012     28.1     46.8     1e+03   0.0062     33.8      54.6 WorldPhysical hIoni
+    2  -0.0012     28.1     46.8     1e+03  0.00637     33.8      54.6 WorldPhysical hIoni
     3 -0.00149     33.3     55.4     1e+03  0.00176     10.1      64.7 WorldPhysical hIoni
     4 -0.00502     46.8       78     1e+03  0.00521     26.4        91 WorldPhysical hIoni
     5 -0.00525     47.7     79.6     1e+03  0.00024      1.8      92.8 WorldPhysical hIoni
@@ -1868,7 +1868,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     7 -0.00962     69.3      116     1e+03  0.00031     18.1       135 DriftChamberPhysical hIoni
     8  -0.0626      292      486     1e+03   0.0077      432       567 DriftChamberPhysical hIoni
     9   -0.104      540      900     1e+03   0.0109      483  1.05e+03 WorldPhysical CoupledTransportation
-   10    -0.11      570      950     1e+03  0.00877     58.3  1.11e+03 WorldPhysical G4FSMP_parallelGeom
+   10    -0.11      570      950     1e+03  0.00878     58.3  1.11e+03 WorldPhysical G4FSMP_parallelGeom
    11    -0.11      570      950         0    1e+03        0  1.11e+03 WorldPhysical G4FSMP_parallelGeom
 
 *********************************************************************************************************
@@ -1928,9 +1928,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1  -0.0516     10.7     17.8         0   0.0017    0.122     0.122 WorldPhysical eIoni
 >>> Event 3
      11 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.259983590413022 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.2599835400120017 (GeV)
      9 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.5799633939982799 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.5799632815652346 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -1938,8 +1938,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0     1e+03        0        0         0 WorldPhysical initStep
-    1 -0.000373     4.74      7.9     1e+03  0.00122     9.21      9.21 WorldPhysical hIoni
-    2 0.000347       60      100     1e+03   0.0147      107       117 DriftChamberPhysical CoupledTransportation
+    1 -0.000373     4.74      7.9     1e+03  0.00123     9.21      9.21 WorldPhysical hIoni
+    2 0.000347       60      100     1e+03   0.0148      107       117 DriftChamberPhysical CoupledTransportation
     3   0.0739      446      744     1e+03   0.0185      751       867 DriftChamberPhysical hIoni
     4   0.0734      540      900     1e+03  0.00503      182  1.05e+03 WorldPhysical CoupledTransportation
     5    0.072      570      950     1e+03   0.0111     58.3  1.11e+03 WorldPhysical G4FSMP_parallelGeom
@@ -1962,9 +1962,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1   -0.016     4.76     7.89         0  0.00114   0.0686    0.0686 WorldPhysical eIoni
 >>> Event 4
      8 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.2199883435255812 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.2199883367016436 (GeV)
      9 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.7399607918587733 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.7399607689055288 (GeV)
 number of event = 5
 ### Run 5 start.
 
@@ -1980,9 +1980,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     4   -0.104      285      950         0    1e+03        0       992 WorldPhysical G4FSMP_parallelGeom
 >>> Event 0
      1 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.01999915705750169 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.01999915656585181 (GeV)
      13 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.9799586958175825 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.9799586717267385 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -1992,7 +1992,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0     1e+03        0        0         0 WorldPhysical initStep
     1 0.000168     1.52     5.07     1e+03 0.000714     5.29      5.29 WorldPhysical hIoni
     2 -0.00206     15.4     51.4     1e+03   0.0108     48.4      53.7 WorldPhysical hIoni
-    3 -0.000219       30      100     1e+03  0.00716     50.7       104 DriftChamberPhysical CoupledTransportation
+    3 -0.000219       30      100     1e+03  0.00717     50.7       104 DriftChamberPhysical CoupledTransportation
     4  0.00241     63.5      212     1e+03  0.00434      116       221 DriftChamberPhysical hIoni
     5  0.00974      254      846     1e+03   0.0161      663       884 DriftChamberPhysical hIoni
     6   0.0122      270      900     1e+03  0.00136     55.9       940 WorldPhysical CoupledTransportation
@@ -2034,9 +2034,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1  -0.0426     1.52     5.07         0  0.00152    0.103     0.103 WorldPhysical eIoni
 >>> Event 1
      1 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.01999880212100566 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.01999880174941301 (GeV)
      12 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.9799413039292773 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.9799412857212376 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -2127,9 +2127,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1  -0.0552     1.63     5.75         0  0.00272    0.253     0.253 WorldPhysical eIoni
 >>> Event 2
      3 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.0599961854899357 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.0599961842643362 (GeV)
      10 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.9199415108456807 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.9199414920531552 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -2141,7 +2141,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     2   0.0109       30      100     1e+03   0.0154      102       104 DriftChamberPhysical CoupledTransportation
     3    0.022      190      635     1e+03   0.0128      558       662 DriftChamberPhysical hIoni
     4  0.00314      270      900     1e+03  0.00674      277       940 WorldPhysical CoupledTransportation
-    5   0.0024      285      950     1e+03  0.00876     52.2       992 WorldPhysical G4FSMP_parallelGeom
+    5   0.0024      285      950     1e+03  0.00877     52.2       992 WorldPhysical G4FSMP_parallelGeom
     6   0.0024      285      950         0    1e+03        0       992 WorldPhysical G4FSMP_parallelGeom
 
 *********************************************************************************************************
@@ -2161,9 +2161,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1   -0.401    0.479     2.21         0  0.00597    0.985     0.985 WorldPhysical eIoni
 >>> Event 3
      2 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.0399979241561111 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.03999792321081558 (GeV)
      11 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.9599501797466665 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.9599501570595741 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -2209,9 +2209,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1  0.00603     24.7     82.1         0  0.00112   0.0674    0.0674 WorldPhysical eIoni
 >>> Event 4
      1 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.01999897754486354 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.01999897709167284 (GeV)
      12 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.9799498996983136 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.9799498774919688 (GeV)
 number of event = 5
 ### Run 6 start.
 
@@ -2221,8 +2221,8 @@ number of event = 5
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0     1e+03        0        0         0 WorldPhysical initStep
-    1  0.00247    -13.2     43.9     1e+03  0.00691     45.8      45.8 WorldPhysical hIoni
-    2 -0.000322    -28.5     95.1     1e+03  0.00736     53.5      99.3 WorldPhysical hIoni
+    1  0.00247    -13.2     43.9     1e+03  0.00692     45.8      45.8 WorldPhysical hIoni
+    2 -0.000322    -28.5     95.1     1e+03  0.00737     53.5      99.3 WorldPhysical hIoni
     3 -9.49e-05      -30      100     1e+03  0.00133      5.1       104 DriftChamberPhysical CoupledTransportation
     4   0.0307     -191      637     1e+03   0.0156      561       665 DriftChamberPhysical hIoni
     5   0.0444     -270      900     1e+03  0.00767      274       940 WorldPhysical CoupledTransportation
@@ -2255,9 +2255,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     2     0.13    -14.1     43.2         0  0.00271    0.252      1.78 WorldPhysical eIoni
 >>> Event 0
      4 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.07999530016529779 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.07999529842613519 (GeV)
      12 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.8999471268596003 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.8999471072940211 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -2274,523 +2274,523 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0  -0.0605     -124      413       791        0        0         0 DriftChamberPhysical initStep
-    1     16.8     -270      900       791  0.00798      508       508 WorldPhysical CoupledTransportation
+    1     16.8     -270      900       791  0.00799      508       508 WorldPhysical CoupledTransportation
     2     20.3     -300    1e+03       791   0.0147      104       613     Crystal CoupledTransportation
     3     20.3     -300    1e+03       791     0.19    0.506       613     Crystal CoupledTransportation
-    4     21.1     -308 1.03e+03       772     15.7     28.7       642     Crystal muIoni
+    4     21.1     -308 1.03e+03       772     15.6     28.7       642     Crystal muIoni
     5     25.2     -326 1.09e+03       738     33.2     64.8       707     Crystal muIoni
     6       29     -339 1.14e+03       706     28.1     53.9       761     Crystal muIoni
     7     30.1     -340 1.15e+03       701     3.23     6.75       767     Crystal muIoni
     8     32.7     -344 1.16e+03       692     8.35     16.5       784     Crystal muIoni
-    9     32.9     -344 1.17e+03       674    0.413    0.989       785     Crystal muIoni
+    9     32.9     -344 1.17e+03       674    0.414    0.989       785     Crystal muIoni
    10     33.8     -346 1.17e+03       669     3.37     5.87       791     Crystal muIoni
    11     34.4     -347 1.18e+03       665     1.76     4.22       795     Crystal muIoni
    12     35.2     -348 1.18e+03       662     2.91     5.65       801     Crystal muIoni
    13     36.3     -350 1.19e+03       657     4.65     9.22       810     Crystal CoupledTransportation
    14     38.2     -353  1.2e+03       646     8.57     14.1       824     Crystal muIoni
-   15     39.6     -356 1.21e+03       639     5.31     10.2       834     Crystal muIoni
+   15     39.6     -356 1.21e+03       639     5.32     10.2       834     Crystal muIoni
    16     40.7     -357 1.22e+03       632      3.3     7.14       841     Crystal muIoni
-   17     44.1     -362 1.24e+03       621      9.6     20.1       861     Crystal muIoni
+   17     44.1     -362 1.24e+03       622      9.6     20.1       861     Crystal muIoni
    18       50     -370 1.28e+03       603     18.8     38.3       900     Crystal CoupledTransportation
    19     60.6     -386 1.35e+03       557       41     76.5       976     Crystal muIoni
    20     64.8     -390 1.38e+03       541     15.1     29.8  1.01e+03     Crystal muIoni
-   21     68.2     -393  1.4e+03       531     9.95       21  1.03e+03 WorldPhysical CoupledTransportation
+   21     68.2     -393  1.4e+03       531     9.96       21  1.03e+03 WorldPhysical CoupledTransportation
    22     82.5     -405 1.49e+03       531   0.0185     95.9  1.12e+03 WorldPhysical muIoni
    23       83     -405  1.5e+03       531  0.00108      3.3  1.13e+03 WorldPhysical muIoni
    24     83.4     -405  1.5e+03       531 0.000222     2.66  1.13e+03 HadCaloPhysical CoupledTransportation
-   25       91     -411 1.55e+03       531  0.00463     50.9  1.18e+03       Tower CoupledTransportation
-   26      102     -419 1.64e+03       445       86     87.5  1.27e+03       Tower muIoni
-   27     95.7     -429 1.71e+03       366     79.1     72.5  1.34e+03       Tower muIoni
-   28     92.7     -444 1.76e+03       304     61.1     58.7   1.4e+03       Tower muIoni
-   29     91.6     -450 1.79e+03       280     24.3     21.9  1.42e+03       Tower CoupledTransportation
-   30     88.6     -459 1.83e+03       231     49.5     43.7  1.46e+03       Tower muIoni
-   31     86.9     -468 1.86e+03       193     37.8       35   1.5e+03       Tower muIoni
-   32     83.5     -471 1.89e+03       162     30.9     28.4  1.53e+03       Tower muIoni
-   33     80.8     -474 1.91e+03       134     27.8     23.1  1.55e+03       Tower muIoni
-   34     78.6     -476 1.93e+03       112       22     18.4  1.57e+03       Tower muIoni
-   35     73.8     -476 1.94e+03        86     26.3     14.8  1.58e+03       Tower muIoni
-   36     70.7     -477 1.95e+03      73.2     12.8     10.6  1.59e+03       Tower muIoni
-   37     67.6     -480 1.96e+03      59.4     13.7     8.71   1.6e+03       Tower muIoni
-   38     65.3     -483 1.97e+03      48.9     10.5     6.78  1.61e+03       Tower muIoni
-   39     63.8     -484 1.97e+03      39.4     9.58     5.42  1.62e+03       Tower muIoni
-   40     62.8     -485 1.98e+03      32.1     7.28     4.27  1.62e+03       Tower muIoni
-   41     62.5     -486 1.98e+03      24.5     7.55     3.48  1.62e+03       Tower muIoni
-   42     62.5     -487 1.98e+03      17.9     6.66     2.72  1.63e+03       Tower muIoni
-   43     62.4     -488 1.98e+03      10.7     7.19     2.11  1.63e+03       Tower muIoni
-   44     62.7     -488 1.99e+03      2.54     8.15     1.37  1.63e+03       Tower muIoni
-   45     62.8     -488 1.99e+03         0     2.54    0.121  1.63e+03       Tower muIoni
-   46     62.8     -488 1.99e+03         0        0        0  1.63e+03       Tower Decay
+   25       91     -411 1.55e+03       531  0.00464     50.9  1.18e+03       Tower CoupledTransportation
+   26      102     -419 1.64e+03       445     85.9     87.3  1.27e+03       Tower muIoni
+   27     95.7     -429 1.71e+03       366     79.1     72.4  1.34e+03       Tower muIoni
+   28     92.7     -444 1.76e+03       305       61     58.6   1.4e+03       Tower muIoni
+   29     91.7     -450 1.79e+03       280     24.5     22.1  1.42e+03       Tower CoupledTransportation
+   30     88.6     -459 1.83e+03       231     49.5     43.6  1.46e+03       Tower muIoni
+   31       87     -468 1.86e+03       193     37.7     34.9   1.5e+03       Tower muIoni
+   32     83.6     -470 1.89e+03       162     30.8     28.3  1.53e+03       Tower muIoni
+   33     80.9     -474 1.91e+03       134     27.8       23  1.55e+03       Tower muIoni
+   34     78.7     -476 1.93e+03       112       22     18.3  1.57e+03       Tower muIoni
+   35       74     -475 1.94e+03      86.1     26.3     14.7  1.58e+03       Tower muIoni
+   36     70.8     -477 1.95e+03      73.2     12.8     10.6  1.59e+03       Tower muIoni
+   37     67.8     -480 1.96e+03      59.5     13.7     8.68   1.6e+03       Tower muIoni
+   38     65.4     -483 1.97e+03        49     10.5     6.77  1.61e+03       Tower muIoni
+   39       64     -484 1.97e+03      39.4     9.59      5.4  1.61e+03       Tower muIoni
+   40       63     -485 1.98e+03      32.1     7.29     4.26  1.62e+03       Tower muIoni
+   41     62.7     -486 1.98e+03      24.5     7.58     3.47  1.62e+03       Tower muIoni
+   42     62.7     -487 1.98e+03      17.8     6.68     2.72  1.63e+03       Tower muIoni
+   43     62.6     -488 1.98e+03      10.6     7.22     2.11  1.63e+03       Tower muIoni
+   44     62.9     -488 1.99e+03      2.42     8.21     1.36  1.63e+03       Tower muIoni
+   45       63     -488 1.99e+03         0     2.42    0.113  1.63e+03       Tower muIoni
+   46       63     -488 1.99e+03         0        0        0  1.63e+03       Tower Decay
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 23,   Parent ID = 3
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     62.8     -488 1.99e+03      43.8        0        0         0       Tower initStep
-    1     63.2     -487 1.99e+03      42.1     1.52     1.24      1.24       Tower eBrem
-    2     63.3     -486 1.99e+03      40.3    0.502    0.491      1.73       Tower eBrem
-    3     64.3     -484 1.99e+03      31.5     8.81     2.71      4.44       Tower eBrem
-    4     65.1     -480 1.99e+03      27.3     4.03     3.97      8.41       Tower eBrem
-    5     65.5     -478 1.99e+03      20.5     2.28     2.06      10.5       Tower eBrem
-    6     65.5     -477 1.99e+03      18.4     1.95     1.07      11.5       Tower eBrem
-    7     65.4     -476 1.99e+03      15.9     0.74    0.766      12.3       Tower eBrem
-    8     65.2     -475 1.99e+03      13.8     1.57     1.46      13.8       Tower eBrem
-    9     64.3     -472 1.99e+03      10.1     3.74     3.97      17.7       Tower eIoni
-   10     64.1     -471 1.99e+03      8.99    0.984    0.966      18.7       Tower eBrem
-   11     62.7     -469 1.99e+03      5.84     3.15     3.11      21.8       Tower eIoni
-   12     62.9     -467 1.99e+03      3.27     2.26     2.18        24       Tower eBrem
-   13     62.7     -467 1.99e+03      2.83    0.307    0.364      24.4       Tower eBrem
-   14     61.5     -467 1.99e+03     0.644     2.18      1.8      26.2       Tower eIoni
-   15     61.5     -467 1.99e+03         0    0.644    0.455      26.6       Tower eIoni
+    0       63     -488 1.99e+03      43.8        0        0         0       Tower initStep
+    1     63.4     -487 1.99e+03      42.1     1.52     1.24      1.24       Tower eBrem
+    2     63.5     -486 1.99e+03      40.3    0.502    0.491      1.73       Tower eBrem
+    3     64.5     -484 1.99e+03      31.5     8.81     2.71      4.44       Tower eBrem
+    4     65.2     -480 1.99e+03      27.3     4.03     3.97      8.41       Tower eBrem
+    5     65.7     -478 1.99e+03      20.5     2.28     2.06      10.5       Tower eBrem
+    6     65.7     -477 1.99e+03      18.4     1.95     1.07      11.5       Tower eBrem
+    7     65.6     -476 1.99e+03      15.9     0.74    0.766      12.3       Tower eBrem
+    8     65.4     -475 1.99e+03      13.8     1.57     1.46      13.8       Tower eBrem
+    9     64.5     -472 1.99e+03      10.1     3.74     3.97      17.7       Tower eIoni
+   10     64.3     -471 1.99e+03      8.99    0.984    0.966      18.7       Tower eBrem
+   11     62.9     -469 1.99e+03      5.84     3.15     3.11      21.8       Tower eIoni
+   12     63.1     -467 1.99e+03      3.27     2.26     2.18        24       Tower eBrem
+   13     62.9     -467 1.99e+03      2.83    0.307    0.364      24.4       Tower eBrem
+   14     61.7     -467 1.99e+03     0.644     2.18      1.8      26.2       Tower eIoni
+   15     61.6     -467 1.99e+03         0    0.644    0.455      26.6       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 34,   Parent ID = 23
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     62.7     -467 1.99e+03     0.134        0        0         0       Tower initStep
-    1     56.6     -462 1.99e+03     0.105        0     8.03      8.03       Tower compt
-    2     58.9     -459 1.99e+03     0.101        0     4.09      12.1       Tower compt
-    3     59.6     -458 1.99e+03         0  0.00711    0.758      12.9       Tower phot
+    0     62.9     -467 1.99e+03     0.134        0        0         0       Tower initStep
+    1     56.8     -462 1.99e+03     0.105        0     8.03      8.03       Tower compt
+    2     59.1     -459 1.99e+03     0.101        0     4.09      12.1       Tower compt
+    3     59.8     -458 1.99e+03         0  0.00711    0.758      12.9       Tower phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 37,   Parent ID = 34
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     59.6     -458 1.99e+03    0.0939        0        0         0       Tower initStep
-    1     59.6     -458 1.99e+03         0   0.0939   0.0245    0.0245       Tower eIoni
+    0     59.8     -458 1.99e+03    0.0939        0        0         0       Tower initStep
+    1     59.8     -458 1.99e+03         0   0.0939   0.0245    0.0245       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 36,   Parent ID = 34
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     58.9     -459 1.99e+03   0.00382        0        0         0       Tower initStep
-    1     58.9     -459 1.99e+03         0  0.00382 0.000121  0.000121       Tower eIoni
+    0     59.1     -459 1.99e+03   0.00382        0        0         0       Tower initStep
+    1     59.1     -459 1.99e+03         0  0.00382 0.000121  0.000121       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 35,   Parent ID = 34
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     56.6     -462 1.99e+03    0.0289        0        0         0       Tower initStep
-    1     56.6     -462 1.99e+03         0   0.0289  0.00331   0.00331       Tower eIoni
+    0     56.8     -462 1.99e+03    0.0289        0        0         0       Tower initStep
+    1     56.8     -462 1.99e+03         0   0.0289  0.00331   0.00331       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 33,   Parent ID = 23
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     62.9     -467 1.99e+03     0.311        0        0         0       Tower initStep
-    1     61.1     -466 1.99e+03     0.272        0     2.38      2.38       Tower compt
-    2     50.2     -468 1.99e+03     0.223        0       12      14.3       Tower compt
-    3       50     -468 1.99e+03     0.223        0    0.244      14.6       Tower CoupledTransportation
-    4     43.9     -469 1.99e+03     0.155        0     7.38        22       Tower compt
-    5     44.3     -475 1.99e+03     0.126        0     6.32      28.3       Tower compt
-    6     45.9     -476 1.99e+03     0.112        0     2.23      30.5       Tower compt
-    7     45.9     -473    2e+03         0  0.00711     7.06      37.6       Tower phot
+    0     63.1     -467 1.99e+03     0.311        0        0         0       Tower initStep
+    1     61.3     -466 1.99e+03     0.272        0     2.38      2.38       Tower compt
+    2     50.4     -468 1.99e+03     0.223        0       12      14.3       Tower compt
+    3       50     -468 1.99e+03     0.223        0    0.461      14.8       Tower CoupledTransportation
+    4       44     -469 1.99e+03     0.155        0     7.16        22       Tower compt
+    5     44.5     -475 1.99e+03     0.126        0     6.32      28.3       Tower compt
+    6     46.1     -476 1.99e+03     0.112        0     2.23      30.5       Tower compt
+    7     46.1     -473    2e+03         0  0.00711     7.06      37.6       Tower phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 43,   Parent ID = 33
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     45.9     -473    2e+03     0.105        0        0         0       Tower initStep
-    1     45.9     -473    2e+03         0    0.105   0.0297    0.0297       Tower eIoni
+    0     46.1     -473    2e+03     0.105        0        0         0       Tower initStep
+    1     46.1     -473    2e+03         0    0.105   0.0297    0.0297       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 42,   Parent ID = 33
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     45.9     -476 1.99e+03    0.0139        0        0         0       Tower initStep
-    1     45.9     -476 1.99e+03         0   0.0139 0.000964  0.000964       Tower eIoni
+    0     46.1     -476 1.99e+03    0.0139        0        0         0       Tower initStep
+    1     46.1     -476 1.99e+03         0   0.0139 0.000964  0.000964       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 41,   Parent ID = 33
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     44.3     -475 1.99e+03    0.0287        0        0         0       Tower initStep
-    1     44.3     -475 1.99e+03         0   0.0287  0.00329   0.00329       Tower eIoni
+    0     44.5     -475 1.99e+03    0.0287        0        0         0       Tower initStep
+    1     44.5     -475 1.99e+03         0   0.0287  0.00329   0.00329       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 40,   Parent ID = 33
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     43.9     -469 1.99e+03    0.0677        0        0         0       Tower initStep
-    1     43.9     -469 1.99e+03         0   0.0677   0.0141    0.0141       Tower eIoni
+    0       44     -469 1.99e+03    0.0677        0        0         0       Tower initStep
+    1       44     -469 1.99e+03         0   0.0677   0.0141    0.0141       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 39,   Parent ID = 33
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     50.2     -468 1.99e+03    0.0489        0        0         0       Tower initStep
-    1     50.2     -468 1.99e+03         0   0.0489  0.00814   0.00814       Tower eIoni
+    0     50.4     -468 1.99e+03    0.0489        0        0         0       Tower initStep
+    1     50.4     -468 1.99e+03         0   0.0489  0.00814   0.00814       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 38,   Parent ID = 33
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     61.1     -466 1.99e+03    0.0398        0        0         0       Tower initStep
-    1     61.1     -466 1.99e+03         0   0.0398  0.00572   0.00572       Tower eIoni
+    0     61.3     -466 1.99e+03    0.0398        0        0         0       Tower initStep
+    1     61.3     -466 1.99e+03         0   0.0398  0.00572   0.00572       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 32,   Parent ID = 23
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     64.1     -471 1.99e+03     0.134        0        0         0       Tower initStep
-    1     63.6     -470 1.99e+03         0  0.00711     2.15      2.15       Tower phot
+    0     64.3     -471 1.99e+03     0.134        0        0         0       Tower initStep
+    1     63.7     -470 1.99e+03         0  0.00711     2.15      2.15       Tower phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 44,   Parent ID = 32
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     63.6     -470 1.99e+03     0.127        0        0         0       Tower initStep
-    1     63.6     -470 1.99e+03         0    0.127   0.0403    0.0403       Tower eIoni
+    0     63.7     -470 1.99e+03     0.127        0        0         0       Tower initStep
+    1     63.7     -470 1.99e+03         0    0.127   0.0403    0.0403       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 31,   Parent ID = 23
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     65.2     -475 1.99e+03     0.462        0        0         0       Tower initStep
-    1     64.1     -468 1.99e+03     0.424        0     6.75      6.75       Tower compt
-    2     65.7     -462 1.99e+03         0  0.00711     6.29        13       Tower phot
+    0     65.4     -475 1.99e+03     0.462        0        0         0       Tower initStep
+    1     64.3     -468 1.99e+03     0.424        0     6.75      6.75       Tower compt
+    2     65.9     -462 1.99e+03         0  0.00711     6.29        13       Tower phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 46,   Parent ID = 31
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     65.7     -462 1.99e+03     0.417        0        0         0       Tower initStep
-    1     65.8     -462 1.99e+03         0    0.417    0.251     0.251       Tower eIoni
+    0     65.9     -462 1.99e+03     0.417        0        0         0       Tower initStep
+    1       66     -462 1.99e+03         0    0.417    0.251     0.251       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 45,   Parent ID = 31
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     64.1     -468 1.99e+03    0.0387        0        0         0       Tower initStep
-    1     64.1     -468 1.99e+03         0   0.0387  0.00546   0.00546       Tower eIoni
+    0     64.3     -468 1.99e+03    0.0387        0        0         0       Tower initStep
+    1     64.3     -468 1.99e+03         0   0.0387  0.00546   0.00546       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 30,   Parent ID = 23
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     65.4     -476 1.99e+03      1.79        0        0         0       Tower initStep
-    1     64.8     -457 1.99e+03     0.479        0     18.9      18.9       Tower compt
-    2     60.4     -456 1.99e+03     0.193        0      6.6      25.5       Tower compt
-    3     59.3     -456 1.99e+03         0  0.00711     5.96      31.4       Tower phot
+    0     65.6     -476 1.99e+03      1.79        0        0         0       Tower initStep
+    1       65     -457 1.99e+03     0.479        0     18.9      18.9       Tower compt
+    2     60.6     -456 1.99e+03     0.193        0      6.6      25.5       Tower compt
+    3     59.4     -456 1.99e+03         0  0.00711     5.96      31.4       Tower phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 49,   Parent ID = 30
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     59.3     -456 1.99e+03     0.186        0        0         0       Tower initStep
-    1     59.3     -456 1.99e+03         0    0.186   0.0749    0.0749       Tower eIoni
+    0     59.4     -456 1.99e+03     0.186        0        0         0       Tower initStep
+    1     59.4     -456 1.99e+03         0    0.186   0.0749    0.0749       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 48,   Parent ID = 30
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     60.4     -456 1.99e+03     0.285        0        0         0       Tower initStep
-    1     60.4     -456 1.99e+03         0    0.285    0.144     0.144       Tower eIoni
+    0     60.6     -456 1.99e+03     0.285        0        0         0       Tower initStep
+    1     60.6     -456 1.99e+03         0    0.285    0.144     0.144       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 47,   Parent ID = 30
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     64.8     -457 1.99e+03      1.31        0        0         0       Tower initStep
-    1     64.8     -457 1.99e+03         0     1.31     1.09      1.09       Tower eIoni
+    0       65     -457 1.99e+03      1.31        0        0         0       Tower initStep
+    1       65     -457 1.99e+03         0     1.31     1.09      1.09       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 29,   Parent ID = 23
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     65.5     -477 1.99e+03     0.193        0        0         0       Tower initStep
-    1     64.7     -468 1.99e+03     0.167        0     9.31      9.31       Tower compt
-    2     63.7     -467 1.99e+03         0  0.00711     1.25      10.6       Tower phot
+    0     65.7     -477 1.99e+03     0.193        0        0         0       Tower initStep
+    1     64.9     -468 1.99e+03     0.167        0     9.31      9.31       Tower compt
+    2     63.9     -467 1.99e+03         0  0.00711     1.25      10.6       Tower phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 51,   Parent ID = 29
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     63.7     -467 1.99e+03      0.16        0        0         0       Tower initStep
-    1     63.7     -467 1.99e+03         0     0.16   0.0589    0.0589       Tower eIoni
+    0     63.9     -467 1.99e+03      0.16        0        0         0       Tower initStep
+    1     63.9     -467 1.99e+03         0     0.16   0.0589    0.0589       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 50,   Parent ID = 29
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     64.7     -468 1.99e+03    0.0256        0        0         0       Tower initStep
-    1     64.7     -468 1.99e+03         0   0.0256  0.00269   0.00269       Tower eIoni
+    0     64.9     -468 1.99e+03    0.0256        0        0         0       Tower initStep
+    1     64.9     -468 1.99e+03         0   0.0256  0.00269   0.00269       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 28,   Parent ID = 23
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     65.5     -478 1.99e+03      4.47        0        0         0       Tower initStep
-    1     64.5     -450 1.99e+03      4.47        0     28.4      28.4       Tower CoupledTransportation
-    2     60.7     -350 2.01e+03      4.47        0      101       130       Tower CoupledTransportation
-    3     60.2     -335 2.01e+03     0.268        0     15.3       145       Tower compt
-    4     62.6     -350 1.99e+03     0.268        0     21.8       167       Tower CoupledTransportation
-    5     66.1     -372 1.97e+03     0.176        0     31.6       198       Tower compt
-    6     71.4     -381 1.98e+03         0  0.00711       14       212       Tower phot
+    0     65.7     -478 1.99e+03      4.47        0        0         0       Tower initStep
+    1     64.7     -450 1.99e+03      4.47        0     28.3      28.3       Tower CoupledTransportation
+    2     60.9     -350 2.01e+03      4.47        0      101       129       Tower CoupledTransportation
+    3     60.3     -335 2.01e+03     0.268        0     15.4       145       Tower compt
+    4     62.8     -350 1.99e+03     0.268        0     21.9       167       Tower CoupledTransportation
+    5     66.3     -372 1.97e+03     0.176        0     31.5       198       Tower compt
+    6     71.6     -381 1.98e+03         0  0.00711       14       212       Tower phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 54,   Parent ID = 28
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     71.4     -381 1.98e+03     0.169        0        0         0       Tower initStep
-    1     71.4     -381 1.98e+03         0    0.169   0.0641    0.0641       Tower eIoni
+    0     71.6     -381 1.98e+03     0.169        0        0         0       Tower initStep
+    1     71.6     -381 1.98e+03         0    0.169   0.0641    0.0641       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 53,   Parent ID = 28
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     66.1     -372 1.97e+03     0.092        0        0         0       Tower initStep
-    1     66.1     -372 1.97e+03         0    0.092   0.0237    0.0237       Tower eIoni
+    0     66.3     -372 1.97e+03     0.092        0        0         0       Tower initStep
+    1     66.3     -372 1.97e+03         0    0.092   0.0237    0.0237       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 52,   Parent ID = 28
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     60.2     -335 2.01e+03      4.21        0        0         0       Tower initStep
-    1     60.2     -334 2.01e+03      2.37    0.396    0.455     0.455       Tower eBrem
-    2     60.7     -334 2.01e+03     0.827     1.54     1.65       2.1       Tower eIoni
-    3     60.6     -334 2.01e+03         0    0.827    0.629      2.73       Tower eIoni
+    0     60.3     -335 2.01e+03      4.21        0        0         0       Tower initStep
+    1     60.3     -334 2.01e+03      2.37    0.396    0.455     0.455       Tower eBrem
+    2     60.8     -334 2.01e+03     0.827     1.54     1.65       2.1       Tower eIoni
+    3     60.7     -334 2.01e+03         0    0.827    0.629      2.73       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 55,   Parent ID = 52
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     60.2     -334 2.01e+03      1.44        0        0         0       Tower initStep
-    1     69.8     -314    2e+03     0.738        0       23        23       Tower compt
-    2     71.3     -313 2.01e+03     0.329        0      1.7      24.7       Tower compt
-    3     71.2     -313 2.01e+03     0.183        0    0.421      25.1       Tower compt
-    4     71.3     -313 2.01e+03      0.15        0     0.12      25.2       Tower compt
-    5     72.6     -316 2.01e+03         0  0.00711     7.89      33.1       Tower phot
+    0     60.3     -334 2.01e+03      1.44        0        0         0       Tower initStep
+    1     69.9     -314    2e+03     0.738        0       23        23       Tower compt
+    2     71.5     -313    2e+03     0.329        0      1.7      24.7       Tower compt
+    3     71.4     -313    2e+03     0.183        0    0.421      25.1       Tower compt
+    4     71.5     -313    2e+03      0.15        0     0.12      25.2       Tower compt
+    5     72.8     -316 2.01e+03         0  0.00711     7.89      33.1       Tower phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 60,   Parent ID = 55
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     72.6     -316 2.01e+03     0.142        0        0         0       Tower initStep
-    1     72.6     -316 2.01e+03         0    0.142   0.0487    0.0487       Tower eIoni
+    0     72.8     -316 2.01e+03     0.142        0        0         0       Tower initStep
+    1     72.8     -316 2.01e+03         0    0.142   0.0487    0.0487       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 59,   Parent ID = 55
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     71.3     -313 2.01e+03    0.0336        0        0         0       Tower initStep
-    1     71.3     -313 2.01e+03         0   0.0336  0.00429   0.00429       Tower eIoni
+    0     71.5     -313    2e+03    0.0336        0        0         0       Tower initStep
+    1     71.5     -313    2e+03         0   0.0336  0.00429   0.00429       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 58,   Parent ID = 55
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     71.2     -313 2.01e+03     0.146        0        0         0       Tower initStep
-    1     71.2     -313 2.01e+03         0    0.146   0.0505    0.0505       Tower eIoni
+    0     71.4     -313    2e+03     0.146        0        0         0       Tower initStep
+    1     71.4     -313    2e+03         0    0.146   0.0505    0.0505       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 57,   Parent ID = 55
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     71.3     -313 2.01e+03     0.409        0        0         0       Tower initStep
-    1     71.4     -313 2.01e+03         0    0.409    0.244     0.244       Tower eIoni
+    0     71.5     -313    2e+03     0.409        0        0         0       Tower initStep
+    1     71.5     -313    2e+03         0    0.409    0.244     0.244       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 56,   Parent ID = 55
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     69.8     -314    2e+03     0.707        0        0         0       Tower initStep
-    1     69.7     -314    2e+03         0    0.707    0.514     0.514       Tower eIoni
+    0     69.9     -314    2e+03     0.707        0        0         0       Tower initStep
+    1     69.9     -314    2e+03         0    0.707    0.514     0.514       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 27,   Parent ID = 23
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     65.1     -480 1.99e+03     0.118        0        0         0       Tower initStep
-    1     69.6     -466 1.99e+03     0.108        0       15        15       Tower compt
-    2     74.7     -464 1.99e+03    0.0897        0     5.93      20.9       Tower compt
-    3     75.3     -465 1.99e+03         0  0.00711     1.23      22.1       Tower phot
+    0     65.2     -480 1.99e+03     0.118        0        0         0       Tower initStep
+    1     69.8     -466 1.99e+03     0.108        0       15        15       Tower compt
+    2     74.9     -464 1.99e+03    0.0897        0     5.93      20.9       Tower compt
+    3     75.5     -465 1.99e+03         0  0.00711     1.23      22.1       Tower phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 63,   Parent ID = 27
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     75.3     -465 1.99e+03    0.0826        0        0         0       Tower initStep
-    1     75.3     -465 1.99e+03         0   0.0826   0.0198    0.0198       Tower eIoni
+    0     75.5     -465 1.99e+03    0.0826        0        0         0       Tower initStep
+    1     75.5     -465 1.99e+03         0   0.0826   0.0198    0.0198       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 62,   Parent ID = 27
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     74.7     -464 1.99e+03    0.0185        0        0         0       Tower initStep
-    1     74.7     -464 1.99e+03         0   0.0185  0.00156   0.00156       Tower eIoni
+    0     74.9     -464 1.99e+03    0.0185        0        0         0       Tower initStep
+    1     74.9     -464 1.99e+03         0   0.0185  0.00156   0.00156       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 61,   Parent ID = 27
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     69.6     -466 1.99e+03    0.0102        0        0         0       Tower initStep
-    1     69.6     -466 1.99e+03         0   0.0102 0.000571  0.000571       Tower eIoni
+    0     69.8     -466 1.99e+03    0.0102        0        0         0       Tower initStep
+    1     69.8     -466 1.99e+03         0   0.0102 0.000571  0.000571       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 26,   Parent ID = 23
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     64.3     -484 1.99e+03    0.0712        0        0         0       Tower initStep
-    1     65.3     -481 1.99e+03         0  0.00711      2.7       2.7       Tower phot
+    0     64.5     -484 1.99e+03    0.0712        0        0         0       Tower initStep
+    1     65.5     -481 1.99e+03         0  0.00711      2.7       2.7       Tower phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 64,   Parent ID = 26
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     65.3     -481 1.99e+03    0.0641        0        0         0       Tower initStep
-    1     65.3     -481 1.99e+03         0   0.0641   0.0129    0.0129       Tower eIoni
+    0     65.5     -481 1.99e+03    0.0641        0        0         0       Tower initStep
+    1     65.5     -481 1.99e+03         0   0.0641   0.0129    0.0129       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 25,   Parent ID = 23
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     63.3     -486 1.99e+03      1.27        0        0         0       Tower initStep
-    1     68.9     -470 1.99e+03      1.06        0     17.7      17.7       Tower compt
-    2     69.6     -469 1.99e+03     0.264        0     1.17      18.8       Tower compt
-    3     67.5     -481    2e+03     0.188        0     14.9      33.7       Tower compt
-    4       69     -484    2e+03     0.137        0     3.84      37.6       Tower compt
-    5     79.5     -484    2e+03    0.0932        0     13.3      50.8       Tower compt
-    6     78.5     -482    2e+03         0  0.00711     2.83      53.7       Tower phot
+    0     63.5     -486 1.99e+03      1.27        0        0         0       Tower initStep
+    1     69.1     -470 1.99e+03      1.06        0     17.7      17.7       Tower compt
+    2     69.8     -469 1.99e+03     0.264        0     1.17      18.8       Tower compt
+    3     67.7     -481    2e+03     0.188        0     14.9      33.7       Tower compt
+    4     69.2     -484    2e+03     0.137        0     3.84      37.6       Tower compt
+    5     79.7     -484    2e+03    0.0932        0     13.3      50.8       Tower compt
+    6     78.7     -482    2e+03         0  0.00711     2.83      53.7       Tower phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 70,   Parent ID = 25
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     78.5     -482    2e+03    0.0861        0        0         0       Tower initStep
-    1     78.5     -482    2e+03         0   0.0861   0.0212    0.0212       Tower eIoni
+    0     78.7     -482    2e+03    0.0861        0        0         0       Tower initStep
+    1     78.7     -482    2e+03         0   0.0861   0.0212    0.0212       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 69,   Parent ID = 25
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     79.5     -484    2e+03    0.0434        0        0         0       Tower initStep
-    1     79.5     -484    2e+03         0   0.0434  0.00665   0.00665       Tower eIoni
+    0     79.7     -484    2e+03    0.0434        0        0         0       Tower initStep
+    1     79.7     -484    2e+03         0   0.0434  0.00665   0.00665       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 68,   Parent ID = 25
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0       69     -484    2e+03    0.0518        0        0         0       Tower initStep
-    1       69     -484    2e+03         0   0.0518  0.00898   0.00898       Tower eIoni
+    0     69.2     -484    2e+03    0.0518        0        0         0       Tower initStep
+    1     69.2     -484    2e+03         0   0.0518  0.00898   0.00898       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 67,   Parent ID = 25
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     67.5     -481    2e+03    0.0759        0        0         0       Tower initStep
-    1     67.5     -481    2e+03         0   0.0759   0.0171    0.0171       Tower eIoni
+    0     67.7     -481    2e+03    0.0759        0        0         0       Tower initStep
+    1     67.7     -481    2e+03         0   0.0759   0.0171    0.0171       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 66,   Parent ID = 25
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     69.6     -469 1.99e+03     0.795        0        0         0       Tower initStep
-    1     69.7     -469 1.99e+03         0    0.795    0.598     0.598       Tower eIoni
+    0     69.8     -469 1.99e+03     0.795        0        0         0       Tower initStep
+    1     69.8     -469 1.99e+03         0    0.795    0.598     0.598       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 65,   Parent ID = 25
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     68.9     -470 1.99e+03     0.206        0        0         0       Tower initStep
-    1     68.9     -470 1.99e+03         0    0.206   0.0878    0.0878       Tower eIoni
+    0     69.1     -470 1.99e+03     0.206        0        0         0       Tower initStep
+    1     69.1     -470 1.99e+03         0    0.206   0.0878    0.0878       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 24,   Parent ID = 23
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     63.2     -487 1.99e+03     0.204        0        0         0       Tower initStep
-    1     65.2     -480 1.99e+03     0.194        0     7.24      7.24       Tower compt
-    2       66     -479 1.99e+03     0.118        0     1.03      8.27       Tower compt
-    3     65.9     -480 1.99e+03         0  0.00711    0.897      9.17       Tower phot
+    0     63.4     -487 1.99e+03     0.204        0        0         0       Tower initStep
+    1     65.4     -480 1.99e+03     0.194        0     7.24      7.24       Tower compt
+    2     66.2     -479 1.99e+03     0.118        0     1.03      8.27       Tower compt
+    3     66.1     -480 1.99e+03         0  0.00711    0.897      9.17       Tower phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 73,   Parent ID = 24
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     65.9     -480 1.99e+03     0.111        0        0         0       Tower initStep
-    1     65.9     -480 1.99e+03         0    0.111   0.0323    0.0323       Tower eIoni
+    0     66.1     -480 1.99e+03     0.111        0        0         0       Tower initStep
+    1     66.1     -480 1.99e+03         0    0.111   0.0323    0.0323       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 72,   Parent ID = 24
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0       66     -479 1.99e+03    0.0758        0        0         0       Tower initStep
-    1       66     -479 1.99e+03         0   0.0758   0.0171    0.0171       Tower eIoni
+    0     66.2     -479 1.99e+03    0.0758        0        0         0       Tower initStep
+    1     66.2     -479 1.99e+03         0   0.0758   0.0171    0.0171       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 71,   Parent ID = 24
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     65.2     -480 1.99e+03    0.0102        0        0         0       Tower initStep
-    1     65.2     -480 1.99e+03         0   0.0102 0.000579  0.000579       Tower eIoni
+    0     65.4     -480 1.99e+03    0.0102        0        0         0       Tower initStep
+    1     65.4     -480 1.99e+03         0   0.0102 0.000579  0.000579       Tower eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = anti_nu_e,   Track ID = 22,   Parent ID = 3
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     62.8     -488 1.99e+03        32        0        0         0       Tower initStep
-    1     81.6     -550 1.99e+03        32        0     65.4      65.4       Tower CoupledTransportation
+    0       63     -488 1.99e+03        32        0        0         0       Tower initStep
+    1     81.8     -550 1.99e+03        32        0     65.5      65.5       Tower CoupledTransportation
     2      112     -650 2.01e+03        32        0      105       171       Tower CoupledTransportation
     3      142     -750 2.02e+03        32        0      105       276       Tower CoupledTransportation
-    4      150     -776 2.02e+03        32        0     27.5       304       Tower CoupledTransportation
-    5      172     -850 2.03e+03        32        0     77.8       381       Tower CoupledTransportation
+    4      150     -775 2.02e+03        32        0     26.8       303       Tower CoupledTransportation
+    5      173     -850 2.03e+03        32        0     78.5       381       Tower CoupledTransportation
     6      203     -950 2.05e+03        32        0      105       487       Tower CoupledTransportation
     7      233 -1.05e+03 2.06e+03        32        0      105       592       Tower CoupledTransportation
-    8      250 -1.11e+03 2.07e+03        32        0     59.6       652       Tower CoupledTransportation
-    9      263 -1.15e+03 2.07e+03        32        0     45.7       697 HadCaloPhysical CoupledTransportation
-   10      293 -1.25e+03 2.09e+03        32        0      105       803 WorldPhysical CoupledTransportation
+    8      250 -1.11e+03 2.07e+03        32        0     58.9       651       Tower CoupledTransportation
+    9      263 -1.15e+03 2.07e+03        32        0     46.4       697 HadCaloPhysical CoupledTransportation
+   10      294 -1.25e+03 2.09e+03        32        0      105       803 WorldPhysical CoupledTransportation
    11 1.13e+03   -4e+03 2.45e+03        32        0  2.9e+03   3.7e+03  OutOfWorld CoupledTransportation
 
 *********************************************************************************************************
@@ -2798,27 +2798,27 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     62.8     -488 1.99e+03      28.9        0        0         0       Tower initStep
-    1       50     -493 1.98e+03      28.9        0     14.2      14.2       Tower CoupledTransportation
+    0       63     -488 1.99e+03      28.9        0        0         0       Tower initStep
+    1       50     -493 1.98e+03      28.9        0     14.4      14.4       Tower CoupledTransportation
     2      -50     -531 1.95e+03      28.9        0      111       126       Tower CoupledTransportation
-    3    -98.7     -550 1.94e+03      28.9        0     54.2       180       Tower CoupledTransportation
-    4     -150     -570 1.92e+03      28.9        0     57.1       237       Tower CoupledTransportation
+    3    -98.8     -550 1.94e+03      28.9        0     54.3       180       Tower CoupledTransportation
+    4     -150     -570 1.92e+03      28.9        0       57       237       Tower CoupledTransportation
     5     -250     -608 1.89e+03      28.9        0      111       348       Tower CoupledTransportation
-    6     -350     -647 1.86e+03      28.9        0      111       459       Tower CoupledTransportation
-    7     -359     -650 1.86e+03      28.9        0      9.6       469       Tower CoupledTransportation
+    6     -350     -647 1.86e+03      28.9        0      111       460       Tower CoupledTransportation
+    7     -359     -650 1.86e+03      28.9        0     9.73       469       Tower CoupledTransportation
     8     -450     -685 1.83e+03      28.9        0      102       571       Tower CoupledTransportation
     9     -550     -724  1.8e+03      28.9        0      111       682       Tower CoupledTransportation
-   10     -619     -750 1.78e+03      28.9        0     76.3       758       Tower CoupledTransportation
-   11     -650     -762 1.77e+03      28.9        0       35       793       Tower CoupledTransportation
+   10     -619     -750 1.78e+03      28.9        0     76.4       759       Tower CoupledTransportation
+   11     -650     -762 1.77e+03      28.9        0     34.9       794       Tower CoupledTransportation
    12     -750     -801 1.74e+03      28.9        0      111       905       Tower CoupledTransportation
    13     -850     -839 1.71e+03      28.9        0      111  1.02e+03       Tower CoupledTransportation
-   14     -878     -850  1.7e+03      28.9        0     31.7  1.05e+03       Tower CoupledTransportation
-   15     -950     -878 1.68e+03      28.9        0     79.6  1.13e+03       Tower CoupledTransportation
+   14     -879     -850  1.7e+03      28.9        0     31.8  1.05e+03       Tower CoupledTransportation
+   15     -950     -877 1.68e+03      28.9        0     79.5  1.13e+03       Tower CoupledTransportation
    16 -1.05e+03     -916 1.65e+03      28.9        0      111  1.24e+03       Tower CoupledTransportation
-   17 -1.14e+03     -950 1.62e+03      28.9        0     98.4  1.34e+03       Tower CoupledTransportation
-   18 -1.15e+03     -954 1.62e+03      28.9        0     12.9  1.35e+03 HadCaloPhysical CoupledTransportation
+   17 -1.14e+03     -950 1.62e+03      28.9        0     98.6  1.34e+03       Tower CoupledTransportation
+   18 -1.15e+03     -954 1.62e+03      28.9        0     12.8  1.35e+03 HadCaloPhysical CoupledTransportation
    19 -1.25e+03     -993 1.59e+03      28.9        0      111  1.46e+03 WorldPhysical CoupledTransportation
-   20   -4e+03 -2.05e+03      760      28.9        0 3.06e+03  4.52e+03  OutOfWorld CoupledTransportation
+   20   -4e+03 -2.05e+03      759      28.9        0 3.06e+03  4.52e+03  OutOfWorld CoupledTransportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 20,   Parent ID = 3
@@ -2911,8 +2911,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1       50     -360 1.23e+03      1.16        0     14.7      14.7     Crystal CoupledTransportation
     2     76.7     -369 1.26e+03      1.07        0       43      57.6     Crystal compt
     3      100     -383 1.32e+03      1.07        0     58.3       116     Crystal CoupledTransportation
-    4      130     -400 1.38e+03      1.07        0     74.6       190     Crystal CoupledTransportation
-    5      132     -401 1.39e+03      1.06        0     5.49       196     Crystal compt
+    4      130     -400 1.38e+03      1.07        0     74.5       190     Crystal CoupledTransportation
+    5      132     -401 1.39e+03      1.06        0     5.51       196     Crystal compt
     6      139     -406  1.4e+03      1.06        0     15.3       211 WorldPhysical CoupledTransportation
     7      190     -447  1.5e+03      1.06        0      119       331 HadCaloPhysical CoupledTransportation
     8      216     -467 1.55e+03      1.06        0     59.7       390       Tower CoupledTransportation
@@ -3047,7 +3047,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     5     35.3     -344 1.17e+03      2.07    0.552    0.988      8.48     Crystal eBrem
     6     35.4     -343 1.17e+03      1.02     1.05     2.13      10.6     Crystal eIoni
     7       35     -343 1.17e+03     0.153    0.732     1.42        12     Crystal eBrem
-    8       35     -343 1.17e+03         0    0.153    0.117      12.2     Crystal eIoni
+    8       35     -343 1.17e+03         0    0.153    0.118      12.2     Crystal eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 91,   Parent ID = 9
@@ -3062,8 +3062,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     32.5     -342 1.17e+03    0.0969        0        0         0     Crystal initStep
-    1     32.5     -342 1.17e+03         0   0.0969   0.0561    0.0561     Crystal eIoni
+    0     32.5     -342 1.17e+03     0.097        0        0         0     Crystal initStep
+    1     32.5     -342 1.17e+03         0    0.097   0.0562    0.0562     Crystal eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 90,   Parent ID = 9
@@ -3089,7 +3089,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0     35.5     -344 1.17e+03      7.51        0        0         0     Crystal initStep
     1     45.4     -350 1.21e+03      7.51        0     39.8      39.8     Crystal CoupledTransportation
     2       50     -353 1.23e+03      7.51        0     18.4      58.2     Crystal CoupledTransportation
-    3     53.3     -355 1.24e+03         0        0     13.1      71.2     Crystal conv
+    3     53.3     -355 1.24e+03         0        0       13      71.2     Crystal conv
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e+,   Track ID = 95,   Parent ID = 89
@@ -3098,18 +3098,18 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     53.3     -355 1.24e+03     0.778        0        0         0     Crystal initStep
     1     53.2     -355 1.24e+03     0.166    0.612     1.18      1.18     Crystal eIoni
-    2     53.2     -355 1.24e+03         0    0.166    0.126      1.31     Crystal eIoni
-    3     53.2     -355 1.24e+03         0        0        0      1.31     Crystal annihil
+    2     53.1     -355 1.24e+03         0    0.166    0.126      1.31     Crystal eIoni
+    3     53.1     -355 1.24e+03         0        0        0      1.31     Crystal annihil
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 97,   Parent ID = 95
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     53.2     -355 1.24e+03     0.511        0        0         0     Crystal initStep
-    1     56.4     -350 1.24e+03     0.511        0     5.87      5.87     Crystal CoupledTransportation
+    0     53.1     -355 1.24e+03     0.511        0        0         0     Crystal initStep
+    1     56.4     -350 1.24e+03     0.511        0     5.88      5.88     Crystal CoupledTransportation
     2     60.1     -345 1.24e+03     0.242        0     6.54      12.4     Crystal compt
-    3     64.4     -350 1.25e+03     0.242        0     7.16      19.6     Crystal CoupledTransportation
+    3     64.4     -350 1.25e+03     0.242        0     7.15      19.6     Crystal CoupledTransportation
     4     76.9     -365 1.25e+03         0    0.036     20.9      40.5     Crystal phot
 
 *********************************************************************************************************
@@ -3133,11 +3133,11 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     53.2     -355 1.24e+03     0.511        0        0         0     Crystal initStep
-    1       50     -359 1.24e+03     0.511        0     5.63      5.63     Crystal CoupledTransportation
+    0     53.1     -355 1.24e+03     0.511        0        0         0     Crystal initStep
+    1       50     -359 1.24e+03     0.511        0     5.62      5.62     Crystal CoupledTransportation
     2     20.4     -400 1.22e+03     0.511        0     52.9      58.5     Crystal CoupledTransportation
     3     14.1     -409 1.22e+03     0.332        0     11.2      69.7     Crystal compt
-    4     2.95     -413 1.17e+03     0.188        0     54.6       124     Crystal compt
+    4     2.94     -413 1.17e+03     0.188        0     54.6       124     Crystal compt
     5     2.74     -414 1.17e+03         0   0.0332     1.15       125     Crystal phot
 
 *********************************************************************************************************
@@ -3153,8 +3153,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     2.95     -413 1.17e+03     0.144        0        0         0     Crystal initStep
-    1     2.95     -413 1.17e+03         0    0.144    0.107     0.107     Crystal eIoni
+    0     2.94     -413 1.17e+03     0.144        0        0         0     Crystal initStep
+    1     2.94     -413 1.17e+03         0    0.144    0.107     0.107     Crystal eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 100,   Parent ID = 96
@@ -3170,18 +3170,18 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     53.3     -355 1.24e+03      5.71        0        0         0     Crystal initStep
-    1     53.7     -355 1.24e+03      5.24    0.461    0.979     0.979     Crystal msc
-    2       54     -354 1.24e+03      4.86     0.38    0.731      1.71     Crystal msc
-    3       54     -354 1.24e+03      4.41    0.459    0.857      2.57     Crystal msc
-    4     53.7     -355 1.24e+03      3.87    0.532    0.882      3.45     Crystal msc
-    5     53.5     -355 1.24e+03      3.62    0.202    0.439      3.89     Crystal eBrem
-    6       54     -355 1.24e+03      3.17    0.449     0.95      4.84     Crystal msc
+    1     53.7     -355 1.24e+03      5.25    0.461    0.978     0.978     Crystal msc
+    2       54     -354 1.24e+03      4.87     0.38    0.731      1.71     Crystal msc
+    3       54     -354 1.24e+03      4.41    0.459    0.855      2.56     Crystal msc
+    4     53.7     -355 1.24e+03      3.88    0.531    0.881      3.45     Crystal msc
+    5     53.5     -355 1.24e+03      3.62    0.203    0.442      3.89     Crystal eBrem
+    6       54     -355 1.24e+03      3.17    0.448    0.948      4.84     Crystal msc
     7     54.2     -354 1.24e+03      2.61    0.567    0.731      5.57     Crystal msc
-    8     54.8     -354 1.25e+03      2.08     0.53    0.937      6.51     Crystal msc
-    9     55.5     -354 1.25e+03      1.59    0.481    0.953      7.46     Crystal msc
-   10     55.6     -354 1.25e+03      1.34   0.0876    0.197      7.66     Crystal eBrem
-   11     55.5     -354 1.24e+03     0.482    0.856     1.71      9.37     Crystal eIoni
-   12     55.6     -354 1.24e+03         0    0.482    0.647        10     Crystal eIoni
+    8     54.8     -354 1.25e+03      2.08    0.529    0.936       6.5     Crystal msc
+    9     55.5     -354 1.25e+03       1.6    0.481    0.953      7.46     Crystal msc
+   10     55.6     -354 1.25e+03      1.34   0.0896    0.201      7.66     Crystal eBrem
+   11     55.5     -354 1.24e+03     0.483    0.856     1.71      9.37     Crystal eIoni
+   12     55.6     -354 1.24e+03         0    0.483    0.648        10     Crystal eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 104,   Parent ID = 94
@@ -3197,7 +3197,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     58.2     -353 1.24e+03     0.132        0        0         0     Crystal initStep
-    1     58.2     -353 1.24e+03         0    0.132    0.093     0.093     Crystal eIoni
+    1     58.3     -353 1.24e+03         0    0.132    0.093     0.093     Crystal eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 103,   Parent ID = 94
@@ -3223,7 +3223,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0     34.1     -345 1.17e+03      1.24        0        0         0     Crystal initStep
     1     44.5     -350 1.19e+03      1.24        0     23.8      23.8     Crystal CoupledTransportation
     2       50     -353  1.2e+03      1.24        0     12.7      36.5     Crystal CoupledTransportation
-    3     54.9     -355 1.21e+03     0.734        0     11.3      47.8     Crystal compt
+    3     54.9     -355 1.21e+03     0.734        0     11.2      47.8     Crystal compt
     4     56.8     -400 1.25e+03     0.734        0       56       104     Crystal CoupledTransportation
     5     57.1     -407 1.25e+03     0.375        0     8.31       112     Crystal compt
     6     61.9     -408 1.25e+03         0    0.036     5.06       117     Crystal phot
@@ -3281,7 +3281,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     4     31.7     -348 1.19e+03     0.425        0        2      28.9     Crystal compt
     5     26.3     -330  1.2e+03     0.398        0     20.3      49.2     Crystal compt
     6     16.4     -316 1.21e+03     0.221        0     21.7      70.9     Crystal compt
-    7     16.6     -316 1.21e+03         0    0.036    0.259      71.2     Crystal phot
+    7     16.6     -316 1.21e+03         0    0.036     0.26      71.2     Crystal phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 118,   Parent ID = 87
@@ -3399,7 +3399,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     28.7     -341 1.14e+03      0.12        0        0         0     Crystal initStep
-    1     28.7     -341 1.14e+03         0     0.12   0.0799    0.0799     Crystal eIoni
+    1     28.7     -341 1.14e+03         0     0.12     0.08      0.08     Crystal eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 120,   Parent ID = 6
@@ -3502,9 +3502,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    15     -464 -1.21e+03    4e+03       243        0 1.58e+03  3.78e+03  OutOfWorld CoupledTransportation
 >>> Event 1
      8 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.259560581747325 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.2595774943607143 (GeV)
      5 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.5755772991988063 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.5755603143351371 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -3528,9 +3528,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     2   -0.235     -276      918         0  0.00185    0.138     0.307 WorldPhysical eIoni
 >>> Event 2
      4 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.07999627581820057 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.07999627389223457 (GeV)
      10 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.8799590340002063 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.87995901281458 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -3582,7 +3582,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      0 hits are stored in EM ExN05CalorimeterHitsCollection.
      Total energy deposition in EM calorimeter crytals : 0 (GeV)
      13 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.9999483803285675 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.9999483554759174 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -3593,7 +3593,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1        0      -30      100     1e+03   0.0142      104       104 DriftChamberPhysical CoupledTransportation
     2   0.0693     -270      900     1e+03   0.0203      835       940 WorldPhysical CoupledTransportation
     3   0.0798     -282      941     1e+03  0.00556     42.7       982 WorldPhysical hIoni
-    4   0.0816     -285      950     1e+03 0.000893     9.48       992 WorldPhysical G4FSMP_parallelGeom
+    4   0.0816     -285      950     1e+03 0.000894     9.48       992 WorldPhysical G4FSMP_parallelGeom
     5   0.0816     -285      950         0    1e+03        0       992 WorldPhysical G4FSMP_parallelGeom
 
 *********************************************************************************************************
@@ -3608,7 +3608,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      0 hits are stored in EM ExN05CalorimeterHitsCollection.
      Total energy deposition in EM calorimeter crytals : 0 (GeV)
      13 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.9799503093789932 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.9799502857433056 (GeV)
 number of event = 5
 ### Run 7 start.
 
@@ -3624,9 +3624,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     4   0.0552     -570      950         0    1e+03        0  1.11e+03 WorldPhysical G4FSMP_parallelGeom
 >>> Event 0
      10 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.2599882689772979 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.2599882612910327 (GeV)
      11 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.6799693188637024 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.6799692987611624 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -3638,8 +3638,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     2  -0.0176      -60      100     1e+03   0.0147      111       117 DriftChamberPhysical CoupledTransportation
     3  -0.0499     -170      283     1e+03  0.00515      214       330 DriftChamberPhysical hIoni
     4   -0.153     -540      900     1e+03   0.0179      719  1.05e+03 WorldPhysical CoupledTransportation
-    5   -0.155     -546      910     1e+03 0.000643     11.7  1.06e+03 WorldPhysical hIoni
-    6   -0.158     -570      950     1e+03  0.00739     46.6  1.11e+03 WorldPhysical G4FSMP_parallelGeom
+    5   -0.155     -546      910     1e+03 0.000644     11.7  1.06e+03 WorldPhysical hIoni
+    6   -0.158     -570      950     1e+03   0.0074     46.6  1.11e+03 WorldPhysical G4FSMP_parallelGeom
     7   -0.158     -570      950         0    1e+03        0  1.11e+03 WorldPhysical G4FSMP_parallelGeom
 
 *********************************************************************************************************
@@ -3690,9 +3690,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1     4.85    -4.42     4.86         0   0.0022     0.18      0.18 WorldPhysical eIoni
 >>> Event 1
      4 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.1599873263548057 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.1599873225983008 (GeV)
      9 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.8199350475683792 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.8199350283162917 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -3700,7 +3700,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0     1e+03        0        0         0 WorldPhysical initStep
-    1 -0.00416    -31.3     52.2     1e+03  0.00864     60.9      60.9 WorldPhysical hIoni
+    1 -0.00416    -31.3     52.2     1e+03  0.00865     60.9      60.9 WorldPhysical hIoni
     2 -0.00533    -41.4       69     1e+03  0.00323     19.5      80.4 WorldPhysical hIoni
     3 -0.00576    -49.3     82.2     1e+03  0.00239     15.5      95.9 WorldPhysical hIoni
     4 -0.00581    -51.1     85.2     1e+03 0.000474      3.4      99.3 WorldPhysical hIoni
@@ -3769,9 +3769,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1  -0.0121    -31.3     52.2         0   0.0014   0.0913    0.0913 WorldPhysical eIoni
 >>> Event 2
      6 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.219986468120004 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.2199864635723231 (GeV)
      10 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.7599532535054683 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.7599532377952978 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -3782,7 +3782,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1   0.0026    -14.9     24.8     1e+03   0.0057     28.9      28.9 WorldPhysical hIoni
     2  0.00614      -60      100     1e+03   0.0148     87.7       117 DriftChamberPhysical CoupledTransportation
     3   0.0556     -540      900     1e+03   0.0203      933  1.05e+03 WorldPhysical CoupledTransportation
-    4   0.0487     -570      950     1e+03  0.00916     58.3  1.11e+03 WorldPhysical G4FSMP_parallelGeom
+    4   0.0487     -570      950     1e+03  0.00917     58.3  1.11e+03 WorldPhysical G4FSMP_parallelGeom
     5   0.0487     -570      950         0    1e+03        0  1.11e+03 WorldPhysical G4FSMP_parallelGeom
 
 *********************************************************************************************************
@@ -3794,9 +3794,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1  0.00383    -14.9     24.8         0  0.00134   0.0864    0.0864 WorldPhysical eIoni
 >>> Event 3
      10 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.3199835898582333 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.3199835802025584 (GeV)
      9 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.619968205350327 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.6199681866424569 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -3804,14 +3804,14 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0     1e+03        0        0         0 WorldPhysical initStep
-    1 -0.000798    -7.18       12     1e+03  0.00265       14        14 WorldPhysical hIoni
+    1 -0.000798    -7.18       12     1e+03  0.00266       14        14 WorldPhysical hIoni
     2  0.00373    -50.5     84.2     1e+03   0.0131     84.2      98.2 WorldPhysical hIoni
     3  0.00324    -51.9     86.6     1e+03 0.000633     2.79       101 WorldPhysical hIoni
     4  0.00165      -60      100     1e+03  0.00182     15.6       117 DriftChamberPhysical CoupledTransportation
     5  -0.0115     -421      702     1e+03   0.0139      702       818 DriftChamberPhysical hIoni
     6  -0.0235     -488      814     1e+03  0.00326      130       949 DriftChamberPhysical hIoni
-    7  -0.0395     -540      900     1e+03  0.00247      101  1.05e+03 WorldPhysical CoupledTransportation
-    8  -0.0481     -570      950     1e+03  0.00864     58.3  1.11e+03 WorldPhysical G4FSMP_parallelGeom
+    7  -0.0395     -540      900     1e+03  0.00248      101  1.05e+03 WorldPhysical CoupledTransportation
+    8  -0.0481     -570      950     1e+03  0.00865     58.3  1.11e+03 WorldPhysical G4FSMP_parallelGeom
     9  -0.0481     -570      950         0    1e+03        0  1.11e+03 WorldPhysical G4FSMP_parallelGeom
 
 *********************************************************************************************************
@@ -3856,9 +3856,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1    0.027    -7.13       12         0   0.0021    0.168     0.168 WorldPhysical eIoni
 >>> Event 4
      8 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.2399866893834352 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.2399866827743674 (GeV)
      13 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.6399645050224938 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.639964487398313 (GeV)
 number of event = 5
 Graphics systems deleted.
 Visualization Manager deleting...

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-09    (25-June-2010)
+ Geant4 version Name: geant4-09-04-ref-00    (17-December-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -2548,7 +2548,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     0      0 fm      0 fm  -2.91 m       1 TeV     0 eV      0 fm      0 fm        World    initStep
     1      0 fm      0 fm  -2.45 m   1e+03 GeV   110 keV    46 cm     46 cm        World  Transportation
     2    200 nm   -106 nm  -2.44 m   1e+03 GeV  16.5 MeV  1.28 cm   47.3 cm       Target  muPairProd
-    3   2.09 um   1.42 um   -2.4 m   1e+03 GeV    66 MeV  3.72 cm     51 cm       Target  Transportation
+    3   2.09 um   1.42 um   -2.4 m   1e+03 GeV  65.9 MeV  3.72 cm     51 cm       Target  Transportation
     4   11.7 um   2.72 um   -2.3 m   1e+03 GeV  20.9 keV    10 cm     61 cm      Tracker  StepLimiter
     5   21.2 um   4.01 um   -2.2 m   1e+03 GeV    34 keV    10 cm     71 cm      Tracker  StepLimiter
     6   30.8 um    5.3 um   -2.1 m   1e+03 GeV  25.3 keV    10 cm     81 cm      Tracker  StepLimiter
@@ -2573,7 +2573,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
    25    214 um   30.9 um    -20 cm  1e+03 GeV  17.5 keV    10 cm   2.71 m       Tracker  StepLimiter
    26    223 um   32.4 um    -10 cm  1e+03 GeV  33.9 keV    10 cm   2.81 m       Tracker  StepLimiter
    27    233 um   33.8 um  -2.93 nm  1e+03 GeV  25.3 keV    10 cm   2.91 m       Tracker  StepLimiter
-   28    233 um   33.8 um -0.00221 fm  1e+03 GeV0.000704 eV   2.93 nm   2.91 m       Tracker  Transportation
+   28    233 um   33.8 um -0.00219 fm  1e+03 GeV0.000704 eV   2.93 nm   2.91 m       Tracker  Transportation
    29    238 um   34.5 um   4.54 cm  1e+03 GeV  36.6 keV  4.54 cm   2.96 m       Chamber      muIoni
    30    253 um   36.7 um     20 cm  1e+03 GeV   133 keV  15.5 cm   3.11 m       Chamber  Transportation
    31    262 um   38.3 um     30 cm  1e+03 GeV  24.1 keV    10 cm   3.21 m       Tracker  StepLimiter

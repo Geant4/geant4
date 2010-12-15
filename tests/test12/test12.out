@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-09    (25-June-2010)
+ Geant4 version Name: geant4-09-04-ref-00    (17-December-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -12,25 +12,9 @@
 
 
 <<< Geant4 Physics List engine packaging library: PACK 5.5
-<<< Geant4 Physics List simulation engine: FTFP 4.5
+<<< Geant4 Physics List simulation engine: FTFP_BERT 1.2
 
-*=====================================================================
-*                                                                     
-*   The Physics list FTFP is NO LONGER SUPPORTED !   
-*   and is likely to be deleted in a future release of Geant4             
-*                                                                     
-*    We recommend you try the physics lists FTFP_BERT,
-*      this offers similar functionality for most use cases            
-*                                                                      
-*                                                                      
-*   We invite you to report your use case for, and your experience with
-*    this physics list on the Geant4 User Forum dedicated to physics   
-*    lists:                                                            
-*  http://hypernews.slac.stanford.edu/HyperNews/geant4/get/phys-list.html
-*                                                                      
-*=====================================================================*
-
-Test12 using physics list FTFP (default)
+Test12 using physics list FTFP_BERT (default)
 SimpleBox is now made of Pb
 PreInit> #
 PreInit> # Auto-generated test input file for test12 hadronics.
@@ -308,13 +292,9 @@ hPairProd:   for  pi-    SubType= 4
 
                      Hadronic Processes for <anti_neutron>
           hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 100000
-AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(GeV)= 25
-                               G4HEAntiNeutronInelastic: Emin(GeV)=    20  Emax(GeV)= 100000
 
                      Hadronic Processes for <anti_proton>
           hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 100000
- AntiProtonInelastic  Models:   G4LEAntiProtonInelastic: Emin(GeV)=     0  Emax(GeV)= 25
-                                G4HEAntiProtonInelastic: Emin(GeV)=    20  Emax(GeV)= 100000
 
                      Hadronic Processes for <e->
       ElectroNuclear  Models:                     CHIPS: Emin(GeV)=     0  Emax(GeV)= 30000
@@ -326,17 +306,15 @@ AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(
                      Hadronic Processes for <kaon+>
           hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 100000
    KaonPlusInelastic  Models:                      FTFP: Emin(GeV)=     4  Emax(GeV)= 100000
-                                  G4LEKaonPlusInelastic: Emin(GeV)=     0  Emax(GeV)= 5
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 5
 
                      Hadronic Processes for <kaon->
           hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 100000
   KaonMinusInelastic  Models:                      FTFP: Emin(GeV)=     4  Emax(GeV)= 100000
-                                 G4LEKaonMinusInelastic: Emin(GeV)=     0  Emax(GeV)= 5
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 5
 
                      Hadronic Processes for <lambda>
           hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 100000
-     LambdaInelastic  Models:       G4LELambdaInelastic: Emin(GeV)=     0  Emax(GeV)= 25
-                                    G4HELambdaInelastic: Emin(GeV)=    20  Emax(GeV)= 100000
 
                      Hadronic Processes for <mu->
           muMinusCaptureAtRest
@@ -344,7 +322,7 @@ AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(
                      Hadronic Processes for <neutron>
           hadElastic  Models:             hElasticCHIPS: Emin(GeV)=     0  Emax(GeV)= 100000
     NeutronInelastic  Models:                      FTFP: Emin(GeV)=     4  Emax(GeV)= 100000
-                                   G4LENeutronInelastic: Emin(GeV)=     0  Emax(GeV)= 5
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 5
             nCapture  Models:                G4LCapture: Emin(GeV)=     0  Emax(GeV)= 20000
             nFission  Models:                G4LFission: Emin(GeV)=     0  Emax(GeV)= 20000
 
@@ -352,18 +330,18 @@ AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(
           hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 1
                                         hElasticGlauber: Emin(GeV)=     1  Emax(GeV)= 100000
    PionPlusInelastic  Models:                      FTFP: Emin(GeV)=     4  Emax(GeV)= 100000
-                                  G4LEPionPlusInelastic: Emin(GeV)=     0  Emax(GeV)= 5
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 5
 
                      Hadronic Processes for <pi->
           hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 1
                                         hElasticGlauber: Emin(GeV)=     1  Emax(GeV)= 100000
   PionMinusInelastic  Models:                      FTFP: Emin(GeV)=     4  Emax(GeV)= 100000
-                                 G4LEPionMinusInelastic: Emin(GeV)=     0  Emax(GeV)= 5
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 5
 
                      Hadronic Processes for <proton>
           hadElastic  Models:             hElasticCHIPS: Emin(GeV)=     0  Emax(GeV)= 100000
      ProtonInelastic  Models:                      FTFP: Emin(GeV)=     4  Emax(GeV)= 100000
-                                    G4LEProtonInelastic: Emin(GeV)=     0  Emax(GeV)= 5
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 5
 ============================================================================================
 Idle> #
 Idle> # neutron at 100 GeV in Pb
