@@ -69,12 +69,12 @@
 
 #include "Geant4_gl2ps.h"
 
-#include <math.h>
-#include <string.h>
+#include <cmath>
+#include <string>
 #include <sys/types.h>
 #include <stdarg.h>
 #include <time.h>
-#include <float.h>
+#include <cfloat>
 
 #define GL2PS_HAVE_ZLIB
 #include <zlib.h>
