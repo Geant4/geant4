@@ -162,7 +162,12 @@ recompilation) and a recompilation of user applications is required.
 <B>Physics Lists</B>
 <P> </P>
 <UL>
-<LI>!!!!!!!! FILL IN HERE IF REQUIRED !!!!!!! </LI> 
+<LI>Previously obsolete physics lists have been deleted, for the detailed 
+list please see <a href="#lst-notes">below</a>.
+<LI>Introduced new constructor for all builders with a signature common for all
+builders. Previous constructors are kept for this release, but are obsolete, and
+will be removed in a future release. 
+</LI> 
 </UL>
 
 <P> </P>
@@ -341,6 +346,13 @@ Please see the corresponding details in
 <P> </P>
 <B>Physics Lists</B>
 <UL>
+<LI>New physics lists QGSP_BERT_CHIPS and Shielding, details are described <a
+href="#lst-notes">below</a>.
+<LI>Improved inelastic hadronic cross section at high energies, above 90 GeV,
+  in all QGS.. and FTF.. lists.
+<LI>Improved cross sections for Kaon, and all "misc" particles, including
+    anti-proton, anti-neutron, and hyperons in FTFP_BERT, QGSP_FTFP_BERT, and the
+    two new physics lists QGSP_BERT_CHIPS and Shielding.    
 <LI><TT>G4UrbanMscModel93</TT> is used by default for e+,e- in all EM physics
     builders except <TT>G4EmLivermorePhysics</TT> and <TT>G4EmPenelopePhysics</TT>
     where new <TT>G4GoudsmitSaundersonMscModel</TT> is used.</LI> 
@@ -1569,9 +1581,17 @@ please refer to the corresponding History files provided in most packages):
 <UL>
 <LI>New physics lists and builders:
     <UL>
-    <LI>QGSP_BERT_CHIPS: use CHIPS inelastic for all "misc"
-        particles, including anti-proton, anti-neutron and hyperons.
-        Also use interface to CHIPS cross-sections for Kaons.</LI>
+    <LI>QGSP_BERT_CHIPS: use CHIPS inelastic in cluding cross sections
+        for Kaon and all "misc" particles, including anti-proton, 
+	anti-neutron and hyperons.
+    </LI>
+    <LI>Shielding: A list optimised to shielding applications. Uses FTFP and
+    Bertini for proton, neutron,pion, and Kaon. For neutron at low energy,
+    neutron_HP is used. Uses G4BGGNucleonInelasticXS 
+    inelastic cross sections for proton and neutron,
+    G4NeutronHPJENDLHEInelasticData for neutron at low energy, 
+    interface to CHIPS cross-sections G4QHadronInelasticDataSet for Kaon.
+    For ions the QMD model is used. 
     </UL></LI>
 <LI>Physics lists qualification changes (obsolete/partially
     disabled/experimental/supported):
@@ -1617,7 +1637,8 @@ please refer to the corresponding History files provided in most packages):
     </UL></LI>
 <LI>Hadronic builders:
     <UL>
-    <LI>Allow for separate physics for pion and Kaon, i.e. separate builders
+    <LI>Allow for separate physics for pion and Kaon, i.e. add builders
+        seperating pion and Kaon,  
         <TT>G4{V,}{Pion,Kaon}Builder, G4{LEP,Bertini, QGSP}PionBuilder</TT>,
         and <TT>G4ChipKaonBuilder</TT>. In QGSP_BERT_CHIPS, use CHIPS
         <TT>G4QInelastic</TT> via <TT>G4ChipKaonBuilder</TT> for Kaons.</LI>
