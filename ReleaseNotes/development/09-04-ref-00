@@ -62,10 +62,12 @@ environments                                     envs-V09-03-02
   o Using QGSP_BERT physics-list instead of GPE
   o JAVA source codes is now included (momo-src.jar).
 
-event                                            event-V09-03-09
+event                                            event-V09-03-10
 -----
 - Added protection against null pointer in G4TrackStack and G4SmartTrackStack.
 - Added setting of touchable history of the origin to G4Track.
+- Fixed incorrect destination stack in G4StackManager for the case more than
+  three track stacks are used.
 - Added automatic energy biasing scheme. Users now can bias the energy
   distribution sampling to a given power-law distribution (index alpha) via
   the UI command: /gps/ene/biasAlpha alpha.
