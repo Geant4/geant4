@@ -1,4 +1,3 @@
-surface#
 # Macro file for the initialization phase of field03
 #
 # It creates the default geometry (simple absorber cylinder )        
