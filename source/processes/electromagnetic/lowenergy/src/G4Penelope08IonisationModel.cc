@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Penelope08IonisationModel.cc,v 1.3 2010-12-15 10:26:41 pandola Exp $
+// $Id: G4Penelope08IonisationModel.cc,v 1.2 2010-12-15 07:39:12 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -605,7 +605,6 @@ G4Penelope08IonisationModel::GetCrossSectionTableForCouple(const G4ParticleDefin
 	  G4cout << "G4Penelope08IonisationModel::GetCrossSectionTableForCouple()" << G4endl;
 	  G4cout << "The Cross Section Table for e- was not initialized correctly!" << G4endl;
 	  G4Exception();	  
-	  return NULL;
 	}
       std::pair<const G4Material*,G4double> theKey = std::make_pair(mat,cut);
       if (XSTableElectron->count(theKey)) //table already built	
@@ -630,8 +629,7 @@ G4Penelope08IonisationModel::GetCrossSectionTableForCouple(const G4ParticleDefin
 	{
 	  G4cout << "G4Penelope08IonisationModel::GetCrossSectionTableForCouple()" << G4endl;
 	  G4cout << "The Cross Section Table for e+ was not initialized correctly!" << G4endl;
-	  G4Exception();
-	  return NULL;
+	  G4Exception();	  
 	}
       std::pair<const G4Material*,G4double> theKey = std::make_pair(mat,cut);
       if (XSTablePositron->count(theKey)) //table already built	
@@ -707,7 +705,6 @@ void G4Penelope08IonisationModel::BuildXSTable(const G4Material* mat,G4double cu
 	       G4cout << "G4Penelope08IonisationModel::BuildXSTable" << G4endl;
 	       G4cout << "Problem in calculating the shell XS " << G4endl;
 	       G4Exception();
-	       return;
 	     }
 	   if (tempStorage->size() != 6)
 	     {
@@ -741,12 +738,10 @@ void G4Penelope08IonisationModel::BuildXSTable(const G4Material* mat,G4double cu
 
   //Insert in the appropriate table
   std::pair<const G4Material*,G4double> theKey = std::make_pair(mat,cut);
-  if (part == G4Electron::Electron())      
+  if (part == G4Electron::Electron())  
     XSTableElectron->insert(std::make_pair(theKey,XSEntry));
   else if (part == G4Positron::Positron())
     XSTablePositron->insert(std::make_pair(theKey,XSEntry));
-  else
-    delete XSEntry;
   
   return;
 }
@@ -763,7 +758,6 @@ G4double G4Penelope08IonisationModel::GetDensityCorrection(const G4Material* mat
       G4cout << "G4Penelope08IonisationModel::GetDensityCorrection()" << G4endl;
       G4cout << "Delta Table not initialized. Was Initialise() run?" << G4endl;
       G4Exception();
-      return 0;
     }
   if (energy <= 0*eV)
     {

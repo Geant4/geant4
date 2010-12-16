@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.cc,v 1.35 2010-12-07 09:36:59 allison Exp $
+// $Id: HepPolyhedron.cc,v 1.34 2009-10-28 13:36:32 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1590,8 +1590,8 @@ HepPolyhedronParaboloid::HepPolyhedronParaboloid(double r1,
   RotateAroundZ(0, phi1, dphi, n, 2, zz, rr, -1, -1); 
   SetReferences();
 
-  delete [] zz;
-  delete [] rr;
+  delete zz;
+  delete rr;
 }
 
 HepPolyhedronParaboloid::~HepPolyhedronParaboloid() {}
@@ -1679,9 +1679,6 @@ HepPolyhedronHype::HepPolyhedronHype(double r1,
 
   RotateAroundZ(0, 0., wholeCircle, n, n, zz, rr, -1, -1); 
   SetReferences();
-
-  delete [] zz;
-  delete [] rr;
 }
 
 HepPolyhedronHype::~HepPolyhedronHype() {}

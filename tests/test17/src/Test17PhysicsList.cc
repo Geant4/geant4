@@ -205,7 +205,7 @@ void Test17PhysicsList::ConstructEM()
       // hIon->SetAntiProtonStoppingOff() ;
       //      hIon->SetBarkasOff() ;
       //      hIon->SetNuclearStoppingOn() ;
-      //hIon->SetFluorescence(true) ;
+      hIon->SetFluorescence(true) ;
       hIon->SetCutForSecondaryPhotons(100.*eV) ;
 
       //hIon->SetStoppingPowerTableName("Ziegler1977He") ;
@@ -232,7 +232,7 @@ void Test17PhysicsList::ConstructEM()
 
       // Standard ionisation with low energy extantion
        G4hLowEnergyIonisation* iIon = new G4hLowEnergyIonisation() ;
-       //iIon->SetVerboseLevel(1);
+       iIon->SetVerboseLevel(1);
 	   //   iIon->SetNuclearStoppingOff() ;
 	//  iIon->SetNuclearStoppingOn() ;
 

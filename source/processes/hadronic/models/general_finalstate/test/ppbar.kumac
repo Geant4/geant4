@@ -1,3 +1,0 @@
-nt/cr 1 ' ' 13 ' ' 200000 ic ip px py pz ee xx yy zz cpx cpy cpz ce
-nt/read 1   pp_bar.liste                             
-nt/cut 1 pz/sqrt(px*px+py*py+pz*pz)                 

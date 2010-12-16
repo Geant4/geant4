@@ -1,4 +1,4 @@
-$Id: History,v 1.480 2010-12-15 10:28:44 pandola Exp $
+$Id: History,v 1.477 2010-12-02 18:02:33 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,15 +16,6 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
-15.12.2010  L. Pandola, tag emlowen-V09-04-01
-	    fixed Coverity defects for G4Penelope08 models 
-
-09.12.2010  V.Ivanchenko, tag emlowen-V09-04-00
-            fixed memory leak at initialisation of G4eIonisationParameters,
-            G4ShellVacancy, G4LivermoreIonisationModel, 
-            G4LivermoreBremsstrahlungModel, G4EMDataSet,
-            G4BremsstrahlungParameters
 
 02.12.2010  V.Ivanchenko, tag emlowen-V09-03-69
             fixed minor memory leaks in G4VCrossSectinDataSet, G4EMDataSet,

@@ -48,7 +48,6 @@ HsQGSPInterface::HsQGSPInterface()
 {
   theModel = new G4TheoFSGenerator;
   theCascade = new G4GeneratorPrecompoundInterface;
-  theCascade->SetCaptureThreshold(10*MeV);
   thePreEquilib = new G4PreCompoundModel(&theHandler);
   theCascade->SetDeExcitation(thePreEquilib);  
   theModel->SetTransport(theCascade);

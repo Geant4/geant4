@@ -262,7 +262,6 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     G4FTFModel* theStringModel = new G4FTFModel();
     G4GeneratorPrecompoundInterface* theCascade = 
       new G4GeneratorPrecompoundInterface;
-    theCascade->SetCaptureThreshold(10*MeV);
     G4ExcitedStringDecay* theStringDecay = 
       new G4ExcitedStringDecay(new G4LundStringFragmentation());
     theStringModel->SetFragmentationModel(theStringDecay);

@@ -1,4 +1,4 @@
-?RCS: $Id: Oldconfig.U,v 1.22 2009-11-20 13:41:17 bmorgan Exp $
+?RCS: $Id: Oldconfig.U,v 1.21 2007-02-16 10:51:17 bmorgan Exp $
 ?RCS:
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
 ?RCS: 
@@ -9,9 +9,6 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
-?RCS: Revision 1.21  2007/02/16 10:51:17  bmorgan
-?RCS: Added test on g4system before asking user
-?RCS:
 ?RCS: Revision 1.20  2006/12/07 15:09:13  sadilov
 ?RCS: Usage of flags for Configure
 ?RCS:
@@ -631,7 +628,7 @@ case  "$g4compiler" in
 				*egcs*) g4compiler=egcs
 				;;
 				*2.96*) 
-				echo "WARNING: Found version of g++ (2.96.XXX) is known to be buggy!"
+				echo "WARNING: Found version of 'g++' (2.96.XXX) is known to be buggy!"
 				g4compiler="g++"
 				;;
 				*) g4compiler="g++"
@@ -647,7 +644,7 @@ case  "$g4compiler" in
 				;;
 		'WIN32')
 				g4compiler=VC
-	clcompiler=`( cl 1>/dev/null || echo "ERROR: There is no cl compiler.") 2>&1`
+	clcompiler=`( cl 1>/dev/null || echo "ERROR: There is no 'cl' compiler.") 2>&1`
 				case $clcompiler in
 				*"Version 12"*) g4compiler=VC6
 				;;
@@ -721,8 +718,13 @@ gans=$ans
 
 		if test X$tans != X$g4osnamerec ; then
 		echo ""
-		echo "You are configuring Geant4 for a different platform to the native system!"
-		echo "You are on your own!!!"
+
+cat << EOM
+
+		You are running 'Configure' on NOT native platform!
+		You are on your own way !!!
+
+EOM
 
 		dflt=$tans
 		rp="Confirm your selection or set native '$g4osnamerec'!"
@@ -765,10 +767,14 @@ gans=$ans
 		tans=$ans
 
 		if test X$tans != X$g4compilerrec ; then
-		echo " "
-		echo "The recommmended compiler for this platform ($g4osname) is $g4compilerrec."
-		echo "Use of $tans on $g4osname is not supported - you are on your own!"
+		echo ""
 
+cat << EOM
+
+		The recommmended compiler for this platform ($g4osname) is $g4compilerrec.
+		You are on your own way !!!
+
+EOM
 
 		dflt=$tans
 		rp="Confirm your selection or set recommended '$g4compilerrec'!"
@@ -778,7 +784,11 @@ gans=$ans
 
 		g4compiler=$tans
 		;;
+#	[eE]) 
+#		break
+#		;;
 	*) 
+#		echo " "
 		break
 		;;
 	esac
@@ -792,6 +802,12 @@ fi
 g4system=$g4osname-$g4compiler
 
 fi
+
+#cat << EOM
+#
+#G4SYSTEM is now set to $g4system.
+#
+#EOM
 
 cd .config/UU
 
@@ -1003,9 +1019,19 @@ fi
 
 # header for User
 echo " "
+echo " "
+echo " "
 echo "                --- Geant4 Toolkit Installation  ---"
 echo "                  (setting environments for USER )"
 echo " "
+echo " "
+echo " "
+
+#cat << EOM
+#
+#G4SYSTEM is now set to $g4system.
+#
+#EOM
 
 	cat >&2 <<EOM
 ---------------------------------------------------
@@ -1036,7 +1062,12 @@ else #there is no env.sh
 
 # header for Installer
 echo " "
+echo " "
+echo " "
 echo "                --- Geant4 Toolkit Installation  ---"
+echo " "
+echo " "
+echo " "
 echo " "
 
 	echo " "

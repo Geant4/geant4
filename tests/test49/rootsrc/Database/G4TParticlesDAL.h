@@ -31,9 +31,7 @@
 // mass calculation, requests to get the particles by name or A and Z.
 //
 // History:
-// Created by Roman Atachiants, 18/08/2009
-// Modified:
-// Mikhail Kosov, 10/05/2010: warnings & mesons are added for p400
+// Roman Atachiants, 18/08/2009 - initial version
 //
 // --------------------------------------------------------------------
 
@@ -42,51 +40,49 @@
 
 #include "../CommonHeaders.h"
 
-struct MTableEntry_t
-{
-  Int_t fZ;
-  TString fName;
+struct MTableEntry_t{
+	Int_t fZ;
+	TString fName;
 
-  MTableEntry_t() {}
-  MTableEntry_t(Int_t z, TString const& name) : fZ(z), fName(name) {}
+	MTableEntry_t() {}
+	MTableEntry_t(Int_t z, TString const& name) : fZ(z), fName(name) {}
 };
 
 
-class G4TParticlesDAL : public TObject
-{
+class G4TParticlesDAL : public TObject {
+
   private:
+	  vector<MTableEntry_t>	fMendeleevTable; 		//! Mendeleev table in order to get Z from name or name from Z
+	  Bool_t				fNuclearMassesRead;		//! Flag to mark if the nuclear masses database was read or not
+	  TGeoManager*			fGeoManager;			//! Pointer to the geometry manager
+	  TGeoElementTable*		fTable;					//! Pointer to the database of elements
 
-    vector<MTableEntry_t> fMendeleevTable; // Mendeleev table to get name-> or Z->name
-    Bool_t    fNuclearMassesRead; // A flag for the nuclear masses database has been read
-    TGeoManager*   fGeoManager;   // Pointer to the geometry manager
-    TGeoElementTable*  fTable;    // Pointer to the database of elements
-
-    Double_t   ComputeNuclearMass(Double_t AtomicMass, Double_t A, Int_t Z);
+	  Double_t 		ComputeNuclearMass(Double_t AtomicMass, Int_t A, Int_t Z);
 
   public:
 
-    G4TParticlesDAL() : fNuclearMassesRead(false), fGeoManager(0), fTable(0) { }
-    virtual ~G4TParticlesDAL () {}
+	  G4TParticlesDAL() : fNuclearMassesRead(false), fGeoManager(0), fTable(0) { }
+	  virtual ~G4TParticlesDAL () {}
 
-    void     ReadNuclearMasses();
-   TGeoElementRN* GetParticle(Int_t PDG);
-   Double_t   GetParticleMass(Int_t PDG);
-   TString   GetParticleName(Int_t PDG, Bool_t inLatex = false);
-   TString   GetElementName(Int_t Z);
-   TString   GetFileName(Int_t PDG);
-   Int_t    GetPDG(TString const& particleName);
-   Int_t    GetPDG(Int_t Z, Int_t A, Int_t S=0);
-   Int_t    GetA(Int_t PDG);
-   Int_t    GetA(TString const& elementName);
-   Int_t    GetZ(Int_t PDG);
-   Int_t    GetZ(TString const& elementName);
-   Int_t    GetN(Int_t PDG);
-
-
-   TString   GetCut(Int_t PDG);
+	  void 				ReadNuclearMasses(TString const& filename = "nubase2003/nuclear_masses.asc");
+	  TGeoElementRN*	GetParticle(Int_t PDG);
+	  Double_t			GetParticleMass(Int_t PDG);
+	  TString			GetParticleName(Int_t PDG, Bool_t inLatex = false);
+	  TString			GetElementName(Int_t Z);
+	  TString			GetFileName(Int_t PDG);
+	  Int_t 			GetPDG(TString const& particleName);
+	  Int_t 			GetPDG(Int_t Z, Int_t A);
+	  Int_t				GetA(Int_t PDG);
+	  Int_t				GetA(TString const& elementName);
+	  Int_t				GetZ(Int_t PDG);
+	  Int_t				GetZ(TString const& elementName);
+	  Int_t				GetN(Int_t PDG);
 
 
-   ClassDef(G4TParticlesDAL, 1)  //The class for Geant4 Testing Database DAL
+	  TString			GetCut(Int_t PDG);
+
+
+	  ClassDef(G4TParticlesDAL, 1)  //The class for Geant4 Testing Database DAL
 };
 
 

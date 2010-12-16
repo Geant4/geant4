@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AttributeFilterT.hh,v 1.7 2010-12-11 16:41:11 allison Exp $
+// $Id: G4AttributeFilterT.hh,v 1.6 2006-12-13 15:50:02 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Generic attribute filter.
@@ -127,17 +127,10 @@ G4AttributeFilterT<T>::Evaluate(const T& object) const
     
     // Expect definition to exist    
     if (!G4AttUtils::ExtractAttDef(object, fAttName, attDef)) {
-      static G4bool warnedUnableToExtract = false;
-      if (!warnedUnableToExtract) {
-	std::ostringstream o;
-	o <<"Unable to extract attribute definition named "<<fAttName;
-	G4Exception
-	  ("G4AttributeFilterT::Evaluate", "InvalidAttributeDefinition", JustWarning, o.str().c_str());
-	G4cout << "Available attributes:\n"
-	       << object.GetAttDefs();
-	warnedUnableToExtract = true;
-      }
-      return false;
+      std::ostringstream o;
+      o <<"Unable to extract attribute definition named "<<fAttName;
+      G4Exception
+	("G4AttributeFilterT::Evaluate", "InvalidAttributeDefinition", FatalErrorInArgument, o.str().c_str());
     }
     
     // Get new G4AttValue filter
@@ -158,17 +151,10 @@ G4AttributeFilterT<T>::Evaluate(const T& object) const
 
   // Expect value to exist
   if (!G4AttUtils::ExtractAttValue(object, fAttName, attVal)) {
-    static G4bool warnedUnableToExtract = false;
-    if (!warnedUnableToExtract) {
-      std::ostringstream o;
-      o <<"Unable to extract attribute value named "<<fAttName;
-      G4Exception
-	("G4AttributeFilterT::Evaluate", "InvalidAttributeValue", JustWarning, o.str().c_str());
-    }
-    G4cout << "Available attributes:\n"
-	   << object.GetAttDefs();
-    warnedUnableToExtract = true;
-    return false;
+    std::ostringstream o;
+    o <<"Unable to extract attribute value named "<<fAttName;
+    G4Exception
+      ("G4AttributeFilterT::Evaluate", "InvalidAttributeValue", FatalErrorInArgument, o.str().c_str());
   }
 
   if (G4SmartFilter<T>::GetVerbose()) {

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveExcitation.cc,v 1.24 2010-12-07 10:42:40 vuzhinsk Exp $
+// $Id: G4DiffractiveExcitation.cc,v 1.23 2010-11-15 10:02:38 vuzhinsk Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -234,8 +234,7 @@ G4cout<<"Rapid "<<ProjectileRapidity<<G4endl; //" "<<TargetRapidity<<G4endl;
      G4double DeltaMass=
               (G4ParticleTable::GetParticleTable()->FindParticle(2224))->GetPDGMass();
 
-//G4double TargetRapidity(0.);
-//G4cout<<"Prob Q Exch "<<MagQuarkExchange*std::exp(-SlopeQuarkExchange*(ProjectileRapidity - TargetRapidity))<<G4endl;
+//G4cout<<MagQuarkExchange*std::exp(-SlopeQuarkExchange*(ProjectileRapidity - TargetRapidity))<<G4endl;
 
 //G4cout<<"Q exc Mag Slop Wdelta"<<MagQuarkExchange<<" "<<SlopeQuarkExchange<<" "<<DeltaProbAtQuarkExchange<<G4endl;
 //G4cout<<"ProjectileRapidity "<<ProjectileRapidity<<G4endl;
@@ -936,10 +935,8 @@ void G4DiffractiveExcitation::CreateStrings(G4VSplitableHadron * hadron,
                                             G4ExcitedString * &SecondString,
                                             G4FTFParameters *theParameters) const
 {
-//G4cout<<"Create Strings SplitUp "<<hadron<<G4endl;
 	hadron->SplitUp();
 	G4Parton *start= hadron->GetNextParton();
-
 	if ( start==NULL)
 	{ G4cout << " G4FTFModel::String() Error:No start parton found"<< G4endl;
           FirstString=0; SecondString=0;
@@ -951,10 +948,9 @@ void G4DiffractiveExcitation::CreateStrings(G4VSplitableHadron * hadron,
           FirstString=0; SecondString=0;
 	  return;
 	}
-//G4cout<<start<<" "<<start->GetPDGcode()<<" "<<end<<" "<<end->GetPDGcode()<<G4endl;
-//G4cout<<"Create string "<<start->GetPDGcode()<<" "<<end->GetPDGcode()<<G4endl;
+
         G4LorentzVector Phadron=hadron->Get4Momentum();
-//G4cout<<"String mom "<<Phadron<<G4endl;
+
         G4LorentzVector Pstart(0.,0.,0.,0.);
         G4LorentzVector Pend(0.,0.,0.,0.);
         G4LorentzVector Pkink(0.,0.,0.,0.);
@@ -963,7 +959,6 @@ void G4DiffractiveExcitation::CreateStrings(G4VSplitableHadron * hadron,
 
         G4int PDGcode_startQ = std::abs(start->GetDefinition()->GetPDGEncoding());
         G4int PDGcode_endQ   = std::abs(  end->GetDefinition()->GetPDGEncoding());
-//G4cout<<"PDGcode_startQ "<<PDGcode_startQ<<" PDGcode_endQ   "<<PDGcode_endQ  <<G4endl;
 
 //--------------------------------------------------------------------------------        
         G4double Wmin(0.);
@@ -976,7 +971,6 @@ void G4DiffractiveExcitation::CreateStrings(G4VSplitableHadron * hadron,
         } // end of if(isProjectile)
 
         G4double W = hadron->Get4Momentum().mag();
-//G4cout<<"Wmin W "<<Wmin<<" "<<W<<G4endl;
         G4double W2=W*W;
 
         G4double Pt(0.), x1(0.), x2(0.), x3(0.);
@@ -1068,7 +1062,7 @@ Pend*=Rotate;
         }           // end of if(W > Wmin) Check for a kink
 
 //--------------------------------------------------------------------------------
-//G4cout<<"Kink "<<Kink<<G4endl;
+
         if(Kink)
         {                                        // Kink is possible
           std::vector<G4double> QuarkProbabilitiesAtGluonSplitUp =
@@ -1182,7 +1176,6 @@ if(Ksi > QuarkProbabilitiesAtGluonSplitUp[Iq]) QuarkInGluon++;}
 // -------------------------------------------------------------------------  
         } else                                   // End of kink is possible
         {                                        // Kink is impossible
-//G4cout<<start<<" "<<start->GetPDGcode()<<" "<<end<<" "<<end->GetPDGcode()<<G4endl;
 	  if ( isProjectile )
 	  {
 		FirstString= new G4ExcitedString(end,start, +1);
@@ -1238,9 +1231,6 @@ if(Ksi > QuarkProbabilitiesAtGluonSplitUp[Iq]) QuarkInGluon++;}
 	  end->Set4Momentum(Pend);
           SecondString=0;
         }            // End of kink is impossible 
-
-//G4cout<<"Quarks in the string at creation"<<FirstString->GetRightParton()->GetPDGcode()<<" "<<FirstString->GetLeftParton()->GetPDGcode()<<G4endl;
-//G4cout<<FirstString<<" "<<SecondString<<G4endl;
 
 #ifdef G4_FTFDEBUG
 	  G4cout << " generated string flavors          " 

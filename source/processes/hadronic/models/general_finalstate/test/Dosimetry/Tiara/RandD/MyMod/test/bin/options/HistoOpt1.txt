@@ -1,5 +1,0 @@
-linx 0
-liny 0
-box 0
-sta 1
-

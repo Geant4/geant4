@@ -83,7 +83,6 @@
 #
 # If secondary particles dose & fluence are needed
 #/analysis/secondary true 
-
 # Default material is water liquid
 #/changePhantom/material G4_PLEXIGLASS
 

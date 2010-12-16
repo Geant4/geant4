@@ -32,8 +32,6 @@
 // design and code review.
 //
 //
-#ifdef G4LIB_USE_GDML
-
 #include "G4ORNLFemaleBodyFactory.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4GDMLParser.hh"
@@ -77,7 +75,7 @@ G4VPhysicalVolume* G4ORNLFemaleBodyFactory::CreateOrgan(const G4String& gdmlFile
   			       logicOrgan,
 			       motherVolume,
 			       false,
-			       0);
+			       0, true);
 
   // Sensitive Body Part
     if (sensitivity==true)
@@ -108,4 +106,4 @@ G4VPhysicalVolume* G4ORNLFemaleBodyFactory::CreateOrgan(const G4String& gdmlFile
   return physOrgan;
 }
 
-#endif
+

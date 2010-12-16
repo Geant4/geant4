@@ -1,6 +1,0 @@
-*** Begin of history file: Thu May 29 13:25:49 2003
-opt pto
-exec test_n
-shell ls *.kumac
-exit
-*** End   of history file: Thu May 29 13:26:06 2003

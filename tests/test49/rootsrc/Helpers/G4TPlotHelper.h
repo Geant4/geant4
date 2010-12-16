@@ -30,13 +30,11 @@
 // This class is a simple wrapper/helper for ROOT plotting commands. It
 // also contains different features:
 //   - division for n:  DivideForNumber(Int_t number) which divides the
-//    canvas automatically
+//		  canvas automatically
 //   - different 'prepare' methods in order to set the look and feel
 //
 // History:
-// Created by Roman Atachiants, 18/08/2009
-// Modified:
-// Mikhail Kosov, 12/05/2010: Energy -> momentum, fit the legend
+// Roman Atachiants, 18/08/2009 - initial version
 //
 // --------------------------------------------------------------------
 
@@ -46,78 +44,82 @@
 #include "../CommonHeaders.h"
 #include "../Database/G4TData.h"
 
-class G4TPlotHelper : public TObject
-{
-  private:
 
-  Int_t         fBackgroundColor;
-  Int_t         fTextFont;
-  Float_t       fTextSize;
-  Float_t       fAxisXTextSize;
-  Float_t       fAxisYTextSize;
-  Float_t       fAxisXTitleSize;
-  Float_t       fAxisYTitleSize;
-  TCanvas*      fCanvas;
-  vector<Int_t> fMarkers;
+
+class G4TPlotHelper : public TObject {
+
+  private:
+    Int_t 			fBackgroundColor;
+    Int_t 			fTextFont;
+    Float_t 		fTextSize;
+    Float_t 		fAxisXTextSize;
+    Float_t 		fAxisYTextSize;
+    Float_t 		fAxisXTitleSize;
+    Float_t 		fAxisYTitleSize;
+    TCanvas*		fCanvas;
+    vector<Int_t>	fMarkers;
 
   public:
 
-  TCanvas* PrepareCanvas();
-  TH1F*    PrepareFrame(Double_t hxmin, Double_t hymin, Double_t hxmax, Double_t hymax,
-                        TString const& Title);
-  TString  PrepareCutEnumeration(G4TData* publication);
-  void     PreparePad(Int_t number);
-  Int_t    DivideForNumber(Int_t number);
-  void     DivideCanvas(Int_t xDiv, Int_t yDiv);
-  void     ClearCanvas();
-  void     DrawBigTitle(TString const& text);
-  void     DrawRightAxis(TH1F* frame, Double_t hxmax, Double_t hymin, Double_t hymax);
-  void     DrawAnglesLegend(G4TData* publication);
-  //void     DrawAnglesLegend(G4TData* publ, Double_t xma, Double_t ymin, Double_t ymax);
-  void     DrawModelsLegend(vector<G4TData*>* models);
+    TCanvas*		PrepareCanvas();
+    TH1F*			PrepareFrame(Double_t hxmin, Double_t hymin, Double_t hxmax, Double_t hymax,TString const& Title);
+    TString			PrepareCutEnumeration(G4TData* publication);
+    void			PreparePad(Int_t number);
+    Int_t			DivideForNumber(Int_t number);
+    void			DivideCanvas(Int_t xDiv, Int_t yDiv);
+    void			ClearCanvas();
+    void			DrawBigTitle(TString const& text);
+    void			DrawRightAxis(TH1F* frame, Double_t hxmax,Double_t  hymin, Double_t  hymax);
+    void 			DrawAnglesLegend(G4TData* publication);
+    void 			DrawModelsLegend(vector<G4TData*>* models);
 
-  // Selectors/Modifiers
-  TCanvas*       GetCanvas();
-  vector<Int_t>& GetMarkers()               {return fMarkers;}
-  Int_t          GetMarker(Int_t idx)       {return fMarkers[idx];}
-  Int_t          GetBackgroundColor() const {return fBackgroundColor;}
-  Int_t          GetTextFont() const        {return fTextFont;}
-  Float_t        GetTextSize() const        {return fTextSize;}
-  Float_t        GetAxisXTextSize() const   {return fAxisXTextSize;}
-  Float_t        GetAxisYTextSize() const   {return fAxisYTextSize;}
-  Float_t        GetAxisXTitleSize() const  {return fAxisXTitleSize;}
-  Float_t        GetAxisYTitleSize() const  {return fAxisYTitleSize;}
-  void SetBackgroundColor(Int_t backColor)  {fBackgroundColor= backColor;}
-  void SetTextFont(Int_t textFont)          {fTextFont       = textFont;}
-  void SetAxisXTextSize(Float_t textSize)   {fAxisXTextSize  = textSize;}
-  void SetAxisYTextSize(Float_t textSize)   {fAxisYTextSize  = textSize;}
-  void SetAxisXTitleSize(Float_t titleSize) {fAxisXTitleSize = titleSize;}
-  void SetAxisYTitleSize(Float_t titleSize) {fAxisYTitleSize = titleSize;}
-  void SetTextSize(Float_t textSize)        {fTextSize       = textSize;}
-  void SetTitlePosition(Int_t align = 23, Float_t x = 0, Float_t y = 0);
 
-  G4TPlotHelper()
-  {
-    fBackgroundColor = 10;
-    fTextFont        = 42;
-    fTextSize        = 0.07;
-    fAxisXTextSize   = 0.07;
-    fAxisYTextSize   = 0.07;
-    fAxisXTitleSize  = 0.07;
-    fAxisYTitleSize  = 0.08;
+    // Setters/Getters
+    TCanvas*		GetCanvas();
+    vector<Int_t>&	GetMarkers();
+	Int_t			GetMarker(Int_t idx);
+    Int_t 			GetBackgroundColor() const;
+    Int_t 			GetTextFont() const;
+    Float_t 		GetTextSize() const;
+    Float_t 		GetAxisXTextSize() const;
+    Float_t 		GetAxisYTextSize() const;
+    Float_t 		GetAxisXTitleSize() const;
+	Float_t 		GetAxisYTitleSize() const;
+    void 			SetBackgroundColor(Int_t fBackgroundColor);
+    void 			SetTextFont(Int_t fTextFont);
+    void 			SetAxisXTextSize(Float_t);
+    void 			SetAxisYTextSize(Float_t);
+    void 			SetAxisXTitleSize(Float_t);
+    void 			SetAxisYTitleSize(Float_t);
+    void 			SetTextSize(Float_t fTextSize);
+    void			SetTitlePosition(Int_t align = 23, Float_t x = 0, Float_t y = 0);
 
-    fMarkers.push_back(20);
-    fMarkers.push_back(25);
-    fMarkers.push_back(22);
-    fMarkers.push_back(24);
-    fMarkers.push_back(21);
-    fMarkers.push_back(26);
-    fMarkers.push_back(29);
-    fMarkers.push_back(28);
-    fMarkers.push_back(23);
-  }
-  virtual ~G4TPlotHelper();
-  ClassDef(G4TPlotHelper, 1)
+
+
+    G4TPlotHelper()
+    {
+        fBackgroundColor = 10;
+        fTextFont = 42;
+        fTextSize = 0.07;
+        fAxisXTextSize = 0.07;
+        fAxisYTextSize = 0.07;
+        fAxisXTitleSize = 0.07;
+        fAxisYTitleSize = 0.08;
+
+
+        fMarkers.push_back(20);
+		fMarkers.push_back(25);
+		fMarkers.push_back(22);
+		fMarkers.push_back(24);
+		fMarkers.push_back(21);
+		fMarkers.push_back(26);
+		fMarkers.push_back(29);
+		fMarkers.push_back(28);
+		fMarkers.push_back(23);
+    }
+
+    virtual ~G4TPlotHelper();
+    ClassDef(G4TPlotHelper, 1)
 
 };
 

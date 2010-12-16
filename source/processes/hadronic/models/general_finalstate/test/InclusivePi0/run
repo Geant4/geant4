@@ -1,3 +1,0 @@
-cd scripts
-./doitall | tee ../logs/Multiplicities.log
-

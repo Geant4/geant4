@@ -30,6 +30,7 @@
 
 #include "G4TAnalysisTool.h"
 
+
 G4TAnalysisTool *gAnalysisTool = new G4TAnalysisTool();
 
 ClassImp(G4TAnalysisTool)
@@ -38,72 +39,73 @@ using namespace std;
 using namespace ROOT;
 using namespace TMath;
 
-//______________________________________________________________________________
-Int_t G4TAnalysisTool::Run(TString const& publicationFile, Int_t secondaryPDGorIdx,
-                           TString const& printQue )
-{
-  cout<<"G4TAnalysisTool::Run: Loading Libraries..."<<endl;
-  G4TSimHelper::LoadLibraries();
-  gBenchmark->Start("Overall Benchmark");
-  gROOT->Reset();
-  // parse the header and load the publication
-  fPublication = gTestDB->LoadData(publicationFile);
-  // prepare arguments
-  fProjectilePDG  = fPublication->fHeader.fProjectilePDG;
-  fTargetPDG   = fPublication->fHeader.fTargetPDG;
-  fModelName  = fPublication->fHeader.fModelName;
-  fKineticEnergy  = fPublication->fHeader.fTypeValue;
-  // get nn and np
-  fNN = gParticlesDAL->GetN(fTargetPDG);
-  fNP = gParticlesDAL->GetZ(fTargetPDG);
-  // initialize and execute
-  Initialize();
-  InternalExecute(secondaryPDGorIdx, fNP, fNN, fKineticEnergy, printQue, 2, fNP);
 
-  gBenchmark->Show("Overall Benchmark");
-  return 0;
+//______________________________________________________________________________
+int G4TAnalysisTool::Run(TString const& publicationFile, Int_t secondaryPDGorIdx,
+                         TString const& printQue )
+{
+ cout << "Loading Libraries..." << endl;
+ G4TSimHelper::LoadLibraries();
+
+ gBenchmark->Start("Overall Benchmark");
+ gROOT->Reset();
+
+ // parse the header and load the publication
+ fPublication = gTestDB->LoadData(publicationFile);
+
+ // prepare arguments
+ fProjectilePDG  = fPublication->fHeader.fProjectilePDG;
+ fTargetPDG   = fPublication->fHeader.fTargetPDG;
+ fModelName  = fPublication->fHeader.fModelName;
+ fKineticEnergy  = fPublication->fHeader.fTypeValue;
+
+ // get nn and np
+ fNN = gParticlesDAL->GetN(fTargetPDG);
+ fNP = gParticlesDAL->GetZ(fTargetPDG);
+
+ // initialize and execute
+ Initialize();
+ InternalExecute(secondaryPDGorIdx, fNP, fNN, fKineticEnergy, printQue, 2, fNP);
+
+
+ gBenchmark->Show("Overall Benchmark");
+ return 0;
 }
 
 //______________________________________________________________________________
-void G4TAnalysisTool::InternalExecute(Int_t secondaryPDGIndx, Int_t np, Int_t nn,
-                                      Double_t en, const TString& pq, Int_t nzone,
-                                      Int_t nvex, const TString& dir)
+void G4TAnalysisTool::InternalExecute(Int_t secondaryPDGorIdx, Int_t np, Int_t nn, Int_t e,
+                           const TString& pq, Int_t nzone , Int_t nvex, const TString& dir)
 {
   if(fPublication == 0 || !fPublication->IsLoaded())
   {
-    cout<<"G4TAnalysisTool::InternalExecute: Publication isn't defined! Aborting..."<<endl;
-    return;
+   cout << "Publication is not defined! Aborting..." << endl;
+   return;
   }
-  // Redefine xmax and prepare general Hisograms
-  fHxmax = fPublication->GetMaxT() * 1.03; // Step a bit to the right from the max point
-  fHlxmax = std::log(fHxmax);
-  cout<<"G4TAnalysisTool::InternalExecute:Cuts&Hists, xi="<<fHlxmin<<",xa="<<fHlxmax<<endl;
-  PrepareHistograms(fHnbin, fHlxmin, fHlxmax); // Taken out of the G4TTool Constructor
-  SetSecondaryToAnalyze(secondaryPDGIndx, np);
+  
+   SetSecondaryToAnalyze(secondaryPDGorIdx, np);
+  
   // Prepare Models
-  ArgEnum arg      = fPublication->fHeader.fTypeVar;
-  UnitsEnum units  = fPublication->fHeader.fTypeUnits;
-  Double_t value   = fPublication->fHeader.fTypeValue;
-  SigmaEnum sigun  = fPublication->fHeader.fSigUnits;
-  Double_t sigval  = fPublication->fHeader.fSigValue;
+  ArgEnum arg  = fPublication->fHeader.fTypeVar;
+  UnitsEnum units = fPublication->fHeader.fTypeUnits;
+  Double_t value  = fPublication->fHeader.fTypeValue;
   
   fSimulations.clear();
-  fSimulations.push_back(new G4TData(fProjectilePDG, fTargetPDG, false, "lhep", "No", arg,
-                         value, units, sigval, sigun,  1));
-  fSimulations.push_back(new G4TData(fProjectilePDG, fTargetPDG, false, "chips", "No", arg,
-                         value, units, sigval, sigun,  2));
-  fSimulations.push_back(new G4TData(fProjectilePDG, fTargetPDG, false, "preco", "No", arg,
-                         value, units, sigval, sigun,  6));
-  fSimulations.push_back(new G4TData(fProjectilePDG, fTargetPDG, false, "binary", "No",
-                         arg, value, units, sigval, sigun,  8));
-  fSimulations.push_back(new G4TData(fProjectilePDG, fTargetPDG, false, "bertini", "No",
-                         arg, value, units, sigval, sigun,  9));
+  fSimulations.push_back(new G4TData(fProjectilePDG, fTargetPDG, false, "lhep",   arg,
+                         value, units,  1));
+  fSimulations.push_back(new G4TData(fProjectilePDG, fTargetPDG, false, "chips",  arg,
+                         value, units,  2));
+  fSimulations.push_back(new G4TData(fProjectilePDG, fTargetPDG, false, "preco",  arg,
+                         value, units,  6));
+  fSimulations.push_back(new G4TData(fProjectilePDG, fTargetPDG, false, "binary", arg,
+                         value, units,  8));
+  fSimulations.push_back(new G4TData(fProjectilePDG, fTargetPDG, false, "bertini",arg,
+                         value, units,  9));
   
   vector<G4TDataItem*> pubItems = (fSecondaryPDG == 0 ? fPublication->GetItems() :
     fPublication->GetItemsForSecondary(fSecondaryPDG) );
   TString title = TString::Format("%s(p, %s) reaction at E_{p} = %d MeV",
      gParticlesDAL->GetParticleName(fTargetPDG).Data(),
-     gParticlesDAL->GetParticleName(fSecondaryPDG).Data(), en);
+     gParticlesDAL->GetParticleName(fSecondaryPDG).Data(), e);
   
   gPlotHelper->PrepareCanvas();
   gPlotHelper->ClearCanvas();
@@ -120,8 +122,9 @@ void G4TAnalysisTool::InternalExecute(Int_t secondaryPDGIndx, Int_t np, Int_t nn
       // not loaded, just continue the loop
       continue;
     }
+  
     // prepare histograms and get items
-    simulation->BookHistograms(fHnbin, fHlxmin, fHlxmax, 0, i);
+    simulation->PrepareHistograms(fHnbin, fHlxmin, fHlxmax, 0, i);
     vector<G4TDataItem*> items = (fSecondaryPDG == 0 ? simulation->GetItems() :
       simulation->GetItemsForSecondary(fSecondaryPDG) );
     for (UInt_t j = 0; j < items.size(); ++j)
@@ -140,94 +143,104 @@ void G4TAnalysisTool::InternalExecute(Int_t secondaryPDGIndx, Int_t np, Int_t nn
       hK->Scale(w);
     }
   }
-  for(UInt_t i = 0; i < pubItems.size(); ++i)
-  {
-    G4TDataItem* item = pubItems[i];
-    Double_t a  = item->GetCutValue();
-    Int_t   mk  = 20;
-    // auto size feature
-    cout<<"G4TAnalysisTool::InternalExecute: i="<<i<<", padsPerRow = "<<padsPerRow<<endl;
-    std::pair<Double_t, Double_t> limits = fPublication->GetLimits(i,padsPerRow);
-    if(limits.first && limits.second)
-    {
-      Double_t rat = std::exp( 0.1 * std::log(limits.first / limits.second) );
-      fHymin = limits.first  / rat;
-      fHymax = limits.second * rat;
-    }
 
-    gPlotHelper->PreparePad(i+1);
-    TH1F* frame = gPlotHelper->PrepareFrame(0, fHymin, fHxmax, fHymax,
-      TString::Format("%s %g#circ",
-        gParticlesDAL->GetParticleName( item->GetSecondaryParticlePDG(), true).Data(), a));
-    gPlotHelper->DrawRightAxis(frame, fHxmax, fHymin, fHymax);
-    if(!i) // @@ Make a switch
-    {
-      frame->SetYTitle("d#sigma/pdEd#Omega(mb MeV^{-2} sr^{-1})");
-      gPlotHelper->DrawModelsLegend(&fSimulations);
-    }
-    else if(i == pubItems.size() - 1) frame->SetXTitle("T (MeV)");
-    TTree* currentTree  = item->GetData();
-    currentTree->Draw(item->GetInvariantFunction().Data(),"","goff");
-    TGraphErrors *gr = new TGraphErrors(currentTree->GetSelectedRows(),
-                                        currentTree->GetV2(), currentTree->GetV1(),
-                                        0,                    currentTree->GetV3() );
-    gr->SetMarkerStyle(mk);
-    gr->Draw("p");
-    for (UInt_t x = 0; x < fSimulations.size(); ++x)
-    {
-      if(!fSimulations[x]->IsLoaded()) continue; // not loaded, just continue the loop
-      G4TDataItem* sim = fSimulations[x]->GetItem(item->fHeader.fSecondaryParticlePDG, a);
-      if(!sim)
-      {
-        TH1F* hist = sim->GetHistogram();
-        RenderHSolid(hist, fHfbin, fHnbin,
-                     gParticlesDAL->GetParticleMass(item->fHeader.fSecondaryParticlePDG),
-                     fSimulations[x]->GetRenderColor(), true);
-      }
-      else cout<<"Error>G4TAnalysisTool::InternalExecute: Simulation isn't found!"<<endl;
-    }
+ for(UInt_t i = 0; i < pubItems.size(); ++i)
+ {
+  G4TDataItem* item = pubItems[i];
+  Double_t a  = item->GetCutValue();
+  Int_t   mk  = 20;
+
+  // auto size feature
+  cout << "i = " << i << " pads per row = " << padsPerRow << endl;
+  DataItemLimit_t limits = fPublication->GetLimits(i,padsPerRow);
+  if(limits.fMin != 0 && limits.fMax != 0)
+  {
+   fHymin = limits.fMin / exp(  0.10 * log(limits.fMax / limits.fMin) );
+   fHymax = limits.fMax * exp(  0.10 * log(limits.fMax / limits.fMin) );
   }
+
+  gPlotHelper->PreparePad(i+1);
+  TH1F* frame = gPlotHelper->PrepareFrame(0, fHymin, fHxmax, fHymax,
+    TString::Format("%s %g#circ", gParticlesDAL->GetParticleName( item->GetSecondaryParticlePDG(), true).Data(), a));
+  gPlotHelper->DrawRightAxis(frame, fHxmax, fHymin, fHymax);
+
+  if(i == 0)
+  {
+   frame->SetYTitle("d#sigma/pdEd#Omega(mb MeV^{-2} sr^{-1})");
+   gPlotHelper->DrawModelsLegend(&fSimulations);
+  }
+  if(i == pubItems.size() - 1) frame->SetXTitle("T (MeV)");
+
+  TTree* currentTree  = item->GetData();
+  currentTree->Draw(item->GetFormula().Data(),"","goff");
+
+  TGraphErrors *gr = new TGraphErrors(currentTree->GetSelectedRows(), currentTree->GetV2(),
+    currentTree->GetV1(), 0, currentTree->GetV3());
+  gr->SetMarkerStyle(mk);
+  gr->Draw("p");
+
+  for (UInt_t x = 0; x < fSimulations.size(); ++x)
+  {
+   if(!fSimulations[x]->IsLoaded()){
+    // not loaded, just continue the loop
+    continue;
+   }
+
+   G4TDataItem* sim = fSimulations[x]->GetItem(item->fHeader.fSecondaryParticlePDG, a);
+   if(sim != 0)
+   {
+    TH1F* hist = sim->GetHistogram();
+    RenderHSolid(hist, fHfbin, fHnbin, gParticlesDAL->GetParticleMass(item->fHeader.fSecondaryParticlePDG), fSimulations[x]->GetRenderColor(),true);
+   }else{
+    cout << "Error: simulation item not found!" << endl;
+   }
+  }
+ }
+
+      
 }
+
 
 //______________________________________________________________________________
 void G4TAnalysisTool::SetSecondaryToAnalyze(Int_t idx, Int_t np)
 {
+ fSecondaryPDG = 0;
+ if(idx > 1000000000 || idx < -1000000000){
+  // is PDG code
+  vector<Int_t> fragments = fPublication->GetSecondaryPDGs();
+  for(UInt_t i = 0; i < fragments.size(); ++i)
+  {
+   if(fragments[i] == idx){
+    fSecondaryPDG = idx;
+    //fSecondaryIndex = i - 1;
+    break;
+   }
+  }
+
+  if(fSecondaryPDG == 0)
+  {
+   cout << "*** Projectile #" << idx << " is not defined!" << endl;
+   return;
+  }
+ }else if(idx > 0){
+  // is index
+  vector<Int_t> fragments = fPublication->GetSecondaryPDGs();
+  if((UInt_t)idx < fragments.size()){
+   fSecondaryPDG = fragments[idx - 1];
+  }else{
+   cout << "*** Projectile #" << idx << " is not defined!" << endl;
+   return;
+  }
+ }
+ else if(idx == 0)
+ {
+  // All particles
   fSecondaryPDG = 0;
-  if(idx > 1000000000 || idx < -1000000000) // @@ take into account negative strangeness
-  {
-    // is PDG code
-    vector<Int_t> fragments = fPublication->GetSecondaryPDGs();
-    for(UInt_t i = 0; i < fragments.size(); ++i)
-    {
-      if(fragments[i] == idx)
-      {
-        fSecondaryPDG = idx;
-        //fSecondaryIndex = i - 1;
-        break;
-      }
-    }
-    if(!fSecondaryPDG)
-    {
-      cout<<"Error>G4TAnalysisTool::SetSecondaryToAnalyze: Projectile PDG= "<<idx
-          <<" isn't defined!"<<endl;
-      return;
-    }
-  }
-  else if(idx > 0)
-  {
-    // is index
-    vector<Int_t> fragments = fPublication->GetSecondaryPDGs();
-    if((UInt_t)idx < fragments.size()) fSecondaryPDG = fragments[idx - 1];
-    else
-    {
-      cout<<"Error>G4TAnalysisTool::SetSecondaryToAnalyze: Projectile index# "<<idx
-          <<" isn't defined!" << endl;
-      return;
-    }
-  }
-  else if(!idx) fSecondaryPDG = 0; // All particles
-  else
-    cout<<"Error>G4TAnalysisTool::SetSecondaryToAnalyze:UnknownProjectile idx="<<idx<<endl;
-  return;
+ }
+ else
+ {
+  cout << "*** Projectile #" << idx << " is not defined!" << endl;
+ }
+
 }
 

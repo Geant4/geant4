@@ -1,6 +1,0 @@
-#! /bin/sh
-#
-bsub  -q 1nw \
-      -o /afs/cern.ch/user/r/ribon/ExtraSpace/cascadeTest/outputLSF.log-CuLAr-proton-200 \
-         /afs/cern.ch/user/r/ribon/ExtraSpace/cascadeTest/job.sh-CuLAr-proton-200
-

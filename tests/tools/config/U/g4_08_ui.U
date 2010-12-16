@@ -1,22 +1,9 @@
 ?RCS:
-?MAKE:g4ui_none \
-g4ui_build_terminal_session \
-g4ui_use_terminal \
-g4ui_build_gag_session \
-g4ui_use_gag \
-g4ui_build_xm_session \
-g4ui_use_xm \
-g4ui_build_xaw_session \
-g4ui_use_xaw \
-g4ui_build_win32_session \
-g4ui_use_win32 \
-g4ui_use_tcsh \
-g4vis_xmhome \
-g4vis_xmflags \
-g4vis_xmlibs \
-g4ui_xawhome \
-g4ui_xawflags \
-g4ui_xawlibs:\
+?MAKE:g4ui_none g4ui_build_terminal_session g4ui_use_terminal \
+g4ui_build_gag_session g4ui_use_gag g4ui_build_xm_session g4ui_use_xm \
+g4ui_build_xaw_session g4ui_use_xaw g4ui_build_win32_session g4ui_use_win32 \
+g4ui_use_tcsh g4vis_xmhome g4vis_xmflags g4vis_xmlibs g4ui_xawhome \
+g4ui_xawflags g4ui_xawlibs:\
 	g4lib_build_shared g4debug Myread Getfile cat rm test
 ?MAKE:	-pick add $@ %<
 ?S:g4osname:
@@ -33,25 +20,107 @@ g4ui_xawlibs:\
 ?S:	This variable holds the path to the Qt installation
 ?S:.
 ?INIT:#INITIALIZE QT UI OPTIONS
-?INIT:g4ui_none='n'
-?INIT:g4ui_build_terminal_session='y'
-?INIT:g4ui_use_terminal='y'
-?INIT:g4ui_build_gag_session='y'
-?INIT:g4ui_use_gag='y'
-?INIT:g4ui_build_xm_session='n'
-?INIT:g4ui_use_xm='n'
-?INIT:g4ui_build_xaw_session='n'
-?INIT:g4ui_use_xaw='n'
-?INIT:g4ui_build_win32_session='n'
-?INIT:g4ui_use_win32='n'
-?INIT:g4ui_use_tcsh='y'
+?INIT:g4ui_build_qt_session='n'
+?INIT:g4ui_use_qt='n'
+?INIT:g4_qthome=''
+?INIT:#END QT UI OPTIONS
 
 echo " "
-echo "*OPTIONS FOR GEANT4 USER INTERFACE MODULES*"
 
-g4message="Enable building of User Interface (UI) modules?"
+case "$g4ui_none" in
+'')
+	g4ui_none=n
+	;;
+esac
 
-dflt='y'
+# Set by default!
+case "$g4ui_build_terminal_session" in
+'')
+	g4ui_build_terminal_session=y
+	;;
+esac
+
+# Set by default!
+case "$g4ui_use_terminal" in
+'')
+	g4ui_use_terminal=y
+	;;
+esac
+
+# Set by default!
+case "$g4ui_build_gag_session" in
+'')
+	g4ui_build_gag_session=y
+	;;
+esac
+
+# Set by default!
+case "$g4ui_use_gag" in
+'')
+	g4ui_use_gag=y
+	;;
+esac
+
+case "$g4ui_build_xm_session" in
+'')
+	g4ui_build_xm_session=n
+	;;
+esac
+
+case "$g4ui_use_xm" in
+'')
+	g4ui_use_xm=n
+	;;
+esac
+
+case "$g4ui_build_xaw_session" in
+'')
+	g4ui_build_xaw_session=n
+	;;
+esac
+
+case "$g4ui_use_xaw" in
+'')
+	g4ui_use_xaw=n
+	;;
+esac
+
+case "$g4ui_build_win32_session" in
+'')
+	g4ui_build_win32_session=n
+	;;
+esac
+
+case "$g4ui_use_win32" in
+'')
+	g4ui_use_win32=n
+	;;
+esac
+
+# Set by default!
+case "$g4ui_use_tcsh" in
+'')
+	g4ui_use_tcsh=y
+	;;
+esac
+
+
+
+
+echo ""
+
+g4message=`cat << EOM
+
+  G4UI_NONE
+
+If this variable is set, no UI sessions nor any UI libraries are built. 
+This can be useful when running a pure batch job or in a user framework 
+having its own UI system.
+Do you want to set this variable ?
+
+EOM`
+
+dflt=$g4ui_none
 rp=$g4message
 . ./myread
 gans=$ans
@@ -59,10 +128,10 @@ gans=$ans
 	case $gans in
 	
 	n*|N*) 
-		g4ui_none=y
+		g4ui_none=n
 		;;
 	y*|Y*) 
-		g4ui_none=n
+		g4ui_none=y
 		;;
 	esac
 
@@ -70,11 +139,78 @@ case $g4ui_none in
 
 n)
 
+g4message=`cat << EOM
+
+  G4UI_BUILD_TERMINAL_SESSION
+  Specifies to include in kernel library a basic dumb terminal
+  user interface (default).
+
+  G4UI_USE_TERMINAL
+  Specifies to use dumb terminal interface in the application to be
+  built (default).
+EOM`
+
+dflt=$g4ui_use_terminal
+rp=$g4message
+#. ./myread
+#gans=$ans
+gans=y
+
+	case $gans in
+	
+	n*|N*) 
+		g4ui_build_terminal_session=n
+		g4ui_use_terminal=n
+		;;
+	y*|Y*) 
+		g4ui_build_terminal_session=y
+		g4ui_use_terminal=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4UI_BUILD_GAG_SESSION
+  Specifies to include in kernel library the GAG based
+  user interface.
+
+  G4UI_USE_GAG
+  Specifies to use the GAG interface in the application to be
+  built.
+EOM`
+
+dflt=$g4ui_use_gag
+rp=$g4message
+#. ./myread
+#gans=$ans
+gans=y
+
+	case $gans in
+	
+	n*|N*) 
+		g4ui_build_gag_session=n
+		g4ui_use_gag=n
+		;;
+	y*|Y*) 
+		g4ui_build_gag_session=y
+		g4ui_use_gag=y
+		;;
+	esac
+
 if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
 
-g4message="Enable building of the XAW (X11 Athena Widget set) UI module?"
+g4message=`cat << EOM
 
-dflt=$g4ui_build_xaw_session
+  G4UI_BUILD_XAW_SESSION
+  G4UI_USE_XAW
+
+  Specifies to include and use the XAW interfaces in the
+  application to be built.
+  The XAW (X11 Athena Widget set) extensions are required to activate 
+  and build this driver.
+EOM`
+
+dflt=$g4ui_use_xaw
 rp=$g4message
 . ./myread
 gans=$ans
@@ -130,8 +266,8 @@ if test "X$g4ui_xawhome" != "X" ; then
 
 g4message=`cat << EOM
 
-You have selected to build the XAW based user interfaces.
-Specify the correct path where XAW is installed on your system.
+You have selected to use the XAW based user interfaces.
+Specify the correct path where XAW is installed in your system.
 It was found in $g4ui_xawhome. Press [Enter] to set this path or type the correct one.
 
 You can set '-' (without quotation) to CANCEL the XAW flag at all:
@@ -155,16 +291,15 @@ else
 
 g4ui_build_xaw_session=n
 g4ui_use_xaw=n
-echo " "
 
 fi
 else
 
 g4message=`cat << EOM
 
-You have selected to build the XAW based user interfaces.
+You have selected to use XAW based user interfaces.
 But XAW was not found in $ans.
-Please specify the correct path where XAW is installed on your system.
+Please specify the correct path where XAW is installed in your system.
 
 You can set '-' (without quotation) to CANCEL the XAW flag at all:
 
@@ -181,9 +316,9 @@ else
 
 g4message=`cat << EOM
 
-You have selected to build the XAW based user interfaces.
+You have selected to use XAW based user interfaces.
 But XAW was not found in expected place.
-Please specify the correct path where XAW is installed on your system.
+Please specify the correct path where XAW is installed in your system.
 
 You can set '-' (without quotation) to CANCEL the XAW flag at all:
 
@@ -206,16 +341,15 @@ else
 
 g4ui_build_xaw_session=n
 g4ui_use_xaw=n
-echo " "
 
 fi
 else
 
 g4message=`cat << EOM
 
-You have selected to build the XAW based user interfaces.
+You have selected to use XAW based user interfaces.
 But XAW was not found in $ans.
-Please specify the correct path where XAW is installed on your system.
+Please specify the correct path where XAW is installed in your system.
 
 You can set '-' (without quotation) to CANCEL the XAW flag at all:
 
@@ -296,9 +430,18 @@ fi # end of XM build
 ###############################################
 ###############################################
 
-g4message="Enable building of the X11-Motif (Xm) UI module?"
+g4message=`cat << EOM
 
-dflt=$g4ui_build_xm_session
+  G4UI_BUILD_XM_SESSION
+  G4UI_USE_XM
+
+  Specifies to include and use the XM Motif based user interfaces.
+  The XM Motif extensions are required to activate and build this
+  driver.
+
+EOM`
+
+dflt=$g4ui_use_xm
 rp=$g4message
 . ./myread
 gans=$ans
@@ -354,8 +497,8 @@ if test "X$g4vis_xmhome" != "X" ; then
 
 g4message=`cat << EOM
 
-You have selected to build the X11-Motif(Xm) based user interfaces.
-Specify the correct path where Xm is installed on your system.
+You have selected to use the XM Motif based user interfaces.
+Specify the correct path where Xm is installed in your system.
 It was found in $g4vis_xmhome. Press [Enter] to set this path or type the correct one.
 
 You can set '-' (without quotation) to CANCEL the XM flag at all:
@@ -379,16 +522,15 @@ else
 
 g4ui_build_xm_session=n
 g4ui_use_xm=n
-echo " "
 
 fi
 else
 
 g4message=`cat << EOM
 
-You have selected to build the X11-Motif(Xm) based user interfaces.
-But Xm was not found in $ans.
-Please specify the correct path where Xm is installed on your system.
+You have selected to use XM Motif based user interfaces.
+But XM Motif was not found in $ans.
+Please specify the correct path where Xm is installed in your system.
 
 You can set '-' (without quotation) to CANCEL the XM flag at all:
 
@@ -405,9 +547,9 @@ else
 
 g4message=`cat << EOM
 
-You have selected to build the X11-Motif(Xm) based user interfaces.
-But Xm was not found in the expected place.
-Please specify the correct path where Xm is installed on your system.
+You have selected to use XM Motif based user interfaces.
+But XM Motif was not found in expected place.
+Please specify the correct path where Xm is installed in your system.
 
 You can set '-' (without quotation) to CANCEL the XM flag at all:
 
@@ -430,16 +572,15 @@ else
 
 g4ui_build_xm_session=n
 g4ui_use_xm=n
-echo " "
 
 fi
 else
 
 g4message=`cat << EOM
 
-You have selected to build the X11-Motif(Xm) based user interfaces.
-But Xm was not found in $ans.
-Please specify the correct path where Xm is installed on your system.
+You have selected to use XM Motif based user interfaces.
+But XM Motif was not found in $ans.
+Please specify the correct path where Xm is installed in your system.
 
 You can set '-' (without quotation) to CANCEL the XM flag at all:
 
@@ -523,9 +664,17 @@ fi # if !WIN
 
 if test "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7"; then
 
-g4message="Enable building of the WIN32 Terminal UI module?"
+g4message=`cat << EOM
 
-dflt=$g4ui_build_win32_session
+  G4UI_BUILD_WIN32_SESSION
+  G4UI_USE_WIN32
+
+  Specifies to include and use the terminal interface for 
+  Windows systems.
+
+EOM`
+
+dflt=$g4ui_use_win32
 rp=$g4message
 . ./myread
 gans=$ans

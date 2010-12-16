@@ -1,4 +1,0 @@
- ./doit G4StringModelTest 200gev.p.p
- ./doit G4StringModelTest 250gev.p.p
- ./dopions G4StringModelTest 250gev.pim.p.21395
-# ./doit G4StringModelTest 200gev.p.al

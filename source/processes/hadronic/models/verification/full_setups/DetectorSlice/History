@@ -1,9 +1,0 @@
-
-                 History file
-                 ------------
-
-08-Jun-2007 - A.Ribon (detectorSlice-V08-03-00)
-- Created a new application: a cylindrical slice of a
-  detector (Tracker + EM Cal + HAD Cal + Muon detector).
-
-

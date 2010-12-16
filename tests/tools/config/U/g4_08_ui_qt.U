@@ -19,7 +19,18 @@
 # Checks applied for all systems ONLY IF g4ui_none HAS NOT BEEN SET TO y
 if test "x$g4ui_none" = "xn" ; then
     # Query the user to see if build of Qt UI module is needed
-	g4message="Enable building of the Qt UI module?"
+    g4message=`cat <<EOM
+
+    G4UI_BUILD_QT_SESSION
+    G4UI_USE_QT
+
+Setting these variables will enable the building of the G4 Qt based 
+user interface module and the use of this module in your applications
+respectively.
+The Qt3 or Qt4 headers, libraries and moc application are required to enable
+the building of this module.
+Do you want to enable build and use of this module?
+EOM`
 
     # Read in the user response
     dflt=$g4ui_build_qt_session
@@ -46,6 +57,7 @@ if test "x$g4ui_none" = "xn" ; then
     # installation
     #
     if test "x$g4ui_build_qt_session" = "xy" ; then
+	echo " "
 	# NB Have to supply arg to qt script, just blank in this case!
 	qt_search_dir=""
 	. ./qt

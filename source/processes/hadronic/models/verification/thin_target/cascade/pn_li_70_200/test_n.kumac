@@ -1,4 +1,0 @@
- exe n_a0
- exe n_a0800
- shell rm *.old
- shell rm *~

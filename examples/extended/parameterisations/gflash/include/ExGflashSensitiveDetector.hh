@@ -26,6 +26,7 @@
 #ifndef TILE05SENSITIVEDETECTOR_H
 #define TILE05SENSITIVEDETECTOR_H
 
+using namespace std;
 #include "G4VSensitiveDetector.hh"
 #include "G4VGFlashSensitiveDetector.hh"
 #include "G4GFlashSpot.hh"

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.80 2010-09-13 17:21:01 japost Exp $
+// $Id: G4Transportation.cc,v 1.72.2.4 2009-11-17 16:51:06 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -88,6 +88,8 @@ G4Transportation::G4Transportation( G4int verboseLevel )
 
   fLinearNavigator = transportMgr->GetNavigatorForTracking() ; 
 
+  // fGlobalFieldMgr = transportMgr->GetFieldManager() ;
+
   fFieldPropagator = transportMgr->GetPropagatorInField() ;
 
   fpSafetyHelper =   transportMgr->GetSafetyHelper();  // New 
@@ -102,15 +104,6 @@ G4Transportation::G4Transportation( G4int verboseLevel )
 
   fEndGlobalTimeComputed  = false;
   fCandidateEndGlobalTime = 0;
-
-#ifdef G4VERBOSE
-  if( fVerboseLevel > 0) 
-  { 
-     G4cout << " G4Transportation constructor> set fShortStepOptimisation to "; 
-     if ( fShortStepOptimisation )  G4cout << "true"  << G4endl;
-     else                           G4cout << "false" << G4endl;
-  } 
-#endif
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -233,7 +226,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
        //
        fPreviousSftOrigin = startPosition ;
        fPreviousSafety    = newSafety ; 
-       fpSafetyHelper->SetCurrentSafety( newSafety, startPosition);
+       // fpSafetyHelper->SetCurrentSafety( newSafety, startPosition);
 
        // The safety at the initial point has been re-calculated:
        //
@@ -301,19 +294,19 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
         } else {
            geometryStepLength   = currentMinimumStep ;
         }
-
-	// Remember last safety origin & value.
-	//
-	fPreviousSftOrigin = startPosition ;
-	fPreviousSafety    = currentSafety ;         
-	fpSafetyHelper->SetCurrentSafety( newSafety, startPosition);
      }
      else
      {
         geometryStepLength   = lengthAlongCurve= 0.0 ;
         fGeometryLimitedStep = false ;
      }
-      
+
+     // Remember last safety origin & value.
+     //
+     fPreviousSftOrigin = startPosition ;
+     fPreviousSafety    = currentSafety ;         
+     // fpSafetyHelper->SetCurrentSafety( newSafety, startPosition);
+       
      // Get the End-Position and End-Momentum (Dir-ection)
      //
      fTransportEndPosition = aFieldTrack.GetPosition() ;

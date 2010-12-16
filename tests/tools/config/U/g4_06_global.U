@@ -1,16 +1,34 @@
 ?RCS:
 ?MAKE:g4global g4granular g4lib_use_granular: \
-	g4lib_build_shared Myread Getfile cat rm test
+	g4lib_build_shared g4clhep_base_dir Myread Getfile cat rm test
 ?MAKE:	-pick add $@ %<
 ?S:g4osname:
 ?S:	This variable contains the value of the 'g4osname' symbol, which
 ?S:	used for building G4SYSTEM.
 ?S:.
-?INIT:#INITIALIZE GLOBAL/GRANULAR LIBRARY OPTIONS
-?INIT:g4global='y'
-?INIT:g4granular='n'
-?INIT:g4lib_use_granular='n'
 
+echo " "
+case "$g4global" in
+'')
+	g4global=n
+	;;
+esac
+
+echo " "
+# By default it's 'grabular'!
+case "$g4granular" in
+'')
+	g4granular=y
+	;;
+esac
+
+echo " "
+# Will be set (if needed) in GNUmakefile!
+case "$g4lib_use_granular" in
+'')
+	g4lib_use_granular=y
+	;;
+esac
 
 if test \( \( "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7" \) -a "X$g4lib_build_dll" = "Xy" \) -o  \( "X$g4system" = "XDarwin-g++"  -a "X$g4lib_build_dyn" = "Xy" \) ; then
 
@@ -21,69 +39,131 @@ if test \( \( "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7" \) -a "X
 fi
 
 if test \( "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7" -a "X$g4system" != "XDarwin-g++" \) -o    \( \( "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7" \) -a "X$g4lib_build_dll" = "Xn" \) -o \( "X$g4system" = "XDarwin-g++" -a "X$g4lib_build_dyn" = "Xn" \) ; then
-	#
-	# Ask about g4global - default "(empty)". 
-	#
-	g4message="Do you want to build global libraries?"
-	dflt=$g4global
-	rp=$g4message
-	. ./myread
-	gans=$ans
+
+#
+# Ask about g4global - default "(empty)". 
+#
+echo ""
+
+while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+Do you want to build 'global' compound libraries?
+EOM`
+
+dflt=$g4global
+rp=$g4message
+. ./myread
+gans=$ans
 
 	case $gans in
-	n*|N*)
-        # If global libs not wanted, we must force build and use of granular 
+	
+	n*|N*) 
 		g4global=n
 		g4granular=y
 		g4lib_use_granular=y
+		break
 		;;
 	y*|Y*) 
-        # If we do want global libs, leave granular alone to preserve default settings
 		g4global=y
+# Shoud be comment out to keep settings from config.sh - not now to keep as in release
+		g4granular=n
+# Shoud be comment out to keep settings from config.sh - not now to keep as in release
+		g4lib_use_granular=n
+		break
 		;;
+#	[eE]) 
+#		break
+#		;;
+#	*) 
+#		echo " "
+#		break
+#		;;
 	esac
+done
 
-	if [ X$g4global = Xy ] ; then
-		#
-		# Ask about g4granular - default "n". 
-		#
-		g4message="Do you want to build granular libraries as well?"
-		dflt=$g4granular
-		rp=$g4message
-		. ./myread
-		gans=$ans
+if [ X$g4global = Xy ] ; then
+#
+# Ask about g4granular - default "n". 
+#
+echo ""
 
-		case $gans in
-		n*|N*) 
-            # If granular libraries not built, also force use_granular to no
-			g4granular=n
-            g4lib_use_granular=n
-			;;
-		y*|Y*) 
-			g4granular=y
-			;;
-		esac
+while test 1 = 1  ; do
 
-		if [ X$g4granular = Xy ] ; then
-			#
-			# Ask about g4lib_use_granular - default "n". 
-			#
-			g4message="Do you want to use granular libraries in your applications?"
-			dflt=$g4lib_use_granular
-			rp=$g4message
-			. ./myread
-			gans=$ans
+g4message=`cat << EOM
 
-			case $gans in
-			n*|N*) 
-				g4lib_use_granular=n
-				;;
-			y*|Y*) 
-				g4lib_use_granular=y
-				;;
-			esac
-		fi
-	fi
+Granular libraries are used by defaults, you asked to build global
+compound libraries. Do you want to build 'granular' libraries too?
+EOM`
+
+dflt=$g4granular
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4granular=n
+		break
+		;;
+	y*|Y*) 
+		g4granular=y
+		break
+		;;
+#	[eE]) 
+#		break
+#		;;
+#	*) 
+#		echo " "
+#		break
+#		;;
+	esac
+done
+
+if [ X$g4granular = Xy ] ; then
+#
+# Ask about g4lib_use_granular - default "n". 
+#
+echo ""
+
+while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+Global libraries are used by defaults, you asked to build global
+compound libraries and granular libraries. 
+Do you want to use 'granular' libraries instead?
+EOM`
+
+dflt=$g4lib_use_granular
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4lib_use_granular=n
+		break
+		;;
+	y*|Y*) 
+		g4lib_use_granular=y
+		break
+		;;
+#	[eE]) 
+#		break
+#		;;
+#	*) 
+#		echo " "
+#		break
+#		;;
+	esac
+done
+fi
+fi
+
 fi # !Win
 
 ### End file - without will be problem! Check in others...

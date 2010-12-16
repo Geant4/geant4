@@ -8,7 +8,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: CMakeLists.txt,v 1.3 2010-11-23 13:29:25 gcosmo Exp $
+# $Id: CMakeLists.txt,v 1.2 2010-11-19 08:43:44 gcosmo Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -67,7 +67,6 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
             hadronic/models/im_r_matrix/sources.cmake
             hadronic/models/incl/sources.cmake
             hadronic/models/isotope_production/sources.cmake
-            hadronic/models/lend/sources.cmake
             hadronic/models/lll_fission/sources.cmake
             hadronic/models/low_energy/sources.cmake
             hadronic/models/management/sources.cmake

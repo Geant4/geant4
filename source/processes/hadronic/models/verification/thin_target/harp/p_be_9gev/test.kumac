@@ -1,3 +1,0 @@
-title 'p + Be at 8.9GeV/c (G4 7.0) theta = (15 - 300)mrad'
-exe ../ptot
-exe ../prf ptot70 eps

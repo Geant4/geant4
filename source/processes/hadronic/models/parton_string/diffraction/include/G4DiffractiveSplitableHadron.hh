@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveSplitableHadron.hh,v 1.7 2010-12-07 10:42:40 vuzhinsk Exp $
+// $Id: G4DiffractiveSplitableHadron.hh,v 1.6 2010-09-20 15:50:46 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -61,11 +61,8 @@ public:
 	void SplitUp();
 	G4Parton * GetNextParton() ;
 	G4Parton * GetNextAntiParton();
-
-        void SetFirstParton(G4int PDGcode);  // Uzhi 24.11.10
-        void SetSecondParton(G4int PDGcode); // Uzhi 24.11.10
-
-//private:    // Uzhi 29.11.2010
+	
+private:
 	G4DiffractiveSplitableHadron();
 	G4DiffractiveSplitableHadron(const G4DiffractiveSplitableHadron &right);
 	const G4DiffractiveSplitableHadron & operator=(const G4DiffractiveSplitableHadron &right);

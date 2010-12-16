@@ -1,18 +1,5 @@
 # This is test19.g4m
 #
-# Instantiate filters and models for documentation with /control/createHTML.
-/vis/filtering/digi/create/attributeFilter
-/vis/filtering/hits/create/attributeFilter
-/vis/filtering/trajectories/create/attributeFilter
-/vis/filtering/trajectories/create/chargeFilter
-/vis/filtering/trajectories/create/originVolumeFilter
-/vis/filtering/trajectories/create/particleFilter
-
-/vis/modeling/trajectories/create/drawByAttribute
-/vis/modeling/trajectories/create/drawByCharge
-/vis/modeling/trajectories/create/drawByOriginVolume
-/vis/modeling/trajectories/create/drawByParticleID
-
 # Switch on echoing of commands and history mechanism.
 #
 /control/verbose 2
@@ -80,7 +67,7 @@
 /vis/viewer/set/hiddenMarker true
 #
 /vis/viewer/set/lineSegmentsPerCircle 100
-# flush not necessary for auto-refresh drivers like OGL and OI, but leave
+# flush not necessary for auto-refresh drivers like OGL abd OI, but leave
 # (all that happens is an extra refresh).
 /vis/viewer/flush
 /vis/ogl/set/printMode vectored
@@ -135,7 +122,7 @@
 # Test logical volume model...
 /vis/scene/create
 /vis/scene/add/logicalVolume expHall_L
-/vis/sceneHandler/create OGLIX
+/vis/sceneHandler/create OGLIQt
 /vis/viewer/create
 /vis/viewer/set/viewpointThetaPhi 35 35
 /vis/scene/notifyHandlers
@@ -148,7 +135,7 @@
 # Logical volume of Boolean solids...
 /vis/scene/create
 /vis/scene/add/logicalVolume intersection_L
-/vis/sceneHandler/create OGLIX
+/vis/sceneHandler/create OGLIQt
 /vis/viewer/create
 /vis/viewer/reset
 /vis/viewer/set/viewpointThetaPhi 35 35
@@ -188,7 +175,7 @@
 /vis/scene/add/volume
 /vis/scene/add/trajectories 5000
 #/vis/sceneHandler/create OGLSX
-/vis/sceneHandler/create OGLIX
+/vis/sceneHandler/create OGLIQt
 /vis/viewer/create
 /vis/viewer/reset
 /vis/viewer/set/viewpointThetaPhi 35 35
@@ -438,7 +425,7 @@
 /vis/ogl/printEPS
 #
 #/vis/sceneHandler/create OIX
-/vis/sceneHandler/create OGLIX
+/vis/sceneHandler/create OGLIQt
 #/vis/viewer/create
 /vis/viewer/create ! ! 200
 /vis/viewer/set/viewpointThetaPhi 30 30

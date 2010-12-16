@@ -1,5 +1,5 @@
 ?RCS:
-?MAKE: g4vis_build_openglqt_driver g4vis_use_openglqt: g4system g4vis_build_dawn_driver Qt g4ui_build_qt_session Myread Getfile Loc cat test
+?MAKE: g4vis_build_openglqt_driver g4vis_use_openglqt: g4system g4vis_build_dawn_driver Qt Myread Getfile Loc cat test
 ?MAKE:	-pick add $@ %<
 ?S:g4vis_build_openglqt_driver:
 ?S:	This variable determines whether the Qt OpenGL driver will be built 
@@ -16,14 +16,22 @@
 # BEGIN QTVIS/QT PROBE
 #
 # Because the vis driver only works with UI, only probe if g4ui_none is
-# NOT set AND g4vis_none is NOT set.
-# Also, Qt vis driver has dependency on Qt UI module - so only ask if
-# build is required IF Qt UI was selected.
+# NOT set AND also that g4vis_none is NOT set
 #
 if test "x$g4ui_none" = "xn" -a "x$g4vis_none" = "xn" ; then
-if test "x$g4ui_build_qt_session" = "xy" ; then
-    # Query the user to see if build of Qt GL module is needed
-	g4message="Enable building of the Qt OpenGL visualization driver?"
+    # Query the user to see if build of Qt UI module is needed
+    g4message=`cat <<EOM
+
+    G4UI_BUILD_OPENGLQT_DRIVER
+    G4UI_USE_OPENGLQT
+
+Setting these variables will enable the building of the G4 OpenGL Qt based 
+visualisation driver and the use of this driver in your applications
+respectively.
+The Qt3 or Qt4 headers, libraries and moc application are required to enable
+the building of this module.
+Do you want to enable build and use of this module?
+EOM`
 
     # Read in the user response
     dflt=$g4vis_build_openglqt_driver
@@ -50,6 +58,7 @@ if test "x$g4ui_build_qt_session" = "xy" ; then
     # installation
     #
     if test "x$g4vis_build_openglqt_driver" = "xy" ; then
+	echo " "
 	# NB Have to supply arg to qt script, just blank in this case!
 	qt_search_dir=""
 	. ./qt
@@ -94,10 +103,4 @@ EOM`
             done #END while promptend=no (for user input of Qt install)
         fi #END TEST g4_havegoodqt = no (for user prompt)
     fi #END TEST g4vis_build_openglqt_driver (whether to build at all)
-else # TEST g4ui_build_qt_session
-    # Because we can 'drop through' this test on repeat
-    # running Configure, force build and use to n
-    g4vis_build_openglqt_driver=n
-    g4vis_use_openglqt=n
-fi #END TEST g4ui_build_qt_session (dependency on Qt UI module)
 fi #END TEST g4ui_none = n AND g4vis_none=n

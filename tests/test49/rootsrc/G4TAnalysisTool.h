@@ -31,9 +31,7 @@
 // files and renders the model comparison plot.
 //
 // History:
-// Created by Roman Atachiants, 18/08/2009
-// Modified:
-// Mikhail Kosov, 12/05/2010: Cleaning up
+// Roman Atachiants, 18/08/2009 - initial version
 //
 // --------------------------------------------------------------------
 
@@ -48,33 +46,41 @@
 #include "Database/G4TData.h"
 #include "Database/G4TDataBase.h"
 
-class G4TAnalysisTool : public G4TTool
-{
+class G4TAnalysisTool : public G4TTool {
+
   protected:
-  Int_t      fNP; // Number of Protons
-  Int_t      fNN; // Number of Neutrons
-  Double_t      fKineticEnergy;
+	  Int_t 					fNP; // Number of Protons
+	  Int_t 					fNN; // Number of Neutrons
+	  Double_t 					fKineticEnergy;
 
-  Int_t      fTargetPDG;
-  Int_t      fProjectilePDG;
-  Int_t      fSecondaryPDG;
-  TString     fModelName;
-  Int_t      fCrossSection;
+	  Int_t						fTargetPDG;
+	  Int_t						fProjectilePDG;
+	  Int_t						fSecondaryPDG;
+	  TString					fModelName;
+	  Int_t						fCrossSection;
 
-  vector<G4TData*>   fSimulations;
+	  vector<G4TData*>			fSimulations;
 
-  void SetSecondaryToAnalyze(Int_t idx, Int_t np);
-  void  InternalExecute(Int_t secondaryPDGorIdx = 0, Int_t np = 13, Int_t nn = 14,
-                        Double_t e = 90., const TString& pq = "32-rb20-hp",
-                        Int_t nzone = 2, Int_t nvex = 26, const TString& dir = "./");
+
+
+	  void			SetSecondaryToAnalyze(Int_t idx, Int_t np);
+	  void 			InternalExecute(Int_t secondaryPDGorIdx = 0, Int_t np = 13, Int_t nn = 14, Int_t e = 90, const TString& pq = "32-rb20-hp",
+			  Int_t nzone = 2, Int_t nvex = 26, const TString& dir = "./"  );
+
   public:
-  virtual ~G4TAnalysisTool() {}
-  G4TAnalysisTool() {}
-  Int_t Run(TString const& publicationFile, Int_t secondaryPDGorIdx = 0,
-            TString const& printQue = "32-rb20-hp" );
-  ClassDef(G4TAnalysisTool, 1)  //The class for Geant4 Analyzing (p90.kumac base)
+
+	  virtual ~G4TAnalysisTool() {}
+	  G4TAnalysisTool() { }
+
+	  int Run(TString const& publicationFile, Int_t secondaryPDGorIdx = 0, TString const& printQue = "32-rb20-hp" );
+
+	  ClassDef(G4TAnalysisTool, 1)  //The class for Geant4 Analyzing (p90.kumac base)
 };
 
-R__EXTERN G4TAnalysisTool* gAnalysisTool;
+R__EXTERN G4TAnalysisTool *gAnalysisTool;
 
 #endif
+
+
+
+

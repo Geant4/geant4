@@ -1,24 +1,52 @@
 ?RCS:
-?MAKE:g4debug: g4global g4lib_build_shared Myread Getfile cat rm test
+?MAKE:g4debug: \
+	g4global g4lib_build_shared Myread Getfile cat rm test
 ?MAKE:	-pick add $@ %<
-?S:g4debug:
-?S:	This variable selects whether to build libraries with debugging symbols
+?S:g4osname:
+?S:	This variable contains the value of the 'g4osname' symbol, which
+?S:	used for building G4SYSTEM.
 ?S:.
-?INIT:#INITIALIZE DEBUGGING OPTIONS
-?INIT:g4debug='n'
 
-g4message="Do you want to build libraries with debugging information?"
+echo " "
+case "$g4debug" in
+'')
+	g4debug=n
+	;;
+esac
+
+#
+# Ask about g4debug - default "(empty)". 
+#
+echo ""
+
+while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+Do you want to compile libraries in DEBUG mode (-g)?
+EOM`
+
 dflt=$g4debug
 rp=$g4message
 . ./myread
 gans=$ans
 
-case $gans in
-n*|N*) 
-	g4debug=n
+	case $gans in
+	
+	n*|N*) 
+		break
 		;;
-y*|Y*) 
-	g4debug=y
-	;;
-esac
+	y*|Y*) 
+		g4debug=y
+		break
+		;;
+#	[eE]) 
+#		break
+#		;;
+#	*) 
+#		echo " "
+#		break
+#		;;
+	esac
+done
 

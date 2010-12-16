@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParameters.cc,v 1.16 2010-12-07 10:42:40 vuzhinsk Exp $
+// $Id: G4FTFParameters.cc,v 1.15 2010-11-15 10:02:38 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -61,11 +61,6 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
 
     G4double Ylab=0.5*std::log((Elab+Plab)/(Elab-Plab));
 
-    G4double ECMSsqrt=s/GeV/GeV;
-    G4double SqrtS=std::sqrt(s)/GeV;
-//G4cout<<"ECMSsqrt SqrtS "<<ECMSsqrt<<" "<<SqrtS<<G4endl;
-    TargetMass     /=GeV;
-    ProjectileMass /=GeV;
     Plab/=GeV;                               // Uzhi 8.07.10
     G4double LogPlab = std::log( Plab );
     G4double sqrLogPlab = LogPlab * LogPlab;
@@ -76,7 +71,7 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
 //    G4int NumberOfTargetNeutrons = (G4int) theA- (G4int) theZ;
     G4int NumberOfTargetNucleons = NumberOfTargetProtons + NumberOfTargetNeutrons;
 
-    G4double Xtotal(0.), Xelastic(0.), Xannihilation(0.);
+    G4double Xtotal, Xelastic;
 
     if( PDGcode > 1000 )                        //------Projectile is baryon --------
       {        
@@ -90,37 +85,9 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
                            NumberOfTargetNeutrons * XtotPN  ) / NumberOfTargetNucleons;
        Xelastic        = ( NumberOfTargetProtons  * XelPP  + 
                            NumberOfTargetNeutrons * XelPN   ) / NumberOfTargetNucleons;
-       Xannihilation   = 0.;
       }
     else if( PDGcode < -1000 )                 //------Projectile is anti_baryon --------
       {        
-       G4double LogS=std::log(ECMSsqrt/33.0625);
-       G4double Xasmpt=36.04+0.304*LogS*LogS;    // mb
-
-                LogS=std::log(SqrtS/20.74);
-       G4double Basmpt=11.92+0.3036*LogS*LogS;   // GeV^(-2)
-       G4double R0=std::sqrt(0.40874044*Xasmpt-Basmpt); // GeV^(-1)
-
-       G4double FlowF=TargetMass/ProjectileMass/std::sqrt(ECMSsqrt-
-                (ProjectileMass+TargetMass)*(ProjectileMass+TargetMass));
-
-       Xtotal=Xasmpt*(1.+13.55*FlowF/R0/R0/R0*
-                         (1.-4.47/SqrtS+12.38/ECMSsqrt-12.43/SqrtS/ECMSsqrt)); // mb
-
-       Xasmpt=4.4+0.101*LogS*LogS;    // mb
-       Xelastic=Xasmpt*(1.+59.27*FlowF/R0/R0/R0*
-                         (1.-6.95/SqrtS+23.54/ECMSsqrt-25.34/SqrtS/ECMSsqrt)); // mb
-//G4cout<<"FlowF "<<FlowF<<" SqrtS "<<SqrtS<<G4endl;
-       G4double X_a=100.*FlowF*(1.-1.12/SqrtS); // mb 3-shirt diagram
-       G4double X_b= 50.*FlowF*std::pow(1./(ProjectileMass+TargetMass) - 1./SqrtS,0.6); 
-                                               // mb anti-quark-quark annihilation
-       G4double X_e=10./ECMSsqrt+197./ECMSsqrt/SqrtS-181/ECMSsqrt/ECMSsqrt;  
-                                               // mb anti-quark-quark string creation
-       Xannihilation=X_a+X_b+X_e;
-//G4cout<<"X a b e Annih "<<X_a<<" "<<X_b<<" "<<X_e<<" "<<Xannihilation<<G4endl;
-//G4cout<<"Xtotal Xelastic Xannihilation "<<Xtotal<<" "<<Xelastic<<" "<<Xannihilation<<G4endl;
-/*
-//--------------- PDG92 parameterization -------------------------------
        G4double XtotPP = 38.4 +  77.6*std::pow(Plab,-0.64) + 0.26*sqrLogPlab - 1.2*LogPlab;
        G4double XtotPN =  0.  + 133.6*std::pow(Plab,-0.70) + 1.22*sqrLogPlab +13.7*LogPlab;
 
@@ -131,7 +98,6 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
                            NumberOfTargetNeutrons * XtotPN  ) / NumberOfTargetNucleons;
        Xelastic        = ( NumberOfTargetProtons  * XelPP  + 
                            NumberOfTargetNeutrons * XelPN   ) / NumberOfTargetNucleons;
-*/
       }
     else if( PDGcode ==  211 )                     //------Projectile is PionPlus -------
       {
@@ -145,7 +111,6 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
                             NumberOfTargetNeutrons * XtotPiN  ) / NumberOfTargetNucleons;
        Xelastic         = ( NumberOfTargetProtons  * XelPiP  + 
                             NumberOfTargetNeutrons * XelPiN   ) / NumberOfTargetNucleons; 
-       Xannihilation   = 0.;
       }
     else if( PDGcode == -211 )                     //------Projectile is PionMinus -------
       {
@@ -159,7 +124,6 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
                             NumberOfTargetNeutrons * XtotPiN  ) / NumberOfTargetNucleons;
        Xelastic         = ( NumberOfTargetProtons  * XelPiP  + 
                             NumberOfTargetNeutrons * XelPiN   ) / NumberOfTargetNucleons;
-       Xannihilation   = 0.;
       }
 
     else if( PDGcode ==  111 )                     //------Projectile is PionZero  -------
@@ -179,7 +143,6 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
                             NumberOfTargetNeutrons * XtotPiN  ) / NumberOfTargetNucleons;
        Xelastic         = ( NumberOfTargetProtons  * XelPiP  + 
                             NumberOfTargetNeutrons * XelPiN   ) / NumberOfTargetNucleons; 
-       Xannihilation   = 0.;
       }
     else if( PDGcode == 321 )                      //------Projectile is KaonPlus -------
       {
@@ -193,7 +156,6 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
                            NumberOfTargetNeutrons * XtotKN  ) / NumberOfTargetNucleons;
        Xelastic        = ( NumberOfTargetProtons  * XelKP  + 
                            NumberOfTargetNeutrons * XelKN   ) / NumberOfTargetNucleons;
-       Xannihilation   = 0.;
       }
     else if( PDGcode ==-321 )                      //------Projectile is KaonMinus ------
       {
@@ -207,7 +169,6 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
                            NumberOfTargetNeutrons * XtotKN  ) / NumberOfTargetNucleons;
        Xelastic        = ( NumberOfTargetProtons  * XelKP  + 
                            NumberOfTargetNeutrons * XelKN   ) / NumberOfTargetNucleons;
-       Xannihilation   = 0.;
       }
     else if((PDGcode == 311) || (PDGcode == 130) || (PDGcode == 310))//Projectile is KaonZero
       {
@@ -224,7 +185,6 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
                            NumberOfTargetNeutrons * XtotKN  ) / NumberOfTargetNucleons;
        Xelastic        = ( NumberOfTargetProtons  * XelKP  + 
                            NumberOfTargetNeutrons * XelKN   ) / NumberOfTargetNucleons;
-       Xannihilation   = 0.;
       }
     else                 //------Projectile is undefined, Nucleon assumed
       {
@@ -238,12 +198,11 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
                            NumberOfTargetNeutrons * XtotPN  ) / NumberOfTargetNucleons;
        Xelastic        = ( NumberOfTargetProtons  * XelPP  + 
                            NumberOfTargetNeutrons * XelPN   ) / NumberOfTargetNucleons;
-       Xannihilation   = 0.;
       };
 
 //      Xtotal and Xelastic in mb
 
-/* For Pi- P interactions only!
+// For Pi- P interactions only!
 if(std::abs(Plab-1.4) < 0.05) {Xtotal=3.500599e+01; Xelastic= 1.150032e+01;}
 if(std::abs(Plab-1.5) < 0.05) {Xtotal=3.450591e+01; Xelastic= 1.050038e+01;}
 if(std::abs(Plab-1.6) < 0.05) {Xtotal=3.430576e+01; Xelastic= 9.800433e+00;}
@@ -264,7 +223,7 @@ if(std::abs(Plab-12.0) < 0.05){Xtotal=2.632341e+01; Xelastic= 4.480229e+00;}
 if(std::abs(Plab-14.0) < 0.05){Xtotal=2.604340e+01; Xelastic= 4.360221e+00;}
 if(std::abs(Plab-20.0) < 0.05){Xtotal=2.520337e+01; Xelastic= 4.000197e+00;}
 if(std::abs(Plab-30.0) < 0.05){Xtotal=2.505334e+01; Xelastic= 3.912679e+00;}
-*/
+//
 //----------- Geometrical parameters ------------------------------------------------
       SetTotalCrossSection(Xtotal);
       SetElastisCrossSection(Xelastic);
@@ -274,8 +233,6 @@ if(std::abs(Plab-30.0) < 0.05){Xtotal=2.505334e+01; Xelastic= 3.912679e+00;}
 //  // Interactions with elastic and inelastic collisions
       SetProbabilityOfElasticScatt(Xtotal, Xelastic);
       SetRadiusOfHNinteractions2(Xtotal/pi/10.);
-
-      SetProbabilityOfAnnihilation(Xannihilation/(Xtotal-Xelastic));
 //
 /* //==== No elastic scattering ============================
       SetProbabilityOfElasticScatt(Xtotal, 0.);
@@ -419,7 +376,7 @@ if(std::abs(Plab-30.0) < 0.05){Xtotal=2.505334e+01; Xelastic= 3.912679e+00;}
     } else                                             // for baryon projectile
     {
       SetMaxNumberOfCollisions(Plab,2.); //4.); // ##############################
-      SetMaxNumberOfCollisions(1000.,1.); //(Plab,2.); //3.); ##############################
+
       SetCofNuclearDestruction(1.*std::exp(4.*(Ylab-2.1))/(1.+std::exp(4.*(Ylab-2.1)))); //0.62 1.0
 //G4cout<<Ylab<<" "<<0.62*std::exp(4.*(Ylab-2.1))/(1.+std::exp(4.*(Ylab-2.1)))<<G4endl;
 //G4int Uzhi; G4cin>>Uzhi;

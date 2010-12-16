@@ -1,8 +1,0 @@
-gmake
-rm  pp_bar.liste
-../../../../../../../bin/SUN-CC/G4AnnihilationTest < input | grep ETWITHINCUTS > pp_bar.liste
-rm in
-sed "/PRE/d" pp_bar.liste | sed "s/ETWITHINCUTS//g" > in
-rm in.1
-sed "s/PREDECAYETWITHINCUTS//g" pp_bar.liste | sed "/ETWITHINCUTS/d" > in.1
-paw

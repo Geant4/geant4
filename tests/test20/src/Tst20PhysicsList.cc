@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst20PhysicsList.cc,v 1.14 2010-04-01 08:17:10 sincerti Exp $
+// $Id: Tst20PhysicsList.cc,v 1.13 2008-12-05 12:57:27 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -48,7 +48,7 @@
 #include "G4LowEnergyRayleigh.hh"
 
 // e+
-#include "G4eMultipleScattering.hh"
+#include "G4MultipleScattering.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
@@ -211,7 +211,7 @@ void Tst20PhysicsList::ConstructEM()
 	}
       else if (particleName == "e+") 
 	{
-	  processManager->AddProcess(new G4eMultipleScattering,-1, 1,1);
+	  processManager->AddProcess(new G4MultipleScattering,-1, 1,1);
 	  processManager->AddProcess(new G4eIonisation,      -1, 2,2);
 	  processManager->AddProcess(new G4eBremsstrahlung,   -1,-1,3);
 	  processManager->AddProcess(new G4eplusAnnihilation,  0,-1,4);	

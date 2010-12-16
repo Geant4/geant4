@@ -1,3 +1,0 @@
-grep "SECONDARIES info" $1 > current
-../doit
-./$2 > $2.result

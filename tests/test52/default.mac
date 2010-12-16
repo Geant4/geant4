@@ -1,0 +1,26 @@
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 0
+/event/verbose 0
+## Fix the physics
+/physics/addPhysics photon-standard
+/physics/addPhysics electron-standard
+/physics/addPhysics positron-standard
+/run/initialize
+########
+### Visualisation #######
+/vis/scene/create
+/vis/open OGLIX
+/vis/viewer/flush
+/tracking/storeTrajectory 1
+/vis/scene/endOfEventAction accumulate
+/vis/viewer/update
+/vis/scene/transientsAction none
+/vis/viewer/set/viewpointThetaPhi 90. 180. 
+#/vis/viewer/zoom 5
+#########################
+/gun/energy 1.5 MeV
+/target/setTargetThick 10. mm
+/target/voxelNumber 10
+/tracking/verbose 1
+/run/beamOn 10

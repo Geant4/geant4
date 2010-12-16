@@ -30,157 +30,142 @@ namespace std {} using namespace std;
 
 // START OF SHADOWS
 
-namespace ROOT
-{
-   namespace Shadow {} // of namespace Shadow
+namespace ROOT {
+   namespace Shadow {
+   } // of namespace Shadow
 } // of namespace ROOT
 // END OF SHADOWS
 
-namespace ROOT
-{
-  void G4TModelParams_ShowMembers(void *obj, TMemberInspector &R__insp, char *R__parent);
-  static void *new_G4TModelParams(void *p = 0);
-  static void *newArray_G4TModelParams(Long_t size, void *p);
-  static void delete_G4TModelParams(void *p);
-  static void deleteArray_G4TModelParams(void *p);
-  static void destruct_G4TModelParams(void *p);
+namespace ROOT {
+   void G4TModelParams_ShowMembers(void *obj, TMemberInspector &R__insp, char *R__parent);
+   static void *new_G4TModelParams(void *p = 0);
+   static void *newArray_G4TModelParams(Long_t size, void *p);
+   static void delete_G4TModelParams(void *p);
+   static void deleteArray_G4TModelParams(void *p);
+   static void destruct_G4TModelParams(void *p);
 
-  // Function generating the singleton type initializer
-  static TGenericClassInfo *GenerateInitInstanceLocal(const ::G4TModelParams*)
-  {
-     ::G4TModelParams *ptr = 0;
-     static ::TVirtualIsAProxy* isa_proxy=new ::TInstrumentedIsAProxy<::G4TModelParams>(0);
-     static ::ROOT::TGenericClassInfo 
-        instance("G4TModelParams", ::G4TModelParams::Class_Version(),
-                 "rootsrc/G4TModelParams.h", 60,
-                 typeid(::G4TModelParams), DefineBehavior(ptr, ptr),
-                 &::G4TModelParams::Dictionary, isa_proxy, 4,
-                 sizeof(::G4TModelParams) );
-     instance.SetNew(&new_G4TModelParams);
-     instance.SetNewArray(&newArray_G4TModelParams);
-     instance.SetDelete(&delete_G4TModelParams);
-     instance.SetDeleteArray(&deleteArray_G4TModelParams);
-     instance.SetDestructor(&destruct_G4TModelParams);
-     return &instance;
-  }
-  TGenericClassInfo *GenerateInitInstance(const ::G4TModelParams*)
-  {
-     return GenerateInitInstanceLocal((::G4TModelParams*)0);
-  }
-  // Static variable to force the class initialization
-  static ::ROOT::TGenericClassInfo* _R__UNIQUE_(Init) =
-                                   GenerateInitInstanceLocal((const ::G4TModelParams*)0x0);
-  R__UseDummy(_R__UNIQUE_(Init));
+   // Function generating the singleton type initializer
+   static TGenericClassInfo *GenerateInitInstanceLocal(const ::G4TModelParams*)
+   {
+      ::G4TModelParams *ptr = 0;
+      static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::G4TModelParams >(0);
+      static ::ROOT::TGenericClassInfo 
+         instance("G4TModelParams", ::G4TModelParams::Class_Version(), "rootsrc/G4TModelParams.h", 60,
+                  typeid(::G4TModelParams), DefineBehavior(ptr, ptr),
+                  &::G4TModelParams::Dictionary, isa_proxy, 4,
+                  sizeof(::G4TModelParams) );
+      instance.SetNew(&new_G4TModelParams);
+      instance.SetNewArray(&newArray_G4TModelParams);
+      instance.SetDelete(&delete_G4TModelParams);
+      instance.SetDeleteArray(&deleteArray_G4TModelParams);
+      instance.SetDestructor(&destruct_G4TModelParams);
+      return &instance;
+   }
+   TGenericClassInfo *GenerateInitInstance(const ::G4TModelParams*)
+   {
+      return GenerateInitInstanceLocal((::G4TModelParams*)0);
+   }
+   // Static variable to force the class initialization
+   static ::ROOT::TGenericClassInfo *_R__UNIQUE_(Init) = GenerateInitInstanceLocal((const ::G4TModelParams*)0x0); R__UseDummy(_R__UNIQUE_(Init));
 } // end of namespace ROOT
 
-namespace ROOT
-{
-  void G4TCatalog_ShowMembers(void *obj, TMemberInspector &R__insp, char *R__parent);
-  static void *new_G4TCatalog(void *p = 0);
-  static void *newArray_G4TCatalog(Long_t size, void *p);
-  static void delete_G4TCatalog(void *p);
-  static void deleteArray_G4TCatalog(void *p);
-  static void destruct_G4TCatalog(void *p);
+namespace ROOT {
+   void G4TCatalog_ShowMembers(void *obj, TMemberInspector &R__insp, char *R__parent);
+   static void *new_G4TCatalog(void *p = 0);
+   static void *newArray_G4TCatalog(Long_t size, void *p);
+   static void delete_G4TCatalog(void *p);
+   static void deleteArray_G4TCatalog(void *p);
+   static void destruct_G4TCatalog(void *p);
 
-  // Function generating the singleton type initializer
-  static TGenericClassInfo *GenerateInitInstanceLocal(const ::G4TCatalog*)
-  {
-     ::G4TCatalog *ptr = 0;
-     static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy<::G4TCatalog>(0);
-     static ::ROOT::TGenericClassInfo 
-        instance("G4TCatalog", ::G4TCatalog::Class_Version(),
-                 "rootsrc/Database/G4TCatalog.h", 42,
-                 typeid(::G4TCatalog), DefineBehavior(ptr, ptr),
-                 &::G4TCatalog::Dictionary, isa_proxy, 4,
-                 sizeof(::G4TCatalog) );
-     instance.SetNew(&new_G4TCatalog);
-     instance.SetNewArray(&newArray_G4TCatalog);
-     instance.SetDelete(&delete_G4TCatalog);
-     instance.SetDeleteArray(&deleteArray_G4TCatalog);
-     instance.SetDestructor(&destruct_G4TCatalog);
-     return &instance;
-  }
-  TGenericClassInfo *GenerateInitInstance(const ::G4TCatalog*)
-  {
-     return GenerateInitInstanceLocal((::G4TCatalog*)0);
-  }
-  // Static variable to force the class initialization
-  static ::ROOT::TGenericClassInfo *_R__UNIQUE_(Init) =
-                                      GenerateInitInstanceLocal((const ::G4TCatalog*)0x0);
-  R__UseDummy(_R__UNIQUE_(Init));
+   // Function generating the singleton type initializer
+   static TGenericClassInfo *GenerateInitInstanceLocal(const ::G4TCatalog*)
+   {
+      ::G4TCatalog *ptr = 0;
+      static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::G4TCatalog >(0);
+      static ::ROOT::TGenericClassInfo 
+         instance("G4TCatalog", ::G4TCatalog::Class_Version(), "rootsrc/Database/G4TCatalog.h", 42,
+                  typeid(::G4TCatalog), DefineBehavior(ptr, ptr),
+                  &::G4TCatalog::Dictionary, isa_proxy, 4,
+                  sizeof(::G4TCatalog) );
+      instance.SetNew(&new_G4TCatalog);
+      instance.SetNewArray(&newArray_G4TCatalog);
+      instance.SetDelete(&delete_G4TCatalog);
+      instance.SetDeleteArray(&deleteArray_G4TCatalog);
+      instance.SetDestructor(&destruct_G4TCatalog);
+      return &instance;
+   }
+   TGenericClassInfo *GenerateInitInstance(const ::G4TCatalog*)
+   {
+      return GenerateInitInstanceLocal((::G4TCatalog*)0);
+   }
+   // Static variable to force the class initialization
+   static ::ROOT::TGenericClassInfo *_R__UNIQUE_(Init) = GenerateInitInstanceLocal((const ::G4TCatalog*)0x0); R__UseDummy(_R__UNIQUE_(Init));
 } // end of namespace ROOT
 
-namespace ROOT
-{
-  void G4TSimHelper_ShowMembers(void *obj, TMemberInspector &R__insp, char *R__parent);
-  static void *new_G4TSimHelper(void *p = 0);
-  static void *newArray_G4TSimHelper(Long_t size, void *p);
-  static void delete_G4TSimHelper(void *p);
-  static void deleteArray_G4TSimHelper(void *p);
-  static void destruct_G4TSimHelper(void *p);
+namespace ROOT {
+   void G4TSimHelper_ShowMembers(void *obj, TMemberInspector &R__insp, char *R__parent);
+   static void *new_G4TSimHelper(void *p = 0);
+   static void *newArray_G4TSimHelper(Long_t size, void *p);
+   static void delete_G4TSimHelper(void *p);
+   static void deleteArray_G4TSimHelper(void *p);
+   static void destruct_G4TSimHelper(void *p);
 
-  // Function generating the singleton type initializer
-  static TGenericClassInfo *GenerateInitInstanceLocal(const ::G4TSimHelper*)
-  {
-     ::G4TSimHelper *ptr = 0;
-     static ::TVirtualIsAProxy* isa_proxy=new ::TInstrumentedIsAProxy<::G4TSimHelper>(0);
-     static ::ROOT::TGenericClassInfo 
-        instance("G4TSimHelper", ::G4TSimHelper::Class_Version(),
-                 "rootsrc/Helpers/G4TSimHelper.h", 45,
-                 typeid(::G4TSimHelper), DefineBehavior(ptr, ptr),
-                 &::G4TSimHelper::Dictionary, isa_proxy, 4,
-                 sizeof(::G4TSimHelper) );
-     instance.SetNew(&new_G4TSimHelper);
-     instance.SetNewArray(&newArray_G4TSimHelper);
-     instance.SetDelete(&delete_G4TSimHelper);
-     instance.SetDeleteArray(&deleteArray_G4TSimHelper);
-     instance.SetDestructor(&destruct_G4TSimHelper);
-     return &instance;
-  }
-  TGenericClassInfo *GenerateInitInstance(const ::G4TSimHelper*)
-  {
-     return GenerateInitInstanceLocal((::G4TSimHelper*)0);
-  }
-  // Static variable to force the class initialization
-  static ::ROOT::TGenericClassInfo *_R__UNIQUE_(Init) =
-                                    GenerateInitInstanceLocal((const ::G4TSimHelper*)0x0);
-  R__UseDummy(_R__UNIQUE_(Init));
+   // Function generating the singleton type initializer
+   static TGenericClassInfo *GenerateInitInstanceLocal(const ::G4TSimHelper*)
+   {
+      ::G4TSimHelper *ptr = 0;
+      static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::G4TSimHelper >(0);
+      static ::ROOT::TGenericClassInfo 
+         instance("G4TSimHelper", ::G4TSimHelper::Class_Version(), "rootsrc/Helpers/G4TSimHelper.h", 45,
+                  typeid(::G4TSimHelper), DefineBehavior(ptr, ptr),
+                  &::G4TSimHelper::Dictionary, isa_proxy, 4,
+                  sizeof(::G4TSimHelper) );
+      instance.SetNew(&new_G4TSimHelper);
+      instance.SetNewArray(&newArray_G4TSimHelper);
+      instance.SetDelete(&delete_G4TSimHelper);
+      instance.SetDeleteArray(&deleteArray_G4TSimHelper);
+      instance.SetDestructor(&destruct_G4TSimHelper);
+      return &instance;
+   }
+   TGenericClassInfo *GenerateInitInstance(const ::G4TSimHelper*)
+   {
+      return GenerateInitInstanceLocal((::G4TSimHelper*)0);
+   }
+   // Static variable to force the class initialization
+   static ::ROOT::TGenericClassInfo *_R__UNIQUE_(Init) = GenerateInitInstanceLocal((const ::G4TSimHelper*)0x0); R__UseDummy(_R__UNIQUE_(Init));
 } // end of namespace ROOT
 
-namespace ROOT
-{
-  void G4TParticlesDAL_ShowMembers(void *obj, TMemberInspector &R__insp, char *R__parent);
-  static void *new_G4TParticlesDAL(void *p = 0);
-  static void *newArray_G4TParticlesDAL(Long_t size, void *p);
-  static void delete_G4TParticlesDAL(void *p);
-  static void deleteArray_G4TParticlesDAL(void *p);
-  static void destruct_G4TParticlesDAL(void *p);
+namespace ROOT {
+   void G4TParticlesDAL_ShowMembers(void *obj, TMemberInspector &R__insp, char *R__parent);
+   static void *new_G4TParticlesDAL(void *p = 0);
+   static void *newArray_G4TParticlesDAL(Long_t size, void *p);
+   static void delete_G4TParticlesDAL(void *p);
+   static void deleteArray_G4TParticlesDAL(void *p);
+   static void destruct_G4TParticlesDAL(void *p);
 
-  // Function generating the singleton type initializer
-  static TGenericClassInfo *GenerateInitInstanceLocal(const ::G4TParticlesDAL*)
-  {
-    ::G4TParticlesDAL *ptr = 0;
-    static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::G4TParticlesDAL >(0);
-    static ::ROOT::TGenericClassInfo 
-       instance("G4TParticlesDAL", ::G4TParticlesDAL::Class_Version(), "rootsrc/Helpers/../Database/G4TParticlesDAL.h", 52,
-                typeid(::G4TParticlesDAL), DefineBehavior(ptr, ptr),
-                &::G4TParticlesDAL::Dictionary, isa_proxy, 4,
-                sizeof(::G4TParticlesDAL) );
-    instance.SetNew(&new_G4TParticlesDAL);
-    instance.SetNewArray(&newArray_G4TParticlesDAL);
-    instance.SetDelete(&delete_G4TParticlesDAL);
-    instance.SetDeleteArray(&deleteArray_G4TParticlesDAL);
-    instance.SetDestructor(&destruct_G4TParticlesDAL);
-    return &instance;
-  }
-  TGenericClassInfo *GenerateInitInstance(const ::G4TParticlesDAL*)
-  {
-    return GenerateInitInstanceLocal((::G4TParticlesDAL*)0);
-  }
-  // Static variable to force the class initialization
-  static ::ROOT::TGenericClassInfo *_R__UNIQUE_(Init) =
-                                  GenerateInitInstanceLocal((const ::G4TParticlesDAL*)0x0);
-  R__UseDummy(_R__UNIQUE_(Init));
+   // Function generating the singleton type initializer
+   static TGenericClassInfo *GenerateInitInstanceLocal(const ::G4TParticlesDAL*)
+   {
+      ::G4TParticlesDAL *ptr = 0;
+      static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::G4TParticlesDAL >(0);
+      static ::ROOT::TGenericClassInfo 
+         instance("G4TParticlesDAL", ::G4TParticlesDAL::Class_Version(), "rootsrc/Helpers/../Database/G4TParticlesDAL.h", 52,
+                  typeid(::G4TParticlesDAL), DefineBehavior(ptr, ptr),
+                  &::G4TParticlesDAL::Dictionary, isa_proxy, 4,
+                  sizeof(::G4TParticlesDAL) );
+      instance.SetNew(&new_G4TParticlesDAL);
+      instance.SetNewArray(&newArray_G4TParticlesDAL);
+      instance.SetDelete(&delete_G4TParticlesDAL);
+      instance.SetDeleteArray(&deleteArray_G4TParticlesDAL);
+      instance.SetDestructor(&destruct_G4TParticlesDAL);
+      return &instance;
+   }
+   TGenericClassInfo *GenerateInitInstance(const ::G4TParticlesDAL*)
+   {
+      return GenerateInitInstanceLocal((::G4TParticlesDAL*)0);
+   }
+   // Static variable to force the class initialization
+   static ::ROOT::TGenericClassInfo *_R__UNIQUE_(Init) = GenerateInitInstanceLocal((const ::G4TParticlesDAL*)0x0); R__UseDummy(_R__UNIQUE_(Init));
 } // end of namespace ROOT
 
 namespace ROOT {
@@ -3023,8 +3008,8 @@ static int G__ReflexionDict_1001_0_9(G__value* result7, G__CONST char* funcname,
 
 static int G__ReflexionDict_1001_0_10(G__value* result7, G__CONST char* funcname, struct G__param* libp, int hash)
 {
-  G__letdouble(result7, 100, (double) ((const G4TDataItem*) G__getstructoffset())->GetAngleInRadians());
-  return(1 || funcname || hash || result7 || libp) ;
+      G__letdouble(result7, 100, (double) ((const G4TDataItem*) G__getstructoffset())->GetAngleInRadians());
+   return(1 || funcname || hash || result7 || libp) ;
 }
 
 static int G__ReflexionDict_1001_0_11(G__value* result7, G__CONST char* funcname, struct G__param* libp, int hash)
@@ -3073,7 +3058,7 @@ static int G__ReflexionDict_1001_0_18(G__value* result7, G__CONST char* funcname
 {
       {
          TString* pobj;
-         TString xobj = ((G4TDataItem*) G__getstructoffset())->GetInvariantFunction();
+         TString xobj = ((G4TDataItem*) G__getstructoffset())->GetFormula();
          pobj = new TString(xobj);
          result7->obj.i = (long) ((void*) pobj);
          result7->ref = result7->obj.i;
@@ -3085,9 +3070,9 @@ static int G__ReflexionDict_1001_0_18(G__value* result7, G__CONST char* funcname
 static int G__ReflexionDict_1001_0_19(G__value* result7, G__CONST char* funcname, struct G__param* libp, int hash)
 {
       {
-         std::pair<Double_t, Double_t>* pobj;
-         std::pair<Double_t, Double_t> xobj = ((G4TDataItem*) G__getstructoffset())->GetLimits();
-         pobj = new std::pair<Double_t, Double_t>(xobj);
+         DataItemLimit_t* pobj;
+         DataItemLimit_t xobj = ((G4TDataItem*) G__getstructoffset())->GetLimits();
+         pobj = new DataItemLimit_t(xobj);
          result7->obj.i = (long) ((void*) pobj);
          result7->ref = result7->obj.i;
          G__store_tempobject(*result7);
@@ -3467,9 +3452,9 @@ static int G__ReflexionDict_1003_0_16(G__value* result7, G__CONST char* funcname
 static int G__ReflexionDict_1003_0_17(G__value* result7, G__CONST char* funcname, struct G__param* libp, int hash)
 {
       {
-         std::pair<Double_t, Double_t>* pobj;
-         std::pair<Double_t, Double_t> xobj = ((G4TData*) G__getstructoffset())->GetLimits((Int_t) G__int(libp->para[0]), (Int_t) G__int(libp->para[1]));
-         pobj = new std::pair<Double_t, Double_t>(xobj);
+         DataItemLimit_t* pobj;
+         DataItemLimit_t xobj = ((G4TData*) G__getstructoffset())->GetLimits((Int_t) G__int(libp->para[0]), (Int_t) G__int(libp->para[1]));
+         pobj = new DataItemLimit_t(xobj);
          result7->obj.i = (long) ((void*) pobj);
          result7->ref = result7->obj.i;
          G__store_tempobject(*result7);
@@ -3480,9 +3465,9 @@ static int G__ReflexionDict_1003_0_17(G__value* result7, G__CONST char* funcname
 static int G__ReflexionDict_1003_0_18(G__value* result7, G__CONST char* funcname, struct G__param* libp, int hash)
 {
       {
-         std::pair<Double_t, Double_t>* pobj;
-         std::pair<Double_t, Double_t> xobj = ((G4TData*) G__getstructoffset())->GetLimits();
-         pobj = new std::pair<Double_t, Double_t>(xobj);
+         DataItemLimit_t* pobj;
+         DataItemLimit_t xobj = ((G4TData*) G__getstructoffset())->GetLimits();
+         pobj = new DataItemLimit_t(xobj);
          result7->obj.i = (long) ((void*) pobj);
          result7->ref = result7->obj.i;
          G__store_tempobject(*result7);
@@ -6234,7 +6219,7 @@ static void G__setup_memfuncG4TDataItem(void) {
    G__memfunc_setup("GetArgumentUnits",1654,G__ReflexionDict_1001_0_15, 105, G__get_linked_tagnum(&G__ReflexionDictLN_UnitsEnum), -1, 0, 0, 1, 1, 8, "", (char*)NULL, (void*) NULL, 0);
    G__memfunc_setup("GetHistogram",1230,G__ReflexionDict_1001_0_16, 85, G__get_linked_tagnum(&G__ReflexionDictLN_TH1F), -1, 0, 0, 1, 1, 8, "", (char*)NULL, (void*) NULL, 0);
    G__memfunc_setup("GetData",666,G__ReflexionDict_1001_0_17, 85, G__get_linked_tagnum(&G__ReflexionDictLN_TTree), -1, 0, 0, 1, 1, 8, "", (char*)NULL, (void*) NULL, 0);
-   G__memfunc_setup("GetInvariantFunction",1014,G__ReflexionDict_1001_0_18, 117, G__get_linked_tagnum(&G__ReflexionDictLN_TString), -1, 0, 0, 1, 1, 0, "", (char*)NULL, (void*) NULL, 0);
+   G__memfunc_setup("GetFormula",1014,G__ReflexionDict_1001_0_18, 117, G__get_linked_tagnum(&G__ReflexionDictLN_TString), -1, 0, 0, 1, 1, 0, "", (char*)NULL, (void*) NULL, 0);
    G__memfunc_setup("GetLimits",914,G__ReflexionDict_1001_0_19, 117, G__get_linked_tagnum(&G__ReflexionDictLN_DataItemLimit_t), -1, 0, 0, 1, 1, 0, "", (char*)NULL, (void*) NULL, 0);
    G__memfunc_setup("GetHeader",873,G__ReflexionDict_1001_0_20, 117, G__get_linked_tagnum(&G__ReflexionDictLN_TString), -1, 0, 0, 1, 1, 8, "", (char*)NULL, (void*) NULL, 0);
    G__memfunc_setup("GetHistogramName",1615,G__ReflexionDict_1001_0_21, 117, G__get_linked_tagnum(&G__ReflexionDictLN_TString), -1, 0, 1, 1, 1, 8, "i - 'Int_t' 0 '-1' additionalIndex", (char*)NULL, (void*) NULL, 0);
@@ -6929,7 +6914,7 @@ G__linked_taginfo G__ReflexionDictLN_CutEnum = { "CutEnum" , 101 , -1 };
 G__linked_taginfo G__ReflexionDictLN_UnitsEnum = { "UnitsEnum" , 101 , -1 };
 G__linked_taginfo G__ReflexionDictLN_ArgEnum = { "ArgEnum" , 101 , -1 };
 G__linked_taginfo G__ReflexionDictLN_DataItemObjectHeader_t = { "DataItemObjectHeader_t" , 115 , -1 };
-G__linked_taginfo G__ReflexionDictLN_DataItemLimit_t = { "std::pair<Double_t, Double_t>" , 115 , -1 };
+G__linked_taginfo G__ReflexionDictLN_DataItemLimit_t = { "DataItemLimit_t" , 115 , -1 };
 G__linked_taginfo G__ReflexionDictLN_G4TDataItem = { "G4TDataItem" , 99 , -1 };
 G__linked_taginfo G__ReflexionDictLN_DataObjectHeader_t = { "DataObjectHeader_t" , 115 , -1 };
 G__linked_taginfo G__ReflexionDictLN_G4TData = { "G4TData" , 99 , -1 };

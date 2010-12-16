@@ -389,7 +389,7 @@ G4double G4QPhotonNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F,
 #ifdef debug
     G4cout<<"G4QPhNCS::CalcCS:bGDR A="<<A<<", nL="<<nL<<",TH="<<THmin<<",dE="<<dE<<G4endl;
 #endif
-    if(A<=1. || dE <= THmin) sigma=0.;      // No GDR for A=1
+    if(A<=1. || dE <= THmin) sigma=0.;
     else      sigma=EquLinearFit(Energy,nL,THmin,dE,lastGDR);
 #ifdef debugn
     if(sigma<0.)

@@ -36,6 +36,8 @@
 
 #include "G4VPhysicalVolume.hh"
 
+#include "G4GDMLParser.hh"
+
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 
@@ -46,6 +48,10 @@ public:
   G4MIRDTestes();
   ~G4MIRDTestes();
   G4VPhysicalVolume* ConstructTestes(G4VPhysicalVolume*, G4String, G4bool);
+ 
+private:
+
+  G4GDMLParser parser;
 
 };
 #endif

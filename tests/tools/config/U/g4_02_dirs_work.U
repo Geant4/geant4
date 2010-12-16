@@ -6,6 +6,7 @@
 ?S:	This variable contains the value of the 'g4osname' symbol, which
 ?S:	used for building G4SYSTEM.
 ?S:.
+echo " "
 
 case "$g4tmp" in
 '')
@@ -19,4 +20,66 @@ case "$g4lib" in
 	;;
 esac
 
+#case "$g4bin" in
+#'')
+#	g4bin=$g4workdir/bin
+#	;;
+#esac
+
+while test 1 = 0  ; do
+
+g4message=`cat << EOM
+
+(OPTIONAL) You can now customise installation directories:
+  G4TMP - tmp/ containing temporary dependency (.d) and object (.o) files;
+  G4LIB - lib/ containing final static (.a) or shared (.so) libraries;
+
+1) G4TMP:		$g4tmp
+
+2) G4LIB:		$g4lib
+
+To modify default settings, select number above (e.g. 2) 
+EOM`
+
+#dflt="NO DEFAULT ANSWER"
+dflt="Press [Enter] for default settings"
+#fn='d~'
+rp=$g4message
+. ./myread
+gans=$ans
+
+
+	case $gans in
+
+	1) 
+		dflt=$g4tmp
+		fn='d~+'
+		rp="Where will be your Geant4 tmp directory?"
+		. ./getfile
+		g4tmp=$ans
+		;;
+	2) 
+		dflt=$g4lib
+		fn='d~+'
+		rp="Where will be your Geant4 lib directory?"
+		. ./getfile
+		g4lib=$ans
+		;;
+#	3) 
+#		dflt=$g4bin
+#		fn='d~+'
+#		rp="Where will be your Geant4 bin directory?"
+#		. ./getfile
+#		g4bin=$ans
+#		;;
+
+#	[eE]) 
+#		break
+#		;;
+	*) 
+		break
+#		echo " "
+		;;
+	esac
+done
 

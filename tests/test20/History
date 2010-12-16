@@ -1,4 +1,4 @@
-$Id: History,v 1.20 2010-04-01 08:17:10 sincerti Exp $
+$Id: History,v 1.19 2009-08-05 17:33:27 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,10 +14,6 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
-01 Apr 2010 - S. Incerti tag test20-V09-03-00
-              Replaced obsolete G4MultipleScattering by G4eMultipleScattering 
-              in Physics list
 
 05 Aug 2009 - H.Kurashige  tag test20-V09-02-00
 	      Add DisableCheckParticleList to avoid G4Exception by PhysicsList

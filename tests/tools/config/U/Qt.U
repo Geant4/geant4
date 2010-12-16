@@ -7,7 +7,7 @@
 ?X: to use, but arranges for its demise at the end of Configure.
 ?X:
 ?MAKE:Qt g4_qt_version g4_qt_cxxflags g4_qt_gl_cxxflags g4_qt_libs \
-g4_qt_gl_libs g4_qt_moc: startsh Loc cat n
+g4_qt_gl_libs g4_qt_moc: startsh Loc cat
 ?MAKE:	-pick add $@ %<
 ?V:with_qt_dir:g4_qt_version g4_qt_cxxflags g4_qt_gl_cxxflags g4_qt_libs g4_qt_gl_libs g4_qt_moc g4_qt_is_configured g4_havegoodqt
 ?F:./qt
@@ -51,20 +51,17 @@ if test "x\$g4_qt_is_configured" = "x" ; then
 
     #
     # User may supply a value for 'QTDIR' and in that case we ASSUME a
-    # Trolltech style installation or a Mac Framework. The latter has a
-    # higher priority in the list of search paths because otherwise we may
-    # miss the presence of a Framework (see Bug #1095)
+    # Trolltech style installation or a Mac Framework
     #
     if test "x\$with_qt_dir" != "x" ; then
         g4_qt_dir="\$with_qt_dir"
-        g4_qt_possible_qt_include_dirs="\$with_qt_dir/QtCore.framework/Headers
-                                        \$with_qt_dir/lib*/QtCore.framework/Headers
-                                        \$with_qt_dir/include/QtCore
+        g4_qt_possible_qt_include_dirs="\$with_qt_dir/include/QtCore
                                         \$with_qt_dir/include/Qt 
                                         \`ls -dr \$with_qt_dir/include/qt*/QtCore 2>/dev/null\` 
                                         \`ls -dr \$with_qt_dir/include/qt*/Qt 2>/dev/null\` 
                                         \`ls -dr \$with_qt_dir/include/qt* 2>/dev/null\` 
-                                        \$with_qt_dir/include"
+                                        \$with_qt_dir/include
+                                        \$with_qt_dir/QtCore.framework/Headers"
 
         # Check for qglobal.h
         g4_qglobal_loc=\`./loc qglobal.h no \$g4_qt_possible_qt_include_dirs\`
@@ -80,29 +77,17 @@ if test "x\$g4_qt_is_configured" = "x" ; then
         fi
 
     else
-        # We use standard search paths, again preferencing Frameworks so that
-        # these are not missed
+        # We use standard search paths...
         qt_direct_test_header="qglobal.h"
 
         g4_qt_include_path_list="
             \`ls -dr /Library/Frameworks/QtCore.framework/Headers 2>/dev/null\` 
             \`ls -dr /System/Library/Frameworks/QtCore.framework/Headers 2>/dev/null\`
-            \`ls -dr /usr/local/Qt*/QtCore.framework/Headers 2>/dev/null\`
-            \`ls -dr /usr/local/Qt*/lib*/QtCore.framework/Headers 2>/dev/null\`
-            \`ls -dr /usr/local/lib*/Qt*/QtCore.framework/Headers 2>/dev/null\`
-            \`ls -dr /opt/local/Qt*/QtCore.framework/Headers 2>/dev/null\`
-            \`ls -dr /opt/local/Qt*/lib*/QtCore.framework/Headers 2>/dev/null\`
-            \`ls -dr /opt/local/lib/Qt*/QtCore.framework/Headers 2>/dev/null\`
-            \`ls -dr /opt/local/lib*/QtCore.framework/Headers 2>/dev/null\`
-            \`ls -dr /opt/Qt*/QtCore.framework/Headers 2>/dev/null\`
-            \`ls -dr /opt/Qt*/lib*/QtCore.framework/Headers 2>/dev/null\`
-            \`ls -dr /usr/lib/QtCore.framework/Headers 2>/dev/null\`
-            \`ls -dr /usr/lib/Qt*/QtCore.framework/Headers 2>/dev/null\`
             /usr/include/QtCore
             \`ls -dr /usr/include/qt*/QtCore 2>/dev/null\`
-	        \`ls -dr /usr/local/include/QtCore 2>/dev/null\`
+	    \`ls -dr /usr/local/include/QtCore 2>/dev/null\`
             \`ls -dr /usr/local/include/qt*/QtCore 2>/dev/null\`
-	        \`ls -dr /usr/local/qt*/include/QtCore 2>/dev/null\` 
+	    \`ls -dr /usr/local/qt*/include/QtCore 2>/dev/null\` 
             \`ls -dr /opt/qt*/include/QtCore 2>/dev/null\` 
             \`ls -dr /usr/qt*/include/QtCore 2>/dev/null\`
             \`ls -dr /usr/qt/*/include/QtCore 2>/dev/null\` 
@@ -113,7 +98,7 @@ if test "x\$g4_qt_is_configured" = "x" ; then
             /usr/include
             \`ls -dr /usr/include/qt* 2>/dev/null\`
             \`ls -dr /usr/local/include 2>/dev/null\`
-	        \`ls -dr /usr/local/include/qt* 2>/dev/null\`
+	    \`ls -dr /usr/local/include/qt* 2>/dev/null\`
             \`ls -dr /usr/local/qt*/include 2>/dev/null\`
             \`ls -dr /opt/qt*/include 2>/dev/null\` 
             \`ls -dr /usr/qt*/include 2>/dev/null\`
@@ -156,10 +141,9 @@ if test "x\$g4_qt_is_configured" = "x" ; then
         if test "x\$g4_qt_include_dir" = "x" ; then
             g4_qt_include_dir=no
             g4_havegoodqt=no
-            echo "checking for qglobal.h... no"
-        else
-            echo "checking for qglobal.h... \$g4_qt_include_dir/qglobal.h"
         fi
+
+        echo "checking for qglobal.h... \$g4_qt_include_dir/qglobal.h"
     fi # END TEST with_qt_dir is set
 
     #
@@ -170,54 +154,24 @@ if test "x\$g4_qt_is_configured" = "x" ; then
 
     # Immediate and obvious Darwin check...
     if test "x\`basename \$g4_qt_include_dir\`" = "xHeaders" ; then
-        #check for moc - we have a framework so we first need to check for
-        #a bin directory below g4_qt_include_dir. Depending on how the
-        #Framework was installed, this may be below the level that
-        #QtCore.framework is at.
+        #check for moc
+        if test -x "/usr/bin/moc" ; then
+            g4_qt_moc="/usr/bin/moc"
+            echo "checking for moc... \$g4_qt_moc"
 
-        # Find base framework directory
-        g4_qt_fmwk_base_dir=\`dirname \$g4_qt_include_dir\`
-        g4_qt_fmwk_base_dir=\`dirname \$g4_qt_fmwk_base_dir\`
+            g4_qt_dir=\`dirname \$g4_qt_include_dir\`
+            g4_qt_dir=\`dirname \$g4_qt_dir\`
 
-        if test "x\`basename \$g4_qt_fmwk_base_dir\`" = "xlib" ; then
-            #This is probably an independent install
-            echo "checking Mac Framework location... trolltech/custom"
-            g4_qt_dir=\`dirname \$g4_qt_fmwk_base_dir\`
-
-            #Check for moc
-            if test -x "\$g4_qt_dir/bin/moc" ; then
-                g4_qt_moc="\$g4_qt_dir/bin/moc"
-                echo "checking for moc... \$g4_qt_moc"
-
-                g4_qt_version="4"
-                g4_qt_cxxflags="-I\$g4_qt_dir/lib/QtCore.framework/Headers -I\$g4_qt_dir/lib/QtGui.framework/Headers"
-                g4_qt_gl_cxxflags="-I\$g4_qt_dir/lib/QtOpenGl.framework/Headers"
-                g4_qt_libs="-F\$g4_qt_dir/lib -framework QtCore -framework QtGui"
-                g4_qt_gl_libs="-framework QtOpenGL"
-            else
-                echo "checking for moc... no"
-                g4_havegoodqt=no
-            fi
-        elif test "x\`basename \$g4_qt_fmwk_base_dir\`" = "xFrameworks" ; then
-            #This looks like a system install
-            echo "Checking Mac Framework location... Frameworks"
-            if test -x "/usr/bin/moc" ; then
-                g4_qt_moc="/usr/bin/moc"
-                echo "checking for moc... \$g4_qt_moc"
-
-                g4_qt_dir=\$g4_qt_fmwk_base_dir
-
- 	            g4_qt_version="4"
-                g4_qt_cxxflags="-I\$g4_qt_dir/QtCore.framework/Headers -I\$g4_qt_dir/QtGui.framework/Headers"
-                g4_qt_gl_cxxflags="-I\$g4_qt_dir/QtOpenGl.framework/Headers"
-                g4_qt_libs="-F\$g4_qt_dir -framework QtCore -framework QtGui"
-                g4_qt_gl_libs="-framework QtOpenGL"
-            else
-                echo "checking for moc... no"
-                g4_havegoodqt=no
-            fi
+	    g4_qt_version="4"
+            g4_qt_cxxflags="-I\$g4_qt_dir/QtCore.framework/Headers -I\$g4_qt_dir/QtGui.framework/Headers"
+            g4_qt_gl_cxxflags="-I\$g4_qt_dir/QtOpenGl.framework/Headers"
+            g4_qt_libs="-F\$g4_qt_dir -framework QtCore -framework QtGui"
+            g4_qt_gl_libs="-framework QtOpenGL"
+        else
+            echo "checking for moc... no"
+            g4_havegoodqt=no
         fi
-    elif test "x\$g4_qt_include_dir" != "x" ; then
+    else
         # Probably have Unix-style installation, in which case estimated
         # 'QTDIR' equivalent is $with_qt_dir if supplied, or directory
         # one level below the 'include' directory in \$g4_qt_include_dir
@@ -312,18 +266,7 @@ if test "x\$g4_qt_is_configured" = "x" ; then
         # Now check for appropriate library...
         #
         if test -d "\$g4_qt_dir/lib64" ; then
-	    # Damn, this doesn't guarantee we're on a 64bit system, some distros/packages
-	    # will have a lib64 dir even on an i*86 machine...
-	    # We don't ever cross-compile Geant4, so must have the native libraries.
-	    # Double check for this craziness...
-            case "`uname -m`" in
-		i*86)
-		    g4_qt_lib_dir=\$g4_qt_dir/lib
-		    ;;
-		*)
-		    g4_qt_lib_dir=\$g4_qt_dir/lib64
-		    ;;
-	    esac
+            g4_qt_lib_dir=\$g4_qt_dir/lib64
         else
             g4_qt_lib_dir=\$g4_qt_dir/lib
         fi
@@ -369,96 +312,19 @@ if test "x\$g4_qt_is_configured" = "x" ; then
 
         #
         # Finally, we need to search for moc
-	# We use prior knowledge of the detected Qt version to
-	# try and grab the correct moc straight off.
         #
         g4_qt_bin_dir=\$g4_qt_dir/bin
         g4_qtmoc=no
-	g4_qt_cross_check_moc=no
-
-	if test "x\$g4_is_qt4" = "xyes" ; then
-	    # Try the qt4 variants first...
-	    if test -x "\$g4_qt_bin_dir/moc-qt4" ; then
-		g4_qtmoc="\$g4_qt_bin_dir/moc-qt4"
-	    elif test -x "\$g4_qt_bin_dir/qt4-moc" ; then
-		g4_qtmoc="\$g4_qt_bin_dir/qt4-moc"
-	    elif test -x "\$g4_qt_bin_dir/moc" ; then
-		g4_qtmoc="\$g4_qt_bin_dir/moc"
-		g4_qt_cross_check_moc=yes
-	    else
-		g4_havegoodqt=no
-	    fi
-	else
-	    # We've probably got Qt3, so check for
-	    # the qt3 variants first
-	    if test -x "\$g4_qt_bin_dir/moc-qt3" ; then
-		g4_qtmoc="\$g4_qt_bin_dir/moc-qt3"
-	    elif test -x "\$g4_qt_bin_dir/qt3-moc" ; then
-		g4_qtmoc="\$g4_qt_bin_dir/qt3-moc"
-	    elif test -x "\$g4_qt_bin_dir/moc" ; then
-		g4_qtmoc="\$g4_qt_bin_dir/moc"
-		g4_qt_cross_check_moc=yes
-	    else
-		g4_havegoodqt=no
-	    fi
+        if test -x "\$g4_qt_bin_dir/moc" ; then
+           g4_qtmoc="\$g4_qt_bin_dir/moc"
+        elif test -x "\$g4_qt_bin_dir/moc-qt4" ; then
+           g4_qtmoc="\$g4_qt_bin_dir/moc-qt4"
+        elif test -x "\$g4_qt_bin_dir/qt4-moc" ; then
+           g4_qtmoc="\$g4_qt_bin_dir/qt4-moc"
+        else
+            g4_havegoodqt=no
         fi
         echo "checking for moc... \$g4_qtmoc"
-
-	#
-	# If pure 'moc' was found, cross check its version
-	# against previously detected Qt major version
-	#
-	if test "x\$g4_qt_cross_check_moc" = "xyes" ; then
-	    $echo $n "Checking \$g4_qtmoc major version is \$g4_qt_major_ver... $c"
-	    # Grab version of found moc
-	    g4_qt_found_moc_major_version=\`\$g4_qtmoc -v 2>&1 | sed 's/^.*(Qt \([0-9]\)\..*/\1/'\`
-	    if test "x\$g4_qt_found_moc_major_version" != "x\$g4_qt_major_ver" ; then
-		# We need to ask the user where correct moc is
-		$echo "no"
-		promptend="no"
-		user_moc="\$g4_qtmoc"
-
-		while test "x\$promptend" = "xno" ; do
-		    echo " "
-		    g4message=\`cat << EOM
-Qt moc was found as \$user_moc and has major version \$g4_qt_found_moc_major_version. 
-This does not match the version of the detected Qt install 
-which is \$g4_qt_major_ver.
-Please enter the full path to the moc program which matches this Qt
-version, or type '-' to CANCEL the Qt checks.
-EOM\`
-		    dflt="\$user_moc"
-		    rp=\$g4message
-                    . ./myread
-
-		    # Check for user cancellation
-                    if test "x\$ans" = "x-" ; then
-			g4_havegoodqt="no"
-			g4_qtmoc=""
-			promptend="yes"
-                    else
-                        user_moc="\$ans"
-			if test -x "\$user_moc" ; then
-			    g4_qt_found_moc_major_version=\`\$user_moc -v 2>&1 | sed 's/^.*(Qt \([0-9]\)\..*/\1/'\`
-			    if test "x\$g4_qt_found_moc_major_version" != "x\$g4_qt_major_ver" ; then
-			        echo "Checking if \$user_moc version is \$g4_qt_major_ver... no"
-			    else
-			        echo "Checking if \$user_moc version is \$g4_qt_major_ver... yes"
-				g4_qtmoc=\$user_moc
-				promptend=yes
-                            fi
-			else
-			    echo "warning: \$user_moc is not executable."
-			    user_moc="<null>"
-                            g4_qt_found_moc_major_version="<null>"
-			fi
-                    fi
-		# We need to ask the user where correct moc is
-		done
-            else
-                $echo "yes"
-            fi
-	fi
 
         ## THIS IS POINT AT WHICH TO DO FALLBACK TESTS I.E DOES
         ## COMPILATION OF SMALL TEST PROGRAM WORK - THEN HEADERS AND
@@ -508,9 +374,6 @@ EOM\`
         else
             g4_qt_is_configured=''
         fi
-    else
-        #We couldn't find qglobal...
-	    g4_havegoodqt="no"
     fi #END TEST for Darwin Framework
 
 else

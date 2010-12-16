@@ -7,7 +7,10 @@
 ?S:	used for building G4SYSTEM.
 ?S:.
 echo " "
-echo "*OPTIONS FOR GEANT4 INSTALLATION PATHS*"
+
+#echo "SSS"
+#echo `pwd`
+#echo "SSS"
 
 if [ X$src = X. ] ; then
 	cd ../..
@@ -23,26 +26,37 @@ case "$g4conf" in
 	;;
 esac
 
+#echo "g4conf=$g4conf"
 
 case "$g4install" in
 '')
-	if test $g4system = "WIN32-VC" -o $g4system = "WIN32-VC7"; then
-		g4install=$abssrc
-	else
-		g4install=$abssrc
-	fi
+if test $g4system = "WIN32-VC" -o $g4system = "WIN32-VC7"; then
+#	g4install="c:/geant4"
+	g4install=$abssrc
+else
+#	if [ X"$HOME" = X/ ] ; then
+#	HOME=""
+#	fi
+#	g4install="$HOME"/geant4
+	g4install=$abssrc
 
-	# Check for Windows!
-	if test $g4system = "WIN32-VC" -o $g4system = "WIN32-VC7"; then
-		checkdrive=`echo $g4install|cut -d"/" -f2`
+fi
 
-		if test $checkdrive = "cygdrive"; then
-			windrive=`echo $g4install|cut -d"/" -f3`
-			winpath=`echo $g4install|cut -d"/" -f4-`
-			fullwinpath="$windrive:/$winpath"
-			g4install=$fullwinpath
-		fi
-	fi
+# Check for Windows!
+if test $g4system = "WIN32-VC" -o $g4system = "WIN32-VC7"; then
+
+checkdrive=`echo $g4install|cut -d"/" -f2`
+
+if test $checkdrive = "cygdrive"; then
+
+windrive=`echo $g4install|cut -d"/" -f3`
+winpath=`echo $g4install|cut -d"/" -f4-`
+
+fullwinpath="$windrive:/$winpath"
+g4install=$fullwinpath
+
+fi
+fi
 	;;
 esac
 
@@ -65,43 +79,79 @@ case "$g4includes_flag" in
 esac
 
 
-g4message="What is the path to the Geant4 source tree?"
+g4message=`cat << EOM
+
+Where is Geant4 source installed?
+EOM`
+
+#dflt="NO DEFAULT ANSWER"
 dflt=$g4install
 fn='d~'
 rp=$g4message
 . ./getfile
 g4install=$ans
 g4workdir=$g4install
-
 #################################
-echo " "
-g4message="Where should Geant4 be installed?"
+g4message=`cat << EOM
+
+Specify the path where Geant4 libraries and source files should be
+installed.
+EOM`
+
+#dflt="NO DEFAULT ANSWER"
 dflt=$g4final_install
 fn='d~'
 rp=$g4message
 . ./getfile
 g4final_install=$ans
+#g4workdir=$g4install
 
 ##################################
-echo " "
-g4message="Do you want to install all Geant4 headers in one directory?"
+g4message=`cat << EOM
+
+Do you want to copy all Geant4 headers 
+in one directory?
+EOM`
+
+#dflt="NO DEFAULT ANSWER"
 dflt=$g4includes_flag
+#fn='d~'
 rp=$g4message
 . ./myread
 g4includes_flag=$ans
 
 if [ X$g4includes_flag = Xy ] ; then
-	case "$g4include" in
-	'')
-		g4include=$g4install/include
-		;;
-	esac
 
-	# Set constantly!
-	if [ X$g4install != X$g4final_install ] ; then
-		g4include=$g4final_install/include/geant4
-	else
-		g4include=$g4final_install/include
-	fi
+case "$g4include" in
+'')
+	g4include=$g4install/include
+#	g4include=''
+	;;
+esac
+
+#g4message=`cat << EOM
+#
+#Where will be directory to copy all Geant4 headers?
+#EOM`
+#
+##dflt="NO DEFAULT ANSWER"
+####dflt=$g4install/include
+#dflt=$g4include
+#fn='d~+'
+#rp=$g4message
+#. ./getfile
+#g4include=$ans
+
+# Set constantly!
+if [ X$g4install != X$g4final_install ] ; then
+g4include=$g4final_install/include/geant4
+else
+g4include=$g4final_install/include
 fi
+
+fi
+
+#if test "X$g4include" = "X[NOT DEFINED]" ; then
+#g4include=""
+#fi
 

@@ -31,8 +31,6 @@
 // with the design in a forthcoming publication, and subject to a 
 // design and code review.
 //
-#ifdef G4LIB_USE_GDML
-
 #ifndef G4ORNLFemaleBodyFactory_h
 #define G4ORNLFemaleBodyFactory_h 1
 
@@ -49,5 +47,4 @@ public:
   G4VPhysicalVolume* CreateOrgan(const G4String&,G4VPhysicalVolume*,
 				 const G4String&, G4bool, G4bool);
 };
-#endif
 #endif

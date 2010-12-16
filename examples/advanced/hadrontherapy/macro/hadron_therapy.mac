@@ -4,12 +4,6 @@
 # Macro file recommended for the use with proton beams and built-in physic list.
 # This macro uses the physics list already contained in the Geant4 distribution
 # 
-#    The 'Reference Physics Lists' can be activated setting a specific enviroment variable to the name
-#    of the physics. For example if the QGSP_BIC Reference Physics Lists must be activated the User 
-#    must set export PHYSLIST=QGSP_BIC (or setenv PHYSLIST QGSP_BIC).
-#    A 'Reference Physics Lists' contains all the physics process necessary to a particle transport
-#    If the User set the PHYSLIST variable Hadrontherapy will start with the defaultMacroWithReferencePhysicsList.mac
-#    macro. See this macro file for more details
 
 #########################
 # Set of the verboses 
@@ -33,6 +27,7 @@
 #/Physics/addPhysics QGSP_BIC_EMY
 
 
+/Physics/addPackage QGSP_BIC_EMY
 ##########################
 # Initialisation procedure
 #
@@ -89,11 +84,13 @@
 # 
 /event/printEventNumber 100
 
+#/changeDetector/voxelSize 0 1 1 mm
+#/changePhantom/update
 
 # Default material is liquid water (G4_WATER)
 #/changePhantom/material G4_Pb
 
-# Only if secondaries dose/fluence are needed
+# If secondaries dose/fluence are needed
 #/analysis/secondaries true 
 
 /run/beamOn 100

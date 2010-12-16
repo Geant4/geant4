@@ -1,7 +1,0 @@
-*** Begin of history file: Tue Sep 12 09:14:52 2000
-shell
-exec pipC
-opt pto
-exec pipC
-exit
-*** End   of history file: Tue Sep 12 09:16:30 2000

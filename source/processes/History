@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2007-10-10 14:39:00 gunter Exp $
+$Id: History,v 1.6 2002-12-06 19:52:06 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,9 +16,6 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
-October 10, 2007: Gunter Folger   (processes-gmk-V09-00-01)
-- Added hadronic/models/incl (Liege cascade) to GNUmakefile
 
 Dec 06, 2002: Gabriele Cosmo (process-V04-01-01)
 - Merged development with latest migration to G4ApplicationState.

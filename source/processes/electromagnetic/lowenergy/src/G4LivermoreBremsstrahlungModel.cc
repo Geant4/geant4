@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreBremsstrahlungModel.cc,v 1.9 2010-12-03 16:03:35 vnivanch Exp $
+// $Id: G4LivermoreBremsstrahlungModel.cc,v 1.8 2010-12-02 16:07:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -62,7 +62,6 @@
 //
 #include "G4VEnergySpectrum.hh"
 #include "G4eBremsstrahlungSpectrum.hh"
-#include "G4VEMDataSet.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -149,9 +148,8 @@ void G4LivermoreBremsstrahlungModel::Initialise(const G4ParticleDefinition* part
   crossSectionHandler->Clear();
   crossSectionHandler->LoadShellData("brem/br-cs-");
   //This is used to retrieve cross section values later on
-  G4VEMDataSet* p = crossSectionHandler->BuildMeanFreePathForMaterials(&cuts);
-  delete p;  
- 
+  crossSectionHandler->BuildMeanFreePathForMaterials(&cuts);
+  
   if (verboseLevel > 0)
     {
       G4cout << "Livermore Bremsstrahlung model is initialized " << G4endl

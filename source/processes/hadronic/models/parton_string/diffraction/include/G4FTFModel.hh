@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.hh,v 1.12 2010-12-07 10:42:40 vuzhinsk Exp $
+// $Id: G4FTFModel.hh,v 1.11 2010-09-20 15:50:46 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class Description
@@ -58,7 +58,6 @@ class G4ExcitedString;
 #include "G4ExcitedStringVector.hh"
 #include "G4DiffractiveExcitation.hh"
 #include "G4ElasticHNScattering.hh"
-#include "G4FTFAnnihilation.hh"
 
 class G4FTFModel : public G4VPartonStringModel
 {
@@ -100,9 +99,6 @@ class G4FTFModel : public G4VPartonStringModel
        G4FTFParameters  *theParameters;
        G4DiffractiveExcitation * theExcitation;
        G4ElasticHNScattering   * theElastic;
-       G4FTFAnnihilation       * theAnnihilation;              // Uzhi 17.11.10
-
-       std::vector<G4VSplitableHadron *> theAdditionalString;  // Uzhi 17.11.10
 
        G4LorentzVector Residual4Momentum;
        G4double ResidualExcitationEnergy;

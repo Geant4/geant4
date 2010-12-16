@@ -1,4 +1,4 @@
-$Id: History,v 1.30 2010-11-30 12:32:08 allison Exp $
+$Id: History,v 1.29 2010-11-30 11:16:01 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -7,10 +7,6 @@ $Id: History,v 1.30 2010-11-30 12:32:08 allison Exp $
 
                       Category History file
                       ---------------------
-
-30.11.2010 - John Allison
-             dicom.cc: Removed redundant headers:
-             "G4UIterminal.hh" and "G4UItcsh.hh".             
 
 30.11.2010 - Ivana Hrivnacova (DICOM-V09-03-09)
              Moved inclusion of vis headers as last in main().

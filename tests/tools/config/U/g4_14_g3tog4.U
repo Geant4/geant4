@@ -6,17 +6,41 @@
 ?S:	This variable contains the value of the 'g4osname' symbol, which
 ?S:	used for building G4SYSTEM.
 ?S:.
-?INIT:#INITIALIZE G3TOG4 OPTIONS
-?INIT:g4wlib_build_g3tog4='n'
-?INIT:g4wlib_use_g3tog4='n'
 
-g4message="Enable build of the g3tog4 utility module?"
+echo " "
+case "$g4wlib_build_g3tog4" in
+'')
+	g4wlib_build_g3tog4=n
+	;;
+esac
+
+case "$g4w_use_g3tog4" in
+'')
+	g4w_use_g3tog4=n
+	;;
+esac
+
+echo ""
+
+g4message=`cat << EOM
+
+  G4LIB_BUILD_G3TOG4  
+
+The utility module 'g3tog4' will be built by setting this
+variable. NOTE: it requires a valid FORTRAN compiler to be
+installed on your system and the 'cernlib' command in the
+path, in order to build the ancillary tools!
+Do you want to build 'g3tog4' ?
+ 
+EOM`
+
 dflt=$g4wlib_build_g3tog4
 rp=$g4message
 . ./myread
 gans=$ans
 
-case $gans in
+	case $gans in
+	
 	n*|N*) 
 		g4wlib_build_g3tog4=n
 		g4w_use_g3tog4=n
@@ -25,5 +49,5 @@ case $gans in
 		g4wlib_build_g3tog4=y
 		g4w_use_g3tog4=y
 		;;
-esac
+	esac
 

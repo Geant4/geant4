@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSplitableHadron.cc,v 1.9 2010-12-07 10:42:40 vuzhinsk Exp $
+// $Id: G4VSplitableHadron.cc,v 1.8 2010-11-30 16:07:35 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -115,4 +115,3 @@ int G4VSplitableHadron::operator!=(const G4VSplitableHadron &right) const
 void G4VSplitableHadron::SplitUp()
 {
 }
-

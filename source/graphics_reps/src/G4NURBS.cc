@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBS.cc,v 1.10 2010-12-07 09:36:59 allison Exp $
+// $Id: G4NURBS.cc,v 1.9 2006-06-29 19:06:42 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -483,7 +483,7 @@ G4NURBS::G4NURBS( t_order in_Uorder, t_order in_Vorder,
   {
     t_KnotVectorGenFlag flag = (dummy?in_VKVGFlag:in_UKVGFlag);
     m[dir].pKnots = 0;  // (allocation under our control)
-    if ( flag != UserDefined && !MakeKnotVector(m[dir], flag) )
+    if (  flag && !MakeKnotVector(m[dir], flag) )
     {
       G4cerr << "\nFATAL ERROR: G4NURBS::G4NURBS: "
              << "Unable to make knot vector along "

@@ -1,4 +1,4 @@
-?RCS: $Id: Options.U,v 1.9 2009-08-17 13:54:34 bmorgan Exp $
+?RCS: $Id: Options.U,v 1.8 2004-12-06 03:02:47 sadilov Exp $
 ?RCS:
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
 ?RCS: 
@@ -9,9 +9,6 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
-?RCS: Revision 1.8  2004/12/06 03:02:47  sadilov
-?RCS: Temporary remove usage of -prefix
-?RCS:
 ?RCS: Revision 1.7  2004/12/06 02:43:21  sadilov
 ?RCS: First implementation of -prefix
 ?RCS:
@@ -176,27 +173,12 @@ while test $# -gt 0; do
 	-d) shift; fastread=yes;;
 	-e) shift; alldone=cont;;
 	-build) shift; g4build=yes;;
-	-incflags) 
-		shift 
-		g4incflags=yes
-		g4query_conf=yes;;
+	-incflags) shift; g4incflags=yes;;
 	-install) shift; install=yes;;
-	-cppflags) 
-		shift
-		g4query_conf=yes
-		g4cppflags=yes;;
-	-cxxflags) 
-		shift
-		g4query_conf=yes
-		g4cxxflags=yes;;
-	-ldlibs) 
-		shift
-		g4query_conf=yes
-		g4ldlibs=yes;;
-	-ldflags) 
-		shift
-		g4query_conf=yes
-		g4ldflags=yes;;
+	-cppflags) shift; g4cppflags=yes;;
+	-cxxflags) shift; g4cxxflags=yes;;
+	-ldlibs) shift; g4ldlibs=yes;;
+	-ldflags) shift; g4ldflags=yes;;
 	-f)
 		shift
 		cd ../..
@@ -287,21 +269,16 @@ esac
 ?X: interactively, i.e. attached to a terminal. Moved from Head.U to be able
 ?X: to handle batch configurations...
 ?X:
-?X: Add an additional check one any of the Geant4 query options being set
-?X: as in this case we can safely run without attachment to a terminal.
-?X:
 ?X: We have to hardwire the Configure name and cannot use $me, since if they
 ?X: said 'sh <Configure', then $me is 'sh'...
 ?X:
 : Sanity checks
 case "$fastread$alldone" in
-yescontyes|yesexityes) ;;
+yescont|yesexit) ;;
 *)
-	if test "x$g4query_conf" != "xyes" ; then
-	    if test ! -t 0; then
+	if test ! -t 0; then
 		echo "Say 'sh Configure', not 'sh <Configure'"
 		exit 1
-	    fi
 	fi
 	;;
 esac

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTel.cc,v 1.20 2010-11-12 08:28:54 flongo Exp $
+// $Id: GammaRayTel.cc,v 1.19 2010-11-11 17:42:50 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,7 +57,7 @@
 #include "GammaRayTelRunAction.hh"
 #include "GammaRayTelEventAction.hh"
 
-#include "QGSP_BERT.hh"
+#include "QGSP_BIC.hh"
 
 #ifdef G4ANALYSIS_USE
 #include "GammaRayTelAnalysis.hh"
@@ -80,10 +80,11 @@ int main(int argc, char** argv)
   runManager->SetUserInitialization(detector);
 
   // POSSIBILITY TO SELECT ANOTHER PHYSICS LIST
+  //  do not use   GammaRayTelPhysicsList, this is old style and crashes at 
+  //    program exit   
+  //runManager->SetUserInitialization(new GammaRayTelPhysicsList);
 
-  runManager->SetUserInitialization(new GammaRayTelPhysicsList);
-
-  //runManager->SetUserInitialization(new QGSP_BERT);
+  runManager->SetUserInitialization(new QGSP_BIC);
 
   // Set mandatory user action classes
   runManager->SetUserAction(new GammaRayTelPrimaryGeneratorAction);

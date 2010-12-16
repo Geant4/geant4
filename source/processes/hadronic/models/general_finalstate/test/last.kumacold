@@ -1,7 +1,0 @@
-*** Begin of history file: Tue Jul 27 19:43:15 1999
-exec k.250.xf.kumac
-shell ls 250gev.k.p.debug*
-shell vi k.250.xf.kumac
-exec k.250.xf.kumac
-exit
-*** End   of history file: Tue Jul 27 19:44:36 1999

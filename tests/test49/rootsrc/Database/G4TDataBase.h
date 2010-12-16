@@ -32,9 +32,7 @@
 // and Load() methods of G4TData class.
 //
 // History:
-// Created by Roman Atachiants, 18/08/2009
-// Modified:
-// Mikhail Kosov, 25/05/2010: correspondance to the new G4TData structure
+// Roman Atachiants, 18/08/2009 - initial version
 //
 // --------------------------------------------------------------------
 
@@ -46,29 +44,34 @@
 #include "G4TData.h"
 
 
-class G4TDataBase : public TObject
-{
-  private:
+class G4TDataBase : public TObject {
 
-  TString fDirectory;
+  private:
+	  TString fDirectory;
 
   public:
 
-  G4TDataBase() : fDirectory("./database/") {  }
-  virtual ~G4TDataBase () {}
+	  G4TDataBase() : fDirectory("./database/") {  }
+	  virtual ~G4TDataBase () {}
 
-  // Access Methods
-  G4TData*  LoadData(G4TData* object, Int_t secondaryPDG = 0);
-  G4TData*  LoadData(TString const& filename, Int_t secondaryPDG = 0);
-  void   SaveData(G4TData* object);
+	  // Access Methods
+	  G4TData*		LoadData(G4TData* object, Int_t secondaryPDG = 0);
+	  G4TData*		LoadData(TString const& filename, Int_t secondaryPDG = 0);
+	  void			SaveData(G4TData* object);
 
-  // Selectors & Modifiers
-  TString  GetDirectory() const;
-  void   SetDirectory(TString fDirectory);
+	  // Getters/Setters
+	  TString		GetDirectory() const;
+	  void			SetDirectory(TString fDirectory);
 
-  ClassDef(G4TDataBase, 1)  //The class for Geant4 Testing Database DAL
+
+	  ClassDef(G4TDataBase, 1)  //The class for Geant4 Testing Database DAL
 };
+
 
 R__EXTERN G4TDataBase *gTestDB;
 
 #endif
+
+
+
+

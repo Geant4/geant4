@@ -24,6 +24,8 @@
 // ********************************************************************
 //
 // Created by Joanna Weng 26.11.2004
+using namespace std;
+
 
 //std includes 
 #include <algorithm>
@@ -42,8 +44,6 @@
 #include "ExGflashPrimaryGeneratorAction.hh"
 #include "ExGflashEventAction.hh"
 #include "ExGflashRunAction.hh"
-
-using namespace std;
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"

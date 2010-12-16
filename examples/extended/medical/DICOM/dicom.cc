@@ -40,7 +40,9 @@
 
 #include "globals.hh"
 #include "G4UImanager.hh"
+#include "G4UIterminal.hh"
 #include "G4RunManager.hh"
+#include "G4UItcsh.hh"
 #include "Randomize.hh"
 
 #include "DicomPhysicsList.hh"

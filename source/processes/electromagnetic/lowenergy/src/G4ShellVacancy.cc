@@ -47,13 +47,16 @@ G4ShellVacancy::G4ShellVacancy()
 { }
 
 G4ShellVacancy::~G4ShellVacancy()
+
 {
+/*
   G4int size = xsis.size();
   for (G4int k =0; k<size; k++)
     {
       delete xsis[k];
       xsis[k] = 0;
     }
+*/
 }
 
 void G4ShellVacancy::AddXsiTable(G4VEMDataSet* p)

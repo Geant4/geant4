@@ -50,7 +50,7 @@
 //    are activated for the various processes of interest.
 //    Each builder is activated with the /Physics/addPhysics <nome builder> command
 //
-// 3. Defining a specific 'local' physics list. In Hadrontherapy two local physics list are defined 
+// 3. Defining a specific 'local' physics list. In Hadrontherapy two loca physics list are defined 
 //    (LocalINCLIonIonInelasticPhysic.cc and LocalIonIonInelasticPhysic.cc) where models for the 
 //    ion-ion interactions are activated.
 //    'Local' physics can be activated using the /Physics/addPhysics <nome builder> command

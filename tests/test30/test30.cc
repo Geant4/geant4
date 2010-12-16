@@ -773,8 +773,10 @@ int main(int argc, char** argv)
 
     } else if( ionParticle || 
 	       part == deu || part == tri ||part == he3 ||part == alp) {
+      G4double zz = G4double(Z);
+      G4double aa = G4double(A);
       cs = new G4TripathiLightCrossSection();
-      if(cs->IsIsoApplicable(&dParticle,Z,A)) {
+      if(cs->IsZAApplicable(&dParticle,zz,aa)) {
 	G4cout << "Using Tripathi Light Cross section for Ions" << G4endl;
       } else {
 	delete cs;
@@ -782,7 +784,7 @@ int main(int argc, char** argv)
       }
       if(!cs) {
 	cs = new G4TripathiCrossSection();
-	if(cs->IsZAApplicable(&dParticle,Z,A)) {
+	if(cs->IsZAApplicable(&dParticle,zz,aa)) {
 	  G4cout << "Using Tripathi Cross section for Ions" << G4endl;
 	} else {
 	  delete cs;
@@ -791,11 +793,11 @@ int main(int argc, char** argv)
       }
       if(!cs) {
 	cs = new G4IonsShenCrossSection();
-	if(cs->IsZAApplicable(&dParticle,Z,A)) {
+	if(cs->IsZAApplicable(&dParticle,zz,aa)) {
 	  G4cout << "Using Shen Cross section for Ions" << G4endl;
 	} else {
 	  G4cout << "ERROR: no cross section for ion Z= " 
-		 << Z << " A= " << A << G4endl;
+		 << zz << " A= " << aa << G4endl;
 	  exit(1);
 	}
       }

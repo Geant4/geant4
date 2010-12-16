@@ -368,22 +368,7 @@ void G4PhantomBuilder::SetModel(G4String modelFlag)
   model = modelFlag;
 
   if(model=="MIRD" || model =="MIX") body = new G4MIRDBodyFactory();
-  if(model=="ORNLFemale")
- {
-
-#ifdef G4LIB_USE_GDML
- body = new G4ORNLFemaleBodyFactory();
-#else
- G4cout << model << " Working with GDML only! set G4LIB_USE_GDML 1" << G4endl;
-#endif
- }
-
-  if(model=="ORNLMale") 
-{
-#ifdef G4LIB_USE_GDML
-body = new G4ORNLMaleBodyFactory();
-#else
-G4cout << model << " Working with GDML only! set G4LIB_USE_GDML 1" << G4endl;
-#endif
+  if(model=="ORNLFemale") body = new G4ORNLFemaleBodyFactory();
+  if(model=="ORNLMale") body = new G4ORNLMaleBodyFactory();
 }
-}
+

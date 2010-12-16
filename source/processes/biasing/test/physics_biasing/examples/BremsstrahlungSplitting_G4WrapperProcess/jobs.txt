@@ -1,6 +1,0 @@
-./bin/$G4SYSTEM/BremsstrahlungSplitting_G4WrapperProcess runit.mac 1 Al_10pt09MeV_0_degrees Default LowEnergy 1_mm NoBiasing
-./bin/$G4SYSTEM/BremsstrahlungSplitting_G4WrapperProcess runit.mac 1 Al_10pt09MeV_0_degrees Default LowEnergy 1_mm BremSplitting_100
-
-# broken ./bin/$G4SYSTEM/BremsstrahlungSplitting_G4WrapperProcess runit.mac 1 Al_10pt09MeV_0_degrees Default Standard 1_mm BremSplitting_100
-
-

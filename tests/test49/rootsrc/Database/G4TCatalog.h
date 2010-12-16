@@ -31,9 +31,7 @@
 // inserts new ones).
 //
 // History:
-// Created by Roman Atachiants, 18/08/2009
-// Modified:
-// M.Kosov 25/05/2010: catalog reading/wrighting correction
+// Roman Atachiants, 18/08/2009 - initial version
 //
 // --------------------------------------------------------------------
 #ifndef G4TCatalog_H_
@@ -41,26 +39,31 @@
 
 #include "../CommonHeaders.h"
 
-class G4TCatalog : public TObject
-{
-  private:
+class G4TCatalog : public TObject {
 
-  TString fFileName;
+  private:
+	  TString fFileName;
 
   public:
 
-  G4TCatalog() : fFileName("./database/catalog.txt")  { }
-  virtual ~G4TCatalog () {}
+	  G4TCatalog() : fFileName("./database/catalog.txt")  { }
+	  virtual ~G4TCatalog () {}
 
-  vector<TString>   Load();
-  Bool_t    ContainsLine(TString const& line);
-  void      Insert(TString const& name);
 
-  vector<TString>   GetPublications();
+	  vector<TString> 		Load();
+	  Bool_t				ContainsLine(TString const& line);
+	  void			 		Insert(TString const& name);
 
-  ClassDef(G4TCatalog, 1)  //The class for the data catalog
+	  vector<TString> 		GetPublications();
+
+	  ClassDef(G4TCatalog, 1)  //The class for the data catalog
 };
 
-R__EXTERN G4TCatalog * gCatalog;
- 
+
+R__EXTERN G4TCatalog *gCatalog;
+
 #endif
+
+
+
+

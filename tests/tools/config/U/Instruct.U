@@ -1,4 +1,4 @@
-?RCS: $Id: Instruct.U,v 1.6 2009-11-20 13:40:49 bmorgan Exp $
+?RCS: $Id: Instruct.U,v 1.5 2005-06-16 10:00:51 sadilov Exp $
 ?RCS:
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
 ?RCS: 
@@ -9,9 +9,6 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
-?RCS: Revision 1.5  2005/06/16 10:00:51  sadilov
-?RCS: build and install
-?RCS:
 ?RCS: Revision 1.4  2002/12/12 22:48:32  sadilov
 ?RCS: MOve G4 header.
 ?RCS:
@@ -61,14 +58,44 @@ case "$user" in
 '') user=`whoami 2>&1`;;
 esac
 
+#if [ X$install = Xyes ] ; then
+#
+#echo " "
+#echo " "
+#echo " "
+#echo "                --- Geant4 Toolkit Installation  ---"
+#echo " "
+#echo " "
+#echo " "
+#echo " "
+#
+##if $contains "^$user\$" ../../.config/instruct >/dev/null 2>&1; then
+##	firsttime=false
+##	echo " "
+##	rp='Would you like to see the instructions?'
+##	dflt=n
+##	. ./myread
+##	case "$ans" in
+##	[yY]*) ;;
+##	*) needman=false;;
+##	esac
+##fi
+#fi
+
 if [ X$g4build = Xyes ] ; then
 
 echo " "
+echo " "
+echo " "
 echo "                --- Geant4 Toolkit Build  ---"
+echo " "
+echo " "
+echo " "
 echo " "
 
 if $contains "^$user\$" ../../.config/instruct >/dev/null 2>&1; then
 	firsttime=false
+	echo " "
 	rp='Would you like to see the instructions?'
 	dflt=n
 	. ./myread

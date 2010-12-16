@@ -1,3 +1,0 @@
-title 'p + Al at 12.9GeV/c (G4 7.0) theta = (15 - 300)mrad'
-exe ../ptot
-exe ../prf ptot70 eps

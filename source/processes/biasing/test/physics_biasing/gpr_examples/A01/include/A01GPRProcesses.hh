@@ -1,4 +1,0 @@
-#ifndef A01GPRPROCESSES_HH
-#define A01GPRPROCESSES_HH
-
-#endif

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EMDataSet.cc,v 1.22 2010-12-03 16:03:35 vnivanch Exp $
+// $Id: G4EMDataSet.cc,v 1.21 2010-12-02 17:37:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -160,11 +160,11 @@ G4EMDataSet::G4EMDataSet(G4int argZ,
 G4EMDataSet::~G4EMDataSet()
 { 
   delete algorithm;
-  if (energies) { delete energies; }
-  if (data) { delete data; }
-  if (pdf) { delete pdf; }
-  if (log_energies) { delete log_energies; }
-  if (log_data) { delete log_data; }
+  if (energies) { energies->clear(); delete energies; }
+  if (data) { data->clear(); delete data; }
+  if (pdf) { pdf->clear(); delete pdf; }
+  if (log_energies) { log_energies->clear(); delete log_energies; }
+  if (log_data) { log_data->clear(); delete log_data; }
 }
 
 

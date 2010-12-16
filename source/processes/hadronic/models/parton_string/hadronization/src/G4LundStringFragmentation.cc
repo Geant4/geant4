@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LundStringFragmentation.cc,v 1.24 2010-12-07 10:42:40 vuzhinsk Exp $
+// $Id: G4LundStringFragmentation.cc,v 1.23 2010-09-22 12:36:37 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $ 1.8
 //
 // -----------------------------------------------------------------------------
@@ -493,8 +493,6 @@ G4KineticTrackVector* G4LundStringFragmentation::FragmentString(
 //G4cout<<G4endl<<"G4LundStringFragmentation::"<<G4endl;
 //G4cout<<"FragmentString Position"<<theString.GetPosition()/fermi<<" "<<theString.GetTimeOfCreation()/fermi<<G4endl;
 //G4cout<<"FragmentString Momentum"<<theString.Get4Momentum()<<theString.Get4Momentum().mag()<<G4endl;
-//G4cout<<"Quarks in the string "<<theString.GetRightParton()->GetPDGcode()<<" "<<theString.GetLeftParton()->GetPDGcode()<<G4endl;
-
 //
         G4FragmentingString  aString(theString);
         SetMinimalStringMass(&aString); 
@@ -705,8 +703,7 @@ G4cout<<"WminLUND "<<WminLUND<<" SmoothParam "<<SmoothParam<<" "<<string->Mass()
              (1 + SmoothParam * (1.-2*G4UniformRand())) >                
                    string->Mass();                        
 //
-//  return G4UniformRand() < std::exp(-0.3*(string->Mass()*string->Mass()-MinimalStringMass2)/WminLUND/WminLUND);
-//return true;
+//  return G4UniformRand() < std::exp(-(string->Mass()*string->Mass()-MinimalStringMass2)/WminLUND/WminLUND);
 }
 
 //----------------------------------------------------------------------------------------
@@ -726,11 +723,11 @@ G4bool G4LundStringFragmentation::SplitLast(G4FragmentingString * string,
     G4ParticleDefinition * LeftHadron(0), * RightHadron(0);
     G4double LeftHadronMass(0.), RightHadronMass(0.);
 
-    G4ParticleDefinition * FS_LeftHadron[35], * FS_RightHadron[35];
-    G4double FS_Weight[35];
+    G4ParticleDefinition * FS_LeftHadron[25], * FS_RightHadron[25];
+    G4double FS_Weight[25];
     G4int NumberOf_FS=0;
 
-    for(G4int i=0; i<35; i++) {FS_Weight[i]=0.;} 
+    for(G4int i=0; i<25; i++) {FS_Weight[i]=0.;} 
 //***********************************************
 //G4cout<<"StrMass "<<StringMass<<" q "<<string->GetLeftParton()->GetParticleName()<<" "<<string->GetRightParton()->GetParticleName()<<" StringMassSqr "<<StringMassSqr<<G4endl;
 
@@ -740,7 +737,6 @@ G4bool G4LundStringFragmentation::SplitLast(G4FragmentingString * string,
     if (string->FourQuarkString() )
     {
      // The string is qq-qqbar type. Diquarks are on the string ends
-//G4cout<<"The string is qq-qqbar type. Diquarks are on the string ends"<<G4endl;
      G4int cClusterInterrupt = 0;
      do
      {
@@ -797,7 +793,6 @@ G4bool G4LundStringFragmentation::SplitLast(G4FragmentingString * string,
          Anti_Quark=string->GetLeftParton();
         }
 
-//G4cout<<" Quarks "<<Quark->GetParticleName()<<" "<<Anti_Quark->GetParticleName()<<G4endl;
         G4int IDquark        =Quark->GetPDGEncoding();      
         G4int AbsIDquark     =std::abs(IDquark);
         G4int IDanti_quark   =Anti_Quark->GetPDGEncoding();
@@ -806,7 +801,6 @@ G4bool G4LundStringFragmentation::SplitLast(G4FragmentingString * string,
         NumberOf_FS=0;
         for(G4int ProdQ=1; ProdQ < 4; ProdQ++)
         {
-//G4cout<<"ProdQ "<<ProdQ<<G4endl;
          G4int                              SignQ=-1;
          if(IDquark == 2)                   SignQ= 1;
          if((IDquark == 1) && (ProdQ == 3)) SignQ= 1; // K0
@@ -847,9 +841,7 @@ G4bool G4LundStringFragmentation::SplitLast(G4FragmentingString * string,
             FS_LeftHadron[NumberOf_FS] = LeftHadron;
             FS_RightHadron[NumberOf_FS]= RightHadron;
             NumberOf_FS++;
-//G4cout<<LeftHadron->GetParticleName()<<" "<<RightHadron->GetParticleName()<<G4endl;
-
-if(NumberOf_FS > 34)
+if(NumberOf_FS > 24)
 {G4int Uzhi; G4cout<<"QQbar string #_FS "<<NumberOf_FS<<G4endl; G4cin>>Uzhi;}
            } // End of if(StringMass >= LeftHadronMass + RightHadronMass)
           } while(Meson[AbsIDanti_quark-1][ProdQ-1][StateAQ]!=0); 
@@ -945,7 +937,7 @@ if(NumberOf_FS > 34)
 //G4cout<<"++++++++++++++++++++++++++++++++"<<G4endl;
             NumberOf_FS++;
 
-if(NumberOf_FS > 34)
+if(NumberOf_FS > 24)
 {G4int Uzhi; G4cout<<"QQbar string #_FS "<<NumberOf_FS<<G4endl; G4cin>>Uzhi;}
            } // End of if(StringMass >= LeftHadronMass + RightHadronMass)
 

@@ -128,21 +128,20 @@ recompilation) and a recompilation of user applications is required.
 <B>Standard Electromagnetic physics</B>
 <P> </P>
 <UL>
-<LI>Obsolete classes <TT>G4MultipleScattering, G4UrbanMscModel</TT> and
-    <TT>G4UrbanMscModel2</TT> are removed in this release; multiple-scattering
-    particle-based processes, <TT>G4eMultipleScattering, G4hMultipleScattering</TT>
-    and <TT>G4MuMultipleScattering</TT> are now mandatory;
-<LI>Default multiple scattering models are <TT>G4UrbanMscModel93</TT>
-    for electrons and positron, <TT>G4WentzelVIModel</TT> for muons, 
-    and <TT>G4UrbanMscModel90</TT> remains for other particles.</LI>
+<LI>Changed default multiple scattering models to <TT>G4UrbanMscModel93</TT>
+    for electrons and positron, <TT>G4WentzelVIModel</TT> for muons.
+    <TT>G4UrbanMscModel90</TT> remains the choice for other particles.</LI>
+<LI>Removed obsolete classes <TT>G4MultipleScattering, G4UrbanMscModel</TT> and
+    <TT>G4UrbanMscModel2</TT>. The use of multiple scattering processes 
+    specialised by particle type  (<TT>G4eMultipleScattering, G4hMultipleScattering</TT>
+    and <TT>G4MuMultipleScattering</TT>) is now mandatory.
 </UL>
 
 <P> </P>
 <B>Low Energy Electromagnetic physics</B>
 <P> </P>
 <UL>
-<LI>If used in a user application, the Geant4-DNA
-    <TT>G4DNAEmfietzoglouExcitationModel</TT> class for the modeling of
+<LI>The Geant4-DNA <TT>G4DNAEmfietzoglouExcitationModel</TT> class for the modeling of
     electron excitation in liquid water is obsolete and should be replaced
     by the <TT>G4DNABornExcitationModel</TT> class.</LI> 
 </UL>
@@ -164,9 +163,9 @@ recompilation) and a recompilation of user applications is required.
 <UL>
 <LI>Previously obsolete physics lists have been deleted, for the detailed 
 list please see <a href="#lst-notes">below</a>.
-<LI>Introduced new constructor for all builders with a signature common for all
-builders. Previous constructors are kept for this release, but are obsolete, and
-will be removed in a future release. 
+<LI>Introduced new constructor for all builders with a common signature.
+Previous constructors are kept for this release, but are declared obsolete.
+They will be removed in a future release. 
 </LI> 
 </UL>
 
@@ -246,23 +245,24 @@ Please see the corresponding details in
     for low-energy ionisation of negative-charge projectiles
     (including anti-ions); it is  based on ICRU'73 data for oscillator strengths;
     this model is the default for negative-charge particles in <TT>G4hIonisation</TT> process class.</LI> 
-<LI>Improvement of the modeling of fluctuations in energy deposition, relevant
+<LI>Improved modeling of fluctuations in energy deposition, relevant for 
     deposit in gasses and silicon. Increases stability when step size changes.</LI> 
-<LI>The new model of single scattering and NIEL for ions
+<LI>New model of single scattering and NIEL for ions
     <TT>G4IonCoulombScatteringModel</TT> is available; the model is applicable 
     from <TT>50 keV</TT> to <TT>100 TeV</TT>.</LI> 
 <LI>New ionisation models <TT>G4BraggIonGasModel</TT>,
     <TT>G4BetheBlochIonGasModel</TT> are available for simulation of ion
-    transport in low density media, for example, in vacuum; effective charge
-    approach is not used; initial ion charge is not changed during tracking by these models.</LI> 
+    transport in low density media, e.g. in vacuum.  
+    The ion charge of a particle is not changed by these models.</LI> 
 <LI>The default angular distribution of gamma in the Bremsstrahlung process
     can be substituted by alternative model in physics-list.</LI> 
-<LI>The fluorescence and Auger electron production can be activated via UI commands 
-    if new models <TT>G4PEEffectFluoModel</TT> and <TT>G4KleinNishinaModel</TT> are used.</LI> 
-<LI>Disabled usage of min energy threshold defined by models, so
-    production threshold is defined only by range to energy conversion and
-    is limited only by low limit of energy threshold defined in 'cut' category; this is necessary
-    for proper combining standrad and low-enegry models in one process.</LI>
+<LI>Fluorescence and Auger electron production can be activated via UI commands,
+    using the new models <TT>G4PEEffectFluoModel</TT> and <TT>G4KleinNishinaModel</TT>.</LI> 
+<LI>Disabled usage of minimum energy threshold per model. As a result the
+    production threshold is defined only by range (converted to energy in each 
+    material). It remains constrained by the minimum limit defined in 'cut' category.
+    This change is necessary to allow the full set of combinations of models 
+    in a process.</LI>
 </UL>
 
 <B>Low Energy Electromagnetic physics</B>
@@ -308,21 +308,16 @@ Please see the corresponding details in
 <LI>Hadronic interfaces now require integer Z and A arguments.  Elements or
     materials with effective or average values of Z and A are no longer 
     allowed.</LI>
-<LI>Energy/momentum conservation checking is now available for all hadronic
-    processes, along with methods to set the level of detail of the output.</LI>
-<LI>All hadronic processes now check to see if the cross section has become negative
-    at the end of a step, before invoking the model.</LI>
 <LI>Quark exchange, Reggeon cascade and nuclear destruction parameters in the FTF 
     model were tuned.   Tuning of the nuclear destruction parameters was based on
     HARP-CDP data. Low mass string fragmentation was improved.</LI>
-<LI>An isomer decay table was added to extend the number of existing isomers in the 
-    radioactive decay model.  All of them will be decayed by isomeric transition
-    (IT).  A README file was added to explain the radioactive decay data files. </LI>
 <LI>The Bertini cascade model was re-written to employ more code re-use, improve
     memory management, and provide better energy/momentum conservation.  Angular 
     distributions of the two-body final states of hadron-nucleon interactions were 
-    re-written and improved.  An interface to the G4Precompound model is now 
-    available.</LI> 
+    redone and improved.  
+    An optional interface to the G4Precompound model (and the associated 
+    de-excitation processes) is now available;  this is an alternative to the 
+    dedicated de-excitation which has been used until now.</LI> 
 <LI>Anti-baryon-nucleon elastic scattering was added to the CHIPS model.</LI>
 <LI>Fermi breakup was extended to include fragments with <TT>1 < A < 5 </TT>.
     Several improvements were made to bring the model closer to the original
@@ -330,17 +325,25 @@ Please see the corresponding details in
     <TT>A < 20</TT>.  Several other improvements were made to the evaporation
     models.  A README file was added explaining the photo-evaporation data
     files.</LI>
+<LI>New, fast models and cross sections for neutron elastic, inelastic and capture
+    are now available: G4NeutronElasticXS, G4NeutronInelasticXS and 
+    G4NeutronCaptureXS. </LI>
+<LI>An isomer decay table was added to extend the number of existing isomers in the 
+    radioactive decay model.  All of them will be decayed by isomeric transition
+    (IT).  A README file was added to explain the radioactive decay data files. </LI>
 <LI>RQMD (relativistic quantum molecular dynamics) code was enabled in the QMD
     model to allow treatment of higher collision energies.</LI>
 <LI>A new model, <TT>G4NuclNuclDiffuseElastic</TT> is now available for 
     nucleus-nucleus elastic scattering.</LI>
-<LI>New, fast models and cross sections for neutron elastic, inelastic and capture
-    are now available: G4NeutronElasticXS, G4NeutronInelasticXS and 
-    G4NeutronCaptureXS.
-    </LI>
-<LI>A new class <TT>G4ComponentAntiNuclNuclearXS</TT> was developed for the
-    calculation of the total elastic and inelastic cross sections of anti-nucleon
-    and anti-nucleus interactions with nuclei based on the Glauber approach.</LI>
+<LI>A new class <TT>G4ComponentAntiNuclNuclearXS</TT> provides
+    the total elastic and inelastic cross sections of anti-nucleon
+    and anti-nucleus interactions with nuclei.
+    These were calculated using the Glauber approach.</LI>
+<LI>All hadronic processes now check to see if the cross section has become negative
+    at the end of a step, before invoking the model.</LI>
+<LI>Checking of Energy/momentum conservation is available in the hadronic
+    process class.  Methods can set the theshold level for reporting 
+    and the verbosity of the output.</LI>
 </UL>
 
 <P> </P>
@@ -353,7 +356,7 @@ href="#lst-notes">below</a>.
 <LI>Improved cross sections for Kaon, and all "misc" particles, including
     anti-proton, anti-neutron, and hyperons in FTFP_BERT, QGSP_FTFP_BERT, and the
     two new physics lists QGSP_BERT_CHIPS and Shielding.    
-<LI><TT>G4UrbanMscModel93</TT> is used by default for e+,e- in all EM physics
+<LI>Use <TT>G4UrbanMscModel93</TT> by default for e+,e- in all EM physics
     builders except <TT>G4EmLivermorePhysics</TT> and <TT>G4EmPenelopePhysics</TT>
     where new <TT>G4GoudsmitSaundersonMscModel</TT> is used.</LI> 
 <LI><TT>G4WentzelVIModel93</TT> and <TT>G4CoulombScattering</TT> are 
@@ -362,9 +365,10 @@ href="#lst-notes">below</a>.
 <TT>G4WentzelVIModel93</TT> is used for protons, pions, and kaons; 
     for angular distribution of bremmstrahlung gamma <TT>G4GeneratorBS</TT> 
     is applied.</LI> 
-<LI><TT>G4EmConfigurator</TT> class to define alternative models per particle
-    type, energy range, and detector region is established and proposed to be
-    used for additional configuration on top of already instantiated EM physics.</LI>
+<LI>Improved <TT>G4EmConfigurator</TT> class, to define alternative models by particle
+    type, energy range, and detector region. 
+    Can be used to choose configuration EM models before or after the EM physics 
+    has been instantiated.</LI>
 </UL>
 
 <P> </P>
@@ -377,8 +381,8 @@ href="#lst-notes">below</a>.
 <B>Standard Electromagnetic physics and cuts</B>
 <UL>
 <LI>Small increase of visible energy deposition in sampling calorimeters
-    (0.5% for ATLAS barrel structure) due to improvements in the multiple
-    scattering model.</LI> 
+    (e.g. 0.5% for a simplified setup with materials of the ATLAS EM barrel calorimeter)
+    due to improvements in the multiple scattering model.</LI> 
 <LI>Improved tails of energy deposition in thin absorbers.</LI> 
 </UL>
 
@@ -388,16 +392,17 @@ href="#lst-notes">below</a>.
     to be used at lower energies and provides a smoother transition in energy
     response in the region where string models give way to cascade models.</LI>
 <LI>Improved memory management in the Bertini cascade model results in a
-    10-fold reduction of object creation and destruction. The model also now
-    does a much better job of conserving energy and momentum.</LI> 
+    10-fold reduction of object creation and destruction. The model also
+    conserves energy and momentum better.</LI>
 <LI>Fermi Break-up Model and GEM evaporation are used by default providing
     improved production of light fragments in nuclear fragmentation at low
     energy.</LI> 
 <LI>Improved spectra of nuclear gamma deexcitation including Doppler
     broadening simulation.</LI>
-<LI>Fast neutron models provide significant CPU savings for applications
-    dealing with neutrons below 20 MeV.</LI>
-<LI>Materials defined with an effective Z or A can no longer be used.</LI>
+<LI>Fast neutron cross-sections can provide significant CPU savings for 
+    applications which need accurate simulation of neutrons below 20 MeV.</LI>
+<LI>Materials defined with an effective Z or A can no longer be used 
+    with hadronic processes.</LI>
 </UL>
 
 <P> </P>

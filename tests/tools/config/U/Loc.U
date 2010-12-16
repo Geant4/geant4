@@ -1,4 +1,4 @@
-?RCS: $Id: Loc.U,v 1.3 2009-05-26 13:17:01 bmorgan Exp $
+?RCS: $Id: Loc.U,v 1.2 2001-11-06 15:21:20 sadilov Exp $
 ?RCS:
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
 ?RCS: 
@@ -9,9 +9,6 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
-?RCS: Revision 1.2  2001/11/06 15:21:20  sadilov
-?RCS: Some 'echo' removing.
-?RCS:
 ?RCS: Revision 1.1  2001/05/17 10:12:22  sadilov
 ?RCS: Import 'config'.
 ?RCS:
@@ -339,18 +336,15 @@ echo)
 		'-n') n='' c='\c';;
 		*) n='-n' c='';;
 		esac
-#We suppress the following message to avoid problems where the system points
-#sh to dash (Ubuntu). If you have problems with echo, uncomment the cat and
-#two $echo s to see if you're warned!!
-#		cat <<FOO
-#They are not compatible!  You are probably running ksh on a non-USG system.
-#I'll have to use $echo instead of the builtin, since Bourne shell doesn't
-#have echo built in and we may have to run some Bourne shell scripts.  That
-#means I'll have to use '$n$c' to suppress newlines now.
-#
-#FOO
-#		$echo $n "The star should be here-->$c"
-#		$echo "*"
+		cat <<FOO
+They are not compatible!  You are probably running ksh on a non-USG system.
+I'll have to use $echo instead of the builtin, since Bourne shell doesn't
+have echo built in and we may have to run some Bourne shell scripts.  That
+means I'll have to use '$n$c' to suppress newlines now.
+
+FOO
+		$echo $n "The star should be here-->$c"
+		$echo "*"
 	fi
 	$rm -f foo1 foo2
 	;;
