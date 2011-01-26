@@ -36,9 +36,6 @@
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
-
-#include "G4MultipleScattering.hh"
-
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
@@ -46,6 +43,7 @@
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
+#include "G4MuMultipleScattering.hh"
 
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
@@ -97,7 +95,7 @@ void PhysListEmStandardSS::ConstructProcess()
                particleName == "mu-"    ) {
       //muon  
       pmanager->AddDiscreteProcess(new G4CoulombScattering);
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
+      pmanager->AddProcess(new G4MuMultipleScattering, -1, 1,1);
       pmanager->AddProcess(new G4MuIonisation,       -1, 2,2);
       pmanager->AddProcess(new G4MuBremsstrahlung,   -1, 3,3);
       pmanager->AddProcess(new G4MuPairProduction,   -1, 4,4);

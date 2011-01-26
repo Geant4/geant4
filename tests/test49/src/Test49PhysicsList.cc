@@ -194,9 +194,7 @@ void Test49PhysicsList::ConstructProcess()
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
-#include "G4eMultipleScattering.hh"
-#include "G4hMultipleScattering.hh"
-#include "G4hLowEnergyIonisation.hh"
+#include "G4hIonisation.hh"
 
 void Test49PhysicsList::ConstructEM()
 {
@@ -218,14 +216,12 @@ void Test49PhysicsList::ConstructEM()
       else if (particleName == "e-")
 	{
 	  //electron
-	  pmanager->AddProcess(new G4eMultipleScattering(),-1, 1,1);
 	  pmanager->AddProcess(new G4eIonisation(),       -1, 2,2);
 	  pmanager->AddProcess(new G4eBremsstrahlung(),   -1,-1,3);
 	}
       else if (particleName == "e+")
 	{
 	  //positron
-	  pmanager->AddProcess(new G4eMultipleScattering(),-1, 1,1);
 	  pmanager->AddProcess(new G4eIonisation(),       -1, 2,2);
 	  pmanager->AddProcess(new G4eBremsstrahlung(),   -1,-1,3);
 	  pmanager->AddProcess(new G4eplusAnnihilation(),  0,-1,4);
@@ -235,14 +231,13 @@ void Test49PhysicsList::ConstructEM()
 	       (particle->GetParticleName() != "chargedgeantino"))
 	{
 	  //all others charged particles except geantino
-	  pmanager->AddProcess(new G4hMultipleScattering(),-1,1,1);
 
 	  G4double demax = 0.05;  // try to lose at most 5% of the energy in
 	  //    a single step (in limit of large energies)
 	  G4double stmin = 1.e-9 * m;  // length of the final step: 10 angstrom
 	  // reproduced angular distribution of TRIM
 
-	  G4hLowEnergyIonisation* lowEIonisation = new G4hLowEnergyIonisation();
+	  G4hIonisation* lowEIonisation = new G4hIonisation();
 	  pmanager->AddProcess( lowEIonisation, -1,2,2);
 	  lowEIonisation->SetStepFunction( demax, stmin );
 	}

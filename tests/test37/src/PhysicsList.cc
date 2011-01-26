@@ -130,13 +130,13 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics_option3();
 
-  } else if (name == "standardSS") {
+  } else if (name == "emstandardSS") {
 
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandardSS(name);
 
-  } else if (name == "standardIG") {
+  } else if (name == "emstandardWVI") {
 
     emName = name;
     delete emPhysicsList;

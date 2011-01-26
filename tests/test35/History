@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+test35-V09-04-00  23 December 2010 V.Ivanchenko
+- minor update for 9.4
+
 test35-V09-03-03  09 November 2010 M.Asai
 - Fix AIDA file option.
 

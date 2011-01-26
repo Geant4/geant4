@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardIG.cc,v 1.14 2010-05-28 14:03:33 vnivanch Exp $
+// $Id: PhysListEmStandardIG.cc,v 1.15 2010-12-21 20:18:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -87,7 +87,7 @@ void PhysListEmStandardIG::ConstructProcess()
       //electron
       G4eMultipleScattering* msc = new G4eMultipleScattering();
       msc->AddEmModel(0,new G4WentzelVIModel());
-      msc->SetRangeFactor(0.1);
+      //      msc->SetRangeFactor(0.1);
       pmanager->AddProcess(msc,                     -1, 1,1);
       pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,   -1,-3,3);
@@ -97,7 +97,7 @@ void PhysListEmStandardIG::ConstructProcess()
       //positron
       G4eMultipleScattering* msc = new G4eMultipleScattering();
       msc->AddEmModel(0,new G4WentzelVIModel());
-      msc->SetRangeFactor(0.1);
+      //      msc->SetRangeFactor(0.1);
       pmanager->AddProcess(msc,                     -1, 1,1);
       pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,   -1,-3,3);

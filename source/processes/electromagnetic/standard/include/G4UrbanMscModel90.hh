@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel90.hh,v 1.6 2009-11-01 13:04:12 vnivanch Exp $
+// $Id: G4UrbanMscModel90.hh,v 1.7 2010-12-29 18:56:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -178,13 +178,12 @@ G4double G4UrbanMscModel90::GetLambda(G4double e)
 {
   G4double x;
   if(theLambdaTable) {
-    G4bool b;
-    x = ((*theLambdaTable)[currentMaterialIndex])->GetValue(e, b);
+    x = ((*theLambdaTable)[currentMaterialIndex])->Value(e);
   } else {
     x = CrossSection(couple,particle,e);
   }
-  if(x > DBL_MIN) x = 1./x;
-  else            x = DBL_MAX;
+  if(x > DBL_MIN) { x = 1./x; }
+  else            { x = DBL_MAX; }
   return x;
 }
 

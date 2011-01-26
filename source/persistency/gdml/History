@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10 Jan 2010 Ivana Hrivnakova (gdml-V09-04-00)
+- Correction in G4GDMLWriteMaterials::MaterialWrite() to properly treat
+  export of materials with single element defined as isotope composition.
+
 30 Nov 2010 Gabriele Cosmo (gdml-V09-03-10)
 - Fixed ambiguity in signature of Write() method in G4GDMLParser.
 

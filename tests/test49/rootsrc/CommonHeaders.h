@@ -31,7 +31,7 @@
 // file by default.
 //
 // History:
-// Roman Atachiants, 18/08/2009 - initial version
+// Created by Roman Atachiants, 18/08/2009
 //
 // --------------------------------------------------------------------
 

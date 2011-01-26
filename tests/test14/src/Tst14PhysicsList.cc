@@ -56,11 +56,6 @@
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 #include "G4VProcess.hh"
-/*
-#include "G4LowEnergyPhotoElectric.hh"
-#include "G4LowEnergyIonisation.hh"
-#include "G4LowEnergyBremsstrahlung.hh"
-*/
 #include "G4PhotoElectricEffect.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"

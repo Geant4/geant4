@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 Jan 2011 - S. Incerti  tag test60-V09-04-01
+              Added excitation for hydrogen
+
 09 Sep 2010 - S. Incerti  tag test60-V09-03-01
               Added new vibrational and attachment e- models
               To be used with G4LEDATA 6.16 and above

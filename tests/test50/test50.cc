@@ -36,7 +36,7 @@
 #include "G4UIterminal.hh"
 #include "G4UItcsh.hh"
 #include "Tst50DetectorConstruction.hh"
-#include "Tst50PhysicsList.hh"
+#include "PhysicsList.hh"
 #include "Tst50PrimaryGeneratorAction.hh"
 #include "Tst50RunAction.hh"
 #include "Tst50EventAction.hh"
@@ -45,6 +45,9 @@
 #include "Tst50AnalysisManager.hh"
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
+#endif
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 int main(int argc,char** argv) {
@@ -58,13 +61,8 @@ int main(int argc,char** argv) {
   Tst50DetectorConstruction* tst50Detector = new Tst50DetectorConstruction();
   runManager->SetUserInitialization(tst50Detector);  
 
-  Tst50PhysicsList* tst50Physics = new Tst50PhysicsList();
+  PhysicsList* tst50Physics = new PhysicsList();
   runManager->SetUserInitialization(tst50Physics);
-
-#ifdef G4VIS_USE 
-  G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize();
-#endif
 
   Tst50PrimaryGeneratorAction* tst50PrimaryParticle = new Tst50PrimaryGeneratorAction(); 
   runManager->SetUserAction(tst50PrimaryParticle);
@@ -76,9 +74,8 @@ int main(int argc,char** argv) {
  
   runManager->SetUserAction(tst50EventAction);
      
-  Tst50SteppingAction* tst50SteppingAction = new Tst50SteppingAction(tst50PrimaryParticle,
-                                                                tst50Run,
-                                                                tst50Detector);
+  Tst50SteppingAction* tst50SteppingAction 
+    = new Tst50SteppingAction(tst50PrimaryParticle, tst50Run, tst50Detector);
   runManager->SetUserAction(tst50SteppingAction);
 
 #ifdef G4ANALYSIS_USE
@@ -94,17 +91,20 @@ int main(int argc,char** argv) {
   if (argc == 1)
     // Define (G)UI terminal for interactive mode  
     { 
-      // G4UIterminal is a (dumb) terminal.
-      G4UIsession * session = 0;
+#ifdef G4VIS_USE 
+      G4VisManager* visManager = new G4VisExecutive;
+      visManager->Initialize();
+#endif
 
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);      
-#else
-      session = new G4UIterminal();
-#endif    
-      UI->ApplyCommand("/control/execute default.mac");
-      session->SessionStart();
-      delete session;
+#ifdef G4UI_USE
+      G4UIExecutive * ui = new G4UIExecutive(argc,argv);
+      ui->SessionStart();
+      delete ui;
+#endif
+
+#ifdef G4VIS_USE
+     delete visManager;
+#endif
     }
   else
     // Batch mode
@@ -119,11 +119,7 @@ int main(int argc,char** argv) {
   analysis->finish();
 #endif
 
-#ifdef G4VIS_USE
-  delete visManager;
-#endif
-
-   delete runManager;
+  delete runManager;
 
   return 0;
 }

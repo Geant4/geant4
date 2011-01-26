@@ -19,6 +19,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24-01-2011 L.Pandola, Tag: XrayFluo-V09-04-00
+- Ensure compatibility with CLHEP 2.1.0.0
 
 18-11-2010 G.A.P.Cirrone, Tag: XrayFluo-V09-03-03
 - Corrected bug in the MercuryPrimaryGeneratorAction file on source definition

@@ -116,7 +116,7 @@ G4tgrVolume::G4tgrVolume( const G4tgrVolume& vol )
   theName = vol.GetName();   
   theType = vol.GetType();
   theMaterialName = vol.GetMaterialName();   
-  theSolid = const_cast<G4tgrSolid*>(vol.GetSolid());
+  theSolid = vol.GetSolid();
   thePlacements  = vol.GetPlacements();
   theVisibility   = vol.GetVisibility();
   theRGBColour   = vol.GetRGBColour();

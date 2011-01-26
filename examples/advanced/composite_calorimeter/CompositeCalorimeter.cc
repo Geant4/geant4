@@ -35,7 +35,6 @@
 #include "CCalPrimaryGeneratorAction.hh"
 #include "LHEP.hh"
 #include "QGSP.hh"
-#include "QGSC.hh"
 #include "QGSP_BIC_EMY.hh"
 
 #include "G4RunManager.hh"

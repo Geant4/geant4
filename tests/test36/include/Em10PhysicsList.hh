@@ -39,7 +39,7 @@ class G4PhotoElectricEffect;
 class G4ComptonScattering;
 class G4GammaConversion;
 
-class G4MultipleScattering;
+class G4eMultipleScattering;
 
 class G4PAIonisation ;
 class G4ForwardXrayTR ;
@@ -117,13 +117,13 @@ class Em10PhysicsList: public G4VModularPhysicsList  // G4VUserPhysicsList
     G4ComptonScattering*   theComptonScattering;
     G4GammaConversion*     theGammaConversion;
 
-    G4MultipleScattering*  theeminusMultipleScattering;
+    G4eMultipleScattering*  theeminusMultipleScattering;
     G4eIonisation*         theeminusIonisation;
     G4eBremsstrahlung*     theeminusBremsstrahlung;
 
     G4ForwardXrayTR*       fForwardXrayTR ;
 
-    G4MultipleScattering*  theeplusMultipleScattering;
+    G4eMultipleScattering*  theeplusMultipleScattering;
     G4eIonisation*         theeplusIonisation;
     G4eBremsstrahlung*     theeplusBremsstrahlung;
     G4eplusAnnihilation*   theeplusAnnihilation;

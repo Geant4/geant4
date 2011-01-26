@@ -194,7 +194,7 @@ void Test19PhysicsList::ConstructProcess()
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
-#include "G4hLowEnergyIonisation.hh"
+#include "G4hIonisation.hh"
 
 void Test19PhysicsList::ConstructEM()
 {
@@ -237,7 +237,7 @@ void Test19PhysicsList::ConstructEM()
 	  G4double stmin = 1.e-9 * m;  // length of the final step: 10 angstrom
 	  // reproduced angular distribution of TRIM
 
-	  G4hLowEnergyIonisation* lowEIonisation = new G4hLowEnergyIonisation();
+	  G4hIonisation* lowEIonisation = new G4hIonisation();
 	  pmanager->AddProcess( lowEIonisation, -1,2,2);
 	  lowEIonisation->SetStepFunction( demax, stmin );
 	}

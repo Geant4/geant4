@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNARuddIonisationModel.cc,v 1.21 2010-11-04 14:52:17 sincerti Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: G4DNARuddIonisationModel.cc,v 1.21 2010/11/04 14:52:17 sincerti Exp $
+// GEANT4 tag $Name:  $
 //
 
 #include "G4DNARuddIonisationModel.hh"
@@ -882,9 +882,6 @@ G4int G4DNARuddIonisationModel::RandomSelect(G4double k, const G4String& particl
 
   // add ONE or TWO electron-water ionisation for alpha+ and helium
    
-  G4DNAGenericIonsManager *instance;
-  instance = G4DNAGenericIonsManager::Instance();
- 
   G4int level = 0;
 
   // Retrieve data table corresponding to the current particle type  

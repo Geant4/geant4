@@ -88,8 +88,9 @@ class G4tgrVolume
     // Accessors
 
     const G4String& GetName() const {return theName;}
+    void SetName(const G4String& name) {theName = name;}
     const G4String& GetType() const {return theType;}
-    const G4tgrSolid* GetSolid() const {return theSolid;}
+    G4tgrSolid* GetSolid() const {return theSolid;}
     const G4String& GetMaterialName() const {return theMaterialName;}
 
     const std::vector<G4tgrPlace*> GetPlacements() const {return thePlacements;}

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardSS.cc,v 1.10 2010-05-03 12:42:31 vnivanch Exp $
+// $Id: PhysListEmStandardSS.cc,v 1.11 2010-12-23 11:46:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -123,6 +123,7 @@ void PhysListEmStandardSS::ConstructProcess()
   opt.SetDEDXBinning(56);
   opt.SetLambdaBinning(56);
   //opt.SetLinearLossLimit(1.e-2);
+  opt.SetPolarAngleLimit(0.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -39,13 +39,6 @@
 #include "G4ProcessManager.hh"
 #include "G4Gamma.hh"
 #include "G4ParticleDefinition.hh"
-/*
-#include "G4PenelopeCompton.hh"
-#include "G4PenelopeGammaConversion.hh"
-#include "G4PenelopePhotoElectric.hh"
-#include "G4PenelopeRayleigh.hh"
-*/
-
 #include "G4PhotoElectricEffect.hh"
 #include "G4PenelopePhotoElectricModel.hh"
 #include "G4ComptonScattering.hh"
@@ -57,10 +50,10 @@
 
 
 Tst14PhotonPenelope::Tst14PhotonPenelope(const G4String& name): G4VPhysicsConstructor(name)
-{ }
+{;}
 
 Tst14PhotonPenelope::~Tst14PhotonPenelope()
-{ }
+{;}
 
 void Tst14PhotonPenelope::ConstructProcess()
 {
@@ -78,45 +71,36 @@ void Tst14PhotonPenelope::ConstructProcess()
      
       if (particleName == "gamma") 
 	{
-/*
-	  manager->AddDiscreteProcess(new G4PenelopePhotoElectric);
-	  manager->AddDiscreteProcess(new G4PenelopeCompton);
-	  manager->AddDiscreteProcess(new G4PenelopeGammaConversion);
-	  manager->AddDiscreteProcess(new G4PenelopeRayleigh);
-*/
+	  //Photo-electric effect
+	  G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
+	  G4PenelopePhotoElectricModel* thePEPenelopeModel = new 
+	    G4PenelopePhotoElectricModel();
+	  thePEPenelopeModel->SetHighEnergyLimit(PenelopeHighEnergyLimit);
+	  thePhotoElectricEffect->AddEmModel(0,thePEPenelopeModel);
+	  manager->AddDiscreteProcess(thePhotoElectricEffect);
 
-      //Photo-electric effect
-      G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
-      G4PenelopePhotoElectricModel* thePEPenelopeModel = new 
-	G4PenelopePhotoElectricModel();
-      thePEPenelopeModel->SetHighEnergyLimit(PenelopeHighEnergyLimit);
-      thePhotoElectricEffect->AddEmModel(0,thePEPenelopeModel);
-      manager->AddDiscreteProcess(thePhotoElectricEffect);
-
-      //Compton scattering
-      G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
-      G4PenelopeComptonModel* theComptonPenelopeModel = 
-	new G4PenelopeComptonModel();
-      theComptonPenelopeModel->SetHighEnergyLimit(PenelopeHighEnergyLimit);
-      theComptonScattering->AddEmModel(0,theComptonPenelopeModel);
-      manager->AddDiscreteProcess(theComptonScattering);
-
-      //Gamma conversion
-      G4GammaConversion* theGammaConversion = new G4GammaConversion();
-      G4PenelopeGammaConversionModel* theGCPenelopeModel = 
-	new G4PenelopeGammaConversionModel();
-      theGammaConversion->AddEmModel(0,theGCPenelopeModel);
-      manager->AddDiscreteProcess(theGammaConversion);
-
-      //Rayleigh scattering
-      G4RayleighScattering* theRayleigh = new G4RayleighScattering();
-      G4PenelopeRayleighModel* theRayleighPenelopeModel = 
-	new G4PenelopeRayleighModel();
-      theRayleighPenelopeModel->SetHighEnergyLimit(PenelopeHighEnergyLimit);
-      theRayleigh->AddEmModel(0,theRayleighPenelopeModel);
-      manager->AddDiscreteProcess(theRayleigh);
-
-
+	  //Compton scattering
+	  G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
+	  G4PenelopeComptonModel* theComptonPenelopeModel = 
+	    new G4PenelopeComptonModel();
+	  theComptonPenelopeModel->SetHighEnergyLimit(PenelopeHighEnergyLimit);
+	  theComptonScattering->AddEmModel(0,theComptonPenelopeModel);
+	  manager->AddDiscreteProcess(theComptonScattering);
+	  
+	  //Gamma conversion
+	  G4GammaConversion* theGammaConversion = new G4GammaConversion();
+	  G4PenelopeGammaConversionModel* theGCPenelopeModel = 
+	    new G4PenelopeGammaConversionModel();
+	  theGammaConversion->AddEmModel(0,theGCPenelopeModel);
+	  manager->AddDiscreteProcess(theGammaConversion);
+	  
+	  //Rayleigh scattering
+	  G4RayleighScattering* theRayleigh = new G4RayleighScattering();
+	  G4PenelopeRayleighModel* theRayleighPenelopeModel = 
+	    new G4PenelopeRayleighModel();
+	  theRayleighPenelopeModel->SetHighEnergyLimit(PenelopeHighEnergyLimit);
+	  theRayleigh->AddEmModel(0,theRayleighPenelopeModel);
+	  manager->AddDiscreteProcess(theRayleigh);	  
 	}   
     }
 }

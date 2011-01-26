@@ -37,26 +37,20 @@ G4ErrorEnergyLoss::G4ErrorEnergyLoss(const G4String& processName,
     G4cout << GetProcessName() << " is created " << G4endl;
   }
 
-  InstantiateEforExtrapolator();
+  theELossForExtrapolator = new G4EnergyLossForExtrapolator;
 
   theStepLimit = 1.;
 }
 
 //-------------------------------------------------------------------
 void G4ErrorEnergyLoss::InstantiateEforExtrapolator()
-{
-  if( theELossForExtrapolator == 0 ) {
-    theELossForExtrapolator = new G4EnergyLossForExtrapolator;
-  }
-}
+{}
 
 
 //-------------------------------------------------------------------
 G4ErrorEnergyLoss::~G4ErrorEnergyLoss() 
 {
-  if( theELossForExtrapolator != 0 ) {
-    delete theELossForExtrapolator;
-  }
+  delete theELossForExtrapolator;
 }
 
 //-------------------------------------------------------------------

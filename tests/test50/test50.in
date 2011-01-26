@@ -2,11 +2,9 @@
 /tracking/verbose 0
 /run/verbose 0
 /event/verbose 0
-/physics/addPhysics photon-standard
-/physics/addPhysics electron-standard
-/physics/addPhysics positron-standard
+/testem/phys/addPhysics emlivermore
 /target/setUserLimits true
-/physics/cutE 1. m
+/testem/phys/setCuts 1 m
 /run/initialize
 /target/setTargetMat Aluminium
 /target/setTargetThick 15000000. cm
@@ -14,6 +12,7 @@
 /target/setTargetY 15000000. cm
 /target/setMaxStep 0.000001 cm
 /target/update
+/run/beamOn 1
 /process/inactivate msc
 /process/eLoss/fluct false
 /gun/particle e-

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.55 2009-02-18 14:21:38 lgarnier Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.56 2010-12-11 17:07:48 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -112,7 +112,7 @@ G4OpenInventorSceneHandler::G4OpenInventorSceneHandler (G4OpenInventor& system,
 ,fModelingSolid(false)
 ,fReducedWireFrame(true)
 ,fStyleCache(0)
-,fPreviewAndFull(false)
+,fPreviewAndFull(true)
 {
   fStyleCache = new SoStyleCache;
   fStyleCache->ref();

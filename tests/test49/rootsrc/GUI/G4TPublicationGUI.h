@@ -30,7 +30,9 @@
 // The GUI for the tool that creates the publications fron ASCII files
 //
 // History:
-// Roman Atachiants, 18/08/2009 - initial version
+// Created by Roman Atachiants, 18/08/2009
+// Modiified:
+// Mikhail Kosov, 12/05/2010: Cleaning up
 //
 // --------------------------------------------------------------------
 #ifndef G4TPublicationGUI_H_
@@ -45,66 +47,58 @@
 #include "../Database/G4TParticlesDAL.h"
 #include "../Database/G4TDataBase.h"
 
-
 #include "Riostream.h"
 
-
-class G4TPublicationGUI : public TGMainFrame {
-
+class G4TPublicationGUI : public TGMainFrame
+{
   private:
-   TGTextButton*  bRun0;
-   TGTextButton*  bRun1;
-   TGTextButton*  bRun2;
-   TGTextButton*  bRun3;
+  TGTextButton*  bRun0;
+  TGTextButton*  bRun1;
+  TGTextButton*  bRun2;
+  TGTextButton*  bRun3;
 
-   TGGroupFrame*  gSecondary;
+  TGGroupFrame*  gSecondary;
 
-   TGComboBox*  cProjectilePDG;
-   TGComboBox*  cTargetPDG;
-   TGNumberEntry* nTargetA;
-   TGComboBox*  cArgType;
-   TGNumberEntry* nArgValue;
-   TGComboBox*  cArgUnits;
+  TGComboBox*    cProjectilePDG;
+  TGTextEntry*   tComment;
+  TGComboBox*    cTargetPDG;
+  TGNumberEntry* nTargetA;
+  TGComboBox*    cArgType;
+  TGNumberEntry* nArgValue;
+  TGComboBox*    cArgUnits;
+  TGNumberEntry* nSigValue;
+  TGComboBox*    cSigUnits;
 
-   TGTextEntry*  tFilename;
-   TGComboBox*  cSecondaryPDG;
-   TGComboBox*  cCutType;
-   TGComboBox*  cCutUnits;
-   TGNumberEntry* nCutValue;
-   TGNumberEntry* nCutDelta;
-   TGComboBox*  cFunctionType;
-   TGComboBox*  cFunctionUnits;
-   TGComboBox*  cSecArgType;
-   TGComboBox*  cSecArgUnits;
+  TGTextEntry*   tFilename;
+  TGComboBox*    cSecondaryPDG;
+  TGComboBox*    cCutType;
+  TGComboBox*    cCutUnits;
+  TGNumberEntry* nCutValue;
+  TGNumberEntry* nCutDelta;
+  TGComboBox*    cFunctionType;
+  TGComboBox*    cFunctionUnits;
+  TGComboBox*    cFunctErrorType;
+  TGComboBox*    cSecArgType;
+  TGComboBox*    cSecArgUnits;
 
+  G4TData*       fPublication;
 
-   G4TData*    fPublication;
-
-   void Initialize();
-   void ChangeState(Int_t state);
-   void Run1_Click();
-   void Run2_Click();
-   void Run3_Click();
-   void Run4_Click();
+  void Initialize();
+  void ChangeState(Int_t state);
+  void Run1_Click();
+  void Run2_Click();
+  void Run3_Click();
+  void Run4_Click();
 
   public:
+  G4TPublicationGUI(const TGWindow *p, UInt_t w, UInt_t h);
+  virtual ~G4TPublicationGUI ();
 
+  virtual void CloseWindow();
+  virtual Bool_t ProcessMessage(Long_t msg, Long_t parm1, Long_t parm2);
 
-   G4TPublicationGUI(const TGWindow *p, UInt_t w, UInt_t h);
-   virtual ~G4TPublicationGUI ();
-
-
-   virtual void CloseWindow();
-   virtual Bool_t ProcessMessage(Long_t msg, Long_t parm1, Long_t parm2);
-
-
-   ClassDef(G4TPublicationGUI, 1)  //The class for Geant4 Simulation
+  ClassDef(G4TPublicationGUI, 1)  //The class for Geant4 Simulation
 };
 
-
-
 #endif
-
-
-
 

@@ -166,8 +166,8 @@ endif
 
 banner:
 	@$(ECHO) "*************************************************************"
-	@$(ECHO) " Installation Geant4 version $$Name: not supported by cvs2svn $ "
-	@$(ECHO) " Copyright (C) 1994-2010 Geant4 Collaboration                            "
+	@$(ECHO) " Installation Geant4 version geant4-09-04-ref-01             "
+	@$(ECHO) " Copyright (C) 1994-2011 Geant4 Collaboration                "
 	@$(ECHO) "*************************************************************"
 
 clean_libs::

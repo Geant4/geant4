@@ -20,6 +20,9 @@ committal in the CVS repository !
 History file for visualization/HepRep sub-category
 --------------------------------------------------
 
+23th January 2011 L.Garnier
+- GNUMakefile : Remove G4VIS_BUILD.gmk use
+
 7th November 2010  Joseph Perl  (vis-HepRep-V09-03-04)
 - G4HepRepFileSceneHandler.hh: Fix coverity warning about uninitialized variables. Turns out they were unneeded.
 

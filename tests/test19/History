@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Jan 20th, 2010 Luciano Pandola (test19-V09-04-00)
+- removed obsolete G4hLowEnergyIonisation from the 
+  physics list
+
 Oct 28th, 2010 Gunter Folger   (test19-V09-03-07)
 - trivial fix for CLHEP 2.1.x in test19.cc
 

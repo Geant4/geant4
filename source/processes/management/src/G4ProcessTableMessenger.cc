@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTableMessenger.cc,v 1.18 2008-03-14 02:55:04 kurasige Exp $
+// $Id: G4ProcessTableMessenger.cc,v 1.19 2010-12-22 09:14:54 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -443,8 +443,8 @@ void G4ProcessTableMessenger::SetNumberOfProcessType()
   if ( isFoundEndMark ) {
     NumberOfProcessType = idx;
   } else {
-    G4Exception("G4ProcessTableMessenger::SetNumberOfProcessType()","No End Mark",
-		 FatalException,"");
+    G4Exception("G4ProcessTableMessenger::SetNumberOfProcessType()","ProcMan014",
+		 FatalException,"No End Mark");
   } 
 }
 

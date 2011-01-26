@@ -1,0 +1,24 @@
+#================================================
+#     Macro file for test46
+#================================================
+/control/verbose 2
+/run/verbose 1
+/tracking/verbose 0
+#
+/testCalorim/nbins 100
+/testCalorim/maxE 50. GeV
+/testCalorim/factEcal 1.03 
+/testCalorim/factHcal 100.0
+/testCalorim/addPreShower
+#
+/testhadr/PrintModulo 10
+/run/initialize
+/run/setCut 1 mm
+/run/setCutForRegion HcalRegion 1 mm
+/gun/particle e-
+/gun/energy 2. GeV
+/run/beamOn 10
+#
+
+
+

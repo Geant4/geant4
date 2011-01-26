@@ -12,17 +12,17 @@ setenv PHYSLIST    emstandard
 set    phys = "opt0"
 source ${dir}run_single.csh ${phys} ${work} ${dir} >& res0.out
 
-setenv PHYSLIST    emstandard_opt3
-set    phys = "opt3"
-source ${dir}run_single.csh ${phys} ${work} ${dir} >& res3.out
+setenv PHYSLIST    emstandard_opt2
+set    phys = "opt2"
+source ${dir}run_single.csh ${phys} ${work} ${dir} >& res2.out
 
 setenv PHYSLIST    emstandard_msc93
 set    phys = "msc93"
 source ${dir}run_single.csh ${phys} ${work} ${dir} >& res93.out
 
-setenv PHYSLIST    emstandard_opt2
-set    phys = "opt2"
-source ${dir}run_single.csh ${phys} ${work} ${dir} >& res2.out
+setenv PHYSLIST    emstandard_msc90
+set    phys = "opt3"
+source ${dir}run_single.csh ${phys} ${work} ${dir} >& res3.out
 
 setenv PHYSLIST    standardSS
 set    phys = "optS"

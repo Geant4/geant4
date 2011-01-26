@@ -66,6 +66,7 @@ class G4tgrUtils
     static G4bool IsFunction( const G4String& word ); 
       // Checks that every character in a G4String is a number
       // (also '.' or exponencial notation: 'E')
+    static G4bool WordIsUnit( const G4String& word );
 
     static void Dump3v( const G4ThreeVector& vec, const char* msg);
       // Dumps a three-vector with a message

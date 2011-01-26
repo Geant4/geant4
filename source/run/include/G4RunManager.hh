@@ -351,7 +351,7 @@ class G4RunManager
       G4String shellCmd = "mkdir -p ";
 #else
       std::replace(dirStr.begin(), dirStr.end(),'/','\\');
-      G4String shellCmd = "mkdir ";
+      G4String shellCmd = "if not exist " + dirStr + " mkdir ";
 #endif
       shellCmd += dirStr;
       randomNumberStatusDir = dirStr;

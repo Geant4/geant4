@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellData.cc,v 1.11 2009-06-10 13:32:36 mantero Exp $
+// $Id: G4ShellData.cc,v 1.12 2010-12-27 17:44:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -32,6 +32,7 @@
 // History:
 // -----------
 // 31 Jul 2001   MGP        Created
+// 26 Dec 2010 V.Ivanchenko Fixed Coverity warnings   
 //
 // -------------------------------------------------------------------
 
@@ -45,9 +46,6 @@
 #include <valarray>
 #include <functional>
 #include "Randomize.hh"
-
-// The following deprecated header is included because <functional> seems not to be found on MGP's laptop
-//#include "function.h"
 
 // Constructor
 
@@ -245,6 +243,7 @@ void G4ShellData::LoadData(const G4String& fileName)
     { 
       G4String excep("G4EMDataSet - G4LEDATA environment variable not set");
       G4Exception(excep);
+      return;
     }
   
   G4String pathString(path);
@@ -258,6 +257,7 @@ void G4ShellData::LoadData(const G4String& fileName)
       G4String s2(" not found");
       G4String excep = s1 + dirFile + s2;
       G4Exception(excep);
+      return;
     }
 
   G4double a = 0;

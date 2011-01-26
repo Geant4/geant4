@@ -218,7 +218,7 @@ void G4TAnalysisGUI::CloseWindow()
 void G4TAnalysisGUI::Run_Click()
 {
   TString publication(cPublication->GetSelectedEntry()->GetTitle());
-  Double_t idx = nParticleIdx->GetNumber();
+  Int_t idx = nParticleIdx->GetIntNumber();
   gAnalysisTool->Run(publication, idx);
 }
 

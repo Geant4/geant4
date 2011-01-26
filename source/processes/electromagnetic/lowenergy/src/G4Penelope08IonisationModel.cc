@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Penelope08IonisationModel.cc,v 1.2 2010-12-15 07:39:12 gunter Exp $
+// $Id: G4Penelope08IonisationModel.cc,v 1.3 2010-12-15 10:26:41 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -31,7 +31,8 @@
 // History:
 // --------
 // 27 Jul 2010   L Pandola    First complete implementation
-//
+// 18 Jan 2011   L.Pandola    Stricter check on production of sub-treshold delta-rays. 
+//                            Should never happen now
 
 #include "G4Penelope08IonisationModel.hh"
 #include "G4ParticleDefinition.hh"
@@ -325,6 +326,7 @@ void G4Penelope08IonisationModel::SampleSecondaries(std::vector<G4DynamicParticl
     fParticleChange->ProposeLocalEnergyDeposit(kineticEnergy0);
     return ;
   }
+
   const G4Material* material = couple->GetMaterial();
   G4PenelopeOscillatorTable* theTable = oscManager->GetOscillatorTableIonisation(material); 
 
@@ -348,7 +350,8 @@ void G4Penelope08IonisationModel::SampleSecondaries(std::vector<G4DynamicParticl
       G4cout << "Invalid particle " << theParticle->GetParticleName() << G4endl;
       G4Exception();	
     }
- 
+  if (energySecondary == 0) return;
+
   if (verboseLevel > 3)
   {
      G4cout << "G4Penelope08IonisationModel::SamplingSecondaries() for " << 
@@ -375,10 +378,9 @@ void G4Penelope08IonisationModel::SampleSecondaries(std::vector<G4DynamicParticl
       fParticleChange->ProposeMomentumDirection(electronDirection1);
       fParticleChange->SetProposedKineticEnergy(kineticEnergy1);
     }
-  else
-    {
-      fParticleChange->SetProposedKineticEnergy(0.);
-    }
+  else    
+    fParticleChange->SetProposedKineticEnergy(0.);
+    
   
   //Generate the delta ray
   G4double ionEnergyInPenelopeDatabase = 
@@ -454,10 +456,10 @@ void G4Penelope08IonisationModel::SampleSecondaries(std::vector<G4DynamicParticl
 		      G4double itsEnergy = aPhoton->GetKineticEnergy();
 		      if (itsEnergy <= localEnergyDeposit)
 			{
-			localEnergyDeposit -= itsEnergy;
-			if (aPhoton->GetDefinition() == G4Gamma::Gamma()) 
-			  energyInFluorescence += itsEnergy;;
-			fvect->push_back(aPhoton);		    
+			  localEnergyDeposit -= itsEnergy;
+			  if (aPhoton->GetDefinition() == G4Gamma::Gamma()) 
+			    energyInFluorescence += itsEnergy;;
+			  fvect->push_back(aPhoton);		    
 			}
 		      else
 			{
@@ -471,19 +473,26 @@ void G4Penelope08IonisationModel::SampleSecondaries(std::vector<G4DynamicParticl
 	}
     }
 
-  //Always produce explicitely the delta electron 
-  G4DynamicParticle* electron = 0;
-  G4double sinThetaE = std::sqrt(1.-cosThetaSecondary*cosThetaSecondary);
-  G4double phiEl = phiPrimary+pi; //pi with respect to the primary electron/positron
-  G4double xEl = sinThetaE * std::cos(phiEl);
-  G4double yEl = sinThetaE * std::sin(phiEl);
-  G4double zEl = cosThetaSecondary;
-  G4ThreeVector eDirection(xEl,yEl,zEl); //electron direction
-  eDirection.rotateUz(particleDirection0);
-  electron = new G4DynamicParticle (G4Electron::Electron(),
-				    eDirection,energySecondary) ;
-  fvect->push_back(electron);
-
+  // Generate the delta ray --> to be done only if above cut
+  if (energySecondary > cutE)
+    {
+      G4DynamicParticle* electron = 0;
+      G4double sinThetaE = std::sqrt(1.-cosThetaSecondary*cosThetaSecondary);
+      G4double phiEl = phiPrimary+pi; //pi with respect to the primary electron/positron
+      G4double xEl = sinThetaE * std::cos(phiEl);
+      G4double yEl = sinThetaE * std::sin(phiEl);
+      G4double zEl = cosThetaSecondary;
+      G4ThreeVector eDirection(xEl,yEl,zEl); //electron direction
+      eDirection.rotateUz(particleDirection0);
+      electron = new G4DynamicParticle (G4Electron::Electron(),
+					eDirection,energySecondary) ;
+      fvect->push_back(electron);
+    }
+  else
+    {
+      localEnergyDeposit += energySecondary;
+      energySecondary = 0;
+    }
 
   if (localEnergyDeposit < 0)
     {
@@ -505,7 +514,7 @@ void G4Penelope08IonisationModel::SampleSecondaries(std::vector<G4DynamicParticl
       G4cout << "Fluorescence: " << energyInFluorescence/keV << " keV" << G4endl;
       G4cout << "Local energy deposit " << localEnergyDeposit/keV << " keV" << G4endl;
       G4cout << "Total final state: " << (energySecondary+energyInFluorescence+kineticEnergy1+
-					      localEnergyDeposit)/keV <<
+					  localEnergyDeposit)/keV <<
 	" keV" << G4endl;
       G4cout << "-----------------------------------------------------------" << G4endl;
     }
@@ -518,7 +527,7 @@ void G4Penelope08IonisationModel::SampleSecondaries(std::vector<G4DynamicParticl
 	G4cout << "Warning from G4PenelopeIonisation: problem with energy conservation: " <<  
 	  (energySecondary+energyInFluorescence+kineticEnergy1+localEnergyDeposit)/keV <<
 	  " keV (final) vs. " <<
-	  kineticEnergy0/keV << " keV (initial)" << G4endl;
+	  kineticEnergy0/keV << " keV (initial)" << G4endl;      
     }
     
 }
@@ -605,6 +614,7 @@ G4Penelope08IonisationModel::GetCrossSectionTableForCouple(const G4ParticleDefin
 	  G4cout << "G4Penelope08IonisationModel::GetCrossSectionTableForCouple()" << G4endl;
 	  G4cout << "The Cross Section Table for e- was not initialized correctly!" << G4endl;
 	  G4Exception();	  
+	  return NULL;
 	}
       std::pair<const G4Material*,G4double> theKey = std::make_pair(mat,cut);
       if (XSTableElectron->count(theKey)) //table already built	
@@ -629,7 +639,8 @@ G4Penelope08IonisationModel::GetCrossSectionTableForCouple(const G4ParticleDefin
 	{
 	  G4cout << "G4Penelope08IonisationModel::GetCrossSectionTableForCouple()" << G4endl;
 	  G4cout << "The Cross Section Table for e+ was not initialized correctly!" << G4endl;
-	  G4Exception();	  
+	  G4Exception();
+	  return NULL;
 	}
       std::pair<const G4Material*,G4double> theKey = std::make_pair(mat,cut);
       if (XSTablePositron->count(theKey)) //table already built	
@@ -705,6 +716,7 @@ void G4Penelope08IonisationModel::BuildXSTable(const G4Material* mat,G4double cu
 	       G4cout << "G4Penelope08IonisationModel::BuildXSTable" << G4endl;
 	       G4cout << "Problem in calculating the shell XS " << G4endl;
 	       G4Exception();
+	       return;
 	     }
 	   if (tempStorage->size() != 6)
 	     {
@@ -738,10 +750,12 @@ void G4Penelope08IonisationModel::BuildXSTable(const G4Material* mat,G4double cu
 
   //Insert in the appropriate table
   std::pair<const G4Material*,G4double> theKey = std::make_pair(mat,cut);
-  if (part == G4Electron::Electron())  
+  if (part == G4Electron::Electron())      
     XSTableElectron->insert(std::make_pair(theKey,XSEntry));
   else if (part == G4Positron::Positron())
     XSTablePositron->insert(std::make_pair(theKey,XSEntry));
+  else
+    delete XSEntry;
   
   return;
 }
@@ -758,6 +772,7 @@ G4double G4Penelope08IonisationModel::GetDensityCorrection(const G4Material* mat
       G4cout << "G4Penelope08IonisationModel::GetDensityCorrection()" << G4endl;
       G4cout << "Delta Table not initialized. Was Initialise() run?" << G4endl;
       G4Exception();
+      return 0;
     }
   if (energy <= 0*eV)
     {

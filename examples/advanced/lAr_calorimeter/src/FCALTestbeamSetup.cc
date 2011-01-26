@@ -220,7 +220,7 @@ G4VPhysicalVolume * FCALTestbeamSetup::Construct()
    G4LogicalVolume * LogicalSlitPb = 
      new G4LogicalVolume(SolidSlitPb, FCALMaterials->Material("Air"), "SlitPbLogical");
    // G4VPhysicalVolume * PhysicalSlitPb = 
-     new G4PVPlacement(0, 0, LogicalSlitPb, "SlitPbPhysical", LogicalLeadWall, 0, 0);
+     new G4PVPlacement(0, G4ThreeVector(), LogicalSlitPb, "SlitPbPhysical", LogicalLeadWall, 0, 0);
 
    // G4VPhysicalVolume * PhysicalLeadWall = 
      new G4PVPlacement(0, G4ThreeVector(LeadWallPosX,LeadWallPosY,LeadWallPosZ),
@@ -244,7 +244,7 @@ G4VPhysicalVolume * FCALTestbeamSetup::Construct()
    G4LogicalVolume * LogicalSlitFe = 
      new G4LogicalVolume(SolidSlitFe, FCALMaterials->Material("Air"), "SlitFeLogical");
    // G4VPhysicalVolume * PhysicalSlitFe = 
-     new G4PVPlacement(0, 0, LogicalSlitFe, "SlitFePhysical", LogicalIronWall, 0, 0);
+     new G4PVPlacement(0, G4ThreeVector(), LogicalSlitFe, "SlitFePhysical", LogicalIronWall, 0, 0);
 
    // G4VPhysicalVolume * PhysicalIronWall = 
      new G4PVPlacement(0, G4ThreeVector(IronWallPosX,IronWallPosY,IronWallPosZ),
@@ -343,7 +343,7 @@ G4VPhysicalVolume * FCALTestbeamSetup::Construct()
       new G4LogicalVolume(SolidConcWallIns, FCALMaterials->Material("Iron"),
 			  "LogicalConcWallIns");
     // G4VPhysicalVolume * PhysicalConcWallIns =
-      new G4PVPlacement(0, 0, "ConcWallInsPhysical", LogicalConcWallIns, PhysicalConcWallA, 0, 0);
+      new G4PVPlacement(0, G4ThreeVector(), "ConcWallInsPhysical", LogicalConcWallIns, PhysicalConcWallA, 0, 0);
 
    G4VisAttributes * ColorOfConcrete = new G4VisAttributes(G4Colour(0.,0.,0.));
    LogicalConcWallA->SetVisAttributes(ColorOfConcrete);

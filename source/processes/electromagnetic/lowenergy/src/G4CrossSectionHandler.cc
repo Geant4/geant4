@@ -134,6 +134,7 @@ G4CrossSectionHandler::BuildCrossSectionsForMaterials(const G4DataVector& energy
 
       matCrossSections->push_back(setForMat);
     }
+  delete interpolationAlgo;
   return matCrossSections;
 }
 

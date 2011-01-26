@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2009-11-18 17:15:11 gcosmo Exp $
+# $Id: GNUmakefile,v 1.6 2010-12-23 14:18:05 lgarnier Exp $
 # -------------------------------------------------------------
 # GNUmakefile for gl2ps.  Laurent Garnier, 6/2/09.
 

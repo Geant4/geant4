@@ -40,14 +40,6 @@
 #include "G4Gamma.hh"
 #include "G4ParticleDefinition.hh"
 
-// OLD LIVERMORE
-/*
-#include "G4LowEnergyCompton.hh"
-#include "G4LowEnergyGammaConversion.hh"
-#include "G4LowEnergyPhotoElectric.hh"
-#include "G4LowEnergyRayleigh.hh"
-*/
-
 #include "G4PhotoElectricEffect.hh"
 #include "G4LivermorePhotoElectricModel.hh"
 #include "G4ComptonScattering.hh"
@@ -79,41 +71,32 @@ void Tst14PhotonEPDL::ConstructProcess()
 
       if (particleName == "gamma") 
 	{
-/*
-	  manager->AddDiscreteProcess(new G4LowEnergyPhotoElectric);
-	  manager->AddDiscreteProcess(new G4LowEnergyCompton);
-	  manager->AddDiscreteProcess(new G4LowEnergyGammaConversion);
-	  manager->AddDiscreteProcess(new G4LowEnergyRayleigh);
-*/
+	  G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
+	  G4LivermorePhotoElectricModel* theLivermorePhotoElectricModel = 
+	    new G4LivermorePhotoElectricModel();
+	  theLivermorePhotoElectricModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
+	  thePhotoElectricEffect->AddEmModel(0, theLivermorePhotoElectricModel);
+	  manager->AddDiscreteProcess(thePhotoElectricEffect);
 
+	  G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
+	  G4LivermoreComptonModel* theLivermoreComptonModel = 
+	    new G4LivermoreComptonModel();
+	  theLivermoreComptonModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
+	  theComptonScattering->AddEmModel(0, theLivermoreComptonModel);
+	  manager->AddDiscreteProcess(theComptonScattering);
 
-      G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
-      G4LivermorePhotoElectricModel* theLivermorePhotoElectricModel = 
-	new G4LivermorePhotoElectricModel();
-      theLivermorePhotoElectricModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
-      thePhotoElectricEffect->AddEmModel(0, theLivermorePhotoElectricModel);
-      manager->AddDiscreteProcess(thePhotoElectricEffect);
+	  G4GammaConversion* theGammaConversion = new G4GammaConversion();
+	  G4LivermoreGammaConversionModel* theLivermoreGammaConversionModel = 
+	    new G4LivermoreGammaConversionModel();
+	  theLivermoreGammaConversionModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
+	  theGammaConversion->AddEmModel(0, theLivermoreGammaConversionModel);
+	  manager->AddDiscreteProcess(theGammaConversion);
 
-      G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
-      G4LivermoreComptonModel* theLivermoreComptonModel = 
-	new G4LivermoreComptonModel();
-      theLivermoreComptonModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
-      theComptonScattering->AddEmModel(0, theLivermoreComptonModel);
-      manager->AddDiscreteProcess(theComptonScattering);
-
-      G4GammaConversion* theGammaConversion = new G4GammaConversion();
-      G4LivermoreGammaConversionModel* theLivermoreGammaConversionModel = 
-	new G4LivermoreGammaConversionModel();
-      theLivermoreGammaConversionModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
-      theGammaConversion->AddEmModel(0, theLivermoreGammaConversionModel);
-      manager->AddDiscreteProcess(theGammaConversion);
-
-      G4RayleighScattering* theRayleigh = new G4RayleighScattering();
-      G4LivermoreRayleighModel* theRayleighModel = new G4LivermoreRayleighModel();
-      theRayleighModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
-      theRayleigh->AddEmModel(0, theRayleighModel);
-      manager->AddDiscreteProcess(theRayleigh);
-
-		}   
+	  G4RayleighScattering* theRayleigh = new G4RayleighScattering();
+	  G4LivermoreRayleighModel* theRayleighModel = new G4LivermoreRayleighModel();
+	  theRayleighModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
+	  theRayleigh->AddEmModel(0, theRayleighModel);
+	  manager->AddDiscreteProcess(theRayleigh);
+	}   
     }
 }

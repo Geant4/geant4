@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Jan 7, 2011  T.Nikitina                  geom-csg-V09-04-00
+- G4Cons: fix in DistanceToIn(p,v,..) to squared tolerance in comparision.
+  Replaced calculation of the solution for the quadratic equation, to use safe
+  formula, in order to avoid numerical errors when b is almost equal to sqrt(d).
+  Addresses problem report #1153.
+
 Nov 23, 2010  G.Cosmo                    geom-csg-V09-03-14 & V09-03-12
 - Fixed one left cases of cout precision restoring in G4Sphere.
 

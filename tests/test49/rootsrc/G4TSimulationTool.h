@@ -32,7 +32,9 @@
 // output histogram.
 //
 // History:
-// Roman Atachiants, 18/08/2009 - initial version
+// Created by Roman Atachiants, 18/08/2009
+// Modified:
+// Mikhail Kosov, 12/05/2010: Cross-Section to Double_t
 //
 // --------------------------------------------------------------------
 
@@ -49,40 +51,41 @@
 #include "Database/G4TDataItem.h"
 #include "Database/G4TDataBase.h"
 
-
 using namespace std;
 using namespace ROOT;
 using namespace TMath;
 
-
-class G4TSimulationTool : public G4TTool {
-
+class G4TSimulationTool : public G4TTool
+{
   protected:
-	  Int_t					fTargetPDG;
-	  Int_t					fProjectilePDG;
-	  TString				fModelName;
-	  Int_t					fRunsNumber;
-	  Int_t					fEventsNumber;
-	  Int_t					fCrossSection;
-	  Bool_t				fUseExistingData;
 
-	  G4TSimHelper			fSimHelper;
-	  G4TData*				fSimulation;
+  Int_t     fTargetPDG;
+  Int_t     fProjectilePDG;
+  TString   fModelName;
+  TString   fPostfix;
+  Int_t     fRunsNumber;
+  Int_t     fEventsNumber;
+  Double_t  fCrossSection;
+  Bool_t    fUseExistingData;
 
-	  void Plot(Int_t np, TTree* inclTree, Int_t e, Int_t cs, const TString& file);
+  G4TSimHelper   fSimHelper;
+  G4TData*       fSimulation;
 
-	  void InternalExecute(Int_t np = 6, Int_t nn = 6, Int_t e = 90, const TString& pq = "32-rb20-hp", Int_t nzone = 2, Int_t nvex = 26,
-	  		const TString& dir = "./"  );
+  void Plot(TTree* inclTree, Double_t mom, Double_t cs, const TString& file);
 
+  void InternalExecute(Double_t mom = 99., Double_t sig=1., const TString& pq="32-rb20-hp",
+                       Int_t nzone=2, Int_t nvex=2, const TString& model = "chips",
+                       const TString& dir = "./");
   public:
 
-	  G4TSimulationTool() {}
-	  virtual ~G4TSimulationTool () {}
+  G4TSimulationTool() {}
+  virtual ~G4TSimulationTool () {}
 
-	  int Run(TString const& publicationFile, Int_t crossSection = 450, const TString& modelName = "preco", Int_t runsNumber = 25 ,
-			  Bool_t useExistingData = false, TString const& dbPath = "./database/", TString const& printQue = "32-rb20-hp");
-
-	  ClassDef(G4TSimulationTool, 1)  //The class for Geant4 Models Testing
+  Int_t Run(TString const& publicationFile, Double_t crossSection = 450.,
+            const TString& modelName = "preco", const TString& prefix = "93r5",
+            Int_t runsNumber = 25, Bool_t useExistingData = false,
+            TString const& dbPath = "./database/", TString const& printQue = "32-rb20-hp");
+  ClassDef(G4TSimulationTool, 1)  //The class for Geant4 Models Testing
 };
 
 R__EXTERN G4TSimulationTool *gSimulationTool;

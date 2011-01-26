@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4UAtomicDeexcitation.cc,v 1.11 
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -44,17 +46,14 @@
 #include "G4VhShellCrossSection.hh"
 #include "Randomize.hh"
 
-G4VhShellCrossSection::G4VhShellCrossSection()
-{ }
-
+G4VhShellCrossSection::G4VhShellCrossSection(const G4String& xname):name(xname)
+{}
 
 G4VhShellCrossSection::~G4VhShellCrossSection() 
-{ }
+{}
 
 void G4VhShellCrossSection :: SetTotalCS(G4double)
-{
-}
-
+{}
 
 G4int G4VhShellCrossSection::SelectRandomShell(G4int Z, 
                                                G4double incidentEnergy,

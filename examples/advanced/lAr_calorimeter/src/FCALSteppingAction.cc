@@ -146,16 +146,17 @@ void FCALSteppingAction::UserSteppingAction(const G4Step* astep)
 	  // calculate DCA of secondries to primary particle
 	  Distance = PrimaryVertex - SecondaryVertex ;
 	  VectorProduct = PrimaryDirection.cross(SecondaryDirection);
-	  if(VectorProduct == 0. &&  
-	     PrimaryDirection != 0. && SecondaryDirection != 0.) 
+	  if(VectorProduct == G4ThreeVector() &&  
+	     PrimaryDirection != G4ThreeVector() && SecondaryDirection != G4ThreeVector()) 
 	    {
 	      G4ThreeVector Temp = Distance.cross(PrimaryDirection);
 	      VectorProduct = Temp.cross(PrimaryDirection);
 	    };	  
-	  VectorProductMagnitude = VectorProduct.mag();
+	  	  
+VectorProductMagnitude = VectorProduct.mag();
 	  if(VectorProductMagnitude == 0.) 
 	    {
-	      VectorProductNorm = 0.;
+	      VectorProductNorm = G4ThreeVector();
 	    } else {
 	      VectorProductNorm = (1./VectorProduct.mag()) * VectorProduct ;
 	    };	  

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNARuddIonisationExtendedModel.cc,v 1.3 2010-11-04 14:52:17 sincerti Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: G4DNARuddIonisationExtendedModel.cc,v 1.3 2010/11/04 14:52:17 sincerti Exp $
+// GEANT4 tag $Name:  $
 //
 
 
@@ -493,7 +493,9 @@ G4double G4DNARuddIonisationExtendedModel::CrossSectionPerVolume(const G4Materia
     {
       G4cout << "---> Kinetic energy(eV)=" << k/eV << G4endl;
       G4cout << " - Cross section per water molecule (cm^2)=" << sigma/cm/cm << G4endl;
-      G4cout << " - Cross section per water molecule (cm^-1)=" << sigma*densityWater/(1./cm) << G4endl;
+      G4cout << " - Cross section per water molecule (cm^-1)=" << sigma*
+        material->GetAtomicNumDensityVector()[1]/(1./cm) << G4endl;
+
     } 
  
   } // if (waterMaterial)
@@ -516,14 +518,12 @@ void G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicPa
   G4double lowLim = 0;
   G4double highLim = 0;
 
-  G4DNAGenericIonsManager *instance;
-  instance = G4DNAGenericIonsManager::Instance();
-
   // ZF: the following line summarizes the commented part 
   if(particle->GetDefinition()->GetAtomicMass() <= 4) lowLim = killBelowEnergyForA[particle->GetDefinition()->GetAtomicMass()];
  else lowLim = killBelowEnergyForA[5]*particle->GetDefinition()->GetAtomicMass();
 
-/*if(particle->GetDefinition()->GetAtomicMass() >= 5) lowLim = killBelowEnergyForA[5]*particle->GetDefinition()->GetAtomicMass();
+  /*
+  if(particle->GetDefinition()->GetAtomicMass() >= 5) lowLim = killBelowEnergyForA[5]*particle->GetDefinition()->GetAtomicMass();
 
 
   if (     particle->GetDefinition() == G4Proton::ProtonDefinition()
@@ -538,9 +538,7 @@ void G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicPa
      )
        
        lowLim = killBelowEnergyForA[4];*/
-
-
-    
+   
   G4double k = particle->GetKineticEnergy();
 
   const G4String& particleName = particle->GetDefinition()->GetParticleName();
@@ -632,9 +630,6 @@ G4double G4DNARuddIonisationExtendedModel::RandomizeEjectedElectronEnergy(G4Part
 								    G4double k, 
 								    G4int shell)
 {
-  G4DNAGenericIonsManager *instance;
-  instance = G4DNAGenericIonsManager::Instance();
-
   //-- Fast sampling method -----
   G4double proposed_energy;
   G4double random1;
@@ -669,9 +664,6 @@ void G4DNARuddIonisationExtendedModel::RandomizeEjectedElectronDirection(G4Parti
 								   G4double & phi,
 									G4int shell )
 {
-  G4DNAGenericIonsManager *instance;
-  instance = G4DNAGenericIonsManager::Instance();
-
   G4double maxSecKinetic = 0.;
   G4double maximumEnergyTransfer = 0.;
  
@@ -907,8 +899,6 @@ G4double G4DNARuddIonisationExtendedModel::ProposedSampledEnergy(G4ParticleDefin
   
   G4double tau = 0.;
   G4double A_ion = 0.;
-  G4DNAGenericIonsManager* instance;
-  instance = G4DNAGenericIonsManager::Instance();
   tau = (electron_mass_c2 / particle->GetPDGMass()) * k;
 
   A_ion = particle->GetAtomicMass();
@@ -1062,9 +1052,6 @@ G4double G4DNARuddIonisationExtendedModel::CorrectionFactor(G4ParticleDefinition
 G4int G4DNARuddIonisationExtendedModel::RandomSelect(G4double k, const G4String& particle )
 {   
   
-  G4DNAGenericIonsManager *instance;
-  instance = G4DNAGenericIonsManager::Instance();
- 
   G4int level = 0;
 
   // Retrieve data table corresponding to the current particle type  

@@ -628,7 +628,10 @@ void RMC01AnalysisManager::ComputeMeanEdepAndError(const G4Event* anEvent,G4doub
 	  G4double mean_x2 =accumulated_edep2/nb_event;
   	  error = factor*std::sqrt(mean_x2-mean*mean)/std::sqrt(G4double(nb_event));
 	  mean *=factor;
-   }
+   } else {
+          mean=0;
+          error=0;
+  }
 }
 ////////////////////////////////////////////////////////////////////////////////
 //

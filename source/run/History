@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+January 22nd, 2011, M.Asai (run-V09-04-00)
+- G4RunManager.hh : protection for WIN32 against already-existing
+  directory -- Problem #1157
+
 December 5th, 2010, J.Allison (run-V09-03-09)
 - G4RunManagerKernel::RunInitialization: Notify Vis Manager when
   geometry needs to be closed.

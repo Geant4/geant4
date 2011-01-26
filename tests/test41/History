@@ -4,7 +4,7 @@
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                    Test37 History file
+                    Test41 History file
                     --------------------
 This file should be used by the test developer to briefly
 summarize all major modifications introduced in the code and keep
@@ -13,6 +13,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21-12-10  V.Ivanchenko (test41-V09-04-00)
+- Added local Physics List in order to have comparisons with 
+  Urban90 and Urban93 models
+- Updated scripts
 
 28-05-10  V.Ivanchenko (test41-V09-03-01)
 - Added StackingAction

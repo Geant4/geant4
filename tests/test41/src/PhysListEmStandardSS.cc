@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardSS.cc,v 1.9 2010-05-03 12:48:24 vnivanch Exp $
+// $Id: PhysListEmStandardSS.cc,v 1.10 2010-12-23 11:47:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -97,8 +97,8 @@ void PhysListEmStandardSS::ConstructProcess()
                particleName == "mu-"    ) {
       //muon  
       pmanager->AddProcess(new G4MuIonisation,       -1, 1,1);
-      pmanager->AddProcess(new G4MuBremsstrahlung,   -1,-2,2);
-      pmanager->AddProcess(new G4MuPairProduction,   -1,-3,3);
+      pmanager->AddProcess(new G4MuBremsstrahlung,   -1, -2,2);
+      pmanager->AddProcess(new G4MuPairProduction,   -1, -3,3);
       pmanager->AddDiscreteProcess(new G4CoulombScattering);
              
     } else if (particleName == "alpha" || 
@@ -119,10 +119,11 @@ void PhysListEmStandardSS::ConstructProcess()
   //  opt.SetSubCutoff(true);
   opt.SetMinEnergy(0.1*keV);
   opt.SetMaxEnergy(10.*GeV);
-  //  opt.SetSplineFlag(true);
+  //opt.SetSplineFlag(true);
   opt.SetDEDXBinning(56);
   opt.SetLambdaBinning(56);
-  //  opt.SetLinearLossLimit(1.e-2);
+  //opt.SetLinearLossLimit(1.e-2);
+  opt.SetPolarAngleLimit(0.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAAttachment.cc,v 1.1 2010-09-08 13:46:45 sincerti Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: G4DNAAttachment.cc,v 1.1 2010/09/08 13:46:45 sincerti Exp $
+// GEANT4 tag $Name:  $
 
 #include "G4DNAAttachment.hh"
 
@@ -48,8 +48,6 @@ G4DNAAttachment::~G4DNAAttachment()
 
 G4bool G4DNAAttachment::IsApplicable(const G4ParticleDefinition& p)
 {
-  G4DNAGenericIonsManager *instance;
-  instance = G4DNAGenericIonsManager::Instance();
   return (&p == G4Electron::Electron());
 }
 

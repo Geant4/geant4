@@ -67,7 +67,7 @@ G4PionRadiativeDecayChannel::
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
       G4cout << "G4RadiativePionDecayChannel:: constructor :";
-      G4cout << " parent particle is not muon but ";
+      G4cout << " parent particle is not charged pion but ";
       G4cout << theParentName << G4endl;
     }
 #endif

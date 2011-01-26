@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19-01-2011 Luciano Pandola tag test52-V09-04-00
+	   Clean-up, remove obsolete EM models
+
 16-11-2007 Anton Lechner tag test52-V09-00-00
            Equivalent to CVS head of obsolete version
 

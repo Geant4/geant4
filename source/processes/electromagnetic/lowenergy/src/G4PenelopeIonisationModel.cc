@@ -48,6 +48,8 @@
 // 15 Apr 2010   L. Pandola   Implemented model's own version of MinEnergyCut()
 // 23 Apr 2010   L. Pandola   Removed InitialiseElementSelectors() call. Useless here and 
 //                            triggers fake warning messages
+// 18 Jan 2011   L. Pandola   Stricter check on production of sub-treshold delta-rays. Should 
+//                            never happen now
 //
 
 #include "G4PenelopeIonisationModel.hh"
@@ -485,8 +487,8 @@ void G4PenelopeIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*
   else if (theParticle == G4Positron::Positron())
     CalculateDiscreteForPositrons(kineticEnergy0,cutE,iZ,electronVolumeDensity);
 
-  // if (energySecondary == 0) return;
-
+  if (energySecondary == 0) return;
+ 
   //Update the primary particle
   G4double sint = std::sqrt(1. - cosThetaPrimary*cosThetaPrimary);
   G4double phi  = twopi * G4UniformRand();
@@ -541,7 +543,7 @@ void G4PenelopeIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*
   else 
     //Penelope subtracted the fluorescence, but one has to match the databases
     eKineticEnergy = energySecondary+ioniEnergy-bindingEnergy;
-  
+
   G4double localEnergyDeposit = ionEnergy; 
   G4double energyInFluorescence = 0.0*eV;
 
@@ -561,7 +563,7 @@ void G4PenelopeIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*
 		  G4DynamicParticle* aPhoton = (*photonVector)[k];
 		  if (aPhoton)
 		    {
-		      G4double itsEnergy = aPhoton->GetKineticEnergy();
+		      G4double itsEnergy = aPhoton->GetKineticEnergy();		   
 		      if (itsEnergy <= localEnergyDeposit)
 			{
 			  if(aPhoton->GetDefinition() == G4Gamma::Gamma())
@@ -580,20 +582,28 @@ void G4PenelopeIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*
 	    }
 	}
     }
-
-  // Generate the delta ray 
-  G4double sin2 = std::sqrt(1. - cosThetaSecondary*cosThetaSecondary);
-  G4double phi2  = twopi * G4UniformRand();
   
-  G4double xEl = sin2 * std::cos(phi2); 
-  G4double yEl = sin2 * std::sin(phi2);
-  G4double zEl = cosThetaSecondary;
-  G4ThreeVector eDirection(xEl,yEl,zEl); //electron direction
-  eDirection.rotateUz(particleDirection0);
+  // Generate the delta ray --> to be done only if above cut
+  if (eKineticEnergy> cutE)
+    {
+      G4double sin2 = std::sqrt(1. - cosThetaSecondary*cosThetaSecondary);
+      G4double phi2  = twopi * G4UniformRand();
+  
+      G4double xEl = sin2 * std::cos(phi2); 
+      G4double yEl = sin2 * std::sin(phi2);
+      G4double zEl = cosThetaSecondary;
+      G4ThreeVector eDirection(xEl,yEl,zEl); //electron direction
+      eDirection.rotateUz(particleDirection0);
 
-  G4DynamicParticle* deltaElectron = new G4DynamicParticle (G4Electron::Electron(),
+      G4DynamicParticle* deltaElectron = new G4DynamicParticle (G4Electron::Electron(),
 							    eDirection,eKineticEnergy) ;
-  fvect->push_back(deltaElectron);
+      fvect->push_back(deltaElectron);
+    }
+  else //delta-ray energy deposited locally
+    {
+      localEnergyDeposit += eKineticEnergy;
+      eKineticEnergy = 0;
+    }
   
   if (localEnergyDeposit < 0)
     {
@@ -619,6 +629,7 @@ void G4PenelopeIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*
 	" keV" << G4endl;
       G4cout << "-----------------------------------------------------------" << G4endl;
     }
+
   if (verboseLevel > 0)
     {
       G4double energyDiff = std::fabs(eKineticEnergy+energyInFluorescence+kineticEnergy1+
@@ -628,9 +639,21 @@ void G4PenelopeIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*
 	  (eKineticEnergy+energyInFluorescence+kineticEnergy1+localEnergyDeposit)/keV << 
 	  " keV (final) vs. " << 
 	  kineticEnergy0/keV << " keV (initial)" << G4endl;
+
+      //Check also for sub-threshold secondaries
+      /*
+      for (size_t i=0;i<fvect->size();i++)
+	{
+	  G4double e= (*fvect)[i]->GetKineticEnergy();
+	  if (e < cutE || e < cutG)
+	    {
+	      G4cout << "Sub-threshold secondary: " << e/eV << 
+	      "; particle is " << (*fvect)[i]->GetDefinition()->GetParticleName() << G4endl;
+	    }
+	}
+      */
     }
 }
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4PenelopeIonisationModel::ReadData()

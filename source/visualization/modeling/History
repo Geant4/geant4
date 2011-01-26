@@ -1,4 +1,4 @@
-$Id: History,v 1.123 2010-11-14 22:14:11 allison Exp $
+$Id: History,v 1.126 2010-12-27 12:29:28 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,20 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+25th January 2011  John Allison  (modeling-V09-04-01)
+- G4TrajectortDrawerUtils.cc:
+  o Fixed unresolved reference.
+  o Tidied.
+
+27th December 2010  John Allison  (modeling-V09-04-00)
+- Tagged.
+
+11th December 2010  John Allison
+- G4AttributeFilterT.hh, G4TrajectoryDrawByAttribute.cc:
+  o Changed some exceptions from FatalError to JustWarnings.
+- G4TrajectoryDrawerUtils.cc:
+  o Rework TimesValidity.
 
 14th November 2010  John Allison  (modeling-V09-03-05)
 - G4TrajectoryDrawerUtils.cc:Fixed time-slicing problem.

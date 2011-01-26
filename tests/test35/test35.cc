@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+// $Id: test35.cc,v 1.30 2010-12-23 15:16:12 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998
@@ -313,7 +314,7 @@ int main(int argc, char** argv)
         (*fin) >> nameGen;
 	if (nameGen == "") {
 	  G4cout << "Generator name is empty! " << G4endl; 
-	  break;
+	  continue;
 	}
         hFile = nameGen;
         if(nameGen == "binary")       { hFile = "bic"; }
@@ -335,8 +336,6 @@ int main(int argc, char** argv)
 	xssolang = false;
       } else if(line == "#xs_ghad") {
 	xsbgg = false;
-	//} else if(line == "#run") {
-        //break;
       } else if(line == "#verbose") {
         (*fin) >> verbose;
         G4cout << "### New verbose level " << verbose << G4endl;

@@ -44,7 +44,7 @@
 #include "Randomize.hh"
 
 #include "Test17DetectorConstruction.hh"
-#include "Test17PhysicsList.hh"
+#include "PhysicsList.hh"
 #include "Test17PrimaryGeneratorAction.hh"
 #include "Test17RunAction.hh"
 #include "Test17EventAction.hh"
@@ -62,7 +62,7 @@ int main(int argc,char** argv) {
   Test17DetectorConstruction* detector;
   detector = new Test17DetectorConstruction;
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new Test17PhysicsList(detector));
+  runManager->SetUserInitialization(new PhysicsList());
 
   // set user action classes
   runManager->SetUserAction(new Test17PrimaryGeneratorAction(detector));
@@ -77,23 +77,20 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(steppingaction);
 
   //Initialize G4 kernel
-//  runManager->Initialize();
-
   // get the pointer to the User Interface manager
-    G4UImanager* UI = G4UImanager::GetUIpointer();
+  G4UImanager* UI = G4UImanager::GetUIpointer();
 
   if (argc==1)   // Define UI terminal for interactive mode
     {
-     G4UIsession * session = new G4UIterminal;
-     //UI->ApplyCommand("/control/execute init.mac");
-     session->SessionStart();
-     delete session;
+      G4UIsession * session = new G4UIterminal;
+      session->SessionStart();
+      delete session;
     }
   else           // Batch mode
     {
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UI->ApplyCommand(command+fileName);
+      G4String command = "/control/execute ";
+      G4String fileName = argv[1];
+      UI->ApplyCommand(command+fileName);
     }
 
   // job termination

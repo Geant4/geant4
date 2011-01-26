@@ -159,6 +159,7 @@ void PhysicsList::ConstructEM()
 
     } else if ( particleName == "hydrogen" ) {
 
+      pmanager->AddDiscreteProcess(new G4DNAExcitation());
       pmanager->AddDiscreteProcess(new G4DNAIonisation());
       pmanager->AddDiscreteProcess(new G4DNAChargeIncrease());
 

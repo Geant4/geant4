@@ -1,4 +1,4 @@
-$Id: History,v 1.477 2010-12-02 18:02:33 vnivanch Exp $
+$Id: History,v 1.483 2011-01-04 11:50:19 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,49 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24.01.2011  L. Pandola, tag emlowen-V09-04-08
+	    Removed all obsolete G4Penelope processes and the 
+	    obsolete class G4PenelopeCrossSectionHandler.
+	    * Files to be restored in case of patches to G4 9.4 * 
+
+24.01.2011  S. Incerti, tag emlowen-V09-04-07
+            Fixed coverity warnings for G4DNA classes.
+
+18.01.2011  L.Pandola, tag emlowen-V09-04-06
+	    Fix memory leak in G4CrossSectionHandler, reported by 
+	    Coverity
+
+18.01.2011  L.Pandola, tag emlowen-V09-04-05
+	    Edited G4Penelope08IonisationModel and G4PenelopeIonisationModel 
+	    to avoid the production of sub-threshold delta-rays.
+
+04.01.2011  V.Ivanchenko, tag emlowen-V09-04-04
+            G4UAtomicDeexcitation, G4empCrossSection, G4teoCrossSection,
+            G4VhShellCrossSection - fixed inefficiency in computation 
+            of ionisation cross sections, now both models work with
+            similar speed; added extra protections limited usage of 
+            a model in applicability range
+
+27.12.2010  V.Ivanchenko, tag emlowen-V09-04-03
+            Fixed memory leaks at initialisation of G4LivermoreComptonModel,
+            G4LivermoreGammaConversionModel, G4LivermorePhotoElectricModel,
+            G4LivermoreRayleighModel;
+            Fixed Coverity warnings in G4EMDataSet and G4ShellData;
+            Moved constructor and destructor to source in G4VEMDataSet
+
+20.12.2010  L. Pandola, tag emlowen-V09-04-02
+	    Add the new Bremsstrahlung model based on Penelope v2008
+	    Requires version 6.20 of G4LEDATA
+
+15.12.2010  L. Pandola, tag emlowen-V09-04-01
+	    fixed Coverity defects for G4Penelope08 models 
+
+09.12.2010  V.Ivanchenko, tag emlowen-V09-04-00
+            fixed memory leak at initialisation of G4eIonisationParameters,
+            G4ShellVacancy, G4LivermoreIonisationModel, 
+            G4LivermoreBremsstrahlungModel, G4EMDataSet,
+            G4BremsstrahlungParameters
 
 02.12.2010  V.Ivanchenko, tag emlowen-V09-03-69
             fixed minor memory leaks in G4VCrossSectinDataSet, G4EMDataSet,

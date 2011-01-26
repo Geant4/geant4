@@ -30,9 +30,7 @@
 
 #include "G4TCatalog.h"
 
-
 G4TCatalog *gCatalog = new G4TCatalog();
-
 
 ClassImp(G4TCatalog)
 
@@ -40,91 +38,83 @@ using namespace std;
 using namespace ROOT;
 using namespace TMath;
 
-
-
 //______________________________________________________________________________
 vector<TString> G4TCatalog::GetPublications()
 {
-	vector<TString> files = this->Load();
-	vector<TString> result;
-	for(UInt_t i=0; i < files.size(); ++i)
-	{
-		TString str = files[i];
-		if(str.Contains("data"))
-		{
-			result.push_back(str);
-		}
-	}
-	return result;
+  vector<TString> files = this->Load();
+  vector<TString> result;
+  for(UInt_t i=0; i < files.size(); ++i)
+  {
+    TString str = files[i];
+    if(str.Contains("data")) result.push_back(str);
+  }
+  return result;
 }
 
 //______________________________________________________________________________
 vector<TString> G4TCatalog::Load()
 {
-	vector<TString> catalog;
-	ifstream asciiFile;
-	string   asciiLine;
+  vector<TString> catalog;
+  ifstream asciiFile;
+  string   asciiLine;
+  // open the file
+  asciiFile.open(fFileName.Data());
+  if (!asciiFile)
+  {
+    cout<< "Warning>>G4TCatalog::Load: Error in opening file="<< fFileName.Data()<< endl;
+    return catalog;
+  }
+  // process
+  while(getline(asciiFile, asciiLine)) catalog.push_back(TString(asciiLine));
 
-	// open the file
-	asciiFile.open(fFileName.Data());
-	if (!asciiFile) {
-		cout << "Error opening file "<< fFileName.Data() << endl;
-		return catalog;
-	}
-
-	// process
-	while(getline(asciiFile, asciiLine))
-	{
-		catalog.push_back(TString(asciiLine));
-	}
-
-	asciiFile.close();
-	return catalog;
+  asciiFile.close();
+  return catalog;
 }
 
 //______________________________________________________________________________
 Bool_t G4TCatalog::ContainsLine(TString const& line)
 {
-	ifstream asciiFile;
-	string   asciiLine;
-
-	// open the file
-	asciiFile.open(fFileName.Data());
-	if (!asciiFile) {
-		cout << "Error opening file "<< fFileName.Data() << endl;
-		return false;
-	}
-
-	// process
-	while(getline(asciiFile, asciiLine))
-	{
-		if(line == TString(asciiLine)){
-			asciiFile.close();
-			return true; // already there
-		}
-	}
-
-	asciiFile.close();
-	return false;
+  ifstream asciiFile;
+  string   asciiLine;
+  // open the file
+  asciiFile.open(fFileName.Data());
+  if (!asciiFile)
+  {
+    cout<<"Warning>G4TCatalog::ContainsLine: ErrorInOpening file="<<fFileName.Data()<<endl;
+    return false;
+  }
+  // process
+  while(getline(asciiFile, asciiLine))
+  {
+    if(line == TString(asciiLine))
+    {
+      asciiFile.close();
+      return true; // already there
+    }
+  }
+  asciiFile.close();
+  return false;
 }
 
 //______________________________________________________________________________
 void G4TCatalog::Insert(TString const& name)
 {
-	fstream  asciiFile;
-	string   asciiLine;
-
-	// open the file
-	asciiFile.open(fFileName.Data(), fstream::in | fstream::out | fstream::app);
-	if (!asciiFile || asciiFile.fail()) {
-		cout << "Error opening file "<< fFileName.Data() << endl;
-		return;
-	}
-
-	if(ContainsLine(name)) return; // already there
-
-	asciiFile << name << endl;
-	asciiFile.close();
-	return;
+  ofstream  asciiFile;
+  asciiFile.open(fFileName.Data(), std::ios::out | std::ios::app );
+  if (!asciiFile || asciiFile.fail())
+  {
+    cout<<"!Warning->G4TCatalog::Insert: Error in opening file="<<fFileName.Data()
+        <<", file="<<asciiFile<<", fail="<<asciiFile.fail()<<endl;
+    return;
+  }
+  if(ContainsLine(name))
+  {
+    cout<<"Warning>G4TCatalog::Insert:File="<<name<<" exists -> rewrite"<<endl;
+    return; // This name is is already in the Catalog, so just rewriting the file itself
+  }
+  else cout<<"G4TCatalog::Insert: File="<<name<<" is new"<<endl;
+  asciiFile << name << endl;
+  asciiFile.close();
+  return;
 }
 

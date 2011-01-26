@@ -212,13 +212,14 @@ void Em10PhysicsList::ConstructProcess()
 //
 
 #include "G4ComptonScattering.hh"
-// #include "G4PenelopeCompton.hh"
 #include "XTRComptonScattering.hh"
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 #include "XTRPhotoElectricEffect.hh"
 
-#include "G4MultipleScattering.hh"
+#include "G4eMultipleScattering.hh"
+#include "G4MuMultipleScattering.hh"
+#include "G4hMultipleScattering.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -396,9 +397,6 @@ void Em10PhysicsList::ConstructEM()
       // xtrComptonScattering->SetMinGammaEnergy(fMinGammaEnergy);
       // pmanager->AddDiscreteProcess(xtrComptonScattering);
 
-      // G4PenelopeCompton* penelopeCompton = new G4PenelopeCompton();      
-      // pmanager->AddDiscreteProcess(penelopeCompton);
-
       theGammaConversion = new G4GammaConversion();
       pmanager->AddDiscreteProcess(theGammaConversion);
 
@@ -407,7 +405,7 @@ void Em10PhysicsList::ConstructEM()
     {
       // Construct processes for electron
 
-      theeminusMultipleScattering = new G4MultipleScattering();
+      theeminusMultipleScattering = new G4eMultipleScattering();
       theeminusBremsstrahlung = new G4eBremsstrahlung();
 
       theeminusStepCut = new Em10StepCut();
@@ -438,7 +436,7 @@ void Em10PhysicsList::ConstructEM()
     {
       // Construct processes for positron
 
-      theeplusMultipleScattering = new G4MultipleScattering();
+      theeplusMultipleScattering = new G4eMultipleScattering();
       theeplusIonisation = new G4eIonisation();
       theeplusBremsstrahlung = new G4eBremsstrahlung();
       theeplusAnnihilation = new G4eplusAnnihilation();
@@ -471,7 +469,7 @@ void Em10PhysicsList::ConstructEM()
       G4PAIModel*     pai = new G4PAIModel(particle,"PAIModel");
       themuIonisation->AddEmModel(0,pai,pai,gas);
 
-      pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
+      pmanager->AddProcess(new G4MuMultipleScattering(),-1,1,1);
       pmanager->AddProcess(themuIonisation,-1,2,2);
       pmanager->AddProcess(new G4MuBremsstrahlung(),-1,-1,3);
       pmanager->AddProcess(new G4MuPairProduction(),-1,-1,4);
@@ -491,8 +489,8 @@ void Em10PhysicsList::ConstructEM()
       Em10StepCut* thehadronStepCut = new Em10StepCut();
 
       G4hIonisation* thehIonisation = new G4hIonisation();
-      G4MultipleScattering* thehMultipleScattering =
-                        new G4MultipleScattering() ;
+      G4hMultipleScattering* thehMultipleScattering =
+                        new G4hMultipleScattering() ;
 
 
       G4PAIModel*     pai = new G4PAIModel(particle,"PAIModel");

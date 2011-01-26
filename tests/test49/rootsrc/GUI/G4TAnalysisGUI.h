@@ -30,7 +30,9 @@
 // The GUI for the analysis tool
 //
 // History:
-// Roman Atachiants, 18/08/2009 - initial version
+// Created by Roman Atachiants, 18/08/2009
+// Modified:
+// Mikhail Kosov, 12/05/2010: Cleaning up
 //
 // --------------------------------------------------------------------
 #ifndef G4TAnalysisGUI_H_
@@ -43,13 +45,13 @@
 
 #include "Riostream.h"
 
-
-class G4TAnalysisGUI : public TGMainFrame {
-
+class G4TAnalysisGUI : public TGMainFrame
+{
   private:
-  TGTextButton* bRun;
-  TGTextButton* bClose;
-  TGComboBox*  cPublication;
+
+  TGTextButton*  bRun;
+  TGTextButton*  bClose;
+  TGComboBox*    cPublication;
   TGNumberEntry* nParticleIdx;
 
   void Initialize();
@@ -59,15 +61,13 @@ class G4TAnalysisGUI : public TGMainFrame {
 
   public:
 
+  G4TAnalysisGUI(const TGWindow *p, UInt_t w, UInt_t h);
+  virtual ~G4TAnalysisGUI ();
 
- G4TAnalysisGUI(const TGWindow *p, UInt_t w, UInt_t h);
- virtual ~G4TAnalysisGUI ();
+  virtual void CloseWindow();
+  virtual Bool_t ProcessMessage(Long_t msg, Long_t parm1, Long_t parm2);
 
-
- virtual void CloseWindow();
- virtual Bool_t ProcessMessage(Long_t msg, Long_t parm1, Long_t parm2);
-
- ClassDef(G4TAnalysisGUI, 1)  //The class for Geant4 Simulation
+  ClassDef(G4TAnalysisGUI, 1)  //The class for Geant4 Simulation
 };
 
 

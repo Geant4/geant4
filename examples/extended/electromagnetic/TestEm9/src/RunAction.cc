@@ -73,11 +73,11 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void RunAction::EndOfRunAction(const G4Run*)
+void RunAction::EndOfRunAction(const G4Run* run)
 {
 
   G4cout << "RunAction: End of run actions are started" << G4endl;
-  (HistoManager::GetPointer())->EndOfRun();
+  (HistoManager::GetPointer())->EndOfRun(run->GetRunID());
 
 #ifdef G4VIS_USE
   if (G4VVisManager::GetConcreteInstance())

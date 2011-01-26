@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20-01-2011 V. Ivanchenko - tag test50-V09-04-01
+	   Use Physics List from test17
+
+19-01-2011 L. Pandola - tag test50-V09-04-00
+	   Make test50 with Geant4 9.4, removed obsolete Penelope and 
+           LowEnergy processes
+
 09-11-2010 M. Asai - tag test50-V09-03-03
            Fix AIDA file option.
 

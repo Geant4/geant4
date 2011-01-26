@@ -1,0 +1,37 @@
+#ifndef SEMIINFINITETARGET_HH
+#define SEMIINFINITETARGET_HH
+
+#include "TargetComponent.hh"
+#include "globals.hh"
+
+class G4Tubs;
+class G4LogicalVolume;
+class G4VPhysicalVolume;
+class G4PVPlacement;
+class TargetLayerSD;
+class G4VisAttributes;
+
+class SemiInfiniteTarget : public TargetComponent {
+
+ public:
+   SemiInfiniteTarget(G4VPhysicalVolume* world,
+                      G4String material,
+                      G4double thickness,
+                      G4double rad,
+                      G4double position);
+   ~SemiInfiniteTarget(); 
+
+   G4double GetRadius() { return radius; }
+   G4VPhysicalVolume* GetWorldVolPhys() { return worldVolPhys; }   
+
+ private:
+   G4double radius;
+   G4VPhysicalVolume* worldVolPhys;
+   G4Tubs* semiInfTargetSolid;
+   G4LogicalVolume* semiInfTargetLogic;
+   G4PVPlacement* semiInfTargetPhys;
+   TargetLayerSD* semiInfTargetSD; 
+   G4VisAttributes* semiInfTargetVisAtt;
+};
+
+#endif // SEMIINFINITETARGET_HH

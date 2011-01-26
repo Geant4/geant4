@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNASancheExcitationModel.hh,v 1.3 2010-11-11 23:43:35 sincerti Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: G4DNASancheExcitationModel.hh,v 1.3 2010/11/11 23:43:35 sincerti Exp $
+// GEANT4 tag $Name:  $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,7 +75,6 @@ protected:
 
 private:
 
-  G4double killBelowEnergy;  
   G4double lowEnergyLimit;  
   G4double highEnergyLimit; 
   G4bool isInitialised;

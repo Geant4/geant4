@@ -4,32 +4,19 @@
 /control/verbose 2
 /run/verbose 1
 /tracking/verbose 0
-###############################
-#/testCalorim/GapWidth  0.01 mm
-#/testCalorim/crystalWidth  22.0 mm
-#/testCalorim/crystalLength 230.0 mm
-#/testCalorim/hcalWidth 200. mm
-#/testCalorim/nbins 50
-/testCalorim/maxE 60. GeV
-/testCalorim/factEcal 1.05  
-/testCalorim/factHcal 105.0
-#/testCalorim/addPreShower
-#######
-/run/initialize
-/run/setCut 0.5 mm
-/run/setCutForRegion HcalRegion 0.7 mm
-#/process/eLoss/verbose 2
-#/process/em/applyCuts true
-/gun/particle pi-
-/gun/particle mu-
-/gun/energy 30. GeV
-/run/beamOn 400
-#/testCalorim/magField 4 tesla
-#/testCalorim/addPreShower
-#/testCalorim/updateGeometry
-#/run/beamOn 10
 #
-#/run/particle/storePhysicsTable QGSP_BERT_EML
+/testCalorim/nbins 100
+/testCalorim/maxE 50. GeV
+/testCalorim/factEcal 1.03 
+/testCalorim/factHcal 100.0
+#
+/testhadr/PrintModulo 10
+/run/initialize
+/run/setCut 1 mm
+/run/setCutForRegion HcalRegion 1 mm
+/gun/particle pi-
+/gun/energy 15. GeV
+/run/beamOn 100
 #
 
 

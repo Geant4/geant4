@@ -20,6 +20,9 @@ committal in the CVS repository !
 History file for visualization/XXX sub-category (a template graphics system)
 ---------------------------------------------------------------------------
 
+23th January 2011 L.Garnier
+- GNUMakefile : Remove G4VIS_BUILD.gmk use
+
 6th October 2010  John Allison  (visXXX-V08-03-00)
 - G4XXXSGViewer.cc, G4XXXStoredViewer.cc:
   o Added default colour and default text colour to list of parameters

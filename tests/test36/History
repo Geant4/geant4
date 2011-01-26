@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19-01-11  L.Pandola (test36-V09-04-00)
+- porting to Geant4 9.4
+
 01-06-07  V.Ivanchenko (test36-V08-03-03)
 - disable previous changing and restore XTR test
 

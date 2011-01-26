@@ -23,18 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+// $Id: test46.cc,v 1.3 2010-12-21 19:43:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------
 //      GEANT4 test46
 //
-//  Application demonstrating Geant4 hadronic physics:
-//  beam interaction with a thick target
+//  Simplified combined CMS calorimeter 
 //
-//  Authors: Ivanchenko
+//  Authors: A.Ivanchenko and V.Ivanchenko
+//           September 2008
 //
-//  Modified: Sept 2008
+//  Modified: 
 //
 // -------------------------------------------------------------
 //
@@ -59,6 +59,7 @@
 #include "G4Timer.hh"
 
 #include "G4VisExecutive.hh"
+#include "G4UIExecutive.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -76,8 +77,15 @@ int main(int argc,char** argv) {
   //set mandatory initialization classes
   runManager->SetUserInitialization(new DetectorConstruction());
 
+  // Physics List name defined via environment variable
+  // or the default test46 name is used
+  G4String physName = "";
+  char* path = getenv("PHYSLIST");
+  if(path) { physName = G4String(path); }
+  if("" == physName) { physName = "FTFP_BERT_EMV"; }
+
   G4PhysListFactory factory;
-  G4VModularPhysicsList* phys = factory.ReferencePhysList();
+  G4VModularPhysicsList* phys = factory.GetReferencePhysList(physName);
 
   runManager->SetUserInitialization(phys);
 
@@ -88,35 +96,35 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(new EventAction());
   runManager->SetUserAction(new StackingAction());
 
-  //get the pointer to the User Interface manager
+  // get the pointer to the User Interface manager
   G4UImanager* UI = G4UImanager::GetUIpointer();
-  G4VisManager* visManager = 0;
 
   if (argc==1)   // Define UI terminal for interactive mode
     {
 #ifdef G4VIS_USE
       //visualization manager
-      visManager = new G4VisExecutive;
+      G4VisExecutive* visManager = new G4VisExecutive;
       visManager->Initialize();
 #endif
-      G4UIsession* session = 0;
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);
-#else
-      session = new G4UIterminal();
+
+#ifdef G4UI_USE
+      G4UIExecutive * ui = new G4UIExecutive(argc,argv);
+      ui->SessionStart();
+      delete ui;
 #endif
-      session->SessionStart();
-      delete session;
+
+#ifdef G4VIS_USE
+     delete visManager;
+#endif
     }
   else           // Batch mode
     {
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UI->ApplyCommand(command+fileName);
+      G4String command = "/control/execute ";
+      G4String fileName = argv[1];
+      UI->ApplyCommand(command+fileName);
     }
 
   //job termination
-  if(visManager) delete visManager;
   delete runManager;
   timer.Stop();
   G4cout << timer << std::endl;

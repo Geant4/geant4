@@ -68,14 +68,20 @@ G4Material* G4tgbMaterialMixtureByNoAtoms::BuildG4Material()
   G4Material* mate = new G4Material( theTgrMate->GetName(),
                                      theTgrMate->GetDensity(),
                                      theTgrMate->GetNumberOfComponents(),
-                                     kStateUndefined, STP_Temperature );
+                                     theTgrMate->GetState(),
+                                     theTgrMate->GetTemperature(),
+                                     theTgrMate->GetPressure() );
  #ifdef G4VERBOSE
   if( G4tgrMessenger::GetVerboseLevel() >= 2 )
   {
     G4cout << " G4tgbMaterialMixtureByNoAtoms::BuildG4Material() -"
            << " Constructing new G4Material:"
            << " " << theTgrMate->GetName()
-           << " " << theTgrMate->GetDensity()/g*cm3 << G4endl;
+           << " " << theTgrMate->GetDensity()/g*cm3
+           << " " << theTgrMate->GetNumberOfComponents()
+           << " " << theTgrMate->GetState()
+           << " " << theTgrMate->GetTemperature()
+           << " " << theTgrMate->GetPressure() << G4endl;
   }
 #endif
 

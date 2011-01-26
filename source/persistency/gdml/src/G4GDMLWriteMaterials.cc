@@ -162,7 +162,9 @@ void G4GDMLWriteMaterials::MaterialWrite(const G4Material* const materialPtr)
   
    const size_t NumberOfElements = materialPtr->GetNumberOfElements();
 
-   if (NumberOfElements>1)
+   if ( (NumberOfElements>1)
+      || ( materialPtr->GetElement(0)
+        && materialPtr->GetElement(0)->GetNumberOfIsotopes()>1 ) )
    {
       const G4double* MassFractionVector = materialPtr->GetFractionVector();
 

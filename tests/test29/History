@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Jan 20th, 2010 Luciano Pandola (test29-V09-04-00)
+- removed obsolete G4hLowEnergyIonisation from the 
+  physics list
+
 Jun 1st, 2010  Mikhail Kossov (test29-V09-03-00)
 - Get rid of G4MultipleScattering in Test29PhysicsList
 

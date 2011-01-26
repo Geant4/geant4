@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByAttribute.cc,v 1.5 2010-05-28 02:00:59 allison Exp $
+// $Id: G4TrajectoryDrawByAttribute.cc,v 1.6 2010-12-11 16:41:11 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay August 2006
@@ -96,10 +96,17 @@ G4TrajectoryDrawByAttribute::Draw(const G4VTrajectory& object,
     
     // Expect definition to exist    
     if (!G4AttUtils::ExtractAttDef(object, fAttName, attDef)) {
-      std::ostringstream o;
-      o <<"Unable to extract attribute definition named "<<fAttName;
-      G4Exception
-	("G4TrajectoryDrawByAttribute::Draw", "InvalidAttributeDefinition", FatalErrorInArgument, o.str().c_str());
+      static G4bool warnedUnableToExtract = false;
+      if (!warnedUnableToExtract) {
+	std::ostringstream o;
+	o <<"Unable to extract attribute definition named "<<fAttName;
+	G4Exception
+	  ("G4TrajectoryDrawByAttribute::Draw", "InvalidAttributeDefinition", JustWarning, o.str().c_str());
+	G4cout << "Available attributes:\n"
+	       << object.GetAttDefs();
+	warnedUnableToExtract = true;
+      }
+      return;
     }
     
     // Get new G4AttValue filter
@@ -126,10 +133,17 @@ G4TrajectoryDrawByAttribute::Draw(const G4VTrajectory& object,
 
   // Expect value to exist
   if (!G4AttUtils::ExtractAttValue(object, fAttName, attVal)) {
+    static G4bool warnedUnableToExtract = false;
+    if (!warnedUnableToExtract) {
       std::ostringstream o;
       o <<"Unable to extract attribute value named "<<fAttName;
       G4Exception
-	("G4TrajectoryDrawByAttribute::Draw", "InvalidAttributeValue", FatalErrorInArgument, o.str().c_str());
+	("G4TrajectoryDrawByAttribute::Draw", "InvalidAttributeValue", JustWarning, o.str().c_str());
+	G4cout << "Available attributes:\n"
+	       << object.GetAttDefs();
+      warnedUnableToExtract = true;
+    }
+      return;
   }
   
   G4VisTrajContext myContext(GetContext());

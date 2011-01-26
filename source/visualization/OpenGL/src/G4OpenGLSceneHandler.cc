@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.59 2010-05-30 09:53:05 allison Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.60 2010-12-11 17:04:07 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -490,10 +490,12 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   // attributes, thereby over-riding the current view parameter.
   G4ViewParameters::DrawingStyle drawing_style = GetDrawingStyle (pVA);
 
-  //Get colour, etc...
-  G4bool transparency_enabled = true;
+  // Get colour, etc...
+  // Need access to data in G4OpenGLViewer.  static_cast doesn't work
+  // with a virtual base class, so use dynamic_cast.  No need to test
+  // the outcome since viewer is guaranteed to be a G4OpenGLViewer.
   G4OpenGLViewer* pViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
-  if (pViewer) transparency_enabled = pViewer->transparency_enabled;
+  const G4bool& transparency_enabled = pViewer->transparency_enabled;
   const G4Colour& c = pVA->GetColour();
   GLfloat materialColour [4];
   materialColour [0] = c.GetRed ();

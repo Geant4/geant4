@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25-January, 2011  G.Folger     (ReverseMC01-V09-04-00)
+- Add protection for unitialised mean&error in RMC01AnalysisManager::ComputeMeanEdepAndError()
+
 11-November, 2010 L. Desorgher (ReverseMC01-V09-03-04)
 - Add initialisation of thepIonisation in G4AdjointPhysicsList constructor.
 - Modify some test on nb_event in  RMC01AnalysisManager::ComputeMeanEdepAndError
