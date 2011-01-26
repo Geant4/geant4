@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Jan 26, 2011  G.Cosmo (global-V09-04-02)
+- Added trailing spaces to version string in G4Version.hh.
+
 Jan 26, 2011  G.Cosmo (global-V09-04-01)
 - Manually added corrected tag strings in G4Version.hh, temporary solution
   for the no longer supported feature in SVN...
