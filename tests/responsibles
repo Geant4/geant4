@@ -215,7 +215,7 @@ tests                        Gunter.Folger@cern.ch           Gunter Folger
       test17                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test18                 flei@space.qinetiq.com          Fan Lei
       test19                 Mikhail.Kossov@cern.ch          Mikhail Kossov
-      test20                 incerti@cenbg.in2p3.fr          Sebastien Incerti
+      test20                 (not currently used - see tests/GNUmakefile)
       test21                 dwright@slac.stanford.edu       Dennis Wright
       test22                 dwright@slac.stanford.edu       Dennis Wright
       test23                 dwright@slac.stanford.edu       Dennis Wright
