@@ -17,6 +17,23 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+tests-V09-04-01 31st January 2011  Gabriele Cosmo
+- Updated reference outputs according to reference tag geant4-09-04-ref-01.
+- Archived test20.
+- Includes tags: test14-V09-04-00, test17-V09-04-00, test19-V09-04-00,
+                 test29-V09-04-00, test35-V09-04-00, test36-V09-04-00,
+                 test37-V09-04-00, test39-V09-04-00, test41-V09-04-00,
+                 test46-V09-04-00, test49-V09-04-00, test50-V09-04-01,
+                 test52-V09-04-00, test60-V09-04-01.
+
+tests-V09-04-00 17th December 2010  Gabriele Cosmo
+- Updated reference outputs according to reference tag geant4-09-04-ref-00.
+- Includes tags: test10-V09-03-02, test12-V09-03-01, test30-V09-03-08,
+                 test35-V09-03-03, test44-V09-03-02, test45-V09-03-00,
+                 test46-V09-03-01, test50-V09-03-03, test53-V09-03-02,
+                 test54-V09-03-01, test55-V09-03-01, test58-V09-03-00,
+                 test202-V09-03-01.
+
 tests-V09-03-09 29th October 2010  Gabriele Cosmo
 - Updated reference outputs according to reference tag geant4-09-03-ref-09.
 - Includes tags: test19-V09-03-07, test30-V09-03-07, test31-V09-03-02.
