@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-00    (17-December-2010)
+ Geant4 version geant4-09-04-ref-01   (17-December-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -288,7 +288,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=29.28s Real=30s Sys=0.01s
+  User=29.58s Real=30.42s Sys=0.02s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
@@ -499,7 +499,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0.03s Real=0.04s Sys=0s
+  User=0.04s Real=0.04s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Silicon
 #
@@ -715,7 +715,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=4.6s Real=4.66s Sys=0.01s
+  User=4.46s Real=4.48s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -936,7 +936,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=3.2s Real=3.41s Sys=0s
+  User=3.32s Real=3.33s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -984,7 +984,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=0s Real=0s Sys=0s
+  User=7.28s Real=7.29s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on H
 #
@@ -1031,7 +1031,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0.02s Real=0.03s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on Silicon
 #
@@ -1078,7 +1078,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0.11s Real=0.11s Sys=0s
+  User=0.24s Real=0.24s Sys=0s
 #
 #  .....end C(12,6)++............
 #
@@ -1307,7 +1307,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=15.92s Real=15.93s Sys=0.01s
+  User=39.19s Real=43.05s Sys=0.01s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.

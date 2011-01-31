@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-00    (17-December-2010)
+ Geant4 version geant4-09-04-ref-01   (17-December-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -389,7 +389,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.44s Real=2.46s Sys=0.02s
+  User=2.5s Real=2.54s Sys=0.04s
 
  The run consists of 1000 C12[0.0] of 144 MeV through 20 cm  of G4_Al (density: 2.699 g/cm3 )
 
@@ -751,7 +751,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.02s Real=3.13s Sys=0.05s
+  User=3.15s Real=3.2s Sys=0.05s
 
  The run consists of 1000 C12[0.0] of 144 MeV through 20 cm  of G4_Be (density: 1.848 g/cm3 )
 
@@ -1123,7 +1123,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.67s Real=2.72s Sys=0.05s
+  User=2.66s Real=2.71s Sys=0.05s
 
  The run consists of 1000 C12[0.0] of 144 MeV through 20 cm  of G4_C (density: 2 g/cm3 )
 
@@ -1516,7 +1516,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.8s Real=0.89s Sys=0.04s
+  User=0.8s Real=0.85s Sys=0.05s
 
  The run consists of 1000 Li7[0.0] of 29.818 MeV through 70.14 um  of G4_KAPTON (density: 1.42 g/cm3 )
 
@@ -1926,7 +1926,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.36s Real=0.41s Sys=0.06s
+  User=0.35s Real=0.39s Sys=0.04s
 
  The run consists of 1000 Li7[0.0] of 29.818 MeV through 29.333 um  of G4_POLYCARBONATE (density: 1.2 g/cm3 )
 
@@ -2353,7 +2353,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.28s Real=0.37s Sys=0.08s
+  User=0.29s Real=0.32s Sys=0.03s
 
  The run consists of 1000 Li7[0.0] of 29.818 MeV through 23.143 um  of G4_MYLAR (density: 1.4 g/cm3 )
 
@@ -2780,7 +2780,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.81s Real=0.92s Sys=0.11s
+  User=0.83s Real=0.86s Sys=0.03s
 
  The run consists of 1000 C12[0.0] of 79.08 MeV through 70.14 um  of G4_KAPTON (density: 1.42 g/cm3 )
 
@@ -3207,7 +3207,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.34s Real=0.48s Sys=0.13s
+  User=0.35s Real=0.39s Sys=0.04s
 
  The run consists of 1000 C12[0.0] of 79.08 MeV through 29.333 um  of G4_POLYCARBONATE (density: 1.2 g/cm3 )
 
@@ -3634,7 +3634,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.27s Real=0.33s Sys=0.05s
+  User=0.28s Real=0.33s Sys=0.05s
 
  The run consists of 1000 C12[0.0] of 59.04 MeV through 23.143 um  of G4_MYLAR (density: 1.4 g/cm3 )
 
@@ -4061,7 +4061,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.57s Real=0.65s Sys=0.06s
+  User=0.57s Real=0.63s Sys=0.05s
 
  The run consists of 1000 O16[0.0] of 78.215 MeV through 46.7 um  of G4_KAPTON (density: 1.42 g/cm3 )
 
@@ -4488,7 +4488,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.35s Real=0.43s Sys=0.08s
+  User=0.35s Real=0.4s Sys=0.05s
 
  The run consists of 1000 O16[0.0] of 78.215 MeV through 29.333 um  of G4_POLYCARBONATE (density: 1.2 g/cm3 )
 
@@ -4915,7 +4915,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.31s Real=0.41s Sys=0.1s
+  User=0.29s Real=0.35s Sys=0.04s
 
  The run consists of 1000 O16[0.0] of 78.215 MeV through 23.143 um  of G4_MYLAR (density: 1.4 g/cm3 )
 

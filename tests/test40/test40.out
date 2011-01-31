@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-00    (17-December-2010)
+ Geant4 version geant4-09-04-ref-01   (17-December-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -370,7 +370,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=21.54s Real=21.93s Sys=0s
+  User=21.62s Real=22.27s Sys=0.01s
                  LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
 
         bin              Mean         rms                 bin            Mean      rms 
@@ -470,7 +470,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=31.22s Real=31.45s Sys=0.01s
+  User=31.65s Real=33.78s Sys=0s
                  LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
 
         bin              Mean         rms                 bin            Mean      rms 

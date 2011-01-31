@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-00    (17-December-2010)
+ Geant4 version geant4-09-04-ref-01   (17-December-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -282,7 +282,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.28s Real=0.28s Sys=0s
+  User=0.29s Real=0.29s Sys=0s
 #
 # neutron at 1 GeV in Th
 #
@@ -585,7 +585,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.3s Real=0.3s Sys=0s
+  User=0.32s Real=0.31s Sys=0s
 #
 # neutron at 1 GeV in U
 #
@@ -908,7 +908,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.24s Real=0.23s Sys=0s
+  User=0.25s Real=0.25s Sys=0s
 #
 # neutron at 1 GeV in Pb
 #
@@ -1251,7 +1251,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.06s Real=0.05s Sys=0s
+  User=0.06s Real=0.06s Sys=0s
 #
 # neutron at 1 GeV in Cu
 #
@@ -1614,7 +1614,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.03s Real=0.03s Sys=0s
+  User=0.03s Real=0.03s Sys=0.01s
 #
 # neutron at 1 GeV in Si
 #
