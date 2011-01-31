@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-00    (17-December-2010)
+ Geant4 version geant4-09-04-ref-01   (17-December-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -2255,7 +2255,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     1   12.8 cm     -5 m    2.32 m    2.59 eV      0 eV   5.51 m    5.51 m          Tank  Transportation
     2   31.8 cm    -10 m    5.78 m    2.59 eV      0 eV   6.08 m    11.6 m    OutOfWorld  Transportation
 Number of optical photons produced in this event : 87
-number of event = 1 User=0.01s Real=0.02s Sys=0s
+number of event = 1 User=0.02s Real=0.02s Sys=0s
 #
 #/process/inactivate Scintillation
 #/N06/phys/verbose 0
