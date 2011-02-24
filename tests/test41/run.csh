@@ -29,3 +29,5 @@ set    phys = "optS"
 source ${dir}run_single.csh ${phys} ${work} ${dir} >& resS.out
 
 source ${dir}plot.csh $1 >& p.out
+
+gzip *.out

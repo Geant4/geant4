@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+10-02-11 mma (exampleN03-V09-04-01)
+- update SteppingVerbose
+     
+01-02-11 mma (exampleN03-V09-04-00)
+- /vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 1
+     
 01-12-10 John Allison (exampleN03-V09-03-05)
 - First attempt at rationalising visTutor:
   o Several repetitive macros deleted:

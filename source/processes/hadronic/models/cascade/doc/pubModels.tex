@@ -1,0 +1,172 @@
+\section{Geant4 cascade model}
+
+In inelastic particle nucleus collision a fast phase ($10^{-23} - 10^{-22} s$) of INC results to highly exited nucleus, 
+and is followed possible by fission and pre-equilibrium emission. A slower $10^{-18} - 10^{-16} s$ compound nucleus phase follows with evaportaion.
+A Boltzman equation must be solved to treat physical proces of collision in detail.
+ 
+Intranuclear cascade (INC) model developed by Bertini \cite{bertini68, bertini69, bertini71}, solves the Boltzman equation on the average.
+The model had been implemented in several codes such as HETC \cite{alsmiller90}. 
+Our model is based on re-engineering of INUCL code  \cite{titarenko99a}.
+Models included are Bertini intranuclear cascade model with exitons, pre-equilibrium model, simple nucleus explosion model, 
+fission model, and evaporation model. 
+
+Nuclear model consist of a three-region approximation to the continuously changing density distribution of nuclear matter within nuclei.
+Reletivistic kinematics is applied throughout the cascade.
+Cascade is stopped when all the particles, which can escape the nucleus, do it. 
+Then conformity with the energy - conservation law is checked.
+
+
+\subsection{Model limits}
+
+Particles treated are proton, neutron, pions, photon and nuclear isotopes.
+Bullet particle can be proton, neutron or  pion.
+Range of targets allowed is arbitrary.
+
+The necessary condition of validity of the INC model is $\lambda_{B} / v << \tau_{c} << \Delta t$, 
+where $\delta_{B}$ is the de Broglie wavelenth of the nucleons, v is the average relative N-N velocity and $\Delta t$ is the time interval between collisions.
+So the physical foundation comes approximate at energies less than $200 MeV$, and needs to be supported with pre-quilibrium model.
+also at energies higher than $\approx$ 10 GeV) the INC picture breaks down.
+Model has been tested against experimental with bullet kinetic energy  between 100~MeV and 5~GeV.
+
+\subsection{Intranuclear cascade model}
+
+Basic steps of the INC model are summarised below:
+
+\begin{enumerate}
+\item The spatial point, where the incident particle enters, is selected uniformly over the projected area of the nucleus.
+\item Total particle-particle crossections and region-depenent nucleon densities are used to select a path lenght for the projectile particle.
+\item The momentum of the struck nucleon, the type of reaction and four momentum of the reaction products are determined.
+\item Exiton model is updated as the cascade proceeds.
+\item If Pauli exclusion principle allows and $E_{particle} > E_{cutoff}$ = 2~MeV, step (2) is performed to transport the products.
+\end{enumerate}
+
+After INC, the residual excitation energy of the resulting nucleus is used as input for non-equilibrium model.
+
+\subsection{Nuclei model}
+
+Some of the basic features of the nuclei are:
+
+\begin{itemize}
+\item The nucleons are assumed to to have a Fermi gas momentum distribution. Fermi energy calculated in a local density approximation i.e. 
+Fermi energy is made radius dependent with Fermi momentum $p_{F}(r) = (\frac{3 \pi^2 \rho(r)}{2})^\frac{1}{3}$.
+%\item Nuclear density effects are recalculated after each step.
+\item Nucleons binding energies (BE) are calculated using mass formula.
+A parametrization of the nuclear binding energy uses combination of Kummel mass formula, and
+experimental data. Also, asymptotic high temperature mass formula is used if it's impossible to use experimental data.
+\end{itemize}
+
+\subsubsection{Initialization}
+The initialization phase fixes of nucleus radius  and momentum according to Fermi gas model.
+
+If target is Hydrogen (A = 1) direct particle-particle collision is performed, 
+and no nuclear modelling is used. 
+
+If $1 < A < 4$, a nuclei model consisting one layer with radius of 8.0 fm is created.
+
+For $4 < A < 11$, nuclei model is composed of three consentric spheres $i = \{1, 2, 3\}$ with radius
+$$r_{i}(\alpha_{i}) = \sqrt{C_{1}^{2} (1 - \frac{1}{A}) + 6.4} \sqrt{-log( \alpha_{i})}$$
+
+Here $\alpha_{i} = \{0.01, 0.3, 0.7\}$ and $C_{1} = 3.3836 A^{1/3}$
+
+If $A > 11$, nuclei model with three consentric spheres is also used. The shere radius is now defined as:
+$$r_{i}(\alpha_{i}) =  C_{2} \log({\frac{1 + e^{- \frac{C_{1}}{C_{2}}}}{\alpha_{i}} - 1}) + C_{1}$$
+
+where $C_{2} = 1.7234$.
+
+The potential energy V for nucleon N is
+$$ V_{N} = \frac{p_{F}^2}{2 m_{N}} + BE_{N}(A, Z)$$
+
+where $p_f$ is a Fermi momentum and BE a binding energy. 
+ 
+Impulse distribution in each region follows Fermi distribution with zero temperature.
+
+\begin{equation}
+ f(p) = c p ^2
+ \end{equation}
+
+ where
+
+ \begin{equation}
+ \int_0^{p_F} f(p) dp = n_{p}   or  n_{n}
+ \end{equation}
+
+ where $n_p$ and $n_n$ are the number of protons or neutrons in region.
+ $P_f$ is impulse corresponding the Fermi energy
+
+ \begin{equation}
+ E_f = \frac{p_F^2}{2 m_N} = \frac{\hbar^2}{2 m_N}(\frac{3 \pi^{2}}{v})^\frac{2}{3}
+ \end{equation}
+ 
+ which depend on the dencity $n/v$ of particles. 
+ and which is different for each particle and each region. 
+
+\subsubsection{Pauli exclusion principle}
+Pauli exclusion principle forbids interactions where the products would be in occupied states.
+Following an assumption of completely degenerate Fermi gas, the levels are filled from the lowest level.
+The minimum energy allowed for the product of collision correspond to the lowest unfilled level of system, which is the Fermi energy in the region. 
+So in practice, Pauli exclusion prinsiple is taken into account by accepting only secondary nucleons which have $E_N > E_f$.
+
+
+\subsubsection{Cross sections and kinematics}
+
+Path lengths of nucleons in the nucleus are sampled according to the local density and to free N-N cross sections.
+Angles after collisions are sampled from experimental differential cross sections.
+%{\sc Geant4} cascade model uses tabulated cross-sections.
+Tabulated total reaction cross-sections are calculated by Letaw's formulation \cite{letaw83, letaw93, pearlstein89}.
+%:::$45 A^0.7 (1+0.016 sin(5.3-2.63 log10(A)))^(1-0.62 exp(-E / 200) sin(10.9 E^(-0.28)))
+For N-N cross-sections parametrizations based on the experimental energy and isospin dependent data. 
+The parameterization described in \cite{barashenkov72} is used. 
+
+For pion the INC crossections are privded to treat elestic collisions and following inelstics channels
+$\pi^{-}$n $\rightarrow$ $\pi^{0}$n, $\pi^{0}$p $\rightarrow$ $\pi^{+}$n and $\pi^{0}$n $\rightarrow$ $\pi^{-}$p.
+Multiple particle production is also implemented.
+
+Pion absorption cannels are 
+$\pi^{+}$nn $\rightarrow$ pn, $\pi^{+}$pn $\rightarrow$ pp, 
+$\pi^{0}$nn $\rightarrow$ X , $\pi^{0}$pn $\rightarrow$ pn,      $\pi^{0}$pp $\rightarrow$ pp, 
+$\pi^{-}$nn $\rightarrow$ X , $\pi^{-}$pn $\rightarrow$ nn , and $\pi^{-}$pp $\rightarrow$ pn.
+\subsection{Pre-equilibrium model}
+
+{\sc Geant4} cascade model implements exiton model proposed by Griffin \cite{griffin66, griffin67}.
+The his model nucleon states are characterized by the number of exited particles and holes (the exitons).
+INC collisions give rise to a sequence of states characterized by increasing exciton number, eventually leading to a equilibrated nucleus.
+For practical implementation of exiton model we use parameters  from \cite{ribansky73}, (level densities) and \cite{kalbach78}  
+(matrix elements).
+
+In exiton model the posible selection rules for a particle-hole configuarations in the cource of the cascade are:
+$\Delta p = 0, \pm 1$  $\Delta h = 0, \pm 1$  $\Delta n = 0, \pm 2$,
+where p is the number of particle, h is number of holes and n = p + h is the number of exitons. 
+
+Cascade pre-equilibrium model uses target exitation data, 
+exiton configuration for neutron and proton to produce non-equilibrium evaporation.
+The angular distribution is isotropic in the frame of rest of the exiton system.
+
+Parametrisations of the level density, is tabulated both with A and Z dependence and with high temperature 
+behaviour (the nuclei binding energy using smooth liquid high energy formula).
+
+%N $\rightarrow$ N - 2, N $\rightarrow$ N - 1 N $\rightarrow$ N, N $\rightarrow$ N + 2,  channels are treated.
+
+\subsection{Break-up models}
+
+
+Fermi break-up is allowed only in some extreme cases, i.e. for light nuclei ($A < 12$ and  $3 (A - Z) < Z < 6$ ) and $E_{exitation} > 3 E_{binding}$ 
+Simple explosion model decays the nuleus into neutrons and protons and decreases exotic evaporation processes.
+
+
+Fission model is phenomenological model using potential minimization. Binding energy paramerization is used and
+some features of the fission statistical model are incorporated \cite{fong69}.
+
+\subsection{Evaporation model}
+
+Statistical theory for particle emission of the exited nucleus remaining after the INC was originally developed by Weisskopf \cite{weisskopf37}. 
+This model assumes complete energy equilibration before the particle emission, and re-equilibration of excitation energies between successive evaporations. 
+As a result the angular distribution of emitted particles is isotropic.
+
+{\sc Geant4} evaporation model for cascade implementation adapts often used computational method developed by Dostrowski \cite{dostrovsky59, dostrovsky60}.
+The emission of particles is computed until the exitation energy fall below some spesific cutoff. 
+If light nucleus is higly exited Fermi break-up model is executed. Also, fission is performed if channel is open. 
+The main chain of evaporation is followed until  $E_{exitation}$ falls below E$_{cutoff}$ = 0.1 MeV. 
+The evaporation model ends with  emission chain which is followed until E$_{exitation}$ $<$ E$^{\gamma}_{cutoff}$ = 10$^{-15}$ MeV.
+
+%Evaporation (Weisskopf - Ewing) 
+%Weisskopf-Ewing evaporation in competition with fission. 

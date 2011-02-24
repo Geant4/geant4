@@ -44,56 +44,50 @@
 
 class G4HadronFissionDataSet : public G4VCrossSectionDataSet
 {
-public:
+  public:
 
-   G4HadronFissionDataSet()
-   {
-      theHadronCrossSections = G4HadronCrossSections::Instance();
-   }
+    G4HadronFissionDataSet();
 
-   ~G4HadronFissionDataSet()
-   {
-   }
+    ~G4HadronFissionDataSet()
+    {}
 
-   G4bool IsApplicable(const G4DynamicParticle* aParticle,
-                       const G4Element* anElement)
-   {
+    G4bool IsApplicable(const G4DynamicParticle* aParticle,
+                        const G4Element* anElement)
+    {
       return theHadronCrossSections->IsApplicable(aParticle, anElement);
-   }
+    }
 
-   G4bool IsIsoApplicable(const G4DynamicParticle* aParticle,
-                          G4int ZZ, G4int AA)
-   {
-     return theHadronCrossSections->IsApplicable(aParticle, ZZ, AA);
-   }
+    G4bool IsIsoApplicable(const G4DynamicParticle* aParticle,
+                           G4int ZZ, G4int AA)
+    {
+      return theHadronCrossSections->IsApplicable(aParticle, ZZ, AA);
+    }
 
 
-   G4double GetCrossSection(const G4DynamicParticle* aParticle,
-                            const G4Element* anElement, G4double )
-   {
+    G4double GetCrossSection(const G4DynamicParticle* aParticle,
+                             const G4Element* anElement, G4double )
+    {
       return theHadronCrossSections->GetFissionCrossSection(aParticle,
-                                                              anElement);
-   }
+                                                            anElement);
+    }
 
-   G4double GetZandACrossSection(const G4DynamicParticle* aParticle,
-                                 G4int ZZ, G4int AA,
-                                 G4double /*aTemperature*/)
-   {
-     return theHadronCrossSections->GetFissionCrossSection(aParticle, ZZ, AA);
-   }
+    G4double GetZandACrossSection(const G4DynamicParticle* aParticle,
+                                  G4int ZZ, G4int AA,
+                                  G4double /*aTemperature*/)
+    {
+      return theHadronCrossSections->GetFissionCrossSection(aParticle, ZZ, AA);
+    }
 
 
-   void BuildPhysicsTable(const G4ParticleDefinition&)
-   {
-   }
+    void BuildPhysicsTable(const G4ParticleDefinition&)
+    {}
 
-   void DumpPhysicsTable(const G4ParticleDefinition&)
-   {
-   }
+    void DumpPhysicsTable(const G4ParticleDefinition&)
+    {}
 
-private:
+  private:
 
-   G4HadronCrossSections* theHadronCrossSections;
+    G4HadronCrossSections* theHadronCrossSections;
 };
 
 #endif

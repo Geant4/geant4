@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+02 February 11: V.Ivant (emutils-V09-04-04)
+- G4VEmModel - reduced in 2 times memory for element selectors data
+                (ATLAS concern)
+
+31 January 11: V.Ivant (emutils-V09-04-03)
+- G4VEmModel - fixed problem of deexcitation flags - allow
+               set this flag by user command
+
 17 January 11: V.Ivant (emutils-V09-04-02)
 - G4LossTableManager - fixed problem happens at initilisation, when
   bremsstrahlung process is instantiated but not added to the 

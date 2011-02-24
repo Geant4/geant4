@@ -33,7 +33,10 @@
 // 27 Jul 2010   L Pandola    First complete implementation
 // 18 Jan 2011   L.Pandola    Stricter check on production of sub-treshold delta-rays. 
 //                            Should never happen now
-
+// 01 Feb 2011   L Pandola  Suppress fake energy-violation warning when Auger is active.
+//                          Make sure that fluorescence/Auger is generated only if 
+//                          above threshold
+//
 #include "G4Penelope08IonisationModel.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4MaterialCutsCouple.hh"
@@ -413,6 +416,7 @@ void G4Penelope08IonisationModel::SampleSecondaries(std::vector<G4DynamicParticl
   G4double localEnergyDeposit = bindingEnergy;
   //testing purposes only
   G4double energyInFluorescence = 0;
+  G4double energyInAuger = 0; 
 
   if (energySecondary < 0)
     {
@@ -454,18 +458,34 @@ void G4Penelope08IonisationModel::SampleSecondaries(std::vector<G4DynamicParticl
 		  if (aPhoton)
 		    {
 		      G4double itsEnergy = aPhoton->GetKineticEnergy();
+		      G4bool keepIt = false;
 		      if (itsEnergy <= localEnergyDeposit)
 			{
-			  localEnergyDeposit -= itsEnergy;
-			  if (aPhoton->GetDefinition() == G4Gamma::Gamma()) 
-			    energyInFluorescence += itsEnergy;;
-			  fvect->push_back(aPhoton);		    
+			  //check if good! 
+			  if(aPhoton->GetDefinition() == G4Gamma::Gamma()
+			     && itsEnergy >= cutg)
+			    {
+			      keepIt = true;
+			      energyInFluorescence += itsEnergy;			  
+			    }
+			  if (aPhoton->GetDefinition() == G4Electron::Electron() && 
+			      itsEnergy >= cute)
+			    {
+			      energyInAuger += itsEnergy;
+			      keepIt = true;
+			    }
 			}
+		      //good secondary, register it
+		      if (keepIt)
+			{
+			  localEnergyDeposit -= itsEnergy;
+			  fvect->push_back(aPhoton);
+			}		    
 		      else
 			{
 			  delete aPhoton;
-			  (*photonVector)[k]=0;
-			}
+			  (*photonVector)[k] = 0;
+			}		      
 		    }
 		}
 	      delete photonVector;
@@ -511,10 +531,13 @@ void G4Penelope08IonisationModel::SampleSecondaries(std::vector<G4DynamicParticl
       G4cout << "-----------------------------------------------------------" << G4endl;
       G4cout << "Outgoing primary energy: " << kineticEnergy1/keV << " keV" << G4endl;
       G4cout << "Delta ray " << energySecondary/keV << " keV" << G4endl;
-      G4cout << "Fluorescence: " << energyInFluorescence/keV << " keV" << G4endl;
+      if (energyInFluorescence)
+	G4cout << "Fluorescence x-rays: " << energyInFluorescence/keV << " keV" << G4endl;
+      if (energyInAuger)
+	G4cout << "Auger electrons: " << energyInAuger/keV << " keV" << G4endl;     
       G4cout << "Local energy deposit " << localEnergyDeposit/keV << " keV" << G4endl;
       G4cout << "Total final state: " << (energySecondary+energyInFluorescence+kineticEnergy1+
-					  localEnergyDeposit)/keV <<
+					  localEnergyDeposit+energyInAuger)/keV <<
 	" keV" << G4endl;
       G4cout << "-----------------------------------------------------------" << G4endl;
     }
@@ -522,10 +545,10 @@ void G4Penelope08IonisationModel::SampleSecondaries(std::vector<G4DynamicParticl
   if (verboseLevel > 0)
     {
       G4double energyDiff = std::fabs(energySecondary+energyInFluorescence+kineticEnergy1+
-				      localEnergyDeposit-kineticEnergy0);
+				      localEnergyDeposit+energyInAuger-kineticEnergy0);
       if (energyDiff > 0.05*keV)
 	G4cout << "Warning from G4PenelopeIonisation: problem with energy conservation: " <<  
-	  (energySecondary+energyInFluorescence+kineticEnergy1+localEnergyDeposit)/keV <<
+	  (energySecondary+energyInFluorescence+kineticEnergy1+localEnergyDeposit+energyInAuger)/keV <<
 	  " keV (final) vs. " <<
 	  kineticEnergy0/keV << " keV (initial)" << G4endl;      
     }
@@ -716,6 +739,7 @@ void G4Penelope08IonisationModel::BuildXSTable(const G4Material* mat,G4double cu
 	       G4cout << "G4Penelope08IonisationModel::BuildXSTable" << G4endl;
 	       G4cout << "Problem in calculating the shell XS " << G4endl;
 	       G4Exception();
+	       delete XSEntry;
 	       return;
 	     }
 	   if (tempStorage->size() != 6)
@@ -723,7 +747,7 @@ void G4Penelope08IonisationModel::BuildXSTable(const G4Material* mat,G4double cu
 	       G4cout << "G4Penelope08IonisationModel::BuildXSTable" << G4endl;
 	       G4cout << "Problem in calculating the shell XS " << G4endl;
 	       G4cout << "Result has dimension " << tempStorage->size() << " instead of 6" << G4endl;
-	       G4Exception();
+	       G4Exception();	       
 	     }
 	   G4double stre = theOsc->GetOscillatorStrength();
 

@@ -468,7 +468,7 @@ void G4Penelope08BremsstrahlungModel::BuildXSTable(const G4Material* mat,G4doubl
 	   XH2A = fPenelopeFSHelper->GetMomentumIntegral(tempData,1.0,1) -
 	     XS2A;
 	 }
-       delete tempData;
+       delete[] tempData;
 
        XH0 = XH0A*fact;
        XS1 = XS1A*fact*energy;
@@ -519,6 +519,7 @@ G4Penelope08BremsstrahlungModel::GetCrossSectionTableForCouple(const G4ParticleD
           G4cout << "G4Penelope08BremsstrahlungModel::GetCrossSectionTableForCouple()" << G4endl;
           G4cout << "The Cross Section Table for e- was not initialized correctly!" << G4endl;
           G4Exception();          
+	  return NULL;
         }
       std::pair<const G4Material*,G4double> theKey = std::make_pair(mat,cut);
       if (XSTableElectron->count(theKey)) //table already built
@@ -532,7 +533,7 @@ G4Penelope08BremsstrahlungModel::GetCrossSectionTableForCouple(const G4ParticleD
             {
               G4cout << "G4Penelope08BremsstrahlungModel::GetCrossSectionTableForCouple()" << G4endl;
               G4cout << "Unable to build e- table for " << mat->GetName() << G4endl;
-              G4Exception();       
+              G4Exception();       	 
             }
         }
     }
@@ -542,7 +543,8 @@ G4Penelope08BremsstrahlungModel::GetCrossSectionTableForCouple(const G4ParticleD
         {
           G4cout << "G4Penelope08BremsstrahlungModel::GetCrossSectionTableForCouple()" << G4endl;
           G4cout << "The Cross Section Table for e+ was not initialized correctly!" << G4endl;
-          G4Exception();          
+          G4Exception();   
+	  return NULL;
         }
       std::pair<const G4Material*,G4double> theKey = std::make_pair(mat,cut);
       if (XSTablePositron->count(theKey)) //table already built
@@ -556,7 +558,7 @@ G4Penelope08BremsstrahlungModel::GetCrossSectionTableForCouple(const G4ParticleD
             {
               G4cout << "G4Penelope08BremsstrahlungModel::GetCrossSectionTableForCouple()" << G4endl;
               G4cout << "Unable to build e+ table for " << mat->GetName() << G4endl;
-              G4Exception();       
+              G4Exception();   
             }
         }
     }

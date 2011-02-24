@@ -51,6 +51,7 @@
 // Created: 2007-03-29  Tsukasa ASO
 // 2010-07-22   Introduce Unit specification.
 // 2010-07-22   Add weighted and divideByArea options
+// 2011-02-21   Get correct momentum direction in Flux_Out.
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSCylinderSurfaceFlux::G4PSCylinderSurfaceFlux(G4String name, 
@@ -78,7 +79,6 @@ G4PSCylinderSurfaceFlux::~G4PSCylinderSurfaceFlux()
 G4bool G4PSCylinderSurfaceFlux::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
   G4StepPoint* preStep = aStep->GetPreStepPoint();
-  G4StepPoint* postStep = aStep->GetPreStepPoint();
 
   G4VPhysicalVolume* physVol = preStep->GetPhysicalVolume();
   G4VPVParameterisation* physParam = physVol->GetParameterisation();
@@ -106,7 +106,7 @@ G4bool G4PSCylinderSurfaceFlux::ProcessHits(G4Step* aStep,G4TouchableHistory*)
       if ( dirFlag == fFlux_In ){
 	thisStep = preStep;
       }else if ( dirFlag == fFlux_Out ){
-	thisStep = postStep;
+	thisStep = aStep->GetPostStepPoint();
       }else{
 	return FALSE;
       }

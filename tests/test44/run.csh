@@ -8,7 +8,7 @@ cd $VFEM/test44
 
 mkdir -p $REFERENCE
 cd $REFERENCE
-rm -f *.txt
+rm -f *.txt *.gz
 
 set    work = "$G4BIN/$G4SYSTEM/test44"
 set    dir  = "$G4INSTALL/tests/test44/"
@@ -33,3 +33,5 @@ date > root.log
 foreach tPart ($tPart)
     ${G4BIN}/${G4SYSTEM}/reader_test44 $tPart $1  >>& root.log
 end
+
+gzip *.log *.out

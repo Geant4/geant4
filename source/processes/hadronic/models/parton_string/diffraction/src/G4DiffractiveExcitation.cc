@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveExcitation.cc,v 1.23 2010-11-15 10:02:38 vuzhinsk Exp $
+// $Id: G4DiffractiveExcitation.cc,v 1.24 2010/12/07 10:42:40 vuzhinsk Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -234,7 +234,8 @@ G4cout<<"Rapid "<<ProjectileRapidity<<G4endl; //" "<<TargetRapidity<<G4endl;
      G4double DeltaMass=
               (G4ParticleTable::GetParticleTable()->FindParticle(2224))->GetPDGMass();
 
-//G4cout<<MagQuarkExchange*std::exp(-SlopeQuarkExchange*(ProjectileRapidity - TargetRapidity))<<G4endl;
+//G4double TargetRapidity(0.);
+//G4cout<<"Prob Q Exch "<<MagQuarkExchange*std::exp(-SlopeQuarkExchange*(ProjectileRapidity - TargetRapidity))<<G4endl;
 
 //G4cout<<"Q exc Mag Slop Wdelta"<<MagQuarkExchange<<" "<<SlopeQuarkExchange<<" "<<DeltaProbAtQuarkExchange<<G4endl;
 //G4cout<<"ProjectileRapidity "<<ProjectileRapidity<<G4endl;
@@ -935,8 +936,14 @@ void G4DiffractiveExcitation::CreateStrings(G4VSplitableHadron * hadron,
                                             G4ExcitedString * &SecondString,
                                             G4FTFParameters *theParameters) const
 {
+/*
+G4cout<<"Create Strings SplitUp "<<hadron<<G4endl;
+G4cout<<"Defin "<<hadron->GetDefinition()<<G4endl;
+G4cout<<"Defin "<<hadron->GetDefinition()->GetPDGEncoding()<<G4endl;
+*/
 	hadron->SplitUp();
 	G4Parton *start= hadron->GetNextParton();
+
 	if ( start==NULL)
 	{ G4cout << " G4FTFModel::String() Error:No start parton found"<< G4endl;
           FirstString=0; SecondString=0;
@@ -948,9 +955,10 @@ void G4DiffractiveExcitation::CreateStrings(G4VSplitableHadron * hadron,
           FirstString=0; SecondString=0;
 	  return;
 	}
-
+//G4cout<<start<<" "<<start->GetPDGcode()<<" "<<end<<" "<<end->GetPDGcode()<<G4endl;
+//G4cout<<"Create string "<<start->GetPDGcode()<<" "<<end->GetPDGcode()<<G4endl;
         G4LorentzVector Phadron=hadron->Get4Momentum();
-
+//G4cout<<"String mom "<<Phadron<<G4endl;
         G4LorentzVector Pstart(0.,0.,0.,0.);
         G4LorentzVector Pend(0.,0.,0.,0.);
         G4LorentzVector Pkink(0.,0.,0.,0.);
@@ -959,6 +967,7 @@ void G4DiffractiveExcitation::CreateStrings(G4VSplitableHadron * hadron,
 
         G4int PDGcode_startQ = std::abs(start->GetDefinition()->GetPDGEncoding());
         G4int PDGcode_endQ   = std::abs(  end->GetDefinition()->GetPDGEncoding());
+//G4cout<<"PDGcode_startQ "<<PDGcode_startQ<<" PDGcode_endQ   "<<PDGcode_endQ  <<G4endl;
 
 //--------------------------------------------------------------------------------        
         G4double Wmin(0.);
@@ -971,11 +980,20 @@ void G4DiffractiveExcitation::CreateStrings(G4VSplitableHadron * hadron,
         } // end of if(isProjectile)
 
         G4double W = hadron->Get4Momentum().mag();
+//G4cout<<"Wmin W "<<Wmin<<" "<<W<<G4endl;
         G4double W2=W*W;
 
         G4double Pt(0.), x1(0.), x2(0.), x3(0.);
         G4bool Kink=false;
 
+       if(!(((start->GetDefinition()->GetParticleSubType() == "di_quark") &&
+             (  end->GetDefinition()->GetParticleSubType() == "di_quark")   ) ||
+            ((start->GetDefinition()->GetParticleSubType() == "quark")    &&
+             (  end->GetDefinition()->GetParticleSubType() == "quark")      )))
+       {   // Kinky strings are allowed only for qq-q strings
+           // Kinky strings are impossible for other systems (qq-qqbar, q-qbar)
+           // according to the analysis of Pbar P interactions
+//G4cout<<G4endl<<"Check for Kink!##############"<<G4endl<<G4endl;
         if(W > Wmin)
         {                                        // Kink is possible
           G4double Pt2kink=theParameters->GetPt2Kink();
@@ -1060,34 +1078,59 @@ Pend*=Rotate;
              }      // end of if((P2_1 < 0.) || (P2_3 <0.))
           }         // end of if(Pt > 500.*MeV)
         }           // end of if(W > Wmin) Check for a kink
-
+       }            // end of qq-q string selection
 //--------------------------------------------------------------------------------
+/*
+G4cout<<"Kink "<<Kink<<" "
+<<start->GetDefinition()->GetParticleSubType()<<" "
+<<  end->GetDefinition()->GetParticleSubType() <<G4endl;
+
+G4cout<<"Kink "<<Kink<<" "
+<<start->GetDefinition()->GetPDGEncoding()<<" "
+<<  end->GetDefinition()->GetPDGEncoding() <<G4endl;
+G4int Uzhi; G4cin>>Uzhi;
+*/
 
         if(Kink)
         {                                        // Kink is possible
+//G4cout<<"Kink is sampled!"<<G4endl;
           std::vector<G4double> QuarkProbabilitiesAtGluonSplitUp =
               theParameters->GetQuarkProbabilitiesAtGluonSplitUp();
 
           G4int QuarkInGluon(1); G4double Ksi=G4UniformRand();
           for(unsigned int Iq=0; Iq <3; Iq++)
           {
+//G4cout<<"Iq "<<Iq<<G4endl;
 
 if(Ksi > QuarkProbabilitiesAtGluonSplitUp[Iq]) QuarkInGluon++;}
 
+//G4cout<<"Last Iq "<<QuarkInGluon<<G4endl;
           G4Parton * Gquark = new G4Parton(QuarkInGluon);
           G4Parton * Ganti_quark = new G4Parton(-QuarkInGluon);
+//G4cout<<"Lorentz "<<G4endl;
 
 //-------------------------------------------------------------------------------
           G4LorentzRotation toCMS(-1*Phadron.boostVector());
 
           G4LorentzRotation toLab(toCMS.inverse());
-
+//G4cout<<"Pstart "<<Pstart<<G4endl;
+//G4cout<<"Pend   "<<Pend<<G4endl;
           Pstart.transform(toLab);  start->Set4Momentum(Pstart);
           PkinkQ1.transform(toLab);
           PkinkQ2.transform(toLab);
           Pend.transform(toLab);    end->Set4Momentum(Pend);
+//G4cout<<"Pstart "<<Pstart<<G4endl;
+//G4cout<<"Pend   "<<Pend<<G4endl;
+//G4cout<<"Defin "<<hadron->GetDefinition()<<G4endl;
+//G4cout<<"Defin "<<hadron->GetDefinition()->GetPDGEncoding()<<G4endl;
 
-          G4int absPDGcode=std::abs(hadron->GetDefinition()->GetPDGEncoding());
+//        G4int absPDGcode=std::abs(hadron->GetDefinition()->GetPDGEncoding());
+          G4int absPDGcode=1500;  // 23 Dec
+if((start->GetDefinition()->GetParticleSubType() == "quark") &&
+   (  end->GetDefinition()->GetParticleSubType() == "quark")  )
+  absPDGcode=110;
+
+//G4cout<<"absPDGcode "<<absPDGcode<<G4endl;
 
           if(absPDGcode < 1000)
           {                                // meson
@@ -1176,6 +1219,7 @@ if(Ksi > QuarkProbabilitiesAtGluonSplitUp[Iq]) QuarkInGluon++;}
 // -------------------------------------------------------------------------  
         } else                                   // End of kink is possible
         {                                        // Kink is impossible
+//G4cout<<start<<" "<<start->GetPDGcode()<<" "<<end<<" "<<end->GetPDGcode()<<G4endl;
 	  if ( isProjectile )
 	  {
 		FirstString= new G4ExcitedString(end,start, +1);
@@ -1231,6 +1275,9 @@ if(Ksi > QuarkProbabilitiesAtGluonSplitUp[Iq]) QuarkInGluon++;}
 	  end->Set4Momentum(Pend);
           SecondString=0;
         }            // End of kink is impossible 
+
+//G4cout<<"Quarks in the string at creation"<<FirstString->GetRightParton()->GetPDGcode()<<" "<<FirstString->GetLeftParton()->GetPDGcode()<<G4endl;
+//G4cout<<FirstString<<" "<<SecondString<<G4endl;
 
 #ifdef G4_FTFDEBUG
 	  G4cout << " generated string flavors          " 

@@ -1,0 +1,28 @@
+#
+# create empty scene
+#
+/vis/scene/create
+#
+# Create a scene handler for a specific graphics system
+# (Edit the next line(s) to choose another graphic system)
+#
+/vis/open OGLIX
+#
+# draw scene
+#
+/vis/drawVolume worlds
+/vis/viewer/set/lightsThetaPhi 120 135                  
+/vis/viewer/set/viewpointThetaPhi 105 165 deg
+# Set specific colur for identification
+###/vis/geometry/set/colour Calor-AP_LayerLog ! yellow
+###/vis/geometry/set/colour Calor-BP_LayerLog ! yellow
+###/vis/geometry/set/colour Calor-CP_LayerLog ! yellow
+#############/vis/viewer/zoom 2.0
+##############/vis/viewer/flush
+#
+# for drawing the tracks
+# (if too many tracks cause core dump => storeTrajectory 0)
+/tracking/storeTrajectory 1
+/vis/scene/endOfEventAction accumulate
+/vis/scene/add/trajectories
+

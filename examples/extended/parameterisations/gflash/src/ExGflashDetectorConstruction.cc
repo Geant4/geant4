@@ -52,6 +52,7 @@
 #include "GFlashHitMaker.hh"
 #include "GFlashParticleBounds.hh"
 
+using namespace std;
 
 ExGflashDetectorConstruction::ExGflashDetectorConstruction()
 :m_experimentalHall_log(0), 
@@ -59,7 +60,7 @@ m_calo_log(0),
 m_experimentalHall_phys(0), 
 m_calo_phys(0)
 {
-	cout<<"ExGflashDetectorConstruction::Detector constructor"<<endl;    
+	G4cout<<"ExGflashDetectorConstruction::Detector constructor"<<G4endl;    
 	
 	// Simplified `CMS-like` PbWO4 crystal calorimeter  
 	m_calo_xside=31*cm;
@@ -86,7 +87,7 @@ G4VPhysicalVolume* ExGflashDetectorConstruction::Construct()
 {
 	//--------- Definitions of Solids, Logical Volumes, Physical Volumes ---------
 	G4String mat= "PbWO4";     
-	cout<<"Defining the materials"<<endl;
+	G4cout<<"Defining the materials"<<G4endl;
 	ExGflashMaterialManager *matManager=ExGflashMaterialManager::GetMaterialManager();
 	
 	/*******************************
@@ -177,10 +178,10 @@ G4VPhysicalVolume* ExGflashDetectorConstruction::Construct()
 			1);														//Visibility
 		}
 	}	
-	cout << "There are " << m_NbOfCrystals << " crystals per row in the calorimeter, so in total "<<
-	m_NbOfCrystals*m_NbOfCrystals << " crystals" << endl;	
-	cout << "The have widthof  " << m_CrystalWidht /cm << "  cm and a lenght of  " <<  m_CrystalLenght /cm
-	<<" cm. The Material is "<< matManager->getMaterial(mat) << endl;
+	G4cout << "There are " << m_NbOfCrystals << " crystals per row in the calorimeter, so in total "<<
+	m_NbOfCrystals*m_NbOfCrystals << " crystals" << G4endl;	
+	G4cout << "The have widthof  " << m_CrystalWidht /cm << "  cm and a lenght of  " <<  m_CrystalLenght /cm
+	<<" cm. The Material is "<< matManager->getMaterial(mat) << G4endl;
 	
 	// Sensitive Detector part
 	G4SDManager* SDman = G4SDManager::GetSDMpointer();
@@ -206,13 +207,13 @@ G4VPhysicalVolume* ExGflashDetectorConstruction::Construct()
 	/**********************************************
 	* Initializing shower modell
 	***********************************************/	
-	cout<<"Shower parameterization"<<endl;
+	G4cout<<"Shower parameterization"<<G4endl;
 	m_theFastShowerModel =  new GFlashShowerModel("fastShowerModel",aRegion);
 	m_theParameterisation = new GFlashHomoShowerParameterisation(matManager->getMaterial(mat));
 	m_theFastShowerModel->SetParameterisation(*m_theParameterisation);
 	m_theFastShowerModel->SetParticleBounds(*m_theParticleBounds) ;
 	m_theFastShowerModel->SetHitMaker(*m_theHMaker);	 
-	cout<<"end shower parameterization"<<endl;
+	G4cout<<"end shower parameterization"<<G4endl;
 	/**********************************************/
 	
 	return m_experimentalHall_phys;

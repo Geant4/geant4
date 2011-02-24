@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronCaptureDataSet.cc,v 1.8 2006-06-29 19:57:35 gunter Exp $
+// $Id: G4HadronCaptureDataSet.cc,v 1.9 2011-01-09 02:37:48 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -33,3 +33,10 @@
 // 
 
 #include "G4HadronCaptureDataSet.hh"
+
+
+G4HadronCaptureDataSet::G4HadronCaptureDataSet()
+ : G4VCrossSectionDataSet("Gheisha capture")
+{
+  theHadronCrossSections = G4HadronCrossSections::Instance();
+}

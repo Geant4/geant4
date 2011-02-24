@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonNucleusInteractionModel.cc,v 1.6 2006-06-29 20:57:36 gunter Exp $
+// $Id: G4MuonNucleusInteractionModel.cc,v 1.7 2010-12-16 17:14:03 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -33,18 +33,21 @@
 //     M.Takahata (Makoto.Takahata@cern.ch)
 
 #include "G4MuonNucleusInteractionModel.hh"
-
+#include "G4CascadeInterface.hh"
 
 //-----------------------------------------------------------------------------
-  G4MuonNucleusInteractionModel::G4MuonNucleusInteractionModel()
-    : G4LeptonHadronInteractionModel()
+G4MuonNucleusInteractionModel::G4MuonNucleusInteractionModel()
+ : G4LeptonHadronInteractionModel()
 //-----------------------------------------------------------------------------
-  {
+{
     // build the physics vector
     Nbin = 90;
     kEmin = 1.0e-5*GeV;
     kEmax = 1.0e+4*GeV;
     cascadeModelMarginalEnergy = 25.0*GeV;
+    blendRangeMin = 10.0*GeV;
+    blendRangeMax = 15.0*GeV;
+
     theCoefficientVector = new G4PhysicsLogVector(kEmin, kEmax, Nbin);
     makePhysicsVector();
 
@@ -53,20 +56,19 @@
     LEPionPlusInelastic   = new G4LEPionPlusInelastic;
     HEPionMinusInelastic  = new G4HEPionMinusInelastic;
     HEPionPlusInelastic   = new G4HEPionPlusInelastic;
-  }
+    bertiniCascade = new G4CascadeInterface();
+}
 
 
-//-----------------------------------------------------------------------------
-  G4MuonNucleusInteractionModel::~G4MuonNucleusInteractionModel()
-//-----------------------------------------------------------------------------
-  {
-    delete LEPionMinusInelastic;
-    delete LEPionPlusInelastic;
-    delete HEPionMinusInelastic;
-    delete HEPionPlusInelastic;
-
-    delete theCoefficientVector;
-  }
+G4MuonNucleusInteractionModel::~G4MuonNucleusInteractionModel()
+{
+  delete LEPionMinusInelastic;
+  delete LEPionPlusInelastic;
+  delete HEPionMinusInelastic;
+  delete HEPionPlusInelastic;
+  delete bertiniCascade;
+  delete theCoefficientVector;
+}
 
 
 //-----------------------------------------------------------------------------
@@ -253,50 +255,67 @@
   }
 
 
-//-----------------------------------------------------------------------------
-  void G4MuonNucleusInteractionModel::invokePionNucleus
-    (const G4Track &pionTrack, G4Nucleus &targetNucleus )
-//-----------------------------------------------------------------------------
-  {
-    // force interaction of pion with target nucleus
-    G4double pionKineticEnergy = pionTrack.GetKineticEnergy();
-    if(pionTrack.GetDefinition()->GetParticleName() == "pi-") {
-      if(pionKineticEnergy <= cascadeModelMarginalEnergy)
-        pionChange 
-          = LEPionMinusInelastic->ApplyYourself(pionTrack, targetNucleus);
+void
+G4MuonNucleusInteractionModel::invokePionNucleus(const G4Track& pionTrack,
+                                                 G4Nucleus& targetNucleus)
+{
+  // Force interaction of pion with target nucleus
+  G4double pionKE = pionTrack.GetKineticEnergy();
+
+  if (pionTrack.GetDefinition() == G4PionMinus::PionMinus() ) {
+    if (pionKE < blendRangeMin) {
+      pionChange = bertiniCascade->ApplyYourself(pionTrack, targetNucleus);
+    } else if (pionKE >= blendRangeMin && pionKE < blendRangeMax) {
+      G4double frac = (pionKE - blendRangeMin)/(blendRangeMax - blendRangeMin);
+      if (G4UniformRand() > frac)
+        pionChange = bertiniCascade->ApplyYourself(pionTrack, targetNucleus);
       else
-        pionChange 
-          = HEPionMinusInelastic->ApplyYourself(pionTrack, targetNucleus);
-    } else if(pionTrack.GetDefinition()->GetParticleName() == "pi+") {
-      if(pionKineticEnergy <= cascadeModelMarginalEnergy)
-        pionChange 
-          = LEPionPlusInelastic->ApplyYourself(pionTrack, targetNucleus);
-      else
-        pionChange 
-          = HEPionPlusInelastic->ApplyYourself(pionTrack, targetNucleus);
+        pionChange = LEPionMinusInelastic->ApplyYourself(pionTrack, targetNucleus);
+    } else if (pionKE <= cascadeModelMarginalEnergy) {
+      pionChange 
+        = LEPionMinusInelastic->ApplyYourself(pionTrack, targetNucleus);
+    } else {
+      pionChange 
+        = HEPionMinusInelastic->ApplyYourself(pionTrack, targetNucleus);
     }
 
-
-    // add local energy deposit
-    G4double localEnergyDeposited = 0.0;
-    localEnergyDeposited = pionChange->GetLocalEnergyDeposit();
-    aParticleChange.ProposeLocalEnergyDeposit(localEnergyDeposited);
-
-
-    // register secondary particles
-    G4int numSecondaries = pionChange->GetNumberOfSecondaries();
-    aParticleChange.SetNumberOfSecondaries(numSecondaries);
-
-    G4ParticleMomentum secondaryMomentum = G4ThreeVector(0.,0.,0.);
-    for(G4int iS=0; iS<=(numSecondaries-1); iS++) {
-      secondaryMomentum 
-        = secondaryMomentum + pionChange->GetSecondary(iS)->GetParticle()->GetMomentum();
-      aParticleChange.AddSecondary(pionChange->GetSecondary(iS)->GetParticle());
+  } else if (pionTrack.GetDefinition() == G4PionPlus::PionPlus() ) {
+    if (pionKE < blendRangeMin) {
+      pionChange = bertiniCascade->ApplyYourself(pionTrack, targetNucleus);
+    } else if (pionKE >= blendRangeMin && pionKE < blendRangeMax) {
+      G4double frac = (pionKE - blendRangeMin)/(blendRangeMax - blendRangeMin);
+      if (G4UniformRand() > frac)
+        pionChange = bertiniCascade->ApplyYourself(pionTrack, targetNucleus);
+      else
+        pionChange = LEPionPlusInelastic->ApplyYourself(pionTrack, targetNucleus);
+    } else if (pionKE <= cascadeModelMarginalEnergy) {
+      pionChange 
+        = LEPionPlusInelastic->ApplyYourself(pionTrack, targetNucleus);
+    } else {
+      pionChange 
+        = HEPionPlusInelastic->ApplyYourself(pionTrack, targetNucleus);
     }
-    pionChange->Clear();
-
-    return;
   }
+
+  // add local energy deposit
+  G4double localEnergyDeposited = 0.0;
+  localEnergyDeposited = pionChange->GetLocalEnergyDeposit();
+  aParticleChange.ProposeLocalEnergyDeposit(localEnergyDeposited);
+
+  // register secondary particles
+  G4int numSecondaries = pionChange->GetNumberOfSecondaries();
+  aParticleChange.SetNumberOfSecondaries(numSecondaries);
+
+  G4ParticleMomentum secondaryMomentum = G4ThreeVector(0.,0.,0.);
+  for(G4int iS=0; iS<=(numSecondaries-1); iS++) {
+    secondaryMomentum 
+      = secondaryMomentum + pionChange->GetSecondary(iS)->GetParticle()->GetMomentum();
+    aParticleChange.AddSecondary(pionChange->GetSecondary(iS)->GetParticle());
+  }
+  pionChange->Clear();
+
+  return;
+}
 
 
 //-----------------------------------------------------------------------------

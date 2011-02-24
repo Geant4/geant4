@@ -140,6 +140,7 @@ G4double G4Penelope08BremsstrahlungFS::GetEffectiveZSquared(const G4Material* ma
       G4cout << "G4Penelope08BremsstrahlungFS::GetEffectiveZSquared()" << G4endl;
       G4cout << "The container for the <Z^2> values is not initialized" << G4endl;
       G4Exception();
+      return 0;
     }
   //found in the table: return it 
   if (theEffectiveZSq->count(material))
@@ -249,7 +250,7 @@ void G4Penelope08BremsstrahlungFS::BuildScaledXSTable(const G4Material* material
       for (size_t ix=0;ix<nBinsX;ix++)	
 	tempData2[ix] = (*tempMatrix)[ie][ix]; 
       G4double rsum = GetMomentumIntegral(tempData2,1.0,0);
-      delete tempData2; 
+      delete[] tempData2; 
       G4double fact = millibarn*(theEGrid[ie]+electron_mass_c2)*(1./fine_structure_const)/
 	(classic_electr_radius*classic_electr_radius*(theEGrid[ie]+2.0*electron_mass_c2));
       G4double fnorm = (*tempData)[ie]/(rsum*fact);
@@ -532,7 +533,7 @@ void G4Penelope08BremsstrahlungFS::InitializeEnergySampling(const G4Material* ma
 	GetMomentumIntegral(tempData,xc,-1) :
 	GetMomentumIntegral(tempData,1.0,-1);	
       thePBvec->PutValue(ie,theEGrid[ie],pbval);
-      delete tempData;
+      delete[] tempData;
     }
 
   theSamplingTable->insert(std::make_pair(theKey,thePhysicsTable));

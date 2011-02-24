@@ -465,6 +465,7 @@ void G4Penelope08GammaConversionModel::ReadDataFile(const G4int Z)
       G4cout << "G4Penelope08RayleighModel::ReadDataFile()" << G4endl;
       G4cout << "Problem with allocation of logAtomicCrossSection data table " << G4endl;
       G4Exception();
+      delete theVec;
       return;
     }
   logAtomicCrossSection->insert(std::make_pair(Z,theVec));

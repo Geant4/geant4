@@ -32,6 +32,13 @@
 #include "G4HadTmpUtil.hh"
 #include "globals.hh"
 
+G4NeutronInelasticCrossSection::G4NeutronInelasticCrossSection()
+ : G4VCrossSectionDataSet("Wellisch-Laidlaw")
+{}
+
+G4NeutronInelasticCrossSection::~G4NeutronInelasticCrossSection()
+{}
+
 G4double G4NeutronInelasticCrossSection::
 GetCrossSection(const G4DynamicParticle* aPart, 
                 const G4Element* anEle, G4double /*aTemperature*/)

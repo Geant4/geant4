@@ -355,7 +355,13 @@ class G4RunManager
 #endif
       shellCmd += dirStr;
       randomNumberStatusDir = dirStr;
-      system(shellCmd);
+      G4int sysret = system(shellCmd);
+      if(sysret!=0)
+      { 
+        G4String errmsg = "\"" + shellCmd + "\" returns non-zero value. Directory creation failed.";
+        G4Exception("GrRunManager::SetRandomNumberStoreDir()","RUN",JustWarning,errmsg);
+        G4cerr << " return value = " << sysret << G4endl;
+      }
     }
     inline const G4String& GetRandomNumberStoreDir() const
     { return randomNumberStatusDir; }

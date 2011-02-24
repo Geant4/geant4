@@ -14,6 +14,24 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+17 February 2011 Dennis Wright (hadr-cross-V09-04-02)
+-----------------------------------------------------
+- new class G4KokoulinMuonNuclearXS added.  This class was created from
+  code in the direct-implementation process G4MuNuclearInteraction.  This
+  was done to replace the old-style implementation with one conforming to
+  the hadronic framework design of process, model, cross section.  The
+  new class is now the default cross section for the new
+  G4MuonNuclearProcess class.  
+
+ 2 February 2011 Vladimir Ivanchenko (hadr-cross-V09-04-01)
+----------------------------------------------------------
+- G4NeutronCaptureXS - added protection for the case Ekin = 0
+
+ 8 January 2011 Dennis Wright (hadr-cross-V09-04-00)
+----------------------------------------------------
+- add cross section name to constructors:  G4VCrossSectionDataSet("CSname")
+  so that they can be retrieved for physics list print out
+
  9 December 2010 Dennis Wright (hadr-cross-V09-03-21)
 -----------------------------------------------------
 - G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy() : remove

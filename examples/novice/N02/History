@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+10-02-11 mma (exampleN02-V09-04-01)
+- update SteppingVerbose
+     
+01-02-11 mma (exampleN02-V09-04-00)
+- /vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 1
 
 04-06-10 J.Perl (exampleN02-V09-03-01)
 - Updated vis usage

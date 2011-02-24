@@ -54,32 +54,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4BremsstrahlungCrossSectionHandler.hh
         G4BremsstrahlungParameters.hh
         G4CompositeEMDataSet.hh
-        G4CrossSectionChargeDecrease.hh
-        G4CrossSectionChargeDecreasePartial.hh
-        G4CrossSectionChargeIncrease.hh
-        G4CrossSectionChargeIncreasePartial.hh
-        G4CrossSectionChargeTransferCH.hh
-        G4CrossSectionChargeTransferExp.hh
-        G4CrossSectionElasticChampion.hh
-        G4CrossSectionElasticScreenedRutherfordHE.hh
-        G4CrossSectionElasticScreenedRutherford.hh
-        G4CrossSectionElasticScreenedRutherfordLE.hh
-        G4CrossSectionExcitationBorn.hh
-        G4CrossSectionExcitationBornPartial.hh
-        G4CrossSectionExcitationEmfietzoglou.hh
-        G4CrossSectionExcitationEmfietzoglouPartial.hh
-        G4CrossSectionExcitationMillerGreen.hh
-        G4CrossSectionExcitationMillerGreenPartial.hh
         G4CrossSectionHandler.hh
-        G4CrossSectionIonisationBornElectron.hh
-        G4CrossSectionIonisationBorn.hh
-        G4CrossSectionIonisationBornPartialElectron.hh
-        G4CrossSectionIonisationBornPartial.hh
-        G4CrossSectionIonisationRudd.hh
-        G4CrossSectionIonisationRuddPartial.hh
-        G4CrossSectionKill.hh
-        G4CrossSectionPsCreationChampion.hh
-        G4CrossSectionPsCreationChampionPartial.hh
         G4DNAAttachment.hh
         G4DNABornExcitationModel.hh
         G4DNABornIonisationModel.hh
@@ -97,18 +72,13 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4DNAMeltonAttachmentModel.hh
         G4DNAMillerGreenExcitationModel.hh
         G4DNAMoleculeManager.hh
-        G4DNAProcess.hh
-        G4DNAProcess.icc
         G4DNARuddIonisationExtendedModel.hh
         G4DNARuddIonisationModel.hh
         G4DNASancheExcitationModel.hh
         G4DNAScreenedRutherfordElasticModel.hh
         G4DNAVibExcitation.hh
         G4DopplerProfile.hh
-        G4DummyFinalState.hh
         G4eBremsstrahlungSpectrum.hh
-        G4eCrossSectionExcitationEmfietzoglou.hh
-        G4eCrossSectionScreenedRutherford.hh
         G4eIonisationCrossSectionHandler.hh
         G4eIonisationParameters.hh
         G4eIonisationSpectrum.hh
@@ -116,20 +86,6 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4eLowEnergyLoss.icc
         G4EMDataSet.hh
         G4empCrossSection.hh
-        G4FinalStateChargeDecrease.hh
-        G4FinalStateChargeIncrease.hh
-        G4FinalStateChargeTransferProton.hh
-        G4FinalStateElasticBrennerZaider.hh
-        G4FinalStateElasticChampion.hh
-        G4FinalStateElasticScreenedRutherford.hh
-        G4FinalStateExcitationBorn.hh
-        G4FinalStateExcitationEmfietzoglou.hh
-        G4FinalStateExcitationMillerGreen.hh
-        G4FinalStateIonisationBorn.hh
-        G4FinalStateIonisationRudd.hh
-        G4FinalStateKill.hh
-        G4FinalStateProduct.hh
-        G4FinalStatePsCreationChampion.hh
         G4FluoData.hh
         G4FluoTransition.hh
         G4Generator2BN.hh
@@ -256,32 +212,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4BremsstrahlungCrossSectionHandler.cc
         G4BremsstrahlungParameters.cc
         G4CompositeEMDataSet.cc
-        G4CrossSectionChargeDecrease.cc
-        G4CrossSectionChargeDecreasePartial.cc
-        G4CrossSectionChargeIncrease.cc
-        G4CrossSectionChargeIncreasePartial.cc
-        G4CrossSectionChargeTransferCH.cc
-        G4CrossSectionChargeTransferExp.cc
-        G4CrossSectionElasticChampion.cc
-        G4CrossSectionElasticScreenedRutherford.cc
-        G4CrossSectionElasticScreenedRutherfordHE.cc
-        G4CrossSectionElasticScreenedRutherfordLE.cc
-        G4CrossSectionExcitationBorn.cc
-        G4CrossSectionExcitationBornPartial.cc
-        G4CrossSectionExcitationEmfietzoglou.cc
-        G4CrossSectionExcitationEmfietzoglouPartial.cc
-        G4CrossSectionExcitationMillerGreen.cc
-        G4CrossSectionExcitationMillerGreenPartial.cc
         G4CrossSectionHandler.cc
-        G4CrossSectionIonisationBorn.cc
-        G4CrossSectionIonisationBornElectron.cc
-        G4CrossSectionIonisationBornPartial.cc
-        G4CrossSectionIonisationBornPartialElectron.cc
-        G4CrossSectionIonisationRudd.cc
-        G4CrossSectionIonisationRuddPartial.cc
-        G4CrossSectionKill.cc
-        G4CrossSectionPsCreationChampion.cc
-        G4CrossSectionPsCreationChampionPartial.cc
         G4DNAAttachment.cc
         G4DNABornExcitationModel.cc
         G4DNABornIonisationModel.cc
@@ -304,30 +235,13 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4DNAScreenedRutherfordElasticModel.cc
         G4DNAVibExcitation.cc
         G4DopplerProfile.cc
-        G4DummyFinalState.cc
         G4eBremsstrahlungSpectrum.cc
-        G4eCrossSectionExcitationEmfietzoglou.cc
-        G4eCrossSectionScreenedRutherford.cc
         G4eIonisationCrossSectionHandler.cc
         G4eIonisationParameters.cc
         G4eIonisationSpectrum.cc
         G4eLowEnergyLoss.cc
         G4EMDataSet.cc
         G4empCrossSection.cc
-        G4FinalStateChargeDecrease.cc
-        G4FinalStateChargeIncrease.cc
-        G4FinalStateChargeTransferProton.cc
-        G4FinalStateElasticBrennerZaider.cc
-        G4FinalStateElasticChampion.cc
-        G4FinalStateElasticScreenedRutherford.cc
-        G4FinalStateExcitationBorn.cc
-        G4FinalStateExcitationEmfietzoglou.cc
-        G4FinalStateExcitationMillerGreen.cc
-        G4FinalStateIonisationBorn.cc
-        G4FinalStateIonisationRudd.cc
-        G4FinalStateKill.cc
-        G4FinalStateProduct.cc
-        G4FinalStatePsCreationChampion.cc
         G4FluoData.cc
         G4FluoTransition.cc
         G4Generator2BN.cc

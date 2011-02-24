@@ -44,8 +44,10 @@
 #include "G4LEPionMinusInelastic.hh"
 #include "G4HEPionPlusInelastic.hh"
 #include "G4HEPionMinusInelastic.hh"
+// #include "G4CascadeInterface.hh"
 #include "G4HadFinalState.hh"
 
+class G4CascadeInterface;
 
   class G4MuonNucleusInteractionModel : public G4LeptonHadronInteractionModel
   {
@@ -79,10 +81,13 @@
 
       // pi-N models
       G4double cascadeModelMarginalEnergy;
+      G4double blendRangeMin;
+      G4double blendRangeMax;
       G4LEPionPlusInelastic*  LEPionPlusInelastic;
       G4LEPionMinusInelastic* LEPionMinusInelastic;
       G4HEPionPlusInelastic*  HEPionPlusInelastic;
       G4HEPionMinusInelastic* HEPionMinusInelastic;
+      G4CascadeInterface* bertiniCascade;
   };
 
 #endif

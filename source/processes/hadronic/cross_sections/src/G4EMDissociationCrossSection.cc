@@ -72,24 +72,24 @@
 
 
 G4EMDissociationCrossSection::G4EMDissociationCrossSection ()
+ : G4VCrossSectionDataSet("Electromagnetic dissociation")
 {
-//
-// This function makes use of the class which can sample the virtual photon
-// spectrum, G4EMDissociationSpectrum.
-//
+  // This function makes use of the class which can sample the virtual photon
+  // spectrum, G4EMDissociationSpectrum.
+
   thePhotonSpectrum = new G4EMDissociationSpectrum();
-//
-//
-// Define other constants.
-//
+
+  // Define other constants.
+
   r0      = 1.18 * fermi;
   J       = 36.8 * MeV;
   Qprime  = 17.0 * MeV;
   epsilon = 0.0768;
   xd      = 0.25;
 }
+
 //////////////////////////////////////////////////////////////////////////////
-//
+
 G4EMDissociationCrossSection::~G4EMDissociationCrossSection()
 {
   delete thePhotonSpectrum;

@@ -1,0 +1,157 @@
+%%
+%% This is file `revsymb.sty',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% revtex4.dtx  (with options: `revsymb')
+%% 
+%% This file is part of the APS files in the REVTeX 4 distribution.
+%% For the version number, search on the string 
+%% Original version by David Carlisle
+%% Modified by Arthur Ogawa (mailto:ogawa@teleport.com)
+%% 
+%% Copyright (c) 1999 The American Physical Society.
+%% http://publish.aps.org/revtex4/
+%% mailto:revtex4@aps.org
+%% 
+%% See the REVTeX 4 README file for restrictions and more information.
+%% 
+\ProvidesPackage{revsymb}
+          [2001/08/03 v4.0 (http://publish.aps.org/revtex4/ for documentation)]%FileInfo
+\def\REVSYMB@warn#1{\PackageWarningNoLine{revsymb}{#1}}%
+\DeclareRobustCommand\lambdabar{%
+  \bgroup
+    \def\@tempa{%
+      \hbox{%
+        \raise.73\ht\z@
+        \hb@xt@\z@{%
+          \kern.25\wd\z@
+          \vrule \@width.5\wd\z@\@height.1\p@\@depth.1\p@
+          \hss
+        }%
+        \box\z@
+      }%
+    }%
+    \mathchoice
+      {\setbox\z@\hbox{$\displaystyle     \lambda$}\@tempa}%
+      {\setbox\z@\hbox{$\textstyle        \lambda$}\@tempa}%
+      {\setbox\z@\hbox{$\scriptstyle      \lambda$}\@tempa}%
+      {\setbox\z@\hbox{$\scriptscriptstyle\lambda$}\@tempa}%
+  \egroup
+}%
+\DeclareRobustCommand\openone{\leavevmode\hbox{\small1\normalsize\kern-.33em1}}%
+\DeclareRobustCommand\corresponds{\replace@command\corresponds\triangleq}%
+\DeclareRobustCommand\overcirc{\replace@command\overcirc\mathring}%
+\DeclareRobustCommand\overdots{\replace@command\overdots\dddot}%
+\DeclareRobustCommand\REV@triangleq{%
+ {\lower.2ex\hbox{=}}{\kern-.75em^\triangle}%
+}%
+\DeclareRobustCommand\REV@dddot[1]{%
+ \@ontopof{#1}{\cdots}{1.0}\mathord{\box2}%
+}%
+\DeclareRobustCommand\altsuccsim{\succ\kern-.9em_\sim\kern.3em}%
+\DeclareRobustCommand\altprecsim{\prec\kern-1em_\sim\kern.3em}%
+\let\REV@succsim\altsuccsim
+\let\REV@precsim\altprecsim
+\DeclareRobustCommand\REV@lesssim{\mathrel{\mathpalette\vereq{<}}}%
+\DeclareRobustCommand\REV@gtrsim{\mathrel{\mathpalette\vereq{>}}}%
+\DeclareRobustCommand\alt{\lesssim}
+\DeclareRobustCommand\agt{\gtrsim}
+\def\vereq#1#2{%
+ \lower3\p@\vbox{%
+  \baselineskip1.5\p@
+  \lineskip1.5\p@
+  \ialign{$\m@th#1\hfill##\hfil$\crcr#2\crcr\sim\crcr}%
+ }%
+}%
+\DeclareRobustCommand\tensor[1]{\@ontopof{#1}{\leftrightarrow}{1.15}\mathord{\box2}}
+\DeclareRobustCommand\overstar[1]{\@ontopof{#1}{\ast}{1.15}\mathord{\box2}}
+\DeclareRobustCommand\loarrow[1]{\@ontopof{#1}{\leftarrow}{1.15}\mathord{\box2}}
+\DeclareRobustCommand\roarrow[1]{\@ontopof{#1}{\rightarrow}{1.15}\mathord{\box2}}
+\def\@ontopof#1#2#3{%
+ {%
+  \mathchoice
+    {\@@ontopof{#1}{#2}{#3}\displaystyle     \scriptstyle      }%
+    {\@@ontopof{#1}{#2}{#3}\textstyle        \scriptstyle      }%
+    {\@@ontopof{#1}{#2}{#3}\scriptstyle      \scriptscriptstyle}%
+    {\@@ontopof{#1}{#2}{#3}\scriptscriptstyle\scriptscriptstyle}%
+ }%
+}%
+\def\@@ontopof#1#2#3#4#5{%
+  \setbox\z@\hbox{$#4#1$}%
+  \setbox\f@ur\hbox{$#5#2$}%
+  \setbox\tw@\null\ht\tw@\ht\z@ \dp\tw@\dp\z@
+  \@ifdim{\wd\z@>\wd\f@ur}{%
+    \setbox\f@ur\hb@xt@\wd\z@{\hss\box\f@ur\hss}%
+    \mathord{\rlap{\raise#3\ht\z@\box\f@ur}\box\z@}%
+  }{%
+    \setbox\f@ur\hb@xt@.9\wd\f@ur{\hss\box\f@ur\hss}%
+    \setbox\z@\hb@xt@\wd\f@ur{\hss$#4\relax#1$\hss}%
+    \mathord{\rlap{\copy\z@}\raise#3\ht\z@\box\f@ur}%
+  }%
+}%
+\DeclareRobustCommand\frak{%
+ \REVSYMB@warn{%
+  Command \string\frak\space unsupported:^^J%
+  please use \string\mathfrak\space instead.%
+ }%
+ \global\let\frak\mathfrak
+ \frak
+}%
+\DeclareRobustCommand\REV@mathfrak{%
+ \REVSYMB@warn{%
+  Command \string\mathfrak\space undefined:^^J%
+  please specify the amsfonts or amssymb option!%
+ }%
+ \global\let\mathfrak\@firstofone
+ \mathfrak
+}%
+\DeclareRobustCommand\Bbb{%
+ \REVSYMB@warn{%
+  Command \string\Bbb\space unsupported:^^J%
+  please use \string\mathbb\space instead.%
+ }%
+ \global\let\Bbb\mathbb
+ \Bbb
+}%
+\DeclareRobustCommand\REV@mathfrak{%
+ \REVSYMB@warn{%
+  Command \string\mathbb\space undefined:^^J%
+  please specify the amsfonts or amssymb option!%
+ }%
+ \global\let\mathbb\@firstofone
+ \mathbb
+}%
+\def\Bigglb{\REV@boldopen \Bigg}%
+\def\Biglb {\REV@boldopen \Big }%
+\def\bigglb{\REV@boldopen \bigg}%
+\def\biglb {\REV@boldopen \big }%
+\def\Biggrb{\REV@boldclose\Bigg}%
+\def\Bigrb {\REV@boldclose\Big }%
+\def\biggrb{\REV@boldclose\bigg}%
+\def\bigrb {\REV@boldclose\big }%
+\def\REV@pmb#1{%
+ \hbox{%
+  \setbox\z@=\hbox{#1}%
+  \kern-.02em\copy\z@\kern-\wd\z@
+  \kern .04em\copy\z@\kern-\wd\z@
+  \kern-.02em
+  \raise.04em\copy\z@
+ }%
+}%
+\def\REV@boldopen #1#2{\mathopen {\REV@pmb{$#1#2$}}}%
+\def\REV@boldclose#1#2{\mathclose{\REV@pmb{$#1#2$}}}%
+\def\revsymb@inithook{%
+ \@ifxundefined\dddot{\let\dddot\REV@dddot}{}%
+ \@ifxundefined\triangleq{\let\triangleq\REV@triangleq}{}%
+ \@ifxundefined\succsim{\let\succsim\altsuccsim}{}%
+ \@ifxundefined\precsim{\let\precsim\altprecsim}{}%
+ \@ifxundefined\lesssim{\let\lesssim\REV@lesssim}{}%
+ \@ifxundefined\gtrsim {\let\gtrsim \REV@gtrsim }{}%
+ \@ifxundefined\mathfrak{\let\mathfrak\REV@mathfrak}{}%
+ \@ifxundefined\mathbb{\let\mathbb\REV@mathbb}{}%
+}%
+\endinput
+%%
+%% End of file `revsymb.sty'.

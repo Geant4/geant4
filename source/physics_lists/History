@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16-2-2011, S.Incerti                    (phys-lists-V09-04-03)
+- Added process names in G4EmDNAPhysics.cc
+
+14-2-2011, G.Folger             (phys-lists-V09-04-02 and phys-lists-V09-03-45)
+- Shielding PL corrected .icc file to include correct G4HadronElasticPhysicsHP
+
 5-1-2011, G.Folger              (phys-lists-V09-04-01 and phys-lists-V09-03-44)
 - QGSP_BERT_NOLEP and QGSP_QEL were missing the include 
    for G4HadronQElasticPhysics.hh, but included G4HadronElasticPhysics 

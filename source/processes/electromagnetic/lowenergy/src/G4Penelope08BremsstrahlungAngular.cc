@@ -46,7 +46,8 @@
 #include "Randomize.hh"
 #include "globals.hh"
 
-G4Penelope08BremsstrahlungAngular::G4Penelope08BremsstrahlungAngular()
+G4Penelope08BremsstrahlungAngular::G4Penelope08BremsstrahlungAngular() : 
+  theLorentzTables1(0),theLorentzTables2(0)
 {
   dataRead = false;
 }
@@ -266,6 +267,8 @@ void G4Penelope08BremsstrahlungAngular::PrepareInterpolationTables(G4double Zmat
     {
       G4cout << "Unable to create tables of Lorentz coefficients for " << G4endl;
       G4cout << "<Z>= "  << Zmat << " in G4Penelope08BremsstrahlungAngular" << G4endl;
+      delete theTable1;
+      delete theTable2;
       G4Exception();	
     }
   

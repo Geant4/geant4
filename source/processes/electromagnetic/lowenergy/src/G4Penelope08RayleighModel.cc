@@ -454,7 +454,7 @@ void G4Penelope08RayleighModel::ReadDataFile(const G4int Z)
   size_t nPoints= 0;
   file >> readZ >> nPoints;
   //check the right file is opened.
-  if (readZ != Z || nPoints <= 0)
+  if (readZ != Z || nPoints <= 0 || nPoints >= 5000)
     {
       G4cout << "G4Penelope08RayleighModel::ReadDataFile()" << G4endl;
       G4cout << "Corrupted data file for Z=" << Z << G4endl;
@@ -483,6 +483,7 @@ void G4Penelope08RayleighModel::ReadDataFile(const G4int Z)
       G4cout << "G4Penelope08RayleighModel::ReadDataFile()" << G4endl;
       G4cout << "Problem with allocation of logAtomicCrossSection data table " << G4endl;
       G4Exception();
+      delete theVec;
       return;
     }
   logAtomicCrossSection->insert(std::make_pair(Z,theVec));
@@ -504,7 +505,7 @@ void G4Penelope08RayleighModel::ReadDataFile(const G4int Z)
     }
   file >> readZ >> nPoints;
   //check the right file is opened.
-  if (readZ != Z || nPoints <= 0)
+  if (readZ != Z || nPoints <= 0 || nPoints >= 5000)
     {
       G4cout << "G4Penelope08RayleighModel::ReadDataFile()" << G4endl;
       G4cout << "Corrupted data file for Z=" << Z << G4endl;
@@ -539,6 +540,7 @@ void G4Penelope08RayleighModel::ReadDataFile(const G4int Z)
       G4cout << "G4Penelope08RayleighModel::ReadDataFile()" << G4endl;
       G4cout << "Problem with allocation of atomicFormFactor data table " << G4endl;
       G4Exception();
+      delete theFFVec;
       return;
     }
   atomicFormFactor->insert(std::make_pair(Z,theFFVec));
@@ -896,9 +898,9 @@ void G4Penelope08RayleighModel::InitializeSamplingAlgorithm(const G4Material* ma
 		  reLoop = true;
 		}
 	    }while(reLoop);
-	  if (pdfi) delete pdfi;
-	  if (pdfih) delete pdfih;
-	  if (sumi) delete sumi;
+	  delete pdfi;
+	  delete pdfih;
+	  delete sumi;
 	}
     }while(x->size() < np);
 

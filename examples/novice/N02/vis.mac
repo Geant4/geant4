@@ -47,7 +47,7 @@
 /vis/scene/add/trajectories smooth
 /vis/modeling/trajectories/create/drawByCharge
 /vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
-/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 1
 # (if too many tracks cause core dump => /tracking/storeTrajectory 0)
 #
 # Draw hits at end of event:

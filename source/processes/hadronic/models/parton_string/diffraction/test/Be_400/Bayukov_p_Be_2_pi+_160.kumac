@@ -1,0 +1,41 @@
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 80   ITEP-80-37'
+ opt logy
+ve/cr q(008)
+ve/cr q0(008)
+ve/cr v(7,008)
+ve/in v(1:7,001)      1.8000E-01     0.0000E+00     1.1100E+00     1.5000E-01     1.5000E-01     0.0000E+00     0.0000E+00
+ve/in v(1:7,002)      2.7000E-01     0.0000E+00     3.2600E-01     4.6000E-02     4.6000E-02     0.0000E+00     0.0000E+00
+ve/in v(1:7,003)      3.6000E-01     0.0000E+00     7.1100E-02     1.0300E-02     1.0300E-02     0.0000E+00     0.0000E+00
+ve/in v(1:7,004)      4.6000E-01     0.0000E+00     1.4500E-02     2.4000E-03     2.4000E-03     0.0000E+00     0.0000E+00
+ve/in v(1:7,005)      5.5000E-01     0.0000E+00     2.7300E-03     7.5000E-04     7.5000E-04     0.0000E+00     0.0000E+00
+ve/in v(1:7,006)      6.6000E-01     0.0000E+00     6.1600E-04     1.4400E-04     1.4400E-04     0.0000E+00     0.0000E+00
+ve/in v(1:7,007)      7.3000E-01     0.0000E+00     3.1100E-04     7.9000E-05     7.9000E-05     0.0000E+00     0.0000E+00
+ve/in v(1:7,008)      8.1000E-01     0.0000E+00     9.7900E-05     2.8200E-05     2.8200E-05     0.0000E+00     0.0000E+00
+ve/copy v(1,1:008) x
+ve/copy v(2,1:008) q
+ve/copy v(3,1:008) y
+ve/copy v(4,1:008) eup
+ve/copy v(5,1:008) edo
+ve/copy v(6,1:008) sys1
+ve/copy v(7,1:008) sys2
+ null   0.117000   0.873000    1.00000E-05   10.00000
+ sigma etot1=sqrt(eup*eup+sys1*sys1)
+ sigma etot2=sqrt(edo*edo+sys2*sys2)
+/GRAPHICS/HPLOT/AERRORS x y q q etot2 etot1 008 20 0.2
+/GRAPHICS/HPLOT/AERRORS x y q0 q0 edo eup 008 20 0.2 '1'
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.495000     5.01187 _
+ 'RE   P BE --&gt; PI+ X' 0.3
+ text    0.495000     2.51189 _
+ 'E IN GEV   400.00' 0.3
+ text    0.495000     1.25893 _
+ 'THETA(P=3,RF=LAB) IN DEG   160.00' 0.3
+ text    0.495000    0.630957 _
+ 'A   9.01' 0.3
+* option *
+ ve/de *

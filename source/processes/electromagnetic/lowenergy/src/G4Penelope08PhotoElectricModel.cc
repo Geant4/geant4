@@ -31,6 +31,10 @@
 // History:
 // --------
 // 08 Jan 2010   L Pandola  First implementation
+// 01 Feb 2011   L Pandola  Suppress fake energy-violation warning when Auger is active.
+//                          Make sure that fluorescence/Auger is generated only if 
+//                          above threshold
+//
 
 #include "G4Penelope08PhotoElectricModel.hh"
 #include "G4ParticleDefinition.hh"
@@ -283,6 +287,7 @@ void G4Penelope08PhotoElectricModel::SampleSecondaries(std::vector<G4DynamicPart
     }
 
   G4double energyInFluorescence = 0; //testing purposes
+  G4double energyInAuger = 0; //testing purposes
 
   //Now, take care of fluorescence, if required
   if(DeexcitationFlag() && Z > 5) 
@@ -310,13 +315,29 @@ void G4Penelope08PhotoElectricModel::SampleSecondaries(std::vector<G4DynamicPart
 		  if (aPhoton)
 		    {
 		      G4double itsEnergy = aPhoton->GetKineticEnergy();
+		      G4bool keepIt = false;
 		      if (itsEnergy <= bindingEnergy)
 			{
-			  if(aPhoton->GetDefinition() == G4Gamma::Gamma())
-			    energyInFluorescence += itsEnergy;
+			  //check if good! 
+			  if(aPhoton->GetDefinition() == G4Gamma::Gamma()
+			     && itsEnergy >= cutG)
+			    {
+			      keepIt = true;
+			      energyInFluorescence += itsEnergy;
+			    }
+			  if (aPhoton->GetDefinition() == G4Electron::Electron() && 
+			      itsEnergy >= cutE)
+			    {
+			      energyInAuger += itsEnergy;
+			      keepIt = true;
+			    }
+			}
+		      //good secondary, register it
+		      if (keepIt)
+			{
 			  bindingEnergy -= itsEnergy;
 			  fvect->push_back(aPhoton);
-			}
+			}		    
 		      else
 			{
 			  delete aPhoton;
@@ -351,19 +372,23 @@ void G4Penelope08PhotoElectricModel::SampleSecondaries(std::vector<G4DynamicPart
       G4cout << "-----------------------------------------------------------" << G4endl;
       if (eKineticEnergy)
 	G4cout << "Outgoing electron " << eKineticEnergy/keV << " keV" << G4endl;
-      G4cout << "Fluorescence: " << energyInFluorescence/keV << " keV" << G4endl;
+      if (energyInFluorescence)
+	G4cout << "Fluorescence x-rays: " << energyInFluorescence/keV << " keV" << G4endl;
+      if (energyInAuger)
+	G4cout << "Auger electrons: " << energyInAuger/keV << " keV" << G4endl;
       G4cout << "Local energy deposit " << localEnergyDeposit/keV << " keV" << G4endl;
-      G4cout << "Total final state: " << (eKineticEnergy+energyInFluorescence+localEnergyDeposit)/keV << 
+      G4cout << "Total final state: " << 
+	(eKineticEnergy+energyInFluorescence+localEnergyDeposit+energyInAuger)/keV << 
 	" keV" << G4endl;
       G4cout << "-----------------------------------------------------------" << G4endl;
     }
   if (verboseLevel > 0)
     {
       G4double energyDiff = 
-	std::fabs(eKineticEnergy+energyInFluorescence+localEnergyDeposit-photonEnergy);
+	std::fabs(eKineticEnergy+energyInFluorescence+localEnergyDeposit+energyInAuger-photonEnergy);
       if (energyDiff > 0.05*keV)
 	G4cout << "Warning from G4Penelope08PhotoElectric: problem with energy conservation: " << 
-	  (eKineticEnergy+energyInFluorescence+localEnergyDeposit)/keV 
+	  (eKineticEnergy+energyInFluorescence+localEnergyDeposit+energyInAuger)/keV 
 	       << " keV (final) vs. " << 
 	  photonEnergy/keV << " keV (initial)" << G4endl;
     }

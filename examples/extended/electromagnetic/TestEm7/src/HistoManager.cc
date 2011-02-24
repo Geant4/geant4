@@ -54,7 +54,7 @@ HistoManager::HistoManager()
  
   fileName[0] = "testem7";
   fileType    = "root";
-  fileOption  = "export=root";
+  fileOption  = "";
   // histograms
   for (G4int k=0; k<MaxHisto; k++) {
     histo[k] = 0;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcessStore.cc,v 1.19 2010-11-22 07:56:43 dennis Exp $
+// $Id: G4HadronicProcessStore.cc,v 1.20 2011-01-08 02:23:20 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -581,7 +581,6 @@ void G4HadronicProcessStore::Dump(G4int level)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void G4HadronicProcessStore::Print(G4int idxProc, G4int idxPart)
 {
@@ -590,8 +589,10 @@ void G4HadronicProcessStore::Print(G4int idxProc, G4int idxPart)
   if(wasPrinted[idxPart] == 0) {
     wasPrinted[idxPart] = 1;
     G4cout<<G4endl;
-    G4cout << "                     Hadronic Processes for <" 
-	   <<part->GetParticleName() << ">" << G4endl; 
+    G4cout << "                                  Hadronic Processes for <" 
+	   << part->GetParticleName() << ">" << G4endl;
+    G4cout << "                                  ------------------------"
+           << "-----------" << G4endl;
   }
   HI hi = 0;
   G4bool first;
@@ -608,14 +609,21 @@ void G4HadronicProcessStore::Print(G4int idxProc, G4int idxPart)
       }
       if(!first) G4cout << "                              ";
       first = false;
-      G4cout << std::setw(25) << modelName[i] 
+      G4cout << std::setw(28) << modelName[i] 
 	     << ": Emin(GeV)= "  
-	     << std::setw(5) << hi->GetMinEnergy()/GeV
+	     << std::setw(4) << hi->GetMinEnergy()/GeV
 	     << "  Emax(GeV)= " 
 	     << hi->GetMaxEnergy()/GeV
 	     << G4endl;
     }
   }
+
+  G4cout << G4endl;
+  G4cout << std::setw(20) << proc->GetProcessName()
+         << "  Crs sctns: ";
+  G4CrossSectionDataStore* csds = proc->GetCrossSectionDataStore();
+  csds->DumpPhysicsTable(*part);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

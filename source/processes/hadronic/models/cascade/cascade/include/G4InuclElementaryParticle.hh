@@ -32,6 +32,7 @@
 // 20100914  M. Kelsey -- Move printout to .cc file
 // 20100915  M. Kelsey -- Add hyperon() identification function, ctor for
 //		G4DynamicParticle
+// 20110117  M. Kelsey -- Add antinucleon() and antibaryon() flag
 
 #ifndef G4INUCL_ELEMENTARY_PARTICLE_HH
 #define G4INUCL_ELEMENTARY_PARTICLE_HH
@@ -84,9 +85,15 @@ public:
   G4bool nucleon() const { return (type()==G4InuclParticleNames::proton ||
 				   type()==G4InuclParticleNames::neutron); }
 
+  G4bool antinucleon() const {
+    return (type()==G4InuclParticleNames::antiProton ||
+	    type()==G4InuclParticleNames::antiNeutron); }
+
   G4int baryon() const { 		// Can use as a bool (!=0 ==> true)
     return getDefinition()->GetBaryonNumber();
   }
+
+  G4bool antibaryon() const { return baryon() < 0; }
 
   G4bool hyperon() const {
     return (baryon() && getStrangeness() != 0.);

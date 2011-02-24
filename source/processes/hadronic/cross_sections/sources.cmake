@@ -70,6 +70,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
         G4IonsKoxCrossSection.hh
         G4IonsShenCrossSection.hh
         G4IonsSihverCrossSection.hh
+        G4KokoulinMuonNuclearXS.hh
         G4NeutronCaptureXS.hh
         G4NeutronElasticXS.hh
         G4NeutronInelasticCrossSection.hh
@@ -114,6 +115,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
         G4IonsKoxCrossSection.cc
         G4IonsShenCrossSection.cc
         G4IonsSihverCrossSection.cc
+        G4KokoulinMuonNuclearXS.cc
         G4NeutronCaptureXS.cc
         G4NeutronElasticXS.cc
         G4NeutronInelasticCrossSection.cc

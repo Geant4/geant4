@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronInelasticDataSet.cc,v 1.8 2006-06-29 19:57:43 gunter Exp $
+// $Id: G4HadronInelasticDataSet.cc,v 1.9 2011-01-09 02:37:48 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -33,3 +33,21 @@
 // 
 
 #include "G4HadronInelasticDataSet.hh"
+
+G4HadronInelasticDataSet::G4HadronInelasticDataSet()
+ : G4VCrossSectionDataSet("Gheisha inelastic")
+{
+  theHadronCrossSections = G4HadronCrossSections::Instance(); 
+  SetMinKinEnergy(0.0);
+  SetMaxKinEnergy(100*TeV);
+}
+
+
+void G4HadronInelasticDataSet::DumpPhysicsTable(const G4ParticleDefinition&)
+{
+  G4cout << std::setw(24) << " " 
+         << " G4HadronInelasticDataSet: GHEISHA inelastic cross sections "
+         << G4endl; 
+}
+
+

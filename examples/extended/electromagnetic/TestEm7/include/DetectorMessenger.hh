@@ -37,9 +37,10 @@
 
 class DetectorConstruction;
 class G4UIdirectory;
+class G4UIcommand;
 class G4UIcmdWithAString;
+class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWith3VectorAndUnit;
 class G4UIcmdWithoutParameter;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,10 +65,9 @@ class DetectorMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* SizeYZCmd;    
     G4UIcmdWithADoubleAndUnit* MagFieldCmd;
     
-    G4UIcmdWithAString*        TalMateCmd;
-    G4UIcmdWith3VectorAndUnit* TalSizeCmd;
-    G4UIcmdWith3VectorAndUnit* TalPosiCmd;
-            
+    G4UIcmdWithAnInteger*      TalNbCmd;    
+    G4UIcommand*               TalDefCmd;
+    G4UIcommand*               TalPosiCmd;                
     G4UIcmdWithoutParameter*   UpdateCmd;
 };
 

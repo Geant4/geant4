@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18th February 2011 G.Folger (exampleN05-V09-04-01)
+- ExN05DetectorConstruction: SetProductionCuts() needs array of 4 values, twice
+
+18th February 2011 G.Folger (exampleN05-V09-04-00)
+- ExN05DetectorConstruction: SetProductionCuts() needs array of 4 values
+
 4th June 2010 Joseph Perl (exampleN05-V09-03-01)
 - Updated vis usage
 

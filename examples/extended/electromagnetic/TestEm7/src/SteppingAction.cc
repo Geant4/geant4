@@ -74,10 +74,8 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
 
   //fill tallies
   //
-  G4TouchableHandle touchable = prePoint->GetTouchableHandle();
-  G4LogicalVolume* lVolume = touchable->GetVolume()->GetLogicalVolume();
-  if (lVolume == detector->GetLogicalTally())
-    runAction->FillTallyEdep(touchable->GetCopyNumber(), edep);
+  G4int copyNb = prePoint->GetTouchableHandle()->GetCopyNumber();
+  if (copyNb > 0) runAction->FillTallyEdep(copyNb, edep);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,0 +1,148 @@
+macro comp_mult
+      IGSET chhe .3
+      set *fon -130
+      set *wid 2
+      set yval 100.
+      opt zfl
+      v/del xtxt
+      v/del ytxt
+*      v/del ydata
+      v/cre xtxt(2) r
+      v/cre ytxt(1) r
+      v/cre ydelta(1) r
+
+      v/in xtxt 7. 7.2
+      v/in ydelta 0.25
+
+set xsiz 15.
+set ysiz 15.
+set ygti 1.2      
+set GSIZ .35
+Title 'pp "5# X, 200 GeV/c'
+*---
+
+
+*exec axis
+v/in ytxt 3.5
+zone 1 1
+null 0 11 0 4  
+exec data
+exec axis
+
+*---
+v/in ytxt 10.
+null 0 11 0 0.4 
+exec data
+exec axis
+SET TANG 90
+itx -1.  5. Mean Mulitiplicity 
+ SET TANG 0
+IGSET chhe .5
+igset txal 20
+*itx 6.5 9.7 'Diffractive String Model' 
+igset txal 0
+IGSET chhe .2
+*itx 11. -1.0 'G.Folger'
+return
+*--------------------------------------------------
+macro axis
+
+
+null 0 11 0 4 'AS'
+*igset chhe 0.4  
+igset chhe 0.35  
+igset txfp -130
+
+xoff=-0.25
+itx 0.9 [xoff]  'pi^-'
+itx 1.9 [xoff]  'pi^+'
+itx 2.8 [xoff]  'pi^0'
+itx 3.9 [xoff]  'K^+'
+itx 4.9 [xoff]  'K^-'
+itx 5.8 [xoff]  'K^0!&?s'
+itx 6.5 [xoff]  '[L]+[S]'
+itx 7.7 [xoff]  '[L]&^\261!+[S]&^\261!'
+itx 8.9 [xoff]  'p'
+itx 9.9 [xoff]  'p&^\261!'
+return
+
+*-------------------------------------------------
+
+macro data
+
+v/del data 
+v/del edata
+v/del x
+v/del xx
+
+v/del ex
+v/del dx
+
+v/cre x(10) r
+v/in x 1 2 3 4 5 6 7 8 9 10
+v/cre dx(10) r
+v/in dx 10*0.1
+v/cre xx(10) r
+
+v/cre ex(10) r
+v/in ex 10*0.01
+
+
+SET PMCI 1
+SET MTYP 20
+
+v/cre data(10) r 
+v/cre edata(10) r
+
+v/in data   2.62 3.22 3.34 0.28 0.18 0.17 0.096 0.013 1.34 0.05
+v/in edata  0.06 0.12 0.24 0.06 0.05 0.01 0.01  0.004 0.15 0.02
+PMARKER 1 xtxt ytxt
+igset txal 3
+itx xtxt(2) ytxt(1) 'Data'
+igset txal 0
+*v/oper/vsub ytxt ydelta ytxt
+
+
+hplot/errors x data ex edata 10 20 0.2 ' ' 
+v/del sa
+v/cre sa(10) r
+
+v/in sa   2.7093 3.4538 3.7269 0.2619 0.1545 0.1935 0.159 0.0325 1.258 0.0675 
+ v/oper/vsub x dx xx
+exec plotit 2   20           1. 'QGSM'
+*          red open_circle size
+v/del xx
+
+
+*oldv/in sa   2.3897  3.19336 3.46894 0.21174 0.13086 0.16682 0.13352 0.0279  1.21298 0.05804  | 200-0.8-300-150-0.5
+v/in sa 2.4146 3.198 3.4042 0.2181 0.1332 0.1729 0.133 0.0267 1.2325 0.0572 
+*exec plotit 2 8 0.9 '200-0.8-300-150-0.5'
+v/oper/vadd x dx xx
+exec plotit 3 20 1. 'Diffractive Model'
+v/del xx
+igset txal 3
+*itx xtxt(2) ytxt(1) 'Simulation' 
+igset txal 0
+*----------
+
+
+return
+
+*-------------------------------------------------
+
+
+macro plotit
+
+SET PMCI [1]
+SET MTYP [2]
+SET MSCF [3]
+
+PMARKER 10 xx sa 
+
+v/oper/vsub ytxt ydelta ytxt
+PMARKER 1 xtxt ytxt
+igset txal 3
+*text xtxt(2) ytxt(1) [4] .3
+itx xtxt(2) ytxt(1) [4]
+igset txal 0
+return

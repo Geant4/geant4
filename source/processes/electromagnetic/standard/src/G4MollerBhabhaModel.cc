@@ -251,7 +251,7 @@ G4double G4MollerBhabhaModel::ComputeDEDXPerVolume(
 
     G4double d2 = d*d*0.5;
     G4double d3 = d2*d/1.5;
-    G4double d4 = d3*d*3.75;
+    G4double d4 = d3*d*0.75;
     G4double y  = 1.0/(1.0 + gam);
     dedx = log(2.0*(tau + 2.0)/eexc2) + log(tau*d)
          - beta2*(tau + 2.0*d - y*(3.0*d2 

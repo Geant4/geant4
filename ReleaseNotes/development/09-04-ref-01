@@ -15,59 +15,60 @@ Some of the development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(o)  Fixes included in release 9.4.p01
 
 Summarised, the list of changes is the following:
 
 geometry
 --------
-- solids/CSG (geom-csg-V09-04-00)
+- solids/CSG (geom-csg-V09-04-00)                                           (o)
   o G4Cons: fix in DistanceToIn(p,v,..) to squared tolerance in comparision.
     Replaced calculation of the solution for the quadratic equation, to use
     safe formula, in order to avoid numerical errors when b is almost equal
     to sqrt(d). Addresses problem report #1153.
 
-global                                           global-V09-04-02
+global                                           global-V09-04-02           (o)
 ------
 - Extended length of internal arrays in G4Pow from 256 to 512.
   Allows to fix numerical problems observed in some ion/ion collision tests.
 - Use unsigned-int for table size type in G4PhysicsTable. Fixes a problem
   for data persistency.
 
-graphics_reps                                    greps-V09-04-00
+graphics_reps                                    greps-V09-04-00            (o)
 -------------
 - Fixes to G4Visible operators against possible zero pointers and minor
   memory leaks. Fixed more minor Coverity reports.
 
-materials                                        materials-V09-04-00
+materials                                        materials-V09-04-00        (o)
 ---------
 - G4SandiaTable: fixed trivial Coverity warnings.
 - G4NistMaterialBuilder: fixed unnecessary instantiation of an element.
 - G4ExtDEDXTable: fixed Coverity warning in RetrievePhysicsTable() method.
 
-particles                                        particles-V09-04-00
+particles                                        particles-V09-04-00        (o)
 ---------
 - Register BetaDecay for anti_neutron though anti_neutron keeps as "stable"
   with finite life-time
 - Defined error codes for G4Exceptions.
 
-persistency/ascii                                ascii-V09-04-01
+persistency/ascii                                ascii-V09-04-01            (o)
 -----------------
 - Fixed missing dumping of pressure and state for materials.
   Added enumeration of units.
 
-persistency/gdml                                 gdml-V09-04-00
+persistency/gdml                                 gdml-V09-04-00             (o)
 ----------------
 - Correction in G4GDMLWriteMaterials::MaterialWrite() to properly treat
   export of materials with single element defined as isotope composition.
 
-physics_lists                                    phys-lists-V09-04-01
+physics_lists                                    phys-lists-V09-04-01       (o)
 -------------
 - G4EmStandardPhysics_option1: fixed missing line defining polar angle limit,
   responsible for significant CPU penalty in single scattering of muons.
 - Fix in QGSP_BERT_NOLEP and QGSP_QEL for missing inclusion of
   G4HadronQElasticPhysics header.
 
-processes/cuts                                   procuts-V09-04-00
+processes/cuts                                   procuts-V09-04-00          (o)
 --------------
 - Added protection in G4ProductionCuts::SetProductionCuts() to check
   consistencies on size of given vector.
@@ -81,22 +82,22 @@ processes/electromagnetic/lowenergy              emlowen-V09-04-08
   G4PenelopeCrossSectionHandler.
 - Edited G4Penelope08IonisationModel and G4PenelopeIonisationModel 
   to avoid the production of sub-threshold delta-rays.
-- G4UAtomicDeexcitation, G4empCrossSection, G4teoCrossSection,
+- G4UAtomicDeexcitation, G4empCrossSection, G4teoCrossSection,              (o)
   G4VhShellCrossSection: fixed inefficiency in computation of ionisation
   cross-sections; added extra protections for limited usage of a model in
   applicability range.
-- Fixed Coverity defects for G4Penelope08 models, G4EMDataSet, G4ShellData
+- Fixed Coverity defects for G4Penelope08 models, G4EMDataSet, G4ShellData  (o)
   and G4DNA classes.
   Moved constructor and destructor to source in G4VEMDataSet.
-- Fixed memory leak in G4CrossSectionHandler.
+- Fixed memory leak in G4CrossSectionHandler.                               (o)
   Fixed memory leaks at initialisation in several classes.
 
-processes/electromagnetic/muons                  emmuons-V09-04-00
+processes/electromagnetic/muons                  emmuons-V09-04-00          (o)
 -------------------------------
 - G4ErrorEnergyLoss: fixed initialisation in constructor, addressing a
   problem identified on Windows.
 
-processes/electromagnetic/standard               emstand-V09-04-01
+processes/electromagnetic/standard               emstand-V09-04-01          (o)
 ----------------------------------
 - G4KleinNishinaModel: improved computation of kinematics.
 - G4GoudsmitSaundersonMscModel, G4UrbanMscModel90, G4UrbanMscModel92,
@@ -105,7 +106,7 @@ processes/electromagnetic/standard               emstand-V09-04-01
 - G4IonCoulombScatteringModel, G4GoudsmitSaundersonMscModel, 
   G4GoudsmitSaundersonTable: fixed Coverity warnings for data initialisation.
 
-processes/electromagnetic/utils                  emutils-V09-04-02
+processes/electromagnetic/utils                  emutils-V09-04-02          (o)
 -------------------------------
 - G4LossTableManager: fixed problem happening at initilisation, for the case
   when Bremsstrahlung process is instantiated but not added to physics list.
@@ -116,23 +117,23 @@ processes/electromagnetic/utils                  emutils-V09-04-02
 
 processes/hadronic
 ------------------
-- models/chiral_inv_phase_space/cross_sections (hadr-chips-cs-V09-03-08)
+- models/chiral_inv_phase_space/cross_sections (hadr-chips-cs-V09-03-08)    (o)
   o Unlock inelastic h+p cross-sections below 1 GeV (G4Q...NuclearCrossSection)
     K+ + p low energy inelastic CS blocking below 600 MeV/c.
-- models/chiral_inv_phase_space/fragmentation (hadr-chips-frag-V09-03-09)
+- models/chiral_inv_phase_space/fragmentation (hadr-chips-frag-V09-03-09)   (o)
   o Fixed photon-nuclear environment for Quasmons.
-- models/chiral_inv_phase_space/processes (hadr-chips-proc-V09-04-00)
+- models/chiral_inv_phase_space/processes (hadr-chips-proc-V09-04-00)       (o)
   o Added correct handling of splitting of target for (A>=2,Z=0).
     Added throwing of exception to signal NULL pointer.
-- models/de_excitation (hadr-deex-V09-04-00)
+- models/de_excitation (hadr-deex-V09-04-00)                                (o)
   o G4ParaFissionModel: fixed initialisation of G4Fragment (A,Z order),
     use G4NucleiProperties to access mass.
 
-processes/management                             procman-V09-04-00
+processes/management                             procman-V09-04-00          (o)
 --------------------
 - Defined error codes for G4Exceptions. Some code cleanup.
 
-processes/transportation                         transport-V09-04-03
+processes/transportation                         transport-V09-04-03        (o)
 ------------------------
 - G4UserSpecialCuts: fixed bug in energy tracking cut; changed order of checks:
   1st energy tracking cut, 2nd track length, 3d time cut, 4th range for charged
@@ -140,7 +141,7 @@ processes/transportation                         transport-V09-04-03
 - G4CoupledTransportation: added missing EndTracking() method to reset the
   activated navigator list.
 
-run                                              run-V09-04-00
+run                                              run-V09-04-00              (o)
 ---
 - G4RunManager: added protection for WIN32 against already existing directory
   when saving random seeds. Addressing problem report #1157.
@@ -165,44 +166,44 @@ data
 examples                                         examples-V09-04-01
 --------
 - Updated reference outputs.
-- advanced/air_shower (air_shower-V09-04-00)
+- advanced/air_shower (air_shower-V09-04-00)                                (o)
   o Fixed use of 3Vector according to new CLHEP, causing compilation error.
-- advanced/composite_calorimeter (ccal-V09-04-00)
+- advanced/composite_calorimeter (ccal-V09-04-00)                           (o)
   o Updated physics lists.
-- advanced/lAr_calorimeter (lAr_calorimeter-V09-04-00)
+- advanced/lAr_calorimeter (lAr_calorimeter-V09-04-00)                      (o)
   o Updated physics models.
-- advanced/human_phantom (human_phantom-V09-04-00)
+- advanced/human_phantom (human_phantom-V09-04-00)                          (o)
   o Fixed use of 3Vector according to new CLHEP, causing compilation error.
-- advanced/underground_physics (DMX-V09-04-00)
+- advanced/underground_physics (DMX-V09-04-00)                              (o)
   o Removed inclusion of obsolete header.
-- advanced/xray_fluorescence (XrayFluo-V09-04-00)
+- advanced/xray_fluorescence (XrayFluo-V09-04-00)                           (o)
   o Fixed use of 3Vector according to new CLHEP, causing compilation error.
-- extended/biasing/ReverseMC01 (ReverseMC01-V09-04-00)
+- extended/biasing/ReverseMC01 (ReverseMC01-V09-04-00)                      (o)
   o Added protection for unitialised mean&error in
     RMC01AnalysisManager::ComputeMeanEdepAndError().
 - extended/electromagnetic/TestEm3 (testem3-V09-04-00)
   o Updated input macro tileCal.mac.
-- extended/electromagnetic/TestEm5 (testem5-V09-04-00)
-- extended/electromagnetic/TestEm7 (testem7-V09-04-00)
+- extended/electromagnetic/TestEm5 (testem5-V09-04-00)                      (o)
+- extended/electromagnetic/TestEm7 (testem7-V09-04-00)                      (o)
   o Minor cleanup of SS physics constructor. 
-- extended/electromagnetic/TestEm9 (testem9-V09-04-00)
+- extended/electromagnetic/TestEm9 (testem9-V09-04-00)                      (o)
   o Added extra run with 20 GeV mu- in input macro.
-- extended/electromagnetic/TestEm11 (testem11-V09-04-00)
-- extended/electromagnetic/TestEm12 (testem12-V09-04-00)
+- extended/electromagnetic/TestEm11 (testem11-V09-04-00)                    (o)
+- extended/electromagnetic/TestEm12 (testem12-V09-04-00)                    (o)
   o Minor cleanup of SS physics constructor.
 - extended/electromagnetic/TestEm14 (testem14-V09-04-00)
   o PhysListEmStandard: include AtomicDeexcitation and new
     G4PEEffectFluoModel, G4KleinNishinaModel.
 - extended/electromagnetic/TestEm18 (testem18-V09-04-00)
   o Moved Fluo and Pixe tests to TestEm14.
-- extended/medical/electronScattering (electronScattering-V09-04-00)
+- extended/medical/electronScattering (electronScattering-V09-04-00)        (o)
   o Minor cleanup of SS physics constructor.
-- extended/medical/electronScattering2 (exampleES2-V09-04-00)
+- extended/medical/electronScattering2 (exampleES2-V09-04-00)               (o)
   o Added all physics builders from electronScattering example.
-- extended/medical/fanoCavity (fano-V09-04-00)
-- extended/medical/fanoCavity2 (fano2-V09-04-00)
+- extended/medical/fanoCavity (fano-V09-04-00)                              (o)
+- extended/medical/fanoCavity2 (fano2-V09-04-00)                            (o)
   o Minor cleanup of SS physics constructor.
-- extended/persistency/P03 (exampleP03-V09-04-00)
+- extended/persistency/P03 (exampleP03-V09-04-00)                           (o)
   o Added batch.mac input macro, replacing use of OGL vis driver by ASCII.
 
 tests                                            tests-V09-04-00

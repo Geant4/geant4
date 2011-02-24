@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+February 11th, 2011, M.Asai (run-V09-04-01)
+- G4RunManager.hh : Additional protection against the failure in
+  creating a new directory -- Problem #1157
+
 January 22nd, 2011, M.Asai (run-V09-04-00)
 - G4RunManager.hh : protection for WIN32 against already-existing
   directory -- Problem #1157

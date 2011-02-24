@@ -55,9 +55,15 @@ G4FastStep::    SetPrimaryTrackFinalProperTime(G4double properTime)
 
 inline void 
 G4FastStep::
-SetPrimaryTrackFinalKineticEnergy(G4double kineticEnergy)
+ProposePrimaryTrackFinalKineticEnergy(G4double kineticEnergy)
 {
   theEnergyChange = kineticEnergy;
+}
+inline void 
+G4FastStep::
+SetPrimaryTrackFinalKineticEnergy(G4double kineticEnergy)
+{
+  ProposePrimaryTrackFinalKineticEnergy(kineticEnergy);
 }
 
 
@@ -71,6 +77,7 @@ G4FastStep::SetPrimaryTrackPathLength(G4double pathLength)
 {
   ProposePrimaryTrackPathLength(pathLength);
 }
+
 //-----------------------------------------
 //
 // Creation of eventual secondaries: 

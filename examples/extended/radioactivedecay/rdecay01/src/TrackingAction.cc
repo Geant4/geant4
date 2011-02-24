@@ -100,7 +100,7 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
   //example of saving random number seed of this event, under condition
   //
   ////condition = (ih == 3);
-  if (condition) G4RunManager::GetRunManager()->rndmSaveThisEvent();      
+  if (condition) G4RunManager::GetRunManager()->rndmSaveThisEvent();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -114,7 +114,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
   //get time
   //   
   G4double time = track->GetGlobalTime();
-    
+      
   //energy and momentum balance (from secondaries)
   //
   G4TrackVector* secondaries = fpTrackingManager->GimmeSecondaries();

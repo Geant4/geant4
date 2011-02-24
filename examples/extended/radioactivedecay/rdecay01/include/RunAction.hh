@@ -64,7 +64,7 @@ class RunAction : public G4UserRunAction
     std::map<G4String,G4double> Emean;
     std::map<G4String,G4double> Emin;
     std::map<G4String,G4double> Emax;
-    G4int    decayCount;
+    G4int    decayCount, timeCount;
     G4double Ebalance[3];
     G4double Pbalance[3];
     G4double EventTime[3];                    

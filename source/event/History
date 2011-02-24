@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+February 10th, 2011, M.Asai (event-V09-04-00)
+- Adding one more reset of abortRequested flag at the top of G4EventManager::DoProcessing().
+- Addressing to Bug report #1169.
+
 December 15th, 2010, M.Asai (event-V09-03-10)
 - Fixing incorrect destination stack for the case more than three track stacks are used.
 

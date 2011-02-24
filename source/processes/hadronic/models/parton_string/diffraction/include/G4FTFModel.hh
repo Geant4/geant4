@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.hh,v 1.11 2010-09-20 15:50:46 vuzhinsk Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: G4FTFModel.hh,v 1.12 2010/12/07 10:42:40 vuzhinsk Exp $
+// GEANT4 tag $Name:  $
 //
 // Class Description
 // Final state production code for hadron inelastic scattering above 20 GeV
@@ -58,6 +58,7 @@ class G4ExcitedString;
 #include "G4ExcitedStringVector.hh"
 #include "G4DiffractiveExcitation.hh"
 #include "G4ElasticHNScattering.hh"
+#include "G4FTFAnnihilation.hh"
 
 class G4FTFModel : public G4VPartonStringModel
 {
@@ -81,11 +82,13 @@ class G4FTFModel : public G4VPartonStringModel
   protected:
   
   private:
+       void StoreInvolvedNucleon();              
        void ReggeonCascade();
        G4bool PutOnMassShell();
        G4bool ExciteParticipants();
        G4ExcitedStringVector * BuildStrings();
-       void GetResidualNucleus();                  // 23 Oct. 2009
+       void GetResidualNucleus();                  
+       void AjustTargetNucleonForAnnihilation(G4VSplitableHadron *SelectedTargetNucleon); 
        G4ThreeVector GaussianPt(G4double  AveragePt2, G4double maxPtSquare) const;
   
   private:     
@@ -99,6 +102,9 @@ class G4FTFModel : public G4VPartonStringModel
        G4FTFParameters  *theParameters;
        G4DiffractiveExcitation * theExcitation;
        G4ElasticHNScattering   * theElastic;
+       G4FTFAnnihilation       * theAnnihilation;              // Uzhi 17.11.10
+
+       std::vector<G4VSplitableHadron *> theAdditionalString;  // Uzhi 17.11.10
 
        G4LorentzVector Residual4Momentum;
        G4double ResidualExcitationEnergy;

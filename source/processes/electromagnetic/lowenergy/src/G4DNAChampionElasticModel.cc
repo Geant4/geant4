@@ -135,7 +135,7 @@ void G4DNAChampionElasticModel::Initialise(const G4ParticleDefinition* /*particl
     char *path = getenv("G4LEDATA");
  
     if (!path)
-    G4Exception("G4FinalStateElasticChampion::Initialise: G4LEDATA environment variable not set");
+    G4Exception("G4ChampionElasticModel::Initialise: G4LEDATA environment variable not set");
 
     std::ostringstream eFullFileName;
     eFullFileName << path << "/dna/sigmadiff_cumulatedshort_elastic_e_champion.dat";

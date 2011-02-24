@@ -47,7 +47,8 @@
 #include "G4NistManager.hh"
 
 
-G4UInelasticCrossSection::G4UInelasticCrossSection(const G4ParticleDefinition*) 
+G4UInelasticCrossSection::G4UInelasticCrossSection(const G4ParticleDefinition*)
+ : G4VCrossSectionDataSet("G4UInelasticCrossSection")
 {
   verboseLevel = 0;
   hasGlauber = false;

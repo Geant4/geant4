@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21-02-11 V.Ivant (test46-V09-04-01)
+- improved scripts and macro
+
 21-12-10 V.Ivant (test46-V09-04-00)
 - macro files to be used in nightly tests are prepared
 

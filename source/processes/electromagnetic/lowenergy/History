@@ -17,6 +17,25 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14.02.2011  S. Incerti, tag emlowen-V09-04-13
+            Corrected verbose in G4DNA Champion elastic model class.
+
+14.02.2011  S. Incerti, tag emlowen-V09-04-12
+            Removal of obsolete dummy class
+
+14.02.2011  S. Incerti, tag emlowen-V09-04-11
+            Removal of all obsolete Geant4-DNA classes
+
+02.02.2011  L. Pandola, tag emlowen-V09-04-10
+	    Updated Compton and Ionisation for Penelope and Penelope08 
+	    (to fix the same issue as tag emlowen-V09-04-09). Fix 
+	    Coverity defects in G4Penelope08 models
+
+01.02.2011  L. Pandola, tag emlowen-V09-04-09
+	    Changed G4Penelope08PhotoElectricModel and G4PenelopePhotoElectricModel to 
+	    suppress fake energy-violation warning and to make sure that fluorescence/Auger 
+            is generated only if above threshold
+
 24.01.2011  L. Pandola, tag emlowen-V09-04-08
 	    Removed all obsolete G4Penelope processes and the 
 	    obsolete class G4PenelopeCrossSectionHandler.
@@ -107,7 +126,7 @@ committal in the CVS repository !
 
 12.11.2010, V. Ivanchenko, tag emlowen-V09-03-58
             G4BoldyshevTripletModel - F.Longo substitute asinh,
-            because it is abcent at Windows
+            because it is absent at Windows
 
 12.11.2010, S. Incerti, tag emlowen-V09-03-57
             Renamed inline function in Sanche excitation model

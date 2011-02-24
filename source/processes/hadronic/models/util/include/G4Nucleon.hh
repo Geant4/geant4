@@ -42,6 +42,10 @@
 #include "G4ParticleDefinition.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
+
+#include "G4AntiProton.hh"    // Uzhi Feb. 2011
+#include "G4AntiNeutron.hh"   // Uzhi Feb. 2011 
+
 #include "G4VKineticNucleon.hh"
 
 //#include "G4VSplitableHadron.hh"
@@ -72,6 +76,10 @@ class G4Nucleon : public G4VKineticNucleon
 
     inline void SetParticleType(G4Proton * aProton) {theParticleType = aProton;}
     inline void SetParticleType(G4Neutron *aNeutron){theParticleType = aNeutron;}
+
+    inline void SetParticleType(G4AntiProton * aAntiProton) {theParticleType =aAntiProton;} //VU
+    inline void SetParticleType(G4AntiNeutron *aAntiNeutron){theParticleType =aAntiNeutron;}//VU
+
 
     inline  G4ParticleDefinition * GetParticleType() const {return theParticleType;}
     virtual  G4ParticleDefinition* GetDefinition() const {return theParticleType;}

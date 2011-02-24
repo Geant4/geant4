@@ -128,7 +128,7 @@ void G4EmDNAPhysics::ConstructProcess()
 
       // *** Elastic scattering (two alternative models available) ***
       
-      G4DNAElastic* theDNAElasticProcess = new G4DNAElastic();
+      G4DNAElastic* theDNAElasticProcess = new G4DNAElastic("e-_G4DNAElastic");
       // theDNAElasticProcess->SetModel(new G4DNAChampionElasticModel());
       
       // or alternative model
@@ -137,43 +137,43 @@ void G4EmDNAPhysics::ConstructProcess()
       pmanager->AddDiscreteProcess(theDNAElasticProcess);
 
       // *** Excitation ***
-      pmanager->AddDiscreteProcess(new G4DNAExcitation());
+      pmanager->AddDiscreteProcess(new G4DNAExcitation("e-_G4DNAExcitation"));
 
       // *** Ionisation ***
-      pmanager->AddDiscreteProcess(new G4DNAIonisation());
+      pmanager->AddDiscreteProcess(new G4DNAIonisation("e-_G4DNAIonisation"));
 
       // *** Vibrational excitation ***
-      pmanager->AddDiscreteProcess(new G4DNAVibExcitation());
+      pmanager->AddDiscreteProcess(new G4DNAVibExcitation("e-_G4DNAVibExcitation"));
       
       // *** Attachment ***
-      pmanager->AddDiscreteProcess(new G4DNAAttachment()); 
+      pmanager->AddDiscreteProcess(new G4DNAAttachment("e-_G4DNAAttachment")); 
 
     
     } else if ( particleName == "proton" ) {
-      pmanager->AddDiscreteProcess(new G4DNAExcitation());
-      pmanager->AddDiscreteProcess(new G4DNAIonisation());
-      pmanager->AddDiscreteProcess(new G4DNAChargeDecrease());
+      pmanager->AddDiscreteProcess(new G4DNAExcitation("proton_G4DNAExcitation"));
+      pmanager->AddDiscreteProcess(new G4DNAIonisation("proton_G4DNAIonisation"));
+      pmanager->AddDiscreteProcess(new G4DNAChargeDecrease("proton_G4DNAChargeDecrease"));
 
     } else if ( particleName == "hydrogen" ) {
-      pmanager->AddDiscreteProcess(new G4DNAExcitation());
-      pmanager->AddDiscreteProcess(new G4DNAIonisation());
-      pmanager->AddDiscreteProcess(new G4DNAChargeIncrease());
+      pmanager->AddDiscreteProcess(new G4DNAExcitation("hydrogen_G4DNAExcitation"));
+      pmanager->AddDiscreteProcess(new G4DNAIonisation("hydrogen_G4DNAIonisation"));
+      pmanager->AddDiscreteProcess(new G4DNAChargeIncrease("hydrogen_G4DNAChargeIncrease"));
 
     } else if ( particleName == "alpha" ) {
-      pmanager->AddDiscreteProcess(new G4DNAExcitation());
-      pmanager->AddDiscreteProcess(new G4DNAIonisation());
-      pmanager->AddDiscreteProcess(new G4DNAChargeDecrease());
+      pmanager->AddDiscreteProcess(new G4DNAExcitation("alpha_G4DNAExcitation"));
+      pmanager->AddDiscreteProcess(new G4DNAIonisation("alpha_G4DNAIonisation"));
+      pmanager->AddDiscreteProcess(new G4DNAChargeDecrease("alpha_G4DNAChargeDecrease"));
 
     } else if ( particleName == "alpha+" ) {
-      pmanager->AddDiscreteProcess(new G4DNAExcitation());
-      pmanager->AddDiscreteProcess(new G4DNAIonisation());
-      pmanager->AddDiscreteProcess(new G4DNAChargeDecrease());
-      pmanager->AddDiscreteProcess(new G4DNAChargeIncrease());
+      pmanager->AddDiscreteProcess(new G4DNAExcitation("alpha+_G4DNAExcitation"));
+      pmanager->AddDiscreteProcess(new G4DNAIonisation("alpha+_G4DNAIonisation"));
+      pmanager->AddDiscreteProcess(new G4DNAChargeDecrease("alpha+_G4DNAChargeDecrease"));
+      pmanager->AddDiscreteProcess(new G4DNAChargeIncrease("alpha+_G4DNAChargeIncrease"));
 
     } else if ( particleName == "helium" ) {
-      pmanager->AddDiscreteProcess(new G4DNAExcitation());
-      pmanager->AddDiscreteProcess(new G4DNAIonisation());
-      pmanager->AddDiscreteProcess(new G4DNAChargeIncrease());
+      pmanager->AddDiscreteProcess(new G4DNAExcitation("helium_G4DNAExcitation"));
+      pmanager->AddDiscreteProcess(new G4DNAIonisation("helium_G4DNAIonisation"));
+      pmanager->AddDiscreteProcess(new G4DNAChargeIncrease("helium_G4DNAChargeIncrease"));
 
     }
     

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronElasticXS.cc,v 1.11 2010-11-18 13:03:15 vnivanch Exp $
+// $Id: G4NeutronElasticXS.cc,v 1.12 2011-01-09 02:37:48 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -58,7 +58,8 @@
 using namespace std;
 
 G4NeutronElasticXS::G4NeutronElasticXS() 
-  :  proton(G4Proton::Proton()), maxZ(92)
+ : G4VCrossSectionDataSet("G4NeutronElasticXS"),
+   proton(G4Proton::Proton()), maxZ(92)
 {
   //  verboseLevel = 0;
   if(verboseLevel > 0){

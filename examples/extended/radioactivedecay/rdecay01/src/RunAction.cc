@@ -56,7 +56,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
 { 
   //initialize arrays
   //
-  decayCount = 0;
+  decayCount = timeCount = 0;
   for (G4int i=0; i<3; i++) Ebalance[i] = Pbalance[i] = EventTime[i] = 0. ;
        
   //histograms
@@ -74,6 +74,7 @@ void RunAction::ParticleCount(G4String name, G4double Ekin)
 {
   particleCount[name]++;
   Emean[name] += Ekin;
+  //update min max
   if (particleCount[name] == 1) Emin[name] = Emax[name] = Ekin;
   if (Ekin < Emin[name]) Emin[name] = Ekin;
   if (Ekin > Emax[name]) Emax[name] = Ekin;  
@@ -85,11 +86,13 @@ void RunAction::Balance(G4double Ebal, G4double Pbal)
 {
   decayCount++;
   Ebalance[0] += Ebal;
+  //update min max  
   if (decayCount == 1) Ebalance[1] = Ebalance[2] = Ebal;
   if (Ebal < Ebalance[1]) Ebalance[1] = Ebal;
   if (Ebal > Ebalance[2]) Ebalance[2] = Ebal;
   
   Pbalance[0] += Pbal;
+  //update min max   
   if (decayCount == 1) Pbalance[1] = Pbalance[2] = Pbal;  
   if (Pbal < Pbalance[1]) Pbalance[1] = Pbal;
   if (Pbal > Pbalance[2]) Pbalance[2] = Pbal;    
@@ -98,11 +101,12 @@ void RunAction::Balance(G4double Ebal, G4double Pbal)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::EventTiming(G4double time)
-{  
+{
+  timeCount++;  
   EventTime[0] += time;
-  if (decayCount == 1) EventTime[1] = EventTime[2] = time;  
+  if (timeCount == 1) EventTime[1] = EventTime[2] = time;  
   if (time < EventTime[1]) EventTime[1] = time;
-  if (time > EventTime[2]) EventTime[2] = time;    
+  if (time > EventTime[2]) EventTime[2] = time;	     
 }    
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -166,7 +170,7 @@ void RunAction::EndOfRunAction(const G4Run* run)
 	    
  //time of life
  //
- G4double Tmean = EventTime[0]/nbEvents;
+ G4double Tmean = EventTime[0]/timeCount;
  G4double halfLife = Tmean*std::log(2.);
    
  G4cout << "\n Time of life : mean = "

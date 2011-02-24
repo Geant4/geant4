@@ -7,7 +7,7 @@ cd $REFERENCE
 setenv PRIMARYBEAM pi-
 mkdir -p $PRIMARYBEAM
 cd $PRIMARYBEAM
-
+ 
 setenv PHYSLIST QBBC
 #source $G4INSTALL/tests/test46/run.csh
 setenv PHYSLIST QBBCG
@@ -15,12 +15,24 @@ setenv PHYSLIST QBBCG
 setenv PHYSLIST QBBCF
 #source $G4INSTALL/tests/test46/run.csh
 setenv PHYSLIST QGSP_BERT_EML
+<<<<<<< run1.csh
+<<<<<<< run1.csh
+source $G4INSTALL/tests/test46/run.csh
+setenv PHYSLIST QGSP_BERT_EMLSN
+#source $G4INSTALL/tests/test46/run.csh
+setenv PHYSLIST QBBC_XGGSN
+#source $G4INSTALL/tests/test46/run.csh
+#setenv PHYSLIST QGSP_BERT
+=======
+>>>>>>> 1.10
+=======
 source $G4INSTALL/tests/test46/run.csh
 setenv PHYSLIST QGSP_BERT_EMLSN
 source $G4INSTALL/tests/test46/run.csh
 setenv PHYSLIST QBBC_XGGSN
 source $G4INSTALL/tests/test46/run.csh
 #setenv PHYSLIST QGSP_BERT
+>>>>>>> 1.13
 #source $G4INSTALL/tests/test46/run.csh
 
 exit

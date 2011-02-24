@@ -17,6 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17 February 2011: V.Ivant (emstand-V09-04-04)
+- G4PEEffectFluoModel - comment out parasitic cout
+
+11 February 2011: V.Ivant (emstand-V09-04-03)
+- G4PEEffectFluoModel - fixed K-shell selection (was off by mistake)
+
+01 February 2011: V.Ivant (emstand-V09-04-02)
+- G4MollerBhabhaModel - fixed expression for computation of positron dedx
+                        according to PDG formula and original paper
+                        (thanks to Nicola Mori)
+
 04 January 2011: V.Ivant (emstand-V09-04-01)
 - G4GoudsmitSaundersonMscModel, G4UrbanMscModel90, G4UrbanMscModel92,
   G4UrbanMscModel93 use recommended method Value(e) to access transport
@@ -45,7 +56,7 @@ committal in the CVS repository !
 13 November 2010: V.Ivant (emstand-V09-03-27)
 - G4UrbanMscModel90, G4UrbanMscModel92, G4UrbanMscModel93 - added
   warning messages;
-- G4WentzelOKandVIxSection - fixed computation of nuclear formfactor
+- G4WentzelOKandVIxSection - fixed computation of nuclear form-factor
 - G4eCoulombScatteringModel - fixed computation of nuclear recoil
 
 12 November 2010: V.Ivant (emstand-V09-03-26)

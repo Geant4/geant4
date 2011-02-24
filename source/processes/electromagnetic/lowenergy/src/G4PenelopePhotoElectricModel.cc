@@ -46,6 +46,9 @@
 // 21 Oct 2009   L Pandola    Remove un-necessary fUseAtomicDeexcitation flag - now managed by
 //                            G4VEmModel::DeexcitationFlag()
 // 15 Mar 2010   L Pandola    Explicitely initialize Auger to false
+// 01 Feb 2011   L Pandola  Suppress fake energy-violation warning when Auger is active.
+//                          Make sure that fluorescence/Auger is generated only if 
+//                          above threshold
 //
 
 #include "G4PenelopePhotoElectricModel.hh"
@@ -162,7 +165,6 @@ G4double G4PenelopePhotoElectricModel::ComputeCrossSectionPerAtom(
   // also shell sampling from a given atom). Data are from the Livermore database
   //  D.E. Cullen et al., Report UCRL-50400 (1989)
   //
-
   if (verboseLevel > 3)
     G4cout << "Calling ComputeCrossSectionPerAtom() of G4PenelopePhotoElectricModel" << G4endl;
 
@@ -279,6 +281,7 @@ void G4PenelopePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicPartic
       bindingEnergy = photonEnergy;
     }
   G4double energyInFluorescence = 0; //testing purposes
+  G4double energyInAuger = 0; //testing purposes
 
   //Now, take care of fluorescence, if required
   if(DeexcitationFlag() && Z > 5) 
@@ -306,10 +309,26 @@ void G4PenelopePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicPartic
 		  if (aPhoton)
 		    {
 		      G4double itsEnergy = aPhoton->GetKineticEnergy();
+		      G4bool keepIt = false;
 		      if (itsEnergy <= bindingEnergy)
 			{
-			  if(aPhoton->GetDefinition() == G4Gamma::Gamma())
-			    energyInFluorescence += itsEnergy;
+			  //check if good! 
+			  if(aPhoton->GetDefinition() == G4Gamma::Gamma()
+			     && itsEnergy >= cutG)
+			    {
+			      keepIt = true;
+			      energyInFluorescence += itsEnergy;
+			    }
+			  if (aPhoton->GetDefinition() == G4Electron::Electron() && 
+			      itsEnergy >= cutE)
+			    {
+			      energyInAuger += itsEnergy;
+			      keepIt = true;
+			    }
+			}
+		      //register the secondary or delete it
+		      if (keepIt)
+			{
 			  bindingEnergy -= itsEnergy;
 			  fvect->push_back(aPhoton);
 			}
@@ -345,19 +364,23 @@ void G4PenelopePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicPartic
       G4cout << "-----------------------------------------------------------" << G4endl;
       if (eKineticEnergy)
 	G4cout << "Outgoing electron " << eKineticEnergy/keV << " keV" << G4endl;
-      G4cout << "Fluorescence: " << energyInFluorescence/keV << " keV" << G4endl;
+      if (energyInFluorescence)
+	G4cout << "Fluorescence x-rays: " << energyInFluorescence/keV << " keV" << G4endl;
+      if (energyInAuger)
+	G4cout << "Auger electrons: " << energyInAuger/keV << " keV" << G4endl;    
       G4cout << "Local energy deposit " << localEnergyDeposit/keV << " keV" << G4endl;
-      G4cout << "Total final state: " << (eKineticEnergy+energyInFluorescence+localEnergyDeposit)/keV << 
+      G4cout << "Total final state: " << (eKineticEnergy+energyInFluorescence+localEnergyDeposit+
+					  energyInAuger)/keV << 
 	" keV" << G4endl;
       G4cout << "-----------------------------------------------------------" << G4endl;
     }
   if (verboseLevel > 0)
     {
       G4double energyDiff = 
-	std::fabs(eKineticEnergy+energyInFluorescence+localEnergyDeposit-photonEnergy);
+	std::fabs(eKineticEnergy+energyInFluorescence+localEnergyDeposit+energyInAuger-photonEnergy);
       if (energyDiff > 0.05*keV)
 	G4cout << "Warning from G4PenelopePhotoElectric: problem with energy conservation: " << 
-	  (eKineticEnergy+energyInFluorescence+localEnergyDeposit)/keV 
+	  (eKineticEnergy+energyInFluorescence+localEnergyDeposit+energyInAuger)/keV 
 	       << " keV (final) vs. " << 
 	  photonEnergy/keV << " keV (initial)" << G4endl;
     }

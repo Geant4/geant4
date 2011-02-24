@@ -45,7 +45,7 @@ int main(int argc, char** argv)
 
   if(argc < 3) {
     cout << "Input parameters are not specified! Exit" << endl;
-    exit(1);
+    return 1;
   }
 
   const int nidx = 3;
@@ -97,7 +97,7 @@ int main(int argc, char** argv)
 
   if( !in.is_open()) { 
     cout << "Input file<" << fname2[idx] << "> does not exist! Exit" << endl;
-    exit(1);
+    return 1;
   }
    
   // Ignore first blank line
@@ -148,7 +148,7 @@ int main(int argc, char** argv)
     in.open(finName[j].c_str());
     if( !in.is_open()) {
       cout << "Input file<" << finName[j] << "> does not exist! Exit" << endl;
-      exit(1);
+      return 1;
     }
     cout << "File with MC <" << finName[j] << "> is opened" << endl;
    
@@ -192,4 +192,5 @@ int main(int argc, char** argv)
 
   string fout = "A_" + fnm[idx] + "_water.gif";
   c1->Print(fout.c_str());
+  return 0;
 }

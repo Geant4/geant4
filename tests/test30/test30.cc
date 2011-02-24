@@ -79,6 +79,7 @@
 #include "G4DynamicParticle.hh"
 #include "G4AntiProton.hh"
 #include "G4Neutron.hh"
+#include "G4AntiNeutron.hh"
 #include "G4Proton.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
@@ -255,6 +256,8 @@ int main(int argc, char** argv)
   const G4ParticleDefinition* electron = G4Electron::Electron();
   const G4ParticleDefinition* proton = G4Proton::Proton();
   const G4ParticleDefinition* neutron = G4Neutron::Neutron();
+  const G4ParticleDefinition* antiproton = G4AntiProton::AntiProton();
+  const G4ParticleDefinition* antineutron = G4AntiNeutron::AntiNeutron();
   const G4ParticleDefinition* pin = G4PionMinus::PionMinus();
   const G4ParticleDefinition* pip = G4PionPlus::PionPlus();
   const G4ParticleDefinition* pi0 = G4PionZero::PionZero();
@@ -773,10 +776,8 @@ int main(int argc, char** argv)
 
     } else if( ionParticle || 
 	       part == deu || part == tri ||part == he3 ||part == alp) {
-      G4double zz = G4double(Z);
-      G4double aa = G4double(A);
       cs = new G4TripathiLightCrossSection();
-      if(cs->IsZAApplicable(&dParticle,zz,aa)) {
+      if(cs->IsIsoApplicable(&dParticle,Z,A)) {
 	G4cout << "Using Tripathi Light Cross section for Ions" << G4endl;
       } else {
 	delete cs;
@@ -784,7 +785,7 @@ int main(int argc, char** argv)
       }
       if(!cs) {
 	cs = new G4TripathiCrossSection();
-	if(cs->IsZAApplicable(&dParticle,zz,aa)) {
+	if(cs->IsZAApplicable(&dParticle,Z,A)) {
 	  G4cout << "Using Tripathi Cross section for Ions" << G4endl;
 	} else {
 	  delete cs;
@@ -793,11 +794,11 @@ int main(int argc, char** argv)
       }
       if(!cs) {
 	cs = new G4IonsShenCrossSection();
-	if(cs->IsZAApplicable(&dParticle,zz,aa)) {
+	if(cs->IsZAApplicable(&dParticle,Z,A)) {
 	  G4cout << "Using Shen Cross section for Ions" << G4endl;
 	} else {
 	  G4cout << "ERROR: no cross section for ion Z= " 
-		 << zz << " A= " << aa << G4endl;
+		 << Z << " A= " << A << G4endl;
 	  exit(1);
 	}
       }
@@ -1078,10 +1079,8 @@ int main(int argc, char** argv)
 		 << G4endl;
 	}
 	de += e;
-        if((verbose>0 || std::fabs(mom.phi()/degree - 90.) < 0.001 ) && 
-	   warn < 15 && verbose>1) {
-          warn++;
-          G4cout << "Warning! evt# " << iter 
+        if(verbose>1) {
+          G4cout /*<< "Warning! evt# " << iter*/ 
                  << "  " << i << "-th sec  "
 		 << pd->GetParticleName() << "  Ekin(MeV)= "
                  << e/MeV
@@ -1187,8 +1186,8 @@ int main(int argc, char** argv)
         delete aChange->GetSecondary(i);
       }
 
-      if(verbose > 0) 
-        G4cout << "Energy/Momentum balance= " << labv << G4endl;
+      if(verbose > 1 && std::fabs(labv.e()) > 0.1*MeV) 
+        G4cout << iter << "-event Energy/Momentum balance= " << labv << G4endl;
 
       px = labv.px();
       py = labv.py();

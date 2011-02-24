@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPartonStringModel.cc,v 1.7 2009-12-06 11:29:33 vuzhinsk Exp $
+// $Id: G4VPartonStringModel.cc,v 1.8 2010-12-07 10:42:40 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //// ------------------------------------------------------------
@@ -138,6 +138,9 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
 	    << Ptmp.e() << " " 
 	    << stringEnergy - 939.*hits - Ptmp.e()<< G4endl;
 #endif
+
+//  theResult = stringFragmentationModel->FragmentStrings(strings);
+
   G4double SumMass(0.); 
   attempts = 0; 
   maxAttempts=100;
@@ -149,16 +152,25 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
     std::for_each(theResult->begin(), theResult->end(), DeleteKineticTrack());
     theResult->clear();
    }
-
+//G4cout<<"Frag Mod start"<<G4endl;
    theResult = stringFragmentationModel->FragmentStrings(strings);
-
+//G4cout<<"Frag Mod end"<<G4endl;
    if(attempts > maxAttempts ) break;
 
+//G4cout<<G4endl<<"G4VPartStrMod Managm"<<G4endl;
+//G4cout<<"Final Result Size "<<theResult->size()<<G4endl;
+
    SumMass=0.;
+//G4LorentzVector SumP(0.,0.,0.,0.);
    for ( unsigned int i=0; i < theResult->size(); i++)
    {
     SumMass+=(*theResult)[i]->GetDefinition()->GetPDGMass();
+//SumP+=(*theResult)[i]->Get4Momentum();
+//G4cout<<(*theResult)[i]->Get4Momentum()<<" "<<(*theResult)[i]->Get4Momentum().mag()<<G4endl;
+//G4cout<<i<<" "<<(*theResult)[i]->GetDefinition()->GetParticleName()<<G4endl;
    }
+
+//G4cout<<"SumP "<<SumP<<G4endl;
   } while(SumMass > InvMass);
 
   std::for_each(strings->begin(), strings->end(), DeleteString() );

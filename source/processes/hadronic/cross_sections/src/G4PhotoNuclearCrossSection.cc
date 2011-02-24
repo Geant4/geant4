@@ -68,8 +68,8 @@ std::vector<G4double*> G4PhotoNuclearCrossSection::HEN;
 
 
 G4PhotoNuclearCrossSection::G4PhotoNuclearCrossSection()
+ : G4VCrossSectionDataSet("Photo-nuclear")
 {}
-
 
 G4PhotoNuclearCrossSection::~G4PhotoNuclearCrossSection()
 {

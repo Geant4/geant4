@@ -28,6 +28,7 @@ interfaces                   Koichi.Murakami@kek.jp          Koichi Murakami
 materials                    Marc.Verderi@in2p3.fr           Marc Verderi
 parameterisations/gflash     Marc.Verderi@in2p3.fr           Marc Verderi
 particles                    kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
+"/adjoint                    desorgher@spaceit.ch            Laurent Desorgher
 persistency                  Gabriele.Cosmo@cern.ch          Gabriele Cosmo
 "/ascii                      Pedro.Arce@ciemat.es            Pedro Arce
 "/gdml                       Witold.Pokorski@cern.ch         Witold Pokorski
@@ -37,8 +38,10 @@ processes                    John Apostolakis                John Apostolakis
 "/biasing                    Alexander.Howard@cern.ch        Alexander Howard
 "/cuts                       kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
 "/electromagnetic            Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
+"/"/adjoint                  desorgher@spaceit.ch            Laurent Desorgher
 "/"/lowenergy                incerti@cenbg.in2p3.fr          Sebastien Incerti
 "/"/pii                      Maria.Grazia.Pia@ge.infn.it     Maria Grazia Pia
+"/"/polarisation             Andreas.Schaelicke@desy.de      Andreas Schaelicke
 "/decay                      kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
 "/hadronic                   dwright@slac.stanford.edu       Dennis Wright
 "/"/cross_sections           dwright@slac.stanford.edu       Dennis Wright
@@ -48,10 +51,10 @@ processes                    John Apostolakis                John Apostolakis
 "/"/processes                dwright@slac.stanford.edu       Dennis Wright
 "/"/models/abrasion          flei@space.qinetiq.com          Fan Lei
 "/"/"/binary_cascade         Gunter.Folger@cern.ch           Gunter Folger
-"/"/"/cascade                dwright@slac.stanford.edu       Dennis Wright
+"/"/"/cascade                kelsey@slac.stanford.edu        Mike Kelsey
 "/"/"/chiral_inv_phase_space Mikhail.Kossov@cern.ch          Mikhail Kossov
-"/"/"/coherent_elastic       Nikolai.Starkov@cern.ch         Nikolai Starkov
-"/"/"/de_excitation          dwright@slac.stanford.edu       Dennis Wright
+"/"/"/coherent_elastic       Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
+"/"/"/de_excitation          Alexander.Howard@cern.ch        Alexander Howard
 "/"/"/"/ablation             PRTruscott@space.qinetiq.com    Pete Truscott
 "/"/"/"/evaporation          dwright@slac.stanford.edu       Dennis Wright
 "/"/"/"/fermi_breakup        dwright@slac.stanford.edu       Dennis Wright
@@ -67,9 +70,8 @@ processes                    John Apostolakis                John Apostolakis
 "/"/"/im_r_matrix            Gunter.Folger@cern.ch           Gunter Folger
 "/"/"/incl                   kaitanie@cc.helsinki.fi	     Pekka Kaitaniemi
 "/"/"/isotope_production     dwright@slac.stanford.edu       Dennis Wright
-"/"/"/leading_particle       asai@slac.stanford.edu          Makoto Asai
 "/"/"/lend                   tkoi@slac.stanford.edu          Tatsumi Koi
-"/"/"/lll_fission            dwright@slac.stanford.edu       Dennis Wright
+"/"/"/lll_fission            verbeke2@llnl.gov               Jerome Verbeke
 "/"/"/low_energy             dwright@slac.stanford.edu       Dennis Wright
 "/"/"/management             Gunter.Folger@cern.ch           Gunter Folger
 "/"/"/neutron_hp             tkoi@slac.stanford.edu          Tatsumi Koi
@@ -79,8 +81,8 @@ processes                    John Apostolakis                John Apostolakis
 "/"/"/"/qgsm                 Gunter.Folger@cern.ch           Gunter Folger
 "/"/"/photolepton_hadron     dwright@slac.stanford.edu       Dennis Wright
 "/"/"/qmd                    tkoi@slac.stanford.edu          Tatsumi Koi
-"/"/"/pre_equilibrium        dwright@slac.stanford.edu       Dennis Wright
-"/"/"/radioactive_decay      flei@space.qinetiq.com          Fan Lei
+"/"/"/pre_equilibrium        Alexander.Howard@cern.ch        Alexander Howard
+"/"/"/radioactive_decay      desorgher@spaceit.ch            Laurent Desorgher
 "/"/"/theo_high_energy       Gunter.Folger@cern.ch           Gunter Folger
 "/"/"/util                   Gunter.Folger@cern.ch           Gunter Folger
 "/optical                    gum@triumf.ca                   Peter Gumplinger

@@ -26,16 +26,15 @@
 #ifndef MATERIALMANAGER_H
 #define MATERIALMANAGER_H
 
-using namespace std;
 #include "G4Element.hh"
 #include "G4Material.hh"
 
 #include <map>
 #include <iostream>
+#include <functional>
 
-
-typedef map< G4String, G4Element*, less<G4String> > ElementList;
-typedef map< G4String, G4Material*, less<G4String> > MaterialList;
+typedef std::map< G4String, G4Element*, std::less<G4String> > ElementList;
+typedef std::map< G4String, G4Material*, std::less<G4String> > MaterialList;
 
 
 

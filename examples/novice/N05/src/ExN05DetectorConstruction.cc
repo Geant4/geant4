@@ -237,7 +237,8 @@ G4VPhysicalVolume* ExN05DetectorConstruction::Construct()
   // -- Makes the calorimeterLog volume becoming a G4Region: 
    G4Region* caloRegion = new G4Region("EM_calo_region");
    caloRegion->AddRootLogicalVolume(calorimeterLog);
-   std::vector<double> cuts; cuts.push_back(1.0*mm);cuts.push_back(1.0*mm);cuts.push_back(1.0*mm);
+   std::vector<double> cuts; 
+   cuts.push_back(1.0*mm);cuts.push_back(1.0*mm);cuts.push_back(1.0*mm);cuts.push_back(1.0*mm);
    caloRegion->SetProductionCuts(new G4ProductionCuts());
    caloRegion->GetProductionCuts()->SetProductionCuts(cuts);
   // builds a model and sets it to the envelope of the calorimeter:
@@ -248,7 +249,7 @@ G4VPhysicalVolume* ExN05DetectorConstruction::Construct()
    G4Region* hadRegion = new G4Region("HAD_calo_region");
    hadRegion->AddRootLogicalVolume(hadCaloLog);
    cuts.clear();
-   cuts.push_back(1.0*cm);cuts.push_back(1.0*cm);cuts.push_back(1.0*cm);
+   cuts.push_back(1.0*cm);cuts.push_back(1.0*cm);cuts.push_back(1.0*cm);cuts.push_back(1.0*cm);
    hadRegion->SetProductionCuts(new G4ProductionCuts());
    hadRegion->GetProductionCuts()->SetProductionCuts(cuts);
 

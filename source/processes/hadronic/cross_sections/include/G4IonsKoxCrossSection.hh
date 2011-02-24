@@ -44,59 +44,57 @@
 
 class G4IonsKoxCrossSection : public G4VCrossSectionDataSet
 {
-   public:
-      G4IonsKoxCrossSection():
-         upperLimit ( 10 * GeV ), 
-         lowerLimit ( 10 * MeV ), 
-         r0 ( 1.1 * fermi ),
-         rc ( 1.3 * fermi )
-      {
-      }
+  public:
+    G4IonsKoxCrossSection()
+     : G4VCrossSectionDataSet("G4IonsKoxCrossSection"),
+       upperLimit ( 10*GeV ), lowerLimit ( 10*MeV ), 
+       r0 ( 1.1*fermi ), rc ( 1.3*fermi )
+     {}
 
-   virtual
-   G4bool IsApplicable(const G4DynamicParticle* aDP, const G4Element*)
-   {
-     return IsIsoApplicable(aDP, 0, 0);
-   }
+    virtual
+    G4bool IsApplicable(const G4DynamicParticle* aDP, const G4Element*)
+    {
+      return IsIsoApplicable(aDP, 0, 0);
+    }
 
 
-   virtual
-   G4bool IsIsoApplicable(const G4DynamicParticle* aDP,
-                          G4int /*ZZ*/, G4int /*AA*/) 
-   {
+    virtual
+    G4bool IsIsoApplicable(const G4DynamicParticle* aDP,
+                           G4int /*ZZ*/, G4int /*AA*/) 
+    {
       G4int baryonNumber = aDP->GetDefinition()->GetBaryonNumber();
       G4double kineticEnergy = aDP->GetKineticEnergy(); 
       if ( kineticEnergy / baryonNumber <= upperLimit ) 
          return true;
       return false;
-   }
+    }
 
 
-   virtual
-   G4double GetCrossSection(const G4DynamicParticle*, 
-                            const G4Element*, G4double aTemperature);
+    virtual
+    G4double GetCrossSection(const G4DynamicParticle*, 
+                             const G4Element*, G4double aTemperature);
 
 
-   virtual
-   G4double GetZandACrossSection(const G4DynamicParticle*, G4int ZZ,
-                                 G4int AA, G4double aTemperature);
+    virtual
+    G4double GetZandACrossSection(const G4DynamicParticle*, G4int ZZ,
+                                  G4int AA, G4double aTemperature);
 
-   virtual
-   void BuildPhysicsTable(const G4ParticleDefinition&)
-   {}
+    virtual
+    void BuildPhysicsTable(const G4ParticleDefinition&)
+    {}
 
-   virtual
-   void DumpPhysicsTable(const G4ParticleDefinition&) 
-   {G4cout << "G4IonsKoxCrossSection: uses Kox formula"<<G4endl;}
+    virtual
+    void DumpPhysicsTable(const G4ParticleDefinition&) 
+    {G4cout << "G4IonsKoxCrossSection: uses Kox formula"<<G4endl;}
 
-   private:
-      const G4double upperLimit; 
-      const G4double lowerLimit; 
-      const G4double r0;
-      const G4double rc;
+  private:
+    const G4double upperLimit; 
+    const G4double lowerLimit; 
+    const G4double r0;
+    const G4double rc;
 
-      G4double calEcm ( G4double , G4double , G4double ); 
-      G4double calCeValue ( G4double ); 
+    G4double calEcm ( G4double , G4double , G4double ); 
+    G4double calCeValue ( G4double ); 
 };
 
 #endif

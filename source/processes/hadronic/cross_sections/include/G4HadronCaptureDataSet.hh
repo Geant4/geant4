@@ -45,53 +45,50 @@
 
 class G4HadronCaptureDataSet : public G4VCrossSectionDataSet
 {
-public:
+  public:
 
-   G4HadronCaptureDataSet()
-   {
-      theHadronCrossSections = G4HadronCrossSections::Instance();
-   }
+    G4HadronCaptureDataSet();
+//   {
+//      theHadronCrossSections = G4HadronCrossSections::Instance();
+//   }
 
-   ~G4HadronCaptureDataSet()
-   {
-   }
+    ~G4HadronCaptureDataSet()
+    {}
 
-   G4bool IsApplicable(const G4DynamicParticle* aParticle,
-                       const G4Element* anElement)
-   {
+    G4bool IsApplicable(const G4DynamicParticle* aParticle,
+                        const G4Element* anElement)
+    {
       return theHadronCrossSections->IsApplicable(aParticle, anElement);
-   }
+    }
 
-   G4bool IsIsoApplicable(const G4DynamicParticle* aParticle,
-                          G4int ZZ, G4int AA)
-   {
-     return theHadronCrossSections->IsApplicable(aParticle, ZZ, AA);
-   }
+    G4bool IsIsoApplicable(const G4DynamicParticle* aParticle,
+                           G4int ZZ, G4int AA)
+    {
+      return theHadronCrossSections->IsApplicable(aParticle, ZZ, AA);
+    }
 
-   G4double GetCrossSection(const G4DynamicParticle* aParticle,
-                            const G4Element* anElement, G4double )
-   {
+    G4double GetCrossSection(const G4DynamicParticle* aParticle,
+                             const G4Element* anElement, G4double )
+    {
       return theHadronCrossSections->GetCaptureCrossSection(aParticle,
-                                                              anElement);
-   }
+                                                            anElement);
+    }
 
-   G4double GetZandACrossSection(const G4DynamicParticle* aParticle,
-                                 G4int ZZ, G4int AA, G4double /*aTemperature*/)
-   {
-     return theHadronCrossSections->GetCaptureCrossSection(aParticle, ZZ, AA);
-   }
+    G4double GetZandACrossSection(const G4DynamicParticle* aParticle,
+                                  G4int ZZ, G4int AA, G4double /*aTemperature*/)
+    {
+      return theHadronCrossSections->GetCaptureCrossSection(aParticle, ZZ, AA);
+    }
 
-   void BuildPhysicsTable(const G4ParticleDefinition&)
-   {
-   }
+    void BuildPhysicsTable(const G4ParticleDefinition&)
+    {}
 
-   void DumpPhysicsTable(const G4ParticleDefinition&)
-   {
-   }
+    void DumpPhysicsTable(const G4ParticleDefinition&)
+    {}
 
-private:
+  private:
 
-   G4HadronCrossSections* theHadronCrossSections;
+    G4HadronCrossSections* theHadronCrossSections;
 };
 
 #endif

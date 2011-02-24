@@ -25,7 +25,7 @@
 //
 #ifndef ExGflashRunAction_h
 #define ExGflashRunAction_h
-using namespace std;
+
 #include "G4UserRunAction.hh"
 #include "globals.hh"
 

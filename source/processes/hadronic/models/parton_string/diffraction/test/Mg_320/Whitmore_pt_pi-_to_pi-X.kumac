@@ -1,0 +1,38 @@
+*  <html><head><title>HEPDATA Reaction Database</title><!-- base href="http:* durpdg.dur.ac.uk/cgi-bin/hepdata/tabkum/KUMAC/7875/38/2/1" --></head>
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'WHITMORE 94   ZP C62, 199'
+ opt logy
+ve/cr q(008)
+ve/cr q0(008)
+ve/cr v(7,008)
+ve/in v(1:7,001)      2.5000E-02     0.0000E+00     3.7370E+01     4.4760E+00     4.4760E+00     0.0000E+00     0.0000E+00
+ve/in v(1:7,002)      1.0000E-01     0.0000E+00     2.2185E+01     2.6100E+00     2.6100E+00     0.0000E+00     0.0000E+00
+ve/in v(1:7,003)      2.0000E-01     0.0000E+00     7.0600E+00     1.3900E+00     1.3900E+00     0.0000E+00     0.0000E+00
+ve/in v(1:7,004)      3.7500E-01     0.0000E+00     3.3040E+00     5.3700E-01     5.3700E-01     0.0000E+00     0.0000E+00
+ve/in v(1:7,005)      6.2500E-01     0.0000E+00     5.4700E-01     2.0800E-01     2.0800E-01     0.0000E+00     0.0000E+00
+ve/in v(1:7,006)      8.7500E-01     0.0000E+00     7.6400E-01     2.8900E-01     2.8900E-01     0.0000E+00     0.0000E+00
+ve/in v(1:7,007)      1.2500E+00     0.0000E+00     7.8000E-02     5.5000E-02     5.5000E-02     0.0000E+00     0.0000E+00
+ve/in v(1:7,008)      1.7500E+00     0.0000E+00     7.8000E-02     5.5000E-02     5.5000E-02     0.0000E+00     0.0000E+00
+ve/copy v(1,1:008) x
+ve/copy v(2,1:008) q
+ve/copy v(3,1:008) y
+ve/copy v(4,1:008) eup
+ve/copy v(5,1:008) edo
+ve/copy v(6,1:008) sys1
+ve/copy v(7,1:008) sys2
+ null  -0.147500    1.92250    1.00000E-02   100.0000
+ sigma etot1=sqrt(eup*eup+sys1*sys1)
+ sigma etot2=sqrt(edo*edo+sys2*sys2)
+/GRAPHICS/HPLOT/AERRORS x y q q etot2 etot1 008 20 0.2
+/GRAPHICS/HPLOT/AERRORS x y q0 q0 edo eup 008 20 0.2 '1'
+ atitle 'PT**2 IN GEV**2'  '(1/N(C=TOT))D(N)/DPT**2 IN GEV**-2'
+ text    0.887500     63.0957 _
+ 'RE   PI- MG --&gt; PI- X' 0.3
+ text    0.887500     39.8107 _
+ 'PLAB IN GEV   320' 0.3
+* option *
+ ve/de *

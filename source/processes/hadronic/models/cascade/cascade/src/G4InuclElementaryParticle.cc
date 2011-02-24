@@ -23,13 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclElementaryParticle.cc,v 1.10 2010-09-23 05:33:56 mkelsey Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
+// $Id: G4InuclElementaryParticle.cc,v 1.10 2010/09/23 05:33:56 mkelsey Exp $
+// Geant4 tag: $Name:  $
 //
 // 20100428  M. Kelsey -- Use G4InuclParticleNames enums instead of numbers,
 //		add Omega and antinucleons.
 // 20100429  M. Kelsey -- Change "case gamma:" to "case photon:"
 // 20100923  M. Kelsey -- Drop "uups" message when converting G4PartDef to code
+// 20101029  M. Kelsey -- Add instantiation of new particles, antiparticles
 
 #include "G4InuclElementaryParticle.hh"
 
@@ -51,8 +52,17 @@
 #include "G4XiZero.hh"
 #include "G4XiMinus.hh"
 #include "G4OmegaMinus.hh"
+#include "G4Deuteron.hh"
+#include "G4Triton.hh"
+#include "G4He3.hh"
+#include "G4Alpha.hh"
 #include "G4AntiProton.hh"
 #include "G4AntiNeutron.hh"
+#include "G4AntiDeuteron.hh"
+#include "G4AntiTriton.hh"
+#include "G4AntiHe3.hh"
+#include "G4AntiAlpha.hh"
+#include "G4Deuteron.hh"
 #include "G4Diproton.hh"
 #include "G4UnboundPN.hh"
 #include "G4Dineutron.hh"
@@ -81,11 +91,22 @@ G4InuclElementaryParticle::makeDefinition(G4int ityp) {
   case xiZero:      return G4XiZero::Definition(); break;
   case xiMinus:     return G4XiMinus::Definition(); break;
   case omegaMinus:  return G4OmegaMinus::Definition(); break;
+    // NOTE:  The four light nuclei "particles" are actually G4Ions
+  case deuteron:    return G4Deuteron::Definition(); break;
+  case triton:      return G4Triton::Definition(); break;
+  case He3:	    return G4He3::Definition(); break;
+  case alpha:	    return G4Alpha::Definition(); break;
   case antiProton:  return G4AntiProton::Definition(); break;
   case antiNeutron: return G4AntiNeutron::Definition(); break;
-  case diproton:    return G4Diproton::Definition(); break;  // Bertini class!
-  case unboundPN:   return G4UnboundPN::Definition(); break; // Bertini class!
-  case dineutron:   return G4Dineutron::Definition(); break; // Bertini class!
+    // NOTE:  The the four light antinuclei "particles" are actually G4Ions
+  case antiDeuteron: return G4AntiDeuteron::Definition(); break;
+  case antiTriton:  return G4AntiTriton::Definition(); break;
+  case antiHe3:     return G4AntiHe3::Definition(); break;
+  case antiAlpha:   return G4AntiAlpha::Definition(); break;
+    // NOTE:  The three unbound dibaryons are local Bertini classes
+  case diproton:    return G4Diproton::Definition(); break;
+  case unboundPN:   return G4UnboundPN::Definition(); break;
+  case dineutron:   return G4Dineutron::Definition(); break;
   default:
     G4cerr << " uups, unknown particle type " << ityp << G4endl;
   }
@@ -114,11 +135,22 @@ G4int G4InuclElementaryParticle::type(const G4ParticleDefinition *pd) {
   if (pd == G4XiZero::Definition())       return xiZero;
   if (pd == G4XiMinus::Definition())      return xiMinus;
   if (pd == G4OmegaMinus::Definition())   return omegaMinus;
+  // NOTE:  The four light nuclei "particles" are actually G4Ions
+  if (pd == G4Deuteron::Definition())     return deuteron;
+  if (pd == G4Triton::Definition())       return triton;
+  if (pd == G4He3::Definition())          return He3;
+  if (pd == G4Alpha::Definition())        return alpha;
   if (pd == G4AntiProton::Definition())   return antiProton;
   if (pd == G4AntiNeutron::Definition())  return antiNeutron;
-  if (pd == G4Diproton::Definition())     return diproton;  // Bertini class!
-  if (pd == G4UnboundPN::Definition())    return unboundPN; // Bertini class!
-  if (pd == G4Dineutron::Definition())    return dineutron; // Bertini class!
+    // NOTE:  The the four light antinuclei "particles" are actually G4Ions
+  if (pd == G4AntiDeuteron::Definition()) return antiDeuteron;
+  if (pd == G4AntiTriton::Definition())   return antiTriton;
+  if (pd == G4AntiHe3::Definition())      return antiHe3;
+  if (pd == G4AntiAlpha::Definition())    return antiAlpha;
+    // NOTE:  The three unbound dibaryons are local Bertini classes
+  if (pd == G4Diproton::Definition())     return diproton;
+  if (pd == G4UnboundPN::Definition())    return unboundPN;
+  if (pd == G4Dineutron::Definition())    return dineutron;
 
   return 0;	// Unknown objects return zero (e.g., nuclei)
 }

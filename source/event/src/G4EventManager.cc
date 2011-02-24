@@ -97,6 +97,7 @@ G4int G4EventManager::operator!=(const G4EventManager &right) const { }
 
 void G4EventManager::DoProcessing(G4Event* anEvent)
 {
+  abortRequested = false;
   G4StateManager* stateManager = G4StateManager::GetStateManager();
   G4ApplicationState currentState = stateManager->GetCurrentState();
   if(currentState!=G4State_GeomClosed)

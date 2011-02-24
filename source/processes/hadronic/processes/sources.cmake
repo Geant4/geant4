@@ -45,12 +45,16 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4hadronic_proc
     HEADERS
         G4AlphaInelasticProcess.hh
+        G4AntiAlphaInelasticProcess.hh
+        G4AntiDeuteronInelasticProcess.hh
+        G4AntiHe3InelasticProcess.hh
         G4AntiLambdaInelasticProcess.hh
         G4AntiNeutronInelasticProcess.hh
         G4AntiOmegaMinusInelasticProcess.hh
         G4AntiProtonInelasticProcess.hh
         G4AntiSigmaMinusInelasticProcess.hh
         G4AntiSigmaPlusInelasticProcess.hh
+        G4AntiTritonInelasticProcess.hh
         G4AntiXiMinusInelasticProcess.hh
         G4AntiXiZeroInelasticProcess.hh
         G4DeuteronInelasticProcess.hh
@@ -64,6 +68,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_proc
         G4KaonZeroLInelasticProcess.hh
         G4KaonZeroSInelasticProcess.hh
         G4LambdaInelasticProcess.hh
+        G4MuonNuclearProcess.hh
         G4NeutronInelasticProcess.hh
         G4OmegaMinusInelasticProcess.hh
         G4PhotoNuclearProcess.hh
@@ -81,6 +86,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_proc
         G4HadronCaptureProcess.cc
         G4HadronElasticProcess.cc
         G4HadronFissionProcess.cc
+        G4MuonNuclearProcess.cc
         G4PhotoNuclearProcess.cc
         G4PositronNuclearProcess.cc
     GRANULAR_DEPENDENCIES

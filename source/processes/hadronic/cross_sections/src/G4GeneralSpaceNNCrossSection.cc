@@ -70,6 +70,7 @@
 
 
 G4GeneralSpaceNNCrossSection::G4GeneralSpaceNNCrossSection ()
+ : G4VCrossSectionDataSet("General Space NN")
 {
   protonInelastic = new G4ProtonInelasticCrossSection();
   ionProton       = new G4IonProtonCrossSection();

@@ -15,7 +15,7 @@ source $G4INSTALL/tests/test46/run_single.csh $1"20gev"
 source $G4INSTALL/tests/test46/run_single.csh $1"30gev"
 source $G4INSTALL/tests/test46/run_single.csh $1"50gev"
 source $G4INSTALL/tests/test46/run_single.csh $1"100gev"
-source $G4INSTALL/tests/test46/run_single.csh $1"200gev"
-source $G4INSTALL/tests/test46/run_single.csh $1"300gev"
+#source $G4INSTALL/tests/test46/run_single.csh $1"200gev"
+#source $G4INSTALL/tests/test46/run_single.csh $1"300gev"
 
 #

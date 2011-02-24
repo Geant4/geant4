@@ -16,6 +16,22 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+
+23 February 2011  John Apostolakis (hadr-proc-V09-04-01)
+-----------------------------------------------------
+Added processes for light anti-ions: 
+  G4AntiAlphaInelasticProcess
+  G4AntiDeuteronInelasticProcess
+  G4AntiHe3InelasticProcess
+  G4AntiTritonInelasticProcess
+
+
+10 February 2011  Dennis Wright (hadr-proc-V09-04-00)
+-----------------------------------------------------
+- add G4MuonNuclearProcess which is meant to replace the old directly
+  implemented process G4MuNuclearInteraction with a process
+  implemented by separate model and cross section classes.
+
 31 Mar 2009 Vladimir Ivanchenko (hadr-proc-V09-02-00)
 ----------------------------------------------------
 - To fix bug #1056 cross section data set now are created by new in

@@ -30,9 +30,12 @@
 //
 // History:
 // --------
-// 15 Feb 2010   L Pandola    Implementation
-// 18 Mar 2010   L. Pandola   Removed GetAtomsPerMolecule(), now demanded 
+// 15 Feb 2010   L Pandola  Implementation
+// 18 Mar 2010   L Pandola  Removed GetAtomsPerMolecule(), now demanded 
 //                            to G4PenelopeOscillatorManager
+// 01 Feb 2011   L Pandola  Suppress fake energy-violation warning when Auger is active.
+//                          Make sure that fluorescence/Auger is generated only if 
+//                          above threshold
 //
 #include "G4Penelope08ComptonModel.hh"
 #include "G4ParticleDefinition.hh"
@@ -472,6 +475,7 @@ void G4Penelope08ComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>
   G4double eKineticEnergy = diffEnergy - ionEnergy; 
   G4double localEnergyDeposit = ionEnergy; 
   G4double energyInFluorescence = 0.; //testing purposes only
+  G4double energyInAuger = 0; //testing purposes
 
   if (eKineticEnergy < 0) 
     {
@@ -513,17 +517,33 @@ void G4Penelope08ComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>
 		if (aPhoton)
 		  {
 		    G4double itsEnergy = aPhoton->GetKineticEnergy();
+		    G4bool keepIt = false;
 		    if (itsEnergy <= localEnergyDeposit)
 		      {
-			localEnergyDeposit -= itsEnergy;
-			if (aPhoton->GetDefinition() == G4Gamma::Gamma()) 
-			  energyInFluorescence += itsEnergy;;
-			fvect->push_back(aPhoton);		    
+			//check if good! 
+			if(aPhoton->GetDefinition() == G4Gamma::Gamma()
+			   && itsEnergy >= cutg)
+			  {
+			    keepIt = true;
+			    energyInFluorescence += itsEnergy;			  
+			  }
+			if (aPhoton->GetDefinition() == G4Electron::Electron() && 
+			    itsEnergy >= cute)
+			  {
+			    energyInAuger += itsEnergy;
+			    keepIt = true;
+			  }
 		      }
+		    //good secondary, register it
+		    if (keepIt)
+		      {
+			localEnergyDeposit -= itsEnergy;
+			fvect->push_back(aPhoton);
+		      }		    
 		    else
 		      {
 			delete aPhoton;
-			(*photonVector)[k]=0;
+			(*photonVector)[k] = 0;
 		      }
 		  }
 	      }
@@ -531,7 +551,7 @@ void G4Penelope08ComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>
 	  }
       }
   }
-
+  
   //Always produce explicitely the electron 
   G4DynamicParticle* electron = 0;
 
@@ -555,6 +575,8 @@ void G4Penelope08ComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>
   fParticleChange->ProposeLocalEnergyDeposit(localEnergyDeposit);
   
   G4double electronEnergy = 0.;
+  if (electron)
+    electronEnergy = eKineticEnergy;
   if (verboseLevel > 1)
     {
       G4cout << "-----------------------------------------------------------" << G4endl;
@@ -562,13 +584,14 @@ void G4Penelope08ComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>
       G4cout << "Incoming photon energy: " << photonEnergy0/keV << " keV" << G4endl;
       G4cout << "-----------------------------------------------------------" << G4endl;
       G4cout << "Scattered photon: " << photonEnergy1/keV << " keV" << G4endl;
-      if (electron)
-	electronEnergy = eKineticEnergy;
       G4cout << "Scattered electron " << electronEnergy/keV << " keV" << G4endl;
-      G4cout << "Fluorescence: " << energyInFluorescence/keV << " keV" << G4endl;
+      if (energyInFluorescence)
+	G4cout << "Fluorescence x-rays: " << energyInFluorescence/keV << " keV" << G4endl;
+      if (energyInAuger)
+	G4cout << "Auger electrons: " << energyInAuger/keV << " keV" << G4endl;
       G4cout << "Local energy deposit " << localEnergyDeposit/keV << " keV" << G4endl;
       G4cout << "Total final state: " << (photonEnergy1+electronEnergy+energyInFluorescence+
-					  localEnergyDeposit)/keV << 
+					  localEnergyDeposit+energyInAuger)/keV << 
 	" keV" << G4endl;
       G4cout << "-----------------------------------------------------------" << G4endl;
     }
@@ -576,10 +599,10 @@ void G4Penelope08ComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>
     {
       G4double energyDiff = std::fabs(photonEnergy1+
 				      electronEnergy+energyInFluorescence+
-				      localEnergyDeposit-photonEnergy0);
+				      localEnergyDeposit+energyInAuger-photonEnergy0);
       if (energyDiff > 0.05*keV)
 	G4cout << "Warning from G4Penelope08Compton: problem with energy conservation: " << 
-	  (photonEnergy1+electronEnergy+energyInFluorescence+localEnergyDeposit)/keV << 
+	  (photonEnergy1+electronEnergy+energyInFluorescence+energyInAuger+localEnergyDeposit)/keV << 
 	  " keV (final) vs. " << 
 	  photonEnergy0/keV << " keV (initial)" << G4endl;
     }    

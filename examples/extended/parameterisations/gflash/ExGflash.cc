@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 // Created by Joanna Weng 26.11.2004
-using namespace std;
-
 
 //std includes 
 #include <algorithm>
@@ -44,6 +42,8 @@ using namespace std;
 #include "ExGflashPrimaryGeneratorAction.hh"
 #include "ExGflashEventAction.hh"
 #include "ExGflashRunAction.hh"
+
+using namespace std;
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -68,22 +68,22 @@ int main(int argc,char** argv)
 	// Timer to see GFlash performance
 	Timer.Start();
 	
-	cout<<"+-------------------------------------------------------+"<<endl;
-	cout<<"|                                                       |"<<endl;
-	cout<<"|          This is an example of Shower                 |"<<endl;
-	cout<<"|          Parameterization with GFLASH                 |"<<endl;
-	cout<<"+-------------------------------------------------------+"<<endl;
+	G4cout<<"+-------------------------------------------------------+"<<G4endl;
+	G4cout<<"|                                                       |"<<G4endl;
+	G4cout<<"|          This is an example of Shower                 |"<<G4endl;
+	G4cout<<"|          Parameterization with GFLASH                 |"<<G4endl;
+	G4cout<<"+-------------------------------------------------------+"<<G4endl;
 	
 	G4RunManager* runManager = new G4RunManager;
 	
 	// UserInitialization classes (mandatory)
-	cout<<"# GFlash Example: Detector Construction"<<endl;    
+	G4cout<<"# GFlash Example: Detector Construction"<<G4endl;    
 	runManager->SetUserInitialization(new ExGflashDetectorConstruction);
-	cout<<"# GFlash Example: Physics list"<<endl;
+	G4cout<<"# GFlash Example: Physics list"<<G4endl;
 	runManager->SetUserInitialization(new ExGflashPhysicsList);
-	cout<<"# GFlash Example: Primary Generator"<<endl;
+	G4cout<<"# GFlash Example: Primary Generator"<<G4endl;
 	runManager->SetUserAction(new ExGflashPrimaryGeneratorAction);
-	cout<<"# GFlash Example: User Action Classes"<<endl;
+	G4cout<<"# GFlash Example: User Action Classes"<<G4endl;
 	runManager->SetUserAction(new ExGflashEventAction);
 	runManager->SetUserAction(new ExGflashRunAction);
 	
@@ -120,17 +120,17 @@ int main(int argc,char** argv)
 	delete runManager;
 	
 	Timer.Stop();
-	cout << endl;
-	cout << "******************************************";
-	cout << endl;
-	cout << "Total Real Elapsed Time is: "<< Timer.GetRealElapsed();
-	cout << endl;
-	cout << "Total System Elapsed Time: " << Timer.GetSystemElapsed();
-	cout << endl;
-	cout << "Total GetUserElapsed Time: " << Timer.GetUserElapsed();
-	cout << endl;
-	cout << "******************************************";
-	cout << endl;
+	G4cout << G4endl;
+	G4cout << "******************************************";
+	G4cout << G4endl;
+	G4cout << "Total Real Elapsed Time is: "<< Timer.GetRealElapsed();
+	G4cout << G4endl;
+	G4cout << "Total System Elapsed Time: " << Timer.GetSystemElapsed();
+	G4cout << G4endl;
+	G4cout << "Total GetUserElapsed Time: " << Timer.GetUserElapsed();
+	G4cout << G4endl;
+	G4cout << "******************************************";
+	G4cout << G4endl;
 	
 	return 0;
 }

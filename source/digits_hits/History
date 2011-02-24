@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Feb 21, 2011, M.Asai (digits_hits-V09-04-00)
+- Fixed G4PSCylinderSurfaceFlux.cc and G4PSSPhareSurfaceFlux.cc for
+  the way how "flux_out" is scored.
+
 Nov 10, 2010, G.Cosmo (digits_hits-V09-03-07)
 - Fixed signature in G4VPrimitiveScorer for Set/GetUnit() methods.
 

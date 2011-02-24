@@ -520,11 +520,6 @@ QTMOC="$g4_qt_moc"
 export QTFLAGS
 export QTLIBS
 export QTMOC
-if [ X\$g4non_display = X ] ; then
-echo "On this machine the QTFLAGS=\$QTFLAGS"
-echo "On this machine the QTLIBS=\$QTLIBS"
-echo "On this machine the QTMOC=\$QTMOC"
-fi
 fi
 
 if [ "X$g4vis_build_openglqt_driver" = "Xy" -o "X$g4vis_build_openglqt_driver" = "Xy" ] ; then
@@ -540,12 +535,23 @@ GLQTLIBS="$g4_qt_libs $g4_qt_gl_libs"
 export QTFLAGS
 export QTMOC
 export GLQTLIBS
-if [ X\$g4non_display = X ] ; then
-echo "On this machine the QTFLAGS=\$QTFLAGS"
-echo "On this machine the GLQTLIBS=\$GLQTLIBS"
-echo "On this machine the QTMOC=\$QTMOC"
 fi
+
+#
+# Because the setting of flags is messy, we separate out the reporting
+#
+if test "x\$QTMOC" != "x" -a "x\$g4non_display" = "x" ; then
+    echo "On this machine the QTMOC=\$QTMOC"
+    echo "On this machine the QTFLAGS=\$QTFLAGS"
+    # {GL}QTLIBS dependent on what modules were chosen...
+    if test "x\$QTLIBS" != "x" ; then
+        echo "On this machine the QTLIBS=\$QTLIBS"
+    fi
+    if test "x\$GLQTLIBS" != "x" ; then
+        echo "On this machine the GLQTLIBS=\$GLQTLIBS"
+    fi
 fi
+
 
 
 #

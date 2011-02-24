@@ -145,9 +145,16 @@ G4PEEffectFluoModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
 
   // Select atomic shell
   G4int nShells = anElement->GetNbOfAtomicShells();
-  G4int i  = 0;  
-  while ((i<nShells) && (energy<anElement->GetAtomicShell(i))) { ++i; }
-
+  G4int i = 0;  
+  for(; i<nShells; ++i) {
+    /*
+    G4cout << "i= " << i << " E(eV)= " << energy/eV 
+    	   << " Eb(eV)= " << anElement->GetAtomicShell(i)/eV
+           << "  " << anElement->GetName() 
+	   << G4endl;
+    */
+    if(energy >= anElement->GetAtomicShell(i)) { break; }
+  }
   // no shell available
   if (i == nShells) { return; }
   

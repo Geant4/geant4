@@ -35,11 +35,11 @@
 
 
 G4GGNuclNuclCrossSection::G4GGNuclNuclCrossSection() 
-: fUpperLimit( 100000 * GeV ),
-  fLowerLimit( 0.1 * MeV ),
-  fRadiusConst( 1.08*fermi ),  // 1.1, 1.3 ?
-  fTotalXsc(0.0), fElasticXsc(0.0), fInelasticXsc(0.0), fProductionXsc(0.0),
-  fDiffractionXsc(0.0), fHadronNucleonXsc(0.0)
+ : G4VCrossSectionDataSet("Glauber-Gribov nucleus nucleus"),
+   fUpperLimit(100000*GeV), fLowerLimit(0.1*MeV),
+   fRadiusConst(1.08*fermi),  // 1.1, 1.3 ?
+   fTotalXsc(0.0), fElasticXsc(0.0), fInelasticXsc(0.0), fProductionXsc(0.0),
+   fDiffractionXsc(0.0), fHadronNucleonXsc(0.0)
 {
   theProton   = G4Proton::Proton();
   theNeutron  = G4Neutron::Neutron();

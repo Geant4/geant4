@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcess.hh,v 1.42 2010-07-05 14:50:15 vnivanch Exp $
+// $Id: G4HadronicProcess.hh,v 1.43 2011-01-08 02:22:15 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -156,6 +156,10 @@ public:
   inline std::pair<G4double, G4double> GetEnergyMomentumCheckLevels() const
   { return epCheckLevels; }
 
+  // access to the cross section data store
+  inline G4CrossSectionDataStore* GetCrossSectionDataStore()
+    {return theCrossSectionDataStore;}
+
 protected:
             
   // obsolete method will be removed
@@ -171,8 +175,8 @@ protected:
   { return theInteraction; }
     
   // access to the cross section data store
-  inline G4CrossSectionDataStore* GetCrossSectionDataStore()
-  { return theCrossSectionDataStore; }
+  //  inline G4CrossSectionDataStore* GetCrossSectionDataStore()
+  //  { return theCrossSectionDataStore; }
    
   // access to the cross section data set
   inline G4double GetLastCrossSection() 

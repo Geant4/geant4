@@ -15,6 +15,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+16 February 2011 D.H. Wright (hadr-munuclear-V09-04-00)
+-------------------------------------------------------
+- create new model G4VDMuonNuclearModel to replace old-style
+  G4MuNuclearInteraction and G4ParametrizedHadronicVertex
+- add more libraries to list in GNUmakefile for above new model
+
 08 Sept 2010 V.Ivantchenko (hadr-munuclear-V09-03-00)
 ----------------------------------------------------
 G4MuNuclearInteraction - clear hadronic tracks PostStepDoIt

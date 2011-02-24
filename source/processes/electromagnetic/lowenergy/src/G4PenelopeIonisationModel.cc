@@ -50,6 +50,9 @@
 //                            triggers fake warning messages
 // 18 Jan 2011   L. Pandola   Stricter check on production of sub-treshold delta-rays. Should 
 //                            never happen now
+// 01 Feb 2011   L Pandola  Suppress fake energy-violation warning when Auger is active.
+//                          Make sure that fluorescence/Auger is generated only if 
+//                          above threshold
 //
 
 #include "G4PenelopeIonisationModel.hh"
@@ -546,6 +549,7 @@ void G4PenelopeIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*
 
   G4double localEnergyDeposit = ionEnergy; 
   G4double energyInFluorescence = 0.0*eV;
+  G4double energyInAuger = 0; 
 
   if(DeexcitationFlag() && iZ > 5) 
     {
@@ -560,17 +564,33 @@ void G4PenelopeIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*
 	    {
 	      for (size_t k=0;k<photonVector->size();k++)
 		{
-		  G4DynamicParticle* aPhoton = (*photonVector)[k];
+		  G4DynamicParticle* aPhoton = (*photonVector)[k];		
 		  if (aPhoton)
 		    {
 		      G4double itsEnergy = aPhoton->GetKineticEnergy();		   
+		      G4bool keepIt = false;
 		      if (itsEnergy <= localEnergyDeposit)
 			{
-			  if(aPhoton->GetDefinition() == G4Gamma::Gamma())
-			    energyInFluorescence += itsEnergy;
+			  //check if good! 
+			  if(aPhoton->GetDefinition() == G4Gamma::Gamma()
+			     && itsEnergy >= cutG)
+			    {
+			      keepIt = true;
+			      energyInFluorescence += itsEnergy;			  
+			    }
+			  if (aPhoton->GetDefinition() == G4Electron::Electron() && 
+			      itsEnergy >= cutE)
+			    {
+			      energyInAuger += itsEnergy;
+			      keepIt = true;
+			    }
+			}
+		      //good secondary, register it
+		      if (keepIt)
+			{
 			  localEnergyDeposit -= itsEnergy;
 			  fvect->push_back(aPhoton);
-			}
+			}		    
 		      else
 			{
 			  delete aPhoton;
@@ -622,10 +642,13 @@ void G4PenelopeIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*
       G4cout << "-----------------------------------------------------------" << G4endl;
       G4cout << "Outgoing primary energy: " << kineticEnergy1/keV << " keV" << G4endl;
       G4cout << "Delta ray " << eKineticEnergy/keV << " keV" << G4endl;
-      G4cout << "Fluorescence: " << energyInFluorescence/keV << " keV" << G4endl;
+      if (energyInFluorescence)
+	G4cout << "Fluorescence x-rays: " << energyInFluorescence/keV << " keV" << G4endl;
+      if (energyInAuger)
+	G4cout << "Auger electrons: " << energyInAuger/keV << " keV" << G4endl;           
       G4cout << "Local energy deposit " << localEnergyDeposit/keV << " keV" << G4endl;
       G4cout << "Total final state: " << (eKineticEnergy+energyInFluorescence+kineticEnergy1+
-					  localEnergyDeposit)/keV << 
+					  localEnergyDeposit+energyInAuger)/keV << 
 	" keV" << G4endl;
       G4cout << "-----------------------------------------------------------" << G4endl;
     }
@@ -633,10 +656,11 @@ void G4PenelopeIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*
   if (verboseLevel > 0)
     {
       G4double energyDiff = std::fabs(eKineticEnergy+energyInFluorescence+kineticEnergy1+
-				      localEnergyDeposit-kineticEnergy0);
+				      energyInAuger+localEnergyDeposit-kineticEnergy0);
       if (energyDiff > 0.05*keV)
 	G4cout << "Warning from G4PenelopeIonisation: problem with energy conservation: " << 
-	  (eKineticEnergy+energyInFluorescence+kineticEnergy1+localEnergyDeposit)/keV << 
+	  (eKineticEnergy+energyInFluorescence+kineticEnergy1+energyInAuger+
+	   localEnergyDeposit)/keV << 
 	  " keV (final) vs. " << 
 	  kineticEnergy0/keV << " keV (initial)" << G4endl;
 

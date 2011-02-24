@@ -56,7 +56,8 @@
 // Beta release
 //
 // J. M. Quesada 24 November 2010 bug fixed in X_m 
-//(according to eq. 14 in  R.K. Tripathi et al. Nucl. Instr. and Meth. in Phys. Res. B 155 (1999) 349-356)
+// (according to eq. 14 in
+//     R.K. Tripathi et al. Nucl. Instr. and Meth. in Phys. Res. B 155 (1999) 349-356)
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ///////////////////////////////////////////////////////////////////////////////
@@ -68,26 +69,22 @@
 #include "G4HadTmpUtil.hh"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
 G4TripathiLightCrossSection::G4TripathiLightCrossSection ()
+ : G4VCrossSectionDataSet("G4TripathiLightCrossSection")
 {
-//
-//
-// Constructor only needs to instantiate the object which provides functions
-// to calculate the nuclear radius, and some other constants used to
-// calculate cross-sections.
-//
+  // Constructor only needs to instantiate the object which provides functions
+  // to calculate the nuclear radius, and some other constants used to
+  // calculate cross-sections.
+
   theWilsonRadius = new G4WilsonRadius();
   r_0             = 1.1  * fermi;
   third           = 1.0/3.0;
-//
-//
-// The following variable is set to true if
-// G4TripathiLightCrossSection::GetCrossSection is going to be called from
-// within G4TripathiLightCrossSection::GetCrossSection to check whether the
-// cross-section is behaviing anomalously in the low-energy region.
-//
+
+  // The following variable is set to true if
+  // G4TripathiLightCrossSection::GetCrossSection is going to be called from
+  // within G4TripathiLightCrossSection::GetCrossSection to check whether the
+  // cross-section is behaviing anomalously in the low-energy region.
+
   lowEnergyCheck = false;
 }
 ///////////////////////////////////////////////////////////////////////////////
