@@ -12,6 +12,10 @@ $Id$
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+
+24-Feb-2011, G.Folger                (testtools-QMtest-V09-04-01)
+-  Add new test for new dnaphysics adv example
+
 19-Jan-2011, G.Folger                (testtools-QMtest-V09-04-00)
 -  times for build increased in few examples from 300 to 600 secs.
     (needed in windows failing to build)
