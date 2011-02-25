@@ -108,7 +108,6 @@ void HadronPhysicsQGSP_FTFP_BERT::CreateModels()
   thePro->RegisterMe(theFTFPPro=new G4FTFPProtonBuilder(quasiElasFTF));
   theFTFPPro->SetMinEnergy(minFTFP);   // was (9.5*GeV);
   theFTFPPro->SetMaxEnergy(maxFTFP);   // was (25*GeV); 
-
   thePro->RegisterMe(theBertiniPro=new G4BertiniProtonBuilder);
   theBertiniPro->SetMaxEnergy(maxBERT);  //  was (9.9*GeV);
   
@@ -118,16 +117,25 @@ void HadronPhysicsQGSP_FTFP_BERT::CreateModels()
   thePiK->RegisterMe(theFTFPPiK=new G4FTFPPiKBuilder(quasiElasFTF));
   theFTFPPiK->SetMaxEnergy(maxFTFP);   // was (25*GeV); 
   theFTFPPiK->SetMinEnergy(minFTFP);   // was (9.5*GeV);
-
   thePiK->RegisterMe(theBertiniPiK=new G4BertiniPiKBuilder);
   theBertiniPiK->SetMaxEnergy(maxBERT);  //  was (9.9*GeV);
   
-  theMiscCHIPS=new G4MiscCHIPSBuilder;
+  // theMiscCHIPS=new G4MiscCHIPSBuilder;
+  theHyperonCHIPS=   new G4HyperonCHIPSBuilder();
+
+  theAntiBaryon=new G4AntiBarionBuilder;
+  theAntiBaryon->RegisterMe(theFTFPAntiBaryon=new G4FTFPAntiBarionBuilder(quasiElasFTF));
+  theFTFPAntiBaryon->SetMaxEnergy(  0.0*GeV);    // Default - down to 0.0 
+  theFTFPAntiBaryon->SetMinEnergy(100.0*GeV);    // Initially - no more than 100 GeV
 }
 
 HadronPhysicsQGSP_FTFP_BERT::~HadronPhysicsQGSP_FTFP_BERT()
 {
-   delete theMiscCHIPS;
+  // delete theMiscCHIPS;
+   delete theHyperonCHIPS;
+   delete theAntiBaryon;
+   delete theFTFPAntiBaryon;
+
    delete theQGSPNeutron;
    delete theFTFPNeutron;
    delete theBertiniNeutron;
@@ -170,7 +178,9 @@ void HadronPhysicsQGSP_FTFP_BERT::ConstructProcess()
   FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(theCHIPSInelastic);
   FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(theCHIPSInelastic);
 
-  theMiscCHIPS->Build();
+  //theMiscCHIPS->Build();
+  theHyperonCHIPS->Build(); 
+  theAntiBaryon->Build();  // Iterates over all anti-baryons   ( as PiK does ) 
 }
 
 

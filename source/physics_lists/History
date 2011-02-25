@@ -15,13 +15,23 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-16-2-2011, S.Incerti                    (phys-lists-V09-04-03)
+24-02-2011, V.Ivanchenko                (phys-lists-V09-04-04)
+- G4HadronElasticPhysics - added light anti-nuclei
+- G4FTFPAntiBarionBuilder - added cross section to light anti-nuclei
+
+23-02-2011, J.Apostolakis            
+- Added builders for anti-deuteron, anti-triton, anti-He and anti-Alpha
+- Revised QGSP_FTFP_BERT to utilise the new FTF/P processes
+   changing them for anti-proton, anti-neutron 
+   adding them also for the above list of light anti-ions (d,t,He3,alpha).
+
+16-02-2011, S.Incerti                    (phys-lists-V09-04-03)
 - Added process names in G4EmDNAPhysics.cc
 
-14-2-2011, G.Folger             (phys-lists-V09-04-02 and phys-lists-V09-03-45)
+14-02-2011, G.Folger             (phys-lists-V09-04-02 and phys-lists-V09-03-45)
 - Shielding PL corrected .icc file to include correct G4HadronElasticPhysicsHP
 
-5-1-2011, G.Folger              (phys-lists-V09-04-01 and phys-lists-V09-03-44)
+05-01-2011, G.Folger             (phys-lists-V09-04-01 and phys-lists-V09-03-44)
 - QGSP_BERT_NOLEP and QGSP_QEL were missing the include 
    for G4HadronQElasticPhysics.hh, but included G4HadronElasticPhysics 
 

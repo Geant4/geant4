@@ -94,6 +94,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4phys_builders
     HEADERS
+        G4AntiBarionBuilder.hh
         CompileTimeConstraints.hh
         G4BertiniNeutronBuilder.hh
         G4BertiniPiKBuilder.hh
@@ -124,6 +125,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4FTFCNeutronBuilder.hh
         G4FTFCPiKBuilder.hh
         G4FTFCProtonBuilder.hh
+        G4FTFPAntiBarionBuilder.hh
         G4FTFPNeutronBuilder.hh
         G4FTFPPiKBuilder.hh
         G4FTFPProtonBuilder.hh
@@ -135,6 +137,8 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4HadronElasticPhysicsXS.hh
         G4HadronHElasticPhysics.hh
         G4HadronQElasticPhysics.hh
+        G4HyperonCHIPSBuilder.hh
+        G4HyperonLHEPBuilder.hh
         G4InclAblaNeutronBuilder.hh
         G4InclAblaPiKBuilder.hh
         G4InclAblaProtonBuilder.hh
@@ -147,6 +151,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4LEPPiKBuilder.hh
         G4LEPPionBuilder.hh
         G4LEPProtonBuilder.hh
+        G4LHEPAntiBarionBuilder.hh
         G4LHEPNeutronBuilder.hh
         G4LHEPPiKBuilder.hh
         G4LHEPProtonBuilder.hh
@@ -199,6 +204,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4QStoppingPhysics.hh
         G4RadioactiveDecayPhysics.hh
         G4StoppingHadronBuilder.hh
+        G4VAntiBarionBuilder.hh
         G4VHadronModelBuilder.hh
         G4VKaonBuilder.hh
         G4VNeutronBuilder.hh
@@ -208,6 +214,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4WarnPLStatus.hh
         TheoModelFactory.hh
     SOURCES
+        G4AntiBarionBuilder.cc
         G4BertiniNeutronBuilder.cc
         G4BertiniPiKBuilder.cc
         G4BertiniPionBuilder.cc
@@ -247,6 +254,8 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4HadronElasticPhysicsXS.cc
         G4HadronHElasticPhysics.cc
         G4HadronQElasticPhysics.cc
+        G4HyperonCHIPSBuilder.cc
+        G4HyperonLHEPBuilder.cc
         G4InclAblaNeutronBuilder.cc
         G4InclAblaPiKBuilder.cc
         G4InclAblaProtonBuilder.cc
@@ -259,6 +268,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4LEPPiKBuilder.cc
         G4LEPPionBuilder.cc
         G4LEPProtonBuilder.cc
+        G4LHEPAntiBarionBuilder.cc
         G4LHEPNeutronBuilder.cc
         G4LHEPPiKBuilder.cc
         G4LHEPProtonBuilder.cc
@@ -311,6 +321,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4QStoppingPhysics.cc
         G4RadioactiveDecayPhysics.cc
         G4StoppingHadronBuilder.cc
+        G4VAntiBarionBuilder.cc
         G4VHadronModelBuilder.cc
         G4VKaonBuilder.cc
         G4VNeutronBuilder.cc
