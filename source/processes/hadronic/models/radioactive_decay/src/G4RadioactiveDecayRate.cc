@@ -33,14 +33,11 @@
 
 
 G4RadioactiveDecayRate::G4RadioactiveDecayRate()
-{
-  ;
-  //do nothing at the momment
-}
+ : Z(0), A(0), E(0.0), generation(0), verboseLevel(0)
+{}
 
 
-
-G4RadioactiveDecayRate::G4RadioactiveDecayRate(const G4RadioactiveDecayRate &right)
+G4RadioactiveDecayRate::G4RadioactiveDecayRate(const G4RadioactiveDecayRate& right)
 {
   Z = right.Z;
   A = right.A;
