@@ -38,13 +38,13 @@
 #include "G4InteractionContent.hh"
 
 G4InteractionContent::G4InteractionContent(G4VSplitableHadron *aPrimaryParticipant)
-      : theNumberOfHard(0), theNumberOfSoft(0)
+      : theNumberOfHard(0), theNumberOfSoft(0), theInteractionTime(0.)   // Uzhi 23.02.2011
 {
 	theProjectile=aPrimaryParticipant;
 }
 
 G4InteractionContent::G4InteractionContent(const G4InteractionContent &)
-     : theNumberOfHard(0), theNumberOfSoft(0)
+     : theNumberOfHard(0), theNumberOfSoft(0) , theInteractionTime(0.)   // Uzhi 23.02.2011
 {}
 
 
@@ -61,11 +61,19 @@ int G4InteractionContent::operator!=(const G4InteractionContent &right) const
         return this!=&right;
 }
 
-
+G4bool G4InteractionContent::operator<(const G4InteractionContent &right) const//Uzhi 23.02.2011
+{
+        return this->GetInteractionTime() < right.GetInteractionTime();
+}
 const G4InteractionContent & G4InteractionContent::operator=(const G4InteractionContent &)
 {
 	throw G4HadronicException(__FILE__, __LINE__, "G4InteractionContent::operator= meant to not be accessable");
 	return *this;
 }
 
+void  G4InteractionContent::SetInteractionTime(G4double aValue) // Uzhi 23.02.2011
+{theInteractionTime = aValue;}
+
+G4double G4InteractionContent::GetInteractionTime() const       // Uzhi 23.02.2011
+{return theInteractionTime;}
 

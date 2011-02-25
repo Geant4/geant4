@@ -97,7 +97,11 @@ class G4FTFModel : public G4VPartonStringModel
        G4FTFParticipants theParticipants;
        
        G4Nucleon * TheInvolvedNucleon[250];
-       G4int NumberOfInvolvedNucleon;
+       G4int  NumberOfInvolvedNucleon;
+       G4int  NumberOfInvolvedTargetNucleon;
+
+       G4Nucleon * TheInvolvedNucleonOfProjectile[250];
+       G4int  NumberOfInvolvedNucleonOfProjectile;
 
        G4FTFParameters  *theParameters;
        G4DiffractiveExcitation * theExcitation;

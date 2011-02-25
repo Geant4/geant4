@@ -40,29 +40,42 @@ G4FTFParameters::G4FTFParameters()
 G4FTFParameters::~G4FTFParameters()
 {;}
 //**********************************************************************************************
-
-//G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle, 
-//                                                   G4double   theA,
-//                                                   G4double   theZ,
-//                                                   G4double   s) 
 G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle, 
                                                    G4int   theA,
                                                    G4int   theZ,
                                                    G4double   s) 
 {
-    G4int ProjectilePDGcode = particle->GetPDGEncoding();
-    G4int ProjectileabsPDGcode = std::abs(ProjectilePDGcode);
-    G4double ProjectileMass = particle->GetPDGMass();
-    G4double ProjectileMass2=ProjectileMass*ProjectileMass;
+    G4int    ProjectilePDGcode    = particle->GetPDGEncoding();
+    G4int    ProjectileabsPDGcode = std::abs(ProjectilePDGcode);
+    G4double ProjectileMass       = particle->GetPDGMass();
+    G4double ProjectileMass2      =ProjectileMass*ProjectileMass;
+
+    G4int    ProjectileBaryonNumber(0), AbsProjectileBaryonNumber(0);
+    G4int                               AbsProjectileCharge(0);
+    G4bool   ProjectileIsNucleus=false;
+
+    if(std::abs(particle->GetBaryonNumber()) > 1)
+    { // The projectile is a nucleus
+     ProjectileIsNucleus      =true;
+     ProjectileBaryonNumber   =particle->GetBaryonNumber();
+     AbsProjectileBaryonNumber=std::abs(ProjectileBaryonNumber);
+     AbsProjectileCharge      =(G4int) particle->GetPDGCharge();
+
+     if(ProjectileBaryonNumber > 1)
+     {      ProjectilePDGcode= 2212; ProjectileabsPDGcode=2212;} // Proton
+     else { ProjectilePDGcode=-2212; ProjectileabsPDGcode=2212;} // Anti-Proton
+
+     ProjectileMass =G4Proton::Proton()->GetPDGMass();
+     ProjectileMass2=sqr(ProjectileMass);
+    } 
 
     G4double TargetMass     = G4Proton::Proton()->GetPDGMass();
-    G4double TargetMass2    =TargetMass*TargetMass;
+    G4double TargetMass2    = TargetMass*TargetMass;
 
-    G4double Elab = (s - ProjectileMass*ProjectileMass - TargetMass*TargetMass)/
-                     (2*TargetMass);
-    G4double Plab = std::sqrt(Elab * Elab - ProjectileMass*ProjectileMass);
+    G4double Elab = (s - ProjectileMass2 - TargetMass2)/(2*TargetMass);
+    G4double Plab = std::sqrt(Elab * Elab - ProjectileMass2);
 
-//G4cout<<"Proj S Plab "<<ProjectilePDGcode<<" "<<s/GeV/GeV<<" "<<Plab<<G4endl;
+//G4cout<<"Proj S Plab "<<ProjectilePDGcode<<" "<<s/GeV/GeV<<" "<<Plab/GeV<<G4endl;
 //G4cout<<" A Z "<<theA<<" "<<theZ<<G4endl;
 
     G4double Ylab,Xtotal,Xelastic,Xannihilation;
@@ -71,13 +84,13 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
     Ylab=0.5*std::log((Elab+Plab)/(Elab-Plab));
 
     G4double ECMSsqr=s/GeV/GeV;
-    G4double SqrtS=std::sqrt(s)/GeV;
+    G4double SqrtS  =std::sqrt(s)/GeV;
 
     TargetMass     /=GeV; TargetMass2     /=(GeV*GeV);
     ProjectileMass /=GeV; ProjectileMass2 /=(GeV*GeV);
 
     Plab/=GeV;
-    G4double LogPlab = std::log( Plab );
+    G4double LogPlab    = std::log( Plab );
     G4double sqrLogPlab = LogPlab * LogPlab;
 
     G4int NumberOfTargetProtons  = theZ; 
@@ -93,10 +106,29 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
        G4double XelPP  = 11.9 + 26.9*std::pow(Plab,-1.21) + 0.169*sqrLogPlab - 1.85*LogPlab;
        G4double XelPN  = 11.9 + 26.9*std::pow(Plab,-1.21) + 0.169*sqrLogPlab - 1.85*LogPlab;
 
-       Xtotal          = ( NumberOfTargetProtons  * XtotPP + 
-                           NumberOfTargetNeutrons * XtotPN  ) / NumberOfTargetNucleons;
-       Xelastic        = ( NumberOfTargetProtons  * XelPP  + 
-                           NumberOfTargetNeutrons * XelPN   ) / NumberOfTargetNucleons;
+       if(!ProjectileIsNucleus)
+       { // Projectile is hadron
+        Xtotal          = ( NumberOfTargetProtons  * XtotPP + 
+                            NumberOfTargetNeutrons * XtotPN  ) / NumberOfTargetNucleons;
+        Xelastic        = ( NumberOfTargetProtons  * XelPP  + 
+                            NumberOfTargetNeutrons * XelPN   ) / NumberOfTargetNucleons;
+       } else
+       { // Projectile is a nucleus
+        Xtotal  = (
+                 AbsProjectileCharge                           *NumberOfTargetProtons *XtotPP + 
+                (AbsProjectileBaryonNumber-AbsProjectileCharge)*NumberOfTargetNeutrons*XtotPP + 
+               ( AbsProjectileCharge                           *NumberOfTargetNeutrons +
+                (AbsProjectileBaryonNumber-AbsProjectileCharge)*NumberOfTargetProtons)*XtotPN
+                   )/(AbsProjectileBaryonNumber*NumberOfTargetNucleons);
+
+        Xelastic= (
+                 AbsProjectileCharge                           *NumberOfTargetProtons *XelPP + 
+                (AbsProjectileBaryonNumber-AbsProjectileCharge)*NumberOfTargetNeutrons*XelPP + 
+               ( AbsProjectileCharge                           *NumberOfTargetNeutrons +
+                (AbsProjectileBaryonNumber-AbsProjectileCharge)*NumberOfTargetProtons)*XelPN
+                   )/(AbsProjectileBaryonNumber*NumberOfTargetNucleons);
+      }
+
        Xannihilation   = 0.;
       }
     else if( ProjectilePDGcode < -1000 )         //------Projectile is anti_baryon --------
@@ -171,9 +203,19 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
 
 //G4cout<<"Sum          "<<Xann_on_P<<G4endl;
 
-       Xannihilation   = ( NumberOfTargetProtons  * Xann_on_P  + 
-                           NumberOfTargetNeutrons * Xann_on_N   ) / NumberOfTargetNucleons;
-
+       if(!ProjectileIsNucleus)
+       { // Projectile is anti-baryon
+        Xannihilation   = ( NumberOfTargetProtons  * Xann_on_P  + 
+                            NumberOfTargetNeutrons * Xann_on_N   ) / NumberOfTargetNucleons;
+       } else
+       { // Projectile is a nucleus
+        Xannihilation=(
+          ( AbsProjectileCharge                           *NumberOfTargetProtons+ 
+           (AbsProjectileBaryonNumber-AbsProjectileCharge)*NumberOfTargetNeutrons )*Xann_on_P + 
+          ( AbsProjectileCharge                           *NumberOfTargetNeutrons+
+           (AbsProjectileBaryonNumber-AbsProjectileCharge)*NumberOfTargetProtons  )*Xann_on_N
+                      )/(AbsProjectileBaryonNumber*NumberOfTargetNucleons);
+       }
        G4double Xftf=0.;  
        MesonProdThreshold=ProjectileMass+TargetMass+(0.14+0.08); // Mpi +DeltaE
        if(SqrtS > MesonProdThreshold) {Xftf=36.*(1.-MesonProdThreshold/SqrtS);}
@@ -312,34 +354,6 @@ G4int Uzhi; G4cin>>Uzhi;
        Xannihilation   = 0.;
       };
 
-// ???      TargetMass     *=GeV;
-// ???      ProjectileMass *=GeV;
-
-//    Xtotal and Xelastic in mb
-
-/* For Pi- P interactions only!
-if(std::abs(Plab-1.4) < 0.05) {Xtotal=3.500599e+01; Xelastic= 1.150032e+01;}
-if(std::abs(Plab-1.5) < 0.05) {Xtotal=3.450591e+01; Xelastic= 1.050038e+01;}
-if(std::abs(Plab-1.6) < 0.05) {Xtotal=3.430576e+01; Xelastic= 9.800433e+00;}
-if(std::abs(Plab-1.7) < 0.05) {Xtotal=3.455560e+01; Xelastic= 9.300436e+00;}
-if(std::abs(Plab-1.8) < 0.05) {Xtotal=3.480545e+01; Xelastic= 8.800438e+00;}
-if(std::abs(Plab-2.0) < 0.05) {Xtotal=3.570503e+01; Xelastic= 8.200370e+00;}
-if(std::abs(Plab-2.2) < 0.05) {Xtotal=3.530495e+01; Xelastic= 7.800362e+00;}
-if(std::abs(Plab-2.5) < 0.05) {Xtotal=3.410484e+01; Xelastic= 7.350320e+00;}
-if(std::abs(Plab-2.75) < 0.05){Xtotal=3.280479e+01; Xelastic= 7.050273e+00;}
-if(std::abs(Plab-3.0) < 0.05) {Xtotal=3.180473e+01; Xelastic= 6.800258e+00;}
-if(std::abs(Plab-4.0) < 0.05) {Xtotal=2.910441e+01; Xelastic= 6.100229e+00;}
-if(std::abs(Plab-5.0) < 0.05) {Xtotal=2.820372e+01; Xelastic= 5.700275e+00;}
-if(std::abs(Plab-6.0) < 0.05) {Xtotal=2.760367e+01; Xelastic= 5.400255e+00;}
-if(std::abs(Plab-7.0) < 0.05) {Xtotal=2.725366e+01; Xelastic= 5.150256e+00;}
-if(std::abs(Plab-8.0) < 0.05) {Xtotal=2.690365e+01; Xelastic= 4.900258e+00;}
-if(std::abs(Plab-10.0) < 0.05){Xtotal=2.660342e+01; Xelastic= 4.600237e+00;}
-if(std::abs(Plab-12.0) < 0.05){Xtotal=2.632341e+01; Xelastic= 4.480229e+00;}
-if(std::abs(Plab-14.0) < 0.05){Xtotal=2.604340e+01; Xelastic= 4.360221e+00;}
-if(std::abs(Plab-20.0) < 0.05){Xtotal=2.520337e+01; Xelastic= 4.000197e+00;}
-if(std::abs(Plab-30.0) < 0.05){Xtotal=2.505334e+01; Xelastic= 3.912679e+00;}
-*/
-
 //----------- Geometrical parameters ------------------------------------------------
       SetTotalCrossSection(Xtotal);
       SetElastisCrossSection(Xelastic);
@@ -376,6 +390,8 @@ G4int Uzhi; G4cin>>Uzhi;
       SetAvaragePt2ofElasticScattering(1./(Xtotal*Xtotal/16./pi/Xelastic/0.3894)*GeV*GeV);
 
 //----------- Parameters of excitations ---------------------------------------------
+
+//G4cout<<"Param ProjectilePDGcode "<<ProjectilePDGcode<<G4endl;
            if( ProjectilePDGcode > 1000 )             //------Projectile is baryon --------
              {
               SetMagQuarkExchange(1.84);//(3.63);
@@ -394,7 +410,7 @@ G4int Uzhi; G4cin>>Uzhi;
 
               SetAveragePt2(0.15);                        // 0.15 GeV^2
              }
-           if( ProjectilePDGcode < -1000 )         //------Projectile is anti_baryon --------
+           else if( ProjectilePDGcode < -1000 )  //------Projectile is anti_baryon --------
              {
               SetMagQuarkExchange(0.);
               SetSlopeQuarkExchange(0.);
@@ -459,8 +475,8 @@ G4int Uzhi; G4cin>>Uzhi;
               SetSlopeQuarkExchange(1.0);
               SetDeltaProbAtQuarkExchange(0.1);
 
-              SetProjMinDiffMass((particle->GetPDGMass()+160.*MeV)/GeV);
-              SetProjMinNonDiffMass((particle->GetPDGMass()+160.*MeV)/GeV);
+              SetProjMinDiffMass((940.+160.*MeV)/GeV);     // particle->GetPDGMass()
+              SetProjMinNonDiffMass((940.+160.*MeV)/GeV);  // particle->GetPDGMass()
               SetProbabilityOfProjDiff(0.95*std::pow(s/GeV/GeV,-0.35)); // 40/32 X-dif/X-inel
 
               SetTarMinDiffMass(1.1);                     // GeV
@@ -494,6 +510,8 @@ G4int Uzhi; G4cin>>Uzhi;
       SetExcitationEnergyPerWoundedNucleon(75.*MeV);
     } else if( ProjectilePDGcode < -1000 )             // for anti-baryon projectile
     {
+//G4cout<<"Nucl destruct Anti Bar"<<G4endl;
+
       SetMaxNumberOfCollisions(Plab,2.); //3.); ##############################
       SetCofNuclearDestruction(1.*std::exp(4.*(Ylab-2.1))/
                               (1.+std::exp(4.*(Ylab-2.1)))); //0.62 1.0
@@ -513,7 +531,8 @@ G4int Uzhi; G4cin>>Uzhi;
        SetDofNuclearDestruction(0.01);
        SetPt2ofNuclearDestruction(0.035*GeV*GeV);
        SetMaxPt2ofNuclearDestruction(0.04*GeV*GeV);
-       SetExcitationEnergyPerWoundedNucleon(0.);   // ?????
+
+//       SetExcitationEnergyPerWoundedNucleon(0.);   // ?????
       }
     } else                                        // Projectile baryon assumed
     {

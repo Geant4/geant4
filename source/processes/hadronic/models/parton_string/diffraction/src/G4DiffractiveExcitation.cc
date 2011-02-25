@@ -162,6 +162,7 @@ G4bool G4DiffractiveExcitation::
      G4double PZcms2, PZcms;
 
      G4double SqrtS=std::sqrt(S);
+
 //G4cout<<"SqrtS < 2300*MeV "<<SqrtS<<G4endl;           
      if(absProjectilePDGcode > 1000 && (SqrtS < 2300*MeV || SqrtS < SumMasses))
      {target->SetStatus(2);  return false;}  // The model cannot work for
@@ -214,7 +215,8 @@ G4bool G4DiffractiveExcitation::
                              PZcms2));
      }
 
-     G4double maxPtSquare; // = PZcms2;
+
+     G4double maxPtSquare(0.); // = PZcms2;
 /*
 G4cout<<"Start --------------------"<<G4endl;
 G4cout<<"Proj "<<M0projectile<<" "<<ProjectileDiffStateMinMass<<"  "<<ProjectileNonDiffStateMinMass<<G4endl;
@@ -611,7 +613,7 @@ G4cout<<"SqrtS "<<SqrtS<<G4endl;
 
 G4cout<<"Prob ProjDiff TargDiff "<<ProbProjectileDiffraction<<" "<<ProbTargetDiffraction<<" "<<ProbOfDiffraction<<G4endl;
 G4cout<<"Pr Y "<<Pprojectile.rapidity()<<" Tr Y "<<Ptarget.rapidity()<<G4endl;
-G4int Uzhi; G4cin>>Uzhi;
+//G4int Uzhi; G4cin>>Uzhi;
 */
 /*
      if(ProjectileNonDiffStateMinMass + TargetNonDiffStateMinMass > SqrtS) // 24.07.10
@@ -687,12 +689,11 @@ G4int Uzhi; G4cin>>Uzhi;
 
              TargMassT2=M0target2;
              TargMassT =M0target;
-//G4cout<<"Masses "<<ProjMassT<<" "<<TargMassT<<" "<<SqrtS<<" "<<ProjMassT+TargMassT<<G4endl;
+
              PZcms2=(S*S + ProjMassT2*ProjMassT2 + TargMassT2*TargMassT2-
                      2.*S*ProjMassT2-2.*S*TargMassT2-2.*ProjMassT2*TargMassT2)
                     /4./S;
 
-//G4cout<<"PZcms2 PrD"<<PZcms2<<G4endl;
              if(PZcms2 < 0 ) 
              {
                target->SetStatus(2);  

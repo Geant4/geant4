@@ -98,7 +98,9 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
   	{
 		throw G4HadronicException(__FILE__, __LINE__, "G4VPartonStringModel::Scatter(): fails to generate strings");
   	}
+
 	theThis->Init(theNucleus,thePrimary);
+
   	strings = GetStrings();
   }
   

@@ -146,7 +146,7 @@ G4KineticTrackVector *G4ExcitedStringDecay::FragmentStrings
 //G4cout<<"success "<<success<<G4endl;
 	if ( NeedEnergyCorrector ) success=EnergyAndMomentumCorrector(theResult, KTsum);
 //G4cout<<"success after Ecorr "<<success<<G4endl;
-  } while(!success && (attempts < 100));
+  } while(!success && (attempts < 10));   // It was 100 !!! Uzhi
 
 #ifdef debug_ExcitedStringDecay
   G4LorentzVector  KTsum1=0;
