@@ -49,11 +49,10 @@
 #include "G4VComponentCrossSection.hh"
 #include "G4ParticleDefinition.hh"
 
-G4CrossSectionInelastic::G4CrossSectionInelastic(const G4ParticleDefinition* p, 
-						 G4VComponentCrossSection* c,
+G4CrossSectionInelastic::G4CrossSectionInelastic(G4VComponentCrossSection* c,
 						 G4int zmin, G4int zmax, 
 						 G4double Emin, G4double Emax)
-  : G4VCrossSectionDataSet(c->GetName()),particle(p), component(c),
+  : G4VCrossSectionDataSet(c->GetName()), component(c),
     Zmin(zmin),Zmax(zmax)
 {
   SetMinKinEnergy(Emin);
@@ -85,15 +84,21 @@ G4double
 G4CrossSectionInelastic::GetCrossSection(const G4DynamicParticle* p, 
 					 const G4Element* elm, G4double)
 {
-  return component->GetInelasticCrossSection(p->GetDefinition(), 
-					     p->GetKineticEnergy(), elm);
+  return component->GetInelasticElementCrossSection(p->GetDefinition(), 
+						    p->GetKineticEnergy(), elm);
 }
 
 G4double 
-G4CrossSectionInelastic::GetZandACrossSection(const G4DynamicParticle* p, G4int Z,
-					      G4int A, G4double)
+G4CrossSectionInelastic::GetZandACrossSection(const G4DynamicParticle* p, 
+					      G4int Z, G4int A, G4double)
 {
-  return component->GetInelasticZandACrossSection(p->GetDefinition(), 
-						  p->GetKineticEnergy(), 
-						  Z, A);
+  return component->GetInelasticIsotopeCrossSection(p->GetDefinition(), 
+						    p->GetKineticEnergy(), 
+						    Z, A);
 }
+
+void G4CrossSectionInelastic::BuildPhysicsTable(const G4ParticleDefinition&)
+{}
+
+void G4CrossSectionInelastic::DumpPhysicsTable(const G4ParticleDefinition&)
+{}

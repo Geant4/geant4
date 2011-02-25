@@ -79,7 +79,7 @@ G4ComponentAntiNuclNuclearXS::~G4ComponentAntiNuclNuclearXS()
 // Calculation of total CrossSection of Anti-Nucleus - Nucleus 
 
 
-G4double G4ComponentAntiNuclNuclearXS:: ComputeTotalCrossSection
+G4double G4ComponentAntiNuclNuclearXS::GetTotalElementCrossSection
 (const G4ParticleDefinition* aParticle, G4double kinEnergy, G4int Z, G4double A)
 {
   G4double xsection,   sigmaTotal, sigmaElastic;
@@ -159,15 +159,15 @@ G4double G4ComponentAntiNuclNuclearXS:: ComputeTotalCrossSection
 // 
 // Calculation of total CrossSection of Anti-Nucleus - Nucleus 
 //////////////////////////////////////////////////////////////////////////////
-G4double G4ComponentAntiNuclNuclearXS::GetTotalZandACrossSection
+G4double G4ComponentAntiNuclNuclearXS::GetTotalIsotopeCrossSection
 (const G4ParticleDefinition* aParticle, G4double kinEnergy, G4int Z, G4int A )
-{ return ComputeTotalCrossSection(aParticle, kinEnergy, Z, (G4double) A);  }
+{ return GetTotalElementCrossSection(aParticle, kinEnergy, Z, (G4double) A);  }
 
 ////////////////////////////////////////////////////////////////
 // Calculation of inelastic CrossSection of Anti-Nucleus - Nucleus
 ////////////////////////////////////////////////////////////////
 
-G4double G4ComponentAntiNuclNuclearXS:: ComputeInelasticCrossSection
+G4double G4ComponentAntiNuclNuclearXS::GetInelasticElementCrossSection
 (const G4ParticleDefinition* aParticle, G4double kinEnergy, G4int Z, G4double A)
 {
   G4double  inelxsection,  sigmaTotal, sigmaElastic;
@@ -247,9 +247,9 @@ G4double G4ComponentAntiNuclNuclearXS:: ComputeInelasticCrossSection
 //
 // Calculates Inelastic Anti-nucleus-Nucleus cross-section   
 //
-G4double G4ComponentAntiNuclNuclearXS::GetInelasticZandACrossSection
+G4double G4ComponentAntiNuclNuclearXS::GetInelasticIsotopeCrossSection
 (const G4ParticleDefinition* aParticle, G4double kinEnergy, G4int Z, G4int A)
-{return ComputeInelasticCrossSection(aParticle, kinEnergy, Z, (G4double) A); }
+{return GetInelasticElementCrossSection(aParticle, kinEnergy, Z, (G4double) A); }
  
 
 
@@ -257,11 +257,11 @@ G4double G4ComponentAntiNuclNuclearXS::GetInelasticZandACrossSection
 //
 // Calculates elastic Anti-nucleus-Nucleus cross-section  as Total - Inelastic 
 //
-G4double G4ComponentAntiNuclNuclearXS::ComputeElasticCrossSection
+G4double G4ComponentAntiNuclNuclearXS::GetElasticElementCrossSection
 (const G4ParticleDefinition* aParticle, G4double kinEnergy, G4int Z, G4double A)
 {
- fElasticXsc = ComputeTotalCrossSection(aParticle, kinEnergy, Z, A)-
-                                  ComputeInelasticCrossSection(aParticle, kinEnergy, Z, A);
+ fElasticXsc = GetTotalElementCrossSection(aParticle, kinEnergy, Z, A)-
+   GetInelasticElementCrossSection(aParticle, kinEnergy, Z, A);
 
  if (fElasticXsc < 0.) fElasticXsc = 0.;
 
@@ -272,15 +272,15 @@ G4double G4ComponentAntiNuclNuclearXS::ComputeElasticCrossSection
 //
 // Calculates elastic Anti-nucleus-Nucleus cross-section   
 //
-G4double G4ComponentAntiNuclNuclearXS:: GetElasticZandACrossSection
+G4double G4ComponentAntiNuclNuclearXS::GetElasticIsotopeCrossSection
 (const G4ParticleDefinition* aParticle, G4double kinEnergy, G4int Z, G4int A)
-{ return ComputeElasticCrossSection(aParticle, kinEnergy, Z, (G4double) A); }
+{ return GetElasticElementCrossSection(aParticle, kinEnergy, Z, (G4double) A); }
 
 
 ///////////////////////////////////////////////////////////////////////////////////
 // Calculation of  Antihadron - hadron Total Cross-section  
 
-G4double G4ComponentAntiNuclNuclearXS ::GetAntiHadronNucleonTotCrSc
+G4double G4ComponentAntiNuclNuclearXS::GetAntiHadronNucleonTotCrSc
 (const G4ParticleDefinition* aParticle, G4double kinEnergy)
 {
   G4double xsection, Pmass, Energy, momentum;

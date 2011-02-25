@@ -58,7 +58,7 @@ class G4CrossSectionElastic : public G4VCrossSectionDataSet
 {
 public:
 
-  G4CrossSectionElastic(const G4ParticleDefinition*, G4VComponentCrossSection*,
+  G4CrossSectionElastic(G4VComponentCrossSection*,
 			G4int zmin = 0, G4int zmax = 256, 
 			G4double Emin = 0.0, G4double Emax = DBL_MAX);
 
@@ -78,14 +78,17 @@ public:
   G4double GetZandACrossSection(const G4DynamicParticle*, G4int /*Z*/,
                                 G4int /*A*/, G4double aTemperature = 0.);
 
-  inline const G4ParticleDefinition* GetParticle() const { return particle; }
+  virtual
+  void BuildPhysicsTable(const G4ParticleDefinition&);
+
+  virtual
+  void DumpPhysicsTable(const G4ParticleDefinition&);
 
 private:
 
   G4CrossSectionElastic & operator=(const G4CrossSectionElastic &right);
   G4CrossSectionElastic(const G4CrossSectionElastic&);
 
-  const G4ParticleDefinition* particle;
   G4VComponentCrossSection* component;
   G4int Zmin;
   G4int Zmax;
