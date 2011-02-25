@@ -38,18 +38,16 @@
 // 20.10.06 V.Ivanchenko initialise lowestEnergy=0 for neitrals, eV for charged
 // 23.01.07 V.Ivanchenko add cross section interfaces with Z and A
 // 02.05.07 V.Ivanchenko add He3
-// 13.01.10: M.Kosov: Commented not used G4QElasticCrossSection & G4QCHIPSWorld
+// 13.01.10 M.Kosov: Commented not used G4QElasticCrossSection & G4QCHIPSWorld
+// 24.02.11 V.Ivanchenko use particle name in IfApplicable, 
+//                       added anti particles for light ions
+// 
 //
 
 #include "G4WHadronElasticProcess.hh"
 #include "globals.hh"
 #include "G4CrossSectionDataStore.hh"
 #include "G4HadronElasticDataSet.hh"
-#include "G4VQCrossSection.hh"
-#include "G4Element.hh"
-#include "G4ElementVector.hh"
-#include "G4IsotopeVector.hh"
-#include "G4Neutron.hh"
 #include "G4ProductionCutsTable.hh"
  
 G4WHadronElasticProcess::G4WHadronElasticProcess(const G4String& pName)
@@ -78,16 +76,14 @@ G4VParticleChange* G4WHadronElasticProcess::PostStepDoIt(
   // protection against numerical problems
   if(part == theNeutron) {
     if(kineticEnergy <= lowestEnergyNeutron) 
-      return G4VDiscreteProcess::PostStepDoIt(track,step);
-  } else {
-    if(kineticEnergy <= lowestEnergy)
-      return G4VDiscreteProcess::PostStepDoIt(track,step);
-  }
+      { return G4VDiscreteProcess::PostStepDoIt(track,step); }
+  } else if(kineticEnergy <= lowestEnergy)
+      { return G4VDiscreteProcess::PostStepDoIt(track,step); }
 
   G4Material* material = track.GetMaterial();
   G4CrossSectionDataStore* store = GetCrossSectionDataStore();
   G4double xsec = store->GetCrossSection(dynParticle,material);
-  if(xsec <= DBL_MIN) return G4VDiscreteProcess::PostStepDoIt(track,step);
+  if(xsec <= DBL_MIN) { return G4VDiscreteProcess::PostStepDoIt(track,step); }
 
   // Select element
   G4Element* elm = store->SampleZandA(dynParticle,material,targetNucleus);
@@ -96,8 +92,8 @@ G4VParticleChange* G4WHadronElasticProcess::PostStepDoIt(
     ChooseHadronicInteraction( kineticEnergy, material, elm);
 
   size_t idx = track.GetMaterialCutsCouple()->GetIndex();
-  G4double tcut = 
-    (*(G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(3)))[idx];
+  G4double tcut = (*(G4ProductionCutsTable::GetProductionCutsTable()
+		     ->GetEnergyCutsVector(3)))[idx];
   hadi->SetRecoilEnergyThreshold(tcut);
 
   // Initialize the hadronic projectile from the track
@@ -145,35 +141,42 @@ G4VParticleChange* G4WHadronElasticProcess::PostStepDoIt(
 G4bool G4WHadronElasticProcess::
 IsApplicable(const G4ParticleDefinition& aParticleType)
 {
-   return (&aParticleType == G4PionPlus::PionPlus() ||
-           &aParticleType == G4PionMinus::PionMinus() ||
-           &aParticleType == G4KaonPlus::KaonPlus() ||
-           &aParticleType == G4KaonZeroShort::KaonZeroShort() ||
-           &aParticleType == G4KaonZeroLong::KaonZeroLong() ||
-           &aParticleType == G4KaonMinus::KaonMinus() ||
-           &aParticleType == G4Proton::Proton() ||
-           &aParticleType == G4AntiProton::AntiProton() ||
-           &aParticleType == G4Neutron::Neutron() ||
-           &aParticleType == G4AntiNeutron::AntiNeutron() ||
-           &aParticleType == G4Lambda::Lambda() ||
-           &aParticleType == G4AntiLambda::AntiLambda() ||
-           &aParticleType == G4SigmaPlus::SigmaPlus() ||
-           &aParticleType == G4SigmaZero::SigmaZero() ||
-           &aParticleType == G4SigmaMinus::SigmaMinus() ||
-           &aParticleType == G4AntiSigmaPlus::AntiSigmaPlus() ||
-           &aParticleType == G4AntiSigmaZero::AntiSigmaZero() ||
-           &aParticleType == G4AntiSigmaMinus::AntiSigmaMinus() ||
-           &aParticleType == G4XiZero::XiZero() ||
-           &aParticleType == G4XiMinus::XiMinus() ||
-           &aParticleType == G4AntiXiZero::AntiXiZero() ||
-           &aParticleType == G4AntiXiMinus::AntiXiMinus() ||
-           &aParticleType == G4Deuteron::Deuteron() ||
-           &aParticleType == G4Triton::Triton() ||
-           &aParticleType == G4He3::He3() ||
-           &aParticleType == G4Alpha::Alpha() ||
-           &aParticleType == G4OmegaMinus::OmegaMinus() ||
-           &aParticleType == G4AntiOmegaMinus::AntiOmegaMinus() ||
-           &aParticleType == G4GenericIon::GenericIon());
+  G4String particleName = aParticleType.GetParticleName();
+  G4bool res = false;
+
+  if (particleName == "pi+" ||
+      particleName == "pi-" ||
+      particleName == "kaon+" ||
+      particleName == "kaon-" ||
+      particleName == "neutron" ||
+      particleName == "proton" ) { res = true; }
+  else if (
+	   particleName == "anti_He3" ||
+	   particleName == "anti_alpha" ||
+	   particleName == "anti_deuteron" ||
+	   particleName == "anti_lambda" ||
+	   particleName == "anti_omega-" ||
+	   particleName == "anti_proton" ||
+	   particleName == "anti_sigma0" ||
+	   particleName == "anti_sigma+" ||
+	   particleName == "anti_sigma-" ||
+	   particleName == "anti_triton" ||
+	   particleName == "anti_xi0" ||
+	   particleName == "anti_xi-" ||
+	   particleName == "deuteron" ||
+	   particleName == "kaon0L" ||
+	   particleName == "kaon0S" ||
+	   particleName == "lambda" ||
+	   particleName == "omega-" ||
+	   particleName == "sigma0" ||
+	   particleName == "sigma+" ||
+	   particleName == "sigma-" ||
+	   particleName == "tau+" ||
+	   particleName == "tau-" ||
+	   particleName == "triton" ||
+	   particleName == "xi0" ||
+	   particleName == "xi-" ) { res = true; }
+  return res;  
 }
 
 

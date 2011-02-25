@@ -46,13 +46,18 @@
 #include "G4TrackStatus.hh"
 #include "G4HadronicInteraction.hh"
 
+#ifdef NPDEBUG
+#include <iostream>
+#include <fstream>
+#endif
 
 
 class G4LEnp : public G4HadronicInteraction
 {
  private:
 
-   enum { NENERGY=21, NANGLE=180 };
+  //enum { NENERGY=21, NANGLE=180 };
+    enum { NENERGY=39, NANGLE=180 };
 
  public:
 
@@ -65,6 +70,9 @@ class G4LEnp : public G4HadronicInteraction
 
 
  private:
+
+   //   std::ofstream* outFile;
+   //   std::ofstream* outFile1;
 
  // The following arrays are declared static to allow the use of initializers.
  // They are initialized in G4LEnpData.hh

@@ -29,6 +29,7 @@
 
 // 11-OCT-2007 F.W. Jones: removed erroneous code for identity
 //             exchange of particles.
+// FWJ 27-AUG-2010: extended to 5 GeV by Tony Kwan TRIUMF
 
 #include "G4LEnp.hh"
 #include "Randomize.hh"
@@ -46,7 +47,7 @@ G4LEnp::G4LEnp():G4HadronicInteraction("G4LEnp")
   //    SetMinEnergy(10.*MeV);
   //    SetMaxEnergy(1200.*MeV);
   SetMinEnergy(0.);
-  SetMaxEnergy(1200.*GeV);
+  SetMaxEnergy(5.*GeV);
 }
 
 G4LEnp::~G4LEnp()

@@ -27,6 +27,7 @@
  // G4 Low energy model: n-n or p-p scattering
  // F.W. Jones, L.G. Greeniaus, H.P. Wellisch
 
+// FWJ 27-AUG-2010: extended Coulomb-suppressed data to 5 GeV
 
 #include "G4LEpp.hh"
 #include "Randomize.hh"
@@ -44,7 +45,7 @@ G4LEpp::G4LEpp():G4HadronicInteraction("G4LEpp")
   SetCoulombEffects(0);
 
   SetMinEnergy(0.);
-  SetMaxEnergy(1200.*GeV);
+  SetMaxEnergy(5.*GeV);
 }
 
 G4LEpp::~G4LEpp()
@@ -62,6 +63,7 @@ G4LEpp::SetCoulombEffects(G4int State)
       sig[i] = SigCoul[i];
     }
     elab = ElabCoul;
+    SetMaxEnergy(1.2*GeV);
   }
   else {
     for(G4int i=0; i<NANGLE; i++)
@@ -69,6 +71,7 @@ G4LEpp::SetCoulombEffects(G4int State)
       sig[i] = Sig[i];
     }
     elab = Elab;
+    SetMaxEnergy(5.*GeV);
   }
 }
 
