@@ -36,14 +36,14 @@ event                                            event-V09-04-00            (o)
 - Added resetting of 'abortRequested' flag at start of DoProcessing()
   in G4EventManager. Addressing to problem report #1169.
 
-physics_lists                                    phys-lists-V09-04-04
+physics_lists                                    phys-lists-V09-04-05
 -------------
 - G4HadronElasticPhysics: added light anti-nuclei.
 - G4FTFPAntiBarionBuilder: added cross section to light anti-nuclei.
 - Added builders for anti-deuteron, anti-triton, anti-He and anti-Alpha.
 - Revised QGSP_FTFP_BERT to utilise the new FTF/P processes: changing them
   for anti-proton, anti-neutron; adding them also for the above list of
-  light anti-ions (d,t,He3,alpha).
+  light anti-ions (d,t,He3,alpha). Corrected energy limit for antibarions.
 - Added process names in G4EmDNAPhysics.
 - Corrected shielding physics-list to include correct header for HP         (o)
   hadron elastic. Addressing problem report #1166.
@@ -58,12 +58,15 @@ processes/electromagnetic/lowenergy              emlowen-V09-04-13
   suppress fake energy-violation warning and to make sure that
   fluorescence/Auger is generated only if above threshold. 
 
-processes/electromagnetic/standard               emstand-V09-04-04          (o)
+processes/electromagnetic/standard               emstand-V09-04-05
 ----------------------------------
-- G4PEEffectFluoModel: fixed K-shell selection (was off by mistake);
+- G4PEEffectFluoModel: fixed K-shell selection (was off by mistake);        (o)
   removed extra debug print-out.
-- G4MollerBhabhaModel: fixed expression for computation of positron dEdx
+- G4MollerBhabhaModel: fixed expression for computation of positron dEdx    (o)
   according to PDG formula and original paper.
+- G4UrbanMscModel90, G4UrbanMscModel92, G4UrbanMscModel93: use simplified
+  computation of geom path length if true path length is equal to the range;
+  providing minor CPU improvement and more stable computation.
 
 processes/electromagnetic/utils                  emutils-V09-04-04          (o)
 -------------------------------
@@ -87,9 +90,11 @@ processes/hadronic
     physics-list.
   o G4VComponentCrossSection: changed method names to
     GetTotalElementCrossSection() and GetTotalIsotopeCrossSection().
-- management (hadr-man-V09-04-00)
+- management (hadr-man-V09-04-02)
   o G4HadronicProcess: make GetCrossSectionDataStore() public so it can be
-    accessed through the process.
+    accessed through the process. Added method MultiplyCrossSectionBy() so
+    that cross-sections can be scaled for testing.
+  o Allow to turn on checking for E/p conservation by environment variables.
   o Extended Print() method in G4HadronicProcessStore to include cross-section
     info.
 - models/cascade (hadr-casc-V09-04-00)                                      (o)
@@ -102,7 +107,7 @@ processes/hadronic
 - models/de_excitation (hadr-deex-V09-04-01)
   o G4NeutronRadCapture: fixed in particle change, kill primary particle
     and save residual nucleus.
-- models/parton_string (hadr-prtn-V09-04-02)
+- models/parton_string (hadr-prtn-V09-04-03)
   o First implementation of barion - anti-barion annihilation.
     Added new G4FTFAnnihilation class in the FTF model, and made
     corresponding changes in related FTF classes.
@@ -116,6 +121,8 @@ processes/hadronic
     anti-nucleus-nucleus and nucleus-nucleus interactions.
     The anti-nucleus nucleus part is working starting from 150*A MeV/c.
     The nucleus-nucleus part is applicable at Plab > 2 * A GeV/c.
+  o Small improvement introduced in G4FTFParameters in order to treat
+    Labmda-Bar, Sigma-Bar, etc...
 - models/photolepton_hadron/muon_nuclear (hadr-munuclear-V09-04-00)
   o New model G4VDMuonNuclearModel to replace old-style G4MuNuclearInteraction
     and G4ParametrizedHadronicVertex based on GHEISHA.
@@ -132,7 +139,7 @@ processes/hadronic
   o Added new methods in G4Nucleon for creation of anti-nucleus.
     They can be used to replace protons and neutrons into anti-protons
     and anti-neutron, respectively.
-- processes (hadr-proc-V09-04-01)
+- processes (hadr-proc-V09-04-02)
   o Added G4MuonNuclearProcess, meant to replace the old process
     G4MuNuclearInteraction by separating model and cross-section classes.
   o Added processes for light anti-ions: G4AntiAlphaInelasticProcess,
@@ -183,6 +190,9 @@ examples                                         examples-V09-04-02
 tests                                            tests-V09-04-02
 -----
 - Updated reference outputs and tools.
+- test12 (test12-V09-04-00)
+  o Added testing of QGSP_FTFP_BERT: include anti{proton, neutron,deuerium,
+    tritium,alpha} as primaries with small statistics.
 - test30 (test30-V09-04-00)
   o Added anti_proton and anti_neutron. Improved print-out.
 - test37 (test37-V09-04-01)
