@@ -36,6 +36,7 @@
 #include "FTF_BIC.hh"
 #include "QGS_BIC.hh"
 #include "QGSP_BERT.hh"
+#include "QGSP_FTFP_BERT.hh"
 
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
@@ -59,6 +60,7 @@ int main(int argc,char** argv) {
      else if (opt == "FTF_BIC" ) thePL=new FTF_BIC;
      else if (opt == "QGS_BIC" ) thePL=new QGS_BIC;
      else if (opt == "QGSP_BERT" ) thePL=new QGSP_BERT;
+     else if (opt == "QGSP_FTFP_BERT" ) thePL=new QGSP_FTFP_BERT;
 
      if ( thePL ) G4cout << "Test12 using physics list " << opt << G4endl;
   }

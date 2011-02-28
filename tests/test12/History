@@ -15,6 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25 February 2011, G.Folger               test12-V09-04-00
+-  Add testing QGSP_FTFP_BERT
+-  include anti{proton, neutron,deuerium, tritium,alpha} as primaries 
+     with small statistics 
+
 22 November 2010 Gabriele Cosmo          test12-V09-03-01
 - Changed obsolete FTFP to FTFP_BERT to main().
 

@@ -105,5 +105,20 @@ int main (int argc, char** argv) {
 
   OutputCases (N, particleNameList, energyList, materialNameList);
 
+// anti - particles testing... 
+  std::vector <G4String> anti_particleNameList;
+  anti_particleNameList.push_back ("anti_proton");
+  anti_particleNameList.push_back ("anti_neutron");
+  anti_particleNameList.push_back ("anti_deuteron");
+  anti_particleNameList.push_back ("anti_triton");
+  anti_particleNameList.push_back ("anti_He3");
+  anti_particleNameList.push_back ("anti_alpha");
+
+  std::vector <G4double> anti_energyList;
+  anti_energyList.push_back (10 * GeV);
+
+  OutputCases (5, anti_particleNameList, anti_energyList, materialNameList);
+
+
   G4cout << G4endl;
 }
