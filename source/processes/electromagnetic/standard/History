@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25 February 2011: V.Ivant (emstand-V09-04-05)
+- G4UrbanMscModel90, G4UrbanMscModel92, G4UrbanMscModel93 use 
+   simpified computation of geom path length if true path length
+   is equal to the range (minor CPU improvement and more stable
+   computation)
+
 17 February 2011: V.Ivant (emstand-V09-04-04)
 - G4PEEffectFluoModel - comment out parasitic cout
 
