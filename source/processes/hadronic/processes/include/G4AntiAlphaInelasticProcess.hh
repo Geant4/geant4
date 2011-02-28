@@ -45,8 +45,8 @@
  {
  public:
     
-    G4AntiAlphaInelasticProcess( const G4String& processName= "G4AntiAlphaInelasticProcess") \
-       : G4HadronInelasticProcess( "AntiAlphaInelastic", G4AntiAlpha::AntiAlpha() )
+    G4AntiAlphaInelasticProcess( const G4String& processName= "AntiAlphaInelasticProcess") \
+       : G4HadronInelasticProcess( processName, G4AntiAlpha::AntiAlpha() )
     { }
     
     ~G4AntiAlphaInelasticProcess()

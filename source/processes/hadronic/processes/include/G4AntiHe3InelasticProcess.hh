@@ -45,8 +45,8 @@
  {
  public:
     
-    G4AntiHe3InelasticProcess( const G4String& processName= "G4AntiHe3InelasticProcess") \
-       : G4HadronInelasticProcess( "AntiHe3Inelastic", G4AntiHe3::AntiHe3() )
+    G4AntiHe3InelasticProcess( const G4String& processName= "AntiHe3InelasticProcess") \
+       : G4HadronInelasticProcess( processName, G4AntiHe3::AntiHe3() )
     { }
     
     ~G4AntiHe3InelasticProcess()
