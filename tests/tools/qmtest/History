@@ -12,6 +12,8 @@ $Id$
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26-Feb-2011, G.Folger                (testtools-QMtest-V09-04-02)
+-  Add test12-QGSP_FTFP_BERT.run testing antibarions with FTF
 
 24-Feb-2011, G.Folger                (testtools-QMtest-V09-04-01)
 -  Add new test for new dnaphysics adv example
