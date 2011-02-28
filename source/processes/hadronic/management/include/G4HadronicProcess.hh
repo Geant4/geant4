@@ -160,6 +160,9 @@ public:
   inline G4CrossSectionDataStore* GetCrossSectionDataStore()
     {return theCrossSectionDataStore;}
 
+  inline void MultiplyCrossSectionBy(G4double factor)
+  { aScaleFactor = factor; }
+
 protected:
             
   // obsolete method will be removed

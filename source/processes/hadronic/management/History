@@ -13,6 +13,19 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+25 February 2011 Gunter Folger  (hadr-man-V09-04-02)
+----------------------------------------------------
+-  allow to turn on checking for E/p conservation by environment variables:
+	G4Hadronic_epReportLevel : set to checklevel [1,4]
+	G4Hadronic_epCheckRelativeLevel: level of relative conservation
+	G4Hadronic_epCheckAbsoluteLevel: level for absolute conservation
+     
+10 February 2011 Dennis Wright  (hadr-man-V09-04-01)
+----------------------------------------------------
+- add method MultiplyCrossSectionBy() to G4HadronicProcess so that 
+cross sections can be scaled for testing
+
  7 January 2011  Dennis Wright  (hadr-man-V09-04-00)
 ----------------------------------------------------
 - G4HadronicProcess.cc: make GetCrossSectionDataStore public so it 

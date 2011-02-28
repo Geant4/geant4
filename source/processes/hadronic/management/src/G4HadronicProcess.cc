@@ -60,6 +60,7 @@
 #include "G4HadronicProcessStore.hh"
 
 #include <typeinfo>
+#include <sstream>
 
 G4IsoParticleChange * G4HadronicProcess::theIsoResult = 0;
 G4IsoParticleChange * G4HadronicProcess::theOldIsoResult = 0;
@@ -90,6 +91,22 @@ G4HadronicProcess::G4HadronicProcess(const G4String& processName,
   epCheckLevels.first = DBL_MAX;
   epCheckLevels.second = DBL_MAX;
   levelsSetByProcess = false;
+// Make ep checking possible via environment variables
+  if ( char * ReportLevel = getenv("G4Hadronic_epReportLevel")) {
+     std::stringstream sRL (ReportLevel);
+     sRL >> epReportLevel;
+     levelsSetByProcess = true;
+     if ( char * RelativeLevel = getenv("G4Hadronic_epCheckRelativeLevel")) {
+     	std::stringstream level(RelativeLevel);
+	level >> epCheckLevels.first;
+     }
+     if ( char * AbsoluteLevel = getenv("G4Hadronic_epCheckAbsoluteLevel")) {
+     	std::stringstream level(AbsoluteLevel);
+	level >> epCheckLevels.second;
+     }
+     //G4cout << " Checking E/p with level " << epReportLevel 
+     //       << ", relative/absolute level = " << epCheckLevels.first << " / "<< epCheckLevels.second << G4endl;      
+  }  
 }
 
 G4HadronicProcess::~G4HadronicProcess()
@@ -554,6 +571,7 @@ G4IsoParticleChange* G4HadronicProcess::GetIsotopeProductionInfo()
   theIsoResult = 0;
   return anIsoResult;
 }
+
 
 void G4HadronicProcess::BiasCrossSectionByFactor(G4double aScale) 
 {
