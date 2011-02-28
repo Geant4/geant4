@@ -109,6 +109,12 @@ G4FragmentingString::G4FragmentingString(const G4FragmentingString &old,
 					 G4ParticleDefinition * newdecay) 
 {                                                                         
 	decaying=None;                                                    
+
+        Ptleft.setX(0.);  Ptleft.setY(0.);  Ptleft.setZ(0.);  // Uzhi 25.02.2011
+        Ptright.setX(0.); Ptright.setY(0.); Ptright.setZ(0.); // Uzhi 25.02.2011
+        Pplus=0.; Pminus=0.;                                  // Uzhi 25.02.2011
+        theStableParton=0; theDecayParton=0;                  // Uzhi 25.02.2011
+
 	if ( old.decaying == Left )                                       
 	{                                                                 
 		RightParton= old.RightParton;                             

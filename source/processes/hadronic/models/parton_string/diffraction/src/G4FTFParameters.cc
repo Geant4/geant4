@@ -475,8 +475,8 @@ G4int Uzhi; G4cin>>Uzhi;
               SetSlopeQuarkExchange(1.0);
               SetDeltaProbAtQuarkExchange(0.1);
 
-              SetProjMinDiffMass((940.+160.*MeV)/GeV);     // particle->GetPDGMass()
-              SetProjMinNonDiffMass((940.+160.*MeV)/GeV);  // particle->GetPDGMass()
+              SetProjMinDiffMass((particle->GetPDGMass()+160.*MeV)/GeV); 
+              SetProjMinNonDiffMass((particle->GetPDGMass()+160.*MeV)/GeV);
               SetProbabilityOfProjDiff(0.95*std::pow(s/GeV/GeV,-0.35)); // 40/32 X-dif/X-inel
 
               SetTarMinDiffMass(1.1);                     // GeV
