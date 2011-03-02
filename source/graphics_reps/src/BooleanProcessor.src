@@ -507,12 +507,12 @@ void BooleanProcessor::takePolyhedron(const HepPolyhedron & p,
 
     HVNormal3D n = (nodes[iNodes[2]].v-nodes[iNodes[0]].v).cross
                     (nodes[iNodes[3]].v-nodes[iNodes[1]].v);
-    HVPoint3D  p(0,0,0);
+    HVPoint3D  point(0,0,0);
     
-    for (i=0; i<nnode; i++) { p += nodes[iNodes[i]].v; }
-    p *= (1./nnode);
-    //G.Barrand : faces.back().plane = HVPlane3D(n.unit(), p);
-    faces.back().plane = HVPlane3D(n, p); //G.Barrand
+    for (i=0; i<nnode; i++) { point += nodes[iNodes[i]].v; }
+    point *= (1./nnode);
+    //G.Barrand : faces.back().plane = HVPlane3D(n.unit(), point);
+    faces.back().plane = HVPlane3D(n, point); //G.Barrand
 
     //   S E T   R E F E R E N C E   T O   T H E   N E X T   F A C E
 

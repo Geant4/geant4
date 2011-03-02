@@ -700,11 +700,14 @@ void G4NURBS::CalcPoint(G4double u, G4double v, G4Point3D &p,
       rj = orderU - 1 - j;
 
       tmp = bu[rj] * bv[ri];
+
       cpoint = GetdoubleCtrlPt(j+ufirst, i+vfirst);
       cp.x = *cpoint[G4NURBS::X];
       cp.y = *cpoint[G4NURBS::Y];
       cp.z = *cpoint[G4NURBS::Z];
       cp.w = *cpoint[G4NURBS::W];
+      delete [] cpoint;
+
       r.x += cp.x * tmp;
       r.y += cp.y * tmp;
       r.z += cp.z * tmp;

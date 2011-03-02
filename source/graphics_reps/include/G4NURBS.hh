@@ -494,7 +494,7 @@ G4NURBS::TofloatCtrlPt(const t_CtrlPt & in_krcp)
 inline G4NURBS::t_doubleCtrlPt* 
 G4NURBS::TodoubleCtrlPt(const t_CtrlPt & in_krcp)
 {
-  G4NURBS::t_doubleCtrlPt *  pcopy = new G4NURBS::t_doubleCtrlPt [1];
+  G4NURBS::t_doubleCtrlPt *  pcopy = new G4NURBS::t_doubleCtrlPt [4];
   for (G4int indCoord = X; indCoord < NofC; indCoord++)
     (*pcopy)[indCoord] = (G4double)in_krcp[indCoord];
   return pcopy;
