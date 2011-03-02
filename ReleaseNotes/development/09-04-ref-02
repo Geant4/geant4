@@ -36,6 +36,10 @@ event                                            event-V09-04-00            (o)
 - Added resetting of 'abortRequested' flag at start of DoProcessing()
   in G4EventManager. Addressing to problem report #1169.
 
+graphics_reps                                    greps-V09-04-01
+-------------
+- Fixed few Coverity warnings.
+
 physics_lists                                    phys-lists-V09-04-05
 -------------
 - G4HadronElasticPhysics: added light anti-nuclei.
@@ -48,7 +52,7 @@ physics_lists                                    phys-lists-V09-04-05
 - Corrected shielding physics-list to include correct header for HP         (o)
   hadron elastic. Addressing problem report #1166.
 
-processes/electromagnetic/lowenergy              emlowen-V09-04-13
+processes/electromagnetic/lowenergy              emlowen-V09-04-14
 -----------------------------------
 - Removed obsolete Geant4-DNA classes and dummy classes.
 - Corrected verbose in G4DNA Champion elastic model class.
@@ -56,7 +60,8 @@ processes/electromagnetic/lowenergy              emlowen-V09-04-13
   Fixed Coverity defects in G4Penelope08 models.
 - Changed G4Penelope08PhotoElectricModel and G4PenelopePhotoElectricModel to
   suppress fake energy-violation warning and to make sure that
-  fluorescence/Auger is generated only if above threshold. 
+  fluorescence/Auger is generated only if above threshold.
+- Corrected control of warnings in ion cross section model classes.
 
 processes/electromagnetic/standard               emstand-V09-04-05
 ----------------------------------
@@ -107,7 +112,7 @@ processes/hadronic
 - models/de_excitation (hadr-deex-V09-04-01)
   o G4NeutronRadCapture: fixed in particle change, kill primary particle
     and save residual nucleus.
-- models/parton_string (hadr-prtn-V09-04-03)
+- models/parton_string (hadr-prtn-V09-04-08)
   o First implementation of barion - anti-barion annihilation.
     Added new G4FTFAnnihilation class in the FTF model, and made
     corresponding changes in related FTF classes.
@@ -156,6 +161,12 @@ run                                              run-V09-04-01              (o)
 - G4RunManager: added additional protection against cases of failure in
   creating a new directory when saving random seeds.
   Addressing problem report #1157.
+
+visualization/RayTracer                          raytracer-V09-04-00
+-----------------------
+- Trap recursive calls in G4RayTracerViewer::DrawView(), thus avoiding
+  warning messages for each pixel when endOfEventAction() is "refresh".
+- Fixed some Coverity warnings.
 
 examples                                         examples-V09-04-02
 --------
