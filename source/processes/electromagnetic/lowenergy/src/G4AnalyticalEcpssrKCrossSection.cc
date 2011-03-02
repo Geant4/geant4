@@ -139,7 +139,7 @@ G4double G4AnalyticalEcpssrKCrossSection::ExpIntFunction(G4int n,G4double x)
   const G4double eps = 1.0e-7;
   nm1=n-1;
   if (n<0 || x<0.0 || (x==0.0 && (n==0 || n==1))) {
-    G4cout << "G4AnalyticalEcpssrKCrossSection::ExpIntFunction: VERY Bad arguments in ExpIntFunction" << G4endl;
+    G4cout << "*** WARNING in G4AnalyticalEcpssrKCrossSection::ExpIntFunction: bad arguments in ExpIntFunction" << G4endl;
     G4cout << n << ", " << x << G4endl;
   }
   else {
@@ -440,6 +440,8 @@ G4double G4AnalyticalEcpssrKCrossSection::CalculateCrossSection(G4int zTarget,G4
   G4double pssDeltaK = (4./(systemMass*sigmaPSS*tetaK))*(sigmaPSS/velocity)*(sigmaPSS/velocity);
     
     if (verboseLevel>0) G4cout << "  pssDeltaK=" << pssDeltaK<< G4endl;
+
+  if (pssDeltaK>1) return 0.;
 
   G4double energyLoss = std::pow(1-pssDeltaK,0.5); //energyLoss incorporates the straight-line energy-loss 
     

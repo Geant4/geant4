@@ -141,7 +141,8 @@ G4double G4AnalyticalEcpssrLiCrossSection::ExpIntFunction(G4int n,G4double x)
   const G4double eps = 1.0e-7;
   nm1=n-1;
   if (n<0 || x<0.0 || (x==0.0 && (n==0 || n==1)))
-  G4cout << "bad arguments in ExpIntFunction" << G4endl;
+  G4cout << "*** WARNING in G4AnalyticalEcpssrLiCrossSection::ExpIntFunction: bad arguments in ExpIntFunction" 
+         << G4endl;
   else {
        if (n==0) ans=std::exp(-x)/x;
         else {
@@ -189,6 +190,8 @@ return ans;
 
 G4double G4AnalyticalEcpssrLiCrossSection::CalculateL1CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident)
 {
+
+  if (zTarget <=4) return 0.;
 
  //this L1-CrossSection calculation method is done according to Werner Brandt and Grzegorz Lapicki, Phys.Rev.A20 N2 (1979),
  //and using data tables of O. Benka et al. At.Data Nucl.Data Tables Vol.22 No.3 (1978).
@@ -276,82 +279,82 @@ G4double G4AnalyticalEcpssrLiCrossSection::CalculateL1CrossSection(G4int zTarget
 
     if (verboseLevel>0) G4cout << "sigmaPSS_l1 =" << sigmaPSS_l1<< G4endl;
 
-const G4double cNaturalUnit= 137.;
+  const G4double cNaturalUnit= 137.;
   
-G4double yl1Formula=0.4*(screenedzTarget/cNaturalUnit)*(screenedzTarget/cNaturalUnit)/(nl*velocityl1/sigmaPSS_l1);
+  G4double yl1Formula=0.4*(screenedzTarget/cNaturalUnit)*(screenedzTarget/cNaturalUnit)/(nl*velocityl1/sigmaPSS_l1);
     
-G4double l1relativityCorrection = std::pow((1.+(1.1*yl1Formula*yl1Formula)),0.5)+yl1Formula; // Relativistic correction parameter
+  G4double l1relativityCorrection = std::pow((1.+(1.1*yl1Formula*yl1Formula)),0.5)+yl1Formula; // Relativistic correction parameter
   
-//G4double reducedVelocity_l1 = velocityl1*std::pow(l1relativityCorrection,0.5); //Reduced velocity parameter
+  //G4double reducedVelocity_l1 = velocityl1*std::pow(l1relativityCorrection,0.5); //Reduced velocity parameter
 
+  G4double L1etaOverTheta2;
 
-G4double L1etaOverTheta2;
+  G4double  universalFunction_l1 = 0.;
 
-G4double  universalFunction_l1 = 0.;
+  G4double sigmaPSSR_l1;
 
-G4double sigmaPSSR_l1;
-
-if ( velocityl1 <5.  )
+  if ( velocityl1 <5.  )
   {
 
-L1etaOverTheta2 =(reducedEnergy* l1relativityCorrection)/((tetal1*sigmaPSS_l1)*(tetal1*sigmaPSS_l1));
+    L1etaOverTheta2 =(reducedEnergy* l1relativityCorrection)/((tetal1*sigmaPSS_l1)*(tetal1*sigmaPSS_l1));
     
- if ( ((tetal1*sigmaPSS_l1) >=0.2) && ((tetal1*sigmaPSS_l1) <=2.6670) && (L1etaOverTheta2>=0.1e-3) && (L1etaOverTheta2<=0.866e2) )
+    if ( ((tetal1*sigmaPSS_l1) >=0.2) && ((tetal1*sigmaPSS_l1) <=2.6670) && (L1etaOverTheta2>=0.1e-3) && (L1etaOverTheta2<=0.866e2) )
   
-universalFunction_l1 = FunctionFL1((tetal1*sigmaPSS_l1),L1etaOverTheta2);
+      universalFunction_l1 = FunctionFL1((tetal1*sigmaPSS_l1),L1etaOverTheta2);
 
- if (verboseLevel>0) G4cout << "at low velocity range, universalFunction_l1  =" << universalFunction_l1 << G4endl;
+      if (verboseLevel>0) G4cout << "at low velocity range, universalFunction_l1  =" << universalFunction_l1 << G4endl;
 
-sigmaPSSR_l1 = (sigma0/(tetal1*sigmaPSS_l1))*universalFunction_l1;// Plane-wave Born -Aproximation L1-subshell ionisation Cross Section
+    sigmaPSSR_l1 = (sigma0/(tetal1*sigmaPSS_l1))*universalFunction_l1;// Plane-wave Born -Aproximation L1-subshell ionisation Cross Section
 
- if (verboseLevel>0) G4cout << "  at low velocity range, sigma PWBA L1 CS  = " << sigmaPSSR_l1<< G4endl;
+      if (verboseLevel>0) G4cout << "  at low velocity range, sigma PWBA L1 CS  = " << sigmaPSSR_l1<< G4endl;
 
+   }
 
-}
+  else
 
-else
+  {
 
-{
+    L1etaOverTheta2 = reducedEnergy/(tetal1*tetal1);
 
- L1etaOverTheta2 = reducedEnergy/(tetal1*tetal1);
-
- if ( (tetal1 >=0.2) && (tetal1 <=2.6670) && (L1etaOverTheta2>=0.1e-3) && (L1etaOverTheta2<=0.866e2) ) 
+    if ( (tetal1 >=0.2) && (tetal1 <=2.6670) && (L1etaOverTheta2>=0.1e-3) && (L1etaOverTheta2<=0.866e2) ) 
     
-universalFunction_l1 = FunctionFL1(tetal1,L1etaOverTheta2);
+      universalFunction_l1 = FunctionFL1(tetal1,L1etaOverTheta2);
 
-if (verboseLevel>0) G4cout << "at medium and high velocity range, universalFunction_l1  =" << universalFunction_l1 << G4endl;
+    if (verboseLevel>0) G4cout << "at medium and high velocity range, universalFunction_l1  =" << universalFunction_l1 << G4endl;
 
-sigmaPSSR_l1 = (sigma0/tetal1)*universalFunction_l1;// Plane-wave Born -Aproximation L1-subshell ionisation Cross Section
+    sigmaPSSR_l1 = (sigma0/tetal1)*universalFunction_l1;// Plane-wave Born -Aproximation L1-subshell ionisation Cross Section
 
- if (verboseLevel>0) G4cout << "  sigma PWBA L1 CS at medium and high velocity range = " << sigmaPSSR_l1<< G4endl;    
-}
+    if (verboseLevel>0) G4cout << "  sigma PWBA L1 CS at medium and high velocity range = " << sigmaPSSR_l1<< G4endl;    
+  }
  
- G4double pssDeltal1 = (4./(systemMass *sigmaPSS_l1*tetal1))*(sigmaPSS_l1/velocityl1)*(sigmaPSS_l1/velocityl1);
+  G4double pssDeltal1 = (4./(systemMass *sigmaPSS_l1*tetal1))*(sigmaPSS_l1/velocityl1)*(sigmaPSS_l1/velocityl1);
 
     if (verboseLevel>0) G4cout << "  pssDeltal1=" << pssDeltal1<< G4endl;
+
+  if (pssDeltal1>1) return 0.;
 
   G4double energyLossl1 = std::pow(1-pssDeltal1,0.5);
 
     if (verboseLevel>0) G4cout << "  energyLossl1=" << energyLossl1<< G4endl;
 
   G4double coulombDeflectionl1 = 
-(8.*pi*zIncident/systemMass)*std::pow(tetal1*sigmaPSS_l1,-2.)*std::pow(velocityl1/sigmaPSS_l1,-3.)*(zTarget/screenedzTarget);
+   (8.*pi*zIncident/systemMass)*std::pow(tetal1*sigmaPSS_l1,-2.)*std::pow(velocityl1/sigmaPSS_l1,-3.)*(zTarget/screenedzTarget);
 
- G4double cParameterl1 =2.* coulombDeflectionl1/(energyLossl1*(energyLossl1+1.));
+  G4double cParameterl1 =2.* coulombDeflectionl1/(energyLossl1*(energyLossl1+1.));
 
   G4double coulombDeflectionFunction_l1 = 9.*ExpIntFunction(10,cParameterl1); //Coulomb-deflection effect correction
 
- if (verboseLevel>0) G4cout << "  coulombDeflectionFunction_l1 =" << coulombDeflectionFunction_l1 << G4endl;
+    if (verboseLevel>0) G4cout << "  coulombDeflectionFunction_l1 =" << coulombDeflectionFunction_l1 << G4endl;
 
-G4double crossSection_L1 = coulombDeflectionFunction_l1 * sigmaPSSR_l1;
+  G4double crossSection_L1 = coulombDeflectionFunction_l1 * sigmaPSSR_l1;
 
   //ECPSSR L1 -subshell cross section is estimated at perturbed-stationnairy-state(PSS)
   //and reduced by the energy-loss(E),the Coulomb deflection(C),and the relativity(R) effects
 
     if (verboseLevel>0) G4cout << "  crossSection_L1 =" << crossSection_L1 << G4endl;
 
-  if (crossSection_L1 >= 0) {
-
+  if (crossSection_L1 >= 0) 
+  {
     return crossSection_L1 * barn;
   }
   
@@ -363,6 +366,7 @@ G4double crossSection_L1 = coulombDeflectionFunction_l1 * sigmaPSSR_l1;
 G4double G4AnalyticalEcpssrLiCrossSection::CalculateL2CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident)
 
 {
+  if (zTarget <=4) return 0.;
 
   // this L2-CrossSection calculation method is done according to Werner Brandt and Grzegorz Lapicki, Phys.Rev.A20 N2 (1979),
   // and using data tables of O. Benka et al. At.Data Nucl.Data Tables Vol.22 No.3 (1978).
@@ -439,7 +443,7 @@ G4double G4AnalyticalEcpssrLiCrossSection::CalculateL2CrossSection(G4int zTarget
         {if ( x2<=11.) electrIonizationEnergyl2 =2.*std::exp(-2.*x2)/std::pow(x2,1.6);  }
     }
 
- G4double hFunctionl2 =(electrIonizationEnergyl2*2.*nl)/(tetal2*std::pow(velocityl2,3)); //takes into account  the polarization effect
+  G4double hFunctionl2 =(electrIonizationEnergyl2*2.*nl)/(tetal2*std::pow(velocityl2,3)); //takes into account  the polarization effect
 
    if (verboseLevel>0) G4cout << "  hFunctionl2=" << hFunctionl2<< G4endl;
 
@@ -452,58 +456,56 @@ G4double G4AnalyticalEcpssrLiCrossSection::CalculateL2CrossSection(G4int zTarget
 
     if (verboseLevel>0) G4cout << "  sigmaPSS_l2=" << sigmaPSS_l2<< G4endl;
 
-const G4double cNaturalUnit= 137.;
+  const G4double cNaturalUnit= 137.;
      
-G4double yl2Formula=0.15*(screenedzTarget/cNaturalUnit)*(screenedzTarget/cNaturalUnit)/(velocityl2/sigmaPSS_l2);
+  G4double yl2Formula=0.15*(screenedzTarget/cNaturalUnit)*(screenedzTarget/cNaturalUnit)/(velocityl2/sigmaPSS_l2);
   
-G4double l2relativityCorrection = std::pow((1.+(1.1*yl2Formula*yl2Formula)),0.5)+yl2Formula; // Relativistic correction parameter
+  G4double l2relativityCorrection = std::pow((1.+(1.1*yl2Formula*yl2Formula)),0.5)+yl2Formula; // Relativistic correction parameter
     
+  G4double L2etaOverTheta2;
 
-G4double L2etaOverTheta2;
+  G4double  universalFunction_l2 = 0.;
 
-G4double  universalFunction_l2 = 0.;
-
-G4double sigmaPSSR_l2 ;
+  G4double sigmaPSSR_l2 ;
  
-if ( velocityl2 < 5. )
+  if ( velocityl2 < 5. )
   {
 
-L2etaOverTheta2 = (reducedEnergy*l2relativityCorrection)/((sigmaPSS_l2*tetal2)*(sigmaPSS_l2*tetal2));
+    L2etaOverTheta2 = (reducedEnergy*l2relativityCorrection)/((sigmaPSS_l2*tetal2)*(sigmaPSS_l2*tetal2));
 
-if ( (tetal2*sigmaPSS_l2>=0.2) && (tetal2*sigmaPSS_l2<=2.6670) && (L2etaOverTheta2>=0.1e-3) && (L2etaOverTheta2<=0.866e2) )
+    if ( (tetal2*sigmaPSS_l2>=0.2) && (tetal2*sigmaPSS_l2<=2.6670) && (L2etaOverTheta2>=0.1e-3) && (L2etaOverTheta2<=0.866e2) )
 
-universalFunction_l2 = FunctionFL2((tetal2*sigmaPSS_l2),L2etaOverTheta2);
+      universalFunction_l2 = FunctionFL2((tetal2*sigmaPSS_l2),L2etaOverTheta2);
 
-sigmaPSSR_l2 = (sigma0/(tetal2*sigmaPSS_l2))*universalFunction_l2;
+    sigmaPSSR_l2 = (sigma0/(tetal2*sigmaPSS_l2))*universalFunction_l2;
 
- if (verboseLevel>0) G4cout << "  sigma PWBA L2 CS at low velocity range = " << sigmaPSSR_l2<< G4endl;
-
-}    
-
-else
-
-{ 
+      if (verboseLevel>0) G4cout << "  sigma PWBA L2 CS at low velocity range = " << sigmaPSSR_l2<< G4endl;
+  }    
+  else
+  { 
     
-L2etaOverTheta2 = reducedEnergy /(tetal2*tetal2);
+    L2etaOverTheta2 = reducedEnergy /(tetal2*tetal2);
 
-if ( (tetal2>=0.2) && (tetal2<=2.6670) && (L2etaOverTheta2>=0.1e-3) && (L2etaOverTheta2<=0.866e2) )
+    if ( (tetal2>=0.2) && (tetal2<=2.6670) && (L2etaOverTheta2>=0.1e-3) && (L2etaOverTheta2<=0.866e2) )
 
-universalFunction_l2 = FunctionFL2((tetal2),L2etaOverTheta2);
+      universalFunction_l2 = FunctionFL2((tetal2),L2etaOverTheta2);
    
-sigmaPSSR_l2 = (sigma0/tetal2)*universalFunction_l2;
+    sigmaPSSR_l2 = (sigma0/tetal2)*universalFunction_l2;
 
- if (verboseLevel>0) G4cout << "  sigma PWBA L2 CS at medium and high velocity range = " << sigmaPSSR_l2<< G4endl;
+      if (verboseLevel>0) G4cout << "  sigma PWBA L2 CS at medium and high velocity range = " << sigmaPSSR_l2<< G4endl;
 
-}
+  }
  
-G4double pssDeltal2 = (4./(systemMass*sigmaPSS_l2*tetal2))*(sigmaPSS_l2/velocityl2)*(sigmaPSS_l2/velocityl2);
+  G4double pssDeltal2 = (4./(systemMass*sigmaPSS_l2*tetal2))*(sigmaPSS_l2/velocityl2)*(sigmaPSS_l2/velocityl2);
 
-G4double energyLossl2 = std::pow(1-pssDeltal2,0.5);
+  if (pssDeltal2>1) return 0.;
+
+  G4double energyLossl2 = std::pow(1-pssDeltal2,0.5);
  
-  if (verboseLevel>0) G4cout << "  energyLossl2=" << energyLossl2<< G4endl;
+    if (verboseLevel>0) G4cout << "  energyLossl2=" << energyLossl2<< G4endl;
 
   G4double coulombDeflectionl2 
-=(8.*pi*zIncident/systemMass)*std::pow(tetal2*sigmaPSS_l2,-2.)*std::pow(velocityl2/sigmaPSS_l2,-3.)*(zTarget/screenedzTarget);
+    =(8.*pi*zIncident/systemMass)*std::pow(tetal2*sigmaPSS_l2,-2.)*std::pow(velocityl2/sigmaPSS_l2,-3.)*(zTarget/screenedzTarget);
 
   G4double cParameterl2 = 2.*coulombDeflectionl2/(energyLossl2*(energyLossl2+1.));
 
@@ -517,9 +519,10 @@ G4double energyLossl2 = std::pow(1-pssDeltal2,0.5);
 
     if (verboseLevel>0) G4cout << "  crossSection_L2 =" << crossSection_L2 << G4endl;
 
-  if (crossSection_L2 >= 0) {
+  if (crossSection_L2 >= 0) 
+  {
      return crossSection_L2 * barn;
-      }
+  }
   else {return 0;}
 }
 
@@ -529,6 +532,7 @@ G4double energyLossl2 = std::pow(1-pssDeltal2,0.5);
 G4double G4AnalyticalEcpssrLiCrossSection::CalculateL3CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident)
 
 {
+  if (zTarget <=4) return 0.;
 
   //this L3-CrossSection calculation method is done according to Werner Brandt and Grzegorz Lapicki, Phys.Rev.A20 N2 (1979),
   //and using data tables of O. Benka et al. At.Data Nucl.Data Tables Vol.22 No.3 (1978).
@@ -618,59 +622,60 @@ G4double G4AnalyticalEcpssrLiCrossSection::CalculateL3CrossSection(G4int zTarget
 
     if (verboseLevel>0) G4cout << "sigmaPSS_l3 =" << sigmaPSS_l3<< G4endl;
 
-const G4double cNaturalUnit= 137.;
+  const G4double cNaturalUnit= 137.;
         
-G4double yl3Formula=0.15*(screenedzTarget/cNaturalUnit)*(screenedzTarget/cNaturalUnit)/(velocityl3/sigmaPSS_l3);
+  G4double yl3Formula=0.15*(screenedzTarget/cNaturalUnit)*(screenedzTarget/cNaturalUnit)/(velocityl3/sigmaPSS_l3);
         
-G4double l3relativityCorrection = std::pow((1.+(1.1*yl3Formula*yl3Formula)),0.5)+yl3Formula; // Relativistic correction parameter
+  G4double l3relativityCorrection = std::pow((1.+(1.1*yl3Formula*yl3Formula)),0.5)+yl3Formula; // Relativistic correction parameter
   
-G4double L3etaOverTheta2;
+  G4double L3etaOverTheta2;
  
-G4double  universalFunction_l3 = 0.;
+  G4double  universalFunction_l3 = 0.;
  
-G4double sigmaPSSR_l3;
+  G4double sigmaPSSR_l3;
 
-if ( velocityl3 < 5. )
+  if ( velocityl3 < 5. )
   {
 
-L3etaOverTheta2 = (reducedEnergy* l3relativityCorrection)/((sigmaPSS_l3*tetal3)*(sigmaPSS_l3*tetal3));
+    L3etaOverTheta2 = (reducedEnergy* l3relativityCorrection)/((sigmaPSS_l3*tetal3)*(sigmaPSS_l3*tetal3));
 
-if ( (tetal3*sigmaPSS_l3>=0.2) && (tetal3*sigmaPSS_l3<=2.6670) && (L3etaOverTheta2>=0.1e-3) && (L3etaOverTheta2<=0.866e2) )
+    if ( (tetal3*sigmaPSS_l3>=0.2) && (tetal3*sigmaPSS_l3<=2.6670) && (L3etaOverTheta2>=0.1e-3) && (L3etaOverTheta2<=0.866e2) )
 
-universalFunction_l3 = 2.*FunctionFL2((tetal3*sigmaPSS_l3), L3etaOverTheta2  );
+      universalFunction_l3 = 2.*FunctionFL2((tetal3*sigmaPSS_l3), L3etaOverTheta2  );
 
-sigmaPSSR_l3 = (sigma0/(tetal3*sigmaPSS_l3))*universalFunction_l3;
+    sigmaPSSR_l3 = (sigma0/(tetal3*sigmaPSS_l3))*universalFunction_l3;
 
- if (verboseLevel>0) G4cout << "  sigma PWBA L3 CS at low velocity range = " << sigmaPSSR_l3<< G4endl;
+    if (verboseLevel>0) G4cout << "  sigma PWBA L3 CS at low velocity range = " << sigmaPSSR_l3<< G4endl;
 
-}
+  }
 
-else 
+  else 
 
-{
+  {
 
- L3etaOverTheta2 = reducedEnergy/(tetal3*tetal3);
+    L3etaOverTheta2 = reducedEnergy/(tetal3*tetal3);
 
-if ( (tetal3>=0.2) && (tetal3<=2.6670) && (L3etaOverTheta2>=0.1e-3) && (L3etaOverTheta2<=0.866e2) ) 
+    if ( (tetal3>=0.2) && (tetal3<=2.6670) && (L3etaOverTheta2>=0.1e-3) && (L3etaOverTheta2<=0.866e2) ) 
      
-universalFunction_l3 = 2.*FunctionFL2(tetal3, L3etaOverTheta2  );
+      universalFunction_l3 = 2.*FunctionFL2(tetal3, L3etaOverTheta2  );
 
- sigmaPSSR_l3 = (sigma0/tetal3)*universalFunction_l3;
+    sigmaPSSR_l3 = (sigma0/tetal3)*universalFunction_l3;
 
- if (verboseLevel>0) G4cout << "  sigma PWBA L3 CS at medium and high velocity range = " << sigmaPSSR_l3<< G4endl;
-
-}
+      if (verboseLevel>0) G4cout << "  sigma PWBA L3 CS at medium and high velocity range = " << sigmaPSSR_l3<< G4endl;
+  }
   
-G4double pssDeltal3 = (4./(systemMass*sigmaPSS_l3*tetal3))*(sigmaPSS_l3/velocityl3)*(sigmaPSS_l3/velocityl3);
+  G4double pssDeltal3 = (4./(systemMass*sigmaPSS_l3*tetal3))*(sigmaPSS_l3/velocityl3)*(sigmaPSS_l3/velocityl3);
 
-if (verboseLevel>0) G4cout << "  pssDeltal3=" << pssDeltal3<< G4endl;
+    if (verboseLevel>0) G4cout << "  pssDeltal3=" << pssDeltal3<< G4endl;
 
-G4double energyLossl3 = std::pow(1-pssDeltal3,0.5);
+  if (pssDeltal3>1) return 0.;
 
-if (verboseLevel>0) G4cout << "  energyLossl3=" << energyLossl3<< G4endl;
+  G4double energyLossl3 = std::pow(1-pssDeltal3,0.5);
+
+  if (verboseLevel>0) G4cout << "  energyLossl3=" << energyLossl3<< G4endl;
 
   G4double coulombDeflectionl3 = 
-(8.*pi*zIncident/systemMass)*std::pow(tetal3*sigmaPSS_l3,-2.)*std::pow(velocityl3/sigmaPSS_l3,-3.)*(zTarget/screenedzTarget);
+    (8.*pi*zIncident/systemMass)*std::pow(tetal3*sigmaPSS_l3,-2.)*std::pow(velocityl3/sigmaPSS_l3,-3.)*(zTarget/screenedzTarget);
 
   G4double cParameterl3 = 2.*coulombDeflectionl3/(energyLossl3*(energyLossl3+1.));
 
@@ -684,7 +689,8 @@ if (verboseLevel>0) G4cout << "  energyLossl3=" << energyLossl3<< G4endl;
 
     if (verboseLevel>0) G4cout << "  crossSection_L3 =" << crossSection_L3 << G4endl;
  
-  if (crossSection_L3 >= 0) {
+  if (crossSection_L3 >= 0) 
+  {
     return crossSection_L3 * barn;
   }
   else {return 0;}

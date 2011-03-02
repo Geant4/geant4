@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28.02.2011  S. Incerti, tag emlowen-V09-04-14
+            Corrected control of warnings in ion. cross section model classes.
+
 14.02.2011  S. Incerti, tag emlowen-V09-04-13
             Corrected verbose in G4DNA Champion elastic model class.
 
