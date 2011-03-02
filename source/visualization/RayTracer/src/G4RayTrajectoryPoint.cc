@@ -39,6 +39,9 @@
 G4Allocator<G4RayTrajectoryPoint> G4RayTrajectoryPointAllocator;
 
 G4RayTrajectoryPoint :: G4RayTrajectoryPoint()
+  :preStepAtt(0)
+  ,postStepAtt(0)
+  ,stepLength(0.)
 {;}
 
 G4RayTrajectoryPoint :: ~G4RayTrajectoryPoint()

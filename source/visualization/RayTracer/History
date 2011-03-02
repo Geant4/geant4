@@ -24,6 +24,15 @@ committal in the CVS repository !
 History file for Ray Tracer category
 ---------------------------------------
 
+1st March 2011  John Allison (raytracer-V09-04-00)
+- G4RayTracerViewer::DrawView: Trap recursive calls, thus avoiding
+  warning messages for each pixel when endOfEventAction is "refresh".
+  EndOfEventAction is not relevant for Ray Tracer.  At the present
+  time, Ray Tracer takes no notice of the scene.  Perhaps in future,
+  it will, but G4RayTracerViewer should still ignore those recursive
+  calls.
+- Fix Coverity warnings.
+
 23, December L. Garnier 
 - GNUmakefile : Remove OpenGL/Qt stuff from Makefile
 

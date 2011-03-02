@@ -139,6 +139,22 @@ jMarker{
 //JpegProperty
 struct
 G4JpegProperty{
+  G4JpegProperty()
+    :nRow(0)
+    ,nColumn(0)
+    ,Dimension(0)
+    ,SamplePrecision(0)
+    ,Comment(0)
+    ,Format(0)
+    ,MajorRevisions(0)
+    ,MinorRevisions(0)
+    ,Units(0)
+    ,HDensity(0)
+    ,VDensity(0)
+    ,HThumbnail(0)
+    ,VThumbnail(0)
+    ,ExtensionCode(0)
+  {}
   int nRow;
   int nColumn;
   int Dimension;

@@ -86,6 +86,11 @@ void G4RayTracerViewer::ClearView() {}
 
 void G4RayTracerViewer::DrawView()
 {
+  // Trap recursive call
+  static G4bool called = false;
+  if (called) return;
+  called = true;
+
   if (fVP.GetFieldHalfAngle() == 0.) { // Orthogonal (parallel) projection.
     G4double fieldHalfAngle = perMillion;
     fVP.SetFieldHalfAngle(fieldHalfAngle);
@@ -105,4 +110,7 @@ void G4RayTracerViewer::DrawView()
   std::ostringstream filename;
   filename << "g4RayTracer." << fShortName << '_' << fFileCount++ << ".jpeg";
   theTracer->Trace(filename.str());
+
+  // Reset call flag
+  called = false;
 }

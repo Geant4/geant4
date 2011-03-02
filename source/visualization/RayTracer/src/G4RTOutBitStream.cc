@@ -53,6 +53,11 @@ G4OutBitStream::G4OutBitStream(int size)
   mWriteFlag = 1;
 }
 
+G4OutBitStream::~G4OutBitStream()
+{
+  delete mBuf;
+}
+
 void
 G4OutBitStream::IncBuf( void )
 {

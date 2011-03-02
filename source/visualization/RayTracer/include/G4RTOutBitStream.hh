@@ -46,6 +46,7 @@ class G4OutBitStream
 {
   public:
     G4OutBitStream(int size);
+    ~G4OutBitStream();
         void SetBits(int v, int numBits);
         void SetByte(u_char dat);
         void SetWord(u_int dat);

@@ -47,7 +47,9 @@ extern "C" {
 }
 
 G4RTXScanner::G4RTXScanner():
-  G4VRTScanner(), theNRow(0), theNColumn(0), theIRow(0), theIColumn(0)
+  G4VRTScanner(), theNRow(0), theNColumn(0), theStep(0)
+  ,theIRow(0), theIColumn(0)
+  ,display(0), win(0), scmap(0)
 {
   theGSName = "RayTracerX";
   theGSNickname = "RayTracerX";
