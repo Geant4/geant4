@@ -512,13 +512,13 @@ G4KineticTrackVector* G4LundStringFragmentation::FragmentString(
         
         SetMassCut(160.*MeV); // For LightFragmentationTest it is required
                               // that no one pi-meson can be produced
-//
-//G4cout<<G4endl<<"G4LundStringFragmentation::"<<G4endl;
+/*
+G4cout<<G4endl<<"G4LundStringFragmentation::"<<G4endl;
 //G4cout<<"FragmentString Position"<<theString.GetPosition()/fermi<<" "<<theString.GetTimeOfCreation()/fermi<<G4endl;
-//G4cout<<"FragmentString Momentum"<<theString.Get4Momentum()<<theString.Get4Momentum().mag()<<G4endl;
-//G4cout<<"Quarks in the string "<<theString.GetRightParton()->GetPDGcode()<<" "<<theString.GetLeftParton()->GetPDGcode()<<G4endl;
+G4cout<<"FragmentString Momentum"<<theString.Get4Momentum()<<theString.Get4Momentum().mag2()<<G4endl;
+G4cout<<"Quarks in the string "<<theString.GetRightParton()->GetPDGcode()<<" "<<theString.GetLeftParton()->GetPDGcode()<<G4endl;
 //G4int Uzhi; G4cin>>Uzhi;
-//
+*/
         G4FragmentingString  aString(theString);
         SetMinimalStringMass(&aString); 
 

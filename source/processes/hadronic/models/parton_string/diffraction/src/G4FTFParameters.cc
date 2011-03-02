@@ -41,9 +41,9 @@ G4FTFParameters::~G4FTFParameters()
 {;}
 //**********************************************************************************************
 G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle, 
-                                                   G4int   theA,
-                                                   G4int   theZ,
-                                                   G4double   s) 
+                                                   G4int      theA,
+                                                   G4int      theZ,
+                                                   G4double   PlabPerParticle) 
 {
     G4int    ProjectilePDGcode    = particle->GetPDGEncoding();
     G4int    ProjectileabsPDGcode = std::abs(ProjectilePDGcode);
@@ -72,10 +72,12 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
     G4double TargetMass     = G4Proton::Proton()->GetPDGMass();
     G4double TargetMass2    = TargetMass*TargetMass;
 
-    G4double Elab = (s - ProjectileMass2 - TargetMass2)/(2*TargetMass);
-    G4double Plab = std::sqrt(Elab * Elab - ProjectileMass2);
+    G4double Plab = PlabPerParticle;
+    G4double Elab = std::sqrt(Plab*Plab+ProjectileMass2);
 
-//G4cout<<"Proj S Plab "<<ProjectilePDGcode<<" "<<s/GeV/GeV<<" "<<Plab/GeV<<G4endl;
+    G4double s=ProjectileMass2 + TargetMass2 + 2.*TargetMass*Elab;
+
+//G4cout<<"Proj Plab "<<ProjectilePDGcode<<" "<<Plab/GeV<<G4endl;
 //G4cout<<" A Z "<<theA<<" "<<theZ<<G4endl;
 
     G4double Ylab,Xtotal,Xelastic,Xannihilation;
@@ -134,49 +136,61 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
     else if( ProjectilePDGcode < -1000 )         //------Projectile is anti_baryon --------
       {        
 
-// Total and elastic cross section of PbarP interactions a'la Arkhipov
-       G4double LogS=std::log(ECMSsqr/33.0625);
-       G4double Xasmpt=36.04+0.304*LogS*LogS;    // mb
+       G4double X_a(0.), X_b(0.), X_c(0.), X_d(0.);
+       G4double MesonProdThreshold=ProjectileMass+TargetMass+(2.*0.14+0.016); // 2 Mpi +DeltaE;
 
-                LogS=std::log(SqrtS/20.74);
-       G4double Basmpt=11.92+0.3036*LogS*LogS;   // GeV^(-2)
-       G4double R0=std::sqrt(0.40874044*Xasmpt-Basmpt); // GeV^(-1)
+       if(PlabPerParticle < 40.*MeV)
+       { // Low energy limits. Projectile at rest.
+        Xtotal=   1512.9;    // mb
+        Xelastic=  473.2;    // mb
+        X_a=       625.1;    // mb
+        X_b=         9.780;  // mb
+        X_c=        49.989;  // mb
+        X_d=         6.614;  // mb
+       }
+       else
+       { // Total and elastic cross section of PbarP interactions a'la Arkhipov
+        G4double LogS=std::log(ECMSsqr/33.0625);
+        G4double Xasmpt=36.04+0.304*LogS*LogS;    // mb
 
-       G4double FlowF=SqrtS/
-       std::sqrt(ECMSsqr*ECMSsqr+ProjectileMass2*ProjectileMass2+TargetMass2*TargetMass2-
-       2.*ECMSsqr*ProjectileMass2 -2.*ECMSsqr*TargetMass2 -2.*ProjectileMass2*TargetMass2);
+                 LogS=std::log(SqrtS/20.74);
+        G4double Basmpt=11.92+0.3036*LogS*LogS;   // GeV^(-2)
+        G4double R0=std::sqrt(0.40874044*Xasmpt-Basmpt); // GeV^(-1)
 
-       Xtotal=Xasmpt*(1.+13.55*FlowF/R0/R0/R0*
+        G4double FlowF=SqrtS/
+        std::sqrt(ECMSsqr*ECMSsqr+ProjectileMass2*ProjectileMass2+TargetMass2*TargetMass2-
+        2.*ECMSsqr*ProjectileMass2 -2.*ECMSsqr*TargetMass2 -2.*ProjectileMass2*TargetMass2);
+
+        Xtotal=Xasmpt*(1.+13.55*FlowF/R0/R0/R0*
                          (1.-4.47/SqrtS+12.38/ECMSsqr-12.43/SqrtS/ECMSsqr)); // mb
 
-       Xasmpt=4.4+0.101*LogS*LogS;    // mb
-       Xelastic=Xasmpt*(1.+59.27*FlowF/R0/R0/R0*
+        Xasmpt=4.4+0.101*LogS*LogS;    // mb
+        Xelastic=Xasmpt*(1.+59.27*FlowF/R0/R0/R0*
                          (1.-6.95/SqrtS+23.54/ECMSsqr-25.34/SqrtS/ECMSsqr)); // mb
-//G4cout<<"Param Xelastic "<<Xelastic<<G4endl;
+//G4cout<<"Param Xtotal Xelastic "<<Xtotal<<" "<<Xelastic<<G4endl;
 //G4cout<<"FlowF "<<FlowF<<" SqrtS "<<SqrtS<<G4endl;
 //G4cout<<"Param Xelastic-NaN "<<Xelastic<<" "<<1.5*16.654/pow(ECMSsqr/2.176/2.176,2.2)<<" "<<ECMSsqr<<G4endl;
-       G4double X_a=25.*FlowF;               // mb, 3-shirts diagram
+        X_a=25.*FlowF;               // mb, 3-shirts diagram
 
-       G4double X_b(0.);
-       G4double MesonProdThreshold=ProjectileMass+TargetMass+
-                                     (2.*0.14+0.016); // 2 Mpi +DeltaE
-       if(SqrtS < MesonProdThreshold)
-       {
-        X_b=3.13+140.*pow(MesonProdThreshold-SqrtS,2.5);// mb anti-quark-quark annihilation
-        Xelastic-=3.*X_b;  // Xel-X(PbarP->NNbar)
-       } else
-       {
-        X_b=6.8/SqrtS;                                 // mb anti-quark-quark annihilation
-        Xelastic-=3.*X_b;  // Xel-X(PbarP->NNbar)
-       }
+        if(SqrtS < MesonProdThreshold)
+        {
+         X_b=3.13+140.*pow(MesonProdThreshold-SqrtS,2.5);// mb anti-quark-quark annihilation
+         Xelastic-=3.*X_b;  // Xel-X(PbarP->NNbar)
+        } else
+        {
+         X_b=6.8/SqrtS;                                 // mb anti-quark-quark annihilation
+         Xelastic-=3.*X_b;  // Xel-X(PbarP->NNbar)
+        }
 
-       G4double X_c=2.*FlowF*sqr(ProjectileMass+TargetMass)/ECMSsqr; // mb rearrangement
+        X_c=2.*FlowF*sqr(ProjectileMass+TargetMass)/ECMSsqr; // mb rearrangement
 
 //G4cout<<"Old new Xa "<<35.*FlowF<<" "<<25.*FlowF<<G4endl;
 
-       G4double X_d=23.3/ECMSsqr;                       // mb anti-quark-quark string creation
-
+        X_d=23.3/ECMSsqr;                       // mb anti-quark-quark string creation
+       }
 //---------------------------------------------------------------
+//G4cout<<"Param Xtotal Xelastic "<<Xtotal<<" "<<Xelastic<<G4endl;
+//G4cout<<"Para a b c d "<<X_a<<" "<<X_b<<" "<<X_c<<" "<<X_d<<G4endl;
 //G4cout<<"Para a b c d "<<X_a<<" "<<5.*X_b<<" "<<5.*X_c<<" "<<6.*X_d<<G4endl;
        G4double Xann_on_P(0.), Xann_on_N(0.);
 
@@ -216,6 +230,7 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
            (AbsProjectileBaryonNumber-AbsProjectileCharge)*NumberOfTargetProtons  )*Xann_on_N
                       )/(AbsProjectileBaryonNumber*NumberOfTargetNucleons);
        }
+
        G4double Xftf=0.;  
        MesonProdThreshold=ProjectileMass+TargetMass+(0.14+0.08); // Mpi +DeltaE
        if(SqrtS > MesonProdThreshold) {Xftf=36.*(1.-MesonProdThreshold/SqrtS);}
@@ -224,7 +239,7 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
 /*
 G4cout<<"Plab Xtotal, Xelastic  Xinel Xftf "<<Plab<<" "<<Xtotal<<" "<<Xelastic<<" "<<Xtotal-Xelastic<<" "<<Xtotal-Xelastic-Xannihilation<<G4endl;
 G4cout<<"Plab Xelastic/Xtotal,  Xann/Xin "<<Plab<<" "<<Xelastic/Xtotal<<" "<<Xannihilation/(Xtotal-Xelastic)<<G4endl;
-G4int Uzhi; G4cin>>Uzhi;
+//G4int Uzhi; G4cin>>Uzhi;
 */
 //---------------------------------------------------------------
       }
@@ -402,6 +417,7 @@ G4int Uzhi; G4cin>>Uzhi;
 
               SetProjMinDiffMass(1.16);                   // GeV 
               SetProjMinNonDiffMass(1.16);                // GeV 
+//G4cout<<"Param Get Min Dif "<<GetProjMinNonDiffMass()<<G4endl;
               SetProbabilityOfProjDiff(0.805*std::exp(-0.35*Ylab));// 0.5
 
               SetTarMinDiffMass(1.16);                    // GeV
@@ -475,8 +491,8 @@ G4int Uzhi; G4cin>>Uzhi;
               SetSlopeQuarkExchange(1.0);
               SetDeltaProbAtQuarkExchange(0.1);
 
-              SetProjMinDiffMass((particle->GetPDGMass()+160.*MeV)/GeV); 
-              SetProjMinNonDiffMass((particle->GetPDGMass()+160.*MeV)/GeV);
+              SetProjMinDiffMass((940.+160.*MeV)/GeV);     // particle->GetPDGMass()
+              SetProjMinNonDiffMass((940.+160.*MeV)/GeV);  // particle->GetPDGMass()
               SetProbabilityOfProjDiff(0.95*std::pow(s/GeV/GeV,-0.35)); // 40/32 X-dif/X-inel
 
               SetTarMinDiffMass(1.1);                     // GeV
@@ -485,7 +501,7 @@ G4int Uzhi; G4cin>>Uzhi;
 
               SetAveragePt2(0.3);                         // GeV^2
              }
-
+//G4cout<<"Param Get Min Dif "<<GetProjMinNonDiffMass()<<G4endl;
 // ---------- Set parameters of a string kink -------------------------------
              SetPt2Kink(6.*GeV*GeV);
              G4double Puubar(1./3.), Pddbar(1./3.), Pssbar(1./3.); // SU(3) symmetry
@@ -527,11 +543,10 @@ G4int Uzhi; G4cin>>Uzhi;
       if(Plab < 2.*GeV)
       { // For slow anti-baryon we have to garanty putting on mass-shell
        SetCofNuclearDestruction(0.);
-       SetR2ofNuclearDestruction(0.*fermi*fermi);
+       SetR2ofNuclearDestruction(1.5*fermi*fermi);
        SetDofNuclearDestruction(0.01);
        SetPt2ofNuclearDestruction(0.035*GeV*GeV);
        SetMaxPt2ofNuclearDestruction(0.04*GeV*GeV);
-
 //       SetExcitationEnergyPerWoundedNucleon(0.);   // ?????
       }
     } else                                        // Projectile baryon assumed

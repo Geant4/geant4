@@ -38,13 +38,15 @@
 #include "G4InteractionContent.hh"
 
 G4InteractionContent::G4InteractionContent(G4VSplitableHadron *aPrimaryParticipant)
-      : theNumberOfHard(0), theNumberOfSoft(0), theInteractionTime(0.)   // Uzhi 23.02.2011
+      : theNumberOfHard(0), theNumberOfSoft(0), 
+        theInteractionTime(0.), curStatus(0)   // Uzhi Feb23
 {
 	theProjectile=aPrimaryParticipant;
 }
 
 G4InteractionContent::G4InteractionContent(const G4InteractionContent &)
-     : theNumberOfHard(0), theNumberOfSoft(0) , theInteractionTime(0.)   // Uzhi 23.02.2011
+     : theNumberOfHard(0), theNumberOfSoft(0) , 
+       theInteractionTime(0.), curStatus(0)   // Uzhi Feb23
 {}
 
 
@@ -61,7 +63,7 @@ int G4InteractionContent::operator!=(const G4InteractionContent &right) const
         return this!=&right;
 }
 
-G4bool G4InteractionContent::operator<(const G4InteractionContent &right) const//Uzhi 23.02.2011
+G4bool G4InteractionContent::operator<(const G4InteractionContent &right) const//Uzhi Feb23
 {
         return this->GetInteractionTime() < right.GetInteractionTime();
 }
@@ -71,9 +73,13 @@ const G4InteractionContent & G4InteractionContent::operator=(const G4Interaction
 	return *this;
 }
 
-void  G4InteractionContent::SetInteractionTime(G4double aValue) // Uzhi 23.02.2011
+void  G4InteractionContent::SetInteractionTime(G4double aValue) // Uzhi Feb23
 {theInteractionTime = aValue;}
 
-G4double G4InteractionContent::GetInteractionTime() const       // Uzhi 23.02.2011
+G4double G4InteractionContent::GetInteractionTime() const       // Uzhi Feb23
 {return theInteractionTime;}
 
+void G4InteractionContent::SetStatus(G4int aValue)              // Uzhi Feb26
+{curStatus = aValue;}
+G4int G4InteractionContent::GetStatus() const                    // Uzhi Feb26
+{return curStatus;}

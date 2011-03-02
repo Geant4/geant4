@@ -40,7 +40,6 @@
 // ------------------------------------------------------------
 
 #include "globals.hh"
-
 #include "G4VSplitableHadron.hh"
 #include "G4Nucleon.hh"                // Uzhi 16.07.09
 class G4InteractionContent 
@@ -54,7 +53,7 @@ class G4InteractionContent
 
       int operator==(const G4InteractionContent &right) const;
       int operator!=(const G4InteractionContent &right) const;
-      G4bool operator<(const G4InteractionContent &right) const;   // Uzhi 23.02.2011
+      G4bool operator<(const G4InteractionContent &right) const;   // Uzhi Feb23
       
       G4VSplitableHadron * GetProjectile() const ;
       G4VSplitableHadron * GetTarget() const;
@@ -73,8 +72,10 @@ class G4InteractionContent
 
       void SplitHadrons();
 
-      void     SetInteractionTime(G4double aValue); // Uzhi 23.02.2011
-      G4double GetInteractionTime() const;          // Uzhi 23.02.2011
+      void     SetInteractionTime(G4double aValue); // Uzhi Feb23
+      G4double GetInteractionTime() const;          // Uzhi Feb23
+      void     SetStatus(G4int aValue);             // Uzhi Feb26
+      G4int    GetStatus() const;                   // Uzhi Feb26
  
 #ifdef G4DEBUG
       void Dump();
@@ -98,7 +99,8 @@ public:
       G4int theNumberOfSoft;
       G4int theNumberOfDiffractive;
 
-      G4double theInteractionTime;  // Uzhi 23.02.2011
+      G4double theInteractionTime;  // Uzhi Feb23
+      G4int    curStatus;           // Uzhi Feb26
 
 };
 

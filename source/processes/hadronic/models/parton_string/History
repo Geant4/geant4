@@ -13,6 +13,26 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+1 March 2011, V. Uzhinsky (hadr-prtn-V09-04-08)
+   Bugs fixed Annihilation (px, py of strings were not set).
+
+1 March 2011, V. Uzhinsky (hadr-prtn-V09-04-07)
+   Bug in dtor fixed; possible double deletion.
+
+1 March 2011, V. Uzhinsky (hadr-prtn-V09-04-06)
+   Bug was found and fixed in FTF. The pionter on a projectile
+   nucleus was not set to 0 at the end of FTF run.
+--------------------------------------------------
+
+28 February 2011, V. Uzhinsky (hadr-prtn-V09-04-05)
+   Bug was found and fixed in annihilation.
+ 
+--------------------------------------------------
+28 February 2011, V. Uzhinsky (hadr-prtn-V09-04-04)
+   Bug was found and fixed in G4FTFParameters.cc. Small improvements 
+   were introduced in FTF annihilation.
+
+-------------------------------------------------------
 25 February 2011, V. Uzhinsky (hadr-prtn-V09-04-03)
    Bug was found and fixed in G4FragmentingString.cc thank to Gunter.
    A small improvement was introduced in G4FTFParameters.cc in order

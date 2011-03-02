@@ -88,7 +88,8 @@ class G4FTFModel : public G4VPartonStringModel
        G4bool ExciteParticipants();
        G4ExcitedStringVector * BuildStrings();
        void GetResidualNucleus();                  
-       void AjustTargetNucleonForAnnihilation(G4VSplitableHadron *SelectedTargetNucleon); 
+       void AjustTargetNucleonForAnnihilation(G4VSplitableHadron *SelectedAntiBaryon,
+                                              G4VSplitableHadron *SelectedTargetNucleon); 
        G4ThreeVector GaussianPt(G4double  AveragePt2, G4double maxPtSquare) const;
   
   private:     

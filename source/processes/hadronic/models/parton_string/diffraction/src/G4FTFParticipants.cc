@@ -88,13 +88,14 @@ void G4FTFParticipants::GetList(const G4ReactionProduct  &thePrimary,
                                       G4FTFParameters    *theParameters) 
 { 
 //G4cout<<"Participants::GetList"<<G4endl;
+//G4cout<<"thePrimary "<<thePrimary.GetMomentum()<<G4endl;
     StartLoop();  // reset Loop over Interactions
 
     for(unsigned int i=0; i<theInteractions.size(); i++) delete theInteractions[i];
     theInteractions.clear();
 
     G4double deltaxy=2 * fermi;                       // Extra nuclear radius
-
+//G4cout<<"theProjectileNucleus "<<theProjectileNucleus<<G4endl;
     if(theProjectileNucleus == 0)
     { // Hadron-nucleus or anti-baryon-nucleus interactions
 //G4cout<<"Hadron-nucleus or anti-baryon-nucleus interactions"<<G4endl;
@@ -146,17 +147,17 @@ G4int TrN(0);
                                        new G4InteractionContent(primarySplitable);
 		aInteraction->SetTarget(targetSplitable);
                 aInteraction->SetTargetNucleon(nucleon);     // Uzhi 16.07.09
+                aInteraction->SetStatus(1);                  // Uzhi Feb26
 		theInteractions.push_back(aInteraction);
 	   }
 TrN++;
 	 }    
      }      // end of while ( theInteractions.size() == 0 )
 
-/*
-	G4cout << "Number of Hit nucleons " << theInteractions.size()
-		<< "\t" << impactX/fermi << "\t"<<impactY/fermi
-		<< "\t" << std::sqrt(sqr(impactX)+sqr(impactY))/fermi <<G4endl;
-*/
+//	G4cout << "Number of Hit nucleons " << theInteractions.size()
+//		<< "\t" << impactX/fermi << "\t"<<impactY/fermi
+//		<< "\t" << std::sqrt(sqr(impactX)+sqr(impactY))/fermi <<G4endl;
+
      return;
     }       // end of if(theProjectileNucleus == 0)
 
@@ -190,7 +191,7 @@ TrN++;
 
 	 theProjectileNucleus->StartLoop();
 	 G4Nucleon * ProjectileNucleon;
-//G4int PrNuclN(0);
+G4int PrNuclN(0);
 
 	 while ( (ProjectileNucleon=theProjectileNucleus->GetNextNucleon()) ) 
 	 {
@@ -199,7 +200,7 @@ TrN++;
            theNucleus->StartLoop();
            G4Nucleon * TargetNucleon;
 
-//G4int TrNuclN(0);
+G4int TrNuclN(0);
            while ( (TargetNucleon=theNucleus->GetNextNucleon()) )
            {
 //G4cout<<"Trg N mom "<<TargetNucleon->Get4Momentum()<<G4endl;
@@ -243,15 +244,16 @@ TrN++;
                                    new G4InteractionContent(ProjectileSplitable);
              anInteraction->SetTarget(TargetSplitable);
              anInteraction->SetTargetNucleon(TargetNucleon);
+             anInteraction->SetStatus(1);                      // Uzhi Feb26
 //             anInteraction->SetInteractionTime(ProjectileNucleon->GetPosition().z()+
 //                                                   TargetNucleon->GetPosition().z());
 //G4cout<<"Z's pr tr "<<ProjectileNucleon->GetPosition().z()/fermi<<" "<<TargetNucleon->GetPosition().z()/fermi<<" "<<ProjectileNucleon->GetPosition().z()/fermi + TargetNucleon->GetPosition().z()/fermi <<G4endl;
              theInteractions.push_back(anInteraction);
 //G4cout<<"Ppr tr "<<ProjectileSplitable<<" "<<TargetSplitable<<G4endl;
             } // End of An Interaction has happend!
-//TrNuclN++;
+TrNuclN++;
            } // End of while ( (TargetNucleon=theNucleus->GetNextNucleon()) )
-//PrNuclN++;
+PrNuclN++;
 	 } // End of   while ( (ProjectileNucleon=theProjectileNucleus->GetNextNucleon()) )
     }      // end of while ( theInteractions.size() == 0 )
 

@@ -69,7 +69,8 @@ class G4FTFParticipants : public G4VParticipants
 
       void StartLoop();
       G4bool Next();
-      const G4InteractionContent & GetInteraction() const;
+//Vova      const G4InteractionContent & GetInteraction() const;
+      G4InteractionContent & GetInteraction();
       
       std::vector<G4InteractionContent *> theInteractions;
       G4V3DNucleus *theProjectileNucleus;
@@ -95,10 +96,11 @@ G4bool G4FTFParticipants::Next()
 }
 
 
+//inline
+//const G4InteractionContent & G4FTFParticipants::GetInteraction() const
 inline
-const G4InteractionContent & G4FTFParticipants::GetInteraction() const
+G4InteractionContent & G4FTFParticipants::GetInteraction()
 {
 	return *theInteractions[currentInteraction];
 }
-
 #endif

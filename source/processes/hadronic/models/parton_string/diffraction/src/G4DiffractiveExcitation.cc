@@ -91,6 +91,7 @@ G4bool G4DiffractiveExcitation::
      G4bool PutOnMassShell(false);
 //   G4double M0projectile=projectile->GetDefinition()->GetPDGMass(); // With de-excitation
      G4double M0projectile = Pprojectile.mag();                       // Without de-excitation
+//G4cout<<"M0projectile "<<M0projectile<<G4endl;
 
      if(M0projectile < projectile->GetDefinition()->GetPDGMass())
      {
@@ -113,6 +114,7 @@ G4bool G4DiffractiveExcitation::
 
      G4double M0target = Ptarget.mag();
 
+//G4cout<<"M0target "<<M0target<<G4endl;
 //   G4double TargetRapidity = Ptarget.rapidity();
 
      if(M0target < target->GetDefinition()->GetPDGMass())
@@ -163,6 +165,8 @@ G4bool G4DiffractiveExcitation::
 
      G4double SqrtS=std::sqrt(S);
 
+//G4cout<<"Proj "<<Pprojectile<<G4endl;
+//G4cout<<"Targ "<<Ptarget<<G4endl;
 //G4cout<<"SqrtS < 2300*MeV "<<SqrtS<<G4endl;           
      if(absProjectilePDGcode > 1000 && (SqrtS < 2300*MeV || SqrtS < SumMasses))
      {target->SetStatus(2);  return false;}  // The model cannot work for
@@ -185,7 +189,7 @@ G4bool G4DiffractiveExcitation::
      PZcms2=(S*S+M0projectile2*M0projectile2+M0target2*M0target2-
              2*S*M0projectile2 - 2*S*M0target2 - 2*M0projectile2*M0target2)
              /4./S;
-
+//G4cout<<"PZcms2 "<<PZcms2<<G4endl;
      if(PZcms2 < 0)
      {target->SetStatus(2);  return false;}   // It can be in an interaction with 
                                               // off-shell nuclear nucleon
@@ -216,7 +220,9 @@ G4bool G4DiffractiveExcitation::
      }
 
 
-     G4double maxPtSquare(0.); // = PZcms2;
+//G4cout<<"Proj "<<Pprojectile<<G4endl;
+//G4cout<<"Targ "<<Ptarget<<G4endl;
+     G4double maxPtSquare; // = PZcms2;
 /*
 G4cout<<"Start --------------------"<<G4endl;
 G4cout<<"Proj "<<M0projectile<<" "<<ProjectileDiffStateMinMass<<"  "<<ProjectileNonDiffStateMinMass<<G4endl;
@@ -689,11 +695,12 @@ G4cout<<"Pr Y "<<Pprojectile.rapidity()<<" Tr Y "<<Ptarget.rapidity()<<G4endl;
 
              TargMassT2=M0target2;
              TargMassT =M0target;
-
+//G4cout<<"Masses "<<ProjMassT<<" "<<TargMassT<<" "<<SqrtS<<" "<<ProjMassT+TargMassT<<G4endl;
              PZcms2=(S*S + ProjMassT2*ProjMassT2 + TargMassT2*TargMassT2-
                      2.*S*ProjMassT2-2.*S*TargMassT2-2.*ProjMassT2*TargMassT2)
                     /4./S;
 
+//G4cout<<"PZcms2 PrD"<<PZcms2<<G4endl;
              if(PZcms2 < 0 ) 
              {
                target->SetStatus(2);  
@@ -710,10 +717,12 @@ G4cout<<"Pr Y "<<Pprojectile.rapidity()<<" Tr Y "<<Ptarget.rapidity()<<G4endl;
              TargMassT2=M0target2+Pt2;
              TargMassT =std::sqrt(TargMassT2);
 
+//G4cout<<"Masses "<<ProjMassT<<" "<<TargMassT<<" "<<SqrtS<<" "<<ProjMassT+TargMassT<<G4endl;
+
              PZcms2=(S*S + ProjMassT2*ProjMassT2 + TargMassT2*TargMassT2-
                      2.*S*ProjMassT2-2.*S*TargMassT2-2.*ProjMassT2*TargMassT2)
                     /4./S;
-
+//G4cout<<"PZcms2 PrD"<<PZcms2<<G4endl;
              if(PZcms2 < 0 ) continue;
              PZcms =std::sqrt(PZcms2);
 

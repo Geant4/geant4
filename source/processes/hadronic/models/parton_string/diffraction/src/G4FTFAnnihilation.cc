@@ -78,7 +78,9 @@ G4bool G4FTFAnnihilation::
 {
 // -------------------- Projectile parameters -----------------------
      G4LorentzVector Pprojectile=projectile->Get4Momentum();
-
+//G4cout<<"---------------------------- Annihilation----------------"<<G4endl;
+//G4cout<<"Pprojectile "<<Pprojectile<<G4endl;
+//G4cout<<"Pprojectile.mag2 "<<Pprojectile.mag2()<<G4endl;
      G4int    ProjectilePDGcode=projectile->GetDefinition()->GetPDGEncoding();
      if(ProjectilePDGcode > 0)
      {
@@ -94,14 +96,17 @@ G4bool G4FTFAnnihilation::
      G4int    TargetPDGcode=target->GetDefinition()->GetPDGEncoding();
 
      G4LorentzVector Ptarget=target->Get4Momentum();
+//G4cout<<"Ptarget "<<Ptarget<<G4endl;
+//G4cout<<"Ptarget.mag2 "<<Ptarget.mag2()<<G4endl;
+
 //   G4double M0target = Ptarget.mag();
 //   G4double M0target2= target->GetDefinition()->GetPDGMass()*
 //                         target->GetDefinition()->GetPDGMass();
      G4double M0target2=Ptarget.mag2();
 
 //G4cout<<"Annihilate "<<ProjectilePDGcode<<" "<<TargetPDGcode<<G4endl;
-//G4cout<<"Pprojec "<<Pprojectile<<" "<<Pprojectile.mag()<<G4endl;
-//G4cout<<"Ptarget "<<Ptarget    <<" "<<Ptarget.mag()    <<G4endl;
+//G4cout<<"Pprojec "<<Pprojectile<<" "<<Pprojectile.mag2()<<G4endl;
+//G4cout<<"Ptarget "<<Ptarget    <<" "<<Ptarget.mag2()    <<G4endl;
 //G4cout<<"M0 proj target "<<M0projectile<<" "<<M0target<<G4endl;
 
      G4double AveragePt2=theParameters->GetAveragePt2();
@@ -110,10 +115,10 @@ G4bool G4FTFAnnihilation::
      G4LorentzVector Psum;      // 4-momentum in CMS
      Psum=Pprojectile+Ptarget;
      G4double S=Psum.mag2(); 
-
+//G4cout<<"Psum S"<<Psum<<" "<<S<<G4endl;
 // Transform momenta to cms and then rotate parallel to z axis;
      G4LorentzRotation toCms(-1*Psum.boostVector());
-
+//G4cout<<"G4LorentzRotation toCms(-1*Psum.boostVector());"<<G4endl;
      G4LorentzVector Ptmp=toCms*Pprojectile;
 
 /*   // For anti-baryons it is not needed !
@@ -134,38 +139,53 @@ G4bool G4FTFAnnihilation::
 
      G4double maxPtSquare;
 
-//G4cout<<"M0projectile+M0target Sqrt(S) (GeV)  "<<M0projectile/GeV<<" "<<M0target/GeV<<" "<<(M0projectile+M0target)/GeV<<" "<<SqrtS/GeV<<G4endl;
+//G4cout<<"M0projectile+M0target Sqrt(S) (GeV)  "<<M0projectile2/GeV<<" "<<M0target2/GeV<<" "<<(M0projectile2+M0target2)/GeV<<" "<<SqrtS/GeV<<G4endl;
 
-     G4double FlowF=SqrtS/std::sqrt(S*S+M0projectile2*M0projectile2+M0target2*M0target2-
-                       2.*S*M0projectile2 - 2.*S*M0target2 - 2.*M0projectile2*M0target2)*GeV;
+     G4double X_a(0.), X_b(0.), X_c(0.), X_d(0.);
+     G4double MesonProdThreshold=projectile->GetDefinition()->GetPDGMass()+
+                                     target->GetDefinition()->GetPDGMass()+
+                                     (2.*140.+16.)*MeV; // 2 Mpi +DeltaE
+
+     G4double Prel2= S*S + M0projectile2*M0projectile2 + M0target2*M0target2 -
+                  2.*S*M0projectile2 - 2.*S*M0target2 - 2.*M0projectile2*M0target2;
+              Prel2/=S;
+
+     if(Prel2 < 1600. )  // *MeV*MeV
+     { // Annihilation at rest! Values are copied from Paratemets.
+      X_a=       625.1;    // mb  // 3-shirt diagram
+      X_b=         9.780;  // mb  // anti-quark-quark annihilation
+      X_c=        49.989;  // mb
+      X_d=         6.614;  // mb
+     }
+     else
+     { // Annihilation in flight!
+      G4double FlowF=1./std::sqrt(Prel2)*GeV;
 
 //G4cout<<"Annig FlowF "<<FlowF<<" sqrt "<<SqrtS/GeV<<G4endl;
 
 // Process cross sections ---------------------------------------------------
-     G4double X_a=25.*FlowF;           // mb 3-shirt diagram
+      X_a=25.*FlowF;                 // mb 3-shirt diagram
 
-     G4double X_b(0.);                 // mb anti-quark-quark annihilation
-     G4double MesonProdThreshold=projectile->GetDefinition()->GetPDGMass()+
-                                     target->GetDefinition()->GetPDGMass()+
-                                     (2.*140.+16.)*MeV; // 2 Mpi +DeltaE
-     if(SqrtS < MesonProdThreshold)
-     {
-      X_b=3.13+140.*pow((MesonProdThreshold - SqrtS)/GeV,2.5); 
-     } 
-     else
-     {
-      X_b=6.8*GeV/SqrtS;               
-     }
-     if(projectile->GetDefinition()->GetPDGMass()+
-            target->GetDefinition()->GetPDGMass()  > SqrtS) {X_b=0.;}
+                                     // mb anti-quark-quark annihilation
+      if(SqrtS < MesonProdThreshold)
+      {
+       X_b=3.13+140.*pow((MesonProdThreshold - SqrtS)/GeV,2.5); 
+      } 
+      else
+      {
+       X_b=6.8*GeV/SqrtS;               
+      }
+      if(projectile->GetDefinition()->GetPDGMass()+
+             target->GetDefinition()->GetPDGMass()  > SqrtS) {X_b=0.;}
 //   This can be in an interaction of low energy anti-baryon with off-shell nuclear nucleon
 
 // ????????????????????????????????????????
-     G4double X_c=2.*FlowF*sqr(projectile->GetDefinition()->GetPDGMass()+
-                                    target->GetDefinition()->GetPDGMass())/S;
+      X_c=2.*FlowF*sqr(projectile->GetDefinition()->GetPDGMass()+
+                           target->GetDefinition()->GetPDGMass())/S;
                    // mb re-arrangement of 2 quarks and 2 anti-quarks
 // ????????????????????????????????????????
-     G4double X_d=23.3*GeV*GeV/S;      // mb anti-quark-quark string creation
+      X_d=23.3*GeV*GeV/S;            // mb anti-quark-quark string creation
+     } // end of if(Prel2 < 1600. )  // *MeV*MeV
 
 //G4cout<<"Annih X a b c d "<<X_a<<" "<<X_b<<" "<<X_c<<" "<<X_d<<G4endl;
 
@@ -632,6 +652,8 @@ G4cout<<tmp<<" "<<tmp.mag()<<G4endl;
        projectile->SetStatus(1);
        target->SetStatus(3);     // The target nucleon has annihilated
 
+       Pprojectile.setPx(0.);   // VU Mar1
+       Pprojectile.setPy(0.);   // VU Mar1
        Pprojectile.setPz(0.);
        Pprojectile.setE(SqrtS);
        Pprojectile.transform(toLab);
@@ -1004,6 +1026,8 @@ G4cout<<"2 str "<<Pstring2<<" "<<Pstring2.mag()<<" "<<Ystring2<<G4endl;
        projectile->SetStatus(1);
        target->SetStatus(3);      // The target nucleon has annihilated
 
+       Pprojectile.setPx(0.);  // VU Mar1
+       Pprojectile.setPy(0.);  // Vu Mar1
        Pprojectile.setPz(0.);
        Pprojectile.setE(SqrtS);
        Pprojectile.transform(toLab);

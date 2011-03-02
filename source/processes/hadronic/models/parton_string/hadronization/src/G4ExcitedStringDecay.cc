@@ -102,8 +102,8 @@ G4KineticTrackVector *G4ExcitedStringDecay::FragmentStrings
 
 	for ( unsigned int astring=0; astring < theStrings->size(); astring++)
 	{
-//G4cout<<"String No "<<astring+1<<" "<<theStrings->operator[](astring)->Get4Momentum().mag()<<" "<<theStrings->operator[](astring)->GetRightParton()->GetPDGcode()<<" "<<theStrings->operator[](astring)->GetLeftParton()->GetPDGcode()<<G4endl;
-
+//G4cout<<"String No "<<astring+1<<" "<<theStrings->operator[](astring)->Get4Momentum().mag2()<<" "<<theStrings->operator[](astring)->GetRightParton()->GetPDGcode()<<" "<<theStrings->operator[](astring)->GetLeftParton()->GetPDGcode()<<" "<<theStrings->operator[](astring)->Get4Momentum()<<G4endl;
+//G4int Uzhi; G4cin >>Uzhi;
           G4KineticTrackVector * generatedKineticTracks = NULL;
   
 	  if ( theStrings->operator[](astring)->IsExcited() )
@@ -147,6 +147,7 @@ G4KineticTrackVector *G4ExcitedStringDecay::FragmentStrings
 	if ( NeedEnergyCorrector ) success=EnergyAndMomentumCorrector(theResult, KTsum);
 //G4cout<<"success after Ecorr "<<success<<G4endl;
   } while(!success && (attempts < 10));   // It was 100 !!! Uzhi
+//G4cout<<"End frag string"<<G4endl;
 
 #ifdef debug_ExcitedStringDecay
   G4LorentzVector  KTsum1=0;
