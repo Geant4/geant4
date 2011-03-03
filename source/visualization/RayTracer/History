@@ -24,6 +24,9 @@ committal in the CVS repository !
 History file for Ray Tracer category
 ---------------------------------------
 
+2nd March 2011  John Allison (raytracer-V09-04-01)
+- Fix bug introduced by fix to Coverity warnings.
+
 1st March 2011  John Allison (raytracer-V09-04-00)
 - G4RayTracerViewer::DrawView: Trap recursive calls, thus avoiding
   warning messages for each pixel when endOfEventAction is "refresh".

@@ -56,10 +56,7 @@ G4JpegCoder::G4JpegCoder(u_char* colorR,u_char* colorG,u_char* colorB)
 }
 
 G4JpegCoder::~G4JpegCoder(void)
-{
-  if(mOBSP != 0)
-                delete mOBSP;
-}
+{}
 
 void
 G4JpegCoder::GetJpegData(char** aJpegData, int& size)
