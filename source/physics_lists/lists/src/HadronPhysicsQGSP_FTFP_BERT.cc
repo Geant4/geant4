@@ -46,6 +46,7 @@
 #include "G4MesonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
+#include "G4IonConstructor.hh"
 
 #include "G4QHadronInelasticDataSet.hh"
 
@@ -125,8 +126,8 @@ void HadronPhysicsQGSP_FTFP_BERT::CreateModels()
 
   theAntiBaryon=new G4AntiBarionBuilder;
   theAntiBaryon->RegisterMe(theFTFPAntiBaryon=new G4FTFPAntiBarionBuilder(quasiElasFTF));
-  theFTFPAntiBaryon->SetMaxEnergy(  0.0*GeV);    // Default - down to 0.0 
-  theFTFPAntiBaryon->SetMinEnergy(100.0*GeV);    // Initially - no more than 100 GeV
+  theFTFPAntiBaryon->SetMinEnergy(  0.0*GeV);    // Default - down to 0.0 
+  theFTFPAntiBaryon->SetMaxEnergy(100.0*GeV);    // Initially - no more than 100 GeV
 }
 
 HadronPhysicsQGSP_FTFP_BERT::~HadronPhysicsQGSP_FTFP_BERT()
@@ -160,7 +161,10 @@ void HadronPhysicsQGSP_FTFP_BERT::ConstructParticle()
   pBaryonConstructor.ConstructParticle();
 
   G4ShortLivedConstructor pShortLivedConstructor;
-  pShortLivedConstructor.ConstructParticle();  
+  pShortLivedConstructor.ConstructParticle();
+  
+  G4IonConstructor pIonConstructor;
+  pIonConstructor.ConstructParticle();
 }
 
 #include "G4ProcessManager.hh"

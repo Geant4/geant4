@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26-02-2011, G.Folger                    (phys-lists-V09-04-05)
+- correct energy limit for antibarions
+
 24-02-2011, V.Ivanchenko                (phys-lists-V09-04-04)
 - G4HadronElasticPhysics - added light anti-nuclei
 - G4FTFPAntiBarionBuilder - added cross section to light anti-nuclei
