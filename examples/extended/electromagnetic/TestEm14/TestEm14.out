@@ -291,23 +291,23 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=8.74s Real=8.74s Sys=0s
+  User=9.14s Real=9.14s Sys=0s
 
  The run consists of 1000000 gamma of 100 keV through 100 m   of Water (density: 1 g/cm3 )
 
- Process calls frequency --->	compt = 983790	phot = 16210
+ Process calls frequency --->	compt = 983776	phot = 16224
 
- MeanFreePath:	6.0585 cm  +- 6.0504 cm 	massic: 6.0585 g/cm2 
- CrossSection:	0.16506 cm^-1 			massic: 0.16506 cm2/g
+ MeanFreePath:	6.0581 cm  +- 6.0456 cm 	massic: 6.0581 g/cm2 
+ CrossSection:	0.16507 cm^-1 			massic: 0.16507 cm2/g
 
- mean energy of charged secondaries: 15.195 keV	mass_energy_transfer coef: 0.02508 cm2/g
+ mean energy of charged secondaries: 15.198 keV	mass_energy_transfer coef: 0.025088 cm2/g
 
  Verification : crossSections from G4EmCalculator 
 	compt= 0.1623 cm2/g	phot= 0.0026853 cm2/g	total= 0.16499 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1994082368, 1299548688
+ Current couple of seeds = 465665205, 446609575
 ----------------------------------------
 #
 /gun/particle e-
@@ -336,7 +336,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1994082368, 1299548688
+ Current couple of seeds = 465665205, 446609575
 ----------------------------------------
 Start Run processing.
 
@@ -362,23 +362,23 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=7.93s Real=7.94s Sys=0s
+  User=8s Real=8.01s Sys=0s
 
  The run consists of 1000000 e- of 100 MeV through 100 m   of Water (density: 1 g/cm3 )
 
- Process calls frequency --->	eBrem = 605654	eIoni = 394346
+ Process calls frequency --->	eBrem = 605681	eIoni = 394319
 
- MeanFreePath:	1.6255 cm  +- 1.6252 cm 	massic: 1.6255 g/cm2 
- CrossSection:	0.61521 cm^-1 			massic: 0.61521 cm2/g
+ MeanFreePath:	1.6254 cm  +- 1.6253 cm 	massic: 1.6254 g/cm2 
+ CrossSection:	0.61522 cm^-1 			massic: 0.61522 cm2/g
 
- mean energy of charged secondaries: 745.83 keV	mass_energy_transfer coef: 0.0045884 cm2/g
+ mean energy of charged secondaries: 745.72 keV	mass_energy_transfer coef: 0.0045878 cm2/g
 
  Verification : crossSections from G4EmCalculator 
 	eBrem= 0.37212 cm2/g	eIoni= 0.24337 cm2/g	total= 0.61549 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1622894828, 509778451
+ Current couple of seeds = 1531709909, 1303530619
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

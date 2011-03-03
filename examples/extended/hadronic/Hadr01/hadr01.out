@@ -309,53 +309,96 @@ hPairProd:   for  pi-    SubType= 4
                      Hadronic Processes for <anti_proton>
           CHIPS_Inelastic
 
-                     Hadronic Processes for <GenericIon>
-        ionInelastic  Models:            Binary Cascade: Emin(GeV)=     0  Emax(GeV)= 20
+                                  Hadronic Processes for <GenericIon>
+                                  -----------------------------------
+        ionInelastic  Models:               Binary Cascade: Emin(GeV)=    0  Emax(GeV)= 20
 
-                     Hadronic Processes for <e->
-      ElectroNuclear  Models:                     CHIPS: Emin(GeV)=     0  Emax(GeV)= 30000
+        ionInelastic  Crs sctns:          AxenWellischIonH: Emin(GeV)=    0  Emax(GeV)= 100000
 
-                     Hadronic Processes for <gamma>
-     PhotonInelastic  Models:                     CHIPS: Emin(GeV)=     0  Emax(GeV)= 3.5
-                                        TheoFSGenerator: Emin(GeV)=     3  Emax(GeV)= 100000
 
-                     Hadronic Processes for <kaon+>
-          hInelastic  Models:                      FTFP: Emin(GeV)=     4  Emax(GeV)= 100000
-                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 5
+                                  Hadronic Processes for <e->
+                                  -----------------------------------
+      ElectroNuclear  Models:                        CHIPS: Emin(GeV)=    0  Emax(GeV)= 30000
 
-                     Hadronic Processes for <kaon->
-          hInelastic  Models:                      FTFP: Emin(GeV)=     4  Emax(GeV)= 100000
-                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 5
+      ElectroNuclear  Crs sctns:           Electro-nuclear: Emin(GeV)=    0  Emax(GeV)= 100000
 
-                     Hadronic Processes for <lambda>
-          hInelastic  Models:                      FTFP: Emin(GeV)=     4  Emax(GeV)= 100000
-                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 5
+
+                                  Hadronic Processes for <gamma>
+                                  -----------------------------------
+     PhotonInelastic  Models:                        CHIPS: Emin(GeV)=    0  Emax(GeV)= 3.5
+                                           TheoFSGenerator: Emin(GeV)=    3  Emax(GeV)= 100000
+
+     PhotonInelastic  Crs sctns:             Photo-nuclear: Emin(GeV)=    0  Emax(GeV)= 100000
+
+
+                                  Hadronic Processes for <kaon+>
+                                  -----------------------------------
+          hInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
+                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 5
+
+          hInelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+
+
+                                  Hadronic Processes for <kaon->
+                                  -----------------------------------
+          hInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
+                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 5
+
+          hInelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+
+
+                                  Hadronic Processes for <lambda>
+                                  -----------------------------------
+          hInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
+                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 5
+
+          hInelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+
 
                      Hadronic Processes for <mu->
           muMinusCaptureAtRest
 
-                     Hadronic Processes for <neutron>
-          hInelastic  Models:                      QGSP: Emin(GeV)=  12.5  Emax(GeV)= 100000
-                                                   FTFP: Emin(GeV)=     4  Emax(GeV)= 25
-                                        Bertini Cascade: Emin(GeV)=     1  Emax(GeV)= 5
-                                         Binary Cascade: Emin(GeV)=     0  Emax(GeV)= 1.5
-            nCapture  Models:               nRadCapture: Emin(GeV)=     0  Emax(GeV)= 100000
+                                  Hadronic Processes for <neutron>
+                                  -----------------------------------
+          hInelastic  Models:                         QGSP: Emin(GeV)= 12.5  Emax(GeV)= 100000
+                                                      FTFP: Emin(GeV)=    4  Emax(GeV)= 25
+                                           Bertini Cascade: Emin(GeV)=    1  Emax(GeV)= 5
+                                            Binary Cascade: Emin(GeV)=    0  Emax(GeV)= 1.5
 
-                     Hadronic Processes for <pi+>
-          hInelastic  Models:                      QGSP: Emin(GeV)=  12.5  Emax(GeV)= 100000
-                                                   FTFP: Emin(GeV)=     4  Emax(GeV)= 25
-                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 5
+          hInelastic  Crs sctns:      G4NeutronInelasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
 
-                     Hadronic Processes for <pi->
-          hInelastic  Models:                      QGSP: Emin(GeV)=  12.5  Emax(GeV)= 100000
-                                                   FTFP: Emin(GeV)=     4  Emax(GeV)= 25
-                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 5
+            nCapture  Models:                  nRadCapture: Emin(GeV)=    0  Emax(GeV)= 100000
 
-                     Hadronic Processes for <proton>
-          hInelastic  Models:                      QGSP: Emin(GeV)=  12.5  Emax(GeV)= 100000
-                                                   FTFP: Emin(GeV)=     4  Emax(GeV)= 25
-                                        Bertini Cascade: Emin(GeV)=     1  Emax(GeV)= 5
-                                         Binary Cascade: Emin(GeV)=     0  Emax(GeV)= 1.5
+            nCapture  Crs sctns:        G4NeutronCaptureXS: Emin(GeV)=    0  Emax(GeV)= 100000
+
+
+                                  Hadronic Processes for <pi+>
+                                  -----------------------------------
+          hInelastic  Models:                         QGSP: Emin(GeV)= 12.5  Emax(GeV)= 100000
+                                                      FTFP: Emin(GeV)=    4  Emax(GeV)= 25
+                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 5
+
+          hInelastic  Crs sctns: Barashenkov-Glauber-Gribov: Emin(GeV)=    0  Emax(GeV)= 100000
+
+
+                                  Hadronic Processes for <pi->
+                                  -----------------------------------
+          hInelastic  Models:                         QGSP: Emin(GeV)= 12.5  Emax(GeV)= 100000
+                                                      FTFP: Emin(GeV)=    4  Emax(GeV)= 25
+                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 5
+
+          hInelastic  Crs sctns: Barashenkov-Glauber-Gribov: Emin(GeV)=    0  Emax(GeV)= 100000
+
+
+                                  Hadronic Processes for <proton>
+                                  -----------------------------------
+          hInelastic  Models:                         QGSP: Emin(GeV)= 12.5  Emax(GeV)= 100000
+                                                      FTFP: Emin(GeV)=    4  Emax(GeV)= 25
+                                           Bertini Cascade: Emin(GeV)=    1  Emax(GeV)= 5
+                                            Binary Cascade: Emin(GeV)=    0  Emax(GeV)= 1.5
+
+          hInelastic  Crs sctns: Barashenkov-Glauber-Gribov: Emin(GeV)=    0  Emax(GeV)= 100000
+
 ============================================================================================
 
 ========= Table of registered couples ==============================

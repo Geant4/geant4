@@ -318,19 +318,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.14s Real=0.15s Sys=0s
+  User=0.13s Real=0.13s Sys=0s
 
  The run consists of 10000 e- of 5 MeV through 100 m   of Water (density: 1 g/cm3 )
 
  Process calls frequency --->	msc = 10000
 
  truePathLength :	2.7512 cm  +- 11.142 nm 
- geomPathLength :	2.0703 cm  +- 16.621 nm 
- lateralDisplac :	1.1488 cm  +- 3.0764 nm 
- Psi            :	506.58 mrad +- 0.00019228 mrad  (29.025 deg +- 1.1017e-05 deg)
+ geomPathLength :	2.0703 cm  +- 8.0957 nm 
+ lateralDisplac :	1.024 cm  +- 5.5455 nm 
+ Psi            :	459.33 mrad +- 1.178e-05 mrad  (26.317 deg +- 6.7497e-07 deg)
 
- Theta_plane    :	1810.8 mrad  (103.75 deg)
- phi correlation:	0.26308 +- 0.058008  (std::cos(phi_pos - phi_dir))
+ Theta_plane    :	729.32 mrad  (41.787 deg)
+ phi correlation:	0.29111 +- 0.29953  (std::cos(phi_pos - phi_dir))
 
  Verification from G4EmCalculator. 
 
