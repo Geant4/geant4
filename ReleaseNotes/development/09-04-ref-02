@@ -162,7 +162,7 @@ run                                              run-V09-04-01              (o)
   creating a new directory when saving random seeds.
   Addressing problem report #1157.
 
-visualization/RayTracer                          raytracer-V09-04-00
+visualization/RayTracer                          raytracer-V09-04-01
 -----------------------
 - Trap recursive calls in G4RayTracerViewer::DrawView(), thus avoiding
   warning messages for each pixel when endOfEventAction() is "refresh".
