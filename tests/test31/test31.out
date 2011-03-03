@@ -748,31 +748,32 @@ G4EnergyLossForExtrapolator::ComputeMuonDEDX for mu+
 G4EnergyLossForExtrapolator::ComputeProtonDEDX for proton
 G4EnergyLossForExtrapolator::ComputeProtonDEDX for e-
 Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 93.8597 Erec-E0(MeV)= -135.759
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 178.881 Erec-E0(MeV)= 321.279
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 31.0519 Erec-E0(MeV)= -339.943
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 477.628 Erec-E0(MeV)= 1963.21
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 14.6764 Erec-E0(MeV)= -965.148
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 11.7112 Erec-E0(MeV)= -972.485
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 324.258 Erec-E0(MeV)= 1119.29
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 382.331 Erec-E0(MeV)= 1438.81
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 253.42 Erec-E0(MeV)= 729.83
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 118.783 Erec-E0(MeV)= -4.34764
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 306.308 Erec-E0(MeV)= 1020.57
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 290.521 Erec-E0(MeV)= 933.776
 test31EventAction: Event # 100 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.96s Real=0.95s Sys=0s
+  User=0.9s Real=0.9s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
 Initial particle               e-   Ekin(GeV)= 1
-Range(mm)= 548.09; Stragling(mm)= 103.55 +- 10    1e+02 events for range
+Range(mm)= 550.82; Stragling(mm)= 102.27 +- 10    1e+02 events for range
 Number of events               100
-Average energy deposit         281.1 MeV
-Average number of e-           45.27
-Average number of gamma        54.73
-Average number of e+           2.83
-Average number of steps        1823
-Average number of leak charged 2.99
-Average number of leak gamma   21.02
+Average energy deposit         263.4 MeV
+Average number of e-           42.54
+Average number of gamma        49.65
+Average number of e+           2.47
+Average number of steps        1681
+Average number of leak charged 2.86
+Average number of leak gamma   20
 Average number of back charged 0
-Average number of back gamma   1.39
+Average number of back gamma   1.07
 Average number of mu+mu-       0
 Average number of pi+pi-       0
 ====================================================================
@@ -809,15 +810,15 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
 ### Run 2 start
 Start Run processing.
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 886.5 Erec-E0(MeV)= 12.03
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 885.2 Erec-E0(MeV)= 10.77
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 881.9 Erec-E0(MeV)= 7.358
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 883.4 Erec-E0(MeV)= 8.877
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 886.3 Erec-E0(MeV)= 11.89
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 890.6 Erec-E0(MeV)= 16.22
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 888.1 Erec-E0(MeV)= 13.61
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 851.6 Erec-E0(MeV)= -23.22
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 888.5 Erec-E0(MeV)= 14.07
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 858.2 Erec-E0(MeV)= -16.54
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 881 Erec-E0(MeV)= 6.522
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 893.1 Erec-E0(MeV)= 18.71
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 855.5 Erec-E0(MeV)= -19.27
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 865.7 Erec-E0(MeV)= -8.982
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 890.7 Erec-E0(MeV)= 16.27
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 887.9 Erec-E0(MeV)= 13.46
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 869.7 Erec-E0(MeV)= -4.886
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 885.3 Erec-E0(MeV)= 10.8
 test31EventAction: Event # 100 started
 test31EventAction: Event # 200 started
 test31EventAction: Event # 300 started
@@ -831,22 +832,22 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.43s Real=1.43s Sys=0s
+  User=1.41s Real=1.4s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
 Initial particle               mu-   Ekin(GeV)= 1
 Range(mm)= 600; Stragling(mm)= 0 +- 0    1e+03 events for range
 Number of events               1000
-Average energy deposit         124.2 MeV
-Average number of e-           16.07
-Average number of gamma        2.733
-Average number of e+           0.005
-Average number of steps        227.6
-Average number of leak charged 1.11
-Average number of leak gamma   0.374
+Average energy deposit         124.1 MeV
+Average number of e-           16.06
+Average number of gamma        2.707
+Average number of e+           0.004
+Average number of steps        226.2
+Average number of leak charged 1.126
+Average number of leak gamma   0.358
 Average number of back charged 0
-Average number of back gamma   0.076
+Average number of back gamma   0.082
 Average number of mu+mu-       0
 Average number of pi+pi-       0
 ====================================================================
@@ -883,15 +884,15 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
 ### Run 3 start
 Start Run processing.
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 863.3 Erec-E0(MeV)= -13.48
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 875.7 Erec-E0(MeV)= -0.9668
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 883.5 Erec-E0(MeV)= 6.831
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 878.3 Erec-E0(MeV)= 1.65
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 866.3 Erec-E0(MeV)= -10.45
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 884.5 Erec-E0(MeV)= 7.919
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 870.6 Erec-E0(MeV)= -6.19
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 892.6 Erec-E0(MeV)= 16.06
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 888.4 Erec-E0(MeV)= 11.83
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 893.1 Erec-E0(MeV)= 16.61
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 894.1 Erec-E0(MeV)= 17.53
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 860.8 Erec-E0(MeV)= -16.03
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 881.5 Erec-E0(MeV)= 4.835
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 874.4 Erec-E0(MeV)= -2.305
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 883 Erec-E0(MeV)= 6.333
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 883.1 Erec-E0(MeV)= 6.478
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 874.7 Erec-E0(MeV)= -1.977
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 892.2 Erec-E0(MeV)= 15.69
 test31EventAction: Event # 100 started
 test31EventAction: Event # 200 started
 test31EventAction: Event # 300 started
@@ -905,22 +906,22 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.36s Real=1.36s Sys=0s
+  User=1.32s Real=1.33s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
 Initial particle               pi+   Ekin(GeV)= 1
 Range(mm)= 600; Stragling(mm)= 0 +- 0    9.9e+02 events for range
 Number of events               1000
-Average energy deposit         122 MeV
-Average number of e-           15.53
-Average number of gamma        2.328
-Average number of e+           0.006
-Average number of steps        214.7
+Average energy deposit         122.2 MeV
+Average number of e-           15.5
+Average number of gamma        2.293
+Average number of e+           0.003
+Average number of steps        213
 Average number of leak charged 1.11
-Average number of leak gamma   0.295
-Average number of back charged 0.002
-Average number of back gamma   0.065
+Average number of leak gamma   0.268
+Average number of back charged 0
+Average number of back gamma   0.061
 Average number of mu+mu-       0
 Average number of pi+pi-       0
 ====================================================================
@@ -957,15 +958,15 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
 ### Run 4 start
 Start Run processing.
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 866.4 Erec-E0(MeV)= 0.6987
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 871.3 Erec-E0(MeV)= 5.434
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 867.3 Erec-E0(MeV)= 1.523
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 870.4 Erec-E0(MeV)= 4.52
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 863.9 Erec-E0(MeV)= -1.722
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 860.5 Erec-E0(MeV)= -5.068
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 867.5 Erec-E0(MeV)= 1.746
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 863.5 Erec-E0(MeV)= -2.14
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 864.9 Erec-E0(MeV)= -0.7562
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 862 Erec-E0(MeV)= -3.613
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 864.8 Erec-E0(MeV)= -0.8991
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 862 Erec-E0(MeV)= -3.565
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 863.1 Erec-E0(MeV)= -2.508
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 870.6 Erec-E0(MeV)= 4.78
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 861.7 Erec-E0(MeV)= -3.82
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 863.1 Erec-E0(MeV)= -2.55
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 864.3 Erec-E0(MeV)= -1.329
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 859.4 Erec-E0(MeV)= -6.11
 test31EventAction: Event # 100 started
 test31EventAction: Event # 200 started
 test31EventAction: Event # 300 started
@@ -979,22 +980,22 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.12s Real=1.12s Sys=0s
+  User=1.05s Real=1.05s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
 Initial particle               proton   Ekin(GeV)= 1
 Range(mm)= 600; Stragling(mm)= 0 +- 0    1e+03 events for range
 Number of events               1000
-Average energy deposit         134.1 MeV
-Average number of e-           13.81
-Average number of gamma        0.884
+Average energy deposit         133.9 MeV
+Average number of e-           13.56
+Average number of gamma        0.843
 Average number of e+           0
-Average number of steps        165.5
-Average number of leak charged 1.039
-Average number of leak gamma   0.05
-Average number of back charged 0.001
-Average number of back gamma   0.025
+Average number of steps        161.4
+Average number of leak charged 1.038
+Average number of leak gamma   0.06
+Average number of back charged 0
+Average number of back gamma   0.018
 Average number of mu+mu-       0
 Average number of pi+pi-       0
 ====================================================================
@@ -1030,15 +1031,15 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
 ### Run 5 start
 Start Run processing.
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 884.3 Erec-E0(MeV)= 7.65
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 882.2 Erec-E0(MeV)= 5.599
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 823.5 Erec-E0(MeV)= -53.66
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 880.8 Erec-E0(MeV)= 4.181
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 876.9 Erec-E0(MeV)= 0.1894
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 879.1 Erec-E0(MeV)= 2.426
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 888.8 Erec-E0(MeV)= 12.19
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 888.5 Erec-E0(MeV)= 11.94
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 885.1 Erec-E0(MeV)= 8.464
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 873.9 Erec-E0(MeV)= -2.851
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 879.3 Erec-E0(MeV)= 2.656
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 887.3 Erec-E0(MeV)= 10.74
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 878.6 Erec-E0(MeV)= 1.943
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 884.4 Erec-E0(MeV)= 7.76
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 891.5 Erec-E0(MeV)= 14.91
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 865.5 Erec-E0(MeV)= -11.25
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 865.9 Erec-E0(MeV)= -10.84
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 883.7 Erec-E0(MeV)= 7.046
 test31EventAction: Event # 100 started
 test31EventAction: Event # 200 started
 test31EventAction: Event # 300 started
@@ -1052,22 +1053,22 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.32s Real=1.34s Sys=0s
+  User=1.32s Real=1.32s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
 Initial particle               pi-   Ekin(GeV)= 1
 Range(mm)= 600; Stragling(mm)= 0 +- 0    9.9e+02 events for range
 Number of events               1000
-Average energy deposit         121.7 MeV
-Average number of e-           15.4
-Average number of gamma        2.308
-Average number of e+           0.003
-Average number of steps        213.6
-Average number of leak charged 1.119
-Average number of leak gamma   0.307
-Average number of back charged 0.001
-Average number of back gamma   0.068
+Average energy deposit         121.6 MeV
+Average number of e-           15.44
+Average number of gamma        2.364
+Average number of e+           0.002
+Average number of steps        213.5
+Average number of leak charged 1.107
+Average number of leak gamma   0.264
+Average number of back charged 0
+Average number of back gamma   0.072
 Average number of mu+mu-       0
 Average number of pi+pi-       0
 ====================================================================
@@ -1103,15 +1104,15 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
 ### Run 6 start
 Start Run processing.
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 830.9 Erec-E0(MeV)= 1.328
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 828.1 Erec-E0(MeV)= -1.271
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 831.8 Erec-E0(MeV)= 2.116
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 830.5 Erec-E0(MeV)= 0.9812
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 827.5 Erec-E0(MeV)= -1.816
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 831.5 Erec-E0(MeV)= 1.893
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 831.5 Erec-E0(MeV)= 1.848
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 825.5 Erec-E0(MeV)= -3.692
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 833.8 Erec-E0(MeV)= 3.975
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 829.8 Erec-E0(MeV)= 0.3383
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 829.9 Erec-E0(MeV)= 0.4131
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 826.6 Erec-E0(MeV)= -2.665
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 825.5 Erec-E0(MeV)= -3.628
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 829.9 Erec-E0(MeV)= 0.4372
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 824.3 Erec-E0(MeV)= -4.805
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 830.5 Erec-E0(MeV)= 0.9577
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 826.2 Erec-E0(MeV)= -3.019
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 830.3 Erec-E0(MeV)= 0.7269
 test31EventAction: Event # 100 started
 test31EventAction: Event # 200 started
 test31EventAction: Event # 300 started
@@ -1125,7 +1126,7 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.16s Real=1.16s Sys=0s
+  User=1.15s Real=1.15s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
@@ -1133,14 +1134,14 @@ Initial particle               anti_deuteron   Ekin(GeV)= 1
 Range(mm)= 600; Stragling(mm)= 0 +- 0    1e+03 events for range
 Number of events               1000
 Average energy deposit         170.5 MeV
-Average number of e-           13.95
-Average number of gamma        0.628
+Average number of e-           14.12
+Average number of gamma        0.632
 Average number of e+           0
-Average number of steps        157
-Average number of leak charged 1.026
-Average number of leak gamma   0.024
+Average number of steps        158.2
+Average number of leak charged 1.039
+Average number of leak gamma   0.028
 Average number of back charged 0
-Average number of back gamma   0.015
+Average number of back gamma   0.01
 Average number of mu+mu-       0
 Average number of pi+pi-       0
 ====================================================================
@@ -1176,15 +1177,15 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
 ### Run 7 start
 Start Run processing.
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 865.9 Erec-E0(MeV)= 0.2327
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 868.5 Erec-E0(MeV)= 2.705
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 854.5 Erec-E0(MeV)= -10.82
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 865.5 Erec-E0(MeV)= -0.167
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 866.6 Erec-E0(MeV)= 0.8675
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 867.8 Erec-E0(MeV)= 2.034
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 864.7 Erec-E0(MeV)= -0.9819
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 865.2 Erec-E0(MeV)= -0.4653
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 867.1 Erec-E0(MeV)= 1.339
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 857.1 Erec-E0(MeV)= -8.276
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 869.5 Erec-E0(MeV)= 3.686
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 868.6 Erec-E0(MeV)= 2.813
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 871.1 Erec-E0(MeV)= 5.207
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 865.4 Erec-E0(MeV)= -0.2614
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 857.9 Erec-E0(MeV)= -7.559
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 862 Erec-E0(MeV)= -3.595
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 862.9 Erec-E0(MeV)= -2.72
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 866.5 Erec-E0(MeV)= 0.7395
 test31EventAction: Event # 100 started
 test31EventAction: Event # 200 started
 test31EventAction: Event # 300 started
@@ -1198,7 +1199,7 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.05s Real=1.29s Sys=0s
+  User=1.02s Real=1.02s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
@@ -1206,19 +1207,19 @@ Initial particle               anti_proton   Ekin(GeV)= 1
 Range(mm)= 600; Stragling(mm)= 0 +- 0    1e+03 events for range
 Number of events               1000
 Average energy deposit         134 MeV
-Average number of e-           13.67
-Average number of gamma        0.852
+Average number of e-           13.72
+Average number of gamma        0.855
 Average number of e+           0
-Average number of steps        161.6
-Average number of leak charged 1.035
-Average number of leak gamma   0.041
-Average number of back charged 0.001
-Average number of back gamma   0.023
+Average number of steps        162.7
+Average number of leak charged 1.031
+Average number of leak gamma   0.055
+Average number of back charged 0
+Average number of back gamma   0.025
 Average number of mu+mu-       0
 Average number of pi+pi-       0
 ====================================================================
 =========   End of tets31Histo  ============================
 #
-  User=10.24s Real=10.52s Sys=0.01s
+  User=10.01s Real=10.05s Sys=0.01s
 G4 kernel has come to Quit state.
 
