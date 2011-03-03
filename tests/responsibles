@@ -121,6 +121,7 @@ examples/advanced            cirrone@lns.infn.it             Pablo Cirrone
   brachytherapy              susanna@uow.edu.au              Susanna Guatelli
   ChargeExchangeMC           cirrone@lns.infn.it             Pablo Cirrone
   composite_calorimeter      Andrea.Dotti@cern.ch            Andrea Dotti
+  dnaphysics                 incerti@cenbg.in2p3.fr          Sebastien Incerti
   eRosita                    Maria.Grazia.Pia@ge.infn.it     Maria Grazia Pia
   gammaray_telescope         longof@ts.infn.it               Francesco Longo
   hadrontherapy              cirrone@lns.infn.it             Pablo Cirrone
@@ -140,6 +141,7 @@ examples/extended
   analysis:
     A01                      perl@slac.stanford.edu          Joseph Perl
     AnaEx01                  Guy.Barrand@lal.in2p3.fr        Guy Barrand
+    AnaEx02                  Michel.Maire@lapp.in2p3.fr      Michel Maire
     N03Con                   tkoi@slac.stanford.edu          Tatsumi Koi
   biasing
     B01, B02                 Alexander.Howard@cern.ch        Alexander Howard
