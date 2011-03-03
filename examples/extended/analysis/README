@@ -12,8 +12,13 @@ AnaEx01
 A01
 ---
 
- Rather complete example dedicaced to Jaida/Jas3 and HepRep
+ Rather complete example dedicaced to Jaida/Jas3 and HepRep.
  
+AnaEx02
+--------
+
+ As AnaEx01, but direct interface to ROOT. Do not use AIDA.
+  
 N03Con
 ------
 
