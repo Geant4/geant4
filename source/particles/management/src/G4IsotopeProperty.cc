@@ -114,9 +114,15 @@ void G4IsotopeProperty::DumpInfo() const
   } else {
     G4cout << "Spin: " << fISpin /2  << G4endl;
   }
-  G4cout << "MagneticMoment: " << fMagneticMoment/MeV*tesla << "[MeV/T]" <<G4endl;
-  G4cout << "Excited Energy: " << std::setprecision(1) << fEnergy/keV << "[keV]" << G4endl;
-  G4cout << "Life Time: " << fLifeTime/ns << "[ns]" << G4endl;
+  G4cout << "MagneticMoment: " 
+	 << fMagneticMoment/MeV*tesla << "[MeV/T]" <<G4endl;
+  G4cout << "Excited Energy: " 
+	 << std::setprecision(1) 
+	 << fEnergy/keV << "[keV]" 
+	 << std::setprecision(6) 
+	 << G4endl;
+  G4cout << "Life Time: " 
+	 << fLifeTime/ns << "[ns]" << G4endl;
   if (fDecayTable != 0) {
     fDecayTable->DumpInfo();
   } else {

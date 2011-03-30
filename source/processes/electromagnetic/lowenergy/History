@@ -17,6 +17,30 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28.03.2011  V.Ivanchenko, tag emlowen-V09-04-22
+            Removed parasitic printout
+
+28.03.2011  V.Ivanchenko, tag emlowen-V09-04-21
+            Fixed compillation
+
+27.03.2011  A. Mantero, tag emlowen-V09-04-20
+	    Warning update for PIXE and Deexcitation.
+
+27.03.2011  A. Mantero, tag emlowen-V09-04-19
+	    Some bug fixes for PIXE and Deexcitation.
+
+25.03.2011  S. Incerti, tag emlowen-V09-04-18
+            commented ionization classes for better clarity.
+
+17.03.2011  S. Incerti, tag emlowen-V09-04-17
+            Updated sources.cmake.
+
+17.03.2011  S. Incerti, tag emlowen-V09-04-16
+            Created new G4CrossSectionDataSet class.
+
+17.03.2011  S. Incerti, tag emlowen-V09-04-15
+            Removal of all Geant4-DNA classes.
+
 28.02.2011  S. Incerti, tag emlowen-V09-04-14
             Corrected control of warnings in ion. cross section model classes.
 

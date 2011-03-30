@@ -182,8 +182,8 @@ G4ReactionProduct * G4NeutronHPDiscreteTwoBody::Sample(G4double anEnergy, G4doub
 	 {
            //theBuff2.SetX(i, theCoeff[it].GetCoeff(i));
            //theBuff2.SetY(i, theCoeff[it].GetCoeff(i));
-           theBuff2.SetX(i, theCoeff[it].GetCoeff(i));
-           theBuff2.SetY(i, theCoeff[it].GetCoeff(i+1));
+           theBuff2.SetX(i/2, theCoeff[it].GetCoeff(i));
+           theBuff2.SetY(i/2, theCoeff[it].GetCoeff(i+1));
 	   i++;
 	 }
 

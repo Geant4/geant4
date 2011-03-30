@@ -44,6 +44,7 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4emutils
     HEADERS
         G4AtomicShell.hh
+        G4AtomicShellEnumerator.hh
         G4DummyModel.hh
         G4ElectronIonPair.hh
         G4EmCalculator.hh

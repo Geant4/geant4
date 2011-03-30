@@ -106,22 +106,20 @@ public:
 
   void SetLinearLossLimit(G4double val);
 
-  // obsolete will be removed
-  void ActivateDeexcitation(const G4String& proc, G4bool val, 
-			    const G4String& reg = "");
-
-  void SetDeexcitationActive(G4bool val);
-
   void SetDeexcitationActiveRegion(const G4String& rname = "", 
 				   G4bool valDeexcitation = true,
 				   G4bool valAuger = true,
 				   G4bool valPIXE = true);
 
-  void SetAugerActive(G4bool val);
+  void SetFluo(G4bool val);
 
-  void SetPIXEActive(G4bool val);
+  void SetAuger(G4bool val);
+
+  void SetPIXE(G4bool val);
 
   void SetPIXECrossSectionModel(const G4String& val);
+
+  void SetPIXEElectronCrossSectionModel(const G4String& val);
 
   void SetMscStepLimitation(G4MscStepLimitType val);
 

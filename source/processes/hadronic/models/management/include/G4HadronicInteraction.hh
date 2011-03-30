@@ -153,8 +153,7 @@ public: // With description
   { return ( this != (G4HadronicInteraction *) &right ); }
 
 
-  inline std::pair<G4double, G4double> GetEnergyMomentumCheckLevels() const
-  { return epCheckLevels; }
+  virtual std::pair<G4double, G4double> GetEnergyMomentumCheckLevels() const;
     
   inline void SetEnergyMomentumCheckLevels(G4double relativeLevel, G4double absoluteLevel)
   { epCheckLevels.first = relativeLevel;

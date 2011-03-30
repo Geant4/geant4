@@ -42,7 +42,7 @@
 #include "G4ProcessManager.hh"
 
 G4LEPProtonBuilder::
-G4LEPProtonBuilder() 
+G4LEPProtonBuilder() : theLEProtonModel(0)
 {
   theMin = 0;
   theMax=55*GeV;

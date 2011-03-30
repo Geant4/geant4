@@ -17,6 +17,37 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28 March 11: V.Ivant (emutils-V09-04-11)
+- Return old methods in G4VAtomDeexcitation, which are still used
+  in EM examples   
+
+28 March 11: V.Ivant (emutils-V09-04-10)
+- Cleanup G4VAtomDeexcitation methods
+
+28 March 11: A. Mantero (emutils-V09-04-09)
+- Updated G4VAtomDeexcitation methods names and in referring classses
+- Created G4AtomicShellEnumerator (from old G4VAtomicDeexcitation)
+
+28 March 11: V.Ivant (emutils-V09-04-08)
+- G4VMscModel - updated signature of GetRange and GetEnergy methods
+- G4EmProcessOptions - improved names of methods for deexcitation
+
+25 March 11: V.Ivant (emutils-V09-04-07)
+- G4VMscModel - added Get/Set method for ionisation process
+- G4VMultipleScattering - use these methods in run time 
+
+18 March 11: V.Ivant (emutils-V09-04-06)
+- G4VMscModel - add protected method for common computation of 
+  range and energy for all msc models
+- G4EmProcessOptions, G4EnergyLossMessenger, G4LossTableManager,
+  G4VAtomDeexcitation - cleanup options for deexcitation
+
+04 March 11: V.Ivant (emutils-V09-04-05)
+- G4VEmModel - removed obsolete method MinEnergyCut
+- G4VMultipleScattering - fix problem of initialisation of true
+  step length when multiple scattering model is inactive (needed for 
+  DNA Phsyics List)
+
 02 February 11: V.Ivant (emutils-V09-04-04)
 - G4VEmModel - reduced in 2 times memory for element selectors data
                 (ATLAS concern)

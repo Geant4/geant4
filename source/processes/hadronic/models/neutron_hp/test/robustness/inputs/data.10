@@ -1,0 +1,8 @@
+/control/verbose 2
+/run/particle/setCut 1 m
+/run/initialize
+/run/verbose 1
+/gun/direction 1 0 0
+/gun/particle proton
+/gun/energy 1 GeV
+/run/beamOn 10

@@ -16,19 +16,6 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-GLOBALLIBS := $(shell test -f $(G4LIB)/$(G4SYSTEM)/libG4global.a && echo yes)
-
-#ifdef GLOBALLIBS
-#  LDLIBS := -lG4global
-#else
-#  LDLIBS := -lG4globman
-#endif
-
-# ---Temporary--- external CHIPS processes
-#CPPFLAGS +=-I$(G4BASE)/processes/photolepton_hadron/cross-sections/include \
-#           -I$(G4BASE)/processes/photolepton_hadron/processes/include
-#EXTRALIBS += -lG4photoleptohadr_cs -lG4photoleptohadr_proc
-
 include $(G4INSTALL)/config/binmake.gmk
 
 CXXFLAGS_WITHOUT_O := $(filter-out -O% , $(CXXFLAGS))

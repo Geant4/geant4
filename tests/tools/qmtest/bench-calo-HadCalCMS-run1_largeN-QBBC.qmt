@@ -5,7 +5,7 @@
     <text>.*</text>
   </argument>
   <argument name="timeout">
-    <integer>3000</integer>
+    <integer>7200</integer>
   </argument>
   <argument name="stdout">
     <text/>
@@ -22,7 +22,11 @@
     <integer>0</integer>
   </argument>
   <argument name="environment">
-    <set/>
+    <set>
+       <text>G4Hadronic_epReportLevel=3</text>
+       <text>G4Hadronic_epCheckRelativeLevel=0.01</text>
+       <text>G4Hadronic_epCheckAbsoluteLevel=2.0</text>
+    </set>   
   </argument>
   <argument name="command">
     <text>cd

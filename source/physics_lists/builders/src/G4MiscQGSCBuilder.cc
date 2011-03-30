@@ -39,7 +39,10 @@
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 
-G4MiscQGSCBuilder::G4MiscQGSCBuilder(G4int ver): verbose(ver), wasActivated(false)
+G4MiscQGSCBuilder::G4MiscQGSCBuilder(G4int ver): 
+    theModel(0),theCascade(0),theQGSCModel(0),
+    theQGSCDecay(0),theQuasiElastic(0),
+   verbose(ver), wasActivated(false)
 {
   // pointer to the particle table
   theParticleTable = G4ParticleTable::GetParticleTable();

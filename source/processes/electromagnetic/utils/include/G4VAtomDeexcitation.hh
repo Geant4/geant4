@@ -38,6 +38,7 @@
 // Creation date: 30.06.2009
 //
 // Modifications:
+// 15 Mar 2011  ALF   stripped G4AtomicShellEnumerator to its own file
 //
 // Class Description:
 //
@@ -54,24 +55,12 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4Track.hh"
 #include <vector>
+#include "G4AtomicShellEnumerator.hh"
 
 class G4ParticleDefinition;
 class G4DynamicParticle;
 class G4MaterialCutsCouple;
 class G4VParticleChange;
-
-enum G4AtomicShellEnumerator
-{
-  fKShell = 0,
-  fL1Shell,
-  fL2Shell,
-  fL3Shell,
-  fM1Shell,
-  fM2Shell,
-  fM3Shell,
-  fM4Shell,
-  fM5Shell
-};
 
 class G4VAtomDeexcitation {
 public:
@@ -93,20 +82,22 @@ public:
   // May be called at run time 
   virtual void InitialiseForExtraAtom(G4int Z) = 0;
 
-  // Activation of deexcitation
-  inline void SetActive(G4bool);
-
   // Activation of deexcitation per detector region
   void SetDeexcitationActiveRegion(const G4String& rname = "", 
 				   G4bool valDeexcitation = true,
 				   G4bool valAuger = false,
 				   G4bool valPIXE = true);
 
+  // Activation of deexcitation
+  inline void SetFluo(G4bool);
+  inline void SetActive(G4bool);
+
   // Activation of Auger electron production
-  inline void SetAugerActive(G4bool);
+  inline void SetAuger(G4bool);
   inline G4bool IsAugerActive() const;
 
   // Activation of PIXE simulation
+  inline void SetPIXE(G4bool);
   inline void SetPIXEActive(G4bool);
   inline G4bool IsPIXEActive() const;
 
@@ -116,6 +107,10 @@ public:
   // PIXE model name
   inline void SetPIXECrossSectionModel(const G4String&);
   inline const G4String& PIXECrossSectionModel() const;
+
+  // PIXE model name for e+e-
+  inline void SetPIXEElectronCrossSectionModel(const G4String&);
+  inline const G4String& PIXEElectronCrossSectionModel() const;
 
   // Access to the list of atoms active for deexcitation
   inline const std::vector<G4bool>& GetListOfActiveAtoms() const;
@@ -182,6 +177,7 @@ private:
   G4int    verbose;
   G4String name;
   G4String namePIXE;
+  G4String nameElectronPIXE;
   G4bool   isActive;
   G4bool   flagAuger;
   G4bool   flagPIXE;
@@ -197,12 +193,17 @@ private:
   std::vector<G4Track*> secVect;
 };
 
+inline void G4VAtomDeexcitation::SetFluo(G4bool val)
+{
+  isActive = val;
+}
+
 inline void G4VAtomDeexcitation::SetActive(G4bool val)
 {
   isActive = val;
 }
 
-inline void G4VAtomDeexcitation::SetAugerActive(G4bool val)
+inline void G4VAtomDeexcitation::SetAuger(G4bool val)
 {
   flagAuger = val;
 }
@@ -212,9 +213,16 @@ inline G4bool G4VAtomDeexcitation::IsAugerActive() const
   return (flagAuger && isActive);
 }
 
+inline void G4VAtomDeexcitation::SetPIXE(G4bool val)
+{
+  flagPIXE = val;
+  if(val) { isActive = true; }
+}
+
 inline void G4VAtomDeexcitation::SetPIXEActive(G4bool val)
 {
   flagPIXE = val;
+  if(val) { isActive = true; }
 }
 
 inline G4bool G4VAtomDeexcitation::IsPIXEActive() const
@@ -233,10 +241,22 @@ void G4VAtomDeexcitation::SetPIXECrossSectionModel(const G4String& n)
   namePIXE = n;
 }
 
+inline void 
+G4VAtomDeexcitation::SetPIXEElectronCrossSectionModel(const G4String& n)
+{
+  nameElectronPIXE = n;
+}
+
 inline 
 const G4String& G4VAtomDeexcitation::PIXECrossSectionModel() const
 {
   return namePIXE;
+}
+
+inline 
+const G4String& G4VAtomDeexcitation::PIXEElectronCrossSectionModel() const
+{
+  return nameElectronPIXE;
 }
 
 inline const std::vector<G4bool>& 

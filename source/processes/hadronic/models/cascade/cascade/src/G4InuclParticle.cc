@@ -36,7 +36,7 @@
 // WARNING!  Bertini code doesn't do four-vectors; repair mass before use!
 G4InuclParticle::G4InuclParticle(G4ParticleDefinition* pd,
 				 const G4LorentzVector& mom)
-  : modelId(0) {
+  : modelId(G4InuclParticle::DefaultModel) {
   setDefinition(pd);
   setMomentum(mom);
 }
@@ -49,6 +49,7 @@ G4InuclParticle& G4InuclParticle::operator=(const G4InuclParticle& right) {
 
   return *this;
 }
+
 
 // WARNING!  Bertini code doesn't do four-vectors; repair mass before use!
 void G4InuclParticle::setMomentum(const G4LorentzVector& mom) {

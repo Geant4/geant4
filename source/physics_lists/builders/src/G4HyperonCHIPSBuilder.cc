@@ -36,7 +36,7 @@
 #include "G4HyperonCHIPSBuilder.hh"
 
 G4HyperonCHIPSBuilder::G4HyperonCHIPSBuilder(G4int ver):
- verbose(ver), wasActivated(false)
+ verbose(ver), wasActivated(false), inelastic(0)
 {
   // pointer to the particle table
   theParticleTable = G4ParticleTable::GetParticleTable();

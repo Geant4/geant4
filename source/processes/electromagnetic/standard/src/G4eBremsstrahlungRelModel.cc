@@ -92,7 +92,6 @@ G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(const G4ParticleDefinition*
 {
   theGamma = G4Gamma::Gamma();
 
-  minThreshold = 0.1*keV;
   lowKinEnergy = GeV;
   SetLowEnergyLimit(lowKinEnergy);  
 
@@ -136,14 +135,6 @@ void G4eBremsstrahlungRelModel::SetParticle(const G4ParticleDefinition* p)
   particleMass = p->GetPDGMass();
   if(p == G4Electron::Electron()) { isElectron = true; }
   else                            { isElectron = false;}
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4eBremsstrahlungRelModel::MinEnergyCut(const G4ParticleDefinition*,
-						 const G4MaterialCutsCouple*)
-{
-  return minThreshold;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

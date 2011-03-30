@@ -40,6 +40,7 @@ GEANT4_DEFINE_MODULE(NAME G4materials
         G4Material.hh                  
         G4NistMessenger.hh
         G4Element.hh            
+        G4ElementData.hh 
         G4MaterialPropertiesTable.hh   
         G4OpticalSurface.hh
         G4ElementTable.hh       
@@ -68,6 +69,7 @@ GEANT4_DEFINE_MODULE(NAME G4materials
         G4Material.cc              
         G4NistMessenger.cc
         G4Element.cc          
+        G4ElementData.cc
         G4MaterialPropertiesTable.cc  
         G4OpticalSurface.cc
         G4ExtDEDXTable.cc       

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
  // Hadronic Process: AntiTriton Inelastic Process
- // J.Apostolakis 23 Feb 2011
+ // G.Folger, 10 March 2011
  // Last modified:
  //
  // Note:  there is no .cc file
@@ -38,15 +38,14 @@
 // Class Description - End
 
 #include "G4HadronInelasticProcess.hh"
-#include "G4AntiTriton.hh" 
+#include "G4AntiTriton.hh"
 
  class G4AntiTritonInelasticProcess : public G4HadronInelasticProcess
  {
  public:
     
-    G4AntiTritonInelasticProcess(
-     const G4String& processName = "AntiTritonInelastic" ) :
-      G4HadronInelasticProcess( processName, G4AntiTriton::AntiTriton() )
+    G4AntiTritonInelasticProcess( const G4String& processName= "AntiTritonInelasticProcess") \
+       : G4HadronInelasticProcess( processName, G4AntiTriton::AntiTriton() )
     { }
     
     ~G4AntiTritonInelasticProcess()

@@ -35,7 +35,7 @@
 #include "G4HadTmpUtil.hh"
 
 G4TripathiCrossSection::G4TripathiCrossSection()
- : G4VCrossSectionDataSet("G4TripathiCrossSection")
+ : G4VCrossSectionDataSet("Tripathi")
 {
   //  G4cout <<"New G4TripathiCrossSection " << this << G4endl;
 }

@@ -12,6 +12,7 @@
 #------------------------------------------------------------------------------
 
 add_subdirectory(adjoint)
+add_subdirectory(dna)
 add_subdirectory(highenergy)
 add_subdirectory(lowenergy)
 add_subdirectory(muons)

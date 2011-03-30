@@ -86,10 +86,8 @@ G4ionIonisation::G4ionIonisation(const G4String& name)
     stopDataActive(true)
 {
   SetLinearLossLimit(0.02);
-  SetStepFunction(0.1, 0.1*mm);
-  SetIntegral(true);
+  SetStepFunction(0.1, 0.01*mm);
   SetProcessSubType(fIonisation);
-  //  SetVerboseLevel(1);
   corr = G4LossTableManager::Instance()->EmCorrections();
   eth = 2*MeV;
 }
@@ -128,7 +126,6 @@ void G4ionIonisation::InitialiseEnergyLossProcess(
   if(!isInitialised) {
 
     theParticle = part;
-    //G4String pname = part->GetParticleName();
 
     // define base particle
     const G4ParticleDefinition* theBaseParticle = 0;

@@ -56,6 +56,7 @@ G4Step::G4Step()
   :  fTotalEnergyDeposit(0.0),fNonIonizingEnergyDeposit(0.0),
      fStepLength(0.), fpTrack(0), 
      fpSteppingControlFlag(NormalCondition),fSecondary(0),
+     nSecondaryByLastStep(0), secondaryInCurrentStep(),
      fpVectorOfAuxiliaryPointsPointer(0)
 {
   fpPreStepPoint  = new G4StepPoint();
@@ -63,6 +64,8 @@ G4Step::G4Step()
 
   fFirstStepInVolume =false;
   fLastStepInVolume = false;
+
+  secondaryInCurrentStep = new std::vector<CT>;
 }
 
 /////////////////
@@ -93,7 +96,7 @@ G4ThreeVector G4Step::GetDeltaMomentum() const
 
 /////////////////
 G4double G4Step::GetDeltaEnergy() const
-  /////////////////
+/////////////////
 { 
   static G4bool isFirstTime = true;
   if (isFirstTime) {
@@ -107,3 +110,16 @@ G4double G4Step::GetDeltaEnergy() const
   return fpPostStepPoint->GetKineticEnergy()
     - fpPreStepPoint->GetKineticEnergy(); 
 }
+
+/////////////////
+const std::vector<const G4Track*>* G4Step::GetSecondaryInCurrentStep() const 
+/////////////////
+{
+  secondaryInCurrentStep->clear();
+  G4int nSecondary = fSecondary->size();
+  for (G4int i=nSecondaryByLastStep; i<nSecondary; i++) {
+    secondaryInCurrentStep->push_back((*fSecondary)[i]);
+  }
+  return  secondaryInCurrentStep;
+}
+

@@ -29,11 +29,13 @@
  #include "G4ProcessManager.hh"
 
  G4LHEPNeutronBuilder::
- G4LHEPNeutronBuilder() 
- {
-   theMin = 0;
-   theIMin = 0;
- }
+ G4LHEPNeutronBuilder() :
+  theLENeutronModel(0), theHENeutronModel(0),
+  theNeutronFissionModel(0), theNeutronCaptureModel(0)
+{
+  theMin = 0;
+  theIMin = 0;
+}
 
  G4LHEPNeutronBuilder::
  ~G4LHEPNeutronBuilder() 

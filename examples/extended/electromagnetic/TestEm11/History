@@ -15,6 +15,18 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+20-02-11 mma (testem11-V09-04-02)
+- update PhysListEmStandard for deexcitation
+- PhysicsList : set lowest production cut to 100 eV
+     
+10-03-11 mma (testem11-V09-04-01)
+- DetectorConstruction : allows several absorbers
+- Modify RunAction, SteppingAction, DetectorMessenger
+- HistoManager and Messenger : remove csda and stepMax computation
+- update all macros and Readme
+- update SteppingVerbose
+- update vis.mac 
+     
 05-01-11 V.Ivant (testem11-V09-04-00)
 - Minor cleanup of SS physics constructor
 

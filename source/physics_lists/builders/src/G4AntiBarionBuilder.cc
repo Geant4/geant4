@@ -47,6 +47,7 @@ G4AntiBarionBuilder(): wasActivated(false)
   theAntiProtonInelastic=new G4AntiProtonInelasticProcess;
   theAntiNeutronInelastic=new G4AntiNeutronInelasticProcess;
   theAntiDeuteronInelastic=new G4AntiDeuteronInelasticProcess;
+  theAntiTritonInelastic=new G4AntiTritonInelasticProcess;
   theAntiHe3Inelastic=new G4AntiHe3InelasticProcess;
   theAntiAlphaInelastic=new G4AntiAlphaInelasticProcess;
 }
@@ -56,6 +57,7 @@ G4AntiBarionBuilder::
   delete theAntiProtonInelastic;
   delete theAntiNeutronInelastic;
   delete theAntiDeuteronInelastic;
+  delete theAntiTritonInelastic;
   delete theAntiHe3Inelastic;
   delete theAntiAlphaInelastic;
 }
@@ -71,6 +73,7 @@ Build()
     (*i)->Build(theAntiProtonInelastic);
     (*i)->Build(theAntiNeutronInelastic);
     (*i)->Build(theAntiDeuteronInelastic);
+    (*i)->Build(theAntiTritonInelastic);
     (*i)->Build(theAntiHe3Inelastic);
     (*i)->Build(theAntiAlphaInelastic);
   }

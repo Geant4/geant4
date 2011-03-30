@@ -34,7 +34,7 @@
 #include <map>
 #include <vector>
 
-#include "G4DNACrossSectionDataSet.hh"
+#include "G4CrossSectionDataSet.hh"
 
 
 class G4AnalyticalEcpssrKCrossSection : public G4VecpssrKModel
@@ -84,9 +84,9 @@ private:
 
   G4int verboseLevel;
 
-  G4DNACrossSectionDataSet* tableC1;
-  G4DNACrossSectionDataSet* tableC2;
-  G4DNACrossSectionDataSet* tableC3;
+  G4CrossSectionDataSet* tableC1;
+  G4CrossSectionDataSet* tableC2;
+  G4CrossSectionDataSet* tableC3;
 };
   
 #endif

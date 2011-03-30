@@ -41,6 +41,7 @@
 #include "G4PhysicalVolumeModel.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
+#include "G4RotationMatrix.hh"
 #include "G4Material.hh"
 #include "G4Polymarker.hh"
 #include "G4Polyline.hh"
@@ -211,7 +212,7 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Cons& cons) {
 	
 	// HepRApp does not correctly represent the end faces of cones at
 	// non-standard angles, let the base class convert these solids to polygons.	
-	CLHEP::HepRotation r = fpObjectTransformation->getRotation();	
+	G4RotationMatrix r = fpObjectTransformation->getRotation();	
 	G4bool linedUpWithAnAxis = (std::fabs(r.phiX())<=.001 ||  
 								std::fabs(r.phiY())<=.001 || 
 								std::fabs(r.phiZ())<=.001 ||
@@ -278,7 +279,7 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Tubs& tubs) {
 	
 	// HepRApp does not correctly represent the end faces of cylinders at
 	// non-standard angles, let the base class convert these solids to polygons.	
-	CLHEP::HepRotation r = fpObjectTransformation->getRotation();	
+	G4RotationMatrix r = fpObjectTransformation->getRotation();	
 	G4bool linedUpWithAnAxis = (std::fabs(r.phiX())<=.001 ||  
 								std::fabs(r.phiY())<=.001 || 
 								std::fabs(r.phiZ())<=.001 ||

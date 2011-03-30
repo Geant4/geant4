@@ -27,11 +27,35 @@
 // 10-Nov-2003 Bug fix at Cal. ke_per_n and D T. Koi
 // 12-Nov-2003 Add energy check at lower side T. Koi
 // 26-Dec-2006 Add isotope dependence D. Wright
+// 14-Mar-2011 Moved constructor, destructor and virtual methods to source by V.Ivanchenko
 
 #include "G4IonsKoxCrossSection.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
 #include "G4HadTmpUtil.hh"
+
+G4IonsKoxCrossSection::G4IonsKoxCrossSection()
+  : G4VCrossSectionDataSet("IonsKox"),
+    upperLimit ( 10*GeV ), lowerLimit ( 10*MeV ), 
+    r0 ( 1.1*fermi ), rc ( 1.3*fermi )
+{}
+
+G4IonsKoxCrossSection::~G4IonsKoxCrossSection()
+{}
+
+G4bool G4IonsKoxCrossSection::IsApplicable(const G4DynamicParticle* aDP, const G4Element*)
+{
+  return IsIsoApplicable(aDP, 0, 0);
+}
+
+G4bool G4IonsKoxCrossSection::IsIsoApplicable(const G4DynamicParticle* aDP,
+                           G4int /*ZZ*/, G4int /*AA*/) 
+{
+  G4int baryonNumber = aDP->GetDefinition()->GetBaryonNumber();
+  G4double kineticEnergy = aDP->GetKineticEnergy(); 
+  if ( kineticEnergy / baryonNumber <= upperLimit ) { return true; }
+  return false;
+}
 
 G4double G4IonsKoxCrossSection::
 GetZandACrossSection(const G4DynamicParticle* aParticle, G4int ZZ, 
@@ -145,4 +169,12 @@ G4double G4IonsKoxCrossSection::calCeValue(const G4double ke)
 
    }
    return Ce;
+}
+
+void G4IonsKoxCrossSection::BuildPhysicsTable(const G4ParticleDefinition&)
+{}
+
+void G4IonsKoxCrossSection::DumpPhysicsTable(const G4ParticleDefinition&) 
+{
+  G4cout << "G4IonsKoxCrossSection: uses Kox formula"<<G4endl;
 }

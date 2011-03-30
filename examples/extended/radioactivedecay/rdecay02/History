@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+04/03/2011 - L. Desorgher (rdecay02-V09-04-00)
+-Correct prepocessor lines 316-320 in exrdmHisto.cc to get the code 
+ also compiled with ROOT (G4ANALYSIS_USE_ROOT switch on)
+
 17/11/2010 - F.Lei (rdecay02-V09-03-04)
 - The radioactivity data is output in file ".activity" with the same file name as the .aida or .root files
 - Added more macros macros/u238-b.mac macros/u238.mac  macros/po201m.mac

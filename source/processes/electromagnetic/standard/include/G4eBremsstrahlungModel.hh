@@ -74,9 +74,6 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  virtual G4double MinEnergyCut(const G4ParticleDefinition*, 
-				const G4MaterialCutsCouple*);
-
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
 					const G4ParticleDefinition*,
 					G4double kineticEnergy,
@@ -134,7 +131,6 @@ protected:
   G4ParticleDefinition*       theGamma;
   G4ParticleChangeForLoss*    fParticleChange;
 
-  G4double minThreshold;
   G4bool   isElectron;
 
 private:

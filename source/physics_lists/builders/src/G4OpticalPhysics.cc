@@ -194,6 +194,7 @@ void G4OpticalPhysics::ConstructProcess()
        o << "Particle " << particleName << "without a Process Manager";
        G4Exception("G4OpticalPhysics::ConstructProcess()","",
                     FatalException,o.str().c_str());
+       return;                 // else coverity complains for pManager use below	    
     }
 
     if(fCerenkovProcess->IsApplicable(*particle)){

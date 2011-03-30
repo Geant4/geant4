@@ -58,7 +58,7 @@ public:
 
   ~Test30Physics();
 
-  G4VProcess* GetProcess(const G4String&, const G4String&, G4Material*);
+  G4VProcess* GetProcess(const G4String&, const G4ParticleDefinition*, G4Material*);
 
   G4double GetNucleusMass() {return theProcess->GetMass();};
 

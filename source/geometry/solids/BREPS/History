@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24/03/2011 : G.Cosmo           breps-V09-04-00
+- Use G4Transform3D type in place of native CLHEP type.
+
 23/11/2010 : G.Cosmo           breps-V09-03-07 and V09-03-06
 - Fixed remaining cases of pointer handling in experimental G4BezierSurface
   code.

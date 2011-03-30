@@ -32,6 +32,7 @@
 // -----------
 //  21 Apr 2008   ALF  1st implementation
 //  29 Apr 2009   ALF Updated Desing for Integration
+//  15 Mar 2011   ALF introduced the usage of G4AtomicShellEnumerator
 //
 // -------------------------------------------------------------------
 
@@ -65,7 +66,7 @@ public:
 					G4double deltaEnergy = 0,
 					G4bool testFlag = false) const;
 
-  G4double CrossSection(G4int Z, G4int shell,
+  G4double CrossSection(G4int Z, G4AtomicShellEnumerator shell,
 			G4double incidentEnergy,
 			G4double mass) const;
 

@@ -32,6 +32,7 @@
 #include "G4HadronicException.hh"
 
 G4VHighEnergyGenerator::G4VHighEnergyGenerator()
+  :   epCheckLevels(DBL_MAX,DBL_MAX)
 {
 }
 
@@ -62,4 +63,16 @@ int G4VHighEnergyGenerator::operator!=(const G4VHighEnergyGenerator &) const
 {
   return 1;
 }
+
+std::pair<G4double, G4double> G4VHighEnergyGenerator::GetEnergyMomentumCheckLevels() const
+{
+   return epCheckLevels;
+}
+void G4VHighEnergyGenerator::SetEnergyMomentumCheckLevels(
+									G4double relativeLevel, G4double absoluteLevel)
+{
+	epCheckLevels.first=relativeLevel;
+	epCheckLevels.second=absoluteLevel;
+}
+
 

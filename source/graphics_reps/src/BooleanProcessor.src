@@ -13,11 +13,12 @@
 
 #ifdef BP_GEANT4 //G.Barrand
 
-#include <CLHEP/Geometry/Plane3D.h>
-#include <CLHEP/Geometry/Plane3D.h>
-typedef HepGeom::Plane3D<double> HVPlane3D;
-typedef HepGeom::Point3D<double> HVPoint3D;
-typedef HepGeom::Normal3D<double> HVNormal3D;
+#include "G4Plane3D.hh"
+#include "G4Point3D.hh"
+#include "G4Normal3D.hh"
+typedef G4Plane3D HVPlane3D;
+typedef G4Point3D HVPoint3D;
+typedef G4Normal3D HVNormal3D;
 
 #else //BP_HEPVIS
 

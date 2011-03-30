@@ -36,6 +36,7 @@
 //		explosion condition to base-class function.
 // 20100926  M. Kelsey -- Move to new G4VCascadeDeexcitation base class,
 //		replace getDeexcitationFragments() with deExcite().
+// 20110214  M. Kelsey -- Follow G4InuclParticle::Model enumerator migration
 
 #include "G4PreCompoundDeexcitation.hh"
 #include "globals.hh"
@@ -81,7 +82,8 @@ void G4PreCompoundDeexcitation::collide(G4InuclParticle* /*bullet*/,
   // NOTE:  Should not get this case, as G4IntraNucleiCascade should catch it
   if (ntarget->getA() == 1) {		// Just a nucleon; move to output list
     G4int type = (ntarget->getZ() == 0) ? neutron : proton;
-    G4InuclElementaryParticle ptarget(target->getMomentum(), type, 9);
+    G4InuclElementaryParticle ptarget(target->getMomentum(), type, 
+				      G4InuclParticle::PreCompound);
 
     globalOutput.addOutgoingParticle(ptarget);
     return;

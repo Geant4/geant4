@@ -37,6 +37,7 @@
 // Modifications:
 // 23.01.2009 V.Ivanchenko add destruction of data sets
 // 29.04.2010 G.Folger     modifictaions for integer A & Z
+// 14.03.2011 V.Ivanchenko fixed DumpPhysicsTable
 //
 //
 
@@ -59,15 +60,18 @@ G4CrossSectionDataStore::GetCrossSection(const G4DynamicParticle* aParticle,
                                          const G4Element* anElement,
 					 G4double aTemperature)
 {
+  /*
   if (NDataSetList == 0) 
   {
     throw G4HadronicException(__FILE__, __LINE__, 
      "G4CrossSectionDataStore: no data sets registered");
     return DBL_MIN;
   }
-  for (G4int i = NDataSetList-1; i >= 0; i--) {
-    if (DataSetList[i]->IsApplicable(aParticle, anElement))
+  */
+  for (G4int i = NDataSetList-1; i >= 0; i--) { 
+    if (DataSetList[i]->IsApplicable(aParticle, anElement)) {
       return DataSetList[i]->GetCrossSection(aParticle,anElement,aTemperature);
+    }
   }
   throw G4HadronicException(__FILE__, __LINE__, 
                       "G4CrossSectionDataStore: no applicable data set found "
@@ -79,12 +83,14 @@ G4VCrossSectionDataSet*
 G4CrossSectionDataStore::whichDataSetInCharge(const G4DynamicParticle* aParticle,
                                               const G4Element* anElement)
 {
+  /*
   if (NDataSetList == 0) 
   {
     throw G4HadronicException(__FILE__, __LINE__, 
      "G4CrossSectionDataStore: no data sets registered");
     return 0;
   }
+  */
   for (G4int i = NDataSetList-1; i >= 0; i--) {
     if (DataSetList[i]->IsApplicable(aParticle, anElement) )
     {
@@ -103,12 +109,14 @@ G4CrossSectionDataStore::GetCrossSection(const G4DynamicParticle* aParticle,
                                          const G4Isotope* anIsotope,
 					 G4double aTemperature)
 {
+  /*
   if (NDataSetList == 0) 
   {
     throw G4HadronicException(__FILE__, __LINE__, 
      "G4CrossSectionDataStore: no data sets registered");
     return DBL_MIN;
   }
+  */
   for (G4int i = NDataSetList-1; i >= 0; i--) {
     if (DataSetList[i]->IsIsoApplicable(aParticle, anIsotope->GetZ(), anIsotope->GetN()))
       return DataSetList[i]->GetIsoCrossSection(aParticle,anIsotope,aTemperature);
@@ -136,15 +144,18 @@ G4CrossSectionDataStore::GetCrossSection(const G4DynamicParticle* aParticle,
                                          G4int Z, G4int A,
 					 G4double aTemperature)
 {
+  /*
   if (NDataSetList == 0) 
   {
     throw G4HadronicException(__FILE__, __LINE__, 
      "G4CrossSectionDataStore: no data sets registered");
     return DBL_MIN;
   }
+  */
   for (G4int i = NDataSetList-1; i >= 0; i--) {
-      if (DataSetList[i]->IsIsoApplicable(aParticle, Z, A))
+    if (DataSetList[i]->IsIsoApplicable(aParticle, Z, A)) {
       return DataSetList[i]->GetZandACrossSection(aParticle,Z,A,aTemperature);
+    }
   }
   throw G4HadronicException(__FILE__, __LINE__, 
                       "G4CrossSectionDataStore: no applicable data set found "
@@ -167,7 +178,6 @@ G4CrossSectionDataStore::GetCrossSection(const G4DynamicParticle* aParticle,
     xSection = GetCrossSection( aParticle, (*aMaterial->GetElementVector())[i], aTemp);
     sigma += theAtomsPerVolumeVector[i] * xSection;
   }
-
   return sigma;
 }
 
@@ -303,19 +313,22 @@ G4CrossSectionDataStore::AddDataSet(G4VCrossSectionDataSet* aDataSet)
 }
 
 void
-G4CrossSectionDataStore::
-BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
+G4CrossSectionDataStore::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 {
-  if(NDataSetList > 0) {
-    for (G4int i=0; i<NDataSetList; i++) {
-      DataSetList[i]->BuildPhysicsTable(aParticleType);
-    } 
+  if (NDataSetList == 0) 
+  {
+    throw G4HadronicException(__FILE__, __LINE__, 
+     "G4CrossSectionDataStore: no data sets registered");
+    return;
   }
+  for (G4int i=0; i<NDataSetList; i++) {
+    DataSetList[i]->BuildPhysicsTable(aParticleType);
+  } 
 }
 
 
-void G4CrossSectionDataStore::
-DumpPhysicsTable(const G4ParticleDefinition& aParticleType)
+void 
+G4CrossSectionDataStore::DumpPhysicsTable(const G4ParticleDefinition& aParticleType)
 {
   // Print out all cross section data sets used and the energies at
   // which they apply
@@ -326,67 +339,17 @@ DumpPhysicsTable(const G4ParticleDefinition& aParticleType)
     return;
   }
 
-  // Get low and high energy limits of data sets
-
-  std::vector<G4double> limitE;
   for (G4int i = NDataSetList-1; i >= 0; i--) {
-    limitE.push_back(DataSetList[i]->GetMinKinEnergy() );
-    limitE.push_back(DataSetList[i]->GetMaxKinEnergy() );
-  }
-
-  // Sort the energies and find average values for each interval
-
-  std::sort(limitE.begin(), limitE.end());
-  std::vector<G4double> avE;
-  for (unsigned int i = 0; i < limitE.size()-1; i++)
-              avE.push_back((limitE[i] + limitE[i+1])/2.);
-
-  // Check each average energy to see which set it belongs to
-
-  G4double testE;
-  G4int prevSet = -1;
-  std::vector<G4int> csIndex;
-  std::vector<G4double> csLoE;
-  std::vector<G4double> csHiE;
-
-  for (unsigned int i = 0; i < avE.size(); i++) {
-    testE = avE[i];
-    for (G4int j = NDataSetList-1; j >= 0; j--) {
-      if (testE > DataSetList[j]->GetMinKinEnergy() && 
-          testE < DataSetList[j]->GetMaxKinEnergy() ) {
-        if (j != prevSet) {
-          prevSet = j;
-          csIndex.push_back(j);
-          csLoE.push_back(limitE[i]);
-          csHiE.push_back(limitE[i+1]);
-        } else {
-          csHiE.pop_back();
-          csHiE.push_back(limitE[i+1]);
-        }
-        break;
-      }
+    G4double e1 = DataSetList[i]->GetMinKinEnergy();
+    G4double e2 = DataSetList[i]->GetMaxKinEnergy();
+    if (i < NDataSetList-1) G4cout << "                                 ";
+    G4cout << std::setw(25) << DataSetList[i]->GetName() << ": Emin(GeV)= "
+           << std::setw(4) << e1/GeV << "  Emax(GeV)= " 
+           << e2/GeV << G4endl;
+    if (DataSetList[i]->GetName() == "G4CrossSectionPairGG") {
+      DataSetList[i]->DumpPhysicsTable(aParticleType);
     }
   }
 
-  // Print out
-
-  G4int csSet;
-  G4bool first = true;
-  for (unsigned int i = 0; i < csIndex.size(); i++) {
-    csSet = csIndex[i];
-    if (!first) G4cout << "                                 ";
-    G4cout << std::setw(25)
-           << DataSetList[csSet]->GetName() << ": Emin(GeV)= "
-           << std::setw(4) << csLoE[i]/GeV << "  Emax(GeV)= " 
-           << csHiE[i]/GeV << G4endl;
-    first = false;
-  }
-
-  for (G4int i = NDataSetList-1; i >= 0; i--) {
-    if (DataSetList[i]->GetName() == "G4CrossSectionPairGG")
-      DataSetList[i]->DumpPhysicsTable(aParticleType);
-  }
-
   G4cout << G4endl;
-
 }

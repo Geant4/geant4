@@ -104,7 +104,7 @@ void G4GammaConversion::InitialiseProcess(const G4ParticleDefinition*)
     SetSecondaryParticle(G4Electron::Electron());
     G4double emin = std::max(MinKinEnergy(), 2.0*electron_mass_c2);
     SetMinKinEnergy(emin);
-    if(!Model()) SetModel(new G4BetheHeitlerModel());
+    if(!Model()) { SetModel(new G4BetheHeitlerModel()); }
     Model()->SetLowEnergyLimit(emin);
     Model()->SetHighEnergyLimit(MaxKinEnergy());
     AddEmModel(1, Model());

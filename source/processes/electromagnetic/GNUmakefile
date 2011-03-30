@@ -7,8 +7,10 @@ MAKEFLAGS= --no-print-directory
 
 name := G4electromagnetic
 
-SUBDIRS = muons standard utils xrays lowenergy highenergy adjoint polarisation pii
-SUBLIBS = G4muons G4emstandard G4emutils G4xrays G4emlowenergy G4emhighenergy G4emadjoint G4empolar G4empii
+SUBDIRS  = muons standard utils xrays lowenergy
+SUBDIRS += dna pii highenergy adjoint polarisation
+SUBLIBS  = G4muons G4emstandard G4emutils G4xrays G4emlowenergy
+SUBLIBS += G4emdna G4empii G4emhighenergy G4emadjoint G4empolar
 
 ifndef G4INSTALL
   G4INSTALL = ../../..

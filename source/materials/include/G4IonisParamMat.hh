@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id: G4IonisParamMat.hh,v 1.18 2010-05-10 10:44:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -186,12 +185,12 @@ private:
 
   // static data created only once
   static G4DensityEffectData* fDensityData;
+  static G4double twoln10;
 };
 
   // x = log10(beta*gamma)  
 inline G4double G4IonisParamMat::DensityCorrection(G4double x)
 {
-  static const G4double twoln10 = 2.*std::log(10.);
   G4double y = 0.0;
   if(x < fX0density) {
     if(fD0density > 0.0) { y = fD0density*std::pow(10.,2*(x - fX0density)); }

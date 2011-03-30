@@ -760,8 +760,9 @@ G4VEnergyLossProcess::GetRangeForLoss(G4double& kineticEnergy,
 {
   DefineMaterial(couple);
   G4double x = DBL_MAX;
-  if(theRangeTableForLoss) 
+  if(theRangeTableForLoss) {
     x = GetScaledRangeForScaledEnergy(kineticEnergy*massRatio)*reduceFactor;
+  }
   //  G4cout << "Range from " << GetProcessName() 
   //         << "  e= " << kineticEnergy << " r= " << x << G4endl;
   return x;

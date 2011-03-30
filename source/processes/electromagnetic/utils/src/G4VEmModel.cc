@@ -235,14 +235,6 @@ void G4VEmModel::DefineForRegion(const G4Region*)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4VEmModel::MinEnergyCut(const G4ParticleDefinition*,
-				  const G4MaterialCutsCouple*)
-{
-  return 0.0;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4double G4VEmModel::ChargeSquareRatio(const G4Track& track)
 {
   return GetChargeSquareRatio(track.GetParticleDefinition(), 

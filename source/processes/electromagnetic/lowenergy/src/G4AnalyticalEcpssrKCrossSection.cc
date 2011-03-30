@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: G4AnalyticalEcpssrKCrossSection.cc,v 1.5 2010-12-15 07:39:10 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -81,15 +78,15 @@ G4AnalyticalEcpssrKCrossSection::G4AnalyticalEcpssrKCrossSection()
   // Storing C coefficients for high velocity formula
 
   G4String fileC1("pixe/uf/c1");
-  tableC1 = new G4DNACrossSectionDataSet(new G4SemiLogInterpolation, 1.,1.);
+  tableC1 = new G4CrossSectionDataSet(new G4SemiLogInterpolation, 1.,1.);
   tableC1->LoadData(fileC1);
 
   G4String fileC2("pixe/uf/c2");
-  tableC2 = new G4DNACrossSectionDataSet(new G4SemiLogInterpolation, 1.,1.);
+  tableC2 = new G4CrossSectionDataSet(new G4SemiLogInterpolation, 1.,1.);
   tableC2->LoadData(fileC2);
 
   G4String fileC3("pixe/uf/c3");
-  tableC3 = new G4DNACrossSectionDataSet(new G4SemiLogInterpolation, 1.,1.);
+  tableC3 = new G4CrossSectionDataSet(new G4SemiLogInterpolation, 1.,1.);
   tableC3->LoadData(fileC3);
 
   //
@@ -234,16 +231,22 @@ G4double G4AnalyticalEcpssrKCrossSection::CalculateCrossSection(G4int zTarget,G4
     if (verboseLevel>0) G4cout << "  systemMass=" <<  systemMass<< G4endl;
 
   const G4double zkshell= 0.3;
+  // *** see Brandt, Phys Rev A23, p 1727
 
   G4double screenedzTarget = zTarget-zkshell; // screenedzTarget is the screened nuclear charge of the target
+  // *** see Brandt, Phys Rev A23, p 1727
 
   const G4double rydbergMeV= 13.6056923e-6;
  
   G4double tetaK = kBindingEnergy/((screenedzTarget*screenedzTarget)*rydbergMeV);  //tetaK denotes the reduced binding energy of the electron
+  // *** see Rice, ADANDT 20, p 504, f 2 
   
     if (verboseLevel>0) G4cout << "  tetaK=" <<  tetaK<< G4endl;
 
   G4double velocity =(2./(tetaK*screenedzTarget))*std::pow(((energyIncident*electron_mass_c2)/(massIncident*rydbergMeV)),0.5);
+  // *** also called xiK
+  // *** see Brandt, Phys Rev A23, p 1727
+  // *** see Basbas, Phys Rev A17, p 1656, f4
     
     if (verboseLevel>0) G4cout << "  velocity=" << velocity<< G4endl;
 
@@ -252,17 +255,23 @@ G4double G4AnalyticalEcpssrKCrossSection::CalculateCrossSection(G4int zTarget,G4
     if (verboseLevel>0) G4cout << "  bohrPow2Barn=" <<  bohrPow2Barn<< G4endl;
 
   G4double sigma0 = 8.*pi*(zIncident*zIncident)*bohrPow2Barn*std::pow(screenedzTarget,-4.);     //sigma0 is the initial cross section of K shell at stable state
-    
+  // *** see Benka, ADANDT 22, p 220, f2, for protons
+  // *** see Basbas, Phys Rev A7, p 1000
+   
     if (verboseLevel>0) G4cout << "  sigma0=" <<  sigma0<< G4endl;
 
   const G4double kAnalyticalApproximation= 1.5; 
- 
   G4double x = kAnalyticalApproximation/velocity;
+  // *** see Brandt, Phys Rev A23, p 1727
+  // *** see Brandt, Phys Rev A20, p 469, f16 in expression of h
   
     if (verboseLevel>0) G4cout << "  x=" << x<< G4endl;
 
   G4double electrIonizationEnergy;                                         
-                                       
+  // *** see Basbas, Phys Rev A17, p1665, f27
+  // *** see Brandt, Phys Rev A20, p469
+  // *** see Liu, Comp Phys Comm 97, p325, f A5
+                                        
   if ((0.< x) && (x <= 0.035))
     {
       electrIonizationEnergy= 0.75*pi*(std::log(1./(x*x))-1.);
@@ -288,17 +297,23 @@ G4double G4AnalyticalEcpssrKCrossSection::CalculateCrossSection(G4int zTarget,G4
     if (verboseLevel>0) G4cout << "  electrIonizationEnergy=" << electrIonizationEnergy<< G4endl;
 
   G4double hFunction =(electrIonizationEnergy*2.)/(tetaK*std::pow(velocity,3)); //hFunction represents the correction for polarization effet
+  // *** see Brandt, Phys Rev A20, p 469, f16
   
     if (verboseLevel>0) G4cout << "  hFunction=" << hFunction<< G4endl;
     
   G4double gFunction = (1.+(9.*velocity)+(31.*velocity*velocity)+(98.*std::pow(velocity,3.))+(12.*std::pow(velocity,4.))+(25.*std::pow(velocity,5.))
 			+(4.2*std::pow(velocity,6.))+(0.515*std::pow(velocity,7.)))/std::pow(1.+velocity,9.); //gFunction represents the correction for binding effet
+  // *** see Brandt, Phys Rev A20, p 469, f19
+  
     if (verboseLevel>0) G4cout << "  gFunction=" << gFunction<< G4endl;
  
   //-----------------------------------------------------------------------------------------------------------------------------
 
   G4double sigmaPSS = 1.+(((2.*zIncident)/(screenedzTarget*tetaK))*(gFunction-hFunction)); //describes the perturbed stationnairy state of the affected atomic electon
-    
+  // *** also called dzeta
+  // *** also called epsilon
+  // *** see Basbas, Phys Rev A17, p1667, f45
+      
     if (verboseLevel>0) G4cout << "  sigmaPSS=" << sigmaPSS<< G4endl;
     
     if (verboseLevel>0) G4cout << "  sigmaPSS*tetaK=" << sigmaPSS*tetaK<< G4endl;
@@ -310,32 +325,47 @@ G4double G4AnalyticalEcpssrKCrossSection::CalculateCrossSection(G4int zTarget,G4
     if (verboseLevel>0) G4cout << "  cNaturalUnit=" << cNaturalUnit<< G4endl;
   
   G4double ykFormula=0.4*(screenedzTarget/cNaturalUnit)*(screenedzTarget/cNaturalUnit)/(velocity/sigmaPSS);
-    
+  // *** also called yS
+  // *** see Brandt, Phys Rev A20, p467, f6
+  // *** see Brandt, Phys Rev A23, p1728
+      
     if (verboseLevel>0) G4cout << "  ykFormula=" << ykFormula<< G4endl;
  
   G4double relativityCorrection = std::pow((1.+(1.1*ykFormula*ykFormula)),0.5)+ykFormula;// the relativistic correction parameter
+  // *** also called mRS
+  // *** see Brandt, Phys Rev A20, p467, f6
     
     if (verboseLevel>0) G4cout << "  relativityCorrection=" << relativityCorrection<< G4endl;
 
   G4double reducedVelocity = velocity*std::pow(relativityCorrection,0.5);  // presents the reduced collision velocity parameter 
-    
+  // *** also called xiR
+  // *** see Brandt, Phys Rev A20, p468, f7
+  // *** see Brandt, Phys Rev A23, p1728
+      
     if (verboseLevel>0) G4cout << "  reducedVelocity=" << reducedVelocity<< G4endl;
 
   G4double etaOverTheta2 = (energyIncident*electron_mass_c2)/(massIncident*rydbergMeV*screenedzTarget*screenedzTarget)
                            /(sigmaPSS*tetaK)/(sigmaPSS*tetaK);
+  // *** see Benka, ADANDT 22, p220, f4 for eta
+  // then we use sigmaPSS*tetaK == epsilon*tetaK
     
     if (verboseLevel>0) G4cout << "  etaOverTheta2=" << etaOverTheta2<< G4endl;
 
   G4double universalFunction = 0;
   
   // low velocity formula
-  
-  if ( velocity < 1. )
+  // *****************  
+   if ( velocity < 1. )
+  // OR
+  //if ( reducedVelocity/sigmaPSS < 1.)
+  // *** see Brandt, Phys Rev A23, p1727
+  // *** reducedVelocity/sigmaPSS is also called xiR/dzeta
+  // *****************
     {
       if (verboseLevel>0) G4cout << "  Notice : FK is computed from low velocity formula" << G4endl;
       
       universalFunction = (std::pow(2.,9.)/45.)*std::pow(reducedVelocity/sigmaPSS,8.)*std::pow((1.+(1.72*(reducedVelocity/sigmaPSS)*(reducedVelocity/sigmaPSS))),-4.);// is the reduced universal cross section
-      
+      // *** see Brandt, Phys Rev A23, p1728
       
       if (verboseLevel>0) G4cout << "  universalFunction by Brandt 1981 =" << universalFunction<< G4endl;
 
@@ -347,7 +377,7 @@ G4double G4AnalyticalEcpssrKCrossSection::CalculateCrossSection(G4int zTarget,G4
     
     if ( etaOverTheta2 > 86.6 && (sigmaPSS*tetaK) > 0.4 && (sigmaPSS*tetaK) < 2.9996 )
     {
-      // High and medium energies. Method from Rice 1977 on tabvles from Benka 1978
+      // High and medium energies. Method from Rice ADANDT 20, p506, 1977 on tables from Benka 1978
       
       if (verboseLevel>0) G4cout << "  Notice : FK is computed from high velocity formula" << G4endl;
 
@@ -362,14 +392,17 @@ G4double G4AnalyticalEcpssrKCrossSection::CalculateCrossSection(G4int zTarget,G4
         if (verboseLevel>0) G4cout << "  C3=" << C3 << G4endl;
    
       G4double etaK = (energyIncident*electron_mass_c2)/(massIncident*rydbergMeV*screenedzTarget*screenedzTarget);
+      // *** see Benka, ADANDT 22, p220, f4 for eta
       
         if (verboseLevel>0) G4cout << "  etaK=" << etaK << G4endl;
 
       G4double etaT = (sigmaPSS*tetaK)*(sigmaPSS*tetaK)*(86.6); // at any theta, the largest tabulated etaOverTheta2 is 86.6
+      // *** see Rice, ADANDT 20, p506
       
         if (verboseLevel>0) G4cout << "  etaT=" << etaT << G4endl;
     
       G4double fKT = FunctionFK((sigmaPSS*tetaK),86.6)*(etaT/(sigmaPSS*tetaK));
+      // *** see Rice, ADANDT 20, p506
 
       if (FunctionFK((sigmaPSS*tetaK),86.6)<=0.) 
 	{
@@ -399,6 +432,7 @@ G4double G4AnalyticalEcpssrKCrossSection::CalculateCrossSection(G4int zTarget,G4
         if (verboseLevel>0) G4cout << "  fKK=" << fKK << G4endl;
     
       G4double universalFunction3= fKK/(etaK/tetaK);
+      // *** see Rice, ADANDT 20, p505, f7
       
         if (verboseLevel>0) G4cout << "  universalFunction3=" << universalFunction3 << G4endl;
 
@@ -432,36 +466,46 @@ G4double G4AnalyticalEcpssrKCrossSection::CalculateCrossSection(G4int zTarget,G4
   //----------------------------------------------------------------------------------------------------------------------
 
   G4double sigmaPSSR = (sigma0/(sigmaPSS*tetaK))*universalFunction; //sigmaPSSR is the straight-line K-shell ionization cross section
+  // *** see Benka, ADANDT 22, p220, f1
   
     if (verboseLevel>0) G4cout << "  sigmaPSSR=" << sigmaPSSR<< G4endl;
   
   //-----------------------------------------------------------------------------------------------------------------------
 
   G4double pssDeltaK = (4./(systemMass*sigmaPSS*tetaK))*(sigmaPSS/velocity)*(sigmaPSS/velocity);
+  // *** also called dzetaK*deltaK
+  // *** see Brandt, Phys Rev A23, p1727, f B2
     
     if (verboseLevel>0) G4cout << "  pssDeltaK=" << pssDeltaK<< G4endl;
 
   if (pssDeltaK>1) return 0.;
 
   G4double energyLoss = std::pow(1-pssDeltaK,0.5); //energyLoss incorporates the straight-line energy-loss 
+  // *** also called zK
+  // *** see Brandt, Phys Rev A23, p1727, after f B2
     
     if (verboseLevel>0) G4cout << "  energyLoss=" << energyLoss<< G4endl;
 
   G4double energyLossFunction = (std::pow(2.,-9)/8.)*((((9.*energyLoss)-1.)*std::pow(1.+energyLoss,9.))+(((9.*energyLoss)+1.)*std::pow(1.-energyLoss,9.)));//energy loss function 
+  // *** also called fs
+  // *** see Brandt, Phys Rev A23, p1718, f7
     
     if (verboseLevel>0) G4cout << "  energyLossFunction=" <<  energyLossFunction<< G4endl;
 
   //----------------------------------------------------------------------------------------------------------------------------------------------
 
   G4double coulombDeflection = (4.*pi*zIncident/systemMass)*std::pow(tetaK*sigmaPSS,-2.)*std::pow(velocity/sigmaPSS,-3.)*(zTarget/screenedzTarget); //incorporates Coulomb deflection parameter 
+  // *** see Brandt, Phys Rev A23, p1727, f B3
  
     if (verboseLevel>0) G4cout << "  cParameter-short=" << coulombDeflection<< G4endl;
 
   G4double cParameter = 2.*coulombDeflection/(energyLoss*(energyLoss+1.));
+  // *** see Brandt, Phys Rev A23, p1727, f B4
   
     if (verboseLevel>0) G4cout << "  cParameter-full=" << cParameter<< G4endl;
 
   G4double coulombDeflectionFunction = 9.*ExpIntFunction(10,cParameter);                         //this function describes Coulomb-deflection effect
+  // *** see Brandt, Phys Rev A23, p1727
   
     if (verboseLevel>0) G4cout << "  ExpIntFunction(10,cParameter) =" << ExpIntFunction(10,cParameter) << G4endl;
     

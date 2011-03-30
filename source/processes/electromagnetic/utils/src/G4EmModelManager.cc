@@ -275,11 +275,13 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 
   // prepare vectors, shortcut for the case of only 1 model
   if(nRegions > 1 && nEmModels > 1) {
-    if(numOfCouples > idxOfRegionModels.size()) idxOfRegionModels.resize(numOfCouples);
+    if(numOfCouples > idxOfRegionModels.size()) {
+      idxOfRegionModels.resize(numOfCouples);
+    }
   }
   size_t nr = 1;
-  if(nEmModels > 1) nr = nRegions;
-  if(nr > setOfRegionModels.size()) setOfRegionModels.resize(nr);
+  if(nEmModels > 1) { nr = nRegions; }
+  if(nr > setOfRegionModels.size()) { setOfRegionModels.resize(nr); }
 
   std::vector<G4int>    modelAtRegion(nEmModels);
   std::vector<G4int>    modelOrd(nEmModels);
@@ -474,7 +476,7 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
       ++nn;
       currModel = models[jj];
       currModel->Initialise(particle, theCuts);
-      if(flucModels[jj]) flucModels[jj]->InitialiseMe(particle);
+      if(flucModels[jj]) { flucModels[jj]->InitialiseMe(particle); }
     }
   }
   if(1 == nn) { severalModels = false; }
@@ -501,7 +503,7 @@ void G4EmModelManager::FillDEDXVector(G4PhysicsVector* aVector,
   if(fTotal == tType) cut = DBL_MAX;
   else if(fSubRestricted == tType) {
     emin = cut;
-    if(theSubCuts.size() > 0) emin = theSubCuts[i];
+    if(theSubCuts.size() > 0) { emin = theSubCuts[i]; }
   }
 
   if(1 < verboseLevel) {
@@ -515,7 +517,7 @@ void G4EmModelManager::FillDEDXVector(G4PhysicsVector* aVector,
   }
 
   G4int reg  = 0;
-  if(nRegions > 1 && nEmModels > 1) reg = idxOfRegionModels[i];
+  if(nRegions > 1 && nEmModels > 1) { reg = idxOfRegionModels[i]; }
   const G4RegionModels* regModels = setOfRegionModels[reg];
   G4int nmod = regModels->NumberOfModels();
 
@@ -573,11 +575,11 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
   G4double tmax = DBL_MAX;
   if (fSubRestricted == tType) {
     tmax = cut;
-    if(theSubCuts.size() > 0) cut  = theSubCuts[i];
+    if(theSubCuts.size() > 0) { cut  = theSubCuts[i]; }
   }
 
   G4int reg  = 0;
-  if(nRegions > 1 && nEmModels > 1) reg  = idxOfRegionModels[i];
+  if(nRegions > 1 && nEmModels > 1) { reg  = idxOfRegionModels[i]; }
   const G4RegionModels* regModels = setOfRegionModels[reg];
   G4int nmod = regModels->NumberOfModels();
   if(1 < verboseLevel) {
@@ -617,7 +619,7 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
     }
     G4double cross = mod->CrossSection(couple,particle,e,cut,tmax) + del;
     
-    if(j==0 && startFromNull) cross = 0.0;
+    if(j==0 && startFromNull) { cross = 0.0; }
 
     if(2 < verboseLevel) {
       G4cout << "FillLambdaVector: " << j << ".   e(MeV)= " << e/MeV
@@ -656,7 +658,7 @@ void G4EmModelManager::DumpModelList(G4int verb)
 	G4cout << G4endl;
       }  
     }
-    if(1 == nEmModels) break; 
+    if(1 == nEmModels) { break; }
   }
 }
 

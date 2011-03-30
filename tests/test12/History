@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29 Mar 2011, Gunter Folger              (test12-V09-04-01)
+- Correct GNUmakefile_hadronic_exerciser to work with global shared libs.
+
 25 February 2011, G.Folger               test12-V09-04-00
 -  Add testing QGSP_FTFP_BERT
 -  include anti{proton, neutron,deuerium, tritium,alpha} as primaries 

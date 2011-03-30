@@ -18,6 +18,9 @@ ifdef G4ANALYSIS_USE_ROOT
   CPPFLAGS += -DG4ANALYSIS_USE_ROOT
 endif
 
+ifdef X11LIBS 
+  LDFLAGS += $(X11LIBS)
+endif
 
 include $(G4INSTALL)/config/architecture.gmk
 

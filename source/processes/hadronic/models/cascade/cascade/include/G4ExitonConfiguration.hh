@@ -27,6 +27,7 @@
 //
 // 20100909  Add function to reset values to zero
 // 20100924  Migrate to integer A and Z
+// 20110225  M. Kelsey -- Add equality operator (NOT sorting!)
 
 #ifndef G4EXITON_CONFIGURATION_HH
 #define G4EXITON_CONFIGURATION_HH
@@ -45,6 +46,21 @@ public:
     protonQuasiParticles = neutronQuasiParticles = 0;
     protonHoles = neutronHoles = 0;
   }
+
+  bool operator==(const G4ExitonConfiguration& right) {
+    return ( (&right == this) ||
+	     (protonQuasiParticles == right.protonQuasiParticles &&
+	      neutronQuasiParticles == right.neutronQuasiParticles &&
+	      protonHoles == right.protonHoles &&
+	      neutronHoles == right.neutronHoles) );
+  }
+
+  bool operator!=(const G4ExitonConfiguration& right) {
+    return !operator==(right);
+  }
+
+
+  // Modify configuration
 
   void incrementQP(G4int ip) {
     if (ip == 1) protonQuasiParticles++;

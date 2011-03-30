@@ -42,6 +42,7 @@
 // 20100921  M. Kelsey -- Return G4InuclNuclei using "makeRecoilNuclei()".
 //		Repurpose "makeRecoilFragment()" to return G4Fragment.
 // 20100924  M. Kelsey -- Add raw excitation energy (mass difference) function
+// 20110214  M. Kelsey -- Replace "model" with G4InuclParticle::Model enum
 
 #include "G4VCascadeCollider.hh"
 #include "globals.hh"
@@ -78,7 +79,7 @@ public:
   void setRecoilExcitation(G4double Eexc) { excitationEnergy = Eexc; }
 
   // Build nucleus from current parameters, if physically reasonable
-  G4InuclNuclei* makeRecoilNuclei(G4int model=0);
+  G4InuclNuclei* makeRecoilNuclei(G4InuclParticle::Model model=G4InuclParticle::DefaultModel);
   G4Fragment* makeRecoilFragment();	// For use with PreCompound
 
   // Attach exciton configuration for use by "nucleus makers"

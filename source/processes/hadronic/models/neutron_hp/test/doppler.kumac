@@ -1,0 +1,19 @@
+fo/file 66 doppler_v.ps
+meta 66 -111
+nt/cr 1 ' ' 2 ' ' 100000 e x
+nt/read 1 liste1
+nt/cr 2 ' ' 2 ' ' 100000 e x
+nt/read 2 liste300
+nt/cr 3 ' ' 2 ' ' 100000 e x
+nt/read 3 liste3000
+nt/cr 4 ' ' 2 ' ' 100000 e x
+nt/read 4 liste30000
+2d 55 ' ' 100 -5.1 3 100 0 3
+zone 
+nt/pl 1.log10(x/1000.)%log10(e*1000000) log10(e*1000000)<3.1 ! ! -55
+nt/pl 2.log10(x/1000.)%log10(e*1000000) log10(e*1000000)<3.1 ! ! -s
+nt/pl 3.log10(x/1000.)%log10(e*1000000) log10(e*1000000)<3.1 ! ! -s
+nt/pl 4.log10(x/1000.)%log10(e*1000000) log10(e*1000000)<3.1 ! ! -s
+atit log?10!(E"m#eV"n#) 'log?10!([s]"m#barns"n#)'
+close 66
+

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id: G4EnergyLossMessenger.cc,v 1.41 2011-01-03 19:34:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -35,7 +34,7 @@
 //
 // Author:        Michel Maire
 //
-// Creation date: 22-06-2000
+// Creation date: 17-03-2011 (original version of 22-06-2000)
 //
 // Modifications:
 // 10-01-06 SetStepLimits -> SetStepFunction (V.Ivanchenko)
@@ -57,8 +56,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4EnergyLossMessenger.hh"
-
-#include "G4VEnergyLoss.hh"
 
 #include "G4UIdirectory.hh"
 #include "G4UIcommand.hh"
@@ -87,7 +84,7 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   emDirectory = new G4UIdirectory("/process/em/");
   emDirectory->SetGuidance("General commands for EM processes.");
 
-  RndmStepCmd = new G4UIcmdWithABool("/process/eLoss/rndmStep",this);
+  RndmStepCmd = new G4UIcmdWithABool("/process/eLoss/useCutAsFinalRange",this);
   RndmStepCmd->SetGuidance("Randomize the proposed step by eLoss.");
   RndmStepCmd->SetParameterName("choice",true);
   RndmStepCmd->SetDefaultValue(false);
@@ -199,6 +196,11 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   pixeXsCmd->SetGuidance("The name of PIXE cross section");
   pixeXsCmd->SetParameterName("pixeXS",true);
   pixeXsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  pixeeXsCmd = new G4UIcmdWithAString("/process/em/pixeElecXSmodel",this);
+  pixeeXsCmd->SetGuidance("The name of PIXE cross section for electron");
+  pixeeXsCmd->SetParameterName("pixeEXS",true);
+  pixeeXsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   deexCmd = new G4UIcommand("/process/em/deexcitation",this);
   deexCmd->SetGuidance("Set deexcitation flags per G4Region.");
@@ -327,6 +329,7 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
   delete auCmd;
   delete pixeCmd;
   delete pixeXsCmd;
+  delete pixeeXsCmd;
   delete frCmd;
   delete fgCmd;
   delete lllCmd;
@@ -341,40 +344,26 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
 
 void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {
-  if(!opt) opt = new G4EmProcessOptions();
+  if(!opt) { opt = new G4EmProcessOptions(); }
 
   if (command == RndmStepCmd) {
-    G4VEnergyLoss::SetRndmStep(RndmStepCmd->GetNewBoolValue(newValue));
     opt->SetRandomStep(RndmStepCmd->GetNewBoolValue(newValue));
-    return;
-  }
-  if (command == EnlossFlucCmd) {
-    G4VEnergyLoss::SetEnlossFluc(EnlossFlucCmd->GetNewBoolValue(newValue));
+  } else if (command == EnlossFlucCmd) {
     opt->SetLossFluctuations(EnlossFlucCmd->GetNewBoolValue(newValue));
-    return;
-  }
-  if (command == SubSecCmd) {
-    G4VEnergyLoss::SetSubSec(SubSecCmd->GetNewBoolValue(newValue));
+  } else if(command == SubSecCmd) {
     opt->SetSubCutoff(SubSecCmd->GetNewBoolValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
-    return;
-  }
-  if (command == MinSubSecCmd) {
+  } else if (command == MinSubSecCmd) {
     opt->SetMinSubRange(MinSubSecCmd->GetNewDoubleValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
-    return;
-  }
-  if (command == StepFuncCmd) {
+  } else if (command == StepFuncCmd) {
     G4double v1,v2;
     G4String unt;
     std::istringstream is(newValue);
     is >> v1 >> v2 >> unt;
     v2 *= G4UIcommand::ValueOf(unt);
-    G4VEnergyLoss::SetStepFunction(v1,v2);
     opt->SetStepFunction(v1,v2);
-    return;
-  }
-  if (command == deexCmd) {
+  } else if (command == deexCmd) {
     G4String s1 (""), s2(""), s3(""), s4("");
     G4bool b2(false), b3(false), b4(false);
     std::istringstream is(newValue);
@@ -383,25 +372,17 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     if(s3 == "true") { b3 = true; }
     if(s4 == "true") { b4 = true; }
     opt->SetDeexcitationActiveRegion(s1,b2,b3,b4);
-    return;
-  }
-  if (command == deCmd) {
-    opt->SetDeexcitationActive(deCmd->GetNewBoolValue(newValue));
-    return;
-  }
-  if (command == auCmd) {
-    opt->SetAugerActive(auCmd->GetNewBoolValue(newValue));
-    return;
-  }
-  if (command == pixeCmd) {
-    opt->SetPIXEActive(pixeCmd->GetNewBoolValue(newValue));
-    return;
-  }
-  if (command == pixeXsCmd) {
+  } else if (command == deCmd) {
+    opt->SetFluo(deCmd->GetNewBoolValue(newValue));
+  } else if (command == auCmd) {
+    opt->SetAuger(auCmd->GetNewBoolValue(newValue));
+  } else if (command == pixeCmd) {
+    opt->SetPIXE(pixeCmd->GetNewBoolValue(newValue));
+  } else if (command == pixeXsCmd) {
     opt->SetPIXECrossSectionModel(newValue);
-    return;
-  }
-  if (command == mscCmd) {
+  } else if (command == pixeeXsCmd) {
+    opt->SetPIXEElectronCrossSectionModel(newValue);
+  } else if (command == mscCmd) {
     if(newValue == "Minimal") 
       opt->SetMscStepLimitation(fMinimal);
 
@@ -417,93 +398,55 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
       return;
     }
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
-    return;
-  }
-  if (command == MinEnCmd) {
+  } else if (command == MinEnCmd) {
     opt->SetMinEnergy(MinEnCmd->GetNewDoubleValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
-    return;
-  }
-  if (command == MaxEnCmd) { 
+  } else if (command == MaxEnCmd) { 
     opt->SetMaxEnergy(MaxEnCmd->GetNewDoubleValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
-    return;
-  }  
-  if (command == IntegCmd) {
+  } else if (command == IntegCmd) {
     opt->SetIntegral(IntegCmd->GetNewBoolValue(newValue));
-    return;
-  }
-  if (command == rangeCmd) {
+  } else if (command == rangeCmd) {
     opt->SetBuildCSDARange(rangeCmd->GetNewBoolValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
-    return;
-  }  
-  if (command == lpmCmd) {
+  } else if (command == lpmCmd) {
     opt->SetLPMFlag(lpmCmd->GetNewBoolValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
-    return;
-  }
-  if (command == splCmd) {
+  } else if (command == splCmd) {
     opt->SetSplineFlag(splCmd->GetNewBoolValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
-    return;
-  }
-  if (command == aplCmd) {
+  } else if (command == aplCmd) {
     opt->SetApplyCuts(aplCmd->GetNewBoolValue(newValue));
-    return;
-  }
-  if (command == latCmd) {
+  } else if (command == latCmd) {
     opt->SetMscLateralDisplacement(latCmd->GetNewBoolValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
-    return;
-  }
-  if (command == verCmd) {
+  } else if (command == verCmd) {
     opt->SetVerbose(verCmd->GetNewIntValue(newValue));
-    return;
-  }
-  if (command == ver1Cmd) {
+  } else if (command == ver1Cmd) {
     opt->SetVerbose(ver1Cmd->GetNewIntValue(newValue));
-    return;
-  }
-  if (command == lllCmd) {
+  } else if (command == lllCmd) {
     opt->SetLinearLossLimit(lllCmd->GetNewDoubleValue(newValue));
-    return;
-  }
-  if (command == labCmd) {
+  } else if (command == labCmd) {
     opt->SetLambdaFactor(labCmd->GetNewDoubleValue(newValue));
-    return;
-  }
-  if (command == skinCmd) {
+  } else if (command == skinCmd) {
     opt->SetSkin(skinCmd->GetNewDoubleValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
-    return;
-  }  
-  if (command == dedxCmd) { 
+  } else if (command == dedxCmd) { 
     opt->SetDEDXBinning(dedxCmd->GetNewIntValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
-    return;
-  }
-  if (command == lamCmd) { 
+  } else if (command == lamCmd) { 
     opt->SetLambdaBinning(lamCmd->GetNewIntValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
-    return;
-  }
-  if (command == frCmd) {
+  } else if (command == frCmd) {
     opt->SetMscRangeFactor(frCmd->GetNewDoubleValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
-    return;
-  }
-  if (command == fgCmd) {
+  } else if (command == fgCmd) {
     opt->SetMscGeomFactor(fgCmd->GetNewDoubleValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
-    return;
-  }
-  if (command == mscfCmd) {
+  } else if (command == mscfCmd) {
     opt->SetFactorForAngleLimit(mscfCmd->GetNewDoubleValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
-    return;
-  }
-  if (command == angCmd) { 
+  } else if (command == angCmd) { 
     opt->SetPolarAngleLimit(angCmd->GetNewDoubleValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
   }  

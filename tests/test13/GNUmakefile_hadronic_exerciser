@@ -12,12 +12,4 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-GLOBALLIBS := $(shell test -f $(G4LIB)/$(G4SYSTEM)/libG4global.a && echo yes)
-
-ifdef GLOBALLIBS
-  LDLIBS := -lG4global
-else
-  LDLIBS := -lG4globman
-endif
-
 include $(G4INSTALL)/config/binmake.gmk

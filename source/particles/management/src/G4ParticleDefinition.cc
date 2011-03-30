@@ -321,7 +321,8 @@ void G4ParticleDefinition::SetApplyCutsFlag(G4bool flg)
 {
   if(theParticleName=="gamma"
   || theParticleName=="e-"
-  || theParticleName=="e+")
+  || theParticleName=="e+"
+  || theParticleName=="proton")
   { fApplyCutsFlag = flg; }
   else
   {
@@ -330,6 +331,6 @@ void G4ParticleDefinition::SetApplyCutsFlag(G4bool flg)
      << G4endl;
     G4cerr
      << "becomes obsolete. Production threshold is applied only for "
-     << "gamma, e- and e+." << G4endl;
+     << "gamma, e- ,e+ and proton." << G4endl;
   }
 }

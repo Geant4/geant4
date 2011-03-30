@@ -12,6 +12,14 @@ $Id$
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14-Mar-2011, G.Folger                (testtools-QMtest-V09-04-04)
+-  Remove from largeN testing in benchmarks QGSC_CHIPS,QBBC_XGG, 
+    and  QBBC_XGGSN. Also svn rm .qmt files using these lists. 
+
+14-Mar-2011, G.Folger                (testtools-QMtest-V09-04-03)
+-  Increase timelimit in benchmarks, test22  largeN to 2 hours
+-  set environment in benchmark using QBBC to check for E/p conservation.
+
 26-Feb-2011, G.Folger                (testtools-QMtest-V09-04-02)
 -  Add test12-QGSP_FTFP_BERT.run testing antibarions with FTF
 

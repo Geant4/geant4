@@ -13,6 +13,9 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+17 Mar 2011, G.Folger		         had-binary-V09-04-00
+-  set E/p checking limits
+
 11 Nov 2010, G.Folger		         had-binary-V09-03-05
 - fix compilation errors and warnings in G4BinaryCascade.
 

@@ -39,6 +39,7 @@
 // 20100728  M. Kelsey -- Make fixed arrays static, move G4FissionStore to data
 //		member and reuse
 // 20100914  M. Kelsey -- Migrate to integer A and Z
+// 20110214  M. Kelsey -- Follow G4InuclParticle::Model enumerator migration
 
 #include "G4Fissioner.hh"
 #include "G4CollisionOutput.hh"
@@ -83,7 +84,7 @@ void G4Fissioner::collide(G4InuclParticle* /*bullet*/,
 
   G4double EEXS = nuclei_target->getExitationEnergy();
   G4double mass_in = nuclei_target->getMass();
-  G4double e_in = mass_in; /**** + 0.001 * EEXS; ****/	// Mass includes EEXS
+  G4double e_in = mass_in; 		// Mass includes excitation
   G4double PARA = 0.055 * G4cbrt(A*A) * (G4cbrt(A-Z) + G4cbrt(Z));
   G4double TEM = std::sqrt(EEXS / PARA);
   G4double TETA = 0.494 * G4cbrt(A) * TEM;
@@ -176,8 +177,8 @@ void G4Fissioner::collide(G4InuclParticle* /*bullet*/,
   G4double EEXS1 = EV*A1;
   G4double EEXS2 = EV*A2;
 
-  G4InuclNuclei nuclei1(mom1, A1, Z1, EEXS1, 7);        
-  G4InuclNuclei nuclei2(mom2, A2, Z2, EEXS2, 7);        
+  G4InuclNuclei nuclei1(mom1, A1, Z1, EEXS1, G4InuclParticle::Fissioner);
+  G4InuclNuclei nuclei2(mom2, A2, Z2, EEXS2, G4InuclParticle::Fissioner);
 
   // Pass only last two nuclear fragments
   static std::vector<G4InuclNuclei> frags(2);		// Always the same size!

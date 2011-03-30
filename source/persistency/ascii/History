@@ -16,11 +16,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-25 January, 10 G.Cosmo (ascii-V09-04-01)
+25 March, 11 G.Cosmo (ascii-V09-04-02)
+- Use G4 types for 3-vectors and 3x3 rotations.
+
+25 January, 11 G.Cosmo (ascii-V09-04-01)
 - Removed function WordIsFunction() in G4tgrUtils with missing implementation
   introduced in previous tag.
 
-10 January, 10 P.Arce (ascii-V09-04-00)
+10 January, 11 P.Arce (ascii-V09-04-00)
 - Added missing dumping of pressure and state for materials.
   Added enumeration of units.
 

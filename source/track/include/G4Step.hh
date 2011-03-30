@@ -197,6 +197,9 @@ class G4Step
 
 // Secondary buckets
 public:
+  // secodaries in the current step
+   const std::vector<const G4Track*>* GetSecondaryInCurrentStep() const; 
+
    // NOTE: Secondary bucket of the Step contains  
    //       all secondaries during tracking the current track 
    //       (i.e. NOT secondaries produced in the current step)
@@ -216,6 +219,12 @@ public:
 private: 
    // Secondaty bucket implemented by using  std::vector of G4Track*   
    G4TrackVector* fSecondary;
+
+   // number of secondaries which have been created by the last step
+   G4int  nSecondaryByLastStep;
+
+   typedef const G4Track* CT;
+   std::vector<CT>* secondaryInCurrentStep;
 
   // Prototyping implementation of smooth representation of curved
   // trajectories. (jacek 30/10/2002)

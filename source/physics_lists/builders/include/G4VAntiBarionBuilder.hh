@@ -43,6 +43,7 @@
 #include "G4AntiProtonInelasticProcess.hh"
 #include "G4AntiNeutronInelasticProcess.hh"
 #include "G4AntiDeuteronInelasticProcess.hh"
+#include "G4AntiTritonInelasticProcess.hh"
 #include "G4AntiHe3InelasticProcess.hh"
 #include "G4AntiAlphaInelasticProcess.hh"
 
@@ -55,6 +56,7 @@ public:
   virtual void Build(G4AntiProtonInelasticProcess * aP) = 0;
   virtual void Build(G4AntiNeutronInelasticProcess * aP) = 0;
   virtual void Build(G4AntiDeuteronInelasticProcess * aP) = 0;
+  virtual void Build(G4AntiTritonInelasticProcess * aP) = 0;
   virtual void Build(G4AntiHe3InelasticProcess * aP) = 0;
   virtual void Build(G4AntiAlphaInelasticProcess * aP) = 0;
 };

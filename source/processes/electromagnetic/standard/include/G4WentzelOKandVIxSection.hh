@@ -100,8 +100,9 @@ public:
  
   inline G4double SetupKinematic(G4double kinEnergy, const G4Material* mat);
   
-  inline void SetTargetMass(G4double value);
+  //inline void SetTargetMass(G4double value);
 
+  //obsolete method
   inline void SetRelativisticMass(G4double value);
 
   inline G4double GetMomentumSquare() const;
@@ -150,6 +151,7 @@ private:
   G4double mass;
   G4double tkin;
   G4double mom2;
+  G4double momCM2;
   G4double invbeta2;
   G4double kinFactor;
   G4double etag;
@@ -164,6 +166,8 @@ private:
   G4double factorA2;
   G4double factB;
   G4double factD;
+  G4double gam0pcmp;
+  G4double pcmp2;
 
   static G4double ScreenRSquare[100];
   static G4double FormFactor[100];
@@ -191,17 +195,23 @@ G4WentzelOKandVIxSection::SetupKinematic(G4double ekin, const G4Material* mat)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+//inline G4double G4WentzelOKandVIxSection::TransformCosThetaToLab(G4double& cost)
+//{
+//}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/*
 inline void G4WentzelOKandVIxSection::SetTargetMass(G4double value)
 {
   targetMass = value;
   factD = std::sqrt(mom2)/value;
 }
-
+*/
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline void G4WentzelOKandVIxSection::SetRelativisticMass(G4double value)
+inline void G4WentzelOKandVIxSection::SetRelativisticMass(G4double)
 {
-  mass = value;
+  //  mass = value;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

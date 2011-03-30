@@ -46,8 +46,10 @@
 #include "G4IonisParamMat.hh"
 #include "G4Material.hh"
 #include "G4DensityEffectData.hh"
+#include "G4NistManager.hh"
 
 G4DensityEffectData* G4IonisParamMat::fDensityData = 0;
+G4double G4IonisParamMat::twoln10 = 2.*std::log(10.);
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -107,10 +109,19 @@ G4IonisParamMat::G4IonisParamMat(__void__&)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
+G4IonisParamMat::~G4IonisParamMat()
+{
+  if (fShellCorrectionVector) { delete [] fShellCorrectionVector; }
+  if (fDensityData) { delete fDensityData; }
+  fDensityData = 0;
+  fShellCorrectionVector = 0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
 void G4IonisParamMat::ComputeMeanParameters()
 {
   // compute mean excitation energy and shell correction vector
-
   fTaul = (*(fMaterial->GetElementVector()))[0]->GetIonisation()->GetTaul();
 
   fMeanExcitationEnergy = 0.;
@@ -119,7 +130,7 @@ void G4IonisParamMat::ComputeMeanParameters()
   size_t nElements = fMaterial->GetNumberOfElements();
   const G4ElementVector* elmVector = fMaterial->GetElementVector();
   const G4double* nAtomsPerVolume = fMaterial->GetVecNbOfAtomsPerVolume();
-
+ 
   const G4String ch = fMaterial->GetChemicalFormula();
 
   if(ch != "") { fMeanExcitationEnergy = FindMeanExcitationEnergy(ch); }
@@ -164,7 +175,6 @@ G4DensityEffectData* G4IonisParamMat::GetDensityEffectData()
                     
 void G4IonisParamMat::ComputeDensityEffect()
 {
-  static const G4double twoln10 = 2.*std::log(10.);
   G4State State = fMaterial->GetState();
 
   // Check if density effect data exist in the table
@@ -193,6 +203,15 @@ void G4IonisParamMat::ComputeDensityEffect()
     fPlasmaEnergy = fDensityData->GetPlasmaEnergy(idx);
     fAdjustmentFactor = fDensityData->GetAdjustmentFactor(idx);
 
+    // Correction for base material
+    const G4Material* bmat = fMaterial->GetBaseMaterial();
+    if(bmat) {
+      G4double corr = std::log(bmat->GetDensity()/fMaterial->GetDensity());
+      fCdensity  += corr;
+      fX0density += corr/twoln10;
+      fX1density += corr/twoln10;
+    }
+
   } else {
 
     const G4double Cd2 = 4*pi*hbarc_squared*classic_electr_radius;
@@ -203,14 +222,9 @@ void G4IonisParamMat::ComputeDensityEffect()
     G4int icase;
     
     fCdensity = 1. + 2*std::log(fMeanExcitationEnergy/fPlasmaEnergy);
-
-    //fCdensity = 1. + std::log(fMeanExcitationEnergy*fMeanExcitationEnergy
-    //			      /(Cd2*fMaterial->GetTotNbOfElectPerVolume()));
-
     //
     // condensed materials
-    //
-  
+    //  
     if ((State == kStateSolid)||(State == kStateLiquid)) {
 
       const G4double E100eV  = 100.*eV; 
@@ -218,20 +232,19 @@ void G4IonisParamMat::ComputeDensityEffect()
       const G4double X0valS[] = {1.0   , 1.5   };
       const G4double X1valS[] = {2.0   , 3.0   };
                                 
-      if(fMeanExcitationEnergy < E100eV) icase = 0;
-         else                            icase = 1;
+      if(fMeanExcitationEnergy < E100eV) { icase = 0; }
+      else                               { icase = 1; } 
 
-      if(fCdensity < ClimiS[icase]) fX0density = 0.2;
-         else                       fX0density = 0.326*fCdensity-X0valS[icase];
+      if(fCdensity < ClimiS[icase])    { fX0density = 0.2; }
+      else { fX0density = 0.326*fCdensity - X0valS[icase]; }
 
-      fX1density = X1valS[icase] ; fMdensity = 3.0;
+      fX1density = X1valS[icase]; fMdensity = 3.0;
       
       //special: Hydrogen
       if ((fMaterial->GetNumberOfElements()==1)&&(fMaterial->GetZ()==1.)) {
          fX0density = 0.425; fX1density = 2.0; fMdensity = 5.949;
       }
     }
-
     //
     // gases
     //
@@ -243,8 +256,8 @@ void G4IonisParamMat::ComputeDensityEffect()
 
       icase = 5;
       fX0density = 0.326*fCdensity-2.5 ; fX1density = 5.0 ; fMdensity = 3. ; 
-      while((icase > 0)&&(fCdensity < ClimiG[icase])) icase-- ;
-      fX0density = X0valG[icase]  ; fX1density = X1valG[icase] ;
+      while((icase > 0)&&(fCdensity < ClimiG[icase])) { icase-- ; }
+      fX0density = X0valG[icase]; fX1density = X1valG[icase];
       
       //special: Hydrogen
       if ((fMaterial->GetNumberOfElements()==1)&&(fMaterial->GetZ()==1.)) {
@@ -369,19 +382,25 @@ void G4IonisParamMat::ComputeIonParameters()
 void G4IonisParamMat::SetMeanExcitationEnergy(G4double value)
 {
   if(value == fMeanExcitationEnergy || value <= 0.0) { return; }
-
-  /*
-  if (G4NistManager::Instance()->GetVerbose() > 0) 
+  if (G4NistManager::Instance()->GetVerbose() > 1) {
     G4cout << "G4Material: Mean excitation energy is changed for "
            << fMaterial->GetName()
            << " Iold= " << fMeanExcitationEnergy/eV
            << "eV; Inew= " << value/eV << " eV;"
            << G4endl;
-  */
+  }
   
   fMeanExcitationEnergy = value;
-  fLogMeanExcEnergy = std::log(value);
-  ComputeDensityEffect();
+
+  // add corrections to density effect
+  G4double newlog = std::log(value);
+  G4double corr = 2*(newlog - fLogMeanExcEnergy);
+  fCdensity  += corr;
+  fX0density += corr/twoln10;
+  fX1density += corr/twoln10;
+
+  // recompute parameters of fluctuation model
+  fLogMeanExcEnergy = newlog;
   ComputeFluctModel();
 }
 
@@ -389,21 +408,18 @@ void G4IonisParamMat::SetMeanExcitationEnergy(G4double value)
 
 G4double G4IonisParamMat::FindMeanExcitationEnergy(const G4String& chFormula)
 {
-
   // The data on mean excitation energy for compaunds
   // from "Stopping Powers for Electrons and Positrons"
   // ICRU Report N#37, 1984  (energy in eV)
 
-  const size_t numberOfMolecula = 79 ;
-  
+  const size_t numberOfMolecula = 54; 
   static G4String name[numberOfMolecula] = {
-
-    // gas
+    // gas 0 - 12
     "NH_3",       "C_4H_10",    "CO_2",       "C_2H_6",      "C_7H_16",
     "C_6H_14",    "CH_4",       "NO",         "N_2O",        "C_8H_18",
     "C_5H_12",    "C_3H_8",     "H_2O-Gas", 
 
-    // liquid
+    // liquid 13 - 39
     "C_3H_6O",    "C_6H_5NH_2",  "C_6H_6",    "C_4H_9OH",    "CCl_4",    
     "C_6H_5Cl",   "CHCl_3",      "C_6H_12",   "C_6H_4Cl_2",  "C_4Cl_2H_8O", 
     "C_2Cl_2H_4", "(C_2H_5)_2O", "C_2H_5OH",  "C_3H_5(OH)_3","C_7H_16",     
@@ -411,13 +427,12 @@ G4double G4IonisParamMat::FindMeanExcitationEnergy(const G4String& chFormula)
     "C_5H_5N",    "C_8H_8",      "C_2Cl_4",   "C_7H_8",      "C_2Cl_3H",    
     "H_2O",       "C_8H_10",
 
-    //solid
+    // solid 40 - 53
     "C_5H_5N_5",  "C_5H_5N_5O",  "(C_6H_11NO)-nylon",  "C_25H_52", 
     "(C_2H_4)-Polyethylene",     "(C_5H_8O-2)-Polymethil_Methacrylate",   
     "(C_8H_8)-Polystyrene",      "A-150-tissue",       "Al_2O_3",  "CaF_2", 
     "LiF",        "Photo_Emulsion",  "(C_2F_4)-Teflon",  "SiO_2"     
-
-  } ;
+  };
     
   static G4double meanExcitation[numberOfMolecula] = {
 
@@ -435,8 +450,7 @@ G4double G4IonisParamMat::FindMeanExcitationEnergy(const G4String& chFormula)
     71.4,  75.0,   63.9,  48.3,   57.4,
     74.0,  68.7,   65.1, 145.2,  166.,
     94.0, 331.0,   99.1, 139.2 
-
-  } ;
+  };
 
   G4double x = fMeanExcitationEnergy;
 
@@ -447,16 +461,6 @@ G4double G4IonisParamMat::FindMeanExcitationEnergy(const G4String& chFormula)
     }
   }
   return x;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
-
-G4IonisParamMat::~G4IonisParamMat()
-{
-  if (fShellCorrectionVector) { delete [] fShellCorrectionVector; }
-  if (fDensityData) { delete fDensityData; }
-  fDensityData = 0;
-  fShellCorrectionVector = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....

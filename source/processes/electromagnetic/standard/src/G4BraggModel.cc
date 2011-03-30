@@ -102,15 +102,6 @@ G4BraggModel::~G4BraggModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4BraggModel::MinEnergyCut(const G4ParticleDefinition*,
-                                    const G4MaterialCutsCouple*)
-{
-  return 0.1*keV;
-  // return couple->GetMaterial()->GetIonisation()->GetMeanExcitationEnergy();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void G4BraggModel::Initialise(const G4ParticleDefinition* p,
                               const G4DataVector&)
 {
@@ -234,7 +225,7 @@ G4double G4BraggModel::ComputeDEDXPerVolume(const G4Material* material,
 
   // now compute the total ionization loss
 
-  if (dedx < 0.0) dedx = 0.0 ;
+  if (dedx < 0.0) { dedx = 0.0; }
 
   dedx *= chargeSquare;
 

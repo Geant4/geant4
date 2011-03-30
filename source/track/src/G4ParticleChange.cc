@@ -98,6 +98,7 @@ G4ParticleChange & G4ParticleChange::operator=(const G4ParticleChange &right)
       theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
       theNumberOfSecondaries = right.theNumberOfSecondaries;
       theStatusChange = right.theStatusChange;
+      theCurrentTrack = right.theCurrentTrack;
 
       theMomentumDirectionChange = right.theMomentumDirectionChange;
       thePolarizationChange = right.thePolarizationChange;

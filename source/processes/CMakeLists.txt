@@ -8,7 +8,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: CMakeLists.txt,v 1.2 2010-11-19 08:43:44 gcosmo Exp $
+# $Id: CMakeLists.txt,v 1.3 2010-11-23 13:29:25 gcosmo Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -31,6 +31,7 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
             cuts/sources.cmake
             decay/sources.cmake
             electromagnetic/adjoint/sources.cmake
+            electromagnetic/dna/sources.cmake
             electromagnetic/highenergy/sources.cmake
             electromagnetic/lowenergy/sources.cmake
             electromagnetic/muons/sources.cmake

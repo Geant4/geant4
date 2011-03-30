@@ -52,6 +52,7 @@
 //		nucleus momentum (PEX) by evaporate momentum directly
 // 20100719  M. Kelsey -- Remove duplicative EESX_new calculation.
 // 20100923  M. Kelsey -- Migrate to integer A and Z
+// 20110214  M. Kelsey -- Follow G4InuclParticle::Model enumerator migration
 
 #include "G4EquilibriumEvaporator.hh"
 #include "G4BigBanger.hh"
@@ -177,7 +178,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
       if (verboseLevel > 2) 
 	G4cout << " big bang in eql step " << itry_global << G4endl;
 	
-      G4InuclNuclei nuclei(PEX, A, Z, EEXS, 6);        
+      G4InuclNuclei nuclei(PEX, A, Z, EEXS, G4InuclParticle::Equilib);        
       theBigBanger.collide(0, &nuclei, output);
 
       validateOutput(0, target, output);	// Check energy conservation
@@ -332,7 +333,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	  PEX -= mom;			// Remaining four-momentum
 	  EEXS -= S*GeV;		// New excitation energy (in MeV)
 
-	  G4InuclElementaryParticle particle(mom, 10, 6);
+	  G4InuclElementaryParticle particle(mom, 10, G4InuclParticle::Equilib);
 	  output.addOutgoingParticle(particle);
 	  
 	  if (verboseLevel > 3) particle.printParticle();
@@ -393,7 +394,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		  G4cout << " particle " << ptype << " escape" << G4endl;
 		
 		G4InuclElementaryParticle particle(ptype);
-		particle.setModel(6);
+		particle.setModel(G4InuclParticle::Equilib);
 		
 		// generate particle momentum
 		G4double mass = particle.getMass();
@@ -435,8 +436,8 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 			 << " escape icase " << icase << G4endl;
 		}
 		
-		G4InuclNuclei nuclei(AN[icase], Q[icase]);
-		nuclei.setModel(6);
+		G4InuclNuclei nuclei(AN[icase], Q[icase], 0.*GeV, 
+				     G4InuclParticle::Equilib);
 		G4double mass = nuclei.getMass();
 		// generate particle momentum
 		G4double pmod = std::sqrt((2.0 * mass + S) * S);
@@ -478,8 +479,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 
 	if (itry1 == itry_max || bad) try_again = false;
       } else { 	// if (icase < 6)
-	G4InuclNuclei nuclei(A, Z, EEXS);        
-	nuclei.setModel(6);
+	G4InuclNuclei nuclei(A, Z, EEXS, G4InuclParticle::Equilib);        
 
 	if (verboseLevel > 2) {
 	  G4cout << " fission: A " << A << " Z " << Z << " eexs " << EEXS
@@ -524,7 +524,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 
   G4LorentzVector pnuc = pin - ppout;
 
-  G4InuclNuclei nuclei(pnuc, A, Z, EEXS, 6);
+  G4InuclNuclei nuclei(pnuc, A, Z, EEXS, G4InuclParticle::Equilib);
 
   /***** THIS SHOULD NOT BE NECESSARY IF EEXS WAS COMPUTED RIGHT
   pnuc = nuclei.getMomentum(); 

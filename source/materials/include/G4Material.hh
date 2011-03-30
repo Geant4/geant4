@@ -84,7 +84,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef G4MATERIAL_HH
-#define G4MATERIAL_HH
+#define G4MATERIAL_HH 1
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -102,7 +102,7 @@ enum G4State { kStateUndefined = 0, kStateSolid, kStateLiquid, kStateGas };
 
 class G4Material
 {
- public:  // with description
+public:  // with description
 
   //
   // Constructor to create a material from scratch.
@@ -122,6 +122,16 @@ class G4Material
   G4Material(const G4String& name,				//its name
                    G4double  density, 				//density
                    G4int     nComponents,			//nbOfComponents
+                   G4State   state    = kStateUndefined,	//solid,gas
+                   G4double  temp     = STP_Temperature,	//temperature
+                   G4double  pressure = STP_Pressure);		//pressure
+
+  //
+  // Constructor to create a material from base material
+  //
+  G4Material(const G4String& name,				//its name
+                   G4double  density, 				//density
+             const G4Material* baseMaterial,			//base material
                    G4State   state    = kStateUndefined,	//solid,gas
                    G4double  temp     = STP_Temperature,	//temperature
                    G4double  pressure = STP_Pressure);		//pressure
@@ -197,6 +207,9 @@ class G4Material
   
   // Sandia table:
   G4SandiaTable*   GetSandiaTable()     const {return fSandiaTable;}
+
+  // Base material:
+  const G4Material* GetBaseMaterial()   const {return fBaseMaterial;}
   
   //meaningful only for single material:
   G4double GetZ() const;
@@ -230,7 +243,7 @@ class G4Material
   friend std::ostream& operator<<(std::ostream&, G4Material&);    
   friend std::ostream& operator<<(std::ostream&, G4MaterialTable);
     
- public:  // without description 
+public:  // without description 
        
   G4int operator==(const G4Material&) const;
   G4int operator!=(const G4Material&) const;
@@ -241,7 +254,7 @@ class G4Material
 
   void SetName (const G4String& name) {fName=name;}
 
- private:
+private:
 
   G4Material(const G4Material&);
   const G4Material& operator=(const G4Material&);
@@ -256,13 +269,15 @@ class G4Material
   
   // Compute Nuclear interaction length
   void ComputeNuclearInterLength();
+
+  // Copy pointers of base material
+  void CopyPointersOfBaseMaterial();
     
 private:
 
   //
   // Basic data members ( To define a material)
   //
-
   G4String         fName;                 // Material name
   G4String         fChemicalFormula;      // Material chemical formula
   G4double         fDensity;              // Material density
@@ -301,33 +316,8 @@ private:
   
   G4IonisParamMat* fIonisation;           // ionisation parameters
   G4SandiaTable*   fSandiaTable;          // Sandia table         
+  const G4Material* fBaseMaterial;        // Pointer to the base material
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline
-G4double G4Material::GetZ() const
-{ 
-  if (fNumberOfElements > 1) {
-     G4cerr << "WARNING in GetZ. The material: " << fName << " is a mixture."
-            << G4endl;
-     G4Exception ( " the Atomic number is not well defined." );
-  } 
-  return (*theElementVector)[0]->GetZ();      
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline
-G4double G4Material::GetA() const
-{ 
-  if (fNumberOfElements > 1) { 
-     G4cerr << "WARNING in GetA. The material: " << fName << " is a mixture."
-            << G4endl;
-     G4Exception ( " the Atomic mass is not well defined." );
-  } 
-  return  (*theElementVector)[0]->GetA();      
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

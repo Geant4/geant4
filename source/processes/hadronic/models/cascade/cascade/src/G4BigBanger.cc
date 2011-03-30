@@ -41,6 +41,7 @@
 // 20100714  M. Kelsey -- Move conservation checking to base class
 // 20100726  M. Kelsey -- Move std::vector<> buffer to .hh file
 // 20100923  M. Kelsey -- Migrate to integer A and Z
+// 20110214  M. Kelsey -- Follow G4InuclParticle::Model enumerator migration
 
 #include "G4BigBanger.hh"
 #include "G4CollisionOutput.hh"
@@ -231,7 +232,8 @@ void G4BigBanger::generateBangInSCM(G4double etot, G4int a, G4int z) {
   if (!bad) {
     for(G4int i = 0; i < a; i++) {
       G4int knd = i < z ? 1 : 2;
-      particles.push_back(G4InuclElementaryParticle(scm_momentums[i], knd, 8));
+      particles.push_back(G4InuclElementaryParticle(scm_momentums[i], knd,
+						    G4InuclParticle::BigBanger));
     };
   };
 

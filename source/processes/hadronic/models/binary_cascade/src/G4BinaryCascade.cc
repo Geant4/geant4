@@ -115,6 +115,8 @@ G4VIntraNuclearTransportModel("Binary Cascade")
   //PrintWelcomeMessage();
   thePrimaryEscape = true;
   thePrimaryType = 0;
+  
+  SetEnergyMomentumCheckLevels(1*perCent, 1*MeV);
 }
 
 

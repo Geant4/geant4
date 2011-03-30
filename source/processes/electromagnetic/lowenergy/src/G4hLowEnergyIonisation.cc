@@ -174,8 +174,8 @@ void G4hLowEnergyIonisation::InitializeMe()
   shellCS = new G4teoCrossSection("analytical");
 
   deexcitationManager.InitialiseForNewRun();
-  deexcitationManager.SetAugerActive(false);
-  deexcitationManager.SetPIXEActive(true);
+  deexcitationManager.SetAuger(false);
+  deexcitationManager.SetPIXE(true);
 
 }
 
@@ -2027,7 +2027,7 @@ void G4hLowEnergyIonisation::SetCutForAugerElectrons(G4double cut)
 
 void G4hLowEnergyIonisation::ActivateAugerElectronProduction(G4bool val)
 {
-  deexcitationManager.SetAugerActive(val);
+  deexcitationManager.SetAuger(val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

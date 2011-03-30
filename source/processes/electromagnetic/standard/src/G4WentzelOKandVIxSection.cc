@@ -87,17 +87,17 @@ G4WentzelOKandVIxSection::G4WentzelOKandVIxSection() :
     ScreenRSquare[0] = alpha2*a0*a0;
     for(G4int j=1; j<100; ++j) {
       G4double x = a0*fG4pow->Z13(j);
-      ScreenRSquare[j] = alpha2*x*x;
+      ScreenRSquare[j] = (0.5 + 0.5/G4double(j))*alpha2*x*x;
       x = fNistManager->GetA27(j);
       FormFactor[j] = constn*x*x;
     } 
   }
   currentMaterial = 0;
-  elecXSRatio = factB = formfactA = screenZ = 0.0;
-  cosTetMaxElec = cosTetMaxNuc = invbeta2 = kinFactor = 1.0;
+  elecXSRatio = factB = factD = formfactA = screenZ = 0.0;
+  cosTetMaxElec = cosTetMaxNuc = invbeta2 = kinFactor = gam0pcmp = pcmp2 = 1.0;
 
   Initialise(theElectron, 1.0);
-  SetTargetMass(proton_mass_c2);
+  targetMass = proton_mass_c2;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -111,7 +111,7 @@ void G4WentzelOKandVIxSection::Initialise(const G4ParticleDefinition* p,
 					  G4double CosThetaLim)
 {
   SetupParticle(p);
-  tkin = mom2 = 0.0;
+  tkin = mom2 = momCM2 = 0.0;
   ecut = etag = DBL_MAX;
   targetZ = 0;
   cosThetaMax = CosThetaLim;
@@ -146,8 +146,16 @@ G4WentzelOKandVIxSection::SetupTarget(G4int Z, G4double cut)
     etag    = tkin; 
     targetZ = Z;
     if(targetZ > 99) { targetZ = 99; }
-    SetTargetMass(fNistManager->GetAtomicMassAmu(targetZ)*amu_c2);
+    targetMass = fNistManager->GetAtomicMassAmu(targetZ)*CLHEP::amu_c2;
+    //G4double tmass2 = targetMass*targetMass;
+    //G4double etot = tkin + mass;
+    //G4double invmass2 = mass*mass + tmass2 + 2*etot*targetMass;
+    //momCM2 = mom2*tmass2/invmass2;
+    //gam0pcmp = (etot + targetMass)*targetMass/invmass2;
+    //pcmp2    = tmass2/invmass2;
+
     kinFactor = coeff*targetZ*chargeSquare*invbeta2/mom2;
+    factD = std::sqrt(mom2)/targetMass;
 
     screenZ = ScreenRSquare[targetZ]/mom2;
     if(Z > 1) {
@@ -163,11 +171,13 @@ G4WentzelOKandVIxSection::SetupTarget(G4int Z, G4double cut)
     // allowing do not compute scattering off e-
     cosTetMaxElec = 1.0;
     if(cut < DBL_MAX) { 
+      /*
       if(mass < MeV) { 
 	if(cosTetMaxNuc < 1.0 && cosTetMaxNuc > 0.0 && tkin < 10*cut) { 
 	  cosTetMaxNuc2 *= 0.1*tkin/cut;
 	}
       }
+      */
       ComputeMaxElectronScattering(cut); 
     }
   }
@@ -300,12 +310,26 @@ G4WentzelOKandVIxSection::SampleSingleScattering(G4double cosTMin,
   G4double w1 = 1. - cost1 + screenZ;
   G4double w2 = 1. - cost2 + screenZ;
   G4double z1 = w1*w2/(w1 + G4UniformRand()*(w2 - w1)) - screenZ;
+  /*
+  if(factB > 0.0 || formf > 0.0) {
+    G4double fm =  1.0 + formf*z1;
+    G4double grej = (1. - z1*factB)/(fm*fm);
+    // "false" scattering
+    if( G4UniformRand() > grej ) { return v; }
+  } 
+  G4double z2 = 1.0 - gam0pcmp*z1;
+  G4double cost = z2/std::sqrt(z2*z2 + pcmp2*z1*(2.0 - z1));
+  */ 
+ 
   if(factB > 0.0 || formf > 0.0 || factD > 0.01) {
+    factD = 0.0;
     G4double fm =  1.0 + formf*z1/(1.0 + (mass + tkin)*z1/targetMass);
     G4double grej = (1. - z1*factB)/( (1.0 + z1*factD)*fm*fm );
+    // "false" scattering
     if( G4UniformRand() > grej ) { return v; }
-  }  
+  } 
   G4double cost = 1.0 - z1;
+
   if(cost > 1.0)       { cost = 1.0; }
   else if(cost < -1.0) { cost =-1.0; }
   G4double sint = sqrt((1.0 - cost)*(1.0 + cost));

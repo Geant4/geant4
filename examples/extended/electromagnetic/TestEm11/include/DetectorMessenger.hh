@@ -37,7 +37,7 @@
 
 class DetectorConstruction;
 class G4UIdirectory;
-class G4UIcmdWithAString;
+class G4UIcommand;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithoutParameter;
@@ -58,11 +58,11 @@ class DetectorMessenger: public G4UImessenger
     DetectorConstruction*   Detector;
     
     G4UIdirectory*             testemDir;
-    G4UIdirectory*             detDir;    
-    G4UIcmdWithAString*        MaterCmd;
-    G4UIcmdWithADoubleAndUnit* SizeXCmd;
-    G4UIcmdWithADoubleAndUnit* SizeYZCmd;
-    G4UIcmdWithAnInteger*      NbLayersCmd;        
+    G4UIdirectory*             detDir; 
+    G4UIcmdWithAnInteger*      NbAbsorCmd;           
+    G4UIcommand*               AbsorCmd;
+    G4UIcommand*               NdivCmd;    
+    G4UIcmdWithADoubleAndUnit* SizeYZCmd;    
     G4UIcmdWithADoubleAndUnit* MagFieldCmd;    
             
     G4UIcmdWithoutParameter*   UpdateCmd;

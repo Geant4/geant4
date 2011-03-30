@@ -42,6 +42,8 @@
 //		migrate to integer A and Z
 // 20100924  M. Kelsey -- Add constructor to copy G4Fragment input, and output
 //		functions to create G4Fragment
+// 20110214  M. Kelsey -- Replace integer "model" with enum
+// 20110308  M. Kelsey -- Follow new G4Fragment interface for hole types
 
 #include "G4InuclNuclei.hh"
 #include "G4Fragment.hh"
@@ -61,7 +63,8 @@ using namespace G4InuclSpecialFunctions;
 
 // Convert contents from (via constructor) and to G4Fragment
 
-G4InuclNuclei::G4InuclNuclei(const G4Fragment& aFragment, G4int model)
+G4InuclNuclei::G4InuclNuclei(const G4Fragment& aFragment,
+			     G4InuclParticle::Model model)
   : G4InuclParticle(makeDefinition(aFragment.GetA_asInt(),
 				   aFragment.GetZ_asInt()),
 		    aFragment.GetMomentum()/GeV) {	// Bertini units
@@ -72,10 +75,9 @@ G4InuclNuclei::G4InuclNuclei(const G4Fragment& aFragment, G4int model)
   theExitonConfiguration.protonQuasiParticles = aFragment.GetNumberOfCharged();
 
   theExitonConfiguration.neutronQuasiParticles =
-    aFragment.GetNumberOfCharged() - aFragment.GetNumberOfCharged();
+    aFragment.GetNumberOfParticles() - aFragment.GetNumberOfCharged();
 
-  // Split hole count evenly between protons and neutrons (arbitrary!)
-  theExitonConfiguration.protonHoles = aFragment.GetNumberOfHoles()/2;
+  theExitonConfiguration.protonHoles = aFragment.GetNumberOfChargedHoles();
 
   theExitonConfiguration.neutronHoles =
     aFragment.GetNumberOfHoles() - theExitonConfiguration.protonHoles;
@@ -87,12 +89,12 @@ G4Fragment G4InuclNuclei::makeG4Fragment() const {
 
   // Note:  exciton configuration has to be set piece by piece
   frag.SetNumberOfHoles(theExitonConfiguration.protonHoles
-			+ theExitonConfiguration.neutronHoles);
+			+ theExitonConfiguration.neutronHoles,
+			theExitonConfiguration.protonHoles);
 
-  frag.SetNumberOfParticles(theExitonConfiguration.protonQuasiParticles 
-			    + theExitonConfiguration.neutronQuasiParticles);
-
-  frag.SetNumberOfCharged(theExitonConfiguration.protonQuasiParticles);
+  frag.SetNumberOfExcitedParticle(theExitonConfiguration.protonQuasiParticles 
+		  + theExitonConfiguration.neutronQuasiParticles,
+		  theExitonConfiguration.protonQuasiParticles);
 
   return frag;
 }
@@ -105,7 +107,7 @@ G4InuclNuclei::operator G4Fragment() const {
 // Overwrite data structure (avoids creating/copying temporaries)
 
 void G4InuclNuclei::fill(const G4LorentzVector& mom, G4int a, G4int z,
-			 G4double exc, G4int model) {
+			 G4double exc, G4InuclParticle::Model model) {
   setDefinition(makeDefinition(a,z));
   setMomentum(mom);
   setExitationEnergy(exc);
@@ -114,7 +116,7 @@ void G4InuclNuclei::fill(const G4LorentzVector& mom, G4int a, G4int z,
 }
 
 void G4InuclNuclei::fill(G4double ekin, G4int a, G4int z, G4double exc,
-			 G4int model) {
+			 G4InuclParticle::Model model) {
   setDefinition(makeDefinition(a,z));
   setKineticEnergy(ekin);
   setExitationEnergy(exc);

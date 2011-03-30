@@ -14,7 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
- 
+      
+22-02-11 mma (testem2-V09-04-00)
+- update PhysListEmStandard for deexcitation
+- PhysicsList : set lowest production cut to 100 eV
+- update SteppingVerbose
+- update vis.mac
+
 09-11-10 M.Asai (testem2-V09-03-05)
 - Fix AIDA file option.
     

@@ -39,7 +39,6 @@
 #include "G4UIparameter.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -95,19 +94,12 @@ HistoMessenger::HistoMessenger(HistoManager* manager)
   rmhistoCmd->SetGuidance("desactivate histo  #id");
   rmhistoCmd->SetParameterName("id",false);
   rmhistoCmd->SetRange("id>0");
-  
-  csdaCmd = new G4UIcmdWithADoubleAndUnit("/testem/histo/setcsdaRange",this);
-  csdaCmd->SetGuidance("Set csda range for normalisation");
-  csdaCmd->SetParameterName("csda",false);
-  csdaCmd->SetRange("csda>0.");
-  csdaCmd->SetUnitCategory("Length");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoMessenger::~HistoMessenger()
 {
-  delete csdaCmd; 
   delete rmhistoCmd;
   delete prhistoCmd;
   delete histoCmd;
@@ -145,10 +137,7 @@ void HistoMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
     histoManager->PrintHisto(prhistoCmd->GetNewIntValue(newValues));
         
   if (command == rmhistoCmd)
-    histoManager->RemoveHisto(rmhistoCmd->GetNewIntValue(newValues));
-    
-  if (command == csdaCmd)
-    histoManager->SetcsdaRange(csdaCmd->GetNewDoubleValue(newValues));             
+    histoManager->RemoveHisto(rmhistoCmd->GetNewIntValue(newValues));       
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

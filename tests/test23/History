@@ -39,6 +39,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29 Mar 2011, Gunter Folger   (test23-V09-04-00)
+----------------------------------------------
+- Correct GNUmakefile_hadronic_exerciser to work with global shared libs.
+
 18 Mar 2010  Dennis Wright  (test23-V09-03-00)
 ----------------------------------------------
 - replace G4MultipleScattering with G4eMultipleScattering, G4MuMultipleScattering,

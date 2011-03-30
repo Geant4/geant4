@@ -65,8 +65,8 @@ G4alphaIonisation::G4alphaIonisation(const G4String& name)
     theParticle(0),
     isInitialised(false)
 {
-  //  SetLinearLossLimit(0.15);
-  SetStepFunction(0.2, 0.1*mm);
+  SetLinearLossLimit(0.02);
+  SetStepFunction(0.2, 0.01*mm);
   //  SetIntegral(true);
   SetProcessSubType(fIonisation);
   //  SetVerboseLevel(1);
@@ -85,7 +85,7 @@ G4alphaIonisation::~G4alphaIonisation()
 G4bool G4alphaIonisation::IsApplicable(const G4ParticleDefinition& p)
 {
   return (!p.IsShortLived() &&
-	  std::fabs(p.GetPDGCharge() - 2*CLHEP::eplus) < 0.01);
+	  std::fabs(p.GetPDGCharge()/CLHEP::eplus - 2) < 0.01);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

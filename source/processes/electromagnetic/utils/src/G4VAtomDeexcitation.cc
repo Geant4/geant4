@@ -63,7 +63,7 @@
 G4VAtomDeexcitation::G4VAtomDeexcitation(const G4String& modname, 
 					 const G4String& pname) 
   : lowestKinEnergy(keV), verbose(1), name(modname), namePIXE(pname), 
-    isActive(false), flagAuger(false), flagPIXE(false)
+    nameElectronPIXE(""),isActive(false), flagAuger(false), flagPIXE(false)
 {
   vdyn.reserve(5);
   secVect.reserve(5);

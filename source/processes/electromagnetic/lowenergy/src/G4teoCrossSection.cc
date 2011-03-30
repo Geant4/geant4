@@ -32,6 +32,7 @@
 // -----------
 //  21 Apr 2009   ALF   1st implementation
 //  29 Apr 2009   ALF Updated Desing for Integration
+//  15 Mar 2011   ALF introduced the usage of G4AtomicShellEnumerator
 //
 
 
@@ -70,20 +71,20 @@ std::vector<G4double> G4teoCrossSection::GetCrossSection(G4int Z,
   return crossSections;
 }
 
-G4double G4teoCrossSection::CrossSection(G4int Z, G4int shell,
+G4double G4teoCrossSection::CrossSection(G4int Z, G4AtomicShellEnumerator shell,
 					 G4double incidentEnergy,
 					 G4double mass) const
 {
   G4double res = 0.0;
   if(3 < shell) {
     return res; 
-  } else if(0 == shell) { 
+  } else if(fKShell  == shell) { 
     res = ecpssrShellK->CalculateCrossSection(Z, mass, incidentEnergy);
-  } else if(1 == shell) { 
+  } else if(fL1Shell == shell) { 
     res = ecpssrShellLi->CalculateL1CrossSection(Z, mass, incidentEnergy);
-  } else if(2 == shell) { 
+  } else if(fL2Shell == shell) { 
     res = ecpssrShellLi->CalculateL2CrossSection(Z, mass, incidentEnergy);
-  } else if(3 == shell) { 
+  } else if(fL3Shell == shell) { 
     res = ecpssrShellLi->CalculateL3CrossSection(Z, mass, incidentEnergy);
   }
   return res;

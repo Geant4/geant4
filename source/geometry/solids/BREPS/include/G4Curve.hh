@@ -76,7 +76,7 @@ class G4Curve
     // Returns shape identifier.
 
   virtual G4Curve* Project(const G4Transform3D& tr =
-                           HepGeom::Transform3D::Identity)= 0;
+                           G4Transform3D::Identity)= 0;
     // Projection onto the xy plane after the transformation tr.
     // The returned object is allocated dynamically; it's caller's
     // responsibility to delete it.

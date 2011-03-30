@@ -31,6 +31,9 @@
 // 20100429  M. Kelsey -- Change "case gamma:" to "case photon:"
 // 20100923  M. Kelsey -- Drop "uups" message when converting G4PartDef to code
 // 20101029  M. Kelsey -- Add instantiation of new particles, antiparticles
+// 20110214  M. Kelsey -- Drop unused "generation"
+// 20110307  M. Kelsey -- Add random K0 mixing if K0S/K0L passed to type()
+// 20110321  M. Kelsey -- Fix getStrangeness to return int
 
 #include "G4InuclElementaryParticle.hh"
 
@@ -44,6 +47,8 @@
 #include "G4KaonPlus.hh"
 #include "G4KaonMinus.hh"
 #include "G4KaonZero.hh"
+#include "G4KaonZeroLong.hh"
+#include "G4KaonZeroShort.hh"
 #include "G4AntiKaonZero.hh"
 #include "G4Lambda.hh"
 #include "G4SigmaPlus.hh"
@@ -66,6 +71,7 @@
 #include "G4Diproton.hh"
 #include "G4UnboundPN.hh"
 #include "G4Dineutron.hh"
+#include "Randomize.hh"
 
 #include "G4InuclParticleNames.hh"
 using namespace G4InuclParticleNames;
@@ -142,15 +148,20 @@ G4int G4InuclElementaryParticle::type(const G4ParticleDefinition *pd) {
   if (pd == G4Alpha::Definition())        return alpha;
   if (pd == G4AntiProton::Definition())   return antiProton;
   if (pd == G4AntiNeutron::Definition())  return antiNeutron;
-    // NOTE:  The the four light antinuclei "particles" are actually G4Ions
+  // NOTE:  The the four light antinuclei "particles" are actually G4Ions
   if (pd == G4AntiDeuteron::Definition()) return antiDeuteron;
   if (pd == G4AntiTriton::Definition())   return antiTriton;
   if (pd == G4AntiHe3::Definition())      return antiHe3;
   if (pd == G4AntiAlpha::Definition())    return antiAlpha;
-    // NOTE:  The three unbound dibaryons are local Bertini classes
+  // NOTE:  The three unbound dibaryons are local Bertini classes
   if (pd == G4Diproton::Definition())     return diproton;
   if (pd == G4UnboundPN::Definition())    return unboundPN;
   if (pd == G4Dineutron::Definition())    return dineutron;
+
+  // Weak neutral kaons must be mixed back to strong (strangeness states)
+  if (pd==G4KaonZeroShort::Definition() || pd==G4KaonZeroLong::Definition()) {
+    return ((G4UniformRand() > 0.5) ? kaonZero : kaonZeroBar);
+  }
 
   return 0;	// Unknown objects return zero (e.g., nuclei)
 }
@@ -163,15 +174,14 @@ void G4InuclElementaryParticle::setType(G4int ityp) {
 // Assignment operator for use with std::sort()
 G4InuclElementaryParticle& 
 G4InuclElementaryParticle::operator=(const G4InuclElementaryParticle& right) {
-  generation = right.generation;
   G4InuclParticle::operator=(right);
   return *this;
 }
 
 
-G4double G4InuclElementaryParticle::getStrangeness(G4int type) {
+G4int G4InuclElementaryParticle::getStrangeness(G4int type) {
   G4ParticleDefinition* pd = makeDefinition(type);
-  return pd ? (pd->GetQuarkContent(3) - pd->GetAntiQuarkContent(3)) : 0.;
+  return pd ? (pd->GetQuarkContent(3) - pd->GetAntiQuarkContent(3)) : 0;
 }
 
 G4double G4InuclElementaryParticle::getParticleMass(G4int type) {

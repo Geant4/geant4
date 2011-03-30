@@ -63,8 +63,7 @@ public:  // with description
   virtual G4String GetEntityType() const;
     // Returns entity type identifier.
 
-  virtual G4Curve* Project(const G4Transform3D& tr =
-                           HepGeom::Transform3D::Identity);
+  virtual G4Curve* Project(const G4Transform3D& tr = G4Transform3D::Identity);
     // Project along trasformation tr.
 	
   virtual G4bool Tangent(G4CurvePoint& cp, G4Vector3D& v);

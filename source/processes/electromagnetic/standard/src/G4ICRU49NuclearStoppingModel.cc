@@ -71,7 +71,7 @@ G4ICRU49NuclearStoppingModel::G4ICRU49NuclearStoppingModel(const G4String& nam)
 {
   theZieglerFactor = eV*cm2*1.0e-15;
   g4pow = G4Pow::GetInstance();
-  if(ad[0] == 0.0) InitialiseNuclearStopping();
+  if(ad[0] == 0.0) { InitialiseNuclearStopping(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

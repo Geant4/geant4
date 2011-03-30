@@ -42,6 +42,7 @@
 // 20100724  M. Kelsey -- Replace std::vector<> D with trivial D[3] array.
 // 20100914  M. Kelsey -- Migrate to integer A and Z: this involves replacing
 //		a number of G4double terms with G4int, with consequent casts.
+// 20110214  M. Kelsey -- Follow G4InuclParticle::Model enumerator migration
 
 #include "G4NonEquilibriumEvaporator.hh"
 #include "G4CollisionOutput.hh"
@@ -311,7 +312,7 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		      EPART /= GeV; 		// From MeV to GeV
 		      
 		      G4InuclElementaryParticle particle(ptype);
-		      particle.setModel(5);
+		      particle.setModel(G4InuclParticle::NonEquilib);
 		      
 		      // generate particle momentum
 		      G4double mass = particle.getMass();
@@ -426,7 +427,7 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
     output.addOutgoingNucleus(*nuclei_target);
   } else {
     G4LorentzVector pnuc = pin - ppout;
-    G4InuclNuclei nuclei(pnuc, A, Z, EEXS, 5);
+    G4InuclNuclei nuclei(pnuc, A, Z, EEXS, G4InuclParticle::NonEquilib);
     
     if (verboseLevel > 3) {
       G4cout << " remaining nucleus " << G4endl;

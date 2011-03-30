@@ -1,0 +1,124 @@
+% manual pages
+\section{{\sc Geant4} CASCADE MANUAL PAGES}
+\label{manual:}
+\subsection{INUCL hadronic cascade model}
+
+\subsection{HETC hadronic cascade model} 
+
+
+\subsection{UML DIAGRAMS}
+Preliminary suggestion for Inucl class interface to Geant4 cascade, pre-equilibrium
+and evaporation modules.
+
+\begin{figure}
+  \begin{center}
+    \leavevmode
+%    \mbox{\epsfxsize=8cm \epsffile{pictures/cascadeUml.eps} }
+       \caption{General class structure for Inucl INC model.}
+  \label{massPb}
+  \end{center}
+\end{figure}
+
+\begin{figure}
+  \begin{center}
+    \leavevmode
+    \mbox{\epsfxsize=8cm \epsffile{pictures/preEquilibriumUml.eps} }
+       \caption{General class structure for Inucl pre-equilibrium model.}
+  \label{massPb}
+  \end{center}
+\end{figure}
+
+\begin{figure}
+  \begin{center}
+    \leavevmode
+    \mbox{\epsfxsize=8cm  \epsffile{pictures/evaporationUml.eps} }
+       \caption{General class structure for Inucl evaporation/fission model.}
+  \label{massPb}
+  \end{center}
+\end{figure}
+
+
+\subsection{HETC uml-diagrams} %:::
+\begin{figure}[h]
+\leavevmode
+\begin{flushleft}
+%\mbox{\epsfxsize=10cm\epsfysize=3.286cm\epsffile{pictures/hip.eps}}
+%\mbox{\epsffile{pictures/hetc.eps}}
+\end{flushleft}
+\end{figure}
+
+
+\subsection{Downloading INUCL++}
+INUCL++ is downloadable from INUCL homepage at
+http://cern.ch/aatos.heikkinen/inucl
+
+
+\subsection{Sample run result}
+\scriptsize
+\begin{verbatim}
+Number of events 100000
+ average multiplicity 21.5523
+ average proton number 3.53569
+ average neutron number 14.5048
+ average nucleon Ekin 0.0321547
+ average proton Ekin 0.0848587
+ average neutron Ekin 0.0193075
+ average pion number 0.3036
+ average pion Ekin 0.132491
+ average pi+ 0.1165
+ average pi- 0.058
+ average pi0 0.1291
+ average A 126.891
+ average Z 53.1615
+ average Exitation Energy 0.0258312
+ average num of fragments 1.69988
+ fission prob. 0.0117 c.sec 20.592
+ =====================================================
+ ********** Izotop analysis ******************
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ **** izotop Z **** 0
+ A 1 exp.cs 33520 err 12.4
+ sim. cs 30536.4 err 23.1827
+ ratio 0.910989 err 0.000769346
+ simulated production rate 17.3502
+ A 0 exp.cs 217.4 err 1.22
+ sim. cs 256.749 err 2.12574
+ ratio 1.181 err 0.0118124
+ simulated production rate 0.14588
+ not found in simulations 0
+ not found in exper: 0
+ simulated production rate 17.3502
+ simulated production rate 0.14588
+ matched 2 CHSQ 58.3536
+ raw chsq 13620.6
+ average ratio 1.04599 err 0.00629088
+ lhood 1.14436
+ exper. cs 33737.4 err 13.62
+ inucl. cs 30793.1 err 25.3085
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ **** izotop Z **** 1
+ A 1 exp.cs 7645 err 6.08
+ sim. cs 6801.24 err 10.9408
+ ratio 0.889632 err 0.00159645
+ simulated production rate 3.86434
+ A 0 exp.cs 109.4 err 0.96
+ sim. cs 226.195 err 1.99525
+ ratio 2.0676 err 0.0257258
+ simulated production rate 0.12852
+ not found exper.: A 2 exp.cs 658.7 err 4.2
+ not found exper.: A 3 exp.cs 338.6 err 3.1
+ not found in simulations 2
+ not found in exper: 0
+ simulated production rate 3.86434
+ simulated production rate 0.12852
+ matched 2 CHSQ 40.3162
+ raw chsq 6501.58
+ average ratio 1.47862 err 0.0136611
+ lhood 1.68244
+ exper. cs 8751.7 err 14.34
+ inucl. cs 7027.43 err 12.9361
+\end{verbatim}
+\normalsize

@@ -40,6 +40,7 @@
 // 23 Oct 2001 A. Mantero   1st implementation
 // 24 Oct 2001 MGP          Cleaned up
 // 29 Oct 2001 VI           Add delta energy
+// 15 Mar 2011 ALF          Introduced the usage of G4AtomicShellEnumerator
 //
 // -------------------------------------------------------------------
 
@@ -55,6 +56,7 @@
 
 #include "globals.hh"
 #include <vector>
+#include "G4AtomicShellEnumerator.hh"
 
 class G4VhShellCrossSection 
 {
@@ -77,7 +79,7 @@ public:
 						G4bool testFlag = false) const =0;
 
   virtual G4double CrossSection(G4int Z,
-                                G4int shell,
+                                G4AtomicShellEnumerator shell,
 				G4double incidentEnergy,
 				G4double mass) const =0;
 

@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: G4AnalyticalEcpssrLiCrossSection.cc,v 1.4 2010-11-22 17:25:45 mantero Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "globals.hh"
 #include "G4AnalyticalEcpssrLiCrossSection.hh"
@@ -229,34 +227,45 @@ G4double G4AnalyticalEcpssrLiCrossSection::CalculateL1CrossSection(G4int zTarget
   G4double systemMass =((massIncident*massTarget)/(massIncident+massTarget))/electron_mass_c2; //Mass of the system (projectile, target)
 
   const G4double zlshell= 4.15;
+  // *** see Benka, ADANDT 22, p 223
 
   G4double screenedzTarget = zTarget-zlshell; //Effective nuclear charge as seen by electrons in L1-sub shell
 
   const G4double rydbergMeV= 13.6056923e-6;
 
   const G4double nl= 2.;
+  // *** see Benka, ADANDT 22, p 220, f3
 
   G4double tetal1 = (l1BindingEnergy*nl*nl)/((screenedzTarget*screenedzTarget)*rydbergMeV); //Screening parameter
+  // *** see Benka, ADANDT 22, p 220, f3
 
     if (verboseLevel>0) G4cout << "  tetal1=" <<  tetal1<< G4endl;
 
   G4double reducedEnergy = (energyIncident*electron_mass_c2)/(massIncident*rydbergMeV*screenedzTarget*screenedzTarget);
+  // *** also called etaS
+  // *** see Benka, ADANDT 22, p 220, f3
 
   const G4double bohrPow2Barn=(Bohr_radius*Bohr_radius)/barn ; //Bohr radius of hydrogen
 
   G4double sigma0 = 8.*pi*(zIncident*zIncident)*bohrPow2Barn*std::pow(screenedzTarget,-4.);
+  // *** see Benka, ADANDT 22, p 220, f2, for protons
+  // *** see Basbas, Phys Rev A7, p 1000
 
   G4double velocityl1 = CalculateVelocity(1, zTarget, massIncident, energyIncident); // Scaled velocity
 
     if (verboseLevel>0) G4cout << "  velocityl1=" << velocityl1<< G4endl;
 
   const G4double l1AnalyticalApproximation= 1.5;
-
   G4double x1 =(nl*l1AnalyticalApproximation)/velocityl1;
-
+  // *** 1.5 is cK = cL1 (it is 1.25 for L2 & L3)
+  // *** see Brandt, Phys Rev A20, p 469, f16 in expression of h
+  
    if (verboseLevel>0) G4cout << "  x1=" << x1<< G4endl;
 
   G4double electrIonizationEnergyl1=0.;
+  // *** see Basbas, Phys Rev A17, p1665, f27
+  // *** see Brandt, Phys Rev A20, p469
+  // *** see Liu, Comp Phys Comm 97, p325, f A5
 
   if ( x1<=0.035)  electrIonizationEnergyl1= 0.75*pi*(std::log(1./(x1*x1))-1.);
   else
@@ -268,22 +277,32 @@ G4double G4AnalyticalEcpssrLiCrossSection::CalculateL1CrossSection(G4int zTarget
     }
 
   G4double hFunctionl1 =(electrIonizationEnergyl1*2.*nl)/(tetal1*std::pow(velocityl1,3)); //takes into account the polarization effect
+  // *** see Brandt, Phys Rev A20, p 469, f16
 
     if (verboseLevel>0) G4cout << "  hFunctionl1=" << hFunctionl1<< G4endl;
 
   G4double gFunctionl1 = (1.+(9.*velocityl1)+(31.*velocityl1*velocityl1)+(49.*std::pow(velocityl1,3.))+(162.*std::pow(velocityl1,4.))+(63.*std::pow(velocityl1,5.))+(18.*std::pow(velocityl1,6.))+(1.97*std::pow(velocityl1,7.)))/std::pow(1.+velocityl1,9.);//takes into account the reduced binding effect
+  // *** see Brandt, Phys Rev A20, p 469, f19
 
     if (verboseLevel>0) G4cout << "  gFunctionl1=" << gFunctionl1<< G4endl;
 
   G4double sigmaPSS_l1 = 1.+(((2.*zIncident)/(screenedzTarget*tetal1))*(gFunctionl1-hFunctionl1)); //Binding-polarization factor
+  // *** also called dzeta
+  // *** also called epsilon
+  // *** see Basbas, Phys Rev A17, p1667, f45
 
     if (verboseLevel>0) G4cout << "sigmaPSS_l1 =" << sigmaPSS_l1<< G4endl;
 
   const G4double cNaturalUnit= 137.;
   
   G4double yl1Formula=0.4*(screenedzTarget/cNaturalUnit)*(screenedzTarget/cNaturalUnit)/(nl*velocityl1/sigmaPSS_l1);
-    
+  // *** also called yS
+  // *** see Brandt, Phys Rev A20, p467, f6
+  // *** see Brandt, Phys Rev A23, p1728
+      
   G4double l1relativityCorrection = std::pow((1.+(1.1*yl1Formula*yl1Formula)),0.5)+yl1Formula; // Relativistic correction parameter
+  // *** also called mRS
+  // *** see Brandt, Phys Rev A20, p467, f6
   
   //G4double reducedVelocity_l1 = velocityl1*std::pow(l1relativityCorrection,0.5); //Reduced velocity parameter
 
@@ -293,10 +312,16 @@ G4double G4AnalyticalEcpssrLiCrossSection::CalculateL1CrossSection(G4int zTarget
 
   G4double sigmaPSSR_l1;
 
+  // low velocity formula
+  // *****************  
   if ( velocityl1 <5.  )
   {
 
     L1etaOverTheta2 =(reducedEnergy* l1relativityCorrection)/((tetal1*sigmaPSS_l1)*(tetal1*sigmaPSS_l1));
+    // *** 1) RELATIVISTIC CORRECTION ADDED
+    // *** 2) sigma_PSS_l1 ADDED
+    // *** reducedEnergy is etaS, l1relativityCorrection is mRS
+    // *** see Phys Rev A20, p468, top
     
     if ( ((tetal1*sigmaPSS_l1) >=0.2) && ((tetal1*sigmaPSS_l1) <=2.6670) && (L1etaOverTheta2>=0.1e-3) && (L1etaOverTheta2<=0.866e2) )
   
@@ -305,6 +330,7 @@ G4double G4AnalyticalEcpssrLiCrossSection::CalculateL1CrossSection(G4int zTarget
       if (verboseLevel>0) G4cout << "at low velocity range, universalFunction_l1  =" << universalFunction_l1 << G4endl;
 
     sigmaPSSR_l1 = (sigma0/(tetal1*sigmaPSS_l1))*universalFunction_l1;// Plane-wave Born -Aproximation L1-subshell ionisation Cross Section
+  // *** see Benka, ADANDT 22, p220, f1
 
       if (verboseLevel>0) G4cout << "  at low velocity range, sigma PWBA L1 CS  = " << sigmaPSSR_l1<< G4endl;
 
@@ -315,6 +341,10 @@ G4double G4AnalyticalEcpssrLiCrossSection::CalculateL1CrossSection(G4int zTarget
   {
 
     L1etaOverTheta2 = reducedEnergy/(tetal1*tetal1);
+    // Medium & high velocity
+    // *** 1) NO RELATIVISTIC CORRECTION
+    // *** 2) NO sigma_PSS_l1
+    // *** see Benka, ADANDT 22, p223
 
     if ( (tetal1 >=0.2) && (tetal1 <=2.6670) && (L1etaOverTheta2>=0.1e-3) && (L1etaOverTheta2<=0.866e2) ) 
     
@@ -323,24 +353,32 @@ G4double G4AnalyticalEcpssrLiCrossSection::CalculateL1CrossSection(G4int zTarget
     if (verboseLevel>0) G4cout << "at medium and high velocity range, universalFunction_l1  =" << universalFunction_l1 << G4endl;
 
     sigmaPSSR_l1 = (sigma0/tetal1)*universalFunction_l1;// Plane-wave Born -Aproximation L1-subshell ionisation Cross Section
+  // *** see Benka, ADANDT 22, p220, f1
 
     if (verboseLevel>0) G4cout << "  sigma PWBA L1 CS at medium and high velocity range = " << sigmaPSSR_l1<< G4endl;    
   }
  
   G4double pssDeltal1 = (4./(systemMass *sigmaPSS_l1*tetal1))*(sigmaPSS_l1/velocityl1)*(sigmaPSS_l1/velocityl1);
+  // *** also called dzeta*delta
+  // *** see Brandt, Phys Rev A23, p1727, f B2
 
     if (verboseLevel>0) G4cout << "  pssDeltal1=" << pssDeltal1<< G4endl;
 
   if (pssDeltal1>1) return 0.;
 
   G4double energyLossl1 = std::pow(1-pssDeltal1,0.5);
+  // *** also called z
+  // *** see Brandt, Phys Rev A23, p1727, after f B2
 
     if (verboseLevel>0) G4cout << "  energyLossl1=" << energyLossl1<< G4endl;
 
   G4double coulombDeflectionl1 = 
    (8.*pi*zIncident/systemMass)*std::pow(tetal1*sigmaPSS_l1,-2.)*std::pow(velocityl1/sigmaPSS_l1,-3.)*(zTarget/screenedzTarget);
+  // *** see Brandt, Phys Rev A20, v2s and f2 and B2 
+  // *** with factor n2 compared to Brandt, Phys Rev A23, p1727, f B3
 
   G4double cParameterl1 =2.* coulombDeflectionl1/(energyLossl1*(energyLossl1+1.));
+  // *** see Brandt, Phys Rev A23, p1727, f B4
 
   G4double coulombDeflectionFunction_l1 = 9.*ExpIntFunction(10,cParameterl1); //Coulomb-deflection effect correction
 
@@ -366,7 +404,7 @@ G4double G4AnalyticalEcpssrLiCrossSection::CalculateL1CrossSection(G4int zTarget
 G4double G4AnalyticalEcpssrLiCrossSection::CalculateL2CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident)
 
 {
-  if (zTarget <=4) return 0.;
+  if (zTarget <=13 ) return 0.;
 
   // this L2-CrossSection calculation method is done according to Werner Brandt and Grzegorz Lapicki, Phys.Rev.A20 N2 (1979),
   // and using data tables of O. Benka et al. At.Data Nucl.Data Tables Vol.22 No.3 (1978).
@@ -438,7 +476,7 @@ G4double G4AnalyticalEcpssrLiCrossSection::CalculateL2CrossSection(G4int zTarget
   else
     {
       if ( x2<=3.)
-        electrIonizationEnergyl2 =std::exp(-2.*x2)/(0.031+(0.210*std::pow(x2,0.5))+(0.005*x2)-(0.069*std::pow(x2,3./2.))+(0.324*x2*x2));
+        electrIonizationEnergyl2 =std::exp(-2.*x2)/(0.031+(0.213*std::pow(x2,0.5))+(0.005*x2)-(0.069*std::pow(x2,3./2.))+(0.324*x2*x2));
       else
         {if ( x2<=11.) electrIonizationEnergyl2 =2.*std::exp(-2.*x2)/std::pow(x2,1.6);  }
     }
@@ -479,7 +517,7 @@ G4double G4AnalyticalEcpssrLiCrossSection::CalculateL2CrossSection(G4int zTarget
 
     sigmaPSSR_l2 = (sigma0/(tetal2*sigmaPSS_l2))*universalFunction_l2;
 
-      if (verboseLevel>0) G4cout << "  sigma PWBA L2 CS at low velocity range = " << sigmaPSSR_l2<< G4endl;
+    if (verboseLevel>0) G4cout << "  sigma PWBA L2 CS at low velocity range = " << sigmaPSSR_l2<< G4endl;
   }    
   else
   { 
@@ -510,7 +548,8 @@ G4double G4AnalyticalEcpssrLiCrossSection::CalculateL2CrossSection(G4int zTarget
   G4double cParameterl2 = 2.*coulombDeflectionl2/(energyLossl2*(energyLossl2+1.));
 
   G4double coulombDeflectionFunction_l2 = 11.*ExpIntFunction(12,cParameterl2); //Coulomb-deflection effect correction
-
+  // *** see Brandt, Phys Rev A10, p477, f25
+  
     if (verboseLevel>0) G4cout << "  coulombDeflectionFunction_l2 =" << coulombDeflectionFunction_l2 << G4endl;
 
   G4double crossSection_L2 = coulombDeflectionFunction_l2 * sigmaPSSR_l2;
@@ -532,7 +571,7 @@ G4double G4AnalyticalEcpssrLiCrossSection::CalculateL2CrossSection(G4int zTarget
 G4double G4AnalyticalEcpssrLiCrossSection::CalculateL3CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident)
 
 {
-  if (zTarget <=4) return 0.;
+  if (zTarget <=13) return 0.;
 
   //this L3-CrossSection calculation method is done according to Werner Brandt and Grzegorz Lapicki, Phys.Rev.A20 N2 (1979),
   //and using data tables of O. Benka et al. At.Data Nucl.Data Tables Vol.22 No.3 (1978).
@@ -603,7 +642,7 @@ G4double G4AnalyticalEcpssrLiCrossSection::CalculateL3CrossSection(G4int zTarget
   if ( x3<=0.035)  electrIonizationEnergyl3= 0.75*pi*(std::log(1./(x3*x3))-1.);
     else
     {
-      if ( x3<=3.) electrIonizationEnergyl3 =std::exp(-2.*x3)/(0.031+(0.210*std::pow(x3,0.5))+(0.005*x3)-(0.069*std::pow(x3,3./2.))+(0.324*x3*x3));
+      if ( x3<=3.) electrIonizationEnergyl3 =std::exp(-2.*x3)/(0.031+(0.213*std::pow(x3,0.5))+(0.005*x3)-(0.069*std::pow(x3,3./2.))+(0.324*x3*x3));
       else
 	{
 	  if ( x3<=11.) electrIonizationEnergyl3 =2.*std::exp(-2.*x3)/std::pow(x3,1.6);}
@@ -680,6 +719,7 @@ G4double G4AnalyticalEcpssrLiCrossSection::CalculateL3CrossSection(G4int zTarget
   G4double cParameterl3 = 2.*coulombDeflectionl3/(energyLossl3*(energyLossl3+1.));
 
   G4double coulombDeflectionFunction_l3 = 11.*ExpIntFunction(12,cParameterl3);//Coulomb-deflection effect correction
+  // *** see Brandt, Phys Rev A10, p477, f25
 
     if (verboseLevel>0) G4cout << "  coulombDeflectionFunction_l3 =" << coulombDeflectionFunction_l3 << G4endl;
 
@@ -729,7 +769,8 @@ G4double G4AnalyticalEcpssrLiCrossSection::CalculateVelocity(G4int subShell, G4i
   G4double reducedEnergy = (energyIncident*electron_mass_c2)/(massIncident*rydbergMeV*screenedzTarget*screenedzTarget);
 
   G4double velocity = 2.*nl*std::pow(reducedEnergy,0.5)/tetali;
-
+  // *** see Brandt, Phys Rev A10, p10, f4
+  
   return velocity;
 }
 

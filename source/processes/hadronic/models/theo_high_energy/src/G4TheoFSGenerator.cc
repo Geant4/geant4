@@ -23,11 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id: G4TheoFSGenerator.cc,v 1.11 2009-04-09 08:28:42 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4TheoFSGenerator
+//
+// 20110307  M. Kelsey -- Add call to new theTransport->SetPrimaryProjectile()
+//		to provide access to full initial state (for Bertini)
 
 #include "G4DynamicParticle.hh"
 #include "G4TheoFSGenerator.hh"
@@ -37,7 +39,7 @@
 G4TheoFSGenerator::G4TheoFSGenerator(const G4String& name)
     : G4HadronicInteraction(name)
     , theQuasielastic(0), theProjectileDiffraction(0)
-{
+ {
  theParticleChange = new G4HadFinalState;
 }
 
@@ -163,6 +165,7 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
   }
   if(hitCount != theHighEnergyGenerator->GetWoundedNucleus()->GetMassNumber() )
   {
+    theTransport->SetPrimaryProjectile(thePrimary);	// For Bertini Cascade
     theTransportResult = 
                theTransport->Propagate(theInitialResult, theHighEnergyGenerator->GetWoundedNucleus());
     if ( !theTransportResult ) {
@@ -199,3 +202,11 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
   return theParticleChange;
 }
 
+std::pair<G4double, G4double> G4TheoFSGenerator::GetEnergyMomentumCheckLevels() const
+{
+  if ( theHighEnergyGenerator ) {
+	 return theHighEnergyGenerator->GetEnergyMomentumCheckLevels();
+  } else {
+	 return std::pair<G4double, G4double>(DBL_MAX, DBL_MAX);
+  }
+}

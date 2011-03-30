@@ -61,6 +61,8 @@ public:
 		  G4double maxEnergyTransfer, 
 		  G4double betaGammaSq);
 	            
+  void     ComputeLowEnergyCof(const G4Material* material);
+
   void InitPAI();
 
   void NormShift( G4double betaGammaSq );
@@ -159,6 +161,7 @@ private :
 
   G4double fDensity;            // Current density
   G4double fElectronDensity;    // Current electron (number) density
+  G4double fLowEnergyCof;    // Correction cof for low energy region
   G4int    fSplineNumber;       // Current size of spline
   G4int    fVerbose;       // verbose flag
 

@@ -50,15 +50,6 @@
 #include "G4ParticleDefinition.hh"
 #include "G4DecayPhysics.hh"
 
-#include "G4PionPlus.hh"
-#include "G4PionMinus.hh"
-#include "G4Proton.hh"
-#include "G4Neutron.hh"
-#include "G4GenericIon.hh"
-#include "G4Alpha.hh"
-#include "G4Deuteron.hh"
-#include "G4Triton.hh"
-
 #include "G4LEPionPlusInelastic.hh"
 #include "G4LEPionMinusInelastic.hh"
 #include "G4LEProtonInelastic.hh"
@@ -89,16 +80,11 @@
 #include "G4QGSMFragmentation.hh"
 #include "G4QuasiElasticChannel.hh"
 
-#include "G4ElasticHadrNucleusHE.hh"
-#include "G4LElastic.hh"
-#include "G4HadronElastic.hh"
-#include "G4ChargeExchange.hh"
 #include "G4QuasiElasticChannel.hh"
 #include "G4GeneratorPrecompoundInterface.hh"
 #include "G4QStringChipsParticleLevelInterface.hh"
 
 #include "HsQGSCInterface.hh"
-#include "G4DiffuseElastic.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -132,26 +118,19 @@ void Test30Physics::Initialise()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
-		                      const G4String& part_name,
-		                            G4Material* mat)
+		                      const G4ParticleDefinition* part,
+				      G4Material* mat)
 {
   G4cout <<  "Test30Physics entry" << G4endl;
   if(theProcess) { delete theProcess; }
   theProcess = 0;
 
-  G4ProcessManager* man = 0;
-
-  if(part_name == "proton")   man = new G4ProcessManager(G4Proton::Proton());
-  else if(part_name == "pi+") man = new G4ProcessManager(G4PionPlus::PionPlus());
-  else if(part_name == "pi-") man = new G4ProcessManager(G4PionMinus::PionMinus());
-  else if(part_name == "neutron") man = new G4ProcessManager(G4Neutron::Neutron());
-  else if(part_name == "deuteron") man = new G4ProcessManager(G4Deuteron::Deuteron());
-  else if(part_name == "alpha") man = new G4ProcessManager(G4Alpha::Alpha());
-  else if(part_name == "GenericIon") man = new G4ProcessManager(G4GenericIon::GenericIon());
-
-  if(!man) return 0;
+  G4String part_name = part->GetParticleName();
+  G4ProcessManager* man = new G4ProcessManager(part);
+  if(!man) { return 0; }
 
   theProcess = new Test30HadronProduction();
+ 
   G4cout <<  "Process is created; gen= " << gen_name << G4endl;
 
   if(!theDeExcitation) {
@@ -324,6 +303,13 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 
+  } else if(gen_name == "bertini_preco") {
+    G4CascadeInterface* hkm = new G4CascadeInterface();
+    hkm->usePreCompoundDeexcitation();
+    sg = new Test30VSecondaryGenerator(hkm, mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
+
   } else if(gen_name == "incl") {
     G4InclAblaCascadeInterface* hkm = new G4InclAblaCascadeInterface();
     sg = new Test30VSecondaryGenerator(hkm, mat);
@@ -333,37 +319,6 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
   } else if(gen_name == "incl_ion") {
     G4InclLightIonInterface* hkm = new G4InclLightIonInterface();
     sg = new Test30VSecondaryGenerator(hkm, mat);
-    theProcess->SetSecondaryGenerator(sg);
-    man->AddDiscreteProcess(theProcess);
-
-  } else if(gen_name == "LElastic") {
-    G4LElastic* els = new G4LElastic();
-    sg = new Test30VSecondaryGenerator(els, mat);
-    theProcess->SetSecondaryGenerator(sg);
-    man->AddDiscreteProcess(theProcess);
-
-  } else if(gen_name == "Elastic") {
-    G4HadronElastic* els = new G4HadronElastic();
-    els->SetHEModelLowLimit(0.0);
-    sg = new Test30VSecondaryGenerator(els, mat);
-    theProcess->SetSecondaryGenerator(sg);
-    man->AddDiscreteProcess(theProcess);
-
-  } else if(gen_name == "HElastic") {
-    G4ElasticHadrNucleusHE* els = new G4ElasticHadrNucleusHE();
-    sg = new Test30VSecondaryGenerator(els, mat);
-    theProcess->SetSecondaryGenerator(sg);
-    man->AddDiscreteProcess(theProcess);
-
-  } else if(gen_name == "DElastic") {
-    G4DiffuseElastic* els = new G4DiffuseElastic();
-    sg = new Test30VSecondaryGenerator(els, mat);
-    theProcess->SetSecondaryGenerator(sg);
-    man->AddDiscreteProcess(theProcess);
-
-  } else if(gen_name == "chargeex") {
-    G4ChargeExchange* cex = new G4ChargeExchange();
-    sg = new Test30VSecondaryGenerator(cex, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 

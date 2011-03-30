@@ -74,6 +74,16 @@
 #include "G4BGGNucleonInelasticXS.hh"
 #include "G4BGGPionInelasticXS.hh"
 
+#include "G4ElasticHadrNucleusHE.hh"
+#include "G4LElastic.hh"
+#include "G4ChargeExchange.hh"
+#include "G4DiffuseElastic.hh"
+#include "G4CHIPSElastic.hh"
+#include "G4CHIPSElasticXS.hh"
+#include "G4NeutronHPElastic.hh"
+#include "G4NeutronHPElasticData.hh"
+#include "G4WHadronElasticProcess.hh"
+
 #include "G4ParticleTable.hh"
 #include "G4ParticleChange.hh"
 #include "G4DynamicParticle.hh"
@@ -179,7 +189,6 @@ int main(int argc, char** argv)
   G4bool gtran = false;
   G4bool gemis = false;
   G4bool xsbgg = true;
-  G4bool elastic = false;
 
   G4double ang[20] = {0.0};
   G4double bng1[20] = {0.0};
@@ -256,8 +265,10 @@ int main(int argc, char** argv)
   const G4ParticleDefinition* electron = G4Electron::Electron();
   const G4ParticleDefinition* proton = G4Proton::Proton();
   const G4ParticleDefinition* neutron = G4Neutron::Neutron();
-  const G4ParticleDefinition* antiproton = G4AntiProton::AntiProton();
-  const G4ParticleDefinition* antineutron = G4AntiNeutron::AntiNeutron();
+  //  const G4ParticleDefinition* antiproton = 
+  G4AntiProton::AntiProton();
+  //const G4ParticleDefinition* antineutron = 
+  G4AntiNeutron::AntiNeutron();
   const G4ParticleDefinition* pin = G4PionMinus::PionMinus();
   const G4ParticleDefinition* pip = G4PionPlus::PionPlus();
   const G4ParticleDefinition* pi0 = G4PionZero::PionZero();
@@ -265,14 +276,14 @@ int main(int argc, char** argv)
   const G4ParticleDefinition* tri = G4Triton::TritonDefinition();
   const G4ParticleDefinition* he3 = G4He3::He3Definition();
   const G4ParticleDefinition* alp = G4Alpha::AlphaDefinition();
-  const G4ParticleDefinition* ion = G4GenericIon::GenericIon();
+  //const G4ParticleDefinition* ion = 
+  G4GenericIon::GenericIon();
 
   G4DecayPhysics decays;
   decays.ConstructParticle();  
 
   G4ParticleTable* partTable = G4ParticleTable::GetParticleTable();
   partTable->SetReadiness();
-  assert(ion);
 
   //--------- Geometry definition
 
@@ -309,10 +320,11 @@ int main(int argc, char** argv)
       if(verbose > 0) G4cout << "Next line " << line << G4endl;
       if(line == "#particle") {
         (*fin) >> namePart;
+        ionParticle= false;
       } else if(line == "#ion") {
         ionParticle= true;
 	namePart="GenericIon";
-        (*fin) >> ionA >> ionZ;
+        (*fin) >> ionZ >> ionA;
       } else if(line == "#energy(MeV)") {
         (*fin) >> energy;
         energy *= MeV;
@@ -410,8 +422,6 @@ int main(int argc, char** argv)
 	}
         usepaw = true;
 	hFile = nameGen;
-        if(nameGen == "elastic" || nameGen == "HElastic" || 
-	   nameGen == "DElastic") { break; }
 	char* c = getenv(nameGen);
         if(!c) {
 	  G4cout << "Generator <" << nameGen << "> is not included in the "
@@ -545,12 +555,9 @@ int main(int argc, char** argv)
 
     // -------- Projectile
 
-    G4ParticleDefinition* part(0);
-    if (!ionParticle) {
-      part = (G4ParticleTable::GetParticleTable())->FindParticle(namePart);
-    } else {
-      part = (G4ParticleTable::GetParticleTable())->GetIon(ionZ, ionA, 0, ionZ);
-    }
+    G4ParticleDefinition* part = 0;
+    if (!ionParticle) { part = partTable->FindParticle(namePart); }
+    else              { part = partTable->GetIonTable()->GetIon(ionZ,ionA,0.0); }
     if (!part) {
       G4cout << " Sorry, No definition for particle" <<namePart 
 	     << " found" << G4endl;
@@ -559,16 +566,26 @@ int main(int argc, char** argv)
     G4DynamicParticle dParticle(part,aDirection,energy);
 
     // ------- Select model
-    G4VProcess* proc = phys->GetProcess(nameGen, namePart, material);
+    G4HadronicProcess* extraproc = 0;
+    G4VProcess* proc = 0;
+    G4String namegen1 = nameGen.substr(0, 4);
+    G4cout << "<" << namegen1 << ">" << G4endl; 
+    if(namegen1 == "Elas") { 
+      extraproc = new G4WHadronElasticProcess(); 
+    } else if (nameGen == "chargeex") { 
+      extraproc = new G4ChargeExchangeProcess(); 
+    } else { 
+      proc = phys->GetProcess(nameGen, part, material); 
+    }
+
     G4QInelastic* chips = 0;
     if(nameGen == "chips") { chips = new G4QInelastic(); }
 
-    if(!proc) {
+    if(!proc && !chips && !extraproc) {
       G4cout << "For particle: " << part->GetParticleName()
 	     << " generator " << nameGen << " is unavailable"<< G4endl;
 	     exit(1);
     }
-    G4HadronicProcess* extraproc = 0;
 
     // ------- Define target A
     G4int A = (G4int)(elm->GetN()+0.5);
@@ -620,14 +637,7 @@ int main(int argc, char** argv)
     G4cout << "### Log10 scale from " << logmin << " to " << logmax 
 	   << " in " << nbinlog << " bins" << G4endl; 
 
-    if(nameGen == "LElastic" || 
-       nameGen == "BertiniElastic" ||
-       nameGen == "elastic" ||
-       nameGen == "HElastic" ||
-       nameGen == "DElastic") elastic = true;
-
     // ------- Histograms
-
     if(usepaw && !isInitH) {
 
       isInitH = true;
@@ -714,7 +724,7 @@ int main(int argc, char** argv)
       // neutron double differencial histograms are active by request
       for(i=nangl; i<6; i++) {histo.activate(51+i, false);}
 
-      if(elastic) {
+      if(extraproc) {
 	histo.add1D("58","Ekin (MeV) for primary particle",120,0.,energy*1.2/MeV);
 	histo.add1D("59","cos(Theta) for recoil particle in Lab.Sys.",nbinsa,costmax,1.);
 	histo.add1D("60","cos(Theta) for primary particle in Lab.Sys.",nbinsa,costmax,1.);
@@ -746,21 +756,37 @@ int main(int argc, char** argv)
 
     if(chips) {
       chips->SetParameters();
-    } else if(nameGen == "LElastic" || nameGen == "BertiniElastic") {
+    } else if(extraproc && namegen1 == "Elas") {
       cs = new G4HadronElasticDataSet();
-    } else if (nameGen == "chargeex" ||
-	       nameGen == "elastic" || 
-	       nameGen == "HElastic" || 
-	       nameGen == "DElastic") {
-
-      if (nameGen == "chargeex") extraproc = new G4ChargeExchangeProcess();
-      else                       extraproc = new G4UHadronElasticProcess();
-
-      if(part == proton || part == neutron) {
-	if(xsbgg) extraproc->AddDataSet(new G4BGGNucleonElasticXS(part));
-      } else if(part == pip || part == pin) {
-	if(xsbgg) extraproc->AddDataSet(new G4BGGPionElasticXS(part));
+      if(nameGen == "Elastic" || nameGen == "ElasticHE" || 
+	 nameGen == "ElasticDIFF") {
+	if(part == proton || part == neutron) {
+	  if(xsbgg) { cs = new G4BGGNucleonElasticXS(part); }
+	} else if(part == pip || part == pin) {
+	  if(xsbgg) { cs = new G4BGGPionElasticXS(part); }
+	}
+      } else if(nameGen == "ElasticCHIPS") {
+	cs = new G4CHIPSElasticXS(); 
+      } else if(nameGen == "ElasticHP") {
+	cs = new G4NeutronHPElasticData(); 
+      } 
+      extraproc->AddDataSet(cs);
+      G4ProcessManager* man = new G4ProcessManager(part);
+      if(!man) {  
+	G4cout << " Sorry, No manager available for particle" <<namePart << G4endl;
+	G4Exception(" ");  
       }
+
+      G4HadronicInteraction* els = 0;
+      if(nameGen == "Elastic")             { els = new G4VHadronElastic(); }
+      else if(nameGen == "ElasticLHEPOLD") { els = new G4LElastic(); }
+      else if(nameGen == "ElasticLHEP")    { els = new G4VHadronElastic(); }
+      else if(nameGen == "ElasticHE")      { els = new G4ElasticHadrNucleusHE(); }
+      else if(nameGen == "ElasticDIFF")    { els = new G4DiffuseElastic(); }
+      else if(nameGen == "ElasticCHIPS")   { els = new G4CHIPSElastic(); }
+      else if(nameGen == "ElasticHP")      { els = new G4NeutronHPElastic(); }
+      extraproc->RegisterMe(els);
+      man->AddDiscreteProcess(extraproc); 
 
     } else if(part == proton && Z > 1 && nameGen != "lepar") {
       if(xsbgg) cs = new G4BGGNucleonInelasticXS(part);
@@ -785,7 +811,7 @@ int main(int argc, char** argv)
       }
       if(!cs) {
 	cs = new G4TripathiCrossSection();
-	if(cs->IsZAApplicable(&dParticle,Z,A)) {
+	if(cs->IsIsoApplicable(&dParticle,Z,A)) {
 	  G4cout << "Using Tripathi Cross section for Ions" << G4endl;
 	} else {
 	  delete cs;
@@ -946,7 +972,7 @@ int main(int argc, char** argv)
     }
 
     if(!G4StateManager::GetStateManager()->SetNewState(G4State_Idle))
-      G4cout << "G4StateManager PROBLEM! " << G4endl;
+      { G4cout << "G4StateManager PROBLEM! " << G4endl; }
     G4RotationMatrix* rot = new G4RotationMatrix();
     G4double phi0 = aDirection.phi();
     G4double theta0 = aDirection.theta();
@@ -992,6 +1018,8 @@ int main(int argc, char** argv)
 	aChange = chips->PostStepDoIt(*gTrack,*step);
 	G4int Nt = chips->GetNumberOfNeutronsInTarget(); 
         amass = G4NucleiProperties::GetNuclearMass(Nt+Z, Z);
+      } else if(extraproc) {
+	aChange = extraproc->PostStepDoIt(*gTrack,*step); 
       } else { 
 	aChange = proc->PostStepDoIt(*gTrack,*step); 
       }
@@ -1050,7 +1078,7 @@ int main(int argc, char** argv)
         G4double costcm = std::cos(fm.theta());
 
 	if(usepaw) {
-          if(elastic) {
+          if(extraproc) {
 	    if(i==0)  {
 	      histo.fill(57,e/MeV,1.0);
 	      histo.fill(59,cost,factora);

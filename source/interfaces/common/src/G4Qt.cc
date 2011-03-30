@@ -86,11 +86,7 @@ G4Qt::G4Qt (
   // Check if Qt already init in another external app
   if(qApp) {
     QtInited  = TRUE;
-    //#if QT_VERSION < 0x040000
-    //      SetMainInteractor (&qApp);
-    //#else
     SetMainInteractor (qApp);
-    //#endif
     SetArguments      (a_argn,a_args);
     
 #ifdef G4DEBUG_INTERFACES_COMMON
@@ -121,14 +117,10 @@ G4Qt::G4Qt (
 
       int *p_argn = (int*)malloc(sizeof(int));
       *p_argn = argn;
-#if QT_VERSION < 0x040000
-      qApp = new QApplication (*p_argn, args);
-#else
 #ifdef G4DEBUG_INTERFACES_COMMON
     printf("G4Qt::G4Qt QAppl \n");
 #endif
       new QApplication (*p_argn, args);
-#endif
       if(!qApp) {
         
         G4cout        << "G4Qt : Unable to init Qt." << G4endl;

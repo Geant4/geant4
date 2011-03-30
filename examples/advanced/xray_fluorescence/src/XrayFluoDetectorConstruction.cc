@@ -58,8 +58,8 @@
 #include "XrayFluoNistMaterials.hh"
 
 
-//#include "G4Region.hh"
-//#include "G4RegionStore.hh"
+#include "G4Region.hh"
+#include "G4RegionStore.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -135,8 +135,8 @@ XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
   G4String defaultDetectorType = "sili";
   ComputeApparateParameters();
 
-  // G4String regName = "SampleRegion";
-  //sampleRegion = new G4Region(regName);  
+  G4String regName = "SampleRegion";
+  sampleRegion = new G4Region(regName);  
 
   if (!phaseSpaceFlag) SetDetectorType(defaultDetectorType);
   
@@ -649,8 +649,8 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
   }
   // cut per region
   
-  //logicSample->SetRegion(sampleRegion);
-  //sampleRegion->AddRootLogicalVolume(logicSample);
+  logicSample->SetRegion(sampleRegion);
+  sampleRegion->AddRootLogicalVolume(logicSample);
   
 
   
@@ -749,7 +749,7 @@ void XrayFluoDetectorConstruction::UpdateGeometry()
   if (logicHPGe) delete logicHPGe;
   if (physiHPGe) delete physiHPGe;
 
-  //if (sampleRegion) sampleRegion->RemoveRootLogicalVolume(logicSample);
+  if (sampleRegion) sampleRegion->RemoveRootLogicalVolume(logicSample);
   if (solidSample) delete solidSample;
   if (logicSample) delete logicSample;
   if (physiSample) delete physiSample;

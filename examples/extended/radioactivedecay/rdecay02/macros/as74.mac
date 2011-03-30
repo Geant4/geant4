@@ -41,12 +41,12 @@
 # 
 #  Analogue MC
 /histo/fileName as74
-/run/beamOn 100000
-
+/tracking/verbose 1
+/run/beamOn 10
 #  VR MC
 /histo/fileName as74-b
 /grdm/analogueMC 0
-/run/beamOn 100000
+/run/beamOn 10
 
 
 

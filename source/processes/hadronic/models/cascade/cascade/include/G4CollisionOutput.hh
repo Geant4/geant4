@@ -40,6 +40,8 @@
 //		and access functions for initial post-cascade processing.
 //		Move implementation of add() to .cc file.
 // 20100925  M. Kelsey -- Add function to process G4ReactionProduct list
+// 20110225  M. Kelsey -- Add interface to remove entries from lists
+// 20110311  M. Kelsey -- Add function to boost individual four-vector
 
 #ifndef G4COLLISION_OUTPUT_HH
 #define G4COLLISION_OUTPUT_HH
@@ -96,6 +98,22 @@ public:
     theRecoilFragment = aFragment;
   }
 
+  // ===== Remove contents of lists, by index, reference or value  =====
+
+  void removeOutgoingParticle(G4int index);
+  void removeOutgoingParticle(const G4InuclElementaryParticle& particle);
+  void removeOutgoingParticle(const G4InuclElementaryParticle* particle) {
+    if (particle) removeOutgoingParticle(*particle);
+  }
+
+  void removeOutgoingNucleus(G4int index);
+  void removeOutgoingNucleus(const G4InuclNuclei& nuclei);
+  void removeOutgoingNucleus(const G4InuclNuclei* nuclei) {
+    if (nuclei) removeOutgoingNucleus(*nuclei);
+  }
+
+  void removeRecoilFragment();		// There is only one fragment
+
   // ===== Access contents of lists =====
 
   G4int numberOfOutgoingParticles() const { return outgoingParticles.size(); }
@@ -123,6 +141,9 @@ public:
   // ===== Manipulate final-state particles for kinematics =====
 
   void boostToLabFrame(const G4LorentzConvertor& convertor);
+  G4LorentzVector boostToLabFrame(G4LorentzVector mom,	// Note pass by value!
+				  const G4LorentzConvertor& convertor) const;
+
   void rotateEvent(const G4LorentzRotation& rotate);
   void trivialise(G4InuclParticle* bullet, G4InuclParticle* target);
   void setOnShell(G4InuclParticle* bullet, G4InuclParticle* target);

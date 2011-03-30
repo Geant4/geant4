@@ -100,14 +100,6 @@ G4BraggIonModel::~G4BraggIonModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4BraggIonModel::MinEnergyCut(const G4ParticleDefinition*,
-                                       const G4MaterialCutsCouple* couple)
-{
-  return couple->GetMaterial()->GetIonisation()->GetMeanExcitationEnergy();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void G4BraggIonModel::Initialise(const G4ParticleDefinition* p,
                                  const G4DataVector&)
 {

@@ -124,7 +124,7 @@ private:
   G4double tausmall,taulim,tlimit,tlimitmin,geommin,geombig;
   G4double charge,lambdalimit;
   G4double tPathLength,stepmin ;
-  G4double lambda0,lambda1,lambda11,Qn1,Qn12;
+  G4double lambda0,lambda1,lambda11;
   G4double mass;
   G4int    currentMaterialIndex;
 

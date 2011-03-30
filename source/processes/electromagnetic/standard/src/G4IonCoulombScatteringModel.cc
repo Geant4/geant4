@@ -243,7 +243,7 @@ void G4IonCoulombScatteringModel::SampleSecondaries(
 			}
  
   	if(trec > tcut) {
-    		G4ParticleDefinition* ion = theParticleTable->FindIon(iz, ia, 0, iz);
+    		G4ParticleDefinition* ion = theParticleTable->GetIon(iz, ia, 0.0);
     		G4double plab = sqrt(finalT*(finalT + 2.0*mass));
     		G4ThreeVector p2 = (ptot*dir - plab*newDirection).unit();
     		G4DynamicParticle* newdp  = new G4DynamicParticle(ion, p2, trec);

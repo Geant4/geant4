@@ -95,7 +95,7 @@ G4HadronicProcess::G4HadronicProcess(const G4String& processName,
   if ( char * ReportLevel = getenv("G4Hadronic_epReportLevel")) {
      std::stringstream sRL (ReportLevel);
      sRL >> epReportLevel;
-     levelsSetByProcess = true;
+     //-GF we now take min of process and model   levelsSetByProcess = true;
      if ( char * RelativeLevel = getenv("G4Hadronic_epCheckRelativeLevel")) {
      	std::stringstream level(RelativeLevel);
 	level >> epCheckLevels.first;
@@ -618,10 +618,11 @@ G4HadronicProcess::CheckEnergyMomentumConservation(const G4Track& aTrack,
   G4HadronicInteraction* theModel = GetHadronicInteraction();
   G4String modelName("none");
   if (theModel) modelName = theModel->GetModelName();
-
   std::pair<G4double, G4double> checkLevels = epCheckLevels;;
   if (!levelsSetByProcess) {
     if (theModel) checkLevels = theModel->GetEnergyMomentumCheckLevels();
+    checkLevels.first= std::min(checkLevels.first,  epCheckLevels.first);
+    checkLevels.second=std::min(checkLevels.second, epCheckLevels.second);
   }
 
   G4bool relPass = false;

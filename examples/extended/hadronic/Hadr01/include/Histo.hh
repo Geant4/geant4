@@ -132,7 +132,7 @@ private:
   std::vector<G4double>  xmax;
   std::vector<G4double>  unit;
   std::vector<G4String>  ids;
-  std::vector<G4String>  tittles;
+  std::vector<G4String>  titles;
 };
 
 #endif

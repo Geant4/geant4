@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17 March 11: V.Ivanchenko (empolar-V09-04-00)
+- G4ePolarizedIonisation - do not use obsolete MinCutEnergy
+
 12 November 10: A.Schaelicke (empolar-V09-03-02)
 - Resolved: Warning messages of Coverity 
 

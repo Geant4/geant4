@@ -18,10 +18,7 @@
     <text>bench-calo-HadCalCMS-run1_largeN-QGSP_BERT_HP</text>
     <text>bench-calo-HadCalCMS-run1_largeN-QGSP_BERT_EMX</text>
     <text>bench-calo-HadCalCMS-run1_largeN-QGSP_BERT_EMV</text>
-    <text>bench-calo-HadCalCMS-run1_largeN-QGSC_CHIPS</text>
     <text>bench-calo-HadCalCMS-run1_largeN-QGSC_BERT</text>
-    <text>bench-calo-HadCalCMS-run1_largeN-QBBC_XGGSN</text>
-    <text>bench-calo-HadCalCMS-run1_largeN-QBBC_XGG</text>
     <text>bench-calo-HadCalCMS-run1_largeN-QBBC</text>
     <text>bench-calo-HadCalCMS-run1_largeN-LHEP</text>
     <text>bench-calo-HadCalCMS-run1_largeN-LHEP_EMV</text>

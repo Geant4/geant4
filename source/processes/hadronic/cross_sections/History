@@ -14,6 +14,14 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+14 March 2011 Vladimir Ivanchenko (hadr-cross-V09-04-05)
+----------------------------------------------------------
+- G4CrossSectionDataStore - fixed DumpPhysicsTable method, ion cross
+  sections become wrong if this method is invocated
+- G4IonsShenCrossSection - extended energy range up to 100 TeV
+- G4IonsShenCrossSection, G4IonsSihverCrossSection, G4IonsKoxCrossSection
+  moved constructor, destructor and virtual methods to source
+
 24 February 2011 Vladimir Ivanchenko (hadr-cross-V09-04-04)
 ----------------------------------------------------------
 - G4CrossSectionElastic,  G4CrossSectionInelastic - fixed usage in 

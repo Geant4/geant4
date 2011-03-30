@@ -140,12 +140,12 @@ void PhysListEmStandardSS::ConstructProcess()
   emOptions.SetMaxEnergy(100*TeV);	//default  
   emOptions.SetDEDXBinning(12*20);	//default=12*7  
   emOptions.SetLambdaBinning(12*20);	//default=12*7
-  emOptions.SetSplineFlag(true);	//default
+  //  emOptions.SetSplineFlag(true);	//default
       
   //energy loss
   //
-  emOptions.SetStepFunction(0.2, 100*um);	//default=(0.2, 1*mm)      
-  emOptions.SetLinearLossLimit(1.e-2);		//default
+  //emOptions.SetStepFunction(0.2, 100*um);	//default=(0.2, 1*mm)      
+  //emOptions.SetLinearLossLimit(1.e-2);		//default
    
   //ionization
   //

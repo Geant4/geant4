@@ -14,6 +14,15 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+23-03-11 V.Ivant (testem7-V09-04-05)
+- PhysListEmStandardNR - remove calls to obsolete methods,
+     cleaned up options
+- PhysListEmStandardSS - cleaned up options
+     
+20-02-11 mma (testem7-V09-04-04)
+- update PhysListEmStandard for deexcitation
+- PhysicsList : set lowest production cut to 100 eV
      
 14-02-11 mma (testem7-V09-04-03)
 - update HistoManager

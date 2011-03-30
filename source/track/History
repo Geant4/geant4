@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Mar. 16, 2011, H.Kurashige (track-V09-04-00)
+- Fix problems reported by Coverity
+- Add  GetSecondaryInCurrentStep method in G4Step.
+ 
 Nov. 10, 2010, H.Kurashige (track-V09-03-11)
 - Remove  GetSecondaryInCurrentStep method in G4Step.
   (revert chages in track-V09-03-07)

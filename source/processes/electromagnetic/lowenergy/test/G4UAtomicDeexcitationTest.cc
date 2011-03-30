@@ -29,7 +29,11 @@
 #include "G4ios.hh"
 #include <vector>
 #include "G4DynamicParticle.hh"
+
+#ifdef G4ANALYSIS_BUILD
 #include "AIDA/AIDA.h"
+#endif
+
 #include "Randomize.hh"
 #include "G4Proton.hh"
 #include "G4Alpha.hh"
@@ -61,10 +65,13 @@ int main(int argc, char* argv[]){
   if (argv[4]) {fileName = argv[4];}
   else {fileName = "transitions.xml";}
 
+#ifdef G4ANALYSIS_BUILD
   AIDA::ITree* tree;
   AIDA::IAnalysisFactory* analysisFactory;
   AIDA::ITupleFactory* tupleFactory;
   AIDA::ITuple* tupleFluo = 0;
+#endif
+
   if (batch != 1) {
     G4cout << "Enter Z " << G4endl;
     G4cin >> a;
@@ -79,6 +86,8 @@ int main(int argc, char* argv[]){
     startId = -1;
     numberOfRun = atoi(argv[2]);
   }
+
+#ifdef G4ANALYSIS_BUILD
   analysisFactory = AIDA_createAnalysisFactory();
   AIDA::ITreeFactory* treeFactory = analysisFactory->createTreeFactory();
   tree = treeFactory->create(fileName,"xml",false,true);
@@ -87,6 +96,7 @@ int main(int argc, char* argv[]){
   std::vector<std::string> columnNames;
   // Book tuple column types
   std::vector<std::string> columnTypes;
+#endif
   
   //if Z=0 a number of runs numberOfRun is generated for all the elements 
   if (a==0)
@@ -98,6 +108,7 @@ int main(int argc, char* argv[]){
       else {
 	a = element;
 	b = a;}
+#ifdef G4ANALYSIS_BUILD
       columnNames.push_back("AtomicNumber");
       columnNames.push_back("Particle");
       columnNames.push_back("Energies");
@@ -107,7 +118,7 @@ int main(int argc, char* argv[]){
       columnTypes.push_back("double");
       tupleFluo = tupleFactory->create("10", "Total Tuple", columnNames, columnTypes, "");
       assert(tupleFluo);
-
+#endif
     }
   else { b = a;} 
   
@@ -160,10 +171,10 @@ int main(int argc, char* argv[]){
 	G4AtomicShellEnumerator as;
 
 	if (shell->ShellId() == 1) {as = fKShell;}
-	else if (shell->ShellId() == 3) {as = fL1Shell;}
-	else if (shell->ShellId() == 5) {as = fL2Shell;}
-	else if (shell->ShellId() == 6) {as = fL3Shell;}
-	else if (shell->ShellId() == 8) {as = fM1Shell;}
+	else if (shell->ShellId() == 3 ) {as = fL1Shell;}
+	else if (shell->ShellId() == 5 ) {as = fL2Shell;}
+	else if (shell->ShellId() == 6 ) {as = fL3Shell;}
+	else if (shell->ShellId() == 8 ) {as = fM1Shell;}
 	else if (shell->ShellId() == 10) {as = fM2Shell;}
 	else if (shell->ShellId() == 11) {as = fM3Shell;}
 	else if (shell->ShellId() == 13) {as = fM4Shell;}
@@ -174,18 +185,19 @@ int main(int argc, char* argv[]){
 	particle = G4Proton::Proton();
 
       	G4double crossSecProton = deexcitation->GetShellIonisationCrossSectionPerAtom
-	  (particle,Z,as,3.0 * MeV) * barn ;
+	  (particle,Z,as,3.0 * MeV) /* * barn*/ ;
 
 	particle = G4Alpha::Alpha();
 
       	G4double crossSecAlpha = deexcitation->GetShellIonisationCrossSectionPerAtom
-	  (particle, Z, as, 5.8 * MeV) * barn ;
+	  (particle, Z, as, 5.8 * MeV) /* * barn */;
  
 	deexcitation->GenerateParticles(vectorOfParticles, shell, Z, 0, 0);
       
+	G4cout << "Shell ID: " << shell->ShellId() << G4endl; 
 	G4cout<<  vectorOfParticles->size()<<" particles in the vector "<<G4endl;
-	G4cout<<"XS for p @ 3 MeV: "<< crossSecProton/barn  << "barns" << G4endl;
-	G4cout<<"XS for p @ 5.8 MeV: "<< crossSecAlpha/barn << "barns" << G4endl; 
+	G4cout<< as <<" XS for p @ 3 MeV: "<< crossSecProton/barn  << "barns" << G4endl;
+	G4cout<< as <<" XS for alpha @ 5.8 MeV: "<< crossSecAlpha/barn << "barns" << G4endl; 
 
 	for (G4int k=0; k< vectorOfParticles->size();k++)
 	  {
@@ -201,12 +213,12 @@ int main(int argc, char* argv[]){
 
 
 		if (startId==-1){
-		  
+#ifdef G4ANALYSIS_BUILD		  
 		  tupleFluo->fill(0,Z);
 		  tupleFluo->fill(1,0);
 		  tupleFluo->fill(2,augerEnergy);
 		  tupleFluo->addRow();
-		  
+#endif		  
 		}
 		else{	      
 		  
@@ -218,19 +230,20 @@ int main(int argc, char* argv[]){
 		}
 	      }
 	    else{
-		G4cout << "pippo" << G4endl; 
+	      //G4cout << "pippo" << G4endl; 
 
 	      G4ThreeVector photonDirection = newParticle ->GetMomentum();
 	      G4double  photonEnergy =newParticle ->GetKineticEnergy();
 
 	      if (startId==-1){
-		G4cout << "pippo2" << G4endl;
+#ifdef G4ANALYSIS_BUILD
+		//G4cout << "pippo2" << G4endl;
 		tupleFluo->fill(0,Z);
 
 		tupleFluo->fill(1,1);
 		tupleFluo->fill(2,photonEnergy);
 		tupleFluo->addRow();		
-
+#endif
 	      }
 	      else{
 		
@@ -243,8 +256,10 @@ int main(int argc, char* argv[]){
 	  }
       }
       if (batch == 1){
+#ifdef G4ANALYSIS_BUILD
 	tree->commit(); // Write histos in file. 
 	tree->close();
+#endif
       }
       if (!vectorOfParticles) delete vectorOfParticles;
     }

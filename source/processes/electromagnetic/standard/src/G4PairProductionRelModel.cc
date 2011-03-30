@@ -45,7 +45,8 @@
 //  J.W.Motz et.al., Rev. Mod. Phys. 41 (1969) 581.
 //  S.Klein,  Rev. Mod. Phys. 71 (1999) 1501.
 //  T.Stanev et.al., Phys. Rev. D25 (1982) 1291.
-//  M.L.Ter-Mikaelian, High-energy Electromagnetic Processes in Condensed Media, Wiley, 1972.
+//  M.L.Ter-Mikaelian, High-energy Electromagnetic Processes in Condensed Media, 
+//                     Wiley, 1972.
 //
 // -------------------------------------------------------------------
 //
@@ -73,11 +74,11 @@ const G4double G4PairProductionRelModel::preS1 = 1./(184.15*184.15);
 const G4double G4PairProductionRelModel::logTwo = log(2.);
 
 const G4double G4PairProductionRelModel::xgi[]={ 0.0199, 0.1017, 0.2372, 0.4083,
-						  0.5917, 0.7628, 0.8983, 0.9801 };
+						 0.5917, 0.7628, 0.8983, 0.9801 };
 const G4double G4PairProductionRelModel::wgi[]={ 0.0506, 0.1112, 0.1569, 0.1813,
-					    0.1813, 0.1569, 0.1112, 0.0506 };
-const G4double G4PairProductionRelModel::Fel_light[]  = {0., 5.31  , 4.79  , 4.74 ,  4.71} ;
-const G4double G4PairProductionRelModel::Finel_light[] = {0., 6.144 , 5.621 , 5.805 , 5.924} ;
+						 0.1813, 0.1569, 0.1112, 0.0506 };
+const G4double G4PairProductionRelModel::Fel_light[]  = {0., 5.31  , 4.79  , 4.74 ,  4.71};
+const G4double G4PairProductionRelModel::Finel_light[] = {0., 6.144 , 5.621 , 5.805 , 5.924};
 
 
 
@@ -331,7 +332,7 @@ G4PairProductionRelModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
 
   G4double epsil ;
   G4double epsil0 = electron_mass_c2/GammaEnergy ;
-  if(epsil0 > 1.0) return;
+  if(epsil0 > 1.0) { return; }
 
   // do it fast if GammaEnergy < 2. MeV
   static const G4double Egsmall=2.*MeV;

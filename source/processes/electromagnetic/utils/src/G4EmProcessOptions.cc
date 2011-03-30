@@ -241,53 +241,6 @@ void G4EmProcessOptions::SetLambdaFactor(G4double val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4EmProcessOptions::ActivateDeexcitation(const G4String& pname, 
-					      G4bool val, 
-					      const G4String& reg)
-{
-  G4RegionStore* regionStore = G4RegionStore::GetInstance();
-  const G4Region* r = 0;
-  if(reg == "" || reg == "World") {
-    r = regionStore->GetRegion("DefaultRegionForTheWorld", false);
-  } else {
-    r = regionStore->GetRegion(reg, false);
-  }
-  if(!r) {
-    G4cout << "G4EmProcessOptions::ActivateDeexcitation ERROR: G4Region <"
-	   << reg << "> not found, the command ignored" << G4endl;
-    return;
-  }
-
-  const std::vector<G4VEnergyLossProcess*>& v =
-        theManager->GetEnergyLossProcessVector();
-  std::vector<G4VEnergyLossProcess*>::const_iterator itr;
-  for(itr = v.begin(); itr != v.end(); itr++) {
-    G4VEnergyLossProcess* p = *itr;
-    if(p) {
-      if(pname == p->GetProcessName()) { p->ActivateDeexcitation(val,r); }
-    }
-  }
-  const std::vector<G4VEmProcess*>& w =
-        theManager->GetEmProcessVector();
-  std::vector<G4VEmProcess*>::const_iterator itp;
-  for(itp = w.begin(); itp != w.end(); itp++) {
-    G4VEmProcess* q = *itp;
-    if(q) {
-      if(pname == q->GetProcessName()) { q->ActivateDeexcitation(val,r); }
-    }
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4EmProcessOptions::SetDeexcitationActive(G4bool val)
-{
-  G4VAtomDeexcitation* ad = theManager-> AtomDeexcitation();
-  if(ad) { ad->SetActive(val); }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void 
 G4EmProcessOptions::SetDeexcitationActiveRegion(const G4String& rname, 
 						G4bool valDeexcitation,
@@ -303,18 +256,26 @@ G4EmProcessOptions::SetDeexcitationActiveRegion(const G4String& rname,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4EmProcessOptions::SetAugerActive(G4bool val)
+void G4EmProcessOptions::SetFluo(G4bool val)
 {
   G4VAtomDeexcitation* ad = theManager-> AtomDeexcitation();
-  if(ad) { ad->SetAugerActive(val); }
+  if(ad) { ad->SetFluo(val); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4EmProcessOptions::SetPIXEActive(G4bool val)
+void G4EmProcessOptions::SetAuger(G4bool val)
 {
   G4VAtomDeexcitation* ad = theManager-> AtomDeexcitation();
-  if(ad) { ad->SetPIXEActive(val); }
+  if(ad) { ad->SetAuger(val); }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmProcessOptions::SetPIXE(G4bool val)
+{
+  G4VAtomDeexcitation* ad = theManager-> AtomDeexcitation();
+  if(ad) { ad->SetPIXE(val); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -323,6 +284,15 @@ void G4EmProcessOptions::SetPIXECrossSectionModel(const G4String& mname)
 {
   G4VAtomDeexcitation* ad = theManager-> AtomDeexcitation();
   if(ad) { ad->SetPIXECrossSectionModel(mname); }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void 
+G4EmProcessOptions::SetPIXEElectronCrossSectionModel(const G4String& mname)
+{
+  G4VAtomDeexcitation* ad = theManager-> AtomDeexcitation();
+  if(ad) { ad->SetPIXEElectronCrossSectionModel(mname); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

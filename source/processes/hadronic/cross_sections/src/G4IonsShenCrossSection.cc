@@ -27,6 +27,7 @@
 // 12-Nov-2003 Add energy check at lower side T. Koi
 // 15-Nov-2006 Above 10GeV/n Cross Section become constant T. Koi (SLAC/SCCS)
 // 23-Dec-2006 Isotope dependence adde by D. Wright
+// 14-Mar-2011 Moved constructor, destructor and virtual methods to source by V.Ivanchenko
 //
 
 #include "G4IonsShenCrossSection.hh"
@@ -34,6 +35,27 @@
 #include "G4IonTable.hh"
 #include "G4HadTmpUtil.hh"
 
+G4IonsShenCrossSection::G4IonsShenCrossSection()
+  : G4VCrossSectionDataSet("IonsShen"),
+    upperLimit( 100*TeV ), lowerLimit( 10*MeV ), r0 ( 1.1 )
+{}
+
+G4IonsShenCrossSection::~G4IonsShenCrossSection()
+{}
+   
+G4bool G4IonsShenCrossSection::IsApplicable(const G4DynamicParticle* aDP, const G4Element*)
+{
+  return IsIsoApplicable(aDP, 0, 0);
+}
+
+G4bool G4IonsShenCrossSection::IsIsoApplicable(const G4DynamicParticle* aDP,
+					       G4int /*ZZ*/, G4int /*AA*/)
+{
+  G4int baryonNumber = aDP->GetDefinition()->GetBaryonNumber();
+  G4double kineticEnergy = aDP->GetKineticEnergy(); 
+  if ( kineticEnergy / baryonNumber <= upperLimit ) { return true; }
+  return false;
+}
 
 G4double G4IonsShenCrossSection::
 GetZandACrossSection(const G4DynamicParticle* aParticle, G4int ZZ, 
@@ -155,4 +177,12 @@ G4double G4IonsShenCrossSection::calCeValue(const G4double ke)
          std::pow(G4double(1.5) , G4double(3)) * std::pow(G4double(log10_ke), G4double(3));
    }
    return Ce;
+}
+
+void G4IonsShenCrossSection::BuildPhysicsTable(const G4ParticleDefinition&)
+{}
+
+void G4IonsShenCrossSection::DumpPhysicsTable(const G4ParticleDefinition&) 
+{
+  G4cout << "G4IonsShenCrossSection: uses Shen formula"<<G4endl;
 }

@@ -107,19 +107,19 @@ G4NistManager::~G4NistManager()
   size_t nmat = theMaterialTable->size();
   size_t i;
   for(i=0; i<nmat; i++) {
-    if((*theMaterialTable)[i]) delete (*theMaterialTable)[i];
+    if((*theMaterialTable)[i]) { delete (*theMaterialTable)[i]; }
   }
   //  G4cout << "NistManager: start element destruction" << G4endl;
   const G4ElementTable* theElementTable = G4Element::GetElementTable();
   size_t nelm = theElementTable->size();
   for(i=0; i<nelm; i++) {
-    if((*theElementTable)[i]) delete (*theElementTable)[i];
+    if((*theElementTable)[i]) { delete (*theElementTable)[i]; }
   }
   //  G4cout << "NistManager: start isotope destruction" << G4endl;
   const G4IsotopeTable* theIsotopeTable = G4Isotope::GetIsotopeTable();
   size_t niso = theIsotopeTable->size();
   for(i=0; i<niso; i++) {
-    if((*theIsotopeTable)[i]) delete (*theIsotopeTable)[i];
+    if((*theIsotopeTable)[i]) { delete (*theIsotopeTable)[i]; }
   }
   //  G4cout << "NistManager: end isotope destruction" << G4endl;
   delete messenger;
@@ -130,10 +130,46 @@ G4NistManager::~G4NistManager()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4Material* 
+G4NistManager::BuildMaterialWithNewDensity(const G4String& name,
+					   const G4String& basename, 
+					   G4double density,
+					   G4double temperature,
+					   G4double pressure)
+{
+  G4Material* bmat = FindOrBuildMaterial(name);
+  if(bmat) {
+    G4cout << "G4NistManager::BuildMaterialWithNewDensity ERROR: " << G4endl;
+    G4cout << " New material <" << name << "> cannot be built because material"
+	   << " with the same name already exist" << G4endl;
+    G4Exception("Wrong material name");
+  }
+  bmat = FindOrBuildMaterial(basename);
+  if(!bmat) {
+    G4cout << "G4NistManager::BuildMaterialWithNewDensity ERROR: " << G4endl;
+    G4cout << " New material <" << name << "> cannot be built because " << G4endl;
+    G4cout << " base material <" << basename << "> does not exist" << G4endl;
+    G4Exception("Wrong material name");
+  }
+  G4double dens = density;
+  G4double temp = temperature;
+  G4double pres = pressure;
+  if(dens == 0.0) { 
+    dens = bmat->GetDensity();
+    temp = bmat->GetTemperature();
+    pres = bmat->GetPressure(); 
+  }
+  G4Material* mat = new G4Material(name, dens, bmat, bmat->GetState(),
+				   temp, pres);
+  return mat;
+}
+  
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4NistManager::PrintElement(const G4String& symbol)
 {
-  if (symbol == "all") elmBuilder->PrintElement(0);
-  else                 elmBuilder->PrintElement(elmBuilder->GetZ(symbol));
+  if (symbol == "all") { elmBuilder->PrintElement(0); }
+  else                 { elmBuilder->PrintElement(elmBuilder->GetZ(symbol)); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

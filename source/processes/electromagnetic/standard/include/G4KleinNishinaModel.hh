@@ -51,6 +51,7 @@
 #define G4KleinNishinaModel_h 1
 
 #include "G4VEmModel.hh"
+#include "G4LorentzVector.hh"
 #include <vector>
 
 class G4ParticleChangeForGamma;
@@ -93,8 +94,12 @@ private:
   // hide assignment operator
   G4KleinNishinaModel & operator=(const  G4KleinNishinaModel &right);
   G4KleinNishinaModel(const  G4KleinNishinaModel&);
+ 
+  G4LorentzVector lv1, lv2;
+  G4ThreeVector bst;
 
   G4VAtomDeexcitation*      fAtomDeexcitation;
+  G4double                  limitFactor;
   G4bool                    isInitialized;
   std::vector<G4double>     fProbabilities;
 };

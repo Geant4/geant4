@@ -57,6 +57,7 @@
 G4VMscModel::G4VMscModel(const G4String& nam):
   G4VEmModel(nam), 
   safetyHelper(0),
+  ionisation(0),
   facrange(0.04),
   facgeom(2.5),
   facsafety(0.3),
@@ -65,6 +66,7 @@ G4VMscModel::G4VMscModel(const G4String& nam):
   lambdalimit(mm),
   geomMin(1.e-6*CLHEP::mm),
   geomMax(1.e50*CLHEP::mm),
+  dedx(2.0*CLHEP::MeV*CLHEP::cm2/CLHEP::g),
   steppingAlgorithm(fUseSafety),
   samplez(false),
   latDisplasment(true)
@@ -79,24 +81,18 @@ G4VMscModel::~G4VMscModel()
 
 G4ParticleChangeForMSC* G4VMscModel::GetParticleChangeForMSC()
 {
-  G4ParticleChangeForMSC* p = 0;
-  if (pParticleChange) {
-    p = static_cast<G4ParticleChangeForMSC*>(pParticleChange);
-  } else {
-    p = new G4ParticleChangeForMSC();
-  }
-  return p;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4VMscModel::InitialiseSafetyHelper()
-{
   if(!safetyHelper) {
     safetyHelper = G4TransportationManager::GetTransportationManager()
       ->GetSafetyHelper();
     safetyHelper->InitialiseHelper();
   }
+  G4ParticleChangeForMSC* change = 0;
+  if (pParticleChange) {
+    change = static_cast<G4ParticleChangeForMSC*>(pParticleChange);
+  } else {
+    change = new G4ParticleChangeForMSC();
+  }
+  return change;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

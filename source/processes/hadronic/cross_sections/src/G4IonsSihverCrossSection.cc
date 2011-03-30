@@ -25,12 +25,37 @@
 //
 // 18-Sep-2003 First version is written by T. Koi
 // 23-Dec-2006 Isotope dependence added by D. Wright
+// 14-Mar-2011 Moved constructor, destructor and virtual methods to source by V.Ivanchenko
 //
 
 #include "G4IonsSihverCrossSection.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
 #include "G4HadTmpUtil.hh"
+
+G4IonsSihverCrossSection::G4IonsSihverCrossSection()
+  : G4VCrossSectionDataSet("IonsSihver"),
+    square_r0 ( (1.36*fermi) * (1.36*fermi) )
+{}
+
+G4IonsSihverCrossSection::~G4IonsSihverCrossSection()
+{}
+   
+G4bool 
+G4IonsSihverCrossSection::IsApplicable(const G4DynamicParticle* aDP, const G4Element*)
+{
+  return IsIsoApplicable(aDP, 0, 0);
+}
+
+G4bool 
+G4IonsSihverCrossSection::IsIsoApplicable(const G4DynamicParticle* aDP, G4int /*ZZ*/, 
+					  G4int /*AA*/)
+{
+  G4int BaryonNumber = aDP->GetDefinition()->GetBaryonNumber();
+  G4double KineticEnergy = aDP->GetKineticEnergy(); 
+  if ( KineticEnergy / BaryonNumber >= 100*MeV && BaryonNumber > 1 ) { return true; }
+  return false;
+}
 
 G4double G4IonsSihverCrossSection::
 GetZandACrossSection(const G4DynamicParticle* aParticle,
@@ -53,7 +78,6 @@ GetZandACrossSection(const G4DynamicParticle* aParticle,
   
    return xsection; 
 }
-
 
 G4double G4IonsSihverCrossSection::
 GetCrossSection(const G4DynamicParticle* aParticle, 
@@ -83,4 +107,12 @@ GetCrossSection(const G4DynamicParticle* aParticle,
   }
    
   return xsection;
+}
+
+void G4IonsSihverCrossSection::BuildPhysicsTable(const G4ParticleDefinition&)
+{}
+
+void G4IonsSihverCrossSection::DumpPhysicsTable(const G4ParticleDefinition&) 
+{
+  G4cout << "G4GIonCrossSection: uses Sihver formula"<<G4endl;
 }

@@ -42,5 +42,6 @@
 #include <CLHEP/Vector/Rotation.h>
 
 typedef CLHEP::HepRotation G4RotationMatrix;
+typedef CLHEP::HepRep3x3 G4Rep3x3;
 
 #endif

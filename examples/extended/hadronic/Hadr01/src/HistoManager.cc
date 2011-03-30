@@ -248,7 +248,7 @@ void HistoManager::EndOfRun()
   G4cout<<G4endl;
 
   // normalise histograms
-  for(G4int i=0; i<nHisto; i++) {
+  for(G4int i=0; i<nHisto; i++) { 
     histo->scale(i,x);
   }
 

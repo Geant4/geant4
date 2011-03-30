@@ -42,7 +42,6 @@ class G4UIdirectory;
 class G4UIcommand;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
-class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -66,7 +65,6 @@ class HistoMessenger: public G4UImessenger
    G4UIcommand*               histoCmd;
    G4UIcmdWithAnInteger*      prhistoCmd;
    G4UIcmdWithAnInteger*      rmhistoCmd;   
-   G4UIcmdWithADoubleAndUnit* csdaCmd;
   
 };
 

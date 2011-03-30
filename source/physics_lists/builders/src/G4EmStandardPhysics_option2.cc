@@ -63,7 +63,7 @@
 #include "G4hMultipleScattering.hh"
 #include "G4MuMultipleScattering.hh"
 #include "G4CoulombScattering.hh"
-#include "G4UrbanMscModel93.hh"
+#include "G4UrbanMscModel95.hh"
 #include "G4WentzelVIModel.hh"
 //#include "G4GoudsmitSaundersonMscModel.hh"
 
@@ -172,7 +172,7 @@ void G4EmStandardPhysics_option2::ConstructProcess()
     if (particleName == "gamma") {
 
       G4PhotoElectricEffect* pe = new G4PhotoElectricEffect;
-      pe->SetModel(new G4PEEffectFluoModel());
+      //pe->SetModel(new G4PEEffectFluoModel());
       G4ComptonScattering* cs   = new G4ComptonScattering;
       cs->SetModel(new G4KleinNishinaModel());
       pmanager->AddDiscreteProcess(pe);
@@ -184,7 +184,7 @@ void G4EmStandardPhysics_option2::ConstructProcess()
       G4eMultipleScattering* msc = new G4eMultipleScattering();
       //msc->AddEmModel(0, new G4WentzelVIModel());
       //msc->SetRangeFactor(0.04);
-      //msc->AddEmModel(0, new G4UrbanMscModel93());
+      msc->AddEmModel(0, new G4UrbanMscModel95());
       //      msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
       G4eBremsstrahlung* brem = new G4eBremsstrahlung();
       G4eBremsstrahlungModel* br = new G4eBremsstrahlungModel();
@@ -198,7 +198,7 @@ void G4EmStandardPhysics_option2::ConstructProcess()
     } else if (particleName == "e+") {
 
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      //msc->AddEmModel(0, new G4UrbanMscModel93());
+      msc->AddEmModel(0, new G4UrbanMscModel95());
       //msc->AddEmModel(0, new G4WentzelVIModel());
       //msc->SetRangeFactor(0.04);
       // msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());

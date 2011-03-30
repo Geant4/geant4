@@ -100,7 +100,7 @@ G4eeToTwoGammaModel::~G4eeToTwoGammaModel()
 void G4eeToTwoGammaModel::Initialise(const G4ParticleDefinition*,
                                      const G4DataVector&)
 {
-  if(isInitialised) return;
+  if(isInitialised) { return; }
   fParticleChange = GetParticleChangeForGamma();
   isInitialised = true;
 }

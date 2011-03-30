@@ -146,11 +146,6 @@ public:
 					      G4double cutEnergy = 0.0,
 					      G4double maxEnergy = DBL_MAX);
 				      				     
-  // min cut in kinetic energy allowed by the model
-  // obsolete method will be removed
-  virtual G4double MinEnergyCut(const G4ParticleDefinition*,
-				const G4MaterialCutsCouple*);
-
   // Compute effective ion charge square
   virtual G4double ChargeSquareRatio(const G4Track&);
 

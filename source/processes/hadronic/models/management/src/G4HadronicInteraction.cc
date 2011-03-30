@@ -233,6 +233,11 @@ G4bool G4HadronicInteraction::IsBlocked( const G4Element *anElement ) const
   return false;
 }
 
+std::pair<G4double, G4double> G4HadronicInteraction::GetEnergyMomentumCheckLevels() const
+{
+	return epCheckLevels;
+}
+
 /*
 G4HadronicInteraction::G4HadronicInteraction(const G4HadronicInteraction &right )
 { 

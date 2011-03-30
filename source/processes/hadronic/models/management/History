@@ -14,7 +14,16 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+3 November 2010  - G.Folger   (hadr-modman-V09-04-00)
+------------------------------------------------------
+- E/p checking extended to allow string models to set limits:
+   GetEnergyMomentumCheckLevels() made virtual in G4HadronicInteraction,
+     implemented to query string model in G4VHighEnergyGenerator
+- M.Kelsey: G4VIntraNuclearTransportModel add data member and 
+   Set/Get method to store/retrieve original projectile   
+
 3 November 2010  - G.Folger   (hadr-modman-V09-03-05)
+------------------------------------------------------
 - G4VNuclearDensity: coverity warning: init data member in ctor
 
 8 September 2010 - G.Folger   (hadr-modman-V09-03-04)

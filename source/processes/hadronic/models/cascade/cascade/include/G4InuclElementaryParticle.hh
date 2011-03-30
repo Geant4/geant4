@@ -1,3 +1,5 @@
+#ifndef G4INUCL_ELEMENTARY_PARTICLE_HH
+#define G4INUCL_ELEMENTARY_PARTICLE_HH
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -33,9 +35,9 @@
 // 20100915  M. Kelsey -- Add hyperon() identification function, ctor for
 //		G4DynamicParticle
 // 20110117  M. Kelsey -- Add antinucleon() and antibaryon() flag
-
-#ifndef G4INUCL_ELEMENTARY_PARTICLE_HH
-#define G4INUCL_ELEMENTARY_PARTICLE_HH
+// 20110127  M. Kelsey -- Drop generation.
+// 20110214  M. Kelsey -- Replace integer "model" with enum
+// 20110321  M. Kelsey -- Fix getStrangeness() to return int
 
 #include "G4InuclParticle.hh"
 #include "G4InuclParticleNames.hh"
@@ -46,28 +48,29 @@ class G4ParticleDefinition;
 class G4InuclElementaryParticle : public G4InuclParticle {
 public:
   G4InuclElementaryParticle() 
-    : G4InuclParticle(), generation(0) {}
+    : G4InuclParticle() {}
 
   explicit G4InuclElementaryParticle(G4int type) 
-    : G4InuclParticle(makeDefinition(type)), generation(0) {}
+    : G4InuclParticle(makeDefinition(type)) {}
 
-  G4InuclElementaryParticle(const G4DynamicParticle& dynPart, G4int model=0)
-    : G4InuclParticle(dynPart), generation(0) {
+  G4InuclElementaryParticle(const G4DynamicParticle& dynPart,
+			    Model model=DefaultModel)
+    : G4InuclParticle(dynPart) {
     setModel(model);
   }
 
   G4InuclElementaryParticle(const G4LorentzVector& mom,
-			    G4int type, G4int model=0) 
-    : G4InuclParticle(makeDefinition(type), mom), generation(0) {
+			    G4int type, Model model=DefaultModel)
+    : G4InuclParticle(makeDefinition(type), mom) {
     setModel(model);
   }
 
   G4InuclElementaryParticle(G4double ekin, G4int type) 
-    : G4InuclParticle(makeDefinition(type), ekin), generation(0) {}
+    : G4InuclParticle(makeDefinition(type), ekin) {}
 
   // Copy and assignment constructors for use with std::vector<>
   G4InuclElementaryParticle(const G4InuclElementaryParticle& right)
-    : G4InuclParticle(right), generation(right.generation) {}
+    : G4InuclParticle(right) {}
 
   G4InuclElementaryParticle& operator=(const G4InuclElementaryParticle& right);
 
@@ -95,30 +98,22 @@ public:
 
   G4bool antibaryon() const { return baryon() < 0; }
 
-  G4bool hyperon() const {
-    return (baryon() && getStrangeness() != 0.);
-  }
+  G4bool hyperon() const { return (baryon() && getStrangeness()); }
 
   G4bool quasi_deutron() const { return (type() > 100); }
 
-  G4double getStrangeness() const { return getStrangeness(type()); }
+  G4int getStrangeness() const { return getStrangeness(type()); }
 
   G4bool valid() const { return type()>0; }
 
   virtual void printParticle() const;
 
-  void setGeneration(G4int gen) { generation = gen; }
-  G4int getGeneration() const { return generation; }
-
-  static G4double getStrangeness(G4int type);
+  static G4int getStrangeness(G4int type);
   static G4double getParticleMass(G4int type);
 
 protected:
   // Convert internal type code to standard GEANT4 pointer
   static G4ParticleDefinition* makeDefinition(G4int ityp);
-
-private: 
-  G4int generation;
 };        
 
 #endif // G4INUCL_ELEMENTARY_PARTICLE_HH 

@@ -47,7 +47,11 @@
 #include "G4AntiProton.hh"
 #include "G4AntiNeutron.hh"
 
-G4StoppingHadronBuilder::G4StoppingHadronBuilder(): wasActivated(false)
+G4StoppingHadronBuilder::G4StoppingHadronBuilder():
+ theMuonMinusAbsorption(0),thePionMinusAbsorption(0),
+ theKaonMinusAbsorption(0), theAntiProtonAnnihilation(0),
+ theAntiNeutronAnnihilation(0),
+ wasActivated(false)
 {}
 
 G4StoppingHadronBuilder::~G4StoppingHadronBuilder()

@@ -42,6 +42,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/particles/shortlived/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/physics_lists/builders/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/cuts/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/decay/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/dna/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/highenergy/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/lowenergy/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/muons/include)
@@ -220,6 +221,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         G4cuts
         G4decay
         G4digits
+        G4emdna
         G4emhighenergy
         G4emlowenergy
         G4emstandard

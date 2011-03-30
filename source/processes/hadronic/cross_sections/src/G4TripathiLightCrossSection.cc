@@ -70,7 +70,7 @@
 
 
 G4TripathiLightCrossSection::G4TripathiLightCrossSection ()
- : G4VCrossSectionDataSet("G4TripathiLightCrossSection")
+ : G4VCrossSectionDataSet("TripathiLightIons")
 {
   // Constructor only needs to instantiate the object which provides functions
   // to calculate the nuclear radius, and some other constants used to

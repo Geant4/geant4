@@ -71,6 +71,8 @@ class G4TheoFSGenerator : public G4HadronicInteraction
       void SetHighEnergyGenerator(G4VHighEnergyGenerator *const  value);
       void SetQuasiElasticChannel(G4QuasiElasticChannel *const value);
       void SetProjectileDiffraction(G4ProjectileDiffractiveChannel *const value);
+      virtual std::pair<G4double, G4double> GetEnergyMomentumCheckLevels() const;
+
   private:
       const G4VIntraNuclearTransportModel * GetTransport() const;
       const G4VHighEnergyGenerator * GetHighEnergyGenerator() const;
@@ -118,7 +120,6 @@ inline const G4HadFinalState * G4TheoFSGenerator::GetFinalState() const
 {
   return theParticleChange;
 }
-
 
 #endif
 

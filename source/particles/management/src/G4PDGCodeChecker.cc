@@ -380,7 +380,9 @@ G4int G4PDGCodeChecker::CheckForNuclei()
   pcode -= 10000*Z;
   G4int A = pcode/10;
   
-  if (A < 2 || Z > A-L || L>A || Z<=0 ) {
+  // Allow neutron balls
+  // if (A < 2 || Z > A-L || L>A || Z<=0 ) {
+  if (A < 2 || Z > A-L || L>A ) {
 #ifdef G4VERBOSE
     if (verboseLevel>0) {
       G4cout << " G4PDGCodeChecker::CheckPDGCode : ";

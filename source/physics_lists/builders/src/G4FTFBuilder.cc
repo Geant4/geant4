@@ -49,7 +49,8 @@
 
 
 G4FTFBuilder::G4FTFBuilder(const G4String& aName, G4PreCompoundModel* p) 
-  : G4VHadronModelBuilder(aName), thePreCompound(p)
+  : G4VHadronModelBuilder(aName), 
+    theStringModel(0), theStringDecay(0), thePreCompound(p)
 {}
 
 G4FTFBuilder::~G4FTFBuilder() 

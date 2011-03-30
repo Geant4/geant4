@@ -97,7 +97,7 @@ G4double G4PaulKCrossSection::CalculateKCrossSection(G4int zTarget,G4double mass
   
   G4double sigma = 0;
 
-  if (massIncident == aProtone->GetPDGMass() )
+  if (massIncident == aProtone->GetPDGMass() && zTarget < 93 && zTarget > 3)
     {
       
       sigma = protonDataSetMap[zTarget]->FindValue(energyIncident/MeV); 
@@ -105,7 +105,7 @@ G4double G4PaulKCrossSection::CalculateKCrossSection(G4int zTarget,G4double mass
     }
   else
     {
-      if (massIncident == aAlpha->GetPDGMass())
+      if (massIncident == aAlpha->GetPDGMass() && zTarget < 93 && zTarget > 3)
 	{
 	  
           sigma = alphaDataSetMap[zTarget]->FindValue(energyIncident/MeV); 
@@ -113,7 +113,7 @@ G4double G4PaulKCrossSection::CalculateKCrossSection(G4int zTarget,G4double mass
 	}
       else
 	{ 
-	  G4cout << "we can treat only Proton or Alpha incident particles " << G4endl;
+	  G4cout << "we can treat only Proton or Alpha incident particles between 4 and 93" << G4endl;
 	  sigma = 0.;
 	}
     }

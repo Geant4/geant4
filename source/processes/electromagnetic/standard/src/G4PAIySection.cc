@@ -173,7 +173,8 @@ void G4PAIySection::Initialize( const G4Material* material,
       
   G4double   betaGammaSqRef = 
      fLorentzFactor[fRefGammaNumber]*fLorentzFactor[fRefGammaNumber] - 1;
-
+      
+  ComputeLowEnergyCof(material);            
   NormShift(betaGammaSqRef);             
   SplainPAI(betaGammaSqRef);
       
@@ -189,6 +190,40 @@ void G4PAIySection::Initialize( const G4Material* material,
   IntegralCerenkov();
   IntegralPlasmon();
 }
+
+/////////////////////////////////////////////////////////////////////////
+//
+// Compute low energy cof. It reduces PAI xsc for Lorentz factors less than 4.
+//
+
+void G4PAIySection::ComputeLowEnergyCof(const G4Material* material)
+{    
+  G4int i, numberOfElements = material->GetNumberOfElements();
+  G4double sumZ = 0., sumCof = 0.; 
+
+  const G4double p0 =  1.20923e+00; 
+  const G4double p1 =  3.53256e-01; 
+  const G4double p2 = -1.45052e-03; 
+  
+  G4double* thisMaterialZ   = new G4double[numberOfElements];
+  G4double* thisMaterialCof = new G4double[numberOfElements];
+   
+  for( i = 0; i < numberOfElements; i++ )
+  {
+    thisMaterialZ[i] = material->GetElement(i)->GetZ();
+    sumZ += thisMaterialZ[i];
+    thisMaterialCof[i] = p0+p1*thisMaterialZ[i]+p2*thisMaterialZ[i]*thisMaterialZ[i];   
+  }
+  for( i = 0; i < numberOfElements; i++ )
+  {
+    sumCof += thisMaterialCof[i]*thisMaterialZ[i]/sumZ;
+  }
+  fLowEnergyCof = sumCof;
+  // G4cout<<"fLowEnergyCof = "<<fLowEnergyCof<<G4endl;
+}
+
+
+
 
 /////////////////////////////////////////////////////////////////////////
 //
@@ -505,14 +540,15 @@ G4double G4PAIySection::RePartDielectricConst(G4double enb)
 G4double G4PAIySection::DifPAIySection( G4int              i ,
                                         G4double betaGammaSq  )
 {        
-   G4double be2,cof,x1,x2,x3,x4,x5,x6,x7,x8,result;
+  G4double beta, be2,cof,x1,x2,x3,x4,x5,x6,x7,x8,result;
    //G4double beta, be4;
    G4double be4;
-   G4double betaBohr2 = fine_structure_const*fine_structure_const;
-   G4double betaBohr4 = betaBohr2*betaBohr2*4.0;
+   G4double betaBohr = fine_structure_const;
+   // G4double betaBohr2 = fine_structure_const*fine_structure_const;
+   // G4double betaBohr4 = betaBohr2*betaBohr2*4.0;
    be2 = betaGammaSq/(1 + betaGammaSq);
    be4 = be2*be2;
-   //  beta = sqrt(be2);
+   beta = sqrt(be2);
    cof = 1;
    x1 = log(2*electron_mass_c2/fSplineEnergy[i]);
 
@@ -547,9 +583,15 @@ G4double G4PAIySection::DifPAIySection( G4int              i ,
    result = (x4 + cof*fIntegralTerm[i]/fSplineEnergy[i]/fSplineEnergy[i]);
    if(result < 1.0e-8) result = 1.0e-8;
    result *= fine_structure_const/be2/pi;
+   // low energy correction
+
+   G4double lowCof = fLowEnergyCof; // 6.0 ; // Ar ~ 4.; -> fLowCof as f(Z1,Z2)? 
+
+   result *= (1 - exp(-beta/betaBohr/lowCof));
+
    //   result *= (1-exp(-beta/betaBohr))*(1-exp(-beta/betaBohr));
    //  result *= (1-exp(-be2/betaBohr2));
-   result *= (1-exp(-be4/betaBohr4));
+   // result *= (1-exp(-be4/betaBohr4));
    //   if(fDensity >= 0.1)
    if(x8 > 0.)
    { 

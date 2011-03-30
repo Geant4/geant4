@@ -17,6 +17,45 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29 March 2011: V.Ivant (emstand-V09-04-12)
+- G4WentzelOKandVIxSection - return back to the version of 9.4 
+
+29 March 2011: V.Ivant (emstand-V09-04-11)
+- G4UrbanMscModel95 - set samplez=false to avoid numerical problem
+
+28 March 2011: V.Ivant (emstand-V09-04-10)
+- G4UrbanMscModel90, G4UrbanMscModel92, G4UrbanMscModel93,
+  G4UrbanMscModel95, G4GoudsmitSaundersonMscModel,
+  G4WentzelVIModel - updated G4VMscModel methods signature 
+
+25 March 2011: V.Ivant (emstand-V09-04-09)
+- G4UrbanMscModel90, G4UrbanMscModel92, G4UrbanMscModel93,
+  G4UrbanMscModel95, G4GoudsmitSaundersonMscModel,
+  G4WentzelVIModel - use G4VMscModel methods to compute range
+                     and inverse range
+- G4WentzelOKandVIxSection - remove special trietment of e-
+- G4ComptonScattering - use by default old G4KleinNishinaCompton
+
+24 March 2011: V.Ivant (emstand-V09-04-08)
+- G4UrbanMscModel95 - (L.Urban) new version of msc model which 
+   includes improved sampling of the tail of angular distribution, 
+   sampling of lateral displacement and true step length
+- G4WentzelOKandVIxSection - fixed sampling of single scattering
+
+22 March 2011: V.Ivant (emstand-V09-04-07)
+- General cleanup - removed MinEnergyCut methods, improved comments  
+
+21 March 2011: V.Ivant (emstand-V09-04-06)
+- G4PAIySection - added method ComputeLowEnergyCof and usage of 
+   this method allowing extend low energy limit of the model down 
+   to 10 eV (V.Grichine)
+- G4MollerBhabhaModel - cleanup
+- G4ComptonScattering - use G4KleinNishinaModel as a default
+- G4PhotoElectricEffect - use G4PEEffectFluoModel as a default
+- G4KleinNishinaModel - use dynamic selection between high energy
+   sampling and sampling with Doppler broading
+- G4GoudsmitSaundersonMscModel - restore version of 9.3ref05
+
 25 February 2011: V.Ivant (emstand-V09-04-05)
 - G4UrbanMscModel90, G4UrbanMscModel92, G4UrbanMscModel93 use 
    simpified computation of geom path length if true path length

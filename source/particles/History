@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 22 Mar. 2011  Hisaya Kurashige  (particles-V09-04-02)
+- Fix  G4ParticleDefinition::SetApplyCutsFlag() to remove warning messages for proton 
+
+- 16 Mar. 2011  Hisaya Kurashige  (particles-V09-04-01)
+- Modify PDGCodeChecker to allow PDG codei for neutron balls
+- Fix problems reported by Coverity
+  
 - 26 jan. 2011  Hisaya Kurashige  (particles-V09-04-00)
 - Register BetaDecay for anti_neutron 
   though anti_neutron keeps as "stable" with finite life time

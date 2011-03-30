@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 19, 2010  G.Cosmo                  geommng-V09-04-00
+- Use internal G4 header for physical constants in meshdefs.h.
+
 October 19, 2010  G.Cosmo                  geommng-V09-03-05
 - Added Clone() virtual method to G4VSolid, to return a pointer to a
   dynamically allocated copy of the solid. To be used by Geant4-MT.

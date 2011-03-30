@@ -277,10 +277,9 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
 	} else {
 	  aVector = new G4PhysicsLogVector(*bVector);
 	}       
-	//G4PhysicsVector* aVector = PhysicsVector(couple);
 	aVector->SetSpline(splineFlag);
         modelManager->FillLambdaVector(aVector, couple, false);
-	if(splineFlag) aVector->FillSecondDerivatives();
+	if(splineFlag) { aVector->FillSecondDerivatives(); }
         G4PhysicsTableHelper::SetPhysicsVector(theLambdaTable, i, aVector);
       }
     }
@@ -295,7 +294,8 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
                          num == "proton" || num == "pi-" || 
 			 num == "kaon+" || num == "GenericIon")) {
     PrintInfoDefinition();
-    if(2 < verboseLevel && theLambdaTable) G4cout << *theLambdaTable << G4endl;
+    if(2 < verboseLevel && theLambdaTable) 
+      { G4cout << *theLambdaTable << G4endl; }
   }
 
   if(1 < verboseLevel) {
@@ -328,7 +328,7 @@ void G4VMultipleScattering::PrintInfoDefinition()
     modelManager->DumpModelList(verboseLevel);
     if (2 < verboseLevel) {
       G4cout << "LambdaTable address= " << theLambdaTable << G4endl;
-      if(theLambdaTable) G4cout << (*theLambdaTable) << G4endl;
+      if(theLambdaTable) { G4cout << (*theLambdaTable) << G4endl; }
     }
   }
 }
@@ -349,6 +349,13 @@ G4double G4VMultipleScattering::AlongStepGetPhysicalInteractionLength(
   G4double ekin = track.GetKineticEnergy();
   if(isIon) { ekin *= proton_mass_c2/track.GetParticleDefinition()->GetPDGMass(); }
   currentModel = static_cast<G4VMscModel*>(SelectModel(ekin));
+
+  // define ionisation process
+  if(!currentModel->GetIonisation()) {
+    currentModel->SetIonisation(G4LossTableManager::Instance()
+				->GetEnergyLossProcess(track.GetParticleDefinition()));
+  }  
+
   if(x > 0.0 && ekin > 0.0 && currentModel->IsActive(ekin)) {
     G4double tPathLength = 
       currentModel->ComputeTruePathLengthLimit(track, theLambdaTable, x);
@@ -378,6 +385,8 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
 {
   if(currentModel->IsActive(track.GetKineticEnergy())) {
     fParticleChange.ProposeTrueStepLength(currentModel->ComputeTrueStepLength(step.GetStepLength()));
+  } else {
+    fParticleChange.ProposeTrueStepLength(step.GetStepLength());
   }
   return &fParticleChange;
 }

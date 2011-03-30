@@ -316,7 +316,11 @@ void exrdmHisto::scaleHisto(G4int i, G4double x)
 #ifdef G4ANALYSIS_USE
 void exrdmHisto::addTuple(const G4String& w1, const G4String& w2, const G4String& w3 )
 #else
+#ifdef G4ANALYSIS_USE_ROOT
+void exrdmHisto::addTuple(const G4String& w1, const G4String& w2, const G4String& w3 )
+#else
 void exrdmHisto::addTuple(const G4String& w1, const G4String& w2, const G4String& )
+#endif
 #endif
 
 {

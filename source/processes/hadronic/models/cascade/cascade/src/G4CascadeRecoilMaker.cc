@@ -40,6 +40,9 @@
 // 20100924  M. Kelsey -- Remove unusable G4Fragment::SetExcitationEnergy().
 //		Add deltaM to compute mass difference, use excitationEnergy
 //		to force G4Fragment four-vector to match.
+// 20110214  M. Kelsey -- Follow G4InuclParticle::Model enumerator migration
+// 20110303  M. Kelsey -- Add diagnostic messages to goodNucleus().
+// 20110308  M. Kelsey -- Follow new G4Fragment interface for hole types
 
 #include "G4CascadeRecoilMaker.hh"
 #include "globals.hh"
@@ -135,7 +138,8 @@ void G4CascadeRecoilMaker::fillRecoil() {
 
 // Construct physical nucleus from recoil parameters, if reasonable
 
-G4InuclNuclei* G4CascadeRecoilMaker::makeRecoilNuclei(G4int model) {
+G4InuclNuclei* 
+G4CascadeRecoilMaker::makeRecoilNuclei(G4InuclParticle::Model model) {
   if (verboseLevel > 1) 
     G4cout << " >>> G4CascadeRecoilMaker::makeRecoilNuclei" << G4endl;
 
@@ -177,13 +181,14 @@ G4Fragment* G4CascadeRecoilMaker::makeRecoilFragment() {
   theRecoilFragment.SetMomentum(fragMom*GeV);	// Bertini uses GeV!
 
   // Note:  exciton configuration has to be set piece by piece
-  theRecoilFragment.SetNumberOfHoles(theExcitons.protonHoles
-				     + theExcitons.neutronHoles);
+  //		(arguments are Ntotal,Nproton in both cases)
+  G4int nholes = theExcitons.protonHoles+theExcitons.neutronHoles;
+  theRecoilFragment.SetNumberOfHoles(nholes, theExcitons.protonHoles);
 
-  theRecoilFragment.SetNumberOfParticles(theExcitons.protonQuasiParticles 
-					 + theExcitons.neutronQuasiParticles);
-
-  theRecoilFragment.SetNumberOfCharged(theExcitons.protonQuasiParticles);
+  G4int nexcit = (theExcitons.protonQuasiParticles
+		  + theExcitons.neutronQuasiParticles);
+  theRecoilFragment.SetNumberOfExcitedParticle(nexcit,
+				    theExcitons.protonQuasiParticles);
 
   return &theRecoilFragment;
 }
@@ -208,6 +213,16 @@ G4bool G4CascadeRecoilMaker::goodRecoil() const {
 }
 
 G4bool G4CascadeRecoilMaker::wholeEvent() const {
+  if (verboseLevel > 2) {
+    G4cout << " >>> G4CascadeRecoilMaker::wholeEvent:"
+	   << " A " << recoilA << " Z " << recoilZ
+	   << " P " << recoilMomentum.rho() << " E " << recoilMomentum.e()
+	   << "\n wholeEvent returns "
+	   << (recoilA==0 && recoilZ==0 && 
+	       recoilMomentum.rho() < excTolerance/GeV &&
+	       std::abs(recoilMomentum.e()) < excTolerance/GeV) << G4endl;
+  }
+
   return (recoilA==0 && recoilZ==0 && 
 	  recoilMomentum.rho() < excTolerance/GeV &&
 	  std::abs(recoilMomentum.e()) < excTolerance/GeV);
@@ -224,9 +239,14 @@ G4bool G4CascadeRecoilMaker::goodNucleus() const {
   const G4double reasonableExcitation = 7.0;	// Multiple of binding energy
   const G4double fractionalExcitation = 0.2;	// Fraction of input to excite
 
-  if (!goodRecoil()) return false;		// Not a sensible nucleus
-
-  if (excitationEnergy < -excTolerance) return false;	// Negative mass-diff
+  if (!goodRecoil()) {
+    if (verboseLevel>2) {
+      if (!goodFragment()) G4cerr << " goodNucleus: invalid A/Z" << G4endl;
+      else if (excitationEnergy < -excTolerance) 
+	G4cerr << " goodNucleus: negative excitation" << G4endl;
+    }
+    return false;				// Not a sensible nucleus
+  }
 
   if (excitationEnergy <= minExcitation) return true;	// Effectively zero
 
@@ -240,6 +260,9 @@ G4bool G4CascadeRecoilMaker::goodNucleus() const {
     G4cout << " eexs " << excitationEnergy << " max " << exc_max
 	   << " dm " << dm << G4endl;
   }
-  
+
+  if (verboseLevel > 2 && excitationEnergy >= exc_max)
+    G4cerr << " goodNucleus: too much excitation" << G4endl;
+
   return (excitationEnergy < exc_max);		// Below maximum possible
 }

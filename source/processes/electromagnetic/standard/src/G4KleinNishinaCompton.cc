@@ -179,13 +179,12 @@ void G4KleinNishinaCompton::SampleSecondaries(std::vector<G4DynamicParticle*>* f
   G4double cosTeta = 1. - onecost; 
   G4double sinTeta = sqrt (sint2);
   G4double Phi     = twopi * G4UniformRand();
-  G4double dirx = sinTeta*cos(Phi), diry = sinTeta*sin(Phi), dirz = cosTeta;
 
   //
   // update G4VParticleChange for the scattered gamma
   //
    
-  G4ThreeVector gamDirection1 ( dirx,diry,dirz );
+  G4ThreeVector gamDirection1(sinTeta*cos(Phi), sinTeta*sin(Phi), cosTeta);
   gamDirection1.rotateUz(gamDirection0);
   G4double gamEnergy1 = epsilon*gamEnergy0;
   fParticleChange->SetProposedKineticEnergy(gamEnergy1);

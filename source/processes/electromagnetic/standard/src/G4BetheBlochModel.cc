@@ -100,14 +100,6 @@ G4BetheBlochModel::~G4BetheBlochModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4BetheBlochModel::MinEnergyCut(const G4ParticleDefinition*,
-                                         const G4MaterialCutsCouple* couple)
-{
-  return couple->GetMaterial()->GetIonisation()->GetMeanExcitationEnergy();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void G4BetheBlochModel::Initialise(const G4ParticleDefinition* p,
                                    const G4DataVector&)
 {
@@ -368,9 +360,9 @@ void G4BetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
       G4double x2 = 0.5*electron_mass_c2*deltaKinEnergy/(mass*mass);
       g *= (1.0 + magMoment2*(x2 - f1/f)/(1.0 + x2));
     }
-    if(g > 1.0) {
+    if(g > 1.1) {
       G4cout << "### G4BetheBlochModel WARNING: g= " << g
-	     << dp->GetDefinition()->GetParticleName()
+	     << "  " << dp->GetDefinition()->GetParticleName()
 	     << " Ekin(MeV)= " <<  kineticEnergy
 	     << " delEkin(MeV)= " << deltaKinEnergy
 	     << G4endl;

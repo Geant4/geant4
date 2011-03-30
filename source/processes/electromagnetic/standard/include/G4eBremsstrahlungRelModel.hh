@@ -70,9 +70,6 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  virtual G4double MinEnergyCut(const G4ParticleDefinition*, 
-				const G4MaterialCutsCouple*);
-
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
 					const G4ParticleDefinition*,
 					G4double kineticEnergy,
@@ -134,8 +131,6 @@ protected:
   static const G4double xgi[8], wgi[8];
   static const G4double Fel_light[5];
   static const G4double Finel_light[5];
-
-  G4double minThreshold;
 
   // cash
   G4double particleMass;

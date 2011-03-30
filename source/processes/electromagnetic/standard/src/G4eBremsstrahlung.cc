@@ -119,8 +119,8 @@ void G4eBremsstrahlung::InitialiseEnergyLossProcess(
     SetSecondaryParticle(G4Gamma::Gamma());
     SetIonisation(false);
 
-    if (!EmModel(1)) SetEmModel(new G4eBremsstrahlungModel(), 1);
-    if (!EmModel(2)) SetEmModel(new G4eBremsstrahlungRelModel(), 2);
+    if (!EmModel(1)) { SetEmModel(new G4eBremsstrahlungModel(), 1); }
+    if (!EmModel(2)) { SetEmModel(new G4eBremsstrahlungRelModel(), 2); }
 
     EmModel(1)->SetLowEnergyLimit(MinKinEnergy());
     EmModel(1)->SetHighEnergyLimit(EmModel(2)->LowEnergyLimit());
@@ -150,7 +150,9 @@ void G4eBremsstrahlung::PrintInfo()
     G4double eth = man->BremsstrahlungTh(); 
     G4cout << "      LPM flag: " << man->LPMFlag() << " for E > " 
 	   << EmModel(1)->HighEnergyLimit()/GeV << " GeV";
-    if(eth < DBL_MAX) G4cout << ",  HighEnergyThreshold(GeV)= " << eth/GeV; 
+    if(eth < DBL_MAX) { 
+      G4cout << ",  HighEnergyThreshold(GeV)= " << eth/GeV; 
+    }
     G4cout << G4endl;
   }
 }

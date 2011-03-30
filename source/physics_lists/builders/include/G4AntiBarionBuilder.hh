@@ -59,6 +59,7 @@ class G4AntiBarionBuilder
     G4AntiProtonInelasticProcess*   theAntiProtonInelastic;
     G4AntiNeutronInelasticProcess*  theAntiNeutronInelastic;
     G4AntiDeuteronInelasticProcess* theAntiDeuteronInelastic;
+    G4AntiTritonInelasticProcess*   theAntiTritonInelastic;
     G4AntiHe3InelasticProcess*      theAntiHe3Inelastic;
     G4AntiAlphaInelasticProcess*    theAntiAlphaInelastic;
      

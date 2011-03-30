@@ -153,6 +153,9 @@ inline
    //This method is called at the beggining of each step 
    *(fpPreStepPoint) = *(fpPostStepPoint);
    fpPostStepPoint->SetStepStatus(fUndefined);
+
+   // store number of secondaries
+   nSecondaryByLastStep = fSecondary->size();
 }
 
 
@@ -186,6 +189,8 @@ inline
    fNonIonizingEnergyDeposit = 0.;
    fpTrack = aValue;
    fpTrack->SetStepLength(0.);
+
+   nSecondaryByLastStep = 0;
    
    // Initialize G4StepPoint attributes.
    // To avoid the circular dependency between G4Track, G4Step

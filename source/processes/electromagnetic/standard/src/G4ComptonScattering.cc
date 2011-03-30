@@ -62,6 +62,7 @@
 // -----------------------------------------------------------------------------
 
 #include "G4ComptonScattering.hh"
+#include "G4KleinNishinaModel.hh"
 #include "G4KleinNishinaCompton.hh"
 #include "G4Electron.hh"
 
@@ -96,10 +97,11 @@ void G4ComptonScattering::InitialiseProcess(const G4ParticleDefinition*)
     isInitialised = true;
     SetBuildTableFlag(true);
     SetSecondaryParticle(G4Electron::Electron());
-    if(!Model()) SetModel(new G4KleinNishinaCompton);
-    Model()->SetLowEnergyLimit(MinKinEnergy());
-    Model()->SetHighEnergyLimit(MaxKinEnergy());
-    AddEmModel(1, Model());
+    //    if(!Model(1)) { SetModel(new G4KleinNishinaModel(), 1); }
+    if(!Model(1)) { SetModel(new G4KleinNishinaCompton(), 1); }
+    Model(1)->SetLowEnergyLimit(MinKinEnergy());
+    Model(1)->SetHighEnergyLimit(MaxKinEnergy());
+    AddEmModel(1, Model(1));
   } 
 }
 

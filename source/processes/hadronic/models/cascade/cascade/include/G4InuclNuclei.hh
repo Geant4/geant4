@@ -44,6 +44,8 @@
 // 20100915  M. Kelsey -- Add constructor to copy G4DynamicParticle input
 // 20100924  M. Kelsey -- Add constructor to copy G4Fragment input, and output
 //		functions to create G4Fragment.
+// 20110214  M. Kelsey -- Replace integer "model" with enum
+// 20110225  M. Kelsey -- Add equality operator (NOT sorting!)
 
 #ifndef G4INUCL_NUCLEI_HH
 #define G4INUCL_NUCLEI_HH
@@ -60,32 +62,32 @@ class G4InuclNuclei : public G4InuclParticle {
 public:
   G4InuclNuclei() : G4InuclParticle() {}
 
-  G4InuclNuclei(const G4DynamicParticle& dynPart, G4int model=0)
+  G4InuclNuclei(const G4DynamicParticle& dynPart, Model model=DefaultModel)
     : G4InuclParticle(dynPart) {
     setModel(model);
   }
 
-  G4InuclNuclei(G4int a, G4int z, G4double exc=0., G4int model=0)
+  G4InuclNuclei(G4int a, G4int z, G4double exc=0., Model model=DefaultModel)
     : G4InuclParticle(makeDefinition(a,z)) {
     setExitationEnergy(exc);
     setModel(model);
   }
 
   G4InuclNuclei(const G4LorentzVector& mom, G4int a, G4int z,
-		G4double exc=0., G4int model=0)
+		G4double exc=0., Model model=DefaultModel)
     : G4InuclParticle(makeDefinition(a,z), mom) {
     setExitationEnergy(exc);
     setModel(model);
   }
 
   G4InuclNuclei(G4double ekin, G4int a, G4int z, G4double exc,
-		G4int model=0) 
+		Model model=DefaultModel)
     : G4InuclParticle(makeDefinition(a,z), ekin) {
     setExitationEnergy(exc);
     setModel(model);
   }
 
-  G4InuclNuclei(const G4Fragment& aFragment, G4int model=0);
+  G4InuclNuclei(const G4Fragment& aFragment, Model model=DefaultModel);
 
   virtual ~G4InuclNuclei() {}
 
@@ -96,16 +98,22 @@ public:
 
   G4InuclNuclei& operator=(const G4InuclNuclei& right);
 
+  // Equality (comparison) operator -- NOT SORTING
+  bool operator==(const G4InuclNuclei& right) {
+    return ( G4InuclParticle::operator==(right) && 
+	     theExitonConfiguration == right.theExitonConfiguration );
+  }
+
   // Overwrite data structure (avoids creating/copying temporaries)
-  void fill(G4int a, G4int z, G4double exc=0., G4int model=0) {
+  void fill(G4int a, G4int z, G4double exc=0., Model model=DefaultModel) {
     fill(0., a, z, exc, model);
   }
 
   void fill(const G4LorentzVector& mom, G4int a, G4int z,
-	    G4double exc=0., G4int model=0);
+	    G4double exc=0., Model model=DefaultModel);
 
   void fill(G4double ekin, G4int a, G4int z, G4double exc,
-	    G4int model=0);
+	    Model model=DefaultModel);
 
   // Excitation energy is stored as dynamical mass of particle
   void setExitationEnergy(G4double e);

@@ -15,6 +15,229 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+21 March 2011 Michael Kelsey (hadr-casc-V09-04-03-01, -V09-04-05)
+--------------------------------------------------
+Fixes for compiler warnings (and one error on Windows).  The -03-01 tag
+backs out change to G4NucleiModel.cc in -04 tag, which will be restored to
+the HEAD.
+
+- G4InuclElementaryParticle:  Make getStrangeness() and getStrangeness(type)
+  both return G4int.
+- G4CascadeColliderBase.hh:  Hide names of arguments to rescatter().
+- G4NucleiModel.cc:  Replace strtof() with strtod().
+
+18 March 2011 Michael Kelsey (hadr-casc-V09-04-04)
+--------------------------------------------------
+- G4NucleiModel.cc:  Change internal length scale to use femtometers
+  directly (instead of apparent 2.8197 fm), and internal cross-section scale
+  to use fm^2 (instead of millibarns).
+
+17 March 2011 Michael Kelsey (hadr-casc-V09-04-03)
+--------------------------------------------------
+Tag all revisions for deployment in next reference build.
+
+1)  Implement most of rescattering capability (G4CascadeInterface::Propagate
+    and dependent code).  Substantial factoring of ::collide() functions to
+    allow functional reuse by ::rescatter().  Not operational without code
+    to capture and use primary projectile.
+
+2)  Simplify cascade test-and-repeat loops; do four-momentum balancing with
+    nuclear fragment, now used exclusively as G4Fragment, at end of cascade,
+    not after de-excitation.
+
+16 March 2011 Michael Kelsey
+----------------------------
+More improvements to rescattering code.  Not yet functional without code to
+construct "bullet" from original projectile.
+
+- G4CascadeInterface: Simplify target-construction functions by moving
+  active code to one with simple (A,Z) arguments.
+
+- G4CollisionOutput.cc:  Add reset() at start of trivialize().
+
+- G4IntraNucleiCascader:  Add functions to convert single G4KineticTrack to
+  G4CascadParticle (move out of preloadCascade()), and to decay G4KT
+  hadronic resonances in situ.  Improve diagnostic messages.
+
+- G4InuclElementaryParticle.cc:  Move K0S/K0L "mixing" to K0/K0bar into type().
+
+11 March 2011 Michael Kelsey
+----------------------------
+- G4CollisionOutput:  Include G4Fragment as part of final state for
+  setOnShell() (including computing totalOutputMomentum).  Note that the
+  four-momentum in G4Fragment is in GEANT4 units (MeV), not Bertini units!
+
+- G4IntraNucleiCascader.cc:  Reorganize post-cascade handling to do
+  setOnShell() check for all cases, allowing G4Fragment to be adjusted.
+  This should leave final state fully balanced before InuclCollider sees it.
+
+- G4InuclCollider.cc:  Simplify de-excitation handling (fragment test is in
+  deexcite() function).  Suppress momentum-conservation check on de-excitation 
+  unless G4CASCADE_CHECK_ECONS compiler flag was used, as all functions have
+  been confirmed to conserve four-momentum.
+
+8 March 2011 Michael Kelsey
+---------------------------
+- G4InuclCollider:  Move post-cascade (deexcitation) block out of collide()
+  to separate function.  Pass G4Fragment instead of G4InuclNuclei.
+
+- G4IntraNucleiCascader.cc:  Don't put recoil "nucleus" onto output list.
+
+- G4CollisionOutput.cc, G4InuclNuclei.cc:  Follow additions to G4Fragment
+  interface to store and access charged and neutral holes separately.
+
+4 March 2011 Michael Kelsey (kelsey-20110304)
+---------------------------------------------
+Continue development of rescattering infrastructure.  All executable
+functionality should be in place, BUT no "bullet" is available yet, so code
+(especially conservation checks) will crash with segmentation fault.
+
+- G4CascadeColliderBase.hh:  Add ::rescatter() interface with null body, to
+  enforce common interface in all (both) affected colliders.
+
+- G4CascadeInterface:  Move conversion functions used by ::Propagate() from
+  here down to G4IntraNucleiCascader.  Just pass input arguments through.
+  Convert cascade results to G4ReactionProducts for ::Propagate() output.
+
+- G4IntraNucleiCascader:  Move conversion functions used by ::Propagate() to
+  here from G4CascadeInterface.  Replace ::rescatter() interface to take
+  arguments from ::Propagate and do conversion locally.  Remove unnecesary
+  "itry" arguments from cascade functions.
+
+- G4InuclCollider:  Follow ::rescatter() interface change above, passing
+  arguments from G4CascadeInterface through to G4IntraNucleiCascader.
+
+- G4NucleiModel.hh:  Add optional arguments to reset() to force values of
+  neutron and proton counts (default behaviour is unchanged).
+
+3 March 2011 Michael Kelsey
+---------------------------
+- G4CascadeInterface:  Change name of "bulletList" to "inputFragments".
+
+- G4CascadeRecoilMaker.cc:  Add diagnostic message to ::wholeEvent().
+
+- G4IntraNucleiCascader:  Add function to copy input cascade particles to
+  local list for propagation, move clearing functions to separate action.
+
+- G4NucleiModel.hh:  Add accessors for radius (including zone radii),
+  mapping radial position to zone index, and converting radius units.
+
+- G4NucleiModel.cc:  Add a couple of FIXME messages about binding_energies[].
+
+3 March 2011 Michael Kelsey (kelsey-20110303)
+---------------------------------------------
+- G4CascadeDeexcitation.cc:  Don't do conservation check at end of process.
+- G4CascadeInterface.cc:  Rearrange messages for G4CASCADE_DEBUG_INTERFACE.
+- G4CascadeOutput.cc:  Fix diagnostic message reporting initial momentum.
+- G4IntraNucleiCascader.cc:  Move model->printModel() call to G4NucleiModel.
+- G4NucleiModel.cc:  Put printModel() call at end of generateModel().
+- G4CascadeRecoilMaker.cc:  Add diagnostics to goodNucleus().
+- G4CollisionOutput.cc:  Move ini_mom calculation to fix diagnostic output.
+
+28 February 2011 Michael Kelsey (kelsey-20110228)
+-------------------------------------------------
+Continue infrastructure development for rescattering.
+
+- G4CascadeInterface:  New ::copyPreviousCascade() to transfer rescattering
+  into to Bertini particles, along with data buffers for the converted list.
+  New ::makeReactionProduct() for conversion of internal to external
+  hadronic-tracks.  New ::makeCascadParticle() for conversion of pre-cascade
+  G4KineticTrack to Bertini type.
+
+- G4InuclCollider.cc:  Set verbosity when de-excitation module is changed.
+
+25 February 2011 Michael Kelsey (kelsey-20110225b)
+--------------------------------------------------
+Develop infrastructure to support using Bertini as a "rescattering" model
+for the output of the FTF simulation.
+
+- G4CascadeColliderBase:  Add ::setVerboseLevel() function which passes
+  verbosity through to G4CheckBalance data member.
+
+- G4CascadeInterface:  Add ::createTarget(G4V3DNucleus*).  Move setVerboseLevel
+  implementation to .cc file, and propagate verbosity to member objects.
+  Move conservation checking to separate function.  Begin to populate Propagate
+  function.
+
+- G4IntraNucleiCascader:  Split ::collide() into separate utility functions
+  to handle different stages of cascade process (initialization, cascade
+  development, final state).  Add new ::rescatter() function which takes a
+  list of pre-existing secondaries as input to "seed" the processing.  Add
+  setVerboseLevel implementation, and propagate verbosity to member objects.
+
+- G4InuclCollider:  Add ::rescatter() function which calls through to
+  G4IntraNucleiCascader(), and setVerboseLevel implementation.
+
+NOTE:  G4InuclCollider above was accidentally commited to kelsey-20110225a
+
+25 February 2011 Michael Kelsey (kelsey-20110225a)
+--------------------------------------------------
+Infrastructure improvements to support modifying output particle lists
+
+- G4CollisionOutput:  Add ::removeXXX() interfaces to take particles off of
+  lists.
+
+- G4InuclParticle.hh, G4InuclNuclei.hh, G4ExitonConfiguration.hh:  Add
+  equality and inequality operators.  NOTE: Sorting (operator<) NOT SUPPORTED.
+
+23 February 2011 Michael Kelsey (hadr-casc-V09-04-02)
+-----------------------------------------------------
+- G4NucleiModel:  Bring changes for parametrizing "rescaled" nuclear model
+  parameters from orphaned CVS tag kelsey-20101020b into HEAD of SVN.  The
+  scale factors are set specifically to reproduce the existing production
+  code, but will be adjusted to give the model "natural units" (fm lengths
+  and millibarn cross sections).  Use environment variables to set scale
+  factors:
+
+  G4NUCMODEL_RAD_SCALE  (3.3836/1.2 ~ 2.8197)
+	Internal length scale (conversion from femtometers).  All of the
+	lengths in G4NucleiModel are larger by this factor than one would
+	expected from the literature.  To do all of the model parameter
+	calculations in fm, this scale factor should be set to 1.
+
+  G4NUCMODEL_RAD_2PAR   (not defined)
+	The current model computes the nuclear radius as a one-parameter
+	function of mass: 1.2*cbrt(A) (multiplied by the length scale
+	above).  A better parametrization is 1.16*cbrt(A) - 1.3456/cbrt(A);
+	setting this environment variable chooses that parametrization.
+
+  G4NUCMODEL_RAD_SMALL  (8.0/G4NUCMODEL_RAD_SCALE)
+	For nuclei below A=5 (alphas, tritons, etc.), instead of the
+	mass-dependent scaling, a constant radius is used.  In the current
+	model, a value of 8.0 (corresponding to 2.83 fm) is set; published
+	data suggests 1.992 fm instead.
+
+  G4NUCMODEL_RAD_ALPHA  (0.70)
+	This scale factor multiplies G4NUCMODEL_RAD_SMALL to account for the
+	anomalous binding energy of alphas compared to nearby light nuclei.
+	Published data suggests a value of 0.84 instead.
+
+  G4NUCMODEL_FERMI_SCALE (0.685)
+	This factor converts from the length scale (cbrt(volume)) to the
+	Fermi momentum for each nuclear species.  Published data suggests a
+	value of 0.61 GeV/fm instead.
+
+  G4NUCMODEL_XSEC_SCALE (1.)
+	Scaling factors for total cross-sections.  The current code has all
+	the cross sections in millbarns.  If we are able to migrate to a
+	length scale in femtometers, this factor will change to 10. to
+	convert mb to fm^2.
+
+14 February 2011 Michael Kelsey (hadr-casc-V09-04-01)
+-----------------------------------------------------
+- G4InuclParticle:  Continue migration to enumerator Model.  Replace
+  previous enum word "default" with "DefaultModel", add "PreCompound".
+
+- G4InuclNuclei, G4InuclElementaryParticle:  Follow G4InuclParticle::Model
+  migration, and drop use of "generation."
+
+- G4CascadeRecoilMaker:  Replace integer model with G4InuclParticle::Model.
+
+- G4BigBanger.cc, G4CollisionOutput.cc, G4ElementaryParticleCollider.cc,
+  G4EqulibriumEvaporator.cc, G4Fissioner.cc, G4NonEquilibriumEvaporator.cc,
+  G4PreCompoundDeexcitation.cc:  Replace integer model code with
+  G4InuclParticle::Model enumerator values.
+
 31 January 2011 Michael Kelsey
 ------------------------------
 - G4IntraNucleiCascader.cc:  Move "momentum_in" calculation inside verbosity.

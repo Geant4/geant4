@@ -43,10 +43,15 @@
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 
-G4LHEPAntiBarionBuilder::G4LHEPAntiBarionBuilder(): wasActivated(false) {}
+
+G4LHEPAntiBarionBuilder::G4LHEPAntiBarionBuilder():  
+ theAntiProtonInelastic(0), theLEAntiProtonModel(0), theHEAntiProtonModel(0),
+ theAntiNeutronInelastic(0), theLEAntiNeutronModel(0), theHEAntiNeutronModel(0),
+ wasActivated(false)
+{}
+
 G4LHEPAntiBarionBuilder::~G4LHEPAntiBarionBuilder()
-{
-}
+{}
 
 void G4LHEPAntiBarionBuilder::Build()
 {

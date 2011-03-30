@@ -93,7 +93,6 @@ G4eBremsstrahlungModel::G4eBremsstrahlungModel(const G4ParticleDefinition* p,
 {
   if(p) { SetParticle(p); }
   theGamma = G4Gamma::Gamma();
-  minThreshold = 0.1*keV;
   SetAngularDistribution(new G4ModifiedTsai());
   highKinEnergy = HighEnergyLimit();
   lowKinEnergy  = LowEnergyLimit();
@@ -116,16 +115,8 @@ G4eBremsstrahlungModel::~G4eBremsstrahlungModel()
 void G4eBremsstrahlungModel::SetParticle(const G4ParticleDefinition* p)
 {
   particle = p;
-  if(p == G4Electron::Electron()) isElectron = true;
-  else                            isElectron = false;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4eBremsstrahlungModel::MinEnergyCut(const G4ParticleDefinition*,
-                                              const G4MaterialCutsCouple*)
-{
-  return minThreshold;
+  if(p == G4Electron::Electron()) { isElectron = true; }
+  else                            { isElectron = false;}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -420,7 +411,7 @@ G4double G4eBremsstrahlungModel::CrossSectionPerVolume(
   if(!particle) { SetParticle(p); }
   G4double cross = 0.0;
   G4double tmax = min(maxEnergy, kineticEnergy);
-  G4double cut  = max(cutEnergy, minThreshold);
+  G4double cut  = min(cutEnergy, kineticEnergy);
   if(cut >= tmax) { return cross; }
 
   const G4ElementVector* theElementVector = material->GetElementVector();
@@ -499,7 +490,7 @@ G4double G4eBremsstrahlungModel::ComputeCrossSectionPerAtom(
  
 {
   G4double cross = 0.0 ;
-  if ( kineticEnergy < 1*keV || kineticEnergy < cut) { return cross; }
+  if ( kineticEnergy < keV || kineticEnergy < cut) { return cross; }
 
   static const G4double ksi=2.0, alfa=1.00;
   static const G4double csigh = 0.127, csiglow = 0.25, asiglow = 0.020*MeV ;
@@ -565,7 +556,7 @@ G4double G4eBremsstrahlungModel::ComputeCrossSectionPerAtom(
     }
   }
 
-  G4double xx = log10(kineticEnergy/MeV) ;
+  G4double xx = log10(kineticEnergy/MeV);
   G4double fs = 1. ;
 
   if (xx <= xlim) {
@@ -575,7 +566,7 @@ G4double G4eBremsstrahlungModel::ComputeCrossSectionPerAtom(
 
       fs = fs*xx+coefsig[iz][j] ;
     }
-    if(fs < 0.) fs = 0.;
+    if(fs < 0.) { fs = 0.; }
   }
 
   cross = Z*(Z+ksi)*(1.-csigh*exp(log(Z)/4.))*pow(log(kineticEnergy/cut),alfa);
@@ -589,7 +580,7 @@ G4double G4eBremsstrahlungModel::ComputeCrossSectionPerAtom(
 
   cross *= fs/Avogadro ;
 
-  if (cross < 0.) cross = 0.;
+  if (cross < 0.) { cross = 0.; }
   return cross;
 }
 

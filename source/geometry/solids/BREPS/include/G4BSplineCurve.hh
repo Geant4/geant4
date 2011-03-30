@@ -62,7 +62,7 @@ public:  // with description
     // Copy constructor and assignment operator.
 
   virtual G4Curve* Project(const G4Transform3D& tr=
-			   HepGeom::Transform3D::Identity);
+			   G4Transform3D::Identity);
     // Transforms and projects all control points.
 
   virtual G4double  GetPMax() const;

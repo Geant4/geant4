@@ -104,7 +104,7 @@ public:
   // defines low energy limit of the model
   inline void SetLowEnergyLimit(G4double val);
 
-  // obsolete method
+  // user definition of low-energy threshold of recoil
   inline void SetRecoilThreshold(G4double eth);
 
 protected:

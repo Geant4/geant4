@@ -16,6 +16,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18th March 2011  Gunter Folger    (config-V09-04-02)
+- Address old bug report 1033 in liblist.c
+
+17th March 2011  Gabriele Cosmo   (config-V09-04-01)
+- Added electromagnetic/dna module.
+
 10th February 2011  Ben Morgan   (config-V09-04-00)
 - Fixed restoring of default settings for XercesC in Configure script and
   internal scripts. Corrected duplication of text in setup dump.

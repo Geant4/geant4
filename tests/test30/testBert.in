@@ -7,7 +7,7 @@
 #verbose
 0
 #events
-1000000
+10000
 #print
 100
 #particle
@@ -29,5 +29,8 @@ G4_Be
 30. 60. 90. 120. 150.  
 #generator
 bertini
+#run
+#generator
+bertini_preco
 #run
 #exit

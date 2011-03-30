@@ -97,7 +97,7 @@ G4GoudsmitSaundersonMscModel::G4GoudsmitSaundersonMscModel(const G4String& nam)
 { 
   currentKinEnergy=currentRange=skindepth=par1=par2=par3=zPathLength=truePathLength
     =tausmall=taulim=tlimit=charge=lambdalimit=tPathLength=lambda0=lambda1
-    =lambda11=Qn1=Qn12=mass=0.0;
+    =lambda11=mass=0.0;
   currentMaterialIndex = -1;
 
   fr=0.02,rangeinit=0.,masslimite=0.6*MeV,
@@ -126,9 +126,9 @@ void G4GoudsmitSaundersonMscModel::Initialise(const G4ParticleDefinition* p,
 { 
   skindepth=skin*stepmin;
   SetParticle(p);
-  if(isInitialized) return;
+  if(isInitialized) { return; }
   fParticleChange = GetParticleChangeForMSC();
-  InitialiseSafetyHelper();
+
   isInitialized=true;
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -155,22 +155,25 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
 {    
   G4double kineticEnergy = dynParticle->GetKineticEnergy();
   if((kineticEnergy <= 0.0) || (tPathLength <= tlimitminfix)||
-     (tPathLength/tausmall < lambda1)) return ;
+     (tPathLength/tausmall < lambda1)) { return; }
 
   ///////////////////////////////////////////
-  // Effective energy
-  G4double  eloss = theManager->GetEnergy(particle,tPathLength,currentCouple);
-  if(eloss>0.5*kineticEnergy)
-   {if((dynParticle->GetCharge())==-eplus)eloss=kineticEnergy-eloss;//exchange between target and projectile if they are electrons
-    else eloss=0.5*kineticEnergy;
-   }
-  G4double ee       = kineticEnergy - 0.5*eloss;
-  G4double ttau     = ee/electron_mass_c2;
-  G4double ttau2    = ttau*ttau;
-  G4double epsilonpp= eloss/ee;
-  G4double cst1=epsilonpp*epsilonpp*(6+10*ttau+5*ttau2)/(24*ttau2+48*ttau+72);
-
-  kineticEnergy *= (1 - cst1);
+  // Effective energy 
+  G4double eloss    = kineticEnergy;
+  G4double rrr      = currentRange-tPathLength;
+  if(rrr > 0.0) {
+    G4double T1 = GetEnergy(particle,currentRange-tPathLength,currentCouple);
+    if(T1 < kineticEnergy) { eloss = kineticEnergy - T1; }
+    else { eloss = 0.0; }
+  }
+  if(eloss > 0.0) {
+    G4double ee       = kineticEnergy - 0.5*eloss;
+    G4double ttau     = ee/electron_mass_c2;
+    G4double ttau2    = ttau*ttau;
+    G4double epsilonpp= eloss/ee;
+    G4double cst1=epsilonpp*epsilonpp*(6+10*ttau+5*ttau2)/(24*ttau2+48*ttau+72);
+    kineticEnergy *= (1 - cst1);
+  }
   ///////////////////////////////////////////
   // additivity rule for mixture and compound xsection's
   const G4Material* mat = currentCouple->GetMaterial();
@@ -186,10 +189,10 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
     } 
   if(lambda0>DBL_MIN) lambda0 =1./lambda0;
 
-// Newton-Raphson root's finding method of scrA from: 
-// Sig1(PWA)/Sig0(PWA)=g1=2*scrA*((1+scrA)*log(1+1/scrA)-1)
+  // Newton-Raphson root's finding method of scrA from: 
+  // Sig1(PWA)/Sig0(PWA)=g1=2*scrA*((1+scrA)*log(1+1/scrA)-1)
   G4double g1=0.0;
-  if(lambda1>DBL_MIN) g1 = lambda0/lambda1;
+  if(lambda1>DBL_MIN) { g1 = lambda0/lambda1; }
 
   G4double logx0,x1,delta;
   G4double x0=g1/2.;
@@ -204,28 +207,28 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
 
   G4double lambdan=0.;
 
-  if(lambda0>0.)lambdan=tPathLength/lambda0;
+  if(lambda0>0.) { lambdan=tPathLength/lambda0; }
   if(lambdan<=1.0e-12)return;
-  G4double lambdan12=0.5*lambdan;
-  Qn1 = lambdan *g1;//2.* lambdan *scrA*((1.+scrA)*log(1.+1./scrA)-1.);
-  Qn12 = 0.5*Qn1;
+ 
+  G4double Qn1 = lambdan *g1;//2.* lambdan *scrA*((1.+scrA)*log(1.+1./scrA)-1.);
+  G4double Qn12 = 0.5*Qn1;
   
   G4double cosTheta1,sinTheta1,cosTheta2,sinTheta2;
   G4double cosPhi1=1.0,sinPhi1=0.0,cosPhi2=1.0,sinPhi2=0.0;
   G4double us=0.0,vs=0.0,ws=1.0,wss=0.,x_coord=0.0,y_coord=0.0,z_coord=1.0;
-  
+
   G4double epsilon1=G4UniformRand();
   G4double expn = std::exp(-lambdan);
   if(epsilon1<expn)// no scattering 
     {return;}
-  else if((epsilon1<((1.+lambdan)*expn))||(lambdan<1.))//single scattering (Rutherford DCS's)
+  else if((epsilon1<((1.+lambdan)*expn))||(lambdan<1.))//single or plural scattering (Rutherford DCS's)
     {
 
       G4double xi=G4UniformRand();
-      xi= 2.*scrA*xi/(1.-xi + scrA);   
+      xi= 2.*scrA*xi/(1.-xi + scrA);
       if(xi<0.)xi=0.;
-      else if(xi>2.)xi=2.; 
-      ws=1.-xi;
+      else if(xi>2.)xi=2.;      
+      ws=(1. - xi);
       wss=std::sqrt(xi*(2.-xi));      
       G4double phi0=CLHEP::twopi*G4UniformRand(); 
       us=wss*cos(phi0);
@@ -235,13 +238,13 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
     {
       // Ref.2 subsection 4.4 "The best solution found"
       // Sample first substep scattering angle
-      SampleCosineTheta(lambdan12,scrA,cosTheta1,sinTheta1);
+      SampleCosineTheta(0.5*lambdan,scrA,cosTheta1,sinTheta1);
       G4double phi1  = CLHEP::twopi*G4UniformRand();
       cosPhi1 = cos(phi1);
       sinPhi1 = sin(phi1);
 
       // Sample second substep scattering angle
-      SampleCosineTheta(lambdan12,scrA,cosTheta2,sinTheta2);
+      SampleCosineTheta(0.5*lambdan,scrA,cosTheta2,sinTheta2);
       G4double phi2  = CLHEP::twopi*G4UniformRand();
       cosPhi2 = cos(phi2);
       sinPhi2 = sin(phi2);
@@ -253,17 +256,17 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
       G4double sqrtA=sqrt(scrA);
       if(acos(ws)<sqrtA)//small angle approximation for theta less than screening angle
       {
-       G4int i=0;
-       do{i++;
-       ws=1.+Qn12*log(G4UniformRand());
-       }while((fabs(ws)>1.)&&(i<20));//i<20 to avoid time consuming during the run
-       if(i>=19)ws=cos(sqrtA);
-
-       wss=std::sqrt((1.-ws)*(1.0+ws));      
-       us=wss*cos(phi1);
-       vs=wss*sin(phi1);
-     }
+	G4int i=0;
+	do{i++;
+	  ws=1.+Qn12*log(G4UniformRand());
+	}while((fabs(ws)>1.)&&(i<20));//i<20 to avoid time consuming during the run
+	if(i>=19)ws=cos(sqrtA);
+	wss=std::sqrt((1.-ws*ws));      
+	us=wss*std::cos(phi1);
+	vs=wss*std::sin(phi1);
+      }
     }
+
     
   G4ThreeVector oldDirection = dynParticle->GetMomentumDirection();
   G4ThreeVector newDirection(us,vs,ws);
@@ -275,10 +278,10 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
       if(Qn1<0.02)// corresponding to error less than 1% in the exact formula of <z>
       z_coord = 1.0 - Qn1*(0.5 - Qn1/6.);
       else z_coord = (1.-std::exp(-Qn1))/Qn1;
-
       G4double rr=std::sqrt((1.- z_coord*z_coord)/(1.-ws*ws));
       x_coord = rr*us;
       y_coord = rr*vs;
+
       // displacement is computed relatively to the end point
       z_coord -= 1.0;
       rr = std::sqrt(x_coord*x_coord+y_coord*y_coord+z_coord*z_coord);
@@ -290,7 +293,7 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
 	     << " geomStep(mm)= " << zPathLength
 	     << G4endl;
       */
-      if(tPathLength<=zPathLength)return;
+
       if(r > tlimitminfix) {
 
         G4ThreeVector Direction(x_coord/rr,y_coord/rr,z_coord/rr);
@@ -307,18 +310,18 @@ void
 G4GoudsmitSaundersonMscModel::SampleCosineTheta(G4double lambdan, G4double scrA,
 						G4double &cost, G4double &sint)
 {
-  G4double xi=0.;
-  
-  if (Qn12<0.001)  
-  {G4double r1,tet;
+  G4double r1,tet,xi=0.;
+  G4double Qn1 = 2.* lambdan *scrA*((1.+scrA)*log(1.+1./scrA)-1.);
+  if (Qn1<0.001)
+    {
       do{
         r1=G4UniformRand();
-        xi=-Qn12*log(G4UniformRand());
+        xi=-0.5*Qn1*log(G4UniformRand());
         tet=acos(1.-xi);
       }while(tet*r1*r1>sin(tet));
-  }
-  else if(Qn12>0.5)xi=2.*G4UniformRand();
-  else xi=2.*(GSTable->SampleTheta(lambdan,scrA,G4UniformRand()));
+    }
+  else if(Qn1>0.5) { xi=2.*G4UniformRand(); }//isotropic distribution
+  else{ xi=2.*(GSTable->SampleTheta(lambdan,scrA,G4UniformRand()));}
 
 
   if(xi<0.)xi=0.;
@@ -427,7 +430,7 @@ G4GoudsmitSaundersonMscModel::CalculateIntegrals(const G4ParticleDefinition* p,G
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//t->g->t step transformations taken from Ref.6
+//t->g->t step transformations taken from Ref.6 
 
 G4double 
 G4GoudsmitSaundersonMscModel::ComputeTruePathLengthLimit(const G4Track& track,
@@ -451,8 +454,8 @@ G4GoudsmitSaundersonMscModel::ComputeTruePathLengthLimit(const G4Track& track,
   currentCouple = track.GetMaterialCutsCouple();
   currentMaterialIndex = currentCouple->GetIndex();
   currentKinEnergy = dp->GetKineticEnergy();
-  currentRange = 
-    theManager->GetRangeFromRestricteDEDX(particle,currentKinEnergy,currentCouple);
+  currentRange = GetRange(particle,currentKinEnergy,currentCouple);
+
 
   lambda1 = GetLambda(currentKinEnergy);
 
@@ -642,18 +645,18 @@ G4double G4GoudsmitSaundersonMscModel::ComputeGeomPathLength(G4double)
   zPathLength = tPathLength;
 
   // z = t for very small tPathLength
-  if(tPathLength < tlimitminfix) return zPathLength;
+  if(tPathLength < tlimitminfix) { return zPathLength; }
 
   // this correction needed to run MSC with eIoni and eBrem inactivated
   // and makes no harm for a normal run
   if(tPathLength > currentRange)
-    tPathLength = currentRange ;
+    { tPathLength = currentRange; }
 
   G4double tau   = tPathLength/lambda1 ;
 
   if ((tau <= tausmall) || insideskin) {
     zPathLength  = tPathLength;
-    if(zPathLength > lambda1) zPathLength = lambda1;
+    if(zPathLength > lambda1) { zPathLength = lambda1; }
     return zPathLength;
   }
 
@@ -661,7 +664,7 @@ G4double G4GoudsmitSaundersonMscModel::ComputeGeomPathLength(G4double)
   if (tPathLength < currentRange*dtrl) {
     if(tau < taulim) zmean = tPathLength*(1.-0.5*tau) ;
     else             zmean = lambda1*(1.-exp(-tau));
-  } else if(currentKinEnergy < mass /*|| tPathLength == currentRange*/) {
+  } else if(currentKinEnergy < mass || tPathLength == currentRange) {
     par1 = 1./currentRange ;
     par2 = 1./(par1*lambda1) ;
     par3 = 1.+par2 ;
@@ -670,8 +673,8 @@ G4double G4GoudsmitSaundersonMscModel::ComputeGeomPathLength(G4double)
     else
       zmean = 1./(par1*par3) ;
   } else {
-    G4double T1 = theManager->GetEnergy(particle,currentRange-tPathLength,
-					currentCouple);
+    G4double T1 = GetEnergy(particle,currentRange-tPathLength,currentCouple);
+
 
     lambda11 = GetLambda(T1);
 

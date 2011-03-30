@@ -1,6 +1,6 @@
-# $Id: History,v 1.13 2010-11-19 09:30:42 cirrone Exp $
+# $Id: History,v 1.13 2010/11/19 09:30:42 cirrone Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: not supported by cvs2svn $
+# GEANT4 tag $Name: geant4-09-04-ref-00 $
 # -------------------------------------------------------------------
 
      =========================================================
@@ -19,8 +19,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-24-01-2011 L.Pandola, Tag: XrayFluo-V09-04-00
-- Ensure compatibility with CLHEP 2.1.0.0
+27-03-2011 A.Mantero Tag: XrayFluo-V09-04-01
+  Re commit of the previous tag.
+
+07-02-2011 A.Mantero Tag: XrayFluo-V09-04-00
+- migrated physicslist to standard EM+Fluo (with PIXE)
+- added several files (XrayFluoPhysListEmStandardFLUO.cc, XrayFluoStepMax.cc
+  XrayFluoStepMaxMessenger.cc and relative headers) 
+  and modified accordingly others.
 
 18-11-2010 G.A.P.Cirrone, Tag: XrayFluo-V09-03-03
 - Corrected bug in the MercuryPrimaryGeneratorAction file on source definition

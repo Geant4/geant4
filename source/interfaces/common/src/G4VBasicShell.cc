@@ -234,7 +234,7 @@ void G4VBasicShell::ApplyShellCommand (
 
     G4cout << command << G4endl; 
 
-  } else if( command == "ls" || command(0,3) == "ls " ) {
+  } else if( command == "ls" || (G4String)command(0,3) == "ls " ) {
 
     ListDirectory( command );
 
@@ -243,11 +243,11 @@ void G4VBasicShell::ApplyShellCommand (
     G4cout << "Current Working Directory : " 
        << GetCurrentWorkingDirectory() << G4endl; 
 
-  } else if( command == "cd" || command(0,3) == "cd ") {
+  } else if( command == "cd" || (G4String)command(0,3) == "cd ") {
 
     ChangeDirectoryCommand ( command );
 
-  } else if( command == "help" || command(0,5) == "help ") {
+  } else if( command == "help" || (G4String)command(0,5) == "help ") {
 
     TerminalHelp( command ); 
 
@@ -413,15 +413,3 @@ void G4VBasicShell::TerminalHelp(G4String newCommand)
   //G4cout << G4endl;
   ExitHelp();
 }
-
-
-
-
-
-
-
-
-
-
-
-

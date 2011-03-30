@@ -38,6 +38,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/cuts/include \
             -I$(G4BASE)/processes/optical/include \
             -I$(G4BASE)/processes/transportation/include \
+            -I$(G4BASE)/processes/electromagnetic/dna/include \
             -I$(G4BASE)/processes/electromagnetic/lowenergy/include \
             -I$(G4BASE)/processes/electromagnetic/highenergy/include \
             -I$(G4BASE)/processes/electromagnetic/standard/include \

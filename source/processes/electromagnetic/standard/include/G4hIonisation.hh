@@ -100,9 +100,6 @@ public:
   // Print out of the class parameters
   virtual void PrintInfo();
 
-  // obsolete method
-  void ActivateNuclearStopping(G4bool);
-
 protected:
 
   virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,

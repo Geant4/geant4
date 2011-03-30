@@ -68,6 +68,7 @@
 // 20100804  M. Kelsey -- Add printing of final-state tables, protected by
 //		G4CASCADE_DEBUG_SAMPLER preprocessor flag
 // 20101019  M. Kelsey -- CoVerity report: check dynamic_cast<> for null
+// 20110214  M. Kelsey -- Follow G4InuclParticle::Model enumerator migration
 
 #include "G4ElementaryParticleCollider.hh"
 
@@ -392,8 +393,8 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
       }
       G4LorentzVector mom1(-mom.vect(), mom.e());
 
-      particles.push_back(G4InuclElementaryParticle(mom, particle_kinds[0], 3));
-      particles.push_back(G4InuclElementaryParticle(mom1, particle_kinds[1],3));
+      particles.push_back(G4InuclElementaryParticle(mom, particle_kinds[0], G4InuclParticle::EPCollider));
+      particles.push_back(G4InuclElementaryParticle(mom1, particle_kinds[1], G4InuclParticle::EPCollider));
       generate = false;
 
     } else {			 // 2 -> many
@@ -444,9 +445,9 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
 	    bad = false;
 	    generate = false;
 	    
-	    particles.push_back(G4InuclElementaryParticle(mom1, particle_kinds[0],3));
-	    particles.push_back(G4InuclElementaryParticle(mom2, particle_kinds[1],3));
-	    particles.push_back(G4InuclElementaryParticle(mom3, particle_kinds[2],3));
+	    particles.push_back(G4InuclElementaryParticle(mom1, particle_kinds[0], G4InuclParticle::EPCollider));
+	    particles.push_back(G4InuclElementaryParticle(mom2, particle_kinds[1], G4InuclParticle::EPCollider));
+	    particles.push_back(G4InuclElementaryParticle(mom3, particle_kinds[2], G4InuclParticle::EPCollider));
 	  };
 	} else { // multiplicity > 3
 	  // generate first mult - 2 momentums
@@ -537,7 +538,7 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
 	    }
 	    
 	    for (i = 0; i < multiplicity; i++) {
-	      particles.push_back(G4InuclElementaryParticle(scm_momentums[i], particle_kinds[i],3));
+	      particles.push_back(G4InuclElementaryParticle(scm_momentums[i], particle_kinds[i], G4InuclParticle::EPCollider));
 	    };
 	  };
 	}; 
@@ -1015,8 +1016,8 @@ G4ElementaryParticleCollider::generateSCMpionAbsorption(G4double etot_scm,
   G4LorentzVector mom2;
   mom2.setVectM(-mom1.vect(), m2);
 
-  particles.push_back(G4InuclElementaryParticle(mom1, particle_kinds[0],3));
-  particles.push_back(G4InuclElementaryParticle(mom2, particle_kinds[1],3));
+  particles.push_back(G4InuclElementaryParticle(mom1, particle_kinds[0], G4InuclParticle::EPCollider));
+  particles.push_back(G4InuclElementaryParticle(mom2, particle_kinds[1], G4InuclParticle::EPCollider));
 
   return;
 }

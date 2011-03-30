@@ -80,7 +80,7 @@ void G4PEEffectFluoModel::Initialise(const G4ParticleDefinition*,
 {
   fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
 
-  if (isInitialized) return;
+  if (isInitialized) { return; }
   fParticleChange = GetParticleChangeForGamma();
   isInitialized = true;
 }

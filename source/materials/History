@@ -17,6 +17,23 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25-03-11 V.Ivanchenko (materials-V09-04-03)
+- G4ElementData - added extra array
+
+11-03-11 V.Ivanchenko (materials-V09-04-02)
+- G4Material - added extra protections against incorrect mass fraction
+               during material construction
+
+08-03-11 V.Ivanchenko (materials-V09-04-01)
+- G4Material - added Base Material pointer and corresponding methods
+- G4NistMaterial - added constructor of a material using variable
+     density; reduce size of internal vectors
+- G4NistMaterialBuilder - cleanup methods to build materials
+- G4IonisParamMat - use mean ionisation potential provided by user
+     in computation of density effect 
+- G4ExtDEDXTable - try to fix minor Coverity warning
+- G4ElementData - added new class
+
 23-12-10 V.Ivanchenko (materials-V09-04-00)
 - G4SandiaTable - fixed trivial Coverity warning introduced in 
                   previous tag

@@ -58,6 +58,8 @@
 #include "G4hMultipleScattering.hh"
 #include "G4MscStepLimitType.hh"
 #include "G4UrbanMscModel93.hh"
+#include "G4UrbanMscModel95.hh"
+#include "G4DummyModel.hh"
 #include "G4WentzelVIModel.hh"
 #include "G4CoulombScattering.hh"
 
@@ -164,18 +166,22 @@ void G4EmStandardPhysics_option3::ConstructProcess()
     if (particleName == "gamma") {
 
       G4PhotoElectricEffect* pe = new G4PhotoElectricEffect;
-      pe->SetModel(new G4PEEffectFluoModel());
+      //pe->SetModel(new G4PEEffectFluoModel());
       G4ComptonScattering* cs   = new G4ComptonScattering;
       cs->SetModel(new G4KleinNishinaModel());
       pmanager->AddDiscreteProcess(pe);
       pmanager->AddDiscreteProcess(cs);
       pmanager->AddDiscreteProcess(new G4GammaConversion);
-      //pmanager->AddDiscreteProcess(new G4RayleighScattering);
 
+      // The process is created and deactivated
+      G4RayleighScattering* rl = new G4RayleighScattering();
+      rl->AddEmModel(0, new G4DummyModel());
+      pmanager->AddDiscreteProcess(rl);
+ 
     } else if (particleName == "e-") {
 
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      //msc->AddEmModel(0, new G4UrbanMscModel93());
+      msc->AddEmModel(0, new G4UrbanMscModel95());
       msc->SetStepLimitType(fUseDistanceToBoundary);
       pmanager->AddProcess(msc,                   -1, 1, 1);
       G4eIonisation* eIoni = new G4eIonisation();
@@ -186,7 +192,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
     } else if (particleName == "e+") {
 
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      //msc->AddEmModel(0, new G4UrbanMscModel93());
+      msc->AddEmModel(0, new G4UrbanMscModel95());
       msc->SetStepLimitType(fUseDistanceToBoundary);
       pmanager->AddProcess(msc,                   -1, 1, 1);
       G4eIonisation* eIoni = new G4eIonisation();
@@ -213,7 +219,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
 
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       G4ionIonisation* ionIoni = new G4ionIonisation();
-      ionIoni->SetStepFunction(0.1, 20*um);
+      ionIoni->SetStepFunction(0.1, 10*um);
       pmanager->AddProcess(ionIoni,                   -1, 2, 2);
       pmanager->AddProcess(new G4NuclearStopping(),   -1, 3,-1);
 
@@ -222,7 +228,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       G4ionIonisation* ionIoni = new G4ionIonisation();
       ionIoni->SetEmModel(new G4IonParametrisedLossModel());
-      ionIoni->SetStepFunction(0.1, 10*um);
+      ionIoni->SetStepFunction(0.1, 1*um);
       pmanager->AddProcess(ionIoni,                   -1, 2, 2);
       pmanager->AddProcess(new G4NuclearStopping(),   -1, 3,-1);
 
@@ -287,10 +293,10 @@ void G4EmStandardPhysics_option3::ConstructProcess()
     
   // Physics tables
   //
-  opt.SetMinEnergy(100*eV);
+  opt.SetMinEnergy(10*eV);
   opt.SetMaxEnergy(10*TeV);
-  opt.SetDEDXBinning(220);
-  opt.SetLambdaBinning(220);
+  opt.SetDEDXBinning(240);
+  opt.SetLambdaBinning(240);
     
   // Ionization
   //

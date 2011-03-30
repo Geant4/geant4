@@ -879,10 +879,7 @@ void G4VEnergyLossProcess::ActivateDeexcitation(G4bool val, const G4Region* r)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4VEnergyLossProcess::AlongStepGetPhysicalInteractionLength(
-                             const G4Track&,
-                             G4double,
-                             G4double  currentMinStep,
-                             G4double&,
+                             const G4Track&,G4double,G4double,G4double&,
                              G4GPILSelection* selection)
 {
   G4double x = DBL_MAX;
@@ -892,13 +889,18 @@ G4double G4VEnergyLossProcess::AlongStepGetPhysicalInteractionLength(
 
     x = fRange;
     G4double y = x*dRoverRange;
-
-    if(x > finalRange && y < currentMinStep) { 
-      x = y + finalRange*(1.0 - dRoverRange)*(2.0 - finalRange/fRange);
-    } else if (rndmStepFlag) { x = SampleRange(); }
+    G4double finR = finalRange;
+    if(rndmStepFlag) { 
+      finR = std::min(finR,currentCouple->GetProductionCuts()->GetProductionCut(1)); 
+    }
+    if(x > finR) { x = y + finR*(1.0 - dRoverRange)*(2.0 - finR/fRange); }
+    //if(x > finalRange && y < currentMinStep) { 
+    //  x = y + finalRange*(1.0 - dRoverRange)*(2.0 - finalRange/fRange);
+    //} else if (rndmStepFlag) { x = SampleRange(); }
     //G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy
-    //  <<" range= "<<fRange <<" cMinSt="<<currentMinStep
-    //  << " limit= " << x <<G4endl;
+    //   <<" range= "<<fRange <<" cMinSt="<<currentMinStep
+    //	  << " y= " << y << " finR= " << prec
+    //    << " limit= " << x <<G4endl;
   }
   //G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy
   //  <<" stepLimit= "<<x<<G4endl;

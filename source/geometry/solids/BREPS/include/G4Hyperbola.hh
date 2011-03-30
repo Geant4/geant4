@@ -55,8 +55,7 @@ public:  // with description
   G4Hyperbola& operator=(const G4Hyperbola& right);
     // Copy constructor and assignment operator.
 
-  G4Curve* Project(const G4Transform3D& tr=
-                   HepGeom::Transform3D::Identity);
+  G4Curve* Project(const G4Transform3D& tr= G4Transform3D::Identity);
     // Transforms and projects the curve.
 
   G4bool Tangent(G4CurvePoint& cp, G4Vector3D& v);

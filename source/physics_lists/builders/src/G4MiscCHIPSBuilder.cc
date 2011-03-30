@@ -36,7 +36,7 @@
 #include "G4MiscCHIPSBuilder.hh"
 
 G4MiscCHIPSBuilder::G4MiscCHIPSBuilder(G4int ver):
- verbose(ver), wasActivated(false)
+ verbose(ver), wasActivated(false), inelastic(0)
 {
   // pointer to the particle table
   theParticleTable = G4ParticleTable::GetParticleTable();

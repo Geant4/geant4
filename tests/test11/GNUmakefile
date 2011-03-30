@@ -1,9 +1,9 @@
-# $Id: GNUmakefile,v 1.3 2002-12-09 11:25:09 gcosmo Exp $
+# $Id: GNUmakefile,v 1.4 2010-11-24 15:18:24 tkoi Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 27/06/98.
 # --------------------------------------------------------------
 
-name := test11
+name := test65
 G4TARGET := $(name)
 G4EXLIB := true
 
@@ -14,5 +14,9 @@ endif
 .PHONY: all
 
 all: lib bin
+
+
+CPPFLAGS += -I$(G4INSTALL)/source/processes/hadronic/models/lend/include
+LDLIBS3 += -lG4had_lend -lexpat
 
 include $(G4INSTALL)/config/binmake.gmk

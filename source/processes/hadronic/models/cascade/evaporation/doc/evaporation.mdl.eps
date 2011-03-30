@@ -1,0 +1,1256 @@
+%!PS-Adobe-3.0 EPSF-3.0
+%%BoundingBox:      27.0   267.0   565.0   773.0
+%%Creator: tlampen using rose_exe
+%%CreationDate: Mon Jun 12 21:29:04 2000
+%%Title: bertini
+%%EndComments
+
+%%BeginProlog
+200 dict begin 
+%%BeginResource: Units and resolution
+/cm { 300 mul 2.54 div } def
+/PageHeight 26.9 cm def
+ /PageWidth 20.6 cm def
+/LineSpace 0.05 cm def
+%%EndResource
+
+%%BeginResource: PenBrush
+/TmpPenArray 5 array def
+/PenArray 5 array def
+ /lpStyle 0 def
+ /lpWidth 1 def
+ /lpRed 2 def
+ /lpGreen 3 def
+ /lpBlue 4 def
+/BrushArray 6 array def
+ /lbStyle 0 def
+ /lbRed 1 def
+ /lbGreen 2 def
+ /lbBlue 3 def
+ /lbHatchStyle 4 def
+ /lpPattern 5 def
+/BkColorArray 5 array def
+ /bkRed 0 def
+ /bkGreen 1 def
+ /bkBlue 2 def
+/TextColorArray 3 array def
+ /TextRed 0 def
+ /TextGreen 1 def
+ /TextBlue 2 def
+/PenDashArray [ [] [0.2 cm 0.1 cm] [0.1 cm 0.1 cm] [0.3 cm 0.1 cm 0.1 cm 0.1 cm] [0.3 cm 0.1 cm 0.1 cm 0.1 cm 0.1 cm 0.1 cm] [] [] ] def
+
+/HatchStyleArray [ {HS_HORIZ} {HS_VERT} {HS_BDIAG} {HS_FDIAG} {HS_CROSS} {HS_DIAGCROSS} ] def
+
+/UpdatePen
+ {/PenArray exch def /PenWidthMemo PenArray lpWidth get def } def
+/UpdateBrush
+ {/BrushArray exch def} def
+
+/UpdateBkColor
+ {/BkColorArray exch def} def
+
+/UpdateBkMode
+ {/BkMode exch def} def
+
+/UpdateTextColor
+ {/TextColorArray exch def} def
+
+/HS_HORIZ
+ {0 LineSpace PageHeight { /i exch def 0 i MyMatrix itransform moveto PageWidth i MyMatrix idtransform lineto } for stroke } def
+/HS_VERT
+ {0 LineSpace PageWidth { /i exch def i 0 MyMatrix itransform moveto i PageHeight MyMatrix idtransform lineto } for stroke } def
+/HS_CROSS
+ { HS_HORIZ HS_VERT } def
+
+/HS_FDIAG
+ {0 LineSpace 1.4 mul PageWidth 2 mul
+     { /i exch def i PageWidth sub 0 MyMatrix itransform moveto i
+       PageHeight MyMatrix idtransform lineto } for stroke } def
+/HS_BDIAG
+ {0 LineSpace 1.4 mul PageWidth 2 mul
+     { /i exch def i 0 MyMatrix itransform moveto  i PageWidth sub
+        PageHeight MyMatrix idtransform lineto } for stroke } def
+/HS_DIAGCROSS
+ { HS_FDIAG HS_BDIAG } def
+
+/StrokeWithPen
+{/join exch def /Penwidth PenArray lpWidth get 
+ def Penwidth setlinewidth
+ PenArray lpWidth get 1 le { 0 setlinecap }
+ { PenArray lpWidth get 5 gt { 1 setlinecap } { 2 setlinecap } ifelse } ifelse
+ join { PenArray lpWidth get 5 le {0 setlinejoin 3 setmiterlimit}
+ { PenArray lpWidth get 8 gt { 1 setlinejoin } { 2 setlinejoin } ifelse } ifelse } if
+ join LineJoin -1 ne and {SetLineJoin setlinejoin} if
+ join MiterLimit -1 ne and {MiterLimit miterlimit} if
+ PenArray lpRed get 255 div PenArray lpGreen get 255 div PenArray lpBlue get 255 div setrgbcolor
+ /PenStyle PenArray lpStyle get def
+ PenStyle 5 lt  { PenDashArray PenStyle get 0 setdash stroke }
+ { PenStyle 6 eq  { [] 0 setdash stroke } {newpath} ifelse } ifelse
+ join {0 setlinejoin 10 setmiterlimit} if } def
+
+/FillWithBkColor
+ { gsave BkColorArray bkRed get 255 div
+BkColorArray bkGreen get 255 div BkColorArray bkBlue get 
+255 div setrgbcolor fill grestore } def
+
+/FillWithBrush
+ {/BrushStyle BrushArray lbStyle get def
+ BrushStyle 2 eq dup BrushStyle 0 eq or
+ { BrushArray lbRed get 255 div BrushArray lbGreen get 255 div BrushArray lbBlue get 255 div setrgbcolor
+ { gsave BkMode 2 eq {FillWithBkColor} if clip
+PenArray lpWidth get PenWidthMemo dup 0 ne {div} {pop} ifelse setlinewidth
+ HatchStyleArray BrushArray lbHatchStyle get get exec
+ grestore }
+ { fill } ifelse }
+ {BrushStyle 3 eq {BrushArray 5 get p SHR
+  gsave clip /Tmp save def pfill Tmp restore grestore} {pop}ifelse
+     } ifelse } def
+
+/Fill&Stroke
+ { gsave FillWithBrush grestore StrokeWithPen } def
+  /patfont 10 dict def patfont begin
+    /FontType 3 def
+    /FontMatrix [1 0 0 -1 0 0] def
+    /FontBBox [0 0 16 16]
+    def/Encoding StandardEncoding def
+    /BuildChar{pop pop 16 0 0 0 16 16
+      setcachedevice 16 16 false [1 0 0 1 .25 .25]{pat}imagemask}bind def
+  end
+/p{/pat 32 string def
+    {}forall 0 1 7{dup 2 mul pat exch 3 index put dup
+      2 mul 1 add pat exch 3 index put dup 2 mul 16 add pat exch 3 index
+      put 2 mul 17 add pat exch 2 index put pop}for}bind def
+
+/AU{1 add cvi 15 or}bind def
+/AD{1 sub cvi -16 and}bind def
+/SHR{pathbbox
+AU/Y1 exch def AU/X1 exch def AD/Y0 exch def AD/X0 exch def}bind def
+
+/M /moveto load def
+
+/pfill{/PatFont patfont
+definefont setfont/ch(AAAA)def X0 64 X1{Y1 -16 Y0{1 index exch M ch
+show}for pop}for}bind def
+%%EndResource
+
+%%BeginResource: LineTo
+/LineTo
+ { /y exch def /x exch def
+ moveto x y lineto currentpoint false StrokeWithPen } def
+%%EndResource
+
+%%BeginResource: RectanglePath
+/RectanglePath
+{
+3 index 3 index moveto 3 index 1 index lineto
+1 index 1 index lineto 1 index 3 index lineto
+3 index 3 index lineto pop pop pop pop closepath} def
+/RectanglePathBackwards
+{
+3 index 3 index moveto 1 index 3 index lineto
+1 index 1 index lineto 3 index 1 index lineto
+3 index 3 index lineto pop pop pop pop closepath} def
+%%EndResource
+
+%%BeginResource: EllipticPath
+/EllipticPath
+{matrix currentmatrix dup 3 index 6 index sub 2 div
+3 index 6 index sub 2 div
+7 index 2 index add
+7 index 2 index add
+matrix translate 3 1 roll matrix scale
+exch matrix concatmatrix exch matrix concatmatrix setmatrix
+1 0 moveto 0 0 1 360 0 arcn closepath
+setmatrix
+pop pop pop pop 
+}def
+/EllipticPathBackwards
+{matrix currentmatrix dup 3 index 6 index sub 2 div
+3 index 6 index sub 2 div
+7 index 2 index add
+7 index 2 index add
+matrix translate 3 1 roll matrix scale
+exch matrix concatmatrix exch matrix concatmatrix setmatrix
+1 0 moveto 0 0 1 0 360 arc closepath
+setmatrix
+pop pop pop pop 
+}def
+%%EndResource
+
+%%BeginResource: Rectangle
+/RectangleOutLine
+{/y2 exch def /x2 exch def /y1 exch def /x1 exch def
+ newpath
+ x1 y1 moveto x2 y1 lineto x2 y2 lineto x1 y2 lineto
+ closepath
+ false StrokeWithPen } def
+
+/FillRectangle
+{/y2 exch def /x2 exch def /y1 exch def /x1 exch def
+ /MyMatrix matrix def
+ newpath
+ x1 y1 moveto x2 y1 lineto x2 y2 lineto x1 y2 lineto
+ closepath
+ FillWithBrush} def
+/FrameRectangle
+{/y2 exch def /x2 exch def /y1 exch def /x1 exch def
+ /MyMatrix matrix def
+ /x1 x1 0.5 sub def /x2 x2 0.5 add def /y2 y2 0.5 sub def /y1 y1 0.5 add def newpath
+ x1 y1 moveto x2 y1 lineto x2 y2 lineto x1 y2 lineto x1 y1 lineto
+ /x1 x1 1 add def /x2 x2 1 sub def /y2 y2 1 add def /y1 y1 1 sub def
+ x1 y1 moveto x1 y2 lineto x2 y2 lineto x2 y1 lineto x1 y1 lineto
+ closepath
+ FillWithBrush} def
+%%EndResource
+
+%%BeginResource: Polygon
+/Polygon
+{/MyMatrix matrix def
+ newpath PolylineArray PolylineMode 1 sub get exec closepath
+ true Fill&Stroke } def
+
+/FillPolygon
+{/MyMatrix matrix def
+ newpath PolylineArray PolylineMode 1 sub get exec closepath
+ FillWithBrush } def
+%%EndResource
+
+%%BeginResource: Polyline
+/PolylineArray [ {DrawPolyline} {Bezier} ] def
+/Polyline 
+{PolylineArray PolylineMode 1 sub get exec pop pop currentpoint true StrokeWithPen } def
+/Bezier 
+{/nbPoint exch def /nbCurves nbPoint 1 sub 3 idiv def /nbLeft nbPoint 1 sub nbCurves 3 mul sub def
+ moveto 1 1 nbCurves { pop 4 2 roll 6 -2 roll curveto } for
+ nbLeft 1 eq { lineto } {nbLeft 2 eq { 4 2 roll 2 copy curveto } if } ifelse
+ } def
+/DrawPolyline 
+{/nbPoint exch def moveto
+ 1 1 nbPoint 1 sub { pop lineto } for
+ } def
+
+%%EndResource
+
+%%BeginResource: Ellipse
+/Ellipse
+{gsave
+ /Dy exch def /Dx exch def /Cy exch def /Cx exch def
+ Cx Cy translate Dx Dy scale
+ /MyMatrix Dx Dy matrix scale Cx Cy matrix translate matrix concatmatrix def
+ newpath 0 0 1 0 360 arc closepath
+ 1 Dx div 1 Dy div scale 0 Cx sub 0 Cy sub translate
+ PenArray TmpPenArray copy pop
+ PenArray lpWidth PenArray lpWidth get Dx abs Dy abs add 2 div div put
+ false Fill&Stroke
+ TmpPenArray PenArray copy pop
+ grestore } def 
+
+/FillEllipse
+{gsave
+ /Dy exch def /Dx exch def /Cy exch def /Cx exch def
+ Cx Cy translate Dx Dy scale
+ /MyMatrix Dx Dy matrix scale Cx Cy matrix translate matrix concatmatrix def
+ newpath 0 0 1 0 360 arc closepath
+ PenArray TmpPenArray copy pop
+ PenArray lpWidth PenArray lpWidth get Dx abs Dy abs add 2 div div put
+ FillWithBrush
+ TmpPenArray PenArray copy pop
+ grestore } def 
+%%EndResource
+
+%%BeginResource: Arc
+/Arc
+{ gsave
+ /ang1 exch def /ang2 exch def /Dy exch def /Dx exch def /Cy exch def /Cx exch def
+ Cx Cy translate Dx Dy 
+ scale 1 -1 scale
+ newpath
+ ClockWise {0 0 1 ang2 ang1 narc} {0 0 1 ang2 ang1 arc} ifelse 
+ 1 -1 scale 1 Dx div 1 Dy div scale 0 Cx sub 0 Cy sub translate
+ PenArray TmpPenArray copy pop
+ PenArray lpWidth PenArray lpWidth get Dx abs Dy abs add 2 div div put
+ false StrokeWithPen
+ TmpPenArray PenArray copy pop
+ grestore } def 
+%%EndResource
+
+%%BeginResource: Pie
+/Pie
+{gsave
+ /ang1 exch def /ang2 exch def /Dy exch def /Dx exch def /Cy exch def /Cx exch def
+ Cx Cy translate Dx Dy scale
+ 1 -1 scale
+ /MyMatrix Dx Dy matrix scale Cx Cy matrix translate matrix concatmatrix def
+ newpath 0 0 moveto ClockWise {0 0 1 ang2 ang1 narc} {0 0 1 ang2 ang1 arc} ifelse closepath
+ 1 -1 scale 1 Dx div 1 Dy div scale 0 Cx sub 0 Cy sub translate
+ PenArray TmpPenArray copy pop
+ PenArray lpWidth PenArray lpWidth get Dx abs Dy abs add 2 div div put
+ true Fill&Stroke
+ TmpPenArray PenArray copy pop
+ grestore } def 
+%%EndResource
+
+%%BeginResource: Chord
+/Chord
+{gsave
+ /ang1 exch def /ang2 exch def /Dy exch def /Dx exch def /Cy exch def /Cx exch def
+ Cx Cy translate Dx Dy scale
+ 1 -1 scale
+ /MyMatrix Dx Dy matrix scale Cx Cy matrix translate matrix concatmatrix def
+ newpath ClockWise {0 0 1 ang2 ang1 narc} {0 0 1 ang2 ang1 arc} ifelse closepath
+ 1 -1 scale 1 Dx div 1 Dy div scale 0 Cx sub 0 Cy sub translate
+ PenArray TmpPenArray copy pop
+ PenArray lpWidth PenArray lpWidth get Dx abs Dy abs add 2 div div put
+ true Fill&Stroke
+ TmpPenArray PenArray copy pop
+ grestore } def 
+%%EndResource
+
+%%BeginResource: RoundRectangle
+ /min {1 index 1 index le { pop} {exch pop} ifelse } def
+/RoundRectangle
+{/r2 exch def /r1 exch def /y2 exch def /x2 exch def /y1 exch def /x1 exch def
+ y2  2 div r2 min cvi /r2 exch def
+ x2 2 div r1 min cvi /r1 exch def
+ /width x2 r1 idiv def /height y2 r2 idiv def
+ gsave
+ x1 y1 translate r1 r2 scale
+ 1 -1 scale
+ /MyMatrix r1 r2 matrix scale x1 y1 matrix translate matrix concatmatrix def
+ newpath
+ 1 1 1 180 270 arc
+ width 1 sub 0 lineto width 1 sub 1 1 270 0 arc
+ width height 1 sub lineto width 1 sub height 1 sub 1 0 90 arc
+ 1 height lineto 1 height 1 sub 1 90 180 arc
+ closepath
+ PenArray TmpPenArray copy pop
+ PenArray lpWidth PenArray lpWidth get r1 abs r2 abs add 2 div div put
+ false Fill&Stroke
+ TmpPenArray PenArray copy pop
+ grestore } def
+%%EndResource
+
+%%BeginResource: TextOut
+/TextOut
+{TextColorArray 0 get 255 div TextColorArray 1 get 255 div TextColorArray 2 get 255 div setrgbcolor
+gsave translate rotate
+0 0 moveto /expwidth exch def dup stringwidth pop expwidth exch div -1 scale show pop pop currentpoint grestore} def 
+%%EndResource
+
+%%BeginResource: MwSetFont
+/EncodingDict 256 dict def
+EncodingDict begin
+0  [/.notdef /.notdef /.notdef /.notdef
+  /.notdef /.notdef /.notdef /.notdef
+  /.notdef /.notdef /.notdef /.notdef
+  /.notdef /.notdef /.notdef /.notdef
+  /.notdef /.notdef /.notdef /.notdef
+  /.notdef /.notdef /.notdef /.notdef
+  /.notdef /.notdef /.notdef /.notdef
+  /.notdef /.notdef /.notdef /.notdef
+  /space /exclam /quotedbl /numbersign
+  /dollar /percent /ampersand /quotesingle
+  /parenleft /parenright /asterisk /plus
+  /comma /hyphen /period /slash /zero /one
+  /two /three /four /five /six /seven
+  /eight /nine /colon /semicolon /less
+  /equal /greater /question /at /A /B /C
+  /D /E /F /G /H /I /J /K /L /M /N /O /P
+  /Q /R /S /T /U /V /W /X /Y /Z
+  /bracketleft /backslash /bracketright
+  /asciicircum /underscore /grave /a
+  /b /c /d /e /f /g /h /i /j /k /l /m /n
+  /o /p /q /r /s /t /u /v /w /x /y /z
+  /braceleft /bar /braceright /asciitilde
+  /.notdef /.notdef /.notdef /quotesinglbase
+  /florin /quotedblbase /ellipsis /dagger
+  /daggerdbl /circumflex /perthousand /Scaron
+  /guilsinglleft /OE /.notdef /.notdef
+  /.notdef /.notdef /quoteleft /quoteright
+  /quotedblleft /quotedblright /bullet /endash
+  /emdash /tilde /trademark /scaron
+  /guilsinglright /oe /.notdef /.notdef
+  /Ydieresis /.notdef /exclamdown /cent
+  /sterling /currency /yen /brokenbar
+  /section /dieresis /copyright
+  /ordfeminine /guillemotleft /logicalnot
+  /hyphen /registered /macron /degree
+  /plusminus /twosuperior /threesuperior
+  /acute /mu /paragraph /periodcentered
+  /cedilla /onesuperior /ordmasculine
+  /guillemotright /onequarter /onehalf
+  /threequarters /questiondown /Agrave
+  /Aacute /Acircumflex /Atilde /Adieresis
+  /Aring /AE /Ccedilla /Egrave /Eacute
+  /Ecircumflex /Edieresis /Igrave /Iacute
+  /Icircumflex /Idieresis /Eth /Ntilde
+  /Ograve /Oacute /Ocircumflex /Otilde
+  /Odieresis /multiply /Oslash /Ugrave
+  /Uacute /Ucircumflex /Udieresis /Yacute
+  /Thorn /germandbls /agrave /aacute
+  /acircumflex /atilde /adieresis /aring
+  /ae /ccedilla /egrave /eacute
+  /ecircumflex /edieresis /igrave /iacute
+  /icircumflex /idieresis /eth /ntilde
+  /ograve /oacute /ocircumflex /otilde
+  /odieresis /divide /oslash /ugrave
+  /uacute /ucircumflex /udieresis /yacute
+  /thorn /ydieresis] def
+end
+/fntdict 100 dict def
+
+/MwScaleAndSetFont 
+{
+    2 index findfont  dup length dict begin
+    {1 index /FID ne {def} {pop pop} ifelse} forall
+    dup EncodingDict exch known 
+    {EncodingDict exch get /Encoding exch def} {pop} ifelse
+    currentdict end /font0 exch definefont
+    exch scalefont setfont pop
+} def
+
+/MwSetFont
+{
+  % look in cache of scaled fonts
+  1 index /askedsize exch def
+  2 index /askedname exch def
+  fntdict askedname known 
+  { % font name found in cache - what about the size
+    /fntszdict fntdict askedname get def
+    fntszdict askedsize known
+    {
+      % font size found in cache
+      fntszdict askedsize get setfont pop pop pop
+    }
+    {
+      MwScaleAndSetFont 
+      fntszdict askedsize currentfont put
+    }
+    ifelse
+  }
+  { % not found in cache
+    MwScaleAndSetFont 
+    /fntszdict 200 dict def
+    fntszdict askedsize currentfont put
+    fntdict askedname fntszdict put
+  }
+  ifelse 
+} def
+%%EndResource
+
+%%BeginResource: DisplayBB
+/DisplayBB {gsave initgraphics 72 300 div 72 300 div scale 0 3300 translate 
+1 -1 scale 1 setlinewidth 1 0 0 setrgbcolor 
+/y2 exch def /x2 exch def /y1 exch def /x1 exch def 
+newpath x1 y1 moveto x2 y1 lineto x2 y2 lineto x1 y2 lineto closepath 
+stroke grestore } def
+%%EndResource
+
+%%EndProlog
+
+%%BeginSetup
+[{
+%%BeginFeature: *InputSlot AUTO
+6 statusdict /setpapertray get exec
+%%EndFeature
+} stopped cleartomark
+[{
+%%BeginFeature: *PageRegion LETTER
+LETTER
+%%EndFeature
+} stopped cleartomark
+%%EndSetup
+
+%%Page:
+%%BeginPageSetup
+/ClockWise false def /LineJoin -1 def /MiterLimit -1 def /PolylineMode 1 def /LineCap 0 def
+[0 0 0 0 0] UpdatePen
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0] UpdateTextColor
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+0 0
+
+% All the numbers (for positions, length or font size) given
+% in this file are expressed in pixels, but interpreted by
+% Postscript as points (1/72 inch)!
+%   -->so scale accordingly!
+72 300 div 72 300 div scale
+
+% So that (0, 0) is at top-left corner of paper sheet (takes postscript scaling into account too)
+0 3300 translate
+1 -1 scale
+
+/Courier  38 0  MwSetFont
+gstate /Mwgstate exch def
+%%EndPageSetup:
+[0 1 0 0 0] UpdatePen
+[0 2957 0 0 0] UpdatePen
+Mwgstate setgstate newpath
+75 75 2357 3032 RectanglePath
+clip newpath
+/Courier  38 0  MwSetFont
+[0 1 0 0 0] UpdatePen
+[1 0 0 0 0 <>] UpdateBrush
+1433 1043 1987 1269 FillRectangle
+1433 1043 1987 1269 RectangleOutLine
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  48 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  48 0  MwSetFont
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(G4BENeutronChannel) 522 -0.00 1449 1094 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  31 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+1433 1109 1987 1269 FillRectangle
+1433 1109 1987 1269 RectangleOutLine
+1433 1125 1987 1269 FillRectangle
+1433 1125 1987 1269 RectangleOutLine
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  31 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  31 0  MwSetFont
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(+ calculateProbability\(\)) 450 -0.00 1440 1171 TextOut
+[255 255 255] UpdateBkColor
+[255 255 255] UpdateBkColor
+(+ emit\(\)) 150 -0.00 1440 1204 TextOut
+[255 255 255] UpdateBkColor
+[255 255 255] UpdateBkColor
+(+ sampleKineticEnergy\(\)) 432 -0.00 1440 1237 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  48 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  48 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  27 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  27 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+621 1048 1214 1415 FillRectangle
+621 1048 1214 1415 RectangleOutLine
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  48 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  48 0  MwSetFont
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(G4BEChargedChannel) 522 -0.00 657 1099 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  31 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+621 1113 1214 1415 FillRectangle
+621 1113 1214 1415 RectangleOutLine
+621 1130 1214 1415 FillRectangle
+621 1130 1214 1415 RectangleOutLine
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  31 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  31 0  MwSetFont
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(+ calculateProbability\(\)) 450 -0.00 628 1176 TextOut
+[255 255 255] UpdateBkColor
+[255 255 255] UpdateBkColor
+(+ emit\(\)) 150 -0.00 628 1209 TextOut
+[255 255 255] UpdateBkColor
+[255 255 255] UpdateBkColor
+(+ sampleKineticEnergy\(\)) 432 -0.00 628 1242 TextOut
+[255 255 255] UpdateBkColor
+[255 255 255] UpdateBkColor
+(+ coulombFactor\(\)) 319 -0.00 628 1275 TextOut
+[255 255 255] UpdateBkColor
+[255 255 255] UpdateBkColor
+(+ coulombFactorForProton\(\)) 488 -0.00 628 1308 TextOut
+[255 255 255] UpdateBkColor
+[255 255 255] UpdateBkColor
+(+ qmFactorForProton\(\)) 394 -0.00 628 1341 TextOut
+[255 255 255] UpdateBkColor
+[255 255 255] UpdateBkColor
+(+ qmFactorForAlpha\(\)) 375 -0.00 628 1374 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  48 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  48 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  27 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  27 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+114 1647 638 1872 FillRectangle
+114 1647 638 1872 RectangleOutLine
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  48 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  48 0  MwSetFont
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(G4BEProtonChannel) 493 -0.00 130 1698 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  31 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+114 1712 638 1872 FillRectangle
+114 1712 638 1872 RectangleOutLine
+114 1729 638 1872 FillRectangle
+114 1729 638 1872 RectangleOutLine
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  31 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  31 0  MwSetFont
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(+ emit\(\)) 150 -0.00 121 1775 TextOut
+[255 255 255] UpdateBkColor
+[255 255 255] UpdateBkColor
+(+ coulombFactor\(\)) 319 -0.00 121 1808 TextOut
+[255 255 255] UpdateBkColor
+[255 255 255] UpdateBkColor
+(+ qmFactor\(\)) 225 -0.00 121 1841 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  48 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  48 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  27 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  27 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+415 1961 991 2187 FillRectangle
+415 1961 991 2187 RectangleOutLine
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  48 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  48 0  MwSetFont
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(G4BEDeuteronChannel) 551 -0.00 428 2012 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  31 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+415 2027 991 2187 FillRectangle
+415 2027 991 2187 RectangleOutLine
+415 2043 991 2187 FillRectangle
+415 2043 991 2187 RectangleOutLine
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  31 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  31 0  MwSetFont
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(+ emit\(\)) 150 -0.00 422 2089 TextOut
+[255 255 255] UpdateBkColor
+[255 255 255] UpdateBkColor
+(+ coulombFactor\(\)) 319 -0.00 422 2122 TextOut
+[255 255 255] UpdateBkColor
+[255 255 255] UpdateBkColor
+(+ qmFactor\(\)) 225 -0.00 422 2155 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  48 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  48 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  27 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  27 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+818 1647 1344 1872 FillRectangle
+818 1647 1344 1872 RectangleOutLine
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  48 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  48 0  MwSetFont
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(G4BETritonChannel) 493 -0.00 834 1698 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  31 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+818 1712 1344 1872 FillRectangle
+818 1712 1344 1872 RectangleOutLine
+818 1729 1344 1872 FillRectangle
+818 1729 1344 1872 RectangleOutLine
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  31 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  31 0  MwSetFont
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(+ emit\(\)) 150 -0.00 825 1775 TextOut
+[255 255 255] UpdateBkColor
+[255 255 255] UpdateBkColor
+(+ coulombFactor\(\)) 319 -0.00 825 1808 TextOut
+[255 255 255] UpdateBkColor
+[255 255 255] UpdateBkColor
+(+ qmFactor\(\)) 225 -0.00 825 1841 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  48 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  48 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  27 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  27 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+1253 1961 1689 2187 FillRectangle
+1253 1961 1689 2187 RectangleOutLine
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  48 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  48 0  MwSetFont
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(G4BeHe3Channel) 406 -0.00 1268 2012 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  31 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+1253 2027 1689 2187 FillRectangle
+1253 2027 1689 2187 RectangleOutLine
+1253 2043 1689 2187 FillRectangle
+1253 2043 1689 2187 RectangleOutLine
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  31 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  31 0  MwSetFont
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(+ emit\(\)) 150 -0.00 1260 2089 TextOut
+[255 255 255] UpdateBkColor
+[255 255 255] UpdateBkColor
+(+ coulombFactor\(\)) 319 -0.00 1260 2122 TextOut
+[255 255 255] UpdateBkColor
+[255 255 255] UpdateBkColor
+(+ qmFactor\(\)) 225 -0.00 1260 2155 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  48 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  48 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  27 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  27 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+1516 1647 1954 1872 FillRectangle
+1516 1647 1954 1872 RectangleOutLine
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  48 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  48 0  MwSetFont
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(G4BEHe4Channel) 406 -0.00 1532 1698 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  31 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+1516 1712 1954 1872 FillRectangle
+1516 1712 1954 1872 RectangleOutLine
+1516 1729 1954 1872 FillRectangle
+1516 1729 1954 1872 RectangleOutLine
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  31 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  31 0  MwSetFont
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(+ emit\(\)) 150 -0.00 1523 1775 TextOut
+[255 255 255] UpdateBkColor
+[255 255 255] UpdateBkColor
+(+ coulombFactor\(\)) 319 -0.00 1523 1808 TextOut
+[255 255 255] UpdateBkColor
+[255 255 255] UpdateBkColor
+(+ qmFactor\(\)) 225 -0.00 1523 1841 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  48 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  48 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  27 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  27 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+pop pop 492 1646
+727 1416 LineTo
+[0 255 255 255 0 <>] UpdateBrush
+682 1436 705 1462 727 1416 3 Polygon
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+pop pop 1045 1646
+973 1416 LineTo
+[0 255 255 255 0 <>] UpdateBrush
+971 1466 1004 1455 973 1416 3 Polygon
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+pop pop 1560 1646
+1203 1416 LineTo
+[0 255 255 255 0 <>] UpdateBrush
+1233 1456 1252 1428 1203 1416 3 Polygon
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+517 452 1318 854 FillRectangle
+517 452 1318 854 RectangleOutLine
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  48 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  48 0  MwSetFont
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(G4BertiniEvaporationChannel) 783 -0.00 526 503 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  31 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+517 518 1318 854 FillRectangle
+517 518 1318 854 RectangleOutLine
+517 534 1318 854 FillRectangle
+517 534 1318 854 RectangleOutLine
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  31 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  31 0  MwSetFont
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(+ setNucleusA\(\)) 282 -0.00 524 580 TextOut
+[255 255 255] UpdateBkColor
+[255 255 255] UpdateBkColor
+(+ setNucleusZ\(\)) 282 -0.00 524 613 TextOut
+[255 255 255] UpdateBkColor
+[255 255 255] UpdateBkColor
+(+ setExcitationEnergy\(\)) 432 -0.00 524 646 TextOut
+[255 255 255] UpdateBkColor
+[255 255 255] UpdateBkColor
+(+ setQ\(\)) 150 -0.00 524 679 TextOut
+[255 255 255] UpdateBkColor
+[255 255 255] UpdateBkColor
+(+ setPairingCorrection\(\)) 450 -0.00 524 712 TextOut
+[255 255 255] UpdateBkColor
+[255 255 255] UpdateBkColor
+(+ getProbability\(\)) 338 -0.00 524 745 TextOut
+[255 255 255] UpdateBkColor
+[255 255 255] UpdateBkColor
+(+ getThresh\(\)) 244 -0.00 524 778 TextOut
+[255 255 255] UpdateBkColor
+[255 255 255] UpdateBkColor
+(+ emit\(\)) 150 -0.00 524 811 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  48 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  48 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  27 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  27 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+pop pop 918 1047
+918 855 LineTo
+[0 255 255 255 0 <>] UpdateBrush
+900 902 935 902 918 855 3 Polygon
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+pop pop 1531 1043
+1234 855 LineTo
+[0 255 255 255 0 <>] UpdateBrush
+1265 895 1284 865 1234 855 3 Polygon
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+1005 81 1609 270 FillRectangle
+1005 81 1609 270 RectangleOutLine
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  48 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  48 0  MwSetFont
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(G4BertiniEvaporation) 580 -0.00 1018 131 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  31 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+1005 146 1609 270 FillRectangle
+1005 146 1609 270 RectangleOutLine
+1005 162 1609 270 FillRectangle
+1005 162 1609 270 RectangleOutLine
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  31 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  31 0  MwSetFont
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(+ BreakItUp\(\)) 244 -0.00 1012 208 TextOut
+[255 255 255] UpdateBkColor
+[255 255 255] UpdateBkColor
+(+ setVerboseLevel\(\)) 357 -0.00 1012 241 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  48 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  48 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  27 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  27 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+[0 0 0 0 0 <>] UpdateBrush
+pop pop 1155 361
+1082 452 LineTo
+[0 0 0 0 0 <>] UpdateBrush
+/Courier  31 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  31 0  MwSetFont
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(6) 19 -0.00 1047 425 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[0 0 0 0 0 <>] UpdateBrush
+/Courier  38 0  MwSetFont
+[0 0 0 0 0 <>] UpdateBrush
+pop pop 1082 452
+1109 437 LineTo
+pop pop 1082 452
+1091 422 LineTo
+[1 0 0 0 0 <>] UpdateBrush
+[0 0 0 0 0 <>] UpdateBrush
+pop pop 1155 361
+1229 271 LineTo
+[0 0 0 0 0 <>] UpdateBrush
+/Courier  31 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  31 0  MwSetFont
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(1) 19 -0.00 1180 262 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[0 0 0 0 0 <>] UpdateBrush
+/Courier  38 0  MwSetFont
+[0 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+1229 271 1206 280 1202 304 1225 294 1229 271 5 Polygon
+[0 0 0 0 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0 <>] UpdateBrush
+/Courier  31 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  31 0  MwSetFont
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(6) 19 -0.00 1047 425 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[0 0 0 0 0 <>] UpdateBrush
+/Courier  38 0  MwSetFont
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0 <>] UpdateBrush
+/Courier  31 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  31 0  MwSetFont
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(1) 19 -0.00 1180 262 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[0 0 0 0 0 <>] UpdateBrush
+/Courier  38 0  MwSetFont
+[0 255 255 255 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+1517 452 2354 728 FillRectangle
+1517 452 2354 728 RectangleOutLine
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  48 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  48 0  MwSetFont
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(G4BEGammaDeexcitationChannel) 812 -0.00 1530 503 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  31 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+1517 518 2354 728 FillRectangle
+1517 518 2354 728 RectangleOutLine
+1517 534 2354 728 FillRectangle
+1517 534 2354 728 RectangleOutLine
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  31 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  31 0  MwSetFont
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(+ setVerboseLevel\(\)) 357 -0.00 1525 580 TextOut
+[255 255 255] UpdateBkColor
+[255 255 255] UpdateBkColor
+(+ setNucleusA\(\)) 282 -0.00 1525 613 TextOut
+[255 255 255] UpdateBkColor
+[255 255 255] UpdateBkColor
+(+ setNucleusZ\(\)) 282 -0.00 1525 646 TextOut
+[255 255 255] UpdateBkColor
+[255 255 255] UpdateBkColor
+(+ setExcitationEnergy\(\)) 432 -0.00 1525 679 TextOut
+[255 255 255] UpdateBkColor
+[255 255 255] UpdateBkColor
+(+ emit\(\)) 150 -0.00 1525 712 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  48 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  48 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+/Courier  27 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  27 0  MwSetFont
+/Courier  38 0  MwSetFont
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+[0 0 0 0 0 <>] UpdateBrush
+pop pop 1589 361
+1452 271 LineTo
+[0 0 0 0 0 <>] UpdateBrush
+/Courier  31 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  31 0  MwSetFont
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(1) 19 -0.00 1433 323 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[0 0 0 0 0 <>] UpdateBrush
+/Courier  38 0  MwSetFont
+[0 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+1452 271 1464 293 1488 294 1477 272 1452 271 5 Polygon
+[0 0 0 0 0 <>] UpdateBrush
+pop pop 1488 294
+1517 300 LineTo
+pop pop 1488 294
+1505 320 LineTo
+[1 0 0 0 0 <>] UpdateBrush
+[0 0 0 0 0 <>] UpdateBrush
+pop pop 1589 361
+1727 452 LineTo
+[0 0 0 0 0 <>] UpdateBrush
+/Courier  31 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  31 0  MwSetFont
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(1) 19 -0.00 1680 486 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[0 0 0 0 0 <>] UpdateBrush
+/Courier  38 0  MwSetFont
+[0 0 0 0 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0 <>] UpdateBrush
+/Courier  31 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  31 0  MwSetFont
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(1) 19 -0.00 1433 323 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[0 0 0 0 0 <>] UpdateBrush
+/Courier  38 0  MwSetFont
+[0 255 255 255 0 <>] UpdateBrush
+[0 0 0 0 0 <>] UpdateBrush
+/Courier  31 0  MwSetFont
+/Courier  38 0  MwSetFont
+/Courier  31 0  MwSetFont
+[0 0 0 0 0 <>] UpdateBrush
+1 UpdateBkMode
+[255 255 255] UpdateBkColor
+(1) 19 -0.00 1680 486 TextOut
+[255 255 255] UpdateBkColor
+2 UpdateBkMode
+[0 0 0 0 0 <>] UpdateBrush
+/Courier  38 0  MwSetFont
+[0 255 255 255 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+pop pop 1452 1961
+1404 1638 LineTo
+1138 1416 LineTo
+[0 255 255 255 0 <>] UpdateBrush
+1163 1459 1185 1432 1138 1416 3 Polygon
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+[1 0 0 0 0 <>] UpdateBrush
+pop pop 712 1961
+739 1602 LineTo
+828 1416 LineTo
+[0 255 255 255 0 <>] UpdateBrush
+792 1451 823 1465 828 1416 3 Polygon
+[1 0 0 0 0 <>] UpdateBrush
+[0 255 255 255 0 <>] UpdateBrush
+ pop pop % pop out coordinates for current pen position
+ showpage 
+end
+% end of the MainWin EPS file

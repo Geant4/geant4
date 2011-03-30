@@ -30,11 +30,14 @@ template<class ParticipantType>
 G4QGSModel<ParticipantType>::G4QGSModel() 
     {
 	G4VPartonStringModel::SetThisPointer(this);
+	SetEnergyMomentumCheckLevels(2*perCent, 150*MeV);
     }
 template<class ParticipantType>
 G4QGSModel<ParticipantType>::G4QGSModel(const G4QGSModel &right)
     {
 	G4VPartonStringModel::SetThisPointer(this);
+	std::pair<G4double, G4double> levels=right.GetEnergyMomentumCheckLevels();
+	SetEnergyMomentumCheckLevels(levels.first, levels.second);
     }
 template<class ParticipantType>
 G4QGSModel<ParticipantType>::~G4QGSModel()

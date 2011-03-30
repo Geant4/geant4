@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version geant4-09-04-ref-01   (17-December-2010)
+ Geant4 version Name: geant4-09-04-ref-00    (17-December-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -290,127 +290,58 @@ hPairProd:   for  pi-    SubType= 4
 ============================================================================================
              HADRONIC PROCESSES SUMMARY (verbose level 1)
 
-                                  Hadronic Processes for <anti_proton>
-                                  -----------------------------------
-          hadElastic  Models:                 hElasticLHEP: Emin(GeV)=    0  Emax(GeV)= 100000
+                     Hadronic Processes for <anti_neutron>
+          hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 100000
 
-          hadElastic  Crs sctns:           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
+                     Hadronic Processes for <anti_proton>
+          hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 100000
 
+                     Hadronic Processes for <e->
+      ElectroNuclear  Models:                     CHIPS: Emin(GeV)=     0  Emax(GeV)= 30000
 
-                                  Hadronic Processes for <e->
-                                  -----------------------------------
-      ElectroNuclear  Models:                        CHIPS: Emin(GeV)=    0  Emax(GeV)= 30000
+                     Hadronic Processes for <gamma>
+     PhotonInelastic  Models:                     CHIPS: Emin(GeV)=     0  Emax(GeV)= 3.5
+                                        TheoFSGenerator: Emin(GeV)=     3  Emax(GeV)= 100000
 
-      ElectroNuclear  Crs sctns:           Electro-nuclear: Emin(GeV)=    0  Emax(GeV)= 100000
+                     Hadronic Processes for <kaon+>
+          hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 100000
+   KaonPlusInelastic  Models:                      FTFP: Emin(GeV)=     4  Emax(GeV)= 100000
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 5
 
+                     Hadronic Processes for <kaon->
+          hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 100000
+  KaonMinusInelastic  Models:                      FTFP: Emin(GeV)=     4  Emax(GeV)= 100000
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 5
 
-                                  Hadronic Processes for <gamma>
-                                  -----------------------------------
-     PhotonInelastic  Models:                        CHIPS: Emin(GeV)=    0  Emax(GeV)= 3.5
-                                           TheoFSGenerator: Emin(GeV)=    3  Emax(GeV)= 100000
-
-     PhotonInelastic  Crs sctns:             Photo-nuclear: Emin(GeV)=    0  Emax(GeV)= 100000
-
-
-                                  Hadronic Processes for <kaon+>
-                                  -----------------------------------
-          hadElastic  Models:                 hElasticLHEP: Emin(GeV)=    0  Emax(GeV)= 100000
-
-          hadElastic  Crs sctns:           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-   KaonPlusInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
-                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 5
-
-   KaonPlusInelastic  Crs sctns:                          : Emin(GeV)=    0  Emax(GeV)= 100000
-
-
-                                  Hadronic Processes for <kaon->
-                                  -----------------------------------
-          hadElastic  Models:                 hElasticLHEP: Emin(GeV)=    0  Emax(GeV)= 100000
-
-          hadElastic  Crs sctns:           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-  KaonMinusInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
-                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 5
-
-  KaonMinusInelastic  Crs sctns:                          : Emin(GeV)=    0  Emax(GeV)= 100000
-
-
-                                  Hadronic Processes for <lambda>
-                                  -----------------------------------
-          hadElastic  Models:                 hElasticLHEP: Emin(GeV)=    0  Emax(GeV)= 100000
-
-          hadElastic  Crs sctns:           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
+                     Hadronic Processes for <lambda>
+          hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 100000
 
                      Hadronic Processes for <mu->
           muMinusCaptureAtRest
 
-                                  Hadronic Processes for <neutron>
-                                  -----------------------------------
-          hadElastic  Models:                hElasticCHIPS: Emin(GeV)=    0  Emax(GeV)= 100000
+                     Hadronic Processes for <neutron>
+          hadElastic  Models:             hElasticCHIPS: Emin(GeV)=     0  Emax(GeV)= 100000
+    NeutronInelastic  Models:                      FTFP: Emin(GeV)=     4  Emax(GeV)= 100000
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 5
+            nCapture  Models:                G4LCapture: Emin(GeV)=     0  Emax(GeV)= 20000
+            nFission  Models:                G4LFission: Emin(GeV)=     0  Emax(GeV)= 20000
 
-          hadElastic  Crs sctns:            CHIPSElasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
+                     Hadronic Processes for <pi+>
+          hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 1
+                                        hElasticGlauber: Emin(GeV)=     1  Emax(GeV)= 100000
+   PionPlusInelastic  Models:                      FTFP: Emin(GeV)=     4  Emax(GeV)= 100000
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 5
 
-    NeutronInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
-                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 5
+                     Hadronic Processes for <pi->
+          hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 1
+                                        hElasticGlauber: Emin(GeV)=     1  Emax(GeV)= 100000
+  PionMinusInelastic  Models:                      FTFP: Emin(GeV)=     4  Emax(GeV)= 100000
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 5
 
-    NeutronInelastic  Crs sctns:      G4CrossSectionPairGG: Emin(GeV)=    0  Emax(GeV)= 100000
-                         G4CrossSectionPairGG: Wellisch-Laidlaw cross sections 
-                           below 91 GeV, Glauber-Gribov above 
-
-            nCapture  Models:                   G4LCapture: Emin(GeV)=    0  Emax(GeV)= 20000
-
-            nCapture  Crs sctns:           Gheisha capture: Emin(GeV)=    0  Emax(GeV)= 100000
-
-            nFission  Models:                   G4LFission: Emin(GeV)=    0  Emax(GeV)= 20000
-
-            nFission  Crs sctns:           Gheisha fission: Emin(GeV)=    0  Emax(GeV)= 100000
-
-
-                                  Hadronic Processes for <pi+>
-                                  -----------------------------------
-          hadElastic  Models:                 hElasticLHEP: Emin(GeV)=    0  Emax(GeV)= 1
-                                           hElasticGlauber: Emin(GeV)=    1  Emax(GeV)= 100000
-
-          hadElastic  Crs sctns: Barashenkov-Glauber-Gribov: Emin(GeV)=    0  Emax(GeV)= 100000
-
-   PionPlusInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
-                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 5
-
-   PionPlusInelastic  Crs sctns:      G4CrossSectionPairGG: Emin(GeV)=    0  Emax(GeV)= 100000
-                         G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
-                           below 91 GeV, Glauber-Gribov above 
-
-
-                                  Hadronic Processes for <pi->
-                                  -----------------------------------
-          hadElastic  Models:                 hElasticLHEP: Emin(GeV)=    0  Emax(GeV)= 1
-                                           hElasticGlauber: Emin(GeV)=    1  Emax(GeV)= 100000
-
-          hadElastic  Crs sctns: Barashenkov-Glauber-Gribov: Emin(GeV)=    0  Emax(GeV)= 100000
-
-  PionMinusInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
-                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 5
-
-  PionMinusInelastic  Crs sctns:      G4CrossSectionPairGG: Emin(GeV)=    0  Emax(GeV)= 100000
-                         G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
-                           below 91 GeV, Glauber-Gribov above 
-
-
-                                  Hadronic Processes for <proton>
-                                  -----------------------------------
-          hadElastic  Models:                hElasticCHIPS: Emin(GeV)=    0  Emax(GeV)= 100000
-
-          hadElastic  Crs sctns:            CHIPSElasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
-
-     ProtonInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
-                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 5
-
-     ProtonInelastic  Crs sctns:      G4CrossSectionPairGG: Emin(GeV)=    0  Emax(GeV)= 100000
-                         G4CrossSectionPairGG: Axen-Wellisch cross sections 
-                           below 91 GeV, Glauber-Gribov above 
-
+                     Hadronic Processes for <proton>
+          hadElastic  Models:             hElasticCHIPS: Emin(GeV)=     0  Emax(GeV)= 100000
+     ProtonInelastic  Models:                      FTFP: Emin(GeV)=     4  Emax(GeV)= 100000
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 5
 ============================================================================================
 Idle> #
 Idle> # neutron at 100 GeV in Pb
@@ -1106,148 +1037,4 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Air
 SimpleBox is now made of Air
 Idle> /run/beamOn 100
-Idle> #
-Idle> # anti_proton at 10 GeV in Pb
-Idle> #
-Idle> /gun/particle anti_proton
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Pb
-SimpleBox is now made of Pb
-Idle> /run/beamOn 5
-Idle> #
-Idle> # anti_neutron at 10 GeV in Pb
-Idle> #
-Idle> /gun/particle anti_neutron
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Pb
-SimpleBox is now made of Pb
-Idle> /run/beamOn 5
-Idle> #
-Idle> # anti_deuteron at 10 GeV in Pb
-Idle> #
-Idle> /gun/particle anti_deuteron
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Pb
-SimpleBox is now made of Pb
-Idle> /run/beamOn 5
-Idle> #
-Idle> # anti_triton at 10 GeV in Pb
-Idle> #
-Idle> /gun/particle anti_triton
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Pb
-SimpleBox is now made of Pb
-Idle> /run/beamOn 5
-Idle> #
-Idle> # anti_He3 at 10 GeV in Pb
-Idle> #
-Idle> /gun/particle anti_He3
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Pb
-SimpleBox is now made of Pb
-Idle> /run/beamOn 5
-Idle> #
-Idle> # anti_alpha at 10 GeV in Pb
-Idle> #
-Idle> /gun/particle anti_alpha
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Pb
-SimpleBox is now made of Pb
-Idle> /run/beamOn 5
-Idle> #
-Idle> # anti_proton at 10 GeV in Al
-Idle> #
-Idle> /gun/particle anti_proton
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Al
-SimpleBox is now made of Al
-Idle> /run/beamOn 5
-Idle> #
-Idle> # anti_neutron at 10 GeV in Al
-Idle> #
-Idle> /gun/particle anti_neutron
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Al
-SimpleBox is now made of Al
-Idle> /run/beamOn 5
-Idle> #
-Idle> # anti_deuteron at 10 GeV in Al
-Idle> #
-Idle> /gun/particle anti_deuteron
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Al
-SimpleBox is now made of Al
-Idle> /run/beamOn 5
-Idle> #
-Idle> # anti_triton at 10 GeV in Al
-Idle> #
-Idle> /gun/particle anti_triton
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Al
-SimpleBox is now made of Al
-Idle> /run/beamOn 5
-Idle> #
-Idle> # anti_He3 at 10 GeV in Al
-Idle> #
-Idle> /gun/particle anti_He3
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Al
-SimpleBox is now made of Al
-Idle> /run/beamOn 5
-Idle> #
-Idle> # anti_alpha at 10 GeV in Al
-Idle> #
-Idle> /gun/particle anti_alpha
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Al
-SimpleBox is now made of Al
-Idle> /run/beamOn 5
-Idle> #
-Idle> # anti_proton at 10 GeV in Air
-Idle> #
-Idle> /gun/particle anti_proton
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Air
-SimpleBox is now made of Air
-Idle> /run/beamOn 5
-Idle> #
-Idle> # anti_neutron at 10 GeV in Air
-Idle> #
-Idle> /gun/particle anti_neutron
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Air
-SimpleBox is now made of Air
-Idle> /run/beamOn 5
-Idle> #
-Idle> # anti_deuteron at 10 GeV in Air
-Idle> #
-Idle> /gun/particle anti_deuteron
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Air
-SimpleBox is now made of Air
-Idle> /run/beamOn 5
-Idle> #
-Idle> # anti_triton at 10 GeV in Air
-Idle> #
-Idle> /gun/particle anti_triton
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Air
-SimpleBox is now made of Air
-Idle> /run/beamOn 5
-Idle> #
-Idle> # anti_He3 at 10 GeV in Air
-Idle> #
-Idle> /gun/particle anti_He3
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Air
-SimpleBox is now made of Air
-Idle> /run/beamOn 5
-Idle> #
-Idle> # anti_alpha at 10 GeV in Air
-Idle> #
-Idle> /gun/particle anti_alpha
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Air
-SimpleBox is now made of Air
-Idle> /run/beamOn 5
 Idle> 

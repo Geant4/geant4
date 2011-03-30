@@ -15,6 +15,45 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28-03-2011, V.Ivanchenko                (phys-lists-V09-04-14)
+- G4EmStandardPhysics_option3 - instead of deactivation of
+  Rayleigh Scattering used G4DummyModel
+
+28-03-2011, G.Folger                    (phys-lists-V09-04-13)
+- Fix coverity issues in many files; most were uninitialised data
+    members for processes/models. LBE not fixed, requires bigger 
+    rework to avoid leaks for processes at program end.
+- Correct inclusion of G4UrbanMscModel95    
+
+24-03-2011, V.Ivanchenko                (phys-lists-V09-04-12)
+- G4EmStandardPhysics_option3, G4EmStandardPhysics_option2 - use
+    updated G4UrbanMscModel95 model for e+-
+
+23-03-2011, V.Ivanchenko                (phys-lists-V09-04-11)
+- G4EmStandardPhysics_option3 - experimental change of of options:
+      - reduced low-energy limit to 10 eV, 
+      - reduced StepFunction parameters per particle type, 
+      - added G4RayleighScattering inactive by default.
+
+23-03-2011, G.Cosmo                     (phys-lists-V09-04-10)
+- Added missing source file in sources.cmake builders list.
+
+17-03-2011, G.Cosmo                     (phys-lists-V09-04-09)
+- Added electromagnetic/dna module dependencies.
+- Coworks with tags "processes-V09-04-00" and "config-V09-04-01"
+
+17-03-2011, V.Ivanchenko                (phys-lists-V09-04-08)
+- G4HadronElasticPhysicsHP, G4HadronElasticPhysicsXS - added
+    anti_nuclei, reshape the code as in G4HadronElasticPhysics
+- G4HadronElasticPhysicsLHEP - use G4WHadronElasticProcess which
+    allowing not to kill primary after scattering
+
+10-03-2011, G.Folger                    (phys-lists-V09-04-07)
+- Use default energy limit for antibaryons, i.e. up o 100 TeV
+
+10-03-2011, G.Folger                    (phys-lists-V09-04-06)
+- Add antiTriton to antibarions
+
 26-02-2011, G.Folger                    (phys-lists-V09-04-05)
 - correct energy limit for antibarions
 

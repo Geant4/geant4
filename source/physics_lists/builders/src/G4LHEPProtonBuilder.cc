@@ -29,7 +29,8 @@
 #include "G4ProcessManager.hh"
 
 G4LHEPProtonBuilder::
-G4LHEPProtonBuilder() 
+G4LHEPProtonBuilder() :
+ theLEProtonModel(0), theHEProtonModel(0) 
 {
   theMin = 0;
 }

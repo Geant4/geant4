@@ -432,15 +432,9 @@ G4bool G4ExtDEDXTable::RetrievePhysicsTable(
 #endif
     return false;
   }  
-  G4int nm = G4int(nmbVectors);
-  if(0 >= nm) {
-#ifdef G4VERBOSE
-    G4cout << "G4ExtDEDXTable::RetrievePhysicsVector() " 
-	   << " The file is empty "<< nm << G4endl;
-#endif
-    return false;
-  }  
-  for(G4int i = 0; i<nm; ++i) {
+
+  size_t nm = size_t(nmbVectors);
+  for(size_t i = 0; i<nm; ++i) {
 
     G4String line = "";
     while( line.empty() ) {

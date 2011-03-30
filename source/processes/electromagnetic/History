@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17 March 2011 G.Cosmo (em-V09-04-00)
+- Added "dna" module.
+
+19 November 2010 G.Cosmo
+- Added "pii" module.
+
 26 July 2009 V.Ivanchenko (em-V09-02-01)
 - Global tag for July developments including: emlowen-V09-02-45, 
     emmuons-V09-02-05, emstand-V09-02-18, emutils-V09-02-15  

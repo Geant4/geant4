@@ -50,7 +50,12 @@
 #include "G4Positron.hh"
 #include "G4ProcessManager.hh"
 
-G4ElectroNuclearBuilder::G4ElectroNuclearBuilder() : wasActivated(false)
+G4ElectroNuclearBuilder::G4ElectroNuclearBuilder() : 
+    thePhotoNuclearProcess(0), theElectronNuclearProcess(0), 
+    thePositronNuclearProcess(0), theElectroReaction(0), 
+    theGammaReaction(0), theModel(0), theCascade(0), 
+    theStringModel(0), theFragmentation(0), theStringDecay(0), 
+   wasActivated(false)
 {
 }
 

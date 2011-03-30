@@ -37,7 +37,7 @@
 #define MESHDEFS_HH
 
 #include "G4Types.hh"
-#include <CLHEP/Units/PhysicalConstants.h>
+#include "G4PhysicalConstants.hh"
 
 const G4double kMeshAngleDefault=(pi/4); // Angle for mesh `wedges' in rads
                                  // Works best when simple fraction of pi/2

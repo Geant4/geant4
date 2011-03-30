@@ -102,7 +102,7 @@ void G4UAtomicDeexcitation::InitialiseForNewRun()
 	     << G4endl;
       G4cout << "    PIXE cross section name " << PIXECrossSectionModel()
 	     << " is unknown, PIXE is disabled" << G4endl; 
-      SetPIXEActive(false);
+      SetPIXE(false);
     }
     
   // Check if old model should be deleted 
@@ -138,6 +138,8 @@ void G4UAtomicDeexcitation::GenerateParticles(
 		      G4double gammaCut,
 		      G4double eCut)
 {
+  //G4cout << "generating particles" << G4endl;
+
   // Defined initial conditions
   G4int givenShellId = atomicShell->ShellId();
   minGammaEnergy = gammaCut;
@@ -148,58 +150,67 @@ void G4UAtomicDeexcitation::GenerateParticles(
   G4int provShellId = 0;
   G4int counter = 0;
   
+  // let's check that 5<Z<100
+
+  if (Z>5 && Z<100) {
+
   // The aim of this loop is to generate more than one fluorecence photon 
   // from the same ionizing event 
-  do
+    do
+      {
+	if (counter == 0) 
+	  // First call to GenerateParticles(...):
+	  // givenShellId is given by the process
+	  {
+	    provShellId = SelectTypeOfTransition(Z, givenShellId);
+
+	    if  ( provShellId >0) 
+	      {
+		aParticle = GenerateFluorescence(Z,givenShellId,provShellId);  
+	      }
+	    else if ( provShellId == -1)
+	      {
+		aParticle = GenerateAuger(Z, givenShellId);
+	      }
+	    else
+	      {
+		G4Exception("G4UAtomicDeexcitation: starting shell uncorrect: check it");
+	      }
+	  }
+	else 
+	  // Following calls to GenerateParticles(...):
+	  // newShellId is given by GenerateFluorescence(...)
+	  {
+	    provShellId = SelectTypeOfTransition(Z,newShellId);
+	    if  (provShellId >0)
+	      {
+		aParticle = GenerateFluorescence(Z,newShellId,provShellId);
+	      }
+	    else if ( provShellId == -1)
+	      {
+		aParticle = GenerateAuger(Z, newShellId);
+	      }
+	    else
+	      {
+		G4Exception("G4UAtomicDeexcitation: starting shell uncorrect: check it");
+	      }
+	  }
+	counter++;
+	if (aParticle != 0) 
+	  {
+	    vectorOfParticles->push_back(aParticle);
+	    //	  G4cout << "FLUO!" << G4endl; //debug
+	  }
+	else {provShellId = -2;}
+      }  
+    // Look this in a particular way: only one auger emitted! // ????
+    while (provShellId > -2); 
+  }
+  else
     {
-      if (counter == 0) 
-	// First call to GenerateParticles(...):
-	// givenShellId is given by the process
-	{
-	  provShellId = SelectTypeOfTransition(Z, givenShellId);
-	  
-	  if  ( provShellId >0) 
-	    {
-	      aParticle = GenerateFluorescence(Z,givenShellId,provShellId);  
-	    }
-	  else if ( provShellId == -1)
-	    {
-	      aParticle = GenerateAuger(Z, givenShellId);
-	    }
-	  else
-	    {
-	      G4Exception("G4UAtomicDeexcitation: starting shell uncorrect: check it");
-	    }
-	}
-      else 
-	// Following calls to GenerateParticles(...):
-	// newShellId is given by GenerateFluorescence(...)
-	{
-	  provShellId = SelectTypeOfTransition(Z,newShellId);
-	  if  (provShellId >0)
-	    {
-	      aParticle = GenerateFluorescence(Z,newShellId,provShellId);
-	    }
-	  else if ( provShellId == -1)
-	    {
-	      aParticle = GenerateAuger(Z, newShellId);
-	    }
-	  else
-	    {
-	      G4Exception("G4UAtomicDeexcitation: starting shell uncorrect: check it");
-	    }
-	}
-      counter++;
-      if (aParticle != 0) 
-	{
-	  vectorOfParticles->push_back(aParticle);
-	  //	  G4cout << "FLUO!" << G4endl; //debug
-	}
-      else {provShellId = -2;}
+      G4cout << "G4UAtomicDeexcitation: Deexcitation Asked for a Z<5 or Z>100, unavailable"<< G4endl;
     }
   
-  // Look this in a particular way: only one auger emitted! // ????
-  while (provShellId > -2); 
 }
 
 G4double 
@@ -210,9 +221,13 @@ G4UAtomicDeexcitation::GetShellIonisationCrossSectionPerAtom(
 			       G4double kineticEnergy,
 			       const G4Material* mat)
 {
+
+  // we must put a control on the shell that are passed: 
+  // some shells should not pass (line "0" or "2")
+
   // check atomic number
   G4double xsec = 0.0;
-  if(Z > 100) { return xsec; }
+  if(Z > 100 || Z<6 ) { return xsec; } //corrected by alf - Z<6 missing
   G4int idx = G4int(shellEnum);
   if(idx >= G4AtomicShells::GetNumberOfShells(Z)) { return xsec; }
 
@@ -227,8 +242,8 @@ G4UAtomicDeexcitation::GetShellIonisationCrossSectionPerAtom(
     q2 = q*q;
   }
 
-  if(PIXEshellCS) { xsec = PIXEshellCS->CrossSection(Z,idx,escaled,mass); }
-  if(0.0 == xsec) { xsec = anaPIXEshellCS->CrossSection(Z,idx,escaled,mass); }
+  if(PIXEshellCS) { xsec = PIXEshellCS->CrossSection(Z,shellEnum,escaled,mass); }
+  if(0.0 == xsec) { xsec = anaPIXEshellCS->CrossSection(Z,shellEnum,escaled,mass); }
   xsec *= q2;
   return xsec;
 }
@@ -326,6 +341,14 @@ G4DynamicParticle*
 G4UAtomicDeexcitation::GenerateFluorescence(G4int Z, G4int shellId,
 					    G4int provShellId )
 { 
+
+  //if(!IsDeexActive()) { return 0; }
+
+  if (shellId <=0 )
+
+    {G4Exception("G4UAtomicDeexcitation: zero or negative shellId");}
+  
+
   //isotropic angular distribution for the outcoming photon
   G4double newcosTh = 1.-2.*G4UniformRand();
   G4double newsinTh = std::sqrt((1.-newcosTh)*(1. + newcosTh));

@@ -34,7 +34,13 @@
 #include "G4ProcessManager.hh"
 
 G4LHEPPiKBuilder::
-G4LHEPPiKBuilder()  
+G4LHEPPiKBuilder() :
+  theLEPionPlusModel(0),theHEPionPlusModel(0),
+  theLEPionMinusModel(0), theHEPionMinusModel(0),
+  theLEKaonPlusModel(0),theHEKaonPlusModel(0),
+  theLEKaonMinusModel(0), theHEKaonMinusModel(0),
+  theLEKaonZeroLModel(0),theHEKaonZeroLModel(0),
+  theLEKaonZeroSModel(0),theHEKaonZeroSModel(0)
 {
   theM = 0;
   theMinPion = theM;

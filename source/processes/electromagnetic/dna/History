@@ -1,0 +1,24 @@
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+17.03.2011  S. Incerti, tag emdna-V09-04-02
+            Addition of dependencies to configuration files.
+
+17.03.2011  S. Incerti, tag emdna-V09-04-01
+            Addition of all files.
+
+13.02.2011  S. Incerti, tag emdna-V09-04-00
+            Creation of dna sub-package in electromagnetic category.

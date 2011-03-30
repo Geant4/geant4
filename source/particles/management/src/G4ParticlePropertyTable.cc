@@ -71,6 +71,7 @@ G4ParticlePropertyTable::G4ParticlePropertyTable():
 ////////////////////////
 G4ParticlePropertyTable::G4ParticlePropertyTable(const G4ParticlePropertyTable &right)
 {
+  fParticleTable = G4ParticleTable::GetParticleTable();   
   *this = right;
 }
       

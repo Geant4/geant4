@@ -37,6 +37,10 @@
 // 20100922  M. Kelsey -- Add functions to select de-excitation method, change
 //		"theDeexcitation" to be a base-class pointer for switching
 // 20100926  M. Kelsey -- Use new intermediate base class for de-exciations.
+// 20110224  M. Kelsey -- Add ::rescatter() function which takes a list of
+//		pre-existing secondaries as input.  Add setVerboseLevel().
+// 20110304  M. Kelsey -- Modify rescatter to use original Propagate() input
+// 20110308  M. Kelsey -- Add ::deexcite() function to handle nuclear fragment
 
 #ifndef G4INUCL_COLLIDER_HH
 #define G4INUCL_COLLIDER_HH
@@ -44,9 +48,12 @@
 #include "G4CascadeColliderBase.hh"
 #include "G4CollisionOutput.hh"
 
-class G4InuclParticle;
+class G4CascadParticle;
 class G4ElementaryParticleCollider;
 class G4IntraNucleiCascader;
+class G4InuclParticle;
+class G4KineticTrackVector;
+class G4V3DNucleus;
 class G4VCascadeDeexcitation;
 
 
@@ -58,9 +65,18 @@ public:
   void collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	       G4CollisionOutput& globalOutput);
 
+  // For use with top-level Propagate to preload a set of secondaries
+  void rescatter(G4InuclParticle* bullet, G4KineticTrackVector* theSecondaries,
+		 G4V3DNucleus* theNucleus, G4CollisionOutput& globalOutput);
+
+  void setVerboseLevel(G4int verbose=0);
+
   // Select betweeen different post-cascade de-excitation models
   void useCascadeDeexcitation();
   void usePreCompoundDeexcitation();
+
+protected:
+  void deexcite(const G4Fragment& fragment, G4CollisionOutput& globalOutput);
 
 private: 
   G4ElementaryParticleCollider* theElementaryParticleCollider;

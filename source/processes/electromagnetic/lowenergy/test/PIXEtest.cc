@@ -80,7 +80,7 @@ int main()
    //  implementation from ISICS tables.
    //  G4hShellCrossSectionDoubleExp is previous work with ownmade fitting functions to Pauli for Alpha.
 
-   G4cout << "Enter model (analytical/interpolated): " << G4endl;
+   G4cout << "Enter model (analytical/interpolated/empirical): " << G4endl;
    G4cin >> model;
 
    if (model == "analytical" || model == "interpolated") {
@@ -106,11 +106,12 @@ int main()
    mass = particle->GetPDGMass();
 
    std::vector<G4double> energies;
-
    
-  for (G4double i=-2; i<123; i=i+1)
+   for (G4double i=0; i<401; i=i+1) 
      {
-       energies.push_back(std::pow(10,(0.05*i+1)) *keV);
+       energies.push_back(std::pow(10,(-2+i/100)) *MeV);
+
+       //       energies.push_back(std::pow(10,(0.05*i+1)) *keV);
      } 
   
 
@@ -124,7 +125,7 @@ int main()
 
    if (model  == "analytical" ) { nameId = "A";}
    else if (model  == "interpolated" ) { nameId = "I";}
-
+   else if (model  == "empirical" ) { nameId = "E";}
    G4String fileNameTxt = fileName;
    char buffer[3];
    std::ofstream myfile;
@@ -139,18 +140,18 @@ int main()
        fileNameTxt = nameId + "-" + shellName + "-" + partType + "-" + buffer + ".dat";
        
        myfile.open (fileNameTxt);
-       
+       G4cout << "************ here! ***************" << G4endl;       
        
        //Cross section for each incident energy
        for (size_t k=0; k<energies.size();k++)
 	 {
-	   incidentEnergy = energies[k]*MeV;
+	   incidentEnergy = energies[k];//*MeV;
 	   deltaEnergy = 0.0;
 	   	   
 	   std::vector<G4double> CS = shellCS->GetCrossSection(Z,incidentEnergy,mass,deltaEnergy,false);
 	   
 	   
-	   myfile << incidentEnergy << "\t\t" << CS[shellNumber]/barn << G4endl;  
+	   myfile << incidentEnergy/MeV << "\t\t" << CS[shellNumber]/barn << G4endl;  
 	   
 	   
 	 }

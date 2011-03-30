@@ -73,9 +73,6 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  virtual G4double MinEnergyCut(const G4ParticleDefinition*,
-				const G4MaterialCutsCouple*);
-				
   virtual G4double ComputeCrossSectionPerElectron(
 				 const G4ParticleDefinition*,
 				 G4double kineticEnergy,
@@ -136,7 +133,7 @@ private:
 inline void G4MollerBhabhaModel::SetParticle(const G4ParticleDefinition* p)
 {
   particle = p;
-  if(p != theElectron) isElectron = false;
+  if(p != theElectron) { isElectron = false; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

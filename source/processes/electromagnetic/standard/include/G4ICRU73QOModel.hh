@@ -79,9 +79,6 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  virtual G4double MinEnergyCut(const G4ParticleDefinition*,
-				const G4MaterialCutsCouple*);
-			
   virtual G4double ComputeCrossSectionPerElectron(
 				 const G4ParticleDefinition*,
 				 G4double kineticEnergy,
@@ -220,14 +217,14 @@ inline G4int G4ICRU73QOModel::GetNumberOfShells(G4int Z) const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double G4ICRU73QOModel::GetShellEnergy(G4int Z,
-					 G4int nbOfTheShell) const
+inline G4double 
+G4ICRU73QOModel::GetShellEnergy(G4int Z, G4int nbOfTheShell) const
 {
   G4double shellEnergy = 0.;
 
   G4int idx = indexZ[Z];
 
-  if(indexZ[Z] >= 0) { shellEnergy = ShellEnergy[startElemIndex[idx] + nbOfTheShell]*eV; 
+  if(idx >= 0) { shellEnergy = ShellEnergy[startElemIndex[idx] + nbOfTheShell]*eV; 
   } else { shellEnergy = GetOscillatorEnergy(Z, nbOfTheShell); }
 
   return  shellEnergy;
@@ -235,15 +232,15 @@ inline G4double G4ICRU73QOModel::GetShellEnergy(G4int Z,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double G4ICRU73QOModel::GetShellStrength(G4int Z,
-					    G4int nbOfTheShell) const
+inline G4double 
+G4ICRU73QOModel::GetShellStrength(G4int Z, G4int nbOfTheShell) const
 {
   G4double shellStrength = 0.;
 
   G4int idx = indexZ[Z];
 
-  if(indexZ[Z] >= 0) { shellStrength = SubShellOccupation[startElemIndex[idx] + nbOfTheShell] / Z; 
-} else { shellStrength = 1.0 / Z * G4AtomicShells::GetNumberOfElectrons(Z,nbOfTheShell); }
+  if(idx >= 0) { shellStrength = SubShellOccupation[startElemIndex[idx] + nbOfTheShell] / Z; 
+  } else { shellStrength = G4double(G4AtomicShells::GetNumberOfElectrons(Z,nbOfTheShell))/Z; }
   
   return shellStrength;
 }

@@ -20,6 +20,10 @@ committal in the CVS repository !
 History file for visualization/HepRep sub-category
 --------------------------------------------------
 
+25th March 2011 G.Cosmo  (vis-HepRep-V09-04-00)
+- Use G4RotationMatrix typedef instead of native CLHEP type in
+  G4HepRepFileSceneHandler.cc.
+
 23th January 2011 L.Garnier
 - GNUMakefile : Remove G4VIS_BUILD.gmk use
 

@@ -118,10 +118,10 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
 						    G4double& length,
 						    G4double& meanLoss)
 {
-// Calculate actual loss from the mean loss.
-// The model used to get the fluctuations is essentially the same
-// as in Glandz in Geant3 (Cern program library W5013, phys332).
-// L. Urban et al. NIM A362, p.416 (1995) and Geant4 Physics Reference Manual
+  // Calculate actual loss from the mean loss.
+  // The model used to get the fluctuations is essentially the same
+  // as in Glandz in Geant3 (Cern program library W5013, phys332).
+  // L. Urban et al. NIM A362, p.416 (1995) and Geant4 Physics Reference Manual
 
   // shortcut for very very small loss (out of validity of the model)
   //
@@ -181,12 +181,11 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
     ipotLogFluct = material->GetIonisation()->GetLogMeanExcEnergy();
     e0 = material->GetIonisation()->GetEnergy0fluct();
     esmall = 0.5*sqrt(e0*ipotFluct);  
-    lastMaterial = material;
-   
+    lastMaterial = material;   
   }
 
   // very small step or low-density material
-  if(tmax <= e0) return meanLoss;
+  if(tmax <= e0) { return meanLoss; }
 
   G4double a1 = 0. , a2 = 0., a3 = 0. ;
 
@@ -309,7 +308,7 @@ G4double G4UniversalFluctuation::Dispersion(
  				G4double& tmax,
 			        G4double& length)
 {
-  if(!particle) InitialiseMe(dp->GetDefinition());
+  if(!particle) { InitialiseMe(dp->GetDefinition()); }
 
   electronDensity = material->GetElectronDensity();
 

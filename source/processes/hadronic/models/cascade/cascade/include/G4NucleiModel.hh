@@ -22,9 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-// $Id: G4NucleiModel.hh,v 1.36 2010-12-15 07:40:00 gunter Exp $
-// GEANT4 tag: $Name: not supported by cvs2svn $
+// $Id: G4NucleiModel.hh,v 1.34 2010/10/20 23:51:07 mkelsey Exp $
+// GEANT4 tag: $Name:  $
 //
 // 20100319  M. Kelsey -- Remove "using" directory and unnecessary #includes,
 //		move ctor to .cc file
@@ -47,6 +46,10 @@
 // 20100914  M. Kelsey -- Migrate to integer A and Z
 // 20101004  M. Kelsey -- Rename and create functions used to generate model
 // 20101019  M. Kelsey -- CoVerity report: dtor leak; move dtor to .cc file
+// 20110223  M. Kelsey -- Add static parameters for radius and cross-section
+//		scaling factors.
+// 20110303  M. Kelsey -- Add accessors for model parameters and units
+// 20110304  M. Kelsey -- Extend reset() to fill neutron and proton counts
 
 #ifndef G4NUCLEI_MODEL_HH
 #define G4NUCLEI_MODEL_HH
@@ -73,9 +76,9 @@ public:
   void generateModel(G4InuclNuclei* nuclei);
   void generateModel(G4int a, G4int z);
 
-  void reset() {
-    neutronNumberCurrent = neutronNumber;
-    protonNumberCurrent = protonNumber;
+  void reset(G4int nHitNeutrons=0, G4int nHitProtons=0) {
+    neutronNumberCurrent = neutronNumber - nHitNeutrons;
+    protonNumberCurrent  = protonNumber - nHitProtons;
   }
 
   void printModel() const; 
@@ -83,7 +86,6 @@ public:
   G4double getDensity(G4int ip, G4int izone) const {
     return nucleon_densities[ip - 1][izone];
   }
-
 
   G4double getFermiMomentum(G4int ip, G4int izone) const {
     return fermi_momenta[ip - 1][izone];
@@ -98,26 +100,27 @@ public:
     return izone < number_of_zones ? zone_potentials[ip0][izone] : 0.0;
   }
 
+  // Factor to convert GEANT4 lengths to internal units
+  G4double getRadiusUnits() const { return radiusUnits*fermi; }
 
-  const std::vector<G4CascadParticle>&
-  generateParticleFate(G4CascadParticle& cparticle,
-		       G4ElementaryParticleCollider* theElementaryParticleCollider); 
-
-
-  G4int getNumberOfNeutrons() const { 
-    return neutronNumberCurrent; 
+  G4double getRadius() const { return nuclei_radius; }
+  G4double getRadius(G4int izone) const {
+    return ( (izone<0) ? 0 
+	     : (izone<number_of_zones) ? zone_radii[izone] : nuclei_radius);
   }
 
-
-  G4int getNumberOfProtons() const { 
-    return protonNumberCurrent; 
+  G4int getNumberOfZones() const { return number_of_zones; }
+  G4int getZone(G4double r) const {
+    for (G4int iz=0; iz<number_of_zones; iz++) if (r<zone_radii[iz]) return iz;
+    return number_of_zones;
   }
 
+  G4int getNumberOfNeutrons() const { return neutronNumberCurrent; }
+  G4int getNumberOfProtons() const  { return protonNumberCurrent; }
 
   G4bool empty() const { 
     return neutronNumberCurrent < 1 && protonNumberCurrent < 1; 
   }
-
 
   G4bool stillInside(const G4CascadParticle& cparticle) {
     return cparticle.getCurrentZone() < number_of_zones;
@@ -125,7 +128,6 @@ public:
 
 
   G4CascadParticle initializeCascad(G4InuclElementaryParticle* particle);
-
 
   typedef std::pair<std::vector<G4CascadParticle>, std::vector<G4InuclElementaryParticle> > modelLists;
 
@@ -137,6 +139,9 @@ public:
     return std::pair<G4int, G4int>(current_nucl1, current_nucl2);
   }
 
+  const std::vector<G4CascadParticle>&
+  generateParticleFate(G4CascadParticle& cparticle,
+		       G4ElementaryParticleCollider* theElementaryParticleCollider); 
 
   G4bool worthToPropagate(const G4CascadParticle& cparticle) const; 
     
@@ -232,8 +237,10 @@ private:
 
   // Parameters for nuclear structure
   static const G4double skinDepth;
-  static const G4double radiusScale;
-  static const G4double radiusForSmall;
+  static const G4double radiusScale;	// Coefficients for two-parameter fit
+  static const G4double radiusScale2;	//   R = 1.16*cbrt(A) - 1.3456/cbrt(A)
+  static const G4double radiusForSmall; // Average radius of light A<5 nuclei
+  static const G4double radScaleAlpha;	// Scaling factor R_alpha/R_small
   static const G4double fermiMomentum;
   static const G4double alfa3[3], alfa6[6];
   static const G4double pion_vp;
@@ -243,6 +250,8 @@ private:
 
   // FIXME:  We should not be using this!
   static const G4double piTimes4thirds;
+  static const G4double crossSectionUnits;
+  static const G4double radiusUnits;
 
   // Total cross sections (for kaons and hyperons only)
   static const G4double kpPtot[30];

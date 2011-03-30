@@ -86,7 +86,7 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(const G4String& nam)
   currentMaterial = 0; 
   currentElement  = 0;
   lowEnergyLimit  = 1*eV;
-  recoilThreshold = 0.*keV;
+  recoilThreshold = 0.*keV; // by default does not work
   particle = 0;
   currentCouple = 0;
   wokvi = new G4WentzelOKandVIxSection();
@@ -116,7 +116,7 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
   cosThetaMin = cos(PolarAngleLimit());
   wokvi->Initialise(p, cosThetaMin);
   /*
-  G4cout << "G4eCoulombScatteringModel: factorA2(GeV^2) = " << factorA2/(GeV*GeV) 
+  G4cout << "G4eCoulombScatteringModel: "  
          << "  1-cos(ThetaLimit)= " << 1 - cosThetaMin
 	 << "  cos(thetaMax)= " <<  cosThetaMax
 	 << G4endl;
@@ -231,7 +231,7 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   if(pCuts) { tcut= std::max(tcut,(*pCuts)[currentMaterialIndex]); }
 
   if(trec > tcut) {
-    G4ParticleDefinition* ion = theParticleTable->FindIon(iz, ia, 0, iz);
+    G4ParticleDefinition* ion = theParticleTable->GetIon(iz, ia, 0.0);
     G4ThreeVector dir = (direction*sqrt(mom2) - 
 			 newDirection*sqrt(finalT*(2*mass + finalT))).unit();
     G4DynamicParticle* newdp = new G4DynamicParticle(ion, dir, trec);

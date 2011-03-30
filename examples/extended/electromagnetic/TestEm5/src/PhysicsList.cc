@@ -270,6 +270,9 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
 void PhysicsList::SetCuts()
 {
+ // fixe lower limit for cut
+ G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(100*eV, 1*GeV);
+ 
   if (verboseLevel >0){
     G4cout << "PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;

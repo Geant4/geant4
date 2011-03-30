@@ -1,0 +1,33 @@
+//---------------------------------------
+//        Macro file for test30
+//         examine PostStepDoIt 
+//        for hadronic physics
+//      Created: 13.03.2002 V.Ivanchenko
+//--------------------------------------- 
+#verbose
+0
+#events
+1000
+#print
+100
+#ion
+6 12
+//--------
+#material
+G4_Al
+#energy(MeV)
+290.
+#emax(MeV)
+400
+#nbinse
+40
+#nbinsd
+40
+#nangle
+5
+#angles
+30. 60. 90. 120. 150.  
+#generator
+binary_ion
+#run
+#exit

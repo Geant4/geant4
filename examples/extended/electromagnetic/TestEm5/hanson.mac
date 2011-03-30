@@ -18,8 +18,8 @@
 /testem/phys/setECut 1.12 um
 /testem/phys/setPCut 1.12 um
 #
-/testem/phys/addPhysics  emstandard_opt3
-#/testem/phys/addPhysics  standardGS
+/testem/phys/addPhysics  emstandard_opt0
+###/testem/phys/addPhysics  standardGS
 #
 /run/initialize
 #
@@ -27,10 +27,11 @@
 /gun/particle e- 
 /gun/energy 15.7 MeV
 #
-/testem/histo/setFileName hanson
-/testem/histo/setFileType hbook
-/testem/histo/setHisto 12  100 0 10 deg		#space angle
-###/testem/histo/setHisto 12  60 0 30 deg		#space angle    
+/testem/histo/setFileName hanson/9um.opt0
+/testem/histo/setFileType root
+###/testem/histo/setHisto 12  120 0 12 deg		#space angle
+/testem/histo/setHisto 12  120 0 30 deg		#space angle    
 #
-/testem/event/printModulo 100000 
+/testem/event/printModulo 100000
+# 
 /run/beamOn 1000000

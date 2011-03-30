@@ -54,29 +54,8 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4BremsstrahlungCrossSectionHandler.hh
         G4BremsstrahlungParameters.hh
         G4CompositeEMDataSet.hh
+	G4CrossSectionDataSet.hh
         G4CrossSectionHandler.hh
-        G4DNAAttachment.hh
-        G4DNABornExcitationModel.hh
-        G4DNABornIonisationModel.hh
-        G4DNAChampionElasticModel.hh
-        G4DNAChargeDecrease.hh
-        G4DNAChargeIncrease.hh
-        G4DNACrossSectionDataSet.hh
-        G4DNADingfelderChargeDecreaseModel.hh
-        G4DNADingfelderChargeIncreaseModel.hh
-        G4DNAElastic.hh
-        G4DNAEmfietzoglouExcitationModel.hh
-        G4DNAExcitation.hh
-        G4DNAGenericIonsManager.hh
-        G4DNAIonisation.hh
-        G4DNAMeltonAttachmentModel.hh
-        G4DNAMillerGreenExcitationModel.hh
-        G4DNAMoleculeManager.hh
-        G4DNARuddIonisationExtendedModel.hh
-        G4DNARuddIonisationModel.hh
-        G4DNASancheExcitationModel.hh
-        G4DNAScreenedRutherfordElasticModel.hh
-        G4DNAVibExcitation.hh
         G4DopplerProfile.hh
         G4eBremsstrahlungSpectrum.hh
         G4eIonisationCrossSectionHandler.hh
@@ -199,8 +178,6 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4VLowEnergyTestableDiscreteProcess.hh
         G4VPhotoElectricAngularDistribution.hh
         G4VRangeTest.hh
-        G4WaterExcitationStructure.hh
-        G4WaterIonisationStructure.hh
     SOURCES
         G4AnalyticalEcpssrKCrossSection.cc
         G4AnalyticalEcpssrLiCrossSection.cc
@@ -212,28 +189,8 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4BremsstrahlungCrossSectionHandler.cc
         G4BremsstrahlungParameters.cc
         G4CompositeEMDataSet.cc
+	G4CrossSectionDataSet.cc
         G4CrossSectionHandler.cc
-        G4DNAAttachment.cc
-        G4DNABornExcitationModel.cc
-        G4DNABornIonisationModel.cc
-        G4DNAChampionElasticModel.cc
-        G4DNAChargeDecrease.cc
-        G4DNAChargeIncrease.cc
-        G4DNACrossSectionDataSet.cc
-        G4DNADingfelderChargeDecreaseModel.cc
-        G4DNADingfelderChargeIncreaseModel.cc
-        G4DNAElastic.cc
-        G4DNAEmfietzoglouExcitationModel.cc
-        G4DNAExcitation.cc
-        G4DNAGenericIonsManager.cc
-        G4DNAIonisation.cc
-        G4DNAMeltonAttachmentModel.cc
-        G4DNAMillerGreenExcitationModel.cc
-        G4DNARuddIonisationExtendedModel.cc
-        G4DNARuddIonisationModel.cc
-        G4DNASancheExcitationModel.cc
-        G4DNAScreenedRutherfordElasticModel.cc
-        G4DNAVibExcitation.cc
         G4DopplerProfile.cc
         G4eBremsstrahlungSpectrum.cc
         G4eIonisationCrossSectionHandler.cc
@@ -344,8 +301,6 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4VLowEnergyDiscretePhotonProcess.cc
         G4VLowEnergyModel.cc
         G4VPhotoElectricAngularDistribution.cc
-        G4WaterExcitationStructure.cc
-        G4WaterIonisationStructure.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

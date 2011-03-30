@@ -9,10 +9,10 @@
 /control/verbose 2
 /run/verbose 2
 #
-/testem/det/setMat G4_Al
-###/testem/det/setMat G4_Mo
-###/testem/det/setMat G4_Ta
-/testem/det/setSizeX  1 cm
+/testem/det/setNbOfAbsor  1
+/testem/det/setAbsor 1 G4_Al  1 cm
+###/testem/det/setAbsor 1 G4_Mo  1 cm
+###/testem/det/setAbsor 1 G4_Ta  1 cm
 /testem/det/setSizeYZ 1 cm
 #
 /testem/phys/addPhysics  emstandard_opt3	# em physics
@@ -25,9 +25,8 @@
 /gun/particle e-
 /gun/energy 521 keV
 #
-###/testem/histo/setFileType hbook
 /testem/histo/setFileType root
-/testem/histo/setFileName sandia/ref4++/Al.521keV.opt3
+/testem/histo/setFileName sandia/Al.521keV.opt3
 /testem/histo/setHisto 8 100 0.  1.0 none	#normalized Edep profile
 ###/testem/histo/setHisto 8 100 0.  0.5 none	#for Ta
 #

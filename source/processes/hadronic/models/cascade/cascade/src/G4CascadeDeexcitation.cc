@@ -30,6 +30,7 @@
 // a final state with evaporated particles and (possibly) a stable nucleus.
 //
 // 20100926  M. Kelsey -- Move to new G4VCascadeDeexcitation base class.
+// 20110302  M. Kelsey -- Don't do "final" conservation check (not needed)
 
 #include "G4CascadeDeexcitation.hh"
 #include "globals.hh"
@@ -128,8 +129,6 @@ void G4CascadeDeexcitation::collide(G4InuclParticle* /*bullet*/,
     G4cout << " After EquilibriumEvaporator " << G4endl;
   }
     
-  validateOutput(0, target, output);	// Check conservation
-
   globalOutput.add(output);		// Evaporated particles and nucleus
 }
   

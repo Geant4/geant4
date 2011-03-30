@@ -47,7 +47,8 @@
 #include "G4ProcessManager.hh"
 
 G4LEPPionBuilder::
-G4LEPPionBuilder()  
+G4LEPPionBuilder() : 
+   theLEPionPlusModel(0),  theLEPionMinusModel(0) 
 {
   theMin = 0;
   theMax = 55*GeV;
