@@ -1,0 +1,1598 @@
+      SUBROUTINE TIMDAT
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+      character*8 datum
+      character*11 zeit
+*     CALL GETDAT(IYEAR,IMONTH,IDAY)
+*     CALL GETTIM(IHOUR,IMINUT,ISECND,IHSCND)
+*     WRITE(6,'(A)') ' YEAR, MONTH,DAY        '
+*     WRITE(6,'(1X,3I4)')IYEAR,IMONTH,IDAY
+*     WRITE(6,'(A)') ' HOUR, MINUTE,SECOND,...'
+*     WRITE(6,'(1X,4I4)')IHOUR,IMINUT,ISECND,IHSCND
+C     call date(datum)
+C     call time(zeit)
+C     WRITE(6,'(4A)') ' YEAR / MONTH / DAY  : ',datum,' time: ',zeit
+      RETURN
+      END
+*CMZ :  1.00/00 25/11/91  16.46.51  by  H.-J. M¶hring
+*-- Author :
+C===========================================================
+C#######################################################################
+C    THIS IS A PACKAGE CONTAINING A RANDOM NUMBER GENERATOR AND
+C    SERVICE ROUTINES.
+C    THE ALGORITHM IS FROM
+C      'TOWARD A UNVERSAL RANDOM NUMBER GENERATOR'
+C      G.MARSAGLIA, A.ZAMAN ;  FLORIDA STATE UNIV. PREPRINT FSU-SCRI-87-
+C    IMPLEMENTATION BY K. HAHN  DEC. 88,
+C    THIS GENERATOR SHOULD NOT DEPEND ON THE HARD WARE ( IF A REAL HAS
+C    AT LEAST 24 SIGNIFICANT BITS IN INTERNAL REPRESENTATION ),
+C    THE PERIOD IS ABOUT 2**144,
+C    TIME FOR ONE CALL AT IBM-XT IS ABOUT 0.7 MILLISECONDS,
+C    THE PACKAGE CONTAINS
+C      FUNCTION RNDM(I)                     : GENERATOR
+C      SUBROUTINE RNDMST(NA1,NA2,NA3,NB4)   : INITIALIZATION
+C      SUBROUTINE RNDMIN(U,C,CD,CM,I,J)     : PUT SEED TO GENERATOR
+C      SUBROUTINE RNDMOU(U,C,CD,CM,I,J)     : TAKE SEED FROM GENERATOR
+C      SUBROUTINE RNDMTE(IO)                : TEST OF GENERATOR
+C---
+C    FUNCTION RNDM(I)
+C       GIVES UNIFORMLY DISTRIBUTED RANDOM NUMBERS  IN 0..1)
+C       I  - DUMMY VARIABLE, NOT USED
+C    SUBROUTINE RNDMST(NA1,NA2,NA3,NB1)
+C       INITIALIZES THE GENERATOR, MUST BE CALLED BEFORE USING RNDM
+C       NA1,NA2,NA3,NB1  - VALUES FOR INITIALIZING THE GENERATOR
+C                          NA? MUST BE IN 1..178 AND NOT ALL 1
+C                          12,34,56  ARE THE STANDARD VALUES
+C                          NB1 MUST BE IN 1..168
+C                          78  IS THE STANDARD VALUE
+C    SUBROUTINE RNDMIN(U,C,CD,CM,I,J)
+C       PUTS SEED TO GENERATOR ( BRINGS GENERATOR IN THE SAME STATUS
+C       AS AFTER THE LAST RNDMOU CALL )
+C       U(97),C,CD,CM,I,J  - SEED VALUES AS TAKEN FROM RNDMOU
+C    SUBROUTINE RNDMOU(U,C,CD,CM,I,J)
+C       TAKES SEED FROM GENERATOR
+C       U(97),C,CD,CM,I,J  - SEED VALUES
+C    SUBROUTINE RNDMTE(IO)
+C       TEST OF THE GENERATOR
+C       IO     - DEFINES OUTPUT
+C                  = 0  OUTPUT ONLY IF AN ERROR IS DETECTED
+C                  = 1  OUTPUT INDEPENDEND ON AN ERROR
+C       RNDMTE USES RNDMIN AND RNDMOU TO BRING GENERATOR TO SAME STATUS
+C       AS BEFORE CALL OF RNDMTE
+C#######################################################################
+C===========================================================
+C     DOUBLE PRECISION FUNCTION RNDM(VDUMMY)
+C     IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+C     COMMON /RANDOO/ U(97),C,CD,CM,I,J
+C     RNDM = U(I)-U(J)
+C     IF ( RNDM.LT.0.0D0 ) RNDM = RNDM+1.0D0
+C     U(I) = RNDM
+C     I    = I-1
+C     IF ( I.EQ.0 ) I = 97
+C     J    = J-1
+C     IF ( J.EQ.0 ) J = 97
+C     C    = C-CD
+C     IF ( C.LT.0.0D0 ) C = C+CM
+C     RNDM = RNDM-C
+C     IF ( RNDM.LT.0.0D0 ) RNDM = RNDM+1.0D0
+C     RETURN
+C     END
+*-- Author :
+C===========================================================
+      SUBROUTINE RNDMST(NA1,NA2,NA3,NB1)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+      COMMON /RANDOO/ U(97),C,CD,CM,I,J
+      MA1 = NA1
+      MA2 = NA2
+      MA3 = NA3
+      MB1 = NB1
+      I   = 97
+      J   = 33
+      DO 20 II2 = 1,97
+        S = 0
+        T = 0.5D0
+        DO 10 II1 = 1,24
+          MAT  = MOD(MOD(MA1*MA2,179)*MA3,179)
+          MA1  = MA2
+          MA2  = MA3
+          MA3  = MAT
+          MB1  = MOD(53*MB1+1,169)
+          IF ( MOD(MB1*MAT,64).GE.32 ) S = S+T
+   10   T = 0.5*T
+   20 U(II2) = S
+      C  =   362436.D0/16777216.D0
+      CD =  7654321.D0/16777216.D0
+      CM = 16777213.D0/16777216.D0
+      RETURN
+      END
+*-- Author :
+C==========================================================
+      SUBROUTINE RNDMIN(UIN,CIN,CDIN,CMIN,IIN,JIN)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+      DIMENSION UIN(97)
+      COMMON /RANDOO/ U(97),C,CD,CM,I,J
+      DO 10 KKK = 1,97
+   10 U(KKK) = UIN(KKK)
+      C  = CIN
+      CD = CDIN
+      CM = CMIN
+      I  = IIN
+      J  = JIN
+      RETURN
+      END
+*-- Author :
+C==========================================================
+      SUBROUTINE RNDMOU(UOUT,COUT,CDOUT,CMOUT,IOUT,JOUT)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+      DIMENSION UOUT(97)
+      COMMON /RANDOO/ U(97),C,CD,CM,I,J
+      DO 10 KKK = 1,97
+   10 UOUT(KKK) = U(KKK)
+      COUT  = C
+      CDOUT = CD
+      CMOUT = CM
+      IOUT  = I
+      JOUT  = J
+      RETURN
+      END
+*-- Author :
+C==========================================================
+      SUBROUTINE RNDMTE(IO)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+      DIMENSION UU(97),U(6),X(6),D(6)
+      DATA U / 6533892.D0, 14220222.D0, 7275067.D0, 6172232.D0,
+     +8354498.D0, 10633180.D0/
+      CALL RNDMOU(UU,CC,CCD,CCM,II,JJ)
+      CALL RNDMST(12,34,56,78)
+      DO 10 II1 = 1,20000
+   10 XX = RNDM(V)
+      SD        = 0
+      DO 20 II2 = 1,6
+        X(II2)  = 4096.D0*(4096.D0*RNDM(V))
+        D(II2)  = X(II2)-U(II2)
+   20 SD = SD+D(II2)
+      CALL RNDMIN(UU,CC,CCD,CCM,II,JJ)
+C     IF ( IO.EQ. 1.OR. SD.NE.0. 0) WRITE(6,500) (U(I),X(I),D(I),I=1,6)
+      RETURN
+C==END OF RANDOM GENERATOR PACKAGE==========================
+  500 FORMAT('  === TEST OF THE RANDOM-GENERATOR ===',/,
+     +'    EXPECTED VALUE    CALCULATED VALUE     DIFFERENCE',/, 6(F17.
+     +1,F20.1,F15.3,/), '  === END OF TEST ;',
+     +'  GENERATOR HAS THE SAME STATUS AS BEFORE CALLING RNDMTE')
+      END
+*-- Author :
+C   03/10/89 910141255  MEMBER NAME  KKEVT    (KK89.S)      F77
+      SUBROUTINE RANNOR(X,Y)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+C     X UND Y SIND GAUSSVERTEILTE ZUFALLSZAHLEN
+      CALL DSFECF(SFE,CFE)
+      A=SQRT(-2.D0*LOG(RNDM(V)))
+      X=A*SFE
+      Y=A*CFE
+      RETURN
+      END
+*-- Author :
+****************************************************** PLOT**********
+*
+      SUBROUTINE PLOT (X,Y,N,M,MM,XO,DX,YO,DY)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+*
+*     initial version
+*     J. Ranft, (FORTRAN-Programmierung,J.R.,Teubner, Leipzig, 72)
+*     This is a subroutine of fluka to plot Y across the page
+*     as a function of X down the page. Up to 37 curves can be
+*     plotted in the same picture with different plotting characters.
+*     Output of first 10 overprinted characters addad by FB 88
+*  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*
+*     Input Variables:
+*        X   = array containing the values of X
+*        Y   = array containing the values of Y
+*        N   = number of values in X and in Y
+*              can exceed the fixed number of lines
+*        M   = number of different curves X,Y are containing
+*        MM  = number of points in each curve i.e. N=M*MM
+*        XO  = smallest value of X to be plotted
+*        DX  = increment of X between subsequent lines
+*        YO  = smallest value of Y to be plotted
+*        DY  = increment of Y between subsequent character spaces
+*
+*        other variables used inside:
+*        XX  = numbers along the X-coordinate axis
+*        YY  = numbers along the Y-coordinate axis
+*        LL  = ten lines temporary storage for the plot
+*        L   = character set used to plot different curves
+*        LOV = memorizes overprinted symbols
+*              the first 10 overprinted symbols are printed on
+*              the end of the line to avoid ambiguities
+*              (added by FB as considered quite helpful)
+*
+*********************************************************************
+*
+      DIMENSION XX(61),YY(61),LL(101,10)
+      DIMENSION X(N),Y(N),L(40),LOV(40,10)
+      DATA  L/
+     11H*,1H2,1H3,1H4,1H5,1H6,1H7,1H8,1H9,1HZ,
+     21H+,1HA,1HO,1HB,1HC,1HD,1HE,1HF,1HG,1HH,
+     31HI,1HJ,1HK,1HL,1HM,1HN,1HO,1HP,1HQ,1HR,
+     41HS,1HT,1HU,1HV,1HW,1HX,1HY,1H1,1H-,1H  /
+*
+*
+      MN=51
+      AMN=MN
+      DO 10 I=1,MN
+        AI=I-1
+   10 XX(I)=XO+AI*DX
+      DO 20 I=1,11
+        AI=I-1
+   20 YY(I)=YO+10.*AI*DY
+      WRITE(6, 500) (YY(I),I=1,11)
+      MMN=MN-1
+*
+*
+      DO 90 JJ=1,MMN,10
+        JJJ=JJ-1
+        DO 30 I=1,101
+          DO 30 J=1,10
+   30   LL(I,J)=L(40)
+        DO 40 I=1,101
+   40   LL(I,1)=L(39)
+        DO 50 I=1,101,10
+          DO 50 J=1,10
+   50   LL(I,J)=L(38)
+        DO 60 I=1,40
+          DO 60 J=1,10
+   60   LOV(I,J)=L(40)
+*
+*
+        DO 70 I=1,M
+          DO 70 J=1,MM
+            II=J+(I-1)*MM
+            AIX=(X(II)-(XO-DX/2.))/DX+1.
+            AIY=(Y(II)-(YO-DY/2.))/DY+1.
+            AIX=AIX-FLOAT(JJJ)
+*           changed Sept.88 by FB to avoid INTEGER OVERFLOW
+            IF( AIX .GT. 1.D0.AND. AIX .LT. 11.D0.AND. AIY .GT. 1.D0.AND
+     +      . AIY .LT. 102.D0) THEN
+              IX=AIX
+              IY=AIY
+              IF( IX.GT. 0.AND. IX.LE. 10.AND. IY.GT. 0.AND. IY.LE. 101)
+     +        THEN
+                IF(LL(IY,IX).NE.L(38).AND.LL(IY,IX).NE.L(39)) LOV(I,IX)
+     +          =LL(IY,IX)
+                LL(IY,IX)=L(I)
+              ENDIF
+            ENDIF
+   70   CONTINUE
+*
+*
+        DO 80 I=1,10
+          II=I+JJJ
+          III=II+1
+          WRITE(6,510) XX(II),XX(III) , (LL(J,I),J=1,101) , (LOV(J,I),J
+     +    =1,10)
+   80   CONTINUE
+   90 CONTINUE
+*
+*
+      WRITE(6, 520)
+      WRITE(6, 500) (YY(I),I=1,11)
+      RETURN
+*
+  500 FORMAT(11X,11(1PE10.2),11HOVERPRINTED)
+  510 FORMAT(1X,2(1PE10.2),101A1,1H ,10A1)
+  520 FORMAT(20X,10('1---------'),'1')
+      END
+*-- Author :
+C
+C++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+C
+      DOUBLE PRECISION FUNCTION DBETAR(GAM,ETA)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+C
+C********************************************************************
+C
+C     RANDOM NUMBER GENERATION FROM BETA
+C     DISTRIBUTION IN REGION  0.LE.X.LE.1.
+C     F(X) = X**(GAM-1.)*(1.-X)**(ETA-1)*GAMM(ETA+GAM) / (GAMM(GAM
+C                                                        *GAMM(ETA))
+C
+C********************************************************************
+C
+      Y = DGAMRN(1.D0,GAM)
+      Z = DGAMRN(1.D0,ETA)
+      DBETAR = Y/(Y+Z)
+      RETURN
+      END
+*-- Author :
+      DOUBLE PRECISION FUNCTION DGAMRN(ALAM,ETA)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+C
+C********************************************************************
+C
+C     RANDOM NUMBER SELECTION FROM GAMMA DISTRIBUTION
+C     F(X) = ALAM**ETA*X**(ETA-1)*EXP(-ALAM*X) / GAM(ETA)
+C
+C********************************************************************
+C
+      NCOU=0
+      N = ETA
+      F = ETA - N
+      IF(F.EQ.0.D0)                                            GO TO 20
+   10 R = RNDM(R)
+      NCOU=NCOU+1
+      IF (NCOU.GE.11)                                          GO TO 20
+      IF(R.LT.F/(F+2.71828D0))                                 GO TO 30
+      YYY=LOG(RNDM(Y)+1.0D-9)/F
+      IF(ABS(YYY).GT.50.0D0)                                   GO TO 20
+      Y = EXP(YYY)
+      IF(LOG(RNDM(R)+1.0D-9).GT.-Y)                            GO TO 10
+                                                               GO TO 40
+   20 Y = 0
+                                                               GO TO 50
+   30 Y = 1.-LOG(RNDM(Y)+1.0D-9)
+      IF(RNDM(R).GT.Y**(F-1.D0))                               GO TO 10
+   40 IF(N.EQ.0)                                               GO TO 70
+   50 Z = 1
+      DO 60 I = 1,N
+   60 Z = Z*RNDM(Z)
+      Y = Y-LOG(Z+1.0D-9)
+   70 DGAMRN = Y/ALAM
+      RETURN
+      END
+*-- Author :
+C*****************************************************************
+      DOUBLE PRECISION FUNCTION BETREJ(GAM,ETA,XMIN,XMAX)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+      IF (XMIN.GE.XMAX)THEN
+        WRITE (6,500)XMIN,XMAX
+        STOP
+      ENDIF
+   10 CONTINUE
+      XX=XMIN+(XMAX-XMIN)*RNDM(V)
+      BETMAX=XMIN**(GAM-1.)*(1.-XMIN)**(ETA-1.)
+      YY=BETMAX*RNDM(W)
+      BETXX=XX**(GAM-1.)*(1.-XX)**(ETA-1.)
+      IF(YY.GT.BETXX)                                           GO TO 10
+      BETREJ=XX
+      RETURN
+  500 FORMAT(' XMIN<XMAX IN BETREJ STOP ',2F10.5)
+      END
+*-- Author :
+C
+C+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+C
+      FUNCTION MCIHAD(MCIND)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+C*** CALCULATION OF THE PARTICLE INDEX ACCORDING TO THE PDG PROPOSAL.
+C    MCIHAD PARTICLE NUMBER AS IN DECAY, BAMJET, HADEVT, FLUKA ETC.
+C    MCIND  PDG PARTICLE NUMBER
+      INTEGER HAMCIN
+      COMMON /HAMCIN/ IAMCIN(410)
+      IH=0
+      MCIHAD=0
+      IF((MCIND.EQ.0).OR.(MCIND.GT.70000))RETURN
+      DO 10 I=1,410
+        IH=I
+        IF (IAMCIN(I).EQ.MCIND)                                 GO TO 20
+   10 CONTINUE
+   20 CONTINUE
+      MCIHAD=IH
+      RETURN
+      END
+*-- Author :
+C
+C+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+C
+      FUNCTION MPDGHA(MCIND)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+C*** CALCULATION OF THE PARTICLE INDEX ACCORDING TO THE PDG PROPOSAL.
+C    MCIND  PARTICLE NUMBER AS IN DECAY, BAMJET, HADEVT, FLUKA ETC.
+C    MPDGHA PDG PARTICLE NUMBER
+      INTEGER HAMCIN
+      COMMON /HAMCIN/ IAMCIN(410)
+      MPDGHA=IAMCIN(MCIND)
+      RETURN
+      END
+*-- Author :
+C---------------------------------
+      BLOCK DATA RADINI
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+      INTEGER HAMCIN
+      COMMON /RHAMCIN/ HAMCIN(200)
+      DATA HAMCIN/
+     *2212,-2212,-11,11,12,   -12,22,2112,-2112,-13,
+     *13,130,211,-211,321,   -321,3122,-3122,310,3112,
+     *3222,3212,111,311,-311,   0,0,0,0,0,
+     *221,213,113,-213,223,   323,313,-323,-313,99999,
+     *99999,99999,99999,30323,30313,   -30323,-30313,3224,3214,3114,
+     *3216,3218,2224,2214,2114,   1114,12224,12214,12114,11114,
+     *12212,12112,22212,22112,99999,99999,-2224,-2214,-2114,-1114,
+     *10*99999,
+     *10*99999,
+     *4*99999,331,333,3322,3312,-3222,-3212,
+     *-3112,-3322,-3312,3224,3214,3114,3324,3314,3334,-3114,
+     *-3214,-3224,-3324,-3314,-3334,421,411,-411,-421,431,
+     *-431,441,8*99999,
+     *6*99999,4122,4232,4132,4222,
+     *4212,4112,6*99999,-4122,-4232,
+     *-4132,-4222,-4212,-4112,6*99999,
+     *40*99999/
+      END
+
+
+C**********************************************************************
+      BLOCK DATA HADINI
+C**********************************************************************
+C
+C     conversion table BAMJET --> PDG
+C
+C**********************************************************************
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+      SAVE
+C  translation table version filled up by r.e. 25.01.94
+      COMMON /HAMCIN/ IAMCIN(410)
+C
+      DATA IAMCIN /
+     &2212,-2212,11,-11,12,              -12,22,2112,-2112,-13,
+     &13,130,211,-211,321,               -321,3122,-3122,310,3112,
+     &3222,3212,111,311,-311,            0,0,0,0,0,
+     &221,213,113,-213,223,              323,313,-323,-313,10323,
+     &10313,-10323,-10313,30323,30313,   -30323,-30313,3224,3214,3114,
+     &3216,3218,2224,2214,2114,          1114,12224,12214,12114,11114,
+     &12212,12112,22212,22112,32124,     31214,-2224,-2214,-2114,-1114,
+     &-12224,-12214,-12114,-11114,-2124, -1214,4*99999,
+     &5*99999,                           5*99999,
+     &4*99999,331,                       333,3322,3312,-3222,-3212,
+     &-3112,-3322,-3312,3224,3214,       3114,3324,3314,3334,-3224,
+     &-3214,-3114,-3324,-3314,-3334,     421,411,-411,-421,431,
+     &-431,441,423,413,-413,             -423,433,-433,20443,443,
+     &-15,15,16,-16,14,                  -14,4122,4232,4132,4222,
+     & 4212,4112,4322,4312,4332,          4422,4412,4432,-4122,-4232,
+     & -4132,-4222,-4212,-4112,-4322,     -4312,-4332,-4422,-4412,-4432,
+     & 4224,4214,4114,4324,4314,          4334,4424,4414,4434,4444,
+     & -4224,-4214,-4114,-4324,-4314,     -4334,-4424,-4414,-4434,-4444,
+     &5*99999 , 20211,20111,-20211,99999,20321,
+     &-20321,20311,-20311,7*99999 ,
+     &7*99999,12212,12112,99999,
+     &115 ,215 ,-215 ,225 ,315 ,-315 ,325 ,-325 ,335 ,415 ,
+     &-415 ,425 ,-425 ,435 ,-435 ,445 ,511 ,-511 ,513 ,-513 ,
+     &515 ,-515 ,521 ,-521 ,523 ,-523 ,525 ,-525 ,531 ,-531 ,
+     &533 ,-533 ,535 ,-535 ,551 ,553 ,555 ,661 ,663 ,665 ,
+     &5112,-5112,5114,-5114,5122,-5122,5132,-5132,5212,-5212,
+     &5214 ,-5214,5222,-5222,5224,-5224,5232,-5232,5312,-5312,
+     &5314 ,-5314,5322,-5322,5324,-5324,5332,-5332,5334,-5334,
+     &10111 ,10113,10211,-10211,10213,-10213,10221,10223,
+     &10311,-10311,
+     & 10321,-10321,10331,10333,10411,-10411,10413,-10413,
+     &10421,-10421,
+     & 10423,-10423,10431,-10431,10433,10433,10411,10443,
+     &10511,-10511,
+     & 10513,-10513,10521,-10521,10523,-10523,10531,-10531,
+     &10533,-10533,
+     & 10551,10553,10661,10663,20113,20213,-20213,20223,
+     &20313,-20313,
+     & 20323,-20323,20333,20413,-20413,20423,-20423,20433,
+     &-20433,20443,
+     & 20513,-20513,20523,-20523,20533,-20533,20553,20663,
+     *99999,99999,
+     &40*99999 ,
+     &1,-1,2,-2,3,-3,4,-4,5,-5,
+     &6,-6,21,23,24,-24,25,99999,99999,99999/
+C
+      END
+C
+*-- Author :
+C
+C+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+C
+      FUNCTION MCHAD(ITDTU)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+C*** CALCULATION OF THE PARTICLE INDEX TO BE USED FOR HADRIN
+C                                        IN SECONDARY COLLISIONS
+C    ITDTU  PARTICLE NUMBER AS IN DECAY, BAMJET, HADEVT, FLUKA ETC.
+C    MCHAD  PARTICLE NUMBER TO BE USED IN HADRIN
+      DIMENSION ITRANS(210)
+      DATA ITRANS / 1, 2, -1, -1, -1, -1, -1, 8, 9, -1, -1, 24, 13, 14,
+     +15, 16, 8, 9, 25, 8, 1, 8, 23, 24, 25, -1, -1, -1, -1, -1, 23, 13,
+     +23, 14, 23, 15, 24, 16, 25, 15, 24, 16, 25, 15, 24, 16, 25, 1, 8,
+     +8, 8, 1, 1, 1, 8, 8, 1, 1, 8, 8, 1, 8, 1, 8, 1, 8, 2, 2, 9, 9, 2,
+     +2, 9, 9, 2, 9, 1, 13, 23, 14, 1, 1, 8, 8, 1, 1, 23, 14, 1, 8, 1,
+     +8, 1, 8, 23, 23, 8, 8, 2, 9, 9, 9, 9, 1, 8, 8, 8, 8, 8, 2, 9, 9,
+     +9, 9, 9, 85*- 1,7*-1,1,8,-1/
+C
+      MCHAD=ITRANS(ITDTU)
+      RETURN
+      END
+*-- Author :
+C
+C++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+C
+      SUBROUTINE  DTRANS(XO,YO,ZO,CDE,SDE,SFE,CFE,X,Y,Z)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+C  NEW TRANS VERSION OCTOBER 1987  J.RANFT
+C  ROTATION OF COORDINATE FRAME (1) DE RORATION AROUND Y AXIS
+C                               (2) FE ROTATION AROUND Z AXIS
+      X= CDE*CFE*XO-SFE*YO+SDE*CFE*ZO
+      Y= CDE*SFE*XO+CFE*YO+SDE*SFE*ZO
+      Z=-SDE    *XO       +CDE    *ZO
+      RETURN
+      END
+*-- Author :
+C
+C++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+C
+C     SUBROUTINE DALTRA(GA,BGX,BGY,BGZ,PCX,PCY,PCZ,EC,P,PX,PY,PZ,E)
+C     IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+C*** ARBITRARY LORENTZ T\RANSFORM
+C     HUGE=1.D15
+C     EP=PCX*BGX+PCY*BGY+PCZ*BGZ
+C     PE=EP/(GA+1.)+EC
+C     PX=PC X+BG X*PE
+C     PY=PC Y+BG Y*PE
+C     PZ=PC Z+BG Z*PE
+C     PX=MIN(HUGE,MAX(-HUGE,P X))
+C     PY=MIN(HUGE,MAX(-HUGE,P Y))
+C     PZ=MIN(HUGE,MAX(-HUGE,P Z))
+C     P=SQRT(PX*PX+PY*PY+PZ*PZ)
+C     E=GA*EC+EP
+C     RETURN
+C     END
+*===daltra=============================================================*
+*
+      SUBROUTINE DALTRA(GA,BGX,BGY,BGZ,PCX,PCY,PCZ,EC,P,PX,PY,PZ,E)
+ 
+************************************************************************
+* Arbitrary Lorentz-transformation.                                    *
+* Adopted from the original by S. Roesler. This version dated 15.01.95 *
+************************************************************************
+ 
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+      PARAMETER (HUGE=1.0D50,ONE=1.0D0)
+ 
+      EP = PCX*BGX+PCY*BGY+PCZ*BGZ
+      PE = EP/(GA+ONE)+EC
+      PX = PCX+BGX*PE
+      PY = PCY+BGY*PE
+      PZ = PCZ+BGZ*PE
+      PX = MIN(HUGE,MAX(-HUGE,PX))
+      PY = MIN(HUGE,MAX(-HUGE,PY))
+      PZ = MIN(HUGE,MAX(-HUGE,PZ))
+      P  = SQRT(PX*PX+PY*PY+PZ*PZ)
+      E  = GA*EC+EP
+ 
+      RETURN
+      END
+*-- Author :
+C
+C+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+C
+      SUBROUTINE FALTRA(GA,BGA,CX,CY,CZ,COD,COF,SIF,PC,EC,P,PX,PY,PZ,E)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+      BGX=BGA*CX
+      BGY=BGA*CY
+      BGZ=BGA*CZ
+      COD2=COD*COD
+      IF (COD2.GT.0.999999D0) COD2=0.999999D0
+      SID=SQRT(1.-COD2)*PC
+      PCX=SID*COF
+      PCY=SID*SIF
+      PCZ=COD*PC
+      EP=PCX*BGX+PCY*BGY+PCZ*BGZ
+      PE=EP/(GA+1.)+EC
+      PX=PCX+BGX*PE
+      PY=PCY+BGY*PE
+      PZ=PCZ+BGZ*PE
+      P=SQRT(PX*PX+PY*PY+PZ*PZ)
+      PM=1./P
+      PX=PX*PM
+      PY=PY*PM
+      PZ=PZ*PM
+      E=GA*EC+EP
+      RETURN
+      END
+*-- Author :
+C
+C+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+C
+      SUBROUTINE DPOLI(CS,SI)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+      U=RNDM(V)
+      CS=RNDM(VV)
+      IF (U.LT.0.5D0) CS=-CS
+      SI=SQRT(1.-CS*CS+1.D-10)
+      RETURN
+      END
+*-- Author :
+C
+C+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+C
+      SUBROUTINE DFERMI(GPART)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+      DIMENSION G(3)
+      DO 10 I=1,3
+        G(I)=RNDM(G(I))
+   10 CONTINUE
+C
+C      FIND LARGEST OF 3 RANDOM NUMBERS
+C
+      IF (G(3).LT.G(2))                                         GO TO 40
+      IF (G(3).LT.G(1))                                         GO TO 30
+      GPART=G(3)
+   20 RETURN
+   30 GPART=G(1)
+                                                                GO TO 20
+   40 IF (G(2).LT.G(1))                                         GO TO 30
+      GPART=G(2)
+                                                                GO TO 20
+      END
+*-- Author :
+C
+C+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+C--------------------------------------------------------------
+C
+C                             GQUAD.FOR
+C
+C----------------------------------------------------------------
+      DOUBLE PRECISION FUNCTION GQUAD(F,AX,BX,NX)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+C     N-POINT GAUSSIAN QUADRATURE OF FUNCTION F OVER INTERVAL (AX,BX).
+C
+      EXTERNAL F
+      COMMON /GQCOM/A(273),X(273),KTAB(96)
+C
+      CALL D106BD
+C-----TEST N
+      N=NX
+      ALPHA=0.5*(BX+AX)
+      BETA=0.5*(BX-AX)
+      IF(N.LT.1)                                                GO TO 50
+      IF(N.NE.1)                                                GO TO 10
+      GQUAD=(BX-AX)*F(ALPHA)
+      RETURN
+C
+   10 IF(N.LE.16)                                               GO TO 20
+      IF(N.EQ.20)                                               GO TO 20
+      IF(N.EQ.24)                                               GO TO 20
+      IF(N.EQ.32)                                               GO TO 20
+      IF(N.EQ.40)                                               GO TO 20
+      IF(N.EQ.48)                                               GO TO 20
+      IF(N.EQ.64)                                               GO TO 20
+      IF(N.EQ.80)                                               GO TO 20
+      IF(N.EQ.96)                                               GO TO 20
+                                                                GO TO 50
+C
+C----- SET K EQUAL TO INITIAL SUBSCRIPT AND INTEGRATE
+   20 K=KTAB(N)
+      M=N/2
+      SUM=0.0
+      JMAX=K-1+M
+C
+      DO 30 J=K,JMAX
+        DELTA=BETA*X(J)
+        SUM=SUM+A(J)*(F(ALPHA+DELTA)+F(ALPHA-DELTA))
+   30 CONTINUE
+C
+      IF(N-M-M.EQ.0)                                            GO TO 40
+      JMID=K+M
+      SUM=SUM+A(JMID)*F(ALPHA)
+   40 GQUAD=BETA*SUM
+      RETURN
+C
+   50 GQUAD=0.0
+      ZN=N
+      WRITE(6, 500)ZN
+      RETURN
+C
+  500 FORMAT( 42H GQUAD ... N HAS THE NON-PERMISSIBLE VALUE ,E11. 3)
+      END
+*-- Author :
+      SUBROUTINE GSET(AX,BX,NX,Z,W)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+C     N-POINT GAUSS ZEROS AND WEIGHTS FOR THE INTERVAL (AX,BX) ARE
+C           STORED IN  ARRAYS Z AND W RESPECTIVELY.
+C
+      COMMON /GQCOM/A(273),X(273),KTAB(96)
+      DIMENSION Z(192),W(192)
+C
+      CALL D106BD
+C-----TEST N
+      N=NX
+      ALPHA=0.5*(BX+AX)
+      BETA=0.5*(BX-AX)
+      IF(N.LT.1)                                                GO TO 40
+      IF(N.NE.1)                                                GO TO 10
+      Z(1)=ALPHA
+      W(1)=BX-AX
+      RETURN
+C
+   10 IF(N.LE.16)                                               GO TO 20
+      IF(N.EQ.20)                                               GO TO 20
+      IF(N.EQ.24)                                               GO TO 20
+      IF(N.EQ.32)                                               GO TO 20
+      IF(N.EQ.40)                                               GO TO 20
+      IF(N.EQ.48)                                               GO TO 20
+      IF(N.EQ.64)                                               GO TO 20
+      IF(N.EQ.80)                                               GO TO 20
+      IF(N.EQ.96)                                               GO TO 20
+                                                                GO TO 40
+C
+C----- SET K EQUAL TO INITIAL SUBSCRIPT AND STORE RESULTS
+   20 K=KTAB(N)
+      M=N/2
+C
+      DO 30 J=1,M
+        JTAB=K-1+J
+        WTEMP=BETA*A(JTAB)
+        DELTA=BETA*X(JTAB)
+        Z(J)=ALPHA-DELTA
+        W(J)=WTEMP
+        JP=N+1-J
+        Z(JP)=ALPHA+DELTA
+        W(JP)=WTEMP
+   30 CONTINUE
+C
+      IF((N-M-M).EQ.0) RETURN
+      Z(M+1)=ALPHA
+      JMID=K+M
+      W(M+1)=BETA*A(JMID)
+      RETURN
+C
+   40 ZN=N
+      WRITE(6, 500)ZN
+      RETURN
+C
+  500 FORMAT( 41H GSET ... N HAS THE NON-PERMISSIBLE VALUE ,E11. 3)
+      END
+*-- Author :
+      SUBROUTINE D106BD
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+      COMMON /GQCOM/ B(273),Y(273),LTAB(96)
+      DIMENSION      A(273),X(273),KTAB(96)
+C
+C-----TABLE OF INITIAL SUBSCRIPTS FOR N=2(1)16(4)96
+      DATA KTAB(2)/1/
+      DATA KTAB(3)/2/
+      DATA KTAB(4)/4/
+      DATA KTAB(5)/6/
+      DATA KTAB(6)/9/
+      DATA KTAB(7)/12/
+      DATA KTAB(8)/16/
+      DATA KTAB(9)/20/
+      DATA KTAB(10)/25/
+      DATA KTAB(11)/30/
+      DATA KTAB(12)/36/
+      DATA KTAB(13)/42/
+      DATA KTAB(14)/49/
+      DATA KTAB(15)/56/
+      DATA KTAB(16)/64/
+      DATA KTAB(20)/72/
+      DATA KTAB(24)/82/
+      DATA KTAB(28)/82/
+      DATA KTAB(32)/94/
+      DATA KTAB(36)/94/
+      DATA KTAB(40)/110/
+      DATA KTAB(44)/110/
+      DATA KTAB(48)/130/
+      DATA KTAB(52)/130/
+      DATA KTAB(56)/130/
+      DATA KTAB(60)/130/
+      DATA KTAB(64)/154/
+      DATA KTAB(68)/154/
+      DATA KTAB(72)/154/
+      DATA KTAB(76)/154/
+      DATA KTAB(80)/186/
+      DATA KTAB(84)/186/
+      DATA KTAB(88)/186/
+      DATA KTAB(92)/186/
+      DATA KTAB(96)/226/
+C
+C-----TABLE OF ABSCISSAE (X) AND WEIGHTS (A) FOR INTERVAL (-1,+1).
+C
+C-----N=2
+      DATA X(1)/0.577350269189626  /, A(1)/1.000000000000000  /
+C-----N=3
+      DATA X(2)/0.774596669241483  /, A(2)/0.555555555555556  /
+      DATA X(3)/0.000000000000000  /, A(3)/0.888888888888889  /
+C-----N=4
+      DATA X(4)/0.861136311594053  /, A(4)/0.347854845137454  /
+      DATA X(5)/0.339981043584856  /, A(5)/0.652145154862546  /
+C-----N=5
+      DATA X(6)/0.906179845938664  /, A(6)/0.236926885056189  /
+      DATA X(7)/0.538469310105683  /, A(7)/0.478628670499366  /
+      DATA X(8)/0.000000000000000  /, A(8)/0.568888888888889  /
+C-----N=6
+      DATA X(9)/0.932469514203152  /, A(9)/0.171324492379170  /
+      DATA X(10)/0.661209386466265 /, A(10)/0.360761573048139 /
+      DATA X(11)/0.238619186083197 /, A(11)/0.467913934572691 /
+C-----N=7
+      DATA X(12)/0.949107912342759 /, A(12)/0.129484966168870 /
+      DATA X(13)/0.741531185599394 /, A(13)/0.279705391489277 /
+      DATA X(14)/0.405845151377397 /, A(14)/0.381830050505119 /
+      DATA X(15)/0.000000000000000 /, A(15)/0.417959183673469 /
+C-----N=8
+      DATA X(16)/0.960289856497536 /, A(16)/0.101228536290376 /
+      DATA X(17)/0.796666477413627 /, A(17)/0.222381034453374 /
+      DATA X(18)/0.525532409916329 /, A(18)/0.313706645877887 /
+      DATA X(19)/0.183434642495650 /, A(19)/0.362683783378362 /
+C-----N=9
+      DATA X(20)/0.968160239507626 /, A(20)/0.081274388361574 /
+      DATA X(21)/0.836031107326636 /, A(21)/0.180648160694857 /
+      DATA X(22)/0.613371432700590 /, A(22)/0.260610696402935 /
+      DATA X(23)/0.324253423403809 /, A(23)/0.312347077040003 /
+      DATA X(24)/0.000000000000000 /, A(24)/0.330239355001260 /
+C-----N=10
+      DATA X(25)/0.973906528517172 /, A(25)/0.066671344308688 /
+      DATA X(26)/0.865063366688985 /, A(26)/0.149451349150581 /
+      DATA X(27)/0.679409568299024 /, A(27)/0.219086362515982 /
+      DATA X(28)/0.433395394129247 /, A(28)/0.269266719309996 /
+      DATA X(29)/0.148874338981631 /, A(29)/0.295524224714753 /
+C-----N=11
+      DATA X(30)/0.978228658146057 /, A(30)/0.055668567116174 /
+      DATA X(31)/0.887062599768095 /, A(31)/0.125580369464905 /
+      DATA X(32)/0.730152005574049 /, A(32)/0.186290210927734 /
+      DATA X(33)/0.519096129206812 /, A(33)/0.233193764591990 /
+      DATA X(34)/0.269543155952345 /, A(34)/0.262804544510247 /
+      DATA X(35)/0.000000000000000 /, A(35)/0.272925086777901 /
+C-----N=12
+      DATA X(36)/0.981560634246719 /, A(36)/0.047175336386512 /
+      DATA X(37)/0.904117256370475 /, A(37)/0.106939325995318 /
+      DATA X(38)/0.769902674194305 /, A(38)/0.160078328543346 /
+      DATA X(39)/0.587317954286617 /, A(39)/0.203167426723066 /
+      DATA X(40)/0.367831498998180 /, A(40)/0.233492536538355 /
+      DATA X(41)/0.125233408511469 /, A(41)/0.249147045813403 /
+C-----N=13
+      DATA X(42)/0.984183054718588 /, A(42)/0.040484004765316 /
+      DATA X(43)/0.917598399222978 /, A(43)/0.092121499837728 /
+      DATA X(44)/0.801578090733310 /, A(44)/0.138873510219787 /
+      DATA X(45)/0.642349339440340 /, A(45)/0.178145980761946 /
+      DATA X(46)/0.448492751036447 /, A(46)/0.207816047536889 /
+      DATA X(47)/0.230458315955135 /, A(47)/0.226283180262897 /
+      DATA X(48)/0.000000000000000 /, A(48)/0.232551553230874 /
+C-----N=14
+      DATA X(49)/0.986283808696812 /, A(49)/0.035119460331752 /
+      DATA X(50)/0.928434883663574 /, A(50)/0.080158087159760 /
+      DATA X(51)/0.827201315069765 /, A(51)/0.121518570687903 /
+      DATA X(52)/0.687292904811685 /, A(52)/0.157203167158194 /
+      DATA X(53)/0.515248636358154 /, A(53)/0.185538397477938 /
+      DATA X(54)/0.319112368927890 /, A(54)/0.205198463721296 /
+      DATA X(55)/0.108054948707344 /, A(55)/0.215263853463158 /
+C-----N=15
+      DATA X(56)/0.987992518020485 /, A(56)/0.030753241996117 /
+      DATA X(57)/0.937273392400706 /, A(57)/0.070366047488108 /
+      DATA X(58)/0.848206583410427 /, A(58)/0.107159220467172 /
+      DATA X(59)/0.724417731360170 /, A(59)/0.139570677926154 /
+      DATA X(60)/0.570972172608539 /, A(60)/0.166269205816994 /
+      DATA X(61)/0.394151347077563 /, A(61)/0.186161000015562 /
+      DATA X(62)/0.201194093997435 /, A(62)/0.198431485327111 /
+      DATA X(63)/0.000000000000000 /, A(63)/0.202578241925561 /
+C-----N=16
+      DATA X(64)/0.989400934991650 /, A(64)/0.027152459411754 /
+      DATA X(65)/0.944575023073233 /, A(65)/0.062253523938648 /
+      DATA X(66)/0.865631202387832 /, A(66)/0.095158511682493 /
+      DATA X(67)/0.755404408355003 /, A(67)/0.124628971255534 /
+      DATA X(68)/0.617876244402644 /, A(68)/0.149595988816577 /
+      DATA X(69)/0.458016777657227 /, A(69)/0.169156519395003 /
+      DATA X(70)/0.281603550779259 /, A(70)/0.182603415044924 /
+      DATA X(71)/0.095012509837637 /, A(71)/0.189450610455069 /
+C-----N=20
+      DATA X(72)/0.993128599185094 /, A(72)/0.017614007139152 /
+      DATA X(73)/0.963971927277913 /, A(73)/0.040601429800386 /
+      DATA X(74)/0.912234428251325 /, A(74)/0.062672048334109 /
+      DATA X(75)/0.839116971822218 /, A(75)/0.083276741576704 /
+      DATA X(76)/0.746331906460150 /, A(76)/0.101930119817240 /
+      DATA X(77)/0.636053680726515 /, A(77)/0.118194531961518 /
+      DATA X(78)/0.510867001950827 /, A(78)/0.131688638449176 /
+      DATA X(79)/0.373706088715419 /, A(79)/0.142096109318382 /
+      DATA X(80)/0.227785851141645 /, A(80)/0.149172986472603 /
+      DATA X(81)/0.076526521133497 /, A(81)/0.152753387130725 /
+C-----N=24
+      DATA X(82)/0.995187219997021 /, A(82)/0.012341229799987 /
+      DATA X(83)/0.974728555971309 /, A(83)/0.028531388628933 /
+      DATA X(84)/0.938274552002732 /, A(84)/0.044277438817419 /
+      DATA X(85)/0.886415527004401 /, A(85)/0.059298584915436 /
+      DATA X(86)/0.820001985973902 /, A(86)/0.073346481411080 /
+      DATA X(87)/0.740124191578554 /, A(87)/0.086190161531953 /
+      DATA X(88)/0.648093651936975 /, A(88)/0.097618652104113 /
+      DATA X(89)/0.545421471388839 /, A(89)/0.107444270115965 /
+      DATA X(90)/0.433793507626045 /, A(90)/0.115505668053725 /
+      DATA X(91)/0.315042679696163 /, A(91)/0.121670472927803 /
+      DATA X(92)/0.191118867473616 /, A(92)/0.125837456346828 /
+      DATA X(93)/0.064056892862605 /, A(93)/0.127938195346752 /
+C-----N=32
+      DATA X(94)/0.997263861849481 /, A(94)/0.007018610009470 /
+      DATA X(95)/0.985611511545268 /, A(95)/0.016274394730905 /
+      DATA X(96)/0.964762255587506 /, A(96)/0.025392065309262 /
+      DATA X(97)/0.934906075937739 /, A(97)/0.034273862913021 /
+      DATA X(98)/0.896321155766052 /, A(98)/0.042835898022226 /
+      DATA X(99)/0.849367613732569 /, A(99)/0.050998059262376 /
+      DATA X(100)/0.794483795967942/, A(100)/0.058684093478535/
+      DATA X(101)/0.732182118740289/, A(101)/0.065822222776361/
+      DATA X(102)/0.663044266930215/, A(102)/0.072345794108848/
+      DATA X(103)/0.587715757240762/, A(103)/0.078193895787070/
+      DATA X(104)/0.506899908932229/, A(104)/0.083311924226946/
+      DATA X(105)/0.421351276130635/, A(105)/0.087652093004403/
+      DATA X(106)/0.331868602282127/, A(106)/0.091173878695763/
+      DATA X(107)/0.239287362252137/, A(107)/0.093844399080804/
+      DATA X(108)/0.144471961582796/, A(108)/0.095638720079274/
+      DATA X(109)/0.048307665687738/, A(109)/0.096540088514727/
+C-----N=40
+      DATA X(110)/0.998237709710559/, A(110)/0.004521277098533/
+      DATA X(111)/0.990726238699457/, A(111)/0.010498284531152/
+      DATA X(112)/0.977259949983774/, A(112)/0.016421058381907/
+      DATA X(113)/0.957916819213791/, A(113)/0.022245849194166/
+      DATA X(114)/0.932812808278676/, A(114)/0.027937006980023/
+      DATA X(115)/0.902098806968874/, A(115)/0.033460195282547/
+      DATA X(116)/0.865959503212259/, A(116)/0.038782167974472/
+      DATA X(117)/0.824612230833311/, A(117)/0.043870908185673/
+      DATA X(118)/0.778305651426519/, A(118)/0.048695807635072/
+      DATA X(119)/0.727318255189927/, A(119)/0.053227846983936/
+      DATA X(120)/0.671956684614179/, A(120)/0.057439769099391/
+      DATA X(121)/0.612553889667980/, A(121)/0.061306242492928/
+      DATA X(122)/0.549467125095128/, A(122)/0.064804013456601/
+      DATA X(123)/0.483075801686178/, A(123)/0.067912045815233/
+      DATA X(124)/0.413779204371605/, A(124)/0.070611647391286/
+      DATA X(125)/0.341994090825758/, A(125)/0.072886582395804/
+      DATA X(126)/0.268152185007253/, A(126)/0.074723169057968/
+      DATA X(127)/0.192697580701371/, A(127)/0.076110361900626/
+      DATA X(128)/0.116084070675255/, A(128)/0.077039818164247/
+      DATA X(129)/0.038772417506050/, A(129)/0.077505947978424/
+C-----N=48
+      DATA X(130)/0.998771007252426/, A(130)/0.003153346052305/
+      DATA X(131)/0.993530172266350/, A(131)/0.007327553901276/
+      DATA X(132)/0.984124583722826/, A(132)/0.011477234579234/
+      DATA X(133)/0.970591592546247/, A(133)/0.015579315722943/
+      DATA X(134)/0.952987703160430/, A(134)/0.019616160457355/
+      DATA X(135)/0.931386690706554/, A(135)/0.023570760839324/
+      DATA X(136)/0.905879136715569/, A(136)/0.027426509708356/
+      DATA X(137)/0.876572020274247/, A(137)/0.031167227832798/
+      DATA X(138)/0.843588261624393/, A(138)/0.034777222564770/
+      DATA X(139)/0.807066204029442/, A(139)/0.038241351065830/
+      DATA X(140)/0.767159032515740/, A(140)/0.041545082943464/
+      DATA X(141)/0.724034130923814/, A(141)/0.044674560856694/
+      DATA X(142)/0.677872379632663/, A(142)/0.047616658492490/
+      DATA X(143)/0.628867396776513/, A(143)/0.050359035553854/
+      DATA X(144)/0.577224726083972/, A(144)/0.052890189485193/
+      DATA X(145)/0.523160974722233/, A(145)/0.055199503699984/
+      DATA X(146)/0.466902904750958/, A(146)/0.057277292100403/
+      DATA X(147)/0.408686481990716/, A(147)/0.059114839698395/
+      DATA X(148)/0.348755886292160/, A(148)/0.060704439165893/
+      DATA X(149)/0.287362487355455/, A(149)/0.062039423159892/
+      DATA X(150)/0.224763790394689/, A(150)/0.063114192286254/
+      DATA X(151)/0.161222356068891/, A(151)/0.063924238584648/
+      DATA X(152)/0.097004699209462/, A(152)/0.064466164435950/
+      DATA X(153)/0.032380170962869/, A(153)/0.064737696812683/
+C-----N=64
+      DATA X(154)/0.999305041735772/, A(154)/0.001783280721696/
+      DATA X(155)/0.996340116771955/, A(155)/0.004147033260562/
+      DATA X(156)/0.991013371476744/, A(156)/0.006504457968978/
+      DATA X(157)/0.983336253884625/, A(157)/0.008846759826363/
+      DATA X(158)/0.973326827789910/, A(158)/0.011168139460131/
+      DATA X(159)/0.961008799652053/, A(159)/0.013463047896718/
+      DATA X(160)/0.946411374858402/, A(160)/0.015726030476024/
+      DATA X(161)/0.929569172131939/, A(161)/0.017951715775697/
+      DATA X(162)/0.910522137078502/, A(162)/0.020134823153530/
+      DATA X(163)/0.889315445995114/, A(163)/0.022270173808383/
+      DATA X(164)/0.865999398154092/, A(164)/0.024352702568710/
+      DATA X(165)/0.840629296252580/, A(165)/0.026377469715054/
+      DATA X(166)/0.813265315122797/, A(166)/0.028339672614259/
+      DATA X(167)/0.783972358943341/, A(167)/0.030234657072402/
+      DATA X(168)/0.752819907260531/, A(168)/0.032057928354851/
+      DATA X(169)/0.719881850171610/, A(169)/0.033805161837141/
+      DATA X(170)/0.685236313054233/, A(170)/0.035472213256882/
+      DATA X(171)/0.648965471254657/, A(171)/0.037055128540240/
+      DATA X(172)/0.611155355172393/, A(172)/0.038550153178615/
+      DATA X(173)/0.571895646202634/, A(173)/0.039953741132720/
+      DATA X(174)/0.531279464019894/, A(174)/0.041262563242623/
+      DATA X(175)/0.489403145707052/, A(175)/0.042473515123653/
+      DATA X(176)/0.446366017253464/, A(176)/0.043583724529323/
+      DATA X(177)/0.402270157963991/, A(177)/0.044590558163756/
+      DATA X(178)/0.357220158337668/, A(178)/0.045491627927418/
+      DATA X(179)/0.311322871990210/, A(179)/0.046284796581314/
+      DATA X(180)/0.264687162208767/, A(180)/0.046968182816210/
+      DATA X(181)/0.217423643740007/, A(181)/0.047540165714830/
+      DATA X(182)/0.169644420423992/, A(182)/0.047999388596458/
+      DATA X(183)/0.121462819296120/, A(183)/0.048344762234802/
+      DATA X(184)/0.072993121787799/, A(184)/0.048575467441503/
+      DATA X(185)/0.024350292663424/, A(185)/0.048690957009139/
+C-----N=80
+      DATA X(186)/0.999553822651630/, A(186)/0.001144950003186/
+      DATA X(187)/0.997649864398237/, A(187)/0.002663533589512/
+      DATA X(188)/0.994227540965688/, A(188)/0.004180313124694/
+      DATA X(189)/0.989291302499755/, A(189)/0.005690922451403/
+      DATA X(190)/0.982848572738629/, A(190)/0.007192904768117/
+      DATA X(191)/0.974909140585727/, A(191)/0.008683945269260/
+      DATA X(192)/0.965485089043799/, A(192)/0.010161766041103/
+      DATA X(193)/0.954590766343634/, A(193)/0.011624114120797/
+      DATA X(194)/0.942242761309872/, A(194)/0.013068761592401/
+      DATA X(195)/0.928459877172445/, A(195)/0.014493508040509/
+      DATA X(196)/0.913263102571757/, A(196)/0.015896183583725/
+      DATA X(197)/0.896675579438770/, A(197)/0.017274652056269/
+      DATA X(198)/0.878722567678213/, A(198)/0.018626814208299/
+      DATA X(199)/0.859431406663111/, A(199)/0.019950610878141/
+      DATA X(200)/0.838831473580255/, A(200)/0.021244026115782/
+      DATA X(201)/0.816954138681463/, A(201)/0.022505090246332/
+      DATA X(202)/0.793832717504605/, A(202)/0.023731882865930/
+      DATA X(203)/0.769502420135041/, A(203)/0.024922535764115/
+      DATA X(204)/0.744000297583597/, A(204)/0.026075235767565/
+      DATA X(205)/0.717365185362099/, A(205)/0.027188227500486/
+      DATA X(206)/0.689637644342027/, A(206)/0.028259816057276/
+      DATA X(207)/0.660859898986119/, A(207)/0.029288369583267/
+      DATA X(208)/0.631075773046871/, A(208)/0.030272321759557/
+      DATA X(209)/0.600330622829751/, A(209)/0.031210174188114/
+      DATA X(210)/0.568671268122709/, A(210)/0.032100498673487/
+      DATA X(211)/0.536145920897131/, A(211)/0.032941939397645/
+      DATA X(212)/0.502804111888784/, A(212)/0.033733214984611/
+      DATA X(213)/0.468696615170544/, A(213)/0.034473120451753/
+      DATA X(214)/0.433875370831756/, A(214)/0.035160529044747/
+      DATA X(215)/0.398393405881969/, A(215)/0.035794393953416/
+      DATA X(216)/0.362304753499487/, A(216)/0.036373749905835/
+      DATA X(217)/0.325664370747701/, A(217)/0.036897714638276/
+      DATA X(218)/0.288528054884511/, A(218)/0.037365490238730/
+      DATA X(219)/0.250952358392272/, A(219)/0.037776364362001/
+      DATA X(220)/0.212994502857666/, A(220)/0.038129711314477/
+      DATA X(221)/0.174712291832646/, A(221)/0.038424993006959/
+      DATA X(222)/0.136164022809143/, A(222)/0.038661759774076/
+      DATA X(223)/0.097408398441584/, A(223)/0.038839651059051/
+      DATA X(224)/0.058504437152420/, A(224)/0.038958395962769/
+      DATA X(225)/0.019511383256793/, A(225)/0.039017813656306/
+C-----N=96
+      DATA X(226)/0.999689503883230/, A(226)/0.000796792065552/
+      DATA X(227)/0.998364375863181/, A(227)/0.001853960788946/
+      DATA X(228)/0.995981842987209/, A(228)/0.002910731817934/
+      DATA X(229)/0.992543900323762/, A(229)/0.003964554338444/
+      DATA X(230)/0.988054126329623/, A(230)/0.005014202742927/
+      DATA X(231)/0.982517263563014/, A(231)/0.006058545504235/
+      DATA X(232)/0.975939174585136/, A(232)/0.007096470791153/
+      DATA X(233)/0.968326828463264/, A(233)/0.008126876925698/
+      DATA X(234)/0.959688291448742/, A(234)/0.009148671230783/
+      DATA X(235)/0.950032717784437/, A(235)/0.010160770535008/
+      DATA X(236)/0.939370339752755/, A(236)/0.011162102099838/
+      DATA X(237)/0.927712456722308/, A(237)/0.012151604671088/
+      DATA X(238)/0.915071423120898/, A(238)/0.013128229566961/
+      DATA X(239)/0.901460635315852/, A(239)/0.014090941772314/
+      DATA X(240)/0.886894517402420/, A(240)/0.015038721026994/
+      DATA X(241)/0.871388505909296/, A(241)/0.015970562902562/
+      DATA X(242)/0.854959033434601/, A(242)/0.016885479864245/
+      DATA X(243)/0.837623511228187/, A(243)/0.017782502316045/
+      DATA X(244)/0.819400310737931/, A(244)/0.018660679627411/
+      DATA X(245)/0.800308744139140/, A(245)/0.019519081140145/
+      DATA X(246)/0.780369043867433/, A(246)/0.020356797154333/
+      DATA X(247)/0.759602341176647/, A(247)/0.021172939892191/
+      DATA X(248)/0.738030643744400/, A(248)/0.021966644438744/
+      DATA X(249)/0.715676812348967/, A(249)/0.022737069658329/
+      DATA X(250)/0.692564536642171/, A(250)/0.023483399085926/
+      DATA X(251)/0.668718310043916/, A(251)/0.024204841792364/
+      DATA X(252)/0.644163403784967/, A(252)/0.024900633222483/
+      DATA X(253)/0.618925840125468/, A(253)/0.025570036005349/
+      DATA X(254)/0.593032364777572/, A(254)/0.026212340735672/
+      DATA X(255)/0.566510418561397/, A(255)/0.026826866725591/
+      DATA X(256)/0.539388108324357/, A(256)/0.027412962726029/
+      DATA X(257)/0.511694177154667/, A(257)/0.027970007616848/
+      DATA X(258)/0.483457973920596/, A(258)/0.028497411065085/
+      DATA X(259)/0.454709422167743/, A(259)/0.028994614150555/
+      DATA X(260)/0.425478988407300/, A(260)/0.029461089958167/
+      DATA X(261)/0.395797649828908/, A(261)/0.029896344136328/
+      DATA X(262)/0.365696861472313/, A(262)/0.030299915420827/
+      DATA X(263)/0.335208522892625/, A(263)/0.030671376123669/
+      DATA X(264)/0.304364944354496/, A(264)/0.031010332586313/
+      DATA X(265)/0.273198812591049/, A(265)/0.031316425596861/
+      DATA X(266)/0.241743156163840/, A(266)/0.031589330770727/
+      DATA X(267)/0.210031310460567/, A(267)/0.031828758894411/
+      DATA X(268)/0.178096882367618/, A(268)/0.032034456231992/
+      DATA X(269)/0.145973714654896/, A(269)/0.032206204794030/
+      DATA X(270)/0.113695850110665/, A(270)/0.032343822568575/
+      DATA X(271)/0.081297495464425/, A(271)/0.032447163714064/
+      DATA X(272)/0.048812985136049/, A(272)/0.032516118713868/
+      DATA X(273)/0.016276744849602/, A(273)/0.032550614492363/
+      DATA IBD/0/
+      IF(IBD.NE.0) RETURN
+      IBD=1
+      DO 10 I=1,273
+        B(I) = A(I)
+   10 Y(I) = X(I)
+      DO 20 I=1,96
+   20 LTAB(I) = KTAB(I)
+      RETURN
+      END
+*-- Author :
+C*********************************************************************
+      DOUBLE PRECISION FUNCTION SAMSQX(X1,X2)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+C                       SAMPLING FROM F(X)=1/X**0.5 BETWEEN X1 AND X2
+      R=RNDM(V)
+      SAMSQX=(R*SQRT(X2)+(1.-R)*SQRT(X1))**2
+      RETURN
+      END
+C*********************************************************************
+      DOUBLE PRECISION FUNCTION SAMPEY(X1,X2)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+      DATA ISAMPE/1/
+C                             SAMPLING FROM F(X)=1/X BETWEEN X1 AND X2
+        R=RNDM(V)
+        AL1=LOG(X1)
+        AL2=LOG(X2)
+        SAMPEY=EXP((1.-R)*AL1+R*AL2)
+      RETURN
+      END
+C*********************************************************************
+      DOUBLE PRECISION FUNCTION SAMPEX(X1,X2)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+      DATA ISAMPE/1/
+C                             SAMPLING FROM F(X)=1/X BETWEEN X1 AND X2
+      IF(ISAMPE.EQ.0)THEN
+        R=RNDM(V)
+        AL1=LOG(X1)
+        AL2=LOG(X2)
+        SAMPEX=EXP((1.-R)*AL1+R*AL2)
+      ELSEIF(ISAMPE.EQ.1)THEN
+	SAMPEX=SAMSQX(X1,X2)
+      ENDIF
+      RETURN
+      END
+C*********************************************************************
+      DOUBLE PRECISION FUNCTION SAMPXB(X1,X2,B)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+C      Sampling x values between x1 and x2 from
+C      f(x)=1./SQRT(X**2+B**2)
+C
+      A1=LOG(X1+SQRT(X1**2+B**2))
+      A2=LOG(X2+SQRT(X2**2+B**2))
+      AN=A2-A1
+      A=AN*RNDM(V)+A1
+      BB=EXP(A)
+      SAMPXB=(BB**2-B**2)/(2.*BB)
+      RETURN
+      END
+C
+      SUBROUTINE SORTI(A,N)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+      DIMENSION A(N)
+      M=N
+   10 CONTINUE
+      M=N-1
+      IF(M.LE.0) RETURN
+      L=0
+      DO 20 I=1,M
+        J=I+1
+        IF (A(I).LE.A(J))                                   GO TO 20
+        B=A(I)
+        A(I)=A(J)
+        A(J)=B
+        L=1
+   20 CONTINUE
+      IF(L.EQ.1)                                           GO TO 10
+      RETURN
+      END
+*$ CREATE RM48.FOR
+*COPY RM48
+      SUBROUTINE RM48(RVEC,LENV)
+C     Double-precision version of
+C Universal random number generator proposed by Marsaglia and Zaman
+C in report FSU-SCRI-87-50
+C        based on RANMAR, modified by F. James, to generate vectors
+C        of pseudorandom numbers RVEC of length LENV, where the numbers
+C        in RVEC are numbers with at least 48-bit mantissas.
+C   Input and output entry points: RM48IN, RM48UT.
+C!!! ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+C!!!  Calling sequences for RM48:                                    ++
+C!!!      CALL RM48 (RVEC, LEN)     returns a vector RVEC of LEN     ++
+C!!!                   64-bit random floating point numbers between  ++
+C!!!                   zero and one.                                 ++
+C!!!      CALL RM48IN(I1,N1,N2)   initializes the generator from one ++
+C!!!                   64-bit integer I1, and number counts N1,N2    ++
+C!!!                  (for initializing, set N1=N2=0, but to restart ++
+C!!!                    a previously generated sequence, use values  ++
+C!!!                    output by RM48UT)                            ++
+C!!!      CALL RM48UT(I1,N1,N2)   outputs the value of the original  ++
+C!!!                  seed and the two number counts, to be used     ++
+C!!!                  for restarting by initializing to I1 and       ++
+C!!!                  skipping N2*100000000+N1 numbers.              ++
+C!!! ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+C for 32-bit machines, use IMPLICIT DOUBLE PRECISION
+C     INCLUDE '(DBLPRC)'
+*$ CREATE DBLPRC.ADD
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+      PARAMETER ( KALGNM = 2 )
+      PARAMETER ( ANGLGB = 5.0D-16 )
+      PARAMETER ( ANGLSQ = 2.5D-31 )
+      PARAMETER ( AXCSSV = 0.2D+16 )
+      PARAMETER ( ANDRFL = 1.0D-38 )
+      PARAMETER ( AVRFLW = 1.0D+38 )
+      PARAMETER ( AINFNT = 1.0D+30 )
+      PARAMETER ( AZRZRZ = 1.0D-30 )
+      PARAMETER ( EINFNT = +69.07755278982137 D+00 )
+      PARAMETER ( EZRZRZ = -69.07755278982137 D+00 )
+      PARAMETER ( ONEMNS = 0.999999999999999  D+00 )
+      PARAMETER ( ONEPLS = 1.000000000000001  D+00 )
+      PARAMETER ( CSNNRM = 2.0D-15 )
+      PARAMETER ( DMXTRN = 1.0D+08 )
+      PARAMETER ( ZERZER = 0.D+00 )
+      PARAMETER ( ONEONE = 1.D+00 )
+      PARAMETER ( TWOTWO = 2.D+00 )
+      PARAMETER ( THRTHR = 3.D+00 )
+      PARAMETER ( FOUFOU = 4.D+00 )
+      PARAMETER ( FIVFIV = 5.D+00 )
+      PARAMETER ( SIXSIX = 6.D+00 )
+      PARAMETER ( SEVSEV = 7.D+00 )
+      PARAMETER ( EIGEIG = 8.D+00 )
+      PARAMETER ( ANINEN = 9.D+00 )
+      PARAMETER ( TENTEN = 10.D+00 )
+      PARAMETER ( HLFHLF = 0.5D+00 )
+      PARAMETER ( ONETHI = ONEONE / THRTHR )
+      PARAMETER ( TWOTHI = TWOTWO / THRTHR )
+      PARAMETER ( ONEFOU = ONEONE / FOUFOU )
+      PARAMETER ( THRTWO = THRTHR / TWOTWO )
+      PARAMETER ( PIPIPI = 3.141592653589793238462643383279D+00 )
+      PARAMETER ( TWOPIP = 6.283185307179586476925286766559D+00 )
+      PARAMETER ( PIP5O2 = 7.853981633974483096156608458199D+00 )
+      PARAMETER ( PIPISQ = 9.869604401089358618834490999876D+00 )
+      PARAMETER ( PIHALF = 1.570796326794896619231321691640D+00 )
+      PARAMETER ( ERFA00 = 0.886226925452758013649083741671D+00 )
+      PARAMETER ( ENEPER = 2.718281828459045235360287471353D+00 )
+      PARAMETER ( SQRENT = 1.648721270700128146848650787814D+00 )
+      PARAMETER ( SQRSIX = 2.449489742783178098197284074706D+00 )
+      PARAMETER ( SQRSEV = 2.645751311064590590501615753639D+00 )
+      PARAMETER ( SQRT12 = 3.464101615137754587054892683012D+00 )
+      PARAMETER ( CLIGHT = 2.99792458         D+10 )
+      PARAMETER ( AVOGAD = 6.0221367          D+23 )
+      PARAMETER ( BOLTZM = 1.380658           D-23 )
+      PARAMETER ( AMELGR = 9.1093897          D-28 )
+      PARAMETER ( PLCKBR = 1.05457266         D-27 )
+      PARAMETER ( ELCCGS = 4.8032068          D-10 )
+      PARAMETER ( ELCMKS = 1.60217733         D-19 )
+      PARAMETER ( AMUGRM = 1.6605402          D-24 )
+      PARAMETER ( AMMUMU = 0.113428913        D+00 )
+      PARAMETER ( AMPRMU = 1.007276470        D+00 )
+      PARAMETER ( AMNEMU = 1.008664904        D+00 )
+      PARAMETER ( ALPFSC = 7.2973530791728595 D-03 )
+      PARAMETER ( FSCTO2 = 5.3251361962113614 D-05 )
+      PARAMETER ( FSCTO3 = 3.8859399018437826 D-07 )
+      PARAMETER ( FSCTO4 = 2.8357075508200407 D-09 )
+      PARAMETER ( PLABRC = 0.197327053        D+00 )
+      PARAMETER ( AMELCT = 0.51099906         D-03 )
+      PARAMETER ( AMUGEV = 0.93149432         D+00 )
+      PARAMETER ( AMMUON = 0.105658389        D+00 )
+      PARAMETER ( AMPRTN = 0.93827231         D+00 )
+      PARAMETER ( AMNTRN = 0.93956563         D+00 )
+      PARAMETER ( AMDEUT = 1.87561339         D+00 )
+      PARAMETER ( COUGFM = ELCCGS * ELCCGS / ELCMKS * 1.D-07 * 1.D+13
+     &                   * 1.D-09 )
+      PARAMETER ( RCLSEL = 2.8179409183694872 D-13 )
+      PARAMETER ( BLTZMN = 8.617385           D-14 )
+      PARAMETER ( GEVMEV = 1.0                D+03 )
+      PARAMETER ( EMVGEV = 1.0                D-03 )
+      PARAMETER ( ALGVMV = 6.90775527898214   D+00 )
+      PARAMETER ( RADDEG = 180.D+00 / PIPIPI )
+      PARAMETER ( DEGRAD = PIPIPI / 180.D+00 )
+      LOGICAL LGBIAS, LGBANA
+      COMMON / GLOBAL / LGBIAS, LGBANA
+C     INCLUDE '(DIMPAR)'
+*$ CREATE DIMPAR.ADD
+      PARAMETER ( MXXRGN = 5000 )
+      PARAMETER ( MXXMDF = 56   )
+      PARAMETER ( MXXMDE = 50   )
+      PARAMETER ( MFSTCK = 1000 )
+      PARAMETER ( MESTCK = 100  )
+      PARAMETER ( NALLWP = 39   )
+      PARAMETER ( MPDPDX = 8    )
+      PARAMETER ( ICOMAX = 180  )
+      PARAMETER ( NSTBIS = 304  )
+      PARAMETER ( IDMAXP = 210  )
+      PARAMETER ( IDMXDC = 620  )
+      PARAMETER ( MKBMX1 = 1    )
+      PARAMETER ( MKBMX2 = 1    )
+C     INCLUDE '(IOUNIT)'
+*$ CREATE IOUNIT.ADD
+      PARAMETER ( LUNIN  = 5  )
+      PARAMETER ( LUNOUT = 6  )
+      PARAMETER ( LUNERR = 15 )
+      PARAMETER ( LUNBER = 14 )
+      PARAMETER ( LUNECH = 8  )
+      PARAMETER ( LUNFLU = 13 )
+      PARAMETER ( LUNGEO = 16 )
+      PARAMETER ( LUNPGS = 12 )
+      PARAMETER ( LUNRAN = 2  )
+      PARAMETER ( LUNXSC = 9  )
+      PARAMETER ( LUNDET = 17 )
+      PARAMETER ( LUNRAY = 10 )
+      PARAMETER ( LUNRDB = 1  )
+*
+*     IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+*
+      DIMENSION RVEC(*)
+      COMMON/R48ST1/U(97),C,I97,J97
+      PARAMETER (MODCNS=1000000000)
+      SAVE CD, CM, TWOM24,  ZERO, ONE, NTOT, NTOT2, IJKL
+      DATA NTOT,NTOT2,IJKL/-1,0,0/
+C
+      IF (NTOT .GE. 0)  GO TO 50
+C
+C        Default initialization. User has called RM48 without RM48IN.
+      IJKL = 54217137
+      NTOT = 0
+      NTOT2 = 0
+      KALLED = 0
+      GO TO 1
+C
+      ENTRY      RM48IN(IJKLIN, NTOTIN,NTOT2N)
+C         Initializing routine for RM48, may be called before
+C         generating pseudorandom numbers with RM48.   The input
+C         values should be in the ranges:  0<=IJKLIN<=900 OOO OOO
+C                                          0<=NTOTIN<=999 999 999
+C                                          0<=NTOT2N<<999 999 999!
+C To get the standard values in Marsaglia's paper, IJKLIN=54217137
+C                                            NTOTIN,NTOT2N=0
+      IJKL = IJKLIN
+      NTOT = MAX(NTOTIN,0)
+      NTOT2= MAX(NTOT2N,0)
+      KALLED = 1
+C          always come here to initialize
+    1 CONTINUE
+      IJ = IJKL/30082
+      KL = IJKL - 30082*IJ
+      I = MOD(IJ/177, 177) + 2
+      J = MOD(IJ, 177)     + 2
+      K = MOD(KL/169, 178) + 1
+      L = MOD(KL, 169)
+      WRITE(LUNOUT,'(A,I10,2X,2I10)')
+     & ' RM48 INITIALIZED:',IJKL,NTOT,NTOT2
+CCC      PRINT '(A,4I10)', '   I,J,K,L= ',I,J,K,L
+      ONE = 1.D+00
+      HALF = 0.5D+00
+      ZERO = 0.D+00
+      DO 2 II= 1, 97
+      S = 0.D+00
+      T = HALF
+      DO 3 JJ= 1, 48
+         M = MOD(MOD(I*J,179)*K, 179)
+         I = J
+         J = K
+         K = M
+         L = MOD(53*L+1, 169)
+         IF (MOD(L*M,64) .GE. 32)  S = S+T
+    3    T = HALF*T
+    2 U(II) = S
+      TWOM24 = ONE
+      DO 4 I24= 1, 24
+    4 TWOM24 = HALF*TWOM24
+      C  =   362436.D+00*TWOM24
+      CD =  7654321.D+00*TWOM24
+      CM = 16777213.D+00*TWOM24
+      I97 = 97
+      J97 = 33
+C       Complete initialization by skipping
+C            (NTOT2*MODCNS + NTOT) random numbers
+      DO 45 LOOP2= 1, NTOT2+1
+      NOW = MODCNS
+      IF (LOOP2 .EQ. NTOT2+1)  NOW=NTOT
+      IF (NOW .GT. 0)  THEN
+      WRITE(LUNOUT,'(A,I15)') ' RM48IN SKIPPING OVER ',NOW
+          DO 40 IDUM = 1, NTOT
+          UNI = U(I97)-U(J97)
+          IF (UNI .LT. ZERO)  UNI=UNI+ONE
+          U(I97) = UNI
+          I97 = I97-1
+          IF (I97 .EQ. 0)  I97=97
+          J97 = J97-1
+          IF (J97 .EQ. 0)  J97=97
+          C = C - CD
+          IF (C .LT. ZERO)  C=C+CM
+   40     CONTINUE
+      ENDIF
+   45 CONTINUE
+      IF (KALLED .EQ. 1)  RETURN
+C
+C          Normal entry to generate LENV random numbers
+   50 CONTINUE
+      DO 100 IVEC= 1, LENV
+      UNI = U(I97)-U(J97)
+      IF (UNI .LT. ZERO)  UNI=UNI+ONE
+      U(I97) = UNI
+      I97 = I97-1
+      IF (I97 .EQ. 0)  I97=97
+      J97 = J97-1
+      IF (J97 .EQ. 0)  J97=97
+      C = C - CD
+      IF (C .LT. ZERO)  C=C+CM
+      UNI = UNI-C
+      IF (UNI .LT. ZERO) UNI=UNI+ONE
+      RVEC(IVEC) = UNI
+CC             Replace exact zeros by uniform distr. *2**-24
+C         IF (UNI .EQ. 0.)  THEN
+C         ZUNI = TWOM24*U(2)
+CC             An exact zero here is very unlikely, but let's be safe.
+C         IF (ZUNI .EQ. 0.) ZUNI= TWOM24*TWOM24
+C         RVEC(IVEC) = ZUNI
+C         ENDIF
+  100 CONTINUE
+      NTOT = NTOT + LENV
+         IF (NTOT .GE. MODCNS)  THEN
+         NTOT2 = NTOT2 + 1
+         NTOT = NTOT - MODCNS
+         ENDIF
+      RETURN
+C           Entry to output current status
+      ENTRY RM48UT(IJKLUT,NTOTUT,NTOT2T)
+      IJKLUT = IJKL
+      NTOTUT = NTOT
+      NTOT2T = NTOT2
+      RETURN
+C
+      ENTRY      RM48WR(IOSEED)
+C         Output routine for RM48, without skipping numbers
+      WRITE (IOSEED,'(2Z8)') NTOT,NTOT2
+      WRITE (IOSEED,'(2Z8,Z16)') I97,J97,C
+      WRITE (IOSEED,'(24(4Z16,/),Z16)') U
+      RETURN
+C
+      ENTRY      RM48RD(IOSEED)
+C         Initializing routine for RM48, without skipping numbers
+      READ (IOSEED,'(2Z8)') NTOT,NTOT2
+      READ (IOSEED,'(2Z8,Z16)') I97,J97,C
+      READ (IOSEED,'(24(4Z16,/),Z16)') U
+      CLOSE (UNIT=IOSEED)
+      IJKL = 54217137
+      IJ = IJKL/30082
+      KL = IJKL - 30082*IJ
+      I = MOD(IJ/177, 177) + 2
+      J = MOD(IJ, 177)     + 2
+      K = MOD(KL/169, 178) + 1
+      L = MOD(KL, 169)
+      WRITE (LUNOUT,'(A,I10,2X,2I10)')
+     &  ' RM48 INITIALIZED:',IJKL,NTOT,NTOT2
+CCC      PRINT '(A,4I10)', '   I,J,K,L= ',I,J,K,L
+      ONE  = 1.D+00
+      HALF = 0.5D+00
+      ZERO = 0.D+00
+      TWOM24 = ONE
+      DO 400 I24= 1, 24
+  400 TWOM24 = HALF*TWOM24
+      CD =  7654321.D+00*TWOM24
+      CM = 16777213.D+00*TWOM24
+      RETURN
+      END
+ 
+*$ CREATE RNDM.FOR
+*COPY RNDM
+*
+*===  rndm  ===========================================================*
+*
+      DOUBLE PRECISION FUNCTION RNDM (RDUMMY)
+ 
+C     INCLUDE '(DBLPRC)'
+*$ CREATE DBLPRC.ADD
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+      PARAMETER ( KALGNM = 2 )
+      PARAMETER ( ANGLGB = 5.0D-16 )
+      PARAMETER ( ANGLSQ = 2.5D-31 )
+      PARAMETER ( AXCSSV = 0.2D+16 )
+      PARAMETER ( ANDRFL = 1.0D-38 )
+      PARAMETER ( AVRFLW = 1.0D+38 )
+      PARAMETER ( AINFNT = 1.0D+30 )
+      PARAMETER ( AZRZRZ = 1.0D-30 )
+      PARAMETER ( EINFNT = +69.07755278982137 D+00 )
+      PARAMETER ( EZRZRZ = -69.07755278982137 D+00 )
+      PARAMETER ( ONEMNS = 0.999999999999999  D+00 )
+      PARAMETER ( ONEPLS = 1.000000000000001  D+00 )
+      PARAMETER ( CSNNRM = 2.0D-15 )
+      PARAMETER ( DMXTRN = 1.0D+08 )
+      PARAMETER ( ZERZER = 0.D+00 )
+      PARAMETER ( ONEONE = 1.D+00 )
+      PARAMETER ( TWOTWO = 2.D+00 )
+      PARAMETER ( THRTHR = 3.D+00 )
+      PARAMETER ( FOUFOU = 4.D+00 )
+      PARAMETER ( FIVFIV = 5.D+00 )
+      PARAMETER ( SIXSIX = 6.D+00 )
+      PARAMETER ( SEVSEV = 7.D+00 )
+      PARAMETER ( EIGEIG = 8.D+00 )
+      PARAMETER ( ANINEN = 9.D+00 )
+      PARAMETER ( TENTEN = 10.D+00 )
+      PARAMETER ( HLFHLF = 0.5D+00 )
+      PARAMETER ( ONETHI = ONEONE / THRTHR )
+      PARAMETER ( TWOTHI = TWOTWO / THRTHR )
+      PARAMETER ( ONEFOU = ONEONE / FOUFOU )
+      PARAMETER ( THRTWO = THRTHR / TWOTWO )
+      PARAMETER ( PIPIPI = 3.141592653589793238462643383279D+00 )
+      PARAMETER ( TWOPIP = 6.283185307179586476925286766559D+00 )
+      PARAMETER ( PIP5O2 = 7.853981633974483096156608458199D+00 )
+      PARAMETER ( PIPISQ = 9.869604401089358618834490999876D+00 )
+      PARAMETER ( PIHALF = 1.570796326794896619231321691640D+00 )
+      PARAMETER ( ERFA00 = 0.886226925452758013649083741671D+00 )
+      PARAMETER ( ENEPER = 2.718281828459045235360287471353D+00 )
+      PARAMETER ( SQRENT = 1.648721270700128146848650787814D+00 )
+      PARAMETER ( SQRSIX = 2.449489742783178098197284074706D+00 )
+      PARAMETER ( SQRSEV = 2.645751311064590590501615753639D+00 )
+      PARAMETER ( SQRT12 = 3.464101615137754587054892683012D+00 )
+      PARAMETER ( CLIGHT = 2.99792458         D+10 )
+      PARAMETER ( AVOGAD = 6.0221367          D+23 )
+      PARAMETER ( BOLTZM = 1.380658           D-23 )
+      PARAMETER ( AMELGR = 9.1093897          D-28 )
+      PARAMETER ( PLCKBR = 1.05457266         D-27 )
+      PARAMETER ( ELCCGS = 4.8032068          D-10 )
+      PARAMETER ( ELCMKS = 1.60217733         D-19 )
+      PARAMETER ( AMUGRM = 1.6605402          D-24 )
+      PARAMETER ( AMMUMU = 0.113428913        D+00 )
+      PARAMETER ( AMPRMU = 1.007276470        D+00 )
+      PARAMETER ( AMNEMU = 1.008664904        D+00 )
+      PARAMETER ( ALPFSC = 7.2973530791728595 D-03 )
+      PARAMETER ( FSCTO2 = 5.3251361962113614 D-05 )
+      PARAMETER ( FSCTO3 = 3.8859399018437826 D-07 )
+      PARAMETER ( FSCTO4 = 2.8357075508200407 D-09 )
+      PARAMETER ( PLABRC = 0.197327053        D+00 )
+      PARAMETER ( AMELCT = 0.51099906         D-03 )
+      PARAMETER ( AMUGEV = 0.93149432         D+00 )
+      PARAMETER ( AMMUON = 0.105658389        D+00 )
+      PARAMETER ( AMPRTN = 0.93827231         D+00 )
+      PARAMETER ( AMNTRN = 0.93956563         D+00 )
+      PARAMETER ( AMDEUT = 1.87561339         D+00 )
+      PARAMETER ( COUGFM = ELCCGS * ELCCGS / ELCMKS * 1.D-07 * 1.D+13
+     &                   * 1.D-09 )
+      PARAMETER ( RCLSEL = 2.8179409183694872 D-13 )
+      PARAMETER ( BLTZMN = 8.617385           D-14 )
+      PARAMETER ( GEVMEV = 1.0                D+03 )
+      PARAMETER ( EMVGEV = 1.0                D-03 )
+      PARAMETER ( ALGVMV = 6.90775527898214   D+00 )
+      PARAMETER ( RADDEG = 180.D+00 / PIPIPI )
+      PARAMETER ( DEGRAD = PIPIPI / 180.D+00 )
+      LOGICAL LGBIAS, LGBANA
+      COMMON / GLOBAL / LGBIAS, LGBANA
+C     INCLUDE '(DIMPAR)'
+*$ CREATE DIMPAR.ADD
+      PARAMETER ( MXXRGN = 5000 )
+      PARAMETER ( MXXMDF = 56   )
+      PARAMETER ( MXXMDE = 50   )
+      PARAMETER ( MFSTCK = 1000 )
+      PARAMETER ( MESTCK = 100  )
+      PARAMETER ( NALLWP = 39   )
+      PARAMETER ( MPDPDX = 8    )
+      PARAMETER ( ICOMAX = 180  )
+      PARAMETER ( NSTBIS = 304  )
+      PARAMETER ( IDMAXP = 210  )
+      PARAMETER ( IDMXDC = 620  )
+      PARAMETER ( MKBMX1 = 1    )
+      PARAMETER ( MKBMX2 = 1    )
+C     INCLUDE '(IOUNIT)'
+*$ CREATE IOUNIT.ADD
+      PARAMETER ( LUNIN  = 5  )
+      PARAMETER ( LUNOUT = 6  )
+      PARAMETER ( LUNERR = 15 )
+      PARAMETER ( LUNBER = 14 )
+      PARAMETER ( LUNECH = 8  )
+      PARAMETER ( LUNFLU = 13 )
+      PARAMETER ( LUNGEO = 16 )
+      PARAMETER ( LUNPGS = 12 )
+      PARAMETER ( LUNRAN = 2  )
+      PARAMETER ( LUNXSC = 9  )
+      PARAMETER ( LUNDET = 17 )
+      PARAMETER ( LUNRAY = 10 )
+      PARAMETER ( LUNRDB = 1  )
+*
+*----------------------------------------------------------------------*
+*                                                                      *
+*     This routine merely acts as an interface to F.James RM48 gen.    *
+*                                                                      *
+*     Created on 03  april  1992   by    Alfredo Ferrari & Paola Sala  *
+*                                                   Infn - Milan       *
+*                                                                      *
+*     Last change on 16-sep-93     by    Alfredo Ferrari               *
+*                                                                      *
+*                                                                      *
+*----------------------------------------------------------------------*
+*
+      DIMENSION RNDNUM (2)
+      CALL RM48 ( RNDNUM, 1 )
+      RNDM = RNDNUM (1)
+      RETURN
+      ENTRY RD2IN (ISEED1,ISEED2)
+*  The following card just to avoid warning messages on the HP compiler
+      RD2IN  = PIPIPI
+      CALL RM48IN (54217137,ISEED1,ISEED2)
+      RETURN
+      ENTRY RD2OUT(ISEED1,ISEED2)
+*  The following card just to avoid warning messages on the HP compiler
+      RD2OUT = PIPIPI
+      CALL RM48UT (IDUMMY,ISEED1,ISEED2)
+*=== End of function rndm =============================================*
+      RETURN
+      END
+ 
