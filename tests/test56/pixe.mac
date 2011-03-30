@@ -1,0 +1,39 @@
+# $Id: pixe.mac,v 1.2 2010/11/22 18:32:59 vnivanch Exp $
+#
+# macro file for TestEm18.cc
+#
+/control/verbose 2
+/run/verbose 2
+/tracking/verbose 0
+#
+/testem/det/setMat G4_Cu
+#/testem/det/setSize 1 cm
+/testem/det/setSize 0.01 mm
+#
+/testem/phys/addPhysics emstandard_opt2
+#/testem/phys/addPhysics emlivermore
+#/testem/phys/addPhysics empenelope
+#
+#/testem/phys/setCuts 0.01 mm
+/testem/phys/setCuts 0.0003 mm
+/testem/stack/killSecondaries false
+#
+/run/initialize
+#/testem/phys/fluo true
+/process/em/deexcitation World true true true
+/process/em/fluo true
+/process/em/auger true
+/process/em/pixe true
+#/process/em/pixeXSmodel ECPSSR_Analytical
+#/testem/phys/pixe true
+#
+/gun/particle proton
+/gun/energy 10 MeV
+#
+/testem/histo/setFileName proton10mev_auger2
+#/testem/histo/setHisto 4 80  0 10 keV  #e- energy spectrum
+/testem/histo/setHisto 4 200 0 10  keV  #e- energy spectrum
+/testem/histo/setHisto 5 200 0 10  keV  #g energy spectrum
+#
+/run/beamOn 10000
+#
