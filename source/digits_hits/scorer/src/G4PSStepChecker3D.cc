@@ -24,69 +24,46 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSCellFlux.hh,v 1.3 2010/07/22 23:42:01 taso Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PSStepChecker3D.cc,v 1.3 2007-08-29 06:36:42 taso Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
+// G4PSStepChecker3D
+#include "G4PSStepChecker3D.hh"
 
-#ifndef G4PSCellFlux_h
-#define G4PSCellFlux_h 1
-
-#include "G4VPrimitiveScorer.hh"
-#include "G4THitsMap.hh"
-
-class G4VSolid;
-
-///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 // (Description)
-//   This is a primitive scorer class for scoring cell flux.
-//   The Cell Flux is defined by  a sum of track length divided 
-//   by the geometry volume, where all of the tracks in the geometry 
-//   are taken into account. e.g. the unit of Cell Flux is mm/mm3.
-//    
-//
-//   If you want to score only tracks passing through the geometry volume,
-//  please use G4PSPassageCellFlux.
-//
-//
-// Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
-// 2010-07-22   Introduce Unit specification.
-// 2010-07-22   Add weighted option
+//   This is a primitive scorer class for Debug.
+// 
+// Created: 2011-03-24  Tsukasa ASO
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
-
-class G4PSCellFlux : public G4VPrimitiveScorer
+G4PSStepChecker3D::G4PSStepChecker3D(G4String name,
+			       G4int ni, G4int nj, G4int nk,
+			       G4int depi, G4int depj, G4int depk)
+    :G4PSStepChecker(name),
+     fDepthi(depi),fDepthj(depj),fDepthk(depk)
 {
-   public: // with description
-      G4PSCellFlux(G4String name, G4int depth=0);
-      G4PSCellFlux(G4String name, const G4String& unit, G4int depth=0);
-      virtual ~G4PSCellFlux();
+  fNi=ni;
+  fNj=nj;
+  fNk=nk;
+}
 
-      inline void Weighted(G4bool flg=true) { weighted = flg; }
-      // Multiply track weight
+G4PSStepChecker3D::~G4PSStepChecker3D()
+{;}
 
-  protected: // with description
-      virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
+G4int G4PSStepChecker3D::GetIndex(G4Step* aStep)
+{
+  const G4VTouchable* touchable = aStep->GetPreStepPoint()->GetTouchable();
+  G4int i = touchable->GetReplicaNumber(fDepthi);
+  G4int j = touchable->GetReplicaNumber(fDepthj);
+  G4int k = touchable->GetReplicaNumber(fDepthk);
 
-      virtual G4double ComputeVolume(G4Step*, G4int idx);
+  G4int N = i*fNj*fNk+j*fNk+k;
 
-  public: 
-      virtual void Initialize(G4HCofThisEvent*);
-      virtual void EndOfEvent(G4HCofThisEvent*);
-      virtual void clear();
-      virtual void DrawAll();
-      virtual void PrintAll();
-
-      virtual void SetUnit(const G4String& unit);    
-
-  protected:
-      virtual void DefineUnitAndCategory();
-
-  private:
-      G4int HCID;
-      G4THitsMap<G4double>* EvtMap;
-      G4bool  weighted;
-
-};
-#endif
-
+  G4cout <<" depi= "<<fDepthi<<" depj= "<<fDepthj<<" depk= "<<fDepthk<<G4endl;
+  G4cout <<"    i= "<<i<<"   j= "<<j<<"    k= "<<k<<G4endl;
+  G4cout <<"    N= " << N<<"  Nx= "<<fNi<<" Nj= "<<fNj<<" Nk= "<<fNk<<G4endl;
+  
+  return i*fNj*fNk+j*fNk+k;
+}

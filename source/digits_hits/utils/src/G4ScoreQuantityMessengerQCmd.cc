@@ -434,5 +434,14 @@ void G4ScoreQuantityMessenger::QuantityCommands()
   qMinKinEAtGeneCmd->SetGuidance("  qname  :(String) scorer name");
   param = new G4UIparameter("qname",'s',false);
   qMinKinEAtGeneCmd->SetParameter(param);
+  //
+  qStepCheckerCmd = new G4UIcommand("/score/quantity/stepChecker",this);
+  qStepCheckerCmd->SetGuidance("Display a comment when this PS is invoked");
+  qStepCheckerCmd->
+  SetGuidance("[usage] /score/quantiy/stepChecker qname");
+  qStepCheckerCmd->SetGuidance("  qname  :(String) scorer name");
+  param = new G4UIparameter("qname",'s',false);
+  qStepCheckerCmd->SetParameter(param);
+
 }
 

@@ -24,69 +24,61 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPassageCellFlux.hh,v 1.3 2010/07/22 23:42:01 taso Exp $
+// $Id: G4PSPassageCellFluxForCylinder3D.cc,v 1.4 2010/07/22 07:23:45 taso Exp $
 // GEANT4 tag $Name: geant4-09-04 $
 //
+// G4PSPassageCellFluxForCylinder3D
+#include "G4PSPassageCellFluxForCylinder3D.hh"
 
-#ifndef G4PSPassageCellFlux_h
-#define G4PSPassageCellFlux_h 1
-
-#include "G4VPrimitiveScorer.hh"
-#include "G4THitsMap.hh"
-
-////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // (Description)
 //   This is a primitive scorer class for scoring cell flux.
 //   The Cell Flux is defined by  a track length divided by a geometry
-//   volume, where only tracks passing through the geometry are taken 
+//   volume, where only tracks passing through the geometry are taken
 //  into account. e.g. the unit of Cell Flux is mm/mm3.
 //
 //   If you want to score all tracks in the geometry volume,
 //  please use G4PSCellFlux.
 //
-// Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
-// 2010-07-22   Introduce Unit specification.
-// 2010-07-22   Add weighted option
-// 
+// Created: 2007-08-14  Tsukasa ASO
+// 2011-03-24   Give Size and Segmentation for relicated volume in cylinder.
 ///////////////////////////////////////////////////////////////////////////////
 
-class G4PSPassageCellFlux : public G4VPrimitiveScorer
-{
- 
-  public: // with description
-      G4PSPassageCellFlux(G4String name, G4int depth=0);
-      G4PSPassageCellFlux(G4String name, const G4String& unit, G4int depth=0);
+G4PSPassageCellFluxForCylinder3D::G4PSPassageCellFluxForCylinder3D(G4String name,
+					     G4int ni, G4int nj, G4int nk,
+					     G4int di, G4int dj, G4int dk)
+  :G4PSPassageCellFlux3D(name,ni,nj,nk,di,dj,dk)
+{;}
 
-      virtual ~G4PSPassageCellFlux();
+G4PSPassageCellFluxForCylinder3D::G4PSPassageCellFluxForCylinder3D(G4String name,const G4String& unit,
+					     G4int ni, G4int nj, G4int nk,
+					     G4int di, G4int dj, G4int dk)
+  :G4PSPassageCellFlux3D(name,unit,ni,nj,nk,di,dj,dk)
+{;}
 
-      inline void Weighted(G4bool flg=true) { weighted = flg; }
-      // Multiply track weight
+G4PSPassageCellFluxForCylinder3D::~G4PSPassageCellFluxForCylinder3D()
+{;}
 
-  protected: // with description
-      virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
-      virtual G4bool IsPassed(G4Step*);
-      virtual G4double ComputeVolume(G4Step*, G4int idx);
+void G4PSPassageCellFluxForCylinder3D::SetCylinderSize(G4double dr, G4double dz){
+  cylinderSize.setX(dz); //Z Phi R
+  cylinderSize.setY(2.0*M_PI); //Z Phi R
+  cylinderSize.setZ(dr); //Z Phi R
+}
+void G4PSPassageCellFluxForCylinder3D::SetNumberOfSegments(G4int nSeg[3]){
+  nSegment[0] = nSeg[0];  // Z
+  nSegment[1] = nSeg[1];  // Phi
+  nSegment[2] = nSeg[2];  // R
+}
+G4double G4PSPassageCellFluxForCylinder3D::ComputeVolume(G4Step*, G4int idx){
+  G4double r0 = (cylinderSize[2]/nSegment[2])*(idx);
+  G4double r1 = (cylinderSize[2]/nSegment[2])*(idx+1);
+  G4double dRArea = (r1*r1-r0*r0)*M_PI;
 
-  public: 
-      virtual void Initialize(G4HCofThisEvent*);
-      virtual void EndOfEvent(G4HCofThisEvent*);
-      virtual void clear();
-      virtual void DrawAll();
-      virtual void PrintAll();
+  // cylinderSize is given in Half Size
+  G4double fullz      = cylinderSize[0]/nSegment[0]*2.;  
+  G4double phiRatio  = 1./nSegment[1];
+  G4double v = dRArea*fullz*phiRatio;
 
-      virtual void SetUnit(const G4String& unit);
-
-  protected:
-      virtual void DefineUnitAndCategory();
-
-  private:
-      G4int HCID;
-      G4int fCurrentTrkID;
-      G4double fCellFlux;
-      G4THitsMap<G4double>* EvtMap;
-      G4bool  weighted;
-
-};
-
-#endif
+  return v;
+}
 

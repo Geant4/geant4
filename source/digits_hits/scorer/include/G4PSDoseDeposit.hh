@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSDoseDeposit.hh,v 1.2 2010-07-22 07:23:45 taso Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: G4PSDoseDeposit.hh,v 1.2 2010/07/22 07:23:45 taso Exp $
+// GEANT4 tag $Name: geant4-09-04 $
 //
 
 #ifndef G4PSDoseDeposit_h
@@ -53,6 +53,8 @@ class G4PSDoseDeposit : public G4VPrimitiveScorer
   protected: // with description
       virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
 
+      virtual G4double ComputeVolume(G4Step*, G4int idx);
+
   public: 
       virtual void Initialize(G4HCofThisEvent*);
       virtual void EndOfEvent(G4HCofThisEvent*);
@@ -65,5 +67,6 @@ class G4PSDoseDeposit : public G4VPrimitiveScorer
   private:
       G4int HCID;
       G4THitsMap<G4double>* EvtMap;
+
 };
 #endif

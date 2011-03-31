@@ -24,69 +24,42 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSCellFlux.hh,v 1.3 2010/07/22 23:42:01 taso Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PSStepChecker.cc,v 1.3 2010-07-23 04:35:38 taso Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-
-#ifndef G4PSCellFlux_h
-#define G4PSCellFlux_h 1
-
-#include "G4VPrimitiveScorer.hh"
-#include "G4THitsMap.hh"
-
-class G4VSolid;
+// G4PSStepChecker
+#include "G4PSStepChecker.hh"
 
 ///////////////////////////////////////////////////////////////////////////////
 // (Description)
-//   This is a primitive scorer class for scoring cell flux.
-//   The Cell Flux is defined by  a sum of track length divided 
-//   by the geometry volume, where all of the tracks in the geometry 
-//   are taken into account. e.g. the unit of Cell Flux is mm/mm3.
-//    
+//   This is a primitive scorer class for Debug.
 //
-//   If you want to score only tracks passing through the geometry volume,
-//  please use G4PSPassageCellFlux.
+// Created: 2011-03-24  Tsukasa ASO
 //
-//
-// Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
-// 2010-07-22   Introduce Unit specification.
-// 2010-07-22   Add weighted option
-// 
 ///////////////////////////////////////////////////////////////////////////////
 
+G4PSStepChecker::G4PSStepChecker(G4String name, G4int depth)
+  :G4VPrimitiveScorer(name,depth)
+{}
 
-class G4PSCellFlux : public G4VPrimitiveScorer
+G4PSStepChecker::~G4PSStepChecker()
+{}
+
+G4bool G4PSStepChecker::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
-   public: // with description
-      G4PSCellFlux(G4String name, G4int depth=0);
-      G4PSCellFlux(G4String name, const G4String& unit, G4int depth=0);
-      virtual ~G4PSCellFlux();
+  G4cout << "G4PSStepChecker:: Step identified index= " << GetIndex(aStep)<<G4endl;
+  return TRUE;
+}
 
-      inline void Weighted(G4bool flg=true) { weighted = flg; }
-      // Multiply track weight
+void G4PSStepChecker::Initialize(G4HCofThisEvent* HCE)
+{}
 
-  protected: // with description
-      virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
+void G4PSStepChecker::EndOfEvent(G4HCofThisEvent*)
+{}
 
-      virtual G4double ComputeVolume(G4Step*, G4int idx);
+void G4PSStepChecker::clear(){}
 
-  public: 
-      virtual void Initialize(G4HCofThisEvent*);
-      virtual void EndOfEvent(G4HCofThisEvent*);
-      virtual void clear();
-      virtual void DrawAll();
-      virtual void PrintAll();
+void G4PSStepChecker::DrawAll(){}
 
-      virtual void SetUnit(const G4String& unit);    
-
-  protected:
-      virtual void DefineUnitAndCategory();
-
-  private:
-      G4int HCID;
-      G4THitsMap<G4double>* EvtMap;
-      G4bool  weighted;
-
-};
-#endif
+void G4PSStepChecker::PrintAll(){}
 
