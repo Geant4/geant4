@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30 Mar 2011, Gunter Folger              (test11-V09-04-02)
+- Correct GNUmakefile_hadronic_Exerciser, i.e. undo test65 changes 
+
 30 Mar 2011, Gunter Folger              (test11-V09-04-01)
 - Restore correct version of GNUmakefile, i.e. undo test65 changes 
 

@@ -3,7 +3,7 @@
 # GNUmakefile for tests module.  Gabriele Cosmo, 27/06/98.
 # --------------------------------------------------------------
 
-name := test65_hadronic_exerciser
+name := test11_hadronic_exerciser
 G4TARGET := $(name)
 
 ifndef G4INSTALL
