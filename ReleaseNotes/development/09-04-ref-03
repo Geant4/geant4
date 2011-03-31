@@ -1,0 +1,274 @@
+
+                       geant4-09-04-ref-03
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o 
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+config                                           config-V09-04-02
+------
+- Fixed limitation of string argument length in liblist.c program;
+  addressing problem report #1033.
+- Added new processes/electromagnetic/dna module to scripts.
+
+digits_hits                                      digits_hits-V09-04-04
+-----------
+- Fixed scorers used for cylindrical mesh that require cubic volume
+  or surface area.
+- Fixed scoring meshes for visualizing scores of very few entries.
+
+interfaces                                       interfaces-V09-04-01
+----------
+- Fix in G4VBasicShell::ApplyShellCommand() for substring exact comparisons;
+  addressing problem report #1180.
+- Removed obsolete Qt3 code and avoid inclusion of OGL flags in compilation.
+
+geometry/management                              geommng-V09-04-01
+-------------------
+- Fix in G4LogicalVolume::AddDaughter() for proper propagation settings
+  of local field manager. Avoid forcing propagation to all daughters when
+  a local field manager is set already for the new daughter.
+  Addressing problem report #1183.
+- Use internal G4 header for physical constants in meshdefs.h
+
+source/geometry/solids/BREPS                     breps-V09-04-00
+----------------------------
+- Use G4Transform3D type in place of native CLHEP type.
+
+source/global                                    global-V09-04-04
+-------------
+- Added G4Rep3x3 typedef to CLHEP::HepRep3x3 in G4RotationMatrix.hh.
+- Added more G4 types for random classes in Randomize.hh.
+- Use G4UniformRand() in G4Poisson.
+
+graphics_reps                                    greps-V09-04-02
+-------------
+- Consistently make use of G4 types in HepPolyhedron and BooleanProcessor,
+  to allow for centralized control of CLHEP types.
+
+materials                                        materials-V09-04-03
+---------
+- G4Material: added Base Material pointer and corresponding methods; added
+  extra protections against incorrect mass fraction during material
+  construction.
+- G4NistMaterial: added constructor of a material using variable density;
+  reduced size of internal vectors. Cleanup in methods to build materials
+  in G4NistMaterialBuilder.
+- G4IonisParamMat: use mean ionisation potential provided by user in
+  computation of density effect
+- Added new class G4ElementData, data structure for cross-sections, shell
+  and isotope cross-sections.
+- Minor fixes for Coverity warnings in G4ExtDEDXTable.
+
+particles                                        particles-V09-04-02
+---------
+- Modified PDGCodeChecker to allow for PDG code for neutron balls.
+- Fix in G4ParticleDefinition::SetApplyCutsFlag() to get rid of unnecessary
+  warning messages for proton.
+- Fixed issues reported by Coverity.
+
+persistency/ascii                                ascii-V09-04-02
+-----------------
+- Use G4 types for 3-vectors and 3x3 rotations.
+
+physics_lists                                    phys-lists-V09-04-14
+-------------
+- G4HadronElasticPhysicsHP, G4HadronElasticPhysicsXS: added anti_nuclei,
+  reshaped code as in G4HadronElasticPhysics
+- G4HadronElasticPhysicsLHEP: use G4WHadronElasticProcess to allow not to
+  kill primary after scattering.
+- Added anti-triton to anti-barions. Use default energy limit for
+  anti-barions, i.e. up o 100 TeV
+- G4EmStandardPhysics_option2: use updated G4UrbanMscModel95 model for e+-.
+- G4EmStandardPhysics_option3: experimental change of options: reduced
+  low-energy limit to 10 eV; reduced StepFunction parameters per particle type;
+  use G4DummyModel by default. Use updated G4UrbanMscModel95 model for e+-.
+- Fixed coverity issues in many files; most were uninitialised data members
+  for processes/models. LBE not fixed, requires bigger rework to avoid leaks
+  for processes at program end.
+- Added electromagnetic/dna module dependencies.
+
+processes/electromagnetic/dna                    dna-V09-04-02
+-----------------------------
+- New module with Geant4-DNA classes imported from 'lowenergy' module.
+
+processes/electromagnetic/lowenergy              emlowen-V09-04-22
+-----------------------------------
+- Moved all Geant4-DNA classes to external module.
+- Added G4CrossSectionDataSet table in G4AnalyticalEcpssrKCrossSection.
+- Bug fixes to PIXE and de-excitation code.
+- Commented ionization classes for better clarity.
+
+processes/electromagnetic/polarisation           empolar-V09-04-00
+--------------------------------------
+- G4ePolarizedIonisation: cleared use of obsolete MinCutEnergy() method.
+
+processes/electromagnetic/standard               emstand-V09-04-12
+----------------------------------
+- G4UrbanMscModel95: new version of multiple-scattering model providing
+  improved sampling of the tail of angular distribution, better sampling
+  of lateral displacement and true step length.
+- G4UrbanMscModel90, G4UrbanMscModel92, G4UrbanMscModel93,
+  G4UrbanMscModel95, G4GoudsmitSaundersonMscModel,
+  G4WentzelVIModel: use G4VMscModel methods to compute range and inverse range.
+- G4PAIySection: added method ComputeLowEnergyCof() allowing for extended
+  low energy limit of the model down to 10 eV.
+- General cleanup: cleared usage of obsolete MinEnergyCut() methods, improved
+  comments.
+- G4PhotoElectricEffect: use G4PEEffectFluoModel as default.
+- G4KleinNishinaModel: use dynamic selection between high energy sampling and
+  sampling with Doppler broadening.
+- G4GoudsmitSaundersonMscModel: restored to version of 9.3-ref05
+
+processes/electromagnetic/utils                  emutils-V09-04-11
+-------------------------------
+- G4VMscModel: updated signature of GetRange() and GetEnergy() methods.
+  Added Get/Set method for ionisation process; use these methods at run time
+  in G4VMultipleScattering.
+  Added protected method for common computation of range and energy for all
+  multiple-scattering models. Removed obsolete method MinEnergyCut().
+- G4VMultipleScattering: fixed problem of initialisation of true step length
+  when multiple-scattering model is inactive (needed for DNA Phsyics List).
+- Updated G4VAtomDeexcitation methods names; created G4AtomicShellEnumerator.
+  G4EmProcessOptions: improved names of methods for deexcitation.
+- G4EmProcessOptions, G4EnergyLossMessenger, G4LossTableManager,
+  G4VAtomDeexcitation: cleanup options for deexcitation
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V09-04-04)
+  o G4CrossSectionDataStore: fix in DumpPhysicsTable() method, responsible for
+    incorrect ion cross-sections values when invocated.
+  o G4IonsShenCrossSection: extended energy range up to 100 TeV.
+  o G4IonsShenCrossSection, G4IonsSihverCrossSection, G4IonsKoxCrossSection:
+    moved constructor, destructor and virtual methods to source.
+- management (hadr-man-V09-04-03)
+  o Modified E/p checking to take the tighter limit of process and model.
+- models/binary_cascade (had-binary-V09-04-00)
+  o Set E/p checking limits for energy non-conservation checks.
+- models/cascade (hadr-casc-V09-04-03-01)
+  o Developed infrastructure to support using Bertini as a "rescattering"
+    model for the output of the FTF simulation.
+  o Modified G4NucleiModel for parameterisation of "rescaled" nuclear model
+    parameters.
+  o Simplified cascade test-and-repeat loops; do four-momentum balancing with
+    nuclear fragment, now used exclusively as G4Fragment, at end of cascade,
+    not after de-excitation.
+- models/de_excitation (hadr-deex-V09-04-03)
+  o G4ExcitationHandler: fix for Fermi break-up products de-excitation.
+    General code cleanup.
+- models/management (hadr-man-V09-04-00)
+  o E/p checking extended to allow string models to set limits;
+    GetEnergyMomentumCheckLevels() made virtual in G4HadronicInteraction,
+    and implemented to query string model in G4VHighEnergyGenerator.
+  o Added data member in G4VIntraNuclearTransportModel with related accessor
+    methods to store/retrieve original projectile.
+
+
+- models/parton_string (hadr-prtn-V09-04-08)
+  o First implementation of barion - anti-barion annihilation.
+    Added new G4FTFAnnihilation class in the FTF model, and made
+    corresponding changes in related FTF classes.
+    Added two new methods in G4VSplitableHadron: SetFirstParton() and
+    SetSecondParton(), to set quark (anti-quark) determination at the
+    annihilation.
+  o Implemented simulation of anti-barion - nucleus interactions from the
+    rest to 1000 GeV. Reggeon cascading is switched off.
+    Good results are obtained in combination with the binary cascade model.
+  o Implemented first variant of FTF code for simulation of
+    anti-nucleus-nucleus and nucleus-nucleus interactions.
+    The anti-nucleus nucleus part is working starting from 150*A MeV/c.
+    The nucleus-nucleus part is applicable at Plab > 2 * A GeV/c.
+  o Small improvement introduced in G4FTFParameters in order to treat
+    Labmda-Bar, Sigma-Bar, etc...
+- models/photolepton_hadron/muon_nuclear (hadr-munuclear-V09-04-00)
+  o New model G4VDMuonNuclearModel to replace old-style G4MuNuclearInteraction
+    and G4ParametrizedHadronicVertex based on GHEISHA.
+- models/radioactive_decay (radioactive_decay-V09-03-05)
+  o G4NuclearDecayChannel: remove unused variables.
+  o Initialize array data in G4RadioactiveDecay::LoadDecayTable().
+  o Fixed memory leak in G4RadioactiveDecay::AddDecayRateTable().
+  o Fixed array overrun in G4RadioactiveDecay::SetSourceTimeProfile() and
+    SetDecayBias(). Avoid possible dereferencing of zero pointer in DecayIt()
+    when in branching-ratio bias mode, fill 'tempprods' as if no biasing is
+    active.
+  o Initialize static data in G4RadioactiveDecayRate constructor.
+- models/util (hadr-mod-util-V09-04-00)
+  o Added new methods in G4Nucleon for creation of anti-nucleus.
+    They can be used to replace protons and neutrons into anti-protons
+    and anti-neutron, respectively.
+- processes (hadr-proc-V09-04-02)
+  o Added G4MuonNuclearProcess, meant to replace the old process
+    G4MuNuclearInteraction by separating model and cross-section classes.
+  o Added processes for light anti-ions: G4AntiAlphaInelasticProcess,
+    G4AntiDeuteronInelasticProcess, G4AntiHe3InelasticProcess and
+    G4AntiTritonInelasticProcess.
+
+processes/parameterisation                       param-V09-04-00            (o)
+--------------------------
+- Added missing implementation of inlined method
+  ProposePrimaryTrackFinalKineticEnergy() in G4FastStep.
+
+run                                              run-V09-04-01              (o)
+---
+- G4RunManager: added additional protection against cases of failure in
+  creating a new directory when saving random seeds.
+  Addressing problem report #1157.
+
+visualization/RayTracer                          raytracer-V09-04-01
+-----------------------
+- Trap recursive calls in G4RayTracerViewer::DrawView(), thus avoiding
+  warning messages for each pixel when endOfEventAction() is "refresh".
+- Fixed some Coverity warnings.
+
+examples                                         examples-V09-04-02
+--------
+- Updated reference outputs.
+- advanced/dnaphysics (dnaphysics-V09-04-02)
+  o New example exercising G4DNA processes.
+- extended/analysis/AnaEx01 (AnaEx01-V09-04-00)
+  o Deleted obsolete directory.
+- extended/analysis/AnaEx02 (AnaEx02-V09-04-01)
+  o New example showing the usage of histogram and ntuple manipulations
+    using the Root analysis tool. All analysis manipulations (histo booking,
+    filling, saving histos in a file, etc...) are located the class 
+    HistoManager.
+- extended/electromagnetic/TestEm5 (testem5-V09-04-02)
+  o Added gammaSpectrum.mac macro, activating EM fluorescence.
+  o Updated vis.mac macro and SteppingVerbose.
+- extended/electromagnetic/TestEm7 (testem7-V09-04-03)
+  o Allow tallies of different materials and sizes.
+  o Updated HistoManager and SteppingVerbose.
+- extended/eventgenerator/particleGun (particleGunExample-V09-04-00)        (o)
+  o Fixed Aida file-option in HistoManager.
+- extended/parameterisations/gflash (exgflash-V09-04-00)                    (o)
+  o Corrections in use of namespaces to allow for compilation on Windows.
+    Some cleanup.
+- extended/radioactivedecay/rdecay01 (rdecay01-V09-04-03)
+  o Fixe bug in time counting in RunAction.
+  o Modified PhysicsList, setting ARM to false.                             (o)
+  o Print global time from SteppingVerbose.                                 (o)
+  o Fixed Aida file-option in HistoManager.                                 (o)
+  o Added macro Co60.mac.                                                   (o)
+
+tests                                            tests-V09-04-02
+-----
+- Updated reference outputs and tools.
+- test12 (test12-V09-04-00)
+  o Added testing of QGSP_FTFP_BERT: include anti{proton, neutron,deuerium,
+    tritium,alpha} as primaries with small statistics.
+- test30 (test30-V09-04-00)
+  o Added anti_proton and anti_neutron. Improved print-out.
+- test37 (test37-V09-04-01)
+- test41 (test41-V09-04-01)
+  o Updated scripts.
+- test44 (test44-V09-04-01)
+- test46 (test46-V09-04-01)
+  o Fixed macro and scripts.
