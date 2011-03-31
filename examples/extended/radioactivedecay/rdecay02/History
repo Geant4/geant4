@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+31/03/2011 - G. Folger    (rdecay02-V09-04-01)
+-  Add missing include of StatMF in physics list. This was previously
+    included indirectly via G4ExcitationHandler.
+
 04/03/2011 - L. Desorgher (rdecay02-V09-04-00)
 -Correct prepocessor lines 316-320 in exrdmHisto.cc to get the code 
  also compiled with ROOT (G4ANALYSIS_USE_ROOT switch on)
