@@ -130,7 +130,7 @@ void G4LogicalVolume::AddDaughter(G4VPhysicalVolume* pNewDaughter)
 
   if( pDaughterFieldManager == 0 )
   {
-    pDaughterLogical->SetFieldManager(fFieldManager, true);
+    pDaughterLogical->SetFieldManager(fFieldManager, false);
   }
   if (fRegion)
   {

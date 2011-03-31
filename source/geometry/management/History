@@ -17,7 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-October 19, 2010  G.Cosmo                  geommng-V09-04-00
+March 31, 2011  G.Cosmo                    geommng-V09-04-01
+- Fix in G4LogicalVolume::AddDaughter() for proper propagation settings
+  of local field manager. Avoid forcing propagation to all daughters when
+  a local field manager is set already for the new daughter.
+  Addressing problem report #1183.
+
+March 21, 2011  G.Cosmo                    geommng-V09-04-00
 - Use internal G4 header for physical constants in meshdefs.h.
 
 October 19, 2010  G.Cosmo                  geommng-V09-03-05
