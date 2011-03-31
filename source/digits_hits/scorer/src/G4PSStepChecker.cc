@@ -51,7 +51,7 @@ G4bool G4PSStepChecker::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   return TRUE;
 }
 
-void G4PSStepChecker::Initialize(G4HCofThisEvent* HCE)
+void G4PSStepChecker::Initialize(G4HCofThisEvent*)
 {}
 
 void G4PSStepChecker::EndOfEvent(G4HCofThisEvent*)
