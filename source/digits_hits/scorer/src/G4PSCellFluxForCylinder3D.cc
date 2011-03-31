@@ -65,7 +65,7 @@ G4PSCellFluxForCylinder3D::~G4PSCellFluxForCylinder3D()
 
 void G4PSCellFluxForCylinder3D::SetCylinderSize(G4double dr, G4double dz){
   cylinderSize.setX(dz);        //Z Phi R
-  cylinderSize.setY(2.0*M_PI);  //Z Phi R
+  cylinderSize.setY(twopi);     //Z Phi R
   cylinderSize.setZ(dr);        //Z Phi R
 }
 void G4PSCellFluxForCylinder3D::SetNumberOfSegments(G4int nSeg[3]){
@@ -77,7 +77,7 @@ void G4PSCellFluxForCylinder3D::SetNumberOfSegments(G4int nSeg[3]){
 G4double G4PSCellFluxForCylinder3D::ComputeVolume(G4Step*, G4int idx){
   G4double r0 = (cylinderSize[2]/nSegment[2])*(idx);
   G4double r1 = (cylinderSize[2]/nSegment[2])*(idx+1);
-  G4double dRArea = (r1*r1-r0*r0)*M_PI;
+  G4double dRArea = (r1*r1-r0*r0)*pi;
 
   // cylinderSize is given in Half Size
   G4double fullz      = cylinderSize[0]/nSegment[0]*2.;  

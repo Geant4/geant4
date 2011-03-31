@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Mar 31, 2011, G.Cosmo (digits_hits-V09-04-04)
+- Replace use of M_PI with pi/twopi, fixing compilation errors on Windows...
+
 Mar 31, 2011, G.Cosmo (digits_hits-V09-04-03)
 - Added missing source files in scorer/sources.cmake.
 - Fixed compilation warning for unused parameter in function
