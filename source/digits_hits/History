@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Mar 31, 2011, G.Cosmo (digits_hits-V09-04-03)
+- Added missing source files in scorer/sources.cmake.
+- Fixed compilation warning for unused parameter in function
+  G4PSStepChecker::Initialize().
+
 Mar 30, 2011, M.Asai (digits_hits-V09-04-02)
 - Fixed scoring meshes for visualizing scores of very few entry.
   - Changed G4ScoringBox, G4ScoringCylinder
