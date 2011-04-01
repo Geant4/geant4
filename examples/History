@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+1st April 2011  Gabriele Cosmo (examples-V09-04-03)
+- Updated reference outputs according to reference tag geant4-09-04-ref-03.
+- Includes tags: microdosimetry-V09-04-00, testem2-V09-04-00, testem3-V09-04-01,
+                 XrayFluo-V09-04-01, testem5-V09-04-05, testem7-V09-04-03,
+                 testem11-V09-04-02, testem12-V09-04-02, exhadr01-V09-04-00,
+                 exhadr02-V09-04-02, WLS-V09-04-00, rdecay02-V09-04-01.
+
 3rd March 2011  Gabriele Cosmo (examples-V09-04-02)
 - Updated reference outputs according to reference tag geant4-09-04-ref-02.
 - Includes tags: dnaphysics-V09-04-02, AnaEx01-V09-04-00, AnaEx02-V09-04-01,
