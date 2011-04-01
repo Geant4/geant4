@@ -1,0 +1,10 @@
+*** dnaphysics ***
+
+1) install Geant4 + G4LEDATA
+2) compile with 'gmake' in the 'dnaphysics' directory
+3) run with '$G4WORKDIR/bin/Linux-g++/DNAPhysics'
+4) look at results with 'root plot.C' from the 'dnaphysics' directory
+
+Do not hesitate to contact us in case of trouble (incerti@in2p3.fr).
+
+

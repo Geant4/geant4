@@ -1,0 +1,12 @@
+     =========================================================
+ 		      Geant4 - Dnaphysics example
+     =========================================================
+
+                       Package History file
+                       --------------------
+
+17 February 2011 - tag dnaphysics-V09-04-02 - S. Incerti
+- switched to G4EmDNAPhysics builder
+
+30 January 2011 - tag dnaphysics-V09-04-01 - S. Incerti
+- first version of dnaphysics example committed
