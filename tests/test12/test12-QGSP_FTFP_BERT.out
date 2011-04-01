@@ -12,9 +12,9 @@
 
 
 <<< Geant4 Physics List engine packaging library: PACK 5.5
-<<< Geant4 Physics List simulation engine: FTFP_BERT 1.2
+<<< Geant4 Physics List simulation engine: QGSP_FTFP_BERT 3.5
 
-Test12 using physics list FTFP_BERT (default)
+Test12 using physics list QGSP_FTFP_BERT
 SimpleBox is now made of Pb
 PreInit> #
 PreInit> # Auto-generated test input file for test12 hadronics.
@@ -22,6 +22,11 @@ PreInit> #
 PreInit> PreInit> # /run/verbose 2
 PreInit> /run/setCut 1 m
 PreInit> /run/initialize
+ New QGSP_FTFP_BERT physics list, replaces LEP with FTF/P for p/n/pi (/K?)  Thresholds: 
+    1) between BERT  and FTF/P over the interval 6 to 8 GeV. 
+    2) between FTF/P and QGS/P over the interval 12 to 25 GeV. 
+  -- quasiElastic was asked to be 1
+     Changed to 1 for QGS  and to 0 (must be false) for FTF
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 Idle> /gun/direction 1 0 0
 Idle> #
@@ -290,11 +295,24 @@ hPairProd:   for  pi-    SubType= 4
 ============================================================================================
              HADRONIC PROCESSES SUMMARY (verbose level 1)
 
+                                  Hadronic Processes for <anti_neutron>
+                                  -----------------------------------
+AntiNeutronInelastic  Models:                         FTFP: Emin(GeV)=    0  Emax(GeV)= 100000
+
+AntiNeutronInelastic  Crs sctns:                          : Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
+                                         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+
+
                                   Hadronic Processes for <anti_proton>
                                   -----------------------------------
           hadElastic  Models:                 hElasticLHEP: Emin(GeV)=    0  Emax(GeV)= 100000
 
           hadElastic  Crs sctns:           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
+
+ AntiProtonInelastic  Models:                         FTFP: Emin(GeV)=    0  Emax(GeV)= 100000
+
+ AntiProtonInelastic  Crs sctns:                          : Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
+                                         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 
                                   Hadronic Processes for <e->
@@ -320,8 +338,9 @@ hPairProd:   for  pi-    SubType= 4
 
           hadElastic  Crs sctns:           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
-   KaonPlusInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
-                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 5
+   KaonPlusInelastic  Models:                         QGSP: Emin(GeV)=   12  Emax(GeV)= 100000
+                                                      FTFP: Emin(GeV)=    6  Emax(GeV)= 25
+                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 8
 
    KaonPlusInelastic  Crs sctns:                          : Emin(GeV)=    0  Emax(GeV)= 100000
                                          Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
@@ -333,8 +352,9 @@ hPairProd:   for  pi-    SubType= 4
 
           hadElastic  Crs sctns:           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
-  KaonMinusInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
-                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 5
+  KaonMinusInelastic  Models:                         QGSP: Emin(GeV)=   12  Emax(GeV)= 100000
+                                                      FTFP: Emin(GeV)=    6  Emax(GeV)= 25
+                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 8
 
   KaonMinusInelastic  Crs sctns:                          : Emin(GeV)=    0  Emax(GeV)= 100000
                                          Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
@@ -357,10 +377,14 @@ hPairProd:   for  pi-    SubType= 4
           hadElastic  Crs sctns:            CHIPSElasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
                                            Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
-    NeutronInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
-                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 5
+    NeutronInelastic  Models:                         QGSP: Emin(GeV)=   12  Emax(GeV)= 100000
+                                                      FTFP: Emin(GeV)=    6  Emax(GeV)= 25
+                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 8
 
     NeutronInelastic  Crs sctns:      G4CrossSectionPairGG: Emin(GeV)=    0  Emax(GeV)= 100000
+                         G4CrossSectionPairGG: Wellisch-Laidlaw cross sections 
+                           below 91 GeV, Glauber-Gribov above 
+                                      G4CrossSectionPairGG: Emin(GeV)=    0  Emax(GeV)= 100000
                          G4CrossSectionPairGG: Wellisch-Laidlaw cross sections 
                            below 91 GeV, Glauber-Gribov above 
                                          Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
@@ -382,10 +406,14 @@ hPairProd:   for  pi-    SubType= 4
           hadElastic  Crs sctns: Barashenkov-Glauber-Gribov: Emin(GeV)=    0  Emax(GeV)= 100000
                                            Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
-   PionPlusInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
-                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 5
+   PionPlusInelastic  Models:                         QGSP: Emin(GeV)=   12  Emax(GeV)= 100000
+                                                      FTFP: Emin(GeV)=    6  Emax(GeV)= 25
+                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 8
 
    PionPlusInelastic  Crs sctns:      G4CrossSectionPairGG: Emin(GeV)=    0  Emax(GeV)= 100000
+                         G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
+                           below 91 GeV, Glauber-Gribov above 
+                                      G4CrossSectionPairGG: Emin(GeV)=    0  Emax(GeV)= 100000
                          G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
                            below 91 GeV, Glauber-Gribov above 
                                          Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
@@ -399,10 +427,14 @@ hPairProd:   for  pi-    SubType= 4
           hadElastic  Crs sctns: Barashenkov-Glauber-Gribov: Emin(GeV)=    0  Emax(GeV)= 100000
                                            Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
-  PionMinusInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
-                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 5
+  PionMinusInelastic  Models:                         QGSP: Emin(GeV)=   12  Emax(GeV)= 100000
+                                                      FTFP: Emin(GeV)=    6  Emax(GeV)= 25
+                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 8
 
   PionMinusInelastic  Crs sctns:      G4CrossSectionPairGG: Emin(GeV)=    0  Emax(GeV)= 100000
+                         G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
+                           below 91 GeV, Glauber-Gribov above 
+                                      G4CrossSectionPairGG: Emin(GeV)=    0  Emax(GeV)= 100000
                          G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
                            below 91 GeV, Glauber-Gribov above 
                                          Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
@@ -415,10 +447,14 @@ hPairProd:   for  pi-    SubType= 4
           hadElastic  Crs sctns:            CHIPSElasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
                                            Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
-     ProtonInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
-                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 5
+     ProtonInelastic  Models:                         QGSP: Emin(GeV)=   12  Emax(GeV)= 100000
+                                                      FTFP: Emin(GeV)=    6  Emax(GeV)= 25
+                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 8
 
      ProtonInelastic  Crs sctns:      G4CrossSectionPairGG: Emin(GeV)=    0  Emax(GeV)= 100000
+                         G4CrossSectionPairGG: Axen-Wellisch cross sections 
+                           below 91 GeV, Glauber-Gribov above 
+                                      G4CrossSectionPairGG: Emin(GeV)=    0  Emax(GeV)= 100000
                          G4CrossSectionPairGG: Axen-Wellisch cross sections 
                            below 91 GeV, Glauber-Gribov above 
                                          Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
@@ -440,6 +476,9 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 100
+ Process: PionMinusInelastic , Model: QGSP
+ relative limit 0.02 relative value = 0.0925036 fail
+ absolute limit 150 absolute value = 2088.72 fail
 Idle> #
 Idle> # pi- at 100 GeV in Pb
 Idle> #
@@ -464,6 +503,9 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 100
+ Process: KaonMinusInelastic , Model: QGSP
+ relative limit 0.02 relative value = 0.025248 fail
+ absolute limit 150 absolute value = 2517.51 fail
 Idle> #
 Idle> # kaon0S at 100 GeV in Pb
 Idle> #
@@ -799,6 +841,9 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 Idle> /run/beamOn 100
+ Process: KaonZeroLInelastic , Model: QGSP
+ relative limit 0.02 relative value = 0.0253914 fail
+ absolute limit 150 absolute value = 2539.14 fail
 Idle> #
 Idle> # proton at 100 GeV in Air
 Idle> #

@@ -1,0 +1,3145 @@
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+*************************************************************
+ Geant4 version Name: geant4-09-04-ref-01    (17-December-2010)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+
+***** Table : Nb of materials = 10 *****
+
+ Material: Beryllium     density:  1.848 g/cm3   RadL:  35.267 cm   Nucl.Int.Length:  39.439 cm   Imean:  63.700 eV 
+   --->  Element: Beryllium ( )   Z =  4.0   N =   9.0   A =   9.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material: Aluminium     density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.860 cm   Imean: 166.000 eV 
+   --->  Element: Aluminium ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material:  Silicon     density:  2.330 g/cm3   RadL:   9.368 cm   Nucl.Int.Length:  45.761 cm   Imean: 173.000 eV 
+   --->  Element: Silicon ( )   Z = 14.0   N =  28.1   A =  28.09 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material: liquidArgon     density:  1.390 g/cm3   RadL:  14.065 cm   Nucl.Int.Length:  86.006 cm   Imean: 188.000 eV 
+   --->  Element: liquidArgon ( )   Z = 18.0   N =  40.0   A =  39.95 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material:     Iron     density:  7.870 g/cm3   RadL:   1.759 cm   Nucl.Int.Length:  16.969 cm   Imean: 286.000 eV 
+   --->  Element: Iron ( )   Z = 26.0   N =  55.8   A =  55.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material:   Copper     density:  8.960 g/cm3   RadL:   1.436 cm   Nucl.Int.Length:  15.515 cm   Imean: 322.000 eV 
+   --->  Element: Copper ( )   Z = 29.0   N =  63.5   A =  63.55 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material:     Gold     density: 19.320 g/cm3   RadL:   3.344 mm   Nucl.Int.Length:  10.539 cm   Imean: 790.000 eV 
+   --->  Element: Gold ( )   Z = 79.0   N = 197.0   A = 196.97 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material:     Lead     density: 11.350 g/cm3   RadL:   5.612 mm   Nucl.Int.Length:  18.258 cm   Imean: 823.000 eV 
+   --->  Element: Lead ( )   Z = 82.0   N = 207.2   A = 207.19 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material:    Water     density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.537 cm   Imean:  68.998 eV 
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
+
+ Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+
+
+/run/verbose 2
+#
+/lowenergy/addPhysics photon-epdl
+Adding PhysicsList chunk photon-epdl
+Tst14PhysicsList::AddPhysicsList: photon-epdl is registered
+/lowenergy/addPhysics electron-eedl
+Adding PhysicsList chunk electron-eedl
+Tst14PhysicsList::AddPhysicsList: electron-eedl is registered
+/lowenergy/addPhysics positron-standard
+Adding PhysicsList chunk positron-standard
+Tst14PhysicsList::AddPhysicsList: positron-standard is registered
+PhysicsList for electron, positron and photon registered
+/run/initialize
+userDetector->Construct() start.
+
+ The  WORLD   is made of 2000mm of Air, the transverse size (R) of the world is 2000 mm. 
+ The ABSORBER is made of 10000mm of Lead, the transverse size (R) is 10000 mm. 
+ Z position of the (middle of the) absorber 0  mm.
+
+World is registered to the default region.
+physicsList->Construct() start.
+physicsList->Construct() start.
+### G4GoudsmitSaundersonTable loading PDF data
+### G4GoudsmitSaundersonMscModel loading ELSEPA data
+physicsList->CheckParticleList() start.
+physicsList->setCut() start.
+#
+/process/list
+     Transportation,               phot,              compt,               conv
+               Rayl,                msc,              eIoni,              eBrem
+            annihil
+/particle/list
+                 e+,                 e-,              gamma,           geantino
+
+#
+/lowenergy/cutG .01 micrometer
+/lowenergy/cutE .01 micrometer
+/lowenergy/lowlimG 2.5e-4
+Tst14PhysicsList - Gamma cut in energy = 0.00025 MeV
+/lowenergy/lowlimE 2.5e-4
+Tst14PhysicsList - Electron cut in energy = 0.00025 MeV
+#
+/run/particle/dumpCutValues
+#
+/calor/setAbsThick 10 cm
+/calor/setAbsRad 12.0 cm
+/calor/update
+
+ The  WORLD   is made of 2000mm of Air, the transverse size (R) of the world is 2000 mm. 
+ The ABSORBER is made of 100mm of Lead, the transverse size (R) is 120 mm. 
+ Z position of the (middle of the) absorber 0  mm.
+
+Obsolete world logical volume is removed from the default region.
+World is registered to the default region.
+#
+#
+/gun/direction 0 0 1
+#
+/calor/setAbsMat Aluminium
+
+ The  WORLD   is made of 2000mm of Air, the transverse size (R) of the world is 2000 mm. 
+ The ABSORBER is made of 100mm of Aluminium, the transverse size (R) is 120 mm. 
+ Z position of the (middle of the) absorber 0  mm.
+
+#=========================
+/gun/particle gamma
+#------------------
+#
+/gun/energy 10 keV
+/tracking/verbose 1
+/run/beamOn 1
+
+phot:   for  gamma    SubType= 12
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+ LivermorePhElectric :   Emin=        0 eV       Emax=          1 GeV
+       PhotoElectric :   Emin=        1 GeV      Emax=         10 TeV
+
+compt:   for  gamma    SubType= 13
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+    LivermoreCompton :   Emin=        0 eV       Emax=          1 GeV
+       Klein-Nishina :   Emin=        1 GeV      Emax=         10 TeV
+
+conv:   for  gamma    SubType= 14
+      Lambda tables from 1.022 MeV to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+ LivermoreConversion :   Emin=        0 eV       Emax=          1 GeV
+        BetheHeitler :   Emin=        1 GeV      Emax=         10 TeV
+
+Rayl:   for  gamma    SubType= 11
+      Lambda tables from 100 eV  to 10 TeV in 200 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LivermoreRayleigh :   Emin=        0 eV       Emax=          1 GeV
+   LivermoreRayleigh :   Emin=        1 GeV      Emax=        100 GeV
+
+msc:   for e-    SubType= 10
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  GoudsmitSaunderson :   Emin=        0 eV       Emax=         10 TeV
+
+eIoni:   for  e-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       LowEnergyIoni :   Emin=        0 eV       Emax=          1 MeV
+        MollerBhabha :   Emin=        1 MeV      Emax=         10 TeV
+
+eBrem:   for  e-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           LowEnBrem :   Emin=        0 eV       Emax=          1 GeV
+            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+
+eIoni:   for  e+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha :   Emin=        0 eV       Emax=         10 TeV
+
+eBrem:   for  e+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
+            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+
+annihil:   for  e+    SubType= 5
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            eplus2gg :   Emin=        0 eV       Emax=         10 TeV
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Aluminium 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   0 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50      0.01        0        0         0    Absorber initStep
+    1        0        0    -49.9         0  0.00155   0.0513    0.0513    Absorber phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0    -49.9   0.00845        0        0         0    Absorber initStep
+    1 0.000181 0.000176    -49.9    0.0063  0.00136 0.000396  0.000396    Absorber eIoni
+    2 0.000184  0.00018    -49.9   0.00604 4.87e-06 4.42e-06    0.0004    Absorber eIoni
+    3 0.000304 0.000325    -49.9         0  0.00604  0.00072   0.00112    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 0.000184  0.00018    -49.9  0.000254        0        0         0    Absorber initStep
+    1 0.000184  0.00018    -49.9         0 0.000254 6.73e-06  6.73e-06    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 0.000181 0.000176    -49.9  0.000789        0        0         0    Absorber initStep
+    1 0.000187 0.000173    -49.9         0 0.000789 2.37e-05  2.37e-05    Absorber eIoni
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Aluminium 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.17s Real=0.16s Sys=0s
+#
+/gun/energy 2 keV
+/tracking/verbose 1
+/run/beamOn 1
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Aluminium 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50     0.002        0        0         0    Absorber initStep
+    1        0        0      -50         0  0.00155 4.88e-05  4.88e-05    Absorber phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50   0.00045        0        0         0    Absorber initStep
+    1 8.73e-07 3.02e-06      -50         0  0.00045 1.17e-05  1.17e-05    Absorber eIoni
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Aluminium 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.02s Real=0.03s Sys=0s
+#
+/gun/energy 600 eV
+/tracking/verbose 1
+/run/beamOn 1
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Aluminium 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50    0.0006        0        0         0    Absorber initStep
+    1        0        0      -50         0 8.07e-05  0.00062   0.00062    Absorber phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50  0.000519        0        0         0    Absorber initStep
+    1 -3.49e-06 -1.63e-06      -50         0 0.000519 1.38e-05  1.38e-05    Absorber eIoni
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Aluminium 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.03s Real=0.02s Sys=0s
+#
+/gun/energy 300 eV
+/tracking/verbose 1
+/run/beamOn 1
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Aluminium 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50    0.0003        0        0         0    Absorber initStep
+    1        0        0      -50         0 8.07e-05 0.000116  0.000116    Absorber phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50  0.000219        0        0         0    Absorber initStep
+    1 1.25e-06 -5.37e-07      -50         0 0.000219 5.97e-06  5.97e-06    Absorber eIoni
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Aluminium 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.02s Real=0.03s Sys=0s
+#
+/gun/particle e-
+#---------------
+/gun/energy 10 keV
+/tracking/verbose 1
+/run/beamOn 1
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Aluminium 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50      0.01        0        0         0    Absorber initStep
+    1 -2.28e-05 -1.79e-06      -50   0.00995 5.16e-05 7.29e-05  7.29e-05    Absorber msc
+    2 -1.67e-05 -1.99e-05      -50   0.00974 0.000207 7.29e-05  0.000146    Absorber msc
+    3 -1.68e-05 -5.07e-05      -50   0.00941 0.000327 7.29e-05  0.000219    Absorber msc
+    4 6.15e-06 -8.76e-05      -50   0.00914 0.000277 7.29e-05  0.000292    Absorber msc
+    5 1.52e-06 -0.000136      -50    0.0089 0.000233 7.34e-05  0.000365    Absorber msc
+    6 7.37e-06 -0.000211      -50   0.00868  0.00023 8.78e-05  0.000453    Absorber msc
+    7  4.9e-05 -0.000288      -50   0.00844 0.000231  9.7e-05   0.00055    Absorber msc
+    8 0.000108 -0.000351      -50   0.00837 7.44e-05 9.69e-05  0.000647    Absorber msc
+    9 0.000132 -0.000432      -50   0.00803 0.000341 9.34e-05   0.00074    Absorber msc
+   10 0.000105 -0.000511      -50   0.00776 0.000273  9.4e-05  0.000834    Absorber msc
+   11 9.68e-05 -0.00058      -50   0.00726   0.0005  9.1e-05  0.000925    Absorber msc
+   12 4.66e-05 -0.000624      -50   0.00719 6.06e-05 7.85e-05     0.001    Absorber msc
+   13 -4.9e-06 -0.000608      -50   0.00662 0.000574 7.29e-05   0.00108    Absorber msc
+   14 -5.75e-05 -0.000622      -50   0.00609 0.000531 7.29e-05   0.00115    Absorber msc
+   15 -9.32e-05 -0.000661      -50   0.00547 0.000624 7.29e-05   0.00122    Absorber msc
+   16 -0.000101 -0.000672      -50    0.0038 0.000194 2.17e-05   0.00124    Absorber eIoni
+   17 -0.000115 -0.000708      -50   0.00348 0.000325 7.29e-05   0.00132    Absorber msc
+   18 -0.000157 -0.000735      -50   0.00283 0.000648 7.29e-05   0.00139    Absorber msc
+   19 -0.000179 -0.000767      -50   0.00217 0.000657 7.29e-05   0.00146    Absorber msc
+   20 -0.000185 -0.000787      -50   0.00107 0.000423 3.01e-05   0.00149    Absorber eIoni
+   21 -0.000186 -0.000797      -50         0  0.00107  3.7e-05   0.00153    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 -0.000185 -0.000787      -50  0.000681        0        0         0    Absorber initStep
+    1 -0.000188 -0.000789      -50         0 0.000681 1.93e-05  1.93e-05    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 -0.000101 -0.000672      -50   0.00147        0        0         0    Absorber initStep
+    1 -0.00011 -0.000687      -50         0  0.00147 6.17e-05  6.17e-05    Absorber eIoni
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Aluminium 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.34s Real=0.33s Sys=0s
+#
+/gun/energy 2 keV
+/tracking/verbose 1
+/run/beamOn 1
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Aluminium 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50     0.002        0        0         0    Absorber initStep
+    1 -2.85e-06 -9.2e-06      -50    0.0017 0.000299 2.02e-05  2.02e-05    Absorber msc
+    2 -2.71e-06 -1.3e-05      -50   0.00114 0.000113  4.2e-06  2.44e-05    Absorber eIoni
+    3 -5.49e-06 -2.33e-05      -50  0.000975  0.00017 2.02e-05  4.45e-05    Absorber msc
+    4 -5.08e-06 -2.3e-05      -50   0.00059 0.000384 1.31e-05  5.76e-05    Absorber msc
+    5 -4.94e-06 -2.19e-05      -50  0.000575 1.51e-05 2.33e-06     6e-05    Absorber msc
+    6 -4.46e-06 -1.76e-05      -50         0 0.000575 1.56e-05  7.56e-05    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 -2.71e-06 -1.3e-05      -50  0.000444        0        0         0    Absorber initStep
+    1 -4.29e-06 -1.52e-05      -50         0 0.000444 1.16e-05  1.16e-05    Absorber eIoni
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Aluminium 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.08s Real=0.09s Sys=0s
+#
+/gun/energy 600 eV
+/tracking/verbose 1
+/run/beamOn 1
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Aluminium 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50    0.0006        0        0         0    Absorber initStep
+    1 -3.28e-06 -2.14e-06      -50  0.000232 0.000368 1.09e-05  1.09e-05    Absorber msc
+    2 -4.48e-06 -2.92e-06      -50         0 0.000232 6.25e-06  1.72e-05    Absorber eIoni
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Aluminium 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.03s Real=0.03s Sys=0s
+#
+/gun/energy 300 eV
+/tracking/verbose 1
+/run/beamOn 1
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Aluminium 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50    0.0003        0        0         0    Absorber initStep
+    1        0        0      -50         0   0.0003 7.79e-06  7.79e-06    Absorber eIoni
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Aluminium 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.01s Real=0.01s Sys=0s
+#
+/calor/setAbsMat Lead
+
+ The  WORLD   is made of 2000mm of Air, the transverse size (R) of the world is 2000 mm. 
+ The ABSORBER is made of 100mm of Lead, the transverse size (R) is 120 mm. 
+ Z position of the (middle of the) absorber 0  mm.
+
+#====================
+#
+/gun/particle gamma
+#------------------
+#
+/gun/energy 10 keV
+/tracking/verbose 1
+/run/beamOn 1
+
+phot:   for  gamma    SubType= 12
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+ LivermorePhElectric :   Emin=        0 eV       Emax=          1 GeV
+       PhotoElectric :   Emin=        1 GeV      Emax=         10 TeV
+
+compt:   for  gamma    SubType= 13
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+    LivermoreCompton :   Emin=        0 eV       Emax=          1 GeV
+       Klein-Nishina :   Emin=        1 GeV      Emax=         10 TeV
+
+conv:   for  gamma    SubType= 14
+      Lambda tables from 1.02199782 MeV to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+ LivermoreConversion :   Emin=        0 eV       Emax=          1 GeV
+        BetheHeitler :   Emin=        1 GeV      Emax=         10 TeV
+
+Rayl:   for  gamma    SubType= 11
+      Lambda tables from 100 eV  to 10 TeV in 200 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LivermoreRayleigh :   Emin=        0 eV       Emax=          1 GeV
+   LivermoreRayleigh :   Emin=        1 GeV      Emax=        100 GeV
+
+msc:   for e-    SubType= 10
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  GoudsmitSaunderson :   Emin=        0 eV       Emax=         10 TeV
+
+eIoni:   for  e-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       LowEnergyIoni :   Emin=        0 eV       Emax=          1 MeV
+        MollerBhabha :   Emin=        1 MeV      Emax=         10 TeV
+
+eBrem:   for  e-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           LowEnBrem :   Emin=        0 eV       Emax=          1 GeV
+            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+
+eIoni:   for  e+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha :   Emin=        0 eV       Emax=         10 TeV
+
+eBrem:   for  e+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
+            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+
+annihil:   for  e+    SubType= 5
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            eplus2gg :   Emin=        0 eV       Emax=         10 TeV
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Lead 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50      0.01        0        0         0    Absorber initStep
+    1        0        0      -50         0  0.00355  0.00803   0.00803    Absorber phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50   0.00645        0        0         0    Absorber initStep
+    1 -1.4e-05 1.25e-05      -50   0.00636 8.74e-05    4e-05     4e-05    Absorber eIoni
+    2 -1.96e-05 -2.93e-06      -50   0.00592 0.000107  8.9e-05  0.000129    Absorber eIoni
+    3 -7.71e-06 -2.05e-05      -50   0.00515 0.000274 6.51e-05  0.000194    Absorber eIoni
+    4 -4.92e-06 -2.17e-05      -50   0.00456 6.84e-05 3.29e-06  0.000197    Absorber eIoni
+    5 -3.08e-06 -4.04e-05      -50   0.00331 0.000857  0.00016  0.000357    Absorber eIoni
+    6 -8.28e-06 -3.79e-05      -50    0.0017  0.00132 0.000117  0.000475    Absorber eIoni
+    7 -8.23e-06 -4.11e-05      -50         0   0.0017 5.45e-05  0.000529    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 7,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 -8.28e-06 -3.79e-05      -50  0.000292        0        0         0    Absorber initStep
+    1 -1.02e-05 -3.75e-05      -50         0 0.000292 6.95e-06  6.95e-06    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 -3.08e-06 -4.04e-05      -50  0.000393        0        0         0    Absorber initStep
+    1 -1.16e-06 -4.08e-05      -50         0 0.000393 9.04e-06  9.04e-06    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 5,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 -4.92e-06 -2.17e-05      -50  0.000517        0        0         0    Absorber initStep
+    1 -5.01e-06 -2.41e-05      -50         0 0.000517 1.18e-05  1.18e-05    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 -7.71e-06 -2.05e-05      -50  0.000494        0        0         0    Absorber initStep
+    1 -8.08e-06 -2.2e-05      -50         0 0.000494 1.13e-05  1.13e-05    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 -1.96e-05 -2.93e-06      -50  0.000338        0        0         0    Absorber initStep
+    1 -1.83e-05 -1.43e-06      -50         0 0.000338 7.87e-06  7.87e-06    Absorber eIoni
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.01s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Lead 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.23s Real=0.23s Sys=0s
+#
+/gun/energy 2 keV
+/tracking/verbose 1
+/run/beamOn 1
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Lead 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50     0.002        0        0         0    Absorber initStep
+    1        0        0      -50         0 0.000148  0.00145   0.00145    Absorber phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50   0.00185        0        0         0    Absorber initStep
+    1 1.18e-06 -4.51e-06      -50         0  0.00185 6.22e-05  6.22e-05    Absorber eIoni
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Lead 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.05s Real=0.06s Sys=0s
+#
+/gun/energy 600 eV
+/tracking/verbose 1
+/run/beamOn 1
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Lead 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50    0.0006        0        0         0    Absorber initStep
+    1        0        0      -50         0 0.000412 3.27e-05  3.27e-05    Absorber phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50  0.000188        0        0         0    Absorber initStep
+    1 -6.85e-07 -1.47e-06      -50         0 0.000188 4.98e-06  4.98e-06    Absorber eIoni
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Lead 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.04s Real=0.03s Sys=0s
+#
+/gun/energy 300 eV
+/tracking/verbose 1
+/run/beamOn 1
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Lead 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50    0.0003        0        0         0    Absorber initStep
+    1        0        0      -50         0 0.000153 6.56e-07  6.56e-07    Absorber phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50  0.000147        0        0         0    Absorber initStep
+    1 -9.19e-08 -7.85e-07      -50  0.000101 4.57e-05 1.03e-06  1.03e-06       World Transportation
+    2 0.000151 0.000825      -50         0 0.000101   0.0052    0.0052       World eIoni
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Lead 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.02s Real=0.03s Sys=0s
+#
+/gun/particle e-
+#---------------
+/gun/energy 10 keV
+/tracking/verbose 1
+/run/beamOn 1
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Lead 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50      0.01        0        0         0    Absorber initStep
+    1 4.08e-06 -2.06e-05      -50   0.00987 0.000128 4.21e-05  4.21e-05    Absorber msc
+    2 2.26e-05 -2.55e-05      -50   0.00983 4.31e-05 4.21e-05  8.43e-05    Absorber msc
+    3 3.36e-05 -5.39e-05      -50    0.0097 0.000131 4.21e-05  0.000126    Absorber msc
+    4 2.25e-05 -8.02e-05      -50    0.0096 9.92e-05 4.21e-05  0.000169    Absorber msc
+    5 -2.21e-06 -9.17e-05      -50   0.00948 0.000117 4.21e-05  0.000211    Absorber msc
+    6 -4.06e-07 -0.000115      -50   0.00937 0.000108 4.21e-05  0.000253    Absorber msc
+    7 -8.55e-06 -0.000132      -50   0.00933 3.98e-05 3.63e-05  0.000289    Absorber msc
+    8 -7.25e-06 -0.000133      -50   0.00933        0 7.03e-06  0.000296    Absorber msc
+    9 -7.12e-06 -0.000133      -50   0.00933 3.58e-06 6.35e-07  0.000297    Absorber msc
+   10 -7.04e-06 -0.000133      -50   0.00933 2.22e-06 3.93e-07  0.000297       World Transportation
+   11 -0.000822  -0.0733    -50.2   0.00927 5.94e-05    0.189      0.19       World msc
+   12  -0.0864   -0.152    -50.3   0.00885 0.000421    0.189     0.379       World msc
+   13   -0.124     -0.2    -50.4    0.0074 8.88e-05   0.0918     0.471       World eIoni
+   14   -0.137   -0.207    -50.4   0.00677  4.1e-05    0.022     0.493       World eIoni
+   15   -0.258   -0.183    -50.5    0.0062 0.000563    0.189     0.682       World msc
+   16   -0.328   -0.173    -50.6   0.00501 0.000786    0.166     0.848       World eIoni
+   17   -0.319  -0.0925    -50.8   0.00424 0.000468    0.187      1.04       World eIoni
+   18   -0.347   0.0484    -50.8    0.0033  0.00094    0.189      1.22       World msc
+   19   -0.347   0.0666    -50.8   0.00267 8.84e-05   0.0213      1.25       World eIoni
+   20   -0.332     0.07    -50.9    0.0017 0.000572   0.0794      1.32       World eIoni
+   21   -0.344   0.0751    -50.9         0   0.0017    0.121      1.45       World eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 7,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -0.332     0.07    -50.9    0.0004        0        0         0       World initStep
+    1   -0.329   0.0741    -50.9         0   0.0004   0.0151    0.0151       World eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -0.347   0.0666    -50.8  0.000536        0        0         0       World initStep
+    1   -0.347    0.073    -50.8         0 0.000536   0.0174    0.0174       World eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 5,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -0.319  -0.0925    -50.8    0.0003        0        0         0       World initStep
+    1   -0.315  -0.0932    -50.8         0   0.0003   0.0112    0.0112       World eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -0.328   -0.173    -50.6  0.000409        0        0         0       World initStep
+    1   -0.327   -0.177    -50.6         0 0.000409   0.0155    0.0155       World eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -0.137   -0.207    -50.4  0.000598        0        0         0       World initStep
+    1    -0.13   -0.209    -50.4         0 0.000598   0.0245    0.0245       World eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -0.124     -0.2    -50.4   0.00135        0        0         0       World initStep
+    1   -0.119   -0.223    -50.3   0.00125 0.000106   0.0433    0.0433       World msc
+    2   -0.109   -0.246    -50.3  0.000268 0.000979   0.0555    0.0988       World eIoni
+    3   -0.106   -0.247    -50.3         0 0.000268   0.0101     0.109       World eIoni
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Lead 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.51s Real=0.51s Sys=0s
+#
+/gun/energy 2 keV
+/tracking/verbose 1
+/run/beamOn 1
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Lead 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50     0.002        0        0         0    Absorber initStep
+    1 8.12e-07  1.8e-06      -50   0.00197 3.38e-05 4.08e-06  4.08e-06    Absorber msc
+    2 -2.95e-08 4.58e-06      -50   0.00197        0 4.08e-06  8.16e-06    Absorber msc
+    3 -4.36e-07 7.31e-06      -50   0.00193 3.46e-05 4.08e-06  1.22e-05    Absorber msc
+    4 -3.4e-06 8.41e-06      -50    0.0019  2.9e-05 4.08e-06  1.63e-05    Absorber msc
+    5 -6.06e-06 7.94e-06      -50    0.0019        0 4.08e-06  2.04e-05    Absorber msc
+    6 -8.75e-06  6.3e-06      -50   0.00187 3.55e-05 4.08e-06  2.45e-05    Absorber msc
+    7 -9.18e-06 3.89e-06      -50   0.00162 0.000247 4.08e-06  2.86e-05    Absorber msc
+    8 -8.38e-06 3.77e-06      -50   0.00161 1.48e-05 4.08e-06  3.27e-05    Absorber msc
+    9 -7.92e-06 3.62e-06      -50   0.00148  0.00012 1.99e-06  3.46e-05    Absorber msc
+   10   -5e-06 3.35e-06      -50   0.00147 1.09e-05 4.08e-06  3.87e-05    Absorber msc
+   11 -3.07e-06 1.82e-06      -50   0.00146 1.68e-05 4.08e-06  4.28e-05    Absorber msc
+   12 -5.45e-06 1.13e-06      -50   0.00144 1.57e-05 3.75e-06  4.66e-05    Absorber msc
+   13 -6.21e-06 9.11e-07      -50   0.00144        0 8.96e-07  4.75e-05    Absorber msc
+   14 -6.56e-06  8.1e-07      -50   0.00143 9.43e-06 4.08e-07  4.79e-05       World Transportation
+   15 -0.000289 -8.15e-05      -50   0.00107 2.62e-05 0.000334  0.000382       World eIoni
+   16  0.00609  -0.0186      -50  0.000379 0.000696    0.045    0.0454       World msc
+   17  0.00985  -0.0215      -50         0 0.000379   0.0142    0.0596       World eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 -0.000289 -8.15e-05      -50  0.000332        0        0         0       World initStep
+    1 -0.000545 -1.02e-05      -50  0.000323 8.37e-06 0.000315  0.000315    Absorber Transportation
+    2 -0.000546 -9.77e-06      -50         0 0.000323 7.57e-06  0.000323    Absorber eIoni
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Lead 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.21s Real=0.21s Sys=0s
+#
+/gun/energy 600 eV
+/tracking/verbose 1
+/run/beamOn 1
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Lead 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50    0.0006        0        0         0    Absorber initStep
+    1 2.02e-06 1.64e-07      -50  0.000293 0.000307 5.27e-06  5.27e-06    Absorber msc
+    2 3.98e-06 3.23e-07      -50  0.000132 0.000161 5.27e-06  1.05e-05    Absorber msc
+    3 4.29e-06 1.22e-06      -50         0 0.000132 4.01e-06  1.46e-05    Absorber eIoni
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Lead 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.04s Real=0.04s Sys=0s
+#
+/gun/energy 300 eV
+/tracking/verbose 1
+/run/beamOn 1
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Lead 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50    0.0003        0        0         0    Absorber initStep
+    1        0        0      -50         0   0.0003 7.11e-06  7.11e-06    Absorber eIoni
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Lead 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.01s Real=0.01s Sys=0s
+#
+#
+/calor/setAbsMat Water
+
+ The  WORLD   is made of 2000mm of Air, the transverse size (R) of the world is 2000 mm. 
+ The ABSORBER is made of 100mm of Water, the transverse size (R) is 120 mm. 
+ Z position of the (middle of the) absorber 0  mm.
+
+#======================
+#
+/gun/particle gamma
+#------------------
+#
+/gun/energy 10 keV
+/tracking/verbose 1
+/run/beamOn 1
+
+phot:   for  gamma    SubType= 12
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+ LivermorePhElectric :   Emin=        0 eV       Emax=          1 GeV
+       PhotoElectric :   Emin=        1 GeV      Emax=         10 TeV
+
+compt:   for  gamma    SubType= 13
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+    LivermoreCompton :   Emin=        0 eV       Emax=          1 GeV
+       Klein-Nishina :   Emin=        1 GeV      Emax=         10 TeV
+
+conv:   for  gamma    SubType= 14
+      Lambda tables from 1.02199782 MeV to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+ LivermoreConversion :   Emin=        0 eV       Emax=          1 GeV
+        BetheHeitler :   Emin=        1 GeV      Emax=         10 TeV
+
+Rayl:   for  gamma    SubType= 11
+      Lambda tables from 100 eV  to 10 TeV in 200 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LivermoreRayleigh :   Emin=        0 eV       Emax=          1 GeV
+   LivermoreRayleigh :   Emin=        1 GeV      Emax=        100 GeV
+
+msc:   for e-    SubType= 10
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  GoudsmitSaunderson :   Emin=        0 eV       Emax=         10 TeV
+
+eIoni:   for  e-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       LowEnergyIoni :   Emin=        0 eV       Emax=          1 MeV
+        MollerBhabha :   Emin=        1 MeV      Emax=         10 TeV
+
+eBrem:   for  e-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           LowEnBrem :   Emin=        0 eV       Emax=          1 GeV
+            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+
+eIoni:   for  e+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha :   Emin=        0 eV       Emax=         10 TeV
+
+eBrem:   for  e+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
+            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+
+annihil:   for  e+    SubType= 5
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            eplus2gg :   Emin=        0 eV       Emax=         10 TeV
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Water 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50      0.01        0        0         0    Absorber initStep
+    1        0        0    -49.3         0 0.000537    0.703     0.703    Absorber phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0    -49.3   0.00946        0        0         0    Absorber initStep
+    1 -0.000485 0.000138    -49.3   0.00529  0.00237 0.000852  0.000852    Absorber eIoni
+    2 -0.000224 9.25e-05    -49.3   0.00435 0.000685 0.000366   0.00122    Absorber eIoni
+    3 -8.38e-05 -0.000145    -49.3         0  0.00435 0.000711   0.00193    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 -0.000224 9.25e-05    -49.3  0.000258        0        0         0    Absorber initStep
+    1 -0.000225 9.11e-05    -49.3         0 0.000258 1.02e-05  1.02e-05    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 -0.000485 0.000138    -49.3    0.0018        0        0         0    Absorber initStep
+    1 -0.000535 0.000172    -49.3         0   0.0018 0.000147  0.000147    Absorber eIoni
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Water 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.17s Real=0.16s Sys=0s
+#
+/gun/energy 2 keV
+/tracking/verbose 1
+/run/beamOn 1
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Water 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50     0.002        0        0         0    Absorber initStep
+    1        0        0      -50         0 0.000537  0.00403   0.00403    Absorber phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50   0.00146        0        0         0    Absorber initStep
+    1 3.27e-05 2.26e-05      -50         0  0.00146 0.000103  0.000103    Absorber eIoni
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Water 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.03s Real=0.04s Sys=0s
+#
+/gun/energy 600 eV
+/tracking/verbose 1
+/run/beamOn 1
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Water 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50    0.0006        0        0         0    Absorber initStep
+    1        0        0      -50         0 0.000537 0.000156  0.000156    Absorber phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50  6.27e-05        0        0         0    Absorber initStep
+    1 1.14e-06 -4.16e-07      -50         0 6.27e-05 4.27e-06  4.27e-06    Absorber eIoni
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Water 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.03s Real=0.03s Sys=0s
+#
+/gun/energy 300 eV
+/tracking/verbose 1
+/run/beamOn 1
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Water 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50    0.0003        0        0         0    Absorber initStep
+    1        0        0      -50         0 2.92e-05  0.00128   0.00128    Absorber phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50  0.000271        0        0         0    Absorber initStep
+    1 1.09e-06 -3.79e-06      -50         0 0.000271 1.06e-05  1.06e-05    Absorber eIoni
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Water 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.02s Real=0.02s Sys=0s
+#
+/gun/particle e-
+#-----------------
+/gun/energy 10 keV
+/tracking/verbose 1
+/run/beamOn 1
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Water 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50      0.01        0        0         0    Absorber initStep
+    1 1.17e-06 -7.54e-05      -50   0.00942 0.000579 0.000258  0.000258    Absorber msc
+    2 2.32e-05 -0.000225      -50   0.00912 0.000299 0.000258  0.000517    Absorber msc
+    3 -3.26e-05 -0.000389      -50   0.00868 0.000441 0.000258  0.000775    Absorber msc
+    4 -0.000244 -0.000453      -50   0.00854 0.000137 0.000258   0.00103    Absorber msc
+    5 -0.000454 -0.000573      -50   0.00815 0.000393 0.000258   0.00129    Absorber msc
+    6 -0.000596 -0.000765      -50   0.00801 0.000138 0.000258   0.00155    Absorber msc
+    7 -0.000617 -0.000846      -50     0.007 5.97e-05 9.14e-05   0.00164    Absorber eIoni
+    8 -0.000677 -0.00106      -50   0.00633 0.000667 0.000258    0.0019    Absorber msc
+    9 -0.000692 -0.00122      -50   0.00589 0.000443 0.000258   0.00216    Absorber msc
+   10 -0.000697 -0.00132      -50   0.00505 0.000831 0.000258   0.00242    Absorber msc
+   11 -0.000621 -0.00126      -50   0.00394 0.000737 0.000195   0.00261    Absorber eIoni
+   12 -0.000448 -0.00127      -50   0.00114  0.00183 0.000293    0.0029    Absorber eIoni
+   13 -0.000437 -0.00127      -50         0  0.00114 6.81e-05   0.00297    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 -0.000448 -0.00127      -50   0.00097        0        0         0    Absorber initStep
+    1 -0.000429 -0.00129      -50         0  0.00097 5.25e-05  5.25e-05    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 -0.000621 -0.00126      -50  0.000374        0        0         0    Absorber initStep
+    1 -0.000623 -0.00126      -50         0 0.000374 1.47e-05  1.47e-05    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 -0.000617 -0.000846      -50  0.000958        0        0         0    Absorber initStep
+    1 -0.000603 -0.00085      -50         0 0.000958 5.14e-05  5.14e-05    Absorber eIoni
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0.01s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Water 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.25s Real=0.25s Sys=0s
+#
+/gun/energy 2 keV
+/tracking/verbose 1
+/run/beamOn 1
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Water 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50     0.002        0        0         0    Absorber initStep
+    1 -2.17e-05 -1.46e-05      -50   0.00157 0.000183 5.77e-05  5.77e-05    Absorber eIoni
+    2 -3.21e-05 -9.76e-06      -50  0.000842 0.000293 4.89e-05  0.000107    Absorber eIoni
+    3 -4.51e-05 -1.75e-05      -50         0 0.000842 4.21e-05  0.000149    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 -3.21e-05 -9.76e-06      -50  0.000431        0        0         0    Absorber initStep
+    1 -2.67e-05 -9.2e-06      -50         0 0.000431 1.72e-05  1.72e-05    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 -2.17e-05 -1.46e-05      -50  0.000251        0        0         0    Absorber initStep
+    1 -2.47e-05 -1.26e-05      -50         0 0.000251 9.95e-06  9.95e-06    Absorber eIoni
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Water 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.06s Real=0.06s Sys=0s
+#
+/gun/energy 600 eV
+/tracking/verbose 1
+/run/beamOn 1
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Water 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50    0.0006        0        0         0    Absorber initStep
+    1        0        0      -50         0   0.0006 2.59e-05  2.59e-05    Absorber eIoni
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Water 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.01s Real=0.01s Sys=0s
+#
+/gun/energy 300 eV
+/tracking/verbose 1
+/run/beamOn 1
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Water 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50    0.0003        0        0         0    Absorber initStep
+    1        0        0      -50         0   0.0003 1.17e-05  1.17e-05    Absorber eIoni
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Water 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.02s Real=0.02s Sys=0s
+#
+/gun/particle gamma
+#------------------
+/process/inactivate Rayl
+/run/physicsModified
+/process/inactivate compt
+/run/physicsModified
+/process/inactivate phot
+/run/physicsModified
+/process/inactivate eIoni
+/run/physicsModified
+/process/inactivate msc
+/run/physicsModified
+/process/inactivate eBrem
+/run/physicsModified
+/calor/setAbsMat Aluminium
+
+ The  WORLD   is made of 2000mm of Air, the transverse size (R) of the world is 2000 mm. 
+ The ABSORBER is made of 100mm of Aluminium, the transverse size (R) is 120 mm. 
+ Z position of the (middle of the) absorber 0  mm.
+
+#======================
+/tracking/verbose 0
+/gun/energy 2 MeV
+/run/beamOn 1000
+
+phot:   for  gamma    SubType= 12
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+ LivermorePhElectric :   Emin=        0 eV       Emax=          1 GeV
+       PhotoElectric :   Emin=        1 GeV      Emax=         10 TeV
+
+compt:   for  gamma    SubType= 13
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+    LivermoreCompton :   Emin=        0 eV       Emax=          1 GeV
+       Klein-Nishina :   Emin=        1 GeV      Emax=         10 TeV
+
+conv:   for  gamma    SubType= 14
+      Lambda tables from 1.02199782 MeV to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+ LivermoreConversion :   Emin=        0 eV       Emax=          1 GeV
+        BetheHeitler :   Emin=        1 GeV      Emax=         10 TeV
+
+Rayl:   for  gamma    SubType= 11
+      Lambda tables from 100 eV  to 10 TeV in 200 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LivermoreRayleigh :   Emin=        0 eV       Emax=          1 GeV
+   LivermoreRayleigh :   Emin=        1 GeV      Emax=        100 GeV
+
+msc:   for e-    SubType= 10
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  GoudsmitSaunderson :   Emin=        0 eV       Emax=         10 TeV
+
+eIoni:   for  e-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       LowEnergyIoni :   Emin=        0 eV       Emax=          1 MeV
+        MollerBhabha :   Emin=        1 MeV      Emax=         10 TeV
+
+eBrem:   for  e-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           LowEnBrem :   Emin=        0 eV       Emax=          1 GeV
+            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+
+eIoni:   for  e+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha :   Emin=        0 eV       Emax=         10 TeV
+
+eBrem:   for  e+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
+            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+
+annihil:   for  e+    SubType= 5
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            eplus2gg :   Emin=        0 eV       Emax=         10 TeV
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Aluminium 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 3     used in the geometry : No      recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.01s Real=0.01s Sys=0s
+/gun/energy 100 MeV
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Aluminium 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 3     used in the geometry : No      recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.02s Real=0.02s Sys=0s
+/calor/setAbsMat Lead
+
+ The  WORLD   is made of 2000mm of Air, the transverse size (R) of the world is 2000 mm. 
+ The ABSORBER is made of 100mm of Lead, the transverse size (R) is 120 mm. 
+ Z position of the (middle of the) absorber 0  mm.
+
+#======================
+/tracking/verbose 0
+/gun/energy 2 MeV
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Lead 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : No      recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.03s Real=0.02s Sys=0s
+/gun/energy 100 MeV
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Lead 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : No      recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.04s Real=0.04s Sys=0s
+/calor/setAbsMat Water
+
+ The  WORLD   is made of 2000mm of Air, the transverse size (R) of the world is 2000 mm. 
+ The ABSORBER is made of 100mm of Water, the transverse size (R) is 120 mm. 
+ Z position of the (middle of the) absorber 0  mm.
+
+#======================
+/tracking/verbose 0
+/gun/energy 2 MeV
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Water 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.01s Real=0.01s Sys=0s
+/gun/energy 100 MeV
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Water 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 0 fm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.01s Real=0.01s Sys=0s
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
+G4 kernel has come to Quit state.
+G4SDManager deleted.
+Rayl for gamma in Air : 1 calls
+Rayl for gamma in Aluminium : 27 calls
+Rayl for gamma in Lead : 23 calls
+Rayl for gamma in Water : 54 calls
+Transportation for e+ in Air : 1525 calls
+Transportation for e- in Air : 4983 calls
+Transportation for e- in Aluminium : 72 calls
+Transportation for e- in Lead : 275 calls
+Transportation for e- in Water : 29 calls
+Transportation for gamma in Air : 5448 calls
+annihil for e+ in Air : 1 calls
+annihil for e+ in Aluminium : 43 calls
+annihil for e+ in Lead : 888 calls
+annihil for e+ in Water : 7 calls
+compt for gamma in Air : 1 calls
+compt for gamma in Aluminium : 7 calls
+compt for gamma in Water : 31 calls
+conv for gamma in Air : 2 calls
+conv for gamma in Aluminium : 476 calls
+conv for gamma in Lead : 1846 calls
+conv for gamma in Water : 141 calls
+eBrem for e- in Aluminium : 2 calls
+eBrem for e- in Lead : 15 calls
+eBrem for e- in Water : 3 calls
+eIoni for e- in Air : 7106 calls
+eIoni for e- in Aluminium : 22950 calls
+eIoni for e- in Lead : 25399 calls
+eIoni for e- in Water : 22801 calls
+msc for e- in Air : 6618 calls
+msc for e- in Aluminium : 16156 calls
+msc for e- in Lead : 33817 calls
+msc for e- in Water : 7641 calls
+phot for gamma in Air : 28 calls
+phot for gamma in Aluminium : 4053 calls
+phot for gamma in Lead : 4034 calls
+phot for gamma in Water : 4009 calls
+EventManager deleted.
+UImanager deleted.
+Units table cleared.
+StateManager deleted.
+RunManagerKernel is deleted.
+RunManager is deleting.
+

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version geant4-09-04-ref-01   (17-December-2010)
+ Geant4 version Name: geant4-09-04-ref-01    (17-December-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -98,7 +98,7 @@ msc:   for proton    SubType= 10
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=          2 MeV
           BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
@@ -111,7 +111,7 @@ msc:   for GenericIon    SubType= 10
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=          2 MeV
           BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
@@ -125,7 +125,7 @@ msc:   for kaon+    SubType= 10
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=    1.05231 MeV
           BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
@@ -133,7 +133,7 @@ hIoni:   for  kaon+    SubType= 2
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=    1.05231 MeV
           BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
@@ -189,7 +189,7 @@ muPairProd:   for  mu-    SubType= 4
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=    297.505 keV
           BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
@@ -203,7 +203,7 @@ msc:   for pi-    SubType= 10
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=    297.505 keV
           BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
@@ -215,7 +215,9 @@ hIoni:   for  pi-    SubType= 2
         IonInelastic  Models:               Binary Cascade: Emin(GeV)=    0  Emax(GeV)= 0.1
                                              HadronicModel: Emin(GeV)= 0.09  Emax(GeV)= 10
 
-        IonInelastic  Crs sctns:    G4IonsShenCrossSection: Emin(GeV)=    0  Emax(GeV)= 100000
+        IonInelastic  Crs sctns:                  IonsShen: Emin(GeV)=    0  Emax(GeV)= 100000
+                                                  Tripathi: Emin(GeV)=    0  Emax(GeV)= 100000
+                                         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 
                                   Hadronic Processes for <anti_neutron>
@@ -358,10 +360,22 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0107689 fail
+ absolute limit 1 absolute value = 0.759261 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0116427 fail
+ absolute limit 1 absolute value = 0.759261 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0143551 fail
+ absolute limit 1 absolute value = 0.759261 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0152475 fail
+ absolute limit 1 absolute value = 0.759261 pass
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=27.7s Real=27.81s Sys=0.02s
+  User=20.31s Real=20.36s Sys=0.01s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
@@ -436,7 +450,7 @@ msc:   for proton    SubType= 10
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=          2 MeV
           BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
@@ -449,7 +463,7 @@ msc:   for GenericIon    SubType= 10
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=          2 MeV
           BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
@@ -463,7 +477,7 @@ msc:   for kaon+    SubType= 10
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=    1.05231 MeV
           BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
@@ -471,7 +485,7 @@ hIoni:   for  kaon+    SubType= 2
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=    1.05231 MeV
           BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
@@ -527,7 +541,7 @@ muPairProd:   for  mu-    SubType= 4
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=    297.505 keV
           BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
@@ -541,7 +555,7 @@ msc:   for pi-    SubType= 10
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=    297.505 keV
           BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
@@ -572,7 +586,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0.04s Real=0.03s Sys=0s
+  User=0.03s Real=0.03s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Silicon
 #
@@ -647,7 +661,7 @@ msc:   for proton    SubType= 10
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=          2 MeV
           BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
@@ -660,7 +674,7 @@ msc:   for GenericIon    SubType= 10
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=          2 MeV
           BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
@@ -674,7 +688,7 @@ msc:   for kaon+    SubType= 10
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=    1.05231 MeV
           BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
@@ -682,7 +696,7 @@ hIoni:   for  kaon+    SubType= 2
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=    1.05231 MeV
           BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
@@ -738,7 +752,7 @@ muPairProd:   for  mu-    SubType= 4
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=    297.505 keV
           BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
@@ -752,7 +766,7 @@ msc:   for pi-    SubType= 10
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=    297.505 keV
           BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
@@ -788,7 +802,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=4.43s Real=4.46s Sys=0s
+  User=4.74s Real=4.78s Sys=0.01s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -863,7 +877,7 @@ msc:   for proton    SubType= 10
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=          2 MeV
           BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
@@ -876,7 +890,7 @@ msc:   for GenericIon    SubType= 10
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=          2 MeV
           BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
@@ -890,7 +904,7 @@ msc:   for kaon+    SubType= 10
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=    1.05231 MeV
           BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
@@ -898,7 +912,7 @@ hIoni:   for  kaon+    SubType= 2
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=    1.05231 MeV
           BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
@@ -954,7 +968,7 @@ muPairProd:   for  mu-    SubType= 4
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=    297.505 keV
           BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
@@ -968,7 +982,7 @@ msc:   for pi-    SubType= 10
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=    297.505 keV
           BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
@@ -1006,10 +1020,40 @@ Index : 3     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 Start Run processing.
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = -2.42919 fail
+ absolute limit 1 absolute value = -1947.72 fail
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = -2.52182 fail
+ absolute limit 1 absolute value = -1918.5 fail
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = -1.58251 fail
+ absolute limit 1 absolute value = -1920.71 fail
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = -3.21097 fail
+ absolute limit 1 absolute value = -1956.17 fail
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = -1.15106 fail
+ absolute limit 1 absolute value = -1045.99 fail
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = -5.57624 fail
+ absolute limit 1 absolute value = -4232.21 fail
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = -3.01641 fail
+ absolute limit 1 absolute value = -1967.85 fail
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = -4.32889 fail
+ absolute limit 1 absolute value = -2373.62 fail
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = -3.02122 fail
+ absolute limit 1 absolute value = -1403.23 fail
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = -2.49728 fail
+ absolute limit 1 absolute value = -1893.57 fail
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=3.3s Real=3.32s Sys=0.01s
+  User=2.98s Real=2.99s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1057,7 +1101,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=6.93s Real=6.94s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on H
 #
@@ -1104,7 +1148,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0s Real=0s Sys=0s
+  User=0.03s Real=0.03s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on Silicon
 #
@@ -1151,7 +1195,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0.24s Real=0.24s Sys=0s
+  User=1.13s Real=1.12s Sys=0s
 #
 #  .....end C(12,6)++............
 #
@@ -1229,7 +1273,7 @@ msc:   for proton    SubType= 10
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=          2 MeV
           BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
@@ -1242,7 +1286,7 @@ msc:   for GenericIon    SubType= 10
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=          2 MeV
           BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
@@ -1256,7 +1300,7 @@ msc:   for kaon+    SubType= 10
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=    1.05231 MeV
           BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
@@ -1264,7 +1308,7 @@ hIoni:   for  kaon+    SubType= 2
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=    1.05231 MeV
           BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
@@ -1320,7 +1364,7 @@ muPairProd:   for  mu-    SubType= 4
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=    297.505 keV
           BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
@@ -1334,7 +1378,7 @@ msc:   for pi-    SubType= 10
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=    297.505 keV
           BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
@@ -1377,10 +1421,190 @@ Index : 4     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 Start Run processing.
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0124037 fail
+ absolute limit 1 absolute value = 0.565396 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.011552 fail
+ absolute limit 1 absolute value = 0.565381 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0101831 fail
+ absolute limit 1 absolute value = 0.565411 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0105724 fail
+ absolute limit 1 absolute value = 0.565381 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.01002 fail
+ absolute limit 1 absolute value = 0.565396 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0119763 fail
+ absolute limit 1 absolute value = 0.565411 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0116471 fail
+ absolute limit 1 absolute value = 0.565411 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0115288 fail
+ absolute limit 1 absolute value = 0.565381 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0105369 fail
+ absolute limit 1 absolute value = 0.565381 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0106789 fail
+ absolute limit 1 absolute value = 0.565411 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0122922 fail
+ absolute limit 1 absolute value = 0.565411 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0116328 fail
+ absolute limit 1 absolute value = 0.565396 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0114529 fail
+ absolute limit 1 absolute value = 0.565396 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.01043 fail
+ absolute limit 1 absolute value = 0.565396 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0116755 fail
+ absolute limit 1 absolute value = 0.565396 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0107997 fail
+ absolute limit 1 absolute value = 0.565381 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0106213 fail
+ absolute limit 1 absolute value = 0.565381 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.011784 fail
+ absolute limit 1 absolute value = 0.565381 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0121334 fail
+ absolute limit 1 absolute value = 0.565396 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0112503 fail
+ absolute limit 1 absolute value = 0.565381 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0104266 fail
+ absolute limit 1 absolute value = 0.565381 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0103842 fail
+ absolute limit 1 absolute value = 0.565411 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0107238 fail
+ absolute limit 1 absolute value = 0.565411 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0102383 fail
+ absolute limit 1 absolute value = 0.565381 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0109409 fail
+ absolute limit 1 absolute value = 0.565411 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0117922 fail
+ absolute limit 1 absolute value = 0.565381 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0104748 fail
+ absolute limit 1 absolute value = 0.565381 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0100949 fail
+ absolute limit 1 absolute value = 0.565381 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0104895 fail
+ absolute limit 1 absolute value = 0.565411 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0100139 fail
+ absolute limit 1 absolute value = 0.565381 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0107067 fail
+ absolute limit 1 absolute value = 0.565381 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0119531 fail
+ absolute limit 1 absolute value = 0.565381 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0116202 fail
+ absolute limit 1 absolute value = 0.56544 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0101374 fail
+ absolute limit 1 absolute value = 0.565381 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.011006 fail
+ absolute limit 1 absolute value = 0.565381 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0115413 fail
+ absolute limit 1 absolute value = 0.565381 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0101114 fail
+ absolute limit 1 absolute value = 0.565381 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.011886 fail
+ absolute limit 1 absolute value = 0.565411 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0106011 fail
+ absolute limit 1 absolute value = 0.565411 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0111375 fail
+ absolute limit 1 absolute value = 0.565381 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.011932 fail
+ absolute limit 1 absolute value = 0.565411 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0104868 fail
+ absolute limit 1 absolute value = 0.565396 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0120458 fail
+ absolute limit 1 absolute value = 0.565381 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0119017 fail
+ absolute limit 1 absolute value = 0.565381 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0120771 fail
+ absolute limit 1 absolute value = 0.565381 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0114297 fail
+ absolute limit 1 absolute value = 0.565411 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0118041 fail
+ absolute limit 1 absolute value = 0.565411 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0116971 fail
+ absolute limit 1 absolute value = 0.565381 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0108805 fail
+ absolute limit 1 absolute value = 0.565381 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0121395 fail
+ absolute limit 1 absolute value = 0.565411 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.010325 fail
+ absolute limit 1 absolute value = 0.565381 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0119275 fail
+ absolute limit 1 absolute value = 0.565396 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0122537 fail
+ absolute limit 1 absolute value = 0.565381 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.012484 fail
+ absolute limit 1 absolute value = 0.565381 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0100302 fail
+ absolute limit 1 absolute value = 0.565381 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0125046 fail
+ absolute limit 1 absolute value = 0.565381 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.011819 fail
+ absolute limit 1 absolute value = 0.565411 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0121139 fail
+ absolute limit 1 absolute value = 0.565381 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0106487 fail
+ absolute limit 1 absolute value = 0.565381 pass
+ Process: inelastic , Model: Binary Cascade
+ relative limit 0.01 relative value = 0.0102541 fail
+ absolute limit 1 absolute value = 0.565381 pass
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=38.22s Real=38.31s Sys=0.01s
+  User=44.82s Real=45s Sys=0.07s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.

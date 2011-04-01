@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version geant4-09-04-ref-01   (17-December-2010)
+ Geant4 version Name: geant4-09-04-ref-01    (17-December-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -13,6 +13,9 @@
 Test49:Par's: T=1.800000e+02,S=3.000000e-01,Eta=3.000000e-01,nop=152,p=4.009300e+05,e=0.000000e+00,pPDG=1000010010,tPDG=1000731810,nEv=50000,fN=4.000000e-01,fD=2.000000e-01,cP=5.000000e+00,rM=1.000000e+00,sA=5.000000e-01,modName=qgsp
 Test49:NewRun:Targ=90073108,M=1.685151e+05,Proj=2212,E=3.999928e+05 MeV, Run #1 of 1, Model=qgsp
 ***=>TEST19: 1000 events are simulated
+ Process: ProtonInelastic , Model: QGSP
+ relative limit 2.000000e-02 relative value = 9.444002e-03 pass
+ absolute limit 1.500000e+02 absolute value = 3.777533e+03 fail
 ***=>TEST19: 2000 events are simulated
 ***=>TEST19: 3000 events are simulated
 ***=>TEST19: 4000 events are simulated
@@ -36,6 +39,9 @@ Test49:NewRun:Targ=90073108,M=1.685151e+05,Proj=2212,E=3.999928e+05 MeV, Run #1 
 ***=>TEST19: 22000 events are simulated
 ***=>TEST19: 23000 events are simulated
 ***=>TEST19: 24000 events are simulated
+ Process: ProtonInelastic , Model: QGSP
+ relative limit 2.000000e-02 relative value = 6.911372e-03 pass
+ absolute limit 1.500000e+02 absolute value = 2.764499e+03 fail
 ***=>TEST19: 25000 events are simulated
 ***=>TEST19: 26000 events are simulated
 ***=>TEST19: 27000 events are simulated
@@ -61,5 +67,5 @@ Test49:NewRun:Targ=90073108,M=1.685151e+05,Proj=2212,E=3.999928e+05 MeV, Run #1 
 ***=>TEST19: 47000 events are simulated
 ***=>TEST19: 48000 events are simulated
 ***=>TEST19: 49000 events are simulated
-Test49:Time/Ev=3.430400e-03 s, DN=0.000000e+00 %
+Test49:Time/Ev=3.379600e-03 s, DN=0.000000e+00 %
 

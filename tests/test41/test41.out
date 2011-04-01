@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version geant4-09-04-ref-01   (17-December-2010)
+ Geant4 version Name: geant4-09-04-ref-01    (17-December-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -87,7 +87,7 @@ muMsc:   for proton    SubType= 10
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 GeV in 56 bins
       Lambda tables from threshold to 10 GeV in 56 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=          2 MeV
           BetheBloch :   Emin=        2 MeV      Emax=         10 GeV
@@ -100,7 +100,7 @@ muMsc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 GeV in 56 bins
       Lambda tables from threshold to 10 GeV in 56 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :   Emin=        0 eV       Emax=          2 MeV
@@ -109,7 +109,7 @@ ionIoni:   for  GenericIon    SubType= 2
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 GeV in 56 bins
       Lambda tables from threshold to 10 GeV in 56 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=          2 MeV
           BetheBloch :   Emin=        2 MeV      Emax=         10 GeV
@@ -123,7 +123,7 @@ muMsc:   for kaon+    SubType= 10
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 GeV in 56 bins
       Lambda tables from threshold to 10 GeV in 56 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=    1.05231 MeV
           BetheBloch :   Emin=  1.05231 MeV      Emax=         10 GeV
@@ -131,7 +131,7 @@ hIoni:   for  kaon+    SubType= 2
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 GeV in 56 bins
       Lambda tables from threshold to 10 GeV in 56 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=    1.05231 MeV
           BetheBloch :   Emin=  1.05231 MeV      Emax=         10 GeV
@@ -199,7 +199,7 @@ CoulombScat:   for  mu-    SubType= 1
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 GeV in 56 bins
       Lambda tables from threshold to 10 GeV in 56 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=    297.505 keV
           BetheBloch :   Emin=  297.505 keV      Emax=         10 GeV
@@ -213,7 +213,7 @@ muMsc:   for pi-    SubType= 10
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 GeV in 56 bins
       Lambda tables from threshold to 10 GeV in 56 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=    297.505 keV
           BetheBloch :   Emin=  297.505 keV      Emax=         10 GeV
@@ -1226,7 +1226,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.6        0        0         0         Abs initStep
-    1    0.193   -0.341     55.1      94.9     1.46     55.1      55.1         Abs muIoni
+    1    0.193   -0.341     55.1      94.9     1.45     55.1      55.1         Abs muIoni
     2    0.592     -1.1      116      93.2     1.72     61.2       116       World Transportation
 
 *********************************************************************************************************
@@ -3039,7 +3039,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0      96.1        0        0         0         Abs initStep
     1  -0.0589  -0.0648     39.3      94.8     1.18     39.3      39.3         Abs muIoni
     2  -0.0663   -0.067     41.9      93.7   0.0694     2.63      41.9         Abs muIoni
-    3   -0.479   -0.426      116      91.5     2.19     74.3       116       World Transportation
+    3   -0.479   -0.426      116      91.6     2.19     74.3       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -4788,7 +4788,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1   0.0219 -0.00847     46.3      94.2     1.38     46.3      46.3         Abs muIoni
     2   0.0456  -0.0481     69.1      93.1    0.642     22.8      69.1         Abs muIoni
     3    0.012 -0.00243      116      91.5     1.38     47.1       116         Abs muIoni
-    4    0.012 -0.00243      116      91.5 0.000256  0.00367       116       World Transportation
+    4    0.012 -0.00244      116      91.5 0.000256  0.00366       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -5160,7 +5160,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      95.4        0        0         0         Abs initStep
     1  -0.0416    0.123     41.4        94     1.33     41.4      41.4         Abs muIoni
-    2   -0.161    0.119      116      91.9     2.16     74.8       116       World Transportation
+    2   -0.161    0.119      116      91.9     2.15     74.8       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -5185,7 +5185,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.7        0        0         0         Abs initStep
-    1  -0.0131   -0.141     46.8      95.5     1.25     46.8      46.8         Abs muIoni
+    1  -0.0131   -0.141     46.8      95.5     1.24     46.8      46.8         Abs muIoni
     2  -0.0704   -0.138     53.3      95.1    0.165     6.58      53.3         Abs muIoni
     3   -0.742   -0.419      116      92.6     1.83     62.5       116         Abs muIoni
     4   -0.746    -0.42      116      92.6   0.0116     0.43       116       World Transportation
@@ -5383,7 +5383,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0        96        0        0         0         Abs initStep
     1    0.012   0.0943     23.9        95    0.702     23.9      23.9         Abs muIoni
     2  -0.0185    0.239     80.7      93.2      1.7     56.8      80.7         Abs muIoni
-    3 -0.00859      0.2      116      92.2    0.997     35.5       116       World Transportation
+    3 -0.00859      0.2      116      92.2    0.996     35.5       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -10084,7 +10084,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.08s Real=0.1s Sys=0.01s
+  User=0.09s Real=0.1s Sys=0.01s
 ###  1000  events of mu+  with p(MeV/c)= 172 scattered off 116.24 mm of G4_lH2
 ###    Beam momentum spread 1 MeV/c
 /testem/setFileName test41_al.log
