@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version geant4-09-04-ref-01   (17-December-2010)
+ Geant4 version Name: geant4-09-04-ref-01    (17-December-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -228,7 +228,7 @@ msc:   for proton    SubType= 10
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=          2 MeV
           BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
@@ -244,7 +244,7 @@ msc:   for kaon+    SubType= 10
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=    1.05231 MeV
           BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
@@ -254,7 +254,7 @@ hIoni:   for  kaon+    SubType= 2
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=    1.05231 MeV
           BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
@@ -316,7 +316,7 @@ muPairProd:   for  mu-    SubType= 4
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=    297.505 keV
           BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
@@ -332,7 +332,7 @@ msc:   for pi-    SubType= 10
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=    297.505 keV
           BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
@@ -376,26 +376,26 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.7s Real=0.69s Sys=0s
+  User=0.67s Real=0.68s Sys=0s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=44.2485 +- 0.51841  mm  
+    mean charged track length   in absorber=43.7084 +- 0.415939  mm  
 
-            mean energy deposit in absorber=0.0517978 +- 0.000948221  MeV 
+            mean energy deposit in absorber=0.0511046 +- 0.000823553  MeV 
 
- mean number of steps in absorber (charged) =8.401 +- 0.236884      
- mean number of steps in absorber (neutral) =2.693 +- 0.0527328      
+ mean number of steps in absorber (charged) =8.821 +- 0.248662      
+ mean number of steps in absorber (neutral) =2.798 +- 0.0534527      
 
-   mean number of charged secondaries = 3.402 +- 0.0758973
+   mean number of charged secondaries = 3.331 +- 0.0718292
 
-   mean number of neutral secondaries = 0.047 +- 0.00684039
+   mean number of neutral secondaries = 0.052 +- 0.00743613
 
-   mean number of e-s =3.402  and e+s =0
+   mean number of e-s =3.331  and e+s =0
 
-(number) transmission coeff=0.52  reflection coeff=0.016
+(number) transmission coeff=0.527  reflection coeff=0.026
 
  energy deposit distribution 
-#entries=1000    #underflows=0    #overflows=55
+#entries=1000    #underflows=0    #overflows=48
  bin nb      Elow      entries     normalized 
     0         0           0           0
     1   1.53846           0           0
@@ -405,70 +405,70 @@ Run Summary
     5   7.69231           0           0
     6   9.23077           0           0
     7   10.7692           0           0
-    8   12.3077           1       0.001
+    8   12.3077           2       0.002
     9   13.8462           4       0.004
-   10   15.3846          15       0.015
-   11   16.9231          11       0.011
-   12   18.4615          18       0.018
-   13        20          15       0.015
-   14   21.5385          20        0.02
-   15   23.0769          23       0.023
-   16   24.6154          23       0.023
-   17   26.1538          30        0.03
-   18   27.6923          21       0.021
-   19   29.2308          28       0.028
-   20   30.7692          35       0.035
-   21   32.3077          33       0.033
-   22   33.8462          32       0.032
-   23   35.3846          32       0.032
-   24   36.9231          33       0.033
-   25   38.4615          31       0.031
-   26        40          24       0.024
-   27   41.5385          34       0.034
-   28   43.0769          33       0.033
-   29   44.6154          27       0.027
-   30   46.1538          26       0.026
-   31   47.6923          24       0.024
-   32   49.2308          28       0.028
-   33   50.7692          16       0.016
-   34   52.3077          21       0.021
-   35   53.8462          25       0.025
-   36   55.3846          25       0.025
-   37   56.9231          24       0.024
-   38   58.4615          18       0.018
-   39        60          15       0.015
-   40   61.5385          16       0.016
-   41   63.0769          22       0.022
-   42   64.6154          16       0.016
-   43   66.1538          14       0.014
-   44   67.6923          10        0.01
-   45   69.2308           9       0.009
-   46   70.7692          11       0.011
-   47   72.3077          11       0.011
+   10   15.3846           8       0.008
+   11   16.9231          13       0.013
+   12   18.4615          13       0.013
+   13        20          18       0.018
+   14   21.5385          21       0.021
+   15   23.0769          25       0.025
+   16   24.6154          15       0.015
+   17   26.1538          34       0.034
+   18   27.6923          28       0.028
+   19   29.2308          31       0.031
+   20   30.7692          32       0.032
+   21   32.3077          25       0.025
+   22   33.8462          39       0.039
+   23   35.3846          20        0.02
+   24   36.9231          23       0.023
+   25   38.4615          29       0.029
+   26        40          34       0.034
+   27   41.5385          31       0.031
+   28   43.0769          39       0.039
+   29   44.6154          29       0.029
+   30   46.1538          15       0.015
+   31   47.6923          29       0.029
+   32   49.2308          24       0.024
+   33   50.7692          36       0.036
+   34   52.3077          23       0.023
+   35   53.8462          21       0.021
+   36   55.3846          20        0.02
+   37   56.9231          21       0.021
+   38   58.4615          16       0.016
+   39        60          18       0.018
+   40   61.5385          14       0.014
+   41   63.0769          20        0.02
+   42   64.6154           9       0.009
+   43   66.1538          12       0.012
+   44   67.6923          19       0.019
+   45   69.2308          14       0.014
+   46   70.7692          17       0.017
+   47   72.3077           9       0.009
    48   73.8462           6       0.006
-   49   75.3846           3       0.003
-   50   76.9231           6       0.006
-   51   78.4615           5       0.005
-   52        80           5       0.005
-   53   81.5385           8       0.008
+   49   75.3846          11       0.011
+   50   76.9231           8       0.008
+   51   78.4615           9       0.009
+   52        80           8       0.008
+   53   81.5385           4       0.004
    54   83.0769           4       0.004
-   55   84.6154           4       0.004
+   55   84.6154          10        0.01
    56   86.1538           7       0.007
-   57   87.6923           4       0.004
-   58   89.2308           7       0.007
-   59   90.7692           5       0.005
-   60   92.3077           9       0.009
-   61   93.8462           6       0.006
-   62   95.3846           5       0.005
+   57   87.6923           7       0.007
+   58   89.2308           6       0.006
+   59   90.7692           7       0.007
+   60   92.3077           2       0.002
+   61   93.8462           2       0.002
+   62   95.3846           4       0.004
    63   96.9231           5       0.005
    64   98.4615           2       0.002
 
- Emp =       0.0307692   width=      0.0446154  MeV 
+ Emp =       0.0338462   width=      0.0415385  MeV 
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1441776206, 741376226
+ Current couple of seeds = 2139536287, 1917209209
 ----------------------------------------
 
 ========= Table of registered couples ==============================

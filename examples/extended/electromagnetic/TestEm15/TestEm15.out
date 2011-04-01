@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version geant4-09-04-ref-01   (17-December-2010)
+ Geant4 version Name: geant4-09-04-ref-01    (17-December-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -318,27 +318,27 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.13s Real=0.13s Sys=0s
+  User=0.14s Real=0.13s Sys=0s
 
  The run consists of 10000 e- of 5 MeV through 100 m   of Water (density: 1 g/cm3 )
 
  Process calls frequency --->	msc = 10000
 
- truePathLength :	2.7512 cm  +- 11.142 nm 
- geomPathLength :	2.0703 cm  +- 8.0957 nm 
- lateralDisplac :	1.024 cm  +- 5.5455 nm 
- Psi            :	459.33 mrad +- 1.178e-05 mrad  (26.317 deg +- 6.7497e-07 deg)
+ truePathLength :	2.753 cm  +- 5.4053 nm 
+ geomPathLength :	2.0713 cm  +- 13.642 nm 
+ lateralDisplac :	1.0249 cm  +- 7.1466 nm 
+ Psi            :	459.48 mrad +- 0.0002561 mrad  (26.327 deg +- 1.4673e-05 deg)
 
- Theta_plane    :	729.32 mrad  (41.787 deg)
- phi correlation:	0.29111 +- 0.29953  (std::cos(phi_pos - phi_dir))
+ Theta_plane    :	729.55 mrad  (41.8 deg)
+ phi correlation:	0.29124 +- 0.2996  (std::cos(phi_pos - phi_dir))
 
  Verification from G4EmCalculator. 
 
  transport mean free path :	8.3657 cm 
- range from restrict dE/dx:	2.7512 cm 
+ range from restrict dE/dx:	2.753 cm 
  ---> effective facRange  :	1
 
- compute theta0 from Highland :	620.02 mrad  (35.525 deg)
+ compute theta0 from Highland :	620.24 mrad  (35.537 deg)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -384,7 +384,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.14s Real=0.14s Sys=0s
+  User=0.13s Real=0.14s Sys=0s
 
  The run consists of 10000 e- of 100 keV through 100 m   of Water (density: 1 g/cm3 )
 

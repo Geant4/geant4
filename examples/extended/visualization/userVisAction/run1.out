@@ -1,0 +1,424 @@
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+*************************************************************
+ Geant4 version Name: geant4-09-04-ref-01    (17-December-2010)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+Visualization Manager instantiating with verbosity "warnings (3)"...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully registered the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  gMocrenFile (gMocrenFile)
+  OpenGLStoredX (OGL)
+  OpenGLImmediateX (OGLI)
+  OpenGLStoredX (OGLS)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
+  drawByAttribute
+
+Registered filter factories:
+  chargeFilter
+  particleFilter
+  originVolumeFilter
+  attributeFilter
+
+
+The materials defined are : 
+
+
+***** Table : Nb of materials = 3 *****
+
+ Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+
+ Material:     Lead     density: 11.350 g/cm3   RadL:   5.612 mm   Nucl.Int.Length:  18.258 cm   Imean: 823.000 eV 
+   --->  Element: Lead ( )   Z = 82.0   N = 207.2   A = 207.19 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material: XenonGas     density:  5.458 mg/cm3  RadL:  15.539 m    Nucl.Int.Length: 326.401 m    Imean: 482.000 eV   temperature: 293.15 K  pressure:   1.00 atm
+   --->  Element: XenonGas ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+
+Target is 5 cm of Lead
+There are 5 chambers in the tracker region. The chambers are 200 mm of XenonGas
+ The distance between chamber is 80 cm
+
+phot:   for  gamma    SubType= 12
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       PhotoElectric :   Emin=        0 eV       Emax=         10 TeV
+
+compt:   for  gamma    SubType= 13
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       Klein-Nishina :   Emin=        0 eV       Emax=         10 TeV
+
+conv:   for  gamma    SubType= 14
+      Lambda tables from 1.022 MeV to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        BetheHeitler :   Emin=        0 eV       Emax=         10 TeV
+
+msc:   for e-    SubType= 10
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc93 :   Emin=        0 eV       Emax=         10 TeV
+
+eIoni:   for  e-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha :   Emin=        0 eV       Emax=         10 TeV
+
+eBrem:   for  e-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
+            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+
+eIoni:   for  e+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha :   Emin=        0 eV       Emax=         10 TeV
+
+eBrem:   for  e+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
+            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+
+annihil:   for  e+    SubType= 5
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            eplus2gg :   Emin=        0 eV       Emax=         10 TeV
+
+msc:   for proton    SubType= 10
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :   Emin=        0 eV       Emax=         10 TeV
+
+hIoni:   for  proton    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :   Emin=        0 eV       Emax=          2 MeV
+          BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
+
+hIoni:   for  anti_proton    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :   Emin=        0 eV       Emax=          2 MeV
+          BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
+
+msc:   for kaon+    SubType= 10
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :   Emin=        0 eV       Emax=         10 TeV
+
+hIoni:   for  kaon+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :   Emin=        0 eV       Emax=    1.05231 MeV
+          BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
+
+hIoni:   for  kaon-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :   Emin=        0 eV       Emax=    1.05231 MeV
+          BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
+
+muMsc:   for mu+    SubType= 10
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :   Emin=        0 eV       Emax=         10 TeV
+
+muIoni:   for  mu+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :   Emin=        0 eV       Emax=        200 keV
+          BetheBloch :   Emin=      200 keV      Emax=          1 GeV
+        MuBetheBloch :   Emin=        1 GeV      Emax=         10 TeV
+
+muBrems:   for  mu+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem :   Emin=        0 eV       Emax=         10 TeV
+
+muPairProd:   for  mu+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :   Emin=        0 eV       Emax=         10 TeV
+
+muIoni:   for  mu-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :   Emin=        0 eV       Emax=        200 keV
+          BetheBloch :   Emin=      200 keV      Emax=          1 GeV
+        MuBetheBloch :   Emin=        1 GeV      Emax=         10 TeV
+
+muBrems:   for  mu-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem :   Emin=        0 eV       Emax=         10 TeV
+
+muPairProd:   for  mu-    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :   Emin=        0 eV       Emax=         10 TeV
+
+hIoni:   for  pi+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :   Emin=        0 eV       Emax=    297.505 keV
+          BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
+
+msc:   for pi-    SubType= 10
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :   Emin=        0 eV       Emax=         10 TeV
+
+hIoni:   for  pi-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :   Emin=        0 eV       Emax=    297.505 keV
+          BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Lead XenonGas 
+ Production cuts :   gamma 1 cm      e- 1 cm      e+ 1 cm  proton 1 cm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 cm 
+ Energy thresholds :  gamma  990 eV     e-  17.6927 keV    e+  17.1942 keV proton 1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 cm 
+ Energy thresholds :  gamma  283.792 keV    e-  15.3667 MeV    e+  13.9869 MeV proton 1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : XenonGas
+ Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 cm 
+ Energy thresholds :  gamma  2.50257 keV    e-  40.6965 keV    e+  39.8843 keV proton 1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   0 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
+
+    Voxelisation: top CPU users:
+    Percent   Total CPU    System CPU       Memory  Volume
+    -------   ----------   ----------     --------  ----------
+       0.00         0.00         0.00            0k World
+       0.00         0.00         0.00            0k Tracker
+
+    Voxelisation: top memory users:
+    Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
+    -------   --------     ------   ------   --------   ----------    ----------
+      66.30          0k         1        7         10         0.00    Tracker
+      33.70          0k         1        3          4         0.00    World
+### Run 0 start.
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = proton,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm  -2.91 m       3 GeV     0 eV      0 fm      0 fm        World    initStep
+    1      0 fm      0 fm  -2.45 m       3 GeV    68 keV    46 cm     46 cm        World  Transportation
+    2  -5.96 um    231 nm   -2.4 m    2.93 GeV  69.1 MeV     5 cm     51 cm       Target  Transportation
+    3    366 um   -673 um   -2.3 m    2.93 GeV  15.2 keV    10 cm     61 cm      Tracker  StepLimiter
+    4    726 um  -1.36 mm   -2.2 m    2.93 GeV  25.7 keV    10 cm     71 cm      Tracker  StepLimiter
+    5   1.08 mm  -2.04 mm   -2.1 m    2.93 GeV  22.8 keV    10 cm     81 cm      Tracker  StepLimiter
+    6   1.44 mm  -2.72 mm     -2 m    2.93 GeV  21.7 keV    10 cm     91 cm      Tracker  StepLimiter
+    7    1.8 mm   -3.4 mm   -1.9 m    2.93 GeV    16 keV    10 cm   1.01 m       Tracker  StepLimiter
+    8   2.17 mm  -4.08 mm   -1.8 m    2.93 GeV  14.2 keV    10 cm   1.11 m       Tracker  StepLimiter
+    9   2.53 mm  -4.77 mm   -1.7 m    2.93 GeV  15.7 keV    10 cm   1.21 m       Tracker  StepLimiter
+   10    2.9 mm  -5.48 mm   -1.6 m    2.93 GeV  15.1 keV    10 cm   1.31 m       Tracker  StepLimiter
+   11    2.9 mm  -5.48 mm   -1.6 m    2.93 GeV  4.19 eV     24 um   1.31 m       Tracker  Transportation
+   12   3.62 mm  -6.86 mm   -1.4 m    2.93 GeV  93.2 keV    20 cm   1.51 m       Chamber  Transportation
+   13   3.98 mm  -7.54 mm   -1.3 m    2.93 GeV  14.4 keV    10 cm   1.61 m       Tracker  StepLimiter
+   14   4.35 mm  -8.22 mm   -1.2 m    2.93 GeV  13.2 keV    10 cm   1.71 m       Tracker  StepLimiter
+   15    4.7 mm   -8.9 mm   -1.1 m    2.93 GeV  17.4 keV    10 cm   1.81 m       Tracker  StepLimiter
+   16   5.06 mm  -9.58 mm     -1 m    2.93 GeV    30 keV    10 cm   1.91 m       Tracker  StepLimiter
+   17   5.42 mm  -1.03 cm    -90 cm   2.93 GeV  11.3 keV    10 cm   2.01 m       Tracker  StepLimiter
+   18   5.47 mm  -1.03 cm  -88.8 cm   2.93 GeV  1.06 keV  1.25 cm   2.02 m       Tracker       hIoni
+   19   5.78 mm  -1.09 cm    -80 cm   2.93 GeV  13.9 keV  8.75 cm   2.11 m       Tracker  Transportation
+   20    6.5 mm  -1.23 cm    -60 cm   2.93 GeV   105 keV    20 cm   2.31 m       Chamber  Transportation
+   21   6.87 mm  -1.29 cm    -50 cm   2.93 GeV  27.3 keV    10 cm   2.41 m       Tracker  StepLimiter
+   22   7.26 mm  -1.36 cm    -40 cm   2.93 GeV    12 keV    10 cm   2.51 m       Tracker  StepLimiter
+   23   7.63 mm  -1.42 cm    -30 cm   2.93 GeV  14.2 keV    10 cm   2.61 m       Tracker  StepLimiter
+   24   8.01 mm  -1.48 cm    -20 cm   2.93 GeV  14.1 keV    10 cm   2.71 m       Tracker  StepLimiter
+   25   8.38 mm  -1.55 cm    -10 cm   2.93 GeV  15.7 keV    10 cm   2.81 m       Tracker  StepLimiter
+   26   8.75 mm  -1.61 cm  -16.7 um   2.93 GeV  25.7 keV    10 cm   2.91 m       Tracker  StepLimiter
+   27   8.75 mm  -1.61 cm -0.0036 fm   2.93 GeV  2.91 eV   16.7 um   2.91 m       Tracker  Transportation
+   28    9.5 mm  -1.74 cm     20 cm   2.93 GeV  78.9 keV    20 cm   3.11 m       Chamber  Transportation
+   29    9.8 mm  -1.81 cm     30 cm   2.93 GeV  17.1 keV    10 cm   3.21 m       Tracker  StepLimiter
+   30   1.01 cm  -1.87 cm     40 cm   2.93 GeV  23.5 keV    10 cm   3.31 m       Tracker  StepLimiter
+   31   1.04 cm  -1.94 cm     50 cm   2.93 GeV  13.9 keV    10 cm   3.41 m       Tracker  StepLimiter
+   32   1.07 cm     -2 cm     60 cm   2.93 GeV  22.4 keV    10 cm   3.51 m       Tracker  StepLimiter
+   33    1.1 cm  -2.07 cm     70 cm   2.93 GeV  28.7 keV    10 cm   3.61 m       Tracker  StepLimiter
+   34   1.14 cm  -2.13 cm     80 cm   2.93 GeV  14.1 keV    10 cm   3.71 m       Tracker  StepLimiter
+   35   1.14 cm  -2.13 cm     80 cm   2.93 GeV  2.71 eV   15.5 um   3.71 m       Tracker  Transportation
+   36    1.2 cm  -2.26 cm      1 m    2.93 GeV  89.3 keV    20 cm   3.91 m       Chamber  Transportation
+   37   1.23 cm  -2.33 cm    1.1 m    2.93 GeV  12.3 keV    10 cm   4.01 m       Tracker  StepLimiter
+   38   1.26 cm   -2.4 cm    1.2 m    2.93 GeV  26.9 keV    10 cm   4.11 m       Tracker  StepLimiter
+   39   1.28 cm  -2.46 cm    1.3 m    2.93 GeV  16.4 keV    10 cm   4.21 m       Tracker  StepLimiter
+   40   1.31 cm  -2.53 cm    1.4 m    2.93 GeV  13.1 keV    10 cm   4.31 m       Tracker  StepLimiter
+   41   1.34 cm   -2.6 cm    1.5 m    2.93 GeV  17.1 keV    10 cm   4.41 m       Tracker  StepLimiter
+   42   1.37 cm  -2.66 cm    1.6 m    2.93 GeV  19.6 keV    10 cm   4.51 m       Tracker  StepLimiter
+   43   1.37 cm  -2.66 cm    1.6 m    2.93 GeV   2.7 eV   15.5 um   4.51 m       Tracker  Transportation
+   44   1.42 cm  -2.79 cm    1.8 m    2.93 GeV  70.1 keV    20 cm   4.71 m       Chamber  Transportation
+   45   1.46 cm  -2.86 cm    1.9 m    2.93 GeV  18.2 keV    10 cm   4.81 m       Tracker  StepLimiter
+   46   1.49 cm  -2.93 cm      2 m    2.93 GeV  21.1 keV    10 cm   4.91 m       Tracker  StepLimiter
+   47   1.52 cm  -2.99 cm    2.1 m    2.93 GeV  18.4 keV    10 cm   5.01 m       Tracker  StepLimiter
+   48   1.55 cm  -3.06 cm    2.2 m    2.93 GeV    14 keV    10 cm   5.11 m       Tracker  StepLimiter
+   49   1.58 cm  -3.12 cm    2.3 m    2.93 GeV  15.9 keV    10 cm   5.21 m       Tracker  StepLimiter
+   50   1.62 cm  -3.19 cm    2.4 m    2.93 GeV  19.8 keV    10 cm   5.31 m       Tracker  StepLimiter
+   51   1.62 cm  -3.19 cm    2.4 m    2.93 GeV  2.81 eV   16.1 um   5.31 m       Tracker  Transportation
+   52   1.78 cm  -3.52 cm   2.91 m    2.93 GeV  92.3 keV    51 cm   5.82 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   5.47 mm  -1.03 cm  -88.8 cm   26.9 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   3.58 mm  -1.28 cm  -88.5 cm   20.1 keV  6.75 keV   4.1 mm    4.1 mm      Tracker       eIoni
+    2   4.91 mm  -1.52 cm  -88.6 cm   15.4 keV  4.67 keV  3.03 mm   7.13 mm      Tracker       eIoni
+    3   6.23 mm  -1.66 cm  -88.5 cm   11.7 keV  3.74 keV   2.4 mm   9.53 mm      Tracker       eIoni
+    4   7.14 mm  -1.53 cm  -88.5 cm   2.22 keV  9.49 keV  1.92 mm   1.14 cm      Tracker       eIoni
+    5   7.18 mm  -1.53 cm  -88.5 cm      0 eV   2.22 keV   182 um   1.16 cm      Tracker       eIoni
+>>> Event 0
+    0 trajectories stored in this event.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0.01s Sys=0s
+
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Lead XenonGas 
+ Production cuts :   gamma 1 cm      e- 1 cm      e+ 1 cm  proton 1 cm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 cm 
+ Energy thresholds :  gamma  990 eV     e-  17.692740670334 keV    e+  17.194181333758 keV proton 1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 cm 
+ Energy thresholds :  gamma  283.79180296983 keV    e-  15.366683149048 MeV    e+  13.98689587491 MeV proton 1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : XenonGas
+ Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 cm 
+ Energy thresholds :  gamma  2.5025696359866 keV    e-  40.696549172646 keV    e+  39.884314226973 keV proton 1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+### Run 1 start.
+Start Run processing.
+>>> Event 0
+    0 trajectories stored in this event.
+>>> Event 1
+    0 trajectories stored in this event.
+>>> Event 2
+    0 trajectories stored in this event.
+Run terminated.
+Run Summary
+  Number of events processed : 3
+  User=0s Real=0s Sys=0s
+Graphics systems deleted.
+Visualization Manager deleting...
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
+G4 kernel has come to Quit state.
+G4SDManager deleted.
+EventManager deleted.
+UImanager deleted.
+Units table cleared.
+StateManager deleted.
+RunManagerKernel is deleted.
+RunManager is deleting.
+

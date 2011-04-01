@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version geant4-09-04-ref-01   (17-December-2010)
+ Geant4 version Name: geant4-09-04-ref-01    (17-December-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -105,7 +105,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
   Range cuts : 	 gamma      100 um 	 e-      100 um 
  Energy cuts : 	 gamma  1.11344 keV	 e-  85.1138 keV
 
-  Max_energy _transferable  : 10 MeV (4.90425 cm )
+  Max_energy _transferable  : 10 MeV (4.90722 cm )
 
   processes :                	        eIoni		        eBrem		        total
  
@@ -117,15 +117,15 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
         (g/cm2)            : 	      1.00527 g/cm2 	      2.91908 g/cm2 	      747.756 mg/cm2
 
  
-  restricted dE/dx         : 	      1.61536 MeV/cm	      12.5324 eV/cm 	      1.61538 MeV/cm
-      (MeV/g/cm2)          : 	      1.61536 MeV*cm2/g	      12.5324  eV*cm2/g	      1.61538 MeV*cm2/g
+  restricted dE/dx         : 	      1.61425 MeV/cm	      12.5324 eV/cm 	      1.61426 MeV/cm
+      (MeV/g/cm2)          : 	      1.61425 MeV*cm2/g	      12.5324  eV*cm2/g	      1.61426 MeV*cm2/g
  
-  range from restrict dE/dx: 	 6.05865 cm  ( 6.05865 g/cm2 )
-  range from full dE/dx    : 	 4.90425 cm  ( 4.90425 g/cm2 )
+  range from restrict dE/dx: 	 6.06328 cm  ( 6.06328 g/cm2 )
+  range from full dE/dx    : 	 4.90722 cm  ( 4.90722 g/cm2 )
  
   transport mean free path : 	 27.9107 cm  ( 27.9107 g/cm2 )
  
-  critical energy (Rossi)  : 	 78.7733 MeV
+  critical energy (Rossi)  : 	 78.7732 MeV
   Moliere radius           : 	0.269193 X0 =  9.71583 cm 
 -------------------------------------------------------------
 
