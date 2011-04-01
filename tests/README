@@ -79,6 +79,7 @@ test52 ## EM low-energy (standard, low-energy, Penelope)
 test53 ## EM low-energy Penelope
 test54 ## EM low-energy Livermore
 test55 ## ICRU 73-based ionization model (G4IonParametrisedLossModel)
+test56 ## Deexcitation/PIXE 
 test58 ## Single Coulomb scattering (G4IonCoulombScatteringModel)
 test60 ## Geant4-DNA LowE migrated processes.
 test61 ## QMD hadronic model.

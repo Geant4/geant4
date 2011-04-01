@@ -169,6 +169,7 @@ examples/extended
   hadronic:
     Hadr00                   Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
     Hadr01                   Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
+    Hadr02                   Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
   medical:
     DICOM                    Pedro.Arce@ciemat.es            Pedro Arce
     electronScattering       Michel.Maire@lapp.in2p3.fr      Michel Maire
