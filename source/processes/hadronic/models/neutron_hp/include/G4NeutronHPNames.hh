@@ -51,7 +51,7 @@ class G4NeutronHPNames
   
   public:
   
-  static const G4String theString[99];
+  static const G4String theString[100];
   G4int theMaxOffSet;
   G4String itoa(int current)
   {
