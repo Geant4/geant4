@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+    
+08-04-11 mma (testem11-V09-04-03)
+- PhysicsList : set back default lowest production cut (990 eV)
+- update PhysListEmStandard for msc95 and deexcitation (see ref-03)
      
 20-02-11 mma (testem11-V09-04-02)
 - update PhysListEmStandard for deexcitation
