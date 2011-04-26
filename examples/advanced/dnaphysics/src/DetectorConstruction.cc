@@ -31,6 +31,7 @@
 #include "G4Region.hh"
 #include "G4ProductionCuts.hh"
 #include "G4UserLimits.hh"
+#include "G4NistManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -60,10 +61,17 @@ void DetectorConstruction::DefineMaterials()
   // Water is defined from NIST material database
   G4NistManager * man = G4NistManager::Instance();
   G4Material * H2O = man->FindOrBuildMaterial("G4_WATER");
+  
+  // If one wishes to test other density value for water material, one should use instead:
+  // G4Material * H2O = man->BuildMaterialWithNewDensity("G4_WATER_MODIFIED","G4_WATER",1000*g/cm/cm/cm);
+  
+  // Note: any string for "G4_WATER_MODIFIED" parameter is accepted
+  // and "G4_WATER" parameter should not be changed
 
   // Default materials in setup.
   waterMaterial = H2O;
   
+  G4cout << "-> Density of water material (g/cm3)=" << waterMaterial->GetDensity()/(g/cm/cm/cm) << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -1,9 +1,12 @@
      =========================================================
- 		      Geant4 - Dnaphysics example
+ 		      Geant4 - dnaphysics example
      =========================================================
 
                        Package History file
                        --------------------
+
+05 April 2011 - tag dnaphysics-V09-04-03 - S. Incerti
+- added comment for use of variable density material
 
 17 February 2011 - tag dnaphysics-V09-04-02 - S. Incerti
 - switched to G4EmDNAPhysics builder
