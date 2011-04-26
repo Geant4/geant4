@@ -72,9 +72,12 @@ G4QEnvironment::G4QEnvironment(const G4QNucleus& theEnv)
   G4int envA = envQPDG.GetBaryNum();
   G4double envM = envQPDG.GetMass();
   theWorld = 0;
+  nBarClust = 0;
+  f2all = 0;
   totCharge = envQPDG.GetCharge();
   totBaryoN = envA;
   tot4Mom = G4LorentzVector(0.,0.,0.,envM);
+  theTargetPDG = 0;
 #ifdef debug
   G4cout << "G4QEnviron::Const: t4M=" << tot4Mom << ",tC=" << totCharge
          << ",tB=" << totBaryoN << G4endl;
@@ -4726,7 +4729,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
 #endif
     if(hBN>lHadr) // Current Hadron is the Biggest fragment -> Swap with theLast Hadron
     {
-      G4QHadron* theLast = theCurr;          // Prototype of the pointer to the Last Hadron
+      G4QHadron* theLast = theCurr; // Pointer prototype for the LastHadron (Last=Cur case)
       G4QHadron* curHadr = new G4QHadron(theCurr);// Remember CurrentHadron for evaporation
       if(ipo+1<theQHadrons.size())          // If ipo<Last, swap theCurHadr and theLastHadr
       {
@@ -4736,15 +4739,15 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
         else theCurr->SetQC(theLast->GetQC());// CurHadrPDG instead of LastHadrPDG
         theCurr->Set4Momentum(theLast->Get4Momentum()); // ... continue substitution
       }
-      theQHadrons.pop_back();           // pointer to theLastHadron is excluded from OUTPUT
-      delete theLast; //*!!When kill,DON'T forget to delete theLastQHadron asAnInstance !!*
-      theQHadrons.push_back(curHadr);
-      nHadr=theQHadrons.size();
       h4Mom = theCurr->Get4Momentum();
       hBN  = theCurr->GetBaryonNumber();
       cBN  = theCurr->GetCharge();
       sBN  = theCurr->GetStrangeness();
       hPDG = theCurr->GetPDGCode();
+      theQHadrons.pop_back();           // pointer to theLastHadron is excluded from OUTPUT
+      delete theLast; //*!!When kill,DON'T forget to delete theLastQHadron asAnInstance !!*
+      theQHadrons.push_back(curHadr);
+      nHadr=theQHadrons.size();
     }
     if(hPDG==89002000||hPDG==89001001||hPDG==89000002)// 2pt dec. of anti-strange (3pt dec)
     {

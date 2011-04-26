@@ -16,6 +16,11 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+14 Apr 2011 W.Pokorski + M.Kossov           (hadr-chips-body-V09-04-00) 
+-----------------------------------------------------------------------
+- G4QEnvironment.cc: Initialization in Constructor, postponed delete for
+  the theCurrent=theLast case.
+
 11 Nov 2010 Dennis Wright                   (hadr-chips-body-V09-03-15) 
 -----------------------------------------------------------------------
 - G4QContent.cc : fix bug 1131 by removing dead code in quark ctor
