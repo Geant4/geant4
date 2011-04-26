@@ -335,8 +335,8 @@ protected:
 
 private:
 
-  const G4MaterialCutsCouple* currentCouple;
-  const G4Element*            currentElement;
+  const G4MaterialCutsCouple* fCurrentCouple;
+  const G4Element*            fCurrentElement;
 
   G4int                  nsec;
   G4bool                 flagDeexcitation;
@@ -348,28 +348,28 @@ private:
 
 inline void G4VEmModel::SetCurrentCouple(const G4MaterialCutsCouple* p)
 {
-  currentCouple = p;
+  fCurrentCouple = p;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline const G4MaterialCutsCouple* G4VEmModel::CurrentCouple() const
 {
-  return currentCouple;
+  return fCurrentCouple;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void G4VEmModel::SetCurrentElement(const G4Element* elm)
 {
-  currentElement = elm;
+  fCurrentElement = elm;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline const G4Element* G4VEmModel::GetCurrentElement() const
 {
-  return currentElement;
+  return fCurrentElement;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -388,7 +388,7 @@ inline G4double G4VEmModel::ComputeDEDX(const G4MaterialCutsCouple* c,
 					G4double kinEnergy,
 					G4double cutEnergy)
 {
-  currentCouple = c;
+  fCurrentCouple = c;
   return ComputeDEDXPerVolume(c->GetMaterial(),p,kinEnergy,cutEnergy);
 }
 
@@ -400,7 +400,7 @@ inline G4double G4VEmModel::CrossSection(const G4MaterialCutsCouple* c,
 					 G4double cutEnergy,
 					 G4double maxEnergy)
 {
-  currentCouple = c;
+  fCurrentCouple = c;
   return CrossSectionPerVolume(c->GetMaterial(),p,kinEnergy,cutEnergy,maxEnergy);
 }
 
@@ -427,7 +427,7 @@ inline G4double G4VEmModel::ComputeCrossSectionPerAtom(
 		G4double cutEnergy,
 		G4double maxEnergy)
 {
-  currentElement = elm;
+  fCurrentElement = elm;
   return ComputeCrossSectionPerAtom(part,kinEnergy,elm->GetZ(),elm->GetN(),
 				    cutEnergy,maxEnergy);
 }
@@ -441,22 +441,22 @@ const G4Element* G4VEmModel::SelectRandomAtom(const G4MaterialCutsCouple* couple
 					      G4double cutEnergy,
 					      G4double maxEnergy)
 {
-  currentCouple = couple;
+  fCurrentCouple = couple;
   if(nSelectors > 0) {
-    currentElement = 
+    fCurrentElement = 
       elmSelectors[couple->GetIndex()]->SelectRandomAtom(kinEnergy);
   } else {
-    currentElement = SelectRandomAtom(couple->GetMaterial(),p,kinEnergy,
+    fCurrentElement = SelectRandomAtom(couple->GetMaterial(),p,kinEnergy,
 				      cutEnergy,maxEnergy);
   }
-  return currentElement;
+  return fCurrentElement;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4int G4VEmModel::SelectIsotopeNumber(const G4Element* elm)
 {
-  currentElement = elm;
+  fCurrentElement = elm;
   G4int N = G4int(elm->GetN() + 0.5);
   G4int ni = elm->GetNumberOfIsotopes();
   if(ni > 0) {

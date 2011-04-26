@@ -17,6 +17,24 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19 April 11: V.Ivant (emutils-V09-04-16)
+- G4VEnergyLossProcess - start cross section table from energy threshold
+  and not from minimal kinetic energy, number of bins is reduced, cross
+  section starts from zero value
+
+06 April 11: V.Ivant (emutils-V09-04-15)
+06 April 11: V.Ivant (emutils-V09-04-14)
+- G4ElectronIonPair - (V.Grichine) substitute Gaussian sampling
+    by Gamma function sampling of number of electron/ion pairs
+
+31 March 11: V.Ivant (emutils-V09-04-13)
+- G4VEmModel - use linear interpolation for G4EmElementSelectors
+   to avoid numerical inprecision for small number of bins
+   (increase number of bins will require extra memory)
+
+30 March 11: V.Ivant (emutils-V09-04-12)
+- G4VEmModel - rename private members to avoid usage of the same names
+
 28 March 11: V.Ivant (emutils-V09-04-11)
 - Return old methods in G4VAtomDeexcitation, which are still used
   in EM examples   

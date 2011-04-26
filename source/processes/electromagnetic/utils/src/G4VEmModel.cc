@@ -64,7 +64,7 @@ G4VEmModel::G4VEmModel(const G4String& nam):
   eMinActive(0.0),eMaxActive(DBL_MAX),
   polarAngleLimit(0.0),secondaryThreshold(DBL_MAX),theLPMflag(false),
   pParticleChange(0),
-  currentCouple(0),currentElement(0),
+  fCurrentCouple(0),fCurrentElement(0),
   nsec(5),flagDeexcitation(false) 
 {
   xsec.resize(nsec);
@@ -121,7 +121,12 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* p,
 {
   // initialise before run
   G4LossTableManager* man = G4LossTableManager::Instance();
-  G4bool spline = man->SplineFlag();
+
+  // using spline for element selectors should be investigated in details
+  // because small number of points may provide biased results
+  // large number of points requires significant increase of memory
+  //G4bool spline = man->SplineFlag();
+  G4bool spline = false;
 
   // two times less bins because probability functon is normalized 
   // so correspondingly is more smooth
@@ -142,9 +147,9 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* p,
 
   // initialise vector
   for(G4int i=0; i<numOfCouples; ++i) {
-    currentCouple = theCoupleTable->GetMaterialCutsCouple(i);
-    const G4Material* material = currentCouple->GetMaterial();
-    G4int idx = currentCouple->GetIndex();
+    fCurrentCouple = theCoupleTable->GetMaterialCutsCouple(i);
+    const G4Material* material = fCurrentCouple->GetMaterial();
+    G4int idx = fCurrentCouple->GetIndex();
 
     // selector already exist check if should be deleted
     G4bool create = true;
@@ -205,18 +210,18 @@ const G4Element* G4VEmModel::SelectRandomAtom(const G4Material* material,
 {
   const G4ElementVector* theElementVector = material->GetElementVector();
   G4int n = material->GetNumberOfElements() - 1;
-  currentElement = (*theElementVector)[n];
+  fCurrentElement = (*theElementVector)[n];
   if (n > 0) {
     G4double x = G4UniformRand()*
                  G4VEmModel::CrossSectionPerVolume(material,pd,kinEnergy,tcut,tmax);
     for(G4int i=0; i<n; ++i) {
       if (x <= xsec[i]) {
-	currentElement = (*theElementVector)[i];
+	fCurrentElement = (*theElementVector)[i];
 	break;
       }
     }
   }
-  return currentElement;
+  return fCurrentElement;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

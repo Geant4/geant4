@@ -72,7 +72,6 @@ G4EmElementSelector::G4EmElementSelector(G4VEmModel* mod,
     v0->SetSpline(spline);
     for(G4int i=1; i<n; ++i) {
       G4PhysicsLogVector* v = new G4PhysicsLogVector(*v0);
-      v->SetSpline(spline);
       xSections.push_back(v);
     }
   }
@@ -96,7 +95,7 @@ void G4EmElementSelector::Initialise(const G4ParticleDefinition* part,
 				     G4double cut)
 {
   //G4cout << "G4EmElementSelector initialise for " << material->GetName() << G4endl;
-  if(0 == nElmMinusOne || cut == cutEnergy) return;
+  if(0 == nElmMinusOne || cut == cutEnergy) { return; }
 
   cutEnergy = cut;
   //G4cout << "cut(keV)= " << cut/keV << G4endl;
@@ -141,6 +140,7 @@ void G4EmElementSelector::Initialise(const G4ParticleDefinition* part,
       }
     }
   }
+  //G4cout << "======== G4EmElementSelector for the " << model->GetName();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

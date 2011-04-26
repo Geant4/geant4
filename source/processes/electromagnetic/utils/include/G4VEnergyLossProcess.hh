@@ -422,7 +422,7 @@ public:
   const G4Element* GetCurrentElement() const;
 
   // sample range at the end of a step
-  inline G4double SampleRange();
+  //  inline G4double SampleRange();
 
   // Set scaling parameters for ions is needed to G4EmCalculator
   inline void SetDynamicMassCharge(G4double massratio, G4double charge2ratio);
@@ -460,7 +460,7 @@ private:
   const G4ParticleDefinition* thePositron;
   const G4ParticleDefinition* theGenericIon;
 
-  G4PhysicsVector*            vstrag;
+  //  G4PhysicsVector*            vstrag;
 
   // ======== Parameters of the class fixed at initialisation =======
 
@@ -816,7 +816,7 @@ inline void G4VEnergyLossProcess::ComputeLambdaForScaledEnergy(G4double e)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+/*
 inline G4double G4VEnergyLossProcess::SampleRange()
 {
   G4double e = amu_c2*preStepKinEnergy/particle->GetPDGMass();
@@ -825,7 +825,7 @@ inline G4double G4VEnergyLossProcess::SampleRange()
   if(x > 0.0) { fRange = x; }
   return fRange;
 }
-
+*/
 // ======== Get/Set inline methods used at initialisation ================
 
 inline void G4VEnergyLossProcess::SetFluctModel(G4VEmFluctuationModel* p)
