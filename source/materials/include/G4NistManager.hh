@@ -26,7 +26,6 @@
 // $Id: G4NistManager.hh,v 1.25 2010-11-01 18:43:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
 // -------------------------------------------------------------------
 //
 // GEANT4 Class header file
@@ -169,7 +168,6 @@ public:
   // Build G4Material with user defined name and density on base
   // of a material from Geant4 dataBase
   //
-  inline 
   G4Material* BuildMaterialWithNewDensity(const G4String& name,
                                           const G4String& basename, 
 					  G4double density = 0.0,

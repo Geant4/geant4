@@ -49,7 +49,6 @@
 #include "G4NistManager.hh"
 
 G4DensityEffectData* G4IonisParamMat::fDensityData = 0;
-G4double G4IonisParamMat::twoln10 = 2.*std::log(10.);
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -58,6 +57,7 @@ G4IonisParamMat::G4IonisParamMat(G4Material* material)
 {
   fBirks = 0.;
   fMeanEnergyPerIon = 0.0;
+  twoln10 = 2.*std::log(10.);
 
   // minimal set of default parameters for density effect
   fCdensity = 0.0;

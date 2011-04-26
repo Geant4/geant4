@@ -318,8 +318,8 @@ void G4Material::CopyPointersOfBaseMaterial()
   for (size_t i=0; i<fNumberOfElements; ++i) {
     VecNbOfAtomsPerVolume[i] = factor*v[i];
   }
-  fRadlen = fBaseMaterial->GetRadlen();
-  fNuclInterLen = fBaseMaterial->GetNuclearInterLength();
+  fRadlen = fBaseMaterial->GetRadlen()/factor;
+  fNuclInterLen = fBaseMaterial->GetNuclearInterLength()/factor;
   if (fIonisation) { delete fIonisation; }
   fIonisation  = new G4IonisParamMat(this);
 

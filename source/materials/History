@@ -17,6 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05-04-11 V.Ivanchenko (materials-V09-04-05)
+- G4IonisParamMat: make method DensityCorrection() inline and make 
+  'twoln10' member of the class
+- G4Material - fixed computation of radiation length and nuclear interaction
+   length when G4Material is constructed from a BaseMaterial
+
+04-04-11 G.Cosmo (materials-V09-04-04)
+- G4IonisParamMat: move method DensityCorrection() to source file, as it is
+  now using static value 'twoln10'. Required for Windows DLLs build.
+
+03-04-11 V.Ivanchenko
+- G4NistManager - implemented forgotten inline method
+
 25-03-11 V.Ivanchenko (materials-V09-04-03)
 - G4ElementData - added extra array
 

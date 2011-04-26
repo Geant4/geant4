@@ -185,12 +185,15 @@ private:
 
   // static data created only once
   static G4DensityEffectData* fDensityData;
-  static G4double twoln10;
+  G4double twoln10;
 };
 
-  // x = log10(beta*gamma)  
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
 inline G4double G4IonisParamMat::DensityCorrection(G4double x)
 {
+  // x = log10(beta*gamma)  
+
   G4double y = 0.0;
   if(x < fX0density) {
     if(fD0density > 0.0) { y = fD0density*std::pow(10.,2*(x - fX0density)); }
