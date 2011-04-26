@@ -166,17 +166,13 @@ void G4EmStandardPhysics_option3::ConstructProcess()
     if (particleName == "gamma") {
 
       G4PhotoElectricEffect* pe = new G4PhotoElectricEffect;
-      //pe->SetModel(new G4PEEffectFluoModel());
+      pe->SetModel(new G4PEEffectFluoModel());
       G4ComptonScattering* cs   = new G4ComptonScattering;
       cs->SetModel(new G4KleinNishinaModel());
       pmanager->AddDiscreteProcess(pe);
       pmanager->AddDiscreteProcess(cs);
       pmanager->AddDiscreteProcess(new G4GammaConversion);
-
-      // The process is created and deactivated
-      G4RayleighScattering* rl = new G4RayleighScattering();
-      rl->AddEmModel(0, new G4DummyModel());
-      pmanager->AddDiscreteProcess(rl);
+      pmanager->AddDiscreteProcess(new G4RayleighScattering());
  
     } else if (particleName == "e-") {
 

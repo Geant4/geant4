@@ -54,7 +54,7 @@ class G4VHadronPhysics : public G4VPhysicsConstructor
 public: 
 
   G4VHadronPhysics(const G4String& name ="hInelastic", 
-			    G4int verbose = 0);
+		   G4int verbose = 0);
 
   virtual ~G4VHadronPhysics();
 
@@ -105,7 +105,7 @@ private:
   G4VHadronPhysics & operator=(const G4VHadronPhysics &right);
 
   std::vector<G4VHadronModelBuilder*> builders;
- 
+
 };
 
 #endif

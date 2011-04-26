@@ -43,9 +43,6 @@
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
 
-class G4HadronElastic;
-class G4QElastic;
-
 class G4HadronQElasticPhysics : public G4VPhysicsConstructor
 {
 public: 
@@ -67,9 +64,6 @@ public:
   virtual void ConstructProcess();
 
 private:
-
-  G4HadronElastic* model;
-  G4QElastic*      process;
 
   G4String mname;
 

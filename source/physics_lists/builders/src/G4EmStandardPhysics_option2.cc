@@ -172,7 +172,7 @@ void G4EmStandardPhysics_option2::ConstructProcess()
     if (particleName == "gamma") {
 
       G4PhotoElectricEffect* pe = new G4PhotoElectricEffect;
-      //pe->SetModel(new G4PEEffectFluoModel());
+      pe->SetModel(new G4PEEffectFluoModel());
       G4ComptonScattering* cs   = new G4ComptonScattering;
       cs->SetModel(new G4KleinNishinaModel());
       pmanager->AddDiscreteProcess(pe);

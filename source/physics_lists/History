@@ -15,6 +15,18 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21-04-2011, V.Ivanchenko                (phys-lists-V09-04-16)
+- G4IonFTFPBinaryCascadePhysics - fixed run time bugs 
+
+21-04-2011, V.Ivanchenko                (phys-lists-V09-04-15)
+- G4EmStandardPhysics_option3 - activate Rayleigh Scattering
+- G4IonFTFPBinaryCascadePhysics - added new builder
+- QBBC - use new G4IonFTFPBinaryCascadePhysics
+- G4HadronElasticPhysics93 is removed as obsolete
+- G4HadronQElasticPhysics substitute G4UHadronElasticProcess by
+  G4WHadronElasticProcess
+- G4QElasticPhysics - removed unused header of G4UHadronElasticProcess
+
 28-03-2011, V.Ivanchenko                (phys-lists-V09-04-14)
 - G4EmStandardPhysics_option3 - instead of deactivation of
   Rayleigh Scattering used G4DummyModel

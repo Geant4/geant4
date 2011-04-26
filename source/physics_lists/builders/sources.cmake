@@ -131,7 +131,6 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4FTFPPiKBuilder.hh
         G4FTFPProtonBuilder.hh
         G4HadronDElasticPhysics.hh
-        G4HadronElasticPhysics93.hh
         G4HadronElasticPhysics.hh
         G4HadronElasticPhysicsHP.hh
         G4HadronElasticPhysicsLHEP.hh
@@ -144,6 +143,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4InclAblaPiKBuilder.hh
         G4InclAblaProtonBuilder.hh
         G4IonBinaryCascadePhysics.hh
+        G4IonFTFPBinaryCascadePhysics.hh
         G4IonInclAblaPhysics.hh
         G4IonPhysics.hh
         G4IonQMDPhysics.hh
@@ -249,7 +249,6 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4FTFPPiKBuilder.cc
         G4FTFPProtonBuilder.cc
         G4HadronDElasticPhysics.cc
-        G4HadronElasticPhysics93.cc
         G4HadronElasticPhysics.cc
         G4HadronElasticPhysicsHP.cc
         G4HadronElasticPhysicsLHEP.cc
@@ -262,6 +261,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4InclAblaPiKBuilder.cc
         G4InclAblaProtonBuilder.cc
         G4IonBinaryCascadePhysics.cc
+        G4IonFTFPBinaryCascadePhysics.cc
         G4IonInclAblaPhysics.cc
         G4IonPhysics.cc
         G4IonQMDPhysics.cc

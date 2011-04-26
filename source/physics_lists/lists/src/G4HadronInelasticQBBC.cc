@@ -111,22 +111,19 @@ void G4HadronInelasticQBBC::ConstructProcess()
 	   << htype << ">" << G4endl;
   }
 
+  G4double emax = 100.*TeV;
+
   // PreCompound and Evaporation models are instantiated here
-  //theEvaporation = new G4Evaporation();
-  //theEvaporation->SetCombinedChannel();
   theHandler = new G4ExcitationHandler();
-  //theHandler->SetEvaporation(theEvaporation);
-  //theHandler->SetMinEForMultiFrag(3.0*GeV);
-  //theHandler->SetMaxAandZForFermiBreakUp(17,9);
   G4PreCompoundModel* thePreCompound = new G4PreCompoundModel(theHandler);
 
   // configure models
   G4HadronicInteraction* theQGSP = 
-    BuildModel(new G4QGSBuilder("QGSP",thePreCompound,true,false),12.5*GeV,100.*TeV);
+    BuildModel(new G4QGSBuilder("QGSP",thePreCompound,true,false),12.5*GeV,emax);
   G4HadronicInteraction* theFTFP = 
-    BuildModel(new G4FTFBuilder("FTFP",thePreCompound),4.0*GeV,25.*GeV);
+    BuildModel(new G4FTFBuilder("FTFP",thePreCompound),4.0*GeV,emax);
   G4HadronicInteraction* theFTFP1 = 
-    BuildModel(new G4FTFBuilder("FTFP",thePreCompound),4.0*GeV,100.*TeV);
+    BuildModel(new G4FTFBuilder("FTFP",thePreCompound),4.0*GeV,emax);
 
   G4HadronicInteraction* theBERT = 
     NewModel(new G4CascadeInterface(),1.0*GeV,5.0*GeV);

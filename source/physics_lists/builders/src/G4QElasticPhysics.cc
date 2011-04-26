@@ -39,7 +39,6 @@
 
 #include "G4QElasticPhysics.hh"
 
-#include "G4UHadronElasticProcess.hh"
 #include "G4HadronicInteraction.hh"
 #include "G4HadronElastic.hh"
 #include "G4QElastic.hh"
