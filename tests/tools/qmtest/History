@@ -12,6 +12,13 @@ $Id$
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20-Apr-2011, G.Folger                (testtools-QMtest-V09-04-06)
+-  increase timelimit on more builds, none at 600 secs. 
+     (2 fail on loaded MAC!)
+
+13-Apr-2011, G.Folger                (testtools-QMtest-V09-04-05)
+-  runandevent-re01-build: allow more time to build to help Windows
+
 14-Mar-2011, G.Folger                (testtools-QMtest-V09-04-04)
 -  Remove from largeN testing in benchmarks QGSC_CHIPS,QBBC_XGG, 
     and  QBBC_XGGSN. Also svn rm .qmt files using these lists. 
