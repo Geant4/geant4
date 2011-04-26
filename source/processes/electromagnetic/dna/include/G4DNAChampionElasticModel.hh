@@ -37,6 +37,7 @@
 #include "G4ParticleChangeForGamma.hh"
 #include "G4LogLogInterpolation.hh"
 #include "G4ProductionCutsTable.hh"
+#include "G4NistManager.hh"
 
 class G4DNAChampionElasticModel : public G4VEmModel
 {
@@ -71,6 +72,7 @@ protected:
 
 private:
 
+  G4Material* nistwater;
   G4double killBelowEnergy;  
   G4double lowEnergyLimit;  
   G4double highEnergyLimit; 

@@ -41,6 +41,7 @@ G4DNASancheExcitationModel::G4DNASancheExcitationModel(const G4ParticleDefinitio
                                              const G4String& nam)
 :G4VEmModel(nam),isInitialised(false)
 {
+  nistwater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
 
   lowEnergyLimit = 2 * eV; 
   highEnergyLimit = 100 * eV;
@@ -108,17 +109,9 @@ void G4DNASancheExcitationModel::Initialise(const G4ParticleDefinition* /*partic
          << HighEnergyLimit() / eV << " eV"
          << G4endl;
 
-  if(!isInitialised) 
-  {
-    isInitialised = true;
-  
-    if(pParticleChange)
-      fParticleChangeForGamma = reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
-    else
-      fParticleChangeForGamma = new G4ParticleChangeForGamma();
-  }    
-
-  // InitialiseElementSelectors(particle,cuts);
+  if (isInitialised) { return; }
+  fParticleChangeForGamma = GetParticleChangeForGamma();
+  isInitialised = true;
 
   char *path = getenv("G4LEDATA");
   std::ostringstream eFullFileName;
@@ -156,7 +149,7 @@ G4double G4DNASancheExcitationModel::CrossSectionPerVolume(const G4Material* mat
 
  G4double sigma=0;
  
- if (material->GetName() == "G4_WATER")
+ if (material == nistwater || material->GetBaseMaterial() == nistwater)
  {
 
   if (particleDefinition == G4Electron::ElectronDefinition())

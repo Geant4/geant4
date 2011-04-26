@@ -38,6 +38,7 @@
 #include <deque>
 #include "Randomize.hh"
 #include "G4Electron.hh"
+#include "G4NistManager.hh"
 
 class G4DNAEmfietzoglouExcitationModel : public G4VEmModel
 {
@@ -73,6 +74,7 @@ protected:
 
 private:
 
+  G4Material* nistwater;
   G4double lowEnergyLimit;  
   G4double highEnergyLimit; 
   G4bool isInitialised;

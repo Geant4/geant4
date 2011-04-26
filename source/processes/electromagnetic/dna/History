@@ -14,6 +14,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05.04.2011  S. Incerti, tag emdna-V09-04-03
+            Updated all models for handling of variable density.
+
 17.03.2011  S. Incerti, tag emdna-V09-04-02
             Addition of dependencies to configuration files.
 

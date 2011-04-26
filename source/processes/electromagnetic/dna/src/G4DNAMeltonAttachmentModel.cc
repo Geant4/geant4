@@ -41,6 +41,7 @@ G4DNAMeltonAttachmentModel::G4DNAMeltonAttachmentModel(const G4ParticleDefinitio
                                              const G4String& nam)
 :G4VEmModel(nam),isInitialised(false)
 {
+  nistwater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
 
   lowEnergyLimit = 4 * eV; 
   lowEnergyLimitOfModel = 4 * eV; 
@@ -145,15 +146,9 @@ void G4DNAMeltonAttachmentModel::Initialise(const G4ParticleDefinition* /*partic
            << G4endl;
   }
 
-  if(!isInitialised) 
-  {
-    isInitialised = true;
-  
-    if(pParticleChange)
-      fParticleChangeForGamma = reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
-    else
-      fParticleChangeForGamma = new G4ParticleChangeForGamma();
-  }    
+  if (isInitialised) { return; }
+  fParticleChangeForGamma = GetParticleChangeForGamma();
+  isInitialised = true;
 
 }
 
@@ -172,7 +167,7 @@ G4double G4DNAMeltonAttachmentModel::CrossSectionPerVolume(const G4Material* mat
 
  G4double sigma=0;
  
- if (material->GetName() == "G4_WATER")
+ if (material == nistwater || material->GetBaseMaterial() == nistwater)
  {
   const G4String& particleName = p->GetParticleName();
 

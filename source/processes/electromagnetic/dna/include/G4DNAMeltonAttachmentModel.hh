@@ -40,6 +40,7 @@
 #include "G4DNACrossSectionDataSet.hh"
 #include "G4Electron.hh"
 #include "G4LogLogInterpolation.hh"
+#include "G4NistManager.hh"
 
 class G4DNAMeltonAttachmentModel : public G4VEmModel
 {
@@ -71,6 +72,7 @@ protected:
 
 private:
 
+  G4Material* nistwater;
   G4double lowEnergyLimit;
   G4double highEnergyLimit;
   G4double lowEnergyLimitOfModel;

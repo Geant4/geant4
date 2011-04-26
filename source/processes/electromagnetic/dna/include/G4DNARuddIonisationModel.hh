@@ -35,13 +35,13 @@
 #include "G4ProductionCutsTable.hh"
 
 #include "G4DNAGenericIonsManager.hh"
-//#include "G4DNAGenericMoleculeManager.hh"
 #include "G4DNACrossSectionDataSet.hh"
 #include "G4Electron.hh"
 #include "G4Proton.hh"
 #include "G4LogLogInterpolation.hh"
 
 #include "G4WaterIonisationStructure.hh"
+#include "G4NistManager.hh"
 
 class G4DNARuddIonisationModel : public G4VEmModel
 {
@@ -73,6 +73,7 @@ protected:
 
 private:
 
+  G4Material* nistwater;
   std::map<G4String,G4double,std::less<G4String> > lowEnergyLimit;
   std::map<G4String,G4double,std::less<G4String> > highEnergyLimit;
 

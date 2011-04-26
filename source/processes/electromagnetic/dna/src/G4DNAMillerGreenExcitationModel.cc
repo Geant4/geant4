@@ -39,6 +39,7 @@ G4DNAMillerGreenExcitationModel::G4DNAMillerGreenExcitationModel(const G4Particl
                                              const G4String& nam)
 :G4VEmModel(nam),isInitialised(false)
 {
+  nistwater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
 
   verboseLevel= 0;
   // Verbosity scale:
@@ -228,17 +229,9 @@ void G4DNAMillerGreenExcitationModel::Initialise(const G4ParticleDefinition* par
            << G4endl;
   }
   
-  if(!isInitialised) 
-  {
-    isInitialised = true;
-  
-    if(pParticleChange)
-      fParticleChangeForGamma = reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
-    else
-      fParticleChangeForGamma = new G4ParticleChangeForGamma();
-  }    
-
-  // InitialiseElementSelectors(particle,cuts);
+  if (isInitialised) { return; }
+  fParticleChangeForGamma = GetParticleChangeForGamma();
+  isInitialised = true;
   
 }
 
@@ -276,7 +269,7 @@ G4double G4DNAMillerGreenExcitationModel::CrossSectionPerVolume(const G4Material
   G4double highLim = 0;
   G4double crossSection = 0.;
 
-  if (material->GetName() == "G4_WATER")
+  if (material == nistwater || material->GetBaseMaterial() == nistwater)
   {
     const G4String& particleName = particleDefinition->GetParticleName();
 

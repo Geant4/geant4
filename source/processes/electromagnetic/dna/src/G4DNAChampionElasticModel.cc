@@ -39,6 +39,7 @@ G4DNAChampionElasticModel::G4DNAChampionElasticModel(const G4ParticleDefinition*
                                              const G4String& nam)
 :G4VEmModel(nam),isInitialised(false)
 {
+  nistwater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
 
   killBelowEnergy = 4*eV; 
   lowEnergyLimit = 0 * eV; 
@@ -182,17 +183,9 @@ void G4DNAChampionElasticModel::Initialise(const G4ParticleDefinition* /*particl
            << G4endl;
   }
 
-  if(!isInitialised) 
-  {
-    isInitialised = true;
-  
-    if(pParticleChange)
-      fParticleChangeForGamma = reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
-    else
-      fParticleChangeForGamma = new G4ParticleChangeForGamma();
-  }    
-
-  // InitialiseElementSelectors(particle,cuts);
+  if (isInitialised) { return; }
+  fParticleChangeForGamma = GetParticleChangeForGamma();
+  isInitialised = true;
 
 }
 
@@ -211,7 +204,7 @@ G4double G4DNAChampionElasticModel::CrossSectionPerVolume(const G4Material* mate
 
  G4double sigma=0;
  
- if (material->GetName() == "G4_WATER")
+ if (material == nistwater || material->GetBaseMaterial() == nistwater)
  {
   const G4String& particleName = p->GetParticleName();
 

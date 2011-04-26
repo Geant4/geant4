@@ -33,6 +33,7 @@
 #include "G4VEmModel.hh"
 #include "G4ParticleChangeForGamma.hh"
 #include "G4ProductionCutsTable.hh"
+#include "G4NistManager.hh"
 
 class G4DNAScreenedRutherfordElasticModel : public G4VEmModel
 {
@@ -67,6 +68,7 @@ protected:
 
 private:
 
+  G4Material* nistwater;
   G4double killBelowEnergy;  
   G4double lowEnergyLimit;  
   G4double intermediateEnergyLimit;

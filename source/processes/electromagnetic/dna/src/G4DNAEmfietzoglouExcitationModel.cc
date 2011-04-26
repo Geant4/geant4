@@ -39,6 +39,7 @@ G4DNAEmfietzoglouExcitationModel::G4DNAEmfietzoglouExcitationModel(const G4Parti
                                              const G4String& nam)
 :G4VEmModel(nam),isInitialised(false)
 {
+  nistwater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
 
   lowEnergyLimit = 8.23 * eV; 
   highEnergyLimit = 10 * MeV;
@@ -107,17 +108,9 @@ void G4DNAEmfietzoglouExcitationModel::Initialise(const G4ParticleDefinition* /*
            << G4endl;
   }
 
-  if(!isInitialised) 
-  {
-    isInitialised = true;
-  
-    if(pParticleChange)
-      fParticleChangeForGamma = reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
-    else
-      fParticleChangeForGamma = new G4ParticleChangeForGamma();
-  }    
-
-  // InitialiseElementSelectors(particle,cuts);
+  if (isInitialised) { return; }
+  fParticleChangeForGamma = GetParticleChangeForGamma();
+  isInitialised = true;
 
 }
 
@@ -136,7 +129,7 @@ G4double G4DNAEmfietzoglouExcitationModel::CrossSectionPerVolume(const G4Materia
 
  G4double sigma=0;
  
- if (material->GetName() == "G4_WATER")
+ if (material == nistwater || material->GetBaseMaterial() == nistwater)
  {
 
   if (particleDefinition == G4Electron::ElectronDefinition())

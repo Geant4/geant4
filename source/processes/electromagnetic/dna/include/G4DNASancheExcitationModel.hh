@@ -38,6 +38,7 @@
 #include "G4ParticleChangeForGamma.hh"
 #include <deque>
 #include "G4Electron.hh"
+#include "G4NistManager.hh"
 
 class G4DNASancheExcitationModel : public G4VEmModel
 {
@@ -75,6 +76,7 @@ protected:
 
 private:
 
+  G4Material* nistwater;
   G4double lowEnergyLimit;  
   G4double highEnergyLimit; 
   G4bool isInitialised;

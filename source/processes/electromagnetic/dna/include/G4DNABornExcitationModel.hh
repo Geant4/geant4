@@ -39,6 +39,7 @@
 #include "G4Electron.hh"
 #include "G4Proton.hh"
 #include "G4WaterExcitationStructure.hh"
+#include "G4NistManager.hh"
 
 class G4DNABornExcitationModel : public G4VEmModel
 {
@@ -69,6 +70,8 @@ protected:
   G4ParticleChangeForGamma* fParticleChangeForGamma;
 
 private:
+
+  G4Material* nistwater;
 
   std::map<G4String,G4double,std::less<G4String> > lowEnergyLimit;
   std::map<G4String,G4double,std::less<G4String> > highEnergyLimit;

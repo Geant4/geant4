@@ -39,6 +39,7 @@
 #include "G4DNAEmfietzoglouExcitationModel.hh"
 #include "G4WaterExcitationStructure.hh"
 #include "Randomize.hh"
+#include "G4NistManager.hh"
 
 class G4DNAMillerGreenExcitationModel : public G4VEmModel
 {
@@ -70,6 +71,7 @@ protected:
 
 private:
 
+  G4Material* nistwater;
   std::map<G4String,G4double,std::less<G4String> > lowEnergyLimit;
   std::map<G4String,G4double,std::less<G4String> > highEnergyLimit;
 

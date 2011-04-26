@@ -42,6 +42,7 @@ G4DNARuddIonisationExtendedModel::G4DNARuddIonisationExtendedModel(const G4Parti
                                              const G4String& nam)
 :G4VEmModel(nam),isInitialised(false)
 {
+  nistwater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
 
   lowEnergyLimitForA[1] = 0 * eV; 
   lowEnergyLimitForA[2] = 0 * eV;
@@ -380,15 +381,9 @@ void G4DNARuddIonisationExtendedModel::Initialise(const G4ParticleDefinition* pa
 
   //
   
-  if(!isInitialised) 
-  {
-    isInitialised = true;
-  
-    if(pParticleChange)
-      fParticleChangeForGamma = reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
-    else
-      fParticleChangeForGamma = new G4ParticleChangeForGamma();
-  }    
+  if (isInitialised) { return; }
+  fParticleChangeForGamma = GetParticleChangeForGamma();
+  isInitialised = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -449,7 +444,7 @@ G4double G4DNARuddIonisationExtendedModel::CrossSectionPerVolume(const G4Materia
   G4double highLim = 0;
   G4double sigma=0;
 
-  if (material->GetName() == "G4_WATER")
+  if (material == nistwater || material->GetBaseMaterial() == nistwater)
   {
     const G4String& particleName = particleDefinition->GetParticleName();
    
