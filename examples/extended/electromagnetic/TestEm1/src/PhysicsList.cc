@@ -141,7 +141,7 @@ void PhysicsList::ConstructParticle()
   G4Positron::PositronDefinition();
   G4MuonPlus::MuonPlusDefinition();
   G4MuonMinus::MuonMinusDefinition();
-
+  
   G4NeutrinoE::NeutrinoEDefinition();
   G4AntiNeutrinoE::AntiNeutrinoEDefinition();
   G4NeutrinoMu::NeutrinoMuDefinition();
@@ -193,7 +193,7 @@ void PhysicsList::ConstructProcess()
   //
   G4EmProcessOptions emOptions;
   emOptions.SetBuildCSDARange(true);
-  emOptions.SetDEDXBinningForCSDARange(8*20);
+  emOptions.SetDEDXBinningForCSDARange(10*10);
     
   // Decay Process
   //
@@ -316,8 +316,8 @@ void PhysicsList::AddStepMax()
 #include "G4Positron.hh"
 
 void PhysicsList::SetCuts()
-{    
-  if (verboseLevel >0){
+{
+  if (verboseLevel >0) {
     G4cout << "PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
   }  

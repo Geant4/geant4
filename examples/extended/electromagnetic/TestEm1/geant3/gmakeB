@@ -18,7 +18,7 @@ hepf77  $extnam -c -g -Dbatch  -I/cern/pro/include -I../include ../src/*.F
 #
 echo 'linking geant3+cernlib libraries ...'
 #
-hepf77  $extnam -g -o $name.xb  *.o \
+hepf77  $extnam -lgfortran -g -o $name.xb  *.o \
    `cernlib geant321 pawlib graflib packlib mathlib kernlib`
 #
 #
