@@ -156,8 +156,7 @@ G4bool G4QHadronInelasticDataSet::IsZAApplicable(const G4DynamicParticle* Pt,
 }
 
 G4double G4QHadronInelasticDataSet::GetCrossSection(const G4DynamicParticle* Pt,
-                                                    const G4Element* pElement,
-                                                    G4double)
+                                                    const G4Element* pElement, G4double)
 {
   G4int IPIE=IsoProbInEl.size();          // How many old elements?
   if(IPIE) for(G4int ip=0; ip<IPIE; ++ip) // Clean up the SumProb's of Isotopes (SPI)
@@ -227,7 +226,7 @@ G4double G4QHadronInelasticDataSet::GetIsoZACrossSection(const G4DynamicParticle
   G4ParticleDefinition* particle = Pt->GetDefinition();
   G4double Momentum=Pt->GetTotalMomentum();
   G4VQCrossSection* CSmanager=0;
-  //G4VQCrossSection* CSmanager2=0;
+
   G4int pPDG=0;
   if(particle == G4Neutron::Neutron())
   {
@@ -395,11 +394,16 @@ G4double G4QHadronInelasticDataSet::GetIsoZACrossSection(const G4DynamicParticle
   //  CSmanager2=G4QANuANuNuclearCrossSection::GetPointer();
   //  pPDG=-12;
   //}
-  else G4cout<<"-Warning-G4QHadronInelasticDataSet::GetIsoZACrossSection: PDG="
-             <<particle->GetPDGEncoding()<<" isn't supported by CHIPS"<<G4endl;
+  else
+  {
+    G4cerr << "-ERROR-G4QHadronInelasticDataSet::GetIsoZACrossSection: PDG="
+           << particle->GetPDGEncoding() << " isn't supported by CHIPS" << G4endl;
+    //throw G4HadronicException(__FILE__, __LINE__,
+    //"G4QHadronInelasticDataSet::GetIsoZACrossSection: Particle not supported by CHIPS");
+    return 0; 
+  }
   G4int tZ=(G4int)(Z);
   G4int tN=(G4int)(A-Z);
   G4double CSI=CSmanager->GetCrossSection(true, Momentum, tZ, tN, pPDG); // CS(j,i) basic
-  //if(CSmanager2) CSI+=CSmanager2->GetCrossSection(true,Momentum,Z,N,pPDG); // e.g.(nu,nu)
   return CSI;
 }
