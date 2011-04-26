@@ -52,14 +52,9 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_fermi_breakup
         G4Be8FermiFragment.hh
         G4FermiBreakUp.hh
         G4FermiConfiguration.hh
-        G4FermiConfiguration.icc
         G4FermiConfigurationList.hh
         G4FermiFragmentsPool.hh
-        G4FermiIntegerPartition.hh
-        G4FermiIntegerPartition.icc
         G4FermiPhaseSpaceDecay.hh
-        G4FermiSplitter.hh
-        G4FermiSplitter.icc
         G4He5FermiFragment.hh
         G4Li5FermiFragment.hh
         G4StableFermiFragment.hh
@@ -73,9 +68,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_fermi_breakup
         G4FermiConfiguration.cc
         G4FermiConfigurationList.cc
         G4FermiFragmentsPool.cc
-        G4FermiIntegerPartition.cc
         G4FermiPhaseSpaceDecay.cc
-        G4FermiSplitter.cc
         G4He5FermiFragment.cc
         G4Li5FermiFragment.cc
         G4StableFermiFragment.cc

@@ -23,69 +23,65 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// Hadronic Process: Nuclear De-excitations
-// by V. Lara
 
-inline G4FermiIntegerPartition::G4FermiIntegerPartition()
-  : total(0), enableNull(false)
+#include "globals.hh"
+
+#include "G4ios.hh"
+
+#include "G4CompetitiveFission.hh"
+#include "G4NucleiProperties.hh"
+#include "G4ParticleTable.hh"
+#include "../src/G4FissionParameters.cc"
+
+int main()
 {
+
+  G4int A, Z;
+
+  G4cout << "Please enter Z and A" << G4endl;
+  G4cin >> Z >> A;
+
+  G4int iter;
+  G4cout << "Please enter number of iterations " << G4endl;
+  G4cin >> iter;
+  
+  G4double energy;
+  G4cout << "Please enter the excitation energy" << G4endl;
+  G4cin >> energy;
+
+  G4CompetitiveFission theFission;
+
+  G4int i=0;
+  for (i=0; i<iter; i++)
+  {
+    G4LorentzVector p4(0.,0.,0.,G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass( Z, A )+energy);
+    G4Fragment aFragment(A,Z,p4);
+    G4FragmentVector * theResult = theFission.BreakUp(aFragment);
+    int ii=0;
+    for(ii=0; ii<theResult->entries(); ii++)
+    {
+      G4cout <<theResult->at(ii)->GetA() << " "<<theResult->at(ii)->GetZ() << G4endl;
+      delete theResult->at(ii);
+    }
+    delete theResult;
+  }
 }
 
-inline G4FermiIntegerPartition::~G4FermiIntegerPartition()
-{
-}
-
-inline G4FermiIntegerPartition::G4FermiIntegerPartition(const G4FermiIntegerPartition& right)
-  : total(right.total), enableNull(right.enableNull), partition(right.partition)
-{
-}
 
 
-inline const G4FermiIntegerPartition&
-G4FermiIntegerPartition::operator=(const G4FermiIntegerPartition& right)
-{
-  total=right.total;
-  enableNull=right.enableNull;
-  partition=right.partition;
-  return *this;
-}
 
-inline G4bool G4FermiIntegerPartition::
-operator==(const G4FermiIntegerPartition& right)
-{
-  return (total == right.total &&
-	  enableNull == enableNull &&
-	  partition == right.partition);
-}
 
-inline G4bool G4FermiIntegerPartition::
-operator!=(const G4FermiIntegerPartition& right)
-{
-  return (total != right.total ||
-	  enableNull != right.enableNull ||
-	  partition != right.partition);
-}
 
-inline std::vector<G4int> G4FermiIntegerPartition::
-GetPartition() const
-{
-  return partition;
-}
 
-inline void G4FermiIntegerPartition::
-EnableNull(const G4bool v)
-{
-  enableNull=v;
-  return;
-}
 
-#ifdef G4FermiIntegerPartition_debug
 
-inline G4int G4FermiIntegerPartition::GetSum()
-{
-  return std::accumulate(partition.begin(), partition.end(), 0);
-}
 
-#endif
+
+
+
+
+
+
+
+
 

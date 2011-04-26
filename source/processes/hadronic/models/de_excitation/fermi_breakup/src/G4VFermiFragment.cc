@@ -33,27 +33,17 @@
 #include "G4NucleiProperties.hh"
 
 G4VFermiFragment::G4VFermiFragment(G4int anA, G4int aZ, G4int Pol, G4double ExE):
-    A(anA),
-    Z(aZ),
-    Polarization(Pol),
-    ExcitEnergy(ExE)
+  isStable(true),
+  A(anA),
+  Z(aZ),
+  Polarization(Pol),
+  ExcitEnergy(ExE)
 {
   fragmentMass = 0.0;
   if(A > 0) { fragmentMass = G4NucleiProperties::GetNuclearMass(A, Z); }
 }
 
-G4VFermiFragment::G4VFermiFragment():
-    A(0),
-    Z(0),
-    Polarization(0),
-    ExcitEnergy(0.0)
-{
-  fragmentMass = 0.0;
-}
-
 G4VFermiFragment::~G4VFermiFragment()
 {}
-
-
 
 

@@ -29,25 +29,26 @@
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
+//
+// Modifications:
+// 01.04.2011 General cleanup by V.Ivanchenko
 
 #ifndef G4Be8FermiFragment_h
 #define G4Be8FermiFragment_h 1
 
 #include "G4UnstableFermiFragment.hh"
 
-
 class G4Be8FermiFragment : public G4UnstableFermiFragment
 {
 public:
-  G4Be8FermiFragment(const G4int anA, const G4int aZ, const G4int Pol, const G4double ExE);
+
+  G4Be8FermiFragment(G4int anA, G4int aZ, G4int Pol, G4double ExE);
 
   virtual ~G4Be8FermiFragment();
   
 private:
-  G4Be8FermiFragment();
   
   G4Be8FermiFragment(const G4Be8FermiFragment &right);
-  
   const G4Be8FermiFragment & operator=(const G4Be8FermiFragment &right);
   G4bool operator==(const G4Be8FermiFragment &right) const;
   G4bool operator!=(const G4Be8FermiFragment &right) const;

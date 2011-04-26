@@ -59,6 +59,7 @@ class G4VFermiBreakUp;
 class G4VEvaporation;
 class G4VEvaporationChannel;
 class G4IonTable;
+class G4FermiFragmentsPool;
 
 class G4ExcitationHandler 
 {
@@ -100,13 +101,15 @@ private:
 
   void SetParameters();
   
-  G4VEvaporation *theEvaporation;
+  G4VEvaporation* theEvaporation;
   
-  G4VMultiFragmentation *theMultiFragmentation;
+  G4VMultiFragmentation* theMultiFragmentation;
   
-  G4VFermiBreakUp *theFermiModel;
+  G4VFermiBreakUp* theFermiModel;
  
-  G4VEvaporationChannel * thePhotonEvaporation;
+  G4VEvaporationChannel* thePhotonEvaporation;
+
+  G4FermiFragmentsPool* thePool;
 
   G4int maxZForFermiBreakUp;
   G4int maxAForFermiBreakUp;

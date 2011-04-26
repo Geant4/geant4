@@ -68,19 +68,21 @@
 
 #include "G4VMultiFragmentation.hh"
 #include "G4VFermiBreakUp.hh"
+#include "G4VFermiFragment.hh"
+
 #include "G4VEvaporation.hh"
 #include "G4VEvaporationChannel.hh"
 #include "G4VPhotonEvaporation.hh"
 #include "G4Evaporation.hh"
 #include "G4StatMF.hh"
-#include "G4FermiBreakUp.hh"
 #include "G4PhotonEvaporation.hh"
+#include "G4FermiBreakUp.hh"
+#include "G4FermiFragmentsPool.hh"
 
 #include <list>
 
 G4ExcitationHandler::G4ExcitationHandler():
   maxZForFermiBreakUp(9),maxAForFermiBreakUp(17),minEForMultiFrag(4.0*GeV),
-  //  maxZForFermiBreakUp(9),maxAForFermiBreakUp(17),minEForMultiFrag(3.0*MeV),
   minExcitation(CLHEP::keV),MyOwnEvaporationClass(true),
   MyOwnPhotonEvaporationClass(true),OPTxs(3),useSICB(false)
 {                                                                          
@@ -90,6 +92,7 @@ G4ExcitationHandler::G4ExcitationHandler():
   theMultiFragmentation = new G4StatMF;
   theFermiModel = new G4FermiBreakUp;
   thePhotonEvaporation = new G4PhotonEvaporation;
+  thePool = G4FermiFragmentsPool::Instance();
   SetParameters();
 }
 
@@ -110,7 +113,8 @@ void G4ExcitationHandler::SetParameters()
   theEvaporation->Initialise();
 }
 
-G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
+G4ReactionProductVector * 
+G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
 {	
   
   // Variables existing until end of method
@@ -118,12 +122,11 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment & theI
 
   G4FragmentVector * theTempResult = 0;      // pointer which receives temporal results
   std::list<G4Fragment*> theEvapList;        // list to apply Evaporation or Fermi Break-Up
-  std::list<G4bool> theFBUflag;              // list to apply Evaporation or Fermi Break-Up
   std::list<G4Fragment*> theEvapStableList;  // list to apply PhotonEvaporation
   std::list<G4Fragment*> theResults;         // list to store final result
   //
-  //G4cout << "@@@@@@@@@@ Start G4Excitation Handler @@@@@@@@@@@@@" << G4endl;  
-  //G4cout << theInitialState << G4endl;  
+  //  G4cout << "@@@@@@@@@@ Start G4Excitation Handler @@@@@@@@@@@@@" << G4endl;  
+  // G4cout << theInitialState << G4endl;  
   
   // Variables to describe the excited configuration
   G4double exEnergy = theInitialState.GetExcitationEnergy();
@@ -150,102 +153,90 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment & theI
       // Fragments after the first step are stored in theEvapList 
       // Statistical Multifragmentation will take place only once
       //
-      // Fermi Break-Up always first
-      G4bool wasFBU = false;
-      if(A<maxAForFermiBreakUp && Z<maxZForFermiBreakUp) 
-        {
-          theTempResult = theFermiModel->BreakItUp(theInitialState);
-	  // fragment was not decaied try to evaporate
-          size_t nsec = theTempResult->size();
-	  if(1 == nsec) {
-            if((*theTempResult)[0] !=  theInitialStatePtr) { 
-	      delete (*theTempResult)[0]; 
-	    }
-            delete theTempResult;
-	    theTempResult = theEvaporation->BreakItUp(theInitialState);
-	  } else if(nsec > 1) { wasFBU = true; }
-        }
-      else   if (exEnergy > minEForMultiFrag*A) 
+      // move to evaporation loop
+      if((A<maxAForFermiBreakUp && Z<maxZForFermiBreakUp) 
+	 || exEnergy <= minEForMultiFrag*A) 
+	{ 
+	  theEvapList.push_back(theInitialStatePtr); 
+	}
+      else  
         {
           theTempResult = theMultiFragmentation->BreakItUp(theInitialState);
-	  // fragment was not decaied try to evaporate
-	  if(1 == theTempResult->size()) {
-            if((*theTempResult)[0] !=  theInitialStatePtr) { 
-	      delete (*theTempResult)[0]; 
-	    }
-            delete theTempResult;
-	    theTempResult = theEvaporation->BreakItUp(theInitialState);
-	  }
-        }
-      else 
-        {
-          theTempResult = theEvaporation->BreakItUp(theInitialState);
-        }
-      
-      G4bool deletePrimary = true;
-      size_t nsec = theTempResult->size();
-      if(nsec > 0) 
-	{      
-	  // Sort out secondary fragments
-	  G4FragmentVector::iterator j;
-	  for (j = theTempResult->begin(); j != theTempResult->end(); ++j)
-	    {  
-	      if((*j) == theInitialStatePtr) { deletePrimary = false; }
-	      A = (*j)->GetA_asInt();  
+	  if(!theTempResult) { theEvapList.push_back(theInitialStatePtr); }
+	  else {
+	    size_t nsec = theTempResult->size();
+	    if(0 == nsec) { theEvapList.push_back(theInitialStatePtr); }
+	    else {
+	      // secondary are produced
+	      // Sort out secondary fragments
+	      G4bool deletePrimary = true;
+	      G4FragmentVector::iterator j;
+	      for (j = theTempResult->begin(); j != theTempResult->end(); ++j) {  
+		if((*j) == theInitialStatePtr) { deletePrimary = false; }
+		A = (*j)->GetA_asInt();  
 
-	      if(A <= 1) { theResults.push_back(*j); }   // gamma, p, n
-	      else if(1 == nsec) { theEvapStableList.push_back(*j); } // evaporation is not possible  
-	      else  // Analyse fragment
-		{
+		// gamma, p, n
+		if(A <= 1) { theResults.push_back(*j); }
+
+		// Analyse fragment
+		else {
 		  G4double exEnergy = (*j)->GetExcitationEnergy();
+
+		  // cold fragments
 		  if(exEnergy < minExcitation) {
 		    Z = (*j)->GetZ_asInt(); 
-                    if(nist->GetIsotopeAbundance(Z, A) > 0.0) { 
+		    if(nist->GetIsotopeAbundance(Z, A) > 0.0) { 
 		      theResults.push_back(*j); // stable fragment 
-		    } else {   
-		      theEvapList.push_back(*j); // unstable cold fragment
-                      theFBUflag.push_back(wasFBU); 
+
+		    } else {
+		      const G4VFermiFragment* ffrag = thePool->GetFragment(Z, A);
+
+		      // isotope from FBU pool
+		      if(ffrag) {
+			if(ffrag->IsStable()) { theResults.push_back(*j); }
+			else                  { theEvapList.push_back(*j); }
+
+			// isotope may be unstable
+		      } else {
+			theEvapList.push_back(*j); // unstable cold fragment
+		      }
 		    }
-		  } else { 
-		    theEvapList.push_back(*j); // hot fragment 
-		    theFBUflag.push_back(wasFBU); 
-		  } 
+
+		    // hot fragments
+		  } else { theEvapList.push_back(*j); }// hot fragment 
 		}
+	      }
+	      if( deletePrimary ) { delete theInitialStatePtr; }
 	    }
+	    delete theTempResult;
+	  }
 	}
-      if( deletePrimary ) { delete theInitialStatePtr; }
-      delete theTempResult;
     }
   //
   // JMQ 150909: Further steps in de-excitation chain follow ..
       
   //G4cout << "## After first step " << theEvapList.size() << " for evap;  "
-  //	 << theEvapStableList.size() << " for photo-evap; " 
-  //	 << theResults.size() << " results. " << G4endl; 
+  // << theEvapStableList.size() << " for photo-evap; " 
+  // << theResults.size() << " results. " << G4endl; 
 
   // ------------------------------
   // De-excitation loop
   // ------------------------------
       
   std::list<G4Fragment*>::iterator iList;
-  std::list<G4bool>::iterator ib = theFBUflag.begin();
-  for (iList = theEvapList.begin(); iList != theEvapList.end(); ++iList, ++ib)
+  for (iList = theEvapList.begin(); iList != theEvapList.end(); ++iList)
     {
+      //G4cout << "Next evaporate: " << G4endl;  
+      //G4cout << *iList << G4endl;  
       A = (*iList)->GetA_asInt(); 
       Z = (*iList)->GetZ_asInt();
 	  
       // Fermi Break-Up 
       G4bool wasFBU = false;
-      if ( !(*ib) && A < maxAForFermiBreakUp && Z < maxZForFermiBreakUp) 
+      if (A < maxAForFermiBreakUp && Z < maxZForFermiBreakUp) 
 	{
 	  theTempResult = theFermiModel->BreakItUp(*(*iList));
-	  // fragment was not decaied try to evaporate
-          size_t nsec = theTempResult->size(); 
-	  if(1 == nsec) {
-            if((*theTempResult)[0] !=  theInitialStatePtr) { delete (*theTempResult)[0]; }
-            delete theTempResult;
-	    theTempResult = theEvaporation->BreakItUp(*(*iList));
-	  } else if(nsec > 1) { wasFBU = true; }
+	  wasFBU = true; 
 	}
       else // apply Evaporation in another case
 	{
@@ -254,43 +245,64 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment & theI
       
       G4bool deletePrimary = true;
       size_t nsec = theTempResult->size();
+      //G4cout << "Nproducts= " << nsec << G4endl;  
 		  
       // Sort out secondary fragments
-      if ( nsec > 0 )
-	{
-	  G4FragmentVector::iterator j;
-	  for (j = theTempResult->begin(); j != theTempResult->end(); ++j)
-	    {
-	      if((*j) == (*iList)) { deletePrimary = false; }
-	      A = (*j)->GetA_asInt();
+      if ( nsec > 0 ) {
+	G4FragmentVector::iterator j;
+	for (j = theTempResult->begin(); j != theTempResult->end(); ++j) {
+	  if((*j) == (*iList)) { deletePrimary = false; }
 
-	      if(A <= 1) { theResults.push_back(*j); }                // gamma, p, n
-	      else if(1 == nsec) { theEvapStableList.push_back(*j); } // no evaporation 
-	      else  // Analyse fragment
-		{
-		  G4double exEnergy = (*j)->GetExcitationEnergy();
-		  if(exEnergy < minExcitation) {
-		    Z = (*j)->GetZ_asInt();
-                    if(nist->GetIsotopeAbundance(Z, A) > 0.0) { 
-		      theResults.push_back(*j); // stable fragment 
-		    } else {   
-		      theEvapList.push_back(*j); // unstable cold fragment 
-                      theFBUflag.push_back(wasFBU); 
-		    }
-		  } else { 
-		    theEvapList.push_back(*j); // hot fragment 
-		    theFBUflag.push_back(wasFBU); 
-		  }
-		}
+	  //G4cout << *j << G4endl;  
+	  A = (*j)->GetA_asInt();
+	  G4double exEnergy = (*j)->GetExcitationEnergy();
+
+	  if(A <= 1) { theResults.push_back(*j); }                // gamma, p, n
+	  else if(1 == nsec) { 
+            // evaporation is not possible
+	    if(exEnergy < minExcitation) { theResults.push_back(*j); }
+	    else                         { theEvapStableList.push_back(*j); }
+
+	  } else { // Analyse fragment
+
+	    // cold fragment
+	    if(exEnergy < minExcitation) {
+	      Z = (*j)->GetZ_asInt();
+
+	      // natural isotope
+	      if(nist->GetIsotopeAbundance(Z, A) > 0.0) { 
+		theResults.push_back(*j); // stable fragment 
+
+	      } else {
+		const G4VFermiFragment* ffrag = thePool->GetFragment(Z, A);
+
+		// isotope from FBU pool
+		if(ffrag) {
+		  if(ffrag->IsStable()) { theResults.push_back(*j); }
+		  else                  { theEvapList.push_back(*j); }
+
+		  // isotope may be unstable
+		} else {
+		  theEvapList.push_back(*j);
+		}   
+	      }
+
+	      // hot fragment
+	    } else if (wasFBU) { 
+	      theEvapStableList.push_back(*j); // FBU applied only once 
+	    } else {  
+	      theEvapList.push_back(*j);        
 	    }
+	  }
 	}
+      }
       if( deletePrimary ) { delete (*iList); }
       delete theTempResult;
     } // end of the loop over theEvapList
 
   //G4cout << "## After 2nd step " << theEvapList.size() << " was evap;  "
-  //	 << theEvapStableList.size() << " for photo-evap; " 
-  //	 << theResults.size() << " results. " << G4endl; 
+  // << theEvapStableList.size() << " for photo-evap; " 
+  // << theResults.size() << " results. " << G4endl; 
       
   // -----------------------
   // Photon-Evaporation loop
@@ -300,8 +312,12 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment & theI
   for(iList = theEvapStableList.begin(); iList != theEvapStableList.end(); ++iList)
     {
       // photon-evaporation is applied
+      //G4cout << "Next photon evaporate: " << thePhotonEvaporation << G4endl;  
+      //G4cout << *iList << G4endl;
+  
       theTempResult = thePhotonEvaporation->BreakUpFragment(*iList);	  
       size_t nsec = theTempResult->size();
+      //G4cout << "Nproducts= " << nsec << G4endl;  
 	  
       // if there is a gamma emission then
       if (nsec > 0)
@@ -371,31 +387,39 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment & theI
 
 void G4ExcitationHandler::SetEvaporation(G4VEvaporation *const  value)
 {
-  delete theEvaporation;
-  theEvaporation = value;
-  MyOwnEvaporationClass = false;
-  SetParameters();
+  if(value && value != theEvaporation) {
+    if(MyOwnEvaporationClass) { delete theEvaporation; }
+    theEvaporation = value;
+    MyOwnEvaporationClass = false;
+    SetParameters();
+  }
 }
 
 void 
 G4ExcitationHandler::SetMultiFragmentation(G4VMultiFragmentation *const  value)
 {
-  delete theMultiFragmentation;
-  theMultiFragmentation = value;
+  if(value && value != theMultiFragmentation) {
+    delete theMultiFragmentation;
+    theMultiFragmentation = value;
+  }
 }
 
 void G4ExcitationHandler::SetFermiModel(G4VFermiBreakUp *const  value)
 {
-  delete theFermiModel;
-  theFermiModel = value;
+  if(value && value != theFermiModel) {
+    delete theFermiModel;
+    theFermiModel = value;
+  }
 }
 
 void 
 G4ExcitationHandler::SetPhotonEvaporation(G4VEvaporationChannel *const  value)
 {
-  delete thePhotonEvaporation;
-  thePhotonEvaporation = value;
-  MyOwnPhotonEvaporationClass = false;
+  if(value && value != thePhotonEvaporation) {
+    if(MyOwnPhotonEvaporationClass) { delete thePhotonEvaporation; }
+    thePhotonEvaporation = value;
+    MyOwnPhotonEvaporationClass = false;
+  }
 }
 
 void G4ExcitationHandler::SetMaxZForFermiBreakUp(G4int aZ)
