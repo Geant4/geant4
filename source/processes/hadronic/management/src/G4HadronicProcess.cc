@@ -303,7 +303,7 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
 
   FillTotalResult(result, aTrack);
 
-  if (epReportLevel > 0) { 
+  if (epReportLevel != 0) { 
     CheckEnergyMomentumConservation(aTrack, targetNucleus);
   }
   return theTotalResult;
@@ -597,7 +597,7 @@ void
 G4HadronicProcess::CheckEnergyMomentumConservation(const G4Track& aTrack,
                                                    const G4Nucleus& aNucleus)
 {
-  G4double targetMass = G4NucleiProperties::GetNuclearMass(aNucleus.GetN(), aNucleus.GetZ());
+  G4double targetMass = G4NucleiProperties::GetNuclearMass(aNucleus.GetA_asInt(),aNucleus.GetZ_asInt());
   G4LorentzVector projectile4mom = aTrack.GetDynamicParticle()->Get4Momentum();
   G4LorentzVector target4mom(0, 0, 0, targetMass);
   G4LorentzVector initial4mom = projectile4mom + target4mom;
@@ -639,39 +639,49 @@ G4HadronicProcess::CheckEnergyMomentumConservation(const G4Track& aTrack,
     absResult = "pass";
   }
 
+  std::stringstream Myout;
   // Options for level of reporting detail:
   //  0. off
   //  1. report only when E/p not conserved
   //  2. report regardless of E/p conservation
   //  3. report only when E/p not conserved, with model names, process names, and limits 
   //  4. report regardless of E/p conservation, with model names, process names, and limits
+  //  negative -1.., as above, but send output to stderr
 
-  if(epReportLevel == 4) {
-    G4cout << " Process: " << processName << " , Model: " <<  modelName << G4endl; 
-    G4cout << " relative limit " << checkLevels.first << " relative value = "
+  if(std::abs(epReportLevel) == 4) {
+    Myout << " Process: " << processName << " , Model: " <<  modelName << G4endl; 
+    Myout << " relative limit " << checkLevels.first << " relative value = "
            << relative << " " << relResult << G4endl;
-    G4cout << " absolute limit " << checkLevels.second << " absolute value = "
-           << absolute << " " << absResult << G4endl;
+    Myout << " absolute limit (MeV) " << checkLevels.second/MeV << " absolute value (MeV) = "
+           << absolute/MeV << " " << absResult << G4endl;
 
-  } else if(epReportLevel == 3) {
+  } else if(std::abs(epReportLevel) == 3) {
     if (!absPass || !relPass) {
-      G4cout << " Process: " << processName << " , Model: " <<  modelName << G4endl; 
-      G4cout << " relative limit " << checkLevels.first << " relative value = "
+      Myout << " Process: " << processName << " , Model: " <<  modelName << G4endl;
+      Myout << " Primary: " << aTrack.GetParticleDefinition()->GetParticleName()
+            << " (" << aTrack.GetParticleDefinition()->GetPDGEncoding() << "),"
+            << " E= " <<  aTrack.GetDynamicParticle()->Get4Momentum().e()
+	    << ", target nucleus (" << aNucleus.GetZ_asInt() << "," 
+	    << aNucleus.GetA_asInt() << ")" << G4endl;
+      Myout << " relative limit " << checkLevels.first << " relative value = "
              << relative << " " << relResult << G4endl;  
-      G4cout << " absolute limit " << checkLevels.second << " absolute value = "
-             << absolute << " " << absResult << G4endl;
+      Myout << " absolute limit (MeV) " << checkLevels.second/MeV << " absolute value (MeV) = "
+             << absolute/MeV << " " << absResult << G4endl;
     }
 
-  } else if(epReportLevel == 2) {
-    G4cout << " relative value = " << relative << " " << relPass
-           << " absolute value = " << absolute << " " << absPass << G4endl;
+  } else if(std::abs(epReportLevel) == 2) {
+    Myout << " relative value = " << relative << " " << relPass
+             << " absolute value (MeV) = " << absolute/MeV << " " << absPass << G4endl;
 
-  } else if(epReportLevel == 1) {
+  } else if(std::abs(epReportLevel) == 1) {
     if (!absPass || !relPass) {
-      G4cout << " relative value = " << relative << " " << relPass
-             << " absolute value = " << absolute << " " << absPass << G4endl;
+      Myout << " relative value = " << relative << " " << relPass
+             << " absolute value (MeV) = " << absolute/MeV << " " << absPass << G4endl;
     }
   }
+  
+  if (epReportLevel > 0)      G4cout << Myout.str();
+  else if (epReportLevel < 0) G4cerr << Myout.str();
 }
 
 
