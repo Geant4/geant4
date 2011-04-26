@@ -82,6 +82,8 @@
 //		factor; set scale factors using environment variables
 // 20110303  M. Kelsey -- Add comments why using fabs() with B.E. differences?
 // 20110321  M. Kelsey -- Replace strtof() with strtod() for envvar conversion
+// 20110321  M. Kelsey -- Use fm and fm^2 as default units, Per D. Wright
+//		(NOTE: Restored from original 20110318 commit)
 
 #include "G4NucleiModel.hh"
 #include "G4CascadeCheckBalance.hh"
@@ -113,12 +115,15 @@ typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
 // Scaling factors for radii and cross-sections, currently different!
 
+// ==> Default as of 21 Mar 2011, crossSectionUnits = 0.1 (fm^2)
+// ==>	                          radiusUnits = 1.0 (fm)
+
 const G4double G4NucleiModel::crossSectionUnits = 
-  getenv("G4NUCMODEL_XSEC_SCALE") ? strtod(getenv("G4NUCMODEL_XSEC_SCALE"),0) : 1.0;
+  getenv("G4NUCMODEL_XSEC_SCALE") ? strtod(getenv("G4NUCMODEL_XSEC_SCALE"),0) : 0.1;
 
 #define OLD_RADIUS_UNITS (3.3836/1.2)
 const G4double G4NucleiModel::radiusUnits = 
-  getenv("G4NUCMODEL_RAD_SCALE") ? strtod(getenv("G4NUCMODEL_RAD_SCALE"),0) : OLD_RADIUS_UNITS;
+  getenv("G4NUCMODEL_RAD_SCALE") ? strtod(getenv("G4NUCMODEL_RAD_SCALE"),0) : 1.0;
 
 const G4double G4NucleiModel::skinDepth = (1.7234/OLD_RADIUS_UNITS)*radiusUnits;
 
