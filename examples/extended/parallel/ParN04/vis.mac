@@ -1,4 +1,4 @@
-surface# Use this open statement to create an OpenGL view:
+# Use this open statement to create an OpenGL view:
 /vis/open OGL 600x600-0+0
 #
 # Use this open statement to create a .prim file suitable for
@@ -22,10 +22,10 @@ surface# Use this open statement to create an OpenGL view:
 /vis/drawVolume
 #
 # Specify view angle:
-#/vis/viewer/set/viewpointThetaPhi 90. 0.
+/vis/viewer/set/viewpointThetaPhi 90. 180.
 #
 # Specify zoom value:
-#/vis/viewer/zoom 2.
+/vis/viewer/zoom 1.4
 #
 # Specify style (surface or wireframe):
 #/vis/viewer/set/style wireframe
@@ -58,7 +58,7 @@ surface# Use this open statement to create an OpenGL view:
 #/vis/modeling/trajectories/drawByParticleID-0/set e- blue
 #
 # To superimpose all of the events from a given run:
-#/vis/scene/endOfEventAction accumulate
+/vis/scene/endOfEventAction accumulate
 #
 # Re-establish auto refreshing and verbosity:
 /vis/viewer/set/autoRefresh true

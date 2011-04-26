@@ -45,7 +45,7 @@ class ExN04MuonHit : public G4VHit
       ~ExN04MuonHit();
       ExN04MuonHit(const ExN04MuonHit &right);
       const ExN04MuonHit& operator=(const ExN04MuonHit &right);
-      int operator==(const ExN04MuonHit &right) const;
+      G4int operator==(const ExN04MuonHit &right) const;
 
 
       inline void *operator new(size_t);

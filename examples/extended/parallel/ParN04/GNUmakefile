@@ -15,9 +15,6 @@ endif
 
 
 .PHONY: all
-all: had_list lib bin
-
-had_list:
-	@echo "This example uses the QGSP 'educated guess physics list'"
+all: lib bin
 
 include $(G4INSTALL)/config/binmake.gmk

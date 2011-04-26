@@ -35,7 +35,7 @@
 #include "G4Tubs.hh"
 #include "G4ThreeVector.hh"
 #include "G4Material.hh"
- 
+#include "G4VisAttributes.hh"
 
 ExN04CalorimeterROGeometry::ExN04CalorimeterROGeometry()
   : G4VReadOutGeometry()
@@ -45,13 +45,14 @@ ExN04CalorimeterROGeometry::ExN04CalorimeterROGeometry()
 
 
 ExN04CalorimeterROGeometry::ExN04CalorimeterROGeometry(G4String aString)
-  : G4VReadOutGeometry(aString)
+  : G4VReadOutGeometry(aString), dummyMat(0)
 {
 #include "ExN04DetectorParameterDef.icc"
 }
 
 ExN04CalorimeterROGeometry::~ExN04CalorimeterROGeometry()
 {
+  delete dummyMat;
 }
 
 G4VPhysicalVolume* ExN04CalorimeterROGeometry::Build()
@@ -59,12 +60,13 @@ G4VPhysicalVolume* ExN04CalorimeterROGeometry::Build()
   // A dummy material is used to fill the volumes of the readout geometry.
   // ( It will be allowed to set a NULL pointer in volumes of such virtual
   // division in future, since this material is irrelevant for tracking.)
-  G4Material* dummyMat  = new G4Material(name="dummyMat", 1., 1.*g/mole, 1.*g/cm3);
+  dummyMat  = new G4Material(name="dummyMat", 1., 1.*g/mole, 1.*g/cm3);
 
   //Builds the ReadOut World:
   G4Box *ROWorldBox = new G4Box("ROWorldBox", expHall_x, expHall_y, expHall_z);
   G4LogicalVolume *ROWorldLog = new G4LogicalVolume(ROWorldBox, dummyMat,
 						    "ROWorldLogical", 0, 0, 0);
+  ROWorldLog->SetVisAttributes(G4VisAttributes::Invisible);
   G4PVPlacement *ROWorldPhys = new G4PVPlacement(0,G4ThreeVector(),
 						 "ROWorldPhysical",
 						 ROWorldLog,
