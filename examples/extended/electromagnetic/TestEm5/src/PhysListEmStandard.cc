@@ -37,10 +37,10 @@
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 #include "G4RayleighScattering.hh"
-#include "G4PEEffectFluoModel.hh"
 #include "G4KleinNishinaModel.hh"
 
 #include "G4eMultipleScattering.hh"
+#include "G4UrbanMscModel95.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
@@ -91,10 +91,8 @@ void PhysListEmStandard::ConstructProcess()
      
     if (particleName == "gamma") {
       // gamma
-      pmanager->AddDiscreteProcess(new G4RayleighScattering);
-      G4PhotoElectricEffect* pe = new G4PhotoElectricEffect;
-      pe->SetModel(new G4PEEffectFluoModel());
-      pmanager->AddDiscreteProcess(pe);      
+      ////pmanager->AddDiscreteProcess(new G4RayleighScattering);
+      pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);      
       G4ComptonScattering* cs   = new G4ComptonScattering;
       cs->SetModel(new G4KleinNishinaModel());
       pmanager->AddDiscreteProcess(cs);
@@ -102,7 +100,9 @@ void PhysListEmStandard::ConstructProcess()
      
     } else if (particleName == "e-") {
       //electron
-      pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
+      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      msc->AddEmModel(0, new G4UrbanMscModel95());
+      pmanager->AddProcess(msc,                       -1, 1, 1);      
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetStepFunction(0.1, 100*um);      
       pmanager->AddProcess(eIoni,                     -1, 2, 2);
@@ -110,7 +110,9 @@ void PhysListEmStandard::ConstructProcess()
 	    
     } else if (particleName == "e+") {
       //positron
-      pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
+      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      msc->AddEmModel(0, new G4UrbanMscModel95());
+      pmanager->AddProcess(msc,                       -1, 1, 1);            
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetStepFunction(0.1, 100*um);      
       pmanager->AddProcess(eIoni,                     -1, 2, 2);            
@@ -133,7 +135,7 @@ void PhysListEmStandard::ConstructProcess()
       //proton  
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       G4hIonisation* hIoni = new G4hIonisation();
-      hIoni->SetStepFunction(0.1, 10*um);      
+      hIoni->SetStepFunction(0.1, 20*um);      
       pmanager->AddProcess(hIoni,                     -1, 2, 2);
       pmanager->AddProcess(new G4hBremsstrahlung,     -1, 3, 3);
       pmanager->AddProcess(new G4hPairProduction,     -1, 4, 4);       
@@ -152,7 +154,7 @@ void PhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       G4ionIonisation* ionIoni = new G4ionIonisation();
       ionIoni->SetEmModel(new G4IonParametrisedLossModel());
-      ionIoni->SetStepFunction(0.1, 100*nm);            
+      ionIoni->SetStepFunction(0.1, 1*um);            
       pmanager->AddProcess(ionIoni,                   -1, 2, 2);      
       pmanager->AddProcess(new G4NuclearStopping,     -1, 3,-1);      
       
@@ -182,12 +184,13 @@ void PhysListEmStandard::ConstructProcess()
   //multiple coulomb scattering
   //
   emOptions.SetMscStepLimitation(fUseDistanceToBoundary);  //default=fUseSafety
-  
+    
   // Deexcitation
   //
   G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
-  de->SetActive(true);
-  de->SetPIXEActive(false);  
+  de->SetFluo(true);
+  de->SetAuger(false);   
+  de->SetPIXE(false);  
   G4LossTableManager::Instance()->SetAtomDeexcitation(de);
 }
 
