@@ -15,7 +15,7 @@
 #
 /testhadr/CutsAll          0.01 mm
 /testhadr/Physics          PHYSLIST
-/testhadr/Physics          emstandard_opt3
+/testhadr/Physics          emstandard_opt0
 #
 /run/initialize
 #

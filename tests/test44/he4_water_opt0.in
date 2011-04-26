@@ -20,7 +20,8 @@
 /process/em/verbose 1
 #
 /gun/particle alpha
-/gun/energy 577.2 MeV
+#/gun/energy 577.2 MeV
+/gun/energy 575 MeV
 /run/beamOn 10000
 #
 

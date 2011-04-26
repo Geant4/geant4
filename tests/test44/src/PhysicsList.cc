@@ -54,8 +54,6 @@
 #include "G4HadronElasticPhysicsXS.hh"
 #include "G4HadronElasticPhysicsHP.hh"
 #include "G4HadronElasticPhysicsLHEP.hh"
-#include "G4HadronQElasticPhysics.hh"
-#include "G4ChargeExchangePhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 #include "G4NeutronCrossSectionXS.hh"
 #include "G4QStoppingPhysics.hh"
@@ -208,16 +206,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     SetBuilderList3();
     hadronPhys.push_back( new G4HadronInelasticQBBC());
 
-  } else if (name == "QGSC_BERT") {
-
-    SetBuilderList4();
-    hadronPhys.push_back( new HadronPhysicsQGSC_BERT());
-
-  } else if (name == "QGSP") {
-
-    SetBuilderList1();
-    hadronPhys.push_back( new HadronPhysicsQGSP());
-
   } else if (name == "QGSP_BERT") {
 
     SetBuilderList1();
@@ -321,17 +309,6 @@ void PhysicsList::SetBuilderList3()
   RegisterPhysics( new G4HadronElasticPhysicsXS(verboseLevel) );
   hadronPhys.push_back( new G4QStoppingPhysics(verboseLevel));
   hadronPhys.push_back( new G4IonBinaryCascadePhysics(verboseLevel));
-  hadronPhys.push_back( new G4NeutronTrackingCut(verboseLevel));
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-
-void PhysicsList::SetBuilderList4()
-{
-  hadronPhys.push_back( new G4EmExtraPhysics(verboseLevel));
-  hadronPhys.push_back( new G4HadronQElasticPhysics(verboseLevel));
-  hadronPhys.push_back( new G4QStoppingPhysics(verboseLevel));
-  hadronPhys.push_back( new G4IonPhysics(verboseLevel));
   hadronPhys.push_back( new G4NeutronTrackingCut(verboseLevel));
 }
 

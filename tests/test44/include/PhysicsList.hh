@@ -75,7 +75,6 @@ private:
   void SetBuilderList1(G4bool flagHP = false);
   void SetBuilderList2(G4bool addStopping = false);
   void SetBuilderList3();
-  void SetBuilderList4();
 
   G4double cutForGamma;
   G4double cutForElectron;

@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22-04-11  V.Ivant (test44-V09-04-02)
+- Removed obsolete includes
+
 21-02-11  V.Ivant (test44-V09-04-01)
 - Fixed macro and scripts
 

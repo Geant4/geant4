@@ -6,8 +6,8 @@
 /run/verbose 1
 /tracking/verbose 0
 #
-/random/setSavingFlag true
-/random/resetEngineFrom currentEvent.rndm
+#/random/setSavingFlag true
+#/random/resetEngineFrom currentEvent.rndm
 #
 /testhadr/TargetMat        G4_WATER
 #/testhadr/TargetRadius     10 cm
@@ -23,7 +23,7 @@
 /run/initialize
 #
 /gun/particle ion
-/gun/ion  6 12 6
+/gun/ion  6 12 
 /gun/energy 1200. MeV
 /run/beamOn 10000
 #
