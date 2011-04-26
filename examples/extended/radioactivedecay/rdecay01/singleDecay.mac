@@ -16,7 +16,6 @@
 /rdecay01/histo/setHisto 6  100 -10.  10 keV	#E balance
 /rdecay01/histo/setHisto 7  100  0.    1 eV	#P balance
 /rdecay01/histo/setHisto 8  100  0.   70 min	#time of life
-/rdecay01/histo/setHisto 9  100  0.   70 min	#activity
 #
 /rdecay01/event/printModulo 10000
 #  

@@ -95,8 +95,7 @@ $Id: README,v 1.2 2010-09-17 11:21:45 maire Exp $
       5 : energy spectrum: ions
       6 : energy balance
       7 : momentum balance
-      8 : time of life of decay chain          
-      9 : activity = f(t)
+      8 : total time of life of decay chain          
                             
    The histograms are managed by the HistoManager class and its Messenger. 
    The histos can be individually activated with the command :

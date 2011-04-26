@@ -165,7 +165,7 @@ void HistoManager::SetHisto(G4int ih,
     return;
   }
   
-  const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7" , "8" , "9" };
+  const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7" , "8" };
   const G4String title[] = 
           { "dummy",				//0
             "energy spectrum: e+ e-",		//1
@@ -175,8 +175,7 @@ void HistoManager::SetHisto(G4int ih,
             "energy spectrum: ions",		//5
             "energy balance",			//6	    	    
             "momentum balance",			//7
-            "total time of life of decay chain",//8
-            "activity in Bq/g"			//9	    	    
+            "total time of life of decay chain"	//8
           };
 
 

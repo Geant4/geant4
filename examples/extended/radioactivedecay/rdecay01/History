@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+14-04-11 mma (rdecay01-V09-04-04)
+- RunAction : compute activity from primary ion
+- suppress histo 9
+    
 13-02-11 mma (rdecay01-V09-04-03)
 - RunAction : fixe a bug in time counting
      

@@ -114,6 +114,8 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
   //get time
   //   
   G4double time = track->GetGlobalTime();
+  G4int ID = track->GetTrackID();
+  if (ID == 1) run->PrimaryTiming(time);	//time of life of primary ion  
       
   //energy and momentum balance (from secondaries)
   //
@@ -123,7 +125,6 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
     //there are secondaries --> it is a decay
     //
     //force 'single' decay
-    G4int ID = track->GetTrackID();
     if ((!fullChain)&&(ID > 1)) G4RunManager::GetRunManager()->AbortEvent();
     //
     //balance    
@@ -145,9 +146,8 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
   //no secondaries --> end of chain    
   //  
   if (!nbtrk) {
-    run->EventTiming(time);		//time of life
+    run->EventTiming(time);		//total time of life
     histoManager->FillHisto(8,time);
-    histoManager->FillHisto(9,time);	//activity                    
   }
 }
 

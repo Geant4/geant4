@@ -45,7 +45,7 @@ namespace AIDA {
 
 class HistoMessenger;
 
-const G4int MaxHisto = 10;
+const G4int MaxHisto = 9;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

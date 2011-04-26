@@ -58,7 +58,8 @@ void RunAction::BeginOfRunAction(const G4Run*)
   //
   decayCount = timeCount = 0;
   for (G4int i=0; i<3; i++) Ebalance[i] = Pbalance[i] = EventTime[i] = 0. ;
-       
+  PrimaryTime = 0.;
+          
   //histograms
   //
   histoManager->book();
@@ -107,7 +108,15 @@ void RunAction::EventTiming(G4double time)
   if (timeCount == 1) EventTime[1] = EventTime[2] = time;  
   if (time < EventTime[1]) EventTime[1] = time;
   if (time > EventTime[2]) EventTime[2] = time;	     
-}    
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::PrimaryTiming(G4double ptime)
+{
+  PrimaryTime += ptime;
+}
+    
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::EndOfRunAction(const G4Run* run)
@@ -168,12 +177,12 @@ void RunAction::EndOfRunAction(const G4Run* run)
 	    << " --> " << G4BestUnit(Pbalance[2], "Energy")
             << ")" << G4endl;
 	    
- //time of life
+ //total time of life
  //
  G4double Tmean = EventTime[0]/timeCount;
  G4double halfLife = Tmean*std::log(2.);
    
- G4cout << "\n Time of life : mean = "
+ G4cout << "\n Total time of life : mean = "
             << std::setw(wid) << G4BestUnit(Tmean, "Time")
 	    << "  half-life = "
 	    << std::setw(wid) << G4BestUnit(halfLife, "Time")
@@ -181,23 +190,19 @@ void RunAction::EndOfRunAction(const G4Run* run)
 	    << " --> "  << G4BestUnit(EventTime[2], "Time")
             << ")" << G4endl;
 	    
- //activity
+ //activity of primary ion
  //
+ G4double pTimeMean = PrimaryTime/nbEvents;
  G4double molMass = particle->GetAtomicMass()*g/mole;
  G4double nAtoms = Avogadro/molMass;
- G4double ActivPerAtom = 1./Tmean;
+ G4double ActivPerAtom = 1./pTimeMean;
  G4double ActivPerMass = ActivPerAtom*nAtoms;
    
- G4cout << "\n Activity = "
+ G4cout << "\n Activity of " << partName << " = "
             << std::setw(wid) << ActivPerMass*g/becquerel
 	    << " Bq/g   ("    << ActivPerMass*g/curie
 	    << " Ci/g) \n" 
 	    << G4endl;
-	    
-  //normalise histo 9
-  G4double binW = histoManager->GetBinWidth(9);
-  G4double factor = (nAtoms*gram)/(binW*nbEvents*becquerel);	    
-  histoManager->Normalize(9,factor);
     	    	   	         
  // remove all contents in particleCount
  // 
