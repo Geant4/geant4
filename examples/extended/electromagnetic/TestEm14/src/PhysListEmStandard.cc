@@ -34,8 +34,8 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 
+#include "G4RayleighScattering.hh"
 #include "G4PhotoElectricEffect.hh"
-#include "G4PEEffectFluoModel.hh"
 #include "G4ComptonScattering.hh"
 #include "G4KleinNishinaModel.hh"
 #include "G4GammaConversion.hh"
@@ -79,14 +79,11 @@ void PhysListEmStandard::ConstructProcess()
     G4String particleName = particle->GetParticleName();
      
     if (particleName == "gamma") {
-      // gamma         
-      ////pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
-      ////pmanager->AddDiscreteProcess(new G4ComptonScattering);
-      G4PhotoElectricEffect* pe = new G4PhotoElectricEffect;
-      pe->SetModel(new G4PEEffectFluoModel());
+      // gamma
+      ////pmanager->AddDiscreteProcess(new G4RayleighScattering);               
+      pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
       G4ComptonScattering* cs   = new G4ComptonScattering;
       cs->SetModel(new G4KleinNishinaModel());
-      pmanager->AddDiscreteProcess(pe);
       pmanager->AddDiscreteProcess(cs);
       pmanager->AddDiscreteProcess(new G4GammaConversion);
       
@@ -122,8 +119,9 @@ void PhysListEmStandard::ConstructProcess()
   // Deexcitation
   //
   G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
-  de->SetActive(true);
-  de->SetPIXEActive(true);  
+  de->SetFluo(true);
+  de->SetAuger(false);  
+  de->SetPIXE(false);  
   G4LossTableManager::Instance()->SetAtomDeexcitation(de);
 }
 
