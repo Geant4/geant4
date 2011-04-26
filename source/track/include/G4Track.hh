@@ -239,6 +239,12 @@ public: // With description
   // User information
   G4VUserTrackInformation* GetUserInformation() const;
   void SetUserInformation(G4VUserTrackInformation* aValue);
+ 
+  // Velocity table
+  static void SetVelocityTableProperties(G4double t_max, G4double t_min, G4int nbin);
+  static G4double GetMaxTOfVelocityTable();
+  static G4double GetMinTOfVelocityTable();
+  static G4double GetNbinOfVelocityTable();
 
 //---------
    private:
@@ -295,8 +301,9 @@ public: // With description
    mutable G4double                  prev_momentum;
 
    static G4PhysicsLogVector* velTable;
-   static const G4double maxT;
-   static const G4double minT;
+   static G4double maxT;
+   static G4double minT;
+   static G4int    NbinT;
    G4bool              is_OpticalPhoton; 
 };
 

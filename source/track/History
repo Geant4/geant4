@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Apr. 2, 2011, H.Kurashige (track-V09-04-01)
+- Set maxT for Velocity Table to 1000
+- Add SetVelocityTableProperties
+
 Mar. 16, 2011, H.Kurashige (track-V09-04-00)
 - Fix problems reported by Coverity
 - Add  GetSecondaryInCurrentStep method in G4Step.

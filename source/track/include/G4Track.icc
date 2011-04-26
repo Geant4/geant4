@@ -318,3 +318,4 @@
 
    inline void G4Track::SetStep(const G4Step* aValue)
    { fpStep = aValue; }
+
