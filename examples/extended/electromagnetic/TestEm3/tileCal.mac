@@ -13,8 +13,7 @@
 /testem/det/setAbsor 2 Scintillator  3  mm
 /testem/det/setSizeYZ 20 cm
 #
-###/testem/phys/addPhysics  emstandard_opt0
-/testem/phys/addPhysics  standardGS
+/testem/phys/addPhysics  emstandard_opt0
 /testem/phys/setCuts 1 um
 #
 /run/initialize

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-01    (17-December-2010)
+ Geant4 version Name: geant4-09-04-ref-00    (17-December-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -136,7 +136,7 @@ msc:   for proton    SubType= 10
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=          2 MeV
           BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
@@ -161,7 +161,7 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :   Emin=        0 eV       Emax=          2 MeV
@@ -170,7 +170,7 @@ ionIoni:   for  GenericIon    SubType= 2
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=          2 MeV
           BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
@@ -184,7 +184,7 @@ msc:   for kaon+    SubType= 10
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=    1.05231 MeV
           BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
@@ -204,7 +204,7 @@ hPairProd:   for  kaon+    SubType= 4
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=    1.05231 MeV
           BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
@@ -284,7 +284,7 @@ CoulombScat:   for  mu-    SubType= 1
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=    297.505 keV
           BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
@@ -310,7 +310,7 @@ msc:   for pi-    SubType= 10
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=    297.505 keV
           BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
@@ -338,21 +338,21 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Galactic
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton 100 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  101.937 keV    e-  1.38038 MeV    e+  1.28825 MeV proton 100 keV
+ Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : liquidArgon
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  6.21346 keV    e-  346.737 keV    e+  336.253 keV proton 100 keV
+ Energy thresholds :  gamma  6.19986 keV    e-  344.855 keV    e+  333.46 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -389,33 +389,33 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=3.98s Real=3.99s Sys=0s
+  User=3.99s Real=4.05s Sys=0.01s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 779.36 MeV :  16.56 MeV     2.125 +- 0.2125 %      54.4 cm  +- 1.31 cm 
-   liquidArgon: 209.63 MeV :  14.37 MeV     6.854 +- 0.6854 %      1.03 m   +- 7.24 cm 
+          Lead: 782.46 MeV :  15.18 MeV      1.94 +- 0.194 %      54.6 cm  +- 1.11 cm 
+   liquidArgon: 206.47 MeV :  13.75 MeV      6.66 +- 0.666 %      1.02 m   +- 7.05 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
  Mean number of gamma  571
- Mean number of e-     960
- Mean number of e+     55.3
+ Mean number of e-     962
+ Mean number of e+     55.5
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 779.33 MeV
-liquidArgon:	 209.091 MeV
+      Lead:	 782.434 MeV
+liquidArgon:	 206.478 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2067952326, 196213903
+ Current couple of seeds = 225336118, 351963897
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
