@@ -7,7 +7,7 @@
 #verbose
 0
 #events
-10000
+1000
 #print
 100
 #particle

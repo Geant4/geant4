@@ -341,8 +341,7 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     man->AddDiscreteProcess(theProcess);
     
   } else {
-    G4cout << gen_name
-           << " generator is unkown - no hadron production" << G4endl;
+    G4cout << "WARNING: <" << gen_name << "> generator is unknown" << G4endl;
   }
 
   G4cout <<  "Secondary generator <"

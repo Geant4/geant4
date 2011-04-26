@@ -11,8 +11,7 @@ ifndef G4INSTALL
   G4INSTALL = ../..
 endif
 
-.PHONY: all 
-
+.PHONY: all
 all: lib bin
 
 ifdef G4ANALYSIS_USE_ROOT

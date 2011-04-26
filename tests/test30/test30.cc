@@ -569,7 +569,7 @@ int main(int argc, char** argv)
     G4HadronicProcess* extraproc = 0;
     G4VProcess* proc = 0;
     G4String namegen1 = nameGen.substr(0, 4);
-    G4cout << "<" << namegen1 << ">" << G4endl; 
+    //G4cout << "<" << namegen1 << ">" << G4endl; 
     if(namegen1 == "Elas") { 
       extraproc = new G4WHadronElasticProcess(); 
     } else if (nameGen == "chargeex") { 
