@@ -76,7 +76,7 @@ G4MollerBhabhaModel::G4MollerBhabhaModel(const G4ParticleDefinition* p,
     particle(0),
     isElectron(true),
     twoln10(2.0*log(10.0)),
-    lowLimit(0.2*keV),
+    lowLimit(0.02*keV),
     isInitialised(false)
 {
   theElectron = G4Electron::Electron();
@@ -182,13 +182,20 @@ G4double G4MollerBhabhaModel::ComputeCrossSectionPerAtom(
 G4double G4MollerBhabhaModel::CrossSectionPerVolume(
 					   const G4Material* material,
                                            const G4ParticleDefinition* p,
-                                                 G4double kineticEnergy,
+                                                 G4double kinEnergy,
                                                  G4double cutEnergy,
                                                  G4double maxEnergy)
 {
   G4double eDensity = material->GetElectronDensity();
-  return 
-    eDensity*ComputeCrossSectionPerElectron(p,kineticEnergy,cutEnergy,maxEnergy);
+  G4double Zeff     = eDensity/material->GetTotNbOfAtomsPerVolume();
+  G4double th       = 0.25*sqrt(Zeff)*keV;
+  G4double res      = 0.0;
+  // below this threshold no 
+  if (kinEnergy > th) { 
+    res = eDensity*ComputeCrossSectionPerElectron(p,kinEnergy,
+						  cutEnergy,maxEnergy);
+  }
+  return res; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -206,11 +213,8 @@ G4double G4MollerBhabhaModel::ComputeDEDXPerVolume(
   G4double Zeff  = electronDensity/material->GetTotNbOfAtomsPerVolume();
   G4double th    = 0.25*sqrt(Zeff)*keV;
   G4double tkin  = kineticEnergy;
-  G4bool   lowEnergy = false;
-  if (kineticEnergy < th) {
-    tkin = th;
-    lowEnergy = true;
-  }
+  if (kineticEnergy < th) { tkin = th; }
+ 
   G4double tau   = tkin/electron_mass_c2;
   G4double gam   = tau + 1.0;
   G4double gamma2= gam*gam;
@@ -252,11 +256,18 @@ G4double G4MollerBhabhaModel::ComputeDEDXPerVolume(
   if (dedx < 0.0) { dedx = 0.0; }
  
   // lowenergy extrapolation
-
-  if (lowEnergy) {
+ 
+  if (kineticEnergy < th) {
+    x = kineticEnergy/th;
+    if(x > 0.25) { dedx /= sqrt(x); }
+    else { dedx *= 1.4*sqrt(x)/(0.1 + x); }
+  }
+  /*
+  if (kineticEnergy < th) {
     if (kineticEnergy >= lowLimit) { dedx *= sqrt(tkin/kineticEnergy); }
     else                           { dedx *= sqrt(tkin*kineticEnergy)/lowLimit; }
   }
+  */
   return dedx;
 }
 
@@ -345,7 +356,7 @@ void G4MollerBhabhaModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp
            sqrt(deltaKinEnergy * (deltaKinEnergy + 2.0*electron_mass_c2));
   G4double cost = deltaKinEnergy * (energy + electron_mass_c2) /
                                    (deltaMomentum * totalMomentum);
-  G4double sint = 1.0 - cost*cost;
+  G4double sint = (1.0 - cost)*(1. + cost);
   if(sint > 0.0) { sint = sqrt(sint); }
   else { sint = 0.0; }
 

@@ -130,7 +130,6 @@ protected:
 
   const G4MaterialCutsCouple* currentCouple;
   const G4Material*           currentMaterial;
-  const G4Element*            currentElement;
   G4int                       currentMaterialIndex;
 
   G4double                  cosThetaMin;

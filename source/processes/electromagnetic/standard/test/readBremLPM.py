@@ -39,6 +39,11 @@ for i in range(t.GetEntries()):
     min1=g1.GetHistogram().GetMinimum()
     max1=g1.GetHistogram().GetMaximum()
 
+    g2=f.Get('model2;'+str(i+1))
+    g2.Draw('lp');
+    min2=g2.GetHistogram().GetMinimum()
+    max2=g2.GetHistogram().GetMaximum()
+
     gR.SetMaximum(1.1*max(max1,maxR))
     gR.SetMinimum(0.9*min(min1,minR))
     print Z
@@ -61,6 +66,11 @@ for i in range(t.GetEntries()):
     g1.Draw('lp');
     min1=g1.GetHistogram().GetMinimum()
     max1=g1.GetHistogram().GetMaximum()
+
+    g2=f.Get('xDEDX2;'+str(i+1))
+    g2.Draw('lp');
+    min2=g2.GetHistogram().GetMinimum()
+    max2=g2.GetHistogram().GetMaximum()
 
 #    gR.SetMaximum(1.e-3)
     gR.SetMinimum(1.e-6*max(max1,maxR))

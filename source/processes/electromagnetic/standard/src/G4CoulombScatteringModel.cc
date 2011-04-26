@@ -147,8 +147,8 @@ void G4CoulombScatteringModel::SampleSecondaries(
   SetupParticle(dp->GetDefinition());
 
   // Choose nucleus
-  currentElement = SelectRandomAtom(couple,particle,
-				    kinEnergy,cutEnergy,kinEnergy);
+  const G4Element* currentElement = 
+    SelectRandomAtom(couple,particle,kinEnergy,cutEnergy,kinEnergy);
 
   G4double Z = currentElement->GetZ();
   G4int iz = G4int(Z);

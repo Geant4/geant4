@@ -17,6 +17,22 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18 April 2011: V.Ivant (emstand-V09-04-16)
+- Fixed problems of the previous tag
+
+08 April 2011: V.Ivant (emstand-V09-04-15)
+- G4eBremParametrizedModel (A.Schaelicke) - new model
+
+07 April 2011: V.Ivant (emstand-V09-04-14)
+- G4IonFluctuation, G4UniversalFluctuations - replaced Gauss 
+    sampling by Gamma function sampling
+- G4MollerBhabhaModel - modified parameterisation of dedx at 
+    very low energy providing more smooth shape
+
+30 March 2011: V.Ivant (emstand-V09-04-13)
+- G4WentzelOKandVIxSection, G4eCoulombScatteringModel - fixed problem 
+    introduced in previous tags for compounds
+
 29 March 2011: V.Ivant (emstand-V09-04-12)
 - G4WentzelOKandVIxSection - return back to the version of 9.4 
 

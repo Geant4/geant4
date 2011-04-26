@@ -151,6 +151,22 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
       electronDensity = material->GetElectronDensity();
       siga  = (1.0/beta2 - 0.5) * twopi_mc2_rcl2 * tmax * length
                                 * electronDensity * chargeSquare;
+
+      G4double sigb = siga/(meanLoss*meanLoss);
+      G4double lambda = 1.0/sigb;
+  
+      if (lambda >= 5.0) {
+
+	sigb = sqrt(sigb);
+	do {
+	  loss = G4RandGauss::shoot(1.0,sigb);
+	} while (0.0 > loss || loss > 2.0);
+      } else {
+
+	loss = CLHEP::RandGamma::shoot(lambda,lambda);
+      }
+      loss *= meanLoss;  
+      /*
       siga = sqrt(siga);
       G4double twomeanLoss = meanLoss + meanLoss;
       if (twomeanLoss < siga) {
@@ -164,6 +180,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
           loss = G4RandGauss::shoot(meanLoss,siga);
         } while (loss < 0. || loss > twomeanLoss);
       }
+      */
       return loss;
     }
   }

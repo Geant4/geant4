@@ -84,7 +84,6 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(const G4String& nam)
   theParticleTable = G4ParticleTable::GetParticleTable();
   theProton   = G4Proton::Proton();
   currentMaterial = 0; 
-  currentElement  = 0;
   lowEnergyLimit  = 1*eV;
   recoilThreshold = 0.*keV; // by default does not work
   particle = 0;
@@ -187,24 +186,26 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   G4double kinEnergy = dp->GetKineticEnergy();
   if(kinEnergy < lowEnergyLimit) { return; }
   SetupParticle(dp->GetDefinition());
+  DefineMaterial(couple);
 
   //G4cout << "G4eCoulombScatteringModel::SampleSecondaries e(MeV)= " 
   //	 << kinEnergy << "  " << particle->GetParticleName() 
   //	 << " cut= " << cutEnergy<< G4endl;
  
   // Choose nucleus
-  currentElement = SelectRandomAtom(couple,particle,
-				    kinEnergy,cutEnergy,kinEnergy);
+  const G4Element* currentElement = 
+    SelectRandomAtom(couple,particle,kinEnergy,cutEnergy,kinEnergy);
 
   G4double Z = currentElement->GetZ();
-  
+
   if(ComputeCrossSectionPerAtom(particle,kinEnergy, Z,
-				kinEnergy, cutEnergy, kinEnergy) == 0.0) 
+  				kinEnergy, cutEnergy, kinEnergy) == 0.0) 
     { return; }
 
   G4int iz = G4int(Z);
   G4int ia = SelectIsotopeNumber(currentElement);
   G4double targetMass = G4NucleiProperties::GetNuclearMass(ia, iz);
+  wokvi->SetTargetMass(targetMass);
 
   G4ThreeVector newDirection = 
     wokvi->SampleSingleScattering(cosTetMinNuc, cosThetaMax, elecRatio);

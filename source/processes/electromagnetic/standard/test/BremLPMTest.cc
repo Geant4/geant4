@@ -57,9 +57,12 @@
 // nasty trick to access private or protected functions
 // use only in tests and with care !!!
 #define  protected public
+#define  private public
 // ------------------------------------------------------------
 
-#include "G4eBremsstrahlungHEModel.hh"
+#include "G4eBremParametrizedModel.hh"
+
+
 #include "G4eBremsstrahlungRelModel.hh"
 #include "G4eBremsstrahlungModel.hh"
 
@@ -73,10 +76,17 @@ void CalcCrossSection()
 {
   // initialize models
   G4eBremsstrahlungModel * model1 = new G4eBremsstrahlungModel(); 
-  model1->SetLPMflag(false);
+  model1->SetLPMFlag(false);
+  model1->lowKinEnergy=10.*MeV;
+  model1->SetLowEnergyLimit(10.*MeV);
 
   G4eBremsstrahlungRelModel * modelR = new G4eBremsstrahlungRelModel(); // rel. version
-  //  modelR->SetLPMflag(false);
+  modelR->SetLPMFlag(false);
+
+
+  G4eBremParametrizedModel * model2 = new G4eBremParametrizedModel();
+  model2->SetLPMFlag(false);
+  
 
   // define energy range and cut
   const G4int nmax=80;
@@ -115,8 +125,8 @@ void CalcCrossSection()
 
 
   // fill plots
-  G4double cross[nmax+1], cross1[nmax+1];
-  G4double xDEDX[nmax+1], xDEDX1[nmax+1];
+  G4double cross[nmax+1], cross1[nmax+1], cross2[nmax+1];
+  G4double xDEDX[nmax+1], xDEDX1[nmax+1], xDEDX2[nmax+1];
 
   for (G4int i=0; i<nElements; i++ ) {
     currentZ=theZ[i];
@@ -129,18 +139,17 @@ void CalcCrossSection()
 
     for (int j=0; j<=nmax; ++j) {
 
-      modelR->SetupForMaterial(0,mats[i]);
+      modelR->SetupForMaterial(0,mats[i],.1*GeV); // WARNING kinetic energy will be overwritten anyway
       modelR->G4VEmModel::SetCurrentElement(els[i]);
-//       cross[j] = 
-// 	modelR->ComputeCrossSectionPerAtom( G4Electron::Electron(),
-// 					   kinEs[j], theZ[i], dum, cut)/barn;
-//       cross1[j] = 
-// 	model1->ComputeCrossSectionPerAtom( G4Electron::Electron(),
-// 					    kinEs[j], theZ[i], dum, cut)/barn;
+      model2->SetupForMaterial(0,mats[i],.1*GeV); // WARNING kinetic energy will be overwritten anyway
+      model2->G4VEmModel::SetCurrentElement(els[i]);
+
       xDEDX[j]= modelR->ComputeDEDXPerVolume(mats[i], G4Electron::Electron(), kinEs[j], cut)/dndV/barn;
       xDEDX1[j] = model1->ComputeDEDXPerVolume(mats[i], G4Electron::Electron(), kinEs[j], cut)/dndV/barn; 
+      xDEDX2[j] = model2->ComputeDEDXPerVolume(mats[i], G4Electron::Electron(), kinEs[j], cut)/dndV/barn; 
       cross[j] = modelR->CrossSectionPerVolume(mats[i], G4Electron::Electron(), kinEs[j], cut, kinEs[j])/dndV/barn;
       cross1[j] = model1->CrossSectionPerVolume(mats[i], G4Electron::Electron(), kinEs[j], cut, kinEs[j])/dndV/barn; 
+      cross2[j] = model2->CrossSectionPerVolume(mats[i], G4Electron::Electron(), kinEs[j], cut, kinEs[j])/dndV/barn; 
     }
     TGraph gR(nmax,kinEs,cross);
     gR.Draw("Alp");
@@ -151,9 +160,16 @@ void CalcCrossSection()
     TGraph g1(nmax,kinEs,cross1);
     g1.Draw("lp");
     g1.SetLineColor(4);
-    gR.GetHistogram()->SetXTitle("E_{kin}");
-    gR.GetHistogram()->SetYTitle("#sigma(E_{kin})");
+    g1.GetHistogram()->SetXTitle("E_{kin}");
+    g1.GetHistogram()->SetYTitle("#sigma(E_{kin})");
     g1.Write("model1");
+    TGraph g2(nmax,kinEs,cross2);
+    g2.Draw("lp");
+    g2.SetLineColor(3);
+    g2.SetLineStyle(2);
+    g2.GetHistogram()->SetXTitle("E_{kin}");
+    g2.GetHistogram()->SetYTitle("#sigma(E_{kin})");
+    g2.Write("model2");
 
     TGraph xR(nmax,kinEs,xDEDX);
     xR.Draw("Alp");
@@ -164,10 +180,49 @@ void CalcCrossSection()
     TGraph x1(nmax,kinEs,xDEDX1);
     x1.Draw("lp");
     x1.SetLineColor(4);
-    xR.GetHistogram()->SetXTitle("E_{kin}");
-    xR.GetHistogram()->SetYTitle("dE/dx");
+    x1.GetHistogram()->SetXTitle("E_{kin}");
+    x1.GetHistogram()->SetYTitle("dE/dx");
     x1.Write("xDEDX1");
+    TGraph x2(nmax,kinEs,xDEDX2);
+    x2.Draw("lp");
+    x2.SetLineColor(3);
+    x2.SetLineStyle(2);
+    x2.GetHistogram()->SetXTitle("E_{kin}");
+    x2.GetHistogram()->SetYTitle("dE/dx");
+    x2.Write("xDEDX2");
   }
+
+  // % differential xsection
+  G4double ekin = 1.*GeV;
+  emin = 10.*MeV;
+  G4double egamma = emin;
+  G4double dxsec = 0.;
+
+  TTree tree_dxsec("dxsec","dxsec");
+  tree_dxsec.Branch("Z",&currentZ,"Z/I");
+  tree_dxsec.Branch("ekin",&ekin,"ekin/D");
+  tree_dxsec.Branch("egamma",&egamma,"egamma/D");
+  tree_dxsec.Branch("dxsec",&dxsec,"dxsec/D");
+  std::cout<<" Calc DX"<<std::endl;
+  {
+    G4Material* mat = mats[2]; // [2] Cu
+    currentZ=theZ[2]; // [2]
+
+    const G4int n = 100;
+
+    model2->SetupForMaterial(0,mat,ekin); // WARNING kinetic energy will be overwritten anyway
+    model2->G4VEmModel::SetCurrentElement(els[2]); // [2]
+    model2->SetCurrentElement(currentZ);
+
+    for (G4int i=0;i<=n;++i) {
+      egamma=std::pow(ekin/emin,double(i)/n)*emin;
+      dxsec = model2->ComputeDXSectionPerAtom(egamma);
+      // need to multiply with prefactor!!
+      tree_dxsec.Fill();
+    }
+  }
+
+  tree_dxsec.Write();
   tree.Write();
 }
 

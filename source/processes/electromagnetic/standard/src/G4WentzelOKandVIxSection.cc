@@ -134,6 +134,7 @@ void G4WentzelOKandVIxSection::SetupParticle(const G4ParticleDefinition* p)
   charge3 = chargeSquare*q;
   tkin = 0.0;
   currentMaterial = 0;
+  targetZ = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -146,7 +147,7 @@ G4WentzelOKandVIxSection::SetupTarget(G4int Z, G4double cut)
     etag    = tkin; 
     targetZ = Z;
     if(targetZ > 99) { targetZ = 99; }
-    targetMass = fNistManager->GetAtomicMassAmu(targetZ)*CLHEP::amu_c2;
+    SetTargetMass(fNistManager->GetAtomicMassAmu(targetZ)*CLHEP::amu_c2);
     //G4double tmass2 = targetMass*targetMass;
     //G4double etot = tkin + mass;
     //G4double invmass2 = mass*mass + tmass2 + 2*etot*targetMass;
@@ -155,7 +156,6 @@ G4WentzelOKandVIxSection::SetupTarget(G4int Z, G4double cut)
     //pcmp2    = tmass2/invmass2;
 
     kinFactor = coeff*targetZ*chargeSquare*invbeta2/mom2;
-    factD = std::sqrt(mom2)/targetMass;
 
     screenZ = ScreenRSquare[targetZ]/mom2;
     if(Z > 1) {
@@ -205,18 +205,15 @@ G4WentzelOKandVIxSection::ComputeTransportCrossSectionPerAtom(G4double cosTMax)
   // scattering off electrons
   if(costm < 1.0) {
     x = (1.0 - costm)/screenZ;
-    x1= x/(1 + x);
     if(x < numlimit) { 
       x2 = 0.5*x*x;
-      y  = x2*(1.0 - 1.3333333*x + 3*x2); 
+      y  = x2*(1.0 - 1.3333333*x + 3*x2);
+      if(0.0 < factB) { y -= fb*x2*x*(0.6666667 - x); }
     } else { 
+      x1= x/(1 + x);
       xlog = log(1.0 + x);  
       y = xlog - x1; 
-    }
-
-    if(0.0 < factB) {
-      if(x < numlimit) { y -= fb*x2*x*(0.6666667 - x); } 
-      else             { y -= fb*(x + x1 - 2*xlog); }
+      if(0.0 < factB) { y -= fb*(x + x1 - 2*xlog); }
     }
 
     if(y < 0.0) {
@@ -246,19 +243,17 @@ G4WentzelOKandVIxSection::ComputeTransportCrossSectionPerAtom(G4double cosTMax)
   // scattering off nucleus
   if(cosTMax < 1.0) {
     x = (1.0 - cosTMax)/screenZ;
-    x1= x/(1 + x);
     if(x < numlimit) { 
       x2 = 0.5*x*x;
       y  = x2*(1.0 - 1.3333333*x + 3*x2); 
+      if(0.0 < factB) { y -= fb*x2*x*(0.6666667 - x); }
     } else { 
+      x1= x/(1 + x);
       xlog = log(1.0 + x);  
       y = xlog - x1; 
+      if(0.0 < factB) { y -= fb*(x + x1 - 2*xlog); }
     }
 
-    if(0.0 < factB) {
-      if(x < numlimit) { y -= fb*x2*x*(0.6666667 - x); } 
-      else             { y -= fb*(x + x1 - 2*xlog); }
-    }
     if(y < 0.0) {
       ++nwarnings;
       if(nwarnings < nwarnlimit) {
@@ -322,7 +317,7 @@ G4WentzelOKandVIxSection::SampleSingleScattering(G4double cosTMin,
   */ 
  
   if(factB > 0.0 || formf > 0.0 || factD > 0.01) {
-    factD = 0.0;
+    //factD = 0.0;
     G4double fm =  1.0 + formf*z1/(1.0 + (mass + tkin)*z1/targetMass);
     G4double grej = (1. - z1*factB)/( (1.0 + z1*factD)*fm*fm );
     // "false" scattering

@@ -100,7 +100,7 @@ public:
  
   inline G4double SetupKinematic(G4double kinEnergy, const G4Material* mat);
   
-  //inline void SetTargetMass(G4double value);
+  inline void SetTargetMass(G4double value);
 
   //obsolete method
   inline void SetRelativisticMass(G4double value);
@@ -195,23 +195,17 @@ G4WentzelOKandVIxSection::SetupKinematic(G4double ekin, const G4Material* mat)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//inline G4double G4WentzelOKandVIxSection::TransformCosThetaToLab(G4double& cost)
-//{
-//}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-/*
 inline void G4WentzelOKandVIxSection::SetTargetMass(G4double value)
 {
   targetMass = value;
   factD = std::sqrt(mom2)/value;
 }
-*/
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline void G4WentzelOKandVIxSection::SetRelativisticMass(G4double)
+inline void G4WentzelOKandVIxSection::SetRelativisticMass(G4double value)
 {
-  //  mass = value;
+  mass = value;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

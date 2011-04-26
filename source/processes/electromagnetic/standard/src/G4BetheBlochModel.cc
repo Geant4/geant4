@@ -297,7 +297,7 @@ void G4BetheBlochModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
     const G4Material* mat = couple->GetMaterial();
     G4double preKinEnergy = dp->GetKineticEnergy();
     G4double e = preKinEnergy - eloss*0.5;
-    if(e < 0.0) e = preKinEnergy*0.5;
+    if(e < 0.0) { e = preKinEnergy*0.5; }
 
     G4double q2 = corr->EffectiveChargeSquareRatio(p,mat,e);
     GetModelOfFluctuations()->SetParticleAndCharge(p, q2);
@@ -323,7 +323,7 @@ void G4BetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
   G4double tmax = MaxSecondaryEnergy(dp->GetDefinition(),kineticEnergy);
 
   G4double maxKinEnergy = std::min(maxEnergy,tmax);
-  if(minKinEnergy >= maxKinEnergy) return;
+  if(minKinEnergy >= maxKinEnergy) { return; }
 
   G4double totEnergy     = kineticEnergy + mass;
   G4double etot2         = totEnergy*totEnergy;
@@ -332,7 +332,7 @@ void G4BetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
   G4double deltaKinEnergy, f; 
   G4double f1 = 0.0;
   G4double fmax = 1.0;
-  if( 0.5 == spin ) fmax += 0.5*maxKinEnergy*maxKinEnergy/etot2; 
+  if( 0.5 == spin ) { fmax += 0.5*maxKinEnergy*maxKinEnergy/etot2; }
 
   // sampling without nuclear size effect
   do {
