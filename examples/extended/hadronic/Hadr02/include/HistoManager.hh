@@ -108,6 +108,7 @@ public:
   void SetMaxEnergyDeposit(G4double val)        {edepMax = val;};
 
   void SetPhysicsList(G4VModularPhysicsList* p) {physList = p;};
+  void SetPhysicsListName(const G4String& nam)  {physListName = nam;};
   void SetIonPhysics(const G4String&);
 
 private:
@@ -121,6 +122,7 @@ private:
   const G4ParticleDefinition* neutron;
   const G4Material*           material;
   G4Element*                  elm;
+  G4String                    physListName;
 
   G4double edepMax;
   G4double edepEvt;

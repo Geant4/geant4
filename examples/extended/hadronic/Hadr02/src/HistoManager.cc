@@ -411,21 +411,29 @@ void HistoManager::Fill(G4int id, G4double x, G4double w)
 
 void HistoManager::SetIonPhysics(const G4String& nam)
 {
+  if(physListName == "QBBC") {
+    G4cout << "SetIonPhysics: WARNING should add ion builder to QBBC "
+	   << "- it is ignored" << G4endl;
+    return; 
+  }
+  G4bool isBinary = false;
+  if(physList->GetPhysics("IonBinaryCascade")) { isBinary = true; }
+
   if(ionPhysics) {
     G4cout << "### HistoManager WARNING: Ion Physics is already defined: <"
 	   << nam << "> is ignored!" << G4endl;
   } else if(nam == "DPMJET") {
-    ionPhysics = new IonDPMJETPhysics();
+    ionPhysics = new IonDPMJETPhysics(isBinary);
     physList->RegisterPhysics(ionPhysics);
     G4RunManager::GetRunManager()->PhysicsHasBeenModified();
     G4cout << "### SetIonPhysics: Ion Physics DPMJET is added to the reference "
-	   << " Physics List" << G4endl;
+	   << " Physics List isBic= " << isBinary << G4endl;
   } else if(nam == "FTF") {
-    ionPhysics = new IonFTFPhysics();
+    ionPhysics = new IonFTFPhysics(isBinary);
     physList->RegisterPhysics(ionPhysics);
     G4RunManager::GetRunManager()->PhysicsHasBeenModified();
     G4cout << "### SetIonPhysics: Ion Physics FTF is added to the reference "
-	   << " Physics List" << G4endl;
+	   << " Physics List isBic= " << isBinary << G4endl;
   } else {
     G4cout << "### HistoManager WARNING: Ion Physics <"
 	   << nam << "> is unknown!" << G4endl;

@@ -38,10 +38,13 @@
 #include "G4VHadronPhysics.hh"
 #include "globals.hh"
 
+class G4VCrossSectionDataSet;
+class G4BinaryLightIonReaction;
+
 class IonFTFPhysics : public G4VHadronPhysics
 {
 public:
-  IonFTFPhysics();
+  IonFTFPhysics(G4bool val);
   virtual ~IonFTFPhysics();
 
 public:
@@ -52,7 +55,12 @@ public:
 
 private:
 
-  //G4BinaryLightIonReaction*  theIonBC;
+  G4VCrossSectionDataSet* fTripathi;
+  G4VCrossSectionDataSet* fTripathiLight;
+  G4VCrossSectionDataSet* fShen;
+  G4VCrossSectionDataSet* fIonH;
+  G4BinaryLightIonReaction*  theIonBC;
+  G4bool isBinary;
 };
 
 

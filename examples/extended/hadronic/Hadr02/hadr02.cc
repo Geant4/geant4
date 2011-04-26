@@ -80,17 +80,26 @@ int main(int argc,char** argv) {
   G4PhysListFactory factory;
   G4VModularPhysicsList* phys = 0;
 
+  // default Physics List for this example
+  G4String physName = "QBBC";
+
   // Physics List name defined via 2nd argument
-  if (argc==3) {
-    G4String physName = argv[2];
-    if(factory.IsReferencePhysList(physName)) 
-      phys = factory.GetReferencePhysList(physName);
+  if (argc==3) { physName = argv[2]; }
+  else {
+    char* path = getenv("PHYSLIST");
+    if (path) { physName = G4String(path); }
   }
+  phys = factory.GetReferencePhysList(physName); 
 
   // Physics List is defined via environment variable PHYSLIST
-  if(!phys) { phys = factory.ReferencePhysList(); }
+  if(!phys) {
+    G4cout << "Hadr02 FATAL ERROR: Physics List is not defined"
+	   << G4endl;
+    return 1;
+  }
   runManager->SetUserInitialization(phys);
   HistoManager::GetPointer()->SetPhysicsList(phys);
+  HistoManager::GetPointer()->SetPhysicsListName(physName);
 
   runManager->SetUserAction(new PrimaryGeneratorAction());
 

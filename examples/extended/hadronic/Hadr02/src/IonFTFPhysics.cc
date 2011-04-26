@@ -45,6 +45,7 @@
 #include "G4TripathiCrossSection.hh"
 #include "G4TripathiLightCrossSection.hh"
 #include "G4IonsShenCrossSection.hh"
+#include "G4IonProtonCrossSection.hh"
 
 #include "G4PreCompoundModel.hh"
 #include "G4FTFBuilder.hh"
@@ -55,9 +56,11 @@ using namespace std;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-IonFTFPhysics::IonFTFPhysics()
-  : G4VHadronPhysics("ionInelasticFTF")
-{}
+IonFTFPhysics::IonFTFPhysics(G4bool val)
+  : G4VHadronPhysics("ionInelasticFTF"),theIonBC(0),isBinary(val)
+{
+  fTripathi = fTripathiLight = fShen = fIonH = 0;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -71,33 +74,40 @@ void IonFTFPhysics::ConstructProcess()
   // Binary Cascade
   G4ParticleDefinition* particle = 0;
   G4ProcessManager* pmanager = 0;
-  // theIonBC = new G4BinaryLightIonReaction();
-  // theIonBC->SetMinEnergy(0.0);
-  // theIonBC->SetMaxEnergy(6*GeV);
+  G4HadronicProcess* hp = 0;
 
+  G4double emax = 1000.*TeV;
+
+  if(!isBinary) {
+    theIonBC = new G4BinaryLightIonReaction();
+    theIonBC->SetMinEnergy(0.0);
+    theIonBC->SetMaxEnergy(6*GeV);
+
+    fShen = new G4IonsShenCrossSection;
+    fTripathi = new G4TripathiCrossSection;
+    fTripathiLight = new G4TripathiLightCrossSection;
+    fIonH = new G4IonProtonCrossSection;
+
+    fShen->SetMaxKinEnergy(emax);
+    fTripathi->SetMaxKinEnergy(emax);
+    fTripathiLight->SetMaxKinEnergy(emax);
+    fIonH->SetMaxKinEnergy(emax);    
+  }
   G4PreCompoundModel* thePreCompound = 
     new G4PreCompoundModel(new G4ExcitationHandler());
   G4HadronicInteraction* theFTFP =
-    BuildModel(new G4FTFBuilder("FTFP",thePreCompound),5.0*GeV,10.*TeV);
+    BuildModel(new G4FTFBuilder("FTFP",thePreCompound),5.0*GeV,emax);
   //G4FTF2_5CrossSection *dpmXS = new G4FTF2_5CrossSection;
-  G4cout << " IonFTFPhysics::ConstructProcess() FTF-> " 
-	 << theFTFP << G4endl;
+  G4cout << " IonFTFPhysics::ConstructProcess() FTFP+Binary for ions " 
+	 << G4endl;
 
-  //G4TripathiLightCrossSection * TripathiLightCrossSection =
-  //  new G4TripathiLightCrossSection;
-  //G4TripathiCrossSection * TripathiCrossSection = new G4TripathiCrossSection;
-  //G4IonsShenCrossSection * aShen = new G4IonsShenCrossSection;
-
+  /*
   // deuteron
   particle = G4Deuteron::Deuteron();
   G4cout << "IonFTFPhysics::ConstructProcess for " 
 	 << particle->GetParticleName() << G4endl;
   pmanager = particle->GetProcessManager();
   G4HadronicProcess* hp = FindInelasticProcess(particle);
-  //  hp->AddDataSet(TripathiLightCrossSection);
-  // hp->AddDataSet(aShen);
-  //  hp->RegisterMe(theIonBC);
-  //hp->AddDataSet(dpmXS);
   hp->RegisterMe(theFTFP);
   pmanager->AddDiscreteProcess(hp);
 
@@ -107,10 +117,6 @@ void IonFTFPhysics::ConstructProcess()
 	 << particle->GetParticleName() << G4endl;
   pmanager = particle->GetProcessManager();
   hp = FindInelasticProcess(particle);
-  //hp->AddDataSet(TripathiLightCrossSection);
-  //hp->AddDataSet(aShen);
-  // hp->RegisterMe(theIonBC);
-  //hp->AddDataSet(dpmXS);
   hp->RegisterMe(theFTFP);
   pmanager->AddDiscreteProcess(hp);
 
@@ -120,12 +126,9 @@ void IonFTFPhysics::ConstructProcess()
 	 << particle->GetParticleName() << G4endl;
   pmanager = particle->GetProcessManager();
   hp = FindInelasticProcess(particle);
-  //hp->AddDataSet(TripathiLightCrossSection);
-  //hp->AddDataSet(aShen);
-  //  hp->RegisterMe(theIonBC);
-  //hp->AddDataSet(dpmXS);
   hp->RegisterMe(theFTFP);
   pmanager->AddDiscreteProcess(hp);
+  */
 
   // He3
   particle = G4He3::He3();
@@ -133,10 +136,14 @@ void IonFTFPhysics::ConstructProcess()
 	 << particle->GetParticleName() << G4endl;
   pmanager = particle->GetProcessManager();
   hp = FindInelasticProcess(particle);
-  //hp->AddDataSet(TripathiLightCrossSection);
-  //hp->AddDataSet(aShen);
-  //  hp->RegisterMe(theIonBC);
   //hp->AddDataSet(dpmXS);
+  if(!isBinary) { 
+    hp->RegisterMe(theIonBC); 
+    hp->AddDataSet(fShen);
+    hp->AddDataSet(fTripathi);
+    hp->AddDataSet(fTripathiLight);
+    hp->AddDataSet(fIonH); 
+  }
   hp->RegisterMe(theFTFP);
   pmanager->AddDiscreteProcess(hp);
 
@@ -146,11 +153,15 @@ void IonFTFPhysics::ConstructProcess()
 	 << particle->GetParticleName() << G4endl;
   pmanager = particle->GetProcessManager();
   hp = FindInelasticProcess(particle);
-  //hp->AddDataSet(TripathiCrossSection);
-  //hp->AddDataSet(aShen);
-  //  hp->RegisterMe(theIonBC);
   G4cout << "IonFTFPhysics: FTF is registered for GenericIon" << G4endl;
   //hp->AddDataSet(dpmXS);
+  if(!isBinary) { 
+    hp->RegisterMe(theIonBC); 
+    hp->AddDataSet(fShen);
+    hp->AddDataSet(fTripathi);
+    hp->AddDataSet(fTripathiLight);
+    hp->AddDataSet(fIonH); 
+  }
   hp->RegisterMe(theFTFP);
   pmanager->AddDiscreteProcess(hp);
 

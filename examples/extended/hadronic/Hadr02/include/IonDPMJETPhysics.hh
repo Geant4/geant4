@@ -48,11 +48,12 @@
 
 class G4BinaryLightIonReaction;
 class G4DPMJET2_5Model;
+class G4VCrossSectionDataSet;
 
 class IonDPMJETPhysics : public G4VHadronPhysics
 {
 public:
-  IonDPMJETPhysics();
+  IonDPMJETPhysics(G4bool val);
   virtual ~IonDPMJETPhysics();
 
 public:
@@ -63,17 +64,13 @@ public:
 
 private:
 
+  G4VCrossSectionDataSet* fTripathi;
+  G4VCrossSectionDataSet* fTripathiLight;
+  G4VCrossSectionDataSet* fShen;
+  G4VCrossSectionDataSet* fIonH;
   G4BinaryLightIonReaction*  theIonBC;
   G4DPMJET2_5Model*          theDPM;
+  G4bool isBinary;
 };
 
-
 #endif
-
-
-
-
-
-
-
-
