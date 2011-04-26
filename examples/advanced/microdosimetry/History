@@ -10,6 +10,9 @@ $Id: History,v 1.24 2010-11-18 11:48:21 allison Exp $
                        --------------------
 
 
+02 April 2011 - S. Incerti -  microdosimetry-V09-04-01
+- Added new variables to histogram
+
 13 March 2011 - S. Incerti -  microdosimetry-V09-04-00
 - Switched to G4ionIonisation and 5 MeV proton
 
