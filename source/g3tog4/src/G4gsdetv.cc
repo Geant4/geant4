@@ -34,7 +34,7 @@
 
 class G4VSensitiveDetector;
 
-void PG4gsdetv(G4String tokens[])
+void PG4gsdetv(G4String *tokens)
 {
     // fill the parameter containers
     G3fillParams(tokens,PTgsdetv);

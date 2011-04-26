@@ -38,7 +38,7 @@
 #include "G4Isotope.hh"
 #include "G4UnitsTable.hh"
 
-void PG4gsmate(G4String tokens[])
+void PG4gsmate(G4String *tokens)
 {
   // fill the parameter containers
   G3fillParams(tokens,PTgsmate);

@@ -32,7 +32,7 @@
 
 class G4VSensitiveDetector;
 
-void PG4gsdeth(G4String tokens[])
+void PG4gsdeth(G4String *tokens)
 {
     // fill the parameter containers
     G3fillParams(tokens,PTgsdeth);

@@ -35,7 +35,7 @@
 #include "G3toG4.hh"
 #include "G3toG4MakeSolid.hh"
 
-void PG4gsvolu(G4String tokens[]) {
+void PG4gsvolu(G4String *tokens) {
     // fill the parameter containers
     G3fillParams(tokens,PTgsvolu);
 

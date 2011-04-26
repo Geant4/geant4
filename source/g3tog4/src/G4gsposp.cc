@@ -39,7 +39,7 @@
 G4bool G3NegVolPars(G4double pars[], G4int *nparpt, 
           G3VolTableEntry* vte, G3VolTableEntry* mvte, const char routine[]);		       
 
-void PG4gsposp(G4String tokens[]){
+void PG4gsposp(G4String *tokens){
   // fill the parameter containers
   G3fillParams(tokens,PTgsposp);
   

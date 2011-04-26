@@ -39,7 +39,7 @@ void G4CreateCloneVTEWithDivision(G4String vname, G3VolTableEntry* mvte,
                G3DivType divType, G4int nofDivisions, G4int iaxis, G4int nmed, 
      	       G4double c0, G4double step);
 
-void PG4gsdvt(G4String tokens[])
+void PG4gsdvt(G4String *tokens)
 {
   // fill the parameter containers
   G3fillParams(tokens,PTgsdvt);

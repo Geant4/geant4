@@ -29,7 +29,7 @@
 
 #include "G3toG4.hh"
 
-void PG4gsdetu(G4String tokens[])
+void PG4gsdetu(G4String *tokens)
 {
     // fill the parameter containers
     G3fillParams(tokens,PTgsdetu);

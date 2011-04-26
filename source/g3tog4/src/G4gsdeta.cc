@@ -36,7 +36,7 @@
 void G4gsdeta(G4String chset, G4String chdet, G4String,
               G4int nwhi, G4int nwdi);
 
-void PG4gsdeta(G4String tokens[])
+void PG4gsdeta(G4String *tokens)
 {
     // fill the parameter containers
     G3fillParams(tokens,PTgsdeta);

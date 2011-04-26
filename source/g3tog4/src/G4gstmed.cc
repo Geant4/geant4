@@ -41,7 +41,7 @@
 #include "G4MagneticField.hh"
 #include "G4Material.hh"
 
-void PG4gstmed(G4String tokens[])
+void PG4gstmed(G4String *tokens)
 {
     // fill the parameter containers
     G3fillParams(tokens,PTgstmed);

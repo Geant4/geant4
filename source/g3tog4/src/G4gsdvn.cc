@@ -36,7 +36,7 @@
 #include "globals.hh"
 #include "G3toG4.hh"
 
-void PG4gsdvn(G4String tokens[])
+void PG4gsdvn(G4String *tokens)
 {
   // fill the parameter containers
   G3fillParams(tokens,PTgsdvn);

@@ -39,7 +39,7 @@
 #include "G4Material.hh"
 #include "G4Isotope.hh"
 
-void PG4gsmixt(G4String tokens[])
+void PG4gsmixt(G4String *tokens)
 {
     // fill the parameter containers
     G3fillParams(tokens,PTgsmixt);

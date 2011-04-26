@@ -38,7 +38,7 @@ void G4gsdvn2(G4String name, G4String moth, G4int ndiv, G4int iaxis,
 void G4gsdvt2(G4String name, G4String moth, G4double Step, G4int iaxis,
               G4double c0, G4int numed, G4int ndvmx);
 
-void PG4gsdvx(G4String tokens[])
+void PG4gsdvx(G4String *tokens)
 {
     // fill the parameter containers
     G3fillParams(tokens,PTgsdvx);

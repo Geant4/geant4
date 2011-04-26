@@ -31,7 +31,7 @@
 #include "G3toG4.hh"
 #include "G3VolTable.hh"
 
-void PG4gsatt(G4String tokens[])
+void PG4gsatt(G4String *tokens)
 {
     // fill the parameter containers
     G3fillParams(tokens,PTgsatt);

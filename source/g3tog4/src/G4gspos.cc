@@ -39,7 +39,7 @@ void G4CreateCloneVTE(G3VolTableEntry* vte, G3VolTableEntry* mvte,
               G4double pars[], G4int npar, G4int num,
               G4double x, G4double y, G4double z, G4int irot, G4String vonly);
 
-void PG4gspos(G4String tokens[])
+void PG4gspos(G4String *tokens)
 {
         // fill the parameter containers
     G3fillParams(tokens,PTgspos);

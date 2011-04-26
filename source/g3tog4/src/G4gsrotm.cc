@@ -32,7 +32,7 @@
 #include "G4ThreeVector.hh"
 #include "G3toG4RotationMatrix.hh"
 
-void PG4gsrotm(G4String tokens[])
+void PG4gsrotm(G4String *tokens)
 {
     // fill the parameter containers
     G3fillParams(tokens,PTgsrotm);
