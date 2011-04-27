@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26 April 11: V.Ivanchenko (empolar-V09-04-01)
+- G4PolarizationHelper - safe computation of a normal
+
 17 March 11: V.Ivanchenko (empolar-V09-04-00)
 - G4ePolarizedIonisation - do not use obsolete MinCutEnergy
 

@@ -47,8 +47,9 @@
 
 G4ThreeVector G4PolarizationHelper::GetFrame(const G4ThreeVector & mom1, const G4ThreeVector & mom2)
 {
-  G4ThreeVector normal = mom1.cross(mom2);
-  return 1./normal.mag()*normal;
+  G4ThreeVector normal = (mom1.cross(mom2)).unit();
+  return normal;
+  //  return 1./normal.mag()*normal;
 }
 
 G4ThreeVector G4PolarizationHelper::GetParticleFrameY(const G4ThreeVector &uZ)
