@@ -81,7 +81,7 @@ private:
 
   G4double Coef;
   G4double ConstCoeff;
-  G4int    nmax;
+  size_t   nmax;
   
   G4Pow* g4pow;
 
