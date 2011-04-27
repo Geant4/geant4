@@ -64,12 +64,12 @@ G4hShellCrossSectionDoubleExp::~G4hShellCrossSectionDoubleExp()
 
 std::vector<G4double> G4hShellCrossSectionDoubleExp::GetCrossSection(G4int Z,
 							             G4double incidentEnergy,
-							             G4double mass,
-							             G4double deltaEnergy,
+							             G4double, // mass,
+							             G4double, // deltaEnergy,
 							             G4bool testFlag) const
 {
-  mass = 0.0;
-  deltaEnergy = 0.0;
+  // mass = 0.0;
+  // deltaEnergy = 0.0;
 
   std::vector<G4double> aCrossSection; 
  
@@ -180,12 +180,12 @@ void G4hShellCrossSectionDoubleExp::SetTotalCS(G4double value)
 std::vector<G4double> G4hShellCrossSectionDoubleExp::Probabilities(
 								   G4int Z, 
 								   G4double incidentEnergy, 
-								   G4double hMass, 
-								   G4double deltaEnergy
+								   G4double, // hMass, 
+								   G4double  // deltaEnergy
 								   ) const
 {  
-  hMass = 0.0;
-  deltaEnergy = 0.0;
+  // hMass = 0.0;
+  // deltaEnergy = 0.0;
   
   std::vector<G4double> kProbability;//(0);
   

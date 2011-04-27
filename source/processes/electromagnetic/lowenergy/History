@@ -17,10 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-28.03.2011  V.Ivanchenko, tag emlowen-V09-04-22
+27.04.2011  G. Cosmo, tag emlowen-V09-04-23
+            Fixed compilation warnings in G4hShellCrossSectionExp and
+            G4hShellCrossSectionDoubleExp for unused parameters.
+
+28.03.2011  V. Ivanchenko, tag emlowen-V09-04-22
             Removed parasitic printout
 
-28.03.2011  V.Ivanchenko, tag emlowen-V09-04-21
+28.03.2011  V. Ivanchenko, tag emlowen-V09-04-21
             Fixed compillation
 
 27.03.2011  A. Mantero, tag emlowen-V09-04-20

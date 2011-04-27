@@ -62,12 +62,12 @@ G4hShellCrossSectionExp::~G4hShellCrossSectionExp()
 
 std::vector<G4double> G4hShellCrossSectionExp::GetCrossSection(G4int Z,
 							       G4double incidentEnergy,
-							       G4double mass,
-							       G4double deltaEnergy,
+							       G4double, // mass,
+							       G4double, // deltaEnergy,
 							       G4bool testFlag) const
 {
-  mass = 0.0;
-  deltaEnergy = 0.0;
+  // mass = 0.0;
+  // deltaEnergy = 0.0;
 
   std::vector<G4double> aCrossSection; 
  
@@ -130,12 +130,12 @@ void G4hShellCrossSectionExp::SetTotalCS(G4double value)
  std::vector<G4double> G4hShellCrossSectionExp::Probabilities(
 							      G4int Z, 
 							      G4double incidentEnergy, 
-							      G4double hMass, 
-							      G4double deltaEnergy
+							      G4double, // hMass, 
+							      G4double  // deltaEnergy
 							      ) const
 {  
-  hMass = 0.0;
-  deltaEnergy = 0.0;
+  // hMass = 0.0;
+  // deltaEnergy = 0.0;
   
   std::vector<G4double> kProbability;
   kProbability.push_back(GetCrossSectionExp(Z,incidentEnergy)/atomTotalCrossSection);
