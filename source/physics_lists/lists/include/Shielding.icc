@@ -36,6 +36,7 @@
 //
 // Modified:
 // 16.08.2010 H.Kurashige: Remove inclusion of G4ParticleWithCuts 
+// 26.04.2011 T.Koi: Add G4RadioactiveDecayPhysics
 //
 //----------------------------------------------------------------------------
 //
@@ -52,6 +53,7 @@
 #include <iomanip>   
 
 #include "G4DecayPhysics.hh"
+#include "G4RadioactiveDecayPhysics.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4IonQMDPhysics.hh"
@@ -84,6 +86,7 @@ template<class T> TShielding<T>::TShielding(G4int ver):  T()
 
   // Decays 
   this->RegisterPhysics( new G4DecayPhysics(ver) );
+  this->RegisterPhysics( new G4RadioactiveDecayPhysics(ver) );
 
    // Hadron Elastic scattering
   this->RegisterPhysics( new G4HadronElasticPhysicsHP(ver) );

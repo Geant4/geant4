@@ -118,8 +118,8 @@ void G4HadronInelasticQBBC::ConstructProcess()
   G4PreCompoundModel* thePreCompound = new G4PreCompoundModel(theHandler);
 
   // configure models
-  G4HadronicInteraction* theQGSP = 
-    BuildModel(new G4QGSBuilder("QGSP",thePreCompound,true,false),12.5*GeV,emax);
+  //G4HadronicInteraction* theQGSP = 
+  //  BuildModel(new G4QGSBuilder("QGSP",thePreCompound,true,false),12.5*GeV,emax);
   G4HadronicInteraction* theFTFP = 
     BuildModel(new G4FTFBuilder("FTFP",thePreCompound),4.0*GeV,emax);
   G4HadronicInteraction* theFTFP1 = 
@@ -155,7 +155,7 @@ void G4HadronInelasticQBBC::ConstructProcess()
       G4HadronicProcess* hp = FindInelasticProcess(particle);
       hp->AddDataSet(new G4BGGNucleonInelasticXS(particle));
       
-      hp->RegisterMe(theQGSP);
+      //hp->RegisterMe(theQGSP);
       hp->RegisterMe(theFTFP);
       hp->RegisterMe(theBERT);
       hp->RegisterMe(theBIC);
@@ -163,7 +163,7 @@ void G4HadronInelasticQBBC::ConstructProcess()
     } else if(pname == "neutron") {
       G4HadronicProcess* hp = FindInelasticProcess(particle);
       hp->AddDataSet(new G4NeutronInelasticXS());
-      hp->RegisterMe(theQGSP);
+      //hp->RegisterMe(theQGSP);
       hp->RegisterMe(theFTFP);
        
       G4HadronicProcess* capture = FindCaptureProcess();
@@ -175,7 +175,7 @@ void G4HadronInelasticQBBC::ConstructProcess()
     } else if(pname == "pi-" || pname == "pi+") {
       G4HadronicProcess* hp = FindInelasticProcess(particle);
       hp->AddDataSet(new G4BGGPionInelasticXS(particle));
-      hp->RegisterMe(theQGSP);
+      //hp->RegisterMe(theQGSP);
       hp->RegisterMe(theFTFP);
       hp->RegisterMe(theBERT1);
 

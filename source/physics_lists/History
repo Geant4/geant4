@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27-04-2011, V.Ivanchenko               (phys-lists-V09-04-18)
+- G4HadronInelasticQBBC - comment out QGSP model to avoid crash due double
+  model definition for the same energy range (bug was introduced in -16)
+
 26-04-2011,G.Folger                    (phys-lists-V09-04-17)
 - In QGSP_FTFP_BERT use G4IonBinaryCascadePhysics inplace of G4IonPhysics 
 
