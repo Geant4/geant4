@@ -170,7 +170,7 @@ G4bool G4Orb::CalculateExtent( const EAxis pAxis,
     G4double yoffset,yMin,yMax;
     G4double zoffset,zMin,zMax;
 
-    G4double diff1,diff2,maxDiff,newMin,newMax;
+    G4double diff1,diff2,delta,maxDiff,newMin,newMax;
     G4double xoff1,xoff2,yoff1,yoff2;
 
     xoffset=pTransform.NetTranslation().x();
@@ -263,8 +263,10 @@ G4bool G4Orb::CalculateExtent( const EAxis pAxis,
           // Y limits don't cross max/min x => compute max delta x,
           // hence new mins/maxs
           //
-          diff1=std::sqrt(fRmax*fRmax-yoff1*yoff1);
-          diff2=std::sqrt(fRmax*fRmax-yoff2*yoff2);
+          delta=fRmax*fRmax-yoff1*yoff1;
+          diff1=(delta>0.) ? std::sqrt(delta) : 0.;
+          delta=fRmax*fRmax-yoff2*yoff2;
+          diff2=(delta>0.) ? std::sqrt(delta) : 0.;
           maxDiff=(diff1>diff2) ? diff1:diff2;
           newMin=xoffset-maxDiff;
           newMax=xoffset+maxDiff;
@@ -287,8 +289,10 @@ G4bool G4Orb::CalculateExtent( const EAxis pAxis,
           // X limits don't cross max/min y => compute max delta y,
           // hence new mins/maxs
           //
-          diff1=std::sqrt(fRmax*fRmax-xoff1*xoff1);
-          diff2=std::sqrt(fRmax*fRmax-xoff2*xoff2);
+          delta=fRmax*fRmax-xoff1*xoff1;
+          diff1=(delta>0.) ? std::sqrt(delta) : 0.;
+          delta=fRmax*fRmax-xoff2*xoff2;
+          diff2=(delta>0.) ? std::sqrt(delta) : 0.;
           maxDiff=(diff1>diff2) ? diff1:diff2;
           newMin=yoffset-maxDiff;
           newMax=yoffset+maxDiff;

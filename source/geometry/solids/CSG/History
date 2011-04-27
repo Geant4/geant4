@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Apr 27, 2011  T.Nikitina                 geom-csg-V09-04-01
+- Added protection for potential negative argument to sqrt() in
+  CalculateExtent() for G4Orb, G4Cons and G4Sphere.
+
 Jan 7, 2011  T.Nikitina                  geom-csg-V09-04-00
 - G4Cons: fix in DistanceToIn(p,v,..) to squared tolerance in comparision.
   Replaced calculation of the solution for the quadratic equation, to use safe
