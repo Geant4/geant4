@@ -55,7 +55,7 @@
 #include "G4DecayPhysics.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4EmExtraPhysics.hh"
-#include "G4IonPhysics.hh"
+#include "G4IonBinaryCascadePhysics.hh"
 #include "G4QStoppingPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
@@ -92,7 +92,7 @@ template<class T> TQGSP_FTFP_BERT<T>::TQGSP_FTFP_BERT(G4int ver):  T()
   this->RegisterPhysics( new G4QStoppingPhysics(ver) );
 
   // Ion Physics
-  this->RegisterPhysics( new G4IonPhysics(ver));
+  this->RegisterPhysics( new G4IonBinaryCascadePhysics(ver));
   
   // Neutron tracking cut
   this->RegisterPhysics( new G4NeutronTrackingCut(ver));
