@@ -104,6 +104,7 @@ G4UrbanMscModel95::G4UrbanMscModel95(const G4String& nam)
   coeffc1       = 0.;
   coeffc2       = 0.;
   coeffc3       = 0.;
+  coeffc4       = 0.;
   scr1ini       = fine_structure_const*fine_structure_const*
                   electron_mass_c2*electron_mass_c2/(0.885*0.885*4.*pi);
   scr2ini       = 3.76*fine_structure_const*fine_structure_const;
@@ -154,8 +155,7 @@ void G4UrbanMscModel95::Initialise(const G4ParticleDefinition* p,
 
   fParticleChange = GetParticleChangeForMSC();
 
-  //  samplez = true;
-  samplez = false;
+  samplez = true;
 
   isInitialized = true;
 }
@@ -680,7 +680,6 @@ G4double G4UrbanMscModel95::ComputeGeomPathLength(G4double)
   zPathLength = zmean ;
 
   //  sample z
- // samplez = true;
   if(samplez)
   {
     const G4double  ztmax = 0.999 ;
@@ -885,12 +884,16 @@ G4double G4UrbanMscModel95::SampleCosineTheta(G4double trueStepLength,
   {
     if(trueStepLength >= currentRange*dtrl) 
     {
-      if(par1*trueStepLength < 1.)
-	tau = -par2*log(1.-par1*trueStepLength) ;
       // for the case if ioni/brems are inactivated
       // see the corresponding condition in ComputeGeomPathLength 
-      else if(1.-KineticEnergy/currentKinEnergy > taulim)
-	tau = taubig ;
+      if(1.-KineticEnergy/currentKinEnergy < taulim)
+        ;
+      else
+      {
+        // mean tau value
+        G4double lambda1 = GetLambda(KineticEnergy);
+        tau = trueStepLength*log(lambda0/lambda1)/(lambda0-lambda1);
+      }
     }
     currentTau = tau ;
     lambdaeff = trueStepLength/currentTau;
@@ -922,12 +925,9 @@ G4double G4UrbanMscModel95::SampleCosineTheta(G4double trueStepLength,
       a = 0.25/(sth*sth);
 
       // parameter for tail
-      G4double c = 1.9 ;
-      G4double ltau = log(tau);
-      if(ltau > -16.)
-        c = coeffc1+ltau*(coeffc2+ltau*coeffc3);         
+      G4double u = exp(log(tau)/6.);
       G4double x = log(lambda0/currentRadLength);
-      c += 0.045*x+0.07;
+      G4double c = coeffc1+u*(coeffc2+coeffc3*u)+coeffc4*x;
 
       if(abs(c-3.) < 0.001)  c = 3.001;      
       if(abs(c-2.) < 0.001)  c = 2.001;      

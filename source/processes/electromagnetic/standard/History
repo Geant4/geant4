@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27 April 2011: V.Ivant (emstand-V09-04-17)
+- G4UrbanMscModel95 - L.Urban fixed FPE problems in the new model,
+  now by default samplez=true (complite sampling of the displacement) 
+
 18 April 2011: V.Ivant (emstand-V09-04-16)
 - Fixed problems of the previous tag
 

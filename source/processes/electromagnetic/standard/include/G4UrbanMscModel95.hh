@@ -165,7 +165,7 @@ private:
   G4double Zold;
   G4double Zeff,Z2,Z23,lnZ;
   G4double coeffth1,coeffth2;
-  G4double coeffc1,coeffc2,coeffc3;
+  G4double coeffc1,coeffc2,coeffc3,coeffc4;
   G4double scr1ini,scr2ini,scr1,scr2;
 
   G4bool   isInitialized;
@@ -213,11 +213,14 @@ void G4UrbanMscModel95::UpdateCache()
     // correction in theta0 formula
     coeffth1 = (1.-8.7780e-2/Zeff)*(0.87+0.03*lnZ);                   
     coeffth2 = (4.0780e-2+1.7315e-4*Zeff)*(0.87+0.03*lnZ);              
+
     // tail parameters
     G4double Z13 = exp(log(Zeff)/3.); 
-    coeffc1  = 3.914-3.723e-1*Z13;                
-    coeffc2  = 2.643e-1-5.152e-2*Z13;                           
-    coeffc3  = 9.676e-3-2.077e-3*Z13;                           
+    coeffc1  = 1.891-5.731e-2*Z13;
+    coeffc2  = 2.995-1.745e-1*Z13;
+    coeffc3  = -2.666+1.941e-1*Z13;
+    coeffc4  = 1.987e-2+8.781e-3*Z13;
+
     // for single scattering
     Z2 = Zeff*Zeff;
     Z23 = std::exp(2.*lnZ/3.);
