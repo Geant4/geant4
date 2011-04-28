@@ -1,0 +1,172 @@
+
+                       geant4-09-04-ref-04
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o Updated G4UrbanMscModel95 to activate complete sampling of the
+   displacement by default.
+ o Updated logic in G4ExcitationHandler in de-excitation hadronic model
+   and some general cleanup of the code.
+ o Replaced use of G4IonPhysics with G4IonBinaryCascadePhysics in
+   QGSP_FTFP_BERT physics-list.
+ o improved printout for energy non-conservation checks.
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+error_propagation                                error_propagation-V09-04-00
+-----------------
+- Backport a fix to G4ErrorSymMatrix to address issues on Windows.
+
+g3tog4                                           g3tog4-V09-04-00
+------
+- Fixed signature in functions of  G4gs* classes to be 'G4String *' (was
+  G4String[]) as used in clparse. Fixes Windows linking problem.
+
+source/geometry/solids/CSG                       geom-csg-V09-04-01
+--------------------------
+- Added protection for potential negative argument to sqrt() in
+  CalculateExtent() for G4Orb, G4Cons and G4Sphere.
+
+materials                                        materials-V09-04-05
+---------
+- G4Material: fixed computation of radiation length and nuclear interaction
+  length when G4Material is constructed from a BaseMaterial.
+- G4IonisParamMat: corrected method DensityCorrection() to use
+  'twoln10' as member of the class.
+- G4NistManager: implemented forgotten inline method.
+
+physics_lists                                    phys-lists-V09-04-18
+-------------
+- In QGSP_FTFP_BERT use G4IonBinaryCascadePhysics in place of G4IonPhysics.
+- Added new builder G4IonFTFPBinaryCascadePhysics and use it within QBBC.
+- Activated Rayleigh Scattering in G4EmStandardPhysics_option3.
+- Removed obsolete G4HadronElasticPhysics93 configuration.
+- Replaced G4UHadronElasticProcess by G4WHadronElasticProcess in
+  G4HadronQElasticPhysics.
+
+processes/electromagnetic/dna                    dna-V09-04-03
+-----------------------------
+- Updated all models for handling of variable density.
+
+processes/electromagnetic/lowenergy              emlowen-V09-04-23
+-----------------------------------
+- Fixed compilation warnings in G4hShellCrossSectionExp and
+  G4hShellCrossSectionDoubleExp for unused parameters.
+
+processes/electromagnetic/polarisation           empolar-V09-04-01
+--------------------------------------
+- Safer computation of a normal in G4PolarizationHelper.
+
+processes/electromagnetic/standard               emstand-V09-04-17
+----------------------------------
+- Added new model G4eBremParametrizedModel.
+- G4IonFluctuation, G4UniversalFluctuations: replaced Gauss sampling by
+  Gamma function sampling.
+- G4UrbanMscModel95: fixed FPE problems in the new model.
+  Activated complete sampling of the displacement by default. 
+- G4MollerBhabhaModel: modified parameterisation of dedx at very low energy
+  providing more smooth shape.
+- G4WentzelOKandVIxSection, G4eCoulombScatteringModel: fixed problem 
+  introduced in previous tags for compounds.
+
+processes/electromagnetic/utils                  emutils-V09-04-16
+-------------------------------
+- G4VEnergyLossProcess: start cross section table from energy threshold
+  and not from minimal kinetic energy; number of bins is reduced, cross
+  section starts from zero value.
+- G4ElectronIonPair: substituted Gaussian sampling by Gamma function
+  sampling of number of electron/ion pairs.
+- G4VEmModel: use linear interpolation for G4EmElementSelectors to avoid
+  numerical imprecision for small number of bins.
+  Renamed private members to avoid usage of the same names.
+
+processes/hadronic
+------------------
+- management (hadr-man-V09-04-05)
+  o Enhanced printout for case 3 in E/p checking with initial state info.
+    Modified E/p checking to allow to use stdout or stderr, depending on 
+    level check.
+- models/cascade (hadr-casc-V09-04-05)
+  o G4NucleiModel: changed internal length scale to use femtometers
+    and internal cross-section scale to use fm^2, instead of millibarns.
+- models/chiral_inv_phase_space/body (hadr-chips-body-V09-04-00)
+  o Fixed initialization in constructor in G4QEnvironment.
+- models/chiral_inv_phase_space/interface (hadr-chips-inter-V09-04-00)
+  o G4QHadron(Elastic/Inelastic)DataSet: added "return 0" for missing hadrons.
+  o Improvement in destructor in G4ElectronNuclearReaction.
+- models/de_excitation (hadr-deex-V09-04-08)
+  o Updated logic in G4ExcitationHandler: first call only to MFM model,
+    second start evaporation loop, where FBU is called for light fragments,
+    products of FBU are sent to the 3d loop on photon evaporation.
+  o Removed G4FermiSplitter and G4FermiIntegerPartition.
+  o Modified G4FermiConfiguration to be a simple container.
+  o Removed unused methods in G4FermiConfigurationList.
+  o Removed map and access to map methods in G4FermiFragmentsPool.
+  o General cleanup of the FermiBreakUp model: constructors and descructors
+    moved to source; integer Z and A; less number of 'new' and 'delete';
+    make use G4Pow.
+  o Extended printout when kinematics fail in G4FermiPhaseSpaceDecay; fixed
+    computation of majorant in BetaKopylov method, general cleanup.
+- models/neutron_hp (hadr-hpn-V09-04-03)
+  o Added "Fermium" in G4NeutronHPNames and fixed bug in "Actinium".
+  o Added message where environment variable "G4NEUTRONHP_NEGLECT_DOPPLER"
+    is activated.
+
+track                                            track-V09-04-01
+-----
+- Set maxT for Velocity Table to 1000. Added SetVelocityTableProperties().
+  Addresses problem report #1185.
+
+examples                                         examples-V09-04-04
+--------
+- Updated reference outputs.
+- advanced/dnaphysics (dnaphysics-V09-04-03)
+  o Added comment for use of variable density material.
+- advanced/microdosimetry (microdosimetry-V09-04-00)
+  o Added new variables to histogram
+- extended/electromagnetic/TestEm1 (testem1-V09-04-01)
+  o PhysicsList: set back default lowest production cut (990 eV).
+  o Updated PhysListEmStandard for msc95 and deexcitation.
+    Set lowest production cut to 100 eV in PhysicsList
+  o Updated SteppingVerbose.
+- extended/electromagnetic/TestEm2 (testem2-V09-04-02)
+- extended/electromagnetic/TestEm3 (testem3-V09-04-03)
+- extended/electromagnetic/TestEm5 (testem5-V09-04-06)
+  o PhysicsList: set back default lowest production cut (990 eV).
+  o Updated PhysListEmStandard for msc95 and deexcitation.
+- extended/electromagnetic/TestEm7 (testem7-V09-04-03)
+  o PhysicsList: set back default lowest production cut (990 eV).
+  o Updated PhysListEmStandard for msc95 and deexcitation.
+  o PhysListEmStandardNR: removed calls to obsolete methods, cleaned up options.
+  o PhysListEmStandardSS: cleaned up options.
+- extended/electromagnetic/TestEm11 (testem11-V09-04-03)
+- extended/electromagnetic/TestEm12 (testem12-V09-04-03)
+  o PhysicsList: set back default lowest production cut (990 eV).
+  o Updated PhysListEmStandard for msc95 and deexcitation.
+- extended/hadronic/Hadr01 (exhadr01-V09-04-01)
+  o Added new builders for ions.
+- extended/hadronic/Hadr02 (exhadr02-V09-04-03)
+  o Fixed problems of energy intervals for models for ions allowing to work
+    with different reference Physics Lists.
+- extended/parallel/ParN02 (ParN02-V09-04-00)
+- extended/parallel/ParN04 (ParN04-V09-04-00)
+  o Synchronised with current version of novice example N02.
+    Includes fixes and missing migrations...
+- extended/radioactivedecay/rdecay01 (rdecay01-V09-04-04)
+  o Compute activity from primary ion in RunAction.
+  o Suppressed histo #9.
+
+tests                                            tests-V09-04-04
+-----
+- Updated reference outputs and tools.
+- test30 (test30-V09-04-02)
+  o Cleanup of printout in main().
+- test44 (test44-V09-04-02)
+  o Removed obsolete includes.
+- test58 (test58-V09-04-00)
+  o Removed obsolete headers of hadron elastic builders.
