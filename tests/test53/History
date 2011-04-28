@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28-04-11  S.Incerti (test53-V09-04-00)
+- Switched to Livermore polarized photons
+
 09-11-10  M.Asai (test53-V09-03-02)
 - Fix AIDA file option.
 

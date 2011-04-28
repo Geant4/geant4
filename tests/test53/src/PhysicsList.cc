@@ -40,6 +40,7 @@
 #include "G4EmStandardPhysics_option3.hh"
 #include "G4EmPenelopePhysics.hh"
 #include "G4EmLivermorePhysics.hh"
+#include "G4EmLivermorePolarizedPhysics.hh"
 
 #include "G4DecayPhysics.hh"
 #include "G4ProcessManager.hh"
@@ -150,10 +151,17 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new G4EmLivermorePhysics();
+
+  } else if (name == "emlivermore_pol"){
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmLivermorePolarizedPhysics();
+
   } else if (name == "penelope08"){    
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmPenelope08(name);    
+  
   } else {
 
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"

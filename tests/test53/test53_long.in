@@ -8,15 +8,15 @@
 /control/verbose 2
 /run/verbose 2
 #
-/testem/phys/addPhysics  empenelope
-#/testem/phys/addPhysics  emlivermore
+#/testem/phys/addPhysics  empenelope
+/testem/phys/addPhysics  emlivermore_pol
 #/testem/phys/addPhysics  emstandard
 #/testem/phys/addPhysics  emstandard_opt3
 #
 /run/initialize
 /process/eLoss/verbose 1
 #
-/gun/particle e-
+/gun/particle gamma
 /gun/energy 10 MeV
 #
 /testem/histo/setFileName testem3

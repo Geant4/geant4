@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-01    (17-December-2010)
+ Geant4 version Name: geant4-09-04-ref-00    (17-December-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -194,7 +194,7 @@ nuclearStopping:   for  alpha    SubType= 1
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=          2 MeV
           BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
@@ -413,13 +413,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=10.15s Real=10.35s Sys=0.03s
+  User=10.23s Real=10.39s Sys=0.02s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 768.78 MeV :  24.79 MeV     3.224 +- 0.3224 %        55 cm  +- 1.88 cm 
-   liquidArgon: 205.33 MeV :  18.11 MeV     8.821 +- 0.8821 %      1.02 m   +- 9.19 cm 
+          Lead: 764.31 MeV :  39.25 MeV     5.136 +- 0.5136 %      54.7 cm  +- 2.87 cm 
+   liquidArgon: 205.81 MeV :  17.83 MeV     8.661 +- 0.8661 %      1.02 m   +- 8.95 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
@@ -427,15 +427,15 @@ Run Summary
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 768.781 MeV
-liquidArgon:	 205.326 MeV
+      Lead:	 764.308 MeV
+liquidArgon:	 205.814 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 163268544, 52254914
+ Current couple of seeds = 1552660085, 1259452458
 ----------------------------------------
 #
 #/run/particle/storePhysicsTable data_stand
