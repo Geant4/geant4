@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27.04.2011  S. Incerti, tag emlowen-V09-04-24
+            Removal of some obsolete classes
+	    - old livermore photon polarized processes (G4LowEnergyPolarized*)
+	    - old shell cross sections (G4hShell*)
+	    - old ion ionisation process (G4ionLowEnergyIonisation)
+	    - old h ionisation process (G4hLowEnergyIonisation)
+	    - old G4hLowEnergyLoss
+
 27.04.2011  G. Cosmo, tag emlowen-V09-04-23
             Fixed compilation warnings in G4hShellCrossSectionExp and
             G4hShellCrossSectionDoubleExp for unused parameters.

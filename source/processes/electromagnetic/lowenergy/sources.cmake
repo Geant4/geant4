@@ -74,17 +74,9 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4hICRU49Nuclear.hh
         G4hICRU49p.hh
         G4hIonEffChargeSquare.hh
-        G4hLowEnergyIonisation.hh
-        G4hLowEnergyLoss.hh
-        G4hLowEnergyLoss.icc
         G4hNuclearStoppingModel.hh
         G4hParametrisedLossModel.hh
         G4hQAOModel.hh
-        G4hShellCrossSectionDoubleExpData.hh
-        G4hShellCrossSectionDoubleExp.hh
-        G4hShellCrossSectionExpData.hh
-        G4hShellCrossSectionExp.hh
-        G4hShellCrossSection.hh
         G4hSRIM2000p.hh
         G4hZiegler1977He.hh
         G4hZiegler1977Nuclear.hh
@@ -94,7 +86,6 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4IonChuFluctuationModel.hh
         G4IonDEDXHandler.hh
         G4IonDEDXScalingICRU73.hh
-        G4ionLowEnergyIonisation.hh
         G4IonParametrisedLossModel.hh
         G4IonParametrisedLossModel.icc
         G4IonYangFluctuationModel.hh
@@ -119,8 +110,6 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LowEnergyGammaConversion.hh
         G4LowEnergyIonisation.hh
         G4LowEnergyPhotoElectric.hh
-        G4LowEnergyPolarizedCompton.hh
-        G4LowEnergyPolarizedRayleigh.hh
         G4LowEnergyRayleigh.hh
         G4OrlicLiCrossSection.hh
         G4PaulKCrossSection.hh
@@ -208,16 +197,9 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4hICRU49Nuclear.cc
         G4hICRU49p.cc
         G4hIonEffChargeSquare.cc
-        G4hLowEnergyIonisation.cc
-        G4hLowEnergyLoss.cc
         G4hNuclearStoppingModel.cc
         G4hParametrisedLossModel.cc
         G4hQAOModel.cc
-        G4hShellCrossSection.cc
-        G4hShellCrossSectionDoubleExp.cc
-        G4hShellCrossSectionDoubleExpData.cc
-        G4hShellCrossSectionExp.cc
-        G4hShellCrossSectionExpData.cc
         G4hSRIM2000p.cc
         G4hZiegler1977He.cc
         G4hZiegler1977Nuclear.cc
@@ -250,8 +232,6 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LowEnergyGammaConversion.cc
         G4LowEnergyIonisation.cc
         G4LowEnergyPhotoElectric.cc
-        G4LowEnergyPolarizedCompton.cc
-        G4LowEnergyPolarizedRayleigh.cc
         G4LowEnergyRayleigh.cc
         G4OrlicLiCrossSection.cc
         G4PaulKCrossSection.cc
