@@ -54,12 +54,14 @@
 // 20110304  M. Kelsey -- Modify rescatter to use original Propagate() input
 // 20110316  M. Kelsey -- Add function to do G4KineticTrack conversion, decay
 //		rescattering resonances in situ.
+// 20110324  M. Kelsey -- Add list of nucleon hit locations for rescatter().
 
 #ifndef G4INTRA_NUCLEI_CASCADER_HH
 #define G4INTRA_NUCLEI_CASCADER_HH
 
 #include "G4CascadeColliderBase.hh"
 #include "G4CollisionOutput.hh"
+#include "G4ThreeVector.hh"
 #include <vector>
 
 class G4CascadParticle;
@@ -138,6 +140,8 @@ private:
   std::vector<G4CascadParticle> new_cascad_particles;
   std::vector<G4InuclElementaryParticle> output_particles;
   G4ExitonConfiguration theExitonConfiguration;
+
+  std::vector<G4ThreeVector> hitNucleons;	// Nucleons hit before rescatter
 };        
 
 #endif /* G4INTRA_NUCLEI_CASCADER_HH */

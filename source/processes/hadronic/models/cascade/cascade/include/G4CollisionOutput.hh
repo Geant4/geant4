@@ -42,6 +42,7 @@
 // 20100925  M. Kelsey -- Add function to process G4ReactionProduct list
 // 20110225  M. Kelsey -- Add interface to remove entries from lists
 // 20110311  M. Kelsey -- Add function to boost individual four-vector
+// 20110323  M. Kelsey -- Add non-const access to lists (for G4NucleiModel)
 
 #ifndef G4COLLISION_OUTPUT_HH
 #define G4COLLISION_OUTPUT_HH
@@ -122,13 +123,21 @@ public:
     return outgoingParticles;
   };
 
+  std::vector<G4InuclElementaryParticle>& getOutgoingParticles() {
+    return outgoingParticles;
+  };
+
   G4int numberOfOutgoingNuclei() const { return outgoingNuclei.size(); };
  
   const std::vector<G4InuclNuclei>& getOutgoingNuclei() const {
     return outgoingNuclei;
   };
 
+  std::vector<G4InuclNuclei>& getOutgoingNuclei() { return outgoingNuclei; };
+
   const G4Fragment& getRecoilFragment() const { return theRecoilFragment; }
+
+  G4Fragment& getRecoilFragment() { return theRecoilFragment; }
 
   // ===== Get event totals for conservation checking, recoil, etc. ======
 

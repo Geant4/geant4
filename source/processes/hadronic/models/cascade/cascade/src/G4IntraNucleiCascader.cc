@@ -89,6 +89,10 @@
 //		and convert to particles, nuclei and G4NucleiModel state.
 // 20110308  M. Kelsey -- Don't put recoiling fragment onto output list any more
 // 20110308  M. Kelsey -- Decay unstable hadrons from pre-cascade, use daughters
+// 20110324  M. Kelsey -- Get locations of hit nuclei in ::rescatter(), pass
+//		to G4NucleiModel::reset().
+// 20110404  M. Kelsey -- Reduce maximum number of retries to 100, reflection
+//		cut to 50.
 
 #include "G4IntraNucleiCascader.hh"
 #include "G4CascadParticle.hh"
@@ -119,8 +123,8 @@ using namespace G4InuclSpecialFunctions;
 
 
 // Configuration parameters for cascade production
-const G4int    G4IntraNucleiCascader::itry_max = 1000;
-const G4int    G4IntraNucleiCascader::reflection_cut = 500;
+const G4int    G4IntraNucleiCascader::itry_max = 100;
+const G4int    G4IntraNucleiCascader::reflection_cut = 50;
 const G4double G4IntraNucleiCascader::small_ekin = 0.001*MeV;
 const G4double G4IntraNucleiCascader::quasielast_cut = 1*MeV;
 
@@ -628,12 +632,14 @@ void G4IntraNucleiCascader::copyWoundedNucleus(G4V3DNucleus* theNucleus) {
   
   // Loop over nucleons and count them
   G4int nHitP=0, nHitN=0;
+  hitNucleons.clear();
   if (theNucleus->StartLoop()) {
     G4Nucleon* nucl = 0;
     while ((nucl = theNucleus->GetNextNucleon())) {
       if (nucl->AreYouHit()) {	// Found previously interacted nucleon
 	if (nucl->GetParticleType() == pdProton)  nHitP++;
 	if (nucl->GetParticleType() == pdNeutron) nHitN++;
+	hitNucleons.push_back(nucl->GetPosition());
       }
     }
   }
@@ -642,7 +648,8 @@ void G4IntraNucleiCascader::copyWoundedNucleus(G4V3DNucleus* theNucleus) {
     G4cout << " nucleus has " << nHitN << " neutrons hit, "
 	   << nHitP << " protons hit" << G4endl;
 
-  model->reset(nHitN, nHitP);	// Preload nuclear model with confirmed hits
+  // Preload nuclear model with confirmed hits, including locations
+  model->reset(nHitN, nHitP, &hitNucleons);
 }
 
 void G4IntraNucleiCascader::copySecondaries(G4KineticTrackVector* secondaries) {
@@ -682,7 +689,9 @@ void G4IntraNucleiCascader::copySecondaries(G4KineticTrackVector* secondaries) {
     }
   }	// G4KineticTrackVector loop
 
-  // 
+  // Sort list of secondaries to put leading particle first
+  std::sort(cascad_particles.begin(), cascad_particles.end(),
+	    G4ParticleLargerEkin());
 
   if (verboseLevel > 2) {
     G4cout << " Original list of " << secondaries->size() << " secondaries"

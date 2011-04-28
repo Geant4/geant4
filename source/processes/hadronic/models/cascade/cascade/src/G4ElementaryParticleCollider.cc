@@ -915,7 +915,7 @@ G4ElementaryParticleCollider::sampleCMcosFor2to2(G4double pscm, G4double pFrac,
 
   G4double term1 = 2.0 * pscm*pscm * (smallAngle ? pA : pC);
 
-  if (std::abs(term1) < FLT_MIN) return 1.0;	// No actual scattering here!
+  if (std::abs(term1) < 1e-7) return 1.0;	// No actual scattering here!
 
   G4double term2 = std::exp(-2.0*term1);
   G4double randScale = (std::exp(-term1*(1.0 - pCos)) - term2)/(1.0 - term2);

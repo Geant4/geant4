@@ -44,6 +44,7 @@
 // 20100909  M. Kelsey -- Add interface to get four-vector difference, and
 //		to supply both kinds of particle lists (G4IntraNucleiCascader)
 // 20100923  M. Kelsey -- Baryon and charge deltas should have been integer
+// 20110328  M. Kelsey -- Add default ctor and explicit limit setting
 
 #include "G4VCascadeCollider.hh"
 #include "globals.hh"
@@ -61,11 +62,21 @@ class G4CascadeCheckBalance : public G4VCascadeCollider {
 public:
   static const G4double tolerance;	// Don't do floating zero!
 
+  explicit G4CascadeCheckBalance(const char* owner="G4CascadeCheckBalance");
+
   G4CascadeCheckBalance(G4double relative, G4double absolute,
 			const char* owner="G4CascadeCheckBalance");
   virtual ~G4CascadeCheckBalance() {};
 
   void setOwner(const char* owner) { setName(owner); }
+
+  void setLimits(G4double relative, G4double absolute) {
+    setRelativeLimit(relative);
+    setAbsoluteLimit(absolute);
+  }
+
+  void setRelativeLimit(G4double limit) { relativeLimit = limit; }
+  void setAbsoluteLimit(G4double limit) { absoluteLimit = limit; }
 
   void collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	       G4CollisionOutput& output);
@@ -129,8 +140,8 @@ protected:
   G4double ekin(const G4LorentzVector& p) const { return (p.e() - p.m()); }
 
 private:
-  G4double relativeLimit;
-  G4double absoluteLimit;
+  G4double relativeLimit;	// Fractional bound on conservation
+  G4double absoluteLimit;	// Absolute (GeV) bound on conservation
 
   G4LorentzVector initial;	// Four-vectors for computing violations
   G4LorentzVector final;

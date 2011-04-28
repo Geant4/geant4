@@ -58,6 +58,8 @@
 // 20110304  M. Kelsey -- Modify rescatter to use original Propagate() input
 // 20110308  M. Kelsey -- Separate de-excitation block from collide(); check
 //		for single-nucleon "fragment", rather than for null fragment
+// 20110413  M. Kelsey -- Modify diagnostic messages in ::rescatter() to be
+//		equivalent to those from ::collide().
 
 #include "G4InuclCollider.hh"
 #include "G4CascadeCheckBalance.hh"
@@ -271,6 +273,9 @@ void G4InuclCollider::rescatter(G4InuclParticle* bullet,
 				G4CollisionOutput& globalOutput) {
   if (verboseLevel) G4cout << " >>> G4InuclCollider::rescatter" << G4endl;
 
+  G4int itry=1;		// For diagnostic post-processing only
+  if (verboseLevel > 2) G4cout << " InuclCollider itry " << itry << G4endl;
+
   globalOutput.reset();		// Clear buffers for this attempt
   output.reset();
 
@@ -283,6 +288,9 @@ void G4InuclCollider::rescatter(G4InuclParticle* bullet,
   output.removeRecoilFragment();
 
   globalOutput.add(output);	// Add local results to global output
+
+  if (verboseLevel) 
+    G4cout << " InuclCollider output after trials " << itry << G4endl;
 }
 
 

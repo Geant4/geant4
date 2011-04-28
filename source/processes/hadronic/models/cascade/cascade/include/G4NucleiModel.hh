@@ -50,6 +50,11 @@
 //		scaling factors.
 // 20110303  M. Kelsey -- Add accessors for model parameters and units
 // 20110304  M. Kelsey -- Extend reset() to fill neutron and proton counts
+// 20110324  D. Wright -- Add list of nucleon interaction points, and nucleon
+//		effective radius, for trailing effect.
+// 20110324  M. Kelsey -- Extend reset() to pass list of points; move
+//		implementation to .cc file.
+// 20110405  M. Kelsey -- Add "passTrailing()" to encapsulate trailing effect
 
 #ifndef G4NUCLEI_MODEL_HH
 #define G4NUCLEI_MODEL_HH
@@ -76,10 +81,9 @@ public:
   void generateModel(G4InuclNuclei* nuclei);
   void generateModel(G4int a, G4int z);
 
-  void reset(G4int nHitNeutrons=0, G4int nHitProtons=0) {
-    neutronNumberCurrent = neutronNumber - nHitNeutrons;
-    protonNumberCurrent  = protonNumber - nHitProtons;
-  }
+  // Arguments here are used for rescattering (::Propagate)
+  void reset(G4int nHitNeutrons=0, G4int nHitProtons=0,
+	     const std::vector<G4ThreeVector>* hitPoints=0);
 
   void printModel() const; 
 
@@ -158,6 +162,8 @@ private:
   G4bool passFermi(const std::vector<G4InuclElementaryParticle>& particles, 
 		   G4int zone);
 
+  G4bool passTrailing(const G4ThreeVector& hit_position);
+
   void boundaryTransition(G4CascadParticle& cparticle);
 
   G4InuclElementaryParticle generateQuasiDeutron(G4int type1, 
@@ -202,6 +208,8 @@ private:
   std::vector<G4LorentzVector> momentums;
   std::vector<G4InuclElementaryParticle> raw_particles;
 
+  std::vector<G4ThreeVector> collisionPts;
+
   // Temporary buffers for computing nuclear model
   G4double ur[7];		// Number of skin depths for each zone
   G4double v[6];		// Density integrals by zone
@@ -242,6 +250,7 @@ private:
   static const G4double radiusForSmall; // Average radius of light A<5 nuclei
   static const G4double radScaleAlpha;	// Scaling factor R_alpha/R_small
   static const G4double fermiMomentum;
+  static const G4double R_nucleon;
   static const G4double alfa3[3], alfa6[6];
   static const G4double pion_vp;
   static const G4double pion_vp_small;

@@ -44,6 +44,7 @@
 //		functions to create G4Fragment
 // 20110214  M. Kelsey -- Replace integer "model" with enum
 // 20110308  M. Kelsey -- Follow new G4Fragment interface for hole types
+// 20110427  M. Kelsey -- Remove PDG-code warning
 
 #include "G4InuclNuclei.hh"
 #include "G4Fragment.hh"
@@ -195,9 +196,6 @@ G4InuclNuclei::makeNuclearFragment(G4int a, G4int z) {
   //               type    lepton number  baryon number   PDG encoding
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding Excitation-energy
-  
-  G4cout << " >>> G4InuclNuclei creating temporary fragment for evaporation "
-	 << "with non-standard PDGencoding." << G4endl;
   
   G4Ions* fragPD = new G4Ions(name,       mass, 0., z*eplus,
   			      0,          +1,   0,

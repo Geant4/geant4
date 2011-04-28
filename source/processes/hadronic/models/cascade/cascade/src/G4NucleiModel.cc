@@ -84,6 +84,8 @@
 // 20110321  M. Kelsey -- Replace strtof() with strtod() for envvar conversion
 // 20110321  M. Kelsey -- Use fm and fm^2 as default units, Per D. Wright
 //		(NOTE: Restored from original 20110318 commit)
+// 20110324  D. Wright -- Implement trailing effect
+// 20110324  M. Kelsey -- Move ::reset() here, as it has more code.
 
 #include "G4NucleiModel.hh"
 #include "G4CascadeCheckBalance.hh"
@@ -103,6 +105,7 @@
 #include "G4InuclNuclei.hh"
 #include "G4InuclParticleNames.hh"
 #include "G4InuclSpecialFunctions.hh"
+#include "G4ParticleLargerBeta.hh"
 #include "G4LorentzConvertor.hh"
 #include "G4Neutron.hh"
 #include "G4Proton.hh"
@@ -149,6 +152,9 @@ const G4double G4NucleiModel::fermiMomentum =
   (getenv("G4NUCMODEL_FERMI_SCALE") ? strtod(getenv("G4NUCMODEL_FERMI_SCALE"),0)
      : 1.932/OLD_RADIUS_UNITS) * radiusUnits;
 
+// effective radius of nucleon in fm
+const G4double G4NucleiModel::R_nucleon = 1.2;
+
 // Zone boundaries as fraction of nuclear radius (from outside in)
 const G4double G4NucleiModel::alfa3[3] = { 0.7, 0.3, 0.01 };
 const G4double G4NucleiModel::alfa6[6] = { 0.9, 0.6, 0.4, 0.2, 0.1, 0.05 };
@@ -191,6 +197,21 @@ G4NucleiModel::~G4NucleiModel() {
   theNucleus = 0;
 }
 
+
+// Initialize model state for new cascade
+
+void G4NucleiModel::reset(G4int nHitNeutrons, G4int nHitProtons,
+			  const std::vector<G4ThreeVector>* hitPoints) {
+  neutronNumberCurrent = neutronNumber - nHitNeutrons;
+  protonNumberCurrent  = protonNumber - nHitProtons;
+  
+  // zero or copy collision point array for trailing effect
+  if (!hitPoints || !hitPoints->empty()) collisionPts.clear();
+  else collisionPts = *hitPoints;
+}
+
+
+// Generate nuclear model parameters for given nucleus
 
 void G4NucleiModel::generateModel(G4InuclNuclei* nuclei) {
   generateModel(nuclei->getA(), nuclei->getZ());
@@ -908,15 +929,22 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
 #endif
       }
 
-      // Don't need to copy list, as "output" isn't changed again below
-      const std::vector<G4InuclElementaryParticle>& outgoing_particles = 
+      // Get list of outgoing particles for evaluation
+      std::vector<G4InuclElementaryParticle>& outgoing_particles = 
 	EPCoutput.getOutgoingParticles();
       
       if (!passFermi(outgoing_particles, zone)) continue; // Interaction fails
 
-      // Successful interaction, add results to output list
+      // Trailing effect: reject interaction at previously hit nucleon
       cparticle.propagateAlongThePath(thePartners[i].second);
       G4ThreeVector new_position = cparticle.getPosition();
+
+      if (!passTrailing(new_position)) continue;
+      collisionPts.push_back(new_position);
+
+      // Sort particles according to beta (fastest first)
+      std::sort(outgoing_particles.begin(), outgoing_particles.end(),
+                G4ParticleLargerBeta() );
 
       if (verboseLevel > 2)
 	G4cout << " adding " << outgoing_particles.size()
@@ -1028,6 +1056,27 @@ G4bool G4NucleiModel::passFermi(const std::vector<G4InuclElementaryParticle>& pa
   }
   return true; 
 }
+
+
+// Test here for trailing effect: loop over all previous collision
+// locations and test for d > R_nucleon
+
+G4bool G4NucleiModel::passTrailing(const G4ThreeVector& hit_position) {
+  if (verboseLevel > 1)
+    G4cout << " >>> G4NucleiModel::passTrailing " << hit_position << G4endl;
+
+  G4double dist;
+  for (G4int i = 0; i < G4int(collisionPts.size() ); i++) {
+    dist = (collisionPts[i] - hit_position).mag();
+    if (verboseLevel > 2) G4cout << " dist " << dist << G4endl;
+    if (dist < R_nucleon) {
+      if (verboseLevel > 2) G4cout << " rejected by Trailing" << G4endl;
+      return false;
+    }
+  }
+  return true;		// New point far enough away to be used
+}
+
 
 void G4NucleiModel::boundaryTransition(G4CascadParticle& cparticle) {
   if (verboseLevel > 1) {

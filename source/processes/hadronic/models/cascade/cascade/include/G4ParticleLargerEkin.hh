@@ -30,10 +30,12 @@
 // which returns true if arg1<arg2.  This function returns true if arg1>=arg2.
 //
 // 20091125  M. Kelsey -- Add additional operator() which uses pointers
+// 20110415  M. Kelsey -- Add additional operator() for G4CascadParticle
 
 #ifndef G4PARTICLE_LARGER_EKIN_HH
 #define G4PARTICLE_LARGER_EKIN_HH
 
+#include "G4CascadParticle.hh"
 #include "G4InuclElementaryParticle.hh"
 
 #ifdef G4CASCADE_DEBUG_SORT
@@ -56,6 +58,16 @@ public:
  
   G4bool operator() (const G4InuclElementaryParticle* part1,
 		     const G4InuclElementaryParticle* part2) {
+    return (part1 && part2 && operator()(*part1, *part2));
+  }
+
+  G4bool operator() (const G4CascadParticle& part1,
+		     const G4CascadParticle& part2) {
+    return (operator()(part1.getParticle(), part2.getParticle()));
+  }
+
+  G4bool operator() (const G4CascadParticle* part1,
+		     const G4CascadParticle* part2) {
     return (part1 && part2 && operator()(*part1, *part2));
   }
 };

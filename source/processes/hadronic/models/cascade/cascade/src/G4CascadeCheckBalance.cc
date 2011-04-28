@@ -44,6 +44,7 @@
 // 20100719  M. Kelsey -- Change zero tolerance to 10 keV instead of 1 keV.
 // 20100909  M. Kelsey -- Add interface for both kinds of particle lists
 // 20101019  M. Kelsey -- CoVerity report: unitialized constructor
+// 20110328  M. Kelsey -- Add default ctor and explicit limit setting
 
 #include "G4CascadeCheckBalance.hh"
 #include "globals.hh"
@@ -59,6 +60,12 @@
 // Constructor sets acceptance limits
 
 const G4double G4CascadeCheckBalance::tolerance = 1e-6;	// How small is zero?
+
+G4CascadeCheckBalance::G4CascadeCheckBalance(const char* owner)
+  : G4VCascadeCollider(owner),
+    relativeLimit(G4CascadeCheckBalance::tolerance),
+    absoluteLimit(G4CascadeCheckBalance::tolerance), initialBaryon(0),
+    finalBaryon(0), initialCharge(0), finalCharge(0) {}
 
 G4CascadeCheckBalance::G4CascadeCheckBalance(G4double relative,
 					     G4double absolute,

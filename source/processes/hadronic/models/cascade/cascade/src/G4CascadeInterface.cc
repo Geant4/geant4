@@ -74,6 +74,9 @@
 //		to makeDynamicParticle.
 // 20110316  M. Kelsey -- Move kaon-mixing for type-code into G4InuclParticle;
 //		add placeholders to capture and use bullet in Propagte
+// 20110327  G. Folger -- Set up for E/p checking by G4HadronicProcess in ctor
+// 20110328  M. Kelsey -- Modify balance() initialization to match Gunter's
+// 20110404  M. Kelsey -- Get primary projectile from base class (ref-03)
 
 #include "G4CascadeInterface.hh"
 #include "globals.hh"
@@ -105,7 +108,7 @@ typedef std::vector<G4InuclNuclei>::const_iterator nucleiIterator;
 
 // Maximum number of iterations allowed for inelastic collision attempts
 
-const G4int G4CascadeInterface::maximumTries = 100;
+const G4int G4CascadeInterface::maximumTries = 20;
 
 
 // Constructor and destrutor
@@ -114,9 +117,11 @@ G4CascadeInterface::G4CascadeInterface(const G4String& name)
   : G4VIntraNuclearTransportModel(name),
     verboseLevel(0), numberOfTries(0),
     collider(new G4InuclCollider), 
-    balance(new G4CascadeCheckBalance(0.05, 0.1, name)),
+    balance(new G4CascadeCheckBalance(name)),
     bullet(0), target(0), output(new G4CollisionOutput) {
   initializeElasticCuts();
+  SetEnergyMomentumCheckLevels(5*perCent, 10*MeV);
+  balance->setLimits(5*perCent, 10*MeV/GeV);	// Bertini internal units
 }
 
 G4CascadeInterface::~G4CascadeInterface() {
@@ -277,9 +282,9 @@ G4CascadeInterface::Propagate(G4KineticTrackVector* theSecondaries,
   theResult.Clear();
   clear();
 
-  // NOTE:  Requires new (uncommitted) mods to base class and G4TheoFSGenerator
-  // *** const G4HadProjectile* projectile = GetPrimaryProjectile();
-  // *** createBullet(*projectile);
+  // NOTE:  Requires 9.4-ref-03 mods to base class and G4TheoFSGenerator
+  const G4HadProjectile* projectile = GetPrimaryProjectile();
+  if (projectile) createBullet(*projectile);
   createTarget(theNucleus);
 
   numberOfTries = 0;
