@@ -8,6 +8,7 @@ Major development/fixes included since the last development tag are:
    displacement by default.
  o Updated logic in G4ExcitationHandler in de-excitation hadronic model
    and some general cleanup of the code.
+ o Deploying operational rescattering in Bertini Cascade hadronics model.
  o Replaced use of G4IonPhysics with G4IonBinaryCascadePhysics in
    QGSP_FTFP_BERT physics-list.
  o improved printout for energy non-conservation checks.
@@ -53,10 +54,14 @@ processes/electromagnetic/dna                    dna-V09-04-03
 -----------------------------
 - Updated all models for handling of variable density.
 
-processes/electromagnetic/lowenergy              emlowen-V09-04-23
+processes/electromagnetic/lowenergy              emlowen-V09-04-24
 -----------------------------------
-- Fixed compilation warnings in G4hShellCrossSectionExp and
-  G4hShellCrossSectionDoubleExp for unused parameters.
+- Removed obsolete classes:
+  old livermore photon polarized processes (G4LowEnergyPolarized*);
+  old shell cross sections (G4hShell*);
+  old ion ionisation process (G4ionLowEnergyIonisation);
+  old h-ionisation process (G4hLowEnergyIonisation);
+  old G4hLowEnergyLoss.
 
 processes/electromagnetic/polarisation           empolar-V09-04-01
 --------------------------------------
@@ -91,9 +96,22 @@ processes/hadronic
   o Enhanced printout for case 3 in E/p checking with initial state info.
     Modified E/p checking to allow to use stdout or stderr, depending on 
     level check.
-- models/cascade (hadr-casc-V09-04-05)
+- models/cascade (hadr-casc-V09-04-09)
+  o Deploying operational rescattering.
   o G4NucleiModel: changed internal length scale to use femtometers
     and internal cross-section scale to use fm^2, instead of millibarns.
+    Added trailing effect. Added optional argument to reset() with
+    list of collision points, for copying cascade state when rescattering.
+  o G4InuclNuclei: removed preface about "non-standard PDGencoding".
+  o G4ElementaryParticleCollider: for 2-body scattering, adjusted test to
+    'term1' to avoid divide-by-zero errors.
+  o Set up for E/p checking by G4HadronicProcess in ctor of G4CascadeInterface.
+    Set internal E/p limits (currently 5% and 10 MeV).
+  o G4CascadeCheckBalance: added non-limit ctor and explicit limit setting.
+  o G4IntraNucleiCascader: added list of hit-nucleon locations, filled by
+    copyWoundedNucleus() for initialization of G4NucleiModel.
+    Reduced number of retries from 1000 to 100.
+  o G4CollisionOutput: added non-const accessors for lists.
 - models/chiral_inv_phase_space/body (hadr-chips-body-V09-04-00)
   o Fixed initialization in constructor in G4QEnvironment.
 - models/chiral_inv_phase_space/interface (hadr-chips-inter-V09-04-00)
@@ -168,5 +186,7 @@ tests                                            tests-V09-04-04
   o Cleanup of printout in main().
 - test44 (test44-V09-04-02)
   o Removed obsolete includes.
+- test53 (test53-V09-04-00)
+  o Switched to Livermore polarized photons.
 - test58 (test58-V09-04-00)
   o Removed obsolete headers of hadron elastic builders.
