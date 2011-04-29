@@ -178,6 +178,8 @@ examples                                         examples-V09-04-04
 - extended/radioactivedecay/rdecay01 (rdecay01-V09-04-04)
   o Compute activity from primary ion in RunAction.
   o Suppressed histo #9.
+- extended/radioactivedecay/rdecay02 (rdecay02-V09-04-02)
+  o Migrated physics list to remove use of obsolete low energy EM processes.
 
 tests                                            tests-V09-04-04
 -----
