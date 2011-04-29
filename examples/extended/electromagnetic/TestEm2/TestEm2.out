@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-00    (17-December-2010)
+ Geant4 version Name: geant4-09-04-ref-04    (30-April-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -107,10 +107,10 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
+            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -122,10 +122,10 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
+            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
@@ -141,7 +141,7 @@ msc:   for proton    SubType= 10
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=          2 MeV
           BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
@@ -166,7 +166,7 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :   Emin=        0 eV       Emax=          2 MeV
@@ -175,7 +175,7 @@ ionIoni:   for  GenericIon    SubType= 2
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=          2 MeV
           BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
@@ -189,7 +189,7 @@ msc:   for kaon+    SubType= 10
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=    1.05231 MeV
           BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
@@ -209,7 +209,7 @@ hPairProd:   for  kaon+    SubType= 4
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=    1.05231 MeV
           BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
@@ -289,7 +289,7 @@ CoulombScat:   for  mu-    SubType= 1
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=    297.505 keV
           BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
@@ -315,7 +315,7 @@ msc:   for pi-    SubType= 10
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=    297.505 keV
           BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
@@ -363,25 +363,25 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=5.98s Real=6.14s Sys=0s
+  User=4.45s Real=4.46s Sys=0.01s
 
  SUMMARY 
 
- energy deposit :   94.62 % E0 +-    1.05 % E0
- charged traklen:  478.58 radl +-    5.22 radl
- neutral traklen: 4477.98 radl +-  112.85 radl
+ energy deposit :   94.71 % E0 +-    1.12 % E0
+ charged traklen:  479.34 radl +-    5.92 radl
+ neutral traklen: 4448.93 radl +-  131.59 radl
 
- 90.00 % confinement: radius = 3.10 radl  (2.77 cm )
+ 90.00 % confinement: radius = 3.04 radl  (2.72 cm )
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 901068406, 786729768
+ Current couple of seeds = 358456961, 1969993160
 ----------------------------------------
 
 <<<<ACCEPTANCE>>>> 100 events for Total Energy in Absorber
-Edep: 0.946215  delEdep= -0.00278457 nrms= -3.39582
-Erms: 0.010485  delErms= 0.00228502 nrms= 2.78661
-<<<<END>>>>   IS NOT ACCEPTED
+Edep: 0.947118  delEdep= -0.00188151 nrms= -2.29453
+Erms: 0.0112188  delErms= 0.00301878 nrms= 3.68144
+<<<<END>>>>   IS ACCEPTED
 
 G4 kernel has come to Quit state.
 

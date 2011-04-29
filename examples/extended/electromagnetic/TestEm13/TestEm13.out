@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-01    (17-December-2010)
+ Geant4 version Name: geant4-09-04-ref-04    (30-April-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -110,10 +110,10 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
+            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -125,10 +125,10 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
+            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
@@ -286,7 +286,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=6.44s Real=6.44s Sys=0s
+  User=4.64s Real=4.65s Sys=0.01s
 
  The run consists of 1000000 gamma of 100 keV through 1 cm  of Water (density: 1 g/cm3 )
 
@@ -355,22 +355,22 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=7.27s Real=7.27s Sys=0s
+  User=5.69s Real=5.69s Sys=0s
 
  The run consists of 1000000 e- of 100 MeV through 1 cm  of Water (density: 1 g/cm3 )
 
- Process calls frequency --->	Transportation = 540804	eBrem = 277603	eIoni = 181593
+ Process calls frequency --->	Transportation = 541253	eBrem = 277077	eIoni = 181670
 
- Nb of incident particles unaltered after 1 cm  of Water : 540804 over 1000000 incident particles.  Ratio = 54.08 %
- ---> CrossSection per volume:	0.6147 cm^-1 	CrossSection per mass: 0.6147 cm2/g
+ Nb of incident particles unaltered after 1 cm  of Water : 541253 over 1000000 incident particles.  Ratio = 54.125 %
+ ---> CrossSection per volume:	0.61387 cm^-1 	CrossSection per mass: 0.61387 cm2/g
 
  Verification from G4EmCalculator: 
-	eBrem= 0.37212 cm2/g	eIoni= 0.24337 cm2/g	total= 0.61549 cm2/g
-	Expected ratio of transmitted particles= 54.037 %
+	eBrem= 0.37138 cm2/g	eIoni= 0.24337 cm2/g	total= 0.61475 cm2/g
+	Expected ratio of transmitted particles= 54.077 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 490323513, 1321056075
+ Current couple of seeds = 1736259342, 442369784
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-01    (17-December-2010)
+ Geant4 version Name: geant4-09-04-ref-04    (30-April-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -118,10 +118,10 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
+            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -133,10 +133,10 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
+            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
@@ -375,7 +375,7 @@ AntiNeutronInelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Ema
 
                                   Hadronic Processes for <e->
                                   -----------------------------------
-      ElectroNuclear  Models:                        CHIPS: Emin(GeV)=    0  Emax(GeV)= 30000
+      ElectroNuclear  Models:                CHIPS_wrapper: Emin(GeV)=    0  Emax(GeV)= 30000
 
       ElectroNuclear  Crs sctns:           Electro-nuclear: Emin(GeV)=    0  Emax(GeV)= 100000
                                          Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
@@ -538,7 +538,7 @@ AntiNeutronInelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Ema
 
  The run consists of 100 monopole of 100 GeV through 10 cm  of G4_Si (density: 2.33 g/cm3 )
 
- projected Range= 7.7389 cm    rms= 88.514 um 
+ projected Range= 7.7396 cm    rms= 114.25 um 
 ### Stopping Powers
  E(MeV)= 0.001  dedxp= 24.465 dedxmp= 1.4828
  E(MeV)= 0.0012589  dedxp= 27.276 dedxmp= 1.6637
@@ -644,7 +644,7 @@ AntiNeutronInelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Ema
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1923059742, 1784098910
+ Current couple of seeds = 131039803, 1991803800
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

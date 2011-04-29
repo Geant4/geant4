@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-01    (17-December-2010)
+ Geant4 version Name: geant4-09-04-ref-04    (30-April-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -306,10 +306,10 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
+            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -323,10 +323,10 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
+            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
@@ -594,36 +594,36 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.09s Real=0.09s Sys=0s
+  User=0.08s Real=0.09s Sys=0s
 RunAction: End of run actions are started
  ================== run summary =====================
    End of Run TotNbofEvents = 1000
 
-   Mean energy deposit in absorber = 15.269 +- 0.25442 keV;    RMS/Emean = 0.52693
-   Mean number of steps in absorber= 1.23;  mean number of ion-clusters = 815.47
+   Mean energy deposit in absorber = 15.053 +- 0.25271 keV;    RMS/Emean = 0.53091
+   Mean number of steps in absorber= 1.255;  mean number of ion-clusters = 844.32
 
- ====== Energy deposit distribution   Noverflows= 0.011 ====== 
+ ====== Energy deposit distribution   Noverflows= 0.019 ====== 
  bin nb      Elow      entries     normalized 
     0         0           0           0
-    1         3           2       0.002
-    2         6         117       0.117
-    3         9         232       0.232
-    4        12         266       0.266
-    5        15         153       0.153
-    6        18          87       0.087
-    7        21          36       0.036
-    8        24          26       0.026
-    9        27          18       0.018
-   10        30          11       0.011
-   11        33           9       0.009
-   12        36           5       0.005
-   13        39           6       0.006
-   14        42           5       0.005
-   15        45           4       0.004
-   16        48           2       0.002
-   17        51           2       0.002
-   18        54           5       0.005
-   19        57           3       0.003
+    1         3           3       0.003
+    2         6         106       0.106
+    3         9         256       0.256
+    4        12         253       0.253
+    5        15         136       0.136
+    6        18          93       0.093
+    7        21          44       0.044
+    8        24          31       0.031
+    9        27           9       0.009
+   10        30          13       0.013
+   11        33          10        0.01
+   12        36           4       0.004
+   13        39           5       0.005
+   14        42           1       0.001
+   15        45           3       0.003
+   16        48           3       0.003
+   17        51           3       0.003
+   18        54           6       0.006
+   19        57           2       0.002
  ================== run end ==========================
 #
 UserDetectorConstruction deleted.

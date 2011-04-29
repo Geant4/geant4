@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-01    (17-December-2010)
+ Geant4 version Name: geant4-09-04-ref-04    (30-April-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -104,10 +104,10 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV in 240 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=        100 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
+            eBremLPM :   Emin=      100 MeV      Emax=        100 TeV  AngularGenUrban
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -120,10 +120,10 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV in 240 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=        100 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
+            eBremLPM :   Emin=      100 MeV      Emax=        100 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
       Lambda tables from 100 eV  to 100 TeV in 240 bins, spline: 1
@@ -290,7 +290,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=1.41s Real=1.42s Sys=0s
+  User=1.08s Real=1.08s Sys=0s
 
  ======================== run summary ======================
 
@@ -298,19 +298,19 @@ Run Summary
  ===========================================================
 
 
- trackLength= 1.0004 cm 	 nb of steps= 1.5807  stepSize= 6.3288 mm 
+ trackLength= 1.0004 cm 	 nb of steps= 1.5797  stepSize= 6.3331 mm 
 
- d-rays  : eLoss/primary= 247.35 keV	  nb of d-rays= 0.23281  <Tkin>= 1.0624 MeV  Tmin= 351.9 keV  Tmax= 4.9579 MeV
+ d-rays  : eLoss/primary= 247.68 keV	  nb of d-rays= 0.23304  <Tkin>= 1.0628 MeV  Tmin= 351.9 keV  Tmax= 4.9579 MeV
 
- brems   : eLoss/primary= 174.55 keV	  nb of gammas= 0.30616  <Tkin>= 570.12 keV  Tmin= 2.9418 keV  Tmax= 9.7621 MeV
+ brems   : eLoss/primary= 172.45 keV	  nb of gammas= 0.30517  <Tkin>= 565.09 keV  Tmin= 2.9418 keV  Tmax= 9.7622 MeV
 
- deposit : eLoss/primary= 1.7336 MeV	 <dEcut > table= 1.7346 MeV   ---> simul/reference= 0.99939
+ deposit : eLoss/primary= 1.7336 MeV	 <dEcut > table= 1.7347 MeV   ---> simul/reference= 0.99938
 
- total   : eLoss/primary= 2.1555 MeV	 <dEfull> table= 2.1616 MeV   ---> simul/reference= 0.99715
+ total   : eLoss/primary= 2.1537 MeV	 <dEfull> table= 2.1617 MeV   ---> simul/reference= 0.99632
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 148662103, 638749738
+ Current couple of seeds = 251097617, 1507814127
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

@@ -4,13 +4,13 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-01    (17-December-2010)
+ Geant4 version Name: geant4-09-04-ref-04    (30-April-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
- creating G4RunManagerKernel 0x346e820
+ creating G4RunManagerKernel 0x292d890
 
 The materials defined are : 
 
@@ -37,14 +37,14 @@ World is registered to the default region.
 List of instantiated particles ============================================
 e+ e- gamma mu+ mu- pi+ pi- proton 
 physicsList->Construct() start.
-0x34db570G4ErrorPhysicsList:: particle process manager e+ = 0x34dca70
-0x34db360G4ErrorPhysicsList:: particle process manager e- = 0x34de070
-0x34dacf0G4ErrorPhysicsList:: particle process manager gamma = 0x34de270
-0x34db780G4ErrorPhysicsList:: particle process manager mu+ = 0x34de4b0
-0x34dbbb0G4ErrorPhysicsList:: particle process manager mu- = 0x34de6f0
-0x34dc020G4ErrorPhysicsList:: particle process manager pi+ = 0x34de930
-0x34dc440G4ErrorPhysicsList:: particle process manager pi- = 0x34deb70
-0x34dc860G4ErrorPhysicsList:: particle process manager proton = 0x34dedb0
+0x299a5c0G4ErrorPhysicsList:: particle process manager e+ = 0x299bac0
+0x299a3f0G4ErrorPhysicsList:: particle process manager e- = 0x299d0c0
+0x299a170G4ErrorPhysicsList:: particle process manager gamma = 0x299d2c0
+0x299a7d0G4ErrorPhysicsList:: particle process manager mu+ = 0x299d500
+0x299ac00G4ErrorPhysicsList:: particle process manager mu- = 0x299d740
+0x299b070G4ErrorPhysicsList:: particle process manager pi+ = 0x299d980
+0x299b490G4ErrorPhysicsList:: particle process manager pi- = 0x299dbc0
+0x299b8b0G4ErrorPhysicsList:: particle process manager proton = 0x299de00
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 

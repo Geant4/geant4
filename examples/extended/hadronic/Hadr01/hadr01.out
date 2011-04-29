@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-00    (17-December-2010)
+ Geant4 version Name: geant4-09-04-ref-04    (30-April-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -64,7 +64,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc93 :   Emin=        0 eV       Emax=         10 TeV
+          UrbanMsc95 :   Emin=        0 eV       Emax=         10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -76,10 +76,10 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGen2BS
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGen2BS
+            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -91,10 +91,10 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGen2BS
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGen2BS
+            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+, applyCuts: 1     SubType= 5
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
@@ -110,7 +110,7 @@ msc:   for proton    SubType= 10
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=          2 MeV
           BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
@@ -135,7 +135,7 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :   Emin=        0 eV       Emax=          2 MeV
@@ -144,7 +144,7 @@ ionIoni:   for  GenericIon    SubType= 2
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=          2 MeV
           BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
@@ -158,7 +158,7 @@ msc:   for kaon+    SubType= 10
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=    1.05231 MeV
           BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
@@ -178,7 +178,7 @@ hPairProd:   for  kaon+    SubType= 4
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=    1.05231 MeV
           BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
@@ -258,7 +258,7 @@ CoulombScat:   for  mu-, applyCuts: 1     SubType= 1
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=    297.505 keV
           BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
@@ -284,7 +284,7 @@ msc:   for pi-    SubType= 10
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=    297.505 keV
           BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
@@ -309,53 +309,104 @@ hPairProd:   for  pi-    SubType= 4
                      Hadronic Processes for <anti_proton>
           CHIPS_Inelastic
 
-                     Hadronic Processes for <GenericIon>
-        ionInelastic  Models:            Binary Cascade: Emin(GeV)=     0  Emax(GeV)= 20
+                                  Hadronic Processes for <GenericIon>
+                                  -----------------------------------
+        ionInelastic  Models:               Binary Cascade: Emin(GeV)=    0  Emax(GeV)= 6
+                                                      FTFP: Emin(GeV)=    5  Emax(GeV)= 100000
 
-                     Hadronic Processes for <e->
-      ElectroNuclear  Models:                     CHIPS: Emin(GeV)=     0  Emax(GeV)= 30000
+        ionInelastic  Crs sctns:          AxenWellischIonH: Emin(GeV)=    0  Emax(GeV)= 100000
+                                         TripathiLightIons: Emin(GeV)=    0  Emax(GeV)= 100000
+                                                  Tripathi: Emin(GeV)=    0  Emax(GeV)= 100000
+                                                  IonsShen: Emin(GeV)=    0  Emax(GeV)= 100000
+                                         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
-                     Hadronic Processes for <gamma>
-     PhotonInelastic  Models:                     CHIPS: Emin(GeV)=     0  Emax(GeV)= 3.5
-                                        TheoFSGenerator: Emin(GeV)=     3  Emax(GeV)= 100000
 
-                     Hadronic Processes for <kaon+>
-          hInelastic  Models:                      FTFP: Emin(GeV)=     4  Emax(GeV)= 100000
-                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 5
+                                  Hadronic Processes for <e->
+                                  -----------------------------------
+      ElectroNuclear  Models:                CHIPS_wrapper: Emin(GeV)=    0  Emax(GeV)= 30000
 
-                     Hadronic Processes for <kaon->
-          hInelastic  Models:                      FTFP: Emin(GeV)=     4  Emax(GeV)= 100000
-                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 5
+      ElectroNuclear  Crs sctns:           Electro-nuclear: Emin(GeV)=    0  Emax(GeV)= 100000
+                                         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
-                     Hadronic Processes for <lambda>
-          hInelastic  Models:                      FTFP: Emin(GeV)=     4  Emax(GeV)= 100000
-                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 5
+
+                                  Hadronic Processes for <gamma>
+                                  -----------------------------------
+     PhotonInelastic  Models:                        CHIPS: Emin(GeV)=    0  Emax(GeV)= 3.5
+                                           TheoFSGenerator: Emin(GeV)=    3  Emax(GeV)= 100000
+
+     PhotonInelastic  Crs sctns:             Photo-nuclear: Emin(GeV)=    0  Emax(GeV)= 100000
+                                         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+
+
+                                  Hadronic Processes for <kaon+>
+                                  -----------------------------------
+          hInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
+                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 5
+
+          hInelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+
+
+                                  Hadronic Processes for <kaon->
+                                  -----------------------------------
+          hInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
+                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 5
+
+          hInelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+
+
+                                  Hadronic Processes for <lambda>
+                                  -----------------------------------
+          hInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
+                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 5
+
+          hInelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+
 
                      Hadronic Processes for <mu->
           muMinusCaptureAtRest
 
-                     Hadronic Processes for <neutron>
-          hInelastic  Models:                      QGSP: Emin(GeV)=  12.5  Emax(GeV)= 100000
-                                                   FTFP: Emin(GeV)=     4  Emax(GeV)= 25
-                                        Bertini Cascade: Emin(GeV)=     1  Emax(GeV)= 5
-                                         Binary Cascade: Emin(GeV)=     0  Emax(GeV)= 1.5
-            nCapture  Models:               nRadCapture: Emin(GeV)=     0  Emax(GeV)= 100000
+                                  Hadronic Processes for <neutron>
+                                  -----------------------------------
+          hInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
+                                           Bertini Cascade: Emin(GeV)=    1  Emax(GeV)= 5
+                                            Binary Cascade: Emin(GeV)=    0  Emax(GeV)= 1.5
 
-                     Hadronic Processes for <pi+>
-          hInelastic  Models:                      QGSP: Emin(GeV)=  12.5  Emax(GeV)= 100000
-                                                   FTFP: Emin(GeV)=     4  Emax(GeV)= 25
-                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 5
+          hInelastic  Crs sctns:      G4NeutronInelasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
+                                         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
-                     Hadronic Processes for <pi->
-          hInelastic  Models:                      QGSP: Emin(GeV)=  12.5  Emax(GeV)= 100000
-                                                   FTFP: Emin(GeV)=     4  Emax(GeV)= 25
-                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 5
+            nCapture  Models:                  nRadCapture: Emin(GeV)=    0  Emax(GeV)= 100000
 
-                     Hadronic Processes for <proton>
-          hInelastic  Models:                      QGSP: Emin(GeV)=  12.5  Emax(GeV)= 100000
-                                                   FTFP: Emin(GeV)=     4  Emax(GeV)= 25
-                                        Bertini Cascade: Emin(GeV)=     1  Emax(GeV)= 5
-                                         Binary Cascade: Emin(GeV)=     0  Emax(GeV)= 1.5
+            nCapture  Crs sctns:        G4NeutronCaptureXS: Emin(GeV)=    0  Emax(GeV)= 100000
+                                           Gheisha capture: Emin(GeV)=    0  Emax(GeV)= 100000
+
+
+                                  Hadronic Processes for <pi+>
+                                  -----------------------------------
+          hInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
+                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 5
+
+          hInelastic  Crs sctns: Barashenkov-Glauber-Gribov: Emin(GeV)=    0  Emax(GeV)= 100000
+                                         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+
+
+                                  Hadronic Processes for <pi->
+                                  -----------------------------------
+          hInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
+                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 5
+
+          hInelastic  Crs sctns: Barashenkov-Glauber-Gribov: Emin(GeV)=    0  Emax(GeV)= 100000
+                                         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+
+
+                                  Hadronic Processes for <proton>
+                                  -----------------------------------
+          hInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
+                                           Bertini Cascade: Emin(GeV)=    1  Emax(GeV)= 5
+                                            Binary Cascade: Emin(GeV)=    0  Emax(GeV)= 1.5
+
+          hInelastic  Crs sctns: Barashenkov-Glauber-Gribov: Emin(GeV)=    0  Emax(GeV)= 100000
+                                         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+
 ============================================================================================
 
 ========= Table of registered couples ==============================
@@ -391,33 +442,33 @@ EventAction: Event # 90 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.21s Real=0.22s Sys=0s
+  User=0.18s Real=0.19s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        proton
 Beam Energy(MeV)                     3000
 Number of events                     100
-Average energy deposit (MeV)         56.33   RMS(MeV) 46.71
-Average number of steps              214.2
-Average number of gamma              1.2
-Average number of e-                 2.92
-Average number of e+                 0.02
-Average number of neutrons           0.7
-Average number of protons            0.7
+Average energy deposit (MeV)         61.02   RMS(MeV) 49.94
+Average number of steps              231.2
+Average number of gamma              2.23
+Average number of e-                 3.06
+Average number of e+                 0.07
+Average number of neutrons           1.06
+Average number of protons            1.02
 Average number of antiprotons        0
-Average number of pi+ & pi-          0.14
-Average number of pi0                0.05
+Average number of pi+ & pi-          0.33
+Average number of pi0                0.16
 Average number of kaons              0
-Average number of muons              0
-Average number of deuterons+tritons  0.09
-Average number of He3+alpha          0.14
-Average number of ions               0.17
-Average number of forward neutrons   0.03
-Average number of reflected neutrons 0.62
-Average number of leaked neutrons    0.03
-Average number of proton leak        0.33
-Average number of pion leak          0.12
+Average number of muons              0.02
+Average number of deuterons+tritons  0.06
+Average number of He3+alpha          0.19
+Average number of ions               0.38
+Average number of forward neutrons   0.1
+Average number of reflected neutrons 0.9
+Average number of leaked neutrons    0.01
+Average number of proton leak        0.5
+Average number of pion leak          0.29
 ========================================================
 
 #

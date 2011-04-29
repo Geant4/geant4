@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-01    (17-December-2010)
+ Geant4 version Name: geant4-09-04-ref-04    (30-April-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -188,10 +188,10 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
+            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -203,10 +203,10 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
+            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
@@ -737,60 +737,60 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=27.09s Real=27.12s Sys=0.02s
+  User=21.66s Real=21.68s Sys=0.01s
 =============================================================
  Number of event processed : 10000
 =============================================================
 #Z Cell#       totalEDep      protonEDep protonNStep  chargedPassCellFlux     chargedCellFlux     chargedSurfFlux    gammaSurfCurr000    gammaSurfCurr001    gammaSurfCurr002    gammaSurfCurr003
      0             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-     1             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+     1       182.347 keV           0 eV            0               0 /cm2       0.314576 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
      2             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
      3             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-     4             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-     5       510.999 keV           0 eV            0               0 /cm2        1.74497 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2             25 /cm2
-     6             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-     7             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-     8             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
-     9       105.191 keV           0 eV            0               0 /cm2       0.374746 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2             25 /cm2
-    10       863.627 keV           0 eV            0               0 /cm2         8.6945 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2             25 /cm2
-    11             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2
+     4       75.1086 keV           0 eV            0        0.770073 /cm2       0.770073 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+     5             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
+     6       510.999 keV           0 eV            0               0 /cm2        3.07198 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+     7             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
+     8       2.84749 MeV           0 eV            0               0 /cm2        20.2609 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2             25 /cm2
+     9             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
+    10             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2             25 /cm2
+    11             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     12             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    13             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2
-    14             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2
-    15             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
-    16             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+    13       937.292 keV           0 eV            0               0 /cm2        8.17221 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2             25 /cm2
+    14       274.729 keV           0 eV            0               0 /cm2        3.49557 /cm2        88.1714 /cm2              0 /cm2              0 /cm2             50 /cm2             50 /cm2
+    15       299.656 keV           0 eV            0               0 /cm2       0.955611 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2             25 /cm2
+    16       2.93934 MeV           0 eV            0               0 /cm2        29.6399 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2              0 /cm2
     17             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    18             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
-    19             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    20             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    21        885.26 keV           0 eV            0               0 /cm2        6.92188 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    22             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2
-    23             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2
+    18             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+    19       201.356 keV           0 eV            0               0 /cm2       0.422403 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2
+    20             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2             25 /cm2
+    21             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+    22             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
+    23       505.065 keV           0 eV            0               0 /cm2        2.21528 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     24             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     25             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    26             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2
+    26             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     27             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    28             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    29             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    30             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2              0 /cm2
-    31       512.946 keV           0 eV            0               0 /cm2        2.94002 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2
-    32             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
-    33             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
-    34             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
-    35             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    36             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2
-    37             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+    28       148.763 keV           0 eV            0               0 /cm2       0.829481 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+    29             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2
+    30        171.25 keV           0 eV            0               0 /cm2       0.256961 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+    31             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2
+    32             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2
+    33             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+    34             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+    35        469.16 keV           0 eV            0               0 /cm2        2.71254 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2
+    36             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+    37       510.999 keV           0 eV            0               0 /cm2        3.07198 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
     38             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
-    39             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
+    39             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     40             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    41             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2             25 /cm2
+    41             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2
     42             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     43             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     44             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     45             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     46             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    47             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
-    48             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+    47             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+    48             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
     49             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     50             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     51             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
@@ -801,7 +801,7 @@ Run Summary
     56             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     57             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     58             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    59             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+    59       2.80359 MeV           0 eV            0               0 /cm2        27.4617 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     60             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     61             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     62             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
@@ -966,7 +966,7 @@ RunManager is deleting.
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-01    (17-December-2010)
+ Geant4 version Name: geant4-09-04-ref-04    (30-April-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -1152,10 +1152,10 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
+            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -1167,10 +1167,10 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
+            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
@@ -1701,7 +1701,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.34s Real=0.34s Sys=0s
+  User=0.27s Real=0.27s Sys=0s
 =============================================================
  Number of event processed : 10000
 =============================================================
@@ -1930,7 +1930,7 @@ RunManager is deleting.
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-01    (17-December-2010)
+ Geant4 version Name: geant4-09-04-ref-04    (30-April-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -2116,10 +2116,10 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
+            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -2131,10 +2131,10 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
+            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
@@ -2436,19 +2436,19 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   23 kByte
-    Total CPU time elapsed for geometry optimisation: 0 seconds
+    Total CPU time elapsed for geometry optimisation: 0.01 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
+     100.00         0.01         0.00           13k RepX
        0.00         0.00         0.00            6k Phantom
        0.00         0.00         0.00            6k RepY
-       0.00         0.00         0.00           13k RepX
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      53.25         12k         1      201        400         0.00    RepX
+      53.25         12k         1      201        400         0.01    RepX
       23.38          5k         1      100        100         0.00    Phantom
       23.38          5k         1      100        100         0.00    RepY
 ++ PhantomSD/totalEDep id 0
@@ -2487,18 +2487,20 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -2.77    0.942   -1e+03     0.356        0        0         0       World initStep
-    1    -2.77    0.942     -200     0.356        0      800       800 PhantomSens Transportation
-    2    -2.77    0.942     -198     0.356        0        2       802 PhantomSens Transportation
-    3    -2.77    0.942     -197         0    0.088     1.49       803 PhantomSens phot
+    0    0.524    -2.77   -1e+03     0.356        0        0         0       World initStep
+    1    0.524    -2.77     -200     0.356        0      800       800 PhantomSens Transportation
+    2    0.524    -2.77     -198     0.356        0        2       802 PhantomSens Transportation
+    3    0.524    -2.77     -196     0.356        0        2       804 PhantomSens Transportation
+    4    0.524    -2.77     -194     0.356        0        2       806 PhantomSens Transportation
+    5    0.524    -2.77     -194         0    0.088    0.414       806 PhantomSens phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -2.77    0.942     -197     0.268        0        0         0 PhantomSens initStep
-    1    -2.77    0.937     -197         0    0.268    0.128     0.128 PhantomSens eIoni
+    0    0.524    -2.77     -194     0.268        0        0         0 PhantomSens initStep
+    1     0.52    -2.77     -194         0    0.268    0.128     0.128 PhantomSens eIoni
 >>> Event 1
 
 *********************************************************************************************************
@@ -2506,20 +2508,21 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0  -0.0792     1.11   -1e+03     0.356        0        0         0       World initStep
-    1  -0.0792     1.11     -200     0.356        0      800       800 PhantomSens Transportation
-    2  -0.0792     1.11     -198     0.356        0        2       802 PhantomSens Transportation
-    3  -0.0792     1.11     -196         0    0.088     1.53       804 PhantomSens phot
+    0   -0.328  -0.0616   -1e+03     0.356        0        0         0       World initStep
+    1   -0.328  -0.0616     -200     0.356        0      800       800 PhantomSens Transportation
+    2   -0.328  -0.0616     -198     0.356        0        2       802 PhantomSens Transportation
+    3   -0.328  -0.0616     -197         0    0.088     1.16       803 PhantomSens phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0  -0.0792     1.11     -196     0.268        0        0         0 PhantomSens initStep
-    1  -0.0667     1.11     -196     0.235   0.0334   0.0238    0.0238 PhantomSens msc
-    2   -0.056     1.11     -196     0.142   0.0927   0.0178    0.0415 PhantomSens msc
-    3  -0.0537     1.11     -196         0    0.142   0.0482    0.0898 PhantomSens eIoni
+    0   -0.328  -0.0616     -197     0.268        0        0         0 PhantomSens initStep
+    1   -0.332  -0.0706     -197     0.227    0.041   0.0185    0.0185 PhantomSens msc
+    2   -0.328  -0.0742     -197     0.187   0.0403   0.0133    0.0318 PhantomSens msc
+    3    -0.33  -0.0824     -197     0.147   0.0394   0.0174    0.0492 PhantomSens msc
+    4   -0.333  -0.0828     -197         0    0.147   0.0512       0.1 PhantomSens eIoni
 >>> Event 2
 
 *********************************************************************************************************
@@ -2527,17 +2530,33 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     -2.9   -0.794   -1e+03     0.356        0        0         0       World initStep
-    1     -2.9   -0.794     -200     0.356        0      800       800 PhantomSens Transportation
-    2     -2.9   -0.794     -199         0    0.088    0.558       801 PhantomSens phot
+    0    0.974     1.77   -1e+03     0.356        0        0         0       World initStep
+    1    0.974     1.77     -200     0.356        0      800       800 PhantomSens Transportation
+    2    0.974     1.77     -198     0.356        0        2       802 PhantomSens Transportation
+    3    0.974     1.77     -196     0.356        0        2       804 PhantomSens Transportation
+    4    0.974     1.77     -194     0.356        0        2       806 PhantomSens Transportation
+    5    0.974     1.77     -192     0.356        0        2       808 PhantomSens Transportation
+    6    0.974     1.77     -190     0.356        0        2       810 PhantomSens Transportation
+    7    0.974     1.77     -190     0.178        0    0.467       810 PhantomSens compt
+    8     1.61     1.02     -190     0.178        0     1.09       812 PhantomSens Transportation
+    9        2    0.555     -190     0.178        0    0.676       812 PhantomSens Transportation
+   10     2.16    0.362     -190         0    0.088    0.279       813 PhantomSens phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0     2.16    0.362     -190    0.0903        0        0         0 PhantomSens initStep
+    1     2.16    0.364     -190         0   0.0903   0.0235    0.0235 PhantomSens eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     -2.9   -0.794     -199     0.268        0        0         0 PhantomSens initStep
-    1     -2.9   -0.792     -199         0    0.268    0.128     0.128 PhantomSens eIoni
+    0    0.974     1.77     -190     0.178        0        0         0 PhantomSens initStep
+    1    0.973     1.77     -190         0    0.178   0.0686    0.0686 PhantomSens eIoni
 >>> Event 3
 
 *********************************************************************************************************
@@ -2545,27 +2564,17 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     2.83   -0.961   -1e+03     0.356        0        0         0       World initStep
-    1     2.83   -0.961     -200     0.356        0      800       800 PhantomSens Transportation
-    2     2.83   -0.961     -198         0    0.088     1.95       802 PhantomSens phot
+    0    -1.42    -4.78   -1e+03     0.356        0        0         0       World initStep
+    1    -1.42    -4.78     -200     0.356        0      800       800 PhantomSens Transportation
+    2    -1.42    -4.78     -200         0    0.088    0.239       800 PhantomSens phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     2.83   -0.961     -198     0.268        0        0         0 PhantomSens initStep
-    1     2.82   -0.956     -198     0.239   0.0294    0.014     0.014 PhantomSens msc
-    2     2.82   -0.953     -198     0.221    0.018  0.00974    0.0238 PhantomSens msc
-    3     2.82   -0.958     -198     0.217  0.00399  0.00868    0.0325 PhantomSens msc
-    4     2.82   -0.965     -198     0.206   0.0107   0.0108    0.0432 PhantomSens msc
-    5     2.82   -0.964     -198      0.19    0.016  0.00948    0.0527 PhantomSens msc
-    6     2.82   -0.964     -198     0.176   0.0138  0.00875    0.0615 PhantomSens msc
-    7     2.82   -0.957     -198     0.163   0.0127   0.0109    0.0724 PhantomSens msc
-    8     2.82   -0.953     -198     0.146   0.0173  0.00879    0.0812 PhantomSens msc
-    9     2.82   -0.948     -198     0.132   0.0137  0.00897    0.0901 PhantomSens msc
-   10     2.83   -0.951     -198     0.113   0.0197   0.0102       0.1 PhantomSens msc
-   11     2.83    -0.95     -198         0    0.113   0.0335     0.134 PhantomSens eIoni
+    0    -1.42    -4.78     -200     0.268        0        0         0 PhantomSens initStep
+    1    -1.41    -4.79     -200         0    0.268    0.128     0.128 PhantomSens eIoni
 >>> Event 4
 
 *********************************************************************************************************
@@ -2573,21 +2582,18 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -1.26     2.25   -1e+03     0.356        0        0         0       World initStep
-    1    -1.26     2.25     -200     0.356        0      800       800 PhantomSens Transportation
-    2    -1.26     2.25     -198     0.356        0        2       802 PhantomSens Transportation
-    3    -1.26     2.25     -196     0.356        0        2       804 PhantomSens Transportation
-    4    -1.26     2.25     -194     0.356        0        2       806 PhantomSens Transportation
-    5    -1.26     2.25     -192     0.356        0        2       808 PhantomSens Transportation
-    6    -1.26     2.25     -191         0    0.088    0.778       809 PhantomSens phot
+    0    -2.79     3.59   -1e+03     0.356        0        0         0       World initStep
+    1    -2.79     3.59     -200     0.356        0      800       800 PhantomSens Transportation
+    2    -2.79     3.59     -198     0.356        0        2       802 PhantomSens Transportation
+    3    -2.79     3.59     -198         0    0.088    0.467       802 PhantomSens phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -1.26     2.25     -191     0.268        0        0         0 PhantomSens initStep
-    1    -1.26     2.25     -191         0    0.268    0.128     0.128 PhantomSens eIoni
+    0    -2.79     3.59     -198     0.268        0        0         0 PhantomSens initStep
+    1    -2.79     3.59     -198         0    0.268    0.128     0.128 PhantomSens eIoni
 >>> Event 5
 
 *********************************************************************************************************
@@ -2595,18 +2601,28 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0      1.5     2.76   -1e+03     0.356        0        0         0       World initStep
-    1      1.5     2.76     -200     0.356        0      800       800 PhantomSens Transportation
-    2      1.5     2.76     -198     0.356        0        2       802 PhantomSens Transportation
-    3      1.5     2.76     -198         0    0.088    0.467       802 PhantomSens phot
+    0     2.33     4.76   -1e+03     0.356        0        0         0       World initStep
+    1     2.33     4.76     -200     0.356        0      800       800 PhantomSens Transportation
+    2     2.33     4.76     -198     0.356        0        2       802 PhantomSens Transportation
+    3     2.33     4.76     -196     0.356        0        2       804 PhantomSens Transportation
+    4     2.33     4.76     -194     0.162        0     1.58       806 PhantomSens compt
+    5     2.39     4.77     -194         0    0.088   0.0919       806 PhantomSens phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0     2.39     4.77     -194    0.0744        0        0         0 PhantomSens initStep
+    1     2.39     4.77     -194         0   0.0744   0.0171    0.0171 PhantomSens eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0      1.5     2.76     -198     0.268        0        0         0 PhantomSens initStep
-    1      1.5     2.76     -198         0    0.268    0.128     0.128 PhantomSens eIoni
+    0     2.33     4.76     -194     0.194        0        0         0 PhantomSens initStep
+    1     2.33     4.76     -194         0    0.194   0.0783    0.0783 PhantomSens eIoni
 >>> Event 6
 
 *********************************************************************************************************
@@ -2614,23 +2630,27 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     -1.4    -3.44   -1e+03     0.356        0        0         0       World initStep
-    1     -1.4    -3.44     -200     0.356        0      800       800 PhantomSens Transportation
-    2     -1.4    -3.44     -198     0.356        0        2       802 PhantomSens Transportation
-    3     -1.4    -3.44     -196     0.356        0        2       804 PhantomSens Transportation
-    4     -1.4    -3.44     -194     0.356        0        2       806 PhantomSens Transportation
-    5     -1.4    -3.44     -192     0.356        0        2       808 PhantomSens Transportation
-    6     -1.4    -3.44     -192         0    0.088    0.112       808 PhantomSens phot
+    0    -2.13    0.304   -1e+03     0.356        0        0         0       World initStep
+    1    -2.13    0.304     -200     0.356        0      800       800 PhantomSens Transportation
+    2    -2.13    0.304     -198     0.356        0        2       802 PhantomSens Transportation
+    3    -2.13    0.304     -197      0.19        0    0.796       803 PhantomSens compt
+    4    -2.38    0.582     -197         0    0.088    0.384       803 PhantomSens phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -2.38    0.582     -197     0.102        0        0         0 PhantomSens initStep
+    1    -2.38    0.581     -197         0    0.102   0.0286    0.0286 PhantomSens eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     -1.4    -3.44     -192     0.268        0        0         0 PhantomSens initStep
-    1    -1.41    -3.45     -192     0.242   0.0263   0.0336    0.0336 PhantomSens msc
-    2    -1.42    -3.45     -192     0.211   0.0303   0.0266    0.0602 PhantomSens msc
-    3    -1.43    -3.45     -192         0    0.211   0.0896      0.15 PhantomSens eIoni
+    0    -2.13    0.304     -197     0.166        0        0         0 PhantomSens initStep
+    1    -2.13    0.303     -197         0    0.166   0.0616    0.0616 PhantomSens eIoni
 >>> Event 7
 
 *********************************************************************************************************
@@ -2638,23 +2658,30 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -0.398    0.422   -1e+03     0.356        0        0         0       World initStep
-    1   -0.398    0.422     -200     0.356        0      800       800 PhantomSens Transportation
-    2   -0.398    0.422     -200         0    0.088   0.0517       800 PhantomSens phot
+    0     1.79     4.09   -1e+03     0.356        0        0         0       World initStep
+    1     1.79     4.09     -200     0.356        0      800       800 PhantomSens Transportation
+    2     1.79     4.09     -198     0.356        0        2       802 PhantomSens Transportation
+    3     1.79     4.09     -196     0.356        0        2       804 PhantomSens Transportation
+    4     1.79     4.09     -194     0.356        0        2       806 PhantomSens Transportation
+    5     1.79     4.09     -192     0.356        0        2       808 PhantomSens Transportation
+    6     1.79     4.09     -190     0.356        0        2       810 PhantomSens Transportation
+    7     1.79     4.09     -188     0.356        0        2       812 PhantomSens Transportation
+    8     1.79     4.09     -186     0.356        0        2       814 PhantomSens Transportation
+    9     1.79     4.09     -184     0.356        0        2       816 PhantomSens Transportation
+   10     1.79     4.09     -182     0.356        0        2       818 PhantomSens Transportation
+   11     1.79     4.09     -180     0.356        0        2       820 PhantomSens Transportation
+   12     1.79     4.09     -178     0.356        0        2       822 PhantomSens Transportation
+   13     1.79     4.09     -177         0    0.088     1.09       823 PhantomSens phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -0.398    0.422     -200     0.268        0        0         0 PhantomSens initStep
-    1   -0.408    0.426     -200     0.252   0.0163   0.0155    0.0155 PhantomSens msc
-    2   -0.412    0.432     -200     0.222   0.0299   0.0109    0.0264 PhantomSens msc
-    3   -0.419    0.436     -200     0.215  0.00629   0.0128    0.0392 PhantomSens msc
-    4   -0.413    0.438     -200     0.195   0.0206    0.014    0.0533 PhantomSens msc
-    5   -0.415    0.445     -200     0.167   0.0274   0.0148    0.0681 PhantomSens msc
-    6   -0.421    0.441     -200     0.119   0.0481   0.0129     0.081 PhantomSens msc
-    7   -0.422    0.441     -200         0    0.119   0.0367     0.118 PhantomSens eIoni
+    0     1.79     4.09     -177     0.268        0        0         0 PhantomSens initStep
+    1      1.8     4.11     -177     0.228   0.0397   0.0274    0.0274 PhantomSens msc
+    2     1.81     4.11     -177      0.21   0.0181    0.021    0.0484 PhantomSens msc
+    3     1.81     4.11     -177         0     0.21   0.0888     0.137 PhantomSens eIoni
 >>> Event 8
 
 *********************************************************************************************************
@@ -2662,23 +2689,23 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -2.42     3.57   -1e+03     0.356        0        0         0       World initStep
-    1    -2.42     3.57     -200     0.356        0      800       800 PhantomSens Transportation
-    2    -2.42     3.57     -198     0.356        0        2       802 PhantomSens Transportation
-    3    -2.42     3.57     -196         0    0.088     1.64       804 PhantomSens phot
+    0    -2.22   -0.559   -1e+03     0.356        0        0         0       World initStep
+    1    -2.22   -0.559     -200     0.356        0      800       800 PhantomSens Transportation
+    2    -2.22   -0.559     -198     0.356        0        2       802 PhantomSens Transportation
+    3    -2.22   -0.559     -197         0    0.088     1.15       803 PhantomSens phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -2.42     3.57     -196     0.268        0        0         0 PhantomSens initStep
-    1    -2.41     3.56     -196         0    0.268    0.128     0.128 PhantomSens eIoni
+    0    -2.22   -0.559     -197     0.268        0        0         0 PhantomSens initStep
+    1    -2.21   -0.562     -197         0    0.268    0.128     0.128 PhantomSens eIoni
 >>> Event 9
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0s Real=0s Sys=0.01s
+  User=0s Real=0s Sys=0s
 =============================================================
  Number of event processed : 10
 =============================================================
