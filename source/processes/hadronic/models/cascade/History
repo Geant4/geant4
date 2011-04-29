@@ -15,6 +15,71 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+27 April 2011 Michael Kelsey (hadr-casc-V09-04-09)
+--------------------------------------------------
+- G4InuclNuclei.cc:  Remove preface about "non-standard PDGencoding," since
+  particles-V09-04-01 has removed the corresponding warning messages.
+
+15 April 2011 Michael Kelsey
+----------------------------
+- G4ParticleLargerEkin.hh, G4ParticleLargerBeta.hh: Add interfaces to do
+  sorting of G4CascadParticles, needed for initial setup of ::Propagate().
+
+- G4IntraNucleiCascader.cc:  In ::copySecondaries(), sort list by kinetic
+  energy.
+
+13 April 2011 Michael Kelsey (hadr-casc-V09-04-08, hadr-casc-V09-03-88)
+-----------------------------------------------------------------------
+- G4ElementaryParticleCollider.cc:  For 2-body scattering, adjust test to term1
+  to avoid divide-by-zero errors (see 19 Jan 2011, tag -00).
+
+13 April 2011 Michael Kelsey
+----------------------------
+- G4NucleiModel:  Encapsulate trailing effect test in ::passTrailing().
+
+13 April 2011 Michael Kelsey (hadr-casc-V09-04-07)
+--------------------------------------------------
+Deploying operational rescattering.  This code requires modifications to
+G4VIntraNuclearTransportModel.hh and G4TheoFSGenerator.hh which are included
+in the geant4-09-04-ref-03 build.
+
+NOTE:  In testing, some input cascades lead to nuclei with excessive
+excitation energy; this code should not be used in production.
+
+- G4CascadeInterface.cc: Add construction of bullet from cached copy of
+  original projectile, saved by G4TheoFSGenerator.
+
+- G4InuclCollider.cc:  Adjust diagnostic messages in ::rescatter() to match
+  those in ::collide().
+
+- G4IntraNucleiCascader.cc:  Reduce number of retries from 1000 to 100.
+
+28 March 2011 Michael Kelsey
+----------------------------
+- G4CascadeCheckBalance.hh:  Add non-limit ctor and explicit limit setting.
+- G4CascadeInterface.cc:  Set internal E/p limits to match Gunter's below
+  (currently 5% and 10 MeV, want to make them tighter).
+
+28 March 2011 Gunter Folger
+----------------------------
+- Set up for E/p checking by G4HadronicProcess in ctor of G4CascadeInterface.
+
+24 March 2011 Michael Kelsey
+----------------------------
+- G4NucleiModel:  Add optional argument to reset() with list of collision
+  points, for copying cascade state when rescattering.
+
+- G4IntraNucleiCascader:  Add list of hit-nucleon locations, filled by
+  copyWoundedNucleus() for initialization of G4NucleiModel (above).
+
+24 March 2011 Dennis Wright (hadr-casc-V09-04-06)
+-------------------------------------------------
+- G4NucleiModel - add trailing effect
+
+23 March 2011 Michael Kelsey
+----------------------------
+- G4CollisionOutput.hh:  Add non-const accessors for lists.
+
 21 March 2011 Michael Kelsey (hadr-casc-V09-04-03-01, -V09-04-05)
 --------------------------------------------------
 Fixes for compiler warnings (and one error on Windows).  The -03-01 tag
