@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-01    (17-December-2010)
+ Geant4 version Name: geant4-09-04-ref-04    (30-April-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -95,7 +95,7 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            LowEnBrem :   Emin=        0 eV       Emax=          1 GeV
             eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
@@ -110,10 +110,10 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
+            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
@@ -386,13 +386,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=6.09s Real=8.92s Sys=2.84s
+  User=5.98s Real=9.15s Sys=3.16s
 
  ======================== run summary ======================
 
  The run was 100000 e- of 100 MeV through 20 um  of Silicon (density: 2.33 g/cm3 )
 
- Total energy deposit in absorber per event = 6.486 keV +- 16.59 eV 
+ Total energy deposit in absorber per event = 6.486 keV +- 16.52 eV 
 
  -----> Mean dE/dx = 3.243 MeV/cm	(1.392 MeV*cm2/g)
 
@@ -400,31 +400,31 @@ Run Summary
    restricted dEdx = 3.016 MeV/cm	(1.295 MeV*cm2/g)
    full dEdx       = 13.55 MeV/cm	(5.817 MeV*cm2/g)
 
- Leakage :  primary = 99.97 MeV +- 2.833 keV   secondaries = 21.63 keV +- 2.833 keV
+ Leakage :  primary = 99.97 MeV +- 2.882 keV   secondaries = 22.52 keV +- 2.882 keV
  Energy balance :  edep + eleak = 100 MeV
 
- Total track length (charged) in absorber per event = 20.28 um  +- 8.028 nm 
- Total track length (neutral) in absorber per event = 28.56 nm  +- 1.909 nm 
+ Total track length (charged) in absorber per event = 20.27 um  +- 7.979 nm 
+ Total track length (neutral) in absorber per event = 30.5 nm  +- 1.979 nm 
 
- Number of steps (charged) in absorber per event = 4.135 +- 8.96e-06
- Number of steps (neutral) in absorber per event = 0.00328 +- 8.96e-06
+ Number of steps (charged) in absorber per event = 4.134 +- 8.932e-06
+ Number of steps (neutral) in absorber per event = 0.00338 +- 8.932e-06
 
- Number of secondaries per event : Gammas = 0.00328;   electrons = 0.01802;   positrons = 0
+ Number of secondaries per event : Gammas = 0.00338;   electrons = 0.01789;   positrons = 0
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
 
  Number of events with the primary particle reflected = 0 %
- Number of events with at least  1 particle reflected (same charge as primary) = 0.166 %
+ Number of events with at least  1 particle reflected (same charge as primary) = 0.162 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 1.415 mrad (central part only)
+  rms proj angle of transmit primary particle = 1.416 mrad (central part only)
   computed theta0 (Highland formula)          = 1.342 mrad
-  central part defined as +- 4.026 mrad;   Tail ratio = 0.6785 %
+  central part defined as +- 4.026 mrad;   Tail ratio = 0.676 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2138099454, 211626723
+ Current couple of seeds = 1313491681, 1189173609
 ----------------------------------------
 #
 /testem/det/setAbsMat Gold
@@ -488,7 +488,7 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            LowEnBrem :   Emin=        0 eV       Emax=          1 GeV
             eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
@@ -503,10 +503,10 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
+            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
@@ -758,7 +758,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2138099454, 211626723
+ Current couple of seeds = 1313491681, 1189173609
 ----------------------------------------
 Start Run processing.
 
@@ -784,13 +784,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=6.37s Real=9.32s Sys=2.95s
+  User=5.88s Real=8.5s Sys=2.61s
 
  ======================== run summary ======================
 
  The run was 100000 e- of 15.7 MeV through 9.66 um  of Gold (density: 19.3 g/cm3 )
 
- Total energy deposit in absorber per event = 18.68 keV +- 48.26 eV 
+ Total energy deposit in absorber per event = 18.68 keV +- 48.5 eV 
 
  -----> Mean dE/dx = 19.34 MeV/cm	(1.001 MeV*cm2/g)
 
@@ -798,31 +798,31 @@ Run Summary
    restricted dEdx = 17.93 MeV/cm	(0.9278 MeV*cm2/g)
    full dEdx       = 60.88 MeV/cm	(3.151 MeV*cm2/g)
 
- Leakage :  primary = 15.64 MeV +- 1.476 keV   secondaries = 39.02 keV +- 1.471 keV
+ Leakage :  primary = 15.64 MeV +- 1.447 keV   secondaries = 37.91 keV +- 1.442 keV
  Energy balance :  edep + eleak = 15.7 MeV
 
- Total track length (charged) in absorber per event = 9.934 um  +- 8.565 nm 
- Total track length (neutral) in absorber per event = 134.7 nm  +- 4.554 nm 
+ Total track length (charged) in absorber per event = 9.941 um  +- 8.837 nm 
+ Total track length (neutral) in absorber per event = 131.2 nm  +- 4.55 nm 
 
- Number of steps (charged) in absorber per event = 5.157 +- 9.255e-06
- Number of steps (neutral) in absorber per event = 0.029 +- 9.255e-06
+ Number of steps (charged) in absorber per event = 5.159 +- 9.4e-06
+ Number of steps (neutral) in absorber per event = 0.02867 +- 9.4e-06
 
- Number of secondaries per event : Gammas = 0.02884;   electrons = 0.02225;   positrons = 0
+ Number of secondaries per event : Gammas = 0.02851;   electrons = 0.02268;   positrons = 0
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
 
  Number of events with the primary particle reflected = 0 %
- Number of events with at least  1 particle reflected (same charge as primary) = 0.25 %
+ Number of events with at least  1 particle reflected (same charge as primary) = 0.251 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 35.28 mrad (central part only)
+  rms proj angle of transmit primary particle = 35.23 mrad (central part only)
   computed theta0 (Highland formula)          = 35.1 mrad
   central part defined as +- 105.3 mrad;   Tail ratio = 0.4455 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 351490571, 2121700005
+ Current couple of seeds = 2145307248, 655631084
 ----------------------------------------
 #
 /testem/phys/setCuts 10 um

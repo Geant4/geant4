@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-01    (17-December-2010)
+ Geant4 version Name: geant4-09-04-ref-04    (30-April-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -108,7 +108,7 @@ conv:   for  gamma    SubType= 14
 Rayl:   for  gamma    SubType= 11
       Lambda tables from 10 eV  to 10 TeV in 200 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel :   Emin=        0 eV       Emax=         10 TeV
+   LivermoreRayleigh :   Emin=        0 eV       Emax=        100 GeV
 
 msc:   for e-    SubType= 10
       Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
@@ -126,10 +126,10 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
       Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
+            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -141,10 +141,10 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
       Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
+            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
       Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
@@ -381,20 +381,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.21s Real=2.22s Sys=0s
+  User=1.82s Real=1.83s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.28997 +- 0.0149916  microns 
-    CSDA  Range  in absorber = 9.21333 +- 0.0146016  microns 
+    Track Length in absorber = 9.24991 +- 0.0153262  microns 
+    CSDA  Range  in absorber = 9.17091 +- 0.0152434  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.230966 +- 0.0149916 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.344332 +- 0.0146016 microns 
+    Track Length (G4 - ICRU49) = 0.19091 +- 0.0153262 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.301914 +- 0.0152434 microns 
 
-Average Number electrons per event = 229.439
+Average Number electrons per event = 228.722
 Average Number photons per event   = 0
 
 #/tracking/verbose 0
@@ -421,23 +421,22 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ### Run 1 start.
 Start Run processing.
-EvtNo= 339  length= 0.0129776  xend= 0.000834163
-EvtNo= 480  length= 0.0143743  xend= 0.00522899
-EvtNo= 567  length= 0.0127174  xend= 0.000976527
-EvtNo= 604  length= 0.012186  xend= 0.00112419
+EvtNo= 136  length= 0.0153598  xend= 0.00323648
+EvtNo= 181  length= 0.0151205  xend= 0.00142619
+EvtNo= 675  length= 0.0130337  xend= 0.00500224
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.72s Real=2.73s Sys=0s
+  User=2.23s Real=2.23s Sys=0s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 996 for anti_proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 13.0332 +- 0.0291212  microns 
-    CSDA  Range  in absorber = 11.651 +- 0.014445  microns 
+ end of Run TotNbofEvents = 997 for anti_proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
+    Track Length in absorber = 13.2739 +- 0.0395466  microns 
+    CSDA  Range  in absorber = 11.6653 +- 0.0153098  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
-Average Number electrons per event = 274.426
+Average Number electrons per event = 273.987
 Average Number photons per event   = 0
 
 #
@@ -464,7 +463,7 @@ conv:   for  gamma    SubType= 14
 Rayl:   for  gamma    SubType= 11
       Lambda tables from 10 eV  to 10 TeV in 200 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel :   Emin=        0 eV       Emax=         10 TeV
+   LivermoreRayleigh :   Emin=        0 eV       Emax=        100 GeV
 
 msc:   for e-    SubType= 10
       Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
@@ -482,10 +481,10 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
       Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
+            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -497,10 +496,10 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
       Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
+            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
       Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
@@ -734,16 +733,16 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ### Run 2 start.
 Start Run processing.
-EvtNo= 552  length= 0.008  xend= 0.0011042
+EvtNo= 831  length= 0.008  xend= 0.000191159
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.11s Real=0.1s Sys=0s
+  User=0.08s Real=0.08s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 999 for C12[0.0] with Ekin = 6 MeV p= 366.244 MeV/c
-    Track Length in absorber = 8.2231 +- 0.010789  microns 
-    CSDA  Range  in absorber = 8.07835 +- 0.00981322  microns 
+    Track Length in absorber = 8.21369 +- 0.0106555  microns 
+    CSDA  Range  in absorber = 8.07564 +- 0.00947642  microns 
 
     Energy deposit in absorber = 6  MeV 
 
@@ -778,7 +777,7 @@ conv:   for  gamma    SubType= 14
 Rayl:   for  gamma    SubType= 11
       Lambda tables from 10 eV  to 10 TeV in 200 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel :   Emin=        0 eV       Emax=         10 TeV
+   LivermoreRayleigh :   Emin=        0 eV       Emax=        100 GeV
 
 msc:   for e-    SubType= 10
       Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
@@ -800,10 +799,10 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
       Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
+            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -815,10 +814,10 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
       Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
+            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
       Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
@@ -1052,24 +1051,25 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ### Run 3 start.
 Start Run processing.
+EvtNo= 407  length= 0.00953856  xend= 0.00265964
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.04s Real=3.04s Sys=0s
+  User=2.31s Real=2.31s Sys=0s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.32295 +- 0.0159397  microns 
-    CSDA  Range  in absorber = 9.24624 +- 0.0156622  microns 
+ end of Run TotNbofEvents = 999 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
+    Track Length in absorber = 9.29093 +- 0.0153225  microns 
+    CSDA  Range  in absorber = 9.21056 +- 0.0154192  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.263949 +- 0.0159397 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.377238 +- 0.0156622 microns 
+    Track Length (G4 - ICRU49) = 0.231934 +- 0.0153225 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.341555 +- 0.0154192 microns 
 
-Average Number electrons per event = 229.261
-Average Number photons per event   = 0.014
+Average Number electrons per event = 229.242
+Average Number photons per event   = 0.01001
 
 #
 /process/em/auger true
@@ -1095,25 +1095,24 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ### Run 4 start.
 Start Run processing.
-EvtNo= 721  length= 0.00933614  xend= 0.00374099
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.04s Real=3.05s Sys=0s
+  User=2.32s Real=2.32s Sys=0s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 999 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.31727 +- 0.0155688  microns 
-    CSDA  Range  in absorber = 9.24191 +- 0.0151592  microns 
+ end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
+    Track Length in absorber = 9.30242 +- 0.0158508  microns 
+    CSDA  Range  in absorber = 9.22474 +- 0.0154199  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.258274 +- 0.0155688 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.372907 +- 0.0151592 microns 
+    Track Length (G4 - ICRU49) = 0.243424 +- 0.0158508 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.355741 +- 0.0154199 microns 
 
-Average Number electrons per event = 230.755
-Average Number photons per event   = 0.016016
+Average Number electrons per event = 231.634
+Average Number photons per event   = 0.018
 
 #
 G4 kernel has come to Quit state.

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-01    (17-December-2010)
+ Geant4 version Name: geant4-09-04-ref-04    (30-April-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -77,10 +77,10 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
+            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -92,10 +92,10 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
+            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
@@ -376,7 +376,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0.01s Sys=0s
 /vis/show/view
     1000.000           1           0     Na24[0.0]
          347           1    4.61e+04     e-
@@ -427,7 +427,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /vis/show/view
        1e+03           1           0     Ne24[0.0]
          899           1       144.8     e-
@@ -435,13 +435,13 @@ Run Summary
       0.0216           1       144.8     Na24[472.2]
          472           1       144.9     gamma
            0           1       144.9     Na24[0.0]
-         324           1   9.632e+04     e-
-    1.07e+03           1   9.632e+04     anti_nu_e
-      0.0163           1   9.632e+04     Mg24[4122.9]
-    2.75e+03           1   9.632e+04     gamma
-           0           1   9.632e+04     Mg24[1368.7]
-    1.37e+03           1   9.632e+04     gamma
-           0           1   9.632e+04     Mg24[0.0]
+         980           1   9.905e+04     e-
+         411           1   9.905e+04     anti_nu_e
+      0.0259           1   9.905e+04     Mg24[4122.9]
+    2.75e+03           1   9.905e+04     gamma
+           0           1   9.905e+04     Mg24[1368.7]
+    1.37e+03           1   9.905e+04     gamma
+           0           1   9.905e+04     Mg24[0.0]
 
 #
 #
@@ -486,23 +486,23 @@ Run Summary
   User=0s Real=0s Sys=0s
 /vis/show/view
        1e+03           1           0     F24[0.0]
-     8.9e+03           1      0.5982     e-
-    3.81e+03           1      0.5982     anti_nu_e
-        3.85           1      0.5982     Ne24[1981.6]
-    1.98e+03           1      0.5982     gamma
-           0           1      0.5982     Ne24[0.0]
-    1.67e+03           1        27.7     e-
-         328           1        27.7     anti_nu_e
-      0.0794           1        27.7     Na24[472.2]
-         472           1       27.75     gamma
-           0           1       27.75     Na24[0.0]
-         215           1   5.279e+04     e-
-    1.18e+03           1   5.279e+04     anti_nu_e
-      0.0286           1   5.279e+04     Mg24[4122.9]
-    2.75e+03           1   5.279e+04     gamma
-           0           1   5.279e+04     Mg24[1368.7]
-    1.37e+03           1   5.279e+04     gamma
-           0           1   5.279e+04     Mg24[0.0]
+    4.38e+03           1      0.8139     e-
+    8.34e+03           1      0.8139     anti_nu_e
+        1.32           1      0.8139     Ne24[1981.6]
+    1.98e+03           1      0.8139     gamma
+           0           1      0.8139     Ne24[0.0]
+    1.67e+03           1       27.91     e-
+         328           1       27.91     anti_nu_e
+      0.0794           1       27.91     Na24[472.2]
+         472           1       27.91     gamma
+           0           1       27.91     Na24[0.0]
+         493           1   2.088e+04     e-
+         898           1   2.088e+04     anti_nu_e
+      0.0578           1   2.088e+04     Mg24[4122.9]
+    2.75e+03           1   2.088e+04     gamma
+           0           1   2.088e+04     Mg24[1368.7]
+    1.37e+03           1   2.088e+04     gamma
+           0           1   2.088e+04     Mg24[0.0]
 
 #
 #
@@ -544,18 +544,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /vis/show/view
        1e+03           1           0     Al24[0.0]
-    3.58e+03           1       1.364     e+
-         511           1       1.364     gamma
-         511           1       1.364     gamma
-         841           1       1.364     nu_e
-       0.379           1       1.364     Mg24[8439.3]
-    7.07e+03           1       1.364     gamma
-           0           1       1.364     Mg24[1368.7]
-    1.37e+03           1       1.364     gamma
-           0           1       1.364     Mg24[0.0]
+         798           1       1.777     e+
+         511           1       1.777     gamma
+         511           1       1.777     gamma
+    3.62e+03           1       1.777     nu_e
+       0.298           1       1.777     Mg24[8439.3]
+    7.07e+03           1       1.777     gamma
+           0           1       1.777     Mg24[1368.7]
+    1.37e+03           1       1.777     gamma
+           0           1       1.777     Mg24[0.0]
 
 #
 #
@@ -600,15 +600,15 @@ Run Summary
   User=0s Real=0s Sys=0s
 /vis/show/view
        1e+03           1           0     Na24[472.0]
-         472           1      0.0571     gamma
-           0           1      0.0571     Na24[0.0]
-         958           1   1.742e+05     e-
-         433           1   1.742e+05     anti_nu_e
-      0.0319           1   1.742e+05     Mg24[4122.9]
-    2.75e+03           1   1.742e+05     gamma
-           0           1   1.742e+05     Mg24[1368.7]
-    1.37e+03           1   1.742e+05     gamma
-           0           1   1.742e+05     Mg24[0.0]
+         472           1     0.03616     gamma
+           0           1     0.03616     Na24[0.0]
+         347           1   1.914e+04     e-
+    1.04e+03           1   1.914e+04     anti_nu_e
+       0.057           1   1.914e+04     Mg24[4122.9]
+    2.75e+03           1   1.914e+04     gamma
+           0           1   1.914e+04     Mg24[1368.7]
+    1.37e+03           1   1.914e+04     gamma
+           0           1   1.914e+04     Mg24[0.0]
 
 #
 #
@@ -653,16 +653,16 @@ Run Summary
   User=0s Real=0s Sys=0s
 /vis/show/view
        1e+03           1           0     Cr46[0.0]
-    3.78e+03           1      0.1119     e+
-         511           1      0.1119     gamma
-         511           1      0.1119     gamma
-     2.8e+03           1      0.1119     nu_e
-      0.0583           1      0.1119     V46[0.0]
-    3.99e+03           1      0.3346     e+
-         511           1      0.3346     gamma
-         511           1      0.3346     gamma
-    2.04e+03           1      0.3346     nu_e
-       0.286           1      0.3346     Ti46[0.0]
+         537           1      0.5212     e+
+         511           1      0.5212     gamma
+         511           1      0.5212     gamma
+    6.04e+03           1      0.5212     nu_e
+       0.348           1      0.5212     V46[0.0]
+     1.9e+03           1      0.9517     e+
+         511           1      0.9517     gamma
+         511           1      0.9517     gamma
+    4.13e+03           1      0.9517     nu_e
+       0.181           1      0.9517     Ti46[0.0]
 
 #
 #
@@ -707,8 +707,8 @@ Run Summary
   User=0s Real=0.01s Sys=0s
 /vis/show/view
        1e+03           1           0     Po215[0.0]
-    7.39e+03           1     0.00267     alpha
-         140           1     0.00267     Pb211[0.0]
+    7.39e+03           1    0.008203     alpha
+         140           1    0.008203     Pb211[0.0]
 
 Graphics systems deleted.
 Visualization Manager deleting...

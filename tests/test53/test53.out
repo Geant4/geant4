@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-00    (17-December-2010)
+ Geant4 version Name: geant4-09-04-ref-04    (30-April-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -12,8 +12,8 @@
 
 /run/verbose 2
 #
-/testem/phys/addPhysics empenelope
-#/testem/phys/addPhysics  emlivermore
+#/testem/phys/addPhysics  empenelope
+/testem/phys/addPhysics emlivermore_pol
 #/testem/phys/addPhysics  emstandard
 #/testem/phys/addPhysics  emstandard_opt3
 #
@@ -48,14 +48,17 @@ physicsList->Construct() start.
 physicsList->Construct() start.
 ### G4GoudsmitSaundersonTable loading PDF data
 ### G4GoudsmitSaundersonMscModel loading ELSEPA data
+Livermore Polarized PhotoElectric is constructed 
+Energy range: 0.25 keV - 100 GeV
+Livermore Polarized GammaConversion is constructed 
+Energy range: 1022 keV - 100 GeV
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 mm 
 /process/eLoss/verbose 1
 #
-/gun/particle e-
-#/gun/energy 10 MeV
-/gun/energy 1 GeV
+/gun/particle gamma
+/gun/energy 10 MeV
 #
 /testem/histo/setFileName testem3
 /testem/histo/setFileType root
@@ -76,28 +79,32 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /testem/event/printModulo 50
 #
 /run/beamOn 100
+Livermore Polarized PhotoElectric model is initialized 
+Energy range: 0.25 keV - 1 GeV
+Livermore Polarized GammaConversion model is initialized 
+Energy range: 1022 keV - 1 GeV
 
 phot:   for  gamma    SubType= 12
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        PenPhotoElec :   Emin=        0 eV       Emax=          1 GeV
+LivermorePolarizedPhotoElectric :   Emin=        0 eV       Emax=          1 GeV
        PhotoElectric :   Emin=        1 GeV      Emax=         10 TeV
 
 compt:   for  gamma    SubType= 13
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          PenCompton :   Emin=        0 eV       Emax=          1 GeV
+LivermorePolarizedCompton :   Emin=        0 eV       Emax=          1 GeV
        Klein-Nishina :   Emin=        1 GeV      Emax=         10 TeV
 
 conv:   for  gamma    SubType= 14
       Lambda tables from 1.022 MeV to 10 TeV in 220 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PenConversion :   Emin=        0 eV       Emax=        100 GeV
-        BetheHeitler :   Emin=      100 GeV      Emax=         10 TeV
+LivermorePolarizedGammaConversion :   Emin=        0 eV       Emax=          1 GeV
+        BetheHeitler :   Emin=        1 GeV      Emax=         10 TeV
 
 Rayl:   for  gamma    SubType= 11
       Lambda tables from 100 eV  to 10 TeV in 200 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         PenRayleigh :   Emin=        0 eV       Emax=          1 GeV
+LivermorePolarizedRayleigh :   Emin=        0 eV       Emax=          1 GeV
    LivermoreRayleigh :   Emin=        1 GeV      Emax=        100 GeV
 
 msc:   for e-    SubType= 10
@@ -111,15 +118,15 @@ eIoni:   for  e-    SubType= 2
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        PenelopeIoni :   Emin=        0 eV       Emax=          1 GeV
-        MollerBhabha :   Emin=        1 GeV      Emax=         10 TeV
+       LowEnergyIoni :   Emin=        0 eV       Emax=          1 MeV
+        MollerBhabha :   Emin=        1 MeV      Emax=         10 TeV
 
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        PenelopeBrem :   Emin=        0 eV       Emax=          1 GeV
+           LowEnBrem :   Emin=        0 eV       Emax=          1 GeV
             eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
 
 eIoni:   for  e+    SubType= 2
@@ -127,22 +134,20 @@ eIoni:   for  e+    SubType= 2
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        PenelopeIoni :   Emin=        0 eV       Emax=          1 GeV
-        MollerBhabha :   Emin=        1 GeV      Emax=         10 TeV
+        MollerBhabha :   Emin=        0 eV       Emax=         10 TeV
 
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
+      LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        PenelopeBrem :   Emin=        0 eV       Emax=          1 GeV
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
+            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            PenAnnih :   Emin=        0 eV       Emax=          1 GeV
-            eplus2gg :   Emin=        1 GeV      Emax=         10 TeV
+            eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
@@ -194,7 +199,7 @@ nuclearStopping:   for  alpha    SubType= 1
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=          2 MeV
           BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
@@ -208,42 +213,18 @@ msc:   for kaon+    SubType= 10
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=    1.05231 MeV
           BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
 
-hBrems:   for  kaon+    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :   Emin=        0 eV       Emax=         10 TeV
-
-hPairProd:   for  kaon+    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :   Emin=        0 eV       Emax=         10 TeV
-
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=    1.05231 MeV
           BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
-
-hBrems:   for  kaon-    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :   Emin=        0 eV       Emax=         10 TeV
-
-hPairProd:   for  kaon-    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :   Emin=        0 eV       Emax=         10 TeV
 
 muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
@@ -413,29 +394,29 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=10.23s Real=10.39s Sys=0.02s
+  User=0.1s Real=0.11s Sys=0.01s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 764.31 MeV :  39.25 MeV     5.136 +- 0.5136 %      54.7 cm  +- 2.87 cm 
-   liquidArgon: 205.81 MeV :  17.83 MeV     8.661 +- 0.8661 %      1.02 m   +- 8.95 cm 
+          Lead: 8.2179 MeV :  1.663 MeV     2.024 +- 0.2024 %      5.89 mm  +- 1.25 mm 
+   liquidArgon: 1.6026 MeV :  1.602 MeV     9.994 +- 0.9994 %      8.09 mm  +-  8.5 mm 
 
 ------------------------------------------------------------
- Beam particle e-  E = 1 GeV
+ Beam particle gamma  E = 10 MeV
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 764.308 MeV
-liquidArgon:	 205.814 MeV
+      Lead:	 8.21787 MeV
+liquidArgon:	 1.60261 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1552660085, 1259452458
+ Current couple of seeds = 2126619641, 1495081193
 ----------------------------------------
 #
 #/run/particle/storePhysicsTable data_stand
