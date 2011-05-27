@@ -1,0 +1,166 @@
+$Id:
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            test67
+                            -------
+  
+ This test implements the Monte Carlo intercomparison exercise 
+ described in 
+  T. Vidmar et al., Appl. Rad. Iso. 66 (2008) 764-766
+ The program calculates the full-peak efficiency of a Germanium 
+ detector for different incident gamma radiation. The geometry is 
+ simplified but anyway is a realistic description of a real-life 
+ germanium detector for gamma spectroscopy. The purpose 
+ is to compare results obtained with different EM models of Geant4 
+ with those from the reference paper and to quantify changes 
+ in EM models at each Geant4 release. 
+	
+ 1- GEOMETRY DEFINITION
+ 
+  Two different configurations have been implemented, that are labeled 
+  as "geometry2" and "geometry3" in the original paper. Geometry can be 
+  switched at run-time via the command
+   /testem/geometry/geometryType 2
+   /testem/geometry/geometryType 3
+
+  The two geometries have the same detector and differ for the source 
+  configuration.
+  The Germanium crystal (rho=5.323 g/cm3) is a cylinder with radius 30 mm 
+  and height 60 mm. The crystal has a 1 mm top dead layer and 1 mm side dead 
+  layer. The central borehole is 40 mm in length and 10 mm in diameter, drilled 
+  on the bottom side of the crystal. The crystal is encased in an aluminum 
+  housing (density: 2.7 g/cm3) with thickness 1 mm and dimensions 70mm diameter 
+  and 70 mm height. The distance between the crystal and the housing is 4 mm on 
+  all sides. The space around the housing if free of any substance (vacuum)
+	
+  In the geometry #2 the source is a point-like source located 5 mm above 
+  the Al housing and on the crystal symmetry axis.
+  In the geometry #3 the point source is replaced by an extended source in 
+  the form of a water cylinder with an artificial density of 3.0 g/cm3, a 
+  diameter of 90 mm and a thickness of 40 mm. The closest distance between 
+  the extended source and the detector housing is 5 mm. The extended source 
+  has no container.
+
+	    
+ 2- PHYSICS LISTS
+ 
+    The global physics list used in the test contains: Electromagnetic 
+    Physics and Decay physics. 
+    Decay physics is from the G4 kernel G4DecayPhysics().
+
+    The builders for the EM part can be local (eg. in this example) or 
+    from G4 kernel physics_list/ subdirectory.
+         
+    From geant4/source/physics_lists/builders:	 
+    - "emstandard"      recommended standard EM physics for LHC
+    - "emstandard_opt1" best CPU performance standard physics for LHC
+    - "emstandard_opt2"     
+    - "emstandard_opt3" 
+    - "emlivermore" 
+    - "empenelope" (Penelope physics, v2008)
+    - "penelope08" (alias of "empenelope") 
+    
+    Local physics builders:	 
+    - "penelope01"      low-energy EM physics with Penelope01 models
+			(obsolete, will be deleted in the future)
+    - "penelopelocal"   same Penelope v2008 models as "empenelope",
+	                but implemented as a local physics list
+	
+    Physics lists and options can be (re)set with UI commands. The 
+    
+    The default cut which is used for all particles is 0.01 mm.
+        	    
+ 3- AN EVENT : THE PRIMARY GENERATOR
+ 
+  The primary kinematic consists of a single particle with isotropic angular 
+  distribution. The default primary is a gamma ray, but it can be changed 
+  interactively via the UI commands 
+   /gun/particle
+  The primary energy can be also changed interactively 
+   /gun/energy
+  the default being 1 MeV.
+
+  The starting position of the primary particle depends on the geometry 
+  configuration (geometry#2 and #3, as listed in Sect. 1). For geometry #2, 
+  a point-like source is considered in the appropriate position. For 
+  geometry #3 the position is sampled uniformly over the extended source 
+  volume. In all cases, the angular distribution is isotropic, to simulate 
+  a typical gamma-ray emission in a radioactive decay.
+ 	
+  A RUN is a set of events.
+  
+  test67 computes the energy deposited in the active Ge volume and produces 
+  and energy spectrum. It also calculates, for each run, the fraction of 
+  events in which the deposited energy is equal (within 0.1%) to the full 
+  primary energy. This corresponds to the detector efficiency vs. energy 
+  which is quoted in the benchmark paper
+	T. Vidmar et al., Appl. Rad. Iso. 66 (2008) 764-766
+ 	
+  The output is written in a text file, which 
+  contains (one line per each run): 
+   energy (keV)
+   fraction of full-energy events (= detector efficiency)
+   statistical uncertainity on the detector efficiency
+			
+  The file in named after the geant4 version (taken from 
+  G4Version) and the name of the EM builders which is being 
+  used. For example, geant4-09-04-ref-01_empenelope.dat.
+
+ 4- VISUALIZATION
+ 
+  The Visualization Manager is set in the main().
+  The initialisation of the drawing is done via the commands :
+  /vis/... in the macro vis.mac. In interactive session:
+  Idle > /control/execute vis.mac
+  Notice that visualization is not available in batch mode 
+  (namely, it is not possible to run as 
+    % test67 vis.mac 	
+  because the G4VisExecutive is not instantiated).
+
+  The default view is a geometry#3
+ 	 	 	
+ 5- HOW TO START ?
+ 
+  - compile and link to generate an executable
+ 	% cd test67
+ 	% gmake
+ 		
+  - execute test67 in 'batch' mode from macro files
+ 	% test67 test67.in
+ 		
+  - execute test67 in 'interactive mode' with visualization
+ 	% test67
+ 	....
+ 	Idle> type your commands. For instance:
+        Idle> /control/execute vis.mac
+ 	Idle> /control/execute test67.in
+ 	....
+ 	Idle> exit
+ 	
+ 6- HISTOGRAMS
+test67 can produce histograms and output in ROOT format. In order to use the ROOT 
+facilities, the environment variable ROOTSYS must be set. If it is not set, only 
+an ASCII file with the run summary (full peak efficiency) will be created, as 
+described in Sect. 3.
+
+The ROOT file has a name given by the Geant4 version used for the run and the EM 
+physics which was chosen, e.g. geant4-09-04-ref-00_empenelope.root. The file contains:
+- one histogram (TH1D) per each run. The histogram has upper limit equal to the full 
+energy of the incoming primary particle (+ 10 keV for tolerance) and 0.5 keV/bin. 
+Energy scales are always in keV.
+- two TObjString objects storing the G4Version which was used for the run and the choice 
+of EM physics, respectively
+- two TGraphErrors object with the peak efficiency profile vs. energy and the 
+total efficiency profile vs. energy, respectively. One point per run is provided. 
+- a TTree. The Branches of the Tree are: primary energy (keV), peak efficiency (in %) 
+with the corresponding error, full efficiency (in %) with the corresponding 
+uncertainty, average number of fluorescence gammas generate by photo-electric effect, 
+e+/e- ionisation and Compton scattering (normalized per primary event). One entry 
+per run is provided.
+
+
+:::::

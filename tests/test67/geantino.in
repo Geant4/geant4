@@ -1,0 +1,28 @@
+#
+# This macro shoots a geantino through the z-axis 
+# from the top to the bottom of the setup. Geometry 
+# number 3 is used. High verbosity in tracking
+#
+/testem/geometry/geometryType 3
+/control/verbose 0
+/run/verbose 0
+#
+/testem/phys/addPhysics  empenelope
+#/testem/phys/addPhysics  penelope01
+#/testem/phys/addPhysics  emlivermore
+#/testem/phys/addPhysics  emstandard
+#/testem/phys/addPhysics  emstandard_opt3
+#
+/run/initialize
+#
+/gun/particle geantino
+#
+/tracking/verbose 0
+/testem/event/printModulo 1000
+#
+/gun/position 0 0 20 cm
+/gun/direction 0 0 -1
+/tracking/verbose 1
+#
+/run/beamOn 1
+

@@ -1,0 +1,41 @@
+$Id:  $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    test67 History file
+                    --------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+27-May-2011 L. Pandola (test67-V09-04-05)
+	    Fix compilation problem on Windows which caused the 
+	    rejection of tag test67-V09-04-04
+
+25-May-2011 L. Pandola (test67-V09-04-04)
+	    Update to tag emlowen-V09-04-36, where v2008 is the default 
+            for Penelope models and v2001 is the (obsolete) alternative. 
+            Changed physics lists, README and macros accordingly. 
+
+25-May-2011 L. Pandola (test67-V09-04-03)
+	    Improve coding according to Gunter's suggestions
+	    
+04-May-2011 L. Pandola (test67-V09-04-02)
+	    Edit EventAction.cc to get rid of a valgrind warning
+
+02-May-2011 L. Pandola (test67-V09-04-01)
+	    Remove local physics list called PhysEmLivermore containing old 
+            (deprecated) G4LowEnergy processes, which are going to be deleted.
+	    Compiles against geant4-V09-04-ref04.    
+
+27-Apr-2011 L. Pandola (test67-V09-04-00)
+	    First version
+
+

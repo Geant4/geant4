@@ -1,0 +1,12 @@
+/testem/geometry/geometryType 3
+/control/verbose 0
+/run/verbose 0
+#
+/run/initialize
+/vis/scene/create
+/vis/open VRML2FILE
+#/vis/viewer/set/viewpointThetaPhi 80 90 deg
+#/vis/viewer/zoom 10.0
+/vis/drawVolume 
+/vis/viewer/flush
+

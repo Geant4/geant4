@@ -1,0 +1,45 @@
+#
+# Macro file for "test67.cc"
+# (can be run in batch, without graphic)
+#
+# This macro shoots gamma-rays of energy  
+# between 45 keV and 2000 keV in the reference 
+# geometry #3. Source position is according to the 
+# same geometry (see README file). Livermore EM 
+# physics, 1e5 primaries per run.
+#
+/testem/geometry/geometryType 3
+/control/verbose 0
+/run/verbose 0
+#
+#/testem/phys/addPhysics  empenelope
+#/testem/phys/addPhysics  penelope01
+/testem/phys/addPhysics  emlivermore
+#/testem/phys/addPhysics  emstandard
+#/testem/phys/addPhysics  emstandard_opt3
+#
+/run/initialize
+#
+/gun/particle gamma
+#
+/tracking/verbose 0
+/testem/event/printModulo 5000
+#
+/gun/energy 45 keV
+/run/beamOn 100000
+#
+/gun/energy 60 keV
+/run/beamOn 100000
+#
+/gun/energy 120 keV
+/run/beamOn 100000
+#
+/gun/energy 200 keV
+/run/beamOn 100000
+#
+/gun/energy 500 keV
+/run/beamOn 100000
+#
+/gun/energy 2000 keV
+/run/beamOn 100000
+
