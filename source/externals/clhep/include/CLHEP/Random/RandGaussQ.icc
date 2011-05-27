@@ -1,0 +1,66 @@
+// $Id:$
+// -*- C++ -*-
+//
+// -----------------------------------------------------------------------
+//                             HEP Random
+//                         --- RandGaussQ ---
+//                 inlined functions implementation file
+// -----------------------------------------------------------------------
+// This file is part of Geant4 (simulation toolkit for HEP).
+ 
+// =======================================================================
+// M. Fischler	  - Created: 24 Janm 2000
+//
+// M. Fischler    - Modified fire() to use local engine, not getTheEngine()
+//		    12/13/04
+// =======================================================================
+
+// Constructors
+// ------------
+
+namespace CLHEP {
+
+RandGaussQ::RandGaussQ(HepRandomEngine & anEngine, double mean,
+                                                        double stdDev )
+: RandGauss(anEngine, mean, stdDev) {}
+
+RandGaussQ::RandGaussQ(HepRandomEngine * anEngine, double mean,
+                                                        double stdDev )
+: RandGauss(anEngine, mean, stdDev) {}
+
+// Getting a Gaussian deviate - static methods
+// -------------------------------------------
+
+double RandGaussQ::shoot()
+{
+  HepRandomEngine* anEngine = HepRandom::getTheEngine();
+  return transformQuick (anEngine->flat());
+}
+
+double RandGaussQ::shoot( HepRandomEngine* anotherEngine )
+{ 
+  return transformQuick  (anotherEngine->flat());
+}
+
+double RandGaussQ::shoot(double mean, double stdDev) {
+  return shoot()*stdDev + mean;
+}
+
+double RandGaussQ::shoot(HepRandomEngine* anotherEngine,
+                                  double mean, double stdDev) {
+  return shoot(anotherEngine)*stdDev + mean;
+}
+
+// Getting a Gaussian deviate - instance methods
+// ---------------------------------------------
+
+double RandGaussQ::fire() {
+  return transformQuick(localEngine->flat()) * defaultStdDev + defaultMean;
+}
+
+double RandGaussQ::fire(double mean, double stdDev) {
+  return transformQuick(localEngine->flat()) * stdDev + mean;
+}
+
+}  // namespace CLHEP
+

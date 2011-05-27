@@ -1,0 +1,291 @@
+// -*- C++ -*-
+// ---------------------------------------------------------------------------
+//
+// This file is a part of the CLHEP - a Class Library for High Energy Physics.
+// 
+// This is the definitions of the inline member functions of the
+// HepBoost class
+//
+
+#include <cmath>
+
+namespace CLHEP  {
+
+// ----------  Constructors and Assignment:
+
+inline HepBoost::HepBoost() : rep_() {}
+
+inline HepBoost::HepBoost(const HepBoost & m) : rep_(m.rep_) {}
+
+inline HepBoost & HepBoost::operator = (const HepBoost & m) { 
+  rep_ = m.rep_; 
+  return *this;
+}
+
+inline HepBoost::HepBoost(double betaX, double betaY, double betaZ) 
+{
+  set(betaX, betaY, betaZ);
+}
+
+inline HepBoost::HepBoost(const HepRep4x4Symmetric & m) : rep_(m) {}
+
+inline HepBoost::HepBoost(Hep3Vector direction, double beta) 
+{
+  double length = direction.mag();
+  if (length==0) {
+    std::cerr << "HepBoost::HepBoost() - "
+              << "HepBoost constructed using a zero vector as direction"
+              << std::endl;
+    set(0,0,0);
+  }
+  set(beta*direction.x()/length,
+      beta*direction.y()/length,
+      beta*direction.z()/length);
+}
+
+inline HepBoost::HepBoost(const Hep3Vector & boost) 
+{
+  set(boost.x(), boost.y(), boost.z());
+}
+
+inline HepBoost::HepBoost(const HepBoostX & boost) {set(boost.boostVector());}
+inline HepBoost::HepBoost(const HepBoostY & boost) {set(boost.boostVector());}
+inline HepBoost::HepBoost(const HepBoostZ & boost) {set(boost.boostVector());}
+inline HepBoost & HepBoost::set(const HepBoostX & boost) 
+					    {return set(boost.boostVector());}
+inline HepBoost & HepBoost::set(const HepBoostY & boost)
+					    {return set(boost.boostVector());}
+inline HepBoost & HepBoost::set(const HepBoostZ & boost)
+					    {return set(boost.boostVector());}
+
+// - Protected method:
+inline HepBoost::HepBoost ( 
+  double xx, double xy, double xz, double xt,
+  		double yy, double yz, double yt,
+  			      double zz, double zt,
+  					    double tt) :
+	  rep_ ( xx, xy, xz, xt, yy, yz, yt, zz, zt, tt ) {}	
+
+// ----------  Accessors:
+
+inline double  HepBoost::beta() const {   
+  return std::sqrt( 1.0 - 1.0 / (rep_.tt_ * rep_.tt_) );
+}
+
+inline double  HepBoost::gamma() const {
+  return rep_.tt_; 
+}
+
+inline Hep3Vector HepBoost::boostVector() const { 
+  return  (1.0/rep_.tt_) * Hep3Vector( rep_.xt_, rep_.yt_, rep_.zt_ );
+}
+
+inline Hep3Vector HepBoost::getDirection() const { 
+  double norm = 1.0/beta();
+  return  (norm*boostVector());
+}
+
+inline Hep3Vector HepBoost::direction() const { 
+  return  getDirection();
+}
+
+inline double HepBoost::xx() const { return rep_.xx_; }
+inline double HepBoost::xy() const { return rep_.xy_; }
+inline double HepBoost::xz() const { return rep_.xz_; }
+inline double HepBoost::xt() const { return rep_.xt_; }
+inline double HepBoost::yx() const { return rep_.xy_; }
+inline double HepBoost::yy() const { return rep_.yy_; }
+inline double HepBoost::yz() const { return rep_.yz_; }
+inline double HepBoost::yt() const { return rep_.yt_; }
+inline double HepBoost::zx() const { return rep_.xz_; }
+inline double HepBoost::zy() const { return rep_.yz_; }
+inline double HepBoost::zz() const { return rep_.zz_; }
+inline double HepBoost::zt() const { return rep_.zt_; }
+inline double HepBoost::tx() const { return rep_.xt_; }
+inline double HepBoost::ty() const { return rep_.yt_; }
+inline double HepBoost::tz() const { return rep_.zt_; }
+inline double HepBoost::tt() const { return rep_.tt_; }
+
+inline HepLorentzVector HepBoost::col1() const {
+  return HepLorentzVector ( xx(), yx(), zx(), tx() );
+}
+inline HepLorentzVector HepBoost::col2() const {
+  return HepLorentzVector ( xy(), yy(), zy(), ty() );
+}
+inline HepLorentzVector HepBoost::col3() const {
+  return HepLorentzVector ( xz(), yz(), zz(), tz() );
+}
+inline HepLorentzVector HepBoost::col4() const {
+  return HepLorentzVector ( xt(), yt(), zt(), tt() );
+}
+
+inline HepLorentzVector HepBoost::row1() const {
+  return HepLorentzVector ( col1() );
+}
+inline HepLorentzVector HepBoost::row2() const {
+  return HepLorentzVector ( col2() );
+}
+inline HepLorentzVector HepBoost::row3() const {
+  return HepLorentzVector ( col3() );
+}
+inline HepLorentzVector HepBoost::row4() const {
+  return HepLorentzVector ( col4() );
+}
+
+inline HepRep4x4 HepBoost::rep4x4() const {
+  return HepRep4x4( rep_ );
+}
+
+inline HepRep4x4Symmetric HepBoost::rep4x4Symmetric() const {
+  return rep_;
+}
+
+
+inline void HepBoost::setBoost(double bx, double by, double bz) {
+  set(bx, by, bz);
+}
+
+
+// ----------  Comparisons:
+
+int HepBoost::compare ( const HepBoost & b ) const {
+  const HepRep4x4Symmetric & s = b.rep4x4Symmetric();
+       if (rep_.tt_ < s.tt_) return -1; else if (rep_.tt_ > s.tt_) return 1;
+  else if (rep_.zt_ < s.zt_) return -1; else if (rep_.zt_ > s.zt_) return 1;
+  else if (rep_.zz_ < s.zz_) return -1; else if (rep_.zz_ > s.zz_) return 1;
+  else if (rep_.yt_ < s.yt_) return -1; else if (rep_.yt_ > s.yt_) return 1;
+  else if (rep_.yz_ < s.yz_) return -1; else if (rep_.yz_ > s.yz_) return 1;
+  else if (rep_.yy_ < s.yy_) return -1; else if (rep_.yy_ > s.yy_) return 1;
+  else if (rep_.xt_ < s.xt_) return -1; else if (rep_.xt_ > s.xt_) return 1;
+  else if (rep_.xz_ < s.xz_) return -1; else if (rep_.xz_ > s.xz_) return 1;
+  else if (rep_.xy_ < s.xy_) return -1; else if (rep_.xy_ > s.xy_) return 1;
+  else if (rep_.xx_ < s.xx_) return -1; else if (rep_.xx_ > s.xx_) return 1;
+  else return 0;
+}
+
+inline bool
+HepBoost::operator == (const HepBoost & b) const {
+  const HepRep4x4Symmetric & s = b.rep4x4Symmetric();
+  return ( 
+     rep_.xx_==s.xx_ && rep_.xy_==s.xy_ && rep_.xz_==s.xz_ && rep_.xt_==s.xt_ 
+ 		     && rep_.yy_==s.yy_ && rep_.yz_==s.yz_ && rep_.yt_==s.yt_ 
+					&& rep_.zz_==s.zz_ && rep_.zt_==s.zt_ 
+							   && rep_.tt_==s.tt_ 
+  );
+}
+
+inline bool
+HepBoost::operator != (const HepBoost & r) const {
+  return ( !(operator==(r)) );
+}
+inline bool HepBoost::operator <= ( const HepBoost & b ) const
+        { return compare(b)<= 0; }
+inline bool HepBoost::operator >= ( const HepBoost & b ) const
+        { return compare(b)>= 0; }
+inline bool HepBoost::operator <  ( const HepBoost & b ) const
+        { return compare(b)<  0; }
+inline bool HepBoost::operator >  ( const HepBoost & b ) const
+        { return compare(b)>  0; }
+
+inline bool HepBoost::isIdentity() const {
+  return (xx() == 1.0 && xy() == 0.0 && xz() == 0.0 && xt() == 0.0 
+          	      && yy() == 1.0 && yz() == 0.0 && yt() == 0.0 
+          		 	     && zz() == 1.0 && zt() == 0.0 
+          					    && tt() == 1.0);
+}
+
+inline double HepBoost::distance2( const HepBoost & b ) const {
+  double bgx = rep_.xt_ - b.rep_.xt_;
+  double bgy = rep_.yt_ - b.rep_.yt_;
+  double bgz = rep_.zt_ - b.rep_.zt_;
+  return bgx*bgx+bgy*bgy+bgz*bgz;
+}
+
+inline double HepBoost::distance2( const HepBoostX & bx ) const {
+  double bgx = rep_.xt_ - bx.beta()*bx.gamma();
+  double bgy = rep_.yt_;
+  double bgz = rep_.zt_;
+  return bgx*bgx+bgy*bgy+bgz*bgz;
+}
+
+inline double HepBoost::distance2( const HepBoostY & by ) const {
+  double bgy = rep_.xt_;
+  double bgx = rep_.yt_ - by.beta()*by.gamma();
+  double bgz = rep_.zt_;
+  return bgx*bgx+bgy*bgy+bgz*bgz;
+}
+
+inline double HepBoost::distance2( const HepBoostZ & bz ) const {
+  double bgz = rep_.xt_;
+  double bgy = rep_.yt_;
+  double bgx = rep_.zt_ - bz.beta()*bz.gamma();
+  return bgx*bgx+bgy*bgy+bgz*bgz;
+}
+
+inline double HepBoost::howNear ( const HepBoost & b ) const {
+  return std::sqrt(distance2(b));
+}
+
+inline bool HepBoost::isNear(const HepBoost & b, double epsilon) const{
+  return (distance2(b) <= epsilon*epsilon);
+}
+
+// ---------- Application:
+
+// - Protected method:
+inline HepLorentzVector
+HepBoost::vectorMultiplication(const HepLorentzVector & p) const {
+  register double x = p.x();
+  register double y = p.y();
+  register double z = p.z();
+  register double t = p.t();
+  return HepLorentzVector( rep_.xx_*x + rep_.xy_*y + rep_.xz_*z + rep_.xt_*t,
+			   rep_.xy_*x + rep_.yy_*y + rep_.yz_*z + rep_.yt_*t,
+			   rep_.xz_*x + rep_.yz_*y + rep_.zz_*z + rep_.zt_*t,
+			   rep_.xt_*x + rep_.yt_*y + rep_.zt_*z + rep_.tt_*t);
+}
+
+inline HepLorentzVector
+HepBoost::operator () (const HepLorentzVector & p) const {
+  return vectorMultiplication(p);
+}
+
+inline HepLorentzVector
+HepBoost::operator * (const HepLorentzVector & p) const {
+  return vectorMultiplication(p);
+}
+
+
+// ---------- Operations in the group of 4-Rotations
+
+inline HepBoost HepBoost::inverse() const {
+  return HepBoost( xx(),  yx(),  zx(), -tx(),
+                   	  yy(),  zy(), -ty(),
+                   		 zz(), -tz(),
+                  			tt());
+}
+
+inline HepBoost inverseOf ( const HepBoost & lt ) {
+  return HepBoost( lt.xx(),  lt.yx(),  lt.zx(), -lt.tx(),
+                             lt.yy(),  lt.zy(), -lt.ty(),
+                             	       lt.zz(), -lt.tz(),
+                            			 lt.tt());
+}
+
+inline HepBoost & HepBoost::invert() {
+  rep_.xt_ = -rep_.xt_;
+  rep_.yt_ = -rep_.yt_;
+  rep_.zt_ = -rep_.zt_;
+  return *this;
+}
+
+// ---------- Tolerance:
+
+inline double HepBoost::getTolerance() {
+  return Hep4RotationInterface::tolerance;
+}
+inline double HepBoost::setTolerance(double tol) {
+  return Hep4RotationInterface::setTolerance(tol);
+}
+
+}  // namespace CLHEP

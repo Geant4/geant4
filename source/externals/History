@@ -1,0 +1,28 @@
+$Id:$
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+24-May-2011: Gabriele Cosmo (externals-V09-04-02)
+- Added missing files in CLHEP built-in module.
+  Allow for generation of DLL library on Windows for it.
+
+11-May-2011: Gabriele Cosmo (externals-V09-04-01)
+- Added "clhep" module.
+
+20-April-2011: Gunter Folger (externals-V09-04-00)
+- Added "expat" module.

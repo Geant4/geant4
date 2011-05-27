@@ -1,0 +1,32 @@
+// $Id:$
+// -*- C++ -*-
+// 
+// -----------------------------------------------------------------------
+//                             HEP Random
+//                        --- RandPoissonQ ---
+//                 inlined functions implementation file
+// -----------------------------------------------------------------------
+// This file is part of Geant4 (simulation toolkit for HEP).
+ 
+// =======================================================================
+// M. Fischler 		- Created: 1/26/00
+// =======================================================================
+
+namespace CLHEP {
+
+inline RandPoissonQ::RandPoissonQ(HepRandomEngine & anEngine, double m )
+: RandPoisson(anEngine, m)
+{ setupForDefaultMu();
+}
+
+inline RandPoissonQ::RandPoissonQ(HepRandomEngine * anEngine, double m )
+: RandPoisson(anEngine, m)
+{ setupForDefaultMu();
+}
+
+inline int RandPoissonQ::tableBoundary() {
+  return int(LAST_MU + S);
+}
+
+}  // namespace CLHEP
+

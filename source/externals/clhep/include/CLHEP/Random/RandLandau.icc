@@ -1,0 +1,55 @@
+// $Id:$
+// -*- C++ -*-
+//
+// -----------------------------------------------------------------------
+//                             HEP Random
+//                         --- RandLandau ---
+//                 inlined functions implementation file
+// -----------------------------------------------------------------------
+// This file is part of Geant4 (simulation toolkit for HEP).
+ 
+// =======================================================================
+// Gabriele Cosmo - Created: 19th August 1998
+// M Fischler	  - Added some inline methods that had been in the .cc file,
+//		    which are shells for calls to transform(r): 30 Sep 1999
+// =======================================================================
+
+// Constructors
+// ------------
+
+namespace CLHEP {
+
+RandLandau::RandLandau(HepRandomEngine & anEngine )
+: HepRandom(), localEngine(&anEngine, do_nothing_deleter())
+{}
+
+RandLandau::RandLandau(HepRandomEngine * anEngine ) 
+: HepRandom(), localEngine(anEngine) 
+{}
+
+// Getting a Landau deviate - static methods
+// -------------------------------------------
+
+double RandLandau::shoot()
+{
+  HepRandomEngine* anEngine = HepRandom::getTheEngine();
+  return transform (anEngine->flat());
+}
+
+double RandLandau::shoot( HepRandomEngine* anotherEngine )
+{ 
+  return transform  (anotherEngine->flat());
+}
+
+// Getting a Landau deviate - instance methods
+// ---------------------------------------------
+
+double RandLandau::fire() {
+  return transform(localEngine->flat());
+}
+
+double RandLandau::operator()() {
+  return transform(localEngine->flat());
+}
+
+}  // namespace CLHEP

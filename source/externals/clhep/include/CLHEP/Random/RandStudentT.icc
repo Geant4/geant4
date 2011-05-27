@@ -1,0 +1,37 @@
+// $Id:$
+// -*- C++ -*-
+// 
+// -----------------------------------------------------------------------
+//                             HEP Random
+//                        --- RandStudentT ---
+//                 inlined functions implementation file
+// -----------------------------------------------------------------------
+ 
+// =======================================================================
+// Gabriele Cosmo - Created: 19th August 1998
+// =======================================================================
+
+namespace CLHEP {
+
+inline RandStudentT::RandStudentT(HepRandomEngine & anEngine, double a)
+: HepRandom( ), localEngine( &anEngine, do_nothing_deleter() ), defaultA(a)
+  {}
+
+inline RandStudentT::RandStudentT(HepRandomEngine * anEngine, double a)
+: HepRandom( ), localEngine( anEngine ), defaultA(a)
+  {}
+
+inline double RandStudentT::fire() {
+  return fire( defaultA );
+}
+
+inline double RandStudentT::shoot() {
+  return shoot( 1.0 );
+}
+
+inline double RandStudentT::shoot( HepRandomEngine* anEngine )
+{
+  return shoot( anEngine, 1.0 );
+}
+
+}  // namespace CLHEP

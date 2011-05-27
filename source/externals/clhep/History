@@ -1,0 +1,40 @@
+$Id:$
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+24 May 2011 - G.Cosmo
+- Added missing files in CLHEP built-in module.
+  Allow for generation of DLL library on Windows for it.
+
+11 May 2011 - G.Cosmo
+- Including a subset of CLHEP classes imported from version CLHEP-2.1.0.1.
+- Modifications applied vs. original CLHEP classes:
+  * Removed dependency on internal CLHEP "defs.h" configuration header;
+    the Geant4 built-in module for CLHEP follows the Geant4 build scheme.
+  * Adopt "std" namespace for standard mathematical functions, where needed.
+  * Removed dependency on ZM exceptions and replaced with "cerr" printouts
+    where necessary.
+  * Renamed following files for coherency and standard:
+    o Inlined code *.src to *.icc and moved to includes set;
+    o DualConv.hh to DualConv.h.
+  * Use coherent inclusion scheme also for internal headers/data/inline-code,
+    where applicable.
+  * Use of standard WIN32 compiler flag where applicable.
+  * Cleared source code of de-activated debug blocks and minor cleanup,
+    where applicable.
+  * Rename of final CLHEP library produced, from 'CLHEP' to 'g4clhep'.

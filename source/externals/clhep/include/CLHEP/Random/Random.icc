@@ -1,0 +1,32 @@
+// $Id:$
+// -*- C++ -*-
+// 
+// -----------------------------------------------------------------------
+//                             HEP Random
+//                         --- HepRandom ---
+//                 inlined functions implementation file
+// -----------------------------------------------------------------------
+// This file is part of Geant4 (simulation toolkit for HEP).
+
+// =======================================================================
+// Gabriele Cosmo - Created: 5th September 1995
+//                - Added methods for engine status: 19th November 1996
+//                - operator()() is now virtual: 28th July 1997
+//                - Simplified initialisation of static generator: 5th Jan 1999
+// =======================================================================
+
+namespace CLHEP {
+
+inline double HepRandom::flat(HepRandomEngine* theNewEngine)
+{
+  return theNewEngine->flat();
+}
+
+inline void HepRandom::flatArray(HepRandomEngine* theNewEngine, 
+                                 const int size, double* vect)
+{
+  theNewEngine->flatArray(size,vect);
+}
+
+}  // namespace CLHEP
+
