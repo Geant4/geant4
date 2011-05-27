@@ -89,7 +89,7 @@ G4eBremParametrizedModel::G4eBremParametrizedModel(const G4ParticleDefinition* p
   SetAngularDistribution(new G4ModifiedTsai());
 
   particleMass = kinEnergy = totalEnergy = currentZ = z13 = z23 = lnZ = Fel = Finel 
-    = densityFactor = densityCorr =0.;
+    = densityFactor = densityCorr = fMax = fCoulomb = 0.;
 
   InitialiseConstants();
   if(p) { SetParticle(p); }
@@ -122,7 +122,7 @@ void G4eBremParametrizedModel::SetParticle(const G4ParticleDefinition* p)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4eBremParametrizedModel::MinEnergyCut(const G4ParticleDefinition*,
-						 const G4MaterialCutsCouple*)
+						const G4MaterialCutsCouple*)
 {
   return minThreshold;
 }
@@ -130,8 +130,8 @@ G4double G4eBremParametrizedModel::MinEnergyCut(const G4ParticleDefinition*,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4eBremParametrizedModel::SetupForMaterial(const G4ParticleDefinition*,
-						 const G4Material* mat, 
-						 G4double kineticEnergy)
+						const G4Material* mat, 
+						G4double kineticEnergy)
 {
   densityFactor = mat->GetElectronDensity()*fMigdalConstant;
 
@@ -145,7 +145,7 @@ void G4eBremParametrizedModel::SetupForMaterial(const G4ParticleDefinition*,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4eBremParametrizedModel::Initialise(const G4ParticleDefinition* p,
-					   const G4DataVector& cuts)
+					  const G4DataVector& cuts)
 {
   if(p) { SetParticle(p); }
 
@@ -165,8 +165,8 @@ void G4eBremParametrizedModel::Initialise(const G4ParticleDefinition* p,
 G4double G4eBremParametrizedModel::ComputeDEDXPerVolume(
 					     const G4Material* material,
                                              const G4ParticleDefinition* p,
-                                                   G4double kineticEnergy,
-                                                   G4double cutEnergy)
+					     G4double kineticEnergy,
+					     G4double cutEnergy)
 {
   if(!particle) { SetParticle(p); }
   if(kineticEnergy < lowKinEnergy) { return 0.0; }

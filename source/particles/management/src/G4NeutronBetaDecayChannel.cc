@@ -33,7 +33,8 @@
 //
 //      History: first implementation, based on object model of
 //      18 Sep  2001 H.Kurashige
-//
+//---
+//      Fix energy of proton and neutrino May  2011 H.Kurashige
 // ------------------------------------------------------------
 
 #include "G4ParticleDefinition.hh"
@@ -133,6 +134,7 @@ G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double)
       r0 = G4UniformRand()*(xmax+m)*(xmax+m)*xmax*xmax*(1.0+aENuCorr);
   } while (r < r0);    
 
+
   //create daughter G4DynamicParticle 
   // rotation materix to lab frame
   G4double costheta = 2.*G4UniformRand()-1.0;
@@ -151,7 +153,9 @@ G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double)
   products->PushProducts(daughterparticle0);
 
   // daughter 1 (nutrino) in XZ plane
-  G4double eNu = xmax-x; 
+  G4double eNu;    // Enu
+  eNu = (parentmass-daughtermass[2])*(parentmass+daughtermass[2])+(m*m)-2.*parentmass*(x+m);
+  eNu /= 2.*(parentmass+p*w-(x+m));
   G4double cosn = w;
   G4double sinn = std::sqrt((1.0-cosn)*(1.0+cosn));
 
@@ -162,8 +166,13 @@ G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double)
   products->PushProducts(daughterparticle1);
 
   // daughter 2 (proton) at REST
-  G4ThreeVector direction2(0.0, 0.0, 0.0);
-  G4DynamicParticle * daughterparticle2 
+  G4double eP;     // Eproton
+  eP = parentmass-eNu-(x+m)-daughtermass[2];
+  G4double pPx = -eNu*sinn;
+  G4double pPz = -p-eNu*cosn;
+  G4double pP  = std::sqrt(eP*(eP+2.*daughtermass[2]));
+  G4ThreeVector direction2(pPx/pP, 0.0, pPz/pP);
+    G4DynamicParticle * daughterparticle2 
          = new G4DynamicParticle( daughters[2], direction2);
   products->PushProducts(daughterparticle2);
  

@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+16-05-11 mma (rdecay01-V09-04-05)
+- histo 6 : total kinetic energy (Q) 
+   
 14-04-11 mma (rdecay01-V09-04-04)
 - RunAction : compute activity from primary ion
 - suppress histo 9

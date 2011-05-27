@@ -36,7 +36,7 @@ G4DNAExcitation::G4DNAExcitation(const G4String& processName,
   G4ProcessType type):G4VEmProcess (processName, type),
     isInitialised(false)
 {
-  SetProcessSubType(51);
+  SetProcessSubType(52);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -75,7 +75,7 @@
 #include "G4QCaptureAtRest.hh"
 #include "G4QElastic.hh"               // CHIPS
 #include "G4LElastic.hh"
-#include "G4UHadronElasticProcess.hh"
+#include "G4WHadronElasticProcess.hh"
 #include "G4HadronElastic.hh"
 //#include "G4LElasticB.hh"
 #include "G4LEnp.hh"

@@ -17,6 +17,27 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24 May 11: V.Ivant (emutils-V09-04-23)
+- G4EmModelManager, G4EmCalculator - changed smoothing function 
+  between two models, effect is seen for protons in non-NIST water
+
+16 May 11: V.Ivant (emutils-V09-04-22)
+- G4VEnergyLoss - fixed gcc-4.6.0 warnings
+
+04 May 11: V.Ivant (emutils-V09-04-21)
+- G4VEmProcess - removed parasitic printout due to tag 19
+
+04 May 11: V.Ivant (emutils-V09-04-20)
+- Fixed Coverity warnings
+
+03 May 11: V.Ivant (emutils-V09-04-19)
+03 May 11: V.Ivant (emutils-V09-04-18)
+- G4EmProcessSubType - added fNuclearStopping=8 sub-type
+
+01 May 11: V.Ivant (emutils-V09-04-17)
+- G4VEmProcess - allow to use the Integral approach also if Physics
+  Table is not built (before was forbidden)
+
 19 April 11: V.Ivant (emutils-V09-04-16)
 - G4VEnergyLossProcess - start cross section table from energy threshold
   and not from minimal kinetic energy, number of bins is reduced, cross

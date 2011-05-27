@@ -74,6 +74,8 @@ G4Step::~G4Step()
 {
   delete fpPreStepPoint;
   delete fpPostStepPoint;
+  secondaryInCurrentStep->clear();
+  delete secondaryInCurrentStep;
 }
 
 

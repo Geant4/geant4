@@ -44,6 +44,7 @@
 // 05 Nov 2003  MGP          Fixed std namespace
 // 17 Nov 2003  MGP          Fixed compilation problem on Windows                  
 // 12 Oct 2010  V.Ivanchenko Moved RejectionFunction inline, use G4Pow to speadup
+// 09 May 2011  L.Pandola    Initialize private members, to avoid Coverity warning
 //
 // Class Description: 
 //
@@ -62,7 +63,8 @@
 //
 
 G4Generator2BS::G4Generator2BS(const G4String&)
-  : G4VBremAngularDistribution("AngularGen2BS")
+  : G4VBremAngularDistribution("AngularGen2BS"),z(1),rejection_argument1(0), 
+    rejection_argument2(0),rejection_argument3(0),EnergyRatio(1)
 {
   g4pow = G4Pow::GetInstance();
 }

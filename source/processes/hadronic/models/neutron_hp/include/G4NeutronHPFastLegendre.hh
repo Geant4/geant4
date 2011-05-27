@@ -115,6 +115,8 @@ class G4NeutronHPFastLegendre
   
   G4double Integrate(G4int l, G4double costh)
   {
+//TK110430 This is tempral solution
+if(l>30) l=30;
     G4int bin = GetBin(l, costh);
     G4double y1, y2;
 //    G4cout <<"Testhpw G4NeutronHPFastLegendre::Integrate "<<l<<" "<<bin<<G4endl;
@@ -126,6 +128,8 @@ class G4NeutronHPFastLegendre
   
   inline G4double Evaluate(G4int l, G4double costh)
   {
+//TK110430 This is tempral solution
+if(l>30) l=30;
     G4double result;
     G4int bin = GetBin(l, costh);
     if(bin != theNbin[l]-1)
@@ -145,6 +149,8 @@ class G4NeutronHPFastLegendre
   
   inline G4int GetBin(G4int l, G4double costh)
   {
+//TK110430 This is tempral solution
+if(l>30) l=30;
     G4int bin=0;
     bin = G4int( (theNbin[l]-1)*(costh+1)/2. );
     if(bin == theNbin[l]-1) bin--;
@@ -153,6 +159,8 @@ class G4NeutronHPFastLegendre
   
   inline G4double Interpolate(G4int bin, G4int l, G4double y1, G4double y2, G4double x)
   {
+//TK110430 This is tempral solution
+if(l>30) l=30;
     G4double slope = 0, off = 0, x2=0, x1mx2;
     G4int half = (theNbin[l]-1)/2;
 //    x1 = (bin-half)/G4double(half);

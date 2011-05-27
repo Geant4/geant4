@@ -716,7 +716,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
   static const G4double halfRadTolerance=kRadTolerance*0.5;
 
   G4double tanRMax,secRMax,rMaxAv,rMaxOAv ;  // Data for cones
-  G4double tanRMin,secRMin,rMinAv,rMinIAv,rMinOAv ;
+  G4double tanRMin,secRMin,rMinAv,rMinOAv ;
   G4double rout,rin ;
 
   G4double tolORMin,tolORMin2,tolIRMin,tolIRMin2 ; // `generous' radii squared
@@ -740,12 +740,10 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
   if (rMinAv > halfRadTolerance)
   {
     rMinOAv = rMinAv - halfRadTolerance ;
-    rMinIAv = rMinAv + halfRadTolerance ;
   }
   else
   {
     rMinOAv = 0.0 ;
-    rMinIAv = 0.0 ;
   }  
   tanRMax = (fRmax2 - fRmax1)*0.5/fDz ;
   secRMax = std::sqrt(1.0 + tanRMax*tanRMax) ;

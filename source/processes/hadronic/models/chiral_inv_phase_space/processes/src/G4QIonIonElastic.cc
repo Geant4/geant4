@@ -46,7 +46,9 @@
 #include "G4QIonIonElastic.hh"
 
 // Initialization of static vectors
-G4int G4QIonIonElastic::nPartCWorld=152;     // The#of particles initialized in CHIPS World
+//G4int G4QIonIonElastic::nPartCWorld=152;   // The#of particles initialized in CHIPS World
+//G4int G4QIonIonElastic::nPartCWorld=122;   // The#of particles initialized in CHIPS World
+G4int G4QIonIonElastic::nPartCWorld=85; // The#of particles initialized in CHIPS World Red.
 std::vector<G4int> G4QIonIonElastic::ElementZ;        // Z of the element(i) in theLastCalc
 std::vector<G4double> G4QIonIonElastic::ElProbInMat;  // SumProbabilityElements in Material
 std::vector<std::vector<G4int>*> G4QIonIonElastic::ElIsoN; // N of isotope(j) of Element(i)

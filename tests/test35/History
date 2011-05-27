@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+test35-V09-04-01  25 May 2011 V.Ivanchenko
+- removed obsolete interface to elastic 
+
 test35-V09-04-00  23 December 2010 V.Ivanchenko
 - minor update for 9.4
 

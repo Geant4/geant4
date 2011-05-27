@@ -60,7 +60,7 @@ void G4tgrEvaluator::print_error( G4int status ) const
       G4cerr << "G4tgrEvaluator: syntax error!" << G4endl;
       return;
     default:
-      HepTool::Evaluator::print_error();    
+      G4Evaluator::print_error();    
     return;
   }
 } 

@@ -48,7 +48,7 @@ class PrimaryGeneratorMessenger;
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
 public:
-  PrimaryGeneratorAction(DetectorConstruction*);    
+  PrimaryGeneratorAction();    
   virtual ~PrimaryGeneratorAction();
 
   void GeneratePrimaries(G4Event*);

@@ -165,13 +165,12 @@ G4TMPDIR := $(G4TMP)/$(G4SYSTEM)/$(G4TARGET)
 G4BINDIR := $(G4BIN)/$(G4SYSTEM)
 
 ifdef G4EXLIB
-  G4LIBDIR := $(G4TMPDIR)
-  LDFLAGS += -L$(G4LIBDIR)
+  LDFLAGS += -L$(G4TMPDIR)
   ifdef SHAREDLIBS
     ifdef G4RUNPATHOPTION
 #         For the example dependent directory, keep the 
 #         path to the shared lib in the executable.
-      LDFLAGS += $(G4RUNPATHOPTION)$(G4LIBDIR)
+      LDFLAGS += $(G4RUNPATHOPTION)$(G4TMPDIR)
     endif
   endif
   include $(G4INSTALL)/config/common.gmk
@@ -230,8 +229,16 @@ ifdef GLOBALLIBS
              -lG4intercoms \
              -lG4global
 
+  ifdef G4LIB_USE_CLHEP
+    LDLIBS2 += -lG4clhep
+  endif
+
   ifdef G4LIB_USE_ZLIB
     LDLIBS2 += -lG4zlib
+  endif
+
+  ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+    LDLIBS2 += -lG4expat
   endif
 
 else

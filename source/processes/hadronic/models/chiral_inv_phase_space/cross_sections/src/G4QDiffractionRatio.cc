@@ -31,8 +31,8 @@
 // G4 Physics class: G4QDiffractionRatio for N+A Diffraction Interactions
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 25-OCT-01
 // The last update: M.V. Kossov, CERN/ITEP(Moscow) 10-Nov-09
-// 
-//=======================================================================
+//
+// --------------------------------------------------------------------
 // Short description: Difraction excitation is a part of the incoherent
 // (inelastic) interaction. This part is calculated in the class.
 // --------------------------------------------------------------------
@@ -348,15 +348,15 @@ G4QHadronVector* G4QDiffractionRatio::TargFragment(G4int pPDG, G4LorentzVector p
   G4double mT=mNeut;                       // Prototype of mass of QF nucleon
   G4double mT2=mNeut2;                     // Squared mass of a free nucleon to be excited
   G4double dmT=dmNeut;                     // Doubled mass              
-  G4int Z=0;                               // Prototype of the isotope Z
-  G4int N=1;                               // Prototype of the Isotope N
+  //G4int Z=0;                               // Prototype of the isotope Z
+  //G4int N=1;                               // Prototype of the Isotope N
   if(rPDG==2212)                           // Correct it, if this is a proton
   {
     mT=mProt;                              // Prototype of mass of QF nucleon to be excited
     mT2=mProt2;                            // Squared mass of the free nucleon
     dmT=dmProt;                            // Doubled mass              
-    Z=1;                                   // Z of the isotope
-    N=0;                                   // N of the Isotope
+    //Z=1;                                   // Z of the isotope
+    //N=0;                                   // N of the Isotope
   }
   G4double mP2=pr4M.m2();                  // Squared mass of the projectile
   if(mP2<0.) mP2=0.;                       // Can be a problem for photon (m_min = 2*m_pi0)
@@ -525,15 +525,15 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
   G4double mT=mNeut;
   G4double mT2=mNeut2;                 // Squared mass of the free nucleon spectator
   G4double dmT=dmNeut;
-  G4int Z=0;
-  G4int N=1;
+  //G4int Z=0;
+  //G4int N=1;
   if(rPDG==2212)
   {
     mT=mProt;
     mT2=mProt2;
     dmT=dmProt;
-    Z=1;
-    N=0;
+    //Z=1;
+    //N=0;
   }
   G4double mP2=pr4M.m2();               // Squared mass of the projectile
   if(mP2<0.) mP2=0.;                    // A possible problem for photon (m_min = 2*m_pi0)
@@ -661,8 +661,8 @@ G4QHadronVector* G4QDiffractionRatio::ProjFragment(G4int pPDG, G4LorentzVector p
       G4double sMass= mPi;
       G4double tMass= mLamb;               // @@ Sigma0 (?)                             |
       G4bool   cont=true;                  // Continue flag                             |
-      // ========= Negative state ======
-      if(nC<0)                             // ====== Only Pi- can help                  |
+      // =--------= Negative state =---------=
+      if(nC<0)                             // =----= Only Pi- can help                  |
       {
         if(nL&&nB==nL)                     // --- n*Lamb + k*(Pi-) State ---            |
         {

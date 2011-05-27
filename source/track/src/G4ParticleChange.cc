@@ -51,8 +51,10 @@
 #include "G4ExceptionSeverity.hh"
 
 G4ParticleChange::G4ParticleChange()
-  : G4VParticleChange(), theEnergyChange(0.), theTimeChange(0.),
-    theProperTimeChange(0.), theMassChange(0.), theChargeChange(0.),
+  : G4VParticleChange(), theEnergyChange(0.), 
+    theVelocityChange(0.), isVelocityChanged(false),
+    theTimeChange(0.),     theProperTimeChange(0.), 
+    theMassChange(0.), theChargeChange(0.),
     theMagneticMomentChange(0.), theCurrentTrack(0)
 {
   G4VParticleChange::SetSecondaryWeightByProcess(false);
@@ -79,6 +81,8 @@ G4ParticleChange::G4ParticleChange(const G4ParticleChange &right): G4VParticleCh
    thePositionChange = right.thePositionChange;
    theTimeChange = right.theTimeChange;
    theEnergyChange = right.theEnergyChange;
+   theVelocityChange = right.theVelocityChange;
+   isVelocityChanged = true;
    theMassChange = right.theMassChange;
    theChargeChange = right.theChargeChange;
    theMagneticMomentChange = right.theMagneticMomentChange;
@@ -104,6 +108,8 @@ G4ParticleChange & G4ParticleChange::operator=(const G4ParticleChange &right)
       thePolarizationChange = right.thePolarizationChange;
       thePositionChange = right.thePositionChange;
       theTimeChange = right.theTimeChange;
+      theVelocityChange = right.theVelocityChange;
+      isVelocityChanged = true;
       theEnergyChange = right.theEnergyChange;
       theMassChange = right.theMassChange;
       theChargeChange = right.theChargeChange;
@@ -200,10 +206,12 @@ void G4ParticleChange::Initialize(const G4Track& track)
 
   // set Energy/Momentum etc. equal to those of the parent particle
   const G4DynamicParticle*  pParticle = track.GetDynamicParticle();
-  theEnergyChange          = pParticle->GetKineticEnergy();
-  theMomentumDirectionChange        = pParticle->GetMomentumDirection();
-  thePolarizationChange    = pParticle->GetPolarization();
-  theProperTimeChange      = pParticle->GetProperTime();
+  theEnergyChange            = pParticle->GetKineticEnergy();
+  theVelocityChange          = track.GetVelocity();
+  isVelocityChanged          = false;
+  theMomentumDirectionChange = pParticle->GetMomentumDirection();
+  thePolarizationChange      = pParticle->GetPolarization();
+  theProperTimeChange        = pParticle->GetProperTime();
 
   // Set mass/charge/MagneticMoment  of DynamicParticle
   theMassChange = pParticle->GetMass();
@@ -267,6 +275,9 @@ G4Step* G4ParticleChange::UpdateStepForAlongStep(G4Step* pStep)
     pPostStepPoint->SetKineticEnergy(0.0);
   }
 
+  if (!isVelocityChanged) theVelocityChange = pStep->GetTrack()->CalculateVelocity();
+  pPostStepPoint->SetVelocity(theVelocityChange);
+
   // update polarization
   pPostStepPoint->AddPolarization( thePolarizationChange
 				   - pPreStepPoint->GetPolarization());
@@ -316,7 +327,9 @@ G4Step* G4ParticleChange::UpdateStepForPostStep(G4Step* pStep)
   // update kinetic energy and momentum direction
   pPostStepPoint->SetMomentumDirection(theMomentumDirectionChange);
   pPostStepPoint->SetKineticEnergy( theEnergyChange );
-
+  if (!isVelocityChanged) theVelocityChange = pStep->GetTrack()->CalculateVelocity();
+  pPostStepPoint->SetVelocity(theVelocityChange);
+ 
    // update polarization
   pPostStepPoint->SetPolarization( thePolarizationChange );
       
@@ -357,6 +370,8 @@ G4Step* G4ParticleChange::UpdateStepForAtRest(G4Step* pStep)
   // update kinetic energy and momentum direction
   pPostStepPoint->SetMomentumDirection(theMomentumDirectionChange);
   pPostStepPoint->SetKineticEnergy( theEnergyChange );
+  if (!isVelocityChanged) theVelocityChange = pStep->GetTrack()->CalculateVelocity();
+  pPostStepPoint->SetVelocity(theVelocityChange);
 
   // update polarization
   pPostStepPoint->SetPolarization( thePolarizationChange );
@@ -430,6 +445,9 @@ void G4ParticleChange::DumpInfo() const
        << G4endl;
   G4cout << "        Kinetic Energy (MeV): " 
        << std::setw(20) << theEnergyChange/MeV
+       << G4endl;
+  G4cout << "        Velocity  (/c): " 
+       << std::setw(20) << theVelocityChange/c_light
        << G4endl;
   G4cout << "        Polarization - x    : " 
        << std::setw(20) << thePolarizationChange.x()
@@ -506,7 +524,29 @@ G4bool G4ParticleChange::CheckIt(const G4Track& aTrack)
     if (accuracy > accuracyForException) exitWithError = true;
   }
 
-  G4bool itsOK = itsOKforMomentum && itsOKforEnergy && itsOKforProperTime && itsOKforGlobalTime;
+  // Velocity  should not be less than c_light
+  G4bool itsOKforVelocity = true;
+  if (theVelocityChange < 0.) {
+#ifdef G4VERBOSE
+    G4cout << "  G4ParticleChange::CheckIt    : ";
+    G4cout << "the velocity is negative  !!" << G4endl;
+    G4cout << "  Velocity:  " << theVelocityChange/c_light  <<G4endl;
+#endif
+    itsOKforVelocity = false;
+    exitWithError = true;
+  }
+  accuracy = theVelocityChange/c_light - 1.0;
+  if (accuracy > accuracyForWarning) {
+#ifdef G4VERBOSE
+    G4cout << "  G4ParticleChange::CheckIt    : ";
+    G4cout << "the velocity is greater than c_light  !!" << G4endl;
+    G4cout << "  Velocity:  " << theVelocityChange/c_light  <<G4endl;
+#endif
+    itsOKforVelocity = false;
+    if (accuracy > accuracyForException) exitWithError = true;
+   }
+
+  G4bool itsOK = itsOKforMomentum && itsOKforEnergy && itsOKforVelocity && itsOKforProperTime && itsOKforGlobalTime;
   // dump out information of this particle change
 #ifdef G4VERBOSE
   if (!itsOK) { 
@@ -535,6 +575,9 @@ G4bool G4ParticleChange::CheckIt(const G4Track& aTrack)
   }
   if (!itsOKforEnergy) {
     theEnergyChange = 0.0;
+  }
+  if (!itsOKforVelocity) {
+    theVelocityChange = c_light;
   }
 
   itsOK = (itsOK) && G4VParticleChange::CheckIt(aTrack);

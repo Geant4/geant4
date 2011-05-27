@@ -72,16 +72,12 @@ GEANT4_DEFINE_MODULE(NAME G4had_muon_nuclear
         G4LeptonHadronInteractionModel.hh
         G4LeptonHadronProcess.hh
         G4MuNuclearInteraction.hh
-        G4MuonNucleusInteractionModel.hh
-        G4MuonNucleusProcess.hh
         G4ParametrizedHadronicVertex.hh
         G4VDMuonNuclearModel.hh
     SOURCES
         G4LeptonHadronInteractionModel.cc
         G4LeptonHadronProcess.cc
         G4MuNuclearInteraction.cc
-        G4MuonNucleusInteractionModel.cc
-        G4MuonNucleusProcess.cc
         G4ParametrizedHadronicVertex.cc
         G4VDMuonNuclearModel.cc
     GRANULAR_DEPENDENCIES

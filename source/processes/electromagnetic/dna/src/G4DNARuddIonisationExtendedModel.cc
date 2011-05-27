@@ -31,6 +31,7 @@
 // Modified by Z. Francis to handle HZE && inverse rudd function sampling 26-10-2010
 
 #include "G4DNARuddIonisationExtendedModel.hh"
+#include "G4UAtomicDeexcitation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -43,6 +44,13 @@ G4DNARuddIonisationExtendedModel::G4DNARuddIonisationExtendedModel(const G4Parti
 :G4VEmModel(nam),isInitialised(false)
 {
   nistwater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
+
+  slaterEffectiveCharge[0]=0.;
+  slaterEffectiveCharge[1]=0.;
+  slaterEffectiveCharge[2]=0.;
+  sCoefficient[0]=0.;
+  sCoefficient[1]=0.;
+  sCoefficient[2]=0.;
 
   lowEnergyLimitForA[1] = 0 * eV; 
   lowEnergyLimitForA[2] = 0 * eV;
@@ -62,6 +70,11 @@ G4DNARuddIonisationExtendedModel::G4DNARuddIonisationExtendedModel(const G4Parti
   // 2 = details of energy budget
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
+
+  fAtomDeexcitation = new G4UAtomicDeexcitation();
+  //  G4LossTableManager::Instance()->SetAtomDeexcitation(fAtomDeexcitation);
+  fAtomDeexcitation->SetFluo(true);
+  fAtomDeexcitation->SetAuger(true);
   
   if( verboseLevel>0 ) 
   { 
@@ -369,6 +382,9 @@ void G4DNARuddIonisationExtendedModel::Initialise(const G4ParticleDefinition* pa
   
 //----------------------------------------------------------------------
 
+
+
+
   if( verboseLevel>0 ) 
   { 
     G4cout << "Rudd ionisation model is initialized " << G4endl
@@ -380,7 +396,10 @@ void G4DNARuddIonisationExtendedModel::Initialise(const G4ParticleDefinition* pa
   }
 
   //
-  
+
+  fAtomDeexcitation->InitialiseAtomicDeexcitation();
+  fAtomDeexcitation->InitialiseForNewRun();  
+
   if (isInitialised) { return; }
   fParticleChangeForGamma = GetParticleChangeForGamma();
   isInitialised = true;
@@ -566,7 +585,30 @@ void G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicPa
       */
       
       G4int ionizationShell = RandomSelect(k,particleName);
-
+      
+      if(fAtomDeexcitation) {
+	G4int Z = 8;
+	G4AtomicShellEnumerator as = fKShell;
+	
+	if (ionizationShell <5 && ionizationShell >1) 
+	  {
+	    as = G4AtomicShellEnumerator(4-ionizationShell);
+	  }
+	else if (ionizationShell <2)
+	  {
+	    as = G4AtomicShellEnumerator(3);
+	  }
+	
+	
+	//      G4cout << "Z: " << Z << " as: " << as << G4endl;
+	//G4cout << "Press <Enter> key to continue...";
+	//G4cin.ignore();
+	
+	const G4AtomicShell* shell = fAtomDeexcitation->GetAtomicShell(Z, as);    
+	fAtomDeexcitation->GenerateParticles(fvect, shell, Z, 0, 0);
+      }
+      
+  
       G4double secondaryKinetic = RandomizeEjectedElectronEnergy(definition,k,ionizationShell);
   
       G4double bindingEnergy = waterStructure.IonisationEnergy(ionizationShell);
@@ -847,7 +889,8 @@ G4double G4DNARuddIonisationExtendedModel::ProposedSampledEnergy(G4ParticleDefin
 
   const G4int j=ionizationLevelIndex;
 
-  G4double A1, B1, C1, D1, E1, A2, B2, C2, D2, alphaConst ; 
+  G4double A1, B1, C1, D1, E1, A2, B2, C2, D2; 
+  //G4double alphaConst ; 
   G4double Bj_energy;
   
   // const G4double Bj[5] = {12.61*eV, 14.73*eV, 18.55*eV, 32.20*eV, 539.7*eV}; //Ding Paper
@@ -867,7 +910,7 @@ G4double G4DNARuddIonisationExtendedModel::ProposedSampledEnergy(G4ParticleDefin
       B2 = 1.30;
       C2 = 1.00; 
       D2 = 0.00; 
-      alphaConst = 0.66;
+      //alphaConst = 0.66;
       //---Note that the following (j==4) cases are provided by   M. Dingfelder (priv. comm)
       Bj_energy = waterStructure.IonisationEnergy(ionizationLevelIndex);
       //---
@@ -887,7 +930,7 @@ G4double G4DNARuddIonisationExtendedModel::ProposedSampledEnergy(G4ParticleDefin
       //
       C2 = 0.60; 
       D2 = 0.04; 
-      alphaConst = 0.64;
+      //alphaConst = 0.64;
 
       Bj_energy = Bj[ionizationLevelIndex];
   }

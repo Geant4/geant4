@@ -1915,9 +1915,8 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
 
   G4double pDistS,compS,pDistE,compE,sphi2,vphi;
     
-  G4double rho2,rad2,pDotV2d,pDotV3d,pTheta;
+  G4double rho2,rad2,pDotV2d,pDotV3d;
 
-  G4double tolSTheta=0.,tolETheta=0.;
   G4double xi,yi,zi;      // Intersection point
 
   // Theta precals
@@ -1931,19 +1930,9 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
   rho2 = p.x()*p.x()+p.y()*p.y();
   rad2 = rho2+p.z()*p.z();
 
-  pTheta = std::atan2(std::sqrt(rho2),p.z());
-
   pDotV2d = p.x()*v.x()+p.y()*v.y();
   pDotV3d = pDotV2d+p.z()*v.z();
 
-  // Theta precalcs
-    
-  if ( !fFullThetaSphere )
-  {
-    tolSTheta = fSTheta - halfAngTolerance;
-    tolETheta = eTheta + halfAngTolerance;
-  }
-    
   // Radial Intersections from G4Sphere::DistanceToIn
   //
   // Outer spherical shell intersection

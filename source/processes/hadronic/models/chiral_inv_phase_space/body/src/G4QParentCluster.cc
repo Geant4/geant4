@@ -42,10 +42,13 @@
 
 #include "G4QParentClusterVector.hh"
 
-G4QParentCluster::G4QParentCluster(G4int PDGCode): thePDGCode(PDGCode),theProbability(0.){}
+G4QParentCluster::G4QParentCluster(G4int PDGCode) : thePDGCode(PDGCode),theProbability(0.),
+  nQPart2(0), lowLimit(0), highLimit(0), theEnvBoundedMass(0), theEnvBindingEnergy(0),
+  theNucBoundedMass(0), theNucBindingEnergy(0) {}
 
-G4QParentCluster::G4QParentCluster(G4int PDGCode, G4double prob): 
-  thePDGCode(PDGCode), theProbability(prob){}
+G4QParentCluster::G4QParentCluster(G4int PDGCode, G4double prob) : thePDGCode(PDGCode),
+  theProbability(prob), nQPart2(0), lowLimit(0), highLimit(0), theEnvBoundedMass(0),
+  theEnvBindingEnergy(0), theNucBoundedMass(0), theNucBindingEnergy(0) {}
 
 G4QParentCluster::G4QParentCluster(const G4QParentCluster& rhs)
 {
@@ -97,14 +100,14 @@ G4QParentCluster::~G4QParentCluster() {}
 
 // Standard output for G4QParentCluster
 std::ostream& operator<<(std::ostream& lhs, G4QParentCluster& rhs)
-{//      ===============================================
+{
   lhs << "[ParClPDG=" << rhs.GetPDGCode() << ", probab=" << rhs.GetProbability() << "]";
   return lhs;
 }
 
 // Standard output for const G4QParentCluster
 std::ostream& operator<<(std::ostream& lhs, const G4QParentCluster& rhs)
-{//      ===============================================
+{
   lhs << "[ParClPDG=" << rhs.GetPDGCode() << ", probab=" << rhs.GetProbability() << "]";
   return lhs;
 }

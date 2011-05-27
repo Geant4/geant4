@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 27, 2011  T.Nikitina                 geom-csg-V09-04-03
+- G4Tubs: use safe formula for quadratic equation solution, in order to avoid
+  numerical errors.
+- G4Torus: use relative radial tolerances to avoid loss of precision issues
+  for shapes of big dimensions. Addresses problem report #1175.
+
+May 12, 2011  G.Cosmo                    geom-csg-V09-04-02
+- Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
+
 Apr 27, 2011  T.Nikitina                 geom-csg-V09-04-01
 - Added protection for potential negative argument to sqrt() in
   CalculateExtent() for G4Orb, G4Cons and G4Sphere.

@@ -47,8 +47,9 @@
 #include "globals.hh"
 #include "G4ios.hh"
 
-#include "G4VProcess.hh"
 #include "G4ProcessManager.hh"
+
+class G4VProcess;
 
 class G4ProcessAttribute
 {

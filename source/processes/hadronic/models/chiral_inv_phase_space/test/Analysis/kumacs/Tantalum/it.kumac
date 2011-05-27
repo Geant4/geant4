@@ -1,0 +1,13 @@
+opt pto
+fo/file 67 allta.ps
+meta 67 -111
+exec pTa.kumac
+exec pipTa.kumac
+exec dTa.kumac
+exec tTa.kumac
+exec he3Ta.kumac
+exec he4Ta.kumac
+exec kminusTa.kumac
+exec kplusTa.kumac
+close 67
+

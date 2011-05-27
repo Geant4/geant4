@@ -31,8 +31,8 @@
 // G4 Physics class: G4QAntiBaryonElasticCrossSection for pA elastic cross sections
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 5-Feb-2010
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 5-Feb-2010
-// 
-//================================================================================
+//
+// -------------------------------------------------------------------------------
 // Short description: Interaction cross-sections for the G4QElastic process
 // -------------------------------------------------------------------------------
 
@@ -166,7 +166,7 @@ G4double G4QAntiBaryonElasticCrossSection::GetCrossSection(G4bool fCS, G4double 
 #endif
   if(pPDG<-3334 || pPDG>-1111)
   {
-    G4cout<<"*Warning*G4QAntiBaryElCS::GetCS:**> Found pPDG="<<pPDG<<" ====> CS=0"<<G4endl;
+    G4cout<<"*Warning*G4QAntiBaryElCS::GetCS:**> Found pPDG="<<pPDG<<" =--=> CS=0"<<G4endl;
     //CalculateCrossSection(fCS,-27,j,pPDG,lastZ,lastN,pMom); // DUMMY TEST
     return 0.;                         // projectile PDG=0 is a mistake (?!) @@
   }
@@ -361,7 +361,7 @@ G4double G4QAntiBaryonElasticCrossSection::CalculateCrossSection(G4bool CS,G4int
     S4T.push_back(lastS4T);             // Fill Tabulated 4-th mantissa to AMDB 
     B4T.push_back(lastB4T);             // Fill Tabulated 4-th slope to AMDB    
   } // End of creation/update of the new set of parameters and tables
-  // ============= NOW Update (if necessary) and Calculate the Cross Section ===========
+  // =---------= NOW Update (if necessary) and Calculate the Cross Section =-----------=
 #ifdef pdebug
   G4cout<<"G4QaBElCS::CalcCS:?update?,LP="<<lastLP<<",IN="<<lastPIN<<",ML="<<lPMax<<G4endl;
 #endif
@@ -580,7 +580,7 @@ G4double G4QAntiBaryonElasticCrossSection::GetPTables(G4double LP, G4double ILP,
                <<", "<<lastPAR[42]<<", "<<lastPAR[43]<<", "<<lastPAR[44]<<G4endl;
 #endif
         }
-        else
+        else // A > Li6 (li7, ...)
         {
           G4double p1a10=2.2e-28*a10;
           G4double r4a16=6.e14/a16;
@@ -1055,7 +1055,7 @@ G4double G4QAntiBaryonElasticCrossSection::GetTabValues(G4double lp, G4int PDG, 
 #ifdef tdebug
     G4cout<<"G4QAntiBarElCS::GetTabV: PDG="<<PDG<<",P="<<p<<",N="<<tgN<<",Z="<<tgZ<<G4endl;
 #endif
-    G4double dlp=lp-lastPAR[5]; // ax
+    G4double dlp=lp-lastPAR[4]; // ax
     //         p1               p2          p3                 p4
     return (lastPAR[0]*dlp*dlp+lastPAR[1]+lastPAR[2]/p)/(1.+lastPAR[3]/p);
   }

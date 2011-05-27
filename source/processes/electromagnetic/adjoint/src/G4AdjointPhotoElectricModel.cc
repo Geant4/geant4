@@ -73,8 +73,7 @@ void G4AdjointPhotoElectricModel::SampleSecondaries(const G4Track& aTrack,
   G4double electronEnergy = aDynPart->GetKineticEnergy();
   G4ThreeVector electronDirection= aDynPart->GetMomentumDirection() ;
   pre_step_AdjointCS = totAdjointCS; //The last computed CS was  at pre step point
-  G4double adjCS;
-  adjCS = AdjointCrossSection(aCouple, electronEnergy,IsScatProjToProjCase);
+  post_step_AdjointCS = AdjointCrossSection(aCouple, electronEnergy,IsScatProjToProjCase);
   post_step_AdjointCS = totAdjointCS; 
 				
 

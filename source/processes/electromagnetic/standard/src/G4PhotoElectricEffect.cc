@@ -80,6 +80,8 @@ G4PhotoElectricEffect::G4PhotoElectricEffect(const G4String& processName,
   G4ProcessType type):G4VEmProcess (processName, type),
     isInitialised(false)
 {
+  SetBuildTableFlag(false);
+  SetSecondaryParticle(G4Electron::Electron());
   SetProcessSubType(fPhotoElectricEffect);
 }
 
@@ -101,8 +103,6 @@ void G4PhotoElectricEffect::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
-    SetBuildTableFlag(false);
-    SetSecondaryParticle(G4Electron::Electron());
     if(!Model()) { SetModel(new G4PEEffectFluoModel()); }
     Model()->SetLowEnergyLimit(MinKinEnergy());
     Model()->SetHighEnergyLimit(MaxKinEnergy());

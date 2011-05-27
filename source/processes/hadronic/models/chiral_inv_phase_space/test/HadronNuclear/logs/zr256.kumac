@@ -1,0 +1,13 @@
+opt a4
+zone 2 3 
+title_gl 'neutron final state'
+
+exec prepare ../data/pb.256mev/p.pb.256mev.dsig_n.dt.domega
+
+exec analyse ../logs/liste.p_zr.256mev.neutron.7.5degree 7.5 256. 1.
+exec analyse ../logs/liste.p_zr.256mev.neutron.30degree 30. 256. 1.
+exec analyse ../logs/liste.p_zr.256mev.neutron.60degree 60. 256. 1.
+exec analyse ../logs/liste.p_zr.256mev.neutron.120degree 120. 256. 1.
+exec analyse ../logs/liste.p_zr.256mev.neutron.150degree 150. 256. 1.
+
+title_gl 'neutron final state'

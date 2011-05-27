@@ -28,10 +28,11 @@ if(UNIX)
 
     #--------------------------------------------------------------------------
     # X11 Support for RayTracer driver
-    #option(GEANT4_USE_RAYTRACERX "Build RayTracer driver with X11 support" OFF)
+    option(GEANT4_USE_RAYTRACERX "Build RayTracer driver with X11 support" OFF)
 
     if(GEANT4_USE_RAYTRACERX)
         # Find and configure X11...
+        find_package(X11 REQUIRED)
     endif()
 
     #-------------------------------------------------------------------------
@@ -61,7 +62,7 @@ if(GEANT4_USE_QT)
     # Find and configure Qt - require 4
     find_package(Qt4 REQUIRED COMPONENTS QtCore QtGui QtOpenGL)
 
-    # Info on how tofall back to Qt3 kept below for information
+    # Info on how to fall back to Qt3 kept below for information
     #if(NOT QT_FOUND)
     #   message(STATUS "failed to find Qt4, trying Qt3...")
     #   find_package(Qt3 REQUIRED)

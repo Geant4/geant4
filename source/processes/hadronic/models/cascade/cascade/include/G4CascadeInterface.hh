@@ -45,6 +45,7 @@
 // 20110304  M. Kelsey -- Drop conversion of Propagate() arguments; pass
 //		directly to collider for processing.  Rename makeReactionProduct
 //		to makeDynamicParticle.
+// 20110502  M. Kelsey -- Add filename string to capture random seeds.
 
 #ifndef G4CASCADEINTERFACE_H
 #define G4CASCADEINTERFACE_H 1
@@ -131,6 +132,8 @@ private:
   G4int operator!=(const G4CascadeInterface& right) const {
     return (this != &right);
   }
+
+  static const G4String randomFile;	// Filename to capture random seeds
 
   static const G4int maximumTries;	// Number of iterations for inelastic
 

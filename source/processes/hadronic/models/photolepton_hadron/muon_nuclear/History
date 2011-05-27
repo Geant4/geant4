@@ -15,6 +15,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+02 May 2011 D.H. Wright (hadr-munuclear-V09-04-01)
+--------------------------------------------------
+- remove G4MuonNucleusProcess and G4MuonNucleusInteractionModel.  These
+  were the old GHEISHA-style models and no longer used.
+
 16 February 2011 D.H. Wright (hadr-munuclear-V09-04-00)
 -------------------------------------------------------
 - create new model G4VDMuonNuclearModel to replace old-style

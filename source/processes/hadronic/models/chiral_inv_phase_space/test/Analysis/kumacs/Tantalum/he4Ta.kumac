@@ -1,0 +1,56 @@
+fo/file 66 he4ta.ps
+meta 66 -111
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79   ITEP-79-6'
+ opt logy
+ve/cr q(005)
+ve/cr v(4,005)
+ve/in v(1:4,001)      1.9000E-01     0.0000E+00     3.0000E-02     5.0000E-03
+ve/in v(1:4,002)      2.3000E-01     0.0000E+00     1.5100E-02     2.1000E-03
+ve/in v(1:4,003)      2.6000E-01     0.0000E+00     8.2000E-03     2.0000E-03
+ve/in v(1:4,004)      3.9000E-01     0.0000E+00     6.4000E-04     3.4000E-04
+ve/in v(1:4,005)      4.6000E-01     0.0000E+00     4.2000E-04     1.3000E-04
+ve/copy v(1,1:005) x
+ve/copy v(2,1:005) q
+ve/copy v(3,1:005) y
+ve/copy v(4,1:005) e
+ null   0.163000   0.487000    1.00000E-04    1.00000
+exec ../analyse ../../logs/liste.p_ta.he4.90degree.p_ta
+/GRAPHICS/HPLOT/ERRORS x y q e 005 24 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.325000    0.630957 'RE   P TA --> HE X' 0.3
+ text    0.325000    0.398107 'E IN GEV   400.00' 0.3
+ text    0.325000    0.251189 'THETA(P=3,RF=LAB) IN DEG   90.00' 0.3
+ text    0.325000    0.158489 'A   180.95' 0.3
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79   ITEP-79-6'
+ opt liny
+ve/cr q(003)
+ve/cr v(4,003)
+ve/in v(1:4,001)      1.6000E-01     0.0000E+00     1.4000E-02     5.0000E-03
+ve/in v(1:4,002)      1.8000E-01     0.0000E+00     1.0800E-02     2.3000E-03
+ve/in v(1:4,003)      2.2000E-01     0.0000E+00     5.9000E-03     6.0000E-04
+ve/copy v(1,1:003) x
+ve/copy v(2,1:003) q
+ve/copy v(3,1:003) y
+ve/copy v(4,1:003) e
+ null   0.154000   0.226000    3.93000E-03    2.03700E-02
+exec ../analyse ../../logs/liste.p_ta.he4.118degree.p_ta
+/GRAPHICS/HPLOT/ERRORS x y q e 003 24 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.190000     1.95480E-02 'RE   P TA --> HE X' 0.3
+ text    0.190000     1.87260E-02 'E IN GEV   400.00' 0.3
+ text    0.190000     1.79040E-02 'THETA(P=3,RF=LAB) IN DEG   118.00' 0.3
+ text    0.190000     1.70820E-02 'A   180.95' 0.3
+close 66
+

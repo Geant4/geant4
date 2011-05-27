@@ -98,9 +98,6 @@ private:
   G4VCrossSectionHandler* crossSectionHandler;
   G4VCrossSectionHandler* shellCrossSectionHandler;
 
-  G4double cutForLowEnergySecondaryPhotons;
-  G4double cutForLowEnergySecondaryElectrons;
-
   G4AtomicDeexcitation deexcitationManager;
 
 

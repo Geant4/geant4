@@ -14,7 +14,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-21-02-10  V.Ivanchenko (test41-V09-04-01)
+01-04-11  V.Ivanchenko (test41-V09-04-03)
+25-03-11  V.Ivanchenko (test41-V09-04-02)
+- Add test of G4UrbanMscModel95
+
+21-02-11  V.Ivanchenko (test41-V09-04-01)
 - Updated scripts
 
 21-12-10  V.Ivanchenko (test41-V09-04-00)

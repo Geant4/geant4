@@ -329,7 +329,6 @@ private:
 protected:
 
   G4VParticleChange*  pParticleChange;
-  //  G4bool              nuclearStopping;
 
   // ======== Cashed values - may be state dependent ================
 

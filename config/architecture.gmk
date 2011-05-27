@@ -136,24 +136,27 @@ endif
 # CLHEP path, etc.
 #
 ifndef CLHEP_BASE_DIR
-  CLHEP_BASE_DIR    := $(shell ls CLHEP_BASE_DIR--UNDEFINED)
+  CLHEP_BASE_DIR  := $(G4BASE)/externals/clhep
+  G4LIB_USE_CLHEP := 1
+endif
+ifndef G4LIB_USE_CLHEP
+  ifndef CLHEP_LIB
+    ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+      CLHEP_LIB := CLHEP.lib
+    else
+      CLHEP_LIB := CLHEP
+#
+# If using the "granular" libraries of CLHEP, uncomment below
+#
+#   CLHEP_LIB := CLHEP-HepMC -l CLHEP-Geometry -l CLHEP-Random -l CLHEP-Vector
+    endif
+  endif
 endif
 ifndef CLHEP_INCLUDE_DIR
   CLHEP_INCLUDE_DIR := $(CLHEP_BASE_DIR)/include
 endif
 ifndef CLHEP_LIB_DIR
   CLHEP_LIB_DIR     := $(CLHEP_BASE_DIR)/lib
-endif
-ifndef CLHEP_LIB
-  ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
-    CLHEP_LIB := CLHEP.lib
-  else
-    CLHEP_LIB := CLHEP
-#
-# If using the "granular" libraries of CLHEP, uncomment below
-#
-#   CLHEP_LIB := CLHEP-HepMC -l CLHEP-Geometry -l CLHEP-Random -l CLHEP-Vector
-  endif
 endif
 
 # Paths for G4 data
@@ -208,12 +211,22 @@ CPPFLAGS  += -I$(CLHEP_INCLUDE_DIR)
 ifndef LDFLAGS
   LDFLAGS :=
 endif
-ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
-  LDFLAGS   += -link $(LIB_PATH)$(CLHEP_LIB_DIR)
-  LOADLIBS  := $(CLHEP_LIB)
+ifndef G4LIB_USE_CLHEP
+  ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+    LDFLAGS   += -link $(LIB_PATH)$(CLHEP_LIB_DIR)
+    LOADLIBS  := $(CLHEP_LIB)
+  else
+    LDFLAGS   += -L$(CLHEP_LIB_DIR)
+    LOADLIBS  := -l$(CLHEP_LIB)
+  endif
 else
-  LDFLAGS   += -L$(CLHEP_LIB_DIR)
-  LOADLIBS  := -l$(CLHEP_LIB) -lm
+  LOADLIBS :=
+  ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+    LDFLAGS  += -link $(LIB_PATH)$(G4INSTALL)/lib
+  endif
+endif
+ifeq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+  LOADLIBS += -lm -lexpat
   ifndef G4LIB_USE_ZLIB
     LOADLIBS += -lz
   endif

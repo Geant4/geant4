@@ -1,0 +1,11 @@
+opt pto
+fo/file 67 allal.ps
+meta 67 -111
+exec pAl.kumac
+exec pipAl.kumac
+exec dAl.kumac
+exec tAl.kumac
+exec he3Al.kumac
+exec he4Al.kumac
+close 67
+

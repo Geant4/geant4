@@ -44,8 +44,10 @@ G4AnalyticalEcpssrKCrossSection::G4AnalyticalEcpssrKCrossSection()
 
     char *path = getenv("G4LEDATA");
  
-    if (!path)
-    G4Exception("G4AnalyticalEcpssrKCrossSection::G4AnalyticalEcpssrKCrossSection() G4LEDATA environment variable not set");
+    if (!path) {
+      G4Exception("G4AnalyticalEcpssrKCrossSection::G4AnalyticalEcpssrKCrossSection() G4LEDATA environment variable not set");
+      return;
+    }
 
     std::ostringstream fileName;
     fileName << path << "/pixe/uf/FK.dat";

@@ -127,7 +127,6 @@ const G4QDecayChan& G4QDecayChan::operator=(const G4QDecayChan& right)
 
 // Standard output for QDecayChan
 std::ostream& operator<<(std::ostream& lhs, G4QDecayChan& rhs)
-//       =========================================
 {
   lhs << "[L=" << rhs.GetDecayChanLimit(); 
   G4QPDGCodeVector VSH = rhs.GetVecOfSecHadrons();
@@ -142,8 +141,3 @@ std::ostream& operator<<(std::ostream& lhs, G4QDecayChan& rhs)
   lhs << "]";
   return lhs;
 }
-
-
-
-
-

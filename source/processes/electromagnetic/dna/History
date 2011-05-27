@@ -14,6 +14,25 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16.05.2011  A.Mantero,  tag emdna-V09-04-09
+	    Further compilation warnings removal
+
+16.05.2011  A.Mantero,  tag emdna-V09-04-08
+	    Compilation warnings removal
+
+12.05.2011  A.Mantero,  tag emdna-V09-04-07
+	    added Atomic Deexcitation to Ionisation Models
+
+04.05.2011  S. Incerti, tag emdna-V09-04-06
+            Fixed compilation error on icc in
+	    G4DNADingfelderChargeIncreaseModel.cc.
+
+03.05.2011  S. Incerti, tag emdna-V09-04-05
+            Changed process sub-type numbering.
+
+30.04.2011  S. Incerti, tag emdna-V09-04-04
+            Fixed coverity warnings.
+
 05.04.2011  S. Incerti, tag emdna-V09-04-03
             Updated all models for handling of variable density.
 

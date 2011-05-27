@@ -1,0 +1,18 @@
+rm *result
+./process_one ../in.pb.113.liste 113mev.p.pb.cc.exe
+./process_one ../in.pb.120.liste 120mev.p.pb.cc.exe
+./process_one ../in.pb.160.liste 160mev.p.pb.cc.exe
+./process_one ../in.pb.25.liste 25mev.p.pb.cc.exe
+./process_one ../in.pb.256.liste 256mev.p.pb.cc.exe
+./process_one ../in.pb.45.liste 45mev.p.pb.cc.exe
+./process_one ../in.pb.597.liste 597mev.p.pb.cc.exe
+./process_one ../in.pb.80.liste 80mev.p.pb.cc.exe
+./process_one ../in.pb.800.liste 800mev.p.pb.cc.exe
+./process_one ../in.zr.160.liste 160mev.p.zr.cc.exe
+./process_one ../in.zr.160.liste 160mev.p.zr.p_fs.cc.exe
+./process_one ../in.zr.25.liste 25mev.p.zr.cc.exe
+./process_one ../in.zr.256.liste 256mev.p.zr.cc.exe
+./process_one ../in.zr.45.liste 45mev.p.zr.cc.exe
+./process_one ../in.zr.80.liste 80mev.p.zr.cc.exe
+./process_one ../in.zr.80.liste 80mev.p.zr.p_fs.cc.exe
+./process_one ../in.zr.800.liste 800mev.p.zr.cc.exe

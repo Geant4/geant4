@@ -61,9 +61,9 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_coherent_elastic
         G4LEpp.hh
         G4LEppData.hh
         G4NuclNuclDiffuseElastic.hh
-        G4UHadronElasticProcess.hh
         G4VHadronElastic.hh
         G4WHadronElasticProcess.hh
+        G4AntiNuclElastic.hh
     SOURCES
         G4CHIPSElastic.cc
         G4CHIPSElasticXS.cc
@@ -75,9 +75,9 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_coherent_elastic
         G4LEnp.cc
         G4LEpp.cc
         G4NuclNuclDiffuseElastic.cc
-        G4UHadronElasticProcess.cc
         G4VHadronElastic.cc
         G4WHadronElasticProcess.cc
+        G4AntiNuclElastic.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

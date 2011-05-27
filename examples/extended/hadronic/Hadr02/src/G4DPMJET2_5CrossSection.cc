@@ -47,6 +47,9 @@
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ///////////////////////////////////////////////////////////////////////////////
 //
+#ifdef G4_USE_DPMJET
+
+
 #include "G4DPMJET2_5CrossSection.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
@@ -494,3 +497,4 @@ void G4DPMJET2_5CrossSection::DumpPhysicsTable(const G4ParticleDefinition
   }
   G4cout.setf(std::ios::fixed);
 }
+#endif

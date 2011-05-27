@@ -61,7 +61,7 @@ G4CrossSectionInelastic::G4CrossSectionInelastic(G4VComponentCrossSection* c,
 
 G4CrossSectionInelastic::~G4CrossSectionInelastic()
 {
-  delete component;
+  //delete component;
 }
    
 G4bool G4CrossSectionInelastic::IsApplicable(const G4DynamicParticle* p, 

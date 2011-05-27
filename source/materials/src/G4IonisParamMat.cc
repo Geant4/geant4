@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id: G4IonisParamMat.cc,v 1.40 2010-11-01 18:18:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -47,6 +46,7 @@
 #include "G4Material.hh"
 #include "G4DensityEffectData.hh"
 #include "G4NistManager.hh"
+#include "G4Pow.hh"
 
 G4DensityEffectData* G4IonisParamMat::fDensityData = 0;
 
@@ -57,7 +57,7 @@ G4IonisParamMat::G4IonisParamMat(G4Material* material)
 {
   fBirks = 0.;
   fMeanEnergyPerIon = 0.0;
-  twoln10 = 2.*std::log(10.);
+  twoln10 = 2.*G4Pow::GetInstance()->logZ(10);
 
   // minimal set of default parameters for density effect
   fCdensity = 0.0;
@@ -105,6 +105,7 @@ G4IonisParamMat::G4IonisParamMat(__void__&)
   fInvA23 = 0.0;
   fBirks = 0.0;
   fMeanEnergyPerIon = 0.0;
+  twoln10 = 2.*G4Pow::GetInstance()->logZ(10);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -321,8 +322,8 @@ void G4IonisParamMat::ComputeFluctModel()
      Zeff += (fMaterial->GetFractionVector())[i]
              *((*(fMaterial->GetElementVector()))[i]->GetZ());
   }
-  if (Zeff > 2.) fF2fluct = 2./Zeff ;
-    else         fF2fluct = 0.;
+  if (Zeff > 2.) { fF2fluct = 2./Zeff; }
+  else           { fF2fluct = 0.; }
 
   fF1fluct         = 1. - fF2fluct;
   fEnergy2fluct    = 10.*Zeff*Zeff*eV;
@@ -353,18 +354,18 @@ void G4IonisParamMat::ComputeIonParameters()
     z = element->GetZ();
     vF= element->GetIonisation()->GetFermiVelocity();
     lF= element->GetIonisation()->GetLFactor();
-    a23 = std::pow(element->GetN(),-2./3.);
+    a23 = 1.0/G4Pow::GetInstance()->Z23(G4int(element->GetN()));
 
   } else {
     for (G4int iel=0; iel<NumberOfElements; iel++)
       {
-        const G4Element* element = (*theElementVector)[iel] ;
-        const G4double weight = theAtomicNumDensityVector[iel] ;
+        const G4Element* element = (*theElementVector)[iel];
+        const G4double weight = theAtomicNumDensityVector[iel];
         norm += weight ;
-        z    += element->GetZ() * weight ;
-        vF   += element->GetIonisation()->GetFermiVelocity() * weight ;
-        lF   += element->GetIonisation()->GetLFactor() * weight ;
-	a23  += std::pow(element->GetN(),-2./3.) * weight ;
+        z    += element->GetZ() * weight;
+        vF   += element->GetIonisation()->GetFermiVelocity() * weight;
+        lF   += element->GetIonisation()->GetLFactor() * weight;
+	a23  += weight/G4Pow::GetInstance()->Z23(G4int(element->GetN()));
       }
     z  /= norm;
     vF /= norm;
@@ -510,6 +511,7 @@ const G4IonisParamMat& G4IonisParamMat::operator=(const G4IonisParamMat& right)
       fBirks                    = right.fBirks;
       fMeanEnergyPerIon         = right.fMeanEnergyPerIon;
       fDensityData              = right.fDensityData;
+      twoln10                   = right.twoln10;
     } 
   return *this;
 }

@@ -143,6 +143,7 @@ G4NistManager::BuildMaterialWithNewDensity(const G4String& name,
     G4cout << " New material <" << name << "> cannot be built because material"
 	   << " with the same name already exist" << G4endl;
     G4Exception("Wrong material name");
+    return 0;
   }
   bmat = FindOrBuildMaterial(basename);
   if(!bmat) {
@@ -150,6 +151,7 @@ G4NistManager::BuildMaterialWithNewDensity(const G4String& name,
     G4cout << " New material <" << name << "> cannot be built because " << G4endl;
     G4cout << " base material <" << basename << "> does not exist" << G4endl;
     G4Exception("Wrong material name");
+    return 0;
   }
   G4double dens = density;
   G4double temp = temperature;

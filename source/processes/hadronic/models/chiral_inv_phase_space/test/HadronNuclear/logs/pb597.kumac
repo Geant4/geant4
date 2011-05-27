@@ -1,0 +1,8 @@
+opt a4
+zone 2 2
+exec prepare_odd ../data/pb.597mev/p.pb.597mev.dsig_n.dt.domega
+
+exec analyse ../logs/liste.p_pb.597mev.neutron.7.5degree 7.5 597 1000.
+exec analyse ../logs/liste.p_pb.597mev.neutron.30degree 30. 597 1000.
+exec analyse ../logs/liste.p_pb.597mev.neutron.60degree 60. 597 1000.
+exec analyse ../logs/liste.p_pb.597mev.neutron.120degree 120. 597 1000.

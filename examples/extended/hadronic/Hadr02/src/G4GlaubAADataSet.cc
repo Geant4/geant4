@@ -47,6 +47,9 @@
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ///////////////////////////////////////////////////////////////////////////////
 //
+#ifdef G4_USE_DPMJET
+
+
 #include "G4GlaubAADataSet.hh"
 
 #include "G4DPMJET2_5Interface.hh"
@@ -301,3 +304,4 @@ void G4GlaubAADataSet::DefineAZStabilityLine ()
 	stabZ[210]= 83;
 }
 
+#endif

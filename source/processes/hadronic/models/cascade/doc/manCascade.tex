@@ -1,0 +1,53 @@
+\documentstyle[palatino, epsf,twoside,fleqn,epsfig,graphics,url, makeidx]{article} 
+\def \SYSTEM {/afs/cern.ch/user/m/miheikki/public/html/system/}
+%\input{\SYSTEM definitions} 
+%\def \PIC {/afs/cern.ch/user/m/miheikki/public/html/inucl/doc/}
+\def \PIC {pictures}
+
+\begin{document}
+% ::: Frontpage
+% ::: Title
+\vspace{-1.5truecm}
+\begin{center}
+\Large
+{\bf {\sc Geant4} homepage}
+\large
+
+Aatos Heikkinen \sf{(aatos.heikkinen@cern.ch)}, \normalsize
+Helsinki Institute of Physics
+\end{center}
+%\end{titlepage}
+
+\thispagestyle{empty}
+% ::: General intro
+\tableofcontents
+\newpage
+\input{manStatus}
+\newpage
+\input{manResults}% ::: Results
+\input{manAbstract}
+\input{manIntro} 
+\input{manG4Intro}
+\input{manHetc} % ::: Models
+\input{manInucl} % ::: Models
+\input{manConclusion} % ::: Conclusion (current performance, project status, plans)
+\input{manAcknowledgements} % ::: Thanks
+
+\bibliographystyle{unsrt}  % ::: References Options plain, unsrt, alpha, abbrv
+
+\bibstyle{plain}
+%\begin{thebibliography}{99}
+\bibliography{\SYSTEM /references/references.bib} 
+%\end{thebibliography}
+
+\input{manTables} % ::: Indexing
+
+\begin{appendix} % ::: appendix starts
+\input{manReport} % ::: Report
+\input{manManual} % ::: Manual
+\input{manExperiment} % ::: Data for validation and comparison
+\input{manGuide} % ::: practical guidance
+\input{manNotes} % ::: Notes
+\end{appendix} % ::: appendix ends
+
+\end{document}

@@ -17,10 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-12 April 2011 - G.Folger  (error_propagation-V09-04-00)
+13 May 2011 - G.Cosmo (error_propagation-V09-04-01)
+- Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
+
+12 April 2011 - G.Folger (error_propagation-V09-04-00)
 - Backport a fix in CLHEP to G4ErrorSymMatrix.cc to address issues on Windows.
-   (Cannot set iterator to point past end of vector in 
-     G4ErrorMatrix operator*(const G4ErrorMatrix, const G4ErrorSymMatrix))
+  (Cannot set iterator to point past end of vector in
+   G4ErrorMatrix operator*(const G4ErrorMatrix, const G4ErrorSymMatrix))
 
 11 November 2009 - P.Arce (error_propagation-V09-02-02)
 - Avoid G4ThreeVector(double) constructor in G4ErrorMagFieldLimitProcess.cc

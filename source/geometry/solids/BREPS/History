@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12/05/2011 : G.Cosmo           breps-V09-04-02
+- G4BREPSolid: fixed compilation warnings on gcc-4.6.0.
+
+06/05/2011 : G.Cosmo           breps-V09-04-01
+- Use G4 typedefs for CLHEP types also in internal unit tests.
+
 24/03/2011 : G.Cosmo           breps-V09-04-00
 - Use G4Transform3D type in place of native CLHEP type.
 

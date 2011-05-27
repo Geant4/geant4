@@ -553,7 +553,7 @@ G4VoxelNavigation::ComputeSafety(const G4ThreeVector& localPoint,
   G4LogicalVolume *motherLogical;
   G4VSolid *motherSolid;
   G4double motherSafety, ourSafety;
-  G4int localNoDaughters, sampleNo;
+  G4int sampleNo;
   G4SmartVoxelNode *curVoxelNode;
   G4int curNoVolumes, contentNo;
   G4double voxelSafety;
@@ -581,12 +581,9 @@ G4VoxelNavigation::ComputeSafety(const G4ThreeVector& localPoint,
   }
 #endif
   //
-  // Compute daughter safeties 
+  // Compute daughter safeties
   //
-
-  localNoDaughters = motherLogical->GetNoDaughters();
-
-  //  Look only inside the current Voxel only (in the first version).
+  // Look only inside the current Voxel only (in the first version).
   //
   curVoxelNode = fVoxelNode;
   curNoVolumes = curVoxelNode->GetNoContained();

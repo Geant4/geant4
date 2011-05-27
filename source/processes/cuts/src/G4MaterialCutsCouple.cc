@@ -60,6 +60,7 @@ G4MaterialCutsCouple::G4MaterialCutsCouple(const G4Material* material,
 
 
 G4MaterialCutsCouple::G4MaterialCutsCouple(const G4MaterialCutsCouple& right) 
+  :fMaterial(0), fCuts(0)
 {
   *this = right;
 }

@@ -15,6 +15,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+3 May, 11  G.Cosmo (mctruth-V09-04-01)
+- Updated CMake script.
+
+3 May, 11  G.Cosmo (mctruth-V09-04-00)
+- Removed obsolete HepMC code.
+
 14 October, 10  G.Cosmo (mctruth-V09-03-01)
 - Fixed possible case of NULL forward in G4PersistencyCenter class.
 

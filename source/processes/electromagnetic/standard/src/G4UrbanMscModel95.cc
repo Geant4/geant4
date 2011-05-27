@@ -155,7 +155,7 @@ void G4UrbanMscModel95::Initialise(const G4ParticleDefinition* p,
 
   fParticleChange = GetParticleChangeForMSC();
 
-  samplez = true;
+  samplez = false;
 
   isInitialized = true;
 }

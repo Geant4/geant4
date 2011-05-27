@@ -636,7 +636,6 @@ ParameterisedRead(const xercesc::DOMElement* const element)
  
      if (tag=="parameters")
      {
-        G4double number = 1;
         const xercesc::DOMNamedNodeMap* const attributes
               = element->getAttributes();
         XMLSize_t attributeCount = attributes->getLength();
@@ -659,7 +658,7 @@ ParameterisedRead(const xercesc::DOMElement* const element)
           const G4String attName = Transcode(attribute->getName());
           const G4String attValue = Transcode(attribute->getValue());
 
-          if (attName=="number")  { number = eval.Evaluate(attValue); }
+          if (attName=="number")  { eval.Evaluate(attValue); }
         }
         ParametersRead(child);
       }

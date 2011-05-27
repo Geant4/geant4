@@ -180,12 +180,21 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
   G4double eps = 0.0001;
   targetMass = ( G4NucleiProperties::GetNuclearMass(static_cast<G4int>(theBaseA+eps), static_cast<G4int>(theBaseZ+eps))) /
                G4Neutron::Neutron()->GetPDGMass();
+
   if(theEnergyAngData!=0)
      { targetMass = theEnergyAngData->GetTargetMass(); }
   if(theAngularDistribution!=0)
      { targetMass = theAngularDistribution->GetTargetMass(); }
+
 //080731a
-if ( targetMass == 0 ) G4cout << "080731a It looks like something wrong value in G4NDL, please update the latest version. If you use the latest, then please report this problem to Geant4 Hyper news." << G4endl;
+//110512 TKDB ENDF-VII.0 21Sc45 has trouble in MF4MT22 (n,np) targetMass is not properly recorded.
+//if ( targetMass == 0 ) G4cout << "080731a It looks like something wrong value in G4NDL, please update the latest version. If you use the latest, then please report this problem to Geant4 Hyper news." << G4endl;
+  if ( targetMass == 0 ) 
+  {
+     //G4cout << "TKDB targetMass = 0; ENDF-VII.0 21Sc45 has trouble in MF4MT22 (n,np) targetMass is not properly recorded. This could be a similar situation." << G4endl;
+     targetMass = ( G4NucleiProperties::GetNuclearMass(static_cast<G4int>(theBaseA+eps), static_cast<G4int>(theBaseZ+eps))) / G4Neutron::Neutron()->GetPDGMass();
+  }
+
   G4Nucleus aNucleus;
   G4ReactionProduct theTarget; 
   G4ThreeVector neuVelo = (1./incidentParticle->GetDefinition()->GetPDGMass())*theNeutron.GetMomentum();

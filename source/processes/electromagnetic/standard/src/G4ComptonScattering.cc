@@ -74,6 +74,9 @@ G4ComptonScattering::G4ComptonScattering(const G4String& processName,
   G4ProcessType type):G4VEmProcess (processName, type),
     isInitialised(false)
 {
+  SetStartFromNullFlag(false);
+  SetBuildTableFlag(true);
+  SetSecondaryParticle(G4Electron::Electron());
   SetProcessSubType(fComptonScattering);
 }
 
@@ -95,8 +98,6 @@ void G4ComptonScattering::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
-    SetBuildTableFlag(true);
-    SetSecondaryParticle(G4Electron::Electron());
     //    if(!Model(1)) { SetModel(new G4KleinNishinaModel(), 1); }
     if(!Model(1)) { SetModel(new G4KleinNishinaCompton(), 1); }
     Model(1)->SetLowEnergyLimit(MinKinEnergy());

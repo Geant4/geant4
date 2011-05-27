@@ -122,7 +122,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
 
   G4FragmentVector * theTempResult = 0;      // pointer which receives temporal results
   std::list<G4Fragment*> theEvapList;        // list to apply Evaporation or Fermi Break-Up
-  std::list<G4Fragment*> theEvapStableList;  // list to apply PhotonEvaporation
+  std::list<G4Fragment*> thePhotoEvapList;  // list to apply PhotonEvaporation
   std::list<G4Fragment*> theResults;         // list to store final result
   //
   //  G4cout << "@@@@@@@@@@ Start G4Excitation Handler @@@@@@@@@@@@@" << G4endl;  
@@ -135,8 +135,6 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
 
   G4NistManager* nist = G4NistManager::Instance();
   
-  // JMQ 150909:  first step in de-excitation chain (SMM will be used only here)
-  
   // In case A <= 1 the fragment will not perform any nucleon emission
   if (A <= 1)
     {
@@ -147,7 +145,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
     {
       theResults.push_back( theInitialStatePtr );
     }  
-  else  // In all cases apply once theFermiModel, theMultiFragmentation or theEvaporation
+  else  
     {      
       // JMQ 150909: first step in de-excitation is treated separately 
       // Fragments after the first step are stored in theEvapList 
@@ -178,7 +176,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
 		// gamma, p, n
 		if(A <= 1) { theResults.push_back(*j); }
 
-		// Analyse fragment
+		// Analyse fragment A > 1
 		else {
 		  G4double exEnergy = (*j)->GetExcitationEnergy();
 
@@ -189,21 +187,21 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
 		      theResults.push_back(*j); // stable fragment 
 
 		    } else {
-		      const G4VFermiFragment* ffrag = thePool->GetFragment(Z, A);
 
-		      // isotope from FBU pool
+		      // check if the cold fragment is from FBU pool
+		      const G4VFermiFragment* ffrag = thePool->GetFragment(Z, A);
 		      if(ffrag) {
 			if(ffrag->IsStable()) { theResults.push_back(*j); }
 			else                  { theEvapList.push_back(*j); }
 
-			// isotope may be unstable
+			// cold fragment may be unstable
 		      } else {
-			theEvapList.push_back(*j); // unstable cold fragment
+			theEvapList.push_back(*j); 
 		      }
 		    }
 
-		    // hot fragments
-		  } else { theEvapList.push_back(*j); }// hot fragment 
+		    // hot fragments are unstable
+		  } else { theEvapList.push_back(*j); } 
 		}
 	      }
 	      if( deletePrimary ) { delete theInitialStatePtr; }
@@ -212,16 +210,14 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
 	  }
 	}
     }
-  //
-  // JMQ 150909: Further steps in de-excitation chain follow ..
       
   //G4cout << "## After first step " << theEvapList.size() << " for evap;  "
-  // << theEvapStableList.size() << " for photo-evap; " 
+  // << thePhotoEvapList.size() << " for photo-evap; " 
   // << theResults.size() << " results. " << G4endl; 
 
-  // ------------------------------
-  // De-excitation loop
-  // ------------------------------
+  // -----------------------------------
+  // FermiBreakUp and De-excitation loop
+  // -----------------------------------
       
   std::list<G4Fragment*>::iterator iList;
   for (iList = theEvapList.begin(); iList != theEvapList.end(); ++iList)
@@ -258,10 +254,11 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
 	  G4double exEnergy = (*j)->GetExcitationEnergy();
 
 	  if(A <= 1) { theResults.push_back(*j); }                // gamma, p, n
+
+	  // evaporation is not possible
 	  else if(1 == nsec) { 
-            // evaporation is not possible
 	    if(exEnergy < minExcitation) { theResults.push_back(*j); }
-	    else                         { theEvapStableList.push_back(*j); }
+	    else                         { thePhotoEvapList.push_back(*j); }
 
 	  } else { // Analyse fragment
 
@@ -289,7 +286,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
 
 	      // hot fragment
 	    } else if (wasFBU) { 
-	      theEvapStableList.push_back(*j); // FBU applied only once 
+	      thePhotoEvapList.push_back(*j); // FBU applied only once 
 	    } else {  
 	      theEvapList.push_back(*j);        
 	    }
@@ -301,17 +298,16 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
     } // end of the loop over theEvapList
 
   //G4cout << "## After 2nd step " << theEvapList.size() << " was evap;  "
-  // << theEvapStableList.size() << " for photo-evap; " 
+  // << thePhotoEvapList.size() << " for photo-evap; " 
   // << theResults.size() << " results. " << G4endl; 
       
   // -----------------------
   // Photon-Evaporation loop
   // -----------------------
   
-  // normally should not reach this point - it is kind of work around	      
-  for(iList = theEvapStableList.begin(); iList != theEvapStableList.end(); ++iList)
+  // at this point only photon evaporation is possible
+  for(iList = thePhotoEvapList.begin(); iList != thePhotoEvapList.end(); ++iList)
     {
-      // photon-evaporation is applied
       //G4cout << "Next photon evaporate: " << thePhotonEvaporation << G4endl;  
       //G4cout << *iList << G4endl;
   
@@ -336,7 +332,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
     } // end of photon-evaporation loop
 
   //G4cout << "## After 3d step " << theEvapList.size() << " was evap;  "
-  //	 << theEvapStableList.size() << " was photo-evap; " 
+  //	 << thePhotoEvapList.size() << " was photo-evap; " 
   //	 << theResults.size() << " results. " << G4endl; 
     
   G4ReactionProductVector * theReactionProductVector = new G4ReactionProductVector;

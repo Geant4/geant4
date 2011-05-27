@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+13-05-2011 mma (fano-V09-04-01)
+- PhysListEmStandard_opt3 updated for msc95
+- PhysListEmStandard_opt2 suppressed
+- PhysListEmStandard_GS, VWI, SS : same options as opt3
 
 04-01-2011 V.Ivanchenko (fano-V09-04-00)
 - Minor cleanup of SS physics constructor

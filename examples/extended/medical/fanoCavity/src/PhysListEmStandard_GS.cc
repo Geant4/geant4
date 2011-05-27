@@ -131,7 +131,22 @@ void PhysListEmStandard_GS::ConstructProcess()
   // Several of them have default values.
   //
   G4EmProcessOptions emOptions;
-           
+  
+  //physics tables
+  //
+  emOptions.SetMinEnergy(100*eV);	//default    
+  emOptions.SetMaxEnergy(10*GeV);	//default  
+  emOptions.SetDEDXBinning(8*20);	//default=8*7
+  emOptions.SetLambdaBinning(8*20);	//default=8*7
+      
+  //multiple coulomb scattering
+  //
+  emOptions.SetMscStepLimitation(fUseDistanceToBoundary);  //default=fUseSafety
+      
+  //energy loss
+  //
+  emOptions.SetStepFunction(0.2, 10*um);	//default=(0.2, 1*mm)
+                
   //build CSDA range
   //
   emOptions.SetBuildCSDARange(true);		//default=false

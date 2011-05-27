@@ -102,6 +102,14 @@ protected:
   G4UIcmdParg		*trdArgs[5];
   G4UIcmdWithPargs	*trdCmd;
   void MakeMeATrd( G4String values );
+ 
+  G4UIcmdParg		*gentrapArgs[3];
+  G4UIcmdWithPargs	*gentrapCmd;
+  void MakeMeAGenericTrap( G4String values );
+
+  G4UIcmdParg		*parabolArgs[3];
+  G4UIcmdWithPargs	*parabolCmd;
+  void MakeMeAParaboloid( G4String values );
 	
   G4UIcmdParg		*tubsArgs[5];
   G4UIcmdWithPargs	*tubsCmd;

@@ -66,11 +66,14 @@ G4VMscModel::G4VMscModel(const G4String& nam):
   lambdalimit(mm),
   geomMin(1.e-6*CLHEP::mm),
   geomMax(1.e50*CLHEP::mm),
-  dedx(2.0*CLHEP::MeV*CLHEP::cm2/CLHEP::g),
   steppingAlgorithm(fUseSafety),
   samplez(false),
   latDisplasment(true)
-{}
+{
+  dedx       = 2.0*CLHEP::MeV*CLHEP::cm2/CLHEP::g;
+  localrange = DBL_MAX;
+  localtkin  = 0.0;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

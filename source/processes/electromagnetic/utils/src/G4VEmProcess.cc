@@ -92,7 +92,7 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   theCrossSectionMax(0),
   integral(false),
   applyCuts(false),
-  startFromNull(true),
+  startFromNull(false),
   useDeexcitation(false),
   nDERegions(0),
   idxDERegions(0),
@@ -121,6 +121,9 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
 
   pParticleChange = &fParticleChange;
   secParticles.reserve(5);
+
+  preStepLambda = 0.0;
+  mfpKinEnergy  = DBL_MAX;
 
   modelManager = new G4EmModelManager();
   (G4LossTableManager::Instance())->Register(this);
@@ -157,6 +160,14 @@ void G4VEmProcess::Clear()
   mfpKinEnergy  = DBL_MAX;
   deRegions.clear();
   nDERegions = 0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4VEmProcess::MinPrimaryEnergy(const G4ParticleDefinition*,
+					const G4Material*)
+{
+  return 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -221,6 +232,16 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
     Clear();
     InitialiseProcess(particle);
 
+    const G4ProductionCutsTable* theCoupleTable=
+      G4ProductionCutsTable::GetProductionCutsTable();
+    size_t n = theCoupleTable->GetTableSize();
+    theEnergyOfCrossSectionMax = new G4double [n];
+    theCrossSectionMax = new G4double [n];
+    for(size_t i=0; i<n; ++i) {
+      theEnergyOfCrossSectionMax[i] = 0.0;
+      theCrossSectionMax[i] = DBL_MAX;
+    }
+
     // initialisation of models
     G4int nmod = modelManager->NumberOfModels();
     for(G4int i=0; i<nmod; ++i) {
@@ -233,8 +254,6 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 
     theCuts = modelManager->Initialise(particle,secondaryParticle,
 				       2.,verboseLevel);
-    const G4ProductionCutsTable* theCoupleTable=
-          G4ProductionCutsTable::GetProductionCutsTable();
     theCutsGamma    = theCoupleTable->GetEnergyCutsVector(idxG4GammaCut);
     theCutsElectron = theCoupleTable->GetEnergyCutsVector(idxG4ElectronCut);
     theCutsPositron = theCoupleTable->GetEnergyCutsVector(idxG4PositronCut);
@@ -290,6 +309,7 @@ void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
   }
 
   (G4LossTableManager::Instance())->BuildPhysicsTable(particle);
+
   if(buildLambdaTable) {
     BuildLambdaTable();
     FindLambdaMax();
@@ -298,7 +318,8 @@ void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
   // reduce printout for nuclear stopping
   G4bool gproc = true;
   G4int st = GetProcessSubType();
-  if(st == fCoulombScattering && part.GetParticleType() == "nucleus" && 
+  if((st == fCoulombScattering || st == fNuclearStopping) && 
+     part.GetParticleType() == "nucleus" && 
      partname != "GenericIon" && partname != "alpha") { gproc = false; } 
 
   if(gproc && 0 < verboseLevel) { PrintInfoDefinition(); }
@@ -332,6 +353,9 @@ void G4VEmProcess::BuildLambdaTable()
   G4PhysicsLogVector* aVector = 0;
   G4PhysicsLogVector* bVector = 0;
 
+  G4double scale = 0.0;
+  if(startFromNull) { scale = std::log(maxKinEnergy/minKinEnergy); }
+    
   for(size_t i=0; i<numOfCouples; ++i) {
 
     if (theLambdaTable->GetFlag(i)) {
@@ -339,17 +363,28 @@ void G4VEmProcess::BuildLambdaTable()
       // create physics vector and fill it
       const G4MaterialCutsCouple* couple = 
 	theCoupleTable->GetMaterialCutsCouple(i);
-      if(!bVector) {
+
+      // if start from zero then change the scale
+      if(startFromNull) {
+	G4double emin = MinPrimaryEnergy(particle,couple->GetMaterial());
+	if(0.0 >= emin) { emin = eV; }
+	else if(maxKinEnergy <= emin) { emin = 0.5*maxKinEnergy; }
+	G4int bin = 
+	  G4int(nLambdaBins*std::log(maxKinEnergy/emin)/scale + 0.5);
+	if(bin < 3) { bin = 3; }
+	aVector = new G4PhysicsLogVector(emin, maxKinEnergy, bin);
+
+	// start not from zero
+      } else if(!bVector) {
 	aVector = 
-	  static_cast<G4PhysicsLogVector*>(LambdaPhysicsVector(couple));
+	  new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nLambdaBins);
         bVector = aVector;
       } else {
         aVector = new G4PhysicsLogVector(*bVector);
       }
-	//      G4PhysicsVector* aVector = LambdaPhysicsVector(couple);
       aVector->SetSpline(splineFlag);
       modelManager->FillLambdaVector(aVector, couple, startFromNull);
-      if(splineFlag) aVector->FillSecondDerivatives();
+      if(splineFlag) { aVector->FillSecondDerivatives(); }
       G4PhysicsTableHelper::SetPhysicsVector(theLambdaTable, i, aVector);
     }
   }
@@ -405,12 +440,12 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
   if(!currentModel->IsActive(preStepKinEnergy)) { return x; }
 
   if(preStepKinEnergy < mfpKinEnergy) {
-    if (integral) ComputeIntegralLambda(preStepKinEnergy);
-    else  preStepLambda = GetCurrentLambda(preStepKinEnergy);
-    if(preStepLambda <= DBL_MIN) mfpKinEnergy = 0.0;
+    if (integral) { ComputeIntegralLambda(preStepKinEnergy); }
+    else { preStepLambda = GetCurrentLambda(preStepKinEnergy); }
+    if(preStepLambda <= DBL_MIN) { mfpKinEnergy = 0.0; }
   }
 
-  // non-zero cross section
+  // non-zero cross sect}ion
   if(preStepLambda > DBL_MIN) { 
     if (theNumberOfInteractionLengthLeft < 0.0) {
       // beggining of tracking (or just after DoIt of this process)
@@ -652,8 +687,9 @@ void G4VEmProcess::ActivateDeexcitation(G4bool val, const G4Region* r)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4VEmProcess::CrossSectionPerVolume(G4double kineticEnergy,
-					     const G4MaterialCutsCouple* couple)
+G4double 
+G4VEmProcess::CrossSectionPerVolume(G4double kineticEnergy,
+				    const G4MaterialCutsCouple* couple)
 {
   // Cross section per atom is calculated
   DefineMaterial(couple);
@@ -716,10 +752,8 @@ void G4VEmProcess::FindLambdaMax()
            << " and process " << GetProcessName() << G4endl; 
   }
   size_t n = theLambdaTable->length();
-  G4PhysicsVector* pv = (*theLambdaTable)[0];
+  G4PhysicsVector* pv;
   G4double e, s, emax, smax;
-  theEnergyOfCrossSectionMax = new G4double [n];
-  theCrossSectionMax = new G4double [n];
 
   for (size_t i=0; i<n; ++i) {
     pv = (*theLambdaTable)[i];
@@ -752,7 +786,8 @@ void G4VEmProcess::FindLambdaMax()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4PhysicsVector* G4VEmProcess::LambdaPhysicsVector(const G4MaterialCutsCouple*)
+G4PhysicsVector* 
+G4VEmProcess::LambdaPhysicsVector(const G4MaterialCutsCouple*)
 {
   G4PhysicsVector* v = 
     new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nLambdaBins);

@@ -1,0 +1,19 @@
+ve/cr it(4,100) R
+ve/read it [1]
+ve/cr xxx(100) r
+ve/cr yyy(100) r
+ve/cr errxxx(100) r
+ve/cr erryyy(100) r
+ve/copy it(1,1:100) xxx
+ve/copy it(2,1:100) errxxx
+ve/copy it(3,1:100) yyy
+ve/copy it(4,1:100) erryyy
+sigma xxx = 1000.*xxx
+sigma yyy = yyy/[4]
+sigma erryyy = erryyy/[4]
+opt logy
+null -10 [3] 0.00001 1000
+/GRAPHICS/HPLOT/ERRORS xxx yyy errxxx erryyy 100 24 0.1
+sigma work = en+1000.*(th-[2])
+/GRAPHICS/HPLOT/ERRORS work sig ex ey 10000 20 0.1
+

@@ -51,6 +51,7 @@ GEANT4_DEFINE_MODULE(NAME G4transportation
         G4Transportation.icc
         G4UserSpecialCuts.hh
         G4VTrackTerminator.hh
+	G4TransportationProcessType.hh
     SOURCES
         G4CoupledTransportation.cc
         G4NeutronKiller.cc

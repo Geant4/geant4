@@ -1,0 +1,8 @@
+
+I RUNNING THE EXAMPLE
+
+1. Compile the example by running "make".
+
+2. Run an example by using "make t0".
+
+See GNUmakefile for details

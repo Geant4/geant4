@@ -28,7 +28,6 @@
 // Coded strictly according to Furihata's GEM paper 
 //
 
-
 #ifndef G4TritonGEMCoulombBarrier_h
 #define G4TritonGEMCoulombBarrier_h 1
 
@@ -38,6 +37,7 @@
 class G4TritonGEMCoulombBarrier : public G4GEMCoulombBarrier
 {
 public:
+
   G4TritonGEMCoulombBarrier() : G4GEMCoulombBarrier(3,1) {}
   ~G4TritonGEMCoulombBarrier() {}
   
@@ -49,7 +49,8 @@ private:
   G4bool operator!=(const G4TritonGEMCoulombBarrier & right) const;
   
 private:
-  G4double BarrierPenetrationFactor(const G4double aZ) const
+
+  G4double BarrierPenetrationFactor(G4double aZ) const
   {
     // Data comes from 
     // Dostrovsky, Fraenkel and Friedlander

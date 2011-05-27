@@ -22,12 +22,6 @@ CPPFLAGS += -I$(G4INSTALL)/source/global/management/include \
             -I$(G4INSTALL)/source/tracking/include \
             -I$(G4INSTALL)/source/intercoms/include \
             -I$(G4INSTALL)/source/geometry/management/include
-ifdef G4LIB_USE_HEPMC
-  ifndef HEPMC_DIR
-	@echo HEPMC_DIR not defined!
-  endif
-  CPPFLAGS += -I$(HEPMC_DIR)/include
-endif
 
 include $(G4INSTALL)/config/common.gmk
 

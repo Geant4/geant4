@@ -32,7 +32,6 @@
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 10-OCT-04
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 27-Nov-04
 // 
-//=========================================================================================
 // ****************************************************************************************
 // ********** This CLASS is temporary moved from the photolepton_hadron directory *********
 // ******* DO NOT MAKE ANY CHANGE! With time it'll move back to photolepton...(M.K.) ******

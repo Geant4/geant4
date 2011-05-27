@@ -86,6 +86,7 @@ G4PaulKCrossSection::~G4PaulKCrossSection()
 
   protonDataSetMap.clear();
   alphaDataSetMap.clear();
+  delete interpolation;
 
 }
 

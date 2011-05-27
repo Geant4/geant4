@@ -92,15 +92,16 @@ enum G4ProcessVectorDoItIndex
   	idxAll = -1,		// for all DoIt/GPIL 
   	idxAtRest = 0, 		// for AtRestDoIt/GPIL
 	idxAlongStep = 1, 	// for AlongStepDoIt/GPIL
-	idxPostStep =2		// for AlongSTepDoIt/GPIL
+	idxPostStep =2,		// for AlongSTepDoIt/GPIL
+	NDoit =3
 };
 
 //  enumeration for Ordering Parameter      
 enum G4ProcessVectorOrdering
 { 
-   	ordInActive = -1,			// ordering parameter to indicate InActive DoIt
-   	ordDefault = 1000,		// default ordering parameter
-   	ordLast    = 99999 		// ordering parameter to indicate the last DoIt
+   	ordInActive = -1,	// ordering parameter to indicate InActive DoIt
+   	ordDefault = 1000,	// default ordering parameter
+   	ordLast    = 9999 	// ordering parameter to indicate the last DoIt
 };
 
 class G4ProcessManager 
@@ -343,6 +344,9 @@ class G4ProcessManager
       G4bool  duringTracking;
       void    CreateGPILvectors();
       void    SetIndexToProcessVector(G4int ivec);
+
+      G4bool  isSetOrderingFirstInvoked[NDoit];
+      G4bool  isSetOrderingLastInvoked[NDoit];
 
  public: // with description
    void  DumpInfo();

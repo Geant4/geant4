@@ -31,6 +31,7 @@
 // 26-January-07 Add G4NEUTRONHP_USE_ONLY_PHOTONEVAPORATION flag
 // 081024 G4NucleiPropertiesTable:: to G4NucleiProperties::
 // 101203 Bugzilla/Geant4 Problem 1155 Lack of residual in some case 
+// 110430 Temporary solution in the case of being MF6 final state in Capture reaction (MT102)
 //
 #include "G4NeutronHPCaptureFS.hh"
 #include "G4Gamma.hh"
@@ -73,7 +74,15 @@
     G4ReactionProductVector * thePhotons = 0;
     if ( HasFSData() && !getenv ( "G4NEUTRONHP_USE_ONLY_PHOTONEVAPORATION" ) ) 
     { 
-      thePhotons = theFinalStatePhotons.GetPhotons(eKinetic);
+       //TK110430
+       if ( hasExactMF6 )
+       {
+          theMF6FinalState.SetTarget(theTarget);
+          theMF6FinalState.SetNeutron(theNeutron);
+          thePhotons = theMF6FinalState.Sample( eKinetic );
+       }
+       else
+          thePhotons = theFinalStatePhotons.GetPhotons(eKinetic);
     }
     else
     {
@@ -274,11 +283,54 @@
     return &theResult;
   }
 
+#include <sstream> 
   void G4NeutronHPCaptureFS::Init (G4double A, G4double Z, G4String & dirName, G4String & )
   {
+
+     //TK110430 BEGIN
+     std::stringstream iss;
+     iss << static_cast<G4int>(Z);
+     G4String sZ;
+     iss >> sZ;
+     iss.clear();
+     iss << static_cast<G4int>(A);
+     G4String sA;
+     iss >> sA;
+     G4String element_name = theNames.GetName( static_cast<G4int>(Z)-1 );
+     G4String filenameMF6 = dirName+"FSMF6/"+sZ+"_"+sA+"_"+element_name;
+     std::ifstream dummyIFS(filenameMF6, std::ios::in);
+     if ( dummyIFS.good() == true ) hasExactMF6=true;
+
+     //TK110430 Just for checking 
+     //ENDF-VII.0 no case (check done at 110430 
+     /*
+     if ( hasExactMF6 == true ) 
+     {
+        G4String filename = dirName+"FS/"+sZ+"_"+sA+"_"+element_name;
+        std::ifstream dummyIFS(filename, std::ios::in);
+        if ( dummyIFS.good() == true ) 
+        {
+           G4cout << "TKDB Capture Both FS and FSMF6 are exist for Z = " << sZ << ", A = " << sA << G4endl;;
+        }
+     }
+     */
+
+     //TK110430 Only use MF6MT102 which has exactly same A and Z 
+     //Even _nat_ do not select and there is no _nat_ case in ENDF-VII.0 
+     if ( hasExactMF6 == true )
+     { 
+        std::ifstream theData(filenameMF6, std::ios::in);
+        theMF6FinalState.Init(theData);
+        theData.close();
+         return;
+     }
+     //TK110430 END
+
+
     G4String tString = "/FS/";
     G4bool dbool;
     G4NeutronHPDataUsed aFile = theNames.GetName(static_cast<G4int>(A), static_cast<G4int>(Z), dirName, tString, dbool);
+
     G4String filename = aFile.GetName();
     theBaseA = A;
     theBaseZ = G4int(Z+.5);

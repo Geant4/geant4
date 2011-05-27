@@ -480,7 +480,7 @@ void G4IonDEDXHandler::PrintDEDXTable(
          << "# ------------------------------------------------------"
          << G4endl;
 
-  G4CacheValue value = GetCacheValue(particle, material); 
+  //G4CacheValue value = GetCacheValue(particle, material); 
 
   G4double energyLowerBoundary = lowerBoundary * atomicMassNumber;
   G4double energyUpperBoundary = upperBoundary * atomicMassNumber; 

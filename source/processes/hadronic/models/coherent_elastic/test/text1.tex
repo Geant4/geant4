@@ -1,0 +1,547 @@
+\documentclass[12pt]{article}
+
+\oddsidemargin  0.0cm
+\evensidemargin 0.0cm
+
+\topmargin 0cm
+\headheight 0pt
+\headsep 0pt
+\topskip 0pt
+%\footheight 1cm
+%\footskip 1cm
+
+%\textheight 24.0cm
+%\textwidth 16.0cm
+%\parindent 7mm
+%\parskip 0pt
+%\def\DD {{\!}_{DD}}
+
+\tolerance = 400
+\begin{document}
+
+{\Large{\bf The generator of events of a hadron-nucleus
+elastic scattering at high energy.}}
+
+\vspace{2ex}
+{\bf The  calculations method.}
+%\par
+\vspace{2ex}
+
+For the calculations  the Glauber model was used. This model describes the 
+hadrons-nucleus elastic and difraction scattering rather well
+at medium and high energy. 
+The corrections on 
+the inelastic screening was taken into account too. 
+
+The important difference from usual calculations is that the two-gaussian 
+form of a nuclear density was used
+
+
+  $$
+   \rho(r) = C (e^{-(r/R_{1})^2}-pe^{-(r/R_2)^2}),   
+   \eqno (1)
+  $$
+where $R_1$, $R_2$ and $p$ are the fitting
+parameters but C is the normalization constant.
+
+
+This representation of density allows to get the expressions 
+for an amplitude in the analitic form.  
+
+The form (1) is not physical especially for a heavy nucleus. 
+The reason why it works rather well (see below the figures of
+descriptions of  experimental datas) is that the nucleus absorbs 
+of the hadrons very strongly especially at small impact parameters 
+where the absorption is full. So the representation (1) describes 
+only the peripherial edge of a nucleus.
+
+ We use an usual expression for the  Glauber model amplitude 
+of a multiple scattering 
+ 
+
+  $$
+   F(q)=\frac{ik_{CM}}{2\pi} \int d^2{b}e^{\vec{\mathstrut q}
+   \cdot \vec{\mathstrut b}} M(\vec b).
+   \eqno (2)
+  $$
+Here $M(\vec b)$ is the hadron-nucleus amplitude in the impact 
+parameter representation
+  $$
+ M(\vec b) = 1-[1-e^{-A\int d^{3}r\Gamma(\vec{\mathstrut b}-
+      \vec{\mathstrut s})\rho(\vec {r})}]^A,
+ \eqno (3)
+  $$
+$k_{CM}$ is an incident particle momentum,
+$\vec q$ is a transfer momentum in the center of mass system
+and $\Gamma(\vec {b})$ is the hadron-nucleon amplitude of 
+the elastic scattering in the impact-parameter 
+representation
+
+  $$
+  \Gamma(\vec b)=\frac{\displaystyle 1}
+                      {\displaystyle 2\pi ik_{CM}}
+  \int d\vec {q} e^{-\vec {\mathstrut q} \cdot \vec{\mathstrut b}} 
+  f(\vec {q}).
+  \eqno (4)
+  $$
+
+We use the exponential parametrisation of the hadron-nucleom
+amplitude
+
+  $$
+  f(\vec {q})=\frac{\displaystyle ik_{CM}\sigma^{hn}}{2\pi}
+   e^{-0.5q^2B}.
+  \eqno (5)
+  $$
+Here  $\sigma^{hn}=\sigma_{tot}^{hn}(1-i\alpha)$, 
+$\sigma_{tot}^{hn}$ is the total
+cross-section hadron-nucleon scattering, B is 
+the difraction cone slope  
+and $\alpha$ is the relation of a real to
+imagenary part of amplitude at $q=0$. 
+
+ Substituting (1) and (5) into (2), (3) and (4)
+we can easy get the following formula
+ 
+ $$
+\begin{array}{cl}
+   F(q) = \frac{\displaystyle ik_{CM}\pi}{\displaystyle 2} 
+   \sum\limits_{k=1}^A (-1)^k {\displaystyle A\choose 
+   \displaystyle k} 
+   [\frac{\displaystyle\sigma^{hn}}
+   {\displaystyle 2\pi(R_1^3-pR_2^3)}]^k 
+   \sum\limits_{m=0}^{k} (-1)^m {\displaystyle k \choose 
+   \displaystyle m}
+   \left[ \frac{\displaystyle R_1^3}{\displaystyle R_1^2+2B}
+   \right]^{k-m} \\
+  \qquad {} \left[ 
+  \frac{\displaystyle pR_2^3}{\displaystyle R_2^2+2B}
+  \right]^{m} \left( 
+  \frac{\displaystyle m}{\displaystyle R_2^2+2B}+
+  \frac{\displaystyle k-m}{\displaystyle R_1^2+2B} \right)^{-1}\\
+%  \eqno (6)
+
+  \qquad {} \exp\left[ -\frac{\displaystyle -q^2}{\displaystyle 4} 
+  \left(
+  \frac{\displaystyle m}{\displaystyle R_2^2+2B}+
+  \frac{\displaystyle k-m}{\displaystyle R_1^2+2B} \right)^{-1}
+  \right].
+\end{array}
+  \eqno (6)
+ $$
+
+The analogous procedure can be used to get the inelastic 
+screening corrections to the hadron-nucleus amplitude
+$\Delta M(\vec b)$.
+In this case the intermediate inelastic difractive
+ state is
+created, rescatters on the nucleus nucleons and then
+returns into the initial hadron. We do not present
+the expressions for the corresponding amplitude
+because it is quite long.
+
+The full amplitude is the sum $M(\vec b)+
+\Delta M(\vec b)$.
+
+The differencial cross-sections are connected with 
+the amplitude in the following way
+
+
+$$
+  \frac{d\sigma}{d\Omega_{CM}}=\left| F(q) \right|^2, \qquad 
+   \frac{d\sigma}{|dt|}=\frac{d\sigma}{dq_{CM}^2}=
+  \frac{\pi}{k_{CM}^2} \left|F(q) \right|^2.
+   \eqno (7)
+$$   
+                      
+The  fitting of the parameters of nuclei densities was made 
+in a wide area of  atomic
+numbers $(A=12 \div 208)$ using experimental data on a 
+proton-nuclei elastic scattering at a proton 
+kinetic energy $T_p=1GeV$. The proton-nucleon parameters
+at this energy were fixed. The fitting was perfomed both for
+the individual nucleus and for all set of nuclei at once. 
+In the last event the following dependensies for nuclei
+parameters were obtained
+
+\vspace{2ex}
+$R_1=4.18A^{0.302}$, $R_2=3.81(A-10)^{0.268}$, $p=0.95$.
+\hspace{3cm} (8)
+\vspace{2ex}
+
+It is necessary to note that for  every nucleus 
+the optimal set of density parameters exists and it
+difers slightly from one derived from (8).
+
+The comparision of the phenomenological cross-sections (6) with the 
+experiment is represented on the fugures from 1 to 8
+where the data of the proton-nucleus scattering 
+are imaged.  The dependence (8) was used for nuclei parameters.
+The proton kinetic energy  is $T_p=1 GeV$ in the laboratory. 
+The experimental datas was obtaned 
+in Gatchina (Russia) and in Sacle (France). 
+The horizontal axes is  $q^2_{CM}$ in $GeV^2$ 
+but the vertical one is
+$\frac{\displaystyle d\sigma}{\displaystyle d\Omega_{CM}}$ 
+in $\frac{\displaystyle mb}{\displaystyle Ster}$.
+The lower curve in the figures is the diferencial cross-section 
+of a coherent elastic scattering bur upper one is the
+cross-section for noncoherent scattering.
+
+The creating of generator of events claims the knowing of the
+distribution function ${\cal F}$ of a corresponding process. 
+The diferential
+cross-section is proportional to the density distribution.
+Therefore to get the distribution function it is enough to
+take an integral of differential cross-section and to
+normalize it
+
+ $$
+    {\cal F}(q^2)=
+ \frac
+ {\displaystyle
+   \int\limits_{0}^{q^2}d(q^2)
+   \frac {\displaystyle d\sigma}{\displaystyle d(q^2)}
+  }
+ {\displaystyle
+   \int\limits_{0}^{q_{max}^2}d(q^2)
+   \frac {\displaystyle d\sigma}{\displaystyle d(q^2)}
+  }
+  \eqno (8)
+  $$
+
+  The expressions (6) and (7) allows the analitic integration
+in (8) but the result is very long to be writen here.
+
+For light nuclei the analitic expression is more convinient
+in calculations
+in comparision with the numeric integration in (8) but for
+heavy nuclei last is more prefered due of large number
+of members in the analitic expression for them.
+
+\vspace{2ex}
+
+{\bf The description of the classes for an elastic hadron-nucleus 
+scattering at high energy.}\\
+\par
+\vspace{1ex}
+
+The set of classes for calculation of the elastic coherent processes includes 
+the following classes:
+
+\begin{enumerate}
+
+\item {\bf G4HadronValues.} This class allows to get 
+the hadron-nucleon 
+parameters (the total cross-sections, the slope parameter and 
+the relation a real to an imaginary 
+part of amplitude). It has the constructor without parameters and the member-
+function {\tt void GetHadronValues(const G4DynamicParticles *)}, 
+which calculates  
+the protected  member-values (all {\tt G4double}) 
+{\tt HadrTot},  {\tt HadrSlope},  {\tt HadrReIm}. 
+These values are the total cross-section in mb, the slope parameter in   
+$GeV^{-2}$ and 
+the relation a real to an imaginary part of an elastic amplitude, 
+correspondingly for 
+hadron-nucleon scattering at an energy included in 
+{\tt G4DynamicParticle}.
+
+\item   {\bf G4IntegralHadrNucleus.} This class calculates an integral
+hadron-nucleus cross-sections 
+and is derived class of the {\tt G4HadronValues}. 
+It  has  the constructor
+without arguments and five public member-functions 
+which return {\tt G4double} values:
+
+\begin{enumerate}
+%\begin{itemize}
+ \item {\tt GetTotalCrossSection(G4DynamicParticle *, G4Nucleus *).}
+ 
+This function returns the corresponding total cross-section in mb.
+
+ \item {\tt GetProductionCrossSection(G4DynamicParticle *, G4Nucle\-us
+*).} 
+
+This function returns the corresponding production cross-section in mb.
+
+ \item {\tt GetElasticCrossSection(G4DynamicParticle *, G4Nucleus *).} 
+
+This 
+function returns the corresponding elastic cross-section in mb.
+
+ \item {\tt GetInelasticCrossSection(G4DynamicParticle *, G4Nucleus *).} 
+This 
+function returns the corresponding inelastic cross-section in mb.
+
+ \item {\tt GetQuasyElasticCrossSection(G4DynamicParticle *, 
+G4Nu\-cle\-us *).} 
+This function returns the corresponding quasyelastic \
+cross-section in mb.
+
+\end{enumerate}
+%\end{itemize}
+
+\item  {\bf G4DiffElasticHadrNucleus.} This class  calculates the
+differential cross-section of an elastic 
+hadron-nucleus scattering. This class is derived of the 
+{\tt G4HadronValues} and has the
+constructor without of arguments. It has one member-function 
+{\tt HadronNucleusDifferCrSec(G4Dyna\-micPar\-ti\-cle *, G4Nucleus *,
+G4double)} 
+which returns the value ({\tt G4double}) of the differential 
+cross-section 
+$\frac{\displaystyle d\sigma}{\displaystyle d\Omega_{CM}} $
+in $ \frac{\displaystyle mb}{\displaystyle Ster}$
+for the momentum transfer squared $q^2$ (in $MeV^2$) 
+which is equal the third argument. 
+
+\item {\bf G4ElasticHadrNucleusHE} is the generator of 
+events for an elastic hadron-nucleus 
+scattering. This class has five overloaded constructors 
+with different sets of arguments.
+
+\begin{enumerate}
+%\begin{itemize}
+%\begin{list}%{\alph}{}
+%{\usecounter{tmp}}
+
+\item {\tt G4ElasticHadrNucleusHE(G4DynamicParticle *, 
+G4Nucleus *)}. 
+This constructor creates the generator of the events 
+at the fixed kinematic variables of an incident particles. 
+ The member-function {\tt RandomElastic0(G4DynamicParticle *, 
+G4Nucleus *)} returns the transfer momentum  $q_{CM}^2$
+(in $MeV^2$)in the center of mass system. 
+The distribution density of generated events 
+is proportional to the differential 
+cross-section at the energy included in {\tt G4DynamicParticle}.
+
+\item {\tt G4ElasticHadrNucleusHE(G4DynamicParticle *, 
+G4Nucleus *,
+G4double, G4double, G4int, G4String)}. This constructor creates 
+the generator of the events which works in user defined 
+energy range. The third and fourth arguments 
+describe the energy interval where the events will be generated. 
+When the class is created the two-dimensional (on $E$ and $q^2$)
+array is formed for the distribution function and is 
+written in the file under file-name noticed by the sixth argument.  
+The number of points on energy (including the beginning end the end) 
+is equal to the fifth argument.
+The member-function {\tt RandomElastic1(G4DynamicParticle *,
+G4Nucleus *, G4double, G4double, G4int, G4String)} returns
+the transfer momentum $q^2$ ({\tt G4double}) in $MeV^2$. 
+
+Besides, the created class allows to realize the tracking 
+with the calling the member-function 
+{\tt ApplayYourself(const G4Track \&, G4Nucleus \&)} which returns
+the reference on class {\tt G4VParticle\-Chan\-ge}.
+In this case the recoil nucleus  is included in 
+the {\tt G4Track} as the secondary particles.
+
+\item  {\tt G4ElasticHadrNucleusHE(G4DynamicParticle *, 
+G4Nucleus *, 
+G4String)}. This constructor is analogues to the previous constructor. 
+The difference is that in this case the two-dimensional 
+array is read from the file with name included in 
+the third argument. Obviously that this file must be created with 
+the previous constructor.
+
+\item {\tt G4ElasticHadrNucleusHE(G4DynamicParticle *, 
+G4Nucleus *,
+G4double, G4double, G4int)}. This constructor creates 
+the generator of the events which works in wide range of hadron 
+energy: $E=2 GeV \div 100 TeV$.  
+When the class is created the two-dimensional (on $E$ and $q^2$)
+array is formed for the distribution function and is 
+written in the file whose name is formed from the name of hadron,
+the underscore, the nucleus atomic number 
+and with the extension ".dat"(for example 
+"PionPlus\underline{ }64.dat" for $\pi^+Cu$ scattering). The file is
+written into subdirectory "Elastic".
+
+The member-function {\tt RandomElastic1(G4DynamicParticle *,
+G4Nucleus *, G4double, G4double, G4int, G4String)} returns
+the transfer momentum $q^2$ ({\tt G4double}) in $MeV^2$. 
+
+Besides, the  created class allows to realize the tracking 
+with the calling the member-function 
+{\tt ApplayYourself(const G4Track \&, G4Nucleus \&)}.  
+The recoil nucleus  is included in 
+the {\tt G4Track} as the secondary particles.
+
+\item  {\tt G4ElasticHadrNucleusHE(G4DynamicParticle *, 
+G4Nucleus *, 
+G4int)}. This constructor is analogues to  previous one. 
+The difference is that in this case the two-dimensional 
+array is read from the file whose name is formed from names of
+hadron and nucleus as described above. Obviously that this file 
+must be created with the previous constructor.
+
+\end{enumerate}
+%\end{itemize}
+%\end{list}
+
+\end{enumerate}
+
+
+  The testing programs of last class have names {\tt MainForRandom1},
+{\tt MainFor\-Ran\-dom2}, {\tt MainForRandom3}, {\tt MainForRandom4} 
+and {\tt MainForRandom5} 
+for the constructors a, b, c, d and e correspondingly. 
+
+In the Appedix we represent the  program text for 
+{\tt MainForRandom4} in which the class
+{\tt G4ElasticHadronNucleusHE} is created, 
+the result is written into
+the subdirectory "Elastic" (note that this subdirectory must
+by prepared before working)  and 500000 events are 
+randomized with the member-function {\tt RandomElastic1}. 
+The result of randomization (the set of $q^2$) 
+is written in file "q2from4.dat".
+The figure 9 represents the result of the generation of
+500000 events of elastic scattering nucleon 
+on the nucleus $^{90}Zr$ at energy $E_p=100 GeV$.
+\vspace{2ex}
+
+{\bf  Appendix.}
+
+\vspace{2ex}
+{\tt
+// //  The main program for "G4ElasticHadrNucleusHE" class
+
+// //  using the fourth type of constructor
+
+
+\#include "G4Proton.hh"
+
+\#include "G4DynamicParticle.hh"
+
+\#include "G4ParticleChange.hh"
+
+\#include "G4Track.hh"
+
+\#include "G4ThreeVector.hh"
+
+\#include "G4Nucleus.hh"
+
+\#include "G4IonConstructor.hh"
+
+\#include "G4ElasticHadrNucleusHE.hh"
+
+\#include "g4std/fstream"
+
+ int main()
+
+
+ \{
+
+\hspace{1cm}  G4IonConstructor Ion;
+
+\hspace{1cm}  Ion.ConstructParticle();
+
+\hspace{1cm}  G4double        Q2, Momentum;
+
+\hspace{1cm}  G4double        px = 0;
+
+\hspace{1cm}  G4double        py = 0;
+
+\hspace{1cm}  G4double        pz = 0;
+
+\hspace{1cm}  G4ThreeVector   inVector(px, py, pz);
+
+\hspace{1cm}  G4ThreeVector   outVector, aPosition(0., 0., 0.);
+
+\hspace{1cm}  G4PionPlus        *  aPionP    = G4PionPlus::
+
+\hspace{5cm}              PionPlusDefinition();
+
+\hspace{1cm}  G4PionMinus       *  aPionM    = G4PionMinus::
+
+\hspace{5cm}            PionMinusDefinition();
+
+\hspace{1cm}   G4KaonPlus        *  aKaonP    = G4KaonPlus::
+
+\hspace{5cm}              KaonPlusDefinition();
+
+\hspace{1cm}    G4KaonMinus       *  aKaonM    = G4KaonMinus::
+
+\hspace{5cm}          KaonMinusDefinition();
+
+\hspace{1cm}   G4Proton          *  aProton   = G4Proton::Proton();
+
+\hspace{1cm} G4AntiProton      *  aProtonA  = G4AntiProton::AntiProton();
+
+\hspace{1cm} G4DynamicParticle *  aParticle = new G4DynamicParticle;
+
+%\hspace{1cm} G4VParticleChange *  aChange   = new G4VParticleChange;
+
+\hspace{1cm} G4Nucleus            aNucleus, * pNucl;
+
+\hspace{1cm}  const G4double N = 90, Z = 45;
+
+\vspace{2ex}
+\hspace{2cm}  aParticle->SetDefinition(aProton);
+
+\hspace{2cm}  aNucleus.SetParameters( N, Z);
+
+\hspace{2cm}        pNucl   = \&aNucleus;
+
+%\hspace{2cm}        G4double aTime = 0.1;
+
+\hspace{2cm}       Momentum = 5000;
+
+\hspace{2cm}        inVector.setZ(Momentum);
+
+\hspace{2cm}     aParticle->SetMomentum(inVector);
+
+\hspace{2cm}  G4ElasticHadrNucleusHE    aElasticRandom(aParticle, pNucl,
+
+\hspace{4cm}     2000., 10000., 5);
+
+\hspace{2cm}  G4cout<<G4endl<< " The array is created !!! "<<G4endl;
+
+\vspace{2ex}
+
+\hspace{2cm}  for(G4int i1=1; i1<=2; i1+=5)
+
+\hspace{2cm}   \{
+
+\hspace{3cm}   Momentum = i1*100000;    // in MeV !!!
+
+\hspace{3cm}   inVector.setZ(Momentum);
+
+\hspace{3cm}   aParticle->SetMomentum(inVector);
+
+\hspace{3cm}   G4std::ofstream TestFile("q2from4.dat", 
+
+\hspace{5cm}            G4std::ios::out);
+
+\hspace{3cm}   TestFile.precision(9);
+
+\hspace{3cm}    TestFile.setf(G4std::ios::scientific);
+
+\hspace{3cm}       for(G4int i2=1; i2<500001; i2++)
+
+\hspace{3cm}     \{
+
+\hspace{4cm}   Q2   = aElasticRandom.RandomElastic1(
+
+\hspace{5cm} aParticle,  pNucl);    //   Q\^2 in MeV\^2 !!!
+
+\hspace{4cm}       TestFile<<"  "<<Q2<<G4endl;
+
+\hspace{3cm}      \}  //  i2
+
+\hspace{2cm}        \}      //  i1
+
+\hspace{1cm}  TestFile.close();
+
+\hspace{1cm}    return 0;
+
+\hspace{0.1cm}  \}
+	
+%\}
+
+\end{document}
+

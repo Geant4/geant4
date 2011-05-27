@@ -70,7 +70,8 @@ G4double G4QCaptureAtRest::freeNuc=0.5;      // Percentage of free nucleons on t
 G4double G4QCaptureAtRest::freeDib=0.05;     // Percentage of free diBaryons on the surface
 G4double G4QCaptureAtRest::clustProb=5.;     // Nuclear clusterization parameter
 G4double G4QCaptureAtRest::mediRatio=10.;    // medium/vacuum hadronization ratio
-G4int    G4QCaptureAtRest::nPartCWorld=152;  // The#of particles initialized in CHIPS World
+//G4int    G4QCaptureAtRest::nPartCWorld=152;// The#of particles initialized in CHIPS World
+G4int    G4QCaptureAtRest::nPartCWorld=122;  // The#of particles initialized in CHIPS World
 G4double G4QCaptureAtRest::SolidAngle=0.5;   // Part of Solid Angle to capture (@@A-dep.)
 G4bool   G4QCaptureAtRest::EnergyFlux=false; // Flag for Energy Flux use (not MultyQuasmon)
 G4double G4QCaptureAtRest::PiPrThresh=141.4; // Pion Production Threshold for gammas
@@ -85,7 +86,7 @@ void G4QCaptureAtRest::SetParameters(G4double temper, G4double ssin2g, G4double 
                                      G4double fN, G4double fD, G4double cP, G4double mR,
                                      G4int nParCW, G4double solAn, G4bool efFlag,
                                      G4double piThresh, G4double mpisq, G4double dinum)
-{//  =============================================================================
+{
   Temperature=temper;
   SSin2Gluons=ssin2g;
   EtaEtaprime=etaetap;
@@ -698,7 +699,7 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
     G4double tM=mp+targQPDG.GetMass();
     EnMomConservation=G4LorentzVector(0.,0.,0.,tM);         // Total 4-mom of the reaction
 #ifdef tdebug
-    G4cout<<"====>G4QCapAR:E/MCons, p="<<mp<<","<<projPDG<<",t="<<tM<<","<<targPDG<<",t4M="
+    G4cout<<"=--=>G4QCapAR:E/MCons, p="<<mp<<","<<projPDG<<",t="<<tM<<","<<targPDG<<",t4M="
           <<EnMomConservation<<G4endl;
 #endif
     G4QHadron* pH = new G4QHadron(projPDG,projLV);          // ---> DELETED---->---->----+

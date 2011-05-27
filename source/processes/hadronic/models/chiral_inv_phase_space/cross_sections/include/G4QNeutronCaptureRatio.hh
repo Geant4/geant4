@@ -33,7 +33,7 @@
 //
 // **********************************************************************
 // This Header is a part of the CHIPS physics package (author: M. Kosov)
-//=======================================================================
+// ----------------------------------------------------------------------
 // Short description: (n,gamma) capture is a part of the incoherent
 // (inelastic) interaction. This part is calculated in the class.
 // ----------------------------------------------------------------------

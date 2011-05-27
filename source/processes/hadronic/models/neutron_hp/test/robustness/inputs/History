@@ -1,0 +1,35 @@
+$Id: History,v 1.1 2001-05-29 19:17:35 hpw Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Test 11 History file
+                    --------------------
+This file should be used by the test developer to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+15th Feb 2001 Steve O'Neale Update reference output
+
+25th November 2000 Steve O'Neale (tagset210)
+- Update test outputs for min.delta energy cut
+
+18th August 2000  Michel Maire  
+- standard G4ionIonisation removed from the PhysicsList
+
+June 17, 2000  John Allison  (test11-V01-01-00)
+- Updated test11.out for geant4-01-01-ref-06.
+
+17 Apr., 1999 H.Kurashige 
+- Modify SetCuts() and ConstructParticle() in Tst11PhysicsList
+- Modify BeginOfRunAction() and EndOfRunAction() in Tst11RunAction
+- Modify UserSteppingAction() in Tst11SteppingAction
+
+30th November 1998  John Allison
+- Copied from test02 with new physics list for neutrons prepared by Hans-Peter.

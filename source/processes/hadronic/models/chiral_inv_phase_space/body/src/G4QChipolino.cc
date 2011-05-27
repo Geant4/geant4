@@ -519,7 +519,7 @@ G4QChipolino::~G4QChipolino() {}
 
 // Standard output for G4QChipolino
 ostream& operator<<(ostream& lhs, G4QChipolino& rhs)
-{//      ===========================================
+{
   lhs<<"{1="<<rhs.GetQPDG1()<<",2="<<rhs.GetQPDG2()<< "}";
   return lhs;
 }

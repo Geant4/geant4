@@ -38,9 +38,7 @@
 #include <CLHEP/Random/RandBit.h>
 #include <CLHEP/Random/RandGamma.h>
 #include <CLHEP/Random/RandGaussQ.h>
-#include <CLHEP/Random/RandGaussT.h>
 #include <CLHEP/Random/RandPoissonQ.h>
-#include <CLHEP/Random/RandPoissonT.h>
 #include <CLHEP/Random/RandExponential.h>
 #include <CLHEP/Random/RandGeneral.h>
 

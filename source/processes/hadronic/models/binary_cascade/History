@@ -13,6 +13,15 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+25-May-2011,G.Folger		         had-binary-V09-04-02
+-  Fix compilation warning on almost unused variables
+
+12 May 2011, G.Folger		         had-binary-V09-04-01
+-  Fix large  energy non-conservation for Hydrogen target.
+     (theFinalState vector was not cleared before use)
+   Also move check for Hydrogen to ApplyYourSelf, directly calling 
+    Progategate1H1().
+
 17 Mar 2011, G.Folger		         had-binary-V09-04-00
 -  set E/p checking limits
 

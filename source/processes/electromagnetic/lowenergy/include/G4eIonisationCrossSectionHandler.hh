@@ -93,6 +93,8 @@ private:
  const G4VEnergySpectrum* theParam;
 
   G4VDataSetAlgorithm* interp;
+  G4int verbose;
+  
 };
  
 #endif

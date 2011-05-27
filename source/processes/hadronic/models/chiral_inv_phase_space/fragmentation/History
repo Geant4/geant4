@@ -1,7 +1,7 @@
 
-       ==========================================================
+       =--------------------------------------------------------=
        Geant4 - an Object-Oriented Toolkit for Physics Simulation
-       ==========================================================
+       =--------------------------------------------------------=
 
 History file for  hadronic/models/chiral_inv_phase_space/fragmentation  
 directory.
@@ -13,11 +13,11 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
-14-Jun-2010 M.Kosov                         (hadr-chips-frag-V09-03-09)
+14-Dec-2010 M.Kosov                         (hadr-chips-frag-V09-03-09)
 -----------------------------------------------------------------------
 Photon nuclear environment is fixed for 1 Quasmon. Thanks to Andrea.
 
-11-Jun-2010 M.Kosov                         (hadr-chips-frag-V09-03-08)
+11-Dec-2010 M.Kosov                         (hadr-chips-frag-V09-03-08)
 -----------------------------------------------------------------------
 Zero nuclear residual correction candidate. Thanks to Andrea.
 

@@ -104,6 +104,7 @@ G4ParticleChangeForTransport::operator=(const G4ParticleChangeForTransport &r)
       thePositionChange = r.thePositionChange;
       theTimeChange = r.theTimeChange;
       theEnergyChange = r.theEnergyChange;
+      theVelocityChange        = r.theVelocityChange;
       theTrueStepLength = r.theTrueStepLength;
       theLocalEnergyDeposit = r.theLocalEnergyDeposit;
       theSteppingControlFlag = r.theSteppingControlFlag;
@@ -178,6 +179,8 @@ G4Step* G4ParticleChangeForTransport::UpdateStepForAlongStep(G4Step* pStep)
     pPostStepPoint->SetMomentumDirection(direction);
     pPostStepPoint->SetKineticEnergy( energy );
   }
+  if (!isVelocityChanged) theVelocityChange = pStep->GetTrack()->CalculateVelocity();
+  pPostStepPoint->SetVelocity(theVelocityChange);
 
   // stop case should not occur
   //pPostStepPoint->SetMomentumDirection(G4ThreeVector(1., 0., 0.));

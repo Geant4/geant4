@@ -29,6 +29,8 @@
 //
 // 070523 bug fix for G4FPE_DEBUG on by A. Howard ( and T. Koi)
 // 080612 bug fix contribution from Benoit Pirard and Laurent Desorgher (Univ. Bern) #5
+// 110505 protection for object is created but not initialized
+// 110510 delete above protection with more coordinated work to other classes 
 //
 #include "G4NeutronHPAngular.hh"
 
@@ -37,12 +39,13 @@ void G4NeutronHPAngular::Init(std::ifstream & aDataFile)
 //  G4cout << "here we are entering the Angular Init"<<G4endl;
   aDataFile >> theAngularDistributionType >> targetMass;
   aDataFile >> frameFlag;
-  if(theAngularDistributionType == 0)
+  if(theAngularDistributionType == 0 )
   {
-    theIsoFlag = true;
+    theIsoFlag = true; 
   }
   else if(theAngularDistributionType==1)
   {
+    theIsoFlag = false;
     G4int nEnergy;
     aDataFile >> nEnergy;  
     theCoefficients = new G4NeutronHPLegendreStore(nEnergy);
@@ -66,6 +69,7 @@ void G4NeutronHPAngular::Init(std::ifstream & aDataFile)
   }
   else if (theAngularDistributionType==2)
   {
+    theIsoFlag = false;
     G4int nEnergy;
     aDataFile >> nEnergy;
     theProbArray = new G4NeutronHPPartial(nEnergy, nEnergy);
@@ -91,6 +95,7 @@ void G4NeutronHPAngular::Init(std::ifstream & aDataFile)
 
 void G4NeutronHPAngular::SampleAndUpdate(G4ReactionProduct & aHadron)
 {
+
   if(theIsoFlag)
   {
 //  G4cout << "Angular result "<<aHadron.GetTotalMomentum()<<" ";

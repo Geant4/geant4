@@ -176,6 +176,8 @@ public:
 
   // Specific General Functions
   G4int RandomizeBinom(G4double p,G4int N);         // Randomize according to Binomial Law
+  G4double CoulombBarGen(const G4double& rZ, const G4double& rA, const G4double& cZ,
+                         const G4double& cA);        // CoulombBarrier in MeV (General)
   G4double CoulombBarrier(const G4double& cZ=1, const G4double& cA=1, G4double dZ=0.,
                           G4double dA=0.);          // CoulombBarrier in MeV
   G4double FissionCoulombBarrier(const G4double& cZ, const G4double& cA, G4double dZ=0.,

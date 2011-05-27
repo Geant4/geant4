@@ -1,0 +1,13 @@
+rm liste; rm liste.$2
+grep "SECONDARIES info" $1 > liste
+sed "s/(/ /g" liste >> liste@ ; mv liste@ liste
+sed "s/)/ /g" liste >> liste@ ; mv liste@ liste
+sed "s/,/ /g" liste >> liste@ ; mv liste@ liste
+sed "s/SECONDARIES info//g" liste >> liste@ ; mv liste@ liste.p_$2
+#rm liste1
+#grep "CHIPS particles" $1 > liste1
+#sed "s/(/ /g" liste1 >> liste1@ ; mv liste1@ liste1
+#sed "s/)/ /g" liste1 >> liste1@ ; mv liste1@ liste1
+#sed "s/,/ /g" liste1 >> liste1@ ; mv liste1@ liste1
+#sed "s/;/ /g" liste1 >> liste1@ ; mv liste1@ liste1
+#sed "s/CHIPS particles//g" liste1 >> liste1@ ; mv liste1@ liste1

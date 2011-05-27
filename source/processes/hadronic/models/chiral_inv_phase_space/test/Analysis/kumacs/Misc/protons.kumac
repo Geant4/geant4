@@ -1,0 +1,970 @@
+<title>HEPDATA Reaction Database</title>
+<body bgcolor=#FFFFFF>
+<XMP>
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79B   ITEP-79-23'
+ opt logy
+ve/cr q(005)
+ve/cr v(4,005)
+ve/in v(1:4,001)      8.0000E-02     0.0000E+00     1.3900E+01     7.0000E-01
+ve/in v(1:4,002)      1.6000E-01     0.0000E+00     5.6000E+00     4.0000E-01
+ve/in v(1:4,003)      2.7000E-01     0.0000E+00     1.5500E+00     8.0000E-02
+ve/in v(1:4,004)      4.0000E-01     0.0000E+00     3.7300E-01     2.3000E-02
+ve/in v(1:4,005)      5.4000E-01     0.0000E+00     9.3000E-02     7.0000E-03
+ve/copy v(1,1:005) x
+ve/copy v(2,1:005) q
+ve/copy v(3,1:005) y
+ve/copy v(4,1:005) e
+ null    3.40000E-02   0.586000    1.00000E-02   100.0000
+/GRAPHICS/HPLOT/ERRORS x y q e 005 20 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.310000     63.0957 'RE   P LI --> P X' 0.3
+ text    0.310000     39.8107 'E IN GEV   400.00' 0.3
+ text    0.310000     25.1189 'THETA(P=3,RF=LAB) IN DEG   70.00' 0.3
+ text    0.310000     15.8489 'A   6.01' 0.3
+ option *
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79B   ITEP-79-23'
+ opt logy
+ve/cr q(004)
+ve/cr v(4,004)
+ve/in v(1:4,001)      1.0000E-01     0.0000E+00     1.2100E+01     7.0000E-01
+ve/in v(1:4,002)      2.8000E-01     0.0000E+00     1.5600E+00     8.0000E-02
+ve/in v(1:4,003)      4.1000E-01     0.0000E+00     4.3900E-01     2.5000E-02
+ve/in v(1:4,004)      5.5000E-01     0.0000E+00     1.1800E-01     7.0000E-03
+ve/copy v(1,1:004) x
+ve/copy v(2,1:004) q
+ve/copy v(3,1:004) y
+ve/copy v(4,1:004) e
+ null    5.50000E-02   0.595000    1.00000E-01   100.0000
+/GRAPHICS/HPLOT/ERRORS x y q e 004 20 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.325000     70.7946 'RE   P BE --> P X' 0.3
+ text    0.325000     50.1187 'E IN GEV   400.00' 0.3
+ text    0.325000     35.4813 'THETA(P=3,RF=LAB) IN DEG   70.00' 0.3
+ text    0.325000     25.1189 'A   9.01' 0.3
+ option *
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79B   ITEP-79-23'
+ opt logy
+ve/cr q(006)
+ve/cr v(4,006)
+ve/in v(1:4,001)      9.0000E-02     0.0000E+00     1.5800E+01     9.0000E-01
+ve/in v(1:4,002)      1.7000E-01     0.0000E+00     6.3000E+00     4.0000E-01
+ve/in v(1:4,003)      2.3000E-01     0.0000E+00     3.8800E+00     2.5000E-01
+ve/in v(1:4,004)      2.8000E-01     0.0000E+00     1.9400E+00     1.0000E-01
+ve/in v(1:4,005)      4.0000E-01     0.0000E+00     5.9000E-01     4.0000E-02
+ve/in v(1:4,006)      5.4000E-01     0.0000E+00     1.6400E-01     1.1000E-02
+ve/copy v(1,1:006) x
+ve/copy v(2,1:006) q
+ve/copy v(3,1:006) y
+ve/copy v(4,1:006) e
+ null    4.50000E-02   0.585000    1.00000E-01   100.0000
+/GRAPHICS/HPLOT/ERRORS x y q e 006 20 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.315000     70.7946 'RE   P C --> P X' 0.3
+ text    0.315000     50.1187 'E IN GEV   400.00' 0.3
+ text    0.315000     35.4813 'THETA(P=3,RF=LAB) IN DEG   70.00' 0.3
+ text    0.315000     25.1189 'A   12.01' 0.3
+ option *
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79B   ITEP-79-23'
+ opt liny
+ve/cr q(004)
+ve/cr v(4,004)
+ve/in v(1:4,001)      9.0000E-02     0.0000E+00     2.3100E+01     1.2000E+00
+ve/in v(1:4,002)      1.7000E-01     0.0000E+00     8.7000E+00     6.0000E-01
+ve/in v(1:4,003)      2.8000E-01     0.0000E+00     2.5600E+00     1.4000E-01
+ve/in v(1:4,004)      4.1000E-01     0.0000E+00     7.9000E-01     5.0000E-02
+ve/copy v(1,1:004) x
+ve/copy v(2,1:004) q
+ve/copy v(3,1:004) y
+ve/copy v(4,1:004) e
+ null    5.80000E-02   0.442000   -1.61600    26.6560
+/GRAPHICS/HPLOT/ERRORS x y q e 004 20 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.250000     25.2424 'RE   P AL --> P X' 0.3
+ text    0.250000     23.8288 'E IN GEV   400.00' 0.3
+ text    0.250000     22.4152 'THETA(P=3,RF=LAB) IN DEG   70.00' 0.3
+ text    0.250000     21.0016 'A   26.98' 0.3
+ option *
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79B   ITEP-79-23'
+ opt logy
+ve/cr q(005)
+ve/cr v(4,005)
+ve/in v(1:4,001)      8.0000E-02     0.0000E+00     2.8000E+01     1.5000E+00
+ve/in v(1:4,002)      1.7000E-01     0.0000E+00     1.0600E+01     7.0000E-01
+ve/in v(1:4,003)      2.7000E-01     0.0000E+00     3.2500E+00     1.7000E-01
+ve/in v(1:4,004)      4.0000E-01     0.0000E+00     1.0100E+00     6.0000E-02
+ve/in v(1:4,005)      5.4000E-01     0.0000E+00     3.1200E-01     2.0000E-02
+ve/copy v(1,1:005) x
+ve/copy v(2,1:005) q
+ve/copy v(3,1:005) y
+ve/copy v(4,1:005) e
+ null    3.40000E-02   0.586000    1.00000E-01   100.0000
+/GRAPHICS/HPLOT/ERRORS x y q e 005 20 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.310000     70.7946 'RE   P CU --> P X' 0.3
+ text    0.310000     50.1187 'E IN GEV   400.00' 0.3
+ text    0.310000     35.4813 'THETA(P=3,RF=LAB) IN DEG   70.00' 0.3
+ text    0.310000     25.1189 'A   63.55' 0.3
+ option *
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79B   ITEP-79-23'
+ opt liny
+ve/cr q(006)
+ve/cr v(4,006)
+ve/in v(1:4,001)      8.0000E-02     0.0000E+00     4.0100E+01     2.2000E+00
+ve/in v(1:4,002)      1.7000E-01     0.0000E+00     1.4400E+01     9.0000E-01
+ve/in v(1:4,003)      2.2000E-01     0.0000E+00     8.2000E+00     5.0000E-01
+ve/in v(1:4,004)      2.8000E-01     0.0000E+00     4.5800E+00     2.6000E-01
+ve/in v(1:4,005)      4.2000E-01     0.0000E+00     1.5200E+00     9.0000E-02
+ve/in v(1:4,006)      5.5000E-01     0.0000E+00     4.9000E-01     3.0000E-02
+ve/copy v(1,1:006) x
+ve/copy v(2,1:006) q
+ve/copy v(3,1:006) y
+ve/copy v(4,1:006) e
+ null    3.30000E-02   0.597000   -3.72400    46.4840
+/GRAPHICS/HPLOT/ERRORS x y q e 006 20 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.315000     43.9736 'RE   P TA --> P X' 0.3
+ text    0.315000     41.4632 'E IN GEV   400.00' 0.3
+ text    0.315000     38.9528 'THETA(P=3,RF=LAB) IN DEG   70.00' 0.3
+ text    0.315000     36.4424 'A   180.95' 0.3
+ option *
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79B   ITEP-79-23'
+ opt logy
+ve/cr q(010)
+ve/cr v(4,010)
+ve/in v(1:4,001)      9.0000E-02     0.0000E+00     8.2000E+00     4.0000E-01
+ve/in v(1:4,002)      1.2000E-01     0.0000E+00     3.7500E+00     1.9000E-01
+ve/in v(1:4,003)      1.7000E-01     0.0000E+00     1.5900E+00     8.0000E-02
+ve/in v(1:4,004)      1.9000E-01     0.0000E+00     1.0300E+00     6.0000E-02
+ve/in v(1:4,005)      2.1000E-01     0.0000E+00     9.3000E-01     6.0000E-02
+ve/in v(1:4,006)      2.3000E-01     0.0000E+00     6.3000E-01     4.0000E-02
+ve/in v(1:4,007)      2.6000E-01     0.0000E+00     3.6300E-01     2.2000E-02
+ve/in v(1:4,008)      3.8000E-01     0.0000E+00     5.4000E-02     4.0000E-03
+ve/in v(1:4,009)      5.2000E-01     0.0000E+00     1.0400E-02     8.0000E-04
+ve/in v(1:4,010)      6.3000E-01     0.0000E+00     3.6000E-03     5.0000E-04
+ve/copy v(1,1:010) x
+ve/copy v(2,1:010) q
+ve/copy v(3,1:010) y
+ve/copy v(4,1:010) e
+ null    3.60000E-02   0.684000    1.00000E-03   10.00000
+/GRAPHICS/HPLOT/ERRORS x y q e 010 20 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.360000     6.30957 'RE   P LI --> P X' 0.3
+ text    0.360000     3.98107 'E IN GEV   400.00' 0.3
+ text    0.360000     2.51189 'THETA(P=3,RF=LAB) IN DEG   90.00' 0.3
+ text    0.360000     1.58489 'A   6.01' 0.3
+ option *
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79B   ITEP-79-23'
+ opt logy
+ve/cr q(007)
+ve/cr v(4,007)
+ve/in v(1:4,001)      1.0000E-01     0.0000E+00     8.6000E+00     4.0000E-01
+ve/in v(1:4,002)      1.3000E-01     0.0000E+00     4.3800E+00     2.1000E-01
+ve/in v(1:4,003)      1.8000E-01     0.0000E+00     1.9200E+00     9.0000E-02
+ve/in v(1:4,004)      2.0000E-01     0.0000E+00     1.2500E+00     6.0000E-02
+ve/in v(1:4,005)      2.2000E-01     0.0000E+00     1.0800E+00     7.0000E-02
+ve/in v(1:4,006)      2.4000E-01     0.0000E+00     7.6000E-01     4.0000E-02
+ve/in v(1:4,007)      3.9000E-01     0.0000E+00     8.2000E-02     4.0000E-03
+ve/copy v(1,1:007) x
+ve/copy v(2,1:007) q
+ve/copy v(3,1:007) y
+ve/copy v(4,1:007) e
+ null    7.10000E-02   0.419000    1.00000E-02   10.00000
+/GRAPHICS/HPLOT/ERRORS x y q e 007 20 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.245000     7.07946 'RE   P BE --> P X' 0.3
+ text    0.245000     5.01187 'E IN GEV   400.00' 0.3
+ text    0.245000     3.54813 'THETA(P=3,RF=LAB) IN DEG   90.00' 0.3
+ text    0.245000     2.51189 'A   9.01' 0.3
+ option *
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79B   ITEP-79-23'
+ opt logy
+ve/cr q(009)
+ve/cr v(4,009)
+ve/in v(1:4,001)      1.0000E-01     0.0000E+00     1.1500E+01     6.0000E-01
+ve/in v(1:4,002)      1.3000E-01     0.0000E+00     6.0000E+00     3.0000E-01
+ve/in v(1:4,003)      1.7000E-01     0.0000E+00     2.7200E+00     1.3000E-01
+ve/in v(1:4,004)      2.0000E-01     0.0000E+00     1.7900E+00     9.0000E-02
+ve/in v(1:4,005)      2.2000E-01     0.0000E+00     1.6800E+00     1.2000E-01
+ve/in v(1:4,006)      2.4000E-01     0.0000E+00     1.1300E+00     6.0000E-02
+ve/in v(1:4,007)      2.8000E-01     0.0000E+00     7.1000E-01     4.0000E-02
+ve/in v(1:4,008)      3.9000E-01     0.0000E+00     1.3300E-01     8.0000E-03
+ve/in v(1:4,009)      6.9000E-01     0.0000E+00     5.0000E-03     4.0000E-04
+ve/copy v(1,1:009) x
+ve/copy v(2,1:009) q
+ve/copy v(3,1:009) y
+ve/copy v(4,1:009) e
+ null    4.10000E-02   0.749000    1.00000E-03   100.0000
+/GRAPHICS/HPLOT/ERRORS x y q e 009 20 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.395000     56.2341 'RE   P C --> P X' 0.3
+ text    0.395000     31.6228 'E IN GEV   400.00' 0.3
+ text    0.395000     17.7828 'THETA(P=3,RF=LAB) IN DEG   90.00' 0.3
+ text    0.395000    10.00000 'A   12.01' 0.3
+ option *
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79B   ITEP-79-23'
+ opt liny
+ve/cr q(009)
+ve/cr v(4,009)
+ve/in v(1:4,001)      1.0000E-01     0.0000E+00     1.3300E+01     2.3000E+00
+ve/in v(1:4,002)      1.2000E-01     0.0000E+00     9.4000E+00     6.0000E-01
+ve/in v(1:4,003)      1.4000E-01     0.0000E+00     6.9000E+00     4.0000E-01
+ve/in v(1:4,004)      1.6000E-01     0.0000E+00     4.3100E+00     2.7000E-01
+ve/in v(1:4,005)      1.9000E-01     0.0000E+00     2.8900E+00     1.6000E-01
+ve/in v(1:4,006)      2.1000E-01     0.0000E+00     2.8400E+00     1.4000E-01
+ve/in v(1:4,007)      2.2000E-01     0.0000E+00     2.3400E+00     1.2000E-01
+ve/in v(1:4,008)      2.4000E-01     0.0000E+00     1.7700E+00     8.0000E-02
+ve/in v(1:4,009)      3.8000E-01     0.0000E+00     2.1500E-01     1.3000E-02
+ve/copy v(1,1:009) x
+ve/copy v(2,1:009) q
+ve/copy v(3,1:009) y
+ve/copy v(4,1:009) e
+ null    7.20000E-02   0.408000   -1.33780    17.1398
+/GRAPHICS/HPLOT/ERRORS x y q e 009 20 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.240000     16.2159 'RE   P AL --> P X' 0.3
+ text    0.240000     15.2920 'E IN GEV   400.00' 0.3
+ text    0.240000     14.3682 'THETA(P=3,RF=LAB) IN DEG   90.00' 0.3
+ text    0.240000     13.4443 'A   26.98' 0.3
+ option *
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79B   ITEP-79-23'
+ opt liny
+ve/cr q(007)
+ve/cr v(4,007)
+ve/in v(1:4,001)      9.0000E-02     0.0000E+00     2.1400E+01     1.1000E+00
+ve/in v(1:4,002)      1.2000E-01     0.0000E+00     1.1600E+01     6.0000E-01
+ve/in v(1:4,003)      1.7000E-01     0.0000E+00     5.3700E+00     2.6000E-01
+ve/in v(1:4,004)      2.0000E-01     0.0000E+00     3.5100E+00     1.8000E-01
+ve/in v(1:4,005)      2.2000E-01     0.0000E+00     3.2400E+00     2.3000E-01
+ve/in v(1:4,006)      2.3000E-01     0.0000E+00     2.4000E+00     1.2000E-01
+ve/in v(1:4,007)      4.2000E-01     0.0000E+00     2.5800E-01     1.8000E-02
+ve/copy v(1,1:007) x
+ve/copy v(2,1:007) q
+ve/copy v(3,1:007) y
+ve/copy v(4,1:007) e
+ null    5.70000E-02   0.453000   -1.98600    24.7260
+/GRAPHICS/HPLOT/ERRORS x y q e 007 20 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.255000     23.3904 'RE   P CU --> P X' 0.3
+ text    0.255000     22.0548 'E IN GEV   400.00' 0.3
+ text    0.255000     20.7192 'THETA(P=3,RF=LAB) IN DEG   90.00' 0.3
+ text    0.255000     19.3836 'A   63.55' 0.3
+ option *
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79B   ITEP-79-23'
+ opt logy
+ve/cr q(013)
+ve/cr v(4,013)
+ve/in v(1:4,001)      9.0000E-02     0.0000E+00     3.0900E+01     1.1000E+00
+ve/in v(1:4,002)      1.3000E-01     0.0000E+00     1.6200E+01     6.0000E-01
+ve/in v(1:4,003)      1.6000E-01     0.0000E+00     1.1200E+01     6.0000E-01
+ve/in v(1:4,004)      1.7000E-01     0.0000E+00     8.4000E+00     3.0000E-01
+ve/in v(1:4,005)      2.0000E-01     0.0000E+00     5.2700E+00     2.6000E-01
+ve/in v(1:4,006)      2.2000E-01     0.0000E+00     4.6200E+00     1.6000E-01
+ve/in v(1:4,007)      2.4000E-01     0.0000E+00     3.6600E+00     1.9000E-01
+ve/in v(1:4,008)      2.8000E-01     0.0000E+00     2.2400E+00     1.6000E-01
+ve/in v(1:4,009)      3.4000E-01     0.0000E+00     1.1100E+00     6.0000E-02
+ve/in v(1:4,010)      4.0000E-01     0.0000E+00     5.4000E-01     3.0000E-02
+ve/in v(1:4,011)      6.2000E-01     0.0000E+00     5.4000E-02     3.0000E-03
+ve/in v(1:4,012)      7.1000E-01     0.0000E+00     2.1100E-02     1.3000E-03
+ve/in v(1:4,013)      7.6000E-01     0.0000E+00     1.3900E-02     1.3000E-03
+ve/copy v(1,1:013) x
+ve/copy v(2,1:013) q
+ve/copy v(3,1:013) y
+ve/copy v(4,1:013) e
+ null    2.30000E-02   0.827000    1.00000E-02   100.0000
+/GRAPHICS/HPLOT/ERRORS x y q e 013 20 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.425000     63.0957 'RE   P TA --> P X' 0.3
+ text    0.425000     39.8107 'E IN GEV   400.00' 0.3
+ text    0.425000     25.1189 'THETA(P=3,RF=LAB) IN DEG   90.00' 0.3
+ text    0.425000     15.8489 'A   180.95' 0.3
+ option *
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79B   ITEP-79-23'
+ opt logy
+ve/cr q(009)
+ve/cr v(4,009)
+ve/in v(1:4,001)      8.0000E-02     0.0000E+00     4.1700E+00     2.3000E-01
+ve/in v(1:4,002)      1.1000E-01     0.0000E+00     1.7600E+00     1.1000E-01
+ve/in v(1:4,003)      1.7000E-01     0.0000E+00     6.1000E-01     4.0000E-02
+ve/in v(1:4,004)      2.2000E-01     0.0000E+00     2.3000E-01     1.2000E-02
+ve/in v(1:4,005)      2.7000E-01     0.0000E+00     6.3000E-02     4.0000E-03
+ve/in v(1:4,006)      3.2000E-01     0.0000E+00     1.8300E-02     1.3000E-03
+ve/in v(1:4,007)      4.0000E-01     0.0000E+00     6.6000E-03     7.0000E-04
+ve/in v(1:4,008)      4.8000E-01     0.0000E+00     2.1100E-03     2.7000E-04
+ve/in v(1:4,009)      5.5000E-01     0.0000E+00     7.7000E-04     1.1000E-04
+ve/copy v(1,1:009) x
+ve/copy v(2,1:009) q
+ve/copy v(3,1:009) y
+ve/copy v(4,1:009) e
+ null    3.30000E-02   0.597000    1.00000E-04   10.00000
+/GRAPHICS/HPLOT/ERRORS x y q e 009 20 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.315000     5.62341 'RE   P LI --> P X' 0.3
+ text    0.315000     3.16228 'E IN GEV   400.00' 0.3
+ text    0.315000     1.77828 'THETA(P=3,RF=LAB) IN DEG   118.00' 0.3
+ text    0.315000     1.00000 'A   6.01' 0.3
+ option *
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79B   ITEP-79-23'
+ opt logy
+ve/cr q(008)
+ve/cr v(4,008)
+ve/in v(1:4,001)      8.0000E-02     0.0000E+00     5.0200E+00     2.9000E-01
+ve/in v(1:4,002)      1.2000E-01     0.0000E+00     2.4700E+00     1.8000E-01
+ve/in v(1:4,003)      1.6000E-01     0.0000E+00     9.9000E-01     5.0000E-02
+ve/in v(1:4,004)      2.2000E-01     0.0000E+00     3.5000E-01     5.0000E-02
+ve/in v(1:4,005)      3.3000E-01     0.0000E+00     2.9500E-02     1.8000E-03
+ve/in v(1:4,006)      4.0000E-01     0.0000E+00     9.6000E-03     6.0000E-04
+ve/in v(1:4,007)      4.8000E-01     0.0000E+00     2.8400E-03     2.3000E-04
+ve/in v(1:4,008)      5.6000E-01     0.0000E+00     1.0600E-03     1.1000E-04
+ve/copy v(1,1:008) x
+ve/copy v(2,1:008) q
+ve/copy v(3,1:008) y
+ve/copy v(4,1:008) e
+ null    3.20000E-02   0.608000    1.00000E-04   10.00000
+/GRAPHICS/HPLOT/ERRORS x y q e 008 20 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.320000     5.62341 'RE   P BE --> P X' 0.3
+ text    0.320000     3.16228 'E IN GEV   400.00' 0.3
+ text    0.320000     1.77828 'THETA(P=3,RF=LAB) IN DEG   118.00' 0.3
+ text    0.320000     1.00000 'A   9.01' 0.3
+ option *
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79B   ITEP-79-23'
+ opt logy
+ve/cr q(007)
+ve/cr v(4,007)
+ve/in v(1:4,001)      8.0000E-02     0.0000E+00     7.6000E+00     4.0000E-01
+ve/in v(1:4,002)      1.2000E-01     0.0000E+00     3.8400E+00     2.0000E-01
+ve/in v(1:4,003)      1.7000E-01     0.0000E+00     1.4800E+00     8.0000E-02
+ve/in v(1:4,004)      2.1000E-01     0.0000E+00     5.6000E-01     3.0000E-02
+ve/in v(1:4,005)      3.3000E-01     0.0000E+00     5.4000E-02     3.0000E-03
+ve/in v(1:4,006)      4.0000E-01     0.0000E+00     1.8300E-02     2.1000E-03
+ve/in v(1:4,007)      5.7000E-01     0.0000E+00     2.0200E-03     1.4000E-04
+ve/copy v(1,1:007) x
+ve/copy v(2,1:007) q
+ve/copy v(3,1:007) y
+ve/copy v(4,1:007) e
+ null    3.10000E-02   0.619000    1.00000E-03   10.00000
+/GRAPHICS/HPLOT/ERRORS x y q e 007 20 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.325000     6.30957 'RE   P C --> P X' 0.3
+ text    0.325000     3.98107 'E IN GEV   400.00' 0.3
+ text    0.325000     2.51189 'THETA(P=3,RF=LAB) IN DEG   118.00' 0.3
+ text    0.325000     1.58489 'A   12.01' 0.3
+ option *
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79B   ITEP-79-23'
+ opt logy
+ve/cr q(006)
+ve/cr v(4,006)
+ve/in v(1:4,001)      8.0000E-02     0.0000E+00     1.4000E+01     7.0000E-01
+ve/in v(1:4,002)      1.2000E-01     0.0000E+00     6.5000E+00     3.0000E-01
+ve/in v(1:4,003)      1.7000E-01     0.0000E+00     2.6000E+00     1.3000E-01
+ve/in v(1:4,004)      2.2000E-01     0.0000E+00     9.9000E-01     6.0000E-02
+ve/in v(1:4,005)      3.4000E-01     0.0000E+00     9.7000E-02     6.0000E-03
+ve/in v(1:4,006)      4.1000E-01     0.0000E+00     3.0900E-02     1.8000E-03
+ve/copy v(1,1:006) x
+ve/copy v(2,1:006) q
+ve/copy v(3,1:006) y
+ve/copy v(4,1:006) e
+ null    4.70000E-02   0.443000    1.00000E-02   100.0000
+/GRAPHICS/HPLOT/ERRORS x y q e 006 20 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.245000     63.0957 'RE   P AL --> P X' 0.3
+ text    0.245000     39.8107 'E IN GEV   400.00' 0.3
+ text    0.245000     25.1189 'THETA(P=3,RF=LAB) IN DEG   118.00' 0.3
+ text    0.245000     15.8489 'A   26.98' 0.3
+ option *
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79B   ITEP-79-23'
+ opt logy
+ve/cr q(007)
+ve/cr v(4,007)
+ve/in v(1:4,001)      8.0000E-02     0.0000E+00     1.9400E+01     1.0000E+00
+ve/in v(1:4,002)      1.2000E-01     0.0000E+00     9.3000E+00     5.0000E-01
+ve/in v(1:4,003)      1.6000E-01     0.0000E+00     3.8200E+00     2.0000E-01
+ve/in v(1:4,004)      2.2000E-01     0.0000E+00     1.4600E+00     8.0000E-02
+ve/in v(1:4,005)      2.7000E-01     0.0000E+00     4.0900E-01     2.4000E-02
+ve/in v(1:4,006)      3.3000E-01     0.0000E+00     1.5300E-01     8.0000E-03
+ve/in v(1:4,007)      3.9000E-01     0.0000E+00     5.4000E-02     3.0000E-03
+ve/copy v(1,1:007) x
+ve/copy v(2,1:007) q
+ve/copy v(3,1:007) y
+ve/copy v(4,1:007) e
+ null    4.90000E-02   0.421000    1.00000E-02   100.0000
+/GRAPHICS/HPLOT/ERRORS x y q e 007 20 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.235000     63.0957 'RE   P CU --> P X' 0.3
+ text    0.235000     39.8107 'E IN GEV   400.00' 0.3
+ text    0.235000     25.1189 'THETA(P=3,RF=LAB) IN DEG   118.00' 0.3
+ text    0.235000     15.8489 'A   63.55' 0.3
+ option *
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79B   ITEP-79-23'
+ opt logy
+ve/cr q(010)
+ve/cr v(4,010)
+ve/in v(1:4,001)      8.0000E-02     0.0000E+00     2.9900E+01     1.5000E+00
+ve/in v(1:4,002)      1.2000E-01     0.0000E+00     1.3200E+01     7.0000E-01
+ve/in v(1:4,003)      1.7000E-01     0.0000E+00     5.2000E+00     3.0000E-01
+ve/in v(1:4,004)      2.2000E-01     0.0000E+00     1.8200E+00     1.0000E-01
+ve/in v(1:4,005)      2.8000E-01     0.0000E+00     6.2000E-01     4.0000E-02
+ve/in v(1:4,006)      3.4000E-01     0.0000E+00     2.2800E-01     1.3000E-02
+ve/in v(1:4,007)      4.1000E-01     0.0000E+00     8.7000E-02     1.3000E-02
+ve/in v(1:4,008)      4.7000E-01     0.0000E+00     3.0100E-02     2.3000E-03
+ve/in v(1:4,009)      5.6000E-01     0.0000E+00     1.3700E-02     1.1000E-03
+ve/in v(1:4,010)      7.7000E-01     0.0000E+00     6.6000E-04     1.3000E-04
+ve/copy v(1,1:010) x
+ve/copy v(2,1:010) q
+ve/copy v(3,1:010) y
+ve/copy v(4,1:010) e
+ null    1.10000E-02   0.839000    1.00000E-04   100.0000
+/GRAPHICS/HPLOT/ERRORS x y q e 010 20 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.425000     50.1187 'RE   P TA --> P X' 0.3
+ text    0.425000     25.1189 'E IN GEV   400.00' 0.3
+ text    0.425000     12.5893 'THETA(P=3,RF=LAB) IN DEG   118.00' 0.3
+ text    0.425000     6.30957 'A   180.95' 0.3
+ option *
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79B   ITEP-79-23'
+ opt logy
+ve/cr q(004)
+ve/cr v(4,004)
+ve/in v(1:4,001)      8.0000E-02     0.0000E+00     2.4600E+00     1.3000E-01
+ve/in v(1:4,002)      1.6000E-01     0.0000E+00     3.7800E-01     2.6000E-02
+ve/in v(1:4,003)      2.6000E-01     0.0000E+00     3.5000E-02     2.2000E-03
+ve/in v(1:4,004)      4.0000E-01     0.0000E+00     2.4000E-03     2.9000E-04
+ve/copy v(1,1:004) x
+ve/copy v(2,1:004) q
+ve/copy v(3,1:004) y
+ve/copy v(4,1:004) e
+ null    4.80000E-02   0.432000    1.00000E-03   10.00000
+/GRAPHICS/HPLOT/ERRORS x y q e 004 20 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.240000     6.30957 'RE   P LI --> P X' 0.3
+ text    0.240000     3.98107 'E IN GEV   400.00' 0.3
+ text    0.240000     2.51189 'THETA(P=3,RF=LAB) IN DEG   137.00' 0.3
+ text    0.240000     1.58489 'A   6.01' 0.3
+ option *
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79B   ITEP-79-23'
+ opt logy
+ve/cr q(004)
+ve/cr v(4,004)
+ve/in v(1:4,001)      8.0000E-02     0.0000E+00     3.6600E+00     2.0000E-01
+ve/in v(1:4,002)      1.7000E-01     0.0000E+00     5.9000E-01     4.0000E-02
+ve/in v(1:4,003)      2.7000E-01     0.0000E+00     5.2200E-02     2.8000E-03
+ve/in v(1:4,004)      4.0000E-01     0.0000E+00     3.5800E-03     2.3000E-04
+ve/copy v(1,1:004) x
+ve/copy v(2,1:004) q
+ve/copy v(3,1:004) y
+ve/copy v(4,1:004) e
+ null    4.80000E-02   0.432000    1.00000E-03   10.00000
+/GRAPHICS/HPLOT/ERRORS x y q e 004 20 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.240000     6.30957 'RE   P BE --> P X' 0.3
+ text    0.240000     3.98107 'E IN GEV   400.00' 0.3
+ text    0.240000     2.51189 'THETA(P=3,RF=LAB) IN DEG   137.00' 0.3
+ text    0.240000     1.58489 'A   9.01' 0.3
+ option *
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79B   ITEP-79-23'
+ opt logy
+ve/cr q(004)
+ve/cr v(4,004)
+ve/in v(1:4,001)      8.0000E-02     0.0000E+00     5.4700E+00     2.9000E-01
+ve/in v(1:4,002)      1.7000E-01     0.0000E+00     9.6000E-01     6.0000E-02
+ve/in v(1:4,003)      2.7000E-01     0.0000E+00     9.4000E-02     5.0000E-03
+ve/in v(1:4,004)      4.0000E-01     0.0000E+00     7.5000E-03     5.0000E-04
+ve/copy v(1,1:004) x
+ve/copy v(2,1:004) q
+ve/copy v(3,1:004) y
+ve/copy v(4,1:004) e
+ null    4.80000E-02   0.432000    1.00000E-03   10.00000
+/GRAPHICS/HPLOT/ERRORS x y q e 004 20 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.240000     6.30957 'RE   P C --> P X' 0.3
+ text    0.240000     3.98107 'E IN GEV   400.00' 0.3
+ text    0.240000     2.51189 'THETA(P=3,RF=LAB) IN DEG   137.00' 0.3
+ text    0.240000     1.58489 'A   12.01' 0.3
+ option *
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79B   ITEP-79-23'
+ opt logy
+ve/cr q(004)
+ve/cr v(4,004)
+ve/in v(1:4,001)      8.0000E-02     0.0000E+00     9.3000E+00     5.0000E-01
+ve/in v(1:4,002)      1.7000E-01     0.0000E+00     1.6900E+00     1.1000E-01
+ve/in v(1:4,003)      2.7000E-01     0.0000E+00     1.7300E-01     9.0000E-03
+ve/in v(1:4,004)      4.0000E-01     0.0000E+00     1.5500E-02     1.0000E-03
+ve/copy v(1,1:004) x
+ve/copy v(2,1:004) q
+ve/copy v(3,1:004) y
+ve/copy v(4,1:004) e
+ null    4.80000E-02   0.432000    1.00000E-02   10.00000
+/GRAPHICS/HPLOT/ERRORS x y q e 004 20 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.240000     7.07946 'RE   P AL --> P X' 0.3
+ text    0.240000     5.01187 'E IN GEV   400.00' 0.3
+ text    0.240000     3.54813 'THETA(P=3,RF=LAB) IN DEG   137.00' 0.3
+ text    0.240000     2.51189 'A   26.98' 0.3
+ option *
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79B   ITEP-79-23'
+ opt logy
+ve/cr q(004)
+ve/cr v(4,004)
+ve/in v(1:4,001)      8.0000E-02     0.0000E+00     1.4700E+01     8.0000E-01
+ve/in v(1:4,002)      1.6000E-01     0.0000E+00     2.4800E+00     1.6000E-01
+ve/in v(1:4,003)      2.7000E-01     0.0000E+00     2.7300E-01     1.4000E-02
+ve/in v(1:4,004)      3.9000E-01     0.0000E+00     2.5600E-02     1.6000E-03
+ve/copy v(1,1:004) x
+ve/copy v(2,1:004) q
+ve/copy v(3,1:004) y
+ve/copy v(4,1:004) e
+ null    4.90000E-02   0.421000    1.00000E-02   100.0000
+/GRAPHICS/HPLOT/ERRORS x y q e 004 20 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.235000     63.0957 'RE   P CU --> P X' 0.3
+ text    0.235000     39.8107 'E IN GEV   400.00' 0.3
+ text    0.235000     25.1189 'THETA(P=3,RF=LAB) IN DEG   137.00' 0.3
+ text    0.235000     15.8489 'A   63.55' 0.3
+ option *
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79B   ITEP-79-23'
+ opt logy
+ve/cr q(008)
+ve/cr v(4,008)
+ve/in v(1:4,001)      8.0000E-02     0.0000E+00     2.2000E+01     1.1000E+00
+ve/in v(1:4,002)      1.7000E-01     0.0000E+00     3.5600E+00     2.4000E-01
+ve/in v(1:4,003)      2.7000E-01     0.0000E+00     3.7000E-01     2.1000E-02
+ve/in v(1:4,004)      4.0000E-01     0.0000E+00     3.8400E-02     2.5000E-03
+ve/in v(1:4,005)      6.2000E-01     0.0000E+00     8.5000E-04     6.0000E-05
+ve/in v(1:4,006)      7.0000E-01     0.0000E+00     2.5500E-04     2.1000E-05
+ve/in v(1:4,007)      7.7000E-01     0.0000E+00     1.1000E-04     3.0000E-05
+ve/in v(1:4,008)      8.5000E-01     0.0000E+00     6.4000E-05     2.3000E-05
+ve/copy v(1,1:008) x
+ve/copy v(2,1:008) q
+ve/copy v(3,1:008) y
+ve/copy v(4,1:008) e
+ null    2.99999E-03   0.927000    1.00000E-05   100.0000
+/GRAPHICS/HPLOT/ERRORS x y q e 008 20 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.465000     44.6684 'RE   P TA --> P X' 0.3
+ text    0.465000     19.9526 'E IN GEV   400.00' 0.3
+ text    0.465000     8.91251 'THETA(P=3,RF=LAB) IN DEG   137.00' 0.3
+ text    0.465000     3.98107 'A   180.95' 0.3
+ option *
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79B   ITEP-79-23'
+ opt logy
+ve/cr q(008)
+ve/cr v(4,008)
+ve/in v(1:4,001)      8.0000E-02     0.0000E+00     2.5000E+00     1.4000E-01
+ve/in v(1:4,002)      1.2000E-01     0.0000E+00     9.8000E-01     6.0000E-02
+ve/in v(1:4,003)      1.6000E-01     0.0000E+00     3.4200E-01     1.6000E-02
+ve/in v(1:4,004)      2.2000E-01     0.0000E+00     9.0000E-02     6.0000E-03
+ve/in v(1:4,005)      2.8000E-01     0.0000E+00     2.5200E-02     2.0000E-03
+ve/in v(1:4,006)      3.4000E-01     0.0000E+00     6.6000E-03     2.4000E-03
+ve/in v(1:4,007)      3.9000E-01     0.0000E+00     1.7000E-03     1.3000E-03
+ve/in v(1:4,008)      4.6000E-01     0.0000E+00     1.2000E-04     9.0000E-05
+ve/copy v(1,1:008) x
+ve/copy v(2,1:008) q
+ve/copy v(3,1:008) y
+ve/copy v(4,1:008) e
+ null    4.20000E-02   0.498000    1.00000E-05   10.00000
+/GRAPHICS/HPLOT/ERRORS x y q e 008 20 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.270000     5.01187 'RE   P LI --> P X' 0.3
+ text    0.270000     2.51189 'E IN GEV   400.00' 0.3
+ text    0.270000     1.25893 'THETA(P=3,RF=LAB) IN DEG   160.00' 0.3
+ text    0.270000    0.630957 'A   6.01' 0.3
+ option *
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79B   ITEP-79-23'
+ opt logy
+ve/cr q(008)
+ve/cr v(4,008)
+ve/in v(1:4,001)      8.0000E-02     0.0000E+00     3.1900E+00     1.8000E-01
+ve/in v(1:4,002)      1.2000E-01     0.0000E+00     1.5100E+00     8.0000E-02
+ve/in v(1:4,003)      1.7000E-01     0.0000E+00     4.9500E-01     2.6000E-02
+ve/in v(1:4,004)      2.2000E-01     0.0000E+00     1.4600E-01     8.0000E-03
+ve/in v(1:4,005)      2.9000E-01     0.0000E+00     3.7700E-02     2.5000E-03
+ve/in v(1:4,006)      3.4000E-01     0.0000E+00     9.5000E-03     1.1000E-03
+ve/in v(1:4,007)      3.9000E-01     0.0000E+00     2.3400E-03     1.3000E-04
+ve/in v(1:4,008)      5.4000E-01     0.0000E+00     1.4000E-04     4.0000E-05
+ve/copy v(1,1:008) x
+ve/copy v(2,1:008) q
+ve/copy v(3,1:008) y
+ve/copy v(4,1:008) e
+ null    3.40000E-02   0.586000    1.00000E-05   10.00000
+/GRAPHICS/HPLOT/ERRORS x y q e 008 20 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.310000     5.01187 'RE   P BE --> P X' 0.3
+ text    0.310000     2.51189 'E IN GEV   400.00' 0.3
+ text    0.310000     1.25893 'THETA(P=3,RF=LAB) IN DEG   160.00' 0.3
+ text    0.310000    0.630957 'A   9.01' 0.3
+ option *
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79B   ITEP-79-23'
+ opt logy
+ve/cr q(009)
+ve/cr v(4,009)
+ve/in v(1:4,001)      8.0000E-02     0.0000E+00     5.3300E+00     2.9000E-01
+ve/in v(1:4,002)      1.2000E-01     0.0000E+00     2.4400E+00     1.2000E-01
+ve/in v(1:4,003)      1.7000E-01     0.0000E+00     8.3000E-01     5.0000E-02
+ve/in v(1:4,004)      2.2000E-01     0.0000E+00     2.4300E-01     1.2000E-02
+ve/in v(1:4,005)      2.8000E-01     0.0000E+00     7.0000E-02     4.0000E-03
+ve/in v(1:4,006)      3.4000E-01     0.0000E+00     1.8100E-02     1.4000E-03
+ve/in v(1:4,007)      4.0000E-01     0.0000E+00     5.0000E-03     6.0000E-04
+ve/in v(1:4,008)      4.9000E-01     0.0000E+00     1.4200E-03     2.0000E-04
+ve/in v(1:4,009)      5.4000E-01     0.0000E+00     2.5000E-04     4.0000E-05
+ve/copy v(1,1:009) x
+ve/copy v(2,1:009) q
+ve/copy v(3,1:009) y
+ve/copy v(4,1:009) e
+ null    3.40000E-02   0.586000    1.00000E-04   10.00000
+/GRAPHICS/HPLOT/ERRORS x y q e 009 20 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.310000     5.62341 'RE   P C --> P X' 0.3
+ text    0.310000     3.16228 'E IN GEV   400.00' 0.3
+ text    0.310000     1.77828 'THETA(P=3,RF=LAB) IN DEG   160.00' 0.3
+ text    0.310000     1.00000 'A   12.01' 0.3
+ option *
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79B   ITEP-79-23'
+ opt logy
+ve/cr q(007)
+ve/cr v(4,007)
+ve/in v(1:4,001)      8.0000E-02     0.0000E+00     9.8000E+00     5.0000E-01
+ve/in v(1:4,002)      1.2000E-01     0.0000E+00     4.4300E+00     2.4000E-01
+ve/in v(1:4,003)      1.7000E-01     0.0000E+00     1.4400E+00     9.0000E-02
+ve/in v(1:4,004)      2.2000E-01     0.0000E+00     4.5000E-01     2.1000E-02
+ve/in v(1:4,005)      2.7000E-01     0.0000E+00     1.4000E-01     7.0000E-03
+ve/in v(1:4,006)      3.4000E-01     0.0000E+00     3.5000E-02     2.1000E-03
+ve/in v(1:4,007)      3.9000E-01     0.0000E+00     1.0500E-02     7.0000E-04
+ve/copy v(1,1:007) x
+ve/copy v(2,1:007) q
+ve/copy v(3,1:007) y
+ve/copy v(4,1:007) e
+ null    4.90000E-02   0.421000    1.00000E-03   100.0000
+/GRAPHICS/HPLOT/ERRORS x y q e 007 20 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.235000     56.2341 'RE   P AL --> P X' 0.3
+ text    0.235000     31.6228 'E IN GEV   400.00' 0.3
+ text    0.235000     17.7828 'THETA(P=3,RF=LAB) IN DEG   160.00' 0.3
+ text    0.235000    10.00000 'A   26.98' 0.3
+ option *
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79B   ITEP-79-23'
+ opt logy
+ve/cr q(007)
+ve/cr v(4,007)
+ve/in v(1:4,001)      8.0000E-02     0.0000E+00     1.3900E+01     7.0000E-01
+ve/in v(1:4,002)      1.2000E-01     0.0000E+00     6.5000E+00     3.0000E-01
+ve/in v(1:4,003)      1.7000E-01     0.0000E+00     2.1200E+00     1.5000E-01
+ve/in v(1:4,004)      2.2000E-01     0.0000E+00     6.7000E-01     4.0000E-02
+ve/in v(1:4,005)      2.8000E-01     0.0000E+00     1.9700E-01     1.1000E-02
+ve/in v(1:4,006)      3.4000E-01     0.0000E+00     5.8000E-02     3.0000E-03
+ve/in v(1:4,007)      3.8000E-01     0.0000E+00     1.5900E-02     1.1000E-03
+ve/copy v(1,1:007) x
+ve/copy v(2,1:007) q
+ve/copy v(3,1:007) y
+ve/copy v(4,1:007) e
+ null    5.00000E-02   0.410000    1.00000E-02   100.0000
+/GRAPHICS/HPLOT/ERRORS x y q e 007 20 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.230000     63.0957 'RE   P CU --> P X' 0.3
+ text    0.230000     39.8107 'E IN GEV   400.00' 0.3
+ text    0.230000     25.1189 'THETA(P=3,RF=LAB) IN DEG   160.00' 0.3
+ text    0.230000     15.8489 'A   63.55' 0.3
+ option *
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79B   ITEP-79-23'
+ opt logy
+ve/cr q(011)
+ve/cr v(4,011)
+ve/in v(1:4,001)      8.0000E-02     0.0000E+00     2.1700E+01     1.1000E+00
+ve/in v(1:4,002)      1.2000E-01     0.0000E+00     9.0000E+00     6.0000E-01
+ve/in v(1:4,003)      1.7000E-01     0.0000E+00     3.0600E+00     1.6000E-01
+ve/in v(1:4,004)      2.2000E-01     0.0000E+00     9.3000E-01     5.0000E-02
+ve/in v(1:4,005)      2.8000E-01     0.0000E+00     2.7900E-01     1.3000E-02
+ve/in v(1:4,006)      3.4000E-01     0.0000E+00     7.9000E-02     4.0000E-03
+ve/in v(1:4,007)      3.9000E-01     0.0000E+00     2.3300E-02     1.0000E-03
+ve/in v(1:4,008)      4.7000E-01     0.0000E+00     6.7000E-03     4.0000E-04
+ve/in v(1:4,009)      5.4000E-01     0.0000E+00     1.9400E-03     1.5000E-04
+ve/in v(1:4,010)      6.3000E-01     0.0000E+00     4.1000E-04     1.0000E-04
+ve/in v(1:4,011)      7.6000E-01     0.0000E+00     3.7000E-05     2.6000E-05
+ve/copy v(1,1:011) x
+ve/copy v(2,1:011) q
+ve/copy v(3,1:011) y
+ve/copy v(4,1:011) e
+ null    1.20000E-02   0.828000    1.00000E-05   100.0000
+/GRAPHICS/HPLOT/ERRORS x y q e 011 20 0.2
+ atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.420000     44.6684 'RE   P TA --> P X' 0.3
+ text    0.420000     19.9526 'E IN GEV   400.00' 0.3
+ text    0.420000     8.91251 'THETA(P=3,RF=LAB) IN DEG   160.00' 0.3
+ text    0.420000     3.98107 'A   180.95' 0.3
+ option *
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79B   ITEP-79-23'
+ opt liny
+ve/cr q(010)
+ve/cr v(4,010)
+ve/in v(1:4,001)      1.6000E+02     0.0000E+00     1.8600E-01     1.0000E-02
+ve/in v(1:4,002)      1.5000E+02     0.0000E+00     1.9800E-01     1.0000E-02
+ve/in v(1:4,003)      1.4000E+02     0.0000E+00     2.3800E-01     1.5000E-02
+ve/in v(1:4,004)      1.3000E+02     0.0000E+00     3.1700E-01     2.3000E-02
+ve/in v(1:4,005)      1.2000E+02     0.0000E+00     4.1300E-01     2.5000E-02
+ve/in v(1:4,006)      1.1000E+02     0.0000E+00     5.7000E-01     4.0000E-02
+ve/in v(1:4,007)      1.0000E+02     0.0000E+00     7.8000E-01     4.0000E-02
+ve/in v(1:4,008)      9.0000E+01     0.0000E+00     1.3000E+00     9.0000E-02
+ve/in v(1:4,009)      8.0000E+01     0.0000E+00     2.3000E+00     1.5000E-01
+ve/in v(1:4,010)      7.0000E+01     0.0000E+00     3.7300E+00     2.4000E-01
+ve/copy v(1,1:010) x
+ve/copy v(2,1:010) q
+ve/copy v(3,1:010) y
+ve/copy v(4,1:010) e
+ null    61.0000    169.000  -0.203400    4.34940
+/GRAPHICS/HPLOT/ERRORS x y q e 010 20 0.2
+ atitle 'THETA(P=3,RF=LAB) IN DEG'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text     115.000     4.12176 'RE   P C --> P X' 0.3
+ text     115.000     3.89412 'P IN GEV   400.00' 0.3
+ text     115.000     3.66648 'P(P=3,RF=LAB) IN GEV   0.70' 0.3
+ text     115.000     3.43884 'A   12.01' 0.3
+ option *
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79B   ITEP-79-23'
+ opt liny
+ve/cr q(009)
+ve/cr v(4,009)
+ve/in v(1:4,001)      1.6000E+02     0.0000E+00     3.4400E-01     1.7000E-02
+ve/in v(1:4,002)      1.5000E+02     0.0000E+00     3.3700E-01     1.5000E-02
+ve/in v(1:4,003)      1.4000E+02     0.0000E+00     4.2400E-01     2.2000E-02
+ve/in v(1:4,004)      1.3000E+02     0.0000E+00     5.3000E-01     2.7000E-02
+ve/in v(1:4,005)      1.2000E+02     0.0000E+00     6.7000E-01     4.0000E-02
+ve/in v(1:4,006)      1.1000E+02     0.0000E+00     9.1000E-01     5.0000E-02
+ve/in v(1:4,007)      1.0000E+02     0.0000E+00     1.3200E+00     7.0000E-02
+ve/in v(1:4,008)      9.0000E+01     0.0000E+00     2.0000E+00     1.0000E-01
+ve/in v(1:4,009)      8.0000E+01     0.0000E+00     3.0700E+00     1.6000E-01
+ve/copy v(1,1:009) x
+ve/copy v(2,1:009) q
+ve/copy v(3,1:009) y
+ve/copy v(4,1:009) e
+ null    72.0000    168.000    3.12000E-02    3.52080
+/GRAPHICS/HPLOT/ERRORS x y q e 009 20 0.2
+ atitle 'THETA(P=3,RF=LAB) IN DEG'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text     120.000     3.34632 'RE   P AL --> P X' 0.3
+ text     120.000     3.17184 'P IN GEV   400.00' 0.3
+ text     120.000     2.99736 'P(P=3,RF=LAB) IN GEV   0.70' 0.3
+ text     120.000     2.82288 'A   26.98' 0.3
+ option *
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79B   ITEP-79-23'
+ opt liny
+ve/cr q(010)
+ve/cr v(4,010)
+ve/in v(1:4,001)      1.6000E+02     0.0000E+00     6.8000E-01     4.0000E-02
+ve/in v(1:4,002)      1.5000E+02     0.0000E+00     7.3000E-01     4.0000E-02
+ve/in v(1:4,003)      1.4000E+02     0.0000E+00     8.6000E-01     5.0000E-02
+ve/in v(1:4,004)      1.3000E+02     0.0000E+00     1.2000E+00     7.0000E-02
+ve/in v(1:4,005)      1.2000E+02     0.0000E+00     1.5300E+00     9.0000E-02
+ve/in v(1:4,006)      1.1000E+02     0.0000E+00     2.0100E+00     1.1000E-01
+ve/in v(1:4,007)      1.0000E+02     0.0000E+00     2.6800E+00     9.0000E-02
+ve/in v(1:4,008)      9.0000E+01     0.0000E+00     4.0200E+00     1.4000E-01
+ve/in v(1:4,009)      8.0000E+01     0.0000E+00     5.6900E+00     3.0000E-01
+ve/in v(1:4,010)      7.0000E+01     0.0000E+00     7.6100E+00     5.0000E-01
+ve/copy v(1,1:010) x
+ve/copy v(2,1:010) q
+ve/copy v(3,1:010) y
+ve/copy v(4,1:010) e
+ null    61.0000    169.000  -0.107000    8.85700
+/GRAPHICS/HPLOT/ERRORS x y q e 010 20 0.2
+ atitle 'THETA(P=3,RF=LAB) IN DEG'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text     115.000     8.40880 'RE   P TA --> P X' 0.3
+ text     115.000     7.96060 'P IN GEV   400.00' 0.3
+ text     115.000     7.51240 'P(P=3,RF=LAB) IN GEV   0.70' 0.3
+ text     115.000     7.06420 'A   180.95' 0.3
+ option *
+ ve/de *
+</XMP>
+</body>

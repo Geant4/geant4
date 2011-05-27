@@ -44,6 +44,7 @@
 
 #include "G4ProcessManagerMessenger.hh"
 #include "G4ProcessManager.hh"
+#include "G4ProcessAttribute.hh"
 #include "G4StateManager.hh"
 #include <iomanip>
 #include "G4ProcessTable.hh"
@@ -60,7 +61,7 @@ G4int  G4ProcessManager::counterOfObjects = 0;
 G4ProcessManager::G4ProcessManager(const G4ParticleDefinition* aParticleType):
                 theParticleType(aParticleType),
                 numberOfProcesses(0),
-                duringTracking(false),
+                duringTracking(false),     
 		verboseLevel(1)
 {
   // create the process List
@@ -85,6 +86,11 @@ G4ProcessManager::G4ProcessManager(const G4ParticleDefinition* aParticleType):
   // create Process Manager Messenger
   if (fProcessManagerMessenger == 0){
     fProcessManagerMessenger = new G4ProcessManagerMessenger();
+  }
+
+  for (G4int i=0; i<NDoit; ++i) {
+    isSetOrderingFirstInvoked[i]=false;
+    isSetOrderingLastInvoked[i]=false;
   }
 
   // Increment counter of G4ProcessManager objects
@@ -151,7 +157,9 @@ G4ProcessManager::G4ProcessManager(G4ProcessManager &right)
 // ///////////////////////////////////////
 G4ProcessManager::G4ProcessManager():
                 theParticleType(0),
-                numberOfProcesses(0)
+                numberOfProcesses(0),
+                duringTracking(false),
+		verboseLevel(1)
 {
   // clear the process List and ProcessAttr Vector
   theProcessList = 0;
@@ -168,7 +176,7 @@ G4ProcessManager & G4ProcessManager::operator=(G4ProcessManager &)
   theProcessList = 0;
   theAttrVector = 0;
 
-  G4Exception("G4ProcessManager::operator=","ProcMan111",
+  G4Exception("G4ProcessManager::operator=","ProcMan112",
 	      JustWarning,"Assignemnet operator is called");
 
   return *this;
@@ -703,13 +711,24 @@ void G4ProcessManager::SetProcessOrderingToFirst(
 
 #ifdef G4VERBOSE
     if (verboseLevel>2) {
-      G4cout << "G4ProcessManager::SetProcessOrdering: ";
+      G4cout << "G4ProcessManager::SetProcessOrderingToFirst: ";
       G4cout << aProcess->GetProcessName() << " is inserted at top ";
       G4cout << " in ProcessVetor[" << ivec<< "]";
       G4cout << G4endl;
     }
 #endif
   }
+ 
+  if (isSetOrderingFirstInvoked[idDoIt]){
+    G4String anErrMsg = "Set Ordering First is invoked twice for ";
+    anErrMsg += aProcess->GetProcessName();
+    anErrMsg += " to ";
+    anErrMsg += theParticleType->GetParticleName();
+    G4Exception( "G4ProcessManager::SetProcessOrderingToFirst()",
+		 "ProcMan113",
+		 JustWarning,anErrMsg);	 
+   }
+  isSetOrderingFirstInvoked[idDoIt] = true;
 
  // check consistencies between ordering parameters and process 
   CheckOrderingParameters(aProcess);
@@ -802,8 +821,8 @@ void G4ProcessManager::SetProcessOrderingToSecond(
     G4cout << G4endl;
   }
 #endif
-
- // check consistencies between ordering parameters and process 
+ 
+  // check consistencies between ordering parameters and process 
   CheckOrderingParameters(aProcess);
 
   // create GPIL vectors 
@@ -817,6 +836,16 @@ void G4ProcessManager::SetProcessOrderingToLast(
 			       )
 {
   SetProcessOrdering(aProcess, idDoIt, ordLast );
+
+  if (isSetOrderingLastInvoked[idDoIt]){
+    G4String anErrMsg = "Set Ordering Last is invoked twice for ";
+    anErrMsg += aProcess->GetProcessName();
+    anErrMsg += " to ";
+    anErrMsg += theParticleType->GetParticleName();
+    G4Exception( "G4ProcessManager::SetProcessOrderingToLast()","ProcMan114",
+		 JustWarning,anErrMsg);	 
+  }
+  isSetOrderingLastInvoked[idDoIt] = true;
 }
 
 // ///////////////////////////////////////

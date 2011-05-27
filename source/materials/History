@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04-05-11 V.Ivanchenko (materials-V09-04-08)
+03-05-11 V.Ivanchenko (materials-V09-04-07)
+- G4IonisParamMat, G4NistManager, G4NistMessenger - attempt to fix
+  Coverity bugs
+
+01-05-11 V.Ivanchenko (materials-V09-04-06)
+- G4IonisParamMat - cleanup methods, use G4Pow
+- G4NistMaterialBuilder - improved comments 
+
 05-04-11 V.Ivanchenko (materials-V09-04-05)
 - G4IonisParamMat: make method DensityCorrection() inline and make 
   'twoln10' member of the class

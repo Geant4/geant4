@@ -1,0 +1,13 @@
+nt/cr 1 'ntuple-test' 157 ' ' 20000 _
+eincom mulpi mulpip mulpim mulpiz  mulnuc  mulpro  mulneu  mulnucba  mulproba  mulneuba  mulfrag _  
+muldeu multri  mulalp  mulkp  mulkm  mulkzl  mulkzs  mullam  mullamba  mulsip  mulsim  mulsiz  _
+mulxim  mulxiz  mulome  mulsipba  mulsimba  mulsizba  mulximba  mulxizba  mulomeba  mulst _
+mulstb  mulstbba  mulpos  mulneg  mulzer  multot  ebalance  px0  px1  px2  px3  px4  px5  px6  px7 _
+px8  px9  pxrest  py0  py1  py2  py3  py4  py5  py6  py7  py8  py9  pyrest  pz0  pz1  pz2  pz3  pz4 _
+pz5  pz6  pz7  pz8  pz9  pzrest  e0  e1  e2  e3  e4  e5  e6  e7  e8  e9  erest  pipx  pipy  pipz  _
+pie  kpx  kpy  kpz  ke  nucpx  nucpy  nucpz  nuce  fragpx  fragpy  fragpz  frage  deupx  deupy  _
+deupz  deue  tripx  tripy  tripz  trie  alpx  alpy  alpz  ale  pippx  pippy  pippz  pipe  pimpx  _
+pimpy  pimpz  pime  pizpx  pizpy  pizpz  pize  propx  propy  propz  proe  neupx  neupy  neupz  neue _
+kppx  kppy  kppz  kpe  kmpx  kmpy  kmpz  kme  klpx  klpy  klpz  kle  kspx  kspy  kspz  kse _  
+stbpx  stbpy  stbpz  stbe  stbbapx  stbbapy  stbbapz  stbbae
+nt/read 1 inelastic.pawin

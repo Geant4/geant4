@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id: G4He3GEMChannel.cc,v 1.5 2009-09-15 12:54:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -32,28 +31,4 @@
 //
 
 #include "G4He3GEMChannel.hh"
-
-
-const G4He3GEMChannel & G4He3GEMChannel::operator=(const G4He3GEMChannel & )
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4He3GEMChannel::operator= meant to not be accessable");
-    return *this;
-}
-
-G4He3GEMChannel::G4He3GEMChannel(const G4He3GEMChannel & ): G4GEMChannel()
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4He3GEMChannel::CopyConstructor meant to not be accessable");
-}
-
-G4bool G4He3GEMChannel::operator==(const G4He3GEMChannel & right) const 
-{
-    return (this == (G4He3GEMChannel *) &right);
-    //  return false;
-}
-
-G4bool G4He3GEMChannel::operator!=(const G4He3GEMChannel & right) const 
-{
-    return (this != (G4He3GEMChannel *) &right);
-    //  return true;
-}
 

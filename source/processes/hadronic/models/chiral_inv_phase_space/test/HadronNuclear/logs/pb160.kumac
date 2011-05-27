@@ -1,0 +1,22 @@
+opt a4
+zone 1 2
+ve/del *
+exec inclusive 160. ../logs/liste.p_pb.160mev.neutron.integral ../data/pb.160mev/p.pb.160mev.dsig_n.dt
+
+zone 3 4 7 s
+exec prepare ../data/pb.160mev/p.pb.160mev.dsig_n.dt.domega
+
+exec analyse ../logs/liste.p_pb.160mev.neutron.0degree 0. 160. 1.
+exec analyse ../logs/liste.p_pb.160mev.neutron.11degree 11. 160. 1.
+exec analyse ../logs/liste.p_pb.160mev.neutron.24degree 24. 160. 1.
+exec analyse ../logs/liste.p_pb.160mev.neutron.35degree 35. 160. 1.
+exec analyse ../logs/liste.p_pb.160mev.neutron.45degree 45. 160. 1.
+exec analyse ../logs/liste.p_pb.160mev.neutron.56degree 56. 160. 1.
+zone 3 4
+exec analyse ../logs/liste.p_pb.160mev.neutron.69degree 69. 160. 1.
+exec analyse ../logs/liste.p_pb.160mev.neutron.82degree 82. 160. 1.
+exec analyse ../logs/liste.p_pb.160mev.neutron.95degree 95. 160. 1.
+exec analyse ../logs/liste.p_pb.160mev.neutron.106degree 106. 160. 1.
+exec analyse ../logs/liste.p_pb.160mev.neutron.121degree 121. 160. 1.
+exec analyse ../logs/liste.p_pb.160mev.neutron.134degree 134. 160. 1.
+exec analyse ../logs/liste.p_pb.160mev.neutron.145degree 145. 160. 1.

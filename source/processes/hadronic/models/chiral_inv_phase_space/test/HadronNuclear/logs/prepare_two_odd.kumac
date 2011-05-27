@@ -1,0 +1,26 @@
+ve/cr data(5,5000) R 25000*-1
+ve/read data [1]
+
+ve/cr e0(10000) r
+ve/cr th(10000) r
+ve/cr en(10000) r
+ve/cr sig(10000) r
+ve/cr ex(10000) R 10000*0.
+ve/cr ey(10000) R 10000*0.
+
+ve/cr work(10000) R 10000*0.
+
+ve/copy data(1,1:5000) e0(1:5000)
+ve/copy data(2,1:5000) th(1:5000)
+ve/copy data(3,1:5000) en(1:5000)
+ve/copy data(4,1:5000) sig(1:5000)
+ve/copy data(5,1:5000) ey(1:5000)
+
+ve/cr data(5,5000) R 25000*-1
+ve/read data [2]
+ve/copy data(1,1:5000) e0(5001:10000)
+ve/copy data(2,1:5000) en(5001:10000)
+ve/copy data(3,1:5000) th(5001:10000)
+sigma data = 1000*data
+ve/copy data(4,1:5000) sig(5001:10000)
+ve/copy data(5,1:5000) ey(5001:10000)

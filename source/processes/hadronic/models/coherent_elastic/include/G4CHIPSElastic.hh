@@ -40,12 +40,12 @@
 #ifndef G4CHIPSElastic_h
 #define G4CHIPSElastic_h 1
  
-#include "G4VHadronElastic.hh"
+#include "G4HadronElastic.hh"
 #include "globals.hh"
 
 class G4VQCrossSection;
 
-class G4CHIPSElastic : public G4VHadronElastic
+class G4CHIPSElastic : public G4HadronElastic
 {
 public:
 

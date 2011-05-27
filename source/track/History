@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Apr. 29, 2011, H.Kurashige (track-V09-04-02)
+- Fix memory leak in G4Step
+- Rename GetVelocity to CalculateVelocity
+- Add fVelocity (and Set/Get methods for it) in G4Track
+- Set velocity of trak in UpdateStep in ParticleChange
+
 Apr. 2, 2011, H.Kurashige (track-V09-04-01)
 - Set maxT for Velocity Table to 1000
 - Add SetVelocityTableProperties

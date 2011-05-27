@@ -178,6 +178,7 @@ void G4eIonisationParameters::LoadData()
     { 
       G4String excep("G4eIonisationParameters - G4LEDATA environment variable not set");
       G4Exception(excep);
+      return;
     }
     
   G4String pathString(path);
@@ -230,6 +231,14 @@ void G4eIonisationParameters::LoadData()
     G4bool isReady = false;
     do {
       file >> energy >> sum;
+      //Check if energy is valid
+      if (energy < -2)
+	{
+	  G4String excep("G4eIonisationParameters - Invalid data file");
+	  G4Exception(excep);
+	  return;
+	}
+
       if (energy == -2) break;
 
       if (energy >  -1) {

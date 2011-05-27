@@ -41,6 +41,12 @@ G4DNAMillerGreenExcitationModel::G4DNAMillerGreenExcitationModel(const G4Particl
 {
   nistwater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
 
+  nLevels=0;
+  kineticEnergyCorrection[0]=0.;
+  kineticEnergyCorrection[1]=0.;
+  kineticEnergyCorrection[2]=0.;
+  kineticEnergyCorrection[3]=0.;
+ 
   verboseLevel= 0;
   // Verbosity scale:
   // 0 = nothing 

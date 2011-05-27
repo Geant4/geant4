@@ -121,6 +121,14 @@
    { fpDynamicParticle->SetProperTime(aValue); }
       // Proper time of the current track
 
+// velocity
+   inline G4double G4Track::GetVelocity() const
+   { return fVelocity; }
+
+   inline void  G4Track::SetVelocity(G4double val)
+   { fVelocity = val; }
+ 
+
 // volume
    inline G4VPhysicalVolume* G4Track::GetVolume() const
    { if ( fpTouchable ==0 ) return 0; 

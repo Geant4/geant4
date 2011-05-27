@@ -1,0 +1,11 @@
+opt a4
+ve/del *
+title_gl 'neutron final state'
+zone 2 3
+exec prepare ../data/zr.800mev/p.zr.800mev.dsig_n.dt.domega
+
+exec analyse ../logs/liste.p_zr.800mev.neutron.7.5degree 7.5 800. 1.
+exec analyse ../logs/liste.p_zr.800mev.neutron.30degree 30. 800. 1.
+exec analyse ../logs/liste.p_zr.800mev.neutron.60degree 60. 800. 1.
+exec analyse ../logs/liste.p_zr.800mev.neutron.120degree 120. 800. 1.
+exec analyse ../logs/liste.p_zr.800mev.neutron.150degree 150. 800. 1.

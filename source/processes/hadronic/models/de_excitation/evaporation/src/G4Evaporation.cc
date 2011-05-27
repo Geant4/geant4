@@ -67,6 +67,8 @@ G4Evaporation::G4Evaporation(std::vector<G4VEvaporationChannel*> * aChannelsVect
   : theChannels(aChannelsVector), theChannelFactory(0), nChannels(0)
 {
   InitialiseEvaporation();
+  maxZforFBU = G4FermiFragmentsPool::Instance()->GetMaxZ();
+  maxAforFBU = G4FermiFragmentsPool::Instance()->GetMaxA();
 }
 
 G4Evaporation::~G4Evaporation()

@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 14 May 2011  Hisaya Kurashige  (particles-V09-04-04)
+- Fix energy of proton and neutrino in G4NeutronBetaDecayChannel
+
+- 13 May 2011  Hisaya Kurashige  (particles-V09-04-03)
+-  Fix compiler warning in G4TauLeptonicDecayChannel.cc 
+
 - 22 Mar. 2011  Hisaya Kurashige  (particles-V09-04-02)
 - Fix  G4ParticleDefinition::SetApplyCutsFlag() to remove warning messages for proton 
 

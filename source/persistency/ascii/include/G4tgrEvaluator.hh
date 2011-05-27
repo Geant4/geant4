@@ -42,9 +42,9 @@
 #define G4tgrEvaluator_HH
 
 #include "G4ThreeVector.hh"
-#include <CLHEP/Evaluator/Evaluator.h>
+#include "G4Evaluator.hh"
 
-class G4tgrEvaluator : public HepTool::Evaluator
+class G4tgrEvaluator : public G4Evaluator
 {
   public:  // with description
 

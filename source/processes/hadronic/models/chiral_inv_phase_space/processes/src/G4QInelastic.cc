@@ -66,14 +66,16 @@ G4QInelastic::G4QInelastic(const G4String& processName):
 }
 
 G4bool   G4QInelastic::manualFlag=false; // If false then standard parameters are used
-G4double G4QInelastic::Temperature=200.; // Critical Temperature (sensitive at High En)
+G4double G4QInelastic::Temperature=140.; // Critical Temperature (sensitive at High En)
 G4double G4QInelastic::SSin2Gluons=0.3;  // Supression of s-quarks (in respect to u&d)
 G4double G4QInelastic::EtaEtaprime=0.3;  // Supression of eta mesons (gg->qq/3g->qq)
-G4double G4QInelastic::freeNuc=.35;      // Percentage of free nucleons on the surface
+G4double G4QInelastic::freeNuc=.5;       // Percentage of free nucleons on the surface
 G4double G4QInelastic::freeDib=.05;      // Percentage of free diBaryons on the surface
 G4double G4QInelastic::clustProb=5.;     // Nuclear clusterization parameter
-G4double G4QInelastic::mediRatio=1.;    // medium/vacuum hadronization ratio
-G4int    G4QInelastic::nPartCWorld=152;  // The#of particles initialized in CHIPS World
+G4double G4QInelastic::mediRatio=1.;     // medium/vacuum hadronization ratio
+//G4int    G4QInelastic::nPartCWorld=152;// The#of particles initialized in CHIPS World
+//G4int    G4QInelastic::nPartCWorld=122;// The#of particles initialized in CHIPS World
+G4int    G4QInelastic::nPartCWorld=85;   // The#of particles initialized in CHIPS World Red
 G4double G4QInelastic::SolidAngle=0.5;   // Part of Solid Angle to capture (@@A-dep.)
 G4bool   G4QInelastic::EnergyFlux=false; // Flag for Energy Flux use (not MultyQuasmon)
 G4double G4QInelastic::PiPrThresh=141.4; // Pion Production Threshold for gammas
@@ -90,7 +92,7 @@ void G4QInelastic::SetParameters(G4double temper, G4double ssin2g, G4double etae
                                      G4double fN, G4double fD, G4double cP, G4double mR,
                                      G4int nParCW, G4double solAn, G4bool efFlag,
                                      G4double piThresh, G4double mpisq, G4double dinum)
-{//  =============================================================================
+{
   Temperature=temper;
   SSin2Gluons=ssin2g;
   EtaEtaprime=etaetap;
@@ -177,7 +179,7 @@ G4double G4QInelastic::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCon
 #ifdef debug
   G4cout<<"G4QInelastic::GetMeanFreePath:"<<nE<<" Elem's in theMaterial"<<G4endl;
 #endif
-  G4bool leptoNuc=false;       // By default the reaction is not lepto-nuclear
+  //G4bool leptoNuc=false; // By default the reaction is not lepto-nuclear *Growing point*
   G4VQCrossSection* CSmanager=0;
   G4VQCrossSection* CSmanager2=0;
   G4int pPDG=0;
@@ -270,7 +272,7 @@ G4double G4QInelastic::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCon
           incidentParticleDefinition == G4MuonMinus::MuonMinus())
   {
     CSmanager=G4QMuonNuclearCrossSection::GetPointer();
-    leptoNuc=true;
+    //leptoNuc=true;
     pPDG=13;
   }
   else if(incidentParticleDefinition == G4AntiNeutron::AntiNeutron())
@@ -327,42 +329,42 @@ G4double G4QInelastic::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCon
           incidentParticleDefinition == G4Positron::Positron())
   {
     CSmanager=G4QElectronNuclearCrossSection::GetPointer();
-    leptoNuc=true;
+    //leptoNuc=true;
     pPDG=11;
   }
   else if(incidentParticleDefinition == G4TauPlus::TauPlus() ||
           incidentParticleDefinition == G4TauMinus::TauMinus())
   {
     CSmanager=G4QTauNuclearCrossSection::GetPointer();
-    leptoNuc=true;
+    //leptoNuc=true;
     pPDG=15;
   }
   else if(incidentParticleDefinition == G4NeutrinoMu::NeutrinoMu() )
   {
     CSmanager=G4QNuMuNuclearCrossSection::GetPointer();
     CSmanager2=G4QNuNuNuclearCrossSection::GetPointer();
-    leptoNuc=true;
+    //leptoNuc=true;
     pPDG=14;
   }
   else if(incidentParticleDefinition == G4AntiNeutrinoMu::AntiNeutrinoMu() )
   {
     CSmanager=G4QANuMuNuclearCrossSection::GetPointer();
     CSmanager2=G4QANuANuNuclearCrossSection::GetPointer();
-    leptoNuc=true;
+    //leptoNuc=true;
     pPDG=-14;
   }
   else if(incidentParticleDefinition == G4NeutrinoE::NeutrinoE() )
   {
     CSmanager=G4QNuENuclearCrossSection::GetPointer();
     CSmanager2=G4QNuNuNuclearCrossSection::GetPointer();
-    leptoNuc=true;
+    //leptoNuc=true;
     pPDG=12;
   }
   else if(incidentParticleDefinition == G4AntiNeutrinoE::AntiNeutrinoE() )
   {
     CSmanager=G4QANuENuclearCrossSection::GetPointer();
     CSmanager2=G4QANuANuNuclearCrossSection::GetPointer();
-    leptoNuc=true;
+    //leptoNuc=true;
     pPDG=-12;
   }
   else G4cout<<"-Warning-G4QInelastic::GetMeanFreePath:Particle "
@@ -767,16 +769,20 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
     return 0;
   }
   nOfNeutrons=N;                           // Remember it for the energy-momentum check
-  G4double dd=0.025;
   G4double am=Z+N;
-  G4double sr=std::sqrt(am);
-  G4double dsr=0.01*(sr+sr);
+  //G4double dd=0.025;
+  //G4double sr=std::sqrt(am);
+  //G4double dsr=0.01*(sr+sr);
+  //if(dsr<dd)dsr=dd;
   //G4double medRA=mediRatio*pow(am,third);
   G4double medRA=mediRatio;
-  if(dsr<dd)dsr=dd;
   if(manualFlag) G4QNucleus::SetParameters(freeNuc,freeDib,clustProb,medRA); // ManualP
-  else if(projPDG==-2212) G4QNucleus::SetParameters(1.-dsr-dsr,dd+dd,5.,10.);//aP ClustPars
-  else if(projPDG==-211)  G4QNucleus::SetParameters(.67-dsr,.32-dsr,5.,9.); //Pi- ClustPars
+  //else if(projPDG==-2212)G4QNucleus::SetParameters(1.-dsr-dsr,dd+dd,5.,9.);//aP ClustPars
+  //else if(projPDG==-211) G4QNucleus::SetParameters(.67-dsr,.32-dsr,5.,9.); //Pi-ClustPars
+  //else if(projPDG ==-2212 || projPDG ==-2112)
+  //                       G4QNucleus::SetParameters(1.-dsr-dsr,dd+dd,5.,1.);//aP ClustPars
+  //else if(projPDG ==-211 ||projPDG == 211 )
+  //                       G4QNucleus::SetParameters(.67-dsr,.32-dsr,5.,1.); //Pi-ClustPars
 #ifdef debug
   G4cout<<"G4QInelastic::PostStepDoIt: N="<<N<<" for element with Z="<<Z<<G4endl;
 #endif
@@ -1128,7 +1134,7 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
     G4double mIN=mProt;                          // Just a prototype (for anu, Z=1, N=0)
     G4double mOT=mNeut;
     G4double OT=mlN2;
-    G4double mOT2=mNeut2;
+    //G4double mOT2=mNeut2;                        // Other formula: sd=s-mlsOT -Not used?-
     G4double mlOT=fmlN;
     G4double mlsOT=mlsN;
     if(secnu)
@@ -1139,7 +1145,7 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
         projPDG=2112;                            // neutron is going out
         mIN =mNeut;                     
         OT  =mNeut2;
-        mOT2=mNeut2;
+        //mOT2=mNeut2;
         mlOT=0.;
         mlsOT=mNeut2;
       }
@@ -1149,7 +1155,7 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
         projPDG=2212;                            // neutron is going out
         mOT  =mProt;
         OT   =mProt2;
-        mOT2 =mProt2;
+        //mOT2 =mProt2;
         mlOT =0.;
         mlsOT=mProt2;
       }
@@ -1171,7 +1177,7 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
       tM=rM;
       mOT=mProt;
       OT=mlP2;
-      mOT2=mProt2;
+      //mOT2=mProt2;
       mlOT=fmlP;
       mlsOT=mlsP;
       projPDG=2212;                              // proton is going out
@@ -1851,10 +1857,10 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
        G4double rM2=rM*rM;                   // Squared mass of the residual nucleus
        G4double nM2=rM2+tM*tM-(tM+tM)*std::sqrt(rM2+dmom*dmom);// M2 of boundQF-nucleon(2N)
        if(nM2 < 0) nM2=0.;
-       G4double nM=std::sqrt(nM2);           // M of bQF-nucleon
        G4double den2=(dmom*dmom+nM2);        // squared energy of bQF-nucleon
        G4double den=std::sqrt(den2);         // energy of bQF-nucleon
 #ifdef qedebug
+       G4double nM=std::sqrt(nM2);           // M of bQF-nucleon
        G4cout<<"G4QInel::PStDoIt:PiU, p="<<dmom<<",tM="<<tM<<", R="<<rM<<",N="<<nM<<G4endl;
 #endif
        G4double qp=momentum*dmom;
@@ -1877,7 +1883,7 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
          }
          nM2=rM2+tM*tM-(tM+tM)*std::sqrt(rM2+dmom*dmom); // M2 of bQF-nucleon
          if(nM2 < 0) nM2=0.;
-         nM=std::sqrt(nM2);                  // M of bQF-nucleon
+         //nM=std::sqrt(nM2);                  // M of bQF-nucleon --Not used?--
          den2=(dmom*dmom+nM2);               // squared energy of bQF-nucleon
          den=std::sqrt(den2);                // energy of bQF-nucleon
          qp=momentum*dmom;
@@ -1978,7 +1984,7 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
     G4int maxCn=7;
 #endif
     G4int atCn=0;                                         // Attempts counter
-    G4bool inel=false;
+    //G4bool inel=false;
     //while (inel==false && ++atCn <= maxCn)                // To evoid elastic final state
     //{
 #ifdef debug
@@ -2021,13 +2027,13 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
       G4cout<<"G4QInelastic::PostStepDoIt:  At# "<<atCn<<", nSec="<<outN<<", fPDG="
             <<(*output)[0]->GetPDGCode()<<", pPDG="<< projPDG<<G4endl;
 #endif
-      inel=true;
+      //inel=true;                                        // For while
       if(outN < 2)
       {
         G4cout<<"-Warning-G4QInelastic::PostStepDoIt: nSec="<<outN<<", At# "<<atCn<<G4endl;
-        inel=false;
+        //inel=false;                                     // For while
       }
-      else if(outN==2 && (*output)[0]->GetPDGCode() == projPDG) inel=false;
+      //else if(outN==2 && (*output)[0]->GetPDGCode() == projPDG) inel=false; // For while
 #ifdef debug
       if(atCn==maxCn)G4cout<<"-Warning-G4QI::PostStDoIt:mAt="<<atCn<<" is reached"<<G4endl;
 #endif

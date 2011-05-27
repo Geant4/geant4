@@ -167,16 +167,21 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
       // Select randomly one element in the current material
       const G4Element* element = crossSectionHandler->SelectRandomElement(couple,photonEnergy);
 
+      /*
       if (element == 0)
 	{
 	  G4cout << "G4LowEnergyGammaConversion::PostStepDoIt - element = 0" << G4endl;
 	}
+      */
       G4IonisParamElm* ionisation = element->GetIonisation();
+      
+      /*
        if (ionisation == 0)
 	{
 	  G4cout << "G4LowEnergyGammaConversion::PostStepDoIt - ionisation = 0" << G4endl;
 	}
-
+      */
+      
       // Extract Coulomb factor for this Element
       G4double fZ = 8. * (ionisation->GetlogZ3());
       if (photonEnergy > 50. * MeV) fZ += 8. * (element->GetfCoulomb());
@@ -222,7 +227,7 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
   G4double electronTotEnergy;
   G4double positronTotEnergy;
 
-  if (CLHEP::RandBit::shootBit())
+  if (G4int(2*G4UniformRand()))  
     {
       electronTotEnergy = (1. - epsilon) * photonEnergy;
       positronTotEnergy = epsilon * photonEnergy;

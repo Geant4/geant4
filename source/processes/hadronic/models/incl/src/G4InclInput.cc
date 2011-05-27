@@ -1,28 +1,3 @@
-//
-// ********************************************************************
-// * License and Disclaimer                                           *
-// *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
-// *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
-// ********************************************************************
-//
 #include "G4InclInput.hh"
 
 G4InclInput::G4InclInput(const G4HadProjectile &aTrack, const G4Nucleus &theNucleus, G4bool inverseKinematics = false) {
@@ -57,16 +32,17 @@ void G4InclInput::printProjectileTargetInfo(const G4HadProjectile &aTrack, const
 
 
 G4bool G4InclInput::canUseInverseKinematics(const G4HadProjectile &aTrack, const G4Nucleus &theNucleus) {
-  G4int targetA = theNucleus.GetA_asInt();
+  G4int tA = theNucleus.GetA_asInt();
+  G4int tZ = theNucleus.GetZ_asInt();
   const G4ParticleDefinition *projectileDef = aTrack.GetDefinition();
   G4int projectileA = projectileDef->GetAtomicMass();
   //    G4int projectileZ = projectileDef->GetAtomicNumber();
-  if(targetA > 0 && targetA < 18 && (projectileDef != G4Proton::Proton() &&
-				     projectileDef != G4Neutron::Neutron() &&
-				     projectileDef != G4PionPlus::PionPlus() &&
-				     projectileDef != G4PionZero::PionZero() &&
-				     projectileDef != G4PionMinus::PionMinus()) &&
-			      projectileA > 1) {
+  if(tA > 0 && tA <= 18 && tZ <= 8 && (projectileDef != G4Proton::Proton() &&
+				      projectileDef != G4Neutron::Neutron() &&
+				      projectileDef != G4PionPlus::PionPlus() &&
+				      projectileDef != G4PionZero::PionZero() &&
+				      projectileDef != G4PionMinus::PionMinus()) &&
+     projectileA > 1) {
     return true;
   } else {
     return false;

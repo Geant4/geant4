@@ -474,8 +474,11 @@ G4String G4CrossSectionDataSet::FullFileName(const G4String& argFileName) const
 {
   char* path = getenv("G4LEDATA");
   if (!path)
-    G4Exception("G4CrossSectionDataSet::FullFileName - G4LEDATA environment variable not set");
-  
+    {
+      G4Exception("G4CrossSectionDataSet::FullFileName - G4LEDATA environment variable not set");
+      return "NULL";
+    }  
+
   std::ostringstream fullFileName;
  
   fullFileName << path << "/" << argFileName << ".dat";

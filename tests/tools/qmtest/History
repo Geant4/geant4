@@ -12,6 +12,13 @@ $Id$
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29-Apr-2011, G.Folger                (testtools-QMtest-V09-04-08)
+-  add examples/extended/hadronic/hadr02 to testing
+-   increase events in bench-calo-HadCalCMS-run1_largeN-LHEP_EMV to 1k
+
+28-Apr-2011, G.Folger                (testtools-QMtest-V09-04-07)
+-  add test67 for testing Em at MeV scale
+
 20-Apr-2011, G.Folger                (testtools-QMtest-V09-04-06)
 -  increase timelimit on more builds, none at 600 secs. 
      (2 fail on loaded MAC!)

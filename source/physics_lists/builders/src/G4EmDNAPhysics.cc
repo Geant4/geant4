@@ -28,7 +28,6 @@
 
 #include "G4EmDNAPhysics.hh"
 
-#include "G4ProcessManager.hh"
 #include "G4DNAGenericIonsManager.hh"
 
 // *** Processes and models for Geant4-DNA
@@ -53,7 +52,7 @@
 // e+
 #include "G4Positron.hh"
 #include "G4eMultipleScattering.hh"
-#include "G4GoudsmitSaundersonMscModel.hh"
+#include "G4UrbanMscModel95.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
@@ -68,6 +67,8 @@
 #include "G4RayleighScattering.hh" 
 #include "G4LivermoreRayleighModel.hh"
 // end of warning
+
+#include "G4PhysicsListHelper.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -117,11 +118,12 @@ void G4EmDNAPhysics::ConstructParticle()
 
 void G4EmDNAPhysics::ConstructProcess()
 {
+  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+
   theParticleIterator->reset();
   while( (*theParticleIterator)() )
   {
     G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
 
     if (particleName == "e-") {
@@ -134,46 +136,46 @@ void G4EmDNAPhysics::ConstructProcess()
       // or alternative model
       theDNAElasticProcess->SetModel(new G4DNAScreenedRutherfordElasticModel());
       
-      pmanager->AddDiscreteProcess(theDNAElasticProcess);
+      ph->RegisterProcess(theDNAElasticProcess, particle);
 
       // *** Excitation ***
-      pmanager->AddDiscreteProcess(new G4DNAExcitation("e-_G4DNAExcitation"));
+      ph->RegisterProcess(new G4DNAExcitation("e-_G4DNAExcitation"), particle);
 
       // *** Ionisation ***
-      pmanager->AddDiscreteProcess(new G4DNAIonisation("e-_G4DNAIonisation"));
+      ph->RegisterProcess(new G4DNAIonisation("e-_G4DNAIonisation"), particle);
 
       // *** Vibrational excitation ***
-      pmanager->AddDiscreteProcess(new G4DNAVibExcitation("e-_G4DNAVibExcitation"));
+      ph->RegisterProcess(new G4DNAVibExcitation("e-_G4DNAVibExcitation"), particle);
       
       // *** Attachment ***
-      pmanager->AddDiscreteProcess(new G4DNAAttachment("e-_G4DNAAttachment")); 
+      ph->RegisterProcess(new G4DNAAttachment("e-_G4DNAAttachment"), particle); 
 
     
     } else if ( particleName == "proton" ) {
-      pmanager->AddDiscreteProcess(new G4DNAExcitation("proton_G4DNAExcitation"));
-      pmanager->AddDiscreteProcess(new G4DNAIonisation("proton_G4DNAIonisation"));
-      pmanager->AddDiscreteProcess(new G4DNAChargeDecrease("proton_G4DNAChargeDecrease"));
+      ph->RegisterProcess(new G4DNAExcitation("proton_G4DNAExcitation"), particle);
+      ph->RegisterProcess(new G4DNAIonisation("proton_G4DNAIonisation"), particle);
+      ph->RegisterProcess(new G4DNAChargeDecrease("proton_G4DNAChargeDecrease"), particle);
 
     } else if ( particleName == "hydrogen" ) {
-      pmanager->AddDiscreteProcess(new G4DNAExcitation("hydrogen_G4DNAExcitation"));
-      pmanager->AddDiscreteProcess(new G4DNAIonisation("hydrogen_G4DNAIonisation"));
-      pmanager->AddDiscreteProcess(new G4DNAChargeIncrease("hydrogen_G4DNAChargeIncrease"));
+      ph->RegisterProcess(new G4DNAExcitation("hydrogen_G4DNAExcitation"), particle);
+      ph->RegisterProcess(new G4DNAIonisation("hydrogen_G4DNAIonisation"), particle);
+      ph->RegisterProcess(new G4DNAChargeIncrease("hydrogen_G4DNAChargeIncrease"), particle);
 
     } else if ( particleName == "alpha" ) {
-      pmanager->AddDiscreteProcess(new G4DNAExcitation("alpha_G4DNAExcitation"));
-      pmanager->AddDiscreteProcess(new G4DNAIonisation("alpha_G4DNAIonisation"));
-      pmanager->AddDiscreteProcess(new G4DNAChargeDecrease("alpha_G4DNAChargeDecrease"));
+      ph->RegisterProcess(new G4DNAExcitation("alpha_G4DNAExcitation"), particle);
+      ph->RegisterProcess(new G4DNAIonisation("alpha_G4DNAIonisation"), particle);
+      ph->RegisterProcess(new G4DNAChargeDecrease("alpha_G4DNAChargeDecrease"), particle);
 
     } else if ( particleName == "alpha+" ) {
-      pmanager->AddDiscreteProcess(new G4DNAExcitation("alpha+_G4DNAExcitation"));
-      pmanager->AddDiscreteProcess(new G4DNAIonisation("alpha+_G4DNAIonisation"));
-      pmanager->AddDiscreteProcess(new G4DNAChargeDecrease("alpha+_G4DNAChargeDecrease"));
-      pmanager->AddDiscreteProcess(new G4DNAChargeIncrease("alpha+_G4DNAChargeIncrease"));
+      ph->RegisterProcess(new G4DNAExcitation("alpha+_G4DNAExcitation"), particle);
+      ph->RegisterProcess(new G4DNAIonisation("alpha+_G4DNAIonisation"), particle);
+      ph->RegisterProcess(new G4DNAChargeDecrease("alpha+_G4DNAChargeDecrease"), particle);
+      ph->RegisterProcess(new G4DNAChargeIncrease("alpha+_G4DNAChargeIncrease"), particle);
 
     } else if ( particleName == "helium" ) {
-      pmanager->AddDiscreteProcess(new G4DNAExcitation("helium_G4DNAExcitation"));
-      pmanager->AddDiscreteProcess(new G4DNAIonisation("helium_G4DNAIonisation"));
-      pmanager->AddDiscreteProcess(new G4DNAChargeIncrease("helium_G4DNAChargeIncrease"));
+      ph->RegisterProcess(new G4DNAExcitation("helium_G4DNAExcitation"), particle);
+      ph->RegisterProcess(new G4DNAIonisation("helium_G4DNAIonisation"), particle);
+      ph->RegisterProcess(new G4DNAChargeIncrease("helium_G4DNAChargeIncrease"), particle);
 
     }
     
@@ -188,18 +190,17 @@ void G4EmDNAPhysics::ConstructProcess()
       // Identical to G4EmStandardPhysics_option3
       
       G4eMultipleScattering* msc = new G4eMultipleScattering();
+      msc->AddEmModel(0, new G4UrbanMscModel95());
       msc->SetStepLimitType(fUseDistanceToBoundary);
-      msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
-      pmanager->AddProcess(msc,                   -1, 1, 1);
-
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetStepFunction(0.2, 100*um);      
 
-      pmanager->AddProcess(eIoni,                 -1, 2, 2);
-      pmanager->AddProcess(new G4eBremsstrahlung, -1,-3, 3);      
-      pmanager->AddProcess(new G4eplusAnnihilation,0,-1, 4);
+      ph->RegisterProcess(msc, particle);
+      ph->RegisterProcess(eIoni, particle);
+      ph->RegisterProcess(new G4eBremsstrahlung(), particle);
+      ph->RegisterProcess(new G4eplusAnnihilation(), particle);
 
-    }  else if (particleName == "gamma") {
+    } else if (particleName == "gamma") {
     
       G4double LivermoreHighEnergyLimit = GeV;
 
@@ -208,27 +209,27 @@ void G4EmDNAPhysics::ConstructProcess()
 	new G4LivermorePhotoElectricModel();
       theLivermorePhotoElectricModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
       thePhotoElectricEffect->AddEmModel(0, theLivermorePhotoElectricModel);
-      pmanager->AddDiscreteProcess(thePhotoElectricEffect);
+      ph->RegisterProcess(thePhotoElectricEffect, particle);
 
       G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
       G4LivermoreComptonModel* theLivermoreComptonModel = 
 	new G4LivermoreComptonModel();
       theLivermoreComptonModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
       theComptonScattering->AddEmModel(0, theLivermoreComptonModel);
-      pmanager->AddDiscreteProcess(theComptonScattering);
+      ph->RegisterProcess(theComptonScattering, particle);
 
       G4GammaConversion* theGammaConversion = new G4GammaConversion();
       G4LivermoreGammaConversionModel* theLivermoreGammaConversionModel = 
 	new G4LivermoreGammaConversionModel();
       theLivermoreGammaConversionModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
       theGammaConversion->AddEmModel(0, theLivermoreGammaConversionModel);
-      pmanager->AddDiscreteProcess(theGammaConversion);
+      ph->RegisterProcess(theGammaConversion, particle);
 
       G4RayleighScattering* theRayleigh = new G4RayleighScattering();
       G4LivermoreRayleighModel* theRayleighModel = new G4LivermoreRayleighModel();
       theRayleighModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
       theRayleigh->AddEmModel(0, theRayleighModel);
-      pmanager->AddDiscreteProcess(theRayleigh);
+      ph->RegisterProcess(theRayleigh, particle);
     }
     
    // Warning : end of particles and processes are needed by EM Physics builders 

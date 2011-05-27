@@ -83,7 +83,7 @@ G4VParticleChange* G4WHadronElasticProcess::PostStepDoIt(
   G4Material* material = track.GetMaterial();
   G4CrossSectionDataStore* store = GetCrossSectionDataStore();
   G4double xsec = store->GetCrossSection(dynParticle,material);
-  if(xsec <= DBL_MIN) { return G4VDiscreteProcess::PostStepDoIt(track,step); }
+  if(xsec <= 0.0) { return G4VDiscreteProcess::PostStepDoIt(track,step); }
 
   // Select element
   G4Element* elm = store->SampleZandA(dynParticle,material,targetNucleus);
@@ -108,6 +108,8 @@ G4VParticleChange* G4WHadronElasticProcess::PostStepDoIt(
   }
   G4HadFinalState* result = hadi->ApplyYourself(thePro, targetNucleus);
   G4ThreeVector indir = track.GetMomentumDirection();
+
+  //!! is not needed for models inheriting G4HadronElastic
   G4ThreeVector outdir = (result->GetMomentumChange()).rotateUz(indir);
   
   if(verboseLevel>1) {
@@ -117,14 +119,18 @@ G4VParticleChange* G4WHadronElasticProcess::PostStepDoIt(
 	   << " dir= " << outdir
 	   << G4endl;
   }
-  
+
+  // primary change  
   aParticleChange.ProposeEnergy(result->GetEnergyChange());
   aParticleChange.ProposeMomentumDirection(outdir);
+
+  // recoil
   if(result->GetNumberOfSecondaries() > 0) {
     aParticleChange.SetNumberOfSecondaries(1);
     G4DynamicParticle* p = result->GetSecondary(0)->GetParticle();
     G4ThreeVector pdir = p->GetMomentumDirection();
     // G4cout << "recoil " << pdir << G4endl;
+    //!! is not needed for models inheriting G4HadronElastic
     pdir = pdir.rotateUz(indir);
     // G4cout << "recoil rotated " << pdir << G4endl;
     p->SetMomentumDirection(pdir);
@@ -132,6 +138,7 @@ G4VParticleChange* G4WHadronElasticProcess::PostStepDoIt(
   } else {
     aParticleChange.SetNumberOfSecondaries(0);
     aParticleChange.ProposeLocalEnergyDeposit(result->GetLocalEnergyDeposit());
+    aParticleChange.ProposeNonIonizingEnergyDeposit(result->GetLocalEnergyDeposit());
   }
   result->Clear();
 

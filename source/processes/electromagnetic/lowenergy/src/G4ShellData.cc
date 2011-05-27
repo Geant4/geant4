@@ -281,6 +281,7 @@ void G4ShellData::LoadData(const G4String& fileName)
             G4int n = ids->size();
 	    nShells.push_back(n);
 	    // Start of new shell data set
+	    
 	    ids = new std::vector<G4double>;
             energies = new G4DataVector;
             Z++;	    
@@ -291,13 +292,15 @@ void G4ShellData::LoadData(const G4String& fileName)
 	  s = 0;
 	}
       }
-    else if (a == -2)
-      {
+
+    // moved out of the do-while since might go to a leak. 
+    //    else if (a == -2)
+    //      {
 	// End of file; delete the empty vectors created when encountering the last -1 -1 row
-	delete energies;
-	delete ids;
+	//	delete energies;
+	//	delete ids;
 	//nComponents = components.size();
-      }
+    //      }
     else
       {
 	// 1st column is shell id
@@ -316,6 +319,8 @@ void G4ShellData::LoadData(const G4String& fileName)
       }
   } while (a != -2); // end of file
   file.close();    
+  delete energies;
+  delete ids;
 
   // For Doppler broadening: the data set contains shell occupancy and binding energy for each shell
   // Build additional map with probability for each shell based on its occupancy

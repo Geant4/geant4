@@ -62,6 +62,7 @@ G4Track::G4Track(G4DynamicParticle* apValueDynamicParticle,
     fGlobalTime(aValueTime),  fLocalTime(0.),
     fTrackLength(0.),
     fParentID(0),             fTrackID(0),
+    fVelocity(c_light),
     fpDynamicParticle(apValueDynamicParticle),
     fTrackStatus(fAlive),
     fBelowThreshold(false),   fGoodForTracking(false),
@@ -85,6 +86,8 @@ G4Track::G4Track(G4DynamicParticle* apValueDynamicParticle,
   is_OpticalPhoton = (fpDynamicParticle->GetDefinition() == fOpticalPhoton);
 
   if (velTable==0) PrepareVelocityTable();
+  fVelocity = CalculateVelocity();
+
 }
 
 //////////////////
@@ -94,6 +97,7 @@ G4Track::G4Track()
     fGlobalTime(0),           fLocalTime(0.),
     fTrackLength(0.),
     fParentID(0),             fTrackID(0),
+    fVelocity(c_light),
     fpDynamicParticle(0),
     fTrackStatus(fAlive),
     fBelowThreshold(false),   fGoodForTracking(false),
@@ -114,6 +118,7 @@ G4Track::G4Track(const G4Track& right)
     fGlobalTime(0),           fLocalTime(0.),
     fTrackLength(0.),
     fParentID(0),             fTrackID(0),
+    fVelocity(c_light),
     fpDynamicParticle(0),
     fTrackStatus(fAlive),
     fBelowThreshold(false),   fGoodForTracking(false),
@@ -156,6 +161,9 @@ G4Track & G4Track::operator=(const G4Track &right)
    // CurrentStepNumber is set to be 0
    fCurrentStepNumber = 0;
 
+   // velocity information 
+   fVelocity = right.fVelocity;
+
    // dynamic particle information 
    fpDynamicParticle = new G4DynamicParticle(*(right.fpDynamicParticle));
  
@@ -197,7 +205,7 @@ void G4Track::CopyTrackInfo(const G4Track& right)
 }
 
 ///////////////////
-G4double G4Track::GetVelocity() const
+G4double G4Track::CalculateVelocity() const
 ///////////////////
 { 
     
@@ -206,63 +214,71 @@ G4double G4Track::GetVelocity() const
   G4double mass = fpDynamicParticle->GetMass();
 
   // special case for photons
-  if ( is_OpticalPhoton ) {
+  if ( is_OpticalPhoton ) return CalculateVelocityForOpticalPhoton();
 
-    G4Material* mat=0; 
-    G4bool update_groupvel = false;
-    if ( this->GetStep() ){
-      mat= this->GetMaterial();         //   Fix for repeated volumes
-    }else{
-      if (fpTouchable!=0){ 
-        mat=fpTouchable->GetVolume()->GetLogicalVolume()->GetMaterial();
-      }
-    }
-    // check if previous step is in the same volume
-    //  and get new GROUPVELOCITY table if necessary 
-    if ((mat != 0) && ((mat != prev_mat)||(groupvel==0))) {
-	groupvel = 0;
-	if(mat->GetMaterialPropertiesTable() != 0)
-	  groupvel = mat->GetMaterialPropertiesTable()->GetProperty("GROUPVEL");
-	update_groupvel = true;
-    }
-    prev_mat = mat;
-      
-    if  (groupvel != 0 ) {
-	// light velocity = c/(rindex+d(rindex)/d(log(E_phot)))
-	// values stored in GROUPVEL material properties vector
-	velocity =  prev_velocity;
- 	 
-	// check if momentum is same as in the previous step
-        //  and calculate group velocity if necessary 
-	G4double current_momentum = fpDynamicParticle->GetTotalMomentum();
- 	if( update_groupvel || (current_momentum != prev_momentum) ) {
-	  velocity =
-	    groupvel->GetProperty(current_momentum);
-	  prev_velocity = velocity;
-	  prev_momentum = current_momentum;
-	}
-    }
-
+  // particles other than optical photon
+  if (mass<DBL_MIN) {
+    // Zero Mass
+    velocity = c_light;
   } else {
-    // particles other than optical photon
-    if (mass<DBL_MIN) {
-      // Zero Mass
+    G4double T = (fpDynamicParticle->GetKineticEnergy())/mass;
+    if (T > maxT) {
       velocity = c_light;
-    } else {
-      G4double T = (fpDynamicParticle->GetKineticEnergy())/mass;
-      if (T > maxT) {
-	velocity = c_light;
-      } else if (T<DBL_MIN) {
-	velocity =0.;
-      } else if (T<minT) {
-	velocity = c_light*std::sqrt(T*(T+2.))/(T+1.0);
-      } else {	
-	velocity = velTable->Value(T);
-      }
+    } else if (T<DBL_MIN) {
+      velocity =0.;
+    } else if (T<minT) {
+      velocity = c_light*std::sqrt(T*(T+2.))/(T+1.0);
+    } else {	
+      velocity = velTable->Value(T);
     }
-      
+    
+  }                                                                             
+  return velocity ;
+}
+
+///////////////////
+G4double G4Track::CalculateVelocityForOpticalPhoton() const
+///////////////////
+{ 
+    
+  G4double velocity = c_light ;
+  
+
+  G4Material* mat=0; 
+  G4bool update_groupvel = false;
+  if ( this->GetStep() ){
+    mat= this->GetMaterial();         //   Fix for repeated volumes
+  }else{
+    if (fpTouchable!=0){ 
+      mat=fpTouchable->GetVolume()->GetLogicalVolume()->GetMaterial();
+    }
   }
-                                                                                
+  // check if previous step is in the same volume
+    //  and get new GROUPVELOCITY table if necessary 
+  if ((mat != 0) && ((mat != prev_mat)||(groupvel==0))) {
+    groupvel = 0;
+    if(mat->GetMaterialPropertiesTable() != 0)
+      groupvel = mat->GetMaterialPropertiesTable()->GetProperty("GROUPVEL");
+    update_groupvel = true;
+  }
+  prev_mat = mat;
+  
+  if  (groupvel != 0 ) {
+    // light velocity = c/(rindex+d(rindex)/d(log(E_phot)))
+    // values stored in GROUPVEL material properties vector
+    velocity =  prev_velocity;
+    
+    // check if momentum is same as in the previous step
+    //  and calculate group velocity if necessary 
+    G4double current_momentum = fpDynamicParticle->GetTotalMomentum();
+    if( update_groupvel || (current_momentum != prev_momentum) ) {
+      velocity =
+	groupvel->GetProperty(current_momentum);
+      prev_velocity = velocity;
+      prev_momentum = current_momentum;
+    }
+  }   
+  
   return velocity ;
 }
 

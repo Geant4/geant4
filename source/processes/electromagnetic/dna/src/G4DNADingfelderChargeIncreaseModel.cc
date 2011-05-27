@@ -41,6 +41,9 @@ G4DNADingfelderChargeIncreaseModel::G4DNADingfelderChargeIncreaseModel(const G4P
 {
   nistwater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
 
+  numberOfPartialCrossSections[0]=0;
+  numberOfPartialCrossSections[1]=0;
+
   verboseLevel= 0;
   // Verbosity scale:
   // 0 = nothing 

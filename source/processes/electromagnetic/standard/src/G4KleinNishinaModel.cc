@@ -54,6 +54,7 @@
 #include "G4DataVector.hh"
 #include "G4ParticleChangeForGamma.hh"
 #include "G4VAtomDeexcitation.hh"
+#include "G4AtomicShells.hh"
 #include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -66,7 +67,7 @@ G4KleinNishinaModel::G4KleinNishinaModel(const G4String& nam)
   theGamma = G4Gamma::Gamma();
   theElectron = G4Electron::Electron();
   lowestGammaEnergy = 1.0*eV;
-  limitFactor       = 4;
+  limitFactor       = 10;
   fProbabilities.resize(9,0.0);
 }
 
@@ -128,6 +129,14 @@ G4KleinNishinaModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
     G4double    y = log(GammaEnergy/T0);
     CrossSection *= exp(-y*(c1+c2*y));          
   }
+  G4int iz = G4int(Z);
+  G4int nShells = G4AtomicShells::GetNumberOfShells(iz);
+  //G4cout << "Z= " << Z << "  Nshells=" << nShells << G4endl;
+  G4double bindingEnergy = G4AtomicShells::GetBindingEnergy(iz,nShells-1);
+  G4double eth = sqrt(bindingEnergy*(bindingEnergy + electron_mass_c2)) -
+    0.5*(sqrt(bindingEnergy*(bindingEnergy + 2*electron_mass_c2)) - bindingEnergy);
+  CrossSection *= (1.0 - eth/GammaEnergy);
+  if(CrossSection < 0.0) { CrossSection = 0.0; }
   //  G4cout << "e= " << GammaEnergy << " Z= " << Z 
   //  << " cross= " << CrossSection << G4endl;
   return CrossSection;
@@ -155,7 +164,10 @@ void G4KleinNishinaModel::SampleSecondaries(
   G4double totprob = 0.0;
   G4int i;
   for(i=0; i<nShells; ++i) {
-    G4double prob = 1.0 - elm->GetAtomicShell(i)/energy;
+    G4double bindingEnergy = elm->GetAtomicShell(i);
+    G4double eth = sqrt(bindingEnergy*(bindingEnergy + electron_mass_c2)) -
+      0.5*(sqrt(bindingEnergy*(bindingEnergy + 2*electron_mass_c2)) - bindingEnergy);
+    G4double prob = 1.0 - eth/energy;
     if(prob > 0.0) { totprob += prob*elm->GetNbOfShellElectrons(i); } 
     fProbabilities[i] = totprob; 
   }
@@ -163,16 +175,39 @@ void G4KleinNishinaModel::SampleSecondaries(
 
   // Loop on sampling
   G4double eKinEnergy;
+  const G4int nlooplim = 100;
+  G4int nloop = 0;
   do {
+    ++nloop;
     G4double xprob = totprob*G4UniformRand();
 
     // select shell
     for(i=0; i<nShells; ++i) { if(xprob <= fProbabilities[i]) {break;} }
    
     G4double bindingEnergy = elm->GetAtomicShell(i);
+
+    // shortcut if the loop is too long
+    if(nloop >= nlooplim) {
+      lv1.set(0.0,0.0,0.0,0.0);
+      eKinEnergy = energy - bindingEnergy;
+      if(eKinEnergy < 0.0) { eKinEnergy = 0.0; }
+      G4double eTotMomentum = sqrt(eKinEnergy*(eKinEnergy + 2*electron_mass_c2));
+      G4double phi = G4UniformRand()*twopi;
+      G4double costet = 2*G4UniformRand() - 1;
+      G4double sintet = sqrt((1 - costet)*(1 + costet));
+      lv2.set(eTotMomentum*sintet*cos(phi),eTotMomentum*sintet*sin(phi),
+	      eTotMomentum*costet,eKinEnergy + electron_mass_c2);
+      break;
+    }
+
     G4double limitEnergy = limitFactor*bindingEnergy;
     G4double gamEnergy0 = energy;
     lv1.set(0.0,0.0,energy,energy);
+
+    //G4cout << "nShells= " << nShells << " i= " << i 
+    //   << " Egamma= " << energy << " Ebind= " << bindingEnergy
+    //   << " Elim= " << limitEnergy 
+    //   << G4endl;
 
     // for low energy rest frame of the electron
     if(energy < limitEnergy) { 
@@ -242,15 +277,19 @@ void G4KleinNishinaModel::SampleSecondaries(
       v.rotateUz(gamDir);
       lv1.set(gamEnergy1*v.x(),gamEnergy1*v.y(),gamEnergy1*v.z(),gamEnergy1);
       lv2 -= lv1;
+      //G4cout << "Egam= " << lv1.e() << "  Ee= " << lv2.e()-electron_mass_c2 << G4endl;
       lv2.boost(bst);
       lv1.boost(bst);
       eKinEnergy = lv2.e() - electron_mass_c2 - 2*bindingEnergy;
+      
     } else {
       lv1.set(gamEnergy1*sinTeta*cos(Phi),gamEnergy1*sinTeta*sin(Phi),
 	      gamEnergy1*cosTeta,gamEnergy1);
       lv2 -= lv1;
       eKinEnergy = lv2.e() - electron_mass_c2 - bindingEnergy;
     }
+   
+    //G4cout << "eKinEnergy= " << eKinEnergy << G4endl;
 
   } while ( eKinEnergy < 0.0 );
 

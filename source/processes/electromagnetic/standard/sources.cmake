@@ -56,7 +56,7 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4BraggModel.hh
         G4ComptonScattering.hh
         G4CoulombScattering.hh
-        G4CoulombScatteringModel.hh
+        G4DipBustGenerator.hh
         G4GammaConversion.hh
         G4GoudsmitSaundersonMscModel.hh
         G4GoudsmitSaundersonTable.hh
@@ -82,14 +82,13 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4PairProductionRelModel.hh
         G4PhotoElectricEffect.hh
         G4UniversalFluctuation.hh
-        G4UniversalFluctuation93.hh
         G4UrbanMscModel90.hh
-        G4UrbanMscModel92.hh
         G4UrbanMscModel93.hh
         G4UrbanMscModel95.hh
         G4WaterStopping.hh
         G4WentzelOKandVIxSection.hh
         G4WentzelVIModel.hh
+        G4XrayRayleighModel.hh
         G4alphaIonisation.hh
         G4eBremsstrahlung.hh
 	G4eBremParametrizedModel.hh
@@ -102,7 +101,6 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4eplusAnnihilation.hh
         G4hIonisation.hh
         G4hMultipleScattering.hh
-        G4ionGasIonisation.hh
         G4ionIonisation.hh
     SOURCES
         G4ASTARStopping.cc
@@ -115,8 +113,8 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4BraggModel.cc
         G4ComptonScattering.cc
         G4CoulombScattering.cc
-        G4CoulombScatteringModel.cc
         G4GammaConversion.cc
+        G4DipBustGenerator.cc
         G4GoudsmitSaundersonMscModel.cc
         G4GoudsmitSaundersonTable.cc
         G4HeatedKleinNishinaCompton.cc
@@ -141,14 +139,13 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4PairProductionRelModel.cc
         G4PhotoElectricEffect.cc
         G4UniversalFluctuation.cc
-        G4UniversalFluctuation93.cc
         G4UrbanMscModel90.cc
-        G4UrbanMscModel92.cc
         G4UrbanMscModel93.cc
         G4UrbanMscModel95.cc
         G4WaterStopping.cc
         G4WentzelOKandVIxSection.cc
         G4WentzelVIModel.cc
+        G4XrayRayleighModel.cc
         G4alphaIonisation.cc
         G4eBremsstrahlung.cc
 	G4eBremParametrizedModel.cc
@@ -161,7 +158,6 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4eplusAnnihilation.cc
         G4hIonisation.cc
         G4hMultipleScattering.cc
-        G4ionGasIonisation.cc
         G4ionIonisation.cc
     GRANULAR_DEPENDENCIES
         G4baryons

@@ -41,6 +41,7 @@
 #include "G4LogLogInterpolation.hh"
 
 #include "G4WaterIonisationStructure.hh"
+#include "G4VAtomDeexcitation.hh"
 #include "G4NistManager.hh"
 
 class G4DNARuddIonisationModel : public G4VEmModel
@@ -73,6 +74,8 @@ protected:
 
 private:
 
+  //deexcitation manager to produce fluo photns and e-
+  G4VAtomDeexcitation*      fAtomDeexcitation;
   G4Material* nistwater;
   std::map<G4String,G4double,std::less<G4String> > lowEnergyLimit;
   std::map<G4String,G4double,std::less<G4String> > highEnergyLimit;

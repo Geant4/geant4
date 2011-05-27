@@ -63,6 +63,8 @@
 #include "G4Positron.hh"
 #include "G4VEmModel.hh"
 
+class G4ParticleDefinition;
+
 class G4eplusAnnihilation : public G4VEmProcess
 {
 
@@ -93,6 +95,7 @@ protected:
 private:
   
   G4bool  isInitialised;
+  const G4ParticleDefinition* theGamma;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

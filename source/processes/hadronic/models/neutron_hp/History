@@ -13,6 +13,43 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+12 May 2011  Tatsumi Koi (hadr-hpn-V09-04-08)
+-Bug fix setting an index of the last element of an array
+	src/G4NeutronHPFinalState.cc
+-Protection ENDF-VII.0 21Sc45 has trouble in MF4MT22 (n,np) targetMass is not properly recorded, 
+and similar situation
+	src/G4NeutronHPInelasticBaseFS.cc
+-Bug fix for calling an element with negative index 
+	src/G4NeutronHPPhotonDist.cc
+
+10 May 2011  Tatsumi Koi (hadr-hpn-V09-04-07)
+-Modifed for ENDF-VII
+	src/G4NeutronHPFission.cc
+	src/G4NeutronHPorLFission.cc
+- delete above the protection which introduced in (adr-hpn-V09-04-05)  with more coordinated work to other classes 
+	include/G4NeutronHPAngular.hh
+	src/G4NeutronHPAngular.cc
+
+6 May 2011  Tatsumi Koi (hadr-hpn-V09-04-06)
+-Bug fix for unexpected baryon balance
+	src/G4NeutronHPFinalState.cc
+-Modifed for ENDF-VII
+	src/G4NeutronHPIsoData.cc
+
+5 May 2011  Tatsumi Koi (hadr-hpn-V09-04-05)
+-Protection for the case that object is created but not initialized
+	include/G4NeutronHPAngular.hh
+	src/G4NeutronHPAngular.cc
+
+5 May 2011  Tatsumi Koi (hadr-hpn-V09-04-04)
+-Enable FSMF6 in Capture final state 
+	include/G4NeutronHPCaptureFS.hh
+	src/G4NeutronHPCaptureFS.cc
+-Add Reaction Q value and break up flag (MF3::QI and LR)
+	include/G4NeutronHPInelasticCompFS.hh
+	src/G4NeutronHPInelasticCompFS.cc
+-Temporary solution in the case of having 31 or more of the Maximum order Legendre polynomials
+	include/G4NeutronHPFastLegendre.hh
 
 12 April 2011  Tatsumi Koi (hadr-hpn-V09-04-03)
 -Add "Fermium" 

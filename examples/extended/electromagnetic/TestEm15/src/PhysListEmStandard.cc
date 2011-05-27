@@ -39,6 +39,7 @@
 #include "G4PhotoElectricEffect.hh"
 
 #include "G4eMultipleScattering.hh"
+#include "G4UrbanMscModel95.hh"
 #include "G4hMultipleScattering.hh"
 #include "G4MuMultipleScattering.hh"
 
@@ -84,13 +85,17 @@ void PhysListEmStandard::ConstructProcess()
       
     } else if (particleName == "e-") {
       //electron
-      pmanager->AddProcess(new G4eMultipleScattering, -1, 1,1);
+      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      msc->AddEmModel(0, new G4UrbanMscModel95());
+      pmanager->AddProcess(msc,                       -1, 1,1);            
       pmanager->AddProcess(new G4eIonisation,         -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3,3);
       	    
     } else if (particleName == "e+") {
       //positron
-      pmanager->AddProcess(new G4eMultipleScattering, -1, 1,1);
+      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      msc->AddEmModel(0, new G4UrbanMscModel95());
+      pmanager->AddProcess(msc,                       -1, 1,1);           
       pmanager->AddProcess(new G4eIonisation,         -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3,3);
       pmanager->AddProcess(new G4eplusAnnihilation,    0,-1,4);

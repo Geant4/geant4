@@ -41,6 +41,7 @@
 #include "G4LogLogInterpolation.hh"
 
 #include "G4WaterIonisationStructure.hh"
+#include "G4VAtomDeexcitation.hh"
 #include "G4NistManager.hh"
 
 class G4DNARuddIonisationExtendedModel : public G4VEmModel
@@ -73,6 +74,8 @@ protected:
 
 private:
 
+  //deexcitation manager to produce fluo photns and e-
+  G4VAtomDeexcitation*      fAtomDeexcitation;
   G4Material* nistwater;
 
   std::map<G4String,G4double,std::less<G4String> > lowEnergyLimit;
@@ -147,11 +150,6 @@ private:
   G4double Sum(G4double energy, const G4String& particle);
 
   G4int RandomSelect(G4double energy,const G4String& particle );
-  
-  // Test water material 
-   
-  G4bool flagMaterialIsWater;
-  G4double densityWater;
    
   //
    

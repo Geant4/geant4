@@ -33,27 +33,3 @@
 
 #include "G4ProtonGEMChannel.hh"
 
-
-const G4ProtonGEMChannel & G4ProtonGEMChannel::operator=(const G4ProtonGEMChannel & )
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4ProtonGEMChannel::operator= meant to not be accessable");
-    return *this;
-}
-
-G4ProtonGEMChannel::G4ProtonGEMChannel(const G4ProtonGEMChannel & ): G4GEMChannel()
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4ProtonGEMChannel::CopyConstructor meant to not be accessable");
-}
-
-G4bool G4ProtonGEMChannel::operator==(const G4ProtonGEMChannel & right) const 
-{
-    return (this == (G4ProtonGEMChannel *) &right);
-    //  return false;
-}
-
-G4bool G4ProtonGEMChannel::operator!=(const G4ProtonGEMChannel & right) const 
-{
-    return (this != (G4ProtonGEMChannel *) &right);
-    //  return true;
-}
-

@@ -17,6 +17,77 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26.05.2011  L. Pandola, tag emlowen-V09-04-38
+	    Fixed include/src list in sources.cmake
+
+26.05.2011  L. Pandola, tag emlowen-V09-04-37
+	    Fixed floating-point exceptions reported by Vladimir I. 
+	    in G4PenelopeRayleighModel
+
+25.05.2011  L. Pandola, tag emlowen-V09-04-36
+	    Removed G4Penelope08XXXXModel files that have been renamed as 
+	    G4PenelopeXXXModel. Now v2008 of Penelope is used as 
+	    default. 
+	    Notice: may break compatibility with applications which 
+	    include specifically G4Penelope08XXXModel.hh files
+
+25.05.2011  L. Pandola, tag emlowen-V09-04-35
+	    Copy all Penelope08Models (v2008) as default 
+	    PenelopeXXXModel. Preparation to delete 
+	    Penelope08Model files
+
+24.05.2011  L. Pandola, tag emlowen-V09-04-34
+	    Copy all PenelopeModels (v2001) as Penelope01xxxModel.
+	    Preparation before moving Penelope08Models as 
+	    default Penelope models
+
+16.05.2011  S. Incerti, tag emlowen-V09-04-33
+            Fix compilation warnings with gcc 4.6.0
+	    G4AtomicDeexcitation.cc
+	    G4Generator2BN.cc
+	    G4IonDEDXHandler.cc
+	    G4LivermorePolarizedGammaConversionModel.cc
+	    G4OrlicLiCrossSection.cc
+	    G4UAtomicDeexcitation.cc
+	    G4VeLowEnergyLoss.cc
+
+10.05.2011  L. Pandola, tag tag emlowen-V09-04-32
+	    Fix Coverity warnings for G4Generator2BS, G4VCrossSectionHandler,
+	    G4PhotoElectricAngularGeneratorPolarized, G4DopplerProfile, 
+	    G4VeLowEnergyLoss and G4CrossSectionDataSet.
+
+09.05.2011  A. Mantero, tag emlowen-V09-04-30/31
+	    Fixed Coverity Warning for Atomic Deexcitation files
+            and History update 
+
+09.05.2011  L. Pandola, tag emlowen-V09-04-29
+	    Fixed Coverity warnings for G4eIonisationCrossSectionHandler, 
+	    G4eIonisationParameters, 
+            G4PhotoElectricAngularGeneratorSauterGavrila, 
+            G4BremsstrahlungParameters and G4Penelope08BremsstrahlungFS
+	
+02.05.2011  S. Incerti, tag emlowen-V09-04-28
+            Fixed coverity warnings
+	    G4LivermorePolarizedGammaconversionModel.cc
+	    G4LowEnergyGammaConversion.cc
+	    G4LivermorePolarizedPhotoElectricModel.hh
+
+04.05.2011  L. Pandola, tag emlowen-V09-04-27
+	    Removed CLHEP::HepMatrix dependency in the Penelope08 files.
+
+02.05.2011  S. Incerti, tag emlowen-V09-04-26 
+            Replaced CLHEP::RandBit by G4int(2*G4UniformRand()) in Livermore
+	    gamma conversion classes, thanks to Gabriele.
+	    Changes applied to the following *.cc classes:
+	    G4LivermoreGammaConversionModel
+	    G4LivermoreGammaConversionModelRC
+	    G4LivermoreNuclearGammaConversionModel
+	    G4LivermorePolarizedGammaConversionModel
+	    G4LowEnergyGammaConversion
+	    
+28.04.2011  S. Incerti, tag emlowen-V09-04-25
+            Removal of parasitic verbosity.
+
 27.04.2011  S. Incerti, tag emlowen-V09-04-24
             Removal of some obsolete classes
 	    - old livermore photon polarized processes (G4LowEnergyPolarized*)

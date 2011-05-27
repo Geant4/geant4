@@ -54,6 +54,7 @@ G4ProcTblElement::G4ProcTblElement(G4VProcess* aProcess):
 
 // copy constructor //////////////////////////
 G4ProcTblElement::G4ProcTblElement(const G4ProcTblElement &right)
+  :pProcess(0),pProcMgrVector(0)
 {
   *this = right;
 }

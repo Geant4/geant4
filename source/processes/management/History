@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- May 05, 2011   H.Kurashige (procman-V09-04-03)
+- Add fParallel process type
+- Fix compiler warning in G4ProcessTableMessenger.cc
+- Change ordLast to 9999 (was 99999 )
+- Add check for calling SetOrderingToFirst(Last)
+
+- Apr. 29, 2011   H.Kurashige (procman-V09-04-02)
+- Fix errors reported by Coverity 
+
 - Mar. 29, 2011   G.Cosmo (procman-V09-04-01)
 - Cleared compilation warnings from G4VProcess.hh for parameter set
   but not used. Removed extra semi-colons...

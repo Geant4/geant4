@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 01, 2011 M.Asai (procscore-V09-04-00)
+- Added IsAtRestRequired() method to G4ParallelWorldScoringProcess.
+
 December 15, 2010 G.Cosmo (procscore-V09-03-02)
 - Fixed creation of touchable-history to allow DLL builds on Windows.
 

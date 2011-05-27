@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Abla.cc,v 1.27 2010-11-17 20:19:09 kaitanie Exp $ 
+// $Id: G4Abla.cc,v 1.26 2010/11/16 16:28:56 gcosmo Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -1044,11 +1044,7 @@ void G4Abla::mglw(G4double a, G4double z, G4double *el)
   // MODEL DE LA GOUTTE LIQUIDE DE C. F. WEIZSACKER.
   // USUALLY AN OBSOLETE OPTION
 
-  G4int a1 = 0, z1 = 0;
   G4double xv = 0.0, xs = 0.0, xc = 0.0, xa = 0.0;                                   
-
-  a1 = idnint(a);
-  z1 = idnint(z);
 
   if ((a <= 0.01) || (z < 0.01)) {
     (*el) = 1.0e38;
@@ -1341,7 +1337,6 @@ void G4Abla::evapora(G4double zprf, G4double aprf, G4double ee, G4double jprf,
   static G4double epsiln = 0.0, probp = 0.0, probn = 0.0, proba = 0.0, ptotl = 0.0, e = 0.0;  
   static G4double sn = 0.0, sbp = 0.0, sba = 0.0, x = 0.0, amoins = 0.0, zmoins = 0.0;
   G4double ecn = 0.0, ecp = 0.0,eca = 0.0, bp = 0.0, ba = 0.0;         
-  static G4double pteva = 0.0;                       
 
   static G4int itest = 0;
   static G4double probf = 0.0;
@@ -1360,7 +1355,6 @@ void G4Abla::evapora(G4double zprf, G4double aprf, G4double ee, G4double jprf,
   zf = zprf;
   af = aprf;
   pleva = 0.0;
-  pteva = 0.0;
   pxeva = 0.0;
   pyeva = 0.0;
 
@@ -1583,8 +1577,6 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
 		    G4double *ecp_par,G4double *eca_par, G4double *bp_par,
 		    G4double *ba_par, G4int, G4int inum, G4int itest)
 {
-  G4int dummy0 = 0;
-  
   G4double probp = (*probp_par);
   G4double probn = (*probn_par);
   G4double proba = (*proba_par);
@@ -1917,17 +1909,13 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
     else {
       ecp = 2.0 * pt;
     }
-
-  direct2914:
-    dummy0 = 0;
-    //    G4cout <<""<<G4endl;
   }
   else {
     densp = 0.0;
     ecp = 0.0;
     pt = 0.0;
   }
-
+ direct2914:
   if (in >= 2) {
     bshell = ecld->ecgnz[in-1][iz] - ecld->vgsld[in-1][iz];
     defbet = 1.5e0 * (ecld->alpha[in-1][iz]);
@@ -1972,20 +1960,13 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
 	if(verboseLevel > 2)
 	  G4cout << __FILE__ << ":" << __LINE__ << " ecn = " << ecn << G4endl;
     }
-//       if((ecn + sn) <= eer) {
-// 	ecn = 2.0 * nt;
-// 	G4cout << __FILE__ << ":" << __LINE__ << " ecn = " << ecn << G4endl;
-//       }
-    direct2915: 
-      dummy0 = 0;
-      //      G4cout <<"" <<G4endl;
   } 
   else {
     densn = 0.0;
     ecn = 0.0;
     nt = 0.0;
   }
-
+ direct2915:
   if ((in >= 3) && (iz >= 3)) {
     bshell = ecld->ecgnz[in-2][iz-2] - ecld->vgsld[in-2][iz-2];
     defbet = 1.5 * (ecld->alpha[in-2][iz-2]);
@@ -2029,15 +2010,13 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
     else {
       eca = 2.0 * at;
     }
-    direct2916:
-      dummy0 = 0;
-      //      G4cout <<"" << G4endl;
   }
   else {
     densa = 0.0;
     eca = 0.0;
     at = 0.0;
   }
+ direct2916:
   //} // PK
 
   // special treatment for unbound nuclei                                                
@@ -2317,7 +2296,6 @@ void G4Abla::densniv(G4double a, G4double z, G4double ee, G4double esous, G4doub
   G4double ecor = 0.0;
   G4double ecor1 = 0.0;
   G4double ecr = 0.0;
-  G4double er = 0.0;
   G4double fe = 0.0;
   G4double fp = 0.0;
   G4double he = 0.0;
@@ -2338,7 +2316,6 @@ void G4Abla::densniv(G4double a, G4double z, G4double ee, G4double esous, G4doub
 
   G4double pi6 = std::pow(3.1415926535,2) / 6.0;
   ecr=10.0;
-  er=28.0;
   afp=idnint(a);
   iz=idnint(z);
 
@@ -2551,15 +2528,11 @@ G4double G4Abla::eflmac(G4int ia, G4int iz, G4int flag, G4int optshp)
   G4double f = 0.0, ca = 0.0, w = 0.0, dp = 0.0, dn = 0.0, dpn = 0.0, efl = 0.0;
   G4double rmac = 0.0, bs = 0.0, h = 0.0, r0 = 0.0, kf = 0.0, ks = 0.0;
   G4double kv = 0.0, rp = 0.0, ay = 0.0, aden = 0.0, x0 = 0.0, y0 = 0.0;
-  G4double mh = 0.0, mn = 0.0, esq = 0.0, ael = 0.0, i = 0.0;
+  G4double esq = 0.0, ael = 0.0, i = 0.0;
   G4double pi = 3.141592653589793238e0;
 
   // fundamental constants
   // hydrogen-atom mass excess
-  mh  = 7.289034;
-
-  // neutron mass excess
-  mn  = 8.071431;
 
   // electronic charge squared
   esq = 1.4399764;
@@ -3348,7 +3321,7 @@ void G4Abla::guet(G4double *x_par, G4double *z_par, G4double *find_par)
 }
 
 //       SUBROUTINE TRANSLAB(GAMREM,ETREM,CSREM,NOPART,NDEC)
-void G4Abla::translab(G4double gamrem, G4double etrem, G4double csrem[4], G4int nopart, G4int ndec)
+void G4Abla::translab(G4double gamrem, G4double etrem, G4double csrem[4], G4int /*unused*/, G4int ndec)
 {
   // c Ce subroutine transforme dans un repere 1 les impulsions pcv des 
   // c particules acv, zcv et de cosinus directeurs xcv, ycv, zcv calculees 
@@ -3378,7 +3351,6 @@ void G4Abla::translab(G4double gamrem, G4double etrem, G4double csrem[4], G4int 
 
   // C Matrice de rotation dans le labo:
   G4double avv = 0.0, zvv = 0.0, enerj = 0.0, plab = 0.0, tetlab = 0.0, philab = 0.0;
-  G4int itypcasc = 0;
   G4double sitet = std::sqrt(std::pow(csrem[1],2)+std::pow(csrem[2],2));
   G4double cstet = 0.0, siphi = 0.0, csphi = 0.0;
   G4double R[4][4];
@@ -3416,7 +3388,6 @@ void G4Abla::translab(G4double gamrem, G4double etrem, G4double csrem[4], G4int 
     R[3][3] = 1.0;
   } //endif
 
-  G4int intp = 0;
   G4double el = 0.0;
   G4double masse = 0.0;
   G4double er = 0.0;
@@ -3430,7 +3401,6 @@ void G4Abla::translab(G4double gamrem, G4double etrem, G4double csrem[4], G4int 
   }
   ndec = 1;
   for(G4int i = ndec; i <= volant->iv; i++) { //do i=ndec,iv
-    intp = i + nopart;
     if(volant->copied[i]) continue; // Avoid double copying
 #ifdef USE_LEGACY_CODE
     varntp->ntrack = varntp->ntrack + 1;
@@ -3453,7 +3423,6 @@ void G4Abla::translab(G4double gamrem, G4double etrem, G4double csrem[4], G4int 
 #else
     avv = nint(volant->acv[i]);
     zvv = nint(volant->zpcv[i]);
-    itypcasc = 0;    
 #endif
     // transformation de lorentz remnan --> labo:
 #ifdef USE_LEGACY_CODE

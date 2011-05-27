@@ -55,7 +55,7 @@
 G4EmExtraPhysics::G4EmExtraPhysics(G4int ver): 
   G4VPhysicsConstructor("G4GammaLeptoNuclearPhys"), wasBuilt(false), gnActivated(false), 
   munActivated(false), synActivated(false), synchOn(false), gammNucOn(true), muNucOn(false), 
-  theElectronSynch(0), thePositronSynch(0), theGNPhysics(0), theMuNuc1(0), theMuNuc2(0),
+  theElectronSynch(0), thePositronSynch(0), theGNPhysics(0), muNucProcess(0), muNucModel(0),
   verbose(ver)
 {
   theMessenger = new G4EmMessenger(this);
@@ -64,7 +64,7 @@ G4EmExtraPhysics::G4EmExtraPhysics(G4int ver):
 G4EmExtraPhysics::G4EmExtraPhysics(const G4String&): 
   G4VPhysicsConstructor("G4GammaLeptoNuclearPhys"), wasBuilt(false), gnActivated(false), 
   munActivated(false), synActivated(false), synchOn(false), gammNucOn(true), muNucOn(false), 
-  theElectronSynch(0), thePositronSynch(0), theGNPhysics(0), theMuNuc1(0), theMuNuc2(0),
+  theElectronSynch(0), thePositronSynch(0), theGNPhysics(0), muNucProcess(0), muNucModel(0),
   verbose(1)
 {
   theMessenger = new G4EmMessenger(this);
@@ -76,8 +76,8 @@ G4EmExtraPhysics::~G4EmExtraPhysics()
   delete theElectronSynch;
   delete thePositronSynch;
   delete theGNPhysics;
-  delete theMuNuc1;
-  delete theMuNuc2;
+  delete muNucProcess;
+  delete muNucModel;
 }
 
 void G4EmExtraPhysics::Synch(G4String & newState)
@@ -129,13 +129,15 @@ void G4EmExtraPhysics::BuildMuonNuclear()
   munActivated = true;
   G4ProcessManager * pManager = 0;
 
-  pManager  = G4MuonPlus::MuonPlus()->GetProcessManager();
-  theMuNuc1 = new G4MuNuclearInteraction("muNucl");
-  pManager->AddDiscreteProcess(theMuNuc1);
+  muNucProcess = new G4MuonNuclearProcess();
+  muNucModel = new G4VDMuonNuclearModel();
+  muNucProcess->RegisterMe(muNucModel);
 
-  pManager  = G4MuonMinus::MuonMinus()->GetProcessManager();
-  theMuNuc2 = new G4MuNuclearInteraction("muNucl");
-  pManager->AddDiscreteProcess(theMuNuc2);
+  pManager = G4MuonPlus::MuonPlus()->GetProcessManager();
+  pManager->AddDiscreteProcess(muNucProcess);
+
+  pManager = G4MuonMinus::MuonMinus()->GetProcessManager();
+  pManager->AddDiscreteProcess(muNucProcess);
 }
 
 void G4EmExtraPhysics::BuildGammaNuclear()

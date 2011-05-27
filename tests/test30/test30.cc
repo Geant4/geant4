@@ -56,7 +56,6 @@
 #include "G4ParticleChange.hh"
 #include "G4HadronCrossSections.hh"
 #include "G4HadronicProcess.hh"
-#include "G4UHadronElasticProcess.hh"
 #include "G4ChargeExchangeProcess.hh"
 #include "G4VCrossSectionDataSet.hh"
 #include "G4ProtonInelasticCrossSection.hh"
@@ -778,9 +777,9 @@ int main(int argc, char** argv)
       }
 
       G4HadronicInteraction* els = 0;
-      if(nameGen == "Elastic")             { els = new G4VHadronElastic(); }
+      if(nameGen == "Elastic")             { els = new G4HadronElastic(); }
       else if(nameGen == "ElasticLHEPOLD") { els = new G4LElastic(); }
-      else if(nameGen == "ElasticLHEP")    { els = new G4VHadronElastic(); }
+      else if(nameGen == "ElasticLHEP")    { els = new G4HadronElastic(); }
       else if(nameGen == "ElasticHE")      { els = new G4ElasticHadrNucleusHE(); }
       else if(nameGen == "ElasticDIFF")    { els = new G4DiffuseElastic(); }
       else if(nameGen == "ElasticCHIPS")   { els = new G4CHIPSElastic(); }

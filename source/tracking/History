@@ -18,6 +18,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+5 May 2011 Makoto Asai (tracking-V09-04-00)
+- Fixed setting of 'fWorldBoundary' step status in G4SteppingManager
+  InvokePostStepDoItProcs() and DefinePhysicalStepLength().
+
 18 November 2010 John Allison (tracking-V09-03-09)
 - G4Trajectory, G4SmoothTrajectory:
   o Reverted to original interface: DrawTrajectory(G4int i_mode = 0).

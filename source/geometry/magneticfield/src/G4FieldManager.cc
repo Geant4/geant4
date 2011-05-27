@@ -42,10 +42,10 @@ G4FieldManager::G4FieldManager(G4Field       *detectorField,
    : fDetectorField(detectorField), 
      fChordFinder(pChordFinder), 
      fAllocatedChordFinder(false),
-     fDefault_Delta_One_Step_Value(0.01*mm), 
-     fDefault_Delta_Intersection_Val(0.001*mm),
      fEpsilonMinDefault(5.0e-5), 
      fEpsilonMaxDefault(0.001),
+     fDefault_Delta_One_Step_Value(0.01*mm), 
+     fDefault_Delta_Intersection_Val(0.001*mm),
      fEpsilonMin( fEpsilonMinDefault ),
      fEpsilonMax( fEpsilonMaxDefault)
 { 
@@ -58,16 +58,15 @@ G4FieldManager::G4FieldManager(G4Field       *detectorField,
 
    // Add to store
    G4FieldManagerStore::Register(this);
-
 }
 
 G4FieldManager::G4FieldManager(G4MagneticField *detectorField)
    : fDetectorField(detectorField), fAllocatedChordFinder(true),
+     fEpsilonMinDefault(5.0e-5), 
+     fEpsilonMaxDefault(0.001),
      fFieldChangesEnergy(false), 
      fDefault_Delta_One_Step_Value(0.01*mm),
      fDefault_Delta_Intersection_Val(0.001*mm),
-     fEpsilonMinDefault(5.0e-5), 
-     fEpsilonMaxDefault(0.001),
      fEpsilonMin( fEpsilonMinDefault ),
      fEpsilonMax( fEpsilonMaxDefault)
 {

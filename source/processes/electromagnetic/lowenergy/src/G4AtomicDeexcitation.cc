@@ -126,7 +126,7 @@ G4int G4AtomicDeexcitation::SelectTypeOfTransition(G4int Z, G4int shellId)
   if (shellId <=0 ) 
     {G4Exception("G4AtomicDeexcitation: zero or negative shellId");}
 
-  G4bool fluoTransitionFoundFlag = false;
+  //G4bool fluoTransitionFoundFlag = false;
   
   const G4AtomicTransitionManager*  transitionManager = 
         G4AtomicTransitionManager::Instance();
@@ -171,7 +171,7 @@ G4int G4AtomicDeexcitation::SelectTypeOfTransition(G4int Z, G4int shellId)
 	 if(partialProb <= partSum)
 	   {
 	     provShellId = aShell->OriginatingShellId(transProb);
-	     fluoTransitionFoundFlag = true;
+	     //fluoTransitionFoundFlag = true;
 
 	     break;
 	   }

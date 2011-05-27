@@ -173,7 +173,7 @@ void HistoManager::SetHisto(G4int ih,
             "energy spectrum: gamma",		//3		  
             "energy spectrum: alpha",		//4
             "energy spectrum: ions",		//5
-            "energy balance",			//6	    	    
+            "total kinetic energy (Q)",		//6	    	    
             "momentum balance",			//7
             "total time of life of decay chain"	//8
           };

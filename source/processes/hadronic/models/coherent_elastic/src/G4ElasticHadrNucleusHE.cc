@@ -219,8 +219,7 @@ void G4ElasticData::DefineNucleusParameters(G4double A)
 //
 
 G4ElasticHadrNucleusHE::G4ElasticHadrNucleusHE()
-  : G4VHadronElastic("hElasticGlauber")
-  //  :G4HadronicInteraction("G4ElasticHadrNucleusHE")
+  : G4HadronElastic("hElasticGlauber")
 {
   verboseLevel = 0;
   plabLowLimit = 20.0*MeV;
@@ -663,7 +662,7 @@ G4double G4ElasticHadrNucleusHE::GetLightFq2(G4int Z, G4int Nucleus,
  
   G4double    Prod0    = 0;
   G4double    N1       = -1.0;
-  G4double    Tot0     = 0;
+  //G4double    Tot0     = 0;
   G4double    exp1;
 
   G4double    Prod3 ;
@@ -675,7 +674,7 @@ G4double G4ElasticHadrNucleusHE::GetLightFq2(G4int Z, G4int Nucleus,
     {
       N1    = -N1*Unucl*(Nucleus-i1+1)/i1*Rho2;
       Prod1 = 0;
-      Tot0  = 0;
+      //Tot0  = 0;
       N2    = -1;
 
       for(i2 = 1; i2<=Nucleus; i2++) ////+++++++++ i2

@@ -153,9 +153,9 @@ G4SynchrotronRadiation::GetMeanFreePath( const G4Track& trackData,
       static G4bool FirstTime=true;
       if(verboseLevel > 0 && FirstTime)
       {
-        G4cout << "G4SynchrotronRadiation::GetMeanFreePath :" << '\n' << std::setprecision(4)
-          << "  MeanFreePath = " << G4BestUnit(MeanFreePath, "Length")
-  	      << G4endl;
+        G4cout << "G4SynchrotronRadiation::GetMeanFreePath :" << '\n' 
+	       << "  MeanFreePath = " << G4BestUnit(MeanFreePath, "Length")
+	       << G4endl;
         if(verboseLevel > 1)
         {
           G4ThreeVector pvec=aDynamicParticle->GetMomentum();
@@ -171,7 +171,7 @@ G4SynchrotronRadiation::GetMeanFreePath( const G4Track& trackData,
             << "  rho   = " << G4BestUnit(rho,"Length")
   	        << G4endl;
         }
-	    FirstTime=false;
+	FirstTime=false;
       }
     }
     else  MeanFreePath = DBL_MAX;

@@ -16,6 +16,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+27 May 2011: L. Desorgher (emadjoint-V09-04-00)
+-Remove few unused variables to avoid compilation warning with gcc-4.6.0.
 
 11 Nov 2010: L. Desorgher (emadjoint-V09-03-02)
 -G4AdjointBremsstrahlungModel: add a G4EmModelManager to initialise properly,

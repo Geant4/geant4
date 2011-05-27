@@ -74,7 +74,7 @@ G4eIonisationCrossSectionHandler::G4eIonisationCrossSectionHandler(
     const G4VEnergySpectrum* spec, G4VDataSetAlgorithm* alg,
     G4double emin, G4double emax, G4int nbin)
  :  G4VCrossSectionHandler(),
-    theParam(spec)
+    theParam(spec),verbose(0)
 {
   G4VCrossSectionHandler::Initialise(alg, emin, emax, nbin);
   interp = new G4LinLogLogInterpolation();
@@ -91,7 +91,6 @@ std::vector<G4VEMDataSet*>* G4eIonisationCrossSectionHandler::BuildCrossSections
                         const G4DataVector& energyVector,
                         const G4DataVector* energyCuts)
 {
-  G4int verbose = 0;
   std::vector<G4VEMDataSet*>* set = new std::vector<G4VEMDataSet*>;
 
   G4DataVector* energies;

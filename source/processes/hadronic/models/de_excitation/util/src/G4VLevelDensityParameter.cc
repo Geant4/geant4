@@ -31,42 +31,11 @@
 // by V. Lara (Oct 1998)
 //
 
-
 #include "G4VLevelDensityParameter.hh"
 
+G4VLevelDensityParameter::G4VLevelDensityParameter() 
+{}
 
-G4VLevelDensityParameter::G4VLevelDensityParameter() {}
-G4VLevelDensityParameter::~G4VLevelDensityParameter() {}
-
-
-G4VLevelDensityParameter::
-G4VLevelDensityParameter(const G4VLevelDensityParameter &)
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4VLevelDensityParameter::copy_constructor meant to not be accessable");
-}
-
-
-const G4VLevelDensityParameter & G4VLevelDensityParameter::
-operator=(const G4VLevelDensityParameter &)
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4VLevelDensityParameter::operator= meant to not be accessable");
-    return *this;
-}
-
-
-G4bool G4VLevelDensityParameter::
-operator==(const G4VLevelDensityParameter &) const
-{
-    return false;
-}
-
-G4bool G4VLevelDensityParameter::
-operator!=(const G4VLevelDensityParameter &) const
-{
-    return true;
-}
-
-
-
-
+G4VLevelDensityParameter::~G4VLevelDensityParameter() 
+{}
 

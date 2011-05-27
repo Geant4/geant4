@@ -55,7 +55,8 @@
 //        add buildPhysicsTable command   13 Apr. 1999 by H.Kurashige
 //        add store/retreivePhysicsTable  08 Nov. 2000 by H.Kurashige
 //        add setStoredInAscii command    12 Mar. 2001 by H.Kurashige
-//        add applyCuts command         2 Aug. 2001 by H.Kurashige
+//        add applyCuts command            2 Aug. 2001 by H.Kurashige
+//        add dumpOrderingParam command    3 May. 2011 by H.Kurashige
 // ------------------------------------------------------------
 
 #ifndef G4UserPhysicsListMessenger_h
@@ -106,6 +107,7 @@ public: // with description
     G4UIcmdWithAnInteger *      asciiCmd;
     G4UIcommand *               applyCutsCmd;
     G4UIcmdWithAString *        dumpCutValuesCmd;
+    G4UIcmdWithAnInteger*       dumpOrdParamCmd;
 };
 
 #endif

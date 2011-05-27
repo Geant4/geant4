@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+10-05-11 mma (exampleN03-V09-04-02)
+- get pointers to UserAction classes via G4RunManager
+     
 10-02-11 mma (exampleN03-V09-04-01)
 - update SteppingVerbose
      

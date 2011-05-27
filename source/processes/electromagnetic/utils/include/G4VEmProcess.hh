@@ -108,6 +108,13 @@ protected:
   virtual void InitialiseProcess(const G4ParticleDefinition*) = 0;
 
   //------------------------------------------------------------------------
+  // Method with standard implementation; may be overwritten if needed
+  //------------------------------------------------------------------------
+
+  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
+                                    const G4Material*);
+
+  //------------------------------------------------------------------------
   // Implementation of virtual methods common to all Discrete processes 
   //------------------------------------------------------------------------
 
@@ -430,7 +437,6 @@ inline G4double G4VEmProcess::GetLambdaFromTable(G4double e)
 
 inline G4double G4VEmProcess::ComputeCurrentLambda(G4double e)
 {
-  SelectModel(e, currentCoupleIndex);
   return currentModel->CrossSectionPerVolume(currentMaterial,currentParticle,
 					     e,(*theCuts)[currentCoupleIndex]);
 }
@@ -447,19 +453,22 @@ inline G4double G4VEmProcess::GetCurrentLambda(G4double e)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VEmProcess::GetLambda(G4double& kineticEnergy,
-					const G4MaterialCutsCouple* couple)
+inline G4double 
+G4VEmProcess::GetLambda(G4double& kinEnergy,
+			const G4MaterialCutsCouple* couple)
 {
   DefineMaterial(couple);
-  return GetCurrentLambda(kineticEnergy);
+  SelectModel(kinEnergy, currentCoupleIndex);
+  return GetCurrentLambda(kinEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VEmProcess::RecalculateLambda(G4double e, 
-						const G4MaterialCutsCouple* couple)
+inline G4double 
+G4VEmProcess::RecalculateLambda(G4double e, const G4MaterialCutsCouple* couple)
 {
   DefineMaterial(couple);
+  SelectModel(e, currentCoupleIndex);
   return ComputeCurrentLambda(e);
 }
 
@@ -469,13 +478,14 @@ inline void G4VEmProcess::ComputeIntegralLambda(G4double e)
 {
   mfpKinEnergy  = theEnergyOfCrossSectionMax[currentCoupleIndex];
   if (e <= mfpKinEnergy) {
-    preStepLambda = GetLambdaFromTable(e);
+    //preStepLambda = GetLambdaFromTable(e);
+    preStepLambda = GetCurrentLambda(e);
 
   } else {
     G4double e1 = e*lambdaFactor;
     if(e1 > mfpKinEnergy) {
-      preStepLambda  = GetLambdaFromTable(e);
-      G4double preStepLambda1 = GetLambdaFromTable(e1);
+      preStepLambda = GetCurrentLambda(e);
+      G4double preStepLambda1 = GetCurrentLambda(e1);
       if(preStepLambda1 > preStepLambda) {
         mfpKinEnergy = e1;
         preStepLambda = preStepLambda1;
@@ -532,9 +542,9 @@ inline G4double G4VEmProcess::MaxKinEnergy() const
 
 inline void G4VEmProcess::SetPolarAngleLimit(G4double val)
 {
-  if(val < 0.0)     polarAngleLimit = 0.0;
-  else if(val > pi) polarAngleLimit = pi;
-  else              polarAngleLimit = val;
+  if(val < 0.0)     { polarAngleLimit = 0.0; }
+  else if(val > pi) { polarAngleLimit = pi;  }
+  else              { polarAngleLimit = val; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -577,7 +587,7 @@ inline void G4VEmProcess::SetLambdaFactor(G4double val)
 inline void G4VEmProcess::SetIntegral(G4bool val)
 {
   if(particle && particle != theGamma) { integral = val; }
-  if(integral) { buildLambdaTable = true; }
+  //  if(integral) { buildLambdaTable = true; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -599,7 +609,7 @@ inline void G4VEmProcess::SetApplyCuts(G4bool val)
 inline void G4VEmProcess::SetBuildTableFlag(G4bool val)
 {
   buildLambdaTable = val;
-  if(!val) { integral = false; }
+  //if(!val) { integral = false; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

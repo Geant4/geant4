@@ -14,6 +14,23 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+ 
+20-05-2011, S.Incerti                  (phys-lists-V09-04-22)
+- following Vladimir, EM low energy + DNA builders are migrated to the 
+  new approach based on G4PhysicsListHelper 
+  - no integer numbers to identify process order is needed anymore
+
+19-05-2011, V.Ivanchenko               (phys-lists-V09-04-21)
+- EM standard builders are migrated to the new approach based on
+  G4PhysicsListHelper - no integer numbers to identify process
+  order is needed anymore
+
+03-05-2011, D.H. Wright                (phys-lists-V09-04-20)
+- modify builder G4EmExtraPhysics so that it uses new muon-nuclear
+  model and process
+
+03-05-2011, H.Kurashige                (phys-lists-V09-04-19)
+- Add OrderingParameterTable for G4PhysicsListHelper
 
 27-04-2011, V.Ivanchenko               (phys-lists-V09-04-18)
 - G4HadronInelasticQBBC - comment out QGSP model to avoid crash due double

@@ -170,7 +170,7 @@ G4Material* G4NistMaterialBuilder::BuildMaterial(G4int i, G4bool isotopes)
   if (verbose>1) { G4cout << "New material nComponents= " << nc << G4endl; }
   if (nc > 0) {
     G4int idx = indexes[i];
-    for (G4int j=0; j<nc; j++) {
+    for (G4int j=0; j<nc; ++j) {
       G4int Z = elements[idx+j];
       G4Element* el = elmBuilder->FindOrBuildElement(Z, isotopes);
       if(!el) {
@@ -186,7 +186,7 @@ G4Material* G4NistMaterialBuilder::BuildMaterial(G4int i, G4bool isotopes)
   }
 
   // Ionisation potential can be defined via NIST DB or 
-  // Chemical Fornmula (ICRU37 Report data)
+  // Chemical Formula (ICRU37 Report data)
   G4IonisParamMat* ion = mat->GetIonisation();
   G4double exc0 = ion->GetMeanExcitationEnergy();
   G4double exc1 = exc0;
@@ -194,8 +194,7 @@ G4Material* G4NistMaterialBuilder::BuildMaterial(G4int i, G4bool isotopes)
     mat->SetChemicalFormula(chFormulas[i]);
     exc1 = ion->FindMeanExcitationEnergy(chFormulas[i]);
   }
-  if(ionPotentials[i] > 0.0 && ionPotentials[i] != exc1)
-    { exc1 = ionPotentials[i]; }
+  if(ionPotentials[i] > 0.0) { exc1 = ionPotentials[i]; }
   if(exc0 != exc1) { ion->SetMeanExcitationEnergy(exc1); }
 
   // Index in Material Table

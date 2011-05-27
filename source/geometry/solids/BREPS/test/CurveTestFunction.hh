@@ -53,7 +53,7 @@
 #include "G4Parabola.hh"
 #include "G4Hyperbola.hh"
 #include "G4Transform3D.hh"
-#include "CLHEP/Random/RandFlat.h"
+#include "Randomize.hh"
 
 
 
@@ -85,7 +85,7 @@ G4double GetRandomP(G4Curve* c)
   if ( max<=min && pMax>0) 
     max+= pMax;
   
-  G4double r= CLHEP::RandFlat::shoot(min, max);
+  G4double r= G4RandFlat::shoot(min, max);
   
   if (pMax>0 && r>=pMax) 
     r-= pMax;

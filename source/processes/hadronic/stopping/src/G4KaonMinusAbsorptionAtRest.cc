@@ -343,11 +343,11 @@ G4DynamicParticleVector* G4KaonMinusAbsorptionAtRest::KaonNucleonReaction()
   
   G4DynamicParticle aNucleon = GetAbsorbingNucleon();
   
-  G4double nucleonMass;
+  // DHW 15 may 2011: unused: G4double nucleonMass;
   
   if (aNucleon.GetDefinition() == G4Proton::Proton()) 
     {
-      nucleonMass = proton_mass_c2+electron_mass_c2;
+      // DHW 15 May 2011: unused: nucleonMass = proton_mass_c2+electron_mass_c2;
       if ( (prob += rateLambdaZeroPiZero) > ranflat) 
 	{                                                  //  lambda pi0
 	  producedBaryonDef = G4Lambda::Lambda();
@@ -371,7 +371,7 @@ G4DynamicParticleVector* G4KaonMinusAbsorptionAtRest::KaonNucleonReaction()
     } 
   else if (aNucleon.GetDefinition() == G4Neutron::Neutron()) 
     {
-      nucleonMass = neutron_mass_c2;
+      // DHW 15 May 2011: unused: nucleonMass = neutron_mass_c2;
       if ((prob += rateLambdaZeroPiMinus) > ranflat) 
 	{                                                 //  lambda pi-
 	  producedBaryonDef = G4Lambda::Lambda();
@@ -466,7 +466,7 @@ G4DynamicParticle* G4KaonMinusAbsorptionAtRest::SigmaLambdaConversion(G4DynamicP
   G4double Z = nucleus->GetZ();
   
   G4double newZ = Z;
-  G4double nucleonMassDifference = 0;
+  // DHW 15 May 2011: unused: G4double nucleonMassDifference = 0;
   
   G4ParticleDefinition* inNucleonDef=NULL;
   G4ParticleDefinition* outNucleonDef=NULL;
@@ -479,7 +479,7 @@ G4DynamicParticle* G4KaonMinusAbsorptionAtRest::SigmaLambdaConversion(G4DynamicP
     inNucleonDef   = G4Neutron::Neutron();
     outNucleonDef  = G4Proton::Proton();
     newZ = Z+1;
-    nucleonMassDifference =   neutron_mass_c2 - proton_mass_c2-electron_mass_c2;
+    // DHW 15 May 2011: unused: nucleonMassDifference =   neutron_mass_c2 - proton_mass_c2-electron_mass_c2;
     break;
 
   case -1: 
@@ -487,7 +487,7 @@ G4DynamicParticle* G4KaonMinusAbsorptionAtRest::SigmaLambdaConversion(G4DynamicP
     inNucleonDef   = G4Proton::Proton();
     outNucleonDef  = G4Neutron::Neutron();
     newZ = Z-1;
-    nucleonMassDifference =  proton_mass_c2+electron_mass_c2 - neutron_mass_c2;
+    // DHW 15 May 2011: unused: nucleonMassDifference =  proton_mass_c2+electron_mass_c2 - neutron_mass_c2;
     break;
 
   case 0: 

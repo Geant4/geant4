@@ -33,7 +33,6 @@
 #include "PhysicsListMessenger.hh"
 
 #include "PhysListEmStandard_option0.hh"
-#include "PhysListEmStandard_option2.hh"
 #include "PhysListEmStandard_option3.hh"
 #include "PhysListEmStandard_GS.hh"
 #include "PhysListEmStandard_WVI.hh"
@@ -149,12 +148,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandard_option0(name,detector);
-    
-  } else if (name == "standard_opt2") {
-
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandard_option2(name,detector);
         
   } else if (name == "standard_opt3") {
 

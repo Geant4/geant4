@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 26th, 2011, H.Kurashige transport-V09-04-04
+- Define ProcessSubType for processes under transportation category
+- Change process type of G4NeutronBuilder to fGeneral
+
 January 26th, 2011, G.Cosmo  transport-V09-04-03
 ---------------------------
 - Simplified implementation of G4CoupledTransportation::EndTracking(), to

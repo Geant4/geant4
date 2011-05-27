@@ -14,7 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+12-05-11 mma (testem13-V09-04-00)
+- PhysListEmStandard: adapted for 9.4-ref-03 
+  include AtomicDeexcitation, new G4PEEffectFluoModel, G4KleinNishinaModel.
+       
 06-06-10 J.Perl (testem13-V09-03-03)
 - Remove unused variable in EventAction
 

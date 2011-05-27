@@ -80,11 +80,11 @@ class G4MagErrorStepper : public G4MagIntegratorStepper
 
   private:
 
+    // STATE
     G4ThreeVector fInitialPoint, fMidPoint, fFinalPoint;
       // Data stored in order to find the chord
  
-    // G4int theNumberOfVariables ; 
-
+    // Dependent Objects, owned --- part of the STATE 
     G4double *yInitial, *yMiddle, *dydxMid, *yOneStep;
       // The following arrays are used only for temporary storage
       // they are allocated at the class level only for efficiency -

@@ -35,6 +35,7 @@
 #include <cmath>
 #include "globals.hh"
 #include "Randomize.hh"
+#include "G4Timer.hh"
 #include "G4UnitsTable.hh"
 #include <iomanip>
 #include <complex>
@@ -64,13 +65,105 @@
 #include "G4BetheHeitlerModel.hh"
 
 
+#include "G4PenelopeRayleighModel.hh"
+#include "G4LivermoreRayleighModel.hh"
+
+
+
+// Ionisation dE/dx check
+
+#include "G4MollerBhabhaModel.hh"
+#include "G4BraggModel.hh"
+#include "G4PAIPhotonModel.hh"
+#include "G4LivermoreIonisationModel.hh"
+#include "G4PenelopeIonisationModel.hh"
+#include "G4Penelope08IonisationModel.hh"
+
+
+
+
+
+
 using namespace std;
 
+const G4double cofA = 2.*pi2*Bohr_radius*Bohr_radius;
 
+const G4double cofR = 8.*pi*classic_electr_radius*classic_electr_radius/3.;
+
+//////////////////////////////////////////////////
+
+G4double CalculateRayleighFF( G4double Z, G4double energy, G4double theta )
+{
+  G4double k    = energy/hbarc;
+  G4double k2   = k*k;
+  G4double z2p3 = std::pow(Z,2./3.);
+  G4double a    = 1. + cofA*z2p3*k2*( 1. - std::cos(theta) );
+  G4double a2   = a*a;
+  G4double ff   = Z/a2;
+  return ff;
+}
+
+//////////////////////////////////////////////////
+
+G4double CalculateRayleighFF( G4double Z, G4double x)
+{
+  G4double z2p3 = std::pow(Z,2./3.);
+  G4double x2   = x*x;
+  G4double a    = 1. + cofA*z2p3*x2*2.;
+  G4double a2   = a*a;
+  G4double ff   = Z/a2;
+  return ff;
+}
+
+////////////////////////////////////////////////////
+
+G4double CalculateRayleighXsc( G4double Z, G4double energy )
+{
+  const G4double p0 =  1.78076e+00;  // 1.77457e+00;
+  const G4double p1 = -6.0911e-02;    // -1.78171e-02;
+  // const G4double p2 =  4.60444e-04;
+  G4double    alpha = p0 + p1*std::log(Z); //  + p2*Z*Z;
+
+  G4double k    = energy/hbarc;
+  G4double k2   = std::pow(k, alpha); // k*k; 1.69 for Z=6, 1.5 for Z=82
+  G4double z2p3 = std::pow( Z, 0.66667); // 2/3~0.66667
+  G4double a    = cofA*z2p3*k2; 
+  G4double b    = 1. + 2.*a;
+  G4double b2   = b*b;
+  G4double b3   = b*b2;
+  G4double xsc  = cofR*Z*Z/b3;
+           xsc *= a*a + (1. + a)*(1. + a);  
+  return   xsc;   
+}
+
+G4double CalculateCosTheta(G4double c)
+{
+  G4double cosTheta, delta, cofA, signc = 1., a = c, power = 1./3.;
+ 
+  if( c < 0.)
+  {
+    signc = -1.;
+    a = -c;
+  }
+  delta  = std::sqrt(a*a+4.);
+  delta += a;
+  delta *= 0.5; 
+
+  cofA = -signc*std::pow(delta, power);
+
+  cosTheta = cofA - 1./cofA;
+  return cosTheta; 
+}
+
+
+
+/////////////////////////////////////////////////////
+//
+//
 
 int main()
 {
-
+  G4Timer timer;
   G4int i, j, k, iMax;
   G4double x;
   G4double expXrad=0., g4Xrad;
@@ -79,10 +172,26 @@ int main()
   writef.setf( std::ios::scientific, std::ios::floatfield );
 
 
+  iMax = 100;
+  writef<<iMax<<G4endl;
+  for( i = 0; i < iMax; i++ )
+  {
+    x = -4. + 8.*G4double(i)/G4double(iMax);
+    g4Xrad = CalculateCosTheta(x);
+    G4cout<<x<<"\t"<<g4Xrad<<G4endl;
+    writef<<x<<"\t"<<g4Xrad<<G4endl;
+  }
+
+
+
   G4Element*     theElement;
   G4Material*    theMaterial;
   G4NistManager* man = G4NistManager::Instance();
   man->SetVerbose(1);
+
+  G4int choice;
+  // G4cin >> choice;
+  choice = 6;
 
   G4cout << " 1 hydrogen" << G4endl;
   G4cout << " 2 helium" << G4endl;
@@ -90,6 +199,7 @@ int main()
   G4cout << " 6 carbon" << G4endl;
   G4cout << " 7 nitrogen" << G4endl;
   G4cout << " 8 oxigen" << G4endl;
+  G4cout << "10 neon" << G4endl;
   G4cout << "13 aluminium" << G4endl;
   G4cout << "14 silicon" << G4endl;
   G4cout << "18 argon" << G4endl;
@@ -99,14 +209,13 @@ int main()
   G4cout << "54 xenon" << G4endl;
   G4cout << "74 tugnsten" << G4endl;
   G4cout << "77 iridium" << G4endl;
+  G4cout << "79 gold" << G4endl;
   G4cout << "82 lead" << G4endl;
   G4cout << "92 uranium" << G4endl;
-  G4int choice;
-  // G4cin >> choice;
-  choice = 6;
+  G4cout << "200 water" << G4endl;
+  G4cout << "201 CO2" << G4endl;
 
-
-  switch (choice)
+ switch (choice)
   {
     case 1:
 
@@ -149,6 +258,13 @@ int main()
 
       theElement  = man->FindOrBuildElement("O");
       theMaterial = man->FindOrBuildMaterial("G4_O");
+      g4Xrad = theMaterial->GetRadlen();
+      break;
+
+    case 10:
+
+      theElement  = man->FindOrBuildElement("Ne");
+      theMaterial = man->FindOrBuildMaterial("G4_Ne");
       g4Xrad = theMaterial->GetRadlen();
       break;
 
@@ -219,6 +335,13 @@ int main()
       g4Xrad = theMaterial->GetRadlen();
       break;
 
+    case 79:
+
+      theElement  = man->FindOrBuildElement("Au");
+      theMaterial = man->FindOrBuildMaterial("G4_Au");
+      g4Xrad = theMaterial->GetRadlen();
+      break;
+
     case 82:
 
       theElement  = man->FindOrBuildElement("Pb");
@@ -234,6 +357,21 @@ int main()
       g4Xrad = theMaterial->GetRadlen();
       expXrad = 0.35*cm;
       break;
+
+    case 200:
+     
+      theMaterial = man->FindOrBuildMaterial("G4_WATER");
+      g4Xrad = theMaterial->GetRadlen();
+      break;
+
+    case 201:
+
+      theMaterial = man->FindOrBuildMaterial("G4_CARBON_DIOXIDE");
+      // g4Xrad = theMaterial->GetRadlen();
+      break;
+
+
+
   }
 
 // Particle definition
@@ -292,18 +430,27 @@ int main()
 
   }
 
-  G4double energyMscXR, xsc, kinEnergy;
+  G4double energyXray, xsc=0., xsccomp, xscray, xscpair, xscphoto, kinEnergy, Tmax, dEdx, Efermi;
 
 
-  // kinEnergy = 8*GeV;   // 25.0*GeV;
 
-  kinEnergy = 25.0*GeV;
+  const G4DataVector cuts(1,1.);
+
+
+  G4VEmModel* penray = new G4PenelopeRayleighModel();
+  G4VEmModel* livray = new G4LivermoreRayleighModel();
+              livray->Initialise(theParticleDefinition,cuts);
+
 
   G4VEmModel* comp = new G4KleinNishinaCompton();
-  // G4VEmModel* comp = new G4HeatedKleinNishinaCompton();
+  // G4VEmModel* compheated = new G4HeatedKleinNishinaCompton();
   G4VEmModel* photo = new G4PEEffectModel();
   G4VEmModel* pair = new G4PairProductionRelModel(theParticleDefinition,"pp");
-  G4VEmModel* bhpair = new G4BetheHeitlerModel(theParticleDefinition,"bhpp");
+  // G4VEmModel* bhpair = new G4BetheHeitlerModel(theParticleDefinition,"bhpp");
+
+
+
+
 
   G4DynamicParticle*  theDynamicParticle = new G4DynamicParticle(theParticleDefinition,
                                               G4ParticleMomentum(0.,0.,1.),
@@ -328,29 +475,101 @@ int main()
          <<expXrad<<"  mm"<<G4endl<<G4endl;
 
 
-  //  energyMscXR = 2*MeV;
-  //xsc = pair->ComputeCrossSectionPerAtom(theParticleDefinition, energyMscXR, G4double(Z ) );
+  energyXray = 2*MeV;
+  //xsc = pair->ComputeCrossSectionPerAtom(theParticleDefinition, energyXray, G4double(Z ) );
 
 
-  iMax = 130;
+  /*
 
+  timer.Start();  
+  iMax = 140; // 30; // 130;
   writef<<iMax<<G4endl;
-
-
-
-
   for( i = 0; i < iMax; i++ )
   {
-    energyMscXR = std::exp(i*0.2)*0.001*keV;
-    // xsc = comp->ComputeCrossSectionPerAtom(theParticleDefinition,energyMscXR,G4double(Z ) );
-    // xsc = photo->ComputeCrossSectionPerAtom(theParticleDefinition, energyMscXR, G4double(Z ) );
-    // xsc = pair->ComputeCrossSectionPerAtom(theParticleDefinition, energyMscXR, G4double(Z ) );
-    xsc = bhpair->ComputeCrossSectionPerAtom(theParticleDefinition, energyMscXR, G4double(Z ) );
-    G4cout<<energyMscXR/MeV<<"\t\t"<<xsc/barn<<G4endl;
-    writef<<energyMscXR/MeV<<"\t\t"<<xsc/barn<<G4endl;
+    energyXray = std::exp(i*0.08)*0.01*keV; // for iMax=140
+    // energyXray = std::exp(i*0.11)*0.01*keV; // for iMax=130
+    // energyXray = std::exp(i*0.41)*0.01*keV; // for iMax=30
+
+    xscray    = CalculateRayleighXsc(theElement->GetZ(),energyXray);
+
+    // xscray = penray->CrossSectionPerVolume(theMaterial,theParticleDefinition,energyXray)
+    //          /theMaterial->GetTotNbOfAtomsPerVolume();
+
+    // xscray = livray->CrossSectionPerVolume(theMaterial,theParticleDefinition,energyXray)
+    //      /theMaterial->GetTotNbOfAtomsPerVolume();
+
+
+
+    xsccomp = comp->ComputeCrossSectionPerAtom(theParticleDefinition,energyXray,G4double(Z ) );
+    xscphoto = photo->ComputeCrossSectionPerAtom(theParticleDefinition, energyXray, G4double(Z ) );
+    xscpair = pair->ComputeCrossSectionPerAtom(theParticleDefinition, energyXray, G4double(Z ) );
+    // xscpair = bhpair->ComputeCrossSectionPerAtom(theParticleDefinition, energyXray, G4double(Z ) );
+
+    xsc = xscray + xsccomp; // + xscphoto + xscpair;
+
+    G4cout<<energyXray/eV<<"\t\t"<<xsc/barn<<G4endl;
+    writef<<energyXray/eV<<"\t\t"<<xsc/barn<<G4endl;
+  }
+  timer.Stop();  
+  G4cout<<"calculation time = "<<timer.GetUserElapsed()<<" s"<<G4endl;  
+
+  // Check dE/dx for different models and wide energies
+
+ 
+
+
+  G4VEmModel* paiph   = new G4PAIPhotonModel(theParticleDefinition,"paiph");
+              paiph->Initialise(theParticleDefinition,cuts);
+
+	      // G4VEmModel* bragg   = new G4BraggModel(theParticleDefinition,"bragg");
+
+  G4VEmModel* bhabha  = new G4MollerBhabhaModel(theParticleDefinition,"bhabha");
+  // G4VEmModel* liver   = new G4LivermoreIonisationModel(theParticleDefinition,"liver");
+  // liver->Initialise(theParticleDefinition,cuts);
+  // G4VEmModel* penelop = new G4PenelopeIonisationModel(theParticleDefinition,"penelop");
+  // G4VEmModel* pen08 = new G4PenelopeIonisationModel(theParticleDefinition,"penelop");
+
+
+
+  G4double Nlon = (2.68e19)/cm3;
+  G4double rateMass = electron_mass_c2/theParticleDefinition->GetPDGMass();
+  Efermi = 7.0*eV;  
+  iMax = 200;
+  writef<<iMax<<G4endl;
+  for( i = 0; i < iMax; i++ )
+  {
+    // kinEnergy = std::exp(i*0.032)*17.*keV; // protons
+    kinEnergy = std::exp(i*0.065)*20.*eV; // electrons
+
+    Tmax = 0.5*kinEnergy; // electrons
+    
+    // G4double   tau      = kinEnergy/theParticleDefinition->GetPDGMass(); // other particles
+    // tau      = kineticEnergy/electron_mass_c2;
+    // G4double    gamma    = tau +1.0;
+    // G4double    bg2      = tau*(tau + 2.0);
+    //   bg = std::sqrt(bg2);       
+    // Tmax = 2.0*electron_mass_c2*bg2/(1.0+2.0*gamma*rateMass+rateMass*rateMass);
+    
+    // dEdx = bragg->ComputeDEDXPerVolume(theMaterial, theParticleDefinition, kinEnergy, Tmax);
+    // dEdx = bhabha->ComputeDEDXPerVolume(theMaterial, theParticleDefinition, kinEnergy, Tmax);
+    // dEdx = penelop->ComputeDEDXPerVolume(theMaterial, theParticleDefinition, kinEnergy, Tmax);
+    // dEdx = pen08->ComputeDEDXPerVolume(theMaterial, theParticleDefinition, kinEnergy, Tmax);
+    // dEdx = liver->ComputeDEDXPerVolume(theMaterial, theParticleDefinition, kinEnergy, Tmax);
+    dEdx = paiph->ComputeDEDXPerVolume(theMaterial, theParticleDefinition, kinEnergy, Tmax);
+
+    // dEdx *= angstrom/eV;
+    dEdx *= g/theMaterial->GetDensity()/MeV/cm2;
+    // dEdx *= (1.e15)/Nlon/eV/cm2;
+
+    // kinEnergy -= Efermi;
+     // kinEnergy *= amu_c2/proton_mass_c2;
+
+    G4cout<<kinEnergy/eV<<"\t\t"<<dEdx<<G4endl;
+    writef<<kinEnergy/eV<<"\t\t"<<dEdx<<G4endl;
+
   }
 
-
+  */
 
 
 

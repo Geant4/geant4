@@ -41,6 +41,7 @@
 //        add two_body_reaction
 // 100909 add safty 
 // 101111 add safty for _nat_ data case in Binary reaction, but break conservation  
+// 110430 add Reaction Q value and break up flag (MF3::QI and LR)
 //
 #include "G4NeutronHPInelasticCompFS.hh"
 #include "G4Nucleus.hh"
@@ -120,7 +121,9 @@ void G4NeutronHPInelasticCompFS::Init (G4double A, G4double Z, G4String & dirNam
     if(sfType>=600||(sfType<100&&sfType>=50)) it = sfType%50;
     if(dataType==3) 
     {
-      theData >> dummy >> dummy;
+      //theData >> dummy >> dummy;
+      //TK110430
+      theData >> QI >> LR;
       theXsection[it] = new G4NeutronHPVector;
       G4int total;
       theData >> total;

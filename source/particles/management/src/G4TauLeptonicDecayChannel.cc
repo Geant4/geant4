@@ -124,7 +124,6 @@ G4DecayProducts *G4TauLeptonicDecayChannel::DecayIt(G4double)
 
   // calculate daughter momentum
   G4double daughtermomentum[3];
-  G4double energy;
 
   // calcurate lepton momentum
   G4double pmax = (parentmass*parentmass-daughtermass[0]*daughtermass[0])/2./parentmass;
@@ -136,7 +135,6 @@ G4DecayProducts *G4TauLeptonicDecayChannel::DecayIt(G4double)
     p = pmax*G4UniformRand();
     e = std::sqrt(p*p + daughtermass[0]*daughtermass[0]);
   } while (r > spectrum(p,e,parentmass,daughtermass[0]) );
-  energy = e- daughtermass[0];
 
   //create daughter G4DynamicParticle 
   // daughter 0 (lepton)

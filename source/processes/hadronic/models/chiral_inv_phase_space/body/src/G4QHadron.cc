@@ -289,7 +289,7 @@ void G4QHadron::SetQPDG(const G4QPDGCode& newQPDG)
 // Decay of Hadron In2Particles f&s, f is in respect to the direction of HadronMomentumDir
 G4bool G4QHadron::RelDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
        G4LorentzVector& dir, G4double maxCost, G4double minCost)
-{//    ===================================================================
+{
   G4double fM2 = f4Mom.m2();
   G4double fM  = sqrt(fM2);              // Mass of the 1st Hadron
   G4double sM2 = s4Mom.m2();
@@ -413,7 +413,7 @@ G4bool G4QHadron::RelDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
 // Decay of Hadron In2Particles f&s, f w/r/to dN/dO [cp>0: ~cost^cp, cp<0: ~(1-cost)^(-cp)]
 G4bool G4QHadron::CopDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
                               G4LorentzVector& dir, G4double cosp)
-{//    ===================================================================
+{
   G4double fM2 = f4Mom.m2();
   G4double fM  = sqrt(fM2);              // Mass of the 1st Hadron
   G4double sM2 = s4Mom.m2();
@@ -536,7 +536,7 @@ G4bool G4QHadron::CopDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
 
 // Decay of the Hadron in 2 particles (f + s)
 G4bool G4QHadron::DecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom)
-{//    ===================================================================
+{
   G4double fM2 = f4Mom.m2();
   if(fM2<0.) fM2=0.;
   G4double fM  = sqrt(fM2);              // Mass of the 1st Hadron
@@ -626,7 +626,7 @@ G4bool G4QHadron::DecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom)
 
 // Correction for the Hadron + fr decay in case of the new corM mass of the Hadron
 G4bool G4QHadron::CorMDecayIn2(G4double corM, G4LorentzVector& fr4Mom)
-{//    ===============================================================
+{
   G4double fM  = fr4Mom.m();                // Mass of the Fragment
   G4LorentzVector comp=theMomentum+fr4Mom;  // 4Mom of the decaying compound system
   G4double iM  = comp.m();                  // mass of the decaying compound system
@@ -733,7 +733,7 @@ G4bool G4QHadron::CorMDecayIn2(G4double corM, G4LorentzVector& fr4Mom)
 
 // Fragment fr4Mom louse energy corE and transfer it to This Hadron 
 G4bool G4QHadron::CorEDecayIn2(G4double corE, G4LorentzVector& fr4Mom)
-{//    ===============================================================
+{
   G4double fE  = fr4Mom.m();                // Energy of the Fragment
 #ifdef debug
   G4cout<<"G4QH::CorEDecIn2:fE="<<fE<<fr4Mom<<">corE="<<corE<<",h4M="<<theMomentum<<G4endl;
@@ -773,7 +773,7 @@ G4bool G4QHadron::CorEDecayIn2(G4double corE, G4LorentzVector& fr4Mom)
 // Decay of the hadron in 3 particles i=>r+s+t
 G4bool G4QHadron::DecayIn3
                    (G4LorentzVector& f4Mom, G4LorentzVector& s4Mom, G4LorentzVector& t4Mom)
-{//    ====================================================================================
+{
 #ifdef debug
   G4cout<<"G4QH::DIn3:"<<theMomentum<<"=>pf="<<f4Mom<<"+ps="<<s4Mom<<"+pt="<<t4Mom<<G4endl;
 #endif
@@ -858,7 +858,7 @@ G4bool G4QHadron::DecayIn3
 G4bool G4QHadron::RelDecayIn3(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
                               G4LorentzVector& t4Mom, G4LorentzVector& dir,
                               G4double maxCost, G4double minCost)
-{//    ====================================================================================
+{
 #ifdef debug
   G4cout<<"G4QH::RelDIn3:"<<theMomentum<<"=>f="<<f4Mom<<"+s="<<s4Mom<<"+t="<<t4Mom<<G4endl;
 #endif
@@ -942,7 +942,7 @@ G4bool G4QHadron::RelDecayIn3(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
 // Relative Decay of hadron in 3: i=>f+s+t.  dN/dO [cp>0:~cost^cp, cp<0:~(1-cost)^(-cp)]
 G4bool G4QHadron::CopDecayIn3(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
                               G4LorentzVector& t4Mom, G4LorentzVector& dir, G4double cosp)
-{//    ====================================================================================
+{
 #ifdef debug
   G4cout<<"G4QH::CopDIn3:"<<theMomentum<<"=>f="<<f4Mom<<"+s="<<s4Mom<<"+t="<<t4Mom<<G4endl;
 #endif
@@ -1025,7 +1025,6 @@ G4bool G4QHadron::CopDecayIn3(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
 
 // Randomize particle mass taking into account the width
 G4double G4QHadron::RandomizeMass(G4QParticle* pPart, G4double maxM)
-//       ===========================================================
 {
   G4double meanM = theQPDG.GetMass();
   G4double width = theQPDG.GetWidth()/2.;
@@ -1237,7 +1236,7 @@ void G4QHadron::SplitUp()
       G4Exception("G4QHadron::SplitUp:","72",FatalException,"Colours&AntiColours notSinc");
     }
 #ifdef pdebug
-    G4cout<<"G4QHad::SpUp:,nPartons="<<nColor+nColor<<<<G4endl;
+    G4cout<<"G4QHad::SpUp:,nPartons="<<nColor+nColor<<G4endl;
 #endif
     G4int dnCol=nColor+nColor;
     // From here two algorithm of splitting can be used (All(default): New, OBO: Olg, Bad)

@@ -50,7 +50,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleChange.hh"
 #include "G4Nucleus.hh"
-#include "G4VHadronElastic.hh"
+#include "G4HadronElastic.hh"
 
 class G4NistManager;
 
@@ -104,7 +104,7 @@ public:
 //
 //
 
-class G4ElasticHadrNucleusHE : public G4VHadronElastic
+class G4ElasticHadrNucleusHE : public G4HadronElastic
 {
 public:
 

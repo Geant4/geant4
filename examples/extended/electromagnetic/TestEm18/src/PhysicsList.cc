@@ -184,21 +184,15 @@ void PhysicsList::ConstructProcess()
   
   //physics tables
   //
-  emOptions.SetMinEnergy(100*eV);	//default    
-  emOptions.SetMaxEnergy(100*TeV);	//default  
+  emOptions.SetMinEnergy(10*eV);	//default 100 eV    
+  emOptions.SetMaxEnergy(10*TeV);	//default 100 TeV 
   emOptions.SetDEDXBinning(12*20);	//default=12*7  
   emOptions.SetLambdaBinning(12*20);	//default=12*7
-  emOptions.SetSplineFlag(true);  
-  
-  //energy loss
-  //  
-  emOptions.SetStepFunction(0.2, 10*um);	//default=(0.2, 1*mm)   
-  emOptions.SetLinearLossLimit(1.e-2);		//default
           
   //build CSDA range
   //
   emOptions.SetBuildCSDARange(true);
-  emOptions.SetMaxEnergyForCSDARange(100*TeV);  
+  emOptions.SetMaxEnergyForCSDARange(10*TeV);  
   emOptions.SetDEDXBinningForCSDARange(12*20);
    
   //ionization

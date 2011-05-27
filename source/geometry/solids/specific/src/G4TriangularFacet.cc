@@ -767,8 +767,8 @@ G4bool G4TriangularFacet::Intersect (const G4ThreeVector &p,
 
 G4ThreeVector G4TriangularFacet::GetPointOnFace() const
 {
-  G4double alpha = CLHEP::RandFlat::shoot(0.,1.);
-  G4double beta = CLHEP::RandFlat::shoot(0.,1);
+  G4double alpha = G4RandFlat::shoot(0.,1.);
+  G4double beta = G4RandFlat::shoot(0.,1);
   G4double lambda1=alpha*beta;
   G4double lambda0=alpha-lambda1;
   

@@ -40,7 +40,6 @@
 #include "G4PhotoElectricEffect.hh"
 
 #include "G4CoulombScattering.hh"
-#include "G4CoulombScatteringModel.hh"
 #include "G4IonCoulombScatteringModel.hh"
 
 #include "G4eIonisation.hh"

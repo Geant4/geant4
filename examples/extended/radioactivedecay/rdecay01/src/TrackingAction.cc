@@ -128,18 +128,18 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
     if ((!fullChain)&&(ID > 1)) G4RunManager::GetRunManager()->AbortEvent();
     //
     //balance    
-    G4double Ebalance = - track->GetTotalEnergy();
+    G4double EkinTot = 0.;
     G4ThreeVector Pbalance = - track->GetMomentum();
     for (size_t itr=0; itr<nbtrk; itr++) {
        G4Track* trk = (*secondaries)[itr];
-       Ebalance += trk->GetTotalEnergy();
+       EkinTot += trk->GetKineticEnergy();
        //exclude gamma desexcitation from momentum balance
        if (trk->GetDefinition() != G4Gamma::Gamma())	 
          Pbalance += trk->GetMomentum();	         
     }
     G4double Pbal = Pbalance.mag();  
-    run->Balance(Ebalance,Pbal);  
-    histoManager->FillHisto(6,Ebalance);
+    run->Balance(EkinTot,Pbal);  
+    histoManager->FillHisto(6,EkinTot);
     histoManager->FillHisto(7,Pbal);
   }
   

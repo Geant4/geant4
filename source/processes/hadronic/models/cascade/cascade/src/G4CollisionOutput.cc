@@ -51,6 +51,7 @@
 // 20110307  M. Kelsey -- Need to discard existing ouput lists in trivialize()
 // 20110311  M. Kelsey -- Include nuclear fragment in setOnShell balancing,
 //		including calculation of final-state momentum
+// 20110519  M. Kelsey -- Drop unused "p2" variable from selectPairToTune()
 
 #include "G4CollisionOutput.hh"
 #include "G4CascadParticle.hh"
@@ -585,7 +586,6 @@ G4CollisionOutput::selectPairToTune(G4double de) const {
   G4double pbest = 0.0;
   G4double pcut = 0.3 * std::sqrt(1.88 * std::fabs(de));
   G4double p1 = 0.0;
-  G4double p2;
   
   for (G4int i = 0; i < G4int(outgoingParticles.size())-1; i++) {
     G4LorentzVector mom1 = outgoingParticles[i].getMomentum();
@@ -603,7 +603,6 @@ G4CollisionOutput::selectPairToTune(G4double de) const {
 	      ibest2 = j;
 	      i3 = l;
 	      p1 = mom1[l];
-	      p2 = mom2[l];
 	      pbest = psum;
 	    }	// psum > pbest
 	  }	// mom1 and mom2 > pcut

@@ -70,12 +70,12 @@ G4TransparentRegXTRadiator::~G4TransparentRegXTRadiator()
 
 G4double G4TransparentRegXTRadiator::SpectralXTRdEdx(G4double energy)
 {
-  G4double result, sum = 0., tmp, cof1, cof2, cofMin, cofPHC,aMa, bMb, sigma;
+  G4double result, sum = 0., tmp, cof1, cof2, cofMin, cofPHC,aMa, bMb /*,sigma*/;
   G4int k, kMax, kMin;
 
   aMa = fPlateThick*GetPlateLinearPhotoAbs(energy);
   bMb = fGasThick*GetGasLinearPhotoAbs(energy);
-  sigma = aMa + bMb;
+  //sigma = aMa + bMb;
    
   cofPHC  = 4*pi*hbarc;
   tmp     = (fSigma1 - fSigma2)/cofPHC/energy;  

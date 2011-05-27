@@ -72,7 +72,8 @@ $Id: README,v 1.3 2010-03-19 09:56:29 pandola Exp $
     Local physics lists:	 
     - "livermore_old"   low-energy EM physics using old Livermore processes
     - "penelope_old"    low-energy EM physics implementing old Penelope models
-    - "penelope08"      low-energy EM physics with Penelope08 gamma models
+    - "penelope01"      low-energy EM physics with (obsolete) 
+			Penelope01 gamma models
 
     Physics lists and options can be (re)set with UI commands
     

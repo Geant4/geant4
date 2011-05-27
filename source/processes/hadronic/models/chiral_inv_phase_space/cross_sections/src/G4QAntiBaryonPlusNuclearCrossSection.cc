@@ -256,7 +256,7 @@ G4double G4QAntiBaryonPlusNuclearCrossSection::CalculateCrossSection(G4bool, G4i
 #endif
   if(F<=0)                             // This isotope was not the last used isotop
   {
-    if(F<0)                            // This isotope was found in DAMDB =======> RETRIEVE
+    if(F<0)                            // This isotope was found in DAMDB =-----=> RETRIEVE
     {
       G4int sync=LEN->size();
       if(sync<=I) G4cerr<<"*!*G4QaBarPNuclCS::CalcCrosSect: Sync="<<sync<<"<="<<I<<G4endl;
@@ -296,7 +296,7 @@ G4double G4QAntiBaryonPlusNuclearCrossSection::CalculateCrossSection(G4bool, G4i
       HEN->push_back(lastHEN);         // remember the High Energy Table
     } // End of creation of the new set of parameters
   } // End of parameters udate
-  // ============================== NOW the Magic Formula =================================
+  // =--------------------= NOW the Magic Formula =--------------------=
 #ifdef debug
   G4cout<<"G4QaBPNCS::CalCS:lTH="<<lastTH<<",Pmi="<<Pmin<<",dP="<<dP<<",dlP="<<dlP<<G4endl;
 #endif

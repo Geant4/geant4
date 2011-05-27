@@ -35,7 +35,7 @@
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithPargs.hh"
 #include "G4UIcmdPargDouble.hh"
-#include "G4UIcmdPargInteger.hh"
+#include "G4UIcmdPargInteger.hh" 
 #include "G4UIcmdPargListDouble.hh"
 
 #include "G4Box.hh"
@@ -46,6 +46,8 @@
 #include "G4Torus.hh"
 #include "G4Trap.hh"
 #include "G4Trd.hh"
+#include "G4GenericTrap.hh"
+#include "G4Paraboloid.hh"
 #include "G4Tubs.hh"
 #include "G4Ellipsoid.hh"
 #include "G4EllipticalCone.hh"
@@ -184,6 +186,26 @@ G4InteractiveSolid::G4InteractiveSolid( const G4String &prefix )
 	trdCmd = new G4UIcmdWithPargs( trdPath, this, trdArgs, 5 );
 	trdCmd->SetGuidance( "Declare a G4Trd solid" );
 
+         //
+	// Declare G4GenericTrap
+	//
+	gentrapArgs[0] = new G4UIcmdPargDouble( "dz", 1.0, m );
+	gentrapArgs[1] = new G4UIcmdPargListDouble("pgonX", 100, m );
+        gentrapArgs[2] = new G4UIcmdPargListDouble("pgonY", 100, m );
+	G4String gentrapPath = prefix+"G4GenericTrap";
+	gentrapCmd = new G4UIcmdWithPargs( gentrapPath, this, gentrapArgs, 3 );
+	gentrapCmd->SetGuidance( "Declare a G4GenericTrap solid" );
+
+        //
+	// Declare G4Paraboloid
+	//
+	parabolArgs[0] = new G4UIcmdPargDouble( "dz" , 1.0, m );
+      	parabolArgs[1] = new G4UIcmdPargDouble( "dr1", 1.0, m );
+	parabolArgs[2] = new G4UIcmdPargDouble( "dr2", 1.0, m );
+	G4String parabolPath = prefix+"G4Paraboloid";
+	parabolCmd = new G4UIcmdWithPargs( parabolPath, this, parabolArgs, 3 );
+	parabolCmd->SetGuidance( "Declare a G4Paraboloid solid" );
+
 	//
 	// Declare G4Tubs
 	//
@@ -297,6 +319,7 @@ G4InteractiveSolid::G4InteractiveSolid( const G4String &prefix )
 	//
 	// Declare G4Polyhedra2
 	//
+
 	polyhedra2Args[0] = new G4UIcmdPargDouble( "phiStart", 0, deg );
 	polyhedra2Args[1] = new G4UIcmdPargDouble( "phiTotal", 0, deg );
 	polyhedra2Args[2] = new G4UIcmdPargInteger( "numSides", 8 );
@@ -316,6 +339,7 @@ G4InteractiveSolid::G4InteractiveSolid( const G4String &prefix )
 	tesselArgs[2] = new G4UIcmdPargListDouble("p2in3", 100, m );
 	tesselArgs[3] = new G4UIcmdPargListDouble("p3in3", 100, m );
 	tesselArgs[4] = new G4UIcmdPargInteger("num4", 8 );
+
 	tesselArgs[5] = new G4UIcmdPargListDouble("p1in4", 100, m );
 	tesselArgs[6] = new G4UIcmdPargListDouble("p2in4", 100, m );
 	tesselArgs[7] = new G4UIcmdPargListDouble("p3in4", 100, m );
@@ -468,6 +492,12 @@ G4InteractiveSolid::~G4InteractiveSolid()
 
 	delete trdCmd;
 	DeleteArgArray( trdArgs,       sizeof(      trdArgs)/sizeof(G4UIcmdParg**) );
+
+        delete gentrapCmd;
+	DeleteArgArray( gentrapArgs,   sizeof(  gentrapArgs)/sizeof(G4UIcmdParg**) );
+
+        delete parabolCmd;
+	DeleteArgArray( parabolArgs,   sizeof(  parabolArgs)/sizeof(G4UIcmdParg**) );
 
 	delete tubsCmd;
 	DeleteArgArray( tubsArgs,      sizeof(     tubsArgs)/sizeof(G4UIcmdParg**) );
@@ -714,6 +744,54 @@ void G4InteractiveSolid::MakeMeATrd( G4String values )
 		G4cerr << "G4Trd not created" << G4endl;
 }
 
+//
+// MakeMeAGenericTrap
+//
+void G4InteractiveSolid::MakeMeAGenericTrap( G4String values )
+{
+	if (gentrapCmd->GetArguments( values )) {
+		delete solid;
+                
+		G4UIcmdPargDouble *dzArg = (G4UIcmdPargDouble*)gentrapArgs[0];
+                G4UIcmdPargListDouble  *pgonxArg = (G4UIcmdPargListDouble *)gentrapArgs[1],
+				       *pgonyArg = (G4UIcmdPargListDouble *)gentrapArgs[2];
+               		      
+                              
+                std::vector<G4TwoVector> polygon;
+                for ( G4int i=0; i<8; ++i ) {
+                  polygon.push_back(G4TwoVector(pgonxArg->GetValues()[i], pgonyArg->GetValues()[i]));
+		  //G4cout<<pgonxArg->GetValues()[i]<<G4endl;
+                }   
+               
+		                              
+                solid = new G4GenericTrap("interactiveGenericTrap",dzArg->GetValue(), polygon);                                        
+	}
+	else
+		G4cerr << "G4GenericTrap not created" << G4endl;
+}
+//
+// MakeMeAParaboloid
+//
+void G4InteractiveSolid::MakeMeAParaboloid( G4String values )
+{
+	if (parabolCmd->GetArguments( values )) {
+		delete solid;
+		
+		G4UIcmdPargDouble *dzArg = (G4UIcmdPargDouble *)parabolArgs[0],
+				  *dr1Arg = (G4UIcmdPargDouble *)parabolArgs[1],
+		                  *dr2Arg = (G4UIcmdPargDouble *)parabolArgs[2];
+				  
+		
+		solid = new G4Paraboloid( "interactiveParaboloid", 
+                                                     dzArg->GetValue(),
+					   	     dr1Arg->GetValue(),
+					  	     dr2Arg->GetValue() );
+	}
+	else
+		G4cerr << "G4Paraboloid not created" << G4endl;
+}
+
+
 
 //
 // MakeMeATubs
@@ -834,6 +912,7 @@ void G4InteractiveSolid::MakeMeAnExtrudedSolid( G4String values )
                 std::vector<G4TwoVector> polygon;
                 for ( G4int i=0; i<numPointsArg->GetValue(); ++i ) {
                   polygon.push_back(G4TwoVector(pgonxArg->GetValues()[i], pgonyArg->GetValues()[i]));
+                  G4cout<<"extr="<<polygon[i]<<G4endl;
                 }   
 		
                 std::vector<G4ExtrudedSolid::ZSection> zsections;
@@ -1475,6 +1554,10 @@ void G4InteractiveSolid::SetNewValue( G4UIcommand *command, G4String newValues )
 		MakeMeATrap( newValues );
 	else if (command == trdCmd) 
 		MakeMeATrd( newValues );
+        else if (command == gentrapCmd) 
+		MakeMeAGenericTrap( newValues );
+	else if (command == parabolCmd) 
+		MakeMeAParaboloid( newValues );
 	else if (command == tubsCmd) 
 		MakeMeATubs( newValues );
 	else if (command == ellipsoidCmd) 
@@ -1544,6 +1627,10 @@ G4String G4InteractiveSolid::GetCurrentValue( G4UIcommand *command )
 		return ConvertArgsToString( 	  trapArgs, sizeof(	trapArgs)/sizeof(G4UIcmdParg**) );
 	else if (command == trdCmd)
 		return ConvertArgsToString( 	   trdArgs, sizeof(	 trdArgs)/sizeof(G4UIcmdParg**) );
+        else if (command == gentrapCmd)
+		return ConvertArgsToString( 	gentrapArgs, sizeof(  gentrapArgs)/sizeof(G4UIcmdParg**) );
+        else if (command == parabolCmd)
+		return ConvertArgsToString(    parabolArgs, sizeof(  parabolArgs)/sizeof(G4UIcmdParg**) );
 	else if (command == tubsCmd)
 		return ConvertArgsToString( 	  tubsArgs, sizeof(	tubsArgs)/sizeof(G4UIcmdParg**) );
 	else if (command == ellipsoidCmd)

@@ -261,7 +261,6 @@ inline void G4QContent::Anti()
 
 // Add Quark Content
 inline G4QContent G4QContent::operator+=(const G4QContent& rhs)
-//     =======================================================
 {
   nD += rhs.nD;
   nU += rhs.nU;
@@ -274,7 +273,6 @@ inline G4QContent G4QContent::operator+=(const G4QContent& rhs)
 
 // Add Quark Content
 inline G4QContent G4QContent::operator+=(G4QContent& rhs)
-//     =======================================================
 {
   nD += rhs.nD;
   nU += rhs.nU;
@@ -287,7 +285,6 @@ inline G4QContent G4QContent::operator+=(G4QContent& rhs)
 
 // Multiply Quark Content by integer number
 inline G4QContent G4QContent::operator*=(const G4int& rhs)
-//     ===================================================
 {
   nU *= rhs;
   nD *= rhs;
@@ -300,7 +297,6 @@ inline G4QContent G4QContent::operator*=(const G4int& rhs)
 
 // Multiply Quark Content by integer number
 inline G4QContent G4QContent::operator*=(G4int& rhs)
-//     ===================================================
 {
   nU *= rhs;
   nD *= rhs;

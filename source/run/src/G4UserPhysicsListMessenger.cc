@@ -36,10 +36,13 @@
 //        first version                   09 Jan. 1998 by H.Kurashige 
 //        add buildPhysicsTable command   13 Apr. 1999 by H.Kurashige
 //        add setStoredInAscii command    12 Mar. 2001 by H.Kurashige
+//        add dumpOrderingParam command    3 May. 2011 by H.Kurashige
 // ------------------------------------------------------------
+
 
 #include "G4UserPhysicsListMessenger.hh"
 #include "G4VUserPhysicsList.hh"
+#include "G4PhysicsListHelper.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithAnInteger.hh"
@@ -196,6 +199,13 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   dumpCutValuesCmd->SetParameterName("particle",true);
   dumpCutValuesCmd->SetDefaultValue("all");
   dumpCutValuesCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  //  /run/particle/dumpCutValues command
+  dumpOrdParamCmd = new G4UIcmdWithAnInteger("/run/particle/dumpOrderingParam",this);
+  dumpOrdParamCmd->SetGuidance("Dump a list of ordering parameter ");
+  dumpOrdParamCmd->SetParameterName("subtype",true);
+  dumpOrdParamCmd->SetDefaultValue(-1);
+  dumpOrdParamCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
 }
 
 G4UserPhysicsListMessenger::~G4UserPhysicsListMessenger()
@@ -213,6 +223,7 @@ G4UserPhysicsListMessenger::~G4UserPhysicsListMessenger()
   delete asciiCmd;
   delete applyCutsCmd;
   delete dumpCutValuesCmd;
+  delete dumpOrdParamCmd;
   delete theDirectory;
 }
 
@@ -250,6 +261,10 @@ void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newV
 
   } else if( command==dumpListCmd ){
     thePhysicsList->DumpList();
+
+  } else if( command==dumpOrdParamCmd ){
+    G4int stype = dumpOrdParamCmd->GetNewIntValue(newValue);
+    G4PhysicsListHelper::GetPhysicsListHelper()->DumpOrdingParameterTable(stype);
 
   }  else if( command == addProcManCmd ){
     G4ParticleDefinition* particle = (G4ParticleTable::GetParticleTable())->FindParticle(newValue);

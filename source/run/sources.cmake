@@ -59,6 +59,8 @@ GEANT4_DEFINE_MODULE(NAME G4run
         G4MSSteppingAction.hh
         G4MatScanMessenger.hh
         G4MaterialScanner.hh
+	G4PhysicsListHelper.hh
+	G4PhysicsListOrderingParameter.hh
         G4Run.hh
         G4RunManager.hh
         G4RunManagerKernel.hh
@@ -80,6 +82,8 @@ GEANT4_DEFINE_MODULE(NAME G4run
         G4MSSteppingAction.cc
         G4MatScanMessenger.cc
         G4MaterialScanner.cc
+	    G4PhysicsListHelper.cc
+	    G4PhysicsListOrderingParamater.cc
         G4Run.cc
         G4RunManager.cc
         G4RunManagerKernel.cc

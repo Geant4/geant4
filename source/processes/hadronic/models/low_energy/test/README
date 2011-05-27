@@ -1,0 +1,28 @@
+
+Low Energy Parameterized Models Test Suite
+------------------------------------------
+
+To build tests:
+
+1) set up some environment variables
+
+       source g4setup.env
+
+2) to select which test to build
+
+       setenv TESTTARGET name
+ 
+   where name is the filename of the test
+   (without the .cc extension)
+
+3) gmake
+
+   This will put an executable in the bin
+   subdirectory within this test directory
+
+4) Run the executable:
+
+        bin/$G4SYSTEM/name
+
+
+  

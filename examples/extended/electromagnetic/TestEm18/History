@@ -15,8 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+12-05-11 mma (testem18-V09-04-01)
+- PhysListEmStandard: adapted for 9.4-ref-03 
+  include AtomicDeexcitation, new G4PEEffectFluoModel, G4KleinNishinaModel.
+- macro pixe.mac  
+       
 06-01-11 mma (testem18-V09-04-00)
-- Go back to tag testem18-V09-03-03. Fluo and Pixe tests moved to TestEm14
+- Go back to tag testem18-V09-03-03. Fluo test moved to TestEm14
 
 22-11-10 V.Ivanchenko (testem18-V09-03-05)
 - PhysicsList, PhysListEmStandardFLUO - changed coherently with

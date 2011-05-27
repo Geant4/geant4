@@ -81,7 +81,6 @@
 #include "G4InclAblaCascadeInterface.hh"
 #include "G4InclLightIonInterface.hh"
 
-#include "G4LElastic.hh"
 #include "G4HadronElastic.hh"
 
 #include "G4TheoFSGenerator.hh"
@@ -241,17 +240,8 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 
-  } else if(gen_name == "LElastic") {
-    G4LElastic* els = new G4LElastic();
-    sg = new Test30VSecondaryGenerator(els, mat);
-    theProcess->SetSecondaryGenerator(sg);
-    man->AddDiscreteProcess(theProcess);
-
   } else if(gen_name == "Elastic") {
     G4HadronElastic* els = new G4HadronElastic();
-    els->SetHEModelLowLimit(0.0);
-    els->SetQModelLowLimit(0.0);
-    els->SetLowestEnergyLimit(0.0);
     sg = new Test30VSecondaryGenerator(els, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);

@@ -138,8 +138,6 @@ private:
 
   G4double ElectronicStoppingPower(G4double z,
                                    G4double kineticEnergy) const;
- 
-  void SetMoleculaNumber(G4int number) {iMolecula = number;};
 
   G4double DEDX(const G4Material* material, G4double kineticEnergy);
 
@@ -161,6 +159,8 @@ private:
   G4ParticleChangeForLoss*    fParticleChange;
   G4PSTARStopping             pstar;
 
+  const G4Material*           currentMaterial;
+
   G4double mass;
   G4double spin;
   G4double chargeSquare;
@@ -169,9 +169,10 @@ private:
   G4double lowestKinEnergy;
   G4double protonMassAMU;
   G4double theZieglerFactor;
-  G4double expStopPower125;        // Experimental Stopping power at 125keV
+  G4double expStopPower125;    // Experimental Stopping power at 125keV
 
   G4int    iMolecula;          // index in the molecula's table
+  G4int    iPSTAR;             // index in PSTAR
   G4bool   isIon;
   G4bool   isInitialised;
 };

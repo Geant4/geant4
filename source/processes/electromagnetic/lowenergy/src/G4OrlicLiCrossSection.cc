@@ -75,19 +75,19 @@ G4double G4OrlicLiCrossSection::CalculateL1CrossSection(G4int zTarget, G4double 
   if ( /*(energyIncident < 0.1*MeV || energyIncident > 10*MeV) ||*/ zTarget < 41 )//fixed: no control on z!
 
     {
-      G4cout << "WARNING: L1 Cross-Section exist only for ZTarget between 41 and 92, zero returned " << G4endl;
+      //G4cout << "WARNING: L1 Cross-Section exist only for ZTarget between 41 and 92, zero returned " << G4endl;
       //G4cout << "energyIncident(MeV): " << energyIncident/MeV << G4endl;
-      G4cout << "zTarget: " << zTarget << G4endl;
+      //G4cout << "zTarget: " << zTarget << G4endl;
       return 0;
     }
 
 
+  /*
   G4double  massIncident; 
-
   G4Proton* aProtone = G4Proton::Proton();
-    
   massIncident = aProtone->GetPDGMass(); 
-
+  */
+  
   G4double l1BindingEnergy = transitionManager->Shell(zTarget,1)->BindingEnergy()/keV;
 //  G4double l1BindingEnergy = (transitionManager->Shell(zTarget,1)->BindingEnergy())/keV;
  
@@ -205,9 +205,9 @@ G4double G4OrlicLiCrossSection::CalculateL2CrossSection(G4int zTarget, G4double 
   if ( /*(energyIncident < 0.1*MeV || energyIncident > 10*MeV) ||*/zTarget < 41) //fixed: no control on z!)
     
     {
-      G4cout << "WARNING: L2 Cross-Section exist only for ZTarget between 41 and 92, zero returned " << G4endl;
+      //G4cout << "WARNING: L2 Cross-Section exist only for ZTarget between 41 and 92, zero returned " << G4endl;
       //      G4cout << "energyIncident(MeV): " << energyIncident/MeV << G4endl;
-      G4cout << "zTarget: " << zTarget << G4endl; 
+      //G4cout << "zTarget: " << zTarget << G4endl; 
      return 0;
     }
 
@@ -310,9 +310,9 @@ G4double G4OrlicLiCrossSection::CalculateL3CrossSection(G4int zTarget, G4double 
   if ( /*(energyIncident < 0.1*MeV || energyIncident > 10*MeV) ||*/zTarget < 41) //fixed: no control on z!
     
     {
-      G4cout << "WARNING: L3 Cross-Section exist only for ZTarget between 41 and 92, zero returned " << G4endl;
+      //G4cout << "WARNING: L3 Cross-Section exist only for ZTarget between 41 and 92, zero returned " << G4endl;
       //G4cout << "energyIncident(MeV): " << energyIncident/MeV << G4endl;
-      G4cout << "zTarget: " << zTarget << G4endl; 
+      //G4cout << "zTarget: " << zTarget << G4endl; 
      return 0;
     }
   

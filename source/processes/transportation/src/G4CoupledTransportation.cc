@@ -46,6 +46,7 @@
 // =======================================================================
 
 #include "G4CoupledTransportation.hh"
+#include "G4TransportationProcessType.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4ParticleTable.hh"
 #include "G4ChordFinder.hh"
@@ -70,6 +71,9 @@ G4CoupledTransportation::G4CoupledTransportation( G4int verboseLevel )
     fSumEnergyKilled( 0.0 ), fMaxEnergyKilled( 0.0 ), 
     fVerboseLevel(verboseLevel)     //  ( verboseLevel ? verboseLevel : 2 )  // or 4
 {
+  // set Process Sub Type
+  SetProcessSubType(static_cast<int>(COUPLED_TRANSPORTATION));
+
   G4TransportationManager* transportMgr ; 
 
   transportMgr = G4TransportationManager::GetTransportationManager() ; 

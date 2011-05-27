@@ -52,6 +52,7 @@
       <text>exam-ext-geometry-olap-build</text>
       <text>exam-ext-hadronic-hadr00-build</text>
       <text>exam-ext-hadronic-hadr01-build</text>
+      <text>exam-ext-hadronic-hadr02-build</text>
       <text>exam-ext-medical-dicom-build</text>
       <text>exam-ext-medical-electronScattering-build</text>
       <text>exam-ext-medical-electronScattering2-build</text>
@@ -122,6 +123,7 @@
       <text>test60-build</text>
       <text>test61-build</text>
       <text>test62-build</text>
+      <text>test67-build</text>
       <text>test201-build</text>
       <text>test202-build</text>
     </set>

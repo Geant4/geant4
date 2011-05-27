@@ -46,7 +46,7 @@ class EventActionMessenger;
 class EventAction : public G4UserEventAction
 {
 public:
-  EventAction(RunAction*);
+  EventAction();
   virtual ~EventAction();
 
   void  BeginOfEventAction(const G4Event*);

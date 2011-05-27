@@ -37,7 +37,7 @@
 #include <vector>
 #include "G4LogicalVolumeStore.hh"
 // random number generator
-#include "CLHEP/Random/RanluxEngine.h" 
+#include "Randomize.hh" 
 
 //a pre-built physics list
 #include "QGSP_BERT_EMV.hh"

@@ -53,6 +53,7 @@ class G4NeutronHPInelasticBaseFS : public G4NeutronHPFinalState
     theFinalStatePhotons = 0;
     theEnergyAngData = 0;
     theAngularDistribution = 0;
+
   }
   virtual ~G4NeutronHPInelasticBaseFS()
   {
@@ -87,5 +88,6 @@ class G4NeutronHPInelasticBaseFS : public G4NeutronHPFinalState
   G4NeutronHPDeExGammas theGammas;
   G4String gammaPath;
 
+  private:
 };
 #endif

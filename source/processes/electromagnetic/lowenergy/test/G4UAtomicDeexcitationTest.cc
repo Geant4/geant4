@@ -75,7 +75,7 @@ int main(int argc, char* argv[]){
   if (batch != 1) {
     G4cout << "Enter Z " << G4endl;
     G4cin >> a;
-    G4cout << "Enter the id of the vacancy" << G4endl;
+    G4cout << "Enter the index of the vacancy" << G4endl;
     G4cin >> startId;
     G4cout<<"Enter the number of runs "<<G4endl;
     G4cin>> numberOfRun;
@@ -131,8 +131,8 @@ int main(int argc, char* argv[]){
   
  deexcitation->SetPIXECrossSectionModel("ECPSSR_Analytical");
  deexcitation->InitialiseForNewRun();    
- deexcitation->SetAugerActive(true);
- deexcitation->SetPIXEActive(true);
+ deexcitation->SetAuger(true);
+ deexcitation->SetPIXE(true);
 
   
   for (Z = a; Z<=b; Z++) {    
@@ -155,9 +155,9 @@ int main(int argc, char* argv[]){
       G4cout<<"begin of run "<< i <<G4endl;
       G4cout<<"**************"<<G4endl;
       vectorOfParticles->clear();
-      // if shellID = -1 the test runs on every shell of the atom
+      // if startId = -1 the test runs on every shell of the atom
       if (startId == -1){
-	min = 1;
+	min = 0;
 	max = shellNumberTable[Z];
       }
       else {
@@ -165,7 +165,7 @@ int main(int argc, char* argv[]){
 	max = min;
       }
 
-      for (vacancyIndex = min; vacancyIndex <= max; vacancyIndex++) { 
+      for (vacancyIndex = min; vacancyIndex < max; vacancyIndex++) { 
 
 	G4AtomicShell* shell = transitionManager->Shell(Z, vacancyIndex);
 	G4AtomicShellEnumerator as;
@@ -179,6 +179,16 @@ int main(int argc, char* argv[]){
 	else if (shell->ShellId() == 11) {as = fM3Shell;}
 	else if (shell->ShellId() == 13) {as = fM4Shell;}
 	else if (shell->ShellId() == 14) {as = fM5Shell;}
+
+	// testing how to get shell from deexcitation
+	const G4AtomicShell* shell2 = deexcitation->GetAtomicShell(Z, as);
+
+	if (shell2 == shell) {
+
+	  G4cout << "**********************************" << G4endl;
+	  G4cout << "deexcitation->GetAtomicShell WORKS" << G4endl;
+	  G4cout << "**********************************" << G4endl;
+	}
 
 	//loop over the energy? no, let's try the "standard" ones
       

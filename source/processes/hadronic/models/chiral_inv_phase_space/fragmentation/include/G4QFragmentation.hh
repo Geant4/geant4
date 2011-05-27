@@ -81,7 +81,7 @@ class G4QFragmentation
   G4ThreeVector GaussianPt(G4double widthSquare, G4double maxPtSquare) const;
   G4int AnnihilationOrder(G4int LS, G4int MS, G4int uP, G4int mP, G4int sP, G4int nP);
   void SwapPartons(); // Try to swap partons of strings, if one of strings has negative M2
-
+  void EvaporateResidual(G4QHadron* hadrNuc); //Evaporate hadrNucleus, NuclFrag->theResult
  private:
   enum {SOFT, DIFFRACTIVE};
   // static model parameters
@@ -99,7 +99,7 @@ class G4QFragmentation
   G4double        maxNuc;                                // #0fNucleons in the Flux Tube
   G4QuasiFreeRatios* theQuasiElastic;                    // For CHIPS Quasi-Elastic
   G4QDiffractionRatio* theDiffraction;                   // For CHIPS Diffraction
-  G4QCHIPSWorld*     theWorld;                           // Pointer to the CHIPS World
+  G4QCHIPSWorld*  theWorld;                              // Pointer to the CHIPS World
 };
 
 #endif

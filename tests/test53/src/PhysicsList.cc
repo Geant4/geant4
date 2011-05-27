@@ -32,7 +32,7 @@
 #include "PhysicsList.hh"
 #include "PhysicsListMessenger.hh"
 
-#include "PhysListEmPenelope08.hh"
+#include "PhysListEmPenelope01.hh"
 
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
@@ -142,7 +142,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics_option3();
     
-  } else if (name == "empenelope"){
+  } else if (name == "empenelope" || name=="penelope08"){
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new G4EmPenelopePhysics();
@@ -157,10 +157,10 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new G4EmLivermorePolarizedPhysics();
 
-  } else if (name == "penelope08"){    
+  } else if (name == "penelope01"){    
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmPenelope08(name);    
+    emPhysicsList = new PhysListEmPenelope01(name);    
   
   } else {
 

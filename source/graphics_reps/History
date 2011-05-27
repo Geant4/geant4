@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+1st March 2011  John Allison  (greps-V09-04-03)
+- BooleanProcessor.cc:
+  o Changed cout to G4cout, etc.
+  o Fixed Coverity warnings.
+
 24th March 2011  Gabriele Cosmo  (greps-V09-04-02)
 - Consistently make use of G4 types in HepPolyhedron and BooleanProcessor,
   to allow for centralized control of CLHEP classes.

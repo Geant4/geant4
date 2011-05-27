@@ -210,20 +210,20 @@ void G4PolarizedAnnihilationModel::SampleSecondaries(std::vector<G4DynamicPartic
   G4double epsil;
   G4double gmax=1. + std::fabs(polarization); // crude estimate
 
-  G4bool check_range=true;
+  //G4bool check_range=true;
 
   crossSectionCalculator->Initialize(epsilmin, gama, 0.,  theBeamPolarization, theTargetPolarization);
   if (crossSectionCalculator->DiceEpsilon()<0) {
     G4cout<<"ERROR in PolarizedAnnihilationPS::PostStepDoIt\n"
 	  <<"epsilmin DiceRoutine not appropriate ! "<<crossSectionCalculator->DiceEpsilon()<<G4endl;
-    check_range=false;
+    //check_range=false;
   }
 
   crossSectionCalculator->Initialize(epsilmax, gama, 0.,  theBeamPolarization, theTargetPolarization);
   if (crossSectionCalculator->DiceEpsilon()<0) {
     G4cout<<"ERROR in PolarizedAnnihilationPS::PostStepDoIt\n"
 	  <<"epsilmax DiceRoutine not appropriate ! "<<crossSectionCalculator->DiceEpsilon()<<G4endl;
-    check_range=false;
+    //check_range=false;
   }
 
   G4int ncount=0;

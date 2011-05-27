@@ -14,6 +14,37 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+20 May 2011 Vladimir Ivanchenko (hadr-deex-V09-04-13)
+----------------------------------------------------------
+- G4ExcitationHandler - improved comments
+- G4NeutronEvaporationProbability, G4ProtonEvaporationProbability -
+  fixed gcc-4.6.0 warnings
+
+11 May 2011 Vladimir Ivanchenko (hadr-deex-V09-04-12)
+----------------------------------------------------------
+- G4GEMCoulombBarrierHE - fixed link problem introduced in previous tags
+
+8 May 2011 Vladimir Ivanchenko (hadr-deex-V09-04-11)
+----------------------------------------------------------
+- G4DiscreteGammaTransition - enable old usage of the ICM flag to
+                              keep 4-momentum balance
+
+7 May 2011 Vladimir Ivanchenko (hadr-deex-V09-04-10)
+----------------------------------------------------------
+- G4VGammaDeexcitation - added Get method for the ICM flag, commented
+                         out usage of this flag during sampling
+- G4DiscreteGammaTransition - enable usage of the ICM flag (if false 
+                              then energy subtracted but e- is not produced) 
+- G4FermiFragmentPool (J.M.Quesada) improved printout, fixed energy condition
+
+6 May 2011 Vladimir Ivanchenko (hadr-deex-V09-04-09)
+----------------------------------------------------------
+- G4FermiConfigurationList - fixed minor memory leak
+- G4Evaporation, Photon_evaporation, utils - fixed Coverity warnings
+- GEM - fixed Coverity warnings, moved constructor and destructor to
+  the head for probability and CoulombBarrier classes, add integer Z and A,
+  use G4Pow 
+
 26 April 2011 Vladimir Ivanchenko (hadr-deex-V09-04-08)
 ----------------------------------------------------------
 - G4FermiConfigurationList - fixed compillation wartning 

@@ -28,6 +28,7 @@
 //
 
 #include "G4DNARuddIonisationModel.hh"
+#include "G4UAtomicDeexcitation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -40,6 +41,13 @@ G4DNARuddIonisationModel::G4DNARuddIonisationModel(const G4ParticleDefinition*,
 :G4VEmModel(nam),isInitialised(false)
 {
   nistwater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
+
+  slaterEffectiveCharge[0]=0.;
+  slaterEffectiveCharge[1]=0.;
+  slaterEffectiveCharge[2]=0.;
+  sCoefficient[0]=0.;
+  sCoefficient[1]=0.;
+  sCoefficient[2]=0.;
 
   lowEnergyLimitForZ1 = 0 * eV; 
   lowEnergyLimitForZ2 = 0 * eV; 
@@ -56,10 +64,18 @@ G4DNARuddIonisationModel::G4DNARuddIonisationModel(const G4ParticleDefinition*,
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
   
+  fAtomDeexcitation = new G4UAtomicDeexcitation();
+  //  G4LossTableManager::Instance()->SetAtomDeexcitation(fAtomDeexcitation);
+  fAtomDeexcitation->SetFluo(true);
+  fAtomDeexcitation->SetAuger(true);
+
   if( verboseLevel>0 ) 
   { 
     G4cout << "Rudd ionisation model is constructed " << G4endl;
   }
+
+
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -259,6 +275,9 @@ void G4DNARuddIonisationModel::Initialise(const G4ParticleDefinition* particle,
 
   //
   
+  fAtomDeexcitation->InitialiseAtomicDeexcitation();
+  fAtomDeexcitation->InitialiseForNewRun();
+
   if (isInitialised) { return; }
   fParticleChangeForGamma = GetParticleChangeForGamma();
   isInitialised = true;
@@ -441,8 +460,31 @@ void G4DNARuddIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
       G4double pSquare = k*(totalEnergy+particleMass);
       G4double totalMomentum = std::sqrt(pSquare);
       */
-
+      
       G4int ionizationShell = RandomSelect(k,particleName);
+      
+      if(fAtomDeexcitation) {
+	G4int Z = 8;
+	G4AtomicShellEnumerator as = fKShell;
+	
+	if (ionizationShell <5 && ionizationShell >1) 
+	  {
+	    as = G4AtomicShellEnumerator(4-ionizationShell);
+	  }
+	else if (ionizationShell <2)
+	  {
+	    as = G4AtomicShellEnumerator(3);
+	  }
+	
+	
+	//      G4cout << "Z: " << Z << " as: " << as << G4endl;
+	//G4cout << "Press <Enter> key to continue...";
+	//G4cin.ignore();
+	
+	const G4AtomicShell* shell = fAtomDeexcitation->GetAtomicShell(Z, as);    
+	fAtomDeexcitation->GenerateParticles(fvect, shell, Z, 0, 0);
+      }
+      
   
       G4double secondaryKinetic = RandomizeEjectedElectronEnergy(definition,k,ionizationShell);
   

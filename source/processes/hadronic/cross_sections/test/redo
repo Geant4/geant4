@@ -1,0 +1,5 @@
+gmake
+rm input_o_pb.liste
+doopb
+paw
+

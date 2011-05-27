@@ -281,6 +281,10 @@ G4double G4BetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
   }
 
   if (dedx < 0.0) { dedx = 0.0; }
+
+  //G4cout << "E(MeV)= " << kineticEnergy/MeV << " dedx= " << dedx 
+  //	 << "  " << material->GetName() << G4endl;
+
   return dedx;
 }
 

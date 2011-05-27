@@ -198,8 +198,8 @@ class G4Torus : public G4CSGSolid
 
     // used by normal
     enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi};
-
-    G4double kRadTolerance, kAngTolerance;
+    
+    G4double fRminTolerance, fRmaxTolerance, kRadTolerance, kAngTolerance;
       // Radial and angular tolerances
 };
 

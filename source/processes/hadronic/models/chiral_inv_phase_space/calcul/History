@@ -1,0 +1,26 @@
+
+       ==========================================================
+       Geant4 - an Object-Oriented Toolkit for Physics Simulation
+       ==========================================================
+
+        History file for hadronic/models/chiral_inv_phase_space/calcul 
+	
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+     ---------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top)
+     ---------------------------------------------------------------
+
+21-Nov-2008 Dennis Wright (hadr-chips-calc-V09-01-00)
+-----------------------------------------------------
+- add History file
+- G4BoundMuDecInElIntegration.cc added by M. Kossov 8 February 2007
+- G4MultyFragmentationTest.cc added by M. Kossov 5 July 2006
+- G4NuElXQ2Integration.cc added by M. Kossov 25 September 2007
+- G4NuElXQ2Integration_N.cc added by M. Kossov 25 October 2007
+- G4NuMuXQ2Integration_N.cc added by M. Kossov 25 October 2007
+- G4SurfaceCalculation.cc added by M. Kossov 8 February 2007
+
+- G4NuMuXQ2Integration.cc updated by M. Kossov 25 September 2007
+- G4GlauberCrossSections.cc updated by M. Kossov 8 February 2007

@@ -17,9 +17,61 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26 May 11: V.Ivanchenko (emstand-V09-04-29)
+- Fixed source.cmake
+
+26 May 11: V.Ivanchenko (emstand-V09-04-28)
+- Fixed problems in new classes
+
+26 May 11: V.Ivanchenko (emstand-V09-04-27)
+- V.Grichine have added two new classes :
+             G4XrayRayleighModel - simplified Rayleigh scattering
+             G4DipBustGenerator - bremsstrahlung angular generator
+
+24 May 11: V.Ivanchenko (emstand-V09-04-26)
+- G4BraggModel, G4BraggIonModel - fixed bug introduced in the previous tag
+
+24 May 11: V.Ivanchenko (emstand-V09-04-25)
+- G4BraggModel, G4BraggIonModel - use ASTAR and PSTAR parameterisations
+  for moleculas from list of ICRU'49
+
+24 May 11: V.Ivanchenko (emstand-V09-04-24)
+- G4KleinNishinaModel - added extra protection against infinite loop
+  during sampling of final state (very low-energy gamma)
+- G4UrbanMscModel95 - disable sampleZ option
+- G4BraggModel, G4BraggIonModel - minor cleanup of the code
+
+16 May 11: V.Ivanchenko (emstand-V09-04-23)
+- G4InitXscPAI,G4IonCoulombCrossSection,G4PAIModel,G4PAIPhotonModel,
+  G4PAIxSection, G4PAIySection  - fixed gcc-4.6.0 warnings
+
+04 May 2011: V.Ivant (emstand-V09-04-22)
+- Removed obsolete unused classes: G4ionGasIonisation, 
+  G4CoulombScatteringModel, G4UniversalFluctuation93,
+  G4UrbanMscModel92
+- Fixed Coverity warnings
+- G4NuclearStopping - use new sub-type fNuclearStopping
+
+01 May 2011: V.Ivant (emstand-V09-04-21)
+- G4PhotoElectricEffect, G4ComptonScattering, G4CoulombScattering
+  make constructors in the same style
+- G4eplusAnnihilation - disable creation of PhysicsTable - compute
+  cross section in run time (no visible CPU penalty, reduced memory)
+
+01 May 2011: V.Ivant (emstand-V09-04-20)
+- G4KleinNishinaModel - removed parasitice printout
+- G4CoulombScattering - removed obsolete unused methods
+
+29 April 2011: V.Ivant (emstand-V09-04-19)
+- G4KleinNishinaModel - fixed compillation warning at SLC4
+
+29 April 2011: V.Ivant (emstand-V09-04-18)
+- G4KleinNishinaModel - fixed infinite loop in new model for 1 keV gamma
+
 27 April 2011: V.Ivant (emstand-V09-04-17)
 - G4UrbanMscModel95 - L.Urban fixed FPE problems in the new model,
   now by default samplez=true (complite sampling of the displacement) 
+- G4ModifiedTsai - V. Grichine clean-up of PolarAngle(Tkin,...) method
 
 18 April 2011: V.Ivant (emstand-V09-04-16)
 - Fixed problems of the previous tag

@@ -1135,7 +1135,7 @@ G4ThreeVector G4TessellatedSolid::GetPointOnSurface() const
 {
   // Select randomly a facet and return a random point on it
 
-  G4int i = CLHEP::RandFlat::shootInt(facets.size());
+  G4int i = G4RandFlat::shootInt(facets.size());
   return facets[i]->GetPointOnFace();
 }
 ///////////////////////////////////////////////////////////////////////////////

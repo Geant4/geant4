@@ -30,6 +30,21 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
         set(G4_BUILTWITH_QT "no")
     endif()
 
+    # - RayTracerX
+    if(GEANT4_USE_RAYTRACERX)
+        set(G4_BUILTWITH_RAYTRACERX11 "yes")
+        # We have to play with the X11 paths to get a clean set suitable for
+        # inclusion
+        set(_raw_x11_includes ${X11_INCLUDE_DIR})
+        list(REMOVE_DUPLICATES _raw_x11_includes)
+        set(G4_X11_INCLUDE_STATEMENT )
+        foreach(_p ${_raw_x11_includes})
+            set(G4_X11_INCLUDE_STATEMENT "-I${_p} ${G4_X11_INCLUDE_STATEMENT}")
+        endforeach()
+    else()
+        set(G4_BUILTWITH_RAYTRACERX11 "no")
+    endif()
+
     # Configure the script
     configure_file(${CMAKE_SOURCE_DIR}/cmake/Templates/geant4-config.in
         ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/geant4-config

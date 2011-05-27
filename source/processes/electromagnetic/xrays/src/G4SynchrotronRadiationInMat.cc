@@ -133,7 +133,9 @@ G4SynchrotronRadiationInMat::G4SynchrotronRadiationInMat(const G4String& process
 
   fFieldPropagator = transportMgr->GetPropagatorInField();
   SetProcessSubType(fSynchrotronRadiation);
-
+  CutInRange = GammaCutInKineticEnergyNow = ElectronCutInKineticEnergyNow = 
+    PositronCutInKineticEnergyNow =  ParticleCutInKineticEnergyNow = fKsi = 
+    fPsiGamma = fEta = fOrderAngleK = 0.0;
 }
  
 /////////////////////////////////////////////////////////////////////////
@@ -144,6 +146,15 @@ G4SynchrotronRadiationInMat::G4SynchrotronRadiationInMat(const G4String& process
 G4SynchrotronRadiationInMat::~G4SynchrotronRadiationInMat()
 {}
  
+
+G4bool
+G4SynchrotronRadiationInMat::IsApplicable( const G4ParticleDefinition& particle )
+{
+
+  return ( ( &particle == (const G4ParticleDefinition *)theElectron ) ||
+	   ( &particle == (const G4ParticleDefinition *)thePositron )    );
+
+}
  
 /////////////////////////////// METHODS /////////////////////////////////
 //

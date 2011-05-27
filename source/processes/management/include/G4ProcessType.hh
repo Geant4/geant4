@@ -52,7 +52,8 @@ enum G4ProcessType
   fDecay,
   fGeneral,
   fParameterisation,
-  fUserDefined
+  fUserDefined,
+  fParallel
 };
 #endif
 

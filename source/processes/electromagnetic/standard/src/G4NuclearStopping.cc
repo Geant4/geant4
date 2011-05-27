@@ -54,7 +54,7 @@ G4NuclearStopping::G4NuclearStopping(const G4String& processName)
   : G4VEmProcess(processName)
 {
   isInitialized = false;  
-  SetProcessSubType(fCoulombScattering);
+  SetProcessSubType(fNuclearStopping);
   enableAlongStepDoIt = true; 
   modelICRU49 = 0;
 }

@@ -77,7 +77,8 @@
        throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
     G4String baseName = getenv("G4NEUTRONHPDATA");
     dirName = baseName+"/Fission";
-    if(Z>89) 
+    //if(Z>89) 
+    if(Z>87) //TK Modifed for ENDF VII.0 
     {
       Init(A, Z, abun, dirName, "/CrossSection/");
     }

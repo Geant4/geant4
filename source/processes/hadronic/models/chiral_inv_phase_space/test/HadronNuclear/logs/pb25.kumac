@@ -1,0 +1,10 @@
+opt a4
+ve/del *
+zone 2 3
+exec prepare ../data/pb.25mev/p.pb.25mev.dsig_n.dt.domega
+
+exec analyse ../logs/liste.p_pb.25mev.neutron.0degree 0. 25. 1.
+exec analyse ../logs/liste.p_pb.25mev.neutron.20degree 20. 25. 1.
+exec analyse ../logs/liste.p_pb.25mev.neutron.60degree 60. 25. 1.
+exec analyse ../logs/liste.p_pb.25mev.neutron.120degree 120. 25. 1.
+exec analyse ../logs/liste.p_pb.25mev.neutron.160degree 160. 25. 1.

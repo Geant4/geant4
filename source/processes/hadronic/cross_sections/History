@@ -14,6 +14,21 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+19 May 2011 Dennis Wright (hadr-cross-V09-04-08)
+------------------------------------------------
+- fix gcc-4.6 warnings (variable Delta set but not used) in
+  G4GGNuclNuclCrossSection.cc, G4GlauberGribovCrossSection.cc, G4HadronNucleonXsc.cc
+
+16 May 2011 Vladimir Ivanchenko (hadr-cross-V09-04-07)
+----------------------------------------------------------
+- G4CrossSectionElastic, G4CrossSectionInelastic - do not delete
+  component cross section in destructor to avoid double deletion
+
+5 May 2011 Dennis Wright (hadr-cross-V09-04-06)
+-----------------------------------------------
+- G4TripathiLightCrossSection::GetZandACrossSection: return 0 cross section
+  when E_cm <= DBL_MIN, in response to bug report #1174
+ 
 14 March 2011 Vladimir Ivanchenko (hadr-cross-V09-04-05)
 ----------------------------------------------------------
 - G4CrossSectionDataStore - fixed DumpPhysicsTable method, ion cross

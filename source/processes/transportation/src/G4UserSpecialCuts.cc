@@ -41,6 +41,7 @@
 // --------------------------------------------------------------
 
 #include "G4UserSpecialCuts.hh"
+#include "G4TransportationProcessType.hh"
 
 #include "G4Step.hh"
 #include "G4UserLimits.hh"
@@ -50,8 +51,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4UserSpecialCuts::G4UserSpecialCuts(const G4String& aName)
-  : G4VProcess(aName)
+  : G4VProcess(aName, fGeneral  )
 {
+  // set Process Sub Type
+  SetProcessSubType(static_cast<int>(USER_SPECIAL_CUTS));
+
   if (verboseLevel>0)
     {
       G4cout << GetProcessName() << " is created "<< G4endl;

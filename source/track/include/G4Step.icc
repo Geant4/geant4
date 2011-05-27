@@ -244,7 +244,7 @@ inline
 
 
    // set velocity 
-   fpPostStepPoint->SetVelocity(fpTrack->GetVelocity());
+   fpTrack->SetVelocity(fpPostStepPoint->GetVelocity());
 }
 
 inline const G4TrackVector* G4Step::GetSecondary() const  

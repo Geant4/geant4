@@ -172,29 +172,33 @@ class G4ChordFinder
 
    private:  // ............................................................
                                           // G4int    nOK, nBAD;
-      G4MagInt_Driver* fIntgrDriver;
 
+      // Constants
       const G4double fDefaultDeltaChord;  // SET in G4ChordFinder.cc = 0.25 mm
 
-      G4double fDeltaChord;               //  Maximum miss distance 
-
-      G4double    fLastStepEstimate_Unconstrained;
-        //  State information for efficiency
-
-      //  Variables used in construction/destruction
-
-      G4bool fAllocatedStepper;
-      G4EquationOfMotion* fEquation; 
-      G4MagIntegratorStepper* fDriversStepper; 
-
-      //  Parameters 
+      //  PARAMETERS 
+      //  ---------------------
+      G4double  fDeltaChord;               //  Maximum miss distance 
+      //    Internal parameters
       G4double  fFirstFraction, fFractionLast, fFractionNextEstimate;
       G4double  fMultipleRadius; 
+      G4int     fStatsVerbose;  // if > 0, print Statistics in destructor
+
+      //  DEPENDENT Objects
+      //  ---------------------
+      G4MagInt_Driver*        fIntgrDriver;
+      G4MagIntegratorStepper* fDriversStepper; 
+      G4bool                  fAllocatedStepper;  // Bookkeeping of dependent object
+      G4EquationOfMotion*     fEquation; 
+
+      //  STATE information
+      //  --------------------
+      G4double    fLastStepEstimate_Unconstrained;
+        //  State information for efficiency
 
       // For Statistics
       // -- G4int   fNoTrials, fNoCalls;
       G4int   fTotalNoTrials_FNC,  fNoCalls_FNC, fmaxTrials_FNC; // fnoTimesMaxTrFNC; 
-      G4int   fStatsVerbose;  // if > 0, print Statistics in destructor
 };
 
 // Inline function implementation:

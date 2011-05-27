@@ -42,7 +42,9 @@ G4LivermorePolarizedGammaConversionModel::G4LivermorePolarizedGammaConversionMod
   SetHighEnergyLimit(highEnergyLimit);
   smallEnergy = 2.*MeV;
 
-
+  Phi=0.;
+  Psi=0.;
+  
   verboseLevel= 0;
   // Verbosity scale:
   // 0 = nothing 
@@ -220,16 +222,21 @@ void G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4D
       const G4ParticleDefinition* particle =  aDynamicGamma->GetDefinition();
       const G4Element* element = SelectRandomAtom(couple,particle,photonEnergy);
 
+      /*
       if (element == 0)
         {
           G4cout << "G4LivermorePolarizedGammaConversionModel::PostStepDoIt - element = 0" << G4endl;
         }
+      */
+      
       G4IonisParamElm* ionisation = element->GetIonisation();
+      
+      /*
       if (ionisation == 0)
         {
           G4cout << "G4LivermorePolarizedGammaConversionModel::PostStepDoIt - ionisation = 0" << G4endl;
         }
-
+      */
 
 
       // Extract Coulomb factor for this Element
@@ -281,7 +288,7 @@ void G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4D
   G4double positronTotEnergy;
 
 
-  if (CLHEP::RandBit::shootBit())
+  if (G4int(2*G4UniformRand()))  
     {
       electronTotEnergy = (1. - epsilon) * photonEnergy;
       positronTotEnergy = epsilon * photonEnergy;
@@ -296,6 +303,7 @@ void G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4D
   // Universal distribution suggested by L. Urban (Geant3 manual (1993) Phys211),
   // derived from Tsai distribution (Rev. Mod. Phys. 49, 421 (1977)
 
+/*
   G4double u;
   const G4double a1 = 0.625;
   G4double a2 = 3. * a1;
@@ -308,6 +316,7 @@ void G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4D
     {
       u = - log(G4UniformRand() * G4UniformRand()) / a2 ;
     }
+*/
 
   G4double Ene = electronTotEnergy/electron_mass_c2; // Normalized energy
 
@@ -520,8 +529,10 @@ G4double G4LivermorePolarizedGammaConversionModel::SetPhi(G4double Energy)
   G4double c1 = 0.;
   c1 = Glor(pl, xe);
 
+/*
   G4double xm = 0.;
   xm = Flor(pl,pl[3])*Glor(pl,pl[3]);
+*/
 
   G4double r1,r2,r3;
   G4double xco=0.;

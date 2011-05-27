@@ -89,7 +89,7 @@ ifeq ($(G4SYSTEM),Darwin-g++)
     endif
   endif
 
-# ---- QT Setup block -------------------------------------------------------
+# ---- Qt Setup block -------------------------------------------------------
 
   ifndef QTHOME
     QTHOME := /Library/Frameworks
@@ -122,12 +122,20 @@ ifeq ($(G4SYSTEM),Darwin-g++)
     GLQTLIBS    += -framework QtOpenGL
   endif
 
+#------ Wt Setup block ------------------------------------------------------
+
+  ifndef WTHOME
+    WTHOME := /usr
+  endif
+  WTFLAGS := -I$(WTHOME)/include/boost -I$(WTHOME)/include -DQT_NO_KEYWORDS 
+  WTLIBS  := -L$(WTHOME)/lib -lwt -lwtext -lwthttp  -lboost_signals  -L/usr/lib -lz -lssl -lcrypto
+
 #----------------------------------------------------------------------------
 
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMPDIR); \
-     $(CXX)  -dynamiclib -single_module  -lgcov -undefined dynamic_lookup \
+     $(CXX)  -dynamiclib -single_module -lgcov -undefined dynamic_lookup \
          -o $$libdir/$(@F) $(INTYLIBS) *.o
   endef
   define build-global-shared-lib

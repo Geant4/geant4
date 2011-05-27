@@ -27,9 +27,6 @@
 //
 // ====================================================================
 
-#ifndef WIN32
-#ifdef G4LIB_USE_HEPMC
-
 #include "G4ios.hh"
 #include "G4MCTEvent.hh"
 #include "G4MCTGenEvent.hh"
@@ -88,7 +85,7 @@ G4MCTGenParticle G4MCTEvent::GetGenParticle
 
 ////////////////////////////////////////////////////////
 int G4MCTEvent::AddPrimaryPair(const G4MCTGenParticle& genp, 
-			     const G4MCTSimParticle* simp)
+			       const G4MCTSimParticle* simp)
 ////////////////////////////////////////////////////////
 {
   gen2simParticleMap.insert(std::make_pair(const_cast<G4MCTGenParticle&>(genp), 
@@ -110,15 +107,10 @@ void G4MCTEvent::ClearEvent()
   simEvent-> ClearEvent();
 }
 
-
 //////////////////////////////////////////////
 void G4MCTEvent::Print(std::ostream& ostr) const
 //////////////////////////////////////////////
 {
   ostr << "Event#:" << eventNumber << G4endl;
-  genEvent-> Print(ostr);
   simEvent-> Print(ostr);
 }
-
-#endif
-#endif

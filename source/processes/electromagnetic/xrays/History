@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16 May 11: V.Ivant (xrays-V09-04-01)
+- G4ForwardXrayTR, G4Scintillation, G4TransparentRegXTRadiator, 
+  G4VXTRenergyLoss - fixed gcc-4.6.0 warnings
+
+05 May 11: V.Ivanchenko (xrays-V09-04-00)
+- fixed Coverity warnings
+
 09 November 10: P. Gumplinger (xrays-V09-03-06)
 - fix coding error in G4Scintillation.cc
 

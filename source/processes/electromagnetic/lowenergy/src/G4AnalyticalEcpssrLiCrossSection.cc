@@ -43,9 +43,10 @@ G4AnalyticalEcpssrLiCrossSection::G4AnalyticalEcpssrLiCrossSection()
 
     char *path = getenv("G4LEDATA");
 
-    if (!path)
-    G4Exception("G4ecpssrLCrossSection::G4AnalyticalEcpssrLiCrossSection() G4LEDDATA environment variable not set");
-
+    if (!path) {      
+      G4Exception("G4ecpssrLCrossSection::G4AnalyticalEcpssrLiCrossSection() G4LEDDATA environment variable not set");
+      return;
+    }
     std::ostringstream fileName1;
     std::ostringstream fileName2;
     

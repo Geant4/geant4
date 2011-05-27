@@ -174,7 +174,7 @@ void G4LivermoreGammaConversionModelRC::SampleSecondaries(std::vector<G4DynamicP
     {
       epsilon = epsilon0 + (0.5 - epsilon0) * G4UniformRand();
  
-    if (CLHEP::RandBit::shootBit())
+     if (G4int(2*G4UniformRand()))
       {
         electronTotEnergy = (1. - epsilon) * photonEnergy;
         positronTotEnergy = epsilon * photonEnergy;
@@ -255,7 +255,7 @@ void G4LivermoreGammaConversionModelRC::SampleSecondaries(std::vector<G4DynamicP
 	     }
          } while ( gReject < G4UniformRand() );
                   
-         if (CLHEP::RandBit::shootBit()) epsilon = (1. - epsilon); // Extención de Epsilon hasta 1.
+         if (G4int(2*G4UniformRand())) epsilon = (1. - epsilon); // Extención de Epsilon hasta 1.
        
          G4double logepsilon = log(epsilon);
          G4double deltaP_R1 = 1. + (a + b*logepsilon + c/logepsilon + d*pow(logepsilon,2.) + e/pow(logepsilon,2.) + 

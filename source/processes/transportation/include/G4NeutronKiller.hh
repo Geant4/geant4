@@ -72,7 +72,7 @@ class G4NeutronKiller : public G4VDiscreteProcess
 public:
 
   G4NeutronKiller(const G4String& processName = "nKiller",
-		  G4ProcessType   aType = fNotDefined);
+		  G4ProcessType   aType =  fGeneral );
 
   virtual ~G4NeutronKiller();
 

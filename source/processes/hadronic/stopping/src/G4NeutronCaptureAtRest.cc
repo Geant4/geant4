@@ -227,7 +227,7 @@ void G4NeutronCaptureAtRest::GenerateSecondaries()
   static G4int l;
   static G4int nopt;
   static G4int i;
-  static G4ParticleDefinition* jnd;
+  // DHW 15 May 2011: unused: static G4ParticleDefinition* jnd;
 
   for (i = 1; i <= MAX_SECONDARIES; ++i) {
     pv[i].SetZero();
@@ -262,7 +262,7 @@ void G4NeutronCaptureAtRest::GenerateSecondaries()
     // --- ONE OR MORE SECONDARIES HAVE BEEN GENERATED ---
     for (l = 1; l <= ntot; ++l) {
       index = l - 1;
-      jnd = eve[index].GetParticleDef();
+      // DHW 15 May 2011: unused: jnd = eve[index].GetParticleDef();
 
       // --- ADD PARTICLE TO THE STACK IF STACK NOT YET FULL ---
       if (ngkine < MAX_SECONDARIES) {

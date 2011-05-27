@@ -17,6 +17,27 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 20th, 2011, B.Morgan (run-09-04-06)
+- CMakeLists.txt : Added G4RUN_ALLOC_EXPORT compiler definition via 
+  add_definitions so it's applied to all sources in this module.
+- sources.cmake : Fixed typo in source files listing.
+
+May 10th, 2011, H.Kurashige (run-V09-04-05)
+- Fix bug in G4VUserPhysicsList::CheckParticleList()
+   (fDisableCheckParticleList was ignored in previous tag) 
+
+May 4th, 2011, H.Kurashige (run-V09-04-04)
+- Add NULL check for theTable in G4PhysicsListHelper
+
+May 3rd, 2011, H.Kurashige (run-V09-04-03)
+- Add G4PhysicsListHelper and related classes
+- Add RegisterProcess to G4VUserPhysicsList and G4VPhysicsConstructor
+- Add ReplacePhysics in G4VModulerPhysicsList
+- Add typePhysics in G4VPhysicsConstructor
+
+May 1st, 2011, M.Asai (run-V09-04-02)
+- Remove unnecessary AtRest GPIL of G4ParallelWorldScoringProcess.
+
 February 11th, 2011, M.Asai (run-V09-04-01)
 - G4RunManager.hh : Additional protection against the failure in
   creating a new directory -- Problem #1157

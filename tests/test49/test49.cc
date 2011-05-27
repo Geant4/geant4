@@ -1358,8 +1358,8 @@ int main()
 #ifdef debug
           G4cout<<"Test49: *** M="<<lorV.m()<<G4endl;
 #endif
-          //if(fabs(m-lorV.m())>.005&&1>2) // @@ Temporary closed
-          if(std::fabs(m-lorV.m())>.005) // @@ Temporary closed
+          if(fabs(m-lorV.m())>.005&&1>2)
+          //if(std::fabs(m-lorV.m())>.005) // @@ Temporary check
           {
             G4cerr<<"***Test49: m="<<lorV.m()<<" # "<<m<<", d="<<lorV.m()-m<<G4endl;
             alarm=true;

@@ -919,29 +919,35 @@ G4DecayTable *G4RadioactiveDecay::LoadDecayTable (G4ParticleDefinition &theParen
 	  }
 	}
       }
-    }	
-    //
-    //
+    }
+
     // Go through the decay table and make sure that the branching ratios are
     // correctly normalised.
-    //
-    G4VDecayChannel       *theChannel             = 0;
-    G4NuclearDecayChannel *theNuclearDecayChannel = 0;
-    G4String mode                     = "";
-    G4int j                           = 0;
-    G4double theBR                    = 0.0;
-    for (i=0; i<theDecayTable->entries(); i++) {
-      theChannel             = theDecayTable->GetDecayChannel(i);
-      theNuclearDecayChannel = static_cast<G4NuclearDecayChannel *>(theChannel);
-      theDecayMode           = theNuclearDecayChannel->GetDecayMode();
-      j          = 0;
+
+    G4VDecayChannel* theChannel = 0;
+    G4NuclearDecayChannel* theNuclearDecayChannel = 0;
+    G4String mode = "";
+
+    // G4int j = 0;  DHW 19 May 2011: variable set but not used
+
+    G4double theBR = 0.0;
+    for (G4int i = 0; i < theDecayTable->entries(); i++) {
+      theChannel = theDecayTable->GetDecayChannel(i);
+      theNuclearDecayChannel = static_cast<G4NuclearDecayChannel*>(theChannel);
+      theDecayMode = theNuclearDecayChannel->GetDecayMode();
+
+      // j = 0;   DHW 19 May 2011: variable set but not used
+
       if (theDecayMode != IT) {
 	theBR = theChannel->GetBR();
 	theChannel->SetBR(theBR*modeTotalBR[theDecayMode]/modeSumBR[theDecayMode]);
       }
-    } 
-  }		
-  DecaySchemeFile.close();		
+    }
+ 
+  }   // if (DecaySchemeFile)	
+  DecaySchemeFile.close();
+
+		
   if (!found && E > 0.) {
     // cases where IT cascade for exited isotopes without entry in RDM database
     // Decay mode is isomeric transition.
@@ -972,8 +978,7 @@ G4DecayTable *G4RadioactiveDecay::LoadDecayTable (G4ParticleDefinition &theParen
   return theDecayTable;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
+
 void
 G4RadioactiveDecay::SetDecayRate(G4int theZ, G4int theA, G4double theE, 
                                  G4int theG, std::vector<G4double> theRates, 

@@ -1,0 +1,197 @@
+      /hi/delete *
+      /HISTOGRAM/CREATE/1DHISTO '100' 'beta0' '100' '0.' '2000.' '0.'
+      /HISTOGRAM/CREATE/1DHISTO '200' 'beta1' '100' '0.' '2000.' '0.'  
+      /HISTOGRAM/CREATE/1DHISTO '300' 'beta3' '100' '0.' '2000.' '0.'
+      /HISTOGRAM/CREATE/1DHISTO '400' 'beta4' '100' '0.' '2000.' '0.'
+      /HISTOGRAM/CREATE/1DHISTO '500' 'beta5' '100' '0.' '2000.' '0.'
+      /HISTOGRAM/CREATE/1DHISTO '600' 'beta6' '100' '0.' '2000.' '0.'
+      vector/delete *
+      APPLIcation COMIS QUIT
+          SUBROUTINE DEMO
+          Vector spec(100)
+          vector spec1(100)
+          vector spec3(100)
+          vector spec4(100)
+          real e(3),pd(3)
+
+          Ap = 24
+          Zp = 10
+          Xp = -5.948
+
+          Ad = 24
+          Zd = 11
+          Xd = -8.417
+
+          Q1 = 1.9978
+	  Q2 = 1.1234
+          ee = 0.511
+
+	  Q = Q1
+          Md = Zd * 938.2796 + (Ad-Zd) * 939.5731 - Xd
+          Mp = Md + ee + Q
+	  dx = 2./100.
+c
+          fnorm = 0.
+          do i=1,100
+            X=i*dx
+            if (x.le.q) then
+               G=X/ee+ 1.0
+               F=F2(G,zd) 
+               if (F.gt.fnorm) fnorm = F
+	    endif
+	  enddo
+	  print*, 'Fnorm1 = ',fnorm
+          do i = 1,10
+c	   print*,i
+ 10        rd1 = rndm()
+           rd2 = rndm()
+         
+           pmax = 0.0
+           psum = 0.0
+         
+           pd(1) = sqrt(rd2) * sqrt((Q+2.0*ee)*Q)
+           e(1)  = sqrt(pd(1)*pd(1) + ee*ee) - ee;
+           if (pd(1) .gt. pmax) pmax = pd(1)
+           psum = psum +pd(1)
+         
+           e(2)  = sqrt(rd1) * Q
+           pd(2)= e(2)            
+           if (pd(2) .gt. pmax) pmax = pd(2)
+           psum = psum + pd(2)
+         
+           e(3)  = Q - e(1)- e(2)
+           if (e(3) .gt. 0.0)  then
+             pd(3) = sqrt(e(3)*e(3) + 2.0*e(3)*Md)
+             if (pd(3) > pmax) pmax = pd(3)
+             psum = psum + pd(3)
+           else 
+             pmax = Q
+             psum = Q
+           endif
+           if (pmax .gt. (psum-pmax)) goto 10
+           G=e(1)/ee + 1.0
+           fermi=F2(G,zd)/fnorm
+           if (rndm() .gt. fermi) goto 10
+           k = e(1)/Q*100 + 1
+	   spec3(k) = spec3(k) +1.
+	enddo
+
+        sum1 = 0.
+        do i = 1,100
+             sum1 = sum1 +spec3(i) 
+        enddo          
+        do i = 1,100
+            spec3(i) = spec3(i) /sum1
+        enddo
+
+	Q = Q2
+        Md = Zd * 938.2796 + (Ad-Zd) * 939.5731 - Xd
+        Mp = Md + ee + Q
+        fnorm = 0.
+        do i=1,100
+           X=i*dx
+           if (x.le.q) then
+               G=X/ee+ 1.0
+               F=F2(G,zd) 
+               if (F.gt.fnorm) fnorm = F
+	   endif
+	enddo
+         print*, 'Fnorm2 = ',fnorm
+
+        do i = 1,10
+ 20        rd1 = rndm()
+           rd2 = rndm()
+         
+           pmax = 0.0
+           psum = 0.0
+         
+           pd(1) = sqrt(rd2) * sqrt((Q+2.0*ee)*Q)
+           e(1)  = sqrt(pd(1)*pd(1) + ee*ee) - ee;
+           if (pd(1) .gt. pmax) pmax = pd(1)
+           psum = psum +pd(1)
+         
+           e(2)  = sqrt(rd1) * Q
+           pd(2)= e(2)            
+           if (pd(2) .gt. pmax) pmax = pd(2)
+           psum = psum + pd(2)
+         
+           e(3)  = Q - e(1)- e(2)
+           if (e(3) .gt. 0.0)  then
+             pd(3) = sqrt(e(3)*e(3) + 2.0*e(3)*Md)
+             if (pd(3) > pmax) pmax = pd(3)
+             psum = psum + pd(3)
+           else 
+             pmax = Q
+             psum = Q
+           endif
+           if (pmax .gt. (psum-pmax)) goto 20
+           G=e(1)/ee + 1.0
+           fermi=F2(G,zd)/fnorm
+           if (rndm() .gt. fermi) goto 20
+           k = e(1)/Q*100 + 1
+	   spec4(k) = spec4(k) +1.
+	enddo
+        sum2 = 0.
+        do i = 1,100
+             sum2 = sum2 +spec4(i)
+        enddo          
+        do i = 1,100
+             spec4(i) = spec4(i) /sum2
+        enddo
+
+
+          
+c
+          sum1 = 0.
+          sum2 = 0.
+          dx = 2000./100.
+          e1 = q1/ee + 1.
+	  e2 = q2/ee + 1.
+	  q2 = q2*1000
+          do i=1,100
+             X=i*dx
+             G=X/511+ 1.0
+             F=F2(G,zd)
+             spec(i)=F*SQRT(G*G-1.0)*(E1-G)*(E1-G)*G
+             sum1 = sum1 + spec(i)
+	     if (x .le. q2) then 
+                F=F2(G,zd)
+                spec1(i)=F*SQRT(G*G-1.0)*(E2-G)*(E2-G)*G
+                sum2 = sum2 + spec1(i)
+	     endif
+          enddo
+          do i = 1,100
+             spec(i) = spec(i) /sum1
+             spec1(i) = spec1(i) / sum2
+          enddo
+          return
+          end
+      
+      FUNCTION F2(X,z0)
+      PI=4.0*ATAN(1.0)
+      P=SQRT(X*X-1.0) 
+      U=Z0/137.0
+      S=SQRT(1.0-U*U) - 1.
+      Y = 2*PI*U*SQRT(1+P*P)/P
+      A1 = U*U*X*X + P*P/4.
+      A2 = abs(Y/(1-exp(-Y)))
+      F2=A1**S * A2
+      RETURN
+      END
+
+      CALL DEMO
+      END
+    QUIT
+    /HISTOGRAM/PUT_VECT/CONTENTS '100' 'spec'
+    /HISTOGRAM/PUT_VECT/CONTENTS '200' 'spec1'
+    /HISTOGRAM/PUT_VECT/CONTENTS '300' 'spec3'
+    /HISTOGRAM/PUT_VECT/CONTENTS '400' 'spec4'
+
+    /HISTOGRAM/OPERATIONS/ADD '100' '200' '500' '0.92' '0.08'
+    /HISTOGRAM/OPERATIONS/ADD '300' '400' '600' '0.92' '0.08'
+
+
+
+
+
+

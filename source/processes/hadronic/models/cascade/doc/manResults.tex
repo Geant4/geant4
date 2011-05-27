@@ -1,0 +1,288 @@
+\section{Results}
+\label{results}
+
+We have redesigned and rewritten HETC and INUCL cascade models using {\sc Geant4} hadronics framework. The cascade code is beeing tested against other simulation codes and experimental data.
+The data used in these comparisons are listed in Appendix \ref{manExperiment}.
+
+
+We have also rewritten INUCL into stand alone software INUCL++ and tested the performance. The code is available from INUCL++ homepage \cite{heikkinen02k}.
+
+We give here summary of results. 
+%Each configuration consists of N=1000 events simulated with same energy etc. parameters. 
+  
+Fig. \ref{pic:z001n002p001e000585c010h000} gives results for (p, D) collisions at $585~MeV$.
+
+Fig. \ref{pic:z001n001p001e000585c010h000} gives results for (p, H) collisions at $585~MeV$.
+
+\subsection{Performance}
+
+Performance tested on un-homogenous Linux (i686) cluster {\em lxplus.cern.ch}.
+ 
+Time ot takes to do cvs checkout for {\sc Geant4} head 8 minutes.
+
+
+Typical compilation times for the {\sc Geant4} are 50 minutes, 
+for the cascade module  ::: minutes, 
+for the cascade model only 2 minutes, 
+and for the cascade test 15 seconds.
+
+Timing for simulating hadronic cascades :::
+
+\begin{table}
+\begin{center}
+
+\begin{tabular}{|l||l|l||}
+\hline
+&\multicolumn{2}{l|}{p bullet energy}\\
+\cline{2-3}
+& $0.5~GeV$ & $3~GeV$ \\
+\hline\hline
+Au    & ::: & ::: \\
+Fe    & ::: & ::: \\
+Pb    & ::: & ::: \\
+\hline
+\end{tabular}
+\end{center}
+\caption{Average time needed for one hadronic cascade.}
+\label{tab:timing}
+\end{table}
+
+
+\subsection{Particle multiplicities} 
+\label{results:multiplicities}
+
+Multiplities for collisions between $p$  projectile ( $0.5~GeV< E <5.0~GeV$) and aluminium $Al$, iron $Fe$ and lead $Pb$ tragets (at rest) are listed in Figs. \ref{pAlMultiplicity} - \ref{pPbPionMultiplicity}.
+
+\begin{figure}
+  \begin{center}
+    \leavevmode
+    \mbox{\epsfxsize=8cm \epsffile{pictures/pAlMultiplicity.eps} }
+       \caption{Particle multiplicities for $(p, ^{27}Al$).}
+  \label{pAlMultiplicity}
+  \end{center}
+\end{figure}
+
+\begin{figure}
+  \begin{center}
+    \leavevmode
+    \mbox{\epsfxsize=8cm \epsffile{pictures/pFeMultiplicity.eps} }
+       \caption{Particle multiplicities for $(p, ^{56}Fe$).}
+  \label{pFeMultiplicity}
+  \end{center}
+\end{figure}
+
+
+\begin{figure}
+  \begin{center}
+    \leavevmode
+    \mbox{\epsfxsize=8cm \epsffile{pictures/pPbMultiplicity.eps} }
+       \caption{Particle multiplicities for $(p, ^{82}Pb$).}
+  \label{pPbMultiplicity}
+  \end{center}
+\end{figure}
+
+
+\begin{figure}
+  \begin{center}
+    \leavevmode
+    \mbox{\epsfxsize=8cm \epsffile{pictures/pPbPionMultiplicity.eps} }
+       \caption{Pion multiplicities.}
+  \label{pPbPionMultiplicity}
+  \end{center}
+\end{figure}
+
+\subsection{Particle energies} 
+\label{results:energies}
+
+Figs. \ref{pPbProtonEnergy} - \ref{p500MeVPbProtonEnergy} give an summary of cascade products energy-levels.
+
+\begin{figure}
+  \begin{center}
+    \leavevmode
+    \mbox{\epsfxsize=8cm \epsffile{pictures/pPbProtonEnergy.eps} }
+       \caption{Average proton energies.}
+  \label{pPbProtonEnergy}
+  \end{center}
+\end{figure}
+
+
+\begin{figure}
+  \begin{center}
+    \leavevmode
+    \mbox{\epsfxsize=8cm \epsffile{pictures/pPbNeutronEnergy.eps} }
+       \caption{Average neutron energies.}
+  \label{pPbNeutronEnergy}
+  \end{center}
+\end{figure}
+
+
+\begin{figure}
+  \begin{center}
+    \leavevmode
+    \mbox{\epsfxsize=8cm \epsffile{pictures/pPbNucleonExitation.eps} }
+       \caption{Average nucleon exitation energy.}
+  \label{pPbNucleonExitation}
+  \end{center}
+\end{figure}
+
+
+\begin{figure}
+  \begin{center}
+    \leavevmode
+    \mbox{\epsfxsize=8cm \epsffile{pictures/p50MeVPbProtonEnergy.eps} }
+       \caption{Proton energy spectrum, when projectile particle (p) had an energy of $0.05~GeV$.}
+  \label{p50MeVPbProtonEnergy}
+  \end{center}
+\end{figure}
+
+
+\begin{figure}
+  \begin{center}
+    \leavevmode
+    \mbox{\epsfxsize=8cm \epsffile{pictures/p500MeVPbProtonEnergy.eps} }
+       \caption{Proton energy spectrum, when projectile particle (p) had an energy of $0.5~GeV$.}
+  \label{p500MeVPbProtonEnergy}
+  \end{center}
+\end{figure}
+
+
+\subsection{Results from {\em cascade.cc} test}
+Results fro, {\sc Geant4} cascade test {\em cascade.cc} and Root batch run {\em cascade.C} are listed in Fig. \ref{cascadeBatch}.
+
+\begin{figure}
+  \begin{center}
+    \leavevmode
+    \mbox{\epsfxsize=13cm \epsffile{pictures/z001n002p001e000585c010h000.eps} }
+       \caption{ Results given by {\sc Geant4} cascade test {\em cascade.cc} and Root batch run {\em cascade.C}.}
+  \label{cascadeBatch}
+  \end{center}
+\end{figure}
+
+
+
+\begin{figure}
+  \begin{center}
+    \leavevmode
+    \mbox{\epsfxsize=13cm \epsffile{pictures/z001n002p001e000585c010h000.eps} }
+       \caption{ Geant4 simulation of proton with $585~MeV$ energy hitting deuterium atom $A(Z = 1,N = 2)$ 10000 times.}
+  \label{pic:z001n002p001e000585c010h000}
+  \end{center}
+\end{figure}
+
+
+
+\begin{figure}
+  \begin{center}
+    \leavevmode
+    \mbox{\epsfxsize=13cm \epsffile{pictures/z001n001p001e000585c010h000.eps} }
+       \caption{ Geant4 simulation of proton with $585~MeV$ energy hitting hydrogen atom $A(Z = 1,N = 1)$ 10000 times.}
+  \label{pic:z001n001p001e000585c010h000}
+  \end{center}
+\end{figure}
+
+To validate the functionality of the HETC code, several simulations
+were carried out. As the other parts of the implementation of HETC
+were not yet ready, the evaporation and de-excitation model was run
+separately in order to check its functionality. Some elementary tests
+were carried out to validate the implementation. 
+%Also, the results
+%were compared with experimental results when available.
+
+There were no remarkable differences between the results of the first
+implementation and the results of the HETC98 code. The differences, which
+were of the order of a couple of percent, were thought to arise from
+statistical fluctuations. In the comparisons, excitation functions for
+all emitted particles as well as for neutrons and protons separately
+were considered. Three different elements ($^{16}{\rm O}$, $^{63}{\rm
+  Cu}$ and $^{208}{\rm Pb}$) were considered. The graphs of these
+tests are, however, omitted here.
+
+%When the results of the second implementation were compared to the
+%results of HETC98, larger differences were found. On the excitation
+%functions of all emitted particles, seen in
+%Fig.~\ref{kaikki}, there are differences of the order of 20~\%
+%with $^{16}{\rm O}$. When the excitation functions of neutrons and
+%protons are considered (Figs.~\ref{fig:neu} and \ref{fig:pro}), there
+%are again such differences with $^{16}{\rm O}$. In other excitation
+%functions, except perhaps that of protons with $^{63}{\rm Cu}$, the
+%differences are less than 10~\%. There are also large differences in
+%the proton excitation function of $^{208}{\rm Pb}$, but this can be
+%explained by the fact that the proton emission is a very rare event
+%and the related statistical fluctuations are again very large. As to
+%the comparison of the kinetic energies of the emitted neutrons and
+%protons (Figs.~\ref{fig:kinEneuts} and \ref{fig:kinEprots}),
+%differences of less than 20\% were found whenever statistical
+%fluctuations were small.
+
+%\begin{figure}[p]
+%\centering
+%\begin{tabular}{c}
+%    \epsfig{file=kuvat/kuva_kaikki.ps,bbllx=50pt,bblly=411pt,bburx=554pt,bbury=605pt,width=0.7\textwidth,clip=}\\
+%    \epsfig{file=kuvat/kuva_kaikkierror.ps,bbllx=50pt,bblly=323pt,bburx=555pt,bbury=463pt,width=0.7\textwidth,clip=} \\
+%\end{tabular}\\
+%    \caption{ Average multiplicity of all evaporated particles
+%      of $^{16}{\rm O}$, $^{63}{\rm Cu}$ and $^{208}{\rm Pb}$
+%      simulated and compared with the HETC98 code. The obtained
+%      average multiplicities and the relative difference (\%) are
+%      shown.}
+%      \label{fig:kaikki}
+%\end{figure}
+
+%\begin{figure}[p]
+%\centering
+%\begin{tabular}{c}
+%    \epsfig{file=kuvat/kuva_neu.ps,bbllx=50pt,bblly=411pt,bburx=554pt,bbury=605pt,width=0.7\textwidth,clip=}\\
+%    \epsfig{file=kuvat/kuva_neuerror.ps,bbllx=50pt,bblly=323pt,bburx=555pt,bbury=463pt,width=0.7\textwidth,clip=} \\
+%\end{tabular}\\
+%    \caption{ Average multiplicity of evaporated neutrons
+%      of $^{16}{\rm O}$, $^{63}{\rm Cu}$ and $^{208}{\rm Pb}$
+%     simulated and compared with the HETC98 code. }
+%      \label{fig:neu}
+%\end{figure}
+
+
+%\begin{figure}[p]
+%\centering
+%\begin{tabular}{c}
+%    \epsfig{file=kuvat/kuva_pro.ps,bbllx=50pt,bblly=411pt,bburx=554pt,bbury=605pt,width=0.7\textwidth,clip=}\\
+%    \epsfig{file=kuvat/kuva_proerror.ps,bbllx=50pt,bblly=323pt,bburx=555pt,bbury=463pt,width=0.7\textwidth,clip=} \\
+%\end{tabular}\\
+%    \caption{ Average multiplicity of evaporated protons
+%      of $^{16}{\rm O}$, $^{63}{\rm Cu}$ and $^{208}{\rm Pb}$
+%      simulated and compared with the HETC98 code. }
+%     \label{fig:pro}
+%\end{figure}
+
+%\begin{figure}[p]
+%\centering
+%\begin{tabular}{c}
+%    \epsfig{file=kuvat/kuva_kinEneut.ps,bbllx=50pt,bblly=411pt,bburx=554pt,bbury=605pt,width=0.7\textwidth,clip=}\\
+%    \epsfig{file=kuvat/kuva_kinEneuterror.ps,bbllx=50pt,bblly=511pt,bburx=555pt,bbury=592pt,width=0.7\textwidth,clip=} \\
+%\end{tabular}\\
+%    \caption{ Kinetic energies of evaporated neutrons of
+%      $^{16}{\rm O}$, $^{63}{\rm Cu}$ and $^{208}{\rm Pb}$
+%     simulated and compared with the HETC98 code. }
+%      \label{fig:kinEneuts}
+%\end{figure}
+
+%\begin{figure}[p]
+%\centering
+%\begin{tabular}{c}
+%    \epsfig{file=kuvat/kuva_kinEprot.ps,bbllx=50pt,bblly=411pt,bburx=554pt,bbury=605pt,width=0.7\textwidth,clip=}\\
+%    \epsfig{file=kuvat/kuva_kinEproterror.ps,bbllx=50pt,bblly=511pt,bburx=555pt,bbury=592pt,width=0.7\textwidth,clip=} \\
+%\end{tabular}\\
+%    \caption{ Kinetic energies of evaporated protons of
+%      $^{16}{\rm O}$, $^{63}{\rm Cu}$ and $^{208}{\rm Pb}$
+%      simulated and compared with the HETC98 code. }
+%      \label{fig:kinEprots}
+%\end{figure}
+
+
+
+%\section{HETC++ documentation}%:::
+
+
+
+
+
+

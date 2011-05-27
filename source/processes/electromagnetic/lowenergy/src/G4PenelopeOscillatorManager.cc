@@ -201,10 +201,6 @@ void G4PenelopeOscillatorManager::Dump(const G4Material* material)
     }
   G4cout << "*********************************************************************" << G4endl;
   
-
-  //just to test it
-  //Clear();
- 
   return;
 }
 

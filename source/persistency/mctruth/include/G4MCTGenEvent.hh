@@ -32,7 +32,6 @@
 #include "G4Types.hh"
 #include <iostream>
 #include <vector>
-#include "CLHEP/HepMC/GenEvent.h"
  
 // ====================================================================
 //
@@ -42,7 +41,7 @@
 
 class G4MCTGenEvent {
 protected:
-  std::vector<HepMC::GenEvent*> eventList;
+  std::vector<void*> eventList;
 
 public:
   G4MCTGenEvent();
@@ -53,13 +52,11 @@ public:
   const G4MCTGenEvent& operator=(const G4MCTGenEvent& right);
   
   // methods...  
-  int AddGenEvent(const HepMC::GenEvent* genevent);
+  int AddGenEvent(const void* genevent);
   int GetNofEvents() const;
-  const HepMC::GenEvent* GetGenEvent(int i);
+  const void* GetGenEvent(int i);
 
   void ClearEvent();
-
-  void Print(std::ostream& ostr= std::cout) const;
 };
 
 // ====================================================================

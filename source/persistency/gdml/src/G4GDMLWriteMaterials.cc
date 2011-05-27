@@ -230,8 +230,19 @@ void G4GDMLWriteMaterials::PropertyWrite(xercesc::DOMElement* matElement,
       propElement->setAttributeNode(NewAttribute("name", mpos->first));
       propElement->setAttributeNode(NewAttribute("ref",
                                     GenerateName(mpos->first, mpos->second)));
-      PropertyVectorWrite(mpos->first, mpos->second);
-      matElement->appendChild(propElement);
+      if (mpos->second)
+      {
+         PropertyVectorWrite(mpos->first, mpos->second);
+         matElement->appendChild(propElement);
+      }
+      else
+      {
+         G4String warn_message = "Null pointer for material property -"
+                  + mpos->first + "- of material -" + mat->GetName() + "- !";
+         G4Exception("G4GDMLWriteMaterials::PropertyWrite()", "NullPointer",
+                     JustWarning, warn_message);
+         continue;
+      }
    }
    for (cpos=cmap->begin(); cpos!=cmap->end(); cpos++)
    {

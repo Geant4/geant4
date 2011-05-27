@@ -1,0 +1,24 @@
+$Id:$
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Sub-Category History file
+                      -------------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all directory-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+May, 5th, 2011,   G.Cosmo             -  geom-solids-tests-V09-04-00
+- Added genericTrap and paraboloid test to SBT.
+- Correction to SBT G4InteractiveSolid class.
+- Avoid direct inclusion of CLHEP headers.
+- Created History file.

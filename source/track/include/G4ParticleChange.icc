@@ -46,6 +46,19 @@ inline
   theEnergyChange = finalEnergy;
 }
 
+inline
+ G4double G4ParticleChange::GetVelocity() const
+{
+   return theVelocityChange;
+}
+
+inline
+  void G4ParticleChange::ProposeVelocity(G4double finalVelocity)
+{
+   theVelocityChange = finalVelocity;
+   isVelocityChanged = true;
+}
+
 inline 
  const G4ThreeVector* G4ParticleChange::GetMomentumDirection() const
 {

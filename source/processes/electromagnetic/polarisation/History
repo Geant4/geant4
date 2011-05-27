@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16 May 11: V.Ivanchenko (empolar-V09-04-02)
+- G4PolarizedAnnihilationModel - fixed gcc-4.6.0 warnings
+
 26 April 11: V.Ivanchenko (empolar-V09-04-01)
 - G4PolarizationHelper - safe computation of a normal
 

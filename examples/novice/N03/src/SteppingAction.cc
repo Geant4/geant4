@@ -38,15 +38,17 @@
 #include "EventAction.hh"
 
 #include "G4Step.hh"
-
-////#include "G4RunManager.hh"
+#include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(DetectorConstruction* det,
-                                         EventAction* evt)
-:detector(det), eventaction(evt)					 
-{ }
+SteppingAction::SteppingAction()					 
+{
+  detector = (DetectorConstruction*)
+             G4RunManager::GetRunManager()->GetUserDetectorConstruction();
+  eventaction = (EventAction*)
+                G4RunManager::GetRunManager()->GetUserEventAction();	       
+ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -17,9 +17,9 @@
 #
 /run/setCut           1 km
 /gun/particle ion
-/gun/ion 16 32
-/gun/energy 200. GeV
+/gun/ion 92 238
+/gun/energy 4760. GeV
 #/testhadr/HistoType  root
 #/testhadr/HistoName  p_al
-/run/beamOn 2000
+/run/beamOn 1000
 #

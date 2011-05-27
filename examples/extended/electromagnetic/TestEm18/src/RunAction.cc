@@ -140,7 +140,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     << "  Tmax= "   << G4BestUnit(emax[0],  "Energy")
     << G4endl;
          
-  //neutral secondaries (bremsstrahlung)
+  //neutral secondaries (bremsstrahlung, pixe)
   //
   energyPerEvent = energyNeutral/nbEvents;
   nbPerEvent = double(nbNeutral)/nbEvents;
@@ -148,7 +148,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   if (nbNeutral) meanEkin = energyNeutral/nbNeutral;
   
   G4cout 
-    << "\n brems   : eLoss/primary= " 
+    << "\n gamma   : eLoss/primary= " 
     << G4BestUnit(energyPerEvent, "Energy")
     << "\t  nb of gammas= " << nbPerEvent
     << "  <Tkin>= " << G4BestUnit(meanEkin, "Energy")

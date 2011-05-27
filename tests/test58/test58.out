@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-04    (30-April-2011)
+ Geant4 version Name: geant4-09-04-beta-cand-02    (25-June-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -76,10 +76,10 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
-            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
+            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
 
 CoulombScat:   for  e-    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
@@ -97,10 +97,10 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
-            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
+            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
@@ -116,7 +116,7 @@ CoulombScat:   for  e+    SubType= 1
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=          2 MeV
           BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
@@ -130,7 +130,7 @@ IonCoulombScattering :   Emin=      100 keV      Emax=         10 TeV
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :   Emin=        0 eV       Emax=          2 MeV
@@ -145,7 +145,7 @@ IonCoulombScattering :   Emin=      100 keV      Emax=         10 TeV
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=          2 MeV
           BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
@@ -159,7 +159,7 @@ msc:   for kaon+    SubType= 10
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=    1.05231 MeV
           BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
@@ -167,7 +167,7 @@ hIoni:   for  kaon+    SubType= 2
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=    1.05231 MeV
           BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
@@ -229,7 +229,7 @@ CoulombScat:   for  mu-    SubType= 1
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=    297.505 keV
           BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
@@ -243,7 +243,7 @@ msc:   for pi-    SubType= 10
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=    297.505 keV
           BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
@@ -289,7 +289,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.93s Real=0.93s Sys=0s
+  User=1.59s Real=1.6s Sys=0s
 
  ======================== run summary ======================
 
@@ -302,43 +302,43 @@ Run Summary
  ============= Primary particle statistics ==============
 
  Total track length in absorber:
- 100.1 um  +- 78.62 nm 
+ 99.97 um  +- 3.969 nm 
 
  Mean Number of Steps :
- 2894 +/- 6.28
+ 2906 +/- 4.857
 
  Mean Free Path :
- 34.57 nm  +/- 7.977e+04 fm 
+ 34.4 nm  +/- 5.75e+04 fm 
 
  Mean Cross Section :
- 5.79e+06 barn   +/- 1.336e+04 barn  
+ 5.819e+06 barn   +/- 9727 barn  
 
  Mean scattering angle :
- 16.73 mrad +/- 4.629 mrad
+ 12.5 mrad +/- 0.647 mrad
 
  Total energy deposit in absorber:
- 470.9 keV +/- 4.818 keV
------> dE/dx total= 47.06 MeV/cm	(20.2 MeV*cm2/g)
+ 471.7 keV +/- 3.502 keV
+-----> dE/dx total= 47.18 MeV/cm	(20.25 MeV*cm2/g)
 
  Nuclear energy deposit in absorber:
- 1.594 keV +/- 1.464 keV
------> dE/dx  nucl = 0.1594 MeV/cm	(0.06839 MeV*cm2/g)
+ 124.3 eV  +/- 6.797 eV 
+-----> dE/dx  nucl = 0.01243 MeV/cm	(0.005335 MeV*cm2/g)
 
  NIEL in absorber (Th>21 eV):
- 698.8 eV  +/- 663.6 eV 
------> NIEL = 0.06985 MeV/cm	(0.02998 MeV*cm2/g)
+ 30.95 eV  +/- 5.157 eV 
+-----> NIEL = 0.003096 MeV/cm	(0.001329 MeV*cm2/g)
 
 ----------------------------------------------------------------
 
- Total Number of primary knock-on atoms: PKA = 50
- Mean Kinetic Energy of PKA = 3.014 keV +/- 2.908 keV
- Total Frenkel-pairs Concentration: FP = 1.33e+05 #/cm3
+ Total Number of primary knock-on atoms: PKA = 55
+ Mean Kinetic Energy of PKA = 66.42 eV  +/- 9.649 eV 
+ Total Frenkel-pairs Concentration: FP = 5898 #/cm3
 
 ----------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 559007531, 1248703724
+ Current couple of seeds = 451917554, 906021814
 ----------------------------------------
 
  ===========================================================
@@ -375,7 +375,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 559007531, 1248703724
+ Current couple of seeds = 451917554, 906021814
 ----------------------------------------
 Start Run processing.
 
@@ -383,7 +383,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.53s Real=1.53s Sys=0s
+  User=2.33s Real=2.34s Sys=0s
 
  ======================== run summary ======================
 
@@ -396,43 +396,43 @@ Run Summary
  ============= Primary particle statistics ==============
 
  Total track length in absorber:
- 99.97 um  +- 3.156 nm 
+ 99.95 um  +- 4.423 nm 
 
  Mean Number of Steps :
- 3127 +/- 4.943
+ 3126 +/- 5.828
 
  Mean Free Path :
- 31.97 nm  +/- 5.054e+04 fm 
+ 31.97 nm  +/- 5.963e+04 fm 
 
  Mean Cross Section :
- 6.261e+06 barn   +/- 9899 barn  
+ 6.26e+06 barn   +/- 1.167e+04 barn  
 
  Mean scattering angle :
- 6.83 mrad +/- 0.4942 mrad
+ 5.742 mrad +/- 0.289 mrad
 
  Total energy deposit in absorber:
- 1.861 MeV +/- 7.892 keV
------> dE/dx total= 186.1 MeV/cm	(79.87 MeV*cm2/g)
+ 1.865 MeV +/- 4.854 keV
+-----> dE/dx total= 186.6 MeV/cm	(80.1 MeV*cm2/g)
 
  Nuclear energy deposit in absorber:
- 668 eV  +/- 118.8 eV 
------> dE/dx  nucl = 0.06682 MeV/cm	(0.02868 MeV*cm2/g)
+ 506.7 eV  +/- 29.35 eV 
+-----> dE/dx  nucl = 0.05069 MeV/cm	(0.02176 MeV*cm2/g)
 
  NIEL in absorber (Th>21 eV):
- 290 eV  +/- 77.29 eV 
------> NIEL = 0.02901 MeV/cm	(0.01245 MeV*cm2/g)
+ 175.7 eV  +/- 16.5 eV 
+-----> NIEL = 0.01758 MeV/cm	(0.007545 MeV*cm2/g)
 
 ----------------------------------------------------------------
 
- Total Number of primary knock-on atoms: PKA = 215
- Mean Kinetic Energy of PKA = 173.4 eV  +/- 52.53 eV 
- Total Frenkel-pairs Concentration: FP = 5.526e+04 #/cm3
+ Total Number of primary knock-on atoms: PKA = 214
+ Mean Kinetic Energy of PKA = 99.23 eV  +/- 12.39 eV 
+ Total Frenkel-pairs Concentration: FP = 3.349e+04 #/cm3
 
 ----------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 290222257, 1533970739
+ Current couple of seeds = 1684757445, 757096476
 ----------------------------------------
 
  ===========================================================
@@ -470,7 +470,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 290222257, 1533970739
+ Current couple of seeds = 1684757445, 757096476
 ----------------------------------------
 Start Run processing.
 
@@ -478,7 +478,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.59s Real=1.59s Sys=0s
+  User=2.06s Real=2.06s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -491,43 +491,43 @@ Run Summary
  ============= Primary particle statistics ==============
 
  Total track length in absorber:
- 99.97 um  +- 2.981 nm 
+ 99.97 um  +- 3.275 nm 
 
  Mean Number of Steps :
- 2706 +/- 5.031
+ 2705 +/- 5.096
 
  Mean Free Path :
- 36.94 nm  +/- 6.87e+04 fm 
+ 36.96 nm  +/- 6.962e+04 fm 
 
  Mean Cross Section :
- 5.418e+06 barn   +/- 1.008e+04 barn  
+ 5.416e+06 barn   +/- 1.02e+04 barn  
 
  Mean scattering angle :
- 6.18 mrad +/- 0.3775 mrad
+ 6.941 mrad +/- 0.5551 mrad
 
  Total energy deposit in absorber:
- 90.6 MeV +/- 84.31 keV
------> dE/dx total= 9063 MeV/cm	(3890 MeV*cm2/g)
+ 90.5 MeV +/- 90.62 keV
+-----> dE/dx total= 9053 MeV/cm	(3885 MeV*cm2/g)
 
  Nuclear energy deposit in absorber:
- 28.45 keV +/- 1.865 keV
------> dE/dx  nucl = 2.846 MeV/cm	(1.222 MeV*cm2/g)
+ 40.03 keV +/- 7.605 keV
+-----> dE/dx  nucl = 4.004 MeV/cm	(1.719 MeV*cm2/g)
 
  NIEL in absorber (Th>21 eV):
- 16.99 keV +/- 0 eV 
------> NIEL = 1.699 MeV/cm	(0.7293 MeV*cm2/g)
+ 20.18 keV +/- 1.221 keV
+-----> NIEL = 2.019 MeV/cm	(0.8663 MeV*cm2/g)
 
 ----------------------------------------------------------------
 
- Total Number of primary knock-on atoms: PKA = 11447
- Mean Kinetic Energy of PKA = 200.5 eV  +/- 15.16 eV 
- Total Frenkel-pairs Concentration: FP = 3.237e+06 #/cm3
+ Total Number of primary knock-on atoms: PKA = 11535
+ Mean Kinetic Energy of PKA = 299.4 eV  +/- 67.06 eV 
+ Total Frenkel-pairs Concentration: FP = 3.845e+06 #/cm3
 
 ----------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1799454849, 1164749799
+ Current couple of seeds = 1708416657, 1557091822
 ----------------------------------------
 
  ===========================================================
@@ -565,7 +565,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1799454849, 1164749799
+ Current couple of seeds = 1708416657, 1557091822
 ----------------------------------------
 Start Run processing.
 
@@ -573,7 +573,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.43s Real=1.44s Sys=0s
+  User=1.75s Real=1.76s Sys=0s
 
  ======================== run summary ======================
 
@@ -586,43 +586,43 @@ Run Summary
  ============= Primary particle statistics ==============
 
  Total track length in absorber:
- 99.95 um  +- 5.417 nm 
+ 99.96 um  +- 3.908 nm 
 
  Mean Number of Steps :
- 2339 +/- 4.828
+ 2345 +/- 4.29
 
  Mean Free Path :
- 42.73 nm  +/- 8.821e+04 fm 
+ 42.63 nm  +/- 7.799e+04 fm 
 
  Mean Cross Section :
- 4.685e+06 barn   +/- 9671 barn  
+ 4.696e+06 barn   +/- 8591 barn  
 
  Mean scattering angle :
- 7.987 mrad +/- 0.7166 mrad
+ 6.06 mrad +/- 0.3799 mrad
 
  Total energy deposit in absorber:
- 277.2 MeV +/- 379.8 keV
------> dE/dx total= 2.773e+04 MeV/cm	(1.19e+04 MeV*cm2/g)
+ 276.4 MeV +/- 325.9 keV
+-----> dE/dx total= 2.765e+04 MeV/cm	(1.187e+04 MeV*cm2/g)
 
  Nuclear energy deposit in absorber:
- 190.8 keV +/- 47.49 keV
------> dE/dx  nucl = 19.09 MeV/cm	(8.194 MeV*cm2/g)
+ 120.2 keV +/- 17.75 keV
+-----> dE/dx  nucl = 12.03 MeV/cm	(5.163 MeV*cm2/g)
 
  NIEL in absorber (Th>21 eV):
- 72.37 keV +/- 0 eV 
------> NIEL = 7.24 MeV/cm	(3.107 MeV*cm2/g)
+ 63.87 keV +/- 0 eV 
+-----> NIEL = 6.39 MeV/cm	(2.742 MeV*cm2/g)
 
 ----------------------------------------------------------------
 
- Total Number of primary knock-on atoms: PKA = 36279
- Mean Kinetic Energy of PKA = 500.7 eV  +/- 134.3 eV 
- Total Frenkel-pairs Concentration: FP = 1.379e+07 #/cm3
+ Total Number of primary knock-on atoms: PKA = 36217
+ Mean Kinetic Energy of PKA = 306.6 eV  +/- 47.2 eV 
+ Total Frenkel-pairs Concentration: FP = 1.217e+07 #/cm3
 
 ----------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1534233859, 1114772468
+ Current couple of seeds = 1218501901, 1653420723
 ----------------------------------------
 
  ===========================================================
@@ -637,4 +637,3 @@ Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
 RunManager is deleting.
-

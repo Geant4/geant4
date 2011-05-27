@@ -143,6 +143,10 @@ private:
   G4SafetyHelper* safetyHelper;
   G4VEnergyLossProcess* ionisation;
 
+  G4double dedx;
+  G4double localtkin;
+  G4double localrange;
+
 protected:
 
   G4double facrange;
@@ -153,9 +157,6 @@ protected:
   G4double lambdalimit;
   G4double geomMin;
   G4double geomMax;
-  G4double dedx;
-  G4double localtkin;
-  G4double localrange;
 
   G4MscStepLimitType steppingAlgorithm;
 

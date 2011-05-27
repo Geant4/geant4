@@ -41,12 +41,16 @@
 
 #include "G4NeutronKiller.hh"
 #include "G4NeutronKillerMessenger.hh"
+#include "G4TransportationProcessType.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4NeutronKiller::G4NeutronKiller(const G4String& processName, G4ProcessType aType)
  : G4VDiscreteProcess(processName, aType)
 {
+  // set Process Sub Type
+  SetProcessSubType(static_cast<int>(NEUTRON_KILLER));
+
   kinEnergyThreshold = 0.0;
   timeThreshold = DBL_MAX;
   pMess = new G4NeutronKillerMessenger(this);

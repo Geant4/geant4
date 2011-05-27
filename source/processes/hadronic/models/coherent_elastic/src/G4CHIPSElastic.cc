@@ -48,7 +48,7 @@
 G4VQCrossSection* G4CHIPSElastic::pxsManager = 0;
 G4VQCrossSection* G4CHIPSElastic::nxsManager = 0;
 
-G4CHIPSElastic::G4CHIPSElastic() : G4VHadronElastic("hElasticCHIPS")
+G4CHIPSElastic::G4CHIPSElastic() : G4HadronElastic("hElasticCHIPS")
 {
   if(!pxsManager)
   {
@@ -65,19 +65,19 @@ G4CHIPSElastic::SampleInvariantT(const G4ParticleDefinition* p,
 				 G4double plab, G4int Z, G4int A)
 {
   G4int N = A - Z;
-  if(Z == 1 && N == 2) N = 1;
-  else if(Z == 2 && N == 1) N = 2;
+  if(Z == 1 && N == 2)      { N = 1; }
+  else if(Z == 2 && N == 1) { N = 2; }
   G4int projPDG = p->GetPDGEncoding();
   G4double cs = 0.;
-  if     (projPDG==2212) cs = pxsManager->GetCrossSection(false,plab,Z,N,projPDG);
-  else if(projPDG==2112) cs = nxsManager->GetCrossSection(false,plab,Z,N,projPDG);
+  if     (projPDG==2212) { cs = pxsManager->GetCrossSection(false,plab,Z,N,projPDG); }
+  else if(projPDG==2112) { cs = nxsManager->GetCrossSection(false,plab,Z,N,projPDG); }
   G4double t = 0.0;
   if(cs > 0.0)
   {
-    if     (projPDG==2212) t = pxsManager->GetExchangeT(Z,N,projPDG);
-    else if(projPDG==2112) t = nxsManager->GetExchangeT(Z,N,projPDG);
+    if     (projPDG==2212) { t = pxsManager->GetExchangeT(Z,N,projPDG); }
+    else if(projPDG==2112) { t = nxsManager->GetExchangeT(Z,N,projPDG); }
   }
-  else         t = G4VHadronElastic::SampleInvariantT(p, plab, Z, A);
+  else  { t = G4HadronElastic::SampleInvariantT(p, plab, Z, A); }
   return t;
 }
 

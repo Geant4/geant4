@@ -61,7 +61,7 @@ G4CrossSectionElastic::G4CrossSectionElastic(G4VComponentCrossSection* c,
 
 G4CrossSectionElastic::~G4CrossSectionElastic()
 {
-  delete component;
+  //delete component;
 }
    
 G4bool G4CrossSectionElastic::IsApplicable(const G4DynamicParticle* p, 

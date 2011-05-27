@@ -34,6 +34,7 @@
 // 20100519  M. Kelsey -- Add interfaces to pass G4InuclParticles directly
 // 20100617  M. Kelsey -- Add more diagnostic messages with multiple levels
 // 20100713  M. Kelsey -- All diagnostic messages should be verbose > 1
+// 20110525  M. Kelsey -- Add some diagnostic messages in both ::rotate()
 
 #include "G4LorentzConvertor.hh"
 #include "G4ThreeVector.hh"
@@ -232,6 +233,11 @@ G4LorentzVector G4LorentzConvertor::rotate(const G4LorentzVector& mom) const {
     G4ThreeVector vscm = velocity - gbpp*scm_momentum.vect();
     G4ThreeVector vxcm = scm_momentum.vect().cross(velocity);
 
+    if (verboseLevel > 3) {
+      G4cout << " reference z axis " << scm_momentum.vect().unit() << G4endl;
+      G4cout << " vscm " << vscm << " vxcm " << vxcm << G4endl;
+    }
+
     mom_rot.setVect(mom.x()*vscm/ga + mom.y()*vxcm/gapp +
 		    mom.z()*scm_momentum.vect().unit() );
   };
@@ -281,6 +287,11 @@ G4LorentzVector G4LorentzConvertor::rotate(const G4LorentzVector& mom1,
 
     G4ThreeVector vmom1 = velocity - gb1*mom1;
     G4ThreeVector vxm1  = mom1.vect().cross(velocity);
+
+    if (verboseLevel > 3) {
+      G4cout << " first z axis " << mom1.vect().unit() << G4endl;
+      G4cout << " vmom1 " << vmom1 << " vxm1 " << vxm1 << G4endl;
+    }
 
     mom_rot.setVect(mom.x()*vmom1/ga1 + mom.y()*vxm1/ga1pp +
 		    mom.z()*mom1.vect().unit() );

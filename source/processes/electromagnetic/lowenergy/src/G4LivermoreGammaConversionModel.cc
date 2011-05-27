@@ -238,7 +238,7 @@ void G4LivermoreGammaConversionModel::SampleSecondaries(std::vector<G4DynamicPar
   G4double electronTotEnergy;
   G4double positronTotEnergy;
 
-  if (CLHEP::RandBit::shootBit())
+  if (G4int(2*G4UniformRand()))
     {
       electronTotEnergy = (1. - epsilon) * photonEnergy;
       positronTotEnergy = epsilon * photonEnergy;

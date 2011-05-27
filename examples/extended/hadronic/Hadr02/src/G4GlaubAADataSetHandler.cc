@@ -47,6 +47,9 @@
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ///////////////////////////////////////////////////////////////////////////////
 //
+#ifdef G4_USE_DPMJET
+
+
 #include "G4GlaubAADataSetHandler.hh"
 #include "G4FullGlaubAADataSet.hh"
 #include "G4ParamType1GlaubAADataSet.hh"
@@ -460,3 +463,4 @@ G4double G4GlaubAADataSetHandler::GetValueM (const G4double v,
 }
 ////////////////////////////////////////////////////////////////////////////////
 //
+#endif

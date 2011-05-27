@@ -107,6 +107,12 @@ else()
     set(G4_HAVE_TCSH "no")
 endif()
 
+if(GEANT4_USE_RAYTRACERX)
+    set(G4_HAVE_RAYTRACERX "yes")
+else()
+    set(G4_HAVE_RAYTRACERX "no")
+endif()
+
 
 #------------------------------------------------------------------------------
 # Add configure files for generating backward compatible shell scripts
@@ -128,6 +134,7 @@ if(UNIX)
         DESTINATION ${GEANT4_DATAROOTDIR}/geant4-${geant4_VERSION}
         FILES_MATCHING PATTERN "*.gmk"
         PATTERN "CVS" EXCLUDE
+        PATTERN ".svn" EXCLUDE
         PATTERN "scripts/" EXCLUDE)
 
     # setup scripts

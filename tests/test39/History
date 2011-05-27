@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 25th, 2011 Luciano Pandola (test39-V09-04-01)
+- substitute G4UHadronElasticProcess by G4WHadronElasticProcess 
+
 Jan 20th, 2010 Luciano Pandola (test39-V09-04-00)
 - removed obsolete G4hLowEnergyIonisation from the 
   physics list

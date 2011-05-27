@@ -65,7 +65,8 @@ using namespace std;
 G4UAtomicDeexcitation::G4UAtomicDeexcitation():
   G4VAtomDeexcitation("UAtomDeexcitation"),
   minGammaEnergy(DBL_MAX), 
-  minElectronEnergy(DBL_MAX)
+  minElectronEnergy(DBL_MAX),
+  emcorr(0)
 {
   PIXEshellCS = 0;
   anaPIXEshellCS = new G4teoCrossSection("Analytical");
@@ -125,8 +126,7 @@ void G4UAtomicDeexcitation::InitialiseForNewRun()
 void G4UAtomicDeexcitation::InitialiseForExtraAtom(G4int /*Z*/)
 {}
 
-const G4AtomicShell* 
-G4UAtomicDeexcitation::GetAtomicShell(G4int Z, G4AtomicShellEnumerator shell)
+const G4AtomicShell* G4UAtomicDeexcitation::GetAtomicShell(G4int Z, G4AtomicShellEnumerator shell)
 {
   return transitionManager->Shell(Z, size_t(shell));
 }
@@ -146,7 +146,7 @@ void G4UAtomicDeexcitation::GenerateParticles(
   minElectronEnergy = eCut;
 
   // generation secondaries
-  G4DynamicParticle* aParticle;
+  G4DynamicParticle* aParticle=0;
   G4int provShellId = 0;
   G4int counter = 0;
   
@@ -166,11 +166,13 @@ void G4UAtomicDeexcitation::GenerateParticles(
 
 	    if  ( provShellId >0) 
 	      {
-		aParticle = GenerateFluorescence(Z,givenShellId,provShellId);  
+		aParticle = GenerateFluorescence(Z,givenShellId,provShellId);
+		//if (aParticle != 0) { G4cout << "****FLUO!****" << G4endl;} //debug  
 	      }
 	    else if ( provShellId == -1)
 	      {
 		aParticle = GenerateAuger(Z, givenShellId);
+		//if (aParticle != 0) { G4cout << "****AUGER!****" << G4endl;} //debug
 	      }
 	    else
 	      {
@@ -185,10 +187,12 @@ void G4UAtomicDeexcitation::GenerateParticles(
 	    if  (provShellId >0)
 	      {
 		aParticle = GenerateFluorescence(Z,newShellId,provShellId);
+		//if (aParticle != 0) { G4cout << "****FLUO!****" << G4endl;} //debug
 	      }
 	    else if ( provShellId == -1)
 	      {
 		aParticle = GenerateAuger(Z, newShellId);
+		//if (aParticle != 0) { G4cout << "****AUGER!****" << G4endl;} //debug
 	      }
 	    else
 	      {
@@ -211,6 +215,8 @@ void G4UAtomicDeexcitation::GenerateParticles(
       G4cout << "G4UAtomicDeexcitation: Deexcitation Asked for a Z<5 or Z>100, unavailable"<< G4endl;
     }
   
+  //G4cout << "---------FATTO!---------" << G4endl; //debug 
+
 }
 
 G4double 
@@ -275,7 +281,7 @@ G4int G4UAtomicDeexcitation::SelectTypeOfTransition(G4int Z, G4int shellId)
     G4Exception("G4UAtomicDeexcitation: zero or negative shellId");
     return 0;
   }
-  G4bool fluoTransitionFoundFlag = false;
+  //G4bool fluoTransitionFoundFlag = false;
   
   G4int provShellId = -1;
   G4int shellNum = 0;
@@ -318,7 +324,7 @@ G4int G4UAtomicDeexcitation::SelectTypeOfTransition(G4int Z, G4int shellId)
 	 if(partialProb <= partSum)
 	   {
 	     provShellId = aShell->OriginatingShellId(transProb);
-	     fluoTransitionFoundFlag = true;
+	     //fluoTransitionFoundFlag = true;
 
 	     break;
 	   }

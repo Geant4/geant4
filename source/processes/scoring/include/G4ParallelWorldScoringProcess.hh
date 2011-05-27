@@ -52,6 +52,7 @@ class G4PathFinder;
 class G4VTouchable;
 class G4VPhysicalVolume;
 class G4ParticleChange;
+class G4ParticleDefinition;
 #include "G4VProcess.hh"
 #include "G4FieldTrack.hh"
 #include "G4TouchableHandle.hh"
@@ -83,6 +84,7 @@ public: // with description
 
   void SetParallelWorld(G4String parallelWorldName);
   void SetParallelWorld(G4VPhysicalVolume* parallelWorld);
+  G4bool IsAtRestRequired(G4ParticleDefinition* partDef);
 
   //--------------------------------------------------------------
   //     Process interface

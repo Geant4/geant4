@@ -43,6 +43,8 @@
 //---------------------------------------------------------------
 //   Modification for G4TouchableHandle             22 Oct. 2001  R.Chytracek
 //   Add MaterialCutCouple                          08 Oct. 2002  H.Kurashige
+//   Add SetVelocityTableProperties                 02 Apr. 2011  H.Kurashige
+//   Add fVelocity and Set/GetVelocity              29 Apr. 2011  H.Kurashige
 
 #ifndef G4Track_h
 #define G4Track_h 1
@@ -173,8 +175,12 @@ public: // With description
 
    G4ThreeVector GetMomentum() const;
 
+   // velocity
    G4double GetVelocity() const;
-
+   void     SetVelocity(G4double val);
+ 
+   G4double CalculateVelocity() const;
+   G4double CalculateVelocityForOpticalPhoton() const;
 
   // polarization 
    const G4ThreeVector& GetPolarization() const;
@@ -252,14 +258,15 @@ public: // With description
   // prepare velocity table
   void PrepareVelocityTable();
 
-// Member data
+   // Member data
    G4int fCurrentStepNumber;       // Total steps number up to now
    G4ThreeVector fPosition;        // Current positon
    G4double fGlobalTime;           // Time since the event is created
    G4double fLocalTime;            // Time since the track is created
    G4double fTrackLength;          // Accumulated track length
-   G4int fParentID;
-   G4int fTrackID;
+   G4int    fParentID;
+   G4int    fTrackID;
+   G4double fVelocity; 
 
    G4TouchableHandle fpTouchable;
    G4TouchableHandle fpNextTouchable;
@@ -295,16 +302,19 @@ public: // With description
    
    G4VUserTrackInformation* fpUserInformation;
 
+   // cached values for CalculateVelocity  
    mutable G4Material*               prev_mat;
    mutable G4MaterialPropertyVector* groupvel;
    mutable G4double                  prev_velocity;
    mutable G4double                  prev_momentum;
 
+   // velocity table for massive particles used in CalculateVelocity 
    static G4PhysicsLogVector* velTable;
-   static G4double maxT;
-   static G4double minT;
-   static G4int    NbinT;
-   G4bool              is_OpticalPhoton; 
+   static G4double            maxT;
+   static G4double            minT;
+   static G4int               NbinT;
+
+   G4bool          is_OpticalPhoton; 
 };
 
 #include "G4Track.icc"

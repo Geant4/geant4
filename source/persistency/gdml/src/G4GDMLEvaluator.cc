@@ -35,8 +35,6 @@
 
 #include <sstream>
 
-#include "globals.hh"
-
 #include "G4GDMLEvaluator.hh"
 
 G4GDMLEvaluator::G4GDMLEvaluator()
@@ -218,7 +216,7 @@ G4double G4GDMLEvaluator::Evaluate(const G4String& in)
    {
       value = eval.evaluate(expression.c_str());
 
-      if (eval.status() != HepTool::Evaluator::OK)
+      if (eval.status() != G4Evaluator::OK)
       {
          eval.print_error();
          G4String error_msg = "Error in expression: " + expression;

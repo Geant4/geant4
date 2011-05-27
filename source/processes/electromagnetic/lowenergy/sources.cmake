@@ -113,30 +113,30 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LowEnergyRayleigh.hh
         G4OrlicLiCrossSection.hh
         G4PaulKCrossSection.hh
-        G4Penelope08BremsstrahlungAngular.hh
-        G4Penelope08BremsstrahlungFS.hh
-        G4Penelope08BremsstrahlungModel.hh
-        G4Penelope08ComptonModel.hh
-        G4Penelope08GammaConversionModel.hh
-        G4Penelope08IonisationModel.hh
-        G4Penelope08PhotoElectricModel.hh
-        G4Penelope08RayleighModel.hh
-        G4PenelopeAnnihilationModel.hh
-        G4PenelopeBremsstrahlungAngular.hh
-        G4PenelopeBremsstrahlungContinuous.hh
-        G4PenelopeBremsstrahlungModel.hh
-        G4PenelopeComptonModel.hh
-        G4PenelopeCrossSection.hh
-        G4PenelopeGammaConversionModel.hh
-        G4PenelopeIntegrator.hh
-        G4PenelopeIntegrator.icc
-        G4PenelopeInterpolator.hh
-        G4PenelopeIonisationModel.hh
-        G4PenelopeOscillator.hh
-        G4PenelopeOscillatorManager.hh
-        G4PenelopePhotoElectricModel.hh
-        G4PenelopeRayleighModel.hh
-        G4PenelopeSamplingData.hh
+        G4Penelope01BremsstrahlungAngular.hh
+	G4Penelope01BremsstrahlungContinuous.hh
+	G4Penelope01BremsstrahlungModel.hh
+	G4Penelope01ComptonModel.hh
+	G4Penelope01GammaConversionModel.hh
+	G4Penelope01IonisationModel.hh
+	G4Penelope01PhotoElectricModel.hh
+	G4Penelope01RayleighModel.hh
+	G4PenelopeAnnihilationModel.hh
+	G4PenelopeBremsstrahlungAngular.hh
+	G4PenelopeBremsstrahlungFS.hh
+	G4PenelopeBremsstrahlungModel.hh
+	G4PenelopeComptonModel.hh
+	G4PenelopeCrossSection.hh
+	G4PenelopeGammaConversionModel.hh
+	G4PenelopeIntegrator.hh
+	G4PenelopeIntegrator.icc
+	G4PenelopeInterpolator.hh
+	G4PenelopeIonisationModel.hh
+	G4PenelopeOscillator.hh
+	G4PenelopeOscillatorManager.hh
+	G4PenelopePhotoElectricModel.hh
+	G4PenelopeRayleighModel.hh
+	G4PenelopeSamplingData.hh
         G4PhotoElectricAngularGeneratorPolarized.hh
         G4PhotoElectricAngularGeneratorSauterGavrila.hh
         G4PhotoElectricAngularGeneratorSimple.hh
@@ -235,28 +235,28 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LowEnergyRayleigh.cc
         G4OrlicLiCrossSection.cc
         G4PaulKCrossSection.cc
-        G4Penelope08BremsstrahlungAngular.cc
-        G4Penelope08BremsstrahlungFS.cc
-        G4Penelope08BremsstrahlungModel.cc
-        G4Penelope08ComptonModel.cc
-        G4Penelope08GammaConversionModel.cc
-        G4Penelope08IonisationModel.cc
-        G4Penelope08PhotoElectricModel.cc
-        G4Penelope08RayleighModel.cc
-        G4PenelopeAnnihilationModel.cc
-        G4PenelopeBremsstrahlungAngular.cc
-        G4PenelopeBremsstrahlungContinuous.cc
-        G4PenelopeBremsstrahlungModel.cc
-        G4PenelopeComptonModel.cc
-        G4PenelopeCrossSection.cc
-        G4PenelopeGammaConversionModel.cc
-        G4PenelopeInterpolator.cc
-        G4PenelopeIonisationModel.cc
-        G4PenelopeOscillator.cc
-        G4PenelopeOscillatorManager.cc
-        G4PenelopePhotoElectricModel.cc
-        G4PenelopeRayleighModel.cc
-        G4PenelopeSamplingData.cc
+      	G4Penelope01BremsstrahlungAngular.cc
+	G4Penelope01BremsstrahlungContinuous.cc
+	G4Penelope01BremsstrahlungModel.cc
+	G4Penelope01ComptonModel.cc
+	G4Penelope01GammaConversionModel.cc
+	G4Penelope01IonisationModel.cc
+	G4Penelope01PhotoElectricModel.cc
+	G4Penelope01RayleighModel.cc
+	G4PenelopeAnnihilationModel.cc
+	G4PenelopeBremsstrahlungAngular.cc
+	G4PenelopeBremsstrahlungFS.cc
+	G4PenelopeBremsstrahlungModel.cc
+	G4PenelopeComptonModel.cc
+	G4PenelopeCrossSection.cc
+	G4PenelopeGammaConversionModel.cc
+	G4PenelopeInterpolator.cc
+	G4PenelopeIonisationModel.cc
+	G4PenelopeOscillator.cc
+	G4PenelopeOscillatorManager.cc
+	G4PenelopePhotoElectricModel.cc
+	G4PenelopeRayleighModel.cc
+	G4PenelopeSamplingData.cc
         G4PhotoElectricAngularGeneratorPolarized.cc
         G4PhotoElectricAngularGeneratorSauterGavrila.cc
         G4PhotoElectricAngularGeneratorSimple.cc

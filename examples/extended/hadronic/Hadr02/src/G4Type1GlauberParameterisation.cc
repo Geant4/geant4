@@ -47,6 +47,9 @@
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ///////////////////////////////////////////////////////////////////////////////
 //
+#ifdef G4_USE_DPMJET
+
+
 #include "G4Type1GlauberParameterisation.hh"
 
 using namespace std;
@@ -354,3 +357,4 @@ G4double G4Type1GlauberParameterisation::GetParameterisedValueM (const G4double 
 }*/
 ////////////////////////////////////////////////////////////////////////////////
 //
+#endif

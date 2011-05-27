@@ -31,7 +31,7 @@
 // M.V. Kossov, ITEP(Moscow), 24-OCT-01
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 12-Jan-2010 (from G4QElCrSect)
 //
-//================================================================================
+// -------------------------------------------------------------------------------
 // Short description: Interaction cross-sections for the G4QElastic process
 // -------------------------------------------------------------------------------
 

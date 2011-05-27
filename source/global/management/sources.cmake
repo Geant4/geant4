@@ -37,6 +37,7 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4DataVector.icc
         G4ErrorPropagatorData.hh
         G4ErrorPropagatorData.icc
+        G4Evaluator.hh
         G4ExceptionSeverity.hh
         G4FPEDetection.hh
         G4FastVector.hh

@@ -39,12 +39,6 @@ G4PersistencyManager::G4PersistencyManager(G4PersistencyCenter* pc, std::string 
  : f_pc(pc), nameMgr(n), f_is_initialized(false)
 {
   m_verbose = f_pc->VerboseLevel();
-
-  // G4cout << "G4PersistencyManager is constructed with name \"" << nameMgr
-  //        << "\", " << this << ", verbose = " << m_verbose << G4endl;
-
-  // f_GenCenter = GeneratorCenter::GetGeneratorCenter();
-  // f_MCTman    = G4MCTManager::GetPointer();
 }
 
 // Implementation of Destructor #1
@@ -67,12 +61,7 @@ void G4PersistencyManager::SetVerboseLevel(int v)
            << G4endl;
   }
   if (   EventIO() != 0 )   EventIO()->SetVerboseLevel(m_verbose);
-#ifndef WIN32
-#ifdef G4LIB_USE_HEPMC
-  if (   HepMCIO() != 0 )   HepMCIO()->SetVerboseLevel(m_verbose);
   if ( MCTruthIO() != 0 ) MCTruthIO()->SetVerboseLevel(m_verbose);
-#endif
-#endif
   if (     HitIO() != 0 )     HitIO()->SetVerboseLevel(m_verbose);
   if (   DigitIO() != 0 )   DigitIO()->SetVerboseLevel(m_verbose);
   if (TransactionManager() != 0) TransactionManager()->SetVerboseLevel(m_verbose);
@@ -105,8 +94,7 @@ G4bool G4PersistencyManager::Store(const G4Event* evt)
 
   if ( TransactionManager() == 0 ) return true;
 
-  G4bool is_store = f_pc->CurrentStoreMode("HepMC")   != kOff ||
-                    f_pc->CurrentStoreMode("MCTruth") != kOff ||
+  G4bool is_store = f_pc->CurrentStoreMode("MCTruth") != kOff ||
                     f_pc->CurrentStoreMode("Hits")    != kOff ||
                     f_pc->CurrentStoreMode("Digits")  != kOff;
 
@@ -141,37 +129,7 @@ G4bool G4PersistencyManager::Store(const G4Event* evt)
   std::string file;
   std::string obj;
 
-#ifndef WIN32
-#ifdef G4LIB_USE_HEPMC
-
-  G4bool sthep = true, stmct = true, st3 = true;
-
-  // Store HepMC event
-  //
-  obj = "HepMC";
-  HepMC::GenEvent* hepevt = 0;
-  if ( f_pc->CurrentStoreMode(obj) == kOn ) {
-
-    //  Note: This part of code will not be activated until a method
-    //  to obtain the current pointer of HepMC::GenEvent* become available.
-
-    // if ( (hepevt = f_GenCenter->GetGenEvent()) !=0 ) {
-    if ( hepevt !=0 ) {
-
-      file = f_pc->CurrentWriteFile(obj);
-      if ( TransactionManager()->SelectWriteFile(obj, file) ) {
-        sthep = HepMCIO()->Store(hepevt);
-        if ( sthep && m_verbose > 1 ) {
-          G4cout << " -- File : " << file << " -- Event# "
-                 << evt->GetEventID() << " -- HepMC Stored." << G4endl;
-        }
-      } else {
-        sthep = false;
-      }
-    } // end of if ( hepevt != 0 )
-  } else { // recycle or off
-    // hepevt= f_GenCenter-> GetGenEvent();
-  }
+  G4bool stmct = true, st3 = true;
 
   // Store MCTruth event
   //
@@ -196,9 +154,6 @@ G4bool G4PersistencyManager::Store(const G4Event* evt)
       }
     } // end of if ( mctevt != 0 )
   }
-
-#endif
-#endif
 
   // Store hits collection
   //
@@ -238,17 +193,13 @@ G4bool G4PersistencyManager::Store(const G4Event* evt)
     }
   }
 
-#ifndef WIN32
-#ifdef G4LIB_USE_HEPMC
-
   // Store this G4EVENT
   //
-  if ( hepevt!=0 || mctevt!=0 || evt!=0 ) {
+  if ( mctevt!=0 || evt!=0 ) {
     obj = "Hits";
     file = f_pc->CurrentWriteFile(obj);
     if ( TransactionManager()->SelectWriteFile(obj, file) ) {
-      // st3 = EventIO()->Store(hepevt, mctevt, evt);
-      st3 = EventIO()->Store(hepevt, evt);
+      st3 = EventIO()->Store(evt);
       if ( st3 && m_verbose > 1 ) {
         G4cout << " -- File name: " << f_pc->CurrentWriteFile("Hits")
                << " -- Event# "  << evt->GetEventID()
@@ -259,19 +210,7 @@ G4bool G4PersistencyManager::Store(const G4Event* evt)
     }
   }
   
-  G4bool st = sthep && stmct && st1 && st2 && st3;
-
-#else
-
-  G4bool st = st1 && st2;
-
-#endif
-
-#else
-
-  G4bool st = st1 && st2;
-
-#endif
+  G4bool st = stmct && st1 && st2 && st3;
 
   if ( st ) {
     TransactionManager()->Commit();
@@ -297,8 +236,7 @@ G4bool G4PersistencyManager::Retrieve(G4Event*& evt)
 
   if ( TransactionManager() == 0 ) return true;
 
-  if ( f_pc->CurrentRetrieveMode("HepMC")   == false &&
-       f_pc->CurrentRetrieveMode("MCTruth") == false &&
+  if ( f_pc->CurrentRetrieveMode("MCTruth") == false &&
        f_pc->CurrentRetrieveMode("Hits")    == false &&
        f_pc->CurrentRetrieveMode("Digits")  == false ) {
     return true;
@@ -359,75 +297,4 @@ G4bool G4PersistencyManager::Retrieve(G4Event*& evt)
   return st;
 }
 
-#ifndef WIN32
-#ifdef G4LIB_USE_HEPMC
-
-// Implementation of Retrieve
-G4bool G4PersistencyManager::Retrieve(HepMC::GenEvent*& evt, int id)
-{
-  if ( m_verbose > 2 ) {
-    G4cout << "G4PersistencyManager::Retrieve(HepMC::GenEvent*&) is called."
-           << G4endl;
-  }
-
-  if ( TransactionManager() == 0 ) return true;
-
-  // Call package dependent Initialize()
-  //
-  if ( ! f_is_initialized ) {
-    f_is_initialized = true;
-    if ( m_verbose > 1 ) {
-      G4cout << "G4PersistencyManager:: Initializing Transaction ... "
-             << G4endl;
-    }
-    Initialize();
-  }
-
-  // Start event IO transaction
-  //
-  if ( TransactionManager()->StartRead() ) {
-    if ( m_verbose > 2 ) {
-      G4cout << "G4PersistencyManager: Read transaction started."
-             << G4endl;
-    }
-  } else {
-    G4cerr << "TransactionManager::Retrieve(HepMC) - StartRead() failed."
-           << G4endl;
-    return false;
-  }
-
-  G4bool st = false;
-  std::string file;
-
-  // Retrieve a HepMC GenEvent
-  //
-  std::string obj = "HepMC";
-  if ( f_pc->CurrentRetrieveMode(obj) == true ) {
-    file = f_pc->CurrentReadFile(obj);
-    if ( TransactionManager()->SelectReadFile(obj, file) ) {
-      st = HepMCIO()->Retrieve(evt, id);
-      if ( st && m_verbose > 1 ) {
-        G4cout << " -- File: " << file
-               << " - Event# " << HepMCIO()->LastEventID()
-               << " - HepMC event is Retrieved." << G4endl;
-      }
-    } else {
-      st = false;
-    }
-  }
-
-  if ( st ) {
-    TransactionManager()->Commit();
-  } else {
-    G4cerr << "G4PersistencyManager::Retrieve(HepMC) - Transaction aborted."
-           << G4endl;
-    TransactionManager()->Abort();
-  }
-
-  return st;
-}
-#endif
-#endif
-
 // End of G4PersistencyManager.cc
-

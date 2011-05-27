@@ -47,6 +47,9 @@
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ///////////////////////////////////////////////////////////////////////////////
 //
+#ifdef G4_USE_DPMJET
+
+
 #include "G4ParamType1GlaubAADataSet.hh"
 
 using namespace std;
@@ -333,3 +336,4 @@ std::ifstream & G4ParamType1GlaubAADataSet::ReadDataFromFile (std::ifstream &Fil
 }
 ////////////////////////////////////////////////////////////////////////////////
 //
+#endif

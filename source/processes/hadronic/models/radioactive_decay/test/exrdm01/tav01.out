@@ -1,0 +1,94 @@
+ The results file name = 
+**********************************************
+ Geant4 version $Name: not supported by cvs2svn $
+                                  (07-Dec-99)
+             Copyright : Geant4 Collaboration
+**********************************************
+Constructing Visualization Manager....
+Initialising Visualization Manager....
+Registering graphics systems....
+G4VisManager::RegisterGraphicsSystem: WARNING: attempt to
+  register a "no functionality" graphics system, probably an
+  unbuilt system, i.e., a system not available locally.  Please
+  consult your computer manager.  System was FukuiRendererFile (DAWNFILE)
+ RDM Applies to all Volumes
+         RDM Applies to Volume universe_L
+         RDM Applies to Volume aSphere_L1
+         RDM Applies to Volume aSphere_L2
+G4ProcessManager::AddProcess():process[RadioactiveDecay] particle[GenericIon]
+ G4ProcessManager::GetProcessVectorIndex:particle[GenericIon] process[RadioactiveDecay]
+ G4ProcessManager::GetProcessVectorIndex:
+particle[GenericIon] process[RadioactiveDecay]
+RadioactiveDecay is inserted at 1 in ProcessVetor[5] with Ordering parameter = 1073741823
+ G4ProcessManager::GetProcessVectorIndex:particle[GenericIon] process[RadioactiveDecay]
+ G4ProcessManager::GetProcessVectorIndex:
+particle[GenericIon] process[RadioactiveDecay]
+RadioactiveDecay is inserted at 0 in ProcessVetor[1] with Ordering parameter = 1073741823
+Idle> Idle> ################################################################################
+Idle> #                                                                              #
+Idle> # ESA-CERN GEANT4 RADIOACTIVE DECAY MODULE                                     #
+Idle> # VALIDATION TEST NUMBER 01                                                    #
+Idle> #                                                                              #
+Idle> # THIS TEST GENERATES NUCLEI OF NA-24 (GND-STATE), NE-24, F-24, AL-24          #
+Idle> # NA-24 (METASTABLE), CR-46, AND PO-215 AND DECAYS THEM.  THE NUCLEAR LIMITS   #
+Idle> # ARE RESTRICTED SO THAT DAUGHTERS ARE NOT DECAYED.  THE GEOMETRY COMPRISES    #
+Idle> # A SPHERE OF RADIUS 125,000. KM, WITHIN A BOX OF SIDE 500,000. KM WITHIN A    #
+Idle> # BOX OF SIDE 10,000,000. KM.  ALL VOLUMES ARE CENTRED ON THE COORDINATE       #
+Idle> # ORIGIN AND CONTAIN A VACUUM.  PARTICLES ARE STARTED OFF FROM THE ORIGIN WITH #
+Idle> # AN ENERGY OF 1 EV.                                                           #
+Idle> #                                                                              #
+Idle> # F LEI, DERA FARNBOROUGH, 8 MARCH 2000                                        #
+Idle> #                                                                              #
+Idle> ################################################################################
+Idle> #
+Idle> #
+Idle> # NOTE THAT THE FIRST RECORD IN THIS MACROFILE IS THE OUTPUT LOG-FILE NAME.
+Idle> # NOW SET VERBOSE LEVELS FOR RUN, EVENT, TRACKING AND THE RDM PROCESS.
+Idle> #
+Idle> Idle> Idle> Idle> Idle> #
+Idle> #
+Idle> # FIRST ION IS NA-24 (GND-STATE) BY BETA-DECAY.  THE RANGE OF NUCLEI DOES NOT
+Idle> # NEED TO BE RESTRICTED SINCE MG-24 IS THE ONLY PRODUCT AND IS STABLE.
+Idle> # 
+Idle> G4ProcessManagerMessenger:: copy constructor 
+Idle> ### Run : 0
+G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /home/geant4/g4/geant4/data/Radioactivity/z12.a24
+The nucleus is assumed to be stable 
+G4ProcessManagerMessenger:: copy constructor 
+Idle> #
+Idle> #
+Idle> # NE-24 BETA- DECAY.
+Idle> #
+Idle> Idle> G4ProcessManagerMessenger:: copy constructor 
+Idle> G4ProcessManagerMessenger:: copy constructor 
+Idle> #
+Idle> #
+Idle> # F-9 BETA- DECAY.
+Idle> #
+Idle> Idle> G4ProcessManagerMessenger:: copy constructor 
+Idle> Idle> #
+Idle> #
+Idle> # AL-24 (GND-STATE) BETA+ DECAY.
+Idle> #
+Idle> Idle> G4ProcessManagerMessenger:: copy constructor 
+Idle> Idle> #
+Idle> #
+Idle> # NA-24 (472 KEV METASTABLE STATE) BETA+ DECAY AND IT.
+Idle> #
+Idle> Idle> G4ProcessManagerMessenger:: copy constructor 
+Idle> Idle> #
+Idle> #
+Idle> # CR-46 BETA+ DECAY.
+Idle> #
+Idle> Idle> G4ProcessManagerMessenger:: copy constructor 
+Idle> G4ProcessManagerMessenger:: copy constructor 
+Idle> #
+Idle> #
+Idle> # PO-215 ALPHA DECAY.
+Idle> #
+Idle> Idle> G4ProcessManagerMessenger:: copy constructor 
+Idle> G4ProcessManagerMessenger:: copy constructor 
+G4ProcessManagerMessenger:: copy constructor 
+Idle> Graphics systems deleted.
+VisManager deleting.
+ Run completed!

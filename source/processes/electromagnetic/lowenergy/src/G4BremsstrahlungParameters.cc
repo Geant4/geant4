@@ -144,6 +144,7 @@ void G4BremsstrahlungParameters::LoadData(const G4String& name)
     {
       G4String excep("G4BremsstrahlungParameters - G4LEDATA environment variable not set");
       G4Exception(excep);
+      return;
     }
 
   G4String pathString_a(path);

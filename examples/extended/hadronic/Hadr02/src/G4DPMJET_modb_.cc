@@ -47,6 +47,9 @@
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ///////////////////////////////////////////////////////////////////////////////
 //
+
+#ifdef G4_USE_DPMJET
+
 #include "globals.hh"
 #include "G4GlaubAADataSetHandler.hh"
 
@@ -82,4 +85,4 @@ extern "C" void g4dpmjet_modb_ (G4double &v, G4double &b)
 #endif
   
 }
-
+#endif

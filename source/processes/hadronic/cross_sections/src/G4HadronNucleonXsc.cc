@@ -350,7 +350,9 @@ G4double
 G4HadronNucleonXsc::GetHadronNucleonXscNS(const G4DynamicParticle* aParticle, 
                                           const G4ParticleDefinition* nucleon  )
 {
-  G4double xsection(0), Delta, A0, B0;
+  G4double xsection(0);
+  // G4double Delta;  DHW 19 May 2011: variable set but not used
+  G4double A0, B0;
   G4int Zt=1, Nt=1, At=1;
   G4double hpXsc(0);
   G4double hnXsc(0);
@@ -388,9 +390,8 @@ G4HadronNucleonXsc::GetHadronNucleonXscNS(const G4DynamicParticle* aParticle,
     if( proj_momentum >= 10.)
     // if( proj_momentum >= 2.)
     {
-      Delta = 1.;
-
-      if( proj_energy < 40. ) Delta = 0.916+0.0021*proj_energy;
+      // Delta = 1.;   DHW 19 May 2011: variable set but not used
+      // if( proj_energy < 40. ) Delta = 0.916+0.0021*proj_energy;
 
       if(proj_momentum >= 10.)
       {
@@ -453,9 +454,8 @@ G4HadronNucleonXsc::GetHadronNucleonXscNS(const G4DynamicParticle* aParticle,
     if( proj_momentum >= 10.)
     // if( proj_momentum >= 2.)
     {
-      Delta = 1.;
-
-      if( proj_energy < 40. ) Delta = 0.916+0.0021*proj_energy;
+      // Delta = 1.;  DHW 19 May 2011: variable set but not used
+      // if( proj_energy < 40. ) Delta = 0.916+0.0021*proj_energy;
 
       if(proj_momentum >= 10.)
       {

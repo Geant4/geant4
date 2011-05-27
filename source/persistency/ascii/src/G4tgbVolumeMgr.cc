@@ -417,11 +417,11 @@ void G4tgbVolumeMgr::DumpG4LogVolLeaf( const G4LogicalVolume* lv,
   G4cout << " LV:(" << leafDepth << ")" << lv->GetName() << G4endl;
   
   //---------- construct the children of this volume
-  G4LogicalVolume* lvnc = const_cast<G4LogicalVolume*>(lv);
-  std::pair<G4mlvlv::iterator, G4mlvlv::iterator> children
-    = theLVTree.equal_range( lvnc );
-  
-  G4mlvlv::iterator cite; 
+  // G4LogicalVolume* lvnc = const_cast<G4LogicalVolume*>(lv);
+  // std::pair<G4mlvlv::iterator, G4mlvlv::iterator> children
+  //   = theLVTree.equal_range( lvnc );
+  //
+  // G4mlvlv::iterator cite; 
   
   leafDepth++;
   // for( cite = children.first; cite != children.second; cite++ )
@@ -454,11 +454,11 @@ void G4tgbVolumeMgr::DumpG4PhysVolLeaf( const G4VPhysicalVolume* pv,
   G4cout << " PV:(" << leafDepth << ")" << pv->GetName() << G4endl;
 
   //---------- construct the children of this PV
-  G4VPhysicalVolume* pvnc = const_cast<G4VPhysicalVolume*>(pv);
-  std::pair<G4mpvpv::iterator, G4mpvpv::iterator> children
-    = thePVTree.equal_range( pvnc );
-
-  G4mpvpv::iterator cite; 
+  // G4VPhysicalVolume* pvnc = const_cast<G4VPhysicalVolume*>(pv);
+  // std::pair<G4mpvpv::iterator, G4mpvpv::iterator> children
+  //  = thePVTree.equal_range( pvnc );
+  //
+  // G4mpvpv::iterator cite; 
 
   leafDepth++;
   // for( cite = children.first; cite != children.second; cite++ )

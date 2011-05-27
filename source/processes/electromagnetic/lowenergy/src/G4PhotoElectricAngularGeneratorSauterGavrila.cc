@@ -53,7 +53,8 @@
 
 //    
 
-G4PhotoElectricAngularGeneratorSauterGavrila::G4PhotoElectricAngularGeneratorSauterGavrila(const G4String& name):G4VPhotoElectricAngularDistribution(name)
+G4PhotoElectricAngularGeneratorSauterGavrila::G4PhotoElectricAngularGeneratorSauterGavrila(const G4String& name):
+  G4VPhotoElectricAngularDistribution(name)
 {;}
 
 //    
@@ -63,7 +64,9 @@ G4PhotoElectricAngularGeneratorSauterGavrila::~G4PhotoElectricAngularGeneratorSa
 
 //
 
-G4ThreeVector G4PhotoElectricAngularGeneratorSauterGavrila::GetPhotoElectronDirection(const G4ThreeVector& direction, const G4double eKineticEnergy, const G4ThreeVector&, const G4int) const
+G4ThreeVector G4PhotoElectricAngularGeneratorSauterGavrila::GetPhotoElectronDirection(const G4ThreeVector& direction, 
+										      const G4double eKineticEnergy, 
+										      const G4ThreeVector&, const G4int) const
 {
 
   // Compute Theta distribution of the emitted electron, with respect to the
@@ -78,8 +81,8 @@ G4ThreeVector G4PhotoElectricAngularGeneratorSauterGavrila::GetPhotoElectronDire
   G4double gamma   = 1. + eKineticEnergy/electron_mass_c2;
 
   if (gamma > 5.) {
-    G4ThreeVector direction (sinteta*cosphi, sinteta*sinphi, costeta);
-    return direction; 
+    G4ThreeVector outdirection (sinteta*cosphi, sinteta*sinphi, costeta);
+    return outdirection; 
     // Bugzilla 1120
     // SI on 05/09/2010 as suggested by JG 04/09/10 
   }

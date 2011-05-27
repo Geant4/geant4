@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 12th,  2011 G.Cosmo - field-V09-04-00
+-----------------------
+- Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
+
+May 5th,  2011 J.Apostolakis
+----------------------------
+- Reordered data members to group invariants, field parameters, etc...
+
 Sep 10th,  2010 J.Apostolakis - field-V09-03-03
 -----------------------------
 - Revised constructor of G4MagErrorStepper to add number of State variables

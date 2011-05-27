@@ -47,7 +47,8 @@
 
     for (G4int i=0; i<numEle; i++)
     { 
-      if((*(G4Element::GetElementTable()))[i]->GetZ()>89)
+      //if((*(G4Element::GetElementTable()))[i]->GetZ()>89)
+      if((*(G4Element::GetElementTable()))[i]->GetZ()>87) //TK modified for ENDF-VII
       {
         theFission[i].Init((*(G4Element::GetElementTable()))[i], dirName);
         theFission[i].Register(&theFS);

@@ -16,13 +16,47 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-18th March 2011  Gunter Folger    (config-V09-04-02)
+24th May 2011 Gabriele Cosmo (config-V09-04-08)
+- Fixed configuration for CLHEP built-in module, to allow for build of DLLs.
+
+16th May 2011 Gabriele Cosmo (config-V09-04-07)
+- Corrected include path definition for built-in CLHEP module.
+
+13th May 2011 Gabriele Cosmo (config-V09-04-06)
+- Added "expat" to link list, and differentiate built-in module for WIN32
+  target.
+
+10th May 2011 Gabriele Cosmo (config-V09-04-05)
+- Integrated flags in architecture.gmk and binmake.gmk for use of CLHEP
+  built-in package in externals.
+  Note: the built-in package can only be used in conjunction with the
+  "externals" module...
+
+10th May 2011 Gabriele Cosmo (config-V09-04-04)
+- Added default for CLHEP_BASE_DIR to built-in package in externals.
+  Note: the default can only be used in conjunction with the "externals"
+  module.
+
+9th May 2011 Gabriele Cosmo (config-V09-04-03)
+- Changed common.gmk to take into account sub-directories for headers
+  installation.
+- Workaround in binmake.gmk to avoid clashes with flag LDFLAGS set in the
+  user's environment beforehand.
+
+8th May 2011 Ben Morgan
+- Updated configure scripts to correct settings of G4LIB_USE_DLL for the
+  case of DLLs build on Windows. Partially addressing problem report #1189.
+
+4th April 2011 Laurent Garnier
+- Added flags to handle future driver OpenGLWt.
+
+18th March 2011  Gunter Folger (config-V09-04-02)
 - Address old bug report 1033 in liblist.c
 
-17th March 2011  Gabriele Cosmo   (config-V09-04-01)
+17th March 2011  Gabriele Cosmo (config-V09-04-01)
 - Added electromagnetic/dna module.
 
-10th February 2011  Ben Morgan   (config-V09-04-00)
+10th February 2011  Ben Morgan (config-V09-04-00)
 - Fixed restoring of default settings for XercesC in Configure script and
   internal scripts. Corrected duplication of text in setup dump.
   Addessing problem reports #1159 and #1160.
@@ -30,7 +64,7 @@ committal in the CVS repository !
 22th December 2010  Laurent Garnier
 - Darwin-g++.gmk: fix to avoid mixing of OpenGL X11 and framework.
 
-8th December 2010  Gunter Folger   (config-V09-03-19)
+8th December 2010  Gunter Folger (config-V09-03-19)
 - Updated linux-icc to suppress warning when linking to shared libs
 
 25th November 2010  Gabriele Cosmo (config-V09-03-18)

@@ -48,8 +48,8 @@ private:
   G4bool operator==(const G4AlphaGEMCoulombBarrier & right) const;
   G4bool operator!=(const G4AlphaGEMCoulombBarrier & right) const;
   
-private:
-  G4double BarrierPenetrationFactor(const G4double aZ) const
+public:
+  G4double BarrierPenetrationFactor(G4double aZ) const
   {
     // Data comes from 
     // Dostrovsky, Fraenkel and Friedlander

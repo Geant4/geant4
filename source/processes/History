@@ -17,6 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 13, 2011 G.Cosmo (processes-V09-04-01)
+- Added "hadronic/models/lend" module.
+- Includes following tags on top of "geant4-09-04-ref-04":
+  had-binary-V09-04-01, procuts-V09-04-03, procman-V09-04-03,
+  hadr-deex-V09-04-12, emlowen-V09-04-32, hadr-cohe-V09-04-02,
+  hadr-cross-V09-04-06, xrays-V09-04-00, hadr-lend-V09-04-05,
+  emutils-V09-04-21, emdna-V09-04-02, hadr-munuclear-V09-04-01,
+  procscore-V09-04-00, emstand-V09-04-21, hadr-chips-pro-V09-04-03.
+- Requires tags: externals-V09-04-01, config-V09-04-06, source-gmk-V09-04-01.
+
 March 17, 2011 G.Cosmo (processes-V09-04-00)
 - Added "electromagnetic/dna" module.
 - Includes following tags on top of "geant4-09-04-ref-02":

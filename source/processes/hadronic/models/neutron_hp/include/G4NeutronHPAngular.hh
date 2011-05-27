@@ -46,12 +46,15 @@ class G4NeutronHPAngular
     
   G4NeutronHPAngular()
   {
-    theAngularDistributionType = 0;
-    theIsoFlag = false;
+//TKDB110511
+    //theAngularDistributionType = 0;
+    //theIsoFlag = false;
+    theIsoFlag = true;
 // TKDB
       theCoefficients = 0;
       theProbArray = 0;
   } 
+
   ~G4NeutronHPAngular()
    {
 // TKDB
@@ -92,6 +95,7 @@ class G4NeutronHPAngular
 
   G4ReactionProduct theTarget;
   G4ReactionProduct theNeutron;
+
 };
 
 #endif

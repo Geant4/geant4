@@ -1,0 +1,9 @@
+Histo/File 0 g4lepp.hbook 0 -X
+Exec G4LEpp.style
+Cdir //LUN1
+zone 2 2
+histo/plot '10'
+histo/plot '11'
+histo/plot '13'
+histo/plot '12'
+picture/print theta.ps

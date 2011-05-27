@@ -80,6 +80,7 @@
 //           virtual G4bool  CheckForRetrievePhysicsTable()
 //           virtual G4bool  CheckMaterialInfo()
 //          added    void BuildPhysicsTable()    
+//       Added PhysicsListHelper           29 APr. 2011 H.Kurashige
 // ------------------------------------------------------------
 #ifndef G4VUserPhysicsList_h
 #define G4VUserPhysicsList_h 1
@@ -91,6 +92,7 @@
 #include "G4ProductionCutsTable.hh"
 
 class G4UserPhysicsListMessenger;
+class G4PhysicsListHelper;
 class G4VProcess;
 
 class G4VUserPhysicsList
@@ -116,8 +118,15 @@ class G4VUserPhysicsList
   protected: // with description
    //  User must invoke this method in his ConstructProcess() 
    //  implementation in order to insures particle transportation.
-   //  !! Caution: this class must not be overriden !!
    void AddTransportation();
+
+   //Register a process to the particle type 
+   // according to the ordering parameter table
+   //  'true' is returned if the process is registerd successfully
+   G4bool RegisterProcess(G4VProcess*            process,
+			  G4ParticleDefinition*  particle);
+  public:
+   void UseCoupledTransportation(G4bool vl=true);
 
   /////////////////////////////////////////////////////////////////
   public: // with description 
@@ -265,10 +274,6 @@ class G4VUserPhysicsList
 
     void DisableCheckParticleList();
  
- protected: 
- 
-    bool fDisableCheckParticleList;
-
   ////////////////////////////////////////////////////////////////////////
   protected:
     // the particle table has the complete List of existing particle types
@@ -306,16 +311,15 @@ class G4VUserPhysicsList
   // flag for Physics Table has been built 
    G4bool fIsPhysicsTableBuilt;
 
+  // flag for CheckParticleList 
+  G4bool fDisableCheckParticleList; 
+
+  // PhysicsListHelper
+  G4PhysicsListHelper* thePLHelper;
+
   private:
    enum { FixedStringLengthForStore = 32 }; 
 
-
-  private:
-   G4bool useCoupledTransportation;
-    
-  public:
-   inline void UseCoupledTransportation(G4bool vl=true)
-   { useCoupledTransportation = vl; }
 
 ////////////////////////////////////////////////////////////////////////////
 // Following method is for backward compatibility and removed soon
@@ -400,12 +404,11 @@ inline
   fStoredInAscii = false;
 }
 
-inline 
- void  G4VUserPhysicsList::DisableCheckParticleList()
-{   
+inline
+ void G4VUserPhysicsList::DisableCheckParticleList()
+{
   fDisableCheckParticleList = true;
 }
-
 
 #endif
 

@@ -194,6 +194,7 @@ void G4FluoData::LoadData(G4int Z)
     { 
       G4String excep("G4EMDataSet - G4LEDATA environment variable not set");
       G4Exception(excep);
+      return;
     }
   
   G4String pathString(path);
@@ -245,14 +246,15 @@ void G4FluoData::LoadData(G4int Z)
 	    s = 0;
 	  }
       }
-    else if (a == -2)
+    // moved to the end in order to avoid possible leak
+    /*    else if (a == -2)
       {
 	// End of file; delete the empty vectors created 
 	//when encountering the last -1 -1 row
 	delete initIds;
 	delete transEnergies;
 	delete transProbabilities;
-      } 
+	}*/ 
     else
       {
 	
@@ -294,7 +296,11 @@ void G4FluoData::LoadData(G4int Z)
   } 
   while (a != -2); // end of file
   file.close();    
+  delete initIds;
+  delete transEnergies;
+  delete transProbabilities;
 }
+
 
 void G4FluoData::PrintData() 
 {

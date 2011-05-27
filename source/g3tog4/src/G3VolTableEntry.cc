@@ -209,11 +209,9 @@ void G3VolTableEntry::SetHasMANY(G4bool hasMANY) {
 
 void G3VolTableEntry::ClearG3PosCopy(G4int copy) {
   if (fG3Pos.size()>0 && copy>=0 && copy<G4int(fG3Pos.size())) {
-    G3Pos* tmp=0;
      std::vector<G3Pos*>::iterator it=fG3Pos.begin();
      for(G4int j=0;j<copy;j++) it++;
      if(it!=fG3Pos.end()) {
-         tmp = fG3Pos[copy];
          fG3Pos.erase(it);
      }
   }

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-04    (30-April-2011)
+ Geant4 version Name: geant4-09-04-ref-00    (17-December-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -124,10 +124,10 @@ eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 1, integral: 0, fluct: 0, linLossLimit= 0.01
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
-            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
+            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -139,10 +139,10 @@ eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 1, integral: 0, fluct: 0, linLossLimit= 0.01
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
-            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
+            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
@@ -318,27 +318,27 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.09s Real=0.09s Sys=0s
+  User=0.14s Real=0.14s Sys=0s
 
  The run consists of 10000 e- of 5 MeV through 100 m   of Water (density: 1 g/cm3 )
 
  Process calls frequency --->	msc = 10000
 
- truePathLength :	2.753 cm  +- 11.344 nm 
- geomPathLength :	2.0713 cm  +- 16.142 nm 
- lateralDisplac :	1.0249 cm  +- 7.1227 nm 
- Psi            :	459.48 mrad +- 0.00028571 mrad  (26.326 deg +- 1.637e-05 deg)
+ truePathLength :	2.7512 cm  +- 11.142 nm 
+ geomPathLength :	2.0703 cm  +- 16.621 nm 
+ lateralDisplac :	1.1488 cm  +- 3.0764 nm 
+ Psi            :	506.58 mrad +- 0.00019228 mrad  (29.025 deg +- 1.1017e-05 deg)
 
- Theta_plane    :	729.55 mrad  (41.8 deg)
- phi correlation:	0.29124 +- 0.2996  (std::cos(phi_pos - phi_dir))
+ Theta_plane    :	1810.8 mrad  (103.75 deg)
+ phi correlation:	0.26308 +- 0.058008  (std::cos(phi_pos - phi_dir))
 
  Verification from G4EmCalculator. 
 
  transport mean free path :	8.3657 cm 
- range from restrict dE/dx:	2.753 cm 
+ range from restrict dE/dx:	2.7512 cm 
  ---> effective facRange  :	1
 
- compute theta0 from Highland :	620.24 mrad  (35.537 deg)
+ compute theta0 from Highland :	620.02 mrad  (35.525 deg)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -384,7 +384,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.1s Real=0.1s Sys=0s
+  User=0.13s Real=0.13s Sys=0s
 
  The run consists of 10000 e- of 100 keV through 100 m   of Water (density: 1 g/cm3 )
 

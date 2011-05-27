@@ -209,7 +209,10 @@ G4double G4EnergyLossTables::GetDEDX(
     oldIndex = -1 ;
   }
   const G4PhysicsTable*  dEdxTable= t.theDEDXTable;
-  if (!dEdxTable) ParticleHaveNoLoss(aParticle,"dEdx");
+  if (!dEdxTable) {
+    ParticleHaveNoLoss(aParticle,"dEdx");
+    return 0.0;
+  }
 
   G4int materialIndex = aMaterial->GetIndex();
   G4double scaledKineticEnergy = KineticEnergy*t.theMassRatio;
@@ -252,7 +255,10 @@ G4double G4EnergyLossTables::GetLabTime(
     oldIndex = -1 ;
   }
   const G4PhysicsTable* labtimeTable= t.theLabTimeTable;
-  if (!labtimeTable) ParticleHaveNoLoss(aParticle,"LabTime");
+  if (!labtimeTable) {
+    ParticleHaveNoLoss(aParticle,"LabTime");
+    return 0.0;
+  }
 
   const G4double parlowen=0.4 , ppar=0.5-parlowen ;
   G4int materialIndex = aMaterial->GetIndex();
@@ -298,7 +304,10 @@ G4double G4EnergyLossTables::GetDeltaLabTime(
     oldIndex = -1 ;
   }
   const G4PhysicsTable* labtimeTable= t.theLabTimeTable;
-  if (!labtimeTable) ParticleHaveNoLoss(aParticle,"LabTime");
+  if (!labtimeTable) {
+    ParticleHaveNoLoss(aParticle,"LabTime");
+    return 0.0;
+  }
 
   const G4double parlowen=0.4 , ppar=0.5-parlowen ;
   const G4double dToverT = 0.05 , facT = 1. -dToverT ;
@@ -376,7 +385,10 @@ G4double G4EnergyLossTables::GetProperTime(
     oldIndex = -1 ;
   }
   const G4PhysicsTable* propertimeTable= t.theProperTimeTable;
-  if (!propertimeTable) ParticleHaveNoLoss(aParticle,"ProperTime");
+  if (!propertimeTable) {
+    ParticleHaveNoLoss(aParticle,"ProperTime");
+    return 0.0;
+  }
 
   const G4double parlowen=0.4 , ppar=0.5-parlowen ;
   G4int materialIndex = aMaterial->GetIndex();
@@ -555,7 +567,10 @@ G4double G4EnergyLossTables::GetPreciseEnergyFromRange(
   }
   const G4PhysicsTable*  dEdxTable= t.theDEDXTable;
   const G4PhysicsTable*  inverseRangeTable= t.theInverseRangeTable;
-  if (!inverseRangeTable) ParticleHaveNoLoss(aParticle,"InverseRange");
+  if (!inverseRangeTable) {
+    ParticleHaveNoLoss(aParticle,"InverseRange");
+    return 0.0;
+  }
 
   G4double scaledrange,scaledKineticEnergy ;
   G4bool isOut ;
@@ -617,7 +632,10 @@ G4double G4EnergyLossTables::GetPreciseEnergyFromRange(
     oldIndex = -1 ;
   }
   const G4PhysicsTable*  dEdxTable= t.theDEDXTable;
-  if (!dEdxTable) ParticleHaveNoLoss(aParticle,"dEdx");
+  if (!dEdxTable) {
+    ParticleHaveNoLoss(aParticle,"dEdx");
+    return 0.0;
+  }
 
   G4int materialIndex = aMaterial->GetIndex();
   G4double scaledKineticEnergy = KineticEnergy*t.theMassRatio;
@@ -664,8 +682,10 @@ G4double G4EnergyLossTables::GetPreciseEnergyFromRange(
   }
   const G4PhysicsTable* rangeTable= t.theRangeTable;
   const G4PhysicsTable*  dEdxTable= t.theDEDXTable;
-  if (!rangeTable) ParticleHaveNoLoss(aParticle,"Range");
-
+  if (!rangeTable) {
+    ParticleHaveNoLoss(aParticle,"Range");
+    return 0.0;
+  }
   G4int materialIndex = aMaterial->GetIndex();
 
   G4double Thighr = t.theHighestKineticEnergy*t.theLowestKineticEnergy/
@@ -722,6 +742,7 @@ G4double G4EnergyLossTables::GetDEDX(
   if (!dEdxTable ) {
     if (check) return G4LossTableManager::Instance()->GetDEDX(aParticle,KineticEnergy,couple);
     else       ParticleHaveNoLoss(aParticle, "dEdx");
+    return 0.0;
   }
 
   G4int materialIndex = couple->GetIndex();

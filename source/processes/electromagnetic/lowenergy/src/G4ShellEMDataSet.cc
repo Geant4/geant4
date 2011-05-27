@@ -231,6 +231,12 @@ G4bool G4ShellEMDataSet::LoadData(const G4String& file)
       else k = 1;
     }
   while (a != -2);  // End of file
+ 
+
+  delete orig_shell_energies;
+  delete orig_shell_data;
+  delete log_shell_energies;
+  delete log_shell_data;
 
   return true;
 }
@@ -298,6 +304,10 @@ G4bool G4ShellEMDataSet::LoadNonLogData(const G4String& file)
       else k = 1;
     }
   while (a != -2);  // End of file
+
+
+  delete orig_shell_energies;
+  delete orig_shell_data;
 
   return true;
 }

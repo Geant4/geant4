@@ -36,6 +36,8 @@
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
+#include "G4RayleighScattering.hh"
+#include "G4KleinNishinaModel.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -47,6 +49,10 @@
 
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
+#include "G4IonParametrisedLossModel.hh"
+
+#include "G4LossTableManager.hh"
+#include "G4UAtomicDeexcitation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -74,31 +80,59 @@ void PhysListEmStandard::ConstructProcess()
      
     if (particleName == "gamma") {
       // gamma
-      pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
-      pmanager->AddDiscreteProcess(new G4ComptonScattering);
+      ////pmanager->AddDiscreteProcess(new G4RayleighScattering);
+      pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);      
+      G4ComptonScattering* cs   = new G4ComptonScattering;
+      cs->SetModel(new G4KleinNishinaModel());
+      pmanager->AddDiscreteProcess(cs);
       pmanager->AddDiscreteProcess(new G4GammaConversion);
-      
+            
     } else if (particleName == "e-") {
       //electron
-      pmanager->AddProcess(new G4eIonisation,        -1, 1, 1);
+      G4eIonisation* eIoni = new G4eIonisation();
+      eIoni->SetStepFunction(0.1, 100*um);      
+      pmanager->AddProcess(eIoni,                    -1, 1, 1);      
       pmanager->AddProcess(new G4eBremsstrahlung,    -1, 2, 2);
 	    
     } else if (particleName == "e+") {
       //positron
-      pmanager->AddProcess(new G4eIonisation,        -1, 1, 1);
+      G4eIonisation* eIoni = new G4eIonisation();
+      eIoni->SetStepFunction(0.1, 100*um);      
+      pmanager->AddProcess(eIoni,                    -1, 1, 1);            
       pmanager->AddProcess(new G4eBremsstrahlung,    -1, 2, 2);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1, 3);
             
     } else if (particleName == "mu+" || 
                particleName == "mu-"    ) {
       //muon  
-      pmanager->AddProcess(new G4MuIonisation,       -1, 1, 1);
+      G4MuIonisation* muIoni = new G4MuIonisation();
+      muIoni->SetStepFunction(0.1, 50*um);      
+      pmanager->AddProcess(muIoni,                   -1, 1, 1);            
       pmanager->AddProcess(new G4MuBremsstrahlung,   -1, 2, 2);
       pmanager->AddProcess(new G4MuPairProduction,   -1, 3, 3);
              
-    } else if (particleName == "alpha" || particleName == "GenericIon" ) { 
-      pmanager->AddProcess(new G4ionIonisation,      -1, 1, 1);
+    } else if( particleName == "proton" ||
+               particleName == "pi-" ||
+               particleName == "pi+"    ) {
+      //proton  
+      G4hIonisation* hIoni = new G4hIonisation();
+      hIoni->SetStepFunction(0.1, 20*um);      
+      pmanager->AddProcess(hIoni,                     -1, 1, 1);
      
+    } else if( particleName == "alpha" || 
+	       particleName == "He3"    ) {
+      //alpha 
+      G4ionIonisation* ionIoni = new G4ionIonisation();
+      ionIoni->SetStepFunction(0.1, 1*um);
+      pmanager->AddProcess(ionIoni,                   -1, 1, 1);            
+            
+    } else if( particleName == "GenericIon" ) {
+      //Ions 
+      G4ionIonisation* ionIoni = new G4ionIonisation();
+      ionIoni->SetEmModel(new G4IonParametrisedLossModel());
+      ionIoni->SetStepFunction(0.1, 1*um);            
+      pmanager->AddProcess(ionIoni,                   -1, 1, 1);      
+
     } else if ((!particle->IsShortLived()) &&
 	       (particle->GetPDGCharge() != 0.0) && 
 	       (particle->GetParticleName() != "chargedgeantino")) {
@@ -106,6 +140,14 @@ void PhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(new G4hIonisation,        -1, 1, 1);
     }
   }
+      
+  // Deexcitation
+  //
+  G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
+  de->SetFluo(true);
+  de->SetAuger(false);   
+  de->SetPIXE(false);  
+  G4LossTableManager::Instance()->SetAtomDeexcitation(de);    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

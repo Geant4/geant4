@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 12, 2011  G.Cosmo                      geommng-V09-04-02
+- Fixed trivial compilation warnings detected with gcc-4.6.0.
+
 March 31, 2011  G.Cosmo                    geommng-V09-04-01
 - Fix in G4LogicalVolume::AddDaughter() for proper propagation settings
   of local field manager. Avoid forcing propagation to all daughters when

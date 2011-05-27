@@ -126,6 +126,7 @@ void G4DopplerProfile::LoadBiggsP(const G4String& fileName)
     { 
       G4String excep("G4EMDataSet - G4LEDATA environment variable not set");
       G4Exception(excep);
+      return;
     }
   
   G4String pathString(path);
@@ -165,6 +166,7 @@ void G4DopplerProfile::LoadProfile(const G4String& fileName,G4int Z)
     { 
       G4String excep("G4EMDataSet - G4LEDATA environment variable not set");
       G4Exception(excep);
+      return;
     }
   
   G4String pathString(path);

@@ -31,8 +31,8 @@
 // G4 Physics class: G4QKaonMinusElasticCrossSection for pA elastic cross sections
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 5-Feb-2010
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 5-Feb-2010
-// 
-//================================================================================
+//
+// -------------------------------------------------------------------------------
 // Short description: Interaction cross-sections for the G4QElastic process
 // -------------------------------------------------------------------------------
 
@@ -361,7 +361,7 @@ G4double G4QKaonMinusElasticCrossSection::CalculateCrossSection(G4bool CS, G4int
     S4T.push_back(lastS4T);             // Fill Tabulated 4-th mantissa to AMDB 
     B4T.push_back(lastB4T);             // Fill Tabulated 4-th slope to AMDB    
   } // End of creation/update of the new set of parameters and tables
-  // ============= NOW Update (if necessary) and Calculate the Cross Section ===========
+  // =----------= NOW Update (if necessary) and Calculate the Cross Section =-----------=
 #ifdef pdebug
   G4cout<<"G4QKMElCS::CalcCS:?update?,LP="<<lastLP<<",IN="<<lastPIN<<",ML="<<lPMax<<G4endl;
 #endif
@@ -1057,7 +1057,7 @@ G4double G4QKaonMinusElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G
 #ifdef tdebug
     G4cout<<"G4QKaonMinusElCS::GTV: PDG="<<PDG<<",P="<<p<<",N="<<tgN<<",Z="<<tgZ<<G4endl;
 #endif
-    G4double dlp=lp-lastPAR[5]; // ax
+    G4double dlp=lp-lastPAR[4]; // ax
     //         p1               p2          p3                 p4
     return (lastPAR[0]*dlp*dlp+lastPAR[1]+lastPAR[2]/p3)/(1.+lastPAR[3]/p2/sp);
   }

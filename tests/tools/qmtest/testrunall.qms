@@ -78,6 +78,7 @@
       <text>exam-ext-geometry-olap-run</text>
       <text>exam-ext-hadronic-hadr00-run</text>
       <text>exam-ext-hadronic-hadr01-run</text>
+      <text>exam-ext-hadronic-hadr02-run</text>
       <text>exam-ext-medical-dicom-run</text>
       <text>exam-ext-medical-electronScattering-run</text>
       <text>exam-ext-medical-fanocavity-run</text>
@@ -155,6 +156,7 @@
       <text>test60-run</text>
       <text>test61-run</text>
       <text>test62-run</text>
+      <text>test67-run</text>
     </set>
   </argument>
 </extension>

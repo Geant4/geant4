@@ -43,6 +43,7 @@
 #include "G4EmStandardPhysics_option3.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
+#include "G4EmDNAPhysics.hh"
 
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
@@ -121,6 +122,7 @@ PhysicsList::~PhysicsList()
 #include "G4Triton.hh"
 #include "G4He3.hh"
 #include "G4GenericIon.hh"
+#include "G4DNAGenericIonsManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -172,6 +174,14 @@ void PhysicsList::ConstructParticle()
   G4He3::He3Definition();
   G4Alpha::AlphaDefinition();
   G4GenericIon::GenericIonDefinition();
+  
+// DNA
+  G4DNAGenericIonsManager* genericIonsManager;
+  genericIonsManager=G4DNAGenericIonsManager::Instance();
+  genericIonsManager->GetIon("alpha++");
+  genericIonsManager->GetIon("alpha+");
+  genericIonsManager->GetIon("helium");
+  genericIonsManager->GetIon("hydrogen");  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -272,7 +282,11 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new G4EmPenelopePhysics();
 
-     
+  } else if (name == "dna") {
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmDNAPhysics();
+         
   } else {
 
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"

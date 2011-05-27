@@ -67,6 +67,14 @@ ifdef G4UI_USE_QT
   CPPFLAGS += -DG4UI_USE_QT
 endif
 
+ifdef G4UI_USE_WT
+  G4UI_USE  = 1
+  G4INTY_USE_WT = 1
+  INC_WT   = 1
+  LOAD_WT   = 1
+  CPPFLAGS += -DG4UI_USE_WT
+endif
+
 ifdef G4UI_USE_XAW
   G4UI_USE  = 1
   G4INTY_USE_XT = 1

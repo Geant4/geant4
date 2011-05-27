@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclLightIonInterface.hh,v 1.8 2010-11-13 00:08:36 kaitanie Exp $ 
+// $Id: G4InclLightIonInterface.hh,v 1.8 2010/11/13 00:08:36 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -59,7 +59,6 @@
 
 // Geant4 de-excitation
 #include "G4ExcitationHandler.hh"
-#include "G4PreCompoundModel.hh"
 
 #include <fstream>
 #include <iostream>
@@ -67,7 +66,7 @@
 using namespace std;
 
 /**
- * Interface for INCL with Geant4 PreCompound de-excitation. This
+ * Interface for INCL with G4ExcitationHandler de-excitation. This
  * interface handles basic light ion bullet particles from deuterons
  * up to carbon-12. @see G4InclAblaLightIonInterface
  */
@@ -123,7 +122,6 @@ private:
   G4bool useFermiBreakup;
 
   G4ExcitationHandler *theExcitationHandler;
-  G4PreCompoundModel *thePrecoModel;
 };
 
 #endif // G4INCLABLALIGHTIONINTERFACE_H

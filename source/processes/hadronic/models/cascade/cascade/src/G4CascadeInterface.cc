@@ -77,6 +77,7 @@
 // 20110327  G. Folger -- Set up for E/p checking by G4HadronicProcess in ctor
 // 20110328  M. Kelsey -- Modify balance() initialization to match Gunter's
 // 20110404  M. Kelsey -- Get primary projectile from base class (ref-03)
+// 20110502  M. Kelsey -- Add interface to capture random seeds for user
 
 #include "G4CascadeInterface.hh"
 #include "globals.hh"
@@ -99,12 +100,17 @@
 #include "G4Track.hh"
 #include "G4V3DNucleus.hh"
 #include <cmath>
+#include <stdlib.h>
 
 using namespace G4InuclParticleNames;
 
 typedef std::vector<G4InuclElementaryParticle>::const_iterator particleIterator;
 typedef std::vector<G4InuclNuclei>::const_iterator nucleiIterator;
 
+
+// Filename to capture random seed, if specified by user at runtime
+
+const G4String G4CascadeInterface::randomFile(getenv("G4CASCADE_RANDOM_FILE")?getenv("G4CASCADE_RANDOM_FILE"):"");
 
 // Maximum number of iterations allowed for inelastic collision attempts
 
@@ -196,6 +202,12 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
 	 << aTrack.GetKineticEnergy() << G4endl;
 #endif
 
+  if (!randomFile.empty()) {		// User requested random-seed capture
+    if (verboseLevel>1) 
+      G4cout << " Saving random engine state to " << randomFile << G4endl;
+    CLHEP::HepRandom::saveEngineStatus(randomFile);
+  }
+
   theResult.Clear();
   clear();
 
@@ -278,6 +290,12 @@ G4CascadeInterface::Propagate(G4KineticTrackVector* theSecondaries,
     }
   }
 #endif
+
+  if (!randomFile.empty()) {		// User requested random-seed capture
+    if (verboseLevel>1) 
+      G4cout << " Saving random engine state to " << randomFile << G4endl;
+    CLHEP::HepRandom::saveEngineStatus(randomFile);
+  }
 
   theResult.Clear();
   clear();

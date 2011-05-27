@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id: G4InitXscPAI.cc,v 1.9 2006-06-29 19:53:00 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -90,7 +89,7 @@ G4InitXscPAI::G4InitXscPAI( const G4MaterialCutsCouple* matCC)
   {
     fMatSandiaMatrix->push_back(new G4DataVector(5,0.));
   }	         	
-  for (G4int i = 0; i < fIntervalNumber; i++)
+  for (i = 0; i < fIntervalNumber; i++)
   {
     (*(*fMatSandiaMatrix)[i])[0] = fSandia->GetSandiaMatTable(i,0);
 
@@ -119,6 +118,8 @@ G4InitXscPAI::~G4InitXscPAI()
   if(fPAIelectronVector) delete fPAIelectronVector;  
   if(fChCosSqVector)     delete fChCosSqVector;  
   if(fChWidthVector)     delete fChWidthVector;  
+  delete fSandia;
+  delete fMatSandiaMatrix;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -159,7 +160,7 @@ void G4InitXscPAI::KillCloseIntervals()
 void G4InitXscPAI::Normalisation()
 {
   G4int i, j;
-  G4double energy1, energy2, delta, cof; // , shift;
+  G4double energy1, energy2, /*delta,*/ cof; // , shift;
 
   energy1 = (*(*fMatSandiaMatrix)[fIntervalNumber-1])[0];
   energy2 = 2.*(*(*fMatSandiaMatrix)[fIntervalNumber-1])[0];
@@ -177,7 +178,7 @@ void G4InitXscPAI::Normalisation()
   }
   fNormalizationCof  = 2*pi*pi*hbarc*hbarc*fine_structure_const/electron_mass_c2 ;
   fNormalizationCof *= fElectronDensity;
-  delta = fNormalizationCof - cof;
+  //delta = fNormalizationCof - cof;
   fNormalizationCof /= cof;
   //  G4cout<<"G4InitXscPAI::fNormalizationCof/cof = "<<fNormalizationCof
   //    <<";  at delta ="<<delta<<G4endl ;
@@ -492,10 +493,10 @@ G4double G4InitXscPAI::PAIdNdxCherenkov( G4double omega  )
   G4double epsilonRe = RePartDielectricConst(omega);
   G4double epsilonIm = ImPartDielectricConst(i,omega);
 
-  G4double cof, logarithm, x3, x5, argument, modul2, dNdxC ; 
+  G4double /*cof,*/ logarithm, x3, x5, argument, modul2, dNdxC ; 
   G4double be2, be4, betaBohr2,betaBohr4,cofBetaBohr ;
 
-   cof         = 1.0 ;
+  //cof         = 1.0 ;
    cofBetaBohr = 4.0 ;
    betaBohr2   = fine_structure_const*fine_structure_const ;
    betaBohr4   = betaBohr2*betaBohr2*cofBetaBohr ;

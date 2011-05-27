@@ -1,0 +1,10 @@
+The subdirectories contain experimental data needed by tests.
+ data_gsi   - Data from GSI
+ proton     - (see file proton/pb/readme)
+
+The data in this directory is based on ABLA V3 data files:
+flalpha.dat - alpha ground state deformation  
+  frldm.dat - ground state shell corr. frldm for a spherical g.s.  
+  vgsld.dat - difference between deformed g.s. and ldm value
+  pace2.dat - default mass for A, Z nucleus
+

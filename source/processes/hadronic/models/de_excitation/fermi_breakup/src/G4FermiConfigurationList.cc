@@ -194,24 +194,28 @@ G4FermiConfigurationList::GetFragments(const G4Fragment& theNucleus)
     mr.push_back( (*conf)[i]->GetTotalEnergy() );
   }
   std::vector<G4LorentzVector*>* mom = thePhaseSpace.Decay(M,mr);
-  if(!mom) { return theResult; }
+  if(!mom) { 
+    delete conf;
+    return theResult; 
+  }
 
   size_t nmom = mom->size();  
-  if(0 == nmom) { return theResult; }
 
   // Go back to the Lab Frame
-  for (size_t j=0; j<nmom; ++j) {
-    G4LorentzVector* FourMomentum = (*mom)[j];
+  if(0 < nmom) { 
+    for (size_t j=0; j<nmom; ++j) {
+      G4LorentzVector* FourMomentum = (*mom)[j];
     
-    // Lorentz boost
-    FourMomentum->boost(boostVector);
+      // Lorentz boost
+      FourMomentum->boost(boostVector);
       
-    G4FragmentVector* fragment = (*conf)[j]->GetFragment(*FourMomentum);
+      G4FragmentVector* fragment = (*conf)[j]->GetFragment(*FourMomentum);
  
-    size_t nfrag = fragment->size();
-    for (size_t k=0; k<nfrag; ++k) { theResult->push_back((*fragment)[k]); }
-    delete fragment;
-    delete (*mom)[j];
+      size_t nfrag = fragment->size();
+      for (size_t k=0; k<nfrag; ++k) { theResult->push_back((*fragment)[k]); }
+      delete fragment;
+      delete (*mom)[j];
+    }
   }
   
   delete mom;

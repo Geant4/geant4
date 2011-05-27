@@ -32,6 +32,7 @@
 
 #include "G4ParticleTable.hh"
 #include "G4Gamma.hh"
+#include "G4Neutron.hh"
 
 
 
@@ -48,40 +49,71 @@ void G4NeutronHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
    G4int sum_A = 0;
    G4int max_SecZ = 0;
    G4int max_SecA = 0;
+   G4int imaxA = -1;
    for ( int i = 0 ; i < nSecondaries ; i++ )
    {
       sum_Z += theResult.GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicNumber();
       max_SecZ = std::max ( max_SecZ , theResult.GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicNumber() );
       sum_A += theResult.GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicMass();
       max_SecA = std::max ( max_SecA , theResult.GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicMass() );
+      if ( theResult.GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicMass() == max_SecA ) imaxA = i;
    }
 
    G4ParticleDefinition* resi_pd = NULL;
+   G4bool needOneMoreSec = false;
+   G4ParticleDefinition* oneMoreSec_pd = NULL;
    if ( (int)(theBaseZ - sum_Z) == 0 && (int)(theBaseA + 1 - sum_A) == 0 )
-      resi_pd = G4ParticleTable::GetParticleTable()->GetIon ( max_SecZ , max_SecA , 0.0 );
+   {
+      //All secondaries are already created;
+      resi_pd = theResult.GetSecondary( imaxA )->GetParticle()->GetDefinition(); 
+   }
    else
    {
-      resi_pd = G4ParticleTable::GetParticleTable()->GetIon ( int(theBaseZ - sum_Z) , (int)(theBaseA + 1 - sum_A) , 0.0 );
+      if ( max_SecA > int(theBaseA + 1 - sum_A) ) 
+      {
+         //Most heavy secondary is interpreted as residual
+         resi_pd = theResult.GetSecondary( imaxA )->GetParticle()->GetDefinition(); 
+         needOneMoreSec = true;
+      }
+      else 
+      {
+         //creation of residual is requierd 
+         resi_pd = G4ParticleTable::GetParticleTable()->GetIon ( int(theBaseZ - sum_Z) , (int)(theBaseA + 1 - sum_A) , 0.0 );
+      }
+
+      if ( needOneMoreSec )
+      {
+         if ( int(theBaseZ - sum_Z) == 0 && (int)(theBaseA + 1 - sum_A) > 0 )
+         {
+            if ( int(theBaseA + 1 - sum_A) > 1 ) G4cout << "More than one neutron is required for the balance of baryon number!" << G4endl;
+            oneMoreSec_pd = G4Neutron::Neutron();
+         }
+         else 
+         {
+            oneMoreSec_pd = G4ParticleTable::GetParticleTable()->GetIon ( int(theBaseZ - sum_Z) , (int)(theBaseA + 1 - sum_A) , 0.0 );
+         }
+      }
+  
       if ( resi_pd == NULL )
       {
-        // theNDLDataZ,A has the Z and A of used NDL file
-        if ( (int)(theNDLDataZ - sum_Z) == 0 && (int)(theNDLDataA + 1 - sum_A) == 0 )
-        {
-           G4int dif_Z = ( int ) ( theNDLDataZ - theBaseZ );
-           G4int dif_A = ( int ) ( theNDLDataA - theBaseA );
-           resi_pd = G4ParticleTable::GetParticleTable()->GetIon ( max_SecZ - dif_Z , max_SecA - dif_A , 0.0 );
-           for ( int i = 0 ; i < nSecondaries ; i++ )
-           {
-              if ( theResult.GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicNumber() == max_SecZ  
-                && theResult.GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicMass() == max_SecA )
-              {
-                 G4ThreeVector p = theResult.GetSecondary( i )->GetParticle()->GetMomentum();
-                 p = p * resi_pd->GetPDGMass()/ G4ParticleTable::GetParticleTable()->GetIon ( max_SecZ , max_SecA , 0.0 )->GetPDGMass(); 
-                 theResult.GetSecondary( i )->GetParticle()->SetDefinition( resi_pd );
-                 theResult.GetSecondary( i )->GetParticle()->SetMomentum( p );
-              } 
-           }
-        }
+         // theNDLDataZ,A has the Z and A of used NDL file
+         if ( (int)(theNDLDataZ - sum_Z) == 0 && (int)(theNDLDataA + 1 - sum_A) == 0 )
+         {
+            G4int dif_Z = ( int ) ( theNDLDataZ - theBaseZ );
+            G4int dif_A = ( int ) ( theNDLDataA - theBaseA );
+            resi_pd = G4ParticleTable::GetParticleTable()->GetIon ( max_SecZ - dif_Z , max_SecA - dif_A , 0.0 );
+            for ( int i = 0 ; i < nSecondaries ; i++ )
+            {
+               if ( theResult.GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicNumber() == max_SecZ  
+                 && theResult.GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicMass() == max_SecA )
+               {
+                  G4ThreeVector p = theResult.GetSecondary( i )->GetParticle()->GetMomentum();
+                  p = p * resi_pd->GetPDGMass()/ G4ParticleTable::GetParticleTable()->GetIon ( max_SecZ , max_SecA , 0.0 )->GetPDGMass(); 
+                  theResult.GetSecondary( i )->GetParticle()->SetDefinition( resi_pd );
+                  theResult.GetSecondary( i )->GetParticle()->SetMomentum( p );
+               } 
+            }
+         }
       }
    }
 
@@ -167,7 +199,20 @@ void G4NeutronHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
          slow = p4.beta(); 
          islow = ires;
       }
+      dif_4p = init_4p_lab - ( secs_4p_lab + p4 );  
+   }
 
+   if ( needOneMoreSec )
+   {
+      nSecondaries += 1;
+      G4DynamicParticle* one = new G4DynamicParticle ( oneMoreSec_pd , dif_4p.v() );    
+      theResult.AddSecondary ( one );    
+      p4 = one->Get4Momentum(); 
+      if ( slow > p4.beta() ) 
+      {
+         slow = p4.beta(); 
+         islow = nSecondaries-1; //Because the first is 0th, so the last becomes "nSecondaries-1"
+      }
       dif_4p = init_4p_lab - ( secs_4p_lab + p4 );  
    }
 

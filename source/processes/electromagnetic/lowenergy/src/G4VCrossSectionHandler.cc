@@ -199,6 +199,7 @@ void G4VCrossSectionHandler::LoadData(const G4String& fileName)
 	{ 
 	  G4String excep = "G4VCrossSectionHandler - G4LEDATA environment variable not set";
 	  G4Exception(excep);
+	  return;
 	}
       
       std::ostringstream ost;
@@ -274,6 +275,7 @@ void G4VCrossSectionHandler::LoadNonLogData(const G4String& fileName)
 	{ 
 	  G4String excep = "G4VCrossSectionHandler - G4LEDATA environment variable not set";
 	  G4Exception(excep);
+	  return;
 	}
       
       std::ostringstream ost;
@@ -493,7 +495,10 @@ G4VEMDataSet* G4VCrossSectionHandler::BuildMeanFreePathForMaterials(const G4Data
   crossSections = BuildCrossSectionsForMaterials(energyVector,energyCuts);
 
   if (crossSections == 0)
-    G4Exception("G4VCrossSectionHandler::BuildMeanFreePathForMaterials, crossSections = 0");
+    {
+      G4Exception("G4VCrossSectionHandler::BuildMeanFreePathForMaterials, crossSections = 0");
+      return 0;
+    }
 
   G4VDataSetAlgorithm* algo = CreateInterpolation();
   G4VEMDataSet* materialSet = new G4CompositeEMDataSet(algo);
@@ -661,7 +666,13 @@ G4int G4VCrossSectionHandler::SelectRandomShell(G4int Z, G4double e) const
   // which does not support the standard and does not accept
   // the syntax pos->first or pos->second
   // if (pos != dataMap.end()) dataSet = pos->second;
-  if (pos != dataMap.end()) dataSet = (*pos).second;
+  if (pos != dataMap.end()) 
+    dataSet = (*pos).second;
+  else
+    {
+      G4Exception("G4VCrossSectionHandler::SelectRandomShell, unable to load the dataSet");
+      return 0;
+    }
 
   size_t nShells = dataSet->NumberOfComponents();
   for (size_t i=0; i<nShells; i++)

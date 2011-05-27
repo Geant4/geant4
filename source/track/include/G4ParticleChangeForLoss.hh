@@ -275,6 +275,8 @@ inline G4Step* G4ParticleChangeForLoss::UpdateStepForAlongStep(G4Step* pStep)
     pPostStepPoint->SetCharge( currentCharge );
   }
   pPostStepPoint->SetKineticEnergy( kinEnergy );
+  pPostStepPoint->SetVelocity(pStep->GetTrack()->CalculateVelocity());
+
 
   // update weight 
   // this feature is commented out, it should be overwritten in case
@@ -293,6 +295,7 @@ inline G4Step* G4ParticleChangeForLoss::UpdateStepForPostStep(G4Step* pStep)
   pPostStepPoint->SetCharge( currentCharge );
   pPostStepPoint->SetMomentumDirection( proposedMomentumDirection );
   pPostStepPoint->SetKineticEnergy( proposedKinEnergy );
+  pPostStepPoint->SetVelocity(pStep->GetTrack()->CalculateVelocity());
   pPostStepPoint->SetPolarization( proposedPolarization );
   // update weight if process cannot do that
   if (!fSetParentWeightByProcess)

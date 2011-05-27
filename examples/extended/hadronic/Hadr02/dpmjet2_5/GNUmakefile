@@ -4,9 +4,9 @@
 #-frecord-marker=4
 #
 # LINUX (Intel PC)
-  OPT1 = -c -C -fno-automatic -fdefault-real-8 -ff2c \
+  OPT1 = -fPIC -c -C -fno-automatic -fdefault-real-8 -ff2c \
          -fno-second-underscore -O -ffixed-line-length-132 -frepack-arrays 
-  OPT2 = -c -C -fno-automatic -Wuninitialized -fdefault-real-8 -ff2c \
+  OPT2 = -fPIC -c -C -fno-automatic -Wuninitialized -fdefault-real-8 -ff2c \
          -fno-second-underscore -O -ffixed-line-length-132 -frepack-arrays 
 
 ifdef G4DEBUG

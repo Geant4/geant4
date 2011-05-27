@@ -1,0 +1,8 @@
+opt a4
+zone 2 2
+exec prepare_odd ../data/pb.113mev/p.pb.113mev.dsig_n.dt.domega
+
+exec analyse ../logs/liste.p_pb.113mev.neutron.7.5degree 7.5 113 1000.
+exec analyse ../logs/liste.p_pb.113mev.neutron.30degree 30. 113 1000.
+exec analyse ../logs/liste.p_pb.113mev.neutron.60degree 60. 113 1000.
+exec analyse ../logs/liste.p_pb.113mev.neutron.150degree 150. 113 1000.

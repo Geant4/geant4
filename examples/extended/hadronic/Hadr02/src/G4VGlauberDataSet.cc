@@ -47,6 +47,9 @@
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ///////////////////////////////////////////////////////////////////////////////
 //
+#ifdef G4_USE_DPMJET
+
+
 #include "G4VGlauberDataSet.hh"
 
 #include "G4DPMJET2_5Interface.hh"
@@ -222,3 +225,4 @@ std::ifstream & operator >> (std::ifstream &File, G4VGlauberDataSet &q)
 
   return q.ReadDataFromFile (File);
 }
+#endif

@@ -19,8 +19,7 @@
 ##/testem/det/setThickness 16.2 um	#Au1
 ##/testem/det/setThickness 48.5 um	#Au3
 #
-##/testem/phys/addPhysics  emstandard_opt3
-/testem/phys/addPhysics  standardWVI
+/testem/phys/addPhysics  emstandard_opt0
 #
 /run/initialize
 #
@@ -29,11 +28,13 @@
 /gun/particle e- 
 /gun/energy 13 MeV
 #
-/testem/histo/setFileName ref4++/graphite/wvi
+/testem/histo/setFileName results/C1.10um.opt0
 /testem/histo/setFileType root
 /testem/histo/setHisto 3 120 0. 240. mm		#d(N/cost)/dS = f(r)
 /testem/histo/setHisto 4 120 0. 240. mm		#normalized d(N/cost)/dS = f(r)
+/testem/histo/printHisto 3
 #
 /testem/event/printModulo 100000
 #
-/run/beamOn 4000000
+###/run/beamOn 4000000
+/run/beamOn 1000000

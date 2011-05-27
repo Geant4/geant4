@@ -47,6 +47,9 @@
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ///////////////////////////////////////////////////////////////////////////////
 //
+#ifdef G4_USE_DPMJET
+
+
 #include "G4FullGlaubAADataSet.hh"
 
 #include "G4DPMJET2_5Interface.hh"
@@ -289,3 +292,4 @@ std::ifstream & G4FullGlaubAADataSet::ReadDataFromFile (std::ifstream &File)
 }
 ////////////////////////////////////////////////////////////////////////////////
 //
+#endif

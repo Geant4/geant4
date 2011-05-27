@@ -37,6 +37,7 @@
 #include "G4ReactionProductVector.hh"
 #include "G4NeutronHPNames.hh"
 #include "G4NeutronHPPhotonDist.hh"
+#include "G4NeutronHPEnAngCorrelation.hh"
 
 class G4NeutronHPCaptureFS : public G4NeutronHPFinalState
 {
@@ -45,6 +46,7 @@ class G4NeutronHPCaptureFS : public G4NeutronHPFinalState
   G4NeutronHPCaptureFS()
   {
     hasXsec = false; 
+    hasExactMF6 = false;
     targetMass = 0;
   }
   
@@ -65,6 +67,9 @@ class G4NeutronHPCaptureFS : public G4NeutronHPFinalState
   G4double targetMass;
   
   G4NeutronHPPhotonDist theFinalStatePhotons;
+
+   G4NeutronHPEnAngCorrelation theMF6FinalState;
+   G4bool hasExactMF6;
   
   G4NeutronHPNames theNames;
   

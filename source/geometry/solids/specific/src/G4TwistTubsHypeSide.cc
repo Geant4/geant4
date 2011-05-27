@@ -540,10 +540,8 @@ G4int G4TwistTubsHypeSide::DistanceToSurface(const G4ThreeVector &gp,
    // If p is on surface, return distance = 0 immediatery .
    //
    G4ThreeVector  lastgxx[2];
-   G4double       distfromlast[2];
    for (G4int i=0; i<2; i++) {
       lastgxx[i] = fCurStatWithV.GetXX(i);
-      distfromlast[i] = (gp - lastgxx[i]).mag();
    }
 
    if ((gp - lastgxx[0]).mag() < halftol || (gp - lastgxx[1]).mag() < halftol) {

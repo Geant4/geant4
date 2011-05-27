@@ -33,14 +33,7 @@
 
 #include "G4Event.hh"
 
-#ifndef WIN32
-#ifdef G4LIB_USE_HEPMC
-  #include "CLHEP/HepMC/GenEvent.h"
-  #include "G4VHepMCIO.hh"
-  #include "G4VMCTruthIO.hh"
-#endif
-#endif
-
+#include "G4VMCTruthIO.hh"
 #include "G4HCIOcatalog.hh"
 #include "G4DCIOcatalog.hh"
 #include "G4VPEventIO.hh"
@@ -74,8 +67,6 @@ class G4PersistencyCenter;
 //         |
 //         |  ... StartRead() ...
 //         |
-//         |  ... HepMCIO()->Retrieve() ...
-//         |
 //         |  ... Commit() ...
 //         V
 // 
@@ -84,8 +75,6 @@ class G4PersistencyCenter;
 //        G4PersistencyManager::Store( G4Pevent* )
 //         |
 //         |  ... StartUpdate() ...
-//         |
-//         |  ... HepMCIO()->Store( HepMC event ) ...
 //         |
 //         |  ... MCTruthIO()->Store( MCTruth event ) ...
 //         |
@@ -152,17 +141,11 @@ class G4PersistencyManager
       virtual G4VPDigitIO* DigitIO() { return 0; };
       // Returns the current digit I/O handling manager
       // Each derived class should return the pointer of actual manager.
-#ifndef WIN32
-#ifdef G4LIB_USE_HEPMC
-      virtual G4VHepMCIO* HepMCIO() { return 0; };
-      // Returns the current HepMC I/O handling manager
-      // Each derived class should return the pointer of actual manager.
 
       virtual G4VMCTruthIO* MCTruthIO() { return 0; };
       // Returns the current MCTruth I/O handling manager
       // Each derived class should return the pointer of actual manager.
-#endif
-#endif
+
       virtual G4VTransactionManager* TransactionManager() { return 0; };
       // Returns the current transaction manager
       // Each derived class should return the pointer of actual manager.
@@ -179,13 +162,7 @@ class G4PersistencyManager
 
       G4bool Retrieve(G4Event*& evt);
       // Retrieve the G4Event and its associated objects
-#ifndef WIN32
-#ifdef G4LIB_USE_HEPMC
-      G4bool Retrieve(HepMC::GenEvent*& evt, int id=-1);
-      // retrieves HepMC GenEvent and its associated object.
-      // To be used by generator/HepMCObjyReader.
-#endif
-#endif
+
       G4bool Store(const G4Run*) {return false;};
       // not used
 
@@ -208,9 +185,7 @@ class G4PersistencyManager
 
     private:
       std::string      nameMgr;
-      // GeneratorCenter* f_GenCenter;
-      // G4MCTManager*      f_MCTman;
-      G4bool             f_is_initialized;
+      G4bool           f_is_initialized;
 
 }; // End of class G4PersistencyManager
 

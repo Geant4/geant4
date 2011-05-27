@@ -64,7 +64,7 @@
 //#define debug_G4BinaryCascade 1
 
 //  more detailed debugging -- deprecated  
-//#define debug_1_BinaryCascade 1
+//#define debug_H1_BinaryCascade 1
 
 //  specific debuuging info per method or functionality
 //#define debug_BIC_ApplyCollision 1
@@ -215,7 +215,8 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
       products=0;
     }
 
-    the3DNucleus->Init(aNucleus.GetA_asInt(), aNucleus.GetZ_asInt());
+    G4int massNumber=aNucleus.GetA_asInt();
+    the3DNucleus->Init(massNumber, aNucleus.GetZ_asInt());
     thePropagator->Init(the3DNucleus);
     //      GF Leak on kt??? but where to delete?
     G4KineticTrack * kt;// = new G4KineticTrack(definition, 0., initialPosition, initial4Momentum);
@@ -229,7 +230,12 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
        // secondaries has been cleared by Propagate() in the previous loop event
       secondaries= new G4KineticTrackVector;
       secondaries->push_back(kt);
-      products = Propagate(secondaries, the3DNucleus);
+      if(massNumber > 1) // 1H1 is special case
+      {
+         products = Propagate(secondaries, the3DNucleus);
+      } else { 
+         products = Propagate1H1(secondaries,the3DNucleus);
+      }
     } while(! products );  // until we FIND a collision...
 
     if(++interactionCounter>99) break;
@@ -288,14 +294,6 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
    G4cout << "G4BinaryCascade Propagate starting -------------------------------------------------------" <<G4endl;
 #endif
 
-   // *GF* FIXME ? in propagate mode this test is wrong! Could be in Apply....
-  if(nucleus->GetMassNumber() == 1) // 1H1 is special case
-  {
-      #ifdef debug_BIC_Propagate
-	  G4cout << " special case 1H1.... " << G4endl;
-      #endif
-     return Propagate1H1(secondaries,nucleus);
-  }
 
   G4ReactionProductVector * products = new G4ReactionProductVector;
   the3DNucleus = nucleus;
@@ -1159,19 +1157,23 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
   primary->Set4Momentum(mom4Primary);
 
 
+#ifdef debug_G4BinaryCascade
   G4int lateBaryon(0), lateCharge(0);
+#endif
 
   if ( lateParticleCollision )
   {  // for late particles, reset charges
         //G4cout << "lateP, initial B C state " << initialBaryon << " " 
         //        << initialCharge<< " " << primary->GetState() << " "<< primary->GetDefinition()->GetParticleName()<< G4endl;
+#ifdef debug_G4BinaryCascade
       lateBaryon = initialBaryon;
       lateCharge = initialCharge;
+#endif
       initialBaryon=initialCharge=0;
   }
   
   initialBaryon += collision->GetTargetBaryonNumber();
-  initialCharge+=G4lrint(collision->GetTargetCharge()); 
+  initialCharge += G4lrint(collision->GetTargetCharge()); 
   if(!products || products->size()==0 || !CheckPauliPrinciple(products))
   {
    #ifdef debug_BIC_ApplyCollision
@@ -1664,7 +1666,7 @@ void G4BinaryCascade::StepParticlesOut()
     }
     if ( counter > 100 && theCollisionMgr->Entries() == 0)   // no collision, and stepping a while....
     {
-        #ifdef debug_1_BinaryCascade
+        #ifdef debug_BIC_StepParticlesOut
         PrintKTVector(&theSecondaryList,std::string("stepping 100 steps"));
 	#endif
 	FindCollisions(&theSecondaryList);
@@ -2469,19 +2471,23 @@ G4ReactionProductVector * G4BinaryCascade::Propagate1H1(
        delete secs;
       }
       secs = theH1Scatterer->Scatter(*(*secondaries).front(), aTarget);
+	#ifdef debug_H1_BinaryCascade
+	PrintKTVector(secs," From Scatter");
+	#endif
       for(size_t ss=0; secs && ss<secs->size(); ss++)
       {
-//        G4cout << "1H1 " << (*secs)[ss]->GetDefinition()->GetParticleName()
-//	       << ", shortlived? "<< (*secs)[ss]->GetDefinition()->IsShortLived()<< G4endl;
+	// must have one resonance in final state, or it was elastic, not allowed here.
         if((*secs)[ss]->GetDefinition()->IsShortLived()) done = true;
       }
-//    G4cout << G4endl;
     }
+
     size_t current(0);
+    ClearAndDestroy(&theFinalState);
     for(current=0; secs && current<secs->size(); current++)
     {
       if((*secs)[current]->GetDefinition()->IsShortLived())
       {
+      	done = true; 	// must have one resonance in final state, elastic not allowed here!
         G4KineticTrackVector * dec = (*secs)[current]->Decay();
 	for(jter=dec->begin(); jter != dec->end(); jter++)
 	{
@@ -2499,8 +2505,11 @@ G4ReactionProductVector * G4BinaryCascade::Propagate1H1(
         theFinalState.push_back((*secs)[current]);
       }
     }
-    //G4cout << "Through loop"<<G4endl;
+    
     delete secs;
+	#ifdef debug_H1_BinaryCascade
+	PrintKTVector(&theFinalState," FinalState");
+	#endif
     for(iter = theFinalState.begin(); iter != theFinalState.end(); ++iter)
     {
       G4KineticTrack * kt = *iter;
@@ -2508,7 +2517,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate1H1(
       aNew->SetMomentum(kt->Get4Momentum().vect());
       aNew->SetTotalEnergy(kt->Get4Momentum().e());
       products->push_back(aNew);
-      #ifdef debug_1_BinaryCascade
+      #ifdef debug_H1_BinaryCascade
       if (! kt->GetDefinition()->GetPDGStable() )
       {
           if (kt->GetDefinition()->IsShortLived())

@@ -78,12 +78,18 @@ G4bool G4Absorber::Absorb(G4KineticTrack & kt, G4KineticTrackVector & tgt)
 G4bool G4Absorber::FindAbsorbers(G4KineticTrack & kt,
 				 G4KineticTrackVector & tgt)
 {
+//  Find a closest ( in space) pair of Nucleons capable to absorb pi+/pi-
+//    pi+ can be absorbed on np or nn resulting in pp or np
+//    pi- can be absorbed on np or pp resulting in nn or np
+
+// @GF: FindAbsorbers is unused, logic is seriously wrong
+
   G4KineticTrack * kt1 = NULL;
   G4KineticTrack * kt2 = NULL;
-  G4double dist1 = DBL_MAX;
-  G4double dist2 = DBL_MAX;
+  G4double dist1 = DBL_MAX;		// dist to closest nucleon
+  G4double dist2 = DBL_MAX;		// dist to next close 
   G4double charge1 = 0;
-  G4double charge2 = 0;
+//  G4double charge2 = 0;		// charge2 is only assigned to, never used
   G4double charge0 = kt.GetDefinition()->GetPDGCharge();
   G4ThreeVector pos = kt.GetPosition();
 
@@ -96,28 +102,28 @@ G4bool G4Absorber::FindAbsorbers(G4KineticTrack & kt,
       continue;
     if(dist < dist1)
     {
-      if(dist1 == DBL_MAX) // accept the candidate
+      if(dist1 == DBL_MAX) // accept 1st as a candidate, 
       {
 	kt1 = curr;
 	charge1 = kt1->GetDefinition()->GetPDGCharge();
 	dist1 = dist;
 	continue;
       }	
-      if(dist2 == DBL_MAX) // accept the candidate put kt1 in kt2
-      {
+      if(dist2 == DBL_MAX) // accept the candidate and shift kt1 to kt2
+      {				// @GF: should'nt we check if compatible?
 	kt2 = kt1;
-	charge2 = charge1;
+//	charge2 = charge1;
 	dist2 = dist1;
 	kt1 = curr;
 	charge1 = kt1->GetDefinition()->GetPDGCharge();
 	dist1 = dist;
 	continue;
       }
-// test the compatibility with charge conservation
+// test the compatibility with charge conservation for new config
       G4double charge = curr->GetDefinition()->GetPDGCharge();
-      if((charge0+charge1+charge < 0.) ||
+      if((charge0+charge1+charge < 0.) ||	//test config (curr,kt1) 
 	 (charge0+charge1+charge) > 2*eplus)
-      {  // incomatible: change kt1 with curr.
+      {  // incompatible: change kt1 with curr.
 	kt1 = curr;
 	charge1 = charge;
 	dist1 = dist;
@@ -125,7 +131,7 @@ G4bool G4Absorber::FindAbsorbers(G4KineticTrack & kt,
       else
       { // compatible: change kt1 with curr and kt2 with kt1
 	kt2 = kt1;
-	charge2 = charge1;
+//	charge2 = charge1;
 	dist2 = dist1;
 	kt1 = curr;
 	charge1 = charge;
@@ -137,7 +143,7 @@ G4bool G4Absorber::FindAbsorbers(G4KineticTrack & kt,
     if(dist2 == DBL_MAX) // accept the candidate
     {
       kt2 = curr;
-      charge2 = kt2->GetDefinition()->GetPDGCharge();
+//      charge2 = kt2->GetDefinition()->GetPDGCharge();
       dist2 = dist;
       continue;
     }	
@@ -148,7 +154,7 @@ G4bool G4Absorber::FindAbsorbers(G4KineticTrack & kt,
       continue;   // incomatible: do nothing
 // compatible: change kt2 with curr
     kt2 = curr;
-    charge2 = charge;
+//    charge2 = charge;
     dist2 = dist;
   }
 

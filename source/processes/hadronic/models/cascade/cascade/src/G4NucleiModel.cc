@@ -86,6 +86,8 @@
 //		(NOTE: Restored from original 20110318 commit)
 // 20110324  D. Wright -- Implement trailing effect
 // 20110324  M. Kelsey -- Move ::reset() here, as it has more code.
+// 20110519  M. Kelsey -- Used "rho" after assignment, instead of recomputing
+// 20110525  M. Kelsey -- Revert scale factor changes (undo 20110321 changes)
 
 #include "G4NucleiModel.hh"
 #include "G4CascadeCheckBalance.hh"
@@ -122,11 +124,11 @@ typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 // ==>	                          radiusUnits = 1.0 (fm)
 
 const G4double G4NucleiModel::crossSectionUnits = 
-  getenv("G4NUCMODEL_XSEC_SCALE") ? strtod(getenv("G4NUCMODEL_XSEC_SCALE"),0) : 0.1;
+  getenv("G4NUCMODEL_XSEC_SCALE") ? strtod(getenv("G4NUCMODEL_XSEC_SCALE"),0) : 1.0;
 
 #define OLD_RADIUS_UNITS (3.3836/1.2)
 const G4double G4NucleiModel::radiusUnits = 
-  getenv("G4NUCMODEL_RAD_SCALE") ? strtod(getenv("G4NUCMODEL_RAD_SCALE"),0) : 1.0;
+  getenv("G4NUCMODEL_RAD_SCALE") ? strtod(getenv("G4NUCMODEL_RAD_SCALE"),0) : OLD_RADIUS_UNITS;
 
 const G4double G4NucleiModel::skinDepth = (1.7234/OLD_RADIUS_UNITS)*radiusUnits;
 
@@ -1326,7 +1328,7 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 		  u = fmax * inuclRndm();
 		  rho = std::sqrt(s) * std::exp(-s);
 
-		  if (std::sqrt(s) * std::exp(-s) > u && s < s3max) {
+		  if (rho > u && s < s3max) {
 		    s = r0forAeq3 * std::sqrt(s);
 		    coord1 = generateWithRandomAngles(s).vect();
 		    coordinates.push_back(coord1);

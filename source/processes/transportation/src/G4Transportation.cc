@@ -57,11 +57,13 @@
 // =======================================================================
 
 #include "G4Transportation.hh"
+#include "G4TransportationProcessType.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4ParticleTable.hh"
 #include "G4ChordFinder.hh"
 #include "G4SafetyHelper.hh"
 #include "G4FieldManagerStore.hh"
+
 class G4VSensitiveDetector;
 
 //////////////////////////////////////////////////////////////////////////
@@ -82,6 +84,9 @@ G4Transportation::G4Transportation( G4int verboseLevel )
     fShortStepOptimisation(false),    // Old default: true (=fast short steps)
     fVerboseLevel( verboseLevel )
 {
+  // set Process Sub Type
+  SetProcessSubType(static_cast<int>(TRANSPORTATION));
+
   G4TransportationManager* transportMgr ; 
 
   transportMgr = G4TransportationManager::GetTransportationManager() ; 

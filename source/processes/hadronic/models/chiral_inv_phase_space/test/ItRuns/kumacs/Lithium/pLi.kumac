@@ -1,0 +1,112 @@
+fo/file 66 pli6.ps
+meta 66 -111
+*option *
+ ve/de *
+ opt zfl1
+ opt nbox
+ opt ndat
+ opt grid
+ set pass 4
+ title_gl 'BAYUKOV 79B   ITEP-79-23 (400 GeV)'
+ opt logy
+ve/cr q(005)
+ve/cr v(4,005)
+ve/in v(1:4,001)      8.0000E-02     0.0000E+00     1.3900E+01     7.0000E-01
+ve/in v(1:4,002)      1.6000E-01     0.0000E+00     5.6000E+00     4.0000E-01
+ve/in v(1:4,003)      2.7000E-01     0.0000E+00     1.5500E+00     8.0000E-02
+ve/in v(1:4,004)      4.0000E-01     0.0000E+00     3.7300E-01     2.3000E-02
+ve/in v(1:4,005)      5.4000E-01     0.0000E+00     9.3000E-02     7.0000E-03
+ve/copy v(1,1:005) x
+ve/copy v(2,1:005) q
+ve/copy v(3,1:005) y
+ve/copy v(4,1:005) e
+ null    0.   0.9    1.00000E-05   100.0000
+exec ../analyse ../../logs/liste.p_li6.proton.70degree.p_li6
+ atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.250000     25.0000 'P LI6 --> P X' 0.3
+/GRAPHICS/HPLOT/ERRORS x y q e 005 29 0.2
+text    0.310000     25.1189 'THETA(P=3,RF=LAB) IN DEG   70.00' 0.3
+ ve/de *
+ve/cr q(010)
+ve/cr v(4,010)
+ve/in v(1:4,001)      9.0000E-02     0.0000E+00     8.2000E+00     4.0000E-01
+ve/in v(1:4,002)      1.2000E-01     0.0000E+00     3.7500E+00     1.9000E-01
+ve/in v(1:4,003)      1.7000E-01     0.0000E+00     1.5900E+00     8.0000E-02
+ve/in v(1:4,004)      1.9000E-01     0.0000E+00     1.0300E+00     6.0000E-02
+ve/in v(1:4,005)      2.1000E-01     0.0000E+00     9.3000E-01     6.0000E-02
+ve/in v(1:4,006)      2.3000E-01     0.0000E+00     6.3000E-01     4.0000E-02
+ve/in v(1:4,007)      2.6000E-01     0.0000E+00     3.6300E-01     2.2000E-02
+ve/in v(1:4,008)      3.8000E-01     0.0000E+00     5.4000E-02     4.0000E-03
+ve/in v(1:4,009)      5.2000E-01     0.0000E+00     1.0400E-02     8.0000E-04
+ve/in v(1:4,010)      6.3000E-01     0.0000E+00     3.6000E-03     5.0000E-04
+ve/copy v(1,1:010) x
+ve/copy v(2,1:010) q
+ve/copy v(3,1:010) y
+ve/copy v(4,1:010) e
+ null    0.   0.9    1.00000E-05   100.0000
+exec ../analyse ../../logs/liste.p_li6.proton.90degree.p_li6
+ atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.250000     25.0000 'P LI6 --> P X' 0.3
+/GRAPHICS/HPLOT/ERRORS x y q e 010 25 0.2
+ text    0.360000     2.51189 'THETA(P=3,RF=LAB) IN DEG   90.00' 0.3
+ ve/de *
+ve/cr q(009)
+ve/cr v(4,009)
+ve/in v(1:4,001)      8.0000E-02     0.0000E+00     4.1700E+00     2.3000E-01
+ve/in v(1:4,002)      1.1000E-01     0.0000E+00     1.7600E+00     1.1000E-01
+ve/in v(1:4,003)      1.7000E-01     0.0000E+00     6.1000E-01     4.0000E-02
+ve/in v(1:4,004)      2.2000E-01     0.0000E+00     2.3000E-01     1.2000E-02
+ve/in v(1:4,005)      2.7000E-01     0.0000E+00     6.3000E-02     4.0000E-03
+ve/in v(1:4,006)      3.2000E-01     0.0000E+00     1.8300E-02     1.3000E-03
+ve/in v(1:4,007)      4.0000E-01     0.0000E+00     6.6000E-03     7.0000E-04
+ve/in v(1:4,008)      4.8000E-01     0.0000E+00     2.1100E-03     2.7000E-04
+ve/in v(1:4,009)      5.5000E-01     0.0000E+00     7.7000E-04     1.1000E-04
+ve/copy v(1,1:009) x
+ve/copy v(2,1:009) q
+ve/copy v(3,1:009) y
+ve/copy v(4,1:009) e
+ null    0.   0.9    1.00000E-05   100.0000
+exec ../analyse ../../logs/liste.p_li6.proton.118degree.p_li6
+ atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.250000     25.0000 'P LI6 --> P X' 0.3
+/GRAPHICS/HPLOT/ERRORS x y q e 009 21 0.2
+ text    0.315000     1.77828 'THETA(P=3,RF=LAB) IN DEG   118.00' 0.3
+ ve/de *
+ve/cr q(004)
+ve/cr v(4,004)
+ve/in v(1:4,001)      8.0000E-02     0.0000E+00     2.4600E+00     1.3000E-01
+ve/in v(1:4,002)      1.6000E-01     0.0000E+00     3.7800E-01     2.6000E-02
+ve/in v(1:4,003)      2.6000E-01     0.0000E+00     3.5000E-02     2.2000E-03
+ve/in v(1:4,004)      4.0000E-01     0.0000E+00     2.4000E-03     2.9000E-04
+ve/copy v(1,1:004) x
+ve/copy v(2,1:004) q
+ve/copy v(3,1:004) y
+ve/copy v(4,1:004) e
+ null    0.   0.9    1.00000E-05   100.0000
+exec ../analyse ../../logs/liste.p_li6.proton.137degree.p_li6
+ atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.250000     25.0000 'P LI6 --> P X' 0.3
+/GRAPHICS/HPLOT/ERRORS x y q e 004 24 0.2
+ text    0.240000     2.51189 'THETA(P=3,RF=LAB) IN DEG   137.00' 0.3
+ ve/de *
+ve/cr q(008)
+ve/cr v(4,008)
+ve/in v(1:4,001)      8.0000E-02     0.0000E+00     2.5000E+00     1.4000E-01
+ve/in v(1:4,002)      1.2000E-01     0.0000E+00     9.8000E-01     6.0000E-02
+ve/in v(1:4,003)      1.6000E-01     0.0000E+00     3.4200E-01     1.6000E-02
+ve/in v(1:4,004)      2.2000E-01     0.0000E+00     9.0000E-02     6.0000E-03
+ve/in v(1:4,005)      2.8000E-01     0.0000E+00     2.5200E-02     2.0000E-03
+ve/in v(1:4,006)      3.4000E-01     0.0000E+00     6.6000E-03     2.4000E-03
+ve/in v(1:4,007)      3.9000E-01     0.0000E+00     1.7000E-03     1.3000E-03
+ve/in v(1:4,008)      4.6000E-01     0.0000E+00     1.2000E-04     9.0000E-05
+ve/copy v(1,1:008) x
+ve/copy v(2,1:008) q
+ve/copy v(3,1:008) y
+ve/copy v(4,1:008) e
+ null    0.   0.9    1.00000E-05   100.0000
+exec ../analyse ../../logs/liste.p_li6.proton.160degree.p_li6
+ atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
+ text    0.250000     25.0000 'P LI6 --> P X' 0.3
+/GRAPHICS/HPLOT/ERRORS x y q e 008 20 0.2
+text    0.270000     1.25893 'THETA(P=3,RF=LAB) IN DEG   160.00' 0.3
+close 66

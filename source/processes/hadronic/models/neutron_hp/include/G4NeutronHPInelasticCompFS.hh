@@ -109,6 +109,10 @@ class G4NeutronHPInelasticCompFS : public G4NeutronHPFinalState
   G4double theCurrentA;
   G4double theCurrentZ;
 
+   protected:
+      G4double QI;
+      G4int LR;
+
    private:
       //                       proj                 targ                 had                  mu of had   
       void two_body_reaction ( G4DynamicParticle* , G4DynamicParticle* , G4DynamicParticle* , G4double mu ); 

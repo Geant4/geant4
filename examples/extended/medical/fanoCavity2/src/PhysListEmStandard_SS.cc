@@ -125,11 +125,14 @@ void PhysListEmStandard_SS::ConstructProcess()
   emOptions.SetDEDXBinning(8*20);	//default=8*7
   emOptions.SetLambdaBinning(8*20);	//default=8*7
   emOptions.SetSplineFlag(true);	//default
-      
+
+  //multiple coulomb scattering
+  //
+  emOptions.SetPolarAngleLimit(0.0);
+        
   //energy loss
   //
   emOptions.SetStepFunction(0.2, 10*um);	//default=(0.2, 1*mm)   
-  emOptions.SetLinearLossLimit(1.e-2);		//default
            
   //build CSDA range
   //
@@ -140,9 +143,6 @@ void PhysListEmStandard_SS::ConstructProcess()
   //ionization
   //
   emOptions.SetSubCutoff(false);	//default
-
-  // scattering
-  emOptions.SetPolarAngleLimit(0.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

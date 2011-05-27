@@ -49,7 +49,8 @@
 
 #include "G4SynchrotronRadiation.hh"
 #include "G4ElectroNuclearBuilder.hh"
-#include "G4MuNuclearInteraction.hh"
+#include "G4MuonNuclearProcess.hh"
+#include "G4VDMuonNuclearModel.hh"
 
 class G4EmExtraPhysics : public G4VPhysicsConstructor
 {
@@ -87,8 +88,8 @@ private:
   G4SynchrotronRadiation*  theElectronSynch;
   G4SynchrotronRadiation*  thePositronSynch;
   G4ElectroNuclearBuilder* theGNPhysics;
-  G4MuNuclearInteraction*  theMuNuc1;
-  G4MuNuclearInteraction*  theMuNuc2;
+  G4MuonNuclearProcess* muNucProcess;
+  G4VDMuonNuclearModel* muNucModel;
 
   G4int verbose;
 };

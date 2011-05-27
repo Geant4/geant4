@@ -62,6 +62,7 @@
 //   Rename SetXXX methods to ProposeXXX   DynamicCharge  Oct. 2005 H.Kurashige
 //   Add get/ProposeMagneticMoment                  Mar 2007 H.Kurashige
 //   Fix treatment of weight                        Mar 2007 H.Kurashige
+//   Add  Get/ProposeVelocity                       Apr 2011 H.Kurashige
 // -------------------------------------------------------------
  
 #ifndef G4ParticleChange_h
@@ -144,6 +145,10 @@ class G4ParticleChange: public G4VParticleChange
     G4double GetEnergy() const;
     void ProposeEnergy(G4double finalEnergy);
     // Get/Propose the final kinetic energy of the current particle.
+
+    G4double GetVelocity() const;
+    void ProposeVelocity(G4double finalVelocity);
+    // Get/Propose the final velocity of the current particle.
 
     G4double GetProperTime() const;
     void ProposeProperTime(G4double finalProperTime);
@@ -228,7 +233,11 @@ class G4ParticleChange: public G4VParticleChange
     G4double theEnergyChange;
     //  The final kinetic energy of the current track
     
-    G4ThreeVector thePositionChange;
+    G4double theVelocityChange;
+    G4bool isVelocityChanged;
+    //  The final velocity of the current track
+
+   G4ThreeVector thePositionChange;
     //  The changed (final) position of a given track
     
     G4double theTimeChange;

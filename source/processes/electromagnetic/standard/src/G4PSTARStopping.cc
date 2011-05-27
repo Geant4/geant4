@@ -75,7 +75,7 @@ G4PSTARStopping::~G4PSTARStopping()
 
 G4int G4PSTARStopping:: GetIndex (const G4Material* mat)
 {  
-  if (mat == currentMaterial) return matIndex;
+  if (mat == currentMaterial) { return matIndex; }
   G4String matName = mat->GetName();
   for (G4int i=0; i<74; ++i){
     if (matName == name[i]){

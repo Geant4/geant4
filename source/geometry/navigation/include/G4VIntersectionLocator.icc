@@ -118,7 +118,6 @@ G4VIntersectionLocator::IntersectChord( G4ThreeVector  StartPointA,
   G4ThreeVector OriginShift = StartPointA -  fPreviousSftOrigin ;
   G4double      MagSqShift  = OriginShift.mag2() ;
   G4double      currentSafety;
-  G4bool        doCallNav= false;
 
   if( MagSqShift >= sqr(fPreviousSafety) )
   {
@@ -139,8 +138,7 @@ G4VIntersectionLocator::IntersectChord( G4ThreeVector  StartPointA,
   }
   else
   {
-    doCallNav= true; 
-      // Check whether any volumes are encountered by the chord AB
+    // Check whether any volumes are encountered by the chord AB
 
     LinearStepLength = GetNavigatorFor()->ComputeStep( StartPointA,
                                  ChordAB_Dir, ChordAB_Length, NewSafety );

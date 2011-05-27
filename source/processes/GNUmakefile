@@ -46,6 +46,9 @@ SUBLIBS += G4empolar
 GLOBLIBS  = libG4digits_hits.lib libG4track.lib libG4particles.lib libG4geometry.lib
 GLOBLIBS += libG4materials.lib libG4graphics_reps.lib
 GLOBLIBS += libG4intercoms.lib libG4global.lib
+ifeq ($(G4SYSTEM), WIN32-VC)
+  GLOBLIBS += libG4expat.lib
+endif
 
 SUBDIRS += hadronic/cross_sections
 SUBDIRS += hadronic/management 
@@ -75,7 +78,7 @@ SUBDIRS += hadronic/models/high_energy
 SUBDIRS += hadronic/models/im_r_matrix
 SUBDIRS += hadronic/models/incl
 SUBDIRS += hadronic/models/isotope_production
-# SUBDIRS += hadronic/models/lend
+SUBDIRS += hadronic/models/lend
 SUBDIRS += hadronic/models/lll_fission
 SUBDIRS += hadronic/models/low_energy
 SUBDIRS += hadronic/models/management
@@ -109,7 +112,7 @@ SUBLIBS +=  G4hadronic_iso
 SUBLIBS +=  G4hadronic_LE
 SUBLIBS +=  G4hadronic_RPG
 SUBLIBS +=  G4hadronic_qmd
-# SUBLIBS +=  G4had_lend
+SUBLIBS +=  G4had_lend
 SUBLIBS +=  G4had_lll_fis
 SUBLIBS +=  G4had_mod_man
 SUBLIBS +=  G4had_neu_hp

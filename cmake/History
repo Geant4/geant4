@@ -16,6 +16,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 24th 2010 - B.Morgan (cmake-V09-04-00)
+- *** All History for the CMake cataegory will now be in this file ***
+- Templates/geant4-env.sh.in : Added variable setting for RayTracerX
+- Templates/geant4-env.csh.in : Added variable setting for RayTracerX
+- Templates/geant4-config.in : Added needed reporting and flags setting for
+  RayTracerX support.
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : Added setting of 
+  variable needed to export the existence of RayTracerX in the geant4-env
+  scripts.
+- Modules/Geant4ConfigureConfigScript.cmake : Added setting of variables
+  needed to export RayTracerX existence and X11 flags to geant4-config script.
+
+
 December 3rd 2010 - B. Morgan (cmake-V09-03-01)
 - Added generation of geant4-config script.
 

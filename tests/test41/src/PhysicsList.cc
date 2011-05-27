@@ -48,6 +48,7 @@
 #include "G4Positron.hh"
 
 #include "G4UrbanMscModel93.hh"
+#include "G4UrbanMscModel95.hh"
 #include "PhysListEmStandard.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -141,6 +142,13 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     AddPhysicsList("emstandard_msc90");
     G4EmConfigurator* conf = G4LossTableManager::Instance()->EmConfigurator();
     G4UrbanMscModel93* mscm = new G4UrbanMscModel93();
+    conf->SetExtraEmModel("mu+","muMsc",mscm);
+
+  } else if (name == "emstandard_msc95") {
+
+    AddPhysicsList("emstandard_msc90");
+    G4EmConfigurator* conf = G4LossTableManager::Instance()->EmConfigurator();
+    G4UrbanMscModel95* mscm = new G4UrbanMscModel95();
     conf->SetExtraEmModel("mu+","muMsc",mscm);
 
   } else if (name == "standardSS") {

@@ -433,7 +433,9 @@ G4GGNuclNuclCrossSection::GetHadronNucleonXscNS(G4ParticleDefinition* pParticle,
                                                  G4double pTkin, 
                                                  G4ParticleDefinition* tParticle)
 {
-  G4double xsection(0), Delta, A0, B0;
+  G4double xsection(0);
+  // G4double Delta;   DHW 19 May 2011: variable set but not used
+  G4double A0, B0;
   G4double hpXsc(0);
   G4double hnXsc(0);
 
@@ -460,8 +462,8 @@ G4GGNuclNuclCrossSection::GetHadronNucleonXscNS(G4ParticleDefinition* pParticle,
   if( proj_momentum >= 10. ) // high energy: pp = nn = np
     // if( proj_momentum >= 2.)
   {
-    Delta = 1.;
-    if (proj_energy < 40.) Delta = 0.916+0.0021*proj_energy;
+    //  Delta = 1.;    // DHW 19 May 2011: variable set but not used
+    //  if (proj_energy < 40.) Delta = 0.916+0.0021*proj_energy;
 
     if (proj_momentum >= 10.) {
       B0 = 7.5;

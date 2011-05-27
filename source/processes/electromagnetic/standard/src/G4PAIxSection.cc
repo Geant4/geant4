@@ -120,6 +120,8 @@ G4PAIxSection::G4PAIxSection(G4MaterialCutsCouple* matCC)
 G4PAIxSection::G4PAIxSection(G4int materialIndex,
 			     G4double maxEnergyTransfer)
 {
+   fSandia = 0;
+   fMatSandiaMatrix = 0;
    const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
    G4int i, j;   
 
@@ -231,6 +233,8 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
                               G4double** photoAbsCof, 
                               G4int intNumber                   )
 {
+   fSandia = 0;
+   fMatSandiaMatrix = 0;
    const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
    G4int i, j; 
   
@@ -343,6 +347,8 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
 			      G4double maxEnergyTransfer,
 			      G4double betaGammaSq          )
 {
+   fSandia = 0;
+   fMatSandiaMatrix = 0;
    const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
    G4int i, j, numberOfElements;   
@@ -475,11 +481,12 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
       IntegralPlasmon();
       IntegralResonance();
       
-      //   delete[] fEnergyInterval;
+      delete[] fEnergyInterval;
       delete[] fA1;
       delete[] fA2;
       delete[] fA3;
       delete[] fA4;    
+      delete[] thisMaterialZ;
 }
 
 
@@ -497,6 +504,8 @@ G4PAIxSection::~G4PAIxSection()
    delete[] fDifPAIxSection       ;   
    delete[] fIntegralPAIxSection  ;
    */ ////////////////////////
+  delete fSandia;
+  delete fMatSandiaMatrix;
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -1503,7 +1512,7 @@ G4double G4PAIxSection::SumOverInterResonance( G4int i )
 G4double G4PAIxSection::SumOverBorder( G4int      i , 
                                        G4double en0    )
 {               
-   G4double x0,x1,y0,yy1,a,b,c,d,e0,result;
+  G4double x0,x1,y0,yy1,a,b,/*c,*/d,e0,result;
 
    e0 = en0;
    x0 = fSplineEnergy[i];
@@ -1511,7 +1520,7 @@ G4double G4PAIxSection::SumOverBorder( G4int      i ,
    y0 = fDifPAIxSection[i];
    yy1 = fDifPAIxSection[i+1];
 
-   c = x1/x0;
+   //c = x1/x0;
    d = e0/x0;   
    a = log10(yy1/y0)/log10(x1/x0);
    // b0 = log10(y0) - a*log10(x0);
@@ -1540,7 +1549,7 @@ G4double G4PAIxSection::SumOverBorder( G4int      i ,
    y0 = fDifPAIxSection[i - 1];
    yy1 = fDifPAIxSection[i - 2];
 
-   c = x1/x0;
+   //c = x1/x0;
    d = e0/x0;   
    a = log10(yy1/y0)/log10(x1/x0);
    //  b0 = log10(y0) - a*log10(x0);
@@ -1572,7 +1581,7 @@ G4double G4PAIxSection::SumOverBorder( G4int      i ,
 G4double G4PAIxSection::SumOverBorderdEdx( G4int      i , 
                                        G4double en0    )
 {               
-   G4double x0,x1,y0,yy1,a,b,c,d,e0,result;
+  G4double x0,x1,y0,yy1,a,b,/*c,*/d,e0,result;
 
    e0 = en0;
    x0 = fSplineEnergy[i];
@@ -1580,7 +1589,7 @@ G4double G4PAIxSection::SumOverBorderdEdx( G4int      i ,
    y0 = fDifPAIxSection[i];
    yy1 = fDifPAIxSection[i+1];
 
-   c = x1/x0;
+   //c = x1/x0;
    d = e0/x0;   
    a = log10(yy1/y0)/log10(x1/x0);
    // b0 = log10(y0) - a*log10(x0);
@@ -1600,7 +1609,7 @@ G4double G4PAIxSection::SumOverBorderdEdx( G4int      i ,
    y0 = fDifPAIxSection[i - 1];
    yy1 = fDifPAIxSection[i - 2];
 
-   c = x1/x0;
+   // c = x1/x0;
    d = e0/x0;   
    a = log10(yy1/y0)/log10(x1/x0);
    //  b0 = log10(y0) - a*log10(x0);

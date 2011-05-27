@@ -20,6 +20,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ May 27, 2011  T.Nikitina                 geom-bool-V09-04-00
+  - Added protection for potential cases of infinite loop in DistanceToIn(p,v)
+    and related error message with event abortion.
+
  October 19, 2010  G.Cosmo                geom-bool-V09-03-03
   - Implemented Clone() virtual method for all solids, returning a pointer
     to a dynamically allocated copy of the solid. To be used by Geant4-MT.

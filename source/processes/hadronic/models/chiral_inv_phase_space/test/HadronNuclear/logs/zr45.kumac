@@ -1,0 +1,19 @@
+opt a4
+zone 1 2
+ve/del *
+title_gl 'neutron final state'
+exec inclusive 45. ../logs/liste.p_zr.45mev.neutron.integral ../data/zr.45mev/p.zr.45mev.dsig_n.dt
+
+zone 3 2 4 s
+exec prepare ../data/zr.45mev/p.zr.45mev.dsig_n.dt.domega
+
+exec analyse ../logs/liste.p_zr.45mev.neutron.0degree 0. 45. 1.
+exec analyse ../logs/liste.p_zr.45mev.neutron.10degree 10. 45. 1.
+exec analyse ../logs/liste.p_zr.45mev.neutron.20degree 20. 45. 1.
+zone 2 3
+exec analyse ../logs/liste.p_zr.45mev.neutron.30degree 30. 45. 1.
+exec analyse ../logs/liste.p_zr.45mev.neutron.40degree 40. 45. 1.
+exec analyse ../logs/liste.p_zr.45mev.neutron.60degree 60. 45. 1.
+exec analyse ../logs/liste.p_zr.45mev.neutron.120degree 120. 45. 1.
+exec analyse ../logs/liste.p_zr.45mev.neutron.150degree 150. 45. 1.
+exec analyse ../logs/liste.p_zr.45mev.neutron.160degree 160. 45. 1.

@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17-05-11  G.Folger (exhadr02-V09-04-04)
+-  Allow to build without reference to DPMJet;
+    all .cc files linking to DPMJet are pretected by #ifdef G4_USE_DPMJET
+    
 21-04-11  V.Ivant (exhadr02-V09-04-03)
 - Fixed problems of energy intervals for models for ions
   allowing to work with different reference Physics Lists

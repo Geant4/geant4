@@ -45,6 +45,7 @@ G4ProcessVector::G4ProcessVector(size_t)
 }
 
 G4ProcessVector::G4ProcessVector(const G4ProcessVector& right)
+  :pProcVector(0)
 {
   *this == right;
 }

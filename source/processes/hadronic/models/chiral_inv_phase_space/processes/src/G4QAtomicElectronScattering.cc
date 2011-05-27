@@ -72,7 +72,9 @@ G4double G4QAtomicElectronScattering::freeNuc=0.5;      // % of free nucleons on
 G4double G4QAtomicElectronScattering::freeDib=0.05;     // % of free diBaryons on a surface
 G4double G4QAtomicElectronScattering::clustProb=5.;     // Nuclear clusterization parameter
 G4double G4QAtomicElectronScattering::mediRatio=10.;    // medium/vacuum hadronizationRatio
-G4int    G4QAtomicElectronScattering::nPartCWorld=152;  // #of particles in the CHIPS World
+//G4int    G4QAtomicElectronScattering::nPartCWorld=152;// #of particles in the CHIPS World
+//G4int    G4QAtomicElectronScattering::nPartCWorld=122;// #of particles in the CHIPS World
+G4int    G4QAtomicElectronScattering::nPartCWorld=85;// #of particles in CHIPS World Reduce
 G4double G4QAtomicElectronScattering::SolidAngle=0.5;   // A part of Solid Angle to capture
 G4bool   G4QAtomicElectronScattering::EnergyFlux=false; // Flag to use EnergyFlux or MultyQ
 G4double G4QAtomicElectronScattering::PiPrThresh=141.4; // PiProductionThreshold for gammas
@@ -89,7 +91,7 @@ void G4QAtomicElectronScattering::SetParameters(G4double temper, G4double ssin2g
                                                 G4double solAn, G4bool efFlag,
                                                 G4double piThresh, G4double mpisq,
                                                 G4double dinum)
-{//  =============================================================================
+{
   Temperature=temper;
   SSin2Gluons=ssin2g;
   EtaEtaprime=etaetap;
@@ -141,12 +143,12 @@ G4double G4QAtomicElectronScattering::GetMeanFreePath(const G4Track& aTrack,
 #ifdef debug
   G4cout<<"G4QAtomElectScattering::GetMeanFreePath:"<<nE<<" Elem's in theMaterial"<<G4endl;
 #endif
-  G4bool leptoNuc=false;       // By default the reaction is not lepto-nuclear
+  //G4bool leptoNuc=false;       // By default the reaction is not lepto-nuclear
   G4VQCrossSection* CSmanager=G4QElectronNuclearCrossSection::GetPointer();
   if(incidentParticleDefinition == G4Electron::Electron())
   {
     CSmanager=G4QElectronNuclearCrossSection::GetPointer();
-    leptoNuc=true;
+    //leptoNuc=true;
   }
   else G4cout<<"G4QAtomEScattering::GetMeanFreePath:Particle isn't known in CHIPS"<<G4endl;
   
@@ -502,7 +504,7 @@ G4VParticleChange* G4QAtomicElectronScattering::PostStepDoIt(const G4Track& trac
   //    //}//                                                                          |
   //    //eWei=pan->GetWeight();        // Just an example for the weight of the event |
   //#ifdef debug
-  //    //G4cout<<"=====>>G4QAtomElScat::PostStepDoIt:elF="<<elF<<",n="<<tNH<<G4endl;//|
+  //    //G4cout<<"=---=>>G4QAtomElScat::PostStepDoIt:elF="<<elF<<",n="<<tNH<<G4endl;//|
   //#endif
   //    // @@@@@@@@@@@@@@ Temporary for the testing purposes --- End                   |
   //  }                                                             //                 |
