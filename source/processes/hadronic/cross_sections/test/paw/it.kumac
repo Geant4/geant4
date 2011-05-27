@@ -1,8 +1,0 @@
-nt/cr 1 ' ' 3 ' ' ! e s1 s2
-nt/read 1 it
-zone
-opt logx
-set mtyp 20
-nt/pl 1.s2%e
-set mtyp 24
-nt/pl 1.s1%e ! ! -s
