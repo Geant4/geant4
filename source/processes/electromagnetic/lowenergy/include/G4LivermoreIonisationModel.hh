@@ -52,13 +52,15 @@
 #include "G4eIonisationCrossSectionHandler.hh"
 #include "G4VEnergySpectrum.hh"
 #include "G4AtomicTransitionManager.hh"
-#include "G4AtomicDeexcitation.hh"
+//#include "G4AtomicDeexcitation.hh"
+#include "G4VAtomDeexcitation.hh"
 
 class G4ParticleDefinition;
 class G4DynamicParticle;
 class G4MaterialCutsCouple;
 class G4Material;
 class G4ShellVacancy;
+//class G4VAtomDeexcitation;
 
 class G4LivermoreIonisationModel : public G4VEmModel 
 {
@@ -93,8 +95,8 @@ public:
 		
 
   virtual void SampleDeexcitationAlongStep(const G4Material*,
-                                           const G4Track&,
-                                           G4double& eloss);
+					   const G4Track&,
+                                           G4double&);
 
   // min cut in kinetic energy allowed by the model
   virtual G4double MinEnergyCut(const G4ParticleDefinition*,
@@ -128,7 +130,9 @@ private:
   G4VEnergySpectrum* energySpectrum;
   G4ShellVacancy* shellVacancy;
 
-  G4AtomicDeexcitation deexcitationManager;
+
+  G4VAtomDeexcitation* fAtomDeexcitation;
+  //  G4AtomicDeexcitation deexcitationManager;
   const G4AtomicTransitionManager* transitionManager;
 
 };

@@ -203,7 +203,7 @@ void G4UAtomicDeexcitation::GenerateParticles(
 	if (aParticle != 0) 
 	  {
 	    vectorOfParticles->push_back(aParticle);
-	    //	  G4cout << "FLUO!" << G4endl; //debug
+	    //G4cout << "FLUO!" << G4endl; //debug
 	  }
 	else {provShellId = -2;}
       }  

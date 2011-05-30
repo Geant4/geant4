@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30.05.2011  L. Pandola, tag emlowen-V09-04-39
+	    Bug fix in G4PenelopeComptonModel and 
+	    G4PenelopeBremsstrahlungFS
+
 26.05.2011  L. Pandola, tag emlowen-V09-04-38
 	    Fixed include/src list in sources.cmake
 

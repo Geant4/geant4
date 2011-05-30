@@ -489,7 +489,8 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
     }
 
   //the local energy deposit is what remains: part of this may be spent for fluorescence.
-  if(DeexcitationFlag() && Z > 5) {
+  //Notice: shellID might be 0 (invalid!) if shFlag=30. Must be protected
+  if(DeexcitationFlag() && Z > 5 && shellId>0) {
 
     const G4ProductionCutsTable* theCoupleTable=
       G4ProductionCutsTable::GetProductionCutsTable();

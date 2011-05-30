@@ -42,7 +42,9 @@
 #include "G4CompositeEMDataSet.hh"
 #include "G4ShellData.hh"
 #include "G4DopplerProfile.hh"
-#include "G4AtomicDeexcitation.hh"
+//#include "G4AtomicDeexcitation.hh"
+#include "G4VAtomDeexcitation.hh"
+
 #include "G4VPhotoElectricAngularDistribution.hh"
 #include "G4PhotoElectricAngularGeneratorSimple.hh"
 #include "G4PhotoElectricAngularGeneratorSauterGavrila.hh"
@@ -52,6 +54,8 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4ForceCondition.hh"
 #include "G4Gamma.hh"
+
+
 
 class G4LivermorePhotoElectricModel : public G4VEmModel
 {
@@ -103,7 +107,8 @@ private:
   G4VCrossSectionHandler* crossSectionHandler;
   G4VCrossSectionHandler* shellCrossSectionHandler;
 
-  G4AtomicDeexcitation deexcitationManager;
+  G4VAtomDeexcitation*      fAtomDeexcitation;
+  //  G4AtomicDeexcitation deexcitationManager;
 
   G4VPhotoElectricAngularDistribution* ElectronAngularGenerator;
   G4String generatorName;

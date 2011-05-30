@@ -49,6 +49,7 @@
 // 
 
 #include "G4LivermorePhotoElectricModel.hh"
+#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -76,7 +77,6 @@ G4LivermorePhotoElectricModel::G4LivermorePhotoElectricModel(const G4ParticleDef
 
   //Set atomic deexcitation by default
   SetDeexcitationFlag(true);
-  ActivateAuger(false);
 
   // default generator
   ElectronAngularGenerator = 
@@ -109,6 +109,9 @@ G4LivermorePhotoElectricModel::Initialise(const G4ParticleDefinition*,
   if (verboseLevel > 3) {
     G4cout << "Calling G4LivermorePhotoElectricModel::Initialise()" << G4endl;
   }
+
+  fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
+  ActivateAuger(true); // which default?
 
   if (crossSectionHandler)
   {
@@ -245,71 +248,100 @@ G4LivermorePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicParticle*>
       bindingEnergy = photonEnergy;
     }
 
-  // deexcitation
-  if(DeexcitationFlag() && Z > 5) {
-
-    const G4ProductionCutsTable* theCoupleTable=
-      G4ProductionCutsTable::GetProductionCutsTable();
-
-    size_t index = couple->GetIndex();
-    G4double cutg = (*(theCoupleTable->GetEnergyCutsVector(0)))[index];
-    G4double cute = (*(theCoupleTable->GetEnergyCutsVector(1)))[index];
 
     // Generation of fluorescence
-    // Data in EADL are available only for Z > 5
-    // Protection to avoid generating photons in the unphysical case of
-    // shell binding energy > photon energy
-    if (bindingEnergy > cutg || bindingEnergy > cute)
-      {
-	G4DynamicParticle* aPhoton;
-	deexcitationManager.SetCutForSecondaryPhotons(cutg);
-	deexcitationManager.SetCutForAugerElectrons(cute);
- 
-	std::vector<G4DynamicParticle*>* photonVector = 
-	  deexcitationManager.GenerateParticles(Z,shellId);
-	size_t nTotPhotons = photonVector->size();
-	for (size_t k=0; k<nTotPhotons; k++)
-	  {
-	    aPhoton = (*photonVector)[k];
-	    if (aPhoton)
-	      {
-		G4double itsEnergy = aPhoton->GetKineticEnergy();
-		if (itsEnergy <= bindingEnergy)
-		  {
-		    // Local energy deposit is given as the sum of the
-		    // energies of incident photons minus the energies
-		    // of the outcoming fluorescence photons
-		    bindingEnergy -= itsEnergy;
-		    fvect->push_back(aPhoton);
-		  }
-		else
-		  {
-		    // abnormal case of energy non-conservation
-		    delete aPhoton;
-		    (*photonVector)[k] = 0;
-		  }
-	      }
-	  }
-	delete photonVector;
+
+  if(fAtomDeexcitation) {
+    G4int index = couple->GetIndex();
+    if(fAtomDeexcitation->CheckDeexcitationActiveRegion(index)) {
+      //G4int Z = (G4int)elm->GetZ();
+      //G4AtomicShellEnumerator as = G4AtomicShellEnumerator(i);
+      //const G4AtomicShell* shell = fAtomDeexcitation->GetAtomicShell(Z, as);    
+      size_t nbefore = fvect->size();
+      fAtomDeexcitation->GenerateParticles(fvect, shell, Z, index);
+      size_t nafter = fvect->size();
+      if(nafter > nbefore) {
+	for (size_t j=nbefore; j<nafter; ++j) {
+	  bindingEnergy -= ((*fvect)[j])->GetKineticEnergy();
+	} 
       }
+    }
   }
+  // energy balance
+  if(bindingEnergy < 0.0) { bindingEnergy = 0.0; }
+  
   // excitation energy left
   fParticleChange->ProposeLocalEnergyDeposit(bindingEnergy);
+  
+//  // deexcitation
+//  if(DeexcitationFlag() && Z > 5) {
+//
+//    const G4ProductionCutsTable* theCoupleTable=
+//      G4ProductionCutsTable::GetProductionCutsTable();
+//
+//    size_t index = couple->GetIndex();
+//    G4double cutg = (*(theCoupleTable->GetEnergyCutsVector(0)))[index];
+//    G4double cute = (*(theCoupleTable->GetEnergyCutsVector(1)))[index];
+//
+//    // Data in EADL are available only for Z > 5
+//    // Protection to avoid generating photons in the unphysical case of
+//    // shell binding energy > photon energy
+//    if (bindingEnergy > cutg || bindingEnergy > cute)
+//      {
+//	G4DynamicParticle* aPhoton;
+//	deexcitationManager.SetCutForSecondaryPhotons(cutg);
+//	deexcitationManager.SetCutForAugerElectrons(cute);
+// 
+//	std::vector<G4DynamicParticle*>* photonVector = 
+//	  deexcitationManager.GenerateParticles(Z,shellId);
+//
+//
+//
+//
+//
+//	size_t nTotPhotons = photonVector->size();
+//	for (size_t k=0; k<nTotPhotons; k++)
+//	  {
+//	    aPhoton = (*photonVector)[k];
+//	    if (aPhoton)
+//	      {
+//		G4double itsEnergy = aPhoton->GetKineticEnergy();
+//		if (itsEnergy <= bindingEnergy)
+//		  {
+//		    // Local energy deposit is given as the sum of the
+//		    // energies of incident photons minus the energies
+//		    // of the outcoming fluorescence photons
+//		    bindingEnergy -= itsEnergy;
+//		    fvect->push_back(aPhoton);
+//		  }
+//		else
+//		  {
+//		    // abnormal case of energy non-conservation
+//		    delete aPhoton;
+//		    (*photonVector)[k] = 0;
+//		  }
+//	      }
+//	  }
+//	delete photonVector;
+//      }
+//  }
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4LivermorePhotoElectricModel::ActivateAuger(G4bool augerbool)
 {
-  if (!DeexcitationFlag() && augerbool)
+  if (!DeexcitationFlag())
     {
       G4cout << "WARNING - G4LivermorePhotoElectricModel" << G4endl;
       G4cout << "The use of the Atomic Deexcitation Manager is set to false " << G4endl;
       G4cout << "Therefore, Auger electrons will be not generated anyway" << G4endl;
     }
-  deexcitationManager.ActivateAugerElectronProduction(augerbool);
+  fAtomDeexcitation->SetAuger(augerbool);
+  //  deexcitationManager.ActivateAugerElectronProduction(augerbool);
   if (verboseLevel > 1)
-    G4cout << "Auger production set to " << augerbool << G4endl;
+    G4cout << "Auger production set to " <<fAtomDeexcitation->IsAugerActive() << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

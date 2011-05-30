@@ -58,7 +58,7 @@
 #include "G4DynamicParticle.hh"
 #include "G4Element.hh"
 #include "G4AtomicTransitionManager.hh"
-#include "G4AtomicDeexcitation.hh"
+//#include "G4AtomicDeexcitation.hh"
 #include "G4AtomicShell.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -74,6 +74,7 @@
 #include "G4VDataSetAlgorithm.hh"
 #include "G4LogLogInterpolation.hh"
 #include "G4CompositeEMDataSet.hh"
+#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -91,14 +92,11 @@ G4LivermoreIonisationModel::G4LivermoreIonisationModel(const G4ParticleDefinitio
   //
   verboseLevel = 0;
   //By default: use deexcitation, not auger
-  SetDeexcitationFlag(true);
-  ActivateAuger(false);
+  //SetDeexcitationFlag(true);
+  //ActivateAuger(false);
   //
-  //
-  // Notice: the fluorescence along step is generated only if it is 
-  // set by the PROCESS (e.g. G4eIonisation) via the command
-  // process->ActivateDeexcitation(true);
-  //  
+
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -122,6 +120,11 @@ void G4LivermoreIonisationModel::Initialise(const G4ParticleDefinition* particle
       G4cout << "It cannot be registered to " << particle->GetParticleName() << G4endl;
       G4Exception();
     }
+  // Notice: the fluorescence along step is generated only if it is 
+  // set by the PROCESS (e.g. G4eIonisation) via the command
+  // process->ActivateDeexcitation(true);
+  //  
+  fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
 
   //Read energy spectrum
   if (energySpectrum) 
@@ -152,12 +155,13 @@ void G4LivermoreIonisationModel::Initialise(const G4ParticleDefinition* particle
   //The method BuildMeanFreePathForMaterials() is required here only to force 
   //the building of an internal table: the output pointer can be deleted
   delete emdata;  
- 
+
   //Fluorescence data
   transitionManager = G4AtomicTransitionManager::Instance();
   if (shellVacancy) delete shellVacancy;
   shellVacancy = new G4ShellVacancy();
   InitialiseFluorescence();
+
 
   if (verboseLevel > 0)
     {
@@ -284,7 +288,7 @@ void G4LivermoreIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle
   const G4AtomicShell* atomicShell =
                 (G4AtomicTransitionManager::Instance())->Shell(Z, shell);
   G4double bindingEnergy = atomicShell->BindingEnergy();
-  G4int shellId = atomicShell->ShellId();
+  //G4int shellId = atomicShell->ShellId();
 
   // Sample delta energy using energy interval for delta-electrons 
   G4double energyMax = 
@@ -369,49 +373,78 @@ void G4LivermoreIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle
     }
   fParticleChange->SetProposedKineticEnergy(finalKinEnergy);
 
-  // deexcitation may be active per G4Region
-  if(DeexcitationFlag() && Z > 5) 
-    {
-      G4ProductionCutsTable* theCoupleTable = 
-	G4ProductionCutsTable::GetProductionCutsTable();
-      // Retrieve cuts for gammas
-      G4double cutG = (*theCoupleTable->GetEnergyCutsVector(0))[couple->GetIndex()];
-      if(theEnergyDeposit > cutG || theEnergyDeposit > cutE) 
-	{
-	  deexcitationManager.SetCutForSecondaryPhotons(cutG);
-	  deexcitationManager.SetCutForAugerElectrons(cutE);
-	  std::vector<G4DynamicParticle*>* secondaryVector = 
-	    deexcitationManager.GenerateParticles(Z, shellId);
-	  G4DynamicParticle* aSecondary;
+  // sample deexcitation
+  //
 
-	  if (secondaryVector) 
-	    {
-	      for (size_t i = 0; i<secondaryVector->size(); i++) 
-		{
-		  aSecondary = (*secondaryVector)[i];
-		  //Check if it is a valid secondary
-		  if (aSecondary) 
-		    {
-		      G4double e = aSecondary->GetKineticEnergy();
-		      if (e < theEnergyDeposit) 
-			{		      
-			  theEnergyDeposit -= e;
-			  fvect->push_back(aSecondary);
-			  aSecondary = 0;
-			  (*secondaryVector)[i]=0;
-			} 
-		      else 
-			{
-			  delete aSecondary;
-			  (*secondaryVector)[i] = 0;
-			}
-		    }
-		}
-	      //secondaryVector = 0; 
-	      delete secondaryVector;
-	    }
-	}
+
+
+  if(fAtomDeexcitation && DeexcitationFlag() ) {
+    G4int index = couple->GetIndex();
+    if(fAtomDeexcitation->CheckDeexcitationActiveRegion(index)) {
+      //      G4int Z = (G4int)elm->GetZ();
+      //      G4AtomicShellEnumerator as = G4AtomicShellEnumerator(i);
+      //      const G4AtomicShell* shell = fAtomDeexcitation->GetAtomicShell(Z, as);    
+      size_t nbefore = fvect->size();
+      fAtomDeexcitation->GenerateParticles(fvect, atomicShell, Z, index);
+      size_t nafter = fvect->size();
+      if(nafter > nbefore) {
+	for (size_t j=nbefore; j<nafter; ++j) {
+	  theEnergyDeposit -= ((*fvect)[j])->GetKineticEnergy();
+	} 
+      }
     }
+  }
+
+
+
+  // Old deexcitation
+
+//  // deexcitation may be active per G4Region
+//  if(DeexcitationFlag() && Z > 5) 
+//    {
+//      G4ProductionCutsTable* theCoupleTable = 
+//	G4ProductionCutsTable::GetProductionCutsTable();
+//      // Retrieve cuts for gammas
+//      G4double cutG = (*theCoupleTable->GetEnergyCutsVector(0))[couple->GetIndex()];
+//      if(theEnergyDeposit > cutG || theEnergyDeposit > cutE) 
+//	{
+//	  deexcitationManager.SetCutForSecondaryPhotons(cutG);
+//	  deexcitationManager.SetCutForAugerElectrons(cutE);
+//	  std::vector<G4DynamicParticle*>* secondaryVector = 
+//	    deexcitationManager.GenerateParticles(Z, shellId);
+//	  G4DynamicParticle* aSecondary;
+//
+//	  if (secondaryVector) 
+//	    {
+//	      for (size_t i = 0; i<secondaryVector->size(); i++) 
+//		{
+//		  aSecondary = (*secondaryVector)[i];
+//		  //Check if it is a valid secondary
+//		  if (aSecondary) 
+//		    {
+//		      G4double e = aSecondary->GetKineticEnergy();
+//		      if (e < theEnergyDeposit) 
+//			{		      
+//			  theEnergyDeposit -= e;
+//			  fvect->push_back(aSecondary);
+//			  aSecondary = 0;
+//			  (*secondaryVector)[i]=0;
+//			} 
+//		      else 
+//			{
+//			  delete aSecondary;
+//			  (*secondaryVector)[i] = 0;
+//			}
+//		    }
+//		}
+//	      //secondaryVector = 0; 
+//	      delete secondaryVector;
+//	    }
+//	}
+//    }
+
+
+
 
   if (theEnergyDeposit < 0)
     {
@@ -443,18 +476,21 @@ void G4LivermoreIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
+//  TO DO //
+
 void G4LivermoreIonisationModel::SampleDeexcitationAlongStep(const G4Material* theMaterial,
 							     const G4Track& theTrack,
 							     G4double& eloss)
 {
+
   //No call if there is no deexcitation along step
   if (!DeexcitationFlag()) return;
-
+  
   //This method gets the energy loss calculated "Along the Step" and 
   //(including fluctuations) and produces explicit fluorescence/Auger 
   //secondaries. The eloss value is updated.
   G4double energyLossBefore = eloss;
-
+  
   if (verboseLevel > 2)
     {
       G4cout << "-----------------------------------------------------------" << G4endl;
@@ -463,35 +499,41 @@ void G4LivermoreIonisationModel::SampleDeexcitationAlongStep(const G4Material* t
 	" keV" << G4endl;
     }
   G4double incidentEnergy = theTrack.GetDynamicParticle()->GetKineticEnergy();
+  
+  // all this can be left to deexcitation, just passing the couple
+  // but we want to check if the eLoss is below the cut, 
+  // then we are going to loop and make a check before the loop 
+  // to see if the max energy of e- or gamma
+  // is below the cut, so we extract cuts here
 
   G4ProductionCutsTable* theCoupleTable = 
     G4ProductionCutsTable::GetProductionCutsTable();
   const G4MaterialCutsCouple* couple = theTrack.GetMaterialCutsCouple();
-  size_t index = couple->GetIndex();
-  G4double cutg = (*(theCoupleTable->GetEnergyCutsVector(0)))[index];
-  G4double cute = (*(theCoupleTable->GetEnergyCutsVector(1)))[index];
+  size_t coupleIndex = couple->GetIndex();
+  G4double cutg = (*(theCoupleTable->GetEnergyCutsVector(0)))[coupleIndex];
+  G4double cute = (*(theCoupleTable->GetEnergyCutsVector(1)))[coupleIndex];
   
-
+  
   std::vector<G4DynamicParticle*>* deexcitationProducts =
     new std::vector<G4DynamicParticle*>;
-
+  
   if(eloss > cute || eloss > cutg)
     {
       const G4AtomicTransitionManager* transitionManager =
 	G4AtomicTransitionManager::Instance();
-      deexcitationManager.SetCutForSecondaryPhotons(cutg);
-      deexcitationManager.SetCutForAugerElectrons(cute);
+      //      deexcitationManager.SetCutForSecondaryPhotons(cutg);
+      //      deexcitationManager.SetCutForAugerElectrons(cute);
       
       size_t nElements = theMaterial->GetNumberOfElements();
       const G4ElementVector* theElementVector = theMaterial->GetElementVector();
-
+      
       std::vector<G4DynamicParticle*>* secVector = 0;
       G4DynamicParticle* aSecondary = 0;
       //G4ParticleDefinition* type = 0;
       G4double e;
       G4ThreeVector position;
-      G4int shell, shellId;
-
+      G4int shell; //shellId;
+      
       // sample secondaries  
       G4double eTot = 0.0;
       std::vector<G4int> n =
@@ -502,17 +544,30 @@ void G4LivermoreIonisationModel::SampleDeexcitationAlongStep(const G4Material* t
 	  G4int Z = (G4int)((*theElementVector)[i]->GetZ());
 	  size_t nVacancies = n[i];
 	  G4double maxE = transitionManager->Shell(Z, 0)->BindingEnergy();
+	  const G4AtomicShell* atomicShell = 0;
 	  if (nVacancies > 0 && Z > 5 && (maxE > cute || maxE > cutg))
 	    {     
 	      for (size_t j=0; j<nVacancies; j++) 
 		{
 		  shell = crossSectionHandler->SelectRandomShell(Z, incidentEnergy);
-		  shellId = transitionManager->Shell(Z, shell)->ShellId();
-		  G4double maxEShell =
-		    transitionManager->Shell(Z, shell)->BindingEnergy();
+
+		  //		  shellId = transitionManager->Shell(Z, shell)->ShellId();
+
+		  atomicShell = (G4AtomicTransitionManager::Instance())->Shell(Z, shell);
+
+		  G4double maxEShell = atomicShell->BindingEnergy();
+		    //		    transitionManager->Shell(Z, shell)->BindingEnergy();
+
 		  if (maxEShell > cute || maxEShell > cutg ) 
 		    {
-		      secVector = deexcitationManager.GenerateParticles(Z, shellId);
+
+		      fAtomDeexcitation->GenerateParticles(deexcitationProducts,  
+							  atomicShell, 
+							  Z,
+							  cutg,
+							   cute);
+		      //		      secVector = deexcitationManager.GenerateParticles(Z, shellId);
+
 		      if (secVector) 
 			{
 			  for (size_t l = 0; l<secVector->size(); l++) {
@@ -538,10 +593,11 @@ void G4LivermoreIonisationModel::SampleDeexcitationAlongStep(const G4Material* t
 			}
 		    }
 		}
+	      atomicShell = 0; // in case something goes wrong, this should crash.
 	    }
 	}
     }
-
+  
   G4double energyLossInFluorescence = 0.0;
   size_t nSecondaries = deexcitationProducts->size();
   if (nSecondaries > 0) 
@@ -560,7 +616,7 @@ void G4LivermoreIonisationModel::SampleDeexcitationAlongStep(const G4Material* t
       deltaT -= t;
       G4double time, q;
       G4ThreeVector position;
-
+      
       for (size_t i=0; i<nSecondaries; i++) 
 	{
 	  G4DynamicParticle* part = (*deexcitationProducts)[i];
@@ -575,7 +631,7 @@ void G4LivermoreIonisationModel::SampleDeexcitationAlongStep(const G4Material* t
 		  position  = deltaR*q;
 		  position += r;
 		  G4Track* newTrack = new G4Track(part, time, position);
-	          energyLossInFluorescence += eSecondary;
+		  energyLossInFluorescence += eSecondary;
 		  pParticleChange->AddSecondary(newTrack);
 		}
 	      else
@@ -601,7 +657,7 @@ void G4LivermoreIonisationModel::SampleDeexcitationAlongStep(const G4Material* t
       G4cout << "Energy in fluorescence: " << energyLossInFluorescence/keV << " keV" << G4endl;
       G4cout << "Residual energy loss: " << eloss/keV << " keV " << G4endl;
       G4cout << "Total final: " << (energyLossInFluorescence+eloss)/keV << " keV" << G4endl;
-      G4cout << "Total initial: " << energyLossBefore/keV << " keV" << G4endl;	
+      G4cout << "Total initial: " << energyLossBefore/keV << " keV" << G4endl;  
       G4cout << "------------------------------------------------------------------" << G4endl;
     }
   if (verboseLevel > 0)
@@ -612,10 +668,13 @@ void G4LivermoreIonisationModel::SampleDeexcitationAlongStep(const G4Material* t
 	  G4cout << "Energy in fluorescence: " << energyLossInFluorescence/keV << " keV" << G4endl;
 	  G4cout << "Residual energy loss: " << eloss/keV << " keV " << G4endl;
 	  G4cout << "Total final: " << (energyLossInFluorescence+eloss)/keV << " keV" << G4endl;
-	  G4cout << "Total initial: " << energyLossBefore/keV << " keV" << G4endl;	
+	  G4cout << "Total initial: " << energyLossBefore/keV << " keV" << G4endl;  
 	}
     }
 }
+
+
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -720,7 +779,7 @@ void G4LivermoreIonisationModel::ActivateAuger(G4bool val)
       G4cout << "The use of the Atomic Deexcitation Manager is set to false " << G4endl;
       G4cout << "Therefore, Auger electrons will be not generated anyway" << G4endl;
     }
-  deexcitationManager.ActivateAugerElectronProduction(val);
+  fAtomDeexcitation->SetAuger(val);
   if (verboseLevel > 1)
     G4cout << "Auger production set to " << val << G4endl;
 }

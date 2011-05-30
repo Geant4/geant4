@@ -493,12 +493,14 @@ void G4PenelopeBremsstrahlungFS::InitializeEnergySampling(const G4Material* mate
   for (size_t i=0;i<nBinsE;i++)
     thePhysicsTable->push_back(new G4PhysicsFreeVector(nBinsX));
 
-  //Retrieve existing table
-  G4PhysicsTable* theTableReduced = theReducedXSTable->find(theKey)->second;
+  //Retrieve existing table using the method GetScaledXSTable()
+  //This will create the table ex-novo, if it does not exist for 
+  //some reason 
+  G4PhysicsTable* theTableReduced = GetScaledXSTable(material,cut);
 
   for (size_t ie=0;ie<nBinsE;ie++)
     {
-      G4PhysicsFreeVector* theVec = 
+      G4PhysicsFreeVector* theVec = 	
 	(G4PhysicsFreeVector*) ((*thePhysicsTable)[ie]);      
       //Fill the table
       G4double value = 0; //first value
@@ -506,7 +508,7 @@ void G4PenelopeBremsstrahlungFS::InitializeEnergySampling(const G4Material* mate
       for (size_t ix=1;ix<nBinsX;ix++)
 	{
 	  //Here calculate the cumulative distribution
-	  // int_{0}^{x} dSigma(x',E)/dx' (1/x') dx'
+	  // int_{0}^{x} dSigma(x',E)/dx' (1/x') dx'	
 	  G4PhysicsFreeVector* v1 = (G4PhysicsFreeVector*) (*theTableReduced)[ix-1];
 	  G4PhysicsFreeVector* v2 = (G4PhysicsFreeVector*) (*theTableReduced)[ix];
 
