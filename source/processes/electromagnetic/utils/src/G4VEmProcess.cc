@@ -64,12 +64,12 @@
 
 #include "G4VEmProcess.hh"
 #include "G4LossTableManager.hh"
+#include "G4LossTableBuilder.hh"
 #include "G4Step.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4VEmModel.hh"
 #include "G4DataVector.hh"
 #include "G4PhysicsTable.hh"
-#include "G4PhysicsVector.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4VParticleChange.hh"
 #include "G4ProductionCutsTable.hh"
@@ -88,8 +88,8 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   secondaryParticle(0),
   buildLambdaTable(true),
   theLambdaTable(0),
-  theEnergyOfCrossSectionMax(0),
-  theCrossSectionMax(0),
+  theDensityFactor(0),
+  theDensityIdx(0),
   integral(false),
   applyCuts(false),
   startFromNull(false),
@@ -133,9 +133,10 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
 
 G4VEmProcess::~G4VEmProcess()
 {
-  if(1 < verboseLevel) 
+  if(1 < verboseLevel) {
     G4cout << "G4VEmProcess destruct " << GetProcessName() 
 	   << G4endl;
+  }
   Clear();
   if(theLambdaTable) {
     theLambdaTable->clearAndDestroy();
@@ -149,11 +150,7 @@ G4VEmProcess::~G4VEmProcess()
 
 void G4VEmProcess::Clear()
 {
-  delete [] theEnergyOfCrossSectionMax;
-  delete [] theCrossSectionMax;
   delete [] idxDERegions;
-  theEnergyOfCrossSectionMax = 0;
-  theCrossSectionMax = 0;
   idxDERegions = 0;
   currentCouple = 0;
   preStepLambda = 0.0;
@@ -226,7 +223,13 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
            << G4endl;
   }
 
-  (G4LossTableManager::Instance())->PreparePhysicsTable(&part, this);
+  G4LossTableManager* man = G4LossTableManager::Instance();
+  G4LossTableBuilder* bld = man->GetTableBuilder();
+
+  man->PreparePhysicsTable(&part, this);
+  const G4ProductionCutsTable* theCoupleTable=
+    G4ProductionCutsTable::GetProductionCutsTable();
+  size_t numOfCouples = theCoupleTable->GetTableSize();
 
   if(particle == &part) {
     Clear();
@@ -235,12 +238,9 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
     const G4ProductionCutsTable* theCoupleTable=
       G4ProductionCutsTable::GetProductionCutsTable();
     size_t n = theCoupleTable->GetTableSize();
-    theEnergyOfCrossSectionMax = new G4double [n];
-    theCrossSectionMax = new G4double [n];
-    for(size_t i=0; i<n; ++i) {
-      theEnergyOfCrossSectionMax[i] = 0.0;
-      theCrossSectionMax[i] = DBL_MAX;
-    }
+
+    theEnergyOfCrossSectionMax.resize(n, 0.0);
+    theCrossSectionMax.resize(n, DBL_MAX);
 
     // initialisation of models
     G4int nmod = modelManager->NumberOfModels();
@@ -261,14 +261,14 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
     // prepare tables
     if(buildLambdaTable){
       theLambdaTable = G4PhysicsTableHelper::PreparePhysicsTable(theLambdaTable);
+      bld->InitialiseBaseMaterials(theLambdaTable);
     }
   }
+  theDensityFactor = bld->GetDensityFactors();
+  theDensityIdx = bld->GetCoupleIndexes();
+
   // Deexcitation
   if (nDERegions>0) {
-
-    const G4ProductionCutsTable* theCoupleTable=
-          G4ProductionCutsTable::GetProductionCutsTable();
-    size_t numOfCouples = theCoupleTable->GetTableSize();
 
     idxDERegions = new G4bool[numOfCouples];
 
@@ -695,7 +695,8 @@ G4VEmProcess::CrossSectionPerVolume(G4double kineticEnergy,
   DefineMaterial(couple);
   G4double cross = 0.0;
   if(theLambdaTable) {
-    cross = (((*theLambdaTable)[currentCoupleIndex])->Value(kineticEnergy));
+    cross = (*theDensityFactor)[currentCoupleIndex]*
+      (((*theLambdaTable)[basedCoupleIndex])->Value(kineticEnergy));
   } else {
     SelectModel(kineticEnergy, currentCoupleIndex);
     cross = currentModel->CrossSectionPerVolume(currentMaterial,
@@ -723,7 +724,7 @@ G4double G4VEmProcess::MeanFreePath(const G4Track& track)
   DefineMaterial(track.GetMaterialCutsCouple());
   preStepLambda = GetCurrentLambda(track.GetKineticEnergy());
   G4double x = DBL_MAX;
-  if(DBL_MIN < preStepLambda) x = 1.0/preStepLambda;
+  if(0.0 < preStepLambda) { x = 1.0/preStepLambda; }
   return x;
 }
 
@@ -736,7 +737,7 @@ G4VEmProcess::ComputeCrossSectionPerAtom(G4double kineticEnergy,
   SelectModel(kineticEnergy, currentCoupleIndex);
   G4double x = 0.0;
   if(currentModel) {
-   x = currentModel->ComputeCrossSectionPerAtom(currentParticle,kineticEnergy,
+    x = currentModel->ComputeCrossSectionPerAtom(currentParticle,kineticEnergy,
 						 Z,A,cut);
   }
   return x;
@@ -755,10 +756,11 @@ void G4VEmProcess::FindLambdaMax()
   G4PhysicsVector* pv;
   G4double e, s, emax, smax;
 
-  for (size_t i=0; i<n; ++i) {
+  size_t i;
+
+  // first loop on existing vectors
+  for (i=0; i<n; ++i) {
     pv = (*theLambdaTable)[i];
-    emax = DBL_MAX;
-    smax = 0.0;
     if(pv) {
       size_t nb = pv->GetVectorLength();
       emax = DBL_MAX;
@@ -773,13 +775,22 @@ void G4VEmProcess::FindLambdaMax()
 	  }
 	}
       }
+      theEnergyOfCrossSectionMax[i] = emax;
+      theCrossSectionMax[i] = smax;
+      if(1 < verboseLevel) {
+	G4cout << "For " << particle->GetParticleName() 
+	       << " Max CS at i= " << i << " emax(MeV)= " << emax/MeV
+	       << " lambda= " << smax << G4endl;
+      }
     }
-    theEnergyOfCrossSectionMax[i] = emax;
-    theCrossSectionMax[i] = smax;
-    if(1 < verboseLevel) {
-      G4cout << "For " << particle->GetParticleName() 
-	     << " Max CS at i= " << i << " emax(MeV)= " << emax/MeV
-	     << " lambda= " << smax << G4endl;
+  }
+  // second loop using base materials
+  for (size_t i=0; i<n; ++i) {
+    pv = (*theLambdaTable)[i];
+    if(!pv){
+      G4int j = (*theDensityIdx)[i];
+      theEnergyOfCrossSectionMax[i] = theEnergyOfCrossSectionMax[j];
+      theCrossSectionMax[i] = (*theDensityFactor)[i]*theCrossSectionMax[j];
     }
   }
 }
