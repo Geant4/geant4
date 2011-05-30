@@ -64,6 +64,34 @@ if(NOT WIN32)
     include(Geant4BuildModes)
 endif(NOT WIN32)
 
+# Optional define flags which are applicable globally
+
+# G4_STORE_TRAJECTORY
+# ON by default, switching off can improve performance. Needs to be on
+# for visualization to work fully. Mark as advanced because most users
+# should not need to worry about it.
+# FIXES : Bug #1208
+option(GEANT4_STORE_TRAJECTORY "Store trajectories in event processing. Switch off for improved performance but note that visualization of trajectories will not be possible" ON)
+mark_as_advanced(GEANT4_STORE_TRAJECTORY)
+
+if(GEANT4_STORE_TRAJECTORY)
+    add_definitions(-DG4_STORE_TRAJECTORY)
+endif()
+
+
+# G4VERBOSE
+# ON by default, switching off can improve performance, but at the cost of
+# fewer informational or warning messages. Mark as advanced because most users
+# should not need to worry about it.
+option(GEANT4_VERBOSE_CODE 
+    "Enable verbose output from Geant4 code. Switch off for better performance at the cost of fewer informational messages or warnings"
+    ON)
+mark_as_advanced(GEANT4_VERBOSE_CODE)
+
+if(GEANT4_VERBOSE_CODE)
+    add_definitions(-DG4VERBOSE)
+endif()
+
 
 #------------------------------------------------------------------------------
 # Includes for common utilities
@@ -208,11 +236,16 @@ include(Geant4ConfigureConfigScript)
 #------------------------------------------------------------------------------
 # Install any extra files needed such as documentation and legacy Makefiles
 #
-# User example code
-install(DIRECTORY examples
-    DESTINATION ${GEANT4_DATAROOTDIR}/geant4-${geant4_VERSION}
-    PATTERN "CVS" EXCLUDE)
+# User example code - optional
+option(GEANT4_INSTALL_EXAMPLES "Install all Geant4 examples" OFF)
 
+if(GEANT4_INSTALL_EXAMPLES)
+    install(DIRECTORY examples
+        DESTINATION ${GEANT4_DATAROOTDIR}/geant4-${geant4_VERSION}
+        COMPONENT Examples
+        PATTERN "CVS" EXCLUDE
+        PATTERN ".svn" EXCLUDE)
+endif()
 
 #
 # Final output - show what's been enabled so that user knows what's
