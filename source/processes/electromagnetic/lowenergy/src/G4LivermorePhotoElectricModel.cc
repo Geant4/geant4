@@ -111,7 +111,7 @@ G4LivermorePhotoElectricModel::Initialise(const G4ParticleDefinition*,
   }
 
   fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
-  ActivateAuger(true); // which default?
+  if(fAtomDeexcitation) { ActivateAuger(true); }
 
   if (crossSectionHandler)
   {
