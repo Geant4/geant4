@@ -32,7 +32,7 @@
 
 #include "G4VUserPhysicsList.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4ProcessManager.hh"
+#include "G4PhysicsListHelper.hh"
 #include "G4ParticleTypes.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
