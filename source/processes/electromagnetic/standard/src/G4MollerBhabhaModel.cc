@@ -189,11 +189,13 @@ G4double G4MollerBhabhaModel::CrossSectionPerVolume(
   G4double eDensity = material->GetElectronDensity();
   G4double Zeff     = eDensity/material->GetTotNbOfAtomsPerVolume();
   G4double th       = 0.25*sqrt(Zeff)*keV;
-  G4double res      = 0.0;
-  // below this threshold no 
+  G4double cut;  
+  if(isElectron) { cut  = std::max(th*0.5, cutEnergy); }
+  else           { cut  = std::max(th, cutEnergy); }
+  G4double res = 0.0;
+  // below this threshold no bremsstrahlung
   if (kinEnergy > th) { 
-    res = eDensity*ComputeCrossSectionPerElectron(p,kinEnergy,
-						  cutEnergy,maxEnergy);
+    res = eDensity*ComputeCrossSectionPerElectron(p,kinEnergy,cut,maxEnergy);
   }
   return res; 
 }
@@ -208,10 +210,13 @@ G4double G4MollerBhabhaModel::ComputeDEDXPerVolume(
 {
   if(!particle) { SetParticle(p); }
   // calculate the dE/dx due to the ionization by Seltzer-Berger formula
-  
+  // checl low-energy limit
   G4double electronDensity = material->GetElectronDensity();
   G4double Zeff  = electronDensity/material->GetTotNbOfAtomsPerVolume();
   G4double th    = 0.25*sqrt(Zeff)*keV;
+  G4double cut;  
+  if(isElectron) { cut  = std::max(th*0.5, cutEnergy); }
+  else           { cut  = std::max(th, cutEnergy); }
   G4double tkin  = kineticEnergy;
   if (kineticEnergy < th) { tkin = th; }
  
@@ -225,7 +230,7 @@ G4double G4MollerBhabhaModel::ComputeDEDXPerVolume(
   eexc          /= electron_mass_c2;
   G4double eexc2 = eexc*eexc; 
 
-  G4double d = std::min(cutEnergy, MaxSecondaryEnergy(p, tkin))/electron_mass_c2;
+  G4double d = std::min(cut, MaxSecondaryEnergy(p, tkin))/electron_mass_c2;
   G4double dedx;
 
   // electron
@@ -262,26 +267,29 @@ G4double G4MollerBhabhaModel::ComputeDEDXPerVolume(
     if(x > 0.25) { dedx /= sqrt(x); }
     else { dedx *= 1.4*sqrt(x)/(0.1 + x); }
   }
-  /*
-  if (kineticEnergy < th) {
-    if (kineticEnergy >= lowLimit) { dedx *= sqrt(tkin/kineticEnergy); }
-    else                           { dedx *= sqrt(tkin*kineticEnergy)/lowLimit; }
-  }
-  */
   return dedx;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4MollerBhabhaModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
-					    const G4MaterialCutsCouple*,
+					    const G4MaterialCutsCouple* couple,
 					    const G4DynamicParticle* dp,
-					    G4double tmin,
+					    G4double cutEnergy,
 					    G4double maxEnergy)
 {
   G4double kineticEnergy = dp->GetKineticEnergy();
-  G4double tmax = kineticEnergy;
-  if(isElectron) { tmax *= 0.5; }
+  const G4Material* mat = couple->GetMaterial();
+  G4double Zeff = mat->GetElectronDensity()/mat->GetTotNbOfAtomsPerVolume();
+  G4double th   = 0.25*sqrt(Zeff)*keV;
+  G4double tmax, tmin;  
+  if(isElectron) { 
+    tmax = 0.5*kineticEnergy; 
+    tmin  = std::max(th*0.5, cutEnergy);
+  } else {
+    tmax = kineticEnergy; 
+    tmin = std::max(th, cutEnergy);
+  }
   if(maxEnergy < tmax) { tmax = maxEnergy; }
   if(tmin >= tmax) { return; }
 

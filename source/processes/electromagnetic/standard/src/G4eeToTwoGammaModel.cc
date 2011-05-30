@@ -114,8 +114,10 @@ G4double G4eeToTwoGammaModel::ComputeCrossSectionPerElectron(
 {
   // Calculates the cross section per electron of annihilation into two photons
   // from the Heilter formula.
-  
-  G4double tau   = kineticEnergy/electron_mass_c2;
+
+  G4double ekin  = std::max(eV,kineticEnergy);   
+
+  G4double tau   = ekin/electron_mass_c2;
   G4double gam   = tau + 1.0;
   G4double gamma2= gam*gam;
   G4double bg2   = tau * (tau+2.0);

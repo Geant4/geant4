@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27 May 11: V.Ivanchenko (emstand-V09-04-30)
+- G4MollerBhabhaModel - more coherent usage of cut at low-energy
+                        for dedx and x-section computation,
+                        impprtant for cuts below 1 keV
+- G4eeToTwoGammaModel - added numerical protection in cross section 
+    computation for very small energy
+
 26 May 11: V.Ivanchenko (emstand-V09-04-29)
 - Fixed source.cmake
 
