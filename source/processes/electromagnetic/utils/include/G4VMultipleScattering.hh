@@ -285,9 +285,6 @@ private:
   G4PhysicsTable*             theLambdaTable;
   const G4ParticleDefinition* firstParticle;
 
-  const std::vector<G4double>* theDensityFactor;
-  const std::vector<G4int>*    theDensityIdx;
-
   G4MscStepLimitType          stepLimit;
 
   G4double                    minKinEnergy;
@@ -316,8 +313,7 @@ private:
   // cache
   const G4ParticleDefinition* currentParticle;
   const G4MaterialCutsCouple* currentCouple;
-  size_t                      currentCoupleIndex;
-  size_t                      basedCoupleIndex;
+  size_t                      currentMaterialIndex;
 
 };
 
@@ -336,8 +332,7 @@ void G4VMultipleScattering::DefineMaterial(const G4MaterialCutsCouple* couple)
 {
   if(couple != currentCouple) {
     currentCouple   = couple;
-    currentCoupleIndex = couple->GetIndex();
-    basedCoupleIndex   = (*theDensityIdx)[currentCoupleIndex];
+    currentMaterialIndex = couple->GetIndex();
   }
 }
 
@@ -349,13 +344,12 @@ G4double G4VMultipleScattering::GetLambda(const G4ParticleDefinition* p,
 {
   G4double x;
   if(theLambdaTable) {
-    x = (*theDensityFactor)[currentCoupleIndex]*
-      ((*theLambdaTable)[basedCoupleIndex])->Value(e);
+    x = ((*theLambdaTable)[currentMaterialIndex])->Value(e);
   } else {
     x = currentModel->CrossSection(currentCouple,p,e);
   }
-  if(x > 0.0) { x = 1./x; }
-  else        { x = DBL_MAX; } 
+  if(x > DBL_MIN) { x = 1./x; }
+  else            { x = DBL_MAX; } 
   return x;
 }
 
@@ -363,7 +357,7 @@ G4double G4VMultipleScattering::GetLambda(const G4ParticleDefinition* p,
 
 inline G4VEmModel* G4VMultipleScattering::SelectModel(G4double kinEnergy)
 {
-  return modelManager->SelectModel(kinEnergy, currentCoupleIndex);
+  return modelManager->SelectModel(kinEnergy, currentMaterialIndex);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

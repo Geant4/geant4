@@ -284,7 +284,6 @@ G4VAtomDeexcitation::CheckDeexcitationActiveRegion(G4int coupleIndex)
 inline G4bool 
 G4VAtomDeexcitation::CheckAugerActiveRegion(G4int coupleIndex)
 {
-
   return (flagAuger && activeAugerMedia[coupleIndex]);
 }
 
@@ -294,16 +293,11 @@ G4VAtomDeexcitation::GenerateParticles(std::vector<G4DynamicParticle*>* v,
 				       G4int Z,
 				       G4int idx)
 {
-  G4double gCut = DBL_MAX;
-  if (theCoupleTable) {
-    gCut = (*(theCoupleTable->GetEnergyCutsVector(0)))[idx];
-  }
+  G4double gCut = (*(theCoupleTable->GetEnergyCutsVector(0)))[idx];
   if(gCut < as->BindingEnergy()) {
     G4double eCut = DBL_MAX;
-    if(CheckAugerActiveRegion(idx)) {
-      if (theCoupleTable) {
-	eCut = (*(theCoupleTable->GetEnergyCutsVector(1)))[idx];
-      }
+    if(CheckAugerActiveRegion(idx)) { 
+      eCut = (*(theCoupleTable->GetEnergyCutsVector(1)))[idx];
     }
     GenerateParticles(v, as, Z, gCut, eCut);
   }

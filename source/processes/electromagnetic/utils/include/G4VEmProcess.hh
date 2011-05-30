@@ -313,15 +313,13 @@ private:
 
   // tables and vectors
   G4PhysicsTable*              theLambdaTable;
-  std::vector<G4double>        theEnergyOfCrossSectionMax;
-  std::vector<G4double>        theCrossSectionMax;
+  G4double*                    theEnergyOfCrossSectionMax;
+  G4double*                    theCrossSectionMax;
 
   const std::vector<G4double>* theCuts;
   const std::vector<G4double>* theCutsGamma;
   const std::vector<G4double>* theCutsElectron;
   const std::vector<G4double>* theCutsPositron;
-  const std::vector<G4double>* theDensityFactor;
-  const std::vector<G4int>*    theDensityIdx;
 
   G4int                        nLambdaBins;
 
@@ -358,7 +356,6 @@ private:
   const G4Material*            currentMaterial;
   const G4MaterialCutsCouple*  currentCouple;
   size_t                       currentCoupleIndex;
-  size_t                       basedCoupleIndex;
 
   G4double                     mfpKinEnergy;
   G4double                     preStepKinEnergy;
@@ -395,7 +392,6 @@ inline void G4VEmProcess::DefineMaterial(const G4MaterialCutsCouple* couple)
     currentCouple   = couple;
     currentMaterial = couple->GetMaterial();
     currentCoupleIndex = couple->GetIndex();
-    basedCoupleIndex   = (*theDensityIdx)[currentCoupleIndex];
     mfpKinEnergy = DBL_MAX;
   }
 }
@@ -427,15 +423,14 @@ inline void G4VEmProcess::InitialiseStep(const G4Track& track)
   preStepKinEnergy = track.GetKineticEnergy();
   DefineMaterial(track.GetMaterialCutsCouple());
   SelectModel(preStepKinEnergy, currentCoupleIndex);
-  if (theNumberOfInteractionLengthLeft < 0.0) { mfpKinEnergy = DBL_MAX; }
+  if (theNumberOfInteractionLengthLeft < 0.0) mfpKinEnergy = DBL_MAX;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEmProcess::GetLambdaFromTable(G4double e)
 {
-  return (*theDensityFactor)[currentCoupleIndex]*
-	  ((*theLambdaTable)[basedCoupleIndex])->Value(e);
+  return (((*theLambdaTable)[currentCoupleIndex])->Value(e));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -483,6 +478,7 @@ inline void G4VEmProcess::ComputeIntegralLambda(G4double e)
 {
   mfpKinEnergy  = theEnergyOfCrossSectionMax[currentCoupleIndex];
   if (e <= mfpKinEnergy) {
+    //preStepLambda = GetLambdaFromTable(e);
     preStepLambda = GetCurrentLambda(e);
 
   } else {
@@ -591,6 +587,7 @@ inline void G4VEmProcess::SetLambdaFactor(G4double val)
 inline void G4VEmProcess::SetIntegral(G4bool val)
 {
   if(particle && particle != theGamma) { integral = val; }
+  //  if(integral) { buildLambdaTable = true; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -612,6 +609,7 @@ inline void G4VEmProcess::SetApplyCuts(G4bool val)
 inline void G4VEmProcess::SetBuildTableFlag(G4bool val)
 {
   buildLambdaTable = val;
+  //if(!val) { integral = false; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -69,7 +69,6 @@
 
 #include "G4VMultipleScattering.hh"
 #include "G4LossTableManager.hh"
-#include "G4LossTableBuilder.hh"
 #include "G4Step.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4VEmFluctuationModel.hh"
@@ -94,8 +93,6 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name,
   buildLambdaTable(true),
   theLambdaTable(0),
   firstParticle(0),
-  theDensityFactor(0),
-  theDensityIdx(0),
   stepLimit(fUseSafety),
   skin(1.0),
   facrange(0.04),
@@ -198,8 +195,7 @@ void G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part
     currentParticle = &part;
   }
 
-  G4LossTableManager* man = G4LossTableManager::Instance();
-  man->PreparePhysicsTable(&part, this);
+  (G4LossTableManager::Instance())->PreparePhysicsTable(&part, this);
 
   if(1 < verboseLevel) {
     G4cout << "### G4VMultipleScattering::PrepearPhysicsTable() for "
@@ -212,7 +208,6 @@ void G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part
   if(firstParticle == &part) {
 
     InitialiseProcess(firstParticle);
-
 
     // initialisation of models
     G4int nmod = modelManager->NumberOfModels();
@@ -239,13 +234,9 @@ void G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part
 			     10.0, verboseLevel);
 
     // prepare tables
-    G4LossTableBuilder* bld = man->GetTableBuilder();
     if(buildLambdaTable) {
       theLambdaTable = G4PhysicsTableHelper::PreparePhysicsTable(theLambdaTable);
-      bld->InitialiseBaseMaterials(theLambdaTable);
     }
-    theDensityFactor = bld->GetDensityFactors();
-    theDensityIdx = bld->GetCoupleIndexes();
   }
 }
 
@@ -451,11 +442,10 @@ G4double G4VMultipleScattering::GetMeanFreePath(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4PhysicsVector* 
-G4VMultipleScattering::PhysicsVector(const G4MaterialCutsCouple* couple)
+G4PhysicsVector* G4VMultipleScattering::PhysicsVector(const G4MaterialCutsCouple* couple)
 {
   G4int nbins = 3;
-  if( couple->IsUsed() ) { nbins = nBins; }
+  if( couple->IsUsed() ) nbins = nBins;
   G4PhysicsVector* v = new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nbins);
   v->SetSpline((G4LossTableManager::Instance())->SplineFlag());
   return v;

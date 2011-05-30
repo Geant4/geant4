@@ -273,8 +273,6 @@ public:
 
   G4VAtomDeexcitation* AtomDeexcitation();
 
-  G4LossTableBuilder* GetTableBuilder();
-
   void SetAtomDeexcitation(G4VAtomDeexcitation*);
 
 private:
