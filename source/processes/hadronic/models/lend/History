@@ -15,6 +15,20 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+30 May 2011 Gabriele Cosmo (hadr-lend-V09-04-11)
+------------------------------------------------
+- Renamed DLL_API macro to DLL_LEND.
+
+27 May 2011 Tatsumi Koi (hadr-lend-V09-04-10)
+------------------------------------------------
+- Rename endlXXX -> lendXXX in private values
+- Move create_used_target_map from constructor to BuildPhysicsTable
+  Cross Sections 
+- Set proper name
+- Set proper modelName
+- Fix link error undefined reference to `tpia_samplingMethods_linear'
+	include/tpia_target.h
+
 26 May 20111 Gunter Folger (hadr-lend-V09-04-09)
 ------------------------------------------------
 - Fix compiler warning in tpia_mac.cc on slc5/gcc43, 

@@ -27,9 +27,9 @@ class G4LENDInelasticCrossSection : public G4LENDCrossSection
       G4LENDInelasticCrossSection( G4ParticleDefinition* pd )
       {
          proj = pd; 
-         name = "LENDInelastic for ";
+         name = "LEND Inelastic Cross Section for ";
          name += proj->GetParticleName();
-         create_used_target_map();
+         //create_used_target_map();
       };
    
       ~G4LENDInelasticCrossSection(){;};

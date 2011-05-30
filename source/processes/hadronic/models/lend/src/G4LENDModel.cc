@@ -15,8 +15,8 @@
 #include "G4LENDModel.hh"
 #include "G4NistManager.hh"
 
-G4LENDModel::G4LENDModel()
-:G4HadronicInteraction()
+G4LENDModel::G4LENDModel( G4String name )
+:G4HadronicInteraction( name )
 {
 
    SetMinEnergy( 0.*eV );
@@ -26,7 +26,7 @@ G4LENDModel::G4LENDModel()
    allow_nat = false;
    allow_any = false;
 
-   endl_manager = G4LENDManager::GetInstance();  
+   lend_manager = G4LENDManager::GetInstance();  
 
 }
 
@@ -79,13 +79,13 @@ void G4LENDModel::create_used_target_map()
             G4LENDUsedTarget* aTarget = new G4LENDUsedTarget ( proj , default_evaluation , iZ , iA );  
             if ( allow_nat == true ) aTarget->AllowNat();
             if ( allow_any == true ) aTarget->AllowAny();
-            usedTarget_map.insert( std::pair< G4int , G4LENDUsedTarget* > ( endl_manager->GetNucleusEncoding( iZ , iA ) , aTarget ) );
+            usedTarget_map.insert( std::pair< G4int , G4LENDUsedTarget* > ( lend_manager->GetNucleusEncoding( iZ , iA ) , aTarget ) );
          }
       }
       else
       {
       // Natural Abundances   
-         G4NistElementBuilder* nistElementBuild = endl_manager->GetNistElementBuilder();
+         G4NistElementBuilder* nistElementBuild = lend_manager->GetNistElementBuilder();
          G4int iZ = int ( anElement->GetZ() );
          //G4cout << nistElementBuild->GetNumberOfNistIsotopes( int ( anElement->GetZ() ) ) << G4endl;
          G4int numberOfNistIso = nistElementBuild->GetNumberOfNistIsotopes( int ( anElement->GetZ() ) ); 
@@ -101,7 +101,7 @@ void G4LENDModel::create_used_target_map()
                G4LENDUsedTarget* aTarget = new G4LENDUsedTarget ( proj , default_evaluation , iZ , iMass );  
                if ( allow_nat == true ) aTarget->AllowNat();
                if ( allow_any == true ) aTarget->AllowAny();
-               usedTarget_map.insert( std::pair< G4int , G4LENDUsedTarget* > ( endl_manager->GetNucleusEncoding( iZ , iMass ) , aTarget ) );
+               usedTarget_map.insert( std::pair< G4int , G4LENDUsedTarget* > ( lend_manager->GetNucleusEncoding( iZ , iMass ) , aTarget ) );
 
             }
 
@@ -145,7 +145,7 @@ G4HadFinalState * G4LENDModel::ApplyYourself(const G4HadProjectile& aTrack, G4Nu
 
    G4HadFinalState* theResult = new G4HadFinalState();
 
-   G4GIDI_target* aTarget = usedTarget_map.find( endl_manager->GetNucleusEncoding( iZ , iA ) )->second->GetTarget();
+   G4GIDI_target* aTarget = usedTarget_map.find( lend_manager->GetNucleusEncoding( iZ , iA ) )->second->GetTarget();
 
    G4double aMu = aTarget->getElasticFinalState( ke*MeV, temp, NULL, NULL );
 

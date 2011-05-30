@@ -26,8 +26,8 @@ class G4LENDModel : public G4HadronicInteraction
 
    public: 
   
-      G4LENDModel();
-  
+      //G4LENDModel();
+      G4LENDModel( G4String name="LENDModel" );
       ~G4LENDModel();
   
       virtual G4HadFinalState * ApplyYourself( const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus );
@@ -42,14 +42,13 @@ class G4LENDModel : public G4HadronicInteraction
       G4bool allow_nat;
       G4bool allow_any;
 
-
    protected:
 
       void create_used_target_map();
       void recreate_used_target_map();
 
       G4ParticleDefinition* proj;
-      G4LENDManager* endl_manager;
+      G4LENDManager* lend_manager;
       std::map< G4int , G4LENDUsedTarget* > usedTarget_map;
 };
 

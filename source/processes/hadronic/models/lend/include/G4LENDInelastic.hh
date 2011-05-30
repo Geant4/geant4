@@ -22,6 +22,7 @@ class G4LENDInelastic : public G4LENDModel
    public: 
   
      G4LENDInelastic( G4ParticleDefinition* pd )
+     :G4LENDModel( "LENDInelastic" ) 
      { 
         proj = pd; 
        

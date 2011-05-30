@@ -22,10 +22,10 @@
 
 #include <map>
 
-struct endl_target
+struct lend_target
 {
 // properties for the traget
-   G4GIDI* endl;
+   G4GIDI* lend;
    G4GIDI_target* target;
    
    G4ParticleDefinition* proj;
@@ -38,7 +38,7 @@ struct endl_target
 class G4LENDManager 
 {
 
-      static G4LENDManager* endl_manager;
+      static G4LENDManager* lend_manager;
    
    protected: 
       G4LENDManager();
@@ -49,8 +49,8 @@ class G4LENDManager
    public:
       static G4LENDManager* GetInstance() 
       {
-         if ( endl_manager == NULL) endl_manager = new G4LENDManager();
-         return endl_manager;
+         if ( lend_manager == NULL) lend_manager = new G4LENDManager();
+         return lend_manager;
       };
 
       G4GIDI_target* GetLENDTarget( G4ParticleDefinition* , G4String , G4int iZ , G4int iA , G4int iM = 0 );
@@ -62,16 +62,18 @@ class G4LENDManager
    
    private:
 
-      std::vector< endl_target > v_endl_target; 
+      std::vector< lend_target > v_lend_target; 
 
       //        proj                              
-      std::map< G4ParticleDefinition* , G4GIDI* > proj_endl_map; 
+      std::map< G4ParticleDefinition* , G4GIDI* > proj_lend_map; 
 
 //    std::map< G4ParticleDefinition* , std::vector< G4int > > proj_checked_map; 
 
       G4IonTable* ionTable;
 
       G4NistElementBuilder* nistElementBuilder; 
+
+      void printBanner();
 
 };
 

@@ -34,7 +34,7 @@ G4LENDCrossSection::G4LENDCrossSection()
    allow_nat = false;
    allow_any = false;
 
-   endl_manager = G4LENDManager::GetInstance(); 
+   lend_manager = G4LENDManager::GetInstance(); 
 
 }
    
@@ -51,7 +51,7 @@ G4LENDCrossSection::~G4LENDCrossSection()
    
 void G4LENDCrossSection::BuildPhysicsTable( const G4ParticleDefinition&  )
 {
-   ;
+   create_used_target_map();
 }
 
 void G4LENDCrossSection::DumpPhysicsTable(const G4ParticleDefinition& aP)
@@ -119,7 +119,7 @@ G4double G4LENDCrossSection::GetCrossSection(const G4DynamicParticle* aP , const
          G4int iA = anElement->GetIsotope( i_iso )->GetN();
          G4double ratio = anElement->GetRelativeAbundanceVector()[i_iso];
 
-         G4GIDI_target* aTarget = usedTarget_map.find( endl_manager->GetNucleusEncoding( iZ , iA ) )->second->GetTarget();
+         G4GIDI_target* aTarget = usedTarget_map.find( lend_manager->GetNucleusEncoding( iZ , iA ) )->second->GetTarget();
          XS += ratio*getLENDCrossSection ( aTarget , ke , aT );
 
       }
@@ -127,7 +127,7 @@ G4double G4LENDCrossSection::GetCrossSection(const G4DynamicParticle* aP , const
    else
    {
       // Natural Abundances   
-      G4NistElementBuilder* nistElementBuild = endl_manager->GetNistElementBuilder();
+      G4NistElementBuilder* nistElementBuild = lend_manager->GetNistElementBuilder();
       G4int iZ = int ( anElement->GetZ() );
       G4int numberOfNistIso = nistElementBuild->GetNumberOfNistIsotopes( int ( anElement->GetZ() ) ); 
 
@@ -138,7 +138,7 @@ G4double G4LENDCrossSection::GetCrossSection(const G4DynamicParticle* aP , const
          G4double ratio = nistElementBuild->GetIsotopeAbundance( iZ , iA );
          if ( ratio > 0.0 )
          {
-            G4GIDI_target* aTarget = usedTarget_map.find( endl_manager->GetNucleusEncoding( iZ , iA ) )->second->GetTarget();
+            G4GIDI_target* aTarget = usedTarget_map.find( lend_manager->GetNucleusEncoding( iZ , iA ) )->second->GetTarget();
             XS += ratio*getLENDCrossSection ( aTarget , ke , aT );
             //G4cout << ke/eV << " "  << iZ << " " << iMass << " " << aTarget << " " << getLENDCrossSection ( aTarget , ke , aT ) << G4endl;
          }
@@ -159,7 +159,7 @@ G4double G4LENDCrossSection::GetIsoCrossSection(const G4DynamicParticle* dp, con
    G4int iZ = isotope->GetZ();
    G4int iA = isotope->GetN();
 
-   G4GIDI_target* aTarget = usedTarget_map.find( endl_manager->GetNucleusEncoding( iZ , iA ) )->second->GetTarget();
+   G4GIDI_target* aTarget = usedTarget_map.find( lend_manager->GetNucleusEncoding( iZ , iA ) )->second->GetTarget();
 
    return getLENDCrossSection ( aTarget , ke , aT );
 
@@ -205,13 +205,13 @@ void G4LENDCrossSection::create_used_target_map()
             G4LENDUsedTarget* aTarget = new G4LENDUsedTarget ( proj , default_evaluation , iZ , iA );  
             if ( allow_nat == true ) aTarget->AllowNat();
             if ( allow_any == true ) aTarget->AllowAny();
-            usedTarget_map.insert( std::pair< G4int , G4LENDUsedTarget* > ( endl_manager->GetNucleusEncoding( iZ , iA ) , aTarget ) );
+            usedTarget_map.insert( std::pair< G4int , G4LENDUsedTarget* > ( lend_manager->GetNucleusEncoding( iZ , iA ) , aTarget ) );
          }
       }
       else
       {
       // Natural Abundances   
-         G4NistElementBuilder* nistElementBuild = endl_manager->GetNistElementBuilder();
+         G4NistElementBuilder* nistElementBuild = lend_manager->GetNistElementBuilder();
          G4int iZ = int ( anElement->GetZ() );
          //G4cout << nistElementBuild->GetNumberOfNistIsotopes( int ( anElement->GetZ() ) ) << G4endl;
          G4int numberOfNistIso = nistElementBuild->GetNumberOfNistIsotopes( int ( anElement->GetZ() ) ); 
@@ -227,7 +227,7 @@ void G4LENDCrossSection::create_used_target_map()
                G4LENDUsedTarget* aTarget = new G4LENDUsedTarget ( proj , default_evaluation , iZ , iMass );  
                if ( allow_nat == true ) aTarget->AllowNat();
                if ( allow_any == true ) aTarget->AllowAny();
-               usedTarget_map.insert( std::pair< G4int , G4LENDUsedTarget* > ( endl_manager->GetNucleusEncoding( iZ , iMass ) , aTarget ) );
+               usedTarget_map.insert( std::pair< G4int , G4LENDUsedTarget* > ( lend_manager->GetNucleusEncoding( iZ , iMass ) , aTarget ) );
 
             }
 

@@ -24,6 +24,7 @@ class G4LENDFission : public G4LENDModel
    public: 
   
      G4LENDFission( G4ParticleDefinition* pd )
+     :G4LENDModel( "LENDFission" ) 
      { 
         proj = pd; 
        

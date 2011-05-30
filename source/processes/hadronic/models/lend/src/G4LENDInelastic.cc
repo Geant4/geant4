@@ -20,7 +20,7 @@ G4HadFinalState * G4LENDInelastic::ApplyYourself(const G4HadProjectile& aTrack, 
    G4HadFinalState* theResult = &theParticleChange;
    theResult->Clear();
 
-   G4GIDI_target* aTarget = usedTarget_map.find( endl_manager->GetNucleusEncoding( iZ , iA ) )->second->GetTarget();
+   G4GIDI_target* aTarget = usedTarget_map.find( lend_manager->GetNucleusEncoding( iZ , iA ) )->second->GetTarget();
    std::vector<G4GIDI_Product>* products = aTarget->getOthersFinalState( ke*MeV, temp, NULL, NULL );
    if ( products != NULL ) 
    {

@@ -8,15 +8,15 @@
   //
   #if defined G4LIB_BUILD_DLL
     #if defined G4PROCESSES_EXPORT
-      #define DLL_API __declspec( dllexport )
+      #define DLL_LEND __declspec( dllexport )
     #else
-      #define DLL_API __declspec( dllimport )
+      #define DLL_LEND __declspec( dllimport )
     #endif
   #else
-    #define DLL_API
+    #define DLL_LEND
   #endif
 #else
-  #define DLL_API
+  #define DLL_LEND
 #endif
 
 #endif          /* End of tpia_defs_h_included. */

@@ -60,7 +60,7 @@ class G4LENDCrossSection : public G4VCrossSectionDataSet
       G4bool allow_nat;
       G4bool allow_any;
 
-      G4LENDManager* endl_manager;
+      G4LENDManager* lend_manager;
       void recreate_used_target_map();
 
    protected :

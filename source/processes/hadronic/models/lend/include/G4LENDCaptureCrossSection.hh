@@ -26,9 +26,9 @@ class G4LENDCaptureCrossSection : public G4LENDCrossSection
       G4LENDCaptureCrossSection( G4ParticleDefinition* pd )
       {
          proj = pd; 
-         name = "LENDCapture for ";
+         name = "LEND Capture Cross Section for ";
          name += proj->GetParticleName();
-         create_used_target_map();
+         //create_used_target_map();
       };
    
       ~G4LENDCaptureCrossSection(){;};

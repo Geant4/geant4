@@ -22,6 +22,7 @@ class G4LENDCapture : public G4LENDModel
    public: 
   
      G4LENDCapture( G4ParticleDefinition* pd )
+     :G4LENDModel( "LENDCapture" ) 
      { 
         proj = pd; 
        

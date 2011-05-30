@@ -41,9 +41,10 @@ namespace GIDI {
 using namespace GIDI;
 #endif
 
-//Need to here beacaus these values used in MACRO
+//Need to here beacaus these values used in MACRO //this comment is out of date 
 const char * tpia_samplingMethods_constant = "constant";
 const char * tpia_samplingMethods_linear = "linear";
+//110527 TK edited the macro (include/tpia_target.hh) see the file. 
 
 /*
 ************************************************************

@@ -25,8 +25,8 @@ class G4LENDElastic : public G4LENDModel
      { 
         proj = pd; 
        
-//        theModelName = "LENDElastic for "; 
-//        theModelName += proj->GetParticleName(); 
+        //theModelName = "LEND Elastic Model for "; 
+        //theModelName += proj->GetParticleName(); 
         create_used_target_map();
      };
   

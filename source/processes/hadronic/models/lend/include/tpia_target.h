@@ -100,17 +100,22 @@ typedef struct tpia_data_frame_s tpia_data_frame;
 #define tpia_speedOfLight_cm_sec 2.99792458e10
 #define tpia_AMU2MeV 931.494028
 
-extern DLL_API const char *tpia_productGenre_unknown, *tpia_productGenre_twoBody_angular, *tpia_productGenre_twoBody_formFactor,
+extern DLL_LEND const char *tpia_productGenre_unknown, *tpia_productGenre_twoBody_angular, *tpia_productGenre_twoBody_formFactor,
     *tpia_productGenre_NBody_Legendre, *tpia_productGenre_NBody_angular_energy, *tpia_productGenre_NBody_uncorrelate_Legendre,
     *tpia_productGenre_NBody_pairProduction;
 
-extern DLL_API const char *tpia_samplingMethods_constant, *tpia_samplingMethods_linear;
+extern DLL_LEND const char *tpia_samplingMethods_constant, *tpia_samplingMethods_linear;
 
 //extern const char *tpia_samplingMethods_constant = "constant";
 //extern const char *tpia_samplingMethods_linear = "linear";
 
-#define tpia_samplingMethods_isConstant( method ) ( method == tpia_samplingMethods_constant )
-#define tpia_samplingMethods_isLinear( method ) ( method == tpia_samplingMethods_linear )
+//#define tpia_samplingMethods_isConstant( method ) ( method == tpia_samplingMethods_constant )
+//#define tpia_samplingMethods_isLinear( method ) ( method == tpia_samplingMethods_linear )
+
+//tpia_samplingMethods_constant and tpia_samplingMethods_linear are defined in src/tpia_samplingMethods.cc in namespace GIDI.
+//So TK directory write the values in follwoing macros. 110527
+#define tpia_samplingMethods_isConstant( method ) ( method == "constant" )
+#define tpia_samplingMethods_isLinear( method ) ( method == "linear" )
 
 
 struct tpia_particle_s {
