@@ -114,7 +114,7 @@ void DetectorConstruction::DefineMaterials()
     new G4Material("Water", density= 1.0*g/cm3, ncomponents=2);
   H2O->AddElement(H, natoms=2);
   H2O->AddElement(O, natoms=1);
-  H2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
+  H2O->GetIonisation()->SetMeanExcitationEnergy(78.0*eV);
 
   G4Material* Air = 
     new G4Material("Air"  , density= 1.290*mg/cm3, ncomponents=2);
