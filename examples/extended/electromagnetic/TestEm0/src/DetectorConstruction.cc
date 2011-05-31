@@ -110,7 +110,7 @@ void DetectorConstruction::DefineMaterials()
   H2O->AddElement(H, natoms=2);
   H2O->AddElement(O, natoms=1);
   ///H2O->SetChemicalFormula("H_2O");
-  H2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
+  H2O->GetIonisation()->SetMeanExcitationEnergy(78.0*eV);
         
   G4Material* steam = 
   new G4Material("WaterSteam", density= 1.0*mg/cm3, ncomponents=1);

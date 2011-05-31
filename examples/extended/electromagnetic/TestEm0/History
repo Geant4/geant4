@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+31-05-11 mma (testem0-V09-04-00)
+- DetectorConstruction : for Water, set I = 78 eV (instead of 75 eV)
+     
 02-02-10 ja (testem0-V09-03-05)
 - TestEm0.cc : 
   Removal of #include "G4UIterminal.hh" and #include "G4UItcsh.hh".
