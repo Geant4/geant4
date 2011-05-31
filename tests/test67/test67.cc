@@ -106,7 +106,11 @@ int main(int argc,char** argv) {
    visManager->Initialize();   
      
      G4UIsession * session = 0;
-      session = new G4UIterminal(new G4UItcsh);      
+#ifdef _WIN32
+    G4UIsession * session = new G4UIterminal();
+#else
+    G4UIsession * session = new G4UIterminal(new G4UItcsh);
+#endif
      session->SessionStart();
      delete session;
      

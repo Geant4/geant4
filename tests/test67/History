@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30-May-2011 G.Folger   (test67-V09-04-06)
+	    Fix test67.cc for Windows, i.e. protect use of G4UItcsh
+	    
 27-May-2011 L. Pandola (test67-V09-04-05)
 	    Fix compilation problem on Windows which caused the 
 	    rejection of tag test67-V09-04-04
@@ -23,7 +26,7 @@ track of all tags.
 	    Update to tag emlowen-V09-04-36, where v2008 is the default 
             for Penelope models and v2001 is the (obsolete) alternative. 
             Changed physics lists, README and macros accordingly. 
-
+G
 25-May-2011 L. Pandola (test67-V09-04-03)
 	    Improve coding according to Gunter's suggestions
 	    
