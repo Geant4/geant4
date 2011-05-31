@@ -145,8 +145,10 @@ G4ProcessManager::G4ProcessManager(G4ProcessManager &right)
     for (G4int j=0; j< src->entries() ; j++){
       // copy j-th process in i-th ProcessVector 
       theProcVector[i]->insert((*src)[j]);
-      //add aProcess and this ProcessManager into ProcesssTable
-      theProcessTable->Insert((*src)[j], this);
+      //add aProcess and this ProcessManager into ProcesssTable 
+      if (  (*src)[j] !=0 ) {
+	theProcessTable->Insert((*src)[j], this);
+      }
     }
   }
 

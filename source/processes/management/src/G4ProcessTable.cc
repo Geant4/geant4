@@ -168,7 +168,8 @@ G4int   G4ProcessTable::Insert(G4VProcess* aProcess,
   if ( (aProcess == 0) || ( aProcMgr == 0 ) ){
 #ifdef G4VERBOSE
     if (verboseLevel>0){
-      G4cout << "G4ProcessTable::Insert : arguments are 0 pointer "<<G4endl;
+      G4cout << "G4ProcessTable::Insert : arguments are 0 pointer "
+	     <<aProcess <<","<<  aProcMgr << G4endl;
     }
 #endif
     return -1;

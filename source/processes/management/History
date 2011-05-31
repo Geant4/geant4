@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- May 31, 2011   H.Kurashige (procman-V09-04-04)
+- Fix a bug in copy constructor of G4ProcessAttribute
+- Suppress warning message of G4ProcessTable::Insert in case of
+  copying process manager with inactivate processes
+
 - May 05, 2011   H.Kurashige (procman-V09-04-03)
 - Add fParallel process type
 - Fix compiler warning in G4ProcessTableMessenger.cc

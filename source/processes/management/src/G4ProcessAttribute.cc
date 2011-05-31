@@ -63,6 +63,7 @@ G4ProcessAttribute::G4ProcessAttribute(const G4ProcessAttribute &right)
     idxProcVector[idx] = right.idxProcVector[idx];
     ordProcVector[idx] = right.ordProcVector[idx];
   }
+  isActive = right.isActive;
 }
 
  G4ProcessAttribute::~G4ProcessAttribute()
