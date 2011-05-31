@@ -40,7 +40,7 @@ test16 ## n and p Cross-Sections
 test17 ## LowEnergy e.m. (protons, antiprotons and ions). 
 test18 ## Radioactive decay.
 test19 ## discrete process verification test for Physics On Flight
-test20 ## Free slot.
+test20 ## Pi0 production test 
 test21 ## CHIPS as intra-nuclear transport, with photo/lepton + T>1GeV cut.
 test22 ## Gamma and electro-nuclear physics.
 test23 ## Muon capture for CHIPS, stopping.
@@ -76,7 +76,7 @@ test50 ## Statistical test suite for e.m. processes:
        ## 4) e-  backscattering;
        ## 5) e-,e+ transmission.
 test52 ## EM low-energy (standard, low-energy, Penelope)
-test53 ## EM low-energy Penelope
+test53 ## EM low-energy Penelope (old version)
 test54 ## EM low-energy Livermore
 test55 ## ICRU 73-based ionization model (G4IonParametrisedLossModel)
 test56 ## Deexcitation/PIXE 
@@ -85,6 +85,7 @@ test60 ## Geant4-DNA LowE migrated processes.
 test61 ## QMD hadronic model.
 test62 ## INCL/ABLA hadronic model.
 test65 ## LEND hadronic model.
+test67 ## EM low-energy Penelope (and also others)
 test201 # Visualization and graphical interfaces
 test202 # Visualization setup of generic geometry constructs
 ______________________________________________________________________________
