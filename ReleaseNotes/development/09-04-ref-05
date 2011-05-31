@@ -372,6 +372,7 @@ examples                                         examples-V09-04-05
   o Added new variables to histogram
 - advanced/nanobeam (nanobeam-V09-04-00)
   o Switched to non-numbered physics list.
+- extended/electromagnetic/TestEm0 (testem0-V09-04-00)
 - extended/electromagnetic/TestEm1 (testem1-V09-04-02)
 - extended/electromagnetic/TestEm2 (testem2-V09-04-03)
 - extended/electromagnetic/TestEm3 (testem3-V09-04-04)
@@ -384,6 +385,8 @@ examples                                         examples-V09-04-05
   o Updated PhysListEmStandard for deexcitation and multiple-scattering-95.
   o Removed calls to obsolete methods and cleaned up options in 
     PhysListEmStandardNR and PhysListEmStandardSS.
+- extended/electromagnetic/TestEm11 (testem11-V09-04-04)
+  o DetectorConstruction: set I=78 eV for Water (instead of 75 eV).
 - extended/electromagnetic/TestEm12 (testem12-V09-04-03)
   o Added G4EmDNAPhysics in PhysicsList and new macro dna.mac.
 - extended/electromagnetic/TestEm13 (testem13-V09-04-00)
@@ -391,9 +394,10 @@ examples                                         examples-V09-04-05
     new G4PEEffectFluoModel and G4KleinNishinaModel.
 - extended/electromagnetic/TestEm15 (testem15-V09-04-00)
   o Updated PhysListEmStandard to multiple-scattering-95.
-- extended/electromagnetic/TestEm18 (testem18-V09-04-01)
+- extended/electromagnetic/TestEm18 (testem18-V09-04-02)
   o Modified PhysListEmStandard, included AtomicDeexcitation,
     new G4PEEffectFluoModel and G4KleinNishinaModel.
+  o DetectorConstruction: set I=78 eV for Water (instead of 75 eV).
   o Added PIXE macro.
 - extended/eventgenerator/HepMC/MCTruth (mctruthex-V09-04-00)
   o Fixed compilation errors on MacOS for use of std::fmod() in MCTruthManager.
@@ -432,7 +436,7 @@ tests                                            tests-V09-04-05
   o Migrated to be compliant with new Penelope08 code.
 - test58 (test58-V09-04-01)
   o Removed obsolete header of CoulombScatteringModel.
-- test67 (test67-V09-04-06)
+- test67 (test67-V09-04-07)
   o New test implementin the Monte Carlo intercomparison exercise
     described in "T.Vidmar et al., Appl. Rad. Iso. 66 (2008) 764-766".
     The program calculates the full-peak efficiency of a Germanium detector
