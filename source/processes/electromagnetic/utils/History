@@ -17,6 +17,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30 May 11: V.Ivant (emutils-V09-04-26)
+- G4LossTableBuilder - fixed initialisation of variable density for the 
+    case when PhysicsTables are not used
+
+27 May 11: V.Ivant (emutils-V09-04-25)
+- G4VEmProcess, G4VEnergyLossProcess - fixed previous tag for the case 
+    when tables are not built
+- G4VAtomDeexcitation - (A.Mantero) fixed inline method 
+
+27 May 11: V.Ivant (emutils-V09-04-24)
+- G4LossTablemanager, G4LossTableBuilder, G4VEmProcess,
+  G4VMultipleScattering, G4VEnergyLossProcess - added base material
+    approach - build Physics Vectors only for base materials and 
+    scale values for other materials
+
 24 May 11: V.Ivant (emutils-V09-04-23)
 - G4EmModelManager, G4EmCalculator - changed smoothing function 
   between two models, effect is seen for protons in non-NIST water

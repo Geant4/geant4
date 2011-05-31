@@ -74,20 +74,54 @@ public:
 			      G4PhysicsTable* invRangeTable,
 			      G4bool isIonisation = false);
 
+  void InitialiseBaseMaterials(G4PhysicsTable* table);
+
+  inline const std::vector<G4int>* GetCoupleIndexes();
+
+  inline const std::vector<G4double>* GetDensityFactors();
+
   inline void SetSplineFlag(G4bool flag);
+
+  inline void SetInitialisationFlag(G4bool flag);
  
 private:
+
+  void InitialiseCouples();
 
   G4LossTableBuilder & operator=(const  G4LossTableBuilder &right);
   G4LossTableBuilder(const  G4LossTableBuilder&);
 
   G4bool splineFlag;
+  G4bool isInitialized;
+
+  std::vector<G4double>* theDensityFactor;
+  std::vector<G4int>*    theDensityIdx;
+  std::vector<G4bool>*   theFlag;
 
 };
+
+inline const std::vector<G4int>* 
+G4LossTableBuilder::GetCoupleIndexes()
+{
+  if(theDensityIdx->size() == 0) { InitialiseCouples(); }
+  return theDensityIdx;
+}
+
+inline const std::vector<G4double>* 
+G4LossTableBuilder::GetDensityFactors()
+{
+  if(theDensityIdx->size() == 0) { InitialiseCouples(); }
+  return theDensityFactor;
+}
 
 inline void G4LossTableBuilder::SetSplineFlag(G4bool flag)
 {
   splineFlag = flag;
+}
+
+inline void G4LossTableBuilder::SetInitialisationFlag(G4bool flag)
+{
+  isInitialized = flag;
 }
 
 //....oooOO0OOooo.......oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -416,6 +416,7 @@ G4LossTableManager::PreparePhysicsTable(const G4ParticleDefinition* particle,
   if( 0 == run ) {
     emConfigurator->PrepareModels(particle, p);
   }
+  tableBuilder->SetInitialisationFlag(false);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -1073,9 +1074,17 @@ G4VAtomDeexcitation* G4LossTableManager::AtomDeexcitation()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4LossTableBuilder* G4LossTableManager::GetTableBuilder()
+{
+  return tableBuilder;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
 void G4LossTableManager::SetAtomDeexcitation(G4VAtomDeexcitation* p)
 {
   atomDeexcitation = p;
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
