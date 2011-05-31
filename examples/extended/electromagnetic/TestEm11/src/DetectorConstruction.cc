@@ -108,7 +108,7 @@ void DetectorConstruction::DefineMaterials()
   man->FindOrBuildMaterial("G4_SODIUM_IODIDE", isotopes);
   
   man->FindOrBuildMaterial("G4_AIR"  , isotopes);
-  ///man->FindOrBuildMaterial("G4_WATER", isotopes);
+  man->FindOrBuildMaterial("G4_WATER", isotopes);
   
   G4Element* H = man->FindOrBuildElement("H", isotopes); 
   G4Element* O = man->FindOrBuildElement("O", isotopes);
@@ -117,7 +117,7 @@ void DetectorConstruction::DefineMaterials()
   new G4Material("Water", 1.000*g/cm3, 2);
   H2O->AddElement(H, 2);
   H2O->AddElement(O, 1);
-  H2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
+  H2O->GetIonisation()->SetMeanExcitationEnergy(78.0*eV);
 
   G4double density     = universe_mean_density;    //from PhysicalConstants.h
   G4double pressure    = 3.e-18*pascal;
