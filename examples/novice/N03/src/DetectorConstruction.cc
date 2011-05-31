@@ -143,7 +143,7 @@ new G4Material("Water", density= 1.000*g/cm3, ncomponents=2);
 H2O->AddElement(H, natoms=2);
 H2O->AddElement(O, natoms=1);
 // overwrite computed meanExcitationEnergy with ICRU recommended value 
-H2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
+H2O->GetIonisation()->SetMeanExcitationEnergy(78.0*eV);
 
 G4Material* Sci = 
 new G4Material("Scintillator", density= 1.032*g/cm3, ncomponents=2);
