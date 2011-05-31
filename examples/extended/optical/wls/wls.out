@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-04    (30-April-2011)
+ Geant4 version Name: geant4-09-04-ref-05    (27-May-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -117,7 +117,6 @@ Required change in UserPhysicsList:
 change: pmanager->AddContinuousProcess(theCerenkovProcess);
 to:     pmanager->AddProcess(theCerenkovProcess);
         pmanager->SetProcessOrdering(theCerenkovProcess,idxPostStep);
-WLSPhysicsList::SetCuts:CutLength : 1 mm 
 
 phot:   for  gamma, applyCuts: 1     SubType= 12
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -170,7 +169,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+, applyCuts: 1     SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -297,7 +295,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+, applyCuts: 1     SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -324,7 +322,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-, applyCuts: 1     SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -532,46 +530,6 @@ AntiNeutronInelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Ema
                                          Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 ============================================================================================
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : G4_AIR
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Coating
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  3.43206 keV    e-  451.206 keV    e+  436.298 keV proton 0 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Polystyrene
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  2.41988 keV    e-  356.639 keV    e+  349.521 keV proton 0 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 3     used in the geometry : Yes     recalculation needed : No 
- Material : PMMA
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  2.78665 keV    e-  389.196 keV    e+  376.336 keV proton 0 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 4     used in the geometry : Yes     recalculation needed : No 
- Material : G4_Al
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 0 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
 ### Run 0 start.
 
 --------- Ranecu engine status ---------

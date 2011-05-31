@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-04    (30-April-2011)
+ Geant4 version Name: geant4-09-04-ref-05    (27-May-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -139,7 +139,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -274,7 +273,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -301,7 +300,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -538,7 +537,7 @@ AntiNeutronInelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Ema
 
  The run consists of 100 monopole of 100 GeV through 10 cm  of G4_Si (density: 2.33 g/cm3 )
 
- projected Range= 7.7396 cm    rms= 114.25 um 
+ projected Range= 7.7403 cm    rms= 90.1 um 
 ### Stopping Powers
  E(MeV)= 0.001  dedxp= 24.465 dedxmp= 1.4828
  E(MeV)= 0.0012589  dedxp= 27.276 dedxmp= 1.6637
@@ -574,59 +573,59 @@ AntiNeutronInelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Ema
  E(MeV)= 1.2589  dedxp= 35.325 dedxmp= 52.611
  E(MeV)= 1.5849  dedxp= 30.422 dedxmp= 59.031
  E(MeV)= 1.9953  dedxp= 26.068 dedxmp= 66.233
- E(MeV)= 2.5119  dedxp= 22.307 dedxmp= 74.315
- E(MeV)= 3.1623  dedxp= 18.994 dedxmp= 83.382
- E(MeV)= 3.9811  dedxp= 16.11 dedxmp= 93.556
- E(MeV)= 5.0119  dedxp= 13.655 dedxmp= 104.86
- E(MeV)= 6.3096  dedxp= 11.482 dedxmp= 106.51
- E(MeV)= 7.9433  dedxp= 9.6638 dedxmp= 108.92
- E(MeV)= 10  dedxp= 8.101 dedxmp= 112.22
- E(MeV)= 12.589  dedxp= 6.7351 dedxmp= 116.54
- E(MeV)= 15.849  dedxp= 5.6104 dedxmp= 122.07
- E(MeV)= 19.953  dedxp= 4.6906 dedxmp= 129
- E(MeV)= 25.119  dedxp= 3.9345 dedxmp= 137.56
- E(MeV)= 31.623  dedxp= 3.2898 dedxmp= 148
- E(MeV)= 39.811  dedxp= 2.7514 dedxmp= 160.64
- E(MeV)= 50.119  dedxp= 2.3011 dedxmp= 175.82
- E(MeV)= 63.096  dedxp= 1.9288 dedxmp= 193.93
- E(MeV)= 79.433  dedxp= 1.6204 dedxmp= 215.44
- E(MeV)= 100  dedxp= 1.3666 dedxmp= 240.86
- E(MeV)= 125.89  dedxp= 1.1584 dedxmp= 270.8
- E(MeV)= 158.49  dedxp= 0.98834 dedxmp= 305.95
- E(MeV)= 199.53  dedxp= 0.85008 dedxmp= 347.09
- E(MeV)= 251.19  dedxp= 0.73828 dedxmp= 395.12
- E(MeV)= 316.23  dedxp= 0.64851 dedxmp= 451.06
- E(MeV)= 398.11  dedxp= 0.57708 dedxmp= 516.06
- E(MeV)= 501.19  dedxp= 0.52094 dedxmp= 591.46
- E(MeV)= 630.96  dedxp= 0.47754 dedxmp= 631.06
- E(MeV)= 794.33  dedxp= 0.44475 dedxmp= 669.72
- E(MeV)= 1000  dedxp= 0.42137 dedxmp= 708.41
- E(MeV)= 1258.9  dedxp= 0.40531 dedxmp= 747.13
- E(MeV)= 1584.9  dedxp= 0.39521 dedxmp= 785.89
- E(MeV)= 1995.3  dedxp= 0.39001 dedxmp= 824.71
- E(MeV)= 2511.9  dedxp= 0.38878 dedxmp= 863.59
- E(MeV)= 3162.3  dedxp= 0.39068 dedxmp= 902.56
- E(MeV)= 3981.1  dedxp= 0.39501 dedxmp= 941.63
- E(MeV)= 5011.9  dedxp= 0.40116 dedxmp= 980.83
- E(MeV)= 6309.6  dedxp= 0.40863 dedxmp= 1020.2
- E(MeV)= 7943.3  dedxp= 0.41701 dedxmp= 1059.7
- E(MeV)= 10000  dedxp= 0.42598 dedxmp= 1099.5
- E(MeV)= 12589  dedxp= 0.43532 dedxmp= 1139.6
- E(MeV)= 15849  dedxp= 0.44483 dedxmp= 1180
- E(MeV)= 19953  dedxp= 0.4544 dedxmp= 1220.8
- E(MeV)= 25119  dedxp= 0.46395 dedxmp= 1262.1
- E(MeV)= 31623  dedxp= 0.47342 dedxmp= 1303.9
- E(MeV)= 39811  dedxp= 0.4828 dedxmp= 1346.2
- E(MeV)= 50119  dedxp= 0.49209 dedxmp= 1389
- E(MeV)= 63096  dedxp= 0.50131 dedxmp= 1432.3
+ E(MeV)= 2.5119  dedxp= 22.267 dedxmp= 74.315
+ E(MeV)= 3.1623  dedxp= 18.934 dedxmp= 83.382
+ E(MeV)= 3.9811  dedxp= 16.043 dedxmp= 93.556
+ E(MeV)= 5.0119  dedxp= 13.589 dedxmp= 104.86
+ E(MeV)= 6.3096  dedxp= 11.42 dedxmp= 106.51
+ E(MeV)= 7.9433  dedxp= 9.608 dedxmp= 108.92
+ E(MeV)= 10  dedxp= 8.0524 dedxmp= 112.22
+ E(MeV)= 12.589  dedxp= 6.6936 dedxmp= 116.54
+ E(MeV)= 15.849  dedxp= 5.5755 dedxmp= 122.07
+ E(MeV)= 19.953  dedxp= 4.6616 dedxmp= 129
+ E(MeV)= 25.119  dedxp= 3.9107 dedxmp= 137.56
+ E(MeV)= 31.623  dedxp= 3.2703 dedxmp= 148
+ E(MeV)= 39.811  dedxp= 2.7356 dedxmp= 160.64
+ E(MeV)= 50.119  dedxp= 2.2882 dedxmp= 175.82
+ E(MeV)= 63.096  dedxp= 1.9184 dedxmp= 193.93
+ E(MeV)= 79.433  dedxp= 1.6121 dedxmp= 215.44
+ E(MeV)= 100  dedxp= 1.3599 dedxmp= 240.86
+ E(MeV)= 125.89  dedxp= 1.153 dedxmp= 270.8
+ E(MeV)= 158.49  dedxp= 0.98406 dedxmp= 305.95
+ E(MeV)= 199.53  dedxp= 0.84666 dedxmp= 347.09
+ E(MeV)= 251.19  dedxp= 0.73555 dedxmp= 395.12
+ E(MeV)= 316.23  dedxp= 0.64633 dedxmp= 451.06
+ E(MeV)= 398.11  dedxp= 0.57535 dedxmp= 516.06
+ E(MeV)= 501.19  dedxp= 0.51956 dedxmp= 591.46
+ E(MeV)= 630.96  dedxp= 0.47644 dedxmp= 631.06
+ E(MeV)= 794.33  dedxp= 0.44387 dedxmp= 669.72
+ E(MeV)= 1000  dedxp= 0.42068 dedxmp= 708.41
+ E(MeV)= 1258.9  dedxp= 0.40476 dedxmp= 747.13
+ E(MeV)= 1584.9  dedxp= 0.39477 dedxmp= 785.89
+ E(MeV)= 1995.3  dedxp= 0.38966 dedxmp= 824.71
+ E(MeV)= 2511.9  dedxp= 0.3885 dedxmp= 863.59
+ E(MeV)= 3162.3  dedxp= 0.39046 dedxmp= 902.56
+ E(MeV)= 3981.1  dedxp= 0.39483 dedxmp= 941.63
+ E(MeV)= 5011.9  dedxp= 0.40102 dedxmp= 980.83
+ E(MeV)= 6309.6  dedxp= 0.40852 dedxmp= 1020.2
+ E(MeV)= 7943.3  dedxp= 0.41692 dedxmp= 1059.7
+ E(MeV)= 10000  dedxp= 0.42591 dedxmp= 1099.5
+ E(MeV)= 12589  dedxp= 0.43526 dedxmp= 1139.6
+ E(MeV)= 15849  dedxp= 0.44479 dedxmp= 1180
+ E(MeV)= 19953  dedxp= 0.45437 dedxmp= 1220.8
+ E(MeV)= 25119  dedxp= 0.46392 dedxmp= 1262.1
+ E(MeV)= 31623  dedxp= 0.4734 dedxmp= 1303.9
+ E(MeV)= 39811  dedxp= 0.48279 dedxmp= 1346.2
+ E(MeV)= 50119  dedxp= 0.49208 dedxmp= 1389
+ E(MeV)= 63096  dedxp= 0.5013 dedxmp= 1432.3
  E(MeV)= 79433  dedxp= 0.51047 dedxmp= 1475.7
- E(MeV)= 1e+05  dedxp= 0.51965 dedxmp= 1521.9
- E(MeV)= 1.2589e+05  dedxp= 0.52891 dedxmp= 1569.5
- E(MeV)= 1.5849e+05  dedxp= 0.53835 dedxmp= 1616.1
+ E(MeV)= 1e+05  dedxp= 0.51964 dedxmp= 1521.9
+ E(MeV)= 1.2589e+05  dedxp= 0.5289 dedxmp= 1569.5
+ E(MeV)= 1.5849e+05  dedxp= 0.53834 dedxmp= 1616.1
  E(MeV)= 1.9953e+05  dedxp= 0.54808 dedxmp= 1661.5
  E(MeV)= 2.5119e+05  dedxp= 0.55828 dedxmp= 1705.5
  E(MeV)= 3.1623e+05  dedxp= 0.56916 dedxmp= 1747.9
- E(MeV)= 3.9811e+05  dedxp= 0.58098 dedxmp= 1788.3
+ E(MeV)= 3.9811e+05  dedxp= 0.58097 dedxmp= 1788.3
  E(MeV)= 5.0119e+05  dedxp= 0.59408 dedxmp= 1826.5
  E(MeV)= 6.3096e+05  dedxp= 0.60891 dedxmp= 1862.4
  E(MeV)= 7.9433e+05  dedxp= 0.62602 dedxmp= 1895.6
@@ -644,7 +643,7 @@ AntiNeutronInelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Ema
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 131039803, 1991803800
+ Current couple of seeds = 1606897015, 72084506
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

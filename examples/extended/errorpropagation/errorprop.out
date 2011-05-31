@@ -4,13 +4,13 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-04    (30-April-2011)
+ Geant4 version Name: geant4-09-04-ref-05    (27-May-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
- creating G4RunManagerKernel 0x292d890
+ creating G4RunManagerKernel 0x12b6890
 
 The materials defined are : 
 
@@ -37,14 +37,14 @@ World is registered to the default region.
 List of instantiated particles ============================================
 e+ e- gamma mu+ mu- pi+ pi- proton 
 physicsList->Construct() start.
-0x299a5c0G4ErrorPhysicsList:: particle process manager e+ = 0x299bac0
-0x299a3f0G4ErrorPhysicsList:: particle process manager e- = 0x299d0c0
-0x299a170G4ErrorPhysicsList:: particle process manager gamma = 0x299d2c0
-0x299a7d0G4ErrorPhysicsList:: particle process manager mu+ = 0x299d500
-0x299ac00G4ErrorPhysicsList:: particle process manager mu- = 0x299d740
-0x299b070G4ErrorPhysicsList:: particle process manager pi+ = 0x299d980
-0x299b490G4ErrorPhysicsList:: particle process manager pi- = 0x299dbc0
-0x299b8b0G4ErrorPhysicsList:: particle process manager proton = 0x299de00
+0x13233c0G4ErrorPhysicsList:: particle process manager e+ = 0x13248e0
+0x13231b0G4ErrorPhysicsList:: particle process manager e- = 0x1327370
+0x1325b00G4ErrorPhysicsList:: particle process manager gamma = 0x1327580
+0x13235d0G4ErrorPhysicsList:: particle process manager mu+ = 0x13277d0
+0x1323a20G4ErrorPhysicsList:: particle process manager mu- = 0x1327a20
+0x1323e90G4ErrorPhysicsList:: particle process manager pi+ = 0x1327c70
+0x13242b0G4ErrorPhysicsList:: particle process manager pi- = 0x1327ec0
+0x13246d0G4ErrorPhysicsList:: particle process manager proton = 0x1328110
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-04    (30-April-2011)
+ Geant4 version Name: geant4-09-04-ref-05    (27-May-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -135,7 +135,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -290,23 +289,23 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=5.81s Real=5.81s Sys=0s
+  User=6.35s Real=6.36s Sys=0s
 
  The run consists of 1000000 gamma of 100 keV through 100 m   of Water (density: 1 g/cm3 )
 
- Process calls frequency --->	compt = 983863	phot = 16137
+ Process calls frequency --->	compt = 983719	phot = 16281
 
- MeanFreePath:	6.0646 cm  +- 6.066 cm 	massic: 6.0646 g/cm2 
- CrossSection:	0.16489 cm^-1 			massic: 0.16489 cm2/g
+ MeanFreePath:	6.1115 cm  +- 6.1121 cm 	massic: 6.1115 g/cm2 
+ CrossSection:	0.16363 cm^-1 			massic: 0.16363 cm2/g
 
- mean energy of charged secondaries: 15.148 keV	mass_energy_transfer coef: 0.024978 cm2/g
+ mean energy of charged secondaries: 15.161 keV	mass_energy_transfer coef: 0.024808 cm2/g
 
  Verification : crossSections from G4EmCalculator 
-	compt= 0.1623 cm2/g	phot= 0.0026853 cm2/g	total= 0.16499 cm2/g
+	compt= 0.16103 cm2/g	phot= 0.0026853 cm2/g	total= 0.16372 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 286474793, 2083374278
+ Current couple of seeds = 1878264175, 281060853
 ----------------------------------------
 #
 /gun/particle e-
@@ -335,7 +334,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 286474793, 2083374278
+ Current couple of seeds = 1878264175, 281060853
 ----------------------------------------
 Start Run processing.
 
@@ -361,23 +360,23 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=5.99s Real=6s Sys=0s
+  User=5.27s Real=5.27s Sys=0s
 
  The run consists of 1000000 e- of 100 MeV through 100 m   of Water (density: 1 g/cm3 )
 
- Process calls frequency --->	eBrem = 604421	eIoni = 395579
+ Process calls frequency --->	eBrem = 590617	eIoni = 409383
 
- MeanFreePath:	1.628 cm  +- 1.6279 cm 	massic: 1.628 g/cm2 
- CrossSection:	0.61427 cm^-1 			massic: 0.61427 cm2/g
+ MeanFreePath:	1.684 cm  +- 1.6834 cm 	massic: 1.684 g/cm2 
+ CrossSection:	0.59382 cm^-1 			massic: 0.59382 cm2/g
 
- mean energy of charged secondaries: 748.2 keV	mass_energy_transfer coef: 0.0045959 cm2/g
+ mean energy of charged secondaries: 774.59 keV	mass_energy_transfer coef: 0.0045997 cm2/g
 
  Verification : crossSections from G4EmCalculator 
-	eBrem= 0.37138 cm2/g	eIoni= 0.24337 cm2/g	total= 0.61475 cm2/g
+	eBrem= 0.35096 cm2/g	eIoni= 0.24337 cm2/g	total= 0.59433 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 393741211, 931743729
+ Current couple of seeds = 1170833705, 1868695300
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

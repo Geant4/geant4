@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-00    (17-December-2010)
+ Geant4 version Name: geant4-09-04-ref-05    (27-May-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -78,9 +78,9 @@ conv:   for  gamma    SubType= 14
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 GeV in 160 bins, spline: 1
-      RangeFactor= 0.02, stepLimitType: 2, latDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc93 :   Emin=        0 eV       Emax=         10 GeV
+          UrbanMsc95 :   Emin=        0 eV       Emax=         10 GeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 GeV in 160 bins
@@ -99,13 +99,12 @@ eIoni:   for  e+    SubType= 2
       CSDA range table up to 10 GeV in 160 bins
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 GeV in 160 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 GeV
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 GeV in 160 bins, spline: 1
-      RangeFactor= 0.02, stepLimitType: 2, latDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :   Emin=        0 eV       Emax=         10 GeV
 
@@ -155,15 +154,15 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 ----------------------------------------
 Start Run processing.
 
- ---> NbofEvents= 1000   NbOfelectr= 70332   Tkin= 589.082 keV (0.000 %)   NbOfelec in cav= 4589   Dose/EnFluence= 26.638 cm2/g (0.000 %)
+ ---> NbofEvents= 1000   NbOfelectr= 70604   Tkin= 588.775 keV (0.000 %)   NbOfelec in cav= 4381   Dose/EnFluence= 28.476 cm2/g (0.000 %)
 
- ---> NbofEvents= 2000   NbOfelectr= 141252   Tkin= 588.179 keV (-0.153 %)   NbOfelec in cav= 9374   Dose/EnFluence= 28.803 cm2/g (8.129 %)
+ ---> NbofEvents= 2000   NbOfelectr= 140815   Tkin= 588.928 keV (0.026 %)   NbOfelec in cav= 9101   Dose/EnFluence= 28.128 cm2/g (-1.224 %)
 
- ---> NbofEvents= 3000   NbOfelectr= 211798   Tkin= 588.153 keV (-0.004 %)   NbOfelec in cav= 13975   Dose/EnFluence= 28.118 cm2/g (-2.379 %)
+ ---> NbofEvents= 3000   NbOfelectr= 211198   Tkin= 589.139 keV (0.036 %)   NbOfelec in cav= 13887   Dose/EnFluence= 28.966 cm2/g (2.980 %)
 Run terminated.
 Run Summary
   Number of events processed : 4000
-  User=23.53s Real=24.52s Sys=0s
+  User=18.33s Real=18.34s Sys=0s
 
  ======================== run summary ======================
 
@@ -173,32 +172,32 @@ Run Summary
 
  ============================================================
 
- Process calls frequency --->  compt= 281849  Transportation= 77349  msc= 2094229  eIoni= 1736138
+ Process calls frequency --->  compt= 282540  Transportation= 75966  msc= 1518807  eIoni= 1792103
 
  Gamma crossSections in wall material :  compt= 63.447 cm2/g   --> total= 63.447 cm2/g
 
- Mean energy of secondary e- = 588.2741 keV +- 0.1028 %  (--> range in wall material = 2.2114 mm )
- Mass_energy_transfer coef: 29.8594 cm2/g
+ Mean energy of secondary e- = 589.1513 keV +- 0.1027 %  (--> range in wall material = 2.2158 mm )
+ Mass_energy_transfer coef: 29.9039 cm2/g
 
- StoppingPower in wall   = 1.9724 MeV*cm2/g
-               in cavity = 1.9724 MeV*cm2/g
+ StoppingPower in wall   = 1.9719 MeV*cm2/g
+               in cavity = 1.9719 MeV*cm2/g
 
  Charged particle flow in cavity :
-      Enter --> nbParticles = 18697	 Energy = 9.4723 GeV
-      Exit  --> nbParticles = 18694	 Energy = 9.4730 GeV
+      Enter --> nbParticles = 18341	 Energy = 9.3196 GeV
+      Exit  --> nbParticles = 18355	 Energy = 9.3277 GeV
 
- Total edep in cavity = 12.4835 MeV +- 2.3625 %	 Total charged trackLength = 51.1392 m     (mean value = 2.7352 mm )
- Total dose in cavity = 19.8681 MeV/mg
- Dose/EnergyFluence   = 28.0878 cm2/g
+ Total edep in cavity = 13.0682 MeV +- 3.4521 %	 Total charged trackLength = 51.0709 m     (mean value = 2.7845 mm )
+ Total dose in cavity = 20.7986 MeV/mg
+ Dose/EnergyFluence   = 29.4034 cm2/g
 
- (Dose/EnergyFluence)/Mass_energy_transfer = 0.94067 +- 0.02224
+ (Dose/EnergyFluence)/Mass_energy_transfer = 0.98326 +- 0.03396
 
- StepSize of ch. tracks in wall   = 122.6753 um  +- 120.8436 um 	 (nbSteps/track = 13.5663)
- StepSize of ch. tracks in cavity = 668.6433 um  +- 847.1076 um 	 (nbSteps/track = 4.0906)
+ StepSize of ch. tracks in wall   = 141.2058 um  +- 122.4725 um 	 (nbSteps/track = 11.8592)
+ StepSize of ch. tracks in cavity = 1.7828 mm  +- 1.3556 mm 	 (nbSteps/track = 1.5619)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1568745475, 2068190730
+ Current couple of seeds = 1819773754, 1478587397
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

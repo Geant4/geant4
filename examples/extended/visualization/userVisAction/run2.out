@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-04    (30-April-2011)
+ Geant4 version Name: geant4-09-04-ref-05    (27-May-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -118,7 +118,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -293,48 +292,48 @@ Start Run processing.
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0      0 fm      0 fm  -2.91 m       3 GeV     0 eV      0 fm      0 fm        World    initStep
-    1      0 fm      0 fm  -2.45 m       3 GeV    68 keV    46 cm     46 cm        World  Transportation
-    2  -5.96 um    231 nm   -2.4 m    2.93 GeV  69.1 MeV     5 cm     51 cm       Target  Transportation
-    3    366 um   -673 um   -2.3 m    2.93 GeV  15.2 keV    10 cm     61 cm      Tracker  StepLimiter
-    4    726 um  -1.36 mm   -2.2 m    2.93 GeV  25.7 keV    10 cm     71 cm      Tracker  StepLimiter
+    1      0 fm      0 fm  -2.45 m       3 GeV  67.9 keV    46 cm     46 cm        World  Transportation
+    2  -5.96 um    231 nm   -2.4 m    2.93 GeV    69 MeV     5 cm     51 cm       Target  Transportation
+    3    366 um   -673 um   -2.3 m    2.93 GeV  15.1 keV    10 cm     61 cm      Tracker  StepLimiter
+    4    726 um  -1.36 mm   -2.2 m    2.93 GeV  25.6 keV    10 cm     71 cm      Tracker  StepLimiter
     5   1.08 mm  -2.04 mm   -2.1 m    2.93 GeV  22.8 keV    10 cm     81 cm      Tracker  StepLimiter
     6   1.44 mm  -2.72 mm     -2 m    2.93 GeV  21.7 keV    10 cm     91 cm      Tracker  StepLimiter
     7    1.8 mm   -3.4 mm   -1.9 m    2.93 GeV    16 keV    10 cm   1.01 m       Tracker  StepLimiter
     8   2.17 mm  -4.08 mm   -1.8 m    2.93 GeV  14.2 keV    10 cm   1.11 m       Tracker  StepLimiter
-    9   2.53 mm  -4.77 mm   -1.7 m    2.93 GeV  15.7 keV    10 cm   1.21 m       Tracker  StepLimiter
-   10    2.9 mm  -5.48 mm   -1.6 m    2.93 GeV  15.1 keV    10 cm   1.31 m       Tracker  StepLimiter
-   11    2.9 mm  -5.48 mm   -1.6 m    2.93 GeV  4.19 eV     24 um   1.31 m       Tracker  Transportation
-   12   3.62 mm  -6.86 mm   -1.4 m    2.93 GeV  93.2 keV    20 cm   1.51 m       Chamber  Transportation
+    9   2.53 mm  -4.77 mm   -1.7 m    2.93 GeV  15.6 keV    10 cm   1.21 m       Tracker  StepLimiter
+   10    2.9 mm  -5.48 mm   -1.6 m    2.93 GeV    15 keV    10 cm   1.31 m       Tracker  StepLimiter
+   11    2.9 mm  -5.48 mm   -1.6 m    2.93 GeV  4.18 eV     24 um   1.31 m       Tracker  Transportation
+   12   3.62 mm  -6.86 mm   -1.4 m    2.93 GeV  93.3 keV    20 cm   1.51 m       Chamber  Transportation
    13   3.98 mm  -7.54 mm   -1.3 m    2.93 GeV  14.4 keV    10 cm   1.61 m       Tracker  StepLimiter
    14   4.35 mm  -8.22 mm   -1.2 m    2.93 GeV  13.2 keV    10 cm   1.71 m       Tracker  StepLimiter
    15    4.7 mm   -8.9 mm   -1.1 m    2.93 GeV  17.4 keV    10 cm   1.81 m       Tracker  StepLimiter
    16   5.06 mm  -9.58 mm     -1 m    2.93 GeV    30 keV    10 cm   1.91 m       Tracker  StepLimiter
    17   5.42 mm  -1.03 cm    -90 cm   2.93 GeV  11.3 keV    10 cm   2.01 m       Tracker  StepLimiter
    18   5.47 mm  -1.03 cm  -88.8 cm   2.93 GeV   960 eV   1.24 cm   2.02 m       Tracker       hIoni
-   19   5.78 mm  -1.09 cm    -80 cm   2.93 GeV  16.7 keV  8.76 cm   2.11 m       Tracker  Transportation
+   19   5.78 mm  -1.09 cm    -80 cm   2.93 GeV  16.6 keV  8.76 cm   2.11 m       Tracker  Transportation
    20   6.51 mm  -1.23 cm    -60 cm   2.93 GeV   104 keV    20 cm   2.31 m       Chamber  Transportation
-   21   6.92 mm  -1.29 cm    -50 cm   2.93 GeV    26 keV    10 cm   2.41 m       Tracker  StepLimiter
+   21   6.92 mm  -1.29 cm    -50 cm   2.93 GeV  25.9 keV    10 cm   2.41 m       Tracker  StepLimiter
    22   7.34 mm  -1.36 cm    -40 cm   2.93 GeV  12.6 keV    10 cm   2.51 m       Tracker  StepLimiter
    23   7.76 mm  -1.43 cm    -30 cm   2.93 GeV  13.3 keV    10 cm   2.61 m       Tracker  StepLimiter
-   24   8.19 mm  -1.49 cm    -20 cm   2.93 GeV    13 keV    10 cm   2.71 m       Tracker  StepLimiter
-   25    8.6 mm  -1.56 cm    -10 cm   2.93 GeV  21.6 keV    10 cm   2.81 m       Tracker  StepLimiter
+   24   8.19 mm  -1.49 cm    -20 cm   2.93 GeV  12.9 keV    10 cm   2.71 m       Tracker  StepLimiter
+   25    8.6 mm  -1.56 cm    -10 cm   2.93 GeV  21.5 keV    10 cm   2.81 m       Tracker  StepLimiter
    26   9.01 mm  -1.63 cm  -18.7 um   2.93 GeV  12.9 keV    10 cm   2.91 m       Tracker  StepLimiter
-   27   9.01 mm  -1.63 cm -0.00312 fm   2.93 GeV  3.26 eV   18.7 um   2.91 m       Tracker  Transportation
+   27   9.01 mm  -1.63 cm -0.000801 fm   2.93 GeV  3.26 eV   18.7 um   2.91 m       Tracker  Transportation
    28   9.83 mm  -1.77 cm     20 cm   2.93 GeV   106 keV    20 cm   3.11 m       Chamber  Transportation
    29   1.02 cm  -1.84 cm     30 cm   2.93 GeV    27 keV    10 cm   3.21 m       Tracker  StepLimiter
    30   1.06 cm   -1.9 cm   38.4 cm   2.93 GeV  12.8 keV  8.43 cm   3.29 m       Tracker       hIoni
-   31    1.1 cm  -1.97 cm   48.4 cm   2.93 GeV  22.4 keV    10 cm   3.39 m       Tracker  StepLimiter
+   31    1.1 cm  -1.97 cm   48.4 cm   2.93 GeV  22.3 keV    10 cm   3.39 m       Tracker  StepLimiter
    32   1.14 cm  -2.05 cm   58.4 cm   2.93 GeV  28.7 keV    10 cm   3.49 m       Tracker  StepLimiter
    33   1.19 cm  -2.12 cm   68.4 cm   2.93 GeV  14.1 keV    10 cm   3.59 m       Tracker  StepLimiter
    34   1.23 cm   -2.2 cm   78.4 cm   2.93 GeV  18.6 keV    10 cm   3.69 m       Tracker  StepLimiter
    35   1.24 cm  -2.21 cm     80 cm   2.93 GeV  1.41 keV  1.57 cm   3.71 m       Tracker  Transportation
    36   1.33 cm  -2.36 cm      1 m    2.93 GeV   139 keV    20 cm   3.91 m       Chamber  Transportation
    37   1.36 cm  -2.43 cm    1.1 m    2.93 GeV  16.4 keV    10 cm   4.01 m       Tracker  StepLimiter
-   38   1.38 cm  -2.46 cm   1.15 m    2.93 GeV  7.11 keV  4.84 cm   4.06 m       Tracker       hIoni
+   38   1.38 cm  -2.46 cm   1.15 m    2.93 GeV   7.1 keV  4.84 cm   4.06 m       Tracker       hIoni
    39   1.42 cm  -2.54 cm   1.25 m    2.93 GeV  16.8 keV    10 cm   4.16 m       Tracker  StepLimiter
    40   1.45 cm  -2.61 cm   1.35 m    2.93 GeV  19.5 keV    10 cm   4.26 m       Tracker  StepLimiter
    41   1.49 cm  -2.68 cm   1.45 m    2.93 GeV  11.7 keV    10 cm   4.36 m       Tracker  StepLimiter
-   42   1.53 cm  -2.75 cm   1.55 m    2.93 GeV    17 keV    10 cm   4.46 m       Tracker  StepLimiter
+   42   1.53 cm  -2.75 cm   1.55 m    2.93 GeV  16.9 keV    10 cm   4.46 m       Tracker  StepLimiter
    43   1.53 cm  -2.75 cm   1.56 m    2.93 GeV  1.15 keV  7.24 mm   4.47 m       Tracker       hIoni
    44   1.55 cm  -2.78 cm    1.6 m    2.93 GeV  15.2 keV  4.44 cm   4.51 m       Tracker  Transportation
    45   1.62 cm  -2.92 cm    1.8 m    2.93 GeV  76.2 keV    20 cm   4.71 m       Chamber  Transportation
@@ -344,9 +343,9 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
    49   1.77 cm   -3.2 cm    2.2 m    2.93 GeV  20.7 keV    10 cm   5.11 m       Tracker  StepLimiter
    50   1.81 cm  -3.27 cm    2.3 m    2.93 GeV  14.3 keV    10 cm   5.21 m       Tracker  StepLimiter
    51   1.85 cm  -3.34 cm    2.4 m    2.93 GeV  25.8 keV    10 cm   5.31 m       Tracker  StepLimiter
-   52   1.85 cm  -3.34 cm    2.4 m    2.93 GeV  3.26 eV   18.7 um   5.31 m       Tracker  Transportation
+   52   1.85 cm  -3.34 cm    2.4 m    2.93 GeV  3.25 eV   18.7 um   5.31 m       Tracker  Transportation
    53   1.91 cm  -3.45 cm   2.56 m    2.93 GeV  35.6 keV  16.4 cm   5.47 m         World       hIoni
-   54   1.96 cm  -3.54 cm    2.7 m    2.93 GeV  26.2 keV  13.9 cm   5.61 m         World       hIoni
+   54   1.96 cm  -3.54 cm    2.7 m    2.93 GeV  26.1 keV  13.9 cm   5.61 m         World       hIoni
    55   2.04 cm  -3.67 cm   2.91 m    2.93 GeV  26.8 keV  20.7 cm   5.82 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
@@ -455,7 +454,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
@@ -491,49 +490,42 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 ### Run 1 start.
 Start Run processing.
 
--------->Hits Collection: in this event they are 36 hits in the tracker chambers: 
-  trackID: 1  chamberNb: 0  energy deposit: 87.40055940491 keV  position: 0.025894924908044 0.16262245086351 -1.4 m  
-  trackID: 1  chamberNb: 1  energy deposit: 91.8803176143 keV  position: 4.6996653077775 39.998827254612 -60 cm 
-  trackID: 1  chamberNb: 2  energy deposit: 85.025048995892 keV  position: 6.8277000393665 76.24746328016 20 cm 
-  trackID: 1  chamberNb: 3  energy deposit: 107.54063190693 keV  position: 0.091704499362746 1.2774941154053 1 m  
-  trackID: 1  chamberNb: 4  energy deposit: 198.52448396684 keV  position: 0.11786116050831 1.968 1.7708629769921 m  
-  trackID: 4  chamberNb: 2  energy deposit: 435.67437204095 eV   position: 5.052302576662 65.72517783581 -3.9605905360895e-16 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 639.82959318512 eV   position: 5.3713127985136 65.625927736636 -5.6621374255883e-16 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 2.1655100474388 keV  position: 5.8051987068821 65.62602797935 -6.6613381477509e-17 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 32.691754988437 keV  position: 7.247241409292 65.672922562163 0.1260860733385 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 19.878442779784 keV  position: 8.6100429083099 65.666529135857 0.12556154514107 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 28.74235037385 keV  position: 8.8782268433643 65.633432970279 0.23393068731856 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 24.294076574555 keV  position: 8.1502743428545 65.693202335501 0.1409159073627 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 17.865563025855 keV  position: 9.0437534476677 65.691067325282 0.28166469097899 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 15.1483128363 keV  position: 9.5597631619644 65.783152307279 0.063834845844891 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 20.120589155009 keV  position: 9.3146795747572 65.729792572358 0.15634287872918 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 13.107416634766 keV  position: 8.9514168895362 65.606385026447 0.040978348160905 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 11.577744374254 keV  position: 9.2924548490012 65.601322008668 0.024764817887313 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 28.145834330334 keV  position: 9.3955801950721 65.59729036583 0.025198045052544 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 2.4584182632718 keV  position: 9.3172874836581 65.551510831925 -2.6090241078691e-16 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 3.9427247594151 keV  position: 9.2958005570804 65.619426106444 0.047597229155294 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 2.0578388062613 keV  position: 9.3019646596473 65.591780569202 0.098580839506577 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 419.54460839813 eV   position: 9.2962633826898 65.537846012628 0.078991041959308 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 928.81610746914 eV   position: 9.286014999741 65.52894910181 0.040555287733657 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 2.9986737113659 keV  position: 9.3245858449105 65.524258731591 0.025010103568995 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 346.08976149793 eV   position: 9.3332905709187 65.564130020759 0.023792457334724 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 2.5206797153217 keV  position: 9.3805270036658 65.58478847928 0.015868010745667 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 4.0942567905831 keV  position: 9.3676223842888 65.619470350185 0.015802315727131 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 759.27558097999 eV   position: 9.3945013170448 65.60825213021 0.043114364230822 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 1.2916001635164 keV  position: 9.4380543730436 65.59904981609 0.067260072810695 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 2.8756732438204 keV  position: 9.4768916376754 65.5824971771 0.095941020711448 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 1.9053249911855 keV  position: 9.441211674226 65.573003778338 0.093621677349693 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 1.3714627305753 keV  position: 9.4022683927595 65.571033339688 0.10864328064182 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 915.13109406022 eV   position: 9.3879518467026 65.53451047944 0.13650045630357 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 5.5801951500909 keV  position: 9.3673061863123 65.546653818261 0.11070505054998 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 6.6713019099785 keV  position: 9.3434851808577 65.532610823461 0.090180273278575 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 4.8797926899684 keV  position: 9.3403585900529 65.531672695454 0.093318725481864 cm 
+-------->Hits Collection: in this event they are 29 hits in the tracker chambers: 
+  trackID: 1  chamberNb: 0  energy deposit: 87.445078526702 keV  position: 0.025894835084356 0.16262198535534 -1.4 m  
+  trackID: 1  chamberNb: 1  energy deposit: 91.928283147935 keV  position: 4.6996483578776 39.99865582098 -60 cm 
+  trackID: 1  chamberNb: 2  energy deposit: 85.068519936592 keV  position: 6.8276743046947 76.247058799927 20 cm 
+  trackID: 1  chamberNb: 3  energy deposit: 107.59333289031 keV  position: 0.091704127359102 1.2774859965666 1 m  
+  trackID: 1  chamberNb: 4  energy deposit: 198.59519626709 keV  position: 0.1178611325426 1.968 1.7708774813813 m  
+  trackID: 4  chamberNb: 2  energy deposit: 802.14240133009 eV   position: 5.2281621909981 65.737726189337 5.7279484974582e-16 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 591.85163928126 eV   position: 1.9419410262368 65.746383932511 3.7437501015924e-16 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 21.726576316964 keV  position: -6.4169492452308 65.82032903952 4.4825254619241e-16 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 939.15283048047 eV   position: -6.4035698765607 65.686399049626 -1.1102230246252e-17 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 11.909622281374 keV  position: -6.4041057069166 65.691649696225 -3.2457760437699e-16 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 1.6043843549162 keV  position: -6.2492866833865 65.687521708384 -4.1986135705316e-16 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 341.9778083089 eV   position: -6.180861015066 65.694140538531 -1.717891237249e-16 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 1.7963651457015 keV  position: -6.0575923177108 65.688715930259 -1.9845236565175e-16 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 1.2724878519859 keV  position: -5.8048458533976 65.689948066157 3.2959746043559e-16 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 1.453065025615 keV  position: -5.5614677937144 65.692670431287 -1.346145417358e-16 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 961.91316105967 eV   position: -5.3885093457331 65.703130156789 -4.1633363423443e-17 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 20.277849783231 keV  position: -5.4989245307492 65.629931003069 0.053196329186809 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 24.456128378505 keV  position: -4.9478608804883 65.639637660982 0.11870752480593 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 11.036313027728 keV  position: -5.3200310836068 65.582557848084 0.058014992697412 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 17.027502388217 keV  position: -5.3920634919346 65.654636395662 0.10871885644996 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 10.927846212908 keV  position: -5.2814638741276 65.66363050782 0.09186572287026 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 10.373618025923 keV  position: -5.2592532916161 65.673819383592 0.072528003429576 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 3.6757544222699 keV  position: -5.103262507622 65.654099696684 0.14466882508627 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 6.7787885110397 keV  position: -4.9739538772529 65.643964924388 0.10201970300849 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 4.8471835706215 keV  position: -5.0056947313309 65.6068091125 0.15816949811835 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 13.509494280221 keV  position: -5.0312064526639 65.567197630267 0.10174709702798 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 10.364045570704 keV  position: -4.9151837125832 65.534776238356 0.19789052544789 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 6.2970336459147 keV  position: -4.8490793884588 65.478080964003 0.24443704340032 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 13.948157043027 keV  position: -4.8521836627926 65.473193878781 0.26457429505795 cm 
 >>> Event 0
     0 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
+  User=0.01s Real=0s Sys=0s
 Graphics systems deleted.
 Visualization Manager deleting...
 UserDetectorConstruction deleted.

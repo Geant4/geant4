@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-04    (30-April-2011)
+ Geant4 version Name: geant4-09-04-ref-05    (27-May-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -118,7 +118,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -293,48 +292,48 @@ Start Run processing.
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0      0 fm      0 fm  -2.91 m       3 GeV     0 eV      0 fm      0 fm        World    initStep
-    1      0 fm      0 fm  -2.45 m       3 GeV    68 keV    46 cm     46 cm        World  Transportation
-    2  -5.96 um    231 nm   -2.4 m    2.93 GeV  69.1 MeV     5 cm     51 cm       Target  Transportation
-    3    366 um   -673 um   -2.3 m    2.93 GeV  15.2 keV    10 cm     61 cm      Tracker  StepLimiter
-    4    726 um  -1.36 mm   -2.2 m    2.93 GeV  25.7 keV    10 cm     71 cm      Tracker  StepLimiter
+    1      0 fm      0 fm  -2.45 m       3 GeV  67.9 keV    46 cm     46 cm        World  Transportation
+    2  -5.96 um    231 nm   -2.4 m    2.93 GeV    69 MeV     5 cm     51 cm       Target  Transportation
+    3    366 um   -673 um   -2.3 m    2.93 GeV  15.1 keV    10 cm     61 cm      Tracker  StepLimiter
+    4    726 um  -1.36 mm   -2.2 m    2.93 GeV  25.6 keV    10 cm     71 cm      Tracker  StepLimiter
     5   1.08 mm  -2.04 mm   -2.1 m    2.93 GeV  22.8 keV    10 cm     81 cm      Tracker  StepLimiter
     6   1.44 mm  -2.72 mm     -2 m    2.93 GeV  21.7 keV    10 cm     91 cm      Tracker  StepLimiter
     7    1.8 mm   -3.4 mm   -1.9 m    2.93 GeV    16 keV    10 cm   1.01 m       Tracker  StepLimiter
     8   2.17 mm  -4.08 mm   -1.8 m    2.93 GeV  14.2 keV    10 cm   1.11 m       Tracker  StepLimiter
-    9   2.53 mm  -4.77 mm   -1.7 m    2.93 GeV  15.7 keV    10 cm   1.21 m       Tracker  StepLimiter
-   10    2.9 mm  -5.48 mm   -1.6 m    2.93 GeV  15.1 keV    10 cm   1.31 m       Tracker  StepLimiter
-   11    2.9 mm  -5.48 mm   -1.6 m    2.93 GeV  4.19 eV     24 um   1.31 m       Tracker  Transportation
-   12   3.62 mm  -6.86 mm   -1.4 m    2.93 GeV  93.2 keV    20 cm   1.51 m       Chamber  Transportation
+    9   2.53 mm  -4.77 mm   -1.7 m    2.93 GeV  15.6 keV    10 cm   1.21 m       Tracker  StepLimiter
+   10    2.9 mm  -5.48 mm   -1.6 m    2.93 GeV    15 keV    10 cm   1.31 m       Tracker  StepLimiter
+   11    2.9 mm  -5.48 mm   -1.6 m    2.93 GeV  4.18 eV     24 um   1.31 m       Tracker  Transportation
+   12   3.62 mm  -6.86 mm   -1.4 m    2.93 GeV  93.3 keV    20 cm   1.51 m       Chamber  Transportation
    13   3.98 mm  -7.54 mm   -1.3 m    2.93 GeV  14.4 keV    10 cm   1.61 m       Tracker  StepLimiter
    14   4.35 mm  -8.22 mm   -1.2 m    2.93 GeV  13.2 keV    10 cm   1.71 m       Tracker  StepLimiter
    15    4.7 mm   -8.9 mm   -1.1 m    2.93 GeV  17.4 keV    10 cm   1.81 m       Tracker  StepLimiter
    16   5.06 mm  -9.58 mm     -1 m    2.93 GeV    30 keV    10 cm   1.91 m       Tracker  StepLimiter
    17   5.42 mm  -1.03 cm    -90 cm   2.93 GeV  11.3 keV    10 cm   2.01 m       Tracker  StepLimiter
    18   5.47 mm  -1.03 cm  -88.8 cm   2.93 GeV   960 eV   1.24 cm   2.02 m       Tracker       hIoni
-   19   5.78 mm  -1.09 cm    -80 cm   2.93 GeV  16.7 keV  8.76 cm   2.11 m       Tracker  Transportation
+   19   5.78 mm  -1.09 cm    -80 cm   2.93 GeV  16.6 keV  8.76 cm   2.11 m       Tracker  Transportation
    20   6.51 mm  -1.23 cm    -60 cm   2.93 GeV   104 keV    20 cm   2.31 m       Chamber  Transportation
-   21   6.92 mm  -1.29 cm    -50 cm   2.93 GeV    26 keV    10 cm   2.41 m       Tracker  StepLimiter
+   21   6.92 mm  -1.29 cm    -50 cm   2.93 GeV  25.9 keV    10 cm   2.41 m       Tracker  StepLimiter
    22   7.34 mm  -1.36 cm    -40 cm   2.93 GeV  12.6 keV    10 cm   2.51 m       Tracker  StepLimiter
    23   7.76 mm  -1.43 cm    -30 cm   2.93 GeV  13.3 keV    10 cm   2.61 m       Tracker  StepLimiter
-   24   8.19 mm  -1.49 cm    -20 cm   2.93 GeV    13 keV    10 cm   2.71 m       Tracker  StepLimiter
-   25    8.6 mm  -1.56 cm    -10 cm   2.93 GeV  21.6 keV    10 cm   2.81 m       Tracker  StepLimiter
+   24   8.19 mm  -1.49 cm    -20 cm   2.93 GeV  12.9 keV    10 cm   2.71 m       Tracker  StepLimiter
+   25    8.6 mm  -1.56 cm    -10 cm   2.93 GeV  21.5 keV    10 cm   2.81 m       Tracker  StepLimiter
    26   9.01 mm  -1.63 cm  -18.7 um   2.93 GeV  12.9 keV    10 cm   2.91 m       Tracker  StepLimiter
-   27   9.01 mm  -1.63 cm -0.00312 fm   2.93 GeV  3.26 eV   18.7 um   2.91 m       Tracker  Transportation
+   27   9.01 mm  -1.63 cm -0.000801 fm   2.93 GeV  3.26 eV   18.7 um   2.91 m       Tracker  Transportation
    28   9.83 mm  -1.77 cm     20 cm   2.93 GeV   106 keV    20 cm   3.11 m       Chamber  Transportation
    29   1.02 cm  -1.84 cm     30 cm   2.93 GeV    27 keV    10 cm   3.21 m       Tracker  StepLimiter
    30   1.06 cm   -1.9 cm   38.4 cm   2.93 GeV  12.8 keV  8.43 cm   3.29 m       Tracker       hIoni
-   31    1.1 cm  -1.97 cm   48.4 cm   2.93 GeV  22.4 keV    10 cm   3.39 m       Tracker  StepLimiter
+   31    1.1 cm  -1.97 cm   48.4 cm   2.93 GeV  22.3 keV    10 cm   3.39 m       Tracker  StepLimiter
    32   1.14 cm  -2.05 cm   58.4 cm   2.93 GeV  28.7 keV    10 cm   3.49 m       Tracker  StepLimiter
    33   1.19 cm  -2.12 cm   68.4 cm   2.93 GeV  14.1 keV    10 cm   3.59 m       Tracker  StepLimiter
    34   1.23 cm   -2.2 cm   78.4 cm   2.93 GeV  18.6 keV    10 cm   3.69 m       Tracker  StepLimiter
    35   1.24 cm  -2.21 cm     80 cm   2.93 GeV  1.41 keV  1.57 cm   3.71 m       Tracker  Transportation
    36   1.33 cm  -2.36 cm      1 m    2.93 GeV   139 keV    20 cm   3.91 m       Chamber  Transportation
    37   1.36 cm  -2.43 cm    1.1 m    2.93 GeV  16.4 keV    10 cm   4.01 m       Tracker  StepLimiter
-   38   1.38 cm  -2.46 cm   1.15 m    2.93 GeV  7.11 keV  4.84 cm   4.06 m       Tracker       hIoni
+   38   1.38 cm  -2.46 cm   1.15 m    2.93 GeV   7.1 keV  4.84 cm   4.06 m       Tracker       hIoni
    39   1.42 cm  -2.54 cm   1.25 m    2.93 GeV  16.8 keV    10 cm   4.16 m       Tracker  StepLimiter
    40   1.45 cm  -2.61 cm   1.35 m    2.93 GeV  19.5 keV    10 cm   4.26 m       Tracker  StepLimiter
    41   1.49 cm  -2.68 cm   1.45 m    2.93 GeV  11.7 keV    10 cm   4.36 m       Tracker  StepLimiter
-   42   1.53 cm  -2.75 cm   1.55 m    2.93 GeV    17 keV    10 cm   4.46 m       Tracker  StepLimiter
+   42   1.53 cm  -2.75 cm   1.55 m    2.93 GeV  16.9 keV    10 cm   4.46 m       Tracker  StepLimiter
    43   1.53 cm  -2.75 cm   1.56 m    2.93 GeV  1.15 keV  7.24 mm   4.47 m       Tracker       hIoni
    44   1.55 cm  -2.78 cm    1.6 m    2.93 GeV  15.2 keV  4.44 cm   4.51 m       Tracker  Transportation
    45   1.62 cm  -2.92 cm    1.8 m    2.93 GeV  76.2 keV    20 cm   4.71 m       Chamber  Transportation
@@ -344,9 +343,9 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
    49   1.77 cm   -3.2 cm    2.2 m    2.93 GeV  20.7 keV    10 cm   5.11 m       Tracker  StepLimiter
    50   1.81 cm  -3.27 cm    2.3 m    2.93 GeV  14.3 keV    10 cm   5.21 m       Tracker  StepLimiter
    51   1.85 cm  -3.34 cm    2.4 m    2.93 GeV  25.8 keV    10 cm   5.31 m       Tracker  StepLimiter
-   52   1.85 cm  -3.34 cm    2.4 m    2.93 GeV  3.26 eV   18.7 um   5.31 m       Tracker  Transportation
+   52   1.85 cm  -3.34 cm    2.4 m    2.93 GeV  3.25 eV   18.7 um   5.31 m       Tracker  Transportation
    53   1.91 cm  -3.45 cm   2.56 m    2.93 GeV  35.6 keV  16.4 cm   5.47 m         World       hIoni
-   54   1.96 cm  -3.54 cm    2.7 m    2.93 GeV  26.2 keV  13.9 cm   5.61 m         World       hIoni
+   54   1.96 cm  -3.54 cm    2.7 m    2.93 GeV  26.1 keV  13.9 cm   5.61 m         World       hIoni
    55   2.04 cm  -3.67 cm   2.91 m    2.93 GeV  26.8 keV  20.7 cm   5.82 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
@@ -455,7 +454,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0s Sys=0s
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
@@ -499,7 +498,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 Graphics systems deleted.
 Visualization Manager deleting...
 UserDetectorConstruction deleted.

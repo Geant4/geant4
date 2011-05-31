@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-00    (17-December-2010)
+ Geant4 version Name: geant4-09-04-ref-05    (27-May-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -20,7 +20,7 @@
  Material: H2liquid     density: 70.800 mg/cm3  RadL:   8.923 m    Nucl.Int.Length:   4.993 m    Imean:  19.200 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:    Water     density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.537 cm   Imean:  75.000 eV 
+ Material:    Water     density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.537 cm   Imean:  78.000 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
 
@@ -105,27 +105,27 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
   Range cuts : 	 gamma      100 um 	 e-      100 um 
  Energy cuts : 	 gamma  1.11344 keV	 e-  85.1138 keV
 
-  Max_energy _transferable  : 10 MeV (4.90425 cm )
+  Max_energy _transferable  : 10 MeV (4.91372 cm )
 
   processes :                	        eIoni		        eBrem		        total
  
-  compCrossSectionPerVolume : 	     0.994761 cm^-1	     0.342573 cm^-1	      1.33733 cm^-1
-  cross section per volume : 	     0.994761 cm^-1	     0.342573 cm^-1	      1.33733 cm^-1
-  cross section per mass   : 	     0.994761 cm2/g	     0.342573 cm2/g	      1.33733 cm2/g
+  compCrossSectionPerVolume : 	     0.994761 cm^-1	     0.342568 cm^-1	      1.33733 cm^-1
+  cross section per volume : 	     0.994763 cm^-1	     0.345141 cm^-1	       1.3399 cm^-1
+  cross section per mass   : 	     0.994763 cm2/g	     0.345141 cm2/g	       1.3399 cm2/g
  
-  mean free path           : 	      1.00527 cm 	      2.91908 cm 	      7.47756 mm 
-        (g/cm2)            : 	      1.00527 g/cm2 	      2.91908 g/cm2 	      747.756 mg/cm2
+  mean free path           : 	      1.00526 cm 	      2.89737 cm 	      7.46322 mm 
+        (g/cm2)            : 	      1.00526 g/cm2 	      2.89737 g/cm2 	      746.322 mg/cm2
 
  
-  restricted dE/dx         : 	      1.61536 MeV/cm	      12.5324 eV/cm 	      1.61538 MeV/cm
-      (MeV/g/cm2)          : 	      1.61536 MeV*cm2/g	      12.5324  eV*cm2/g	      1.61538 MeV*cm2/g
+  restricted dE/dx         : 	      1.61328 MeV/cm	      12.5084 eV/cm 	      1.61329 MeV/cm
+      (MeV/g/cm2)          : 	      1.61328 MeV*cm2/g	      12.5084  eV*cm2/g	      1.61329 MeV*cm2/g
  
-  range from restrict dE/dx: 	 6.05865 cm  ( 6.05865 g/cm2 )
-  range from full dE/dx    : 	 4.90425 cm  ( 4.90425 g/cm2 )
+  range from restrict dE/dx: 	 6.07235 cm  ( 6.07235 g/cm2 )
+  range from full dE/dx    : 	 4.91372 cm  ( 4.91372 g/cm2 )
  
   transport mean free path : 	 27.9107 cm  ( 27.9107 g/cm2 )
  
-  critical energy (Rossi)  : 	 78.7733 MeV
+  critical energy (Rossi)  : 	 78.7732 MeV
   Moliere radius           : 	0.269193 X0 =  9.71583 cm 
 -------------------------------------------------------------
 

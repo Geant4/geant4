@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-04    (30-April-2011)
+ Geant4 version Name: geant4-09-04-ref-05    (27-May-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -161,7 +161,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -300,12 +299,12 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   5 kByte
-    Total CPU time elapsed for geometry optimisation: 0 seconds
+    Total CPU time elapsed for geometry optimisation: 0.01 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-       0.00         0.00         0.00            1k HALL
+     100.00         0.01         0.00            1k HALL
        0.00         0.00         0.00            3k TUB1
        0.00         0.00         0.00            0k TUB2
        0.00         0.00         0.00            0k BXD1_2_ENV
@@ -317,7 +316,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
       60.85          3k         1       60         60         0.00    TUB1
-      11.91          0k         2        8         18         0.00    HALL
+      11.91          0k         2        8         18         0.01    HALL
        6.24          0k         1        5          5         0.00    TUB2
        5.25          0k         1        4          4         0.00    BXD1_2_ENV
        5.25          0k         1        4          4         0.00    BXD1_3_ENV
@@ -341,7 +340,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /gun/particle mu+
 /run/beamOn 1
 

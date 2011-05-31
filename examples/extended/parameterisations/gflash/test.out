@@ -9,7 +9,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-04    (30-April-2011)
+ Geant4 version Name: geant4-09-04-ref-05    (27-May-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -137,7 +137,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -288,9 +287,9 @@ WARNING: Scene "refresh" not found.
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.02
+Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.02
+Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 0  -----
  Total energy deposited in the calorimeter: 0 (GeV)
@@ -333,7 +332,7 @@ Internal GetUserElapsed Time: 0.01
 ******************************************
 Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0.02
 ******************************************
  ------ ExGflashEventAction::End of event nr. 3  -----
   11986 hits are stored in ExGflashHitsCollection 
@@ -406,9 +405,9 @@ Internal GetUserElapsed Time: 0.01
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.01
+Internal Real Elapsed Time is: 0.02
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0.02
 ******************************************
  ------ ExGflashEventAction::End of event nr. 8  -----
   11933 hits are stored in ExGflashHitsCollection 
@@ -439,6 +438,6 @@ Internal Real Elapsed Time /event is: 0.0122222
 ******************************************
 Total Real Elapsed Time is: 0.57
 Total System Elapsed Time: 0.01
-Total GetUserElapsed Time: 0.56
+Total GetUserElapsed Time: 0.57
 ******************************************
 
