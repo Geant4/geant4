@@ -198,11 +198,11 @@
 /gun/particle gamma
 #------------------
 /process/inactivate Rayl
-#/process/inactivate compt
+/process/inactivate compt
 /process/inactivate phot
 /process/inactivate eIoni
 /process/inactivate msc
-#/process/inactivate eBrem
+/process/inactivate eBrem
 
 /calor/setAbsMat Aluminium
 #======================

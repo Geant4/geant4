@@ -40,9 +40,6 @@
 #include "G4Gamma.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4eMultipleScattering.hh"
-
-
-#include "G4eMultipleScattering.hh"
 #include "G4GoudsmitSaundersonMscModel.hh"
 #include "G4eIonisation.hh"
 #include "G4PenelopeIonisationModel.hh"
