@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+31-May-2011 G.Folger   (test67-V09-04-07)
+	    Fix typo introduced in test67.cc
+	    
 30-May-2011 G.Folger   (test67-V09-04-06)
 	    Fix test67.cc for Windows, i.e. protect use of G4UItcsh
 	    

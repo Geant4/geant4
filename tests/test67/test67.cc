@@ -105,7 +105,6 @@ int main(int argc,char** argv) {
    G4VisManager* visManager = new G4VisExecutive;
    visManager->Initialize();   
      
-     G4UIsession * session = 0;
 #ifdef _WIN32
     G4UIsession * session = new G4UIterminal();
 #else
