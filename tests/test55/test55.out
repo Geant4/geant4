@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-04    (30-April-2011)
+ Geant4 version Name: geant4-09-04-ref-05    (27-May-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -148,7 +148,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -186,16 +185,16 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.001, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :   Emin=        0 eV       Emax=         10 TeV
 
-nuclearStopping:   for  C12[0.0]    SubType= 1
+nuclearStopping:   for  C12[0.0]    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :   Emin=        0 eV       Emax=         10 TeV
 
-nuclearStopping:   for  alpha    SubType= 1
+nuclearStopping:   for  alpha    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :   Emin=        0 eV       Emax=         10 TeV
 
@@ -282,7 +281,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -309,7 +308,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -389,7 +388,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.83s Real=1.86s Sys=0.03s
+  User=1.96s Real=1.98s Sys=0.02s
 
  The run consists of 1000 C12[0.0] of 144 MeV through 20 cm  of G4_Al (density: 2.699 g/cm3 )
 
@@ -505,7 +504,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -543,16 +541,16 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.001, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :   Emin=        0 eV       Emax=         10 TeV
 
-nuclearStopping:   for  C12[0.0]    SubType= 1
+nuclearStopping:   for  C12[0.0]    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :   Emin=        0 eV       Emax=         10 TeV
 
-nuclearStopping:   for  alpha    SubType= 1
+nuclearStopping:   for  alpha    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :   Emin=        0 eV       Emax=         10 TeV
 
@@ -639,7 +637,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -666,7 +664,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -751,7 +749,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.31s Real=2.35s Sys=0.02s
+  User=2.45s Real=2.48s Sys=0.03s
 
  The run consists of 1000 C12[0.0] of 144 MeV through 20 cm  of G4_Be (density: 1.848 g/cm3 )
 
@@ -872,7 +870,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -910,16 +907,16 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.001, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :   Emin=        0 eV       Emax=         10 TeV
 
-nuclearStopping:   for  C12[0.0]    SubType= 1
+nuclearStopping:   for  C12[0.0]    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :   Emin=        0 eV       Emax=         10 TeV
 
-nuclearStopping:   for  alpha    SubType= 1
+nuclearStopping:   for  alpha    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :   Emin=        0 eV       Emax=         10 TeV
 
@@ -1006,7 +1003,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -1033,7 +1030,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -1123,7 +1120,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.02s Real=2.05s Sys=0.03s
+  User=2.13s Real=2.16s Sys=0.03s
 
  The run consists of 1000 C12[0.0] of 144 MeV through 20 cm  of G4_C (density: 2 g/cm3 )
 
@@ -1260,7 +1257,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -1298,16 +1294,16 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.001, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :   Emin=        0 eV       Emax=         10 TeV
 
-nuclearStopping:   for  C12[0.0]    SubType= 1
+nuclearStopping:   for  C12[0.0]    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :   Emin=        0 eV       Emax=         10 TeV
 
-nuclearStopping:   for  alpha    SubType= 1
+nuclearStopping:   for  alpha    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :   Emin=        0 eV       Emax=         10 TeV
 
@@ -1394,7 +1390,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -1421,7 +1417,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -1516,7 +1512,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.61s Real=0.64s Sys=0.03s
+  User=0.65s Real=0.68s Sys=0.02s
 
  The run consists of 1000 Li7[0.0] of 29.818 MeV through 70.14 um  of G4_KAPTON (density: 1.42 g/cm3 )
 
@@ -1665,7 +1661,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -1703,16 +1698,16 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.001, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :   Emin=        0 eV       Emax=         10 TeV
 
-nuclearStopping:   for  C12[0.0]    SubType= 1
+nuclearStopping:   for  C12[0.0]    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :   Emin=        0 eV       Emax=         10 TeV
 
-nuclearStopping:   for  alpha    SubType= 1
+nuclearStopping:   for  alpha    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :   Emin=        0 eV       Emax=         10 TeV
 
@@ -1799,7 +1794,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -1826,7 +1821,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -1926,7 +1921,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.28s Real=0.3s Sys=0.02s
+  User=0.29s Real=0.32s Sys=0.02s
 
  The run consists of 1000 Li7[0.0] of 29.818 MeV through 29.333 um  of G4_POLYCARBONATE (density: 1.2 g/cm3 )
 
@@ -2087,7 +2082,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -2125,16 +2119,16 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.001, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :   Emin=        0 eV       Emax=         10 TeV
 
-nuclearStopping:   for  C12[0.0]    SubType= 1
+nuclearStopping:   for  C12[0.0]    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :   Emin=        0 eV       Emax=         10 TeV
 
-nuclearStopping:   for  alpha    SubType= 1
+nuclearStopping:   for  alpha    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :   Emin=        0 eV       Emax=         10 TeV
 
@@ -2221,7 +2215,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -2248,7 +2242,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -2353,7 +2347,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.23s Real=0.27s Sys=0.04s
+  User=0.23s Real=0.26s Sys=0.03s
 
  The run consists of 1000 Li7[0.0] of 29.818 MeV through 23.143 um  of G4_MYLAR (density: 1.4 g/cm3 )
 
@@ -2514,7 +2508,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -2552,16 +2545,16 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.001, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :   Emin=        0 eV       Emax=         10 TeV
 
-nuclearStopping:   for  C12[0.0]    SubType= 1
+nuclearStopping:   for  C12[0.0]    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :   Emin=        0 eV       Emax=         10 TeV
 
-nuclearStopping:   for  alpha    SubType= 1
+nuclearStopping:   for  alpha    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :   Emin=        0 eV       Emax=         10 TeV
 
@@ -2648,7 +2641,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -2675,7 +2668,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -2780,7 +2773,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.6s Real=0.67s Sys=0.07s
+  User=0.65s Real=0.68s Sys=0.03s
 
  The run consists of 1000 C12[0.0] of 79.08 MeV through 70.14 um  of G4_KAPTON (density: 1.42 g/cm3 )
 
@@ -2941,7 +2934,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -2979,16 +2971,16 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.001, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :   Emin=        0 eV       Emax=         10 TeV
 
-nuclearStopping:   for  C12[0.0]    SubType= 1
+nuclearStopping:   for  C12[0.0]    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :   Emin=        0 eV       Emax=         10 TeV
 
-nuclearStopping:   for  alpha    SubType= 1
+nuclearStopping:   for  alpha    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :   Emin=        0 eV       Emax=         10 TeV
 
@@ -3075,7 +3067,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -3102,7 +3094,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -3207,7 +3199,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.26s Real=0.34s Sys=0.08s
+  User=0.29s Real=0.31s Sys=0.03s
 
  The run consists of 1000 C12[0.0] of 79.08 MeV through 29.333 um  of G4_POLYCARBONATE (density: 1.2 g/cm3 )
 
@@ -3368,7 +3360,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -3406,16 +3397,16 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.001, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :   Emin=        0 eV       Emax=         10 TeV
 
-nuclearStopping:   for  C12[0.0]    SubType= 1
+nuclearStopping:   for  C12[0.0]    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :   Emin=        0 eV       Emax=         10 TeV
 
-nuclearStopping:   for  alpha    SubType= 1
+nuclearStopping:   for  alpha    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :   Emin=        0 eV       Emax=         10 TeV
 
@@ -3502,7 +3493,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -3529,7 +3520,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -3634,7 +3625,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.22s Real=0.3s Sys=0.08s
+  User=0.24s Real=0.26s Sys=0.02s
 
  The run consists of 1000 C12[0.0] of 59.04 MeV through 23.143 um  of G4_MYLAR (density: 1.4 g/cm3 )
 
@@ -3795,7 +3786,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -3833,16 +3823,16 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.001, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :   Emin=        0 eV       Emax=         10 TeV
 
-nuclearStopping:   for  C12[0.0]    SubType= 1
+nuclearStopping:   for  C12[0.0]    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :   Emin=        0 eV       Emax=         10 TeV
 
-nuclearStopping:   for  alpha    SubType= 1
+nuclearStopping:   for  alpha    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :   Emin=        0 eV       Emax=         10 TeV
 
@@ -3929,7 +3919,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -3956,7 +3946,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -4061,7 +4051,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.44s Real=0.46s Sys=0.02s
+  User=0.48s Real=0.5s Sys=0.02s
 
  The run consists of 1000 O16[0.0] of 78.215 MeV through 46.7 um  of G4_KAPTON (density: 1.42 g/cm3 )
 
@@ -4222,7 +4212,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -4260,16 +4249,16 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.001, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :   Emin=        0 eV       Emax=         10 TeV
 
-nuclearStopping:   for  C12[0.0]    SubType= 1
+nuclearStopping:   for  C12[0.0]    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :   Emin=        0 eV       Emax=         10 TeV
 
-nuclearStopping:   for  alpha    SubType= 1
+nuclearStopping:   for  alpha    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :   Emin=        0 eV       Emax=         10 TeV
 
@@ -4356,7 +4345,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -4383,7 +4372,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -4488,7 +4477,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.29s Real=0.32s Sys=0.03s
+  User=0.3s Real=0.32s Sys=0.03s
 
  The run consists of 1000 O16[0.0] of 78.215 MeV through 29.333 um  of G4_POLYCARBONATE (density: 1.2 g/cm3 )
 
@@ -4649,7 +4638,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -4687,16 +4675,16 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.001, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :   Emin=        0 eV       Emax=         10 TeV
 
-nuclearStopping:   for  C12[0.0]    SubType= 1
+nuclearStopping:   for  C12[0.0]    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :   Emin=        0 eV       Emax=         10 TeV
 
-nuclearStopping:   for  alpha    SubType= 1
+nuclearStopping:   for  alpha    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :   Emin=        0 eV       Emax=         10 TeV
 
@@ -4783,7 +4771,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -4810,7 +4798,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -4915,7 +4903,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.24s Real=0.3s Sys=0.06s
+  User=0.25s Real=0.28s Sys=0.03s
 
  The run consists of 1000 O16[0.0] of 78.215 MeV through 23.143 um  of G4_MYLAR (density: 1.4 g/cm3 )
 

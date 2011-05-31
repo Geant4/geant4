@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-04    (30-April-2011)
+ Geant4 version Name: geant4-09-04-ref-05    (27-May-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -116,7 +116,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -154,16 +153,16 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.001, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :   Emin=        0 eV       Emax=         10 TeV
 
-nuclearStopping:   for  GenericIon    SubType= 1
+nuclearStopping:   for  GenericIon    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :   Emin=        0 eV       Emax=         10 TeV
 
-nuclearStopping:   for  alpha    SubType= 1
+nuclearStopping:   for  alpha    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :   Emin=        0 eV       Emax=         10 TeV
 
@@ -250,7 +249,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -277,7 +276,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -386,45 +385,45 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=5.98s Real=9.15s Sys=3.16s
+  User=5.7s Real=9.13s Sys=3.43s
 
  ======================== run summary ======================
 
  The run was 100000 e- of 100 MeV through 20 um  of Silicon (density: 2.33 g/cm3 )
 
- Total energy deposit in absorber per event = 6.486 keV +- 16.52 eV 
+ Total energy deposit in absorber per event = 6.502 keV +- 16.99 eV 
 
- -----> Mean dE/dx = 3.243 MeV/cm	(1.392 MeV*cm2/g)
+ -----> Mean dE/dx = 3.251 MeV/cm	(1.395 MeV*cm2/g)
 
  From formulas :
    restricted dEdx = 3.016 MeV/cm	(1.295 MeV*cm2/g)
    full dEdx       = 13.55 MeV/cm	(5.817 MeV*cm2/g)
 
- Leakage :  primary = 99.97 MeV +- 2.882 keV   secondaries = 22.52 keV +- 2.882 keV
+ Leakage :  primary = 99.97 MeV +- 2.476 keV   secondaries = 19.6 keV +- 2.475 keV
  Energy balance :  edep + eleak = 100 MeV
 
- Total track length (charged) in absorber per event = 20.27 um  +- 7.979 nm 
- Total track length (neutral) in absorber per event = 30.5 nm  +- 1.979 nm 
+ Total track length (charged) in absorber per event = 20.29 um  +- 8.409 nm 
+ Total track length (neutral) in absorber per event = 29.08 nm  +- 1.963 nm 
 
- Number of steps (charged) in absorber per event = 4.134 +- 8.932e-06
- Number of steps (neutral) in absorber per event = 0.00338 +- 8.932e-06
+ Number of steps (charged) in absorber per event = 4.14 +- 9.17e-06
+ Number of steps (neutral) in absorber per event = 0.00328 +- 9.17e-06
 
- Number of secondaries per event : Gammas = 0.00338;   electrons = 0.01789;   positrons = 0
+ Number of secondaries per event : Gammas = 0.00328;   electrons = 0.01828;   positrons = 0
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
 
  Number of events with the primary particle reflected = 0 %
- Number of events with at least  1 particle reflected (same charge as primary) = 0.162 %
+ Number of events with at least  1 particle reflected (same charge as primary) = 0.143 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 1.416 mrad (central part only)
+  rms proj angle of transmit primary particle = 1.413 mrad (central part only)
   computed theta0 (Highland formula)          = 1.342 mrad
-  central part defined as +- 4.026 mrad;   Tail ratio = 0.676 %
+  central part defined as +- 4.026 mrad;   Tail ratio = 0.7005 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1313491681, 1189173609
+ Current couple of seeds = 1155144772, 864041580
 ----------------------------------------
 #
 /testem/det/setAbsMat Gold
@@ -509,7 +508,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -547,16 +545,16 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.001, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :   Emin=        0 eV       Emax=         10 TeV
 
-nuclearStopping:   for  GenericIon    SubType= 1
+nuclearStopping:   for  GenericIon    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :   Emin=        0 eV       Emax=         10 TeV
 
-nuclearStopping:   for  alpha    SubType= 1
+nuclearStopping:   for  alpha    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :   Emin=        0 eV       Emax=         10 TeV
 
@@ -643,7 +641,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -670,7 +668,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -758,7 +756,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1313491681, 1189173609
+ Current couple of seeds = 1155144772, 864041580
 ----------------------------------------
 Start Run processing.
 
@@ -784,45 +782,45 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=5.88s Real=8.5s Sys=2.61s
+  User=6.19s Real=9.02s Sys=2.83s
 
  ======================== run summary ======================
 
  The run was 100000 e- of 15.7 MeV through 9.66 um  of Gold (density: 19.3 g/cm3 )
 
- Total energy deposit in absorber per event = 18.68 keV +- 48.5 eV 
+ Total energy deposit in absorber per event = 18.67 keV +- 48.08 eV 
 
- -----> Mean dE/dx = 19.34 MeV/cm	(1.001 MeV*cm2/g)
+ -----> Mean dE/dx = 19.33 MeV/cm	(1 MeV*cm2/g)
 
  From formulas :
    restricted dEdx = 17.93 MeV/cm	(0.9278 MeV*cm2/g)
    full dEdx       = 60.88 MeV/cm	(3.151 MeV*cm2/g)
 
- Leakage :  primary = 15.64 MeV +- 1.447 keV   secondaries = 37.91 keV +- 1.442 keV
+ Leakage :  primary = 15.64 MeV +- 1.477 keV   secondaries = 39.55 keV +- 1.473 keV
  Energy balance :  edep + eleak = 15.7 MeV
 
- Total track length (charged) in absorber per event = 9.941 um  +- 8.837 nm 
- Total track length (neutral) in absorber per event = 131.2 nm  +- 4.55 nm 
+ Total track length (charged) in absorber per event = 9.939 um  +- 8.434 nm 
+ Total track length (neutral) in absorber per event = 125.8 nm  +- 3.163 nm 
 
- Number of steps (charged) in absorber per event = 5.159 +- 9.4e-06
- Number of steps (neutral) in absorber per event = 0.02867 +- 9.4e-06
+ Number of steps (charged) in absorber per event = 5.162 +- 9.184e-06
+ Number of steps (neutral) in absorber per event = 0.02854 +- 9.184e-06
 
- Number of secondaries per event : Gammas = 0.02851;   electrons = 0.02268;   positrons = 0
+ Number of secondaries per event : Gammas = 0.02841;   electrons = 0.02258;   positrons = 0
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
 
  Number of events with the primary particle reflected = 0 %
- Number of events with at least  1 particle reflected (same charge as primary) = 0.251 %
+ Number of events with at least  1 particle reflected (same charge as primary) = 0.278 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 35.23 mrad (central part only)
+  rms proj angle of transmit primary particle = 35.18 mrad (central part only)
   computed theta0 (Highland formula)          = 35.1 mrad
-  central part defined as +- 105.3 mrad;   Tail ratio = 0.4455 %
+  central part defined as +- 105.3 mrad;   Tail ratio = 0.45 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2145307248, 655631084
+ Current couple of seeds = 1955425726, 1612238701
 ----------------------------------------
 #
 /testem/phys/setCuts 10 um

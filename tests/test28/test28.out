@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-04    (30-April-2011)
+ Geant4 version Name: geant4-09-04-ref-05    (27-May-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -95,7 +95,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -376,73 +375,37 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
  Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 988.922, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0153831 fail
+ Primary: neutron (2112), E= 1002.98, target nucleus (92,238)
+ relative limit 0.01 relative value = 0.0119733 fail
  absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
  Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 994.394, target nucleus (92,238)
- relative limit 0.01 relative value = 0.013848 fail
+ Primary: neutron (2112), E= 1012.3, target nucleus (92,238)
+ relative limit 0.01 relative value = 0.0104386 fail
  absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
  Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 986.281, target nucleus (92,238)
- relative limit 0.01 relative value = 0.016253 fail
+ Primary: neutron (2112), E= 1010.23, target nucleus (92,238)
+ relative limit 0.01 relative value = 0.0107449 fail
  absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
  Process: inelastic , Model: Binary Cascade
- Primary: proton (2212), E= 1002.83, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0117603 fail
+ Primary: neutron (2112), E= 985.028, target nucleus (92,238)
+ relative limit 0.01 relative value = 0.0167007 fail
  absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
  Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 989.782, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0151198 fail
+ Primary: neutron (2112), E= 991.305, target nucleus (92,238)
+ relative limit 0.01 relative value = 0.0146746 fail
  absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
  Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 987.64, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0157934 fail
+ Primary: neutron (2112), E= 1012.06, target nucleus (92,238)
+ relative limit 0.01 relative value = 0.0104728 fail
  absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
  Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 995.831, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0134942 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 996.679, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0132939 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 992.352, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0143835 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 986.09, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0163195 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 994.041, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0139376 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 1004.09, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0117677 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 984.665, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0168353 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 985.857, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0164017 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 989.115, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0153233 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 991.591, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0145939 fail
+ Primary: neutron (2112), E= 998.132, target nucleus (92,238)
+ relative limit 0.01 relative value = 0.012964 fail
  absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.54s Real=0.91s Sys=0s
+  User=0.47s Real=0.5s Sys=0.01s
 #
 # deuteron at 1 GeV/nucleon on H
 #
@@ -503,7 +466,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -718,7 +680,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -877,7 +838,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.18s Real=0.21s Sys=0.01s
+  User=0.17s Real=0.17s Sys=0s
 #
 #
 # deuteron at 200 MeV in U
@@ -924,7 +885,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 # deuteron at 200 MeV/nucleon on H
 #
@@ -1016,7 +977,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0.01s Real=0s Sys=0s
 #
 #  .....end deuteron.............
 #
@@ -1062,17 +1023,21 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
  Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 1007.62, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0111571 fail
+ Primary: neutron (2112), E= 995.526, target nucleus (92,238)
+ relative limit 0.01 relative value = 0.0135678 fail
  absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
  Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 1010.52, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0107006 fail
+ Primary: neutron (2112), E= 997.785, target nucleus (92,238)
+ relative limit 0.01 relative value = 0.0130412 fail
+ absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
+ Process: inelastic , Model: Binary Cascade
+ Primary: neutron (2112), E= 991.406, target nucleus (92,238)
+ relative limit 0.01 relative value = 0.0146462 fail
  absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.13s Real=0.17s Sys=0s
+  User=0.17s Real=0.18s Sys=0s
 #
 # alpha at 1 GeV/nucleon on H
 #
@@ -1164,7 +1129,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.07s Real=0.07s Sys=0s
+  User=0.11s Real=0.11s Sys=0s
 #
 # deuteron at 200 MeV/nucleon in U
 #
@@ -1210,7 +1175,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # alpha at 200 MeV/nucleon on H
 #
@@ -1256,7 +1221,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 #
 # alpha at 200 MeV/nucleon on Silicon
 #
@@ -1302,7 +1267,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0s Sys=0s
 #
 #  .....end alpha............
 #
@@ -1348,10 +1313,18 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
+ Process: inelastic , Model: Binary Cascade
+ Primary: proton (2212), E= 1002.39, target nucleus (92,238)
+ relative limit 0.01 relative value = 0.0118409 fail
+ absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
+ Process: inelastic , Model: Binary Cascade
+ Primary: neutron (2112), E= 994.746, target nucleus (92,238)
+ relative limit 0.01 relative value = 0.0137595 fail
+ absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0.11s Real=0.12s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
@@ -1398,7 +1371,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0.02s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Silicon
 #
@@ -1445,7 +1418,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.16s Real=0.29s Sys=0s
+  User=0.04s Real=0.04s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -1507,7 +1480,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -1671,7 +1643,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0.05s Real=0.05s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1893,7 +1865,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 

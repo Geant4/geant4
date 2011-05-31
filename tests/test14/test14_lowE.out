@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-04    (30-April-2011)
+ Geant4 version Name: geant4-09-04-ref-05    (27-May-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -179,7 +179,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -220,33 +219,34 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50      0.01        0        0         0    Absorber initStep
-    1        0        0    -49.9         0  0.00155   0.0513    0.0513    Absorber phot
+    1        0        0    -49.9         0 0.000119   0.0825    0.0825    Absorber phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0    -49.9   0.00845        0        0         0    Absorber initStep
-    1 0.000182 0.000177    -49.9    0.0063  0.00136 0.000397  0.000397    Absorber eIoni
-    2 0.000184  0.00018    -49.9   0.00604 4.87e-06 4.42e-06  0.000401    Absorber eIoni
-    3 0.000304 0.000326    -49.9         0  0.00604 0.000719   0.00112    Absorber eIoni
+    0        0        0    -49.9   0.00988        0        0         0    Absorber initStep
+    1 -0.000102 -0.00024    -49.9   0.00772  0.00135 0.000454  0.000454    Absorber eIoni
+    2 -0.000103 -0.000244    -49.9   0.00746 4.87e-06 5.22e-06  0.000459    Absorber eIoni
+    3 6.78e-05 -0.000288    -49.9  0.000159   0.0073 0.000946   0.00141    Absorber eIoni
+    4 6.82e-05 -0.000288    -49.9         0 0.000159 4.76e-06   0.00141    Absorber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 2
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 0.000184  0.00018    -49.9  0.000254        0        0         0    Absorber initStep
-    1 0.000184  0.00018    -49.9         0 0.000254 6.73e-06  6.73e-06    Absorber eIoni
+    0 -0.000103 -0.000244    -49.9  0.000254        0        0         0    Absorber initStep
+    1 -0.000102 -0.000243    -49.9         0 0.000254 6.73e-06  6.73e-06    Absorber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 2
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 0.000182 0.000177    -49.9  0.000789        0        0         0    Absorber initStep
-    1 0.000187 0.000173    -49.9         0 0.000789 2.37e-05  2.37e-05    Absorber eIoni
+    0 -0.000102 -0.00024    -49.9  0.000812        0        0         0    Absorber initStep
+    1 -0.000109 -0.000238    -49.9         0 0.000812 2.46e-05  2.46e-05    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -320,7 +320,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50     0.002        0        0         0    Absorber initStep
-    1        0        0      -50         0  0.00155  0.00362   0.00362    Absorber phot
+    1        0        0      -50         0  0.00155  0.00607   0.00607    Absorber phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
@@ -328,7 +328,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50   0.00045        0        0         0    Absorber initStep
-    1 3.36e-07 -2.92e-06      -50         0  0.00045 1.17e-05  1.17e-05    Absorber eIoni
+    1 -5.33e-07 -3.16e-06      -50         0  0.00045 1.17e-05  1.17e-05    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -402,7 +402,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0006        0        0         0    Absorber initStep
-    1        0        0      -50         0 8.12e-05  0.00143   0.00143    Absorber phot
+    1        0        0      -50         0 8.07e-05 0.000646  0.000646    Absorber phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
@@ -410,7 +410,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50  0.000519        0        0         0    Absorber initStep
-    1 2.45e-06 1.13e-06      -50         0 0.000519 1.38e-05  1.38e-05    Absorber eIoni
+    1 -1.2e-06 -3.5e-06      -50         0 0.000519 1.38e-05  1.38e-05    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -446,7 +446,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.02s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 1
@@ -484,7 +484,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0003        0        0         0    Absorber initStep
-    1        0        0      -50         0 8.07e-05 0.000363  0.000363    Absorber phot
+    1        0        0      -50         0 8.12e-05 0.000131  0.000131    Absorber phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
@@ -492,7 +492,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50  0.000219        0        0         0    Absorber initStep
-    1 -5.83e-07 -7.12e-07      -50         0 0.000219 5.97e-06  5.97e-06    Absorber eIoni
+    1 -5.35e-07 1.25e-06      -50         0 0.000219 5.96e-06  5.96e-06    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -568,59 +568,43 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50      0.01        0        0         0    Absorber initStep
-    1 -1.06e-06 -2.28e-05      -50    0.0096 0.000401 7.29e-05  7.29e-05    Absorber msc
-    2 -2.46e-05 -2.46e-05      -50   0.00932 0.000282 7.29e-05  0.000146    Absorber msc
-    3 -5.39e-05 -7.21e-07      -50   0.00912 0.000195 7.29e-05  0.000219    Absorber msc
-    4 -7.6e-05 6.36e-05      -50   0.00898 0.000146 7.29e-05  0.000292    Absorber msc
-    5 -8.65e-05 0.000129      -50   0.00867 0.000309 7.29e-05  0.000364    Absorber msc
-    6 -0.000121 0.000186      -50   0.00845  0.00022 7.29e-05  0.000437    Absorber msc
-    7 -0.000187 0.000202      -50   0.00804 0.000409 7.29e-05   0.00051    Absorber msc
-    8 -0.000248 0.000228      -50   0.00795 8.28e-05 7.29e-05  0.000583    Absorber msc
-    9 -0.000295 0.000267      -50   0.00776 0.000195 7.29e-05  0.000656    Absorber msc
-   10 -0.000301 0.000273      -50   0.00776        0 1.16e-05  0.000668    Absorber eIoni
-   11 -0.000357   0.0003      -50   0.00753  0.00023 7.29e-05  0.000741    Absorber msc
-   12 -0.000369 0.000315      -50   0.00696 0.000209 2.15e-05  0.000762    Absorber eIoni
-   13 -0.00038 0.000372      -50   0.00652 0.000444 7.29e-05  0.000835    Absorber msc
-   14 -0.00038 0.000373      -50   0.00614 8.75e-05 1.46e-06  0.000837    Absorber eIoni
-   15 -0.000428 0.000379      -50   0.00607 7.13e-05 7.57e-05  0.000912    Absorber msc
-   16 -0.000499 0.000356      -50   0.00578 0.000294  8.9e-05     0.001    Absorber msc
-   17 -0.000567 0.000349      -50   0.00518 0.000598 8.92e-05   0.00109    Absorber msc
-   18 -0.000637 0.000373      -50   0.00471 0.000469 9.75e-05   0.00119    Absorber msc
-   19 -0.000667 0.000412      -50   0.00363 0.000405 5.86e-05   0.00125    Absorber eIoni
-   20 -0.000708 0.000393      -50   0.00317 0.000153 6.08e-05   0.00131    Absorber eIoni
-   21 -0.000716 0.000332      -50         0  0.00317 0.000227   0.00153    Absorber eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 5,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 -0.000708 0.000393      -50  0.000309        0        0         0    Absorber initStep
-    1 -0.000709 0.000392      -50         0 0.000309 8.01e-06  8.01e-06    Absorber eIoni
+    1 2.18e-05 -6.89e-06      -50   0.00933 0.000671 7.29e-05  7.29e-05    Absorber msc
+    2 4.25e-05 1.14e-05      -50    0.0092 0.000131 7.29e-05  0.000146    Absorber msc
+    3 6.12e-05 -1.25e-05      -50   0.00909 0.000106 7.29e-05  0.000219    Absorber msc
+    4 5.81e-05 -5.05e-05      -50   0.00896 0.000131 7.29e-05  0.000292    Absorber msc
+    5 8.29e-05 -9.72e-05      -50   0.00891 4.63e-05 7.34e-05  0.000365    Absorber msc
+    6   0.0001 -0.000127      -50   0.00869 0.000221 8.63e-05  0.000451    Absorber msc
+    7 0.000148 -0.000191      -50   0.00832 0.000369 0.000108  0.000559    Absorber msc
+    8   0.0002 -0.000229      -50   0.00574  0.00258 0.000124  0.000683    Absorber msc
+    9   0.0003 -0.000268      -50   0.00488 0.000862  0.00015  0.000833    Absorber msc
+   10 0.000308 -0.000271      -50   0.00436 5.27e-05 9.63e-06  0.000843    Absorber eIoni
+   11 0.000344 -0.000299      -50   0.00147  0.00246  0.00031   0.00115    Absorber eIoni
+   12 0.000333 -0.000296      -50  0.000583 0.000549 2.63e-05   0.00118    Absorber eIoni
+   13  0.00033 -0.000292      -50         0 0.000583 1.59e-05    0.0012    Absorber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 -0.000667 0.000412      -50  0.000671        0        0         0    Absorber initStep
-    1 -0.000667 0.000415      -50         0 0.000671  1.9e-05   1.9e-05    Absorber eIoni
+    0 0.000333 -0.000296      -50  0.000336        0        0         0    Absorber initStep
+    1 0.000332 -0.000296      -50         0 0.000336 8.68e-06  8.68e-06    Absorber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 -0.00038 0.000373      -50   0.00029        0        0         0    Absorber initStep
-    1 -0.000379 0.000375      -50         0  0.00029 7.55e-06  7.55e-06    Absorber eIoni
+    0 0.000344 -0.000299      -50  0.000432        0        0         0    Absorber initStep
+    1 0.000345 -0.000302      -50         0 0.000432 1.12e-05  1.12e-05    Absorber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 -0.000369 0.000315      -50  0.000357        0        0         0    Absorber initStep
-    1 -0.000371 0.000314      -50         0 0.000357 9.22e-06  9.22e-06    Absorber eIoni
+    0 0.000308 -0.000271      -50   0.00047        0        0         0    Absorber initStep
+    1 0.000308 -0.000273      -50         0  0.00047 1.23e-05  1.23e-05    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -656,7 +640,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.28s Real=0.28s Sys=0s
+  User=0.28s Real=0.27s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -694,19 +678,12 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50     0.002        0        0         0    Absorber initStep
-    1 -8.85e-06  3.8e-06      -50   0.00159 0.000408 2.02e-05  2.02e-05    Absorber msc
-    2 -5.68e-06  1.3e-05      -50   0.00136 0.000229 2.02e-05  4.03e-05    Absorber msc
-    3 -1.18e-05 2.31e-05      -50  0.000985 0.000378 2.02e-05  6.05e-05    Absorber msc
-    4 -1.16e-05 2.69e-05      -50  0.000528 6.54e-05 4.56e-06   6.5e-05    Absorber eIoni
-    5 -1.01e-05 2.92e-05      -50         0 0.000528 1.41e-05  7.91e-05    Absorber eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 -1.16e-05 2.69e-05      -50  0.000391        0        0         0    Absorber initStep
-    1 -9.24e-06 2.56e-05      -50         0 0.000391 1.01e-05  1.01e-05    Absorber eIoni
+    1 -1.77e-06 -9.47e-06      -50   0.00166  0.00034 2.02e-05  2.02e-05    Absorber msc
+    2 3.19e-06 -1.02e-05      -50   0.00151 0.000146 2.02e-05  4.03e-05    Absorber msc
+    3 -5.51e-06 -1.19e-05      -50   0.00136 0.000149 2.02e-05  6.05e-05    Absorber msc
+    4 -6.75e-06 -1.58e-05      -50  0.000847 0.000518 2.02e-05  8.06e-05    Absorber msc
+    5 -2.18e-06 -2.19e-05      -50  7.26e-05 0.000775 2.03e-05  0.000101    Absorber eIoni
+    6 -1.8e-06 -2.24e-05      -50         0 7.26e-05  3.1e-06  0.000104    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -742,7 +719,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.07000000000000001s Real=0.07000000000000001s Sys=0s
+  User=0.07000000000000001s Real=0.08s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -780,8 +757,10 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0006        0        0         0    Absorber initStep
-    1 -3.89e-06  4.2e-07      -50  0.000117 0.000483 1.09e-05  1.09e-05    Absorber msc
-    2 -4.61e-06 4.97e-07      -50         0 0.000117 3.96e-06  1.49e-05    Absorber eIoni
+    1 2.88e-06 -2.65e-06      -50  9.27e-05 0.000507 1.09e-05  1.09e-05    Absorber msc
+    2 3.09e-06 -2.84e-06      -50  6.81e-05 2.47e-05 1.49e-06  1.24e-05    Absorber msc
+    3 3.34e-06 -2.71e-06      -50  2.68e-06 6.54e-05 1.09e-06  1.35e-05    Absorber msc
+    4 3.18e-06 -3.19e-06      -50         0 2.68e-06 5.96e-07  1.41e-05    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -969,7 +948,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -1010,42 +988,49 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50      0.01        0        0         0    Absorber initStep
-    1        0        0      -50         0  0.00355   0.0047    0.0047    Absorber phot
+    1        0        0      -50         0  0.00305  0.00017   0.00017    Absorber phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50   0.00645        0        0         0    Absorber initStep
-    1 2.63e-05 1.51e-05      -50   0.00545 0.000626 0.000108  0.000108    Absorber eIoni
-    2 2.95e-05 2.71e-05      -50   0.00441 0.000235  1.8e-05  0.000126    Absorber eIoni
-    3 4.34e-05 3.72e-05      -50   0.00224  0.00155 0.000152  0.000278    Absorber eIoni
-    4 4.91e-05 3.92e-05      -50         0  0.00224 8.35e-05  0.000361    Absorber eIoni
+    0        0        0      -50   0.00695        0        0         0    Absorber initStep
+    1 -2.74e-05 -3.61e-06      -50   0.00659 0.000354  5.1e-05   5.1e-05    Absorber msc
+    2 -4.75e-05 -1.03e-05      -50   0.00569 0.000195 3.23e-05  8.33e-05    Absorber eIoni
+    3 -5.96e-05 -7.01e-06      -50   0.00547 0.000214 5.03e-05  0.000134    Absorber msc
+    4 -5.22e-05 1.26e-05      -50   0.00506 0.000414 5.62e-05   0.00019    Absorber msc
+    5 -5.91e-05 2.93e-05      -50   0.00471 0.000353 5.93e-05  0.000249    Absorber msc
+    6 -7.42e-05 4.07e-05      -50   0.00441 0.000294 5.57e-05  0.000305    Absorber msc
+    7 -8.18e-05 3.94e-05      -50   0.00406 0.000347 5.77e-05  0.000362    Absorber msc
+    8 -8.87e-05 5.14e-05      -50   0.00391  0.00015 5.25e-05  0.000415    Absorber msc
+    9 -9.99e-05 5.92e-05      -50   0.00279 0.000108 2.81e-05  0.000443    Absorber eIoni
+   10 -0.000103 6.11e-05      -50   0.00242 9.96e-05 1.34e-05  0.000456    Absorber eIoni
+   11 -0.000108 6.84e-05      -50         0  0.00242 9.44e-05  0.000551    Absorber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 5,   Parent ID = 2
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 4.34e-05 3.72e-05      -50  0.000621        0        0         0    Absorber initStep
-    1 4.49e-05 3.52e-05      -50         0 0.000621 1.44e-05  1.44e-05    Absorber eIoni
+    0 -0.000103 6.11e-05      -50  0.000276        0        0         0    Absorber initStep
+    1 -0.000103  6.1e-05      -50         0 0.000276 6.64e-06  6.64e-06    Absorber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 2
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 2.95e-05 2.71e-05      -50  0.000812        0        0         0    Absorber initStep
-    1 3.09e-05 2.81e-05      -50         0 0.000812 1.97e-05  1.97e-05    Absorber eIoni
+    0 -9.99e-05 5.92e-05      -50   0.00101        0        0         0    Absorber initStep
+    1 -0.000102 6.17e-05      -50         0  0.00101 2.62e-05  2.62e-05    Absorber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 2
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 2.63e-05 1.51e-05      -50  0.000371        0        0         0    Absorber initStep
-    1 2.76e-05 1.35e-05      -50         0 0.000371 8.57e-06  8.57e-06    Absorber eIoni
+    0 -4.75e-05 -1.03e-05      -50  0.000711        0        0         0    Absorber initStep
+    1 -4.87e-05 -1.06e-05      -50         0 0.000711 1.68e-05  1.68e-05    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -1086,7 +1071,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.2s Real=0.2s Sys=0s
+  User=0.19s Real=0.19s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -1129,15 +1114,24 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50     0.002        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000634 0.000145  0.000145    Absorber phot
+    1        0        0      -50         0 0.000877 1.96e-05  1.96e-05    Absorber phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50   0.00137        0        0         0    Absorber initStep
-    1 3.22e-06 9.28e-07      -50         0  0.00137 3.96e-05  3.96e-05    Absorber eIoni
+    0        0        0      -50   0.00112        0        0         0    Absorber initStep
+    1 -1.78e-07  8.7e-07      -50  0.000667 3.73e-05 5.24e-06  5.24e-06    Absorber eIoni
+    2 1.77e-06 -9.55e-08      -50         0 0.000667 1.56e-05  2.08e-05    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 -1.78e-07  8.7e-07      -50  0.000419        0        0         0    Absorber initStep
+    1 -4.77e-07 -7.53e-07      -50         0 0.000419  9.6e-06   9.6e-06    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -1178,7 +1172,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.06s Real=0.05s Sys=0s
+  User=0.05s Real=0.05s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -1221,15 +1215,15 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0006        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000153 0.000105  0.000105    Absorber phot
+    1        0        0      -50         0 0.000148 1.28e-05  1.28e-05    Absorber phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50  0.000447        0        0         0    Absorber initStep
-    1 -2.25e-06 -1.8e-07      -50         0 0.000447 1.02e-05  1.02e-05    Absorber eIoni
+    0        0        0      -50  0.000452        0        0         0    Absorber initStep
+    1  8.5e-07 -1.26e-06      -50         0 0.000452 1.03e-05  1.03e-05    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -1313,15 +1307,15 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0003        0        0         0    Absorber initStep
-    1        0        0      -50         0  2.6e-05 6.76e-05  6.76e-05    Absorber phot
+    1        0        0      -50         0 0.000153 0.000178  0.000178    Absorber phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50  0.000274        0        0         0    Absorber initStep
-    1 -1.38e-06 1.39e-06      -50         0 0.000274 6.59e-06  6.59e-06    Absorber eIoni
+    0        0        0      -50  0.000147        0        0         0    Absorber initStep
+    1 -9.21e-07 8.97e-07      -50         0 0.000147 4.27e-06  4.27e-06    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -1362,7 +1356,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.02s Sys=0s
+  User=0.03s Real=0.02s Sys=0s
 #
 /gun/particle e-
 #---------------
@@ -1407,106 +1401,112 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50      0.01        0        0         0    Absorber initStep
-    1 -4.71e-06 -2.05e-05      -50   0.00983  0.00017 4.21e-05  4.21e-05    Absorber msc
-    2 1.85e-06 -4.46e-05      -50   0.00981 1.47e-05 4.21e-05  8.43e-05    Absorber msc
-    3 5.32e-06 -4.85e-05      -50   0.00981        0 8.06e-06  9.23e-05    Absorber msc
-    4 5.91e-06 -4.89e-05      -50   0.00981 4.77e-06 8.79e-07  9.32e-05    Absorber msc
-    5 6.34e-06 -4.92e-05      -50   0.00981 3.44e-06 6.34e-07  9.38e-05       World Transportation
-    6    0.132   -0.122    -50.1    0.0093 0.000511    0.197     0.197       World msc
-    7    0.144   -0.132    -50.1   0.00891 3.74e-05   0.0158     0.213       World eIoni
-    8    0.145   -0.133    -50.1    0.0079 1.69e-05  0.00141     0.214       World eIoni
-    9    0.189   -0.309      -50   0.00768 0.000223    0.197     0.411       World msc
-   10    0.197   -0.342      -50    0.0072 7.76e-05   0.0346     0.445       World eIoni
-   11    0.127   -0.506      -50   0.00682 0.000381    0.197     0.642       World msc
-   12  -0.0304   -0.573      -50    0.0067 0.000122    0.197     0.839       World msc
-   13  -0.0684   -0.572      -50   0.00668 2.02e-05   0.0416      0.88    Absorber Transportation
-   14  -0.0684   -0.572      -50   0.00642 0.000255 2.07e-05      0.88    Absorber msc
-   15  -0.0684   -0.572      -50   0.00616 5.92e-06 8.29e-08      0.88    Absorber eIoni
-   16  -0.0684   -0.572      -50   0.00608 7.77e-05 2.07e-05      0.88    Absorber msc
-   17  -0.0684   -0.572      -50   0.00594  0.00014 2.07e-05      0.88    Absorber msc
-   18  -0.0684   -0.572      -50   0.00589 5.43e-05 2.07e-05      0.88    Absorber msc
-   19  -0.0684   -0.572      -50   0.00581  7.8e-05 2.07e-05      0.88    Absorber msc
-   20  -0.0684   -0.572      -50   0.00569 0.000118 2.07e-05      0.88    Absorber msc
-   21  -0.0684   -0.572      -50   0.00547 0.000224 2.08e-05      0.88    Absorber msc
-   22  -0.0684   -0.572      -50    0.0054 6.33e-05 2.45e-05      0.88    Absorber msc
-   23  -0.0684   -0.572      -50   0.00535 5.33e-05 2.36e-05     0.881    Absorber msc
-   24  -0.0684   -0.572      -50   0.00534 1.11e-05 2.07e-05     0.881    Absorber msc
-   25  -0.0684   -0.572      -50   0.00505 0.000292 2.07e-05     0.881    Absorber msc
-   26  -0.0684   -0.572      -50   0.00503 2.15e-05 2.07e-05     0.881    Absorber msc
-   27  -0.0684   -0.572      -50   0.00489  0.00014 2.07e-05     0.881    Absorber msc
-   28  -0.0684   -0.572      -50   0.00472 0.000165 2.07e-05     0.881    Absorber msc
-   29  -0.0684   -0.572      -50   0.00445 0.000273 2.07e-05     0.881    Absorber msc
-   30  -0.0684   -0.572      -50   0.00441 3.28e-05 2.07e-05     0.881    Absorber msc
-   31  -0.0684   -0.572      -50   0.00257 5.29e-06 3.44e-06     0.881    Absorber eIoni
-   32  -0.0684   -0.572      -50   0.00241 0.000164 2.07e-05     0.881    Absorber msc
-   33  -0.0684   -0.572      -50   0.00211 0.000296 2.07e-05     0.881    Absorber msc
-   34  -0.0684   -0.572      -50   0.00206 4.91e-05 2.07e-05     0.881    Absorber msc
-   35  -0.0684   -0.572      -50   0.00188 0.000182 2.07e-05     0.881    Absorber msc
-   36  -0.0684   -0.572      -50   0.00172 0.000161 2.07e-05     0.881    Absorber msc
-   37  -0.0684   -0.572      -50   0.00152 0.000205 2.07e-05     0.881    Absorber msc
-   38  -0.0684   -0.572      -50   0.00126 0.000259 2.07e-05     0.881    Absorber msc
-   39  -0.0684   -0.572      -50  0.000708 0.000548 2.07e-05     0.881    Absorber msc
-   40  -0.0684   -0.572      -50         0 0.000708 1.67e-05     0.881    Absorber eIoni
+    1 -2.08e-05 2.99e-06      -50    0.0099 9.89e-05 4.21e-05  4.21e-05    Absorber msc
+    2 -3.43e-05 -1.14e-06      -50   0.00941 8.59e-05  1.6e-05  5.82e-05    Absorber eIoni
+    3 -5.22e-05 -1.2e-05      -50   0.00937 4.57e-05 4.21e-05    0.0001    Absorber msc
+    4 -5.36e-05 -1.35e-05      -50   0.00937        0 3.97e-06  0.000104    Absorber msc
+    5 -5.39e-05 -1.37e-05      -50   0.00936 3.57e-06 6.35e-07  0.000105    Absorber msc
+    6 -5.39e-05 -1.38e-05      -50   0.00936 7.46e-07 1.32e-07  0.000105       World Transportation
+    7   -0.014  -0.0691    -50.2   0.00922 0.000146     0.19      0.19       World msc
+    8    0.112  -0.0827    -50.3   0.00761 0.000407    0.175     0.365       World eIoni
+    9    0.285    -0.11    -50.3   0.00727 0.000333     0.19     0.554       World msc
+   10     0.44   -0.178    -50.2   0.00675 0.000526     0.19     0.744       World msc
+   11    0.448    -0.18    -50.2   0.00621 9.57e-05  0.00925     0.753       World eIoni
+   12    0.592   -0.221    -50.3   0.00598 0.000237     0.19     0.943       World msc
+   13     0.73   -0.308    -50.3   0.00557 0.000406     0.19      1.13       World msc
+   14    0.732   -0.432    -50.2   0.00499 0.000574     0.19      1.32       World msc
+   15     0.83   -0.479    -50.1   0.00411 0.000484    0.152      1.47       World eIoni
+   16    0.876   -0.515      -50   0.00344 0.000668    0.116      1.59    Absorber Transportation
+   17    0.876   -0.515      -50   0.00344        0 6.71e-06      1.59    Absorber msc
+   18    0.876   -0.515      -50   0.00336 8.04e-05 6.71e-06      1.59    Absorber msc
+   19    0.876   -0.515      -50   0.00333 3.32e-05 6.71e-06      1.59    Absorber msc
+   20    0.876   -0.515      -50   0.00333        0 6.71e-06      1.59    Absorber msc
+   21    0.876   -0.515      -50   0.00332 1.15e-05 6.71e-06      1.59    Absorber msc
+   22    0.876   -0.515      -50   0.00317 0.000146 6.71e-06      1.59    Absorber msc
+   23    0.876   -0.515      -50   0.00308 8.88e-05 6.71e-06      1.59    Absorber msc
+   24    0.876   -0.515      -50   0.00299 9.14e-05 6.71e-06      1.59    Absorber msc
+   25    0.876   -0.515      -50   0.00295 4.08e-05 6.71e-06      1.59    Absorber msc
+   26    0.876   -0.515      -50   0.00258 2.88e-05 1.02e-06      1.59    Absorber eIoni
+   27    0.876   -0.515      -50    0.0025 7.32e-05 6.71e-06      1.59    Absorber msc
+   28    0.876   -0.515      -50   0.00244 6.08e-05 6.71e-06      1.59    Absorber msc
+   29    0.876   -0.515      -50   0.00231 0.000132 6.71e-06      1.59    Absorber msc
+   30    0.876   -0.515      -50   0.00231        0 6.95e-06      1.59    Absorber msc
+   31    0.876   -0.515      -50   0.00195  7.9e-05 5.77e-06      1.59    Absorber eIoni
+   32    0.876   -0.515      -50   0.00185 9.31e-05 8.97e-06      1.59    Absorber msc
+   33    0.876   -0.515      -50   0.00178 7.56e-05 8.93e-06      1.59    Absorber msc
+   34    0.876   -0.515      -50   0.00164 0.000139 1.04e-05      1.59    Absorber msc
+   35    0.876   -0.515      -50   0.00146 0.000182 1.11e-05      1.59    Absorber msc
+   36    0.876   -0.515      -50   0.00103 0.000108 1.03e-05      1.59    Absorber eIoni
+   37    0.876   -0.515      -50         0  0.00103 2.68e-05      1.59    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 8,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    0.876   -0.515      -50  0.000317        0        0         0    Absorber initStep
+    1    0.876   -0.515      -50         0 0.000317 7.45e-06  7.45e-06    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 7,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    0.876   -0.515      -50  0.000284        0        0         0    Absorber initStep
+    1    0.876   -0.515      -50         0 0.000284 6.79e-06  6.79e-06    Absorber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0  -0.0684   -0.572      -50   0.00184        0        0         0    Absorber initStep
-    1  -0.0684   -0.572      -50   0.00183 1.01e-05 5.51e-06  5.51e-06    Absorber msc
-    2  -0.0684   -0.572      -50   0.00181 1.51e-05 4.63e-06  1.01e-05    Absorber msc
-    3  -0.0684   -0.572      -50   0.00177 4.01e-05 4.45e-06  1.46e-05    Absorber msc
-    4  -0.0684   -0.572      -50   0.00176 1.07e-05 4.92e-06  1.95e-05    Absorber msc
-    5  -0.0684   -0.572      -50   0.00166   0.0001 5.58e-06  2.51e-05    Absorber msc
-    6  -0.0684   -0.572      -50   0.00159 6.72e-05 5.73e-06  3.08e-05    Absorber msc
-    7  -0.0684   -0.572      -50   0.00134  0.00025 5.43e-06  3.63e-05    Absorber msc
-    8  -0.0684   -0.572      -50   0.00124 0.000103 4.59e-06  4.09e-05    Absorber msc
-    9  -0.0684   -0.572      -50   0.00119 5.34e-05 4.22e-06  4.51e-05    Absorber msc
-   10  -0.0684   -0.572      -50   0.00114 5.08e-05 4.64e-06  4.97e-05    Absorber msc
-   11  -0.0684   -0.572      -50    0.0011 3.95e-05 5.47e-06  5.52e-05    Absorber msc
-   12  -0.0684   -0.572      -50  0.000995 0.000103 5.85e-06   6.1e-05    Absorber msc
-   13  -0.0684   -0.572      -50  0.000962 3.24e-05 5.85e-06  6.69e-05    Absorber msc
-   14  -0.0684   -0.572      -50   0.00086 0.000103  6.5e-06  7.34e-05    Absorber msc
-   15  -0.0684   -0.572      -50         0  0.00086 2.11e-05  9.45e-05    Absorber eIoni
+    0    0.876   -0.515      -50  0.000343        0        0         0    Absorber initStep
+    1    0.876   -0.515      -50         0 0.000343 7.98e-06  7.98e-06    Absorber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 5,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0  -0.0684   -0.572      -50  0.000256        0        0         0    Absorber initStep
-    1  -0.0684   -0.572      -50         0 0.000256 6.25e-06  6.25e-06    Absorber eIoni
+    0     0.83   -0.479    -50.1  0.000401        0        0         0       World initStep
+    1    0.834    -0.48    -50.1         0 0.000401   0.0151    0.0151       World eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.197   -0.342      -50  0.000405        0        0         0       World initStep
-    1    0.192   -0.343      -50         0 0.000405   0.0153    0.0153       World eIoni
+    0    0.448    -0.18    -50.2  0.000442        0        0         0       World initStep
+    1    0.449    -0.18    -50.2         0 0.000442   0.0169    0.0169       World eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.145   -0.133    -50.1  0.000986        0        0         0       World initStep
-    1    0.143   -0.115    -50.1  0.000878 0.000107    0.035     0.035       World msc
-    2    0.126   -0.116    -50.1  0.000112 0.000766    0.035      0.07       World msc
-    3    0.125   -0.116    -50.1         0 0.000112  0.00549    0.0755       World eIoni
+    0    0.112  -0.0827    -50.3    0.0012        0        0         0       World initStep
+    1    0.112  -0.0814    -50.3  0.000914  3.4e-05  0.00225   0.00225       World eIoni
+    2    0.118  -0.0679    -50.3         0 0.000914   0.0453    0.0476       World eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 9,   Parent ID = 3
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    0.112  -0.0814    -50.3  0.000254        0        0         0       World initStep
+    1     0.11  -0.0819    -50.3         0 0.000254   0.0096    0.0096       World eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.144   -0.132    -50.1  0.000352        0        0         0       World initStep
-    1    0.147   -0.132      -50         0 0.000352   0.0131    0.0131       World eIoni
+    0 -3.43e-05 -1.14e-06      -50  0.000403        0        0         0    Absorber initStep
+    1 -3.5e-05 6.33e-07      -50         0 0.000403 9.24e-06  9.24e-06    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -1543,7 +1543,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.41s Real=0.41s Sys=0s
+  User=0.41s Real=0.42s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -1586,39 +1586,32 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50     0.002        0        0         0    Absorber initStep
-    1 1.96e-06 1.93e-07      -50   0.00197 2.69e-05 4.08e-06  4.08e-06    Absorber msc
-    2 2.88e-06 2.83e-07      -50   0.00194 2.83e-05 4.08e-06  8.16e-06    Absorber msc
-    3 2.69e-06  2.1e-06      -50   0.00194        0 4.08e-06  1.22e-05    Absorber msc
-    4 2.98e-06 5.21e-06      -50   0.00192 2.55e-05 4.08e-06  1.63e-05    Absorber msc
-    5 5.39e-06 6.88e-06      -50    0.0019 1.74e-05 4.08e-06  2.04e-05    Absorber msc
-    6 7.96e-06 8.53e-06      -50    0.0019        0 4.08e-06  2.45e-05    Absorber msc
-    7 1.07e-05 8.13e-06      -50   0.00183 7.01e-05 4.08e-06  2.86e-05    Absorber msc
-    8 1.29e-05    6e-06      -50   0.00167 0.000158 4.08e-06  3.27e-05    Absorber msc
-    9 1.45e-05 4.77e-06      -50   0.00167        0 4.08e-06  3.67e-05    Absorber msc
-   10 1.72e-05 3.54e-06      -50   0.00161 6.53e-05 4.08e-06  4.08e-05    Absorber msc
-   11 1.98e-05  3.3e-06      -50   0.00157  4.3e-05 4.08e-06  4.49e-05    Absorber msc
-   12 2.11e-05 1.31e-06      -50   0.00151 5.16e-05 4.08e-06   4.9e-05    Absorber msc
-   13    2e-05 -1.15e-06      -50   0.00136 0.000151 4.26e-06  5.32e-05    Absorber msc
-   14 1.88e-05 -3.62e-06      -50   0.00132 4.15e-05 4.08e-06  5.73e-05    Absorber msc
-   15 1.92e-05 -1.53e-06      -50   0.00127 5.44e-05 4.08e-06  6.14e-05    Absorber msc
-   16 2.07e-05 -2.45e-07      -50  0.000713 4.92e-05 3.19e-06  6.46e-05    Absorber eIoni
-   17 2.19e-05 -7.96e-07      -50  0.000615 9.79e-05 4.57e-06  6.92e-05    Absorber msc
-   18 2.26e-05  6.6e-07      -50  0.000569 4.61e-05 4.08e-06  7.32e-05    Absorber msc
-   19 2.21e-05 2.24e-06      -50  0.000493 7.57e-05 4.08e-06  7.73e-05    Absorber msc
-   20 2.18e-05 3.08e-06      -50  0.000483 1.03e-05 4.08e-06  8.14e-05    Absorber msc
-   21 2.31e-05 2.48e-06      -50  0.000402 8.06e-05 4.08e-06  8.55e-05    Absorber msc
-   22 2.39e-05 2.96e-06      -50  0.000402        0 4.08e-06  8.96e-05    Absorber msc
-   23 2.55e-05 2.95e-06      -50  0.000211 0.000191 4.08e-06  9.36e-05    Absorber msc
-   24  2.5e-05  1.3e-06      -50  0.000133 7.74e-05 4.08e-06  9.77e-05    Absorber msc
-   25 2.46e-05 1.98e-07      -50         0 0.000133 4.03e-06  0.000102    Absorber eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 2.07e-05 -2.45e-07      -50  0.000505        0        0         0    Absorber initStep
-    1 2.08e-05 1.39e-06      -50         0 0.000505 1.15e-05  1.15e-05    Absorber eIoni
+    1        0        0      -50   0.00196 4.34e-05 4.08e-06  4.08e-06    Absorber msc
+    2        0        0      -50   0.00196        0 4.08e-06  8.16e-06    Absorber msc
+    3 2.79e-06 -1.21e-06      -50   0.00185 0.000105 4.08e-06  1.22e-05    Absorber msc
+    4 4.14e-06 -4.04e-06      -50   0.00181 4.64e-05 4.08e-06  1.63e-05    Absorber msc
+    5  5.8e-06 -6.4e-06      -50   0.00181        0 4.08e-06  2.04e-05    Absorber msc
+    6 7.86e-06 -6.66e-06      -50   0.00176 4.21e-05 4.08e-06  2.45e-05    Absorber msc
+    7 1.03e-05 -4.76e-06      -50   0.00174 2.25e-05 4.08e-06  2.86e-05    Absorber msc
+    8 1.11e-05 -1.98e-06      -50   0.00171 2.59e-05 4.08e-06  3.27e-05    Absorber msc
+    9  1.2e-05 6.16e-07      -50   0.00154 0.000175 4.08e-06  3.67e-05    Absorber msc
+   10 1.45e-05 1.46e-08      -50   0.00149 4.79e-05 4.08e-06  4.08e-05    Absorber msc
+   11 1.58e-05 -2.59e-06      -50   0.00145 4.27e-05 4.08e-06  4.49e-05    Absorber msc
+   12 1.79e-05 -4.04e-06      -50   0.00141 3.84e-05 4.08e-06   4.9e-05    Absorber msc
+   13 1.78e-05 -6.75e-06      -50   0.00125 0.000159 4.08e-06  5.31e-05    Absorber msc
+   14  1.9e-05 -9.07e-06      -50   0.00119 5.77e-05 4.08e-06  5.71e-05    Absorber msc
+   15 2.11e-05 -1.06e-05      -50   0.00112 7.62e-05 4.08e-06  6.12e-05    Absorber msc
+   16 2.11e-05 -1.12e-05      -50  0.000951 0.000166 4.08e-06  6.53e-05    Absorber msc
+   17  1.9e-05 -1.26e-05      -50  0.000799 0.000153 4.08e-06  6.94e-05    Absorber msc
+   18 1.98e-05 -1.41e-05      -50  0.000788 1.06e-05 4.08e-06  7.35e-05    Absorber msc
+   19 2.08e-05 -1.21e-05      -50  0.000723 6.55e-05 4.08e-06  7.76e-05    Absorber msc
+   20 2.17e-05 -1.02e-05      -50  0.000723        0 4.08e-06  8.16e-05    Absorber msc
+   21 2.36e-05 -1.1e-05      -50  0.000685 3.72e-05 4.08e-06  8.57e-05    Absorber msc
+   22 2.45e-05 -1.25e-05      -50  0.000626 5.94e-05 3.95e-06  8.97e-05    Absorber msc
+   23 2.44e-05 -1.45e-05      -50  0.000519 0.000107 3.68e-06  9.33e-05    Absorber msc
+   24 2.41e-05 -1.42e-05      -50  0.000519        0 5.28e-07  9.39e-05    Absorber msc
+   25 2.39e-05 -1.4e-05      -50  0.000509    1e-05 4.08e-07  9.43e-05       World Transportation
+   26 -0.00388  0.00365      -50         0 0.000509     0.02    0.0201       World eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -1659,7 +1652,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.17s Real=0.17s Sys=0s
+  User=0.17s Real=0.16s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -1702,14 +1695,11 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0006        0        0         0    Absorber initStep
-    1 -1.53e-06 -1.34e-06      -50  0.000587 1.26e-05 5.27e-06  5.27e-06    Absorber msc
-    2 -4.95e-07 -3.1e-06      -50  0.000457  0.00013 5.27e-06  1.05e-05    Absorber msc
-    3 1.31e-06 -3.2e-06      -50  0.000457        0 4.25e-06  1.48e-05    Absorber msc
-    4 1.52e-06 -1.06e-06      -50  0.000308 0.000149 5.27e-06  2.01e-05    Absorber msc
-    5 3.36e-06 -1.78e-06      -50   0.00023 7.73e-05 5.27e-06  2.53e-05    Absorber msc
-    6 3.65e-06 -2.06e-06      -50  0.000219 1.12e-05 5.27e-07  2.59e-05    Absorber msc
-    7 3.85e-06 -2.25e-06      -50  0.000188 3.16e-05 3.45e-07  2.62e-05       World Transportation
-    8  0.00114  -0.0011      -50         0 0.000188  0.00755   0.00757       World eIoni
+    1 2.03e-06 1.07e-07      -50   0.00041  0.00019 5.27e-06  5.27e-06    Absorber msc
+    2 3.39e-06 -1.51e-06      -50  0.000397 1.29e-05 5.27e-06  1.05e-05    Absorber msc
+    3  3.9e-06 -3.02e-06      -50  0.000261 0.000136 2.95e-06  1.35e-05    Absorber msc
+    4 5.06e-06 -3.46e-06      -50  0.000168 9.33e-05 5.27e-06  1.88e-05    Absorber msc
+    5 5.09e-06 -4.35e-06      -50         0 0.000168 4.63e-06  2.34e-05    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -1750,7 +1740,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.03s Real=0.03s Sys=0s
+  User=0.03s Real=0.04s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 1
@@ -1834,7 +1824,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.01s Sys=0s
+  User=0.01s Real=0s Sys=0s
 #
 #
 /calor/setAbsMat Water
@@ -1913,7 +1903,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -1959,7 +1948,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50      0.01        0        0         0    Absorber initStep
-    1        0        0    -49.5         0 0.000537    0.492     0.492    Absorber phot
+    1        0        0    -49.5         0 0.000537    0.495     0.495    Absorber phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
@@ -1967,47 +1956,39 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0    -49.5   0.00946        0        0         0    Absorber initStep
-    1 -0.000111 -8.13e-05    -49.5   0.00872  0.00043 0.000171  0.000171    Absorber eIoni
-    2 -0.000243 -0.000329    -49.5   0.00748 0.000986 0.000394  0.000565    Absorber eIoni
-    3 -0.000782 -0.000811    -49.5   0.00321  0.00296  0.00111   0.00167    Absorber eIoni
-    4 -0.000792 -0.000737    -49.5   0.00158  0.00106 0.000221   0.00189    Absorber eIoni
-    5 -0.00082 -0.000703    -49.5         0  0.00158 0.000118   0.00201    Absorber eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 2
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 -0.000792 -0.000737    -49.5   0.00057        0        0         0    Absorber initStep
-    1 -0.000784 -0.000736    -49.5         0  0.00057 2.42e-05  2.42e-05    Absorber eIoni
+    1  0.00029 0.000298    -49.5   0.00829 0.000901  0.00047   0.00047    Absorber eIoni
+    2 0.000527 0.000497    -49.5   0.00744 0.000853 0.000383  0.000853    Absorber eIoni
+    3 0.000724 0.000706    -49.5    0.0064 0.000528 0.000323   0.00118    Absorber eIoni
+    4 0.000554  0.00129    -49.5   0.00163  0.00452  0.00113   0.00231    Absorber eIoni
+    5  0.00053  0.00134    -49.5         0  0.00163 0.000123   0.00243    Absorber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 5,   Parent ID = 2
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 -0.000782 -0.000811    -49.5   0.00131        0        0         0    Absorber initStep
-    1 -0.000768 -0.000845    -49.5         0  0.00131 8.49e-05  8.49e-05    Absorber eIoni
+    0 0.000554  0.00129    -49.5   0.00025        0        0         0    Absorber initStep
+    1 0.000558  0.00129    -49.5         0  0.00025 9.91e-06  9.91e-06    Absorber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 2
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 -0.000243 -0.000329    -49.5   0.00026        0        0         0    Absorber initStep
-    1 -0.000242 -0.000332    -49.5         0  0.00026 1.03e-05  1.03e-05    Absorber eIoni
+    0 0.000724 0.000706    -49.5  0.000509        0        0         0    Absorber initStep
+    1  0.00073 0.000701    -49.5         0 0.000509 2.09e-05  2.09e-05    Absorber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 2
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 -0.000111 -8.13e-05    -49.5  0.000308        0        0         0    Absorber initStep
-    1 -0.000112 -8.43e-05    -49.5         0 0.000308  1.2e-05   1.2e-05    Absorber eIoni
+    0  0.00029 0.000298    -49.5  0.000271        0        0         0    Absorber initStep
+    1 0.000292 0.000297    -49.5         0 0.000271 1.07e-05  1.07e-05    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -2097,7 +2078,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50     0.002        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000537   0.0203    0.0203    Absorber phot
+    1        0        0      -50         0 0.000537  0.00563   0.00563    Absorber phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
@@ -2105,7 +2086,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50   0.00146        0        0         0    Absorber initStep
-    1 3.44e-05 -3.21e-05      -50         0  0.00146 0.000103  0.000103    Absorber eIoni
+    1 2.54e-05  3.3e-05      -50  0.000143  0.00132 9.17e-05  9.17e-05    Absorber eIoni
+    2 2.65e-05 3.32e-05      -50         0 0.000143 6.56e-06  9.83e-05    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -2199,7 +2181,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0006        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000537  0.00189   0.00189    Absorber phot
+    1        0        0      -50         0 0.000537 0.000585  0.000585    Absorber phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
@@ -2207,7 +2189,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50  6.27e-05        0        0         0    Absorber initStep
-    1 8.36e-07 -8.86e-07      -50         0 6.27e-05 4.27e-06  4.27e-06    Absorber eIoni
+    1 5.89e-07 7.18e-07      -50         0 6.27e-05 4.27e-06  4.27e-06    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -2253,7 +2235,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.01s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 1
@@ -2301,15 +2283,15 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0003        0        0         0    Absorber initStep
-    1        0        0      -50         0 1.42e-05 0.000164  0.000164    Absorber phot
+    1        0        0      -50         0 2.92e-05  0.00378   0.00378    Absorber phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50  0.000286        0        0         0    Absorber initStep
-    1 -7.09e-07 -3.23e-06      -50         0 0.000286 1.12e-05  1.12e-05    Absorber eIoni
+    0        0        0      -50  0.000271        0        0         0    Absorber initStep
+    1 3.93e-06 -3.81e-07      -50         0 0.000271 1.06e-05  1.06e-05    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -2355,7 +2337,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.01s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 /gun/particle e-
 #-----------------
@@ -2405,48 +2387,70 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50      0.01        0        0         0    Absorber initStep
-    1 1.95e-07 6.03e-06      -50   0.00894 7.85e-05 4.59e-05  4.59e-05    Absorber eIoni
-    2 1.51e-05 1.08e-05      -50   0.00849 0.000118 8.45e-05   0.00013    Absorber eIoni
-    3 -2.24e-05 -5.19e-05      -50   0.00794 0.000553 0.000258  0.000389    Absorber msc
-    4   -4e-05 -0.000175      -50   0.00745 0.000493 0.000258  0.000647    Absorber msc
-    5 -0.000108 -0.000206      -50   0.00684 0.000607 0.000258  0.000906    Absorber msc
-    6 -0.000165 -0.000229      -50   0.00587 0.000606 0.000114   0.00102    Absorber eIoni
-    7 -0.000298 -0.000208      -50   0.00505 0.000825 0.000263   0.00128    Absorber msc
-    8 -0.000341 -0.000133      -50   0.00431 0.000248 0.000107   0.00139    Absorber eIoni
-    9 -0.000154 2.03e-05      -50         0  0.00431   0.0007   0.00209    Absorber eIoni
+    1 -6.08e-05 -4.46e-05      -50   0.00961 0.000392 0.000258  0.000258    Absorber msc
+    2 -0.000171  -0.0002      -50   0.00921 0.000394 0.000258  0.000517    Absorber msc
+    3 -0.000274 -0.000402      -50   0.00902 0.000199 0.000258  0.000775    Absorber msc
+    4 -0.000347 -0.000516      -50   0.00819  0.00043 0.000148  0.000923    Absorber eIoni
+    5 -0.000375 -0.000721      -50   0.00721 0.000436 0.000233   0.00116    Absorber eIoni
+    6 -0.000378 -0.00085      -50   0.00636 0.000273 0.000137   0.00129    Absorber eIoni
+    7 -0.000352 -0.00107      -50   0.00594 0.000427 0.000258   0.00155    Absorber msc
+    8 -0.000431 -0.00121      -50   0.00558 0.000353 0.000258   0.00181    Absorber msc
+    9 -0.00048 -0.00128      -50   0.00531 0.000279 0.000122   0.00193    Absorber eIoni
+   10 -0.000595 -0.00144      -50   0.00449 0.000512 0.000237   0.00217    Absorber eIoni
+   11 -0.000725 -0.00159      -50   0.00391 0.000574 0.000258   0.00243    Absorber msc
+   12 -0.000755 -0.00168      -50   0.00321 0.000374 0.000117   0.00254    Absorber eIoni
+   13 -0.000634 -0.00173      -50   0.00205  0.00116 0.000258    0.0028    Absorber msc
+   14 -0.000616 -0.00174      -50    0.0014 0.000287 4.91e-05   0.00285    Absorber eIoni
+   15 -0.000587 -0.00176      -50  0.000548 0.000852 6.06e-05   0.00291    Absorber eIoni
+   16 -0.000582 -0.00176      -50         0 0.000548  2.3e-05   0.00294    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 7,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 -0.000616 -0.00174      -50  0.000366        0        0         0    Absorber initStep
+    1 -0.000621 -0.00173      -50         0 0.000366 1.43e-05  1.43e-05    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 -0.000755 -0.00168      -50   0.00033        0        0         0    Absorber initStep
+    1 -0.000757 -0.00169      -50         0  0.00033 1.29e-05  1.29e-05    Absorber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 5,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 -0.000341 -0.000133      -50  0.000494        0        0         0    Absorber initStep
-    1 -0.000335 -0.000139      -50         0 0.000494 2.02e-05  2.02e-05    Absorber eIoni
+    0 -0.000595 -0.00144      -50  0.000307        0        0         0    Absorber initStep
+    1 -0.000593 -0.00144      -50         0 0.000307  1.2e-05   1.2e-05    Absorber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 -0.000165 -0.000229      -50  0.000361        0        0         0    Absorber initStep
-    1 -0.000169 -0.000226      -50         0 0.000361 1.41e-05  1.41e-05    Absorber eIoni
+    0 -0.000378 -0.00085      -50  0.000575        0        0         0    Absorber initStep
+    1 -0.000374 -0.000856      -50         0 0.000575 2.45e-05  2.45e-05    Absorber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 1.51e-05 1.08e-05      -50  0.000332        0        0         0    Absorber initStep
-    1 1.52e-05 1.59e-05      -50         0 0.000332 1.29e-05  1.29e-05    Absorber eIoni
+    0 -0.000375 -0.000721      -50  0.000537        0        0         0    Absorber initStep
+    1 -0.000367 -0.000724      -50         0 0.000537 2.24e-05  2.24e-05    Absorber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 1.95e-07 6.03e-06      -50  0.000979        0        0         0    Absorber initStep
-    1 5.53e-06 2.86e-05      -50  0.000546 0.000433 4.61e-05  4.61e-05    Absorber msc
-    2 1.23e-05 3.43e-05      -50         0 0.000546 2.29e-05  6.89e-05    Absorber eIoni
+    0 -0.000347 -0.000516      -50    0.0004        0        0         0    Absorber initStep
+    1 -0.000353 -0.000517      -50         0   0.0004 1.58e-05  1.58e-05    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -2492,7 +2496,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.21s Real=0.22s Sys=0s
+  User=0.21s Real=0.21s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -2540,9 +2544,9 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50     0.002        0        0         0    Absorber initStep
-    1 -1.03e-05 3.34e-05      -50   0.00164 0.000357 7.47e-05  7.47e-05    Absorber msc
-    2 1.63e-06 7.75e-05      -50   0.00116 0.000487 7.47e-05  0.000149    Absorber msc
-    3 7.33e-06 0.000105      -50         0  0.00116 6.95e-05  0.000219    Absorber eIoni
+    1 -3.21e-05 1.36e-05      -50   0.00159 0.000414 7.47e-05  7.47e-05    Absorber msc
+    2 -6.22e-05 4.14e-05      -50   0.00111 0.000478 7.19e-05  0.000147    Absorber msc
+    3 -7.66e-05 6.75e-05      -50         0  0.00111  6.5e-05  0.000212    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -2588,7 +2592,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.05s Real=0.04s Sys=0s
+  User=0.05s Real=0.05s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -2776,7 +2780,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0s Real=0.01s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 /gun/particle gamma
 #------------------
@@ -2864,7 +2868,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -2948,7 +2951,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.02s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 /calor/setAbsMat Lead
 
  The  WORLD   is made of 2000mm of Air, the transverse size (R) of the world is 2000 mm. 
@@ -2998,7 +3001,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.02s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 /gun/energy 100 MeV
 /run/beamOn 1000
 
@@ -3139,38 +3142,39 @@ UserRunAction deleted.
 UserPrimaryGenerator deleted.
 G4 kernel has come to Quit state.
 G4SDManager deleted.
-Rayl for gamma in Aluminium : 25 calls
-Rayl for gamma in Lead : 33 calls
-Rayl for gamma in Water : 55 calls
-Transportation for e+ in Air : 1539 calls
-Transportation for e- in Air : 4985 calls
-Transportation for e- in Aluminium : 47 calls
-Transportation for e- in Lead : 279 calls
-Transportation for e- in Water : 17 calls
-Transportation for gamma in Air : 5437 calls
-annihil for e+ in Aluminium : 45 calls
-annihil for e+ in Lead : 907 calls
-annihil for e+ in Water : 3 calls
-compt for gamma in Aluminium : 1 calls
-compt for gamma in Water : 22 calls
+Rayl for gamma in Aluminium : 31 calls
+Rayl for gamma in Lead : 36 calls
+Rayl for gamma in Water : 37 calls
+Transportation for e+ in Air : 1532 calls
+Transportation for e- in Air : 5017 calls
+Transportation for e- in Aluminium : 51 calls
+Transportation for e- in Lead : 300 calls
+Transportation for e- in Water : 16 calls
+Transportation for gamma in Air : 5478 calls
+annihil for e+ in Air : 1 calls
+annihil for e+ in Aluminium : 48 calls
+annihil for e+ in Lead : 943 calls
+annihil for e+ in Water : 2 calls
+compt for gamma in Aluminium : 2 calls
+compt for gamma in Water : 24 calls
 conv for gamma in Air : 4 calls
-conv for gamma in Aluminium : 489 calls
-conv for gamma in Lead : 1871 calls
-conv for gamma in Water : 134 calls
-eBrem for e- in Lead : 9 calls
-eBrem for e- in Water : 2 calls
-eIoni for e- in Air : 7083 calls
-eIoni for e- in Aluminium : 23532 calls
-eIoni for e- in Lead : 25690 calls
-eIoni for e- in Water : 22245 calls
-msc for e- in Air : 6442 calls
-msc for e- in Aluminium : 16153 calls
-msc for e- in Lead : 33899 calls
-msc for e- in Water : 7627 calls
-phot for gamma in Air : 19 calls
-phot for gamma in Aluminium : 4058 calls
-phot for gamma in Lead : 4027 calls
-phot for gamma in Water : 4010 calls
+conv for gamma in Aluminium : 490 calls
+conv for gamma in Lead : 1894 calls
+conv for gamma in Water : 141 calls
+eBrem for e- in Aluminium : 2 calls
+eBrem for e- in Lead : 11 calls
+eIoni for e- in Air : 6891 calls
+eIoni for e- in Aluminium : 23127 calls
+eIoni for e- in Lead : 24533 calls
+eIoni for e- in Water : 22279 calls
+msc for e- in Air : 6407 calls
+msc for e- in Aluminium : 16177 calls
+msc for e- in Lead : 33647 calls
+msc for e- in Water : 7641 calls
+phot for gamma in Air : 12 calls
+phot for gamma in Aluminium : 4001 calls
+phot for gamma in Lead : 4006 calls
+phot for gamma in Water : 4000 calls
 EventManager deleted.
 UImanager deleted.
 Units table cleared.

@@ -1,0 +1,73 @@
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+*************************************************************
+ Geant4 version Name: geant4-09-04-ref-05    (27-May-2011)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+Test49:Par's: T=1.800000e+02,S=3.000000e-01,Eta=3.000000e-01,nop=152,p=4.009300e+05,e=0.000000e+00,pPDG=1000010010,tPDG=1000731810,nEv=50000,fN=4.000000e-01,fD=2.000000e-01,cP=5.000000e+00,rM=1.000000e+00,sA=5.000000e-01,modName=qgsp
+Test49:NewRun:Targ=90073108,M=1.685151e+05,Proj=2212,E=3.999928e+05 MeV, Run #1 of 1, Model=qgsp
+***=>TEST19: 1000 events are simulated
+***=>TEST19: 2000 events are simulated
+***=>TEST19: 3000 events are simulated
+***=>TEST19: 4000 events are simulated
+***=>TEST19: 5000 events are simulated
+***=>TEST19: 6000 events are simulated
+***=>TEST19: 7000 events are simulated
+***=>TEST19: 8000 events are simulated
+***=>TEST19: 9000 events are simulated
+***=>TEST19: 10000 events are simulated
+***=>TEST19: 11000 events are simulated
+***=>TEST19: 12000 events are simulated
+***=>TEST19: 13000 events are simulated
+***=>TEST19: 14000 events are simulated
+***=>TEST19: 15000 events are simulated
+***=>TEST19: 16000 events are simulated
+***=>TEST19: 17000 events are simulated
+***=>TEST19: 18000 events are simulated
+ Process: ProtonInelastic , Model: QGSP
+ Primary: proton (2212), E= 400931, target nucleus (73,181)
+ relative limit 0.02 relative value = 0.00742645 pass
+ absolute limit (MeV) 150 absolute value (MeV) = 2970.53 fail
+***=>TEST19: 19000 events are simulated
+***=>TEST19: 20000 events are simulated
+***=>TEST19: 21000 events are simulated
+***=>TEST19: 22000 events are simulated
+***=>TEST19: 23000 events are simulated
+***=>TEST19: 24000 events are simulated
+***=>TEST19: 25000 events are simulated
+***=>TEST19: 26000 events are simulated
+***=>TEST19: 27000 events are simulated
+***=>TEST19: 28000 events are simulated
+***=>TEST19: 29000 events are simulated
+***=>TEST19: 30000 events are simulated
+***=>TEST19: 31000 events are simulated
+***=>TEST19: 32000 events are simulated
+***=>TEST19: 33000 events are simulated
+***=>TEST19: 34000 events are simulated
+***=>TEST19: 35000 events are simulated
+***=>TEST19: 36000 events are simulated
+***=>TEST19: 37000 events are simulated
+***=>TEST19: 38000 events are simulated
+***=>TEST19: 39000 events are simulated
+***=>TEST19: 40000 events are simulated
+***=>TEST19: 41000 events are simulated
+***=>TEST19: 42000 events are simulated
+ Process: ProtonInelastic , Model: QGSP
+ Primary: proton (2212), E= 400931, target nucleus (73,181)
+ relative limit 0.02 relative value = 0.00929778 pass
+ absolute limit (MeV) 150 absolute value (MeV) = 3719.04 fail
+***=>TEST19: 43000 events are simulated
+***=>TEST19: 44000 events are simulated
+***=>TEST19: 45000 events are simulated
+***=>TEST19: 46000 events are simulated
+***=>TEST19: 47000 events are simulated
+***=>TEST19: 48000 events are simulated
+***=>TEST19: 49000 events are simulated
+Test49:Time/Ev=3.071800e-03 s, DN=0.000000e+00 %
+

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-04    (30-April-2011)
+ Geant4 version Name: geant4-09-04-ref-05    (27-May-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -147,7 +147,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -190,11 +189,11 @@ ionIoni:   for  GenericIon    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :   Emin=        0 eV       Emax=         10 TeV
 
-nuclearStopping:   for  GenericIon    SubType= 1
+nuclearStopping:   for  GenericIon    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :   Emin=        0 eV       Emax=         10 TeV
 
-nuclearStopping:   for  alpha    SubType= 1
+nuclearStopping:   for  alpha    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :   Emin=        0 eV       Emax=         10 TeV
 
@@ -281,7 +280,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -308,7 +307,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -381,20 +380,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.82s Real=1.83s Sys=0s
+  User=1.85s Real=1.85s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.24991 +- 0.0153262  microns 
-    CSDA  Range  in absorber = 9.17091 +- 0.0152434  microns 
+    Track Length in absorber = 9.02706 +- 0.0148839  microns 
+    CSDA  Range  in absorber = 8.9444 +- 0.0148364  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.19091 +- 0.0153262 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.301914 +- 0.0152434 microns 
+    Track Length (G4 - ICRU49) = -0.0319354 +- 0.0148839 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.0754043 +- 0.0148364 microns 
 
-Average Number electrons per event = 228.722
+Average Number electrons per event = 219.995
 Average Number photons per event   = 0
 
 #/tracking/verbose 0
@@ -421,22 +420,21 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ### Run 1 start.
 Start Run processing.
-EvtNo= 136  length= 0.0153598  xend= 0.00323648
-EvtNo= 181  length= 0.0151205  xend= 0.00142619
-EvtNo= 675  length= 0.0130337  xend= 0.00500224
+EvtNo= 638  length= 0.0132368  xend= 0.00537154
+EvtNo= 819  length= 0.0130446  xend= 0.00591606
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.23s Real=2.23s Sys=0s
+  User=2.31s Real=2.31s Sys=0s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 997 for anti_proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 13.2739 +- 0.0395466  microns 
-    CSDA  Range  in absorber = 11.6653 +- 0.0153098  microns 
+ end of Run TotNbofEvents = 998 for anti_proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
+    Track Length in absorber = 13.271 +- 0.0399961  microns 
+    CSDA  Range  in absorber = 11.6278 +- 0.0160107  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
-Average Number electrons per event = 273.987
+Average Number electrons per event = 274.083
 Average Number photons per event   = 0
 
 #
@@ -502,7 +500,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -545,11 +542,11 @@ ionIoni:   for  GenericIon    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :   Emin=        0 eV       Emax=         10 TeV
 
-nuclearStopping:   for  GenericIon    SubType= 1
+nuclearStopping:   for  GenericIon    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :   Emin=        0 eV       Emax=         10 TeV
 
-nuclearStopping:   for  alpha    SubType= 1
+nuclearStopping:   for  alpha    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :   Emin=        0 eV       Emax=         10 TeV
 
@@ -636,7 +633,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -663,7 +660,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -733,16 +730,15 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ### Run 2 start.
 Start Run processing.
-EvtNo= 831  length= 0.008  xend= 0.000191159
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.08s Real=0.08s Sys=0s
+  User=0.09s Real=0.09s Sys=0s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 999 for C12[0.0] with Ekin = 6 MeV p= 366.244 MeV/c
-    Track Length in absorber = 8.21369 +- 0.0106555  microns 
-    CSDA  Range  in absorber = 8.07564 +- 0.00947642  microns 
+ end of Run TotNbofEvents = 1000 for C12[0.0] with Ekin = 6 MeV p= 366.244 MeV/c
+    Track Length in absorber = 8.20936 +- 0.0103199  microns 
+    CSDA  Range  in absorber = 8.06545 +- 0.00867416  microns 
 
     Energy deposit in absorber = 6  MeV 
 
@@ -820,7 +816,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -863,11 +858,11 @@ ionIoni:   for  GenericIon    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :   Emin=        0 eV       Emax=         10 TeV
 
-nuclearStopping:   for  GenericIon    SubType= 1
+nuclearStopping:   for  GenericIon    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :   Emin=        0 eV       Emax=         10 TeV
 
-nuclearStopping:   for  alpha    SubType= 1
+nuclearStopping:   for  alpha    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :   Emin=        0 eV       Emax=         10 TeV
 
@@ -954,7 +949,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -981,7 +976,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
-      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -1051,25 +1046,24 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ### Run 3 start.
 Start Run processing.
-EvtNo= 407  length= 0.00953856  xend= 0.00265964
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.31s Real=2.31s Sys=0s
+  User=2.37s Real=2.37s Sys=0s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 999 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.29093 +- 0.0153225  microns 
-    CSDA  Range  in absorber = 9.21056 +- 0.0154192  microns 
+ end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
+    Track Length in absorber = 9.02888 +- 0.0150265  microns 
+    CSDA  Range  in absorber = 8.9477 +- 0.0145903  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.231934 +- 0.0153225 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.341555 +- 0.0154192 microns 
+    Track Length (G4 - ICRU49) = -0.0301166 +- 0.0150265 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.0786952 +- 0.0145903 microns 
 
-Average Number electrons per event = 229.242
-Average Number photons per event   = 0.01001
+Average Number electrons per event = 220.082
+Average Number photons per event   = 0.01
 
 #
 /process/em/auger true
@@ -1095,24 +1089,25 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ### Run 4 start.
 Start Run processing.
+EvtNo= 48  length= 0.00951278  xend= 0.00337835
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.32s Real=2.32s Sys=0s
+  User=2.42s Real=2.42s Sys=0s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.30242 +- 0.0158508  microns 
-    CSDA  Range  in absorber = 9.22474 +- 0.0154199  microns 
+ end of Run TotNbofEvents = 999 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
+    Track Length in absorber = 9.04215 +- 0.0158119  microns 
+    CSDA  Range  in absorber = 8.95806 +- 0.0159936  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.243424 +- 0.0158508 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.355741 +- 0.0154199 microns 
+    Track Length (G4 - ICRU49) = -0.0168515 +- 0.0158119 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.0890611 +- 0.0159936 microns 
 
-Average Number electrons per event = 231.634
-Average Number photons per event   = 0.018
+Average Number electrons per event = 222.8
+Average Number photons per event   = 0.00900901
 
 #
 G4 kernel has come to Quit state.

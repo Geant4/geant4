@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-04    (30-April-2011)
+ Geant4 version Name: geant4-09-04-ref-05    (27-May-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -82,7 +82,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -350,7 +349,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.69s Real=4.36s Sys=0.01s
+  User=1.86s Real=1.94s Sys=0.02s
 #
 # neutron at 10 GeV in U
 #
@@ -381,7 +380,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.27s Real=2.74s Sys=0.01s
+  User=1.41s Real=1.51s Sys=0.01s
 #
 # pi+ at 10 GeV in U
 #
@@ -412,7 +411,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.32s Real=3.11s Sys=0.01s
+  User=1.49s Real=1.54s Sys=0s
 #
 # pi- at 10 GeV in U
 #
@@ -443,7 +442,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.48s Real=2.84s Sys=0s
+  User=1.65s Real=1.7s Sys=0.01s
 #
 # proton at 10 GeV in Cu
 #
@@ -504,7 +503,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -653,7 +651,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.51s Real=1.21s Sys=0.01s
+  User=0.5s Real=0.53s Sys=0.01s
 #
 # neutron at 10 GeV in Cu
 #
@@ -689,7 +687,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.47s Real=0.74s Sys=0s
+  User=0.45s Real=0.46s Sys=0s
 #
 # pi+ at 10 GeV in Cu
 #
@@ -725,7 +723,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.42s Real=0.51s Sys=0s
+  User=0.43s Real=0.44s Sys=0s
 #
 # pi- at 10 GeV in Cu
 #
@@ -761,7 +759,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.53s Real=0.68s Sys=0.01s
+  User=0.58s Real=0.57s Sys=0s
 #
 # proton at 10 GeV in Si
 #
@@ -822,7 +820,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -976,7 +973,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.22s Real=0.41s Sys=0s
+  User=0.19s Real=0.2s Sys=0s
 #
 # neutron at 10 GeV in Si
 #
@@ -1017,7 +1014,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.16s Real=0.21s Sys=0s
+  User=0.21s Real=0.22s Sys=0.01s
 #
 # pi+ at 10 GeV in Si
 #
@@ -1058,7 +1055,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.29s Real=0.36s Sys=0s
+  User=0.3s Real=0.31s Sys=0s
 #
 # pi- at 10 GeV in Si
 #
@@ -1099,7 +1096,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.31s Real=0.31s Sys=0s
+  User=0.27s Real=0.27s Sys=0s
 #
 # proton at 10 GeV in H
 #
@@ -1160,7 +1157,6 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 

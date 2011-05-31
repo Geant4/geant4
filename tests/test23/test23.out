@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-04    (30-April-2011)
+ Geant4 version Name: geant4-09-04-ref-05    (27-May-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -69,12 +69,10 @@ eBrem:   for  e+    SubType= 3
             eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -324,6 +322,6 @@ Test23 event # 700
 Test23 event # 800
 Test23 event # 900
 Test23 event # 1000
-Test23_Result: gam=106(4.64794), e-=1583(17.0942), e+=16(4.64243), p=326(5.1126), n=1918(4.24878), d=52(1.31765), t=20(3.71309), He3=5(10.1912), alph=210(2.61334), nu=1352(54.6577), anu=734(32.977), others=17936*0.10631
+Test23_Result: gam=119(4.57164), e-=1781(16.0012), e+=19(5.2667), p=326(4.81121), n=2318(3.78185), d=53(2.12799), t=16(4.56334), He3=1(6.2791), alph=180(2.75785), nu=1365(52.836), anu=781(32.8069), others=21914*0.0894682
 Test23 is done
 
