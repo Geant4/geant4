@@ -97,13 +97,13 @@ void DetectorConstruction::DefineMaterials()
   new G4Material("Water", density= 1.000*g/cm3, ncomponents=2);
   H2O->AddElement(H, natoms=2);
   H2O->AddElement(O, natoms=1);
-  H2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
+  H2O->GetIonisation()->SetMeanExcitationEnergy(78.0*eV);
   
   G4Material* vapor = 
   new G4Material("Water_vapor", density= 1.000*mg/cm3, ncomponents=2);
   vapor->AddElement(H, natoms=2);
   vapor->AddElement(O, natoms=1);
-  vapor->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
+  vapor->GetIonisation()->SetMeanExcitationEnergy(78.0*eV);
   
   new G4Material("Carbon"     , z=6.,  a= 12.01*g/mole, density= 2.267*g/cm3);
   new G4Material("Aluminium"  , z=13., a= 26.98*g/mole, density= 2.700*g/cm3);
