@@ -111,20 +111,22 @@ void G4ProcessPlacer::AddProcessAs(G4VProcess *process, SecondOrLast sol)
     }
 
     // place the given proces as first for the moment
+    // 31/5/11 previously set to first, then transportation set ahead of it, 
+    // which is more conveniently correctly set with placing it second!
     GetProcessManager()->AddProcess(process);
-    GetProcessManager()->SetProcessOrderingToFirst(process, 
+    GetProcessManager()->SetProcessOrderingToSecond(process, 
                                                   idxAlongStep);
-    GetProcessManager()->SetProcessOrderingToFirst(process, 
+    GetProcessManager()->SetProcessOrderingToSecond(process, 
                                                   idxPostStep);
     // xx test
     //     if(process->GetProcessName() == "ImportanceProcess") 
     //bug31/10/07    GetProcessManager()->SetProcessOrdering(process, 
     //bug31/10/07					    idxAlongStep, 1);
     // place transportation first again
-    GetProcessManager()->SetProcessOrderingToFirst(transportation, 
-                                                  idxAlongStep);
-    GetProcessManager()->SetProcessOrderingToFirst(transportation, 
-                                                  idxPostStep);
+//     GetProcessManager()->SetProcessOrderingToFirst(transportation, 
+//                                                   idxAlongStep);
+//     GetProcessManager()->SetProcessOrderingToFirst(transportation, 
+//                                                   idxPostStep);
   }
   
   // for verification inly

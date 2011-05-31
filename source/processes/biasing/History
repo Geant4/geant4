@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 30th, 2011 Alex Howard (procbiasing-V09-04-00)
+- G4ProcessPlacer: Using SetProcessOrderingToSecond for biasing process, and 
+leaving transportation where it is (hopefully first). Previously biasing was 
+moved first, then transportation moved back to first.
+
 June 2nd, 2010 Gabriele Cosmo (procbiasing-V09-03-00)
 - G4WeightWindowProcess: corrected call to G4WeightWindowStore::GetLowerWeight()
   after correction of mispelling in name...
