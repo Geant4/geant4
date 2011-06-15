@@ -117,13 +117,13 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
   fpTrack->GetDefinition()->GetProcessManager()->StartTracking(fpTrack);
 
   // Track the particle Step-by-Step while it is alive
-  G4StepStatus stepStatus;
+  //  G4StepStatus stepStatus;
 
   while( (fpTrack->GetTrackStatus() == fAlive) ||
          (fpTrack->GetTrackStatus() == fStopButAlive) ){
 
     fpTrack->IncrementCurrentStepNumber();
-    stepStatus = fpSteppingManager->Stepping();
+    //    stepStatus = fpSteppingManager->Stepping();
 #ifdef G4_STORE_TRAJECTORY
     if(StoreTrajectory) fpTrajectory->
                         AppendStep(fpSteppingManager->GetStep()); 

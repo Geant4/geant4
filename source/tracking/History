@@ -17,6 +17,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+9 June 2011 T Sasaki(tracking-V09-04-01)
+- stepStaus is no more used in G4TrackingManager.cc
+
+20 May 2011 Ben Morgan (tracking-V09-04-01)
+- CMakeLists.txt : Added G4TRACKING_ALLOC_EXPORT compiler definition via 
+  add_definitions so it's applied to all sources in this module.
 
 5 May 2011 Makoto Asai (tracking-V09-04-00)
 - Fixed setting of 'fWorldBoundary' step status in G4SteppingManager

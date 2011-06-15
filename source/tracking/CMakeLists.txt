@@ -11,6 +11,9 @@
 #
 #------------------------------------------------------------------------------
 
+# Add allocation export symbol for the tracking category
+add_definitions(-DG4TRACKING_ALLOC_EXPORT)
+
 include(Geant4MacroLibraryTargets)
 if(GEANT4_BUILD_GRANULAR_LIBS)
     GEANT4_GRANULAR_LIBRARY_TARGET(COMPONENT sources.cmake)
