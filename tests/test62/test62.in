@@ -3,7 +3,7 @@
 #
 /control/verbose 2
 /run/verbose 2
-/run/particle/setCut 1 m
+/run/setCut 1 m
 /run/initialize
 /gun/direction 1 0 0
 #
@@ -174,3 +174,33 @@
 /gun/energy 1 GeV
 /mydet/SelectMaterial C
 /run/beamOn 20
+#
+# Deuteron at 1 GeV/nucleon on Pb
+#
+/gun/particle deuteron
+/gun/energy 2 GeV
+/mydet/SelectMaterial Pb
+/run/beamOn 20
+#
+# Alpha at 500 MeV/nucleon on Pb
+#
+/gun/particle alpha
+/gun/energy 2 GeV
+/mydet/SelectMaterial Pb
+/run/beamOn 20
+#
+# Carbon at 290 MeV/nucleon on C
+#
+/gun/particle ion
+/gun/ion 6 12
+/gun/energy 3840 MeV
+/mydet/SelectMaterial C
+/run/beamOn 20
+#
+# Carbon at 500 MeV/nucleon on Pb
+#
+/gun/particle ion
+/gun/ion 6 12
+/mydet/SelectMaterial Pb
+/run/beamOn 20
+

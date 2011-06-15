@@ -12,6 +12,16 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15 June 2011, Gunter Folger   (test62-V09-04-01)
+- Update test62.in to replace obsolete /run/particle/SetCut by /run/SetCut
+
+9th June 2010 Pekka Kaitaniemi (test62-V09-04-00)
+- Switch from built-in physics list to QGSP_INCL_ABLA:
+  o Test now covers both model and physics list
+  o Reduces useless physics list code bloat
+- Added test cases for light ion projectiles
+- This tag requires phys-lists-V09-04-27 or later
+
 18th March 2010  Pekka Kaitaniemi (test62-V09-03-00)
 - Migration to the new G4[e|Mu|h]MultipleScattering system
 

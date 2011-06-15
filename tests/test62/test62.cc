@@ -29,7 +29,6 @@
 #include "Tst62DetectorConstruction.hh"
 #include "Tst62RunAction.hh"
 #include "Tst62PrimaryGeneratorAction.hh"
-#include "Tst62PhysicsList.hh"
 #include "Tst62SteppingAction.hh"
 #include "Tst62StackingAction.hh"
 
@@ -38,6 +37,8 @@
 #include "G4RunManager.hh"
 
 #include "G4ios.hh"
+
+#include "QGSP_INCL_ABLA.hh"
 
 int main(int argc,char** argv) {
 
@@ -50,7 +51,7 @@ int main(int argc,char** argv) {
 
   // UserInitialization classes
   runManager->SetUserInitialization(new Tst62DetectorConstruction);
-  runManager->SetUserInitialization(new Tst62PhysicsList);
+  runManager->SetUserInitialization(new QGSP_INCL_ABLA);
 
   // UserAction classes
   runManager->SetUserAction(new Tst62RunAction);
