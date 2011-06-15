@@ -59,7 +59,11 @@ G4GeneratorPrecompoundInterface::G4GeneratorPrecompoundInterface(G4VPreCompoundM
          
 G4GeneratorPrecompoundInterface::~G4GeneratorPrecompoundInterface()
 {}
-         
+
+
+  // choose to calculate excitation energy from energy balance
+#define exactExcitationEnergy
+
 G4ReactionProductVector* G4GeneratorPrecompoundInterface::
 Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 {
@@ -111,6 +115,9 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 
   // loop over secondaries
   unsigned int amax = result->size();
+#ifdef exactExcitationEnergy
+  G4LorentzVector secondary4Momemtum(0,0,0,0);        
+#endif  
   for(unsigned int list=0; list<amax; ++list)
     {
       G4KineticTrack *aTrack = result->operator[](list);
@@ -126,6 +133,9 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 	  theNew->SetMomentum(mom);
 	  theNew->SetTotalEnergy(e);
 	  theTotalResult->push_back(theNew);            
+#ifdef exactExcitationEnergy
+          secondary4Momemtum += aTrack->Get4Momentum();        
+#endif  
 	}
       else
 	{
@@ -157,15 +167,33 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 	}
       theCurrentNucleon = theNucleus->GetNextNucleon();
     }   
- 
   if(0!=anA && 0!=aZ)
     {
       G4double fMass =  G4NucleiProperties::GetNuclearMass(anA, aZ);
+#ifdef exactExcitationEnergy        
+// recalculate exEnergy from Energy balance....
+    const G4HadProjectile * primary = GetPrimaryProjectile();
+    G4double Einitial= primary->Get4Momentum().e() 
+            + G4NucleiProperties::GetNuclearMass(theNucleus->GetMassNumber(),theNucleus->GetCharge());
+    G4double Efinal = fMass + secondary4Momemtum.e();
+    if ( (Einitial - Efinal) > 0 ) {
+      // G4cout << "G4GPI::Propagate() : positive exact excitation Energy " 
+      //  << (Einitial - Efinal)/MeV << " MeV, exciton estimate " << exEnergy/MeV << " MeV" << G4endl; 
+      exEnergy=Einitial - Efinal;
+    } 
+    //else {
+    //  G4cout << "G4GeneratorPrecompoundInterface::Propagate() : negative exact excitation Energy " 
+    //  << (Einitial - Efinal)/MeV << " MeV, using exciton estimate " << exEnergy/MeV << " MeV" << G4endl; 
+    //} 
+#endif 
       fMass += exEnergy;
 
+#ifdef exactExcitationEnergy        
+      G4LorentzVector exciton4Momentum(exciton3Momentum, fMass);
+#else
       G4LorentzVector exciton4Momentum(exciton3Momentum, 
 				       std::sqrt(exciton3Momentum.mag2() + fMass*fMass));
-    
+#endif    
       G4Fragment anInitialState(anA, aZ, exciton4Momentum);
       anInitialState.SetNumberOfParticles(numberOfEx-numberOfHoles);
       anInitialState.SetNumberOfCharged(numberOfCh);
@@ -185,7 +213,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   delete result;
   return theTotalResult;
 }
-  
+
 G4HadFinalState* G4GeneratorPrecompoundInterface::
 ApplyYourself(const G4HadProjectile &, G4Nucleus & )
 {

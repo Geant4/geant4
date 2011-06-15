@@ -13,6 +13,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+10-June-2011, G.Folger		         had-binary-V09-04-03
+-  G4GeneratorPrecompoundInterface: add code to calculate excitation
+    energy from as difference of initial-final state; Results in Energy 
+    conservation for string models. Requires tag on QGS increasing exciattion
+    energy by decrease of participant nucleon energies.
+    
 25-May-2011,G.Folger		         had-binary-V09-04-02
 -  Fix compilation warning on almost unused variables
 
