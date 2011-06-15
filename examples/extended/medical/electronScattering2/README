@@ -59,10 +59,10 @@ This present example, electronScattering2, was the Geant4 code used for this pub
  
  Physics lists can be any of four options given in the G4 kernel
  physics_lists subdirectory, geant4/source/physics_lists/builders:	 
- - "emstandard_opt0"  recommended standard EM physics for LHC
- - "emstandard_opt1"  best CPU performance standard physics for LHC
- - "emstandard_opt2"  recommended for precision medical electron accelerator studies    
- - "emstandard_opt3"  current state of art for EM physics
+ - "emstandard_opt0"  recommended standard EM physics for HEP such as Large Hadron Collider
+ - "emstandard_opt1"  best CPU performance standard physics for Large Hadron Collider
+ - "emstandard_opt2"  latest experimental EM physics
+ - "emstandard_opt3"  recommended for precision medical electron accelerator studies    
     
  Physics lists and options can be (re)set with UI commands
     

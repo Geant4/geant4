@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08 June 2011, Joseph Perl (exampleES2-V09-04-01)
+- Correct README comments on opt2 and opt3
+
 05 January 2011, V.Ivanchenko (exampleES2-V09-04-00)
 - Added all physics builders from electronScattering example
 
