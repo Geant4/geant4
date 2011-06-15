@@ -53,10 +53,10 @@ class G4VCrossSectionDataSet;
 class IonDPMJETPhysics : public G4VHadronPhysics
 {
 public:
+
   IonDPMJETPhysics(G4bool val);
   virtual ~IonDPMJETPhysics();
 
-public:
   // This method will be invoked in the Construct() method.
   // each physics process will be instantiated and
   // registered to the process manager of each particle type
@@ -64,13 +64,16 @@ public:
 
 private:
 
+  void AddProcess(const G4String& name, G4ParticleDefinition* part,
+		  G4bool isIon);
+
   G4VCrossSectionDataSet* fTripathi;
   G4VCrossSectionDataSet* fTripathiLight;
   G4VCrossSectionDataSet* fShen;
   G4VCrossSectionDataSet* fIonH;
   G4BinaryLightIonReaction*  theIonBC;
   G4DPMJET2_5Model*          theDPM;
-  G4bool isBinary;
+  G4bool useDPMJETXS;
 };
 
 #endif

@@ -51,11 +51,8 @@
 #include "G4TripathiLightCrossSection.hh"
 #include "G4IonsShenCrossSection.hh"
 #include "G4IonProtonCrossSection.hh"
-#include "G4LEDeuteronInelastic.hh"
-#include "G4LETritonInelastic.hh"
-#include "G4LEAlphaInelastic.hh"
 
-#include "G4PreCompoundModel.hh"
+#include "G4BuilderType.hh"
 
 #ifdef G4_USE_DPMJET
 #include "G4DPMJET2_5Model.hh"
@@ -68,9 +65,11 @@ using namespace std;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 IonDPMJETPhysics::IonDPMJETPhysics(G4bool val)
-  : G4VHadronPhysics("ionInelasticDPMJET"),theIonBC(0),theDPM(0),isBinary(val)
+  : G4VHadronPhysics("ionInelasticDPMJET"),theIonBC(0),theDPM(0),
+    useDPMJETXS(val)
 {
   fTripathi = fTripathiLight = fShen = fIonH = 0;
+  SetPhysicsType(bIons);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -82,118 +81,53 @@ IonDPMJETPhysics::~IonDPMJETPhysics()
 
 void IonDPMJETPhysics::ConstructProcess()
 {
-  // Binary Cascade
-  G4ParticleDefinition* particle = 0;
-  G4ProcessManager* pmanager = 0;
-  G4HadronicProcess* hp = 0;
-
   G4double emax = 1000.*TeV;
 
-  if(!isBinary) {
-    theIonBC = new G4BinaryLightIonReaction();
-    theIonBC->SetMinEnergy(0.0);
-    theIonBC->SetMaxEnergy(6*GeV);
+  theIonBC = new G4BinaryLightIonReaction();
+  theIonBC->SetMinEnergy(0.0);
+  theIonBC->SetMaxEnergy(6*GeV);
 
-    fShen = new G4IonsShenCrossSection();
-    fTripathi = new G4TripathiCrossSection();
-    fTripathiLight = new G4TripathiLightCrossSection();
-    fIonH = new G4IonProtonCrossSection();
+  fShen = new G4IonsShenCrossSection();
+  fTripathi = new G4TripathiCrossSection();
+  fTripathiLight = new G4TripathiLightCrossSection();
+  fIonH = new G4IonProtonCrossSection();
 
-    fShen->SetMaxKinEnergy(emax);
-    fTripathi->SetMaxKinEnergy(emax);
-    fTripathiLight->SetMaxKinEnergy(emax);
-    fIonH->SetMaxKinEnergy(emax);    
-  }
+  fShen->SetMaxKinEnergy(emax);
+  fTripathi->SetMaxKinEnergy(emax);
+  fTripathiLight->SetMaxKinEnergy(emax);
+  fIonH->SetMaxKinEnergy(emax);    
 
 #ifdef G4_USE_DPMJET
   theDPM = new G4DPMJET2_5Model();
   theDPM->SetMinEnergy(5*GeV);
   theDPM->SetMaxEnergy(emax);
   //G4DPMJET2_5CrossSection *dpmXS = new G4DPMJET2_5CrossSection;
-  G4cout << " IonDPMJETPhysics::ConstructProcess() DPMJET-> " 
-	 << theDPM << G4endl;
 #endif
 
-
-  // not possible to use for d,t,alpha
-  /*
-  // deuteron
-  particle = G4Deuteron::Deuteron();
-  G4cout << "IonDPMJETPhysics::ConstructProcess for " 
-	 << particle->GetParticleName() << G4endl;
-  pmanager = particle->GetProcessManager();
-  hp = FindInelasticProcess(particle);
-#ifdef G4_USE_DPMJET
-  //hp->AddDataSet(dpmXS);
-  hp->RegisterMe(theDPM);
-#endif
-  pmanager->AddDiscreteProcess(hp);
-
-  // triton
-  particle = G4Triton::Triton();
-  G4cout << "IonDPMJETPhysics::ConstructProcess for " 
-	 << particle->GetParticleName() << G4endl;
-  pmanager = particle->GetProcessManager();
-  hp = FindInelasticProcess(particle);
-#ifdef G4_USE_DPMJET
-  //hp->AddDataSet(dpmXS);
-  hp->RegisterMe(theDPM);
-#endif
-  pmanager->AddDiscreteProcess(hp);
-
-  // alpha
-  particle = G4Alpha::Alpha();
-  G4cout << "IonDPMJETPhysics::ConstructProcess for " 
-	 << particle->GetParticleName() << G4endl;
-  pmanager = particle->GetProcessManager();
-  hp = FindInelasticProcess(particle);
-#ifdef G4_USE_DPMJET
-  //hp->AddDataSet(dpmXS);
-  hp->RegisterMe(theDPM);
-#endif
-  pmanager->AddDiscreteProcess(hp);
-  */
-
-  // He3
-  particle = G4He3::He3();
-  G4cout << "IonDPMJETPhysics::ConstructProcess for " 
-	 << particle->GetParticleName() << G4endl;
-  pmanager = particle->GetProcessManager();
-  hp = FindInelasticProcess(particle);
-  if(!isBinary) { 
-    hp->RegisterMe(theIonBC); 
-    hp->AddDataSet(fShen);
-    hp->AddDataSet(fTripathi);
-    hp->AddDataSet(fTripathiLight);
-    hp->AddDataSet(fIonH); 
-  }
-#ifdef G4_USE_DPMJET
-  //hp->AddDataSet(dpmXS);
-  hp->RegisterMe(theDPM);
-#endif
-  pmanager->AddDiscreteProcess(hp);
-
-  // GenericIon
-  particle = G4GenericIon::GenericIon();
-  G4cout << "IonDPMJETPhysics::ConstructProcess for " 
-	 << particle->GetParticleName() << G4endl;
-  pmanager = particle->GetProcessManager();
-  hp = FindInelasticProcess(particle);
-  if(!isBinary) { 
-    hp->RegisterMe(theIonBC); 
-    hp->AddDataSet(fShen);
-    hp->AddDataSet(fTripathi);
-    hp->AddDataSet(fTripathiLight);
-    hp->AddDataSet(fIonH); 
-  }
-#ifdef G4_USE_DPMJET
-  //hp->AddDataSet(dpmXS);
-  hp->RegisterMe(theDPM);
-  G4cout << "IonDPMJETPhysics: DPMJET is registered for GenericIon" << G4endl;
-#endif
-  pmanager->AddDiscreteProcess(hp);
+  AddProcess("dInelastic", G4Deuteron::Deuteron(),false);
+  AddProcess("tInelastic",G4Triton::Triton(),false);
+  AddProcess("He3Inelastic",G4He3::He3(),true);
+  AddProcess("alphaInelastic", G4Alpha::Alpha(),true);
+  AddProcess("ionInelastic",G4GenericIon::GenericIon(),true);
 
   G4cout << "IonDPMJETPhysics::ConstructProcess done! " << G4endl;
+}
+
+void IonDPMJETPhysics::AddProcess(const G4String& name,
+				  G4ParticleDefinition* part,
+				  G4bool isIon)
+{
+  G4HadronInelasticProcess* hadi = new G4HadronInelasticProcess(name, part);
+  G4ProcessManager* pManager = part->GetProcessManager();
+  pManager->AddDiscreteProcess(hadi);
+  hadi->AddDataSet(fShen);
+  hadi->AddDataSet(fTripathi);
+  hadi->AddDataSet(fTripathiLight);
+  if(isIon) { hadi->AddDataSet(fIonH); }
+  hadi->RegisterMe(theIonBC);
+#ifdef G4_USE_DPMJET
+  hadi->RegisterMe(theDPM); 
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

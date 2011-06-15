@@ -126,7 +126,7 @@ private:
 
   G4double edepMax;
   G4double edepEvt;
-  G4double edepEM;
+  G4double edepEM; 
   G4double edepPI;
   G4double edepP;
   G4double edepSum;
@@ -137,6 +137,7 @@ private:
   G4double primaryKineticEnergy;
   G4double currentKinEnergy;
  
+
   G4int verbose;
   G4int nBinsE;
   G4int nSlices;

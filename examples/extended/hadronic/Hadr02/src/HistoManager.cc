@@ -69,9 +69,13 @@
 #include "G4VModularPhysicsList.hh"
 #include "G4VPhysicsConstructor.hh"
 #include "IonDPMJETPhysics.hh"
-#include "IonFTFPhysics.hh"
+#include "G4IonFTFPBinaryCascadePhysics.hh"
 #include "G4RunManager.hh"
-
+#include "DetectorConstruction.hh"
+#include "G4NistManager.hh"
+#include "G4Material.hh"
+#include "G4BuilderType.hh"
+ 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 HistoManager* HistoManager::fManager = 0;
@@ -134,10 +138,12 @@ void HistoManager::bookHisto()
   histo->add1D("13","Log10 Energy (GeV) of muons",nBinsE,-4.,6.,1.0);
   histo->add1D("14","Log10 Energy (GeV) of pi+",nBinsE,-4.,6.,1.0);
   histo->add1D("15","Log10 Energy (GeV) of pi-",nBinsE,-4.,6.,1.0);
-  histo->add1D("16","Secondary Fragment Z E>1 GeV",25,0.5,25.5,1.0);
+  histo->add1D("16","X Section (mb) of Secondary Fragments Z with E>1 GeV (mb)",25,0.5,25.5,1.0);
   histo->add1D("17","Secondary Fragment A E>1 GeV",50,0.5,50.5,1.0);
   histo->add1D("18","Secondary Fragment Z E<1 GeV",25,0.5,25.5,1.0);
   histo->add1D("19","Secondary Fragment A E<1 GeV",50,0.5,50.5,1.0);
+  histo->add1D("20","X Section (mb) of Secondary Fragments Z (mb) ",25,0.5,25.5,1.0);
+  histo->add1D("21","Secondary Fragment A ",50,0.5,50.5,1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -235,6 +241,13 @@ void HistoManager::EndOfRun()
   for(G4int i=0; i<nHisto; i++) {
     histo->scale(i,x);
   }
+  // will work only for pure material - 1 element
+  //  G4cout << material << G4endl; 
+  G4double F= 1000/(length*barn*material->GetTotNbOfAtomsPerVolume());
+  if(F > 0.0) { 
+    histo->scale(16, F); 
+    histo->scale(20, F); 
+  }
 
   if(verbose > 1) histo->print(0);
   histo->save();
@@ -246,7 +259,7 @@ void HistoManager::BeginOfEvent()
 {
   ++n_evt;
 }
-
+ 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void HistoManager::EndOfEvent()
@@ -278,7 +291,7 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
 	     << "; pos(mm)= " << track->GetPosition()/mm 
 	     << ";  dir= " << track->GetMomentumDirection() 
 	     << G4endl;
-
+ 
     // Secondary track
   } else {
     if(1 < verbose) 
@@ -343,6 +356,8 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
 	histo->fill(18,Z,1.0);
 	histo->fill(19,A,1.0);
       }
+      histo->fill(20,Z,1.0);
+      histo->fill(21,A,1.0);
     } else if ( pd == G4MuonPlus::MuonPlus() || pd == G4MuonMinus::MuonMinus()) {
       n_muons++;
       histo->fill(13,e,1.0);    
@@ -411,29 +426,21 @@ void HistoManager::Fill(G4int id, G4double x, G4double w)
 
 void HistoManager::SetIonPhysics(const G4String& nam)
 {
-  if(physListName == "QBBC") {
-    G4cout << "SetIonPhysics: WARNING should add ion builder to QBBC "
-	   << "- it is ignored" << G4endl;
-    return; 
-  }
-  G4bool isBinary = false;
-  if(physList->GetPhysics("IonBinaryCascade")) { isBinary = true; }
-
   if(ionPhysics) {
     G4cout << "### HistoManager WARNING: Ion Physics is already defined: <"
 	   << nam << "> is ignored!" << G4endl;
   } else if(nam == "DPMJET") {
-    ionPhysics = new IonDPMJETPhysics(isBinary);
-    physList->RegisterPhysics(ionPhysics);
+    ionPhysics = new IonDPMJETPhysics(false);
+    physList->ReplacePhysics(ionPhysics);
     G4RunManager::GetRunManager()->PhysicsHasBeenModified();
-    G4cout << "### SetIonPhysics: Ion Physics DPMJET is added to the reference "
-	   << " Physics List isBic= " << isBinary << G4endl;
+    G4cout << "### SetIonPhysics: Ion Physics DPMJET/Binary is added"
+	   << G4endl;
   } else if(nam == "FTF") {
-    ionPhysics = new IonFTFPhysics(isBinary);
-    physList->RegisterPhysics(ionPhysics);
+    ionPhysics = new G4IonFTFPBinaryCascadePhysics();
+    physList->ReplacePhysics(ionPhysics);
     G4RunManager::GetRunManager()->PhysicsHasBeenModified();
-    G4cout << "### SetIonPhysics: Ion Physics FTF is added to the reference "
-	   << " Physics List isBic= " << isBinary << G4endl;
+    G4cout << "### SetIonPhysics: Ion Physics FTFP/Binary is added"
+	   << G4endl;
   } else {
     G4cout << "### HistoManager WARNING: Ion Physics <"
 	   << nam << "> is unknown!" << G4endl;

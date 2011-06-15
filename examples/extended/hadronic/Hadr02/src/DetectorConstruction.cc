@@ -77,11 +77,12 @@ DetectorConstruction::DetectorConstruction()
 
   targetMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_Al");
   worldMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
+  HistoManager::GetPointer()->SetTargetMaterial(targetMaterial);
 
   // Prepare sensitive detectors
   targetSD = new TargetSD("targetSD");
   (G4SDManager::GetSDMpointer())->AddNewDetector( targetSD );
-}
+} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -93,7 +94,6 @@ DetectorConstruction::~DetectorConstruction()
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
   // Cleanup old geometry
-
   G4GeometryManager::GetInstance()->OpenGeometry();
   G4PhysicalVolumeStore::GetInstance()->Clean();
   G4LogicalVolumeStore::GetInstance()->Clean();
@@ -108,10 +108,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   G4int nSlices    = HistoManager::GetPointer()->NumberOfSlices();
   G4double sliceZ  = targetZ/G4double(nSlices);
-
+ 
   //
   // World
-  //
   G4Tubs* solidW = new G4Tubs("World",0.,worldR,worldZ,0.,twopi);
   logicWorld = new G4LogicalVolume( solidW,worldMaterial,"World");
   G4VPhysicalVolume* world = new G4PVPlacement(0,G4ThreeVector(),
@@ -166,7 +165,7 @@ void DetectorConstruction::SetTargetMaterial(const G4String& mat)
 {
   // search the material by its name
   G4Material* material = G4NistManager::Instance()->FindOrBuildMaterial(mat);
-
+ 
   if (material && material != targetMaterial) {
     HistoManager::GetPointer()->SetTargetMaterial(material);
     targetMaterial = material;
