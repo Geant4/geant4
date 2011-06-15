@@ -46,7 +46,7 @@ DicomRunAction::DicomRunAction():
 {
   // - Prepare data member for DicomRun.
   //   vector represents a list of MultiFunctionalDetector names.
-  theSDName.push_back(G4String("PhantomSD"));
+  theSDName.push_back(G4String("phantomSD"));
 }
 
 // Destructor.
