@@ -14,15 +14,15 @@
 #-----------------------------------------------------------------------------
 # Expansion and calculation of all needed variables
 #
-prefix=@GEANT4_PREFIX@
-exec_prefix=@GEANT4_EXEC_PREFIX@
-libdir=@GEANT4_LIBDIR@
-includedir=@GEANT4_INCLUDEDIR@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=@CMAKE_INSTALL_FULL_EXECPREFIX@
+libdir=@CMAKE_INSTALL_FULL_LIBDIR@
+includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
 
 
 name="geant4"
 description="Geant4 toolkit for the simulation of the passage of particles through matter"
-version=@geant4_VERSION@
+version=@Geant4_VERSION@
 
 # 'Requires' that may affect cflags and libs.
 clhep_config_exe=@CLHEP_CONFIG_EXECUTABLE@
@@ -72,8 +72,12 @@ libs="-lG4interfaces \
 #----------------------------------------------------------------------------
 # Extra optional features that were enabled.
 #
+# - ALL
+feature_list=""
+
 # - GDML
 have_gdml="@G4_BUILTWITH_GDML@"
+feature_list="${feature_list} gdml[${have_gdml}]"
 
 if test "x${have_gdml}" = "xyes" ; then
     cflags="${cflags} -I@XERCESC_INCLUDE_DIRS@"
@@ -82,6 +86,7 @@ fi
 
 # - Qt
 have_qt="@G4_BUILTWITH_QT@"
+feature_list="${feature_list} qt[${have_qt}]"
 
 if test "x${have_qt}" = "xyes" ; then
     vis_cflags="${vis_cflags} \
@@ -96,11 +101,31 @@ fi
 
 # - RayTracerX11
 have_raytracerx11="@G4_BUILTWITH_RAYTRACERX11@"
+feature_list="${feature_list} raytracer-x11[${have_raytracerx11}]"
 
 if test "x${have_raytracerx11}" = "xyes" ; then
     vis_cflags="${vis_cflags} \
                 -DG4VIS_USE_RAYTRACERX \
                 @G4_X11_INCLUDE_STATEMENT@"
+fi
+
+
+# - OpenGL with X11
+have_openglx11="@G4_BUILTWITH_OPENGLX11@"
+feature_list="${feature_list} opengl-x11[${have_openglx11}]"
+
+if test "x${have_openglx11}" = "xyes" ; then
+    vis_cflags="${vis_cflags} -DG4VIS_USE_OPENGLX"
+
+    if test "x${have_raytracerx11}" = "xno" ; then
+        # Need X11 includes...
+        vis_cflags="${vis_cflags} @G4_X11_INCLUDE_STATEMENT@"
+    fi
+
+    if test "x${have_qt}" = "xno" ; then
+        # Need to add the OpenGL library
+        vis_libs="-lG4OpenGL -lG4gl2ps ${vis_libs}"
+    fi
 fi
 
 
@@ -127,7 +152,11 @@ Usage: geant4-config [OPTION...]
                           or no if not supported
 
 Known Features:
-  gdml[${have_gdml}], qt[${have_qt}], raytracerx11[${have_raytracerx11}]
+EOF
+for f in ${feature_list} ; do
+    echo " $f"
+done
+cat<<EOF
 
 Help options
   -?, --help              show this help message
@@ -201,8 +230,11 @@ while test $# -gt 0 ; do
                 qt)
                     echo ${have_qt}
                     ;;
-                raytracerx11)
+                raytracer-x11)
                     echo ${have_raytracerx11}
+                    ;;
+                opengl-x11)
+                    echo ${have_openglx11}
                     ;;
                 *)
                     echo "no"

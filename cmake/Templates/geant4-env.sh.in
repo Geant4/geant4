@@ -113,12 +113,21 @@ if test "x@G4_HAVE_TCSH@" = "xyes" ; then
 fi
 
 #----------------------------------------------------------------------------
-# X11 Support
+# RayTracer X11 Support
 #
 unset G4VIS_USE_RAYTRACERX
 if test "x@G4_HAVE_RAYTRACERX@" = "xyes" ; then
     export G4VIS_USE_RAYTRACERX=1
 fi
+
+#----------------------------------------------------------------------------
+# OpenGL X11 Support
+#
+unset G4VIS_USE_OPENGLX
+if test "x@G4_HAVE_OPENGLX@" = "xyes" ; then
+    export G4VIS_USE_OPENGLX=1
+fi
+
 
 #------------------------------------------------------------------------------
 # Setup any needed external packages

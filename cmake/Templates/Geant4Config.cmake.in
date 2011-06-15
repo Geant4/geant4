@@ -1,0 +1,52 @@
+# - Geant4 CMake Configuration File for External Projects
+# This file is configured by Geant4 for use by an external project
+#
+# As this file is configured by Geant4's CMake system it SHOULD NOT BE EDITED
+#
+#----------------------------------------------------------------------------
+
+
+#----------------------------------------------------------------------------
+# Locate ourselves, since all other config files should have been installed
+# alongside us...
+#
+get_filename_component(_thisdir "${CMAKE_CURRENT_LIST_FILE}" PATH)
+
+
+#----------------------------------------------------------------------------
+# Configure the path to the Geant4 headers, using a relative path if possible.
+# This is only known at CMake time, so we expand a CMake supplied variable
+#
+@GEANT4_INCLUDE_DIR_SETUP@
+
+
+#----------------------------------------------------------------------------
+# Configure the path(s) to third party headers.
+# TODO: *Probably* component dependent...
+#
+
+#----------------------------------------------------------------------------
+# Construct overall include path for using Geant4
+#
+set(Geant4_INCLUDE_DIRS
+    ${Geant4_INCLUDE_DIR}
+    ${Geant4_THIRD_PARTY_INCLUDE_DIRS})
+
+#----------------------------------------------------------------------------
+# Set the compile definitions required to use Geant4
+# TODO: *Probably* component dependent, and may depend on other options...
+#
+
+#----------------------------------------------------------------------------
+# Include the file listing all the imported targets.
+# This is always installed in the same location as us...
+#
+include("${_thisdir}/Geant4LibraryDepends.cmake")
+
+
+#----------------------------------------------------------------------------
+# Now perform final configuration of libraries...
+# TODO: Probably separate into core (those always used) and optional ones
+#       Global/Granular probably handled via include(... OPTIONAL).
+#
+

@@ -33,16 +33,28 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
     # - RayTracerX
     if(GEANT4_USE_RAYTRACERX)
         set(G4_BUILTWITH_RAYTRACERX11 "yes")
-        # We have to play with the X11 paths to get a clean set suitable for
-        # inclusion
+        set(G4_CONFIG_NEEDS_X11 TRUE)
+    else()
+        set(G4_BUILTWITH_RAYTRACERX11 "no")
+    endif()
+
+    # - OpenGL X11
+    if(GEANT4_USE_OPENGL_X11)
+        set(G4_BUILTWITH_OPENGLX11 "yes")
+        set(G4_CONFIG_NEEDS_X11 TRUE)
+    else()
+        set(G4_BUILTWITH_OPENGLX11 "no")
+    endif()
+
+    # If we have a module that uses X11, We have to play with the X11 paths to 
+    # get a clean set suitable for inclusion
+    if(G4_CONFIG_NEEDS_X11)
         set(_raw_x11_includes ${X11_INCLUDE_DIR})
         list(REMOVE_DUPLICATES _raw_x11_includes)
         set(G4_X11_INCLUDE_STATEMENT )
         foreach(_p ${_raw_x11_includes})
             set(G4_X11_INCLUDE_STATEMENT "-I${_p} ${G4_X11_INCLUDE_STATEMENT}")
         endforeach()
-    else()
-        set(G4_BUILTWITH_RAYTRACERX11 "no")
     endif()
 
     # Configure the script
@@ -52,11 +64,12 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
 
     # Install it
     install(FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/geant4-config
-        DESTINATION ${GEANT4_BINDIR}
+        DESTINATION ${CMAKE_INSTALL_BINDIR}
         PERMISSIONS
             OWNER_READ OWNER_WRITE OWNER_EXECUTE
             GROUP_READ GROUP_EXECUTE
-            WORLD_READ WORLD_EXECUTE)
+            WORLD_READ WORLD_EXECUTE
+        COMPONENT Development)
 else()
     message(WARNING "geant4-config script will not be generated")
 endif()

@@ -120,6 +120,13 @@ if ( "x@G4_HAVE_RAYTRACERX@" == "xyes" ) then
     setenv G4VIS_USE_RAYTRACERX 1
 endif
 
+#----------------------------------------------------------------------------
+# OpenGL X11 Support
+#
+unsetenv G4VIS_USE_OPENGLX
+if ( "x@G4_HAVE_OPENGLX@" == "xyes" ) then
+    setenv G4VIS_USE_OPENGLX 1
+endif
 
 
 #------------------------------------------------------------------------------

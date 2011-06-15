@@ -74,9 +74,9 @@ message(STATUS "Geant4 backwards compatible compiler name: ${GEANT4_COMPILER}")
 # Construct backward compatible variables
 #
 set(G4SYSTEM  "${GEANT4_SYSTEM}-${GEANT4_COMPILER}")
-set(G4INSTALL ${GEANT4_DATADIR}/geant4-${geant4_VERSION})
-set(G4INCLUDE ${GEANT4_INCLUDEDIR}/geant4)
-set(G4LIB     ${GEANT4_LIBDIR}/geant4-${geant4_VERSION})
+set(G4INSTALL ${CMAKE_INSTALL_FULL_DATAROOTDIR}/Geant4-${Geant4_VERSION})
+set(G4INCLUDE ${CMAKE_INSTALL_FULL_INCLUDEDIR})
+set(G4LIB     ${CMAKE_INSTALL_FULL_LIBDIR}/Geant4-${Geant4_VERSION})
 
 message(STATUS "Geant4 backwards compatible variable G4SYSTEM : ${G4SYSTEM}")
 message(STATUS "Geant4 backwards compatible variable G4INSTALL: ${G4INSTALL}")
@@ -95,24 +95,33 @@ execute_process(COMMAND ${CLHEP_CONFIG_EXECUTABLE} --prefix
 #------------------------------------------------------------------------------
 # Optional variables which are set only if certain features are enabled
 #
+# Qt
 if(GEANT4_USE_QT)
     set(G4_HAVE_QT "yes")
 else()
     set(G4_HAVE_QT "no")
 endif()
 
+# TCSH UI
 if(UNIX)
     set(G4_HAVE_TCSH "yes")
 else()
     set(G4_HAVE_TCSH "no")
 endif()
 
+# RayTracer X11
 if(GEANT4_USE_RAYTRACERX)
     set(G4_HAVE_RAYTRACERX "yes")
 else()
     set(G4_HAVE_RAYTRACERX "no")
 endif()
 
+# OpenGL with X11
+if(GEANT4_USE_OPENGL_X11)
+    set(G4_HAVE_OPENGLX "yes")
+else()
+    set(G4_HAVE_OPENGLX "no")
+endif()
 
 #------------------------------------------------------------------------------
 # Add configure files for generating backward compatible shell scripts
@@ -121,17 +130,18 @@ endif()
 if(UNIX)
     # Create the sh and csh environment setup files
     configure_file(${CMAKE_SOURCE_DIR}/cmake/Templates/geant4-env.sh.in
-        ${CMAKE_BINARY_DIR}/outputs/runtime/geant4-${geant4_VERSION}.sh
+        ${CMAKE_BINARY_DIR}/outputs/runtime/geant4-environment-setup.sh
         @ONLY)
 
     configure_file(${CMAKE_SOURCE_DIR}/cmake/Templates/geant4-env.csh.in
-        ${CMAKE_BINARY_DIR}/outputs/runtime/geant4-${geant4_VERSION}.csh
+        ${CMAKE_BINARY_DIR}/outputs/runtime/geant4-environment-setup.csh
         @ONLY)
 
     # Install targets
     # toolchain
     install(DIRECTORY config
-        DESTINATION ${GEANT4_DATAROOTDIR}/geant4-${geant4_VERSION}
+        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}
+        COMPONENT Development
         FILES_MATCHING PATTERN "*.gmk"
         PATTERN "CVS" EXCLUDE
         PATTERN ".svn" EXCLUDE
@@ -139,18 +149,19 @@ if(UNIX)
 
     # setup scripts
     install(FILES
-        ${CMAKE_BINARY_DIR}/outputs/runtime/geant4-${geant4_VERSION}.sh
-        ${CMAKE_BINARY_DIR}/outputs/runtime/geant4-${geant4_VERSION}.csh
-        DESTINATION ${GEANT4_DATAROOTDIR}/geant4-${geant4_VERSION}/config
+        ${CMAKE_BINARY_DIR}/outputs/runtime/geant4-environment-setup.sh
+        ${CMAKE_BINARY_DIR}/outputs/runtime/geant4-environment-setup.csh
+        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/Geant4-${Geant4_VERSION}/config
         PERMISSIONS 
             OWNER_READ OWNER_WRITE OWNER_EXECUTE
             GROUP_READ GROUP_EXECUTE
-            WORLD_READ WORLD_EXECUTE)
+            WORLD_READ WORLD_EXECUTE
+        COMPONENT Development)
 
     # compatibility softlink to library directory
-    install(CODE "execute_process(COMMAND \${CMAKE_COMMAND} -E make_directory \$ENV{DESTDIR}${GEANT4_LIBDIR}/geant4-${geant4_VERSION})")
+    install(CODE "execute_process(COMMAND \${CMAKE_COMMAND} -E make_directory \$ENV{DESTDIR}${CMAKE_INSTALL_FULL_LIBDIR}/Geant4-${Geant4_VERSION})")
 
-    install(CODE "execute_process(COMMAND \${CMAKE_COMMAND} -E create_symlink .. ${GEANT4_SYSTEM}-${GEANT4_COMPILER} WORKING_DIRECTORY \$ENV{DESTDIR}${GEANT4_LIBDIR}/geant4-${geant4_VERSION})")
+    install(CODE "execute_process(COMMAND \${CMAKE_COMMAND} -E create_symlink .. ${GEANT4_SYSTEM}-${GEANT4_COMPILER} WORKING_DIRECTORY \$ENV{DESTDIR}${CMAKE_INSTALL_FULL_LIBDIR}/Geant4-${Geant4_VERSION})")
 
 endif()
 
