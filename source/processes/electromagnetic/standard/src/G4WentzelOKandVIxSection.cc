@@ -87,7 +87,8 @@ G4WentzelOKandVIxSection::G4WentzelOKandVIxSection() :
     ScreenRSquare[0] = alpha2*a0*a0;
     for(G4int j=1; j<100; ++j) {
       G4double x = a0*fG4pow->Z13(j);
-      ScreenRSquare[j] = (0.5 + 0.5/G4double(j))*alpha2*x*x;
+      ScreenRSquare[j] = 0.5*(1 + exp(-j*j*0.001))*alpha2*x*x;
+      //ScreenRSquare[j] = alpha2*x*x;
       x = fNistManager->GetA27(j);
       FormFactor[j] = constn*x*x;
     } 
@@ -305,24 +306,13 @@ G4WentzelOKandVIxSection::SampleSingleScattering(G4double cosTMin,
   G4double w1 = 1. - cost1 + screenZ;
   G4double w2 = 1. - cost2 + screenZ;
   G4double z1 = w1*w2/(w1 + G4UniformRand()*(w2 - w1)) - screenZ;
-  /*
-  if(factB > 0.0 || formf > 0.0) {
-    G4double fm =  1.0 + formf*z1;
-    G4double grej = (1. - z1*factB)/(fm*fm);
-    // "false" scattering
-    if( G4UniformRand() > grej ) { return v; }
-  } 
-  G4double z2 = 1.0 - gam0pcmp*z1;
-  G4double cost = z2/std::sqrt(z2*z2 + pcmp2*z1*(2.0 - z1));
-  */ 
- 
-  if(factB > 0.0 || formf > 0.0 || factD > 0.01) {
-    //factD = 0.0;
-    G4double fm =  1.0 + formf*z1/(1.0 + (mass + tkin)*z1/targetMass);
-    G4double grej = (1. - z1*factB)/( (1.0 + z1*factD)*fm*fm );
-    // "false" scattering
-    if( G4UniformRand() > grej ) { return v; }
-  } 
+
+  //G4double fm =  1.0 + formf*z1/(1.0 + (mass + tkin)*z1/targetMass);
+  G4double fm =  1.0 + formf*z1;
+  G4double grej = (1. - z1*factB)/( (1.0 + z1*factD)*fm*fm );
+  // "false" scattering
+  if( G4UniformRand() > grej ) { return v; }
+    // } 
   G4double cost = 1.0 - z1;
 
   if(cost > 1.0)       { cost = 1.0; }

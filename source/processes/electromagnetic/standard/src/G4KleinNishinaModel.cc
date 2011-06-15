@@ -67,7 +67,7 @@ G4KleinNishinaModel::G4KleinNishinaModel(const G4String& nam)
   theGamma = G4Gamma::Gamma();
   theElectron = G4Electron::Electron();
   lowestGammaEnergy = 1.0*eV;
-  limitFactor       = 10;
+  limitFactor       = 4;
   fProbabilities.resize(9,0.0);
 }
 

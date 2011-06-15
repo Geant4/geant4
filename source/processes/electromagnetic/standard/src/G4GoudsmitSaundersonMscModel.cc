@@ -195,14 +195,16 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
   if(lambda1>DBL_MIN) { g1 = lambda0/lambda1; }
 
   G4double logx0,x1,delta;
-  G4double x0=g1/2.;
-  do
+  G4double x0=g1*0.5;
+  // V.Ivanchenko added limit of the loop
+  for(G4int i=0;i<1000;++i)
     {  
       logx0=std::log(1.+1./x0);
-      x1 = x0-(x0*((1.+x0)*logx0-1.0)-g1/2.)/( (1.+2.*x0)*logx0-2.0);
-      delta = std::abs( x1 - x0 );    
+      x1 = x0-(x0*((1.+x0)*logx0-1.0)-g1*0.5)/( (1.+2.*x0)*logx0-2.0);
+      delta = std::fabs( x1 - x0 );    
       x0 = x1;
-    } while (delta > 1.0e-12);
+      if(delta < 1.0e-3*x1) { break;}
+    }
   G4double scrA = x1;
 
   G4double lambdan=0.;

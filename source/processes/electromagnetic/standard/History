@@ -17,10 +17,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14 May 11: V.Ivanchenko (emstand-V09-04-32)
+- G4WentzelOKandVIxSection - tuned screening function
+- G4GoudsmitSaundersonMscModel - added protection against infinite loop 
+  for solving equation for the screening parameter (bug#1221) 
+
+08 May 11: V.Ivanchenko (emstand-V09-04-31)
+- G4UrbanMscModel95 - enable sampling along the step for displacement
+- G4PEEffectFluoModel - added protection  
+- G4KleinNishinaModel - limitFactor is set to 4 (was 10)
+
 27 May 11: V.Ivanchenko (emstand-V09-04-30)
 - G4MollerBhabhaModel - more coherent usage of cut at low-energy
                         for dedx and x-section computation,
-                        impprtant for cuts below 1 keV
+                        important for cuts below 1 keV
 - G4eeToTwoGammaModel - added numerical protection in cross section 
     computation for very small energy
 
