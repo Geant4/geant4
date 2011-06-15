@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+07-06-11 mma (testem9-V09-04-01)
+- PhysListEmStandard migrated to the new approach based on G4PhysicsListHelper
 
 06-01-11 V.Ivant (testem9-V09-04-00)
 - add extra run with 20 GeV mu- into TestEm9.in 
