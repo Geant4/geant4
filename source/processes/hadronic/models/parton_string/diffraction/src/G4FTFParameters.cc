@@ -32,13 +32,25 @@
 
 #include "G4ios.hh"
 #include <utility>                                        
+#include "G4VComponentCrossSection.hh"         // 31 May 2011
+#include "G4ComponentCHIPShadronNuclearXS.hh"  // 31 May 2011
+
+#include "G4ParticleDefinition.hh"             // 31 May 2011
+
+#include "G4Proton.hh"                         // 31 May 2011
+#include "G4Neutron.hh"                        // 31 May 2011
+
+#include "G4PionPlus.hh"                       // 31 May 2011
+#include "G4PionMinus.hh"                      // 31 May 2011
+#include "G4KaonPlus.hh"                       // 31 May 2011
+#include "G4KaonMinus.hh"                      // 31 May 2011
 
 G4FTFParameters::G4FTFParameters()
-{;}
+{FTFxsManager=0;}
 
 
 G4FTFParameters::~G4FTFParameters()
-{;}
+{delete FTFxsManager;}
 //**********************************************************************************************
 G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle, 
                                                    G4int      theA,
@@ -74,10 +86,12 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
 
     G4double Plab = PlabPerParticle;
     G4double Elab = std::sqrt(Plab*Plab+ProjectileMass2);
+    G4double KineticEnergy = Elab-ProjectileMass;                 // 31 May 2011
 
     G4double s=ProjectileMass2 + TargetMass2 + 2.*TargetMass*Elab;
 
-//G4cout<<"Proj Plab "<<ProjectilePDGcode<<" "<<Plab/GeV<<G4endl;
+//G4cout<<"Proj Plab "<<ProjectilePDGcode<<" "<<Plab<<G4endl;
+//G4cout<<"Mass KinE "<<ProjectileMass<<" "<<KineticEnergy<<G4endl;
 //G4cout<<" A Z "<<theA<<" "<<theZ<<G4endl;
 
     G4double Ylab,Xtotal,Xelastic,Xannihilation;
@@ -87,27 +101,39 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
 
     G4double ECMSsqr=s/GeV/GeV;
     G4double SqrtS  =std::sqrt(s)/GeV;
+//G4cout<<"Sqrt(s) "<<SqrtS<<G4endl;
 
     TargetMass     /=GeV; TargetMass2     /=(GeV*GeV);
     ProjectileMass /=GeV; ProjectileMass2 /=(GeV*GeV);
 
+// ------------------- Cross section calculation from CHIPS -------------
+    FTFxsManager = new G4ComponentCHIPShadronNuclearXS();  // 31 May 2011 
+
     Plab/=GeV;
-    G4double LogPlab    = std::log( Plab );
-    G4double sqrLogPlab = LogPlab * LogPlab;
+//  G4double LogPlab    = std::log( Plab );
+//  G4double sqrLogPlab = LogPlab * LogPlab;
 
     G4int NumberOfTargetProtons  = theZ; 
     G4int NumberOfTargetNeutrons = theA-theZ;
 
     NumberOfTargetNucleons = NumberOfTargetProtons + NumberOfTargetNeutrons;
 
-    if( ProjectilePDGcode > 1000 )                        //------Projectile is baryon --------
+    if( (ProjectilePDGcode == 2212) || 
+        (ProjectilePDGcode == 2112)   )    //------Projectile is nucleon --------
       {        
-       G4double XtotPP = 48.0 +  0. *std::pow(Plab, 0.  ) + 0.522*sqrLogPlab - 4.51*LogPlab;
-       G4double XtotPN = 47.3 +  0. *std::pow(Plab, 0.  ) + 0.513*sqrLogPlab - 4.27*LogPlab;
+       G4double XtotPP = FTFxsManager->
+                  GetTotalElementCrossSection(  particle,KineticEnergy,1,0);
+       G4ParticleDefinition* Neutron=G4Neutron::Neutron();
+       G4double XtotPN = FTFxsManager->
+                  GetTotalElementCrossSection(   Neutron,KineticEnergy,1,0);
 
-       G4double XelPP  = 11.9 + 26.9*std::pow(Plab,-1.21) + 0.169*sqrLogPlab - 1.85*LogPlab;
-       G4double XelPN  = 11.9 + 26.9*std::pow(Plab,-1.21) + 0.169*sqrLogPlab - 1.85*LogPlab;
 
+       G4double XelPP  = FTFxsManager->
+                  GetElasticElementCrossSection(particle,KineticEnergy,1,0);
+       G4double XelPN  = FTFxsManager->
+                  GetElasticElementCrossSection(   Neutron,KineticEnergy,1,0);
+//G4cout<<"Xs "<<XtotPP/millibarn<<" "<<XelPP/millibarn<<G4endl;
+//G4cout<<"Xs "<<XtotPN/millibarn<<" "<<XelPN/millibarn<<G4endl;
        if(!ProjectileIsNucleus)
        { // Projectile is hadron
         Xtotal          = ( NumberOfTargetProtons  * XtotPP + 
@@ -132,6 +158,8 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
       }
 
        Xannihilation   = 0.;
+       Xtotal/=millibarn;
+       Xelastic/=millibarn;
       }
     else if( ProjectilePDGcode < -1000 )         //------Projectile is anti_baryon --------
       {        
@@ -243,130 +271,179 @@ G4cout<<"Plab Xelastic/Xtotal,  Xann/Xin "<<Plab<<" "<<Xelastic/Xtotal<<" "<<Xan
 */
 //---------------------------------------------------------------
       }
-    else if( ProjectilePDGcode ==  211 )                     //------Projectile is PionPlus -------
+    else if( ProjectilePDGcode ==  211 )    //------Projectile is PionPlus -------
       {
-       G4double XtotPiP = 16.4 + 19.3 *std::pow(Plab,-0.42) + 0.19 *sqrLogPlab - 0.0 *LogPlab;
-       G4double XtotPiN = 33.0 + 14.0 *std::pow(Plab,-1.36) + 0.456*sqrLogPlab - 4.03*LogPlab;
+       G4double XtotPiP = FTFxsManager->
+                  GetTotalElementCrossSection(  particle,KineticEnergy,1,0); 
+       G4ParticleDefinition* PionMinus=G4PionMinus::PionMinus();
+       G4double XtotPiN =  FTFxsManager->
+                  GetTotalElementCrossSection( PionMinus,KineticEnergy,1,0);
            
-       G4double XelPiP  =  0.0 + 11.4*std::pow(Plab,-0.40) + 0.079*sqrLogPlab - 0.0 *LogPlab;
-       G4double XelPiN  = 1.76 + 11.2*std::pow(Plab,-0.64) + 0.043*sqrLogPlab - 0.0 *LogPlab;
+       G4double XelPiP  = FTFxsManager->
+                  GetElasticElementCrossSection(particle,KineticEnergy,1,0); 
+       G4double XelPiN  = FTFxsManager->
+                  GetElasticElementCrossSection( PionMinus,KineticEnergy,1,0);
 
        Xtotal           = ( NumberOfTargetProtons  * XtotPiP + 
                             NumberOfTargetNeutrons * XtotPiN  ) / NumberOfTargetNucleons;
        Xelastic         = ( NumberOfTargetProtons  * XelPiP  + 
                             NumberOfTargetNeutrons * XelPiN   ) / NumberOfTargetNucleons; 
        Xannihilation   = 0.;
+       Xtotal/=millibarn;
+       Xelastic/=millibarn;
       }
     else if( ProjectilePDGcode == -211 )            //------Projectile is PionMinus -------
       {
-       G4double XtotPiP = 33.0 + 14.0 *std::pow(Plab,-1.36) + 0.456*sqrLogPlab - 4.03*LogPlab;
-       G4double XtotPiN = 16.4 + 19.3 *std::pow(Plab,-0.42) + 0.19 *sqrLogPlab - 0.0 *LogPlab;
+       G4double XtotPiP = FTFxsManager->
+                  GetTotalElementCrossSection(  particle,KineticEnergy,1,0);
+       G4ParticleDefinition* PionPlus=G4PionPlus::PionPlus();
+       G4double XtotPiN = FTFxsManager->
+                  GetTotalElementCrossSection(  PionPlus,KineticEnergy,1,0);
            
-       G4double XelPiP  = 1.76 + 11.2*std::pow(Plab,-0.64) + 0.043*sqrLogPlab - 0.0 *LogPlab;
-       G4double XelPiN  =  0.0 + 11.4*std::pow(Plab,-0.40) + 0.079*sqrLogPlab - 0.0 *LogPlab;
+       G4double XelPiP  = FTFxsManager->
+                  GetElasticElementCrossSection(particle,KineticEnergy,1,0);
+       G4double XelPiN  = FTFxsManager->
+                  GetElasticElementCrossSection(  PionPlus,KineticEnergy,1,0);
 
        Xtotal           = ( NumberOfTargetProtons  * XtotPiP + 
                             NumberOfTargetNeutrons * XtotPiN  ) / NumberOfTargetNucleons;
        Xelastic         = ( NumberOfTargetProtons  * XelPiP  + 
                             NumberOfTargetNeutrons * XelPiN   ) / NumberOfTargetNucleons;
        Xannihilation   = 0.;
+       Xtotal/=millibarn;
+       Xelastic/=millibarn;
       }
 
     else if( ProjectilePDGcode ==  111 )          //------Projectile is PionZero  -------
       {
-       G4double XtotPiP =(16.4 + 19.3 *std::pow(Plab,-0.42) + 0.19 *sqrLogPlab - 
-                                                              0.0 *LogPlab +    //Pi+
-                          33.0 + 14.0 *std::pow(Plab,-1.36) + 0.456*sqrLogPlab -
-                                                              4.03*LogPlab)/2;  //Pi-
+       G4ParticleDefinition* PionPlus=G4PionPlus::PionPlus();
+       G4double XtotPipP= FTFxsManager->
+                  GetTotalElementCrossSection(   PionPlus,KineticEnergy,1,0);
 
-       G4double XtotPiN =(33.0 + 14.0 *std::pow(Plab,-1.36) + 0.456*sqrLogPlab -
-                                                              4.03*LogPlab +    //Pi+
-                          16.4 + 19.3 *std::pow(Plab,-0.42) + 0.19 *sqrLogPlab -
-                                                              0.0 *LogPlab)/2;  //Pi-
+       G4ParticleDefinition* PionMinus=G4PionMinus::PionMinus();
+       G4double XtotPimP= FTFxsManager->
+                  GetTotalElementCrossSection(   PionMinus,KineticEnergy,1,0);
            
-       G4double XelPiP  =( 0.0 + 11.4 *std::pow(Plab,-0.40) + 0.079*sqrLogPlab - 
-                                                              0.0 *LogPlab +     //Pi+
-                           1.76 +11.2 *std::pow(Plab,-0.64) + 0.043*sqrLogPlab -
-                                                              0.0 *LogPlab)/2;  //Pi-
-       G4double XelPiN  =( 1.76 +11.2 *std::pow(Plab,-0.64) + 0.043*sqrLogPlab -
-                                                              0.0 *LogPlab +    //Pi+
-                           0.0  +11.4 *std::pow(Plab,-0.40) + 0.079*sqrLogPlab -
-                                                              0.0 *LogPlab)/2;  //Pi-
+       G4double XelPipP = FTFxsManager->
+                  GetElasticElementCrossSection(  PionPlus,KineticEnergy,1,0);
+       G4double XelPimP = FTFxsManager->
+                  GetElasticElementCrossSection( PionMinus,KineticEnergy,1,0);
+
+       G4double XtotPiP= (XtotPipP + XtotPimP)/2.;
+       G4double XtotPiN=XtotPiP;
+       G4double XelPiP = (XelPipP  + XelPimP )/2.;
+       G4double XelPiN = XelPiP;
 
        Xtotal           = ( NumberOfTargetProtons  * XtotPiP + 
                             NumberOfTargetNeutrons * XtotPiN  ) / NumberOfTargetNucleons;
        Xelastic         = ( NumberOfTargetProtons  * XelPiP  + 
                             NumberOfTargetNeutrons * XelPiN   ) / NumberOfTargetNucleons; 
        Xannihilation   = 0.;
+
+       Xtotal/=millibarn;
+       Xelastic/=millibarn;
       }
     else if( ProjectilePDGcode == 321 )             //------Projectile is KaonPlus -------
       {
-       G4double XtotKP = 18.1 +  0. *std::pow(Plab, 0.  ) + 0.26 *sqrLogPlab - 1.0 *LogPlab;
-       G4double XtotKN = 18.7 +  0. *std::pow(Plab, 0.  ) + 0.21 *sqrLogPlab - 0.89*LogPlab;
+       G4double XtotKP = FTFxsManager->
+                  GetTotalElementCrossSection(  particle,KineticEnergy,1,0);
 
-       G4double XelKP  =  5.0 +  8.1*std::pow(Plab,-1.8 ) + 0.16 *sqrLogPlab - 1.3 *LogPlab;
-       G4double XelKN  =  7.3 +  0. *std::pow(Plab,-0.  ) + 0.29 *sqrLogPlab - 2.4 *LogPlab;
+       G4ParticleDefinition* KaonMinus=G4KaonMinus::KaonMinus();
+       G4double XtotKN = FTFxsManager->
+                  GetTotalElementCrossSection( KaonMinus,KineticEnergy,1,0);
+
+       G4double XelKP  = FTFxsManager->
+                  GetElasticElementCrossSection(particle,KineticEnergy,1,0);
+       G4double XelKN  = FTFxsManager->
+                  GetElasticElementCrossSection( KaonMinus,KineticEnergy,1,0);
 
        Xtotal          = ( NumberOfTargetProtons  * XtotKP + 
                            NumberOfTargetNeutrons * XtotKN  ) / NumberOfTargetNucleons;
        Xelastic        = ( NumberOfTargetProtons  * XelKP  + 
                            NumberOfTargetNeutrons * XelKN   ) / NumberOfTargetNucleons;
        Xannihilation   = 0.;
+
+       Xtotal/=millibarn;
+       Xelastic/=millibarn;
       }
     else if( ProjectilePDGcode ==-321 )             //------Projectile is KaonMinus ------
       {
-       G4double XtotKP = 32.1 +  0. *std::pow(Plab, 0.  ) + 0.66 *sqrLogPlab - 5.6 *LogPlab;
-       G4double XtotKN = 25.2 +  0. *std::pow(Plab, 0.  ) + 0.38 *sqrLogPlab - 2.9 *LogPlab;
+       G4double XtotKP = FTFxsManager->
+                  GetTotalElementCrossSection(  particle,KineticEnergy,1,0);
 
-       G4double XelKP  =  7.3 +  0. *std::pow(Plab,-0.  ) + 0.29 *sqrLogPlab - 2.4 *LogPlab;
-       G4double XelKN  =  5.0 +  8.1*std::pow(Plab,-1.8 ) + 0.16 *sqrLogPlab - 1.3 *LogPlab;
+       G4ParticleDefinition* KaonPlus=G4KaonPlus::KaonPlus();
+       G4double XtotKN = FTFxsManager->
+                  GetTotalElementCrossSection(  KaonPlus,KineticEnergy,1,0);
+
+       G4double XelKP  = FTFxsManager->
+                  GetElasticElementCrossSection(particle,KineticEnergy,1,0);
+
+       G4double XelKN  = FTFxsManager->
+                  GetElasticElementCrossSection(KaonPlus,KineticEnergy,1,0); 
 
        Xtotal          = ( NumberOfTargetProtons  * XtotKP + 
                            NumberOfTargetNeutrons * XtotKN  ) / NumberOfTargetNucleons;
        Xelastic        = ( NumberOfTargetProtons  * XelKP  + 
                            NumberOfTargetNeutrons * XelKN   ) / NumberOfTargetNucleons;
        Xannihilation   = 0.;
+       
+       Xtotal/=millibarn;
+       Xelastic/=millibarn;
       }
     else if((ProjectilePDGcode == 311) || 
             (ProjectilePDGcode == 130) || 
             (ProjectilePDGcode == 310))               //Projectile is KaonZero
       {
-       G4double XtotKP =( 18.1 +  0. *std::pow(Plab, 0.  ) + 0.26 *sqrLogPlab -
-                                                             1.0 *LogPlab +    //K+
-                          32.1 +  0. *std::pow(Plab, 0.  ) + 0.66 *sqrLogPlab -
-                                                             5.6 *LogPlab)/2;  //K-
-       G4double XtotKN =( 18.7 +  0. *std::pow(Plab, 0.  ) + 0.21 *sqrLogPlab -
-                                                             0.89*LogPlab +    //K+
-                          25.2 +  0. *std::pow(Plab, 0.  ) + 0.38 *sqrLogPlab -
-                                                             2.9 *LogPlab)/2;  //K-
+       G4ParticleDefinition* KaonPlus=G4KaonPlus::KaonPlus();
+       G4double XtotKpP= FTFxsManager->
+                  GetTotalElementCrossSection(    KaonPlus,KineticEnergy,1,0);
 
-       G4double XelKP  =(  5.0 +  8.1*std::pow(Plab,-1.8 ) + 0.16 *sqrLogPlab -
-                                                             1.3 *LogPlab +    //K+
-                           7.3 +  0. *std::pow(Plab,-0.  ) + 0.29 *sqrLogPlab -
-                                                             2.4 *LogPlab)/2;  //K-
-       G4double XelKN  =(  7.3 +  0. *std::pow(Plab,-0.  ) + 0.29 *sqrLogPlab -
-                                                             2.4 *LogPlab +    //K+
-                           5.0 +  8.1*std::pow(Plab,-1.8 ) + 0.16 *sqrLogPlab -
-                                                             1.3 *LogPlab)/2;  //K-
+       G4ParticleDefinition* KaonMinus=G4KaonMinus::KaonMinus();
+       G4double XtotKmP= FTFxsManager->
+                  GetTotalElementCrossSection(   KaonMinus,KineticEnergy,1,0);
+
+       G4double XelKpP = FTFxsManager->
+                  GetElasticElementCrossSection(  KaonPlus,KineticEnergy,1,0);
+       G4double XelKmP = FTFxsManager->
+                  GetElasticElementCrossSection(   KaonMinus,KineticEnergy,1,0);
+
+       G4double XtotKP=(XtotKpP+XtotKmP)/2.;
+       G4double XtotKN=XtotKP;
+       G4double XelKP =(XelKpP +XelKmP )/2.; 
+       G4double XelKN =XelKP;
+
        Xtotal          = ( NumberOfTargetProtons  * XtotKP + 
                            NumberOfTargetNeutrons * XtotKN  ) / NumberOfTargetNucleons;
        Xelastic        = ( NumberOfTargetProtons  * XelKP  + 
                            NumberOfTargetNeutrons * XelKN   ) / NumberOfTargetNucleons;
        Xannihilation   = 0.;
+
+       Xtotal/=millibarn;
+       Xelastic/=millibarn;
       }
     else                 //------Projectile is undefined, Nucleon assumed
       {
-       G4double XtotPP = 48.0 +  0. *std::pow(Plab, 0.  ) + 0.522*sqrLogPlab - 4.51*LogPlab;
-       G4double XtotPN = 47.3 +  0. *std::pow(Plab, 0.  ) + 0.513*sqrLogPlab - 4.27*LogPlab;
+       G4ParticleDefinition* Proton=G4Proton::Proton();
+       G4double XtotPP = FTFxsManager->
+                  GetTotalElementCrossSection(  Proton,KineticEnergy,1,0);
 
-       G4double XelPP  = 11.9 + 26.9*std::pow(Plab,-1.21) + 0.169*sqrLogPlab - 1.85*LogPlab;
-       G4double XelPN  = 11.9 + 26.9*std::pow(Plab,-1.21) + 0.169*sqrLogPlab - 1.85*LogPlab;
+       G4ParticleDefinition* Neutron=G4Neutron::Neutron();
+       G4double XtotPN = FTFxsManager->
+                  GetTotalElementCrossSection( Neutron,KineticEnergy,1,0);
+
+       G4double XelPP  = FTFxsManager->
+                  GetElasticElementCrossSection(Proton,KineticEnergy,1,0);
+       G4double XelPN  = FTFxsManager->
+                  GetElasticElementCrossSection( Neutron,KineticEnergy,1,0);
 
        Xtotal          = ( NumberOfTargetProtons  * XtotPP + 
                            NumberOfTargetNeutrons * XtotPN  ) / NumberOfTargetNucleons;
        Xelastic        = ( NumberOfTargetProtons  * XelPP  + 
                            NumberOfTargetNeutrons * XelPN   ) / NumberOfTargetNucleons;
        Xannihilation   = 0.;
+
+       Xtotal/=millibarn;
+       Xelastic/=millibarn;
       };
 
 //----------- Geometrical parameters ------------------------------------------------
@@ -376,15 +453,28 @@ G4cout<<"Plab Xelastic/Xtotal,  Xann/Xin "<<Plab<<" "<<Xelastic/Xtotal<<" "<<Xan
 
 /*
 G4cout<<"Plab Xtotal, Xelastic Xinel Xftf "<<Plab<<" "<<Xtotal<<" "<<Xelastic<<" "<<Xtotal-Xelastic<<" "<<Xtotal-Xelastic-Xannihilation<<G4endl;
-G4cout<<"Plab Xelastic/Xtotal,  Xann/Xin "<<Plab<<" "<<Xelastic/Xtotal<<" "<<Xannihilation/(Xtotal-Xelastic)<<G4endl;
-G4int Uzhi; G4cin>>Uzhi;
+if(Xtotal-Xelastic != 0.)
+{
+  G4cout<<"Plab Xelastic/Xtotal,  Xann/Xin "<<Plab<<" "<<Xelastic/Xtotal<<" "<<Xannihilation/
+  (Xtotal-Xelastic)<<G4endl;
+} else 
+{
+  G4cout<<"Plab Xelastic/Xtotal,  Xann     "<<Plab<<" "<<Xelastic/Xtotal<<" "<<
+  Xannihilation<<G4endl;
+}
+//G4int Uzhi; G4cin>>Uzhi;
 */
 //  // Interactions with elastic and inelastic collisions
       SetProbabilityOfElasticScatt(Xtotal, Xelastic);
       SetRadiusOfHNinteractions2(Xtotal/pi/10.);
 
-      SetProbabilityOfAnnihilation(Xannihilation/(Xtotal-Xelastic));
+      if(Xtotal-Xelastic == 0.)
+      {
+       SetProbabilityOfAnnihilation(0.);
+      } else
+      {SetProbabilityOfAnnihilation(Xannihilation/(Xtotal-Xelastic));}
 //
+//SetProbabilityOfElasticScatt(Xtotal, 0.);
 /* //==== No elastic scattering ============================
       SetProbabilityOfElasticScatt(Xtotal, 0.);
       SetRadiusOfHNinteractions2((Xtotal-Xelastic)/pi/10.);
@@ -396,6 +486,7 @@ G4int Uzhi; G4cin>>Uzhi;
 
       SetSlope( Xtotal*Xtotal/16./pi/Xelastic/0.3894 ); // Slope parameter of elastic scattering
                                                         //      (GeV/c)^(-2))
+//G4cout<<"Slope "<<GetSlope()<<G4endl;
 //-----------------------------------------------------------------------------------
       SetGamma0( GetSlope()*Xtotal/10./2./pi );
 
@@ -403,7 +494,7 @@ G4int Uzhi; G4cin>>Uzhi;
                                                         // Gaussian parametrization of
                                                         // elastic scattering amplitude assumed
       SetAvaragePt2ofElasticScattering(1./(Xtotal*Xtotal/16./pi/Xelastic/0.3894)*GeV*GeV);
-
+//G4cout<<"AvaragePt2ofElasticScattering "<<GetAvaragePt2ofElasticScattering()<<G4endl;
 //----------- Parameters of excitations ---------------------------------------------
 
 //G4cout<<"Param ProjectilePDGcode "<<ProjectilePDGcode<<G4endl;
@@ -449,7 +540,7 @@ G4int Uzhi; G4cin>>Uzhi;
                     ProjectilePDGcode ==  111)     //------Projectile is Pion -----------
              {
               SetMagQuarkExchange(240.); 
-              SetSlopeQuarkExchange(2.);
+              SetSlopeQuarkExchange(2.);         // 2.
               SetDeltaProbAtQuarkExchange(0.56); //(0.35);
 
               SetProjMinDiffMass(0.5);                    // GeV
@@ -462,44 +553,47 @@ G4int Uzhi; G4cin>>Uzhi;
 //              SetProbabilityOfTarDiff(2.6*std::exp(-0.46*Ylab));
               SetProbabilityOfTarDiff(0.8*std::exp(-0.6*(Ylab-3.)));
 
-              SetAveragePt2(0.3);                         // GeV^2
+              SetAveragePt2(0.15);                         // GeV^2 7 June 2011
              }
            else if( (ProjectileabsPDGcode == 321) || 
                     (ProjectileabsPDGcode == 311) || 
                     (ProjectilePDGcode == 130)    || 
                     (ProjectilePDGcode == 310))        //Projectile is Kaon
              {
-// Must be corrected, taken from PiN
-              SetMagQuarkExchange(120.);
-              SetSlopeQuarkExchange(2.0);
+              SetMagQuarkExchange(40.);
+              SetSlopeQuarkExchange(2.25);
               SetDeltaProbAtQuarkExchange(0.6);
+//SetMagQuarkExchange(0.);
+//SetSlopeQuarkExchange(0.);
+//SetDeltaProbAtQuarkExchange(0.);
 
-              SetProjMinDiffMass(0.7);                    // GeV 1.1
-              SetProjMinNonDiffMass(0.7);                 // GeV
+              SetProjMinDiffMass(0.6);                    // GeV 0.7
+              SetProjMinNonDiffMass(0.6);                 // GeV 0.7
               SetProbabilityOfProjDiff(0.85*std::pow(s/GeV/GeV,-0.5)); // 40/32 X-dif/X-inel
+SetProbabilityOfProjDiff(0.);
 
               SetTarMinDiffMass(1.1);                     // GeV
               SetTarMinNonDiffMass(1.1);                  // GeV
-              SetProbabilityOfTarDiff(0.85*std::pow(s/GeV/GeV,-0.5)); // 40/32 X-dif/X-inel
+              SetProbabilityOfTarDiff(0.45*std::pow(s/GeV/GeV,-0.5)); // 40/32 X-dif/X-inel
 
-              SetAveragePt2(0.3);                         // GeV^2
+              SetAveragePt2(0.15);                         // GeV^2 7 June 2011
              }
            else                                           //------Projectile is undefined,
                                                           //------Nucleon assumed
              {
-              SetMagQuarkExchange(3.5);
-              SetSlopeQuarkExchange(1.0);
-              SetDeltaProbAtQuarkExchange(0.1);
+              SetMagQuarkExchange(1.85);       // 7 June 2011
+              SetSlopeQuarkExchange(0.7);      // 7 June 2011
+              SetDeltaProbAtQuarkExchange(0.); // 7 June 2011
 
               SetProjMinDiffMass((940.+160.*MeV)/GeV);     // particle->GetPDGMass()
               SetProjMinNonDiffMass((940.+160.*MeV)/GeV);  // particle->GetPDGMass()
-              SetProbabilityOfProjDiff(0.95*std::pow(s/GeV/GeV,-0.35)); // 40/32 X-dif/X-inel
+              SetProbabilityOfProjDiff(0.805*std::pow(s/GeV/GeV,-0.35)); // 40/32 X-dif/X-inel
 
-              SetTarMinDiffMass(1.1);                     // GeV
-              SetTarMinNonDiffMass(1.1);                  // GeV
-              SetProbabilityOfTarDiff(0.95*std::pow(s/GeV/GeV,-0.35)); // 40/32 X-dif/X-inel
+              SetTarMinDiffMass(1.16);                     // GeV
+              SetTarMinNonDiffMass(1.16);                  // GeV
+              SetProbabilityOfTarDiff(0.805*std::pow(s/GeV/GeV,-0.35)); // 40/32 X-dif/X-inel
 
-              SetAveragePt2(0.3);                         // GeV^2
+              SetAveragePt2(0.15);                         // GeV^2
              }
 //G4cout<<"Param Get Min Dif "<<GetProjMinNonDiffMass()<<G4endl;
 // ---------- Set parameters of a string kink -------------------------------
@@ -521,6 +615,7 @@ G4int Uzhi; G4cin>>Uzhi;
       SetDofNuclearDestruction(0.4);
       SetPt2ofNuclearDestruction((0.035+0.04*std::exp(4.*(Ylab-2.5))/
                                          (1.+std::exp(4.*(Ylab-2.5))))*GeV*GeV); //0.09
+//G4cout<<"Parm Pt2 Y "<<(0.035+0.04*std::exp(4.*(Ylab-2.5))/(1.+std::exp(4.*(Ylab-2.5))))<<" "<<Ylab<<G4endl;
       SetMaxPt2ofNuclearDestruction(1.0*GeV*GeV);
 
       SetExcitationEnergyPerWoundedNucleon(75.*MeV);
@@ -586,11 +681,14 @@ G4int Uzhi; G4cin>>Uzhi;
 //SetAveragePt2(0.3);                              //(0.15);
 //SetAvaragePt2ofElasticScattering(0.);
 
-//SetMaxNumberOfCollisions(4.*(Plab+0.01),Plab); //6.); // ##############################
-//SetCofNuclearDestruction(0.2); //(0.4);                  
+//SetMaxNumberOfCollisions(Plab,6.); //(4.*(Plab+0.01),Plab); //6.); // ##########
+//SetAveragePt2(0.15);
+//G4cout<<"Cnd "<<GetCofNuclearDestruction()<<G4endl;
+//SetCofNuclearDestruction(0.4);// (0.2); //(0.4);                  
 //SetExcitationEnergyPerWoundedNucleon(0.*MeV); //(75.*MeV); 
-//SetDofNuclearDestruction(0.4); //(0.4);                  
-//SetPt2ofNuclearDestruction(0.1*GeV*GeV); //(0.168*GeV*GeV); 
-
+//SetDofNuclearDestruction(0.4);                  
+//SetPt2ofNuclearDestruction(0.*GeV*GeV); //(0.168*GeV*GeV); 
+//G4cout<<"Pt2 "<<GetPt2ofNuclearDestruction()/GeV/GeV<<G4endl;
+//G4int Uzhi; G4cin>>Uzhi;
 } 
 //**********************************************************************************************

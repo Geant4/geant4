@@ -31,6 +31,8 @@
 //
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
+#include "G4VComponentCrossSection.hh"   // 31 May 2011
+
 class G4FTFParameters
 {
 
@@ -153,6 +155,8 @@ class G4FTFParameters
 // ------------ Initial energy of hN interactions --------------------	
         G4double FTFhNcmsEnergy;                // Initial hN CMS energy
 
+// ------------ hN cross section manager -----------------------------
+        G4VComponentCrossSection* FTFxsManager;
 // ------------ Geometrical parameteres ------------------------------
         G4double FTFXtotal;                     // Total X in mb
         G4double FTFXelastic;                   // Elastic X in mb

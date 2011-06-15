@@ -14,6 +14,23 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+10 June 2011, V. Uzhinsky (hadr-string-diff-V09-04-04)
+   Low energy limit of FTF is decreased.
+---------------------------------------------------------------------
+
+7 June 2011, V. Uzhinsky (hadr-string-diff-V09-04-03)
+  cmake is corrected.
+---------------------------------------------------------------------
+7 June 2011, V. Uzhinsky (hadr-string-diff-V09-04-02)
+  Some mistakes are erased with the cross-sections.
+---------------------------------------------------------------------
+
+2 June 2011, V. Uzhinsky (hadr-string-diff-V09-04-01)
+  Parameters of Kaon-Proton interactions are tuned in FTF.
+  CHIPS cross sections are used now in FTF for needed X's.
+  The corresponding class is created - G4ComponentCHIPShadronNuclearXS
+---------------------------------------------------------------------
+
 19 February 2011, V. Uzhinsky (hadr-string-diff-V09-04-00)
     Energy-momentum conservation is improved in FTF annihilation.
     A new method - "void G4FTFModel::AjustTargetNucleonForAnnihilation(

@@ -290,7 +290,7 @@ G4bool G4FTFAnnihilation::
 // 1 string AQ[0]-Q[0]// 2 string AQ[1]-Q[1]// 3 string AQ[2]-Q[2]
 
       G4ThreeVector Quark_Mom[6];
-      G4double ModMom[6], ModMom2[6];
+      G4double ModMom2[6]; //ModMom[6], 
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
       AveragePt2=200.*200.; maxPtSquare=S;
@@ -325,7 +325,7 @@ G4bool G4FTFAnnihilation::
        for(G4int i=0; i<6; i++)
        {
         Quark_Mom[i]-=PtSum;
-        ModMom[i] =Quark_Mom[i].mag();
+//        ModMom[i] =Quark_Mom[i].mag();
         ModMom2[i]=Quark_Mom[i].mag2();
         SumMt+=std::sqrt(ModMom2[i]+MassQ2);
        }
@@ -740,7 +740,7 @@ G4cout<<tmp<<" "<<tmp.mag()<<G4endl;
 // 1 string LeftAQ1-LeftQ1// 2 string LeftAQ2-LeftQ2
 
        G4ThreeVector Quark_Mom[4];
-       G4double ModMom[4], ModMom2[4];
+       G4double ModMom2[4]; //ModMom[4], 
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
        AveragePt2=200.*200.; maxPtSquare=S;
@@ -775,7 +775,7 @@ G4cout<<tmp<<" "<<tmp.mag()<<G4endl;
         for(G4int i=0; i<4; i++)
         {
          Quark_Mom[i]-=PtSum;
-         ModMom[i] =Quark_Mom[i].mag();
+//         ModMom[i] =Quark_Mom[i].mag();
          ModMom2[i]=Quark_Mom[i].mag2();
          SumMt+=std::sqrt(ModMom2[i]+MassQ2);
         }

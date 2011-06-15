@@ -126,13 +126,14 @@ void G4FTFModel::Init(const G4Nucleus & aNucleus, const G4DynamicParticle & aPro
 
         G4double PlabPerParticle(0.);  // Laboratory momentum Pz per particle/nucleon
 
-//G4cout<<"FTF init Pro Name "<<theProjectile.GetDefinition()->GetParticleName()<<G4endl;
-//G4cout<<"FTF init Pro Mass "<<theProjectile.GetMass()<<" "<<theProjectile.GetMomentum()<<G4endl;
-//G4cout<<"FTF init Pro B Q  "<<theProjectile.GetDefinition()->GetBaryonNumber()<<" "<<(G4int) theProjectile.GetDefinition()->GetPDGCharge()<<G4endl; 
-//G4cout<<"FTF init A Z "<<aNucleus.GetA_asInt()<<" "<<aNucleus.GetZ_asInt()<<G4endl;
-//G4cout<<"             "<<aNucleus.GetN()<<" "<<aNucleus.GetZ()<<G4endl;
+/*
+G4cout<<"FTF init Pro Name "<<theProjectile.GetDefinition()->GetParticleName()<<G4endl;
+G4cout<<"FTF init Pro Mass "<<theProjectile.GetMass()<<" "<<theProjectile.GetMomentum()<<G4endl;
+G4cout<<"FTF init Pro B Q  "<<theProjectile.GetDefinition()->GetBaryonNumber()<<" "<<(G4int) theProjectile.GetDefinition()->GetPDGCharge()<<G4endl; 
+G4cout<<"FTF init A Z "<<aNucleus.GetA_asInt()<<" "<<aNucleus.GetZ_asInt()<<G4endl;
+G4cout<<"             "<<aNucleus.GetN()<<" "<<aNucleus.GetZ()<<G4endl;
 //G4int Uzhi; G4cin>>Uzhi;
-
+*/
 
         theParticipants.SetProjectileNucleus(0);
         theParticipants.Init(aNucleus.GetA_asInt(),aNucleus.GetZ_asInt());
@@ -226,10 +227,13 @@ G4ExcitedStringVector * G4FTFModel::GetStrings()
         { // Standard variant of FTF for projectile hadron/nucleon
 //G4cout<<"Standard variant of FTF for projectile hadron/nucleon"<<G4endl;
          ReggeonCascade(); 
+//G4cout<<"Success after Reggeon "<<Success<<" PutOnMasShell"<<G4endl;
          Success=PutOnMassShell(); 
+//G4cout<<"Success after PutOn "<<Success<<" GetResid"<<G4endl;
          GetResidualNucleus();
         } 
-
+//G4cout<<"Success after GetN "<<Success<<G4endl;
+//G4int Uzhi; G4cin>>Uzhi;
         if(theProjectile.GetDefinition()->GetBaryonNumber() > 1)
         { // Variant of FTF for projectile nuclei
 //G4cout<<"Variant of FTF for projectile nuclei"<<G4endl;
@@ -239,7 +243,7 @@ G4ExcitedStringVector * G4FTFModel::GetStrings()
          GetResidualNucleus();
         } 
 
-        G4bool LowE_Anti_Ion(false);
+//        G4bool LowE_Anti_Ion(false);
         if(theProjectile.GetDefinition()->GetBaryonNumber() <= -1) 
         { // Projectile is Anti-baryon or Anti-Nucleus
 //G4cout<<"Projectile is Anti-baryon or Anti-Nucleus "<<G4endl;
@@ -259,11 +263,11 @@ G4ExcitedStringVector * G4FTFModel::GetStrings()
          else
          {
 //G4cout<<"Low energy interaction "<<G4endl;
-          LowE_Anti_Ion=true;
+//          LowE_Anti_Ion=true;
           Success=true;
          }
         }
-//G4cout<<"Before Excite "<<G4endl;
+//G4cout<<"Before Excite Success "<<Success<<G4endl;
         Success=Success && ExciteParticipants();
 //G4cout<<"Success ExciteParticipants()? "<<Success<<G4endl;
 //        if(LowE_Anti_Ion) Success=Success && GetResidualNucleusAfterAnnihilation();
@@ -557,6 +561,7 @@ void G4FTFModel::ReggeonCascade()
 // ------------------------------------------------------------
 G4bool G4FTFModel::PutOnMassShell()
 {
+//G4cout<<"PutOnMassShell start "<<G4endl;
         if(std::abs(theProjectile.GetDefinition()->GetBaryonNumber()) > 1) // !!!!
         { // The projectile is a nucleus or an anti-nucleus
 //G4cout<<"PutOnMassShell AA "<<G4endl;
@@ -980,7 +985,7 @@ G4bool G4FTFModel::PutOnMassShell()
 
                G4double Px=aNucleon->Get4Momentum().px() - DeltaX;
                G4double Py=aNucleon->Get4Momentum().py() - DeltaY;
-
+//G4cout<<" i Px Py "<<i<<" "<<Px<<" "<<Py<<G4endl;
                if(!ProjectileIsAntiBaryon)                          // 4.12.2010
                {
                 M2target +=(aNucleon->GetSplitableHadron()->GetDefinition()->GetPDGMass()*
@@ -1003,7 +1008,7 @@ G4bool G4FTFModel::PutOnMassShell()
              {
               M2target +=(ResidualMass*ResidualMass + PtSum.mag2())/XminusSum;
              }
-//G4cout<<"InerSuccess "<<InerSuccess<<G4endl;
+//G4cout<<"InerSuccess "<<InerSuccess<<" "<<std::sqrt(M2target)<<G4endl;
 //G4int Uzhi;G4cin>>Uzhi;
             } while(!InerSuccess);
           } while (SqrtS < Mprojectile + std::sqrt(M2target));
@@ -1014,7 +1019,13 @@ G4bool G4FTFModel::PutOnMassShell()
 
           WminusTarget=(S-M2projectile+M2target+std::sqrt(DecayMomentum2))/2./SqrtS;
           WplusProjectile=SqrtS - M2target/WminusTarget;
+
+          G4double Pzprojectile=WplusProjectile/2. - M2projectile/2./WplusProjectile;// 8.06.11
+          G4double Eprojectile =WplusProjectile/2. + M2projectile/2./WplusProjectile;// 8.06.11
+
 //G4cout<<"DecayMomentum2 "<<DecayMomentum2<<G4endl;
+//G4cout<<"WminusTarget WplusProjectile "<<WminusTarget<<" "<<WplusProjectile<<G4endl;
+//G4int Uzhi;G4cin>>Uzhi;
 //-------------------------------------------------------------
 	  for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )
           {
@@ -1037,8 +1048,8 @@ G4bool G4FTFModel::PutOnMassShell()
 
            G4double Pz=-WminusTarget*Xminus/2. + Mt2/(2.*WminusTarget*Xminus);
            G4double E = WminusTarget*Xminus/2. + Mt2/(2.*WminusTarget*Xminus);
-
-           if( E+Pz > WplusProjectile ){OuterSuccess=false; break;}
+//           if( E+Pz > WplusProjectile ){OuterSuccess=false; break;}        // 8.06.11
+           if( Pz/E > Pzprojectile/Eprojectile ){OuterSuccess=false; break;} // 8.06.11
           }   // end of for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )
 //G4int Uzhi;G4cin>>Uzhi;
         } while(!OuterSuccess);
@@ -1179,6 +1190,8 @@ if(collision.GetStatus())                                          // Uzhi Feb26
 //theParameters->SetProbabilityOfElasticScatt(1.);
 //G4cout<<"before pro "<<projectile->Get4Momentum()<<" "<<projectile->Get4Momentum().mag()<<G4endl;
 //G4cout<<"before tar "<<target->Get4Momentum()<<" "<<target->Get4Momentum().mag()<<G4endl;
+//G4cout<<"Prob el "<<theParameters->GetProbabilityOfElasticScatt()<<G4endl;
+//G4cout<<"Prob an "<<theParameters->GetProbabilityOfAnnihilation()<<G4endl;
            if(G4UniformRand()< theParameters->GetProbabilityOfElasticScatt())
            { //   Elastic scattering -------------------------
 //G4cout<<"Elastic FTF"<<G4endl;
