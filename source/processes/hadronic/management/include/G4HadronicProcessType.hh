@@ -42,11 +42,12 @@
 
 enum G4HadronicProcessType
 {
-  fHadronElastic =   111,
-  fHadronInelastic = 121,
-  fCapture =         131,
-  fFission =         141,
-  fHadronAtRest =    151,
-  fChargeExchange =  161
+  fHadronElastic =    111,
+  fHadronInelastic =  121,
+  fCapture =          131,
+  fFission =          141,
+  fHadronAtRest =     151,
+  fChargeExchange =   161,
+  fRadioactiveDecay = 210
 };
 #endif

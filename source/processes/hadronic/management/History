@@ -14,6 +14,14 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+ 7 June 2011 Dennis Wright      (hadr-man-V09-04-07)
+----------------------------------------------------
+- G4HadronicProcessType: fRadioactiveDecay changed from 211 to 210
+
+ 5 June 2011 Dennis Wright      (hadr-man-V09-04-06)
+----------------------------------------------------
+- G4HadronicProcessType: add fRadioactiveDecay = 211 to enum
+  
 6 April 2011 Gunter Folger      (hadr-man-V09-04-05)
 ----------------------------------------------------
 - enhance printout for case 3 in E/p checking with initial state info.
