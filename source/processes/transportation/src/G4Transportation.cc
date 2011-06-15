@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.72.2.4 2009-11-17 16:51:06 japost Exp $
+// $Id: G4Transportation.cc 2011/06/10 16:19:46 japost Exp japost $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -58,12 +58,12 @@
 
 #include "G4Transportation.hh"
 #include "G4TransportationProcessType.hh"
+
 #include "G4ProductionCutsTable.hh"
 #include "G4ParticleTable.hh"
 #include "G4ChordFinder.hh"
 #include "G4SafetyHelper.hh"
 #include "G4FieldManagerStore.hh"
-
 class G4VSensitiveDetector;
 
 //////////////////////////////////////////////////////////////////////////
@@ -93,8 +93,6 @@ G4Transportation::G4Transportation( G4int verboseLevel )
 
   fLinearNavigator = transportMgr->GetNavigatorForTracking() ; 
 
-  // fGlobalFieldMgr = transportMgr->GetFieldManager() ;
-
   fFieldPropagator = transportMgr->GetPropagatorInField() ;
 
   fpSafetyHelper =   transportMgr->GetSafetyHelper();  // New 
@@ -109,6 +107,15 @@ G4Transportation::G4Transportation( G4int verboseLevel )
 
   fEndGlobalTimeComputed  = false;
   fCandidateEndGlobalTime = 0;
+
+#ifdef G4VERBOSE
+  if( fVerboseLevel > 0) 
+  { 
+     G4cout << " G4Transportation constructor> set fShortStepOptimisation to "; 
+     if ( fShortStepOptimisation )  G4cout << "true"  << G4endl;
+     else                           G4cout << "false" << G4endl;
+  } 
+#endif
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -231,7 +238,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
        //
        fPreviousSftOrigin = startPosition ;
        fPreviousSafety    = newSafety ; 
-       // fpSafetyHelper->SetCurrentSafety( newSafety, startPosition);
+       fpSafetyHelper->SetCurrentSafety( newSafety, startPosition);
 
        // The safety at the initial point has been re-calculated:
        //
@@ -299,19 +306,19 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
         } else {
            geometryStepLength   = currentMinimumStep ;
         }
+
+	// Remember last safety origin & value.
+	//
+	fPreviousSftOrigin = startPosition ;
+	fPreviousSafety    = currentSafety ;         
+	fpSafetyHelper->SetCurrentSafety( newSafety, startPosition);
      }
      else
      {
         geometryStepLength   = lengthAlongCurve= 0.0 ;
         fGeometryLimitedStep = false ;
      }
-
-     // Remember last safety origin & value.
-     //
-     fPreviousSftOrigin = startPosition ;
-     fPreviousSafety    = currentSafety ;         
-     // fpSafetyHelper->SetCurrentSafety( newSafety, startPosition);
-       
+      
      // Get the End-Position and End-Momentum (Dir-ection)
      //
      fTransportEndPosition = aFieldTrack.GetPosition() ;
@@ -455,9 +462,6 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
                                                     const G4Step&  stepData )
 {
   static G4int noCalls=0;
-  static const G4ParticleDefinition* fOpticalPhoton =
-           G4ParticleTable::GetParticleTable()->FindParticle("opticalphoton");
-
   noCalls++;
 
   fParticleChange.Initialize(track) ;
@@ -483,27 +487,11 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
   {
      // The time was not integrated .. make the best estimate possible
      //
-     G4double finalVelocity   = track.GetVelocity() ;
      G4double initialVelocity = stepData.GetPreStepPoint()->GetVelocity() ;
      G4double stepLength      = track.GetStepLength() ;
 
      deltaTime= 0.0;  // in case initialVelocity = 0 
-     const G4DynamicParticle* fpDynamicParticle = track.GetDynamicParticle();
-     if (fpDynamicParticle->GetDefinition()== fOpticalPhoton)
-     {
-        //  A photon is in the medium of the final point
-        //  during the step, so it has the final velocity.
-        deltaTime = stepLength/finalVelocity ;
-     }
-     else if (finalVelocity > 0.0)
-     {
-        G4double meanInverseVelocity ;
-        // deltaTime = stepLength/finalVelocity ;
-        meanInverseVelocity = 0.5
-                            * ( 1.0 / initialVelocity + 1.0 / finalVelocity ) ;
-        deltaTime = stepLength * meanInverseVelocity ;
-     }
-     else if( initialVelocity > 0.0 )
+     if( initialVelocity > 0.0 )
      {
         deltaTime = stepLength/initialVelocity ;
      }
@@ -516,7 +504,7 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
 
   fParticleChange.ProposeGlobalTime( fCandidateEndGlobalTime ) ;
 
-  // Now Correct by Lorentz factor to get "proper" deltaTime
+  // Now Correct by Lorentz factor to get delta "proper" Time
   
   G4double  restMass       = track.GetDynamicParticle()->GetMass() ;
   G4double deltaProperTime = deltaTime*( restMass/track.GetTotalEnergy() ) ;

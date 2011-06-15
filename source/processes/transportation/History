@@ -16,8 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+June 10th, 2011, J.Apostolakis  transport-V09-04-05
+------------------------------
+- Fix G4Transportation::AlongStepDoIt
+  Use only initial velocity to update time. An estimate of velocity
+  at endpoint is not yet available. (finalVelocity still= initial)
+    ==> It will be updated later in the tracking sequence, when
+        energy loss is applied, and it will be available to 
+	Transportation only in the PostStepDoIt()
 
-May 26th, 2011, H.Kurashige transport-V09-04-04
+May 26th, 2011, H.Kurashige  transport-V09-04-04
+---------------------------
 - Define ProcessSubType for processes under transportation category
 - Change process type of G4NeutronBuilder to fGeneral
 
