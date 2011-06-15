@@ -251,7 +251,7 @@ void G4Material::InitializePointers()
   fBaseMaterial            = 0;
 
   fImplicitElement         = false;
-  fChemicalFormula         = " ";
+  fChemicalFormula         = "";
 
   // initilized data members
   fDensity  = 0.0;
@@ -559,7 +559,7 @@ size_t G4Material::GetNumberOfMaterials()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4Material* G4Material::GetMaterial(G4String materialName, G4bool warning)
+G4Material* G4Material::GetMaterial(const G4String& materialName, G4bool warning)
 {  
   // search the material by its name 
   for (size_t J=0 ; J<theMaterialTable.size() ; ++J)

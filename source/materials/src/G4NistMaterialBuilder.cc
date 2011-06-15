@@ -47,6 +47,12 @@
 // 03.11.09 A.Lechner changed following material names:
 //                    From G4_NYLON-6/6 to G4_NYLON-6-6
 //                    From G4_NYLON-6/10 to G4_NYLON-6-10
+// 12.12.10 A.Ivantchenko added following materials methodes:
+//                    BioChemicalMaterials() and SpaceMaterials(),
+//                    where new materials are introduced
+// 14.06.11 A.Ivantchenko updated body materials (G4_....ICRP)
+//                    according ICRU Report 46 (1992) instead of 1975 
+//                    data from ICRU Report 37 used previously
 //
 // -------------------------------------------------------------------
 //
@@ -742,20 +748,14 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction( 6, 0.44443 );
   AddElementByWeightFraction( 7, 0.518275);
 
-  AddMaterial("G4_ADIPOSE_TISSUE_ICRP", 0.92, 0, 63.2, 13);
-  AddElementByWeightFraction( 1, 0.119477);
-  AddElementByWeightFraction( 6, 0.63724 );
-  AddElementByWeightFraction( 7, 0.00797 );
-  AddElementByWeightFraction( 8, 0.232333);
-  AddElementByWeightFraction(11, 0.0005  );
-  AddElementByWeightFraction(12, 2e-05   );
-  AddElementByWeightFraction(15, 0.00016 );
-  AddElementByWeightFraction(16, 0.00073 );
-  AddElementByWeightFraction(17, 0.00119 );
-  AddElementByWeightFraction(19, 0.00032 );
-  AddElementByWeightFraction(20, 2e-05   );
-  AddElementByWeightFraction(26, 2e-05   );
-  AddElementByWeightFraction(30, 2e-05   );
+  AddMaterial("G4_ADIPOSE_TISSUE_ICRP", 0.95, 0, 63.2, 7);
+  AddElementByWeightFraction( 1, 0.114);
+  AddElementByWeightFraction( 6, 0.598);
+  AddElementByWeightFraction( 7, 0.007);
+  AddElementByWeightFraction( 8, 0.278);
+  AddElementByWeightFraction(11, 0.001);
+  AddElementByWeightFraction(16, 0.001);
+  AddElementByWeightFraction(17, 0.001);
 
   AddMaterial("G4_AIR", 0.00120479, 0, 85.7, 4, kStateGas);
   AddElementByWeightFraction( 6, 0.000124);
@@ -827,42 +827,39 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction(32, 0.17482 );
   AddElementByWeightFraction(83, 0.671054);
 
-  AddMaterial("G4_BLOOD_ICRP", 1.06, 0, 75.2, 14);
-  AddElementByWeightFraction( 1, 0.101866);
-  AddElementByWeightFraction( 6, 0.10002 );
-  AddElementByWeightFraction( 7, 0.02964 );
-  AddElementByWeightFraction( 8, 0.759414);
-  AddElementByWeightFraction(11, 0.00185 );
-  AddElementByWeightFraction(12, 4e-05   );
-  AddElementByWeightFraction(14, 3e-05   );
-  AddElementByWeightFraction(15, 0.00035 );
-  AddElementByWeightFraction(16, 0.00185 );
-  AddElementByWeightFraction(17, 0.00278 );
-  AddElementByWeightFraction(19, 0.00163 );
-  AddElementByWeightFraction(20, 6e-05   );
-  AddElementByWeightFraction(26, 0.00046 );
-  AddElementByWeightFraction(30, 1e-05   );
+  AddMaterial("G4_BLOOD_ICRP", 1.06, 0, 75.2, 10);
+  AddElementByWeightFraction( 1, 0.102);
+  AddElementByWeightFraction( 6, 0.110);
+  AddElementByWeightFraction( 7, 0.033);
+  AddElementByWeightFraction( 8, 0.745);
+  AddElementByWeightFraction(11, 0.001);
+  AddElementByWeightFraction(15, 0.001);
+  AddElementByWeightFraction(16, 0.002);
+  AddElementByWeightFraction(17, 0.003);
+  AddElementByWeightFraction(19, 0.002);
+  AddElementByWeightFraction(26, 0.001);
 
   AddMaterial("G4_BONE_COMPACT_ICRU", 1.85, 0, 91.9, 8);
-  AddElementByWeightFraction( 1, 0.063984);
-  AddElementByWeightFraction( 6, 0.278   );
-  AddElementByWeightFraction( 7, 0.027   );
-  AddElementByWeightFraction( 8, 0.410016);
-  AddElementByWeightFraction(12, 0.002   );
-  AddElementByWeightFraction(15, 0.07    );
-  AddElementByWeightFraction(16, 0.002   );
-  AddElementByWeightFraction(20, 0.147   );
+  AddElementByWeightFraction( 1, 0.064);
+  AddElementByWeightFraction( 6, 0.278);
+  AddElementByWeightFraction( 7, 0.027);
+  AddElementByWeightFraction( 8, 0.410);
+  AddElementByWeightFraction(12, 0.002);
+  AddElementByWeightFraction(15, 0.07 );
+  AddElementByWeightFraction(16, 0.002);
+  AddElementByWeightFraction(20, 0.147);
 
-  AddMaterial("G4_BONE_CORTICAL_ICRP", 1.85, 0, 106.4, 9);
-  AddElementByWeightFraction( 1, 0.047234);
-  AddElementByWeightFraction( 6, 0.14433 );
-  AddElementByWeightFraction( 7, 0.04199 );
-  AddElementByWeightFraction( 8, 0.446096);
-  AddElementByWeightFraction(12, 0.0022  );
-  AddElementByWeightFraction(15, 0.10497 );
-  AddElementByWeightFraction(16, 0.00315 );
-  AddElementByWeightFraction(20, 0.20993 );
-  AddElementByWeightFraction(30, 0.0001  );
+  // Sceleton Cortical bone for Adult ICRU 46
+  AddMaterial("G4_BONE_CORTICAL_ICRP", 1.92, 0, 110, 9);
+  AddElementByWeightFraction( 1, 0.034);
+  AddElementByWeightFraction( 6, 0.155);
+  AddElementByWeightFraction( 7, 0.042);
+  AddElementByWeightFraction( 8, 0.435);
+  AddElementByWeightFraction(11, 0.001);
+  AddElementByWeightFraction(12, 0.002);
+  AddElementByWeightFraction(15, 0.103);
+  AddElementByWeightFraction(16, 0.003);
+  AddElementByWeightFraction(20, 0.225);
 
   AddMaterial("G4_BORON_CARBIDE", 2.52, 0, 84.7, 2);
   AddElementByWeightFraction( 5, 0.78261);
@@ -872,20 +869,16 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction( 5, 0.310551);
   AddElementByWeightFraction( 8, 0.689449);
 
-  AddMaterial("G4_BRAIN_ICRP", 1.03, 0, 73.3, 13);
-  AddElementByWeightFraction( 1, 0.110667);
-  AddElementByWeightFraction( 6, 0.12542 );
-  AddElementByWeightFraction( 7, 0.01328 );
-  AddElementByWeightFraction( 8, 0.737723);
-  AddElementByWeightFraction(11, 0.00184 );
-  AddElementByWeightFraction(12, 0.00015 );
-  AddElementByWeightFraction(15, 0.00354 );
-  AddElementByWeightFraction(16, 0.00177 );
-  AddElementByWeightFraction(17, 0.00236 );
-  AddElementByWeightFraction(19, 0.0031  );
-  AddElementByWeightFraction(20, 9e-05   );
-  AddElementByWeightFraction(26, 5e-05   );
-  AddElementByWeightFraction(30, 1e-05   );
+  AddMaterial("G4_BRAIN_ICRP", 1.04, 0, 73.3, 9);
+  AddElementByWeightFraction( 1, 0.107);
+  AddElementByWeightFraction( 6, 0.145);
+  AddElementByWeightFraction( 7, 0.022);
+  AddElementByWeightFraction( 8, 0.712);
+  AddElementByWeightFraction(11, 0.002);
+  AddElementByWeightFraction(15, 0.004);
+  AddElementByWeightFraction(16, 0.002);
+  AddElementByWeightFraction(17, 0.003);
+  AddElementByWeightFraction(19, 0.003);
 
   AddMaterial("G4_BUTANE", 0.00249343, 0, 48.3, 2, kStateGas);
   AddElementByWeightFraction( 1, 0.173408);
@@ -1052,11 +1045,15 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction( 1, 0.143711);
   AddElementByWeightFraction( 6, 0.856289);
 
-  AddMaterial("G4_EYE_LENS_ICRP", 1.1, 0, 73.3, 4);
-  AddElementByWeightFraction( 1, 0.099269);
-  AddElementByWeightFraction( 6, 0.19371 );
-  AddElementByWeightFraction( 7, 0.05327 );
-  AddElementByWeightFraction( 8, 0.653751);
+  AddMaterial("G4_EYE_LENS_ICRP", 1.07, 0, 73.3, 8);
+  AddElementByWeightFraction( 1, 0.096);
+  AddElementByWeightFraction( 6, 0.195);
+  AddElementByWeightFraction( 7, 0.057);
+  AddElementByWeightFraction( 8, 0.646);
+  AddElementByWeightFraction(11, 0.001);
+  AddElementByWeightFraction(15, 0.001);
+  AddElementByWeightFraction(16, 0.003);
+  AddElementByWeightFraction(17, 0.001);
 
   AddMaterial("G4_FERRIC_OXIDE", 5.2, 0, 227.3, 2);
   AddElementByWeightFraction( 8, 0.300567);
@@ -1228,20 +1225,17 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction( 5, 0.25568 );
   AddElementByWeightFraction( 8, 0.662235);
 
-  AddMaterial("G4_LUNG_ICRP", 1.05, 0, 75.3, 13);
-  AddElementByWeightFraction( 1, 0.101278);
-  AddElementByWeightFraction( 6, 0.10231 );
-  AddElementByWeightFraction( 7, 0.02865 );
-  AddElementByWeightFraction( 8, 0.757072);
-  AddElementByWeightFraction(11, 0.00184 );
-  AddElementByWeightFraction(12, 0.00073 );
-  AddElementByWeightFraction(15, 0.0008  );
-  AddElementByWeightFraction(16, 0.00225 );
-  AddElementByWeightFraction(17, 0.00266 );
-  AddElementByWeightFraction(19, 0.00194 );
-  AddElementByWeightFraction(20, 9e-05   );
-  AddElementByWeightFraction(26, 0.00037 );
-  AddElementByWeightFraction(30, 1e-05   );
+  //Adult Lung congested
+  AddMaterial("G4_LUNG_ICRP", 1.04, 0, 75.3, 9);
+  AddElementByWeightFraction( 1, 0.105);
+  AddElementByWeightFraction( 6, 0.083);
+  AddElementByWeightFraction( 7, 0.023);
+  AddElementByWeightFraction( 8, 0.779);
+  AddElementByWeightFraction(11, 0.002);
+  AddElementByWeightFraction(15, 0.001);
+  AddElementByWeightFraction(16, 0.002);
+  AddElementByWeightFraction(17, 0.003);
+  AddElementByWeightFraction(19, 0.002);
 
   AddMaterial("G4_M3_WAX", 1.05, 0, 67.9, 5);
   AddElementByWeightFraction( 1, 0.114318);
@@ -1296,31 +1290,27 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction(12, 0.130287);
   AddElementByWeightFraction(17, 0.0009  );
 
-  AddMaterial("G4_MUSCLE_SKELETAL_ICRP", 1.04, 0, 75.3, 13);
-  AddElementByWeightFraction( 1, 0.100637);
-  AddElementByWeightFraction( 6, 0.10783 );
-  AddElementByWeightFraction( 7, 0.02768 );
-  AddElementByWeightFraction( 8, 0.754773);
-  AddElementByWeightFraction(11, 0.00075 );
-  AddElementByWeightFraction(12, 0.00019 );
-  AddElementByWeightFraction(15, 0.0018  );
-  AddElementByWeightFraction(16, 0.00241 );
-  AddElementByWeightFraction(17, 0.00079 );
-  AddElementByWeightFraction(19, 0.00302 );
-  AddElementByWeightFraction(20, 3e-05   );
-  AddElementByWeightFraction(26, 4e-05   );
-  AddElementByWeightFraction(30, 5e-05   );
+  AddMaterial("G4_MUSCLE_SKELETAL_ICRP", 1.05, 0, 75.3, 9);
+  AddElementByWeightFraction( 1, 0.102);
+  AddElementByWeightFraction( 6, 0.143);
+  AddElementByWeightFraction( 7, 0.034);
+  AddElementByWeightFraction( 8, 0.710);
+  AddElementByWeightFraction(11, 0.001);
+  AddElementByWeightFraction(15, 0.002);
+  AddElementByWeightFraction(16, 0.003);
+  AddElementByWeightFraction(17, 0.001);
+  AddElementByWeightFraction(19, 0.004);
 
-  AddMaterial("G4_MUSCLE_STRIATED_ICRU", 1.04, 0, 74.7, 9);
-  AddElementByWeightFraction( 1, 0.101997);
-  AddElementByWeightFraction( 6, 0.123   );
-  AddElementByWeightFraction( 7, 0.035   );
-  AddElementByWeightFraction( 8, 0.729003);
-  AddElementByWeightFraction(11, 0.0008  );
-  AddElementByWeightFraction(12, 0.0002  );
-  AddElementByWeightFraction(15, 0.002   );
-  AddElementByWeightFraction(16, 0.005   );
-  AddElementByWeightFraction(19, 0.003   );
+  // from old ICRU report
+  AddMaterial("G4_MUSCLE_STRIATED_ICRU", 1.04, 0, 74.7, 8);
+  AddElementByWeightFraction( 1, 0.102);
+  AddElementByWeightFraction( 6, 0.123);
+  AddElementByWeightFraction( 7, 0.035);
+  AddElementByWeightFraction( 8, 0.729);
+  AddElementByWeightFraction(11, 0.001);
+  AddElementByWeightFraction(15, 0.002);
+  AddElementByWeightFraction(16, 0.004);
+  AddElementByWeightFraction(19, 0.003);
 
   AddMaterial("G4_MUSCLE_WITH_SUCROSE", 1.11, 0, 74.3, 4);
   AddElementByWeightFraction( 1, 0.098234);
@@ -1553,20 +1543,16 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction(47, 0.459458);
   AddElementByWeightFraction(53, 0.540542);
 
-  AddMaterial("G4_SKIN_ICRP", 1.1, 0, 72.7, 13);
-  AddElementByWeightFraction( 1, 0.100588);
-  AddElementByWeightFraction( 6, 0.22825 );
-  AddElementByWeightFraction( 7, 0.04642 );
-  AddElementByWeightFraction( 8, 0.619002);
-  AddElementByWeightFraction(11, 7e-05   );
-  AddElementByWeightFraction(12, 6e-05   );
-  AddElementByWeightFraction(15, 0.00033 );
-  AddElementByWeightFraction(16, 0.00159 );
-  AddElementByWeightFraction(17, 0.00267 );
-  AddElementByWeightFraction(19, 0.00085 );
-  AddElementByWeightFraction(20, 0.00015 );
-  AddElementByWeightFraction(26, 1e-05   );
-  AddElementByWeightFraction(30, 1e-05   );
+  AddMaterial("G4_SKIN_ICRP", 1.09, 0, 72.7, 9);
+  AddElementByWeightFraction( 1, 0.100);
+  AddElementByWeightFraction( 6, 0.204);
+  AddElementByWeightFraction( 7, 0.042);
+  AddElementByWeightFraction( 8, 0.645);
+  AddElementByWeightFraction(11, 0.002);
+  AddElementByWeightFraction(15, 0.001);
+  AddElementByWeightFraction(16, 0.002);
+  AddElementByWeightFraction(17, 0.003);
+  AddElementByWeightFraction(19, 0.001);
 
   AddMaterial("G4_SODIUM_CARBONATE", 2.532, 0, 125., 3);
   AddElementByWeightFraction( 6, 0.113323);
@@ -1599,20 +1585,16 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction( 1, 0.044543);
   AddElementByWeightFraction( 6, 0.955457);
 
-  AddMaterial("G4_TESTES_ICRP", 1.04, 0, 75., 13);
-  AddElementByWeightFraction( 1, 0.104166);
-  AddElementByWeightFraction( 6, 0.09227 );
-  AddElementByWeightFraction( 7, 0.01994 );
-  AddElementByWeightFraction( 8, 0.773884);
-  AddElementByWeightFraction(11, 0.00226 );
-  AddElementByWeightFraction(12, 0.00011 );
-  AddElementByWeightFraction(15, 0.00125 );
-  AddElementByWeightFraction(16, 0.00146 );
-  AddElementByWeightFraction(17, 0.00244 );
-  AddElementByWeightFraction(19, 0.00208 );
-  AddElementByWeightFraction(20, 0.0001  );
-  AddElementByWeightFraction(26, 2e-05   );
-  AddElementByWeightFraction(30, 2e-05   );
+  AddMaterial("G4_TESTIS_ICRP", 1.04, 0, 75., 9);
+  AddElementByWeightFraction( 1, 0.106);
+  AddElementByWeightFraction( 6, 0.099);
+  AddElementByWeightFraction( 7, 0.020);
+  AddElementByWeightFraction( 8, 0.766);
+  AddElementByWeightFraction(11, 0.002);
+  AddElementByWeightFraction(15, 0.001);
+  AddElementByWeightFraction(16, 0.002);
+  AddElementByWeightFraction(17, 0.002);
+  AddElementByWeightFraction(19, 0.002);
 
   AddMaterial("G4_TETRACHLOROETHYLENE", 1.625, 0, 159.2, 2);
   AddElementByWeightFraction( 6, 0.144856);
@@ -1622,26 +1604,24 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction(17, 0.147822);
   AddElementByWeightFraction(81, 0.852178);
 
-  AddMaterial("G4_TISSUE_SOFT_ICRP", 1.0, 0, 72.3, 13);
-  AddElementByWeightFraction( 1, 0.104472);
-  AddElementByWeightFraction( 6, 0.23219 );
-  AddElementByWeightFraction( 7, 0.02488 );
-  AddElementByWeightFraction( 8, 0.630238);
-  AddElementByWeightFraction(11, 0.00113 );
-  AddElementByWeightFraction(12, 0.00013 );
-  AddElementByWeightFraction(15, 0.00133 );
-  AddElementByWeightFraction(16, 0.00199 );
-  AddElementByWeightFraction(17, 0.00134 );
-  AddElementByWeightFraction(19, 0.00199 );
-  AddElementByWeightFraction(20, 0.00023 );
-  AddElementByWeightFraction(26, 5e-05   );
-  AddElementByWeightFraction(30, 3e-05   );
+  // TISSUE_SOFT_MALE ICRU-44/46 (1989)
+  AddMaterial("G4_TISSUE_SOFT_ICRP", 1.03, 0, 72.3, 9);
+  AddElementByWeightFraction( 1, 0.105);
+  AddElementByWeightFraction( 6, 0.256);
+  AddElementByWeightFraction( 7, 0.027);
+  AddElementByWeightFraction( 8, 0.602);
+  AddElementByWeightFraction(11, 0.001);
+  AddElementByWeightFraction(15, 0.002);
+  AddElementByWeightFraction(16, 0.003);
+  AddElementByWeightFraction(17, 0.002);
+  AddElementByWeightFraction(19, 0.002);
 
+  // Tissue soft adult ICRU-33 (1980)
   AddMaterial("G4_TISSUE_SOFT_ICRU-4", 1.0, 0, 74.9, 4);
-  AddElementByWeightFraction( 1, 0.101172);
-  AddElementByWeightFraction( 6, 0.111   );
-  AddElementByWeightFraction( 7, 0.026   );
-  AddElementByWeightFraction( 8, 0.761828);
+  AddElementByWeightFraction( 1, 0.101);
+  AddElementByWeightFraction( 6, 0.111);
+  AddElementByWeightFraction( 7, 0.026);
+  AddElementByWeightFraction( 8, 0.762);
 
   AddMaterial("G4_TISSUE-METHANE", 0.00106409, 0, 61.2, 4, kStateGas);
   AddElementByWeightFraction( 1, 0.101869);
@@ -1724,24 +1704,6 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddMaterial("G4_GRAPHITE", 2.21, 6, 78.);
   chFormulas[nMaterials-1] = "Graphite";
 
-  AddMaterial("G4_CYTOSINE", 1.55, 0, 72., 4);
-  AddElementByAtomCount("H", 5);
-  AddElementByAtomCount("C", 4);
-  AddElementByAtomCount("N", 3);
-  AddElementByAtomCount("O", 1);
-
-  AddMaterial("G4_THYMINE", 1.23, 0, 72., 4);
-  AddElementByAtomCount("H", 6);
-  AddElementByAtomCount("C", 5);
-  AddElementByAtomCount("N", 2);
-  AddElementByAtomCount("O", 2);
-
-  AddMaterial("G4_URACIL", 1.32, 0, 72., 4);
-  AddElementByAtomCount("H", 4);
-  AddElementByAtomCount("C", 4);
-  AddElementByAtomCount("N", 2);
-  AddElementByAtomCount("O", 2);
-
   nNIST = nMaterials;
 }
 
@@ -1789,6 +1751,16 @@ void G4NistMaterialBuilder::HepAndNuclearMaterials()
   AddElementByAtomCount("Fe", 74);
   AddElementByAtomCount("Cr",  8);
   AddElementByAtomCount("Ni" ,18);
+
+  AddMaterial("G4_CR39", 1.32, 0, 0.0, 3);
+  AddElementByAtomCount("H", 18);
+  AddElementByAtomCount("C", 12);
+  AddElementByAtomCount("O", 7);
+
+  AddMaterial("G4_OCTADECANOL", 0.812, 0, 0.0, 3);
+  AddElementByAtomCount("H", 38);
+  AddElementByAtomCount("C", 18);
+  AddElementByAtomCount("O", 1);
 
   nHEP = nMaterials;
 }
@@ -1920,7 +1892,22 @@ void G4NistMaterialBuilder::BioChemicalMaterials()
   AddElementByAtomCount("N", 2);
   AddElementByAtomCount("O", 9);
   AddElementByAtomCount("P", 1);
-
+  /*
+  // Complete 70 kg body of adult men from en.wikipedia.org/ see References there
+  AddMaterial("G4_BODY", 1.8, 0, 78, 12);
+  AddElementByWeightFraction( 8, 0.650);
+  AddElementByWeightFraction( 6, 0.180);
+  AddElementByWeightFraction( 1, 0.100);
+  AddElementByWeightFraction( 7, 0.030);
+  AddElementByWeightFraction(20, 0.015);
+  AddElementByWeightFraction(15, 0.010);
+  AddElementByWeightFraction(19, 0.0025);
+  AddElementByWeightFraction(16, 0.0025);
+  AddElementByWeightFraction(11, 0.0015);
+  AddElementByWeightFraction(17, 0.0015);
+  AddElementByWeightFraction(12, 0.0005);
+  AddElementByWeightFraction(26, 0.00006);
+  */
 }
 
 

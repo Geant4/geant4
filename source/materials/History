@@ -17,6 +17,24 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14-06-11 V.Ivanchenko (materials-V09-04-12)
+- Fixed typo in previous tag
+
+14-06-11 V.Ivanchenko (materials-V09-04-11)
+- A.Ivanchenko review and updated body tissue compositions
+  according ICRU Report 46 (1992) instead of old data (1975);
+  G4_TESTES_ICRP is renamed to G4_TESTIS_ICRP;
+  removed G4_CYTOSINE, G4_THYMINE, G4_URACIL, because existing 
+  G4_DNA... materials more adequate to DNA applications 
+
+08-06-11 V.Ivanchenko (materials-V09-04-10)
+- G4Material - fixed typo in previous tag
+
+08-06-11 V.Ivanchenko (materials-V09-04-09)
+- G4Element, G4Material - comments to the class are rewritten to
+  address bug report #1220
+- G4NistMaterialBuilder - added two new materials
+
 04-05-11 V.Ivanchenko (materials-V09-04-08)
 03-05-11 V.Ivanchenko (materials-V09-04-07)
 - G4IonisParamMat, G4NistManager, G4NistMessenger - attempt to fix
