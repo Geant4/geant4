@@ -88,17 +88,20 @@
 #include "G4He3.hh"
 #include "G4Alpha.hh"
 #include "G4GenericIon.hh"
+#include "G4BuilderType.hh"
 
 G4QAtomicPhysics::G4QAtomicPhysics(G4int ver)
   : G4VPhysicsConstructor("CHIPS Atomic"), verbose(ver)
 {
   G4LossTableManager::Instance();
+  SetPhysicsType(bElectromagnetic);
 }
 
 G4QAtomicPhysics::G4QAtomicPhysics(G4int ver, const G4String& name)
   : G4VPhysicsConstructor(name), verbose(ver)
 {
   G4LossTableManager::Instance();
+  SetPhysicsType(bElectromagnetic);
 }
 
 G4QAtomicPhysics::~G4QAtomicPhysics()

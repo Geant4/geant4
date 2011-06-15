@@ -54,16 +54,19 @@
 
 // Nuclei
 #include "G4IonConstructor.hh"
+#include "G4BuilderType.hh"
 
 G4IonPhysics::G4IonPhysics(G4int)
                   :  G4VPhysicsConstructor("IonPhysics")
 		   , wasActivated(false)
 {
+  SetPhysicsType(bIons);
 }
 
 G4IonPhysics::G4IonPhysics(const G4String& name)
                   :  G4VPhysicsConstructor(name), wasActivated(false)
 {
+  SetPhysicsType(bIons);
 }
 
 G4IonPhysics::~G4IonPhysics()

@@ -27,11 +27,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
 #include "G4RadioactiveDecayPhysics.hh"
-#include "G4ProcessManager.hh"
 
 #include "G4RadioactiveDecay.hh"
 #include "G4GenericIon.hh"
 #include "globals.hh"
+#include "G4PhysicsListHelper.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -61,12 +61,8 @@ void G4RadioactiveDecayPhysics::ConstructParticle()
 
 void G4RadioactiveDecayPhysics::ConstructProcess()
 {
-  theRadioactiveDecay = new G4RadioactiveDecay();
-  G4GenericIon* ion = G4GenericIon::GenericIon();
-  G4ProcessManager* pmanager = ion->GetProcessManager();
-  pmanager->AddProcess(theRadioactiveDecay);
-  pmanager->SetProcessOrdering(theRadioactiveDecay, idxPostStep);
-  pmanager->SetProcessOrdering(theRadioactiveDecay, idxAtRest);
+  G4PhysicsListHelper::GetPhysicsListHelper()->
+    RegisterProcess(new G4RadioactiveDecay(), G4GenericIon::GenericIon());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -58,6 +58,7 @@
 
 // Nuclei
 #include "G4IonConstructor.hh"
+#include "G4BuilderType.hh"
 
 G4IonQMDPhysics::G4IonQMDPhysics(G4int ver)
   :  G4VPhysicsConstructor("IonQMD"), verbose(ver), wasActivated(false)
@@ -67,6 +68,7 @@ G4IonQMDPhysics::G4IonQMDPhysics(G4int ver)
   emaxQMD  = 10.*GeV;
   emaxLHEP = 1.*TeV;
   overlap  = 10*MeV;
+  SetPhysicsType(bIons);
   if(verbose > 1) G4cout << "### G4IonQMDPhysics" << G4endl;
 }
 
@@ -79,6 +81,7 @@ G4IonQMDPhysics::G4IonQMDPhysics(const G4String& name,
   emaxQMD  = 10.*GeV;
   emaxLHEP = 1.*TeV;
   overlap  = 10*MeV;
+  SetPhysicsType(bIons);
   if(verbose > 1) G4cout << "### G4IonQMDPhysics" << G4endl;
 }
 

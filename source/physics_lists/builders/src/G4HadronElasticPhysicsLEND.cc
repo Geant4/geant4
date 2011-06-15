@@ -23,85 +23,79 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.hh,v 1.9 2010-08-25 16:49:51 gunter Exp $
+// $Id: G4HadronElasticPhysicsLEND.cc,v 1.3 2010-09-23 18:53:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4HadronElasticPhysics
+// ClassName:   G4HadronElasticPhysicsLEND
 //
-// Author: 23 November 2006 V. Ivanchenko
+// Author: 02 June 2011 Tatsumi Koi
 //
 // Modified:
-// 29.07.2010 V.Ivanchenko rename this class from G4HadronHElasticPhysics to
-//                         G4HadronElasticPhysics, old version of the class
-//                         is renamed to G4HadronElasticPhysics93
-// 03.06.2011 V.Ivanchenko change design - added access to pointers of the
-//                         neutron process and model
+// 03.06.2011 V.Ivanchenko change design - now first default constructor 
+//            is called, LEND model and cross section are added on top
 //
 //----------------------------------------------------------------------------
 //
+// LEND model for n with E < 20 MeV
+// LEND cross sections for n n with E < 20 MeV
 
-#ifndef G4HadronElasticPhysics_h
-#define G4HadronElasticPhysics_h 1
-
-#include "globals.hh"
-#include "G4VPhysicsConstructor.hh"
-#include "G4HadronElastic.hh"
+#include "G4HadronElasticPhysicsLEND.hh"
+#include "G4HadronElasticPhysics.hh"
+#include "G4Neutron.hh"
 #include "G4HadronicProcess.hh"
+#include "G4HadronElastic.hh"
 
-class G4HadronElasticPhysics : public G4VPhysicsConstructor
+#include "G4LENDElastic.hh"
+#include "G4LENDElasticCrossSection.hh"
+
+G4HadronElasticPhysicsLEND::G4HadronElasticPhysicsLEND(G4int ver)
+  : G4VPhysicsConstructor("hElasticWEL_CHIPS_LEND"), verbose(ver), 
+    wasActivated(false)
 {
-public: 
-
-  G4HadronElasticPhysics(G4int ver = 0); 
-
-  // obsolete
-  G4HadronElasticPhysics(const G4String& name , 
-			 G4int ver = 0, G4bool hp = false, 
-			 const G4String& type="");
-
-  virtual ~G4HadronElasticPhysics();
-
-  // This method will be invoked in the Construct() method. 
-  // each particle type will be instantiated
-  virtual void ConstructParticle();
- 
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type 
-  virtual void ConstructProcess();
-
-  inline G4HadronElastic* GetNeutronModel();
-
-  inline G4HadronicProcess* GetNeutronProcess();
-
-private:
-
-  G4int    verbose;
-  G4bool   wasActivated;
-
-  G4HadronElastic*   neutronModel;
-  G4HadronicProcess* neutronProcess;
-
-};
-
-inline G4HadronElastic* G4HadronElasticPhysics::GetNeutronModel()
-{
-  return neutronModel;
+  if(verbose > 1) { 
+    G4cout << "### G4HadronElasticPhysicsLEND: " << GetPhysicsName() 
+	   << G4endl; 
+  }
+  mainElasticBuilder = new G4HadronElasticPhysics(verbose);
 }
 
-inline G4HadronicProcess* G4HadronElasticPhysics::GetNeutronProcess()
+G4HadronElasticPhysicsLEND::~G4HadronElasticPhysicsLEND()
 {
-  return neutronProcess;
+  delete mainElasticBuilder;
 }
 
-#endif
+void G4HadronElasticPhysicsLEND::ConstructParticle()
+{
+  // G4cout << "G4HadronElasticPhysics::ConstructParticle" << G4endl;
+  mainElasticBuilder->ConstructParticle();
+}
 
+void G4HadronElasticPhysicsLEND::ConstructProcess()
+{
+  if(wasActivated) return;
+  wasActivated = true;
 
+  mainElasticBuilder->ConstructProcess();
 
+  mainElasticBuilder->GetNeutronModel()->SetMinEnergy(19.5*MeV);
 
+  G4HadronicProcess* hel = mainElasticBuilder->GetNeutronProcess();
 
+  G4LENDElastic* lend = new G4LENDElastic( G4Neutron::Neutron() );
+  //lend->AllowNaturalAbundanceTarget();
+  lend->AllowAnyCandidateTarget();
+  hel->RegisterMe(lend);
+  G4LENDElasticCrossSection* lend_XS = new G4LENDElasticCrossSection( G4Neutron::Neutron() );
+  //lend_XS->AllowNaturalAbundanceTarget();
+  lend_XS->AllowAnyCandidateTarget();
+  hel->AddDataSet( lend_XS );
 
+  if(verbose > 1) {
+    G4cout << "### HadronElasticPhysicsLEND is constructed" 
+	   << G4endl;
+  }
+}
 
 

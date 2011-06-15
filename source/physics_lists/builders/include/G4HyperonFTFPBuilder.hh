@@ -23,28 +23,35 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: $ 
 // GEANT4 tag $Name: $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4FTFPAntiBarionBuilder
+// ClassName:   G4HyperonFTFPBuilder
 //
-// Author: 2011 J. Apostolakis
+// Author: 2012 G.Folger
 //
 // Modified:
 //
 //----------------------------------------------------------------------------
 //
-#ifndef G4FTFPAntiBarionBuilder_h
-#define G4FTFPAntiBarionBuilder_h 1
+#ifndef G4HyperonFTFPBuilder_h
+#define G4HyperonFTFPBuilder_h 1
 
 #include "globals.hh"
 
-#include "G4HadronElasticProcess.hh"
-// #include "G4HadronFissionProcess.hh"
-// #include "G4HadronCaptureProcess.hh"
-#include "G4VAntiBarionBuilder.hh"
+#include "G4LambdaInelasticProcess.hh"
+#include "G4AntiLambdaInelasticProcess.hh"
+#include "G4SigmaPlusInelasticProcess.hh"
+#include "G4SigmaMinusInelasticProcess.hh"
+#include "G4AntiSigmaPlusInelasticProcess.hh"
+#include "G4AntiSigmaMinusInelasticProcess.hh"
+#include "G4XiZeroInelasticProcess.hh"
+#include "G4XiMinusInelasticProcess.hh"
+#include "G4AntiXiZeroInelasticProcess.hh"
+#include "G4AntiXiMinusInelasticProcess.hh"
+#include "G4OmegaMinusInelasticProcess.hh"
+#include "G4AntiOmegaMinusInelasticProcess.hh"
 
 #include "G4TheoFSGenerator.hh"
 #include "G4ExcitationHandler.hh"
@@ -53,44 +60,45 @@
 #include "G4FTFModel.hh"
 #include "G4LundStringFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
-#include "G4QuasiElasticChannel.hh"
+#include "G4CascadeInterface.hh"
+#include "G4QHadronInelasticDataSet.hh"
 
-#include "G4VCrossSectionDataSet.hh"
-#include "G4VComponentCrossSection.hh"
-
-class G4FTFPAntiBarionBuilder : public G4VAntiBarionBuilder
+class G4HyperonFTFPBuilder 
 {
   public: 
-    G4FTFPAntiBarionBuilder(G4bool quasiElastic=false);
-    virtual ~G4FTFPAntiBarionBuilder();
+    G4HyperonFTFPBuilder();
+    virtual ~G4HyperonFTFPBuilder();
 
   public: 
-    virtual void Build(G4HadronElasticProcess * aP);
-    virtual void Build(G4AntiProtonInelasticProcess * aP);
-    virtual void Build(G4AntiNeutronInelasticProcess * aP);
-    virtual void Build(G4AntiDeuteronInelasticProcess * aP);
-    virtual void Build(G4AntiTritonInelasticProcess * aP);
-    virtual void Build(G4AntiHe3InelasticProcess * aP);
-    virtual void Build(G4AntiAlphaInelasticProcess * aP);
-    
-    void SetMinEnergy(G4double val) {theMin = val;}
-    void SetMaxEnergy(G4double val) {theMax = val;}
+    void Build();
 
   private:
-    G4TheoFSGenerator * theModel;
+ 
+    G4TheoFSGenerator * HyperonFTFP;
+    G4TheoFSGenerator * AntiHyperonFTFP;
     G4PreCompoundModel * thePreEquilib;
+    G4ExcitationHandler * theHandler;
     G4GeneratorPrecompoundInterface * theCascade;
     G4FTFModel * theStringModel;
     G4ExcitedStringDecay * theStringDecay;
     G4QuasiElasticChannel * theQuasiElastic;
     G4LundStringFragmentation * theLund;
-    G4ExcitationHandler * theHandler;
+    G4CascadeInterface * theBertini;
+    G4LambdaInelasticProcess*  theLambdaInelastic;
+    G4AntiLambdaInelasticProcess*  theAntiLambdaInelastic;
+    G4SigmaMinusInelasticProcess*  theSigmaMinusInelastic;
+    G4AntiSigmaMinusInelasticProcess*  theAntiSigmaMinusInelastic;
+    G4SigmaPlusInelasticProcess*  theSigmaPlusInelastic;
+    G4AntiSigmaPlusInelasticProcess*  theAntiSigmaPlusInelastic;
+    G4XiZeroInelasticProcess*  theXiZeroInelastic;
+    G4AntiXiZeroInelasticProcess*  theAntiXiZeroInelastic;
+    G4XiMinusInelasticProcess*  theXiMinusInelastic;
+    G4AntiXiMinusInelasticProcess*  theAntiXiMinusInelastic;
+    G4OmegaMinusInelasticProcess*  theOmegaMinusInelastic;
+    G4AntiOmegaMinusInelasticProcess*  theAntiOmegaMinusInelastic;
+    
+    G4QHadronInelasticDataSet * theCHIPSInelastic;
 
-    G4VCrossSectionDataSet* theAntiNucleonData;
-    G4VComponentCrossSection * theAntiNucleonXS;
-    G4double theMin;
-    G4double theMax;
-
+    G4bool wasActivated;
 };
 #endif
-

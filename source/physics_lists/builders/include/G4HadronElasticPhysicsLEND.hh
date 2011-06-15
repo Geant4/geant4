@@ -23,44 +23,40 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.hh,v 1.14 2010-06-04 08:40:36 vnivanch Exp $
+// $Id: G4HadronElasticPhysicsLEND.hh,v 1.1 2010-06-03 11:04:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4HadronInelasticQBBC
+// ClassName:   G4HadronElasticPhysicsLEND
 //
-// Author: 31 August 2009 V. Ivanchenko
+// Author: 02 June 2011 Tatsumi Koi
 //
 // Modified:
 //
 //----------------------------------------------------------------------------
 //
 
-#ifndef G4HadronInelasticQBBC_h
-#define G4HadronInelasticQBBC_h 1
+#ifndef G4HadronElasticPhysicsLEND_h
+#define G4HadronElasticPhysicsLEND_h 1
 
 #include "globals.hh"
-#include "G4VHadronPhysics.hh"
+#include "G4VPhysicsConstructor.hh"
 
-class G4ExcitationHandler;
-class G4Evaporation;
-class G4ComponentAntiNuclNuclearXS;
+class G4HadronElasticPhysics;
 
-class G4HadronInelasticQBBC : public G4VHadronPhysics
+class G4HadronElasticPhysicsLEND : public G4VPhysicsConstructor
 {
 public: 
 
-  // constructor
-  G4HadronInelasticQBBC(G4int ver = 1);
+  G4HadronElasticPhysicsLEND(G4int ver = 1); 
 
-  G4HadronInelasticQBBC(const G4String& name,
-			G4int ver = 1, G4bool ftf = false, G4bool bert = false,
-			G4bool chips = false, G4bool hp = false, 
-			G4bool glauber = false);
+  virtual ~G4HadronElasticPhysicsLEND();
 
-  virtual ~G4HadronInelasticQBBC();
-
+  // This method will be invoked in the Construct() method. 
+  // each particle type will be instantiated
+  virtual void ConstructParticle();
+ 
   // This method will be invoked in the Construct() method.
   // each physics process will be instantiated and
   // registered to the process manager of each particle type 
@@ -68,17 +64,18 @@ public:
 
 private:
 
-  // copy constructor and hide assignment operator
-  G4HadronInelasticQBBC(G4HadronInelasticQBBC &);
-  G4HadronInelasticQBBC & operator=(const G4HadronInelasticQBBC &right);
-
-  G4ExcitationHandler*  theHandler;
-  G4Evaporation*        theEvaporation;
-  G4ComponentAntiNuclNuclearXS* theAntiNuclXS;
-
-  G4String htype;
   G4int    verbose;
   G4bool   wasActivated;
+  G4HadronElasticPhysics* mainElasticBuilder;
 };
 
+
 #endif
+
+
+
+
+
+
+
+

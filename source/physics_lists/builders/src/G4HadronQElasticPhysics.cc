@@ -44,7 +44,7 @@
 
 #include "G4WHadronElasticProcess.hh"
 #include "G4HadronicInteraction.hh"
-#include "G4VHadronElastic.hh"
+#include "G4HadronElastic.hh"
 #include "G4QElastic.hh"
 
 #include "G4VQCrossSection.hh"
@@ -101,7 +101,7 @@ void G4HadronQElasticPhysics::ConstructProcess()
     G4cout << "### HadronQElasticPhysics::ConstructProcess" << G4endl;
   }
   G4QElastic* process = new G4QElastic();
-  G4VHadronElastic* lhep = new G4VHadronElastic();
+  G4HadronElastic* lhep = new G4HadronElastic();
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() )

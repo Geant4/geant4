@@ -47,6 +47,7 @@
 
 #include "G4Electron.hh"
 #include "G4Proton.hh"
+#include "G4GenericIon.hh"
 
 // Warning : the following is needed in order to use EM Physics builders
 // e+
@@ -68,26 +69,31 @@
 #include "G4LivermoreRayleighModel.hh"
 // end of warning
 
+#include "G4LossTableManager.hh"
+#include "G4UAtomicDeexcitation.hh"
 #include "G4PhysicsListHelper.hh"
+#include "G4BuilderType.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4EmDNAPhysics::G4EmDNAPhysics(G4int ver)
   : G4VPhysicsConstructor("G4EmDNAPhysics"), verbose(ver)
-{}
+{
+  SetPhysicsType(bElectromagnetic);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4EmDNAPhysics::G4EmDNAPhysics(G4int ver, const G4String&)
   : G4VPhysicsConstructor("G4EmDNAPhysics"), verbose(ver)
-{}
+{
+  SetPhysicsType(bElectromagnetic);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4EmDNAPhysics::~G4EmDNAPhysics()
 {}
-
-#include "G4GenericIon.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -235,6 +241,12 @@ void G4EmDNAPhysics::ConstructProcess()
    // Warning : end of particles and processes are needed by EM Physics builders 
     
   }
+
+  // Deexcitation
+  //
+  G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
+  G4LossTableManager::Instance()->SetAtomDeexcitation(de);
+  de->SetFluo(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

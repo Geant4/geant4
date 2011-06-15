@@ -93,6 +93,8 @@
 //
 
 #include "G4LossTableManager.hh"
+#include "G4VAtomDeexcitation.hh"
+#include "G4UAtomicDeexcitation.hh"
 #include "G4EmProcessOptions.hh"
 
 // particles
@@ -116,6 +118,7 @@
 
 //
 #include "G4PhysicsListHelper.hh"
+#include "G4BuilderType.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -123,6 +126,7 @@ G4EmPenelopePhysics::G4EmPenelopePhysics(G4int ver)
   : G4VPhysicsConstructor("G4EmPenelopePhysics"), verbose(ver)
 {
   G4LossTableManager::Instance();
+  SetPhysicsType(bElectromagnetic);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -131,6 +135,7 @@ G4EmPenelopePhysics::G4EmPenelopePhysics(G4int ver, const G4String&)
   : G4VPhysicsConstructor("G4EmPenelopePhysics"), verbose(ver)
 {
   G4LossTableManager::Instance();
+  SetPhysicsType(bElectromagnetic);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -197,7 +202,7 @@ void G4EmPenelopePhysics::ConstructProcess()
       //Photo-electric effect
       G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
       G4PenelopePhotoElectricModel* thePEPenelopeModel = new 
-	G4PenelopePhotoElectricModel();
+	G4PenelopePhotoElectricModel();   
       thePEPenelopeModel->SetHighEnergyLimit(PenelopeHighEnergyLimit);
       thePhotoElectricEffect->AddEmModel(0,thePEPenelopeModel);
       ph->RegisterProcess(thePhotoElectricEffect, particle);
@@ -208,7 +213,7 @@ void G4EmPenelopePhysics::ConstructProcess()
 	new G4PenelopeComptonModel();
       theComptonPenelopeModel->SetHighEnergyLimit(PenelopeHighEnergyLimit);
       theComptonScattering->AddEmModel(0,theComptonPenelopeModel);
-     ph->RegisterProcess(theComptonScattering, particle);
+      ph->RegisterProcess(theComptonScattering, particle);
 
       //Gamma conversion
       G4GammaConversion* theGammaConversion = new G4GammaConversion();
@@ -238,7 +243,7 @@ void G4EmPenelopePhysics::ConstructProcess()
       G4eIonisation* eIoni = new G4eIonisation();
       G4PenelopeIonisationModel* theIoniPenelope = 
 	new G4PenelopeIonisationModel();
-      theIoniPenelope->SetHighEnergyLimit(PenelopeHighEnergyLimit);
+      theIoniPenelope->SetHighEnergyLimit(PenelopeHighEnergyLimit);     
       eIoni->AddEmModel(0,theIoniPenelope,new G4UniversalFluctuation());
       eIoni->SetStepFunction(0.2, 100*um); //     
       ph->RegisterProcess(eIoni, particle);
@@ -405,6 +410,13 @@ void G4EmPenelopePhysics::ConstructProcess()
   // Ionization
   //
   //opt.SetSubCutoff(true);    
+
+  
+  // Deexcitation
+  //
+  G4VAtomDeexcitation* deexcitation = new G4UAtomicDeexcitation();
+  G4LossTableManager::Instance()->SetAtomDeexcitation(deexcitation);
+  deexcitation->SetFluo(true); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -96,6 +96,7 @@
 #include "G4GenericIon.hh"
 
 #include "G4PhysicsListHelper.hh"
+#include "G4BuilderType.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -103,6 +104,7 @@ G4EmStandardPhysics_option3::G4EmStandardPhysics_option3(G4int ver)
   : G4VPhysicsConstructor("G4EmStandard_opt3"), verbose(ver)
 {
   G4LossTableManager::Instance();
+  SetPhysicsType(bElectromagnetic);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -111,6 +113,7 @@ G4EmStandardPhysics_option3::G4EmStandardPhysics_option3(G4int ver, const G4Stri
   : G4VPhysicsConstructor("G4EmStandard_opt3"), verbose(ver)
 {
   G4LossTableManager::Instance();
+  SetPhysicsType(bElectromagnetic);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

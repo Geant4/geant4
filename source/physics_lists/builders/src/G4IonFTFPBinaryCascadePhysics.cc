@@ -51,6 +51,7 @@
 #include "G4PreCompoundModel.hh"
 #include "G4FTFBuilder.hh"
 #include "G4HadronicInteraction.hh"
+#include "G4BuilderType.hh"
 
 using namespace std;
 
@@ -64,6 +65,7 @@ G4IonFTFPBinaryCascadePhysics::G4IonFTFPBinaryCascadePhysics(G4int ver)
   theIonBC = 0;
   theFTFP = 0;
   theBuilder = 0;
+  SetPhysicsType(bIons);
   if(verbose > 1) { G4cout << "### G4IonFTFPBinaryCascadePhysics" << G4endl; }
 }
 
@@ -99,12 +101,12 @@ void G4IonFTFPBinaryCascadePhysics::ConstructProcess()
   theIonBC = new G4BinaryLightIonReaction();
   theIonBC->SetPrecompound(thePreCompound);
   theIonBC->SetMinEnergy(0.0);
-  theIonBC->SetMaxEnergy(6*GeV);
+  theIonBC->SetMaxEnergy(4*GeV);
 
   // FTFP
   theBuilder = new G4FTFBuilder("FTFP",thePreCompound);
   theFTFP = theBuilder->GetModel();
-  theFTFP->SetMinEnergy(5*GeV);
+  theFTFP->SetMinEnergy(2*GeV);
   theFTFP->SetMaxEnergy(emax);
 
   fShen = new G4IonsShenCrossSection();

@@ -14,7 +14,69 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
- 
+
+14-06-2011, V.Ivanchenko               (phys-lists-V09-04-31)
+- G4HadronElasticPhysics - added LHEP model for anti-nuclei below 100 MeV  
+
+13-06-2011, G.Folger                   (phys-lists-V09-04-30)
+-  fix several small bugs in G4HyperonFTFPBuilder.cc
+
+10-06-2011, G.Folger                   (phys-lists-V09-04-29)
+Make use of new features of FTF in FTFP_BERT, and (less) in QGSP_FTFP_BERT:
+- Add Builder for Hyperons using FTF and Bertini as models, 
+   G4HyperonFTFPBuilder.{hh,cc}
+- G4FTFPAntiBarionBuilder.cc: delete cross-section objects
+- HadronPhysicsFTFP_BERT: 
+    + use G4HyperonFTFPBuilder, replacing G4MiscCHIPSBuilder
+    + use/add G4FTFPAntiBarionBuilder for anti barions, 
+- FTFP_BERT.icc and QGSP_FTFP_BERT.icc uses new IonFTFPBinaryPhysics, 
+    replacing LHEP IonPhysics and IonBinaryPhysics, resp.
+    
+- update builders/sources.cmake for new files.    
+
+
+10-06-2011, V.Ivanchenko               (phys-lists-V09-04-28)  
+- G4IonFTFPBinaryCascadePhysics - set transition 2-4 GeV
+- G4HadronInelasticQBBC - added destruction of anti-nuclei cross
+    section component
+- G4DecayPhysics, G4RadioactiveDecayPhysics - use G4PhysicsListHelper
+
+09-06-2011, L.Pandola
+- G4EmPenelopePhysics - added activation of deexcitation
+
+09-06-2011, P. Kaitaniemi              (phys-lists-V09-04-27)
+- QGSP_INCL_ABLA: Enabled INCL/ABLA treatment for GenericIons in
+	G4IonInclAblaPhysics builder
+
+08-05-2011, V.Ivanchenko               (phys-lists-V09-04-26)
+- Fixed GNUmakefile and source.cmake for LEND
+
+07-05-2011, V.Ivanchenko               (phys-lists-V09-04-25)
+- Added G4BuilderType.hh file with enumerator of builder type
+- For all EM and Ion builders added type
+
+06-05-2011, V.Ivanchenko               (phys-lists-V09-04-24)
+- Updated GNUmakefile and source.cmake for LEND
+
+04-05-2011, V.Ivanchenko               (phys-lists-V09-04-23)
+- G4HadronElasticPhysics - use G4AntiNuclElastic model and 
+   G4ComponentAntiNuclNuclearXS 
+- G4HadronInelasticQBBC - use FTFP for all anti-baryons,
+   energy interval FTFP above 2 GeV, Bertini - below 6 GeV
+- G4HadronElasticPhysicsXS, G4HadronElasticPhysicsHP, 
+  G4HadronElasticPhysicsLEND - use G4HadronElasticPhysics for all 
+  particles and modified only neutron models and cross sections
+- G4PhysListFactory - added "ShieldingLEND"
+- G4EmLivermorePhysics, G4EmLivermorePolarizedPhysics, G4EmDNAPhysics -
+    added deexcitation   
+
+02-06-2011, T.Koi                      
+- Add LEND builders
+- Enable to use LEND model and cross section 
+  for low energy neutron in Shielding physics list
+  (Default is still neutron HP package)
+- Add G4RadioactiveDecayPhysics to Shielding physics list
+
 20-05-2011, S.Incerti                  (phys-lists-V09-04-22)
 - following Vladimir, EM low energy + DNA builders are migrated to the 
   new approach based on G4PhysicsListHelper 

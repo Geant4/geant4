@@ -92,6 +92,7 @@ private:
 
   G4double emin;
   G4double emax_d, emax_t, emax_he3, emax_alpha;
+  G4double emax;
   G4double emaxLHEP;
 
   G4int  verbose;

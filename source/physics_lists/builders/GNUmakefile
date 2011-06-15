@@ -11,6 +11,13 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
+CPPFLAGS += -DG4PROCESSES_EXPORT
+
+ifeq ($(G4SYSTEM), WIN32-VC)
+CPPFLAGS += -I$(G4BASE)/externals/expat/include
+endif
+
+
 CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPNumerics/include \
@@ -67,7 +74,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/models/high_energy/include \
             -I$(G4BASE)/processes/hadronic/models/im_r_matrix/include \
             -I$(G4BASE)/processes/hadronic/models/incl/include \
-            -I$(G4BASE)/processes/hadronic/models/leading_particle/include \
+            -I$(G4BASE)/processes/hadronic/models/lend/include \
             -I$(G4BASE)/processes/hadronic/models/low_energy/include \
             -I$(G4BASE)/processes/hadronic/models/neutron_hp/include \
             -I$(G4BASE)/processes/hadronic/models/parton_string/diffraction/include \

@@ -138,6 +138,7 @@ G4VModularPhysicsList* G4PhysListFactory::GetReferencePhysList(
   else if(name == "QGS_BIC")       {p = new QGS_BIC();}
   else if(name == "QGSP_INCL_ABLA"){p = new QGSP_INCL_ABLA();}
   else if(name == "Shielding")     {p = new Shielding();}
+  else if(name == "ShieldingLEND") {p = new Shielding(1,"LEND");}
   else {
     G4cout << "### G4PhysListFactory WARNING: "
 	   << "PhysicsList " << name << " is not known"

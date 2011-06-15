@@ -23,62 +23,36 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.hh,v 1.14 2010-06-04 08:40:36 vnivanch Exp $
+// $Id: G4BuilderType.hh,v 1.9 2008-12-18 13:01:42 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//---------------------------------------------------------------------------
+//---------------------------------------------------------------
 //
-// ClassName:   G4HadronInelasticQBBC
+// G4BuilderType.hh
 //
-// Author: 31 August 2009 V. Ivanchenko
+// Class Description:
+//   This is an enumerator to define sub-type of electro-magnetic
+//   processes
 //
-// Modified:
+// Creation date: 23.09.2008
+// Modifications:
 //
-//----------------------------------------------------------------------------
-//
+//---------------------------------------------------------------
 
-#ifndef G4HadronInelasticQBBC_h
-#define G4HadronInelasticQBBC_h 1
+#ifndef G4BuilderType_h
+#define G4BuilderType_h 1
 
-#include "globals.hh"
-#include "G4VHadronPhysics.hh"
-
-class G4ExcitationHandler;
-class G4Evaporation;
-class G4ComponentAntiNuclNuclearXS;
-
-class G4HadronInelasticQBBC : public G4VHadronPhysics
-{
-public: 
-
-  // constructor
-  G4HadronInelasticQBBC(G4int ver = 1);
-
-  G4HadronInelasticQBBC(const G4String& name,
-			G4int ver = 1, G4bool ftf = false, G4bool bert = false,
-			G4bool chips = false, G4bool hp = false, 
-			G4bool glauber = false);
-
-  virtual ~G4HadronInelasticQBBC();
-
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type 
-  virtual void ConstructProcess();
-
-private:
-
-  // copy constructor and hide assignment operator
-  G4HadronInelasticQBBC(G4HadronInelasticQBBC &);
-  G4HadronInelasticQBBC & operator=(const G4HadronInelasticQBBC &right);
-
-  G4ExcitationHandler*  theHandler;
-  G4Evaporation*        theEvaporation;
-  G4ComponentAntiNuclNuclearXS* theAntiNuclXS;
-
-  G4String htype;
-  G4int    verbose;
-  G4bool   wasActivated;
+enum G4BuilderType 
+{ 
+  bUnknown = 0, 
+  bTransportation = 1, 
+  bElectromagnetic = 2, 
+  bEmExtra = 3,
+  bDecay = 4,
+  bHadronElastic = 5, 
+  bHadronInelastic = 6,
+  bStopping = 7,
+  bIons = 8
 };
 
 #endif

@@ -43,6 +43,8 @@
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
 
+class G4HadronElasticPhysics;
+
 class G4HadronElasticPhysicsHP : public G4VPhysicsConstructor
 {
 public: 
@@ -64,6 +66,7 @@ private:
 
   G4int    verbose;
   G4bool   wasActivated;
+  G4HadronElasticPhysics* mainElasticBuilder;
 };
 
 

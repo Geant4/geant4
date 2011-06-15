@@ -49,7 +49,7 @@ G4FTFPAntiBarionBuilder::
 G4FTFPAntiBarionBuilder(G4bool quasiElastic) 
 {
   theAntiNucleonData = 
-    new G4CrossSectionInelastic(new G4ComponentAntiNuclNuclearXS());
+    new G4CrossSectionInelastic(theAntiNucleonXS=new G4ComponentAntiNuclNuclearXS());
 
   theMin =   0.0*GeV;
   theMax = 100.0*TeV;
@@ -83,8 +83,11 @@ G4FTFPAntiBarionBuilder::~G4FTFPAntiBarionBuilder()
   delete theStringModel;
   delete theModel;
   if ( theQuasiElastic ) delete theQuasiElastic;
+  delete thePreEquilib;
   delete theHandler;
   delete theLund;
+  delete theAntiNucleonXS;
+  delete theAntiNucleonData;
 }
 
 void G4FTFPAntiBarionBuilder::

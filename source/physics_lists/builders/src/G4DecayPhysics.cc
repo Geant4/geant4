@@ -56,15 +56,19 @@
 
 G4DecayPhysics::G4DecayPhysics(G4int ver)
   :  G4VPhysicsConstructor("Decay"), verbose(ver), wasActivated(false)
-{}
+{
+  fDecayProcess = 0;
+}
 
 G4DecayPhysics::G4DecayPhysics(const G4String& name, G4int ver)
   :  G4VPhysicsConstructor(name), verbose(ver), wasActivated(false)
-{}
+{
+  fDecayProcess = 0;
+}
 
 G4DecayPhysics::~G4DecayPhysics()
 {
-  if(wasActivated) delete fDecayProcess;
+  delete fDecayProcess;
 }
 
 void G4DecayPhysics::ConstructParticle()
@@ -92,28 +96,25 @@ void G4DecayPhysics::ConstructParticle()
 
 void G4DecayPhysics::ConstructProcess()
 {
-  if(wasActivated) return;
+  if(wasActivated) { return; }
   wasActivated = true;
+
+  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
 
   // Add Decay Process
   fDecayProcess = new G4Decay();
   theParticleIterator->reset();
   G4ParticleDefinition* particle=0;
-  G4ProcessManager* pmanager=0;
 
   while( (*theParticleIterator)() )
   {
     particle = theParticleIterator->value();
-    pmanager = particle->GetProcessManager();
     if( fDecayProcess->IsApplicable(*particle) ) 
     { 
-      if(verbose > 1)
+      if(verbose > 1) {
         G4cout << "### Decays for " << particle->GetParticleName() << G4endl;
-      pmanager -> AddProcess(fDecayProcess);
-      pmanager -> SetProcessOrdering(fDecayProcess, idxPostStep);
-      pmanager -> SetProcessOrdering(fDecayProcess, idxAtRest);
+      }
+      ph->RegisterProcess(fDecayProcess, particle);
     }
   }
 }
-
-

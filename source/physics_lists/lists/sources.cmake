@@ -74,6 +74,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/high_en
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/im_r_matrix/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/incl/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/isotope_production/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/lend/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/low_energy/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
@@ -230,6 +231,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         G4geometrymng
         G4globman
         G4had_im_r_matrix
+        G4had_lend
         G4had_mod_man
         G4had_mod_util
         G4had_muon_nuclear

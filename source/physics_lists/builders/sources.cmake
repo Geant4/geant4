@@ -66,6 +66,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_exci
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/high_energy/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/im_r_matrix/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/incl/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/lend/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/low_energy/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/neutron_hp/include)
@@ -104,6 +105,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4BinaryNeutronBuilder.hh
         G4BinaryPiKBuilder.hh
         G4BinaryProtonBuilder.hh
+        G4BuilderType.hh
         G4ChargeExchangePhysics.hh
         G4ChipsKaonBuilder.hh
         G4DataQuestionaire.hh
@@ -133,11 +135,13 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4HadronDElasticPhysics.hh
         G4HadronElasticPhysics.hh
         G4HadronElasticPhysicsHP.hh
+        G4HadronElasticPhysicsLEND.hh
         G4HadronElasticPhysicsLHEP.hh
         G4HadronElasticPhysicsXS.hh
         G4HadronHElasticPhysics.hh
         G4HadronQElasticPhysics.hh
         G4HyperonCHIPSBuilder.hh
+	G4HyperonFTFPBuilder.hh
         G4HyperonLHEPBuilder.hh
         G4InclAblaNeutronBuilder.hh
         G4InclAblaPiKBuilder.hh
@@ -162,6 +166,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4MiscQGSCBuilder.hh
         G4NeutronBuilder.hh
         G4NeutronCrossSectionXS.hh
+        G4NeutronLENDBuilder.hh
         G4NeutronHPBuilder.hh
         G4NeutronTrackingCut.hh
         G4OpticalPhysics.hh
@@ -251,11 +256,13 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4HadronDElasticPhysics.cc
         G4HadronElasticPhysics.cc
         G4HadronElasticPhysicsHP.cc
+        G4HadronElasticPhysicsLEND.cc
         G4HadronElasticPhysicsLHEP.cc
         G4HadronElasticPhysicsXS.cc
         G4HadronHElasticPhysics.cc
         G4HadronQElasticPhysics.cc
         G4HyperonCHIPSBuilder.cc
+        G4HyperonFTFPBuilder.cc
         G4HyperonLHEPBuilder.cc
         G4InclAblaNeutronBuilder.cc
         G4InclAblaPiKBuilder.cc
@@ -280,6 +287,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4MiscQGSCBuilder.cc
         G4NeutronBuilder.cc
         G4NeutronCrossSectionXS.cc
+        G4NeutronLENDBuilder.cc
         G4NeutronHPBuilder.cc
         G4NeutronTrackingCut.cc
         G4OpticalPhysics.cc
@@ -344,6 +352,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4geometrymng
         G4globman
         G4had_im_r_matrix
+        G4had_lend
         G4had_mod_man
         G4had_mod_util
         G4had_muon_nuclear

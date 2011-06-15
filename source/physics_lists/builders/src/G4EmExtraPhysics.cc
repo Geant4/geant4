@@ -51,6 +51,7 @@
 #include "G4MuonPlus.hh"
 #include "G4MuonMinus.hh"
 #include "G4ProcessManager.hh"
+#include "G4BuilderType.hh"
 
 G4EmExtraPhysics::G4EmExtraPhysics(G4int ver): 
   G4VPhysicsConstructor("G4GammaLeptoNuclearPhys"), wasBuilt(false), gnActivated(false), 
@@ -59,6 +60,7 @@ G4EmExtraPhysics::G4EmExtraPhysics(G4int ver):
   verbose(ver)
 {
   theMessenger = new G4EmMessenger(this);
+  SetPhysicsType(bEmExtra);
 }
 
 G4EmExtraPhysics::G4EmExtraPhysics(const G4String&): 
@@ -68,6 +70,7 @@ G4EmExtraPhysics::G4EmExtraPhysics(const G4String&):
   verbose(1)
 {
   theMessenger = new G4EmMessenger(this);
+  SetPhysicsType(bEmExtra);
 }
 
 G4EmExtraPhysics::~G4EmExtraPhysics()

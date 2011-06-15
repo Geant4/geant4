@@ -48,7 +48,9 @@ template<class T>
 class TShielding: public T
 {
 public:
-  TShielding(G4int ver = 1);
+  //TShielding(G4int ver = 1);
+  //TShielding(G4int ver = 1, G4bool rad=true, G4bool lend=false);
+  TShielding( G4int verbose = 1 , G4String low_energy_neutron_model = "HP" );
   virtual ~TShielding();
   
 public:

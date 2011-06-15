@@ -27,13 +27,11 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4EmLivermorePhysics.hh"
-
 #include "G4ParticleDefinition.hh"
 
 // *** Processes and models
 
 // gamma
-
 #include "G4PhotoElectricEffect.hh"
 #include "G4LivermorePhotoElectricModel.hh"
 
@@ -46,8 +44,7 @@
 #include "G4RayleighScattering.hh" 
 #include "G4LivermoreRayleighModel.hh"
 
-// e-
-
+// e+-
 #include "G4eMultipleScattering.hh"
 #include "G4UniversalFluctuation.hh"
 
@@ -58,18 +55,15 @@
 #include "G4LivermoreBremsstrahlungModel.hh"
 
 // e+
-
 #include "G4eplusAnnihilation.hh"
 
-// mu
-
+// mu+-
 #include "G4MuMultipleScattering.hh"
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
 
 // hadrons
-
 #include "G4hMultipleScattering.hh"
 #include "G4MscStepLimitType.hh"
 
@@ -88,10 +82,10 @@
 #include "G4GoudsmitSaundersonMscModel.hh"
 #include "G4CoulombScattering.hh"
 
-//
-
+// interfaces
 #include "G4LossTableManager.hh"
 #include "G4EmProcessOptions.hh"
+#include "G4UAtomicDeexcitation.hh"
 
 // particles
 
@@ -114,6 +108,7 @@
 
 //
 #include "G4PhysicsListHelper.hh"
+#include "G4BuilderType.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -121,6 +116,7 @@ G4EmLivermorePhysics::G4EmLivermorePhysics(G4int ver)
   : G4VPhysicsConstructor("G4EmLivermorePhysics"), verbose(ver)
 {
   G4LossTableManager::Instance();
+  SetPhysicsType(bElectromagnetic);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -129,6 +125,7 @@ G4EmLivermorePhysics::G4EmLivermorePhysics(G4int ver, const G4String&)
   : G4VPhysicsConstructor("G4EmLivermorePhysics"), verbose(ver)
 {
   G4LossTableManager::Instance();
+  SetPhysicsType(bElectromagnetic);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -363,8 +360,7 @@ void G4EmLivermorePhysics::ConstructProcess()
   
   // Multiple Coulomb scattering
   //
-  //opt.SetMscStepLimitation(fUseDistanceToBoundary);
-  //opt.SetMscRangeFactor(0.02);
+  opt.SetPolarAngleLimit(0.2);
     
   // Physics tables
   //
@@ -374,12 +370,15 @@ void G4EmLivermorePhysics::ConstructProcess()
   opt.SetDEDXBinning(220);
   opt.SetLambdaBinning(220);
 
-  //opt.SetSplineFlag(true);
-  opt.SetPolarAngleLimit(0.2);
-    
   // Ionization
   //
   //opt.SetSubCutoff(true);    
+
+  // Deexcitation
+  //
+  G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
+  G4LossTableManager::Instance()->SetAtomDeexcitation(de);
+  de->SetFluo(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

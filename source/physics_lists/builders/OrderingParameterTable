@@ -1,3 +1,5 @@
+Transprotation	1	91	-1	0	0	0
+CoupleTrans	1	92	-1	0	0	0	
 CoulombScat	2	1	-1	-1	1000	0	
 Ionisation	2	2	-1	2	2	0
 Brems		2	3	-1	-1	3	0	
@@ -37,6 +39,11 @@ HadCEX		4	161	-1	-1	1000	0
 Decay		6	201	1000	-1	1000	0
 DecayWSpin	6	202	1000	-1	1000	0
 DecayPiWSpin	6	203	1000	-1	1000	0	
-DecayUnKnown	6	203	1000	-1	1000	0
-DecayExt	6	204	1000	-1	1000	0
+DecayRadio	6	210	1000	-1	1000	0
+DecayUnKnown	6	211	1000	-1	1000	0
+DecayExt	6	231	1000	-1	1000	0
+StepLimiter	7	401	-1	-1	1000	0
+UsrSpecCuts	7	402	-1	-1	1000	0
+NeutronKiller	7	403	-1	-1	1000	0
+
 

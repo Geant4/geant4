@@ -38,9 +38,13 @@
 //
 
 #include "G4QIonPhysics.hh"
+#include "G4BuilderType.hh"
 
 G4QIonPhysics::G4QIonPhysics(const G4String& name)
- : G4VPhysicsConstructor(name), wasActivated(false){}
+ : G4VPhysicsConstructor(name), wasActivated(false)
+{
+  SetPhysicsType(bIons);
+}
 
 void G4QIonPhysics::ConstructProcess()
 {
