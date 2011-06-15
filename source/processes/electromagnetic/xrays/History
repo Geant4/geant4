@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08 May 11: V.Ivant (xrays-V09-04-03)
+08 May 11: V.Ivant (xrays-V09-04-02)
+- G4TransparentRegXTRadiator - fixed new gcc-4.6.0 warnings
+
 16 May 11: V.Ivant (xrays-V09-04-01)
 - G4ForwardXrayTR, G4Scintillation, G4TransparentRegXTRadiator, 
   G4VXTRenergyLoss - fixed gcc-4.6.0 warnings
