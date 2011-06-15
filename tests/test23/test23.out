@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-05    (27-May-2011)
+ Geant4 version Name: geant4-09-04-ref-00    (17-December-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -42,10 +42,10 @@ conv:   for  gamma    SubType= 14
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
-            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
+            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -63,16 +63,18 @@ msc:   for e-    SubType= 10
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
-            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
+            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
 annihil:   for  e+    SubType= 5
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -86,7 +88,7 @@ eIoni:   for  e+    SubType= 2
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=          2 MeV
           BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
@@ -105,7 +107,7 @@ msc:   for GenericIon    SubType= 10
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=          2 MeV
           BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
@@ -113,7 +115,7 @@ hIoni:   for  anti_proton    SubType= 2
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=    1.05231 MeV
           BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
@@ -127,7 +129,7 @@ msc:   for kaon+    SubType= 10
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=    1.05231 MeV
           BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
@@ -183,7 +185,7 @@ muPairProd:   for  mu-    SubType= 4
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=    297.505 keV
           BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
@@ -191,7 +193,7 @@ hIoni:   for  pi+    SubType= 2
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=    297.505 keV
           BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
@@ -204,113 +206,50 @@ msc:   for pi-    SubType= 10
 ============================================================================================
              HADRONIC PROCESSES SUMMARY (verbose level 1)
 
-                                  Hadronic Processes for <anti_neutron>
-                                  -----------------------------------
-       HadronElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
+                     Hadronic Processes for <anti_neutron>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                               G4HEAntiNeutronInelastic: Emin(GeV)=    20  Emax(GeV)= 10000
 
-       HadronElastic  Crs sctns:           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
+                     Hadronic Processes for <anti_proton>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+ AntiProtonInelastic  Models:   G4LEAntiProtonInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                G4HEAntiProtonInelastic: Emin(GeV)=    20  Emax(GeV)= 10000
 
-AntiNeutronInelastic  Models:     G4LEAntiNeutronInelastic: Emin(GeV)=    0  Emax(GeV)= 25
-                                  G4HEAntiNeutronInelastic: Emin(GeV)=   20  Emax(GeV)= 10000
+                     Hadronic Processes for <kaon+>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+   KaonPlusInelastic  Models:     G4LEKaonPlusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                  G4HEKaonPlusInelastic: Emin(GeV)=    20  Emax(GeV)= 10000
 
-AntiNeutronInelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+                     Hadronic Processes for <kaon->
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+  KaonMinusInelastic  Models:    G4LEKaonMinusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                 G4HEKaonMinusInelastic: Emin(GeV)=    20  Emax(GeV)= 10000
 
+                     Hadronic Processes for <lambda>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+     LambdaInelastic  Models:       G4LELambdaInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                    G4HELambdaInelastic: Emin(GeV)=    20  Emax(GeV)= 10000
 
-                                  Hadronic Processes for <anti_proton>
-                                  -----------------------------------
-       HadronElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
+                     Hadronic Processes for <neutron>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+    NeutronInelastic  Models:      G4LENeutronInelastic: Emin(GeV)=     0  Emax(GeV)= 55
+                                   G4HENeutronInelastic: Emin(GeV)=    45  Emax(GeV)= 10000
 
-       HadronElastic  Crs sctns:           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
+                     Hadronic Processes for <pi+>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+   PionPlusInelastic  Models:     G4LEPionPlusInelastic: Emin(GeV)=     0  Emax(GeV)= 55
+                                  G4HEPionPlusInelastic: Emin(GeV)=    45  Emax(GeV)= 10000
 
- AntiProtonInelastic  Models:      G4LEAntiProtonInelastic: Emin(GeV)=    0  Emax(GeV)= 25
-                                   G4HEAntiProtonInelastic: Emin(GeV)=   20  Emax(GeV)= 10000
+                     Hadronic Processes for <pi->
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+  PionMinusInelastic  Models:    G4LEPionMinusInelastic: Emin(GeV)=     0  Emax(GeV)= 55
+                                 G4HEPionMinusInelastic: Emin(GeV)=    45  Emax(GeV)= 10000
 
- AntiProtonInelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-
-                                  Hadronic Processes for <kaon+>
-                                  -----------------------------------
-       HadronElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
-
-       HadronElastic  Crs sctns:           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-   KaonPlusInelastic  Models:        G4LEKaonPlusInelastic: Emin(GeV)=    0  Emax(GeV)= 25
-                                     G4HEKaonPlusInelastic: Emin(GeV)=   20  Emax(GeV)= 10000
-
-   KaonPlusInelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-
-                                  Hadronic Processes for <kaon->
-                                  -----------------------------------
-       HadronElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
-
-       HadronElastic  Crs sctns:           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-  KaonMinusInelastic  Models:       G4LEKaonMinusInelastic: Emin(GeV)=    0  Emax(GeV)= 25
-                                    G4HEKaonMinusInelastic: Emin(GeV)=   20  Emax(GeV)= 10000
-
-  KaonMinusInelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-
-                                  Hadronic Processes for <lambda>
-                                  -----------------------------------
-       HadronElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
-
-       HadronElastic  Crs sctns:           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-     LambdaInelastic  Models:          G4LELambdaInelastic: Emin(GeV)=    0  Emax(GeV)= 25
-                                       G4HELambdaInelastic: Emin(GeV)=   20  Emax(GeV)= 10000
-
-     LambdaInelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-
-                                  Hadronic Processes for <neutron>
-                                  -----------------------------------
-       HadronElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
-
-       HadronElastic  Crs sctns:           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-    NeutronInelastic  Models:         G4LENeutronInelastic: Emin(GeV)=    0  Emax(GeV)= 55
-                                      G4HENeutronInelastic: Emin(GeV)=   45  Emax(GeV)= 10000
-
-    NeutronInelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-
-                                  Hadronic Processes for <pi+>
-                                  -----------------------------------
-       HadronElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
-
-       HadronElastic  Crs sctns:           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-   PionPlusInelastic  Models:        G4LEPionPlusInelastic: Emin(GeV)=    0  Emax(GeV)= 55
-                                     G4HEPionPlusInelastic: Emin(GeV)=   45  Emax(GeV)= 10000
-
-   PionPlusInelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-
-                                  Hadronic Processes for <pi->
-                                  -----------------------------------
-       HadronElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
-
-       HadronElastic  Crs sctns:           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-  PionMinusInelastic  Models:       G4LEPionMinusInelastic: Emin(GeV)=    0  Emax(GeV)= 55
-                                    G4HEPionMinusInelastic: Emin(GeV)=   45  Emax(GeV)= 10000
-
-  PionMinusInelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-
-                                  Hadronic Processes for <proton>
-                                  -----------------------------------
-       HadronElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
-
-       HadronElastic  Crs sctns:           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-     ProtonInelastic  Models:          G4LEProtonInelastic: Emin(GeV)=    0  Emax(GeV)= 55
-                                       G4HEProtonInelastic: Emin(GeV)=   45  Emax(GeV)= 10000
-
-     ProtonInelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
+                     Hadronic Processes for <proton>
+       HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
+     ProtonInelastic  Models:       G4LEProtonInelastic: Emin(GeV)=     0  Emax(GeV)= 55
+                                    G4HEProtonInelastic: Emin(GeV)=    45  Emax(GeV)= 10000
 ============================================================================================
 Test23 event # 100
 Test23 event # 200
@@ -322,6 +261,6 @@ Test23 event # 700
 Test23 event # 800
 Test23 event # 900
 Test23 event # 1000
-Test23_Result: gam=119(4.57164), e-=1781(16.0012), e+=19(5.2667), p=326(4.81121), n=2318(3.78185), d=53(2.12799), t=16(4.56334), He3=1(6.2791), alph=180(2.75785), nu=1365(52.836), anu=781(32.8069), others=21914*0.0894682
+Test23_Result: gam=136(4.62013), e-=1859(15.1064), e+=22(5.06741), p=374(4.86894), n=1921(4.37355), d=61(1.506), t=21(4.56672), He3=2(7.21829), alph=193(2.6739), nu=1383(54.2239), anu=762(32.9606), others=16871*0.11109
 Test23 is done
 
