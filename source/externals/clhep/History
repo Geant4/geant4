@@ -17,6 +17,26 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14 June 2011 - B.Morgan
+- CMakeLists.txt : Build G4clhep through standard GEANT4_LIBRARY_TARGET
+  macro. Keep installation of headers as is.
+
+13 June 2011 - B.Morgan
+- CMakeLists.txt : Added use of new CMAKE_INSTALL_XXX variables to control
+  installation of libraries and headers, and add exported libraries to a
+  global property as per other Geant4 targets. Header paths are not added to
+  a global property though because these can be internal or external, so
+  we handle them higher up when generating the configuration files.
+
+2 June 2011 - B.Morgan
+- CMakeLists.txt : NEW file adding CMake build of 'G4clhep'
+  Implemented as a single CMakeLists.txt because special handling of
+  the nested header structure of CLHEP is needed at install time.
+
+1 June 2011 - G.Cosmo
+- Fixed trivial compilation warnings on gcc-4.6.0 in NonRandomEngine.h
+  and Ranlux64Engine.cc for parameters defined but not used.
+
 24 May 2011 - G.Cosmo
 - Added missing files in CLHEP built-in module.
   Allow for generation of DLL library on Windows for it.

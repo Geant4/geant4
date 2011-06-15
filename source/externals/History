@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+14-June-2011: B.Morgan (externals-V09-04-05)
+- Tidied up CMakeLists.txt for G4clhep to use standard library target macro.
+
+2-June-2011: B.Morgan (externals-V09-04-04)
+- CMakeLists.txt : NEW file adding CMake build support to externals module.
+  CMake support added for clhep and expat modules.
+
+1-June-2011: G.Cosmo (externals-V09-04-03)
+- ixed trivial compilation warnings on gcc-4.6.0 in clhep module files
+  NonRandomEngine.h and Ranlux64Engine.cc for parameters defined but not used.
 
 24-May-2011: Gabriele Cosmo (externals-V09-04-02)
 - Added missing files in CLHEP built-in module.

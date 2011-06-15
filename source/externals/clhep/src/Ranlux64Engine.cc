@@ -104,7 +104,7 @@ Ranlux64Engine::Ranlux64Engine(long seed, int lux)
 				// point in the sequence.  
 }
 
-Ranlux64Engine::Ranlux64Engine(int rowIndex, int colIndex, int lux)
+Ranlux64Engine::Ranlux64Engine(int rowIndex, int, int lux)
 : HepRandomEngine()
 {
    luxury = lux;
