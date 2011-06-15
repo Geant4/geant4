@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10-Jun-2011 L.Pandola (test67-V09-04-08)
+	    Edited the local PhysListPenelope physics list to 
+	    comply with the new atomic deexcitation interface
+
 31-May-2011 G.Folger   (test67-V09-04-07)
 	    Fix typo introduced in test67.cc
 	    

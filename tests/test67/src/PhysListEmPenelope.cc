@@ -27,7 +27,8 @@
 // GEANT4 tag $Name:  $
 
 #include "PhysListEmPenelope.hh"
-
+#include "G4UAtomicDeexcitation.hh"
+#include "G4VAtomDeexcitation.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 
@@ -357,6 +358,13 @@ void PhysListEmPenelope::ConstructProcess()
   // Ionization
   //
   //opt.SetSubCutoff(true);    
+
+  // Deexcitation
+  //
+  G4VAtomDeexcitation* deexcitation = new G4UAtomicDeexcitation();
+  G4LossTableManager::Instance()->SetAtomDeexcitation(deexcitation);
+  deexcitation->SetFluo(true);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
