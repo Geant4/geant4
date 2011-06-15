@@ -13,9 +13,20 @@ code and to keep track of all tags.
 
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
-     ---------------------------------------------------------------
 
+01 Jun 2011, G.Folger		(hadr-qgsm-V09-04-02)
+-----------------------------------------------------
+- G4QGSParticipants: reduce energy of participant nucleons by binding energy.
+   This increases excitation energy, as calculated by initial-final. Without
+   this, excitation E often is close to 0, or negative.
+   
+01 Jun 2011, G.Folger		(hadr-qgsm-V09-04-01)
+-----------------------------------------------------
+-  Fix compilation warnings, gcc4.6, on alost unused variables. Move 
+    "debug" variables into #ifdef
+     
 17 Mar 2011, G.Folger		(hadr-qgsm-V09-04-00)
+-----------------------------------------------------
 -  set limits for E/p checking
 
 8 Sep 2010, G.Folger		(hadr-qgsm-V09-03-01)
