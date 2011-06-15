@@ -42,6 +42,7 @@ G4AdjointCSMatrix::G4AdjointCSMatrix(G4bool aBool){
 	log0Vector.clear();
 	nb_of_PrimEnergy=0;
 	is_scat_proj_to_proj_case  =aBool;
+	dlog =0;
 }
 ///////////////////////////////////////////////////////
 //

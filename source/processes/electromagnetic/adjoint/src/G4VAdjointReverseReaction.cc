@@ -47,13 +47,17 @@ G4VAdjointReverseReaction::
 {theAdjointCSManager = G4AdjointCSManager::GetAdjointCSManager();
  IsScatProjToProjCase=whichScatCase;
  fParticleChange=new G4ParticleChange();
- 
+ IsFwdCSUsed=false;
+ IsIntegralModeUsed=false;
+ currentMaterialIndex=100000;
+ currentTcut=0.;
+ lastCS=0.;
 }
 //////////////////////////////////////////////////////////////////////////////
 //
 G4VAdjointReverseReaction::
 	~G4VAdjointReverseReaction()
-{;
+{ if (fParticleChange) delete fParticleChange;
 }			
 //////////////////////////////////////////////////////////////////////////////
 //

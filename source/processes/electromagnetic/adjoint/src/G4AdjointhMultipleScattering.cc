@@ -55,6 +55,10 @@ G4AdjointhMultipleScattering::G4AdjointhMultipleScattering(const G4String& proce
   isInitialized = false;  
   isIon         = false;
   SetStepLimitType(fMinimal);
+
+  dtrl=0.;
+  lambdalimit=0.;
+  samplez=0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -145,4 +149,3 @@ void G4AdjointhMultipleScattering::PrintInfo()
 }
 */
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

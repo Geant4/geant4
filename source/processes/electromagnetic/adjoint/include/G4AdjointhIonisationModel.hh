@@ -118,16 +118,13 @@ private: //Methods
   G4double ratio, ratio2; 
   G4double one_plus_ratio_2;
   G4double formfact;
-  G4double twoln10;
-  G4double bg2lim;
-  G4double taulim;
-  G4double corrFactor;
   G4bool   isIon;
   G4double one_minus_ratio_2;
   
   
+
   G4VEmModel* theBraggDirectEMModel;	
-  G4double term_Cross1, term_Cross2;			    
+  //G4double term_Cross1, term_Cross2;
 
 
 

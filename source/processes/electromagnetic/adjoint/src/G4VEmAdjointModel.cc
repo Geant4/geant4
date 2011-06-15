@@ -87,6 +87,7 @@ G4double G4VEmAdjointModel::GetAdjointCrossSection(const G4MaterialCutsCouple* a
   return AdjointCrossSection(aCouple, primEnergy,
 				IsScatProjToProjCase);
   
+  /*
   //To continue
   DefineCurrentMaterial(aCouple);
   preStepEnergy=primEnergy;
@@ -102,23 +103,8 @@ G4double G4VEmAdjointModel::GetAdjointCrossSection(const G4MaterialCutsCouple* a
 	lastAdjointCSForProdToProjCase = lastCS;
 	//G4cout<<ekin<<std::endl;
   }
-  
- /* G4double ratio=lastCS;
-  G4cout<<"Model name"<<name;	
-  G4cout<<" LastCS Get "<<lastCS;
-  G4cout<<" Energy "<<primEnergy;*/
-  /*G4double lastCS1 = AdjointCrossSection(aCouple,
-				primEnergy,
-				IsScatProjToProjCase);
-  if (lastCS1 >0) {
-  	G4double ratio=lastCS/lastCS1;
-	G4double diff = std::abs(1-ratio)*100.;
-	if (diff >1)  G4cout<<primEnergy <<" diff"<<diff<<'\t'<<lastCS<<'\t'<<lastCS1<<'\t'<<name<<'\t'<<IsScatProjToProjCase<<std::endl;
-  }
-  //G4cout<<" LastCS Compute "<<lastCS1<<std::endl;
+  return lastCS;
   */
-			
-  return lastCS;	
 }					     				
 ////////////////////////////////////////////////////////////////////////////////
 //

@@ -38,13 +38,15 @@
 G4AdjointAlongStepWeightCorrection::G4AdjointAlongStepWeightCorrection(const G4String& name, 
   G4ProcessType type): G4VContinuousProcess(name, type)
 {fParticleChange = new G4ParticleChange();
+ currentMaterialIndex=0;
+ preStepKinEnergy=1.;
 }
 
 ///////////////////////////////////////////////////////
 //
 
 G4AdjointAlongStepWeightCorrection::~G4AdjointAlongStepWeightCorrection()
-{; 
+{delete fParticleChange;
 }
 ///////////////////////////////////////////////////////
 //

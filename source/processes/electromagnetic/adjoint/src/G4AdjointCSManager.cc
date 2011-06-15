@@ -96,9 +96,15 @@ G4AdjointCSManager::G4AdjointCSManager()
   forward_CS_mode = true;
   
   currentParticleDef = 0;
+  currentCouple =0;
+  currentMaterial=0;
+  lastMaterial=0;
+
   
   theAdjIon = 0;
   theFwdIon = 0;  
+
+
  
  
 }

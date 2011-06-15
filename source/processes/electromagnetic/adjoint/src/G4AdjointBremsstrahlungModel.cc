@@ -60,7 +60,9 @@ G4AdjointBremsstrahlungModel::G4AdjointBremsstrahlungModel():
   SetApplyCutInRange(true);
   highKinEnergy= 100.*TeV;
   lowKinEnergy = 1.0*keV;
-  theTimer =new G4Timer();
+
+  lastCZ =0.;
+
   
   theAdjEquivOfDirectPrimPartDef =G4AdjointElectron::AdjointElectron();
   theAdjEquivOfDirectSecondPartDef=G4AdjointGamma::AdjointGamma();
@@ -81,6 +83,12 @@ G4AdjointBremsstrahlungModel::G4AdjointBremsstrahlungModel():
   
 
   
+}
+////////////////////////////////////////////////////////////////////////////////
+//
+G4AdjointBremsstrahlungModel::~G4AdjointBremsstrahlungModel()
+{if (theDirectStdBremModel) delete theDirectStdBremModel;
+ if (theEmModelManagerForFwdModels) delete theEmModelManagerForFwdModels;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -271,11 +279,6 @@ void G4AdjointBremsstrahlungModel::RapidSampleSecondaries(const G4Track& aTrack,
 	
   }	
 } 
-////////////////////////////////////////////////////////////////////////////////
-//
-G4AdjointBremsstrahlungModel::~G4AdjointBremsstrahlungModel()
-{;}
-
 ////////////////////////////////////////////////////////////////////////////////
 //
 G4double G4AdjointBremsstrahlungModel::DiffCrossSectionPerVolumePrimToSecond(const G4Material* aMaterial,

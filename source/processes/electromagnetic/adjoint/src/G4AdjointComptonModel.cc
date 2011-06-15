@@ -53,7 +53,7 @@ G4AdjointComptonModel::G4AdjointComptonModel():
   theDirectPrimaryPartDef=G4Gamma::Gamma();
   second_part_of_same_type=false;
   theDirectEMModel=new G4KleinNishinaCompton(G4Gamma::Gamma(),"ComptonDirectModel");
- 
+  G4direct_CS = 0.;
 }
 ////////////////////////////////////////////////////////////////////////////////
 //

@@ -116,7 +116,7 @@ private:
  
   
   std::vector<float> SigmaPerAtom; 
-  G4Timer* theTimer;
+
   
   G4double MigdalConstant;
   G4double lastCZ;

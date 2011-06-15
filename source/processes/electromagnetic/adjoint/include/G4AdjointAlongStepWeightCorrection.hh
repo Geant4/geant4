@@ -118,7 +118,6 @@ private:
   const G4Material*  currentMaterial;
   const G4MaterialCutsCouple* currentCouple;
   size_t   currentMaterialIndex; 
-  G4double currentTcut;
   G4double preStepKinEnergy;
   
 };

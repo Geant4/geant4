@@ -63,20 +63,13 @@ G4AdjointhIonisationModel::G4AdjointhIonisationModel(G4ParticleDefinition* proje
   theAdjEquivOfDirectSecondPartDef=G4AdjointElectron::AdjointElectron();
   
   theDirectPrimaryPartDef = projectileDefinition;
+  theAdjEquivOfDirectPrimPartDef = 0;
   if (projectileDefinition == G4Proton::Proton()) {
   	theAdjEquivOfDirectPrimPartDef = G4AdjointProton::AdjointProton();
 	
   }
   
   DefineProjectileProperty();
-  
-  
-  
- 
-
-
-
-
 }
 ////////////////////////////////////////////////////////////////////////////////
 //

@@ -155,6 +155,7 @@ size_t  G4AdjointInterpolator::FindPositionForLogVector(G4double& log_x,std::vec
 {  //most rapid nethod could be used probably
    //It is important to put std::vector<G4double>& such that the vector itself is used and not a copy
   return FindPosition(log_x, log_x_vec);
+  /*
   if (log_x_vec.size()>3){ 
   	size_t ind=0;
   	G4double log_x1=log_x_vec[1];
@@ -167,6 +168,7 @@ size_t  G4AdjointInterpolator::FindPositionForLogVector(G4double& log_x,std::vec
 	
   }
   else 	return FindPosition(log_x, log_x_vec);
+  */
   
  
 }

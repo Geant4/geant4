@@ -36,7 +36,6 @@
 #include "G4AdjointCSManager.hh"
 #include "G4LossTableManager.hh"
 
-
 ///////////////////////////////////////////////////////
 //
 G4ContinuousGainOfEnergy::G4ContinuousGainOfEnergy(const G4String& name, 
@@ -54,9 +53,15 @@ G4ContinuousGainOfEnergy::G4ContinuousGainOfEnergy(const G4String& name,
   massRatio =1.;
   chargeSqRatio=1.;
   preStepChargeSqRatio=1.;
-
   
-
+  //Some initialization
+  currentCoupleIndex=9999999;
+  currentCutInRange=0.;
+  currentMaterialIndex=9999999;
+  currentTcut=0.;
+  preStepKinEnergy=0.;
+  preStepRange=0.;
+  preStepScaledKinEnergy=0.;
   
   
 }

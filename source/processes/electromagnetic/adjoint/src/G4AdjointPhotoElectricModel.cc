@@ -45,14 +45,22 @@ G4AdjointPhotoElectricModel::G4AdjointPhotoElectricModel():
 
 { SetUseMatrix(false);
   SetApplyCutInRange(false);
+
+  //Initialization
   current_eEnergy =0.;
   totAdjointCS=0.;
+  factorCSBiasing =1.;
+  post_step_AdjointCS =0.;
+  pre_step_AdjointCS =0.;
+  totBiasedAdjointCS =0.;
+
+  index_element=0;
+
   theAdjEquivOfDirectPrimPartDef =G4AdjointGamma::AdjointGamma();
   theAdjEquivOfDirectSecondPartDef=G4AdjointElectron::AdjointElectron();
   theDirectPrimaryPartDef=G4Gamma::Gamma();
   second_part_of_same_type=false;
   theDirectPEEffectModel = new G4PEEffectModel();
- 
 }
 ////////////////////////////////////////////////////////////////////////////////
 //
