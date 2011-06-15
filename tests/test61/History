@@ -12,6 +12,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15 June 2011, Gunter Folger   (test61-V09-04-00)
+- Update test61.in to replace obsolete /run/particle/SetCut by /run/SetCut
+
 09.11.18 KOI, Tatsumi ( test61-V09-02-00)
 - Change multiple scattering processes to particle dedicated
 
