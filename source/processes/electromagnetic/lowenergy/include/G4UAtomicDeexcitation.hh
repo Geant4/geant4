@@ -140,7 +140,6 @@ private:
 
   G4double minGammaEnergy;
   G4double minElectronEnergy;
-  //  G4bool   fAuger;
 
   // Data member wich stores the id of the shell where is the vacancy 
   // left from the Auger electron
@@ -150,7 +149,11 @@ private:
 
   G4VhShellCrossSection* PIXEshellCS;
   G4VhShellCrossSection* anaPIXEshellCS;
+  G4VhShellCrossSection* ePIXEshellCS;
   G4EmCorrections*       emcorr;
+
+  const G4ParticleDefinition* theElectron;
+  const G4ParticleDefinition* thePositron;
 };
 
 #endif

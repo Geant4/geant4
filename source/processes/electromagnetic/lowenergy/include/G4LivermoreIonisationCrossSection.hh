@@ -23,78 +23,78 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreComptonModel.hh,v 1.3 2009-04-17 10:29:20 vnivanch Exp $
+// $Id: G4LivermoreIonisationCrossSection.hh,v 1.3 2009-10-23 09:28:37 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// Author: Sebastien Inserti
-//         30 October 2008
+// Author: Vladimir Ivanchenko
 //
-// Modified:
+// History:
 // --------
-// 30 May 2011   V Ivanchenko Migration to model design for deexcitation
+// 31 May 2011 V.Ivanchenko  The class is created  
+// 
+// 
+// -------------------------------------------------------------------
+//
+// Class description:
+// Access to Livermore ionisation cross sections for e-
+// -------------------------------------------------------------------
 
-#ifndef G4LivermoreComptonModel_h
-#define G4LivermoreComptonModel_h 1
+#ifndef G4LIVERMOREIONISATIONCROSSSECTION_HH
+#define G4LIVERMOREIONISATIONCROSSSECTION_HH 1
 
-#include "G4VEmModel.hh"
-#include "G4ShellData.hh"
-#include "G4DopplerProfile.hh"
+#include "G4VhShellCrossSection.hh"
+#include "globals.hh"
+#include "G4AtomicShellEnumerator.hh"
+#include <vector>
 
-class G4ParticleChangeForGamma;
+class G4AtomicTransitionManager;
 class G4VCrossSectionHandler;
-class G4VAtomDeexcitation;
-class G4VEMDataSet;
 
-class G4LivermoreComptonModel : public G4VEmModel
+class G4LivermoreIonisationCrossSection : public G4VhShellCrossSection 
 {
 
 public:
-
-  G4LivermoreComptonModel(const G4ParticleDefinition* p = 0, 
-		          const G4String& nam = "LivermoreCompton");
-
-  virtual ~G4LivermoreComptonModel();
-
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
-
-  virtual G4double ComputeCrossSectionPerAtom( const G4ParticleDefinition*,
-                                               G4double kinEnergy, 
-                                               G4double Z, 
-                                               G4double A=0, 
-                                               G4double cut=0,
-                                               G4double emax=DBL_MAX );
-
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double tmin,
-				 G4double maxEnergy);
-
-protected:
-
-  G4ParticleChangeForGamma* fParticleChange;
-
-private:
-
-  G4double lowEnergyLimit;  
-  G4double highEnergyLimit; 
-  G4bool isInitialised;
-  G4int verboseLevel;
   
-  G4VEMDataSet* scatterFunctionData;
+  G4LivermoreIonisationCrossSection(const G4String& nam = "LivermorePIXE");
+  
+  virtual ~G4LivermoreIonisationCrossSection();
+
+  void Initialise();
+
+  G4double CrossSection(G4int Z, G4AtomicShellEnumerator shell,
+			G4double incidentEnergy,
+			G4double mass = 0.0) const;
+
+  std::vector<G4double> GetCrossSection(G4int Z,
+					G4double incidentEnergy,
+					G4double mass = 0.0,
+					G4double deltaEnergy = 0.0,
+					G4bool testFlag = false) const;
+
+  std::vector<G4double> Probabilities(G4int Z,
+				      G4double incidentEnergy,
+				      G4double mass = 0.0,
+				      G4double deltaEnergy = 0) const;
+    
+private:
+ 
+  G4LivermoreIonisationCrossSection & operator=(const G4LivermoreIonisationCrossSection &right);
+  G4LivermoreIonisationCrossSection(const G4LivermoreIonisationCrossSection&);
+
+  //Intrinsic energy limits of the model: cannot be extended by the parent process
+  G4double fLowEnergyLimit;
+  G4double fHighEnergyLimit;
+
+  G4bool isInitialised;
+ 
+  G4int verboseLevel;
+ 
   G4VCrossSectionHandler* crossSectionHandler;
 
-  G4VAtomDeexcitation*    fAtomDeexcitation;
-
-  G4ShellData shellData;
-  G4DopplerProfile profileData;
-
-  G4LivermoreComptonModel & operator=(const  G4LivermoreComptonModel &right);
-  G4LivermoreComptonModel(const  G4LivermoreComptonModel&);
+  const G4AtomicTransitionManager* transitionManager;
 
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #endif
+

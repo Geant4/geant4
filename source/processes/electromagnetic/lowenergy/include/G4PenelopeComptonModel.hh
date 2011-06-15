@@ -34,6 +34,7 @@
 // 18 Mar 2010   L. Pandola   Removed GetAtomsPerMolecule(), now demanded 
 //                            to G4PenelopeOscillatorManager
 // 24 May 2011   L. Pandola   Renamed (make v2008 as default Penelope)
+// 10 Jun 2011   L. Pandola   Migrated to the new AtomDeexcitation interface
 //
 // -------------------------------------------------------------------
 //*
@@ -49,7 +50,8 @@
 #include "G4VEmModel.hh"
 #include "G4DataVector.hh"
 #include "G4ParticleChangeForGamma.hh"
-#include "G4AtomicDeexcitation.hh"
+#include "G4AtomicTransitionManager.hh"
+#include "G4VAtomDeexcitation.hh"
 
 class G4ParticleDefinition;
 class G4DynamicParticle;
@@ -95,7 +97,6 @@ public:
   void SetVerbosityLevel(G4int lev){verboseLevel = lev;};
   G4int GetVerbosityLevel(){return verboseLevel;};
 
-  void ActivateAuger(G4bool);
 
 protected:
   G4ParticleChangeForGamma* fParticleChange;
@@ -122,8 +123,9 @@ private:
 
   G4bool isInitialised;
 
-  G4AtomicDeexcitation deexcitationManager;
-
+  G4VAtomDeexcitation*             fAtomDeexcitation;
+  const G4AtomicTransitionManager* fTransitionManager;
+  
   G4PenelopeOscillatorManager* oscManager;
 
 

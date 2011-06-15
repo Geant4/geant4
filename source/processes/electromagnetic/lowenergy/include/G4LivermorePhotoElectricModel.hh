@@ -26,8 +26,12 @@
 // $Id: G4LivermorePhotoElectricModel.hh,v 1.4 2010-03-15 09:02:29 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 15-Mar-2010   L. Pandola, removed methods to set explicitely fluorescence cuts.
+// Author: Sebastien Inserti
+//         30 October 2008
+//
+// 15 Mar 2010   L. Pandola, removed methods to set explicitely fluorescence cuts.
 //               Main cuts from G4ProductionCutsTable are always used
+// 30 May 2011   A Mantero & V Ivanchenko Migration to model design for deexcitation
 //
 
 
@@ -35,27 +39,12 @@
 #define G4LivermorePhotoElectricModel_h 1
 
 #include "G4VEmModel.hh"
-#include "G4Electron.hh"
-#include "G4ParticleChangeForGamma.hh"
-#include "G4CrossSectionHandler.hh"
-#include "G4LogLogInterpolation.hh"
-#include "G4CompositeEMDataSet.hh"
-#include "G4ShellData.hh"
-#include "G4DopplerProfile.hh"
-//#include "G4AtomicDeexcitation.hh"
-#include "G4VAtomDeexcitation.hh"
 
-#include "G4VPhotoElectricAngularDistribution.hh"
-#include "G4PhotoElectricAngularGeneratorSimple.hh"
-#include "G4PhotoElectricAngularGeneratorSauterGavrila.hh"
-#include "G4PhotoElectricAngularGeneratorPolarized.hh"
-#include "G4AtomicTransitionManager.hh"
-#include "G4AtomicShell.hh"
-#include "G4ProductionCutsTable.hh"
-#include "G4ForceCondition.hh"
-#include "G4Gamma.hh"
-
-
+class G4ParticleChangeForGamma;
+class G4VCrossSectionHandler;
+class G4VAtomDeexcitation;
+class G4VPhotoElectricAngularDistribution;
+class G4AtomicTransitionManager;
 
 class G4LivermorePhotoElectricModel : public G4VEmModel
 {
@@ -63,7 +52,7 @@ class G4LivermorePhotoElectricModel : public G4VEmModel
 public:
 
   G4LivermorePhotoElectricModel(const G4ParticleDefinition* p = 0, 
-		     const G4String& nam = "LivermorePhElectric");
+				const G4String& nam = "LivermorePhElectric");
 
   virtual ~G4LivermorePhotoElectricModel();
 
@@ -83,7 +72,7 @@ public:
 				 G4double tmin,
 				 G4double maxEnergy);
 
-  void ActivateAuger(G4bool);
+  //  void ActivateAuger(G4bool);
 
   void SetAngularGenerator(G4VPhotoElectricAngularDistribution* distribution);
 
@@ -93,8 +82,10 @@ protected:
 
   G4ParticleChangeForGamma* fParticleChange;
 
-
 private:
+
+  G4ParticleDefinition*     theGamma;
+  G4ParticleDefinition*     theElectron;
 
   G4double lowEnergyLimit;  
   G4double highEnergyLimit; 
@@ -102,15 +93,13 @@ private:
   G4int verboseLevel;
   G4bool isInitialised;
 
-  G4VEMDataSet* meanFreePathTable;
-
   G4VCrossSectionHandler* crossSectionHandler;
   G4VCrossSectionHandler* shellCrossSectionHandler;
 
-  G4VAtomDeexcitation*      fAtomDeexcitation;
-  //  G4AtomicDeexcitation deexcitationManager;
+  G4VAtomDeexcitation*             fAtomDeexcitation;
+  const G4AtomicTransitionManager* fTransitionManager;
 
-  G4VPhotoElectricAngularDistribution* ElectronAngularGenerator;
+  G4VPhotoElectricAngularDistribution* fElectronAngularGenerator;
   G4String generatorName;
 
   G4LivermorePhotoElectricModel & operator=(const  G4LivermorePhotoElectricModel &right);

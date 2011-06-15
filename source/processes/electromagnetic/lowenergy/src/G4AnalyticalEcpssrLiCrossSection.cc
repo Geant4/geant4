@@ -38,6 +38,7 @@
 
 G4AnalyticalEcpssrLiCrossSection::G4AnalyticalEcpssrLiCrossSection()
 {
+    verboseLevel=0;
 
     // Storing FLi data needed for 0.2 to 3.0  velocities region
 
@@ -104,9 +105,6 @@ G4AnalyticalEcpssrLiCrossSection::G4AnalyticalEcpssrLiCrossSection()
 
         if (y2 != aVecMap2[x2].back()) aVecMap2[x2].push_back(y2);
     }
-
-    // Verbose level
-    verboseLevel=0;
 
 }
 

@@ -399,8 +399,12 @@ void G4ShellEMDataSet::CleanUpComponents(void)
 G4String G4ShellEMDataSet::FullFileName(const G4String& fileName) const
 {
   char* path = getenv("G4LEDATA");
+  
   if (!path)
+  {
     G4Exception("G4ShellEMDataSet::FullFileName - G4LEDATA environment variable not set");
+    return "";
+  }
   
   std::ostringstream fullFileName;
  

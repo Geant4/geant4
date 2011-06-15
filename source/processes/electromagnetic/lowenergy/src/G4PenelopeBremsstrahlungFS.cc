@@ -374,6 +374,8 @@ void G4PenelopeBremsstrahlungFS::ReadDataFile(G4int Z)
 
   if (theElementData)
     theElementData->insert(std::make_pair(Z,theMatrix));
+  else
+    delete theMatrix;
   file.close();
   return;
 }

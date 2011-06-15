@@ -17,7 +17,34 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-30.05.2011  L. Pandola, tag emlowen-V09-04-40
+14.06.2011  S. Incerti, tag emlowen-V09-04-46
+	    Corrected Windows compilation pblm (asinh) for Boldyshev triplet 
+	    model.
+
+11.06.2011  S. Incerti, tag emlowen-V09-04-45
+	    Commited Boldyshev triplet model on behalf of Francesco & Gerardo
+
+10.06.2011  L. Pandola, tag emlowen-V09-04-44
+	    Migrated PhotoElectric and Compton Penelope models (v2008)
+	    to the new interface for atomic de-excitation. For the time being, 
+	    Ionisation model is left out, as well as the v2001 models
+
+09.06.2011  L. Pandola, tag emlowen-V09-04-43
+	    Fixed coverity defects in G4Penelope files
+
+06.06.2011  S. Incerti, tag emlowen-V09-04-42
+            Fixed coverity warnings.
+
+01.06.2011  V. Ivanchenko, tag emlowen-V09-04-41
+            Added G4LivermoreIonisationCrossSection and
+            G4eCrossSectionHandler
+            G4LivermoreIonisationModel, G4LivermorePhotoElectricModel
+            are migraded to common design with standard for deexcitation
+            G4LivermoreComptonModel - deexcitation is added
+            G4UAtomicDeexcitation - added e+- cross section separately
+            from hadron cross sections
+
+30.05.2011  V. Ivanchenko, tag emlowen-V09-04-40
             Fixed run time crash in G4LivermorePhotoElectricModel
 
 30.05.2011  L. Pandola, tag emlowen-V09-04-39

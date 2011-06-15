@@ -32,6 +32,7 @@
 // -----------
 // 08 Jan 2010   L. Pandola   1st implementation. 
 // 25 May 2011   L. Pandola   Renamed (make v2008 as default Penelope)
+// 10 Jun 2011   L. Pandola   Migrated to the new AtomDeexcitation interface
 //
 // -------------------------------------------------------------------
 //
@@ -47,7 +48,8 @@
 #include "G4VEmModel.hh"
 #include "G4DataVector.hh"
 #include "G4ParticleChangeForGamma.hh"
-#include "G4AtomicDeexcitation.hh"
+#include "G4AtomicTransitionManager.hh"
+#include "G4VAtomDeexcitation.hh"
 
 class G4ParticleDefinition;
 class G4DynamicParticle;
@@ -83,8 +85,6 @@ public:
   void SetVerbosityLevel(G4int lev){verboseLevel = lev;};
   G4int GetVerbosityLevel(){return verboseLevel;};
 
-  void ActivateAuger(G4bool);
-
   //testing purposes
   size_t GetNumberOfShellXS(G4int);
   G4double GetShellCrossSection(G4int Z,size_t shellID,G4double energy);
@@ -106,7 +106,8 @@ private:
   G4int verboseLevel;
   G4bool isInitialised;
 
-  G4AtomicDeexcitation deexcitationManager;
+  G4VAtomDeexcitation*             fAtomDeexcitation;
+  const G4AtomicTransitionManager* fTransitionManager;
 
   void ReadDataFile(G4int Z);
 

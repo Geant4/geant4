@@ -23,69 +23,34 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4CrossSectionHandler.hh,v 1.9 2006-06-29 19:33:10 gunter Exp $
+// $Id: G4eCrossSectionHandler.cc,v 1.21 2009-09-27 10:47:42 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
+// Author: Vladimir Ivanchenko
 //
 // History:
 // -----------
-//  1 Aug 2001   MGP        Created
+// 1  Jun 2011   V.Ivanchenko  Created
 //
 // -------------------------------------------------------------------
 
-// Class description:
-// Low Energy Electromagnetic Physics
-// Data set manager for an electromagnetic physics process
+#include "G4eCrossSectionHandler.hh"
+#include "G4VDataSetAlgorithm.hh"
 
-// -------------------------------------------------------------------
+G4eCrossSectionHandler::G4eCrossSectionHandler(G4VDataSetAlgorithm* alg,
+  G4double emin, G4double emax, G4int nbin): G4VCrossSectionHandler()
+{ 
+  G4VCrossSectionHandler::Initialise(alg, emin, emax, nbin);
+}
 
-#ifndef G4CROSSSECTIONHANDLER_HH
-#define G4CROSSSECTIONHANDLER_HH 1
+G4eCrossSectionHandler::~G4eCrossSectionHandler()
+{}
 
-#include "globals.hh"
-#include "G4DataVector.hh"
-#include <map>
-#include <vector>
-#include "G4VCrossSectionHandler.hh"
-
-class G4VDataSetAlgorithm;
-class G4VEMDataSet;
-class G4Material;
-class G4Element;
-
-class G4CrossSectionHandler : public G4VCrossSectionHandler {
- 
-public:
-
-  G4CrossSectionHandler();
-
-  ~G4CrossSectionHandler();
-	
-   
-protected: 
-   
-  virtual std::vector<G4VEMDataSet*>* BuildCrossSectionsForMaterials(const G4DataVector& energyVector, 
-								       const G4DataVector* energyCuts = 0);
- 
-private:
- 
-  // Hide copy constructor and assignment operator
-  G4CrossSectionHandler(const G4CrossSectionHandler&);
-  G4CrossSectionHandler & operator=(const G4CrossSectionHandler &right);
-
-};
- 
-#endif
-
-
-
-
-
-
-
-
-
-
+std::vector<G4VEMDataSet*>*
+G4eCrossSectionHandler::BuildCrossSectionsForMaterials(const G4DataVector&,
+						       const G4DataVector*)
+{
+  std::vector<G4VEMDataSet*>* matCrossSections = new std::vector<G4VEMDataSet*>;
+  return matCrossSections;
+}
 

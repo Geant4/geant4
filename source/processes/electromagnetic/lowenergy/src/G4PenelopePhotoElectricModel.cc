@@ -35,12 +35,12 @@
 //                          Make sure that fluorescence/Auger is generated only if 
 //                          above threshold
 // 25 May 2011   L Pandola  Renamed (make v2008 as default Penelope)
+// 10 Jun 2011   L Pandola  Migrate atomic deexcitation interface
 //
 
 #include "G4PenelopePhotoElectricModel.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4MaterialCutsCouple.hh"
-#include "G4ProductionCutsTable.hh"
 #include "G4DynamicParticle.hh"
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsFreeVector.hh"
@@ -50,6 +50,7 @@
 #include "G4AtomicShell.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
+#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -71,9 +72,7 @@ G4PenelopePhotoElectricModel::G4PenelopePhotoElectricModel(const G4ParticleDefin
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
 
-  //by default the model will inkove the atomic deexcitation
-  SetDeexcitationFlag(true);  
-  ActivateAuger(false);
+  fTransitionManager = G4AtomicTransitionManager::Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -106,18 +105,31 @@ void G4PenelopePhotoElectricModel::Initialise(const G4ParticleDefinition* partic
     logAtomicShellXS = new std::map<const G4int,G4PhysicsTable*>;
 
   InitialiseElementSelectors(particle,cuts);
+  fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
 
   if (verboseLevel > 0) { 
     G4cout << "Penelope Photo-Electric model v2008 is initialized " << G4endl
 	   << "Energy range: "
 	   << LowEnergyLimit() / MeV << " MeV - "
-	   << HighEnergyLimit() / GeV << " GeV"
-	   << G4endl;
+	   << HighEnergyLimit() / GeV << " GeV";
+
+    //Write the information about deexcitation
+    //Notice: to be compeleted when a getter of the isActive status
+    //is made available
+    if (fAtomDeexcitation)      
+      //if (fAtomDeexcitation->IsActive())
+	G4cout << "--> Fluorescence flag ON";
+    //else
+    //	G4cout << "--> Fluorescence flag OFF";
+    else
+      G4cout << "--> Fluorescence flag OFF";
+    G4cout << G4endl;
   }
 
   if(isInitialised) return;
   fParticleChange = GetParticleChangeForGamma();
   isInitialised = true;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -244,9 +256,9 @@ void G4PenelopePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicPartic
   if (shellIndex >= numberOfShells)
     shellIndex = numberOfShells-1;
 
-  const G4AtomicShell* shell = transitionManager->Shell(Z,shellIndex);
+  const G4AtomicShell* shell = fTransitionManager->Shell(Z,shellIndex);
   G4double bindingEnergy = shell->BindingEnergy();
-  G4int shellId = shell->ShellId();
+  //G4int shellId = shell->ShellId();
 
   //Penelope considers only K, L and M shells. Cross sections of outer shells are 
   //not included in the Penelope database. If SelectRandomShell() returns 
@@ -291,65 +303,32 @@ void G4PenelopePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicPartic
   G4double energyInAuger = 0; //testing purposes
 
   //Now, take care of fluorescence, if required
-  if(DeexcitationFlag() && Z > 5) 
-    {
-      const G4ProductionCutsTable* theCoupleTable=
-	G4ProductionCutsTable::GetProductionCutsTable();
-      size_t indx = couple->GetIndex();
-      G4double cutG = (*(theCoupleTable->GetEnergyCutsVector(0)))[indx];
-      G4double cutE = (*(theCoupleTable->GetEnergyCutsVector(1)))[indx];
-      
-      // Protection to avoid generating photons in the unphysical case of 
-      // shell binding energy > photon energy
-      if (bindingEnergy > cutG || bindingEnergy > cutE)
-	{
-	  deexcitationManager.SetCutForSecondaryPhotons(cutG);
-	  deexcitationManager.SetCutForAugerElectrons(cutE);
-	  std::vector<G4DynamicParticle*>* photonVector = 
-	    deexcitationManager.GenerateParticles(Z,shellId); 
-	  //Check for secondaries
-          if(photonVector) 
+  if (fAtomDeexcitation)
+    {      
+      G4int index = couple->GetIndex();
+      if (fAtomDeexcitation->CheckDeexcitationActiveRegion(index))
+	{	
+	  size_t nBefore = fvect->size();
+	  fAtomDeexcitation->GenerateParticles(fvect,shell,Z,index);
+	  size_t nAfter = fvect->size();
+
+	  if (nAfter > nBefore) //actual production of fluorescence
 	    {
-	      for (size_t k=0; k< photonVector->size(); k++)
+	      for (size_t j=nBefore;j<nAfter;j++) //loop on products
 		{
-		  G4DynamicParticle* aPhoton = (*photonVector)[k];
-		  if (aPhoton)
-		    {
-		      G4double itsEnergy = aPhoton->GetKineticEnergy();
-		      G4bool keepIt = false;
-		      if (itsEnergy <= bindingEnergy)
-			{
-			  //check if good! 
-			  if(aPhoton->GetDefinition() == G4Gamma::Gamma()
-			     && itsEnergy >= cutG)
-			    {
-			      keepIt = true;
-			      energyInFluorescence += itsEnergy;
-			    }
-			  if (aPhoton->GetDefinition() == G4Electron::Electron() && 
-			      itsEnergy >= cutE)
-			    {
-			      energyInAuger += itsEnergy;
-			      keepIt = true;
-			    }
-			}
-		      //good secondary, register it
-		      if (keepIt)
-			{
-			  bindingEnergy -= itsEnergy;
-			  fvect->push_back(aPhoton);
-			}		    
-		      else
-			{
-			  delete aPhoton;
-			  (*photonVector)[k] = 0;
-			}
-		    }
+		  G4double itsEnergy = ((*fvect)[j])->GetKineticEnergy();
+		  bindingEnergy -= itsEnergy;
+		  if (((*fvect)[j])->GetParticleDefinition() == G4Gamma::Definition())
+		    energyInFluorescence += itsEnergy;
+		  else if (((*fvect)[j])->GetParticleDefinition() == G4Electron::Definition())
+		    energyInAuger += itsEnergy;
+		  
 		}
-	      delete photonVector;
 	    }
+
 	}
     }
+
   //Residual energy is deposited locally
   localEnergyDeposit += bindingEnergy;
       
@@ -393,21 +372,6 @@ void G4PenelopePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicPartic
 	       << " keV (final) vs. " << 
 	  photonEnergy/keV << " keV (initial)" << G4endl;
     }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4PenelopePhotoElectricModel::ActivateAuger(G4bool augerbool)
-{
-  if (!DeexcitationFlag() && augerbool)
-    {
-      G4cout << "WARNING - G4PenelopePhotoElectricModel" << G4endl;
-      G4cout << "The use of the Atomic Deexcitation Manager is set to false " << G4endl;
-      G4cout << "Therefore, Auger electrons will be not generated anyway" << G4endl;
-    }
-  deexcitationManager.ActivateAugerElectronProduction(augerbool);
-  if (verboseLevel > 1)
-    G4cout << "Auger production set to " << augerbool << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -501,7 +465,7 @@ void G4PenelopePhotoElectricModel::ReadDataFile(G4int Z)
     G4cout << "Element Z=" << Z << " , nShells = " << nShells << G4endl;
 
   //check the right file is opened.
-  if (readZ != Z || nShells <= 0)
+  if (readZ != Z || nShells <= 0 || nShells > 50) //protect nShell against large values
     {
       G4cout << "G4PenelopePhotoElectricModel::ReadDataFile()" << G4endl;
       G4cout << "Corrupted data file for Z=" << Z << G4endl;

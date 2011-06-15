@@ -58,6 +58,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4CrossSectionHandler.hh
         G4DopplerProfile.hh
         G4eBremsstrahlungSpectrum.hh
+        G4eCrossSectionHandler.hh
         G4eIonisationCrossSectionHandler.hh
         G4eIonisationParameters.hh
         G4eIonisationSpectrum.hh
@@ -96,6 +97,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LivermoreComptonModel.hh
         G4LivermoreGammaConversionModel.hh
         G4LivermoreGammaConversionModelRC.hh
+        G4LivermoreIonisationCrossSection.hh
         G4LivermoreIonisationModel.hh
         G4LivermoreNuclearGammaConversionModel.hh
         G4LivermorePhotoElectricModel.hh
@@ -182,6 +184,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4CrossSectionHandler.cc
         G4DopplerProfile.cc
         G4eBremsstrahlungSpectrum.cc
+        G4eCrossSectionHandler.cc
         G4eIonisationCrossSectionHandler.cc
         G4eIonisationParameters.cc
         G4eIonisationSpectrum.cc
@@ -218,6 +221,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LivermoreComptonModel.cc
         G4LivermoreGammaConversionModel.cc
         G4LivermoreGammaConversionModelRC.cc
+        G4LivermoreIonisationCrossSection.cc
         G4LivermoreIonisationModel.cc
         G4LivermoreNuclearGammaConversionModel.cc
         G4LivermorePhotoElectricModel.cc

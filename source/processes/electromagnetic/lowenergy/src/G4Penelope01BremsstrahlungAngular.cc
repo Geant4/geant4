@@ -94,7 +94,8 @@ void G4Penelope01BremsstrahlungAngular::InterpolationTableForZ()
   G4double a1,a2;
   while(i != -1) {
     file >> i >> j >> k >> a1 >> a2; 
-    if (i > -1 && j > -1 && k >- 1)
+    if (i > -1 && i<NumberofZPoints && j > -1 
+	&& j< NumberofEPoints && k >- 1 && k<NumberofKPoints)
       {
 	QQ1[i][j][k]=a1;
 	QQ2[i][j][k]=a2;

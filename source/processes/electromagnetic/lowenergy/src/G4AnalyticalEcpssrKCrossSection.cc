@@ -40,6 +40,8 @@
 
 G4AnalyticalEcpssrKCrossSection::G4AnalyticalEcpssrKCrossSection()
 { 
+    verboseLevel=0;
+    
     // Storing FK data needed for medium velocities region
 
     char *path = getenv("G4LEDATA");
@@ -91,9 +93,6 @@ G4AnalyticalEcpssrKCrossSection::G4AnalyticalEcpssrKCrossSection()
   tableC3 = new G4CrossSectionDataSet(new G4SemiLogInterpolation, 1.,1.);
   tableC3->LoadData(fileC3);
 
-  //
-
-  verboseLevel=0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

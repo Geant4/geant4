@@ -37,11 +37,11 @@
 //                          Make sure that fluorescence/Auger is generated only if 
 //                          above threshold
 // 24 May 2011   L Pandola  Renamed (make v2008 as default Penelope)
+// 10 Jun 2011   L Pandola  Migrate atomic deexcitation interface
 //
 #include "G4PenelopeComptonModel.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4MaterialCutsCouple.hh"
-#include "G4ProductionCutsTable.hh"
 #include "G4DynamicParticle.hh"
 #include "G4VEMDataSet.hh"
 #include "G4PhysicsTable.hh"
@@ -52,6 +52,7 @@
 #include "G4Electron.hh"
 #include "G4PenelopeOscillatorManager.hh"
 #include "G4PenelopeOscillator.hh"
+#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -75,10 +76,7 @@ G4PenelopeComptonModel::G4PenelopeComptonModel(const G4ParticleDefinition*,
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
 
-  //by default, the model will use atomic deexcitation
-  SetDeexcitationFlag(true);
-  ActivateAuger(false);
-
+  fTransitionManager = G4AtomicTransitionManager::Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -93,18 +91,31 @@ void G4PenelopeComptonModel::Initialise(const G4ParticleDefinition*,
 {
   if (verboseLevel > 3)
     G4cout << "Calling G4PenelopeComptonModel::Initialise()" << G4endl;
+  fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
 
-  if (verboseLevel > 0) {
-    G4cout << "Penelope Compton model v2008 is initialized " << G4endl
-	   << "Energy range: "
-	   << LowEnergyLimit() / keV << " keV - "
-	   << HighEnergyLimit() / GeV << " GeV"
-	   << G4endl;
-  }
-
+  if (verboseLevel > 0) 
+    {
+      G4cout << "Penelope Compton model v2008 is initialized " << G4endl
+	     << "Energy range: "
+	     << LowEnergyLimit() / keV << " keV - "
+	     << HighEnergyLimit() / GeV << " GeV";
+      //Write the information about deexcitation
+      //Notice: to be compeleted when a getter of the isActive status
+      //is made available
+      if (fAtomDeexcitation)      
+	//if (fAtomDeexcitation->IsActive())
+	G4cout << "--> Fluorescence flag ON";
+      //else
+      //	G4cout << "--> Fluorescence flag OFF";
+      else
+	G4cout << "--> Fluorescence flag OFF";
+      G4cout << G4endl;
+    }
+  
   if(isInitialised) return;
   fParticleChange = GetParticleChangeForGamma();
   isInitialised = true; 
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -128,7 +139,7 @@ G4double G4PenelopeComptonModel::CrossSectionPerVolume(const G4Material* materia
   //
   if (verboseLevel > 3)
     G4cout << "Calling CrossSectionPerVolume() of G4PenelopeComptonModel" << G4endl;
- SetupForMaterial(p, material, energy);
+  SetupForMaterial(p, material, energy);
 
   //Retrieve the oscillator table for this material
   G4PenelopeOscillatorTable* theTable = oscManager->GetOscillatorTableCompton(material);
@@ -454,17 +465,14 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
   G4int Z = (G4int) (*theTable)[targetOscillator]->GetParentZ();
 
   //initialize here, then check photons created by Atomic-Deexcitation, and the final state e-
-  std::vector<G4DynamicParticle*>* photonVector=0;  
-  const G4AtomicTransitionManager* transitionManager = G4AtomicTransitionManager::Instance();
   G4double bindingEnergy = 0.*eV;
-  G4int shellId = 0;
+  const G4AtomicShell* shell = 0;
 
   //Real level
   if (Z > 0 && shFlag<30)
     {
-      const G4AtomicShell* shell = transitionManager->Shell(Z,shFlag-1);
-      bindingEnergy = shell->BindingEnergy();
-      shellId = shell->ShellId();
+      shell = fTransitionManager->Shell(Z,shFlag-1);
+      bindingEnergy = shell->BindingEnergy();    
     }
 
   G4double ionEnergyInPenelopeDatabase = ionEnergy;
@@ -489,7 +497,36 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
     }
 
   //the local energy deposit is what remains: part of this may be spent for fluorescence.
-  //Notice: shellID might be 0 (invalid!) if shFlag=30. Must be protected
+  //Notice: shell might be NULL (invalid!) if shFlag=30. Must be protected
+  //Now, take care of fluorescence, if required
+  if (fAtomDeexcitation && shell)
+    {      
+      G4int index = couple->GetIndex();
+      if (fAtomDeexcitation->CheckDeexcitationActiveRegion(index))
+	{	
+	  size_t nBefore = fvect->size();
+	  fAtomDeexcitation->GenerateParticles(fvect,shell,Z,index);
+	  size_t nAfter = fvect->size(); 
+      
+	  if (nAfter > nBefore) //actual production of fluorescence
+	    {
+	      for (size_t j=nBefore;j<nAfter;j++) //loop on products
+		{
+		  G4double itsEnergy = ((*fvect)[j])->GetKineticEnergy();
+		  localEnergyDeposit -= itsEnergy;
+		  if (((*fvect)[j])->GetParticleDefinition() == G4Gamma::Definition())
+		    energyInFluorescence += itsEnergy;
+		  else if (((*fvect)[j])->GetParticleDefinition() == G4Electron::Definition())
+		    energyInAuger += itsEnergy;
+		  
+		}
+	    }
+
+	}
+    }
+
+
+  /*
   if(DeexcitationFlag() && Z > 5 && shellId>0) {
 
     const G4ProductionCutsTable* theCoupleTable=
@@ -553,7 +590,9 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
 	  }
       }
   }
-  
+  */
+
+
   //Always produce explicitely the electron 
   G4DynamicParticle* electron = 0;
 
@@ -670,21 +709,6 @@ G4double G4PenelopeComptonModel::DifferentialCrossSection(G4double cosTheta,G4do
   G4double diffCS = ECOE*ECOE*XKN*sia;
 
   return diffCS;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4PenelopeComptonModel::ActivateAuger(G4bool augerbool)
-{
-  if (!DeexcitationFlag() && augerbool)
-    {
-      G4cout << "WARNING - G4PenelopeComptonModel" << G4endl;
-      G4cout << "The use of the Atomic Deexcitation Manager is set to false " << G4endl;
-      G4cout << "Therefore, Auger electrons will be not generated anyway" << G4endl;
-    }
-  deexcitationManager.ActivateAugerElectronProduction(augerbool);
-  if (verboseLevel > 1)
-    G4cout << "Auger production set to " << augerbool << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

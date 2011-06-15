@@ -51,10 +51,13 @@
 #include "G4Electron.hh"
 #include "G4AtomicTransitionManager.hh"
 #include "G4FluoTransition.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
 #include "G4Proton.hh"
 
 #include "G4teoCrossSection.hh"
 #include "G4empCrossSection.hh"
+#include "G4LivermoreIonisationCrossSection.hh"
 #include "G4EmCorrections.hh"
 #include "G4LossTableManager.hh"
 #include "G4Material.hh"
@@ -68,21 +71,29 @@ G4UAtomicDeexcitation::G4UAtomicDeexcitation():
   minElectronEnergy(DBL_MAX),
   emcorr(0)
 {
-  PIXEshellCS = 0;
+  PIXEshellCS    = 0;
+  ePIXEshellCS   = 0;
   anaPIXEshellCS = new G4teoCrossSection("Analytical");
   emcorr = G4LossTableManager::Instance()->EmCorrections();
+  transitionManager = G4AtomicTransitionManager::Instance();
+  theElectron = G4Electron::Electron();
+  thePositron = G4Positron::Positron();
 }
 
 G4UAtomicDeexcitation::~G4UAtomicDeexcitation()
 {
   delete PIXEshellCS;
   delete anaPIXEshellCS;
+  delete ePIXEshellCS;
 }
 
 void G4UAtomicDeexcitation::InitialiseForNewRun()
 {
-  transitionManager = G4AtomicTransitionManager::Instance();
-
+ 
+  if(IsPIXEActive()) {
+    G4cout << G4endl;
+    G4cout << "### === G4UAtomicDeexcitation::InitialiseForNewRun()" << G4endl;
+  }
   // initializing PIXE x-section name
   // 
   if (PIXECrossSectionModel() == "" ||
@@ -102,8 +113,8 @@ void G4UAtomicDeexcitation::InitialiseForNewRun()
       G4cout << "### G4UAtomicDeexcitation::InitialiseForNewRun WARNING "
 	     << G4endl;
       G4cout << "    PIXE cross section name " << PIXECrossSectionModel()
-	     << " is unknown, PIXE is disabled" << G4endl; 
-      SetPIXE(false);
+	     << " is unknown, Analytical cross section will be used" << G4endl; 
+      SetPIXECrossSectionModel("Analytical");
     }
     
   // Check if old model should be deleted 
@@ -121,6 +132,64 @@ void G4UAtomicDeexcitation::InitialiseForNewRun()
     {
       PIXEshellCS = new G4empCrossSection("Empirical");
     }
+
+  // Electron cross section
+  // initializing PIXE x-section name
+  // 
+  if (PIXEElectronCrossSectionModel() == "" ||
+      PIXEElectronCrossSectionModel() == "Livermore")
+    {
+      SetPIXEElectronCrossSectionModel("Livermore");
+    }
+  else if (PIXEElectronCrossSectionModel() == "ProtonAnalytical" ||
+	   PIXEElectronCrossSectionModel() == "Analytical" || 
+	   PIXEElectronCrossSectionModel() == "analytical") 
+    {
+      SetPIXEElectronCrossSectionModel("ProtonAnalytical");
+    }
+  else if (PIXEElectronCrossSectionModel() == "ProtonEmpirical" ||
+	   PIXEElectronCrossSectionModel() == "Empirical" || 
+	   PIXEElectronCrossSectionModel() == "empirical") 
+    {
+      SetPIXEElectronCrossSectionModel("ProtonEmpirical");
+    }
+  else 
+    {
+      G4cout << "### G4UAtomicDeexcitation::InitialiseForNewRun WARNING "
+	     << G4endl;
+      G4cout << "    PIXE e- cross section name " << PIXEElectronCrossSectionModel()
+	     << " is unknown, PIXE is disabled" << G4endl; 
+      SetPIXEElectronCrossSectionModel("Livermore");
+    }
+    
+  // Check if old model should be deleted 
+  if(ePIXEshellCS) 
+    {
+      if(PIXEElectronCrossSectionModel() != ePIXEshellCS->GetName()) 
+	{
+	  delete ePIXEshellCS;
+          ePIXEshellCS = 0;
+	}
+    }
+
+  // Instantiate empirical model
+  if(!ePIXEshellCS) 
+    {
+      if(PIXEElectronCrossSectionModel() == "Empirical")
+	{
+	  ePIXEshellCS = new G4empCrossSection("Empirical");
+	}
+
+      else if(PIXEElectronCrossSectionModel() == "Analytical") 
+	{
+	  ePIXEshellCS = new G4teoCrossSection("Analytical");
+	}
+
+      else if(PIXEElectronCrossSectionModel() == "Livermore")
+	{
+	  ePIXEshellCS = new G4LivermoreIonisationCrossSection();
+	}
+    } 
 }
 
 void G4UAtomicDeexcitation::InitialiseForExtraAtom(G4int /*Z*/)
@@ -233,9 +302,15 @@ G4UAtomicDeexcitation::GetShellIonisationCrossSectionPerAtom(
 
   // check atomic number
   G4double xsec = 0.0;
-  if(Z > 100 || Z<6 ) { return xsec; } //corrected by alf - Z<6 missing
+  if(Z > 93 || Z < 6 ) { return xsec; } //corrected by alf - Z<6 missing
   G4int idx = G4int(shellEnum);
   if(idx >= G4AtomicShells::GetNumberOfShells(Z)) { return xsec; }
+
+  // 
+  if(pdef == theElectron || pdef == thePositron) {
+    xsec = ePIXEshellCS->CrossSection(Z,shellEnum,kineticEnergy,0.0);
+    return xsec;
+  }
 
   // scaling to protons
   G4double mass = proton_mass_c2;

@@ -43,7 +43,6 @@
 // Class description:
 // Low Energy Electromagnetic Physics
 // Base class for cross section manager for an electromagnetic physics process
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
 
 // -------------------------------------------------------------------
 
