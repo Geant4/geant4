@@ -50,7 +50,12 @@
 #define c2_isfinite std::isfinite
 #endif
 
+#ifdef __INTEL_COMPILER
+#include <mathimf.h>
+#else
 #include <cmath>
+#endif
+
 #include <vector>
 #include <utility>
 #include <string>
