@@ -118,13 +118,15 @@ class G4NeutronHPMadlandNixSpectrum : public G4VNeutronHPEDis
     G4double precision = 0.000001;
     G4double result =-gamma - std::log(aValue);
     G4double term = -aValue;
-    G4double last;
+    //110527TKDB  Unnessary codes, Detected by gcc4.6 compiler 
+    //G4double last;
     G4int count = 1;
     result -= term;
     for(;;)
     {
       count++;
-      last = result;
+      //110527TKDB  Unnessary codes, Detected by gcc4.6 compiler 
+      //last = result;
       term = -term*aValue*(count-1)/(count*count);
       result -=term;
       if(std::fabs(term)/std::fabs(result)<precision) break;

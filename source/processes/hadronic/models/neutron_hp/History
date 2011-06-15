@@ -13,6 +13,68 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+11 June 2011  Tatsumi Koi (hadr-hpn-V09-04-19)
+- Protection for very low "remaining_energy"
+        Unexpected edge value 
+
+11 June 2011  Tatsumi Koi (hadr-hpn-V09-04-18)
+- Protection for very low "remaining_energy"
+        Unexpected edge value
+        Additional general protection about this issue
+        src/G4NeutronHPContAngularPar.cc
+
+10 June 2011  Tatsumi Koi (hadr-hpn-V09-04-17)
+- Protection for very low "remaining_energy"
+        src/G4NeutronHPContAngularPar.cc
+
+10 June 2011  Tatsumi Koi (hadr-hpn-V09-04-16)
+- Update for more collaborated work with other and previous version.
+        src/G4NeutronHPContAngularPar.cc
+
+10 June 2011  Tatsumi Koi (hadr-hpn-V09-04-15)
+- Update for more collaborated work wiht other and previous version.
+	src/G4NeutronHPInelasticCompFS.cc
+- Change contact information
+        src/G4NeutronHPNames.cc
+
+9 June 2011  Tatsumi Koi (hadr-hpn-V09-04-14)
+- Instead of internal level schemes as a function of mt value, 
+use QI value for calculating excitation energy of residual.
+Request from E.Mendoza and D.Cano (CIEMAT)
+	src/G4NeutronHPInelasticCompFS.cc
+
+9 June 2011  Tatsumi Koi (hadr-hpn-V09-04-13)
+- "interpolE" was wrongly interrupted and used 
+Pointed out by E.Mendoza and D.Cano (CIEMAT)
+        src/G4NeutronHPContAngularPar.cc
+
+9 June 2011  Tatsumi Koi (hadr-hpn-V09-04-12)
+-Fix for migaration of G4NDL3.15(ENDF-VII.r0)
+	src/G4NeutronHPIsotropic.cc
+-Set Cross section Name in costructor 
+	src/G4NeutronHPCaptureData.cc
+	src/G4NeutronHPFissionData.cc
+	src/G4NeutronHPInelasticData.cc
+	src/G4NeutronHPElasticData.cc
+
+5 June 2011  Tatsumi Koi (hadr-hpn-V09-04-11)
+-Use vector for keeping QI and LR values 
+	include/G4NeutronHPInelasticCompFS.hh
+	src/G4NeutronHPInelasticCompFS.cc
+
+2 June 2011  Tatsumi Koi for E.Mendoza and D.Cano (CIEMAT) (hadr-hpn-V09-04-10)
+-Bug corrected 
+	src/G4NeutronHPPartial.cc
+
+27 May 2011  Tatsumi Koi (hadr-hpn-V09-04-09)
+-Fix gcc4.6 compiler warning: variable XXX set but not used
+	include/G4NeutronHPMadlandNixSpectrum.hh
+	src/G4NeutronHPFissionFS.cc
+	src/G4NeutronHPCaptureFS.cc
+	src/G4NeutronHPChannelList.cc
+-Fix real bug found with the help of the warning
+	src/G4NeutronHPThermalScattering.cc
+
 12 May 2011  Tatsumi Koi (hadr-hpn-V09-04-08)
 -Bug fix setting an index of the last element of an array
 	src/G4NeutronHPFinalState.cc

@@ -46,6 +46,9 @@ class G4NeutronHPInelasticCompFS : public G4NeutronHPFinalState
   
   G4NeutronHPInelasticCompFS()
   {
+
+    QI.resize(51);
+    LR.resize(51);
     for(G4int i=0; i<51; i++)
     {
       hasXsec = true; 
@@ -54,7 +57,10 @@ class G4NeutronHPInelasticCompFS : public G4NeutronHPFinalState
       theAngularDistribution[i] = 0;
       theEnergyAngData[i] = 0;
       theFinalStatePhotons[i] = 0;
+      QI[i]=0.0;
+      LR[i]=0;
     }
+
   }
   virtual ~G4NeutronHPInelasticCompFS()
   {
@@ -110,8 +116,8 @@ class G4NeutronHPInelasticCompFS : public G4NeutronHPFinalState
   G4double theCurrentZ;
 
    protected:
-      G4double QI;
-      G4int LR;
+      std::vector < G4double >  QI;
+      std::vector <G4int > LR;
 
    private:
       //                       proj                 targ                 had                  mu of had   

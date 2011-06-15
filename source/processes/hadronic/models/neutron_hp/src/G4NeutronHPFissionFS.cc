@@ -142,8 +142,10 @@
    if(theNeutrons != 0)
    {
      theDecayConstants = new G4double[delayed];
-     G4int nPhotons = 0;
-     if(thePhotons!=0) nPhotons = thePhotons->size();
+     //
+     //110527TKDB  Unused codes, Detected by gcc4.6 compiler 
+     //G4int nPhotons = 0;
+     //if(thePhotons!=0) nPhotons = thePhotons->size();
      for(i=0; i<theNeutrons->size(); i++)
      {
        theResult.AddSecondary(theNeutrons->operator[](i));
@@ -169,8 +171,9 @@
      theDecayConstants = new G4double[delayed];
      if(Prompt==0&&delayed==0) Prompt=all;
      theNeutrons = theFS.ApplyYourself(Prompt, delayed, theDecayConstants);
-     G4int nPhotons = 0;
-     if(thePhotons!=0) nPhotons = thePhotons->size();
+     //110527TKDB  Unused codes, Detected by gcc4.6 compiler 
+     //G4int nPhotons = 0;
+     //if(thePhotons!=0) nPhotons = thePhotons->size();
      G4int i0;
      for(i0=0; i0<Prompt; i0++)
      {

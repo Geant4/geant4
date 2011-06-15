@@ -48,6 +48,7 @@ G4bool G4NeutronHPCaptureData::IsApplicable(const G4DynamicParticle*aP, const G4
 }
 
 G4NeutronHPCaptureData::G4NeutronHPCaptureData()
+:G4VCrossSectionDataSet("NeutronHPCaptureXS")
 {
 // TKDB
    theCrossSections = 0;

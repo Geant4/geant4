@@ -75,7 +75,6 @@ void G4NeutronHPInelasticCompFS::InitGammas(G4double AR, G4double ZR)
 
 void G4NeutronHPInelasticCompFS::Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType)
 {
-
   gammaPath = "/Inelastic/Gammas/";
     if(!getenv("G4NEUTRONHPDATA")) 
        throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
@@ -123,7 +122,13 @@ void G4NeutronHPInelasticCompFS::Init (G4double A, G4double Z, G4String & dirNam
     {
       //theData >> dummy >> dummy;
       //TK110430
-      theData >> QI >> LR;
+      // QI and LR introudced since G4NDL3.15
+      G4double dqi;
+      G4int ilr;
+      theData >> dqi >> ilr;
+
+      QI[ it ] = dqi*eV;
+      LR[ it ] = ilr;
       theXsection[it] = new G4NeutronHPVector;
       G4int total;
       theData >> total;
@@ -322,6 +327,42 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
 	  iLevel--;
 	  eExcitation = theGammas.GetLevel(iLevel)->GetLevelEnergy();    
 	}
+        //110610TK BEGIN
+        //Use QI value for calculating excitation energy of residual.
+        G4bool useQI=false;
+        G4double dqi = QI[it]; 
+        if ( dqi < 0 || 849 < dqi ) useQI = true; //Former libraies does not have values of this range
+ 
+        if ( useQI ) 
+        {
+           // QI introudced since G4NDL3.15
+           eExcitation = -QI[it];
+           //Re-evluate iLevel based on this eExcitation 
+           iLevel = 0;
+           G4bool find = false;
+           G4int imaxEx = 0;
+           while( !theGammas.GetLevel(iLevel+1) == 0 ) 
+           { 
+              G4double maxEx = 0.0;
+              if ( maxEx < theGammas.GetLevel(iLevel)->GetLevelEnergy() ) 
+              {
+                 maxEx = theGammas.GetLevel(iLevel)->GetLevelEnergy();  
+                 imaxEx = iLevel;
+              }
+              if ( eExcitation < theGammas.GetLevel(iLevel)->GetLevelEnergy() ) 
+              {
+                 find = true; 
+                 iLevel--; 
+                 // very small eExcitation, iLevel becomes -1, this is protected below.
+                 if ( iLevel == -1 ) iLevel = 0; // But cause energy trouble. 
+                 break;
+              }
+              iLevel++; 
+           }
+           // In case, cannot find proper level, then use the maximum level. 
+           if ( !find ) iLevel = imaxEx;
+        }
+        //110610TK END
 	
 	if(getenv("InelasticCompFSLogging") && eKinetic-eExcitation < 0) 
 	{
@@ -335,6 +376,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
 
       if( theFinalStatePhotons[it] == 0 )
       {
+        //G4cout << "110610 USE Gamma Level" << G4endl;
 // TK comment Most n,n* eneter to this  
 	thePhotons = theGammas.GetDecayGammas(iLevel);
 	eGamm -= theGammas.GetLevelEnergy(iLevel);

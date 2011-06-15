@@ -48,6 +48,7 @@ G4bool G4NeutronHPInelasticData::IsApplicable(const G4DynamicParticle*aP, const 
 }
 
 G4NeutronHPInelasticData::G4NeutronHPInelasticData()
+:G4VCrossSectionDataSet("NeutronHPInelasticXS")
 {
 // TKDB
    onFlightDB = true;

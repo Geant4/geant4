@@ -48,6 +48,7 @@ G4bool G4NeutronHPElasticData::IsApplicable(const G4DynamicParticle*aP, const G4
 }
 
 G4NeutronHPElasticData::G4NeutronHPElasticData()
+:G4VCrossSectionDataSet("NeutronHPElasticXS")
 {
 // TKDB
    theCrossSections = 0;

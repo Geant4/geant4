@@ -73,7 +73,8 @@ if(getenv("NeutronHPNames")) G4cout << "Names::GetName entered for Z = " << Z <<
 
     if(Z>92.5&&!getenv("AllowForHeavyElements") ) 
     {
-      G4cerr << "Please contact Hans-Peter.Wellisch@cern.ch"<<G4endl;
+      //G4cerr << "Please contact Hans-Peter.Wellisch@cern.ch"<<G4endl;
+      G4cerr << "Please contact Geant4 Hadron Group Coordinator"<<G4endl;
       throw G4HadronicException(__FILE__, __LINE__, "G4NeutronHPNames::GetName - data with Z>92 are not provided");
     }
 
@@ -240,7 +241,8 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4b2c "<<*theName<<G4endl;
                 G4cout <<"G4NeutronHPNames: Please make sure G4NEUTRONHPDATA points to the" << G4endl;
                 G4cout <<"                  directory, the neutron scattering data are located in." << G4endl;
                 G4cout << "G4NeutronHPNames: The material was: A="<<A<<", Z="<<Z<<G4endl;
-                throw G4HadronicException(__FILE__, __LINE__, "In case the data sets are at present not available in the neutron data library, please contact Hans-Peter.Wellisch@cern.ch");
+                //throw G4HadronicException(__FILE__, __LINE__, "In case the data sets are at present not available in the neutron data library, please contact Hans-Peter.Wellisch@cern.ch");
+                throw G4HadronicException(__FILE__, __LINE__, "In case the data sets are at present not available in the neutron data library, please contact Hadron Group Coordinator");
                 delete theName;
                 theFileName = "";
                 return result;

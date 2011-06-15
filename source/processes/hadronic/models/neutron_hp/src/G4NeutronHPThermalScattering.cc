@@ -530,7 +530,8 @@ G4HadFinalState* G4NeutronHPThermalScattering::ApplyYourself(const G4HadProjecti
              }
          }
 
-         G4double Ei = vE_T[ j ];
+         //G4double Ei = vE_T[ j ];
+         G4double Ei = vE_T[ k ];
 
          G4double mu = 1 - 2 * Ei / (E/eV) ;  
 

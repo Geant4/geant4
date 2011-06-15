@@ -47,6 +47,7 @@ G4bool G4NeutronHPFissionData::IsApplicable(const G4DynamicParticle*aP, const G4
 }
 
 G4NeutronHPFissionData::G4NeutronHPFissionData()
+:G4VCrossSectionDataSet("NeutronHPFissionXS")
 {
   theCrossSections = 0;
   BuildPhysicsTable(*G4Neutron::Neutron());

@@ -142,7 +142,6 @@
   void G4NeutronHPChannelList::Register(G4NeutronHPFinalState * theFS, 
                                         const G4String & aName)
   {
-    G4bool result;
     if(!allChannelsCreated)
     {
       if(nChannels!=0)
@@ -166,6 +165,10 @@
       theChannels[nChannels]->Init(theElement, theDir, name);
       nChannels++;
     }
-    result = theChannels[theInitCount]->Register(theFS);
+    
+    //110527TKDB  Unnessary codes, Detected by gcc4.6 compiler 
+    //G4bool result;
+    //result = theChannels[theInitCount]->Register(theFS);
+    theChannels[theInitCount]->Register(theFS);
     theInitCount++; 
   }

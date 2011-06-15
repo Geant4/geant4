@@ -153,8 +153,13 @@ G4NeutronHPVector * G4NeutronHPPartial::GetY(G4double e1)
 	else
 	{
           theBuff.SetX(ii, GetX(high,i2));
-          y1 = GetY(high,i2);
-          y2 = GetY(low, GetX(high,i2));  //prob at ident theta
+	  //*******************************************************************************
+	  //Change by E.Mendoza and D.Cano (CIEMAT):
+          //y1 = GetY(high,i2);
+          //y2 = GetY(low, GetX(high,i2));  //prob at ident theta
+          y2 = GetY(high,i2);
+          y1 = GetY(low, GetX(high,i2));  //prob at ident theta
+	  //*******************************************************************************
           theBuff.SetY(ii, theInt.Interpolate(theManager.GetScheme(high),
                                               x, x1, x2, y1, y2)); //energy interpol
           theBuff.SetScheme(ii, data[high].GetScheme(i2));

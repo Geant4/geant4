@@ -124,9 +124,11 @@
 
     G4int nPhotons = 0;
     if(thePhotons!=0) nPhotons=thePhotons->size();
-    G4int nParticles = nPhotons;
-    if(1==nPhotons) nParticles = 2;
 
+
+    //110527TKDB  Unused codes, Detected by gcc4.6 compiler 
+    //G4int nParticles = nPhotons;
+    //if(1==nPhotons) nParticles = 2;
 
 //Make at least one photon  
 //101203 TK
