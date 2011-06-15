@@ -79,7 +79,7 @@ G4MCTGenParticle G4MCTEvent::GetGenParticle
   if(pos != sim2genParticleMap.end()) {
     return pos-> second;
   } else {
-    return G4MCTGenParticle(0,0);
+    return G4MCTGenParticle((void*)0,(void*)0);
   }
 }
 
