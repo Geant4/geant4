@@ -46,6 +46,7 @@ enum G4DecayProcessType
   DECAY = 201 ,
   DECAY_WithSpin ,
   DECAY_PionMakeSpin ,
+  DECAY_Radioactive = 210,
   DECAY_Unknown = 211,
   DECAY_External = 231
 };

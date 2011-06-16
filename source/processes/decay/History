@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+-June 4  2011   H.Kurashige (decay-V09-04-00)
+- Add SubType of DECAY_Radioactive (=210) 
+
 -Oct. 30 2010   H.Kurashige (decay-V09-03-01)
 - Fix minor bugs reported by Coverity
 
