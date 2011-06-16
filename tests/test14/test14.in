@@ -35,6 +35,8 @@
 /gun/energy 10 keV
 /tracking/verbose 1
 /run/beamOn 1
+/control/verbose 0
+/run/verbose 0
 /tracking/verbose 0
 /run/beamOn 1000
 # 

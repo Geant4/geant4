@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07 June 2011  - V.Ivanchenko tag test14-V09-04-02
+              - reduce size of log output for teh default macro
+
 30 May 2011 - V.Ivanchenko tag test14-V09-04-01
               - fixed macro test14_polarised.in providing infine
                 computation
