@@ -110,6 +110,9 @@ public: // With description
   bool AddTabWidget(QWidget*,QString,int,int);
   // To add a tab for vis openGL Qt driver
   
+  QWidget* GetViewComponentsTBWidget();
+  // Get the viewComponent
+
   bool IsSplitterReleased();
 
 public:
@@ -139,7 +142,6 @@ private:
   QMap<int,QString> LookForHelpStringInChildTree(G4UIcommandTree *,const QString&);
 
   void CreateVisParametersTBWidget();
-  void CreateViewComponentsTBWidget();
   void CreateHelpTBWidget();
   void CreateCoutTBWidget();
   void CreateHistoryTBWidget();

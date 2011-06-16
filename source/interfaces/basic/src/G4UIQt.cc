@@ -109,6 +109,8 @@ G4UIQt::G4UIQt (
 ,fHelpLine(NULL)
 ,fTabWidget(NULL)
 ,fCoutText("Output")
+,fLastQTabSizeX(0)
+,fLastQTabSizeY(0)
 {
 
   G4Qt* interactorManager = G4Qt::getInstance (argc,argv,(char*)"Qt");
@@ -170,9 +172,13 @@ G4UIQt::G4UIQt (
   fCoutTBWidget = new QWidget(fToolBox);
   fVisParametersTBWidget = new QWidget(fToolBox);
   fViewComponentsTBWidget = new QWidget(fToolBox);
+#if QT_VERSION < 0x040200
+  fViewComponentsTBWidget->hide();
+#else
+  fViewComponentsTBWidget->setVisible(false);
+#endif
   
   CreateVisParametersTBWidget();
-  CreateViewComponentsTBWidget();
   CreateHelpTBWidget();
   CreateCoutTBWidget();
   CreateHistoryTBWidget();
@@ -371,11 +377,12 @@ void G4UIQt::CreateVisParametersTBWidget(
 }
 
 
-/** Create the ViewComponents ToolBox Widget
+/** Get the ViewComponents ToolBox Widget
  */
-void G4UIQt::CreateViewComponentsTBWidget(
-) 
+QWidget* G4UIQt::GetViewComponentsTBWidget(
+)
 {
+  return fViewComponentsTBWidget;
 }
 
 
@@ -486,11 +493,10 @@ void G4UIQt::UpdateTabWidget(int tabNumber) {
 #ifdef G4DEBUG_INTERFACES_BASIC
   printf("G4UIQt::UpdateTabWidget %d\n",tabNumber);
 #endif
-  if (  fTabWidget == NULL) {
+  if ( fTabWidget == NULL) {
     fTabWidget = new G4QTabWidget;
   }
   
-
 #ifdef G4DEBUG_INTERFACES_BASIC
   printf("G4UIQt::UpdateTabWidget CALL REPAINT tabGL\n");
 #endif
