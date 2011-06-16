@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15.06.2011  V. Ivanchenko, tag emlowen-V09-04-47
+            G4BremsstrahlungParameters - fixed value of the density effect
+            constant (Migdal constant) using standard relativistic model
+            G4LivermorePolarizedGammaConversionModel - added protection 
+            in numeric computations to avoid FPE crash, minor cleanup
+            of the initialisation
+
 14.06.2011  S. Incerti, tag emlowen-V09-04-46
 	    Corrected Windows compilation pblm (asinh) for Boldyshev triplet 
 	    model.

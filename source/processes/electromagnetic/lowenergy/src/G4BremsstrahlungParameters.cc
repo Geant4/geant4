@@ -104,8 +104,10 @@ G4double G4BremsstrahlungParameters::Parameter(G4int parameterIndex,
 
 void G4BremsstrahlungParameters::LoadData(const G4String& name)
 {
-  // Build the complete string identifying the file with the data set
+  const G4double mConst = 
+    classic_electr_radius*electron_Compton_length*electron_Compton_length*4.0*pi;
 
+  // Build the complete string identifying the file with the data set
   // define active elements
 
   const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
@@ -129,8 +131,10 @@ void G4BremsstrahlungParameters::LoadData(const G4String& name)
       G4Element* element = (*elementVector)[iEl];
       G4double Z = element->GetZ();
       G4int iz = (G4int)Z;
-      if(iz < 100)
-            paramC[iz] = 0.217635e-33*(material->GetTotNbOfElectPerVolume());
+      if(iz < 100) {
+	paramC[iz] = mConst*material->GetTotNbOfElectPerVolume();
+	//paramC[iz] = 0.217635e-33*(material->GetTotNbOfElectPerVolume());
+      }
       if (!(activeZ.contains(Z))) {
 	 activeZ.push_back(Z);
       }
