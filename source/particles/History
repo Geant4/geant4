@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 16 June 2011 H.Kurashige (particles-V09-04-08)
+- Fix bug in G4PrimaryParticle by adding pointer check before using 
+  GetPDGMass and GetPDGCode.
+- Add BetaDecay for anti_neutron. (Revert to particles-V09-04-06)
+ 
+- 14 June 2011 M.Asai (particles-V09-04-07)
+- Temporaly remove BetaDecay for anti_neutron for the patch release.
+  
 - 13 June  2011 H.Kurashige (particles-V09-04-06)
 - Modify G4PrimaryParticle to have kinetic energy and momentum direction 
   instead of momentum only.

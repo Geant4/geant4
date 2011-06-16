@@ -52,7 +52,9 @@ G4PrimaryParticle::G4PrimaryParticle(G4int Pcode)
  Weight0(1.0),properTime(0.0),userInfo(0)
 { 
   G4code = G4ParticleTable::GetParticleTable()->FindParticle(Pcode); 
-  mass = G4code->GetPDGMass();
+  if (G4code !=0) {
+    mass = G4code->GetPDGMass();
+  } 
 }
 
 G4PrimaryParticle::G4PrimaryParticle(G4int Pcode,
@@ -64,7 +66,9 @@ G4PrimaryParticle::G4PrimaryParticle(G4int Pcode,
  Weight0(1.0),properTime(0.0),userInfo(0)
 { 
   G4code = G4ParticleTable::GetParticleTable()->FindParticle(Pcode); 
-  mass = G4code->GetPDGMass();
+  if (G4code !=0) {
+    mass = G4code->GetPDGMass();
+  } 
   SetMomentum( px, py, pz);
 }
 
@@ -87,8 +91,10 @@ G4PrimaryParticle::G4PrimaryParticle(const G4ParticleDefinition* Gcode)
  mass(-1.),charge(DBL_MAX),polX(0.),polY(0.),polZ(0.),
  Weight0(1.0),properTime(0.0),userInfo(0)
 { 
-  PDGcode = Gcode->GetPDGEncoding(); 
-  mass = G4code->GetPDGMass();
+  if (G4code !=0) {
+    PDGcode = G4code->GetPDGEncoding(); 
+    mass = G4code->GetPDGMass();
+  } 
 }
 
 G4PrimaryParticle::G4PrimaryParticle(const G4ParticleDefinition* Gcode,
@@ -99,8 +105,10 @@ G4PrimaryParticle::G4PrimaryParticle(const G4ParticleDefinition* Gcode,
  mass(-1.),charge(DBL_MAX),polX(0.),polY(0.),polZ(0.),
  Weight0(1.0),properTime(0.0),userInfo(0)
 { 
-  PDGcode = Gcode->GetPDGEncoding(); 
-  mass = G4code->GetPDGMass();
+  if (G4code !=0) {
+    PDGcode = G4code->GetPDGEncoding(); 
+    mass = G4code->GetPDGMass();
+  } 
   SetMomentum( px, py, pz);
 }
 
@@ -112,7 +120,10 @@ G4PrimaryParticle::G4PrimaryParticle(const G4ParticleDefinition* Gcode,
  charge(DBL_MAX),polX(0.),polY(0.),polZ(0.),
  Weight0(1.0),properTime(0.0),userInfo(0)
 {
- PDGcode = Gcode->GetPDGEncoding();
+  if (G4code !=0) {
+    PDGcode = G4code->GetPDGEncoding(); 
+    mass = G4code->GetPDGMass();
+  } 
  Set4Momentum( px, py, pz, E); 
 }
 
@@ -128,7 +139,7 @@ G4PrimaryParticle::~G4PrimaryParticle()
 
 void G4PrimaryParticle::SetMomentum(G4double px, G4double py, G4double pz)
 { 
-  if(mass<0.){ 
+  if ((mass<0.)&&(G4code!=0)){ 
     mass =  G4code->GetPDGMass(); 
   }
   G4double pmom =  sqrt(px*px+py*py+pz*pz);
@@ -137,7 +148,7 @@ void G4PrimaryParticle::SetMomentum(G4double px, G4double py, G4double pz)
     direction.setY(py/pmom);
     direction.setZ(pz/pmom);
   }
-	kinE = sqrt(px*px+py*py+pz*pz+mass*mass)-mass;
+  kinE = sqrt(px*px+py*py+pz*pz+mass*mass)-mass;
 }
 
 void G4PrimaryParticle::Set4Momentum(G4double px, G4double py, G4double pz, G4double E)
@@ -152,7 +163,9 @@ void G4PrimaryParticle::Set4Momentum(G4double px, G4double py, G4double pz, G4do
   if(mas2>=0.){ 
     mass = std::sqrt(mas2); 
   } else { 
-    mass =  G4code->GetPDGMass(); 
+    if (G4code!=0){ 
+      mass =  G4code->GetPDGMass(); 
+    }
     E = sqrt(pmom*pmom+mass*mass);
   }
   kinE = E - mass;
@@ -162,7 +175,9 @@ void G4PrimaryParticle::SetPDGcode(G4int Pcode)
 {
   PDGcode = Pcode;
   G4code = G4ParticleTable::GetParticleTable()->FindParticle(Pcode);
-  mass = G4code->GetPDGMass();
+  if (G4code!=0){ 
+    mass =  G4code->GetPDGMass(); 
+  }
 }
 
 void G4PrimaryParticle::SetG4code(const G4ParticleDefinition* Gcode)
@@ -173,8 +188,10 @@ void G4PrimaryParticle::SetG4code(const G4ParticleDefinition* Gcode)
 void G4PrimaryParticle::SetParticleDefinition(const G4ParticleDefinition* Gcode)
 {
   G4code = Gcode;
-  PDGcode = Gcode->GetPDGEncoding();
-  mass = G4code->GetPDGMass();
+  if (G4code!=0){ 
+    PDGcode = G4code->GetPDGEncoding();
+    mass =  G4code->GetPDGMass(); 
+  }
 }
 
 G4double G4PrimaryParticle::GetMass() const
