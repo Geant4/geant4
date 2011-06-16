@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+06-June 2011 V.Ivanchenko   hadr-pre-V09-04-01
+---------------------------------------------------
+G4PreCompoundModel - add limit on nucleon number maxZ=9, maxA=17,
+  low fragments with lower Z and A directly call equilibrium emission
+G4VPreCompoundFragment - fixed Coverty warning
+
 20-May 2011 V.Ivanchenko   hadr-pre-V09-04-00
 ---------------------------------------------------
 G4PreCompoundProton, G4PreCompoundNeutron - fixed compillation

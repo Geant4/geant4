@@ -66,17 +66,11 @@ operator << (std::ostream &out, const G4VPreCompoundFragment &theFragment)
 std::ostream& 
 operator << (std::ostream &out, const G4VPreCompoundFragment *theFragment)
 {
-  std::ios::fmtflags old_floatfield = out.flags();
-  out.setf(std::ios::floatfield);
-    
   out 
-    << "PreCompoundModel Emitted Fragment: A = " 
-    << std::setprecision(3) << theFragment->theA 
-    << ", Z = " << std::setprecision(3) << theFragment->theZ
-    << " Mass(GeV)= " << theFragment->theMass/CLHEP::GeV;
-    
-    out.setf(old_floatfield,std::ios::floatfield);
-    return out;
+    << "PreCompoundModel Emitted Fragment: Z= " << theFragment->GetZ() 
+    << " A= " << theFragment->GetA()
+    << " Mass(GeV)= " << theFragment->GetNuclearMass()/CLHEP::GeV;
+  return out;
 }
 
 void 
