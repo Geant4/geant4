@@ -105,7 +105,7 @@ void DetectorConstruction::DefineMaterials()
   H2O->AddElement(H, natoms=2);
   H2O->AddElement(O, natoms=1);
   H2O->SetChemicalFormula("H_2O");
-  H2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
+  H2O->GetIonisation()->SetMeanExcitationEnergy(78.0*eV);
 
   new G4Material("liquidArgon", z=18., a= 39.95*g/mole, density= 1.390*g/cm3);
   
