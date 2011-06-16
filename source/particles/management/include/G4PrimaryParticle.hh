@@ -73,7 +73,7 @@ class G4PrimaryParticle
       G4PrimaryParticle();
       G4PrimaryParticle(G4int Pcode);
       G4PrimaryParticle(G4int Pcode,
-                        G4double px,G4double py,G4double pz);
+                         G4double px,G4double py,G4double pz);
       G4PrimaryParticle(G4int Pcode,
                         G4double px,G4double py,G4double pz,G4double E);
       G4PrimaryParticle(const G4ParticleDefinition* Gcode);
@@ -94,9 +94,9 @@ class G4PrimaryParticle
   private:
       G4int PDGcode;
       const G4ParticleDefinition * G4code;
-      G4double Px;
-      G4double Py;
-      G4double Pz;
+       
+      G4ThreeVector direction;
+      G4double kinE;
       
       G4PrimaryParticle * nextParticle;
       G4PrimaryParticle * daughterParticle;
@@ -132,14 +132,35 @@ class G4PrimaryParticle
       { return const_cast<G4ParticleDefinition*>(G4code); }
       inline const G4ParticleDefinition * GetParticleDefinition() const
       { return G4code; }
+      inline G4double GetTotalMomentum() const
+      { 
+        if (mass<0.)  return kinE; 
+        else          return sqrt(kinE*(kinE+2.*mass));
+      }
       inline G4ThreeVector GetMomentum() const
-      { return G4ThreeVector(Px,Py,Pz); }
+      { return GetTotalMomentum()*direction;}
+      inline G4ThreeVector GetMomentumDirection() const
+      { return direction;}
       inline G4double GetPx() const
-      { return Px; }
+      { return GetTotalMomentum()*direction.x();}
       inline G4double GetPy() const
-      { return Py; }
-      inline G4double GetPz() const
-      { return Pz; }
+      { return GetTotalMomentum()*direction.y();}
+       inline G4double GetPz() const
+      { return GetTotalMomentum()*direction.z();}
+      inline G4double GetTotalEnergy() const
+      { 
+        if (mass<0.)  return kinE; 
+        else          return kinE+mass;
+      }
+      inline void SetTotalEnergy(G4double eTot ) 
+      { 
+        if (mass<0.)  kinE = eTot; 
+        else          kinE = eTot - mass;
+      }
+      inline G4double GetKineticEnergy() const
+      { return kinE; }
+      inline void SetKineticEnergy(G4double eKin) 
+      { kinE = eKin; }
       inline G4PrimaryParticle * GetNext() const
       { return nextParticle; }
       inline G4PrimaryParticle * GetDaughter() const
@@ -165,23 +186,8 @@ class G4PrimaryParticle
       void SetPDGcode(G4int Pcode);
       void SetG4code(const G4ParticleDefinition * Gcode);
       void SetParticleDefinition(const G4ParticleDefinition * pdef);
-      inline void SetMomentum(G4double px, G4double py, G4double pz)
-      { 
-        Px = px;
-        Py = py;
-        Pz = pz; 
-      }
-      inline void Set4Momentum(G4double px, G4double py, G4double pz, G4double E)
-      { 
-        Px = px;
-        Py = py;
-        Pz = pz; 
-        G4double mas2 = E*E - px*px - py*py - pz*pz;
-        if(mas2>=0.)
-        { mass = std::sqrt(mas2); }
-        else
-        { mass = -1.0; }
-      }
+      void SetMomentum(G4double px, G4double py, G4double pz);
+      void Set4Momentum(G4double px, G4double py, G4double pz, G4double E);
       inline void SetNext(G4PrimaryParticle * np)
       { 
         if(nextParticle == 0)

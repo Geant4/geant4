@@ -12,6 +12,10 @@
 #
 #------------------------------------------------------------------------------
 
+# Add allocation export symbol for the particles category
+add_definitions(-DG4PARTICLES_ALLOC_EXPORT)
+
+
 add_subdirectory(adjoint)
 add_subdirectory(bosons)
 add_subdirectory(hadrons)
