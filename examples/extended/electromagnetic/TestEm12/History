@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+05-06-11 mma (testem12-V09-04-06)
+- PhysListEmStandard migrated to the new approach based on G4PhysicsListHelper
+     
 17-05-11 seb-mma (testem12-V09-04-05)
 - PhysicsList : add G4EmDNAPhysics
 - new macro dna.mac
