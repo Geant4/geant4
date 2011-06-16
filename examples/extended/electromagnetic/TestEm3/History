@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+     
+02-06-11 mma (testem3-V09-04-05)
+- PhysListEmStandard migrated to the new approach based on G4PhysicsListHelper
      
 30-05-11 mma (testem3-V09-04-04)
 - DetectorConstruction : for Water, set I = 78 eV (instead of 75 eV)
