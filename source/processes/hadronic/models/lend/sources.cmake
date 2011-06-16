@@ -45,6 +45,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 
+
 #
 # Define the Geant4 Module.
 #
@@ -160,4 +161,16 @@ GEANT4_DEFINE_MODULE(NAME G4had_lend
 )
 
 # List any source specific properties here
+#
+# Not this again... Need to add *another* compile definition to lend sources
+# for DLLs....
+# We do this quick and dirty, add the definition directly. I *don't want it 
+# polluting compile of all other processes modules
+# in global mode
+#
+set_source_files_properties(
+    ${G4had_lend_SOURCES}
+    PROPERTIES COMPILE_DEFINITIONS G4PROCESSES_EXPORT
+)
+
 
