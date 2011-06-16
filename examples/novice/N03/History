@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+03-06-11 mma (exampleN03-V09-04-04)     
+PhysicsList migrated to new scheme G4PhysListHelper
+     
 30-05-11 mma (exampleN03-V09-04-03)
 - DetectorConstruction : for Water, set I = 78 eV (instead of 75 eV)
      
