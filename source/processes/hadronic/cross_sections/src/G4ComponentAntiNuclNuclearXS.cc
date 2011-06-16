@@ -44,7 +44,7 @@
 
 
 G4ComponentAntiNuclNuclearXS::G4ComponentAntiNuclNuclearXS() 
-: fUpperLimit( 10000 * GeV ),
+: G4VComponentCrossSection("AntiAGlauber"), fUpperLimit( 10000 * GeV ),
   fLowerLimit( 10 * MeV )
 {
   theAProton       = G4AntiProton::AntiProton();

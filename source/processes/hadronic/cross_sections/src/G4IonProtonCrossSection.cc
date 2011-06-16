@@ -66,14 +66,22 @@ G4IonProtonCrossSection::IsApplicable(const G4DynamicParticle* dp,
   return IsIsoApplicable(dp, Z, A);
 }
 
+G4bool 
+G4IonProtonCrossSection::IsZAApplicable(const G4DynamicParticle* dp,
+					G4double Z, G4double A)
+{
+  G4int iZ = G4lrint(Z);
+  G4int iA = G4lrint(A);
+  return IsIsoApplicable(dp, iZ, iA);
+}
 
 G4bool 
 G4IonProtonCrossSection::IsIsoApplicable(const G4DynamicParticle* dp,
 					 G4int Z, G4int A)
 {
   G4bool result = false;
-  if(Z < 2 && A < 2 && dp->GetDefinition()->GetPDGCharge()/eplus > 2.5) 
-    { result = true;}
+  if(1 == Z && 1 == A && dp->GetDefinition()->GetPDGCharge()/eplus > 1.5) 
+    { result = true; }
   return result;
 }
 

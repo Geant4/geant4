@@ -67,6 +67,10 @@ public:
   G4bool IsApplicable(const G4DynamicParticle* aPart, const G4Element* anEle);
 
   virtual
+  G4bool IsZAApplicable(const G4DynamicParticle* aPart,
+			G4double Z, G4double A);
+
+  virtual
   G4bool IsIsoApplicable(const G4DynamicParticle* aPart,
                          G4int Z, G4int A);
 
