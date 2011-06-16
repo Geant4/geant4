@@ -51,6 +51,12 @@
 /gun/energy                        144.0 MeV
 /run/beamOn                        1000
 #
+# reduce verbosity
+#
+/control/verbose 0
+/run/verbose 0
+/process/em/verbose 0
+#
 #
 # ##### Range of 12C ion in beryllium
 #
