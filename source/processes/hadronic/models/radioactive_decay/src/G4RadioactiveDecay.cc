@@ -47,6 +47,8 @@
 //
 // CHANGE HISTORY
 // --------------
+// 01 June 2011, M. Kelsey -- Add directional biasing interface to allow for
+//		"collimation" of decay daughters.
 // 16 February 2006, V.Ivanchenko fix problem in IsApplicable connected with
 //            8.0 particle design
 // 18 October 2002, F. Lei
@@ -103,8 +105,15 @@
 #include "G4LogicalVolumeStore.hh"
 #include "G4NuclearLevelManager.hh"
 #include "G4NuclearLevelStore.hh"
+#include "G4ThreeVector.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
+#include "G4Neutron.hh"
+#include "G4Gamma.hh"
+#include "G4Alpha.hh"
 
 #include "G4HadTmpUtil.hh"
+#include "G4HadronicProcessType.hh"
 
 #include <vector>
 #include <sstream>
@@ -113,22 +122,24 @@
 
 using namespace CLHEP;
 
-const G4double   G4RadioactiveDecay::levelTolerance =2.0*keV;
+const G4double G4RadioactiveDecay::levelTolerance =2.0*keV;
+const G4ThreeVector G4RadioactiveDecay::origin(0.,0.,0.);
 
-///////////////////////////////////////////////////////////////////////////////
-//
 //
 // Constructor
 //
 G4RadioactiveDecay::G4RadioactiveDecay (const G4String& processName)
  :G4VRestDiscreteProcess(processName, fDecay), HighestBinValue(10.0),
-  LowestBinValue(1.0e-3), TotBin(200), verboseLevel(0)
+  LowestBinValue(1.0e-3), TotBin(200), forceDecayDirection(0.,0.,0.),
+  forceDecayHalfAngle(0.*deg), verboseLevel(0)
 {
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) {
     G4cout <<"G4RadioactiveDecay constructor    Name: ";
     G4cout <<processName << G4endl;   }
 #endif
+
+  SetProcessSubType(fRadioactiveDecay);
 
   theRadioactiveDecaymessenger = new G4RadioactiveDecaymessenger(this);
   theIsotopeTable              = new G4RIsotopeTable();
@@ -1795,7 +1806,80 @@ G4RadioactiveDecay::DoDecay(  G4ParticleDefinition& theParticleDef )
 
     G4double tempmass = theParticleDef.GetPDGMass();
     products = theDecayChannel->DecayIt(tempmass);
+
+    // Apply directional bias if requested by user
+    CollimateDecay(products);
   }
 
   return products;
+}
+
+
+// Apply directional bias for "visible" daughters (e+-, gamma, n, alpha)
+
+void G4RadioactiveDecay::CollimateDecay(G4DecayProducts* products) {
+  if (origin == forceDecayDirection) return;	// No collimation requested
+  if (180.*deg == forceDecayHalfAngle) return;
+  if (0 == products || 0 == products->entries()) return;
+
+#ifdef G4VERBOSE
+  if (GetVerboseLevel()>0) G4cout<<"Begin of CollimateDecay..."<<G4endl;
+#endif
+
+  // Particles suitable for directional biasing (for if-blocks below)
+  static const G4ParticleDefinition* electron = G4Electron::Definition();
+  static const G4ParticleDefinition* positron = G4Positron::Definition();
+  static const G4ParticleDefinition* neutron  = G4Neutron::Definition();
+  static const G4ParticleDefinition* gamma    = G4Gamma::Definition();
+  static const G4ParticleDefinition* alpha    = G4Alpha::Definition();
+
+  G4ThreeVector newDirection;		// Re-use to avoid memory churn
+  for (G4int i=0; i<products->entries(); i++) {
+    G4DynamicParticle* daughter = (*products)[i];
+    const G4ParticleDefinition* daughterType = daughter->GetParticleDefinition();
+
+    if (daughterType == electron || daughterType == positron ||
+	daughterType == neutron || daughterType == gamma ||
+	daughterType == alpha) CollimateDecayProduct(daughter);
+  }
+}
+
+void G4RadioactiveDecay::CollimateDecayProduct(G4DynamicParticle* daughter) {
+#ifdef G4VERBOSE
+  if (GetVerboseLevel() > 1) {
+    G4cout << "CollimateDecayProduct for daughter "
+	   << daughter->GetParticleDefinition()->GetParticleName() << G4endl;
+  }
+#endif
+
+  G4ThreeVector collimate = ChooseCollimationDirection();
+  if (origin != collimate) daughter->SetMomentumDirection(collimate);
+}
+
+
+// Choose random direction within collimation cone
+
+G4ThreeVector G4RadioactiveDecay::ChooseCollimationDirection() const {
+  if (origin == forceDecayDirection) return origin;	// Don't do collimation
+  if (forceDecayHalfAngle == 180.*deg) return origin;
+
+  G4ThreeVector dir = forceDecayDirection;
+
+  // Return direction offset by random throw
+  if (forceDecayHalfAngle > 0.) {
+    // Generate uniform direction around central axis
+    G4double phi = 2.*pi*G4UniformRand();
+    G4double cosMin = cos(forceDecayHalfAngle);
+    G4double cosTheta = (1.-cosMin)*G4UniformRand() + cosMin;	// [cosMin,1.)
+    
+    dir.setPhi(dir.phi()+phi);
+    dir.setTheta(dir.theta()+acos(cosTheta));
+  }
+
+#ifdef G4VERBOSE
+  if (GetVerboseLevel()>1)
+    G4cout << " ChooseCollimationDirection returns " << dir << G4endl;
+#endif
+
+  return dir;
 }

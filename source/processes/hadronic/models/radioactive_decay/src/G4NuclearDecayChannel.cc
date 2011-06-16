@@ -423,6 +423,14 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
     if (aZ > 5 && aZ < 100) {  // only applies to 5< Z <100 
       // Retrieve the corresponding identifier and binding energy of the selected shell
       const G4AtomicTransitionManager* transitionManager = G4AtomicTransitionManager::Instance();
+
+      //check that eShell is smaller than the max number of shells
+      //this to avoid a warning from transitionManager(otherwise the output is the same)
+      //Correction to Bug 1662. L Desorgher (04/02/2011)
+      if (eShell >= transitionManager->NumberOfShells(aZ)){
+    	  eShell=transitionManager->NumberOfShells(aZ)-1;
+      }
+
       const G4AtomicShell* shell = transitionManager->Shell(aZ, eShell);
       G4double bindingEnergy = shell->BindingEnergy();
       G4int shellId = shell->ShellId();
@@ -494,7 +502,7 @@ G4DecayProducts* G4NuclearDecayChannel::BetaDecayIt()
   // faster method as suggested by Dirk Kruecker of FZ-Julich
   G4double daughtermomentum[3];
   G4double daughterenergy[3];
-  // Use the histogramed distribution to generate the beta energy
+  // Use the histogram distribution to generate the beta energy
   daughterenergy[0] = RandomEnergy->shoot() * Q;
   daughtermomentum[0] = std::sqrt(daughterenergy[0]*daughterenergy[0] +
                         2.0*daughterenergy[0] * daughtermass[0]);
@@ -508,7 +516,7 @@ G4DecayProducts* G4NuclearDecayChannel::BetaDecayIt()
   daughterenergy[2]=K*(Mme-daughterenergy[0]+rd*daughtermomentum[0]);
   daughtermomentum[2] = daughterenergy[2] ; 
 	  
-  // the recoil neuleus
+  // the recoil nucleus
   daughterenergy[1] = Q-daughterenergy[0]-daughterenergy[2];
   G4double recoilmomentumsquared = daughterenergy[1]*daughterenergy[1] +
                              2.0*daughterenergy[1] * daughtermass[1];

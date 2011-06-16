@@ -49,7 +49,7 @@ G4RadioactiveDecaymessenger::G4RadioactiveDecaymessenger
   nucleuslimitsCmd = new
     G4UIcmdWithNucleusLimits("/grdm/nucleusLimits",this);
   nucleuslimitsCmd->SetGuidance 
-    ("Set the amotic weight and number limits for the RDM.");
+    ("Set the atomic weight and number limits for the RDM.");
   nucleuslimitsCmd->SetParameterName("aMin","aMax","zMin","zMax",true);
   //
 
@@ -159,7 +159,22 @@ G4RadioactiveDecaymessenger::G4RadioactiveDecaymessenger
     ("Supply the name of the ascii file containing the decay bias time profile");
   decaybiasprofileCmd->SetParameterName("DBiasProfile",true);
   decaybiasprofileCmd->SetDefaultValue("bias.data");
+
   //
+  // Command to set the directional bias (collimation) vector
+  //
+  colldirCmd = new G4UIcmdWith3Vector("/grdm/decayDirection",this);
+  colldirCmd->SetGuidance("Supply the direction vector for decay products");
+  colldirCmd->SetParameterName("X","Y","Z",false);
+
+  //
+  // Command to set the directional bias (collimation) half angle ("cone")
+  //
+  collangleCmd = new G4UIcmdWithADoubleAndUnit("/grdm/decayHalfAngle",this);
+  collangleCmd->SetGuidance
+    ("Supply maximum angle from direction vector for decay products");
+  collangleCmd->SetParameterName("halfAngle",false);
+  collangleCmd->SetUnitCategory("Angle");
 
   //
   // This command setup the nuclei spliting parameter
@@ -200,41 +215,47 @@ G4RadioactiveDecaymessenger::~G4RadioactiveDecaymessenger ()
   delete icmCmd;
   delete armCmd;
   delete hlthCmd;
+  delete colldirCmd;
+  delete collangleCmd;
 }
 ////////////////////////////////////////////////////////////////////////////////
 //
 void G4RadioactiveDecaymessenger::SetNewValue (G4UIcommand *command, G4String newValues)
 {
   if (command==nucleuslimitsCmd) {theRadioactiveDecayContainer->
-				    SetNucleusLimits(nucleuslimitsCmd->GetNewNucleusLimitsValue(newValues));}
-  else if  (command==analoguemcCmd) {
-    theRadioactiveDecayContainer->SetAnalogueMonteCarlo(analoguemcCmd->GetNewBoolValue(newValues));}
-  else if  (command==fbetaCmd) {
-    theRadioactiveDecayContainer->SetFBeta(fbetaCmd->GetNewBoolValue(newValues));}
+      SetNucleusLimits(nucleuslimitsCmd->GetNewNucleusLimitsValue(newValues));}
+  else if  (command==analoguemcCmd) {theRadioactiveDecayContainer->
+      SetAnalogueMonteCarlo(analoguemcCmd->GetNewBoolValue(newValues));}
+  else if  (command==fbetaCmd) {theRadioactiveDecayContainer->
+      SetFBeta(fbetaCmd->GetNewBoolValue(newValues));}
   else if  (command==avolumeCmd) {theRadioactiveDecayContainer->
-				   SelectAVolume(newValues);}
+      SelectAVolume(newValues);}
   else if  (command==deavolumeCmd) {theRadioactiveDecayContainer->
-				   DeselectAVolume(newValues);}
+      DeselectAVolume(newValues);}
   else if  (command==allvolumesCmd) {theRadioactiveDecayContainer->
-				   SelectAllVolumes();}
+      SelectAllVolumes();}
   else if  (command==deallvolumesCmd) {theRadioactiveDecayContainer->
-				   DeselectAllVolumes();}
-  else if  (command==brbiasCmd) {
-    theRadioactiveDecayContainer->SetBRBias(brbiasCmd->GetNewBoolValue(newValues));}
+      DeselectAllVolumes();}
+  else if  (command==brbiasCmd) {theRadioactiveDecayContainer->
+      SetBRBias(brbiasCmd->GetNewBoolValue(newValues));}
   else if (command==sourcetimeprofileCmd) {theRadioactiveDecayContainer->
-					     SetSourceTimeProfile(newValues);}
+      SetSourceTimeProfile(newValues);}
   else if (command==decaybiasprofileCmd) {theRadioactiveDecayContainer->
-					    SetDecayBias(newValues);}
+      SetDecayBias(newValues);}
   else if (command==splitnucleiCmd) {theRadioactiveDecayContainer->
-				       SetSplitNuclei(splitnucleiCmd->GetNewIntValue(newValues));}
+      SetSplitNuclei(splitnucleiCmd->GetNewIntValue(newValues));}
   else if (command==verboseCmd) {theRadioactiveDecayContainer->
-				       SetVerboseLevel(verboseCmd->GetNewIntValue(newValues));}
+      SetVerboseLevel(verboseCmd->GetNewIntValue(newValues));}
   else if (command==icmCmd ) {theRadioactiveDecayContainer->
       SetICM(icmCmd->GetNewBoolValue(newValues));}
   else if (command==armCmd ) {theRadioactiveDecayContainer->
       SetARM(armCmd->GetNewBoolValue(newValues));}
   else if (command==hlthCmd ) {theRadioactiveDecayContainer->
       SetHLThreshold(hlthCmd->GetNewDoubleValue(newValues));}
+  else if (command==colldirCmd) {theRadioactiveDecayContainer->
+      SetDecayDirection(colldirCmd->GetNew3VectorValue(newValues));}
+  else if (command==collangleCmd) {theRadioactiveDecayContainer->
+      SetDecayHalfAngle(collangleCmd->GetNewDoubleValue(newValues));}
 }
 
 

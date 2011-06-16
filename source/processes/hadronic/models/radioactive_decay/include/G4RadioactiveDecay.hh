@@ -40,6 +40,8 @@
 //
 // CHANGE HISTORY
 // --------------
+// 01 June 2011, M. Kelsey -- Add directional biasing interface to allow for
+//		"collimation" of decay daughters.
 //
 // 29 February 2000, P R Truscott, DERA UK
 // 0.b.3 release.
@@ -61,6 +63,7 @@
 #include "G4RadioactiveDecayRateVector.hh"
 #include "G4RIsotopeTable.hh"
 #include "G4RadioactivityTable.hh"
+#include "G4ThreeVector.hh"
 
 #include <vector>
 
@@ -204,6 +207,27 @@ public: // with description
 	inline G4int GetSplitNuclei () {return NSplit;}
 	//  Returns the N number used for the Nuclei spliting bias scheme
 	//
+
+        inline void SetDecayDirection(const G4ThreeVector& theDir) {
+	  forceDecayDirection = theDir.unit();
+	}
+        inline const G4ThreeVector& GetDecayDirection() const {
+	  return forceDecayDirection; 
+	}
+
+        inline void SetDecayHalfAngle(G4double halfAngle=0.*deg) {
+	  forceDecayHalfAngle = std::min(std::max(0.*deg,halfAngle),180.*deg);
+	}
+        inline G4double GetDecayHalfAngle() const {return forceDecayHalfAngle;}
+
+        inline void SetDecayCollimation(const G4ThreeVector& theDir,
+					G4double halfAngle=0.*deg) {
+	  SetDecayDirection(theDir);
+	  SetDecayHalfAngle(halfAngle);
+	}
+        // Force direction (random within half-angle) for "visible" daughters
+        // (applies to electrons, positrons, gammas, neutrons, or alphas)
+
 public:
 
 	void BuildPhysicsTable(const G4ParticleDefinition &);
@@ -214,6 +238,11 @@ protected:
 		const G4Step&  theStep);
 
 	G4DecayProducts* DoDecay(G4ParticleDefinition& theParticleDef);
+
+        // Apply directional bias for "visible" daughters (e+-, gamma, n, alpha)
+        void CollimateDecay(G4DecayProducts* products);
+        void CollimateDecayProduct(G4DynamicParticle* product);
+        G4ThreeVector ChooseCollimationDirection() const;
 
 	G4double GetMeanFreePath(const G4Track& theTrack,
 		G4double previousStepSize,
@@ -254,6 +283,11 @@ protected:
     G4double halflifethreshold;
     G4bool applyICM;
     G4bool applyARM;
+
+    // Parameters for pre-collimated (biased) decay products
+    G4ThreeVector forceDecayDirection;
+    G4double      forceDecayHalfAngle;
+    static const G4ThreeVector origin;	// (0,0,0) for convenience
 
     G4int NSourceBin;
     G4double SBin[100];
