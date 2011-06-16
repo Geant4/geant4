@@ -134,6 +134,9 @@ public: // With description
   // Returns false if model is already in the list.
   // Prints warnings if warn is true.
 
+  void SetName (const G4String&);
+  // Use with care.  User normally sets scene name by vis commands.
+
   std::vector<G4VModel*>& SetRunDurationModelList ();
   // Allows you to change the model list - do with care!
 

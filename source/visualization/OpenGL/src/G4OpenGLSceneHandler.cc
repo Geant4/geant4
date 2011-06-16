@@ -360,13 +360,13 @@ void G4OpenGLSceneHandler::AddCircleSquareVector
 
   G4VMarker::FillStyle style = marker[0].GetFillStyle();
 
-  G4bool filled = false;
+  // G4bool filled = false;  Not actually used - comment out to prevent compiler warnings (JA).
   static G4bool hashedWarned = false;
   
   switch (style) {
   case G4VMarker::noFill: 
     glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
-    filled = false;
+    //filled = false;
     break;
     
   case G4VMarker::hashed:
@@ -382,7 +382,7 @@ void G4OpenGLSceneHandler::AddCircleSquareVector
     
   case G4VMarker::filled:
     glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
-    filled = true;
+    //filled = true;
     break;
     
   }

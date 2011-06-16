@@ -38,7 +38,6 @@
 
 #include "G4OpenGLStoredViewer.hh"
 #include "G4OpenGLQtViewer.hh"
-
 #include <qgl.h>  // include qglwidget
 
 class QMouseEvent;

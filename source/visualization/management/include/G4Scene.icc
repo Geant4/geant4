@@ -77,6 +77,10 @@ inline G4bool G4Scene::GetRefreshAtEndOfRun () const {
   return fRefreshAtEndOfRun;
 }
 
+inline void G4Scene::SetName (const G4String& name) {
+  fName = name;
+}
+
 inline std::vector<G4VModel*>& G4Scene::SetRunDurationModelList ()
 {
   return fRunDurationModelList;

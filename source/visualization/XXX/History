@@ -20,6 +20,9 @@ committal in the CVS repository !
 History file for visualization/XXX sub-category (a template graphics system)
 ---------------------------------------------------------------------------
 
+2nd June 2011  John Allison  (visXXX-V08-04-00)
+- Tagged
+
 23th January 2011 L.Garnier
 - GNUMakefile : Remove G4VIS_BUILD.gmk use
 

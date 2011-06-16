@@ -24,6 +24,34 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+2nd June 2011  John Allison  (vis-V09-04-04)
+- opengl-V09-04-02: Coverity warning fixes and Qt developments.
+- vistree-V09-04-00: GNUmakefile : Remove OpenGL/Qt stuff from Makefile
+- visXXX-V08-04-00: GNUMakefile : Remove G4VIS_BUILD.gmk use
+
+17th May 2010  John Allison  (vis-V09-04-03)
+- visman-V09-04-02: Fixed warnings, added G4Scene::SetName.
+- DAWN-V09-04-00: Fixed gcc-4.6.0 warning.
+- opengl-V09-04-01:
+  o Fixed numerous warnings.
+  o Several fixes for interoperablility between Qt, X and Xm.
+  o Qt improvemnts.
+  o Eliminate Qt3 code.
+
+6th April 2011 Laurent Garnier
+- G4OpenGLQtViewer add flag for batch mode. It works !
+
+14th March 2011, Laurent Garnier
+- Add Wt driver files
+- G4VisExecutive.icc, G4VisFeaturesOfOpenGL, G4OpenGL.hh : Add some modifications for Wt Driver
+- G4OpenGLQtMovieDialog.hh : Add protection against mix between slots/signals from Qt and Wt (boost)
+
+1st March 2011  John Allison
+- raytracer-V09-04-01: Fix bug introduced by fix to Coverity warnings
+- raytracer-V09-04-00:
+  o Trap recursive calls.
+  o Fix Coverity warnings.
+
 26th January 2011  Gabriele Cosmo  (vis-V09-04-02)
 - Fixed compilation error in OpenInventor SbPainterPS.cc introduced in
   previous tag.

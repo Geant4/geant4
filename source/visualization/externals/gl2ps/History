@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27th January 2011 L.Garnier
+- Restored GNUmakefile and fix the bug introduce the 23th december
+
 26th January 2011  Gabriele Cosmo  (visexternal-V09-04-01)
 - Restored GNUmakefile as it was in tag "visexternal-V09-03-03", as it
   breaks compilation !

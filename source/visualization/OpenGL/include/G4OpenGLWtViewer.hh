@@ -24,61 +24,57 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.hh,v 1.25 2010-10-08 10:07:31 lgarnier Exp $
+// $Id: G4OpenGLWtViewer.hh,v 1.25 2010-10-08 10:07:31 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// G4OpenGLQtViewer : Class to provide WindowsNT specific
+// G4OpenGLWtViewer : Class to provide WindowsNT specific
 //                       functionality for OpenGL in GEANT4
 
-#ifdef G4VIS_BUILD_OPENGLQT_DRIVER
+#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
 
-#ifndef G4OPENGLQTVIEWER_HH
-#define G4OPENGLQTVIEWER_HH
+#ifndef G4OPENGLWTVIEWER_HH
+#define G4OPENGLWTVIEWER_HH
 
 #include "globals.hh"
 
 #include "G4OpenGLViewer.hh"
 
-#include <qobject.h>
-#include <qpoint.h>
+#include <Wt/WObject>
+#include <Wt/WPoint>
+#include <Wt/WTime>
 
 class G4OpenGLSceneHandler;
 class G4UImanager;
 
-class QGLWidget;
-class QDialog;
-class QContextMenuEvent;
-class QMenu;
-class QImage;
-class QAction;
-class QMouseEvent;
-class QKeyEvent;
-class QWheelEvent;
-class QProcess;
-class QTime;
-class QVBoxLayout;
-class QTreeWidgetItem;
-class QTreeWidget;
+class WDialog;
+#ifdef _A_FINIR_FIXME
+class WContextMenuEvent;
+#endif
+class WMenu;
+class WImage;
+#ifdef _A_FINIR_FIXME
+class WWheelEvent;
+#endif
+class WProcess;
+
 class G4OpenGLSceneHandler;
-class G4OpenGLQtMovieDialog;
-class G4VPhysicalVolume;
+class G4OpenGLWtMovieDialog;
 
-class G4OpenGLQtViewer: public QObject, virtual public G4OpenGLViewer {
-
-  Q_OBJECT
+class G4OpenGLWtViewer: public Wt::WObject, virtual public G4OpenGLViewer {
 
 public:
-  G4OpenGLQtViewer (G4OpenGLSceneHandler& scene);
-  virtual ~G4OpenGLQtViewer ();
+  G4OpenGLWtViewer (G4OpenGLSceneHandler& scene);
+  virtual ~G4OpenGLWtViewer ();
   void SetView ();
-  virtual void updateQWidget()=0;
-  QString setEncoderPath(QString path);
-  QString getEncoderPath();
-  QString setTempFolderPath(QString path);
-  QString getTempFolderPath();
-  QString setSaveFileName(QString path);
-  QString getSaveFileName();
+  virtual void updateWWidget()=0;
+#ifdef _A_FINIR_FIXME
+  Wt::WString setEncoderPath(Wt::WString path);
+  Wt::WString getEncoderPath();
+  Wt::WString setTempFolderPath(Wt::WString path);
+  Wt::WString getTempFolderPath();
+  Wt::WString setSaveFileName(Wt::WString path);
+  Wt::WString getSaveFileName();
   bool isRecording();
   bool isStopped();
   bool isPaused();
@@ -100,34 +96,40 @@ public:
   void saveVideo();
   bool generateMpegEncoderParameters();
   void displayRecordingStatus();
+#endif
   void drawText(const char * ,int x,int y,int z, int size);
 
-public:
-  void G4MousePressEvent(QMouseEvent *event);
-  void G4wheelEvent (QWheelEvent * event); 
-  void G4keyPressEvent (QKeyEvent * event); 
-  void G4MouseDoubleClickEvent();
-  void G4MouseReleaseEvent();
-  void G4MouseMoveEvent(QMouseEvent *event);
-
 protected:
-  void CreateGLQtContext ();
-  virtual void CreateMainWindow (QGLWidget*,QString);
-  void G4manageContextMenuEvent(QContextMenuEvent *e);
-  void rotateQtScene(float, float);
-  void rotateQtCamera(float, float);
-  void rotateQtSceneInViewDirection(float, float);
-  void rotateQtCameraInViewDirection(float, float);
+  void CreateGLWtContext ();
+  virtual void CreateMainWindow (Wt::WGLWidget*,Wt::WString);
+#ifdef _A_FINIR_FIXME
+  void G4manageContextMenuEvent(Wt::WContextMenuEvent *e);
+#endif
+  void G4MousePressEvent(Wt::WMouseEvent *event);
+  void G4MouseReleaseEvent();
+  void G4MouseDoubleClickEvent();
+  void G4MouseMoveEvent(Wt::WMouseEvent *event);
+#ifdef _A_FINIR_FIXME
+  void G4wheelEvent (Wt::WWheelEvent * event); 
+#endif
+  void G4keyPressEvent (Wt::WKeyEvent * event); 
+  void rotateWtScene(float, float);
+  void rotateWtCamera(float, float);
+  void rotateWtSceneInViewDirection(float, float);
+  void rotateWtCameraInViewDirection(float, float);
   void moveScene(float, float, float,bool);
   void FinishView();
-  void updateKeyModifierState(Qt::KeyboardModifiers);
-
+#ifdef _A_FINIR_FIXME
+  void updateKeyModifierState(Wt::KeyboardModifiers);
+#endif
 
 protected:
-  QGLWidget* fWindow;
-  QWidget* fGLWindow;
+  Wt::WGLWidget* fWindow;
+  Wt::WWidget* fGLWindow;
   bool hasPendingEvents();
+#ifdef _A_FINIR_FIXME
   void savePPMToTemp();
+#endif
   int fRecordFrameNumber;
 
   bool fHasToRepaint;
@@ -138,29 +140,28 @@ private:
   enum mouseActions {STYLE1,STYLE2,STYLE3,STYLE4}; 
   enum RECORDING_STEP {WAIT,START,PAUSE,CONTINUE,STOP,READY_TO_ENCODE,ENCODING,FAILED,SUCCESS,BAD_ENCODER,BAD_OUTPUT,BAD_TMP,SAVE}; 
 
+#ifdef _A_FINIR_FIXME
   void createPopupMenu();
-  void createRadioAction(QAction *,QAction *, const std::string&,unsigned int a=1);
+  void createRadioAction(Wt::WAction *,Wt::WAction *, const std::string&,unsigned int a=1);
+#endif
   void rescaleImage(int, int);
-  bool printPDF(const std::string,int,QImage);  
+#ifdef _A_FINIR_FIXME
+  bool printPDF(const std::string,int,WImage);  
   void showMovieParametersDialog();
   void initMovieParameters();
-  QString createTempFolder();
-  QString removeTempFolder();
+  Wt::WString createTempFolder();
+  Wt::WString removeTempFolder();
   void setRecordingStatus(RECORDING_STEP);
-  void setRecordingInfos(QString);
-  QString getProcessErrorMsg();
-  QWidget* getParentWidget();
-  void fillUIViewComponent();
-  void parseVolumeTree(G4VPhysicalVolume * root, QTreeWidgetItem *);
-  void setCheckComponent(QTreeWidgetItem* item,bool check);
-  G4VPhysicalVolume* parseAndFindVolumeTree(G4VPhysicalVolume * root, G4String currentPath, G4String pathToMatch);
+  void setRecordingInfos(Wt::WString);
+  Wt::WString getProcessErrorMsg();
 
-  QMenu *fContextMenu;
+  WMenu *fContextMenu;
+#endif
 
   mouseActions fMouseAction; // 1: rotate 2:move 3:pick 4:shortcuts 
-  QPoint fLastPos1;
-  QPoint fLastPos2;
-  QPoint fLastPos3;
+  Wt::WPoint fLastPos1;
+  Wt::WPoint fLastPos2;
+  Wt::WPoint fLastPos3;
   /** delta of scene rotation. This delta is put in degree */
   G4double fDeltaRotation;
   /** delta of scene translation. This delta is put in % of the scene view */
@@ -178,52 +179,51 @@ private:
   /** To ensure rotate event are keep one by one */
   bool fHoldRotateEvent;
   bool fAutoMove;
-  QString fEncoderPath;
-  QString fTempFolderPath;
-  QString fMovieTempFolderPath;
-  QString fSaveFileName;
-  QString fParameterFileName;
-  QAction *fRotateAction;
-  QAction *fMoveAction;
-  QAction *fPickAction;
-  QAction *fFullScreenOn;
-  QAction *fFullScreenOff;
-  QAction *fDrawingWireframe;
-  QAction *fDrawingLineRemoval;
-  QAction *fDrawingSurfaceRemoval;
-  QAction *fDrawingLineSurfaceRemoval;
-  G4OpenGLQtMovieDialog* fMovieParametersDialog;
+  Wt::WString fEncoderPath;
+  Wt::WString fTempFolderPath;
+  Wt::WString fMovieTempFolderPath;
+  Wt::WString fSaveFileName;
+  Wt::WString fParameterFileName;
+#ifdef _A_FINIR_FIXME
+  WAction *fRotateAction;
+  WAction *fMoveAction;
+  WAction *fPickAction;
+  WAction *fFullScreenOn;
+  WAction *fFullScreenOff;
+  WAction *fDrawingWireframe;
+  WAction *fDrawingLineRemoval;
+  WAction *fDrawingSurfaceRemoval;
+  WAction *fDrawingLineSurfaceRemoval;
+#endif
+  G4OpenGLWtMovieDialog* fMovieParametersDialog;
   RECORDING_STEP fRecordingStep;
-  QProcess *fProcess;
-  QTime *fLastEventTime;
+  WProcess *fProcess;
+  Wt::WTime *fLastEventTime;
   int fSpinningDelay;
   int fNbMaxFramesPerSec;
   float fNbMaxAnglePerSec;
   int fLaunchSpinDelay;
-  QWidget* fUIViewComponentsTBWidget;
-  QVBoxLayout* fLayoutViewComponentsTBWidget;
+
   G4double fXRot;
   G4double fYRot;
   bool fNoKeyPress;
   bool fAltKeyPress;
   bool fControlKeyPress;
   bool fShiftKeyPress;
-  bool fBatchMode;
-  bool fCheckViewComponentLock;
-  QTreeWidget * fViewerComponentTreeWidget;
 
-  Q_SIGNALS:
-//signals:
+#ifdef _A_FINIR_FIXME
  void rotateTheta(int);
  void rotatePhi(int);
  void moveX(int);
  void moveY(int);
  void moveZ(int);
+#endif
 
-public Q_SLOTS :
+public :
   void startPauseVideo();
 
-private Q_SLOTS :
+private :
+#ifdef _A_FINIR_FIXME
   void actionMouseRotate();
   void actionMouseMove();
   void actionMousePick();
@@ -236,8 +236,10 @@ private Q_SLOTS :
   void actionChangeTextColor();
   void actionChangeDefaultColor();
   void actionMovieParameters();
+#endif
 
   void showShortcuts();
+#ifdef _A_FINIR_FIXME
   void toggleDrawingAction(int);
   void toggleMouseAction(mouseActions);
   void toggleRepresentation(bool);
@@ -247,11 +249,11 @@ private Q_SLOTS :
   void toggleHaloing(bool);
   void toggleAux(bool);
   void toggleFullScreen(bool);
+#endif
   void processEncodeFinished();
   void processLookForFinished();
   void processEncodeStdout();
-  void viewComponentItemChanged(QTreeWidgetItem* item, int id);
-  // Only use for Qt>4.0
+  // Only use for Wt>4.0
   //  void dialogClosed();
 };
 

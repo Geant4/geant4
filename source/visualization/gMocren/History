@@ -20,6 +20,10 @@ committal in the CVS repository !
 History file for visualization/gMocren sub-category
 ---------------------------------------------------
 
+19 May 2011  Akinori Kimura (gMocren-V09-04-00)
+- Avoided warnings of the following codes in GCC 4.6.0.
+  G4GMocrenTouchable.hh, G4GMocrenFileSceneHandler.cc and G4GMocrenIO.cc.
+
 23, December L. Garnier 
 - GNUmakefile : Remove OpenGL/Qt stuff from Makefile
 

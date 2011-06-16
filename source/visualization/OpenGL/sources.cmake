@@ -79,14 +79,46 @@ include_directories(${OPENGL_INCLUDE_DIR})
 set(G4VIS_MODULE_OPENGL_LINK_LIBRARIES ${OPENGL_LIBRARIES})
 
 #
-# All of the above files must have the G4VIS_BUILD_OPENGL_DRIVER definition
+# All files must have the G4VIS_BUILD_OPENGL_DRIVER definition
 #
-GEANT4_ADD_COMPILE_DEFINITIONS(SOURCES ${G4VIS_MODULE_OPENGL_SOURCES}
-    COMPILE_DEFINITIONS G4VIS_BUILD_OPENGL_DRIVER)
+add_definitions(-DG4VIS_BUILD_OPENGL_DRIVER)
 
 
+#----------------------------------------------------------------------------
+# Add X11 OpenGL Support if requested
 #
-# Qt only if selected
+if(GEANT4_USE_OPENGL_X11)
+    #
+    # Add in the extra X11 GL sources
+    #
+    list(APPEND G4VIS_MODULE_OPENGL_HEADERS
+        G4OpenGLImmediateX.hh
+        G4OpenGLImmediateXViewer.hh
+        G4OpenGLStoredX.hh
+        G4OpenGLStoredXViewer.hh
+        G4OpenGLXViewer.hh)
+
+    list(APPEND G4VIS_MODULE_OPENGL_SOURCES
+        G4OpenGLImmediateX.cc
+        G4OpenGLImmediateXViewer.cc
+        G4OpenGLStoredX.cc
+        G4OpenGLStoredXViewer.cc
+        G4OpenGLXViewer.cc)
+
+    # Add the includes for X11
+    include_directories(${X11_INCLUDE_DIR} ${X11_Xmu_INCLUDE_PATH})
+
+    # Add the compile definitions needed for the X11 component
+    add_definitions(-DG4VIS_BUILD_OPENGLX_DRIVER)
+
+    # Add in X11 libraries, plus Xmu library
+    list(APPEND G4VIS_MODULE_OPENGL_LINK_LIBRARIES ${X11_LIBRARIES} ${X11_Xmu_LIBRARY})
+endif()
+
+
+
+#----------------------------------------------------------------------------
+# Add Qt OpenGL support if requested
 #
 if(GEANT4_USE_QT)
     #
@@ -123,25 +155,17 @@ if(GEANT4_USE_QT)
 
     list(APPEND G4VIS_MODULE_OPENGL_SOURCES ${G4OPENGL_MOC_SOURCES})
 
-    # Add the definitions
+    # Add the definitions - these will also be used to compile the moc sources
     # Argh.. Have to remember about INTY and UI because of their use...
-    GEANT4_ADD_COMPILE_DEFINITIONS(SOURCES ${G4VIS_MODULE_OPENGL_SOURCES}
-        COMPILE_DEFINITIONS
-        G4VIS_BUILD_OPENGL_DRIVER;G4VIS_BUILD_OPENGLQT_DRIVER;G4INTY_BUILD_QT;G4UI_BUILD_QT_SESSION)
-
-    # And for the moc files because these are in the build tree
-    set_source_files_properties(${G4OPENGL_MOC_SOURCES}
-       PROPERTIES 
-       COMPILE_DEFINITIONS
-       "G4VIS_BUILD_OPENGL_DRIVER;G4VIS_BUILD_OPENGLQT_DRIVER"
-    )
+    add_definitions(-DG4VIS_BUILD_OPENGLQT_DRIVER -DG4INTY_BUILD_QT
+        -DG4UI_BUILD_QT_SESSION)
 
     # Add in Qt libraries
     list(APPEND G4VIS_MODULE_OPENGL_LINK_LIBRARIES ${QT_LIBRARIES})
-
 endif()
 
-#
+
+#----------------------------------------------------------------------------
 # Define the Geant4 Module.
 #
 GEANT4_DEFINE_MODULE(NAME G4OpenGL

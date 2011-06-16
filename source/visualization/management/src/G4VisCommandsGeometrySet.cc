@@ -605,3 +605,26 @@ void G4VisCommandGeometrySetVisibility::SetNewValue
     }
   }
 }
+
+void G4VisCommandGeometrySetVisibility::SetNewValueOnLV
+(G4LogicalVolume* pLV, G4int requestedDepth,G4bool visibility)
+{
+  if (!pLV) return;
+  G4VisCommandGeometrySetVisibilityFunction setVisibility(visibility);
+  SetLVVisAtts(pLV, setVisibility, 0, requestedDepth);
+
+  G4VViewer* pViewer = fpVisManager->GetCurrentViewer();
+  if (pViewer) {
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");
+    const G4ViewParameters& viewParams = pViewer->GetViewParameters();
+    if (fpVisManager->GetVerbosity() >= G4VisManager::warnings) {
+      if (!viewParams.IsCulling() ||
+	  !viewParams.IsCullingInvisible()) {
+	G4cout <<
+	  "Culling must be on - \"/vis/viewer/set/culling global true\" and"
+	  "\n  \"/vis/viewer/set/culling invisible true\" - to see effect."
+	       << G4endl;
+      }
+    }
+  }
+}

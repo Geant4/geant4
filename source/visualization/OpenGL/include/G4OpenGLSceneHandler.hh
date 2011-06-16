@@ -41,8 +41,7 @@
 
 #include "G4VSceneHandler.hh"
 #include "G4OpenGLBitMapStore.hh"
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include "G4OpenGL.hh"
 
 #include <map>
 

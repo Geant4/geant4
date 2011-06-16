@@ -798,6 +798,10 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
       break;
     }
   }
+
+  /* sxmin, etc., not actually used.  Comment out to prevent compiler
+     warnings but keep in case need in future.  Extract transform into
+     reduced code below.
   G4double sxmin(sxmid), sxmax(sxmid);
   G4double symin(symid), symax(symid);
   G4double szmin(szmid), szmax(szmid);
@@ -815,6 +819,15 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
   case G4Scale::z:
     szmin = szmid - halfHeight;
     szmax = szmid + halfHeight;
+    transform = G4RotateY3D(halfpi);
+    break;
+  }
+  */
+  G4Transform3D transform;
+  switch (logoDirection) {
+  case G4Scale::x: break;
+  case G4Scale::y: break;
+  case G4Scale::z:
     transform = G4RotateY3D(halfpi);
     break;
   }
@@ -1206,6 +1219,10 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
       break;
     }
   }
+
+  /* sxmin, etc., not actually used.  Comment out to prevent compiler
+     warnings but keep in case need in future.  Extract transform and
+     scaleExtent into reduced code below.
   G4double sxmin(sxmid), sxmax(sxmid);
   G4double symin(symid), symax(symid);
   G4double szmin(szmid), szmax(szmid);
@@ -1230,8 +1247,24 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
     scaleExtent = G4VisExtent(0,0,0,0,-halfLength,halfLength);
     break;
   }
+  */
+  G4Transform3D transform;
+  G4VisExtent scaleExtent;
+  switch (scaleDirection) {
+  case G4Scale::x:
+    scaleExtent = G4VisExtent(-halfLength,halfLength,0,0,0,0);
+    break;
+  case G4Scale::y:
+    transform = G4RotateZ3D(halfpi);
+    scaleExtent = G4VisExtent(0,0,-halfLength,halfLength,0,0);
+    break;
+  case G4Scale::z:
+    transform = G4RotateY3D(halfpi);
+    scaleExtent = G4VisExtent(0,0,0,0,-halfLength,halfLength);
+    break;
+  }
   transform = G4Translate3D(sxmid,symid,szmid) * transform;
-  //////////  G4VisExtent scaleExtent(sxmin, sxmax, symin, symax, szmin, szmax);
+  /////////  G4VisExtent scaleExtent(sxmin, sxmax, symin, symax, szmin, szmax);
 
 
   model->SetTransformation(transform);

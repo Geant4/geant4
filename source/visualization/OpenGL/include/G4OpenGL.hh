@@ -30,20 +30,46 @@
 
 #ifdef G4VIS_BUILD_OPENGL_DRIVER
 
-#ifndef G4OpenGL_h
-#define G4OpenGL_h 
+ #ifndef G4OpenGL_h
+ #define G4OpenGL_h 
 
-#ifdef WIN32
-#include <windows.h>
-#undef min
-#undef max
+ #ifdef WIN32
+ #include <windows.h>
+ #undef min
+ #undef max
+ #endif
+
+
+ #ifdef G4VIS_BUILD_OPENGLX_DRIVER
+ #  include <GL/gl.h>
+ #  include <GL/glu.h>
+ #endif
+
+ #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
+ #    include <GL/gl.h>
+ #    include <GL/glu.h>
+ #endif
+
+ #ifdef G4VIS_BUILD_OPENGLWIN32_DRIVER
+ #    include <GL/gl.h>
+ #    include <GL/glu.h>
+ #endif
+//# Do NOT include glx Here ! It has to be done, after all <Qxx...> includes
+//#  include <GL/glx.h>
+
+#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
+ #include <Wt/WGLWidget>
+ #include <qgl.h>
 #endif
+ #ifdef  G4VIS_BUILD_OPENGLQT_DRIVER
+// Already done in Darwin-g++.gmk
+//#    include <OpenGL/gl.h>
+//#    include <OpenGL/glu.h>
+ #include <qgl.h>
+ #endif
 
-#include <GL/gl.h>
-#include <GL/glu.h>
+ #define G4OPENGL_FLT_BIG 1.e20
 
-#define G4OPENGL_FLT_BIG 1.e20
-
-#endif
+ #endif
 
 #endif

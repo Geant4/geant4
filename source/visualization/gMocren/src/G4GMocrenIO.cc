@@ -3469,15 +3469,13 @@ int G4GMocrenIO::getNumDoseDist() {
 // get & set the dose distribution unit
 std::string G4GMocrenIO::getDoseDistUnit(int _num) {
   // to avoid a warning in the compile process
-  int dummynum;
-  dummynum = _num;
+  if(kDoseUnit.size() > static_cast<size_t>(_num)) return kDoseUnit;
 
   return kDoseUnit;
 }
 void G4GMocrenIO::setDoseDistUnit(std::string & _unit, int _num) {
   // to avoid a warning in the compile process
-  int dummynum;
-  dummynum = _num;
+  if(_unit.size() > static_cast<size_t>(_num)) kDoseUnit = _unit;
 
   //char unit[13];
   //std::strncpy(unit, _unit.c_str(), 12);

@@ -7,7 +7,9 @@ ifndef G4INSTALL
 endif
 
 # Definition of macro for moc files (for Qt use only)
+ifdef G4VIS_BUILD_OPENGLQT_DRIVER
 MOC_MACRO = -DG4VIS_BUILD_OPENGLQT_DRIVER
+endif
 
 # For debug mode
 # CPPFLAGS += -DG4DEBUG_VIS_OGL

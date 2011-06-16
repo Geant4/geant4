@@ -20,7 +20,10 @@ committal in the CVS repository !
 History file for visualization/FukuiRenderer sub-category
 ---------------------------------------------------------
 
-23, December L. Garnier 
+17th May 2010  John Allison  (DAWN-V09-04-00)
+- G4FRSceneFunc.icc: Fixed gcc-4.6.0 warning.
+
+23, December L. Garnier
 - GNUmakefile : Remove OpenGL/Qt stuff from Makefile
 
 11 November 2010  Akinori Kimura (DAWN-V09-03-01)

@@ -24,6 +24,9 @@ committal in the CVS repository !
 History file for visualization/Tree sub-category
 ------------------------------------------------
 
+2nd June 2011  John Allison  (vistree-V09-04-00)
+- Tagged.
+
 23, December L. Garnier 
 - GNUmakefile : Remove OpenGL/Qt stuff from Makefile
 

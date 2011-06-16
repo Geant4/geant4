@@ -958,8 +958,8 @@ void G4VisCommandsViewerSet::SetNewValue
     }
 
     G4double F = 1.;
+    // iSelector can only be 0 or 1
     switch (iSelector) {
-    default:
     case 0:
       vp.UnsetSectionPlane();
       break;

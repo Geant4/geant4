@@ -42,6 +42,7 @@
 
 #include <X11/Intrinsic.h>
 
+#include "G4OpenGL.hh"
 #include <GL/glx.h>
 
 class G4OpenGLSceneHandler;

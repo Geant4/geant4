@@ -26,6 +26,18 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+27th May 2011  Joseph Perl  (visman-V09-04-03)
+- Tagged.
+
+18th May 2011  Laurent Garnier
+- G4VisCommandGeometrySetVisibility : Add method to set value on a logical volume
+
+17th May 2011  John Allison  (visman-V09-04-02)
+- (Note: visman-V09-04-01 skipped.)
+- G4Scene: Added SetName.
+- G4VisCommandsViewerSet.cc: Fixed Coverity warning.
+- G4VisCommandsSceneAdd.cc: Fixed gcc 4.6.0 warning.
+
 27th December 2010  John Allison  (visman-V09-04-00)
 - Tagged.  This tag DOES include changes below of December 11th.
 

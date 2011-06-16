@@ -31,8 +31,8 @@
 
 #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
 
-#include "G4OpenGLXmVWidgetObject.hh"
 #include "G4OpenGLXmViewer.hh"
+#include "G4OpenGLXmVWidgetObject.hh"
 
 G4OpenGLXmVWidgetObject::G4OpenGLXmVWidgetObject ()
 {}

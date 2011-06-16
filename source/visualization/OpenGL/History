@@ -17,6 +17,51 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+2nd June 2011  John Allison  (opengl-V09-04-02)
+- Tagged.
+
+27th May 2011 L. Garnier
+- Fix bug G4OpenGLViewer.cc
+
+26th May 2011 L. Garnier
+- Fix compilation bug in G4OpenGLViewer.cc
+
+25th May 2011 Ben Morgan
+- sources.cmake : Added section to enable building of X11 component if user has
+  requested this.
+  Simplified addition of compile definitions so that all files in the category
+  pick them up. This replicates the behaviour of the current Makefiles.
+
+20th May 2011 L.Garnier
+- G4OpenGLViewer.cc : Add methods for viewerComponent tree
+
+17th May 2011  John Allison  (opengl-V09-04-01)
+- G4OpenGLSceneHandler.cc,G4OpenGLXmConvenienceRoutines.cc:
+  o Fixed gcc-4.6.0 warnings about unused variables.
+- G4OpenGLViewer.cc: Fixed Coverity warning
+
+13th April, 2011 L. Garnier
+- G4OpenGLQtViewer, G4OpenGLStoreQtViewer, G4OpenGLQtMovieDialog: Fix some potentiel problems 
+  with other Signal/Slot systems (boost)
+
+11th April, 2011 L. Garnier
+- Coverity warning fix
+
+6th April 2011 Laurent Garnier
+- G4OpenGLQtViewer add flag for batch mode. It works !
+
+2nd March 2011  John Allison
+- G4OpenGLViewer.cc: Fix Coverity warnings.
+
+2nd March 2011 Laurent Garnier
+- Get rid of old Qt3 code
+
+1st March 2011  Laurent Garnier
+- Fix Xm OpenGL inclusion problem by invert moving GL include at the beginning 
+
+10th January 2011  Laurent Garnier
+- Try to fix mix between GL include from X11 and GL include from Qt (APPLE stuff)
+
 7th January 2011  John Allison
 - G4OpenGLViewerMessenger.cc: Fixed problem of missing return statements.
 

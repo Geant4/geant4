@@ -39,9 +39,10 @@
 
 #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
 
+#include "G4OpenGLXmViewer.hh"
+
 #include "G4Xt.hh"
 
-#include "G4OpenGLXmViewer.hh"
 #include "G4VSceneHandler.hh"
 
 #include "G4Scene.hh"

@@ -47,11 +47,7 @@ G4OpenGLImmediateQtViewer::G4OpenGLImmediateQtViewer
   G4OpenGLImmediateViewer (sceneHandler)
 {
 
-#if QT_VERSION < 0x040000
-  setFocusPolicy(QWidget::StrongFocus); // enable keybord events
-#else
   setFocusPolicy(Qt::StrongFocus); // enable keybord events
-#endif
   fHasToRepaint = false;
   fIsRepainting = false;
 
@@ -170,11 +166,6 @@ void G4OpenGLImmediateQtViewer::paintGL()
 
   // DO NOT RESIZE IF SIZE HAS NOT CHANGE
   if ( !fHasToRepaint) {
-#if QT_VERSION < 0x040000
-    if (((getWinWidth() == (unsigned int)width())) &&(getWinHeight() == (unsigned int) height())) { 
-      return;
-    }
-#else
     // L. Garnier : Trap to get the size with mac OSX 10.6 and Qt 4.6(devel)
     // Tested on Qt4.5 on mac, 4.4 on windows, 4.5 on unbuntu
     int sw = 0;
@@ -194,7 +185,6 @@ void G4OpenGLImmediateQtViewer::paintGL()
         return;
       }
     }
-#endif
   }
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLImmediateQtViewer::paintGL VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV ready %d\n",fReadyToPaint);
@@ -280,10 +270,6 @@ void G4OpenGLImmediateQtViewer::ShowView (
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
   fHasToRepaint = true;
-#if QT_VERSION < 0x040000
-  setActiveWindow();
-#else
   activateWindow();
-#endif
 }
 #endif

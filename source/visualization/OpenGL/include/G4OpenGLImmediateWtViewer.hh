@@ -24,55 +24,61 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLBitMapStore.hh,v 1.4 2009-04-08 15:15:07 lgarnier Exp $
+// $Id: G4OpenGLImmediateWtViewer.hh,v 1.7 2010-03-10 11:03:46 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// John Allison  6th January 2007
-//
-// Class description
-//
-// Keeps bit maps on byte boundaries suitable for drawing.  For
-// example, in OpenGL:
-//
-//   const char* circle = G4OpenGLBitMapStore::GetCircle(size, true);
-//   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-//   glBitmap(size, size, size/2., size/2., 0., 0., circle);
+// Class G4OpenGLImmediateWtViewer : a class derived from
+//   G4OpenGLWtViewer and G4OpenGLImmediateViewer.
 
-#ifdef G4VIS_BUILD_OPENGL_DRIVER
+#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
 
-#ifndef G4OPENGLBITMAPSTORE_HH
-#define G4OPENGLBITMAPSTORE_HH
+#ifndef G4OPENGLIMMEDIATEWTVIEWER_HH
+#define G4OPENGLIMMEDIATEWTVIEWER_HH
+
+#include "G4OpenGLImmediateViewer.hh"
+#include "G4OpenGLImmediateQtViewer.hh"
+#include "G4OpenGLWtViewer.hh"
+#include <Wt/WPaintedWidget>
+#include <Wt/WEvent>
+
+//#include <qgl.h> // include <qglwidget.h>
 
 #include "globals.hh"
-#include <map>
 
-#include "G4OpenGL.hh"
+class G4OpenGLImmediateSceneHandler;
+class QMouseEvent;
 
-namespace G4OpenGLBitMapStore {
+class G4OpenGLImmediateWtViewer : public G4VViewer,
+  /*  public G4OpenGLImmediateViewer ,*/ public Wt::WPaintedWidget {
+   
+public:
+  G4OpenGLImmediateWtViewer (G4OpenGLImmediateSceneHandler& scene, Wt::WContainerWidget *,
+                const G4String& name = "");
+  ~G4OpenGLImmediateWtViewer ();
+  void DrawView();
+  void ShowView();
 
-  enum Shape {circle, square};
+private:
+  G4OpenGLImmediateQtViewer * fQtViewer;
+  //  void WtShowEvent(QShowEvent event );
+  void WtWheelEvent(Wt::WMouseEvent event);
+  void WtMousePressEvent(Wt::WMouseEvent event);
+  void WtMouseMoveEvent(Wt::WMouseEvent event);
+  void WtMouseDoubleClickEvent(Wt::WMouseEvent event);
+  //  void WtMouseReleaseEvent(Wt::WMouseEvent event);
+  //  void WtContextMenuEvent(QContextMenuEvent e);
+  void WtKeyPressEvent (Wt::WKeyEvent event); 
+  void paintEvent(Wt::WPaintDevice * event);
 
-  const GLubyte* GetBitMap(Shape, G4double& size, G4bool filled);
-  // Size in pixels (gets changed to a rationalised value).
+  QMouseEvent * ConvertWtMouseEventToQt(Wt::WMouseEvent event);
+  QWheelEvent * ConvertWtWheelEventToQt(Wt::WMouseEvent event);
+  QKeyEvent * ConvertWtKeyEventToQt(Wt::WKeyEvent event);
 
-  struct Key{
-    Key(Shape shape, G4int size, G4bool filled):
-      fShape(shape), fSize(size), fFilled(filled) {}
-    bool operator<(const Key& rhs) const {
-      if (fShape < rhs.fShape) return true;
-      else if (fSize < rhs.fSize) return true;
-      else if (fFilled != rhs.fFilled) return true;
-      else return false;
-    }
-    Shape fShape;
-    G4int fSize;
-    G4bool fFilled;
-  };
-
-  extern std::map<Key, GLubyte*> fStore;
-
-}
+  // implements G4VViewer::SetView() and ClearView()
+  void SetView ();
+  void ClearView ();
+};
 
 #endif
 

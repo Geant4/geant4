@@ -47,11 +47,7 @@ G4OpenGLStoredQtViewer::G4OpenGLStoredQtViewer
   QGLWidget()
 {
 
-#if QT_VERSION < 0x040000
-  setFocusPolicy(QWidget::StrongFocus); // enable keybord events
-#else
   setFocusPolicy(Qt::StrongFocus); // enable keybord events
-#endif
   fHasToRepaint = false;
   fIsRepainting = false;
 
@@ -225,9 +221,6 @@ void G4OpenGLStoredQtViewer::paintGL()
   //    WHEN CLICK ON THE FRAME FOR EXAMPLE
   //    EXECEPT WHEN MOUSE MOVE EVENT
   if ( !fHasToRepaint) {
-#if QT_VERSION < 0x040000
-    if (((getWinWidth() == (unsigned int)width())) &&(getWinHeight() == (unsigned int) height())) { 
-#else
     // L. Garnier : Trap to get the size with mac OSX 10.6 and Qt 4.6(devel)
     // Tested on Qt4.5 on mac, 4.4 on windows, 4.5 on unbuntu
     int sw = 0;
@@ -240,7 +233,6 @@ void G4OpenGLStoredQtViewer::paintGL()
       sh = frameGeometry().height();
     }
     if ((getWinWidth() == (unsigned int)sw) &&(getWinHeight() == (unsigned int)sh)) {
-#endif
       return;
     }
   }
@@ -323,11 +315,7 @@ void G4OpenGLStoredQtViewer::ShowView (
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-#if QT_VERSION < 0x040000
-  setActiveWindow();
-#else
   activateWindow();
-#endif
 }
 
 #endif

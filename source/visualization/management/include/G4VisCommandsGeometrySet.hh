@@ -300,6 +300,7 @@ public:
   virtual ~G4VisCommandGeometrySetVisibility ();
   G4String GetCurrentValue (G4UIcommand* command);
   void SetNewValue (G4UIcommand* command, G4String newValue);
+  void SetNewValueOnLV (G4LogicalVolume* pLV, G4int,G4bool);
 private:
   G4VisCommandGeometrySetVisibility (const G4VisCommandGeometrySetVisibility&);
   G4VisCommandGeometrySetVisibility& operator = (const G4VisCommandGeometrySetVisibility&);

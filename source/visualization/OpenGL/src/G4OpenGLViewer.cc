@@ -90,6 +90,9 @@ fWinSize_y(0),
 fPointSize (0),
 fSizeHasChanged(0)
 {
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLViewer:: Creation\n");
+#endif
   // Make changes to view parameters for OpenGL...
   fVP.SetAutoRefresh(true);
   fDefaultVP.SetAutoRefresh(true);
@@ -106,11 +109,13 @@ fSizeHasChanged(0)
 
 G4OpenGLViewer::~G4OpenGLViewer ()
 {
-  delete fGL2PSAction;
 }
 
 void G4OpenGLViewer::InitializeGLView () 
 {
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLViewer::InitializeGLView\n");
+#endif
   glClearColor (0.0, 0.0, 0.0, 0.0);
   glClearDepth (1.0);
   glDisable (GL_BLEND);
@@ -119,6 +124,9 @@ void G4OpenGLViewer::InitializeGLView ()
 
   fWinSize_x = fVP.GetWindowSizeHintX();
   fWinSize_y = fVP.GetWindowSizeHintY();
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLViewer::InitializeGLView END\n");
+#endif
 }  
 
 void G4OpenGLViewer::ClearView () {
@@ -484,8 +492,9 @@ void G4OpenGLViewer::printEPS() {
 
   // Change the LC_NUMERIC value in order to have "." separtor and not ","
   // This case is only useful for French, Canadien...
-  char* oldLocale = (char*)(malloc(strlen(setlocale(LC_NUMERIC,NULL))+1));
-  if(oldLocale!=NULL) strcpy(oldLocale,setlocale(LC_NUMERIC,NULL));
+  size_t len = strlen(setlocale(LC_NUMERIC,NULL));
+  char* oldLocale = (char*)(malloc(len+1));
+  if(oldLocale!=NULL) strncpy(oldLocale,setlocale(LC_NUMERIC,NULL),len);
   setlocale(LC_NUMERIC,"C");
 
   if (fVectoredPs) {
@@ -598,7 +607,7 @@ bool G4OpenGLViewer::printNonVectoredEPS () {
 
   fprintf (fp, "grestore\n");
   fprintf (fp, "showpage\n");
-  delete pixels;
+  delete [] pixels;
   fclose (fp);
 
   // Reset for next time (useful is size change)

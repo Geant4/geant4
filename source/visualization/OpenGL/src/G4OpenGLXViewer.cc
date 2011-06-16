@@ -37,7 +37,6 @@
 #include "G4OpenGLXViewer.hh"
 #include "G4VViewer.hh"
 #include "G4OpenGLSceneHandler.hh"
-#include <GL/glu.h>
 
 #include "G4OpenGLFontBaseStore.hh"
 

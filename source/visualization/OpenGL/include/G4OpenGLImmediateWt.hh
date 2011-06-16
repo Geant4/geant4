@@ -24,70 +24,24 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtMovieDialog.hh,v 1.4 2008-10-07 05:36:11 lgarnier Exp $
-// GEANT4 tag $Name: 
+// $Id: G4OpenGLImmediateWt.hh,v 1.2 2009-02-04 16:48:40 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
+// OpenGLImmediateWt graphics system factory.
 
-#ifdef G4VIS_BUILD_OPENGLQT_DRIVER
+#if defined (G4VIS_BUILD_OPENGLWT_DRIVER) || defined (G4VIS_USE_OPENGLWT)
 
-#ifndef G4OPENGLQTMOVIEDIALOG_HH
-#define G4OPENGLQTMOVIEDIALOG_HH
+#ifndef G4OPENGLIMMEDIATEWT_HH
+#define G4OPENGLIMMEDIATEWT_HH
 
-#include <qdialog.h>
+#include "G4VGraphicsSystem.hh"
 
-class QPushButton;
-class QLabel;
-class QLineEdit;
-class G4OpenGLQtViewer;
-
-class QGroupBox;
-
-/** The G4OpenGLQtMovieDialog class provide a Dialog displaying differents options
-    for each file format
-*/
-class G4OpenGLQtMovieDialog : public QDialog
-{
-  Q_OBJECT
-
- public:
-  /** Construct a G4OpenGLQtMovieDialog
-      @param parent : parent widget
-  */
-  G4OpenGLQtMovieDialog(G4OpenGLQtViewer*,QWidget*);
-
-  /** Destroys G4OpenGLQtMovieDialog */
-  ~G4OpenGLQtMovieDialog();
-  void setRecordingStatus(QString);
-  void setRecordingInfos(QString);
-
-private :
-  QLineEdit* fEncoderPath;
-  QLineEdit* fTempFolderPath;
-  QLineEdit* fSaveFileName;
-  G4OpenGLQtViewer *fParentViewer;
-  QLabel *fEncoderStatus;
-  QLabel *fTempFolderStatus;
-  QLabel *fSaveFileStatus;
-  QLabel *fRecordingStatus;
-  QLabel *fRecordingInfos;
-  QPushButton *fButtonStopFinishClose;
-  QPushButton *fButtonSave;
-  QPushButton *fButtonStartPause;
-
-public Q_SLOTS :
-  void stopFinishClose();
-  void save();
-  bool checkEncoderSwParameters();
-  bool checkSaveFileNameParameters();
-  bool checkTempFolderParameters();
-
-private Q_SLOTS :
-  void selectEncoderPathAction();
-  void selectTempPathAction();
-  void selectSaveFileNameAction();
-  void resetRecording();
-  void enabledApplyButton();
+class G4OpenGLImmediateWt: public G4VGraphicsSystem {
+public:
+  G4OpenGLImmediateWt ();
+  G4VSceneHandler* CreateSceneHandler (const G4String& name = "");
+  G4VViewer*  CreateViewer  (G4VSceneHandler&, const G4String& name = "");
 };
 
 #endif

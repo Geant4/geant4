@@ -31,9 +31,9 @@
 
 #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
 
+#include "G4OpenGLXmViewer.hh"
 #include "G4OpenGLXmTopLevelShell.hh"
 #include "G4OpenGLXmVWidgetContainer.hh"
-#include "G4OpenGLXmViewer.hh"
 
 #include <Xm/Frame.h>
 #include <Xm/RowColumn.h>

@@ -17,6 +17,11 @@ include $(G4INSTALL)/config/architecture.gmk
 include $(G4INSTALL)/config/G4VIS_BUILD.gmk
 include $(G4INSTALL)/config/interactivity.gmk
 
+# NO need QT, then reset QTGLAGS
+QTFLAGS =
+QTLIBS  =
+GLQTLIBS =
+
 ifdef G4LIB_BUILD_ZLIB
   CPPFLAGS += -I$(G4BASE)/visualization/externals/zlib/include
 endif
