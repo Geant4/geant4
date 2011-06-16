@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+31-05-11 mma (fano2-V09-04-02)
+- DetectorConstruction : for Water, set I = 78 eV (instead of 75 eV)
+
 14-05-2011 mma (fano2-V09-04-01)
 - PhysListEmStandard_opt3 updated for msc95
 - PhysListEmStandard_opt2 suppressed
