@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+    
+02-06-11 mma (testem4-V09-04-00)
+- PhysicsList migrated to the new approach based on G4PhysicsListHelper
  
 09-11-10 M.Asai (testem4-V09-03-03)
 - Fix AIDA file option.
