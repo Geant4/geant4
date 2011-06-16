@@ -7,10 +7,10 @@
 #
 # define here the Scattering foil
 #
-##/testem/det/setMaterial Beryllium
-##/testem/det/setThickness 5.005 mm	#Be
-/testem/det/setMaterial Graphite
-/testem/det/setThickness 2.505 mm	#C
+/testem/det/setMaterial Beryllium
+/testem/det/setThickness 5.005 mm	#Be
+##/testem/det/setMaterial Graphite
+##/testem/det/setThickness 2.505 mm	#C
 ##/testem/det/setMaterial Aluminium
 ##/testem/det/setThickness 518.5 um	#Al2
 ##/testem/det/setMaterial Titanium
@@ -19,7 +19,8 @@
 ##/testem/det/setThickness 16.2 um	#Au1
 ##/testem/det/setThickness 48.5 um	#Au3
 #
-/testem/phys/addPhysics  emstandard_opt0
+###/testem/phys/addPhysics  emstandard_opt3
+/testem/phys/addPhysics  local
 #
 /run/initialize
 #
@@ -28,13 +29,12 @@
 /gun/particle e- 
 /gun/energy 13 MeV
 #
-/testem/histo/setFileName results/C1.10um.opt0
+/testem/histo/setFileName results/Be1.local
 /testem/histo/setFileType root
 /testem/histo/setHisto 3 120 0. 240. mm		#d(N/cost)/dS = f(r)
 /testem/histo/setHisto 4 120 0. 240. mm		#normalized d(N/cost)/dS = f(r)
-/testem/histo/printHisto 3
+###/testem/histo/printHisto 3
 #
 /testem/event/printModulo 100000
 #
-###/run/beamOn 4000000
-/run/beamOn 1000000
+/run/beamOn 4000000

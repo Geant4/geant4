@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06-06-11 mma (electronScattering-V09-04-03)
+- PhysListEmStandard migrated to the new approach based on G4PhysicsListHelper
      
 24-05-2011 mma (electronScattering-V09-04-02)
 - add EGS_13MeV results (Yann Perrot)
