@@ -12,10 +12,14 @@
 #
 #------------------------------------------------------------------------------
 
+# Add allocation export symbol for the global category
+add_definitions(-DG4IOS_ALLOC_EXPORT)
+
 add_subdirectory(HEPGeometry)
 add_subdirectory(HEPNumerics)
 add_subdirectory(HEPRandom)
 add_subdirectory(management)
+
 
 if(NOT GEANT4_BUILD_GRANULAR_LIBS)
     include(Geant4MacroLibraryTargets)
