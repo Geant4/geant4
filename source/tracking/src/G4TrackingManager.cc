@@ -123,7 +123,7 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
          (fpTrack->GetTrackStatus() == fStopButAlive) ){
 
     fpTrack->IncrementCurrentStepNumber();
-    //    stepStatus = fpSteppingManager->Stepping();
+    fpSteppingManager->Stepping();
 #ifdef G4_STORE_TRAJECTORY
     if(StoreTrajectory) fpTrajectory->
                         AppendStep(fpSteppingManager->GetStep()); 
