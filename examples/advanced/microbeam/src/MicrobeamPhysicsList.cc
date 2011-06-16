@@ -44,8 +44,6 @@
 #include "G4DecayPhysics.hh"
 
 #include "G4HadronElasticPhysics.hh"
-#include "G4HadronDElasticPhysics.hh"
-#include "G4HadronHElasticPhysics.hh"
 #include "G4HadronQElasticPhysics.hh"
 #include "G4HadronInelasticQBBC.hh"
 #include "G4IonBinaryCascadePhysics.hh"
@@ -186,14 +184,6 @@ void MicrobeamPhysicsList::AddPhysicsList(const G4String& name)
 
   } else if (name == "elastic" && !helIsRegisted) {
     hadronPhys.push_back( new G4HadronElasticPhysics());
-    helIsRegisted = true;
-
-  } else if (name == "DElastic" && !helIsRegisted) {
-    hadronPhys.push_back( new G4HadronDElasticPhysics());
-    helIsRegisted = true;
-
-  } else if (name == "HElastic" && !helIsRegisted) {
-    hadronPhys.push_back( new G4HadronHElasticPhysics());
     helIsRegisted = true;
 
   } else if (name == "QElastic" && !helIsRegisted) {
