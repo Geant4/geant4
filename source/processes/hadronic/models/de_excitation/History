@@ -13,6 +13,12 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+     
+06 June 2011 Vladimir Ivanchenko (hadr-deex-V09-04-14)
+----------------------------------------------------------
+- G4ExcitationHandler - added protection for small excitation energy into 
+                        photon evaporation loop
+- G4Evaporation - directly send low Z,A fragments to the FermiBreakUp model
 
 20 May 2011 Vladimir Ivanchenko (hadr-deex-V09-04-13)
 ----------------------------------------------------------

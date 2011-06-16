@@ -138,15 +138,15 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
   // of nucleons
   for(G4int ia=0; ia<Amax; ++ia) {
  
-    // g,n,p - evaporation is finished
+    // g,n,p and light fragments - evaporation is finished
+    G4int Z = theResidualNucleus->GetZ_asInt();
     G4int A = theResidualNucleus->GetA_asInt();
-    if(1 >= A) {
+    if(maxZforFBU > Z && maxAforFBU >= A) {
       theResult->push_back(theResidualNucleus);
       return theResult;
     }
 
     // check if it is stable, then finish evaporation
-    G4int Z = theResidualNucleus->GetZ_asInt();
     G4double abun = nist->GetIsotopeAbundance(Z, A); 
     
     // G4cout << "### G4Evaporation::BreakItUp step " << ia << " Z= " << Z
@@ -156,8 +156,7 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
  
     // stop deecitation loop in the case of the cold stable fragment 
     // or a fragment which can be deexcited by FBU
-    if((theResidualNucleus->GetExcitationEnergy() <= minExcitation && abun > 0.0)
-       || (Z < maxZforFBU && A < maxAforFBU)) 
+    if((theResidualNucleus->GetExcitationEnergy() <= minExcitation && abun > 0.0)) 
       {
 	theResult->push_back(theResidualNucleus);
 	return theResult;

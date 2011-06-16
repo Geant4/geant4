@@ -310,21 +310,25 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
     {
       //G4cout << "Next photon evaporate: " << thePhotonEvaporation << G4endl;  
       //G4cout << *iList << G4endl;
-  
-      theTempResult = thePhotonEvaporation->BreakUpFragment(*iList);	  
-      size_t nsec = theTempResult->size();
-      //G4cout << "Nproducts= " << nsec << G4endl;  
+      G4double exEnergy = (*iList)->GetExcitationEnergy();
+
+      // only hot fragments
+      if(exEnergy >= minExcitation) {  
+	theTempResult = thePhotonEvaporation->BreakUpFragment(*iList);	  
+	size_t nsec = theTempResult->size();
+	//G4cout << "Nproducts= " << nsec << G4endl;  
 	  
-      // if there is a gamma emission then
-      if (nsec > 0)
-	{
-	  G4FragmentVector::iterator j;
-	  for (j = theTempResult->begin(); j != theTempResult->end(); ++j)
-	    {
-	      theResults.push_back(*j); 
-	    }
-	}
-      delete theTempResult;
+	// if there is a gamma emission then
+	if (nsec > 0)
+	  {
+	    G4FragmentVector::iterator j;
+	    for (j = theTempResult->begin(); j != theTempResult->end(); ++j)
+	      {
+		theResults.push_back(*j); 
+	      }
+	  }
+	delete theTempResult;
+      }
 
       // priamry fragment is kept
       theResults.push_back(*iList); 
