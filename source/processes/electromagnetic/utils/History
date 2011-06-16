@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06 May 11: V.Ivant (emutils-V09-04-27)
+- G4VAtomDeexcitation - improved printout
+- G4EnergyLossTables, G4VEnergyLoss - fixed Coverity warnings
+
 30 May 11: V.Ivant (emutils-V09-04-26)
 - G4LossTableBuilder - fixed initialisation of variable density for the 
     case when PhysicsTables are not used

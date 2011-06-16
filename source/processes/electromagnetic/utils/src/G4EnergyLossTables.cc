@@ -434,7 +434,10 @@ G4double G4EnergyLossTables::GetDeltaProperTime(
     oldIndex = -1 ;
   }
   const G4PhysicsTable* propertimeTable= t.theProperTimeTable;
-  if (!propertimeTable) ParticleHaveNoLoss(aParticle,"ProperTime");
+  if (!propertimeTable) {
+    ParticleHaveNoLoss(aParticle,"ProperTime");
+    return 0.0;
+  }
 
   const G4double parlowen=0.4 , ppar=0.5-parlowen ;
   const G4double dToverT = 0.05 , facT = 1. -dToverT ;
@@ -516,7 +519,10 @@ G4double G4EnergyLossTables::GetRange(
   }
   const G4PhysicsTable* rangeTable= t.theRangeTable;
   const G4PhysicsTable*  dEdxTable= t.theDEDXTable;
-  if (!rangeTable) ParticleHaveNoLoss(aParticle,"Range");
+  if (!rangeTable) {
+    ParticleHaveNoLoss(aParticle,"Range");
+    return 0.0;
+  }
 
   G4int materialIndex = aMaterial->GetIndex();
   G4double scaledKineticEnergy = KineticEnergy*t.theMassRatio;

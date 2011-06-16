@@ -87,7 +87,8 @@ G4VEnergyLoss::G4VEnergyLoss(const G4String& aName , G4ProcessType aType)
 
   imat = 0;
   f1Fluct = f2Fluct = e1Fluct = e2Fluct = rateFluct = ipotFluct = e1LogFluct 
-    = e2LogFluct = ipotLogFluct = taulow = tauhigh = ltaulow = ltauhigh = 0.0;
+    = e2LogFluct = ipotLogFluct = taulow = tauhigh = ltaulow = ltauhigh 
+    = ParticleMass = 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -136,7 +136,10 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
   InitialiseForNewRun();
 
   if(0 < verbose && flagPIXE) {
-    G4cout << "### ===  PIXE model: " << namePIXE
+    G4cout << "### ===  PIXE model for hadrons: " << namePIXE
+	   << "  " <<  IsPIXEActive()
+	   << G4endl;  
+    G4cout << "### ===  PIXE model for e+-:     " << nameElectronPIXE
 	   << "  " <<  IsPIXEActive()
 	   << G4endl;  
   }
