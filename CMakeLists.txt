@@ -8,7 +8,7 @@
 #
 
 #------------------------------------------------------------------------------
-# Enforce out-of-source builds before anything else
+# - Enforce an out-of-source builds before anything else
 #
 if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
     message(STATUS "Geant4 requires an out-of-source build.")
@@ -21,7 +21,7 @@ if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
 endif()
 
 #------------------------------------------------------------------------------
-# Define CMake requirements and override make rules as needed
+# - Define CMake requirements and override make rules as needed
 #
 cmake_minimum_required(VERSION 2.6)
 set(CMAKE_USER_MAKE_RULES_OVERRIDE_CXX
@@ -31,191 +31,76 @@ set(CMAKE_USER_MAKE_RULES_OVERRIDE_Fortran
    ${CMAKE_SOURCE_DIR}/cmake/Modules/Geant4MakeRules_fortran.cmake)
 
 #------------------------------------------------------------------------------
-# Define the project
+# - Project definition
 #
-project(geant4)
+project(Geant4)
 
-#------------------------------------------------------------------------------
-# Define the version of the project - can be used to generate sources,
-# but just used for CPack the the moment
-#
-set(${PROJECT_NAME}_VERSION "9.4.0")
-set(${PROJECT_NAME}_VERSION_MAJOR "9")
-set(${PROJECT_NAME}_VERSION_MINOR "4")
-set(${PROJECT_NAME}_VERSION_PATCH "0")
 
-#------------------------------------------------------------------------------
-# Set up path to internal set of CMake modules.
+#----------------------------------------------------------------------------
+# - Prepend our own CMake Modules to the search path
+# This allows us to customize, add, and factor out functionality
+# NB: if our custom modules include others that we don't supply, those in the
+# base path will be used, so watch for incompatibilities!!
 #
 set(CMAKE_MODULE_PATH
-    ${geant4_SOURCE_DIR}/cmake
-    ${geant4_SOURCE_DIR}/cmake/Modules
+    ${PROJECT_SOURCE_DIR}/cmake/Modules
     ${CMAKE_MODULE_PATH})
 
 
-#------------------------------------------------------------------------------
-# Set up Build types or configurations
-# If further tuning of compiler flags is needed then it should be done here.
-# (It can't be done in the make rules override section).
-# However, exercise care when doing this not to override existing flags!!
-# We don't do this on WIN32 platforms because of some teething issues
-# with compiler specifics and linker flags
-if(NOT WIN32)
-    include(Geant4BuildModes)
-endif(NOT WIN32)
-
-# Optional define flags which are applicable globally
-
-# G4_STORE_TRAJECTORY
-# ON by default, switching off can improve performance. Needs to be on
-# for visualization to work fully. Mark as advanced because most users
-# should not need to worry about it.
-# FIXES : Bug #1208
-option(GEANT4_STORE_TRAJECTORY "Store trajectories in event processing. Switch off for improved performance but note that visualization of trajectories will not be possible" ON)
-mark_as_advanced(GEANT4_STORE_TRAJECTORY)
-
-if(GEANT4_STORE_TRAJECTORY)
-    add_definitions(-DG4_STORE_TRAJECTORY)
-endif()
-
-
-# G4VERBOSE
-# ON by default, switching off can improve performance, but at the cost of
-# fewer informational or warning messages. Mark as advanced because most users
-# should not need to worry about it.
-option(GEANT4_VERBOSE_CODE 
-    "Enable verbose output from Geant4 code. Switch off for better performance at the cost of fewer informational messages or warnings"
-    ON)
-mark_as_advanced(GEANT4_VERBOSE_CODE)
-
-if(GEANT4_VERBOSE_CODE)
-    add_definitions(-DG4VERBOSE)
-endif()
-
-
-#------------------------------------------------------------------------------
-# Includes for common utilities
+#----------------------------------------------------------------------------
+# - Add functionality provided by standard and custom modules
+# See the documentation in each of these modules for further details.
 #
-include(Geant4CPackBase)
-include(FeatureSummary)
-include(Geant4MacroUtilities)
+# - Versioning. We do this here for now
+set(${PROJECT_NAME}_VERSION "9.5.0")
+set(${PROJECT_NAME}_VERSION_MAJOR "9")
+set(${PROJECT_NAME}_VERSION_MINOR "5")
+set(${PROJECT_NAME}_VERSION_PATCH "0")
+
+# - Provide dependent options as these are needed for some Geant4 features
 include(CMakeDependentOption)
 
+# - Provide general CMake utilities for Geant4.
+include(Geant4MacroUtilities)
 
-#------------------------------------------------------------------------------
-# Geant4 library build options. 
-# Only global or granular libraries can be built. Global libraries are the
-# default, and provide an advanced option to switch to granular build.
-# Only developers really need the granular build.
-option(GEANT4_BUILD_GRANULAR_LIBS "Build Geant4 with granular libraries" OFF)
-mark_as_advanced(GEANT4_BUILD_GRANULAR_LIBS)
-GEANT4_ADD_FEATURE(GEANT4_BUILD_GRANULAR_LIBS "Build granular Geant4 libraries")
+# - Provide an 'uninstall' target.
+include(CMakeUninstallTarget)
 
-# Default to static libraries on win32 until declspec issues resolved
-if(WIN32)
-    option(BUILD_STATIC_LIBS "Build Geant4 static libraries" ON)
-    option(BUILD_SHARED_LIBS "Build Geant4 dynamic libraries" OFF)
-else(WIN32)
-    option(BUILD_STATIC_LIBS "Build Geant4 static libraries" OFF)
-    option(BUILD_SHARED_LIBS "Build Geant4 dynamic libraries" ON)
-endif(WIN32)
+# - Provide standard install directories permitting customization.
+include(Geant4InstallDirs)
 
-#------------------------------------------------------------------------------
-# Build output
-# Output all binaries to single directory based on their type
-#
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/runtime)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/library)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/archive)
+# - Provide packaging with CPack.
+include(Geant4CPackBase)
 
+# - Provide options to control how Geant4 libraries are built
+include(Geant4LibraryBuildOptions)
 
-#------------------------------------------------------------------------------
-# Geant4 defaults for data libraries
-# Not required for build, so how best to handle?
-#
+# - Provide interface to control use of optional components
+include(Geant4OptionalComponents)
 
-#------------------------------------------------------------------------------
-# Find required CLHEP package
-# Use REQUIRED - we MUST have it. An EXACT version number is not used at 
-# present, but can be added later as needed.
-#
-find_package(CLHEP 2.1.0.1 REQUIRED)
-
-
-#------------------------------------------------------------------------------
-# Geant4 User Interface Options
-# Written in separate module for clarity
-#
+# - Provide interface to control use of UI/Vis components
+#   Written in a separate module from other optional components because
+#   there are many complex options to handle.
 include(Geant4InterfaceOptions)
 
-#------------------------------------------------------------------------------
-# Geant4 Extra Modules Options
-#
-#------------------------------------------------------------------------------
-# Optional support for GDML - requires XercesC package
-#
-option(GEANT4_USE_GDML "Build Geant4 with GDML support" OFF)
-if(GEANT4_USE_GDML)
-    find_package(XercesC REQUIRED)
-endif(GEANT4_USE_GDML)
-
-GEANT4_ADD_FEATURE(GEANT4_USE_GDML "Build Geant4 with GDML support")
+# - Provide options to enable wrapping of Geant4 by other languages
+include(Geant4Wrapping)
 
 
 #------------------------------------------------------------------------------
-# Build G3ToG4 converter program
-# The G3toG4 *library* will always be built, but the application requires
-# a Fortran compiler AND CERNLIB, so is optional.
-# Only on *NIX because converter requires CERNLIB, and Windows support for
-# this is an unknown quantity at present (can always change later).
-#
-if(UNIX)
-    option(GEANT4_USE_GEANT3TOGEANT4 "Build the Geant3-to-Geant4 converter application" OFF)
-    if(GEANT4_USE_GEANT3TOGEANT4)
-        enable_language(Fortran)
-        #find_package(CERNLIB REQUIRED)
-    endif(GEANT4_USE_GEANT3TOGEANT4)
-
-    GEANT4_ADD_FEATURE(GEANT4_USE_GEANT3TOGEANT4 "Build the Geant3-to-Geant4 converter application")
-endif()
-
-#------------------------------------------------------------------------------
-# Optional use of system zlib library
-#
-#option(GEANT4_USE_SYSTEM_ZLIB "Use the system's zlib library" OFF)
-if(GEANT4_USE_SYSTEM_ZLIB)
-    # This needs more work - use ITK's way of doing it as an example.
-    find_package(ZLIB)
-endif(GEANT4_USE_SYSTEM_ZLIB)
-
-GEANT4_ADD_FEATURE(GEANT4_USE_SYSTEM_ZLIB "Use system zlib library")
-
-
-#------------------------------------------------------------------------------
-# Optional build of Python wrappers (Geant4Py)
-# Suggested that this be brought under the wing of the CMake system.
-# -> Requires Global/Shared library build (all platforms?)
-#
-#CMAKE_DEPENDENT_OPTION(GEANT4_WRAP_PYTHON "Wrap Geant4 classes into the Python language" OFF "GEANT4_BUILD_GLOBAL_LIBS;BUILD_SHARED_LIBS" OFF)
-#if(GEANT4_WRAP_PYTHON)
-    # We need Boost-Python and Python
-    # NB: Watch for FindPythonLibs picking up the static version...
-    # Known issue with CMake 2.6 module - see Bug #8389 and 2257 for details
-    # of fix
-    #    find_package(Boost REQUIRED COMPONENTS python)
-    #find_package(PythonLibs REQUIRED)
-    #endif(GEANT4_WRAP_PYTHON)
-
-    #GEANT4_ADD_FEATURE(GEANT4_WRAP_PYTHON "Wrap Geant4 classes into the Python language")
-
-
-#------------------------------------------------------------------------------
-# Add the source subdirectory - all the source code for the libraries is under
-# this.
-#
+# Add the source and environments subdirectories
+# source       : Process all the Geant4 core targets
+# environments : Process optional wrappings of Geant4 (NOTYETIMPLEMENTED)
 add_subdirectory(source)
+#add_subdirectory(environments)
 
 
+#----------------------------------------------------------------------------
+# - Perform all post build tasks
+# At the CMake level, this simply means that we must know about targets
+# and other properties processed in source and environments trees before 
+# these tasks can be performed.
+#
 #------------------------------------------------------------------------------
 # Generate any Use/Config files here once everything else has been processed
 # e.g. "UseGeant4.cmake", "Geant4Config.cmake" - library dependencies etc
@@ -232,23 +117,30 @@ set(GEANT4_DOCDIR ${GEANT4_DATAROOTDIR}/doc/geant4-${geant4_VERSION})
 include(Geant4ToolchainBackwardCompatibility)
 include(Geant4ConfigureConfigScript)
 
+#----------------------------------------------------------------------------
+# Create the Geant4Config files and supporting modules
+#
+include(Geant4BuildProjectConfig)
 
 #------------------------------------------------------------------------------
 # Install any extra files needed such as documentation and legacy Makefiles
 #
-# User example code - optional
+# - User example code - optional
 option(GEANT4_INSTALL_EXAMPLES "Install all Geant4 examples" OFF)
 
 if(GEANT4_INSTALL_EXAMPLES)
     install(DIRECTORY examples
-        DESTINATION ${GEANT4_DATAROOTDIR}/geant4-${geant4_VERSION}
+        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/Geant4-${Geant4_VERSION}
         COMPONENT Examples
         PATTERN "CVS" EXCLUDE
         PATTERN ".svn" EXCLUDE)
 endif()
 
-#
+# - Data Libraries - optional
+
+#----------------------------------------------------------------------------
 # Final output - show what's been enabled so that user knows what's
 # happening - also useful for later problem solving!
 #
 GEANT4_PRINT_ENABLED_FEATURES()
+
