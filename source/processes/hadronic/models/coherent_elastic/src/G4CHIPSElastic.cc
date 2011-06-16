@@ -45,15 +45,34 @@
 #include "G4QProtonElasticCrossSection.hh"
 #include "G4QNeutronElasticCrossSection.hh"
 
+#include "G4QAntiBaryonElasticCrossSection.hh"        // Uzhi
+#include "G4QPionPlusElasticCrossSection.hh"          // Uzhi
+#include "G4QPionMinusElasticCrossSection.hh"         // Uzhi
+#include "G4QKaonPlusElasticCrossSection.hh"          // Uzhi
+#include "G4QKaonMinusElasticCrossSection.hh"         // Uzhi
+
+
 G4VQCrossSection* G4CHIPSElastic::pxsManager = 0;
 G4VQCrossSection* G4CHIPSElastic::nxsManager = 0;
+
+G4VQCrossSection* G4CHIPSElastic::PBARxsManager = 0;   // Uzhi
+G4VQCrossSection* G4CHIPSElastic::PIPxsManager = 0;
+G4VQCrossSection* G4CHIPSElastic::PIMxsManager = 0;
+G4VQCrossSection* G4CHIPSElastic::KPxsManager = 0;
+G4VQCrossSection* G4CHIPSElastic::KMxsManager = 0;
 
 G4CHIPSElastic::G4CHIPSElastic() : G4HadronElastic("hElasticCHIPS")
 {
   if(!pxsManager)
   {
-    pxsManager = G4QProtonElasticCrossSection::GetPointer();
-    nxsManager = G4QNeutronElasticCrossSection::GetPointer();
+    pxsManager    = G4QProtonElasticCrossSection::GetPointer();
+    nxsManager    = G4QNeutronElasticCrossSection::GetPointer();
+
+    PBARxsManager = G4QAntiBaryonElasticCrossSection::GetPointer(); // Uzhi
+    PIPxsManager  = G4QPionPlusElasticCrossSection::GetPointer();   // Uzhi
+    PIMxsManager  = G4QPionMinusElasticCrossSection::GetPointer();  // Uzhi
+    KPxsManager   = G4QKaonPlusElasticCrossSection::GetPointer();   // Uzhi
+    KMxsManager   = G4QKaonMinusElasticCrossSection::GetPointer();  // Uzhi
   }
 }
 
@@ -71,11 +90,22 @@ G4CHIPSElastic::SampleInvariantT(const G4ParticleDefinition* p,
   G4double cs = 0.;
   if     (projPDG==2212) { cs = pxsManager->GetCrossSection(false,plab,Z,N,projPDG); }
   else if(projPDG==2112) { cs = nxsManager->GetCrossSection(false,plab,Z,N,projPDG); }
+  else if(projPDG==-2212){ cs = PBARxsManager->GetCrossSection(false,plab,Z,N,projPDG); } //Pbar
+  else if(projPDG== 211) { cs = PIPxsManager->GetCrossSection(false,plab,Z,N,projPDG); } // Pi+
+  else if(projPDG==-211) { cs = PIMxsManager->GetCrossSection(false,plab,Z,N,projPDG); } // Pi-
+  else if(projPDG== 321) { cs = KPxsManager->GetCrossSection(false,plab,Z,N,projPDG); } // K+
+  else if(projPDG==-321) { cs = KMxsManager->GetCrossSection(false,plab,Z,N,projPDG); } // K-
+
   G4double t = 0.0;
   if(cs > 0.0)
   {
-    if     (projPDG==2212) { t = pxsManager->GetExchangeT(Z,N,projPDG); }
-    else if(projPDG==2112) { t = nxsManager->GetExchangeT(Z,N,projPDG); }
+    if     (projPDG== 2212) { t = pxsManager->GetExchangeT(Z,N,projPDG); }
+    else if(projPDG== 2112) { t = nxsManager->GetExchangeT(Z,N,projPDG); }
+    else if(projPDG==-2212) { t = PBARxsManager->GetExchangeT(Z,N,projPDG); } // Pbar
+    else if(projPDG==  211) { t = PIPxsManager->GetExchangeT(Z,N,projPDG); }  // Pi+
+    else if(projPDG== -211) { t = PIMxsManager->GetExchangeT(Z,N,projPDG); }  // Pi-
+    else if(projPDG==  321) { t = KPxsManager->GetExchangeT(Z,N,projPDG); }   // K+
+    else if(projPDG== -321) { t = KMxsManager->GetExchangeT(Z,N,projPDG); }   // K-
   }
   else  { t = G4HadronElastic::SampleInvariantT(p, plab, Z, A); }
   return t;

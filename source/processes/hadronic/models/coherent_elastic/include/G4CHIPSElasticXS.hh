@@ -104,6 +104,13 @@ private:
   
   G4VQCrossSection*           pCManager;
   G4VQCrossSection*           nCManager;
+
+  G4VQCrossSection* PBARxsManager;        // Uzhi
+  G4VQCrossSection* PIPxsManager;         // Uzhi
+  G4VQCrossSection* PIMxsManager;         // Uzhi
+  G4VQCrossSection* KPxsManager;          // Uzhi
+  G4VQCrossSection* KMxsManager;          // Uzhi
+
   const G4ParticleDefinition* theProton;
   const G4ParticleDefinition* theNeutron;
   const G4ParticleDefinition* theParticle;

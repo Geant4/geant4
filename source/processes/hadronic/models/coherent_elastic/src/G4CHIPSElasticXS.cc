@@ -48,6 +48,12 @@
 #include "G4QProtonElasticCrossSection.hh"
 #include "G4QNeutronElasticCrossSection.hh"
 
+#include "G4QAntiBaryonElasticCrossSection.hh" // Uzhi
+#include "G4QPionMinusElasticCrossSection.hh"  // Uzhi
+#include "G4QPionPlusElasticCrossSection.hh"   // Uzhi
+#include "G4QKaonMinusElasticCrossSection.hh"  // Uzhi
+#include "G4QKaonPlusElasticCrossSection.hh"   // Uzhi
+
 G4CHIPSElasticXS::G4CHIPSElasticXS() 
   :  G4VCrossSectionDataSet("CHIPSElasticXS"),
      theProton(G4Proton::Proton()), 
@@ -58,6 +64,12 @@ G4CHIPSElasticXS::G4CHIPSElasticXS()
   //  verboseLevel = 0;
   pCManager   = G4QProtonElasticCrossSection::GetPointer();
   nCManager   = G4QNeutronElasticCrossSection::GetPointer();
+
+  PBARxsManager = G4QAntiBaryonElasticCrossSection::GetPointer(); // Uzhi
+  PIPxsManager  = G4QPionPlusElasticCrossSection::GetPointer();   // Uzhi
+  PIMxsManager  = G4QPionMinusElasticCrossSection::GetPointer();  // Uzhi
+  KPxsManager   = G4QKaonPlusElasticCrossSection::GetPointer();   // Uzhi
+  KMxsManager   = G4QKaonMinusElasticCrossSection::GetPointer();  // Uzhi
 }
 
 G4CHIPSElasticXS::~G4CHIPSElasticXS()
@@ -139,6 +151,7 @@ G4CHIPSElasticXS::GetZandACrossSection(const G4DynamicParticle* dyn,
 {
   G4double momentum = dyn->GetTotalMomentum();
 
+/*                                     // Uzhi
   // only proton, deuteron and He4 x-sections
   G4int N = A - Z;
   if(Z == 1) {
@@ -151,6 +164,25 @@ G4CHIPSElasticXS::GetZandACrossSection(const G4DynamicParticle* dyn,
   } else {
     x = nCManager->GetCrossSection(false,momentum,Z,N,pPDG);
   }
+*/                                     // Uzhi
+
+// All following is added by V. Uzhinsky
+  G4int uPDGcode=dyn->GetPDGcode();
+  G4VQCrossSection* CHIPSmanager=0; 
+
+  if     (uPDGcode == 2212)  {CHIPSmanager=pCManager;    } // Projectile is Proton
+  else if(uPDGcode == 2112)  {CHIPSmanager=nCManager;    } // Projectile is Neutron
+  else if(uPDGcode == -2212) {CHIPSmanager=PBARxsManager;} // Projectile is Anti-Proton
+  else if(uPDGcode == -2112) {CHIPSmanager=PBARxsManager;} // Projectile is Anti-Neutron
+  else if(uPDGcode ==   211) {CHIPSmanager=PIPxsManager; } // Projectile is Pi+
+  else if(uPDGcode ==  -211) {CHIPSmanager=PIMxsManager; } // Projectile is Pi-
+  else if(uPDGcode ==  321)  {CHIPSmanager=KPxsManager;  } // Projectile is K+
+  else if(uPDGcode ==  -321) {CHIPSmanager=KMxsManager;  } // Projectile is K-
+
+  G4double x = 0.0;
+  G4int N = A - Z;
+  if(CHIPSmanager != 0) x = CHIPSmanager->GetCrossSection(false,momentum,Z,N,uPDGcode);
+
   return x;
 }
 

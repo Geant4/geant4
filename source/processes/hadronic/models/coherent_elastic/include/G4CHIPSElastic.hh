@@ -62,6 +62,12 @@ private:
   static G4VQCrossSection* pxsManager;
   static G4VQCrossSection* nxsManager;
 
+  static G4VQCrossSection* PBARxsManager;
+  static G4VQCrossSection* PIPxsManager;
+  static G4VQCrossSection* PIMxsManager;
+  static G4VQCrossSection* KPxsManager;
+  static G4VQCrossSection* KMxsManager;
+
 };
 
 #endif

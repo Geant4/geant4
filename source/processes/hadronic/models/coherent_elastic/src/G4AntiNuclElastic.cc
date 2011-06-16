@@ -209,7 +209,7 @@ G4double XstotalHad =cs->GetTotalElementCrossSection(particle, energy, Z, (G4dou
 
  G4double Ref2 = 0;
  G4double ceff2 =0;
- G4double A2 = 0;
+ // G4double A2 = 0;
 
  if  ((theParticle == theAProton) || (theParticle == theANeutron))  
 {
@@ -221,7 +221,10 @@ G4double XstotalHad =cs->GetTotalElementCrossSection(particle, energy, Z, (G4dou
    Ref2=Ref2*Ref2;
    ceff2 = 0.035/(sqr(S-4.3)+0.4) + 0.085 * std::log(S) ;
    ceff2 = ceff2*ceff2;
-   A2 = (4.0/std::sqrt(S-4.*Mp2) + 0.3) / 256.8/pi;
+   //A2 = (4.0/std::sqrt(S-4.*Mp2) + 0.3) / 256.8/pi;
+
+SlopeMag = 0.5;  // Uzhi
+Amag=1.;         // Uzhi
   }
  if(Z>2) 
  {  Ref2 = fRa*fRa +2.48*0.01*sig_pbarp*fRa - 2.23e-6*sig_pbarp*sig_pbarp*fRa*fRa; 
@@ -339,6 +342,10 @@ G4double XstotalHad =cs->GetTotalElementCrossSection(particle, energy, Z, (G4dou
 
  BracFunct = sqr(BesselOneByArg(x)*DampFactor(pi*fceff*Q))/
  (Amag*std::exp(-SlopeMag*Q));
+
+//G4cout<<"Amag Bess "<<Amag<<" "<<BesselOneByArg(0.)*DampFactor(pi*fceff*0.)<<G4endl;
+//G4int Uzhi; G4cin>>Uzhi;
+
 // BracFunct = BracFunct * Q * std::pow(fRef,4.); // 8 May 2011
    BracFunct = BracFunct * Q * sqr(sqr(fRef));   // 8 May 2011
   } 
