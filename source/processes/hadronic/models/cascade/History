@@ -15,6 +15,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+2 June 2011  Michael Kelsey (hadr-casc-V09-04-12)
+-------------------------------------------------
+- G4LorentzConvertor:  Drop most "intermediate" kinematic parameters used in
+  rotate, in favor of somewhat more direct vector operations.  Change test
+  for "degenerated" to use "small" rather than "small*small".
+
 25 May 2011  Michael Kelsey (hadr-casc-V09-04-11)
 -------------------------------------------------
 - G4LorentzConvertor.cc:  Add diagnostic messages in both ::rotate().
