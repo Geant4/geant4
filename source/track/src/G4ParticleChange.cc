@@ -76,6 +76,8 @@ G4ParticleChange::G4ParticleChange(const G4ParticleChange &right): G4VParticleCh
    if (verboseLevel>1) {
     G4cout << "G4ParticleChange::  copy constructor is called " << G4endl;
    }
+   theCurrentTrack = right.theCurrentTrack;
+
    theMomentumDirectionChange = right.theMomentumDirectionChange;
    thePolarizationChange = right.thePolarizationChange;
    thePositionChange = right.thePositionChange;

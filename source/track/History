@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May. 20, 2011, B.Morgan (track-V09-04-03)
+- CMakeLists.txt : Added G4TRACK_ALLOC_EXPORT compiler definition via 
+  add_definitions so it's applied to all sources in this module.
+
 Apr. 29, 2011, H.Kurashige (track-V09-04-02)
 - Fix memory leak in G4Step
 - Rename GetVelocity to CalculateVelocity
