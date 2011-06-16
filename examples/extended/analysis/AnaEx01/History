@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+07-06-11 mma (AnaEx01-V09-04-01)     
+PhysicsList migrated to new scheme G4PhysListHelper
+     
 03 February 2011 mma (AnaEx01-V09-04-00)
 - delete subdirectory analysis
      
