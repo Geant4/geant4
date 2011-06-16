@@ -149,6 +149,7 @@ void G4SingleParticleSource::GeneratePrimaryVertex(G4Event *evt) {
 		G4PrimaryParticle* particle = new G4PrimaryParticle(
 				particle_definition, px, py, pz);
 		particle->SetMass(mass);
+		particle->SetKineticEnergy( particle_energy );
 		particle->SetCharge(particle_charge);
 		particle->SetPolarization(particle_polarization.x(),
 				particle_polarization.y(), particle_polarization.z());

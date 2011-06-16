@@ -143,7 +143,9 @@ void G4PrimaryTransformer::GenerateSingleTrack
     }
 #endif
     G4DynamicParticle* DP = 
-      new G4DynamicParticle(partDef,primaryParticle->GetMomentum());
+      new G4DynamicParticle(partDef,
+			    primaryParticle->GetMomentumDirection(),
+			    primaryParticle->GetKineticEnergy());
     if(partDef==optPhoton && primaryParticle->GetPolarization().mag2()==0.)
     {
       if(nWarn<10)

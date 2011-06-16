@@ -98,8 +98,9 @@ void G4HEPEvtInterface::GeneratePrimaryVertex(G4Event* evt)
 
     // create G4PrimaryParticle object
     G4PrimaryParticle* particle 
-      = new G4PrimaryParticle( IDHEP, PHEP1*GeV, PHEP2*GeV, PHEP3*GeV );
+      = new G4PrimaryParticle( IDHEP );
     particle->SetMass( PHEP5*GeV );
+    particle->SetMomentum(PHEP1*GeV, PHEP2*GeV, PHEP3*GeV );
 
     // create G4HEPEvtParticle object
     G4HEPEvtParticle* hepParticle

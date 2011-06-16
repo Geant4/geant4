@@ -85,6 +85,7 @@ void G4RayShooter::Shoot(G4Event* evt,G4ThreeVector vtx,G4ThreeVector direc)
   G4PrimaryParticle* particle =
       new G4PrimaryParticle(particle_definition,px,py,pz);
   particle->SetMass( mass );
+  particle->SetKineticEnergy( particle_energy );
   particle->SetPolarization(particle_polarization.x(),
                                particle_polarization.y(),
                                particle_polarization.z());
