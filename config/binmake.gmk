@@ -165,11 +165,13 @@ G4TMPDIR := $(G4TMP)/$(G4SYSTEM)/$(G4TARGET)
 G4BINDIR := $(G4BIN)/$(G4SYSTEM)
 
 ifdef G4EXLIB
+# Redefine G4LIBDIR here to switch to local path for generation of app library
+  G4LIBDIR := $(G4TMPDIR)
   LDFLAGS += -L$(G4TMPDIR)
   ifdef SHAREDLIBS
     ifdef G4RUNPATHOPTION
-#         For the example dependent directory, keep the 
-#         path to the shared lib in the executable.
+#     For the example dependent directory, keep the 
+#     path to the shared lib in the executable.
       LDFLAGS += $(G4RUNPATHOPTION)$(G4TMPDIR)
     endif
   endif

@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+6th June 2011 Gabriele Cosmo (config-V09-04-09)
+- Correction to binmake.gmk to restore setting of G4LIBDIR for the case of
+  generation of user's application library.
+
 24th May 2011 Gabriele Cosmo (config-V09-04-08)
 - Fixed configuration for CLHEP built-in module, to allow for build of DLLs.
 
