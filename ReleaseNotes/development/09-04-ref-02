@@ -16,6 +16,7 @@ Major development/fixes included since the last development tag are:
 ---------- Reference-tag 'Release Notes' -----------
 
 (o)  Fixes included in release 9.4.p01
+(+)  Fixes included in release 9.4.p02
 
 Summarised, the list of changes is the following:
 
@@ -26,7 +27,7 @@ config                                           config-V09-04-00           (o)
   Addessing problem reports #1159 and #1160.
 - Darwin-g++.gmk: fix to avoid mixing of OpenGL X11 and framework.
 
-digits_hits                                      digits_hits-V09-04-00
+digits_hits                                      digits_hits-V09-04-00      (+)
 -----------
 - Fix in G4PSCylinderSurfaceFlux and G4PSSPhareSurfaceFlux for the way how
   "flux_out" is scored.
@@ -36,7 +37,7 @@ event                                            event-V09-04-00            (o)
 - Added resetting of 'abortRequested' flag at start of DoProcessing()
   in G4EventManager. Addressing to problem report #1169.
 
-graphics_reps                                    greps-V09-04-01
+graphics_reps                                    greps-V09-04-01            (+)
 -------------
 - Fixed few Coverity warnings.
 
@@ -131,7 +132,7 @@ processes/hadronic
 - models/photolepton_hadron/muon_nuclear (hadr-munuclear-V09-04-00)
   o New model G4VDMuonNuclearModel to replace old-style G4MuNuclearInteraction
     and G4ParametrizedHadronicVertex based on GHEISHA.
-- models/radioactive_decay (radioactive_decay-V09-03-05)
+- models/radioactive_decay (radioactive_decay-V09-03-05)                    (+)
   o G4NuclearDecayChannel: remove unused variables.
   o Initialize array data in G4RadioactiveDecay::LoadDecayTable().
   o Fixed memory leak in G4RadioactiveDecay::AddDecayRateTable().
@@ -162,7 +163,7 @@ run                                              run-V09-04-01              (o)
   creating a new directory when saving random seeds.
   Addressing problem report #1157.
 
-visualization/RayTracer                          raytracer-V09-04-01
+visualization/RayTracer                          raytracer-V09-04-01        (+)
 -----------------------
 - Trap recursive calls in G4RayTracerViewer::DrawView(), thus avoiding
   warning messages for each pixel when endOfEventAction() is "refresh".

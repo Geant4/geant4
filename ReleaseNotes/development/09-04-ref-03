@@ -24,28 +24,30 @@ Major development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(o)  Fixes included in release 9.4.p01
+(+)  Fixes included in release 9.4.p02
 
 Summarised, the list of changes is the following:
 
-config                                           config-V09-04-02
+config                                           config-V09-04-02           (+)
 ------
 - Fixed limitation of string argument length in liblist.c program.
   Addressing problem report #1033.
 - Added new processes/electromagnetic/dna module to scripts.
 
-digits_hits                                      digits_hits-V09-04-04
+digits_hits                                      digits_hits-V09-04-04      (+)
 -----------
 - Fixed scorers used for cylindrical mesh that require cubic volume
   or surface area.
 - Fixed scoring meshes for visualizing scores of very few entries.
 
-interfaces                                       interfaces-V09-04-01
+interfaces                                       interfaces-V09-04-01       (+)
 ----------
 - Fix in G4VBasicShell::ApplyShellCommand() for substring exact comparisons;
   addressing problem report #1180.
 - Removed obsolete Qt3 code and avoid inclusion of OGL flags in compilation.
 
-geometry/management                              geommng-V09-04-01
+geometry/management                              geommng-V09-04-01          (+)
 -------------------
 - Fix in G4LogicalVolume::AddDaughter() for proper propagation settings
   of local field manager. Avoid forcing propagation to all daughters when
@@ -53,11 +55,11 @@ geometry/management                              geommng-V09-04-01
   Addressing problem report #1183.
 - Use internal G4 header for physical constants in meshdefs.h
 
-source/geometry/solids/BREPS                     breps-V09-04-00
+source/geometry/solids/BREPS                     breps-V09-04-00            (+)
 ----------------------------
 - Use G4Transform3D type in place of native CLHEP type.
 
-source/global                                    global-V09-04-04
+source/global                                    global-V09-04-04           (+)
 -------------
 - Added G4Rep3x3 typedef to CLHEP::HepRep3x3 in G4RotationMatrix.hh.
 - Added more G4 types for random classes in Randomize.hh.
@@ -82,14 +84,14 @@ materials                                        materials-V09-04-03
   and isotope cross-sections.
 - Minor fixes for Coverity warnings in G4ExtDEDXTable.
 
-particles                                        particles-V09-04-02
+particles                                        particles-V09-04-02        (+)
 ---------
 - Modified PDGCodeChecker to allow setting of PDG code for neutron balls.
 - Fix in G4ParticleDefinition::SetApplyCutsFlag() to get rid of unnecessary
   warning messages for proton.
 - Fixed issues reported by Coverity.
 
-persistency/ascii                                ascii-V09-04-02
+persistency/ascii                                ascii-V09-04-02            (+)
 -----------------
 - Use G4 types for 3-vectors and 3x3 rotations.
 
@@ -122,7 +124,7 @@ processes/electromagnetic/lowenergy              emlowen-V09-04-22
 - Commented ionization classes for better clarity.
 - Requires new data set 6.21 of G4LEDATA.
 
-processes/electromagnetic/polarisation           empolar-V09-04-00
+processes/electromagnetic/polarisation           empolar-V09-04-00          (+)
 --------------------------------------
 - G4ePolarizedIonisation: cleared use of obsolete MinCutEnergy() method.
 
@@ -141,7 +143,7 @@ processes/electromagnetic/standard               emstand-V09-04-12
 - G4PhotoElectricEffect: use G4PEEffectFluoModel as default.
 - G4KleinNishinaModel: use dynamic selection between high energy sampling and
   sampling with Doppler broadening.
-- G4GoudsmitSaundersonMscModel: restored to version of 9.3-ref05
+- G4GoudsmitSaundersonMscModel: restored to version of 9.3-ref05            (+)
 
 processes/electromagnetic/utils                  emutils-V09-04-11
 -------------------------------
@@ -186,7 +188,7 @@ processes/hadronic
     and implemented to query string model in G4VHighEnergyGenerator.
   o Added data member in G4VIntraNuclearTransportModel with related accessor
     methods to store/retrieve original projectile.
-- models/neutron_hp (hadr-hpn-V09-04-00)
+- models/neutron_hp (hadr-hpn-V09-04-00)                                    (+)
   o Bug fix in G4NeutronHPDiscreteTwoBody for MF=6, LAW=2 case.
 - models/parton_string/qgsm (hadr-qgsm-V09-04-00)
   o Set limits for E/p checking.
@@ -196,7 +198,7 @@ processes/hadronic
 - processes (hadr-proc-V09-04-03)
   o Added missing process for anti-triton, G4AntiTritonInelasticProcess.
 
-processes/management                             procman-V09-04-01
+processes/management                             procman-V09-04-01          (+)
 --------------------
 - Cleared compilation warnings from G4VProcess header for parameter set
   but not used. Removed few extra semi-colons...
@@ -204,9 +206,9 @@ processes/management                             procman-V09-04-01
 track                                            track-V09-04-00
 -----
 - Added GetSecondaryInCurrentStep() method in G4Step.
-- Fixed some problems reported by Coverity
+- Fixed some problems reported by Coverity.                                 (+)
 
-visualization/HepRep                             vis-HepRep-V09-04-00
+visualization/HepRep                             vis-HepRep-V09-04-00       (+)
 --------------------
 - Use G4RotationMatrix typedef instead of native CLHEP type in
   G4HepRepFileSceneHandler.
@@ -245,14 +247,14 @@ examples                                         examples-V09-04-03
 - extended/electromagnetic/TestEm12 (testem12-V09-04-02)
   o Reduced statistic in TestEm12.in.
   o Removed obsolete modifiers in PhysListEmStandard.
-- extended/hadronic/Hadr01 (exhadr01-V09-04-00)
+- extended/hadronic/Hadr01 (exhadr01-V09-04-00)                             (+)
   o Fixed typo in printout.
 - extended/hadronic/Hadr02 (exhadr02-V09-04-02)
   o New example providing simulation of ion beam interaction with different
     targets. Hadronic aspects of beam target interaction are demonstrating in
     the example including longitudinal profile of energy deposition, spectra
     of secondary  particles, isotope production spectra.
-- extended/optical/wls (WLS-V09-04-00)
+- extended/optical/wls (WLS-V09-04-00)                                      (o)
   o Added missing inclusion of <ctime> in WLSRunAction, to fix compilation
     on Windows.
 - extended/radioactivedecay/rdecay02 (rdecay02-V09-04-01)

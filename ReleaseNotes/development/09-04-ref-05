@@ -23,10 +23,11 @@ Major development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(+)  Fixes included in release 9.4.p02
 
 Summarised, the list of changes is the following:
 
-cmake                                            cmake-V09-04-00
+cmake                                            cmake-V09-04-00             (+)
 -----
 - Abilitated support for RayTracerX visualization driver.
 - Added G4VERBOSE compilation option as default, replicating the behaviour
@@ -45,18 +46,18 @@ cmake                                            cmake-V09-04-00
 
 config                                           config-V09-04-08
 ------
-- Configure: updated script to correct settings of G4LIB_USE_DLL for the
+- Configure: updated script to correct settings of G4LIB_USE_DLL for the     (+)
   case of DLLs build on Windows. Partially addressing problem report #1189.
 - Added default for CLHEP_BASE_DIR to built-in package in externals.
   Integrated flags in architecture.gmk and binmake.gmk for use of the
   CLHEP built-in package, and adapted setup for build of DLLs on Windows.
 - Changed common.gmk to take into account sub-directories for headers
   installation.
-- Workaround in binmake.gmk to avoid clashes with flag LDFLAGS set in the
+- Workaround in binmake.gmk to avoid clashes with flag LDFLAGS set in the    (+)
   user's environment beforehand.
 - Added flags to handle future driver OpenGLWt.
 
-error_propagation                                error_propagation-V09-04-01
+error_propagation                                error_propagation-V09-04-01 (+)
 -----------------
 - Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
 
@@ -68,33 +69,33 @@ externals                                        externals-V09-04-02
   o Built-in  "expat" module, including source code from original 2.0.1
     version of expat. Build required only on Windows for "lend" hadronic model.
 
-g3tog4                                           g3tog4-V09-04-01
+g3tog4                                           g3tog4-V09-04-01            (+)
 ------
 - Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
 
-geometry/magneticfield                           field-V09-04-00
+geometry/magneticfield                           field-V09-04-00             (+)
 ----------------------
 - Reordered data members to group invariants, field parameters, etc...
 - Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
 
-geometry/management                              geommng-V09-04-02
+geometry/management                              geommng-V09-04-02           (+)
 -------------------
 - Fixed trivial compilation warnings detected with gcc-4.6.0.
 
-geometry/navigation                              geomnav-V09-04-00
+geometry/navigation                              geomnav-V09-04-00           (+)
 -------------------
 - Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
 
-geometry/solids/Boolean                          geom-bool-V09-04-00
+geometry/solids/Boolean                          geom-bool-V09-04-00         (+)
 -----------------------
 - Added protection for potential cases of infinite loop in DistanceToIn(p,v)
   and related error message with event abortion.
 
-geometry/solids/BREPS                            breps-V09-04-02
+geometry/solids/BREPS                            breps-V09-04-02             (+)
 ---------------------
 - G4BREPSolid: fixed compilation warnings on gcc-4.6.0.
 
-geometry/solids/CSG                              geom-csg-V09-04-03
+geometry/solids/CSG                              geom-csg-V09-04-03          (+)
 -------------------
 - G4Tubs: use safe formula for quadratic equation solution, to better handle
   numerical errors.
@@ -102,14 +103,14 @@ geometry/solids/CSG                              geom-csg-V09-04-03
   for shapes of big dimensions. Addresses problem report #1175.
 - Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
 
-geometry/solids/specific                         geom-specific-V09-04-02
+geometry/solids/specific                         geom-specific-V09-04-02     (+)
 ------------------------
 - G4ExtrudedSolid: fix in Inside(p) for false overlap reporting.
   Addressing problem report #1211.
 - Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
 - Use G4 internal typedef for CLHEP types, where applicable.
 
-global                                           global-V09-04-07
+global                                           global-V09-04-07            (+)
 ------
 - Added G4Evaluator typedef in new header.
   Cleared unused CLHEP headers included in Randomize.hh.
@@ -127,17 +128,17 @@ materials                                        materials-V09-04-08
 - G4IonisParamMat: cleanup of methods; use G4Pow.
 - G4NistMaterialBuilder: improved comments...
 
-particles                                        particles-V09-04-01
+particles                                        particles-V09-04-01         (+)
 ---------
 - Fixed energy of proton and neutrino in G4NeutronBetaDecayChannel.
 - Fixed gcc-4.6.0 compiler warning in G4TauLeptonicDecayChannel.
 
-persistency/ascii                                ascii-V09-04-04
+persistency/ascii                                ascii-V09-04-04             (+)
 -----------------
 - Use G4Evaluator typedef for evaluator and 3x3 rotations.
 - Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
 
-persistency/gdml                                 gdml-V09-04-03
+persistency/gdml                                 gdml-V09-04-03              (+)
 ----------------
 - Make use of G4Evaluator typedef for evaluator instance.
 - G4GDMLWriteMaterials: introduced workaround to avoid dereferencing of null
@@ -162,12 +163,12 @@ processes/biasing                               procbiasing-V09-04-00
 - G4ProcessPlacer: using SetProcessOrderingToSecond() for biasing process,
   and leave transportation as first.
 
-processes/cuts                                   procuts-V09-04-03
+processes/cuts                                   procuts-V09-04-03           (+)
 --------------
 - Fixed defects reported by Coverity.
 - Fixed compilation warnings from gcc-4.6.0 in G4RToEConvForGamma.
 
-processes/electromagnetic/adjoint                emadjoint-V09-04-00
+processes/electromagnetic/adjoint                emadjoint-V09-04-00         (+)
 ---------------------------------
 - Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
 
@@ -192,7 +193,7 @@ processes/electromagnetic/lowenergy              emlowen-V09-04-40
 - Fixed compilation warnings from gcc-4.6.0 for variables set but not used
   and removed some parasitic verbosity.
 
-processes/electromagnetic/polarisation           empolar-V09-04-02
+processes/electromagnetic/polarisation           empolar-V09-04-02           (+)
 --------------------------------------
 - Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
 
@@ -225,7 +226,7 @@ processes/electromagnetic/utils                  emutils-V09-04-26
 - G4LossTablemanager, G4LossTableBuilder, G4VEmProcess, G4VMultipleScattering,
   G4VEnergyLossProcess: adopt base material approach; build physics vectors
   only for base materials and scale values for other materials.
-- G4EmModelManager, G4EmCalculator: changed smoothing function
+- G4EmModelManager, G4EmCalculator: changed smoothing function               (+)
   between two models; effect is seen for protons in non-NIST water.
 - G4VEmProcess: allow to use the Integral approach also if the physics
   table is not built (before it was forbidden).
@@ -234,7 +235,7 @@ processes/electromagnetic/utils                  emutils-V09-04-26
 - Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
 - Fixed defects reported by Coverity.
 
-processes/electromagnetic/xrays                  xrays-V09-04-01
+processes/electromagnetic/xrays                  xrays-V09-04-01             (+)
 -------------------------------
 - Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
 - Fixed defects reported by Coverity.
@@ -242,7 +243,7 @@ processes/electromagnetic/xrays                  xrays-V09-04-01
 processes/hadronic                               processes-V09-04-01
 ------------------
 - cross_sections (hadr-cross-V09-04-08)
-  o G4TripathiLightCrossSection: return 0 cross-section in method
+  o G4TripathiLightCrossSection: return 0 cross-section in method            (+)
     GetZandACrossSection(), when E_cm <= DBL_MIN.
     Addressing problem report #1174.
   o G4CrossSectionElastic, G4CrossSectionInelastic: do not delete
@@ -285,7 +286,7 @@ processes/hadronic                               processes-V09-04-01
     GEM classes and utils. Use integer Z and A. Make use of G4Pow where
     applicable.
   o Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
-- models/high_energy (hadr-hep-V09-04-00)
+- models/high_energy (hadr-hep-V09-04-00)                                    (+)
   o Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
 - models/incl (hadr-incl-V09-04-01)
   o Use inverse kinematics in INCL light ion collisions: it improves INCL
@@ -297,7 +298,7 @@ processes/hadronic                               processes-V09-04-01
 - models/lend (hadr-lend-V09-04-11)
   o First implementation of LEND (Low Energy Nuclear Data) cross-section and
     physics model.
-- models/low_energy (hadr-lep-V09-04-00)
+- models/low_energy (hadr-lep-V09-04-00)                                     (+)
   o Fixed compilation warnings from gcc-4.6.0 in G4LCapture.
 - models/neutron_hp (hadr-hpn-V09-04-08)
   o Added reaction Q value and break up flag (MF3::QI and LR) in
@@ -311,15 +312,15 @@ processes/hadronic                               processes-V09-04-01
 - models/photonlepton_hadron/muon_nuclear (hadr-munuclear-V09-04-01)
   o Removed G4MuonNucleusProcess and G4MuonNucleusInteractionModel classes.
     These were the old GHEISHA-style models no longer used.
-- models/pre_equilibrium (hadr-pre-V09-04-00)
+- models/pre_equilibrium (hadr-pre-V09-04-00)                                (+)
   o Fixed compilation warnings from gcc-4.6.0 in G4PreCompoundNeutron and
     G4PreCompoundProton.
-- models/radioactive_decay (radioactive_decay-V09-04-00)
+- models/radioactive_decay (radioactive_decay-V09-04-00)                     (+)
   o Fixed compilation warnings from gcc-4.6.0 in G4RadioactiveDecay.
-- stopping (hadr-stopping-V09-04-00)
+- stopping (hadr-stopping-V09-04-00)                                         (+)
   o Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
 
-processes/management                             procman-V09-04-04
+processes/management                             procman-V09-04-04           (+)
 --------------------
 - Fixed bug in copy constructor of G4ProcessAttribute.
 - Suppressed warning message of G4ProcessTable::Insert() in case of copying
@@ -330,7 +331,7 @@ processes/management                             procman-V09-04-04
 - Fixed compilation warnings from gcc-4.6.0 in G4ProcessTableMessenger.
 - Fixed defects reported by Coverity.
 
-processes/scoring                                procscore-V09-04-00
+processes/scoring                                procscore-V09-04-00         (+)
 -----------------
 - Added IsAtRestRequired() method to G4ParallelWorldScoringProcess.
 
@@ -355,13 +356,13 @@ track                                            track-V09-04-02
   and modifier for velocity.
 - Set velocity of track within UpdateStep() in G4ParticleChange.
 
-tracking                                         tracking-V09-04-00
+tracking                                         tracking-V09-04-00          (+)
 --------
 - Fixed setting of 'fWorldBoundary' step status in G4SteppingManager
   InvokePostStepDoItProcs() and DefinePhysicalStepLength(). Flag was not
   set and not used.
 
-visualization/RayTracer                          raytracer-V09-04-03
+visualization/RayTracer                          raytracer-V09-04-03         (+)
 -----------------------
 - Fixes to CMake scripts, now allowing support for building the driver.
 
@@ -399,7 +400,7 @@ examples                                         examples-V09-04-05
     new G4PEEffectFluoModel and G4KleinNishinaModel.
   o DetectorConstruction: set I=78 eV for Water (instead of 75 eV).
   o Added PIXE macro.
-- extended/eventgenerator/HepMC/MCTruth (mctruthex-V09-04-00)
+- extended/eventgenerator/HepMC/MCTruth (mctruthex-V09-04-00)                (+)
   o Fixed compilation errors on MacOS for use of std::fmod() in MCTruthManager.
 - extended/hadronic/Hadr02 (exhadr02-V09-04-04)
   o Allow to build without reference to DPMJet, protecting code with
