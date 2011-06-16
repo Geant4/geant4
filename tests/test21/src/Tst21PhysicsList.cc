@@ -296,9 +296,9 @@ void Tst21PhysicsList::ConstructEM()
 #include "G4PreCompoundModel.hh"
 #include "G4QGSModel.hh"
 #include "G4QGSParticipants.hh"
-#include "G4LundStringFragmentation.hh"
+#include "G4QGSMFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
-#include "G4StringChipsParticleLevelInterface.hh"
+#include "G4QStringChipsParticleLevelInterface.hh"
 
 
 //
@@ -310,12 +310,12 @@ void Tst21PhysicsList::ConstructEM()
 void Tst21PhysicsList::ConstructHad()
 {
     // this will be the model class for high energies
-    G4TheoFSGenerator * theTheoModel = new G4TheoFSGenerator;
+    G4TheoFSGenerator * theTheoModel = new G4TheoFSGenerator("QGSC-like");
        
     
     // a cascade interface interface to chiral invriant phase space decay
     // at particle level.
-    G4StringChipsParticleLevelInterface* theCascade = new G4StringChipsParticleLevelInterface();
+    G4QStringChipsParticleLevelInterface* theCascade = new G4QStringChipsParticleLevelInterface();
 	
     // here come the high energy parts
     // the string model; still not quite according to design - Explicite use of the forseen interfaces 
@@ -324,10 +324,10 @@ void Tst21PhysicsList::ConstructHad()
     theStringModel = new G4QGSModel<G4QGSParticipants>;
     theTheoModel->SetTransport(theCascade);
     theTheoModel->SetHighEnergyGenerator(theStringModel);
-    theTheoModel->SetMinEnergy(19*GeV);
+    theTheoModel->SetMinEnergy(8*GeV);
     theTheoModel->SetMaxEnergy(100*TeV);
 
-      G4VLongitudinalStringDecay * theFragmentation = new G4LundStringFragmentation;
+      G4VLongitudinalStringDecay * theFragmentation = new G4QGSMFragmentation;
       G4ExcitedStringDecay * theStringDecay = new G4ExcitedStringDecay(theFragmentation);
       theStringModel->SetFragmentationModel(theStringDecay);
 
