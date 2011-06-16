@@ -247,7 +247,7 @@ void G4Abla::breakItUp(G4int nucleusA, G4int nucleusZ, G4double nucleusMass, G4d
   }
 
   if(esrem >= 1.0e-3) {
-    evapora(zprf,aprf,ee,jprf, &zf, &af, &mtota, &pleva, &pxeva, &pyeva, &ff, &inttype, &inum);
+    evapora(zprf,aprf,&ee,jprf, &zf, &af, &mtota, &pleva, &pxeva, &pyeva, &ff, &inttype, &inum);
   }
   else {
     ff = 0; 
@@ -458,7 +458,7 @@ void G4Abla::breakItUp(G4int nucleusA, G4int nucleusZ, G4double nucleusMass, G4d
       // 	       G4double *ff_par, G4int *inttype_par, G4int *inum_par);
       G4double zf1 = 0.0, af1 = 0.0, malpha1 = 0.0, ffpleva1 = 0.0, ffpxeva1 = 0.0, ffpyeva1 = 0.0;
       G4int ff1 = 0, ftype1 = 0;
-      evapora(zff1, aff1, epf1_out, 0.0, &zf1, &af1, &malpha1, &ffpleva1,
+      evapora(zff1, aff1, &epf1_out, 0.0, &zf1, &af1, &malpha1, &ffpleva1,
 	      &ffpxeva1, &ffpyeva1, &ff1, &ftype1, &inum);
       // C On ajoute le fragment:
       volant->iv = volant->iv + 1;
@@ -535,7 +535,7 @@ void G4Abla::breakItUp(G4int nucleusA, G4int nucleusZ, G4double nucleusMass, G4d
       // 	       G4double *ff_par, G4int *inttype_par, G4int *inum_par);
       G4double zf2 = 0.0, af2 = 0.0, malpha2 = 0.0, ffpleva2 = 0.0, ffpxeva2 = 0.0, ffpyeva2 = 0.0;
       G4int ff2 = 0, ftype2 = 0;
-      evapora(zff2,aff2,epf2_out,0.0,&zf2,&af2,&malpha2,&ffpleva2,
+      evapora(zff2,aff2,&epf2_out,0.0,&zf2,&af2,&malpha2,&ffpleva2,
 	      &ffpxeva2,&ffpyeva2,&ff2,&ftype2,&inum);
       // C On ajoute le fragment:
       volant->iv = volant->iv + 1;
@@ -1193,13 +1193,14 @@ G4double G4Abla::fissility(int a,int z, int optxfis)
   return fissilityResult;
 }
 
-void G4Abla::evapora(G4double zprf, G4double aprf, G4double ee, G4double jprf, 
+void G4Abla::evapora(G4double zprf, G4double aprf, G4double *ee_par, G4double jprf, 
 		     G4double *zf_par, G4double *af_par, G4double *mtota_par,
 		     G4double *pleva_par, G4double *pxeva_par, G4double *pyeva_par,
 		     G4int *ff_par, G4int *inttype_par, G4int *inum_par)
 {
   G4double zf = (*zf_par);
   G4double af = (*af_par);
+  G4double ee = (*ee_par);
   G4double mtota = (*mtota_par);
   G4double pleva = (*pleva_par);
   G4double pxeva = (*pxeva_par);
@@ -1559,6 +1560,7 @@ void G4Abla::evapora(G4double zprf, G4double aprf, G4double ee, G4double jprf,
  evapora100:
   (*zf_par) = zf;
   (*af_par) = af;
+  (*ee_par) = ee;
   (*mtota_par) = mtota;
   (*pleva_par) = pleva;
   (*pxeva_par) = pxeva;
@@ -3841,15 +3843,8 @@ G4int G4Abla::idint(G4double a)
 
 G4int G4Abla::idnint(G4double value)
 {
-  G4double valueCeil = int(std::ceil(value));
-  G4double valueFloor = int(std::floor(value));
-
-  if(std::fabs(value - valueCeil) < std::fabs(value - valueFloor)) {
-    return int(valueCeil);
-  }
-  else {
-    return int(valueFloor);
-  }
+  if(value > 0.0) return (int (std::ceil(value)));
+  else return (int (std::floor(value)));
 }
 
 G4double G4Abla::dmin1(G4double a, G4double b, G4double c)

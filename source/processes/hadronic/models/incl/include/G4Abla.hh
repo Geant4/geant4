@@ -143,7 +143,7 @@ public:
   /**
    * Main evaporation routine.
    */
-  void evapora(G4double zprf, G4double aprf, G4double ee, G4double jprf, 
+  void evapora(G4double zprf, G4double aprf, G4double *ee_par, G4double jprf, 
 	       G4double *zf_par, G4double *af_par, G4double *mtota_par,
 	       G4double *pleva_par, G4double *pxeva_par, G4double *pyeva_par,
 	       G4int *ff_par, G4int *inttype_par, G4int *inum_par);
