@@ -12,6 +12,10 @@
 #
 #------------------------------------------------------------------------------
 
+# Add allocation export symbol for the digits_hits category
+add_definitions(-DG4DIGI_ALLOC_EXPORT)
+
+
 add_subdirectory(detector)
 add_subdirectory(digits)
 add_subdirectory(hits)

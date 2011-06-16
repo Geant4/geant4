@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 20, 2011, B.Morgan (digits_hits-V09-04-05)
+- CMakeLists.txt : Added G4DIGI_ALLOC_EXPORT compiler definition via 
+  add_definitions so all submodules pick it up.
+
 Mar 31, 2011, G.Cosmo (digits_hits-V09-04-04)
 - Replace use of M_PI with pi/twopi, fixing compilation errors on Windows...
 
