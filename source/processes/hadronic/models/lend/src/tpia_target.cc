@@ -149,7 +149,9 @@ int tpia_target_read( statusMessageReporting *smr, tpia_target *target, const ch
     xData_element *element, *child;
     int i, iHeated, nHeated = 0, status = 1;
     double temperature;
-    char *pReturnValue, *name;
+    //fix for gcc4.6 warings 110602
+    //char *pReturnValue, *name;
+    char *name;
     char const *contents;
 
     tpia_target_initialize( smr, target );
@@ -160,7 +162,9 @@ int tpia_target_read( statusMessageReporting *smr, tpia_target *target, const ch
     if( strcmp( element->name, "xTarget" ) != 0 ) {
         tpia_misc_setMessageError_Element( smr, NULL, element, __FILE__, __LINE__, 1, "input file's top element must be xTarget and not %s", element->name ); }
     else {
-        pReturnValue = ( xData_copyAttributionList( smr, &(target->attributes), &(element->attributes) ) ) ? NULL : target->path;
+        //pReturnValue = ( xData_copyAttributionList( smr, &(target->attributes), &(element->attributes) ) ) ? NULL : target->path;
+        //fix for gcc4.6 warings 110602
+        xData_copyAttributionList( smr, &(target->attributes),&(element->attributes) );
         name = tpia_misc_pointerToAttributeIfAllOk2( smr, element, 1, &(target->attributes), "projectile" );
         if( smr_isOk( smr ) ) target->projectileID = tpia_particle_getInternalID( smr, name );
         if( smr_isOk( smr ) && ( name = tpia_misc_pointerToAttributeIfAllOk2( smr, element, 1, &(target->attributes), "target" ) ) != NULL ) {

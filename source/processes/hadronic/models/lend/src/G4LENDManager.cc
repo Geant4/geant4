@@ -20,6 +20,7 @@
 G4LENDManager* G4LENDManager::lend_manager = NULL;
 
 G4LENDManager::G4LENDManager()
+:verboseLevel( 0 )
 {
 
    printBanner();
@@ -43,6 +44,7 @@ G4LENDManager::G4LENDManager()
 
    ionTable = new G4IonTable();
    nistElementBuilder = new G4NistElementBuilder( 0 );
+
 }
    
 
@@ -100,7 +102,8 @@ G4GIDI_target* G4LENDManager::GetLENDTarget( G4ParticleDefinition* proj , G4Stri
    if ( xlend->isThisDataAvailable( evaluation, iZ, iA , iM ) )
    {
 
-      G4cout << evaluation << " for " << ionTable->GetIonName( iZ , iA , 0 ) << " is exist in this LEND." << G4endl;
+      if ( verboseLevel > 1 ) 
+         G4cout << evaluation << " for " << ionTable->GetIonName( iZ , iA , 0 ) << " is exist in this LEND." << G4endl;
 
       anLENDTarget = xlend->readTarget( evaluation , iZ , iA , iM );
 
@@ -120,13 +123,17 @@ G4GIDI_target* G4LENDManager::GetLENDTarget( G4ParticleDefinition* proj , G4Stri
    else 
    {
 //    NO EXACT DATA (Evaluatino & Z,A,M)
-                                                            // This is for ground state
-      G4cout << evaluation << " for " << ionTable->GetIonName( iZ , iA , 0 ) << " is not exist in this LEND." << G4endl;
+                                                                        // This is for ground state
+      if ( verboseLevel > 1 ) 
+         G4cout << evaluation << " for " << ionTable->GetIonName( iZ , iA , 0 ) << " is not exist in this LEND." << G4endl;
+
       std::vector< std::string >* available =  xlend->getNamesOfAvailableLibraries( iZ, iA , iM );
       if ( available->size() > 0 )
       {
 //       EXACT Z,A,M but Evaluation is different 
-         G4cout << " However you can use following evaluation(s) for the target. " << G4endl;
+         if ( verboseLevel > 1 ) 
+            G4cout << " However you can use following evaluation(s) for the target. " << G4endl;
+
          std::vector< std::string >::iterator its;
          for ( its = available->begin() ; its != available->end() ; its++ ) 
             G4cout << *its << G4endl;
@@ -139,7 +146,8 @@ G4GIDI_target* G4LENDManager::GetLENDTarget( G4ParticleDefinition* proj , G4Stri
       else if ( xlend->isThisDataAvailable( evaluation, iZ, 0 , iM ) )
       {
 //       EXACT natural abundance data for the evaluation 
-         G4cout << " However you can use natural abundance data for the target. " << G4endl;
+         if ( verboseLevel > 1 ) 
+            G4cout << " However you can use natural abundance data for the target. " << G4endl;
       }
       else
       {
@@ -148,11 +156,15 @@ G4GIDI_target* G4LENDManager::GetLENDTarget( G4ParticleDefinition* proj , G4Stri
          if ( available_nat->size() > 0 )
          {
 //          EXACT natural abundance data for Z but differnet evaluation
-            G4cout << " However you can use following evaluation(s) for natural abundace of the target. " << G4endl;
-            std::vector< std::string >::iterator its;
-            for ( its = available_nat->begin() ; its != available_nat->end() ; its++ ) 
-               G4cout << *its << G4endl;
-            G4cout << G4endl;
+            if ( verboseLevel > 1 ) 
+            {
+               G4cout << " However you can use following evaluation(s) for natural abundace of the target. " << G4endl;
+
+               std::vector< std::string >::iterator its;
+               for ( its = available_nat->begin() ; its != available_nat->end() ; its++ ) 
+                  G4cout << *its << G4endl;
+               G4cout << G4endl;
+            }
          }
       }
 
@@ -225,4 +237,21 @@ void G4LENDManager::printBanner()
    G4cout << " (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, " << G4endl;
    G4cout << " EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  " << G4endl;
    G4cout << " <<END-copyright>> " << G4endl;
+}
+
+
+G4bool G4LENDManager::RequestChangeOfVerboseLevel( G4int newValue )
+{
+   G4bool result=false;
+   if ( newValue >= verboseLevel) 
+   {
+      verboseLevel = newValue;
+      result=true;
+   }
+   else
+   {
+      G4cout << "Since other LEND model or cross section have set the higher verbose level (" << verboseLevel << ") in LENDManager, you cannot change the value now." << G4endl; 
+   }
+
+   return result;
 }

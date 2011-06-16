@@ -21,13 +21,14 @@ class G4LENDFissionCrossSection : public G4LENDCrossSection
 
    public:
    
-      G4LENDFissionCrossSection()
-      {;};
+      //G4LENDFissionCrossSection()
+      //{;};
       G4LENDFissionCrossSection( G4ParticleDefinition* pd )
+      :G4LENDCrossSection("LENDEFissionCrossSection")
       {
          proj = pd; 
-         name = "LEND Fission Cross Section for ";
-         name += proj->GetParticleName();
+         //name = "LEND Fission Cross Section for ";
+         //name += proj->GetParticleName();
          //create_used_target_map();
       };
    

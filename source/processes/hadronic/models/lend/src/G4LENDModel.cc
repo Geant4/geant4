@@ -59,6 +59,8 @@ void G4LENDModel::recreate_used_target_map()
 void G4LENDModel::create_used_target_map()
 {
 
+   lend_manager->RequestChangeOfVerboseLevel( verboseLevel );
+
    size_t numberOfElements = G4Element::GetNumberOfElements();
    static const G4ElementTable* theElementTable = G4Element::GetElementTable();
 
@@ -112,19 +114,20 @@ void G4LENDModel::create_used_target_map()
 
 
 
-   //G4cout << "Dump UsedTarget for " << theModelName << G4endl;
+   G4cout << "Dump UsedTarget for " << GetModelName() << G4endl;
+   G4cout << "Requested Evaluation, Z , A -> Actual Evaluation, Z , A(0=Nat) , Pointer of Target" << G4endl;
    for ( std::map< G4int , G4LENDUsedTarget* >::iterator 
          it = usedTarget_map.begin() ; it != usedTarget_map.end() ; it ++ )
    {
       G4cout 
-      << " " << it->second->GetWantedEvaluation() 
-      << " " << it->second->GetWantedZ() 
-      << " " << it->second->GetWantedA() 
-      << " " << it->second->GetActualEvaluation() 
-      << " " << it->second->GetActualZ() 
-      << " " << it->second->GetActualA() 
-      << " " << it->second->GetTarget() 
-      << G4endl; 
+         << " " << it->second->GetWantedEvaluation() 
+         << ", " << it->second->GetWantedZ() 
+         << ", " << it->second->GetWantedA() 
+         << " -> " << it->second->GetActualEvaluation() 
+         << ", " << it->second->GetActualZ() 
+         << ", " << it->second->GetActualA() 
+         << ", " << it->second->GetTarget() 
+         << G4endl; 
    } 
 
 }

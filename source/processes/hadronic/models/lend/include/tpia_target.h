@@ -114,8 +114,11 @@ extern DLL_LEND const char *tpia_samplingMethods_constant, *tpia_samplingMethods
 
 //tpia_samplingMethods_constant and tpia_samplingMethods_linear are defined in src/tpia_samplingMethods.cc in namespace GIDI.
 //So TK directory write the values in follwoing macros. 110527
-#define tpia_samplingMethods_isConstant( method ) ( method == "constant" )
-#define tpia_samplingMethods_isLinear( method ) ( method == "linear" )
+//#define tpia_samplingMethods_isConstant( method ) ( method == "constant" )
+//#define tpia_samplingMethods_isLinear( method ) ( method == "linear" )
+//Fix above bug. 110602
+#define tpia_samplingMethods_isConstant( method ) ( strcmp ( method , "constant" ) == 0 )
+#define tpia_samplingMethods_isLinear( method ) ( strcmp ( method , "linear" ) == 0 )
 
 
 struct tpia_particle_s {

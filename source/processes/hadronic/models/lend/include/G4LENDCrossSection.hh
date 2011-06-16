@@ -32,7 +32,7 @@ class G4LENDCrossSection : public G4VCrossSectionDataSet
 {
    public:
    
-      G4LENDCrossSection();
+      G4LENDCrossSection(const G4String name = "" );
    
       ~G4LENDCrossSection();
    
@@ -46,9 +46,20 @@ class G4LENDCrossSection : public G4VCrossSectionDataSet
 
       G4double GetIsoCrossSection( const G4DynamicParticle* , const G4Isotope* , G4double );
 
+      G4double GetZandACrossSection(const G4DynamicParticle* , G4int /*Z*/, G4int /*A*/, G4double aTemperature);
+
       void ChangeDefaultEvaluation( G4String name ){ default_evaluation = name; recreate_used_target_map(); };
-      void AllowNaturalAbundanceTarget(){ allow_nat = true; recreate_used_target_map(); };
-      void AllowAnyCandidateTarget(){ allow_any = true; recreate_used_target_map(); };
+      //void AllowNaturalAbundanceTarget(){ allow_nat = true; recreate_used_target_map(); };
+      //void AllowAnyCandidateTarget(){ allow_any = true; recreate_used_target_map(); };
+      void AllowNaturalAbundanceTarget(){ allow_nat = true; };
+      void AllowAnyCandidateTarget(){ allow_any = true; };
+
+      //Hadronic Framework still does not handle isotope in GPIL
+      //G4VDiscreteProcess::PostStepGetPhysicalInteractionLenght()
+      // G4HadronicProcess::GetMeanFreePath()
+      //  G4double GetCrossSection(const G4DynamicParticle*, const G4Material*)
+      //   G4double GetCrossSection(const G4DynamicParticle*, const G4Element*, G4double aTemperature); 
+      G4bool IsIsoApplicable( const G4DynamicParticle* , G4int /*ZZ*/, G4int /*AA*/) { return true; }
 
    private:
    
@@ -64,7 +75,7 @@ class G4LENDCrossSection : public G4VCrossSectionDataSet
       void recreate_used_target_map();
 
    protected :
-      G4String name;
+      //G4String name;
       G4ParticleDefinition* proj;
       void create_used_target_map();
 

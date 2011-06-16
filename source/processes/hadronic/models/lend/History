@@ -14,6 +14,50 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+2 June 2011 Tatsumi Koi (hadr-lend-V09-04-16)
+- Fix gcc4.6 warning message
+	src/tpia_target.cc
+
+2 June 2011 Tatsumi Koi (hadr-lend-V09-04-15)
+----------------------------------------------
+- Fix bug 
+	include/tpia_target.h
+
+2 June 2011 Ben Morgan (hadr-lend-V09-04-14)
+----------------------------------------------
+- sources.cmake : Added support for expat in the CMake build. The expat 
+  include directories are added to the include path, and the module is linked 
+  to the expat libraries.
+  The interface variables EXPAT_INCLUDE_DIRS and EXPAT_LIBRARIES are used
+  so there is no dependence on whether the internal or system expat is used.
+
+1 June 2011 Tatsumi Koi (hadr-lend-V09-04-14)<-Actually I did not make this tag
+------------------------------------------------
+- Migrate recent update in G4CrossSectionDataStore
+	include/G4LENDCrossSection.hh
+	src/G4LENDCrossSection.cc
+
+31 May 2011 Tatsumi Koi (hadr-lend-V09-04-13)
+------------------------------------------------
+- Set proper name for cross section
+- Migrate minKinEnergy and maxKinEnergy in G4VCrossSectionDataSet
+	include/G4LENDElasticCrossSection.hh
+	include/G4LENDCaptureCrossSection.hh
+	include/G4LENDFissionCrossSection.hh
+	include/G4LENDInelasticCrossSection.hh
+	include/G4LENDCrossSection.hh
+	src/G4LENDCrossSection.cc
+
+30 May 2011 Tatsumi Koi (hadr-lend-V09-04-12)
+------------------------------------------------
+- Set proper name 
+	include/G4LENDElastic.hh
+- Change format of output messages 
+	src/G4LENDCrossSection.cc
+	src/G4LENDModel.cc
+- Introduce verboseLevel and its changing method 
+	include/G4LENDManager.hh
+	src/G4LENDManager.cc
 
 30 May 2011 Gabriele Cosmo (hadr-lend-V09-04-11)
 ------------------------------------------------

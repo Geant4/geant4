@@ -21,13 +21,14 @@ class G4LENDCaptureCrossSection : public G4LENDCrossSection
 
    public:
    
-      G4LENDCaptureCrossSection()
-      {;};
+      //G4LENDCaptureCrossSection()
+      //{;};
       G4LENDCaptureCrossSection( G4ParticleDefinition* pd )
+      :G4LENDCrossSection("LENDCaptureCrossSection")
       {
          proj = pd; 
-         name = "LEND Capture Cross Section for ";
-         name += proj->GetParticleName();
+         //name = "LEND Capture Cross Section for ";
+         //name += proj->GetParticleName();
          //create_used_target_map();
       };
    

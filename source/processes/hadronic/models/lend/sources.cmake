@@ -17,6 +17,7 @@
 
 # List external includes needed.
 include_directories(${CLHEP_INCLUDE_DIRS})
+include_directories(${EXPAT_INCLUDE_DIRS})
 
 # List internal includes needed.
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
@@ -155,6 +156,7 @@ GEANT4_DEFINE_MODULE(NAME G4had_lend
         G4particles
         G4track
     LINK_LIBRARIES
+        ${EXPAT_LIBRARIES}
 )
 
 # List any source specific properties here

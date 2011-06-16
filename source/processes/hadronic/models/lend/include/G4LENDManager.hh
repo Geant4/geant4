@@ -59,8 +59,13 @@ class G4LENDManager
       { return ionTable->GetNucleusEncoding( iZ , iA ); };
 
       G4NistElementBuilder* GetNistElementBuilder(){ return nistElementBuilder; };
+
+      G4int GetVerboseLevel(){ return verboseLevel; };
+      G4bool RequestChangeOfVerboseLevel( G4int );
    
    private:
+
+      G4int verboseLevel;
 
       std::vector< lend_target > v_lend_target; 
 

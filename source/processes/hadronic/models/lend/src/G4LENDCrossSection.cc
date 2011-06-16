@@ -22,17 +22,21 @@ G4bool G4LENDCrossSection::IsApplicable(const G4DynamicParticle*aP, const G4Elem
 
    G4bool result = true;
    G4double eKin = aP->GetKineticEnergy();
-   if( eKin > 20*MeV || aP->GetDefinition() != proj ) result = false;
+   if( eKin > GetMaxKinEnergy() || aP->GetDefinition() != proj ) result = false;
    return result;
 
 }
 
-G4LENDCrossSection::G4LENDCrossSection()
+G4LENDCrossSection::G4LENDCrossSection(const G4String nam)
+:G4VCrossSectionDataSet( nam )
 {
 
    default_evaluation = "endl99";
    allow_nat = false;
    allow_any = false;
+
+   SetMinKinEnergy(  0*MeV );
+   SetMaxKinEnergy( 20*MeV );
 
    lend_manager = G4LENDManager::GetInstance(); 
 
@@ -61,7 +65,7 @@ void G4LENDCrossSection::DumpPhysicsTable(const G4ParticleDefinition& aP)
      throw G4HadronicException(__FILE__, __LINE__, "Attempt to use LEND data for particles other than neutrons!!!");  
 
    G4cout << G4endl;
-   G4cout << "Dump Cross Sections of " << name << G4endl;
+   G4cout << "Dump Cross Sections of " << GetName() << G4endl;
    G4cout << "(Pointwise cross-section at 300 Kelvin.)" << G4endl;
    G4cout << G4endl;
 
@@ -90,7 +94,7 @@ void G4LENDCrossSection::DumpPhysicsTable(const G4ParticleDefinition& aP)
 
          if ( ke < 20*MeV )
          {
-            G4cout << "  "<< name << ", cross section at " << ke/eV << " [eV] = " << getLENDCrossSection ( aTarget , ke , aT )/barn << " [barn] " << G4endl;
+            G4cout << "  " << GetName() << ", cross section at " << ke/eV << " [eV] = " << getLENDCrossSection ( aTarget , ke , aT )/barn << " [barn] " << G4endl;
          }
       }
       G4cout << G4endl;
@@ -167,6 +171,19 @@ G4double G4LENDCrossSection::GetIsoCrossSection(const G4DynamicParticle* dp, con
 
 
 
+G4double G4LENDCrossSection::GetZandACrossSection(const G4DynamicParticle* dp, G4int iZ, G4int iA, G4double aT)
+{
+
+   G4double ke = dp->GetKineticEnergy();
+
+   G4GIDI_target* aTarget = usedTarget_map.find( lend_manager->GetNucleusEncoding( iZ , iA ) )->second->GetTarget();
+
+   return getLENDCrossSection ( aTarget , ke , aT );
+
+}
+
+
+
 void G4LENDCrossSection::recreate_used_target_map()
 {
    for ( std::map< G4int , G4LENDUsedTarget* >::iterator 
@@ -183,6 +200,8 @@ void G4LENDCrossSection::recreate_used_target_map()
 
 void G4LENDCrossSection::create_used_target_map()
 {
+
+   lend_manager->RequestChangeOfVerboseLevel( verboseLevel );
 
    size_t numberOfElements = G4Element::GetNumberOfElements();
    static const G4ElementTable* theElementTable = G4Element::GetElementTable();
@@ -235,18 +254,19 @@ void G4LENDCrossSection::create_used_target_map()
       }
    }
 
-   G4cout << "Dump UsedTarget for " << name << G4endl;
+   G4cout << "Dump UsedTarget for " << GetName() << G4endl;
+   G4cout << "Requested Evaluation, Z , A -> Actual Evaluation, Z , A(0=Nat) , Pointer of Target" << G4endl;
    for ( std::map< G4int , G4LENDUsedTarget* >::iterator 
          it = usedTarget_map.begin() ; it != usedTarget_map.end() ; it ++ )
    {
       G4cout 
          << " " << it->second->GetWantedEvaluation() 
-         << " " << it->second->GetWantedZ() 
-         << " " << it->second->GetWantedA() 
-         << " " << it->second->GetActualEvaluation() 
-         << " " << it->second->GetActualZ() 
-         << " " << it->second->GetActualA() 
-         << " " << it->second->GetTarget() 
+         << ", " << it->second->GetWantedZ() 
+         << ", " << it->second->GetWantedA() 
+         << " -> " << it->second->GetActualEvaluation() 
+         << ", " << it->second->GetActualZ() 
+         << ", " << it->second->GetActualA() 
+         << ", " << it->second->GetTarget() 
          << G4endl; 
    } 
 

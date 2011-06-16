@@ -21,13 +21,14 @@ class G4LENDElasticCrossSection : public G4LENDCrossSection
 
    public:
    
-      G4LENDElasticCrossSection()
-      {;};
+      //G4LENDElasticCrossSection()
+      //{;};
       G4LENDElasticCrossSection( G4ParticleDefinition* pd )
+      :G4LENDCrossSection("LENDElasitcCrossSection")
       {
          proj = pd; 
-         name = "LEND Elastic Cross Section for ";
-         name += proj->GetParticleName();
+         //name = "LEND Elastic Cross Section for ";
+         //name += proj->GetParticleName();
          //create_used_target_map();
       };
    
