@@ -82,8 +82,6 @@ enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kSTheta,kETheta};
 
 enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNSTheta,kNETheta};
 
-const G4double G4Sphere::fEpsilon = 2.e-11;  // relative tolerance of radii
-
 ////////////////////////////////////////////////////////////////////////
 //
 // constructor - check parameters, convert angles so 0<sphi+dpshi<=2_PI
@@ -95,6 +93,8 @@ G4Sphere::G4Sphere( const G4String& pName,
                           G4double pSTheta, G4double pDTheta )
   : G4CSGSolid(pName), fFullPhiSphere(true), fFullThetaSphere(true)
 {
+  const G4double fEpsilon = 2.e-11;  // Relative radial tolerance constant
+
   kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 
   // Check radii and set radial tolerances

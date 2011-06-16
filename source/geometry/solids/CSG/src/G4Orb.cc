@@ -67,8 +67,6 @@ enum ESide {kNull,kRMax};
 enum ENorm {kNRMax};
 
 
-const G4double G4Orb::fEpsilon = 2.e-11;  // relative tolerance of fRmax
-
 ////////////////////////////////////////////////////////////////////////
 //
 // constructor - check positive radius
@@ -77,6 +75,8 @@ const G4double G4Orb::fEpsilon = 2.e-11;  // relative tolerance of fRmax
 G4Orb::G4Orb( const G4String& pName, G4double pRmax )
 : G4CSGSolid(pName), fRmax(pRmax)
 {
+
+  const G4double fEpsilon = 2.e-11;  // relative tolerance of fRmax
 
   G4double kRadTolerance
     = G4GeometryTolerance::GetInstance()->GetRadialTolerance();

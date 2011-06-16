@@ -131,7 +131,6 @@ class G4Orb : public G4CSGSolid
 
   private:
 
-    static const G4double fEpsilon;
     G4double fRmax;
     G4double fRmaxTolerance;
 };

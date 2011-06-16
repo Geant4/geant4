@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 1, 2011  G.Cosmo                    geom-csg-V09-04-04
+- Made radial tolerance a local constant instead of a static data member
+  in G4Orb and G4Sphere.
+
 May 27, 2011  T.Nikitina                 geom-csg-V09-04-03
 - G4Tubs: use safe formula for quadratic equation solution, in order to avoid
   numerical errors.

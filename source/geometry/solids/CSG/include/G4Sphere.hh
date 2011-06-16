@@ -217,10 +217,6 @@ class G4Sphere : public G4CSGSolid
     //
     enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNSTheta,kNETheta};
 
-    static const G4double fEpsilon;
-      //
-      // Relative radial tolerance constant
-
     G4double fRminTolerance, fRmaxTolerance, kAngTolerance;
       //
       // Radial and angular tolerances
