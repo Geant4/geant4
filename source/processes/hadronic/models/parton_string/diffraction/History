@@ -14,6 +14,13 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+17 June 2011, G.Folger    (hadr-string-diff-V09-04-05)
+---------------------------------------------------------------------
+   In G4DiffractiveExcitation, fix warning from gcc 4.6 on "unused" 
+    variable TestParticle from line 514 onwards; this is only assigned, 
+    but never used
+   
 10 June 2011, V. Uzhinsky (hadr-string-diff-V09-04-04)
    Low energy limit of FTF is decreased.
 ---------------------------------------------------------------------

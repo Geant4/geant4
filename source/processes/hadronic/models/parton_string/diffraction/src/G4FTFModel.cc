@@ -58,6 +58,8 @@ G4FTFModel::G4FTFModel():theExcitation(new G4DiffractiveExcitation()),
         theParameters=0;
 	NumberOfInvolvedNucleon=0;
         NumberOfInvolvedNucleonOfProjectile=0;
+	SetEnergyMomentumCheckLevels(2*perCent, 150*MeV);
+
 }
 
 struct DeleteVSplitableHadron { void operator()(G4VSplitableHadron * aH){ delete aH;} };

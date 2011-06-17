@@ -511,10 +511,10 @@ if(TestParticle)
 //G4cout<<"ProjQ1, ProjQ2, ProjQ3 "<<ProjQ1<<" "<<ProjQ2<<" "<<ProjQ3<<" "<<NewProjCode<<G4endl;
 
 //G4int                 TestParticleID=NewProjCode;
-G4ParticleDefinition* TestParticle=0;
+//G4ParticleDefinition* TestParticle=0;
 //G4double              TestParticleMass=DBL_MAX;
 
-TestParticle=G4ParticleTable::GetParticleTable()->FindParticle(NewProjCode);
+//TestParticle=G4ParticleTable::GetParticleTable()->FindParticle(NewProjCode);
 //if(TestParticle) TestParticleMass=TestParticle->GetPDGMass(); 
 
        if((ProjQ1==ProjQ2) && (ProjQ1==ProjQ3)) {NewProjCode +=2; ProjDeltaHasCreated=true;}
@@ -544,7 +544,7 @@ TestParticle=G4ParticleTable::GetParticleTable()->FindParticle(NewProjCode);
 //TestParticleID=NewTargCode;
 //TestParticleMass=DBL_MAX;
 
-TestParticle=G4ParticleTable::GetParticleTable()->FindParticle(NewTargCode);
+//TestParticle=G4ParticleTable::GetParticleTable()->FindParticle(NewTargCode);
 //if(TestParticle) TestParticleMass=TestParticle->GetPDGMass(); 
 
        if((TargQ1==TargQ2) && (TargQ1==TargQ3)) {NewTargCode +=2; TargDeltaHasCreated=true;}  
