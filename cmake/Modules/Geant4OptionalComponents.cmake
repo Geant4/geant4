@@ -20,14 +20,25 @@
 # Find required CLHEP package
 # We prefer to use our internal CLHEP library, but provide an advanced option
 # to allow an external CLHEP to be used should the user require this. 
+# We also allow that it can be automatically enabled by providing
+# the CLHEP_ROOT_DIR option (which FindCLHEP will recognize)
 #
 # KNOWNISSUE : For internal CLHEP, how to deal with static and shared?
-option(GEANT4_USE_SYSTEM_CLHEP "Use system CLHEP library" OFF)
+if(CLHEP_ROOT_DIR)
+    set(_default_use_system_clhep ON)
+else()
+    set(_default_use_system_clhep OFF)
+endif()
+
+option(GEANT4_USE_SYSTEM_CLHEP 
+    "Use system CLHEP library" 
+    ${_default_use_system_clhep}
+)
 mark_as_advanced(GEANT4_USE_SYSTEM_CLHEP)
 
 if(GEANT4_USE_SYSTEM_CLHEP)
     # We keep this as required, because if the user chooses to use a
-    # system option we assume that absolutely, positively require this.
+    # system option we assume that we absolutely, positively require this.
     find_package(CLHEP 2.1.0.1 REQUIRED)
     set(GEANT4_USE_SYSTEM_CLHEP TRUE)
 else()

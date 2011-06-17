@@ -22,15 +22,6 @@ unsetenv  G4DEBUG
 unsetenv  G4INCLUDE
 unsetenv  G4INSTALL
 
-unsetenv  G4LEDATA
-unsetenv  G4LEVELGAMMADATA
-unsetenv  G4NEUTRONHPDATA
-unsetenv  G4RADIOACTIVEDATA
-unsetenv  G4ABLADATA
-unsetenv  G4REALSURFACEDATA
-unsetenv  G4NEUTRONXSDATA
-unsetenv  G4PIIDATA
-
 unsetenv  G4LIB
 unsetenv  G4LIB_BUILD_G3TOG4
 unsetenv  G4LIB_BUILD_SHARED

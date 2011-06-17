@@ -66,32 +66,45 @@ endif()
 # in both 'formats', e.g. G4materials or G4OpenGL.
 # Global libraries are built by default, but we provide an option to switch to
 # granular format. Granular format is only intended for developers, so we
-# mark this option as advanced.
+# mark this option as advanced and warn the user.
 option(GEANT4_BUILD_GRANULAR_LIBS "Build Geant4 with granular libraries" OFF)
 mark_as_advanced(GEANT4_BUILD_GRANULAR_LIBS)
 GEANT4_ADD_FEATURE(GEANT4_BUILD_GRANULAR_LIBS "Build granular Geant4 libraries")
 
+if(GEANT4_BUILD_GRANULAR_LIBS)
+    message(WARNING " Granular libraries are only intended for developers!")
+endif()
 
 #----------------------------------------------------------------------------
 # Setup Shared and/or Static Library builds
 # We name these options without a 'GEANT4_' prefix because they are really
 # higher level CMake options.
-# Default to static libraries on win32 until declspec issues resolved
-# TODO: Fix DLLs on WIN32, then always build shared libs with static as an
-# option.
-if(WIN32)
-    option(BUILD_STATIC_LIBS "Build Geant4 static libraries" ON)
-    option(BUILD_SHARED_LIBS "Build Geant4 shared libraries" OFF)
-else(WIN32)
-    option(BUILD_STATIC_LIBS "Build Geant4 static libraries" OFF)
-    option(BUILD_SHARED_LIBS "Build Geant4 shared libraries" ON)
-endif(WIN32)
+# Default to building shared libraries, mark options as advanced because
+# most user should not have to touch them.
+option(BUILD_SHARED_LIBS "Build Geant4 shared libraries" ON)
+option(BUILD_STATIC_LIBS "Build Geant4 static libraries" OFF)
+mark_as_advanced(BUILD_SHARED_LIBS BUILD_STATIC_LIBS)
 
 # Because both could be switched off accidently, FATAL_ERROR if neither
 # option has been selected.
 if(NOT BUILD_STATIC_LIBS AND NOT BUILD_SHARED_LIBS)
     message(FATAL_ERROR "Neither static nor shared libraries will be built")
 endif()
+
+# On MSVC, warn if both shared and static are built - this has duplicate
+# symbol issues on VS2010 Express.
+# TODO: Resolve and understand this issue...
+if(MSVC)
+    if(BUILD_SHARED_LIBS AND BUILD_STATIC_LIBS)
+        message(WARNING " Building shared AND static libraries on VS2010 may result in link errors.
+ You are welcome to try building both, but please be aware of this warning.
+ Problems can be reported to the Geant4 Bugzilla system:
+ 
+ http://bugzilla-geant4.kek.jp
+ ")
+    endif()
+endif()
+
 
 # On WIN32, we need to build the genwindef application to create export
 # def file for building DLLs.

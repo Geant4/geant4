@@ -15,6 +15,39 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+June 16th 2011 - B.Morgan (cmake-V09-04-02)
+- Modules/Geant4LibraryBuildOptions.cmake : Default to building shared libraries
+  on all platforms, but warn about possible link errors on MSVC when building
+  both shared and static libs. Mark both library build options as advanced.
+  Add warning about building granular libs as only for developers.
+- Modules/Geant4InterfaceOptions.cmake : Reverted to version from
+  cmake-V09-04-01 because of poor logic.
+- Modules/FindCLHEP.cmake : UPGRADE WITH INTERFACE BREAK : Much simplified
+  search structure which no longer relies on clhep-config. The user can supply
+  a CLHEP_ROOT_DIR argument to point CMake to a specific installation. On UNIX
+  clhep-config will be searched for under this root dir. CLHEP library and
+  include path will be found under this root dir, or in the system paths.
+  Version checking is also provided which follows the standard logic of
+  CMake modules.
+- Modules/Geant4OptionalComponents.cmake : Option to use system CLHEP is
+  now automatically set to ON if the user has supplied a CLHEP_ROOT_DIR
+  argument. This simplifies the interface.
+
+June 15th 2011 - B.Morgan
+- Modules/Geant4InterfaceOptions.cmake : Added in option for enabling Xm (Motif)
+  support with find_package for Motif headers/libraries.
+  Use of Qt and X11 OpenGL have been made mutually exclusive on Mac OS X to
+  prevent clashes between Framework OpenGL and X11 OpenGL. 
+  Added new stub option to build OpenInventor driver
+  TODO: Add FindInventor module, check build of OpenInventor category.
+  Added new stub option to build Win32 OpenGL driver.
+  TODO: Add Win32 build to OpenGL category.
+- Templates/geant4-env.sh.in
+  Templates/geant4-env.csh.in : Removed unsetting of data library environment
+  variables.
+  TODO : Add setting of these as an optional codeblock if data was installed
+  as part of the Geant4 build.
+
 June 15th 2011 - B.Morgan (cmake-V09-04-01)
 - Modules/Geant4InterfaceOptions.cmake : Set QT_USE_IMPORTED_TARGETS on WIN32
   to stop errors when setting LINK_INTERFACE_LIBRARIES to a value containing
