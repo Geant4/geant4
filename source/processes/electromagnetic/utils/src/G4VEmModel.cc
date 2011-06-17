@@ -128,6 +128,9 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* p,
   //G4bool spline = man->SplineFlag();
   G4bool spline = false;
 
+  //G4cout << "IES: for " << GetName() << " Emin(MeV)= " << lowLimit/MeV 
+  //	 << " Emax(MeV)= " << highLimit/MeV << G4endl;
+
   // two times less bins because probability functon is normalized 
   // so correspondingly is more smooth
   G4int nbins = G4int(man->GetNumberOfBinsPerDecade()
@@ -140,8 +143,7 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* p,
 
   // prepare vector
   if(numOfCouples > nSelectors) { 
-    elmSelectors.reserve(numOfCouples); 
-    for(G4int i=nSelectors; i<numOfCouples; ++i) { elmSelectors.push_back(0); }
+    elmSelectors.resize(numOfCouples,0); 
     nSelectors = numOfCouples;
   }
 
