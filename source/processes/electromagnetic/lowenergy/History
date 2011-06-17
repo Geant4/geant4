@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16.06.2011  V. Ivanchenko, tag emlowen-V09-04-48
+            G4LivermorePolarizedGammaConversionModel - fixed problem 
+            introduced in the previous tag
+
 15.06.2011  V. Ivanchenko, tag emlowen-V09-04-47
             G4BremsstrahlungParameters - fixed value of the density effect
             constant (Migdal constant) using standard relativistic model

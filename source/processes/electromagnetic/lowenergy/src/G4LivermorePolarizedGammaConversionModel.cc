@@ -38,7 +38,7 @@ G4LivermorePolarizedGammaConversionModel::G4LivermorePolarizedGammaConversionMod
 {
   lowEnergyLimit = 2*electron_mass_c2;
   highEnergyLimit = 100 * GeV;
-  SetLowEnergyLimit(0.0);
+  SetLowEnergyLimit(lowEnergyLimit);
   SetHighEnergyLimit(highEnergyLimit);
   smallEnergy = 2.*MeV;
 
@@ -114,9 +114,10 @@ void G4LivermorePolarizedGammaConversionModel::Initialise(const G4ParticleDefini
   crossSectionHandler->LoadData(crossSectionFile);
 
   //
-  if (verboseLevel > 2) 
-    G4cout << "Loaded cross section files for Livermore Polarized GammaConversion model" << G4endl;
-
+  if (verboseLevel > 2) {
+    G4cout << "Loaded cross section files for Livermore Polarized GammaConversion model" 
+	   << G4endl;
+  }
   InitialiseElementSelectors(particle,cuts);
 
   if(verboseLevel > 0) {
@@ -128,35 +129,37 @@ void G4LivermorePolarizedGammaConversionModel::Initialise(const G4ParticleDefini
   }
 
   //    
-  if(isInitialised) { return; }
-
-  fParticleChange = GetParticleChangeForGamma();
-    
-  isInitialised = true;
+  if(!isInitialised) { 
+    isInitialised = true;
+    fParticleChange = GetParticleChangeForGamma();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4LivermorePolarizedGammaConversionModel::ComputeCrossSectionPerAtom(
                                        const G4ParticleDefinition*,
-                                             G4double GammaEnergy,
-                                             G4double Z, G4double,
-                                             G4double, G4double)
+				       G4double GammaEnergy,
+				       G4double Z, G4double,
+				       G4double, G4double)
 {
-  if (verboseLevel > 3)
-    G4cout << "Calling ComputeCrossSectionPerAtom() of G4LivermorePolarizedGammaConversionModel" << G4endl;
-
+  if (verboseLevel > 3) {
+    G4cout << "G4LivermorePolarizedGammaConversionModel::ComputeCrossSectionPerAtom()" 
+	   << G4endl;
+  }
+  if(Z < 0.9 || GammaEnergy <= lowEnergyLimit) { return 0.0; }
   G4double cs = crossSectionHandler->FindValue(G4int(Z), GammaEnergy);
   return cs;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
-							       const G4MaterialCutsCouple* couple,
-							       const G4DynamicParticle* aDynamicGamma,
-							       G4double,
-							       G4double)
+void 
+G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
+							    const G4MaterialCutsCouple* couple,
+							    const G4DynamicParticle* aDynamicGamma,
+							    G4double,
+							    G4double)
 {
 
   // Fluorescence generated according to:
