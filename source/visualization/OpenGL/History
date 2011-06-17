@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17th June 2011  John Allison  (opengl-V09-04-04)
+- G4OpenGLViewer.cc: Re-instated cutaways in intersection mode.  (Seems
+  they got accidentally commented out.)
+
 16th June 2011  John Allison  (opengl-V09-04-03)
 - Tagged.
 

@@ -304,10 +304,13 @@ void G4OpenGLViewer::SetView () {
     glDisable (GL_CLIP_PLANE1);
   }
 
+  // What we call intersection of cutaways is easy in OpenGL.  You
+  // just keep cutting.  Unions are more tricky - you have to have
+  // multiple passes and this is handled in
+  // G4OpenGLImmediate/StoredViewer::ProcessView.
   const G4Planes& cutaways = fVP.GetCutawayPlanes();
   size_t nPlanes = cutaways.size();
-  //if (fVP.IsCutaway() &&
-  if (false &&
+  if (fVP.IsCutaway() &&
       fVP.GetCutawayMode() == G4ViewParameters::cutawayIntersection &&
       nPlanes > 0) {
     double a[4];
