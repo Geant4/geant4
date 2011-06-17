@@ -206,18 +206,28 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
       //transition++;
       //G4cout<<"transition number .."<<transition<<G4endl;
       //G4cout<<" n ="<<aFragment.GetNumberOfExcitons()<<G4endl;
+      /*
+      // DHW 16 June 2011 : comment out to fix unused variable warning
       G4bool go_ahead = false;
+      */
       // soft cutoff criterium as an "ad-hoc" solution to force increase in  evaporation  
       //       G4double test = static_cast<G4double>(aFragment.GetNumberOfHoles());
       G4int test = aFragment.GetNumberOfExcitons();
+      /*
+      // DHW 16 June 2011 : comment out to fix unused variable warning
       if (test < EquilibriumExcitonNumber) { go_ahead=true; }
+      */
 
       //J. M. Quesada (Apr. 08): soft-cutoff switched off by default
       if (useSCO) {
 	if (test < EquilibriumExcitonNumber)
 	  {
-	    G4double x = G4double(test)/G4double(EquilibriumExcitonNumber) - 1; 
+            /*
+            // DHW 16 June 2011 : comment out to fix unused variable warning
+	    G4double x = G4double(test)/G4double(EquilibriumExcitonNumber) - 1;
             if( G4UniformRand() < 1.0 -  std::exp(-x*x/0.32) ) { go_ahead = true; }
+            */
+
 	    /*
               test = test*test;
               test /= 0.32;
