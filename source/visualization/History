@@ -24,6 +24,10 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+16th June 2011  John Allison  (vis-V09-04-05)
+- opengl-V09-04-03: L. Garnier:
+  o Fix conflict with qgl.h and GL/gh.h in include files
+
 2nd June 2011  John Allison  (vis-V09-04-04)
 - opengl-V09-04-02: Coverity warning fixes and Qt developments.
 - vistree-V09-04-00: GNUmakefile : Remove OpenGL/Qt stuff from Makefile

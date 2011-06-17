@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16th June 2011  John Allison  (opengl-V09-04-03)
+- Tagged.
+
+16th June 2011 L. Garnier
+- Fix conflict with qgl.h and GL/gh.h in include files
+
 2nd June 2011  John Allison  (opengl-V09-04-02)
 - Tagged.
 
