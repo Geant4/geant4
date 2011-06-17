@@ -271,7 +271,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
 void PhysicsList::SetCuts()
 {
-
+  /*
   if (verboseLevel >0){
     G4cout << "PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
@@ -284,6 +284,7 @@ void PhysicsList::SetCuts()
   SetCutValue(cutForPositron, "e+");
 
   if (verboseLevel>0) DumpCutValuesTable();
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

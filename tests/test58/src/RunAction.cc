@@ -47,7 +47,7 @@
 RunAction::RunAction(DetectorConstruction* det, 
 PhysicsList* phy, PrimaryGeneratorAction* kin)
 :detector(det), physics(phy)  , primary(kin)
-{ }
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -58,9 +58,6 @@ RunAction::~RunAction()
 
 void RunAction::BeginOfRunAction(const G4Run* aRun)
 {
-
-		
-
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
 
   //initialisation
@@ -77,7 +74,6 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
   TrakLenPrim = TrakLenPrim2 = 0.;
 
-
   G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   CLHEP::HepRandom::showEngineStatus();
 }
@@ -92,56 +88,54 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   // compute mean and rms
   //
   G4int TotNbofEvents = aRun->GetNumberOfEvent();
+  //G4cout << "Ntot= " << TotNbofEvents << G4endl;
   if (TotNbofEvents == 0) return;
   
-	//total energy loss
+  //total energy loss
   EnergyDeposit /= TotNbofEvents; EnergyDeposit2 /= TotNbofEvents;
   G4double rmsEdep = EnergyDeposit2 - EnergyDeposit*EnergyDeposit;
-	if(rmsEdep >0.)rmsEdep=std::sqrt(rmsEdep/TotNbofEvents);
-	else rmsEdep =0;
+  if(rmsEdep >0.)rmsEdep=std::sqrt(rmsEdep/TotNbofEvents);
+  else rmsEdep =0;
 
-	//nuclear energy loss
+  //nuclear energy loss
   NonIonEnergyDeposit /= TotNbofEvents; NonIonEnergyDeposit2 /= TotNbofEvents;
   G4double rmsEnondep = NonIonEnergyDeposit2 - NonIonEnergyDeposit*NonIonEnergyDeposit;
-	if(rmsEnondep>0.) rmsEnondep= std::sqrt(rmsEnondep/TotNbofEvents);
-	else rmsEnondep=0;
+  if(rmsEnondep>0.) rmsEnondep= std::sqrt(rmsEnondep/TotNbofEvents);
+  else rmsEnondep=0;
 
+  //mean sum of T( kinetic energy of secondary)x L(T) partition energy 
+  sum_TL/=TotNbofEvents;     sum_TL2/=TotNbofEvents;
+  G4double rmssum_TL =sum_TL2- sum_TL*sum_TL;
+  if(rmssum_TL>0.) rmssum_TL=std::sqrt(rmssum_TL/TotNbofEvents);
+  else rmssum_TL =0;
 
-	//mean sum of T( kinetic energy of secondary)x L(T) partition energy 
-   sum_TL/=TotNbofEvents;     sum_TL2/=TotNbofEvents;
-   G4double rmssum_TL =sum_TL2- sum_TL*sum_TL;
-   	if(rmssum_TL>0.) rmssum_TL=std::sqrt(rmssum_TL/TotNbofEvents);
-	else rmssum_TL =0;
+  //mean kinetic energy of secondary particles (IDp==1) 
+  G4double rmssum_T = 0.0;
+  if(N_rec > 0) {
+    sum_T/=N_rec;     sum_T2/=N_rec;
+    G4double rmssum_T =sum_T2- sum_T*sum_T;
+    if(rmssum_T>0.) rmssum_T=std::sqrt(rmssum_T/N_rec);
+  }
 
+  //mean number of steps:
+  Nsteps/=TotNbofEvents;  Nsteps2/=TotNbofEvents;
+  G4double rmsSteps= Nsteps2 -Nsteps*Nsteps;
+  if(rmsSteps>0) rmsSteps= std::sqrt(rmsSteps/TotNbofEvents);
+  else rmsSteps=0;
 
-     //mean kinetic energy of secondary particles (IDp==1) 
-   sum_T/=N_rec;     sum_T2/=N_rec;
-   G4double rmssum_T =sum_T2- sum_T*sum_T;
-        if(rmssum_T>0.) rmssum_T=std::sqrt(rmssum_T/N_rec);
-        else rmssum_T =0;
+  //scattering angle
+  theta/=TotNbofEvents ; theta2/=TotNbofEvents;	
+  G4double rmsTheta =theta2-theta*theta;
+  if(rmsTheta>0.) rmsTheta =std::sqrt(rmsTheta/TotNbofEvents);
+  else rmsTheta =0;
+  
+  //track length
+  TrakLenPrim /= TotNbofEvents; TrakLenPrim2 /= TotNbofEvents;
+  G4double rmsTLPrim = TrakLenPrim2 - TrakLenPrim*TrakLenPrim;
+  if (rmsTLPrim>0.) rmsTLPrim = std::sqrt(rmsTLPrim/TotNbofEvents);
+  else rmsTLPrim = 0.;
 
-
-	//mean number of steps:
-     Nsteps/=TotNbofEvents;  Nsteps2/=TotNbofEvents;
-     G4double rmsSteps= Nsteps2 -Nsteps*Nsteps;
-     	if(rmsSteps>0) rmsSteps= std::sqrt(rmsSteps/TotNbofEvents);
-	else rmsSteps=0;
-
-
-	//scattering angle
-     theta/=TotNbofEvents ; theta2/=TotNbofEvents;	
-     G4double rmsTheta =theta2-theta*theta;
-	if(rmsTheta>0.) rmsTheta =std::sqrt(rmsTheta/TotNbofEvents);
- 	else rmsTheta =0;
-
-	//trak length
-     TrakLenPrim /= TotNbofEvents; TrakLenPrim2 /= TotNbofEvents;
-     G4double rmsTLPrim = TrakLenPrim2 - TrakLenPrim*TrakLenPrim;
-  	if (rmsTLPrim>0.) rmsTLPrim = std::sqrt(rmsTLPrim/TotNbofEvents);
-  	else rmsTLPrim = 0.;
-
-//..............................................................
-
+  //..............................................................
 
   G4Material* material = detector->GetAbsorberMaterial();
   G4double thickness  = detector->GetAbsorberThickness();
@@ -151,12 +145,16 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
                                           ->GetParticleDefinition();
   G4String partName = particle->GetParticleName();
   G4double energy = primary->GetParticleGun()->GetParticleEnergy();
-
    
   //Stopping Power and NIEL from simulation.
   //
   // effective length
   G4double length=TrakLenPrim;
+
+  //G4cout << "Length= " << length << G4endl;
+  //G4cout << "Density= " << density << G4endl;
+  //G4cout << "Nsteps= " << Nsteps << G4endl;
+
   // total energy loss  
   G4double meandEdx  = EnergyDeposit/length;
   // nuclear energy loss
@@ -178,6 +176,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
 
   G4double NA  = material->GetTotNbOfAtomsPerVolume();
+  //G4cout << "NA= " << NA << G4endl;
   G4double CrossSection =1./(NA*freepath); 
   G4double rmsCrossSection=rmsFreepath*CrossSection/freepath;
 
@@ -195,7 +194,6 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 	 << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
   G4cout << "\n Threshold Energy for displacement \n "
         << Th/eV<<" eV" <<G4endl;
-
 
 
   G4cout << "\n ============= Primary particle statistics ==============\n";
@@ -243,20 +241,16 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
          << "\t(" << stopPower_sumTL/(MeV*cm2/g) << " MeV*cm2/g)"
          << G4endl;
 
-	 
-
-  //-------------------------------------------
-	//Frenkel-pairs Concentration:
- 	G4double l=	detector->GetAbsorberSizeYZ();
- 	G4double area=l*l;//cm2
- 	G4double flu =TotNbofEvents/area; // #/cm2
- 	G4double Edis= meandEdx_sumTL*flu;// MeV/cm3
- 	G4double FP= Edis/(2.5*Th);
+  //Frenkel-pairs Concentration:
+  G4double l=	detector->GetAbsorberSizeYZ();
+  G4double area=l*l;//cm2
+  G4double flu =TotNbofEvents/area; // #/cm2
+  G4double Edis= meandEdx_sumTL*flu;// MeV/cm3
+  G4double FP= Edis/(2.5*Th);
  
-  //------------------------------------------
   G4cout<<"\n----------------------------------------------------------------"<<G4endl;
   G4cout<<"\n Total Number of primary knock-on atoms: PKA = "<< N_rec<<G4endl;
- G4cout<<" Mean Kinetic Energy of PKA = "<<G4BestUnit(sum_T,"Energy")
+  G4cout<<" Mean Kinetic Energy of PKA = "<<G4BestUnit(sum_T,"Energy")
                 <<" +/- "  <<G4BestUnit(rmssum_T,"Energy")<<G4endl;
   G4cout<<" Total Frenkel-pairs Concentration: FP = " <<FP*cm3<< " #/cm3"<<G4endl;
 
@@ -264,13 +258,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
   G4cout << "\n ===========================================================\n";
 
-//........................................................
-
+  //........................................................
 
   CLHEP::HepRandom::showEngineStatus();
-
-
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

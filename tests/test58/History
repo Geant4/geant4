@@ -14,6 +14,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17-06-11  V.Ivanchenko (test58-V09-04-02)
+- Changed method to define cuts (use /run/ UI commends)
+- RunAction - added protetion for the case of zero number of recoils 
+- StackingAction - cleanup
+
 10-05-11  V.Ivanchenko (test58-V09-04-01)
 - Removed obsolete header of CoulombScatteringModel
 

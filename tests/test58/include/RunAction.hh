@@ -52,60 +52,60 @@ class PrimaryGeneratorAction;
 
 class RunAction : public G4UserRunAction
 {
-  public:
-    RunAction(DetectorConstruction*,PhysicsList* ,PrimaryGeneratorAction*) ;
-   ~RunAction();
+public:
+  RunAction(DetectorConstruction*,PhysicsList* ,PrimaryGeneratorAction*) ;
+  ~RunAction();
 
-  public:
-    void BeginOfRunAction(const G4Run*);
-    void   EndOfRunAction(const G4Run*);
+public:
+  void BeginOfRunAction(const G4Run*);
+  void   EndOfRunAction(const G4Run*);
 
-    void AddEnergy (G4double edep)
-                   {EnergyDeposit += edep; EnergyDeposit2 += edep*edep;};
+  void AddEnergy (G4double edep)
+       { EnergyDeposit += edep; EnergyDeposit2 += edep*edep; };
 
-    void AddNonIonEnergy (G4double enondep)
-                   {NonIonEnergyDeposit += enondep; 
-		   NonIonEnergyDeposit2 += enondep*enondep;};
+  void AddNonIonEnergy (G4double enondep)
+       { NonIonEnergyDeposit += enondep; 
+         NonIonEnergyDeposit2 += enondep*enondep; };
 
 
    // sum of secondary Kinetic energy*L(T):
-    void SumTL(G4double energyL){sum_TL +=energyL;  sum_TL2 +=energyL*energyL;};
+  void SumTL(G4double energyL){sum_TL +=energyL;  sum_TL2 +=energyL*energyL;};
 
-   // sum of secondary Kinetic energy:
-    void SumT(G4double energy){sum_T +=energy;  sum_T2 +=energy*energy; };
+  // sum of secondary Kinetic energy:
+  void SumT(G4double energy){sum_T +=energy;  sum_T2 +=energy*energy; };
 
+  //number of recoils
+  void NumberRec(G4int i){ N_rec += i; };
 
-   //number of recoils
-    void NumberRec(G4int i ){N_rec+=i;};
+  //number of steps
+  void AddNumberOfSteps(G4int i ){ Nsteps+=double(i); 
+				   Nsteps2+=double(i)*double(i);};
 
-   //number of steps
-    void AddNumberOfSteps(G4int i ){Nsteps+=double(i); 
-				    Nsteps2+=double(i)*double(i);};
-
-    //scattering angle	
-    void AddTheta(G4double tet){theta+=tet;
-				theta2+=tet*tet;};	
-    // trak length	
-    void AddTrakLenPrim (G4double length)
-                 {TrakLenPrim += length; TrakLenPrim2 += length*length;};
+  //scattering angle	
+  void AddTheta(G4double tet){ theta+=tet;
+			       theta2+=tet*tet;};	
+  // track length	
+  void AddTrakLenPrim (G4double length)
+          {TrakLenPrim += length; TrakLenPrim2 += length*length;};
 
     // Get Threshold energy for displacement
-    void  GiveThreshold(G4double energy){Th=energy;};
+  void  GiveThreshold(G4double energy) {Th=energy;};
 
-  private:
-    G4double EnergyDeposit,  EnergyDeposit2;
-    G4double NonIonEnergyDeposit,  NonIonEnergyDeposit2;
-    G4double sum_TL, sum_TL2;
-    G4double sum_T, sum_T2;
-    G4double Th; 
-    G4int N_rec; 
-    G4double Nsteps, Nsteps2;
-    G4double theta, theta2;
-    G4double TrakLenPrim, TrakLenPrim2;
+private:
 
-    DetectorConstruction*   detector;
-    PhysicsList*        physics;
-    PrimaryGeneratorAction* primary;
+  G4double EnergyDeposit,  EnergyDeposit2;
+  G4double NonIonEnergyDeposit,  NonIonEnergyDeposit2;
+  G4double sum_TL, sum_TL2;
+  G4double sum_T, sum_T2;
+  G4double Th; 
+  G4int N_rec; 
+  G4double Nsteps, Nsteps2;
+  G4double theta, theta2;
+  G4double TrakLenPrim, TrakLenPrim2;
+
+  DetectorConstruction*   detector;
+  PhysicsList*        physics;
+  PrimaryGeneratorAction* primary;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

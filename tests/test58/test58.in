@@ -13,9 +13,11 @@
 /testem/phys/setTh 21 eV
 /testem/phys/addPhysics  standardISS
 #
-/testem/phys/setCuts 1 cm
-#
 /run/initialize
+#
+/run/setCut      1 cm
+#
+/run/setCutForAGivenParticle proton 1 nm
 #
 /testem/stack/killSecondaries
 /testem/gun/setDefault
