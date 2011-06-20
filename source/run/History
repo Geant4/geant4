@@ -17,7 +17,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-May 20th, 2011, B.Morgan (run-09-04-06)
+June 18th, 2011, H.Kurashige (run-V09-04-08)
+- Modify to allow zero cut length
+
+June 11th, 2011, H.Kurashige (run-V09-04-07)
+- Added default implemenation of SetCuts
+- Added commanf of /run/getCutForAGivenParticle
+- Removed obsolete method of SetCutValueForOthers
+
+May 31st, 2011,  J.Apostolakis
+- Ensure that a ScoreSplittingProcess is added only once in 
+  G4RunManagerKernel::SetScoreSplitter.
+   Fixes PR 1218
+
+May 20th, 2011, B.Morgan (run-V09-04-06)
 - CMakeLists.txt : Added G4RUN_ALLOC_EXPORT compiler definition via 
   add_definitions so it's applied to all sources in this module.
 - sources.cmake : Fixed typo in source files listing.

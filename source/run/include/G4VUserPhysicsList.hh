@@ -39,9 +39,6 @@
 //           Construct particles
 //        G4VUserPhysicsList::ConstructProcess() 
 //           Construct procesess and register them to particles
-//        G4VUserPhysicsList::SetCuts()
-//           set cut values in range to all particles
-//           (and rebuilding physics table will be invoked )
 //
 // ------------------------------------------- 
 //	History
@@ -80,7 +77,9 @@
 //           virtual G4bool  CheckForRetrievePhysicsTable()
 //           virtual G4bool  CheckMaterialInfo()
 //          added    void BuildPhysicsTable()    
-//       Added PhysicsListHelper           29 APr. 2011 H.Kurashige
+//       Added PhysicsListHelper           29 Apr. 2011 H.Kurashige
+//       Added default impelmentation of SetCuts 10 June 2011 H.Kurashige 
+//           SetCuts is not 'pure virtual' any more 
 // ------------------------------------------------------------
 #ifndef G4VUserPhysicsList_h
 #define G4VUserPhysicsList_h 1
@@ -125,6 +124,7 @@ class G4VUserPhysicsList
    //  'true' is returned if the process is registerd successfully
    G4bool RegisterProcess(G4VProcess*            process,
 			  G4ParticleDefinition*  particle);
+
   public:
    void UseCoupledTransportation(G4bool vl=true);
 
@@ -132,7 +132,7 @@ class G4VUserPhysicsList
   public: // with description 
    //  "SetCuts" method sets a cut value for all particle types 
    //   in the particle table
-   virtual void SetCuts() = 0; 
+   virtual void SetCuts(); 
 
   public:  // with description
    //  set/get the default cut value
@@ -186,15 +186,12 @@ class G4VUserPhysicsList
   public: // with description
     // Request to print out information of cut values
     // Printing will be performed when all tables are made
-    void DumpCutValuesTable(G4int nParticles=4);
+    void DumpCutValuesTable(G4int flag =1);
 
     // The following method actually trigger the print-out requested
     // by the above method. This method must be invoked by RunManager
     // at the proper moment.
     void DumpCutValuesTableIfRequested();
-
-    void DumpCutValues(const G4String &particle_name = "ALL");
-    void DumpCutValues(G4ParticleDefinition* );
 
   public: // with description
     void  SetVerboseLevel(G4int value);
@@ -206,14 +203,19 @@ class G4VUserPhysicsList
 
   ///////////////////////////////////////////////////////////////////////////
   public: // with description
-   //  "SetCutsWithDefault" method sets the default cut value
-   //   for all particles for the default region.
+   //  "SetCutsWithDefault" method invokes default SetCuts method
+   //   Note: Cut values will not be overwriten with this method 
+   //   Using default SetCuts method is recommended
+   //  (i.e You do not need to implement SetCuts method) 
    void SetCutsWithDefault();   
 
    // Following are utility methods for SetCuts
   
    // SetCutValue sets a cut value for a particle type for the default region
    void SetCutValue(G4double aCut, const G4String& pname); 
+
+   // GetCutValue sets a cut value for a particle type for the default region
+   G4double GetCutValue(const G4String& pname) const; 
 
    // SetCutValue sets a cut value for a particle type for a region
    void SetCutValue(G4double aCut, const G4String& pname, const G4String& rname); 
@@ -223,6 +225,7 @@ class G4VUserPhysicsList
    // In case of "Retrieve" flag is ON, 
    // Cut values will be retrieved from files
    void SetParticleCuts(G4double cut,G4ParticleDefinition* particle,G4Region* region=0);
+  void SetParticleCuts( G4double cut, const G4String& particleName, G4Region* region=0);
 
    // Invoke SetCuts for all particles in a region
    void SetCutsForRegion(G4double aCut, const G4String& rname);
@@ -276,20 +279,20 @@ class G4VUserPhysicsList
  
   ////////////////////////////////////////////////////////////////////////
   protected:
-    // the particle table has the complete List of existing particle types
-    G4ParticleTable* theParticleTable;
-    G4ParticleTable::G4PTblDicIterator* theParticleIterator;
+   // the particle table has the complete List of existing particle types
+   G4ParticleTable* theParticleTable;
+   G4ParticleTable::G4PTblDicIterator* theParticleIterator;
 
   protected: 
-  // pointer to G4UserPhysicsListMessenger
-    G4UserPhysicsListMessenger* theMessenger;
+   // pointer to G4UserPhysicsListMessenger
+   G4UserPhysicsListMessenger* theMessenger;
 
   protected:
-    G4int verboseLevel;
+   G4int verboseLevel;
 
   protected:
-    // this is the default cut value for all particles
-    G4double defaultCutValue;
+   // this is the default cut value for all particles
+   G4double defaultCutValue;
 
   protected:
    // pointer to ProductionCutsTable
@@ -321,22 +324,7 @@ class G4VUserPhysicsList
    enum { FixedStringLengthForStore = 32 }; 
 
 
-////////////////////////////////////////////////////////////////////////////
-// Following method is for backward compatibility and removed soon
-////////////////////////////////////////////////////////////////////////////
-  protected:
-  void SetCutValueForOthers(G4double) const;
-
 };
-
-inline
- void G4VUserPhysicsList::SetCutValueForOthers(G4double) const
-{
-  G4cerr << "WARNING !" << G4endl;
-  G4cerr << " SetCutValueForOthers became obsolete." << G4endl;
-  G4cerr << " It is harmless to remove this invokation without any side effects." << G4endl;
-  G4cerr << " This dummy method implementation will be removed soon." << G4endl;
-}
 
 inline void G4VUserPhysicsList::Construct()
 {

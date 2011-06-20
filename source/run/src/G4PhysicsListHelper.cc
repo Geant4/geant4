@@ -273,7 +273,15 @@ void G4PhysicsListHelper::ReadOrdingParameterTable()
     }
 #endif
   } else {
-    ordParamFileName  = getenv("G4INSTALL");
+    if (getenv("G4INSTALL")){
+      ordParamFileName  = getenv("G4INSTALL");
+    } else {
+      if (getenv("G4WORKDIR")){
+	ordParamFileName = getenv("G4WORKDIR");
+      } else {
+	ordParamFileName = ".";
+      }
+    }
     ordParamFileName += "/source/physics_lists/builders/";
     ordParamFileName += "OrderingParameterTable";
   } 

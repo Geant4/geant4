@@ -44,6 +44,8 @@
 //       Check if particle IsShortLived   18 Jun 2003 by V.Ivanchenko
 //       Modify PreparePhysicsList        18 Jan 2006 by H.Kurashige
 //       Added PhysicsListHelper           29 APr. 2011 H.Kurashige
+//       Added default impelmentation of SetCuts 10 June 2011 H.Kurashige 
+//           SetCuts is not 'pure virtual' any more 
 // ------------------------------------------------------------
 
 #include "globals.hh"
@@ -70,6 +72,7 @@
 ////////////////////////////////////////////////////////
 G4VUserPhysicsList::G4VUserPhysicsList()
   :verboseLevel(1),
+   defaultCutValue(1.0 * mm),
    fRetrievePhysicsTable(false),
    fStoredInAscii(true),
    fIsCheckedForRetrievePhysicsTable(false),
@@ -80,7 +83,7 @@ G4VUserPhysicsList::G4VUserPhysicsList()
    fDisableCheckParticleList(false)
 {
   // default cut value  (1.0mm)
-  defaultCutValue = 1.0*mm;
+  SetDefaultCutValue( 1.0*mm );
 
   // pointer to the particle table
   theParticleTable = G4ParticleTable::GetParticleTable();
@@ -98,6 +101,7 @@ G4VUserPhysicsList::G4VUserPhysicsList()
   // PhysicsListHelper
   thePLHelper = G4PhysicsListHelper::GetPhysicsListHelper();
   thePLHelper->SetVerboseLevel(verboseLevel);
+
 }
 
 ////////////////////////////////////////////////////////
@@ -112,23 +116,6 @@ G4VUserPhysicsList::~G4VUserPhysicsList()
   // invoke DeleteAllParticle
   theParticleTable->DeleteAllParticles();
 
-}
-
-////////////////////////////////////////////////////////
-void G4VUserPhysicsList::SetVerboseLevel(G4int value)
-{
-  verboseLevel = value;
-  // set verboseLevel for G4ProductionCutsTable same as one for G4VUserPhysicsList: 
-  fCutsTable->SetVerboseLevel(verboseLevel);
-
-  thePLHelper->SetVerboseLevel(verboseLevel);
-
-#ifdef G4VERBOSE
-  if (verboseLevel >1){
-    G4cout << "G4VUserPhysicsList::SetVerboseLevel  :"
-	   << " Verbose level is set to " << verboseLevel << G4endl;
-  }
-#endif
 }
 
 ////////////////////////////////////////////////////////
@@ -238,76 +225,23 @@ void G4VUserPhysicsList::RemoveProcessManager()
   }
 }
 
-////////////////////////////////////////////////////////
-void G4VUserPhysicsList::SetDefaultCutValue(G4double value)
-{
-  if (value<=0.0) {
-#ifdef G4VERBOSE
-    if (verboseLevel >0){
-      G4cout << "G4VUserPhysicsList::SetDefaultCutValue: negative cut values"
-	     << "  :" << value/mm << "[mm]" << G4endl;
-    }
-#endif
-  } else {
-#ifdef G4VERBOSE
-    if (verboseLevel >1){
-      G4cout << "G4VUserPhysicsList::SetDefaultCutValue:"
-	     << "default cut value is changed to   :" 
-	     << value/mm << "[mm]" << G4endl;
-    }
-#endif
-    defaultCutValue = value;
-    
-  }
-}
-
 
 ////////////////////////////////////////////////////////
-void G4VUserPhysicsList::SetCutValue(G4double aCut, const G4String& name)
+void G4VUserPhysicsList::SetCuts()
 {
-  G4ParticleDefinition* particle = theParticleTable->FindParticle(name);
-  if (particle != 0){
-    if (!particle->IsShortLived()) {
-      //set cut value
-      SetParticleCuts( aCut ,particle );
-    }
-  }
-}
-
-////////////////////////////////////////////////////////
-void G4VUserPhysicsList::SetCutValue
-(G4double aCut, const G4String& pname, const G4String& rname)
-{
-  G4ParticleDefinition* particle = theParticleTable->FindParticle(pname);
-  G4Region* region = G4RegionStore::GetInstance()->GetRegion(rname);
-  if (particle != 0 && region != 0){
-    if (!particle->IsShortLived()) {
-      //set cut value
-      SetParticleCuts( aCut ,particle, region );
-    }
-  }
-}
-
-
-
-////////////////////////////////////////////////////////
-void G4VUserPhysicsList::SetCutsWithDefault()
-{
-  // default cut value
-  G4double cut = defaultCutValue;
-
 #ifdef G4VERBOSE
   if (verboseLevel >1){
-    G4cout << "G4VUserPhysicsList::SetCutsWithDefault:"
-	   << "CutLength : " << cut/mm << " (mm)" << G4endl;
+    G4cout << "G4VUserPhysicsList::SetCuts:   " << G4endl;
+    G4cout << "Cut for gamma: " << GetCutValue("gamma")/mm  
+	   << "[mm]" << G4endl;
+    G4cout << "Cut  for e-: " << GetCutValue("e-")/mm  
+	   << "[mm]" << G4endl;
+    G4cout << "Cut  for e+: " << GetCutValue("e+")/mm 
+	   << "[mm]" << G4endl;
+    G4cout << "Cut  for proton: " << GetCutValue("proton")/mm  
+	   << "[mm]" << G4endl;
   }
 #endif
-
-  // set cut values for gamma at first and for e- and e+
-  SetCutValue(cut, "gamma");
-  SetCutValue(cut, "e-");
-  SetCutValue(cut, "e+");
-  SetCutValue(cut, "proton");
 
   // dump Cut values if verboseLevel==3
   if (verboseLevel>2) {
@@ -315,6 +249,68 @@ void G4VUserPhysicsList::SetCutsWithDefault()
   }
 }
 
+
+////////////////////////////////////////////////////////
+void G4VUserPhysicsList::SetDefaultCutValue(G4double value)
+{
+  if (value<0.0) {
+#ifdef G4VERBOSE
+    if (verboseLevel >0){
+      G4cout << "G4VUserPhysicsList::SetDefaultCutValue: negative cut values"
+	     << "  :" << value/mm << "[mm]" << G4endl;
+    }
+#endif
+    return;
+  }
+
+  defaultCutValue = value;
+  
+  // set cut values for gamma at first and for e- and e+
+  SetCutValue(defaultCutValue, "gamma");
+  SetCutValue(defaultCutValue, "e-");
+  SetCutValue(defaultCutValue, "e+");
+  SetCutValue(defaultCutValue, "proton");    
+
+#ifdef G4VERBOSE
+  if (verboseLevel >1){
+    G4cout << "G4VUserPhysicsList::SetDefaultCutValue:"
+	   << "default cut value is changed to   :" 
+	   << defaultCutValue/mm << "[mm]" << G4endl;
+  }
+#endif
+ }
+
+
+////////////////////////////////////////////////////////
+G4double G4VUserPhysicsList::GetCutValue(const G4String& name) const
+{
+  G4Region* region = (*(G4RegionStore::GetInstance()))[0];
+  return region->GetProductionCuts()->GetProductionCut(name);
+}
+
+////////////////////////////////////////////////////////
+void G4VUserPhysicsList::SetCutValue(G4double aCut, const G4String& name)
+{
+  SetParticleCuts( aCut ,name );
+}
+
+////////////////////////////////////////////////////////
+void G4VUserPhysicsList::SetCutValue
+(G4double aCut, const G4String& pname, const G4String& rname)
+{
+  G4Region* region = G4RegionStore::GetInstance()->GetRegion(rname);
+  if (region != 0){
+    //set cut value
+    SetParticleCuts( aCut ,pname, region );
+  }
+}
+
+
+////////////////////////////////////////////////////////
+void G4VUserPhysicsList::SetCutsWithDefault()
+{
+  G4VUserPhysicsList::SetCuts();
+}
 
 ////////////////////////////////////////////////////////
 void G4VUserPhysicsList::SetCutsForRegion(G4double aCut, const G4String& rname)
@@ -331,9 +327,25 @@ void G4VUserPhysicsList::SetCutsForRegion(G4double aCut, const G4String& rname)
 ////////////////////////////////////////////////////////
 void G4VUserPhysicsList::SetParticleCuts( G4double cut, G4ParticleDefinition* particle, G4Region* region)
 {
+  SetParticleCuts(cut, particle->GetParticleName(), region);
+}
+
+////////////////////////////////////////////////////////
+void G4VUserPhysicsList::SetParticleCuts( G4double cut, const G4String& particleName, G4Region* region)
+{
+  if (cut<0.0) {
+#ifdef G4VERBOSE
+    if (verboseLevel >0){
+      G4cout << "G4VUserPhysicsList::SetParticleCuts: negative cut values"
+	     << "  :" << cut/mm << "[mm]" 
+	     << " for "<< particleName << G4endl;
+    }
+#endif
+    return;
+  }
   if(!region) region = (*(G4RegionStore::GetInstance()))[0];
   G4ProductionCuts* pcuts = region->GetProductionCuts();
-  pcuts->SetProductionCut(cut,particle);
+  pcuts->SetProductionCut(cut,particleName);
 }
 
 ///////////////////////////////////////////////////////////////
@@ -570,9 +582,9 @@ void G4VUserPhysicsList::DumpList() const
 
 
 ///////////////////////////////////////////////////////////////
-void G4VUserPhysicsList::DumpCutValuesTable(G4int nParticles) 
+void G4VUserPhysicsList::DumpCutValuesTable(G4int flag) 
 { 
-  fDisplayThreshold = nParticles; 
+  fDisplayThreshold = flag; 
 }
 
 ///////////////////////////////////////////////////////////////
@@ -730,41 +742,26 @@ G4bool G4VUserPhysicsList::RegisterProcess(G4VProcess*            process,
   return thePLHelper->RegisterProcess(process, particle);
 }
 
+////////////////////////////////////////////////////////
+void G4VUserPhysicsList::SetVerboseLevel(G4int value)
+{
+  verboseLevel = value;
+  // set verboseLevel for G4ProductionCutsTable same as one for G4VUserPhysicsList: 
+  fCutsTable->SetVerboseLevel(verboseLevel);
+
+  thePLHelper->SetVerboseLevel(verboseLevel);
+
+#ifdef G4VERBOSE
+  if (verboseLevel >1){
+    G4cout << "G4VUserPhysicsList::SetVerboseLevel  :"
+	   << " Verbose level is set to " << verboseLevel << G4endl;
+  }
+#endif
+}
+
 
 ///////////////////////////////////////////////////////////////
 /// obsolete methods
-
-///////////////////////////////////////////////////////////////
-void G4VUserPhysicsList::DumpCutValues(const G4String &particle_name)
-{
-#ifdef G4VERBOSE  
-  if (verboseLevel>0){
-    G4cout << "WARNING !  " 
-	   << " Obsolete DumpCutValues() method is invoked for " 
-	   << particle_name << G4endl;
-    G4cout << " Please use DumpCutValuesTable() instead." 
-	   << " This dummy method implementation will be removed soon." 
-	   << G4endl;
-    DumpCutValuesTable();
-  }
-#endif
-}
-
-///////////////////////////////////////////////////////////////
-void G4VUserPhysicsList::DumpCutValues(G4ParticleDefinition* )
-{
-#ifdef G4VERBOSE  
-  if (verboseLevel>0){
-    G4cout << "WARNING !  " 
-	   << " DumpCutValues() became obsolete." << G4endl;
-    G4cout << " Please use DumpCutValuesTable() instead." 
-	   << " This dummy method implementation will be removed soon." 
-	   << G4endl;
-    DumpCutValuesTable();
-  }
-#endif
-}
-
 
 ///////////////////////////////////////////////////////////////
 void G4VUserPhysicsList::ResetCuts()

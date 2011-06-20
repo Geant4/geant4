@@ -57,6 +57,7 @@
 //        add setStoredInAscii command    12 Mar. 2001 by H.Kurashige
 //        add applyCuts command            2 Aug. 2001 by H.Kurashige
 //        add dumpOrderingParam command    3 May. 2011 by H.Kurashige
+//        add getCutForAGivenParticle     11 June 2011 by H.Kurashige
 // ------------------------------------------------------------
 
 #ifndef G4UserPhysicsListMessenger_h
@@ -94,10 +95,10 @@ public: // with description
     
   private: //commands
     G4UIdirectory *             theDirectory;
-    G4UIcmdWithADoubleAndUnit * setPCutCmd; 
     G4UIcmdWithADoubleAndUnit * setCutCmd; 
     G4UIcommand *               setCutRCmd;
-    G4UIcommand *               setCutForAGivenParticleCmd; 
+    G4UIcommand *               setCutForAGivenParticleCmd;
+    G4UIcmdWithAString *        getCutForAGivenParticleCmd;
     G4UIcmdWithAnInteger *      verboseCmd;
     G4UIcmdWithoutParameter *   dumpListCmd;
     G4UIcmdWithAString *        addProcManCmd;
