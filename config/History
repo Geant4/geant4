@@ -15,6 +15,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+17th June 2011 Ben Morgan (config-V09-04-10)
+- scripts/env.(c)sh : Added support for internal CLHEP. LD_LIBRARY_PATH is
+  correctly set when an external CLHEP is used, but not modified with any
+  CLHEP related variable if the internal CLHEP is used.
+  Should be used with current trunk of Configure (rev 50915), though this
+  is not absolutely required.
 
 6th June 2011 Gabriele Cosmo (config-V09-04-09)
 - Correction to binmake.gmk to restore setting of G4LIBDIR for the case of

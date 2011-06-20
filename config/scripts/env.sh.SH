@@ -787,13 +787,13 @@ $spitshell >>env.sh <<'!NO!SUBS!'
 # G4WORKDIR
 #
 if [ $G4WORKDIR ] ; then
-    if [ X\$g4non_display = X ] ; then
+    if [ X$g4non_display = X ] ; then
         echo "In your environment you have the G4WORKDIR=$G4WORKDIR"
     fi
 else
     # Check for Windows!
     if test "X$G4SYSTEM" = "XWIN32-VC" -o "X$G4SYSTEM" = "XWIN32-VC7"; then
-        if [ X\$g4non_display = X ] ; then
+        if [ X$g4non_display = X ] ; then
             echo "G4WORKDIR will be set to c:/geant4 (in "native" Windows syntax)"
         fi
 
@@ -801,7 +801,7 @@ else
         export G4WORKDIR
 
     else # if Unix
-        if [ X\$g4non_display = X ] ; then
+        if [ X$g4non_display = X ] ; then
             echo "G4WORKDIR will be set to HOME/geant4=$HOME/geant4"
         fi
 
@@ -816,7 +816,7 @@ fi
 
 #
 # *NIX Shared Libraries
-# If we built Geant4 with shared libraries, we need to add the Gean4
+# If we built Geant4 with shared libraries, we need to add the Geant4
 # library directory to (DY)LD_LIBRARY_PATH.
 # In all cases, external shared library directories should be added to
 # (DY)LD_LIBRARY_PATH
@@ -827,7 +827,10 @@ if test "X$G4SYSTEM" != "XDarwin-g++" ; then
             LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${G4LIB}/${G4SYSTEM}
         fi
     
-        LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${CLHEP_LIB_DIR}
+        # Only append the CLHEP directory if it exists!
+        if [ $CLHEP_LIB_DIR ] ; then
+            LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${CLHEP_LIB_DIR}
+        fi
 
         if [ $G4LIB_BUILD_GDML ] ; then
             LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${XERCESCROOT}/lib
@@ -837,9 +840,14 @@ if test "X$G4SYSTEM" != "XDarwin-g++" ; then
     else
         if [ $G4LIB_BUILD_SHARED ] ; then
             LD_LIBRARY_PATH=${G4LIB}/${G4SYSTEM}
-            LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${CLHEP_LIB_DIR}
+
+            if [ $CLHEP_LIB_DIR ] ; then
+                LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${CLHEP_LIB_DIR}
+            fi
         else
-            LD_LIBRARY_PATH=${CLHEP_LIB_DIR}
+            if [ $CLHEP_LIB_DIR ] ; then
+                LD_LIBRARY_PATH=${CLHEP_LIB_DIR}
+            fi
         fi
 
         if [ $G4LIB_BUILD_GDML ] ; then
@@ -857,7 +865,9 @@ else
             DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH}:${G4LIB}/${G4SYSTEM}
         fi
     
-        DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH}:${CLHEP_LIB_DIR}
+        if [ $CLHEP_LIB_DIR ] ; then
+            DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH}:${CLHEP_LIB_DIR}
+        fi
     
         if [ $G4LIB_BUILD_GDML ] ; then
             DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH}:${XERCESCROOT}/lib
@@ -867,9 +877,14 @@ else
     else
         if [ $G4LIB_BUILD_SHARED ] ; then
             DYLD_LIBRARY_PATH=${G4LIB}/${G4SYSTEM}
-            DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH}:${CLHEP_LIB_DIR}
+
+            if [ $CLHEP_LIB_DIR ] ; then
+                DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH}:${CLHEP_LIB_DIR}
+            fi
         else
-            DYLD_LIBRARY_PATH=${CLHEP_LIB_DIR}
+            if [ $CLHEP_LIB_DIR ] ; then
+                DYLD_LIBRARY_PATH=${CLHEP_LIB_DIR}
+            fi
         fi
 
         if [ $G4LIB_BUILD_GDML ] ; then
@@ -885,35 +900,43 @@ fi
 # NB: ONLY echo if g4non_display not set
 if [ $G4LIB_BUILD_SHARED ] ; then
     if test "X$G4SYSTEM" = "XDarwin-g++" ; then
-        if [ X\$g4non_display = X ] ; then
-            echo 'DYLD_LIBRARY_PATH is set to include CLHEP and Geant4 libraries. '
+        if [ X$g4non_display = X ] ; then
+            if [ $CLHEP_LIB_DIR ] ; then
+                echo 'DYLD_LIBRARY_PATH is set to include CLHEP and Geant4 libraries. '
+            fi
         fi
     else
-        if [ X\$g4non_display = X ] ; then
-            echo 'LD_LIBRARY_PATH is set to include CLHEP and Geant4 libraries. '
+        if [ X$g4non_display = X ] ; then
+            if [ $CLHEP_LIB_DIR ] ; then
+                echo 'LD_LIBRARY_PATH is set to include CLHEP and Geant4 libraries. '
+            fi
         fi
     fi
 else
-    if test "X$G4SYSTEM" = "XDarwin-g++" ; then
-        if [ X\$g4non_display = X ] ; then
-            echo 'DYLD_LIBRARY_PATH is set to include CLHEP libraries. '
-        fi
-    else
-        if [ X\$g4non_display = X ] ; then
-            echo 'LD_LIBRARY_PATH is set to include CLHEP libraries. '
+    if [ $CLHEP_LIB_DIR ] ; then
+        if test "X$G4SYSTEM" = "XDarwin-g++" ; then
+            if [ X$g4non_display = X ] ; then
+                echo 'DYLD_LIBRARY_PATH is set to include CLHEP libraries. '
+            fi
+        else
+            if [ X$g4non_display = X ] ; then
+                echo 'LD_LIBRARY_PATH is set to include CLHEP libraries. '
+            fi
         fi
     fi
 fi
 
-if [ X\$g4non_display = X ] ; then
-    echo 'NOTE : you should verify that the correct path for the CLHEP library'
-    echo ''
-    echo ${CLHEP_BASE_DIR}/lib
-    echo ''
-    echo 'is included in the dynamic library search path ahead of any other'
-    echo 'installations of CLHEP on your system that may be referenced by this'
-    echo 'path.'
-    echo ''
+if [ X$g4non_display = X ] ; then
+    if [ $CLHEP_LIB_DIR ] ; then
+        echo 'NOTE : you should verify that the correct path for the CLHEP library'
+        echo ''
+        echo ${CLHEP_BASE_DIR}/lib
+        echo ''
+        echo 'is included in the dynamic library search path ahead of any other'
+        echo 'installations of CLHEP on your system that may be referenced by this'
+        echo 'path.'
+        echo ''
+    fi
 fi
 
 
