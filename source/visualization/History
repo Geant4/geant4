@@ -24,6 +24,11 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+17th June 2011 Ben Morgan (vis-V09-04-07)
+- opengl-V09-04-05 : Support added for CMake build of Xm and Win32 components.
+- raytracer-V09-04-04 : Changed to use new standard GEANT4_USE_RAYTRACER_X11
+  variable.
+
 17th June 2011  John Allison  (vis-V09-04-06)
 - opengl-V09-04-04: Re-instated cutaways in intersection mode.
 

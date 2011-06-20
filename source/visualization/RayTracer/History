@@ -24,6 +24,9 @@ committal in the CVS repository !
 History file for Ray Tracer category
 ---------------------------------------
 
+17th June 2011 Ben Morgan (raytracer-V09-04-04)
+- sources.cmake : Changed to use GEANT4_USE_RAYTRACER_X11 variable.
+
 24th May 2011 Ben Morgan (raytracer-V09-04-03)
 - sources.cmake : Added additional includes, definitions and link libraries
   to build X11 component of RayTracer, if it's enabled by the user.

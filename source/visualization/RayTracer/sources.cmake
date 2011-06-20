@@ -87,7 +87,7 @@ set(G4VIS_RAYTRACER_MODULE_LINK_LIBRARIES )
 #
 # X11 RayTracer only if selected
 #
-if(GEANT4_USE_RAYTRACERX)
+if(GEANT4_USE_RAYTRACER_X11)
     list(APPEND G4VIS_RAYTRACER_MODULE_HEADERS
         G4RayTracerX.hh
         G4RayTracerXViewer.hh

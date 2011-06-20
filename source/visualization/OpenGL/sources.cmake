@@ -116,6 +116,83 @@ if(GEANT4_USE_OPENGL_X11)
 endif()
 
 
+#----------------------------------------------------------------------------
+# Add Xm OpenGL Support if requested
+#
+if(GEANT4_USE_XM)
+    #
+    # Add in the extra Xm sources
+    #
+    list(APPEND G4VIS_MODULE_OPENGL_HEADERS
+        G4OpenGLImmediateXm.hh
+        G4OpenGLImmediateXmViewer.hh
+        G4OpenGLStoredXm.hh
+        G4OpenGLStoredXmViewer.hh
+        G4OpenGLXmBox.hh
+        G4OpenGLXmFourArrowButtons.hh
+        G4OpenGLXmFramedBox.hh
+        G4OpenGLXmPushButton.hh
+        G4OpenGLXmRadioButton.hh
+        G4OpenGLXmResources.hh
+        G4OpenGLXmSeparator.hh
+        G4OpenGLXmSliderBar.hh
+        G4OpenGLXmTextField.hh
+        G4OpenGLXmTopLevelShell.hh
+        G4OpenGLXmViewer.hh
+        G4OpenGLXmViewerMessenger.hh
+        G4OpenGLXmVWidgetComponent.hh
+        G4OpenGLXmVWidgetContainer.hh
+        G4OpenGLXmVWidgetObject.hh
+        G4OpenGLXmVWidgetShell.hh
+    )
+
+    list(APPEND G4VIS_MODULE_OPENGL_SOURCES
+        G4OpenGLImmediateXm.cc
+        G4OpenGLImmediateXmViewer.cc
+        G4OpenGLStoredXm.cc
+        G4OpenGLStoredXmViewer.cc
+        G4OpenGLXmBox.cc
+        G4OpenGLXmConvenienceRoutines.cc
+        G4OpenGLXmFourArrowButtons.cc
+        G4OpenGLXmFramedBox.cc
+        G4OpenGLXmMainMenubarCallbacks.cc
+        G4OpenGLXmPanningCallbacks.cc
+        G4OpenGLXmPushButton.cc
+        G4OpenGLXmRadioButton.cc
+        G4OpenGLXmRotationCallbacks.cc
+        G4OpenGLXmSeparator.cc
+        G4OpenGLXmSliderBar.cc
+        G4OpenGLXmStyleCallbacks.cc
+        G4OpenGLXmTextField.cc
+        G4OpenGLXmTopLevelShell.cc
+        G4OpenGLXmViewer.cc
+        G4OpenGLXmViewerMessenger.cc
+        G4OpenGLXmVWidgetComponent.cc
+        G4OpenGLXmVWidgetContainer.cc
+        G4OpenGLXmVWidgetObject.cc
+        G4OpenGLXmVWidgetShell.cc
+        G4OpenGLXmWindowHandlingCallbacks.cc
+    )
+
+    # Add the includes for X11, Xmu and Motif
+    include_directories(
+        ${X11_INCLUDE_DIR} 
+        ${X11_Xmu_INCLUDE_PATH}
+        ${MOTIF_INCLUDE_DIR}
+    )
+
+    # Add the compile definitions needed for the Xm component, remembering
+    # to add those for the UI part as well!!!
+    add_definitions(-DG4VIS_BUILD_OPENGLXM_DRIVER -DG4INTY_BUILD_XT -DG4UI_BUILD_XM_SESSION)
+
+    # Add in Xm, X11 libraries, plus Xmu library
+    list(APPEND G4VIS_MODULE_OPENGL_LINK_LIBRARIES 
+        ${MOTIF_LIBRARIES}
+        ${X11_LIBRARIES} 
+        ${X11_Xmu_LIBRARY}
+    )
+endif()
+
 
 #----------------------------------------------------------------------------
 # Add Qt OpenGL support if requested
@@ -164,6 +241,37 @@ if(GEANT4_USE_QT)
     list(APPEND G4VIS_MODULE_OPENGL_LINK_LIBRARIES ${QT_LIBRARIES})
 endif()
 
+
+#----------------------------------------------------------------------------
+# Add WIN32 support, if requested
+#
+if(GEANT4_USE_OPENGL_WIN32)
+    #
+    # Add in the extra sources
+    #
+    list(APPEND G4VIS_MODULE_OPENGL_HEADERS
+        G4OpenGLImmediateWin32.hh
+        G4OpenGLImmediateWin32Viewer.hh
+        G4OpenGLStoredWin32.hh
+        G4OpenGLStoredWin32Viewer.hh
+        G4OpenGLWin32Viewer.hh
+    )
+
+    list(APPEND G4VIS_MODULE_OPENGL_SOURCES
+        G4OpenGLImmediateWin32.cc
+        G4OpenGLImmediateWin32Viewer.cc
+        G4OpenGLStoredWin32.cc
+        G4OpenGLStoredWin32Viewer.cc
+        G4OpenGLWin32Viewer.cc
+    )
+
+    # Add the compile definitions
+    add_definitions(-DG4VIS_BUILD_OPENGLWIN32_DRIVER)
+
+    # That should be it for Win32...
+endif()
+
+    
 
 #----------------------------------------------------------------------------
 # Define the Geant4 Module.
