@@ -38,9 +38,6 @@
 #include "G4UIQt.hh"
 #include "G4Qt.hh"
 
-#elif defined(G4UI_USE_WT)
-#include "G4UIWt.hh"
-
 #elif defined(G4UI_USE_XM)
 #include "G4UIXm.hh"
 
@@ -68,10 +65,6 @@ G4UIExecutive::G4UIExecutive(G4int argc, char** argv)
 {
 #if defined(G4UI_USE_QT)
   session = new G4UIQt(argc, argv);
-  isGUI = true;
-
-#elif defined(G4UI_USE_WT)
-  session = new G4UIWt(argc, argv);
   isGUI = true;
 
 #elif defined(G4UI_USE_XM)
@@ -142,9 +135,6 @@ inline void G4UIExecutive::SessionStart()
 {
   session-> SessionStart();
 
-#if defined(G4UI_USE_WT)
-#else
   delete session;
-#endif
 }
 
