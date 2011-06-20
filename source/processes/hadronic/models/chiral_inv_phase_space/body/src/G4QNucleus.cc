@@ -1313,6 +1313,9 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
     G4double GSResLA= GSMass;      // Prototype of Residual Nuclear Mass for l+alpha
     G4double GSResAA= GSMass;      // Prototype of Residual Nuclear Mass for alpha+alpha
     G4double GSResNa= GSMass;      // Prototype of Residual Nuclear Mass for alpha
+    /*
+    // DHW 16 June 2011 : these variables set but not used.  Comment out to fix
+    //                    compiler warnings 
     G4double GSReNNN= GSMass;      // Prototype of Residual Nuclear Mass for n+n+n
     G4double GSReNNP= GSMass;      // Prototype of Residual Nuclear Mass for n+n+p
     G4double GSReNPP= GSMass;      // Prototype of Residual Nuclear Mass for n+p+p
@@ -1333,6 +1336,7 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
     G4double GSReNAA= GSMass;      // Prototype of Residual Nuclear Mass for n+a+a
     G4double GSReLAA= GSMass;      // Prototype of Residual Nuclear Mass for l+a+a
     G4double GSReAAA= GSMass;      // Prototype of Residual Nuclear Mass for a+a+a
+    */
     G4QPDGCode PQPDG(22);          // Prototype of QPDG for ResidualNucleus to proton
     G4QPDGCode NQPDG(22);          // Prototype of QPDG for ResidualNucleus to neutron
     G4QPDGCode LQPDG(22);          // Prototype of QPDG for ResidualNucleus to lambda
@@ -1397,7 +1401,10 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
         if(GSResPP+mProt+mProt+SPPBarr<totMass) ppFlag=true;
         if(Z>2&&a>3)
         {
+          /*
+          // DHW 16 June 2011: variable set but not used.  See note at line 1317.
           GSRePPP=G4QPDGCode().GetNuclMass(Z-3,N,S);
+          */
           //if(GSRePPP+mProt+mProt+mProt+SPPPBarr<totMass) pppF=true;
           if(N>1&&a>5)
           {
@@ -1412,12 +1419,18 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
         }
         if(N>0&&a>3)
         {
+          /*
+          // DHW  16 June 2011: variable set but not used.  See note at line 1317.
           GSReNPP=G4QPDGCode().GetNuclMass(Z-2,N-1,S);
+          */
           //if(GSReNPP+mProt+mProt+SPPBarr+mNeut<totMass) nppF=true;
         }
         if(S>0&&a>3)
         {
+          /*
+          // DHW  16 June 2011: variable set but not used.  See note at line 1317.
           GSRePPL=G4QPDGCode().GetNuclMass(Z-2,N,S-1);
+          */
           //if(GSRePPL+mProt+mProt+SPPBarr+mLamb<totMass) pplF=true;
         }
         if(N>1&&a>4)
@@ -1426,54 +1439,84 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
           {
             if(S>1)
             {
+              /*
+              // DHW  16 June 2011: variable set but not used.  See note at line 1317.
               GSReLLA=G4QPDGCode().GetNuclMass(Z-2,N-2,S-2);
+              */
               //if(GSReLLA+mAlph+ABarr+mLamb+mLamb<totMass) llaF=true;
             }
             if(N>2&&S>0)
             {
+              /*
+              // DHW 16 June 2011:  variable set but not used.  See note at line 1317.
               GSReNLA=G4QPDGCode().GetNuclMass(Z-2,N-3,S-1);
+              */
               //if(GSReNLA+mAlph+ABarr+mNeut+mLamb<totMass) nlaF=true;
             }
             if(Z>2&&S>0)
             {
+              /*
+              // DHW 16 June 2011:  variable set but not used.  See note at line 1317.
               GSRePLA=G4QPDGCode().GetNuclMass(Z-3,N-2,S-1);
+              */
               //if(GSRePLA+mAlph+SAPBarr+mProt+mLamb<totMass) plaF=true;
             }
             if(N>3)
             {
+              /*
+              // DHW 16 June 2011:  variable set but not used.  See note at line 1317.
               GSReNNA=G4QPDGCode().GetNuclMass(Z-2,N-4,S);
+              */
               //if(GSReNNA+mAlph+ABarr+mNeut+mNeut<totMass) nnaF=true;
             }
             if(Z>2&&N>2)
             {
+              /*
+              // DHW 16 June 2011:  variable set but not used.  See note at line 1317.
               GSReNPA=G4QPDGCode().GetNuclMass(Z-3,N-3,S);
+              */
               //if(GSReNPA+mAlph+SAPBarr+mProt+mNeut<totMass) npaF=true;
             }
             if(N>3)
             {
+              /*
+              // DHW 16 June 2011:  variable set but not used.  See note at line 1317.
               GSRePPA=G4QPDGCode().GetNuclMass(Z-4,N-2,S);
+              */
               //if(GSRePPA+mAlph+SPPABarr+mProt+mProt<totMass) ppaF=true;
             }
             if(a>9)
             {
               if(Z>3&&N>3&&S>0)
               {
+                /*
+                // DHW 16 June 2011:  variable set but not used.  See note at line 1317.
                 GSReLAA=G4QPDGCode().GetNuclMass(Z-4,N-4,S-1);
+                */
                 //if(GSReLAA+mLamb+mAlph+mAlph+SAABarr<totMass) laaF=true;
               }
               if(Z>3&&N>4)
               {
+                /*
+                // DHW 16 June 2011:  variable set but not used.  See note at line 1317.
                 GSReNAA=G4QPDGCode().GetNuclMass(Z-4,N-5,S);
+                */
                 //if(GSReNAA+mNeut+mAlph+mAlph+SAABarr<totMass) naaF=true;
               }
               if(Z>4&&N>3)
               {
+                /*
+                // DHW 16 June 2011:  variable set but not used.  See note at line 1317.
                 GSRePAA=G4QPDGCode().GetNuclMass(Z-5,N-4,S);
+                */
                 //if(GSRePAA+mProt+mAlph+mAlph+SAABarr<totMass) paaF=true;
               }
               if(a>12&&N>5&&Z>5)
               {
+                /*
+                // DHW 16 June 2011:  variable set but not used.  See note at line 1317.
                 GSReAAA=G4QPDGCode().GetNuclMass(Z-6,N-6,S);
+                */
                 //if(GSReAAA+mAlph+mAlph+mAlph+SAAABarr<totMass) aaaF=true;
               }
             }
@@ -1540,12 +1583,18 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
         }
         if(N>1)
         {
+          /* 
+          // DHW 16 June 2011: variable set but not used.  See note at line 1317;
           GSReNNP=G4QPDGCode().GetNuclMass(Z-1,N-2,S);
+          */
           //if(GSReNNP+mProt+PBarr+mNeut+mNeut<totMass) nnpF=true;
         }
         if(S>0)
         {
+          /*
+          // DHW 16 June 2011: variable set but not used.  See note at line 1317;
           GSReNPL=G4QPDGCode().GetNuclMass(Z-1,N-1,S-1);
+          */
           //if(GSReNPL+mProt+PBarr+mNeut+mLamb<totMass) nplF=true;
         }
       }
@@ -1559,7 +1608,10 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
         }
         if(S>1)
         {
+          /*
+          // DHW 16 June 2011: variable set but not used.  See note at line 1317;
           GSRePLL=G4QPDGCode().GetNuclMass(Z-1,N,S-2);
+          */
           //if(GSRePLL+mProt+PBarr+mLamb+mLamb<totMass) pllF=true;
         }
       }
@@ -1598,12 +1650,18 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
         if(GSResNN+mNeut+mNeut<totMass) nnFlag=true;
         if(N>2)
         {
+          /*
+          // DHW 16 June 2011: variable set but not used.  See note at line 1317.
           GSReNNN=G4QPDGCode().GetNuclMass(Z,N-3,S);
+          */
           //if(GSReNNN+mNeut*3<totMass) nnnF=true;
         }
         if(S>0)
         {
+          /*
+          // DHW 16 June 2011: variable set but not used.  See note at line 1317.
           GSReNNL=G4QPDGCode().GetNuclMass(Z,N-2,S-1);
+          */
           //if(GSReNNL+mNeut+mNeut+mLamb<totMass) nnlF=true;
         }
       }
@@ -1614,7 +1672,10 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
         if(GSResNL+mNeut+mLamb<totMass) nlFlag=true;
         if(S>1)
         {
+          /*
+          // DHW 16 June 2011: variable set but not used.  See note at line 1317.
           GSReNLL=G4QPDGCode().GetNuclMass(Z,N-1,S-2);
+          */
           //if(GSReNLL+mNeut+mLamb+mLamb<totMass) nllF=true;
         }
       }
@@ -1649,7 +1710,10 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
         if(GSResLL+mLamb+mLamb<totMass) llFlag=true;
         if(S>2)
         {
+          /*
+          // DHW 16 June 2011: variable set but not used.  See note at line 1317.
           GSReLLL=G4QPDGCode().GetNuclMass(Z,N,S-3);
+          */
           //if(GSReLLL+mLamb*3<totMass) lllF=true;
         }
       }

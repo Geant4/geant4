@@ -10231,12 +10231,19 @@ void G4QEnvironment::CheckMassShell(G4QHadronVector* HV)
             G4LorentzVector c4M = q4M + j4M;                    // Get 4-mom of Compound
             G4LorentzVector i4Mom(0.,0.,0.,qGM);
             G4LorentzVector j4Mom(0.,0.,0.,jGM);
+            /*
+            // DHW 16 June 2011: variable set but not used.  Comment out to fix compiler
+            //                   warning.    
             G4bool done = true;
+            */
             if(!G4QHadron(c4M).DecayIn2(i4Mom, j4Mom))
             {
               G4cout<<"-Warning-G4QEnv::ChkMShell: tM="<< c4M.m() <<", iM="<< qGM <<", jM="
                     << jGM <<", d="<< c4M.m()-qGM-jGM << G4endl;
+              /*
+              // DHW 16 June 2011: set but not used.
               done = false;
+              */
             }
             else
             {
