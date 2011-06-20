@@ -15,6 +15,48 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+June 20th 2011 - B.Morgan (cmake-V09-04-05)
+- Modules/Geant4LibraryOptions.cmake : On Unix platforms, set output directory
+  for libraries to end in the 'SYSTEM-COMPILER' tag expected by the old
+  toolchain. This allows the build tree to be used with the old toolchain.
+  #BUGFIX - 1200 (PARTIAL)
+- Modules/Geant4OptionalComponents.cmake : Now ensures that the static versions
+  of the internal G4clhep and G4expat libraries are used if geant4 is built
+  completely static, otherwise dynamic libs will be used. This is not perfect
+  but ensures builds will not fail.
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : Completely rewritten
+  to use new geant4-environment-skeleton.in template. Provides full setup
+  of environment from build and install trees, permitting developers to
+  build applications directly using the build tree. Also adds all currently
+  supported visualization/ui modules. Adds setting of the G4ORDPARAMTABLE
+  variable to support this new resource file.
+- Templates/geant4-environment-skeleton.in : NEW FILE : Universal shell script
+  skeleton for generating backward compatible environment variable setup.
+  # BUGFIX - 1202
+
+June 17th 2011 - B.Morgan (cmake-V09-04-04)
+- Modules/Geant4ConfigureConfigScript.cmake
+  Modules/Geant4ToolchainBackwardCompatibility.cmake : Updated to use new
+  GEANT4_USE_RAYTRACER_X11 variable.
+- Modules/Geant4InterfaceOptions.cmake : Corrected type in resetting of OpenGL
+  variables.
+  Changed GEANT4_USE_RAYTRACERX -> GEANT4_USE_RAYTRACER_X11 to be in line with
+  what's done for other drivers.
+
+June 17th 2011 - B.Morgan (cmake-V09-04-03)
+- Tagging : internal because this requires testing.
+  Full support also requires tags:
+   interfaces-V09-04-03
+   opengl-V09-04-05
+    
+- Modules/Geant4InterfaceOptions.cmake : Rewritten to enable correct switch
+  between Qt and X11 based GUIs on Mac, with consistent changes in OpenGL
+  location. Added in find_package for Motif. Added full option and find_package
+  for locating OpenGL on Win32.
+- Modules/Geant4OptionalComponents.cmake : Imporved documentation of external
+  CLHEP option. GEANT4_USE_SYSTEM_CLHEP made a standard option as it will
+  likely be used a lot to begin with.
+
 June 16th 2011 - B.Morgan (cmake-V09-04-02)
 - Modules/Geant4LibraryBuildOptions.cmake : Default to building shared libraries
   on all platforms, but warn about possible link errors on MSVC when building

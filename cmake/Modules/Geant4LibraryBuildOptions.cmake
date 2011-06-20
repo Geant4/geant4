@@ -130,11 +130,47 @@ endif()
 # (especially if developers use non-CMake tools).
 # We therefore set the output directory of runtime, library and archive
 # targets to some low level directories under the build tree.
+# On Unices, we try to make the output directory backward compatible
+# with the old style 'SYSTEM-COMPILER' format so that applications may be
+# built against the targets in the build tree.
 # Note that for multi-configuration generators like VS and Xcode, these
-# directories will have the configuration type (e.g. Debug) appended to them.
+# directories will have the configuration type (e.g. Debug) appended to them,
+# so are not backward compatible with the old Make toolchain in these cases.
 #
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/runtime)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/library)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/archive)
+# Also, we only do this on UNIX because we want to avoid mixing static and
+# dynamic libraries on windows until the differences are better understood.
+#------------------------------------------------------------------------------
+# Determine the backward compatible system name
+#
+if(NOT WIN32)
+    set(GEANT4_SYSTEM ${CMAKE_SYSTEM_NAME})
+else()
+    set(GEANT4_SYSTEM "WIN32")
+endif()
 
+#------------------------------------------------------------------------------
+# Determine the backward compatible compiler name
+#
+if(CMAKE_COMPILER_IS_GNUCXX)
+    set(GEANT4_COMPILER "g++")
+elseif(MSVC)
+    set(GEANT4_COMPILER "VC")
+elseif(CMAKE_CXX_COMPILER MATCHES "icpc.*")
+    set(GEANT4_COMPILER "icc")
+else()
+    set(GEANT4_COMPILER "UNSUPPORTED")
+endif()
+
+#----------------------------------------------------------------------------
+# Set the output paths to be backward compatible on UNIX
+if(NOT UNIX)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/runtime)
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/library)
+    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/archive)
+else()
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/runtime)
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY
+        ${PROJECT_BINARY_DIR}/outputs/library/${GEANT4_SYSTEM}-${GEANT4_COMPILER})
+    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+endif()
 

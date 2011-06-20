@@ -18,7 +18,7 @@
 
 #----------------------------------------------------------------------------
 # Find required CLHEP package
-# We prefer to use our internal CLHEP library, but provide an advanced option
+# We prefer to use our internal CLHEP library, but provide an option
 # to allow an external CLHEP to be used should the user require this. 
 # We also allow that it can be automatically enabled by providing
 # the CLHEP_ROOT_DIR option (which FindCLHEP will recognize)
@@ -31,10 +31,9 @@ else()
 endif()
 
 option(GEANT4_USE_SYSTEM_CLHEP 
-    "Use system CLHEP library" 
+    "Use external CLHEP library" 
     ${_default_use_system_clhep}
 )
-mark_as_advanced(GEANT4_USE_SYSTEM_CLHEP)
 
 if(GEANT4_USE_SYSTEM_CLHEP)
     # We keep this as required, because if the user chooses to use a
@@ -45,10 +44,14 @@ else()
     set(CLHEP_FOUND TRUE)
     set(CLHEP_INCLUDE_DIRS
         "${PROJECT_SOURCE_DIR}/source/externals/clhep/include")
-    set(CLHEP_LIBRARIES G4clhep)
+    if(BUILD_SHARED_LIBS)
+        set(CLHEP_LIBRARIES G4clhep)
+    else()
+        set(CLHEP_LIBRARIES G4clhep-static)
+    endif()
 endif()
 
-GEANT4_ADD_FEATURE(GEANT4_USE_SYSTEM_CLHEP "Using system install of CLHEP")
+GEANT4_ADD_FEATURE(GEANT4_USE_SYSTEM_CLHEP "Using external install of CLHEP")
 
 
 #------------------------------------------------------------------------------
@@ -72,7 +75,11 @@ else()
     else()
         set(EXPAT_FOUND TRUE)
         set(EXPAT_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/source/externals/expat/include)
-        set(EXPAT_LIBRARIES G4expat)
+        if(BUILD_SHARED_LIBS)
+            set(EXPAT_LIBRARIES G4expat)
+        else()
+            set(EXPAT_LIBRARIES G4expat-static)
+        endif()
     endif()
 endif()
 

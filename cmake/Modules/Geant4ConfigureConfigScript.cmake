@@ -31,7 +31,7 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
     endif()
 
     # - RayTracerX
-    if(GEANT4_USE_RAYTRACERX)
+    if(GEANT4_USE_RAYTRACER_X11)
         set(G4_BUILTWITH_RAYTRACERX11 "yes")
         set(G4_CONFIG_NEEDS_X11 TRUE)
     else()
