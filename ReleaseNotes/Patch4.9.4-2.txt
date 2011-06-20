@@ -220,6 +220,9 @@ List of fixes included in this public patch since the public release 9.4.p01:
       o Use internal G4RotationMatrix typedef in G4HepRepFileSceneHandler
         instead of native CLHEP type.
       o Correction in GNUmakefile.
+    + OpenGL:
+      o Re-instated cutaways in intersection mode in G4OpenGLViewer, which
+        was apparently commented out accidentally in 9.4.
     + RayTracer:
       o Trap recursive calls in G4RayTracerViewer::DrawView(), thus avoiding
         warning messages for each pixel when endOfEventAction() is "refresh".
