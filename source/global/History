@@ -16,10 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-June 15, 2011 B. Morgan(global-V09-04-09)
-- Proposed tag for beta release.
 
-May 19, 2011 B. Morgan(global-v09-04-08)
+June 20, 2011 V.Ivanchenko (global-V09-04-10)
+- Added protection in G4Pow::powN() method for high exponent values.
+
+June 15, 2011 B.Morgan (global-V09-04-09)
+- More fixes for CMake setup.
+
+May 19, 2011 B.Morgan (global-v09-04-08)
 - CMakeLists.txt : Added G4IOS_ALLOC_EXPORT compiler definition via 
   add_definitions so all submodules pick it up.
 

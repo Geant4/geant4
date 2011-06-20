@@ -94,6 +94,7 @@ G4Pow::~G4Pow()
 
 G4double G4Pow::powN(G4double x, G4int n)
 {
+  if(std::abs(n) > 8) { return std::pow(x, G4double(n)); }
   G4double res = 1.0;
   if(n >= 0) { for(G4int i=0; i<n; ++i) { res *= x; } }
   else if((n < 0) && (x != 0.0))
