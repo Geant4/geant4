@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18-06-2011, B.Morgan                   (phys-lists-V09-04-32)
+- builders/CMakeLists.txt - added install of OrderingParameterTable.
+
 14-06-2011, V.Ivanchenko               (phys-lists-V09-04-31)
 - G4HadronElasticPhysics - added LHEP model for anti-nuclei below 100 MeV  
 
