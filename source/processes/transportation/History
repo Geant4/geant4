@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+June 10th, 2011, J.Apostolakis  transport-V09-04-06
+------------------------------
+- Fix for invalid safety passed to SafetyHelper.
+
 June 10th, 2011, J.Apostolakis  transport-V09-04-05
 ------------------------------
 - Fix G4Transportation::AlongStepDoIt

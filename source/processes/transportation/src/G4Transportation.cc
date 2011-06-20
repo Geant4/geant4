@@ -143,7 +143,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
                                              G4double& currentSafety,
                                              G4GPILSelection* selection )
 {
-  G4double geometryStepLength, newSafety ; 
+  G4double geometryStepLength= -1.0, newSafety= -1.0; 
   fParticleIsLooping = false ;
 
   // Initial actions moved to  StartTrack()   
@@ -311,7 +311,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 	//
 	fPreviousSftOrigin = startPosition ;
 	fPreviousSafety    = currentSafety ;         
-	fpSafetyHelper->SetCurrentSafety( newSafety, startPosition);
+	fpSafetyHelper->SetCurrentSafety( currentSafety, startPosition);
      }
      else
      {
