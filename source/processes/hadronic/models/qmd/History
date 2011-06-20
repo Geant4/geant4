@@ -12,6 +12,9 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+17-June-2010 Tatsumi Koi (hadr-qmd-V09-04-00)
+-Fix gcc 4.6 compilation warnings 
+	src/G4QMDCollision.cc  
 
 18-November-2010 Tatsumi Koi (hadr-qmd-V09-03-00)
 - Enable RQMD
