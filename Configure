@@ -20,7 +20,7 @@
 
 # $Id: Head.U,v 1.3 2002-06-23 20:31:44 sadilov Exp $
 #
-# Generated on Mon May  9 10:26:07 BST 2011 [metaconfig 3.0 PL70]
+# Generated on Fri Jun 17 18:58:52 BST 2011 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -184,6 +184,7 @@ g4radioactivedata=''
 g4realsurfacedata=''
 g4clhep_base_dir=''
 g4clhep_include_dir=''
+g4clhep_internal=''
 g4clhep_lib=''
 g4clhep_lib_dir=''
 g4lib_build_dll=''
@@ -287,6 +288,8 @@ if test -f /etc/unixtovms.exe; then
 	eunicefix=/etc/unixtovms.exe
 fi
 
+#INITIALIZE CLHEP AND EXPAT OPTIONS
+g4clhep_internal='y'
 #INITIALIZE LIBRARY BUILD OPTIONS
 g4lib_build_shared='y'
 g4lib_use_shared='y'
@@ -3784,39 +3787,61 @@ done
 
 
 echo " "
-echo "*CHECKS FOR REQUIRED EXTERNAL PACKAGE CLHEP*"
+echo "*CHECKS FOR REQUIRED PACKAGES*"
 
-if test "X$g4clhep_base_dir" = "X" ; then
-	clhep_dirs=`find $g4clhep_base_dir /usr/local/include /usr/include -type d -name CLHEP 2>/dev/null |xargs echo`
-fi
+#----------------------------------------------------------------------------
+# Internal or External CLHEP?
+# We prefer and default to an internal CLHEP, but proved an option to use
+# an external one if user really needs this
+#
+g4message="Do you want to use Geant4's internal CLHEP library?"
+dflt=$g4clhep_internal
+rp=$g4message
+. ./myread
+g4clhep_internal=$ans
 
-if test "X$clhep_dirs" != "X" ; then
-	g4clhep_base_dir_found=`echo $clhep_dirs|cut -d" " -f1`
-	g4clhep_base_dir_found=`dirname $g4clhep_base_dir_found`
-	g4clhep_base_dir_found=`dirname $g4clhep_base_dir_found`
 
-	g4clhep_base_dir=$g4clhep_base_dir_found
-fi
+case $g4clhep_internal in
+    y*|Y*)
+        # Unset all clhep variables so they are not exported to the build
+        g4clhep_base_dir=''
+        g4clhep_include_dir=''
+        g4clhep_lib_dir=''
+        g4clhep_lib=''
+        ;;
+    n*|N*)
+        # Then we need to do our familiar search for an external one...
+
+        if test "X$g4clhep_base_dir" = "X" ; then
+        	clhep_dirs=`find $g4clhep_base_dir /usr/local/include /usr/include -type d -name CLHEP 2>/dev/null |xargs echo`
+        fi
+
+        if test "X$clhep_dirs" != "X" ; then
+        	g4clhep_base_dir_found=`echo $clhep_dirs|cut -d" " -f1`
+        	g4clhep_base_dir_found=`dirname $g4clhep_base_dir_found`
+        	g4clhep_base_dir_found=`dirname $g4clhep_base_dir_found`
+
+        	g4clhep_base_dir=$g4clhep_base_dir_found
+        fi
 
 
-if test "X$g4clhep_base_dir" != "X" ; then
-	echo "checking for a CLHEP installation... $g4clhep_base_dir"
+        if test "X$g4clhep_base_dir" != "X" ; then
+        	echo "checking for a CLHEP installation... $g4clhep_base_dir"
+        	echo " "
 
-	echo " "
-	g4message="Is this the CLHEP installation you want to use?"
+        	g4message="Is this the CLHEP installation you want to use?"
+        	dflt=$g4clhep_base_dir
+        	fn='d~'
+        	rp=$g4message
+        	. ./getfile
 
-	dflt=$g4clhep_base_dir
-	fn='d~'
-	rp=$g4message
-	. ./getfile
-
-	cend="no"
-	while test "$cend" = "no" ; do
-		if test -e "$ans/include/CLHEP" ; then
-			cend="yes"
-			g4clhep_base_dir=$ans
-		else
-			g4message=`cat << EOM
+        	cend="no"
+        	while test "$cend" = "no" ; do
+		        if test -e "$ans/include/CLHEP" ; then
+        			cend="yes"
+        			g4clhep_base_dir=$ans
+		        else
+        			g4message=`cat << EOM
 
 Could not find CLHEP installed in $ans!
 Please, specify where CLHEP is installed:
@@ -3825,15 +3850,15 @@ CLHEP_BASE_DIR:
 
 EOM`
 
-			dflt=""
-			fn='d~'
-			rp=$g4message
-			. ./getfile
-		fi
-	done
+			        dflt=""
+        			fn='d~'
+		        	rp=$g4message
+        			. ./getfile
+		        fi
+        	done    
 
-else
-	g4message=`cat << EOM
+        else
+        	g4message=`cat << EOM
 
 Could not find CLHEP installed on this system!
 Please, specify where CLHEP is installed:
@@ -3842,18 +3867,18 @@ CLHEP_BASE_DIR:
 
 EOM`
 
-	dflt=""
-	fn='d~'
-	rp=$g4message
-	. ./getfile
+        	dflt=""
+        	fn='d~'
+        	rp=$g4message
+        	. ./getfile
 
-	cend="no"
-	while test "$cend" = "no" ; do
-		if test -e "$ans/include/CLHEP" ; then
-			cend="yes"
-			g4clhep_base_dir=$ans
-		else
-			g4message=`cat << EOM
+        	cend="no"
+        	while test "$cend" = "no" ; do
+        		if test -e "$ans/include/CLHEP" ; then
+		        	cend="yes"
+	    		    g4clhep_base_dir=$ans
+    		    else
+        			g4message=`cat << EOM
 
 Could not find CLHEP installed in $ans!
 Please, specify where CLHEP is installed:
@@ -3862,38 +3887,38 @@ CLHEP_BASE_DIR:
 
 EOM`
 
-			dflt=""
-			fn='d~'
-			rp=$g4message
-			. ./getfile
-		fi
-	done
-fi
+			        dflt=""
+        			fn='d~'
+        			rp=$g4message
+		        	. ./getfile
+        		fi
+        	done
+        fi
 
-case "$g4clhep_include_dir" in
-'')
-	g4clhep_include_dir=$g4clhep_base_dir/include
-	;;
-esac
+        case "$g4clhep_include_dir" in
+            '')
+            	g4clhep_include_dir=$g4clhep_base_dir/include
+            	;;
+        esac
 
-case "$g4clhep_lib_dir" in
-'')
-	g4clhep_lib_dir=$g4clhep_base_dir/lib
-	;;
-esac
+        case "$g4clhep_lib_dir" in
+            '')
+	            g4clhep_lib_dir=$g4clhep_base_dir/lib
+            	;;
+        esac
 
-case "$g4clhep_lib" in
-'')
-	if test "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7"; then
-	g4clhep_lib="CLHEP.lib"
-	else
-	g4clhep_lib=CLHEP
-	fi
-	;;
-esac
+        case "$g4clhep_lib" in
+            '')
+            	if test "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7"; then
+                	g4clhep_lib="CLHEP.lib"
+            	else
+                	g4clhep_lib=CLHEP
+            	fi
+    	        ;;
+        esac
 
-while test 1 = 1  ; do
-	g4message_1=`cat << You
+        while test 1 = 1  ; do
+        	g4message_1=`cat << You
 
 You can customize paths and library name of you CLHEP installation:
 
@@ -3903,50 +3928,98 @@ You can customize paths and library name of you CLHEP installation:
 
 You`
 
-	g4message_2=" need to use full library name with its extension (e.g. libCLHEP.lib)."
+        	g4message_2=" need to use full library name with its extension (e.g. libCLHEP.lib)."
 
-	g4message_3=`cat << EOM
+        	g4message_3=`cat << EOM
 
 To modify default settings, select number above (e.g. 2)
 EOM`
 
 
-	if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
-		rp=$g4message_1$g4message_3
-	else
-		rp=$g4message_1$g4message_2$g4message_3
-	fi
+        	if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
+		        rp=$g4message_1$g4message_3
+        	else
+		        rp=$g4message_1$g4message_2$g4message_3
+        	fi
 
-	dflt="Press [Enter] for default settings"
-	. ./myread
-	gans=$ans
+        	dflt="Press [Enter] for default settings"
+        	. ./myread
+	        gans=$ans
 
-	case $gans in
-	1) 
-		dflt=$g4clhep_include_dir
-		fn='d~'
-		rp="Where is the CLHEP include directory?"
-		. ./getfile
-		g4clhep_include_dir=$ans
-		;;
-	2) 
-		dflt=$g4clhep_lib_dir
-		fn='d~'
-		rp="Where is the CLHEP lib directory?"
-		. ./getfile
-		g4clhep_lib_dir=$ans
-		;;
-	3) 
-		dflt=$g4clhep_lib
-		rp="What is the name of the CLHEP library?"
-		. ./myread
-		g4clhep_lib=$ans
-		;;
-	*) 
-		break
-		;;
-	esac
-done
+	        case $gans in
+            	1) 
+            		dflt=$g4clhep_include_dir
+            		fn='d~'
+            		rp="Where is the CLHEP include directory?"
+            		. ./getfile
+            		g4clhep_include_dir=$ans
+            		;;
+            	2) 
+            		dflt=$g4clhep_lib_dir
+            		fn='d~'
+            		rp="Where is the CLHEP lib directory?"
+            		. ./getfile
+            		g4clhep_lib_dir=$ans
+            		;;
+            	3) 
+            		dflt=$g4clhep_lib
+            		rp="What is the name of the CLHEP library?"
+            		. ./myread
+            		g4clhep_lib=$ans
+            		;;
+            	*) 
+            		break
+            		;;
+        	esac
+        done
+    ;;
+esac
+
+
+#----------------------------------------------------------------------------
+# On non-WIN32 only, perform a sanity check for Expat
+#
+if test "X$g4osname" != "XWIN32" ; then
+    echo " "
+    expat_loc=`./loc expat.h no /usr/include`
+    echo "checking for expat.h... $expat_loc"
+
+    if test "x$expat_loc" = "xno" ; then
+        echo "error: could not find a system install of expat..."
+        exit 1
+    fi
+
+    expat_lib_loc=`./loc libexpat.so no /usr/lib64 /usr/lib /usr/lib32`
+
+    if test "x$expat_lib_loc" = "xno" ; then
+        # Might be on Darwin
+        expat_lib_loc=`./loc libexpat.dylib no /usr/lib /usr/lib64 /usr/lib32`
+    fi
+      
+    echo "checking for expat library... $expat_lib_loc"
+
+    if test "x$expat_lib_loc" = "xno" ; then
+        echo " "
+        echo "error: could not find a system install of expat..."
+        echo " "
+        if test "X$g4osname" = "XDarwin" ; then
+            echo "Expat is always installed on Darwin - is your system o.k.?"
+            echo " "
+        else
+            echo "Expat is usually present in the default install of most Linux distributions"
+            echo " "
+            echo "Check to see if you have expat.h and libexpat.so installed under the usual"
+            echo "/usr/include and /usr/lib(?ARCH?) directories"
+            echo " "
+            echo "If not, check for the Expat libraries and development packages"
+            echo "in the package manager for your system"
+            echo " "
+        fi
+
+        
+        exit 1
+    fi
+fi
 
 
 echo " "
@@ -5960,6 +6033,7 @@ g4base='$g4base'
 g4bin='$g4bin'
 g4clhep_base_dir='$g4clhep_base_dir'
 g4clhep_include_dir='$g4clhep_include_dir'
+g4clhep_internal='$g4clhep_internal'
 g4clhep_lib='$g4clhep_lib'
 g4clhep_lib_dir='$g4clhep_lib_dir'
 g4compiler='$g4compiler'
