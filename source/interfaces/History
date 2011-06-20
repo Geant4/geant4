@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+17th June 2011 Ben Morgan (interfaces-V09-04-03)
+- common/sources.cmake
+- basic/sources.cmake : Support for Win32 and Xm added
 
 3rd June 2011  John Allison  (interfaces-V09-04-02)
 - Tagged.
