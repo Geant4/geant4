@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20.06.2011, MGP, tag empii-V09-04-00
+            Remove compilation warnings with gcc-4.6.0 notified by G. Cosmo
+
 25.11.2010, MGP, tag empii-V09-03-05
             Remove annoying printout
 
