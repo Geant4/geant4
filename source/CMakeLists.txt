@@ -14,6 +14,7 @@
 add_subdirectory(digits_hits)
 add_subdirectory(error_propagation)
 add_subdirectory(event)
+add_subdirectory(externals)
 
 # Target G4g3tog4 is optional based on user selection...
 if(GEANT4_USE_GEANT3TOGEANT4)
