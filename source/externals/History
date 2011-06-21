@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+20-June-2011: B.Morgan (externals-V09-04-06)
+- Modified install of CLHEP headers to use Geant4 name on end of DESTINATION
+  as per changes in cmake-V09-04-06 (REQUIRES cmake-V09-04-06).
+
 14-June-2011: B.Morgan (externals-V09-04-05)
 - Tidied up CMakeLists.txt for G4clhep to use standard library target macro.
 

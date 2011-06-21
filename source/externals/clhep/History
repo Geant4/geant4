@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20 June 2011 - B.Morgan
+- CMakeLists.txt : Install CLHEP headers to
+  CMAKE_INSTALL_INCLUDEDIR/PROJECT_NAME in line with new standard install
+  directory structure.
+
 14 June 2011 - B.Morgan
 - CMakeLists.txt : Build G4clhep through standard GEANT4_LIBRARY_TARGET
   macro. Keep installation of headers as is.

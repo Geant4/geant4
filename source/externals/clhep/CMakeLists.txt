@@ -193,7 +193,7 @@ GEANT4_LIBRARY_TARGET(NAME G4clhep SOURCES ${G4clhep_SOURCES} ${G4clhep_HEADERS}
 # Install the headers, retaining their nested structure
 #
 install(DIRECTORY include/
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
     COMPONENT Development
     PATTERN ".svn" EXCLUDE
     PATTERN "*.h"
