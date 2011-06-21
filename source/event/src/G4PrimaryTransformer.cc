@@ -85,8 +85,9 @@ void G4PrimaryTransformer::GenerateTracks(G4PrimaryVertex* primaryVertex)
   G4double WV = primaryVertex->GetWeight();
 
 #ifdef G4VERBOSE
-  if(verboseLevel>1)
-  { 
+  if(verboseLevel>2) { 
+    primaryVertex->Print();
+  } else if (verboseLevel==1) {
     G4cout << "G4PrimaryTransformer::PrimaryVertex ("
            << X0 / mm << "(mm),"
            << Y0 / mm << "(mm),"

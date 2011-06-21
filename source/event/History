@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 21st, 2011, G.Cosmo (event-V09-04-05)
+- Fixed compilation warnings on gcc-4.6.0 for unused variables in
+  G4SPSPosDistribution and G4AdjointPosOnPhysVolGenerator sources.
+
+June 18th, 2011, H.Kurashige (event-V09-04-04)
+- Modify G4ParticleGun (and related) to use momentum direction
+
 June 16th, 2011, H.Kurashige (event-V09-04-03)
 - Fix bugs in G4HEPEvtInterface. 
   In creation of G4PrimaryParticle, only PDG code is given to the constructor. Then mass and momentum is set .

@@ -437,12 +437,12 @@ void G4SPSPosDistribution::GeneratePointsOnSurface()
 
   if(Shape == "Sphere")
     {
-      G4double tantheta;
+      // G4double tantheta;
       theta = posRndm->GenRandPosTheta();
       phi = posRndm->GenRandPosPhi();
       theta = std::acos(1. - 2.*theta); // theta isotropic
       phi = phi * 2. * pi;
-      tantheta = std::tan(theta);
+      // tantheta = std::tan(theta);
       
       x = Radius * std::sin(theta) * std::cos(phi);
       y = Radius * std::sin(theta) * std::sin(phi);
