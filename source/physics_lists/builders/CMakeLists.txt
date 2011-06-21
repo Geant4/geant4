@@ -16,10 +16,4 @@ if(GEANT4_BUILD_GRANULAR_LIBS)
     GEANT4_GRANULAR_LIBRARY_TARGET(COMPONENT sources.cmake)
 endif()
 
-#
-# Need to install the OrderingParameterTable
-#
-install(FILES OrderingParameterTable
-    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/Geant4-${Geant4_VERSION}/physics_lists
-)
 

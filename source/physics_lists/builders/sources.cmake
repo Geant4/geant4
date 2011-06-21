@@ -18,6 +18,7 @@
 
 # List external includes needed.
 include_directories(${CLHEP_INCLUDE_DIRS})
+include_directories(${EXPAT_INCLUDE_DIRS})
 
 # List internal includes needed.
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/magneticfield/include)
@@ -141,7 +142,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4HadronHElasticPhysics.hh
         G4HadronQElasticPhysics.hh
         G4HyperonCHIPSBuilder.hh
-	G4HyperonFTFPBuilder.hh
+	    G4HyperonFTFPBuilder.hh
         G4HyperonLHEPBuilder.hh
         G4InclAblaNeutronBuilder.hh
         G4InclAblaPiKBuilder.hh
