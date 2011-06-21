@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 19, 2011 Ben Morgan                     geometry-V09-04-00
+-----------------------------
+- CMakeLists.txt : Added G4GEOM_ALLOC_EXPORT compiler definition via 
+  add_definitions so all submodules pick it up.
+
+
 May 18, 2007   Gabriele Cosmo               geometry-V08-03-01
 -----------------------------
 - Includes tags: geomdiv-V08-03-01, geomnav-V08-03-02, breps-V08-03-01,
