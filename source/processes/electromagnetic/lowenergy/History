@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21.06.2011  L. Pandola, tag emlowen-V09-04-49
+	    Fixed bug in G4PenelopeOscillatorManager reported by 
+	    Gunter F. while testing under Windows
+
 16.06.2011  V. Ivanchenko, tag emlowen-V09-04-48
             G4LivermorePolarizedGammaConversionModel - fixed problem 
             introduced in the previous tag

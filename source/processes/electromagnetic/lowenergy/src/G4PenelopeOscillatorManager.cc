@@ -807,13 +807,13 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
       if (Nost>firstIndex+1)
 	{
 	  removedLevels = 0;
-	  for (size_t i=firstIndex;i<Nost-1;i++)
+	  for (size_t i=firstIndex;i<theTable->size()-1;i++)
 	    {
 	      G4bool skipLoop = false;
 	      G4int shellFlag = (*theTable)[i]->GetShellFlag();
 	      G4double ionEne = (*theTable)[i]->GetIonisationEnergy();
 	      G4double resEne = (*theTable)[i]->GetResonanceEnergy();
-	      G4double resEnePlus1 = (*theTable)[i+1]->GetResonanceEnergy();
+	      G4double resEnePlus1 = (*theTable)[i+1]->GetResonanceEnergy();	      	     
 	      G4double oscStre = (*theTable)[i]->GetOscillatorStrength();
 	      G4double oscStrePlus1 = (*theTable)[i+1]->GetOscillatorStrength();
 	      //if (shellFlag < 10 && ionEne>cutEnergy) in Penelope
@@ -851,14 +851,14 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 		  //We've lost anyway the track of the original level
 		  (*theTable)[i]->SetParentShellID((*theTable)[i]->GetShellFlag());
 
-		  if (i<Nost-2)
+		  
+		  if (i<theTable->size()-2)
 		    {
-		      for (size_t ii=i+1;ii<Nost-1;ii++)
-			(*theTable)[ii] = (*theTable)[ii+1];		
+		      for (size_t ii=i+1;ii<theTable->size()-1;ii++)			
+			(*theTable)[ii] = (*theTable)[ii+1];	       			  			
 		    }
 		  //G4cout << theTable->size() << G4endl;
-		  //theTable->erase(theTable->end()); 
-		  theTable->erase(theTable->begin()+theTable->size()-1); //delete last element
+		  theTable->erase(theTable->begin()+theTable->size()-1); //delete last element		  
 		  removedLevels++;
 		}		      
 	    }
@@ -930,12 +930,12 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
       if (Nost>firstIndex+1)
 	{
 	  removedLevels = 0;
-	  for (size_t i=firstIndex;i<Nost-1;i++)
+	  for (size_t i=firstIndex;i<theTableC->size()-1;i++)
 	    {
 	      G4bool skipLoop = false;
 	      //G4int shellFlag = (*theTableC)[i]->GetShellFlag();
 	      G4double ionEne = (*theTableC)[i]->GetIonisationEnergy();
-	      G4double ionEnePlus1 = (*theTableC)[i+1]->GetIonisationEnergy();
+	      G4double ionEnePlus1 = (*theTableC)[i+1]->GetIonisationEnergy();	   
 	      G4double oscStre = (*theTableC)[i]->GetOscillatorStrength();
 	      G4double oscStrePlus1 = (*theTableC)[i+1]->GetOscillatorStrength();
 	      //if (shellFlag < 10 && ionEne>cutEnergy) in Penelope
@@ -963,13 +963,12 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 		  (*theTableC)[i]->SetShellFlag(30);
 		  (*theTableC)[i]->SetParentShellID((*theTableC)[i]->GetShellFlag());
 
-		  if (i<Nost-2)
+		  if (i<theTableC->size()-2)
 		    {
-		      for (size_t ii=i+1;ii<Nost-1;ii++)
-			(*theTableC)[ii] = (*theTableC)[ii+1];		
+		      for (size_t ii=i+1;ii<theTableC->size()-1;ii++)			
+			(*theTableC)[ii] = (*theTableC)[ii+1];							
 		    }
 		  theTableC->erase(theTableC->begin()+theTableC->size()-1); //delete last element
-		  //theTableC->erase(theTableC->end()); //delete last element
 		  removedLevels++;
 		}		      
 	    }
