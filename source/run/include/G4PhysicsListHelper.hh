@@ -84,6 +84,7 @@ class G4PhysicsListHelper
 
   private: 
     void ReadOrdingParameterTable();
+    void ReadInDefaultrderingParameter();
 
   ///////////////////////////////////////////////////////////////////////
   public: // with description

@@ -263,6 +263,9 @@ void G4PhysicsListHelper::AddTransportation()
   
 void G4PhysicsListHelper::ReadOrdingParameterTable()
 {
+  G4bool readInFile = false;
+  std::ifstream fIn;  
+
   if( getenv("G4ORDPARAMTABLE") ){
     ordParamFileName = getenv("G4ORDPARAMTABLE");
 #ifdef G4VERBOSE
@@ -272,36 +275,24 @@ void G4PhysicsListHelper::ReadOrdingParameterTable()
 	     << G4endl; 
     }
 #endif
-  } else {
-    if (getenv("G4INSTALL")){
-      ordParamFileName  = getenv("G4INSTALL");
-    } else {
-      if (getenv("G4WORKDIR")){
-	ordParamFileName = getenv("G4WORKDIR");
-      } else {
-	ordParamFileName = ".";
-      }
-    }
-    ordParamFileName += "/source/physics_lists/builders/";
-    ordParamFileName += "OrderingParameterTable";
-  } 
- 
-  std::ifstream fIn;  
-  // open input file //
-  fIn.open(ordParamFileName, std::ios::in);
-  // check if the file has been opened successfully 
-  if (!fIn) {
+    // open input file //
+    fIn.open(ordParamFileName, std::ios::in);
+    // check if the file has been opened successfully 
+    if (!fIn) {
 #ifdef G4VERBOSE
-    if (verboseLevel >0) {
-      G4cout << "G4PhysicsListHelper::ReadOrdingParameterTable  "
-	     << " Can not open file " << ordParamFileName << G4endl;
-    }
+      if (verboseLevel >0) {
+	G4cout << "G4PhysicsListHelper::ReadOrdingParameterTable  "
+	       << " Can not open file " << ordParamFileName << G4endl;
+      }
 #endif
-    G4Exception("G4PhysicsListHelper::ReadOrdingParameterTable",
-		"RUN103", JustWarning, 
-		"Fail to open ordering paramter table ");
-    return;
+      G4Exception("G4PhysicsListHelper::ReadOrdingParameterTable",
+		  "RUN103", JustWarning, 
+		  "Fail to open ordering paramter table ");
+    } else {
+      readInFile = true;
+    }
   }
+ 
 
   // create OrdParamTable   
   if (theTable !=0) {
@@ -312,18 +303,23 @@ void G4PhysicsListHelper::ReadOrdingParameterTable()
   }
   theTable = new G4OrdParamTable();
   sizeOfTable=0;
-  // read in the file and fill the table 
-  while(!fIn.eof()) {
-    G4PhysicsListOrderingParameter tmp;
-    G4int flag;
-    fIn >> tmp.processTypeName >>  tmp.processType >> tmp.processSubType
-	>> tmp.ordering[0] >> tmp.ordering[1] >> tmp.ordering[2] >> flag;
-    tmp.isDuplicable = (flag!=0);
-    theTable->push_back(tmp);
-    sizeOfTable +=1;  
+
+  if (readInFile){
+    // read in the file and fill the table 
+    while(!fIn.eof()) {
+      G4PhysicsListOrderingParameter tmp;
+      G4int flag;
+      fIn >> tmp.processTypeName >>  tmp.processType >> tmp.processSubType
+	  >> tmp.ordering[0] >> tmp.ordering[1] >> tmp.ordering[2] >> flag;
+      tmp.isDuplicable = (flag!=0);
+      theTable->push_back(tmp);
+      sizeOfTable +=1;  
+    }
+    fIn.close();
+  } else {
+    ReadInDefaultrderingParameter();
   }
-  fIn.close();
-  
+
   if (sizeOfTable==0){
 #ifdef G4VERBOSE
     if (verboseLevel >0) {
@@ -565,3 +561,471 @@ G4bool G4PhysicsListHelper::RegisterProcess(G4VProcess*            process,
 #endif
   return true;
 }
+
+void G4PhysicsListHelper::ReadInDefaultrderingParameter()
+{
+  
+  G4PhysicsListOrderingParameter tmp;
+  
+  tmp.processTypeName = "Transprotation";
+  tmp.processType     = 1;
+  tmp.processSubType  = 91;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     =  0;
+  tmp.ordering[2]     =  0;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName = "CoupleTrans";
+  tmp.processType     = 1;
+  tmp.processSubType  = 92;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     =  0;
+  tmp.ordering[2]     =  0;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName = "CoulombScat";
+  tmp.processType     = 2;
+  tmp.processSubType  =  1;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     = 1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName = "Ionisation";
+  tmp.processType     = 2;
+  tmp.processSubType  =  2;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     =  2;
+  tmp.ordering[2]     =  2;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName = "Brems";
+  tmp.processType     = 2;
+  tmp.processSubType  =  3;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  3;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName = "PairProdCharged";
+  tmp.processType     = 2;
+  tmp.processSubType  =  4;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  4;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName = "Annih";
+  tmp.processType     = 2;
+  tmp.processSubType  =  5;
+  tmp.ordering[0]     =  5;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  5;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName = "AnnihToMuMu";
+  tmp.processType     = 2;
+  tmp.processSubType  =  6;
+  tmp.ordering[0]     =  6;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  6;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName = "AnnihToHad";
+  tmp.processType     = 2;
+  tmp.processSubType  =  7;
+  tmp.ordering[0]     =  7;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  7;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName = "NuclearStopp";
+  tmp.processType     = 2;
+  tmp.processSubType  =  8;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     =  8;
+  tmp.ordering[2]     = -1;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName = "Msc";
+  tmp.processType     = 2;
+  tmp.processSubType  = 10;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     =  1;
+  tmp.ordering[2]     =  1;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName = "PhotoElectric";
+  tmp.processType     = 2;
+  tmp.processSubType  = 12;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName = "Compton";
+  tmp.processType     = 2;
+  tmp.processSubType  = 13;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName = "Conv";
+  tmp.processType     = 2;
+  tmp.processSubType  = 14;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName = "ConvToMuMu";
+  tmp.processType     = 2;
+  tmp.processSubType  = 15;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName = "Cerenkov";
+  tmp.processType     = 2;
+  tmp.processSubType  = 21;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName = "Scintillation";
+  tmp.processType     = 2;
+  tmp.processSubType  = 22;
+  tmp.ordering[0]     =  9999;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  9999;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName = "SynchRad";
+  tmp.processType     = 2;
+  tmp.processSubType  = 23;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName = "TransRad";
+  tmp.processType     = 2;
+  tmp.processSubType  = 24;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName = "OpAbsorb";
+  tmp.processType     = 3;
+  tmp.processSubType  = 31;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName = "OpBoundary";
+  tmp.processType     = 3;
+  tmp.processSubType  = 32;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName = "OpRayleigh";
+  tmp.processType     = 3;
+  tmp.processSubType  = 33;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName = "OpWLS";
+  tmp.processType     = 3;
+  tmp.processSubType  = 34;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName = "OpMieHG";
+  tmp.processType     = 3;
+  tmp.processSubType  = 35;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName = "DNAElastic";
+  tmp.processType     = 2;
+  tmp.processSubType  = 51;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName = "DNAExcit";
+  tmp.processType     = 2;
+  tmp.processSubType  = 52;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName = "DNAIonisation";
+  tmp.processType     = 2;
+  tmp.processSubType  = 53;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName = "DNAVibExcit";
+  tmp.processType     = 2;
+  tmp.processSubType  = 54;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName = "DNAAttachment";
+  tmp.processType     = 2;
+  tmp.processSubType  = 55;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName = "DNAChargeDec";
+  tmp.processType     = 2;
+  tmp.processSubType  = 56;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName =  "DNAChargeInc";
+  tmp.processType     = 2;
+  tmp.processSubType  = 57;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName = "HadElastic";
+  tmp.processType     = 4;
+  tmp.processSubType  = 111;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName =  "HadInElastic";
+  tmp.processType     = 4;
+  tmp.processSubType  = 121;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName = "HadCapture";
+  tmp.processType     = 4;
+  tmp.processSubType  = 131;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName =  "HadFission";
+  tmp.processType     = 4;
+  tmp.processSubType  = 141;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName = "HadAtRest";
+  tmp.processType     = 4;
+  tmp.processSubType  = 151;
+  tmp.ordering[0]     =  1000;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     = -1;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName =  "HadCEX";
+  tmp.processType     = 4;
+  tmp.processSubType  = 161;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName =  "Decay";
+  tmp.processType     = 6;
+  tmp.processSubType  = 201;
+  tmp.ordering[0]     =  1000;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName =  "DecayWSpin";
+  tmp.processType     = 6;
+  tmp.processSubType  = 202;
+  tmp.ordering[0]     =  1000;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName =  "DecayPiSpin";
+  tmp.processType     = 6;
+  tmp.processSubType  = 203;
+  tmp.ordering[0]     =  1000;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName =  "DecayRadio";
+  tmp.processType     = 6;
+  tmp.processSubType  = 210;
+  tmp.ordering[0]     =  1000;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName =  "DecayUnKnown";
+  tmp.processType     = 6;
+  tmp.processSubType  = 211;
+  tmp.ordering[0]     =  1000;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName =  "DecayExt";
+  tmp.processType     = 6;
+  tmp.processSubType  = 231;
+  tmp.ordering[0]     =  1000;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName =  "StepLimiter";
+  tmp.processType     = 7;
+  tmp.processSubType  = 401;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName =  "UsrSepcCuts";
+  tmp.processType     = 7;
+  tmp.processSubType  = 402;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName =  "NeutronKiller";
+  tmp.processType     = 7;
+  tmp.processSubType  = 402;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+}
+
+

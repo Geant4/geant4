@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 20th, 2011, H.Kurashige (run-V09-04-09)
+- Add ReadInDefaultrderingParameter() in G4PhysicsListHelper
+ to set default values without using any file.
+
 June 18th, 2011, H.Kurashige (run-V09-04-08)
 - Modify to allow zero cut length
 
