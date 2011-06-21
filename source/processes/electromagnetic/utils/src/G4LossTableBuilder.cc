@@ -236,8 +236,8 @@ G4LossTableBuilder::InitialiseBaseMaterials(G4PhysicsTable* table)
 {
   size_t nCouples = table->size();
   if(nCouples != theFlag->size()) { isInitialized = false; }
-  G4cout << "%%%%%% Ncouples= " << nCouples << "  FlagSize= " << theFlag->size() 
-	 << "  IsInitialise= " << isInitialized << G4endl; 
+  //G4cout << "%%%%%% Ncouples= " << nCouples << "  FlagSize= " << theFlag->size() 
+  //	 << "  IsInitialise= " << isInitialized << G4endl; 
 
   // only fill flags
   if(isInitialized) { 

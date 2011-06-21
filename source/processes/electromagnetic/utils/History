@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 May 11: V.Ivant (emutils-V09-04-30)
+- G4LossTableBuilder - removed forgotten debug printout
+
 21 May 11: V.Ivant (emutils-V09-04-29)
 - G4LossTableBuilder, G4LossTablemanager - fixed initialisation of base
   material for the case of change of number production cuts between runs
