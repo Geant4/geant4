@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 18 June 2011 H.Kurashige (particles-V09-04-09)
+- Fix bug of setting momentum direction in G4PrimaryParticle
+- Add copy constructor of G4PrimaryParticle and G4PrimaryVertex
+- Fix Print method of G4PrimaryVertex
+- Clean up codes of G4PrimaryParticle and G4PrimaryVertex
+
 - 16 June 2011 H.Kurashige (particles-V09-04-08)
 - Fix bug in G4PrimaryParticle by adding pointer check before using 
   GetPDGMass and GetPDGCode.
