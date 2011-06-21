@@ -13,9 +13,14 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+20 June 2011  Tatsumi Koi (hadr-hpn-V09-04-20)
+- Reasonably relax the checking condition of inconsistency in repFlag3 
+	src/G4NeutronHPElasticFS.cc
+
 11 June 2011  Tatsumi Koi (hadr-hpn-V09-04-19)
 - Protection for very low "remaining_energy"
         Unexpected edge value 
+        src/G4NeutronHPContAngularPar.cc
 
 11 June 2011  Tatsumi Koi (hadr-hpn-V09-04-18)
 - Protection for very low "remaining_energy"
@@ -32,7 +37,7 @@ code and to keep track of all tags.
         src/G4NeutronHPContAngularPar.cc
 
 10 June 2011  Tatsumi Koi (hadr-hpn-V09-04-15)
-- Update for more collaborated work wiht other and previous version.
+- Update for more collaborated work with other and previous version.
 	src/G4NeutronHPInelasticCompFS.cc
 - Change contact information
         src/G4NeutronHPNames.cc
@@ -44,7 +49,7 @@ Request from E.Mendoza and D.Cano (CIEMAT)
 	src/G4NeutronHPInelasticCompFS.cc
 
 9 June 2011  Tatsumi Koi (hadr-hpn-V09-04-13)
-- "interpolE" was wrongly interrupted and used 
+- Fix for wrong interpretation and use of "interpolE" 
 Pointed out by E.Mendoza and D.Cano (CIEMAT)
         src/G4NeutronHPContAngularPar.cc
 

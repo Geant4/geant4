@@ -146,10 +146,11 @@
 
           energy *= eV;
 
-//        consistensy check  
+//        consistency check
           if ( i == 0 )
-             if ( energy !=  tE_of_repFlag3 )
-                G4cout << "Warning Trangition Energy of repFlag3 is not consistent." << G4endl; 
+             //if ( energy != tE_of_repFlag3 ) //110620TK This is too tight for 32bit machines 
+             if ( std::abs( energy - tE_of_repFlag3 ) / tE_of_repFlag3 > 1.0e-15 )
+                G4cout << "Warning Transition Energy of repFlag3 is not consistent." << G4endl; 
 
           theProbArray->InitInterpolation( i , theData );
           theProbArray->SetT( i , temp );
