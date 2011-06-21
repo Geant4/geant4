@@ -368,6 +368,8 @@ G4LossTableManager::PreparePhysicsTable(const G4ParticleDefinition* particle,
 	   << particle->GetParticleName() 
 	   << " and " << p->GetProcessName() << " run= " << run << G4endl;
   }
+  if(!startInitialisation) { tableBuilder->SetInitialisationFlag(false); }
+
   // start initialisation for the first run
   startInitialisation = true;
 
@@ -394,6 +396,8 @@ G4LossTableManager::PreparePhysicsTable(const G4ParticleDefinition* particle,
 	   << particle->GetParticleName() 
 	   << " and " << p->GetProcessName() << G4endl;
   }
+  if(!startInitialisation) { tableBuilder->SetInitialisationFlag(false); }
+
   // start initialisation for the first run
   if( 0 == run ) {
     emConfigurator->PrepareModels(particle, p);
@@ -412,11 +416,12 @@ G4LossTableManager::PreparePhysicsTable(const G4ParticleDefinition* particle,
 	   << particle->GetParticleName() 
 	   << " and " << p->GetProcessName() << G4endl;
   }
+  if(!startInitialisation) { tableBuilder->SetInitialisationFlag(false); }
+
   // start initialisation for the first run
   if( 0 == run ) {
     emConfigurator->PrepareModels(particle, p);
-  }
-  tableBuilder->SetInitialisationFlag(false);  
+  } 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
