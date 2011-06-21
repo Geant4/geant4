@@ -120,7 +120,7 @@ if(NOT DEFINED CMAKE_INSTALL_LIBDIR)
 endif()
 
 if(NOT DEFINED CMAKE_INSTALL_INCLUDEDIR)
-  set(CMAKE_INSTALL_INCLUDEDIR "include/${PROJECT_NAME}" CACHE PATH "C header files (include)")
+  set(CMAKE_INSTALL_INCLUDEDIR "include" CACHE PATH "C header files (include)")
 endif()
 
 

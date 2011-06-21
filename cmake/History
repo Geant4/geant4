@@ -15,6 +15,28 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+June 20th 2011 - B.Morgan (cmake-V09-04-06)
+- Modules/Geant4InterfaceOptions.cmake : Corrected typographic error in option
+  test for enabling Qt on Non-Apple platforms.
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : Added Geant4 to
+  end of G4INCLUDE path for install tree in line with changes to
+  Geant4InstallDirs.
+- Modules/Geant4MacroLibraryTargets.cmake : Added Geant4 to end of installation
+  destination for headers in line with changes to Geant4InstalDirs.
+- Modules/Geant4InstallDirs.cmake : Removed Geant4 from INCLUDEDIR to better
+  reflect standard practice. The Geant4 tag is now added to the destination in
+  the install commands for headers.
+- Modules/Geant4OptionalComponents.cmake : Automatically use GDML if user
+  supplies XERCESC_ROOT_DIR argument.
+- Modules/Geant4InstallData.cmake : NEW FILE : Refactored installation of
+  examples from top level CMakeLists.txt into this file. Also provided stub
+  option for installation of data libraries. We don't implement this yet
+  because it appears to require some CMake 2.8 specific functionality and
+  I haven't yet worked out how to reproduce this in 2.6.4.
+- INSTALL.g4cmake : Rewritten for updated CMake system with full documentation
+  of variables. Provided sections for describing use of the three toolchains
+  for building user applications, but not fully covered yet.
+
 June 20th 2011 - B.Morgan (cmake-V09-04-05)
 - Modules/Geant4LibraryOptions.cmake : On Unix platforms, set output directory
   for libraries to end in the 'SYSTEM-COMPILER' tag expected by the old

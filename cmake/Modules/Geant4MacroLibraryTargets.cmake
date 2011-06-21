@@ -152,7 +152,7 @@ MACRO(GEANT4_HEADER_MODULE_TARGET)
 
     # Header install?
     install(FILES ${${G4MODULENAME}_HEADERS}
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
         COMPONENT Development)
 
     # Store the include path of the component so that the build tree
@@ -187,7 +187,7 @@ MACRO(GEANT4_GRANULAR_LIBRARY_TARGET)
 
     # Header install?
     install(FILES ${${G4MODULENAME}_HEADERS}
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
         COMPONENT Development)
 
     # Store the include path of the component so that the build tree
@@ -250,7 +250,7 @@ MACRO(GEANT4_GLOBAL_LIBRARY_TARGET)
 
     # Header install?
     install(FILES ${${G4GLOBLIB_NAME}_GLOBAL_HEADERS}
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
         COMPONENT Development)
 
     # Store the include path of the component so that the build tree

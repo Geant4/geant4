@@ -94,7 +94,7 @@ if(UNIX AND APPLE)
 
 else()
     # On Windows and non-Apple Unices, we can always enable Qt support.
-    option(GEANT4_USE_QT "Build Geant4 with Qt support (DISABLES X11 support)" OFF)
+    option(GEANT4_USE_QT "Build Geant4 with Qt support" OFF)
     # On non-Apple Unices, we can also always choose X11/Xm
     if(UNIX)
         option(

@@ -103,7 +103,17 @@ GEANT4_ADD_FEATURE(GEANT4_USE_SYSTEM_ZLIB "Use system zlib library")
 #----------------------------------------------------------------------------
 # Optional Support for GDML - requires Xerces-C package
 #
-option(GEANT4_USE_GDML "Build Geant4 with GDML support" OFF)
+if(XERCESC_ROOT_DIR)
+    set(_default_use_gdml ON)
+else()
+    set(_default_use_gdml OFF)
+endif()
+
+option(GEANT4_USE_GDML
+    "Build Geant4 with GDML support" 
+    ${_default_use_gdml}
+)
+
 if(GEANT4_USE_GDML)
     find_package(XercesC REQUIRED)
 endif(GEANT4_USE_GDML)
