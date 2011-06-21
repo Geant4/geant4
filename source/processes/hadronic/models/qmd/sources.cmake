@@ -64,8 +64,6 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4hadronic_qmd
     HEADERS
         G4QMDCollision.hh
-        G4QMDFermiG.hh
-        G4QMDFermiParticipants.hh
         G4QMDGroundStateNucleus.hh
         G4QMDMeanField.hh
         G4QMDNucleus.hh
@@ -75,8 +73,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_qmd
         G4QMDSystem.hh
     SOURCES
         G4QMDCollision.cc
-        G4QMDFermiG.cc
-        G4QMDFermiParticipants.cc
         G4QMDGroundStateNucleus.cc
         G4QMDMeanField.cc
         G4QMDNucleus.cc

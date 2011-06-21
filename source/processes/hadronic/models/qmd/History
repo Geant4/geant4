@@ -12,6 +12,9 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+20-June-2010 Ben Morgan (hadr-qmd-V09-04-01)
+- sources.cmake : Removed no longer present G4QMDFermi* files.
+
 17-June-2010 Tatsumi Koi (hadr-qmd-V09-04-00)
 -Fix gcc 4.6 compilation warnings 
 	src/G4QMDCollision.cc  
