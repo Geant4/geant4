@@ -240,8 +240,8 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
     } else if (particleName == "e+") {
 
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      //msc->AddEmModel(0, new G4UrbanMscModel95());
-      msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
+      msc->AddEmModel(0, new G4UrbanMscModel95());
+      //msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
       msc->SetStepLimitType(fUseDistanceToBoundary);
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetStepFunction(0.2, 100*um);      

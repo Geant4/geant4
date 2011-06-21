@@ -234,8 +234,8 @@ void G4EmPenelopePhysics::ConstructProcess()
 
       G4eMultipleScattering* msc = new G4eMultipleScattering();
       //msc->AddEmModel(0, new G4UrbanMscModel93());
-      //msc->AddEmModel(0, new G4UrbanMscModel95());
-      msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
+      msc->AddEmModel(0, new G4UrbanMscModel95());
+      //msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
       msc->SetStepLimitType(fUseDistanceToBoundary);
       ph->RegisterProcess(msc, particle);
       
@@ -260,8 +260,8 @@ void G4EmPenelopePhysics::ConstructProcess()
     
       G4eMultipleScattering* msc = new G4eMultipleScattering();
       //msc->AddEmModel(0, new G4UrbanMscModel93());
-      //msc->AddEmModel(0, new G4UrbanMscModel95());
-      msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
+      msc->AddEmModel(0, new G4UrbanMscModel95());
+      //msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
       msc->SetStepLimitType(fUseDistanceToBoundary);
       ph->RegisterProcess(msc, particle);
 

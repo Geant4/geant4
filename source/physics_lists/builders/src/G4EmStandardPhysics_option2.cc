@@ -69,6 +69,7 @@
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eBremsstrahlungModel.hh"
+#include "G4eBremsstrahlungRelModel.hh"
 #include "G4eplusAnnihilation.hh"
 #include "G4Generator2BS.hh"
 #include "G4UAtomicDeexcitation.hh"
@@ -192,9 +193,13 @@ void G4EmStandardPhysics_option2::ConstructProcess()
       msc->AddEmModel(0, new G4UrbanMscModel95());
       //      msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
       G4eBremsstrahlung* brem = new G4eBremsstrahlung();
-      G4eBremsstrahlungModel* br = new G4eBremsstrahlungModel();
-      br->SetAngularDistribution(new G4Generator2BS());
-      brem->SetEmModel(br);
+      G4eBremsstrahlungRelModel* br1 = new G4eBremsstrahlungRelModel();
+      G4eBremsstrahlungRelModel* br2 = new G4eBremsstrahlungRelModel();
+      br1->SetAngularDistribution(new G4Generator2BS());
+      br2->SetAngularDistribution(new G4Generator2BS());
+      brem->SetEmModel(br1,1);
+      brem->SetEmModel(br2,2);
+      br2->SetLowEnergyLimit(100*MeV);
 
       ph->RegisterProcess(msc, particle);
       ph->RegisterProcess(new G4eIonisation(), particle);
@@ -208,9 +213,13 @@ void G4EmStandardPhysics_option2::ConstructProcess()
       //msc->SetRangeFactor(0.04);
       // msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
       G4eBremsstrahlung* brem = new G4eBremsstrahlung();
-      G4eBremsstrahlungModel* br = new G4eBremsstrahlungModel();
-      br->SetAngularDistribution(new G4Generator2BS());
-      brem->SetEmModel(br);
+      G4eBremsstrahlungRelModel* br1 = new G4eBremsstrahlungRelModel();
+      G4eBremsstrahlungRelModel* br2 = new G4eBremsstrahlungRelModel();
+      br1->SetAngularDistribution(new G4Generator2BS());
+      br2->SetAngularDistribution(new G4Generator2BS());
+      brem->SetEmModel(br1,1);
+      brem->SetEmModel(br2,2);
+      br2->SetLowEnergyLimit(100*MeV);
 
       ph->RegisterProcess(msc, particle);
       ph->RegisterProcess(new G4eIonisation(), particle);
@@ -299,7 +308,7 @@ void G4EmStandardPhysics_option2::ConstructProcess()
   //    
   G4EmProcessOptions opt;
   opt.SetVerbose(verbose);
-  opt.SetApplyCuts(true);
+  //opt.SetApplyCuts(true);
   
   // Scattering options
   //

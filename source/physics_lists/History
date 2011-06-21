@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20-06-2011, V.Ivanchenko               (phys-lists-V09-04-33)
+- G4EmStandardPhysics_option2 - use relativistic bremsstrahlung for
+    all energies (EM shower shape issue)
+- G4EmLivermorePhysics, G4EmLivermorePolarizedPhysics, 
+  G4EmPenelopePhysics - use UrbanMscModel95 for e+-
+
 18-06-2011, B.Morgan                   (phys-lists-V09-04-32)
 - builders/CMakeLists.txt - added install of OrderingParameterTable.
 
