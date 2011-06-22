@@ -15,6 +15,22 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+June 21st 2011 - B.Morgan (cmake-V09-04-07)
+- Modules/Geant4BuildProjectConfig.cmake : Added section for collecting
+  variables to be exported to the configuration files. Rationalized config of
+  Build and Install Trees so that these sections have the same structure.
+- Templates/Geant4Config.cmake.in : Updates with documentation, debugging
+  option and some improved setting of definitions. Still a skeleton though.
+- Modules/Geant4InterfaceOptions.cmake : Removed reset of OpenGL variables on
+  Win32 because this seems to prevent proper refind of the variables. Since we
+  expect to be able to use Qt and OpenGL concurrently on Win32. This *should*
+  be o.k.
+- INSTALL.g4cmake : Added extra information on using Visual Studio.
+- Modules/Geant4ToolChainBackwardCompatibility.cmake : Removed setting of
+  G4ORDPARAMTABLE as this is no longer needed.
+- Templates/geant4-environment-skeleton.in : Removed setting of G4ORDPARAMTABLE.
+
+
 June 20th 2011 - B.Morgan (cmake-V09-04-06)
 - Modules/Geant4InterfaceOptions.cmake : Corrected typographic error in option
   test for enabling Qt on Non-Apple platforms.

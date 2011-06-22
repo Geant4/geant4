@@ -118,7 +118,6 @@
 # Resource file paths
 # N.B. Data Library Paths are only set if they were installed by CMake
 #
-@GEANT4_TC_G4ORDPARAMTABLE_PATH@
 
 #----------------------------------------------------------------------------
 # Optional components.

@@ -237,11 +237,9 @@ http://geant4.cern.ch
 
     5.8) In the Solution Explorer, right click on the 'ALL_BUILD' target, and
          select 'Build' in the popup menu. The project will now start building.
+         Note that by default, you will get a Debug build.
 
     5.9) In the Solution Explorer, right click on the 'INSTALL' target.
-
-
-
 
 
 
@@ -585,7 +583,12 @@ a few known issues with the structure and interface.
 4.1 Interlibrary dependencies
  * Libraries are currently overlinked - this is being worked on.
 
-4.2 Windows DLLs
+4.2 Windows Builds
+ * The development of the Geant4 CMake buildsystem has focussed on using
+   Visual Studio as the build tool. Inconsistencies or errors may therefore
+   arise when using other tools on Windows.
+
+4.3 Windows DLLs
  * These are provided as is and we cannot guarantee full functionality on all
    Windows Systems and Visual Studio versions.
 

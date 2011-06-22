@@ -127,7 +127,10 @@ if(GEANT4_USE_QT)
 
     find_package(Qt4 REQUIRED COMPONENTS QtCore QtGui QtOpenGL)
 
-    _clear_opengl_variables()
+    # Only clear on non WIN32 - doesn't seem to like this reset?
+    if(NOT WIN32)
+        _clear_opengl_variables()
+    endif()
     find_package(OpenGL REQUIRED)
 
     # OpenGL part of Qt is in OpenGL component so mark the need to

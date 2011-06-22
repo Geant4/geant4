@@ -168,7 +168,6 @@ macro(_g4tc_configure_tc_variables SHELL_FAMILY)
 
 
     # - Resource file paths
-    _g4tc_setenv_command(GEANT4_TC_G4ORDPARAMTABLE_PATH ${SHELL_FAMILY} G4ORDPARAMTABLE ${G4ORDPARAMTABLE})
 
 
     # - CLHEP...
@@ -352,7 +351,6 @@ set(G4INSTALL ${PROJECT_SOURCE_DIR})
 set(G4INCLUDE ${PROJECT_SOURCE_DIR}/no_include)
 set(G4LIB ${PROJECT_BINARY_DIR}/outputs/library)
 set(G4LIB_DIR ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
-set(G4ORDPARAMTABLE ${G4INSTALL}/source/physics_lists/builders/OrderingParameterTable)
 
 #----------------------------------------------------------------------------
 # Configure the shell scripts for the BUILD TREE
@@ -375,7 +373,6 @@ set(G4INSTALL ${CMAKE_INSTALL_FULL_DATAROOTDIR}/Geant4-${Geant4_VERSION})
 set(G4INCLUDE ${CMAKE_INSTALL_FULL_INCLUDEDIR}/${PROJECT_NAME})
 set(G4LIB     ${CMAKE_INSTALL_FULL_LIBDIR}/Geant4-${Geant4_VERSION})
 set(G4LIB_DIR ${CMAKE_INSTALL_FULL_LIBDIR})
-set(G4ORDPARAMTABLE ${G4INSTALL}/physics_lists/OrderingParameterTable)
 
 
 #----------------------------------------------------------------------------

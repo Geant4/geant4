@@ -1,9 +1,49 @@
 # - Geant4 CMake Configuration File for External Projects
 # This file is configured by Geant4 for use by an external project
-#
 # As this file is configured by Geant4's CMake system it SHOULD NOT BE EDITED
+# It defines the following variables
+#  Geant4_INCLUDE_DIRS - include directories for Geant4
+#  Geant4_DEFINITIONS  - compile definitions needed to use Geant4
+#  Geant4_LIBRARIES    - libraries to link against
+#
+# You can specify additional components of Geant4 through the COMPONENTS
+# argument to find_package. By default, all core libraries of Geant4 are
+# appended to the Geant4_LIBRARIES variable. Specifiying additional components
+# will enable a check on the existence of these components, with the following
+# per component variables being set:
+#
+#  Geant4_${COMPONENT}_FOUND    TRUE is the Geant4 library "component" was
+#                               found
+#
+#  Geant4_${COMPONENT}_LIBRARY  Contains the library for the specified
+#                               "component"
+#
+# The list of components available corresponds to
+#
+#
+# ===========================================================================
+# Variables used by this module which can change the default behaviour of
+# this module. They need to be set prior to the call to find_package
+#
+#  Geant4_CONFIG_DEBUG    If set, enable extra messaging output which can be
+#                         helpful in debugging and identifying problems with
+#                         the configuration.
 #
 #----------------------------------------------------------------------------
+
+#----------------------------------------------------------------------------
+# DEBUG : print out the variables passed via find_package arguments
+#
+if(Geant4_CONFIG_DEBUG)
+    message(STATUS "G4CFG_DEBUG : Geant4_VERSION         = ${Geant4_VERSION}")
+    message(STATUS "G4CFG_DEBUG : Geant4_FIND_VERSION    = ${Geant4_FIND_VERSION}")
+    message(STATUS "G4CFG_DEBUG : Geant4_FIND_REQUIRED   = ${Geant4_FIND_REQUIRED}")
+    message(STATUS "G4CFG_DEBUG : Geant4_FIND_COMPONENTS = ${Geant4_FIND_COMPONENTS}")
+
+   foreach(_cpt ${Geant4_FIND_COMPONENTS})
+       message(STATUS "G4CFG_DEBUG : Geant4_FIND_REQUIRED_${_cpt} = ${Geant4_FIND_REQUIRED_${_cpt}")
+    endforeach()
+endif()
 
 
 #----------------------------------------------------------------------------
@@ -15,7 +55,7 @@ get_filename_component(_thisdir "${CMAKE_CURRENT_LIST_FILE}" PATH)
 
 #----------------------------------------------------------------------------
 # Configure the path to the Geant4 headers, using a relative path if possible.
-# This is only known at CMake time, so we expand a CMake supplied variable
+# This is only known at CMake time, so we expand a CMake supplied variable.
 #
 @GEANT4_INCLUDE_DIR_SETUP@
 
@@ -33,9 +73,11 @@ set(Geant4_INCLUDE_DIRS
     ${Geant4_THIRD_PARTY_INCLUDE_DIRS})
 
 #----------------------------------------------------------------------------
-# Set the compile definitions required to use Geant4
-# TODO: *Probably* component dependent, and may depend on other options...
+# Set the base compile definitions required to use Geant4
+# Components may append to this
 #
+set(Geant4_DEFINITIONS @GEANT4_CORE_DEFINITIONS@)
+
 
 #----------------------------------------------------------------------------
 # Include the file listing all the imported targets.
