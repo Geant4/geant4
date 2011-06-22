@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 21th, 2011, H.Kurashige (run-V09-04-12)
+- Fix  G4VUserPhysicsList::SetCutsWithDefault()
+  (defaultCutValues was ignored in -08~11 tag)
+
 June 21th, 2011, H.Kurashige (run-V09-04-11)
 - Fix typo in method name
 

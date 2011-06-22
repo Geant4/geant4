@@ -309,6 +309,7 @@ void G4VUserPhysicsList::SetCutValue
 ////////////////////////////////////////////////////////
 void G4VUserPhysicsList::SetCutsWithDefault()
 {
+  SetDefaultCutValue(defaultCutValue);
   G4VUserPhysicsList::SetCuts();
 }
 
