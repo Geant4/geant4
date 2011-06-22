@@ -677,6 +677,16 @@ void G4PhysicsListHelper::ReadInDefaultrderingParameter()
   theTable->push_back(tmp);
   sizeOfTable +=1;  
 
+  tmp.processTypeName = "Rayleigh";
+  tmp.processType     = 2;
+  tmp.processSubType  = 11;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
   tmp.processTypeName = "PhotoElectric";
   tmp.processType     = 2;
   tmp.processSubType  = 12;
@@ -1019,7 +1029,7 @@ void G4PhysicsListHelper::ReadInDefaultrderingParameter()
 
   tmp.processTypeName =  "NeutronKiller";
   tmp.processType     = 7;
-  tmp.processSubType  = 402;
+  tmp.processSubType  = 403;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     =  1000;
