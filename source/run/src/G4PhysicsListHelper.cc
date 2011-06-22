@@ -317,7 +317,7 @@ void G4PhysicsListHelper::ReadOrdingParameterTable()
     }
     fIn.close();
   } else {
-    ReadInDefaultrderingParameter();
+    ReadInDefaultOrderingParameter();
   }
 
   if (sizeOfTable==0){
@@ -562,7 +562,7 @@ G4bool G4PhysicsListHelper::RegisterProcess(G4VProcess*            process,
   return true;
 }
 
-void G4PhysicsListHelper::ReadInDefaultrderingParameter()
+void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
 {
   
   G4PhysicsListOrderingParameter tmp;

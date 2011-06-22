@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 21th, 2011, H.Kurashige (run-V09-04-11)
+- Fix typo in method name
+
 June 21th, 2011, H.Kurashige (run-V09-04-10)
 - Fix bug of lack of Rayleigh process in G4PhysicsListHelper
 
