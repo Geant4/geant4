@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+22-June-2011: B.Morgan (externals-V09-04-07)
+- Added CLHEp include dirs to GEANT4_BUILDTREE_INCLUDE_DIRS so that its
+  picked up from the buld tree when used.
+
 20-June-2011: B.Morgan (externals-V09-04-06)
 - Modified install of CLHEP headers to use Geant4 name on end of DESTINATION
   as per changes in cmake-V09-04-06 (REQUIRES cmake-V09-04-06).

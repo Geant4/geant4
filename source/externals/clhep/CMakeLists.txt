@@ -188,6 +188,13 @@ set(G4clhep_SOURCES
 include(Geant4MacroLibraryTargets)
 GEANT4_LIBRARY_TARGET(NAME G4clhep SOURCES ${G4clhep_SOURCES} ${G4clhep_HEADERS})
 
+#----------------------------------------------------------------------------
+# Ensure the header directory gets added to the list of ones to export
+#
+set_property(GLOBAL APPEND PROPERTY GEANT4_BUILDTREE_INCLUDE_DIRS
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
 
 #----------------------------------------------------------------------------
 # Install the headers, retaining their nested structure
