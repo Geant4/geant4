@@ -609,16 +609,17 @@ may well not need them).
 The environment variables that require setting for each library and the library
 they correspond to are as follows:
 
-G4LEDATA          -> Unpacked location of 
-G4LEVELGAMMADATA  -> Unpacked location of 
-G4NEUTRONHPDATA   -> Unpacked location of 
-G4RADIOACTIVEDATA -> Unpacked location of 
-G4ABLADATA        -> Unpacked location of 
-G4REALSURFACEDATA -> Unpacked location of 
-G4NEUTRONXSDATA   -> Unpacked location of 
-G4PIIDATA         -> Unpacked location of 
+G4LEDATA          -> Unpacked location of G4EMLOW.<VERSION>.tar.gz
+G4LEVELGAMMADATA  -> Unpacked location of G4PhotonEvaporation.<VERSION>.tar.gz
+G4NEUTRONHPDATA   -> Unpacked location of G4NDL.<VERSION>.tar.gz
+G4RADIOACTIVEDATA -> Unpacked location of G4RadioactiveDecay.<VERSION>.tar.gz
+G4ABLADATA        -> Unpacked location of G4ABLA.<VERSION>.tar.gz
+G4REALSURFACEDATA -> Unpacked location of G4RealSurface.<VERSION>.tar.gz
+G4NEUTRONXSDATA   -> Unpacked location of G4NEUTRONXSDATA.<VERSION>.tar.gz
+G4PIIDATA         -> Unpacked location of G4PII.<VERSION>.tar.gz
 
-The data library distributions are available from
+Where <VERSION> corresponds to the latest distribution of each library set,
+which are available from
 
 http://geant4.web.cern.ch/geant4/support/download.shtml
 
@@ -975,6 +976,12 @@ or added.
 4.1 Interlibrary dependencies
  * Libraries are currently overlinked - proper modularization of the libraries
    is being worked on.
+   On Mac OS X this does mean that you will see warnings like
+
+   ld: warning: duplicate dylib /usr/local/lib/libG4FR.dylib
+
+   though the Darwin linker seems to resolve any linking issues and create
+   usable apps.
 
 4.2 OpenInventor Support
  * OpenInventor visualization is not currently built. There is no technical

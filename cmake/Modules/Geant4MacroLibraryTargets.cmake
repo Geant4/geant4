@@ -78,6 +78,14 @@ MACRO(GEANT4_LIBRARY_TARGET)
         set_target_properties(${G4LIBTARGET_NAME} 
             PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 
+        # Set the INSTALL_NAME_DIR of the library to its final installation
+        # location (Only affects Mac OS X). This will only affect the library
+        # when installed, BUT it does hard code this in. One should still be
+        # able to bundle up the libraries later as CMake should build the
+        # library with headerpad_max_install_names
+        set_target_properties(${G4LIB_TARGET_NAME}
+            PROPERTIES INSTALL_NAME_DIR ${CMAKE_INSTALL_FULL_LIBDIR})
+
         # Install the library - note the use of RUNTIME, LIBRARY and ARCHIVE
         # this helps with later DLL builds.
         # Export to standard depends file for later install

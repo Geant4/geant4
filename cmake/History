@@ -15,6 +15,21 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+June 23rd 2011 - B.Morgan (cmake-V09-04-09)
+- INSTALL.g4cmake : Added in missing data library package names. Added
+  note in Known Issues on Mac warnings from ld due to duplicate dylibs
+  (the overlinking issue as it appears on Mac).
+- Modules/Geant4MacroLibraryTargets.cmake : Added setting of INSTALL_NAME_DIR
+  target property to shared libraries (only affects Mac OS X) to final
+  install location of libraries. This prevents "image not found" errors when
+  building an app against Geant4 (you don't need DYLD_LIBRARY_PATH set).
+  CMake *should* build the dylibs with the headerpad_max_install_names flag
+  so that bundling the Geant4 libraries into an app should work (you can
+  repoint the app to use the bundled libraries).
+  N.B. THIS IS LIKELY TO AFFECT USAGE OF CPACK LATER ON!
+- Templates/UseGeant4.cmake : Fixed error in use of file(GLOB_RECURSE) so
+  that globas are done only under the current source directory.
+
 June 22nd 2011 - B.Morgan (cmake-V09-04-08)
 - INSTALL.g4cmake : Finalized with description of using the three toolchains
   to build Geant4 applications. 
