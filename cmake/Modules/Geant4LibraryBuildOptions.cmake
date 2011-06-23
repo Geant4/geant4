@@ -105,9 +105,14 @@ if(MSVC)
     endif()
 endif()
 
+#----------------------------------------------------------------------------
+# Setup symbol visibility (library interface)
+# We need to define that we're building Geant4
+#
+add_definitions(-DG4LIB_BUILD_DLL)
 
 # On WIN32, we need to build the genwindef application to create export
-# def file for building DLLs.
+# def files for building DLLs.
 # We only use it as a helper application at the moment so we exclude it from 
 # the ALL target.
 # TODO: We could move this section into the Geant4MacroLibraryTargets.cmake

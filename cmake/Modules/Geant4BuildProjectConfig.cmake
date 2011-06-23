@@ -6,11 +6,26 @@
 # Do this here for now, later on we could collect them as we go.
 #
 
+# Compiler flags (because user apps are a bit dependent on them...)
+set(GEANT4_COMPILER_FLAG_HINTS "#
+set(Geant4_CXX_FLAGS \"${CMAKE_CXX_FLAGS}\")")
+
+foreach(_mode DEBUG MINSIZEREL RELEASE RELWITHDEBINFO)
+    set(GEANT4_COMPILER_FLAG_HINTS "${GEANT4_COMPILER_FLAG_HINTS}
+set(Geant4_CXX_FLAGS_${_mode} \"${CMAKE_CXX_FLAGS_${_mode}}\")")
+endforeach()
+
 # Core compile definitions...
 set(GEANT4_CORE_DEFINITIONS )
 
 # Third party includes (libraries *should* be handled by the imports)
 set(GEANT4_THIRD_PARTY_INCLUDES )
+
+# Imports of third party packages used with imported targets
+set(GEANT4_THIRD_PARTY_IMPORT_SETUP )
+
+# Externals libraries that may be present
+set(GEANT4_EXTERNALS_TARGETS )
 
 
 # - Stuff from Geant4LibraryBuildOptions.cmake
@@ -22,32 +37,61 @@ if(GEANT4_BUILD_VERBOSE_CODE)
     list(APPEND GEANT4_CORE_DEFINITIONS -DG4VERBOSE)
 endif()
 
-# We *probably* need G4LIB_BUILD_DLL on WIN32?
-if(WIN32)
-    list(APPEND GEANT4_CORE_DEFINITIONS -DG4LIB_BUILD_DLL)
-endif()
+# - We do actually need G4LIB_BUILD_DLL, even for user applications...
+list(APPEND GEANT4_CORE_DEFINITIONS -DG4LIB_BUILD_DLL)
 
 
 # - Stuff from Geant4OptionalComponents.cmake
 # - CLHEP
-# If it's internal, nothing to do, if it's external, add the include
-# directories to the list of third party headre paths
+# If it's internal, add it to the externals list, if it's external, add the 
+# include directories to the list of third party header paths
 if(GEANT4_USE_SYSTEM_CLHEP)
     list(APPEND GEANT4_THIRD_PARTY_INCLUDES ${CLHEP_INCLUDE_DIRS})
+else()
+    list(APPEND GEANT4_EXTERNALS_TARGETS G4clhep)
 endif()
 
 # - Expat
-# Shouldn't need to do anything...
+# If it's internal, add it to the externals list
+if(NOT GEANT4_USE_SYSTEM_EXPAT)
+    list(APPEND GEANT4_EXTERNALS_TARGETS G4expat)
+endif()
 
 # - ZLIB
-# Don't need to do anything for now
+# If it's internal, add it to the externals list
+if(NOT GEANT4_USE_SYSTEM_ZLIB)
+    list(APPEND GEANT4_EXTERNALS_TARGETS G4zlib)
+endif()
 
 # - GDML
 # Need to include Xerces-C headers becuase these do appear in the public
-# interface of GDML.
+# interface of GDML. The library should then be in the LINK_INTERFACE of
+# persistency...
 if(GEANT4_USE_GDML)
     list(APPEND GEANT4_THIRD_PARTY_INCLUDES ${XERCESC_INCLUDE_DIRS})
 endif()
+
+# - Stuff from Geant4InterfaceOptions.cmake
+if(GEANT4_USE_QT)
+    list(APPEND GEANT4_THIRD_PARTY_INCLUDES 
+        ${QT_INCLUDE_DIR}
+        ${QT_QTCORE_INCLUDE_DIR}
+        ${QT_QTGUI_INCLUDE_DIR}
+        ${QT_QTOPENGL_INCLUDE_DIR}
+    )
+
+    # On WIN32, re-import the Qt targets.    
+    if(WIN32)
+        set(GEANT4_THIRD_PARTY_IMPORT_SETUP "${GEANT4_THIRD_PARTY_IMPORT_SETUP}
+# Qt reimport on WIN32
+set(QT_QMAKE_EXECUTABLE ${QT_QMAKE_EXECUTABLE})
+set(QT_USE_IMPORTED_TARGETS ON)
+find_package(Qt4 REQUIRED)"
+        )
+    endif()
+endif()
+
+
 
 
 #----------------------------------------------------------------------------
@@ -88,7 +132,10 @@ configure_file(${PROJECT_SOURCE_DIR}/cmake/Templates/Geant4ConfigVersion.cmake.i
     ${PROJECT_BINARY_DIR}/Geant4ConfigVersion.cmake
     @ONLY)
 
-
+# Copy the Use file into the build tree
+configure_file(${PROJECT_SOURCE_DIR}/cmake/Templates/UseGeant4.cmake
+    ${PROJECT_BINARY_DIR}/UseGeant4.cmake
+    COPYONLY)
 
 
 #----------------------------------------------------------------------------
@@ -139,10 +186,11 @@ configure_file(${PROJECT_SOURCE_DIR}/cmake/Templates/Geant4ConfigVersion.cmake.i
     @ONLY
 )
 
-# Install the config and config versioning files
+# Install the config, config versioning and use files
 install(FILES
     ${PROJECT_BINARY_DIR}/InstallTreeFiles/Geant4Config.cmake
     ${PROJECT_BINARY_DIR}/InstallTreeFiles/Geant4ConfigVersion.cmake
+    ${PROJECT_SOURCE_DIR}/cmake/Templates/UseGeant4.cmake
     DESTINATION ${GEANT4_CMAKE_DIR}
     COMPONENT Development
 )

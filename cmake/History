@@ -15,6 +15,42 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+June 22nd 2011 - B.Morgan (cmake-V09-04-08)
+- INSTALL.g4cmake : Finalized with description of using the three toolchains
+  to build Geant4 applications. 
+- Modules/Geant4ConfigureConfigScript.cmake : Updated with patch from Pere
+  Mato Vila to export use of internal CLHEP to script when used. Also upgraded
+  to export details on Motif. Script is now generated for both the build and
+  install trees. On CMake >= 2.8, the build tree script is made executable.
+- Templates/geant4-config : Updated with patch from Pere Mato Vila to use
+  internal CLHEP, plus upgrades to provide easier setting of third party paths,
+  compile defintions and libraries. Added motif feature, and changed main
+  prefix, lib and include directory variable replacement to that the script
+  can be used form the build directory as well.
+- INSTALL.g4cmake : Updated with new guides on building user applications
+  using CMake and GNU make.
+- Templates/Geant4Config.cmake.in : First full implementation with most
+  features in place. Provides version and component checking. Setting of
+  components features quite a bit of boilerplate code and a reasonable degree
+  of in module processing. TODO : Investigate clean up and better
+  modularization.
+- Templates/UseGeant4.cmake : NEW FILE : Provides a simple CMake module which
+  users can include to setup the build of a basic Geant4 application without
+  needing to know too many details. Sets definitions, include directories and
+  compiler flags. Provides a simple macro to collate sources in an old style
+  Geant4 Example, with documetation on usage in the file.
+- Modules/Geant4BuildProjectConfig.cmake : Set needed variables for export to
+  Geant4Config.cmake script.
+- Modules/Geant4MakeRules_cxx.cmake : Added -DXPNET and
+  -D_CRT_SECURE_NO_DEPRECATE to MSVC flags to make these exactly the same as
+  used on old makefile system.
+- Modules/Geant4LibraryBuildOptions.cmake : Added definition G4LIB_BUILD_DLL
+  needed to define import/export correctly. Done globally.
+- INSTALL.g4cmake : Fleshed out further.
+- Templates/Geant4Config.cmake.in : Fleshed out documentation with extra notes
+  to help development.
+- Modules/Geant4BuildProjectConfig.cmake : Added extra comments
+
 June 21st 2011 - B.Morgan (cmake-V09-04-07)
 - Modules/Geant4BuildProjectConfig.cmake : Added section for collecting
   variables to be exported to the configuration files. Rationalized config of
