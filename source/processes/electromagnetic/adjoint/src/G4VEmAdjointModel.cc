@@ -48,6 +48,7 @@ name(nam)
   theDirectEMModel=0;
   mass_ratio_product=1.;
   mass_ratio_projectile=1.;
+  currentCouple=0;
 }
 ////////////////////////////////////////////////////////////////////////////////
 //

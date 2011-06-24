@@ -63,7 +63,7 @@ G4ContinuousGainOfEnergy::G4ContinuousGainOfEnergy(const G4String& name,
   preStepRange=0.;
   preStepScaledKinEnergy=0.;
   
-  
+  currentCouple=0;  
 }
 
 ///////////////////////////////////////////////////////

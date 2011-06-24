@@ -40,6 +40,7 @@ G4AdjointAlongStepWeightCorrection::G4AdjointAlongStepWeightCorrection(const G4S
 {fParticleChange = new G4ParticleChange();
  currentMaterialIndex=0;
  preStepKinEnergy=1.;
+ currentCouple=0;
 }
 
 ///////////////////////////////////////////////////////
