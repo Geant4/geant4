@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24 Jun 2011: V.Ivanchenko (emadjoint-V09-04-03)
+- G4AdjointAlongStepWeightCorrection,G4ContinuousGainOfEnergy,
+   G4VEmAdjointModel - fixed initialisation of currentCouple 
+   class member in constructor (Valgrind report)
+
 10 Jun 2011: G.Cosmo (emadjoint-V09-04-02)
 - Fixed initialization of index in G4VAdjointReverseReaction constructor,
   also causing compilation warning.
