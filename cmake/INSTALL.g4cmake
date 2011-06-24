@@ -1001,6 +1001,8 @@ or added.
  * These are provided as is and we cannot guarantee full functionality on all
    Windows Systems and Visual Studio versions. Whilst Geant4 builds without
    error on Windows 7 + VS2010 Express, a full test suite has not been run.
+   User applications on this system also build, but may not run with complete
+   success.
 
 4.4 Binary Packaging
  * A rudimentary CPack based system is in place, but this is only really

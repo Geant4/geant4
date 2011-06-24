@@ -52,7 +52,7 @@ macro(GEANT4_COLLATE_APPLICATION_SOURCES source_dest_var)
     file(GLOB_RECURSE 
         ${source_dest_var} 
         ${CMAKE_CURRENT_SOURCE_DIR}/*.hh 
-        ${CMAKE_CURRENT_SOURCE_DIR}*.cc
+        ${CMAKE_CURRENT_SOURCE_DIR}/*.cc
     )
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 endmacro()

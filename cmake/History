@@ -15,6 +15,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+June 23rd 2011 - B.Morgan (cmake-V09-04-10)
+- INSTALL.g4cmake : Added note on possible issues when building Windows
+  applications using Windows 7 + VS2010 Express.
+- Templates/UseGeant4.cmake : Fixed idiotic typo error in globbing expressions
+  inside file(GLOB_RECURSE).
+
 June 23rd 2011 - B.Morgan (cmake-V09-04-09)
 - INSTALL.g4cmake : Added in missing data library package names. Added
   note in Known Issues on Mac warnings from ld due to duplicate dylibs
