@@ -20,7 +20,7 @@
 
 # $Id: Head.U,v 1.3 2002-06-23 20:31:44 sadilov Exp $
 #
-# Generated on Fri Jun 24 15:51:14 BST 2011 [metaconfig 3.0 PL70]
+# Generated on Fri Jun 24 16:56:43 BST 2011 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -2748,6 +2748,10 @@ EOM\`
 	    g4_havegoodqt="no"
     fi #END TEST for Darwin Framework
 
+    # Hack in a final, well, hack to flag qt4
+    if test "x\$g4_qt_version" = "x4" || "x\$g4_qt_major_version" = "x4" ; then
+        g4_is_qt4="yes"
+    fi
 else
     #Probably also want flags here to reset variables if requested
     echo "configure: Qt already configured, no recheck necessary"
