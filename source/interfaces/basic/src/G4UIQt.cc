@@ -548,7 +548,7 @@ G4UIsession* G4UIQt::SessionStart (
 
   Prompt("Session :");
   exitSession = false;
-
+/*
   if (fEmptyViewerTabLabel != NULL) {
     bool visible = false;
     if (fTabWidget != NULL) {
@@ -557,7 +557,7 @@ G4UIsession* G4UIQt::SessionStart (
       }
     }
   }
-
+*/
   #if QT_VERSION < 0x040200
       fMainWindow->show();
   #else

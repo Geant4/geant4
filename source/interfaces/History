@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27th June 2011 Gabriele Cosmo (interfaces-V09-04-04)
+- Fixed compilation gcc-4.6.0 warning for unused variable in G4UIQt.
+- Removed incomplete Wt code
+- Archived obsolete XVT module lying on trunk...
+
 17th June 2011 Ben Morgan (interfaces-V09-04-03)
 - common/sources.cmake
 - basic/sources.cmake : Support for Win32 and Xm added
