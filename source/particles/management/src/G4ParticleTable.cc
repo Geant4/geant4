@@ -56,6 +56,19 @@
 #include "G4IonTable.hh"
 #include "G4ShortLivedTable.hh"
 
+// Static class variable: ptr to single instance of class
+G4ParticleTable* G4ParticleTable::fgParticleTable =0;
+
+////////////////////
+G4ParticleTable* G4ParticleTable::GetParticleTable()
+{
+    static G4ParticleTable theParticleTable;
+    if (!fgParticleTable){
+      fgParticleTable =  &theParticleTable;
+    }
+    return fgParticleTable;
+}
+
 ////////////////////
 G4ParticleTable::G4ParticleTable()
      :verboseLevel(1),fParticleMessenger(0),
@@ -72,7 +85,6 @@ G4ParticleTable::G4ParticleTable()
   // short lived table
   fShortLivedTable = new G4ShortLivedTable();
 }
-
 
 ////////////////////
 G4ParticleTable::~G4ParticleTable()
@@ -124,21 +136,6 @@ G4ParticleTable::G4ParticleTable(const G4ParticleTable &right)
 	      "Illegal call of copy constructor for G4ParticleTable");    
   fDictionary = new G4PTblDictionary(*(right.fDictionary));
   fIterator   = new G4PTblDicIterator(*fDictionary);
-}
-
-
-
-// Static class variable: ptr to single instance of class
-G4ParticleTable* G4ParticleTable::fgParticleTable =0;
-
-////////////////////
-G4ParticleTable* G4ParticleTable::GetParticleTable()
-{
-    static G4ParticleTable theParticleTable;
-    if (!fgParticleTable){
-      fgParticleTable =  &theParticleTable;
-    }
-    return fgParticleTable;
 }
 
 ////////////////////
@@ -284,7 +281,6 @@ G4ParticleDefinition* G4ParticleTable::Insert(G4ParticleDefinition *particle)
   }
 }
 
-
 ////////////////////
 G4ParticleDefinition* G4ParticleTable::Remove(G4ParticleDefinition* particle)
 {
@@ -391,6 +387,28 @@ G4ParticleDefinition* G4ParticleTable::GetParticle(G4int index)
   }
 #endif
   return 0;
+}
+
+////////////////////
+const G4String& G4ParticleTable::GetParticleName(G4int index)
+{
+  G4ParticleDefinition* aParticle =GetParticle(index);
+  if (aParticle != 0) {
+    return aParticle->GetParticleName();
+  } else {
+    return noName;
+  }
+}
+
+////////////////////
+G4ParticleDefinition* G4ParticleTable::FindParticle(const G4String &particle_name)
+{
+  G4PTblDictionary::iterator it =  fDictionary->find(particle_name);
+  if (it != fDictionary->end()) {
+    return (*it).second;
+  } else {
+    return 0;
+  }
 }
 
 ////////////////////

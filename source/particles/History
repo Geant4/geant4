@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 27 June 2011 G.Cosmo (particles-V09-04-10)
+- Moved GetParticleName() and FindParticle() methods in G4ParticleTable
+  to be non-inline (defining multiple return statements).
+
 - 18 June 2011 H.Kurashige (particles-V09-04-09)
 - Fix bug of setting momentum direction in G4PrimaryParticle
 - Add copy constructor of G4PrimaryParticle and G4PrimaryVertex
