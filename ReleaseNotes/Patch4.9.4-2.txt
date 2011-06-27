@@ -22,6 +22,7 @@ List of fixes included in this public patch since the public release 9.4.p01:
     + Configure script: 
       o Corrected settings of G4LIB_USE_DLL for the case of DLLs build on
         Windows. Partially addressing problem report #1189.
+      o Fixed detection of Qt4 and forbid use of Qt3.
     + Workaround in binmake.gmk to avoid clashes with flag LDFLAGS set in the
       user's environment beforehand.
     + Fixed limitation of string argument length in liblist.c program.
