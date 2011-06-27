@@ -251,7 +251,7 @@ G4EvaporationProbability::ProbabilityDistributionFunction( const G4Fragment & fr
 
   static const G4double pcoeff = millibarn/((pi*hbarc)*(pi*hbarc)); 
 
-  // Fixe dnumerical problem
+  // Fixed numerical problem
   G4double Prob = pcoeff*Gamma*ParticleMass*std::exp(2*(std::sqrt(a1*E1) - std::sqrt(a0*E0)))
     *K*CrossSection(fragment,K);
 

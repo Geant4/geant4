@@ -13,7 +13,12 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
-     
+
+27 June 2011 Vladimir Ivanchenko (hadr-deex-V09-04-15)
+----------------------------------------------------------
+- G4EvaporationProbability - fixed numerical problem - exp function
+  of too big argument     
+
 06 June 2011 Vladimir Ivanchenko (hadr-deex-V09-04-14)
 ----------------------------------------------------------
 - G4ExcitationHandler - added protection for small excitation energy into 
