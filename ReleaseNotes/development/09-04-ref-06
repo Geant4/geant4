@@ -1,0 +1,450 @@
+
+                       geant4-09-04-ref-06
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o Extended coverage for CMake builds, now supporting all build options
+   and visualization drivers.
+ o Modified G4PrimaryParticle to have kinetic energy and momentum direction
+   instead of momentum only.
+ o Adopt relativistic Bremsstrahlung for all energies when using
+   G4EmStandardPhysics_option2 in physics-lists; helping in improving
+   EM shower shape.
+ o Migrated PhotoElectric and Compton Penelope models (v2008) to the new
+   interface for atomic de-excitation.
+ o Added code in Binary cascade to calculate excitation energy as difference
+   of initial-final state, to allow for energy conservation for string models.
+ o Migrated neutron-hp hadronic model to use new data set G4NDL-3.15, based
+   on ENDF/B-VII.
+ o New data sets: PhotonEvaporation-2.2, G4EMLOW-6.22, G4PII-1.3, G4NDL-3.15.
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+(+)  Fixes included in release 9.4.p02
+
+Summarised, the list of changes is the following:
+
+cmake                                            cmake-V09-04-10
+-----
+- Default to build shared libraries on all platforms.
+- Updated scripts to export use of internal CLHEP when used.
+  Option to use system CLHEP is automatically set to ON if the user has
+  supplied a CLHEP_ROOT_DIR argument.
+  Also upgraded to support Motif drivers. 
+- Added script UseGeant4.cmake providing a simple CMake module which users
+  can include to setup the build of a basic Geant4 application without
+  needing to know too many details. It sets definitions, include directories
+  and compiler flags; provides a simple macro to collate sources in an old
+  style Geant4 Example.
+- Added new scripts to support generation of DLL .def files on WIN32
+  platform.
+  Added definition G4LIB_BUILD_DLL needed to define import/export correctly
+  for DLLs build on Windows.
+- Abilitated built-in dylib symbols on Mac for shared libraries (no longer
+  necessary to specify the path in DYLD_LIBRARY_PATH).
+- Automatically use GDML if user supplies XERCESC_ROOT_DIR argument as path
+  to XercesC installation.
+- Provide full setup of environment from build and install trees, allowing
+  developers to build applications directly using the build tree.
+  Also adding all currently supported visualization/ui modules.
+- Refactored installation of examples from top level CMakeLists.txt. Also
+  provided stub option for installation of data libraries. Feature not
+  yet activated, as depending on specific versions of CMake.
+- Fix for Unix platforms in setting the output directory for libraries
+  Allowing the build tree to be used with the old toolchain. Partially
+  addressing problem report #1200.
+- Added universal shell script skeleton for generating backward compatible
+  environment variable setup. Addresing problem report #1202.
+- Added 'uninstall' target to remove all items installed via the install
+  command.
+- Removed unsetting of data library environment variables in generated
+  environment scripts.
+- Updated text guide for 9.5-beta release.
+
+config                                           config-V09-04-10
+------
+- Configure script:
+  o Added support for internal CLHEP. LD_LIBRARY_PATH is correctly set when
+    external installation of CLHEP is used.
+  o Fixed detection of Qt4 and forbid use of Qt3.                            (+)
+- Correction to binmake.gmk to restore setting of G4LIBDIR for the case of
+  generation of user's application library (bug introduced in previous tag).
+
+digits_hits                                      digits_hits-V09-04-05
+-----------
+- Updated CMake scripts for support of DLLs build on Windows.
+
+event                                            event-V09-04-05
+-----
+- Modified G4ParticleGun, G4PrimaryTransformer, G4RayShooter and
+  G4SingleParticleSource to use kinetic energy and momentum direction.
+- Fixed minor bugs in G4HEPEvtInterface: in creation of G4PrimaryParticle,
+  only PDG code is given to the constructor; then mass and momentum are set.
+- Fixed compilation warnings on gcc-4.6.0 for unused variables in
+  G4SPSPosDistribution and G4AdjointPosOnPhysVolGenerator sources.
+- Updated CMake scripts for support of DLLs build on Windows.
+
+externals                                        externals-V09-04-07
+---------
+- Fixed trivial compilation warnings on gcc-4.6.0 in clhep module.
+- Added CMake scripts to support modules installation.
+
+geometry                                         geometry-V09-04-00
+--------
+- Updated CMake scripts for support of DLLs build on Windows.
+
+geometry/solids/CSG                              geom-csg-V09-04-04          (+)
+-------------------
+- Made radial tolerance a local constant instead of a static data member
+  in G4Orb and G4Sphere.
+
+global                                           global-V09-04-10
+------
+- Added protection in G4Pow::powN() method for high exponent values.
+- Updated CMake scripts for support of DLLs build on Windows.
+
+interfaces                                       interfaces-V09-04-04
+----------
+- Fixed Coverity reports and gcc-4.6.0 warnings about unused variables.
+- Updated CMake scripts to add support of Xm driver.
+
+materials                                        materials-V09-04-12
+---------
+- G4Element, G4Material: reviewed comments to the class. Addressing
+  problem report #1220.
+- G4NistMaterialBuilder: added two new materials.
+- Reviewed and updated body tissue compositions according to ICRU Report
+  46 (1992) instead of old data (1975); renamed G4_TESTES_ICRP to
+  G4_TESTIS_ICRP; removed G4_CYTOSINE, G4_THYMINE, G4_URACIL, because
+  existing as G4_DNA.
+
+particles                                        particles-V09-04-10
+---------
+- Fixed energy of proton and neutrino in G4NeutronBetaDecayChannel.          (+)
+- Fix in G4ParticleDefinition::SetApplyCutsFlag() to remove warning          (+)
+  messages for proton.
+- Fix compiler warning in G4TauLeptonicDecayChannel.                         (+)
+- Modified G4PrimaryParticle to have kinetic energy and momentum direction
+  instead of momentum only. Added pointer check before using GetPDGMass()
+  and GetPDGCode().
+- Some code cleanup in G4PrimaryParticle and G4PrimaryVertex: added copy
+  constructors; fixed Print() method in G4PrimaryVertex.
+- Moved GetParticleName() and FindParticle() methods in G4ParticleTable
+  to be non-inline (defining multiple return statements).
+- Updated CMake scripts for support of DLLs build on Windows.
+
+persistency/mctruth                              mctruth-V09-04-03
+-------------------
+- Use cast workaround in G4MCTEvent::GetSimParticle() to fix compilation
+  error on VC2010.
+
+physics_lists                                    phys-lists-V09-04-34
+-------------
+- G4EmStandardPhysics_option2: use relativistic Bremsstrahlung for all
+  energies. Helps in improving EM shower shape.
+- G4EmLivermorePhysics, G4EmLivermorePolarizedPhysics, G4EmPenelopePhysics:
+  use UrbanMscModel95 for e+-.
+- G4HadronElasticPhysics: added LHEP model for anti-nuclei below 100 MeV.
+  Use G4AntiNuclElastic model and G4ComponentAntiNuclNuclearXS.
+- G4HadronElasticPhysicsXS, G4HadronElasticPhysicsHP,
+  G4HadronElasticPhysicsLEND: use G4HadronElasticPhysics for all
+  particles and modified only neutron models and cross-sections
+- Fix several small bugs in G4HyperonFTFPBuilder.
+  Make use of new features of FTF in FTFP_BERT and in QGSP_FTFP_BERT:
+  added builder G4HyperonFTFPBuilder for Hyperons using FTF and Bertini
+  as models. Delete cross-section objects in G4FTFPAntiBarionBuilder.
+- HadronPhysicsFTFP_BERT: use G4HyperonFTFPBuilder, replacing
+  G4MiscCHIPSBuilder; use G4FTFPAntiBarionBuilder for anti barions;
+  FTFP_BERT and QGSP_FTFP_BERT uses new IonFTFPBinaryPhysics, replacing
+  LHEP IonPhysics and IonBinaryPhysics, respectively.
+- G4IonFTFPBinaryCascadePhysics: set transition energy to 2-4 GeV.
+- G4HadronInelasticQBBC: use FTFP for all anti-baryons, set energy interval
+  for FTFP above 2 GeV, below 6 GeV for Bertini.
+  Added deletion of anti-nuclei cross-section component.
+- G4DecayPhysics, G4RadioactiveDecayPhysics: use G4PhysicsListHelper.
+- G4EmPenelopePhysics: added activation of deexcitation.
+- QGSP_INCL_ABLA: enabled INCL/ABLA treatment for GenericIons.
+- Added G4BuilderType header with enumerator of builder types.
+  Added type for all EM and Ion builders.
+- Added de-excitation to G4EmLivermorePhysics, G4EmLivermorePolarizedPhysics
+  and G4EmDNAPhysics.
+- Added builders for new LEND hadronic model. Enable to use LEND model and
+  cross-section for low energy neutron in Shielding physics list (default
+  is still neutron-HP) and added G4RadioactiveDecayPhysics.
+  Updated G4PhysListFactory accordingly.
+
+processes/decay                                  decay-V09-04-00
+-----------------
+- Adde sub-type for radioactive decay 'DECAY_Radioactive' (equal to 210).
+
+processes/electromagnetic/adjoint                emadjoint-V09-04-03
+---------------------------------
+- Fixed Coverity defects (data initialisation and deletion) in several classes.
+
+processes/electromagnetic/lowenergy              emlowen-V09-04-49
+-----------------------------------
+- Added G4LivermoreIonisationCrossSection and G4eCrossSectionHandler classes.
+- Migrated G4LivermoreIonisationModel and G4LivermorePhotoElectricModel
+  to common design with standard for deexcitation.
+- Added de-excitation to G4LivermoreComptonModel.
+  Added e+- cross section separately from hadron cross-sections in
+  G4UAtomicDeexcitation.
+- G4LivermorePolarizedGammaConversionModel: added protection in numeric
+  computations to avoid FPE crash, minor cleanup of the initialisation
+- Added Boldyshev triplet model.
+- Migrated PhotoElectric and Compton Penelope models (v2008) to the new
+  interface for atomic de-excitation. Migration does not affect for now
+  Ionisation and v2001 models.
+- G4BremsstrahlungParameters: fixed value of the density effect constant
+  (Migdal constant) using standard relativistic model
+- Fixed bug in G4PenelopeOscillatorManager causing crash on Windows.
+- Fixed coverity warnings.
+
+processes/electromagnetic/pii                      empii-V09-04-00
+-----------------------------
+- Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
+
+processes/electromagnetic/standard               emstand-V09-04-32
+----------------------------------
+- G4WentzelOKandVIxSection: tuned screening function.
+- G4GoudsmitSaundersonMscModel: added protection against infinite loop
+  for solving equation for the screening parameter.
+  Addresses problem report #1221.
+- G4UrbanMscModel95: enabled sampling along the step for displacement;
+- Added protection in G4PEEffectFluoModel.
+- G4KleinNishinaModel: set 'limitFactor' to 4 (was 10).
+
+processes/electromagnetic/utils                  emutils-V09-04-30
+-------------------------------
+- G4LossTableBuilder, G4LossTablemanager: fixed initialisation of base
+  material for the case of change of number of production cuts between runs.
+- G4VEmModel: fixed non-accurate internal vector initialisation.
+- G4VAtomDeexcitation: improved printout.
+- G4EnergyLossTables, G4VEnergyLoss: fixed Coverity warnings.
+
+processes/electromagnetic/xrays                  xrays-V09-04-03
+-------------------------------
+- Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V09-04-09)
+  o G4IonProtonCrossSection: implemented all virtual IfApplicable() methods.
+  o Added name to G4ComponentAntiNuclNuclearXS.
+- management (hadr-man-V09-04-07)
+  o G4HadronicProcessType: added 'RadioactiveDecay' with ID 210 to enumeration.
+- models/binary_cascade (had-binary-V09-04-03)
+  o G4GeneratorPrecompoundInterface: added code to calculate excitation
+    energy as difference of initial-final state, to allow for energy
+    conservation for string models.
+- models/cascade (hadr-casc-V09-04-12)
+  o G4LorentzConvertor: drop most "intermediate" kinematic parameters used in
+    rotate, in favor of somewhat more direct vector operations.
+  o G4NucleiModel: optimised computation of "rho". Reverted length scales
+    to "2.82" factor.
+  o G4CascadeInterface: added support for capturing random-engine state to
+    user file (specified with environment variable G4CASCADE_RANDOM_FILE),
+    for debugging purposes.
+- models/chiral_inv_phase_space/body (hadr-chips-body-V09-04-01)
+  o Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
+- models/coherent_elastic (hadr-cohe-V09-04-07)
+  o G4CHIPSElasticXS: added calculations of anti-baryons, Pi+, Pi-, K+, K-
+    nucleus elastic cross-sections.
+  o Fixed compilation warnings from gcc-4.6.0 for variables set but not used
+    in G4AntiNuclElastic.
+- models/de_excitation (hadr-deex-V09-04-14)
+  o G4ExcitationHandler: added protection for small excitation energy into
+    photon evaporation loop.
+  o G4Evaporation: directly send low Z,A fragments to the FermiBreakUp model.
+- models/im_r_matrix (hadr-im_r-V09-04-00)                                   (+)
+  o Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
+- models/incl (hadr-incl-V09-04-02)
+  o Bug fixes in ABLA for rounding problem, causing evaporation function to
+    modify nucleus excitation energy via a side-effect.
+- models/lend (hadr-lend-V09-04-17)
+  o Set proper name to G4LENDElastic and for cross-section.
+  o Changed format of output messages in G4LENDCrossSection and G4LENDModel.
+  o Introduced verboseLevel and corresponding accessors in G4LENDManager.
+  o Migrated 'minKinEnergy' and 'maxKinEnergy' as in G4VCrossSectionDataSet.
+  o Fixed a bug in tpia_target source.
+  o Updated CMake scripts
+- models/neutron_hp (hadr-hpn-V09-04-20)
+  o Relaxed checking condition of inconsistency in repFlag3 in
+    G4NeutronHPElasticFS, to avoid rounding problems on 32-bits systems.
+  o Added protection for very low "remaining_energy" and fixes in
+    G4NeutronHPContAngularPar.
+  o Fixes in G4NeutronHPInelasticCompFS and use QI value for calculating
+    excitation energy of residual.
+  o Fixes for migration to ENDF-VII.r0. Now requiring new data set G4NDL3.15.
+  o Bug fix in G4NeutronHPPartial.
+  o Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
+- models/parton_string/diffraction (hadr-string-diff-V09-04-05)
+  o Tuned parameters of Kaon-Proton interactions in FTF.
+    CHIPS cross sections are used now in FTF for needed X's; created
+    corresponding class: G4ComponentCHIPShadronNuclearXS.
+  o Decreased low energy limit for FTF.
+  o Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
+- models/parton_string/qgsm (hadr-qgsm-V09-04-02)
+  o G4QGSParticipants: reduced energy of participant nucleons by binding
+    energy. This increases excitation energy, as calculated by initial-final.
+    Without this, excitation E often is close to 0, or negative.
+  o Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
+- models/pre_equilibrium (hadr-pre-V09-04-02)
+  o G4PreCompoundModel: added limit on nucleon number maxZ=9, maxA=17,
+    low fragments with lower Z and A directly call equilibrium emission.
+  o Fixed Coverity defect in G4VPreCompoundFragment.
+- models/qmd (hadr-qmd-V09-04-01)
+  o Fixed CMake scripts.
+- models/radioactive_decay (radioactive_decay-V09-04-03)
+  o G4RadioactiveDecay: added data members and Set/Get functions to support
+    directional biasing ("collimation") of visible decay daughters (e+, e-,
+    gamma, neutron, and alphas, but not neutrinos or the residual nucleus).
+  o G4RadiactiveDecaymessenger: added commands to interface with directional
+    biasing.
+  o G4RadioactiveDecay: set process subtype (fRadioactiveDecay = 211).
+  o Added check for maximum shell number in G4NuclearDecayChannel.
+
+processes/scoring                                procscore-V09-04-01         (+)
+-----------------
+- Fix in G4ScoreSplittingProcess::PostStepDoIt() to not consider steps
+  if the voxel boundary is not skipped. Addressing problem report #1209.
+
+processes/transportation                         transport-V09-04-06
+------------------------
+- Fix G4Transportation::AlongStepDoIt(): use only initial velocity to        (+)
+  update time. Results in one less sqrt() per tracking step.
+- Fix for invalid safety passed to SafetyHelper (issue was introduced in
+  recent tag).
+
+run                                              run-V09-04-12
+---
+- Ensure that a ScoreSplittingProcess is added only once in                  (+)
+  SetScoreSplitter() of G4RunManagerKernel. Addresses problem report #1218.
+- Added default implementation of SetCuts(). Modified to allow zero cut length.
+  Added UI command '/run/getCutForAGivenParticle'.
+  Removed obsolete method SetCutValueForOthers().
+- Added ReadInDefaultOrderingParameter() in G4PhysicsListHelper to allow for
+  setting default values for process ordering with or without using a file.
+
+track                                            track-V09-04-03
+-----
+- Updated CMake scripts for support of DLLs build on Windows.
+
+tracking                                         tracking-V09-04-03
+--------
+- Fixed compilation warning from gcc-4.6.0 for variable set but not used
+  in G4TrackingManager.
+- Updated CMake scripts for support of DLLs build on Windows.
+
+visualization                                    vis-V09-04-07
+-------------
+- OpenGL:
+  o Re-instated cutaways in intersection mode in G4OpenGLViewer, which       (+)
+    was apparently commented out accidentally in 9.4.
+  o Fixed conflict with qgl.h and GL/gh.h in include files.
+  o Coverity warning fixes and Qt developments.
+  o Added CMake support for Xm and Win32 components.
+- RayTracer:
+  o Updated setup to use new GEANT4_USE_RAYTRACER_X11 variable.
+
+data sets
+---------
+- PhotonEvaporation-2.2:
+  o Updated z93.a237 element using data from:
+    http://www.nndc.bnl.govgtt/useroutput/AR_22452_1.html.
+- G4EMLOW-6.22:
+  o Updated FL2.dat and Paul data.
+- G4PII-1.3
+  o Refined values of the theoretical cross-sections.
+- G4NDL-3.15:
+  o Updated most data to ENDF/B-VII.
+  o Added Zinc
+      Zn_nat:ENDF/B-VII Original BROND-2.2 data taken from JEFF-3.1
+  o Added Tantalum
+      Ta181:Ta-181 (neutron) from ENDF/B-VI Tape 106
+      Ta182:Ta-182 (neutron) from ENDF/B-VI Tape 106
+  o Replaced Lithium data
+      Li6:ENDF/B-VII
+      Li7:ENDF/B-VII
+  o Replaced Boron data
+      B10:ENDF/B-VII
+      B11:ENDF/B-VII.
+
+examples                                         examples-V09-04-06
+--------
+- Updated reference outputs.
+- advanced/microbeam (microbeam-V09-04-00)
+  o Removed obsolete hadron elastic builders.
+- extended/analysis/AnaEx01 (AnaEx01-V09-04-01)
+- extended/analysis/AnaEx02 (AnaEx02-V09-04-02)
+- extended/electromagnetic/TestEm1 (testem1-V09-04-03)
+  o Migrated physics-list to use G4PhysListHelper.
+- extended/electromagnetic/TestEm2 (testem2-V09-04-05)
+  o Migrated physics-list to use G4PhysListHelper.
+  o Fixed misprint in cout in RunAction.
+- extended/electromagnetic/TestEm3 (testem3-V09-04-05)
+- extended/electromagnetic/TestEm4 (testem4-V09-04-00)
+- extended/electromagnetic/TestEm5 (testem5-V09-04-09)
+  o Migrated physics-list to use G4PhysListHelper.
+- extended/electromagnetic/TestEm7 (testem7-V09-04-09)
+  o Migrated physics-list to use G4PhysListHelper.
+  o Added compiler depended selection of the math library to c2_function.
+- extended/electromagnetic/TestEm9 (testem9-V09-04-01)
+  o Migrated physics-list to use G4PhysListHelper.
+  o Added extra run with 20 GeV mu- in TestEm9.in.
+- extended/electromagnetic/TestEm11 (testem11-V09-04-05)
+- extended/electromagnetic/TestEm12 (testem12-V09-04-06)
+  o Migrated physics-list to use G4PhysListHelper.
+- extended/electromagnetic/TestEm13 (testem13-V09-04-01)
+- extended/electromagnetic/TestEm14 (testem14-V09-04-02)
+  o DetectorConstruction: set I=78 eV for Water (instead of 75 eV).
+- extended/electromagnetic/TestEm18 (testem18-V09-04-03)
+  o Migrated physics-list to use G4PhysListHelper.
+- extended/hadronic/Hadr02 (exhadr02-V09-04-07)
+  o IonDPMJETPhysics: fixed compilation when DPMJET is not enabled.
+    Use the same style as FTFP/Binary ion builder.
+  o Replaced interface to the G4VModularPhysicsList to substitute
+    ion builders; use FTFP/Binary ion builder from physics_list library.
+  o Cleanup printout.
+- extended/medical/DICOM (DICOM-V09-04-01)                                   (+)
+  o Corrected name for sensitive detector to be consistently named as
+    "phantomSD" in DicomRunAction. Addressing problem report #1210.
+  o Corrected axes slicing hint in nested-parameterisation.
+  o Removed redundant headers and fixed minor bugs in DicomHandler.
+- extended/medical/electronScattering (electronScattering-V09-04-03)
+  o Migrated physics-list to use G4PhysListHelper.
+- extended/medical/electronScattering2 (exampleES2-V09-04-01)
+  o Corrected README comments on opt2 and opt3.
+- extended/medical/fanoCavity (fano-V09-04-02)
+- extended/medical/fanoCavity2 (fano2-V09-04-02)
+  o DetectorConstruction: set I=78 eV for Water (instead of 75 eV).
+- novice/N02 (exampleN02-V09-04-02)
+- novice/N03 (exampleN03-V09-04-04)
+  o Migrated physics-list to use G4PhysListHelper.
+
+tests                                            tests-V09-04-06
+-----
+- Updated reference outputs and tools.
+- test14 (test14-V09-04-02)
+  o Reduced size of log output in the default macro.
+- test21 (test21-V09-04-01)
+  o Updated physics-list to be closer to QGSC.
+- test23 (test23-V09-04-01)
+- test28 (test28-V09-04-00)
+  o Updated default input macro to replace obsolete command
+    '/run/particle/SetCut' by '/run/SetCut'.
+- test55 (test55-V09-04-00)
+  o Reduced size of log output in the default macro.
+- test58 (test58-V09-04-02)
+  o Changed method to define cuts (use /run/ UI command).
+  o RunAction: added protetion for the case of zero number of recoils.
+  o Cleanup in StackingAction.
+- test61 (test61-V09-04-00)
+- test62 (test62-V09-04-01)
+  o Updated default input macro to replace obsolete command
+    '/run/particle/SetCut' by '/run/SetCut'.
+- test67 (test67-V09-04-08)
+  o Edited the local PhysListPenelope physics list to comply with
+    the new atomic de-excitation interface.
