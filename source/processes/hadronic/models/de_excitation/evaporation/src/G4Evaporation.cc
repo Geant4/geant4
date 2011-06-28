@@ -125,6 +125,7 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
 {
   G4FragmentVector * theResult = new G4FragmentVector;
   G4FragmentVector * theTempResult;
+  const G4double Elimit = 3*MeV;
 
   // The residual nucleus (after evaporation of each fragment)
   G4Fragment* theResidualNucleus = new G4Fragment(theNucleus);
@@ -141,6 +142,8 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
     // g,n,p and light fragments - evaporation is finished
     G4int Z = theResidualNucleus->GetZ_asInt();
     G4int A = theResidualNucleus->GetA_asInt();
+
+    // stop deecitation loop if can be deexcited by FBU
     if(maxZforFBU > Z && maxAforFBU >= A) {
       theResult->push_back(theResidualNucleus);
       return theResult;
@@ -155,12 +158,11 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
     //	   << " aban= " << abun << G4endl;
  
     // stop deecitation loop in the case of the cold stable fragment 
-    // or a fragment which can be deexcited by FBU
-    if((theResidualNucleus->GetExcitationEnergy() <= minExcitation && abun > 0.0)) 
-      {
-	theResult->push_back(theResidualNucleus);
-	return theResult;
-      }
+    G4double Eex = theResidualNucleus->GetExcitationEnergy();
+    if(Eex <= minExcitation && abun > 0.0) {
+      theResult->push_back(theResidualNucleus);
+      return theResult;
+    }
  
     totprob = 0.0;
     maxchannel = nChannels;
@@ -174,8 +176,6 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
       prob = (*theChannels)[i]->GetEmissionProbability();
       //G4cout << "  Channel# " << i << "  prob= " << prob << G4endl; 
 
-      //if(0 == i && 0.0 == abun) { prob = 0.0; }
-
       totprob += prob;
       probabilities[i] = totprob;
       // if two recent probabilities are near zero stop computations
@@ -186,6 +186,11 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
 	}
       }
       oldprob = prob;
+      // protection for very excited fragment - avoid GEM
+      if(7 == i && Eex > Elimit*A) {
+        maxchannel = 8;
+        break;
+      }
     }
 
     // photon evaporation in the case of no other channels available

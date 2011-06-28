@@ -14,17 +14,27 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+28 June 2011 Vladimir Ivanchenko (hadr-deex-V09-04-16)
+----------------------------------------------------------
+- G4Evaporation - added extra protection - do not compute GEM probability
+  for teh case Eexc > 3MeV*A, fixed FPE probelem for rare FTFP events 
+
 27 June 2011 Vladimir Ivanchenko (hadr-deex-V09-04-15)
 ----------------------------------------------------------
 - G4EvaporationProbability - fixed numerical problem - exp function
-  of too big argument     
-
+  of too big argument   
+     
 06 June 2011 Vladimir Ivanchenko (hadr-deex-V09-04-14)
 ----------------------------------------------------------
 - G4ExcitationHandler - added protection for small excitation energy into 
                         photon evaporation loop
 - G4Evaporation - directly send low Z,A fragments to the FermiBreakUp model
-
+     
+06 June 2011 Laurent Desorgher (mma)
+-----------------------------------
+- PhotonEvaporation2.1 : z93.a237 (Np237) alpha coefficients (column 7) 
+  corrected from Nudat2
+  
 20 May 2011 Vladimir Ivanchenko (hadr-deex-V09-04-13)
 ----------------------------------------------------------
 - G4ExcitationHandler - improved comments
