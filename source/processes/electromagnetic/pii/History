@@ -9,13 +9,17 @@ $Id: History,v 1.7 2010-11-25 19:50:48 pia Exp $
                       ---------------------
 This file should be used by G4 developers and category coordinators
 to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
+and keep track of all category-tags.2
 It DOES NOT substitute the  CVS log-message one should put at every
 committal in the CVS repository !
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28.06.2011, MGP, tag empii-V09-04-01
+            Workaround in logarithmic interpolator to deal with 
+            zeros in new data library G4PII1.3
 
 20.06.2011, MGP, tag empii-V09-04-00
             Remove compilation warnings with gcc-4.6.0 notified by G. Cosmo
