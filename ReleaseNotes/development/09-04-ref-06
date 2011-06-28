@@ -202,8 +202,10 @@ processes/electromagnetic/lowenergy              emlowen-V09-04-49
 - Fixed bug in G4PenelopeOscillatorManager causing crash on Windows.
 - Fixed coverity warnings.
 
-processes/electromagnetic/pii                      empii-V09-04-00
+processes/electromagnetic/pii                      empii-V09-04-01
 -----------------------------
+- Implemented workaround in logarithmic interpolator to deal with zeros in
+  new data library G4PII1.3.
 - Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
 
 processes/electromagnetic/standard               emstand-V09-04-32
@@ -254,10 +256,13 @@ processes/hadronic
     nucleus elastic cross-sections.
   o Fixed compilation warnings from gcc-4.6.0 for variables set but not used
     in G4AntiNuclElastic.
-- models/de_excitation (hadr-deex-V09-04-14)
+- models/de_excitation (hadr-deex-V09-04-16)
   o G4ExcitationHandler: added protection for small excitation energy into
     photon evaporation loop.
   o G4Evaporation: directly send low Z,A fragments to the FermiBreakUp model.
+    Added extra protection: do not compute GEM probability for the case
+    Eexc > 3MeV*A; fixing FPE problem for rare FTFP events.
+  o Fixed numerical problem for exp() function in G4EvaporationProbability.
 - models/im_r_matrix (hadr-im_r-V09-04-00)                                   (+)
   o Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
 - models/incl (hadr-incl-V09-04-02)
