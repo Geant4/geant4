@@ -15,6 +15,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+June 29th 2011 - B.Morgan (cmake-V09-04-11)
+- INSTALL.g4cmake : Added warning about ensuring consistent compiler flag
+  sets between build of Geant4 and build of user application.
+- Templates/UseGeant4.cmake : Added setting of all CMAKE_CXX_FLAGS_XXXX
+  variables with appending of Geant4 recommended flags, and filter out
+  any duplicate flags. Adding warning in documentation about this.
+
 June 23rd 2011 - B.Morgan (cmake-V09-04-10)
 - INSTALL.g4cmake : Added note on possible issues when building Windows
   applications using Windows 7 + VS2010 Express.

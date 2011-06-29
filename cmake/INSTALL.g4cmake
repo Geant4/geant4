@@ -90,6 +90,8 @@ build without error, it has only been checked to do so on:
   Windows 7
   Visual Studio 2010 Express
 
+You may however experience issues with building user applications aganist these
+libraries. Further details on this are provided in Section 3.
 We welcome feedback and/or bug reports on the Windows build, and these should
 be posted/reported to the Geant4 HyperNews or Bugzilla listed above.
 
@@ -287,6 +289,7 @@ http://geant4.cern.ch
          to work. If you do not, then you can still use your build of Geant4,
          see Section 3, or you can modify the installation prefix as described
          in Section 2.2.
+
 
 
 
@@ -858,6 +861,48 @@ Geant4Config.cmake and UseGeant4.cmake files for further information, and
 of course the CMake documentation (links earlier).
 
 
+3.3.1 IMPORTANT NOTE FOR WINDOWS USERS
+--------------------------------------
+Whilst using CMake to build your applications as outlined above will generally 
+give a functioning *build*, there is a known issue, and one potential gotcha, 
+with application builds which has not been completely resolved as of the 9.5 
+beta release.
+
+1) CMAKE_CXX_FLAGS. As described above, the inclusion of the UseGeant4.cmake
+   file will append the recommended Geant4 CXX flags to the already existing
+   CMAKE_CXX_FLAGS. CMake's defaults for these flags on Windows currently
+   cause a conflict with the flags used to build Geant4, and you may therefore
+   see low level exceptions being emitted when debugging your application.
+
+   We therefore recommend that when you configure your Geant4 application
+   with CMake that you use the UseGeant4.cmake file and:
+
+   i) Tick the 'Advanced' tick box in the top section of the cmake-gui window.
+   ii) In the Variable 'Name : Value' listings, open the 'CMAKE' section by
+       clicking on the right arrow on the left of 'CMAKE'.
+   iii) Locate the entries for:
+          CMAKE_CXX_FLAGS
+          CMAKE_CXX_FLAGS_DEBUG
+          CMAKE_CXX_FLAGS_MINSIZEREL
+          CMAKE_CXX_FLAGS_RELEASE
+          CMAKE_CXX_FLAGS_RELWITHDEBINFO
+
+        and clear the values in each one (i.e. they should end up as blank
+        strings).
+   iv) Press the 'Configure' button to reconfigure, and then 'Generate'.
+
+   This should result in a project which is built with the same flags as
+   the Geant4 libraries.
+
+2) If you built Geant4 dynamic libraries, you will need to add the path
+   to the DLLs to your system PATH variable, or tweak the PATHs used by
+   the project in Visual Studio.
+
+We apologize for these issues, and are working on resolutions for the 2011
+release. As noted above we welcome feedback and suggestions for improvement
+via our HyperNews forum or Bugzilla reporting system.
+
+
 3.4 Building a Geant4 Application Using Geant4 GNU Make (UNIX ONLY)
 -------------------------------------------------------------------
 To use the backward compatible Geant4 GNU Make toolchain, you need to setup
@@ -1004,11 +1049,15 @@ or added.
    User applications on this system also build, but may not run with complete
    success.
 
+4.4 Windows Application Builds
+ * As noted in Section 3, there are some known issues/gotchas with building
+   user applications on Windows.
+
 4.4 Binary Packaging
  * A rudimentary CPack based system is in place, but this is only really
    intended to generate source packages. Work is underway to use CPack to
    create binary NSIS, PackageMaker, rpm and deb installers for Geant4.
 
 We welcome feedback, suggestions for improvement and bug reports on the CMake
-system!
+system via our HyperNews Forum or Bugzilla system!
 
