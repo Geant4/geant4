@@ -100,7 +100,7 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   getCutForAGivenParticleCmd = new G4UIcmdWithAString("/run/getCutForAGivenParticle",this) ;
   getCutForAGivenParticleCmd->SetGuidance("Get a cut value to a specific particle ") ;
   getCutForAGivenParticleCmd->SetGuidance("Usage: /run/getCutForAGivenParticle  gamma ") ;
-  getCutForAGivenParticleCmd->SetParameterName("particleName",'s',false) ;
+  getCutForAGivenParticleCmd->SetParameterName("particleName",false,false) ;
   getCutForAGivenParticleCmd->SetCandidates("e- e+ gamma proton");
   getCutForAGivenParticleCmd->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed,G4State_EventProc);
 
