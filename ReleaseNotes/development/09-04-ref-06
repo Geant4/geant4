@@ -177,7 +177,7 @@ physics_lists                                    phys-lists-V09-04-34
 
 processes/decay                                  decay-V09-04-00
 -----------------
-- Adde sub-type for radioactive decay 'DECAY_Radioactive' (equal to 210).
+- Added sub-type for radioactive decay 'DECAY_Radioactive' (equal to 210).
 
 processes/electromagnetic/adjoint                emadjoint-V09-04-03
 ---------------------------------
@@ -306,9 +306,9 @@ processes/hadronic
   o G4RadioactiveDecay: added data members and Set/Get functions to support
     directional biasing ("collimation") of visible decay daughters (e+, e-,
     gamma, neutron, and alphas, but not neutrinos or the residual nucleus).
-  o G4RadiactiveDecaymessenger: added commands to interface with directional
+    Set process subtype (fRadioactiveDecay = 210).
+  o G4RadioactiveDecaymessenger: added commands to interface with directional
     biasing.
-  o G4RadioactiveDecay: set process subtype (fRadioactiveDecay = 211).
   o Added check for maximum shell number in G4NuclearDecayChannel.
 
 processes/scoring                                procscore-V09-04-01         (+)
