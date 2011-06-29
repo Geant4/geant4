@@ -323,7 +323,7 @@ processes/transportation                         transport-V09-04-06
 - Fix for invalid safety passed to SafetyHelper (issue was introduced in
   recent tag).
 
-run                                              run-V09-04-12
+run                                              run-V09-04-13
 ---
 - Ensure that a ScoreSplittingProcess is added only once in                  (+)
   SetScoreSplitter() of G4RunManagerKernel. Addresses problem report #1218.
