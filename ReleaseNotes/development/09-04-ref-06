@@ -26,7 +26,7 @@ Major development/fixes included since the last development tag are:
 
 Summarised, the list of changes is the following:
 
-cmake                                            cmake-V09-04-10
+cmake                                            cmake-V09-04-11
 -----
 - Default to build shared libraries on all platforms.
 - Updated scripts to export use of internal CLHEP when used.
