@@ -65,7 +65,7 @@ void AnalysisManager::CreateCalorimeter(double pos,
   AddDataCollector(new CalDataCollector(zLow,zUp,rad));
 
   binBoundaries.push_back(zLow);
-  sort(binBoundaries.begin(),binBoundaries.end());
+  std::sort(binBoundaries.begin(),binBoundaries.end());
 }
 
 
@@ -169,17 +169,17 @@ void AnalysisManager::PrintResults() {
   double totEnergyDepositErrSqu =         
            totEnergyDepositSumSquares / (totEnergyDeposit * 
            totEnergyDeposit) - 1.0 / double(nmbEnergyDeposits);  
-  double totEnergyDepositRelErr = sqrt(totEnergyDepositErrSqu);        
+  double totEnergyDepositRelErr = std::sqrt(totEnergyDepositErrSqu);        
 
   double elecEnergyExitTargetErrSqu =
            elecEnergyExitTargetSumSquares / (elecEnergyExitTarget *
 	   elecEnergyExitTarget) - 1.0 / double(nmbElecExitTarget);
-  double elecEnergyExitTargetRelErr = sqrt(elecEnergyExitTargetErrSqu);
+  double elecEnergyExitTargetRelErr = std::sqrt(elecEnergyExitTargetErrSqu);
  
   double photEnergyExitTargetErrSqu =
            photEnergyExitTargetSumSquares / (photEnergyExitTarget *
 	   photEnergyExitTarget) - 1.0 / double(nmbPhotExitTarget);
-  double photEnergyExitTargetRelErr = sqrt(photEnergyExitTargetErrSqu);
+  double photEnergyExitTargetRelErr = std::sqrt(photEnergyExitTargetErrSqu);
 
 
   os() << "  Total Energy Deposit: " 

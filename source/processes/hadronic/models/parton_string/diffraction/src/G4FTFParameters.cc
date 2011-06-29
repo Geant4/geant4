@@ -202,7 +202,7 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
 
         if(SqrtS < MesonProdThreshold)
         {
-         X_b=3.13+140.*pow(MesonProdThreshold-SqrtS,2.5);// mb anti-quark-quark annihilation
+         X_b=3.13+140.*std::pow(MesonProdThreshold-SqrtS,2.5);// mb anti-quark-quark annihilation
          Xelastic-=3.*X_b;  // Xel-X(PbarP->NNbar)
         } else
         {

@@ -228,24 +228,24 @@ Amag=1.;         // Uzhi
   }
  if(Z>2) 
  {  Ref2 = fRa*fRa +2.48*0.01*sig_pbarp*fRa - 2.23e-6*sig_pbarp*sig_pbarp*fRa*fRa; 
-    ceff2 = 0.16+3.3e-4*sig_pbarp+0.35*exp(-0.03*sig_pbarp);
+    ceff2 = 0.16+3.3e-4*sig_pbarp+0.35*std::exp(-0.03*sig_pbarp);
  }
  if( (Z==2)&&(A==4) )
  {  Ref2 = fRa*fRa -0.46 +0.03*sig_pbarp - 2.98e-6*sig_pbarp*sig_pbarp;
-    ceff2= 0.078 + 6.657e-4*sig_pbarp + 0.3359*exp(-0.03*sig_pbarp);
+    ceff2= 0.078 + 6.657e-4*sig_pbarp + 0.3359*std::exp(-0.03*sig_pbarp);
  }
   if( (Z==1)&&(A==3) )
  {  Ref2 = fRa*fRa - 1.36 + 0.025 * sig_pbarp - 3.69e-7 * sig_pbarp*sig_pbarp;
-    ceff2 = 0.149 + 7.091e-04*sig_pbarp + 0.3743*exp(-0.03*sig_pbarp);
+    ceff2 = 0.149 + 7.091e-04*sig_pbarp + 0.3743*std::exp(-0.03*sig_pbarp);
  }
   if( (Z==2)&&(A==3) )
  {  Ref2 = fRa*fRa - 1.36 + 0.025 * sig_pbarp - 3.69e-7 * sig_pbarp*sig_pbarp;
-    ceff2 = 0.149 + 7.091e-04*sig_pbarp + 0.3743*exp(-0.03*sig_pbarp);
+    ceff2 = 0.149 + 7.091e-04*sig_pbarp + 0.3743*std::exp(-0.03*sig_pbarp);
  }  
   if( (Z==1)&&(A==2) )
  {
     Ref2 = fRa*fRa - 0.28 + 0.019 * sig_pbarp + 2.06e-6 * sig_pbarp*sig_pbarp;  
-    ceff2 = 0.297 + 7.853e-04*sig_pbarp + 0.2899*exp(-0.03*sig_pbarp);
+    ceff2 = 0.297 + 7.853e-04*sig_pbarp + 0.2899*std::exp(-0.03*sig_pbarp);
  }
  }
 
@@ -255,23 +255,23 @@ Amag=1.;         // Uzhi
   Ref2 = XstotalHad/10./2./pi ;
   if(Z>2)
   {
-   ceff2 = 0.38 + 2.0e-4 *sig_pbarp + 0.5 * exp(-0.03*sig_pbarp);
+   ceff2 = 0.38 + 2.0e-4 *sig_pbarp + 0.5 * std::exp(-0.03*sig_pbarp);
   }
   if(theDef == theProton)
   { 
-    ceff2 = 0.297 + 7.853e-04*sig_pbarp + 0.2899*exp(-0.03*sig_pbarp);
+    ceff2 = 0.297 + 7.853e-04*sig_pbarp + 0.2899*std::exp(-0.03*sig_pbarp);
   }
   if(theDef == theDeuteron)
   { 
-   ceff2 = 0.65 + 3.0e-4*sig_pbarp + 0.55 * exp(-0.03*sig_pbarp);
+   ceff2 = 0.65 + 3.0e-4*sig_pbarp + 0.55 * std::exp(-0.03*sig_pbarp);
   }
   if( (theDef == G4Triton::Triton()) || (theDef == G4He3::He3() ) )
   {
-   ceff2 = 0.57 + 2.5e-4*sig_pbarp + 0.65 * exp(-0.02*sig_pbarp);
+   ceff2 = 0.57 + 2.5e-4*sig_pbarp + 0.65 * std::exp(-0.02*sig_pbarp);
   }
   if(theDef == theAlpha)
   {
-   ceff2 = 0.40 + 3.5e-4 *sig_pbarp + 0.45 * exp(-0.02*sig_pbarp);
+   ceff2 = 0.40 + 3.5e-4 *sig_pbarp + 0.45 * std::exp(-0.02*sig_pbarp);
   }
 }
 
@@ -281,23 +281,23 @@ Amag=1.;         // Uzhi
    Ref2 = XstotalHad/10./2./pi ;
   if(Z>2)
   {
-   ceff2 = 0.26 + 2.2e-4*sig_pbarp + 0.33*exp(-0.03*sig_pbarp);
+   ceff2 = 0.26 + 2.2e-4*sig_pbarp + 0.33*std::exp(-0.03*sig_pbarp);
   }  
     if(theDef == theProton)
   {
-   ceff2 = 0.149 + 7.091e-04*sig_pbarp + 0.3743*exp(-0.03*sig_pbarp);         
+   ceff2 = 0.149 + 7.091e-04*sig_pbarp + 0.3743*std::exp(-0.03*sig_pbarp);         
   }
    if(theDef == theDeuteron)
   {
-   ceff2 = 0.57 + 2.5e-4*sig_pbarp + 0.65 * exp(-0.02*sig_pbarp);
+   ceff2 = 0.57 + 2.5e-4*sig_pbarp + 0.65 * std::exp(-0.02*sig_pbarp);
   }
  if( (theDef == G4Triton::Triton()) || (theDef == G4He3::He3() ) )
   {
-    ceff2 = 0.39 + 2.7e-4*sig_pbarp + 0.7 * exp(-0.02*sig_pbarp);
+    ceff2 = 0.39 + 2.7e-4*sig_pbarp + 0.7 * std::exp(-0.02*sig_pbarp);
   }
   if(theDef == theAlpha)
   {
-   ceff2 = 0.24 + 3.5e-4*sig_pbarp + 0.75 * exp(-0.03*sig_pbarp);
+   ceff2 = 0.24 + 3.5e-4*sig_pbarp + 0.75 * std::exp(-0.03*sig_pbarp);
   }
  }
 
@@ -308,23 +308,23 @@ Amag=1.;         // Uzhi
    Ref2 = XstotalHad/10./2./pi ;
   if(Z>2)
   {
-   ceff2 = 0.22 + 2.0e-4*sig_pbarp + 0.2 * exp(-0.03*sig_pbarp);
+   ceff2 = 0.22 + 2.0e-4*sig_pbarp + 0.2 * std::exp(-0.03*sig_pbarp);
   }
     if(theDef == theProton)
   {
-    ceff2= 0.078 + 6.657e-4*sig_pbarp + 0.3359*exp(-0.03*sig_pbarp);   
+    ceff2= 0.078 + 6.657e-4*sig_pbarp + 0.3359*std::exp(-0.03*sig_pbarp);   
   }
      if(theDef == theDeuteron)  
   {
-   ceff2 = 0.40 + 3.5e-4 *sig_pbarp + 0.45 * exp(-0.02*sig_pbarp);
+   ceff2 = 0.40 + 3.5e-4 *sig_pbarp + 0.45 * std::exp(-0.02*sig_pbarp);
   }   
   if( (theDef == G4Triton::Triton()) || (theDef == G4He3::He3() ) )
   {
-    ceff2 = 0.24 + 3.5e-4*sig_pbarp + 0.75 * exp(-0.03*sig_pbarp);   
+    ceff2 = 0.24 + 3.5e-4*sig_pbarp + 0.75 * std::exp(-0.03*sig_pbarp);   
   }
  if(theDef == theAlpha)   
   {
-   ceff2 = 0.17 + 3.5e-4*sig_pbarp + 0.45 * exp(-0.03*sig_pbarp);
+   ceff2 = 0.17 + 3.5e-4*sig_pbarp + 0.45 * std::exp(-0.03*sig_pbarp);
   }
 }
 
@@ -508,7 +508,7 @@ G4double G4AntiNuclElastic::CalculateAm( G4double momentum, G4double n, G4double
 {
   G4double modvalue, value2, fact1, fact2, arg, shift, bessel;
                           
-  modvalue = fabs(value);
+  modvalue = std::fabs(value);
                  
   if ( modvalue < 8.0 )
   {
@@ -543,7 +543,7 @@ G4double G4AntiNuclElastic::CalculateAm( G4double momentum, G4double n, G4double
                           + value2*(-0.88228987e-6
                           + value2*0.105787412e-6       ) ) );
 
-    bessel = sqrt( 0.636619772/modvalue)*(cos(shift)*fact1 - arg*sin(shift)*fact2);
+    bessel = std::sqrt( 0.636619772/modvalue)*(std::cos(shift)*fact1 - arg*std::sin(shift)*fact2);
     if (value < 0.0) bessel = -bessel;
   }
   return bessel;

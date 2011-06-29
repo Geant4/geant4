@@ -115,7 +115,7 @@ void SteppingAction::UserSteppingAction(const G4Step* s)
    Histo->FillNtuple(0, 3, y);
    Histo->FillNtuple(0, 4, z);
    Histo->FillNtuple(0, 5, s->GetTotalEnergyDeposit()/eV);
-   Histo->FillNtuple(0, 6, sqrt((x-xp)*(x-xp)+(y-yp)*(y-yp)+(z-zp)*(z-zp)));
+   Histo->FillNtuple(0, 6, std::sqrt((x-xp)*(x-xp)+(y-yp)*(y-yp)+(z-zp)*(z-zp)));
    Histo->AddRowNtuple(0);      
  }
 }    

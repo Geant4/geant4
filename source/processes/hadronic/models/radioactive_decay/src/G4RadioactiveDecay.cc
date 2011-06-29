@@ -1869,11 +1869,11 @@ G4ThreeVector G4RadioactiveDecay::ChooseCollimationDirection() const {
   if (forceDecayHalfAngle > 0.) {
     // Generate uniform direction around central axis
     G4double phi = 2.*pi*G4UniformRand();
-    G4double cosMin = cos(forceDecayHalfAngle);
+    G4double cosMin = std::cos(forceDecayHalfAngle);
     G4double cosTheta = (1.-cosMin)*G4UniformRand() + cosMin;	// [cosMin,1.)
     
     dir.setPhi(dir.phi()+phi);
-    dir.setTheta(dir.theta()+acos(cosTheta));
+    dir.setTheta(dir.theta()+std::acos(cosTheta));
   }
 
 #ifdef G4VERBOSE

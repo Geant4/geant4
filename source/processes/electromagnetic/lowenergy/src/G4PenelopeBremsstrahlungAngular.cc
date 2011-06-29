@@ -293,9 +293,9 @@ G4double G4PenelopeBremsstrahlungAngular::SampleCosTheta(G4double Zmat,
       if (G4UniformRand() > 0.75)
 	{
 	  if (cdt<0)
-	    cdt = -1.0*pow(-cdt,1./3.);
+	    cdt = -1.0*std::pow(-cdt,1./3.);
 	  else
-	    cdt = pow(cdt,1./3.);
+	    cdt = std::pow(cdt,1./3.);
 	}
       cdt = (cdt+beta)/(1.0+beta*cdt);
       return cdt;

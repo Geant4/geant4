@@ -79,8 +79,8 @@ Ranlux64Engine::Ranlux64Engine()
 : HepRandomEngine()
 {
    luxury = 1;
-   int cycle    = abs(int(numEngines/maxIndex));
-   int curIndex = abs(int(numEngines%maxIndex));
+   int cycle    = std::abs(int(numEngines/maxIndex));
+   int curIndex = std::abs(int(numEngines%maxIndex));
    numEngines +=1;
    long mask = ((cycle & 0x007fffff) << 8);
    long seedlist[2];
@@ -108,8 +108,8 @@ Ranlux64Engine::Ranlux64Engine(int rowIndex, int, int lux)
 : HepRandomEngine()
 {
    luxury = lux;
-   int cycle = abs(int(rowIndex/maxIndex));
-   int   row = abs(int(rowIndex%maxIndex));
+   int cycle = std::abs(int(rowIndex/maxIndex));
+   int   row = std::abs(int(rowIndex%maxIndex));
    long mask = (( cycle & 0x000007ff ) << 20 );
    long seedlist[2]; 
    HepRandom::getTheTableSeeds( seedlist, row );

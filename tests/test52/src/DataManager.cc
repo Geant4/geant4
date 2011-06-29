@@ -119,7 +119,7 @@ void DataManager::AddDataCollector(DataManager* comp) {
      return;
   }
 
-  sort(dataCollectors.begin(),dataCollectors.end(),zCompare());
+  std::sort(dataCollectors.begin(),dataCollectors.end(),zCompare());
 }
 
 

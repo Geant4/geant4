@@ -75,7 +75,7 @@ void CalDataCollector::PrintResults() {
   double totEnergyDepositErrSqu =         
            totEnergyDepositSumSquares / (totEnergyDeposit * 
            totEnergyDeposit) - 1.0 / double(nmbEnergyDeposits);  
-  double totEnergyDepositRelErr = sqrt(totEnergyDepositErrSqu);  
+  double totEnergyDepositRelErr = std::sqrt(totEnergyDepositErrSqu);  
 
   double thickness = GetUpperBound() - GetLowerBound();
   double center = GetLowerBound() + 0.5 * thickness;

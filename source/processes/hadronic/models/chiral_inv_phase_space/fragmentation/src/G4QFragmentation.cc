@@ -2472,7 +2472,7 @@ G4QHadronVector* G4QFragmentation::Fragment()
             h4M=G4LorentzVector(0.,0.,0.,mNeut);
             G4LorentzVector p4M(0.,0.,0.,mProt);
             G4double sum=nuM+mNeut+mProt;
-            if(fabs(dhM-sum)<eps)
+            if(std::fabs(dhM-sum)<eps)
             {
               n4M=dh4M*(nuM/sum);
               h4M=dh4M*(mNeut/sum);
@@ -5003,7 +5003,7 @@ void G4QFragmentation::EvaporateResidual(G4QHadron* qH)
 #ifdef debug
     G4cout<<"G4QFragment::EvaRes: Excitation = "<<totMass-totGSM<<G4endl;
 #endif
-  if(fabs(totMass-totGSM) < eps)
+  if(std::fabs(totMass-totGSM) < eps)
   {
     theResult->push_back(qH);               // fill As It Is
   }

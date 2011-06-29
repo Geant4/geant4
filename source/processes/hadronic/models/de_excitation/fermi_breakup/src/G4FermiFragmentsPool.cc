@@ -680,7 +680,7 @@ G4FermiFragmentsPool::IsExist(G4int Z, G4int A,
       for(size_t j=0; j<nz; ++j) {
 	G4FermiConfiguration* conf = (list2[A])[j];
 	if(Z == conf->GetZ() && A == conf->GetA() && 
-	   fabs(mass - conf->GetMass()) < keV) {return true; }
+	   std::fabs(mass - conf->GetMass()) < keV) {return true; }
       }
     }
     return false;
@@ -692,7 +692,7 @@ G4FermiFragmentsPool::IsExist(G4int Z, G4int A,
       for(size_t j=0; j<nz; ++j) {
 	G4FermiConfiguration* conf = (list3[A])[j];
 	if(Z == conf->GetZ() && A == conf->GetA() && 
-	   fabs(mass - conf->GetMass()) < keV) { return true; }
+	   std::fabs(mass - conf->GetMass()) < keV) { return true; }
       }
     }
     return false;
@@ -704,7 +704,7 @@ G4FermiFragmentsPool::IsExist(G4int Z, G4int A,
       for(size_t j=0; j<nz; ++j) {
 	G4FermiConfiguration* conf = (list4[A])[j];
 	if(Z == conf->GetZ() && A == conf->GetA() && 
-	   fabs(mass - conf->GetMass()) < keV) { return true; }
+	   std::fabs(mass - conf->GetMass()) < keV) { return true; }
       }
     }
     return false;
