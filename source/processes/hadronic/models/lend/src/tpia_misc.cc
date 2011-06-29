@@ -470,7 +470,7 @@ int tpia_misc_sampleEqualProbableBin( statusMessageReporting *, tpia_decaySampli
             value1 = value2;
         }
         r = tpia_misc_drng( decaySamplingInfo->rng, decaySamplingInfo->rngState );
-        if( P23 != P12 ) r = ( -P12 + std::sqrt( P12 * P12 * ( 1. - r ) + r * P23 * P23 ) ) / ( P23 - P12 );
+        if( P23 != P12 ) r = ( -P12 + sqrt( P12 * P12 * ( 1. - r ) + r * P23 * P23 ) ) / ( P23 - P12 );
         value = 0.5 * ( value1 + value2 + r * ( value3 - value1 ) );
     }
     *value_ = value;

@@ -86,7 +86,7 @@ void RandPoissonQ::setupForDefaultMu() {
   // The following are useful for quick approximation, for large mu
   
   double sig2 = defaultMean * (.9998654 - .08346/defaultMean);
-  sigma = std::sqrt(sig2);
+  sigma = sqrt(sig2);
 	// sigma for the Guassian which approximates the Poisson -- naively
 	// sqrt (defaultMean).
 	//
@@ -96,7 +96,7 @@ void RandPoissonQ::setupForDefaultMu() {
   double t = 1./(sig2);
 
   a2 = t/6 + t*t/324;
-  a1 = std::sqrt (1-2*a2*a2*sig2);
+  a1 = sqrt (1-2*a2*a2*sig2);
   a0 = defaultMean + .5 - sig2 * a2;
 
   // The formula will be a0 + a1*x + a2*x*x where x has 2nd moment of sigma.
@@ -159,10 +159,10 @@ long RandPoissonQ::shoot(HepRandomEngine* anEngine, double mean) {
       // Compute the coefficients defining the quadratic transformation from a 
       // Gaussian to a Poisson for this mean.  Also save these for next time.
       double sig2 = mean * (.9998654 - .08346/mean);
-      lastSigma = std::sqrt(sig2);
+      lastSigma = sqrt(sig2);
       double t = 1./sig2;
       lastA2 = t*(1./6.) + t*t*(1./324.);
-      lastA1 = std::sqrt (1-2*lastA2*lastA2*sig2);
+      lastA1 = sqrt (1-2*lastA2*lastA2*sig2);
       lastA0 = mean + .5 - sig2 * lastA2;
     }
     return poissonDeviateQuick ( anEngine, lastA0, lastA1, lastA2, lastSigma );
@@ -197,14 +197,14 @@ long RandPoissonQ::poissonDeviateQuick ( HepRandomEngine *e, double mu ) {
   // Gaussian to a Poisson:
 
   double sig2 = mu * (.9998654 - .08346/mu);
-  double sig = std::sqrt(sig2);
+  double sig = sqrt(sig2);
 	// The multiplier corrects for fact that discretization of the form
 	// [gaussian+.5] increases the second moment by a small amount.
 
   double t = 1./sig2;
 
   double sa2 = t*(1./6.) + t*t*(1./324.);
-  double sa1 = std::sqrt (1-2*sa2*sa2*sig2);
+  double sa1 = sqrt (1-2*sa2*sa2*sig2);
   double sa0 = mu + .5 - sig2 * sa2;
 
   // The formula will be sa0 + sa1*x + sa2*x*x where x has sigma of sq.
@@ -295,7 +295,7 @@ long RandPoissonQ::poissonDeviateSmall (HepRandomEngine * e, double mean) {
   if ( mean < FIRST_MU ) {
 
     long N = 0;
-    double term = std::exp(-mean);
+    double term = exp(-mean);
     double cdf = term;
 
     if ( r < (1 - 1.0E-9) ) {
@@ -363,7 +363,7 @@ long RandPoissonQ::poissonDeviateSmall (HepRandomEngine * e, double mean) {
     // out of oneOverN table.
 
     long N = 0;
-    double term = std::exp(-mu);
+    double term = exp(-mu);
     double cdf = term;
     double cdf0;
 
@@ -509,7 +509,7 @@ long RandPoissonQ::poissonDeviateSmall (HepRandomEngine * e, double mean) {
   //	from deltaMu and s.
 
   N2 = 0;
-  double term = std::exp(-deltaMu);
+  double term = exp(-deltaMu);
   double cdf = term;
 
   if ( s < (1 - 1.0E-10) ) {
