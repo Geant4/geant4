@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-05    (27-May-2011)
+ Geant4 version Name: geant4-09-05-beta-01    (30-June-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -16,6 +16,7 @@ PreInit> # Auto-generated test input file for test13 hadronics.
 PreInit> #
 PreInit> PreInit> # /run/verbose 2
 PreInit> /run/setCut 1 m
+Tst13PhysicsList::SetCuts:CutLength : 1000 (mm)
 PreInit> /run/initialize
 Tst13PhysicsList::SetCuts:CutLength : 1000 (mm)
 Idle> /gun/direction 1 0 0
@@ -532,6 +533,14 @@ Idle> /gun/energy 1 TeV
 Idle> /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 Idle> /run/beamOn 100
+ Process: inelastic , Model: TheoFSGenerator
+ Primary: proton (2212), E= 1.00091e+06, target nucleus (13,27)
+ relative limit 0.02 relative value = 0.000252545 pass
+ absolute limit (MeV) 150 absolute value (MeV) = 252.539 fail
+ Process: inelastic , Model: TheoFSGenerator
+ Primary: proton (2212), E= 1.00083e+06, target nucleus (13,27)
+ relative limit 0.02 relative value = 0.000177641 pass
+ absolute limit (MeV) 150 absolute value (MeV) = 177.622 fail
 Idle> #
 Idle> # proton at 100 GeV in Air
 Idle> #

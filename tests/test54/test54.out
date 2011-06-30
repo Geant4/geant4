@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-05    (27-May-2011)
+ Geant4 version Name: geant4-09-05-beta-01    (30-June-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -26,10 +26,10 @@
 /run/initialize
 userDetector->Construct() start.
 
- Material: Galactic     density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 114561548.020 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 114561548.020 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:  Silicon     density:  2.330 g/cm3   RadL:   9.368 cm   Nucl.Int.Length:  45.761 cm   Imean: 173.000 eV 
+ Material:  Silicon    density:  2.330 g/cm3   RadL:   9.368 cm   Nucl.Int.Length:  45.761 cm   Imean: 173.000 eV 
    --->  Element: Silicon ( )   Z = 14.0   N =  28.1   A =  28.09 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  The  WORLD   is made of 30 um  of Galactic. The transverse size (YZ) of the world is 60 um 
@@ -38,8 +38,6 @@ userDetector->Construct() start.
 World is registered to the default region.
 physicsList->Construct() start.
 physicsList->Construct() start.
-### G4GoudsmitSaundersonTable loading PDF data
-### G4GoudsmitSaundersonMscModel loading ELSEPA data
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 mm 
@@ -82,7 +80,10 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  GoudsmitSaunderson :   Emin=        0 eV       Emax=         10 TeV
+          UrbanMsc95 :   Emin=        0 eV       Emax=         10 TeV
+
+### ===  Deexcitation model UAtomDeexcitation is activated for regions:
+          DefaultRegionForTheWorld
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -330,21 +331,21 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Galactic Silicon 
- Production cuts :   gamma 7 um      e- 7 um      e+ 7 um  proton 0 fm 
+ Production cuts :   gamma 7 um      e- 7 um      e+ 7 um  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Galactic
- Range cuts        :  gamma  7 um     e-  7 um     e+  7 um  proton 0 fm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0 eV 
+ Range cuts        :  gamma  7 um     e-  7 um     e+  7 um  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Silicon
- Range cuts        :  gamma  7 um     e-  7 um     e+  7 um  proton 0 fm 
- Energy thresholds :  gamma  990 eV     e-  21.4886 keV    e+  20.8954 keV proton 0 eV 
+ Range cuts        :  gamma  7 um     e-  7 um     e+  7 um  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  21.4886 keV    e+  20.8954 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -385,45 +386,45 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=5.7s Real=9.13s Sys=3.43s
+  User=5.19s Real=7.6s Sys=2.41s
 
  ======================== run summary ======================
 
  The run was 100000 e- of 100 MeV through 20 um  of Silicon (density: 2.33 g/cm3 )
 
- Total energy deposit in absorber per event = 6.502 keV +- 16.99 eV 
+ Total energy deposit in absorber per event = 6.48 keV +- 16.83 eV 
 
- -----> Mean dE/dx = 3.251 MeV/cm	(1.395 MeV*cm2/g)
+ -----> Mean dE/dx = 3.24 MeV/cm	(1.391 MeV*cm2/g)
 
  From formulas :
    restricted dEdx = 3.016 MeV/cm	(1.295 MeV*cm2/g)
    full dEdx       = 13.55 MeV/cm	(5.817 MeV*cm2/g)
 
- Leakage :  primary = 99.97 MeV +- 2.476 keV   secondaries = 19.6 keV +- 2.475 keV
+ Leakage :  primary = 99.98 MeV +- 2.572 keV   secondaries = 17.35 keV +- 2.572 keV
  Energy balance :  edep + eleak = 100 MeV
 
- Total track length (charged) in absorber per event = 20.29 um  +- 8.409 nm 
- Total track length (neutral) in absorber per event = 29.08 nm  +- 1.963 nm 
+ Total track length (charged) in absorber per event = 20.28 um  +- 8.266 nm 
+ Total track length (neutral) in absorber per event = 29.03 nm  +- 1.968 nm 
 
- Number of steps (charged) in absorber per event = 4.14 +- 9.17e-06
- Number of steps (neutral) in absorber per event = 0.00328 +- 9.17e-06
+ Number of steps (charged) in absorber per event = 3.675 +- 9.092e-06
+ Number of steps (neutral) in absorber per event = 0.00315 +- 9.092e-06
 
- Number of secondaries per event : Gammas = 0.00328;   electrons = 0.01828;   positrons = 0
+ Number of secondaries per event : Gammas = 0.00315;   electrons = 0.01809;   positrons = 0
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
 
  Number of events with the primary particle reflected = 0 %
- Number of events with at least  1 particle reflected (same charge as primary) = 0.143 %
+ Number of events with at least  1 particle reflected (same charge as primary) = 0.137 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 1.413 mrad (central part only)
+  rms proj angle of transmit primary particle = 1.323 mrad (central part only)
   computed theta0 (Highland formula)          = 1.342 mrad
-  central part defined as +- 4.026 mrad;   Tail ratio = 0.7005 %
+  central part defined as +- 4.026 mrad;   Tail ratio = 2.766 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1155144772, 864041580
+ Current couple of seeds = 670935912, 703860217
 ----------------------------------------
 #
 /testem/det/setAbsMat Gold
@@ -431,10 +432,10 @@ Run Summary
 /testem/det/setAbsYZ 1 mm
 /testem/det/update
 
- Material: Galactic     density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 114561548.020 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 114561548.020 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:     Gold     density: 19.320 g/cm3   RadL:   3.344 mm   Nucl.Int.Length:  10.539 cm   Imean: 790.000 eV 
+ Material:     Gold    density: 19.320 g/cm3   RadL:   3.344 mm   Nucl.Int.Length:  10.539 cm   Imean: 790.000 eV 
    --->  Element: Gold ( )   Z = 79.0   N = 197.0   A = 196.97 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  The  WORLD   is made of 14.487 um  of Galactic. The transverse size (YZ) of the world is 1.2 mm 
@@ -474,7 +475,10 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  GoudsmitSaunderson :   Emin=        0 eV       Emax=         10 TeV
+          UrbanMsc95 :   Emin=        0 eV       Emax=         10 TeV
+
+### ===  Deexcitation model UAtomDeexcitation is activated for regions:
+          DefaultRegionForTheWorld
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -722,26 +726,26 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Galactic Gold 
- Production cuts :   gamma 7 um      e- 7 um      e+ 7 um  proton 0 fm 
+ Production cuts :   gamma 7 um      e- 7 um      e+ 7 um  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Galactic
- Range cuts        :  gamma  7 um     e-  7 um     e+  7 um  proton 0 fm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0 eV 
+ Range cuts        :  gamma  7 um     e-  7 um     e+  7 um  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Silicon
- Range cuts        :  gamma  7 um     e-  7 um     e+  7 um  proton 0 fm 
- Energy thresholds :  gamma  990 eV     e-  21.4886 keV    e+  20.8954 keV proton 0 eV 
+ Range cuts        :  gamma  7 um     e-  7 um     e+  7 um  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  21.4886 keV    e+  20.8954 keV proton 100 keV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Gold
- Range cuts        :  gamma  7 um     e-  7 um     e+  7 um  proton 0 fm 
- Energy thresholds :  gamma  6.54229 keV    e-  65.1406 keV    e+  63.8405 keV proton 0 eV 
+ Range cuts        :  gamma  7 um     e-  7 um     e+  7 um  proton 1 mm 
+ Energy thresholds :  gamma  6.54229 keV    e-  65.1406 keV    e+  63.8405 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -756,7 +760,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1155144772, 864041580
+ Current couple of seeds = 670935912, 703860217
 ----------------------------------------
 Start Run processing.
 
@@ -782,45 +786,45 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=6.19s Real=9.02s Sys=2.83s
+  User=6.14s Real=8.71s Sys=2.58s
 
  ======================== run summary ======================
 
  The run was 100000 e- of 15.7 MeV through 9.66 um  of Gold (density: 19.3 g/cm3 )
 
- Total energy deposit in absorber per event = 18.67 keV +- 48.08 eV 
+ Total energy deposit in absorber per event = 18.64 keV +- 47.06 eV 
 
- -----> Mean dE/dx = 19.33 MeV/cm	(1 MeV*cm2/g)
+ -----> Mean dE/dx = 19.3 MeV/cm	(0.9989 MeV*cm2/g)
 
  From formulas :
    restricted dEdx = 17.93 MeV/cm	(0.9278 MeV*cm2/g)
    full dEdx       = 60.88 MeV/cm	(3.151 MeV*cm2/g)
 
- Leakage :  primary = 15.64 MeV +- 1.477 keV   secondaries = 39.55 keV +- 1.473 keV
+ Leakage :  primary = 15.64 MeV +- 1.55 keV   secondaries = 42.64 keV +- 1.543 keV
  Energy balance :  edep + eleak = 15.7 MeV
 
- Total track length (charged) in absorber per event = 9.939 um  +- 8.434 nm 
- Total track length (neutral) in absorber per event = 125.8 nm  +- 3.163 nm 
+ Total track length (charged) in absorber per event = 9.951 um  +- 8.475 nm 
+ Total track length (neutral) in absorber per event = 130.6 nm  +- 3.409 nm 
 
- Number of steps (charged) in absorber per event = 5.162 +- 9.184e-06
- Number of steps (neutral) in absorber per event = 0.02854 +- 9.184e-06
+ Number of steps (charged) in absorber per event = 5.08 +- 9.206e-06
+ Number of steps (neutral) in absorber per event = 0.02912 +- 9.206e-06
 
- Number of secondaries per event : Gammas = 0.02841;   electrons = 0.02258;   positrons = 0
+ Number of secondaries per event : Gammas = 0.02896;   electrons = 0.02316;   positrons = 0
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
 
- Number of events with the primary particle reflected = 0 %
- Number of events with at least  1 particle reflected (same charge as primary) = 0.278 %
+ Number of events with the primary particle reflected = 0.003 %
+ Number of events with at least  1 particle reflected (same charge as primary) = 0.31 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 35.18 mrad (central part only)
+  rms proj angle of transmit primary particle = 34.43 mrad (central part only)
   computed theta0 (Highland formula)          = 35.1 mrad
-  central part defined as +- 105.3 mrad;   Tail ratio = 0.45 %
+  central part defined as +- 105.3 mrad;   Tail ratio = 2.626 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1955425726, 1612238701
+ Current couple of seeds = 96281319, 717475233
 ----------------------------------------
 #
 /testem/phys/setCuts 10 um

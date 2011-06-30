@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-05    (27-May-2011)
+ Geant4 version Name: geant4-09-05-beta-01    (30-June-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -13,6 +13,7 @@
 SimpleBox is now made of U
 /run/verbose 2
 /run/setCut 1 m
+Tst27PhysicsList::SetCuts:CutLength : 1000 (mm)
 /run/initialize
 userDetector->Construct() start.
 SLog is registered to the default region.
@@ -357,65 +358,33 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
  Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 1005.85, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0114546 fail
+ Primary: neutron (2112), E= 988.249, target nucleus (92,238)
+ relative limit 0.01 relative value = 0.0155957 fail
  absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
  Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 991.306, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0146743 fail
+ Primary: neutron (2112), E= 1010.44, target nucleus (92,238)
+ relative limit 0.01 relative value = 0.010712 fail
  absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
  Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 1007.2, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0112256 fail
+ Primary: neutron (2112), E= 988.777, target nucleus (92,238)
+ relative limit 0.01 relative value = 0.0154286 fail
  absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
  Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 994.879, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0137264 fail
+ Primary: neutron (2112), E= 1001.09, target nucleus (92,238)
+ relative limit 0.01 relative value = 0.0123411 fail
  absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
  Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 992.922, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0142298 fail
+ Primary: neutron (2112), E= 1013.4, target nucleus (92,238)
+ relative limit 0.01 relative value = 0.0102838 fail
  absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
  Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 1008.42, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0110277 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 985.539, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0165151 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 986.878, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0160478 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 1013.02, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0103362 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 986.002, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0163506 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 997.253, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0131616 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 1006.39, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0113619 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 1009.68, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0108291 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 1010.57, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0106926 fail
+ Primary: neutron (2112), E= 995.186, target nucleus (92,238)
+ relative limit 0.01 relative value = 0.0136508 fail
  absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.6s Real=0.62s Sys=0s
+  User=0.44s Real=0.54s Sys=0s
 #
 # deuteron at 1 GeV/nucleon on H
 #
@@ -838,7 +807,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.17s Real=0.18s Sys=0.01s
+  User=0.24s Real=0.24s Sys=0s
 #
 #
 # deuteron at 200 MeV in U
@@ -877,10 +846,18 @@ Index : 2     used in the geometry : No      recalculation needed : No
 ====================================================================
 
 Start Run processing.
+ Process: inelastic , Model: Binary Cascade
+ Primary: neutron (2112), E= 1010.25, target nucleus (92,238)
+ relative limit 0.01 relative value = 0.010741 fail
+ absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
+ Process: inelastic , Model: Binary Cascade
+ Primary: neutron (2112), E= 995.144, target nucleus (92,238)
+ relative limit 0.01 relative value = 0.0136609 fail
+ absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0.02s Real=0.03s Sys=0s
 #
 # deuteron at 200 MeV/nucleon on H
 #
@@ -1003,21 +980,25 @@ Index : 2     used in the geometry : No      recalculation needed : No
 
 Start Run processing.
  Process: inelastic , Model: Binary Cascade
- Primary: proton (2212), E= 1005.2, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0113437 fail
+ Primary: neutron (2112), E= 987.317, target nucleus (92,238)
+ relative limit 0.01 relative value = 0.0159001 fail
  absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
  Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 992.961, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0142195 fail
+ Primary: neutron (2112), E= 994.935, target nucleus (92,238)
+ relative limit 0.01 relative value = 0.0137125 fail
  absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
  Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 987.602, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0158059 fail
+ Primary: neutron (2112), E= 1007.37, target nucleus (92,238)
+ relative limit 0.01 relative value = 0.0111979 fail
+ absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
+ Process: inelastic , Model: Binary Cascade
+ Primary: neutron (2112), E= 986.145, target nucleus (92,238)
+ relative limit 0.01 relative value = 0.0163004 fail
  absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.08s Real=0.08s Sys=0s
+  User=0.14s Real=0.14s Sys=0.01s
 #
 # alpha at 1 GeV/nucleon on H
 #
@@ -1140,7 +1121,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 #
 # alpha at 200 MeV/nucleon on H
 #
@@ -1266,7 +1247,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
@@ -1308,7 +1289,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.02s Real=0.02s Sys=0s
+  User=0.02s Real=0.03s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Silicon
 #
@@ -1570,7 +1551,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.02s Sys=0s
+  User=0s Real=0.01s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1712,7 +1693,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 #
 #  .....end C(12,6)++............
 #

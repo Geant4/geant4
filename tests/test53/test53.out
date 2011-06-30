@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-05    (27-May-2011)
+ Geant4 version Name: geant4-09-05-beta-01    (30-June-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -26,17 +26,17 @@ userDetector->Construct() start.
  	 liquidArgon:    5.7 mm 
 -------------------------------------------------------------
 
- Material: Galactic     density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 114334693.470 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 114334693.470 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:     Lead     density: 11.350 g/cm3   RadL:   5.613 mm   Nucl.Int.Length:  18.261 cm   Imean: 823.000 eV 
+ Material:     Lead    density: 11.350 g/cm3   RadL:   5.613 mm   Nucl.Int.Length:  18.261 cm   Imean: 823.000 eV 
    --->  Element: Pb (Pb)   Z = 82.0   N = 207.2   A = 207.22 g/mole
    --->  Isotope: Pb204   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
    --->  Isotope: Pb206   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
    --->  Isotope: Pb207   Z = 82   N = 207   A = 206.98 g/mole   abundance:  22.10 %
    --->  Isotope: Pb208   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material: liquidArgon     density:  1.390 g/cm3   RadL:  14.064 cm   Nucl.Int.Length:  86.001 cm   Imean: 188.000 eV 
+ Material: liquidArgon    density:  1.390 g/cm3   RadL:  14.064 cm   Nucl.Int.Length:  86.001 cm   Imean: 188.000 eV 
    --->  Element: Ar (Ar)   Z = 18.0   N =  40.0   A =  39.95 g/mole
    --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
    --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
@@ -48,8 +48,6 @@ physicsList->Construct() start.
 physicsList->Construct() start.
 Livermore Polarized PhotoElectric is constructed 
 Energy range: 0.25 keV - 100 GeV
-Livermore Polarized GammaConversion is constructed 
-Energy range: 1022 keV - 100 GeV
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 mm 
@@ -79,8 +77,6 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /run/beamOn 100
 Livermore Polarized PhotoElectric model is initialized 
 Energy range: 0.25 keV - 1 GeV
-Livermore Polarized GammaConversion model is initialized 
-Energy range: 1022 keV - 1 GeV
 
 phot:   for  gamma    SubType= 12
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -110,6 +106,9 @@ msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc95 :   Emin=        0 eV       Emax=         10 TeV
+
+### ===  Deexcitation model UAtomDeexcitation is activated for regions:
+          DefaultRegionForTheWorld
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -357,28 +356,28 @@ Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Galactic Lead liquidArgon 
- Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 0 fm 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Galactic
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton 0 eV 
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  102.04 keV    e-  1.36653 MeV    e+  1.28908 MeV proton 0 eV 
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  102.04 keV    e-  1.36653 MeV    e+  1.28908 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : liquidArgon
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  6.21205 keV    e-  344.316 keV    e+  336.864 keV proton 0 eV 
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  6.21205 keV    e-  344.316 keV    e+  336.864 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -420,8 +419,8 @@ Run Summary
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 7.9435 MeV :  1.854 MeV     2.334 +- 0.2334 %      5.78 mm  +- 1.54 mm 
-   liquidArgon: 1.8912 MeV :  1.866 MeV     9.866 +- 0.9866 %      9.59 mm  +- 9.73 mm 
+          Lead:  8.063 MeV :  1.852 MeV     2.297 +- 0.2297 %      5.85 mm  +- 1.53 mm 
+   liquidArgon: 1.7859 MeV :  1.889 MeV     10.58 +- 1.058 %      8.79 mm  +- 9.55 mm 
 
 ------------------------------------------------------------
  Beam particle gamma  E = 10 MeV
@@ -429,15 +428,15 @@ Run Summary
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 7.94354 MeV
-liquidArgon:	 1.8912 MeV
+      Lead:	 8.06301 MeV
+liquidArgon:	 1.78593 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1540709936, 1157125284
+ Current couple of seeds = 1803816746, 1925118163
 ----------------------------------------
 #
 #/run/particle/storePhysicsTable data_stand

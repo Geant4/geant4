@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-05    (27-May-2011)
+ Geant4 version Name: geant4-09-05-beta-01    (30-June-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -244,7 +244,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      95.8        0        0         0         Abs initStep
-    1   -0.237   0.0513     80.2      93.5     2.18     80.2      80.2         Abs muIoni
+    1   -0.237   0.0514     80.2      93.5     2.18     80.2      80.2         Abs muIoni
     2   -0.383   0.0859     96.6        93    0.506     16.4      96.6         Abs muIoni
     3   -0.487     0.12      116      92.4    0.639     19.6       116       World Transportation
 
@@ -286,10 +286,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.4        0        0         0         Abs initStep
-    1   0.0625    0.021     18.1      95.6    0.545     18.1      18.1         Abs muIoni
+    1   0.0626    0.021     18.1      95.6    0.545     18.1      18.1         Abs muIoni
     2   0.0655   0.0217     19.7      95.2   0.0331     1.63      19.7         Abs muIoni
     3    0.118   0.0554     70.8      93.8     1.34     51.1      70.8         Abs muIoni
-    4  0.00724   0.0967      116      92.5     1.29     45.4       116       World Transportation
+    4  0.00723   0.0967      116      92.5     1.29     45.4       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -308,7 +308,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0      96.3        0        0         0         Abs initStep
     1 -0.000962 -0.00106        5        96     0.17        5         5         Abs muIoni
     2  -0.0311    -0.04     22.5      95.4     0.53     17.5      22.5         Abs muIoni
-    3 -0.00627   -0.357      116      92.7     2.69     93.7       116       World Transportation
+    3 -0.00628   -0.357      116      92.7     2.69     93.7       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -326,7 +326,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0      95.7        0        0         0         Abs initStep
     1  -0.0313     0.16     36.5      94.2     1.04     36.5      36.5         Abs muIoni
     2  -0.0549    0.229     61.3      92.6    0.734     24.8      61.3         Abs muIoni
-    3  0.00598    0.337      116      91.1     1.53     54.9       116       World Transportation
+    3  0.00597    0.337      116      91.1     1.53     54.9       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -374,7 +374,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.4        0        0         0         Abs initStep
     1 -0.00536  0.00545     7.38        96    0.206     7.38      7.38         Abs muIoni
-    2  0.00608   -0.223     51.2      94.4     1.32     43.9      51.2         Abs muIoni
+    2  0.00607   -0.223     51.2      94.4     1.32     43.9      51.2         Abs muIoni
     3   0.0921   -0.121     93.2      92.8     1.44       42      93.2         Abs muIoni
     4    0.172  -0.0562      114        92    0.643     20.4       114         Abs muIoni
     5     0.18  -0.0514      115        92   0.0385     1.67       115         Abs muIoni
@@ -387,10 +387,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.5        0        0         0         Abs initStep
     1   0.0137 -0.00479     16.6      95.9    0.519     16.6      16.6         Abs muIoni
-    2  6.2e-05   0.0332     37.5      95.1    0.617       21      37.5         Abs muIoni
+    2  6.3e-05   0.0332     37.5      95.1    0.617       21      37.5         Abs muIoni
     3   0.0402   0.0119       51      94.6    0.351     13.4        51         Abs muIoni
     4   0.0313   -0.157      107      92.8     1.62     55.6       107         Abs muIoni
-    5   0.0266   -0.199      116      92.6    0.284     9.66       116       World Transportation
+    5   0.0265   -0.199      116      92.6    0.284     9.66       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -410,7 +410,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0      96.2        0        0         0         Abs initStep
     1  0.00554   0.0102     11.3      95.7     0.32     11.3      11.3         Abs muIoni
     2 0.000627   0.0723       23      95.3    0.321     11.7        23         Abs muIoni
-    3    0.166    0.746      116      92.7     2.56     93.3       116       World Transportation
+    3    0.166    0.747      116      92.7     2.56     93.3       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -511,7 +511,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     2   0.0219  -0.0257     17.4        95    0.381     15.8      17.4         Abs muIoni
     3   0.0349  -0.0477     24.3      94.5    0.233      6.9      24.3         Abs muIoni
     4   0.0987 -0.00733     63.4      93.4     1.01     39.1      63.4         Abs muIoni
-    5  0.00296   0.0764      116        92      1.4     52.9       116       World Transportation
+    5  0.00295   0.0764      116        92      1.4     52.9       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -622,7 +622,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1   0.0207   0.0247     17.4        95    0.441     17.4      17.4         Abs muIoni
     2    0.106   0.0869     86.3      92.4     2.39     68.9      86.3         Abs muIoni
     3    0.107   0.0867     87.7      92.2   0.0275     1.41      87.7         Abs muIoni
-    4   0.0907   0.0937      116      91.4    0.842     28.5       116       World Transportation
+    4   0.0908   0.0937      116      91.4    0.842     28.5       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -649,7 +649,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.3        0        0         0         Abs initStep
     1 -0.00641  -0.0424       22      95.6    0.673       22        22         Abs muIoni
-    2  -0.0822  -0.0459     38.3        95    0.421     16.3      38.3         Abs muIoni
+    2  -0.0823  -0.0459     38.3        95    0.421     16.3      38.3         Abs muIoni
     3   -0.269   0.0263     56.7      94.5    0.497     18.4      56.7         Abs muIoni
     4   -0.335   0.0811     67.5        94    0.342     10.8      67.5         Abs muIoni
     5   -0.384    0.122     87.4      93.2    0.498     19.9      87.4         Abs muIoni
@@ -846,7 +846,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      95.8        0        0         0         Abs initStep
     1        0        0   0.0137      95.6 0.000201   0.0137    0.0137         Abs muIoni
-    2  -0.0672 -0.00812     35.9      94.3     1.04     35.9      35.9         Abs muIoni
+    2  -0.0672 -0.00813     35.9      94.3     1.04     35.9      35.9         Abs muIoni
     3  -0.0955   -0.061      116        92     2.28     80.3       116       World Transportation
 
 *********************************************************************************************************
@@ -885,7 +885,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.3        0        0         0         Abs initStep
     1  -0.0697  -0.0391     45.3      94.9      1.3     45.3      45.3         Abs muIoni
-    2   -0.257 0.000218       80      93.7     1.07     34.7        80         Abs muIoni
+    2   -0.257 0.000215       80      93.7     1.07     34.7        80         Abs muIoni
     3   -0.466  -0.0876      116      92.5     1.22     36.2       116       World Transportation
 
 *********************************************************************************************************
@@ -918,7 +918,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     3  -0.0782  -0.0522     32.4      95.2    0.329     11.3      32.4         Abs muIoni
     4  -0.0989   -0.102     47.2      94.4    0.532     14.8      47.2         Abs muIoni
     5   -0.123   -0.107     66.9      93.6    0.772     19.7      66.9         Abs muIoni
-    6  0.00618   0.0694      116      92.1     1.42     49.4       116       World Transportation
+    6  0.00619   0.0694      116      92.1     1.42     49.4       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -978,7 +978,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.5        0        0         0         Abs initStep
-    1    -0.23   -0.332     76.8        94     2.38     76.8      76.8         Abs muIoni
+    1   -0.231   -0.332     76.8        94     2.38     76.8      76.8         Abs muIoni
     2   -0.259   -0.441      104      93.1    0.759     27.2       104         Abs muIoni
     3   -0.288   -0.478      114      92.6    0.366      9.7       114         Abs muIoni
     4   -0.295   -0.484      116      92.6   0.0618     2.58       116       World Transportation
@@ -1010,7 +1010,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      95.5        0        0         0         Abs initStep
     1   0.0002  1.2e-05     2.94      95.2   0.0694     2.94      2.94         Abs muIoni
-    2   -0.016  0.00551     20.3      94.6      0.5     17.4      20.3         Abs muIoni
+    2   -0.016  0.00552     20.3      94.6      0.5     17.4      20.3         Abs muIoni
     3  -0.0431 -0.00588       58      93.1     1.06     37.7        58         Abs muIoni
     4  -0.0708   0.0818      116      91.5     1.67     58.2       116       World Transportation
 
@@ -1031,7 +1031,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      95.5        0        0         0         Abs initStep
-    1     0.67     0.91     79.5        94      1.2     44.2      44.2         Abs muIoni
+    1     0.67     0.91     79.6        94      1.2     44.2      44.2         Abs muIoni
     2    0.693    0.959     81.3      93.8   0.0396     1.77        46         Abs muIoni
     3     1.08     1.94      116      92.8    0.987     34.9      80.9       World Transportation
 
@@ -1104,8 +1104,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      95.5        0        0         0         Abs initStep
     1   -0.042   0.0824     51.4      93.8     1.59     51.4      51.4         Abs muIoni
-    2  -0.0258   0.0985     67.7        93    0.542     16.3      67.7         Abs muIoni
-    3  -0.0186   0.0973     71.2      92.5    0.114     3.51      71.2         Abs muIoni
+    2  -0.0258   0.0986     67.7        93    0.542     16.3      67.7         Abs muIoni
+    3  -0.0186   0.0974     71.2      92.5    0.114     3.51      71.2         Abs muIoni
     4   0.0143      0.1     76.2      92.2    0.123     5.03      76.2         Abs muIoni
     5     0.32    0.172      113        91     1.14     37.3       113         Abs muIoni
     6    0.347    0.166      116      90.9   0.0788     2.75       116       World Transportation
@@ -1381,7 +1381,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     2  0.00832   0.0126     47.3      91.8    0.311     10.9      47.3         Abs muIoni
     3   0.0329   0.0888     67.4        91     0.65     20.1      67.4         Abs muIoni
     4    0.112   0.0917     88.6      90.3    0.607     21.2      88.6         Abs muIoni
-    5     0.27   -0.036      116      89.5    0.835     27.6       116       World Transportation
+    5     0.27  -0.0361      116      89.5    0.835     27.6       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -1501,7 +1501,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.3        0        0         0         Abs initStep
-    1  0.00228 -0.00239     4.59        96    0.112     4.59      4.59         Abs muIoni
+    1  0.00229 -0.00239     4.59        96    0.112     4.59      4.59         Abs muIoni
     2   0.0178 -0.00523       12      93.9    0.206     7.36        12         Abs muIoni
     3    0.299    0.295     59.5      92.5     1.33     47.6      59.5         Abs muIoni
     4    0.608    0.711      116      90.7     1.71     56.7       116       World Transportation
@@ -1556,7 +1556,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0      95.4        0        0         0         Abs initStep
     1   0.0316   0.0332     25.8      93.9    0.786     25.8      25.8         Abs muIoni
     2  0.00964    0.177     50.5      93.1    0.712     24.7      50.5         Abs muIoni
-    3  0.00548    0.219     55.6      92.6    0.145     5.16      55.6         Abs muIoni
+    3  0.00549    0.219     55.6      92.6    0.145     5.16      55.6         Abs muIoni
     4   -0.198    0.856      116      90.8     1.78     60.6       116       World Transportation
 
 *********************************************************************************************************
@@ -1638,7 +1638,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1 8.66e-06 8.77e-06    0.205      96.3  0.00505    0.205     0.205         Abs muIoni
     2   0.0154    0.232     39.1      95.2     1.02     38.9      39.1         Abs muIoni
     3     0.34    0.699      100      93.2     1.83     61.2       100         Abs muIoni
-    4    0.436    0.829      116      92.8    0.383       16       116       World Transportation
+    4    0.437    0.829      116      92.8    0.383       16       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -1656,7 +1656,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      95.6        0        0         0         Abs initStep
     1    -0.22  -0.0806     55.2      93.7     1.65     55.2      55.2         Abs muIoni
-    2   -0.783     -0.4      116      91.9     1.89       61       116       World Transportation
+    2   -0.783   -0.401      116      91.9     1.89       61       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -1773,8 +1773,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0        96        0        0         0         Abs initStep
     1  -0.0248   0.0166     12.5      95.5    0.348     12.5      12.5         Abs muIoni
     2    -0.18    0.132     37.2      94.7    0.671     24.8      37.2         Abs muIoni
-    3   -0.311    0.143     50.8      94.2    0.325     13.6      50.8         Abs muIoni
-    4   -0.879   0.0176      116      92.3      1.9     65.4       116       World Transportation
+    3   -0.312    0.143     50.8      94.2    0.325     13.6      50.8         Abs muIoni
+    4   -0.879   0.0177      116      92.3      1.9     65.4       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -1877,7 +1877,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      95.9        0        0         0         Abs initStep
     1    -2.07    0.146     90.9      93.8     1.91     62.4      62.4         Abs muIoni
-    2    -3.06   0.0469      116      93.1    0.745     25.3      87.7       World Transportation
+    2    -3.06    0.047      116      93.1    0.745     25.3      87.7       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -1896,7 +1896,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      95.7        0        0         0         Abs initStep
     1    0.094   0.0618      110      92.3     3.27      110       110         Abs muIoni
-    2   0.0634   0.0462      116      92.1    0.165      6.5       116       World Transportation
+    2   0.0635   0.0462      116      92.1    0.165      6.5       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -1955,7 +1955,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.6        0        0         0         Abs initStep
     1 -0.00122 -0.00361     11.4      96.2    0.304     11.4      11.4         Abs muIoni
-    2 7.01e-05    0.253     61.3      94.7     1.43     49.9      61.3         Abs muIoni
+    2 7.09e-05    0.253     61.3      94.7     1.43     49.9      61.3         Abs muIoni
     3     0.15    0.807      116      93.2     1.45       55       116       World Transportation
 
 *********************************************************************************************************
@@ -1965,8 +1965,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.2        0        0         0         Abs initStep
     1   -0.606   0.0126     54.6      94.9     1.15     41.6      41.6         Abs muIoni
-    2   -0.759 -0.00934     67.1      93.6    0.334     12.5      54.1         Abs muIoni
-    3   -0.826  0.00865     71.6      93.4    0.126     4.57      58.7         Abs muIoni
+    2   -0.759 -0.00935     67.1      93.6    0.334     12.5      54.1         Abs muIoni
+    3   -0.826  0.00864     71.6      93.4    0.126     4.57      58.7         Abs muIoni
     4    -1.56    0.236      116      92.2      1.2     44.6       103       World Transportation
 
 *********************************************************************************************************
@@ -2038,7 +2038,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0      95.4        0        0         0         Abs initStep
     1  -0.0123 -0.00336     20.4      94.7    0.723     20.4      20.4         Abs muIoni
     2   -0.173   0.0935     76.7      92.5     1.48     56.3      76.8         Abs muIoni
-    3   -0.256   0.0899     95.3      91.8     0.55     18.5      95.3         Abs muIoni
+    3   -0.256     0.09     95.3      91.8     0.55     18.5      95.3         Abs muIoni
     4   -0.292    0.143      116      91.2    0.562       21       116       World Transportation
 
 *********************************************************************************************************
@@ -2137,9 +2137,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1   0.0037  6.8e-05     4.06      96.2   0.0977     4.06      4.06         Abs muIoni
     2 -0.00511 -0.00837     9.39      95.9    0.148     5.33      9.39         Abs muIoni
     3  -0.0421 -0.00404     24.5      94.9    0.421     15.1      24.5         Abs muIoni
-    4  -0.0652   0.0342     38.8      94.2    0.364     14.3      38.8         Abs muIoni
+    4  -0.0651   0.0342     38.8      94.2    0.364     14.3      38.8         Abs muIoni
     5   -0.061   0.0378       51      93.2    0.373     12.2        51         Abs muIoni
-    6   0.0375    0.452      116      91.4     1.83     65.3       116       World Transportation
+    6   0.0376    0.452      116      91.4     1.83     65.3       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -2204,7 +2204,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     2     0.39  -0.0161     66.3      92.3    0.767       26      66.3         Abs muIoni
     3    0.395  -0.0189     67.1      92.1   0.0305     0.81      67.1         Abs muIoni
     4    0.486   -0.088     80.4      91.3    0.497     13.3      80.4         Abs muIoni
-    5    0.574    -0.22     98.8      90.6      0.5     18.4      98.8         Abs muIoni
+    5    0.575    -0.22     98.8      90.6      0.5     18.4      98.8         Abs muIoni
     6    0.686   -0.387      116      90.1     0.49     17.5       116       World Transportation
 
 *********************************************************************************************************
@@ -2279,7 +2279,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      95.4        0        0         0         Abs initStep
-    1   0.0112  -0.0158     63.9      93.4      1.9     63.9      63.9         Abs muIoni
+    1   0.0113  -0.0158     63.9      93.4      1.9     63.9      63.9         Abs muIoni
     2   0.0134  -0.0296     66.3      93.1    0.083     2.34      66.3         Abs muIoni
     3  -0.0249   -0.394      104      91.6     1.28     37.6       104         Abs muIoni
     4  -0.0727   -0.574      116      91.3    0.291     12.4       116       World Transportation
@@ -2329,7 +2329,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.2        0        0         0         Abs initStep
-    1  -0.0138   0.0141     9.76      95.6    0.294     9.76      9.76         Abs muIoni
+    1  -0.0138   0.0142     9.76      95.6    0.294     9.76      9.76         Abs muIoni
     2   -0.215    0.208       58        94     1.44     48.2        58         Abs muIoni
     3   -0.474    0.539      116      92.4     1.64     58.2       116       World Transportation
 
@@ -2351,7 +2351,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0      95.7        0        0         0         Abs initStep
     1   0.0459  -0.0323     19.1      95.1    0.512     19.1      19.1         Abs muIoni
     2   0.0891  -0.0548     36.8      94.6    0.433     17.7      36.8         Abs muIoni
-    3    0.214   -0.117     56.7      93.8    0.532     19.9      56.7         Abs muIoni
+    3    0.214   -0.118     56.7      93.8    0.532     19.9      56.7         Abs muIoni
     4     0.78   -0.436      116      92.3     1.54     59.5       116       World Transportation
 
 *********************************************************************************************************
@@ -2428,7 +2428,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1   0.0295    0.251       49      94.4     1.35       49        49         Abs muIoni
     2    0.013    0.261     56.7        94    0.221     7.79      56.7         Abs muIoni
     3  -0.0297    0.156     84.2        93    0.903     27.5      84.2         Abs muIoni
-    4  -0.0573   0.0109      116      92.1    0.858       32       116       World Transportation
+    4  -0.0574   0.0109      116      92.1    0.858       32       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -2437,7 +2437,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.7        0        0         0         Abs initStep
     1   -0.271    0.639      115      93.4     3.23      115       115         Abs muIoni
-    2    -0.28    0.647      116      93.4   0.0364     1.67       116       World Transportation
+    2    -0.28    0.648      116      93.4   0.0364     1.67       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -2656,7 +2656,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0      95.9        0        0         0         Abs initStep
     1 -0.00162 -0.000306     1.72      95.5   0.0399     1.72      1.72         Abs muIoni
     2  -0.0185    0.312     99.7      92.7     2.72     97.9      99.7         Abs muIoni
-    3 -0.00672    0.412      116      92.2    0.457     16.6       116       World Transportation
+    3 -0.00671    0.412      116      92.2    0.457     16.6       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -2743,8 +2743,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      95.4        0        0         0         Abs initStep
     1 0.000731   0.0267     21.2      94.8     0.57     21.2      21.2         Abs muIoni
-    2 0.000613  -0.0723       46      93.9    0.717     24.8        46         Abs muIoni
-    3 -0.00469   -0.616      116        92     1.94     70.2       116       World Transportation
+    2 0.000616  -0.0723       46      93.9    0.717     24.8        46         Abs muIoni
+    3 -0.00467   -0.616      116        92     1.94     70.2       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -2972,7 +2972,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0      96.1        0        0         0         Abs initStep
     1   0.0093   0.0397     17.9      95.5    0.471     17.9      17.9         Abs muIoni
     2   0.0182   0.0413     20.1      95.3   0.0523     2.21      20.1         Abs muIoni
-    3    0.499    0.295     85.3      93.6     1.63     65.2      85.3         Abs muIoni
+    3    0.499    0.296     85.3      93.6     1.63     65.2      85.3         Abs muIoni
     4    0.645    0.372     95.9      93.2    0.306     10.6      95.9         Abs muIoni
     5    0.947    0.556      116      92.6    0.512     20.3       116       World Transportation
 
@@ -3044,7 +3044,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0      95.6        0        0         0         Abs initStep
     1 -0.00416   0.0458       14      94.9    0.417       14        14         Abs muIoni
     2   0.0145   0.0729     26.9      94.5    0.385     12.9      26.9         Abs muIoni
-    3     0.12     0.18      116        92     2.53     89.3       116       World Transportation
+    3     0.12    0.181      116        92     2.53     89.3       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -3368,7 +3368,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      97.1        0        0         0         Abs initStep
     1  -0.0279  -0.0168     13.4      95.8    0.418     13.4      13.4         Abs muIoni
-    2   0.0319   -0.234      116      92.8        3      103       116       World Transportation
+    2   0.0318   -0.234      116      92.8        3      103       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -3472,7 +3472,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0      95.6        0        0         0         Abs initStep
     1  -0.0187   0.0535     23.2      94.9    0.585     23.2      23.2         Abs muIoni
     2  -0.0803    0.106      103      92.4     2.24     79.9       103         Abs muIoni
-    3  -0.0469   0.0572      116      92.1    0.389     13.1       116       World Transportation
+    3  -0.0469   0.0573      116      92.1    0.389     13.1       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -3502,7 +3502,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      95.8        0        0         0         Abs initStep
-    1   0.0878    0.323     97.5      92.4     2.93     97.5      97.5         Abs muIoni
+    1   0.0879    0.323     97.5      92.4     2.93     97.5      97.5         Abs muIoni
     2    0.278     0.39      116      91.9    0.472     18.8       116       World Transportation
 
 *********************************************************************************************************
@@ -3618,7 +3618,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.2        0        0         0         Abs initStep
-    1 -0.00028  -0.0473     26.1      95.3    0.765     26.1      26.1         Abs muIoni
+    1 -0.000281  -0.0473     26.1      95.3    0.765     26.1      26.1         Abs muIoni
     2  -0.0694   -0.167      116      92.5     2.76     90.2       116       World Transportation
 
 *********************************************************************************************************
@@ -3840,7 +3840,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     3   0.0164   -0.413     82.7        93     1.41     50.6      82.7         Abs muIoni
     4   0.0442   -0.464     89.8      92.6    0.173     7.03      89.8         Abs muIoni
     5   0.0167   -0.673      112      92.1    0.323     11.1       101         Abs muIoni
-    6  0.00904   -0.723      116      91.9    0.157     4.65       106       World Transportation
+    6  0.00901   -0.723      116      91.9    0.157     4.65       106       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -3926,7 +3926,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0      95.9        0        0         0         Abs initStep
     1   0.0248 -0.00413     12.7      95.2    0.435     12.7      12.7         Abs muIoni
     2   -0.142   0.0219     72.3      93.4     1.74     59.6      72.3         Abs muIoni
-    3   -0.297 -0.000762     85.7      92.9    0.393     13.5      85.8         Abs muIoni
+    3   -0.297 -0.000753     85.7      92.9    0.393     13.5      85.8         Abs muIoni
     4   -0.618  -0.0931      111      91.8    0.758       25       111         Abs muIoni
     5   -0.675   -0.121      116      91.7    0.146     5.45       116       World Transportation
 
@@ -3969,8 +3969,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.2        0        0         0         Abs initStep
     1 -0.00312 -2.35e-05      5.7      95.9    0.133      5.7       5.7         Abs muIoni
-    2  -0.0449  0.00357     26.3      95.1    0.641     20.6      26.3         Abs muIoni
-    3   -0.415    0.321      116      92.4     2.72     89.9       116       World Transportation
+    2  -0.0449  0.00359     26.3      95.1    0.641     20.6      26.3         Abs muIoni
+    3   -0.414    0.321      116      92.4     2.72     89.9       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -3995,7 +3995,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.3        0        0         0         Abs initStep
     1 -0.00141 -0.00368     3.45      95.2    0.103     3.45      3.45         Abs muIoni
-    2    0.611   -0.428     92.4      92.5     2.61     88.9      92.4         Abs muIoni
+    2    0.611   -0.429     92.4      92.5     2.61     88.9      92.4         Abs muIoni
     3    0.903   -0.539      116      91.8    0.685     23.9       116       World Transportation
 
 *********************************************************************************************************
@@ -4004,7 +4004,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.8        0        0         0         Abs initStep
-    1     0.33   -0.429     90.4      93.8     2.49     90.4      90.4         Abs muIoni
+    1    0.331   -0.429     90.4      93.8     2.49     90.4      90.4         Abs muIoni
     2    0.316   -0.453      102        93    0.343       12       102         Abs muIoni
     3    0.311   -0.428      115      92.5    0.406     12.5       115         Abs muIoni
     4    0.307   -0.425      116      92.4   0.0913     1.36       116       World Transportation
@@ -4065,7 +4065,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.6        0        0         0         Abs initStep
     1   0.0704    -0.14     46.7      95.1     1.29     46.7      46.7         Abs muIoni
-    2    0.419   -0.601      109      93.1     1.89     62.4       109         Abs muIoni
+    2    0.419   -0.602      109      93.1     1.89     62.4       109         Abs muIoni
     3    0.446   -0.604      111      92.6   0.0871     2.43       112         Abs muIoni
     4    0.493   -0.627      116      92.4    0.155     4.74       116       World Transportation
 
@@ -4200,7 +4200,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      95.6        0        0         0         Abs initStep
     1 -0.00241  0.00969     6.95      95.2    0.212     6.95      6.95         Abs muIoni
-    2  -0.0092   0.0305     54.5      93.6     1.32     47.6      54.5         Abs muIoni
+    2 -0.00921   0.0305     54.5      93.6     1.32     47.6      54.5         Abs muIoni
     3   0.0187   0.0205      116      91.7     1.86     61.7       116       World Transportation
 
 *********************************************************************************************************
@@ -4332,7 +4332,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0      96.3        0        0         0         Abs initStep
     1 -0.00525 -0.00138     5.66        96    0.159     5.66      5.66         Abs muIoni
     2    0.484    0.184      102      93.1     2.71     96.1       102         Abs muIoni
-    3    0.655    0.193      116      92.6    0.438     14.5       116       World Transportation
+    3    0.655    0.194      116      92.6    0.438     14.5       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -4354,7 +4354,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.9        0        0         0         Abs initStep
     1    0.139   0.0414     63.8      94.9      1.9     63.8      63.8         Abs muIoni
-    2     0.39   0.0918      116      93.5     1.36     52.5       116       World Transportation
+    2     0.39   0.0919      116      93.5     1.36     52.5       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -4462,7 +4462,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.4        0        0         0         Abs initStep
-    1  0.00979  -0.0923     57.9      94.6     1.59     57.9      57.9         Abs muIoni
+    1  0.00979  -0.0924     57.9      94.6     1.59     57.9      57.9         Abs muIoni
     2   0.0121  -0.0872     60.4      94.4   0.0651     2.55      60.4         Abs muIoni
     3   -0.104   -0.309      106      92.9     1.22       46       106         Abs muIoni
     4   -0.191   -0.335      116      92.6    0.288     9.82       116       World Transportation
@@ -4486,7 +4486,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0      96.4        0        0         0         Abs initStep
     1  -0.0278   0.0205     25.9      95.6    0.712     25.9      25.9         Abs muIoni
     2  -0.0855   0.0669     39.6      94.6    0.455     13.8      39.6         Abs muIoni
-    3   -0.277    0.267     70.5      93.6    0.845     30.9      70.5         Abs muIoni
+    3   -0.277    0.268     70.5      93.6    0.845     30.9      70.5         Abs muIoni
     4   -0.523      0.5      116      92.1     1.45     45.7       116       World Transportation
 
 *********************************************************************************************************
@@ -4662,7 +4662,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1 -0.00108 -0.00108     3.33      96.2   0.0778     3.33      3.33         Abs muIoni
     2  -0.0152 -0.00831     9.95      95.8    0.163     6.62      9.95         Abs muIoni
     3  -0.0863  -0.0589       53      94.4     1.26       43        53         Abs muIoni
-    4 0.000838   -0.291      116      92.5      1.9     63.3       116       World Transportation
+    4 0.000837   -0.291      116      92.5      1.9     63.3       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -4816,7 +4816,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0      95.7        0        0         0         Abs initStep
     1   0.0219 -0.00848     46.3      94.2     1.37     46.3      46.3         Abs muIoni
     2   0.0456  -0.0482     69.1      93.1    0.637     22.8      69.1         Abs muIoni
-    3  0.00884 -0.00423      116      91.8     1.37     47.1       116       World Transportation
+    3  0.00884 -0.00424      116      91.8     1.37     47.1       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -5266,7 +5266,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.7        0        0         0         Abs initStep
-    1   0.0827  -0.0287     35.6      95.5     1.04     35.6      35.6         Abs muIoni
+    1   0.0828  -0.0287     35.6      95.5     1.04     35.6      35.6         Abs muIoni
     2    0.132  -0.0695     48.7      94.8     0.33     13.1      48.7         Abs muIoni
     3    0.138  -0.0708     49.6      94.7   0.0172     0.83      49.6         Abs muIoni
     4    0.179  -0.0867     57.2      93.8     0.23     7.61      57.2         Abs muIoni
@@ -5354,7 +5354,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.6        0        0         0         Abs initStep
     1 1.68e-06 -3.76e-06    0.047      96.4 0.000563    0.047     0.047         Abs muIoni
-    2  -0.0486 -0.000538     17.1      95.9    0.448     17.1      17.1         Abs muIoni
+    2  -0.0486 -0.000537     17.1      95.9    0.448     17.1      17.1         Abs muIoni
     3   -0.211    0.237     64.8      93.6     1.28     47.7      64.8         Abs muIoni
     4    -0.57    0.763      116        92     1.61     51.5       116       World Transportation
 
@@ -5451,7 +5451,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.1        0        0         0         Abs initStep
-    1    0.305  -0.0455       82      93.1     2.43       82        82         Abs muIoni
+    1    0.305  -0.0456       82      93.1     2.43       82        82         Abs muIoni
     2     0.33   -0.332      101      92.5    0.524     19.2       101         Abs muIoni
     3    0.338   -0.577      116      92.1    0.422     15.1       116       World Transportation
 
@@ -5518,7 +5518,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1    0.003 -0.00198      4.2        96    0.103      4.2       4.2         Abs muIoni
     2  -0.0846   -0.136     49.8      94.7     1.18     45.6      49.8         Abs muIoni
     3  -0.0486   -0.167     58.1      94.5     0.21     8.23      58.1         Abs muIoni
-    4 -0.00983   -0.216     66.8      94.1    0.219     8.77      66.8         Abs muIoni
+    4 -0.00982   -0.216     66.8      94.1    0.219     8.77      66.8         Abs muIoni
     5    0.338   -0.534      116      92.6     1.45     49.4       116       World Transportation
 
 *********************************************************************************************************
@@ -5608,7 +5608,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1   0.0107   0.0624     25.7      96.1    0.768     25.7      25.7         Abs muIoni
     2   0.0692   0.0504     67.4      94.6     1.38     41.7      67.4         Abs muIoni
     3    0.124   0.0246     82.5        94     0.47     15.1      82.5         Abs muIoni
-    4    0.254 -0.00337      116      93.1    0.905     33.8       116       World Transportation
+    4    0.254 -0.00341      116      93.1    0.905     33.8       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -5629,7 +5629,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1   -0.616   -0.113     77.9        94      2.4     77.9      77.9         Abs muIoni
     2   -0.778  -0.0671     93.3      93.3    0.382     15.4      93.3         Abs muIoni
     3   -0.821  -0.0386       98      92.9     0.17     4.72        98         Abs muIoni
-    4   -0.928   0.0824      116      92.3    0.571     18.2       116       World Transportation
+    4   -0.929   0.0824      116      92.3    0.571     18.2       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -5656,7 +5656,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.3        0        0         0         Abs initStep
-    1   -0.673    -0.27     94.4      93.2     2.72     94.5      94.5         Abs muIoni
+    1   -0.673   -0.271     94.4      93.2     2.72     94.5      94.5         Abs muIoni
     2   -0.884   -0.166      116      92.7    0.553     21.8       116       World Transportation
 
 *********************************************************************************************************
@@ -5683,7 +5683,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.1        0        0         0         Abs initStep
-    1    0.153   -0.197     70.5      94.1     1.86     70.5      70.5         Abs muIoni
+    1    0.153   -0.198     70.5      94.1     1.86     70.5      70.5         Abs muIoni
     2    0.481     -0.5      116      92.9     1.25     45.7       116       World Transportation
 
 *********************************************************************************************************
@@ -5694,7 +5694,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0      96.2        0        0         0         Abs initStep
     1   0.0301   0.0347     16.9      95.6    0.552     16.9      16.9         Abs muIoni
     2   0.0364   0.0424     19.7      94.5    0.182     2.73      19.7         Abs muIoni
-    3   0.0176   0.0672     27.8      94.1    0.206     8.14      27.8         Abs muIoni
+    3   0.0177   0.0672     27.8      94.1    0.206     8.14      27.8         Abs muIoni
     4   -0.287    0.122     76.4        92     1.24     48.6      76.4         Abs muIoni
     5   -0.312    0.148     91.2      91.3    0.599     14.8      91.2         Abs muIoni
     6   -0.336    0.168     95.1      91.1    0.129     3.86      95.1         Abs muIoni
@@ -5958,9 +5958,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0        97        0        0         0         Abs initStep
     1   -0.139   0.0587     33.3      95.8    0.971     33.3      33.3         Abs muIoni
-    2   -0.166   0.0804     37.3      95.6   0.0957     3.96      37.3         Abs muIoni
+    2   -0.166   0.0805     37.3      95.6   0.0957     3.96      37.3         Abs muIoni
     3   -0.174    0.086     38.3      95.4   0.0498     1.01      38.3         Abs muIoni
-    4   -0.914     0.55      116        93     2.35     77.9       116       World Transportation
+    4   -0.914    0.551      116        93     2.35     77.9       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -5983,7 +5983,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     4  -0.0677   -0.118     97.6      92.1      1.8     65.9      97.6         Abs muIoni
     5  -0.0673   -0.119     97.9      91.9  0.00524    0.226      97.9         Abs muIoni
     6  -0.0158   -0.161      111      91.4    0.322     13.3       111         Abs muIoni
-    7   0.0243   -0.195      116      91.3    0.132     5.08       116       World Transportation
+    7   0.0244   -0.195      116      91.3    0.132     5.08       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -6037,7 +6037,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0        96        0        0         0         Abs initStep
     1  -0.0238  -0.0153     28.8        95    0.858     28.8      28.8         Abs muIoni
-    2   -0.633   0.0922     98.7      92.9     1.96     69.8      98.7         Abs muIoni
+    2   -0.633   0.0923     98.7      92.9     1.96     69.8      98.7         Abs muIoni
     3   -0.784    0.125      116      92.4    0.515     17.6       116       World Transportation
 
 *********************************************************************************************************
@@ -6058,9 +6058,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1  0.00481  -0.0684     47.1      94.8     1.19     47.1      47.1         Abs muIoni
     2  -0.0155   -0.154       68      93.8    0.862     20.9        68         Abs muIoni
     3  -0.0123   -0.205     81.7        93    0.459     13.7      81.7         Abs muIoni
-    4 0.000217   -0.248      108      91.8    0.785     26.1       108         Abs muIoni
+    4 0.000203   -0.248      108      91.8    0.785     26.1       108         Abs muIoni
     5   0.0246   -0.243      116      91.2    0.183     7.93       116         Abs muIoni
-    6   0.0263   -0.241      116      91.2   0.0119    0.525       116       World Transportation
+    6   0.0262   -0.241      116      91.2   0.0119    0.525       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -6131,7 +6131,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1   0.0894   0.0113     50.3      94.3     1.41     50.3      50.3         Abs muIoni
     2    0.101    0.013     53.1      94.2   0.0772     2.85      53.1         Abs muIoni
     3    0.248   0.0409     75.6      93.3    0.683     22.5      75.6         Abs muIoni
-    4    0.744  0.00272      116      92.1     1.21     40.6       116       World Transportation
+    4    0.744  0.00273      116      92.1     1.21     40.6       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -6139,7 +6139,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.7        0        0         0         Abs initStep
-    1   0.0234  -0.0291     30.7      95.7    0.924     30.7      30.7         Abs muIoni
+    1   0.0235  -0.0291     30.7      95.7    0.924     30.7      30.7         Abs muIoni
     2   0.0446   -0.302      108      93.4     2.16     76.9       108         Abs muIoni
     3   0.0508   -0.314      112      92.8    0.121     4.61       112         Abs muIoni
     4   0.0635   -0.308      116      92.7   0.0986     4.11       116       World Transportation
@@ -6318,7 +6318,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      95.7        0        0         0         Abs initStep
     1   -0.079  -0.0963     54.1        94     1.51     54.1      54.1         Abs muIoni
-    2 -0.00598    -0.62      116      92.3     1.77     62.2       116       World Transportation
+    2 -0.00599    -0.62      116      92.3     1.77     62.2       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -6343,7 +6343,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      95.7        0        0         0         Abs initStep
-    1 0.000928 -0.000784     2.48      95.5   0.0619     2.48      2.48         Abs muIoni
+    1 0.000929 -0.000784     2.48      95.5   0.0619     2.48      2.48         Abs muIoni
     2 -0.00194  -0.0235     32.5      94.5    0.879       30      32.5         Abs muIoni
     3   -0.235  -0.0121      111        92     2.25     78.2       111         Abs muIoni
     4   -0.242   0.0187      116      91.9    0.138     5.57       116       World Transportation
@@ -6354,7 +6354,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      95.8        0        0         0         Abs initStep
-    1     0.22  -0.0435     63.9      93.8      1.8     63.9      63.9         Abs muIoni
+    1    0.221  -0.0436     63.9      93.8      1.8     63.9      63.9         Abs muIoni
     2    0.447   -0.192      105      92.5     1.18       41       105         Abs muIoni
     3    0.525   -0.236      116      92.1    0.378     11.3       116       World Transportation
 
@@ -6514,7 +6514,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.6        0        0         0         Abs initStep
-    1  -0.0455 -0.00971     82.2        94     2.37     82.2      82.2         Abs muIoni
+    1  -0.0455 -0.00972     82.2        94     2.37     82.2      82.2         Abs muIoni
     2  -0.0337  -0.0289       86      93.9    0.107     3.72        86         Abs muIoni
     3   0.0643   -0.173      116      92.9    0.976     30.3       116       World Transportation
 
@@ -6591,7 +6591,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.7        0        0         0         Abs initStep
-    1 -0.00597   0.0479     33.6      95.5    0.999     33.6      33.6         Abs muIoni
+    1 -0.00597    0.048     33.6      95.5    0.999     33.6      33.6         Abs muIoni
     2  -0.0124     0.05     35.2      95.3   0.0217     0.83      34.4         Abs muIoni
     3   -0.295    0.108     70.5      94.3    0.923     35.3      69.7         Abs muIoni
     4   -0.513    0.272      112      92.9     1.27     41.4       111         Abs muIoni
@@ -6666,7 +6666,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.6        0        0         0         Abs initStep
     1   -0.101  -0.0322     45.6      94.5     1.34     45.6      45.6         Abs muIoni
-    2  -0.0865   0.0322     84.5      93.2     1.17     38.9      84.5         Abs muIoni
+    2  -0.0866   0.0322     84.5      93.2     1.17     38.9      84.5         Abs muIoni
     3   -0.277   0.0555      116      92.2     1.02     31.8       116       World Transportation
 
 *********************************************************************************************************
@@ -6876,7 +6876,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      95.4        0        0         0         Abs initStep
     1   0.0783   0.0239     58.5      93.2      1.8     58.6      58.6         Abs muIoni
-    2   0.0964   0.0695     74.6      92.7    0.459     16.1      74.6         Abs muIoni
+    2   0.0965   0.0695     74.6      92.7    0.459     16.1      74.6         Abs muIoni
     3    0.206    0.178      107      91.6    0.939     32.5       107         Abs muIoni
     4    0.248    0.224      116      91.4    0.222     9.17       116       World Transportation
 
@@ -6888,7 +6888,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0        97        0        0         0         Abs initStep
     1   0.0245   0.0791       57      94.6     1.58       57        57         Abs muIoni
     2  -0.0276   0.0417     89.8      93.4    0.917     32.8      89.8         Abs muIoni
-    3  -0.0134 -0.00919      116      92.8    0.646     26.5       116       World Transportation
+    3  -0.0134  -0.0092      116      92.8    0.646     26.5       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -6962,7 +6962,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.8        0        0         0         Abs initStep
     1   0.0451   0.0104     23.5        96    0.633     23.5      23.5         Abs muIoni
-    2  -0.0291   0.0803      116      93.2     2.82     92.7       116       World Transportation
+    2  -0.0291   0.0804      116      93.2     2.82     92.7       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -7303,7 +7303,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.3        0        0         0         Abs initStep
     1   0.0112 -0.000239       15      95.8    0.431       15        15         Abs muIoni
-    2   0.0591  -0.0278     34.2      95.2    0.542     19.2      34.2         Abs muIoni
+    2   0.0592  -0.0278     34.2      95.2    0.542     19.2      34.2         Abs muIoni
     3   0.0145   0.0451     95.6      92.9     1.76     61.4      95.6         Abs muIoni
     4  -0.0759   0.0633      116      92.4    0.569     20.6       116       World Transportation
 
@@ -7315,7 +7315,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0      95.8        0        0         0         Abs initStep
     1 -0.00776 -0.00194     8.55      95.5      0.2     8.55      8.55         Abs muIoni
     2 -0.00768 -0.00275     8.96      95.3  0.00729    0.417      8.96         Abs muIoni
-    3 -0.00678   0.0784     32.2      94.6    0.598     23.2      32.2         Abs muIoni
+    3 -0.00679   0.0784     32.2      94.6    0.598     23.2      32.2         Abs muIoni
     4   0.0295    0.041     46.8        94    0.347     12.2      44.4         Abs muIoni
     5   0.0378   0.0329     48.8      93.9   0.0629     2.06      46.5         Abs muIoni
     6   0.0581   0.0228     53.4      93.7    0.136     4.63      51.1         Abs muIoni
@@ -7399,7 +7399,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.5        0        0         0         Abs initStep
     1 -0.00273    0.101     42.5      95.2     1.19     42.5      42.5         Abs muIoni
-    2   -0.127  0.00204      116        93     2.13     73.8       116       World Transportation
+    2   -0.127  0.00205      116        93     2.13     73.8       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -7664,7 +7664,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.8        0        0         0         Abs initStep
     1   -0.413    0.205     93.8      94.1     2.66     93.8      93.8         Abs muIoni
-    2   -0.646    0.336      116      93.2    0.838     22.5       116       World Transportation
+    2   -0.646    0.337      116      93.2    0.838     22.5       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -7787,7 +7787,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1   0.0849  -0.0559     52.6      94.6     1.53     52.6      52.6         Abs muIoni
     2    0.166  -0.0368     65.3      94.1     0.36     12.6      65.3         Abs muIoni
     3     0.23   0.0213       90      93.1    0.691     24.7        90         Abs muIoni
-    4     0.28   0.0425      116      92.4    0.771     26.3       116       World Transportation
+    4     0.28   0.0426      116      92.4    0.771     26.3       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -7823,7 +7823,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.4        0        0         0         Abs initStep
     1    0.398    0.189       60      94.6     1.74       60        60         Abs muIoni
-    2    0.954    0.767      116      92.9     1.67     56.3       116       World Transportation
+    2    0.954    0.768      116      92.9     1.67     56.3       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -8057,7 +8057,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.6        0        0         0         Abs initStep
-    1    0.178   -0.385     63.1      94.7     1.71     63.1      63.1         Abs muIoni
+    1    0.179   -0.385     63.1      94.7     1.71     63.1      63.1         Abs muIoni
     2    0.152   -0.443     74.5      94.3    0.422     11.4      74.5         Abs muIoni
     3   0.0543   -0.573      116        93     1.31     41.8       116       World Transportation
 
@@ -8092,7 +8092,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      95.4        0        0         0         Abs initStep
     1 -0.00083 -0.00325     3.47      95.2   0.0969     3.47      3.47         Abs muIoni
-    2  -0.0287      0.1     79.5      92.8     2.15     76.1      79.5         Abs muIoni
+    2  -0.0288      0.1     79.5      92.8     2.15     76.1      79.5         Abs muIoni
     3  -0.0406     0.11     82.1      92.6   0.0595     2.61      82.1         Abs muIoni
     4   -0.145     0.31      116      91.4     1.14     34.1       116       World Transportation
 
@@ -8129,7 +8129,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     2    0.368  0.00822     67.9      93.6     1.13     39.6      67.9         Abs muIoni
     3    0.377   0.0091     69.2      92.5   0.0372     1.35      69.2         Abs muIoni
     4    0.389   0.0224     72.1      92.3   0.0822     2.88      72.1         Abs muIoni
-    5    0.562    0.348      116      91.1     1.17     44.1       116       World Transportation
+    5    0.563    0.348      116      91.1     1.17     44.1       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -8200,7 +8200,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0      96.6        0        0         0         Abs initStep
     1  0.00528  0.00287     5.69      96.4    0.153     5.69      5.69         Abs muIoni
     2    0.039 0.000971     16.7      95.7    0.431       11      16.7         Abs muIoni
-    3   0.0428 3.63e-05     17.4      95.7   0.0195    0.735      17.4         Abs muIoni
+    3   0.0428 3.72e-05     17.4      95.7   0.0195    0.735      17.4         Abs muIoni
     4    0.386    0.103     63.9      94.1     1.39     46.4      63.9         Abs muIoni
     5    0.633     0.86      116      92.9     1.13     40.9       105         Abs muIoni
     6    0.634    0.864      116      92.9  0.00239     0.13       105       World Transportation
@@ -8246,7 +8246,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0      96.9        0        0         0         Abs initStep
     1   0.0217  0.00102     10.7      96.7    0.258     10.7      10.7         Abs muIoni
     2   0.0299 -0.00849     20.4      96.1    0.262     9.65      20.4         Abs muIoni
-    3   -0.046 -0.000267     37.4      95.4    0.537       17      37.4         Abs muIoni
+    3   -0.046 -0.000266     37.4      95.4    0.537       17      37.4         Abs muIoni
     4   -0.183    0.024     54.8      94.7    0.545     17.4      54.8         Abs muIoni
     5   -0.463    0.128       94      93.4     1.11     39.2        94         Abs muIoni
     6    -0.57    0.264      116      92.8    0.629     22.3       116       World Transportation
@@ -8438,7 +8438,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0      95.5        0        0         0         Abs initStep
     1   -0.224   -0.225     53.4      93.7     1.66     53.4      53.4         Abs muIoni
     2   -0.367   -0.243     69.1      92.6    0.415     15.7      69.1         Abs muIoni
-    3   -0.764 -0.00294      116      91.3     1.33     47.2       116       World Transportation
+    3   -0.764 -0.00295      116      91.3     1.33     47.2       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -8655,8 +8655,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0      96.8        0        0         0         Abs initStep
     1  -0.0046  0.00468     11.6      95.5    0.309     11.6      11.6         Abs muIoni
     2    0.118   0.0654     45.1      94.4    0.885     33.5      45.1         Abs muIoni
-    3     1.08  -0.0849     96.3      92.6     1.74     51.2      96.3         Abs muIoni
-    4     1.28  -0.0903      105      92.1    0.315     8.42       105         Abs muIoni
+    3     1.08   -0.085     96.3      92.6     1.74     51.2      96.3         Abs muIoni
+    4     1.28  -0.0904      105      92.1    0.315     8.42       105         Abs muIoni
     5     1.53   -0.102      116      91.8    0.318     11.5       116       World Transportation
 
 *********************************************************************************************************
@@ -8666,7 +8666,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      95.6        0        0         0         Abs initStep
     1   0.0341  -0.0148     15.7      94.8    0.426     15.7      15.7         Abs muIoni
-    2 0.000796   -0.043     25.8      94.5    0.288       10      25.8         Abs muIoni
+    2 0.000798   -0.043     25.8      94.5    0.288       10      25.8         Abs muIoni
     3 -0.00786  -0.0546     28.3      94.3   0.0632      2.5      28.3         Abs muIoni
     4   -0.121   -0.319      116      91.8     2.52       88       116       World Transportation
 
@@ -8679,7 +8679,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1  -0.0531    -0.19     79.9      93.6     2.35     79.9      79.9         Abs muIoni
     2   -0.212   -0.178      105      92.8    0.737     25.4       105         Abs muIoni
     3   -0.218   -0.179      106      92.2   0.0185    0.685       106         Abs muIoni
-    4   -0.345   -0.164      116      91.9    0.286     10.2       116       World Transportation
+    4   -0.345   -0.165      116      91.9    0.286     10.2       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -8697,12 +8697,12 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0      96.3        0        0         0         Abs initStep
     1  0.00336 -0.00416     9.32      95.6    0.294     9.32      9.32         Abs muIoni
     2   0.0407  -0.0036     24.6        95    0.463     15.3      24.6         Abs muIoni
-    3   0.0542 -0.000805     43.3      94.4    0.527     18.6      43.3         Abs muIoni
+    3   0.0542 -0.00081     43.3      94.4    0.527     18.6      43.3         Abs muIoni
     4   0.0606  -0.0229     49.9      94.1    0.182     6.61      49.9         Abs muIoni
-    5   0.0339   -0.136     66.9      93.5    0.442       17      66.9         Abs muIoni
+    5   0.0338   -0.136     66.9      93.5    0.442       17      66.9         Abs muIoni
     6   0.0222   -0.212     74.7        93    0.193     7.84      74.7         Abs muIoni
-    7  0.00784   -0.345       93      92.3     0.54     18.3        93         Abs muIoni
-    8   0.0532    -0.47      116      91.6    0.717     23.2       116       World Transportation
+    7  0.00775   -0.345       93      92.3     0.54     18.3        93         Abs muIoni
+    8    0.053    -0.47      116      91.6    0.717     23.2       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -8741,7 +8741,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0      96.9        0        0         0         Abs initStep
     1    -0.15   0.0209     34.7      93.6    0.981     34.7      34.7         Abs muIoni
     2   -0.194  -0.0592     71.2      92.2      1.1     36.5      71.2         Abs muIoni
-    3 -0.00107   -0.141      116        91     1.21       45       116       World Transportation
+    3 -0.00108   -0.141      116        91     1.21       45       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -8784,7 +8784,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0        96        0        0         0         Abs initStep
     1   -0.103   0.0259     50.9      94.3     1.59     50.9      50.9         Abs muIoni
-    2   -0.502 -0.000863      106      92.7     1.53     55.5       106         Abs muIoni
+    2   -0.502 -0.000868      106      92.7     1.53     55.5       106         Abs muIoni
     3   -0.631   0.0195      116      92.4    0.254      9.8       116       World Transportation
 
 *********************************************************************************************************
@@ -8940,7 +8940,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.1        0        0         0         Abs initStep
-    1    0.142   0.0917     41.2      94.7      1.1     41.2      41.2         Abs muIoni
+    1    0.142   0.0918     41.2      94.7      1.1     41.2      41.2         Abs muIoni
     2    0.407    0.128     67.2      93.6    0.819       26      67.2         Abs muIoni
     3    0.826    0.283      116      92.1     1.46     49.1       116       World Transportation
 
@@ -9111,7 +9111,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0      96.2        0        0         0         Abs initStep
     1    0.236    -0.34     81.3      93.4     2.23     81.3      81.3         Abs muIoni
     2    0.236   -0.373     83.6      93.2   0.0631     2.32      83.6         Abs muIoni
-    3    0.175   -0.781      116      92.3    0.885     32.7       116       World Transportation
+    3    0.175   -0.782      116      92.3    0.885     32.7       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -9164,7 +9164,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.9        0        0         0         Abs initStep
     1   0.0296   0.0851     37.2      95.6     1.16     37.2      37.2         Abs muIoni
-    2   0.0546    0.239      116      93.3     2.29       79       116       World Transportation
+    2   0.0547    0.239      116      93.3     2.29       79       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -9540,7 +9540,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.4        0        0         0         Abs initStep
     1  -0.0744   0.0694     54.4      94.9     1.47     54.4      54.4         Abs muIoni
-    2  -0.0298    0.505      106      93.3     1.42     51.1       106         Abs muIoni
+    2  -0.0299    0.505      106      93.3     1.42     51.1       106         Abs muIoni
     3  -0.0914    0.618      116        93    0.375     10.7       116       World Transportation
 
 *********************************************************************************************************
@@ -9622,7 +9622,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.3        0        0         0         Abs initStep
     1    0.199   -0.375     70.2      93.8        2     70.2      70.2         Abs muIoni
-    2  0.00577   -0.732      116      92.3     1.45       46       116       World Transportation
+    2  0.00578   -0.732      116      92.3     1.45       46       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -9633,7 +9633,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1 -0.00228 0.000352     3.39      94.4    0.101     3.39      3.39         Abs muIoni
     2  0.00605   -0.158     36.6      93.2     1.01     33.2      36.6         Abs muIoni
     3   -0.197   -0.174     90.1      91.2     1.42     53.5      90.1         Abs muIoni
-    4   -0.179  -0.0356      116      90.4     0.81     26.1       116       World Transportation
+    4   -0.179  -0.0355      116      90.4     0.81     26.1       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -9754,7 +9754,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      95.5        0        0         0         Abs initStep
     1  0.00138 -0.00201     10.3      95.1    0.293     10.3      10.3         Abs muIoni
-    2   0.0393   0.0866      116      92.1     2.99      106       116       World Transportation
+    2   0.0393   0.0865      116      92.1     2.99      106       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -9818,9 +9818,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.1        0        0         0         Abs initStep
     1  0.00197 -0.000286     2.71      95.9    0.119     2.71      2.71         Abs muIoni
-    2  -0.0474   0.0378     50.6      94.3     1.47     47.8      50.6         Abs muIoni
+    2  -0.0474   0.0379     50.6      94.3     1.47     47.8      50.6         Abs muIoni
     3   -0.177    0.386       89      92.7     1.11     38.5        89         Abs muIoni
-    4    -0.14    0.619      116        92     0.72     27.2       116       World Transportation
+    4   -0.141    0.619      116        92     0.72     27.2       116       World Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -9942,7 +9942,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.3        0        0         0         Abs initStep
-    1   0.0339   -0.282     67.4        94     2.02     67.4      67.4         Abs muIoni
+    1   0.0339   -0.283     67.4        94     2.02     67.4      67.4         Abs muIoni
     2   0.0976   -0.157      116      92.6      1.4     48.8       116       World Transportation
 
 *********************************************************************************************************
@@ -9998,7 +9998,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      95.9        0        0         0         Abs initStep
     1    0.189   -0.359     58.2      94.6     1.21     36.5      36.5         Abs muIoni
-    2    0.216   -0.458     70.3      94.1    0.408       12      48.5         Abs muIoni
+    2    0.216   -0.459     70.3      94.1    0.408       12      48.5         Abs muIoni
     3    0.222   -0.514     75.4      93.7    0.163     5.14      53.7         Abs muIoni
     4    0.214   -0.682     91.7      92.8    0.443     16.3      69.9         Abs muIoni
     5   0.0913   -0.952      116        92    0.754     24.6      94.5       World Transportation
@@ -10009,7 +10009,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.5        0        0         0         Abs initStep
-    1   -0.673    -2.39      116      94.1     2.25     72.4      72.4         Abs muIoni
+    1   -0.672    -2.39      116      94.1     2.25     72.4      72.4         Abs muIoni
     2   -0.684    -2.42      116      94.1   0.0106     0.51      72.9       World Transportation
 
 *********************************************************************************************************
@@ -10019,10 +10019,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0      96.2        0        0         0         Abs initStep
     1  0.00222 0.000538      3.2      95.9    0.113      3.2       3.2         Abs muIoni
-    2  0.00418   0.0684     48.3      94.6     1.14     45.1      48.3         Abs muIoni
+    2  0.00419   0.0684     48.3      94.6     1.14     45.1      48.3         Abs muIoni
     3  -0.0163    0.278     83.4      93.5    0.953       35      83.4         Abs muIoni
-    4 -0.00378    0.305     87.1      93.1    0.116      3.5      86.9         Abs muIoni
-    5  0.00534    0.359     98.1      92.6    0.289       11      97.9         Abs muIoni
+    4 -0.00377    0.305     87.1      93.1    0.116      3.5      86.9         Abs muIoni
+    5  0.00535    0.359     98.1      92.6    0.289       11      97.9         Abs muIoni
     6   0.0873    0.363      116        92    0.562     18.1       116       World Transportation
 
 *********************************************************************************************************
@@ -10067,7 +10067,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.07000000000000001s Real=0.08s Sys=0.02s
+  User=0.08s Real=0.09s Sys=0.01s
 ###  1000  events of mu+  with p(MeV/c)= 172 scattered off 116.24 mm of G4_lH2
 ###    Beam momentum spread 1 MeV/c
 /testem/setFileName test41_al.log
