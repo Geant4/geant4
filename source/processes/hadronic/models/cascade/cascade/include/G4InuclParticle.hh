@@ -1,5 +1,3 @@
-#ifndef G4INUCL_PARTICLE_HH
-#define G4INUCL_PARTICLE_HH
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -35,6 +33,9 @@
 // 20100915  M. Kelsey -- Add constructor to copy G4DynamicParticle input
 // 20110214  M. Kelsey -- Replace integer "model" with enum
 // 20110225  M. Kelsey -- Add equality operator (NOT sorting!)
+
+#ifndef G4INUCL_PARTICLE_HH
+#define G4INUCL_PARTICLE_HH
 
 #include "G4DynamicParticle.hh"
 #include "G4LorentzVector.hh"

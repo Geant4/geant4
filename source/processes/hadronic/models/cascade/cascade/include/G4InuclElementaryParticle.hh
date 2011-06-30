@@ -1,5 +1,3 @@
-#ifndef G4INUCL_ELEMENTARY_PARTICLE_HH
-#define G4INUCL_ELEMENTARY_PARTICLE_HH
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -38,6 +36,9 @@
 // 20110127  M. Kelsey -- Drop generation.
 // 20110214  M. Kelsey -- Replace integer "model" with enum
 // 20110321  M. Kelsey -- Fix getStrangeness() to return int
+
+#ifndef G4INUCL_ELEMENTARY_PARTICLE_HH
+#define G4INUCL_ELEMENTARY_PARTICLE_HH
 
 #include "G4InuclParticle.hh"
 #include "G4InuclParticleNames.hh"

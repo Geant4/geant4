@@ -21,7 +21,6 @@
 // * any work based  on the software)  you  agree  to acknowledge its *
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
-
 // ********************************************************************
 //
 // $Id: ROOTAnalysis.cc,v 1.1 2009/03/21 18:37:27 vnivanch Exp $

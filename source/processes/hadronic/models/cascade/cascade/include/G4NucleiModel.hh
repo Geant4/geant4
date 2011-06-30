@@ -22,6 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
 // $Id: G4NucleiModel.hh,v 1.34 2010/10/20 23:51:07 mkelsey Exp $
 // GEANT4 tag: $Name:  $
 //
