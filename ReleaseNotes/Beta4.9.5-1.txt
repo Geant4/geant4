@@ -4,6 +4,54 @@
 
                                                             30 June 2011
 
+                            Migration Notes
+                            --------------- 
+
+  o The CMake system for installation has been now extended to cover all
+    features. The old Configure script is still kept for this Beta release
+    but will be removed in the final release of December.
+    A startup guide with basic instructions for installing Geant4 with CMake
+    can be found in geant4.9.5.b01/cmake/INSTALL.g4cmake
+    You're therefore incouraged to try it out and provide feedback!
+  o Geant4 now comes with an embedded CLHEP module (currently based on
+    version 2.1.0.1 of CLHEP), which includes a subset of the CLHEP library
+    classes relevant for Geant4. It is therefore possible to choose not to
+    install CLHEP as external library and use directly the embedded module.
+    Use/installation of the embedded CLHEP module is triggered if no
+    CLHEP_BASE_DIR variable is being set (or if using the default settings
+    through CMake).
+  o An additional package, 'expat', required by the new hadronic 'lend'
+    module is embedded in 'externals' and is automatically built on Windows.
+    On Linux or Mac, the 'expat' library available in the system is used
+    instead.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o Official platforms:
+    + Linux, gcc-4.1.2, gcc-4.3.x.
+      Tested on 32 bits architectures and 64 bits architectures
+      (Intel or AMD) with the Scientific Linux CERN 5 (SLC5) distribution
+      (based on RedHat Linux Enterprise 5).
+      Versions of Geant4 have also been compiled successfully on other
+      Linux distributions, like Debian, Suse or other RedHat systems.
+    + MacOSX 10.6, gcc-4.2.1
+    + Windows/XP and CygWin Tools with: Visual C++ 9.0 (Visual Studio 2008)
+
+  o More verified configurations:
+    + Linux, gcc-4.6.1
+    + Linux, Intel-icc 11.1
+
+  o Geant4 9.5-beta-01 is based on CLHEP-2.1.0.1.
+
+ Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+ for further information about using Geant4.
+
+ ----------------------------------------------------------------------------
+
 List of main features and fixes included in this Beta release since 9.4.p02:
 
   o Configuration:
@@ -101,9 +149,8 @@ List of main features and fixes included in this Beta release since 9.4.p02:
 
   o Particles:
     ---------
-    + Modified G4PrimaryParticle to have kinetic energy and momentum direction
-      instead of momentum only. Added pointer check before using GetPDGMass()
-      and GetPDGCode().
+    + Modified G4PrimaryParticle to avoid precision loss in conversion from
+      momentum to energy.
     + Some code cleanup in G4PrimaryParticle and G4PrimaryVertex: added copy
       constructors; fixed Print() method in G4PrimaryVertex.
     + Moved GetParticleName() and FindParticle() methods in G4ParticleTable
@@ -314,14 +361,12 @@ List of main features and fixes included in this Beta release since 9.4.p02:
     + Decay:
       o Added sub-type for radioactive decay 'DECAY_Radioactive' (equal to 210).
     + Management:
-      o Fixed bug in copy constructor of G4ProcessAttribute.
       o Suppressed warning message of G4ProcessTable::Insert() in case of
-        copying process manager with inactivate processes.
-        Addresses problem report #1173.
-      o Added 'fParallel' process type. Changed ordLast to 9999 (was 99999).
-        Added check for calling SetOrderingToFirst(Last).
-      o Fixed compilation warnings from gcc-4.6 in G4ProcessTableMessenger.
+        adding ions with inactivate processes. Addresses problem report #1173.
+      o Added check for duplicate call for SetOrderingToFirst(Last).
       o Fixed defects reported by Coverity.
+      o Fixed memory leak in copy constructor of G4ProcessAttribute
+      o Fixed compilation warnings from gcc-4.6 in G4ProcessTableMessenger.
     + Transportation:
       o Defined 'ProcessSubType' for transportation processes.
       o Changed process type of G4NeutronBuilder to 'fGeneral'.
@@ -526,16 +571,17 @@ List of main features and fixes included in this Beta release since 9.4.p02:
   o Run
     ---
     + Added new utility G4PhysicsListHelper for controlling process ordering
-      in physics lists and related classes.
-    + Added ReadInDefaultOrderingParameter() in G4PhysicsListHelper to allow
-      for setting default values for process ordering with or without using
-      a file.
-    + Added RegisterProcess() to G4VUserPhysicsList and G4VPhysicsConstructor.
-    + Added ReplacePhysics() in G4VModulerPhysicsList.
+      in physics lists and related classes. If a process is added through the
+      new method RegisterProcess(), the ordering parameters can be omitted.
+      Default values for process ordering are applied. The user can choose
+      to adopt his/her own parameter table by setting G4ORDPARAMTABLE.
+    + Added ReplacePhysics() in G4VModulerPhysicsList to replace physics
+      constructor in a given physics list.
+    + Default implementation of SetCuts() is provided. Now, it is no longer
+      needed to implement a SetCuts() method (old scheme still supported).
+      The obsolete method SetCutValueForOthers() has been removed.
+      It is now allowed to set zero cut length in SetCuts commands.
     + Removed unnecessary AtRest GPIL in G4ParallelWorldScoringProcess.
-    + Added default implementation of SetCuts(). Modified to allow zero cut
-      length. Added UI command '/run/getCutForAGivenParticle'.
-      Removed obsolete method SetCutValueForOthers().
 
   o Track
     -----
@@ -709,48 +755,5 @@ List of main features and fixes included in this Beta release since 9.4.p02:
     + examples/novice/N03
       o Get pointers to UserAction classes via G4RunManager.
 
-
  ----------------------------------------------------------------------------
-                             Migration Notes
-                             --------------- 
-
-  o The CMake system for installation has been now extended to cover all
-    features. The old Configure script is still kept for this Beta release
-    but will be removed in the final release of December.
-    You're therefore incouraged to try out CMake and provide feedback!
-  o Geant4 now comes with an embedded CLHEP module (currently based on
-    version 2.1.0.1 of CLHEP), which includes a subset of the CLHEP library
-    classes relevant for Geant4. It is therefore possible to choose not to
-    install CLHEP as external library and use directly the embedded module.
-    Use/installation of the embedded CLHEP module is triggered if no
-    CLHEP_BASE_DIR variable is being set (or if using the default settings
-    through CMake).
-  o An additional package, 'expat', required by the new hadronic 'lend' module
-    is embedded in 'externals' and is automatically used/build on Windows.
-    On Linux or Mac, the 'expat' library available in the system is instead
-    used.
-
- ----------------------------------------------------------------------------
-
-                             Technical Notes
-                             --------------- 
-
-  o Official platforms:
-    + Linux, gcc-4.1.2, gcc-4.3.x.
-      Tested on 32 bits architectures and 64 bits architectures
-      (Intel or AMD) with the Scientific Linux CERN 5 (SLC5) distribution
-      (based on RedHat Linux Enterprise 5).
-      Versions of Geant4 have also been compiled successfully on other
-      Linux distributions, like Debian, Suse or other RedHat systems.
-    + MacOSX 10.6, gcc-4.2.1
-    + Windows/XP and CygWin Tools with: Visual C++ 9.0 (Visual Studio 2008)
-
-  o More verified configurations:
-    + Linux, gcc-4.6.1
-    + Linux, Intel-icc 11.1
-
-  o Geant4 9.5-beta-01 is based on CLHEP-2.1.0.1.
-
- Please refer to the Geant4 User Documentation:
-   http://cern.ch/geant4/support/userdocuments.shtml
- for further information about using Geant4.
+ 
