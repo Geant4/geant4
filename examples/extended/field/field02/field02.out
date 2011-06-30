@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-05    (27-May-2011)
+ Geant4 version Name: geant4-09-05-beta-01    (30-June-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -15,45 +15,45 @@ The minimal step is equal to 0.01 mm
 
 ***** Table : Nb of materials = 11 *****
 
- Material:    Mylar     density:  1.390 g/cm3   RadL:  28.743 cm   Nucl.Int.Length:  56.391 cm   Imean:  75.967 eV 
+ Material:    Mylar    density:  1.390 g/cm3   RadL:  28.743 cm   Nucl.Int.Length:  56.391 cm   Imean:  75.967 eV 
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  33.30 %  ElmAbundance  18.18 %
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  62.49 %  ElmAbundance  45.45 %
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:   4.20 %  ElmAbundance  36.36 %
 
- Material: Polypropelene     density: 910.000 mg/cm3  RadL:  49.214 cm   Nucl.Int.Length:  74.517 cm   Imean:  56.518 eV 
+ Material: Polypropelene    density: 910.000 mg/cm3  RadL:  49.214 cm   Nucl.Int.Length:  74.517 cm   Imean:  56.518 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  14.40 %  ElmAbundance  66.67 %
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  85.60 %  ElmAbundance  33.33 %
 
- Material:       Kr     density:  3.700 mg/cm3  RadL:  30.736 m    Nucl.Int.Length: 413.292 m    Imean: 352.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:       Kr    density:  3.700 mg/cm3  RadL:  30.736 m    Nucl.Int.Length: 413.292 m    Imean: 352.000 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Kr ( )   Z = 36.0   N =  83.8   A =  83.80 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:    Argon     density:  1.784 mg/cm3  RadL: 109.604 m    Nucl.Int.Length: 670.233 m    Imean: 188.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:    Argon    density:  1.784 mg/cm3  RadL: 109.604 m    Nucl.Int.Length: 670.233 m    Imean: 188.000 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:       N2     density:  1.251 mg/cm3  RadL: 303.846 m    Nucl.Int.Length: 675.036 m    Imean:  82.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:       N2    density:  1.251 mg/cm3  RadL: 303.846 m    Nucl.Int.Length: 675.036 m    Imean:  82.000 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:       O2     density:  1.429 mg/cm3  RadL: 239.621 m    Nucl.Int.Length: 617.219 m    Imean:  95.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:       O2    density:  1.429 mg/cm3  RadL: 239.621 m    Nucl.Int.Length: 617.219 m    Imean:  95.000 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:      Air     density:  1.293 mg/cm3  RadL: 283.293 m    Nucl.Int.Length: 662.022 m    Imean:  85.664 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      Air    density:  1.293 mg/cm3  RadL: 283.293 m    Nucl.Int.Length: 662.022 m    Imean:  85.664 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  75.57 %  ElmAbundance  78.48 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  23.15 %  ElmAbundance  21.05 %
    --->  Element: Argon (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole  ElmMassFraction:   1.28 %  ElmAbundance   0.47 %
 
- Material:    Xenon     density:  5.858 mg/cm3  RadL:  14.478 m    Nucl.Int.Length: 304.114 m    Imean: 482.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:    Xenon    density:  5.858 mg/cm3  RadL:  14.478 m    Nucl.Int.Length: 304.114 m    Imean: 482.000 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:      CO2     density:  1.842 mg/cm3  RadL: 196.501 m    Nucl.Int.Length: 466.112 m    Imean:  90.958 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      CO2    density:  1.842 mg/cm3  RadL: 196.501 m    Nucl.Int.Length: 466.112 m    Imean:  90.958 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  27.29 %  ElmAbundance  33.33 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  72.71 %  ElmAbundance  66.67 %
 
- Material:  Xe20CO2     density:  5.082 mg/cm3  RadL:  17.750 m    Nucl.Int.Length: 323.445 m    Imean: 412.598 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:  Xe20CO2    density:  5.082 mg/cm3  RadL:  17.750 m    Nucl.Int.Length: 323.445 m    Imean: 412.598 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  ElmMassFraction:  92.20 %  ElmAbundance  56.91 %
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:   2.13 %  ElmAbundance  14.36 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:   5.67 %  ElmAbundance  28.73 %
 
- Material:  Kr20CO2     density:  3.601 mg/cm3  RadL:  34.158 m    Nucl.Int.Length: 391.057 m    Imean: 296.926 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:  Kr20CO2    density:  3.601 mg/cm3  RadL:  34.158 m    Nucl.Int.Length: 391.057 m    Imean: 296.926 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Kr ( )   Z = 36.0   N =  83.8   A =  83.80 g/mole  ElmMassFraction:  89.00 %  ElmAbundance  58.62 %
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:   3.00 %  ElmAbundance  13.79 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:   8.00 %  ElmAbundance  27.59 %
@@ -262,15 +262,15 @@ hIoni:   for  pi-    SubType= 2
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0 eV 
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Kr20CO2
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  990 eV     e-  1.47506 keV    e+  1.44877 keV proton 0 eV 
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  1.47506 keV    e+  1.44877 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -905,8 +905,9 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  NextVolu   Process
     0      0 fm  -2.58 cm   1.26 cm   1.78 keV     0 eV      0 fm      0 fm      World   initStep
     1    866 nm  -2.59 cm   1.26 cm   1.38 MeV  1.78 keV   126 um    126 um      World     eIoni
-    2   3.04 um  -5.53 cm   1.26 cm    295 MeV  5.54 keV  2.94 cm   2.95 cm      World     eIoni
-    3   6.55 um    -20 cm   1.27 cm   1.74 GeV  28.6 keV  14.5 cm   17.4 cm OutOfWorldTransportation
+    2   3.04 um  -5.53 cm   1.26 cm    295 MeV  5.54 keV  2.94 cm   2.95 cm      WorldTransportation
+    3   3.04 um  -5.53 cm   1.26 cm    295 MeV1.04e-12 eV 0.00501 fm   2.95 cm      World     eIoni
+    4   6.55 um    -20 cm   1.27 cm   1.74 GeV  28.6 keV  14.5 cm   17.4 cm OutOfWorldTransportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 10,   Parent ID = 2
@@ -2877,9 +2878,8 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  NextVolu   Process
     0      0 fm      0 fm      0 fm     50 MeV     0 eV      0 fm      0 fm      World   initStep
     1      0 fm  -4.41 cm    1.5 cm    491 MeV  8.14 keV  4.89 cm   4.89 cm      World     eIoni
-    2   2.55 um  -10.6 cm   1.91 cm   1.11 GeV    13 keV  6.16 cm   11.1 cm      WorldTransportation
-    3   2.55 um  -10.6 cm   1.91 cm   1.11 GeV2.34e-12 eV 0.0111 fm   11.1 cm      World     eIoni
-    4   7.27 um    -20 cm   2.22 cm   2.05 GeV  15.7 keV  9.45 cm   20.5 cm OutOfWorldTransportation
+    2   2.55 um  -10.6 cm   1.91 cm   1.11 GeV    13 keV  6.16 cm   11.1 cm      World     eIoni
+    3   7.27 um    -20 cm   2.22 cm   2.05 GeV  15.7 keV  9.45 cm   20.5 cm OutOfWorldTransportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
@@ -5079,9 +5079,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  NextVolu   Process
     0  -2.41 um  -5.27 cm   1.58 cm   1.71 keV     0 eV      0 fm      0 fm      World   initStep
     1   1.52 um  -5.28 cm   1.58 cm   1.28 MeV  1.71 keV   118 um    118 um      World     eIoni
-    2   12.1 um  -8.43 cm   1.58 cm    316 MeV  4.84 keV  3.15 cm   3.16 cm      World     eIoni
-    3   11.6 um  -17.8 cm   1.58 cm   1.25 GeV  20.7 keV  9.35 cm   12.5 cm      World     eIoni
-    4   11.9 um    -20 cm   1.58 cm   1.47 GeV  4.32 keV  2.22 cm   14.7 cm OutOfWorldTransportation
+    2   12.1 um  -8.43 cm   1.58 cm    316 MeV  4.84 keV  3.15 cm   3.16 cm      WorldTransportation
+    3   12.1 um  -8.43 cm   1.58 cm    316 MeV1.03e-12 eV 0.00496 fm   3.16 cm      World     eIoni
+    4   11.6 um  -17.8 cm   1.58 cm   1.25 GeV  20.7 keV  9.35 cm   12.5 cm      World     eIoni
+    5   11.9 um    -20 cm   1.58 cm   1.47 GeV  4.32 keV  2.22 cm   14.7 cm OutOfWorldTransportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 5,   Parent ID = 3
@@ -7167,7 +7168,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.05s Real=0.07s Sys=0.01s
+  User=0.07s Real=0.07s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 Graphics systems deleted.
 Visualization Manager deleting...

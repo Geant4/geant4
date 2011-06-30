@@ -4,30 +4,30 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-05    (27-May-2011)
+ Geant4 version Name: geant4-09-05-beta-01    (30-June-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
- creating G4RunManagerKernel 0x12b6890
+ creating G4RunManagerKernel 0xd4bc890
 
 The materials defined are : 
 
 
 ***** Table : Nb of materials = 4 *****
 
- Material:      Air     density:  1.205 mg/cm3  RadL: 305.277 m    Nucl.Int.Length: 709.664 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      Air    density:  1.205 mg/cm3  RadL: 305.277 m    Nucl.Int.Length: 709.664 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
    --->  Element: Oxigen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
- Material:       Al     density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.860 cm   Imean: 166.000 eV 
+ Material:       Al    density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.860 cm   Imean: 166.000 eV 
    --->  Element: Al ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:       Fe     density:  7.870 g/cm3   RadL:   1.759 cm   Nucl.Int.Length:  16.969 cm   Imean: 286.000 eV 
+ Material:       Fe    density:  7.870 g/cm3   RadL:   1.759 cm   Nucl.Int.Length:  16.969 cm   Imean: 286.000 eV 
    --->  Element: Fe ( )   Z = 26.0   N =  55.8   A =  55.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:       Cu     density:  8.960 g/cm3   RadL:   1.435 cm   Nucl.Int.Length:  15.513 cm   Imean: 322.000 eV 
+ Material:       Cu    density:  8.960 g/cm3   RadL:   1.435 cm   Nucl.Int.Length:  15.513 cm   Imean: 322.000 eV 
    --->  Element: Cu ( )   Z = 29.0   N =  63.5   A =  63.54 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
 
@@ -37,14 +37,15 @@ World is registered to the default region.
 List of instantiated particles ============================================
 e+ e- gamma mu+ mu- pi+ pi- proton 
 physicsList->Construct() start.
-0x13233c0G4ErrorPhysicsList:: particle process manager e+ = 0x13248e0
-0x13231b0G4ErrorPhysicsList:: particle process manager e- = 0x1327370
-0x1325b00G4ErrorPhysicsList:: particle process manager gamma = 0x1327580
-0x13235d0G4ErrorPhysicsList:: particle process manager mu+ = 0x13277d0
-0x1323a20G4ErrorPhysicsList:: particle process manager mu- = 0x1327a20
-0x1323e90G4ErrorPhysicsList:: particle process manager pi+ = 0x1327c70
-0x13242b0G4ErrorPhysicsList:: particle process manager pi- = 0x1327ec0
-0x13246d0G4ErrorPhysicsList:: particle process manager proton = 0x1328110
+ G4Transportation constructor> set fShortStepOptimisation to false
+0xd52a020G4ErrorPhysicsList:: particle process manager e+ = 0xd52b520
+0xd529e10G4ErrorPhysicsList:: particle process manager e- = 0xd52cb30
+0xd528bf0G4ErrorPhysicsList:: particle process manager gamma = 0xd52cd40
+0xd52a230G4ErrorPhysicsList:: particle process manager mu+ = 0xd52cf90
+0xd52a660G4ErrorPhysicsList:: particle process manager mu- = 0xd52d1e0
+0xd52aad0G4ErrorPhysicsList:: particle process manager pi+ = 0xd52d430
+0xd52aef0G4ErrorPhysicsList:: particle process manager pi- = 0xd52d680
+0xd52b310G4ErrorPhysicsList:: particle process manager proton = 0xd52d8d0
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 

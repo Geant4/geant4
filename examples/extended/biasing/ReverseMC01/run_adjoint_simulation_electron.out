@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-05    (27-May-2011)
+ Geant4 version Name: geant4-09-05-beta-01    (30-June-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -47,6 +47,7 @@ Registered filter factories:
   attributeFilter
 
 G4AdjointPhysicsList::SetCuts:CutLength : 1 mm 
+G4AdjointPhysicsList::SetCuts:CutLength : 10 um 
 /adjoint/DefineExtSourceOnExtSurfaceOfAVolume Shielding
 /adjoint/SetExtSourceEmax 10. MeV
 /adjoint/DefineAdjSourceOnExtSurfaceOfAVolume SensitiveVolume
@@ -336,11 +337,11 @@ nb event 375000
 1%  Precision reached!
 Run terminated.
 Run Summary
-  Run Aborted after 376004 events processed.
-  User=135.73s Real=135.76s Sys=0.02s
+  Run Aborted after 375912 events processed.
+  User=130.51s Real=130.77s Sys=0.04s
 Results of reverse/adjoint simulation!
-normalised edep [MeV] = 0.00163983
-error[MeV] = 1.63979e-05
+normalised edep [MeV] = 0.00164604
+error[MeV] = 1.64597e-05
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
