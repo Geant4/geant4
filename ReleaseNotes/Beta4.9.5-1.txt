@@ -12,7 +12,7 @@
     but will be removed in the final release of December.
     A startup guide with basic instructions for installing Geant4 with CMake
     can be found in geant4.9.5.b01/cmake/INSTALL.g4cmake
-    You're therefore incouraged to try it out and provide feedback!
+    You're therefore encouraged to try it out and provide feedback!
   o Geant4 now comes with an embedded CLHEP module (currently based on
     version 2.1.0.1 of CLHEP), which includes a subset of the CLHEP library
     classes relevant for Geant4. It is therefore possible to choose not to
@@ -44,7 +44,7 @@
     + Linux, gcc-4.6.1
     + Linux, Intel-icc 11.1
 
-  o Geant4 9.5-beta-01 is based on CLHEP-2.1.0.1.
+  o Geant4 9.5-beta-01 has been tested using CLHEP-2.1.0.1.
 
  Please refer to the Geant4 User Documentation:
    http://cern.ch/geant4/support/userdocuments.shtml
