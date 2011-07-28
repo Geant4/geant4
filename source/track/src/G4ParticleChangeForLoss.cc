@@ -88,10 +88,26 @@ G4ParticleChangeForLoss(const G4ParticleChangeForLoss &right)
 G4ParticleChangeForLoss & G4ParticleChangeForLoss::operator=(
                                    const G4ParticleChangeForLoss &right)
 {
+#ifdef G4VERBOSE
   if (verboseLevel>1) {
     G4cout << "G4ParticleChangeForLoss:: assignment operator is called " << G4endl;
   }
+#endif
+
   if (this != &right) {
+    if (theNumberOfSecondaries>0) {
+#ifdef G4VERBOSE
+      if (verboseLevel>0) {
+	G4cerr << "G4ParticleChangeForLoss: assignment operator Warning  ";
+	G4cerr << "theListOfSecondaries is not empty ";
+      }
+#endif
+       for (G4int index= 0; index<theNumberOfSecondaries; index++){
+	 if ( (*theListOfSecondaries)[index] ) delete (*theListOfSecondaries)[index] ;
+       }
+    }
+    delete theListOfSecondaries; 
+
     theListOfSecondaries = right.theListOfSecondaries;
     theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
     theNumberOfSecondaries = right.theNumberOfSecondaries;

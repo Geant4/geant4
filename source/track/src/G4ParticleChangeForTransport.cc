@@ -194,9 +194,9 @@ G4Step* G4ParticleChangeForTransport::UpdateStepForAlongStep(G4Step* pStep)
   pPostStepPoint->AddPosition( thePositionChange
 			       - pPreStepPoint->GetPosition() );
   pPostStepPoint->AddGlobalTime( theTimeChange
-				 - pPreStepPoint->GetGlobalTime());
+				 - pPreStepPoint->GetLocalTime());
   pPostStepPoint->AddLocalTime( theTimeChange
-				 - pPreStepPoint->GetGlobalTime());
+				 - pPreStepPoint->GetLocalTime());
   pPostStepPoint->AddProperTime( theProperTimeChange
 				 - pPreStepPoint->GetProperTime());
 
@@ -244,6 +244,7 @@ G4Step* G4ParticleChangeForTransport::UpdateStepForPostStep(G4Step* pStep)
   return pStep;
 }
 
+
 //----------------------------------------------------------------
 // methods for printing messages
 //
@@ -258,3 +259,4 @@ void G4ParticleChangeForTransport::DumpInfo() const
          << std::setw(20) << theTouchableHandle() << G4endl; 
   G4cout.precision(oldprc);
 }
+

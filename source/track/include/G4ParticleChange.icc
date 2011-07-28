@@ -144,24 +144,30 @@ inline
   return thePositionChange + displacement;
 }
 
-
-inline
- G4double  G4ParticleChange::GetGlobalTime(G4double timeDelay) const
-{
-      //  Convert the time delay to the global time.
-  return theTimeChange + timeDelay;
-}
-
-inline 
-  G4double  G4ParticleChange::GetGlobalTime() const
-{
-  return  theTimeChange;
-}
-
 inline 
   void G4ParticleChange::ProposeGlobalTime(G4double t)
 {
+  theTimeChange = (t-theGlobalTime0) + theLocalTime0;
+}
+   
+inline
+ G4double  G4ParticleChange::GetGlobalTime(G4double timeDelay) const
+{
+  //  Convert the time delay to the global time.
+  return theGlobalTime0 + (theTimeChange-theLocalTime0) + timeDelay;
+}
+
+inline 
+  void G4ParticleChange::ProposeLocalTime(G4double t)
+{
   theTimeChange = t;
+}
+   
+inline
+ G4double  G4ParticleChange::GetLocalTime(G4double timeDelay) const
+{
+  //  Convert the time delay to the local time.
+  return theTimeChange + timeDelay;
 }
 
 inline 

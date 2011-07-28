@@ -128,18 +128,31 @@ G4VParticleChange & G4VParticleChange::operator=(const G4VParticleChange &right)
 #endif
    if (this != &right)
    {
-      theListOfSecondaries = right.theListOfSecondaries;
-      theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
-      theNumberOfSecondaries = right.theNumberOfSecondaries;
-      theStatusChange = right.theStatusChange;
-      theTrueStepLength = right.theTrueStepLength;
-      theLocalEnergyDeposit = right.theLocalEnergyDeposit;
-      theNonIonizingEnergyDeposit = right.theNonIonizingEnergyDeposit;
-      theSteppingControlFlag = right.theSteppingControlFlag;
-      fSetParentWeightByProcess = right.fSetParentWeightByProcess;    
+     if (theNumberOfSecondaries>0) {
+#ifdef G4VERBOSE
+       if (verboseLevel>0) {
+	 G4cerr << "G4VParticleChange: assignment operator Warning  ";
+	 G4cerr << "theListOfSecondaries is not empty ";
+       }
+#endif
+       for (G4int index= 0; index<theNumberOfSecondaries; index++){
+	 if ( (*theListOfSecondaries)[index] ) delete (*theListOfSecondaries)[index] ;
+       }
+     }
+     delete theListOfSecondaries; 
 
-      theFirstStepInVolume = right.theFirstStepInVolume;
-      theLastStepInVolume =  right.theLastStepInVolume;
+     theListOfSecondaries = right.theListOfSecondaries;
+     theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
+     theNumberOfSecondaries = right.theNumberOfSecondaries;
+     theStatusChange = right.theStatusChange;
+     theTrueStepLength = right.theTrueStepLength;
+     theLocalEnergyDeposit = right.theLocalEnergyDeposit;
+     theNonIonizingEnergyDeposit = right.theNonIonizingEnergyDeposit;
+     theSteppingControlFlag = right.theSteppingControlFlag;
+     fSetParentWeightByProcess = right.fSetParentWeightByProcess;    
+     
+     theFirstStepInVolume = right.theFirstStepInVolume;
+     theLastStepInVolume =  right.theLastStepInVolume;
    }
    return *this;
 }

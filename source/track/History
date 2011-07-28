@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 6, 2011, H.Kurashige (track-V09-04-04)
+- Modify ParticleChanges (forDecay, for Transportation and G4ParticleChange)
+  to handle local time change rather than global time
+  (see problem #1224)
+- Modify CalculateVelocityForOpticalPhoton() for Coverity report.
+
 May. 20, 2011, B.Morgan (track-V09-04-03)
 - CMakeLists.txt : Added G4TRACK_ALLOC_EXPORT compiler definition via 
   add_definitions so it's applied to all sources in this module.

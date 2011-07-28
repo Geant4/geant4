@@ -86,6 +86,7 @@ G4Track::G4Track(G4DynamicParticle* apValueDynamicParticle,
   is_OpticalPhoton = (fpDynamicParticle->GetDefinition() == fOpticalPhoton);
 
   if (velTable==0) PrepareVelocityTable();
+
   fVelocity = CalculateVelocity();
 
 }
@@ -246,7 +247,7 @@ G4double G4Track::CalculateVelocityForOpticalPhoton() const
 
   G4Material* mat=0; 
   G4bool update_groupvel = false;
-  if ( this->GetStep() ){
+  if ( fpStep !=0  ){
     mat= this->GetMaterial();         //   Fix for repeated volumes
   }else{
     if (fpTouchable!=0){ 

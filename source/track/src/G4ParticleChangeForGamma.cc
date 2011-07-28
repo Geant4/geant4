@@ -83,10 +83,25 @@ G4ParticleChangeForGamma::G4ParticleChangeForGamma(
 G4ParticleChangeForGamma & G4ParticleChangeForGamma::operator=(
 			   const G4ParticleChangeForGamma &right)
 {
+#ifdef G4VERBOSE
   if (verboseLevel>1) 
     G4cout << "G4ParticleChangeForGamma:: assignment operator is called " << G4endl;
+#endif
   
   if (this != &right) {
+     if (theNumberOfSecondaries>0) {
+#ifdef G4VERBOSE
+       if (verboseLevel>0) {
+	 G4cerr << "G4ParticleChangeForGamma: assignment operator Warning  ";
+	 G4cerr << "theListOfSecondaries is not empty ";
+       }
+#endif
+       for (G4int index= 0; index<theNumberOfSecondaries; index++){
+	 if ( (*theListOfSecondaries)[index] ) delete (*theListOfSecondaries)[index] ;
+       }
+     }
+     delete theListOfSecondaries; 
+ 
     theListOfSecondaries = right.theListOfSecondaries;
     theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
     theNumberOfSecondaries = right.theNumberOfSecondaries;

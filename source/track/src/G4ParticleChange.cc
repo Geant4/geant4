@@ -53,6 +53,7 @@
 G4ParticleChange::G4ParticleChange()
   : G4VParticleChange(), theEnergyChange(0.), 
     theVelocityChange(0.), isVelocityChanged(false),
+    theGlobalTime0(0.),    theLocalTime0(0.),
     theTimeChange(0.),     theProperTimeChange(0.), 
     theMassChange(0.), theChargeChange(0.),
     theMagneticMomentChange(0.), theCurrentTrack(0)
@@ -80,47 +81,64 @@ G4ParticleChange::G4ParticleChange(const G4ParticleChange &right): G4VParticleCh
 
    theMomentumDirectionChange = right.theMomentumDirectionChange;
    thePolarizationChange = right.thePolarizationChange;
-   thePositionChange = right.thePositionChange;
-   theTimeChange = right.theTimeChange;
-   theEnergyChange = right.theEnergyChange;
-   theVelocityChange = right.theVelocityChange;
-   isVelocityChanged = true;
-   theMassChange = right.theMassChange;
-   theChargeChange = right.theChargeChange;
-   theMagneticMomentChange = right.theMagneticMomentChange;
-   //   theWeightChange = right.theWeightChange;
+   thePositionChange   = right.thePositionChange;
+   theGlobalTime0      = right.theGlobalTime0;
+   theLocalTime0       = right.theLocalTime0;
+   theTimeChange       = right.theTimeChange;
    theProperTimeChange = right.theProperTimeChange;
+   theEnergyChange     = right.theEnergyChange;
+   theVelocityChange   = right.theVelocityChange;
+   isVelocityChanged   = true;
+   theMassChange       = right.theMassChange;
+   theChargeChange     = right.theChargeChange;
+   theMagneticMomentChange = right.theMagneticMomentChange;
 }
 
 // assignemnt operator
 G4ParticleChange & G4ParticleChange::operator=(const G4ParticleChange &right)
 {
+#ifdef G4VERBOSE
    if (verboseLevel>1) {
     G4cout << "G4ParticleChange:: assignment operator is called " << G4endl;
    }
-   if (this != &right)
-   {
-      theListOfSecondaries = right.theListOfSecondaries;
-      theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
-      theNumberOfSecondaries = right.theNumberOfSecondaries;
-      theStatusChange = right.theStatusChange;
-      theCurrentTrack = right.theCurrentTrack;
-
-      theMomentumDirectionChange = right.theMomentumDirectionChange;
-      thePolarizationChange = right.thePolarizationChange;
-      thePositionChange = right.thePositionChange;
-      theTimeChange = right.theTimeChange;
-      theVelocityChange = right.theVelocityChange;
-      isVelocityChanged = true;
-      theEnergyChange = right.theEnergyChange;
-      theMassChange = right.theMassChange;
-      theChargeChange = right.theChargeChange;
-      theMagneticMomentChange = right.theMagneticMomentChange;
-      // theWeightChange = right.theWeightChange;
-
-      theTrueStepLength = right.theTrueStepLength;
-      theLocalEnergyDeposit = right.theLocalEnergyDeposit;
-      theSteppingControlFlag = right.theSteppingControlFlag;
+#endif
+   if (this != &right){
+     if (theNumberOfSecondaries>0) {
+#ifdef G4VERBOSE
+       if (verboseLevel>0) {
+	 G4cerr << "G4ParticleChange: assignment operator Warning  ";
+	 G4cerr << "theListOfSecondaries is not empty ";
+       }
+#endif
+       for (G4int index= 0; index<theNumberOfSecondaries; index++){
+	 if ( (*theListOfSecondaries)[index] ) delete (*theListOfSecondaries)[index] ;
+       }
+     }
+     delete theListOfSecondaries; 
+     
+     theListOfSecondaries = right.theListOfSecondaries;
+     theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
+     theNumberOfSecondaries = right.theNumberOfSecondaries;
+     theStatusChange = right.theStatusChange;
+     theCurrentTrack = right.theCurrentTrack;
+     
+     theMomentumDirectionChange = right.theMomentumDirectionChange;
+     thePolarizationChange = right.thePolarizationChange;
+     thePositionChange = right.thePositionChange;
+     theGlobalTime0      = right.theGlobalTime0;
+     theLocalTime0       = right.theLocalTime0;
+     theTimeChange       = right.theTimeChange;
+     theProperTimeChange = right.theProperTimeChange;
+     theEnergyChange     = right.theEnergyChange;
+     theVelocityChange   = right.theVelocityChange;
+     isVelocityChanged   = true;
+     theMassChange       = right.theMassChange;
+     theChargeChange     = right.theChargeChange;
+     theMagneticMomentChange = right.theMagneticMomentChange;
+     
+     theTrueStepLength = right.theTrueStepLength;
+     theLocalEnergyDeposit = right.theLocalEnergyDeposit;
+     theSteppingControlFlag = right.theSteppingControlFlag;
    }
    return *this;
 }
@@ -220,11 +238,16 @@ void G4ParticleChange::Initialize(const G4Track& track)
   theChargeChange = pParticle->GetCharge();
   theMagneticMomentChange = pParticle->GetMagneticMoment();
 
-  // set Position/Time etc. equal to those of the parent track
+  // set Position  equal to those of the parent track
   thePositionChange      = track.GetPosition();
-  theTimeChange          = track.GetGlobalTime();
 
-  // theWeightChange        = track.GetWeight();
+  // set TimeChange equal to local time of the parent track
+  theTimeChange                = track.GetLocalTime();
+
+  // set initial Local/Global time of the parent track
+  theLocalTime0           = track.GetLocalTime();
+  theGlobalTime0          = track.GetGlobalTime();
+
 }
 
 //----------------------------------------------------------------
@@ -287,10 +310,8 @@ G4Step* G4ParticleChange::UpdateStepForAlongStep(G4Step* pStep)
   // update position and time
   pPostStepPoint->AddPosition( thePositionChange 
 			       - pPreStepPoint->GetPosition() );
-  pPostStepPoint->AddGlobalTime( theTimeChange
-				 - pPreStepPoint->GetGlobalTime());
-  pPostStepPoint->AddLocalTime( theTimeChange 
-				 - pPreStepPoint->GetGlobalTime()); 
+  pPostStepPoint->AddGlobalTime(theTimeChange - theLocalTime0);
+  pPostStepPoint->AddLocalTime( theTimeChange - theLocalTime0 );	       
   pPostStepPoint->AddProperTime( theProperTimeChange 
 				 - pPreStepPoint->GetProperTime());
 
@@ -337,9 +358,8 @@ G4Step* G4ParticleChange::UpdateStepForPostStep(G4Step* pStep)
       
   // update position and time
   pPostStepPoint->SetPosition( thePositionChange  );
-  pPostStepPoint->SetGlobalTime( theTimeChange  );
-  pPostStepPoint->AddLocalTime( theTimeChange 
-				 - aTrack->GetGlobalTime());
+  pPostStepPoint->AddGlobalTime(theTimeChange - theLocalTime0);
+  pPostStepPoint->SetLocalTime( theTimeChange );	       
   pPostStepPoint->SetProperTime( theProperTimeChange  );
 
   // update weight
@@ -380,9 +400,8 @@ G4Step* G4ParticleChange::UpdateStepForAtRest(G4Step* pStep)
       
   // update position and time
   pPostStepPoint->SetPosition( thePositionChange  );
-  pPostStepPoint->SetGlobalTime( theTimeChange  );
-  pPostStepPoint->AddLocalTime( theTimeChange 
-				 - aTrack->GetGlobalTime());
+  pPostStepPoint->AddGlobalTime(theTimeChange - theLocalTime0);
+  pPostStepPoint->SetLocalTime( theTimeChange );	       
   pPostStepPoint->SetProperTime( theProperTimeChange  );
 
   // update weight 
@@ -490,11 +509,11 @@ G4bool G4ParticleChange::CheckIt(const G4Track& aTrack)
 
   // Both global and proper time should not go back
   G4bool itsOKforGlobalTime = true;  
-  accuracy = (aTrack.GetGlobalTime()- theTimeChange)/ns;
+  accuracy = (aTrack.GetLocalTime()- theTimeChange)/ns;
   if (accuracy > accuracyForWarning) {
 #ifdef G4VERBOSE
     G4cout << "  G4ParticleChange::CheckIt    : ";
-    G4cout << "the global time goes back  !!" << G4endl;
+    G4cout << "the local time goes back  !!" << G4endl;
     G4cout << "  Difference:  " << accuracy  << "[ns] " <<G4endl;
 #endif
     itsOKforGlobalTime = false;

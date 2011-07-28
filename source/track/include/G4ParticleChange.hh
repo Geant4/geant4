@@ -152,16 +152,23 @@ class G4ParticleChange: public G4VParticleChange
 
     G4double GetProperTime() const;
     void ProposeProperTime(G4double finalProperTime);
-    //  Get/Propose th final eProperTime 
+    //  Get/Propose th final ProperTime 
 
     const G4ThreeVector* GetPosition() const;
     void ProposePosition(G4double x, G4double y, G4double z);
     void ProposePosition(const G4ThreeVector& finalPosition);
     //  Get/Propose the final position of the current particle.
 
-    G4double GetGlobalTime() const;
-    void ProposeGlobalTime(G4double finalGlobalTime);
-    //  Get/Propose the final GlobalTime
+    void     ProposeGlobalTime(G4double t);
+    void     ProposeLocalTime(G4double t);
+    //  Get/Propose the final global/local Time
+    // NOTE: DO NOT INVOKE both methods in a step
+    //       Each method affects both local and global time 
+
+    G4double GetGlobalTime(G4double timeDelay=0.0) const;
+    G4double GetLocalTime(G4double timeDelay=0.0) const;
+    //  Convert the time delay to the glocbal/local time.
+    //  Can get  the final global/local  Time without argument
  
     G4double GetMass() const;
     void ProposeMass(G4double finalMass);
@@ -179,18 +186,14 @@ class G4ParticleChange: public G4VParticleChange
     void ProposeWeight(G4double finalWeight);
     //   Get/Propose the final Weight of the parent particle
 
-    //  -- Utility functions --
     G4ThreeVector GetGlobalPosition(const G4ThreeVector& displacement) const;
     //  Convert the position displacement to the global position.
-
-    G4double GetGlobalTime(G4double timeDelay) const;
-    //  Convert the time delay to the global time.
 
     G4ThreeVector CalcMomentum(G4double           energy,
 			       G4ThreeVector direction,
 			       G4double           mass      ) const;
     //  Calculate momentum by using Energy, Momentum Direction, and Mass 
-    // ----------------------------------------------------
+
 
 
     // ----------------------------------------------------
@@ -240,16 +243,17 @@ class G4ParticleChange: public G4VParticleChange
    G4ThreeVector thePositionChange;
     //  The changed (final) position of a given track
     
+    G4double theGlobalTime0;
+    //  The global time at Initial.
+    G4double theLocalTime0;
+    //  The local time at Initial.
+
     G4double theTimeChange;
-    //  The changed (final) global time of a given track
+    //  The change of local time of a given particle.
     
     G4double theProperTimeChange;
     //  The changed (final) proper time of a given track
     
-    // Obsolete   Mar 2007
-    // G4double theWeightChange;
-    //  The Changed (final) weight of a given track
-
     G4double theMassChange;
     //  The Changed (final) mass of a given track
 
