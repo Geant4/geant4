@@ -166,7 +166,7 @@ ComputeDimensions( G4Tubs& tubs, const G4int copyNo,
   tubs.SetInnerRadius( pRMin );
   tubs.SetOuterRadius( pRMax );
   tubs.SetZHalfLength( pDz );
-  tubs.SetStartPhiAngle( pSPhi );
+  tubs.SetStartPhiAngle( pSPhi, false );
   tubs.SetDeltaPhiAngle( pDPhi );
 
 #ifdef G4DIVDEBUG
@@ -275,7 +275,7 @@ ComputeDimensions( G4Tubs& tubs, const G4int,
   tubs.SetInnerRadius( pRMin );
   tubs.SetOuterRadius( pRMax );
   tubs.SetZHalfLength( pDz );
-  tubs.SetStartPhiAngle( pSPhi );
+  tubs.SetStartPhiAngle( pSPhi, false );
   tubs.SetDeltaPhiAngle( pDPhi );
 
 #ifdef G4DIVDEBUG
@@ -386,7 +386,7 @@ ComputeDimensions( G4Tubs& tubs, const G4int,
   tubs.SetInnerRadius( pRMin );
   tubs.SetOuterRadius( pRMax );
   tubs.SetZHalfLength( pDz );
-  tubs.SetStartPhiAngle( pSPhi );
+  tubs.SetStartPhiAngle( pSPhi, false );
   tubs.SetDeltaPhiAngle( pDPhi );
 
 #ifdef G4DIVDEBUG

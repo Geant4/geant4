@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July, 14th, 2011             G.Cosmo (geomdiv-V09-04-00)
+- Optimise initialization of phi angles in parameterisation for tubs and cons.
+
 November, 9th, 2010          M.Asai (geomdiv-V09-03-02)
 - Introducing G4ReplicatedSlice, allowing for gaps in between divided daughter
   volumes.

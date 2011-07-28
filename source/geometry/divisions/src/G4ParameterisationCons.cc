@@ -198,7 +198,7 @@ ComputeDimensions( G4Cons& cons, const G4int copyNo,
   cons.SetInnerRadiusPlusZ( pRMin2 + d_half_gap );
   cons.SetOuterRadiusPlusZ( pRMax2 - d_half_gap );
   cons.SetZHalfLength( pDz );
-  cons.SetStartPhiAngle( pSPhi );
+  cons.SetStartPhiAngle( pSPhi, false );
   cons.SetDeltaPhiAngle( pDPhi );
 
 #ifdef G4DIVDEBUG
@@ -304,7 +304,7 @@ ComputeDimensions( G4Cons& cons, const G4int,
   cons.SetInnerRadiusPlusZ( pRMin2 );
   cons.SetOuterRadiusPlusZ( pRMax2 );
   cons.SetZHalfLength( pDz );
-  cons.SetStartPhiAngle( pSPhi );
+  cons.SetStartPhiAngle( pSPhi, false );
   cons.SetDeltaPhiAngle( pDPhi );
 
 #ifdef G4DIVDEBUG
@@ -418,7 +418,7 @@ ComputeDimensions( G4Cons& cons, const G4int copyNo,
   G4double pDPhi = msol->GetDeltaPhiAngle();
 
   cons.SetZHalfLength( pDz );
-  cons.SetStartPhiAngle( pSPhi );
+  cons.SetStartPhiAngle( pSPhi, false );
   cons.SetDeltaPhiAngle( pDPhi );
 
 #ifdef G4DIVDEBUG
