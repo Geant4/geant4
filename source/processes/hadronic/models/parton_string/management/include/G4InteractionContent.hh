@@ -53,13 +53,13 @@ class G4InteractionContent
 
       int operator==(const G4InteractionContent &right) const;
       int operator!=(const G4InteractionContent &right) const;
-      G4bool operator<(const G4InteractionContent &right) const;   // Uzhi Feb23
+      G4bool operator<(const G4InteractionContent &right) const;
       
       G4VSplitableHadron * GetProjectile() const ;
       G4VSplitableHadron * GetTarget() const;
 
-      void                 SetTargetNucleon(G4Nucleon * aNucleon); // Uzhi 16.07.09
-      G4Nucleon          * GetTargetNucleon() const;              // Uzhi 16.07.09
+      void                 SetTargetNucleon(G4Nucleon * aNucleon);
+      G4Nucleon          * GetTargetNucleon() const;
 
       void SetTarget(G4VSplitableHadron *aTarget);
 
@@ -84,8 +84,10 @@ class G4InteractionContent
 
 public:
       G4InteractionContent(){}
-      G4InteractionContent(const G4InteractionContent &right);
       const G4InteractionContent & operator=(const G4InteractionContent &right);
+
+private:
+      G4InteractionContent(const G4InteractionContent &right);
 
   protected:
 
@@ -99,8 +101,8 @@ public:
       G4int theNumberOfSoft;
       G4int theNumberOfDiffractive;
 
-      G4double theInteractionTime;  // Uzhi Feb23
-      G4int    curStatus;           // Uzhi Feb26
+      G4double theInteractionTime;
+      G4int    curStatus;
 
 };
 
@@ -121,12 +123,12 @@ inline void G4InteractionContent::SetTarget(G4VSplitableHadron *aTarget)
 	theTarget = aTarget;
 }
 
-inline void G4InteractionContent::SetTargetNucleon(G4Nucleon * aNucleon) // Uzhi 16.07.09
+inline void G4InteractionContent::SetTargetNucleon(G4Nucleon * aNucleon)
 {
         theTargetNucleon = aNucleon;
 }
 
-inline G4Nucleon * G4InteractionContent::GetTargetNucleon() const       // Uzhi 16.07.09
+inline G4Nucleon * G4InteractionContent::GetTargetNucleon() const
 {
        return theTargetNucleon;
 }

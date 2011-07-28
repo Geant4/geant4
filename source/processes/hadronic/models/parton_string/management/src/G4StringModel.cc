@@ -30,14 +30,8 @@
 // G4StringModel
 #include "G4StringModel.hh"
 
-G4StringModel::G4StringModel()
-{
-	the3DNucleus=NULL;
-	theStringFragmentationModel=NULL;
-	theGenerator=NULL;
-}
-
-G4StringModel::G4StringModel(const G4StringModel &) : G4VHighEnergyGenerator()
+G4StringModel::G4StringModel() :  G4VHighEnergyGenerator(),
+the3DNucleus(0), theStringFragmentationModel(0),theGenerator(0)
 {
 }
 
@@ -46,6 +40,11 @@ G4StringModel::~G4StringModel()
 {
 }
 
+  // private:
+G4StringModel::G4StringModel(const G4StringModel &) : G4VHighEnergyGenerator(),
+the3DNucleus(0), theStringFragmentationModel(0),theGenerator(0)
+{
+}
 
 const G4StringModel & G4StringModel::operator=(const G4StringModel &)
 {

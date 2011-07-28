@@ -43,15 +43,18 @@
 #include "G4ShortLivedConstructor.hh"
 
 
-G4VPartonStringModel::G4VPartonStringModel()
+G4VPartonStringModel::G4VPartonStringModel() : G4VHighEnergyGenerator(),
+stringFragmentationModel(0), theThis(0)
 {
 //  Make shure Shotrylived partyicles are constructed.
 	G4ShortLivedConstructor ShortLived;
 	ShortLived.ConstructParticle();
 }
 
-G4VPartonStringModel::G4VPartonStringModel(const G4VPartonStringModel &) : G4VHighEnergyGenerator()
+G4VPartonStringModel::G4VPartonStringModel(const G4VPartonStringModel &) : G4VHighEnergyGenerator(), 
+stringFragmentationModel(0), theThis(0)
 {
+  throw G4HadronicException(__FILE__, __LINE__, "G4VPartonStringModel::copy ctor not accessible");
 }
 
 
@@ -104,7 +107,6 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
   	strings = GetStrings();
   }
   
-  G4KineticTrackVector * theResult = 0;
   G4double stringEnergy(0);
   G4LorentzVector SumStringMom(0.,0.,0.,0.);
 
@@ -119,7 +121,8 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
 
   G4double InvMass=SumStringMom.mag();   
 
-#ifdef debug_PartonStringModel
+//#define debug_PartonStringModel
+  #ifdef debug_PartonStringModel
   G4V3DNucleus * fancynucleus=theThis->GetWoundedNucleus();
   
        // loop over wounded nucleus
@@ -134,15 +137,17 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
        theCurrentNucleon = fancynucleus->GetNextNucleon();
      }
      
-     G4cout << " strE, nucleons, inE " 
+     G4cout << "G4VPSM: strE, nucleons,SumStringE,  inE "
             << stringEnergy << " "    
 	    << hits << " "
 	    << Ptmp.e() << " " 
-	    << stringEnergy - 939.*hits - Ptmp.e()<< G4endl;
-#endif
+	    << SumStringMom.e() << " "
+	    << Ptmp.e() + 939.*hits - stringEnergy  << G4endl;
+  #endif
 
-//  theResult = stringFragmentationModel->FragmentStrings(strings);
+//  Fragment strings
 
+  G4KineticTrackVector * theResult = 0;
   G4double SumMass(0.); 
   attempts = 0; 
   maxAttempts=100;
@@ -152,27 +157,24 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
    if(theResult != 0)
    {
     std::for_each(theResult->begin(), theResult->end(), DeleteKineticTrack());
-    theResult->clear();
+    delete theResult;
    }
-//G4cout<<"Frag Mod start"<<G4endl;
    theResult = stringFragmentationModel->FragmentStrings(strings);
-//G4cout<<"Frag Mod end"<<G4endl;
    if(attempts > maxAttempts ) break;
 
-//G4cout<<G4endl<<"G4VPartStrMod Managm"<<G4endl;
-//G4cout<<"Final Result Size "<<theResult->size()<<G4endl;
+    //G4cout<<"G4endl<<"G4VPartonStringModel:: Final Result, Size "<<theResult->size()<<G4endl;
 
    SumMass=0.;
-//G4LorentzVector SumP(0.,0.,0.,0.);
+    //G4LorentzVector SumP(0.,0.,0.,0.);
    for ( unsigned int i=0; i < theResult->size(); i++)
    {
     SumMass+=(*theResult)[i]->GetDefinition()->GetPDGMass();
-//SumP+=(*theResult)[i]->Get4Momentum();
-//G4cout<<(*theResult)[i]->Get4Momentum()<<" "<<(*theResult)[i]->Get4Momentum().mag()<<G4endl;
-//G4cout<<i<<" "<<(*theResult)[i]->GetDefinition()->GetParticleName()<<G4endl;
+     //SumP+=(*theResult)[i]->Get4Momentum();
+     //G4cout<<i<<" : "<<(*theResult)[i]->GetDefinition()->GetParticleName();
+     //G4cout<<"p= " << (*theResult)[i]->Get4Momentum()<<" m= "<<(*theResult)[i]->Get4Momentum().mag()<<G4endl;
    }
 
-//G4cout<<"SumP "<<SumP<<G4endl;
+     //G4cout<<"SumP "<<SumP<<G4endl;
   } while(SumMass > InvMass);
 
   std::for_each(strings->begin(), strings->end(), DeleteString() );
