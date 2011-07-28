@@ -81,6 +81,8 @@ G4hParametrisedLossModel::G4hParametrisedLossModel(const G4String& name)
 
 void G4hParametrisedLossModel::InitializeMe()
 {
+  expStopPower125 = 0.;
+
   theZieglerFactor = eV*cm2*1.0e-15 ;
 
   // Registration of parametrisation models

@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05.07.2011  L. Pandola tag emlowen-V09-04-51
+	    Fixed coverity warnings.
+
+02.07.2011  S. Incerti, tag emlowen-V09-04-50
+	    Fixed coverity warnings.
+
 21.06.2011  L. Pandola, tag emlowen-V09-04-49
 	    Fixed bug in G4PenelopeOscillatorManager reported by 
 	    Gunter F. while testing under Windows

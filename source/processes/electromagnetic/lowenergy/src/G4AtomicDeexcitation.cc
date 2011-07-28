@@ -49,7 +49,10 @@ G4AtomicDeexcitation::G4AtomicDeexcitation():
   minGammaEnergy(100.*eV),
   minElectronEnergy(100.*eV),
   fAuger(false)
-{}
+{
+  augerVacancyId=0;
+  newShellId=0;
+}
 
 G4AtomicDeexcitation::~G4AtomicDeexcitation()
 {}

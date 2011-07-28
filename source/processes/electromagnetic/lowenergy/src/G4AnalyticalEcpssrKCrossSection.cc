@@ -42,6 +42,17 @@ G4AnalyticalEcpssrKCrossSection::G4AnalyticalEcpssrKCrossSection()
 { 
     verboseLevel=0;
     
+    // Storing C coefficients for high velocity formula
+
+    G4String fileC1("pixe/uf/c1");
+    tableC1 = new G4CrossSectionDataSet(new G4SemiLogInterpolation, 1.,1.);
+
+    G4String fileC2("pixe/uf/c2");
+    tableC2 = new G4CrossSectionDataSet(new G4SemiLogInterpolation, 1.,1.);
+
+    G4String fileC3("pixe/uf/c3");
+    tableC3 = new G4CrossSectionDataSet(new G4SemiLogInterpolation, 1.,1.);
+
     // Storing FK data needed for medium velocities region
 
     char *path = getenv("G4LEDATA");
@@ -79,19 +90,9 @@ G4AnalyticalEcpssrKCrossSection::G4AnalyticalEcpssrKCrossSection()
           
     }
 
-  // Storing C coefficients for high velocity formula
-
-  G4String fileC1("pixe/uf/c1");
-  tableC1 = new G4CrossSectionDataSet(new G4SemiLogInterpolation, 1.,1.);
-  tableC1->LoadData(fileC1);
-
-  G4String fileC2("pixe/uf/c2");
-  tableC2 = new G4CrossSectionDataSet(new G4SemiLogInterpolation, 1.,1.);
-  tableC2->LoadData(fileC2);
-
-  G4String fileC3("pixe/uf/c3");
-  tableC3 = new G4CrossSectionDataSet(new G4SemiLogInterpolation, 1.,1.);
-  tableC3->LoadData(fileC3);
+    tableC1->LoadData(fileC1);
+    tableC2->LoadData(fileC2);
+    tableC3->LoadData(fileC3);
 
 }
 

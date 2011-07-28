@@ -35,6 +35,7 @@
 // 23 Oct 2009   L. Pandola   remove un-necessary methods to manage atomic 
 //                            deexcitation (done by G4VEmModel)
 // 01 Jun 2011   V Ivanchenko general cleanup - all old deexcitation code removed
+// 04 Jul 2011   L Pandola    removed unused private member
 // 
 // -------------------------------------------------------------------
 //
@@ -100,7 +101,6 @@ private:
   //Intrinsic energy limits of the model: cannot be extended by the parent process
   G4double fIntrinsicLowEnergyLimit;
   G4double fIntrinsicHighEnergyLimit;
-  G4int fNBinEnergyLoss;
 
   G4bool isInitialised;
  

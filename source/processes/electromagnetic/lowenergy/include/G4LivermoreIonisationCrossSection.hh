@@ -32,6 +32,7 @@
 // History:
 // --------
 // 31 May 2011 V.Ivanchenko  The class is created  
+// 04 Jul 2011 L Pandola     Comment unused private member
 // 
 // 
 // -------------------------------------------------------------------
@@ -85,9 +86,9 @@ private:
   //Intrinsic energy limits of the model: cannot be extended by the parent process
   G4double fLowEnergyLimit;
   G4double fHighEnergyLimit;
-
-  G4bool isInitialised;
  
+  //G4bool isInitialised;
+
   G4int verboseLevel;
  
   G4VCrossSectionHandler* crossSectionHandler;

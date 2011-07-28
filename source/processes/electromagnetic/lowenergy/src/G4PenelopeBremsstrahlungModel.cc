@@ -106,7 +106,7 @@ void G4PenelopeBremsstrahlungModel::Initialise(const G4ParticleDefinition*,
   ClearTables();
 
   //Set the number of bins for the tables. 20 points per decade
-  nBins = (size_t) (20*std::log10(HighEnergyLimit()/LowEnergyLimit()));
+  nBins = (size_t) (20*log10(HighEnergyLimit()/LowEnergyLimit()));
   nBins = std::max(nBins,(size_t)100);
   energyGrid = new G4PhysicsLogVector(LowEnergyLimit(),
                                       HighEnergyLimit(), 
@@ -271,7 +271,7 @@ void G4PenelopeBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParti
   if (verboseLevel > 3)
     G4cout << "Sampled gamma energy: " << gammaEnergy/keV << " keV" << G4endl;
 
-  G4double Zeff = std::sqrt(fPenelopeFSHelper->GetEffectiveZSquared(material));
+  G4double Zeff = sqrt(fPenelopeFSHelper->GetEffectiveZSquared(material));
   if (verboseLevel > 3)
     {
       G4cout << "Sampling in " << material->GetName() << " with Zeff= " << 
@@ -445,12 +445,12 @@ void G4PenelopeBremsstrahlungModel::BuildXSTable(const G4Material* mat,G4double 
        //the 32-point x grid. Interpolation is log-log
        size_t nBinsX = fPenelopeFSHelper->GetNBinsX();       
        G4double* tempData = new G4double[nBinsX];     
-       G4double logene = std::log(energy);
+       G4double logene = log(energy);
        for (size_t ix=0;ix<nBinsX;ix++)	
 	 {
 	   //find dSigma/dx for the given E. X belongs to the 32-point grid.
 	   G4double val = (*table)[ix]->Value(logene);	   
-	   tempData[ix] = std::exp(val); //back to the real value!
+	   tempData[ix] = exp(val); //back to the real value!
 	 } 
        
        G4double XH0A = 0.;
@@ -580,7 +580,7 @@ G4double G4PenelopeBremsstrahlungModel::GetPositronXSCorrection(const G4Material
   //accuracy
   G4double t=std::log(1.0+1e6*energy/
 		      (electron_mass_c2*fPenelopeFSHelper->GetEffectiveZSquared(mat)));
-  G4double corr = 1.0-std::exp(-t*(1.2359e-1-t*(6.1274e-2-t*
+  G4double corr = 1.0-exp(-t*(1.2359e-1-t*(6.1274e-2-t*
 					   (3.1516e-2-t*(7.7446e-3-t*(1.0595e-3-t*
 								      (7.0568e-5-t*
 								       1.8080e-6)))))));

@@ -255,7 +255,7 @@ void G4PenelopeBremsstrahlungFS::BuildScaledXSTable(const G4Material* material,
       G4double fact = millibarn*(theEGrid[ie]+electron_mass_c2)*(1./fine_structure_const)/
 	(classic_electr_radius*classic_electr_radius*(theEGrid[ie]+2.0*electron_mass_c2));
       G4double fnorm = (*tempData)[ie]/(rsum*fact);
-      G4double TST = 100.*std::fabs(fnorm-1.0);
+      G4double TST = 100.*fabs(fnorm-1.0);
       if (TST > 1.0)
 	{
 	  G4cout << "G4PenelopeBremsstrahlungFS. Corrupted data files?" << G4endl;
@@ -289,16 +289,16 @@ void G4PenelopeBremsstrahlungFS::BuildScaledXSTable(const G4Material* material,
 	(G4PhysicsFreeVector*) ((*thePhysicsTable)[ix]);      
       for (size_t ie=0;ie<nBinsE;ie++)
 	{
-	  G4double logene = std::log(theEGrid[ie]);
+	  G4double logene = log(theEGrid[ie]);
 	  G4double aValue = (*tempMatrix)[ie*nBinsX+ix];
 	  if (aValue < 1e-20*millibarn) //protection against log(0)
 	    aValue = 1e-20*millibarn;	
-	  theVec->PutValue(ie+1,logene,std::log(aValue));
+	  theVec->PutValue(ie+1,logene,log(aValue));
 	}
       //Add fake point at 1 eV using an extrapolation with the derivative 
       //at the first valid point (Penelope approach)
       G4double derivative = ((*theVec)[2]-(*theVec)[1])/(theVec->Energy(2) - theVec->Energy(1));
-      G4double log1eV = std::log(1*eV);
+      G4double log1eV = log(1*eV);
       G4double val1eV = (*theVec)[1]+derivative*(log1eV-theVec->Energy(1));
       //fake point at very low energy
       theVec->PutValue(0,log1eV,val1eV);      
@@ -438,15 +438,15 @@ G4double G4PenelopeBremsstrahlungFS::GetMomentumIntegral(G4double* y,
 	  G4double b=dy/dx;
 	  G4double a=y1-b*x1;	 
 	  if (momOrder == -1)	    
-	    ds = a*std::log(xtc/x1)+b*(xtc-x1);
+	    ds = a*log(xtc/x1)+b*(xtc-x1);
 	  else if (momOrder == 0) //speed it up, not using pow()
 	    ds = a*(xtc-x1) + 0.5*b*(xtc*xtc-x1*x1);
 	  else
-	    ds = a*(std::pow(xtc,momOrder+1)-std::pow(x1,momOrder+1))/((G4double) (momOrder + 1))
-	      + b*(std::pow(xtc,momOrder+2)-std::pow(x1,momOrder+2))/((G4double) (momOrder + 2));	    
+	    ds = a*(pow(xtc,momOrder+1)-pow(x1,momOrder+1))/((G4double) (momOrder + 1))
+	      + b*(pow(xtc,momOrder+2)-pow(x1,momOrder+2))/((G4double) (momOrder + 2));	    
 	}
       else
-	ds = 0.5*(y1+y2)*(xtc-x1)*std::pow(xtc,momOrder);
+	ds = 0.5*(y1+y2)*(xtc-x1)*pow(xtc,momOrder);
       result += ds;
       if (!loopAgain) 
 	return result;
@@ -517,12 +517,12 @@ void G4PenelopeBremsstrahlungFS::InitializeEnergySampling(const G4Material* mate
 	  G4double x1=std::max(theXGrid[ix-1],1.0e-35);	  
 	  //Remember: the table theReducedXSTable has a fake first point in energy
 	  //so, it contains one more bin than nBinsE.
-	  G4double y1=std::exp((*v1)[ie+1]);
+	  G4double y1=exp((*v1)[ie+1]);
 	  G4double x2=std::max(theXGrid[ix],1.0e-35);
-	  G4double y2=std::exp((*v2)[ie+1]); 
+	  G4double y2=exp((*v2)[ie+1]); 
 	  G4double B = (y2-y1)/(x2-x1);
 	  G4double A = y1-B*x1;
-	  G4double dS = A*std::log(x2/x1)+B*(x2-x1);
+	  G4double dS = A*log(x2/x1)+B*(x2-x1);
 	  value += dS;
 	  theVec->PutValue(ix,theXGrid[ix],value);
 	}
@@ -534,7 +534,7 @@ void G4PenelopeBremsstrahlungFS::InitializeEnergySampling(const G4Material* mate
       for (size_t ix=0;ix<nBinsX;ix++)	
 	{
 	  G4PhysicsFreeVector* vv = (G4PhysicsFreeVector*) (*theTableReduced)[ix];
-	  tempData[ix] = std::exp((*vv)[ie+1]);
+	  tempData[ix] = exp((*vv)[ie+1]);
 	}
       G4double pbval = (xc<=1) ?
 	GetMomentumIntegral(tempData,xc,-1) :
@@ -641,8 +641,8 @@ G4double G4PenelopeBremsstrahlungFS::SampleGammaEnergy(G4double energy,const G4M
       G4PhysicsFreeVector* v2 = (G4PhysicsFreeVector*) (*theTableRed)[ibin+1];     
       //Remember: the table theReducedXSTable has a fake first point in energy
       //so, it contains one more bin than nBinsE.
-      G4double pdf1 = std::exp((*v1)[eBin+1]);
-      G4double pdf2 = std::exp((*v2)[eBin+1]);    
+      G4double pdf1 = exp((*v1)[eBin+1]);
+      G4double pdf2 = exp((*v2)[eBin+1]);    
       G4double deltaW = w2-w1;
       G4double dpdfb = pdf2-pdf1;
       G4double B = dpdfb/deltaW;
@@ -662,7 +662,7 @@ G4double G4PenelopeBremsstrahlungFS::SampleGammaEnergy(G4double energy,const G4M
       do
 	{
 	  loopAgain = false;
-	  eGamma = w1* std::pow((w2/w1),G4UniformRand());
+	  eGamma = w1* pow((w2/w1),G4UniformRand());
 	  if  (G4UniformRand()*pmax > (A+B*eGamma))
 	    loopAgain = true;	
 	}while(loopAgain);     
