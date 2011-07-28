@@ -58,36 +58,20 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Tst18EventActionMessenger::Tst18EventActionMessenger(Tst18EventAction* EvAct)
-:eventAction(EvAct)
+  : eventAction(EvAct)
 { 
-  DrawCmd = new G4UIcmdWithAString("/event/draw",this);
-  DrawCmd->SetGuidance("Draw the tracks in the event");
-  DrawCmd->SetGuidance("  Choice : none, charged, all (default)");
-  DrawCmd->SetParameterName("choice",true);
-  DrawCmd->SetDefaultValue("all");
-  DrawCmd->SetCandidates("none charged all");
-  DrawCmd->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Tst18EventActionMessenger::~Tst18EventActionMessenger()
 {
-  delete DrawCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Tst18EventActionMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
+void Tst18EventActionMessenger::SetNewValue(G4UIcommand *, G4String)
 { 
-  if(command == DrawCmd)
-    {eventAction->SetDrawFlag(newValue);}
-   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-
-
-

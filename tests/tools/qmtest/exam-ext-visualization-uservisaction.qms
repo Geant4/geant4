@@ -7,7 +7,9 @@
   <argument name="test_ids">
     <set>
       <text>exam-ext-visualization-uservisaction-build</text>
-      <text>exam-ext-visualization-uservisaction-run</text>
+      <text>exam-ext-visualization-uservisaction-run1-run</text>
+      <text>exam-ext-visualization-uservisaction-run2-run</text>
+      <text>exam-ext-visualization-uservisaction-uva-run</text>
     </set>
   </argument>
 </extension>

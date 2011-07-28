@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE extension PUBLIC "-//QM/2.4/Extension//EN" "http://www.codesourcery.com/qm/dtds/2.4/-//qm/2.4/extension//en.dtd">
+<extension class="explicit_suite.ExplicitSuite" kind="suite">
+  <argument name="suite_ids">
+    <set>
+      <text>exam-nov-n01</text>
+      <text>exam-nov-n02</text>
+      <text>exam-nov-n03</text>
+      <text>exam-nov-n04</text>
+      <text>exam-nov-n05</text>
+      <text>exam-nov-n06</text>
+      <text>exam-nov-n07</text>
+    </set>
+  </argument>
+  <argument name="test_ids">
+    <set/>
+  </argument>
+</extension>

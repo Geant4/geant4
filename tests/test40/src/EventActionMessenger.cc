@@ -43,14 +43,6 @@
 EventActionMessenger::EventActionMessenger(EventAction* EvAct)
 :eventAction(EvAct)
 { 
-  DrawCmd = new G4UIcmdWithAString("/testem/event/drawTracks",this);
-  DrawCmd->SetGuidance("Draw the tracks in the event");
-  DrawCmd->SetGuidance("  Choice : none, charged, all");
-  DrawCmd->SetParameterName("choice",true);
-  DrawCmd->SetDefaultValue("all");
-  DrawCmd->SetCandidates("none charged all");
-  DrawCmd->AvailableForStates(G4State_Idle);
-  
   PrintCmd = new G4UIcmdWithAnInteger("/testem/event/printModulo",this);
   PrintCmd->SetGuidance("Print events modulo n");
   PrintCmd->SetParameterName("EventNb",false);
@@ -62,7 +54,6 @@ EventActionMessenger::EventActionMessenger(EventAction* EvAct)
 
 EventActionMessenger::~EventActionMessenger()
 {
-  delete DrawCmd;
   delete PrintCmd;
 }
 
@@ -71,9 +62,6 @@ EventActionMessenger::~EventActionMessenger()
 void EventActionMessenger::SetNewValue(G4UIcommand* command,
                                           G4String newValue)
 { 
-  if(command == DrawCmd)
-    {eventAction->SetDrawFlag(newValue);}
-    
   if(command == PrintCmd)
     {eventAction->SetPrintModulo(PrintCmd->GetNewIntValue(newValue));}    
    

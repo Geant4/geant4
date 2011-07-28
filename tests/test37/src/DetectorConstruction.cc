@@ -42,8 +42,6 @@
 
 #include "G4UnitsTable.hh"
 
-#include "G4VisAttributes.hh"
-#include "G4Colour.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -174,23 +172,6 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
                G4ThreeVector(((LayerThichness3-Absorber3Thickness)/2 + iAb * LayerThichness3)  
 			     ,0.,0.),logicLayerMedium3,"LayerMedium 3",logicMedium3,false,iAb+1);			
   }
-
-//--------- Visualization attributes -------------------------------
-
-  G4VisAttributes* Zero= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
-  logicWorld  ->SetVisAttributes(G4VisAttributes::Invisible);  
-        
-  G4VisAttributes* One = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
-  logicMedium1  ->SetVisAttributes(Zero); 
-  logicLayerMedium1  ->SetVisAttributes(One); 
-
-  G4VisAttributes* Two = new G4VisAttributes(G4Colour(1.0,0.0,1.0));
-  logicMedium2  ->SetVisAttributes(Zero);
-  logicMedium3  ->SetVisAttributes(Zero);
-  logicLayerMedium2  ->SetVisAttributes(Two);
-  logicLayerMedium3  ->SetVisAttributes(One);
-
-//-------------------------------------------------------------------
 
   return physiWorld;
 }

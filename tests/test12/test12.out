@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-beta-01    (30-June-2011)
+ Geant4 version Name: geant4-09-04-ref-00    (17-December-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -12,7 +12,7 @@
 
 
 <<< Geant4 Physics List engine packaging library: PACK 5.5
-<<< Geant4 Physics List simulation engine: FTFP_BERT 1.3
+<<< Geant4 Physics List simulation engine: FTFP_BERT 1.2
 
 Test12 using physics list FTFP_BERT (default)
 SimpleBox is now made of Pb
@@ -63,10 +63,10 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
-            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
+            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -78,12 +78,13 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
-            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
+            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -96,7 +97,7 @@ msc:   for proton    SubType= 10
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=          2 MeV
           BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
@@ -121,7 +122,7 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :   Emin=        0 eV       Emax=          2 MeV
@@ -130,7 +131,7 @@ ionIoni:   for  GenericIon    SubType= 2
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=          2 MeV
           BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
@@ -144,7 +145,7 @@ msc:   for kaon+    SubType= 10
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=    1.05231 MeV
           BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
@@ -164,7 +165,7 @@ hPairProd:   for  kaon+    SubType= 4
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=    1.05231 MeV
           BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
@@ -210,7 +211,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -237,14 +238,14 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=    297.505 keV
           BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
@@ -270,7 +271,7 @@ msc:   for pi-    SubType= 10
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=    297.505 keV
           BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
@@ -289,189 +290,59 @@ hPairProd:   for  pi-    SubType= 4
 ============================================================================================
              HADRONIC PROCESSES SUMMARY (verbose level 1)
 
-                                  Hadronic Processes for <GenericIon>
-                                  -----------------------------------
-        ionInelastic  Models:               Binary Cascade: Emin(GeV)=    0  Emax(GeV)= 4
-                                                      FTFP: Emin(GeV)=    2  Emax(GeV)= 100000
+                     Hadronic Processes for <anti_neutron>
+          hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 100000
 
-        ionInelastic  Crs sctns:          AxenWellischIonH: Emin(GeV)=    0  Emax(GeV)= 100000
-                                         TripathiLightIons: Emin(GeV)=    0  Emax(GeV)= 100000
-                                                  Tripathi: Emin(GeV)=    0  Emax(GeV)= 100000
-                                                  IonsShen: Emin(GeV)=    0  Emax(GeV)= 100000
-                                         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+                     Hadronic Processes for <anti_proton>
+          hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 100000
 
+                     Hadronic Processes for <e->
+      ElectroNuclear  Models:                     CHIPS: Emin(GeV)=     0  Emax(GeV)= 30000
 
-                                  Hadronic Processes for <anti_neutron>
-                                  -----------------------------------
-AntiNeutronInelastic  Models:                         FTFP: Emin(GeV)=    0  Emax(GeV)= 100000
+                     Hadronic Processes for <gamma>
+     PhotonInelastic  Models:                     CHIPS: Emin(GeV)=     0  Emax(GeV)= 3.5
+                                        TheoFSGenerator: Emin(GeV)=     3  Emax(GeV)= 100000
 
-AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
-                                         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+                     Hadronic Processes for <kaon+>
+          hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 100000
+   KaonPlusInelastic  Models:                      FTFP: Emin(GeV)=     4  Emax(GeV)= 100000
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 5
 
+                     Hadronic Processes for <kaon->
+          hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 100000
+  KaonMinusInelastic  Models:                      FTFP: Emin(GeV)=     4  Emax(GeV)= 100000
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 5
 
-                                  Hadronic Processes for <anti_proton>
-                                  -----------------------------------
-          hadElastic  Models:                 hElasticLHEP: Emin(GeV)=    0  Emax(GeV)= 0.1
-                                              AntiAElastic: Emin(GeV)=  0.1  Emax(GeV)= 1000
-
-          hadElastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
-                                           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
- AntiProtonInelastic  Models:                         FTFP: Emin(GeV)=    0  Emax(GeV)= 100000
-
- AntiProtonInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
-                                         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-
-                                  Hadronic Processes for <e->
-                                  -----------------------------------
-      ElectroNuclear  Models:                CHIPS_wrapper: Emin(GeV)=    0  Emax(GeV)= 30000
-
-      ElectroNuclear  Crs sctns:           Electro-nuclear: Emin(GeV)=    0  Emax(GeV)= 100000
-                                         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-
-                                  Hadronic Processes for <gamma>
-                                  -----------------------------------
-     PhotonInelastic  Models:                        CHIPS: Emin(GeV)=    0  Emax(GeV)= 3.5
-                                           TheoFSGenerator: Emin(GeV)=    3  Emax(GeV)= 100000
-
-     PhotonInelastic  Crs sctns:             Photo-nuclear: Emin(GeV)=    0  Emax(GeV)= 100000
-                                         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-
-                                  Hadronic Processes for <kaon+>
-                                  -----------------------------------
-          hadElastic  Models:                 hElasticLHEP: Emin(GeV)=    0  Emax(GeV)= 100000
-
-          hadElastic  Crs sctns:           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-   KaonPlusInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
-                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 5
-
-   KaonPlusInelastic  Crs sctns:                          : Emin(GeV)=    0  Emax(GeV)= 100000
-                                         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-
-                                  Hadronic Processes for <kaon->
-                                  -----------------------------------
-          hadElastic  Models:                 hElasticLHEP: Emin(GeV)=    0  Emax(GeV)= 100000
-
-          hadElastic  Crs sctns:           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-  KaonMinusInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
-                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 5
-
-  KaonMinusInelastic  Crs sctns:                          : Emin(GeV)=    0  Emax(GeV)= 100000
-                                         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-
-                                  Hadronic Processes for <lambda>
-                                  -----------------------------------
-          hadElastic  Models:                 hElasticLHEP: Emin(GeV)=    0  Emax(GeV)= 100000
-
-          hadElastic  Crs sctns:           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-     LambdaInelastic  Models:              Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 6
-                                                      FTFP: Emin(GeV)=    2  Emax(GeV)= 100000
-
-     LambdaInelastic  Crs sctns:                          : Emin(GeV)=    0  Emax(GeV)= 100000
-                                         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
+                     Hadronic Processes for <lambda>
+          hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 100000
 
                      Hadronic Processes for <mu->
           muMinusCaptureAtRest
 
-                                  Hadronic Processes for <neutron>
-                                  -----------------------------------
-          hadElastic  Models:                hElasticCHIPS: Emin(GeV)=    0  Emax(GeV)= 100000
+                     Hadronic Processes for <neutron>
+          hadElastic  Models:             hElasticCHIPS: Emin(GeV)=     0  Emax(GeV)= 100000
+    NeutronInelastic  Models:                      FTFP: Emin(GeV)=     4  Emax(GeV)= 100000
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 5
+            nCapture  Models:                G4LCapture: Emin(GeV)=     0  Emax(GeV)= 20000
+            nFission  Models:                G4LFission: Emin(GeV)=     0  Emax(GeV)= 20000
 
-          hadElastic  Crs sctns:            CHIPSElasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
-                                           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
+                     Hadronic Processes for <pi+>
+          hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 1
+                                        hElasticGlauber: Emin(GeV)=     1  Emax(GeV)= 100000
+   PionPlusInelastic  Models:                      FTFP: Emin(GeV)=     4  Emax(GeV)= 100000
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 5
 
-    NeutronInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
-                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 5
+                     Hadronic Processes for <pi->
+          hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 1
+                                        hElasticGlauber: Emin(GeV)=     1  Emax(GeV)= 100000
+  PionMinusInelastic  Models:                      FTFP: Emin(GeV)=     4  Emax(GeV)= 100000
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 5
 
-    NeutronInelastic  Crs sctns:      G4CrossSectionPairGG: Emin(GeV)=    0  Emax(GeV)= 100000
-                         G4CrossSectionPairGG: Wellisch-Laidlaw cross sections 
-                           below 91 GeV, Glauber-Gribov above 
-                                         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-            nCapture  Models:                   G4LCapture: Emin(GeV)=    0  Emax(GeV)= 20000
-
-            nCapture  Crs sctns:           Gheisha capture: Emin(GeV)=    0  Emax(GeV)= 100000
-
-            nFission  Models:                   G4LFission: Emin(GeV)=    0  Emax(GeV)= 20000
-
-            nFission  Crs sctns:           Gheisha fission: Emin(GeV)=    0  Emax(GeV)= 100000
-
-
-                                  Hadronic Processes for <pi+>
-                                  -----------------------------------
-          hadElastic  Models:                 hElasticLHEP: Emin(GeV)=    0  Emax(GeV)= 1
-                                           hElasticGlauber: Emin(GeV)=    1  Emax(GeV)= 100000
-
-          hadElastic  Crs sctns: Barashenkov-Glauber-Gribov: Emin(GeV)=    0  Emax(GeV)= 100000
-                                           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-   PionPlusInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
-                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 5
-
-   PionPlusInelastic  Crs sctns:      G4CrossSectionPairGG: Emin(GeV)=    0  Emax(GeV)= 100000
-                         G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
-                           below 91 GeV, Glauber-Gribov above 
-                                         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-
-                                  Hadronic Processes for <pi->
-                                  -----------------------------------
-          hadElastic  Models:                 hElasticLHEP: Emin(GeV)=    0  Emax(GeV)= 1
-                                           hElasticGlauber: Emin(GeV)=    1  Emax(GeV)= 100000
-
-          hadElastic  Crs sctns: Barashenkov-Glauber-Gribov: Emin(GeV)=    0  Emax(GeV)= 100000
-                                           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-  PionMinusInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
-                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 5
-
-  PionMinusInelastic  Crs sctns:      G4CrossSectionPairGG: Emin(GeV)=    0  Emax(GeV)= 100000
-                         G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
-                           below 91 GeV, Glauber-Gribov above 
-                                         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-
-                                  Hadronic Processes for <proton>
-                                  -----------------------------------
-          hadElastic  Models:                hElasticCHIPS: Emin(GeV)=    0  Emax(GeV)= 100000
-
-          hadElastic  Crs sctns:            CHIPSElasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
-                                           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-     ProtonInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
-                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 5
-
-     ProtonInelastic  Crs sctns:      G4CrossSectionPairGG: Emin(GeV)=    0  Emax(GeV)= 100000
-                         G4CrossSectionPairGG: Axen-Wellisch cross sections 
-                           below 91 GeV, Glauber-Gribov above 
-                                         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
+                     Hadronic Processes for <proton>
+          hadElastic  Models:             hElasticCHIPS: Emin(GeV)=     0  Emax(GeV)= 100000
+     ProtonInelastic  Models:                      FTFP: Emin(GeV)=     4  Emax(GeV)= 100000
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 5
 ============================================================================================
- Process: AntiProtonInelastic , Model: FTFP
- Primary: anti_proton (-2212), E= 13832.9, target nucleus (82,208)
- relative limit 0.02 relative value = -0.0129514 pass
- absolute limit (MeV) 150 absolute value (MeV) = -167.003 fail
- Process: AntiNeutronInelastic , Model: FTFP
- Primary: anti_neutron (-2112), E= 24062.4, target nucleus (82,208)
- relative limit 0.02 relative value = -0.00851683 pass
- absolute limit (MeV) 150 absolute value (MeV) = -196.933 fail
- Process: AntiNeutronInelastic , Model: FTFP
- Primary: anti_neutron (-2112), E= 12072, target nucleus (82,208)
- relative limit 0.02 relative value = -0.0342641 fail
- absolute limit (MeV) 150 absolute value (MeV) = -381.445 fail
- Process: AntiNeutronInelastic , Model: FTFP
- Primary: anti_neutron (-2112), E= 6237.08, target nucleus (82,206)
- relative limit 0.02 relative value = -0.0223716 fail
- absolute limit (MeV) 150 absolute value (MeV) = -118.514 pass
 Idle> #
 Idle> # neutron at 100 GeV in Pb
 Idle> #
@@ -480,18 +351,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 100
- Process: AntiLambdaInelastic , Model: FTFP
- Primary: anti_lambda (-3122), E= 14772.8, target nucleus (82,208)
- relative limit 0.02 relative value = -0.0126835 pass
- absolute limit (MeV) 150 absolute value (MeV) = -173.219 fail
- Process: AntiNeutronInelastic , Model: FTFP
- Primary: anti_neutron (-2112), E= 8474.04, target nucleus (82,206)
- relative limit 0.02 relative value = -0.0260604 fail
- absolute limit (MeV) 150 absolute value (MeV) = -196.352 fail
-G4Fragment::CalculateExcitationEnergy(): WARNING 
-Fragment: A = 206, Z =  81, U = -2.223e-03 MeV
-          P = (-2.704e+01,-1.103e+01,-4.981e-01) MeV   E = 1.918e+05 MeV
-
 Idle> #
 Idle> # pi+ at 100 GeV in Pb
 Idle> #
@@ -500,10 +359,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 100
- Process: AntiProtonInelastic , Model: FTFP
- Primary: anti_proton (-2212), E= 13228.6, target nucleus (82,207)
- relative limit 0.02 relative value = -0.0205979 fail
- absolute limit (MeV) 150 absolute value (MeV) = -253.155 fail
 Idle> #
 Idle> # pi- at 100 GeV in Pb
 Idle> #
@@ -512,10 +367,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 100
- Process: AntiProtonInelastic , Model: FTFP
- Primary: anti_proton (-2212), E= 7168.95, target nucleus (82,208)
- relative limit 0.02 relative value = -0.0327387 fail
- absolute limit (MeV) 150 absolute value (MeV) = -203.984 fail
 Idle> #
 Idle> # kaon+ at 100 GeV in Pb
 Idle> #
@@ -524,26 +375,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 100
- Process: AntiLambdaInelastic , Model: FTFP
- Primary: anti_lambda (-3122), E= 26672, target nucleus (82,207)
- relative limit 0.02 relative value = -0.0069369 pass
- absolute limit (MeV) 150 absolute value (MeV) = -177.281 fail
- Process: AntiXiMinusInelastic , Model: FTFP
- Primary: anti_xi- (-3312), E= 7722.81, target nucleus (82,208)
- relative limit 0.02 relative value = -0.0253056 fail
- absolute limit (MeV) 150 absolute value (MeV) = -161.984 fail
- Process: AntiNeutronInelastic , Model: FTFP
- Primary: anti_neutron (-2112), E= 5178.01, target nucleus (82,208)
- relative limit 0.02 relative value = -0.0538635 fail
- absolute limit (MeV) 150 absolute value (MeV) = -228.298 fail
- Process: AntiLambdaInelastic , Model: FTFP
- Primary: anti_lambda (-3122), E= 13643.2, target nucleus (82,208)
- relative limit 0.02 relative value = -0.0120435 pass
- absolute limit (MeV) 150 absolute value (MeV) = -150.875 fail
- Process: AntiNeutronInelastic , Model: FTFP
- Primary: anti_neutron (-2112), E= 41276.2, target nucleus (82,208)
- relative limit 0.02 relative value = -0.0064878 pass
- absolute limit (MeV) 150 absolute value (MeV) = -261.696 fail
 Idle> #
 Idle> # kaon- at 100 GeV in Pb
 Idle> #
@@ -552,26 +383,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 100
- Process: AntiLambdaInelastic , Model: FTFP
- Primary: anti_lambda (-3122), E= 16520.4, target nucleus (82,206)
- relative limit 0.02 relative value = -0.0168336 pass
- absolute limit (MeV) 150 absolute value (MeV) = -259.316 fail
- Process: AntiProtonInelastic , Model: FTFP
- Primary: anti_proton (-2212), E= 22672.2, target nucleus (82,207)
- relative limit 0.02 relative value = -0.0124175 pass
- absolute limit (MeV) 150 absolute value (MeV) = -269.881 fail
- Process: AntiNeutronInelastic , Model: FTFP
- Primary: anti_neutron (-2112), E= 1950.2, target nucleus (82,206)
- relative limit 0.02 relative value = -0.0235865 fail
- absolute limit (MeV) 150 absolute value (MeV) = -23.8374 pass
- Process: AntiProtonInelastic , Model: FTFP
- Primary: anti_proton (-2212), E= 5526.99, target nucleus (82,208)
- relative limit 0.02 relative value = -0.0610548 fail
- absolute limit (MeV) 150 absolute value (MeV) = -280.163 fail
- Process: AntiNeutronInelastic , Model: FTFP
- Primary: anti_neutron (-2112), E= 9528.14, target nucleus (82,208)
- relative limit 0.02 relative value = -0.0366151 fail
- absolute limit (MeV) 150 absolute value (MeV) = -314.472 fail
 Idle> #
 Idle> # kaon0S at 100 GeV in Pb
 Idle> #
@@ -588,10 +399,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 100
- Process: AntiNeutronInelastic , Model: FTFP
- Primary: anti_neutron (-2112), E= 7252.15, target nucleus (82,208)
- relative limit 0.02 relative value = -0.0346205 fail
- absolute limit (MeV) 150 absolute value (MeV) = -218.545 fail
 Idle> #
 Idle> # proton at 100 GeV in Al
 Idle> #
@@ -631,10 +438,10 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
-            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
+            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -646,12 +453,13 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
-            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
+            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -664,7 +472,7 @@ msc:   for proton    SubType= 10
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=          2 MeV
           BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
@@ -689,7 +497,7 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :   Emin=        0 eV       Emax=          2 MeV
@@ -698,7 +506,7 @@ ionIoni:   for  GenericIon    SubType= 2
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=          2 MeV
           BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
@@ -712,7 +520,7 @@ msc:   for kaon+    SubType= 10
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=    1.05231 MeV
           BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
@@ -732,7 +540,7 @@ hPairProd:   for  kaon+    SubType= 4
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=    1.05231 MeV
           BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
@@ -778,7 +586,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -805,14 +613,14 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=    297.505 keV
           BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
@@ -838,7 +646,7 @@ msc:   for pi-    SubType= 10
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=    297.505 keV
           BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
@@ -862,10 +670,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 Idle> /run/beamOn 100
- Process: AntiProtonInelastic , Model: FTFP
- Primary: anti_proton (-2212), E= 2982.42, target nucleus (13,27)
- relative limit 0.02 relative value = -0.0272685 fail
- absolute limit (MeV) 150 absolute value (MeV) = -55.7408 pass
 Idle> #
 Idle> # pi+ at 100 GeV in Al
 Idle> #
@@ -882,10 +686,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 Idle> /run/beamOn 100
- Process: AntiLambdaInelastic , Model: FTFP
- Primary: anti_lambda (-3122), E= 2599.76, target nucleus (13,27)
- relative limit 0.02 relative value = -0.0375841 fail
- absolute limit (MeV) 150 absolute value (MeV) = -55.7778 pass
 Idle> #
 Idle> # kaon+ at 100 GeV in Al
 Idle> #
@@ -894,18 +694,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 Idle> /run/beamOn 100
- Process: AntiProtonInelastic , Model: FTFP
- Primary: anti_proton (-2212), E= 6416.51, target nucleus (13,27)
- relative limit 0.02 relative value = -0.0239476 fail
- absolute limit (MeV) 150 absolute value (MeV) = -131.19 pass
- Process: AntiNeutronInelastic , Model: FTFP
- Primary: anti_neutron (-2112), E= 7086.83, target nucleus (13,27)
- relative limit 0.02 relative value = -0.0216075 fail
- absolute limit (MeV) 150 absolute value (MeV) = -132.827 pass
- Process: AntiLambdaInelastic , Model: FTFP
- Primary: anti_lambda (-3122), E= 3554.65, target nucleus (13,27)
- relative limit 0.02 relative value = -0.0868635 fail
- absolute limit (MeV) 150 absolute value (MeV) = -211.858 fail
 Idle> #
 Idle> # kaon- at 100 GeV in Al
 Idle> #
@@ -922,10 +710,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 Idle> /run/beamOn 100
- Process: AntiNeutronInelastic , Model: FTFP
- Primary: anti_neutron (-2112), E= 2210.1, target nucleus (13,27)
- relative limit 0.02 relative value = -0.0233923 fail
- absolute limit (MeV) 150 absolute value (MeV) = -29.7208 pass
 Idle> #
 Idle> # kaon0L at 100 GeV in Al
 Idle> #
@@ -934,18 +718,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 Idle> /run/beamOn 100
- Process: PionPlusInelastic , Model: FTFP
- Primary: pi+ (211), E= 8118.98, target nucleus (13,27)
- relative limit 0.02 relative value = -0.15641 fail
- absolute limit (MeV) 150 absolute value (MeV) = -1248.06 fail
- Process: AntiNeutronInelastic , Model: FTFP
- Primary: anti_neutron (-2112), E= 5659.81, target nucleus (13,27)
- relative limit 0.02 relative value = -0.0323968 fail
- absolute limit (MeV) 150 absolute value (MeV) = -152.921 fail
- Process: AntiProtonInelastic , Model: FTFP
- Primary: anti_proton (-2212), E= 9763, target nucleus (13,27)
- relative limit 0.02 relative value = -0.0193389 pass
- absolute limit (MeV) 150 absolute value (MeV) = -170.66 fail
 Idle> #
 Idle> # proton at 100 GeV in Air
 Idle> #
@@ -985,10 +757,10 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
-            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
+            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -1000,12 +772,13 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
-            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
+            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
 
 annihil:   for  e+    SubType= 5
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
@@ -1018,7 +791,7 @@ msc:   for proton    SubType= 10
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=          2 MeV
           BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
@@ -1043,7 +816,7 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :   Emin=        0 eV       Emax=          2 MeV
@@ -1052,7 +825,7 @@ ionIoni:   for  GenericIon    SubType= 2
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=          2 MeV
           BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
@@ -1066,7 +839,7 @@ msc:   for kaon+    SubType= 10
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=    1.05231 MeV
           BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
@@ -1086,7 +859,7 @@ hPairProd:   for  kaon+    SubType= 4
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=    1.05231 MeV
           BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
@@ -1132,7 +905,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -1159,14 +932,14 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      11.4592 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :   Emin=        0 eV       Emax=    297.505 keV
           BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
@@ -1192,7 +965,7 @@ msc:   for pi-    SubType= 10
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :   Emin=        0 eV       Emax=    297.505 keV
           BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
@@ -1264,184 +1037,4 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Air
 SimpleBox is now made of Air
 Idle> /run/beamOn 100
-Idle> #
-Idle> # anti_proton at 10 GeV in Pb
-Idle> #
-Idle> /gun/particle anti_proton
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Pb
-SimpleBox is now made of Pb
-Idle> /run/beamOn 5
-Idle> #
-Idle> # anti_neutron at 10 GeV in Pb
-Idle> #
-Idle> /gun/particle anti_neutron
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Pb
-SimpleBox is now made of Pb
-Idle> /run/beamOn 5
- Process: AntiNeutronInelastic , Model: FTFP
- Primary: anti_neutron (-2112), E= 10939.6, target nucleus (82,206)
- relative limit 0.02 relative value = -0.0255403 fail
- absolute limit (MeV) 150 absolute value (MeV) = -255.403 fail
-Idle> #
-Idle> # anti_deuteron at 10 GeV in Pb
-Idle> #
-Idle> /gun/particle anti_deuteron
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Pb
-SimpleBox is now made of Pb
-Idle> /run/beamOn 5
- Process: AntiNeutronInelastic , Model: FTFP
- Primary: anti_neutron (-2112), E= 6575.04, target nucleus (82,208)
- relative limit 0.02 relative value = -0.0306166 fail
- absolute limit (MeV) 150 absolute value (MeV) = -172.539 fail
- Process: AntiNeutronInelastic , Model: FTFP
- Primary: anti_neutron (-2112), E= 7021.41, target nucleus (82,208)
- relative limit 0.02 relative value = -0.0254809 fail
- absolute limit (MeV) 150 absolute value (MeV) = -154.971 fail
- Process: AntiProtonInelastic , Model: FTFP
- Primary: anti_proton (-2212), E= 5986.37, target nucleus (82,208)
- relative limit 0.02 relative value = -0.022633 fail
- absolute limit (MeV) 150 absolute value (MeV) = -114.253 pass
-Idle> #
-Idle> # anti_triton at 10 GeV in Pb
-Idle> #
-Idle> /gun/particle anti_triton
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Pb
-SimpleBox is now made of Pb
-Idle> /run/beamOn 5
-Idle> #
-Idle> # anti_He3 at 10 GeV in Pb
-Idle> #
-Idle> /gun/particle anti_He3
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Pb
-SimpleBox is now made of Pb
-Idle> /run/beamOn 5
-Idle> #
-Idle> # anti_alpha at 10 GeV in Pb
-Idle> #
-Idle> /gun/particle anti_alpha
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Pb
-SimpleBox is now made of Pb
-Idle> /run/beamOn 5
-Idle> #
-Idle> # anti_proton at 10 GeV in Al
-Idle> #
-Idle> /gun/particle anti_proton
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Al
-SimpleBox is now made of Al
-Idle> /run/beamOn 5
-Idle> #
-Idle> # anti_neutron at 10 GeV in Al
-Idle> #
-Idle> /gun/particle anti_neutron
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Al
-SimpleBox is now made of Al
-Idle> /run/beamOn 5
-Idle> #
-Idle> # anti_deuteron at 10 GeV in Al
-Idle> #
-Idle> /gun/particle anti_deuteron
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Al
-SimpleBox is now made of Al
-Idle> /run/beamOn 5
- Process: AntiProtonInelastic , Model: FTFP
- Primary: anti_proton (-2212), E= 5230.04, target nucleus (13,27)
- relative limit 0.02 relative value = -0.0259762 fail
- absolute limit (MeV) 150 absolute value (MeV) = -111.484 pass
-Idle> #
-Idle> # anti_triton at 10 GeV in Al
-Idle> #
-Idle> /gun/particle anti_triton
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Al
-SimpleBox is now made of Al
-Idle> /run/beamOn 5
-Idle> #
-Idle> # anti_He3 at 10 GeV in Al
-Idle> #
-Idle> /gun/particle anti_He3
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Al
-SimpleBox is now made of Al
-Idle> /run/beamOn 5
- Process: AntiProtonInelastic , Model: FTFP
- Primary: anti_proton (-2212), E= 2759.87, target nucleus (13,27)
- relative limit 0.02 relative value = -0.0289247 fail
- absolute limit (MeV) 150 absolute value (MeV) = -52.6892 pass
- Process: AntiNeutronInelastic , Model: FTFP
- Primary: anti_neutron (-2112), E= 3317.67, target nucleus (13,27)
- relative limit 0.02 relative value = -0.022156 fail
- absolute limit (MeV) 150 absolute value (MeV) = -52.6892 pass
-Idle> #
-Idle> # anti_alpha at 10 GeV in Al
-Idle> #
-Idle> /gun/particle anti_alpha
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Al
-SimpleBox is now made of Al
-Idle> /run/beamOn 5
- Process: AntiNeutronInelastic , Model: FTFP
- Primary: anti_neutron (-2112), E= 3440.17, target nucleus (13,27)
- relative limit 0.02 relative value = -0.0210706 fail
- absolute limit (MeV) 150 absolute value (MeV) = -52.6892 pass
- Process: AntiNeutronInelastic , Model: FTFP
- Primary: anti_neutron (-2112), E= 3337.82, target nucleus (13,27)
- relative limit 0.02 relative value = -0.045797 fail
- absolute limit (MeV) 150 absolute value (MeV) = -109.833 pass
-Idle> #
-Idle> # anti_proton at 10 GeV in Air
-Idle> #
-Idle> /gun/particle anti_proton
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Air
-SimpleBox is now made of Air
-Idle> /run/beamOn 5
-Idle> #
-Idle> # anti_neutron at 10 GeV in Air
-Idle> #
-Idle> /gun/particle anti_neutron
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Air
-SimpleBox is now made of Air
-Idle> /run/beamOn 5
-Idle> #
-Idle> # anti_deuteron at 10 GeV in Air
-Idle> #
-Idle> /gun/particle anti_deuteron
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Air
-SimpleBox is now made of Air
-Idle> /run/beamOn 5
-Idle> #
-Idle> # anti_triton at 10 GeV in Air
-Idle> #
-Idle> /gun/particle anti_triton
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Air
-SimpleBox is now made of Air
-Idle> /run/beamOn 5
-Idle> #
-Idle> # anti_He3 at 10 GeV in Air
-Idle> #
-Idle> /gun/particle anti_He3
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Air
-SimpleBox is now made of Air
-Idle> /run/beamOn 5
-Idle> #
-Idle> # anti_alpha at 10 GeV in Air
-Idle> #
-Idle> /gun/particle anti_alpha
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Air
-SimpleBox is now made of Air
-Idle> /run/beamOn 5
 Idle> 

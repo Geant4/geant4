@@ -29,7 +29,6 @@
 #include "G4UItcsh.hh"
 #include "Randomize.hh"
 
-
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
@@ -37,10 +36,6 @@
 #include "EventAction.hh"
 #include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
-
-#ifdef G4VIS_USE
-#include "G4VisExecutive.hh"
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -61,11 +56,6 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(new PhysicsList);
   //
 
-#ifdef G4VIS_USE
-  // visualization manager
-  G4VisManager* visManager = 0;
-#endif
-
   PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
   runManager->SetUserAction(primary);
 
@@ -84,8 +74,6 @@ int main(int argc,char** argv) {
  
   if (argc==1)   // Define UI terminal for interactive mode  
     { 
-      visManager = new G4VisExecutive;
-      visManager->Initialize();
       G4UIsession * session = 0;
 #ifdef G4UI_USE_TCSH
       session = new G4UIterminal(new G4UItcsh);      
@@ -104,10 +92,6 @@ int main(int argc,char** argv) {
     
   // job termination
 
-#ifdef G4VIS_USE
-  delete visManager;
-#endif
-  
   delete runManager;
   return 0;
 }

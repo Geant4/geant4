@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08-April-10 A.Ivant (test45-V09-04-00)
+- 0-80 MeV for pn_dn_050+ 110d in HistoManager.
+
 09-November-10 M.Asai (test45-V09-03-00)
 - fix AIDA file option.
 

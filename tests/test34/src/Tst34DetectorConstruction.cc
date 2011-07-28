@@ -31,7 +31,6 @@
 #include "G4PVPlacement.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
-#include "G4VisAttributes.hh"
 #include "G4Box.hh"
 #include "G4SDManager.hh"
 #include "G4Material.hh"
@@ -39,7 +38,6 @@
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
-#include "G4Colour.hh"
 
 // User Classes
 #include "Tst34DetectorConstruction.hh"
@@ -144,10 +142,6 @@ G4VPhysicalVolume* Tst34DetectorConstruction::Construct()
   new Tst34SensitiveDetector("Calorimeter",this);
   SDman->AddNewDetector(CaloSD);
  
-  m_experimentalHall_log->SetVisAttributes(G4VisAttributes::Invisible);
-  G4VisAttributes* CaloVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
-
-  m_calo_log->SetVisAttributes(CaloVisAtt);
   m_calo_log->SetSensitiveDetector(CaloSD);
 	// define the parameterisation region
   aRegion = new G4Region("crystals");

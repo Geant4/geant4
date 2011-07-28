@@ -204,7 +204,12 @@ macro(_g4tc_configure_tc_variables SHELL_FAMILY)
 
     # - GDML...
     if(GEANT4_USE_GDML)
-        set(GEANT4_TC_G4LIB_USE_GDML "# BUILT WITH GDML SUPPORT")
+        _g4tc_setenv_command(GEANT4_TC_G4LIB_USE_GDML ${SHELL_FAMILY} G4LIB_USE_GDML 1)
+        # Backward compatibility requires XERCESCROOT to be set
+        # As this is a 'rootdir' determine it from the XERCESC_INCLUDE_DIR
+        # variable...
+        get_filename_component(_xercesc_root ${XERCESC_INCLUDE_DIR} PATH)
+        _g4tc_setenv_command(GEANT4_TC_GDML_PATH_SETUP ${SHELL_FAMILY} XERCESCROOT ${_xercesc_root})
     else()
         set(GEANT4_TC_G4LIB_USE_GDML "# NOT BUILT WITH GDML SUPPORT")
     endif()

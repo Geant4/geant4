@@ -263,7 +263,7 @@ void Em10PhysicsList::ConstructEM()
   const G4RegionStore* theRegionStore = G4RegionStore::GetInstance();
   G4Region* gas = theRegionStore->GetRegion("XTRdEdxDetector");
 
-  G4VXTRenergyLoss* processXTR;
+  G4VXTRenergyLoss* processXTR=0;
 
       
   if(fXTRModel == "gammaR" )          

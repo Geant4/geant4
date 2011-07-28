@@ -43,12 +43,7 @@
 #include "G4UItcsh.hh"
 #include "Randomize.hh"
 
-#ifdef G4VIS_USE
-#include "G4VisExecutive.hh"
-#endif
-
 #include "Em10DetectorConstruction.hh"
-// #include "ALICEDetectorConstruction.hh"
 #include "Em10PhysicsList.hh"
 #include "Em10PrimaryGeneratorAction.hh"
 #include "Em10RunAction.hh"
@@ -82,14 +77,6 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new Em10PhysicsList(detector));
   
-#ifdef G4VIS_USE
-
-  // visualization manager
-
-  G4VisManager* visManager = 0;
-
-#endif 
- 
   // set user action classes
 
   runManager->SetUserAction(new Em10PrimaryGeneratorAction(detector));
@@ -117,9 +104,6 @@ int main(int argc,char** argv)
  
   if (argc==1)   // Define UI terminal for interactive mode  
   { 
-    visManager = new G4VisExecutive;
-    visManager->Initialize();
-
     G4UIsession * session = 0;
 #ifdef G4UI_USE_TCSH
     session = new G4UIterminal(new G4UItcsh);
@@ -139,9 +123,6 @@ int main(int argc,char** argv)
     
   // job termination
 
-#ifdef G4VIS_USE
-  delete visManager;
-#endif  
   delete runManager;
 
   return 0;

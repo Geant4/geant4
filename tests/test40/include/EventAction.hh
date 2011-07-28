@@ -55,19 +55,15 @@ class EventAction : public G4UserEventAction
     void BeginOfEventAction(const G4Event*);
     void   EndOfEventAction(const G4Event*);
     
-    void SetDrawFlag   (G4String val)  {drawFlag    = val;};
     void SetPrintModulo(G4int    val)  {printModulo = val;};
     
   private:
   
     RunAction*             Run;
-    G4String                  drawFlag;
-    G4int                     printModulo;          
+    G4int                  printModulo;          
     EventActionMessenger*  eventMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-    

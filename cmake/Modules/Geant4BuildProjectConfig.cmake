@@ -37,9 +37,10 @@ if(GEANT4_BUILD_VERBOSE_CODE)
     list(APPEND GEANT4_CORE_DEFINITIONS -DG4VERBOSE)
 endif()
 
-# - We do actually need G4LIB_BUILD_DLL, even for user applications...
-list(APPEND GEANT4_CORE_DEFINITIONS -DG4LIB_BUILD_DLL)
-
+# - We do actually need G4LIB_BUILD_DLL, even for user applications... on Windows
+if(WIN32)
+    list(APPEND GEANT4_CORE_DEFINITIONS -DG4LIB_BUILD_DLL)
+endif()
 
 # - Stuff from Geant4OptionalComponents.cmake
 # - CLHEP

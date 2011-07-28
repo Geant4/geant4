@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!DOCTYPE extension PUBLIC "-//QM/2.4/Extension//EN" "http://www.codesourcery.com/qm/dtds/2.4/-//qm/2.4/extension//en.dtd">
+<extension class="explicit_suite.ExplicitSuite" kind="suite">
+  <argument name="suite_ids">
+    <set>
+      <text>exam-adv-nanobeam</text>
+    </set>
+  </argument>
+  <argument name="test_ids">
+    <set/>
+  </argument>
+</extension>

@@ -43,7 +43,6 @@
 #include "G4VHitsCollection.hh"
 #include "G4TrajectoryContainer.hh"
 #include "G4Trajectory.hh"
-#include "G4VVisManager.hh"
 #include "G4SDManager.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"
@@ -109,28 +108,6 @@ void T07EventAction::EndOfEventAction( const G4Event* evt )
        << G4endl;
     */
    }
-
-  /*
-  G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
-  G4int n_trajectories = 0;
-  if(trajectoryContainer)
-  { n_trajectories = trajectoryContainer->entries(); }
-  G4cout << "    " << n_trajectories 
-       << " trajectories stored in this event." << G4endl;
-
-
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-
-  if(pVVisManager)
-  {
-    for(G4int i=0; i<n_trajectories; i++) 
-         { G4Trajectory* trj = (*(evt->GetTrajectoryContainer()))[i];
-           if (drawFlag == "all") trj->DrawTrajectory(50);
-           else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-                                  trj->DrawTrajectory(50); 
-         }
-  }
-  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

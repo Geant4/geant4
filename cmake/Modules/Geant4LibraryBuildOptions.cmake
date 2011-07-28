@@ -109,7 +109,6 @@ endif()
 # Setup symbol visibility (library interface)
 # We need to define that we're building Geant4
 #
-add_definitions(-DG4LIB_BUILD_DLL)
 
 # On WIN32, we need to build the genwindef application to create export
 # def files for building DLLs.
@@ -119,6 +118,7 @@ add_definitions(-DG4LIB_BUILD_DLL)
 # if it can be protected so that the genwindef target wouldn't be defined
 # more than once... Put it here for now...
 if(WIN32)
+    add_definitions(-DG4LIB_BUILD_DLL)
     # Assume the sources are co-located 
     get_filename_component(_genwindef_src_dir ${CMAKE_CURRENT_LIST_FILE} PATH)
     add_executable(genwindef EXCLUDE_FROM_ALL 

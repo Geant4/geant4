@@ -29,7 +29,7 @@
 //
 // 
 // --------------------------------------------------------------
-//      GEANT 4 - GGEVis.cc
+//      GEANT 4 - test18.cc
 //
 // --------------------------------------------------------------
 // Comments
@@ -39,16 +39,7 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-
-#ifdef G4UI_USE_GAG
-#include "G4UIGAG.hh"
-#endif 
-
 #include "G4UIterminal.hh"
-
-#ifdef G4UI_USE_XM
-#include "G4UIXm.hh"
-#endif 
 
 #include "Tst18GeometryConstruction.hh"
 #include "Tst18PhysicsList.hh"
@@ -60,15 +51,10 @@
 
 #include <vector>
 
-G4bool drawEvent;
 std::vector<G4String> Particles;
 std::vector<G4double> Energies;
 std::vector<G4double> Weights;
 std::vector<G4double> Times;
-
-#ifdef G4VIS_USE
-#include "G4VisExecutive.hh"
-#endif
 
 int main(int argc,char** argv)
 {
@@ -82,12 +68,6 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(Geometry);
   runManager->SetUserInitialization(new Tst18PhysicsList);
 
-#ifdef G4VIS_USE
-  // visualization manager
-  G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize();
-#endif
-
   // set mandatory user action class
   runManager->SetUserAction(new Tst18PrimaryGeneratorAction);
   runManager->SetUserAction(new Tst18RunAction);
@@ -98,46 +78,30 @@ int main(int argc,char** argv)
 
   // get the pointer to the User Interface manager 
     
-      G4UImanager* UI = G4UImanager::GetUIpointer();  
-      UI->ApplyCommand("/run/verbose 0");
-      UI->ApplyCommand("/event/verbose 0");
-      UI->ApplyCommand("/tracking/verbose 0");           
-      UI->ApplyCommand("/process/verbose 0");           
-      if (argc==1) {
-	//     	G4UIsession * session = new G4UIGAG;
-     	G4UIsession * session = new G4UIterminal;
-      	session->SessionStart();
-      	delete session;
+  G4UImanager* UI = G4UImanager::GetUIpointer();  
+  UI->ApplyCommand("/run/verbose 0");
+  UI->ApplyCommand("/event/verbose 0");
+  UI->ApplyCommand("/tracking/verbose 0");           
+  UI->ApplyCommand("/process/verbose 0");           
+  if (argc==1) {
+    G4UIsession * session = new G4UIterminal;
+    session->SessionStart();
+    delete session;
   }
-      else {
+  else {
  
-  //
-  //
-  // Create a pointer to the user interface manager.
-  //
-	//      G4UImanager *UI = G4UImanager::GetUIpointer();
-      G4String command = "/control/execute ";
-      for (int i=2; i<=argc; i++) {
-      G4String macroFileName = argv[i-1];
-      UI->ApplyCommand(command+macroFileName);
-       }
-
+    // Create a pointer to the user interface manager.
+    //
+    G4String command = "/control/execute ";
+    for (int i=2; i<=argc; i++) {
+       G4String macroFileName = argv[i-1];
+       UI->ApplyCommand(command+macroFileName);
+    }
   }                                  
 
   // job termination
-#ifdef G4VIS_USE
-  delete visManager;
-#endif
 
   delete runManager;
 
   return 0;
 }
-
-
-
-
-
-
-
-

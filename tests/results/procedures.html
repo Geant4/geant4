@@ -1,273 +1,185 @@
-<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
-<html>
-<head>
-<title> Geant4 System Test Team Procedures </title>
-<!-- Changed by: Serguei SADILOV, 20-Aug-2002 -->
-   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-   <meta name="GENERATOR" content="Mozilla/4.7 [en] (X11; I; Linux 2.2.12-20 i686) [Netscape]">
-</head>
-<body>
+<!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html><head><title>Geant4 System Test Team Procedures</title></head><body>
 
 <h1> System Test Procedures</h1>
-<P>
+<p>
 <b>Please note: Sytem Test Procedures are being updated.</b>
-<br>John, Serguei and Steve, 19th August 2002.
-<h1>
-The System Testing Area at CERN</h1>
-All source, binaries and output are kept under <b><tt>/afs/cern.ch/sw/geant4/stt/</tt></b>.&nbsp;
-This area is read accessible to all Geant4 Collaborators (zb:collaborators
-rl) and write-accessible to the STT group (zb:sttmembers rlidwka).
-<p>Note that sometimes this area contains symbolic links to local discs
-of specific machines to improve performance.&nbsp; E.g.:
-<blockquote><b><tt>/afs/cern.ch/user/s/stesting/stt/prod/SUN-CC/debug_NONISO
--> /home3/stesting/prod/SUN-CC/debug_NONISO</tt></b></blockquote>
-so you need to be logged into the appropriate machine to see files under
-these links.
-<h1>
-Production and Development Areas</h1>
-Under <b><tt>/afs/cern.ch/sw/geant4/stt/</tt></b> there are 3 areas, <b><tt>prod/</tt></b>,
-<b><tt>dev1/</tt></b>
-and <b><tt>dev2/</tt></b>.&nbsp; In each area there is <b><tt>src/</tt></b>,
-<b><tt>testtools/</tt></b>
-and one subdirectory per system, e.g., <b><tt>DEC-cxx/</tt></b>,
-<b><tt>HP-aCC/</tt></b>,
-<b><tt>Linux-g++/</tt></b>,
-<b><tt>SUN-CC/</tt></b>,
-<b><tt>SUN-CC5/</tt></b>.
-The data directories (which are not in distribution!) are used 
-from <b><tt>/afs/cern.ch/sw/geant4/dev/data</tt></b> : 
-<b><tt>G4NDL3.5</tt></b>, <b><tt>G4EMLOW1.1</tt></b>.
+<br>Gunter Folger, April 2011
 
+</p><h1>Introduction</h1>
+
+The testing of Geant4 is using the nightly build system running at CERN/SFT. 
+An introduction to this system is given e.g. in 
+<a href="http://cerncourier.com/cws/article/cnl/39608%22">this CNL article by S.Roiser</a>, 
+or in GEANT 4 NIGHTLY BUILDS SYSTEM, 
+Victor Diez et.al., <a href="http://iopscience.iop.org/1742-6596/219/4/042038/">
+J. Phys.: Conf. Ser. 219 042038</a>.
+
+<br>
+<br>
+Testing is run an several machines in parallel, to test on different
+systems, on different hardware, using different compilers, and to
+distribute the load. The architecture is a client-server model, with
+clients starting a test script via cron or a similar system tool. The
+testing script then queries a server for a setup or configuration which
+needs to be tested by providing information about its capabilities. For
+example, the client could tell "I am slc5 on 64 bit hardware, with gcc
+4.3 and gcc-4.1".
+The server then provides a specific configuration out of the all of
+configurations, see below for details of a configuration.&nbsp; <br>
+The scripts then check out the source code of geant4, using the svn
+repository based upon the configuration to be tested, for example using
+accepted and selected tags on top of the reference tag, or a candiate
+reference tag. The configuration of the build and test environment is
+obtained from a CMT requirements file. The code is compiled using teh
+normal Geant4 build system, and tests and examples are tested using teh
+QMtest tool.<br>
+Results from compilation and testing are copied to afs and become
+available in a web browser. Summaries are also stored in a database.<br>
+<br>
+a configuration 
+is a combination of OS/hardware/compiler and slot. A slot defines the software 
+configuration of teh software tested. In Geant4 we normally use two slots, 
+one for testing ongoing development, and one to test tags prior to a reference tag 
+or release.
+
+  
+Basically, every night a testing run is started, and results are reported on a 
+<a href="http://lcgapp.cern.ch/spi/cgi-bin/nightly.py?view=slots&amp;slots=17-18&amp;tag=None&amp;dates=week&amp;hiddenSlots=19-16-14-13-22-21-20-23&amp;hiddenTags=58-60-61-41-23-25-35-48-64-50-55&amp;hiddenPlatforms=&amp;slotOrder=58-60-61-41-23-25-35-48-64-50-55">
+web page</a>.
+A testing run for a given platform, i.e. OS/compiler combination, contains both a 
+build using optimized and debug mode. The platforms are specified in a configuration
+file, /afs/cern.ch/sw/lcg/app/nightlies/scripts/configuration_geant4.xml. For Geant4,
+we usually test two configurations, one testing tags as these are proposed, 
+called tags_bonsai, 
+the second configuration is used to test globals tags prior to release.
+
+Testing itsself is local to testing machines, only log files are kept in afs, and
+are made available on a 
+<a href="http://lcgapp.cern.ch/spi/cgi-bin/nightly.py?view=slots&amp;slots=17-18&amp;tag=None&amp;dates=week&amp;hiddenSlots=19-16-14-13-22-21-20-23&amp;hiddenTags=58-60-61-41-23-25-35-48-64-50-55&amp;hiddenPlatforms=&amp;slotOrder=58-60-61-41-23-25-35-48-64-50-55">
+web page</a>.  
+<br>
+<br>
+<h3>Definitions</h3>
+A <span style="font-weight: bold;">configuration</span> is a
+combination of Operating system, type of hardware (32 or 64 bit), and
+compiler name and version, and includes the Geant4 configration to be
+tested.&nbsp; We regularily test proposed tags in the slot geant4 using
+the pseudo tag name geant4-dev. The platforms are specified in a
+configuration file <span style="font-family: monospace;">configuration_geant4.xml </span> in the directory <span style="font-family: monospace;">/afs/cern.ch/sw/lcg/app/nightlies/scripts/</span>.<br>
+<br>
+A <span style="font-weight: bold;">testing slot</span> defines the
+software configuration of the software tested. The configuration file
+defines one which OS/hardware/compiler combinations will tested in a
+given slot.<br>
+<br>
+A <span style="font-weight: bold;">QMtest test case</span> is the
+running of a test or example with a specific input; this implies that
+the same executable run with different input are distinct tests. We
+also made the build of the test or example a QMtest.<br>
+<br>
+<h1><span style="font-weight: bold;">Testing Procedure</span></h1>
+<h3>Testing proposed tags</h3>
+Testing fo proposed tags proceeds in interations of selecting tags, checking results, accepting, rejecting or postponing tags.<br>
+<br>
+<h3>Selecting Tags</h3>
+Tags are selected from proposed tags using the full interface to the <a href="https://sftweb.cern.ch/geant4/geant4tagsadmin" target="_blank">Geant4 Tags system</a>.
+At the bottom of the window you can select tags by their status, for
+selecting tags it is useful to choose mark only "proposed tags", filter
+the list of tags. From the set of proposed tags select all the tags you
+want to test by marking these, and then click on the "Change status"
+button. If depencies for co-working tags are given in the comment
+field, be sure to take all of co-working tags together. All tags
+getting the status changed&nbsp; are groupped into a tag list, creating
+a new taglist is the default. If you want to add a tag to an existing
+taglist,&nbsp; you can do this by selecting the tag, click "Change
+status", and then tick the box add to tagslist choosing the last one.
+Tags should not be added to an existing taglist once a taglist has be
+tested in the nightlies, in this case create a new taglist.<br>
+<br>
+If there are many tags proposed, it&nbsp; usually is safe to select
+tests or exmaples for testing.&nbsp; Several tags in related categories
+is more challanging, in case tests fail&nbsp; it will be more difficult
+to identify the culprit.<br>
+<br>
+<h3>Checking Results</h3>
+Results of testing are shown on the <a href="http://lcgapp.cern.ch/spi/cgi-bin/nightly.py?permalink=1&amp;openSlots=21-22-18-38-17-24&amp;tag=&amp;dates=2011-04-07_2011-04-13&amp;slotGroup=2&amp;visibleCompilers=1-2-3-4&amp;visibleOsystems=1-2-3&amp;visibleArchitectures=1-2&amp;visibleModes=1-2-3&amp;slotOrder=days&amp;scrollElement=slot&amp;orderingCriteria=5268" target="_blank">nightlies page</a>;
+this should show only Geant4 related results, but you may tailor the
+display using the customisation options on this page. With the current
+configuration_geant4.xml, proposed tags are tested in the slot geant4
+using the tag g4tags-dev. We have a small number of tests failing on
+nearly all platforms, but this number <span style="text-decoration: underline;">must not</span>
+increase. To check the log file of a given platform, click in the field
+showing the number of failures. You can also get an overview of all
+failing tests by clicking on the blue magnifier symbol in the date
+area. To reorder the platforms use the arrows in the platform box. In
+general nearly everything in this page is a link, and you need to
+experiment a bit.<br>
+<h3>Accepting, rejecting, or postponing tags</h3>
+In general most tags get accepted. You must not accept tags, if there
+is a compilation warning, or worse an error, with the code of the tag,
+or if there are tests failing newly. If a test previously ok is
+failing, the tag causing this must be identified and rejected. It is
+recommended to not accept reminder of tags under testing, unless a new
+testing run has shown sucess again.<br>
+To accept tags, you can either select the tags you want to accept using
+the select box, and then click teh "Chaneg status" button. A faster
+method is to choose at&nbsp; the top left the tab taglist,&nbsp; then
+to choose the correct, in general the latest, taglist, and select&nbsp;
+all tags using the select box in the header row, and the click the
+"Change status" button, and select the accept box before confirming the
+change. <br>
+<br>
+Rejecting tags is similar to accepting, execpt that you would select
+the reject box, and then fill in some description why the tag is
+rejected,&nbsp; before confirming the change. A mail with this
+description&nbsp; is sent to the person who has submitted the tag, but
+if you want to give more detail, please send this more detailed
+information in a separate mail, where you also can CC for example the
+working group coordinator.<br>
+<br>
+If a rejected tag is part of a set of co-working tags, you cannot leave
+the dependant tags in testing until a fix for the rejected tag is
+available. In this case, change teh status of the dependant tags to
+"postponed". When the fix for the rejected tag(s) becomes available,
+teh postponed tags can be selected again.<br>
+<br>
+<h1>Scripts for System Testing</h1>
 <blockquote>
-<li>
-<b><tt>src/</tt></b>: this contains <b><tt>geant4/</tt></b>.&nbsp; This is checked out/updated
-from the <b><tt>geant4</tt></b> CVS repository as defined by the <b><tt>*.sdb</tt></b>
-files (see Defining the Geant4 Source Tree).</li>
 
-<li>
-<b><tt>testtools/:</tt></b> this contains a separately checked out version
-of <b><tt>geant4/tests/GNUmakefile</tt></b>, <b><tt>History</tt></b>, <b><tt>README</tt></b>,
-<b><tt>mailing_list</tt></b>,
-<b><tt>responsibles</tt></b>,
-<b><tt>results/
-</tt></b>and <b><tt>tools/</tt></b>.&nbsp; This is so that
-the scripts (see below) in <b><tt>testtools/geant4/tools/bin/</tt></b>
-are decoupled from the versions under <b><tt>src/geant4/tests/tools/bin</tt></b>.&nbsp;
-The former are the ones which are effective at run time.&nbsp; This means
-one can change and develop them without affecting <b><tt>src/</tt></b>.&nbsp;
-To avoid ambiguities with tag names, each of above files or directories
-under <b><tt>testtools/geant4/tests/</tt></b>, if changed, must be committed
-and tagged with distinctive tag names and proposed for testing in the normal
-way so that they get included in reference tags.</li>
 
-<li>
-The rest contain binaries and output for each system, debug option and
-ISO option, e.g., <b><tt>SUN-CC/debug_NONISO/</tt></b>,&nbsp; which themselves
-contain the directories for binaries - <b><tt>bin/</tt></b>,
-<b><tt>lib/</tt></b>
-and <b><tt>tmp/</tt></b> - for the current tests and
-<b><tt>stt/</tt></b>,
-a symbolic link to the current test output, e.g., <b><tt>stt -> stt.geant4-01-01-cand-00</tt></b>.&nbsp;
-The latter are kept, the directories for binaries are re-used.</li>
+
 </blockquote>
+<br>
+<h1>Large N Tests</h1>
+Every Sunday we use a special set of tags, using a different QMTest
+configuration file to test a subset of all test cases, but using higher
+statistics.<br>
+<br>
+<h1>Making a Global (geant4-wide) Reference Tag</h1>
 
-<h1>
-Scripts for System Testing</h1>
-These are kept in <b><tt>geant4/tests/tools/bin/</tt></b>.&nbsp; Be aware
-that there are 6 checked out versions, namely in <b><tt>prod/src/</tt></b>,
-<b><tt>dev1/src/</tt></b>,
-<b><tt>dev2/src/</tt></b>,
-<b><tt>/prod/testtools/</tt></b>,
-<b><tt>dev1/testtools/</tt></b>
-and <b><tt>dev2/testtools/</tt></b> so please maintain them with CVS, checking
-in when you change something, updating in the other areas if necessary.&nbsp;
-The current used scripts are in summary:
-<br>&nbsp;
-<center><table BORDER NOSAVE >
-<tr>
-<td>g4status.sh</td>
-
-<td>Prints the status of currently running rsh-submitted jobs.</td>
-</tr>
-
-<tr>
-<td>g4allsys.sh</td>
-
-<td>Reads stt-hosts...data files, submits g4sbr.sh via rsh one per line.</td>
-</tr>
-
-<tr>
-<td>g4sbr.sh</td>
-
-<td>Submit, build and run.&nbsp; Uses limit.sh and tmpenv.sh</td>
-</tr>
-
-<tr>
-<td>build.sh</td>
-
-<td>Builds libraries and/or test and examples excutables.</td>
-</tr>
-
-<tr>
-<td>run.sh</td>
-
-<td>Runs tests and examples.</td>
-</tr>
-
-<tr>
-<td>limit.sh</td>
-
-<td>Sets limits for some platforms.</td>
-</tr>
-
-<tr>
-<td>tmpenv.sh</td>
-
-<td>Sets TMPDIR for some platforms.</td>
-</tr>
-
-<tr>
-<td>setup.sh/csh</td>
-
-<td>"Source" script to set environment based on current platform and working
-directory.&nbsp; Sources...</td>
-</tr>
-
-<tr>
-<td>specific.sh/csh</td>
-
-<td>Detailed platform specific environment setting.</td>
-</tr>
-
-<tr>
-<td>update.sh</td>
-
-<td>Reads stt...sdb files, updates directory one per line.&nbsp; Uses...</td>
-</tr>
-
-<tr>
-<td>updt.sh</td>
-
-<td>Basic CVS update instructions.</td>
-</tr>
-</table></center>
-
-<p>Some other "useful" scripts are also there:
-<br>&nbsp;
-<center><table BORDER NOSAVE >
-<tr>
-<td>streamedit.sh</td>
-
-<td>Changes all occurences of given string in given file(s).</td>
-</tr>
-
-<tr>
-<td>rename.sh</td>
-
-<td>Changes names of files, replacing occurences of string in name.</td>
-</tr>
-</table></center>
-
-<h1>
-HTML files for Recording Activities</h1>
-The Tags Database and these Procedures are currently an HTML files in <b><tt>geant4/tests/results/</tt></b>.&nbsp;
-Maintain them through CVS.&nbsp; When you commit this directory they are
-posted on the web automatically.
-<h1>
-Notifying Tags for Testing</h1>
-When he/she wishes to have code tested, a category coordinators should
-notify the System Test Team (STT) using <b><tt>geant4-stt@listbox.cern.ch</tt></b>
-giving the tag name, its domain (sub-directory) of application and a short
-description of the salient features.&nbsp; Co-working tags should also
-be specified.
-<h1>
-Recording a Notified Tag</h1>
-When a tag is notified to the STT, the on-standby STT member should update
-the Bonsai database, marking the tag "Proposed".
-<h1>
-Preparing a Tag for Testing</h1>
-Update the Bonsai database, marking the tag "Selected.".
-<h1>
-Submitting a Tags Set to Tests</h1>
-In the appropriate System Test Area:
-<blockquote>
-<li>
-Change to <b><tt>testtools/geant4/tests/tools/bin</tt></b>, set <b><tt>G4DEBUG</tt></b>
-and/or <b><tt>G4STTNONISO</tt></b> if required, and <b><tt>source setup.csh</tt></b>.</li>
-
-<li>
-Prepare an update driver file, say <b><tt>bonsaiXXX.sdb</tt></b>, from
-the Bonsai database (by Hasami.plx).</li>
-
-<li>
-Update the code, e.g., <b><tt>update.sh [-n] &lt;bonsaiXXX.sdb >&amp;bonsaiXXX.log
-&amp;</tt></b>.(csh) or <b><tt>update.sh [-n] &lt;bonsaiXXX.sdb >bonsaiXXX.log
-2>&amp;1 &amp;</tt></b> (sh).</li>
-
-<li>
-Check the log file for unexpected CVS flags <b><tt>C</tt></b>, <b><tt>M</tt></b>,
-or <b><tt>?</tt></b>.</li>
-
-<li>
-Prepare a file, say <b><tt>hostsXXX.data</tt></b> (by Hasami.plx), for piping into <b><tt>g4allsys.sh</tt></b>
-and run it, e.g., <b><tt>g4allsys.sh &lt;hostsXXX.data</tt></b>.</li>
-
-<li>
-Check with <b><tt>g4status.sh</tt></b>.&nbsp; Check log files, e.g., <b><tt>sungeant.&lt;area>.deb_NONISO.log</tt></b>
-for errors.</li>
-</blockquote>
-
-<h1>
-Inspecting the Output</h1>
-The output is in <b><tt>/afs/cern.ch/sw/geant4/stt/&lt;area>/$G4SYSTEM/&lt;debug-ISO-option>/stt/$G4SYSTEM</tt></b>
-as appropriate (the last <b><tt>stt</tt></b> is a symbolic link to the
-current results sub-directory name).&nbsp; <b><tt>.diff</tt></b> files
-compare the <b><tt>.out</tt></b> files with the "reference"
-<b><tt>.out</tt></b>
-files in the source tree, e.g.,
-<b><tt>test01.diff</tt></b> is <b><tt>diff
--w test01.out $G4INSTALL/tests/test01/test01.out</tt></b>.
-
-<p>We are using <b><tt>Tinderbox</tt></b> to check <b><tt>gmake.log</tt></b> 
-and output/diff files: <b><tt>http://pcitapiww/tinderbox/tinderbox/html/</tt></b>
-
-<p>If all's well, update the Bonsai database and mark the tag(s) "Accepted"
-or "Rejected".&nbsp; <i>Notify the category coordinator.</i>
-<p>After a few tags have built up, or for the monthly reference tag, consider
-placing a global (geant4-wide) reference tag on the geant4 source tree
-- see below.
-<h1>
-Large N Tests</h1>
-Periodically, say every other weekend, submit "large N" tests.&nbsp; This
-is done by setting the "action" parameter on each line of the job submission
-driver file <b><tt>bonsaiXXX.large_N.data</tt></b>. to
-<b><tt>large_N</tt></b>.&nbsp;
-Note that the binaries must already be in place from an earlier normal
-build.
-<p>This option runs jobs in the following cases: (a) if a test or example
-has a file ending in <b><tt>large_N.in</tt></b>, in which case this file
-is taken instead of the normal <b><tt>.in</tt></b> file, or (b) if a job's
-input is generated by an "hadronic exerciser", in which case the exerciser
-is run with the large N option.
-<h1>
-Making a Global (geant4-wide) Reference Tag</h1>
 Make sure <b><tt>src/geant/tests</tt></b> is up to date.&nbsp; In <b><tt>src/geant4/</tt></b>
-of the relevant test area, <b><tt>cvs tag &lt;tag-name> >&amp; cvs_log_&lt;tag-name>.log
-&amp;</tt></b>, where <b><tt>&lt;tag-name></tt></b> is <b><tt>geant4-xx-yy-ref-zz</tt></b>,
+of the relevant test area, <b><tt>cvs tag &lt;tag-name&gt; &gt;&amp; cvs_log_&lt;tag-name&gt;.log
+&amp;</tt></b>, where <b><tt>&lt;tag-name&gt;</tt></b> is <b><tt>geant4-xx-yy-ref-zz</tt></b>,
 where <b><tt>xx-yy</tt></b> refer to the most recent past Geant4 release
 and <b><tt>zz</tt></b> is a serial number.
 <p>Announce on the Tags Blackboard and invite category coordinators to
 add further information.
+</p>
 <h1>
 Candidate Tags</h1>
+
 These are simply global tags used internally by the STT to define a version
 of geant4 which has not yet been tested.&nbsp; The format is <b><tt>geant4-xx-yy-cand-zz</tt></b>,
 where <b><tt>zz</tt></b> refers to the next global reference tag.
 <br>
-<hr WIDTH="100%">
-<br><i><a href="mailto:John.Allison@man.ac.uk">John Allison</a> ,
+
+<hr width="100%">
+<br>
+<blockquote><i><a href="mailto:John.Allison@man.ac.uk">John Allison</a> ,
 <a href="mailto:Serguei.Sadilov@cern.ch">Serguei
-Sadilov</a>&nbsp; and <a href="mailto:Steve.O'Neale@cern.ch">Steve O'Neale</a>&nbsp;
+Sadilov</a>&nbsp; and <a href="mailto:Steve.O%27Neale@cern.ch">Steve O'Neale</a>&nbsp;
 19th August 2002</i>
-</body>
-</html>
+
+</blockquote>
+</body></html>

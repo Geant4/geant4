@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20 July 2011  G.Cosmo (test17-V09-04-01)
+             Removed vis commands from init.mac macro.
+
 20 January 2010  V.Ivanchenko (test17-V09-04-00)
              Used Physics List from TestEm5, updated macro
 

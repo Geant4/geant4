@@ -30,8 +30,6 @@
 
 #include <vector>
 
-extern G4bool drawEvent;
-
 extern std::vector<G4String> Particles;
 extern std::vector<G4double> Energies;
 extern std::vector<G4double> Weights;
@@ -64,15 +62,8 @@ void Tst18SteppingAction::UserSteppingAction(const G4Step* fStep)
       Energies.push_back ( fStep->GetPreStepPoint()->GetKineticEnergy()/keV );
       Weights.push_back ( fStep->GetPreStepPoint()->GetWeight() );
       Times.push_back((fStep->GetPreStepPoint()->GetGlobalTime() - fStep->GetPreStepPoint()->GetLocalTime()) / s );
-      drawEvent = true;
     }
-  }
-  
-  
+  } 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-
-

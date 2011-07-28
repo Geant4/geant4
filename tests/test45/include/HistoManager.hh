@@ -114,7 +114,7 @@ private:
   G4double de1, de2;
  
   G4int verbose;
-  G4int nbins;
+  G4int nbins, nbins1, nbins2;
 
   G4int n_evt;
   G4int n_step;

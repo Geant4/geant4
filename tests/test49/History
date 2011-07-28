@@ -15,10 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-May 5th, 2010 Mikhail Kosov (test49-V09-04-01)
+Jul 28th, 2011 Gabriele Cosmo (test49-V09-04-02)
+- Included change in test49.cc from previous tag, which was missing..
+
+May 5th, 2011 Mikhail Kosov (test49-V09-04-01)
 - removed temporary check
 
-Jan 20th, 2010 Luciano Pandola (test49-V09-04-00)
+Jan 20th, 2011 Luciano Pandola (test49-V09-04-00)
 - removed obsolete G4hLowEnergyIonisation from the 
   physics list
 

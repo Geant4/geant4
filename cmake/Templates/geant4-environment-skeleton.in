@@ -46,7 +46,8 @@
 
 # - GDML Options
 @GEANT4_TC_UNSET_COMMAND@  G4LIB_BUILD_GDML
-
+@GEANT4_TC_UNSET_COMMAND@  G4LIB_USE_GDML
+@GEANT4_TC_UNSET_COMMAND@  XERCESCROOT
 
 # - UI Build and Use options
 # USE options only for applications.
@@ -141,6 +142,7 @@
 # GDML Setup
 #
 @GEANT4_TC_G4LIB_USE_GDML@
+@GEANT4_TC_GDML_PATH_SETUP@
 
 #----------------------------------------------------------------------------
 # G3ToG4 Setup

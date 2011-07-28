@@ -44,10 +44,6 @@
 #include "Randomize.hh"
 #include "G4UItcsh.hh"
 
-#ifdef G4VIS_USE
-#include "G4VisExecutive.hh"
-#endif
-
 #include "test31DetectorConstruction.hh"
 #include "PhysicsList.hh"
 #include "test31PrimaryGeneratorAction.hh"
@@ -82,10 +78,6 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(new PhysicsList());
   if(verbose >0) G4cout << "Physics List is defined" << G4endl;
 
-#ifdef G4VIS_USE
-  G4VisManager* visManager = 0;
-#endif 
-
   G4cout << "User actions will be initialized" << G4endl;
  
   // set user action classes
@@ -109,9 +101,6 @@ int main(int argc,char** argv) {
      
   if (argc==1)   // Define UI terminal for interactive mode
     {
-
-      visManager = new G4VisExecutive();
-      visManager->Initialize();
       G4UIsession * session;
 #ifdef G4UI_USE_TCSH
       session = new G4UIterminal(new G4UItcsh);
@@ -131,10 +120,6 @@ int main(int argc,char** argv) {
     
  // job termination
   
-#ifdef G4VIS_USE
-  delete visManager;
-#endif
-
   timer->Stop();
   G4cout << "  "  << *timer << G4endl;
   /*

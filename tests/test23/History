@@ -38,6 +38,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+25 July 2011, Andrea Dotti (test23-V09-04-02)
+----------------------------------------------
+- Update test23-large_N.in to replace obsolete /run/particle/setCut by /run/SetCut
 
 15 June 2011, Gunter Folger   (test23-V09-04-01)
 ----------------------------------------------

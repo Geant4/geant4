@@ -39,16 +39,8 @@
 // DESCRIPTION
 // -----------
 //
-// The SSAEventActionMessenger is instatiated by the SSARunManager and introduces 
-// into the UI event menu additional command to control the drawing of event
-// trajectory. User can choose one from
-//       1) none: no particle trajectory will be drawn.
-//       2) charged: only for charged particles.
-//       3) all: for all particles
-// The default option is for all particles.  
-//        
-// The SSAEventActionMessenger modifies the state of the event Drawing flag 
-// according to UI menu command issued by the user.
+// The SSAEventActionMessenger is instatiated by the SSARunManager and can
+// introduce into the UI event menu additional commands...
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -56,8 +48,7 @@
 // -----------------------
 //
 // SSAEventActionMessenger (SSAEventAction*)
-//    Constructor:  Defines the commands available to change the DrawFlag
-//    status. 
+//    Constructor:  Defines the commands available.
 //
 // ~SSAEventActionMessenger ()
 //    Destructor deletes G4UIdirectory and G4UIcommand objects.
@@ -102,7 +93,6 @@ class Tst18EventActionMessenger: public G4UImessenger
     
   private:
     Tst18EventAction*   eventAction;   
-    G4UIcmdWithAString* DrawCmd;
 };
 
 #endif

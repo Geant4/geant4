@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28-07-2011 Gabriele Cosmo tag test52-V09-04-01
+           Synchronised with versioning on main trunk.
+
 19-01-2011 Luciano Pandola tag test52-V09-04-00
 	   Clean-up, remove obsolete EM models
 

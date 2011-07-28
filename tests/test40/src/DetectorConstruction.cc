@@ -45,7 +45,6 @@
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
 
-#include "G4VisAttributes.hh"
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -219,7 +218,6 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
       // Slice
       solidSlice = new G4Tubs("Slice",i*dR,(i+1)*dR,0.5*dL,0.,360*deg);
       logicSlice = new G4LogicalVolume(solidSlice,myMaterial,"Slice",0,0,0);
-      logicSlice-> SetVisAttributes(G4VisAttributes::Invisible);
       if (nLtot >1)
         physiSlice = new G4PVReplica("Slice",logicSlice,physiRing,
                                     kZAxis,nLtot,dL);
@@ -231,11 +229,6 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
   G4cout << "Absorber is " << G4BestUnit(EcalLength,"Length") 
        << " of " << myMaterial->GetName() << G4endl; 
-
-
-  G4VisAttributes* VisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
-  VisAtt->SetVisibility(true);
-  logicEcal->SetVisAttributes(VisAtt);
 
   //Muon detector volume
 

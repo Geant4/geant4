@@ -305,7 +305,7 @@ G4VParticleChange* XTRComptonScattering::PostStepDoIt(const G4Track& aTrack,
  
 {
    aParticleChange.Initialize(aTrack);
-   G4Material* aMaterial                     = aTrack.GetMaterial();
+   // G4Material* aMaterial                     = aTrack.GetMaterial();
 
    const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();
    G4double GammaEnergy0 = aDynamicGamma->GetKineticEnergy();

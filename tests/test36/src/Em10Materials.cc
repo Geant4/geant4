@@ -95,7 +95,8 @@ void Em10Materials::Initialise()
 
   density = 2.700*g/cm3;
   a = 26.98*g/mole;
-  G4Material* Al  = new G4Material(name="Al", z=13., a, density);
+  // G4Material* Al  =
+  new G4Material(name="Al", z=13., a, density);
 
 
   /////////
@@ -181,7 +182,8 @@ void Em10Materials::Initialise()
 
   density = 0.900*mg/cm3;
   a = 20.179*g/mole;
-  G4Material* Ne = new G4Material(name="Ne",z=10., a, density );
+  // G4Material* Ne =
+  new G4Material(name="Ne",z=10., a, density );
 
   // Argon as detector gas, STP
 
@@ -379,7 +381,8 @@ void Em10Materials::Initialise()
 
   density = 2.330*g/cm3;
   a = 28.09*g/mole;
-  G4Material* Si = new G4Material(name="Si", z=14., a, density);
+  // G4Material* Si =
+  new G4Material(name="Si", z=14., a, density);
 
 
 

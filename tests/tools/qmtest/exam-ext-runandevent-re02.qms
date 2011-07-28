@@ -8,6 +8,8 @@
     <set>
       <text>exam-ext-runandevent-re02-build</text>
       <text>exam-ext-runandevent-re02-run</text>
+      <text>exam-ext-runandevent-re02-run3-run</text>
+      <text>exam-ext-runandevent-re02-run4-run</text>
     </set>
   </argument>
 </extension>

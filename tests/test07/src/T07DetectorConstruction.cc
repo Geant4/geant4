@@ -48,9 +48,6 @@
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
 
-#include "G4VisAttributes.hh"
-#include "G4Colour.hh"
-
 #include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -355,14 +352,6 @@ G4VPhysicalVolume* T07DetectorConstruction::ConstructCalorimeter()
       logicAbsorber->SetSensitiveDetector(calorimeterSD);
   if (logicGap)
       logicGap     ->SetSensitiveDetector(calorimeterSD);
-  
-  //                                        
-  // Visualization attributes
-  //
-  logicWorld->SetVisAttributes (G4VisAttributes::Invisible);
-  G4VisAttributes* simpleBoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
-  simpleBoxVisAtt->SetVisibility(true);
-  logicCalor->SetVisAttributes(simpleBoxVisAtt);
   
   //
   //always return the physical World

@@ -12,6 +12,15 @@ $Id$
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06-Jul-2011, G.Folger                (testtools-QMtest-V09-04-09)
+-  create hierarchical qms files; this allows  to not do certain tests
+     for platform/slot combinations. Ie. do not test on windows example 
+     needing regex, or with internal CLHEP exmaple needing matrix from
+     full CLHEP.
+
+04-Jul-2011, G.Folger
+-  remove test20 from large_N, test20 reassignied, not tagged
+
 29-Apr-2011, G.Folger                (testtools-QMtest-V09-04-08)
 -  add examples/extended/hadronic/hadr02 to testing
 -   increase events in bench-calo-HadCalCMS-run1_largeN-LHEP_EMV to 1k

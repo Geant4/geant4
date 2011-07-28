@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20-07-11  G.Cosmo (test31-V09-04-01)
+- Removed vis setup.
+
 25-10-10  V.Ivant (test31-V09-03-02)
 - test31PrimaryGeneratorAction - removed old unused methods
 - test31.in - added anti_deuteron run

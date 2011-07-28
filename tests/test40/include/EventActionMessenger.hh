@@ -54,7 +54,6 @@ class EventActionMessenger: public G4UImessenger
     
   private:
     EventAction*   eventAction;   
-    G4UIcmdWithAString*   DrawCmd;
     G4UIcmdWithAnInteger* PrintCmd;
 };
 

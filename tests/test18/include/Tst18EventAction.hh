@@ -60,10 +60,7 @@ class Tst18EventAction : public G4UserEventAction
     void BeginOfEventAction(const G4Event* anEvent);
     void EndOfEventAction(const G4Event* anEvent);
     
-    void SetDrawFlag(G4String val)  {drawFlag = val;};
-    
   private:
-    G4String drawFlag;                         // control the drawing of event
     Tst18EventActionMessenger*  eventMessenger;
 };
 

@@ -38,9 +38,6 @@
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
 
-#include "G4VisAttributes.hh"
-#include "G4Colour.hh"
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction(RunAction* r, PrimaryGeneratorAction* p)
@@ -83,16 +80,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4Box* solidWorld = new G4Box("World",y + 1.,y + 1.,width + 1);	
   G4LogicalVolume* logicWorld = new G4LogicalVolume(solidWorld,matWorld,"World");	
   physWorld = new G4PVPlacement(0,G4ThreeVector(),logicWorld,"World",0,false,0); 
-  logicWorld->SetVisAttributes(G4VisAttributes::Invisible);  
-
 
   // Absorber
   G4Box* solidAbs = new G4Box("Abs",y,y,0.5*width);	
   G4LogicalVolume* logicAbs = new G4LogicalVolume(solidAbs,matAbsorber,"Abs");	
   physAbs = new G4PVPlacement(0,G4ThreeVector(0.,0.,0.5*width),
 			      logicAbs,"Abs",logicWorld,false,0); 
-  G4VisAttributes* One = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
-  logicAbs->SetVisAttributes(One); 
 
   G4cout << "### Absorber width(mm)= " << width/mm 
 	 << " made of " << matAbsorber->GetName()
@@ -133,5 +126,3 @@ void DetectorConstruction::UpdateGeometry()
 {
   G4RunManager::GetRunManager()->DefineWorldVolume(Construct());
 }
-
-

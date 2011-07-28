@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Jul 20th, 2011  Gabriele Cosmo  (test07-V09-04-01)
+- Removed vis setup.
+
 Mar 31st, 2010  Gunter Folger  (test07-V09-03-00)
 - Replace obsolete G4MultipleScattering class by particle specific 
   multiple scattering classes

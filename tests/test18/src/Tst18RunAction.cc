@@ -37,17 +37,11 @@
 
 #include "G4Run.hh"
 #include "G4UImanager.hh"
-#include "G4VVisManager.hh"
 #include "G4ios.hh"
-//#include "Histo.hh"
 
 #include <fstream>
 #include <iomanip>
 #include <vector>
-
-//using namespace std;
-
-//extern G4String filename;
 
 extern std::vector<G4String> Particles;
 extern std::vector<G4double> Energies;
@@ -78,13 +72,6 @@ void Tst18RunAction::BeginOfRunAction(const G4Run* aRun)
   if ( RunN % 1000 == 0 ) 
     G4cout << "### Run : " << RunN << G4endl;
 
-  if (G4VVisManager::GetConcreteInstance())
-    {
-      G4UImanager* UI = G4UImanager::GetUIpointer(); 
-      UI->ApplyCommand("/vis/clear/view");
-      UI->ApplyCommand("/vis/draw/current");
-    } 
-  
   Particles.clear();
   Energies.clear();
   Weights.clear();
@@ -96,13 +83,8 @@ void Tst18RunAction::BeginOfRunAction(const G4Run* aRun)
 void Tst18RunAction::EndOfRunAction(const G4Run* )
 {
   
-  if (G4VVisManager::GetConcreteInstance())
-    G4UImanager::GetUIpointer()->ApplyCommand("/vis/show/view");
-  //  ofstream outscat(fileName, ios::app);
-
   for (size_t i=0; i<Particles.size();i++) {
 
-    //    outscat 
     G4cout
       << std::setiosflags(std::ios::fixed)
       << std::setprecision(3)
@@ -121,12 +103,6 @@ void Tst18RunAction::EndOfRunAction(const G4Run* )
       << G4endl ;    
   }
   G4cout<< G4endl;
-  //  outscat << G4endl;
-  //outscat.close();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-
-

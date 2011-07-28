@@ -36,10 +36,6 @@
 #include "SteppingAction.hh"
 #include "StackingAction.hh"
 
-#ifdef G4VIS_USE
-#include "G4VisExecutive.hh"
-#endif
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv) {
@@ -58,11 +54,6 @@ int main(int argc,char** argv) {
   DetectorConstruction* det = new DetectorConstruction(runAct, gen);
   runManager->SetUserInitialization(det);
 
-#ifdef G4VIS_USE
-  // visualization manager
-  G4VisManager* visManager = 0;
-#endif
-
   runManager->SetUserAction(gen);
    
   // set user action classes
@@ -75,8 +66,6 @@ int main(int argc,char** argv) {
  
   if (argc==1)   // Define UI terminal for interactive mode  
     { 
-      visManager = new G4VisExecutive;
-      visManager->Initialize();
       G4UIsession * session = 0;
 #ifdef G4UI_USE_TCSH
       session = new G4UIterminal(new G4UItcsh);      
@@ -95,10 +84,6 @@ int main(int argc,char** argv) {
     
   // job termination
 
-#ifdef G4VIS_USE
-  delete visManager;
-#endif
-  
   delete runManager;
   return 0;
 }

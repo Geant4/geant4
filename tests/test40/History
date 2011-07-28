@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20-07-11 G.Cosmo (test40-V09-04-00)
+- Removed left-over vis setup.
+
 11-06-07 V.Ivanchenko (test40-V08-03-01)
 - Fixed macro file - phys list name
 

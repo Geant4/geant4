@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Jul 20, 2011  Gabriele Cosmo (test18-V09-04-01)
+- Removed vis setup.
+
 Jun 1, 2010   Gunter Folger  (test18-V09-03-00)
 - Migrate to G4{e,Mu,h}MutplieScattering
 

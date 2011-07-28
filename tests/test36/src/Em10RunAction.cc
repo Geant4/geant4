@@ -35,7 +35,6 @@
 
 #include "G4Run.hh"
 #include "G4UImanager.hh"
-#include "G4VVisManager.hh"
 #include "G4ios.hh"
 #include <iomanip>
 
@@ -147,13 +146,7 @@ void Em10RunAction::BeginOfRunAction(const G4Run* aRun)
       CLHEP::HepRandom::showEngineStatus();
       CLHEP::HepRandom::saveEngineStatus("beginOfRun.rndm");
   }  
-  G4UImanager* UI = G4UImanager::GetUIpointer();
    
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-
-  if(pVVisManager)    UI->ApplyCommand("/vis/scene/notifyHandlers");
-
-      
   EnergySumAbs = 0. ;
   EnergySquareSumAbs = 0.;
   tlSumAbs = 0. ;
@@ -727,11 +720,6 @@ void Em10RunAction::EndOfRunAction(const G4Run*)
   
  G4cout.precision(prec);
   
-  if (G4VVisManager::GetConcreteInstance())
-  {
-    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-  }
-
   // save Rndm status
 
   if (saveRndm == 1)

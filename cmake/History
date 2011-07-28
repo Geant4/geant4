@@ -15,7 +15,24 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-June 29th 2011 - B.Morgan (cmake-V09-04-11)
+
+July 5th 2011 - G.Folger  (cmake-V09-04-13)
+- Modules/{Geant4LibraryBuildOptions,Geant4BuildProjectConfig}.cmake:
+   protect setting of G4LIB_BUILD_DLL to happen on WIN32 only.
+    (Affected examples/.../olap, which was built without this flag, 
+     and failed to link)
+     
+July 5th 2011 - B. Morgan (cmake-V09-04-12)
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : Added support for
+  setting GDML/Xerces variables as needed.
+- Templates/geant4-environment-skeleton.in : Added unsetting/setting of
+  G4LIB_USE_GDML and XERCESCROOT. These are needed to help the automated builds
+  of examples in the old toolchain. XERCESCROOT uses the value of
+  XERCESC_INCLUDE_DIR with one directory level stripped off the end. This
+  is not 100% foolproof if an odd XercesC install is used, but should cover
+  the vast majority of cases.
+
+June 29th 2011 - B.Morgan (cmake-V09-04-11) (In geant4-09-04-ref-06)
 - INSTALL.g4cmake : Added warning about ensuring consistent compiler flag
   sets between build of Geant4 and build of user application.
 - Templates/UseGeant4.cmake : Added setting of all CMAKE_CXX_FLAGS_XXXX

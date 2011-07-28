@@ -41,7 +41,7 @@ class MySteppingAction: public G4UserSteppingAction {
   virtual void UserSteppingAction(const G4Step*);
   private:
     CLHEP::HepJamesRandom theJamesEngine;
-    CLHEP::DRand48Engine theDRand48Engine;
+    //CLHEP::DRand48Engine theDRand48Engine;
 };
 
 #endif

@@ -206,6 +206,15 @@ void test31Histo::EndOfHisto()
     if(Z/10*10 == Z) {G4cout << G4endl;}
   } 
   G4cout << G4endl;
+  
+  G4cout << "Z=92, A=238 M(GeV)= "
+	 <<G4NucleiProperties::GetNuclearMass(238,92)/GeV << G4endl;
+  G4cout << "Z=82, A=208 M(GeV)= "
+	 <<G4NucleiProperties::GetNuclearMass(208,82)/GeV << G4endl;
+  G4cout << "Z=54, A=136 M(GeV)= "
+	 <<G4NucleiProperties::GetNuclearMass(136,54)/GeV << G4endl;
+  G4cout << "Z=26, A=56 M(GeV)= "
+	 <<G4NucleiProperties::GetNuclearMass(56,26)/GeV << G4endl;
   */
 }
 

@@ -1,6 +1,5 @@
 #
 # Macro file for the initialization phase of "test34"
-# when runing in interactive mode
 #
 # Sets some default verbose
 #
@@ -10,20 +9,10 @@
 /gps/energy   20 GeV
 /gps/direction  0. 0. 1.0
 
-#/tracking/storeTrajectory 1
-
 # Paramatrisation off
 /GFlash/flag 1
 
-
-# for drawing the tracks
-# (if too many tracks cause core dump => storeTrajectory 0)
-#/tracking/storeTrajectory 1
-
-#/vis/scene/endOfEventAction accumulate
 /tracking/verbose 0
 
 /run/beamOn 10
 exit
-quit
-

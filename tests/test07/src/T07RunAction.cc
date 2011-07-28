@@ -36,7 +36,6 @@
 
 #include "G4Run.hh"
 #include "G4UImanager.hh"
-#include "G4VVisManager.hh"
 #include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -55,28 +54,12 @@ T07RunAction::~T07RunAction()
 void T07RunAction::BeginOfRunAction(const G4Run* aRun)
 {
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
-
-  G4UImanager* UI = G4UImanager::GetUIpointer();
-   
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-
-  if(pVVisManager)
-  {
-    UI->ApplyCommand("/vis~/clear/view");
-    UI->ApplyCommand("/vis~/draw/current");
-  } 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void T07RunAction::EndOfRunAction(const G4Run* )
 {
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  
-  if(pVVisManager)
-  {
-    G4UImanager::GetUIpointer()->ApplyCommand("/vis~/show/view");
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

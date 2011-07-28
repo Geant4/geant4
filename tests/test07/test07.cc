@@ -40,10 +40,6 @@
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
 
-#ifdef G4VIS_USE
-#include "G4VisExecutive.hh"
-#endif
-
 #include "T07DetectorConstruction.hh"
 #include "T07PhysicsList.hh"
 #include "T07PrimaryGeneratorAction.hh"
@@ -65,12 +61,6 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new T07PhysicsList);
   
-#if defined(G4VIS_USE)
-  // visualization manager
-  G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize();
-#endif
-    
   // set user action classes
   runManager->SetUserAction(new T07PrimaryGeneratorAction(detector));
   runManager->SetUserAction(new T07RunAction);
@@ -98,9 +88,6 @@ int main(int argc,char** argv)
     }
 
   // job termination
-#if defined(G4VIS_USE)
-  delete visManager;
-#endif
   delete runManager;
 
   return 0;

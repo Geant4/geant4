@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!DOCTYPE extension PUBLIC "-//QM/2.4/Extension//EN" "http://www.codesourcery.com/qm/dtds/2.4/-//qm/2.4/extension//en.dtd">
+<extension class="explicit_suite.ExplicitSuite" kind="suite">
+  <argument name="suite_ids">
+    <set>
+      <text>test01</text>
+      <text>test02</text>
+      <text>test05</text>
+      <text>test07</text>
+      <text>test09</text>
+      <text>test10</text>
+      <text>test11</text>
+      <text>test12</text>
+      <text>test13</text>
+      <text>test14</text>
+      <text>test15</text>
+      <text>test16</text>
+      <text>test17</text>
+      <text>test18</text>
+      <text>test19</text>
+      <text>test21</text>
+      <text>test22</text>
+      <text>test23</text>
+      <text>test24</text>
+      <text>test25</text>
+      <text>test27</text>
+      <text>test28</text>
+      <text>test29</text>
+      <text>test31</text>
+      <text>test33</text>
+      <text>test34</text>
+      <text>test35</text>
+      <text>test37</text>
+      <text>test39</text>
+      <text>test40</text>
+      <text>test41</text>
+      <text>test44</text>
+      <text>test49</text>
+      <text>test53</text>
+      <text>test54</text>
+      <text>test55</text>
+      <text>test58</text>
+      <text>test60</text>
+      <text>test61</text>
+      <text>test62</text>
+      <text>test67</text>
+    </set>
+  </argument>
+  <argument name="test_ids">
+    <set>
+      <text>test201-build</text>
+      <text>test202-build</text>
+    </set>  
+  </argument>
+</extension>

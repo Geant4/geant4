@@ -46,7 +46,6 @@
 #include "G4UImanager.hh"
 #include "G4TrajectoryContainer.hh"
 #include "G4Trajectory.hh"
-#include "G4VVisManager.hh"
 #include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -105,24 +104,8 @@ void test31EventAction::BeginOfEventAction(const G4Event*)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void test31EventAction::EndOfEventAction(const G4Event* evt)
+void test31EventAction::EndOfEventAction(const G4Event*)
 {
-
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-
-  if(pVVisManager) {
-    G4TrajectoryContainer* trjc = evt->GetTrajectoryContainer();
-    G4int n_trajectories = 0;
-    if (trjc) n_trajectories = trjc->entries();  
-
-    for(G4int i=0; i<n_trajectories; i++) {
-      G4Trajectory* t = (G4Trajectory*)((*(evt->GetTrajectoryContainer()))[i]);
-      if (drawFlag == "all") t->DrawTrajectory(50);
-      else if ((drawFlag == "charged")&&(t->GetCharge() != 0.))
-                             t->DrawTrajectory(50); 
-    }
-  }  
-
   if(verbose > 0) {
     G4cout << "test31EventAction: Event # " 
            << nEvt << " ended" << G4endl;
@@ -130,17 +113,3 @@ void test31EventAction::EndOfEventAction(const G4Event* evt)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
-
-
-
-
-
-
-
-
-
-
-
-
-

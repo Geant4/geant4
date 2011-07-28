@@ -10,8 +10,7 @@ $Id: README,v 1.3 2006-02-03 12:44:18 gcosmo Exp $
 
      This test is cloned from TestEm2 in order to perform benchmarking
      TestEm2 allows to do the shower development of an single primary
-     particle, and to survey the physics processes which occur,
-     with printing and visualization.
+     particle, and to survey the physics processes which occur, with printing.
 
      test40 inteded to control the performance for the setup with
      10 radiation length absorber. The mean trancated energy deposited
@@ -62,7 +61,7 @@ $Id: README,v 1.3 2006-02-03 12:44:18 gcosmo Exp $
      - execute test40 in 'batch' mode from macro files
  		% test40 test40.in
  		
-     - execute test40 in 'interactive mode' with visualization
+     - execute test40 in 'interactive mode'
  		% test40
  		....
  		Idle> type your commands

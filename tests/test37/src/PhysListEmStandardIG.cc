@@ -55,6 +55,8 @@
 #include "G4CoulombScattering.hh"
 
 #include "G4EmProcessOptions.hh"
+#include "G4UAtomicDeexcitation.hh"
+#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -143,6 +145,14 @@ void PhysListEmStandardIG::ConstructProcess()
   //  opt.SetLinearLossLimit(1.e-2);
   // opt.SetSplineFlag(true);
   opt.SetPolarAngleLimit(0.2);
+
+  // Deexcitation
+  //
+  G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
+  de->SetFluo(true);
+  de->SetAuger(false);
+  de->SetPIXE(false);
+  G4LossTableManager::Instance()->SetAtomDeexcitation(de);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

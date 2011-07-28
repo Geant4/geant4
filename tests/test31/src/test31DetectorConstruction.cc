@@ -60,9 +60,6 @@
 #include "G4SolidStore.hh"
 #include "G4NistManager.hh"
 
-#include "G4VisAttributes.hh"
-#include "G4Colour.hh"
-
 #include "globals.hh"
 #include "G4ios.hh"
 
@@ -194,13 +191,6 @@ G4VPhysicalVolume* test31DetectorConstruction::ConstructGeometry()
   test31SD* calorimeterSD = new test31SD("test31");
   (G4SDManager::GetSDMpointer())->AddNewDetector( calorimeterSD );
   logicAbs->SetSensitiveDetector(calorimeterSD);
-
-  //                                        
-  // Visualization attributes
-  //
-  G4VisAttributes* VisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
-  VisAtt->SetVisibility(true);
-  logicAbs->SetVisAttributes(VisAtt);
 
   PrintGeomParameters();  
 
