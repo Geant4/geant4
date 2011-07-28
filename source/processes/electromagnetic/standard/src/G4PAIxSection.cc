@@ -113,6 +113,7 @@ G4PAIxSection::G4PAIxSection(G4MaterialCutsCouple* matCC)
       (*(*fMatSandiaMatrix)[i])[j] = fSandia->GetSandiaMatTable(i,j)*fDensity;
     }     
   }	         	
+  fEnergyInterval = fA1 = fA3 = fA3 = fA4 = 0;
 }
 
 ////////////////////////////////////////////////////////////////

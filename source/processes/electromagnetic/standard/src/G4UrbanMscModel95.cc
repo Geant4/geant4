@@ -886,13 +886,13 @@ G4double G4UrbanMscModel95::SampleCosineTheta(G4double trueStepLength,
     {
       // for the case if ioni/brems are inactivated
       // see the corresponding condition in ComputeGeomPathLength 
-      if(1.-KineticEnergy/currentKinEnergy < taulim)
-        ;
-      else
-      {
+      if(1.-KineticEnergy/currentKinEnergy > taulim) {
+
         // mean tau value
         G4double lambda1 = GetLambda(KineticEnergy);
-        tau = trueStepLength*log(lambda0/lambda1)/(lambda0-lambda1);
+        if(lambda0 != lambda1) {
+	  tau = trueStepLength*log(lambda0/lambda1)/(lambda0-lambda1);
+	}
       }
     }
     currentTau = tau ;
@@ -954,7 +954,7 @@ G4double G4UrbanMscModel95::SampleCosineTheta(G4double trueStepLength,
       prob = f2x0/(f1x0+f2x0);
 
       // sampling of costheta
-     G4double qprob = (prob*xmean1+(1.-prob)*xmean2)/xmeanth;
+     G4double qprob = xmeanth/(prob*xmean1+(1.-prob)*xmean2);
      if(G4UniformRand() < qprob)
      {
        if(G4UniformRand() < prob)

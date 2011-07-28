@@ -100,7 +100,8 @@ G4InitXscPAI::G4InitXscPAI( const G4MaterialCutsCouple* matCC)
   }
   KillCloseIntervals();
   Normalisation();
-
+  fBetaGammaSq = fIntervalTmax = fTmax = 0.0;
+  fCurrentInterval = 0;
 }
 
 

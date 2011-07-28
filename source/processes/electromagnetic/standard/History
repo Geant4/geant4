@@ -17,6 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25 July 11: V.Ivanchenko (emstand-V09-04-35)
+- G4PAIxSection, G4InitXscPAI - fixed Coverity tool warnings
+- G4KleinNishinaCompton, G4KleinNishinaModel - added extra protection
+  to avoid precision loss in sampling of scattering angle
+
+06 June 11: V.Ivanchenko (emstand-V09-04-34)
+- G4UrbanMscModel95 - L.Urban fixed typo in sampling of theta
+                    - V.Ivanchenko optimized UpdateCache computation
+                      reducing number of calls to std functions
+
+29 May 11: V.Ivanchenko (emstand-V09-04-33)
+- G4UrbanMscModel95 - fixed FPE problem at low-energy (about 10 eV)
+
 14 May 11: V.Ivanchenko (emstand-V09-04-32)
 - G4WentzelOKandVIxSection - tuned screening function
 - G4GoudsmitSaundersonMscModel - added protection against infinite loop 

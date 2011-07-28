@@ -264,6 +264,7 @@ void G4KleinNishinaModel::SampleSecondaries(
     //
     // scattered gamma angles. ( Z - axis along the parent gamma)
     //
+    if(sint2 < 0.0) { sint2 = 0.0; }
     G4double cosTeta = 1. - onecost; 
     G4double sinTeta = sqrt(sint2);
     G4double Phi  = twopi * G4UniformRand();

@@ -215,17 +215,17 @@ void G4UrbanMscModel95::UpdateCache()
     coeffth2 = (4.0780e-2+1.7315e-4*Zeff)*(0.87+0.03*lnZ);              
 
     // tail parameters
-    G4double Z13 = std::exp(std::log(Zeff)/3.); 
+    G4double Z13 = std::exp(lnZ/3.); 
     coeffc1  = 1.891-5.731e-2*Z13;
     coeffc2  = 2.995-1.745e-1*Z13;
     coeffc3  = -2.666+1.941e-1*Z13;
     coeffc4  = 1.987e-2+8.781e-3*Z13;
 
     // for single scattering
-    Z2 = Zeff*Zeff;
-    Z23 = std::exp(2.*lnZ/3.);
-    scr1     = scr1ini*Z23;
-    scr2     = scr2ini*Z2*ChargeSquare;
+    Z2   = Zeff*Zeff;
+    Z23  = Z13*Z13;
+    scr1 = scr1ini*Z23;
+    scr2 = scr2ini*Z2*ChargeSquare;
                                               
     Zold = Zeff;
 }
