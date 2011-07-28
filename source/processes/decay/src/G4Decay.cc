@@ -277,9 +277,11 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
   //boost all decay products to laboratory frame
   G4double energyDeposit = 0.0;
   G4double finalGlobalTime = aTrack.GetGlobalTime();
+  G4double finalLocalTime = aTrack.GetLocalTime();
   if (aTrack.GetTrackStatus() == fStopButAlive ){
     // AtRest case
     finalGlobalTime += fRemainderLifeTime;
+    finalLocalTime += fRemainderLifeTime;
     energyDeposit += aParticle->GetKineticEnergy();
     if (isPreAssigned) products->Boost( ParentEnergy, ParentDirection);
   } else {
@@ -328,7 +330,8 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
   // Kill the parent particle
   fParticleChangeForDecay.ProposeTrackStatus( fStopAndKill ) ;
   fParticleChangeForDecay.ProposeLocalEnergyDeposit(energyDeposit); 
-  fParticleChangeForDecay.ProposeGlobalTime( finalGlobalTime );
+  fParticleChangeForDecay.ProposeLocalTime( finalLocalTime );
+
   // Clear NumberOfInteractionLengthLeft
   ClearNumberOfInteractionLengthLeft();
 

@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+-July 6  2011   H.Kurashige (decay-V09-04-01)
+- Modify G4Decay  to propose the final local time rather than the global time
+  so that local time can be updated properly
+  (see problem #1224)  
+
+
 -June 4  2011   H.Kurashige (decay-V09-04-00)
 - Add SubType of DECAY_Radioactive (=210) 
 
