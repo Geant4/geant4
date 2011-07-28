@@ -62,9 +62,9 @@ G4TransitionRadiation( const G4String& processName, G4ProcessType type )
   : G4VDiscreteProcess(processName, type)
 {
   SetProcessSubType(fTransitionRadiation);
-  fMatIndex1 = fMatIndex2;
+  fMatIndex1 = fMatIndex2 = 0;
 
-  fGamma = fEnergy = fVarAngle = fMinEnergy = fMaxEnergy = fMaxTheta = fSigma1 = fSigma2;
+  fGamma = fEnergy = fVarAngle = fMinEnergy = fMaxEnergy = fMaxTheta = fSigma1 = fSigma2 = 0.0;
 }
 
 //////////////////////////////////////////////////////////////////////

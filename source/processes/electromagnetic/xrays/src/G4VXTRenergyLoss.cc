@@ -437,9 +437,7 @@ void G4VXTRenergyLoss::BuildAngleTable()
 
       energy = fXTREnergyVector->GetLowEdgeEnergy(iTR);
 
-      G4PhysicsFreeVector* angleVector = new G4PhysicsFreeVector(fBinTR);
-
-      angleVector = GetAngleVector(energy,fBinTR);
+      G4PhysicsFreeVector* angleVector = GetAngleVector(energy,fBinTR);
       // G4cout<<G4endl;
 
       fAngleForEnergyTable->insertAt(iTR,angleVector) ;
