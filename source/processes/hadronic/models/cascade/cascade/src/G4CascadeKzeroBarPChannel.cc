@@ -26,8 +26,11 @@
 // $Id: G4CascadeKzeroBarPChannel.cc,v 1.6 2010-12-15 07:40:25 gunter Exp $
 //
 // 20100804  M. Kelsey -- Add name string to ctor
+// 20110719  M. Kelsey -- Add initial state code to ctor
 
 #include "G4CascadeKzeroBarPChannel.hh"
+#include "G4InuclParticleNames.hh"
+using namespace G4InuclParticleNames;
 
 namespace {
   // Outgoing particle types of a given multiplicity
@@ -714,4 +717,4 @@ namespace {
 G4CascadeKzeroBarPChannelData::data_t
 G4CascadeKzeroBarPChannelData::data(kzbp2bfs, kzbp3bfs, kzbp4bfs,
 				    kzbp5bfs, kzbp6bfs, kzbp7bfs,
-				    kzbpCrossSections, "KzeroBarP");
+				    kzbpCrossSections, k0b*pro, "KzeroBarP");

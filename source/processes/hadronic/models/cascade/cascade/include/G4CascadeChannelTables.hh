@@ -23,51 +23,33 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclParticle.cc,v 1.7 2010-06-25 09:44:44 gunter Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
+// Factory function to return pointer to Bertini cross-section table based on
+// collision initial state (hadron type codes).
 //
-// 20100409  M. Kelsey -- Drop unused string argument from ctors.
-// 20110721  M. Kelsey -- Add model ID as optional ctor argument (so subclasses
-//		don't have to call SetModel()).
+// Author:  Michael Kelsey (SLAC)
 
-#include "G4InuclParticle.hh"
-#include "G4ios.hh"
-#include <cmath>
+#ifndef G4_CASCADE_CHANNEL_TABLES_HH
+#define G4_CASCADE_CHANNEL_TABLES_HH
+
+#include "globals.hh"
+
+class G4CascadeChannel;
 
 
-// Internal constructor only usable by subclasses
-G4InuclParticle::G4InuclParticle(G4ParticleDefinition* pd,
-				 const G4LorentzVector& mom,
-				 G4InuclParticle::Model model)
-  : modelId(model) {
-  setDefinition(pd);
-  setMomentum(mom);
+namespace G4CascadeChannelTables {
+  // Argument is interaction code, product of G4InuclEP types
+  const G4CascadeChannel* GetTable(G4int initialState);
+
+  // Arguments are individual G4InuclElementaryParticle types
+  inline const G4CascadeChannel* GetTable(G4int had1, G4int had2);
+
+  // Convenience function for diagnostic output
+  void PrintTable(G4int initialState);
 }
 
-
-// Assignment operator for use with std::sort()
-G4InuclParticle& G4InuclParticle::operator=(const G4InuclParticle& right) {
-  pDP = right.pDP;
-  modelId = right.modelId;
-
-  return *this;
+inline const G4CascadeChannel* 
+G4CascadeChannelTables::GetTable(G4int had1, G4int had2) {
+  return GetTable(had1*had2);
 }
 
-
-// WARNING!  Bertini code doesn't do four-vectors; repair mass before use!
-void G4InuclParticle::setMomentum(const G4LorentzVector& mom) {
-  G4double mass = getMass();
-  if (std::fabs(mass-mom.m()) <= 1e-5) 
-    pDP.Set4Momentum(mom*GeV/MeV);		// From Bertini to G4 units
-  else
-    pDP.SetMomentum(mom.vect()*GeV/MeV);	// Don't change current mass!
-}
-
-
-void G4InuclParticle::printParticle() const {
-  G4LorentzVector mom = getMomentum();
-  G4cout << " px " << mom.px() << " py " << mom.py() << " pz " << mom.pz()
-	 << " pmod " << mom.rho() << " E " << mom.e()
-	 << " creator model " << modelId << G4endl;
-}
-
+#endif	/* G4_CASCADE_CHANNEL_TABLES_HH */

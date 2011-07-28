@@ -13,6 +13,7 @@
 #
 # $Id: sources.cmake,v 1.4 2010-09-30 12:02:28 bmorgan Exp $
 #
+# 20110725  M. Kelsey -- Update HEADERS and SOURCES with new code
 #------------------------------------------------------------------------------
 
 # List external includes needed.
@@ -63,6 +64,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4BertiniHydrogenCollision.hh
         G4BigBanger.hh
         G4CascadeChannel.hh
+        G4CascadeChannelTables.hh
         G4CascadeCheckBalance.hh
         G4CascadeColliderBase.hh
         G4CascadeData.hh
@@ -144,7 +146,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         bindingEnergy.cc
         G4Analyser.cc
         G4BigBanger.cc
-        G4CascadeChannel.cc
+        G4CascadeChannelTables.cc
         G4CascadeCheckBalance.cc
         G4CascadeColliderBase.cc
         G4CascadeDeexcitation.cc

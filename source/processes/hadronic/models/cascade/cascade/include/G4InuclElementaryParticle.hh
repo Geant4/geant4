@@ -36,6 +36,10 @@
 // 20110127  M. Kelsey -- Drop generation.
 // 20110214  M. Kelsey -- Replace integer "model" with enum
 // 20110321  M. Kelsey -- Fix getStrangeness() to return int
+// 20110721  M. Kelsey -- Add constructors to take G4ParticleDefinition as
+//		input instead of type code, to allow pass-through of unusable
+//		particles during rescattering.  Modify ctors to pass model to
+//		base ctor.
 
 #ifndef G4INUCL_ELEMENTARY_PARTICLE_HH
 #define G4INUCL_ELEMENTARY_PARTICLE_HH
@@ -46,28 +50,31 @@
 
 class G4ParticleDefinition;
 
+
 class G4InuclElementaryParticle : public G4InuclParticle {
 public:
   G4InuclElementaryParticle() 
     : G4InuclParticle() {}
 
-  explicit G4InuclElementaryParticle(G4int type) 
-    : G4InuclParticle(makeDefinition(type)) {}
+  G4InuclElementaryParticle(G4int type, Model model=DefaultModel) 
+    : G4InuclParticle(makeDefinition(type), model) {}
 
   G4InuclElementaryParticle(const G4DynamicParticle& dynPart,
 			    Model model=DefaultModel)
-    : G4InuclParticle(dynPart) {
-    setModel(model);
-  }
+    : G4InuclParticle(dynPart, model) {}
 
   G4InuclElementaryParticle(const G4LorentzVector& mom,
 			    G4int type, Model model=DefaultModel)
-    : G4InuclParticle(makeDefinition(type), mom) {
-    setModel(model);
-  }
+    : G4InuclParticle(makeDefinition(type), mom, model) {}
 
-  G4InuclElementaryParticle(G4double ekin, G4int type) 
-    : G4InuclParticle(makeDefinition(type), ekin) {}
+  G4InuclElementaryParticle(G4double ekin, G4int type,
+			    Model model=DefaultModel) 
+    : G4InuclParticle(makeDefinition(type), ekin, model) {}
+
+  // WARNING:  This may create a particle without a valid type code!
+  G4InuclElementaryParticle(const G4LorentzVector& mom,
+			    G4ParticleDefinition* pd, Model model=DefaultModel)
+    : G4InuclParticle(pd, mom, model) {}
 
   // Copy and assignment constructors for use with std::vector<>
   G4InuclElementaryParticle(const G4InuclElementaryParticle& right)

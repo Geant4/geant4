@@ -28,23 +28,25 @@
 //
 // 20100514  M. Kelsey -- All functionality removed except quantum-number
 //		validation functions.
+// 20110719  M. Kelsey -- Repurpose as abstract base class for all channels.
 
 #ifndef G4_CASCADE_CHANNEL_HH
 #define G4_CASCADE_CHANNEL_HH
 
 #include "globals.hh"
-#include "G4FastVector.hh"
-#include "G4ReactionProduct.hh"
 #include <vector>
 
-namespace G4CascadeChannel {
-  std::vector<G4int> getQnums(G4int type);
 
-  void CheckQnums(const G4FastVector<G4ReactionProduct,256> &vec,
-		  G4int &vecLen,
-		  G4ReactionProduct &currentParticle,
-		  G4ReactionProduct &targetParticle,
-		  G4double Q, G4double B, G4double S);
-}
+class G4CascadeChannel {
+public:
+  virtual G4double getCrossSection(double ke) const = 0;
+  virtual G4double getCrossSectionSum(double ke) const = 0;
+  virtual G4int getMultiplicity(G4double ke) const = 0;
 
-#endif
+  virtual void getOutgoingParticleTypes(std::vector<G4int>& kinds,
+					G4int mult, G4double ke) const = 0;
+
+  virtual void printTable() const = 0;
+};
+
+#endif	/* G4_CASCADE_CHANNEL_HH */

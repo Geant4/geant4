@@ -27,6 +27,7 @@
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100804  M. Kelsey -- Add name string to ctor
+// 20110719  M. Kelsey -- Add initial state code to ctor
 
 #include "G4CascadeNPChannel.hh"
 #include "G4InuclParticleNames.hh"
@@ -667,4 +668,4 @@ namespace {
 G4CascadeNPChannelData::data_t
 G4CascadeNPChannelData::data(np2bfs, np3bfs, np4bfs, np5bfs, np6bfs, np7bfs,
 			     np8bfs, np9bfs, npCrossSections, npTotXSec,
-			     "NeutronProton");
+			     neu*pro, "NeutronProton");

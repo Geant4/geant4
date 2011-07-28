@@ -46,6 +46,8 @@
 //		functions to create G4Fragment.
 // 20110214  M. Kelsey -- Replace integer "model" with enum
 // 20110225  M. Kelsey -- Add equality operator (NOT sorting!)
+// 20110721  M. Kelsey -- Follow base-class ctor change to pass model directly
+// 20110722  M. Kelsey -- BUG FIX:  Deleted excitation energy in one ctor
 
 #ifndef G4INUCL_NUCLEI_HH
 #define G4INUCL_NUCLEI_HH
@@ -63,28 +65,23 @@ public:
   G4InuclNuclei() : G4InuclParticle() {}
 
   G4InuclNuclei(const G4DynamicParticle& dynPart, Model model=DefaultModel)
-    : G4InuclParticle(dynPart) {
-    setModel(model);
-  }
+    : G4InuclParticle(dynPart, model) {}
 
   G4InuclNuclei(G4int a, G4int z, G4double exc=0., Model model=DefaultModel)
-    : G4InuclParticle(makeDefinition(a,z)) {
+    : G4InuclParticle(makeDefinition(a,z), model) {
     setExitationEnergy(exc);
-    setModel(model);
   }
 
   G4InuclNuclei(const G4LorentzVector& mom, G4int a, G4int z,
 		G4double exc=0., Model model=DefaultModel)
-    : G4InuclParticle(makeDefinition(a,z), mom) {
+    : G4InuclParticle(makeDefinition(a,z), mom, model) {
     setExitationEnergy(exc);
-    setModel(model);
   }
 
   G4InuclNuclei(G4double ekin, G4int a, G4int z, G4double exc,
 		Model model=DefaultModel)
-    : G4InuclParticle(makeDefinition(a,z), ekin) {
+    : G4InuclParticle(makeDefinition(a,z), ekin, model) {
     setExitationEnergy(exc);
-    setModel(model);
   }
 
   G4InuclNuclei(const G4Fragment& aFragment, Model model=DefaultModel);

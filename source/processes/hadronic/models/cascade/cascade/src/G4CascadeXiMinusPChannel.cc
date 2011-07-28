@@ -26,8 +26,11 @@
 // $Id: G4CascadeXiMinusPChannel.cc,v 1.6 2010-12-15 07:40:54 gunter Exp $
 //
 // 20100804  M. Kelsey -- Add name string to ctor
+// 20110719  M. Kelsey -- Add initial state code to ctor
 
 #include "G4CascadeXiMinusPChannel.hh"
+#include "G4InuclParticleNames.hh"
+using namespace G4InuclParticleNames;
 
 namespace {
   // Outgoing particle types of a given multiplicity
@@ -318,4 +321,4 @@ namespace {
 G4CascadeXiMinusPChannelData::data_t
 G4CascadeXiMinusPChannelData::data(xmp2bfs, xmp3bfs, xmp4bfs,
 				   xmp5bfs, xmp6bfs, xmp7bfs,
-				   xmpCrossSections, "XiMinusP");
+				   xmpCrossSections, xim*pro, "XiMinusP");

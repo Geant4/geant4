@@ -23,13 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifndef G4_CASCADE_DATA_ICC
-#define G4_CASCADE_DATA_ICC
 // $Id: G4CascadeData.icc,v 1.3 2010-12-15 07:39:34 gunter Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100803  M. Kelsey -- Move implementations to this .icc file.  Use name
 //		string to report output
+// 20110718  M. Kelsey -- Add inelastic cross-section sum to deal with
+//		suppressing elastic scattering off free nucleons (hydrogen)
+// 20110719  M. Kelsey -- Add ctor argument for two-body initial state
+
+#ifndef G4_CASCADE_DATA_ICC
+#define G4_CASCADE_DATA_ICC
 
 #include "G4CascadeData.hh"
 #include <iomanip>
@@ -37,7 +41,7 @@
 
 // Fill cumulative cross-section arrays from input data
 template <int NE,int N2,int N3,int N4,int N5,int N6,int N7,int N8,int N9> inline
-void G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::initialize() {
+void G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::initialize(G4int initialState) {
   // Initialize index offsets for cross-section array (can't do globally)
   index[0] = 0;   index[1] = N02; index[2] = N23; index[3] = N24;
   index[4] = N25; index[5] = N26; index[6] = N27; index[7] = N28;
@@ -54,13 +58,24 @@ void G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::initialize() {
       }
     }
   }
-  
-  // Initialize total cross section array
+
+  // Initialize total cross section arrays
   for (G4int k = 0; k < NE; k++) {
     sum[k] = 0.0;
     for (G4int m = 0; m < NM; m++) {
       sum[k] += multiplicities[m][k];
     }
+  }
+
+  // Identify elastic scattering channel and subtract from inclusive
+  G4int i2b = 0;
+  for (i2b=index[0]; i2b<index[1]; i2b++) {
+    if (x2bfs[i2b][0]*x2bfs[i2b][1] == initialState) break;	// Found it
+  }
+
+  for (G4int k = 0; k < NE; k++) {
+    if (i2b<index[1]) inelastic[k] = tot[k] - crossSections[i2b][k];
+    else inelastic[k] = tot[k];		// FIXME:  No elastic channel in table!
   }
 }
 
@@ -84,6 +99,8 @@ void G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::print(G4int mult) const {
     printXsec(tot);
     G4cout << "\n Summed cross section:" << G4endl;
     printXsec(sum);
+    G4cout << "\n Inelastic cross section:" << G4endl;
+    printXsec(inelastic);
     G4cout << "\n Individual channel cross sections" << G4endl;
 
     for (int m=2; m<NM+2; m++) print(m);

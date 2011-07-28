@@ -43,6 +43,7 @@
 // 20110214  M. Kelsey -- Follow G4InuclParticle::Model enumerator migration
 // 20110303  M. Kelsey -- Add diagnostic messages to goodNucleus().
 // 20110308  M. Kelsey -- Follow new G4Fragment interface for hole types
+// 20110722  M. Kelsey -- For IntraNucleiCascader, take G4CollOut as argument
 
 #include "G4CascadeRecoilMaker.hh"
 #include "globals.hh"
@@ -94,7 +95,7 @@ void G4CascadeRecoilMaker::collide(G4InuclParticle* bullet,
 
 void G4CascadeRecoilMaker::collide(G4InuclParticle* bullet,
 				   G4InuclParticle* target,
-	     const std::vector<G4InuclElementaryParticle>& particles,
+				   G4CollisionOutput& output,
 	     const std::vector<G4CascadParticle>& cparticles) {
   if (verboseLevel > 1)
     G4cout << " >>> G4CascadeRecoilMaker::collide(<EP>,<CP>)" << G4endl;
@@ -103,7 +104,7 @@ void G4CascadeRecoilMaker::collide(G4InuclParticle* bullet,
   inputEkin = bullet ? bullet->getKineticEnergy() : 0.;
 
   balance->setVerboseLevel(verboseLevel);
-  balance->collide(bullet, target, particles, cparticles);
+  balance->collide(bullet, target, output, cparticles);
   fillRecoil();
 }
 

@@ -43,6 +43,7 @@
 //		Repurpose "makeRecoilFragment()" to return G4Fragment.
 // 20100924  M. Kelsey -- Add raw excitation energy (mass difference) function
 // 20110214  M. Kelsey -- Replace "model" with G4InuclParticle::Model enum
+// 20110722  M. Kelsey -- For IntraNucleiCascader, take G4CollOut as argument
 
 #include "G4VCascadeCollider.hh"
 #include "globals.hh"
@@ -70,7 +71,7 @@ public:
 
   // This is for use with G4IntraNucleiCascader
   void collide(G4InuclParticle* bullet, G4InuclParticle* target,
-	       const std::vector<G4InuclElementaryParticle>& particles,
+	       G4CollisionOutput& output,
 	       const std::vector<G4CascadParticle>& cparticles);
 
   // Modifiable parameters

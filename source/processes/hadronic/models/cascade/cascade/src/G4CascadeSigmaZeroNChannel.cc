@@ -26,8 +26,11 @@
 // $Id: G4CascadeSigmaZeroNChannel.cc,v 1.6 2010-12-15 07:40:45 gunter Exp $
 //
 // 20100804  M. Kelsey -- Add name string to ctor
+// 20110719  M. Kelsey -- Add initial state code to ctor
 
 #include "G4CascadeSigmaZeroNChannel.hh"
+#include "G4InuclParticleNames.hh"
+using namespace G4InuclParticleNames;
 
 namespace {
   // Outgoing particle types of a given multiplicity
@@ -906,4 +909,4 @@ namespace {
 G4CascadeSigmaZeroNChannelData::data_t
 G4CascadeSigmaZeroNChannelData::data(s0n2bfs, s0n3bfs, s0n4bfs,
 				     s0n5bfs, s0n6bfs, s0n7bfs,
-				     s0nCrossSections, "SigmaZeroN");
+				     s0nCrossSections, s0*neu, "SigmaZeroN");

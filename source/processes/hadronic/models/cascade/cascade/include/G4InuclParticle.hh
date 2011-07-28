@@ -33,6 +33,8 @@
 // 20100915  M. Kelsey -- Add constructor to copy G4DynamicParticle input
 // 20110214  M. Kelsey -- Replace integer "model" with enum
 // 20110225  M. Kelsey -- Add equality operator (NOT sorting!)
+// 20110721  M. Kelsey -- Add model ID as optional ctor argument (so subclasses
+//		don't have to call SetModel()).
 
 #ifndef G4INUCL_PARTICLE_HH
 #define G4INUCL_PARTICLE_HH
@@ -44,14 +46,28 @@
 
 class G4InuclParticle {
 public:
+  // used to indicate model that created instance of G4InuclParticle
+  // 0 default
+  // 1 bullet
+  // 2 target
+  // 3 G4ElementaryParticleCollider
+  // 4 G4IntraNucleiCascader
+  // 5 G4NonEquilibriumEvaporator
+  // 6 G4EquilibriumEvaporator
+  // 7 G4Fissioner
+  // 8 G4BigBanger
+  // 9 G4PreCompound
+  enum Model { DefaultModel, bullet, target, EPCollider, INCascader,
+	       NonEquilib, Equilib, Fissioner, BigBanger, PreCompound };
+
+public:
   G4InuclParticle() : modelId(DefaultModel) {}
 
-  explicit G4InuclParticle(const G4DynamicParticle& dynPart)
-    : pDP(dynPart), modelId(DefaultModel) {}
+  G4InuclParticle(const G4DynamicParticle& dynPart, Model model=DefaultModel)
+    : pDP(dynPart), modelId(model) {}
 
-  explicit G4InuclParticle(const G4LorentzVector& mom) : modelId(DefaultModel) {
-    pDP.Set4Momentum(mom*GeV/MeV);		// From Bertini to G4 units
-  }
+  G4InuclParticle(const G4LorentzVector& mom, Model model=DefaultModel)
+    : modelId(model) { pDP.Set4Momentum(mom*GeV/MeV); }	// Bertini to G4 units
 
   virtual ~G4InuclParticle() {}
 
@@ -115,37 +131,23 @@ public:
   }
 
 public:
-  // used to indicate model that created instance of G4InuclParticle
-  // 0 default
-  // 1 bullet
-  // 2 target
-  // 3 G4ElementaryParticleCollider
-  // 4 G4IntraNucleiCascader
-  // 5 G4NonEquilibriumEvaporator
-  // 6 G4EquilibriumEvaporator
-  // 7 G4Fissioner
-  // 8 G4BigBanger
-  // 9 G4PreCompound
-  enum Model { DefaultModel, bullet, target, EPCollider, INCascader,
-	       NonEquilib, Equilib, Fissioner, BigBanger, PreCompound };
-
   void setModel(Model model) { modelId = model; }
-
   Model getModel() const { return modelId; }
 
 protected: 
   //  Special constructors for subclasses to set particle type correctly
-  explicit G4InuclParticle(G4ParticleDefinition* pd) : modelId(DefaultModel) {
-    setDefinition(pd);
-  }
+  explicit G4InuclParticle(G4ParticleDefinition* pd, Model model=DefaultModel)
+    : modelId(model) { setDefinition(pd); }
 
   // FIXME: Bertini code doesn't pass valid 4-vectors, so force mass value
   //	    from supplied PartDefn, with required unit conversions
-  G4InuclParticle(G4ParticleDefinition* pd, const G4LorentzVector& mom);
+  G4InuclParticle(G4ParticleDefinition* pd, const G4LorentzVector& mom,
+		  Model model=DefaultModel);
 
   // NOTE:  Momentum forced along Z direction
-  G4InuclParticle(G4ParticleDefinition* pd, G4double ekin)
-    : pDP(pd,G4ThreeVector(0.,0.,1.),ekin*GeV/MeV), modelId(DefaultModel) {}
+  G4InuclParticle(G4ParticleDefinition* pd, G4double ekin,
+		  Model model=DefaultModel)
+    : pDP(pd,G4ThreeVector(0.,0.,1.),ekin*GeV/MeV), modelId(model) {}
 
   void setDefinition(G4ParticleDefinition* pd) { pDP.SetDefinition(pd); }
 

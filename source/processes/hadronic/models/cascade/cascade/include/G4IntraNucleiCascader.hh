@@ -55,6 +55,9 @@
 // 20110316  M. Kelsey -- Add function to do G4KineticTrack conversion, decay
 //		rescattering resonances in situ.
 // 20110324  M. Kelsey -- Add list of nucleon hit locations for rescatter().
+// 20110721  M. Kelsey -- Drop decayTrappedParticle(G4KineticTrack*).
+// 20110722  M. Kelsey -- Deprecate "output_particles" list in favor of using
+//		output directly (will help with pre-cascade issues).
 
 #ifndef G4INTRA_NUCLEI_CASCADER_HH
 #define G4INTRA_NUCLEI_CASCADER_HH
@@ -112,14 +115,16 @@ protected:
 
   G4CascadParticle* convertKineticToCascade(const G4KineticTrack* ktrack) const;
 
+  // Functions to transfer input high-energy cascade for propagation
   void preloadCascade(G4V3DNucleus* theNucleus,
 		      G4KineticTrackVector* theSecondaries);
   void copyWoundedNucleus(G4V3DNucleus* theNucleus);
   void copySecondaries(G4KineticTrackVector* theSecondaries);
+  void releaseSecondary(const G4KineticTrack* aSecondary);
 
+  // Functions to handle, e.g., low-energy hyperons stuck inside potential
   void processTrappedParticle(const G4CascadParticle& trapped);
   void decayTrappedParticle(const G4CascadParticle& trapped);
-  void decayTrappedParticle(const G4KineticTrack* ktrack);
 
 private: 
   G4NucleiModel* model;
@@ -138,7 +143,6 @@ private:
   G4CollisionOutput output;
   std::vector<G4CascadParticle> cascad_particles;
   std::vector<G4CascadParticle> new_cascad_particles;
-  std::vector<G4InuclElementaryParticle> output_particles;
   G4ExitonConfiguration theExitonConfiguration;
 
   std::vector<G4ThreeVector> hitNucleons;	// Nucleons hit before rescatter

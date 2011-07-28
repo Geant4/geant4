@@ -93,6 +93,10 @@
 //		to G4NucleiModel::reset().
 // 20110404  M. Kelsey -- Reduce maximum number of retries to 100, reflection
 //		cut to 50.
+// 20110721  M. Kelsey -- Put unusable pre-cascade particles directly on output,
+//		do not decay.
+// 20110722  M. Kelsey -- Deprecate "output_particles" list in favor of using
+//		output directly (will help with pre-cascade issues).
 
 #include "G4IntraNucleiCascader.hh"
 #include "G4CascadParticle.hh"
@@ -256,7 +260,6 @@ void G4IntraNucleiCascader::newCascade(G4int itry) {
   model->reset();    			// Start new cascade process
   output.reset();
   new_cascad_particles.clear();
-  output_particles.clear();
   theExitonConfiguration.clear();
 
   cascad_particles.clear();		// List of initial secondaries
@@ -283,10 +286,7 @@ void G4IntraNucleiCascader::setupCascade() {
     model->initializeCascad(bnuclei, tnuclei, all_particles);
     
     cascad_particles = all_particles.first;
-    
-    output_particles.insert(output_particles.end(),
-			    all_particles.second.begin(),
-			    all_particles.second.end());
+    output.addOutgoingParticles(all_particles.second);
     
     if (cascad_particles.size() == 0) { // compound nuclei
       G4int i;
@@ -377,22 +377,17 @@ void G4IntraNucleiCascader::generateCascade() {
 	      currentParticle.printParticle();
 	    }
 	    // Tunnelling through barrier leaves KE unchanged
-	    output_particles.push_back(currentParticle);
+	    output.addOutgoingParticle(currentParticle);
 	  } else {
 	    processTrappedParticle(currentCParticle);
 	  }
 	} else {
 	  if (verboseLevel > 3) G4cout << " Goes out " << G4endl;
 	  
-	  output_particles.push_back(currentParticle);
+	  output.addOutgoingParticle(currentParticle);
 	  
-	  /*****
-	   // Adjust kinetic energy by height of potential (+ve or -ve)
-	   G4double newKE = KE - Q*coulombBarrier;
-	   output_particles.back().setKineticEnergy(newKE);
-	  *****/
-	  
-	  if (verboseLevel > 3) output_particles.back().printParticle();
+	  if (verboseLevel > 3) 
+	    output.getOutgoingParticles().back().printParticle();
 	}
       } 
     } else { // interaction 
@@ -416,7 +411,7 @@ void G4IntraNucleiCascader::generateCascade() {
     
     // Evaluate nuclear residue
     theRecoilMaker->collide(interCase.getBullet(), interCase.getTarget(),
-			    output_particles, cascad_particles);
+			    output, cascad_particles);
     
     G4double aresid = theRecoilMaker->getRecoilA();
     if (verboseLevel > 2) {
@@ -439,17 +434,19 @@ G4bool G4IntraNucleiCascader::finishCascade() {
     G4cout << " >>> G4IntraNucleiCascader::finishCascade ?" << G4endl;
 
   // Add left-over cascade particles to output
-  for (G4int i = 0; i < G4int(cascad_particles.size()); i++)
-    output_particles.push_back(cascad_particles[i].getParticle());
+  output.addOutgoingParticles(cascad_particles);
   cascad_particles.clear();
 
   // Cascade is finished. Check if it's OK.
   if (verboseLevel>2) G4cout << " G4IntraNucleiCascader finished" << G4endl;
   if (verboseLevel>3) {
-    G4cout << " output_particles  " << output_particles.size() <<  G4endl;
-    
-    particleIterator ipart = output_particles.begin();
-    for (; ipart != output_particles.end(); ipart++) {
+    // FIXME:  Replace with "output.printCollisionOutput()" after validation
+    std::vector<G4InuclElementaryParticle>& opart
+      = output.getOutgoingParticles();
+
+    G4cout << " output_particles  " << opart.size() << G4endl;
+    particleIterator ipart = opart.begin();
+    for (; ipart != opart.end(); ipart++) {
       ipart->printParticle();
       G4cout << "  charge " << ipart->getCharge() << " baryon number "
 	     << ipart->baryon() << G4endl;
@@ -506,15 +503,15 @@ G4bool G4IntraNucleiCascader::finishCascade() {
       last_particle.printParticle();
     }
     
-    output_particles.push_back(last_particle);
+    output.addOutgoingParticle(last_particle);
 
     // Update recoil to include residual nucleon
     theRecoilMaker->collide(interCase.getBullet(), interCase.getTarget(),
-			    output_particles, cascad_particles);
+			    output);
   }
   
   // Process recoil fragment for consistency, exit or reject
-  if (output_particles.size() == 1) {
+  if (output.numberOfOutgoingParticles() == 1) {
     G4double Eex = theRecoilMaker->getRecoilExcitation();
     if (std::abs(Eex) < quasielast_cut) {
       if (verboseLevel > 3) {
@@ -545,9 +542,9 @@ G4bool G4IntraNucleiCascader::finishCascade() {
     output.addRecoilFragment(*recoilFrag);
   }
   
-  // Put final-state particle in "leading order" for return
-  std::sort(output_particles.begin(), output_particles.end(), G4ParticleLargerEkin());
-  output.addOutgoingParticles(output_particles);
+  // Put final-state particles in "leading order" for return
+  std::vector<G4InuclElementaryParticle>& opart = output.getOutgoingParticles();
+  std::sort(opart.begin(), opart.end(), G4ParticleLargerEkin());
   
   // Adjust final state to balance momentum and energy if necessary
   if (theRecoilMaker->wholeEvent() || theRecoilMaker->goodNucleus()) {
@@ -674,18 +671,8 @@ void G4IntraNucleiCascader::copySecondaries(G4KineticTrackVector* secondaries) {
 
       cascad_particles.push_back(*cpart);
       delete cpart;
-    } else if (dynamic_cast<G4Ions*>(kpd)) {
-      // NOTE: Must convert GEANT4 natural units to Bertini's GeV
-      G4InuclNuclei inucl(ktrack->Get4Momentum()/GeV, kpd->GetAtomicMass(),
-			  kpd->GetAtomicNumber());
-      if (verboseLevel > 2) {
-	G4cout << " Created pre-cascade fragment " << G4endl;
-	inucl.printParticle();
-      }
-
-      output.addOutgoingNucleus(inucl);		// Put on final-state list
-    } else {
-      decayTrappedParticle(ktrack);		// Resonance?  Decay in flight
+    } else {			// Unusable secondaries go directly to output
+      releaseSecondary(ktrack);
     }
   }	// G4KineticTrackVector loop
 
@@ -724,6 +711,41 @@ convertKineticToCascade(const G4KineticTrack* ktrack) const {
   return new G4CascadParticle(iep, cpos, zone, 0., 0);
 }
 
+
+// Transfer unusable pre-cascade secondaries directly to output
+
+void G4IntraNucleiCascader::releaseSecondary(const G4KineticTrack* ktrack) {
+  G4ParticleDefinition* kpd = ktrack->GetDefinition();
+
+  if (verboseLevel > 1) {
+    G4cout << " >>> G4IntraNucleiCascader::releaseSecondary "
+	   << kpd->GetParticleName() << G4endl;
+  }
+
+  // Convert light ion into nucleus on fragment list
+  if (dynamic_cast<G4Ions*>(kpd)) {
+    G4InuclNuclei inucl(ktrack->Get4Momentum()/GeV, kpd->GetAtomicMass(),
+			kpd->GetAtomicNumber());
+    if (verboseLevel > 2) {
+      G4cout << " Created pre-cascade fragment " << G4endl;
+      inucl.printParticle();
+    }
+    
+    output.addOutgoingNucleus(inucl);
+  } else {
+    // SPECIAL:  Use G4PartDef directly, allowing unknown type code
+    G4InuclElementaryParticle ipart(ktrack->Get4Momentum()/GeV,
+				    ktrack->GetDefinition());
+    if (verboseLevel > 2) {
+      G4cout << " Created invalid pre-cascade particle " << G4endl;
+      ipart.printParticle();
+    }
+    
+    output.addOutgoingParticle(ipart);	// Put on final-state list
+  }
+}
+
+  
 // Convert particles which cannot escape into excitons (or eject/decay them)
 
 void G4IntraNucleiCascader::
@@ -750,7 +772,7 @@ processTrappedParticle(const G4CascadParticle& trapped) {
     trapped.print();
   }
   
-  output_particles.push_back(trappedP);
+  output.addOutgoingParticle(trappedP);
 }
 
 
@@ -768,7 +790,7 @@ decayTrappedParticle(const G4CascadParticle& trapped) {
     if (verboseLevel > 3)
       G4cerr << " no decay table!  Releasing trapped particle" << G4endl;
 
-    output_particles.push_back(trappedP);
+    output.addOutgoingParticle(trappedP);
     return;
   }
 
@@ -778,7 +800,7 @@ decayTrappedParticle(const G4CascadParticle& trapped) {
     if (verboseLevel > 3)
       G4cerr << " no daughters!  Releasing trapped particle" << G4endl;
 
-    output_particles.push_back(trappedP);
+    output.addOutgoingParticle(trappedP);
     return;
   }
 
@@ -801,61 +823,9 @@ decayTrappedParticle(const G4CascadParticle& trapped) {
     G4InuclElementaryParticle idaugEP(*idaug, G4InuclParticle::INCascader);
 
     // Only hadronic secondaries can be propagated; photons escape
-    if (idaugEP.isPhoton()) output_particles.push_back(idaugEP);
+    if (idaugEP.isPhoton()) output.addOutgoingParticle(idaugEP);
     else {
       G4CascadParticle idaugCP(idaugEP, decayPos, zone, 0., gen);
-      if (verboseLevel > 3) idaugCP.print();
-
-      cascad_particles.push_back(idaugCP);
-    }
-  }
-}
-
-// Decay unstable input particles from pre-cascade
-
-void G4IntraNucleiCascader::
-decayTrappedParticle(const G4KineticTrack* ktrack) {
-  if (verboseLevel > 3) 
-    G4cout << " unstable " << ktrack->GetDefinition()->GetParticleName()
-	   << " must be decayed in flight" << G4endl;
-
-  G4DecayTable* unstable = ktrack->GetDefinition()->GetDecayTable();
-  if (!unstable) {			// No decay table; cannot decay!
-    if (verboseLevel > 3)
-      G4cerr << " no decay table!  Discarding unusable particle" << G4endl;
-    return;
-  }
-
-  // Get secondaries from decay in particle's rest frame
-  G4DecayProducts* daughters = unstable->SelectADecayChannel()->DecayIt();
-  if (!daughters) {			// No final state; cannot decay!
-    if (verboseLevel > 3)
-      G4cerr << " no daughters!  Discarding unusable particle" << G4endl;
-    return;
-  }
-
-  if (verboseLevel > 3)
-    G4cout << " " << daughters->entries() << " decay daughters" << G4endl;
-
-  // Convert secondaries to lab frame
-  G4double decayEnergy = ktrack->Get4Momentum().e();
-  G4ThreeVector decayDir = ktrack->Get4Momentum().vect().unit();
-  daughters->Boost(decayEnergy, decayDir);
-
-  // Put all the secondaries onto the list for propagation
-  const G4double lengthScale = model->getRadiusUnits();	// Bertini unts
-  G4ThreeVector decayPos = ktrack->GetPosition()/lengthScale;
-  G4int zone = model->getZone(decayPos.mag());
-
-  for (G4int i=0; i<daughters->entries(); i++) {
-    G4DynamicParticle* idaug = (*daughters)[i];
-
-    G4InuclElementaryParticle idaugEP(*idaug, G4InuclParticle::INCascader);
-
-    // Only hadronic secondaries can be propagated; photons escape
-    if (idaugEP.isPhoton()) output_particles.push_back(idaugEP);
-    else {
-      G4CascadParticle idaugCP(idaugEP, decayPos, zone, 0., 1);
       if (verboseLevel > 3) idaugCP.print();
 
       cascad_particles.push_back(idaugCP);

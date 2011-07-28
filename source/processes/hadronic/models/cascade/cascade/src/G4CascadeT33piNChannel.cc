@@ -28,6 +28,7 @@
 //
 // 20100612  M. Kelsey -- BUG FIX:  Swapped eight-body channel final-states
 // 20100804  M. Kelsey -- Add name string to ctor
+// 20110719  M. Kelsey -- Add initial state code to ctor
 
 #include "G4CascadePiPlusPChannel.hh"
 #include "G4CascadePiMinusNChannel.hh"
@@ -538,10 +539,10 @@ G4CascadePiPlusPChannelData::data_t
 G4CascadePiPlusPChannelData::data(pipP2bfs, pipP3bfs, pipP4bfs,
 				  pipP5bfs, pipP6bfs, pipP7bfs,
 				  pipP8bfs, pipP9bfs, pipPCrossSections,
-				  pipPtotXSec, "PiPlusP");
+				  pipPtotXSec, pip*pro, "PiPlusP");
 
 G4CascadePiMinusNChannelData::data_t
 G4CascadePiMinusNChannelData::data(pimN2bfs, pimN3bfs, pimN4bfs,
 				   pimN5bfs, pimN6bfs, pimN7bfs,
 				   pimN8bfs, pimN9bfs, pipPCrossSections,
-				   pipPtotXSec, "PiMinusN");
+				   pipPtotXSec, pim*neu, "PiMinusN");

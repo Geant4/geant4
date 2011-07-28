@@ -89,28 +89,25 @@
 // 20110324  M. Kelsey -- Move ::reset() here, as it has more code.
 // 20110519  M. Kelsey -- Used "rho" after assignment, instead of recomputing
 // 20110525  M. Kelsey -- Revert scale factor changes (undo 20110321 changes)
+// 20110617  M. Kelsey -- Apply scale factor to trailing-effect radius, make
+//		latter runtime adjustable (G4NUCMODEL_RAD_TRAILING)
+// 20110720  M. Kelsey -- Follow interface change for cross-section tables,
+//		eliminating switch blocks.
 
 #include "G4NucleiModel.hh"
+#include "G4CascadeChannel.hh"
+#include "G4CascadeChannelTables.hh"
 #include "G4CascadeCheckBalance.hh"
 #include "G4CascadeInterpolator.hh"
-#include "G4CascadeNNChannel.hh"
-#include "G4CascadeNPChannel.hh"
-#include "G4CascadePPChannel.hh"
-#include "G4CascadePiMinusNChannel.hh"
-#include "G4CascadePiMinusPChannel.hh"
-#include "G4CascadePiPlusNChannel.hh"
-#include "G4CascadePiPlusPChannel.hh"
-#include "G4CascadePiZeroNChannel.hh"
-#include "G4CascadePiZeroPChannel.hh"
 #include "G4CollisionOutput.hh"
 #include "G4ElementaryParticleCollider.hh"
 #include "G4HadTmpUtil.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclParticleNames.hh"
 #include "G4InuclSpecialFunctions.hh"
-#include "G4ParticleLargerBeta.hh"
 #include "G4LorentzConvertor.hh"
 #include "G4Neutron.hh"
+#include "G4ParticleLargerBeta.hh"
 #include "G4Proton.hh"
 #include <stdlib.h>
 
@@ -125,11 +122,13 @@ typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 // ==>	                          radiusUnits = 1.0 (fm)
 
 const G4double G4NucleiModel::crossSectionUnits = 
-  getenv("G4NUCMODEL_XSEC_SCALE") ? strtod(getenv("G4NUCMODEL_XSEC_SCALE"),0) : 1.0;
+  getenv("G4NUCMODEL_XSEC_SCALE") ? strtod(getenv("G4NUCMODEL_XSEC_SCALE"),0)
+  : 1.0;
 
 #define OLD_RADIUS_UNITS (3.3836/1.2)
 const G4double G4NucleiModel::radiusUnits = 
-  getenv("G4NUCMODEL_RAD_SCALE") ? strtod(getenv("G4NUCMODEL_RAD_SCALE"),0) : OLD_RADIUS_UNITS;
+  getenv("G4NUCMODEL_RAD_SCALE") ? strtod(getenv("G4NUCMODEL_RAD_SCALE"),0)
+  : OLD_RADIUS_UNITS;
 
 const G4double G4NucleiModel::skinDepth = (1.7234/OLD_RADIUS_UNITS)*radiusUnits;
 
@@ -146,17 +145,20 @@ const G4double G4NucleiModel::radiusScale2 =
 
 const G4double G4NucleiModel::radiusForSmall =
   (getenv("G4NUCMODEL_RAD_SMALL") ? strtod(getenv("G4NUCMODEL_RAD_SMALL"),0)
-     : 8.0/OLD_RADIUS_UNITS) * radiusUnits;
+   : 8.0/OLD_RADIUS_UNITS) * radiusUnits;
 
 const G4double G4NucleiModel::radScaleAlpha  =
-  getenv("G4NUCMODEL_RAD_ALPHA") ? strtod(getenv("G4NUCMODEL_RAD_ALPHA"),0) : 0.70;
+  getenv("G4NUCMODEL_RAD_ALPHA") ? strtod(getenv("G4NUCMODEL_RAD_ALPHA"),0)
+  : 0.70;
 
 const G4double G4NucleiModel::fermiMomentum = 
   (getenv("G4NUCMODEL_FERMI_SCALE") ? strtod(getenv("G4NUCMODEL_FERMI_SCALE"),0)
-     : 1.932/OLD_RADIUS_UNITS) * radiusUnits;
+   : 1.932/OLD_RADIUS_UNITS) * radiusUnits;
 
-// effective radius of nucleon in fm
-const G4double G4NucleiModel::R_nucleon = 1.2;
+// Effective radius (0.87 to 1.2 fm) of nucleon, for trailing effect
+const G4double G4NucleiModel::R_nucleon = 
+  (getenv("G4NUCMODEL_RAD_TRAILING") ? strtod(getenv("G4NUCMODEL_RAD_TRAILING"),0)
+   : 1.2) * radiusUnits;
 
 // Zone boundaries as fraction of nuclear radius (from outside in)
 const G4double G4NucleiModel::alfa3[3] = { 0.7, 0.3, 0.01 };
@@ -1652,19 +1654,9 @@ G4double G4NucleiModel::totalCrossSection(G4double ke, G4int rtype) const
 
   static G4CascadeInterpolator<NBINS> interp(keScale);
 
-  // Pion and nucleon scattering cross-sections are available elsewhere
+  // Pion and nucleon scattering cross-sections are available from tables
   G4double xsec = 0.;
   switch (rtype) {
-  case pro*pro: xsec = G4CascadePPChannel::getCrossSection(ke); break;
-  case pro*neu: xsec = G4CascadeNPChannel::getCrossSection(ke); break;
-  case pip*pro: xsec = G4CascadePiPlusPChannel::getCrossSection(ke); break;
-  case neu*neu: xsec = G4CascadeNNChannel::getCrossSection(ke); break;
-  case pim*pro: xsec = G4CascadePiMinusPChannel::getCrossSection(ke); break;
-  case pip*neu: xsec = G4CascadePiPlusNChannel::getCrossSection(ke); break;
-  case pi0*pro: xsec = G4CascadePiZeroPChannel::getCrossSection(ke); break;
-  case pim*neu: xsec = G4CascadePiMinusNChannel::getCrossSection(ke); break;
-  case pi0*neu: xsec = G4CascadePiZeroNChannel::getCrossSection(ke); break;
-    // Remaining channels are handled locally until arrays are moved
   case kpl*pro:			     
   case k0*neu:  xsec = interp.interpolate(ke, kpPtot); break;
   case kmi*pro:			     
@@ -1686,8 +1678,11 @@ G4double G4NucleiModel::totalCrossSection(G4double ke, G4int rtype) const
   case xim*pro:			     
   case xi0*neu: xsec = interp.interpolate(ke, ximPtot); break;
   default:
-    G4cout << " unknown collison type = " << rtype << G4endl; 
+    const G4CascadeChannel* xsecTable = G4CascadeChannelTables::GetTable(rtype);
+    if (xsecTable) xsec = xsecTable->getCrossSection(ke);
   }
+
+  if (0. == xsec) G4cerr << " unknown collison type = " << rtype << G4endl; 
 
   return crossSectionUnits * xsec;
 }

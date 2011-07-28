@@ -69,45 +69,20 @@
 //		G4CASCADE_DEBUG_SAMPLER preprocessor flag
 // 20101019  M. Kelsey -- CoVerity report: check dynamic_cast<> for null
 // 20110214  M. Kelsey -- Follow G4InuclParticle::Model enumerator migration
+// 20110718  V. Uzhinskiy -- Drop IL,IM reset for multiplicity-three collisions
+// 20110718  M. Kelsey -- Use enum names in switch blocks (c.f. G4NucleiModel)
+// 20110720  M. Kelsey -- Follow interface change for cross-section tables,
+//		eliminating switch blocks.
 
 #include "G4ElementaryParticleCollider.hh"
-
-#include "G4CascadePiMinusNChannel.hh"
-#include "G4CascadePiMinusPChannel.hh"
-#include "G4CascadePiPlusNChannel.hh"
-#include "G4CascadePiPlusPChannel.hh"
-#include "G4CascadePiZeroNChannel.hh"
-#include "G4CascadePiZeroPChannel.hh"
-#include "G4CascadeKplusPChannel.hh"
-#include "G4CascadeKplusNChannel.hh"
-#include "G4CascadeKzeroPChannel.hh"
-#include "G4CascadeKzeroNChannel.hh"
-#include "G4CascadeKminusPChannel.hh"
-#include "G4CascadeKminusNChannel.hh"
-#include "G4CascadeKzeroBarPChannel.hh"
-#include "G4CascadeKzeroBarNChannel.hh"
-#include "G4CascadeNNChannel.hh"
-#include "G4CascadeNPChannel.hh"
-#include "G4CascadePPChannel.hh"
-#include "G4CascadeLambdaPChannel.hh"
-#include "G4CascadeLambdaNChannel.hh"
-#include "G4CascadeSigmaPlusPChannel.hh"
-#include "G4CascadeSigmaPlusNChannel.hh"
-#include "G4CascadeSigmaZeroPChannel.hh"
-#include "G4CascadeSigmaZeroNChannel.hh"
-#include "G4CascadeSigmaMinusPChannel.hh"
-#include "G4CascadeSigmaMinusNChannel.hh"
-#include "G4CascadeXiZeroPChannel.hh"
-#include "G4CascadeXiZeroNChannel.hh"
-#include "G4CascadeXiMinusPChannel.hh"
-#include "G4CascadeXiMinusNChannel.hh"
-
+#include "G4CascadeChannel.hh"
+#include "G4CascadeChannelTables.hh"
 #include "G4CascadeInterpolator.hh"
 #include "G4CollisionOutput.hh"
 #include "G4InuclParticleNames.hh"
 #include "G4InuclSpecialFunctions.hh"
-#include "G4ParticleLargerEkin.hh"
 #include "G4LorentzConvertor.hh"
+#include "G4ParticleLargerEkin.hh"
 #include "Randomize.hh"
 #include <algorithm>
 #include <cfloat>
@@ -263,37 +238,10 @@ G4ElementaryParticleCollider::generateMultiplicity(G4int is,
 {
   G4int mul = 0;
 
-  switch (is) {
-  case  1: mul = G4CascadePPChannel::getMultiplicity(ekin); break;
-  case  2: mul = G4CascadeNPChannel::getMultiplicity(ekin); break;
-  case  3: mul = G4CascadePiPlusPChannel::getMultiplicity(ekin); break;
-  case  4: mul = G4CascadeNNChannel::getMultiplicity(ekin); break;
-  case  5: mul = G4CascadePiMinusPChannel::getMultiplicity(ekin); break;
-  case  6: mul = G4CascadePiPlusNChannel::getMultiplicity(ekin); break;
-  case  7: mul = G4CascadePiZeroPChannel::getMultiplicity(ekin); break;
-  case 10: mul = G4CascadePiMinusNChannel::getMultiplicity(ekin); break;
-  case 11: mul = G4CascadeKplusPChannel::getMultiplicity(ekin); break;
-  case 13: mul = G4CascadeKminusPChannel::getMultiplicity(ekin); break;
-  case 14: mul = G4CascadePiZeroNChannel::getMultiplicity(ekin); break;
-  case 15: mul = G4CascadeKzeroPChannel::getMultiplicity(ekin); break;
-  case 17: mul = G4CascadeKzeroBarPChannel::getMultiplicity(ekin); break;
-  case 21: mul = G4CascadeLambdaPChannel::getMultiplicity(ekin); break;
-  case 22: mul = G4CascadeKplusNChannel::getMultiplicity(ekin); break;
-  case 23: mul = G4CascadeSigmaPlusPChannel::getMultiplicity(ekin); break;
-  case 25: mul = G4CascadeSigmaZeroPChannel::getMultiplicity(ekin); break;
-  case 26: mul = G4CascadeKminusNChannel::getMultiplicity(ekin); break;
-  case 27: mul = G4CascadeSigmaMinusPChannel::getMultiplicity(ekin); break;
-  case 29: mul = G4CascadeXiZeroPChannel::getMultiplicity(ekin); break;
-  case 30: mul = G4CascadeKzeroNChannel::getMultiplicity(ekin); break;
-  case 31: mul = G4CascadeXiMinusPChannel::getMultiplicity(ekin); break;
-  case 34: mul = G4CascadeKzeroBarNChannel::getMultiplicity(ekin); break;
-  case 42: mul = G4CascadeLambdaNChannel::getMultiplicity(ekin); break;
-  case 46: mul = G4CascadeSigmaPlusNChannel::getMultiplicity(ekin); break;
-  case 50: mul = G4CascadeSigmaZeroNChannel::getMultiplicity(ekin); break;
-  case 54: mul = G4CascadeSigmaMinusNChannel::getMultiplicity(ekin); break;
-  case 58: mul = G4CascadeXiZeroNChannel::getMultiplicity(ekin); break;
-  case 62: mul = G4CascadeXiMinusNChannel::getMultiplicity(ekin); break;
-  default:
+  const G4CascadeChannel* xsecTable = G4CascadeChannelTables::GetTable(is);
+
+  if (xsecTable) mul = xsecTable->getMultiplicity(ekin);
+  else {
     G4cerr << " G4ElementaryParticleCollider: Unknown interaction channel "
 	   << is << " - multiplicity not generated " << G4endl;
   }
@@ -677,38 +625,12 @@ G4ElementaryParticleCollider::generateOutgoingPartTypes(G4int is, G4int mult,
 {
   particle_kinds.clear();	// Initialize buffer for generation
 
-  switch (is) {
-  case  1: G4CascadePPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
-  case  2: G4CascadeNPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
-  case  3: G4CascadePiPlusPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
-  case  4: G4CascadeNNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
-  case  5: G4CascadePiMinusPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
-  case  6: G4CascadePiPlusNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
-  case  7: G4CascadePiZeroPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
-  case 10: G4CascadePiMinusNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
-  case 11: G4CascadeKplusPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
-  case 13: G4CascadeKminusPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
-  case 14: G4CascadePiZeroNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
-  case 15: G4CascadeKzeroPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
-  case 17: G4CascadeKzeroBarPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
-  case 21: G4CascadeLambdaPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
-  case 22: G4CascadeKplusNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
-  case 23: G4CascadeSigmaPlusPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
-  case 25: G4CascadeSigmaZeroPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
-  case 26: G4CascadeKminusNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
-  case 27: G4CascadeSigmaMinusPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
-  case 29: G4CascadeXiZeroPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
-  case 30: G4CascadeKzeroNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
-  case 31: G4CascadeXiMinusPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
-  case 34: G4CascadeKzeroBarNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
-  case 42: G4CascadeLambdaNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
-  case 46: G4CascadeSigmaPlusNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
-  case 50: G4CascadeSigmaZeroNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
-  case 54: G4CascadeSigmaMinusNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
-  case 58: G4CascadeXiZeroNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
-  case 62: G4CascadeXiMinusNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
-  default:
-    G4cout << " G4ElementaryParticleCollider: Unknown interaction channel "
+  const G4CascadeChannel* xsecTable = G4CascadeChannelTables::GetTable(is);
+
+  if (xsecTable)
+    xsecTable->getOutgoingParticleTypes(particle_kinds, mult, ekin);
+  else {
+    G4cerr << " G4ElementaryParticleCollider: Unknown interaction channel "
 	   << is << " - outgoing kinds not generated " << G4endl;
   }
 
@@ -717,7 +639,7 @@ G4ElementaryParticleCollider::generateOutgoingPartTypes(G4int is, G4int mult,
 
 
 G4double 
-G4ElementaryParticleCollider::getMomModuleFor2toMany(G4int is, G4int mult, 
+G4ElementaryParticleCollider::getMomModuleFor2toMany(G4int is, G4int /*mult*/, 
 					             G4int knd, 
 					     	     G4double ekin) const 
 {
@@ -737,7 +659,6 @@ G4ElementaryParticleCollider::getMomModuleFor2toMany(G4int is, G4int mult,
   G4int IM = 3;
 
   if(is == 1 || is == 2 || is == 4) KM = 1;
-  if(mult == 3) { IM = 0; IL = 0; };
   if(knd == 1 || knd == 2) JK = 0;
 
   for(G4int i = 0; i < 4; i++) {
@@ -1026,35 +947,35 @@ G4ElementaryParticleCollider::generateSCMpionAbsorption(G4double etot_scm,
 // Dump lookup tables for N-body final states
 
 void G4ElementaryParticleCollider::printFinalStateTables() const {
-  G4CascadeKminusNChannel::printTable();
-  G4CascadeKminusPChannel::printTable();
-  G4CascadeKplusNChannel::printTable();
-  G4CascadeKplusPChannel::printTable();
-  G4CascadeKzeroBarNChannel::printTable();
-  G4CascadeKzeroBarPChannel::printTable();
-  G4CascadeKzeroNChannel::printTable();
-  G4CascadeKzeroPChannel::printTable();
-  G4CascadeLambdaNChannel::printTable();
-  G4CascadeLambdaPChannel::printTable();
-  G4CascadeNNChannel::printTable();
-  G4CascadeNPChannel::printTable();
-  G4CascadePPChannel::printTable();
-  G4CascadePiMinusNChannel::printTable();
-  G4CascadePiMinusPChannel::printTable();
-  G4CascadePiPlusNChannel::printTable();
-  G4CascadePiPlusPChannel::printTable();
-  G4CascadePiZeroNChannel::printTable();
-  G4CascadePiZeroPChannel::printTable();
-  G4CascadeSigmaMinusNChannel::printTable();
-  G4CascadeSigmaMinusPChannel::printTable();
-  G4CascadeSigmaPlusNChannel::printTable();
-  G4CascadeSigmaPlusPChannel::printTable();
-  G4CascadeSigmaZeroNChannel::printTable();
-  G4CascadeSigmaZeroPChannel::printTable();
-  G4CascadeXiMinusNChannel::printTable();
-  G4CascadeXiMinusPChannel::printTable();
-  G4CascadeXiZeroNChannel::printTable();
-  G4CascadeXiZeroPChannel::printTable();
+  G4CascadeChannelTables::PrintTable(pro*pro);
+  G4CascadeChannelTables::PrintTable(neu*pro);
+  G4CascadeChannelTables::PrintTable(neu*neu);
+  G4CascadeChannelTables::PrintTable(kmi*neu);
+  G4CascadeChannelTables::PrintTable(kmi*pro);
+  G4CascadeChannelTables::PrintTable(kpl*neu);
+  G4CascadeChannelTables::PrintTable(kpl*pro);
+  G4CascadeChannelTables::PrintTable(k0b*neu);
+  G4CascadeChannelTables::PrintTable(k0b*pro);
+  G4CascadeChannelTables::PrintTable(k0*neu);
+  G4CascadeChannelTables::PrintTable(k0*pro);
+  G4CascadeChannelTables::PrintTable(lam*neu);
+  G4CascadeChannelTables::PrintTable(lam*pro);
+  G4CascadeChannelTables::PrintTable(pim*neu);
+  G4CascadeChannelTables::PrintTable(pim*pro);
+  G4CascadeChannelTables::PrintTable(pip*neu);
+  G4CascadeChannelTables::PrintTable(pip*pro);
+  G4CascadeChannelTables::PrintTable(pi0*neu);
+  G4CascadeChannelTables::PrintTable(pi0*pro);
+  G4CascadeChannelTables::PrintTable(sm*neu);
+  G4CascadeChannelTables::PrintTable(sm*pro);
+  G4CascadeChannelTables::PrintTable(sp*neu);
+  G4CascadeChannelTables::PrintTable(sp*pro);
+  G4CascadeChannelTables::PrintTable(s0*neu);
+  G4CascadeChannelTables::PrintTable(s0*pro);
+  G4CascadeChannelTables::PrintTable(xim*neu);
+  G4CascadeChannelTables::PrintTable(xim*pro);
+  G4CascadeChannelTables::PrintTable(xi0*neu);
+  G4CascadeChannelTables::PrintTable(xi0*pro);
 }
 
 

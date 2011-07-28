@@ -27,6 +27,8 @@
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100804  M. Kelsey -- Add name string to ctor
+// 20110719  M. Kelsey -- Add initial state code to ctor
+// 20110720  M. Kelsey -- Bugs in the very last 9-body final state for pp and nn
 
 #include "G4CascadePPChannel.hh"
 #include "G4CascadeNNChannel.hh"
@@ -88,7 +90,7 @@ namespace {
     {pro,neu,pip,pip,pip,pip,pim,pim,pim},{pro,neu,pip,pip,pip,pim,pim,pi0,pi0},
     {pro,neu,pip,pip,pim,pi0,pi0,pi0,pi0},{pro,neu,pip,pi0,pi0,pi0,pi0,pi0,pi0},
     {neu,neu,pip,pip,pip,pip,pim,pim,pi0},{neu,neu,pip,pip,pip,pim,pi0,pi0,pi0},
-    {neu,neu,pip,pim,pi0,pi0,pi0,pi0,pi0}};
+    {neu,neu,pip,pip,pi0,pi0,pi0,pi0,pi0}};
 }
 
 namespace {
@@ -146,7 +148,7 @@ namespace {
     {pro,neu,pip,pip,pip,pim,pim,pim,pim},{pro,neu,pip,pip,pim,pim,pim,pi0,pi0},
     {pro,neu,pip,pim,pim,pi0,pi0,pi0,pi0},{pro,neu,pim,pi0,pi0,pi0,pi0,pi0,pi0},
     {pro,pro,pip,pip,pim,pim,pim,pim,pi0},{pro,pro,pip,pim,pim,pim,pi0,pi0,pi0},
-    {pro,pro,pip,pim,pi0,pi0,pi0,pi0,pi0}};
+    {pro,pro,pim,pim,pi0,pi0,pi0,pi0,pi0}};
 }
 
 namespace {
@@ -645,9 +647,9 @@ namespace {
 G4CascadePPChannelData::data_t
 G4CascadePPChannelData::data(pp2bfs, pp3bfs, pp4bfs, pp5bfs, pp6bfs, pp7bfs,
 			     pp8bfs, pp9bfs, ppCrossSections, ppTotXSec,
-			     "ProtonProton");
+			     pro*pro, "ProtonProton");
 
 G4CascadeNNChannelData::data_t
 G4CascadeNNChannelData::data(nn2bfs, nn3bfs, nn4bfs, nn5bfs, nn6bfs, nn7bfs,
 			     nn8bfs, nn9bfs, ppCrossSections, ppTotXSec,
-			     "NeutronNeutron");
+			     neu*neu, "NeutronNeutron");

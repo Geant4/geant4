@@ -45,6 +45,7 @@
 //		to supply both kinds of particle lists (G4IntraNucleiCascader)
 // 20100923  M. Kelsey -- Baryon and charge deltas should have been integer
 // 20110328  M. Kelsey -- Add default ctor and explicit limit setting
+// 20110722  M. Kelsey -- For IntraNucleiCascader, take G4CollOut as argument
 
 #include "G4VCascadeCollider.hh"
 #include "globals.hh"
@@ -95,7 +96,7 @@ public:
 
   // This is for use with G4IntraNucleiCascader
   void collide(G4InuclParticle* bullet, G4InuclParticle* target,
-	       const std::vector<G4InuclElementaryParticle>& particles,
+	       G4CollisionOutput& output,
 	       const std::vector<G4CascadParticle>& cparticles);
 
   // Checks on conservation laws (kinematics, baryon number, charge)

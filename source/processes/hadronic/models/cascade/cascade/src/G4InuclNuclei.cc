@@ -45,6 +45,7 @@
 // 20110214  M. Kelsey -- Replace integer "model" with enum
 // 20110308  M. Kelsey -- Follow new G4Fragment interface for hole types
 // 20110427  M. Kelsey -- Remove PDG-code warning
+// 20110721  M. Kelsey -- Follow base-class ctor change to pass model directly
 
 #include "G4InuclNuclei.hh"
 #include "G4Fragment.hh"
@@ -68,9 +69,8 @@ G4InuclNuclei::G4InuclNuclei(const G4Fragment& aFragment,
 			     G4InuclParticle::Model model)
   : G4InuclParticle(makeDefinition(aFragment.GetA_asInt(),
 				   aFragment.GetZ_asInt()),
-		    aFragment.GetMomentum()/GeV) {	// Bertini units
+		    aFragment.GetMomentum()/GeV, model) {	// Bertini units
   setExitationEnergy(aFragment.GetExcitationEnergy());
-  setModel(model);
 
   // Exciton configuration must be set by hand
   theExitonConfiguration.protonQuasiParticles = aFragment.GetNumberOfCharged();
@@ -83,6 +83,7 @@ G4InuclNuclei::G4InuclNuclei(const G4Fragment& aFragment,
   theExitonConfiguration.neutronHoles =
     aFragment.GetNumberOfHoles() - theExitonConfiguration.protonHoles;
 }
+
 
 // FIXME:  Should we have a local buffer and return by const-reference instead?
 G4Fragment G4InuclNuclei::makeG4Fragment() const {

@@ -38,36 +38,38 @@
 //		which Sampler is used.  Move implementations to .icc file.
 // 20100511  M. Kelsey -- Pass "kinds" buffer as input to getOutputPartTypes
 // 20100803  M. Kelsey -- Add printing function for debugging
+// 20110719  M. Kelsey -- Add inheritance from non-template base for factory,
+//		change static's to virtual (no more direct access)
 
 #ifndef G4_CASCADE_FUNCTIONS_HH
 #define G4_CASCADE_FUNCTIONS_HH
 
+#include "G4CascadeChannel.hh"
 #include "globals.hh"
 #include "Randomize.hh"
 #include <vector>
 
 
 template <class DATA, class SAMP>
-class G4CascadeFunctions : public SAMP {
+class G4CascadeFunctions : public G4CascadeChannel, public SAMP {
 public:
-  static G4double getCrossSection(double ke) {
-    return instance.findCrossSection(ke, DATA::data.tot);
-  }
-
-  static G4double getCrossSectionSum(double ke) {
-    return instance.findCrossSection(ke, DATA::data.sum);
-  }
-
-  static G4int getMultiplicity(G4double ke);
-
-  static void
-  getOutgoingParticleTypes(std::vector<G4int>& kinds, G4int mult, G4double ke);
-
-  static void printTable();
-
-private:
   G4CascadeFunctions() : SAMP() {}
-  static const G4CascadeFunctions<DATA,SAMP> instance;
+  virtual ~G4CascadeFunctions() {}
+
+  virtual G4double getCrossSection(double ke) const {
+    return findCrossSection(ke, DATA::data.tot);
+  }
+
+  virtual G4double getCrossSectionSum(double ke) const {
+    return findCrossSection(ke, DATA::data.sum);
+  }
+
+  virtual G4int getMultiplicity(G4double ke) const;
+
+  virtual void getOutgoingParticleTypes(std::vector<G4int>& kinds,
+				       G4int mult, G4double ke) const;
+
+  virtual void printTable() const;
 };
 
 #include "G4CascadeFunctions.icc"

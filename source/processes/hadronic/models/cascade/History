@@ -15,6 +15,142 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+25 July 2011  Michael Kelsey (hadr-casc-V09-04-19)
+--------------------------------------------------
+- sources.cmake:  Update HEADERS and SOURCES list with new code added 20
+  July 2011.  This must be done manually.
+
+22 July 2011  Michael Kelsey (hadr-casc-V09-04-18)
+--------------------------------------------------
+- G4CascadeInterface.cc:  In makeDynamicParticle(), allow invalid type codes
+  in order to process, e.g., resonances from Propagate() input.
+
+- G4InuclNuclei.hh:  Fix bug in ctor (mom,A,Z,Eexc,model) -- failed to set
+  excitation energy; causes energy non-conservation in de-excitation code.
+
+22 July 2011  Michael Kelsey (hadr-casc-V09-04-17)
+--------------------------------------------------
+- G4IntraNucleiCascader:  Deprecate local "output_particles" list in favor
+  of using "output" (G4CollisionOutput) buffer directly.  This will support
+  handling light ions and unrecognized particles for rescattering.
+
+- G4CascadeCheckBalance:  Replace std::vector<G4InuclEP> argument with
+  G4CollisionOutput in version of ::collide() for G4IntraNucleiCascader.
+
+- G4CascadeRecoilMaker:  Replace std::vector<G4InuclEP> argument with
+  G4CollisionOutput in version of ::collide() for G4IntraNucleiCascader.
+
+21 July 2011  Michael Kelsey
+----------------------------
+- G4IntraNucleiCascader:  For pre-cascade rescattering, put resonances, or
+  any particle which cannot be propagated by Bertini, directly onto output,
+  without decaying.  Requires G4InuclEP constructor which takes G4PartDef
+  directly, avoiding possibly undefined type codes.
+
+  NOTE:  The ::rescatter() process doesn't generate a proper recoil nucleus
+  because outgoing_particles is used, rather than output.
+
+- G4InuclParticle:  Modify all constructors to take the model code as an
+  optional argument, so that subclasses don't have to set it manually.
+
+- G4InuclNuclei:  Modify constructors to pass model code to base (as above),
+  instead of calling SetModel() explicitly.
+
+- G4InuclElementaryParticle: Modify constructors to pass model code to base
+  (as above), instead of calling SetModel() explicitly.  Add new constructor
+  which takes G4ParticleDefinition* argument instead of type code.  Allows
+  client code to create objects without a valid (enumerated) type, e.g. for
+  passing pre-cascade resonances through to output.
+
+21 July 2011  Michael Kelsey (hadr-casc-V09-04-16)
+--------------------------------------------------
+- G4ElementaryParticleCollider.cc:  Hide "mult" argument to
+  getMomModule2toMany(), as it is no longer used (V. Uzhinsky's fix).  Fixes
+  compilation warning from hadr-casc-V09-04-15.
+
+- G4CascadeInterface.cc:  In NoInteraction(), only projectile should be
+  copied to final state, not target nucleus.
+
+- G4CascadeT1NNChannel.cc:  Fix final 9-body final-state list for both nn
+  and pp:  existing entries violate charge.
+
+20 July 2011  Michael Kelsey
+----------------------------
+- G4CascadeInterface:  Drop local copy of G4HadFinalState (theResult),
+  available directly from base class (theParticleChange).  Add NoInteraction()
+  to copy input particle directly to return in case of problems.
+  Modify createBullet() to leave pointer null if not a valid particle; in
+  ApplyYourself(), check for both null bullets and bullet types without
+  interaction tables and return NoInteraction() in those cases.  Fix bug in
+  reporting charge violation.
+
+- G4CascadeChannel.hh:  Repurpose this as non-template base class for all
+  cross-section tables, specifying public interface (pure virtual).  Used
+  with multiple inheritance for G4CascadeFunctions<> to allow instantiation
+  and pointer return (below).
+
+- G4CascadeChannel.cc:  DELETE code from previous version of name.
+
+- G4CascadeFunctions:  Add inheritance from G4CascadeChannel, replace
+  static functions with virtual; must create instance from now on.
+
+- G4CascadeChannelTables:  NEW namespace with function to return
+  cross-section tables by pointer based on two-body initial state.
+
+- G4ElementaryParticleCollider.cc:  Remove all switch-blocks, replace with
+  calls to G4CascadeChannelTables; in PrintFinalStateTables, use convenience
+  funciton directly in G4CascadeChannelTables.
+
+- G4NucleiModel.cc:  Remove use of G4CascadeXXXChannel in switch block;
+  under "default:", make calls to G4CascadeTables.
+
+19 July 2011  Michael Kelsey (hadr-casc-V09-04-15)
+--------------------------------------------------
+- G4CascadeInterface.cc:  If accept/reject loop fails (maximum retries),
+  return initial state untouched rather than last generated cascade.  This
+  avoids exposing an elastic scattering event under any circumstances.
+
+19 July 2011  Michael Kelsey (hadr-casc-V09-04-14)
+--------------------------------------------------
+- G4ChannelData:  Add new ctor argument "initialState", to specify the
+  product of the hadrons (e.g., for KminusP, the value is "kmi*pro").  This
+  argument is used to find the elastic channel cross-sections to be
+  subtracted from tot[] to get inelastic[] (other two-body channels,
+  including the quasi-elastic charge exchange, are treated as inelastic).
+
+- G4Cascade*Channel.cc:  Add new ctor argument for all cross-section tables.
+
+18 July 2011  Michael Kelsey (hadr-casc-V09-03-91) ***BRANCH TAG***
+--------------------------------------------------
+- G4LorentzConvertor.cc:  Copy HEAD version, which includes protections for
+  ::rotate() applied to at-rest system (i.e., z-axis ~ (0,0,0)), and
+  simplifies calculations to avoid similar errors elsewhere.
+
+NOTE:  Changes below not included in branch tag.
+
+18 July 2011  Michael Kelsey (hadr-casc-V09-04-13)
+--------------------------------------------------
+- G4ChannelData:  Add new "inelastic" array, filled in initialize() to the
+  sum of 3-body and higher multiplicity cross-sections.
+
+- G4CascadeInterface.cc:  Change an error message to not show "ApplyYourself"
+
+- G4ElementaryParticleCollider.cc:  Per V. Uzhinskiy, remove special
+  "mult==3" case from getMomModule2toMany().  Replace magic numbers in
+  switch blocks with particle-name enums.
+
+1 July 2011  Michael Kelsey
+---------------------------
+- G4NucleiModel.hh/.cc, G4InuclPartice.hh, G4InuclElementaryParticle.hh:
+  Copy minor comment changes applied to 9.4-ref-06 and 9.5-beta to HEAD.
+
+17 June 2011  Michael Kelsey
+----------------------------
+- G4NucleiModel.cc:  Change "R_nucleon" (trailing effect nucleon radius) to
+  be adjustable parameter using G4NUCMODEL_RAD_TRAILING.  Also apply radius
+  scaling factor to numerical value.  This code should NOT be proposed for
+  builds until tested with thick-target models.
+
 2 June 2011  Michael Kelsey (hadr-casc-V09-04-12)
 -------------------------------------------------
 - G4LorentzConvertor:  Drop most "intermediate" kinematic parameters used in

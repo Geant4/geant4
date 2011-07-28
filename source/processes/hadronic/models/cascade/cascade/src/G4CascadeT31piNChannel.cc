@@ -27,6 +27,7 @@
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100804  M. Kelsey -- Add name string to ctor
+// 20110719  M. Kelsey -- Add initial state code to ctor
 
 #include "G4CascadePiMinusPChannel.hh"
 #include "G4CascadePiPlusNChannel.hh"
@@ -690,10 +691,10 @@ G4CascadePiMinusPChannelData::data_t
 G4CascadePiMinusPChannelData::data(pimP2bfs, pimP3bfs, pimP4bfs,
 				   pimP5bfs, pimP6bfs, pimP7bfs,
 				   pimP8bfs, pimP9bfs, pimPCrossSections,
-				   pimPtotXSec, "PiMinusP");
+				   pimPtotXSec, pim*pro, "PiMinusP");
 
 G4CascadePiPlusNChannelData::data_t
 G4CascadePiPlusNChannelData::data(pipN2bfs, pipN3bfs, pipN4bfs,
 				  pipN5bfs, pipN6bfs, pipN7bfs,
 				  pipN8bfs, pipN9bfs, pimPCrossSections,
-				  pimPtotXSec, "PiPlusN");
+				  pimPtotXSec, pip*neu, "PiPlusN");

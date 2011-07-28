@@ -45,6 +45,7 @@
 // 20100909  M. Kelsey -- Add interface for both kinds of particle lists
 // 20101019  M. Kelsey -- CoVerity report: unitialized constructor
 // 20110328  M. Kelsey -- Add default ctor and explicit limit setting
+// 20110722  M. Kelsey -- For IntraNucleiCascader, take G4CollOut as argument
 
 #include "G4CascadeCheckBalance.hh"
 #include "globals.hh"
@@ -170,14 +171,14 @@ void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
 
 void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
 				   G4InuclParticle* target,
-	     const std::vector<G4InuclElementaryParticle>& particles,
+				    G4CollisionOutput& output,
 	     const std::vector<G4CascadParticle>& cparticles) {
   if (verboseLevel > 1)
     G4cout << " >>> G4CascadeCheckBalance(" << theName
 	   << ")::collide(<EP>,<CP>)" << G4endl;
 
   tempOutput.reset();			// Buffer for processing
-  tempOutput.addOutgoingParticles(particles);
+  tempOutput.add(output);
   tempOutput.addOutgoingParticles(cparticles);
   collide(bullet, target, tempOutput);
 }

@@ -26,8 +26,11 @@
 // $Id: G4CascadeLambdaPChannel.cc,v 1.6 2010-12-15 07:40:33 gunter Exp $
 //
 // 20100804  M. Kelsey -- Add name string to ctor
+// 20110719  M. Kelsey -- Add initial state code to ctor
 
 #include "G4CascadeLambdaPChannel.hh"
+#include "G4InuclParticleNames.hh"
+using namespace G4InuclParticleNames;
 
 namespace {
   // Outgoing particle types of a given multiplicity
@@ -906,4 +909,4 @@ namespace {
 G4CascadeLambdaPChannelData::data_t
 G4CascadeLambdaPChannelData::data(lp2bfs, lp3bfs, lp4bfs,
 				  lp5bfs, lp6bfs, lp7bfs,
-				  lpCrossSections, "LambdaP");
+				  lpCrossSections, lam*pro, "LambdaP");

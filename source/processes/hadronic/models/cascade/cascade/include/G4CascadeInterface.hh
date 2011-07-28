@@ -46,6 +46,8 @@
 //		directly to collider for processing.  Rename makeReactionProduct
 //		to makeDynamicParticle.
 // 20110502  M. Kelsey -- Add filename string to capture random seeds.
+// 20110720  M. Kelsey -- Discard elastic-cut array (no longer needed),
+//		discard local "theFinalState" (avail in base class).
 
 #ifndef G4CASCADEINTERFACE_H
 #define G4CASCADEINTERFACE_H 1
@@ -61,13 +63,14 @@
 #include <vector>
 
 class G4CascadParticle;
+class G4CascadeCheckBalance;
+class G4CollisionOutput;
 class G4DynamicParticle;
+class G4HadFinalState;
 class G4InuclCollider;
 class G4InuclElementaryParticle;
 class G4InuclNuclei;
 class G4InuclParticle;
-class G4CollisionOutput;
-class G4CascadeCheckBalance;
 class G4V3DNucleus;
 
 
@@ -106,12 +109,13 @@ protected:
   G4bool retryInelasticProton() const;
   G4bool retryInelasticNucleus() const;
 
-  // Fill sparse array with minimum momenta for inelastic on hydrogen
-  void initializeElasticCuts();
-
   // Transfer Bertini internal final state to hadronics interface
   void copyOutputToHadronicResult();
   G4ReactionProductVector* copyOutputToReactionProducts();
+
+  // Replicate input particles onto output
+  G4HadFinalState* NoInteraction(const G4HadProjectile& aTrack,
+				 G4Nucleus& theNucleus);
 
   // Report violations of conservation laws in original frame
   void checkFinalResult();
@@ -137,12 +141,8 @@ private:
 
   static const G4int maximumTries;	// Number of iterations for inelastic
 
-  G4double cutElastic[32];		// Bullet momenta for hydrogen target
-
   G4int verboseLevel;
   G4int numberOfTries;
-
-  G4HadFinalState theResult;
 
   G4InuclCollider* collider;
   G4CascadeCheckBalance* balance;
