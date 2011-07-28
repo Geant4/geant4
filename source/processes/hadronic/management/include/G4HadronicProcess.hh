@@ -110,6 +110,10 @@ public:
   G4double GetMeanFreePath(const G4Track &aTrack, G4double, 
 			   G4ForceCondition *);
 
+  // access to the target nucleus
+  inline const G4Nucleus* GetTargetNucleus() const
+  { return &targetNucleus; }
+   
 protected:    
 
   // reset number of interaction length and save  
@@ -177,10 +181,6 @@ protected:
   inline G4HadronicInteraction *GetHadronicInteraction()
   { return theInteraction; }
     
-  // access to the cross section data store
-  //  inline G4CrossSectionDataStore* GetCrossSectionDataStore()
-  //  { return theCrossSectionDataStore; }
-   
   // access to the cross section data set
   inline G4double GetLastCrossSection() 
   { return theLastCrossSection; }
@@ -190,6 +190,8 @@ private:
   void DumpState(const G4Track&, const G4String&);
     
   void FillTotalResult(G4HadFinalState * aR, const G4Track & aT);
+
+  void FillResult(G4HadFinalState * aR, const G4Track & aT);
 
   G4HadFinalState * DoIsotopeCounting(G4HadFinalState * aResult,
 				      const G4Track & aTrack,
