@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+July 6th, 2011, H.Kurashige  transport-V09-04-07
+- Modify G4Transportaion (and CoupledTtansportation)
+  to propose the final local time rather than the global time
+  so that local time can be updated properly
+  (see problem #1224)  
+
 June 10th, 2011, J.Apostolakis  transport-V09-04-06
 ------------------------------
 - Fix for invalid safety passed to SafetyHelper.

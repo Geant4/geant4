@@ -531,6 +531,7 @@ G4VParticleChange* G4CoupledTransportation::AlongStepDoIt( const G4Track& track,
      }  //  Could do with better estimate for final step (finalVelocity = 0) ?
 
      fCandidateEndGlobalTime   = startTime + deltaTime ;
+     fParticleChange.ProposeLocalTime(  track.GetLocalTime() + deltaTime) ;
 
      // G4cout << " Calculated global time from start = " << startTime << " and "
      //        << " delta time = " << deltaTime << G4endl;
@@ -538,6 +539,7 @@ G4VParticleChange* G4CoupledTransportation::AlongStepDoIt( const G4Track& track,
   else
   {
      deltaTime = fCandidateEndGlobalTime - startTime ;
+     fParticleChange.ProposeGlobalTime( fCandidateEndGlobalTime ) ;
      // G4cout << " Calculated global time from candidate end time = "
      //    << fCandidateEndGlobalTime << " and start time = " << startTime << G4endl;
   }
@@ -545,7 +547,6 @@ G4VParticleChange* G4CoupledTransportation::AlongStepDoIt( const G4Track& track,
   // G4cout << " G4CoupledTransportation::AlongStepDoIt  "
   // << " flag whether computed time = " << fEndGlobalTimeComputed  << " and " 
   // << " is proposes end time " << fCandidateEndGlobalTime << G4endl; 
-  fParticleChange.ProposeGlobalTime( fCandidateEndGlobalTime ) ;
 
   // Now Correct by Lorentz factor to get "proper" deltaTime
   

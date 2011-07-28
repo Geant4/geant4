@@ -478,8 +478,8 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
   G4double deltaTime = 0.0 ;
 
   // Calculate  Lab Time of Flight (ONLY if field Equations used it!)
-     // G4double endTime   = fCandidateEndGlobalTime;
-     // G4double delta_time = endTime - startTime;
+  // G4double endTime   = fCandidateEndGlobalTime;
+  // G4double delta_time = endTime - startTime;
 
   G4double startTime = track.GetGlobalTime() ;
   
@@ -496,13 +496,14 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
         deltaTime = stepLength/initialVelocity ;
      }
      fCandidateEndGlobalTime   = startTime + deltaTime ;
+     fParticleChange.ProposeLocalTime(  track.GetLocalTime() + deltaTime) ;
   }
   else
   {
      deltaTime = fCandidateEndGlobalTime - startTime ;
+     fParticleChange.ProposeGlobalTime( fCandidateEndGlobalTime ) ;
   }
 
-  fParticleChange.ProposeGlobalTime( fCandidateEndGlobalTime ) ;
 
   // Now Correct by Lorentz factor to get delta "proper" Time
   
