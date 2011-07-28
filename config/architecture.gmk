@@ -271,6 +271,8 @@ endif
 #
 ifneq ($(G4LIB_BUILD_GDML),)
   G4LIB_USE_GDML = 1
+endif
+ifdef G4LIB_USE_GDML
   ifndef XERCESCROOT
     XERCESCROOT := /usr/local/xercesc
   endif

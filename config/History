@@ -15,6 +15,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14th July 2011 Gabriele Cosmo (config-V09-04-12)
+- Added "analysis" module to binmake.gmk.
+
+5th July 2011 Gabriele Cosmo (config-V09-04-11)
+- architecture.gmk: corrected definition of G4LIB_USE_GDML, to properly
+  activate GDML settings.
+
 17th June 2011 Ben Morgan (config-V09-04-10)
 - scripts/env.(c)sh : Added support for internal CLHEP. LD_LIBRARY_PATH is
   correctly set when an external CLHEP is used, but not modified with any

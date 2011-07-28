@@ -45,6 +45,7 @@ ifndef INCFLAGS
   INCFLAGS := -I$(G4INCLUDE)
  else
   INCFLAGS := \
+              -I$(G4BASE)/analysis/include \
               -I$(G4BASE)/global/management/include \
               -I$(G4BASE)/global/HEPRandom/include \
               -I$(G4BASE)/global/HEPGeometry/include \
@@ -214,7 +215,8 @@ ifdef GLOBALLIBS
     LDLIBS2 += -lG3toG4
   endif
 
-  LDLIBS2 += -lG4error_propagation \
+  LDLIBS2 += -lG4analysis \
+             -lG4error_propagation \
              -lG4readout \
              -lG4physicslists \
              -lG4run \
