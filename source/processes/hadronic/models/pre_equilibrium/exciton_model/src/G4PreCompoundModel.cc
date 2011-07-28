@@ -206,36 +206,17 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
       //transition++;
       //G4cout<<"transition number .."<<transition<<G4endl;
       //G4cout<<" n ="<<aFragment.GetNumberOfExcitons()<<G4endl;
-      /*
-      // DHW 16 June 2011 : comment out to fix unused variable warning
       G4bool go_ahead = false;
-      */
       // soft cutoff criterium as an "ad-hoc" solution to force increase in  evaporation  
-      //       G4double test = static_cast<G4double>(aFragment.GetNumberOfHoles());
       G4int test = aFragment.GetNumberOfExcitons();
-      /*
-      // DHW 16 June 2011 : comment out to fix unused variable warning
-      if (test < EquilibriumExcitonNumber) { go_ahead=true; }
-      */
+      if (test <= EquilibriumExcitonNumber) { go_ahead=true; }
 
       //J. M. Quesada (Apr. 08): soft-cutoff switched off by default
-      if (useSCO) {
-	if (test < EquilibriumExcitonNumber)
-	  {
-            /*
-            // DHW 16 June 2011 : comment out to fix unused variable warning
-	    G4double x = G4double(test)/G4double(EquilibriumExcitonNumber) - 1;
-            if( G4UniformRand() < 1.0 -  std::exp(-x*x/0.32) ) { go_ahead = true; }
-            */
-
-	    /*
-              test = test*test;
-              test /= 0.32;
-              test = 1.0 - std::exp(-test);
-              go_ahead = (G4UniformRand() < test);
-	    */
-	  }
-      } 
+      if (useSCO && !go_ahead)
+	{
+	  G4double x = G4double(test)/G4double(EquilibriumExcitonNumber) - 1;
+	  if( G4UniformRand() < 1.0 -  std::exp(-x*x/0.32) ) { go_ahead = true; }
+	} 
         
       // JMQ: WARNING:  CalculateProbability MUST be called prior to Get methods !! 
       // (O values would be returned otherwise)
@@ -249,7 +230,8 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
       //J.M. Quesada (May 2008) Physical criterium (lamdas)  PREVAILS over 
       //                        approximation (critical exciton number)
       //V.Ivanchenko (May 2011) added check on number of nucleons
-      if(P1 <= P2+P3 || 
+      //                        to send a fragment to FermiBreakUp
+      if(!go_ahead || P1 <= P2+P3 || 
 	 (aFragment.GetZ_asInt() < maxZ && aFragment.GetA_asInt() < maxA) )        
 	{
 	  //G4cout<<"#4 EquilibriumEmission"<<G4endl; 
