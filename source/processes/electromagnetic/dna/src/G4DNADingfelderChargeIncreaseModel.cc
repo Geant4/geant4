@@ -89,7 +89,7 @@ void G4DNADingfelderChargeIncreaseModel::Initialise(const G4ParticleDefinition* 
   {
     hydrogen = hydrogenDef->GetParticleName();
     lowEnergyLimit[hydrogen] = 100. * eV;
-    highEnergyLimit[hydrogen] = 10. * MeV;
+    highEnergyLimit[hydrogen] = 100. * MeV;
   }
   else
   {
@@ -100,7 +100,7 @@ void G4DNADingfelderChargeIncreaseModel::Initialise(const G4ParticleDefinition* 
   {
     alphaPlus = alphaPlusDef->GetParticleName();
     lowEnergyLimit[alphaPlus] = 1. * keV;
-    highEnergyLimit[alphaPlus] = 10. * MeV;
+    highEnergyLimit[alphaPlus] = 400. * MeV;
   }
   else
   {
@@ -111,7 +111,7 @@ void G4DNADingfelderChargeIncreaseModel::Initialise(const G4ParticleDefinition* 
   {
     helium = heliumDef->GetParticleName();
     lowEnergyLimit[helium] = 1. * keV;
-    highEnergyLimit[helium] = 10. * MeV;
+    highEnergyLimit[helium] = 400. * MeV;
   }
   else
   {

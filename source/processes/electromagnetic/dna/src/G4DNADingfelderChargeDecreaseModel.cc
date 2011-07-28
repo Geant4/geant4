@@ -89,7 +89,7 @@ void G4DNADingfelderChargeDecreaseModel::Initialise(const G4ParticleDefinition* 
   {
     proton = protonDef->GetParticleName();
     lowEnergyLimit[proton] = 100. * eV;
-    highEnergyLimit[proton] = 10. * MeV;
+    highEnergyLimit[proton] = 100. * MeV;
   }
   else
   {
@@ -100,7 +100,7 @@ void G4DNADingfelderChargeDecreaseModel::Initialise(const G4ParticleDefinition* 
   {
     alphaPlusPlus = alphaPlusPlusDef->GetParticleName();
     lowEnergyLimit[alphaPlusPlus] = 1. * keV;
-    highEnergyLimit[alphaPlusPlus] = 10. * MeV;
+    highEnergyLimit[alphaPlusPlus] = 400. * MeV;
   }
   else
   {
@@ -111,7 +111,7 @@ void G4DNADingfelderChargeDecreaseModel::Initialise(const G4ParticleDefinition* 
   {
     alphaPlus = alphaPlusDef->GetParticleName();
     lowEnergyLimit[alphaPlus] = 1. * keV;
-    highEnergyLimit[alphaPlus] = 10. * MeV;
+    highEnergyLimit[alphaPlus] = 400. * MeV;
   }
   else
   {

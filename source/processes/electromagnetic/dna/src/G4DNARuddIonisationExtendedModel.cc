@@ -585,6 +585,13 @@ void G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicPa
       */
       
       G4int ionizationShell = RandomSelect(k,particleName);
+
+      // sample deexcitation
+      // here we assume that H_{2}O electronic levels are the same of Oxigen.
+      // this can be considered true with a rough 10% error in energy on K-shell,
+      
+      G4int secNumberInit = 0;  // need to know at a certain point the enrgy of secondaries   
+      G4int secNumberFinal = 0; // So I'll make the diference and then sum the energies
       
       if(fAtomDeexcitation) {
 	G4int Z = 8;
@@ -605,7 +612,9 @@ void G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicPa
 	//G4cin.ignore();
 	
 	const G4AtomicShell* shell = fAtomDeexcitation->GetAtomicShell(Z, as);    
+	secNumberInit = fvect->size();	
 	fAtomDeexcitation->GenerateParticles(fvect, shell, Z, 0, 0);
+	secNumberFinal = fvect->size();
       }
       
   
@@ -641,10 +650,18 @@ void G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicPa
 
       fParticleChangeForGamma->ProposeMomentumDirection(direction.unit()) ;
       */
-      fParticleChangeForGamma->ProposeMomentumDirection(primaryDirection);
 
-      fParticleChangeForGamma->SetProposedKineticEnergy(k-bindingEnergy-secondaryKinetic);
-      fParticleChangeForGamma->ProposeLocalEnergyDeposit(bindingEnergy);
+      fParticleChangeForGamma->ProposeMomentumDirection(primaryDirection);
+    G4double scatteredEnergy = k-bindingEnergy-secondaryKinetic;
+    G4double deexSecEnergy = 0;
+    for (G4int j=secNumberInit; j < secNumberFinal; j++) {
+
+      deexSecEnergy =+ (*fvect)[j]->GetKineticEnergy();
+
+    }
+
+    fParticleChangeForGamma->SetProposedKineticEnergy(scatteredEnergy);
+    fParticleChangeForGamma->ProposeLocalEnergyDeposit(k-scatteredEnergy-secondaryKinetic-deexSecEnergy);
 
       G4DynamicParticle* dp = new G4DynamicParticle (G4Electron::Electron(),deltaDirection,secondaryKinetic) ;
       fvect->push_back(dp);

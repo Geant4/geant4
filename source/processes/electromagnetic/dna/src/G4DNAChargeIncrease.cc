@@ -75,7 +75,7 @@ void G4DNAChargeIncrease::InitialiseProcess(const G4ParticleDefinition* p)
     {
       if(!Model()) SetModel(new G4DNADingfelderChargeIncreaseModel);
       Model()->SetLowEnergyLimit(100*eV);
-      Model()->SetHighEnergyLimit(10*MeV);
+      Model()->SetHighEnergyLimit(100*MeV);
 
       AddEmModel(1, Model());   
     }
@@ -84,7 +84,7 @@ void G4DNAChargeIncrease::InitialiseProcess(const G4ParticleDefinition* p)
     {
       if(!Model()) SetModel(new G4DNADingfelderChargeIncreaseModel);
       Model()->SetLowEnergyLimit(1*keV);
-      Model()->SetHighEnergyLimit(10*MeV);
+      Model()->SetHighEnergyLimit(400*MeV);
 
       AddEmModel(1, Model());   
     }

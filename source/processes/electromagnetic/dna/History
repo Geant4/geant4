@@ -14,6 +14,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11.07.2011  S.Incerti,  tag emdna-V09-04-10
+	    - Increased energy limits for
+	    G4DNAChargeIncrease
+	    G4DNAChargeDecrease
+	    G4DNADingfelderChargeIncreaseModel
+	    G4DNADingflederChargeDecreaseModel
+	    in collaboration with Ziad F.
+	    - This tag includes Alfonso's upgrade 
+	    of ionisation classes for Auger e-
+
 16.05.2011  A.Mantero,  tag emdna-V09-04-09
 	    Further compilation warnings removal
 
