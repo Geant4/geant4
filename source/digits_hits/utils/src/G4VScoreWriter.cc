@@ -40,7 +40,7 @@
 
 G4VScoreWriter::G4VScoreWriter()
   : fScoringMesh(0), verboseLevel(0) {
-  ;
+  fNMeshSegments[0] = fNMeshSegments[1] = fNMeshSegments[2] = 0;
 }
 
 G4VScoreWriter::~G4VScoreWriter() {

@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Jul 07, 2011, G.Cosmo (digits_hits-V09-04-06)
+- Fixed Coverity defects: mainly uninitialised static data.
+- Moved copy-ctor and operator=() for G4VReadOutGeometry to protected, as
+  not meant to be directly used.
+
 May 20, 2011, B.Morgan (digits_hits-V09-04-05)
 - CMakeLists.txt : Added G4DIGI_ALLOC_EXPORT compiler definition via 
   add_definitions so all submodules pick it up.

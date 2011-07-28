@@ -32,11 +32,11 @@
 
 G4Allocator<G4HitsCollection> anHCAllocator;
 
-G4HitsCollection::G4HitsCollection()
+G4HitsCollection::G4HitsCollection() : theCollection((void*)0)
 {;}
 
 G4HitsCollection::G4HitsCollection(G4String detName,G4String colNam)
-: G4VHitsCollection(detName,colNam)
+: G4VHitsCollection(detName,colNam), theCollection((void*)0)
 {;}
 
 G4HitsCollection::~G4HitsCollection()

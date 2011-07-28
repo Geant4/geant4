@@ -58,8 +58,8 @@
 
 G4PSFlatSurfaceFlux::G4PSFlatSurfaceFlux(G4String name, 
 					 G4int direction, G4int depth)
-    :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),
-     weighted(true),divideByArea(true)
+  : G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),
+    weighted(true),divideByArea(true)
 {
     DefineUnitAndCategory();
     SetUnit("percm2");
@@ -69,7 +69,8 @@ G4PSFlatSurfaceFlux::G4PSFlatSurfaceFlux(G4String name,
 					 G4int direction, 
 					 const G4String& unit,
 					 G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction)
+  : G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),
+    weighted(true),divideByArea(true)
 {
     DefineUnitAndCategory();
     SetUnit(unit);

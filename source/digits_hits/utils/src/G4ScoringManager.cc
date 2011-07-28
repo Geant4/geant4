@@ -54,7 +54,7 @@ G4ScoringManager* G4ScoringManager::GetScoringManagerIfExist()
 { return fSManager; }
 
 G4ScoringManager::G4ScoringManager()
-:verboseLevel(0),fCurrentMesh(0)
+  : verboseLevel(0),fCurrentMesh(0)
 {
   fMessenger = new G4ScoringMessenger(this);
   fQuantityMessenger = new G4ScoreQuantityMessenger(this);
@@ -68,9 +68,12 @@ G4ScoringManager::G4ScoringManager()
 
 G4ScoringManager::~G4ScoringManager()
 {
+  if (writer) { delete writer; }
+  delete fDefaultLinearColorMap;
+  delete fColorMapDict;
+  delete fQuantityMessenger;
   delete fMessenger;
-  fSManager = 0;
-  if(writer) delete writer;
+  delete fSManager;
 }
 
 void G4ScoringManager::SetReplicaLevel(G4int lvl)
@@ -82,7 +85,7 @@ void G4ScoringManager::Accumulate(G4VHitsCollection* map)
 {
   G4String wName = map->GetSDname();
   G4VScoringMesh* sm = FindMesh(wName);
-  if(sm == NULL) return;
+  if(sm == 0) return;
   if(verboseLevel>9)
   { G4cout << "G4ScoringManager::Accumulate() for " << map->GetSDname() << " / " << map->GetName() << G4endl;
     G4cout << "  is calling G4VScoringMesh::Accumulate() of " << sm->GetWorldName() << G4endl; }

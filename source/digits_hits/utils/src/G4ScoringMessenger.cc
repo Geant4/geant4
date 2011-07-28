@@ -557,6 +557,7 @@ void G4ScoringMessenger::MeshBinCommand(G4VScoringMesh* mesh,G4TokenVec& token){
       nSegment[2] = Ni;
     } else {
       G4Exception("G4ScoringMessenger::MeshBinCommand()", "001", FatalException, "invalid mesh type");
+      return;
     }
     //
     mesh->SetNumberOfSegments(nSegment);

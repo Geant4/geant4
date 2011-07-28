@@ -41,7 +41,7 @@
 #include "G4Colour.hh"
 
 G4VScoreColorMap::G4VScoreColorMap(G4String mName)
-:fName(mName),ifFloat(true),fMinVal(0.),fMaxVal(DBL_MAX)
+:fName(mName),ifFloat(true),fMinVal(0.),fMaxVal(DBL_MAX),fVisManager(0)
 {;}
 
 G4VScoreColorMap::~G4VScoreColorMap()

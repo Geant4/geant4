@@ -32,11 +32,11 @@
 
 G4Allocator<G4DigiCollection> aDCAllocator;
 
-G4DigiCollection::G4DigiCollection()
+G4DigiCollection::G4DigiCollection() : theCollection((void*)0)
 {;}
 
 G4DigiCollection::G4DigiCollection(G4String detName,G4String colNam)
-: G4VDigiCollection(detName,colNam)
+: G4VDigiCollection(detName,colNam), theCollection((void*)0)
 {;}
 
 G4DigiCollection::~G4DigiCollection()

@@ -37,7 +37,7 @@
 
 G4VPrimitiveScorer::G4VPrimitiveScorer(G4String name, G4int depth)
   :primitiveName(name),detector(0),filter(0),verboseLevel(0),indexDepth(depth),
-   unitName("NoUnit"),unitValue(1.0)
+   unitName("NoUnit"),unitValue(1.0),fNi(0),fNj(0),fNk(0)
 {;} 
 
 G4VPrimitiveScorer::~G4VPrimitiveScorer()
