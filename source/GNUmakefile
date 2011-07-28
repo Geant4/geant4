@@ -19,7 +19,7 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-SUBDIR1 =  externals global intercoms graphics_reps materials
+SUBDIR1 =  externals analysis global intercoms graphics_reps materials
 SUBDIR2 =  geometry particles track digits_hits processes parameterisations
 SUBDIR2 += tracking event run error_propagation readout physics_lists
 SUBDIR3 =  persistency interfaces visualization
@@ -166,7 +166,7 @@ endif
 
 banner:
 	@$(ECHO) "*************************************************************"
-	@$(ECHO) " Installation Geant4 version geant4-09-05-beta-01            "
+	@$(ECHO) " Installation Geant4 version geant4-09-04-ref-07             "
 	@$(ECHO) " Copyright (C) 1994-2011 Geant4 Collaboration                "
 	@$(ECHO) "*************************************************************"
 
