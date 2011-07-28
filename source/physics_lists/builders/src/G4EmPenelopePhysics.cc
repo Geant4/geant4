@@ -405,7 +405,7 @@ void G4EmPenelopePhysics::ConstructProcess()
   opt.SetLambdaBinning(220);
 
   //opt.SetSplineFlag(true);
-  opt.SetPolarAngleLimit(0.2);
+  opt.SetPolarAngleLimit(CLHEP::pi);
     
   // Ionization
   //

@@ -61,7 +61,7 @@
 #include "G4BertiniNeutronBuilder.hh"
 #include "G4LEPNeutronBuilder.hh"
 
-#include "G4HyperonCHIPSBuilder.hh"
+#include "G4HyperonFTFPBuilder.hh"
 #include "G4AntiBarionBuilder.hh"
 #include "G4FTFPAntiBarionBuilder.hh"
 
@@ -98,7 +98,7 @@ class HadronPhysicsQGSP_FTFP_BERT : public G4VPhysicsConstructor
     G4QGSPProtonBuilder * theQGSPPro; 
     G4BertiniProtonBuilder * theBertiniPro;
     
-    G4HyperonCHIPSBuilder *theHyperonCHIPS;
+    G4HyperonFTFPBuilder *theHyperon;
 
     G4AntiBarionBuilder     *theAntiBaryon;
     G4FTFPAntiBarionBuilder *theFTFPAntiBaryon;

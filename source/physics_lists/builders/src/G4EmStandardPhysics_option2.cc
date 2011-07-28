@@ -312,7 +312,7 @@ void G4EmStandardPhysics_option2::ConstructProcess()
   
   // Scattering options
   //
-  opt.SetPolarAngleLimit(0.2);
+  opt.SetPolarAngleLimit(CLHEP::pi);
     
   // Ionization
   //

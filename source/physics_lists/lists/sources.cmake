@@ -188,6 +188,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         Shielding.hh
         Shielding.icc
         SpecialCuts.hh
+	G4PhysListUtil.hh
     SOURCES
         G4HadronInelasticQBBC.cc
         G4HadronInelasticQLHEP.cc
@@ -217,6 +218,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         MinEkineCuts.cc
         QBBC.cc
         SpecialCuts.cc
+	G4PhysListUtil.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

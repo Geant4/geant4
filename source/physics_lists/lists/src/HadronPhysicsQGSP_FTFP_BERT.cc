@@ -50,6 +50,8 @@
 
 #include "G4QHadronInelasticDataSet.hh"
 
+#include "G4PhysListUtil.hh"
+
 HadronPhysicsQGSP_FTFP_BERT::HadronPhysicsQGSP_FTFP_BERT(G4int)
                     :  G4VPhysicsConstructor("hInelastic QGSP_FTFP_BERT")
 		     , QuasiElastic(true)
@@ -121,8 +123,8 @@ void HadronPhysicsQGSP_FTFP_BERT::CreateModels()
   thePiK->RegisterMe(theBertiniPiK=new G4BertiniPiKBuilder);
   theBertiniPiK->SetMaxEnergy(maxBERT);  //  was (9.9*GeV);
   
-  // theMiscCHIPS=new G4MiscCHIPSBuilder;
-  theHyperonCHIPS=   new G4HyperonCHIPSBuilder();
+  // Hyperons use FTF
+  theHyperon=new G4HyperonFTFPBuilder;
 
   theAntiBaryon=new G4AntiBarionBuilder;
   theAntiBaryon->RegisterMe(theFTFPAntiBaryon=new G4FTFPAntiBarionBuilder(quasiElasFTF));
@@ -130,23 +132,25 @@ void HadronPhysicsQGSP_FTFP_BERT::CreateModels()
 
 HadronPhysicsQGSP_FTFP_BERT::~HadronPhysicsQGSP_FTFP_BERT()
 {
-  // delete theMiscCHIPS;
-   delete theHyperonCHIPS;
-   delete theAntiBaryon;
-   delete theFTFPAntiBaryon;
-
    delete theQGSPNeutron;
    delete theFTFPNeutron;
    delete theBertiniNeutron;
    delete theNeutrons;
+
    delete theQGSPPro;
    delete theFTFPPro;
    delete thePro;
    delete theBertiniPro;
+
    delete theQGSPPiK;
    delete theFTFPPiK;
    delete theBertiniPiK;
    delete thePiK;
+
+   delete theHyperon;
+   delete theAntiBaryon;
+   delete theFTFPAntiBaryon;
+
    delete theCHIPSInelastic;
 }
 
@@ -175,32 +179,11 @@ void HadronPhysicsQGSP_FTFP_BERT::ConstructProcess()
   // use CHIPS cross sections also for Kaons
   theCHIPSInelastic = new G4QHadronInelasticDataSet();
   
-  FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(theCHIPSInelastic);
-  FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(theCHIPSInelastic);
-  FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(theCHIPSInelastic);
-  FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(theCHIPSInelastic);
+  G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(theCHIPSInelastic);
+  G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(theCHIPSInelastic);
+  G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(theCHIPSInelastic);
+  G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(theCHIPSInelastic);
 
-  //theMiscCHIPS->Build();
-  theHyperonCHIPS->Build(); 
-  theAntiBaryon->Build();  // Iterates over all anti-baryons   ( as PiK does ) 
-}
-
-
-G4HadronicProcess* 
-HadronPhysicsQGSP_FTFP_BERT::FindInelasticProcess(const G4ParticleDefinition* p)
-{
-  G4HadronicProcess* had = 0;
-  if(p) {
-     G4ProcessVector*  pvec = p->GetProcessManager()->GetProcessList();
-     size_t n = pvec->size();
-     if(0 < n) {
-       for(size_t i=0; i<n; ++i) {
-	 if(fHadronInelastic == ((*pvec)[i])->GetProcessSubType()) {
-	   had = static_cast<G4HadronicProcess*>((*pvec)[i]);
-	   break;
-	 }
-       }
-     }
-  }
-  return had;
+  theHyperon->Build(); 
+  theAntiBaryon->Build(); 
 }

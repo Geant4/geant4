@@ -296,7 +296,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
   
   // Multiple Coulomb scattering
   //
-  opt.SetPolarAngleLimit(0.2);
+  opt.SetPolarAngleLimit(CLHEP::pi);
     
   // Physics tables
   //

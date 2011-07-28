@@ -44,7 +44,6 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4MiscLHEPBuilder.hh"
 
 #include "G4PiKBuilder.hh"
 #include "G4BinaryPiKBuilder.hh"
@@ -60,6 +59,10 @@
 #include "G4LEPNeutronBuilder.hh"
 #include "G4FTFBinaryNeutronBuilder.hh"
 #include "G4BinaryNeutronBuilder.hh"
+
+#include "G4HyperonFTFPBuilder.hh"
+#include "G4AntiBarionBuilder.hh"
+#include "G4FTFPAntiBarionBuilder.hh"
 
 class HadronPhysicsFTF_BIC : public G4VPhysicsConstructor
 {
@@ -88,9 +91,13 @@ class HadronPhysicsFTF_BIC : public G4VPhysicsConstructor
     G4FTFBinaryProtonBuilder * theFTFBinaryPro; 
     G4BinaryProtonBuilder * theBinaryPro;
     
-    G4MiscLHEPBuilder * theMiscLHEP;
+    G4HyperonFTFPBuilder * theHyperon;
     
+    G4AntiBarionBuilder * theAntiBaryon;
+    G4FTFPAntiBarionBuilder * theFTFPAntiBaryon;
+
     G4bool QuasiElastic;
+    G4VCrossSectionDataSet * theCHIPSInelastic;
 };
 
 #endif

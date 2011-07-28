@@ -14,6 +14,36 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14/20-07-2011, G.Folger                   (phys-lists-V09-04-38)
+- Add in lists class PhysListUtil. Contains a single function
+     FindInelasticProcess(), up to now implemeted multiple times 
+- HadronPhysicsFTFP_BERT_TRV: update to use FTF for antibarions and 
+     Hyperons, and to use CHIPS cross-sections for Hyperons and Kaons.
+     This make it identical to HadronPhysicsFTFP_BERT, except the 
+     transition energy.     
+- HadronPhysicsQGSP_FTFP_BERT:update to use FTFP for hyperons 
+    using G4HyperonFTFPBuilder
+- HadronPhysicsFTF_BIC: No longer using LEP for "misc" particles, 
+   but use FTFP for:
+    - Antibarions using G4FTFPAntiBarionBuilder
+    - Hyperons using G4HyperonFTFPBuilder
+   and switch to CHIPS cross-section for kaons.
+
+13-07-2011, V.Ivanchenko               (phys-lists-V09-04-37)
+- G4HadronDElasticPhysics - is done coherently with the 
+  modifications in G4DiffuseElastic class 
+
+13-07-2011, V.Ivanchenko               (phys-lists-V09-04-36)
+- Fixed typo in previous tag
+
+08-07-2011, V.Ivanchenko               (phys-lists-V09-04-35)
+- G4EmStandardPhysics, G4EmStandardPhysics_option1
+- G4EmStandardPhysics_option2, G4EmStandardPhysics_option3,
+- G4EmLivermorePhysics, G4EmPenelopePhysics - set msc polar
+  angle limit from 0.2 to pi (reduction of number of steps for
+  low-energy muons/hadrons)
+
 21-06-2011, B.Morgan                   (phys-lists-V09-04-34)
 - builders/CMakeLists.txt - removed install of OrderingParameterTable
 - builders/sources.cmake - Added include of EXPAT headers for lend.

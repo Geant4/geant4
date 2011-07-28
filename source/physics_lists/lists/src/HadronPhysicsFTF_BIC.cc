@@ -83,23 +83,34 @@ void HadronPhysicsFTF_BIC::CreateModels()
   theBICPiK->SetMaxEnergy(5*GeV);        //  use Binary up to 5GeV for pion
   theLEPPiK->SetMaxEnergy(5*GeV); 
 
-  theMiscLHEP=new G4MiscLHEPBuilder;
+  
+  theHyperon=new G4HyperonFTFPBuilder;
+    
+  theAntiBaryon=new G4AntiBarionBuilder;
+  theAntiBaryon->RegisterMe(theFTFPAntiBaryon=new  G4FTFPAntiBarionBuilder(QuasiElastic));
 }
 
 HadronPhysicsFTF_BIC::~HadronPhysicsFTF_BIC() 
 {
-   delete theMiscLHEP;
    delete theFTFBinaryNeutron;
    delete theLEPNeutron;
    delete theBinaryNeutron;
    delete theNeutrons;
+
    delete theFTFBinaryPro;
    delete theBinaryPro;
    delete thePro;
+
    delete theFTFBinaryPiK;
    delete theBICPiK;
    delete theLEPPiK;
    delete thePiK;
+
+   delete theHyperon;
+   delete theAntiBaryon;
+   delete theFTFPAntiBaryon;
+  
+   delete theCHIPSInelastic;
 }
 
 void HadronPhysicsFTF_BIC::ConstructParticle()
@@ -114,13 +125,23 @@ void HadronPhysicsFTF_BIC::ConstructParticle()
   pShortLivedConstructor.ConstructParticle();  
 }
 
-#include "G4ProcessManager.hh"
+//#include "G4ProcessManager.hh"
+#include "G4PhysListUtil.hh"
 void HadronPhysicsFTF_BIC::ConstructProcess()
 {
   CreateModels();
   theNeutrons->Build();
   thePro->Build();
   thePiK->Build();
-  theMiscLHEP->Build();
+  // use CHIPS cross sections also for Kaons
+  theCHIPSInelastic = new G4QHadronInelasticDataSet();
+  
+  G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(theCHIPSInelastic);
+  G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(theCHIPSInelastic);
+  G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(theCHIPSInelastic);
+  G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(theCHIPSInelastic);
+
+  theHyperon->Build();
+  theAntiBaryon->Build();
 }
 

@@ -354,7 +354,7 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
   
   // Multiple Coulomb scattering
   //
-  opt.SetPolarAngleLimit(0.2);
+  opt.SetPolarAngleLimit(CLHEP::pi);
     
   // Physics tables
   //

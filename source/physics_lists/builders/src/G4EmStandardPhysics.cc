@@ -253,7 +253,7 @@ void G4EmStandardPhysics::ConstructProcess()
   }
   G4EmProcessOptions opt;
   opt.SetVerbose(verbose);
-  opt.SetPolarAngleLimit(0.2);
+  opt.SetPolarAngleLimit(CLHEP::pi);
 
   // Deexcitation
   //

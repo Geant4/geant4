@@ -23,56 +23,36 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronDElasticPhysics.hh,v 1.2 2010-06-03 11:04:33 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4HadronDElasticPhysics
+// ClassName: G4PhyslistUtil:
+//     "Container" for function needed in various places  
 //
-// Author: 13 November 2007 V. Ivanchenko
+// Author: 2007 Gunter Folger
 //
 // Modified:
 //
 //----------------------------------------------------------------------------
 //
-
-#ifndef G4HadronDElasticPhysics_h
-#define G4HadronDElasticPhysics_h 1
+#ifndef G4PhysListUtil_h
+#define G4PhysListUtil_h
 
 #include "globals.hh"
-#include "G4VPhysicsConstructor.hh"
 
-class G4HadronDElasticPhysics : public G4VPhysicsConstructor
+#include "G4ParticleDefinition.hh"
+#include "G4HadronicProcess.hh"
+
+class G4PhysListUtil
 {
-public: 
 
-  G4HadronDElasticPhysics(G4int ver = 1);
+  public:
+    static G4HadronicProcess* FindInelasticProcess(const G4ParticleDefinition*);
 
-  virtual ~G4HadronDElasticPhysics();
-
-  // This method will be invoked in the Construct() method. 
-  // each particle type will be instantiated
-  virtual void ConstructParticle();
- 
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type 
-  virtual void ConstructProcess();
-
-private:
-
-  G4int    verbose;
-  G4bool   wasActivated;
+  private:
+          // no instance needed
+  	G4PhysListUtil();
+	~G4PhysListUtil();
 };
-
-
 #endif
-
-
-
-
-
-
-
-
