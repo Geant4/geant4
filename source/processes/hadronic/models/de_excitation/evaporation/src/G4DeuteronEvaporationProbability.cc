@@ -41,7 +41,10 @@
 
 G4DeuteronEvaporationProbability::G4DeuteronEvaporationProbability() :
     G4EvaporationProbability(2,1,3,&theCoulombBarrier) // A,Z,Gamma (fixed JMQ)
-{}
+{
+  ResidualA = ResidualZ = theA = theZ = FragmentA = 0;
+  ResidualAthrd = FragmentAthrd = 0.0;
+}
 
 G4DeuteronEvaporationProbability::~G4DeuteronEvaporationProbability()
 {}

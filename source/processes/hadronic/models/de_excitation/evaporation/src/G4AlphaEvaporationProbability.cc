@@ -39,7 +39,10 @@
 
 G4AlphaEvaporationProbability::G4AlphaEvaporationProbability() :
     G4EvaporationProbability(4,2,1,&theCoulombBarrier) // A,Z,Gamma,&theCoumlombBarrier
-{}
+{
+  ResidualA = ResidualZ = theA = theZ = FragmentA = 0;
+  ResidualAthrd = FragmentAthrd = 0.0;
+}
 
 G4AlphaEvaporationProbability::~G4AlphaEvaporationProbability()
 {}

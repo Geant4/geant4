@@ -32,26 +32,19 @@
 
 #include "G4VEvaporationFactory.hh"
 
-G4VEvaporationFactory::G4VEvaporationFactory() : _channel(0) 
+G4VEvaporationFactory::G4VEvaporationFactory() : channel(0) 
 {}
 
 G4VEvaporationFactory::~G4VEvaporationFactory()
 {
-  if (_channel != 0)
-    std::for_each(_channel->begin(), _channel->end(), 
-		    DeleteFragment());
-  delete _channel;
+  if (channel != 0) {
+    size_t n = channel->size();
+    for(size_t i=0; i<n; ++i) { delete (*channel)[i]; }
+    delete channel;
+    channel = 0;
+  }
 }
 
-
-std::vector<G4VEvaporationChannel*> * 
-G4VEvaporationFactory::GetChannel()
-{
-  // Lazy initialization
-  if (_channel == 0)
-    _channel = CreateChannel();
-  return _channel;
-}
 
 
 

@@ -39,7 +39,10 @@
 
 G4TritonEvaporationProbability::G4TritonEvaporationProbability() :
     G4EvaporationProbability(3,1,2,&theCoulombBarrier) // A,Z,Gamma,&theCoulombBarrier
-{}
+{
+  ResidualA = ResidualZ = theA = theZ = FragmentA = 0;
+  ResidualAthrd = FragmentAthrd = 0.0;
+}
 
 G4TritonEvaporationProbability::~G4TritonEvaporationProbability()
 {}

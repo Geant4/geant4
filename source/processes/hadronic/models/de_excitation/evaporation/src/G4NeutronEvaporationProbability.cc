@@ -39,7 +39,10 @@
 
 G4NeutronEvaporationProbability::G4NeutronEvaporationProbability() :
     G4EvaporationProbability(1,0,2,&theCoulombBarrier) // A,Z,Gamma,&theCoulombBarrier
-{}
+{
+  ResidualA = ResidualZ = theA = theZ = FragmentA = 0;
+  ResidualAthrd = FragmentAthrd = 0.0;
+}
 
 G4NeutronEvaporationProbability::~G4NeutronEvaporationProbability()
 {}

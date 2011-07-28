@@ -39,7 +39,10 @@
 
 G4He3EvaporationProbability::G4He3EvaporationProbability() :
    G4EvaporationProbability(3,2,2,&theCoulombBarrier) // A,Z,Gamma,&theCoulombBarrier
-{}
+{
+  ResidualA = ResidualZ = theA = theZ = FragmentA = 0;
+  ResidualAthrd = FragmentAthrd = 0.0;
+}
 
 G4He3EvaporationProbability::~G4He3EvaporationProbability() 
 {}

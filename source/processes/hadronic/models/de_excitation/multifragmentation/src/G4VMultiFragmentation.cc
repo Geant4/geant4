@@ -34,38 +34,8 @@
 #include "G4HadronicException.hh"
 
 G4VMultiFragmentation::G4VMultiFragmentation()
-{
-}
-
-G4VMultiFragmentation::G4VMultiFragmentation(const G4VMultiFragmentation &)
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4VMultiFragmentation::copy_constructor meant to not be accessable");
-}
-
+{}
 
 G4VMultiFragmentation::~G4VMultiFragmentation()
-{
-}
-
-
-const G4VMultiFragmentation & G4VMultiFragmentation::operator=(const G4VMultiFragmentation &)
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4VMultiFragmentation::operator= meant to not be accessable");
-    return *this;
-}
-
-
-G4bool G4VMultiFragmentation::operator==(const G4VMultiFragmentation &) const
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4VMultiFragmentation::operator== meant to not be accessable");
-    return false;
-}
-
-G4bool G4VMultiFragmentation::operator!=(const G4VMultiFragmentation &) const
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4VMultiFragmentation::operator=! meant to not be accessable");
-    return true;
-}
-
-
+{}
 
