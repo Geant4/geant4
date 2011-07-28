@@ -73,6 +73,7 @@
 G4VUserPhysicsList::G4VUserPhysicsList()
   :verboseLevel(1),
    defaultCutValue(1.0 * mm),
+   isSetDefaultCutValue(false),
    fRetrievePhysicsTable(false),
    fStoredInAscii(true),
    fIsCheckedForRetrievePhysicsTable(false),
@@ -83,7 +84,7 @@ G4VUserPhysicsList::G4VUserPhysicsList()
    fDisableCheckParticleList(false)
 {
   // default cut value  (1.0mm)
-  SetDefaultCutValue( 1.0*mm );
+  defaultCutValue = 1.0*mm;
 
   // pointer to the particle table
   theParticleTable = G4ParticleTable::GetParticleTable();
@@ -229,6 +230,10 @@ void G4VUserPhysicsList::RemoveProcessManager()
 ////////////////////////////////////////////////////////
 void G4VUserPhysicsList::SetCuts()
 {
+  if ( !isSetDefaultCutValue ){
+    SetDefaultCutValue(defaultCutValue);
+  }
+
 #ifdef G4VERBOSE
   if (verboseLevel >1){
     G4cout << "G4VUserPhysicsList::SetCuts:   " << G4endl;
@@ -264,6 +269,7 @@ void G4VUserPhysicsList::SetDefaultCutValue(G4double value)
   }
 
   defaultCutValue = value;
+  isSetDefaultCutValue = true;
   
   // set cut values for gamma at first and for e- and e+
   SetCutValue(defaultCutValue, "gamma");
@@ -284,6 +290,19 @@ void G4VUserPhysicsList::SetDefaultCutValue(G4double value)
 ////////////////////////////////////////////////////////
 G4double G4VUserPhysicsList::GetCutValue(const G4String& name) const
 {
+  size_t nReg = (G4RegionStore::GetInstance())->size();
+  if (nReg==0) {
+#ifdef G4VERBOSE
+    if (verboseLevel>0){      
+      G4cout << "G4VUserPhysicsList::GetCutValue "
+	     <<" : No Default Region " <<G4endl;
+    }
+#endif
+    G4Exception("G4VUserPhysicsList::GetCutValue",
+		"RUN005", FatalException,
+		"No Default Region");
+    return -1.*mm;
+  }
   G4Region* region = (*(G4RegionStore::GetInstance()))[0];
   return region->GetProductionCuts()->GetProductionCut(name);
 }
@@ -302,6 +321,13 @@ void G4VUserPhysicsList::SetCutValue
   if (region != 0){
     //set cut value
     SetParticleCuts( aCut ,pname, region );
+  } else {
+#ifdef G4VERBOSE
+    if (verboseLevel>0){      
+      G4cout << "G4VUserPhysicsList::SetCutValue "
+	     <<" : No Region of " << rname << G4endl;
+    }
+#endif
   }
 }
 
@@ -344,9 +370,37 @@ void G4VUserPhysicsList::SetParticleCuts( G4double cut, const G4String& particle
 #endif
     return;
   }
-  if(!region) region = (*(G4RegionStore::GetInstance()))[0];
+
+  if(!region){
+    size_t nReg = (G4RegionStore::GetInstance())->size();
+    if (nReg==0) {
+#ifdef G4VERBOSE
+      if (verboseLevel>0){      
+	G4cout << "G4VUserPhysicsList::SetParticleCuts "
+	       <<" : No Default Region " <<G4endl;
+      }
+#endif
+      G4Exception("G4VUserPhysicsList::SetParticleCuts ",
+		  "RUN005", FatalException,
+		"No Default Region");
+      return;
+    }
+    region = (*(G4RegionStore::GetInstance()))[0];
+  }
+
+  if ( !isSetDefaultCutValue ){
+    SetDefaultCutValue(defaultCutValue);
+  }
+
   G4ProductionCuts* pcuts = region->GetProductionCuts();
   pcuts->SetProductionCut(cut,particleName);
+#ifdef G4VERBOSE
+  if (verboseLevel>2){      
+    G4cout << "G4VUserPhysicsList::SetParticleCuts: "
+	   << "  :" << cut/mm << "[mm]" 
+	   << " for "<< particleName << G4endl;
+  }
+#endif
 }
 
 ///////////////////////////////////////////////////////////////

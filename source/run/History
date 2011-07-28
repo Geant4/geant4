@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 24th, 2011, H.Kurashige (run-V09-04-15)
+- Fix a bug in constructor of G4VUserPhysicsList
+  (add isSetDefaultCutValue flag)
+
+July 2nd, 2011, H.Kurashige (run-V09-04-14)
+- Fix a bug of "explicit null deferenced" in G4VModularPhysicsList::RemovePhysics
+
 June 29th, 2011, G.Cosmo (run-V09-04-13)
 - Fix in G4UserPhysicsListMessenger constructor for proper initialisation of UI command.
 

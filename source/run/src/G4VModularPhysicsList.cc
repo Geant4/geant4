@@ -205,17 +205,19 @@ void  G4VModularPhysicsList::RemovePhysics(G4int pType)
   }
 
   G4PhysConstVector::iterator itr= physicsVector->begin();
-  for (itr = physicsVector->begin(); itr!= physicsVector->end(); ++itr) {
+  for (itr = physicsVector->begin(); itr!= physicsVector->end();) {
     if ( pType  == (*itr)->GetPhysicsType()) {
       G4String pName = (*itr)->GetPhysicsName();  
 #ifdef G4VERBOSE
-    if (verboseLevel > 1){
-      G4cout << "G4VModularPhysicsList::RemovePhysics: "
-	     <<  pName  << "  is removed" 
-	     << G4endl;
-    }
+      if (verboseLevel > 1){
+	G4cout << "G4VModularPhysicsList::RemovePhysics: "
+	       <<  pName  << "  is removed" 
+	       << G4endl;
+      }
 #endif
       physicsVector->erase(itr);
+    } else {
+      itr++;
     }
   }
 }

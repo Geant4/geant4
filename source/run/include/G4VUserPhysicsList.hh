@@ -293,6 +293,7 @@ class G4VUserPhysicsList
   protected:
    // this is the default cut value for all particles
    G4double defaultCutValue;
+  G4bool   isSetDefaultCutValue;
 
   protected:
    // pointer to ProductionCutsTable
