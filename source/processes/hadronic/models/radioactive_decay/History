@@ -14,7 +14,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-5 June 2011  Dennis Wright         (radioactive_decay-V09-04-03)
+9 July 2011  Dennis Wright  (radioactive_decay-V09-04-04)
+---------------------------------------------------------
+- G4RadioactiveDecay.cc : add H. Kurasige's fix of local decay time
+  (bug report 1224)
+       
+5 June 2011  Dennis Wright  (radioactive_decay-V09-04-03)
 ----------------------------------------------------------------
 - G4RadioactiveDecay.cc: set process subtype (fRadioactiveDecay = 211)
 

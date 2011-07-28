@@ -1471,6 +1471,7 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
       //
       G4double energyDeposit = 0.0;
       G4double finalGlobalTime = theTrack.GetGlobalTime();
+      G4double finalLocalTime = theTrack.GetLocalTime();
       G4int index;
       G4ThreeVector currentPosition;
       currentPosition = theTrack.GetPosition();
@@ -1518,7 +1519,8 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
 	    // but we need to protect the case PDGTime < 0. (F.Lei 11/05/10)
 	    G4double temptime =  -std::log( G4UniformRand()) * theParticleDef->GetPDGLifeTime();
 	    if (temptime <0.) temptime =0.; 
-	    finalGlobalTime += temptime ;
+            finalGlobalTime += temptime;
+            finalLocalTime += temptime;
 	    energyDeposit += theParticle->GetKineticEnergy();
 	  }
 	else
@@ -1753,7 +1755,7 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
       fParticleChangeForRadDecay.ProposeTrackStatus( fStopAndKill ) ;
       fParticleChangeForRadDecay.ProposeLocalEnergyDeposit(energyDeposit);
       // 
-      fParticleChangeForRadDecay.ProposeGlobalTime( finalGlobalTime );
+      fParticleChangeForRadDecay.ProposeLocalTime(finalLocalTime);
       //
       // Reset NumberOfInteractionLengthLeft.
       //
@@ -1869,11 +1871,11 @@ G4ThreeVector G4RadioactiveDecay::ChooseCollimationDirection() const {
   if (forceDecayHalfAngle > 0.) {
     // Generate uniform direction around central axis
     G4double phi = 2.*pi*G4UniformRand();
-    G4double cosMin = std::cos(forceDecayHalfAngle);
+    G4double cosMin = cos(forceDecayHalfAngle);
     G4double cosTheta = (1.-cosMin)*G4UniformRand() + cosMin;	// [cosMin,1.)
     
     dir.setPhi(dir.phi()+phi);
-    dir.setTheta(dir.theta()+std::acos(cosTheta));
+    dir.setTheta(dir.theta()+acos(cosTheta));
   }
 
 #ifdef G4VERBOSE
