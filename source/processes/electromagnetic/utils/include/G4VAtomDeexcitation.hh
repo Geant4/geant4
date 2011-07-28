@@ -90,7 +90,7 @@ public:
 
   // Activation of deexcitation
   inline void SetFluo(G4bool);
-  inline void SetActive(G4bool);
+  inline G4bool IsFluoActive() const;
 
   // Activation of Auger electron production
   inline void SetAuger(G4bool);
@@ -98,7 +98,7 @@ public:
 
   // Activation of PIXE simulation
   inline void SetPIXE(G4bool);
-  inline void SetPIXEActive(G4bool);
+  //  inline void SetPIXEActive(G4bool);
   inline G4bool IsPIXEActive() const;
 
   // Deexcitation model name
@@ -198,28 +198,23 @@ inline void G4VAtomDeexcitation::SetFluo(G4bool val)
   isActive = val;
 }
 
-inline void G4VAtomDeexcitation::SetActive(G4bool val)
+inline G4bool G4VAtomDeexcitation::IsFluoActive() const
 {
-  isActive = val;
+  return isActive;
 }
 
 inline void G4VAtomDeexcitation::SetAuger(G4bool val)
 {
   flagAuger = val;
+  if(val) { isActive = true; }
 }
 
 inline G4bool G4VAtomDeexcitation::IsAugerActive() const
 {
-  return (flagAuger && isActive);
+  return flagAuger;
 }
 
 inline void G4VAtomDeexcitation::SetPIXE(G4bool val)
-{
-  flagPIXE = val;
-  if(val) { isActive = true; }
-}
-
-inline void G4VAtomDeexcitation::SetPIXEActive(G4bool val)
 {
   flagPIXE = val;
   if(val) { isActive = true; }

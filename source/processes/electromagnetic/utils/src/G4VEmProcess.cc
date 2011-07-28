@@ -113,6 +113,7 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
 
   // default limit on polar angle
   polarAngleLimit = 0.0;
+  biasFactor = 1.0;
 
   // particle types
   theGamma     = G4Gamma::Gamma();
@@ -252,6 +253,7 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
       }
     }
 
+    if(man->AtomDeexcitation()) { modelManager->SetFluoFlag(true); }
     theCuts = modelManager->Initialise(particle,secondaryParticle,
 				       2.,verboseLevel);
     theCutsGamma    = theCoupleTable->GetEnergyCutsVector(idxG4GammaCut);
@@ -280,7 +282,7 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
       G4bool reg = false;
       for(G4int i=0; i<nDERegions; ++i) {
 	if(deRegions[i]) {
-	  if(pcuts == deRegions[i]->GetProductionCuts()) reg = true;
+	  if(pcuts == deRegions[i]->GetProductionCuts()) { reg = true; }
 	}
       }
       idxDERegions[j] = reg;
@@ -405,7 +407,9 @@ void G4VEmProcess::PrintInfoDefinition()
            << particle->GetParticleName();
     if(integral) G4cout << ", integral: 1 ";
     if(applyCuts) G4cout << ", applyCuts: 1 ";
-    G4cout << "    SubType= " << GetProcessSubType() << G4endl;
+    G4cout << "    SubType= " << GetProcessSubType();;
+    if(biasFactor != 1.0) { G4cout << "   BiasingFactor= " << biasFactor; }
+    G4cout << G4endl;
     if(buildLambdaTable) {
       G4cout << "      Lambda tables from "
 	     << G4BestUnit(minKinEnergy,"Energy") 
@@ -520,9 +524,11 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
 
   SelectModel(finalT, currentCoupleIndex);
   if(!currentModel->IsActive(finalT)) { return &fParticleChange; }
-  if(useDeexcitation) {
-    currentModel->SetDeexcitationFlag(idxDERegions[currentCoupleIndex]);
-  }
+
+  // define new weight for primary and secondaries
+  G4double weight = fParticleChange.GetParentWeight()/biasFactor;
+  fParticleChange.ProposeParentWeight(weight);
+
   /*  
   if(0 < verboseLevel) {
     G4cout << "G4VEmProcess::PostStepDoIt: Sample secondary; E= "
@@ -533,7 +539,6 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
   }
   */
 
-  
   // sample secondaries
   secParticles.clear();
   currentModel->SampleSecondaries(&secParticles, 
@@ -572,7 +577,7 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
 	  edep += e;
 	}
       }
-      if (good) fParticleChange.AddSecondary(dp);
+      if (good) { fParticleChange.AddSecondary(dp); }
     } 
     fParticleChange.ProposeLocalEnergyDeposit(edep);
   }

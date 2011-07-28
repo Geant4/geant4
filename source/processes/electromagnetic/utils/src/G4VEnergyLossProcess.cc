@@ -207,6 +207,9 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   // default lambda factor
   lambdaFactor  = 0.8;
 
+  // cross section biasing
+  biasFactor = 1.0;
+
   // particle types
   theElectron   = G4Electron::Electron();
   thePositron   = G4Positron::Positron();
@@ -385,6 +388,7 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   chargeSqRatio = 1.0;
   massRatio = 1.0;
   reduceFactor = 1.0;
+  fFactor = 1.0;
 
   G4LossTableManager* lManager = G4LossTableManager::Instance();
 
@@ -922,20 +926,25 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
   G4double x = DBL_MAX;
 
   // initialisation of material, mass, charge, model at the beginning of the step
-  DefineMaterial(track.GetMaterialCutsCouple());
-
   const G4ParticleDefinition* currPart = track.GetParticleDefinition();
   if(theGenericIon == particle) {
     massRatio = proton_mass_c2/currPart->GetPDGMass();
   }  
+  DefineMaterial(track.GetMaterialCutsCouple());
+
   preStepKinEnergy    = track.GetKineticEnergy();
   preStepScaledEnergy = preStepKinEnergy*massRatio;
   SelectModel(preStepScaledEnergy);
   if(!currentModel->IsActive(preStepScaledEnergy)) { return x; }
 
-  if(isIon) { 
-    chargeSqRatio = currentModel->ChargeSquareRatio(track);
-    reduceFactor  = 1.0/(chargeSqRatio*massRatio);
+  // change effective charge of an ion on fly
+  if(isIon) {
+    G4double q2 = currentModel->ChargeSquareRatio(track);
+    if(q2 != chargeSqRatio) {
+      chargeSqRatio = q2;
+      fFactor = q2*biasFactor*(*theDensityFactor)[currentCoupleIndex];
+      reduceFactor = 1.0/(fFactor*massRatio);
+    }
   }
   //G4cout << "q2= " << chargeSqRatio << " massRatio= " << massRatio << G4endl; 
   // initialisation for sampling of the interaction length 
@@ -1049,11 +1058,10 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   eloss = GetDEDXForScaledEnergy(preStepScaledEnergy)*length;
 
   // Long step
-  //} else {
   if(eloss > preStepKinEnergy*linLossLimit) {
 
-    G4double x = 
-      GetScaledRangeForScaledEnergy(preStepScaledEnergy) - length/reduceFactor;
+    G4double x = GetScaledRangeForScaledEnergy(preStepScaledEnergy) 
+      - length/reduceFactor;
     eloss = preStepKinEnergy - ScaledKinEnergyForLoss(x)/massRatio;
    
     /*
@@ -1357,9 +1365,10 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
   }
 
   SelectModel(postStepScaledEnergy);
-  if(useDeexcitation && !atomDeexcitation) { 
-    currentModel->SetDeexcitationFlag(idxDERegions[currentCoupleIndex]);
-  }
+
+  // define new weight for primary and secondaries
+  G4double weight = fParticleChange.GetParentWeight()/biasFactor;
+  fParticleChange.ProposeParentWeight(weight);
 
   const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
   G4double tcut = (*theCuts)[currentCoupleIndex];

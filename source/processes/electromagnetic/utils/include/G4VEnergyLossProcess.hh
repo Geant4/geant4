@@ -390,6 +390,10 @@ public:
   // Max kinetic energy for tables
   inline void SetMaxKinEnergyForCSDARange(G4double e);
 
+  // Biasing parameters
+  inline void SetCrossSectionBiasingFactor(G4double f);
+  inline G4double CrossSectionBiasingFactor() const;
+
   // Return values for given G4MaterialCutsCouple
   inline G4double GetDEDX(G4double& kineticEnergy, const G4MaterialCutsCouple*);
   inline G4double GetDEDXForSubsec(G4double& kineticEnergy, 
@@ -516,6 +520,7 @@ private:
   G4double dRoverRange;
   G4double finalRange;
   G4double lambdaFactor;
+  G4double biasFactor;
 
   G4bool   lossFluctuationFlag;
   G4bool   rndmStepFlag;
@@ -548,6 +553,7 @@ private:
   G4int    nWarnings;
 
   G4double massRatio;
+  G4double fFactor;
   G4double reduceFactor;
   G4double chargeSqRatio;
 
@@ -601,6 +607,8 @@ G4VEnergyLossProcess::DefineMaterial(const G4MaterialCutsCouple* couple)
     currentMaterial = couple->GetMaterial();
     currentCoupleIndex = couple->GetIndex();
     basedCoupleIndex   = (*theDensityIdx)[currentCoupleIndex];
+    fFactor = chargeSqRatio*biasFactor*(*theDensityFactor)[currentCoupleIndex];
+    reduceFactor = 1.0/(fFactor*massRatio);
     mfpKinEnergy = DBL_MAX;
   }
 }
@@ -611,16 +619,16 @@ inline void G4VEnergyLossProcess::SetDynamicMassCharge(G4double massratio,
                                                        G4double charge2ratio)
 {
   massRatio     = massratio;
+  fFactor      *= charge2ratio/chargeSqRatio;
   chargeSqRatio = charge2ratio;
-  reduceFactor  = 1.0/(chargeSqRatio*massRatio);
+  reduceFactor  = 1.0/(fFactor*massRatio);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEnergyLossProcess::GetDEDXForScaledEnergy(G4double e)
 {
-  G4double x = (*theDensityFactor)[currentCoupleIndex]*
-    ((*theDEDXTable)[basedCoupleIndex]->Value(e))*chargeSqRatio;
+  G4double x = fFactor*(*theDEDXTable)[basedCoupleIndex]->Value(e);
   if(e < minKinEnergy) { x *= std::sqrt(e/minKinEnergy); }
   return x;
 }
@@ -629,8 +637,7 @@ inline G4double G4VEnergyLossProcess::GetDEDXForScaledEnergy(G4double e)
 
 inline G4double G4VEnergyLossProcess::GetSubDEDXForScaledEnergy(G4double e)
 {
-  G4double x = (*theDensityFactor)[currentCoupleIndex]*
-    ((*theDEDXSubTable)[basedCoupleIndex]->Value(e))*chargeSqRatio;
+  G4double x = fFactor*(*theDEDXSubTable)[basedCoupleIndex]->Value(e);
   if(e < minKinEnergy) { x *= std::sqrt(e/minKinEnergy); }
   return x;
 }
@@ -639,8 +646,7 @@ inline G4double G4VEnergyLossProcess::GetSubDEDXForScaledEnergy(G4double e)
 
 inline G4double G4VEnergyLossProcess::GetIonisationForScaledEnergy(G4double e)
 {
-  G4double x = (*theDensityFactor)[currentCoupleIndex]*
-    ((*theIonisationTable)[basedCoupleIndex]->Value(e))*chargeSqRatio;
+  G4double x = fFactor*(*theIonisationTable)[basedCoupleIndex]->Value(e);
   if(e < minKinEnergy) { x *= std::sqrt(e/minKinEnergy); }
   return x;
 }
@@ -650,8 +656,7 @@ inline G4double G4VEnergyLossProcess::GetIonisationForScaledEnergy(G4double e)
 inline 
 G4double G4VEnergyLossProcess::GetSubIonisationForScaledEnergy(G4double e)
 {
-  G4double x = (*theDensityFactor)[currentCoupleIndex]*
-    ((*theIonisationSubTable)[basedCoupleIndex]->Value(e))*chargeSqRatio;
+  G4double x = fFactor*(*theIonisationSubTable)[basedCoupleIndex]->Value(e);
   if(e < minKinEnergy) { x *= std::sqrt(e/minKinEnergy); }
   return x;
 }
@@ -660,8 +665,7 @@ G4double G4VEnergyLossProcess::GetSubIonisationForScaledEnergy(G4double e)
 
 inline G4double G4VEnergyLossProcess::GetScaledRangeForScaledEnergy(G4double e)
 {
-  G4double x = ((*theRangeTableForLoss)[basedCoupleIndex])->Value(e)/
-    (*theDensityFactor)[currentCoupleIndex];
+  G4double x = ((*theRangeTableForLoss)[basedCoupleIndex])->Value(e);
   if(e < minKinEnergy) { x *= std::sqrt(e/minKinEnergy); }
   return x;
 }
@@ -673,8 +677,7 @@ G4VEnergyLossProcess::GetLimitScaledRangeForScaledEnergy(G4double e)
 {
   G4double x;
   if (e < maxKinEnergyCSDA) {
-    x = (*theDensityFactor)[currentCoupleIndex]*
-      ((*theCSDARangeTable)[basedCoupleIndex])->Value(e);
+    x = ((*theCSDARangeTable)[basedCoupleIndex])->Value(e);
     if(e < minKinEnergy) { x *= std::sqrt(e/minKinEnergy); }
   } else {
     x = theRangeAtMaxEnergy[basedCoupleIndex] +
@@ -690,10 +693,10 @@ inline G4double G4VEnergyLossProcess::ScaledKinEnergyForLoss(G4double r)
   G4PhysicsVector* v = (*theInverseRangeTable)[basedCoupleIndex];
   G4double rmin = v->Energy(0);
   G4double e = 0.0; 
-  if(r >= rmin) { e = (*theDensityFactor)[currentCoupleIndex]*v->Value(r); }
+  if(r >= rmin) { e = v->Value(r); }
   else if(r > 0.0) {
     G4double x = r/rmin;
-    e = (*theDensityFactor)[currentCoupleIndex]*minKinEnergy*x*x;
+    e = minKinEnergy*x*x;
   }
   return e;
 }
@@ -702,8 +705,7 @@ inline G4double G4VEnergyLossProcess::ScaledKinEnergyForLoss(G4double r)
 
 inline G4double G4VEnergyLossProcess::GetLambdaForScaledEnergy(G4double e)
 {
-  return (*theDensityFactor)[currentCoupleIndex]*chargeSqRatio*
-    (((*theLambdaTable)[basedCoupleIndex])->Value(e));
+  return fFactor*((*theLambdaTable)[basedCoupleIndex])->Value(e);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -735,11 +737,12 @@ G4VEnergyLossProcess::GetRange(G4double& kineticEnergy,
   G4double x = fRange;
   if(kineticEnergy != preStepKinEnergy || couple != currentCouple) { 
     DefineMaterial(couple);
-    if(theCSDARangeTable)
+    if(theCSDARangeTable) {
       x = GetLimitScaledRangeForScaledEnergy(kineticEnergy*massRatio)
 	* reduceFactor;
-    else if(theRangeTableForLoss)
+    } else if(theRangeTableForLoss) {
       x = GetScaledRangeForScaledEnergy(kineticEnergy*massRatio)*reduceFactor;
+    }
   }
   return x;
 }
@@ -752,9 +755,9 @@ G4VEnergyLossProcess::GetCSDARange(G4double& kineticEnergy,
 {
   DefineMaterial(couple);
   G4double x = DBL_MAX;
-  if(theCSDARangeTable)
-    x = GetLimitScaledRangeForScaledEnergy(kineticEnergy*massRatio)
-      * reduceFactor;
+  if(theCSDARangeTable) {
+    x = GetLimitScaledRangeForScaledEnergy(kineticEnergy*massRatio)*reduceFactor;
+  }
   return x;
 }
 
@@ -816,7 +819,7 @@ inline void G4VEnergyLossProcess::ComputeLambdaForScaledEnergy(G4double e)
         preStepLambda = preStepLambda1;
       }
     } else {
-      preStepLambda = chargeSqRatio*theCrossSectionMax[currentCoupleIndex];
+      preStepLambda = fFactor*theCrossSectionMax[currentCoupleIndex];
     }
   }
 }
@@ -1031,6 +1034,19 @@ inline void G4VEnergyLossProcess::SetMaxKinEnergyForCSDARange(G4double e)
   maxKinEnergyCSDA = e;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VEnergyLossProcess::SetCrossSectionBiasingFactor(G4double f)
+{
+  if(f > 0.0) { biasFactor = f; }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEnergyLossProcess::CrossSectionBiasingFactor() const
+{
+  return biasFactor;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

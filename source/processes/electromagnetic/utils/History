@@ -17,6 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20 July 11: V.Ivant (emutils-V09-04-32)
+- G4VEmProcess, G4VEnegryLossProcess - improved computations
+  for the base material approach; added cross section biasing option;
+  removed old methods of sampling deexcitation PostStep 
+- G4VEmModel, G4VAtomDeexcitation - cleanup method names and comments
+- G4EmModelManager - do not create local copy of vector with
+  production thresholds (reducing run time memory);
+  added printout of deexcitation flag per model
+
+29 June 11: V.Ivant (emutils-V09-04-31)
+- G4EmModelManager - fixed smoothing function for cross section
+  computations
+
 21 May 11: V.Ivant (emutils-V09-04-30)
 - G4LossTableBuilder - removed forgotten debug printout
 

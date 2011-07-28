@@ -191,9 +191,15 @@ public:
   inline void SetMaxKinEnergy(G4double e);
   inline G4double MaxKinEnergy() const;
 
+  // Single scattering parameters
   inline void SetPolarAngleLimit(G4double a);
   inline G4double PolarAngleLimit() const;
 
+  // Biasing parameters
+  inline void SetCrossSectionBiasingFactor(G4double f);
+  inline G4double CrossSectionBiasingFactor() const;
+
+  // Cross section table pointer
   inline const G4PhysicsTable* LambdaTable() const;
 
   //------------------------------------------------------------------------
@@ -329,6 +335,7 @@ private:
   G4double                     maxKinEnergy;
   G4double                     lambdaFactor;
   G4double                     polarAngleLimit;
+  G4double                     biasFactor;
 
   G4bool                       integral;
   G4bool                       applyCuts;
@@ -355,6 +362,7 @@ private:
   const G4ParticleDefinition*  currentParticle;
 
   // cash
+  const G4Material*            baseMaterial;
   const G4Material*            currentMaterial;
   const G4MaterialCutsCouple*  currentCouple;
   size_t                       currentCoupleIndex;
@@ -363,6 +371,7 @@ private:
   G4double                     mfpKinEnergy;
   G4double                     preStepKinEnergy;
   G4double                     preStepLambda;
+  G4double                     fFactor;
 
 };
 
@@ -394,8 +403,11 @@ inline void G4VEmProcess::DefineMaterial(const G4MaterialCutsCouple* couple)
   if(couple != currentCouple) {
     currentCouple   = couple;
     currentMaterial = couple->GetMaterial();
+    baseMaterial = currentMaterial->GetBaseMaterial();
     currentCoupleIndex = couple->GetIndex();
     basedCoupleIndex   = (*theDensityIdx)[currentCoupleIndex];
+    fFactor = biasFactor*(*theDensityFactor)[currentCoupleIndex];
+    if(!baseMaterial) { baseMaterial = currentMaterial; }
     mfpKinEnergy = DBL_MAX;
   }
 }
@@ -434,16 +446,16 @@ inline void G4VEmProcess::InitialiseStep(const G4Track& track)
 
 inline G4double G4VEmProcess::GetLambdaFromTable(G4double e)
 {
-  return (*theDensityFactor)[currentCoupleIndex]*
-	  ((*theLambdaTable)[basedCoupleIndex])->Value(e);
+  return fFactor*((*theLambdaTable)[basedCoupleIndex])->Value(e);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEmProcess::ComputeCurrentLambda(G4double e)
 {
-  return currentModel->CrossSectionPerVolume(currentMaterial,currentParticle,
-					     e,(*theCuts)[currentCoupleIndex]);
+  return fFactor *
+    (currentModel->CrossSectionPerVolume(baseMaterial,currentParticle,
+					 e,(*theCuts)[currentCoupleIndex]));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -459,7 +471,7 @@ inline G4double G4VEmProcess::GetCurrentLambda(G4double e)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double 
-G4VEmProcess::GetLambda(G4double& kinEnergy,
+G4VEmProcess::GetLambda(G4double& kinEnergy, 
 			const G4MaterialCutsCouple* couple)
 {
   DefineMaterial(couple);
@@ -495,7 +507,7 @@ inline void G4VEmProcess::ComputeIntegralLambda(G4double e)
         preStepLambda = preStepLambda1;
       }
     } else {
-      preStepLambda = theCrossSectionMax[currentCoupleIndex];
+      preStepLambda = fFactor*theCrossSectionMax[currentCoupleIndex];
     }
   }
 }
@@ -546,9 +558,9 @@ inline G4double G4VEmProcess::MaxKinEnergy() const
 
 inline void G4VEmProcess::SetPolarAngleLimit(G4double val)
 {
-  if(val < 0.0)     { polarAngleLimit = 0.0; }
-  else if(val > pi) { polarAngleLimit = pi;  }
-  else              { polarAngleLimit = val; }
+  if(val < 0.0)            { polarAngleLimit = 0.0; }
+  else if(val > CLHEP::pi) { polarAngleLimit = CLHEP::pi;  }
+  else                     { polarAngleLimit = val; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -556,6 +568,20 @@ inline void G4VEmProcess::SetPolarAngleLimit(G4double val)
 inline G4double G4VEmProcess::PolarAngleLimit() const
 {
   return polarAngleLimit;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VEmProcess::SetCrossSectionBiasingFactor(G4double f)
+{
+  if(f > 0.0) { biasFactor = f; }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEmProcess::CrossSectionBiasingFactor() const
+{
+  return biasFactor;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

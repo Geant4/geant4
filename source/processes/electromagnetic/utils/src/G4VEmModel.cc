@@ -60,11 +60,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VEmModel::G4VEmModel(const G4String& nam):
-  flucModel(0),anglModel(0), name(nam), lowLimit(0.1*keV), highLimit(100.0*TeV), 
+  flucModel(0),anglModel(0), name(nam), lowLimit(0.1*CLHEP::keV), 
+  highLimit(100.0*CLHEP::TeV), 
   eMinActive(0.0),eMaxActive(DBL_MAX),
-  polarAngleLimit(0.0),secondaryThreshold(DBL_MAX),theLPMflag(false),
-  pParticleChange(0),
-  fCurrentCouple(0),fCurrentElement(0),
+  polarAngleLimit(CLHEP::pi),secondaryThreshold(DBL_MAX),theLPMflag(false),
+  pParticleChange(0),fCurrentCouple(0),fCurrentElement(0),
   nsec(5),flagDeexcitation(false) 
 {
   xsec.resize(nsec);

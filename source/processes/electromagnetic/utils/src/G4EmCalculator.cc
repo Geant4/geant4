@@ -919,9 +919,9 @@ const G4MaterialCutsCouple* G4EmCalculator::FindCouple(
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
   const G4Region* r = region;
-  if(!r) 
+  if(!r) {
     r = G4RegionStore::GetInstance()->GetRegion("DefaultRegionForTheWorld");
-
+  }
   return theCoupleTable->GetMaterialCutsCouple(material,r->GetProductionCuts());
 
 }
