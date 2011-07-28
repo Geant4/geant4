@@ -42,7 +42,7 @@
 #include "G4Step.hh"
 #include "GFlashEnergySpot.hh"
 
-GFlashEnergySpot::GFlashEnergySpot() {}
+GFlashEnergySpot::GFlashEnergySpot() : Energy (0.) {}
 
 GFlashEnergySpot::GFlashEnergySpot(const G4ThreeVector& point, G4double E)
 {

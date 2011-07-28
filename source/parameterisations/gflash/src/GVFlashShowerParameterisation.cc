@@ -44,7 +44,7 @@
 #include "G4MaterialTable.hh"
 
 GVFlashShowerParameterisation::GVFlashShowerParameterisation()
-  : thePar(0)
+  : thePar(0), density(0.), A(0.), Z(0.), X0(0.), Ec(0.), Rm(0.), NSpot(0.)
 {
 }
 

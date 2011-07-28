@@ -93,6 +93,7 @@ class GFlashHomoShowerParameterisation : public GVFlashShowerParameterisation
 
     // parametrization parameters
     GVFlashHomoShowerTuning * thePar;
+    G4bool owning;
 
     // Cashed parameters:  
     // Longitudinal Coefficients for a homogeneous calo
@@ -129,7 +130,7 @@ class GFlashHomoShowerParameterisation : public GVFlashShowerParameterisation
     G4double NSpot,AlphaNSpot,TNSpot,BetaNSpot;
 
     //Radial
-    G4double RadiusCore, WeightCore,RadiusTail; 
+    G4double RadiusCore, WeightCore,RadiusTail;
 };
 
 #endif

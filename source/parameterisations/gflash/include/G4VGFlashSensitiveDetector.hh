@@ -86,6 +86,7 @@ class G4VGFlashSensitiveDetector
           G4Exception("G4VGFlashSensitiveDetector::Hit()",
                       "InvalidSetup", FatalException,
                       "Needs also to inherit from G4VSensitiveDetector!");
+          return false;
         }
         if(This->isActive())
         { 

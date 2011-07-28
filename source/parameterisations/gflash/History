@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Jul 5th, 2005 G.Cosmo (gflash-V09-04-00)
+---------------------
+- Fixed Coverity defects, mainly related to uninitialised static data.
+
 May 8th, 2005 G.Cosmo (gflash-V08-00-00)
 ---------------------
 - Fix compilation warning on SUN-CC in GFlashSamplingShowerParameterisation.cc.

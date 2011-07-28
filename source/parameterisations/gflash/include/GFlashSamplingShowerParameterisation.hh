@@ -103,6 +103,7 @@ class GFlashSamplingShowerParameterisation
     // parametrization parameters
     //
     GFlashSamplingShowerTuning * thePar;
+    G4bool owning;
 
     // Cashed parameters:  
     // Longitudinal Coefficients for a homogenious calo
