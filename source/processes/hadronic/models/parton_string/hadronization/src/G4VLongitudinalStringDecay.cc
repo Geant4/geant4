@@ -326,7 +326,7 @@ G4KineticTrack * G4VLongitudinalStringDecay::Splitup(
 {
 //G4cout<<"Start SplitUP"<<G4endl;
        //... random choice of string end to use for creating the hadron (decay)   
-       SideOfDecay = (G4UniformRand() < 0.5)? 1: -1;
+       G4int SideOfDecay = (G4UniformRand() < 0.5)? 1: -1;
        if (SideOfDecay < 0)
        {
 	  string->SetLeftPartonStable();

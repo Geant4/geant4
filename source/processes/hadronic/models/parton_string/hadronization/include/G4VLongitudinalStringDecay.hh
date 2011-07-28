@@ -181,7 +181,6 @@ protected:
    G4double  StrangeSuppress ;
    G4int     StringLoopInterrupt;
    G4int     ClusterLoopInterrupt;
-   G4int     SideOfDecay;
    G4HadronBuilder *hadronizer;
 
    G4double pspin_meson;

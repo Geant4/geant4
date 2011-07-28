@@ -45,9 +45,10 @@ class G4LundStringFragmentation: public G4VLongitudinalStringDecay
 public:
 
     G4LundStringFragmentation();
-    G4LundStringFragmentation(const G4LundStringFragmentation &right);
     virtual ~G4LundStringFragmentation();
 
+private:
+    G4LundStringFragmentation(const G4LundStringFragmentation &right);
     const G4LundStringFragmentation & operator=(const G4LundStringFragmentation &right);
     int operator==(const G4LundStringFragmentation &right) const;
     int operator!=(const G4LundStringFragmentation &right) const;

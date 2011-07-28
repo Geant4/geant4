@@ -27,17 +27,20 @@
 #include "G4ExcitedStringDecay.hh"
 #include "G4KineticTrack.hh"
 
-G4ExcitedStringDecay::G4ExcitedStringDecay()
-{
-	theStringDecay=NULL;
-}
-
-G4ExcitedStringDecay::G4ExcitedStringDecay(G4VLongitudinalStringDecay * aStringDecay)
-: theStringDecay(aStringDecay)
+G4ExcitedStringDecay::G4ExcitedStringDecay() : G4VStringFragmentation(),
+	theStringDecay(0)
 {}
 
-G4ExcitedStringDecay::G4ExcitedStringDecay(const G4ExcitedStringDecay &) : G4VStringFragmentation()
+G4ExcitedStringDecay::G4ExcitedStringDecay(G4VLongitudinalStringDecay * aStringDecay)
+: G4VStringFragmentation(),
+  theStringDecay(aStringDecay)
+{}
+
+G4ExcitedStringDecay::G4ExcitedStringDecay(const G4ExcitedStringDecay &)
+: G4VStringFragmentation(),
+  theStringDecay(0)
 {
+  throw G4HadronicException(__FILE__, __LINE__, "G4ExcitedStringDecay::copy ctor not accessible");
 } 
 
 G4ExcitedStringDecay::~G4ExcitedStringDecay()

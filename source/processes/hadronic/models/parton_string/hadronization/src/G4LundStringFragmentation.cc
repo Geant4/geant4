@@ -388,15 +388,17 @@ G4cin>>Uzhi;
    }
 
 // --------------------------------------------------------------
-G4LundStringFragmentation::G4LundStringFragmentation(const G4LundStringFragmentation &) : G4VLongitudinalStringDecay()
-   {
-   }
-
 G4LundStringFragmentation::~G4LundStringFragmentation()
    { 
    }
 
-//*************************************************************************************
+// --------------------------------------------------------------
+G4LundStringFragmentation::G4LundStringFragmentation(const G4LundStringFragmentation &) : G4VLongitudinalStringDecay()
+   {
+     throw G4HadronicException(__FILE__, __LINE__,"G4LundStringFragmentation::copy ctor not accessible");
+   }
+
+// --------------------------------------------------------------
 
 const G4LundStringFragmentation & G4LundStringFragmentation::operator=(const G4LundStringFragmentation &)
    {

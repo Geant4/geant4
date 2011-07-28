@@ -57,8 +57,8 @@ class G4FragmentingString
       G4FragmentingString(const G4FragmentingString &old,
 			  G4ParticleDefinition * newdecay,
 			  const G4LorentzVector *momentum);
-      G4FragmentingString(const G4FragmentingString &old,      // Uzhi
-			  G4ParticleDefinition * newdecay);    // Uzhi
+      G4FragmentingString(const G4FragmentingString &old,
+			  G4ParticleDefinition * newdecay);
 			  
       ~G4FragmentingString();
 
