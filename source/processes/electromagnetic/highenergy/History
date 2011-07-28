@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12 July 11: V.Ivanchenko (emhighenergy-V09-04-00)
+- G4GammaConversionToMuons - removed include of unused header
+
 26 October 10: V.Ivanchenko (emhighenergy-V09-03-02)
 - Fixed problem reported by the Coverity tools (mainly pedantic 
   initialisation)
