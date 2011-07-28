@@ -51,7 +51,8 @@ class G4ErrorFreeTrajParam
 {
  public:  // with description
 
-  G4ErrorFreeTrajParam(){}
+  G4ErrorFreeTrajParam()
+   : fInvP(0.), fLambda(0.), fPhi(0.), fYPerp(0.), fZPerp(0.){}
   G4ErrorFreeTrajParam( const G4Point3D& pos, const G4Vector3D& mom );
     // build parameters from position and momentum
 

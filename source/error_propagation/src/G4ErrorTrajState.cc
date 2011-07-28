@@ -43,7 +43,8 @@ G4ErrorTrajState::G4ErrorTrajState( const G4String& partType,
                                     const G4Point3D& pos,
                                     const G4Vector3D& mom,
                                     const G4ErrorTrajErr& errmat)
-  : fParticleType(partType), fPosition(pos), fMomentum(mom), fError(errmat)
+  : fParticleType(partType), fPosition(pos), fMomentum(mom), fCharge(0.),
+    fError(errmat), theG4Track(0)
 {
   iverbose = G4ErrorPropagatorData::verbose();
 }

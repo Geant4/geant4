@@ -55,6 +55,7 @@
 
 //---------------------------------------------------------------------------
 G4ErrorPropagator::G4ErrorPropagator()
+  : theInitialTrajState(0), theFinalTrajState(0)
 {
   verbose =  G4ErrorPropagatorData::verbose();
 #ifdef G4EVERBOSE

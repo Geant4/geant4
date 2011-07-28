@@ -51,7 +51,7 @@ class G4ErrorTrajState
 {
  public:  // with description
 
-  G4ErrorTrajState(){}
+  G4ErrorTrajState() : fCharge(0.), theG4Track(0), iverbose(0) {}
 
   G4ErrorTrajState( const G4String& partType, const G4Point3D& pos,
                     const G4Vector3D& mom,

@@ -67,7 +67,7 @@ class G4ErrorFreeTrajState : public G4ErrorTrajState
 {
  public:  // with description
 
-  G4ErrorFreeTrajState(){}
+  G4ErrorFreeTrajState() : theFirstStep(true) {}
   G4ErrorFreeTrajState( const G4String& partType,
                         const G4Point3D& pos,
                         const G4Vector3D& mom,

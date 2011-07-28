@@ -163,7 +163,7 @@ void G4ErrorFreeTrajState::Init()
   theTSType = G4eTS_FREE;
   BuildCharge();
   theTransfMat = G4ErrorMatrix(5,5,0);
-  //-  theFirstStep = true;
+  theFirstStep = true;
 }
 
 //------------------------------------------------------------------------
@@ -179,7 +179,6 @@ G4int G4ErrorFreeTrajState::Update( const G4Track* aTrack )
   fTrajParam.Update( aTrack );
   UpdatePosMom( aTrack->GetPosition(), aTrack->GetMomentum() );
   return ierr;
-
 }
 
 
