@@ -141,7 +141,7 @@ class G4NavigationHistory
 
  private:
 
-#ifdef G4LIB_BUILD_DLL
+#ifdef WIN32
   std::vector<G4NavigationLevel> fNavHistory;
 #else
   std::vector<G4NavigationLevel,

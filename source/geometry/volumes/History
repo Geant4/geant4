@@ -17,8 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 15th, 2011 G.Cosmo - geomvol-V09-04-00
+- Use WIN32 instead of G4LIB_BUILD_DLL as flag for choosing enhanced
+  allocator in G4NavigationHistory.
+
 December 15th, 2010 G.Cosmo - geomvol-V09-03-09
-- Use normal allocator if building DLLs on Windows.
+- Use normal allocator if building on Windows.
 
 September 6th, 2010 G.Cosmo - geomvol-V09-03-08
 - Fixed false-positive cases for initialization in copy-constructor of

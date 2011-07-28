@@ -37,7 +37,7 @@
 #include "G4NavigationHistory.hh"
 #include "G4ios.hh"
 
-#ifndef G4LIB_BUILD_DLL
+#ifndef WIN32
   // Initialise static data for the specialized memory pool
   // for the internal STL vector of histories  ...
   //
