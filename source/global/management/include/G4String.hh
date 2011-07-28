@@ -140,8 +140,8 @@ public:
   inline operator const char*() const;
   inline G4SubString operator()(str_size, str_size);
 
-  inline G4int compareTo(const char*, caseCompare mode=exact);
-  inline G4int compareTo(const G4String&, caseCompare mode=exact);
+  inline G4int compareTo(const char*, caseCompare mode=exact) const;
+  inline G4int compareTo(const G4String&, caseCompare mode=exact) const;
 
   inline G4String& prepend (const char*);
   inline G4String& append (const G4String&);

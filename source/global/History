@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 12, 2011 G.Cosmo (global-V09-04-11)
+- Added missing post-const qualifier to G4String::compareTo() methods
+  (M.Kelsey).
+- Updated date and version.
+
 June 20, 2011 V.Ivanchenko (global-V09-04-10)
 - Added protection in G4Pow::powN() method for high exponent values.
 

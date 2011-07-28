@@ -257,16 +257,15 @@ G4int G4String::strcasecompare(const char* s1, const char* s2) const
   return res;
 }
 
-G4int G4String::compareTo(const char* s, caseCompare mode)
+G4int G4String::compareTo(const char* s, caseCompare mode) const
 {
   return (mode==exact) ? strcmp(c_str(),s)
                        : strcasecompare(c_str(),s);
 }
 
-G4int G4String::compareTo(const G4String& s, caseCompare mode)
+G4int G4String::compareTo(const G4String& s, caseCompare mode) const
 {
-  return (mode==exact) ? strcmp(c_str(),s.c_str())
-                       : strcasecompare(c_str(),s.c_str());
+  return compareTo(s.c_str(), mode);
 }
 
 G4String& G4String::prepend (const char* str)
