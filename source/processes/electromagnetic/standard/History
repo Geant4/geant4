@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28 July 11: V.Ivanchenko (emstand-V09-04-37)
+- G4PAIxSection, G4InitXscPAI - fixed typo in tag 035 
+
+28 July 11: V.Ivanchenko (emstand-V09-04-36)
+-  G4KleinNishinaModel, G4PEEffectFluoModel - initialise deexcitation 
+   flag;
+-  G4GoudsmitSaundersonMscModel - fixed Coverity warnings
+
 25 July 11: V.Ivanchenko (emstand-V09-04-35)
 - G4PAIxSection, G4InitXscPAI - fixed Coverity tool warnings
 - G4KleinNishinaCompton, G4KleinNishinaModel - added extra protection

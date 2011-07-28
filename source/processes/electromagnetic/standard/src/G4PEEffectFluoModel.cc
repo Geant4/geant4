@@ -66,6 +66,7 @@ G4PEEffectFluoModel::G4PEEffectFluoModel(const G4String& nam)
   theGamma    = G4Gamma::Gamma();
   theElectron = G4Electron::Electron();
   fminimalEnergy = 1.0*eV;
+  SetDeexcitationFlag(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

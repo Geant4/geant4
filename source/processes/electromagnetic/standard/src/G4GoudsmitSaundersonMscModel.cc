@@ -137,12 +137,11 @@ G4double
 G4GoudsmitSaundersonMscModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition* p,
                        G4double kineticEnergy,G4double Z, G4double, G4double, G4double)
 {  
-  G4double cs=0.0;
   G4double kinEnergy = kineticEnergy;
   if(kinEnergy<lowKEnergy) kinEnergy=lowKEnergy;
   if(kinEnergy>highKEnergy)kinEnergy=highKEnergy;
 
-  G4double cs0;
+  G4double cs(0.0), cs0(0.0);
   CalculateIntegrals(p,Z,kinEnergy,cs0,cs);
   
   return cs;
@@ -180,8 +179,8 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
   const G4ElementVector* theElementVector = mat->GetElementVector();
   const G4double* theAtomNumDensityVector = mat->GetVecNbOfAtomsPerVolume();
   G4int nelm = mat->GetNumberOfElements();
-  G4double s0,s1;
-  lambda0=0.;
+  G4double s0(0.0), s1(0.0);
+  lambda0 = 0.0;
   for(G4int i=0;i<nelm;i++)
     { 
       CalculateIntegrals(particle,(*theElementVector)[i]->GetZ(),kineticEnergy,s0,s1);

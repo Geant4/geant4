@@ -69,6 +69,7 @@ G4KleinNishinaModel::G4KleinNishinaModel(const G4String& nam)
   lowestGammaEnergy = 1.0*eV;
   limitFactor       = 4;
   fProbabilities.resize(9,0.0);
+  SetDeexcitationFlag(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
