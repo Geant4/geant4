@@ -94,7 +94,7 @@ public:
   G4double  massA2;
   G4int     dnkE[NENERGY];
   G4double  maxQ2[NENERGY];
-  G4double  CrossSecMaxQ2[NENERGY];
+  //G4double  CrossSecMaxQ2[NENERGY];
 
   G4double  TableQ2[ONQ2];
   G4double  TableCrossSec[NQTABLE];
@@ -205,7 +205,7 @@ private:
             DDSect2, DDSect3, ConstU, FmaxT;
 
   // momentum limits for different models of hadron/nucleon scatetring
-    G4double BoundaryP[7], BoundaryTL[7], BoundaryTG[7];
+  G4double BoundaryP[7], BoundaryTL[7], BoundaryTG[7];
 
   // parameterisation of scattering
 

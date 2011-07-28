@@ -67,6 +67,8 @@ public:
 
   inline void SetLowestEnergyLimit(G4double value);
 
+  inline G4double LowestEnergyLimit() const;
+
   inline G4double ComputeMomentumCMS(const G4ParticleDefinition* p, 
 				     G4double plab, G4int Z, G4int A);
   
@@ -85,6 +87,11 @@ private:
 inline void G4HadronElastic::SetLowestEnergyLimit(G4double value)
 {
   lowestEnergyLimit = value;
+}
+
+inline G4double G4HadronElastic::LowestEnergyLimit() const
+{
+  return lowestEnergyLimit;
 }
 
 inline G4double

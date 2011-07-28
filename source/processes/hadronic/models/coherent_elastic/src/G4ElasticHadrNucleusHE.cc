@@ -221,6 +221,12 @@ void G4ElasticData::DefineNucleusParameters(G4double A)
 G4ElasticHadrNucleusHE::G4ElasticHadrNucleusHE()
   : G4HadronElastic("hElasticGlauber")
 {
+  dQ2 = hMass = hMass2 =  hLabMomentum = hLabMomentum2 = MomentumCM = HadrEnergy 
+    = R1 = R2 = Pnucl = Aeff = HadrTot = HadrSlope = HadrReIm = TotP = DDSect2
+    = DDSect3 = ConstU = FmaxT = Slope1 = Slope2 = Coeff1 = Coeff2 = MaxTR 
+    = Slope0 = Coeff0 = aAIm = aDIm = Dtot11 = 0.0;
+  NumbN = iHadrCode = iHadron = 0;
+
   verboseLevel = 0;
   plabLowLimit = 20.0*MeV;
   lowestEnergyLimit = 0.0;
@@ -232,13 +238,13 @@ G4ElasticHadrNucleusHE::G4ElasticHadrNucleusHE()
   protonM   =  proton_mass_c2/GeV;
   protonM2  =  protonM*protonM;
 
-   BoundaryP[0]=9.0;BoundaryTG[0]=5.0;BoundaryTL[0]=0.;
-   BoundaryP[1]=20.0;BoundaryTG[1]=1.5;BoundaryTL[1]=0.;
-   BoundaryP[2]=5.0; BoundaryTG[2]=1.0;BoundaryTL[2]=1.5;
-   BoundaryP[3]=8.0; BoundaryTG[3]=3.0;BoundaryTL[3]=0.;
-   BoundaryP[4]=7.0; BoundaryTG[4]=3.0;BoundaryTL[4]=0.;
-   BoundaryP[5]=5.0; BoundaryTG[5]=2.0;BoundaryTL[5]=0.;
-   BoundaryP[6]=5.0; BoundaryTG[6]=1.5;BoundaryTL[6]=3.0;
+  BoundaryP[0]=9.0;BoundaryTG[0]=5.0;BoundaryTL[0]=0.;
+  BoundaryP[1]=20.0;BoundaryTG[1]=1.5;BoundaryTL[1]=0.;
+  BoundaryP[2]=5.0; BoundaryTG[2]=1.0;BoundaryTL[2]=1.5;
+  BoundaryP[3]=8.0; BoundaryTG[3]=3.0;BoundaryTL[3]=0.;
+  BoundaryP[4]=7.0; BoundaryTG[4]=3.0;BoundaryTL[4]=0.;
+  BoundaryP[5]=5.0; BoundaryTG[5]=2.0;BoundaryTL[5]=0.;
+  BoundaryP[6]=5.0; BoundaryTG[6]=1.5;BoundaryTL[6]=3.0;
 
   Binom();
   // energy in GeV
@@ -276,7 +282,7 @@ G4ElasticHadrNucleusHE::G4ElasticHadrNucleusHE()
     HadronType[j]  = id[j];
     HadronType1[j] = id1[j];
 
-    for(G4int k = 0; k < 93; k++) SetOfElasticData[j][k] = 0;
+    for(G4int k = 0; k < 93; k++) { SetOfElasticData[j][k] = 0; }
   } 
 }
 
@@ -450,7 +456,7 @@ G4double G4ElasticHadrNucleusHE::
 		<<Pnucl<<G4endl;
 	}
 
-      pElD->CrossSecMaxQ2[NumbOnE] = 1.0;
+      //pElD->CrossSecMaxQ2[NumbOnE] = 1.0;
 
       if(verboseLevel > 1)
 	G4cout<<" HadrNucleusQ2_2: NumbOnE= " << NumbOnE 

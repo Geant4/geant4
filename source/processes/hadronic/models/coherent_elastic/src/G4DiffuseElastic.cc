@@ -39,6 +39,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4IonTable.hh"
+#include "G4NucleiProperties.hh"
 
 #include "Randomize.hh"
 #include "G4Integrator.hh"
@@ -63,7 +64,7 @@
 
 
 G4DiffuseElastic::G4DiffuseElastic() 
-  : G4HadronicInteraction(), fParticle(0)
+  : G4HadronElastic("DiffuseElastic"), fParticle(0)
 {
   SetMinEnergy( 0.01*GeV );
   SetMaxEnergy( 1.*TeV );
@@ -98,9 +99,10 @@ G4DiffuseElastic::G4DiffuseElastic()
   fAddCoulomb = false;
 }
 
+/*
 //////////////////////////////////////////////////////////////////////////
 //
-// Constructor with initialisation
+// Test constructor with initialisation
 
 G4DiffuseElastic::G4DiffuseElastic(const G4ParticleDefinition* aParticle) 
   : G4HadronicInteraction(), fParticle(aParticle)
@@ -139,6 +141,7 @@ G4DiffuseElastic::G4DiffuseElastic(const G4ParticleDefinition* aParticle)
   fAddCoulomb = false;
   // Initialise();
 }
+*/
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -188,6 +191,7 @@ void G4DiffuseElastic::Initialise()
   return;
 }
 
+/*
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Model analog of DoIt function
@@ -361,7 +365,7 @@ G4DiffuseElastic::ApplyYourself( const G4HadProjectile& aTrack,
 
   return &theParticleChange;
 }
-
+*/
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -946,6 +950,31 @@ G4DiffuseElastic::SampleThetaCMS(const G4ParticleDefinition* particle,
 
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////  Table preparation and reading ////////////////////////
+////////////////////////////////////////////////////////////////////////////
+//
+// Return inv momentum transfer -t > 0 from initialisation table
+
+G4double G4DiffuseElastic::SampleInvariantT( const G4ParticleDefinition* aParticle, G4double p, 
+                                               G4int Z, G4int A)
+{
+  fParticle = aParticle;
+  G4double m1 = fParticle->GetPDGMass();
+  G4double totElab = std::sqrt(m1*m1+p*p);
+  G4double m2 = G4NucleiProperties::GetNuclearMass(A, Z);
+  G4LorentzVector lv1(p,0.0,0.0,totElab);
+  G4LorentzVector  lv(0.0,0.0,0.0,m2);   
+  lv += lv1;
+
+  G4ThreeVector bst = lv.boostVector();
+  lv1.boost(-bst);
+
+  G4ThreeVector p1 = lv1.vect();
+  G4double momentumCMS = p1.mag();
+
+  G4double t = SampleTableT( aParticle,  momentumCMS, G4double(Z), G4double(A) ); // sample theta2 in cms
+  return t;
+}
+
 ////////////////////////////////////////////////////////////////////////////
 //
 // Return inv momentum transfer -t > 0 from initialisation table

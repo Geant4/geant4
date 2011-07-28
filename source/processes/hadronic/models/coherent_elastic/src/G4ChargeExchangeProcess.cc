@@ -86,7 +86,7 @@ G4ChargeExchangeProcess::G4ChargeExchangeProcess(const G4String& procName)
   theD        = G4Deuteron::Deuteron();
   theT        = G4Triton::Triton();
   theA        = G4Alpha::Alpha();
-  theA        = G4He3::He3();
+  theHe3      = G4He3::He3();
 }
 
 G4ChargeExchangeProcess::~G4ChargeExchangeProcess()

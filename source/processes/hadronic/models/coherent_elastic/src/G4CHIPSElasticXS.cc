@@ -70,6 +70,7 @@ G4CHIPSElasticXS::G4CHIPSElasticXS()
   PIMxsManager  = G4QPionMinusElasticCrossSection::GetPointer();  // Uzhi
   KPxsManager   = G4QKaonPlusElasticCrossSection::GetPointer();   // Uzhi
   KMxsManager   = G4QKaonMinusElasticCrossSection::GetPointer();  // Uzhi
+  theParticle   = 0;
 }
 
 G4CHIPSElasticXS::~G4CHIPSElasticXS()
