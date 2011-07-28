@@ -1,0 +1,74 @@
+#!/bin/sh -f
+
+what=""
+
+build_debug=no
+build_verbose=no
+build_icc=no
+
+args=""
+while test $# -ge 1 ; do
+  case $1 in
+    -g) build_debug=yes
+        args="${args} $1"
+        ;;
+    -v) build_verbose=yes
+        args="${args} $1"
+        ;;
+    -icc) build_icc=yes
+        args="${args} $1"
+        ;;
+    -*) echo "unknwon option : $1" ; exit ;;
+     *) if [ $# = 1 ] ; then
+          what=$1
+        else         
+          echo "unknwon option : $1"
+        fi
+        ;;
+  esac
+  shift
+done
+
+if [ "${what}" = "" ] ; then
+  find . -maxdepth 1 -name '*.cpp' -exec ./build ${args} {} \;
+  exit
+fi
+
+if [ ${build_verbose} = "yes" ] ; then
+  set -x
+fi
+
+what=`basename ${what}` # in case executed from exlib/mgr/check
+
+exa=${what}
+
+exa=`echo ${exa} | sed -e 's:.cpp::g'`
+exa=`echo ${exa} | sed -e 's:./::g'`
+
+if [ ${exa} = "chbook" ] ; then exit;fi
+if [ ${exa} = "whbook" ] ; then exit;fi
+
+echo "build ${exa}..."
+
+cppflags="-I../include"
+if [ ${build_debug} = "yes" ] ; then
+  cppflags="${cppflags} -g -DTOOLS_MEM"
+else
+  cppflags="${cppflags} -O2"
+fi
+
+cppflags="${cppflags} -I../.."
+
+files=${exa}.cpp
+
+if [ ${exa} = "rpawdemo" ] ; then
+  files="${files} ../../inlib/csz/inflate.c"
+fi
+
+if [ ${build_icc} = "yes" ] ; then
+  eval icpc -o tools_test_${exa} ${cppflags} ${files}
+else
+  # G4 flags :
+  cppflags="${cppflags} -Wall -ansi -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual"
+  eval c++ -o tools_test_${exa} ${cppflags} ${files}
+fi

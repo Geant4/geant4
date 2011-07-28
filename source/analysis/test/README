@@ -1,0 +1,18 @@
+
+  The code of g4/tools is an automatic extraction of part
+ of the inlib/exlib that is used, among other things,
+ to build the ioda application. The namespace "inlib"
+ and "exlib" had been automatically changed to "tools"
+ by the procedure. Modifications or corrections must be done
+ in the original inlib/exlib code and not in the
+ g4/tools packing. If wanting to do some, please contact
+ the author. The web pages of inlib/exlib can be
+ accessed through :
+     http://ioda.lal.in2p3.fr
+
+  See also the tools.license file for terms.
+
+   May 2011
+
+    Guy Barrand   
+

@@ -1,0 +1,91 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_hbook_p1
+#define tools_hbook_p1
+
+#include "base_histo"
+
+namespace tools {
+namespace hbook {
+
+class p1 : public base_histo {
+public:
+  inline p1(int aID,const std::string& aTitle,
+             int aXnumber,rarg aXmin,rarg aXmax,
+             rarg aVmin,rarg aVmax)
+  :base_histo(aID)
+  ,m_axis(m_path,aID,1,true,true)
+  {
+    cd_beg();
+    CHBPROF(m_id,aTitle,
+            aXnumber,aXmin,aXmax,
+            aVmin,aVmax,
+            ""); //FIXME : or "S" or "T" ?
+    cd_end();
+  }
+  inline virtual ~p1(){
+    cd_beg();
+    CHDELET(m_id);
+    cd_end();
+  }
+private:
+  inline p1(const p1& a_from)
+  :base_histo(a_from)
+  ,m_axis(a_from.m_axis)
+  {}
+  inline p1& operator=(const p1& a_from){
+    base_histo::operator=(a_from);
+    m_axis = a_from.m_axis;
+    return *this;
+  }
+public:
+  inline void fill(rarg aX,rarg aY,rarg aWeight = 1) {
+    cd_beg();
+    CHFILL(m_id,aX,aY,aWeight);
+    cd_end();
+  }
+
+  // optimization :
+  inline void fill_beg() const {cd_beg();}
+  inline void fill_fast(rarg aX,rarg aY,rarg aWeight = 1) {
+    CHFILL(m_id,aX,aY,aWeight);
+  }
+  inline void fill_end() const {cd_end();}
+
+  inline std::string title() const {
+    std::string title;
+    int ncx,ncy;
+    rarg xmin,xmax,ymin,ymax;
+    cd_beg();
+    CHGIVE(m_id,title,ncx,xmin,xmax,ncy,ymin,ymax);
+    cd_end();
+    return title;
+  }
+  inline int dimension() const {return 1;}
+  inline bool reset() {
+    cd_beg();
+    CHRESET(m_id," ");
+    cd_end();
+    return true;
+  }
+  inline int all_entries() const {
+    cd_beg();
+    int v = CHNOENT(m_id);
+    cd_end();
+    return v;
+  }
+
+  inline const hbook::axis& axis() const {return m_axis;}
+  inline hbook::axis& axis() {return m_axis;}
+
+  inline int coord_to_index(rarg aCoord) const {
+    return m_axis.coord_to_index(aCoord);
+  }
+protected:
+  hbook::axis m_axis;
+};
+
+}}
+
+#endif

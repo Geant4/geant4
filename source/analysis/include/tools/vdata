@@ -1,0 +1,33 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_vdata
+#define tools_vdata
+
+#include <vector>
+
+namespace tools {
+
+template <class T>
+inline const T* vec_data(const std::vector<T>& a_vec) {
+#if TARGET_OS_IPHONE || WIN32
+  const T& vf = a_vec.front();
+  return &vf;
+#else
+  return a_vec.data();
+#endif
+}
+
+template <class T>
+inline T* vec_data(std::vector<T>& a_vec) {
+#if TARGET_OS_IPHONE || WIN32
+  T& vf = a_vec.front();
+  return &vf;
+#else
+  return a_vec.data();
+#endif
+}
+
+}
+
+#endif

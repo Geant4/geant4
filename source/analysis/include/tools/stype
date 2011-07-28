@@ -1,0 +1,71 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_stype
+#define tools_stype
+
+//used in rroot leaf template.
+
+#include "typedefs"
+
+#include <string>
+
+namespace tools {
+
+inline const std::string& stype(unsigned char) {
+  static const std::string s_v("unsigned char");
+  return s_v;
+}
+
+inline const std::string& stype(char) {
+  static const std::string s_v("char");
+  return s_v;
+}
+
+inline const std::string& stype(unsigned short) {
+  static const std::string s_v("unsigned short");
+  return s_v;
+}
+
+inline const std::string& stype(short) {
+  static const std::string s_v("short");
+  return s_v;
+}
+
+inline const std::string& stype(int) {
+  static const std::string s_v("int");
+  return s_v;
+}
+
+inline const std::string& stype(unsigned int) {
+  static const std::string s_v("unsigned int");
+  return s_v;
+}
+
+inline const std::string& stype(float) {
+  static const std::string s_v("float");
+  return s_v;
+}
+
+inline const std::string& stype(double) {
+  static const std::string s_v("double");
+  return s_v;
+}
+
+// for inlib::mcol<T> :
+inline const std::string& stype(int64) {
+  static const std::string s_v("tools::int64");
+  return s_v;
+}
+inline const std::string& stype(uint64) {
+  static const std::string s_v("tools::uint64");
+  return s_v;
+}
+inline const std::string& stype(const std::string&) {
+  static const std::string s_v("std::string");
+  return s_v;
+}
+
+}
+
+#endif

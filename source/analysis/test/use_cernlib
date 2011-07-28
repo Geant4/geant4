@@ -1,0 +1,69 @@
+
+# beurk, beurk, beurk
+
+if [ "${use_sys_cernlib}" = "yes" ] ; then
+
+  on_lxplus=no
+  if [ "`uname -n | grep lxplus`" != "" ] ; then
+    on_lxplus=yes
+  fi
+  on_lal_lx=no
+  if [ "`uname -n | grep lal.in2p3.fr | grep lx`" != "" ] ; then
+    on_lal_lx=yes
+  fi
+
+  if [ `uname` = Darwin ] ; then
+    if [ "`sysctl hw.optional.x86_64 | grep 1`" != "" ] ; then
+      # May 2011 : we don't have cernlib on 64 bits intel machines.
+      echo " We don't have cernlib on Mac 64 bits machines."
+      exit
+    fi
+    if [ ! -d /cern/pro/lib ] ; then
+      echo " You don't have cernlib under /cern/pro/lib."
+      echo " If you have them elsewhere, change exlib/mgr/use_cernlib."
+      exit
+    fi
+    no_shift=
+    cernlib_home=/cern/pro
+    f77_for_C_libs="-lgfortran -lg2c"
+  else
+    no_shift=_noshift
+    if [ ${on_lxplus} = "yes" ] ; then
+      cernlib_home=/afs/cern.ch/sw/lcg/external/cernlib/2006a/x86_64-slc5-gcc43-opt
+      f77_for_C_libs="-lcrypt /usr/lib64/libg2c.so.0.0.0"
+      f77_end_libs="/usr/lib64/libgfortran.so.3.0.0"
+    else
+      if [ ${on_lal_lx} = "yes" ] ; then
+        # for exlib/hbook/CHBOOK :
+        cppflags="${cppflags} -DTOOLS_HBOOK_F2C_RET_DOUBLE"
+        cernlib_home=/cern/pro/lib64
+        f77_for_C_libs="-lcrypt /usr/lib64/libg2c.so.0.0.0"    
+      else
+        if [ -d /cern/pro/lib ] ; then
+          cernlib_home=/cern/pro
+        else
+          if [ "${CERNLIB}" != "" ] ; then
+            cernlib_home=${CERNLIB}
+          else
+            echo " You don't have cernlib under /cern/pro/lib"
+            echo " and you don't have defined CERNLIB envirnment variable."
+            echo " If you have them elsewhere, change exlib/mgr/use_cernlib."
+            exit
+          fi  
+        fi
+        if [ ${f77_compiler} = "gfortran" ] ; then
+          f77_for_C_libs="-lcrypt -lgfortran"    
+        fi
+      fi
+    fi
+
+  fi
+
+  f77_libs="${f77_libs} -L${cernlib_home}/lib -lmathlib -lpacklib${no_shift}"
+  f77_libs="${f77_libs} ${f77_end_libs}"
+ 
+  # if linking from c/c++ :
+  libs="${libs} ${f77_libs}"
+  libs="${libs} ${f77_for_C_libs}"
+
+fi

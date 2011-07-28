@@ -1,0 +1,15 @@
+*
+* To read and plot with CERN-PAW some columns
+* of the ntuple produced with whbook.cpp
+*
+
+MACRO NTUPLE
+h/file 101 out.hbook
+h/list T
+cd //lun**/ntuple
+ntuple/print 40
+zone 1 2
+ntuple/plot 40.rg
+ntuple/plot 40.rbw
+RETURN
+

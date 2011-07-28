@@ -1,0 +1,147 @@
+#!/bin/sh -f
+
+# to build FORTRAN and CERNLIB related programs.
+
+#set -x
+
+build_debug=no
+build_verbose=no
+
+use_from=sys
+
+tools_mgr=. # for use_CERN_ROOT/check_app
+
+args=""
+while test $# -ge 1 ; do
+  case $1 in
+    -g) build_debug=yes
+        args="${args} $1"
+        ;;
+    -v) build_verbose=yes
+        args="${args} $1"
+        ;;
+    -*) echo "unknwon option : $1" ; exit ;;
+     *) echo "unknwon option : $1"
+        ;;
+  esac
+  shift
+done
+
+#////////////////////////////////////
+#/// C/C++ //////////////////////////
+#////////////////////////////////////
+cppflags="-I../include"
+if [ ${build_debug} = "yes" ] ; then
+  cppflags="${cppflags} -g"
+else
+  cppflags="${cppflags} -O2"
+fi
+
+# G4 flags. Do not put in cppflags here because some application
+# may want to not include them (as LHCb_artist_X11).
+G4_cppflags="-Wall -ansi -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual"
+
+cpp_compiler=c++
+
+#////////////////////////////////////
+#/// f77 mess ///////////////////////
+#////////////////////////////////////
+
+f77flags=
+f77_compiler=gfortran
+if [ "`uname -n | grep lal.in2p3.fr | grep lx`" != "" ] ; then
+  f77_compiler=g77
+  # hbook.f does not pass with gfortran
+fi
+
+if [ "${f77_compiler}" = "g77" ] ; then
+  ${tools_mgr}/check_app g77 'g77 not found.'
+  use_status=$?;if [ ${use_status} != 0 ] ; then exit ${use_status};fi
+fi
+if [ "${f77_compiler}" = "gfortran" ] ; then
+  ${tools_mgr}/check_app gfortran 'gfortran not found.'
+  use_status=$?;if [ ${use_status} != 0 ] ; then exit ${use_status};fi
+fi
+#////////////////////////////////////
+#////////////////////////////////////
+#////////////////////////////////////
+
+
+if [ ${build_verbose} = "yes" ] ; then
+  set -x
+fi
+
+if [ `uname` = Darwin ] ; then
+  lib=lib
+  shext=dylib
+else
+  if [ `uname -p` = x86_64 ] ; then
+    lib=lib64
+  else
+    lib=lib
+  fi
+  shext=so
+fi
+
+libs=""
+
+use_sys_cernlib=yes
+. ${tools_mgr}/use_cernlib
+
+# ////////////////////////////////////
+# /// hello_f77.f ////////////////////
+# ////////////////////////////////////
+
+echo "build hello_f77.f ..."
+
+${f77_compiler} ${f77flags} -c -o hello_f77.o hello_f77.f
+${f77_compiler} ${f77flags} -o ./tools_test_hello_f77 hello_f77.o
+
+# ////////////////////////////////////
+# /// hbook.f ////////////////////////
+# ////////////////////////////////////
+
+echo "build hbook.f ..."
+
+${f77_compiler} ${f77flags} -c -o hbook.o hbook.f
+${f77_compiler} ${f77flags} -o ./tools_test_hbook hbook.o ${f77_libs}
+
+# ////////////////////////////////////
+# /// hbooknt.f ////////////////////////
+# ////////////////////////////////////
+
+echo "build hbooknt.f ..."
+
+${f77_compiler} ${f77flags} -c -o hbooknt.o hbooknt.f
+${f77_compiler} ${f77flags} -o ./tools_test_hbooknt hbooknt.o ${f77_libs}
+
+# ////////////////////////////////////
+# /// chbook.cpp /////////////////////
+# ////////////////////////////////////
+echo "build chbook.cpp ..."
+
+${f77_compiler} ${f77flags} -c -o close.o ../include/tools/hbook/close.f
+${f77_compiler} ${f77flags} -c -o setpawc.o ../include/tools/hbook/setpawc.f
+
+cppflags="${cppflags} ${G4_cppflags}"
+cppflags="${cppflags} -I../.."
+cppflags="${cppflags} -I../../../tools"
+
+${cpp_compiler} -c ${cppflags} -o chbook.o chbook.cpp
+${cpp_compiler} ${cppflags} -o ./tools_test_chbook chbook.o close.o setpawc.o ${libs}
+
+# ////////////////////////////////////
+# /// whbook.cpp /////////////////////
+# ////////////////////////////////////
+echo "build whbook.cpp ..."
+
+${f77_compiler} ${f77flags} -c -o setntuc.o ../include/tools/hbook/setntuc.f
+
+${cpp_compiler} -c ${cppflags} -o whbook.o whbook.cpp
+${cpp_compiler} ${cppflags} -o ./tools_test_whbook whbook.o setntuc.o setpawc.o close.o ${libs}
+
+# ////////////////////////////////////
+# ////////////////////////////////////
+# ////////////////////////////////////
+
+find . -name "*.o" -exec /bin/rm -f {} \;

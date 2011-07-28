@@ -1,0 +1,19 @@
+# $Id: GNUmakefile,v 1.4 2010-11-08 10:38:44 maire Exp $
+# --------------------------------------------------------------
+#
+
+name := G4analysis
+
+ifndef G4INSTALL
+  G4INSTALL = ../..
+endif
+
+include $(G4INSTALL)/config/architecture.gmk
+
+.PHONY: all
+all: lib
+
+CPPFLAGS += -I$(G4BASE)/global/management/include \
+            -I$(G4BASE)/analysis/include
+            
+include $(G4INSTALL)/config/common.gmk

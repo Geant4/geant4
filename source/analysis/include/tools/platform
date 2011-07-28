@@ -1,0 +1,28 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_platform
+#define tools_platform
+
+// We do not byteswap on intel (LE) (common platform).
+// We have then a better compression on these machines.
+// NOTE : this is the contrary to what is done in ROOT (and Rio).
+
+namespace tools {
+
+inline bool is_little_endian() {
+  unsigned int i = 1;
+  unsigned char* b = (unsigned char*)&i;
+  // BE = Big Endian, LE = Little Endian.
+  // The Intels x86 are LE.
+  // Mac PPC b[3] is 1 (BE)
+  // Mac Intel b[0] is 1 (LE)
+  // Linux i386 b[0] is 1 (LE)
+  // Linux x86_64 b[0] is 1 (LE)
+  return (b[0]==1?true:false);
+}
+
+}
+
+#endif
+
