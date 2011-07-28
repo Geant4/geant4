@@ -55,6 +55,8 @@ G4PrimaryVertex::G4PrimaryVertex(G4ThreeVector xyz0,G4double t0)
 }
 
 G4PrimaryVertex::G4PrimaryVertex(const G4PrimaryVertex & right)
+:theParticle(0),theTail(0),
+ nextVertex(0),tailVertex(0),userInfo(0)
 {
   *this = right;
 }

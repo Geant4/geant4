@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 2 July 2011  H.Kurashige (particles-V09-04-11)
+- Fixed bugs of uninitialized values in CTOR of G4PrimaryParticle and G4PrimaryVertex
+
 - 27 June 2011 G.Cosmo (particles-V09-04-10)
 - Moved GetParticleName() and FindParticle() methods in G4ParticleTable
   to be non-inline (defining multiple return statements).
