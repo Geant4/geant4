@@ -65,14 +65,11 @@ G4AdjointPosOnPhysVolGenerator::~G4AdjointPosOnPhysVolGenerator()
 ////////////////////////////////////////////////////
 //
 G4AdjointPosOnPhysVolGenerator::G4AdjointPosOnPhysVolGenerator()
+   : theSolid(0), thePhysicalVolume(0), NStat(1000000), epsilon(0.001),
+     UseSphere(true), ModelOfSurfaceSource("OnSolid"),
+     ExtSourceRadius(0.), ExtSourceDx(0.), ExtSourceDy(0.), ExtSourceDz(0.),
+     AreaOfExtSurfaceOfThePhysicalVolume(0.), CosThDirComparedToNormal(0.)
 { 
-  theSolid=0;
-  NStat =1000000;
-  epsilon=0.001;
-  ModelOfSurfaceSource = "OnSolid"; //OnSolid, ExternalSphere, ExternalBox
-  thePhysicalVolume = 0;
-  theTransformationFromPhysVolToWorld = G4AffineTransform();
-  UseSphere =true;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -219,19 +216,16 @@ void G4AdjointPosOnPhysVolGenerator::GenerateAPositionOnASolidBoundary(G4VSolid*
 { 
   G4bool find_pos =false;
   while (!find_pos){
-  	 if (UseSphere) GenerateAPositionOnASphereBoundary( aSolid,p, direction);
-  	 else  GenerateAPositionOnABoxBoundary( aSolid,p, direction);
-	 G4double dist_to_in = aSolid->DistanceToIn(p,direction);
-	 if (dist_to_in<kInfinity/2.) {
-		find_pos =true;
-		G4ThreeVector p1=p+ 0.99999*direction*dist_to_in;
-		G4ThreeVector norm =aSolid->SurfaceNormal(p1);
-		p+= 0.999999*direction*dist_to_in;
-		CosThDirComparedToNormal=direction.dot(-norm);
-		//std::cout<<CosThDirComparedToNormal<<std::endl;
-		
-		return;
-	}
+    if (UseSphere) GenerateAPositionOnASphereBoundary( aSolid,p, direction);
+    else  GenerateAPositionOnABoxBoundary( aSolid,p, direction);
+    G4double dist_to_in = aSolid->DistanceToIn(p,direction);
+    if (dist_to_in<kInfinity/2.) {
+      find_pos =true;
+      G4ThreeVector p1=p+ 0.99999*direction*dist_to_in;
+      G4ThreeVector norm =aSolid->SurfaceNormal(p1);
+      p+= 0.999999*direction*dist_to_in;
+      CosThDirComparedToNormal=direction.dot(-norm);
+    }
   }
 }
 /////////////////////////////////////////////////////////////////////////////////////////

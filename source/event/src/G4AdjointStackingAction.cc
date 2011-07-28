@@ -40,6 +40,7 @@
 #include "G4ios.hh"
 
 G4AdjointStackingAction::G4AdjointStackingAction()
+  : kill_tracks(true), adjoint_mode(true)
 {
   theFwdStackingAction =0;
   theUserAdjointStackingAction =0;

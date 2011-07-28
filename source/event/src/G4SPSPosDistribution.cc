@@ -52,6 +52,7 @@
 #include "G4SPSPosDistribution.hh"
 
 G4SPSPosDistribution::G4SPSPosDistribution()
+  : posRndm(0)
 {
 
   // Initialise all variables

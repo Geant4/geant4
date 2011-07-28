@@ -31,7 +31,7 @@
 // G4VPrimaryGenerator
 #include "G4VPrimaryGenerator.hh"
 
-G4VPrimaryGenerator::G4VPrimaryGenerator()
+G4VPrimaryGenerator::G4VPrimaryGenerator() : particle_time(0.)
 {;}
 
 G4VPrimaryGenerator::~G4VPrimaryGenerator()

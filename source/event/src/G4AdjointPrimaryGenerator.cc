@@ -43,6 +43,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 G4AdjointPrimaryGenerator::G4AdjointPrimaryGenerator()
+  : radius_spherical_source(0.)
 {
   theSingleParticleSource  = new G4SingleParticleSource();
  

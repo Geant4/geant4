@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 7th, 2011, G.Cosmo (event-V09-04-06)
+- Fixed Coverity defects for uninitialised static data.
+
 June 21st, 2011, G.Cosmo (event-V09-04-05)
 - Fixed compilation warnings on gcc-4.6.0 for unused variables in
   G4SPSPosDistribution and G4AdjointPosOnPhysVolGenerator sources.

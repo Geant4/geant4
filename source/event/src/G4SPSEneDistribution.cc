@@ -49,7 +49,9 @@
 
 #include "G4SPSEneDistribution.hh"
 
-G4SPSEneDistribution::G4SPSEneDistribution() {
+G4SPSEneDistribution::G4SPSEneDistribution()
+  : particle_definition(0), eneRndm(0), Splinetemp(0)
+{
 	//
 	// Initialise all variables
 	particle_energy = 1.0 * MeV;
