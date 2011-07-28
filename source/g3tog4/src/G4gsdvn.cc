@@ -107,7 +107,9 @@ void G4gsdvn(G4String vname, G4String vmoth, G4int ndiv, G4int iaxis)
   G3VolTableEntry* mvte = G3Vol.GetVTE(vmoth);
  
   if (mvte == 0) {
-    G4Exception("G4gsdvn:'" + vmoth + "' has no VolTableEntry");
+    G4String text = "G4gsdvn:'" + vmoth + "' has no VolTableEntry";
+    G4Exception("G4gsdvn()", "G3toG40013", FatalException, text);
+    return;
   }  
   else {
     // a new vte clone copy with division is created

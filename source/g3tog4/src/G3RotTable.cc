@@ -64,10 +64,12 @@ void G3RotTable::Clear()
     a = fRotVector->back();
     fRotVector->pop_back();
     for (G3RotMatrixVector::iterator i=fRotVector->begin();
-                                     i!=fRotVector->end(); i++){
+                                     i!=fRotVector->end();){
       if (*i==a) {
-	fRotVector->erase(i);
-	i--;
+	i = fRotVector->erase(i);
+      }
+      else {
+	++i;
       }
     } 
     if ( a )  delete a;    

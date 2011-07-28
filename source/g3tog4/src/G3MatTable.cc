@@ -64,10 +64,12 @@ void G3MatTable::Clear()
     a = fMatVector->back();
     fMatVector->pop_back();
     for (G3MaterialVector::iterator i=fMatVector->begin();
-                                    i!=fMatVector->end(); i++){
+                                    i!=fMatVector->end();){
       if (*i==a) {
-	fMatVector->erase(i);
-	i--;
+	i = fMatVector->erase(i);
+      }
+      else {
+	++i;
       }
     } 
     if ( a )  delete a;    

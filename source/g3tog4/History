@@ -3,6 +3,10 @@ $Id: History,v 1.63 2008-11-17 08:34:11 gcosmo Exp $
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
 
+g3tog4-V09-04-02 06-Jul-2011 G.Cosmo
+- Fixed Coverity defects.
+- Use canonic indexed form for G4Exception.
+
 g3tog4-V09-04-01 13-May-2011 G.Cosmo
 - Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
 

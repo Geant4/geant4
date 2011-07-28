@@ -109,9 +109,11 @@ G3VolTableEntry::ReplaceDaughter(G3VolTableEntry* vteOld,
     if (fDaughters[i]->GetName() == vteOld->GetName()) index = i;
   }
   if (index<0) {
-    G4Exception(
-      "G3VolTableEntry::ReplaceDaughter: old daughter " +
-       vteOld->GetName() + " does not exist.");
+    G4String err_message = "Old daughter " + vteOld->GetName()
+                         + " does not exist.";
+    G4Exception("G3VolTableEntry::ReplaceDaughter()", "G3toG40007",
+                FatalException, err_message);
+    return;
   }      
   fDaughters[index] = vteNew;
 }
@@ -125,9 +127,11 @@ G3VolTableEntry::ReplaceMother(G3VolTableEntry* vteOld,
     if (fMothers[i]->GetName() == vteOld->GetName()) index = i;
   }
   if (index<0) {
-    G4Exception(
-      "G3VolTableEntry::ReplaceMother: old mother " +
-       vteOld->GetName() + " does not exist.");
+    G4String err_message = "Old mother " + vteOld->GetName()
+                         + " does not exist.";
+    G4Exception("G3VolTableEntry::ReplaceMother()", "G3toG40008",
+                FatalException, err_message);
+    return;
   }      
   fMothers[index] = vteNew;
 }

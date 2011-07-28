@@ -70,10 +70,14 @@ void G4gspos(G4String vname, G4int num, G4String vmoth, G4double x,
   G3VolTableEntry* mvte = G3Vol.GetVTE(vmoth);
 
   if (vte == 0) {
-    G4Exception("G4gspos: '" + vname + "' has no VolTableEntry");
+    G4String text = "G4gspos: '" + vname + "' has no VolTableEntry";
+    G4Exception("G4gspos()", "G3toG40017", FatalException, text);
+    return;
   } 
   else if (mvte == 0) {
-    G4Exception("G4gspos: '" + vmoth + "' has no VolTableEntry");
+    G4String text = "G4gspos: '" + vmoth + "' has no VolTableEntry";
+    G4Exception("G4gspos()", "G3toG40018", FatalException, text);
+    return;
   } 
   else { 
     if (!vte->HasNegPars()) {

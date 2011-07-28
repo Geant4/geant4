@@ -86,7 +86,9 @@ void G4gsrotm(G4int irot, G4double theta1, G4double phi1,
         G4cerr << " theta3=" << theta3;
         G4cerr << " phi3=" << phi3;
         G4cerr << G4endl;
-        G4Exception("G4gsrotm error");
+        G4Exception("G4gsrotm()", "G3toG40023", FatalException,
+                    "Non orthogonal axes!");
+        return;
     }
     //else if (1+check<=tol) {
     //    G4cerr << "G4gsrotm warning: coordinate axes forming rotation "

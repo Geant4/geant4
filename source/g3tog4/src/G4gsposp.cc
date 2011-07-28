@@ -91,9 +91,10 @@ void G4ProcessDaughters(G3VolTableEntry* vte)
 	    = G3NegVolPars(pars,&npar, dvte, vte, "GSPOS");
 
           if (negpars) {
-            G4String text = "    G4ProcessDaughter:\n"; 
-  	    text = text + "    G3NegVolPars still returns negative parameters!";
-            G4Exception(text);
+            G4String text = "G3NegVolPars still returns negative parameters!";
+            G4Exception("G4ProcessDaughters()", "G3toG40019",
+                        FatalException, text);
+            return;
   	  }  
 
           // create solid
@@ -104,9 +105,10 @@ void G4ProcessDaughters(G3VolTableEntry* vte)
             = G3toG4MakeSolid(dvte->GetName(), dvte->GetShape(), pars, npar, 
 	                      hasNegPars, deferred, okAxis);  
           if (hasNegPars) {
-            G4String text = "    G4ProcessDaughter:\n"; 
-  	    text = text + "    G3toG4MakeSolid still returns negative parameters!";
-            G4Exception(text);
+            G4String text = "G3toG4MakeSolid still returns negative parameters!";
+            G4Exception("G4ProcessDaughters()", "G3toG40020",
+                        FatalException, text);
+            return;
 	  }  
 
           // update dvte			  
@@ -239,8 +241,7 @@ void G4CreateCloneVTE(G3VolTableEntry* vte, G3VolTableEntry* mvte,
 		break;  
 	      }
 	  } 
-	  if (isSame) vteSameClone = checkClone;	  
-	  break;
+	  if (isSame) { vteSameClone = checkClone; break; }
         }
        
         if (vteSameClone) {
@@ -302,10 +303,14 @@ void G4gsposp(G4String vname, G4int num, G4String vmoth, G4double x,
   G3VolTableEntry* mvte = G3Vol.GetVTE(vmoth);
 
   if (vte == 0) {
-    G4Exception("G4gsposp: '" + vname + "' has no VolTableEntry");
+    G4String err_message1 = "G4gsposp: '" + vname + "' has no VolTableEntry";
+    G4Exception("G4psposp()", "G3toG40021", FatalException, err_message1);
+    return;
   } 
   if (mvte == 0) {
-    G4Exception("G4gsposp: '" + vmoth + "' has no VolTableEntry");
+    G4String err_message2 = "G4gsposp: '" + vmoth + "' has no VolTableEntry";
+    G4Exception("G4psposp()", "G3toG40022", FatalException, err_message2);
+    return;
   } 
   else { 
     // a new vte clone copy is created for each mother (clone copy)  

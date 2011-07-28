@@ -82,7 +82,9 @@ void G4gsvolu(G4String vname, G4String shape, G4int nmed, G4double* Rpar,
   */
   if (G3Vol.GetVTE(vname)) {
     // abort if VTE with given name exists
-    G4Exception("G4gsvolu: Attempt to create volume " + vname + " twice.");
+    G4String text = "G4gsvolu: Attempt to create volume " + vname + " twice.";
+    G4Exception("G4gsvolu()", "G3toG40024", FatalException, text);
+    return;
   }
   else {  
     G4CreateVTE(vname, shape, nmed, Rpar, npar);

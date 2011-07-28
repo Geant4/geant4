@@ -40,7 +40,9 @@ void G4gsbool(G4String volName, G4String manyVolName)
   G3VolTableEntry* manyVTE = G3Vol.GetVTE(manyVolName);
 
   if (vte == 0) {
-    G4Exception("G4gsbool: '" + volName + "' has no VolTableEntry");
+    G4String text = "G4gsbool: '" + volName + "' has no VolTableEntry";
+    G4Exception("G4gsbool()", "G3toG40012", FatalException, text);
+    return;
   } 
   else if (manyVTE == 0) {
     // warning

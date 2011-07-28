@@ -79,10 +79,12 @@ void G3MedTable::Clear()
     a = fMedVector->back();
     fMedVector->pop_back();
     for (G3MediumVector::iterator i=fMedVector->begin();
-                                  i!=fMedVector->end(); i++){
+                                  i!=fMedVector->end();){
       if (*i==a) {
-	fMedVector->erase(i);
-	i--;
+	i = fMedVector->erase(i);
+      }
+      else {
+	++i;
       }
     } 
     if ( a )  delete a;    
