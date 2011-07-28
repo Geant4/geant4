@@ -35,6 +35,7 @@
 G4int G4QGSParticipants_NPart = 0;
 
 G4QGSParticipants::G4QGSParticipants() : theDiffExcitaton(), //0.7*GeV, 250*MeV, 250*MeV),
+					 ModelMode(SOFT),
                                          //nCutMax(7),ThresholdParameter(0.45*GeV),
                                          nCutMax(7),ThresholdParameter(0.000*GeV),
                                          QGSMThreshold(3*GeV),theNucleonRadius(1.5*fermi)
@@ -43,8 +44,9 @@ G4QGSParticipants::G4QGSParticipants() : theDiffExcitaton(), //0.7*GeV, 250*MeV,
 }
 
 G4QGSParticipants::G4QGSParticipants(const G4QGSParticipants &right)
-: G4VParticipants(), nCutMax(right.nCutMax),ThresholdParameter(right.ThresholdParameter),
-  QGSMThreshold(right.QGSMThreshold),theNucleonRadius(right.theNucleonRadius)
+: G4VParticipants(),ModelMode(right.ModelMode), nCutMax(right.nCutMax),
+  ThresholdParameter(right.ThresholdParameter), QGSMThreshold(right.QGSMThreshold),
+  theNucleonRadius(right.theNucleonRadius)
 {
 }
 

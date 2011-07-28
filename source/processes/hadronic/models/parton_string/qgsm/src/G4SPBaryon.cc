@@ -34,6 +34,7 @@ G4int G4SPBaryon::FindQuark(G4int diQuark) const
   G4double sum = GetProbability(diQuark);
   G4double random = G4UniformRand();
   G4double running = 0;
+  G4int Quark(0);
   typedef std::vector<G4SPPartonInfo *>::const_iterator iter;
   iter i;
   for(i = thePartonInfo.begin(); i!=thePartonInfo.end(); i++)
@@ -43,12 +44,12 @@ G4int G4SPBaryon::FindQuark(G4int diQuark) const
       running += (*i)->GetProbability();
       if (running/sum >= random) 
       {
-        diQuark = (*i)->GetDiQuark(); 
+        Quark = (*i)->GetQuark(); 
         break;                  
       }
     }
   }
-  return (*i)->GetQuark();
+  return Quark;
 }
     
 G4double G4SPBaryon::GetProbability(G4int diQuark) const
@@ -82,10 +83,13 @@ MatchDiQuarkAndGetQuark(const G4SPBaryon & aBaryon, G4int & aDiQuark) const
   for(i = thePartonInfo.begin(); i!=thePartonInfo.end(); i++)
   {
     running += aBaryon.GetProbability((*i)->GetDiQuark());
-    if(random/total<running) break;
+    if(random/total<running) 
+    {
+       result = (*i)->GetQuark(); // (diquark annihilated)
+       aDiQuark = (*i)->GetDiQuark();
+       break;
+    }
   }
-  result = (*i)->GetQuark(); // (diquark annihilated)
-  aDiQuark = (*i)->GetDiQuark();
   return result;
 }
 
