@@ -17,7 +17,7 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-July 29 2011 G.Cosmo (analysis-V09-04-03)
+July 29 2011 G.Cosmo (analysis-V09-04-04)
 - Fix in tools/vdata for compilation error in Intel ICC compiler.
 
 July 28 2011 B.Morgan (analysis-V09-04-02)
