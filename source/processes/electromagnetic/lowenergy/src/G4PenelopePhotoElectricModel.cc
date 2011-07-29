@@ -72,6 +72,9 @@ G4PenelopePhotoElectricModel::G4PenelopePhotoElectricModel(const G4ParticleDefin
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
 
+  //Mark this model as "applicable" for atomic deexcitation
+  SetDeexcitationFlag(true);
+
   fTransitionManager = G4AtomicTransitionManager::Instance();
 }
 
@@ -112,18 +115,6 @@ void G4PenelopePhotoElectricModel::Initialise(const G4ParticleDefinition* partic
 	   << "Energy range: "
 	   << LowEnergyLimit() / MeV << " MeV - "
 	   << HighEnergyLimit() / GeV << " GeV";
-
-    //Write the information about deexcitation
-    //Notice: to be compeleted when a getter of the isActive status
-    //is made available
-    if (fAtomDeexcitation)      
-      //if (fAtomDeexcitation->IsActive())
-	G4cout << "--> Fluorescence flag ON";
-    //else
-    //	G4cout << "--> Fluorescence flag OFF";
-    else
-      G4cout << "--> Fluorescence flag OFF";
-    G4cout << G4endl;
   }
 
   if(isInitialised) return;

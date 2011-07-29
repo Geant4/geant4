@@ -147,7 +147,11 @@ size_t G4AugerData::NumberOfTransitions(G4int Z, G4int vacancyIndex) const
     }
   else {
     trans_Table::const_iterator element = augerTransitionTable.find(Z);
-    if (element == augerTransitionTable.end()) {G4Exception("G4AugerData::augerTransitionTable: Data not Loaded");}
+    if (element == augerTransitionTable.end()) 
+      {
+	G4Exception("G4AugerData::augerTransitionTable: Data not Loaded");
+	return 0;
+      }
     std::vector<G4AugerTransition> dataSet = (*element).second;
     n = (G4int)dataSet[vacancyIndex].TransitionOriginatingShellIds()->size();
   }

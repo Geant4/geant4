@@ -101,6 +101,9 @@ G4LivermorePhotoElectricModel::G4LivermorePhotoElectricModel(
 	   << highEnergyLimit / GeV << " GeV"
 	   << G4endl;
   }
+
+  //Mark this model as "applicable" for atomic deexcitation
+  SetDeexcitationFlag(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

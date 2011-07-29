@@ -76,6 +76,9 @@ G4PenelopeComptonModel::G4PenelopeComptonModel(const G4ParticleDefinition*,
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
 
+  //Mark this model as "applicable" for atomic deexcitation
+  SetDeexcitationFlag(true);
+
   fTransitionManager = G4AtomicTransitionManager::Instance();
 }
 
@@ -98,18 +101,7 @@ void G4PenelopeComptonModel::Initialise(const G4ParticleDefinition*,
       G4cout << "Penelope Compton model v2008 is initialized " << G4endl
 	     << "Energy range: "
 	     << LowEnergyLimit() / keV << " keV - "
-	     << HighEnergyLimit() / GeV << " GeV";
-      //Write the information about deexcitation
-      //Notice: to be compeleted when a getter of the isActive status
-      //is made available
-      if (fAtomDeexcitation)      
-	//if (fAtomDeexcitation->IsActive())
-	G4cout << "--> Fluorescence flag ON";
-      //else
-      //	G4cout << "--> Fluorescence flag OFF";
-      else
-	G4cout << "--> Fluorescence flag OFF";
-      G4cout << G4endl;
+	     << HighEnergyLimit() / GeV << " GeV";  
     }
   
   if(isInitialised) return;

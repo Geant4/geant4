@@ -54,8 +54,8 @@ G4AnalyticalEcpssrKCrossSection::G4AnalyticalEcpssrKCrossSection()
     tableC3 = new G4CrossSectionDataSet(new G4SemiLogInterpolation, 1.,1.);
 
     // Storing FK data needed for medium velocities region
-
-    char *path = getenv("G4LEDATA");
+    char *path = 0;
+    path = getenv("G4LEDATA");
  
     if (!path) {
       G4Exception("G4AnalyticalEcpssrKCrossSection::G4AnalyticalEcpssrKCrossSection() G4LEDATA environment variable not set");

@@ -17,8 +17,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-05.07.2011  L. Pandola tag emlowen-V09-04-51
+28.07.2011  S.I. + L.P. + V.I. tag emlowen-V09-04-54
+	    -Use SetDeexcitationFlag(true) in the migrated 
+	    Livermore models.
+	    -Removed printouts in Penelope migrated models.
+
+26.07.2011  L. Pandola tag emlowen-V09-04-53
+	    Use SetDeexcitationFlag(true) in the migrated 
+	    Penelope models (flag that atomDeex is applicable 
+	    for these models).
+
+21.07.2011  A. Mantero tag emlowen-V09-04-52
 	    Fixed coverity warnings.
+
+05.07.2011  L. Pandola tag emlowen-V09-04-51
+            Fixed coverity warnings.
 
 02.07.2011  S. Incerti, tag emlowen-V09-04-50
 	    Fixed coverity warnings.
