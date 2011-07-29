@@ -27,6 +27,7 @@
 //
 // 20100804  M. Kelsey -- Add name string to ctor
 // 20110719  M. Kelsey -- Add initial state code to ctor
+// 20110725  M. Kelsey -- Instantiate cross-section object for self-registration
 
 #include "G4CascadeLambdaNChannel.hh"
 #include "G4InuclParticleNames.hh"
@@ -910,3 +911,7 @@ G4CascadeLambdaNChannelData::data_t
 G4CascadeLambdaNChannelData::data(ln2bfs, ln3bfs, ln4bfs,
 				  ln5bfs, ln6bfs, ln7bfs,
 				  lnCrossSections, lam*neu, "LambdaN");
+
+namespace {
+  G4CascadeLambdaNChannel lookup;	// Force instantiation and registration
+}

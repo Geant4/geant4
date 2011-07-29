@@ -86,6 +86,8 @@
 //		Fix charge violation report before throwing exception.
 // 20110722  M. Kelsey -- In makeDynamicParticle(), allow invalid type codes
 //		in order to process, e.g., resonances from Propagate() input
+// 20110728  M. Kelsey -- Per V.Ivantchenko, change NoInteraction to return
+//		zero particles, but set kinetic energy from projectile.
 
 #include "G4CascadeInterface.hh"
 #include "globals.hh"
@@ -344,15 +346,9 @@ G4CascadeInterface::NoInteraction(const G4HadProjectile& aTrack,
   if (verboseLevel) 
     G4cout << " >>> G4CascadeInterface::NoInteraction" << G4endl;
 
-  // Convert projectile to particle for output
-  G4DynamicParticle* projectile =
-    new G4DynamicParticle(aTrack.GetDefinition(), aTrack.Get4Momentum());
-  projectile->SetProperTime(aTrack.GetGlobalTime());
-
-  // Only the projectile needs to be copied onto the output
   theParticleChange.Clear();
   theParticleChange.SetStatusChange(isAlive);
-  theParticleChange.AddSecondary(projectile);
+  theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
 
   return &theParticleChange;
 }

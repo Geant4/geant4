@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Factory function to return pointer to Bertini cross-section table based on
+// Factory class to return pointer to Bertini cross-section table based on
 // collision initial state (hadron type codes).
 //
 // Author:  Michael Kelsey (SLAC)
@@ -32,24 +32,48 @@
 #define G4_CASCADE_CHANNEL_TABLES_HH
 
 #include "globals.hh"
+#include <map>
 
 class G4CascadeChannel;
 
 
-namespace G4CascadeChannelTables {
+class G4CascadeChannelTables {
+public:
   // Argument is interaction code, product of G4InuclEP types
-  const G4CascadeChannel* GetTable(G4int initialState);
+  static const G4CascadeChannel* GetTable(G4int initialState) {
+    return instance.FindTable(initialState);
+  }
 
   // Arguments are individual G4InuclElementaryParticle types
-  inline const G4CascadeChannel* GetTable(G4int had1, G4int had2);
+  static const G4CascadeChannel* GetTable(G4int had1, G4int had2) {
+    return instance.FindTable(had1*had2);
+  }
 
   // Convenience function for diagnostic output
-  void PrintTable(G4int initialState);
-}
+  static void PrintTable(G4int initialState);
 
-inline const G4CascadeChannel* 
-G4CascadeChannelTables::GetTable(G4int had1, G4int had2) {
-  return GetTable(had1*had2);
-}
+  // Register cross-section table for later lookup
+  static void AddTable(G4int initialState, G4CascadeChannel* table) {
+    instance.SaveTable(initialState, table);
+  }
+
+private:
+  static G4CascadeChannelTables instance;	// Singleton
+
+  G4CascadeChannelTables() {}
+  ~G4CascadeChannelTables() {}	// Tables are created externally, not owned
+
+  // Fetch table from map if already registered, or return null
+  const G4CascadeChannel* FindTable(G4int initialState);
+
+  // Save table for specified interaction in map 
+  void SaveTable(G4int initialState, G4CascadeChannel* table);
+
+  typedef std::map<G4int, G4CascadeChannel*> TableMap;
+  typedef std::pair<const G4int, G4CascadeChannel*> TableEntry;
+  TableMap tables;
+
+  static void DeleteTable(TableEntry& t);	// For use by destructor
+};
 
 #endif	/* G4_CASCADE_CHANNEL_TABLES_HH */

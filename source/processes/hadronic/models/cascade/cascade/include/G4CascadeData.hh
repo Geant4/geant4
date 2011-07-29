@@ -39,6 +39,7 @@
 // 20110718  M. Kelsey -- Add inelastic cross-section sum to deal with
 //		suppressing elastic scattering off free nucleons (hydrogen)
 // 20110719  M. Kelsey -- Add ctor argument for two-body initial state
+// 20110725  M. Kelsey -- Save initial state as data member
 
 #ifndef G4_CASCADE_DATA_HH
 #define G4_CASCADE_DATA_HH
@@ -81,6 +82,7 @@ struct G4CascadeData
   static const G4int empty9bfs[1][9];
 
   const G4String name;			// For diagnostic purposes
+  const G4int initialState;		// For registration in lookup table
 
   G4int maxMultiplicity() const { return NM+1; }  // Used by G4CascadeFunctions
 
@@ -91,32 +93,38 @@ struct G4CascadeData
   G4CascadeData(const G4int (&the2bfs)[N2][2], const G4int (&the3bfs)[N3][3],
 		const G4int (&the4bfs)[N4][4], const G4int (&the5bfs)[N5][5],
 		const G4int (&the6bfs)[N6][6], const G4int (&the7bfs)[N7][7],
-		const G4double (&xsec)[NXS][NE], G4int initialState,
+		const G4double (&xsec)[NXS][NE], G4int ini,
 		const G4String& aName="G4CascadeData")
     : x2bfs(the2bfs), x3bfs(the3bfs), x4bfs(the4bfs), x5bfs(the5bfs),
       x6bfs(the6bfs), x7bfs(the7bfs), x8bfs(empty8bfs), x9bfs(empty9bfs),
-      crossSections(xsec), tot(sum), name(aName) { initialize(initialState); }
+      crossSections(xsec), tot(sum), name(aName), initialState(ini) {
+    initialize();
+  }
 
   // Constructor for kaon/hyperon channels, with multiplicity <= 7 and inclusive
   G4CascadeData(const G4int (&the2bfs)[N2][2], const G4int (&the3bfs)[N3][3],
 		const G4int (&the4bfs)[N4][4], const G4int (&the5bfs)[N5][5],
 		const G4int (&the6bfs)[N6][6], const G4int (&the7bfs)[N7][7],
 		const G4double (&xsec)[NXS][NE], const G4double (&theTot)[NE],
-		G4int initialState, const G4String& aName="G4CascadeData")
+		G4int ini, const G4String& aName="G4CascadeData")
     : x2bfs(the2bfs), x3bfs(the3bfs), x4bfs(the4bfs), x5bfs(the5bfs),
       x6bfs(the6bfs), x7bfs(the7bfs), x8bfs(empty8bfs), x9bfs(empty9bfs),
-      crossSections(xsec), tot(theTot), name(aName) { initialize(initialState); }
+      crossSections(xsec), tot(theTot), name(aName), initialState(ini) {
+    initialize();
+  }
 
   // Constructor for pion/nucleon channels, with multiplicity > 7
   G4CascadeData(const G4int (&the2bfs)[N2][2], const G4int (&the3bfs)[N3][3],
 		const G4int (&the4bfs)[N4][4], const G4int (&the5bfs)[N5][5],
 		const G4int (&the6bfs)[N6][6], const G4int (&the7bfs)[N7][7],
 		const G4int (&the8bfs)[N8D][8], const G4int (&the9bfs)[N9D][9],
-		const G4double (&xsec)[NXS][NE], G4int initialState,
+		const G4double (&xsec)[NXS][NE], G4int ini,
 		const G4String& aName="G4CascadeData")
     : x2bfs(the2bfs), x3bfs(the3bfs), x4bfs(the4bfs), x5bfs(the5bfs),
       x6bfs(the6bfs), x7bfs(the7bfs), x8bfs(the8bfs), x9bfs(the9bfs),
-      crossSections(xsec), tot(sum), name(aName) { initialize(initialState); }
+      crossSections(xsec), tot(sum), name(aName), initialState(ini) {
+    initialize();
+  }
 
   // Constructor for pion/nucleon channels, with multiplicity > 7 and inclusive
   G4CascadeData(const G4int (&the2bfs)[N2][2], const G4int (&the3bfs)[N3][3],
@@ -124,12 +132,14 @@ struct G4CascadeData
 		const G4int (&the6bfs)[N6][6], const G4int (&the7bfs)[N7][7],
 		const G4int (&the8bfs)[N8D][8], const G4int (&the9bfs)[N9D][9],
 		const G4double (&xsec)[NXS][NE], const G4double (&theTot)[NE],
-		G4int initialState, const G4String& aName="G4CascadeData")
+		G4int ini, const G4String& aName="G4CascadeData")
     : x2bfs(the2bfs), x3bfs(the3bfs), x4bfs(the4bfs), x5bfs(the5bfs),
       x6bfs(the6bfs), x7bfs(the7bfs), x8bfs(the8bfs), x9bfs(the9bfs),
-      crossSections(xsec), tot(theTot), name(aName) { initialize(initialState); }
+      crossSections(xsec), tot(theTot), name(aName), initialState(ini) {
+    initialize();
+  }
 
-  void initialize(G4int initialState);	// Fill summed arrays from input
+  void initialize();			// Fill summed arrays from input
 };
 
 // Dummy arrays for use when optional template arguments are skipped

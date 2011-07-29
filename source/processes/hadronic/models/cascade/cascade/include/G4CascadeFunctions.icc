@@ -32,9 +32,19 @@
 //		getOutgoingPartTypes().
 // 20100803  M. Kelsey -- Add printing function for debugging
 // 20100804  M. Kelsey -- Pretty up printing function
+// 20110725  M. Kelsey -- Use ctor to register table in lookup factory
 
 #include "G4CascadeFunctions.hh"
+#include "G4CascadeChannelTables.hh"
 #include "globals.hh"
+
+
+// Constructor registers table in lookup
+
+template <class DATA, class SAMP>
+G4CascadeFunctions<DATA,SAMP>::G4CascadeFunctions() : SAMP() {
+  G4CascadeChannelTables::AddTable(DATA::data.initialState, this);
+}
 
 
 // Compare summed partial cross section with total cross section

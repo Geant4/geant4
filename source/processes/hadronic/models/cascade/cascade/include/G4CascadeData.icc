@@ -31,6 +31,7 @@
 // 20110718  M. Kelsey -- Add inelastic cross-section sum to deal with
 //		suppressing elastic scattering off free nucleons (hydrogen)
 // 20110719  M. Kelsey -- Add ctor argument for two-body initial state
+// 20110725  M. Kelsey -- Save initial state as data member
 
 #ifndef G4_CASCADE_DATA_ICC
 #define G4_CASCADE_DATA_ICC
@@ -41,7 +42,7 @@
 
 // Fill cumulative cross-section arrays from input data
 template <int NE,int N2,int N3,int N4,int N5,int N6,int N7,int N8,int N9> inline
-void G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::initialize(G4int initialState) {
+void G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::initialize() {
   // Initialize index offsets for cross-section array (can't do globally)
   index[0] = 0;   index[1] = N02; index[2] = N23; index[3] = N24;
   index[4] = N25; index[5] = N26; index[6] = N27; index[7] = N28;

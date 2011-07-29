@@ -15,6 +15,37 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+27 July 2011  Michael Kelsey (hadr-casc-V09-04-21)
+--------------------------------------------------
+- G4CascadeInterface.cc:  Simplify NoInteraction() per V.Ivantchenko.  No
+  particles are returned, but "SetEnergyChange" is used to communicate to
+  tracking that real track should be stopped and deposit all its energy.
+
+- G4NucleiModel:  Compared local kaon/hyperon cross-section tables with
+  sum-of-exclusive tables from G4Cascade*Channel.cc; all bin values below 10
+  GeV are identical.  The channel tables have a somewhat more realistic
+  treatment of high energy projectiles (a logarithmic decrease rather than
+  flat).  Remove the local arrays, using channel table lookup for everything.
+
+25 July 2011  Michael Kelsey (hadr-casc-V09-04-20)
+--------------------------------------------------
+Make cross-section tables self-registering at job initialization.  No switch
+blocks needed any longer:  new initial-state tables become usable without
+any code modification.
+
+- G4CascadeData:  Add data member storing initial state argument.
+
+- G4CascadeFunctions:  Move constructor implementation to .icc file, where
+  registration to lookup table is done.
+
+- G4CascadeChannelTables:  Change from namespace back to class, with
+  std::map as data member.  Add public function to register new table in
+  map, and return null pointer if lookup fails (i.e., no create-on-demand).
+
+- G4Cascade*Channel.cc:  Add local instance of each cross-section table,
+  used solely to trigger auto-registration in base class ctor.  The
+  corresponding .hh files no longer appear anywhere else in Bertini code.
+
 25 July 2011  Michael Kelsey (hadr-casc-V09-04-19)
 --------------------------------------------------
 - sources.cmake:  Update HEADERS and SOURCES list with new code added 20

@@ -27,6 +27,7 @@
 //
 // 20100804  M. Kelsey -- Add name string to ctor
 // 20110719  M. Kelsey -- Add initial state code to ctor
+// 20110725  M. Kelsey -- Instantiate cross-section object for self-registration
 
 #include "G4CascadeSigmaZeroPChannel.hh"
 #include "G4InuclParticleNames.hh"
@@ -910,3 +911,7 @@ G4CascadeSigmaZeroPChannelData::data_t
 G4CascadeSigmaZeroPChannelData::data(s0p2bfs, s0p3bfs, s0p4bfs,
 				     s0p5bfs, s0p6bfs, s0p7bfs,
 				     s0pCrossSections, s0*pro, "SigmaZeroP");
+
+namespace {
+  G4CascadeSigmaZeroPChannel lookup;	// Force instantiation and registration
+}

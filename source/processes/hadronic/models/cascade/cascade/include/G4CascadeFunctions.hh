@@ -40,6 +40,7 @@
 // 20100803  M. Kelsey -- Add printing function for debugging
 // 20110719  M. Kelsey -- Add inheritance from non-template base for factory,
 //		change static's to virtual (no more direct access)
+// 20110725  M. Kelsey -- Move ctor to .icc file for registration in lookup
 
 #ifndef G4_CASCADE_FUNCTIONS_HH
 #define G4_CASCADE_FUNCTIONS_HH
@@ -53,7 +54,7 @@
 template <class DATA, class SAMP>
 class G4CascadeFunctions : public G4CascadeChannel, public SAMP {
 public:
-  G4CascadeFunctions() : SAMP() {}
+  G4CascadeFunctions();
   virtual ~G4CascadeFunctions() {}
 
   virtual G4double getCrossSection(double ke) const {

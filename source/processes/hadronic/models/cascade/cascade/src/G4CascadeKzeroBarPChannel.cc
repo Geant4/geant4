@@ -27,6 +27,7 @@
 //
 // 20100804  M. Kelsey -- Add name string to ctor
 // 20110719  M. Kelsey -- Add initial state code to ctor
+// 20110725  M. Kelsey -- Instantiate cross-section object for self-registration
 
 #include "G4CascadeKzeroBarPChannel.hh"
 #include "G4InuclParticleNames.hh"
@@ -718,3 +719,7 @@ G4CascadeKzeroBarPChannelData::data_t
 G4CascadeKzeroBarPChannelData::data(kzbp2bfs, kzbp3bfs, kzbp4bfs,
 				    kzbp5bfs, kzbp6bfs, kzbp7bfs,
 				    kzbpCrossSections, k0b*pro, "KzeroBarP");
+
+namespace {
+  G4CascadeKzeroBarPChannel lookup;	// Force instantiation and registration
+}

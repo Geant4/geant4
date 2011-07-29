@@ -29,6 +29,7 @@
 // 20100804  M. Kelsey -- Add name string to ctor
 // 20110719  M. Kelsey -- Add initial state code to ctor
 // 20110720  M. Kelsey -- Bugs in the very last 9-body final state for pp and nn
+// 20110725  M. Kelsey -- Instantiate cross-section object for self-registration
 
 #include "G4CascadePPChannel.hh"
 #include "G4CascadeNNChannel.hh"
@@ -649,7 +650,15 @@ G4CascadePPChannelData::data(pp2bfs, pp3bfs, pp4bfs, pp5bfs, pp6bfs, pp7bfs,
 			     pp8bfs, pp9bfs, ppCrossSections, ppTotXSec,
 			     pro*pro, "ProtonProton");
 
+namespace {
+  G4CascadePPChannel lookup1;	// Force instantiation and registration
+}
+
 G4CascadeNNChannelData::data_t
 G4CascadeNNChannelData::data(nn2bfs, nn3bfs, nn4bfs, nn5bfs, nn6bfs, nn7bfs,
 			     nn8bfs, nn9bfs, ppCrossSections, ppTotXSec,
 			     neu*neu, "NeutronNeutron");
+
+namespace {
+  G4CascadeNNChannel lookup2;	// Force instantiation and registration
+}

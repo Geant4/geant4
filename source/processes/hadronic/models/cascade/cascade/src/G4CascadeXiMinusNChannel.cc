@@ -27,6 +27,7 @@
 //
 // 20100804  M. Kelsey -- Add name string to ctor
 // 20110719  M. Kelsey -- Add initial state code to ctor
+// 20110725  M. Kelsey -- Instantiate cross-section object for self-registration
 
 #include "G4CascadeXiMinusNChannel.hh"
 #include "G4InuclParticleNames.hh"
@@ -500,3 +501,7 @@ G4CascadeXiMinusNChannelData::data_t
 G4CascadeXiMinusNChannelData::data(xmn2bfs, xmn3bfs, xmn4bfs,
 				   xmn5bfs, xmn6bfs, xmn7bfs,
 				   xmnCrossSections, xim*neu, "XiMinusN");
+
+namespace {
+  G4CascadeXiMinusNChannel lookup;	// Force instantiation and registration
+}
