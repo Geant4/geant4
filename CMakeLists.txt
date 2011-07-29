@@ -69,9 +69,6 @@ include(CMakeUninstallTarget)
 # - Provide standard install directories permitting customization.
 include(Geant4InstallDirs)
 
-# - Provide packaging with CPack.
-include(Geant4CPackBase)
-
 # - Provide options to control how Geant4 libraries are built
 include(Geant4LibraryBuildOptions)
 
@@ -121,6 +118,20 @@ include(Geant4ConfigureConfigScript)
 #
 include(Geant4BuildProjectConfig)
 
+#------------------------------------------------------------------------------
+# Add the examples and tests subdirectories
+# This is done after the Geant4Config.cmake file has been generated
+if(GEANT4_BUILD_EXAMPLES)
+  add_subdirectory(examples EXCLUDE_FROM_ALL)
+endif()
+if(GEANT4_ENABLE_TESTING)
+  enable_testing()
+  add_subdirectory(tests)
+endif()
+
+#-----------------------------------------------------------------------------
+# Provide packaging with CPack.
+include(Geant4CPackBase)
 
 #----------------------------------------------------------------------------
 # Final output - show what's been enabled so that user knows what's
