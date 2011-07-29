@@ -15,6 +15,6 @@ GEANT4_ADD_TEST(test23 COMMAND test23 ${CMAKE_CURRENT_SOURCE_DIR}/test23.in
                        ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(test23-had COMMAND test23 test23-had.in
                        ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
-                       DEPENDS test23_hadronic_exerciser)
+                       DEPENDS test23 test23_hadronic_exerciser)
 
 
