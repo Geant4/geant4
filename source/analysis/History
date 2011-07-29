@@ -1,0 +1,35 @@
+$Id:$
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  SVN log-message one should put at every
+committal in the SVN repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+July 28 2011 B.Morgan (analysis-V09-04-02)
+- Creating new tag because previous ones were not documented here!!
+
+
+July 28 2011 B.Morgan (analysis-V09-04-01.5)
+- CMakeLists.txt : Added to provide CMake build for G4Analysis. Implemented
+  without using a sources.cmake because we only have one library, and tools
+  headers need a specialized install to retain their nested structure.
+
+
+July 28 2011 G. Cosmo
+- Fix in tools/wroot/file to avoid gcc dependency error on WIN32 with CygWin.
+
+
+July 28, 2011 B.Morgan
+- Created History file for analysis module.

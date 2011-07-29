@@ -21,7 +21,7 @@
 #include <errno.h>
 #include <sys/stat.h>
 
-#ifdef WIN32
+#if defined(WIN32) && !defined(__GNUC__)
 #include <direct.h>
 #define ssize_t int
 #include <io.h>
