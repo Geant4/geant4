@@ -50,6 +50,7 @@ done
 
 libs="-lG4interfaces \
       -lG4persistency \
+      -lG4analysis \
       -lG4error_propagation \
       -lG4readout \
       -lG4physicslists \

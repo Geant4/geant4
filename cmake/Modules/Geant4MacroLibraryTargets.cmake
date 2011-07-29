@@ -83,7 +83,7 @@ MACRO(GEANT4_LIBRARY_TARGET)
         # when installed, BUT it does hard code this in. One should still be
         # able to bundle up the libraries later as CMake should build the
         # library with headerpad_max_install_names
-        set_target_properties(${G4LIB_TARGET_NAME}
+        set_target_properties(${G4LIBTARGET_NAME}
             PROPERTIES INSTALL_NAME_DIR ${CMAKE_INSTALL_FULL_LIBDIR})
 
         # Install the library - note the use of RUNTIME, LIBRARY and ARCHIVE

@@ -8,13 +8,69 @@ cvs log $Id: History,v 1.3 2010-12-03 17:58:51 gcosmo Exp $
                       Category History file
                       ---------------------
 
-History file for Geant4 configuration scripts.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+History file for Geant4 CMake build scripts.
+It DOES NOT substitute the SVN log-message one should put at every
+committal in the SVN repository !
+
+Entries MUST use the following format:
+
+
+MONTH DAY YEAR - INITIAL.SURNAME (TAG)
+- FILECHANGED : Document changes made.
+
+- OTHERFILECHANGED : Document changes made.
+
+
+You should keep two lines between each date.
+TAG is optional. If your changes fix a bug listed in the Geant4 Bugzilla,
+add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
+
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+July 28th 2011 - B. Morgan (cmake-V09-04-14)
+- History : Added note on preferred format of entries.
+
+- Modules/Geant4InstallData.cmake : Added guard on option and install of data so
+  that this is only available on CMake >= 2.8 due to use of ExternalProject.
+  (NB: Usage still broken, probably due to tar formats (CMake 2.8.1).
+
+- Modules/UseGeant4.cmake : Forced all CXX flags to use those used to build
+  Geant4 [BUGFIX #1227]. Neatified and commented internal functions for
+  library/exe/test builds. Added WARNING message if GEANT4_ADD_TEST is used
+  outside of the Geant4 project. Corrected(?) include of
+  CMakeMacroParseArguments (MIGHT BREAK GEANT4_XXX FUNCTIONS IN UseGeant4).
+
+- Modules/Geant4CPackBase.cmake : Added TBZ2 and ZIP types back into list of
+  source package generators. Neatified the generation of the README file.
+  Neatified and commented new component build commands.
+
+- Modules/Geant4MacroLibraryTargets.cmake : Corrected setting of
+  INSTALL_NAME_DIR for library targets [BUGFIX #1231].
+
+- Templates/geant4-config.in : Added G4analysis library to default list of
+  libraries.
+
+- Templates/Geant4Config.cmake.in : Added G4analysis library to Geant4_LIBRARIES
+  variable. Always added for now rather than as an optional component.
+
+
+July 27th 2011 - P. Mato 
+- Added the downloading and installation of Geant4 Data files if the option
+  GEANT4_INSTALL_DATA is set. Modified Modules/Geant4InstallData.cmake
+- Initial version of CPack configuration for binaries.
+  Modified Modules/Geant4CPackBase.cmake and added Templates/CMakeCPackOptions.cmake.in,
+    Templates/g4_small.gif 
+- Initial set of files needed for testing with CTest.
+  Added Modules/FindROOT.cmake, Modules/Geant, Geant4TestDriver.cmake
+  Added options GEANT4_ENABLE_TESTING, GEANT4_BUILD_EXAMPLES in 
+    Modules/Geant4LibraryBuildOptions.cmake
+  Inherit CMAKE_MODULE_PATH in tests. Modified Modules/Geant4BuildProjectConfig.cmake,
+    Templates/Geant4Config.cmake.in
+  Added convenient macros to Templates/UseGeant4.cmake
+
 
 July 5th 2011 - G.Folger  (cmake-V09-04-13)
 - Modules/{Geant4LibraryBuildOptions,Geant4BuildProjectConfig}.cmake:

@@ -110,6 +110,14 @@ endif()
 # We need to define that we're building Geant4
 #
 
+#----------------------------------------------------------------------------
+# Build options for building examples and tests
+option(GEANT4_BUILD_EXAMPLES "Build all the examples of the project" OFF)
+GEANT4_ADD_FEATURE(GEANT4_BUILD_EXAMPLES "Build all the examples of the project")
+option(GEANT4_ENABLE_TESTING "Enable and define all the tests of the project" OFF)
+GEANT4_ADD_FEATURE(GEANT4_ENABLE_TESTING "Enable and define all the tests of the project")
+
+
 # On WIN32, we need to build the genwindef application to create export
 # def files for building DLLs.
 # We only use it as a helper application at the moment so we exclude it from 

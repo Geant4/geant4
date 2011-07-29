@@ -107,6 +107,7 @@ set(Geant4_DEFINITIONS @GEANT4_CORE_DEFINITIONS@)
 #
 @GEANT4_INCLUDE_DIR_SETUP@
 
+@GEANT4_MODULE_PATH_SETUP@
 
 #----------------------------------------------------------------------------
 # Configure the path(s) to third party headers.
@@ -138,9 +139,12 @@ set(Geant4_INCLUDE_DIRS
 
 #----------------------------------------------------------------------------
 # Include the file listing all the imported targets.
+# (Not needed if used in the same Geant4 project) 
 # This is always installed in the same location as us...
 #
-include("${_thisdir}/Geant4LibraryDepends.cmake")
+if(NOT CMAKE_PROJECT_NAME STREQUAL Geant4)
+  include("${_thisdir}/Geant4LibraryDepends.cmake")
+endif()
 
 
 #----------------------------------------------------------------------------
@@ -321,6 +325,7 @@ list(APPEND _geant4_internal_libraries
     G4interfaces${_geant4_lib_use_suffix}
     G4persistency${_geant4_lib_use_suffix}
     # G3toG4?
+    G4analysis${_geant4_lib_use_suffix}
     G4error_propagation${_geant4_lib_use_suffix}
     G4readout${_geant4_lib_use_suffix}
     G4physicslists${_geant4_lib_use_suffix}

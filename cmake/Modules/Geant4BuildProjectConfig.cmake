@@ -37,10 +37,9 @@ if(GEANT4_BUILD_VERBOSE_CODE)
     list(APPEND GEANT4_CORE_DEFINITIONS -DG4VERBOSE)
 endif()
 
-# - We do actually need G4LIB_BUILD_DLL, even for user applications... on Windows
-if(WIN32)
-    list(APPEND GEANT4_CORE_DEFINITIONS -DG4LIB_BUILD_DLL)
-endif()
+# - We do actually need G4LIB_BUILD_DLL, even for user applications...
+list(APPEND GEANT4_CORE_DEFINITIONS -DG4LIB_BUILD_DLL)
+
 
 # - Stuff from Geant4OptionalComponents.cmake
 # - CLHEP
@@ -113,6 +112,10 @@ set(GEANT4_INCLUDE_DIR_SETUP "
 set(Geant4_INCLUDE_DIR ${__geant4_buildtree_include_dirs})
 ")
 
+set(GEANT4_MODULE_PATH_SETUP "
+# Geant4 configured for use CMake modules from source tree
+set(CMAKE_MODULE_PATH \${CMAKE_MODULE_PATH} ${CMAKE_MODULE_PATH})
+")
 
 # Export targets from the build tree. We rely on the GEANT4_EXPORTED_TARGETS
 # global property to list these for us.
@@ -166,6 +169,7 @@ get_filename_component(Geant4_INCLUDE_DIR \"\${_thisdir}/${GEANT4_RELATIVE_HEADE
 ")
 endif()
 
+set(GEANT4_MODULE_PATH_SETUP)
 
 # Install exported targets file for the install tree - we just install
 # the named export
