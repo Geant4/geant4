@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29 July 11: B.Morgan (emutils-V09-04-34)
+- sources.cmake : Fixed extension of G4EmBiasingManager.cc in SOURCES list.
+
 28 July 11: V.Ivant (emutils-V09-04-33)
 - G4VEmProcess, G4VEnergyLossProcess - removed old obsolete 
   deexcitation scheme; added forced interaction biasing
