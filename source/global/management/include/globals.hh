@@ -73,9 +73,20 @@
 
 // Global error function
 #include "G4ExceptionSeverity.hh"
+typedef std::ostringstream G4ExceptionDesciption;
+
 void G4Exception(const char* issure,
                  const char* errorCode,
                              G4ExceptionSeverity severity,
+                 const char* comments);
+void G4Exception(const char* originOfException,
+                 const char* exceptionCode,
+                             G4ExceptionSeverity severity,
+                 G4ExceptionDesciption & description);
+void G4Exception(const char* originOfException,
+                 const char* exceptionCode,
+                             G4ExceptionSeverity severity,
+                 G4ExceptionDesciption & description,
                  const char* comments);
 void G4Exception(const char* s=0);
 void G4Exception(std::string s);

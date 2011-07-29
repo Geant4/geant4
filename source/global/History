@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 28, 2011 M.Asai (global-V09-04-12)
+- Added two now G4Exception syntax.
+
 July 12, 2011 G.Cosmo (global-V09-04-11)
 - Added missing post-const qualifier to G4String::compareTo() methods
   (M.Kelsey).

@@ -123,3 +123,27 @@ void G4Exception(G4String emessage)
 {
   G4Exception(emessage.c_str());
 }
+
+//typedef std::ostringstream G4ExceptionDesciption;
+
+void G4Exception(const char* originOfException,
+                 const char* exceptionCode,
+                 G4ExceptionSeverity severity,
+                 G4ExceptionDesciption & description)
+{
+  G4String des = description.str();
+  G4Exception(originOfException,exceptionCode,severity,
+                 des.c_str());
+}
+
+void G4Exception(const char* originOfException,
+                 const char* exceptionCode,
+                 G4ExceptionSeverity severity,
+                 G4ExceptionDesciption & description,
+                 const char* comments)
+{
+  description << comments << G4endl;
+  G4Exception(originOfException,exceptionCode,severity,
+                 description);
+}
+
