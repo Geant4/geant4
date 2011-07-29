@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+                 27th July 2011  Pere Mato
+- Added CMakeLists.txt files for each test directory and the top level one.
+  Exceptions are: test03, test04, test06, test08, test26, test32, test42,
+                  test43, test51, test57, test59, test63, test66
+
 tests-V09-04-06 30th June 2011  Gabriele Cosmo
 - Updated reference outputs according to reference tag geant4-09-04-ref-06.
 - Includes tags: test14-V09-04-02, test21-V09-04-01, test23-V09-04-01,
