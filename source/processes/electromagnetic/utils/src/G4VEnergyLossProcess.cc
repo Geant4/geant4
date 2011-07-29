@@ -146,6 +146,7 @@
 #include "G4TransportationManager.hh"
 #include "G4EmConfigurator.hh"
 #include "G4VAtomDeexcitation.hh"
+#include "G4EmBiasingManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -154,9 +155,7 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   G4VContinuousDiscreteProcess(name, type),
   secondaryParticle(0),
   nSCoffRegions(0),
-  nDERegions(0),
   idxSCoffRegions(0),
-  idxDERegions(0),
   nProcesses(0),
   theDEDXTable(0),
   theDEDXSubTable(0),
@@ -227,9 +226,11 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   fluctModel = 0;
   atomDeexcitation = 0;
 
+  biasManager  = 0;
+  biasFlag     = false; 
+
   scTracks.reserve(5);
   secParticles.reserve(5);
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -289,6 +290,7 @@ G4VEnergyLossProcess::~G4VEnergyLossProcess()
   }
 
   delete modelManager;
+  delete biasManager;
   (G4LossTableManager::Instance())->DeRegister(this);
 }
 
@@ -301,7 +303,6 @@ void G4VEnergyLossProcess::Clean()
 	   << G4endl;
   }
   delete [] idxSCoffRegions;
-  delete [] idxDERegions;
 
   tablesAreBuilt = false;
 
@@ -477,6 +478,12 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   theDensityFactor = bld->GetDensityFactors();
   theDensityIdx = bld->GetCoupleIndexes();
 
+  // forced biasing
+  if(biasManager) { 
+    biasManager->Initialise(); 
+    biasFlag = false; 
+  }
+
   G4double initialCharge = particle->GetPDGCharge();
   G4double initialMass   = particle->GetPDGMass();
 
@@ -499,13 +506,11 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   theCuts = modelManager->Initialise(particle, secondaryParticle, 
 				     minSubRange, verboseLevel);
 
-  // Sub Cutoff and Deexcitation
-  if (nSCoffRegions>0 || nDERegions>0) {
+  // Sub Cutoff 
+  if (nSCoffRegions>0) {
     theSubCuts = modelManager->SubCutoff();
 
     if(nSCoffRegions>0) { idxSCoffRegions = new G4bool[n]; }
-    if(nDERegions>0)    { idxDERegions = new G4bool[n]; }
-  
     for (size_t j=0; j<n; ++j) {
 
       const G4MaterialCutsCouple* couple = 
@@ -518,13 +523,6 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 	  if( pcuts == scoffRegions[i]->GetProductionCuts()) { reg = true; }
 	}
 	idxSCoffRegions[j] = reg;
-      }
-      if(nDERegions>0) {
-	G4bool reg = false;
-	for(G4int i=0; i<nDERegions; ++i) {
-	  if( pcuts == deRegions[i]->GetProductionCuts()) { reg = true; }
-	}
-	idxDERegions[j] = reg;
       }
     }
   }
@@ -540,13 +538,6 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
       G4cout << " SubCutoff Regime is ON for regions: " << G4endl;
       for (G4int i=0; i<nSCoffRegions; ++i) {
         const G4Region* r = scoffRegions[i];
-	G4cout << "           " << r->GetName() << G4endl;
-      }
-    }
-    if (nDERegions) {
-      G4cout << " Deexcitation is ON for regions: " << G4endl;
-      for (G4int i=0; i<nDERegions; ++i) {
-        const G4Region* r = deRegions[i];
 	G4cout << "           " << r->GetName() << G4endl;
       }
     }
@@ -571,7 +562,7 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
       G4LossTableManager::Instance()->BuildPhysicsTable(particle, this);
     }
     if(!baseParticle) {
-      if(0 < verboseLevel) PrintInfoDefinition();
+      if(0 < verboseLevel) { PrintInfoDefinition(); }
     
       // needs to be done only once
       safetyHelper->InitialiseHelper();
@@ -579,6 +570,7 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
   }
 
   // Added tracking cut to avoid tracking artifacts
+  // identify deexcitation flag
   if(isIonisation) { 
     fParticleChange.SetLowEnergyLimit(lowestKinEnergy); 
     atomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
@@ -839,7 +831,6 @@ void G4VEnergyLossProcess::ActivateSubCutoff(G4bool val, const G4Region* r)
   if (nSCoffRegions) {
     for (G4int i=0; i<nSCoffRegions; ++i) {
       if (reg == scoffRegions[i]) {
-	if(!val) { deRegions[i] = 0; }
         return;
       }
     }
@@ -852,34 +843,6 @@ void G4VEnergyLossProcess::ActivateSubCutoff(G4bool val, const G4Region* r)
     ++nSCoffRegions;
   } else {
     useSubCutoff = false;
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4VEnergyLossProcess::ActivateDeexcitation(G4bool val, const G4Region* r)
-{
-  G4RegionStore* regionStore = G4RegionStore::GetInstance();
-  const G4Region* reg = r;
-  if (!reg) {reg = regionStore->GetRegion("DefaultRegionForTheWorld", false);}
-
-  // the region is in the list
-  if (nDERegions) {
-    for (G4int i=0; i<nDERegions; ++i) {
-      if (reg == deRegions[i]) {
-	if(!val) { deRegions[i] = 0; }
-        return;
-      }
-    }
-  }
-
-  // new region 
-  if(val) {
-    useDeexcitation = true;
-    deRegions.push_back(reg);
-    ++nDERegions;
-  } else {
-    useDeexcitation = false;
   }
 }
 
@@ -948,18 +911,31 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
   }
   //G4cout << "q2= " << chargeSqRatio << " massRatio= " << massRatio << G4endl; 
   // initialisation for sampling of the interaction length 
-  if(previousStepSize <= DBL_MIN) { theNumberOfInteractionLengthLeft = -1.0; }
+  if(previousStepSize <= 0.0) { theNumberOfInteractionLengthLeft = -1.0; }
   if(theNumberOfInteractionLengthLeft < 0.0) { mfpKinEnergy = DBL_MAX; }
+
+  // forced biasing only for primary particles
+  if(biasManager) {
+    if(0 == track.GetParentID()) {
+      if(0 == track.GetCurrentStepNumber()) {
+        biasFlag = true; 
+	biasManager->ResetForcedInteraction(); 
+      }
+      if(biasFlag && biasManager->ForcedInteractionRegion(currentCoupleIndex)) {
+        return biasManager->GetStepLimit(currentCoupleIndex, previousStepSize);
+      }
+    }
+  }
 
   // compute mean free path
   if(preStepScaledEnergy < mfpKinEnergy) {
     if (integral) { ComputeLambdaForScaledEnergy(preStepScaledEnergy); }
     else  { preStepLambda = GetLambdaForScaledEnergy(preStepScaledEnergy); }
-    if(preStepLambda <= DBL_MIN) { mfpKinEnergy = 0.0; }
+    if(preStepLambda <= 0.0) { mfpKinEnergy = 0.0; }
   }
 
   // non-zero cross section
-  if(preStepLambda > DBL_MIN) { 
+  if(preStepLambda > 0.0) { 
     if (theNumberOfInteractionLengthLeft < 0.0) {
       // beggining of tracking (or just after DoIt of this process)
       //G4cout<<"G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength Reset"<<G4endl;
@@ -1041,12 +1017,8 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   if (length >= fRange) {
     eloss = preStepKinEnergy;
     if (useDeexcitation) {
-      if(atomDeexcitation) { 
-	atomDeexcitation->AlongStepDeexcitation(&fParticleChange, step, 
-						eloss, currentCoupleIndex);
-      } else if(idxDERegions[currentCoupleIndex]) {
-	currentModel->SampleDeexcitationAlongStep(currentMaterial, track, eloss);
-      }
+      atomDeexcitation->AlongStepDeexcitation(&fParticleChange, step, 
+					      eloss, currentCoupleIndex);
       if(eloss < 0.0) { eloss = 0.0; }
     }
     fParticleChange.SetProposedKineticEnergy(0.0);
@@ -1196,12 +1168,8 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   // deexcitation
   if (useDeexcitation) {
     G4double eloss_before = eloss;
-    if(atomDeexcitation) { 
-      atomDeexcitation->AlongStepDeexcitation(&fParticleChange, step, 
-					      eloss, currentCoupleIndex);
-    } else if(idxDERegions[currentCoupleIndex] && eloss > 0.0) {
-      currentModel->SampleDeexcitationAlongStep(currentMaterial, track, eloss);
-    }
+    atomDeexcitation->AlongStepDeexcitation(&fParticleChange, step, 
+					    eloss, currentCoupleIndex);
     esec += eloss_before - eloss;
   }
 
@@ -1343,8 +1311,13 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
 	   << G4endl;
   }
   */
+
+  // forced process - should happen only once per track
+  if(biasFlag && biasManager->ForcedInteractionRegion(currentCoupleIndex)) {
+    biasFlag = false;
+
   // Integral approach
-  if (integral) {
+  } else if (integral) {
     G4double lx = GetLambdaForScaledEnergy(postStepScaledEnergy);
     /*
     if(preStepLambda<lx && 1 < verboseLevel && nWarnings<200) {
@@ -1903,6 +1876,16 @@ const G4Element* G4VEnergyLossProcess::GetCurrentElement() const
   const G4Element* elm = 0;
   if(currentModel) { elm = currentModel->GetCurrentElement(); }
   return elm;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void 
+G4VEnergyLossProcess::ActivateForcedInteraction(G4double length, 
+						const G4String& r)
+{
+  if(!biasManager) { biasManager = new G4EmBiasingManager(); }
+  biasManager->ActivateForcedInteraction(length, r);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

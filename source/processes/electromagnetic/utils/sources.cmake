@@ -47,6 +47,7 @@ GEANT4_DEFINE_MODULE(NAME G4emutils
         G4AtomicShellEnumerator.hh
         G4DummyModel.hh
         G4ElectronIonPair.hh
+        G4EmBiasingManager.hh
         G4EmCalculator.hh
         G4EmConfigurator.hh
         G4EmCorrections.hh
@@ -77,6 +78,7 @@ GEANT4_DEFINE_MODULE(NAME G4emutils
         G4AtomicShell.cc
         G4DummyModel.cc
         G4ElectronIonPair.cc
+        G4EmBiasingManager.hh
         G4EmCalculator.cc
         G4EmConfigurator.cc
         G4EmCorrections.cc

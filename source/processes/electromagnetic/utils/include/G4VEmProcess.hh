@@ -83,6 +83,7 @@ class G4DataVector;
 class G4VParticleChange;
 class G4PhysicsTable;
 class G4PhysicsVector;
+class G4EmBiasingManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -132,8 +133,7 @@ public:
   G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
                              G4double   previousStepSize,
-                             G4ForceCondition* condition
-                            );
+                             G4ForceCondition* condition);
 
   // implementation of virtual method, specific for G4VEmProcess
   G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
@@ -152,9 +152,6 @@ public:
   G4bool RetrievePhysicsTable(const G4ParticleDefinition*,
 			      const G4String& directory,
 			      G4bool ascii);
-
-  // deexcitation activated per G4Region
-  void ActivateDeexcitation(G4bool, const G4Region* r = 0);
 
   //------------------------------------------------------------------------
   // Specific methods for Discrete EM post step simulation 
@@ -190,14 +187,6 @@ public:
   // Max kinetic energy for tables
   inline void SetMaxKinEnergy(G4double e);
   inline G4double MaxKinEnergy() const;
-
-  // Single scattering parameters
-  inline void SetPolarAngleLimit(G4double a);
-  inline G4double PolarAngleLimit() const;
-
-  // Biasing parameters
-  inline void SetCrossSectionBiasingFactor(G4double f);
-  inline G4double CrossSectionBiasingFactor() const;
 
   // Cross section table pointer
   inline const G4PhysicsTable* LambdaTable() const;
@@ -240,6 +229,18 @@ public:
 
   // access atom on which interaction happens
   const G4Element* GetCurrentElement() const;
+
+  // Activate forced interaction
+  void ActivateForcedInteraction(G4double length = 0.0, 
+				 const G4String& r = "");
+
+  // Single scattering parameters
+  inline void SetPolarAngleLimit(G4double a);
+  inline G4double PolarAngleLimit() const;
+
+  // Biasing parameters
+  inline void SetCrossSectionBiasingFactor(G4double f);
+  inline G4double CrossSectionBiasingFactor() const;
 
   inline void SetLambdaFactor(G4double val);
 
@@ -306,6 +307,7 @@ private:
   // ======== Parameters of the class fixed at construction =========
 
   G4EmModelManager*            modelManager;
+  G4EmBiasingManager*          biasManager;
   const G4ParticleDefinition*  theGamma;
   const G4ParticleDefinition*  theElectron;
   const G4ParticleDefinition*  thePositron;
@@ -340,11 +342,6 @@ private:
   G4bool                       integral;
   G4bool                       applyCuts;
   G4bool                       startFromNull;
-  G4bool                       useDeexcitation;
-
-  G4int                        nDERegions;
-  std::vector<const G4Region*> deRegions;
-  G4bool*                      idxDERegions;
 
   // ======== Cashed values - may be state dependent ================
 
@@ -372,7 +369,7 @@ private:
   G4double                     preStepKinEnergy;
   G4double                     preStepLambda;
   G4double                     fFactor;
-
+  G4bool                       biasFlag;
 };
 
 // ======== Run time inline methods ================

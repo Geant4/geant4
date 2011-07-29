@@ -114,6 +114,7 @@ class G4DataVector;
 class G4Region;
 class G4SafetyHelper;
 class G4VAtomDeexcitation;
+class G4EmBiasingManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -172,12 +173,6 @@ public:
 
   // summary printout after initialisation
   void PrintInfoDefinition();
-
-  // Add subcutoff option for the region
-  void ActivateSubCutoff(G4bool val, const G4Region* region = 0);
-
-  // Activate deexcitation code for region
-  void ActivateDeexcitation(G4bool, const G4Region* region = 0);
 
   // Step limit from AlongStep 
   G4double AlongStepGetPhysicalInteractionLength(const G4Track&,
@@ -334,6 +329,13 @@ public:
   // Get/set parameters to configure the process at initialisation time
   //------------------------------------------------------------------------
 
+  // Add subcutoff option for the region
+  void ActivateSubCutoff(G4bool val, const G4Region* region = 0);
+
+  // Activate forced interaction
+  void ActivateForcedInteraction(G4double length = 0.0, 
+				 const G4String& r = "");
+
   // Add subcutoff process (bremsstrahlung) to sample secondary 
   // particle production in vicinity of the geometry boundary
   void AddCollaborativeProcess(G4VEnergyLossProcess*);
@@ -357,7 +359,6 @@ public:
   inline void SetLowestEnergyLimit(G4double);
 
   inline G4int NumberOfSubCutoffRegions() const;
-  inline G4int NumberOfDERegions() const;
 
   //------------------------------------------------------------------------
   // Specific methods to path Physics Tables to the process
@@ -457,6 +458,7 @@ private:
   // ======== Parameters of the class fixed at construction =========
 
   G4EmModelManager*           modelManager;
+  G4EmBiasingManager*         biasManager;
   G4SafetyHelper*             safetyHelper;
 
   const G4ParticleDefinition* secondaryParticle;
@@ -472,11 +474,8 @@ private:
   G4VEmFluctuationModel*                fluctModel;
   G4VAtomDeexcitation*                  atomDeexcitation;
   std::vector<const G4Region*>          scoffRegions;
-  std::vector<const G4Region*>          deRegions;
   G4int                                 nSCoffRegions;
-  G4int                                 nDERegions;
   G4bool*                               idxSCoffRegions;
-  G4bool*                               idxDERegions;
 
   std::vector<G4VEnergyLossProcess*>    scProcesses;
   G4int                                 nProcesses;
@@ -530,6 +529,7 @@ private:
   G4bool   isIonisation;
   G4bool   useSubCutoff;
   G4bool   useDeexcitation;
+  G4bool   biasFlag;
 
 protected:
 
@@ -968,13 +968,6 @@ inline void G4VEnergyLossProcess::SetLowestEnergyLimit(G4double val)
 inline G4int G4VEnergyLossProcess::NumberOfSubCutoffRegions() const
 {
   return nSCoffRegions;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4int G4VEnergyLossProcess::NumberOfDERegions() const
-{
-  return nDERegions;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

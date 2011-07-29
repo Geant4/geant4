@@ -74,12 +74,11 @@
 #include "G4VParticleChange.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4Region.hh"
-#include "G4RegionStore.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4PhysicsTableHelper.hh"
-#include "G4EmConfigurator.hh"
+#include "G4EmBiasingManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -93,9 +92,6 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   integral(false),
   applyCuts(false),
   startFromNull(false),
-  useDeexcitation(false),
-  nDERegions(0),
-  idxDERegions(0),
   currentModel(0),
   particle(0),
   currentParticle(0),
@@ -127,6 +123,8 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   mfpKinEnergy  = DBL_MAX;
 
   modelManager = new G4EmModelManager();
+  biasManager  = 0;
+  biasFlag     = false; 
   (G4LossTableManager::Instance())->Register(this);
 }
 
@@ -144,6 +142,7 @@ G4VEmProcess::~G4VEmProcess()
     delete theLambdaTable;
   }
   delete modelManager;
+  delete biasManager;
   (G4LossTableManager::Instance())->DeRegister(this);
 }
 
@@ -151,13 +150,9 @@ G4VEmProcess::~G4VEmProcess()
 
 void G4VEmProcess::Clear()
 {
-  delete [] idxDERegions;
-  idxDERegions = 0;
   currentCouple = 0;
   preStepLambda = 0.0;
   mfpKinEnergy  = DBL_MAX;
-  deRegions.clear();
-  nDERegions = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -228,9 +223,6 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   G4LossTableBuilder* bld = man->GetTableBuilder();
 
   man->PreparePhysicsTable(&part, this);
-  const G4ProductionCutsTable* theCoupleTable=
-    G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
 
   if(particle == &part) {
     Clear();
@@ -265,36 +257,14 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
       theLambdaTable = G4PhysicsTableHelper::PreparePhysicsTable(theLambdaTable);
       bld->InitialiseBaseMaterials(theLambdaTable);
     }
+    // forced biasing
+    if(biasManager) { 
+      biasManager->Initialise(); 
+      biasFlag = false; 
+    }
   }
   theDensityFactor = bld->GetDensityFactors();
   theDensityIdx = bld->GetCoupleIndexes();
-
-  // Deexcitation
-  if (nDERegions>0) {
-
-    idxDERegions = new G4bool[numOfCouples];
-
-    for (size_t j=0; j<numOfCouples; ++j) {
-
-      const G4MaterialCutsCouple* couple =
-        theCoupleTable->GetMaterialCutsCouple(j);
-      const G4ProductionCuts* pcuts = couple->GetProductionCuts();
-      G4bool reg = false;
-      for(G4int i=0; i<nDERegions; ++i) {
-	if(deRegions[i]) {
-	  if(pcuts == deRegions[i]->GetProductionCuts()) { reg = true; }
-	}
-      }
-      idxDERegions[j] = reg;
-    }
-  }
-  if (1 < verboseLevel && nDERegions>0) {
-    G4cout << " Deexcitation is activated for regions: " << G4endl;
-    for (G4int i=0; i<nDERegions; ++i) {
-      const G4Region* r = deRegions[i];
-      G4cout << "           " << r->GetName() << G4endl;
-    }
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -439,18 +409,32 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
   // condition is set to "Not Forced"
   *condition = NotForced;
   G4double x = DBL_MAX;
-  if(previousStepSize <= DBL_MIN) { theNumberOfInteractionLengthLeft = -1.0; }
+  if(previousStepSize <= 0.0) { theNumberOfInteractionLengthLeft = -1.0; }
   InitialiseStep(track);
   if(!currentModel->IsActive(preStepKinEnergy)) { return x; }
+ 
+  // forced biasing only for primary particles
+  if(biasManager) {
+    if(0 == track.GetParentID()) {
+      if(0 == track.GetCurrentStepNumber()) {
+        biasFlag = true; 
+	biasManager->ResetForcedInteraction(); 
+      }
+      if(biasFlag && biasManager->ForcedInteractionRegion(currentCoupleIndex)) {
+        return biasManager->GetStepLimit(currentCoupleIndex, previousStepSize);
+      }
+    }
+  }
 
+  // compute mean free path
   if(preStepKinEnergy < mfpKinEnergy) {
     if (integral) { ComputeIntegralLambda(preStepKinEnergy); }
     else { preStepLambda = GetCurrentLambda(preStepKinEnergy); }
-    if(preStepLambda <= DBL_MIN) { mfpKinEnergy = 0.0; }
+    if(preStepLambda <= 0.0) { mfpKinEnergy = 0.0; }
   }
 
   // non-zero cross sect}ion
-  if(preStepLambda > DBL_MIN) { 
+  if(preStepLambda > 0.0) { 
     if (theNumberOfInteractionLengthLeft < 0.0) {
       // beggining of tracking (or just after DoIt of this process)
       ResetNumberOfInteractionLengthLeft();
@@ -505,8 +489,12 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
 
   G4double finalT = track.GetKineticEnergy();
 
+  // forced process - should happen only once per track
+  if(biasFlag && biasManager->ForcedInteractionRegion(currentCoupleIndex)) {
+    biasFlag = false;
+
   // Integral approach
-  if (integral) {
+  } else if (integral) {
     G4double lx = GetLambda(finalT, currentCouple);
     if(preStepLambda<lx && 1 < verboseLevel) {
       G4cout << "WARING: for " << currentParticle->GetParticleName() 
@@ -664,34 +652,6 @@ G4bool G4VEmProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEmProcess::ActivateDeexcitation(G4bool val, const G4Region* r)
-{
-  G4RegionStore* regionStore = G4RegionStore::GetInstance();
-  const G4Region* reg = r;
-  if (!reg) {reg = regionStore->GetRegion("DefaultRegionForTheWorld", false);}
-
-  // the region is in the list
-  if (nDERegions) {
-    for (G4int i=0; i<nDERegions; ++i) {
-      if (reg == deRegions[i]) {
-	if(!val) deRegions[i] = 0;
-        return;
-      }
-    }
-  }
-
-  // new region 
-  if(val) {
-    useDeexcitation = true;
-    deRegions.push_back(reg);
-    nDERegions++;
-  } else {
-    useDeexcitation = false;
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 G4double 
 G4VEmProcess::CrossSectionPerVolume(G4double kineticEnergy,
 				    const G4MaterialCutsCouple* couple)
@@ -818,6 +778,15 @@ const G4Element* G4VEmProcess::GetCurrentElement() const
   const G4Element* elm = 0;
   if(currentModel) {elm = currentModel->GetCurrentElement(); }
   return elm;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void 
+G4VEmProcess::ActivateForcedInteraction(G4double length, const G4String& r)
+{
+  if(!biasManager) { biasManager = new G4EmBiasingManager(); }
+  biasManager->ActivateForcedInteraction(length, r);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

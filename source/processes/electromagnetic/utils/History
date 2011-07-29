@@ -17,8 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28 July 11: V.Ivant (emutils-V09-04-33)
+- G4VEmProcess, G4VEnergyLossProcess - removed old obsolete 
+  deexcitation scheme; added forced interaction biasing
+- G4EmBiasingManager - new class for forced biasing
+
 20 July 11: V.Ivant (emutils-V09-04-32)
-- G4VEmProcess, G4VEnegryLossProcess - improved computations
+- G4VEmProcess, G4VEnergyLossProcess - improved computations
   for the base material approach; added cross section biasing option;
   removed old methods of sampling deexcitation PostStep 
 - G4VEmModel, G4VAtomDeexcitation - cleanup method names and comments
