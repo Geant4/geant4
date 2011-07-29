@@ -17,15 +17,16 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 29 2011 G.Cosmo (analysis-V09-04-03)
+- Fix in tools/vdata for compilation error in Intel ICC compiler.
+
 July 28 2011 B.Morgan (analysis-V09-04-02)
 - Creating new tag because previous ones were not documented here!!
-
 
 July 28 2011 B.Morgan (analysis-V09-04-01.5)
 - CMakeLists.txt : Added to provide CMake build for G4Analysis. Implemented
   without using a sources.cmake because we only have one library, and tools
   headers need a specialized install to retain their nested structure.
-
 
 July 28 2011 G. Cosmo
 - Fix in tools/wroot/file to avoid gcc dependency error on WIN32 with CygWin.
