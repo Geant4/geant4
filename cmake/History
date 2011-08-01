@@ -30,6 +30,27 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 29th 2011 - B.Morgan (cmake-V09-04-15)
+- Modules/Geant4InstallData.cmake : Corrected URL for use in downloading data
+  to use direct URL. Original URL redirects, which early 2.8 iterations of
+  CMake appear not to like.
+  Use .tar.gz of RadioactiveDecay as this is available and cheaper to download.
+  Added use of PREFIX in ExternalProject so that all EP directories are 
+  created under a single 'Externals' directory. This is simply to keep the 
+  build tree nicely organized. The data still appear in the data/ subdirectory 
+  of the build directory, so this should not affect usage by tests.
+
+
+July 29th 2011 - P. Mato
+- Modules/CMakeMacroParseArguments.cmake : updated to the version exiting in CMake 2.8.5
+
+- Modules/Geant4MacroLibraryTargets.cmake, Modules/Geant4MacroDefineModule.cmake,
+  Modules/Geant4MacroDefineModule.cmake : Adjusted to the new CMakeMacroParseArguments.cmake
+
+- Templates/UseGeant4.cmake : Removed installs included in GEANT4_LIBRARY and
+  GEANT4_EXECUTABLE macros and fixed comments.
+
+
 July 28th 2011 - B. Morgan (cmake-V09-04-14)
 - History : Added note on preferred format of entries.
 

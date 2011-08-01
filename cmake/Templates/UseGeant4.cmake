@@ -93,7 +93,6 @@ include(CMakeMacroParseArguments)
 #----------------------------------------------------------------------------
 # function GEANT4_LINK_LIBRARY( <name> source1 source2 ...
 #                               [TYPE STATIC|SHARED] 
-#                               [DLLEXPORT] 
 #                               LIBRARIES library1 library2 ... )
 #
 function(GEANT4_LINK_LIBRARY library)
@@ -143,10 +142,6 @@ function(GEANT4_LINK_LIBRARY library)
     target_link_libraries(${library} ${ARG_LIBRARIES} ${Geant4_LIBRARIES})
   endif()
 
-  # - Hard coded installation
-  install(TARGETS ${library} RUNTIME DESTINATION bin
-                             LIBRARY DESTINATION lib
-                             ARCHIVE DESTINATION lib)
 endfunction()
 
 
@@ -170,8 +165,6 @@ function(GEANT4_EXECUTABLE executable)
   target_link_libraries(${executable} ${ARG_LIBRARIES} ${Geant4_LIBRARIES} )
   set_target_properties(${executable} PROPERTIES OUTPUT_NAME ${executable})
 
-  # - Hard coded installation
-  install(TARGETS ${executable} RUNTIME DESTINATION bin)
 endfunction()
 
 
@@ -179,8 +172,9 @@ endfunction()
 # function GEANT4_ADD_TEST( <name> COMMAND cmd [arg1... ] 
 #                           [OUTPUT outfile] [ERROR errfile]
 #                           [ENVIRONMENT var1=val1 var2=val2 ...
-#                           [TIMEOUT seconds] [DEBUG]
-#                           [BUILD dir] )
+#                           [TIMEOUT seconds] 
+#                           [DEBUG]
+#                           [BUILD target] )
 #
 function(GEANT4_ADD_TEST test)
   if(NOT CMAKE_PROJECT_NAME STREQUAL Geant4)

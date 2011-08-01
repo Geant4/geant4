@@ -16,9 +16,9 @@ include(CMakeMacroParseArguments)
 # General build and install of a Geant4 library target
 #
 MACRO(GEANT4_LIBRARY_TARGET)
-    PARSE_ARGUMENTS(G4LIBTARGET
-        "NAME;SOURCES;GEANT4_LINK_LIBRARIES;LINK_LIBRARIES"
+   CMAKE_PARSE_ARGUMENTS(G4LIBTARGET
         ""
+        "NAME" "SOURCES;GEANT4_LINK_LIBRARIES;LINK_LIBRARIES"
         ${ARGN}
     )
 
@@ -149,7 +149,8 @@ ENDMACRO()
 # Build and install for a header only Geant4 module.
 #
 MACRO(GEANT4_HEADER_MODULE_TARGET)
-    PARSE_ARGUMENTS(G4HEADERMOD
+    CMAKE_PARSE_ARGUMENTS(G4HEADERMOD
+        ""
         "COMPONENT"
         ""
         ${ARGN}
@@ -176,7 +177,8 @@ ENDMACRO()
 # Build and install for a Geant4 module (granular) library
 #
 MACRO(GEANT4_GRANULAR_LIBRARY_TARGET)
-    PARSE_ARGUMENTS(G4GRANLIB
+    CMAKE_PARSE_ARGUMENTS(G4GRANLIB
+        ""
         "COMPONENT"
         ""
         ${ARGN}
@@ -211,9 +213,10 @@ ENDMACRO()
 # Build and install of a Geant4 category (global) library
 #
 MACRO(GEANT4_GLOBAL_LIBRARY_TARGET)
-    PARSE_ARGUMENTS(G4GLOBLIB
-        "NAME;COMPONENTS"
+    CMAKE_PARSE_ARGUMENTS(G4GLOBLIB
         ""
+        "NAME"
+        "COMPONENTS"
         ${ARGN}
     )
 
