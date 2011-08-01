@@ -27,6 +27,9 @@
 // collision initial state (hadron type codes).
 //
 // Author:  Michael Kelsey (SLAC)
+//
+// 20110728  M. Kelsey -- Use static instance() function to work around
+//		"disappearance" bug on Linux (GCC 4.1.2).
 
 #ifndef G4_CASCADE_CHANNEL_TABLES_HH
 #define G4_CASCADE_CHANNEL_TABLES_HH
@@ -41,12 +44,12 @@ class G4CascadeChannelTables {
 public:
   // Argument is interaction code, product of G4InuclEP types
   static const G4CascadeChannel* GetTable(G4int initialState) {
-    return instance.FindTable(initialState);
+    return instance().FindTable(initialState);
   }
 
   // Arguments are individual G4InuclElementaryParticle types
   static const G4CascadeChannel* GetTable(G4int had1, G4int had2) {
-    return instance.FindTable(had1*had2);
+    return instance().FindTable(had1*had2);
   }
 
   // Convenience function for diagnostic output
@@ -54,13 +57,13 @@ public:
 
   // Register cross-section table for later lookup
   static void AddTable(G4int initialState, G4CascadeChannel* table) {
-    instance.SaveTable(initialState, table);
+    instance().SaveTable(initialState, table);
   }
 
 private:
-  static G4CascadeChannelTables instance;	// Singleton
+  static G4CascadeChannelTables& instance();	// Singleton
 
-  G4CascadeChannelTables() {}
+  G4CascadeChannelTables() { tables.clear(); }	// Must initialize map
   ~G4CascadeChannelTables() {}	// Tables are created externally, not owned
 
   // Fetch table from map if already registered, or return null

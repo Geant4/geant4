@@ -15,6 +15,35 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+29 July 2011  Michael Kelsey (hadr-casc-V09-04-22)
+--------------------------------------------------
+- G4CascadeChannelTables.cc:  Use FindTable() to determine if table has been
+  created already or not.  Add "clear()" to ctor to initialize empty map
+  (GCC 4.1.2 segfaults on first insertion otherwise).  Add diagnostic
+  messages hidden with G4CASCADE_DEBUG_SAMPLER compiler flag.
+
+28 July 2011  Michael Kelsey
+----------------------------
+Fix, or flag as "Ignore," all outstanding Coverity reports.
+
+20228 G4CascadeFunctions.icc:  Fix bug, compare (mult > maxMult) and set to
+	max on true.  Otherwise, mult can overflow array dimension.
+
+20230 G4CascadeInterpolator.icc:  Remove "recursive" #include of .hh file.
+
+20231 G4CascadeSampler.icc:       Remove "recursive" #include of .hh file.
+
+22951 G4EquilibriumEvaporator.cc:  Check for icase<0 after assignment loop,
+	to avoid invalid array subscript.
+
+22954 G4CascadeData.icc:          Remove "recursive" #include of .hh file.
+
+22955 G4CascadeFunctions.icc:      Remove "recursive" #include of .hh file.
+
+23843 G4EvaporationInuclCollider:  Add dtor to delete EquilibriumEvaporator.
+
+28776 G4InuclEvaporation.cc:  Remove return following throw.
+
 27 July 2011  Michael Kelsey (hadr-casc-V09-04-21)
 --------------------------------------------------
 - G4CascadeInterface.cc:  Simplify NoInteraction() per V.Ivantchenko.  No

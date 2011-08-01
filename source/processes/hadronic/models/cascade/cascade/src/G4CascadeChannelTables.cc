@@ -27,23 +27,31 @@
 // collision initial state (hadron type codes).
 //
 // Author:  Michael Kelsey (SLAC)
+//
+// 20110729  M. Kelsey -- Use static instance() function to work around
+//		"disappearance" bug on Linux (GCC 4.1.2).  Add diagnostics.
 
 #include "G4CascadeChannelTables.hh"
 #include "G4CascadeChannel.hh"
 #include <map>
-#include <algorithm>
 
 
-// Singleton is created at beginning of job
+// Singleton is created at first invocation
 
-G4CascadeChannelTables G4CascadeChannelTables::instance;
+G4CascadeChannelTables& G4CascadeChannelTables::instance() {
+  static G4CascadeChannelTables theInstance;
+  return theInstance;
+}
 
 
 // Return cross-section table requested by user
 
 const G4CascadeChannel* 
 G4CascadeChannelTables::FindTable(G4int initialState) {
-  return (tables.find(initialState) != tables.end()) ? tables[initialState] : 0;
+#ifdef G4CASCADE_DEBUG_SAMPLER
+  G4cout << "G4CascadeChannelTables::FindTable " << initialState << G4endl;
+#endif
+  return (tables.find(initialState)!=tables.end()) ? tables[initialState] : 0;
 }
 
 
@@ -51,9 +59,12 @@ G4CascadeChannelTables::FindTable(G4int initialState) {
 
 void 
 G4CascadeChannelTables::SaveTable(G4int initialState, G4CascadeChannel* table) {
+#ifdef G4CASCADE_DEBUG_SAMPLER
+  G4cout << "G4CascadeChannelTables::SaveTable " << initialState << G4endl;
+#endif
   if (!table) return;		// Avoid unnecessary work
 
-  if (tables[initialState]) delete tables[initialState];
+  if (FindTable(initialState)) delete tables[initialState];
   tables[initialState] = table;
 }
 

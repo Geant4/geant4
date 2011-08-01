@@ -53,6 +53,8 @@
 // 20100719  M. Kelsey -- Remove duplicative EESX_new calculation.
 // 20100923  M. Kelsey -- Migrate to integer A and Z
 // 20110214  M. Kelsey -- Follow G4InuclParticle::Model enumerator migration
+// 20110728  M. Kelsey -- Fix Coverity #22951: check for "icase = -1" after
+//		loop which is supposed to set it.  Otherwise indexing is wrong.
 
 #include "G4EquilibriumEvaporator.hh"
 #include "G4BigBanger.hh"
@@ -355,6 +357,8 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	  break;
 	};
       };
+
+      if (icase < 0) continue;	// Failed to choose scenario, try again
 
       if (icase < 6) { // particle or light nuclei escape
 	if (verboseLevel > 2) 

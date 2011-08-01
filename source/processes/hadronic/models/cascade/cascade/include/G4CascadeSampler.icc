@@ -32,9 +32,9 @@
 //		use as base class to G4CascadeFunctions<T>.
 // 20100512 M. Kelsey -- Move implementation to .icc with templating
 // 20100803 M. Kelsey -- Add print function for debugging.
-// 20101019  M. Kelsey -- CoVerity report: recursive #include
+// 20101019 M. Kelsey -- CoVerity report: recursive #include
+// 20110728 M. Kelsey -- Fix Coverity #20231, recursive #include
 
-#include "G4CascadeSampler.hh"
 #include "Randomize.hh"
 #include <vector>
 

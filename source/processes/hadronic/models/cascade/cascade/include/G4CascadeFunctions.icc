@@ -33,8 +33,9 @@
 // 20100803  M. Kelsey -- Add printing function for debugging
 // 20100804  M. Kelsey -- Pretty up printing function
 // 20110725  M. Kelsey -- Use ctor to register table in lookup factory
+// 20110728  M. Kelsey -- Fix Coverity #22955, recursive #include; fix
+//		Coverity #20228, test (mult>maxMult), set to max if over
 
-#include "G4CascadeFunctions.hh"
 #include "G4CascadeChannelTables.hh"
 #include "globals.hh"
 
@@ -71,13 +72,13 @@ getOutgoingParticleTypes(std::vector<G4int>& kinds,
 			 G4int mult, G4double ke) const {
   const G4int maxMult = DATA::data.maxMultiplicity();
 
+  if (mult > maxMult) {
+    G4cerr << " Illegal multiplicity " << mult << " > " << maxMult << G4endl;
+    mult = maxMult;
+  }
+
   kinds.clear();
   kinds.reserve(mult);
-
-  if (mult > maxMult+2) {
-    G4cerr << " Illegal multiplicity " << G4endl;
-    return;
-  }
 
   G4int channel = findFinalStateIndex(mult, ke, DATA::data.index,
 				      DATA::data.crossSections);

@@ -32,6 +32,7 @@
 // 20100517  M. Kelsey -- Inherit from common base class, make other colliders
 //		simple data members.  Eliminate unnecessary G4InuclNuclei ctor.
 // 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class
+// 20110728  M. Kelsey -- Fix Coverity #23843, delete evaporator in dtor.
 
 #include "G4EvaporationInuclCollider.hh"
 #include "G4CollisionOutput.hh"
@@ -47,21 +48,26 @@ G4EvaporationInuclCollider::G4EvaporationInuclCollider()
   : G4CascadeColliderBase("G4EvaporationInuclCollider"),
     theEquilibriumEvaporator(new G4EquilibriumEvaporator) {}
 
+G4EvaporationInuclCollider::~G4EvaporationInuclCollider() {
+  delete theEquilibriumEvaporator;
+}
+
+
 void
 G4EvaporationInuclCollider::collide(G4InuclParticle* /*bullet*/,
 				    G4InuclParticle* target,
 				    G4CollisionOutput& globalOutput) {
-  if (verboseLevel > 3) {
+  if (verboseLevel) {
     G4cout << " >>> G4EvaporationInuclCollider::evaporate" << G4endl;
   }
 
   if (!dynamic_cast<G4InuclNuclei*>(target)) return;	// Only nuclei evaporate
 
-  target->printParticle();	// FIXME: Why is this not verbose protected???
+  if (verboseLevel>3) target->printParticle();
 
   theEquilibriumEvaporator->collide(0, target, globalOutput);
 
-  if (verboseLevel > 3) {
+  if (verboseLevel > 2) {
     G4cout << " After EquilibriumEvaporator " << G4endl;
     globalOutput.printCollisionOutput();
     G4cout << "G4EvaporationInuclCollider::collide end" << G4endl;

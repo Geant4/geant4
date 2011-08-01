@@ -46,9 +46,8 @@
 //		i=1, not i=0 (since i-1 is the key).
 // 20100803  M. Kelsey -- Add printBins() function for debugging
 // 20101019  M. Kelsey -- CoVerity reports: recursive #include, index overrun
+// 20110728  M. Kelsey -- Fix Coverity #20238, recursive #include.
 
-#include "globals.hh"
-#include "G4CascadeInterpolator.hh"
 #include <iomanip>
 
 
