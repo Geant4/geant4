@@ -129,11 +129,12 @@ G4SynchrotronRadiation::GetMeanFreePath( const G4Track& trackData,
       pField = fieldMgr->GetDetectorField() ;
       G4ThreeVector  globPosition = trackData.GetPosition();
 
-      G4double  globPosVec[3], FieldValueVec[3];
+      G4double  globPosVec[4], FieldValueVec[6];
 
       globPosVec[0] = globPosition.x();
       globPosVec[1] = globPosition.y();
       globPosVec[2] = globPosition.z();
+      globPosVec[3] = trackData.GetGlobalTime();
 
       pField->GetFieldValue( globPosVec, FieldValueVec );
 
@@ -224,10 +225,11 @@ G4SynchrotronRadiation::PostStepDoIt(const G4Track& trackData,
   {
     pField = fieldMgr->GetDetectorField() ;
     G4ThreeVector  globPosition = trackData.GetPosition() ;
-    G4double  globPosVec[3], FieldValueVec[3] ;
+    G4double  globPosVec[4], FieldValueVec[6] ;
     globPosVec[0] = globPosition.x() ;
     globPosVec[1] = globPosition.y() ;
     globPosVec[2] = globPosition.z() ;
+    globPosVec[3] = trackData.GetGlobalTime();
 
     pField->GetFieldValue( globPosVec, FieldValueVec ) ;
     FieldValue = G4ThreeVector( FieldValueVec[0],
