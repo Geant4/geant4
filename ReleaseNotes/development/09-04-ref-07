@@ -1,0 +1,283 @@
+
+                       geant4-09-04-ref-07
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o Extended CMake scripts to support usage of CTest for building and running
+   tests and CPack for generation of binary distributions and bundles.
+ o New analysis module providing managers for generation of batch histograms
+   in tests and examples.
+ o Extended signature to G4Exception to allow for proper formatting of error
+   messages and warnings.
+ o Fixes and improvements to Bertini Cascade for treatment of elastic
+   scattering.
+ o Fix in transportation for the treatment of local decay time.
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+cmake                                            cmake-V09-04-15
+-----
+- First version of CPack configuration for binaries.
+  Added TBZ2 and ZIP types back into list of source package generators.
+- Added initial set of files needed for building tests and examples with CTest.
+- Added the downloading and installation of Geant4 Data files if the option
+  GEANT4_INSTALL_DATA is set. Added guard on option and install of data so
+  that this is only available on CMake >= 2.8 due to use of ExternalProject.
+- Forced all CXX flags to use those used to build Geant4
+  Addressing problem report #1227.
+- Corrected setting of INSTALL_NAME_DIR for library targets.
+  Addressing problem report #1231.
+- Added build of new "analysis" module.
+- Added protection for setting of G4LIB_BUILD_DLL to happen on WIN32 only.
+- Added support for setting GDML/Xerces variables as needed.
+
+config                                           config-V09-04-12
+------
+- architecture.gmk: corrected definition of G4LIB_USE_GDML, to properly
+  activate GDML settings.
+- Added "analysis" module to binmake.gmk.
+
+analysis                                         analysis-V09-04-04
+--------
+- New module providing managers for generation of histograms in the form
+  of Root n-tuple/trees and AIDA XML, based on tools from the Inlib/Exlib
+  package (http://inexlib.lal.in2p3.fr/).
+
+digits_hits                                      digits_hits-V09-04-06
+-----------
+- Fixed Coverity defects: mainly uninitialised static data.
+- Moved copy-ctor and operator=() for G4VReadOutGeometry to protected, as
+  not meant to be directly used.
+
+error_propagation                                error_propagation-V09-04-02
+-----------------
+- Fixed Coverity defects for uninitialised static data and cases of ios
+  format not restored.
+
+event                                            event-V09-04-06
+-----
+- Fixed Coverity defects for uninitialised static data.
+
+g3tog4                                           g3tog4-V09-04-02
+------
+- Fixed Coverity defects.
+- Use canonic indexed form for G4Exception.
+
+geometry/divisions                               geomdiv-V09-04-00
+------------------
+- Optimise initialization of phi angles in parameterisation for tubs and cons.
+
+geometry/solids/Boolean                          geom-bool-V09-04-01
+-----------------------
+- Corrected protection in G4SubtractionSolid::DistanceToIn(p,v) introduced
+  in previous tag and relaxed to not cause event abortion.
+
+geometry/volumes                                 geomvol-V09-04-00
+----------------
+- Use WIN32 instead of G4LIB_BUILD_DLL as flag for protecting allocator
+  choice in G4NavigationHistory on Windows.
+
+global                                           global-V09-04-12
+------
+- Added two new G4Exception signatures.
+- Added missing post-const qualifier to G4String::compareTo() methods
+- Updated date and version.
+
+parameterisations/gflash                         gflash-V09-04-00
+------------------------
+- Fixed Coverity defects, mainly related to uninitialised static data.
+
+particles                                        particles-V09-04-11
+---------
+- Fixed Coverity defects about uninitialized static data in constructors
+  of G4PrimaryParticle and G4PrimaryVertex.
+
+persistency/ascii                                ascii-V09-04-05
+-----------------
+- Fixed case of dereferencing null pointer in G4tgbGeometryDumper
+  DumpRotationMatrix() method.
+
+physics_lists                                    phys-lists-V09-04-38
+-------------
+- Set multiple-scattering polar angle limit from 0.2 to pi (reduction of
+  number of steps for low-energy muons/hadrons) for G4EmStandardPhysics,
+  G4EmStandardPhysics_option1, G4EmStandardPhysics_option2,
+  G4EmStandardPhysics_option3, G4EmLivermorePhysics and G4EmPenelopePhysics.
+- Updated HadronPhysicsFTFP_BERT_TRV to use FTF for antibarions and hyperons,
+  and to use CHIPS cross-sections for hyperons and kaons.
+  This makes this configuration identical to HadronPhysicsFTFP_BERT, except
+  for the transition energy.
+- Updated HadronPhysicsQGSP_FTFP_BERT to use FTFP for hyperons
+  (G4HyperonFTFPBuilder).
+- Change in HadronPhysicsFTF_BIC to no longer use LEP for "misc" particles.
+  Now using FTFP for antibarions (G4FTFPAntiBarionBuilder) and for hyperons
+  (G4HyperonFTFPBuilder); also switch to CHIPS cross-section for kaons.
+- Modified G4HadronDElasticPhysics coherently with the changes made in
+  G4DiffuseElastic.
+- Removed multiple implementations of FindInelasticProcess() method, now
+  included in class PhysListUtil.
+
+processes/decay                                  decay-V09-04-01
+-----------------
+- Fix in G4Decay to propose the final local time rather than the global time
+  so that local time can be updated properly. Addressing problem report #1224.
+
+processes/electromagnetic/dna                    emdna-V09-04-13
+-----------------------------
+- Increased energy limits for G4DNAChargeIncrease, G4DNAChargeDecrease,
+  G4DNADingfelderChargeIncreaseModel and G4DNADingflederChargeDecreaseModel.
+- Upgrade to ionisation classes for Auger e-.
+  Updated deexcitation initialization in ionization models.
+- Fixed some Coverity defects and removed obsolete information.
+
+processes/electromagnetic/highenergy             emhighenergy-V09-04-00
+------------------------------------
+- Removed include of unused header in G4GammaConversionToMuons.
+
+processes/electromagnetic/lowenergy              emlowen-V09-04-54
+-----------------------------------
+- Use SetDeexcitationFlag(true) in the migrated Penelope and Livermore models,
+  to make atomic de-excitation applicable for these models.
+- Fixed some more coverity warnings.
+
+processes/electromagnetic/standard               emstand-V09-04-37
+----------------------------------
+- G4UrbanMscModel95: fixed FPE problem at low-energy (about 10 eV).
+  Fixed typo in sampling of theta and optimized UpdateCache() computation
+  reducing number of calls to std functions
+- G4KleinNishinaModel, G4PEEffectFluoModel: initialised de-excitation flag.
+- G4KleinNishinaCompton, G4KleinNishinaModel: added extra protection
+  to avoid precision loss in sampling of scattering angle.
+- Fixed Coverity defects in G4GoudsmitSaundersonMscModel, G4PAIxSection
+  and G4InitXscPAI.
+
+processes/electromagnetic/utils                  emutils-V09-04-34
+-------------------------------
+- G4EmBiasingManager: new class for forced biasing.
+- G4VEmProcess, G4VEnergyLossProcess: removed old obsolete
+  de-excitation scheme; added forced interaction biasing.
+  Improved computations for the base material approach; added cross-section
+  biasing option.
+- Optimisation fix in G4EmModelManager, to not create local copy of vector
+  with production thresholds (reducing run time memory).
+  Added printout of de-excitation flag per model.
+  Fixed smoothing function for cross section computations
+- G4VEmModel, G4VAtomDeexcitation: cleanup of method names and comments.
+
+processes/electromagnetic/xrays                  xrays-V09-04-05
+-------------------------------
+- G4SynchrotronRadiation, G4SynchrotronRadiationInMat: fixed length of C-arrays
+  for the interface with EM field. Addressing problem report #1236.
+- Fixed some Coverity defects.
+
+processes/hadronic
+------------------
+- management (hadr-man-V09-04-08)
+  o G4HadronicProcess: added public method GetTargetNucleus() to access
+    target isotope; added private method FillResult() providing simpler
+    and more transparent handle for primary and secondaries.
+    Added null-pointer checks for material and volume to DumpState().
+- models/cascade (hadr-casc-V09-04-22)
+  o Make cross-section tables self-registering at job initialization.
+  o G4CascadeInterface: simplified NoInteraction() to have no particles
+    returned, but use SetEnergyChange() to communicate to tracking that real
+    track should be stopped and deposit all its energy. Only projectile is
+    copied to final state, not target nucleus.
+    If accept/reject loop fails (maximum retries), return initial state
+    untouched rather than last generated cascade. This avoids exposing an
+    elastic scattering event under any circumstances.
+  o G4CascadeChannelTables: use FindTable() to determine if table has been
+    created already or not.
+  o G4Cascade*Channel: added new ctor argument for all cross-section tables.
+  o G4NucleiModel: compared local kaon/hyperon cross-section tables with
+    sum-of-exclusive tables from G4Cascade*Channel classes.
+  o Fixed bug in G4InuclNuclei constructor (mom,A,Z,Eexc,model) to properly set
+    excitation energy; caused energy non-conservation in de-excitation code.
+  o G4IntraNucleiCascader: for pre-cascade rescattering, put resonances, or
+    any particle which cannot be propagated by Bertini, directly onto output,
+    without decaying.
+  o G4Inucl*Particle: modified all constructors to take the model code as an
+    optional argument, so that subclasses don't have to set it manually.
+  o Fix in G4ElementaryParticleCollider to hide no longer used "mult" argument
+    to getMomModule2toMany(); removed special "mult==3" case.
+  o Fix in G4CascadeT1NNChannel to final 9-body final-state list for both nn
+    and pp: existing entries violate charge.
+  o Added protections in G4LorentzConvertor for rotate() applied to at-rest
+    system (i.e., z-axis ~ (0,0,0)), and simplified calculations.
+  o Fixed outstanding Coverity reports, and cleanup to remove recursive
+    header inclusions.
+- models/coherent_elastic (hadr-cohe-V09-04-09)
+  o G4NuclNuclDiffuseElastic, G4DiffuseElastic: updated to use G4HadronElastic
+    as the base class and to follow its interface.
+  o Removed obsolete class G4VHadronElastic.
+  o Fixed outstanding Coverity reports.
+- models/de_excitation (hadr-deex-V09-04-17)
+  o Fixed outstanding Coverity reports.
+- models/parton_string/hadronization (had-hadronization-V09-04-02)
+  o Fixed outstanding Coverity reports in G4LundStringFragmentation.
+- models/parton_string/management (had-partonstring-mgt-V09-04-00)
+  o Fixed outstanding Coverity reports.
+- models/parton_string/qgsm (hadr-qgsm-V09-04-03)
+  o Fixed outstanding Coverity reports.
+- models/pre_equilibrium (hadr-pre-V09-04-03)
+  o G4PreCompoundModel: restored soft-cutoff option and use "go_ahead".
+- models/radioactive_decay (radioactive_decay-V09-04-04)
+  o Fix to G4RadioactiveDecay for local decay time.
+    Addressing problem report #1224.
+
+processes/transportation                         transport-V09-04-07
+------------------------
+- Change in G4Transportation and G4CoupledTransportation to propose the final
+  local time rather than the global time so that local time can be properly
+  updated. Addressing problem report #1224.
+
+run                                              run-V09-04-15
+---
+- Fixed bug in constructor of G4VUserPhysicsList reported by ATLAS for setting
+  of 'DefaultCutValue' flag.
+- Fixed potential case of deferencing null pointer in G4VModularPhysicsList
+  RemovePhysics().
+
+track                                            track-V09-04-04
+-----
+- Modified ParticleChange classes to properly handle local time change.
+  Addressing problem report #1224.
+- Fixed Coverity report in CalculateVelocityForOpticalPhoton().
+
+examples                                         examples-V09-04-07
+--------
+- Updated reference outputs.
+- advanced/nanobeam (nanobeam-V09-04-01)
+  o Updated README for use with full version of CLHEP.
+- novice/N04 (exampleN04-V09-04-00)
+  o Optimised initialisation of Phi angles in parameterisations to avoid
+    recomputation of trigonometry.
+
+tests                                            tests-V09-04-07
+-----
+- Updated reference outputs and tools and added CMakeLists.txt script.
+- test07 (test07-V09-04-01)
+  o Removed left-over vis setup.
+- test17 (test17-V09-04-01)
+  o Removed left-over vis commands from init.mac macro.
+- test18 (test18-V09-04-01)
+- test23 (test23-V09-04-01)
+  o Update test23-large_N.in to replace obsolete setCut by /run/SetCut.
+- test31 (test31-V09-04-01)
+- test34 (test34-V09-04-01)
+- test36 (test36-V09-04-02)
+- test37 (test37-V09-04-02)
+- test40 (test40-V09-04-00)
+- test41 (test41-V09-04-04)
+  o Removed left-over vis setup.
+- test45 (test45-V09-04-00)
+  o 0-80 MeV for pn_dn_050+ 110d in HistoManager.
+- test49 (test49-V09-04-02)
+  o Included change in test49.cc from previous tag, which was missing.
+- test52 (test52-V09-04-01)
+  o Synchronised with versioning on main trunk.
