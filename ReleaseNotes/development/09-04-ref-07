@@ -102,7 +102,7 @@ persistency/ascii                                ascii-V09-04-05
 - Fixed case of dereferencing null pointer in G4tgbGeometryDumper
   DumpRotationMatrix() method.
 
-physics_lists                                    phys-lists-V09-04-38
+physics_lists                                    phys-lists-V09-04-39
 -------------
 - Set multiple-scattering polar angle limit from 0.2 to pi (reduction of
   number of steps for low-energy muons/hadrons) for G4EmStandardPhysics,
@@ -112,6 +112,8 @@ physics_lists                                    phys-lists-V09-04-38
   and to use CHIPS cross-sections for hyperons and kaons.
   This makes this configuration identical to HadronPhysicsFTFP_BERT, except
   for the transition energy.
+  Changed overlap region between BERT/FTFP to be from 3 to 12 GeV,
+  affecting FTFP_BERT_TRV physics-list.
 - Updated HadronPhysicsQGSP_FTFP_BERT to use FTFP for hyperons
   (G4HyperonFTFPBuilder).
 - Change in HadronPhysicsFTF_BIC to no longer use LEP for "misc" particles.
