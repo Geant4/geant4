@@ -230,6 +230,13 @@ processes/hadronic
   o Fix to G4RadioactiveDecay for local decay time.
     Addressing problem report #1224.
 
+processes/optical                                op-V09-04-00
+-----------------
+- A dielectric_dielectric surface may now have a wavelength dependent
+  property "TRANSMITTANCE". If this is specified for a surface it overwrites
+  the Snell's law's probability. This allows the simulation of anti-reflective
+  coatings.
+
 processes/transportation                         transport-V09-04-07
 ------------------------
 - Change in G4Transportation and G4CoupledTransportation to propose the final
