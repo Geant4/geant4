@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-beta-01    (30-June-2011)
+ Geant4 version Name: geant4-09-04-ref-07    (29-July-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -62,30 +62,30 @@ PhysicsList::SetCuts:CutLength : 10 km
 
 phot:   for  gamma    SubType= 12
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :   Emin=        0 eV       Emax=         10 GeV
+       PhotoElectric :  Emin=        0 eV    Emax=       10 GeV
 
 compt:   for  gamma    SubType= 13
       Lambda tables from 100 eV  to 10 GeV in 160 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Klein-Nishina :   Emin=        0 eV       Emax=         10 GeV
+       Klein-Nishina :  Emin=        0 eV    Emax=       10 GeV
 
 conv:   for  gamma    SubType= 14
       Lambda tables from 1.022 MeV to 10 GeV in 160 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :   Emin=        0 eV       Emax=         10 GeV
+        BetheHeitler :  Emin=        0 eV    Emax=       10 GeV
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 GeV in 160 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :   Emin=        0 eV       Emax=         10 GeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 GeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 GeV in 160 bins
       Lambda tables from threshold to 10 GeV in 160 bins, spline: 1
       finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-      myMollerBhabha :   Emin=        0 eV       Emax=         10 GeV
+      myMollerBhabha :  Emin=        0 eV    Emax=       10 GeV
       CSDA range table up to 10 GeV in 160 bins
 
 eIoni:   for  e+    SubType= 2
@@ -93,26 +93,26 @@ eIoni:   for  e+    SubType= 2
       Lambda tables from threshold to 10 GeV in 160 bins, spline: 1
       finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-      myMollerBhabha :   Emin=        0 eV       Emax=         10 GeV
+      myMollerBhabha :  Emin=        0 eV    Emax=       10 GeV
       CSDA range table up to 10 GeV in 160 bins
 
 annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            eplus2gg :   Emin=        0 eV       Emax=         10 GeV
+            eplus2gg :  Emin=        0 eV    Emax=       10 GeV
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 GeV in 160 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :   Emin=        0 eV       Emax=         10 GeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 GeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 GeV in 160 bins
       Lambda tables from threshold to 10 GeV in 160 bins, spline: 1
       finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :   Emin=        0 eV       Emax=          2 MeV
-          BetheBloch :   Emin=        2 MeV      Emax=         10 GeV
+               Bragg :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=       10 GeV
       CSDA range table up to 10 GeV in 160 bins
 
 Region <DefaultRegionForTheWorld> -- appears in <Wall> world volume
@@ -165,37 +165,37 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
                in cavity = 1.8644 MeV*cm2/g
 Start Run processing.
 
---->evntNb= 10000 Nwall= 9997 Ncav= 4 Ic/Iw= 2.10823 Ne-_cav= 2780 doseCavity/Ebeam= 1.24738  (100*(ratio-1) = 24.73787 %)
+--->evntNb= 10000 Nwall= 9999 Ncav= 2 Ic/Iw= 1.05391 Ne-_cav= 2936 doseCavity/Ebeam= 1.01915  (100*(ratio-1) = 1.91543 %)
 
---->evntNb= 20000 Nwall= 19995 Ncav= 6 Ic/Iw= 1.58109 Ne-_cav= 5569 doseCavity/Ebeam= 1.13513  (100*(ratio-1) = 13.51299 %)
+--->evntNb= 20000 Nwall= 19999 Ncav= 2 Ic/Iw= 0.52693 Ne-_cav= 5688 doseCavity/Ebeam= 0.99753  (100*(ratio-1) = -0.24704 %)
 
---->evntNb= 30000 Nwall= 29995 Ncav= 6 Ic/Iw= 1.05398 Ne-_cav= 8438 doseCavity/Ebeam= 1.14434  (100*(ratio-1) = 14.43415 %)
+--->evntNb= 30000 Nwall= 29995 Ncav= 6 Ic/Iw= 1.05398 Ne-_cav= 8519 doseCavity/Ebeam= 0.99367  (100*(ratio-1) = -0.63345 %)
 Run terminated.
 Run Summary
   Number of events processed : 40000
-  User=5.87s Real=5.87s Sys=0s
+  User=5.42s Real=5.45s Sys=0.01s
 
- Process calls frequency --->  msc= 344443  eIoni= 624774  Transportation= 22522
+ Process calls frequency --->  msc= 347020  eIoni= 623994  Transportation= 22633
 
  Charged particle flow in cavity :
-      Enter --> nbParticles = 11258	 Energy = 7.233 GeV
-      Exit  --> nbParticles = 11263	 Energy = 7.233 GeV
+      Enter --> nbParticles = 11316	 Energy = 7.189 GeV
+      Exit  --> nbParticles = 11317	 Energy = 7.189 GeV
 
- beamFluence in wall = 39991	 in cavity = 9	 Icav/Iwall = 1.18579	 energyFluence = 37.95067 MeV*cm2/mg
+ beamFluence in wall = 39992	 in cavity = 8	 Icav/Iwall = 1.05401	 energyFluence = 37.95067 MeV*cm2/mg
 
- Total edep in cavity = 8.30566 MeV +- 4.00375 %
- Total dose in cavity = 41.52832 MeV*cm2/mg +- 4.00375 %
+ Total edep in cavity = 7.67077 MeV +- 2.96508 %
+ Total dose in cavity = 38.35385 MeV*cm2/mg +- 2.96508 %
 
- DoseCavity/EnergyFluence = 1.09427 +- 0.04381
+ DoseCavity/EnergyFluence = 1.01062 +- 0.02997
 
- Total charged trackLength in cavity = 37.4334 m     (mean value = 3.3250 mm )
+ Total charged trackLength in cavity = 36.3380 m     (mean value = 3.2112 mm )
 
- StepSize of ch. tracks in wall   = 180.6795 um  +- 184.2191 um 	 (nbSteps/track = 24.3959)
- StepSize of ch. tracks in cavity = 2.3216 mm  +- 3.0432 mm 	 (nbSteps/track = 1.4322)
+ StepSize of ch. tracks in wall   = 180.5724 um  +- 184.3675 um 	 (nbSteps/track = 24.4362)
+ StepSize of ch. tracks in cavity = 2.2167 mm  +- 2.2677 mm 	 (nbSteps/track = 1.4487)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1480529316, 673911647
+ Current couple of seeds = 1759688924, 673547032
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

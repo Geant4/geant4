@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-beta-01    (30-June-2011)
+ Geant4 version Name: geant4-09-04-ref-07    (29-July-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -49,40 +49,40 @@ Detector cuts are set
 
 phot:   for  gamma, applyCuts: 1     SubType= 12
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :   Emin=        0 eV       Emax=         10 TeV
+       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV
 
 compt:   for  gamma, applyCuts: 1     SubType= 13
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Klein-Nishina :   Emin=        0 eV       Emax=         10 TeV
+       Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
 conv:   for  gamma, applyCuts: 1     SubType= 14
       Lambda tables from 1.022 MeV to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :   Emin=        0 eV       Emax=         10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc93 :   Emin=        0 eV       Emax=         10 TeV
+          UrbanMsc93 :  Emin=        0 eV    Emax=       10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :   Emin=        0 eV       Emax=         10 TeV
+        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
       ===== EM models for the G4Region  XTRdEdxDetector ======
-            PAIModel :   Emin=        0 eV       Emax=         10 TeV
+            PAIModel :  Emin=        0 eV    Emax=       10 TeV
 
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
-            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :  Emin=        0 eV    Emax=      100 MeV   AngularGenUrban
+            eBremLPM :  Emin=      100 MeV   Emax=       10 TeV   AngularGenUrban
 
 Lorentz Factor	XTR photon number
 
@@ -147,21 +147,21 @@ eIoni:   for  e+    SubType= 2
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :   Emin=        0 eV       Emax=         10 TeV
+        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
       ===== EM models for the G4Region  XTRdEdxDetector ======
-            PAIModel :   Emin=        0 eV       Emax=         10 TeV
+            PAIModel :  Emin=        0 eV    Emax=       10 TeV
 
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
-            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :  Emin=        0 eV    Emax=      100 MeV   AngularGenUrban
+            eBremLPM :  Emin=      100 MeV   Emax=       10 TeV   AngularGenUrban
 
 annihil:   for  e+, applyCuts: 1     SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            eplus2gg :   Emin=        0 eV       Emax=         10 TeV
+            eplus2gg :  Emin=        0 eV    Emax=       10 TeV
 
 Lorentz Factor	XTR photon number
 
@@ -222,121 +222,121 @@ msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :   Emin=        0 eV       Emax=         10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :   Emin=        0 eV       Emax=          2 MeV
-          BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
+               Bragg :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
       ===== EM models for the G4Region  XTRdEdxDetector ======
-            PAIModel :   Emin=        0 eV       Emax=         10 TeV
+            PAIModel :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for kaon+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :   Emin=        0 eV       Emax=         10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
 
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :   Emin=        0 eV       Emax=    1.05231 MeV
-          BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
+               Bragg :  Emin=        0 eV    Emax=  1.05231 MeV
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
       ===== EM models for the G4Region  XTRdEdxDetector ======
-            PAIModel :   Emin=        0 eV       Emax=         10 TeV
+            PAIModel :  Emin=        0 eV    Emax=       10 TeV
 
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :   Emin=        0 eV       Emax=    1.05231 MeV
-          BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
       ===== EM models for the G4Region  XTRdEdxDetector ======
-            PAIModel :   Emin=        0 eV       Emax=         10 TeV
+            PAIModel :  Emin=        0 eV    Emax=       10 TeV
 
 muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :   Emin=        0 eV       Emax=         10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :   Emin=        0 eV       Emax=        200 keV
-          BetheBloch :   Emin=      200 keV      Emax=          1 GeV
-        MuBetheBloch :   Emin=        1 GeV      Emax=         10 TeV
+               Bragg :  Emin=        0 eV    Emax=      200 keV
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
       ===== EM models for the G4Region  XTRdEdxDetector ======
-            PAIModel :   Emin=        0 eV       Emax=         10 TeV
+            PAIModel :  Emin=        0 eV    Emax=       10 TeV
 
 muBrems:   for  mu+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :   Emin=        0 eV       Emax=         10 TeV
+              MuBrem :  Emin=        0 eV    Emax=       10 TeV
 
 muPairProd:   for  mu+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :   Emin=        0 eV       Emax=         10 TeV
+          muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 muIoni:   for  mu-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :   Emin=        0 eV       Emax=        200 keV
-          BetheBloch :   Emin=      200 keV      Emax=          1 GeV
-        MuBetheBloch :   Emin=        1 GeV      Emax=         10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=      200 keV
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
       ===== EM models for the G4Region  XTRdEdxDetector ======
-            PAIModel :   Emin=        0 eV       Emax=         10 TeV
+            PAIModel :  Emin=        0 eV    Emax=       10 TeV
 
 muBrems:   for  mu-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :   Emin=        0 eV       Emax=         10 TeV
+              MuBrem :  Emin=        0 eV    Emax=       10 TeV
 
 muPairProd:   for  mu-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :   Emin=        0 eV       Emax=         10 TeV
+          muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :   Emin=        0 eV       Emax=    297.505 keV
-          BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
+               Bragg :  Emin=        0 eV    Emax=  297.505 keV
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
       ===== EM models for the G4Region  XTRdEdxDetector ======
-            PAIModel :   Emin=        0 eV       Emax=         10 TeV
+            PAIModel :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :   Emin=        0 eV       Emax=         10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :   Emin=        0 eV       Emax=    297.505 keV
-          BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
       ===== EM models for the G4Region  XTRdEdxDetector ======
-            PAIModel :   Emin=        0 eV       Emax=         10 TeV
+            PAIModel :  Emin=        0 eV    Emax=       10 TeV
 
 ========= Table of registered couples ==============================
 
@@ -375,26 +375,26 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.55s Real=0.55s Sys=0s
+  User=0.55s Real=0.56s Sys=0s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=44.681 +- 0.509935  mm  
+    mean charged track length   in absorber=45.4976 +- 0.620521  mm  
 
-            mean energy deposit in absorber=0.0535225 +- 0.000954395  MeV 
+            mean energy deposit in absorber=0.0540892 +- 0.000961762  MeV 
 
- mean number of steps in absorber (charged) =9.068 +- 0.267281      
- mean number of steps in absorber (neutral) =2.801 +- 0.0524347      
+ mean number of steps in absorber (charged) =9.049 +- 0.246947      
+ mean number of steps in absorber (neutral) =2.843 +- 0.0530881      
 
-   mean number of charged secondaries = 3.454 +- 0.0813627
+   mean number of charged secondaries = 3.536 +- 0.0757806
 
-   mean number of neutral secondaries = 0.045 +- 0.00685383
+   mean number of neutral secondaries = 0.034 +- 0.00573097
 
-   mean number of e-s =3.454  and e+s =0
+   mean number of e-s =3.536  and e+s =0
 
-(number) transmission coeff=0.545  reflection coeff=0.022
+(number) transmission coeff=0.527  reflection coeff=0.027
 
  energy deposit distribution 
-#entries=1000    #underflows=0    #overflows=65
+#entries=1000    #underflows=0    #overflows=66
  bin nb      Elow      entries     normalized 
     0         0           0           0
     1   1.53846           0           0
@@ -402,72 +402,72 @@ Run Summary
     3   4.61538           0           0
     4   6.15385           0           0
     5   7.69231           0           0
-    6   9.23077           1       0.001
-    7   10.7692           2       0.002
+    6   9.23077           0           0
+    7   10.7692           0           0
     8   12.3077           1       0.001
-    9   13.8462           1       0.001
-   10   15.3846           6       0.006
-   11   16.9231          15       0.015
-   12   18.4615          18       0.018
-   13        20          21       0.021
-   14   21.5385          23       0.023
-   15   23.0769          18       0.018
-   16   24.6154          19       0.019
-   17   26.1538          19       0.019
-   18   27.6923          27       0.027
-   19   29.2308          25       0.025
-   20   30.7692          30        0.03
-   21   32.3077          36       0.036
-   22   33.8462          33       0.033
-   23   35.3846          31       0.031
-   24   36.9231          25       0.025
-   25   38.4615          22       0.022
-   26        40          30        0.03
-   27   41.5385          27       0.027
-   28   43.0769          21       0.021
-   29   44.6154          31       0.031
-   30   46.1538          27       0.027
+    9   13.8462           3       0.003
+   10   15.3846           3       0.003
+   11   16.9231           7       0.007
+   12   18.4615          12       0.012
+   13        20          10        0.01
+   14   21.5385          17       0.017
+   15   23.0769          26       0.026
+   16   24.6154          16       0.016
+   17   26.1538          27       0.027
+   18   27.6923          30        0.03
+   19   29.2308          29       0.029
+   20   30.7692          36       0.036
+   21   32.3077          34       0.034
+   22   33.8462          32       0.032
+   23   35.3846          29       0.029
+   24   36.9231          28       0.028
+   25   38.4615          27       0.027
+   26        40          22       0.022
+   27   41.5385          22       0.022
+   28   43.0769          30        0.03
+   29   44.6154          29       0.029
+   30   46.1538          33       0.033
    31   47.6923          26       0.026
-   32   49.2308          33       0.033
-   33   50.7692          22       0.022
-   34   52.3077          20        0.02
-   35   53.8462          17       0.017
-   36   55.3846          19       0.019
-   37   56.9231          17       0.017
-   38   58.4615          18       0.018
-   39        60          16       0.016
-   40   61.5385          17       0.017
-   41   63.0769          17       0.017
-   42   64.6154          12       0.012
-   43   66.1538          13       0.013
-   44   67.6923          20        0.02
-   45   69.2308          22       0.022
-   46   70.7692          16       0.016
-   47   72.3077          13       0.013
-   48   73.8462          17       0.017
-   49   75.3846          10        0.01
-   50   76.9231           7       0.007
-   51   78.4615          14       0.014
-   52        80           7       0.007
-   53   81.5385           4       0.004
-   54   83.0769           4       0.004
-   55   84.6154           4       0.004
-   56   86.1538           5       0.005
-   57   87.6923           4       0.004
-   58   89.2308           2       0.002
-   59   90.7692           9       0.009
-   60   92.3077           7       0.007
-   61   93.8462           4       0.004
-   62   95.3846           6       0.006
-   63   96.9231           4       0.004
-   64   98.4615           0           0
+   32   49.2308          20        0.02
+   33   50.7692          27       0.027
+   34   52.3077          29       0.029
+   35   53.8462          23       0.023
+   36   55.3846          26       0.026
+   37   56.9231          23       0.023
+   38   58.4615          27       0.027
+   39        60          18       0.018
+   40   61.5385          16       0.016
+   41   63.0769          19       0.019
+   42   64.6154          13       0.013
+   43   66.1538          16       0.016
+   44   67.6923           7       0.007
+   45   69.2308           9       0.009
+   46   70.7692          10        0.01
+   47   72.3077          12       0.012
+   48   73.8462          11       0.011
+   49   75.3846          11       0.011
+   50   76.9231          12       0.012
+   51   78.4615           6       0.006
+   52        80           9       0.009
+   53   81.5385           6       0.006
+   54   83.0769           6       0.006
+   55   84.6154          13       0.013
+   56   86.1538           6       0.006
+   57   87.6923           5       0.005
+   58   89.2308           7       0.007
+   59   90.7692           3       0.003
+   60   92.3077           2       0.002
+   61   93.8462           2       0.002
+   62   95.3846           5       0.005
+   63   96.9231           2       0.002
+   64   98.4615           4       0.004
 
- Emp =       0.0323077   width=      0.0507692  MeV 
+ Emp =       0.0307692   width=           0.04  MeV 
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 894400097, 684570532
+ Current couple of seeds = 784466807, 622453687
 ----------------------------------------
 
 ========= Table of registered couples ==============================

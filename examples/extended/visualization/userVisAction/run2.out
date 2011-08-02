@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-beta-01    (30-June-2011)
+ Geant4 version Name: geant4-09-04-ref-07    (29-July-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -69,171 +69,171 @@ There are 5 chambers in the tracker region. The chambers are 200 mm of XenonGas
 
 phot:   for  gamma    SubType= 12
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :   Emin=        0 eV       Emax=         10 TeV
+       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV
 
 compt:   for  gamma    SubType= 13
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Klein-Nishina :   Emin=        0 eV       Emax=         10 TeV
+       Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
 conv:   for  gamma    SubType= 14
       Lambda tables from 1.022 MeV to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :   Emin=        0 eV       Emax=         10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc93 :   Emin=        0 eV       Emax=         10 TeV
+          UrbanMsc93 :  Emin=        0 eV    Emax=       10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :   Emin=        0 eV       Emax=         10 TeV
+        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
 
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
-            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :  Emin=        0 eV    Emax=      100 MeV   AngularGenUrban
+            eBremLPM :  Emin=      100 MeV   Emax=       10 TeV   AngularGenUrban
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :   Emin=        0 eV       Emax=         10 TeV
+        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
 
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       LPM flag: 1 for E > 0.1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=        100 MeV  AngularGenUrban
-            eBremLPM :   Emin=      100 MeV      Emax=         10 TeV  AngularGenUrban
+               eBrem :  Emin=        0 eV    Emax=      100 MeV   AngularGenUrban
+            eBremLPM :  Emin=      100 MeV   Emax=       10 TeV   AngularGenUrban
 
 annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            eplus2gg :   Emin=        0 eV       Emax=         10 TeV
+            eplus2gg :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :   Emin=        0 eV       Emax=         10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :   Emin=        0 eV       Emax=          2 MeV
-          BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
+               Bragg :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :   Emin=        0 eV       Emax=          2 MeV
-          BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
 
 msc:   for kaon+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :   Emin=        0 eV       Emax=         10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
 
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :   Emin=        0 eV       Emax=    1.05231 MeV
-          BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
+               Bragg :  Emin=        0 eV    Emax=  1.05231 MeV
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
 
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :   Emin=        0 eV       Emax=    1.05231 MeV
-          BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
 
 muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :   Emin=        0 eV       Emax=         10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :   Emin=        0 eV       Emax=        200 keV
-          BetheBloch :   Emin=      200 keV      Emax=          1 GeV
-        MuBetheBloch :   Emin=        1 GeV      Emax=         10 TeV
+               Bragg :  Emin=        0 eV    Emax=      200 keV
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
 
 muBrems:   for  mu+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :   Emin=        0 eV       Emax=         10 TeV
+              MuBrem :  Emin=        0 eV    Emax=       10 TeV
 
 muPairProd:   for  mu+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :   Emin=        0 eV       Emax=         10 TeV
+          muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 muIoni:   for  mu-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :   Emin=        0 eV       Emax=        200 keV
-          BetheBloch :   Emin=      200 keV      Emax=          1 GeV
-        MuBetheBloch :   Emin=        1 GeV      Emax=         10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=      200 keV
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
 
 muBrems:   for  mu-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :   Emin=        0 eV       Emax=         10 TeV
+              MuBrem :  Emin=        0 eV    Emax=       10 TeV
 
 muPairProd:   for  mu-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :   Emin=        0 eV       Emax=         10 TeV
+          muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :   Emin=        0 eV       Emax=    297.505 keV
-          BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
+               Bragg :  Emin=        0 eV    Emax=  297.505 keV
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :   Emin=        0 eV       Emax=         10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :   Emin=        0 eV       Emax=    297.505 keV
-          BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
@@ -318,7 +318,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
    24   8.19 mm  -1.49 cm    -20 cm   2.93 GeV  12.9 keV    10 cm   2.71 m       Tracker  StepLimiter
    25    8.6 mm  -1.56 cm    -10 cm   2.93 GeV  21.5 keV    10 cm   2.81 m       Tracker  StepLimiter
    26   9.01 mm  -1.63 cm  -18.7 um   2.93 GeV  12.9 keV    10 cm   2.91 m       Tracker  StepLimiter
-   27   9.01 mm  -1.63 cm -0.000801 fm   2.93 GeV  3.26 eV   18.7 um   2.91 m       Tracker  Transportation
+   27   9.01 mm  -1.63 cm -5.2e-05 fm   2.93 GeV  3.26 eV   18.7 um   2.91 m       Tracker  Transportation
    28   9.83 mm  -1.77 cm     20 cm   2.93 GeV   106 keV    20 cm   3.11 m       Chamber  Transportation
    29   1.02 cm  -1.84 cm     30 cm   2.93 GeV    27 keV    10 cm   3.21 m       Tracker  StepLimiter
    30   1.06 cm   -1.9 cm   38.4 cm   2.93 GeV  12.8 keV  8.43 cm   3.29 m       Tracker       hIoni
@@ -454,7 +454,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0s Sys=0s
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
@@ -491,41 +491,41 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 Start Run processing.
 
 -------->Hits Collection: in this event they are 29 hits in the tracker chambers: 
-  trackID: 1  chamberNb: 0  energy deposit: 87.445078526702 keV  position: 0.025894835084356 0.16262198535534 -1.4 m  
-  trackID: 1  chamberNb: 1  energy deposit: 91.928283147935 keV  position: 4.6996483578776 39.99865582098 -60 cm 
-  trackID: 1  chamberNb: 2  energy deposit: 85.068519936592 keV  position: 6.8276743046947 76.247058799927 20 cm 
-  trackID: 1  chamberNb: 3  energy deposit: 107.59333289031 keV  position: 0.091704127359102 1.2774859965666 1 m  
-  trackID: 1  chamberNb: 4  energy deposit: 198.59519626709 keV  position: 0.1178611325426 1.968 1.7708774813813 m  
-  trackID: 4  chamberNb: 2  energy deposit: 802.14240133009 eV   position: 5.2281621909981 65.737726189337 5.7279484974582e-16 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 591.85163928126 eV   position: 1.9419410262368 65.746383932511 3.7437501015924e-16 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 21.726576316964 keV  position: -6.4169492452308 65.82032903952 4.4825254619241e-16 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 939.15283048047 eV   position: -6.4035698765607 65.686399049626 -1.1102230246252e-17 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 11.909622281374 keV  position: -6.4041057069166 65.691649696225 -3.2457760437699e-16 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 1.6043843549162 keV  position: -6.2492866833865 65.687521708384 -4.1986135705316e-16 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 341.9778083089 eV   position: -6.180861015066 65.694140538531 -1.717891237249e-16 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 1.7963651457015 keV  position: -6.0575923177108 65.688715930259 -1.9845236565175e-16 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 1.2724878519859 keV  position: -5.8048458533976 65.689948066157 3.2959746043559e-16 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 1.453065025615 keV  position: -5.5614677937144 65.692670431287 -1.346145417358e-16 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 961.91316105967 eV   position: -5.3885093457331 65.703130156789 -4.1633363423443e-17 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 20.277849783231 keV  position: -5.4989245307492 65.629931003069 0.053196329186809 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 24.456128378505 keV  position: -4.9478608804883 65.639637660982 0.11870752480593 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 11.036313027728 keV  position: -5.3200310836068 65.582557848084 0.058014992697412 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 17.027502388217 keV  position: -5.3920634919346 65.654636395662 0.10871885644996 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 10.927846212908 keV  position: -5.2814638741276 65.66363050782 0.09186572287026 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 10.373618025923 keV  position: -5.2592532916161 65.673819383592 0.072528003429576 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 3.6757544222699 keV  position: -5.103262507622 65.654099696684 0.14466882508627 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 6.7787885110397 keV  position: -4.9739538772529 65.643964924388 0.10201970300849 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 4.8471835706215 keV  position: -5.0056947313309 65.6068091125 0.15816949811835 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 13.509494280221 keV  position: -5.0312064526639 65.567197630267 0.10174709702798 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 10.364045570704 keV  position: -4.9151837125832 65.534776238356 0.19789052544789 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 6.2970336459147 keV  position: -4.8490793884588 65.478080964003 0.24443704340032 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 13.948157043027 keV  position: -4.8521836627926 65.473193878781 0.26457429505795 cm 
+  trackID: 1  chamberNb: 0  energy deposit: 87.444398195452 keV  position: 0.025894835084356 0.16262198535534 -1.4 m  
+  trackID: 1  chamberNb: 1  energy deposit: 91.927549450098 keV  position: 4.6996483578693 39.998655819874 -60 cm 
+  trackID: 1  chamberNb: 2  energy deposit: 85.067853823583 keV  position: 6.8276743046704 76.247058793567 20 cm 
+  trackID: 1  chamberNb: 3  energy deposit: 107.59252268239 keV  position: 0.09170412735706 1.2774859963517 1 m  
+  trackID: 1  chamberNb: 4  energy deposit: 198.59427450982 keV  position: 0.11786113255437 1.968 1.7708774819387 m  
+  trackID: 4  chamberNb: 2  energy deposit: 802.14240133009 eV   position: 5.2281621882901 65.737726180635 -5.8103478625671e-16 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 591.85163928126 eV   position: 1.9419413901285 65.746383930844 4.0137164425413e-16 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 21.726577980395 keV  position: -6.4169488427015 65.820329038631 -3.9551695252271e-17 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 939.15282978155 eV   position: -6.403569493659 65.686399048868 5.2180482157382e-16 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 11.909622274703 keV  position: -6.4041053035321 65.691649695557 2.4632531257784e-16 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 1.6043843669729 keV  position: -6.2492862588298 65.68752170773 5.004758543356e-16 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 341.9778083089 eV   position: -6.1808605636873 65.694140537921 4.3030086872148e-16 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 1.7963652012893 keV  position: -6.0575918648574 65.688715937763 -3.7608804959177e-16 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 1.2724880297962 keV  position: -5.8048453876852 65.68994807354 -5.162537064507e-16 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 1.4530652211479 keV  position: -5.5614673198198 65.692670438377 -5.1417203827953e-16 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 961.913244301 eV   position: -5.388508865138 65.703130162592 5.5649929109336e-16 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 20.27784935973 keV  position: -5.4989245524777 65.629931002442 0.053196327272138 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 24.456127950179 keV  position: -4.9478616300759 65.63963755977 0.11870769072289 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 11.036312974242 keV  position: -5.3200319280133 65.582557708394 0.058015225495316 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 17.027502268742 keV  position: -5.3920646192336 65.654636261643 0.10871905874787 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 10.927846145821 keV  position: -5.2814646353995 65.663630356728 0.091865929650229 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 10.373617964339 keV  position: -5.2592543776313 65.673819233384 0.07252820453956 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 3.6757543986342 keV  position: -5.1032640859143 65.654099823136 0.14466889907202 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 6.7787884766684 keV  position: -4.9739559609495 65.643964891251 0.10201966142164 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 4.8471835463651 keV  position: -5.0056974708476 65.606809129503 0.15816941663081 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 13.509494232487 keV  position: -5.0312097544097 65.567197522517 0.10174717657004 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 10.364045571536 keV  position: -4.9151873775453 65.53477583734 0.1978906277066 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 6.297033691156 keV  position: -4.849083178084 65.478080530119 0.24443727190912 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 13.948156228808 keV  position: -4.8521874373729 65.473193498084 0.26457453676441 cm 
 >>> Event 0
     0 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 Graphics systems deleted.
 Visualization Manager deleting...
 UserDetectorConstruction deleted.

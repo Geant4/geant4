@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-beta-01    (30-June-2011)
+ Geant4 version Name: geant4-09-04-ref-07    (29-July-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -302,13 +302,17 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 exrdmAnalysisManager: Histograms are booked and the run has been started
 ### Run : 0
  Process: NeutronInelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 991.421, target nucleus (82,207)
- relative limit 0.01 relative value = 0.0109033 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565396 pass
- Process: ProtonInelastic , Model: Binary Cascade
- Primary: proton (2212), E= 983.592, target nucleus (82,206)
- relative limit 0.01 relative value = 0.0124759 fail
+ Primary: neutron (2112), E= 994.717, target nucleus (82,206)
+ relative limit 0.01 relative value = 0.010252 fail
  absolute limit (MeV) 1 absolute value (MeV) = 0.565411 pass
+ Process: ProtonInelastic , Model: Binary Cascade
+ Primary: proton (2212), E= 987.747, target nucleus (82,206)
+ relative limit 0.01 relative value = 0.0114283 fail
+ absolute limit (MeV) 1 absolute value (MeV) = 0.565411 pass
+ Process: NeutronInelastic , Model: Binary Cascade
+ Primary: neutron (2112), E= 988.134, target nucleus (82,208)
+ relative limit 0.01 relative value = 0.011641 fail
+ absolute limit (MeV) 1 absolute value (MeV) = 0.565381 pass
 exrdmAnalysisManager: Histograms have been saved!
 Graphics systems deleted.
 Visualization Manager deleting...

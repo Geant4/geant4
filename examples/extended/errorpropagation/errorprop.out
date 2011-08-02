@@ -4,13 +4,13 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-beta-01    (30-June-2011)
+ Geant4 version Name: geant4-09-04-ref-07    (29-July-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
- creating G4RunManagerKernel 0xd4bc890
+ creating G4RunManagerKernel 0xac5e890
 
 The materials defined are : 
 
@@ -38,30 +38,30 @@ List of instantiated particles ============================================
 e+ e- gamma mu+ mu- pi+ pi- proton 
 physicsList->Construct() start.
  G4Transportation constructor> set fShortStepOptimisation to false
-0xd52a020G4ErrorPhysicsList:: particle process manager e+ = 0xd52b520
-0xd529e10G4ErrorPhysicsList:: particle process manager e- = 0xd52cb30
-0xd528bf0G4ErrorPhysicsList:: particle process manager gamma = 0xd52cd40
-0xd52a230G4ErrorPhysicsList:: particle process manager mu+ = 0xd52cf90
-0xd52a660G4ErrorPhysicsList:: particle process manager mu- = 0xd52d1e0
-0xd52aad0G4ErrorPhysicsList:: particle process manager pi+ = 0xd52d430
-0xd52aef0G4ErrorPhysicsList:: particle process manager pi- = 0xd52d680
-0xd52b310G4ErrorPhysicsList:: particle process manager proton = 0xd52d8d0
+0xaccbb50G4ErrorPhysicsList:: particle process manager e+ = 0xaccd050
+0xaccb940G4ErrorPhysicsList:: particle process manager e- = 0xacce660
+0xaccab40G4ErrorPhysicsList:: particle process manager gamma = 0xacce870
+0xaccbd60G4ErrorPhysicsList:: particle process manager mu+ = 0xacceac0
+0xaccc190G4ErrorPhysicsList:: particle process manager mu- = 0xacced10
+0xaccc600G4ErrorPhysicsList:: particle process manager pi+ = 0xaccef60
+0xaccca20G4ErrorPhysicsList:: particle process manager pi- = 0xaccf1b0
+0xaccce40G4ErrorPhysicsList:: particle process manager proton = 0xaccf400
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 
 conv:   for  gamma    SubType= 14
       Lambda tables from 1.022 MeV to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :   Emin=        0 eV       Emax=         10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       10 TeV
 
 compt:   for  gamma    SubType= 13
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Klein-Nishina :   Emin=        0 eV       Emax=         10 TeV
+       Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
 phot:   for  gamma    SubType= 12
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :   Emin=        0 eV       Emax=         10 TeV
+       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Root logical volume(s) : World 
