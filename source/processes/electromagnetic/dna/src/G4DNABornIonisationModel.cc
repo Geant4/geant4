@@ -29,7 +29,7 @@
 
 #include "G4DNABornIonisationModel.hh"
 #include "G4UAtomicDeexcitation.hh"
-#include "G4LossTableManager.hh"
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -51,13 +51,15 @@ G4DNABornIonisationModel::G4DNABornIonisationModel(const G4ParticleDefinition*,
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
   
+  fAtomDeexcitation = new G4UAtomicDeexcitation();
+  //  G4LossTableManager::Instance()->SetAtomDeexcitation(fAtomDeexcitation);
+  fAtomDeexcitation->SetFluo(true);
+  fAtomDeexcitation->SetAuger(true);
+
   if( verboseLevel>0 ) 
   { 
     G4cout << "Born ionisation model is constructed " << G4endl;
   }
-
-  //Mark this model as "applicable" for atomic deexcitation
-  SetDeexcitationFlag(true);
 
 }
 
@@ -232,8 +234,9 @@ void G4DNABornIonisationModel::Initialise(const G4ParticleDefinition* particle,
   }
   
   //
-
-  fAtomDeexcitation  = G4LossTableManager::Instance()->AtomDeexcitation();
+  
+  fAtomDeexcitation->InitialiseAtomicDeexcitation();
+  fAtomDeexcitation->InitialiseForNewRun();
 
   if (isInitialised) { return; }
   fParticleChangeForGamma = GetParticleChangeForGamma();

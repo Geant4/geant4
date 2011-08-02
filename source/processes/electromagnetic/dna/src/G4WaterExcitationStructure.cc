@@ -22,6 +22,33 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+//
+// $Id: G4WaterExcitationStructure.cc,v 1.1 2007-10-15 08:57:54 pia Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+// 
+// Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
+//
+// Reference: TNS Geant4-DNA paper
+// Reference for implementation model: NIM. 155, pp. 145-156, 1978
+
+// History:
+// -----------
+// Date         Name              Modification
+// 28 Apr 2007  M.G. Pia          Created in compliance with design described in TNS paper
+//
+// -------------------------------------------------------------------
+
+// Class description:
+// Geant4-DNA Cross total cross section for electron elastic scattering in water
+// Reference: TNS Geant4-DNA paper
+// S. Chauvie et al., Geant4 physics processes for microdosimetry simulation:
+// design foundation and implementation of the first set of models,
+// IEEE Trans. Nucl. Sci., vol. 54, no. 6, Dec. 2007.
+// Further documentation available from http://www.ge.infn.it/geant4/dna
+
+// -------------------------------------------------------------------
+
 
 #include "G4WaterExcitationStructure.hh"
 

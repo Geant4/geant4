@@ -32,7 +32,6 @@
 
 #include "G4DNARuddIonisationExtendedModel.hh"
 #include "G4UAtomicDeexcitation.hh"
-#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -72,14 +71,15 @@ G4DNARuddIonisationExtendedModel::G4DNARuddIonisationExtendedModel(const G4Parti
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
 
+  fAtomDeexcitation = new G4UAtomicDeexcitation();
+  //  G4LossTableManager::Instance()->SetAtomDeexcitation(fAtomDeexcitation);
+  fAtomDeexcitation->SetFluo(true);
+  fAtomDeexcitation->SetAuger(true);
+  
   if( verboseLevel>0 ) 
   { 
     G4cout << "Rudd ionisation model is constructed " << G4endl;
   }
-
-  //Mark this model as "applicable" for atomic deexcitation
-  SetDeexcitationFlag(true);
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -94,9 +94,7 @@ G4DNARuddIonisationExtendedModel::~G4DNARuddIonisationExtendedModel()
     G4DNACrossSectionDataSet* table = pos->second;
     delete table;
   }
-  if (fAtomDeexcitation) {delete  fAtomDeexcitation;}
-
-
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -399,7 +397,8 @@ void G4DNARuddIonisationExtendedModel::Initialise(const G4ParticleDefinition* pa
 
   //
 
-  fAtomDeexcitation  = G4LossTableManager::Instance()->AtomDeexcitation();
+  fAtomDeexcitation->InitialiseAtomicDeexcitation();
+  fAtomDeexcitation->InitialiseForNewRun();  
 
   if (isInitialised) { return; }
   fParticleChangeForGamma = GetParticleChangeForGamma();
