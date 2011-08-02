@@ -127,13 +127,11 @@ processes/decay                                  decay-V09-04-01
 - Fix in G4Decay to propose the final local time rather than the global time
   so that local time can be updated properly. Addressing problem report #1224.
 
-processes/electromagnetic/dna                    emdna-V09-04-13
+processes/electromagnetic/dna                    emdna-V09-04-10
 -----------------------------
 - Increased energy limits for G4DNAChargeIncrease, G4DNAChargeDecrease,
   G4DNADingfelderChargeIncreaseModel and G4DNADingflederChargeDecreaseModel.
 - Upgrade to ionisation classes for Auger e-.
-  Updated deexcitation initialization in ionization models.
-- Fixed some Coverity defects and removed obsolete information.
 
 processes/electromagnetic/highenergy             emhighenergy-V09-04-00
 ------------------------------------
