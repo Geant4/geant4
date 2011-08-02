@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+2nd August 2011  Gabriele Cosmo (examples-V09-04-07)
+- Updated reference outputs according to reference tag geant4-09-04-ref-07.
+- Includes tags: nanobeam-V09-04-01, exampleN04-V09-04-00.
+
 30th June 2011  Gabriele Cosmo (examples-V09-04-06)
 - Updated reference outputs according to reference tag geant4-09-04-ref-06.
 - Includes tags: microbeam-V09-04-00, AnaEx01-V09-04-01, AnaEx02-V09-04-02,
