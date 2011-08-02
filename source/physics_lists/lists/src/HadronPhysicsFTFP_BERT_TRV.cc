@@ -62,8 +62,8 @@ HadronPhysicsFTFP_BERT_TRV::HadronPhysicsFTFP_BERT_TRV(const G4String& name, G4b
 
 void HadronPhysicsFTFP_BERT_TRV::CreateModels()
 {
-  G4double minFTFP= 6.0 * GeV;
-  G4double maxBERT= 8.0 * GeV;
+  G4double minFTFP= 3.0 * GeV;
+  G4double maxBERT= 12.0 * GeV;
   // G4double minFTFP= 5.0 * GeV; G4double maxBERT= 7.0 * GeV;
   G4cout << " Revised FTFTP_BERT_TRV - new threshold between BERT and FTFP " 
 	 << " is over the interval " << minFTFP/GeV << " to " << maxBERT/GeV 

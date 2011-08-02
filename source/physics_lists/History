@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+01-08-2011, G.Folger                      (phys-lists-V09-04-39)
+- In HadronPhysicsFTFP_BERT_TRV, change overlap BERT/FTFP to be 
+   from 3 to 12 GeV, affecting FTFP_BERT_TRV.
+
 14/20-07-2011, G.Folger                   (phys-lists-V09-04-38)
 - Add in lists class PhysListUtil. Contains a single function
      FindInelasticProcess(), up to now implemeted multiple times 
