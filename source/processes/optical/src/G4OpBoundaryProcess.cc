@@ -105,8 +105,9 @@ G4OpBoundaryProcess::G4OpBoundaryProcess(const G4String& processName,
 	theStatus = Undefined;
 	theModel = glisur;
 	theFinish = polished;
-        theReflectivity = 1.;
-        theEfficiency   = 0.;
+        theReflectivity =  1.;
+        theEfficiency   =  0.;
+        theTransmittance = 0.;
 
         prob_sl = 0.;
         prob_ss = 0.;
@@ -250,8 +251,9 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 		return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 	}
 
-        theReflectivity = 1.;
-        theEfficiency   = 0.;
+        theReflectivity =  1.;
+        theEfficiency   =  0.;
+        theTransmittance = 0.;
 
         theModel = glisur;
         theFinish = polished;
@@ -346,6 +348,13 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
               aMaterialPropertiesTable->GetProperty("EFFICIENCY");
               if (PropertyPointer) {
                       theEfficiency =
+                      PropertyPointer->GetProperty(thePhotonMomentum);
+              }
+
+              PropertyPointer =
+              aMaterialPropertiesTable->GetProperty("TRANSMITTANCE");
+              if (PropertyPointer) {
+                      theTransmittance =
                       PropertyPointer->GetProperty(thePhotonMomentum);
               }
 
@@ -882,12 +891,9 @@ void G4OpBoundaryProcess::DielectricDielectric()
 
               G4double TransCoeff;
 
-	      if (cost1 != 0.0) {
-	         TransCoeff = s2/s1;
-	      }
-	      else {
-	         TransCoeff = 0.0;
-	      }
+              if (theTransmittance > 0) TransCoeff = theTransmittance;
+              else if (cost1 != 0.0) TransCoeff = s2/s1;
+              else TransCoeff = 0.0;
 
 	      G4double E2_abs, C_parl, C_perp;
 

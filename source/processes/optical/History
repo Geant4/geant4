@@ -16,6 +16,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14th Jun 2011 Peter Gumplinger (op-V09-04-00)
+              A dielectric_dielectric surface may now have a wavelength
+              dependent property "TRANSMITTANCE". If this is specified
+              for a surface it overwrites the Snell's law's probability.
+              This allows the simulation of anti-reflective coatings.
+              Thanks to Evgueni Goudzovski (CERN) for the idea.
+
 29th Oct 2010 Peter Gumplinger (op-V09-03-06)
               Fix minor Coverty Errors
 
