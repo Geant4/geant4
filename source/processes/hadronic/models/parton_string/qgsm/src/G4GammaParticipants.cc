@@ -26,6 +26,7 @@
 #include "globals.hh"
 #include "G4GammaParticipants.hh"
 #include "G4LorentzVector.hh"
+#include "G4V3DNucleus.hh"
 #include <utility>
 
 // Class G4GammaParticipants 
@@ -33,21 +34,23 @@
 // J.P. Wellisch, April 2002
 // new participants class for gamma nuclear, with this design more can come with 
 // cross-section based, and quasi-eiconal model based modelling 
+//
+// 20110805  M. Kelsey -- Follow change to G4V3DNucleus::GetNucleons()
 
 G4VSplitableHadron* G4GammaParticipants::SelectInteractions(const G4ReactionProduct  &thePrimary) 
 {
   // Check reaction threshold  - goes to CheckThreshold
   G4VSplitableHadron* aProjectile = new G4QGSMSplitableHadron(thePrimary, TRUE); // @@@ check the TRUE
 
-  const std::vector<G4Nucleon *> & theTargetNuc = theNucleus->GetNucleons();
+  const std::vector<G4Nucleon>& theTargetNuc = theNucleus->GetNucleons();
   G4LorentzVector aPrimaryMomentum(thePrimary.GetMomentum(), thePrimary.GetTotalEnergy());
   if((!(aPrimaryMomentum.e()>-1)) && (!(aPrimaryMomentum.e()<1)) )
   {
     throw G4HadronicException(__FILE__, __LINE__, 
                  "G4GammaParticipants::SelectInteractions: primary nan energy.");
   }
-  G4double s = (aPrimaryMomentum + theTargetNuc[0]->Get4Momentum()).mag2();
-  G4double ThresholdMass = thePrimary.GetMass() + theTargetNuc[0]->GetDefinition()->GetPDGMass(); 
+  G4double s = (aPrimaryMomentum + theTargetNuc[0].Get4Momentum()).mag2();
+  G4double ThresholdMass = thePrimary.GetMass() + theTargetNuc[0].GetDefinition()->GetPDGMass(); 
   ModelMode = SOFT;
   if (sqr(ThresholdMass + ThresholdParameter) > s)
   {
@@ -70,10 +73,10 @@ G4VSplitableHadron* G4GammaParticipants::SelectInteractions(const G4ReactionProd
    #endif
 
   G4int theCurrent = static_cast<G4int> (theTargetNuc.size()*G4UniformRand());
-  G4Nucleon * pNucleon = theTargetNuc[theCurrent];
-  G4QGSMSplitableHadron* aTarget = new G4QGSMSplitableHadron(*pNucleon);
+  const G4Nucleon& pNucleon = theTargetNuc[theCurrent];
+  G4QGSMSplitableHadron* aTarget = new G4QGSMSplitableHadron(pNucleon);
   theTargets.push_back(aTarget);
-   pNucleon->Hit(aTarget);
+  const_cast<G4Nucleon&>(pNucleon).Hit(aTarget);
    if ( (0.06 > G4UniformRand() &&(ModelMode==SOFT)) || (ModelMode==DIFFRACTIVE ) )
    { 
      // diffractive interaction occurs

@@ -14,6 +14,20 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
 
+5 Aug 2011, M. Kelsey		(hadr-qgsm-V09-04-04)
+-----------------------------------------------------
+- G4GammaParticipants.cc:  Follow change in return value of
+   G4V3DNucleus::GetNucleons(), use const_cast<> to allow setting Hit().
+- G4QGSParticipants.hh:  Add G4V3DNucleus.hh (should move implementations to
+   .cc file).
+
+  Requires consistent changes in other packages:
+  	hadr-modman-V09-04-01
+  	hadr-mod-util-V09-04-02
+	had-partonstring-mgt-V09-04-01
+  	hadr-qgsm-V09-04-04
+  	had-theo-HE-V09-04-01
+
 14 Jul 2011, G.Folger		(hadr-qgsm-V09-04-03)
 -----------------------------------------------------
 - Fix coverity warnings in G4QGSParticipants.cc and G4SPBaryon.cc
