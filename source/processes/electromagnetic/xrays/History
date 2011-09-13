@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19 August 11: G.Cosmo (xrays-V09-04-06)
+- G4ForwardXrayTR: made 'fProtonEnergyVector' non static pointer; allocate
+  and deallocate it directly inside class constructors/destructor.
+
 30 July 11: V.Ivant (xrays-V09-04-05)
 - G4SynchrotronRadiation, G4SynchrotronRadiationInMat - fixed 
   length of C-arrays for the interface with EM field (addressed 

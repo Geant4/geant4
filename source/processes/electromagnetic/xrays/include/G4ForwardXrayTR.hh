@@ -27,17 +27,14 @@
 // $Id: G4ForwardXrayTR.hh,v 1.14 2006-06-29 19:55:33 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// G4ForwardXrayTR -- header file
+// G4ForwardXrayTR
 //
-// Class for description of forward X-ray transition radiation generated
+// Class for description
+//
+// Class for forward X-ray transition radiation generated
 // by relativistic charged particle crossed interface between material 1
 // and material 2 (1 -> 2)
-//
-// GEANT 4 class header file --- Copyright CERN 1995
-// CERB Geneva Switzerland
-//
-// for information related to this code, please, contact
-// CERN, CN Division, ASD Group
+
 // History:
 // 22.09.97, V. Grichine (Vladimir.Grichine@cern.ch)
 // 26.01.00, V.Grichine, new constructor and protected DM for fast sim. models
@@ -158,7 +155,7 @@ G4double  fGammaTkinCut ;            // Tkin cut of TR photon in current mat.
 G4PhysicsTable* fAngleDistrTable ;
 G4PhysicsTable* fEnergyDistrTable ;
 
-static G4PhysicsLogVector* fProtonEnergyVector ;
+G4PhysicsLogVector* fProtonEnergyVector ;
 
 static G4int fSympsonNumber ;                // Accuracy of Sympson integration 
 

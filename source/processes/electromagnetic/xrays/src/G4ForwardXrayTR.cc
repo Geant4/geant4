@@ -28,12 +28,7 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4ForwardXrayTR class -- implementation file
-
-// GEANT 4 class implementation file --- Copyright CERN 1995
-// CERN Geneva Switzerland
-
-// For information related to this code, please, contact
-// CERN, CN Division, ASD Group
+//
 // History:
 // 1st version 11.09.97 V. Grichine (Vladimir.Grichine@cern.ch )
 // 2nd version 17.12.97 V. Grichine
@@ -66,12 +61,6 @@ G4int    G4ForwardXrayTR::fBinTR          =  50;
 G4double G4ForwardXrayTR::fMinProtonTkin = 100.0*GeV;
 G4double G4ForwardXrayTR::fMaxProtonTkin = 100.0*TeV;
 G4int    G4ForwardXrayTR::fTotBin        =  50;
-// Proton energy vector initialization
-
-G4PhysicsLogVector* G4ForwardXrayTR::
-fProtonEnergyVector = new G4PhysicsLogVector(fMinProtonTkin,
-                                             fMaxProtonTkin,
-                                                    fTotBin  );
 
 G4double G4ForwardXrayTR::fPlasmaCof = 4.0*pi*fine_structure_const*
                                        hbarc*hbarc*hbarc/electron_mass_c2;
@@ -102,6 +91,11 @@ G4ForwardXrayTR( const G4String& matName1,   //  G4Material* pMat1,
   fAngleDistrTable = 0;
   fEnergyDistrTable = 0;
   fMatIndex1 = fMatIndex2 = 0;
+
+  // Proton energy vector initialization
+  //
+  fProtonEnergyVector = new G4PhysicsLogVector(fMinProtonTkin,
+                                               fMaxProtonTkin, fTotBin  );
   G4int iMat;
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
@@ -159,6 +153,11 @@ G4ForwardXrayTR( const G4String& processName  )
   fAngleDistrTable = 0;
   fEnergyDistrTable = 0;
   fMatIndex1 = fMatIndex2 = 0;
+
+  // Proton energy vector initialization
+  //
+  fProtonEnergyVector = new G4PhysicsLogVector(fMinProtonTkin,
+                                               fMaxProtonTkin, fTotBin  );
 }
 
 
@@ -171,6 +170,7 @@ G4ForwardXrayTR::~G4ForwardXrayTR()
 {
   delete fAngleDistrTable;
   delete fEnergyDistrTable;
+  delete fProtonEnergyVector;
 }
 
 G4double G4ForwardXrayTR::GetMeanFreePath(const G4Track&,
