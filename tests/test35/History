@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+test35-V09-04-02  1 September 2011 V.Ivanchenko
+- migrate to new interface for cross sections 
+
 test35-V09-04-01  25 May 2011 V.Ivanchenko
 - removed obsolete interface to elastic 
 

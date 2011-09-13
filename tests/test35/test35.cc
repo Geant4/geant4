@@ -521,7 +521,7 @@ int main(int argc, char** argv)
 					      &condition));
     } else {
       cross_sec = (G4HadronCrossSections::Instance())->
-        GetInelasticCrossSection(&dParticle, elm);
+        GetInelasticCrossSection(&dParticle, Z, A);
     }
 
     G4double factor = 
