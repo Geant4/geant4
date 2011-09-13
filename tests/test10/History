@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Sep 12, 2011  Pere Mato (test10-V09-04-00)
+- Added missing dependency between tests in CMakeLists.txt.
+
 Nov 16, 2010  Gabriele Cosmo (test10-V09-03-02)
 - Activated testing of G4EllipticalCone in input macros.
 
