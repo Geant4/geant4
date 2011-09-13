@@ -1,28 +1,3 @@
-//
-// ********************************************************************
-// * License and Disclaimer                                           *
-// *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
-// *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
-// ********************************************************************
-//
 #ifndef G4LENDCrossSection_h
 #define G4LENDCrossSection_h 1
 
@@ -48,6 +23,7 @@
 #include "G4VCrossSectionDataSet.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Element.hh"
+#include "G4Material.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4PhysicsTable.hh"
 
@@ -55,27 +31,42 @@
 
 class G4LENDCrossSection : public G4VCrossSectionDataSet
 {
+
+//
+//
+//  G4bool IsIsoApplicable(const G4DynamicParticle*, G4int Z, G4int A,
+//                         const G4Element* elm = 0,
+//                         const G4Material* mat = 0);
+// 
+//  G4double GetIsoCrossSection(const G4DynamicParticle*, G4int Z, G4int A,
+//                              const G4Element* elm = 0,
+//                              const G4Material* mat = 0);
+//
+
    public:
    
       G4LENDCrossSection(const G4String name = "" );
    
       ~G4LENDCrossSection();
    
-      G4bool IsApplicable( const G4DynamicParticle* , const G4Element* );
+      //G4bool IsApplicable( const G4DynamicParticle* , const G4Element* );
+//TK110811
+      G4bool IsIsoApplicable( const G4DynamicParticle* , G4int /*Z*/ , G4int /*A*/ , 
+                              const G4Element* , const G4Material* );
+      G4double GetIsoCrossSection( const G4DynamicParticle*, G4int /*Z*/, G4int /*A*/ ,
+                                   const G4Isotope* , const G4Element* , const G4Material* );
 
       void BuildPhysicsTable( const G4ParticleDefinition& );
 
       void DumpPhysicsTable( const G4ParticleDefinition& );
 
-      G4double GetCrossSection( const G4DynamicParticle* , const G4Element* , G4double aT );
 
-      G4double GetIsoCrossSection( const G4DynamicParticle* , const G4Isotope* , G4double );
+//TK110810
+      //G4double GetCrossSection( const G4DynamicParticle* , const G4Element* , G4double aT );
+      //G4double GetCrossSection(const G4DynamicParticle*, G4int , const G4Material* );
 
-      G4double GetZandACrossSection(const G4DynamicParticle* , G4int /*Z*/, G4int /*A*/, G4double aTemperature);
 
-      void ChangeDefaultEvaluation( G4String name ){ default_evaluation = name; recreate_used_target_map(); };
-      //void AllowNaturalAbundanceTarget(){ allow_nat = true; recreate_used_target_map(); };
-      //void AllowAnyCandidateTarget(){ allow_any = true; recreate_used_target_map(); };
+      void ChangeDefaultEvaluation( G4String name ){ default_evaluation = name; };
       void AllowNaturalAbundanceTarget(){ allow_nat = true; };
       void AllowAnyCandidateTarget(){ allow_any = true; };
 
@@ -84,11 +75,18 @@ class G4LENDCrossSection : public G4VCrossSectionDataSet
       // G4HadronicProcess::GetMeanFreePath()
       //  G4double GetCrossSection(const G4DynamicParticle*, const G4Material*)
       //   G4double GetCrossSection(const G4DynamicParticle*, const G4Element*, G4double aTemperature); 
-      G4bool IsIsoApplicable( const G4DynamicParticle* , G4int /*ZZ*/, G4int /*AA*/) { return true; }
+
+//TK110810
+      //G4bool IsIsoApplicable( const G4DynamicParticle* , G4int /*ZZ*/, G4int /*AA*/) { return true; }
+      //G4bool IsZandAApplicable( const G4DynamicParticle* , G4int /*ZZ*/, G4int /*AA*/, const G4Element* , const G4Material* ) { return true; }
+//TK110810
+      //G4double GetZandACrossSection(const G4DynamicParticle* , G4int /*Z*/, G4int /*A*/, G4double aTemperature);
+      //G4double GetZandACrossSection(const G4DynamicParticle* , G4int /*Z*/, G4int /*A*/,  const G4Material* mat);
+//TK110810
+      //G4double GetIsoCrossSection( const G4DynamicParticle* , const G4Isotope* , G4double );
+//      G4double GetIsoCrossSection( const G4DynamicParticle* , const G4Isotope* , const G4Material* mat );
 
    private:
-   
-      virtual G4double getLENDCrossSection( G4GIDI_target* , G4double , G4double ) { return 0.0; };
 
       std::map< G4int , G4LENDUsedTarget* > usedTarget_map;
 
@@ -103,6 +101,8 @@ class G4LENDCrossSection : public G4VCrossSectionDataSet
       //G4String name;
       G4ParticleDefinition* proj;
       void create_used_target_map();
-
+      virtual G4double getLENDCrossSection( G4GIDI_target* , G4double , G4double ) { return 0.0; };
+      //                                         elow       ehigh     xs_elow   xs_ehigh    ke (<elow)
+      G4double GetUltraLowEnergyExtrapolatedXS( G4double , G4double , G4double , G4double , G4double );
 };
 #endif

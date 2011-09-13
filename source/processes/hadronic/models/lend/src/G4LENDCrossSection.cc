@@ -1,28 +1,3 @@
-//
-// ********************************************************************
-// * License and Disclaimer                                           *
-// *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
-// *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
-// ********************************************************************
-//
 // Class Description
 // Cross Section for LEND (Low Energy Nuclear Data)
 // LEND is Geant4 interface for GIDI (General Interaction Data Interface) 
@@ -42,17 +17,44 @@
 #include "G4ElementTable.hh"
 #include "G4HadronicException.hh"
 
-G4bool G4LENDCrossSection::IsApplicable(const G4DynamicParticle*aP, const G4Element*)
+//TK110811
+G4bool G4LENDCrossSection::IsIsoApplicable( const G4DynamicParticle* dp, G4int /*iZ*/ , G4int /*aA*/ , 
+                                            const G4Element* /*element*/ , const G4Material* /*material*/ )
+{
+   G4double eKin = dp->GetKineticEnergy();
+   if ( dp->GetDefinition() != proj ) return false;
+   if ( eKin > GetMaxKinEnergy() || eKin < GetMinKinEnergy() ) return false;
+
+   return true;
+}
+
+G4double G4LENDCrossSection::GetIsoCrossSection( const G4DynamicParticle* dp , G4int iZ , G4int iA ,
+                                                 const G4Isotope* /*isotope*/ , const G4Element* /*elment*/ , const G4Material* material )
 {
 
+   G4double xs = 0.0;
+   G4double ke = dp->GetKineticEnergy();
+   G4double temp = material->GetTemperature();
+
+   G4GIDI_target* aTarget = usedTarget_map.find( lend_manager->GetNucleusEncoding( iZ , iA ) )->second->GetTarget();
+
+   xs = getLENDCrossSection ( aTarget , ke , temp );
+
+   return xs;
+}
+
+
+/*
+G4bool G4LENDCrossSection::IsApplicable(const G4DynamicParticle*aP, const G4Element*)
+{
    G4bool result = true;
    G4double eKin = aP->GetKineticEnergy();
    if( eKin > GetMaxKinEnergy() || aP->GetDefinition() != proj ) result = false;
    return result;
-
 }
+*/
 
-G4LENDCrossSection::G4LENDCrossSection(const G4String nam)
+G4LENDCrossSection::G4LENDCrossSection( const G4String nam )
 :G4VCrossSectionDataSet( nam )
 {
 
@@ -129,9 +131,15 @@ void G4LENDCrossSection::DumpPhysicsTable(const G4ParticleDefinition& aP)
 }
 
 
-
-G4double G4LENDCrossSection::GetCrossSection(const G4DynamicParticle* aP , const G4Element* anElement , G4double aT)
+/*
+//110810
+//G4double G4LENDCrossSection::GetCrossSection(const G4DynamicParticle* aP , const G4Element* anElement , G4double aT)
+G4double G4LENDCrossSection::GetCrossSection(const G4DynamicParticle* aP , int iZ , const G4Material* aMat)
 {
+
+//110810
+   G4double aT = aMat->GetTemperature();
+   G4Element* anElement = lend_manager->GetNistElementBuilder()->FindOrBuildElement( iZ );
 
    G4double ke = aP->GetKineticEnergy();
    G4double XS = 0.0;
@@ -180,8 +188,13 @@ G4double G4LENDCrossSection::GetCrossSection(const G4DynamicParticle* aP , const
 
 
 
-G4double G4LENDCrossSection::GetIsoCrossSection(const G4DynamicParticle* dp, const G4Isotope* isotope, G4double aT )
+//110810
+//G4double G4LENDCrossSection::GetIsoCrossSection(const G4DynamicParticle* dp, const G4Isotope* isotope, G4double aT )
+G4double G4LENDCrossSection::GetIsoCrossSection(const G4DynamicParticle* dp, const G4Isotope* isotope, const G4Material* aMat)
 {
+
+//110810
+   G4double aT = aMat->GetTemperature();
 
    G4double ke = dp->GetKineticEnergy();
 
@@ -196,8 +209,13 @@ G4double G4LENDCrossSection::GetIsoCrossSection(const G4DynamicParticle* dp, con
 
 
 
-G4double G4LENDCrossSection::GetZandACrossSection(const G4DynamicParticle* dp, G4int iZ, G4int iA, G4double aT)
+//110810
+//G4double G4LENDCrossSection::GetZandACrossSection(const G4DynamicParticle* dp, G4int iZ, G4int iA, G4double aT)
+G4double G4LENDCrossSection::GetZandACrossSection(const G4DynamicParticle* dp, G4int iZ, G4int iA, const G4Material* aMat)
 {
+
+//110810
+   G4double aT = aMat->GetTemperature();
 
    G4double ke = dp->GetKineticEnergy();
 
@@ -206,6 +224,7 @@ G4double G4LENDCrossSection::GetZandACrossSection(const G4DynamicParticle* dp, G
    return getLENDCrossSection ( aTarget , ke , aT );
 
 }
+*/
 
 
 
@@ -295,4 +314,15 @@ void G4LENDCrossSection::create_used_target_map()
          << G4endl; 
    } 
 
+}
+
+                                                           // elow          ehigh       xs_elow      xs_ehigh      ke (ke < elow)
+G4double G4LENDCrossSection::GetUltraLowEnergyExtrapolatedXS( G4double x1, G4double x2, G4double y1, G4double y2 , G4double ke )
+{
+   //XS propotinal to 1/v at low energy -> 1/root(E) 
+   //XS = a * 1/root(E) + b  
+   G4double a = ( y2 - y1 ) / ( 1/std::sqrt(x2) - 1/std::sqrt(x1) );
+   G4double b = y1 - a * 1/std::sqrt(x1);
+   G4double result = a * 1/std::sqrt(ke) + b;
+   return result;
 }

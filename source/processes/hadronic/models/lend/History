@@ -14,11 +14,47 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+12 September 2011 Tatsumi Koi (hadr-lend-V09-04-21)
+----------------------------------------------
+- Merge to new interface of VCrossSectionDataSet (hadr-cross-V09-04-14)
+
+6 September 2011 Tatsumi Koi (hadr-lend-V09-04-20)
+----------------------------------------------
+- Introduce BuildPhysicsTable
+        include/G4LENDModel.hh
+- Bug fix 
+        src/G4LENDCaptureCrossSection.cc
+        src/G4LENDElasticCrossSection.cc
+        src/G4LENDFissionCrossSection.cc
+        src/G4LENDInelasticCrossSection.cc
+
+6 September 2011 Tatsumi Koi (hadr-lend-V09-04-19)
+----------------------------------------------
+This tag keeps OLD interface of VCrossSectionDataSet
+- Change for reducing output
+        include/G4LENDModel.hh
+        include/G4LENDCrossSection.hh
+- Add UltraLowEnergyExtrapolatedXS
+        src/G4LENDCaptureCrossSection.cc
+        src/G4LENDElasticCrossSection.cc
+        src/G4LENDFissionCrossSection.cc
+        src/G4LENDInelasticCrossSection.cc
+- Fix oddy output
+        src/G4LENDManager.cc
+
+29 August 2011 Tatsumi Koi (hadr-lend-V09-04-18)
+----------------------------------------------
+- Migrate new interface of VCrossSectionDataSet (hadr-cross-V09-04-14)
+	src/G4LENDCrossSection.cc
+	include/G4LENDCrossSection.hh
+
 16 June 2011 Ben Morgan (hadr-lend-V09-04-17)
+----------------------------------------------
 - sources.cmake : Add additional G4PROCESSES_EXPORT compile definition needed
   for DLL build.
 
 2 June 2011 Tatsumi Koi (hadr-lend-V09-04-16)
+----------------------------------------------
 - Fix gcc4.6 warning message
 	src/tpia_target.cc
 
