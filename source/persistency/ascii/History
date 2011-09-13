@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+1 September 2011 - P.Arce (ascii-V09-04-06)
+- Fixed bug on the usage of units. Addressing problem report #1240.
+
 1 July 2011 - G.Cosmo (ascii-V09-04-05)
 - Fixed case of dereferencing null pointer in G4tgbGeometryDumper
   DumpRotationMatrix() method.
