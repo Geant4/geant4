@@ -325,7 +325,7 @@ G4cout << "after " <<  ( n4p.e() - n4p.m() ) / eV<< G4endl;
       {
          //theNeutron.SetMomentum( G4ThreeVector(0) ); 
          //theNeutron.SetTotalEnergy ( theNeutron.GetMass() );
-//100822 Protection for not producing 0 kinetic energy neutron
+//110822 Protection for not producing 0 kinetic energy neutron
          theNeutron.SetTotalEnergy ( theNeutron.GetMass() * ( 1 + std::pow( 10 , -15.65 ) ) );
       }
 
@@ -335,7 +335,7 @@ G4cout << "after " <<  ( n4p.e() - n4p.m() ) / eV<< G4endl;
       {
          //theTarget.SetMomentum( G4ThreeVector(0) ); 
          //theTarget.SetTotalEnergy ( theTarget.GetMass()  );
-//100822 Protection for not producing 0 kinetic energy target
+//110822 Protection for not producing 0 kinetic energy target
          theTarget.SetTotalEnergy ( theTarget.GetMass() * ( 1 + std::pow( 10 , -15.65 ) ) );
       }
     }

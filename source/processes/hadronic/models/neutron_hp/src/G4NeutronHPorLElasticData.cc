@@ -38,16 +38,72 @@
 
 #include "G4PhysicsVector.hh"
 
+G4NeutronHPorLElasticData::G4NeutronHPorLElasticData()
+{
+   SetMinKinEnergy( 0*MeV );                                   
+   SetMaxKinEnergy( 20*MeV );                                   
+
+   ke_cache = 0.0;
+   xs_cache = 0.0;
+   element_cache = NULL;
+   material_cache = NULL;
+//   BuildPhysicsTable(*G4Neutron::Neutron());
+}
+
+G4NeutronHPorLElasticData::~G4NeutronHPorLElasticData()
+{
+//  delete theCrossSections;
+}
+
+G4bool G4NeutronHPorLElasticData::IsIsoApplicable( const G4DynamicParticle* dp , 
+                                                G4int /*Z*/ , G4int /*A*/ ,
+                                                const G4Element* element ,
+                                                const G4Material* /*mat*/ )
+{
+   G4double eKin = dp->GetKineticEnergy();
+   if ( eKin > GetMaxKinEnergy() 
+     || eKin < GetMinKinEnergy() 
+     || dp->GetDefinition() != G4Neutron::Neutron() ) return false;                                   
+   if ( unavailable_elements->find( element->GetName() ) != unavailable_elements->end() ) return false;
+
+   return true;
+}
+
+G4double G4NeutronHPorLElasticData::GetIsoCrossSection( const G4DynamicParticle* dp ,
+                                   G4int /*Z*/ , G4int /*A*/ ,
+                                   const G4Isotope* /*iso*/  ,
+                                   const G4Element* element ,
+                                   const G4Material* material )
+{
+   if ( dp->GetKineticEnergy() == ke_cache && element == element_cache &&  material == material_cache ) return xs_cache;
+
+   ke_cache = dp->GetKineticEnergy();
+   element_cache = element;
+   material_cache = material;
+   G4double xs = GetCrossSection( dp , element , material->GetTemperature() );
+   xs_cache = xs;
+   return xs;
+   //return GetCrossSection( dp , element , material->GetTemperature() );
+}
 
 
 G4NeutronHPorLElasticData::G4NeutronHPorLElasticData( G4NeutronHPChannel* pChannel , std::set< G4String >* pSet )
+:G4VCrossSectionDataSet("NeutronHPorLElasticXS")
 {
    theElasticChannel = pChannel;
    unavailable_elements = pSet;   
+
+   SetMinKinEnergy( 0*MeV );                                   
+   SetMaxKinEnergy( 20*MeV );                                   
+
+   ke_cache = 0.0;
+   xs_cache = 0.0;
+   element_cache = NULL;
+   material_cache = NULL;
 }
 
  
-
+/*
 G4bool G4NeutronHPorLElasticData::IsApplicable(const G4DynamicParticle*aP, const G4Element* anElement)
 {
    G4bool result = true;
@@ -56,21 +112,8 @@ G4bool G4NeutronHPorLElasticData::IsApplicable(const G4DynamicParticle*aP, const
    if ( unavailable_elements->find( anElement->GetName() ) != unavailable_elements->end() ) result = false;
    return result;
 }
+*/
 
-G4NeutronHPorLElasticData::G4NeutronHPorLElasticData()
-{
-//   BuildPhysicsTable(*G4Neutron::Neutron());
-}
-
- 
-
-G4NeutronHPorLElasticData::~G4NeutronHPorLElasticData()
-{
-//  delete theCrossSections;
-}
-
-
-   
 void G4NeutronHPorLElasticData::BuildPhysicsTable( const G4ParticleDefinition& aP )
 {
    if( &aP!=G4Neutron::Neutron() ) 

@@ -62,10 +62,21 @@ class G4NeutronHPorLFissionData : public G4VCrossSectionDataSet
 
    ~G4NeutronHPorLFissionData();
    
-   G4bool IsApplicable(const G4DynamicParticle*, const G4Element*);
+      G4bool IsIsoApplicable( const G4DynamicParticle* , 
+                              G4int /*Z*/ , G4int /*A*/ ,
+                              const G4Element* /*elm*/ ,
+                              const G4Material* /*mat*/ );
 
-   G4bool IsZAApplicable( const G4DynamicParticle* , G4double /*ZZ*/, G4double /*AA*/)
-   { return false; }
+      G4double GetIsoCrossSection( const G4DynamicParticle*  , 
+                                   G4int /*Z*/ , G4int /*A*/ ,
+                                   const G4Isotope* /*iso*/  ,
+                                   const G4Element* /*elm*/  ,
+                                   const G4Material* /*mat*/ );
+
+   //G4bool IsApplicable(const G4DynamicParticle*, const G4Element*);
+
+   //G4bool IsZAApplicable( const G4DynamicParticle* , G4double /*ZZ*/, G4double /*AA*/)
+   //{ return false; }
 
    G4double GetCrossSection(const G4DynamicParticle*, const G4Element*, G4double aT);
 
@@ -80,6 +91,11 @@ class G4NeutronHPorLFissionData : public G4VCrossSectionDataSet
    private:
      G4NeutronHPChannel* theFissionChannel;
      std::set< G4String >* unavailable_elements;
+
+      G4double ke_cache;
+      G4double xs_cache;
+      const G4Element* element_cache;
+      const G4Material* material_cache;
 };
 
 #endif
