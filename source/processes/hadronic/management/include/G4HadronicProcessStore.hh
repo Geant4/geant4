@@ -60,6 +60,7 @@
 #include "G4HadronicProcessType.hh"
 #include <map>
 #include <vector>
+#include <iostream>
 
 class G4Element;
 class G4HadronicEPTestMessenger;
@@ -173,6 +174,8 @@ public:
   void PrintInfo(const G4ParticleDefinition*); 
 
   void Dump(G4int level);
+  void DumpHtml();
+  void PrintHtml(const G4ParticleDefinition*, std::ofstream&);
 
   void SetVerbose(G4int val);
 
