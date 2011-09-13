@@ -10,6 +10,15 @@ $Id: History,v 1.24 2010-11-18 11:48:21 allison Exp $
                        --------------------
 
 
+18 August 2011 - S. Incerti -  microdosimetry-V09-04-06
+- Added scoring of msc 
+
+18 August 2011 - S. Incerti -  microdosimetry-V09-04-05
+- Removed initStep test in SteppingAction
+
+16 August 2011 - S. Incerti -  microdosimetry-V09-04-04
+- Removed usage of system command
+
 27 May 2011 - S. Incerti -  microdosimetry-V09-04-03
 - Switched back to ordered physics list
 
