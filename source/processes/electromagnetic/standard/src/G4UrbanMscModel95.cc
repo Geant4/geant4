@@ -40,6 +40,13 @@
 //
 // Created from G4UrbanMscModel93
 //
+// 01-08-2011 L.Urban
+// new parametrization of the tail parameter c. Some of the timing 
+// optimization has been removed (facsafety) 
+// 04-09-2011 L.Urban
+// facsafety optimization is back for UseSafety
+//
+//
 // Class Description:
 //
 // Implementation of the model of multiple scattering based on
@@ -74,7 +81,6 @@ G4UrbanMscModel95::G4UrbanMscModel95(const G4String& nam)
   masslimite    = 0.6*MeV;
   lambdalimit   = 1.*mm;
   fr            = 0.02;
-  //facsafety     = 0.3;
   taubig        = 8.0;
   tausmall      = 1.e-16;
   taulim        = 1.e-6;
@@ -503,8 +509,6 @@ G4double G4UrbanMscModel95::ComputeTruePathLengthLimit(
 
       //step limit 
       tlimit = facrange*rangeinit;              
-      if(tlimit < facsafety*presafety)
-        tlimit = facsafety*presafety; 
 
       //lower limit for tlimit
       if(tlimit < tlimitmin) tlimit = tlimitmin;
@@ -882,19 +886,13 @@ G4double G4UrbanMscModel95::SampleCosineTheta(G4double trueStepLength,
   }
   else
   {
-    if(trueStepLength >= currentRange*dtrl) 
+    G4double lambda1 = GetLambda(KineticEnergy);
+    if(std::fabs(lambda1/lambda0 - 1) > 0.01 && lambda1 > 0.)
     {
-      // for the case if ioni/brems are inactivated
-      // see the corresponding condition in ComputeGeomPathLength 
-      if(1.-KineticEnergy/currentKinEnergy > taulim) {
-
-        // mean tau value
-        G4double lambda1 = GetLambda(KineticEnergy);
-        if(lambda0 != lambda1) {
-	  tau = trueStepLength*log(lambda0/lambda1)/(lambda0-lambda1);
-	}
-      }
+      // mean tau value
+      tau = trueStepLength*log(lambda0/lambda1)/(lambda0-lambda1);
     }
+
     currentTau = tau ;
     lambdaeff = trueStepLength/currentTau;
     currentRadLength = couple->GetMaterial()->GetRadlen();
@@ -926,7 +924,7 @@ G4double G4UrbanMscModel95::SampleCosineTheta(G4double trueStepLength,
 
       // parameter for tail
       G4double u = exp(log(tau)/6.);
-      G4double x = log(lambda0/currentRadLength);
+      G4double x = log(lambdaeff/currentRadLength);
       G4double c = coeffc1+u*(coeffc2+coeffc3*u)+coeffc4*x;
 
       if(abs(c-3.) < 0.001)  c = 3.001;      

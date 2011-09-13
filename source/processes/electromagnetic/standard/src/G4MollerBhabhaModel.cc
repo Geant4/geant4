@@ -187,6 +187,8 @@ G4double G4MollerBhabhaModel::CrossSectionPerVolume(
                                                  G4double maxEnergy)
 {
   G4double eDensity = material->GetElectronDensity();
+  return eDensity*ComputeCrossSectionPerElectron(p,kinEnergy,cutEnergy,maxEnergy);
+  /*
   G4double Zeff     = eDensity/material->GetTotNbOfAtomsPerVolume();
   G4double th       = 0.25*sqrt(Zeff)*keV;
   G4double cut;  
@@ -198,6 +200,7 @@ G4double G4MollerBhabhaModel::CrossSectionPerVolume(
     res = eDensity*ComputeCrossSectionPerElectron(p,kinEnergy,cut,maxEnergy);
   }
   return res; 
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -206,17 +209,18 @@ G4double G4MollerBhabhaModel::ComputeDEDXPerVolume(
 					  const G4Material* material,
                                           const G4ParticleDefinition* p,
                                                 G4double kineticEnergy,
-                                                G4double cutEnergy)
+                                                G4double cut)
 {
   if(!particle) { SetParticle(p); }
   // calculate the dE/dx due to the ionization by Seltzer-Berger formula
   // checl low-energy limit
   G4double electronDensity = material->GetElectronDensity();
+  
   G4double Zeff  = electronDensity/material->GetTotNbOfAtomsPerVolume();
   G4double th    = 0.25*sqrt(Zeff)*keV;
-  G4double cut;  
-  if(isElectron) { cut  = std::max(th*0.5, cutEnergy); }
-  else           { cut  = std::max(th, cutEnergy); }
+  //  G4double cut;  
+  // if(isElectron) { cut  = std::max(th*0.5, cutEnergy); }
+  // else           { cut  = std::max(th, cutEnergy); }
   G4double tkin  = kineticEnergy;
   if (kineticEnergy < th) { tkin = th; }
  
@@ -273,22 +277,21 @@ G4double G4MollerBhabhaModel::ComputeDEDXPerVolume(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4MollerBhabhaModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
-					    const G4MaterialCutsCouple* couple,
+					    const G4MaterialCutsCouple*,
 					    const G4DynamicParticle* dp,
 					    G4double cutEnergy,
 					    G4double maxEnergy)
 {
   G4double kineticEnergy = dp->GetKineticEnergy();
-  const G4Material* mat = couple->GetMaterial();
-  G4double Zeff = mat->GetElectronDensity()/mat->GetTotNbOfAtomsPerVolume();
-  G4double th   = 0.25*sqrt(Zeff)*keV;
-  G4double tmax, tmin;  
+  //const G4Material* mat = couple->GetMaterial();
+  //G4double Zeff = mat->GetElectronDensity()/mat->GetTotNbOfAtomsPerVolume();
+  // G4double th   = 0.25*sqrt(Zeff)*keV;
+  G4double tmax;
+  G4double tmin = cutEnergy;  
   if(isElectron) { 
     tmax = 0.5*kineticEnergy; 
-    tmin  = std::max(th*0.5, cutEnergy);
   } else {
     tmax = kineticEnergy; 
-    tmin = std::max(th, cutEnergy);
   }
   if(maxEnergy < tmax) { tmax = maxEnergy; }
   if(tmin >= tmax) { return; }

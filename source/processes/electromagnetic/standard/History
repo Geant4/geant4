@@ -17,6 +17,31 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+4 September 11: V.Ivanchenko (emstand-V09-04-42)
+- G4UrbanMscModel95 - L.Urban return back optimisation of step
+    limitation using FactorSafety parameter for the UseSafety 
+    option of step limitation (important for CPU performance 
+    of default Physics List) 
+
+20 August 11: V.Ivanchenko (emstand-V09-04-41)
+- G4UrbanMscModel95 - minor change of arithmetic computation
+
+18 August 11: V.Ivanchenko (emstand-V09-04-40)
+- G4MollerBhabhaModel - removed limitations on cut value to be 
+                        able to combined with LIvermore and 
+                        Penelope models
+
+18 August 11: V.Ivanchenko (emstand-V09-04-39)
+- G4eMultipleScattering - G4UrbanMscModel95 become default
+
+08 August 11: V.Ivanchenko (emstand-V09-04-38)
+- G4UrbanMscModel95 L.Urban provided new of tail parameter "c" and
+                    removed CPU optimisation near boundary dependent
+                    on facsafety, which not allowed to have precise
+                    simulation in vicinity of geometrical boundary;
+                    V.Ivanchenko added minor optimisation into
+                    inline method UpdateCache() 
+
 28 July 11: V.Ivanchenko (emstand-V09-04-37)
 - G4PAIxSection, G4InitXscPAI - fixed typo in tag 035 
 

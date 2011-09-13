@@ -211,19 +211,19 @@ void G4UrbanMscModel95::UpdateCache()
 {
     lnZ = std::log(Zeff);
     // correction in theta0 formula
-    coeffth1 = (1.-8.7780e-2/Zeff)*(0.87+0.03*lnZ);                   
-    coeffth2 = (4.0780e-2+1.7315e-4*Zeff)*(0.87+0.03*lnZ);              
+    coeffth1 = (1. - 8.7780e-2/Zeff)*(0.87 + 0.03*lnZ);                   
+    coeffth2 = (4.0780e-2 + 1.7315e-4*Zeff)*(0.87 + 0.03*lnZ);              
 
     // tail parameters
-    G4double Z13 = std::exp(lnZ/3.); 
-    coeffc1  = 1.891-5.731e-2*Z13;
-    coeffc2  = 2.995-1.745e-1*Z13;
-    coeffc3  = -2.666+1.941e-1*Z13;
-    coeffc4  = 1.987e-2+8.781e-3*Z13;
+    G4double Z13 = std::exp(lnZ/3.);
+    coeffc1  = 2.3785    - Z13*(4.1981e-1 - Z13*6.3100e-2);
+    coeffc2  = 4.7526e-1 + Z13*(1.7694    - Z13*3.3885e-1);
+    coeffc3  = 2.3683e-1 - Z13*(1.8111    - Z13*3.2774e-1);
+    coeffc4  = 1.7888e-2 + Z13*(1.9659e-2 - Z13*2.6664e-3);
 
     // for single scattering
     Z2   = Zeff*Zeff;
-    Z23  = Z13*Z13;
+    Z23  = Z13*Z13;               
     scr1 = scr1ini*Z23;
     scr2 = scr2ini*Z2*ChargeSquare;
                                               
