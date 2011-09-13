@@ -55,7 +55,7 @@ G4VRangeToEnergyConverter::G4VRangeToEnergyConverter():
   fMaxEnergyCut = 0.;
 }
 
-G4VRangeToEnergyConverter::G4VRangeToEnergyConverter(const G4VRangeToEnergyConverter& right) : TotBin(right.TotBin)
+G4VRangeToEnergyConverter::G4VRangeToEnergyConverter(const G4VRangeToEnergyConverter& right) :  theParticle(right.theParticle), theLossTable(0), TotBin(right.TotBin)
 {
   fMaxEnergyCut = 0.;
   *this = right;
@@ -71,7 +71,6 @@ G4VRangeToEnergyConverter & G4VRangeToEnergyConverter::operator=(const G4VRangeT
  }
 
   NumberOfElements = right.NumberOfElements;
-  //TotBin = right.TotBin;
   theParticle = right.theParticle;
   verboseLevel = right.verboseLevel;
   

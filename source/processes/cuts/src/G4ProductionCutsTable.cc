@@ -975,10 +975,16 @@ G4ProductionCutsTable::CheckMaterialCutsCoupleInfo(const G4String& directory,
       if (fOK) {
 	G4String regionname(region_name);
 	G4Region* fRegion = 0;
-	if ( regionname != "NONE" ) fRegion = fG4RegionStore->GetRegion(region_name);
-	if ( (( regionname == "NONE" ) && (aCouple->IsUsed()) )      ||
-	     (( regionname != "NONE" ) && (fRegion==0) )             ||
-	     !IsCoupleUsedInTheRegion(aCouple, fRegion)           ) {
+	if ( regionname != "NONE" ) {
+	  fRegion = fG4RegionStore->GetRegion(region_name);
+	  if (fRegion==0) {
+	    G4cout << "G4ProductionCutTable::CheckMaterialCutsCoupleInfo ";
+	    G4cout << "Region " << regionname << " is not found ";	    
+	    G4cout << index << ": in " << fileName  << G4endl;
+	  } 
+	}
+	if ( ( (regionname == "NONE") && (aCouple->IsUsed()) )  ||
+	     ( (fRegion !=0) && !IsCoupleUsedInTheRegion(aCouple, fRegion) ) ) {
 	  G4cout << "G4ProductionCutTable::CheckMaterialCutsCoupleInfo ";
 	  G4cout << "A Couple is used differnt region in the current setup  ";
 	  G4cout << index << ": in " << fileName  << G4endl;
