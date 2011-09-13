@@ -215,7 +215,7 @@ void G4SurfaceBoundary::SplitWithPlane(const G4Point3D&,
 				       G4SurfaceBoundary*&,
 				       G4SurfaceBoundary*&)
 {
-  G4Exception("G4SurfaceBoundary::SplitWithPlane()", "NotImplemented",
+  G4Exception("G4SurfaceBoundary::SplitWithPlane()", "GeomSolids0001",
               FatalException, "Sorry, not yet implemented.");
 }
 
@@ -223,6 +223,6 @@ void G4SurfaceBoundary::SplitWithCylinder(const G4CylindricalSurface&,
                                           G4SurfaceBoundary*&, 
                                           G4SurfaceBoundary*&)
 {
-  G4Exception("G4SurfaceBoundary::SplitWithCylinder()", "NotImplemented",
+  G4Exception("G4SurfaceBoundary::SplitWithCylinder()", "GeomSolids0001",
               FatalException, "Sorry, not yet implemented.");
 }

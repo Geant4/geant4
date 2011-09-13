@@ -254,7 +254,7 @@ void G4Ray::RayCheck()
   // Check that the ray has a G4Vector3D...
   if (dir==G4Vector3D(0, 0, 0)) 
   {
-    G4Exception("G4Ray::RayCheck()", "InvalidInput", FatalException,
+    G4Exception("G4Ray::RayCheck()", "GeomSolids0002", FatalException,
                 "Invalid zero direction given !");
   }
 

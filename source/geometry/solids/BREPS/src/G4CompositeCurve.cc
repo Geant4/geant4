@@ -130,14 +130,14 @@ G4Curve* G4CompositeCurve::Project(const G4Transform3D& tr)
 
 G4double G4CompositeCurve::GetPMax() const
 {
-  G4Exception("G4CompositeCurve::GetPMax()", "NotApplicable",
+  G4Exception("G4CompositeCurve::GetPMax()", "GeomSolids0002",
               FatalException, "Not applicable to base class.");
   return 0;
 }
 
 G4Point3D G4CompositeCurve::GetPoint(G4double) const
 {
-  G4Exception("G4CompositeCurve::GetPoint()", "NotApplicable",
+  G4Exception("G4CompositeCurve::GetPoint()", "GeomSolids0002",
               FatalException, "Not applicable to base class.");
   // Fake return value
   return G4Point3D();
@@ -145,7 +145,7 @@ G4Point3D G4CompositeCurve::GetPoint(G4double) const
 
 G4double G4CompositeCurve::GetPPoint(const G4Point3D&) const
 {
-  G4Exception("G4CompositeCurve::GetPPoint()", "NotApplicable",
+  G4Exception("G4CompositeCurve::GetPPoint()", "GeomSolids0002",
               FatalException, "Not applicable to base class.");
   return 0;
 }

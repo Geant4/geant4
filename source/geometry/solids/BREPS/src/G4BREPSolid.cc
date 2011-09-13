@@ -759,7 +759,7 @@ G4BREPSolid::CreateRotatedVertices(const G4AffineTransform& pTransform) const
   }
   else
   {
-    G4Exception("G4BREPSolid::CreateRotatedVertices()", "FatalError",
+    G4Exception("G4BREPSolid::CreateRotatedVertices()", "GeomSolids0003",
                 FatalException, "Out of memory - Cannot allocate vertices!");
   }
   return vertices;
@@ -1168,8 +1168,8 @@ void G4BREPSolid::CalcBBoxes()
     bbox =  new G4BoundingBox3D(min, max);
     return;
   }
-  G4cerr << "ERROR - G4BREPSolid::CalcBBoxes()" << G4endl
-         << "        No bbox calculated for solid. Error." << G4endl;
+  G4Exception("G4BREPSolid::CalcBBoxes()", "GeomSolids1002",
+              JustWarning, "No bbox calculated for solid.");
 }
 
 void G4BREPSolid::RemoveHiddenFaces(register const G4Ray& rayref,

@@ -151,7 +151,8 @@ void G4BSplineCurve::IntersectRay2D(const G4Ray& ray,
 G4int G4BSplineCurve::IntersectRay2D(const G4Ray&)
 {
   // L. Broglia
-  G4cout<<"\nWarning ! G4BSplineCurve::IntersectRay2D is empty.";
+  G4Exception("G4BSplineCurve::IntersectRay2D()", "GeomSolids0001",
+              FatalException, "Sorry, not yet implemented.");
   return 0;
 }
 
@@ -334,7 +335,7 @@ G4Point3d G4BSplineCurve::GetBoundMax()
 
 G4bool G4BSplineCurve::Tangent(G4CurvePoint&, G4Vector3D&)
 {
-  G4Exception("G4BSplineCurve::Tangent()", "NotImplemented",
+  G4Exception("G4BSplineCurve::Tangent()", "GeomSolids0001",
               FatalException, "Sorry, not implemented !");
   return false;
 }

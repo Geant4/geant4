@@ -172,7 +172,7 @@ G4int G4Surface::Intersect(const G4Ray&)
 {
   G4int Result = 0;
 
-  G4Exception("G4Surface::Intersect()", "NotImplemented",
+  G4Exception("G4Surface::Intersect()", "GeomSolids0001",
               FatalException, "Sorry, not yet implemented.");
 
 #ifdef NEW_IMPLEMENTATION
