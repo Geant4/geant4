@@ -15,6 +15,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+5-Aug-2011, M. Kelsey       (had-partonstring-mgt-V09-04-01)
+  G4VParticipants:  Remove external dependences on G4Fancy3DNucleus by
+    moving #include, Init(), and SetNucleus() to .cc file.
+
 18-Jul-2011, G.Folger       (had-partonstring-mgt-V09-04-00)
    Address coverity warnings
 

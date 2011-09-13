@@ -39,11 +39,11 @@
 //      abstract class finding participants in a hadron Nucleus collision
 //       in Parton String Models.
 // ------------------------------------------------------------
+// 20110805  M. Kelsey -- Move #include, Init() and SetNucleus() to .cc file
+
 #include "globals.hh"
 
 class G4V3DNucleus;
-
-#include "G4Fancy3DNucleus.hh"
 
 
 class G4VParticipants 
@@ -58,16 +58,12 @@ class G4VParticipants
       int operator==(const G4VParticipants &right) const;
       int operator!=(const G4VParticipants &right) const;
 
-      void Init(G4int theZ, G4int theA);
-      
-      void SetNucleus(G4V3DNucleus * aNucleus);
-      G4V3DNucleus * GetWoundedNucleus() const;
-
+      virtual void Init(G4int theZ, G4int theA);
+      virtual void SetNucleus(G4V3DNucleus* aNucleus);
+      virtual G4V3DNucleus* GetWoundedNucleus() const;
 
 //  protected:   // Uzhi 26 July 09
-
-  
-      G4V3DNucleus *theNucleus;
+      G4V3DNucleus* theNucleus;
       
   private:
   
@@ -79,19 +75,6 @@ inline G4V3DNucleus * G4VParticipants::GetWoundedNucleus() const
 {
   return theNucleus;
 }
-
-inline void G4VParticipants::SetNucleus(G4V3DNucleus * aNucleus)
-{
-  theNucleus = aNucleus;
-}
-
-inline void G4VParticipants::Init(G4int theA, G4int theZ)
-{
-	if ( theNucleus == NULL ) theNucleus = new G4Fancy3DNucleus();
-	theNucleus->Init(theA, theZ);
-        theNucleus->SortNucleonsIncZ();
-}
-
 
 #endif
 
