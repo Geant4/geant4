@@ -111,7 +111,7 @@ G4double G4GeneralSpaceNNCrossSection::GetElementCrossSection
   (const G4DynamicParticle* theProjectile, G4int ZT, const G4Material* mat)
 {
   G4double result = 0.0;
-  G4int ZP = lrint(theProjectile->GetDefinition()->GetPDGCharge()/eplus);
+  G4int ZP = G4lrint(theProjectile->GetDefinition()->GetPDGCharge()/eplus);
 
   if (verboseLevel >= 2)
   {

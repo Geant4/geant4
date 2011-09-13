@@ -479,8 +479,8 @@ G4double
 G4GlauberGribovCrossSection::GetHadronNucleonXsc(const G4DynamicParticle* aParticle, 
                                                  const G4Element* anElement)
 {
-  G4int At = lrint(anElement->GetN());  // number of nucleons 
-  G4int Zt = lrint(anElement->GetZ());  // number of protons
+  G4int At = G4lrint(anElement->GetN());  // number of nucleons 
+  G4int Zt = G4lrint(anElement->GetZ());  // number of protons
 
   return GetHadronNucleonXsc(aParticle, At, Zt);
 }
@@ -566,8 +566,8 @@ G4double
 G4GlauberGribovCrossSection::GetHadronNucleonXscPDG(const G4DynamicParticle* aParticle, 
                                                     const G4Element* anElement)
 {
-  G4int At = lrint(anElement->GetN());  // number of nucleons 
-  G4int Zt = lrint(anElement->GetZ());  // number of protons
+  G4int At = G4lrint(anElement->GetN());  // number of nucleons 
+  G4int Zt = G4lrint(anElement->GetZ());  // number of protons
 
   return GetHadronNucleonXscPDG(aParticle, At, Zt);
 }
@@ -700,8 +700,8 @@ G4double
 G4GlauberGribovCrossSection::GetHadronNucleonXscNS(const G4DynamicParticle* aParticle, 
                                                    const G4Element* anElement)
 {
-  G4int At = lrint(anElement->GetN());  // number of nucleons 
-  G4int Zt = lrint(anElement->GetZ());  // number of protons
+  G4int At = G4lrint(anElement->GetN());  // number of nucleons 
+  G4int Zt = G4lrint(anElement->GetZ());  // number of protons
 
   return GetHadronNucleonXscNS(aParticle, At, Zt);
 }
@@ -1053,8 +1053,8 @@ G4double
 G4GlauberGribovCrossSection::GetHNinelasticXsc(const G4DynamicParticle* aParticle, 
                                                const G4Element* anElement)
 {
-  G4int At = lrint(anElement->GetN());  // number of nucleons 
-  G4int Zt = lrint(anElement->GetZ());  // number of protons
+  G4int At = G4lrint(anElement->GetN());  // number of nucleons 
+  G4int Zt = G4lrint(anElement->GetZ());  // number of protons
 
   return GetHNinelasticXsc(aParticle, At, Zt);
 }
@@ -1307,7 +1307,7 @@ G4double
 G4GlauberGribovCrossSection::GetNucleusRadius(const G4DynamicParticle* , 
                                               const G4Element* anElement)
 {
-  G4int At = lrint(anElement->GetN());
+  G4int At = G4lrint(anElement->GetN());
   G4double oneThird = 1.0/3.0;
   G4double cubicrAt = std::pow(G4double(At), oneThird); 
 

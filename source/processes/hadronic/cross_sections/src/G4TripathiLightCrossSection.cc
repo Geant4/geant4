@@ -105,8 +105,8 @@ G4TripathiLightCrossSection::IsElementApplicable(const G4DynamicParticle* thePro
 						 G4int ZT, const G4Material*)
 {
   G4bool result = false;
-  G4int AT = lrint(G4NistManager::Instance()->GetAtomicMassAmu(ZT));
-  G4int ZP = lrint(theProjectile->GetDefinition()->GetPDGCharge()/eplus);
+  G4int AT = G4lrint(G4NistManager::Instance()->GetAtomicMassAmu(ZT));
+  G4int ZP = G4lrint(theProjectile->GetDefinition()->GetPDGCharge()/eplus);
   G4int AP = theProjectile->GetDefinition()->GetBaryonNumber();
   if (theProjectile->GetKineticEnergy()/AP < 10.0*GeV &&
       ((AT==1 && ZT==1) || (AP==1 && ZP==1) ||
@@ -130,11 +130,11 @@ G4TripathiLightCrossSection::GetElementCrossSection(const G4DynamicParticle* the
   // kinetic enery and energy/nucleon.
 
   G4double xAT= G4NistManager::Instance()->GetAtomicMassAmu(ZT);
-  G4int    AT = lrint(xAT);
+  G4int    AT = G4lrint(xAT);
   G4double EA = theProjectile->GetKineticEnergy()/MeV;
   G4int    AP = theProjectile->GetDefinition()->GetBaryonNumber();
   G4double xAP= G4double(AP);
-  G4double ZP = lrint(theProjectile->GetDefinition()->GetPDGCharge()/eplus);
+  G4double ZP = G4lrint(theProjectile->GetDefinition()->GetPDGCharge()/eplus);
   G4double E  = EA / xAP;
 
   G4Pow* g4pow = G4Pow::GetInstance();

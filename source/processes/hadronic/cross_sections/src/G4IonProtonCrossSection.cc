@@ -71,7 +71,7 @@ G4IonProtonCrossSection::GetElementCrossSection(
   const G4ParticleDefinition* p = dp->GetDefinition();
   G4double e = dp->GetKineticEnergy()*CLHEP::proton_mass_c2/p->GetPDGMass();
   return 
-    theForward->GetProtonCrossSection(e, lrint(p->GetPDGCharge()/eplus));
+    theForward->GetProtonCrossSection(e, G4lrint(p->GetPDGCharge()/eplus));
 }
 
 void G4IonProtonCrossSection::Description() const

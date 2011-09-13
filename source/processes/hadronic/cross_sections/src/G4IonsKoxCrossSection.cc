@@ -63,7 +63,7 @@ G4IonsKoxCrossSection::GetElementCrossSection(
    // Apply energy check, if less than lower limit then 0 value is returned
    // if (  ke_per_N < lowerLimit ) return xsection;
 
-   G4int At = lrint(G4NistManager::Instance()->GetAtomicMassAmu(ZZ));
+   G4int At = G4lrint(G4NistManager::Instance()->GetAtomicMassAmu(ZZ));
    G4int Zt = ZZ;  
 
    G4double one_third = 1.0 / 3.0;

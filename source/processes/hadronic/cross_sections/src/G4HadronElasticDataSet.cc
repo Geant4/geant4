@@ -89,6 +89,6 @@ G4HadronElasticDataSet::GetElementCrossSection(const G4DynamicParticle* aParticl
 					       G4int Z, 
 					       const G4Material*)
 {
-  G4int A = lrint(G4NistManager::Instance()->GetAtomicMassAmu(Z));
+  G4int A = G4lrint(G4NistManager::Instance()->GetAtomicMassAmu(Z));
   return theHadronCrossSections->GetElasticCrossSection(aParticle, Z, A);
 }

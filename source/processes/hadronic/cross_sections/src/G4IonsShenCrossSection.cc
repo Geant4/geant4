@@ -57,7 +57,7 @@ G4IonsShenCrossSection::GetElementCrossSection(const G4DynamicParticle* aParticl
 					       G4int Z, 
 					       const G4Material*)
 {
-  G4int A = lrint(G4NistManager::Instance()->GetAtomicMassAmu(Z));
+  G4int A = G4lrint(G4NistManager::Instance()->GetAtomicMassAmu(Z));
   return GetIsoCrossSection(aParticle, Z, A);
 }
 
@@ -71,7 +71,7 @@ G4double G4IonsShenCrossSection::GetIsoCrossSection(const G4DynamicParticle* aPa
    G4double xsection = 0.0;
 
    G4int Ap = aParticle->GetDefinition()->GetBaryonNumber();
-   G4int Zp = G4int(aParticle->GetDefinition()->GetPDGCharge()/eplus + 0.5 ); 
+   G4int Zp = G4lrint(aParticle->GetDefinition()->GetPDGCharge()/eplus); 
    G4double ke_per_N = aParticle->GetKineticEnergy() / Ap; 
    if ( ke_per_N > upperLimit ) { ke_per_N = upperLimit; }
 

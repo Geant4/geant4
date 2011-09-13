@@ -211,7 +211,7 @@ void G4BGGPionElasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
   }
   for(G4int iz=2; iz<93; iz++) {
 
-    A = lrint(nist->GetAtomicMassAmu(iz));
+    A = G4lrint(nist->GetAtomicMassAmu(iz));
     theA[iz] = A;
 
     csup = fGlauber->GetElasticGlauberGribov(&dp, iz, A);

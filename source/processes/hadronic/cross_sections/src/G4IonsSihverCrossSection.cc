@@ -57,7 +57,7 @@ G4IonsSihverCrossSection::GetElementCrossSection(
       const G4DynamicParticle* aParticle, G4int Z, const G4Material*)
 {
   G4double xsection = 0.0;
-  G4int At = lrint(G4NistManager::Instance()->GetAtomicMassAmu(Z));
+  G4int At = G4lrint(G4NistManager::Instance()->GetAtomicMassAmu(Z));
 
   G4int Ap = aParticle->GetDefinition()->GetBaryonNumber();
  
