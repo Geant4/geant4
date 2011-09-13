@@ -257,34 +257,6 @@ void PhysicsList::SetElectronLowLimit(G4double lowcut)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void PhysicsList::SetPositronLowLimit(G4double lowcut)
-{
-  if (verboseLevel >0){
-    
-    G4cout << "PhysicsList::SetCuts:";
-    G4cout << "Positron cut in energy: " << lowcut*MeV << " (MeV)" << G4endl;
-  }  
-
-  G4cerr << "PhysicsList::SetPositronLowLimit: Not currently able to set Positron LowLimit." << G4endl;
-  G4Exception("Positron Low Limit: not implemented in PhysicsList"); 
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void PhysicsList::SetProtonLowLimit(G4double lowcut)
-{
-  if (verboseLevel >0){
-    
-    G4cout << "PhysicsList::SetCuts:";
-    G4cout << "Proton cut in energy: " << lowcut*MeV << " (MeV)" << G4endl;  
-  }  
-
-  G4cerr << "PhysicsList::SetProtonLowLimit: Not currently able to set Proton LowLimit." << G4endl;
-  G4Exception("Proton Low Limit: not implemented in PhysicsList"); 
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void PhysicsList::SetGEPLowLimit(G4double lowcut)
 {
   if (verboseLevel >0){

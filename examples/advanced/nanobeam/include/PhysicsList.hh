@@ -58,8 +58,6 @@ public:
   
   void SetGammaLowLimit(G4double);
   void SetElectronLowLimit(G4double);
-  void SetPositronLowLimit(G4double);
-  void SetProtonLowLimit(G4double);
   void SetGEPLowLimit(G4double);
 
   void SetGELowLimit(G4double);

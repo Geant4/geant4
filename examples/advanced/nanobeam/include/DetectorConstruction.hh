@@ -104,7 +104,6 @@ private:
   G4Box*             solidControlVol_GridShadow;
 
   G4Material*        defaultMaterial;
-  G4Material*        waterMaterial;
   G4Material*        gridMaterial;
 
   G4bool gradientsInitialized;
