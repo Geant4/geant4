@@ -96,7 +96,7 @@ void HistoManager::book()
   AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);
   AIDA::ITupleFactory* ntf = af->createTupleFactory(*tree);
  
-  ntupl0 = ntf->create( "ntuple0", "Beam profile", "double flagParticle, flagProcess, x, y, z");
+  ntupl0 = ntf->create( "ntuple0", "Beam profile", "double flagParticle, flagProcess, x, y, z, edep");
   factoryOn = true;
 
   delete hf;

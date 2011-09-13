@@ -96,11 +96,7 @@ void SteppingAction::UserSteppingAction(const G4Step* s)
  if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="hIoni")				flagProcess =33;
  if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="eIoni")				flagProcess =34;
 
- if (
-      s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()!="initStep"
-      &&
-      s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()!="Transportation"
-    )
+ if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()!="Transportation")
  {  
    x=s->GetPreStepPoint()->GetPosition().x()/nanometer;
    y=s->GetPreStepPoint()->GetPosition().y()/nanometer;
@@ -111,6 +107,7 @@ void SteppingAction::UserSteppingAction(const G4Step* s)
    Histo->FillNtuple(0, 2, x);
    Histo->FillNtuple(0, 3, y);
    Histo->FillNtuple(0, 4, z);
+   Histo->FillNtuple(0, 5, s->GetTotalEnergyDeposit()/eV);
    Histo->AddRowNtuple(0);      
  }
 }    

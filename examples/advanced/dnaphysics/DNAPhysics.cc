@@ -78,7 +78,7 @@ int main(int argc,char** argv)
   // Initialize G4 kernel
   runManager->Initialize();
     
-  system ("rm -rf dna.root");  
+  remove ("dna.root");  
     
   // Get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  

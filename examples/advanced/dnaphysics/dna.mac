@@ -9,4 +9,5 @@
 #/gun/particle helium
 /gun/energy 1 keV
 /run/initialize
-/run/beamOn 1
+/process/em/auger true
+/run/beamOn 100

@@ -5,6 +5,19 @@
                        Package History file
                        --------------------
 
+24 August2011 - tag dnaphysics-V09-04-07 - S. Incerti
+- Added Auger production to dna.mac
+
+18 August 2011 - tag dnaphysics-V09-04-06 - S. Incerti
+- Removed initStep test in SteppingAction
+
+16 August 2011 - tag dnaphysics-V09-04-05 - S. Incerti
+- Removed usage of system command
+
+02 August 2011 - tag dnaphysics-V09-04-04 - S. Incerti
+- increased statistics in dna.mac as suggested by Gunter
+- added total energy deposits in ntuple 
+
 05 April 2011 - tag dnaphysics-V09-04-03 - S. Incerti
 - added comment for use of variable density material
 
