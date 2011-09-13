@@ -17,6 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August, 11th, 2011           G.Cosmo (geomdiv-V09-04-04, geomdiv-V09-04-03)
+- Defined scheme for warnings/errors coding:
+  + 1xxx for warnings, 0xxx for errors.
+  Code numbering:
+  + 0001: not supported or implemented features;
+  + 0002: invalid setup/construct;
+  + 0003: invalid run condition;
+  + 1001: incorrect setup; automatically adapted.
+  + 1002: notification.
+
+August, 10th, 2011           G.Cosmo (geomdiv-V09-04-02, geomdiv-V09-04-01)
+- Migrated to new G4Exception scheme for warnings and errors.
+
 July, 14th, 2011             G.Cosmo (geomdiv-V09-04-00)
 - Optimise initialization of phi angles in parameterisation for tubs and cons.
 

@@ -134,8 +134,8 @@ G4PVDivisionFactory::CreatePVDivision(const G4String& pName,
   if (!divParam)
   {
     G4Exception("G4PVDivisionFactory::CreatePVDivision()",
-                "WrongType", FatalException,
-                "Unexpected parameterisation type !");
+                "GeomDiv0001", FatalException,
+                "Unexpected parameterisation type!");
     return 0;
   }
   else

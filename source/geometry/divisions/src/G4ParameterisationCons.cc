@@ -91,10 +91,11 @@ G4ParameterisationConsRho( EAxis axis, G4int nDiv,
   G4Cons* msol = (G4Cons*)(fmotherSolid);
   if( msol->GetInnerRadiusPlusZ() == 0. )
   {
-    G4cerr << "WARNING - G4ParameterisationConsRho, OuterRadiusMinusZ = 0. "
-           << G4endl 
-           << "          Width is calculated as that of OuterRadiusMinusZ !"
-           << G4endl;
+    std::ostringstream message;
+    message << "OuterRadiusMinusZ = 0" << G4endl 
+            << "Width is calculated as that of OuterRadiusMinusZ !";
+    G4Exception("G4ParameterisationConsRho::G4ParameterisationConsRho()",
+                "GeomDiv1001", JustWarning, message);
   } 
 
   if( divType == DivWIDTH )
