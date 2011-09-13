@@ -45,7 +45,7 @@ G4AnalyticalEcpssrLiCrossSection::G4AnalyticalEcpssrLiCrossSection()
     char *path = getenv("G4LEDATA");
 
     if (!path) {      
-      G4Exception("G4ecpssrLCrossSection::G4AnalyticalEcpssrLiCrossSection() G4LEDDATA environment variable not set");
+      G4Exception("G4ecpssrLCrossSection::G4AnalyticalEcpssrLiCrossSection()","em0006", FatalException ,"G4LEDATA environment variable not set");
       return;
     }
     std::ostringstream fileName1;
@@ -57,7 +57,7 @@ G4AnalyticalEcpssrLiCrossSection::G4AnalyticalEcpssrLiCrossSection()
     // Reading of FL1.dat
 
     std::ifstream FL1(fileName1.str().c_str());
-    if (!FL1) G4Exception("G4ecpssrLCrossSection::G4AnalyticalEcpssrLiCrossSection() error opening FL1 data file");
+    if (!FL1) G4Exception("G4ecpssrLCrossSection::G4AnalyticalEcpssrLiCrossSection()","em0003",FatalException, "error opening FL1 data file");
   
     dummyVec1.push_back(0.);
 
@@ -83,7 +83,7 @@ G4AnalyticalEcpssrLiCrossSection::G4AnalyticalEcpssrLiCrossSection()
     // Reading of FL2.dat
     
     std::ifstream FL2(fileName2.str().c_str());
-    if (!FL2) G4Exception("G4ecpssrLCrossSection::G4AnalyticalEcpssrLiCrossSection() error opening FL2 data file");
+    if (!FL2) G4Exception("G4ecpssrLCrossSection::G4AnalyticalEcpssrLiCrossSection()","em0003", FatalException," error opening FL2 data file");
     
     dummyVec2.push_back(0.);
 

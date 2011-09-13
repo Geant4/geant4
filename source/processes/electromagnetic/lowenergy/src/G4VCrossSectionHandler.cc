@@ -197,8 +197,8 @@ void G4VCrossSectionHandler::LoadData(const G4String& fileName)
       char* path = getenv("G4LEDATA");
       if (!path)
 	{ 
-	  G4String excep = "G4VCrossSectionHandler - G4LEDATA environment variable not set";
-	  G4Exception(excep);
+          G4Exception("G4VCrossSectionHandler::LoadData",
+		    "em0006",FatalException,"G4LEDATA environment variable not set");
 	  return;
 	}
       
@@ -209,8 +209,9 @@ void G4VCrossSectionHandler::LoadData(const G4String& fileName)
        
       if (! (lsdp->is_open()) )
 	{
-	  G4String excep = "G4VCrossSectionHandler - data file: " + ost.str() + " not found";
-	  G4Exception(excep);
+	  G4String excep = "data file: " + ost.str() + " not found";
+          G4Exception("G4VCrossSectionHandler::LoadData",
+		    "em0003",FatalException,excep);
 	}
       G4double a = 0;
       G4int k = 0;
@@ -273,8 +274,8 @@ void G4VCrossSectionHandler::LoadNonLogData(const G4String& fileName)
       char* path = getenv("G4LEDATA");
       if (!path)
 	{ 
-	  G4String excep = "G4VCrossSectionHandler - G4LEDATA environment variable not set";
-	  G4Exception(excep);
+          G4Exception("G4VCrossSectionHandler::LoadNonLogData",
+		    "em0006",FatalException,"G4LEDATA environment variable not set");
 	  return;
 	}
       
@@ -285,8 +286,9 @@ void G4VCrossSectionHandler::LoadNonLogData(const G4String& fileName)
        
       if (! (lsdp->is_open()) )
 	{
-	  G4String excep = "G4VCrossSectionHandler - data file: " + ost.str() + " not found";
-	  G4Exception(excep);
+	  G4String excep = "data file: " + ost.str() + " not found";
+          G4Exception("G4VCrossSectionHandler::LoadNonLogData",
+		    "em0003",FatalException,excep);
 	}
       G4double a = 0;
       G4int k = 0;
@@ -496,7 +498,8 @@ G4VEMDataSet* G4VCrossSectionHandler::BuildMeanFreePathForMaterials(const G4Data
 
   if (crossSections == 0)
     {
-      G4Exception("G4VCrossSectionHandler::BuildMeanFreePathForMaterials, crossSections = 0");
+      G4Exception("G4VCrossSectionHandler::BuildMeanFreePathForMaterials",
+		    "em1010",FatalException,"crossSections = 0");
       return 0;
     }
 
@@ -670,7 +673,8 @@ G4int G4VCrossSectionHandler::SelectRandomShell(G4int Z, G4double e) const
     dataSet = (*pos).second;
   else
     {
-      G4Exception("G4VCrossSectionHandler::SelectRandomShell, unable to load the dataSet");
+      G4Exception("G4VCrossSectionHandler::SelectRandomShell",
+		    "em1011",FatalException,"unable to load the dataSet");
       return 0;
     }
 
@@ -693,7 +697,8 @@ void G4VCrossSectionHandler::ActiveElements()
 {
   const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
   if (materialTable == 0)
-    G4Exception("G4VCrossSectionHandler::ActiveElements - no MaterialTable found)");
+      G4Exception("G4VCrossSectionHandler::ActiveElements",
+		    "em1001",FatalException,"no MaterialTable found");
 
   G4int nMaterials = G4Material::GetNumberOfMaterials();
 

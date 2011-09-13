@@ -51,6 +51,7 @@
 #include "G4Gamma.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4LogLogInterpolation.hh"
+#include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -248,13 +249,6 @@ G4double G4Penelope01BremsstrahlungModel::ComputeCrossSectionPerAtom(const G4Par
   
   G4int iZ = (G4int) Z;
 
-  // VI - not needed in run time
-  // if (!crossSectionHandler)
-  //  {
-  //    G4cout << "G4Penelope01BremsstrahlungModel::ComputeCrossSectionPerAtom" << G4endl;
-  //    G4cout << "The cross section handler is not correctly initialized" << G4endl;
-  //    G4Exception();
-  //  }
   G4double totalCs = crossSectionHandler->FindValue(iZ,kinEnergy);
   G4double cs = totalCs * energySpectrum->Probability(iZ,cutEnergy,kinEnergy,kinEnergy);
 
@@ -468,8 +462,12 @@ G4Penelope01BremsstrahlungAngular* G4Penelope01BremsstrahlungModel::GetAngularDa
   if (angularData->count(iZ)) //the material should exist now
     return angularData->find(iZ)->second;
   else
-    {
-      G4Exception("Problem in G4Penelope01BremsstrahlungModel::GetAngularDataForZ()");
+    {      
+      G4ExceptionDescription ed;
+      ed << "Unable to build table for angular distribution for Z = " 
+	 << iZ << G4endl;
+      G4Exception("G4Penelope01BremsstrahlungModel::GetAngularDataForZ()",
+		  "em2001",FatalException,ed);
       return 0;
     }
 }
@@ -492,14 +490,19 @@ G4Penelope01BremsstrahlungModel::GetStoppingPowerData(G4int iZ,G4double energyCu
   //Otherwise create a new object, store it and return it
   G4String theParticleName = theParticle->GetParticleName();
   G4Penelope01BremsstrahlungContinuous* theContinuous = new 
-    G4Penelope01BremsstrahlungContinuous(iZ,energyCut,LowEnergyLimit(),HighEnergyLimit(),theParticleName);
+    G4Penelope01BremsstrahlungContinuous(iZ,energyCut,LowEnergyLimit(),
+					 HighEnergyLimit(),theParticleName);
   stoppingPowerData->insert(std::make_pair(theKey,theContinuous));
 
   if (stoppingPowerData->count(theKey)) //the material should exist now
     return stoppingPowerData->find(theKey)->second;
   else
     {
-      G4Exception("Problem in G4Penelope01BremsstrahlungModel::GetStoppingPowerData()");
+      G4ExceptionDescription ed;
+      ed << "Unable to build table for stopping power for Z = " << iZ  
+	 << " cut = " << G4BestUnit(energyCut,"Energy") << G4endl;
+      G4Exception("G4Penelope01BremsstrahlungModel::GetStoppingPowerData()",
+		  "em2002",FatalException,ed);
       return 0;
     }
 }

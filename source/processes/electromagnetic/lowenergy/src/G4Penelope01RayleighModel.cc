@@ -506,10 +506,11 @@ void G4Penelope01RayleighModel::InitialiseSampling()
 {
   if (!samplingFunction_x || !samplingFunction_xNoLog)
     {
-      G4cout << "G4Penelope01RayleighModel::InitialiseSampling(), something wrong" << G4endl;
-      G4cout << "It looks like G4Penelope01RayleighModel::PrepareConstants() has not been called" 
-	     << G4endl;
-      G4Exception();
+      G4ExceptionDescription ed;
+      ed << "It looks like G4Penelope01RayleighModel::PrepareConstants() has not been called" 
+	 << G4endl;
+      G4Exception("G4Penelope01RayleighModel::InitialiseSampling()",
+		  "em2004",FatalException,ed);
       return;
     }
   if (!SamplingTable.count(theMaterial)) //material not defined yet

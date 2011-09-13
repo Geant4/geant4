@@ -145,12 +145,7 @@ G4double G4Penelope01GammaConversionModel::ComputeCrossSectionPerAtom(const G4Pa
     G4cout << "Calling ComputeCrossSectionPerAtom() of G4Penelope01GammaConversionModel" << G4endl;
 
   G4int iZ = (G4int) Z;
-  //  if (!crossSectionHandler) //VI: should not be checked in run time
-  //  {
-  //    G4cout << "G4Penelope01GammaConversionModel::ComputeCrossSectionPerAtom" << G4endl;
-  //    G4cout << "The cross section handler is not correctly initialized" << G4endl;
-  //    G4Exception();
-  //  }
+  
   G4double cs = crossSectionHandler->FindValue(iZ,energy);
 
   if (verboseLevel > 2)
@@ -228,12 +223,16 @@ G4Penelope01GammaConversionModel::SampleSecondaries(std::vector<G4DynamicParticl
       g0 = funct1-4*CoulombCorrection(ZAlpha)+LowEnergyCorrection(ZAlpha,eki); 
       G4double bmin = 2*eki*ScreenRadius;
       std::vector<G4double> ScreenFunctionValues = ScreenFunction(bmin);
+      /*
       if (ScreenFunctionValues.size() != 2)
 	{
+	  
 	  G4cout << "G4Penelope01GammaConversionModel::SampleSecondaries" << G4endl;
 	  G4cout << "ScreenFunction did not return 2 values! Something wrong! " << G4endl;
-	  G4Exception();
+	  G4Exception("G4Penelope01GammaConversionModel::SampleSecondaries",
+	  "pe0001",FatalException,"");
 	}
+      */
       g1min=g0+ScreenFunctionValues[0];
       g2min=g0+ScreenFunctionValues[1];
       G4double xr,a1,p1;
@@ -419,7 +418,8 @@ G4double G4Penelope01GammaConversionModel::GetScreeningRadius(G4double Z)
       if (!path)
 	{
 	  G4String excep = "G4Penelope01GammaConversionModel - G4LEDATA environment variable not set!";
-	  G4Exception(excep);
+	  G4Exception("G4Penelope01GammaConversionModel::GetScreeningRadius",
+		      "em0006",FatalException,excep);
 	  return result;
 	}
       G4String pathString(path);
@@ -429,7 +429,9 @@ G4double G4Penelope01GammaConversionModel::GetScreeningRadius(G4double Z)
       if (!(file.is_open()))
 	{
 	  G4String excep = "G4Penelope01GammaConversionModel - data file " + pathFile + "not found!";
-	  G4Exception(excep);
+	  G4Exception("G4Penelope01GammaConversionModel::GetScreeningRadius",
+		      "em0003",FatalException,excep);
+	  return result;
 	}
       G4int k;
       G4double a1,a2;
@@ -449,8 +451,11 @@ G4double G4Penelope01GammaConversionModel::GetScreeningRadius(G4double Z)
 	return result;
       else
 	{
-	  G4String excep = "G4Penelope01GammaConversionModel - Screening Radius for not found in the data file";
-	  G4Exception(excep);
+	  G4ExceptionDescription ed;
+	  ed << "Screening Radius for Z= " << Z << " not found in the data file" 
+	     <<G4endl;	  
+	  G4Exception("G4Penelope01GammaConversionModel::GetScreeningRadius",
+		      "em0005",FatalException,ed);
 	  return 0;
 	}
     }

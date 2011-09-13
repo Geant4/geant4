@@ -45,8 +45,10 @@ G4PenelopeCrossSection::G4PenelopeCrossSection(size_t nPointsE,size_t nShells) :
   //check the number of points is not zero
   if (!numberOfEnergyPoints)
     {
-      G4cout << "G4PenelopeCrossSection: invalid number of energy points " << G4endl;
-      G4Exception();
+      G4ExceptionDescription ed;
+      ed << "G4PenelopeCrossSection: invalid number of energy points " << G4endl;
+      G4Exception("G4PenelopeCrossSection::G4PenelopeCrossSection()",
+		  "em2017",FatalException,ed);
     }
 
   isNormalized = false;

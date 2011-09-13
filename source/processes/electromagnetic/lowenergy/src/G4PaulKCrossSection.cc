@@ -58,14 +58,6 @@ G4PaulKCrossSection::G4PaulKCrossSection()
   
   interpolation = new G4LogLogInterpolation();
 
-  /*
-    G4String path = getenv("G4LEDATA");
- 
-    if (!path)
-    G4Exception("G4paulKCrossSection::G4paulKCrossSection: G4LEDATA environment variable not set");
-    G4cout << path + "/kcsPaul/kcs-" << G4endl;
-  */
-
 
     for (G4int i=4; i<93; i++) {
       protonDataSetMap[i] = new G4EMDataSet(i,interpolation);
@@ -114,8 +106,10 @@ G4double G4PaulKCrossSection::CalculateKCrossSection(G4int zTarget,G4double mass
 	}
       else
 	{ 
-	  G4cout << "we can treat only Proton or Alpha incident particles between 4 and 93" << G4endl;
+
+	  G4Exception("G4PaulKCrossSection::CalculateKCrossSection()","de0004",JustWarning, "Energy deposited locally");
 	  sigma = 0.;
+
 	}
     }
   

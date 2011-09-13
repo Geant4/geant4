@@ -112,7 +112,8 @@ void G4BremsstrahlungParameters::LoadData(const G4String& name)
 
   const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
   if (materialTable == 0)
-     G4Exception("G4CrossSectionHandler: no MaterialTable found)");
+     G4Exception("G4BremsstrahlungParameters::LoadData",
+		    "em1001",FatalException,"Unable to find MaterialTable");
 
   G4int nMaterials = G4Material::GetNumberOfMaterials();
 
@@ -146,8 +147,8 @@ void G4BremsstrahlungParameters::LoadData(const G4String& name)
   char* path = getenv("G4LEDATA");
   if (path == 0)
     {
-      G4String excep("G4BremsstrahlungParameters - G4LEDATA environment variable not set");
-      G4Exception(excep);
+      G4Exception("G4BremsstrahlungParameters::LoadData",
+		    "em0006",FatalException,"G4LEDATA environment variable not set");
       return;
     }
 
@@ -158,9 +159,10 @@ void G4BremsstrahlungParameters::LoadData(const G4String& name)
 
   if (! (lsdp_a->is_open()) )
     {
-      G4String stringConversion2("G4BremsstrahlungParameters: cannot open file ");
+      G4String stringConversion2("G4BremsstrahlungParameters::LoadData");
       G4String excep = stringConversion2 + name_a;
-      G4Exception(excep);
+      G4Exception("G4BremsstrahlungParameters::LoadData",
+		    "em0003",FatalException,excep);
   }
 
   // The file is organized into two columns:
@@ -249,10 +251,11 @@ G4double G4BremsstrahlungParameters::ParameterC(G4int id) const
   G4int n = paramC.size();
   if (id < 0 || id >= n)
     {
-      G4String stringConversion1("G4BremsstrahlungParameters::ParameterC - wrong id = ");
       G4String stringConversion2(id);
-      G4String ex = stringConversion1 + stringConversion2;
-      G4Exception(ex);
+      G4String ex = "Wrong id " + stringConversion2;
+      G4Exception("G4BremsstrahlungParameters::ParameterC",
+		    "em1002",FatalException,ex);
+
     }
 
   return paramC[id];

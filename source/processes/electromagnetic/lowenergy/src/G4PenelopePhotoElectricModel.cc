@@ -144,13 +144,11 @@ G4double G4PenelopePhotoElectricModel::ComputeCrossSectionPerAtom(
   if (!logAtomicShellXS->count(iZ))
     ReadDataFile(iZ);
   //now it should be ok
-  if (!logAtomicShellXS->count(iZ))
-     {
-       G4cout << "Problem in G4PenelopePhotoElectricModel::ComputeCrossSectionPerAtom"
-              << G4endl;
-       G4Exception();
-     }
-
+  if (!logAtomicShellXS->count(iZ))     
+    G4Exception("G4PenelopePhotoElectricModel::ComputeCrossSectionPerAtom()",
+		"em2038",FatalException,
+		"Unable to retrieve the shell cross section table");     
+  
   G4double cross = 0;
 
   G4PhysicsTable* theTable =  logAtomicShellXS->find(iZ)->second;
@@ -158,9 +156,9 @@ G4double G4PenelopePhotoElectricModel::ComputeCrossSectionPerAtom(
 
    if (!totalXSLog)
      {
-       G4cout << "Problem in G4PenelopePhotoElectricModel::ComputeCrossSectionPerAtom"
-         << G4endl;
-       G4Exception();
+       G4Exception("G4PenelopePhotoElectricModel::ComputeCrossSectionPerAtom()",
+		   "em2039",FatalException,
+		   "Unable to retrieve the total cross section table");       
        return 0;
      }
    G4double logene = std::log(energy);
@@ -417,7 +415,8 @@ void G4PenelopePhotoElectricModel::ReadDataFile(G4int Z)
   if (!path)
     {
       G4String excep = "G4PenelopePhotoElectricModel - G4LEDATA environment variable not set!";
-      G4Exception(excep);
+      G4Exception("G4PenelopePhotoElectricModel::ReadDataFile()",
+		  "em0006",FatalException,excep);
       return;
     }
  
@@ -433,7 +432,8 @@ void G4PenelopePhotoElectricModel::ReadDataFile(G4int Z)
   if (!file.is_open())
     {
       G4String excep = "G4PenelopePhotoElectricModel - data file " + G4String(ost.str()) + " not found!";
-      G4Exception(excep);
+      G4Exception("G4PenelopePhotoElectricModel::ReadDataFile()",
+		  "em0003",FatalException,excep);
     }
   //I have to know in advance how many points are in the data list
   //to initialize the G4PhysicsFreeVector()
@@ -458,9 +458,10 @@ void G4PenelopePhotoElectricModel::ReadDataFile(G4int Z)
   //check the right file is opened.
   if (readZ != Z || nShells <= 0 || nShells > 50) //protect nShell against large values
     {
-      G4cout << "G4PenelopePhotoElectricModel::ReadDataFile()" << G4endl;
-      G4cout << "Corrupted data file for Z=" << Z << G4endl;
-      G4Exception();
+      G4ExceptionDescription ed;
+      ed << "Corrupted data file for Z=" << Z << G4endl;
+      G4Exception("G4PenelopePhotoElectricModel::ReadDataFile()",
+		  "em0005",FatalException,ed);
       return;
     }
   G4PhysicsTable* thePhysicsTable = new G4PhysicsTable();
@@ -515,9 +516,10 @@ size_t G4PenelopePhotoElectricModel::SelectRandomShell(G4int Z,G4double energy)
   //Check if data have been read (it should be!)
   if (!logAtomicShellXS->count(Z))
      {
-       G4cout << "Problem in G4PenelopePhotoElectricModel::SelectRandomShell" << G4endl;
-       G4cout << "Cannot find data for Z=" << Z << G4endl;
-       G4Exception();
+       G4ExceptionDescription ed;
+       ed << "Cannot find shell cross section data for Z=" << Z << G4endl;
+       G4Exception("G4PenelopePhotoElectricModel::SelectRandomShell()",
+		   "em2038",FatalException,ed);
      }
 
   size_t shellIndex = 0;
@@ -590,9 +592,10 @@ size_t G4PenelopePhotoElectricModel::GetNumberOfShellXS(G4int Z)
   //now it should be ok
   if (!logAtomicShellXS->count(Z))
      {
-       G4cout << "Problem in G4PenelopePhotoElectricModel::GetNumberOfShellXS()"
-              << G4endl;
-       G4Exception();
+       G4ExceptionDescription ed;
+       ed << "Cannot find shell cross section data for Z=" << Z << G4endl;
+       G4Exception("G4PenelopePhotoElectricModel::GetNumberOfShellXS()",
+		   "em2038",FatalException,ed);
      }
   //one vector is allocated for the _total_ cross section
   size_t nEntries = logAtomicShellXS->find(Z)->second->entries();
@@ -619,9 +622,9 @@ G4double G4PenelopePhotoElectricModel::GetShellCrossSection(G4int Z,size_t shell
  
   if (!totalXSLog)
      {
-       G4cout << "Problem in G4PenelopePhotoElectricModel::GetShellCrossSection()"
-         << G4endl;
-       G4Exception();
+       G4Exception("G4PenelopePhotoElectricModel::GetShellCrossSection()",
+		   "em2039",FatalException,
+		   "Unable to retrieve the total cross section table");
        return 0;
      }
    G4double logene = std::log(energy);

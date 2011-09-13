@@ -1,9 +1,0 @@
-Geant4
-testExpREADME
-
-This test checks the empirical model for proton atomic shell cross section implemented in 
-G4hShellCrossSectionExp and G4hShellCrossSectionExpData classes.
-This test asks to the users the Shell Number.
-Since the model is implemented only for the k shell, the shell number must be 0.
-The test prints on the desktop the atomic number, particle incident energy and 
-atomic cross section for each elemet with Z > 5.

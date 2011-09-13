@@ -162,9 +162,10 @@ G4double G4PenelopeGammaConversionModel::ComputeCrossSectionPerAtom(
   //now it should be ok
   if (!logAtomicCrossSection->count(iZ))
      {
-       G4cout << "Problem in G4PenelopeGammaConversion::ComputeCrossSectionPerAtom"
-              << G4endl;
-       G4Exception();
+       G4ExceptionDescription ed;
+       ed << "Unable to retrieve cross section table for Z=" << iZ << G4endl;
+       G4Exception("G4PenelopeGammaConversionModel::ComputeCrossSectionPerAtom()",
+		   "em2018",FatalException,ed);
      }
 
   G4double cs = 0;
@@ -224,9 +225,11 @@ G4PenelopeGammaConversionModel::SampleSecondaries(std::vector<G4DynamicParticle*
     InitializeScreeningFunctions(mat); 
   if (!fEffectiveCharge->count(mat))
     {
-      G4cout << "Problem in G4PenelopeGammaConversion::SampleSecondaries()" << G4endl;
-      G4cout << "Unable to allocate the EffectiveCharge data" << G4endl;
-      G4Exception();
+      G4ExceptionDescription ed;      
+      ed << "Unable to allocate the EffectiveCharge data for " << 
+	mat->GetName() << G4endl;
+      G4Exception("G4PenelopeGammaConversion::SampleSecondaries()",
+		  "em2019",FatalException,ed);		  
     }
 
   // eps is the fraction of the photon energy assigned to e- (including rest mass)
@@ -401,7 +404,8 @@ void G4PenelopeGammaConversionModel::ReadDataFile(const G4int Z)
     {
       G4String excep = 
 	"G4PenelopeGammaConversionModel - G4LEDATA environment variable not set!";
-      G4Exception(excep);
+      G4Exception("G4PenelopeGammaConversionModel::ReadDataFile()",
+		  "em0006",FatalException,excep);
       return;
     }
  
@@ -418,7 +422,8 @@ void G4PenelopeGammaConversionModel::ReadDataFile(const G4int Z)
     {
       G4String excep = "G4PenelopeGammaConversionModel - data file " + 
 	G4String(ost.str()) + " not found!";
-      G4Exception(excep);
+      G4Exception("G4PenelopeGammaConversionModel::ReadDataFile()",
+		  "em0003",FatalException,excep);
     }
 
   //I have to know in advance how many points are in the data list
@@ -442,9 +447,10 @@ void G4PenelopeGammaConversionModel::ReadDataFile(const G4int Z)
   //check the right file is opened.
   if (readZ != Z)
     {
-      G4cout << "G4PenelopeGammaConversionModel::ReadDataFile()" << G4endl;
-      G4cout << "Corrupted data file for Z=" << Z << G4endl;
-      G4Exception();
+      G4ExceptionDescription ed;
+      ed << "Corrupted data file for Z=" << Z << G4endl;      
+      G4Exception("G4PenelopeGammaConversionModel::ReadDataFile()",
+		  "em0005",FatalException,ed);
     }
 
   G4PhysicsFreeVector* theVec = new G4PhysicsFreeVector(ndata);
@@ -463,9 +469,10 @@ void G4PenelopeGammaConversionModel::ReadDataFile(const G4int Z)
 
   if (!logAtomicCrossSection)
     {
-      G4cout << "G4PenelopeGammaConversionModel::ReadDataFile()" << G4endl;
-      G4cout << "Problem with allocation of logAtomicCrossSection data table " << G4endl;
-      G4Exception();
+      G4ExceptionDescription ed;
+      ed << "Problem with allocation of logAtomicCrossSection data table " << G4endl;
+      G4Exception("G4PenelopeGammaConversionModel::ReadDataFile()",
+		  "em2020",FatalException,ed);
       delete theVec;
       return;
     }

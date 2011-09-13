@@ -77,7 +77,8 @@ G4VeLowEnergyLoss::G4VeLowEnergyLoss()
 		    nmaxCont1(4),
 		    nmaxCont2(16)
 {
-  G4Exception("G4VeLowEnergyLoss:: default constructor is called");
+      G4Exception("G4VeLowEnergyLoss::G4VeLowEnergyLoss()",
+		    "em1009",FatalException,"default constructor is called");
 }
 
 //

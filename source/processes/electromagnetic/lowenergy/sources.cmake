@@ -62,8 +62,6 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4eIonisationCrossSectionHandler.hh
         G4eIonisationParameters.hh
         G4eIonisationSpectrum.hh
-        G4eLowEnergyLoss.hh
-        G4eLowEnergyLoss.icc
         G4EMDataSet.hh
         G4empCrossSection.hh
         G4FluoData.hh
@@ -107,12 +105,6 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LivermorePolarizedRayleighModel.hh
         G4LivermoreRayleighModel.hh
         G4LogLogInterpolation.hh
-        G4LowEnergyBremsstrahlung.hh
-        G4LowEnergyCompton.hh
-        G4LowEnergyGammaConversion.hh
-        G4LowEnergyIonisation.hh
-        G4LowEnergyPhotoElectric.hh
-        G4LowEnergyRayleigh.hh
         G4OrlicLiCrossSection.hh
         G4PaulKCrossSection.hh
         G4Penelope01BremsstrahlungAngular.hh
@@ -188,7 +180,6 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4eIonisationCrossSectionHandler.cc
         G4eIonisationParameters.cc
         G4eIonisationSpectrum.cc
-        G4eLowEnergyLoss.cc
         G4EMDataSet.cc
         G4empCrossSection.cc
         G4FluoData.cc
@@ -231,12 +222,6 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LivermorePolarizedRayleighModel.cc
         G4LivermoreRayleighModel.cc
         G4LogLogInterpolation.cc
-        G4LowEnergyBremsstrahlung.cc
-        G4LowEnergyCompton.cc
-        G4LowEnergyGammaConversion.cc
-        G4LowEnergyIonisation.cc
-        G4LowEnergyPhotoElectric.cc
-        G4LowEnergyRayleigh.cc
         G4OrlicLiCrossSection.cc
         G4PaulKCrossSection.cc
       	G4Penelope01BremsstrahlungAngular.cc

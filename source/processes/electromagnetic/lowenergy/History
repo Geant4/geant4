@@ -17,6 +17,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+01.09.2011  S.I., L.P., A.M., tag emlowen-V09-04-58
+            Removed obsolete G4Exception syntax
+
+23.08.2011  S.Incerti, tag emlowen-V09-04-57
+            Removed obsolete codes in test
+
+08.08.2011  S.Incerti, tag emlowen-V09-04-56
+            Removed all obsolete G4eLowEnergyLoss* classes
+
+03.08.2011  S.Incerti, tag emlowen-V09-04-55
+            Removed all obsolete G4LowEnergy* classes
+
 28.07.2011  S.I. + L.P. + V.I. tag emlowen-V09-04-54
 	    -Use SetDeexcitationFlag(true) in the migrated 
 	    Livermore models.

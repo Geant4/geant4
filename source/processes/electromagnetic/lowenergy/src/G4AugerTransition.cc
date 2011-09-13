@@ -99,7 +99,7 @@ const G4DataVector* G4AugerTransition::AugerTransitionEnergies(G4int startShellI
 
   if (shellId == augerTransitionEnergiesMap.end() ) 
     {
-      G4Exception("G4AugerTransition: corresponding map element not found");
+      G4Exception("G4AugerTransition::AugerTransitionEnergies()","de0002",JustWarning,"corresponding map element not found, energy deposited locally");
       return 0; 
     }
 
@@ -123,7 +123,7 @@ const G4DataVector* G4AugerTransition::AugerTransitionProbabilities(G4int startS
   if (shellId == augerTransitionProbabilitiesMap.end() ) 
     {
 
-      G4Exception("G4AugerTransition: corresponding map element not found");
+      G4Exception("G4AugerTransition::AugerTransitionProbabilities()","de0002",JustWarning,"corresponding map element not found, energy deposited locally");
       return 0;
     }
   

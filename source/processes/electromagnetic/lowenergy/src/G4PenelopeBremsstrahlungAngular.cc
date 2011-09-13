@@ -101,7 +101,8 @@ void G4PenelopeBremsstrahlungAngular::ReadDataFile()
     {
       G4String excep = 
 	"G4PenelopeBremsstrahlungAngular - G4LEDATA environment variable not set!";
-      G4Exception(excep);
+      G4Exception("G4PenelopeBremsstrahlungAngular::ReadDataFile()",
+		  "em0006",FatalException,excep);
       return;
     }
   G4String pathString(path);
@@ -111,7 +112,9 @@ void G4PenelopeBremsstrahlungAngular::ReadDataFile()
   if (!file.is_open())
     {
       G4String excep = "G4PenelopeBremsstrahlungAngular - data file " + pathFile + " not found!";
-      G4Exception(excep);
+      G4Exception("G4PenelopeBremsstrahlungAngular::ReadDataFile()",
+		  "em0003",FatalException,excep);
+      return;
     }
   G4int i=0,j=0,k=0; // i=index for Z, j=index for E, k=index for K 
 
@@ -131,12 +134,12 @@ void G4PenelopeBremsstrahlungAngular::ReadDataFile()
 	    }
 	  else
 	    {	     
-	      G4cout << "G4PenelopeBremsstrahlungAngular: corrupted data file " << 
-		pathFile << "?" << G4endl;
-	      G4Exception();
+	      G4ExceptionDescription ed;
+	      ed << "Corrupted data file " << pathFile << "?" << G4endl;
+	      G4Exception("G4PenelopeBremsstrahlungAngular::ReadDataFile()",
+		  "em0005",FatalException,ed);	  
 	    }
-	}
-   
+	}   
   file.close();
   dataRead = true;
 }
@@ -150,7 +153,8 @@ void G4PenelopeBremsstrahlungAngular::PrepareInterpolationTables(G4double Zmat)
     {
       ReadDataFile();
       if (!dataRead)	
-	G4Exception("G4PenelopeBremsstrahlungAngular::PrepareInterpolationTables");
+	G4Exception("G4PenelopeBremsstrahlungAngular::PrepareInterpolationTables()",
+		    "em2001",FatalException,"Unable to build interpolation table");
     }
 
   const G4int reducedEnergyGrid=21;
@@ -266,11 +270,13 @@ void G4PenelopeBremsstrahlungAngular::PrepareInterpolationTables(G4double Zmat)
     }
   else
     {
-      G4cout << "Unable to create tables of Lorentz coefficients for " << G4endl;
-      G4cout << "<Z>= "  << Zmat << " in G4PenelopeBremsstrahlungAngular" << G4endl;
+      G4ExceptionDescription ed;
+      ed << "Unable to create tables of Lorentz coefficients for " << G4endl;
+      ed << "<Z>= "  << Zmat << " in G4PenelopeBremsstrahlungAngular" << G4endl;
       delete theTable1;
       delete theTable2;
-      G4Exception();	
+      G4Exception("G4PenelopeBremsstrahlungAngular::PrepareInterpolationTables()",
+		  "em2005",FatalException,ed);	
     }
   
   return;
@@ -313,9 +319,10 @@ G4double G4PenelopeBremsstrahlungAngular::SampleCosTheta(G4double Zmat,
 
   if (!(theLorentzTables1->count(Zmat)) || !(theLorentzTables2->count(Zmat)))
     {
-      G4cout << "Unable to retrieve Lorentz tables in " << G4endl;
-      G4cout << "G4PenelopeBremsstrahlungAngular" << G4endl;
-      G4Exception();
+      G4ExceptionDescription ed;
+      ed << "Unable to retrieve Lorentz tables for Z= " << Zmat << G4endl;
+      G4Exception("G4PenelopeBremsstrahlungAngular::SampleCosTheta()",
+		  "em2006",FatalException,ed);
     }
     
   //retrieve actual tables

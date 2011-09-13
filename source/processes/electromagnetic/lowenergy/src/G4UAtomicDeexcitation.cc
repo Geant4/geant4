@@ -207,12 +207,15 @@ void G4UAtomicDeexcitation::GenerateParticles(
 		      G4double gammaCut,
 		      G4double eCut)
 {
-  //G4cout << "generating particles" << G4endl;
 
   // Defined initial conditions
   G4int givenShellId = atomicShell->ShellId();
+  //  G4cout << "generating particles for vacancy in shellId: " << givenShellId << G4endl;
   minGammaEnergy = gammaCut;
   minElectronEnergy = eCut;
+
+  // V.I. short-cut
+  if(!IsAugerActive()) {  minElectronEnergy = DBL_MAX; }
 
   // generation secondaries
   G4DynamicParticle* aParticle=0;
@@ -236,16 +239,16 @@ void G4UAtomicDeexcitation::GenerateParticles(
 	    if  ( provShellId >0) 
 	      {
 		aParticle = GenerateFluorescence(Z,givenShellId,provShellId);
-		//if (aParticle != 0) { G4cout << "****FLUO!****" << G4endl;} //debug  
+		//		if (aParticle != 0) { G4cout << "****FLUO!****" << G4endl;} //debug  
 	      }
 	    else if ( provShellId == -1)
 	      {
 		aParticle = GenerateAuger(Z, givenShellId);
-		//if (aParticle != 0) { G4cout << "****AUGER!****" << G4endl;} //debug
+		//		if (aParticle != 0) { G4cout << "****AUGER!****" << G4endl;} //debug
 	      }
 	    else
 	      {
-		G4Exception("G4UAtomicDeexcitation: starting shell uncorrect: check it");
+		G4Exception("G4UAtomicDeexcitation::GenerateParticles()","de0002",JustWarning, "Energy deposited locally");
 	      }
 	  }
 	else 
@@ -256,35 +259,34 @@ void G4UAtomicDeexcitation::GenerateParticles(
 	    if  (provShellId >0)
 	      {
 		aParticle = GenerateFluorescence(Z,newShellId,provShellId);
-		//if (aParticle != 0) { G4cout << "****FLUO!****" << G4endl;} //debug
+		//		if (aParticle != 0) { G4cout << "****FLUO!****" << G4endl;} //debug
 	      }
 	    else if ( provShellId == -1)
 	      {
 		aParticle = GenerateAuger(Z, newShellId);
-		//if (aParticle != 0) { G4cout << "****AUGER!****" << G4endl;} //debug
+		//		if (aParticle != 0) { G4cout << "****AUGER!****" << G4endl;} //debug
 	      }
 	    else
 	      {
-		G4Exception("G4UAtomicDeexcitation: starting shell uncorrect: check it");
+		G4Exception("G4UAtomicDeexcitation::GenerateParticles()","de0002",JustWarning, "Energy deposited locally");
 	      }
 	  }
 	counter++;
 	if (aParticle != 0) 
 	  {
 	    vectorOfParticles->push_back(aParticle);
-	    //G4cout << "FLUO!" << G4endl; //debug
+	    //	    G4cout << "Deexcitation Occurred!" << G4endl; //debug
 	  }
 	else {provShellId = -2;}
       }  
-    // Look this in a particular way: only one auger emitted! // ????
     while (provShellId > -2); 
   }
   else
     {
-      G4cout << "G4UAtomicDeexcitation: Deexcitation Asked for a Z<5 or Z>100, unavailable"<< G4endl;
+      G4Exception("G4UAtomicDeexcitation::GenerateParticles()","de0001",JustWarning, "Energy deposited locally");
     }
   
-  //G4cout << "---------FATTO!---------" << G4endl; //debug 
+  //  G4cout << "---------FATTO!---------" << G4endl; //debug 
 
 }
 
@@ -353,7 +355,7 @@ G4UAtomicDeexcitation::ComputeShellIonisationCrossSectionPerAtom(
 G4int G4UAtomicDeexcitation::SelectTypeOfTransition(G4int Z, G4int shellId)
 {
   if (shellId <=0 ) {
-    G4Exception("G4UAtomicDeexcitation: zero or negative shellId");
+    G4Exception("G4UAtomicDeexcitation::SelecttypeOfTransition()","de0002",JustWarning, "Energy deposited locally");
     return 0;
   }
   //G4bool fluoTransitionFoundFlag = false;
@@ -427,7 +429,10 @@ G4UAtomicDeexcitation::GenerateFluorescence(G4int Z, G4int shellId,
 
   if (shellId <=0 )
 
-    {G4Exception("G4UAtomicDeexcitation: zero or negative shellId");}
+    {
+      G4Exception("G4UAtomicDeexcitation::GenerateFluorescence()","de0002",JustWarning, "Energy deposited locally");
+      return 0;
+    }
   
 
   //isotropic angular distribution for the outcoming photon
@@ -494,7 +499,12 @@ G4DynamicParticle* G4UAtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
   if(!IsAugerActive()) { return 0; }
 
   if (shellId <=0 ) {
-    {G4Exception("G4UAtomicDeexcitation: zero or negative shellId");}
+    {
+
+      G4Exception("G4UAtomicDeexcitation::GenerateAuger()","de0002",JustWarning, "Energy deposited locally");
+
+      return 0;
+    }
   }
   // G4int provShellId = -1;
   G4int maxNumOfShells = transitionManager->NumberOfReachableAugerShells(Z);  
@@ -506,9 +516,6 @@ G4DynamicParticle* G4UAtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
   // in the vector storing the list of the vacancies in the variuos shells 
   // that can originate a NON-radiative transition
   
-  // ---- MGP ---- Next line commented out to remove compilation warning
-  // G4int p = refAugerTransition->FinalShellId();
-
   G4int shellNum = 0;
 
   if ( shellId <= refAugerTransition->FinalShellId() ) 

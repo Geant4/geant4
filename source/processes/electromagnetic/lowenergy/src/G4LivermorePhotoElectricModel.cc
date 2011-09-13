@@ -318,7 +318,8 @@ void G4LivermorePhotoElectricModel::SetAngularGenerator(const G4String& name)
     }
   else
     {
-      G4Exception("G4LowEnergyPhotoElectric::SetAngularGenerator - generator does not exist");
+      G4Exception("G4LivermorePhotoElectricModel::SetAngularGenerator",
+		    "em1008",FatalException,"generator does not exist");
     }
 
   fElectronAngularGenerator->PrintGeneratorInformation();

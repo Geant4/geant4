@@ -415,10 +415,11 @@ void G4PenelopeBremsstrahlungModel::BuildXSTable(const G4Material* mat,G4double 
   //Tables have been already created (checked by GetCrossSectionTableForCouple)
   if (energyGrid->GetVectorLength() != nBins) 
     {
-      G4cout << "G4PenelopeBremsstrahlungModel::BuildXSTable" << G4endl;
-      G4cout << "Energy Grid looks not initialized" << G4endl;
-      G4cout << nBins << " " << energyGrid->GetVectorLength() << G4endl;
-      G4Exception();
+      G4ExceptionDescription ed;
+      ed << "Energy Grid looks not initialized" << G4endl;
+      ed << nBins << " " << energyGrid->GetVectorLength() << G4endl;
+      G4Exception("G4PenelopeBremsstrahlungModel::BuildXSTable()",
+		  "em2016",FatalException,ed);
     }
 
   G4PenelopeCrossSection* XSEntry = new G4PenelopeCrossSection(nBins);
@@ -507,19 +508,20 @@ G4PenelopeBremsstrahlungModel::GetCrossSectionTableForCouple(const G4ParticleDef
 {
   if (part != G4Electron::Electron() && part != G4Positron::Positron())
     {
-      G4cout << "G4PenelopeBremsstrahlungModel::GetCrossSectionTableForCouple" << G4endl;
-      G4cout << "Invalid particle: " << part->GetParticleName() << G4endl;
-      G4Exception();
+      G4ExceptionDescription ed;
+      ed << "Invalid particle: " << part->GetParticleName() << G4endl;
+      G4Exception("G4PenelopeBremsstrahlungModel::GetCrossSectionTableForCouple()",
+		  "em0001",FatalException,ed);
       return NULL;
     }
 
   if (part == G4Electron::Electron())
     {
       if (!XSTableElectron)
-        {
-          G4cout << "G4PenelopeBremsstrahlungModel::GetCrossSectionTableForCouple()" << G4endl;
-          G4cout << "The Cross Section Table for e- was not initialized correctly!" << G4endl;
-          G4Exception();          
+        {	  
+          G4String excep = "The Cross Section Table for e- was not initialized correctly!";
+          G4Exception("G4PenelopeBremsstrahlungModel::GetCrossSectionTableForCouple()",
+		      "em2013",FatalException,excep);          
 	  return NULL;
         }
       std::pair<const G4Material*,G4double> theKey = std::make_pair(mat,cut);
@@ -532,9 +534,10 @@ G4PenelopeBremsstrahlungModel::GetCrossSectionTableForCouple(const G4ParticleDef
             return XSTableElectron->find(theKey)->second;
           else
             {
-              G4cout << "G4PenelopeBremsstrahlungModel::GetCrossSectionTableForCouple()" << G4endl;
-              G4cout << "Unable to build e- table for " << mat->GetName() << G4endl;
-              G4Exception();       	 
+	      G4ExceptionDescription ed;
+              ed << "Unable to build e- table for " << mat->GetName() << G4endl;
+              G4Exception("G4PenelopeBremsstrahlungModel::GetCrossSectionTableForCouple()",
+			  "em2009",FatalException,ed);
             }
         }
     }
@@ -542,9 +545,9 @@ G4PenelopeBremsstrahlungModel::GetCrossSectionTableForCouple(const G4ParticleDef
     {
       if (!XSTablePositron)
         {
-          G4cout << "G4PenelopeBremsstrahlungModel::GetCrossSectionTableForCouple()" << G4endl;
-          G4cout << "The Cross Section Table for e+ was not initialized correctly!" << G4endl;
-          G4Exception();   
+	  G4String excep = "The Cross Section Table for e+ was not initialized correctly!";
+          G4Exception("G4PenelopeBremsstrahlungModel::GetCrossSectionTableForCouple()",
+		      "em2013",FatalException,excep); 
 	  return NULL;
         }
       std::pair<const G4Material*,G4double> theKey = std::make_pair(mat,cut);
@@ -557,9 +560,10 @@ G4PenelopeBremsstrahlungModel::GetCrossSectionTableForCouple(const G4ParticleDef
             return XSTablePositron->find(theKey)->second;
           else
             {
-              G4cout << "G4PenelopeBremsstrahlungModel::GetCrossSectionTableForCouple()" << G4endl;
-              G4cout << "Unable to build e+ table for " << mat->GetName() << G4endl;
-              G4Exception();   
+	      G4ExceptionDescription ed;
+              ed << "Unable to build e+ table for " << mat->GetName() << G4endl;
+              G4Exception("G4PenelopeBremsstrahlungModel::GetCrossSectionTableForCouple()",
+			  "em2009",FatalException,ed);
             }
         }
     }

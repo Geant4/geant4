@@ -93,7 +93,7 @@ int main()
   
   for (G4int iter=0; iter<100; iter++)
     {
-      G4int shellIndex = dataSet->RandomSelectShell(Z);
+      G4int shellIndex = dataSet->SelectRandomShell(Z);
       G4cout << "Random selected shell: " << shellIndex << G4endl;
       // G4cout << "random = " << random 
       //        << ", i = " << shellIndex 

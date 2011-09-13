@@ -204,9 +204,8 @@ G4double G4PenelopeRayleighModel::ComputeCrossSectionPerAtom(const G4ParticleDef
    //now it should be ok
    if (!logAtomicCrossSection->count(iZ))
      {
-       G4cout << "Problem in G4PenelopeRayleighModel::ComputeCrossSectionPerAtom" 
-	      << G4endl;
-       G4Exception();
+       G4Exception("G4PenelopeRayleighModel::ComputeCrossSectionPerAtom()",
+		   "em2040",FatalException,"Unable to load the cross section table");
      }
 
    G4double cross = 0;
@@ -214,9 +213,10 @@ G4double G4PenelopeRayleighModel::ComputeCrossSectionPerAtom(const G4ParticleDef
    G4PhysicsFreeVector* atom = logAtomicCrossSection->find(iZ)->second;
    if (!atom)
      {
-       G4cout << "Problem in G4PenelopeRayleighModel::ComputeCrossSectionPerAtom" 
-	 << G4endl;
-       G4Exception();
+       G4ExceptionDescription ed;
+       ed << "Unable to find Z=" << iZ << " in the atomic cross section table" << G4endl;
+       G4Exception("G4PenelopeRayleighModel::ComputeCrossSectionPerAtom()",
+		   "em2041",FatalException,ed);
        return 0;
      }
    G4double logene = std::log(energy);
@@ -258,9 +258,11 @@ void G4PenelopeRayleighModel::BuildFormFactorTable(const G4Material* material)
     }
   if (MaxStechiometricFactor<1e-16)
     {
-      G4cout << "G4PenelopeRayleighModel::BuildFormFactorTable" << G4endl;
-      G4cout << "Problem with the mass composition of " << material->GetName() << G4endl;
-      G4Exception();
+      G4ExceptionDescription ed;
+      ed << "Inconsistent data of atomic composition for " << 
+	material->GetName() << G4endl;
+      G4Exception("G4PenelopeRayleighModel::BuildFormFactorTable()",
+		  "em2042",FatalException,ed);
     }
   //Normalize
   for (G4int i=0;i<nElements;i++)
@@ -339,9 +341,8 @@ void G4PenelopeRayleighModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
   //1) Verify if tables are ready
   if (!pMaxTable || !samplingTable)
     {
-      G4cout << " G4PenelopeRayleighModel::SampleSecondaries" << G4endl;
-      G4cout << "Looks like the model is _not_ properly initialized" << G4endl;
-      G4Exception();
+      G4Exception("G4PenelopeRayleighModel::SampleSecondaries()",
+		  "em2043",FatalException,"Invalid model initialization");    
       return;
     }
   
@@ -432,8 +433,9 @@ void G4PenelopeRayleighModel::ReadDataFile(const G4int Z)
   char* path = getenv("G4LEDATA");
   if (!path)
     {
-      G4String excep = "G4PenelopeRayleighModel - G4LEDATA environment variable not set!";
-      G4Exception(excep);
+      G4String excep = "G4LEDATA environment variable not set!";
+      G4Exception("G4PenelopeRayleighModel::ReadDataFile()",
+		  "em0006",FatalException,excep);
       return;
     }
 
@@ -448,8 +450,9 @@ void G4PenelopeRayleighModel::ReadDataFile(const G4int Z)
   std::ifstream file(ost.str().c_str());
   if (!file.is_open())
     {
-      G4String excep = "G4PenelopeRayleighModel - data file " + G4String(ost.str()) + " not found!";
-      G4Exception(excep);
+      G4String excep = "Data file " + G4String(ost.str()) + " not found!";
+      G4Exception("G4PenelopeRayleighModel::ReadDataFile()",
+		  "em0003",FatalException,excep);
     }
   G4int readZ =0;
   size_t nPoints= 0;
@@ -457,9 +460,10 @@ void G4PenelopeRayleighModel::ReadDataFile(const G4int Z)
   //check the right file is opened.
   if (readZ != Z || nPoints <= 0 || nPoints >= 5000)
     {
-      G4cout << "G4PenelopeRayleighModel::ReadDataFile()" << G4endl;
-      G4cout << "Corrupted data file for Z=" << Z << G4endl;
-      G4Exception();
+      G4ExceptionDescription ed;
+      ed << "Corrupted data file for Z=" << Z << G4endl;
+      G4Exception("G4PenelopeRayleighModel::ReadDataFile()",
+		  "em0005",FatalException,ed);
       return;
     }  
   G4PhysicsFreeVector* theVec = new G4PhysicsFreeVector((size_t)nPoints);
@@ -473,17 +477,17 @@ void G4PenelopeRayleighModel::ReadDataFile(const G4int Z)
       theVec->PutValue(i,std::log(ene),std::log(xs));
       if (file.eof() && i != (nPoints-1)) //file ended too early
 	{
-	  G4cout << "G4PenelopeRayleighModel::ReadDataFile()" << G4endl;
-	  G4cout << "Corrupted data file for Z=" << Z << G4endl;
-	  G4cout << "Found less than " << nPoints << "entries " <<G4endl;
-	  G4Exception();
+	  G4ExceptionDescription ed ;	  
+	  ed << "Corrupted data file for Z=" << Z << G4endl;
+	  ed << "Found less than " << nPoints << "entries " <<G4endl;
+	  G4Exception("G4PenelopeRayleighModel::ReadDataFile()",
+		      "em0005",FatalException,ed);
 	}
     }
   if (!logAtomicCrossSection)
     {
-      G4cout << "G4PenelopeRayleighModel::ReadDataFile()" << G4endl;
-      G4cout << "Problem with allocation of logAtomicCrossSection data table " << G4endl;
-      G4Exception();
+      G4Exception("G4PenelopeRayleighModel::ReadDataFile()",
+		  "em2044",FatalException,"Unable to allocate the atomic cross section table");
       delete theVec;
       return;
     }
@@ -501,16 +505,18 @@ void G4PenelopeRayleighModel::ReadDataFile(const G4int Z)
   file.open(ost2.str().c_str());
   if (!file.is_open())
     {
-      G4String excep = "G4PenelopeRayleighModel - data file " + G4String(ost2.str()) + " not found!";
-      G4Exception(excep);
+      G4String excep = "Data file " + G4String(ost2.str()) + " not found!";
+      G4Exception("G4PenelopeRayleighModel::ReadDataFile()",
+		  "em0003",FatalException,excep);
     }
   file >> readZ >> nPoints;
   //check the right file is opened.
   if (readZ != Z || nPoints <= 0 || nPoints >= 5000)
     {
-      G4cout << "G4PenelopeRayleighModel::ReadDataFile()" << G4endl;
-      G4cout << "Corrupted data file for Z=" << Z << G4endl;
-      G4Exception();
+      G4ExceptionDescription ed;
+      ed << "Corrupted data file for Z=" << Z << G4endl;
+      G4Exception("G4PenelopeRayleighModel::ReadDataFile()",
+		  "em0005",FatalException,ed);
       return;
     }  
   G4PhysicsFreeVector* theFFVec = new G4PhysicsFreeVector((size_t)nPoints);
@@ -530,17 +536,18 @@ void G4PenelopeRayleighModel::ReadDataFile(const G4int Z)
 	}
       if (file.eof() && i != (nPoints-1)) //file ended too early
 	{
-	  G4cout << "G4PenelopeRayleighModel::ReadDataFile()" << G4endl;
-	  G4cout << "Corrupted data file for Z=" << Z << G4endl;
-	  G4cout << "Found less than " << nPoints << "entries " <<G4endl;
-	  G4Exception();
+	  G4ExceptionDescription ed;	  
+	  ed << "Corrupted data file for Z=" << Z << G4endl;
+	  ed << "Found less than " << nPoints << "entries " <<G4endl;
+	  G4Exception("G4PenelopeRayleighModel::ReadDataFile()",
+		      "em0005",FatalException,ed);
 	}
     }
   if (!atomicFormFactor)
     {
-      G4cout << "G4PenelopeRayleighModel::ReadDataFile()" << G4endl;
-      G4cout << "Problem with allocation of atomicFormFactor data table " << G4endl;
-      G4Exception();
+      G4Exception("G4PenelopeRayleighModel::ReadDataFile()",
+		  "em2045",FatalException,
+		  "Unable to allocate the atomicFormFactor data table");
       delete theFFVec;
       return;
     }
@@ -569,9 +576,10 @@ G4double G4PenelopeRayleighModel::GetFSquared(const G4Material* mat, const G4dou
 
   if (!theVec)
     {
-      G4cout << " G4PenelopeRayleighModel::GetFSquared()" << G4endl;
-      G4cout << "Unable to retrieve F squared table for " << mat->GetName();
-      G4Exception();
+      G4ExceptionDescription ed;
+      ed << "Unable to retrieve F squared table for " << mat->GetName() << G4endl;
+      G4Exception("G4PenelopeRayleighModel::GetFSquared()",
+		  "em2046",FatalException,ed);
       return 0;
     }
   if (logQSquared < -20) // Q < 1e-9
@@ -617,15 +625,15 @@ void G4PenelopeRayleighModel::InitializeSamplingAlgorithm(const G4Material* mat)
   //check for errors
   if (np < 16)
     {
-      G4cout << "G4PenelopeRayleighModel::InitializeSamplingAlgorithm" << G4endl;
-      G4cout << "Too few points to initialize the sampling algorithm" << G4endl;
-      G4Exception();
+      G4Exception("G4PenelopeRayleighModel::InitializeSamplingAlgorithm()",
+		  "em2047",FatalException,
+		  "Too few points to initialize the sampling algorithm");
     }
   if (q2min > (q2max-1e-10))
     {
-      G4cout << "G4PenelopeRayleighModel::InitializeSamplingAlgorithm" << G4endl;
-      G4cout << "Too narrow grid to initialize the sampling algorithm" << G4endl;
-      G4Exception();
+      G4Exception("G4PenelopeRayleighModel::InitializeSamplingAlgorithm()",
+		  "em2048",FatalException,
+		  "Too narrow grid to initialize the sampling algorithm");
     }
 
   //This is subroutine RITAI0 of Penelope
@@ -772,9 +780,10 @@ void G4PenelopeRayleighModel::InitializeSamplingAlgorithm(const G4Material* mat)
   if (x->size() != NUNIF || a->size() != NUNIF || 
       err->size() != NUNIF || area->size() != NUNIF)
     {
-      G4cout << "G4PenelopeRayleighModel::InitializeSamplingAlgorithm" << G4endl;
-      G4cout << "Problem in building the Table for Sampling: array dimensions do not match " << G4endl;
-      G4Exception();
+      G4ExceptionDescription ed;
+      ed << "Problem in building the Table for Sampling: array dimensions do not match" << G4endl;
+      G4Exception("G4PenelopeRayleighModel::InitializeSamplingAlgorithm()",
+		  "em2049",FatalException,ed);
     }
   
   /*******************************************************************************
@@ -911,9 +920,9 @@ void G4PenelopeRayleighModel::InitializeSamplingAlgorithm(const G4Material* mat)
   if (x->size() != np || a->size() != np || 
       err->size() != np || area->size() != np)
     {
-      G4cout << "G4PenelopeRayleighModel::InitializeSamplingAlgorithm" << G4endl;
-      G4cout << "Problem in building the extended Table for Sampling: array dimensions do not match " << G4endl;
-      G4Exception();
+      G4Exception("G4PenelopeRayleighModel::InitializeSamplingAlgorithm()",
+		  "em2050",FatalException,
+		  "Problem in building the extended Table for Sampling: array dimensions do not match ");
     }
 
   /*******************************************************************************
@@ -978,9 +987,9 @@ void G4PenelopeRayleighModel::InitializeSamplingAlgorithm(const G4Material* mat)
 
   if (ITTU->size() != np || ITTU->size() != np)
     {
-      G4cout << "G4PenelopeRayleighModel::InitializeSamplingAlgorithm" << G4endl;
-      G4cout << "Problem in building the Limit Tables for Sampling: array dimensions do not match " << G4endl;
-      G4Exception();
+      G4Exception("G4PenelopeRayleighModel::InitializeSamplingAlgorithm()",
+		  "em2051",FatalException,
+		  "Problem in building the Limit Tables for Sampling: array dimensions do not match");
     }
 
 
@@ -1037,9 +1046,9 @@ void G4PenelopeRayleighModel::GetPMaxTable(const G4Material* mat)
   //otherwise build it
   if (!samplingTable)
     {
-      G4cout << "G4PenelopeRayleighModel::BuildPMaxTable" << G4endl;
-      G4cout << "WARNING: samplingTable is not properly instantiated" << G4endl;
-      G4Exception();
+      G4Exception("G4PenelopeRayleighModel::GetPMaxTable()",
+		  "em2052",FatalException,
+		  "SamplingTable is not properly instantiated");
       return;
     }
 

@@ -77,7 +77,8 @@ void G4Penelope01BremsstrahlungAngular::InterpolationTableForZ()
   if (!path)
     {
       G4String excep = "G4Penelope01BremsstrahlungAngular - G4LEDATA environment variable not set!";
-      G4Exception(excep);
+      G4Exception("G4Penelope01BremsstrahlungAngular::InterpolationTableForZ()",
+		  "em0006",FatalException,excep);
       return;
     }
   G4String pathString(path);
@@ -88,7 +89,8 @@ void G4Penelope01BremsstrahlungAngular::InterpolationTableForZ()
   if (!(lsdp->is_open()))
     {
       G4String excep = "G4Penelope01BremsstrahlungAngular - data file " + pathFile + " not found!";
-      G4Exception(excep);
+      G4Exception("G4Penelope01BremsstrahlungAngular::InterpolationTableForZ()",
+		  "em0003",FatalException,excep);
     }
   G4int i=0,j=0,k=0; // i=index for Z, j=index for E, k=index for K 
   G4double a1,a2;

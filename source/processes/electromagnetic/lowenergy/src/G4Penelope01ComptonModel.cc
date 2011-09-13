@@ -658,7 +658,8 @@ void G4Penelope01ComptonModel::ReadData()
   if (!path)
     {
       G4String excep = "G4Penelope01ComptonModel - G4LEDATA environment variable not set!";
-      G4Exception(excep);
+      G4Exception("G4Penelope01ComptonModel::ReadData()",
+		  "em0006",FatalException,excep);
       return;
     }
   G4String pathString(path);
@@ -668,7 +669,8 @@ void G4Penelope01ComptonModel::ReadData()
   if (!file.is_open())
     {
       G4String excep = "G4Penelope01ComptonModel - data file " + pathFile + " not found!";
-      G4Exception(excep);
+      G4Exception("G4Penelope01ComptonModel::ReadData()",
+		  "em0003",FatalException,excep);
     }
 
   G4int k1,test,test1;
@@ -678,7 +680,8 @@ void G4Penelope01ComptonModel::ReadData()
   if (!ionizationEnergy || !hartreeFunction || !occupationNumber)
     {
       G4String excep = "G4Penelope01ComptonModel: problem with reading data from file";
-      G4Exception(excep);
+      G4Exception("G4Penelope01ComptonModel::ReadData()",
+		  "em0005",FatalException,excep);
       return;
     }
 
@@ -689,8 +692,9 @@ void G4Penelope01ComptonModel::ReadData()
     //Check for nLevels validity, before using it in a loop
     if (nLevels<0 || nLevels>64)
       {
-	G4String excep = "G4Penelope01ComptonModel: corrupted data file?";
-	G4Exception(excep);
+	G4String excep = "G4Penelope01ComptonModel: corrupted data file? Wrong number of levels";
+	G4Exception("G4Penelope01ComptonModel::ReadData()",
+		    "em0005",FatalException,excep);
 	return;
       }
     G4DataVector* occVector = new G4DataVector;
@@ -729,7 +733,8 @@ void G4Penelope01ComptonModel::ReadData()
     file >> test >> test1; //-1 -1 close the data for each Z
     if (test > 0) {
       G4String excep = "G4Penelope01ComptonModel - data file corrupted!";
-      G4Exception(excep);
+      G4Exception("G4Penelope01ComptonModel::ReadData()",
+		  "em0005",FatalException,excep);
     }
   }while (test != -2); //the very last Z is closed with -2 instead of -1
   file.close();

@@ -99,9 +99,8 @@ void G4LivermoreIonisationModel::Initialise(const G4ParticleDefinition* particle
   //Check that the Livermore Ionisation is NOT attached to e+
   if (particle != G4Electron::Electron())
     {
-      G4cout << "ERROR: Livermore Ionisation Model is applicable only to electrons" << G4endl;
-      G4cout << "It cannot be registered to " << particle->GetParticleName() << G4endl;
-      G4Exception();
+      G4Exception("G4LivermoreIonisationModel::Initialise",
+		    "em0002",FatalException,"Livermore Ionisation Model is applicable only to electrons");
     }
 
   //Read energy spectrum
@@ -173,9 +172,8 @@ G4LivermoreIonisationModel::ComputeCrossSectionPerAtom(const G4ParticleDefinitio
   G4int iZ = (G4int) Z;
   if (!crossSectionHandler)
     {
-      G4cout << "G4LivermoreIonisationModel::ComputeCrossSectionPerAtom" << G4endl;
-      G4cout << "The cross section handler is not correctly initialized" << G4endl;
-      G4Exception();
+      G4Exception("G4LivermoreIonisationModel::ComputeCrossSectionPerAtom",
+		    "em1007",FatalException,"The cross section handler is not correctly initialized");
       return 0;
     }
   

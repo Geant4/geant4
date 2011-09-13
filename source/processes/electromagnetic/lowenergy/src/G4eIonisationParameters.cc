@@ -154,7 +154,8 @@ void G4eIonisationParameters::LoadData()
 
   const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
   if (materialTable == 0)
-     G4Exception("G4eIonisationParameters: no MaterialTable found)");
+     G4Exception("G4eIonisationParameters::LoadData",
+		    "em1001",FatalException,"Unable to find MaterialTable");
 
   G4int nMaterials = G4Material::GetNumberOfMaterials();
   
@@ -176,8 +177,8 @@ void G4eIonisationParameters::LoadData()
   char* path = getenv("G4LEDATA");
   if (!path)
     { 
-      G4String excep("G4eIonisationParameters - G4LEDATA environment variable not set");
-      G4Exception(excep);
+      G4Exception("G4BremsstrahlungParameters::LoadData",
+		    "em0006",FatalException,"G4LEDATA environment variable not set");
       return;
     }
     
@@ -200,9 +201,10 @@ void G4eIonisationParameters::LoadData()
     std::filebuf* lsdp = file.rdbuf();
 
     if (! (lsdp->is_open()) ) {
-      G4String excep = G4String("G4IonisationParameters - data file: ")
-      + name + G4String(" not found. Please check and/or update G4LEDATA");
-      G4Exception(excep);
+      G4String excep = G4String("data file: ")
+      + name + G4String(" not found");
+      G4Exception("G4eIonisationParameters::LoadData",
+		    "em0003",FatalException,excep);
     }
 
     // The file is organized into:
@@ -234,8 +236,9 @@ void G4eIonisationParameters::LoadData()
       //Check if energy is valid
       if (energy < -2)
 	{
-	  G4String excep("G4eIonisationParameters - Invalid data file");
-	  G4Exception(excep);
+	  G4String excep("invalid data file");
+          G4Exception("G4eIonisationParameters::LoadData",
+		    "em0005",FatalException,excep);
 	  return;
 	}
 
@@ -302,14 +305,16 @@ void G4eIonisationParameters::LoadData()
   std::filebuf* lsdp_b = file_b.rdbuf();
   
   if (! (lsdp_a->is_open()) ) {
-     G4String excep = G4String("G4eIonisationParameters: cannot open file ")
+     G4String excep = G4String("cannot open file ")
                     + name_a;
-     G4Exception(excep);
+     G4Exception("G4eIonisationParameters::LoadData",
+		    "em0003",FatalException,excep);
   }  
   if (! (lsdp_b->is_open()) ) {
-     G4String excep = G4String("G4eIonisationParameters: cannot open file ")
+     G4String excep = G4String("cannot open file ")
                     + name_b;
-     G4Exception(excep);
+     G4Exception("G4eIonisationParameters::LoadData",
+		    "em0003",FatalException,excep);
   }  
 
   // The file is organized into two columns:

@@ -170,12 +170,7 @@ G4double G4Penelope01PhotoElectricModel::ComputeCrossSectionPerAtom(
     G4cout << "Calling ComputeCrossSectionPerAtom() of G4Penelope01PhotoElectricModel" << G4endl;
 
   G4int iZ = (G4int) Z;
-  //  if (!crossSectionHandler) // VI: should not be 
-  //  {
-  //    G4cout << "G4Penelope01PhotoElectricModel::ComputeCrossSectionPerAtom" << G4endl;
-  //    G4cout << "The cross section handler is not correctly initialized" << G4endl;
-  //    G4Exception();
-  //  }
+ 
   G4double cs = crossSectionHandler->FindValue(iZ,energy);
  
   if (verboseLevel > 2)

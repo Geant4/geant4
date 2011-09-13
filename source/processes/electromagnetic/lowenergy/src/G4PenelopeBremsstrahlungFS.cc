@@ -139,9 +139,10 @@ G4double G4PenelopeBremsstrahlungFS::GetEffectiveZSquared(const G4Material* mate
 {
   if (!theEffectiveZSq)
     {
-      G4cout << "G4PenelopeBremsstrahlungFS::GetEffectiveZSquared()" << G4endl;
-      G4cout << "The container for the <Z^2> values is not initialized" << G4endl;
-      G4Exception();
+      G4ExceptionDescription ed;
+      ed << "The container for the <Z^2> values is not initialized" << G4endl;
+      G4Exception("G4PenelopeBremsstrahlungFS::GetEffectiveZSquared()",
+		  "em2007",FatalException,ed);
       return 0;
     }
   //found in the table: return it 
@@ -149,9 +150,12 @@ G4double G4PenelopeBremsstrahlungFS::GetEffectiveZSquared(const G4Material* mate
     return theEffectiveZSq->find(material)->second;    
   else
     {
-      G4cout << "The value of  <Z^2> is not properly set! " << G4endl;
+      G4ExceptionDescription ed;
+      ed << "The value of  <Z^2> is not properly set for material " << 
+	material->GetName() << G4endl;
       //requires running of BuildScaledXSTable()
-      G4Exception();
+      G4Exception("G4PenelopeBremsstrahlungFS::GetEffectiveZSquared()",
+		  "em2008",FatalException,ed);
     }
   return 0;
 }
@@ -224,9 +228,11 @@ void G4PenelopeBremsstrahlungFS::BuildScaledXSTable(const G4Material* material,
 	  ReadDataFile(iZ);
 	  if (!theElementData->count(iZ))
 	    {
-	      G4cout << "Error in G4PenelopeBremsstrahlungFS::BuildScaledXSTable" << G4endl;
-	      G4cout << "Unable to retrieve data for element " << iZ << G4endl;
-	      G4Exception();
+	      G4ExceptionDescription ed;
+	      ed << "Error in G4PenelopeBremsstrahlungFS::BuildScaledXSTable" << G4endl;
+	      ed << "Unable to retrieve data for element " << iZ << G4endl;
+	      G4Exception("G4PenelopeBremsstrahlungFS::BuildScaledXSTable()",
+			  "em2009",FatalException,ed);
 	    }
 	}
 
@@ -258,12 +264,14 @@ void G4PenelopeBremsstrahlungFS::BuildScaledXSTable(const G4Material* material,
       G4double TST = 100.*fabs(fnorm-1.0);
       if (TST > 1.0)
 	{
-	  G4cout << "G4PenelopeBremsstrahlungFS. Corrupted data files?" << G4endl;
+	  G4ExceptionDescription ed;
+	  ed << "G4PenelopeBremsstrahlungFS. Corrupted data files?" << G4endl;
 	  G4cout << "TST= " << TST << "; fnorm = " << fnorm << G4endl;
 	  G4cout << "rsum = " << rsum << G4endl;
 	  G4cout << "fact = " << fact << G4endl;
 	  G4cout << ie << " " << theEGrid[ie]/keV << " " << (*tempData)[ie]/barn << G4endl;
-	  G4Exception();
+	  G4Exception("G4PenelopeBremsstrahlungFS::BuildScaledXSTable()",
+		      "em2010",FatalException,ed);
 	}	  
       for (size_t ix=0;ix<nBinsX;ix++)
 	(*tempMatrix)[ie*nBinsX+ix] *= fnorm;                    
@@ -322,7 +330,8 @@ void G4PenelopeBremsstrahlungFS::ReadDataFile(G4int Z)
   if (!path)
     {
       G4String excep = "G4PenelopeBremsstrahlungFS - G4LEDATA environment variable not set!";
-      G4Exception(excep);
+      G4Exception("G4PenelopeBremsstrahlungFS::ReadDataFile()",
+		  "em0006",FatalException,excep);
       return;
     }
   /*
@@ -338,7 +347,8 @@ void G4PenelopeBremsstrahlungFS::ReadDataFile(G4int Z)
     {
       G4String excep = "G4PenelopeBremsstrahlungFS - data file " + 
 	G4String(ost.str()) + " not found!";
-      G4Exception(excep);
+      G4Exception("G4PenelopeBremsstrahlungFS::ReadDataFile()",
+		  "em0003",FatalException,excep);
       return;
     }
 
@@ -348,9 +358,10 @@ void G4PenelopeBremsstrahlungFS::ReadDataFile(G4int Z)
   //check the right file is opened.
   if (readZ != Z)
     {
-      G4cout << "G4PenelopeBremsstrahlungFS::ReadDataFile()" << G4endl;
-      G4cout << "Corrupted data file for Z=" << Z << G4endl;
-      G4Exception();
+      G4ExceptionDescription ed;
+      ed << "Corrupted data file for Z=" << Z << G4endl;
+      G4Exception("G4PenelopeBremsstrahlungFS::ReadDataFile()",
+		  "em0005",FatalException,ed);
       return;
     }
 
@@ -396,17 +407,18 @@ G4double G4PenelopeBremsstrahlungFS::GetMomentumIntegral(G4double* y,
   //Check that the call is valid
   if (momOrder<-1 || size<2 || theXGrid[0]<0)
     {
-      G4cout << "Problem in G4PenelopeBremsstrahlungFS::GetMomentumIntegral" << G4endl;
-      G4cout << "Invalid call" << G4endl;
-      G4Exception();
+      G4Exception("G4PenelopeBremsstrahlungFS::GetMomentumIntegral()",
+		  "em2011",FatalException,"Invalid call");
     }
 
   for (size_t i=1;i<size;i++)
     {
       if (theXGrid[i]<0 || theXGrid[i]<theXGrid[i-1])
 	{
-	  G4cout << "Problem in G4PenelopeBremsstrahlungFS::GetMomentumIntegral" << G4endl;
-	  G4Exception();
+	  G4ExceptionDescription ed;
+	  ed << "Invalid call for bin " << i << G4endl;
+	  G4Exception("G4PenelopeBremsstrahlungFS::GetMomentumIntegral()",
+		  "em2012",FatalException,ed);
 	}
     }
 
@@ -473,7 +485,8 @@ G4PhysicsTable* G4PenelopeBremsstrahlungFS::GetScaledXSTable(const G4Material* m
   
   if (!(theReducedXSTable->count(theKey)))
     {
-      G4Exception("Problem in building scaled cross section table!");
+      G4Exception("G4PenelopeBremsstrahlungFS::GetScaledXSTable()",
+		  "em2013",FatalException,"Unable to retrieve the cross section table");
     }
 
   return theReducedXSTable->find(theKey)->second;
@@ -567,10 +580,12 @@ G4double G4PenelopeBremsstrahlungFS::SampleGammaEnergy(G4double energy,const G4M
       InitializeEnergySampling(mat,cut);
       if (!(theSamplingTable->count(theKey)) || !(thePBcut->count(theKey)))
 	{
-	  G4cout << theSamplingTable->count(theKey) << " " << 
+	  G4ExceptionDescription ed;
+	  ed << "Unable to create the SamplingTable: " << 
+	    theSamplingTable->count(theKey) << " " << 
 	    thePBcut->count(theKey) << G4endl;
-	  G4Exception("Unable to create the SamplingTable for G4PenelopeBremsstrahlungFS");
-	  
+	  G4Exception("G4PenelopeBremsstrahlungFS::SampleGammaEnergy()",
+		      "em2014",FatalException,ed);	  
 	}
     }
 
@@ -616,8 +631,8 @@ G4double G4PenelopeBremsstrahlungFS::SampleGammaEnergy(G4double energy,const G4M
 	ibin = 0;
       else if (pt > (*theVec)[nBinsX-1])
 	{
-	  G4cout << "Error in G4PenelopeBremsstrahlungFS::SampleGammaEnergy()" << G4endl;
-	  G4Exception();
+	  G4Exception("G4PenelopeBremsstrahlungFS::SampleGammaEnergy()",
+		      "em2015",FatalException,"Invalid call");
 	}
       else
 	{

@@ -23,12 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4EMDataSet.cc,v 1.23 2010-12-27 17:44:50 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
-//
 // History:
 // -----------
 // 31 Jul 2001   MGP        Created
@@ -82,7 +76,8 @@ G4EMDataSet::G4EMDataSet(G4int Z,
   randomSet(random)
 {
   if (algorithm == 0) {
-    G4Exception("G4EMDataSet::G4EMDataSet - interpolation == 0");
+    G4Exception("G4EMDataSet::G4EMDataSet",
+		    "em1012",FatalException,"interpolation == 0");
   } else if (randomSet) { BuildPdf(); }
 }
 
@@ -105,11 +100,14 @@ G4EMDataSet::G4EMDataSet(G4int argZ,
   randomSet(random)
 {
   if (algorithm == 0) {
-    G4Exception("G4EMDataSet::G4EMDataSet - interpolation == 0");
+    G4Exception("G4EMDataSet::G4EMDataSet",
+		    "em1012",FatalException,"interpolation == 0");
   } else if ((energies == 0) ^ (data == 0)) {
-    G4Exception("G4EMDataSet::G4EMDataSet - different size for energies and data (zero case)");
+    G4Exception("G4EMDataSet::G4EMDataSet",
+		    "em1012",FatalException,"different size for energies and data (zero case)");
   } else if (energies->size() != data->size()) { 
-    G4Exception("G4EMDataSet::G4EMDataSet - different size for energies and data");
+    G4Exception("G4EMDataSet::G4EMDataSet",
+		    "em1012",FatalException,"different size for energies and data");
   } else if (randomSet) {
     BuildPdf();
   }
@@ -136,15 +134,20 @@ G4EMDataSet::G4EMDataSet(G4int argZ,
   randomSet(random)
 {
   if (algorithm == 0) {
-    G4Exception("G4EMDataSet::G4EMDataSet - interpolation == 0");
+    G4Exception("G4EMDataSet::G4EMDataSet",
+		    "em1012",FatalException,"interpolation == 0");
   } else if ((energies == 0) ^ (data == 0)) {
-    G4Exception("G4EMDataSet::G4EMDataSet - different size for energies and data (zero case)");
+    G4Exception("G4EMDataSet::G4EMDataSet",
+		    "em1012",FatalException,"different size for energies and data (zero case)");
   } else if (energies->size() != data->size()) { 
-    G4Exception("G4EMDataSet::G4EMDataSet - different size for energies and data");
+    G4Exception("G4EMDataSet::G4EMDataSet",
+		    "em1012",FatalException,"different size for energies and data");
   } else if ((log_energies == 0) ^ (log_data == 0)) {
-    G4Exception("G4EMDataSet::G4EMDataSet - different size for log energies and log data (zero case)");
+    G4Exception("G4EMDataSet::G4EMDataSet",
+		    "em1012",FatalException,"different size for log energies and log data (zero case)");
   } else if (log_energies->size() != log_data->size()) {
-    G4Exception("G4EMDataSet::G4EMDataSet - different size for log energies and log data");
+    G4Exception("G4EMDataSet::G4EMDataSet",
+		    "em1012",FatalException,"different size for log energies and log data");
   } else if (randomSet) {
     BuildPdf();
   }
@@ -165,7 +168,8 @@ G4EMDataSet::~G4EMDataSet()
 G4double G4EMDataSet::FindValue(G4double energy, G4int /* componentId */) const
 {
   if (!energies) {
-    G4Exception("G4EMDataSet::FindValue - energies == 0");
+   G4Exception("G4EMDataSet::FindValue",
+		    "em1012",FatalException,"energies == 0");
     return 0.0;
   } else if (energies->empty()) {
     return 0.0;
@@ -217,13 +221,15 @@ void G4EMDataSet::SetEnergiesData(G4DataVector* dataX,
   data = dataY;
  
   if ((energies == 0) ^ (data==0)) {
-    G4Exception("G4EMDataSet::SetEnergiesData - different size for energies and data (zero case)");
+    G4Exception("G4EMDataSet::SetEnergiesData",
+		    "em1012",FatalException,"different size for energies and data (zero case)");
     return;
   } else if (energies == 0) { return; }
 
   //G4cout << "Size of energies: " << energies->size() << G4endl << "Size of data: " << data->size() << G4endl;
   if (energies->size() != data->size()) { 
-    G4Exception("G4EMDataSet::SetEnergiesData - different size for energies and data");
+   G4Exception("G4EMDataSet::SetEnergiesData",
+		    "em1012",FatalException,"different size for energies and data");
   }
 }
 
@@ -247,15 +253,18 @@ void G4EMDataSet::SetLogEnergiesData(G4DataVector* dataX,
   //Check if data loaded properly from data files
   if ( !energies ) {
     if(data || log_energies || log_data ) { 
-      G4Exception("G4EMDataSet::SetLogEnergiesData - inconsistent data");
+      G4Exception("G4EMDataSet::SetLogEnergiesData",
+		    "em1012",FatalException,"inconsistent data");
     }
     return;
   } else {
     if ( !data ) {
-      G4Exception("G4EMDataSet::SetLogEnergiesData - only energy, no data");
+      G4Exception("G4EMDataSet::SetLogEnergiesData",
+		    "em1012",FatalException,"only energy, no data");
       return; 
     } else if (energies->size() != data->size()) { 
-      G4Exception("G4EMDataSet::SetLogEnergiesData - different size for energies and data");
+      G4Exception("G4EMDataSet::SetLogEnergiesData",
+		    "em1012",FatalException,"different size for energies and data");
       return;
     }
     //G4cout << "Size of energies: " << energies->size() << G4endl << "Size of data: " << data->size() << G4endl << G4endl;
@@ -263,14 +272,17 @@ void G4EMDataSet::SetLogEnergiesData(G4DataVector* dataX,
     //Check if logarithmic data loaded properly from data files 
     if ( !log_energies ) {
       if(log_data) {
-	G4Exception("G4EMDataSet::SetLogEnergiesData - inconsistence of log_data");
+        G4Exception("G4EMDataSet::SetLogEnergiesData",
+		    "em1012",FatalException,"inconsistence of log_data");
       }
       return;
     } else {
       if ( !log_data ) { 
-	G4Exception("G4EMDataSet::SetLogEnergiesData - only log_energies, no data");
+        G4Exception("G4EMDataSet::SetLogEnergiesData",
+		    "em1012",FatalException,"only log_energies, no data");
       } else if ((log_energies->size() != log_data->size()) || (log_energies->size() != data->size())) { 
-	G4Exception("G4EMDataSet::SetLogEnergiesData - different size for log energies and data");
+        G4Exception("G4EMDataSet::SetLogEnergiesData",
+		    "em1012",FatalException,"different size for log energies and data");
       }
     }
   }
@@ -290,10 +302,11 @@ G4bool G4EMDataSet::LoadData(const G4String& fileName)
 
   if (!in.is_open())
     {
-      G4String message("G4EMDataSet::LoadData - data file \"");
+      G4String message("data file \"");
       message += fullFileName;
       message += "\" not found";
-      G4Exception(message);
+      G4Exception("G4EMDataSet::LoadData",
+		    "em1012",FatalException,message);
       return false;
     }
 
@@ -346,10 +359,11 @@ G4bool G4EMDataSet::LoadNonLogData(const G4String& fileName)
   std::ifstream in(fullFileName);
   if (!in.is_open())
     {
-      G4String message("G4EMDataSet::LoadData - data file \"");
+      G4String message("data file \"");
       message += fullFileName;
       message += "\" not found";
-      G4Exception(message);
+      G4Exception("G4EMDataSet::LoadNonLogData",
+		    "em1012",FatalException,message);
     }
 
   G4DataVector* argEnergies=new G4DataVector;
@@ -400,10 +414,11 @@ G4bool G4EMDataSet::SaveData(const G4String& name) const
 
   if (!out.is_open())
     {
-      G4String message("G4EMDataSet::SaveData - cannot open \"");
+      G4String message("cannot open \"");
       message+=fullFileName;
       message+="\"";
-      G4Exception(message);
+      G4Exception("G4EMDataSet::SaveData",
+		    "em1012",FatalException,message);
     }
  
   out.precision(10);
@@ -496,7 +511,8 @@ G4String G4EMDataSet::FullFileName(const G4String& name) const
 {
   char* path = getenv("G4LEDATA");
   if (!path) {
-    G4Exception("G4EMDataSet::FullFileName - G4LEDATA environment variable not set");
+     G4Exception("G4EMDataSet::FullFileName",
+		    "em0006",FatalException,"G4LEDATA environment variable not set");
     return "";
   }
   std::ostringstream fullFileName;
@@ -543,7 +559,8 @@ G4double G4EMDataSet::RandomSelect(G4int /* componentId */) const
   // derived from the data
 
   if (!pdf) {
-    G4Exception("G4EMDataSet::RandomSelect - PDF has not been created for this data set");
+    G4Exception("G4EMDataSet::RandomSelect",
+		    "em1012",FatalException,"PDF has not been created for this data set");
     return value;
   }
 

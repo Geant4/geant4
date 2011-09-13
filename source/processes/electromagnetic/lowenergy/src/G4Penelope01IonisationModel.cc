@@ -247,16 +247,7 @@ G4double G4Penelope01IonisationModel::CrossSectionPerVolume(const G4Material* ma
     G4cout << "Calling CrossSectionPerVolume() of G4Penelope01IonisationModel" << G4endl;
 
   SetupForMaterial(theParticle, material, energy);
-
-  // VI - should be check at initialisation not in run time
-  /*
-  if (!crossSectionHandler)
-    {
-      G4cout << "G4Penelope01IonisationModel::CrossSectionPerVolume" << G4endl;
-      G4cout << "The cross section handler is not correctly initialized" << G4endl;
-      G4Exception();
-    }
-  */  
+   
   if (!theXSTable)
     {
       if (verboseLevel > 2)
@@ -690,7 +681,8 @@ void G4Penelope01IonisationModel::ReadData()
   if (!path)
     {
       G4String excep = "G4Penelope01IonisationModel - G4LEDATA environment variable not set!";
-      G4Exception(excep);
+      G4Exception("G4Penelope01IonisationModel::ReadData()",
+		  "em0006",FatalException,excep);
       return;
     }
   G4String pathString(path);
@@ -700,13 +692,16 @@ void G4Penelope01IonisationModel::ReadData()
   if (!file.is_open())
     {
       G4String excep = "G4Penelope01IonisationModel - data file " + pathFile + " not found!";
-      G4Exception(excep);
+      G4Exception("G4Penelope01IonisationModel::ReadData()",
+		  "em0003",FatalException,excep);
+      return;
     }
 
  if (!ionizationEnergy || !resonanceEnergy || !occupationNumber || !shellFlag)
     {
-      G4String excep = "G4Penelope01IonisationModel: problem with reading data from file";
-      G4Exception(excep);
+      G4String excep = "Problem with reading data from file";
+      G4Exception("G4Penelope01IonisationModel::ReadData()",
+		  "em0005",FatalException,excep);
       return;
     }
 
@@ -718,8 +713,9 @@ void G4Penelope01IonisationModel::ReadData()
    //Check for nLevels validity, before using it in a loop
    if (nLevels<0 || nLevels>64)
      {
-       G4String excep = "G4Penelope01IonisationModel: corrupted data file ?";
-       G4Exception(excep);
+       G4String excep = "Corrupted data file ? Wrong number of levels";
+       G4Exception("G4Penelope01IonisationModel::ReadData()",
+		  "em0005",FatalException,excep);
        return;
      }
    //Allocate space for storage
@@ -751,8 +747,12 @@ void G4Penelope01IonisationModel::ReadData()
    shellFlag->insert(std::make_pair(Z,shellIndVector));
    file >> test >> test1; //-1 -1 close the data for each Z
    if (test > 0) {
-     G4String excep = "G4Penelope01IonisationModel - data file corrupted!";
-     G4Exception(excep);
+     
+     G4ExceptionDescription ed;
+     ed <<"G4Penelope01IonisationModel - data file corrupted for Z=" 
+	<< Z << G4endl;
+     G4Exception("G4Penelope01IonisationModel::ReadData()",
+		 "em0005",FatalException,ed);     
    }
  }while (test != -2); //the very last Z is closed with -2 instead of -1
 }
@@ -1090,8 +1090,9 @@ G4Penelope01IonisationModel::CalculateDiscreteForElectrons(G4double kinEnergy,
     }
   else
     {
-      G4String excep = "G4Penelope01IonisationModel - Error in the calculation of the final state";
-      G4Exception(excep);
+      G4String excep = "G4Penelope01IonisationModel - Unable to calculate the final state";
+      G4Exception("G4Penelope01IonisationModel::CalculateDiscreteForElectrons()",
+		  "em2003",FatalException,excep);      
     }
 
   delete qm;
@@ -1351,8 +1352,9 @@ G4Penelope01IonisationModel::CalculateDiscreteForPositrons(G4double kinEnergy,
     }      
   else
     {
-      G4String excep = "G4Penelope01IonisationModel - Error in the calculation of the final state";
-      G4Exception(excep);
+      G4String excep = "G4Penelope01IonisationModel - Unable to calculate the final state";
+      G4Exception("G4Penelope01IonisationModel::CalculateDiscreteForPositrons()",
+		  "em2003",FatalException,excep);      
     }
 
   delete qm;

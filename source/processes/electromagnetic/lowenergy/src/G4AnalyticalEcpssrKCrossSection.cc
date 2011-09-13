@@ -58,7 +58,7 @@ G4AnalyticalEcpssrKCrossSection::G4AnalyticalEcpssrKCrossSection()
     path = getenv("G4LEDATA");
  
     if (!path) {
-      G4Exception("G4AnalyticalEcpssrKCrossSection::G4AnalyticalEcpssrKCrossSection() G4LEDATA environment variable not set");
+      G4Exception("G4AnalyticalEcpssrKCrossSection::G4AnalyticalEcpssrKCrossSection()", "em0006", FatalException,"G4LEDATA environment variable not set" );
       return;
     }
 
@@ -66,8 +66,9 @@ G4AnalyticalEcpssrKCrossSection::G4AnalyticalEcpssrKCrossSection()
     fileName << path << "/pixe/uf/FK.dat";
     std::ifstream FK(fileName.str().c_str());
 
-    if (!FK) G4Exception("G4AnalyticalEcpssrKCrossSection::G4AnalyticalEcpssrKCrossSection() error opening FK data file");
-      
+    if (!FK) 
+      G4Exception("G4AnalyticalEcpssrKCrossSection::G4AnalyticalEcpssrKCrossSection()", "em0003", FatalException,"error opening FK data file" );
+
     dummyVec.push_back(0.);
 
     while(!FK.eof())

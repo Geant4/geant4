@@ -106,10 +106,8 @@ void G4LivermoreBremsstrahlungModel::Initialise(const G4ParticleDefinition* part
   //Check that the Livermore Bremsstrahlung is NOT attached to e+
   if (particle != G4Electron::Electron())
     {
-      G4cout << "ERROR: Livermore Bremsstrahlung Model is applicable only to electrons" 
-	     << G4endl;
-      G4cout << "It cannot be registered to " << particle->GetParticleName() << G4endl;
-      G4Exception();
+      G4Exception("G4LivermoreBremsstrahlungModel::Initialise",
+		    "em0002",FatalException,"Livermore Bremsstrahlung Model is applicable only to electrons");
     }
   //Prepare energy spectrum
   if (energySpectrum) 
@@ -194,9 +192,8 @@ G4LivermoreBremsstrahlungModel::ComputeCrossSectionPerAtom(const G4ParticleDefin
   G4int iZ = (G4int) Z;
   if (!crossSectionHandler)
     {
-      G4cout << "G4LivermoreBremsstrahlungModel::ComputeCrossSectionPerAtom" << G4endl;
-      G4cout << "The cross section handler is not correctly initialized" << G4endl;
-      G4Exception();
+      G4Exception("G4LivermoreBremsstrahlungModel::ComputeCrossSectionPerAtom",
+		    "em1007",FatalException,"The cross section handler is not correctly initialized");
       return 0;
     }
   

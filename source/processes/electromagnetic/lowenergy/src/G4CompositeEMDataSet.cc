@@ -68,7 +68,9 @@ G4CompositeEMDataSet::G4CompositeEMDataSet(G4VDataSetAlgorithm* argAlgorithm,
   maxZ(argMaxZ)
 {
   if (algorithm == 0) 
-    G4Exception("G4CompositeEMDataSet::G4CompositeEMDataSet - interpolation == 0");
+  G4Exception("G4CompositeEMDataSet::G4CompositeEMDataSet",
+	      "em1003",FatalException,"interpolation == 0");
+
 }
 
 
@@ -89,7 +91,8 @@ G4double G4CompositeEMDataSet::FindValue(G4double argEnergy, G4int argComponentI
   std::ostringstream message;
   message << "G4CompositeEMDataSet::FindValue - component " << argComponentId << " not found";
  
-  G4Exception(message.str().c_str());
+  G4Exception("G4CompositeEMDataSet::FindValue",
+	      "em1004",FatalException,message.str().c_str());
  
   return 0.;
 }
@@ -124,7 +127,8 @@ void G4CompositeEMDataSet::SetEnergiesData(G4DataVector* argEnergies, G4DataVect
   std::ostringstream message;
   message << "G4CompositeEMDataSet::SetEnergiesData - component " << argComponentId << " not found";
  
-  G4Exception(message.str().c_str());
+  G4Exception("G4CompositeEMDataSet::SetEnergiesData",
+	      "em1004",FatalException,message.str().c_str());
 }
 
 void G4CompositeEMDataSet::SetLogEnergiesData(G4DataVector* argEnergies, 
@@ -144,7 +148,8 @@ void G4CompositeEMDataSet::SetLogEnergiesData(G4DataVector* argEnergies,
   std::ostringstream message;
   message << "G4CompositeEMDataSet::SetEnergiesData - component " << argComponentId << " not found";
  
-  G4Exception(message.str().c_str());
+  G4Exception("G4CompositeEMDataSet::SetLogEnergiesData",
+	      "em1004",FatalException,message.str().c_str());
 }
 
 
@@ -194,7 +199,8 @@ G4bool G4CompositeEMDataSet::SaveData(const G4String& argFileName) const
 	{
 	  std::ostringstream message;
 	  message << "G4CompositeEMDataSet::SaveData - component " << (z-minZ) << " not found";
-	  G4Exception(message.str().c_str());
+          G4Exception("G4CompositeEMDataSet::SaveData",
+	      "em1004",FatalException,message.str().c_str());
 	  return false;
 	}
 

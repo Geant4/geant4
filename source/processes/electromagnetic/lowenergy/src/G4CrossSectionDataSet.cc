@@ -91,10 +91,11 @@ G4bool G4CrossSectionDataSet::LoadData(const G4String & argFileName)
 
   if (!in.is_open())
     {
-      G4String message("G4CrossSectionDataSet::LoadData - data file \"");
+      G4String message("data file \"");
       message+=fullFileName;
       message+="\" not found";
-      G4Exception(message);
+      G4Exception("G4CrossSectionDataSet::LoadData",
+		    "em0003",FatalException,message);
       return false;
     }
 
@@ -200,10 +201,11 @@ G4bool G4CrossSectionDataSet::LoadData(const G4String & argFileName)
  
   if (maxI<2)
     {
-      G4String message("G4CrossSectionDataSet::LoadData - data file \"");
+      G4String message("data file \"");
       message+=fullFileName;
       message+="\" should have at least two columns";
-      G4Exception(message);
+      G4Exception("G4CrossSectionDataSet::LoadData",
+		    "em0005",FatalException,message);
       return false;
     }
  
@@ -214,10 +216,11 @@ G4bool G4CrossSectionDataSet::LoadData(const G4String & argFileName)
 
       if (maxJ!=columns[0]->size())
 	{
-	  G4String message("G4CrossSectionDataSet::LoadData - data file \"");
+	  G4String message("data file \"");
 	  message+=fullFileName;
 	  message+="\" has lines with a different number of columns";
-	  G4Exception(message);
+          G4Exception("G4CrossSectionDataSet::LoadData",
+		    "em0005",FatalException,message);
 	  return false;
 	}
 
@@ -263,10 +266,11 @@ G4bool G4CrossSectionDataSet::LoadNonLogData(const G4String & argFileName)
 
   if (!in.is_open())
     {
-      G4String message("G4CrossSectionDataSet::LoadData - data file \"");
+      G4String message("data file \"");
       message+=fullFileName;
       message+="\" not found";
-      G4Exception(message);
+      G4Exception("G4CrossSectionDataSet::LoadNonLogData",
+		    "em0003",FatalException,message);
       return false;
     }
 
@@ -355,10 +359,11 @@ G4bool G4CrossSectionDataSet::LoadNonLogData(const G4String & argFileName)
  
   if (maxI<2)
     {
-      G4String message("G4CrossSectionDataSet::LoadData - data file \"");
+      G4String message("data file \"");
       message+=fullFileName;
       message+="\" should have at least two columns";
-      G4Exception(message);
+      G4Exception("G4CrossSectionDataSet::LoadNonLogData",
+		    "em0005",FatalException,message);
       return false;
     }
  
@@ -369,10 +374,11 @@ G4bool G4CrossSectionDataSet::LoadNonLogData(const G4String & argFileName)
 
       if (maxJ!=columns[0]->size())
 	{
-	  G4String message("G4CrossSectionDataSet::LoadData - data file \"");
+	  G4String message("data file \"");
 	  message+=fullFileName;
 	  message+="\" has lines with a different number of columns";
-	  G4Exception(message);
+          G4Exception("G4CrossSectionDataSet::LoadNonLogData",
+		    "em0005",FatalException,message);
 	  return false;
 	}
 
@@ -410,7 +416,8 @@ G4bool G4CrossSectionDataSet::SaveData(const G4String & argFileName) const
  
   if (n==0)
     {
-      G4Exception("G4EMDataSet::SaveData - expected at least one component");
+      G4Exception("G4CrossSectionDataSet::SaveData",
+		    "em0005",FatalException,"expected at least one component");
       return false;
     }
  
@@ -419,10 +426,11 @@ G4bool G4CrossSectionDataSet::SaveData(const G4String & argFileName) const
 
   if (!out.is_open())
     {
-      G4String message("G4EMDataSet::SaveData - cannot open \"");
+      G4String message("cannot open \"");
       message+=fullFileName;
       message+="\"";
-      G4Exception(message);
+      G4Exception("G4CrossSectionDataSet::SaveData",
+		    "em0003",FatalException,message);
       return false;
     }
  
@@ -475,7 +483,8 @@ G4String G4CrossSectionDataSet::FullFileName(const G4String& argFileName) const
   char* path = getenv("G4LEDATA");
   if (!path)
     {
-      G4Exception("G4CrossSectionDataSet::FullFileName - G4LEDATA environment variable not set");
+      G4Exception("G4CrossSectionDataSet::FullFileName",
+		   "em0006",FatalException,"G4LEDATA environment variable not set");
       return "NULL";
     }  
 
@@ -536,9 +545,10 @@ void G4CrossSectionDataSet::SetEnergiesData(G4DataVector* argEnergies,
     }
 
   std::ostringstream message;
-  message << "G4CrossSectionDataSet::SetEnergiesData - component " << argComponentId << " not found";
+  message << "component " << argComponentId << " not found";
  
-  G4Exception(message.str().c_str());
+  G4Exception("G4CrossSectionDataSet::SetEnergiesData",
+		   "em0005",FatalException,message.str().c_str());
 }
 
 
@@ -557,9 +567,10 @@ void G4CrossSectionDataSet::SetLogEnergiesData(G4DataVector* argEnergies,
     }
 
   std::ostringstream message;
-  message << "G4CrossSectionDataSet::SetLogEnergiesData - component " << argComponentId << " not found";
+  message << "component " << argComponentId << " not found";
  
-  G4Exception(message.str().c_str());
+  G4Exception("G4CrossSectionDataSet::SetLogEnergiesData",
+		   "em0005",FatalException,message.str().c_str());
 }
 
 

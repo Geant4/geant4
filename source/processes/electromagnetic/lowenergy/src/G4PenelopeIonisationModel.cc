@@ -352,9 +352,11 @@ void G4PenelopeIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*
     SampleFinalStatePositron(material,cutE,kineticEnergy0);
   else
     {
-      G4cout << "G4PenelopeIonisationModel::SamplingSecondaries() - " ;
-      G4cout << "Invalid particle " << theParticle->GetParticleName() << G4endl;
-      G4Exception();	
+      G4ExceptionDescription ed;
+      ed << "Invalid particle " << theParticle->GetParticleName() << G4endl;
+      G4Exception("G4PenelopeIonisationModel::SamplingSecondaries()",
+		  "em0001",FatalException,ed);
+      
     }
   if (energySecondary == 0) return;
 
@@ -627,9 +629,10 @@ G4PenelopeIonisationModel::GetCrossSectionTableForCouple(const G4ParticleDefinit
 {
   if (part != G4Electron::Electron() && part != G4Positron::Positron())
     {
-      G4cout << "G4PenelopeIonisationModel::GetCrossSectionTableForCouple" << G4endl;
-      G4cout << "Invalid particle: " << part->GetParticleName() << G4endl;
-      G4Exception();
+      G4ExceptionDescription ed;
+      ed << "Invalid particle: " << part->GetParticleName() << G4endl;
+      G4Exception("G4PenelopeIonisationModel::GetCrossSectionTableForCouple()",
+		  "em0001",FatalException,ed);
       return NULL;
     }
 
@@ -637,9 +640,9 @@ G4PenelopeIonisationModel::GetCrossSectionTableForCouple(const G4ParticleDefinit
     {
       if (!XSTableElectron)
 	{
-	  G4cout << "G4PenelopeIonisationModel::GetCrossSectionTableForCouple()" << G4endl;
-	  G4cout << "The Cross Section Table for e- was not initialized correctly!" << G4endl;
-	  G4Exception();	  
+	  G4Exception("G4PenelopeIonisationModel::GetCrossSectionTableForCouple()",
+		      "em0028",FatalException,  
+		      "The Cross Section Table for e- was not initialized correctly!");
 	  return NULL;
 	}
       std::pair<const G4Material*,G4double> theKey = std::make_pair(mat,cut);
@@ -652,9 +655,10 @@ G4PenelopeIonisationModel::GetCrossSectionTableForCouple(const G4ParticleDefinit
 	    return XSTableElectron->find(theKey)->second;
 	  else
 	    {
-	      G4cout << "G4PenelopeIonisationModel::GetCrossSectionTableForCouple()" << G4endl;
-	      G4cout << "Unable to build e- table for " << mat->GetName() << G4endl;
-	      G4Exception();	   
+	      G4ExceptionDescription ed;
+	      ed << "Unable to build e- table for " << mat->GetName() << G4endl;
+	      G4Exception("G4PenelopeIonisationModel::GetCrossSectionTableForCouple()",
+			  "em0029",FatalException,ed);	   
 	    }
 	}
     }
@@ -663,9 +667,9 @@ G4PenelopeIonisationModel::GetCrossSectionTableForCouple(const G4ParticleDefinit
     {
       if (!XSTablePositron)
 	{
-	  G4cout << "G4PenelopeIonisationModel::GetCrossSectionTableForCouple()" << G4endl;
-	  G4cout << "The Cross Section Table for e+ was not initialized correctly!" << G4endl;
-	  G4Exception();
+	  G4Exception("G4PenelopeIonisationModel::GetCrossSectionTableForCouple()",
+		      "em0028",FatalException,  
+		      "The Cross Section Table for e+ was not initialized correctly!");
 	  return NULL;
 	}
       std::pair<const G4Material*,G4double> theKey = std::make_pair(mat,cut);
@@ -678,9 +682,10 @@ G4PenelopeIonisationModel::GetCrossSectionTableForCouple(const G4ParticleDefinit
 	    return XSTablePositron->find(theKey)->second;
 	  else
 	    {
-	      G4cout << "G4PenelopeIonisationModel::GetCrossSectionTableForCouple()" << G4endl;
-	      G4cout << "Unable to build e+ table for " << mat->GetName() << G4endl;
-	      G4Exception();	   
+	      G4ExceptionDescription ed;
+	      ed << "Unable to build e+ table for " << mat->GetName() << G4endl;
+	      G4Exception("G4PenelopeIonisationModel::GetCrossSectionTableForCouple()",
+			  "em0029",FatalException,ed);	   	   
 	    }
 	}
     }
@@ -710,10 +715,11 @@ void G4PenelopeIonisationModel::BuildXSTable(const G4Material* mat,G4double cut,
 
   if (energyGrid->GetVectorLength() != nBins) 
     {
-      G4cout << "G4PenelopeIonisationModel::BuildXSTable" << G4endl;
-      G4cout << "Energy Grid looks not initialized" << G4endl;
-      G4cout << nBins << " " << energyGrid->GetVectorLength() << G4endl;
-      G4Exception();
+      G4ExceptionDescription ed;
+      ed << "Energy Grid looks not initialized" << G4endl;
+      ed << nBins << " " << energyGrid->GetVectorLength() << G4endl;
+      G4Exception("G4PenelopeIonisationModel::BuildXSTable()",
+		  "em2030",FatalException,ed);
     }
 
   G4PenelopeCrossSection* XSEntry = new G4PenelopeCrossSection(nBins,numberOfOscillators);
@@ -739,18 +745,21 @@ void G4PenelopeIonisationModel::BuildXSTable(const G4Material* mat,G4double cut,
 	   //check results are all right
 	   if (!tempStorage)
 	     {
-	       G4cout << "G4PenelopeIonisationModel::BuildXSTable" << G4endl;
-	       G4cout << "Problem in calculating the shell XS " << G4endl;
-	       G4Exception();
+	       G4ExceptionDescription ed;
+	       ed << "Problem in calculating the shell XS for shell # " 
+		  << iosc << G4endl;
+	       G4Exception("G4PenelopeIonisationModel::BuildXSTable()",
+			   "em2031",FatalException,ed);			   
 	       delete XSEntry;
 	       return;
 	     }
 	   if (tempStorage->size() != 6)
 	     {
-	       G4cout << "G4PenelopeIonisationModel::BuildXSTable" << G4endl;
-	       G4cout << "Problem in calculating the shell XS " << G4endl;
-	       G4cout << "Result has dimension " << tempStorage->size() << " instead of 6" << G4endl;
-	       G4Exception();	       
+	       G4ExceptionDescription ed;
+	       ed << "Problem in calculating the shell XS " << G4endl;
+	       ed << "Result has dimension " << tempStorage->size() << " instead of 6" << G4endl;
+	       G4Exception("G4PenelopeIonisationModel::BuildXSTable()",
+			   "em2031",FatalException,ed);	
 	     }
 	   G4double stre = theOsc->GetOscillatorStrength();
 
@@ -796,9 +805,9 @@ G4double G4PenelopeIonisationModel::GetDensityCorrection(const G4Material* mat,
   G4double result = 0;
   if (!theDeltaTable)
     {
-      G4cout << "G4PenelopeIonisationModel::GetDensityCorrection()" << G4endl;
-      G4cout << "Delta Table not initialized. Was Initialise() run?" << G4endl;
-      G4Exception();
+      G4Exception("G4PenelopeIonisationModel::GetDensityCorrection()",
+		  "em2032",FatalException,
+		  "Delta Table not initialized. Was Initialise() run?");
       return 0;
     }
   if (energy <= 0*eV)
@@ -820,9 +829,10 @@ G4double G4PenelopeIonisationModel::GetDensityCorrection(const G4Material* mat,
     }
   else
     {
-      G4cout << "G4PenelopeIonisationModel::GetDensityCorrection()" << G4endl;
-      G4cout << "Unable to build table for " << mat->GetName() << G4endl;
-      G4Exception();
+      G4ExceptionDescription ed;      
+      ed << "Unable to build table for " << mat->GetName() << G4endl;
+      G4Exception("G4PenelopeIonisationModel::GetDensityCorrection()",
+		  "em2033",FatalException,ed);
     }
 
   return result;
@@ -839,10 +849,11 @@ void G4PenelopeIonisationModel::BuildDeltaTable(const G4Material* mat)
 
   if (energyGrid->GetVectorLength() != nBins) 
     {
-      G4cout << "G4PenelopeIonisationModel::BuildDeltaTable" << G4endl;
-      G4cout << "Energy Grid for Delta looks not initialized" << G4endl;
-      G4cout << nBins << " " << energyGrid->GetVectorLength() << G4endl;
-      G4Exception();
+      G4ExceptionDescription ed;
+      ed << "Energy Grid for Delta table looks not initialized" << G4endl;
+      ed << nBins << " " << energyGrid->GetVectorLength() << G4endl;
+      G4Exception("G4PenelopeIonisationModel::BuildDeltaTable()",
+		  "em2030",FatalException,ed);
     }
 
   G4PhysicsFreeVector* theVector = new G4PhysicsFreeVector(nBins);

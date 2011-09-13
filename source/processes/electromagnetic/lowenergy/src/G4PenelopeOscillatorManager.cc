@@ -215,14 +215,11 @@ void G4PenelopeOscillatorManager::CheckForTablesCreated()
       oscillatorStoreIonisation = new std::map<const G4Material*,G4PenelopeOscillatorTable*>;
       if (!fReadElementData)
 	ReadElementData();
-      if (!oscillatorStoreIonisation)
-	{
-	  //It should be ok now
-	  G4cout << "G4PenelopeOscillatorManager::GetOscillatorTableIonisation() " << G4endl;
-	  G4cout << "Problem in allocating the Oscillator Store for Ionisation" << G4endl;
-	  G4cout << "Abort execution" << G4endl;
-	  G4Exception();
-	}
+      if (!oscillatorStoreIonisation)	
+	//It should be ok now
+	G4Exception("G4PenelopeOscillatorManager::GetOscillatorTableIonisation()",
+		    "em2034",FatalException,
+		    "Problem in allocating the Oscillator Store for Ionisation");    
     }
 
   if (!oscillatorStoreCompton) 
@@ -230,14 +227,11 @@ void G4PenelopeOscillatorManager::CheckForTablesCreated()
       oscillatorStoreCompton = new std::map<const G4Material*,G4PenelopeOscillatorTable*>;
       if (!fReadElementData)
 	ReadElementData();
-      if (!oscillatorStoreCompton)
-	{
-	  //It should be ok now
-	  G4cout << "G4PenelopeOscillatorManager::GetOscillatorTableCompton() " << G4endl;
-	  G4cout << "Problem in allocating the Oscillator Store for Compton" << G4endl;
-	  G4cout << "Abort execution" << G4endl;
-	  G4Exception();
-	}
+      if (!oscillatorStoreCompton)	
+	//It should be ok now
+	G4Exception("G4PenelopeOscillatorManager::GetOscillatorTableIonisation()",
+		    "em2034",FatalException,
+		    "Problem in allocating the Oscillator Store for Compton");        
     }
 
   if (!atomicNumber)
@@ -456,9 +450,11 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
     }
   if (MaxStechiometricFactor<1e-16)
     {
-      G4cout << "G4PenelopeOscillatorManager::BuildOscillatorTable" << G4endl;
-      G4cout << "Problem with the mass composition of " << material->GetName() << G4endl;
-      G4Exception();
+      G4ExceptionDescription ed;
+      ed << "Problem with the mass composition of " << material->GetName() << G4endl;
+      ed << "MaxStechiometricFactor = " << MaxStechiometricFactor << G4endl;
+      G4Exception("G4PenelopeOscillatorManager::BuildOscillatorTable()",
+		  "em2035",FatalException,ed);
     }
   //Normalize
   for (G4int i=0;i<nElements;i++)
@@ -648,9 +644,11 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
     }
   if (std::fabs(sum-totalZ) > (1e-6*totalZ))
     {
-      G4cout << "G4PenelopeOscillatorManager - Inconsistent oscillator data " << G4endl;
-      G4cout << sum << " " << totalZ << G4endl;
-      G4Exception();
+      G4ExceptionDescription ed;
+      ed << "Inconsistent oscillator data " << G4endl;
+      ed << sum << " " << totalZ << G4endl;
+      G4Exception("G4PenelopeOscillatorManager::BuildOscillatorTable()",
+		  "em2036",FatalException,ed);
     }
   if (std::fabs(sum-totalZ) > (1e-12*totalZ))
     {
@@ -733,16 +731,20 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
     }
   if (std::fabs(TST-totalZ)>1e-8*totalZ)
     {
-      G4cout << "G4PenelopeOscillatorManager - Inconsistent oscillator data " << G4endl;
-      G4cout << TST << " " << totalZ << G4endl;
-      G4Exception();
+      G4ExceptionDescription ed;
+      ed << "Inconsistent oscillator data " << G4endl;
+      ed << TST << " " << totalZ << G4endl;
+      G4Exception("G4PenelopeOscillatorManager::BuildOscillatorTable()",
+		  "em2036",FatalException,ed);
     }
   xcheck = std::exp(xcheck/totalZ);
   if (std::fabs(xcheck-meanExcitationEnergy) > 1e-8*meanExcitationEnergy)
     {
-      G4cout << "G4PenelopeOscillatorManager - Error in Sterheimer factor calculation " << G4endl;
-      G4cout << xcheck/eV << " " << meanExcitationEnergy/eV << G4endl;
-      G4Exception();
+      G4ExceptionDescription ed;
+      ed << "Error in Sterheimer factor calculation " << G4endl;
+      ed << xcheck/eV << " " << meanExcitationEnergy/eV << G4endl;
+      G4Exception("G4PenelopeOscillatorManager::BuildOscillatorTable()",
+		  "em2037",FatalException,ed);    
     }
 
   //Selection of the lowest ionisation energy for inner shells. Only the K, L and M shells with 
@@ -1041,7 +1043,8 @@ void G4PenelopeOscillatorManager::ReadElementData()
   if (!path)
     {
       G4String excep = "G4PenelopeOscillatorManager - G4LEDATA environment variable not set!";
-      G4Exception(excep);
+      G4Exception("G4PenelopeOscillatorManager::ReadElementData()",
+		  "em0006",FatalException,excep);
       return;
     }
   G4String pathString(path);
@@ -1051,7 +1054,8 @@ void G4PenelopeOscillatorManager::ReadElementData()
   if (!file.is_open())
     {
       G4String excep = "G4PenelopeOscillatorManager - data file " + pathFile + " not found!";
-      G4Exception(excep);
+      G4Exception("G4PenelopeOscillatorManager::ReadElementData()",
+		  "em0003",FatalException,excep);
     }
   //Read header (22 lines)
   G4String theHeader;

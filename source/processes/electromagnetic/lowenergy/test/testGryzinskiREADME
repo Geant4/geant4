@@ -1,8 +1,0 @@
-Geant4
-testGryzinskiREADME
-
-This test checks Gryzinski's theorical model for proton atomic shell cross section implemented in 
-G4hShellCrossSection class.
-This test asks to the users the Shell Number.
-The test prints on the desktop the atomic number, particle incident energy and 
-atomic cross section for each elemet with Z > 5.

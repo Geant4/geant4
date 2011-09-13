@@ -89,7 +89,8 @@ void G4Penelope01BremsstrahlungContinuous::LoadFromFile()
  if (!path)
    {
      G4String excep = "G4Penelope01BremsstrahlungContinuous - G4LEDATA environment variable not set!";
-     G4Exception(excep);
+     G4Exception("G4Penelope01BremsstrahlungContinuous::LoadFromFile()",
+		 "em0006",FatalException,excep);
      return;
    }
  G4String pathString(path);
@@ -102,7 +103,8 @@ void G4Penelope01BremsstrahlungContinuous::LoadFromFile()
  if (!file.is_open())
      {
       G4String excep = "G4Penelope01BremsstrahlungContinuous - data file " + name + " not found!";
-      G4Exception(excep);
+      G4Exception("G4Penelope01BremsstrahlungContinuous::LoadFromFile()",
+		  "em0003",FatalException,excep);
      }
  G4double a1 = -1.;
  for (size_t i=0;i<NumberofEPoints;i++)
@@ -124,7 +126,8 @@ void G4Penelope01BremsstrahlungContinuous::LoadFromFile()
        {
 	 G4String excep = "G4Penelope01BremsstrahlungContinuous - Check the bremms data file " 
 	   + name;
-	 G4Exception(excep);
+	 G4Exception("G4Penelope01BremsstrahlungContinuous::LoadFromFile()",
+		     "em0005",FatalException,excep);
        }
    }
  file.close();
@@ -158,7 +161,8 @@ void G4Penelope01BremsstrahlungContinuous::PrepareInterpolationTable()
     G4double TST = std::abs(Normalization-1.0);
     if (TST > 1.0) {
       G4String excep = "G4Penelope01BremsstrahlungContinuous - Check the bremms data file";
-      G4Exception(excep);
+      G4Exception("G4Penelope01BremsstrahlungContinuous::PrepareInterpolationTable()",
+		  "em0005",FatalException,excep);
     }
     for (j=0;j<NumberofKPoints;j++){
       ReducedCS[i][j] = ReducedCS[i][j]*Normalization;
@@ -290,7 +294,8 @@ G4double G4Penelope01BremsstrahlungContinuous::PositronCorrection(G4double energ
   else //neither electrons nor positrons...exception
     {
       G4String excep = "G4Penelope01BremmstrahlungContinuous: the particle is not e- nor e+!";
-      G4Exception(excep);
+      G4Exception("G4Penelope01BremsstrahlungContinuous::PositronCorrection",
+		  "em0001",FatalException,excep);
       return 0;
     }
 }

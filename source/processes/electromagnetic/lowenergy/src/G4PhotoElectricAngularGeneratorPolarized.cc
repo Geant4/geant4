@@ -94,7 +94,8 @@ G4PhotoElectricAngularGeneratorPolarized::G4PhotoElectricAngularGeneratorPolariz
     if (!path)
       {
         G4String excep = "G4EMDataSet - G4LEDATA environment variable not set";
-        G4Exception(excep);
+        G4Exception("G4PhotoElectricAngularGeneratorPolarized::G4PhotoElectricAngularGeneratorPolarized",
+		    "em0006",FatalException,"G4LEDATA environment variable not set");
 	return;
       }
 
@@ -103,8 +104,9 @@ G4PhotoElectricAngularGeneratorPolarized::G4PhotoElectricAngularGeneratorPolariz
     std::ifstream infile(dirFile);
     if (!infile.is_open())
       {
-	G4String excep = "G4PhotoElectricAngularGeneratorPolarized - data file: " + dirFile + " not found";
-	G4Exception(excep);
+	G4String excep = "data file: " + dirFile + " not found";
+        G4Exception("G4PhotoElectricAngularGeneratorPolarized::G4PhotoElectricAngularGeneratorPolarized",
+		    "em0003",FatalException,excep);
 	return;
       }
 

@@ -1,8 +1,0 @@
-Geant4
-testDoubleExpREADME
-
-This test checks a second implementation of the empirical model for proton atomic shell cross section, implemented in G4hShellCrossSectionExp and G4hShellCrossSectionExpData classes, with the implementatiotion of two new classes: G4hShellCrossSectionDoubleExp and G4hShellCrossSectionDoubleExpData.
-Like the first model, this test asks to the users the Shell Number.
-Since the model is implemented only for the k shell, the shell number must be 0.
-The test prints on the desktop the atomic number, particle incident energy and 
-atomic cross section for each elemet with Z > 5.
