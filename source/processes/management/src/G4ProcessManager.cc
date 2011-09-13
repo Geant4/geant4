@@ -169,6 +169,16 @@ G4ProcessManager::G4ProcessManager():
 
   G4Exception("G4ProcessManager::G4ProcessManager()","ProcMan111",
 	      JustWarning,"Default constructor is called");
+
+  //create process vector
+  for (G4int i=0; i<SizeOfProcVectorArray; ++i) {
+    theProcVector[i] = new G4ProcessVector();
+  }
+
+  for (G4int i=0; i<NDoit; ++i) {
+    isSetOrderingFirstInvoked[i]=false;
+    isSetOrderingLastInvoked[i]=false;
+  }
 }
 
 // ///////////////////////////////////////

@@ -16,6 +16,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- Aug. 3, 2011   H.Kurashige (procman-V09-04-05)
+- Fix errors in CTOR of G4ProcessManager (reported by Coverity)
 
 - May 31, 2011   H.Kurashige (procman-V09-04-04)
 - Fix a bug in copy constructor of G4ProcessAttribute
