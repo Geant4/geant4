@@ -262,6 +262,7 @@ G4Paraboloid::CalculateExtent(const EAxis pAxis,
 
     if(pAxis == kXAxis || pAxis == kYAxis || pAxis == kZAxis)
     {
+
       pMin =  kInfinity;
       pMax = -kInfinity;
 
@@ -501,7 +502,7 @@ G4double G4Paraboloid::DistanceToIn( const G4ThreeVector& p,
   {
     // Is there a problem with squaring rho twice?
 
-    if(!vRho2) // Needs to be treated seperately.
+    if(vRho2<tol2) // Needs to be treated seperately.
     {
       intersection = ((rho2 - k2)/k1 - p.z())/v.z();
       if(intersection < 0) { return kInfinity; }
@@ -571,40 +572,34 @@ G4double G4Paraboloid::DistanceToIn( const G4ThreeVector& p,
 
 G4double G4Paraboloid::DistanceToIn(const G4ThreeVector& p) const
 {
-  G4double safe = 0;
-  if(std::fabs(p.z()) > dz + 0.5 * kCarTolerance)
+  G4double safz = -dz+std::fabs(p.z());
+  if(safz<0) { safz=0; }
+  G4double safr = kInfinity;
+
+  G4double rho = p.x()*p.x()+p.y()*p.y();
+  G4double paraRho = (p.z()-k2)/k1;
+  G4double sqrho = std::sqrt(rho);
+
+  if(paraRho<0)
   {
-    // If we're below or above the paraboloid treat it as a cylinder with
-    // radius r2.
-
-    if(p.perp2() > sqr(r2 + 0.5 * kCarTolerance))
-    {
-      // This algorithm is exact for now but contains 2 sqrt calculations.
-      // Might be better to replace with approximated version
-
-      G4double dRho = p.perp() - r2;
-      safe = std::sqrt(sqr(dRho) + sqr(std::fabs(p.z()) - dz));
-    }
-    else
-    {
-      safe = std::fabs(p.z()) - dz;
-    }
+    safr=sqrho-r2;
+    if(safr>safz) { safz=safr; }
+    return safz;
   }
-  else 
-  {
-    G4double paraRho = std::sqrt(k1 * p.z() + k2);
-    G4double rho = p.perp();
 
-    if(rho > paraRho + 0.5 * kCarTolerance)
-    {
-      // Should check the value of paraRho here,
-      // for small values the following algorithm is bad.
+  G4double sqprho = std::sqrt(paraRho);
+  G4double dRho = sqrho-sqprho;
+  if(dRho<0) { return safz; }
 
-      safe = k1 / 2 * (-paraRho + rho) / rho;
-      if(safe < 0) { safe = 0; }
-    }
-  }
-  return safe;
+  G4double talf = -2.*k1*sqprho;
+  G4double tmp  = 1+talf*talf;
+  if(tmp<0.) { return safz; }
+
+  G4double salf = talf/std::sqrt(tmp);
+  safr = std::fabs(dRho*salf);
+  if(safr>safz) { safz=safr; }
+
+  return safz;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

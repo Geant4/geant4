@@ -58,6 +58,10 @@
 // 12 April 2010    P R Truscott, QinetiQ, bug fixes to treat optical
 //                  photon transport, in particular internal reflection
 //                  at surface.
+//
+// 22 August 2011   I Hrivnacova, Orsay, fix in Intersect() to take into
+//                  account geometrical tolerance and cases of zero distance
+//                  from surface.
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 #include "G4TriangularFacet.hh"
@@ -449,7 +453,7 @@ G4double G4TriangularFacet::Distance (const G4ThreeVector &p,
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// Distance (G4ThreeVector, G4double, G4double)
+// Distance (G4ThreeVector, G4double, G4bool)
 //
 // Determine the distance to point p.  kInfinity is returned if either:
 // (1) outgoing is TRUE and the dot product of the normal vector to the facet
@@ -658,7 +662,8 @@ G4bool G4TriangularFacet::Intersect (const G4ThreeVector &p,
       G4double normDist1 = surfaceNormal.dot(s1*v) - distFromSurface;
 
       if ((normDist0 < 0.0 && normDist1 < 0.0) ||
-          (normDist0 > 0.0 && normDist1 > 0.0))
+          (normDist0 > 0.0 && normDist1 > 0.0) ||
+          (normDist0 == 0.0 && normDist1 == 0.0) ) 
       {
         distance        = kInfinity;
         distFromSurface = kInfinity;
@@ -736,7 +741,15 @@ G4bool G4TriangularFacet::Intersect (const G4ThreeVector &p,
   G4double s       = b*e - c*d;
   G4double t       = b*d - a*e;
 
-  if (s < 0.0 || t < 0.0 || s+t > det)
+  G4double sTolerance = (std::fabs(b)+ std::fabs(c) + std::fabs(d)
+                       + std::fabs(e)) *kCarTolerance;
+  G4double tTolerance = (std::fabs(a)+ std::fabs(b) + std::fabs(d)
+                       + std::fabs(e)) *kCarTolerance;
+  G4double detTolerance = (std::fabs(a)+ std::fabs(c)
+                       + 2*std::fabs(b) ) *kCarTolerance;
+
+  //if (s < 0.0 || t < 0.0 || s+t > det)
+  if (s < -sTolerance || t < -tTolerance || ( s+t - det ) > detTolerance)
   {
 //
 //

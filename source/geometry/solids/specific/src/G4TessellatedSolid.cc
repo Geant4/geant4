@@ -41,12 +41,18 @@
 //
 // CHANGE HISTORY
 // --------------
+// 22 August 2011,    I Hrivnacova, Orsay, fix in DistanceToOut(p) and
+//                    DistanceToIn(p) to exactly compute distance from facet
+//                    avoiding use of 'outgoing' flag shortcut variant.
 //
-// 12 April 2010      P R Truscott, QinetiQ, bug fixes to treat optical
+// 04 August 2011,    T Nikitina, CERN, added SetReferences() to
+//                    CreatePolyhedron() for Visualization of Boolean Operations  
+//
+// 12 April 2010,     P R Truscott, QinetiQ, bug fixes to treat optical
 //                    photon transport, in particular internal reflection
 //                    at surface.
 //
-// 14 November 2007   P R Truscott, QinetiQ & Stan Seibert, U Texas
+// 14 November 2007,  P R Truscott, QinetiQ & Stan Seibert, U Texas
 //                    Bug fixes to CalculateExtent
 //
 // 17 September 2007, P R Truscott, QinetiQ Ltd & Richard Holmberg
@@ -736,7 +742,8 @@ G4double G4TessellatedSolid::DistanceToIn (const G4ThreeVector &p) const
 
   for (FacetCI f=facets.begin(); f!=facets.end(); f++)
   {
-    dist = (*f)->Distance(p,minDist,false);
+    //dist = (*f)->Distance(p,minDist,false);
+    dist = (*f)->Distance(p,minDist);
     if (dist < minDist)  { minDist  = dist; }
   }
   
@@ -864,7 +871,8 @@ G4double G4TessellatedSolid::DistanceToOut (const G4ThreeVector &p) const
 
   for (FacetCI f=facets.begin(); f!=facets.end(); f++)
   {
-    dist = (*f)->Distance(p,minDist,true);
+    //dist = (*f)->Distance(p,minDist,true);
+    dist = (*f)->Distance(p,minDist);
     if (dist < minDist) minDist  = dist;
   }
   
@@ -958,7 +966,8 @@ G4Polyhedron *G4TessellatedSolid::CreatePolyhedron () const
     }
     polyhedron->AddFacet(v[0],v[1],v[2],v[3]);
   }
-  
+  polyhedron->SetReferences();  
+ 
   return (G4Polyhedron*) polyhedron;
 }
 

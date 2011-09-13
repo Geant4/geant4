@@ -36,6 +36,10 @@
 // Authors:
 //   Tatiana Nikitina, CERN; Ivana Hrivnacova, IPN Orsay
 //   Adapted from Root Arb8 implementation by Andrei Gheata, CERN 
+//
+// History :
+// 04 August 2011 T.Nikitina Add SetReferences() and InvertFacets()
+//                to CreatePolyhedron() for Visualisation of Boolean       
 // --------------------------------------------------------------------
 
 #include <iomanip>
@@ -2203,6 +2207,9 @@ G4Polyhedron* G4GenericTrap::CreatePolyhedron() const
     polyhedron->AddFacet(6+is,5+is,1+is,2+is); 
   }
   polyhedron->AddFacet(5+sub4,6+sub4,7+sub4,8+sub4);  //Z-plane
+
+  polyhedron->SetReferences();
+  polyhedron->InvertFacets();
 
   return (G4Polyhedron*) polyhedron;
 }
