@@ -30,6 +30,7 @@
 //
 // 20110307  M. Kelsey -- Add call to new theTransport->SetPrimaryProjectile()
 //		to provide access to full initial state (for Bertini)
+// 20110805  M. Kelsey -- Follow change to G4V3DNucleus::GetNucleons()
 
 #include "G4DynamicParticle.hh"
 #include "G4TheoFSGenerator.hh"
@@ -158,10 +159,10 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
   
   G4ReactionProductVector * theTransportResult = NULL;
   G4int hitCount = 0;
-  const std::vector<G4Nucleon *> & they = theHighEnergyGenerator->GetWoundedNucleus()->GetNucleons();
+  const std::vector<G4Nucleon>& they = theHighEnergyGenerator->GetWoundedNucleus()->GetNucleons();
   for(size_t them=0; them<they.size(); them++)
   {
-    if(they[them]->AreYouHit()) hitCount ++;
+    if(they[them].AreYouHit()) hitCount ++;
   }
   if(hitCount != theHighEnergyGenerator->GetWoundedNucleus()->GetMassNumber() )
   {
