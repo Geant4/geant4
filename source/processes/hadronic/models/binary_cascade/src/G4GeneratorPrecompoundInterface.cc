@@ -33,7 +33,8 @@
 //      HPW, 10DEC 98, the decay part originally written by Gunter Folger 
 //                in his FTF-test-program.
 //
-//
+//      M.Kelsey, 28 Jul 2011 -- Replace loop to decay input secondaries
+//		with new utility class, simplify cleanup loops
 // -----------------------------------------------------------------------------
 
 #include "G4GeneratorPrecompoundInterface.hh"
@@ -45,8 +46,13 @@
 #include "G4Nucleon.hh"
 #include "G4FragmentVector.hh"
 #include "G4ReactionProduct.hh"
+#include "G4ReactionProductVector.hh"
 #include "G4PreCompoundModel.hh"
 #include "G4ExcitationHandler.hh"
+#include "G4DecayKineticTracks.hh"
+#include <algorithm>
+#include <vector>
+
 
 G4GeneratorPrecompoundInterface::G4GeneratorPrecompoundInterface(G4VPreCompoundModel* p) 
   : CaptureThreshold(10*MeV)
@@ -70,39 +76,8 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4ReactionProductVector * theTotalResult = new G4ReactionProductVector;
 
   // decay the strong resonances
-  G4KineticTrackVector *result1, *secondaries, *result;
-  result1=theSecondaries;
-  result=new G4KineticTrackVector();
-  //G4cout << "### G4GeneratorPrecompoundInterface::Propagate " 
-  //	 << result1->size() << " tracks " << theDeExcitation << G4endl;
-  for (unsigned int aResult=0; aResult < result1->size(); ++aResult)
-    {
-      G4ParticleDefinition * pdef;
-      pdef=result1->operator[](aResult)->GetDefinition();
-      secondaries=0;
-      if ( pdef->IsShortLived() )
-	{
-	  secondaries = result1->operator[](aResult)->Decay();
-	}
-      if ( 0 == secondaries )
-	{
-	  result->push_back(result1->operator[](aResult));
-	  result1->operator[](aResult)=NULL;	//protect for clearAndDestroy 
-	} 
-      else
-	{
-	  unsigned int amax = secondaries->size();
-	  for (unsigned int aSecondary=0; aSecondary<amax; ++aSecondary)
-	    {
-	      result1->push_back(secondaries->operator[](aSecondary));
-	    }
-	  delete secondaries;
-	}
-    }
-  //G4cout << "Delete tracks" << G4endl;
-  std::for_each(result1->begin(), result1->end(), DeleteKineticTrack());
-  delete result1;
-     
+  G4DecayKineticTracks decay(theSecondaries);
+
   // prepare the fragment
   G4int anA=theNucleus->GetMassNumber();
   G4int aZ=theNucleus->GetCharge();
@@ -114,13 +89,13 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4ThreeVector exciton3Momentum(0.,0.,0.);
 
   // loop over secondaries
-  unsigned int amax = result->size();
+  unsigned int amax = theSecondaries->size();
 #ifdef exactExcitationEnergy
   G4LorentzVector secondary4Momemtum(0,0,0,0);        
 #endif  
   for(unsigned int list=0; list<amax; ++list)
     {
-      G4KineticTrack *aTrack = result->operator[](list);
+      G4KineticTrack *aTrack = (*theSecondaries)[list];
       G4ParticleDefinition* part = aTrack->GetDefinition();
       G4double e = aTrack->Get4Momentum().e();
       G4double mass = aTrack->Get4Momentum().mag();
@@ -200,17 +175,13 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       anInitialState.SetNumberOfHoles(numberOfHoles);
       G4ReactionProductVector * aPreResult = theDeExcitation->DeExcite(anInitialState);
 
-      // fill pre-compound part into the result, and return
-      unsigned int amax = aPreResult->size();
-       for(unsigned int ll=0; ll<amax; ++ll)
-	 {
-	   theTotalResult->push_back(aPreResult->operator[](ll));
-	 }
-       delete aPreResult;
+      // move pre-compound part into the result, and return
+      theTotalResult->insert(theTotalResult->end(), aPreResult->begin(),
+			     aPreResult->end());
+
+      delete aPreResult;
     }
      
-  std::for_each(result->begin(), result->end(), DeleteKineticTrack());
-  delete result;
   return theTotalResult;
 }
 
