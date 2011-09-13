@@ -124,8 +124,8 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 	}
       else
 	{
-	  G4cout << "Problem in RunAction::EndOfRunAction(): file not open" << G4endl;
-	  G4Exception();
+	  G4Exception("RunAction::EndOfRunAction()","tst67_05",
+		      FatalException,"Unable to open output file");
 	  return;
 	}
 

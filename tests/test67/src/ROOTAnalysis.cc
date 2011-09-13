@@ -21,6 +21,7 @@
 // * any work based  on the software)  you  agree  to acknowledge its *
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
+
 // ********************************************************************
 //
 // $Id: ROOTAnalysis.cc,v 1.1 2009/03/21 18:37:27 vnivanch Exp $
@@ -152,8 +153,10 @@ void ROOTAnalysis::AddEventEnergy(G4int runID,G4double val)
 {
   if (!(fHistograms->count(runID)))
     {
-      G4cout << "Problem! Histogram for run " << runID << " not booked" << G4endl;
-      G4Exception();
+      G4ExceptionDescription ed;
+      ed << "Problem! Histogram for run " << runID << " not booked" << G4endl;
+      G4Exception("ROOTAnalysis::AddEventEnergy",
+		  "tst67_01",FatalException,ed);
       return;
     }
   TH1D* theHisto = (fHistograms->find(runID))->second;
@@ -183,8 +186,8 @@ void ROOTAnalysis::CloseFile()
     return;
   if (!fFile->IsOpen())
     {
-      G4cout << "Problema in ROOTAnalysis::CloseFile()" << G4endl;
-      G4Exception();
+      G4Exception("ROOTAnalysis::CloseFile()","tst67_02",FatalException,
+		  "Trying to close a ROOT file which is not open");
       return;
     }
   fFile->cd();
@@ -217,8 +220,8 @@ void ROOTAnalysis::SetListName(G4String name)
 {
   if (!fPhysicsListName)
     {
-      G4cout << "Problem in ROOTAnalysis::SetListName()" << G4endl;
-      G4Exception();
+      G4Exception("ROOTAnalysis::SetListName()","tst67_03",FatalException,
+		  "Unable to set the proper physics list name");
       return;
     }
   fPhysicsListName->SetString((TString) name);
@@ -232,8 +235,8 @@ void ROOTAnalysis::EndOfRun(G4int runID,G4double energy,G4int nEventsTotal,
 {
   if (!fGraph || !fGraph2 || !nEventsTotal)
     {
-      G4cout << "Problem in ROOTAnalysis::AddGraphPoint()" << G4endl;
-      G4Exception();
+      G4Exception("ROOTAnalysis::EndOfRun()","tst67_04",FatalException,
+		  "Unable to create TGraphs");
       return;
     }
   fEfficiency = ((Double_t) nEventsGood)/((Double_t) nEventsTotal);

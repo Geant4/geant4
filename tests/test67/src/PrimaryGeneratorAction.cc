@@ -100,11 +100,11 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       G4double waterRadius = theDetector->GetWaterDiameter()/2.;
    
       G4double b     = waterRadius*waterRadius;
-      G4double r     = std::sqrt(b*G4UniformRand());
+      G4double r     = sqrt(b*G4UniformRand());
       G4double phi   = twopi * G4UniformRand();
 
-      G4double x = r*std::cos(phi);
-      G4double y = r*std::sin(phi);
+      G4double x = r*cos(phi);
+      G4double y = r*sin(phi);
       G4double z = (G4UniformRand()-0.5)*waterHeight;
 
       G4ThreeVector initialPos(x,y,z+WaterZpos);
