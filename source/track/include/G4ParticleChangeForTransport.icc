@@ -107,6 +107,8 @@ inline void G4ParticleChangeForTransport::Initialize(const G4Track& track)
   const G4DynamicParticle*  pParticle = track.GetDynamicParticle();
 //  theEnergyChange          = pParticle->GetKineticEnergy();
 //  theMomentumChange        = pParticle->GetMomentumDirection();
+    theVelocityChange          = track.GetVelocity();
+    isVelocityChanged          = false;
     thePolarizationChange    = pParticle->GetPolarization();
 //  theProperTimeChange      = pParticle->GetProperTime();
 

@@ -178,9 +178,6 @@ void G4VelocityTable::SetVelocityTableProperties(G4double t_max, G4double t_min,
     return;
   }
 
-  if(!(currentState==G4State_PreInit)){
-  }
-
   if (nbin > 100 )  theInstance->NbinT = nbin;
   if ((t_min < t_max)&&(t_min>0.))  {
     theInstance->minT = t_min; 

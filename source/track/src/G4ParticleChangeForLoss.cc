@@ -47,6 +47,7 @@
 #include "G4Step.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ExceptionSeverity.hh"
+#include "G4VelocityTable.hh"
 
 G4ParticleChangeForLoss::G4ParticleChangeForLoss()
   : G4VParticleChange(), currentTrack(0), proposedKinEnergy(0.),
@@ -195,3 +196,58 @@ G4bool G4ParticleChangeForLoss::CheckIt(const G4Track& aTrack)
   itsOK = (itsOK) && G4VParticleChange::CheckIt(aTrack);
   return itsOK;
 }
+
+//----------------------------------------------------------------
+// methods for updating G4Step
+//
+
+G4Step* G4ParticleChangeForLoss::UpdateStepForAlongStep(G4Step* pStep)
+{
+  G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
+
+  // accumulate change of the kinetic energy
+  G4double kinEnergy = pPostStepPoint->GetKineticEnergy() +
+    (proposedKinEnergy - pStep->GetPreStepPoint()->GetKineticEnergy());
+
+  // update kinetic energy and charge
+  if (kinEnergy < lowEnergyLimit) {
+    theLocalEnergyDeposit += kinEnergy;
+    kinEnergy = 0.0;
+  } else {
+    pPostStepPoint->SetCharge( currentCharge );
+  }
+  pPostStepPoint->SetKineticEnergy( kinEnergy );
+  // calculate velocity
+  pStep->GetTrack()->SetKineticEnergy(kinEnergy); 
+  pPostStepPoint->SetVelocity(pStep->GetTrack()->CalculateVelocity());
+  pStep->GetTrack()->SetKineticEnergy(pStep->GetPreStepPoint()->GetKineticEnergy()); 
+
+  // update weight 
+  // this feature is commented out, it should be overwritten in case
+  // if energy loss processes will use biasing
+  //  G4double newWeight = theParentWeight*(pPostStepPoint->GetWeight())
+  //  /(pPreStepPoint->GetWeight());
+  // pPostStepPoint->SetWeight( newWeight );
+  pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
+  pStep->AddNonIonizingEnergyDeposit( theNonIonizingEnergyDeposit );
+  return pStep;
+}
+
+G4Step* G4ParticleChangeForLoss::UpdateStepForPostStep(G4Step* pStep)
+{
+  G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
+  pPostStepPoint->SetCharge( currentCharge );
+  pPostStepPoint->SetMomentumDirection( proposedMomentumDirection );
+  pPostStepPoint->SetKineticEnergy( proposedKinEnergy );
+  pStep->GetTrack()->SetKineticEnergy( proposedKinEnergy );
+  pPostStepPoint->SetVelocity(pStep->GetTrack()->CalculateVelocity());
+  pPostStepPoint->SetPolarization( proposedPolarization );
+  // update weight if process cannot do that
+  if (!fSetParentWeightByProcess)
+    pPostStepPoint->SetWeight( theParentWeight );
+
+  pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
+  pStep->AddNonIonizingEnergyDeposit( theNonIonizingEnergyDeposit );
+  return pStep;
+}
+
