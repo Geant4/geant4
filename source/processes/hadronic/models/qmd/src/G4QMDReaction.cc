@@ -100,12 +100,12 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
    G4ParticleDefinition* targ_pd = G4ParticleTable::GetParticleTable()->GetIon( targ_Z , targ_A , 0.0 );
 
 
-   G4NistManager* nistMan = G4NistManager::Instance();
+   //G4NistManager* nistMan = G4NistManager::Instance();
 //   G4Element* G4NistManager::FindOrBuildElement( targ_Z );
 
-     const G4DynamicParticle* proj_dp = new G4DynamicParticle ( proj_pd , projectile.Get4Momentum() );
-     const G4Element* targ_ele =  nistMan->FindOrBuildElement( targ_Z ); 
-     G4double aTemp = projectile.GetMaterial()->GetTemperature();
+   const G4DynamicParticle* proj_dp = new G4DynamicParticle ( proj_pd , projectile.Get4Momentum() );
+   //const G4Element* targ_ele =  nistMan->FindOrBuildElement( targ_Z ); 
+   //G4double aTemp = projectile.GetMaterial()->GetTemperature();
 
      //090331
   
@@ -113,9 +113,11 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
 
    if ( proj_pd->GetParticleType() == "meson" ) theXS = piNucXS;
 
-   G4double xs_0 = theXS->GetCrossSection ( proj_dp , targ_ele , aTemp );
+   //G4double xs_0 = genspaXS->GetCrossSection ( proj_dp , targ_ele , aTemp );
+   //G4double xs_0 = theXS->GetCrossSection ( proj_dp , targ_ele , aTemp );
+   //110822 
+   G4double xs_0 = theXS->GetIsoCrossSection ( proj_dp , targ_Z , targ_A );
 
-     //G4double xs_0 = genspaXS->GetCrossSection ( proj_dp , targ_ele , aTemp );
      G4double bmax_0 = std::sqrt( xs_0 / pi );
      //std::cout << "bmax_0 in fm (fermi) " <<  bmax_0/fermi << std::endl;
 
