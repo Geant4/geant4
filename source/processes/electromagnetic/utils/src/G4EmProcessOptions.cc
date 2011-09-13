@@ -414,3 +414,54 @@ void G4EmProcessOptions::SetBremsstrahlungTh(G4double val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void 
+G4EmProcessOptions::SetProcessBiasingFactor(const G4String& name, G4double val)
+{
+  const std::vector<G4VEnergyLossProcess*>& v =
+        theManager->GetEnergyLossProcessVector();
+  std::vector<G4VEnergyLossProcess*>::const_iterator itr;
+  for(itr = v.begin(); itr != v.end(); ++itr) {
+    G4VEnergyLossProcess* p = *itr;
+    if(p) {
+      if (p->GetProcessName() == name) { p->SetCrossSectionBiasingFactor(val); }
+    }
+  }
+  const std::vector<G4VEmProcess*>& w =
+        theManager->GetEmProcessVector();
+  std::vector<G4VEmProcess*>::const_iterator itp;
+  for(itp = w.begin(); itp != w.end(); itp++) {
+    G4VEmProcess* q = *itp;
+    if(q) {
+      if (q->GetProcessName() == name) { q->SetCrossSectionBiasingFactor(val); }
+    }
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void 
+G4EmProcessOptions::ActivateForcedInteraction(const G4String& name, G4double length, 
+					      const G4String& region)
+{
+  const std::vector<G4VEnergyLossProcess*>& v =
+        theManager->GetEnergyLossProcessVector();
+  std::vector<G4VEnergyLossProcess*>::const_iterator itr;
+  for(itr = v.begin(); itr != v.end(); ++itr) {
+    G4VEnergyLossProcess* p = *itr;
+    if(p) {
+      if (p->GetProcessName() == name) { p->ActivateForcedInteraction(length,region); }
+    }
+  }
+  const std::vector<G4VEmProcess*>& w =
+        theManager->GetEmProcessVector();
+  std::vector<G4VEmProcess*>::const_iterator itp;
+  for(itp = w.begin(); itp != w.end(); itp++) {
+    G4VEmProcess* q = *itp;
+    if(q) {
+      if (q->GetProcessName() == name) { q->ActivateForcedInteraction(length,region); }
+    }
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+

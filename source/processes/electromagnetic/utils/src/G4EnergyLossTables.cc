@@ -1034,8 +1034,8 @@ void G4EnergyLossTables::ParticleHaveNoLoss(const G4ParticleDefinition* aParticl
 {
   G4String s = " " + q + " table not found for "
              + aParticle->GetParticleName() + " !";
-  G4Exception("G4EnergyLossTables::ParticleHaveNoLoss", "EM01",
-	      FatalException, s);
+  //G4Exception("G4EnergyLossTables::ParticleHaveNoLoss", "EM01",
+  //	      FatalException, s);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

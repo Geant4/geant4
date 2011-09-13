@@ -131,7 +131,6 @@ void G4LossTableBuilder::BuildRangeTable(const G4PhysicsTable* dedxTable,
   G4double del = 1.0/(G4double)n;
 
   for (size_t i=0; i<nCouples; i++) {
-
     if (rangeTable->GetFlag(i) || !isIonisation) {
       G4PhysicsLogVector* pv = 
 	static_cast<G4PhysicsLogVector*>((*dedxTable)[i]);
@@ -139,9 +138,9 @@ void G4LossTableBuilder::BuildRangeTable(const G4PhysicsTable* dedxTable,
       size_t bin0    = 0;
       G4double elow  = pv->Energy(0);
       G4double ehigh = pv->Energy(npoints-1);
-      G4double dedx1 = pv->Value(elow);
+      G4double dedx1 = (*pv)[0];
 
-      //G4cout << "nbins= " << nbins << " dedx1= " << dedx1 << G4endl;
+      //G4cout << "npoints= " << npoints << " dedx1= " << dedx1 << G4endl;
 
       // protection for specific cases dedx=0
       if(dedx1 == 0.0) {
@@ -149,17 +148,19 @@ void G4LossTableBuilder::BuildRangeTable(const G4PhysicsTable* dedxTable,
           bin0++;
           elow  = pv->Energy(k);
           dedx1 = (*pv)[k];
-          if(dedx1 > 0.0) break;
+          if(dedx1 > 0.0) { break; }
         }
         npoints -= bin0;
       }
-      // G4cout<<"New Range vector" << G4endl;
-      // G4cout<<"nbins= "<<npoints-1<<" elow= "<<elow<<" ehigh= "<<ehigh<<G4endl;
+      //G4cout<<"New Range vector" << G4endl;
+      //G4cout<<"nbins= "<<npoints-1<<" elow= "<<elow<<" ehigh= "<<ehigh
+      //	    <<" bin0= " << bin0 <<G4endl;
       // initialisation of a new vector
-      if(npoints < 2) npoints = 2;
+      if(npoints < 2) { npoints = 2; }
       G4PhysicsLogVector* v;
       if(0 == bin0) { v = new G4PhysicsLogVector(*pv); }
-      else          { v = new G4PhysicsLogVector(elow, ehigh, npoints-1); }
+      else { v = new G4PhysicsLogVector(elow, ehigh, npoints-1); }
+
       // dedx is exect zero
       if(2 == npoints) {
 	v->PutValue(0,1000.);
@@ -170,23 +171,25 @@ void G4LossTableBuilder::BuildRangeTable(const G4PhysicsTable* dedxTable,
       v->SetSpline(splineFlag);
 
       // assumed dedx proportional to beta
-      G4double range  = 2.*elow/dedx1;
+      G4double energy1 = v->Energy(0);
+      G4double range   = 2.*energy1/dedx1;
+      //G4cout << "range0= " << range << G4endl;
       v->PutValue(0,range);
-      G4double energy1 = elow;
 
-      for (size_t j=1; j<npoints; j++) {
+      for (size_t j=1; j<npoints; ++j) {
 
-        G4double energy2 = pv->Energy(j+bin0);
+        G4double energy2 = v->Energy(j);
         G4double de      = (energy2 - energy1) * del;
         G4double energy  = energy2 + de*0.5;
         G4double sum = 0.0;
-        for (size_t k=0; k<n; k++) {
+	//G4cout << "j= " << j << " e1= " << energy1 << " e2= " << energy2 
+	//       << " n= " << n << G4endl;
+        for (size_t k=0; k<n; ++k) {
           energy -= de;
           dedx1 = pv->Value(energy);
-          if(dedx1 > 0.0) sum += de/dedx1;
+          if(dedx1 > 0.0) { sum += de/dedx1; }
 	}
         range += sum;
-	//	G4cout << "Range i= " <<i << " j= " << j << G4endl;
         v->PutValue(j,range);
         energy1 = energy2;
       }

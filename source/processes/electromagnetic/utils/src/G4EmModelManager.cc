@@ -234,7 +234,11 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
   }
   // Are models defined?
   if(nEmModels < 1) {
-    G4Exception("G4EmModelManager::Initialise: no model defined for " + partname);
+    G4ExceptionDescription ed;
+    ed << "No models found out for " << p->GetParticleName() 
+       << " !" << G4endl;
+    G4Exception("G4EmModelManager::Initialise","em0002",
+		FatalException, ed);
   }
 
   particle = p;
@@ -270,8 +274,11 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
   }
   // Are models defined?
   if(!isWorld) {
-    G4Exception("G4EmModelManager::Initialise: no models defined for " + 
-		partname + " in the World volume");
+    G4ExceptionDescription ed;
+    ed << "No models defined for the World volume for " << p->GetParticleName() 
+       << " !" << G4endl;
+    G4Exception("G4EmModelManager::Initialise","em0002",
+		FatalException, ed);
   }
 
   G4ProductionCutsTable* theCoupleTable=
@@ -561,7 +568,6 @@ void G4EmModelManager::FillDEDXVector(G4PhysicsVector* aVector,
       ComputeDEDX(models[regModels->ModelIndex(k)],couple,e,cut,emin);
     dedx *= (1.0 + del/e); 
 
-    if(dedx < 0.0) { dedx = 0.0; }
     if(2 < verboseLevel) {
       G4cout << "Material= " << couple->GetMaterial()->GetName()
 	     << "   E(MeV)= " << e/MeV
@@ -570,6 +576,7 @@ void G4EmModelManager::FillDEDXVector(G4PhysicsVector* aVector,
 	     << " modelIdx= " << regModels->ModelIndex(k)
 	     << G4endl;
     }
+    if(dedx < 0.0) { dedx = 0.0; }
     aVector->PutValue(j, dedx);
   }
 }
@@ -608,13 +615,13 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
   size_t totBinsLambda = aVector->GetVectorLength();
   G4double del = 0.0;
   G4int    k0  = 0;
+  G4int     k  = 0;
+  G4VEmModel* mod = models[regModels->ModelIndex(0)]; 
   for(size_t j=0; j<totBinsLambda; ++j) {
 
     G4double e = aVector->Energy(j);
 
     // Choose a model 
-    G4int k = 0;
-    G4VEmModel* mod = models[regModels->ModelIndex(0)]; 
     if (nmod > 1) {
       k = nmod;
       do {--k;} while (k>0 && e <= regModels->LowEdgeEnergy(k));
@@ -644,7 +651,6 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
 	     << G4endl;
     }
     if(cross < 0.0) { cross = 0.0; }
-
     aVector->PutValue(j, cross);
   }
 }

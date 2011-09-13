@@ -722,10 +722,11 @@ G4EnergyLossMessenger* G4LossTableManager::GetMessenger()
 void G4LossTableManager::ParticleHaveNoLoss(
      const G4ParticleDefinition* aParticle)
 {
-  G4String s = " dE/dx table not found for "
-             + aParticle->GetParticleName() + " !";
-  G4Exception("G4LossTableManager::ParticleHaveNoLoss", "EM01",
-	      FatalException, s);
+  G4ExceptionDescription ed;
+  ed << "Energy loss process not found for " << aParticle->GetParticleName() 
+     << " !" << G4endl;
+  G4Exception("G4LossTableManager::ParticleHaveNoLoss", "em0001",
+	      FatalException, ed);
 
 }
 

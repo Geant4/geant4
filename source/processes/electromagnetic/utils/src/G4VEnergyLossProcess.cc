@@ -396,29 +396,27 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   // Are particle defined?
   if( !particle ) {
     particle = &part;
-    if(part.GetParticleType() == "nucleus") {
-      if(!theGenericIon) { theGenericIon = G4GenericIon::GenericIon(); }
-      if(particle == theGenericIon) { isIon = true; }
-      else if(part.GetPDGCharge() > eplus) {
-	isIon = true; 
-
-	// generic ions created on-fly
-	if(part.GetPDGCharge() > 2.5*eplus) {
-	  particle = theGenericIon;
-	}
+    if(GetProcessName() == "ionIoni") {
+      G4String pname = particle->GetParticleName();
+      if(pname != "GenericIon" && pname != "alpha" && pname != "He3") {
+	lManager->RegisterIon(&part, this);
+	theGenericIon = G4GenericIon::GenericIon();
+	particle = theGenericIon;  
+	return;
       }
     }
   }
 
-  if( particle != &part) {
-    if(part.GetParticleType() == "nucleus") {
-      isIon = true;
+  if(part.GetParticleType() == "nucleus") { isIon = true; }
+
+  if( particle != &part ) {
+    if(isIon) {
       lManager->RegisterIon(&part, this);
     } else { 
       lManager->RegisterExtraParticle(&part, this);
     }
     if(1 < verboseLevel) {
-      G4cout << "### G4VEnergyLossProcess::PreparePhysicsTable() end for "
+      G4cout << "### G4VEnergyLossProcess::PreparePhysicsTable() interrupted for "
 	     << part.GetParticleName() << G4endl;
     }
     return;
@@ -488,6 +486,9 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   G4double initialMass   = particle->GetPDGMass();
 
   if (baseParticle) {
+    if(baseParticle->GetParticleName() == "GenericIon") { 
+      theGenericIon = G4GenericIon::GenericIon(); 
+    }
     massRatio = (baseParticle->GetPDGMass())/initialMass;
     G4double q = initialCharge/baseParticle->GetPDGCharge();
     chargeSqRatio = q*q;
@@ -893,8 +894,16 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
   if(theGenericIon == particle) {
     massRatio = proton_mass_c2/currPart->GetPDGMass();
   }  
+  if(!theDensityFactor || !theDensityIdx) {
+    G4cout << "G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength 1: "
+	   <<  theDensityFactor << "  " << theDensityIdx
+	   << G4endl;
+    G4cout << track.GetDefinition()->GetParticleName() 
+	   << " e(MeV)= " << track.GetKineticEnergy()
+	   << " mat " << track.GetMaterialCutsCouple()->GetMaterial()->GetName()
+	   << G4endl;
+  }
   DefineMaterial(track.GetMaterialCutsCouple());
-
   preStepKinEnergy    = track.GetKineticEnergy();
   preStepScaledEnergy = preStepKinEnergy*massRatio;
   SelectModel(preStepScaledEnergy);

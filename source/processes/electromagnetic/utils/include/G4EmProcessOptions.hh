@@ -141,6 +141,11 @@ public:
 
   void SetFactorForAngleLimit(G4double val);
 
+  void SetProcessBiasingFactor(const G4String& name, G4double val);
+
+  void ActivateForcedInteraction(const G4String& name, G4double length=0.0, 
+				 const G4String& region="");
+
 private:
 
   G4EmProcessOptions & operator=(const  G4EmProcessOptions &right);

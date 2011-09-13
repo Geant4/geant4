@@ -17,6 +17,26 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29 August 11: V.Ivant (emutils-V09-04-38)
+- G4VEnergyLossProcess - fixed initialisation for alpha and He3 
+                         introduced in previous tag
+
+29 August 11: V.Ivant (emutils-V09-04-37)
+- G4VEnergyLossProcess - fixed initialisation for ions defined by
+                         DNA ion manager
+- G4LossTableBuilder - fixed computation of range table for the case 
+                       of zero dedx in first bins of dedx table
+
+26 August 11: V.Ivant (emutils-V09-04-36)
+- G4LossTableManager, G4EmModelManager - implemented new G4Exceptions
+- G4EnergyLossMessenger, G4EmProcessOptions - added new UI commands
+    for cross section biasing and forced interaction
+
+18 August 11: V.Ivant (emutils-V09-04-35)
+- G4EmModelManager - bug fix in cross section computation for the case
+                     of more than 1 model; effect is seen for results
+                     when low cuts are used for low-energy Physics Lists
+
 29 July 11: B.Morgan (emutils-V09-04-34)
 - sources.cmake : Fixed extension of G4EmBiasingManager.cc in SOURCES list.
 

@@ -120,6 +120,8 @@ private:
   G4UIcmdWithADouble*        fgCmd;
   G4UIcmdWithADouble*        mscfCmd;
   G4UIcmdWithADoubleAndUnit* angCmd;
+  G4UIcommand*               bfCmd;
+  G4UIcommand*               fiCmd;
 };
 
 #endif

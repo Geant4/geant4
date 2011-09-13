@@ -297,6 +297,37 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   angCmd->SetParameterName("theta",true);
   angCmd->SetUnitCategory("Angle");
   angCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  bfCmd = new G4UIcommand("/process/em/setBiasingFactor",this);
+  bfCmd->SetGuidance("Set factor for the process cross section.");
+  bfCmd->SetGuidance("  procName   : process name");
+  bfCmd->SetGuidance("  procFact   : factor");
+
+  G4UIparameter* procName = new G4UIparameter("procName",'s',false);
+  bfCmd->SetParameter(procName);
+
+  G4UIparameter* procFact = new G4UIparameter("procFact",'d',false);
+  bfCmd->SetParameter(procFact);
+
+  fiCmd = new G4UIcommand("/process/em/setForcedInteraction",this);
+  fiCmd->SetGuidance("Set factor for the process cross section.");
+  fiCmd->SetGuidance("  procNam    : process name");
+  fiCmd->SetGuidance("  regNam     : region name");
+  fiCmd->SetGuidance("  tlength    : fixed target length");
+
+  G4UIparameter* procNam = new G4UIparameter("procNam",'s',false);
+  fiCmd->SetParameter(procNam);
+
+  G4UIparameter* regNam = new G4UIparameter("regNam",'s',false);
+  fiCmd->SetParameter(regNam);
+
+  G4UIparameter* tlength = new G4UIparameter("tlength",'d',false);
+  fiCmd->SetParameter(tlength);
+
+  G4UIparameter* unitT = new G4UIparameter("unitT",'s',true);
+  fiCmd->SetParameter(unitT);
+  unitT->SetGuidance("unit of tlength");
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -338,6 +369,8 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
   delete skinCmd;
   delete angCmd;
   delete mscfCmd;
+  delete bfCmd;
+  delete fiCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -449,6 +482,19 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   } else if (command == angCmd) { 
     opt->SetPolarAngleLimit(angCmd->GetNewDoubleValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
+  } else if (command == bfCmd) {
+    G4double v1(1.0);
+    G4String s("");
+    std::istringstream is(newValue);
+    is >> s >> v1;
+    opt->SetProcessBiasingFactor(s,v1);
+  } else if (command == fiCmd) {
+    G4double v1(0.0);
+    G4String s1(""),s2(""),unt("mm");
+    std::istringstream is(newValue);
+    is >> s1 >> s2 >> v1 >> unt;
+    v1 *= G4UIcommand::ValueOf(unt);
+    opt->ActivateForcedInteraction(s1,v1,s2);
   }  
 }
 
