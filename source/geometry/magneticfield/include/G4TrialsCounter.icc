@@ -23,36 +23,27 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifndef NTSTField_hh
-#define NTSTField_hh
+// $Id: $
+// GEANT4 tag $Name:  $
+//
+// class G4TrialCounts
+//
+// Class inline implementation
+//
+// -------------------------------------------------------------------
 
-#include "G4UniformMagField.hh"
+inline void G4TrialsCounter::AccumulateCounts( G4int noTrials )
+{
+  fTotalNoTrials += noTrials;
+  fNumberCalls++;
 
-class NTSTField : public G4UniformMagField {
-	public:
-	NTSTField( const G4ThreeVector& FieldVector )
-		: G4UniformMagField(FieldVector),
-		  count(0) {;}
-	NTSTField( G4double vField,
-                   G4double vTheta,
-                   G4double vPhi     )
-		: G4UniformMagField( vField, vTheta, vPhi ),
-		  count(0) {;}
-	virtual ~NTSTField() {;}
-	
-	
-	void GetFieldValue( const G4double yTrack[3] ,
-                                  G4double *MagField ) const 
-	{
-		count++;
-		G4UniformMagField::GetFieldValue( yTrack, MagField );
-	}
-	
-	long GetCount() const { return count; }
-	void ClearCount() { count = 0; }
-	
-	protected:
-	mutable long count;
-};
-
-#endif
+  if( noTrials >= fmaxTrials ){
+     if (noTrials > fmaxTrials ) { 
+        fmaxTrials=noTrials; 
+        fNoTimesMaxTrials=1; 
+     } else { 
+        fNoTimesMaxTrials++; 
+     } 
+  } 
+  fPrinted= false;  // New statistics
+}

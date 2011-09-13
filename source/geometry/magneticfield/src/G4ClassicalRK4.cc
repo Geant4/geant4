@@ -125,7 +125,7 @@ G4ClassicalRK4::StepWithEst( const G4double*,
                              const G4double*,
                                    G4double*  ) 
 {
-  G4Exception("G4ClassicalRK4::StepWithEst()", "ObsoleteMethod",
+  G4Exception("G4ClassicalRK4::StepWithEst()", "GeomField0001",
               FatalException, "Method no longer used.");
 
 }  // end of StepWithEst ......................................................

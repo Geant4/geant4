@@ -23,36 +23,62 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifndef NTSTField_hh
-#define NTSTField_hh
+// $Id: $
+// GEANT4 tag $Name:  $
+//
+// class G4TrialsCounter
+//
+// Class inline implementation
+//
+// Author: Dec 8, 2006  John Apostolakis
+// -------------------------------------------------------------------
 
-#include "G4UniformMagField.hh"
+#include "G4TrialsCounter.hh"
+#include "G4ios.hh"
 
-class NTSTField : public G4UniformMagField {
-	public:
-	NTSTField( const G4ThreeVector& FieldVector )
-		: G4UniformMagField(FieldVector),
-		  count(0) {;}
-	NTSTField( G4double vField,
-                   G4double vTheta,
-                   G4double vPhi     )
-		: G4UniformMagField( vField, vTheta, vPhi ),
-		  count(0) {;}
-	virtual ~NTSTField() {;}
-	
-	
-	void GetFieldValue( const G4double yTrack[3] ,
-                                  G4double *MagField ) const 
-	{
-		count++;
-		G4UniformMagField::GetFieldValue( yTrack, MagField );
-	}
-	
-	long GetCount() const { return count; }
-	void ClearCount() { count = 0; }
-	
-	protected:
-	mutable long count;
-};
+G4TrialsCounter::G4TrialsCounter( const G4String& nameStats,
+                                  const G4String& description,
+                                        G4bool printOnExit )
+  : fName(nameStats), fDescription(description),
+    fStatsVerbose(printOnExit), fPrinted(false) 
+{ 
+  ClearCounts(); 
+}
+   
+G4TrialsCounter::~G4TrialsCounter() 
+{ 
+  if( (fStatsVerbose) && (!fPrinted) )  { PrintStatistics(); }
+}
 
-#endif
+void
+G4TrialsCounter::PrintStatistics()
+{
+  // Print Statistics
+  G4cout << "G4TrialsCounter::PrintStatistics()" << G4endl
+         << "Report of counts for " << fDescription  << " : " << G4endl;
+  G4cout << "Stats for '" <<  fName << "' > "
+         << "  No-trials= " << fTotalNoTrials
+         << "  No-calls= "  << fNumberCalls
+         << "  Max-trial= " << fmaxTrials
+         << "  no-max= "    << fNoTimesMaxTrials 
+         << G4endl; 
+  fPrinted= true; 
+}
+
+void G4TrialsCounter::ClearCounts()
+{
+  fTotalNoTrials= 0; 
+  fNumberCalls  = 0; 
+  fmaxTrials    = 0;        // Maximum --> so only unsigned ints expected
+  fNoTimesMaxTrials=0; 
+}
+
+G4int
+G4TrialsCounter::ReturnTotals( G4int& calls, G4int& maxTrials, G4int& numMaxT ) 
+{
+  calls    = fNumberCalls; 
+  maxTrials= fmaxTrials;
+  numMaxT  = fNoTimesMaxTrials; 
+
+  return fTotalNoTrials; 
+}

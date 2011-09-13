@@ -559,10 +559,13 @@ ApproxCurvePointV( const G4FieldTrack& CurveA_PointVelocity,
            << G4endl;
     if( curve_length < ABdist * (1. - 10*eps_step) )
     {
-      G4cerr << " ERROR: the size of the above difference"
-             << " exceeds allowed limits.  Aborting." << G4endl;
-      G4Exception("G4ChordFinder::ApproxCurvePointV()", "PrecisionError",
-                  FatalException, "Unphysical curve length.");
+      std::ostringstream message;
+      message << "Unphysical curve length." << G4endl
+              << "The size of the above difference exceeds allowed limits."
+              << G4endl
+              << "Aborting.";
+      G4Exception("G4ChordFinder::ApproxCurvePointV()", "GeomField0003",
+                  FatalException, message);
     }
 #endif
     // Take default corrective action: adjust the maximum curve length. 

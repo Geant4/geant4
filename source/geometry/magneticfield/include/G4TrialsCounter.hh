@@ -23,36 +23,56 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifndef NTSTField_hh
-#define NTSTField_hh
+//
+// $Id: $
+// GEANT4 tag $Name:  $
+//
+//
+// class G4TrialsCounter
+//
+// Class description:
+//    Keep statistics of the number of trials,
+//    including the Maximum and how many times it was reached.
+//
 
-#include "G4UniformMagField.hh"
+// Author: Dec 8, 2006  John Apostolakis    
+// -------------------------------------------------------------------
+#ifndef G4TRIALS_COUNTER_HH
+#define G4TRIALS_COUNTER_HH
 
-class NTSTField : public G4UniformMagField {
-	public:
-	NTSTField( const G4ThreeVector& FieldVector )
-		: G4UniformMagField(FieldVector),
-		  count(0) {;}
-	NTSTField( G4double vField,
-                   G4double vTheta,
-                   G4double vPhi     )
-		: G4UniformMagField( vField, vTheta, vPhi ),
-		  count(0) {;}
-	virtual ~NTSTField() {;}
-	
-	
-	void GetFieldValue( const G4double yTrack[3] ,
-                                  G4double *MagField ) const 
-	{
-		count++;
-		G4UniformMagField::GetFieldValue( yTrack, MagField );
-	}
-	
-	long GetCount() const { return count; }
-	void ClearCount() { count = 0; }
-	
-	protected:
-	mutable long count;
-};
+#include "G4Types.hh"
+#include "G4String.hh"
 
-#endif
+class  G4TrialsCounter
+{
+  public:  // with description
+
+    G4TrialsCounter( const G4String& nameStats,
+                     const G4String& description, G4bool printOnExit=false ); 
+   ~G4TrialsCounter();
+
+    inline void AccumulateCounts( G4int noTrials ); 
+       //  Add this number to stats
+    void ClearCounts(); 
+       //  Reset all counts
+    G4int ReturnTotals( G4int& calls, G4int& maxTrials, G4int& numMaxT ) ; 
+       //  Return number of count/trials, calls, max & no-max
+
+    void PrintStatistics(); 
+
+  private:
+
+    G4int    fTotalNoTrials;    //  Counts sum of trials 
+    G4int    fNumberCalls;      //  Total # of calls to accumulate
+    G4int    fmaxTrials;        // Max value of trials
+    G4int    fNoTimesMaxTrials; // How many times maximum is reached
+
+    G4String  fName;         //  Identifies stats, and is printed 
+    G4String  fDescription;  //  Explanation of stats
+    G4bool    fStatsVerbose; //  If verbose and not printed, print on destruction
+    G4bool    fPrinted;      //  Flag, to avoid reprinting on destruction
+}; 
+
+#include "G4TrialsCounter.icc"
+
+#endif  /* End of ifndef G4TRIALS_COUNTER_HH */

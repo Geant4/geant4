@@ -112,7 +112,7 @@ void G4RKG3_Stepper::StepWithEst( const G4double*,
                                         G4double* )
    
 {
-  G4Exception("G4RKG3_Stepper::StepWithEst()", "ObsoleteMethod",
+  G4Exception("G4RKG3_Stepper::StepWithEst()", "GeomField0001",
               FatalException, "Method no longer used.");
 }
 

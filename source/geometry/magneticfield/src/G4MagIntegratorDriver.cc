@@ -163,19 +163,20 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
   { 
     if(hstep==0.0)
     {
-      G4cerr << "WARNING - G4MagIntegratorDriver::AccurateAdvance()" << G4endl
-             << "          Proposed step is zero; hstep = " << hstep
-             << " !" << G4endl;
+      std::ostringstream message;
+      message << "Proposed step is zero; hstep = " << hstep << " !";
+      G4Exception("G4MagInt_Driver::AccurateAdvance()", 
+                  "GeomField1001", JustWarning, message);
       return succeeded; 
     }
     else
     { 
-      G4cerr << "ERROR - G4MagIntegratorDriver::AccurateAdvance()" << G4endl
-             << "        Proposed step is negative; hstep = " << hstep
-             << " !" << G4endl;
+      std::ostringstream message;
+      message << "Invalid run condition." << G4endl
+              << "Proposed step is negative; hstep = " << hstep << "." << G4endl
+              << "Requested step cannot be negative! Aborting event.";
       G4Exception("G4MagInt_Driver::AccurateAdvance()", 
-                  "InvalidCall", EventMustBeAborted,
-                  "Requested step cannot be negative! Aborting event.");
+                  "GeomField0003", EventMustBeAborted, message);
       return false;
     }
   }
@@ -268,8 +269,8 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
       if( h == 0.0 )
       { 
         G4Exception("G4MagInt_Driver::AccurateAdvance()",
-                    "Integration Step became Zero",
-                    FatalException, "IntegrationStepUnderflow."); 
+                    "GeomField0003", FatalException,
+                    "Integration Step became Zero!"); 
       }
       dyerr = dyerr_len / h;
       hdid= h;
@@ -431,26 +432,26 @@ G4MagInt_Driver::WarnSmallStepSize( G4double hnext, G4double hstep,
 {
   static G4int noWarningsIssued =0;
   const  G4int maxNoWarnings =  10;   // Number of verbose warnings
+  std::ostringstream message;
   if( (noWarningsIssued < maxNoWarnings) || fVerboseLevel > 10 )
   {
-    G4cerr << " Warning (G4MagIntegratorDriver::AccurateAdvance):" << G4endl
-           << " The stepsize for the next iteration, " << hnext
-           << ", is too small - in Step number " << nstp << "." << G4endl;
-    G4cerr << "     The minimum for the driver is " << Hmin()  << G4endl;
-    G4cerr << "     Requested integr. length was " << hstep << " ." << G4endl;
-    G4cerr << "     The size of this sub-step was " << h     << " ." << G4endl;
-    G4cerr << "     The integrations has already gone " << xDone << G4endl;
+    message << "The stepsize for the next iteration, " << hnext
+            << ", is too small - in Step number " << nstp << "." << G4endl
+            << "The minimum for the driver is " << Hmin()  << G4endl
+            << "Requested integr. length was " << hstep << " ." << G4endl
+            << "The size of this sub-step was " << h     << " ." << G4endl
+            << "The integrations has already gone " << xDone;
   }
   else
   {
-    G4cerr << " G4MagInt_Driver: Too small 'next' step " << hnext 
-           << " step-no "  << nstp << G4endl;
-    G4cerr << "  this sub-step " << h     
-           << "  req_tot_len " << hstep 
-           << "  done " << xDone 
-           << "  min " << Hmin() 
-           << G4endl;
+    message << "Too small 'next' step " << hnext
+            << ", step-no: " << nstp << G4endl
+            << ", this sub-step: " << h     
+            << ",  req_tot_len: " << hstep 
+            << ", done: " << xDone << ", min: " << Hmin();
   }
+  G4Exception("G4MagInt_Driver::WarnSmallStepSize()", "GeomField1001",
+              JustWarning, message);
   noWarningsIssued++;
 }
 
@@ -461,12 +462,14 @@ G4MagInt_Driver::WarnTooManyStep( G4double x1start,
                                   G4double x2end, 
                                   G4double xCurrent)
 {
-  G4cerr << " Warning (G4MagIntegratorDriver):" << G4endl
-         << " The number of steps used in the Integration driver"
-         << " (Runge-Kutta) is too many." << G4endl;
-  G4cerr << " Integration of the interval was not completed !" << G4endl
-         << " Only a " << (xCurrent-x1start)*100/(x2end-x1start)
-         <<" % fraction of it was done." << G4endl;
+    std::ostringstream message;
+    message << "The number of steps used in the Integration driver"
+            << " (Runge-Kutta) is too many." << G4endl
+            << "Integration of the interval was not completed !" << G4endl
+            << "Only a " << (xCurrent-x1start)*100/(x2end-x1start)
+            << " % fraction of it was done.";
+    G4Exception("G4MagInt_Driver::WarnTooManyStep()", "GeomField1001",
+                JustWarning, message);
 }
 
 // ---------------------------------------------------------
@@ -488,30 +491,20 @@ G4MagInt_Driver::WarnEndPointTooFar (G4double endPointDist,
           && ( (dbg>1) || prNewMax || (endPointDist >= h*(1.+eps) ) ) )
   { 
     static G4int noWarnings = 0;
+    std::ostringstream message;
     if( (noWarnings ++ < 10) || (dbg>2) )
     {
-      G4cerr << " Warning (G4MagIntegratorDriver): " << G4endl
-             << " The integration produced an endpoint which " << G4endl
-             << "   is further from the startpoint than the curve length."
-             << G4endl; 
-          
-      G4cerr << "   Distance of endpoints = " << endPointDist
-             << "  curve length = " <<  h
-             << "  Difference (curveLen-endpDist)= " << (h - endPointDist)
-             << "  relative = " << (h-endPointDist) / h 
-             << "  epsilon =  " << eps 
-             << G4endl;
+      message << "The integration produced an end-point which " << G4endl
+              << "is further from the start-point than the curve length."
+              << G4endl;
     }
-    else
-    {
-      G4cerr << " Warning:" 
-             << "  dist_e= " << endPointDist
-             << "  h_step = " <<  h
-             << "  Diff (hs-ed)= " << (h - endPointDist)
-             << "  rel = " << (h-endPointDist) / h 
-             << "  eps = " << eps
-             << " (from G4MagInt_Driver)" << G4endl;
-    }
+    message << "  Distance of endpoints = " << endPointDist
+            << ", curve length = " << h << G4endl
+            << "  Difference (curveLen-endpDist)= " << (h - endPointDist)
+            << ", relative = " << (h-endPointDist) / h 
+            << ", epsilon =  " << eps;
+    G4Exception("G4MagInt_Driver::WarnEndPointTooFar()", "GeomField1001",
+                JustWarning, message);
   }
 }
 
@@ -645,7 +638,7 @@ G4bool  G4MagInt_Driver::QuickAdvance(
                                   G4double&    dyerr_pos_sq,
                                   G4double&    dyerr_mom_rel_sq )  
 {
-  G4Exception("G4MagInt_Driver::QuickAdvance()", "NotImplemented",
+  G4Exception("G4MagInt_Driver::QuickAdvance()", "GeomField0001",
               FatalException, "Not yet implemented."); 
 
   // Use the parameters of this method, to please compiler
@@ -744,7 +737,7 @@ G4bool  G4MagInt_Driver::QuickAdvance(
                                   G4double&    dchord_step,
                                   G4double&    dyerr )      // In length
 {
-  G4Exception("G4MagInt_Driver::QuickAdvance()", "NotImplemented",
+  G4Exception("G4MagInt_Driver::QuickAdvance()", "GeomField0001",
               FatalException, "Not yet implemented.");
   dyerr = dchord_step = hstep * yarrin[0] * dydx[0];
   yarrout[0]= yarrin[0];

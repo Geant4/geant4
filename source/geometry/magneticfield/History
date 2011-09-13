@@ -17,6 +17,24 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 11th,  2011 G.Cosmo - field-V09-04-01
+--------------------------
+- Migrated to new G4Exception scheme for warnings and errors.
+- Defined scheme for warnings/errors coding:
+  + 1xxx for warnings, 0xxx for errors.
+  Code numbering:
+  + 0001: not supported or implemented features;
+  + 0002: invalid setup/construct;
+  + 0003: invalid run condition;
+  + 1001: incorrect setup; automatically adapted.
+  + 1002: notification.
+
+May 13th, 2011 J.Apostolakis
+----------------------------
+- Added new class G4TrialsCounter for keeping statistics of trials.
+- Avoid printing out pointer in G4CachedMagneticField::ReportStatistics().
+- Updated unit tests.
+
 May 12th,  2011 G.Cosmo - field-V09-04-00
 -----------------------
 - Fixed compilation warnings from gcc-4.6.0 for variables set but not used.

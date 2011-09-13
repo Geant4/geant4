@@ -1,0 +1,20 @@
+G4MagIntegratorDriver::OneGoodStep:
+  Stepsize underflow in Stepper 
+  Step's start x=0.00225563 and end x= 0.00225563 are equal !! 
+  Due to step-size= 2.49774e-20 . Note that input step was 2.49774
+G4MagIntegratorDriver::OneGoodStep:
+  Stepsize underflow in Stepper 
+  Step's start x=2.5 and end x= 2.5 are equal !! 
+  Due to step-size= 2.5e-17 . Note that input step was 2.5
+G4MagIntegratorDriver::OneGoodStep:
+  Stepsize underflow in Stepper 
+  Step's start x=2.50075 and end x= 2.50075 are equal !! 
+  Due to step-size= 2.49925e-17 . Note that input step was 2.49925
+G4MagIntegratorDriver::OneGoodStep:
+  Stepsize underflow in Stepper 
+  Step's start x=2.5 and end x= 2.5 are equal !! 
+  Due to step-size= 2.5e-17 . Note that input step was 2.5
+G4MagIntegratorDriver::OneGoodStep:
+  Stepsize underflow in Stepper 
+  Step's start x=2.5 and end x= 2.5 are equal !! 
+  Due to step-size= 2.5e-17 . Note that input step was 2.5

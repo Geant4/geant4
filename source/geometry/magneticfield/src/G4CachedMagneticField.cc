@@ -52,7 +52,7 @@ G4CachedMagneticField::~G4CachedMagneticField()
 void
 G4CachedMagneticField::ReportStatistics()
 {
-  G4cout << " Cached field: " << this << G4endl
+  G4cout << " Cached field: " << G4endl
 	 << "   Number of calls:        " << fCountCalls << G4endl
 	 << "   Number of evaluations : " << fCountEvaluations << G4endl;                     
 }

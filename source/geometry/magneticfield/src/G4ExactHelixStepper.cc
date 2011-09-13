@@ -88,7 +88,7 @@ G4ExactHelixStepper::DumbStepper( const G4double  yIn[],
   AdvanceHelix(yIn, Bfld, h, yOut);
 
   G4Exception("G4ExactHelixStepper::DumbStepper",
-              "EHS:NoDumbStepper", FatalException,
+              "GeomField0002", FatalException,
               "Should not be called. Stepper must do all the work." ); 
 }  
 

@@ -46,11 +46,11 @@ G4ConstRK4::G4ConstRK4(G4Mag_EqRhs* EqRhs, G4int numStateVariables)
   // const G4int numberOfVariables= 6;
   if( numStateVariables < 8 ) 
   {
-    G4cerr << "ERROR in G4ConstRK4::G4ConstRK4 " 
-	   << "   The number of State variables at least 8 " << G4endl;
-    G4cerr << "   Instead it is  numStateVariables= " << numStateVariables << G4endl; 
-    G4Exception("G4ConstRK4::G4ConstRK4()", "InvalidSetup", FatalException,
-	"Valid only for number of state variables of 8 or more. Use another Stepper!");
+    std::ostringstream message;
+    message << "The number of State variables at least 8 " << G4endl
+            << "Instead it is - numStateVariables= " << numStateVariables;
+    G4Exception("G4ConstRK4::G4ConstRK4()", "GeomField0002",
+                FatalException, message, "Use another Stepper!");
   }
 
   fEq = EqRhs;

@@ -221,7 +221,7 @@ G4CashKarpRKF45::StepWithEst( const G4double*,
                               const G4double*,
                                     G4double*  )    
 {
-  G4Exception("G4CashKarpRKF45::StepWithEst()", "ObsoleteMethod",
+  G4Exception("G4CashKarpRKF45::StepWithEst()", "GeomField0001",
               FatalException, "Method no longer used.");
   return ;
 }

@@ -246,8 +246,12 @@ G4VPhysicalVolume* BuildGeometry()
 #include "G4HelixMixedStepper.hh"
 
 G4UniformMagField      uniformMagField(10.*tesla, 0., 0.); 
+// G4CachedMagneticField  myMagField( &uniformMagField, 1.0 * cm); 
+// G4String   fieldName("Uniform 10Tesla"); 
+
 G4QuadrupoleMagField   quadrupoleMagField( 10.*tesla/(50.*cm) ); 
 G4CachedMagneticField  myMagField( &quadrupoleMagField, 1.0 * cm); 
+G4String   fieldName("Cached Quadropole field, 20T/meter, cache=1cm"); 
 
 G4FieldManager* SetupField(G4int type)
 {
@@ -255,6 +259,8 @@ G4FieldManager* SetupField(G4int type)
     G4ChordFinder    *pChordFinder;
     G4Mag_UsualEqRhs *fEquation = new G4Mag_UsualEqRhs(&myMagField); 
     G4MagIntegratorStepper *pStepper;
+
+    G4cout << " Setting up field of type: " << fieldName << G4endl;
 
     switch ( type ) 
     {

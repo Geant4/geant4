@@ -80,6 +80,8 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4RKG3_Stepper.hh
         G4SimpleHeum.hh
         G4SimpleRunge.hh
+        G4TrialsCounter.hh
+        G4TrialsCounter.icc
         G4UniformElectricField.hh
         G4UniformMagField.hh
     SOURCES
@@ -125,6 +127,7 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4RKG3_Stepper.cc
         G4SimpleHeum.cc
         G4SimpleRunge.cc
+        G4TrialsCounter.cc
         G4UniformElectricField.cc
         G4UniformMagField.cc
     GRANULAR_DEPENDENCIES

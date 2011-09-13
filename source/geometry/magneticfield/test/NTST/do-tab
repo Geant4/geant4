@@ -2,27 +2,111 @@
 # 
 # Process log output from do-runs jobs, and create table with key quantities.
 #  Initial version :  J. Apostolakis,  8 Dec 2006, 12:50 CET
-#  Version  0.2.1, JA, 8 Dec 2006, 13:00 CET
+#  Version  0.3.0, JA, 12 Dec 2006, 11:30 CET
 #
- BEGIN { dbg= 0; } 
+ BEGIN { dbg= 0; clearStats(); } 
  /Running/ { inp=$4;
              nevents=1000; if( /2x/ ){ nevents = 100;} 
              if( dbg ) { print "Events= ", nevents;  } 
              events = 1.0 * nevents;
+             clearStats(); 
            }
+### Event real time =  0.347 +- 0.0191 (sec)
  /real/ { realtm= $6; erealtm= $8; } 
- /^ *No trials/ { trials = $3;  ncalls= $6; maxtr= $8; }
- /field/ { nfield=$6; }
+### Event user time =  0.346 +- 0.0192 (sec)
+ /user/ { usertm= $6; eusertm= $8; } 
+
+##  Original output - from Chord Finder
+ /^ *No trials/ { trialsChF = $3;  ncallsChF= $6; maxtr= $8; }
+##  Number of field calls
+ /Number calls to field/ { nfield=$6; }
+
+##  Particles killed (if any) and their total energy
  /^Killed/ { nkilled=$2; }
  /^Total energy/ { ekilled= $4; } 
- /Iterations/ { printf "%5s %7d  %7.3f +- %6.3f  %9.2f  %9.2f  %7.5f  %6d    %7.4g \n", 
-	inp,  events, realtm, erealtm, trials/events, ncalls/events,  trials/(1.0*ncalls), 
-	maxtr,  nfield/events,  nkilled, ekilled; }  
 
-  BEGIN { printf "%5s %8s %9s  %6s  %10s  %9s  %9s %7s   %6s   %7s \n", 
-             "Run", "#Events", "Real time", "error", "trials/ev", "calls/ev", "trials/call", "maxTrials", "#FieldCAlls/ev", "killed", "E_killed" ; } 
+## New statistics from Propagator In Field: 
+##  1) substep of Compute Step
+ /Stats for 'Num-PiF-steps'/ { 
+    nPifSteps= $6; nPifCalls= $8; maxPifStep= $10; nPifMax= $12;
+    # print " PiF-steps> ", nPifSteps, " calls= ", nPifCalls, " max#= ", maxPifStep, " found= ", nPifMax;
+ }
+##  2) trials in Locate Intersection Point
+ /Stats for 'PiF-LocIntersect-trials'/ { 
+    nLocSteps= $6; nLocCalls= $8; maxLocStep= $10; nLocMax= $12;
+ }
+
+#Stats for 'Num-PiF-steps' >   No-trials= 1793489  No-calls= 465925  Max-trial= 5267  no-max= 0
+#  1     2     3            4     5            6       7         8        9       10    11    12
+#Stats for 'PiF-LocIntersect-trials' >   No-trials= 127014  No-calls= 119233  Max-trial= 20  no-max= 0
+
+ /Iterations/ { report(); }
+ END { if(dbg) {
+	 print "End of input file - making report, in case of partial logfile input"; 
+	 report(); 
+       }
+     }  
+
+ function clearStats(){ 
+    trialsChF = 0;  ncallsChF= 0; maxtr= 0;   ## Chord Finder stats
+    nkilled= 0;  ekilled=0.0; 
+    nPifSteps= 0; nPifCalls= 0; maxPifStep= 0; nPifMax= 0;
+    nLocSteps= 0; nLocCalls= 0; maxLocStep= 0; nLocMax= 0;
+ }
+
+ function report() {  
+   if( (events > 0) && (ncallsChF>0) ){
+     printf "%5s %6d  %6.2g +- %6.2g  ", inp,  events, usertm, eusertm;
+     printf "%7.0f %7.0f %6.3f %4d %2d | ",
+        nPifCalls/events, nPifSteps/events, nPifSteps/(1.0*nPifCalls), maxPifStep, nPifMax;
+     printf "%7.0f %7.0f %6.3f %4d %2d  | ",
+        nLocCalls/events, nLocSteps/events, nLocSteps/(1.0*nLocCalls), maxLocStep, nLocMax;
+     printf "%7.0f %7.0f %7.5f %4d | ",
+        ncallsChF/events, trialsChF/events, trialsChF/(1.0*ncallsChF), maxtr;
+     printf "  %7.1f %6d %7.4g \n", 
+        nfield/events,  nkilled, ekilled; 
+     # print  " PiF> ",  inp, nPifSteps/events, nPifCalls/events, nPifSteps/(1.0*nPifCalls), maxPifStep, nPifMax; 
+     # print  " LiP> ",  inp, nLocSteps/events, nLocCalls/events, nLocSteps/(1.0*nLocCalls), maxLocStep, nLocMax; 
+   }else{
+     print " No Events found in input ", inp, " nevents= ", events, " calls-ChordFnd=", ncallsChF; 
+   } 
+ }  
+
+  BEGIN { 
+      printf "%25s %32s %32s %32s\n",  "Per Event stats:", "Prop In Field", " Locate Intersection", " Chord Finder"; 
+      printf "%5s %8s %12s     ", "Run", "#Events", "User time";
+      for( i=0; i<3; i++){
+        printf "%6s %7s %7s %4s %2s | ", "calls", "trials", "#tr/call", "max#", "n"; 
+      }
+      printf " %8s %6s %7s \n",  "#FieldCalls",  "killed", "E_killed" ; 
+      printf "%s%s\n",
+	"------------------------------------------------------------------------------------------",
+        "---------------------------------------------------------------------";
+
+ } 
 
 
+# Input version 2
+#---------------------------
+#Number calls to field = 21135684
+#Graphics systems deleted.
+##Visualization Manager deleting...
+#G4ChordFinder statistics report:
+#  No trials: 1801178  No Calls: 1793489  Max-trial: 7
+#  Parameters:   fFirstFraction 0.999  fFractionLast 1  fFractionNextEstimate 0.98
+### Processed number of events for all runs: 100
+### Event user time =  0.342 +- 0.0193 (sec)
+### Event real time =  0.344 +- 0.0194 (sec)
+### Number of Vertices =   23.1 +-  0.515 Number of Tracks =   23.1 +-  0.515
+# *** G4PropagatorInField Statistics  for object 0x97e9bf0 ****-------------------
+# Report of counts for PiF: number of field substeps (per physics step) in G4PropagatorInField :
+#Stats for 'Num-PiF-steps' >   No-trials= 1793489  No-calls= 465925  Max-trial= 5267  no-max= 0
+# Report of counts for PiF: number of attempts to locate boundary intersection (per step that appears to intersect) :
+#Stats for 'PiF-LocIntersect-trials' >   No-trials= 127014  No-calls= 119233  Max-trial= 20  no-max= 0
+
+
+# Input version 1
+#---------------------------
 #  10:44:47  up 4 days, 43 min,  2 users,  load average: 0.95, 0.47, 0.23
 # Running with input 2xc 
 # 196.260u 0.080s 3:16.43 99.9%   0+0k 0+0io 3826pf+0w
