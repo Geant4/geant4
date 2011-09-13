@@ -27,9 +27,9 @@
 // $Id: G4LEKaonPlusInelastic.hh,v 1.11 2007-02-26 18:21:57 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
- // Hadronic Process: Low Energy KaonPlus Inelastic Process
- // J.L. Chuma, TRIUMF, 12-Feb-1997
- // Last modified: 27-Mar-1997
+// Hadronic Process: Low Energy KaonPlus Inelastic Process
+// J.L. Chuma, TRIUMF, 12-Feb-1997
+//
  
 #ifndef G4LEKaonPlusInelastic_h
 #define G4LEKaonPlusInelastic_h 1
@@ -42,24 +42,22 @@
 // Class Description - End
 
 #include "G4InelasticInteraction.hh"
- 
- class G4LEKaonPlusInelastic : public G4InelasticInteraction
- {
- public:
+
+
+class G4LEKaonPlusInelastic : public G4InelasticInteraction
+{
+  public:
     
-    G4LEKaonPlusInelastic() : G4InelasticInteraction("G4LEKaonPlusInelastic")
-    {
-      SetMinEnergy( 0.0 );
-      SetMaxEnergy( 25.*GeV );
-    }
+    G4LEKaonPlusInelastic(const G4String& name = "G4LEKaonPlusInelastic");
     
-    ~G4LEKaonPlusInelastic()
-    { }
+    ~G4LEKaonPlusInelastic() {}
     
-    G4HadFinalState * ApplyYourself(const G4HadProjectile &aTrack,
-                                      G4Nucleus &targetNucleus );
+    G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+                                   G4Nucleus& targetNucleus);
+
+    void Description() const;
     
- private:
+  private:
     
     void Cascade(                               // derived from CASKP
       G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
@@ -71,7 +69,6 @@
       G4bool &targetHasChanged,
       G4bool &quasiElastic );
     
- };
- 
+};
+
 #endif
- 

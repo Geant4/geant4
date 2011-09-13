@@ -43,23 +43,18 @@
 
 #include "G4InelasticInteraction.hh"
  
- class G4LEAlphaInelastic : public G4InelasticInteraction
- {
- public:
+class G4LEAlphaInelastic : public G4InelasticInteraction
+{
+  public:
     
-    G4LEAlphaInelastic() : G4InelasticInteraction("G4LEAlphaInelastic")
-    {
-      SetMinEnergy( 0.0 );
-      // SetMaxEnergy( 100.*MeV );  // NUCREC only worked for energies < 100MeV
-      // Work around to avoid exception in G4EnergyRangeManager
-      SetMaxEnergy( 10.*TeV );  // NUCREC only worked for energies < 100MeV
-    }
+    G4LEAlphaInelastic(const G4String& name = "G4LEAlphaInelastic");
     
     ~G4LEAlphaInelastic() { }
     
-    G4HadFinalState * ApplyYourself(const G4HadProjectile &aTrack,
-                                      G4Nucleus &targetNucleus );
- };
- 
+    G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+                                   G4Nucleus& targetNucleus);
+
+    void Description() const;
+};
+
 #endif
- 

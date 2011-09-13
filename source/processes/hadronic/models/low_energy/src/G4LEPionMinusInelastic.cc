@@ -32,11 +32,55 @@
  
 #include "G4LEPionMinusInelastic.hh"
 #include "Randomize.hh"
+#include <iostream>
+
+
+G4LEPionMinusInelastic::G4LEPionMinusInelastic(const G4String& name)
+ : G4InelasticInteraction(name)
+{
+  SetMinEnergy(0.0);
+  SetMaxEnergy(55.*GeV);
+  Description();
+}
  
- G4HadFinalState *
-  G4LEPionMinusInelastic::ApplyYourself( const G4HadProjectile &aTrack,
-                                         G4Nucleus &targetNucleus )
-  {
+
+void G4LEPionMinusInelastic::Description() const
+{
+  char* dirName = getenv("G4PhysListDocDir");
+  if (dirName) {
+    std::ofstream outFile;
+    G4String outFileName = GetModelName() + ".html";
+    G4String pathName = G4String(dirName) + "/" + outFileName;
+
+    outFile.open(pathName);
+    outFile << "<html>\n";
+    outFile << "<head>\n";
+
+    outFile << "<title>Description of Pi- Low Energy Parameterized Model</title>\n";
+    outFile << "</head>\n";
+    outFile << "<body>\n";
+
+    outFile << "G4LEPionMinusInelastic is one of the Low Energy Parameterized\n"
+            << "(LEP) models used to implement inelastic pi- scattering\n"
+            << "from nuclei.  It is a re-engineered version of the GHEISHA\n"
+            << "code of H. Fesefeldt.  It divides the initial collision\n"
+            << "products into backward- and forward-going clusters which are\n"
+            << "then decayed into final state hadrons.  The model does not\n"
+            << "conserve energy on an event-by-event basis.  It may be\n"
+            << "applied to pions with initial energies between 0 and 25\n"
+            << "GeV.\n";
+
+    outFile << "</body>\n";
+    outFile << "</html>\n";
+    outFile.close();
+  }
+}
+
+ 
+G4HadFinalState*
+G4LEPionMinusInelastic::ApplyYourself(const G4HadProjectile& aTrack,
+                                      G4Nucleus& targetNucleus)
+{
     const G4HadProjectile *originalIncident = &aTrack;
     if (originalIncident->GetKineticEnergy()<= 0.1*MeV) 
     {
@@ -124,12 +168,13 @@
                  currentParticle, targetParticle,
                  incidentHasChanged );
     
-    delete originalTarget;
-    return &theParticleChange;
-  }
+  delete originalTarget;
+  return &theParticleChange;
+}
+
  
- void
-  G4LEPionMinusInelastic::Cascade(
+void
+G4LEPionMinusInelastic::Cascade(
    G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
    G4int& vecLen,
    const G4HadProjectile *originalIncident,

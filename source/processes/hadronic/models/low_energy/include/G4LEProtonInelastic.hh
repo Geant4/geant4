@@ -44,38 +44,37 @@
 // Class Description - End
 
 #include "G4InelasticInteraction.hh"
+
  
- class G4LEProtonInelastic : public G4InelasticInteraction
- {
- public:
-    
-    G4LEProtonInelastic() : G4InelasticInteraction("G4LEProtonInelastic")
-    {
-      SetMinEnergy( 0.0 );
-      SetMaxEnergy( 55.*GeV );
-    }
-    
+class G4LEProtonInelastic : public G4InelasticInteraction
+{
+  public:
+
+    G4LEProtonInelastic(const G4String& name = "G4LEProtonInelastic");
+
     ~G4LEProtonInelastic()
-    { }
+    {}
     
-    G4HadFinalState * ApplyYourself(const G4HadProjectile &aTrack,
-                                      G4Nucleus &targetNucleus );
- private:
+    G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+                                   G4Nucleus& targetNucleus);
+
+    void Description() const;
+
+  private:
     
     void Cascade(                               // derived from CASP
-      G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
-      G4int &vecLen,
-      const G4HadProjectile *originalIncident,
-      G4ReactionProduct &currentParticle,
-      G4ReactionProduct &targetParticle,
-      G4bool &incidentHasChanged, 
-      G4bool &targetHasChanged,
-      G4bool &quasiElastic );
+      G4FastVector<G4ReactionProduct,GHADLISTSIZE>& vec,
+      G4int& vecLen,
+      const G4HadProjectile* originalIncident,
+      G4ReactionProduct& currentParticle,
+      G4ReactionProduct& targetParticle,
+      G4bool& incidentHasChanged, 
+      G4bool& targetHasChanged,
+      G4bool& quasiElastic);
 
-    void SlowProton(
-      const G4HadProjectile *originalIncident,
-      G4Nucleus &targetNucleus );
- };
+    void SlowProton(const G4HadProjectile* originalIncident,
+                    G4Nucleus& targetNucleus);
+};
  
 #endif
  

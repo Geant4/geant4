@@ -45,20 +45,54 @@
 #include "globals.hh"
 #include "G4LFission.hh"
 #include "Randomize.hh"
+#include <iostream>
 
-G4LFission::G4LFission() : G4HadronicInteraction("G4LFission")
+
+G4LFission::G4LFission(const G4String& name)
+ : G4HadronicInteraction(name)
 {
-   init();   
-   SetMinEnergy( 0.0*GeV );
-   SetMaxEnergy( DBL_MAX );
-   
+  init();
+  SetMinEnergy(0.0*GeV);
+  SetMaxEnergy(DBL_MAX);
+  Description();  
 }
+
 
 G4LFission::~G4LFission()
 {
-   theParticleChange.Clear();
+  theParticleChange.Clear();
 }
- 
+
+
+void G4LFission::Description() const
+{
+  char* dirName = getenv("G4PhysListDocDir");
+  if (dirName) {
+    std::ofstream outFile;
+    G4String outFileName = GetModelName() + ".html";
+    G4String pathName = G4String(dirName) + "/" + outFileName;
+
+    outFile.open(pathName);
+    outFile << "<html>\n";
+    outFile << "<head>\n";
+
+    outFile << "<title>Description of Low Energy Fission Model</title>\n";
+    outFile << "</head>\n";
+    outFile << "<body>\n";
+
+    outFile << "G4LFission is one of the Low Energy Parameterized\n"
+            << "(LEP) models used to implement neutron-induced fission of\n"
+            << "nuclei.  It is a re-engineered version of the GHEISHA code\n"
+            << "of H. Fesefeldt which emits neutrons and gammas but no\n"
+            << "nuclear fragments.  The model is applicable to all incident\n"
+            << "neutron energies.\n";
+
+    outFile << "</body>\n";
+    outFile << "</html>\n";
+    outFile.close();
+  }
+}
+
 
 void 
 G4LFission::init()

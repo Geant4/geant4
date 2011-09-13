@@ -14,6 +14,14 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+02 August 2011 - Dennis Wright (hadr-lep-V09-04-02)
+---------------------------------------------------
+  Remove test directory from trunk.  It remains in tag hadr-lep-V09-04-01
+
+02 August 2011 - Dennis Wright (hadr-lep-V09-04-01)
+---------------------------------------------------
+  Add Description() method to all model classes for html documentation
+
 19 May 2011 - Dennis Wright (hadr-lep-V09-04-00)
 ------------------------------------------------
   G4LCapture.cc: fix gcc-4.6 compiler warning (variable e0 set but not used)

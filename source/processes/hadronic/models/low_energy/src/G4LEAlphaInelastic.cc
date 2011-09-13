@@ -24,21 +24,65 @@
 // ********************************************************************
 //
 //
+// Hadronic Process: Alpha Inelastic Process
+// J.L. Chuma, TRIUMF, 25-Feb-1997
+// Last modified: 27-Mar-1997
+// J.L. Chuma, 08-May-2001: Update original incident passed back in vec[0]
+//                          from NuclearReaction
 //
- // Hadronic Process: Alpha Inelastic Process
- // J.L. Chuma, TRIUMF, 25-Feb-1997
- // Last modified: 27-Mar-1997
- // J.L. Chuma, 08-May-2001: Update original incident passed back in vec[0]
- //                          from NuclearReaction
- //
+
 #include "G4LEAlphaInelastic.hh"
 #include "Randomize.hh"
 #include "G4Electron.hh"
- 
- G4HadFinalState *
-  G4LEAlphaInelastic::ApplyYourself( const G4HadProjectile &aTrack,
-                                     G4Nucleus &targetNucleus )
-  {
+#include <iostream>
+
+
+G4LEAlphaInelastic::G4LEAlphaInelastic(const G4String& name)
+ : G4InelasticInteraction(name)
+{
+  SetMinEnergy(0.0*GeV);
+  SetMaxEnergy(10.*TeV);
+  Description();
+}
+
+
+void G4LEAlphaInelastic::Description() const
+{
+  char* dirName = getenv("G4PhysListDocDir");
+  if (dirName) {
+    std::ofstream outFile;
+    G4String outFileName = GetModelName() + ".html";
+    G4String pathName = G4String(dirName) + "/" + outFileName;
+
+    outFile.open(pathName);
+    outFile << "<html>\n";
+    outFile << "<head>\n";
+
+    outFile << "<title>Description of Alpha Low Energy Parameterized Model</title>\n";
+    outFile << "</head>\n";
+    outFile << "<body>\n";
+
+    outFile << "G4LEAlphaInelastic is one of the Low Energy Parameterized\n"
+            << "(LEP) models used to implement inelastic alpha scattering\n"
+            << "from nuclei.  It is a re-engineered version of the GHEISHA\n"
+            << "code of H. Fesefeldt. It divides the initial collision\n"
+            << "products into backward- and forward-going clusters which are\n"
+            << "then decayed into final state hadrons.  The model does not\n"
+            << "conserve energy on an event-by-event basis.  It may be\n"
+            << "applied to alphas with initial energies between 0 and 10\n"
+            << "TeV.\n";
+
+    outFile << "</body>\n";
+    outFile << "</html>\n";
+    outFile.close();
+  }
+}
+
+
+G4HadFinalState*
+G4LEAlphaInelastic::ApplyYourself(const G4HadProjectile& aTrack,
+                                  G4Nucleus& targetNucleus)
+{
     theParticleChange.Clear();
     G4double A = targetNucleus.GetN();
     G4double Z = targetNucleus.GetZ();
@@ -94,8 +138,5 @@
       delete vec[i];
     }
     //
-    return &theParticleChange;
-  }
- 
- /* end of file */
- 
+  return &theParticleChange;
+}

@@ -65,22 +65,24 @@
 
 class G4LCapture : public G4HadronicInteraction
 {
-public:
+  public:
 
-   G4LCapture();
+    G4LCapture(const G4String& name = "G4LCapture");
 
-   ~G4LCapture();
+    ~G4LCapture();
  
-   G4HadFinalState * ApplyYourself(const G4HadProjectile& aTrack,
-                                    G4Nucleus& targetNucleus);
+    G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+                                   G4Nucleus& targetNucleus);
 
-private:
+    void Description() const;
 
-// Computes atomic mass in GeV using method from G4LFission
-   inline
-   G4double Atomas(const G4double A, const G4double Z)
-   {
+  private:
+
+    // Computes atomic mass in GeV using method from G4LFission
+    inline
+    G4double Atomas(const G4double A, const G4double Z)
+    {
       return G4LFission::Atomas(A, Z)/GeV;
-   }
+    }
 };
 #endif

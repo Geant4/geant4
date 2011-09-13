@@ -67,20 +67,21 @@
 
 class G4LFission : public G4HadronicInteraction
 {
-public:
+  public:
 
-   G4LFission();
-   ~G4LFission();
+    G4LFission(const G4String& name = "G4LFission");
+    ~G4LFission();
  
-   G4HadFinalState * ApplyYourself(const G4HadProjectile & aTrack,
-                                    G4Nucleus& targetNucleus);
+    G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+                                   G4Nucleus& targetNucleus);
 
-   static G4double Atomas(const G4double A, const G4double Z);
+    static G4double Atomas(const G4double A, const G4double Z);
 
-private:
+    void Description() const;
 
-   void init();
+  private:
 
-   G4double spneut[10];
+    void init();
+    G4double spneut[10];
 };
 #endif

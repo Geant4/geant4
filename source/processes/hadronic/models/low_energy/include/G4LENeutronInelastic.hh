@@ -37,41 +37,44 @@
 // Class Description - End
 
 #include "G4InelasticInteraction.hh"
- 
- class G4LENeutronInelastic : public G4InelasticInteraction
- {
- public:
+
+
+class G4LENeutronInelastic : public G4InelasticInteraction
+{
+  public:
     
     G4LENeutronInelastic() : G4InelasticInteraction("G4LENeutronInelastic")
     {
-      SetMinEnergy( 0.0 );
-      SetMaxEnergy( 55.*GeV );
+      SetMinEnergy(0.0);
+      SetMaxEnergy(55.*GeV);
+      Description();
     }
     
     ~G4LENeutronInelastic()
-    { }
+    {}
     
-    G4HadFinalState * ApplyYourself(const G4HadProjectile &aTrack,
-                                      G4Nucleus &targetNucleus );
+    G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+                                   G4Nucleus& targetNucleus);
+
+    void Description() const;
     
- private:
+  private:
     
     void Cascade(                               // derived from CASN
-      G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
-      G4int &vecLen,
-      const G4HadProjectile *originalIncident,
-      G4ReactionProduct &currentParticle,
-      G4ReactionProduct &targetParticle,
-      G4bool &incidentHasChanged, 
-      G4bool &targetHasChanged,
-      G4bool &quasiElastic );
+      G4FastVector<G4ReactionProduct,GHADLISTSIZE>& vec,
+      G4int& vecLen,
+      const G4HadProjectile* originalIncident,
+      G4ReactionProduct& currentParticle,
+      G4ReactionProduct& targetParticle,
+      G4bool& incidentHasChanged, 
+      G4bool& targetHasChanged,
+      G4bool& quasiElastic);
     
-    void SlowNeutron(
-     const G4HadProjectile *originalIncident,
-     G4ReactionProduct &modifiedOriginal,
-     G4ReactionProduct &targetParticle,
-     G4Nucleus & targetNucleus );
- };
+    void SlowNeutron(const G4HadProjectile* originalIncident,
+                     G4ReactionProduct& modifiedOriginal,
+                     G4ReactionProduct& targetParticle,
+                     G4Nucleus& targetNucleus);
+};
  
 #endif
  
