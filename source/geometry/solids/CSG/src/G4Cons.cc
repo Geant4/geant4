@@ -90,23 +90,23 @@ G4Cons::G4Cons( const G4String& pName,
   //
   if ( pDz < 0 )
   {
-    G4cerr << "ERROR - G4Cons()::G4Cons(): " << GetName() << G4endl
-           << "        Negative Z half-length ! - "
-           << pDz << G4endl;
-    G4Exception("G4Cons::G4Cons()", "InvalidSetup",
-                FatalException, "Invalid Z half-length.");
+    std::ostringstream message;
+    message << "Invalid Z half-length for Solid: " << GetName() << G4endl
+            << "        hZ = " << pDz;
+    G4Exception("G4Cons::G4Cons()", "GeomSolids0002",
+                FatalException, message);
   }
 
   // Check radii
   //
   if (((pRmin1>=pRmax1) || (pRmin2>=pRmax2) || (pRmin1<0)) && (pRmin2<0))
   {
-    G4cerr << "ERROR - G4Cons()::G4Cons(): " << GetName() << G4endl
-           << "        Invalide values for radii ! - "
-           << "        pRmin1 = " << pRmin1 << ", pRmin2 = " << pRmin2
-           << ", pRmax1 = " << pRmax1 << ", pRmax2 = " << pRmax2 << G4endl;
-    G4Exception("G4Cons::G4Cons()", "InvalidSetup",
-                FatalException, "Invalid radii.") ;
+    std::ostringstream message;
+    message << "Invalid values of radii for Solid: " << GetName() << G4endl
+            << "        pRmin1 = " << pRmin1 << ", pRmin2 = " << pRmin2
+            << ", pRmax1 = " << pRmax1 << ", pRmax2 = " << pRmax2;
+    G4Exception("G4Cons::G4Cons()", "GeomSolids0002",
+                FatalException, message) ;
   }
   if( (pRmin1 == 0.0) && (pRmin2 > 0.0) ) { fRmin1 = 1e3*kRadTolerance ; }
   if( (pRmin2 == 0.0) && (pRmin1 > 0.0) ) { fRmin2 = 1e3*kRadTolerance ; }
@@ -566,8 +566,8 @@ G4ThreeVector G4Cons::SurfaceNormal( const G4ThreeVector& p) const
   if ( noSurfaces == 0 )
   {
 #ifdef G4CSGDEBUG
-    G4Exception("G4Cons::SurfaceNormal(p)", "Notification", JustWarning, 
-                "Point p is not on surface !?" );
+    G4Exception("G4Cons::SurfaceNormal(p)", "GeomSolids1002",
+                JustWarning, "Point p is not on surface !?" );
 #endif 
      norm = ApproxSurfaceNormal(p);
   }
@@ -676,8 +676,9 @@ G4ThreeVector G4Cons::ApproxSurfaceNormal( const G4ThreeVector& p ) const
       break ;
     default:          // Should never reach this case...
       DumpInfo();
-      G4Exception("G4Cons::ApproxSurfaceNormal()", "Notification", JustWarning,
-                  "Undefined side for valid surface normal to solid.") ;
+      G4Exception("G4Cons::ApproxSurfaceNormal()",
+                  "GeomSolids1002", JustWarning,
+                  "Undefined side for valid surface normal to solid.");
       break ;    
   }
   return norm ;
@@ -2029,29 +2030,32 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
         *validNorm = true ;
         break ;
       default:
-        G4cout.precision(16) ;
         G4cout << G4endl ;
         DumpInfo();
-        G4cout << "Position:"  << G4endl << G4endl ;
-        G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
-        G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
-        G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
-        G4cout << "pho at z = "   << std::sqrt( p.x()*p.x()+p.y()*p.y() )/mm
-               << " mm" << G4endl << G4endl ;
+        std::ostringstream message;
+        G4int oldprc = message.precision(16) ;
+        message << "Undefined side for valid surface normal to solid."
+                << G4endl
+                << "Position:"  << G4endl << G4endl
+                << "p.x() = "   << p.x()/mm << " mm" << G4endl
+                << "p.y() = "   << p.y()/mm << " mm" << G4endl
+                << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl
+                << "pho at z = "   << std::sqrt( p.x()*p.x()+p.y()*p.y() )/mm
+                << " mm" << G4endl << G4endl ;
         if( p.x() != 0. || p.x() != 0.)
         {
-           G4cout << "point phi = "   << std::atan2(p.y(),p.x())/degree
-                  << " degree" << G4endl << G4endl ; 
+           message << "point phi = "   << std::atan2(p.y(),p.x())/degree
+                   << " degree" << G4endl << G4endl ; 
         }
-        G4cout << "Direction:" << G4endl << G4endl ;
-        G4cout << "v.x() = "   << v.x() << G4endl ;
-        G4cout << "v.y() = "   << v.y() << G4endl ;
-        G4cout << "v.z() = "   << v.z() << G4endl<< G4endl ;
-        G4cout << "Proposed distance :" << G4endl<< G4endl ;
-        G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl ;
-        G4cout.precision(6) ;
-        G4Exception("G4Cons::DistanceToOut(p,v,..)","Notification",JustWarning,
-                    "Undefined side for valid surface normal to solid.") ;
+        message << "Direction:" << G4endl << G4endl
+                << "v.x() = "   << v.x() << G4endl
+                << "v.y() = "   << v.y() << G4endl
+                << "v.z() = "   << v.z() << G4endl<< G4endl
+                << "Proposed distance :" << G4endl<< G4endl
+                << "snxt = "    << snxt/mm << " mm" << G4endl ;
+        message.precision(oldprc) ;
+        G4Exception("G4Cons::DistanceToOut(p,v,..)","GeomSolids1002",
+                    JustWarning, message) ;
         break ;
     }
   }
@@ -2088,7 +2092,7 @@ G4double G4Cons::DistanceToOut(const G4ThreeVector& p) const
              << " degree" << G4endl << G4endl ; 
     }
     G4cout.precision(oldprc) ;
-    G4Exception("G4Cons::DistanceToOut(p)", "Notification",
+    G4Exception("G4Cons::DistanceToOut(p)", "GeomSolids1002",
                 JustWarning, "Point p is outside !?" );
   }
 #endif
@@ -2225,7 +2229,7 @@ G4Cons::CreateRotatedVertices(const G4AffineTransform& pTransform) const
   {
     DumpInfo();
     G4Exception("G4Cons::CreateRotatedVertices()",
-                "FatalError", FatalException,
+                "GeomSolids0003", FatalException,
                 "Error in allocation of vertices. Out of memory !");
   }
 
@@ -2256,6 +2260,7 @@ G4VSolid* G4Cons::Clone() const
 
 std::ostream& G4Cons::StreamInfo(std::ostream& os) const
 {
+  G4int oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -2269,6 +2274,7 @@ std::ostream& G4Cons::StreamInfo(std::ostream& os) const
      << "   starting angle of segment: " << fSPhi/degree << " degrees \n"
      << "   delta angle of segment   : " << fDPhi/degree << " degrees \n"
      << "-----------------------------------------------------------\n";
+  os.precision(oldprc);
 
   return os;
 }

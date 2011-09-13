@@ -103,11 +103,11 @@ G4Sphere::G4Sphere( const G4String& pName,
                          ->GetRadialTolerance();
   if ( (pRmin >= pRmax) || (pRmax < 10*kRadTolerance) || (pRmin < 0) )
   {
-    G4cerr << "ERROR - G4Sphere()::G4Sphere(): " << GetName() << G4endl
-           << "        Invalide values for radii ! - "
-           << "        pRmin = " << pRmin << ", pRmax = " << pRmax << G4endl;
-    G4Exception("G4Sphere::G4Sphere()", "InvalidSetup", FatalException,
-                "Invalid radii");
+    std::ostringstream message;
+    message << "Invalid radii for Solid: " << GetName() << G4endl
+            << "        pRmin = " << pRmin << ", pRmax = " << pRmax;
+    G4Exception("G4Sphere::G4Sphere()", "GeomSolids0002",
+                FatalException, message);
   }
   fRmin=pRmin; fRmax=pRmax;
   fRminTolerance = (pRmin) ? std::max( kRadTolerance, fEpsilon*fRmin ) : 0;
@@ -674,8 +674,8 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
   if ( noSurfaces == 0 )
   {
 #ifdef G4CSGDEBUG
-    G4Exception("G4Sphere::SurfaceNormal(p)", "Notification", JustWarning, 
-                "Point p is not on surface !?" ); 
+    G4Exception("G4Sphere::SurfaceNormal(p)", "GeomSolids1002",
+                JustWarning, "Point p is not on surface !?" ); 
 #endif
      norm = ApproxSurfaceNormal(p);
   }
@@ -825,7 +825,8 @@ G4ThreeVector G4Sphere::ApproxSurfaceNormal( const G4ThreeVector& p ) const
       break;
     default:          // Should never reach this case ...
       DumpInfo();
-      G4Exception("G4Sphere::ApproxSurfaceNormal()","Notification",JustWarning,
+      G4Exception("G4Sphere::ApproxSurfaceNormal()",
+                  "GeomSolids1002", JustWarning,
                   "Undefined side for valid surface normal to solid.");
       break;    
   }
@@ -2723,47 +2724,50 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
         break;
 
       default:
-        G4int old_prc = G4cout.precision(16);
         G4cout << G4endl;
         DumpInfo();
-        G4cout << "Position:"  << G4endl << G4endl;
-        G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl;
-        G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl;
-        G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl;
-        G4cout << "Direction:" << G4endl << G4endl;
-        G4cout << "v.x() = "   << v.x() << G4endl;
-        G4cout << "v.y() = "   << v.y() << G4endl;
-        G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
-        G4cout << "Proposed distance :" << G4endl << G4endl;
-        G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl;
-        G4cout.precision(old_prc);
+        std::ostringstream message;
+        G4int oldprc = message.precision(16);
+        message << "Undefined side for valid surface normal to solid."
+                << G4endl
+                << "Position:"  << G4endl << G4endl
+                << "p.x() = "   << p.x()/mm << " mm" << G4endl
+                << "p.y() = "   << p.y()/mm << " mm" << G4endl
+                << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl
+                << "Direction:" << G4endl << G4endl
+                << "v.x() = "   << v.x() << G4endl
+                << "v.y() = "   << v.y() << G4endl
+                << "v.z() = "   << v.z() << G4endl << G4endl
+                << "Proposed distance :" << G4endl << G4endl
+                << "snxt = "    << snxt/mm << " mm" << G4endl;
+        message.precision(oldprc);
         G4Exception("G4Sphere::DistanceToOut(p,v,..)",
-                    "Notification", JustWarning,
-                    "Undefined side for valid surface normal to solid.");
+                    "GeomSolids1002", JustWarning, message);
         break;
     }
   }
   if (snxt == kInfinity)
   {
-    G4int old_prc = G4cout.precision(24);
     G4cout << G4endl;
     DumpInfo();
-    G4cout << "Position:"  << G4endl << G4endl;
-    G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl;
-    G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl;
-    G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl;
-    G4cout << "Rp = "<< std::sqrt( p.x()*p.x()+p.y()*p.y()+p.z()*p.z() )/mm << " mm" 
-           << G4endl << G4endl;
-    G4cout << "Direction:" << G4endl << G4endl;
-    G4cout << "v.x() = "   << v.x() << G4endl;
-    G4cout << "v.y() = "   << v.y() << G4endl;
-    G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
-    G4cout << "Proposed distance :" << G4endl << G4endl;
-    G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl;
-    G4cout.precision(old_prc);
+    std::ostringstream message;
+    G4int oldprc = message.precision(16);
+    message << "Logic error: snxt = kInfinity  ???" << G4endl
+            << "Position:"  << G4endl << G4endl
+            << "p.x() = "   << p.x()/mm << " mm" << G4endl
+            << "p.y() = "   << p.y()/mm << " mm" << G4endl
+            << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl
+            << "Rp = "<< std::sqrt( p.x()*p.x()+p.y()*p.y()+p.z()*p.z() )/mm
+            << " mm" << G4endl << G4endl
+            << "Direction:" << G4endl << G4endl
+            << "v.x() = "   << v.x() << G4endl
+            << "v.y() = "   << v.y() << G4endl
+            << "v.z() = "   << v.z() << G4endl << G4endl
+            << "Proposed distance :" << G4endl << G4endl
+            << "snxt = "    << snxt/mm << " mm" << G4endl;
+    message.precision(oldprc);
     G4Exception("G4Sphere::DistanceToOut(p,v,..)",
-                "Notification", JustWarning,
-                "Logic error: snxt = kInfinity  ???");
+                "GeomSolids1002", JustWarning, message);
   }
 
   return snxt;
@@ -2794,7 +2798,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p ) const
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
      G4cout.precision(old_prc) ;
      G4Exception("G4Sphere::DistanceToOut(p)",
-                 "Notification", JustWarning, "Point p is outside !?" );
+                 "GeomSolids1002", JustWarning, "Point p is outside !?" );
   }
 #endif
 
@@ -2978,7 +2982,7 @@ G4Sphere::CreateRotatedVertices( const G4AffineTransform& pTransform,
   {
     DumpInfo();
     G4Exception("G4Sphere::CreateRotatedVertices()",
-                "FatalError", FatalException,
+                "GeomSolids0003", FatalException,
                 "Error in allocation of vertices. Out of memory !");
   }
 
@@ -3012,6 +3016,7 @@ G4VSolid* G4Sphere::Clone() const
 
 std::ostream& G4Sphere::StreamInfo( std::ostream& os ) const
 {
+  G4int oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -3024,6 +3029,7 @@ std::ostream& G4Sphere::StreamInfo( std::ostream& os ) const
      << "    starting theta of segment: " << fSTheta/degree << " degrees \n"
      << "    delta theta of segment   : " << fDTheta/degree << " degrees \n"
      << "-----------------------------------------------------------\n";
+  os.precision(oldprc);
 
   return os;
 }

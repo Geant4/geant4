@@ -118,11 +118,11 @@ G4Torus::SetAllParameters( G4double pRmin,
   }
   else
   {
-    G4cerr << "ERROR - G4Torus()::SetAllParameters(): " << GetName() << G4endl
-           << "        Invalid swept radius !" << G4endl
-           << "pRtor = " << pRtor << ", pRmax = " << pRmax << G4endl;
+    std::ostringstream message;
+    message << "Invalid swept radius for Solid: " << GetName() << G4endl
+            << "        pRtor = " << pRtor << ", pRmax = " << pRmax;
     G4Exception("G4Torus::SetAllParameters()",
-                "InvalidSetup", FatalException, "Invalid swept radius.");
+                "GeomSolids0002", FatalException, message);
   }
 
   // Check radii, as in G4Cons
@@ -135,11 +135,11 @@ G4Torus::SetAllParameters( G4double pRmin,
   }
   else
   {
-    G4cerr << "ERROR - G4Torus()::SetAllParameters(): " << GetName() << G4endl
-           << "        Invalid values for radii !" << G4endl
-           << "        pRmin = " << pRmin << ", pRmax = " << pRmax << G4endl;
+    std::ostringstream message;
+    message << "Invalid values of radii for Solid: " << GetName() << G4endl
+            << "        pRmin = " << pRmin << ", pRmax = " << pRmax;
     G4Exception("G4Torus::SetAllParameters()",
-                "InvalidSetup", FatalException, "Invalid radii.");
+                "GeomSolids0002", FatalException, message);
   }
 
   // Relative tolerances
@@ -156,11 +156,11 @@ G4Torus::SetAllParameters( G4double pRmin,
     if (pDPhi > 0)       { fDPhi = pDPhi ; }
     else
     {
-      G4cerr << "ERROR - G4Torus::SetAllParameters(): " << GetName() << G4endl
-             << "        Negative Z delta-Phi ! - "
-             << pDPhi << G4endl;
+      std::ostringstream message;
+      message << "Invalid Z delta-Phi for Solid: " << GetName() << G4endl
+              << "        pDPhi = " << pDPhi;
       G4Exception("G4Torus::SetAllParameters()",
-                  "InvalidSetup", FatalException, "Invalid dphi.");
+                  "GeomSolids0002", FatalException, message);
     }
   }
   
@@ -809,8 +809,8 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
   if ( noSurfaces == 0 )
   {
 #ifdef G4CSGDEBUG
-    G4Exception("G4Torus::SurfaceNormal(p)", "Notification", JustWarning, 
-                "Point p is not on surface !?" );
+    G4Exception("G4Torus::SurfaceNormal(p)", "GeomSolids1002",
+                JustWarning, "Point p is not on surface !?" );
 #endif 
      norm = ApproxSurfaceNormal(p);
   }
@@ -900,7 +900,7 @@ G4ThreeVector G4Torus::ApproxSurfaceNormal( const G4ThreeVector& p ) const
     default:          // Should never reach this case ...
       DumpInfo();
       G4Exception("G4Torus::ApproxSurfaceNormal()",
-                  "Notification", JustWarning,
+                  "GeomSolids1002", JustWarning,
                   "Undefined side for valid surface normal to solid.");
       break ;
   } 
@@ -1445,23 +1445,25 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
 
         // It seems we go here from time to time ...
 
-        G4int oldprc = G4cout.precision(16);
         G4cout << G4endl;
         DumpInfo();
-        G4cout << "Position:"  << G4endl << G4endl;
-        G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl;
-        G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl;
-        G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl;
-        G4cout << "Direction:" << G4endl << G4endl;
-        G4cout << "v.x() = "   << v.x() << G4endl;
-        G4cout << "v.y() = "   << v.y() << G4endl;
-        G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
-        G4cout << "Proposed distance :" << G4endl << G4endl;
-        G4cout << "snxt = " << snxt/mm << " mm" << G4endl << G4endl;
-        G4cout.precision(oldprc);
+        std::ostringstream message;
+        G4int oldprc = message.precision(16);
+        message << "Undefined side for valid surface normal to solid."
+                << G4endl
+                << "Position:"  << G4endl << G4endl
+                << "p.x() = "   << p.x()/mm << " mm" << G4endl
+                << "p.y() = "   << p.y()/mm << " mm" << G4endl
+                << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl
+                << "Direction:" << G4endl << G4endl
+                << "v.x() = "   << v.x() << G4endl
+                << "v.y() = "   << v.y() << G4endl
+                << "v.z() = "   << v.z() << G4endl << G4endl
+                << "Proposed distance :" << G4endl << G4endl
+                << "snxt = " << snxt/mm << " mm" << G4endl;
+        message.precision(oldprc);
         G4Exception("G4Torus::DistanceToOut(p,v,..)",
-                    "Notification",JustWarning,
-                    "Undefined side for valid surface normal to solid.");
+                    "GeomSolids1002",JustWarning, message);
         break;
     }
   }
@@ -1495,7 +1497,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p ) const
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
      G4cout.precision(oldprc);
-     G4Exception("G4Torus::DistanceToOut(p)", "Notification",
+     G4Exception("G4Torus::DistanceToOut(p)", "GeomSolids1002",
                  JustWarning, "Point p is outside !?" );
   }
 #endif
@@ -1616,7 +1618,7 @@ G4Torus::CreateRotatedVertices( const G4AffineTransform& pTransform,
   {
     DumpInfo();
     G4Exception("G4Torus::CreateRotatedVertices()",
-                "FatalError", FatalException,
+                "GeomSolids0003", FatalException,
                 "Error in allocation of vertices. Out of memory !");
   }
   return vertices;
@@ -1646,6 +1648,7 @@ G4VSolid* G4Torus::Clone() const
 
 std::ostream& G4Torus::StreamInfo( std::ostream& os ) const
 {
+  G4int oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -1657,6 +1660,7 @@ std::ostream& G4Torus::StreamInfo( std::ostream& os ) const
      << "    starting phi: " << fSPhi/degree << " degrees \n"
      << "    delta phi   : " << fDPhi/degree << " degrees \n"
      << "-----------------------------------------------------------\n";
+  os.precision(oldprc);
 
   return os;
 }

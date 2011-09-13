@@ -122,11 +122,11 @@ void G4Sphere::CheckThetaAngles(G4double sTheta, G4double dTheta)
 {
   if ( (sTheta<0) || (sTheta>pi) )
   {
-    G4cerr << "ERROR - G4Sphere()::CheckThetaAngles()" << G4endl
-           << "        Invalid starting Theta angle for solid: " << GetName()
-           << G4endl;
-    G4Exception("G4Sphere::CheckThetaAngles()", "InvalidSetup",
-                FatalException, "sTheta outside 0-PI range.");
+    std::ostringstream message;
+    message << "sTheta outside 0-PI range." << G4endl
+            << "Invalid starting Theta angle for solid: " << GetName();
+    G4Exception("G4Sphere::CheckThetaAngles()", "GeomSolids0002",
+                FatalException, message);
   }
   else
   {
@@ -142,11 +142,12 @@ void G4Sphere::CheckThetaAngles(G4double sTheta, G4double dTheta)
   }
   else
   {
-    G4cerr << "ERROR - G4Sphere()::CheckThetaAngles(): " << G4endl
-           << "        Negative delta-Theta (" << dTheta << "), for solid: "
-           << GetName() << G4endl;
-    G4Exception("G4Sphere::CheckThetaAngles()", "InvalidSetup",
-                FatalException, "Invalid dTheta.");
+    std::ostringstream message;
+    message << "Invalid dTheta." << G4endl
+            << "Negative delta-Theta (" << dTheta << "), for solid: "
+            << GetName();
+    G4Exception("G4Sphere::CheckThetaAngles()", "GeomSolids0002",
+                FatalException, message);
   }
   if ( fDTheta-fSTheta < pi ) { fFullThetaSphere = false; }
   else                        { fFullThetaSphere = true ; }
@@ -192,11 +193,12 @@ void G4Sphere::CheckDPhiAngle(G4double dPhi)
     }
     else
     {
-      G4cerr << "ERROR - G4Sphere()::CheckDPhiAngle(): " << GetName() << G4endl
-             << "        Negative delta-Phi ! - "
-             << dPhi << G4endl;
-      G4Exception("G4Sphere::CheckDPhiAngle()", "InvalidSetup",
-                  FatalException, "Invalid dphi.");
+      std::ostringstream message;
+      message << "Invalid dphi." << G4endl
+              << "Negative delta-Phi (" << dPhi << "), for solid: "
+              << GetName();
+      G4Exception("G4Sphere::CheckDPhiAngle()", "GeomSolids0002",
+                  FatalException, message);
     }
   }
 }

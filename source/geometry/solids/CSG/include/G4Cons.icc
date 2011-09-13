@@ -137,11 +137,12 @@ inline void G4Cons::CheckDPhiAngle(G4double dPhi)
     }
     else
     {
-      G4cerr << "ERROR - G4Cons()::CheckDPhiAngle()" << G4endl
-             << "        Negative or zero delta-Phi (" << dPhi << ") in solid: "
-             << GetName() << G4endl;
-      G4Exception("G4Cons::CheckDPhiAngle()", "InvalidSetup",
-                  FatalException, "Invalid dphi.");
+      std::ostringstream message;
+      message << "Invalid dphi." << G4endl
+              << "Negative or zero delta-Phi (" << dPhi << ") in solid: "
+              << GetName();
+      G4Exception("G4Cons::CheckDPhiAngle()", "GeomSolids0002",
+                  FatalException, message);
     }
   }
 }
