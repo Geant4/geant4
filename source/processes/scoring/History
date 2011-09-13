@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 10, 2011 M.Asai (procscore-V09-04-02)
+- Introducing parallel layered mass geometry
+  G4ParallelWorldProcess takes care of both layered mass geometry
+  and sensitivity of a parallel world.
+
 June 05, 2011 P.Arce (procscore-V09-04-01)
 - Fix in G4ScoreSplittingProcess::PostStepDoIt() to not consider steps
   if the voxel boundary is not skipped.

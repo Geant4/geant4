@@ -1,6 +1,0 @@
-/tracking/verbose 3
-/gun/particle geantino
-/run/beamOn 1
-/tracking/verbose 1
-/gun/particle e-
-/run/beamOn 1000
