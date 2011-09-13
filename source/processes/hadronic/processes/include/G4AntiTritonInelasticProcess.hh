@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
- // Hadronic Process: AntiTriton Inelastic Process
- // G.Folger, 10 March 2011
- // Last modified:
- //
- // Note:  there is no .cc file
+// Hadronic Process: AntiTriton Inelastic Process
+// G.Folger, 10 March 2011
+//
  
 #ifndef G4AntiTritonInelasticProcess_h
 #define G4AntiTritonInelasticProcess_h 1
@@ -40,18 +38,15 @@
 #include "G4HadronInelasticProcess.hh"
 #include "G4AntiTriton.hh"
 
- class G4AntiTritonInelasticProcess : public G4HadronInelasticProcess
- {
- public:
+class G4AntiTritonInelasticProcess : public G4HadronInelasticProcess
+{
+  public:
     
-    G4AntiTritonInelasticProcess( const G4String& processName= "AntiTritonInelasticProcess") \
-       : G4HadronInelasticProcess( processName, G4AntiTriton::AntiTriton() )
-    { }
+    G4AntiTritonInelasticProcess(const G4String& processName = "AntiTritonInelasticProcess");
     
-    ~G4AntiTritonInelasticProcess()
-    { }
- };
- 
-#endif
- 
+    ~G4AntiTritonInelasticProcess() {}
 
+    void Description() const;
+};
+
+#endif

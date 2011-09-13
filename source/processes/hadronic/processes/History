@@ -16,6 +16,14 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+08 August 2011 Dennis Wright       (hadr-proc-V09-04-05)
+--------------------------------------------------------
+- add names of new .src files to sources.cmake
+
+02 August 2011 Dennis Wright       (hadr-proc-V09-04-04)
+--------------------------------------------------------
+- add Description() method to each process for documentation
+
 10 March 2011 G.Folger             (hadr-proc-V09-04-03)
 --------------------------------------------------------
 -  add Process fro anti-triton G4AntiTritonInelasticProcess.h

@@ -82,13 +82,43 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_proc
         G4XiMinusInelasticProcess.hh
         G4XiZeroInelasticProcess.hh
     SOURCES
+        G4AlphaInelasticProcess.cc
+        G4AntiAlphaInelasticProcess.cc
+        G4AntiDeuteronInelasticProcess.cc
+        G4AntiHe3InelasticProcess.cc
+        G4AntiLambdaInelasticProcess.cc
+        G4AntiNeutronInelasticProcess.cc
+        G4AntiOmegaMinusInelasticProcess.cc
+        G4AntiProtonInelasticProcess.cc
+        G4AntiSigmaMinusInelasticProcess.cc
+        G4AntiSigmaPlusInelasticProcess.cc
+        G4AntiTritonInelasticProcess.cc
+        G4AntiXiMinusInelasticProcess.cc
+        G4AntiXiZeroInelasticProcess.cc
+        G4DeuteronInelasticProcess.cc
         G4ElectronNuclearProcess.cc
         G4HadronCaptureProcess.cc
         G4HadronElasticProcess.cc
         G4HadronFissionProcess.cc
+        G4IonInelasticProcess.cc
+        G4KaonMinusInelasticProcess.cc
+        G4KaonPlusInelasticProcess.cc
+        G4KaonZeroLInelasticProcess.cc
+        G4KaonZeroSInelasticProcess.cc
+        G4LambdaInelasticProcess.cc
         G4MuonNuclearProcess.cc
+        G4NeutronInelasticProcess.cc
+        G4OmegaMinusInelasticProcess.cc
         G4PhotoNuclearProcess.cc
+        G4PionMinusInelasticProcess.cc
+        G4PionPlusInelasticProcess.cc
         G4PositronNuclearProcess.cc
+        G4ProtonInelasticProcess.cc
+        G4SigmaMinusInelasticProcess.cc
+        G4SigmaPlusInelasticProcess.cc
+        G4TritonInelasticProcess.cc
+        G4XiMinusInelasticProcess.cc
+        G4XiZeroInelasticProcess.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // G4 Process: Low-energy Neutron Capture
 // F.W. Jones, TRIUMF, 03-DEC-96
 // 
@@ -51,14 +49,43 @@ G4HadronCaptureProcess::G4HadronCaptureProcess(const G4String& processName) :
 {
   SetProcessSubType(fCapture);
   G4HadronicProcess::AddDataSet(new G4HadronCaptureDataSet());
+  Description();
 }
 
+
 G4HadronCaptureProcess::~G4HadronCaptureProcess()
-{
-}
+{}
+
 
 G4bool
 G4HadronCaptureProcess::IsApplicable(const G4ParticleDefinition& aParticleType)
 {
   return (&aParticleType == G4Neutron::Neutron());
 }
+
+void G4HadronCaptureProcess::Description() const
+{
+  char* dirName = getenv("G4PhysListDocDir");
+  if (dirName) {
+    std::ofstream outFile;
+    G4String outFileName = GetProcessName() + ".html";
+    G4String pathName = G4String(dirName) + "/" + outFileName;
+
+    outFile.open(pathName);
+    outFile << "<html>\n";
+    outFile << "<head>\n";
+
+    outFile << "<title>Description of G4HadronCaptureProcess</title>\n";
+    outFile << "</head>\n";
+    outFile << "<body>\n";
+
+    outFile << "This process handles the capture of neutrons by nuclei by\n"
+            << "invoking one or more hadronic models and one or more hadronic\n"
+            << "cross sections.\n";
+
+    outFile << "</body>\n";
+    outFile << "</html>\n";
+    outFile.close();
+  }
+}
+

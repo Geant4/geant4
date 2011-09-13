@@ -49,6 +49,7 @@ public:
   G4ElectronNuclearProcess( const G4String& processName = "ElectroNuclear" );
   virtual ~G4ElectronNuclearProcess();
 
+  void Description() const;
 };
 
 #endif

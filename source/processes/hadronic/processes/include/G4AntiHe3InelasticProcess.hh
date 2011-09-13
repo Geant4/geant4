@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
- // Hadronic Process: AntiHe3 Inelastic Process
- // J.Apostolakis 23 Feb 2011
- // Last modified:
- //
- // Note:  there is no .cc file
+// Hadronic Process: AntiHe3 Inelastic Process
+// J.Apostolakis 23 Feb 2011
+//
  
 #ifndef G4AntiHe3InelasticProcess_h
 #define G4AntiHe3InelasticProcess_h 1
@@ -41,17 +39,17 @@
 #include "G4AntiHe3.hh"
 #include "G4AntiAlpha.hh"
 
- class G4AntiHe3InelasticProcess : public G4HadronInelasticProcess
- {
- public:
+
+class G4AntiHe3InelasticProcess : public G4HadronInelasticProcess
+{
+  public:
     
-    G4AntiHe3InelasticProcess( const G4String& processName= "AntiHe3InelasticProcess") \
-       : G4HadronInelasticProcess( processName, G4AntiHe3::AntiHe3() )
-    { }
+    G4AntiHe3InelasticProcess(const G4String& processName= "AntiHe3InelasticProcess");
     
-    ~G4AntiHe3InelasticProcess()
-    { }
- };
+    ~G4AntiHe3InelasticProcess() {}
+
+    void Description() const;
+};
  
 #endif
  

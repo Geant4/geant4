@@ -31,6 +31,7 @@
 #include "G4ElectronNuclearProcess.hh" 
 #include "G4Electron.hh"
 #include "G4ElectroNuclearCrossSection.hh"
+#include <iostream>
 
 G4ElectronNuclearProcess::
 G4ElectronNuclearProcess(const G4String& processName)
@@ -38,9 +39,35 @@ G4ElectronNuclearProcess(const G4String& processName)
 { 
   G4CrossSectionDataStore * theStore = GetCrossSectionDataStore();
   theStore->AddDataSet(new G4ElectroNuclearCrossSection);
+  Description();
 } 
+
     
 G4ElectronNuclearProcess::~G4ElectronNuclearProcess()
-{
-}
+{}
 
+
+void G4ElectronNuclearProcess::Description() const
+{
+  char* dirName = getenv("G4PhysListDocDir");
+  if (dirName) {
+    std::ofstream outFile;
+    G4String outFileName = GetProcessName() + ".html";
+    G4String pathName = G4String(dirName) + "/" + outFileName;
+    outFile.open(pathName);
+    outFile << "<html>\n";
+    outFile << "<head>\n";
+
+    outFile << "<title>Description of G4ElectronNuclearProcess</title>\n";
+    outFile << "</head>\n";
+    outFile << "<body>\n";
+
+    outFile << "This process handles inelastic electron scattering from\n" 
+            << "nuclei by invoking one or more hadronic models and one\n"
+            << "or more hadronic cross sections.\n";
+
+    outFile << "</body>\n";
+    outFile << "</html>\n";
+    outFile.close();
+  }
+}

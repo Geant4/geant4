@@ -23,24 +23,35 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // $Id: G4PhotoNuclearProcess.cc,v 1.3 2009-03-31 19:16:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4PhotoNuclearProcess.hh"
-#include "G4Gamma.hh"
-#include "G4PhotoNuclearCrossSection.hh"
+#include <iostream>
 
-G4PhotoNuclearProcess::
-G4PhotoNuclearProcess(const G4String& processName)
-  : G4HadronInelasticProcess( processName, G4Gamma::Gamma() )
-{ 
-  G4CrossSectionDataStore * theStore = GetCrossSectionDataStore();
-  theStore->AddDataSet(new G4PhotoNuclearCrossSection);
-} 
-    
-G4PhotoNuclearProcess::~G4PhotoNuclearProcess()
+
+void G4PhotoNuclearProcess::Description() const
 {
+  char* dirName = getenv("G4PhysListDocDir");
+  if (dirName) {
+    std::ofstream outFile;
+    G4String outFileName = GetProcessName() + ".html";
+    G4String pathName = G4String(dirName) + "/" + outFileName;
+    outFile.open(pathName);
+    outFile << "<html>\n";
+    outFile << "<head>\n";
+
+    outFile << "<title>Description of G4PhotoNuclearProcess</title>\n";
+    outFile << "</head>\n";
+    outFile << "<body>\n";
+
+    outFile << "This process handles inelastic photon scattering from\n" 
+            << "nuclei by invoking one or more hadronic models and one\n"
+            << "or more hadronic cross sections.\n";
+
+    outFile << "</body>\n";
+    outFile << "</html>\n";
+    outFile.close();
+  }
 }

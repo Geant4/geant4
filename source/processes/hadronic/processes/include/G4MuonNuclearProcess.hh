@@ -48,5 +48,6 @@ public:
  
   virtual G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
 
+  void Description() const;
 };
 #endif

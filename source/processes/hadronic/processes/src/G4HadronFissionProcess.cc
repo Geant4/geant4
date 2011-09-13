@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-//
 // F.W. Jones, TRIUMF, 03-DEC-96
 // 
 // This is a prototype of a low-energy fission process.
@@ -50,13 +49,41 @@ G4HadronFissionProcess::G4HadronFissionProcess(const G4String& processName) :
 {
   SetProcessSubType(fFission);
   AddDataSet(new G4HadronFissionDataSet());
+  Description();
 }
 
+
 G4HadronFissionProcess::~G4HadronFissionProcess()
-{
-}
- 
+{}
+
+
 G4bool G4HadronFissionProcess::IsApplicable(const G4ParticleDefinition& p)
 { 
   return (&p == G4Neutron::Neutron());
+}
+
+
+void G4HadronFissionProcess::Description() const
+{
+  char* dirName = getenv("G4PhysListDocDir");
+  if (dirName) {
+    std::ofstream outFile;
+    G4String outFileName = GetProcessName() + ".html";
+    G4String pathName = G4String(dirName) + "/" + outFileName;
+    outFile.open(pathName);
+    outFile << "<html>\n";
+    outFile << "<head>\n";
+
+    outFile << "<title>Description of G4HadronFissionProcess</title>\n";
+    outFile << "</head>\n";
+    outFile << "<body>\n";
+
+    outFile << "This process handles neutron-induced fission of nuclei by\n"
+            << "invoking one or more hadronic models and one or more hadronic\n"
+            << "cross sections.\n";
+
+    outFile << "</body>\n";
+    outFile << "</html>\n";
+    outFile.close();
+  }
 }

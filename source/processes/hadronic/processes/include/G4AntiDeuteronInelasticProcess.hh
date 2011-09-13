@@ -40,19 +40,15 @@
 #include "G4HadronInelasticProcess.hh"
 #include "G4AntiDeuteron.hh"
 
- class G4AntiDeuteronInelasticProcess : public G4HadronInelasticProcess
- {
- public:
+class G4AntiDeuteronInelasticProcess : public G4HadronInelasticProcess
+{
+  public:
     
-    G4AntiDeuteronInelasticProcess(
-     const G4String& processName = "AntiDeuteronInelastic" ) :
-      G4HadronInelasticProcess( processName, G4AntiDeuteron::AntiDeuteron() )
-    { }
+    G4AntiDeuteronInelasticProcess(const G4String& processName = "AntiDeuteronInelastic");
     
-    ~G4AntiDeuteronInelasticProcess()
-    { }
- };
+    ~G4AntiDeuteronInelasticProcess() {}
+
+    void Description() const;
+};
  
 #endif
- 
-
