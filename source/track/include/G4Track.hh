@@ -45,6 +45,7 @@
 //   Add MaterialCutCouple                          08 Oct. 2002  H.Kurashige
 //   Add SetVelocityTableProperties                 02 Apr. 2011  H.Kurashige
 //   Add fVelocity and Set/GetVelocity              29 Apr. 2011  H.Kurashige
+//   Use G4VelocityTable                     17 AUg. 2011 H.Kurashige
 
 #ifndef G4Track_h
 #define G4Track_h 1
@@ -60,12 +61,11 @@
 #include "G4TouchableHandle.hh"       // Include from 'geometry'
 #include "G4VUserTrackInformation.hh"
 
-#include "G4PhysicsLogVector.hh"
-
 #include "G4Material.hh"
 
 class G4Step;                         // Forward declaration
 class G4MaterialCutsCouple;
+class G4VelocityTable;
 
 //////////////
 class G4Track
@@ -250,14 +250,11 @@ public: // With description
   static void SetVelocityTableProperties(G4double t_max, G4double t_min, G4int nbin);
   static G4double GetMaxTOfVelocityTable();
   static G4double GetMinTOfVelocityTable();
-  static G4double GetNbinOfVelocityTable();
+  static G4int    GetNbinOfVelocityTable();
 
 //---------
    private:
 //---------
-  // prepare velocity table
-  void PrepareVelocityTable();
-
    // Member data
    G4int fCurrentStepNumber;       // Total steps number up to now
    G4ThreeVector fPosition;        // Current positon
@@ -308,13 +305,8 @@ public: // With description
    mutable G4double                  prev_velocity;
    mutable G4double                  prev_momentum;
 
-   // velocity table for massive particles used in CalculateVelocity 
-   static G4PhysicsLogVector* velTable;
-   static G4double            maxT;
-   static G4double            minT;
-   static G4int               NbinT;
-
    G4bool          is_OpticalPhoton; 
+   static G4VelocityTable*  velTable;
 };
 
 #include "G4Track.icc"

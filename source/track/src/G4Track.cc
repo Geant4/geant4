@@ -38,20 +38,18 @@
 //   Modification for G4TouchableHandle             22 Oct. 2001  R.Chytracek//
 //   Fix GetVelocity (bug report #741)   Horton-Smith Apr 14 2005
 //   Remove massless check in  GetVelocity   02 Apr. 09 H.Kurashige
+//   Use G4VelocityTable                     17 AUg. 2011 H.Kurashige
 
 #include "G4Track.hh"
 #include "G4ParticleTable.hh"
+#include "G4VelocityTable.hh"
 
 #include <iostream>
 #include <iomanip>
 
 G4Allocator<G4Track> aTrackAllocator;
 
-G4PhysicsLogVector* G4Track::velTable = 0;
-
-G4double G4Track::maxT = 1000.0;
-G4double G4Track::minT = 0.0001;
-G4int    G4Track::NbinT = 500;
+G4VelocityTable*  G4Track::velTable=0;
 
 ///////////////////////////////////////////////////////////
 G4Track::G4Track(G4DynamicParticle* apValueDynamicParticle,
@@ -85,7 +83,7 @@ G4Track::G4Track(G4DynamicParticle* apValueDynamicParticle,
   // check if the particle type is Optical Photon
   is_OpticalPhoton = (fpDynamicParticle->GetDefinition() == fOpticalPhoton);
 
-  if (velTable==0) PrepareVelocityTable();
+  if (velTable ==0 ) velTable = G4VelocityTable::GetVelocityTable();
 
   fVelocity = CalculateVelocity();
 
@@ -109,7 +107,7 @@ G4Track::G4Track()
     fpUserInformation(0),
     prev_mat(0),  groupvel(0),
     prev_velocity(0.0), prev_momentum(0.0),
-    is_OpticalPhoton(false) 
+    is_OpticalPhoton(false)
 {
 }
 //////////////////
@@ -130,7 +128,7 @@ G4Track::G4Track(const G4Track& right)
     fpUserInformation(0),
     prev_mat(0),  groupvel(0),
     prev_velocity(0.0), prev_momentum(0.0),
-    is_OpticalPhoton(false) 
+    is_OpticalPhoton(false)
 {
   *this = right;
 }
@@ -193,7 +191,6 @@ G4Track & G4Track::operator=(const G4Track &right)
    prev_momentum = right.prev_momentum;
 
    is_OpticalPhoton = right.is_OpticalPhoton; 
-
   }
   return *this;
 }
@@ -223,11 +220,11 @@ G4double G4Track::CalculateVelocity() const
     velocity = c_light;
   } else {
     G4double T = (fpDynamicParticle->GetKineticEnergy())/mass;
-    if (T > maxT) {
+    if (T > GetMaxTOfVelocityTable()) {
       velocity = c_light;
     } else if (T<DBL_MIN) {
       velocity =0.;
-    } else if (T<minT) {
+    } else if (T<GetMinTOfVelocityTable()) {
       velocity = c_light*std::sqrt(T*(T+2.))/(T+1.0);
     } else {	
       velocity = velTable->Value(T);
@@ -284,44 +281,25 @@ G4double G4Track::CalculateVelocityForOpticalPhoton() const
 }
 
 ///////////////////
-void G4Track::PrepareVelocityTable()
-///////////////////
-{
-  velTable = new G4PhysicsLogVector(minT, maxT, NbinT);
-  for (G4int i=0; i<=NbinT; i++){
-    G4double T = velTable->Energy(i);
-    velTable->PutValue(i, c_light*std::sqrt(T*(T+2.))/(T+1.0) );    
-  }
-
-  return;
-} 
-
-
-///////////////////
 void G4Track::SetVelocityTableProperties(G4double t_max, G4double t_min, G4int nbin)
 ///////////////////
 {
-  if (nbin > 100 )                NbinT = nbin;
-  if ((t_min < t_max)&&(t_min>0.))  {
-    minT = t_min; 
-    maxT = t_max;
-  } 
-  if (velTable !=0)               delete velTable;
-  velTable = 0;
+  G4VelocityTable::SetVelocityTableProperties(t_max, t_min, nbin);
+  velTable = G4VelocityTable::GetVelocityTable();
 }
 
 ///////////////////
 G4double G4Track::GetMaxTOfVelocityTable()
 ///////////////////
-{ return maxT; }
+{ return G4VelocityTable::GetMaxTOfVelocityTable();}
 
 ///////////////////
 G4double G4Track::GetMinTOfVelocityTable() 
 ///////////////////
-{ return minT; }
+{ return G4VelocityTable::GetMinTOfVelocityTable();}
 
 ///////////////////
-G4double G4Track::GetNbinOfVelocityTable() 
+G4int    G4Track::GetNbinOfVelocityTable() 
 ///////////////////
-{ return NbinT; }
+{ return G4VelocityTable::GetNbinOfVelocityTable();}
 

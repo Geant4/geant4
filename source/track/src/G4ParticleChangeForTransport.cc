@@ -179,8 +179,7 @@ G4Step* G4ParticleChangeForTransport::UpdateStepForAlongStep(G4Step* pStep)
     pPostStepPoint->SetMomentumDirection(direction);
     pPostStepPoint->SetKineticEnergy( energy );
   }
-  if (!isVelocityChanged) theVelocityChange = pStep->GetTrack()->CalculateVelocity();
-  pPostStepPoint->SetVelocity(theVelocityChange);
+  if (isVelocityChanged)  pPostStepPoint->SetVelocity(theVelocityChange);
 
   // stop case should not occur
   //pPostStepPoint->SetMomentumDirection(G4ThreeVector(1., 0., 0.));

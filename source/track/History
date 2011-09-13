@@ -17,6 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+
+-September 11, 2011, H.Kurashige (track-V09-04-08)
+- Modify ParticleChangeForTransport to fix a bug of wrong velocity
+  in PostStepPoint after Along/PostStepDoIt
+
+-August 22, 2011, H.Kurashige (track-V09-04-07)
+- G4VelocityTable is modified and it is not derived from G4PhysicsVector
+  (in order to avoid from creation of PhysicsVector as static objects)
+ 
+August 17, 2011, H.Kurashige (track-V09-04-05)
+- Add G4VelocityTable as singleton to avoid creation of G4PhysicsVector in event loop
+- Modify G4Step::InitializeStep to set correct velocity for the optical photon
+
 July 6, 2011, H.Kurashige (track-V09-04-04)
 - Modify ParticleChanges (forDecay, for Transportation and G4ParticleChange)
   to handle local time change rather than global time
