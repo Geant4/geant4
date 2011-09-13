@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Sep 10, 2011  Pere Mato   tag test60-V09-04-02
+              Fixed missing dependency between tests in CMakeLists.txt
+
 21 Jan 2011 - S. Incerti  tag test60-V09-04-01
               Added excitation for hydrogen
 

@@ -10,6 +10,6 @@ GEANT4_ADD_TEST(test60 COMMAND test60 ${CMAKE_CURRENT_SOURCE_DIR}/test60.in
                        BUILD test60
                        ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(test60-largeN COMMAND test60 ${CMAKE_CURRENT_SOURCE_DIR}/test60.large_N.in
-                       BUILD test60
+                       DEPENDS test60
                        ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 
