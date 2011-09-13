@@ -511,6 +511,9 @@ G4VParticleChange* G4CoupledTransportation::AlongStepDoIt( const G4Track& track,
      {
         //  A photon is in the medium of the final point
         //  during the step, so Peter says it has the final velocity.
+        finalVelocity   = track.CalculateVelocityForOpticalPhoton();
+	if( finalVelocity > 0.0 ) { finalInverseVel= 1.0 / finalVelocity; }
+	fParticleChange.ProposeVelocity(finalVelocity);
         deltaTime = stepLength * finalInverseVel ;
 	// G4cout << " dt = s / finalV "  << "  s = "   << stepLength
 	//        << " 1 / finalV= " << finalInverseVel << G4endl; 

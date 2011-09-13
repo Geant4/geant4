@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Aug. 8th, 2011, H.Kurashige  transport-V09-04-08
+- Modify calcuation of deltaTime for optical photon in Transportation (and CoupledTtansportation)
+  The final velocity obtained by G4Track::CalculateVelocityForOpticalPhoton
+  should be used instead of the initial velocity of the step.  
+  (see problem #1239)
+
 July 6th, 2011, H.Kurashige  transport-V09-04-07
 - Modify G4Transportaion (and CoupledTtansportation)
   to propose the final local time rather than the global time

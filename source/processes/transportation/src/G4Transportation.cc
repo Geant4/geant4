@@ -461,8 +461,13 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
                                                     const G4Step&  stepData )
 {
+  // set  pdefOpticalPhoton
+  static  G4ParticleDefinition* pdefOpticalPhoton =
+    G4ParticleTable::GetParticleTable()->FindParticle("opticalphoton");
+
   static G4int noCalls=0;
   noCalls++;
+
 
   fParticleChange.Initialize(track) ;
 
@@ -487,12 +492,16 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
   {
      // The time was not integrated .. make the best estimate possible
      //
-     G4double initialVelocity = stepData.GetPreStepPoint()->GetVelocity() ;
-     G4double stepLength      = track.GetStepLength() ;
+     G4double initialVelocity = stepData.GetPreStepPoint()->GetVelocity();
+     G4double stepLength      = track.GetStepLength();
 
      deltaTime= 0.0;  // in case initialVelocity = 0 
-     if( initialVelocity > 0.0 )
-     {
+     if (track.GetParticleDefinition() == pdefOpticalPhoton) {
+       // For only Optical Photon, final velocity is used 
+       double finalVelocity = track.CalculateVelocityForOpticalPhoton();
+       fParticleChange.ProposeVelocity(finalVelocity);
+       deltaTime = stepLength/finalVelocity ; 
+     } else if( initialVelocity > 0.0 ) {
         deltaTime = stepLength/initialVelocity ;
      }
      fCandidateEndGlobalTime   = startTime + deltaTime ;
