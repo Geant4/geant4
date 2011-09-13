@@ -123,7 +123,7 @@ G4ProductionCutsTable::~G4ProductionCutsTable()
   fMessenger = 0;
 }
 
-void G4ProductionCutsTable::UpdateCoupleTable(G4VPhysicalVolume* currentWorld)
+void G4ProductionCutsTable::UpdateCoupleTable(G4VPhysicalVolume* /*currentWorld*/)
 {
   if(firstUse){
     if(G4ParticleTable::GetParticleTable()->FindParticle("gamma")){
@@ -159,7 +159,9 @@ void G4ProductionCutsTable::UpdateCoupleTable(G4VPhysicalVolume* currentWorld)
   {
     // Material scan is to be done only for the regions appear in the 
     // current tracking world.
-    if((*rItr)->GetWorldPhysical()!=currentWorld) continue;
+//    if((*rItr)->GetWorldPhysical()!=currentWorld) continue;
+   if((*rItr)->IsInMassGeometry() || (*rItr)->IsInParallelGeometry())
+   {
 
     G4ProductionCuts* fProductionCut = (*rItr)->GetProductionCuts();
     std::vector<G4Material*>::const_iterator mItr =
@@ -211,6 +213,7 @@ void G4ProductionCutsTable::UpdateCoupleTable(G4VPhysicalVolume* currentWorld)
       // Proceed to next material in this region
       mItr++;
     }
+   }
   }
 
   // Check if sizes of Range/Energy cuts tables are equal to the size of

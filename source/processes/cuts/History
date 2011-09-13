@@ -16,8 +16,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Aug. 10, 2011  -  M.Asai (procuts-V09-04-05)
+- Introducing parallel layered mass geometry.
+  Material-cuts-couple is now updated for all worlds.
+  Modified: G4ProductionCutsTable.cc
+
 Aug. 3, 2011  -  H.Kurashige (procuts-V09-04-04)
 - Fix erros reported by Coverity
+ G4VRangeToEnergyConverter.cc G4ProductionCutsTable.cc
 
 May 13, 2011  -  H.Kurashige (procuts-V09-04-03)
 - Fix compiler warnings in G4RToEConvForGamma.cc
