@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10 Sep 2011, Pere Mato                  (test12-V09-04-03)
+- Fixed test dependencies.
+
+10 Sep 2011, Pere Mato                  (test12-V09-04-02)
+- Added missing CTest tests for FTF_BIC, QGS_BIC, QGSP_FTFP_BERT physics lists.
+
 29 Mar 2011, Gunter Folger              (test12-V09-04-01)
 - Correct GNUmakefile_hadronic_exerciser to work with global shared libs.
 

@@ -14,3 +14,13 @@ GEANT4_ADD_TEST(test12 COMMAND test12 test12.in
                        BUILD test12
                        ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
                        DEPENDS test12_hadronic_exerciser)
+GEANT4_ADD_TEST(test12-FTFBIC COMMAND test12 test12.in FTF_BIC
+                              ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
+                              DEPENDS test12)
+GEANT4_ADD_TEST(test12-QGSBIC COMMAND test12 test12.in QGS_BIC
+                              ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
+                              DEPENDS test12)
+GEANT4_ADD_TEST(test12-QGSP_FTFP_BERT COMMAND test12 test12.in QGSP_FTFP_BERT
+                              ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
+                              DEPENDS test12)
+
