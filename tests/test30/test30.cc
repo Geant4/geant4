@@ -587,9 +587,9 @@ int main(int argc, char** argv)
     }
 
     // ------- Define target A
-    G4int A = (G4int)(elm->GetN()+0.5);
     G4int Z = (G4int)(elm->GetZ()+0.5);
-    if(targetA > 0) A = targetA;
+    G4int A = (G4int)(elm->GetN()+0.5);
+    if(targetA > 0) { A = targetA; }
     phys->SetA(targetA);
 
     // ------- Binning 
@@ -819,7 +819,7 @@ int main(int argc, char** argv)
       }
       if(!cs) {
 	cs = new G4IonsShenCrossSection();
-	if(cs->IsZAApplicable(&dParticle,Z,A)) {
+	if(cs->IsElementApplicable(&dParticle,Z)) {
 	  G4cout << "Using Shen Cross section for Ions" << G4endl;
 	} else {
 	  G4cout << "ERROR: no cross section for ion Z= " 
@@ -869,8 +869,7 @@ int main(int argc, char** argv)
     } else if(extraproc) {
       extraproc->PreparePhysicsTable(*part);
       extraproc->BuildPhysicsTable(*part);
-      cross_sec = extraproc->GetMicroscopicCrossSection(&dParticle,
-							elm, 0.0);
+      cross_sec = extraproc->GetElementCrossSection(&dParticle,elm);
 
     } else if(cs) {
       cs->BuildPhysicsTable(*part);
@@ -878,7 +877,7 @@ int main(int argc, char** argv)
 
     } else {
       cross_sec = (G4HadronCrossSections::Instance())->
-        GetInelasticCrossSection(&dParticle, elm);
+        GetInelasticCrossSection(&dParticle, Z, A);
     }
 
     G4double factor  = 

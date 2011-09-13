@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+test30-V09-04-04  31 August 2011 V.Ivanchenko
+- test30.cc - migration to new design of cross sections
+
 test30-V09-04-03  25 May 2011 V.Ivanchenko
 - test30.cc - removed obsolete Elastic headers
 
