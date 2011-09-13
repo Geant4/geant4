@@ -28,38 +28,31 @@
 // 12-Nov-2003 Add energy check at lower side T. Koi
 // 26-Dec-2006 Add isotope dependence D. Wright
 // 14-Mar-2011 Moved constructor, destructor and virtual methods to source by V.Ivanchenko
+// 19-Aug-2011 V.Ivanchenko move to new design and make x-section per element
 
 #include "G4IonsKoxCrossSection.hh"
-#include "G4ParticleTable.hh"
-#include "G4IonTable.hh"
+#include "G4DynamicParticle.hh"
+#include "G4NucleiProperties.hh"
 #include "G4HadTmpUtil.hh"
+#include "G4NistManager.hh"
 
 G4IonsKoxCrossSection::G4IonsKoxCrossSection()
-  : G4VCrossSectionDataSet("IonsKox"),
-    upperLimit ( 10*GeV ), lowerLimit ( 10*MeV ), 
+  : G4VCrossSectionDataSet("IonsKox"), lowerLimit ( 10*MeV ), 
     r0 ( 1.1*fermi ), rc ( 1.3*fermi )
 {}
 
 G4IonsKoxCrossSection::~G4IonsKoxCrossSection()
 {}
 
-G4bool G4IonsKoxCrossSection::IsApplicable(const G4DynamicParticle* aDP, const G4Element*)
+G4bool G4IonsKoxCrossSection::IsElementApplicable(const G4DynamicParticle* aDP, 
+						  G4int, const G4Material*)
 {
-  return IsIsoApplicable(aDP, 0, 0);
+  return (1 <= aDP->GetDefinition()->GetBaryonNumber());
 }
 
-G4bool G4IonsKoxCrossSection::IsIsoApplicable(const G4DynamicParticle* aDP,
-                           G4int /*ZZ*/, G4int /*AA*/) 
-{
-  G4int baryonNumber = aDP->GetDefinition()->GetBaryonNumber();
-  G4double kineticEnergy = aDP->GetKineticEnergy(); 
-  if ( kineticEnergy / baryonNumber <= upperLimit ) { return true; }
-  return false;
-}
-
-G4double G4IonsKoxCrossSection::
-GetZandACrossSection(const G4DynamicParticle* aParticle, G4int ZZ, 
-                     G4int AA, G4double /*temperature*/)
+G4double 
+G4IonsKoxCrossSection::GetElementCrossSection(
+  const G4DynamicParticle* aParticle, G4int ZZ, const G4Material*)
 {
    G4double xsection = 0.0;
 
@@ -67,10 +60,10 @@ GetZandACrossSection(const G4DynamicParticle* aParticle, G4int ZZ,
    G4int Zp = G4int(aParticle->GetDefinition()->GetPDGCharge() / eplus + 0.5); 
    G4double ke_per_N = aParticle->GetKineticEnergy() / Ap;
 
-// Apply energy check, if less than lower limit then 0 value is returned
+   // Apply energy check, if less than lower limit then 0 value is returned
    // if (  ke_per_N < lowerLimit ) return xsection;
 
-   G4int At = AA;
+   G4int At = lrint(G4NistManager::Instance()->GetAtomicMassAmu(ZZ));
    G4int Zt = ZZ;  
 
    G4double one_third = 1.0 / 3.0;
@@ -81,8 +74,7 @@ GetZandACrossSection(const G4DynamicParticle* aParticle, G4int ZZ,
    // rc divide fermi
    G4double Bc = Zt * Zp / ( (rc/fermi) * (cubicrAp+cubicrAt) );
 
-   G4double targ_mass =
-     G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(Zt, At); 
+   G4double targ_mass = G4NucleiProperties::GetNuclearMass(At, Zt);
    G4double proj_mass = aParticle->GetMass();
    G4double proj_momentum = aParticle->GetMomentum().mag(); 
 
@@ -104,38 +96,6 @@ GetZandACrossSection(const G4DynamicParticle* aParticle, G4int ZZ,
   
    return xsection; 
 }
-
-
-G4double G4IonsKoxCrossSection::
-GetCrossSection(const G4DynamicParticle* aParticle, 
-                const G4Element* anElement, G4double temperature)
-{
-  G4int nIso = anElement->GetNumberOfIsotopes();
-  G4double xsection = 0;
-
-  if (nIso) {
-    G4double sig;
-    G4IsotopeVector* isoVector = anElement->GetIsotopeVector();
-    G4double* abundVector = anElement->GetRelativeAbundanceVector();
-    G4int ZZ;
-    G4int AA;
-     
-    for (G4int i = 0; i < nIso; i++) {
-      ZZ = (*isoVector)[i]->GetZ();
-      AA = (*isoVector)[i]->GetN();
-      sig = GetZandACrossSection(aParticle, ZZ, AA, temperature);
-      xsection += sig*abundVector[i];
-    }
-   
-  } else {
-    G4int ZZ = G4lrint(anElement->GetZ());
-    G4int AA = G4lrint(anElement->GetN());
-    xsection = GetZandACrossSection(aParticle, ZZ, AA, temperature);
-  }
-    
-  return xsection;
-}
-
 
 G4double
 G4IonsKoxCrossSection::calEcm(G4double mp, G4double mt, G4double Plab)
@@ -171,10 +131,3 @@ G4double G4IonsKoxCrossSection::calCeValue(const G4double ke)
    return Ce;
 }
 
-void G4IonsKoxCrossSection::BuildPhysicsTable(const G4ParticleDefinition&)
-{}
-
-void G4IonsKoxCrossSection::DumpPhysicsTable(const G4ParticleDefinition&) 
-{
-  G4cout << "G4IonsKoxCrossSection: uses Kox formula"<<G4endl;
-}

@@ -41,11 +41,12 @@
 #include "G4PionPlus.hh"
 #include "G4PhysicsTable.hh"
 #include "G4NistManager.hh"
+#include "G4HadronicException.hh"
 
 G4UPiNuclearCrossSection::G4UPiNuclearCrossSection()
  : G4VCrossSectionDataSet("G4UPiNuclearCrossSection")
 {
-  Initialise();
+  isInitialized = false;
 }
 
 G4UPiNuclearCrossSection::~G4UPiNuclearCrossSection()
@@ -58,6 +59,13 @@ G4UPiNuclearCrossSection::~G4UPiNuclearCrossSection()
   delete piPlusInelastic;
   delete piMinusElastic;
   delete piMinusInelastic;
+}
+
+G4bool 
+G4UPiNuclearCrossSection::IsElementApplicable(const G4DynamicParticle*, 
+					      G4int Z, const G4Material*)
+{
+  return (1 < Z);
 }
 
 G4double
@@ -155,9 +163,6 @@ void G4UPiNuclearCrossSection::AddDataSet(const G4String& p,
   }
 } 
 
-void G4UPiNuclearCrossSection::BuildPhysicsTable(const G4ParticleDefinition&)
-{}
-
 void G4UPiNuclearCrossSection::DumpPhysicsTable(const G4ParticleDefinition& p)
 {
   if(&p == piPlus) {
@@ -171,12 +176,18 @@ void G4UPiNuclearCrossSection::DumpPhysicsTable(const G4ParticleDefinition& p)
     G4cout << "### G4UPiNuclearCrossSection Inelastic data for pi-" << G4endl;
     G4cout << *piMinusInelastic << G4endl;
   }
-} 
+}
 
-void G4UPiNuclearCrossSection::Initialise()
+void G4UPiNuclearCrossSection::BuildPhysicsTable(const G4ParticleDefinition& p)
 {
+  if(isInitialized) { return; }
   piPlus  = G4PionPlus::PionPlus();
   piMinus = G4PionMinus::PionMinus();
+  if(&p != piPlus && &p != piMinus) { 
+    throw G4HadronicException(__FILE__, __LINE__,"Is applicable only for pions");
+    return;
+  }
+  isInitialized = true;
   aPower  = 0.75;
   elow    = 20.0*MeV;
   elowest = MeV;
@@ -310,4 +321,6 @@ void G4UPiNuclearCrossSection::Initialise()
   AddDataSet("pi+",u_p_t,  u_p_in,  e7, 30);
 }
 
+void G4UPiNuclearCrossSection::Description() const
+{}
 

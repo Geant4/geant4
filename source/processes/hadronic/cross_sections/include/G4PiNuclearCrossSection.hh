@@ -41,47 +41,19 @@ class G4PiNuclearCrossSection : public G4VCrossSectionDataSet
     G4PiNuclearCrossSection();
     virtual ~G4PiNuclearCrossSection();
 
-    G4bool IsApplicable(const G4DynamicParticle* aParticle,
-                        const G4Element* anElement)
-    {
-      G4bool result = false;
-      if (aParticle->GetDefinition() == G4PionMinus::PionMinus()) result = true;
-      if (aParticle->GetDefinition() == G4PionPlus::PionPlus()) result = true;
-      if (G4lrint(anElement->GetZ()) == 1) result = false;
-      if (aParticle->GetKineticEnergy() > GetMaxKinEnergy() ) result = false;
-      return result;
-    }
+    virtual
+    G4bool IsElementApplicable(const G4DynamicParticle* aParticle,
+			       G4int Z, const G4Material*);
 
-    G4bool
-    IsIsoApplicable(const G4DynamicParticle* particle, G4int ZZ, G4int /*AA*/)
-    {
-      G4bool result = false;
-      if (particle->GetDefinition() == G4PionMinus::PionMinus()) result = true;
-      if (particle->GetDefinition() == G4PionPlus::PionPlus()) result = true;
-      if (ZZ == 1) result = false;
-      if (particle->GetKineticEnergy() > GetMaxKinEnergy() ) result = false;
-      return result;
-    }
+    virtual 
+    G4double GetElementCrossSection(const G4DynamicParticle* particle, 
+				    G4int Z, const G4Material*);
 
+    virtual
+    void BuildPhysicsTable(const G4ParticleDefinition&);
 
-    G4double GetCrossSection(const G4DynamicParticle* particle, 
-                             const G4Element* element,
-                             G4double temperature)
-    {
-      G4int Z = G4lrint(element->GetZ());
-      G4int A = G4lrint(element->GetN());
-      return GetZandACrossSection(particle, Z, A, temperature);
-    }
-
-    G4double GetZandACrossSection(const G4DynamicParticle* aParticle,
-                                  G4int ZZ, G4int AA,
-                                  G4double /*aTemperature*/);
-
-    G4double GetTotalXsc() {return fTotalXsc;};
-    G4double GetElasticXsc() {return fElasticXsc;};
-
-    void BuildPhysicsTable(const G4ParticleDefinition&) {}
-    void DumpPhysicsTable(const G4ParticleDefinition&) {}
+    inline G4double GetTotalXsc()   {return fTotalXsc;};
+    inline G4double GetElasticXsc() {return fElasticXsc;};
   
   private:
     G4double Interpolate(G4int Z1, G4int Z2, G4int Z, G4double x1, G4double x2);

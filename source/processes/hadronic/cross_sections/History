@@ -14,6 +14,63 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+13 September 2011 Vladimir Ivanchenko (hadr-cross-V09-04-21)
+------------------------------------------------------------
+- G4VCrossSectionDataSet - added extra include file G4HadTmpUtil.hh
+
+12 September 2011 Vladimir Ivanchenko (hadr-cross-V09-04-20)
+------------------------------------------------------------
+- G4IonsShenCrossSection - method GetIsoCrossSection is added
+
+12 September 2011 Vladimir Ivanchenko (hadr-cross-V09-04-19)
+-----------------------------------------------------------
+- G4CrossSectionDataStore - fixed logic in SampleZandA 
+
+10 September 2011 Vladimir Ivanchenko (hadr-cross-V09-04-18)
+------------------------------------------------------------
+- G4CrossSectionDataStore - fixed selection of isotope when element 
+  cross section is used but isotope composition is defined by the user 
+
+6 September 2011 Vladimir Ivanchenko (hadr-cross-V09-04-17)
+----------------------------------------------------------
+- G4TripathiLightCrossSection - fixed integer Z and A; 
+- G4VCrossSectionDataSet - fixed inline method for CHIPS 
+  electro-nuclear cross section computation
+
+6 September 2011 Vladimir Ivanchenko (hadr-cross-V09-04-16)
+----------------------------------------------------------
+- Fixed signature of Description method in several classes
+
+30 August 2011 Vladimir Ivanchenko (hadr-cross-V09-04-15)
+----------------------------------------------------------
+- Fixed number of run time problems connected with the migration to the 
+  new interface
+
+24 August 2011 Vladimir Ivanchenko (hadr-cross-V09-04-14)
+----------------------------------------------------------
+- G4CrossSectionDataStore - add forgotten return statement
+
+23 August 2011 Vladimir Ivanchenko (hadr-cross-V09-04-13)
+----------------------------------------------------------
+- G4NeutronInelasticCrossSection, G4EMDissociationCrossSection 
+  modified to compile model sub-directories
+
+23 August 2011 Vladimir Ivanchenko (hadr-cross-V09-04-12)
+----------------------------------------------------------
+- Redesign G4VCrossSectionDataSet interface - all classes are affected
+
+03 August 2011 Dennis Wright (hadr-cross-V09-04-11)
+---------------------------------------------------
+- remove unused parameter aParticleType from DumpHtml() method in
+  G4CrossSectionDataStore
+
+02 August 2011 Dennis Wright (hadr-cross-V09-04-10)
+---------------------------------------------------
+- add G4VCrossSectionDataSet::GetName() to be used with documentation 
+    reporting
+- add Description() method to all classes derived from G4VCrossSectionDataSet
+- remove test directory from trunk.  It remains in tag hadr-cross-V09-04-09. 
+   
 04 June 2011 Vladimir Ivanchenko (hadr-cross-V09-04-09)
 ----------------------------------------------------------
 - G4IonProtonCrossSection - implement all virtual IfApplicable methods

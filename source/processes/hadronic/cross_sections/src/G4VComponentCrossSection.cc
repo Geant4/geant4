@@ -56,6 +56,10 @@ G4VComponentCrossSection::ComputeQuasiElasticRatio(const G4ParticleDefinition*,
 }
 
 void 
+G4VComponentCrossSection::Description() const
+{}
+
+void 
 G4VComponentCrossSection::BuildPhysicsTable(const G4ParticleDefinition&)
 {}
 

@@ -43,6 +43,8 @@
 
 #include "G4ElectroNuclearCrossSection.hh"
 #include "G4HadTmpUtil.hh"
+#include <iostream>
+
 
 // Initialization of statics
 // Last used in the cross section TheEnergy
@@ -74,10 +76,11 @@ std::vector<G4double*> G4ElectroNuclearCrossSection::J2;
 std::vector<G4double*> G4ElectroNuclearCrossSection::J3;
 
 
-G4ElectroNuclearCrossSection::G4ElectroNuclearCrossSection()
- : G4VCrossSectionDataSet("Electro-nuclear")
-{}
-
+G4ElectroNuclearCrossSection::G4ElectroNuclearCrossSection(const G4String& name)
+ : G4VCrossSectionDataSet(name)
+{
+  //Description();
+}
 
 G4ElectroNuclearCrossSection::~G4ElectroNuclearCrossSection()
 {
@@ -93,47 +96,55 @@ G4ElectroNuclearCrossSection::~G4ElectroNuclearCrossSection()
   J3.clear();
 }
 
-// The main member function giving the gamma-A cross section 
-// (E in GeV, CS in mb)
-
-G4double 
-G4ElectroNuclearCrossSection::GetCrossSection(const G4DynamicParticle* aPart,
-                                              const G4Element* anEle, 
-                                              G4double temperature)
+void G4ElectroNuclearCrossSection::Description() const
 {
-  G4int nIso = anEle->GetNumberOfIsotopes();
-  G4double xsection = 0;
-     
-  if (nIso) {
-    G4double sig;
-    G4IsotopeVector* isoVector = anEle->GetIsotopeVector();
-    G4double* abundVector = anEle->GetRelativeAbundanceVector();
-    G4int ZZ;
-    G4int AA;
-     
-    for (G4int i = 0; i < nIso; i++) {
-      ZZ = (*isoVector)[i]->GetZ();
-      AA = (*isoVector)[i]->GetN();
-      sig = GetZandACrossSection(aPart, ZZ, AA, temperature);
-      xsection += sig*abundVector[i];
-    }
-   
-  } else {
-    xsection =
-      GetZandACrossSection(aPart,
-                           G4lrint(anEle->GetZ()),
-                           G4lrint(anEle->GetN()),
-                           temperature);
+  char* dirName = getenv("G4PhysListDocDir");
+  if (dirName) {
+    std::ofstream outFile;
+    G4String outFileName = GetName() + ".html";
+    G4String pathName = G4String(dirName) + "/" + outFileName;
+
+    outFile.open(pathName);
+    outFile << "<html>\n";
+    outFile << "<head>\n";
+
+    outFile << "<title>Description of G4ElectroNuclearCrossSection</title>\n";
+    outFile << "</head>\n";
+    outFile << "<body>\n";
+
+    outFile << "G4ElectroNuclearCrossSection provides the total inelastic\n"
+            << "cross section for e- and e+ interactions with nuclei.  The\n"
+            << "cross sections are retrieved from a table which is\n"
+            << "generated using the equivalent photon approximation.  In\n"
+            << "this approximation real gammas are produced from the virtual\n"
+            << "ones generated at the electromagnetic vertex.  This cross\n"
+            << "section set is valid for incident electrons and positrons at\n"
+            << "all energies.\n";
+
+    outFile << "</body>\n";
+    outFile << "</html>\n";
+    outFile.close();
   }
-    
-  return xsection;
 }
 
+G4bool
+G4ElectroNuclearCrossSection::IsIsoApplicable(
+          const G4DynamicParticle* aParticle, G4int /*Z*/,
+	  G4int /*A*/, const G4Element*, const G4Material*)
+{
+  G4bool result = false;
+  if (aParticle->GetDefinition() == G4Electron::ElectronDefinition())
+    result = true;
+  if (aParticle->GetDefinition() == G4Positron::PositronDefinition())
+    result = true;
+  return result;
+}
 
 G4double 
-G4ElectroNuclearCrossSection::GetZandACrossSection(const G4DynamicParticle* aPart,
-                                                   G4int ZZ, G4int AA,
-					           G4double /*temperature*/)
+G4ElectroNuclearCrossSection::GetIsoCrossSection(
+         const G4DynamicParticle* aPart,
+	 G4int ZZ, G4int AA,
+	 const G4Isotope*, const G4Element*, const G4Material*)
 {
   static const G4int nE=336; // !!  If you change this, change it in GetFunctions() (*.hh) !!
   static const G4int mL=nE-1;

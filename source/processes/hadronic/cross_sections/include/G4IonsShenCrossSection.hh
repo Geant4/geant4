@@ -40,6 +40,7 @@
 // 15-Nov-2006 Change upper limit to 1 TeV/n
 //             However above 10GeV/n XS become constant.
 // 23-Dec-2006 Isotope dependence added by D. Wright
+// 19-Aug-2011 V.Ivanchenko move to new design and make x-section per element
 //
 
 #include "globals.hh"
@@ -56,25 +57,18 @@ public:
   virtual ~G4IonsShenCrossSection();
    
   virtual
-  G4bool IsApplicable(const G4DynamicParticle* aDP, const G4Element*);
+  G4bool IsElementApplicable(const G4DynamicParticle* aDP, 
+			     G4int Z, const G4Material*);
 
   virtual
-  G4bool IsIsoApplicable(const G4DynamicParticle* aDP,
-			 G4int /*ZZ*/, G4int /*AA*/);
+  G4double GetElementCrossSection(const G4DynamicParticle*, 
+			     G4int Z, const G4Material*);
 
   virtual
-  G4double GetCrossSection(const G4DynamicParticle*, 
-			   const G4Element*, G4double aTemperature);
-
-  virtual
-  G4double GetZandACrossSection(const G4DynamicParticle*, G4int ZZ, 
-				G4int AA, G4double aTemperature);
-
-  virtual
-  void BuildPhysicsTable(const G4ParticleDefinition&);
-
-  virtual
-  void DumpPhysicsTable(const G4ParticleDefinition&);
+  G4double GetIsoCrossSection(const G4DynamicParticle*, G4int Z, G4int A,  
+			      const G4Isotope* iso = 0,
+			      const G4Element* elm = 0,
+			      const G4Material* mat = 0);
 
 private:
   const G4double upperLimit;

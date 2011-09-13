@@ -23,21 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
- #include "G4PiNuclearCrossSection.hh"
- #include "G4HadronicException.hh"
- #include "G4HadTmpUtil.hh"
-// #include "G4ping.hh"
 
- // by J.P Wellisch, Sun Sep 15 2002.
- // corrected G.Folger 17-8-2006: inel. Ca pim was missing two number, 
- // + formatting
- //
- // updated   G.Folger 21-8-2006: Change scaling of cross section for 
- // elements not tabulated from scaling in Z^(2/3) to A^0.75
- // Implements P2-90-158;
- //
- // 22 Dec 2006 - D.H. Wright added isotope dependence
- //
+#include "G4PiNuclearCrossSection.hh"
+#include "G4DynamicParticle.hh"
+#include "G4HadronicException.hh"
+#include "G4HadTmpUtil.hh"
+
+// by J.P Wellisch, Sun Sep 15 2002.
+// corrected G.Folger 17-8-2006: inel. Ca pim was missing two number, 
+// + formatting
+//
+// updated   G.Folger 21-8-2006: Change scaling of cross section for 
+// elements not tabulated from scaling in Z^(2/3) to A^0.75
+// Implements P2-90-158;
+//
+// 22 Dec 2006 - D.H. Wright added isotope dependence
+//
+// 19 Aug 2011, V.Ivanchenko move to new design and make x-section per element
      
  const G4double G4PiNuclearCrossSection::e1[38] = {
   .02, .04, .06, .08,  .1, .12, .13, .14, .15, .16, .17, .18, .19, .20, 
@@ -440,29 +442,29 @@ G4PiNuclearCrossSection::
   std::for_each(thePipData.begin(), thePipData.end(), G4PiData::Delete());
 }
 
-
-G4double G4PiNuclearCrossSection::
-GetZandACrossSection(const G4DynamicParticle* particle, G4int ZZ, 
-                     G4int /*AA*/, G4double /*temperature*/)
+G4bool 
+G4PiNuclearCrossSection::IsElementApplicable(const G4DynamicParticle*,
+					     G4int Z, const G4Material*)
 {
-  // precondition
-  using namespace std;
-  G4bool ok = false;
-  if(particle->GetDefinition() == G4PionMinus::PionMinus()) ok=true;
-  if(particle->GetDefinition() == G4PionPlus::PionPlus())   ok=true;
-  if(!ok) 
-  {
-    throw G4HadronicException(__FILE__, __LINE__,
-                       	"Call to G4PiNuclearCrossSection failed.");
-  }
+  return (1 < Z);
+}
 
+void G4PiNuclearCrossSection::BuildPhysicsTable(const G4ParticleDefinition& p)
+{
+  if(&p == G4PionMinus::PionMinus() || &p == G4PionPlus::PionPlus()) { return; }
+  throw G4HadronicException(__FILE__, __LINE__,"Is applicable only for pions");
+}
+
+G4double 
+G4PiNuclearCrossSection::GetElementCrossSection(const G4DynamicParticle* particle, 
+						G4int Z, const G4Material*)
+{
   G4double charge = particle->GetDefinition()->GetPDGCharge();
   G4double kineticEnergy = particle->GetKineticEnergy();
 
   // body
 
   G4double result = 0;
-  G4int Z = ZZ;
   //  debug.push_back(Z);
   size_t it = 0;
 
@@ -568,7 +570,7 @@ GetZandACrossSection(const G4DynamicParticle* particle, G4int ZZ,
   if( fElasticXsc < 0.) fElasticXsc = 0.;
 
   return result;
- }
+}
 
 
 G4double G4PiNuclearCrossSection::

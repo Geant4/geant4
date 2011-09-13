@@ -31,12 +31,61 @@
 // G4 Physics class: HadronCaptureDataSet for cross sections
 // F.W. Jones, TRIUMF, 19-MAY-98
 // 
+// 19 Aug 2011, V.Ivanchenko move to new design and make x-section per element
+//
 
 #include "G4HadronCaptureDataSet.hh"
+#include <iostream>
 
-
-G4HadronCaptureDataSet::G4HadronCaptureDataSet()
- : G4VCrossSectionDataSet("Gheisha capture")
+G4HadronCaptureDataSet::G4HadronCaptureDataSet(const G4String& name)
+ : G4VCrossSectionDataSet(name)
 {
   theHadronCrossSections = G4HadronCrossSections::Instance();
+  //Description();
+}
+
+G4HadronCaptureDataSet::~G4HadronCaptureDataSet()
+{}
+
+G4bool
+G4HadronCaptureDataSet::IsElementApplicable(const G4DynamicParticle*, 
+					    G4int /*Z*/, const G4Material*)
+{
+  return true;
+}
+
+G4double
+G4HadronCaptureDataSet::GetElementCrossSection(const G4DynamicParticle* aParticle, 
+					       G4int Z, const G4Material*)
+{
+  return theHadronCrossSections->GetCaptureCrossSection(aParticle, Z);
+}
+
+void G4HadronCaptureDataSet::Description() const 
+{
+  char* dirName = getenv("G4PhysListDocDir");
+  if (dirName) {
+    std::ofstream outFile;
+    G4String outFileName = GetName() + ".html";
+    G4String pathName = G4String(dirName) + "/" + outFileName;
+
+    outFile.open(pathName);
+    outFile << "<html>\n";
+    outFile << "<head>\n";
+
+    outFile << "<title>Description of Gheisha Capture Cross Section Set</title>\n";
+    outFile << "</head>\n";
+    outFile << "<body>\n";
+
+    outFile << "G4HadronCaptureDataSet contains neutron capture cross\n"
+            << "sections developed as part of the Gheisha hadronic package\n"
+            << "by H. Fesefeldt.  The cross sections are valid for all\n"
+            << "incident neutron energies, but they do not represent any of\n"
+            << "the detailed resonances known to exist at low energies.\n"
+            << "The cross sections depend only on Z and not A.\n";
+
+    outFile << "</body>\n";
+    outFile << "</html>\n";
+    outFile.close();
+  }
 }

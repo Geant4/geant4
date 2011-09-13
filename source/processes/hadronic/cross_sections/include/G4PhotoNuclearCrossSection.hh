@@ -46,35 +46,19 @@ class G4PhotoNuclearCrossSection : public G4VCrossSectionDataSet
 {
 public:
 
-  G4PhotoNuclearCrossSection();
+  G4PhotoNuclearCrossSection(const G4String& name = "PhotoNuclearXS");
   virtual ~G4PhotoNuclearCrossSection();
 
+  void Description() const;
 
-  G4bool IsApplicable(const G4DynamicParticle* particle, const G4Element* )
-  {
-    return IsIsoApplicable(particle, 0, 0);
-  }
+  virtual G4bool
+  IsIsoApplicable(const G4DynamicParticle* particle, G4int /*Z*/, G4int /*A*/,
+                  const G4Element*, const G4Material*);
 
-  G4bool IsIsoApplicable(const G4DynamicParticle* particle,
-                         G4int /*ZZ*/, G4int /*AA*/)
-  {
-    G4bool result = false;
-    if( particle->GetDefinition()->GetPDGEncoding()==22) result = true;
-    return result;
-  }
+  virtual G4double
+  GetIsoCrossSection(const G4DynamicParticle*, G4int /*Z*/, G4int /*A*/,
+                     const G4Isotope*, const G4Element*, const G4Material*);
 
-
-  G4double GetCrossSection(const G4DynamicParticle* particle, 
-                           const G4Element* element, G4double temp = 0.);
-
-
-  G4double GetZandACrossSection(const G4DynamicParticle* particle,
-                                G4int ZZ, G4int AA, G4double /*aTemperature*/);
-
-
-  void BuildPhysicsTable(const G4ParticleDefinition&) {}
-
-  void DumpPhysicsTable(const G4ParticleDefinition&) {}
 
 private:
 

@@ -60,6 +60,8 @@
 // 4 June 2004, J.P. Wellisch, CERN
 // trivial porting issue to windows.
 //
+// 19 Aug 2011, V.Ivanchenko move to new design and make x-section per element
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // Class Description
@@ -71,47 +73,40 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
 #include "G4VCrossSectionDataSet.hh"
-#include "G4ProtonInelasticCrossSection.hh"
-#include <iostream>
-#include "G4IonProtonCrossSection.hh"
-#include "G4TripathiLightCrossSection.hh"
-#include "G4TripathiCrossSection.hh"
-#include "G4IonsShenCrossSection.hh"
 #include "globals.hh"
+
+class G4ProtonInelasticCrossSection;
+class G4IonProtonCrossSection;
+class G4TripathiLightCrossSection;
+class G4TripathiCrossSection;
+class G4IonsShenCrossSection;
+class G4Proton;
 
 ////////////////////////////////////////////////////////////////////////////////
 //
 class G4GeneralSpaceNNCrossSection : public G4VCrossSectionDataSet
 {
-  public:
-    G4GeneralSpaceNNCrossSection ();
-    ~G4GeneralSpaceNNCrossSection ();
+public:
 
-    virtual G4bool IsApplicable(const G4DynamicParticle* theProjectile,
-      const G4Element* theTarget);
+  G4GeneralSpaceNNCrossSection ();
+  ~G4GeneralSpaceNNCrossSection ();
 
-    virtual G4bool IsIsoApplicable(const G4DynamicParticle* theProjectile,
-      G4int ZZ, G4int AA);
+  virtual G4bool IsElementApplicable(const G4DynamicParticle* theProjectile,
+				     G4int Z, const G4Material*);
 
-    virtual G4double GetCrossSection(const G4DynamicParticle* theProjectile,
-      const G4Element* theTarget, G4double theTemperature);
+  virtual 
+  G4double GetElementCrossSection(const G4DynamicParticle* theProjectile,
+				  G4int Z, const G4Material*);
 
-    virtual G4double GetZandACrossSection(const G4DynamicParticle* theProjectile,
-      G4int ZZ, G4int AA, G4double theTemperature);
+private:
 
-    virtual void BuildPhysicsTable(const G4ParticleDefinition&)
-      {;}
+  G4ProtonInelasticCrossSection *protonInelastic;
+  G4IonProtonCrossSection       *ionProton;
+  G4TripathiLightCrossSection   *TripathiLight;
+  G4TripathiCrossSection        *TripathiGeneral;
+  G4IonsShenCrossSection        *Shen;
+  G4Proton                      *theProton;
 
-    virtual void DumpPhysicsTable(const G4ParticleDefinition&)
-      {G4cout << "G4GeneralSpaceNNCrossSection: uses formula"<<G4endl;}
-
-   private:
-
-     G4ProtonInelasticCrossSection *protonInelastic;
-     G4IonProtonCrossSection       *ionProton;
-     G4TripathiLightCrossSection   *TripathiLight;
-     G4TripathiCrossSection        *TripathiGeneral;
-     G4IonsShenCrossSection        *Shen;
 };
 
 #endif

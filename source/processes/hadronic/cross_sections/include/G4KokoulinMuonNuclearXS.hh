@@ -28,6 +28,12 @@
 // Author:      D.H. Wright (SLAC)
 // Date:        1 February 2011
 //
+// Modified:
+//
+// 19 Aug 2011, V.Ivanchenko move to new design and make x-section per element
+//
+
+//
 // Description: use Kokoulin's parameterized calculation of virtual 
 //              photon production cross section and conversion to
 //              real photons.
@@ -38,7 +44,6 @@
 #include "G4VCrossSectionDataSet.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Element.hh"
-// #include "G4ParticleTable.hh"
 #include "G4MuonMinus.hh"
 #include "G4MuonPlus.hh"
 #include "G4NucleiProperties.hh"
@@ -55,34 +60,13 @@ public:
   virtual ~G4KokoulinMuonNuclearXS();
 
 
-  G4bool IsApplicable(const G4DynamicParticle* particle, const G4Element* )
-  {
-    return IsIsoApplicable(particle, 0, 0);
-  }
+  G4bool IsElementApplicable(const G4DynamicParticle* particle, 
+			     G4int Z, const G4Material*);
 
-  G4bool IsIsoApplicable(const G4DynamicParticle* particle,
-                         G4int /*ZZ*/, G4int /*AA*/)
-  {
-    G4bool result = false;
-    if (particle->GetDefinition() == G4MuonMinus::MuonMinus() ||
-        particle->GetDefinition() == G4MuonPlus::MuonPlus() ) result = true;
-
-    return result;
-  }
-
-
-  G4double GetCrossSection(const G4DynamicParticle* particle, 
-                           const G4Element* element, G4double temp = 0.);
-
-
-  G4double GetZandACrossSection(const G4DynamicParticle* particle,
-                                G4int ZZ, G4int AA, G4double /*aTemperature*/);
+  G4double GetElementCrossSection(const G4DynamicParticle* particle,
+				  G4int Z, const G4Material*);
 
   void BuildCrossSectionTable();
-
-  void BuildPhysicsTable(const G4ParticleDefinition&) {}
-
-  void DumpPhysicsTable(const G4ParticleDefinition&) {}
 
   G4double
   ComputeDDMicroscopicCrossSection(G4double incidentKE, G4double,
@@ -101,7 +85,7 @@ private:
   G4int TotBin;
   G4double CutFixed;
 
-  std::map<G4int,G4Element*> zelMap;
+  std::map<G4int,G4int> zelMap;
 };
 
 #endif

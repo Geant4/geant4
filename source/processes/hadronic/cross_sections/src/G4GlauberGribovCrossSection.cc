@@ -267,18 +267,10 @@ G4GlauberGribovCrossSection::~G4GlauberGribovCrossSection()
 ////////////////////////////////////////////////////////////////////////////////////////
 
 G4bool 
-G4GlauberGribovCrossSection::IsApplicable(const G4DynamicParticle* aDP, 
-					  const G4Element*  anElement)
-{
-  return IsIsoApplicable(aDP, G4lrint(anElement->GetZ()),
-                              G4lrint(anElement->GetN()));
-} 
-
-////////////////////////////////////////////////////////////////////////////////////////
-
-G4bool 
 G4GlauberGribovCrossSection::IsIsoApplicable(const G4DynamicParticle* aDP, 
-					     G4int Z, G4int)
+					     G4int Z, G4int /*A*/, 
+					     const G4Element*,
+					     const G4Material*)
 {
   G4bool applicable      = false;
   // G4int baryonNumber     = aDP->GetDefinition()->GetBaryonNumber();
@@ -292,11 +284,8 @@ G4GlauberGribovCrossSection::IsIsoApplicable(const G4DynamicParticle* aDP,
          theParticle == theGamma     ||
          theParticle == theKPlus     ||
          theParticle == theKMinus    || 
-         theParticle == theSMinus)      )    ||  
-
-       ( kineticEnergy  >= fLowerLimit &&
-         Z > 1 &&      // >=  He
-       ( theParticle == theProton    ||
+         theParticle == theSMinus    ||  
+         theParticle == theProton    ||
          theParticle == theNeutron   ||   
          theParticle == thePiPlus    ||
          theParticle == thePiMinus       ) )    ) applicable = true;
@@ -308,28 +297,15 @@ G4GlauberGribovCrossSection::IsIsoApplicable(const G4DynamicParticle* aDP,
 //
 // Calculates total and inelastic Xsc, derives elastic as total - inelastic accordong to
 // Glauber model with Gribov correction calculated in the dipole approximation on
-// light cone. Gaussian density helps to calculate rest integrals of the model.
-// [1] B.Z. Kopeliovich, nucl-th/0306044 
-
-
-G4double G4GlauberGribovCrossSection::
-GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement, G4double T)
-{
-  return GetZandACrossSection(aParticle, G4lrint(anElement->GetZ()),
-                              G4lrint(anElement->GetN()), T);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////
-//
-// Calculates total and inelastic Xsc, derives elastic as total - inelastic accordong to
-// Glauber model with Gribov correction calculated in the dipole approximation on
 // light cone. Gaussian density of point-like nucleons helps to calculate rest integrals of the model.
 // [1] B.Z. Kopeliovich, nucl-th/0306044 + simplification above
 
-
-
-G4double G4GlauberGribovCrossSection::
-GetZandACrossSection(const G4DynamicParticle* aParticle, G4int Z, G4int A, G4double)
+G4double 
+G4GlauberGribovCrossSection::GetIsoCrossSection(const G4DynamicParticle* aParticle, 
+						G4int Z, G4int A,  
+						const G4Isotope*,
+						const G4Element*,
+						const G4Material*)
 {
   G4double xsection, sigma, cofInelastic, cofTotal, nucleusSquare, ratio;
   G4double R             = GetNucleusRadius(A); 
@@ -503,14 +479,11 @@ G4double
 G4GlauberGribovCrossSection::GetHadronNucleonXsc(const G4DynamicParticle* aParticle, 
                                                  const G4Element* anElement)
 {
-  G4int At = G4lrint(anElement->GetN());  // number of nucleons 
-  G4int Zt = G4lrint(anElement->GetZ());  // number of protons
+  G4int At = lrint(anElement->GetN());  // number of nucleons 
+  G4int Zt = lrint(anElement->GetZ());  // number of protons
 
   return GetHadronNucleonXsc(aParticle, At, Zt);
 }
-
-
-
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
@@ -521,15 +494,13 @@ G4GlauberGribovCrossSection::GetHadronNucleonXsc(const G4DynamicParticle* aParti
 
 G4double 
 G4GlauberGribovCrossSection::GetHadronNucleonXsc(const G4DynamicParticle* aParticle, 
-                                                 G4int At, G4int Zt)
+                                                 G4int At, G4int /*Zt*/)
 {
   G4double xsection;
 
-  G4double targ_mass = G4ParticleTable::GetParticleTable()->
-  GetIonTable()->GetIonMass(Zt, At);
-//  GetIonTable()->GetIonMass( G4int(Zt+0.5) , G4int(At+0.5) );
+  //G4double targ_mass = G4NucleiProperties::GetNuclearMass(At, Zt);
 
-  targ_mass = 0.939*GeV;  // ~mean neutron and proton ???
+  G4double targ_mass = 0.939*GeV;  // ~mean neutron and proton ???
 
   G4double proj_mass     = aParticle->GetMass();
   G4double proj_momentum = aParticle->GetMomentum().mag();
@@ -595,8 +566,8 @@ G4double
 G4GlauberGribovCrossSection::GetHadronNucleonXscPDG(const G4DynamicParticle* aParticle, 
                                                     const G4Element* anElement)
 {
-  G4int At = G4lrint(anElement->GetN());  // number of nucleons 
-  G4int Zt = G4lrint(anElement->GetZ());  // number of protons
+  G4int At = lrint(anElement->GetN());  // number of nucleons 
+  G4int Zt = lrint(anElement->GetZ());  // number of protons
 
   return GetHadronNucleonXscPDG(aParticle, At, Zt);
 }
@@ -729,8 +700,8 @@ G4double
 G4GlauberGribovCrossSection::GetHadronNucleonXscNS(const G4DynamicParticle* aParticle, 
                                                    const G4Element* anElement)
 {
-  G4int At = G4lrint(anElement->GetN());  // number of nucleons 
-  G4int Zt = G4lrint(anElement->GetZ());  // number of protons
+  G4int At = lrint(anElement->GetN());  // number of nucleons 
+  G4int Zt = lrint(anElement->GetZ());  // number of protons
 
   return GetHadronNucleonXscNS(aParticle, At, Zt);
 }
@@ -1082,8 +1053,8 @@ G4double
 G4GlauberGribovCrossSection::GetHNinelasticXsc(const G4DynamicParticle* aParticle, 
                                                const G4Element* anElement)
 {
-  G4int At = G4lrint(anElement->GetN());  // number of nucleons 
-  G4int Zt = G4lrint(anElement->GetZ());  // number of protons
+  G4int At = lrint(anElement->GetN());  // number of nucleons 
+  G4int Zt = lrint(anElement->GetZ());  // number of protons
 
   return GetHNinelasticXsc(aParticle, At, Zt);
 }
@@ -1336,7 +1307,7 @@ G4double
 G4GlauberGribovCrossSection::GetNucleusRadius(const G4DynamicParticle* , 
                                               const G4Element* anElement)
 {
-  G4int At = G4lrint(anElement->GetN());
+  G4int At = lrint(anElement->GetN());
   G4double oneThird = 1.0/3.0;
   G4double cubicrAt = std::pow(G4double(At), oneThird); 
 
@@ -1445,7 +1416,6 @@ G4double G4GlauberGribovCrossSection::CalculateEcmValue( const G4double mp ,
   return Ecm ; // KEcm;
 }
 
-
 ////////////////////////////////////////////////////////////////////////////////////
 //
 //
@@ -1460,6 +1430,12 @@ G4double G4GlauberGribovCrossSection::CalcMandelstamS( const G4double mp ,
   return sMand;
 }
 
+////////////////////////////////////////////////////////////////////////////////////
+//
+//
+
+void G4GlauberGribovCrossSection::Description() const
+{}
 
 //
 //

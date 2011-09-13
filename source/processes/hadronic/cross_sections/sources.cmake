@@ -83,8 +83,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
         G4ProtonInelasticCrossSection.hh
         G4TripathiCrossSection.hh
         G4TripathiLightCrossSection.hh
-        G4UElasticCrossSection.hh
-        G4UInelasticCrossSection.hh
         G4UPiNuclearCrossSection.hh
         G4VComponentCrossSection.hh
         G4VCrossSectionDataSet.hh
@@ -127,8 +125,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
         G4ProtonInelasticCrossSection.cc
         G4TripathiCrossSection.cc
         G4TripathiLightCrossSection.cc
-        G4UElasticCrossSection.cc
-        G4UInelasticCrossSection.cc
         G4UPiNuclearCrossSection.cc
         G4VComponentCrossSection.cc
         G4VCrossSectionDataSet.cc

@@ -64,21 +64,26 @@ public: // With Description
   virtual ~G4NeutronCaptureXS();
 
   virtual
-  G4bool IsApplicable(const G4DynamicParticle*, const G4Element*);
+  G4bool IsElementApplicable(const G4DynamicParticle*, G4int Z,
+			     const G4Material*);
 
   virtual
-  G4bool IsIsoApplicable(const G4DynamicParticle*, G4int /*Z*/, G4int /*A*/);
+  G4bool IsIsoApplicable(const G4DynamicParticle*, G4int Z, G4int A,
+			 const G4Element*, const G4Material*);
 
   virtual
-  G4double GetCrossSection(const G4DynamicParticle*, 
-			   const G4Element*, 
-	 		   G4double aTemperature = 0.);
+  G4double GetElementCrossSection(const G4DynamicParticle*, 
+				  G4int Z, const G4Material* mat=0);
+  /*
+  virtual
+  G4double GetIsoCrossSection(const G4DynamicParticle*, G4int Z, G4int A,
+                              const G4Isotope* iso,
+                              const G4Element* elm,
+                              const G4Material* mat);
+  */
 
   virtual
   void BuildPhysicsTable(const G4ParticleDefinition&);
-
-  virtual
-  void DumpPhysicsTable(const G4ParticleDefinition&);
 
 private: 
 

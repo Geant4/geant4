@@ -50,9 +50,14 @@
 
 #include "globals.hh"
 #include "G4VCrossSectionDataSet.hh"
+#include <iostream>
 
 class G4ParticleDefinition;
 class G4VComponentCrossSection;
+class G4DynamicParticle;
+class G4Element;
+class G4Material;
+class G4NistManager;
 
 class G4CrossSectionInelastic : public G4VCrossSectionDataSet
 {
@@ -65,18 +70,13 @@ public:
   virtual ~G4CrossSectionInelastic();
    
   virtual
-  G4bool IsApplicable(const G4DynamicParticle*, const G4Element*);
+  G4bool IsElementApplicable(const G4DynamicParticle*, G4int Z,
+			     const G4Material* mat = 0);
 
   virtual
-  G4bool IsIsoApplicable(const G4DynamicParticle*, G4int Z, G4int A);
-
-  virtual
-  G4double GetCrossSection(const G4DynamicParticle*, 
-			   const G4Element*, G4double aTemperature = 0.);
-
-  virtual
-  G4double GetZandACrossSection(const G4DynamicParticle*, G4int /*Z*/,
-                                G4int /*A*/, G4double aTemperature = 0.);
+  G4double GetElementCrossSection(const G4DynamicParticle*, 
+				  G4int Z, 
+				  const G4Material* mat = 0);
 
   virtual
   void BuildPhysicsTable(const G4ParticleDefinition&);
@@ -84,11 +84,14 @@ public:
   virtual
   void DumpPhysicsTable(const G4ParticleDefinition&);
 
+  virtual void Description() const;
+
 private:
 
   G4CrossSectionInelastic & operator=(const G4CrossSectionInelastic &right);
   G4CrossSectionInelastic(const G4CrossSectionInelastic&);
 
+  G4NistManager* nist;
   G4VComponentCrossSection* component;
   G4int Zmin;
   G4int Zmax;

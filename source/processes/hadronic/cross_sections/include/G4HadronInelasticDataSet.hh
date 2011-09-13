@@ -21,7 +21,7 @@
 // * any work based  on the software)  you  agree  to acknowledge its *
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
-// ********************************************************************
+// *******************************************************************
 //
 //
 // GEANT4 physics class: G4HadronInelasticDataSet -- header file
@@ -43,50 +43,24 @@
 
 class G4HadronInelasticDataSet : public G4VCrossSectionDataSet
 {
-  public:
+public:
 
-    G4HadronInelasticDataSet(); 
+  G4HadronInelasticDataSet(const G4String& name = "GheishaInelastic"); 
 
-    virtual ~G4HadronInelasticDataSet()
-    {}
+  virtual ~G4HadronInelasticDataSet();
 
+  void Description() const;
 
-    G4bool IsApplicable(const G4DynamicParticle* aParticle,
-                        const G4Element* anElement)
-    {
-      return theHadronCrossSections->IsApplicable(aParticle, anElement);
-    } 
+  virtual G4bool
+  IsElementApplicable(const G4DynamicParticle* aParticle, G4int /*Z*/,
+                      const G4Material*);
 
+  virtual G4double
+  GetElementCrossSection(const G4DynamicParticle* aParticle, G4int Z, 
+			 const G4Material*);
+private:
 
-    G4bool IsIsoApplicable(const G4DynamicParticle* aParticle,
-                           G4int ZZ, G4int AA)
-    {
-      return theHadronCrossSections->IsApplicable(aParticle, ZZ, AA);
-    }
-
-    G4double GetCrossSection(const G4DynamicParticle* aParticle,
-                             const G4Element* anElement, 
-                             G4double /*aTemperature*/)
-    {
-      return theHadronCrossSections->GetInelasticCrossSection(aParticle,
-                                                              anElement);
-    }
-
-    G4double GetZandACrossSection(const G4DynamicParticle* aParticle,
-                                  G4int ZZ, G4int AA,
-                                  G4double /*aTemperature*/)
-    {
-      return theHadronCrossSections->GetInelasticCrossSection(aParticle, ZZ, AA);
-    }
-
-    void BuildPhysicsTable(const G4ParticleDefinition&)
-    {}
-
-    void DumpPhysicsTable(const G4ParticleDefinition&);
-
-  private:
-
-    G4HadronCrossSections* theHadronCrossSections;
+  G4HadronCrossSections* theHadronCrossSections;
 };
 
 #endif

@@ -53,64 +53,27 @@ G4IonProtonCrossSection::G4IonProtonCrossSection()
 }
 
 G4IonProtonCrossSection::~G4IonProtonCrossSection()
-{
-  delete theForward;
-}
-
-G4bool 
-G4IonProtonCrossSection::IsApplicable(const G4DynamicParticle* dp, 
-				      const G4Element* elm)
-{
-  G4int Z = G4lrint(elm->GetZ());
-  G4int A = G4lrint(elm->GetN());
-  return IsIsoApplicable(dp, Z, A);
-}
-
-G4bool 
-G4IonProtonCrossSection::IsZAApplicable(const G4DynamicParticle* dp,
-					G4double Z, G4double A)
-{
-  G4int iZ = G4lrint(Z);
-  G4int iA = G4lrint(A);
-  return IsIsoApplicable(dp, iZ, iA);
-}
-
-G4bool 
-G4IonProtonCrossSection::IsIsoApplicable(const G4DynamicParticle* dp,
-					 G4int Z, G4int A)
-{
-  G4bool result = false;
-  if(1 == Z && 1 == A && dp->GetDefinition()->GetPDGCharge()/eplus > 1.5) 
-    { result = true; }
-  return result;
-}
-
-
-G4double 
-G4IonProtonCrossSection::GetCrossSection(const G4DynamicParticle* dp, 
-					 const G4Element*, G4double)
-{
-  return GetZandACrossSection(dp);
-}
-
-
-G4double 
-G4IonProtonCrossSection::GetZandACrossSection(const G4DynamicParticle* dp, 
-					      G4int /*ZZ*/, G4int /*AA*/, 
-					      G4double /*temperature*/)
-{
-  const G4ParticleDefinition* p = dp->GetDefinition();
-  G4double e = dp->GetKineticEnergy()*proton_mass_c2/p->GetPDGMass();
-  return theForward->GetCrossSection(e, p->GetBaryonNumber(),
-				     G4lrint(p->GetPDGCharge()/eplus) );
-}
-
-void G4IonProtonCrossSection::BuildPhysicsTable(const G4ParticleDefinition&)
 {}
 
-void G4IonProtonCrossSection::DumpPhysicsTable(const G4ParticleDefinition&)
+G4bool 
+G4IonProtonCrossSection::IsElementApplicable(const G4DynamicParticle* dp, 
+					     G4int Z, const G4Material*)
 {
-  G4cout << "G4IonProtonCrossSection: " << GetName() << " uses formula"
-	 <<G4endl;
+  return ((1 == Z) && (dp->GetDefinition()->GetPDGCharge()/eplus > 1.5)); 
 }
+
+
+G4double 
+G4IonProtonCrossSection::GetElementCrossSection(
+                                   const G4DynamicParticle* dp, 
+				   G4int, const G4Material*)
+{
+  const G4ParticleDefinition* p = dp->GetDefinition();
+  G4double e = dp->GetKineticEnergy()*CLHEP::proton_mass_c2/p->GetPDGMass();
+  return 
+    theForward->GetProtonCrossSection(e, lrint(p->GetPDGCharge()/eplus));
+}
+
+void G4IonProtonCrossSection::Description() const
+{}
 

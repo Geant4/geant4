@@ -28,6 +28,12 @@
 // Author:      D.H. Wright
 // Date:        1 February 2011
 //
+// Modified:
+//
+// 19 Aug 2011, V.Ivanchenko move to new design and make x-section per element
+//
+
+//
 // Description: use Kokoulin's parameterized calculation of virtual 
 //              photon production cross section and conversion to
 //              real photons.
@@ -42,11 +48,10 @@
 G4KokoulinMuonNuclearXS::G4KokoulinMuonNuclearXS()
  :G4VCrossSectionDataSet("KokoulinMuonNuclearXS"), theCrossSectionTable(0),
   LowestKineticEnergy(1*GeV), HighestKineticEnergy(1*PeV),
-  TotBin(100), CutFixed(0.2*GeV)
+  TotBin(60), CutFixed(0.2*GeV)
 {
   BuildCrossSectionTable();
 }
-
 
 G4KokoulinMuonNuclearXS::~G4KokoulinMuonNuclearXS()
 {
@@ -54,6 +59,13 @@ G4KokoulinMuonNuclearXS::~G4KokoulinMuonNuclearXS()
     theCrossSectionTable->clearAndDestroy();
     delete theCrossSectionTable;
   }
+}
+
+G4bool 
+G4KokoulinMuonNuclearXS::IsElementApplicable(const G4DynamicParticle*, 
+					     G4int, const G4Material*)
+{
+  return true;
 }
 
 
@@ -77,8 +89,8 @@ void G4KokoulinMuonNuclearXS::BuildCrossSectionTable()
     AtomicNumber = (*theElementTable)[j]->GetZ();
     AtomicWeight = (*theElementTable)[j]->GetA();
 
-    for (G4int i = 0; i < TotBin; i++) {
-      lowEdgeEnergy = ptrVector->GetLowEdgeEnergy(i);
+    for (G4int i = 0; i <= TotBin; ++i) {
+      lowEdgeEnergy = ptrVector->Energy(i);
       Value = ComputeMicroscopicCrossSection(lowEdgeEnergy,
                                              AtomicNumber, AtomicWeight);
       ptrVector->PutValue(i,Value);
@@ -89,12 +101,10 @@ void G4KokoulinMuonNuclearXS::BuildCrossSectionTable()
 
   // Build (Z,element) look-up table (for use in GetZandACrossSection) 
   for (G4int j = 0; j < nEl; j++) {
-    AtomicNumber = (*theElementTable)[j]->GetZ();
-    G4int ZZ = G4int(AtomicNumber);
-    zelMap[ZZ] = (*theElementTable)[j];
+    G4int ZZ = G4int((*theElementTable)[j]->GetZ());
+    zelMap[ZZ] = j;
   }
 }
-
 
 G4double G4KokoulinMuonNuclearXS::
 ComputeMicroscopicCrossSection(G4double KineticEnergy,
@@ -141,7 +151,6 @@ ComputeMicroscopicCrossSection(G4double KineticEnergy,
   return CrossSection;
 }
 
-
 G4double G4KokoulinMuonNuclearXS::
 ComputeDDMicroscopicCrossSection(G4double KineticEnergy,
                                  G4double, G4double AtomicWeight,
@@ -183,27 +192,11 @@ ComputeDDMicroscopicCrossSection(G4double KineticEnergy,
   return DCrossSection;
 }
 
-
-G4double 
-G4KokoulinMuonNuclearXS::GetCrossSection(const G4DynamicParticle* aPart,
-                                         const G4Element* anElement, 
-                                         G4double /*temperature*/)
-{
-  G4bool isOutOfRange;
-  G4double KE = aPart->GetKineticEnergy();
-
-  G4double cross_section =
-    (*theCrossSectionTable)(anElement->GetIndex())->GetValue(KE, isOutOfRange);
-
-  return cross_section;
-}
-
-
 G4double G4KokoulinMuonNuclearXS::
-GetZandACrossSection(const G4DynamicParticle* aPart,
-                     G4int ZZ, G4int /*AA*/, G4double /*temperature*/)
+GetElementCrossSection(const G4DynamicParticle* aPart,
+		       G4int ZZ, const G4Material*)
 {
-  G4Element* anElement = zelMap[ZZ];
-  return GetCrossSection(aPart, anElement);
+  G4int j = zelMap[ZZ];
+  return (*theCrossSectionTable)[j]->Value(aPart->GetKineticEnergy());
 }
 

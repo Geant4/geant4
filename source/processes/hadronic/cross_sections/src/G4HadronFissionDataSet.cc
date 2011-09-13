@@ -33,10 +33,62 @@
 // 
 
 #include "G4HadronFissionDataSet.hh"
+#include "G4DynamicParticle.hh"
+#include "G4NistManager.hh"
+#include "G4HadTmpUtil.hh"
+#include <iostream>
 
 
-G4HadronFissionDataSet::G4HadronFissionDataSet()
-  : G4VCrossSectionDataSet("Gheisha fission")
+G4HadronFissionDataSet::G4HadronFissionDataSet(const G4String& name)
+  : G4VCrossSectionDataSet(name)
 {
   theHadronCrossSections = G4HadronCrossSections::Instance();
+  //Description();
+}
+
+G4HadronFissionDataSet::~G4HadronFissionDataSet()
+{}
+
+void G4HadronFissionDataSet::Description() const 
+{
+  char* dirName = getenv("G4PhysListDocDir");
+  if (dirName) {
+    std::ofstream outFile;
+    G4String outFileName = GetName() + ".html";
+    G4String pathName = G4String(dirName) + "/" + outFileName;
+
+    outFile.open(pathName);
+    outFile << "<html>\n";
+    outFile << "<head>\n";
+
+    outFile << "<title>Description of Gheisha Fission Cross Section Set</title>\n";
+    outFile << "</head>\n";
+    outFile << "<body>\n";
+
+    outFile << "G4HadronFissionDataSet contains cross sections for\n"
+            << "neutron-induced fission of nuclei.  They were developed as\n"
+            << "part of the Gheisha hadronic package by H. Fesefeldt.  The\n"
+            << "cross sections are valid for all incident neutron energies.\n";
+
+    outFile << "</body>\n";
+    outFile << "</html>\n";
+    outFile.close();
+  }
+}
+
+G4bool
+G4HadronFissionDataSet::IsElementApplicable(const G4DynamicParticle* aParticle, 
+					    G4int /*Z*/,
+					    const G4Material*)
+{
+  return theHadronCrossSections->IsApplicable(aParticle);
+}
+
+G4double
+G4HadronFissionDataSet::GetElementCrossSection(const G4DynamicParticle* aParticle, 
+					       G4int Z, 
+					       const G4Material*)
+{
+  G4int A = lrint(G4NistManager::Instance()->GetAtomicMassAmu(Z));
+  return theHadronCrossSections->GetFissionCrossSection(aParticle, Z, A);
 }

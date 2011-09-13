@@ -48,6 +48,9 @@
 #include "G4CrossSectionInelastic.hh"
 #include "G4VComponentCrossSection.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4DynamicParticle.hh"
+#include "G4Element.hh"
+#include "G4NistManager.hh"
 
 G4CrossSectionInelastic::G4CrossSectionInelastic(G4VComponentCrossSection* c,
 						 G4int zmin, G4int zmax, 
@@ -55,50 +58,44 @@ G4CrossSectionInelastic::G4CrossSectionInelastic(G4VComponentCrossSection* c,
   : G4VCrossSectionDataSet(c->GetName()), component(c),
     Zmin(zmin),Zmax(zmax)
 {
+  nist = G4NistManager::Instance();
   SetMinKinEnergy(Emin);
   SetMaxKinEnergy(Emax);
 }
 
 G4CrossSectionInelastic::~G4CrossSectionInelastic()
-{
-  //delete component;
-}
+{}
    
-G4bool G4CrossSectionInelastic::IsApplicable(const G4DynamicParticle* p, 
-					     const G4Element* elm)
-{
-  return IsIsoApplicable(p, G4int(elm->GetZ()), 0); 
-}
-
-G4bool 
-G4CrossSectionInelastic::IsIsoApplicable(const G4DynamicParticle* p, 
-					 G4int Z, G4int)
+G4bool G4CrossSectionInelastic::IsElementApplicable(const G4DynamicParticle* p, 
+						    G4int Z, const G4Material*)
 {
   G4double e = p->GetKineticEnergy();
   return 
     (Z >= Zmin && Z <= Zmax && e >= GetMinKinEnergy() && e <= GetMaxKinEnergy()); 
 }
 
-
 G4double 
-G4CrossSectionInelastic::GetCrossSection(const G4DynamicParticle* p, 
-					 const G4Element* elm, G4double)
+G4CrossSectionInelastic::GetElementCrossSection(const G4DynamicParticle* p, 
+						G4int Z, 
+						const G4Material*)
 {
   return component->GetInelasticElementCrossSection(p->GetDefinition(), 
-						    p->GetKineticEnergy(), elm);
-}
-
-G4double 
-G4CrossSectionInelastic::GetZandACrossSection(const G4DynamicParticle* p, 
-					      G4int Z, G4int A, G4double)
-{
-  return component->GetInelasticIsotopeCrossSection(p->GetDefinition(), 
 						    p->GetKineticEnergy(), 
-						    Z, A);
+						    Z, nist->GetAtomicMassAmu(Z));
 }
 
-void G4CrossSectionInelastic::BuildPhysicsTable(const G4ParticleDefinition&)
-{}
+void G4CrossSectionInelastic::BuildPhysicsTable(const G4ParticleDefinition& p)
+{
+  component->BuildPhysicsTable(p);
+}
 
-void G4CrossSectionInelastic::DumpPhysicsTable(const G4ParticleDefinition&)
-{}
+void G4CrossSectionInelastic::DumpPhysicsTable(const G4ParticleDefinition& p)
+{
+  component->DumpPhysicsTable(p);
+}
+
+void G4CrossSectionInelastic::Description() const
+{
+  component->Description();
+}
+

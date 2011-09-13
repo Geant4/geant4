@@ -27,27 +27,68 @@
 // $Id: G4HadronInelasticDataSet.cc,v 1.9 2011-01-09 02:37:48 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
 // G4 Physics class: HadronInelasticDataSet for cross sections
 // F.W. Jones, TRIUMF, 19-MAY-98
 // 
 
 #include "G4HadronInelasticDataSet.hh"
+#include "G4DynamicParticle.hh"
+#include "G4NistManager.hh"
+#include "G4HadTmpUtil.hh"
+#include <iostream>
 
-G4HadronInelasticDataSet::G4HadronInelasticDataSet()
- : G4VCrossSectionDataSet("Gheisha inelastic")
+
+G4HadronInelasticDataSet::G4HadronInelasticDataSet(const G4String& name)
+ : G4VCrossSectionDataSet(name)
 {
   theHadronCrossSections = G4HadronCrossSections::Instance(); 
-  SetMinKinEnergy(0.0);
-  SetMaxKinEnergy(100*TeV);
+  //Description();
 }
 
+G4HadronInelasticDataSet::~G4HadronInelasticDataSet()
+{}
 
-void G4HadronInelasticDataSet::DumpPhysicsTable(const G4ParticleDefinition&)
+void G4HadronInelasticDataSet::Description() const
 {
-  G4cout << std::setw(24) << " " 
-         << " G4HadronInelasticDataSet: GHEISHA inelastic cross sections "
-         << G4endl; 
+  char* dirName = getenv("G4PhysListDocDir");
+  if (dirName) {
+    std::ofstream outFile;
+    G4String outFileName = GetName() + ".html";
+    G4String pathName = G4String(dirName) + "/" + outFileName;
+
+    outFile.open(pathName);
+    outFile << "<html>\n";
+    outFile << "<head>\n";
+
+    outFile << "<title>Description of Gheisha Inelastic Cross Section Set</title>\n";
+    outFile << "</head>\n";
+    outFile << "<body>\n";
+
+    outFile << "G4HadronInelasticDataSet contains inelastic cross sections\n"
+            << "for all long-lived hadrons at all incident energies.  It was\n"
+            << "developed as part of the Gheisha hadronic package\n"
+            << "by H. Fesefeldt, and consists of a set of parameterizations\n"
+            << "of inelastic scattering data.\n";
+
+    outFile << "</body>\n";
+    outFile << "</html>\n";
+    outFile.close();
+  }
 }
 
+G4bool
+G4HadronInelasticDataSet::IsElementApplicable(const G4DynamicParticle* aParticle, 
+					      G4int /*Z*/,
+					      const G4Material*)
+{
+  return theHadronCrossSections->IsApplicable(aParticle);
+}
 
+G4double
+G4HadronInelasticDataSet::GetElementCrossSection(const G4DynamicParticle* aParticle, 
+						 G4int Z, 
+						 const G4Material*)
+{
+  G4int A = lrint(G4NistManager::Instance()->GetAtomicMassAmu(Z));
+  return theHadronCrossSections->GetInelasticCrossSection(aParticle, Z, A);
+}

@@ -35,6 +35,7 @@
 // Class Description - End
 //
 // 23-Dec-2006 Isotope dependence added by D. Wright
+// 19-Aug-2011 V.Ivanchenko move to new design and make x-section per element
 //
 
 #include "globals.hh"
@@ -45,30 +46,18 @@
 class G4IonsSihverCrossSection : public G4VCrossSectionDataSet
 {
 public:
+
   G4IonsSihverCrossSection();
 
   virtual ~G4IonsSihverCrossSection();
    
   virtual
-  G4bool IsApplicable(const G4DynamicParticle* aDP, const G4Element*);
-
-  virtual 
-  G4bool IsIsoApplicable(const G4DynamicParticle* aDP, G4int /*ZZ*/, 
-			 G4int /*AA*/);
+  G4bool IsElementApplicable(const G4DynamicParticle* aDP, G4int Z,
+			     const G4Material*);
 
   virtual
-  G4double GetCrossSection(const G4DynamicParticle*, 
-			   const G4Element*, G4double aTemperature);
-
-  virtual
-  G4double GetZandACrossSection(const G4DynamicParticle*, G4int ZZ, 
-				G4int AA, G4double aTemperature);
-
-  virtual
-  void BuildPhysicsTable(const G4ParticleDefinition&);
-
-  virtual
-  void DumpPhysicsTable(const G4ParticleDefinition&);
+  G4double GetElementCrossSection(const G4DynamicParticle*, 
+				  G4int Z, const G4Material*);
 
 private:
   const G4double square_r0;

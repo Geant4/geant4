@@ -35,10 +35,9 @@
 //
 
 #include "G4NucleonNuclearCrossSection.hh"
+#include "G4DynamicParticle.hh"
 #include "G4Neutron.hh"
 #include "G4Proton.hh"
-#include "G4HadTmpUtil.hh"
-
 
 // Group 1: He, Be, C for 44 energies  
 
@@ -551,34 +550,10 @@ G4NucleonNuclearCrossSection::~G4NucleonNuclearCrossSection()
 ////////////////////////////////////////////////////////////////////////////
 //
 
-G4double G4NucleonNuclearCrossSection::
-GetCrossSection(const G4DynamicParticle* aParticle, 
-                const G4Element* anElement, G4double)
-
-{
-  G4int Z = G4lrint(anElement->GetZ());
-  G4int A = G4lrint(anElement->GetN());
-  return GetZandACrossSection(aParticle, Z, A, 0.);
-}
-
-////////////////////////////////////////////////////////////////////////////
-//
-
 G4bool
-G4NucleonNuclearCrossSection::IsApplicable(const G4DynamicParticle* aParticle, 
-						  const G4Element* anElement)
-{
-  G4int Z = G4lrint(anElement->GetZ());
-  G4int A = G4lrint(anElement->GetN());
-  return IsIsoApplicable(aParticle, Z, A); 
-}
-
-////////////////////////////////////////////////////////////////////////////
-//
-
-G4bool
-G4NucleonNuclearCrossSection::IsIsoApplicable(const G4DynamicParticle* aParticle, 
-						    G4int Z, G4int)
+G4NucleonNuclearCrossSection::IsElementApplicable(const G4DynamicParticle* aParticle, 
+						  G4int Z, 
+						  const G4Material*)
 {
   G4bool result = false;
   if(aParticle->GetDefinition() == theNeutron ) result = true;
@@ -588,27 +563,24 @@ G4NucleonNuclearCrossSection::IsIsoApplicable(const G4DynamicParticle* aParticle
   return result;
 }
 
-
 ////////////////////////////////////////////////////////////////////////////
 //
 
-G4double G4NucleonNuclearCrossSection::
-GetZandACrossSection(const G4DynamicParticle* aParticle, 
-                     G4int zElement, G4int, G4double  )
+G4double 
+G4NucleonNuclearCrossSection::GetElementCrossSection(const G4DynamicParticle* aParticle, 
+						     G4int Z, const G4Material*)
 {
    G4double kineticEnergy = aParticle->GetKineticEnergy();
   
    G4double result = 0;
-   G4int Z = zElement;
-
    // G4cout<<"Z = "<<Z<<G4endl;
 
    size_t it = 0;
 
    while( it < theZ.size() && Z > theZ[it] ) {++it;}
-   if(it >= theZ.size()) it = theZ.size() - 1; 
+   if(it >= theZ.size()) { it = theZ.size() - 1; }
 
-   if( Z > theZ[it] ) Z = theZ[it]; 
+   if( Z > theZ[it] ) { Z = theZ[it]; }
    G4int Z1, Z2;
    G4double x1, x2, xt1, xt2;
 
@@ -674,7 +646,7 @@ GetZandACrossSection(const G4DynamicParticle* aParticle,
      }
    }
    fElasticXsc = fTotalXsc - result;
-   if( fElasticXsc < 0.) fElasticXsc = 0.;
+   if( fElasticXsc < 0.) { fElasticXsc = 0.; }
 
    return result;
 }
@@ -730,3 +702,6 @@ Interpolate(G4int Z1, G4int Z2, G4int Z, G4double x1, G4double x2)
   //       G4cout << "res1/2 " << r1 <<" " << r2 <<" " << result<< G4endl;
   return result;
 }
+
+void G4NucleonNuclearCrossSection::Description() const
+{}

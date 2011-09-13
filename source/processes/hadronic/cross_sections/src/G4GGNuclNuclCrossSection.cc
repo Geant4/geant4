@@ -51,21 +51,8 @@ G4GGNuclNuclCrossSection::~G4GGNuclNuclCrossSection()
 
 
 G4bool 
-G4GGNuclNuclCrossSection::IsApplicable(const G4DynamicParticle* aDP, 
-				       const G4Element*  anElement)
-{
-  G4int Z = G4lrint(anElement->GetZ());
-  G4int N = G4lrint(anElement->GetN());
-  return IsIsoApplicable(aDP, Z, N);
-} 
-
-///////////////////////////////////////////////////////////////////////////////
-//
-//
-
-G4bool 
-G4GGNuclNuclCrossSection::IsIsoApplicable(const G4DynamicParticle* aDP, 
-					  G4int Z, G4int)
+G4GGNuclNuclCrossSection::IsElementApplicable(const G4DynamicParticle* aDP, 
+					      G4int Z, const G4Material*)
 {
   G4bool applicable = false;
   G4double kineticEnergy = aDP->GetKineticEnergy();
@@ -83,12 +70,11 @@ G4GGNuclNuclCrossSection::IsIsoApplicable(const G4DynamicParticle* aDP,
 
 
 G4double G4GGNuclNuclCrossSection::
-GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement,
-                G4double T)
+GetElementCrossSection(const G4DynamicParticle* aParticle, G4int Z,
+		       const G4Material*)
 {
-  G4int Z = G4lrint(anElement->GetZ());
-  G4int N = G4lrint(anElement->GetN());
-  return GetZandACrossSection(aParticle, Z, N, T);
+  G4int A = G4lrint(G4NistManager::Instance()->GetAtomicMassAmu(Z));
+  return GetZandACrossSection(aParticle, Z, A);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -102,7 +88,7 @@ GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement,
 
 G4double G4GGNuclNuclCrossSection::
 GetZandACrossSection(const G4DynamicParticle* aParticle,
-                     G4int tZ, G4int tA, G4double)
+                     G4int tZ, G4int tA)
 {
   G4double xsection;
   G4double sigma;

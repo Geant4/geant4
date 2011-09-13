@@ -114,7 +114,8 @@ public: //with description
   virtual
   void DumpPhysicsTable(const G4ParticleDefinition&);
 
-public: 
+  virtual
+  void Description() const;
 
   inline void SetVerboseLevel(G4int value);
 
@@ -149,7 +150,8 @@ G4VComponentCrossSection::GetTotalElementCrossSection(
 	 G4double kinEnergy, 
 	 const G4Element* elm)
 {
-  return GetTotalElementCrossSection(p,kinEnergy,(G4int)elm->GetZ(),elm->GetN());
+  return GetTotalElementCrossSection(p,kinEnergy,
+				     (G4int)elm->GetZ(),elm->GetN());
 }
 
 inline G4double 
@@ -158,7 +160,8 @@ G4VComponentCrossSection::GetInelasticElementCrossSection(
 	 G4double kinEnergy, 
 	 const G4Element* elm)
 {
-  return GetInelasticElementCrossSection(p,kinEnergy,(G4int)elm->GetZ(),elm->GetN());
+  return GetInelasticElementCrossSection(p,kinEnergy,
+					 (G4int)elm->GetZ(),elm->GetN());
 }
 
 inline G4double 
@@ -167,7 +170,8 @@ G4VComponentCrossSection::GetElasticElementCrossSection(
 	 G4double kinEnergy, 
 	 const G4Element* elm)
 {
-  return GetElasticElementCrossSection(p,kinEnergy,(G4int)elm->GetZ(),elm->GetN());
+  return GetElasticElementCrossSection(p,kinEnergy,
+				       (G4int)elm->GetZ(),elm->GetN());
 }
 
 inline void G4VComponentCrossSection::SetVerboseLevel(G4int value)

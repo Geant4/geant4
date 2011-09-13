@@ -33,13 +33,62 @@
 // 
 
 #include "G4HadronElasticDataSet.hh"
+#include "G4NistManager.hh"
+#include "G4HadTmpUtil.hh"
+#include <iostream>
 
 
-G4HadronElasticDataSet::G4HadronElasticDataSet()
- : G4VCrossSectionDataSet("Gheisha elastic")
+G4HadronElasticDataSet::G4HadronElasticDataSet(const G4String& name)
+ : G4VCrossSectionDataSet(name)
 {
   theHadronCrossSections = G4HadronCrossSections::Instance(); 
-  SetMinKinEnergy(0.0);
-  SetMaxKinEnergy(100*TeV);
+  //Description();
 }
 
+G4HadronElasticDataSet::~G4HadronElasticDataSet()
+{}
+
+void G4HadronElasticDataSet::Description() const
+{
+  char* dirName = getenv("G4PhysListDocDir");
+  if (dirName) {
+    std::ofstream outFile;
+    G4String outFileName = GetName() + ".html";
+    G4String pathName = G4String(dirName) + "/" + outFileName;
+
+    outFile.open(pathName);
+    outFile << "<html>\n";
+    outFile << "<head>\n";
+
+    outFile << "<title>Description of Gheisha Elastic Cross Section Set</title>\n";
+    outFile << "</head>\n";
+    outFile << "<body>\n";
+
+    outFile << "G4HadronElasticDataSet contains elastic cross sections for\n"
+            << "all long-lived hadrons at all incident energies.  It was\n"
+            << "developed as part of the Gheisha hadronic package\n"
+            << "by H. Fesefeldt, and consists of a set of parameterizations\n"
+            << "of elastic scattering data.\n";
+
+    outFile << "</body>\n";
+    outFile << "</html>\n";
+    outFile.close();
+  }
+}
+
+G4bool
+G4HadronElasticDataSet::IsElementApplicable(const G4DynamicParticle* aParticle, 
+					    G4int /*Z*/,
+					    const G4Material*)
+{
+  return theHadronCrossSections->IsApplicable(aParticle);
+}
+
+G4double
+G4HadronElasticDataSet::GetElementCrossSection(const G4DynamicParticle* aParticle, 
+					       G4int Z, 
+					       const G4Material*)
+{
+  G4int A = lrint(G4NistManager::Instance()->GetAtomicMassAmu(Z));
+  return theHadronCrossSections->GetElasticCrossSection(aParticle, Z, A);
+}
