@@ -17,6 +17,10 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 4 2011 G.Cosmo (analysis-V09-04-05)
+- Extended fix in tools/vdata for compilation error on olders GCC compiler
+  versions (MacOSX 10.5, SLC4, ...). Addressing problem report #1238.
+
 July 29 2011 G.Cosmo (analysis-V09-04-04)
 - Fix in tools/vdata for compilation error in Intel ICC compiler.
 
