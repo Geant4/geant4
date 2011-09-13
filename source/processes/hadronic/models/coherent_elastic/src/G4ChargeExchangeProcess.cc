@@ -129,10 +129,10 @@ BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
   G4HadronicProcess::BuildPhysicsTable(aParticleType);
 }
 
-G4double G4ChargeExchangeProcess::GetMicroscopicCrossSection(
+G4double G4ChargeExchangeProcess::GetElementCrossSection(
                                   const G4DynamicParticle* dp,
 				  const G4Element* elm,
-				  G4double temp)
+				  const G4Material* mat)
 {
   // gives the microscopic cross section in GEANT4 internal units
   G4double Z = elm->GetZ();
@@ -146,7 +146,7 @@ G4double G4ChargeExchangeProcess::GetMicroscopicCrossSection(
     G4cout << "G4ChargeExchangeProcess compute GHAD CS for element "
 	   << elm->GetName()
 	   << G4endl;
-  x = store->GetCrossSection(dp, elm, temp);
+  x = store->GetCrossSection(dp, elm, mat);
 
   if(verboseLevel>1)
     G4cout << "G4ChargeExchangeProcess cross(mb)= " << x/millibarn

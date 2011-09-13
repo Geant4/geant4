@@ -108,13 +108,15 @@ class G4ElasticHadrNucleusHE : public G4HadronElastic
 {
 public:
 
-  G4ElasticHadrNucleusHE();
+  G4ElasticHadrNucleusHE(const G4String& name = "hElasticGlauber");
 
   virtual ~G4ElasticHadrNucleusHE();
 
   virtual G4double SampleInvariantT(const G4ParticleDefinition* p, 
 				    G4double plab, 
 				    G4int Z, G4int A);
+
+  void Description() const;
 
   G4double SampleT(const G4ParticleDefinition* p, 
 		   G4double plab, 

@@ -218,8 +218,8 @@ void G4ElasticData::DefineNucleusParameters(G4double A)
 //  The constructor for the generating of events
 //
 
-G4ElasticHadrNucleusHE::G4ElasticHadrNucleusHE()
-  : G4HadronElastic("hElasticGlauber")
+G4ElasticHadrNucleusHE::G4ElasticHadrNucleusHE(const G4String& name)
+  : G4HadronElastic(name)
 {
   dQ2 = hMass = hMass2 =  hLabMomentum = hLabMomentum2 = MomentumCM = HadrEnergy 
     = R1 = R2 = Pnucl = Aeff = HadrTot = HadrSlope = HadrReIm = TotP = DDSect2
@@ -230,6 +230,7 @@ G4ElasticHadrNucleusHE::G4ElasticHadrNucleusHE()
   verboseLevel = 0;
   plabLowLimit = 20.0*MeV;
   lowestEnergyLimit = 0.0;
+  Description();
 
   MbToGeV2  =  2.568;
   sqMbToGeV =  1.602;
@@ -285,6 +286,34 @@ G4ElasticHadrNucleusHE::G4ElasticHadrNucleusHE()
     for(G4int k = 0; k < 93; k++) { SetOfElasticData[j][k] = 0; }
   } 
 }
+
+
+void G4ElasticHadrNucleusHE::Description() const
+{
+  char* dirName = getenv("G4PhysListDocDir");
+  if (dirName) {
+    std::ofstream outFile;
+    G4String outFileName = GetModelName() + ".html";
+    G4String pathName = G4String(dirName) + "/" + outFileName;
+    outFile.open(pathName);
+    outFile << "<html>\n";
+    outFile << "<head>\n";
+
+    outFile << "<title>Description of G4ElasticHadrNucleusHE Model</title>\n";
+    outFile << "</head>\n";
+    outFile << "<body>\n";
+
+    outFile << "G4ElasticHadrNucleusHE is a hadron-nucleus elastic scattering\n"
+            << "model developed by N. Starkov which uses a Glauber model\n"
+            << "parameterization to calculate the final state.  It is valid\n"
+            << "for all hadrons with incident energies above 1 GeV.\n";
+
+    outFile << "</body>\n";
+    outFile << "</html>\n";
+    outFile.close();
+  }
+}
+
 
 ///////////////////////////////////////////////////////////////////
 //

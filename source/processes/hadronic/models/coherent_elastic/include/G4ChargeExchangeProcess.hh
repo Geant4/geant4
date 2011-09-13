@@ -65,9 +65,9 @@ public:
 
   virtual void DumpPhysicsTable(const G4ParticleDefinition& aParticleType);
 
-  virtual G4double GetMicroscopicCrossSection(const G4DynamicParticle* aParticle,
-					      const G4Element* anElement,
-					      G4double aTemp);
+  virtual G4double GetElementCrossSection(const G4DynamicParticle* aParticle,
+					  const G4Element* anElement,
+					  const G4Material* mat = 0);
 
 private:
 

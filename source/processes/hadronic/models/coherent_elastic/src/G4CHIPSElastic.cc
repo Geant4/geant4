@@ -50,6 +50,7 @@
 #include "G4QPionMinusElasticCrossSection.hh"         // Uzhi
 #include "G4QKaonPlusElasticCrossSection.hh"          // Uzhi
 #include "G4QKaonMinusElasticCrossSection.hh"         // Uzhi
+#include <iostream>
 
 
 G4VQCrossSection* G4CHIPSElastic::pxsManager = 0;
@@ -74,10 +75,38 @@ G4CHIPSElastic::G4CHIPSElastic() : G4HadronElastic("hElasticCHIPS")
     KPxsManager   = G4QKaonPlusElasticCrossSection::GetPointer();   // Uzhi
     KMxsManager   = G4QKaonMinusElasticCrossSection::GetPointer();  // Uzhi
   }
+  Description();
 }
 
 G4CHIPSElastic::~G4CHIPSElastic()
 {}
+
+
+void G4CHIPSElastic::Description() const
+{
+  char* dirName = getenv("G4PhysListDocDir");
+  if (dirName) {
+    std::ofstream outFile;
+    G4String outFileName = GetModelName() + ".html";
+    G4String pathName = G4String(dirName) + "/" + outFileName;
+    outFile.open(pathName);
+    outFile << "<html>\n";
+    outFile << "<head>\n";
+
+    outFile << "<title>Description of G4CHIPSElastic</title>\n";
+    outFile << "</head>\n";
+    outFile << "<body>\n";
+
+    outFile << "The G4CHIPSElastic model performs hadron-nucleus elastic\n"
+            << "scattering using the parameterized elastic cross sections\n"
+            << "of M. Kossov\n";
+
+    outFile << "</body>\n";
+    outFile << "</html>\n";
+    outFile.close();
+  }
+}
+
 
 G4double 
 G4CHIPSElastic::SampleInvariantT(const G4ParticleDefinition* p, 

@@ -68,6 +68,8 @@ public:
 
   inline void SetLowestEnergyNeutron(G4double);
 
+  void Description() const;
+
 private:
 
   const G4ParticleDefinition* theNeutron;

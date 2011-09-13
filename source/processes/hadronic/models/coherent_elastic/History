@@ -14,6 +14,15 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+23 August 2011 - V.Ivanchenko (hadr-cohe-V09-04-11)
+--------------------------------------------------
+- G4WHadronElasticProcess - lowestNeutronEnergy is set to 1.e-12*eV
+
+23 August 2011 - V.Ivanchenko (hadr-cohe-V09-04-10)
+--------------------------------------------------
+- G4ChargeExchangeProcess, G4CHIPSElasticXS - migration to new design of the
+    G4VCrossSectionDataSet interface
+
 28 July 2011 - V.Ivanchenko (hadr-cohe-V09-04-09)
 -------------------------------------------------
 18 July 2011 - V. Grichine

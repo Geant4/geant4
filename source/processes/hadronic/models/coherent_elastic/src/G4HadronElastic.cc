@@ -30,9 +30,6 @@
 //
 // Author : V.Ivanchenko 29 June 2009 (redesign old elastic model)
 //  
-// Modified:
-//
-//
 
 #include "G4HadronElastic.hh"
 #include "G4ParticleTable.hh"
@@ -56,10 +53,42 @@ G4HadronElastic::G4HadronElastic(const G4String& name)
   theNeutron  = G4Neutron::Neutron();
   theDeuteron = G4Deuteron::Deuteron();
   theAlpha    = G4Alpha::Alpha();
+  Description();
 }
+
 
 G4HadronElastic::~G4HadronElastic()
 {}
+
+
+void G4HadronElastic::Description() const
+{
+  char* dirName = getenv("G4PhysListDocDir");
+  if (dirName) {
+    std::ofstream outFile;
+    G4String outFileName = GetModelName() + ".html";
+    G4String pathName = G4String(dirName) + "/" + outFileName;
+    outFile.open(pathName);
+    outFile << "<html>\n";
+    outFile << "<head>\n";
+
+    outFile << "<title>Description of G4HadronElastic Model</title>\n";
+    outFile << "</head>\n";
+    outFile << "<body>\n";
+
+    outFile << "G4HadronElastic is a hadron-nucleus elastic scattering\n"
+            << "model which uses the Gheisha two-exponential momentum\n"
+            << "transfer parameterization.  The model is fully relativistic\n"
+            << "as opposed to the original Gheisha model which was not.\n"
+            << "This model may be used for all long-lived hadrons at all\n"
+            << "incident energies.\n";
+
+    outFile << "</body>\n";
+    outFile << "</html>\n";
+    outFile.close();
+  }
+}
+
 
 G4HadFinalState* G4HadronElastic::ApplyYourself(
 		 const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)

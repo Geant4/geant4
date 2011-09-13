@@ -49,7 +49,9 @@
 #include "G4CrossSectionDataStore.hh"
 #include "G4HadronElasticDataSet.hh"
 #include "G4ProductionCutsTable.hh"
- 
+#include <iostream>
+
+
 G4WHadronElasticProcess::G4WHadronElasticProcess(const G4String& pName)
   : G4HadronicProcess(pName) 
 {
@@ -57,12 +59,40 @@ G4WHadronElasticProcess::G4WHadronElasticProcess(const G4String& pName)
   AddDataSet(new G4HadronElasticDataSet);
   theNeutron  = G4Neutron::Neutron();
   lowestEnergy = 1.*keV;
-  lowestEnergyNeutron = 1.e-6*eV;
+  lowestEnergyNeutron = 1.e-12*eV;
+  Description();
 }
 
+
 G4WHadronElasticProcess::~G4WHadronElasticProcess()
+{}
+
+
+void G4WHadronElasticProcess::Description() const
 {
+  char* dirName = getenv("G4PhysListDocDir");
+  if (dirName) {
+    std::ofstream outFile;
+    G4String outFileName = GetProcessName() + ".html";
+    G4String pathName = G4String(dirName) + "/" + outFileName;
+    outFile.open(pathName);
+    outFile << "<html>\n";
+    outFile << "<head>\n";
+
+    outFile << "<title>Description of G4WHadronElasticProcess</title>\n";
+    outFile << "</head>\n";
+    outFile << "<body>\n";
+
+    outFile << "G4WHadronElasticProcess handles the elastic scattering of\n"
+            << "hadrons by invoking one or more hadronic models and one or\n"
+            << "more hadronic cross sections.\n";
+
+    outFile << "</body>\n";
+    outFile << "</html>\n";
+    outFile.close();
+  }
 }
+
 
 G4VParticleChange* G4WHadronElasticProcess::PostStepDoIt(
 				  const G4Track& track, 
