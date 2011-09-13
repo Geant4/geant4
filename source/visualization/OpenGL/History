@@ -16,6 +16,20 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+5th August 2011 Gabriele Cosmo (opengl-V09-04-07)
+- Added protection to restrict inclusion of headers in the previous tag
+  only for MacOS systems, where the problem is observed.
+
+5th August 2011 Gabriele Cosmo (opengl-V09-04-06)
+- Fix in G4OpenGL.hh for proper inclusion of <OpenGL/gl.h> and <OpenGL/glu.h>
+  for Qt build, when GL/X11 is not selected.
+  Fixes compilation problem happening in either GNUMake and CMake builds, when
+  selection Qt/GL driver.
+
+21st June 2011  John Allison
+- Removed struct G4OpenGLViewerFeedback3Dcolor.  Not needed since G4 v.6.
+
 17th June 2011 Ben Morgan (opengl-V09-04-05)
 - sources.cmake : Added support for building Xm and Win32 components.
 

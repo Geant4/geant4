@@ -132,16 +132,6 @@ private :
   // print vectored EPS files
 };
 
-typedef struct G4OpenGLViewerFeedback3Dcolor {
-  GLfloat x;
-  GLfloat y;
-  GLfloat z;
-  GLfloat red;
-  GLfloat green;
-  GLfloat blue;
-  GLfloat alpha;
-} Feedback3Dcolor;
-
 #endif
 
 #endif

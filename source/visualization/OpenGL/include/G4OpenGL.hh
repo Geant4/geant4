@@ -62,10 +62,11 @@
  #include <qgl.h>
 #endif
 #ifdef  G4VIS_BUILD_OPENGLQT_DRIVER
-  // Already done in Darwin-g++.gmk
-  //#    include <OpenGL/gl.h>
-  //#    include <OpenGL/glu.h>
   #ifndef G4VIS_BUILD_OPENGLX_DRIVER
+    #ifdef __MACH__
+      #include <OpenGL/gl.h>
+      #include <OpenGL/glu.h>
+    #endif
     #include <qgl.h>
   #endif
 #endif
