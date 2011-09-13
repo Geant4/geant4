@@ -31,11 +31,9 @@
 // ----------------------------------------------------------------------
 // G4Exception
 //
-// Global error function prints string to G4cerr, and aborts
-// program
-//
-// History:
-// 30.06.95 P.Kent
+// Global error function prints string to G4cerr (or G4cout in case of
+// warning). May abort program according to severity.
+// ----------------------------------------------------------------------
 
 #include "G4ios.hh"
 #include "G4String.hh"
@@ -71,33 +69,37 @@ void G4Exception(const char* originOfException,
   }
   else
   {
-    G4cerr << G4endl
-       << "*** ExceptionHandler is not defined ***" << G4endl;
-    G4cerr << G4endl;
-    G4cerr << "*** G4Exception : " << exceptionCode << G4endl;
-    G4cerr << "      issued by : " << originOfException << G4endl;
-    G4cerr << description << G4endl;
-    G4cerr << G4endl << "Severity : ";
+    G4String e_banner = "\n!!!!! - !!!!! - !!!!! - !!!!! - !!!!! - !!!!!\n";
+    G4String w_banner = "\nwwwww - wwwww - wwwww - wwwww - wwwww - wwwww\n";
+    std::ostringstream message;
+    message << "\n*** ExceptionHandler is not defined ***\n"
+            << "*** G4Exception : " << exceptionCode << G4endl
+            << "      issued by : " << originOfException << G4endl
+            << description << G4endl;
     switch(severity)
     {
      case FatalException:
-      G4cerr << "*** Fatal Exception ***";
+      G4cerr << e_banner << message.str() << "*** Fatal Exception ***"
+             << e_banner;
       break;
      case FatalErrorInArgument:
-      G4cerr << "*** Fatal Error In Argument ***";
+      G4cerr << e_banner << message.str() << "*** Fatal Error In Argument ***"
+             << e_banner;
       break;
      case RunMustBeAborted:
-      G4cerr << "*** Run Must Be Aborted ***";
+      G4cerr << e_banner << message.str() << "*** Run Must Be Aborted ***"
+             << e_banner;
       break;
      case EventMustBeAborted:
-      G4cerr << "*** Event Must Be Aborted ***";
+      G4cerr << e_banner << message.str() << "*** Event Must Be Aborted ***"
+             << e_banner;
       break;
      default:
-      G4cerr << "*** This is just a warning message. ***";
+      G4cout << w_banner << message.str() << "*** This is just a warning message. ***"
+             << w_banner;
       toBeAborted = false;
       break;
     }
-    G4cerr << G4endl;
   }
   if(toBeAborted)
   {
@@ -124,26 +126,23 @@ void G4Exception(G4String emessage)
   G4Exception(emessage.c_str());
 }
 
-//typedef std::ostringstream G4ExceptionDesciption;
+//typedef std::ostringstream G4ExceptionDescription;
 
 void G4Exception(const char* originOfException,
                  const char* exceptionCode,
                  G4ExceptionSeverity severity,
-                 G4ExceptionDesciption & description)
+                 G4ExceptionDescription & description)
 {
   G4String des = description.str();
-  G4Exception(originOfException,exceptionCode,severity,
-                 des.c_str());
+  G4Exception(originOfException, exceptionCode, severity, des.c_str());
 }
 
 void G4Exception(const char* originOfException,
                  const char* exceptionCode,
                  G4ExceptionSeverity severity,
-                 G4ExceptionDesciption & description,
+                 G4ExceptionDescription & description,
                  const char* comments)
 {
   description << comments << G4endl;
-  G4Exception(originOfException,exceptionCode,severity,
-                 description);
+  G4Exception(originOfException, exceptionCode, severity, description);
 }
-

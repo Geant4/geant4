@@ -13,7 +13,7 @@
 #------------------------------------------------------------------------------
 
 # Add allocation export symbol for the global category
-add_definitions(-DG4IOS_ALLOC_EXPORT)
+add_definitions(-DG4GLOB_ALLOC_EXPORT)
 
 add_subdirectory(HEPGeometry)
 add_subdirectory(HEPNumerics)

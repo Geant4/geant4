@@ -41,7 +41,7 @@
 
 #include <iostream>
 
-#if defined G4IOS_ALLOC_EXPORT
+#if defined G4GLOB_ALLOC_EXPORT
   extern G4DLLEXPORT std::ostream G4cout;
   extern G4DLLEXPORT std::ostream G4cerr;
 #else

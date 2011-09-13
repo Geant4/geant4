@@ -100,6 +100,7 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4PhysicsOrderedFreeVector.cc
         G4PhysicsTable.cc
         G4PhysicsVector.cc
+        G4PhysicsVectorCache.cc
         G4Pow.cc
         G4SliceTimer.cc
         G4StateManager.cc

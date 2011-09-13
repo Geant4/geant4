@@ -24,56 +24,26 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsOrderedFreeVector.icc,v 1.11 2010-05-28 05:13:43 kurasige Exp $
+// $Id: G4DataVector.cc,v 1.12 2010-11-01 13:55:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-////////////////////////////////////////////////////////////////////////
-// PhysicsOrderedFreeVector Class Inline Functions Definitions
-////////////////////////////////////////////////////////////////////////
+// 
+// --------------------------------------------------------------
+//      GEANT 4 class implementation file
 //
-// File:	G4PhysicsOrderedFreeVector.icc
-// Version:	1.0
-// Author:      Juliet Armstrong
-// mail:        gum@triumf.ca
+//  G4PhysicsVectorCache.cc
 //
-// Updated:
-//              2000-11-11 by H.Kurashige
-//              > use STL vector for dataVector and binVector
-////////////////////////////////////////////////////////////////////////
+// --------------------------------------------------------------
 
-////////////////////
-// Inline methods
-////////////////////
+#include "G4PhysicsVectorCache.hh"
 
-inline
-G4double G4PhysicsOrderedFreeVector::GetMaxValue()
+G4Allocator<G4PhysicsVectorCache> aPVCacheAllocator;
+
+G4PhysicsVectorCache::G4PhysicsVectorCache()
+ : lastEnergy(-DBL_MAX), lastValue(0.), lastBin(0)
 {
-	return dataVector.back();
 }
 
-inline
-G4double G4PhysicsOrderedFreeVector::GetMinValue()
+G4PhysicsVectorCache::~G4PhysicsVectorCache()
 {
-	return dataVector.front();
-}
-
-inline
-G4double G4PhysicsOrderedFreeVector::GetMaxLowEdgeEnergy()
-{
-	return binVector.back();
-}
-
-inline
-G4double G4PhysicsOrderedFreeVector::GetMinLowEdgeEnergy()
-{
-	return binVector.front();
-}
-
-inline
-void G4PhysicsOrderedFreeVector::DumpValues()
-{
-   for (size_t i = 0; i < numberOfNodes; i++)
-   {
-      G4cout << binVector[i] << "\t" << dataVector[i] << G4endl;
-   }
 }

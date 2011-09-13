@@ -10,7 +10,7 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-CPPFLAGS += -DG4IOS_ALLOC_EXPORT
+CPPFLAGS += -DG4GLOB_ALLOC_EXPORT
 CPPFLAGS += -I$(G4BASE)/global/HepGeometry/include
 
 include $(G4INSTALL)/config/common.gmk

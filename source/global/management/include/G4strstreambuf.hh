@@ -40,7 +40,7 @@
 
 class G4strstreambuf;
 
-#if defined G4IOS_ALLOC_EXPORT
+#if defined G4GLOB_ALLOC_EXPORT
 extern G4DLLEXPORT G4strstreambuf G4coutbuf;
 extern G4DLLEXPORT G4strstreambuf G4cerrbuf;
 #else

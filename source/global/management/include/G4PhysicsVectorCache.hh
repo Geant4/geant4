@@ -52,15 +52,36 @@ class G4PhysicsVectorCache
 {
   public:  
 
-    G4PhysicsVectorCache() : lastEnergy(-DBL_MAX), lastValue(0.), lastBin(0) {}
+    G4PhysicsVectorCache();
       // Constructor
 
-   ~G4PhysicsVectorCache() {}
+   ~G4PhysicsVectorCache();
       // Destructor
+
+    inline void* operator new(size_t);
+    inline void  operator delete(void*);
 
     G4double lastEnergy;        // Cache the last input value
     G4double lastValue;         // Cache the last output value   
     size_t lastBin;             // Cache the last bin location
 };
+
+#if defined G4GLOB_ALLOC_EXPORT
+  extern G4DLLEXPORT G4Allocator<G4PhysicsVectorCache> aPVCacheAllocator;
+#else
+  extern G4DLLIMPORT G4Allocator<G4PhysicsVectorCache> aPVCacheAllocator;
+#endif
+
+inline void* G4PhysicsVectorCache::operator new(size_t)
+{
+  void* aCache;
+  aCache = (void*)aPVCacheAllocator.MallocSingle();
+  return aCache;
+}
+
+inline void G4PhysicsVectorCache::operator delete(void* aCache)
+{
+  aPVCacheAllocator.FreeSingle((G4PhysicsVectorCache*)aCache);
+}
 
 #endif

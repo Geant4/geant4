@@ -17,6 +17,24 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 25, 2011 G.Cosmo (global-V09-04-16)
+- Added banner for errors and warnings in G4Exception.
+  Redirect warnings to cout instead of cerr.
+
+August 19, 2011 G.Cosmo (global-V09-04-15)
+- Use G4Allocator for allocation of G4PhysicsVector and G4PhysicsVectorCache
+  objects.
+- Replaced G4IOS_ALLOC_EXPORT flag with G4GLOB_ALLOC_EXPORT.
+
+August 16, 2011 H.Kurashige (global-V09-04-14)
+- Added 'dBin', 'baseBin' and 'verboseLevel' in the base class G4PhysicsVector
+  to avoid additional properties data introduced in derived classes.
+- Fixed ScaleVector() method in G4PhysicsVector derived classes.
+
+August 09, 2011 M.Asai (global-V09-04-13)
+- Fixed a spelling mistake in globals.hh and G4Exception.cc for
+  G4ExceptionDesciption typedef.
+
 July 28, 2011 M.Asai (global-V09-04-12)
 - Added two now G4Exception syntax.
 

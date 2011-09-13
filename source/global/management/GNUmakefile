@@ -11,7 +11,7 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-CPPFLAGS += -DG4IOS_ALLOC_EXPORT
+CPPFLAGS += -DG4GLOB_ALLOC_EXPORT
 ifdef G4RF_DEBUG
   CPPFLAGS += -DG4RF_DEBUG
 endif

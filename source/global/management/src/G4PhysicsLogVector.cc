@@ -48,13 +48,13 @@
 #include "G4PhysicsLogVector.hh"
 
 G4PhysicsLogVector::G4PhysicsLogVector()
-  : G4PhysicsVector(), dBin(0.), baseBin(0.)
+  : G4PhysicsVector()
 { 
   type = T_G4PhysicsLogVector;
 }
 
 G4PhysicsLogVector::G4PhysicsLogVector(size_t theNbin)
-  : G4PhysicsVector(), dBin(0.), baseBin(0.)
+  : G4PhysicsVector()
 {
   type = T_G4PhysicsLogVector;
 
@@ -71,10 +71,12 @@ G4PhysicsLogVector::G4PhysicsLogVector(size_t theNbin)
 
 G4PhysicsLogVector::G4PhysicsLogVector(G4double theEmin, 
                                        G4double theEmax, size_t theNbin)
-  : G4PhysicsVector(), dBin(std::log10(theEmax/theEmin)/theNbin),
-    baseBin(std::log10(theEmin)/dBin)
+  : G4PhysicsVector()
 {
   type = T_G4PhysicsLogVector;
+
+  dBin     =  std::log10(theEmax/theEmin)/theNbin;
+  baseBin  =  std::log10(theEmin)/dBin;
 
   numberOfNodes = theNbin + 1;
   dataVector.reserve(numberOfNodes);
@@ -112,24 +114,25 @@ G4bool G4PhysicsLogVector::Retrieve(std::ifstream& fIn, G4bool ascii)
   return success;
 }
 
-G4PhysicsLogVector::G4PhysicsLogVector(const G4PhysicsLogVector& right)
-  : G4PhysicsVector(right)
+void G4PhysicsLogVector::ScaleVector(G4double factorE, G4double factorV)
 {
-  dBin = right.dBin;
-  baseBin = right.baseBin;
+  G4PhysicsVector::ScaleVector(factorE, factorV);
+  G4double theEmin = binVector[0];
+  baseBin = std::log10(theEmin)/dBin;
 }
 
-G4PhysicsLogVector& 
-G4PhysicsLogVector::operator=(const G4PhysicsLogVector& right)
+size_t G4PhysicsLogVector::FindBinLocation(G4double theEnergy) const
 {
-  // Check assignment to self
+  // For G4PhysicsLogVector, FindBinLocation is implemented using
+  // a simple arithmetic calculation.
   //
-  if(this == &right) { return *this; }
+  // Because this is a virtual function, it is accessed through a
+  // pointer to the G4PhyiscsVector object for most usages. In this
+  // case, 'inline' will not be invoked. However, there is a possibility 
+  // that the user access to the G4PhysicsLogVector object directly and 
+  // not through pointers or references. In this case, the 'inline' will
+  // be invoked. (See R.B.Murray, "C++ Strategies and Tactics", Chap.6.6)
 
-  DeleteData();
-  CopyData(right);
-
-  dBin    = right.dBin;
-  baseBin = right.baseBin;
-  return *this;
+  return size_t( std::log10(theEnergy)/dBin - baseBin );
 }
+
