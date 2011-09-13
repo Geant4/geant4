@@ -65,11 +65,11 @@ G4BMesonZero* G4BMesonZero::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,     5.27950*GeV, 4.316e-10*MeV,          0.,
+                 name,     5.27950*GeV, 4.333e-10*MeV,          0.,
                     0,              -1,             0,
                     1,              -1,             0,
               "meson",               0,             0,         511,
-                false,     1.525e-3*ns,          NULL,
+                false,     1.519e-3*ns,          NULL,
                 false,       "B");
   }
   theInstance = reinterpret_cast<G4BMesonZero*>(anInstance);

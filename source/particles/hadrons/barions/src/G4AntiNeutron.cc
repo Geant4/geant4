@@ -71,7 +71,7 @@ G4AntiNeutron* G4AntiNeutron::Definition()
   // static const double  neutron_mass_c2 = 939.56563 * MeV;
 
   anInstance = new G4ParticleDefinition(
-                 name, neutron_mass_c2, 7.432e-28*GeV,         0.0, 
+                 name, neutron_mass_c2, 7.467e-28*GeV,         0.0, 
 		    1,              +1,             0,          
 		    1,              +1,             0,             
 	     "baryon",               0,            -1,       -2112,

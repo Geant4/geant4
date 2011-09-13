@@ -134,11 +134,20 @@ G4int G4PDGCodeChecker::CheckForBaryons()
   } else if (std::abs(tempPDGcode)%10000 == 4122) { 
     // Lambda_c
     quark2=2;  quark3 = 1; spin = 1;
+  } else if (std::abs(tempPDGcode)%10000 == 5122) { 
+    // Lambda_b
+    quark2=2;  quark3 = 1; spin = 1;
   } else if (std::abs(tempPDGcode)%10000 == 4132) { 
     // Xi_c0
     quark2=3;  quark3 = 1; spin = 1;
   } else if (std::abs(tempPDGcode)%10000 == 4232) { 
     // Xi_c+
+    quark2=3;  quark3 = 2; spin = 1;
+  } else if (std::abs(tempPDGcode)%10000 == 5132) { 
+    // Xi_b0
+    quark2=3;  quark3 = 1; spin = 1;
+  } else if (std::abs(tempPDGcode)%10000 == 5232) { 
+    // Xi_b+
     quark2=3;  quark3 = 2; spin = 1;
   } else if (std::abs(tempPDGcode)%10000 == 2122) { 
     // Delta+ (spin 1/2) 

@@ -356,9 +356,9 @@ const char* G4ExcitedLambdaConstructor::name[] = {
 };
 
 const G4double G4ExcitedLambdaConstructor::mass[] = {
-  1.407*GeV,1.5195*GeV, 1.600*GeV, 1.670*GeV,  1.690*GeV, 
-  1.800*GeV, 1.810*GeV, 1.820*GeV, 1.830*GeV,  1.890*GeV, 
-  2.100*GeV, 2.110*GeV
+  1.4051*GeV,1.5195*GeV, 1.600*GeV, 1.670*GeV,  1.690*GeV, 
+   1.800*GeV, 1.810*GeV, 1.820*GeV, 1.830*GeV,  1.890*GeV, 
+   2.100*GeV, 2.110*GeV
 };
 
 const G4double G4ExcitedLambdaConstructor::width[] = {

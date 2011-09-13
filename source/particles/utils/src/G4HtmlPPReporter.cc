@@ -88,7 +88,7 @@ void G4HtmlPPReporter::SparseOption(const G4String& option)
   PrintHeader(outFile);
   
   // comment
-  outFile << "<! -- " << comment << " --!> " << G4endl;
+  outFile << "<! -- " << comment << " -- !> " << G4endl;
   outFile << G4endl;
   
   
@@ -337,11 +337,13 @@ void G4HtmlPPReporter::SparseOption(const G4String& option)
   outFile << "<HTML>" << G4endl;
   outFile << "<HEAD>" << G4endl;
   outFile << " <META HTTP-EQUIV=" << "\"" << " Content-Type" << "\"";
-  outFile << " CONTENT=" << "\"" << "text/html; charset=iso-8859-1" << "\"" << ">" << G4endl;
+  outFile << " CONTENT=" 
+	  << "\"" << "text/html; charset=iso-8859-1" 
+	  << "\"" << ">" << G4endl;
   outFile << " <TITLE>Geant4 Particle List </TITLE>" << G4endl;
   outFile << "</HEAD>" << G4endl;
-  outFile << "<!-- Generated automatically by Geant4, ";
-  outFile << " -- >" << G4endl;
+  outFile << "<! -- Generated automatically by Geant4, "
+	  << " -- !>" << G4endl;
   outFile << "<BODY>" << G4endl;
 }
 

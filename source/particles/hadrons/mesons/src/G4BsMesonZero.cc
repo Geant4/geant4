@@ -33,8 +33,7 @@
 //
 //      Created                 Hisaya Kurashige, 16 June 1997
 // **********************************************************************
-//  New impelemenataion as an utility class  M.Asai, 26 July 2004
-// ----------------------------------------------------------------------
+//
 
 #include "G4BsMesonZero.hh"
 #include "G4ParticleTable.hh"

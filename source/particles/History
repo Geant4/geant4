@@ -17,6 +17,25 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 22 Aug. 2011 P.Gumplinger (particles-V09-04-17)
+- fix the scale of som0 in G4MuonRadiativeDecayChannelWithSpin.cc
+
+- 22 Aug. 2011 P.Gumplinger (particles-V09-04-16)
+- fix coding errors in G4MuonRadiativeDecayChannelWithSpin.cc
+- should be 12.0*(x*y*(1.0-y)......); 2.0*ns+nv-nt and
+- som0 = (som00+som01)/y
+- then sample according to: } while (G4UniformRand()*177.0 > som0);
+- Thanks to M. Ding, Tsinghua Univ.
+
+- 22 Aug. 2011  H.Kurashige (particles-V09-04-15)
+- Adding B-baryons, Bc mesons, Upsiron and Etac
+- Update particle life time  according to PDG2011
+- Fix a bug of making comment lines in G4HtmlPPReporter 
+
+- 3 Aug. 2011  H.Kurashige (particles-V09-04-12)
+- Update particle mass/width according to PDG2011
+-Fix UNINIT_CTOR in G4PrimaryParticle
+
 - 2 July 2011  H.Kurashige (particles-V09-04-11)
 - Fixed bugs of uninitialized values in CTOR of G4PrimaryParticle and G4PrimaryVertex
 

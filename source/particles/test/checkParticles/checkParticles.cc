@@ -48,7 +48,7 @@ int main(int argc,char** argv) {
   // PDG computer-readble file for particle properties
   //  see http://www-pdg.lbl.gov/computer_read.html
   std::ifstream pdgFile;
-  G4String pdgFileName = "mass_width_2010.mcd";
+  G4String pdgFileName = "mass_width_2011.mcd";
   if (argc > 1) pdgFileName =  argv[1];
  
   // open the pdg file
