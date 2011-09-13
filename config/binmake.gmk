@@ -78,7 +78,9 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/electromagnetic/xrays/include \
               -I$(G4BASE)/processes/electromagnetic/lowenergy/include \
               -I$(G4BASE)/processes/electromagnetic/highenergy/include \
-              -I$(G4BASE)/processes/electromagnetic/dna/include \
+              -I$(G4BASE)/processes/electromagnetic/dna/processes/include \
+              -I$(G4BASE)/processes/electromagnetic/dna/models/include \
+              -I$(G4BASE)/processes/electromagnetic/dna/utils/include \
               -I$(G4BASE)/processes/electromagnetic/pii/include \
               -I$(G4BASE)/processes/electromagnetic/polarisation/include \
               -I$(G4BASE)/processes/hadronic/cross_sections/include \

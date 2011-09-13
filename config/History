@@ -16,6 +16,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+31st August 2011 AM, MK, SI (config-V09-04-14)
+- Modified binmake.gmk to add new DNA architecture.
+
+3rd August 2011 Gabriele Cosmo (config-V09-04-13)
+- Darwin-g++.gmk: modified OGLLIBS settings to support MacOSX 10.7 Lion
+  for proper configuration of OpenGL libraries in combination with Qt.
+
 14th July 2011 Gabriele Cosmo (config-V09-04-12)
 - Added "analysis" module to binmake.gmk.
 
