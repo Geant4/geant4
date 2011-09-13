@@ -52,14 +52,18 @@
 // 20110311  M. Kelsey -- Include nuclear fragment in setOnShell balancing,
 //		including calculation of final-state momentum
 // 20110519  M. Kelsey -- Drop unused "p2" variable from selectPairToTune()
+// 20110801  M. Kelsey -- Use resize to avoid temporaries when copying from
+//		G4ReactionProductVector
 
 #include "G4CollisionOutput.hh"
 #include "G4CascadParticle.hh"
 #include "G4ParticleLargerEkin.hh"
 #include "G4LorentzConvertor.hh"
 #include "G4LorentzRotation.hh"
+#include "G4LorentzVector.hh"
 #include "G4ReactionProductVector.hh"
 #include "G4ReactionProduct.hh"
+#include "G4ThreeVector.hh"
 #include <algorithm>
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
@@ -121,7 +125,7 @@ void G4CollisionOutput::addOutgoingParticle(const G4CascadParticle& cparticle) {
 
 void G4CollisionOutput::addOutgoingParticles(const std::vector<G4CascadParticle>& cparticles) {
   for (unsigned i=0; i<cparticles.size(); i++)
-    addOutgoingParticle(cparticles[i].getParticle());
+    addOutgoingParticle(cparticles[i]);
 }
 
 // This comes from PreCompound de-excitation, both particles and nuclei
@@ -129,20 +133,37 @@ void G4CollisionOutput::addOutgoingParticles(const std::vector<G4CascadParticle>
 void G4CollisionOutput::addOutgoingParticles(const G4ReactionProductVector* rproducts) {
   if (!rproducts) return;		// Sanity check, no error if null
 
+  if (verboseLevel) {
+    G4cout << " >>> G4CollisionOutput::addOutgoingParticles(G4RPVector)"
+	   << G4endl;
+  }
+
   G4ReactionProductVector::const_iterator j;
   for (j=rproducts->begin(); j!=rproducts->end(); ++j) {
     G4ParticleDefinition* pd = (*j)->GetDefinition();
+    G4int type = G4InuclElementaryParticle::type(pd);
 
-    // FIXME:  This is expensive and unnecessary copying!
-    G4DynamicParticle aFragment(pd, (*j)->GetMomentum());
+    // FIXME:  Momentum returned by value; extra copying here!
+    G4LorentzVector mom((*j)->GetMomentum(), (*j)->GetTotalEnergy());
+    mom /= GeV;		// Convert from GEANT4 to Bertini units
     
+    if (verboseLevel>1)
+      G4cout << " Processing " << pd->GetParticleName() << " (" << type
+	     << "), momentum " << mom << " GeV" << G4endl;
+
     // Nucleons and nuclei are jumbled together in the list
-    if (G4InuclElementaryParticle::type(pd)) {
-      addOutgoingParticle(G4InuclElementaryParticle(aFragment, 
-						    G4InuclParticle::PreCompound));
+    // NOTE: Resize and set/fill avoid unnecessary temporary copies
+    if (type) {
+      outgoingParticles.resize(numberOfOutgoingParticles()+1);
+      outgoingParticles.back().fill(mom, pd, G4InuclParticle::PreCompound);
+
+      if (verboseLevel>1) outgoingParticles.back().printParticle();
     } else {
-      addOutgoingNucleus(G4InuclNuclei(aFragment, 
-				       G4InuclParticle::PreCompound));
+      outgoingNuclei.resize(numberOfOutgoingNuclei()+1);
+      outgoingNuclei.back().fill(mom,pd->GetAtomicMass(),pd->GetAtomicNumber(),
+				 0.,G4InuclParticle::PreCompound);
+
+      if (verboseLevel>1) outgoingNuclei.back().printParticle();
     }
   }
 }

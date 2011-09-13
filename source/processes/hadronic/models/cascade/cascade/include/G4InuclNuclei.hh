@@ -48,6 +48,7 @@
 // 20110225  M. Kelsey -- Add equality operator (NOT sorting!)
 // 20110721  M. Kelsey -- Follow base-class ctor change to pass model directly
 // 20110722  M. Kelsey -- BUG FIX:  Deleted excitation energy in one ctor
+// 20110829  M. Kelsey -- Add constructor to copy G4V3DNucleus input
 
 #ifndef G4INUCL_NUCLEI_HH
 #define G4INUCL_NUCLEI_HH
@@ -58,6 +59,7 @@
 
 class G4Fragment;
 class G4ParticleDefinition;
+class G4V3DNucleus;
 
 
 class G4InuclNuclei : public G4InuclParticle {
@@ -86,6 +88,8 @@ public:
 
   G4InuclNuclei(const G4Fragment& aFragment, Model model=DefaultModel);
 
+  G4InuclNuclei(G4V3DNucleus* a3DNucleus, Model model=DefaultModel);
+
   virtual ~G4InuclNuclei() {}
 
   // Copy and assignment constructors for use with std::vector<>
@@ -111,6 +115,10 @@ public:
 
   void fill(G4double ekin, G4int a, G4int z, G4double exc,
 	    Model model=DefaultModel);
+
+  void copy(const G4Fragment& aFragment, Model model=DefaultModel);
+
+  void copy(G4V3DNucleus* a3DNucleus, Model model=DefaultModel);
 
   // Excitation energy is stored as dynamical mass of particle
   void setExitationEnergy(G4double e);

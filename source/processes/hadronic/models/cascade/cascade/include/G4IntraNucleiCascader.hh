@@ -58,6 +58,9 @@
 // 20110721  M. Kelsey -- Drop decayTrappedParticle(G4KineticTrack*).
 // 20110722  M. Kelsey -- Deprecate "output_particles" list in favor of using
 //		output directly (will help with pre-cascade issues).
+// 20110729  M. Kelsey -- Replace convertKineticToCascade() to reduce churn.
+// 20110801  M. Kelsey -- Add local target buffers for rescattering, to avoid
+//		memory leak.
 
 #ifndef G4INTRA_NUCLEI_CASCADER_HH
 #define G4INTRA_NUCLEI_CASCADER_HH
@@ -111,15 +114,14 @@ protected:
 		G4InuclParticle* bullet, G4InuclParticle* target,
 		G4CollisionOutput& globalOutput);
 
-  G4InuclParticle* createTarget(G4V3DNucleus* theNucleus) const;
-
-  G4CascadParticle* convertKineticToCascade(const G4KineticTrack* ktrack) const;
+  G4InuclParticle* createTarget(G4V3DNucleus* theNucleus);
 
   // Functions to transfer input high-energy cascade for propagation
   void preloadCascade(G4V3DNucleus* theNucleus,
 		      G4KineticTrackVector* theSecondaries);
   void copyWoundedNucleus(G4V3DNucleus* theNucleus);
   void copySecondaries(G4KineticTrackVector* theSecondaries);
+  void processSecondary(const G4KineticTrack* aSecondary);
   void releaseSecondary(const G4KineticTrack* aSecondary);
 
   // Functions to handle, e.g., low-energy hyperons stuck inside potential
@@ -138,6 +140,10 @@ private:
 
   G4double minimum_recoil_A;		// Require fragment with this mass
   G4double coulombBarrier;
+
+  // Buffers for creation (and reuse) of rescattering targets
+  G4InuclNuclei* nucleusTarget;
+  G4InuclElementaryParticle* protonTarget;
 
   // Buffers for collecting result of cascade (reset on each iteration)
   G4CollisionOutput output;

@@ -37,6 +37,7 @@
 // 20100926  M. Kelsey -- Move to new G4VCascadeDeexcitation base class,
 //		replace getDeexcitationFragments() with deExcite().
 // 20110214  M. Kelsey -- Follow G4InuclParticle::Model enumerator migration
+// 20110803  M. Kelsey -- Add post-deexcitation diagnostic messages
 
 #include "G4PreCompoundDeexcitation.hh"
 #include "globals.hh"
@@ -115,14 +116,24 @@ void G4PreCompoundDeexcitation::deExcite(G4Fragment* fragment,
   // FIXME: in principle, the explosion(...) stuff should also 
   //        handle properly the case of Z=0 (neutron blob) 
   if (explosion(fragment) && theExcitationHandler) {
+    if (verboseLevel) G4cout << " calling BreakItUp" << G4endl;
     precompoundProducts = theExcitationHandler->BreakItUp(*fragment);
   } else {
+    if (verboseLevel) G4cout << " calling DeExcite" << G4endl;
     precompoundProducts = theDeExcitation->DeExcite(*fragment);
   }
 
   // Transfer output of de-excitation back into Bertini objects
   if (precompoundProducts) {
+    if (verboseLevel>1) {
+      G4cout << " Got " << precompoundProducts->size()
+	     << " secondaries back from PreCompound:" << G4endl;
+    }
+
+    globalOutput.setVerboseLevel(verboseLevel);	// For debugging
     globalOutput.addOutgoingParticles(precompoundProducts);
+    globalOutput.setVerboseLevel(0);
+
     precompoundProducts->clear();
     delete precompoundProducts;
   }

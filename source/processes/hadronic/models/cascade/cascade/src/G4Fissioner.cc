@@ -40,6 +40,7 @@
 //		member and reuse
 // 20100914  M. Kelsey -- Migrate to integer A and Z
 // 20110214  M. Kelsey -- Follow G4InuclParticle::Model enumerator migration
+// 20110801  M. Kelsey -- Replace constant-size std::vector's w/C arrays
 
 #include "G4Fissioner.hh"
 #include "G4CollisionOutput.hh"
@@ -105,8 +106,8 @@ void G4Fissioner::collide(G4InuclParticle* /*bullet*/,
   
   TEM += DTEM;
   
-  static std::vector<G4double> AL1(2, -0.15);
-  static std::vector<G4double> BET1(2, 0.05);
+  static G4double AL1[2] = { -0.15, -0.15 };
+  static G4double BET1[2] = { 0.05, 0.05 };
 
   G4double R12 = G4cbrt(A1) + G4cbrt(A2); 
   
@@ -116,7 +117,7 @@ void G4Fissioner::collide(G4InuclParticle* /*bullet*/,
     G4double X3 = 1.0 / G4cbrt(A1);
     G4double X4 = 1.0 / G4cbrt(A2);
     Z1 = G4lrint(getZopt(A1, A2, Z, X3, X4, R12) - 1.);
-    std::vector<G4double> EDEF1(2);
+    G4double EDEF1[2];
     G4int Z2 = Z - Z1;
     G4double VPOT, VCOUL;
     
@@ -224,14 +225,14 @@ G4double G4Fissioner::getZopt(G4int A1,
 }	     
 
 void G4Fissioner::potentialMinimization(G4double& VP, 
-					std::vector<G4double> & ED,
+					G4double( &ED)[2],
 					G4double& VC, 
 					G4int AF, 
 					G4int AS, 
 					G4int ZF, 
 					G4int ZS,
-					std::vector<G4double>& AL1, 
-					std::vector<G4double>& BET1, 
+					G4double AL1[2], 
+					G4double BET1[2], 
 					G4double& R12) const {
 
   if (verboseLevel > 3) {

@@ -48,12 +48,16 @@
 // 20110502  M. Kelsey -- Add filename string to capture random seeds.
 // 20110720  M. Kelsey -- Discard elastic-cut array (no longer needed),
 //		discard local "theFinalState" (avail in base class).
+// 20110801  M. Kelsey -- Make bullet and target buffers local objects (with
+//		hadron and nucleus versions) to reduce memory churn
 
 #ifndef G4CASCADEINTERFACE_H
 #define G4CASCADEINTERFACE_H 1
 
 #include "G4VIntraNuclearTransportModel.hh"
 #include "G4FragmentVector.hh"
+#include "G4InuclElementaryParticle.hh"
+#include "G4InuclNuclei.hh"
 #include "G4LorentzRotation.hh"
 #include "G4Nucleon.hh"
 #include "G4Nucleus.hh"
@@ -68,8 +72,6 @@ class G4CollisionOutput;
 class G4DynamicParticle;
 class G4HadFinalState;
 class G4InuclCollider;
-class G4InuclElementaryParticle;
-class G4InuclNuclei;
 class G4InuclParticle;
 class G4V3DNucleus;
 
@@ -77,7 +79,7 @@ class G4V3DNucleus;
 class G4CascadeInterface : public G4VIntraNuclearTransportModel {
 
 public:
-  G4CascadeInterface(const G4String& name = "Bertini Cascade");
+  G4CascadeInterface(const G4String& name = "BertiniCascade");
 
   virtual ~G4CascadeInterface();
 
@@ -93,14 +95,16 @@ public:
   void useCascadeDeexcitation();
   void usePreCompoundDeexcitation();
 
+  void Description() const;
+
 protected:
   void clear();			// Delete previously created particles
 
   // Convert input projectile and target to Bertini internal types
-  void createBullet(const G4HadProjectile& aTrack);
-  void createTarget(G4Nucleus& theNucleus);
-  void createTarget(G4V3DNucleus* theNucleus);
-  void createTarget(G4int A, G4int Z);
+  G4bool createBullet(const G4HadProjectile& aTrack);
+  G4bool createTarget(G4Nucleus& theNucleus);
+  G4bool createTarget(G4V3DNucleus* theNucleus);
+  G4bool createTarget(G4int A, G4int Z);
 
   // Evaluate whether any outgoing particles penetrated Coulomb barrier
   G4bool coulombBarrierViolation() const;
@@ -147,9 +151,16 @@ private:
   G4InuclCollider* collider;
   G4CascadeCheckBalance* balance;
 
-  G4InuclParticle* bullet;
+  G4InuclParticle* bullet;		// Pointers to last filled versions
   G4InuclParticle* target;
+
   G4CollisionOutput* output;
+
+  G4InuclElementaryParticle hadronBullet;	// Buffers for bullet, target
+  G4InuclNuclei             nucleusBullet;
+
+  G4InuclElementaryParticle hadronTarget;
+  G4InuclNuclei             nucleusTarget;
 
   G4LorentzRotation bulletInLabFrame;
 };

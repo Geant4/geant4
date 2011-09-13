@@ -88,12 +88,15 @@
 //		in order to process, e.g., resonances from Propagate() input
 // 20110728  M. Kelsey -- Per V.Ivantchenko, change NoInteraction to return
 //		zero particles, but set kinetic energy from projectile.
+// 20110801  M. Kelsey -- Make bullet, target point to local buffers, no delete
+// 20110802  M. Kelsey -- Use new decay handler for Propagate interface
 
 #include "G4CascadeInterface.hh"
 #include "globals.hh"
 #include "G4CascadeChannelTables.hh"
 #include "G4CascadeCheckBalance.hh"
 #include "G4CollisionOutput.hh"
+#include "G4DecayKineticTracks.hh"
 #include "G4DynamicParticle.hh"
 #include "G4HadronicException.hh"
 #include "G4InuclCollider.hh"
@@ -112,6 +115,7 @@
 #include "G4V3DNucleus.hh"
 #include <cmath>
 #include <stdlib.h>
+#include <iostream>
 
 using namespace G4InuclParticleNames;
 
@@ -138,7 +142,9 @@ G4CascadeInterface::G4CascadeInterface(const G4String& name)
     bullet(0), target(0), output(new G4CollisionOutput) {
   SetEnergyMomentumCheckLevels(5*perCent, 10*MeV);
   balance->setLimits(5*perCent, 10*MeV/GeV);	// Bertini internal units
+  Description();                                // Model description
 }
+
 
 G4CascadeInterface::~G4CascadeInterface() {
   clear();
@@ -147,9 +153,41 @@ G4CascadeInterface::~G4CascadeInterface() {
   delete output; output=0;
 }
 
+void G4CascadeInterface::Description() const
+{
+  const char* pathName = getenv("G4PhysListDocDir");
+  if (!pathName) return;		// Avoid unnecessary work
+
+  G4String outFileName(pathName);
+  outFileName += "/" + GetModelName() + ".html";
+
+  std::ofstream outFile(outFileName);
+  if (!outFile) {			// Make sure file opened successfully
+    G4cerr << " >>> G4CascadeInterface::Description() unable to open "
+	   << pathName << G4endl;
+    return;
+  }
+  
+  outFile << "<html><head>\n"
+	  << "<title>Description of Bertini Cascade Model</title>\n"
+	  << "</head><body>\n<P>"
+	  << "The Bertini-style cascade implements the inelastic scattering\n"
+	  << "of hadrons by nuclei.  Nucleons, pions, kaons and hyperons\n" 
+	  << "from 0 to 15 GeV may be used as projectiles in this model.\n"
+	  << "Final state hadrons are produced by a classical cascade\n"
+	  << "consisting of individual hadron-nucleon scatterings which use\n"
+	  << "free-space partial cross sections, corrected for various\n"
+	  << "nuclear medium effects.  The target nucleus is modeled as a\n"
+	  << "set of 1, 3 or 6 spherical shells, in which scattered hadrons\n"
+	  << "travel in straight lines until they are reflected from or\n"
+	  << "transmitted through shell boundaries.\n"
+	  << "</body></html>\n";
+}
+
+
 void G4CascadeInterface::clear() {
-  delete bullet; bullet=0;
-  delete target; target=0;
+  bullet=0;
+  target=0;
 }
 
 
@@ -201,16 +239,13 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
   clear();
 
   // Make conversion between native Geant4 and Bertini cascade classes.
-  createBullet(aTrack);
-  createTarget(theNucleus);
+  if (!createBullet(aTrack)) {
+    if (verboseLevel) G4cerr << " Unable to create usable bullet" << G4endl;
+    return NoInteraction(aTrack, theNucleus);
+  }
 
-  // Avoid unnecessary work or crashes if input state not usable
-  if (!bullet || !target) {
-    if (verboseLevel) {
-      if (!bullet) G4cerr << " Unable to create usable bullet" << G4endl;
-      if (!target) G4cerr << " Unable to create usable target" << G4endl;
-    }
-
+  if (!createTarget(theNucleus)) {
+    if (verboseLevel) G4cerr << " Unable to create usable target" << G4endl;
     return NoInteraction(aTrack, theNucleus);
   }
 
@@ -300,10 +335,17 @@ G4CascadeInterface::Propagate(G4KineticTrackVector* theSecondaries,
   theParticleChange.Clear();
   clear();
 
+  // Process input secondaries list to eliminate resonances
+  G4DecayKineticTracks decay(theSecondaries);
+
   // NOTE:  Requires 9.4-ref-03 mods to base class and G4TheoFSGenerator
   const G4HadProjectile* projectile = GetPrimaryProjectile();
   if (projectile) createBullet(*projectile);
-  createTarget(theNucleus);
+
+  if (!createTarget(theNucleus)) {
+    if (verboseLevel) G4cerr << " Unable to create usable target" << G4endl;
+    return 0;	// FIXME:  This will cause a segfault later
+  }
 
   numberOfTries = 0;
   do {
@@ -356,7 +398,7 @@ G4CascadeInterface::NoInteraction(const G4HadProjectile& aTrack,
 
 // Convert input projectile to Bertini internal object
 
-void G4CascadeInterface::createBullet(const G4HadProjectile& aTrack) {
+G4bool G4CascadeInterface::createBullet(const G4HadProjectile& aTrack) {
   const G4ParticleDefinition* trkDef = aTrack.GetDefinition();
 
   G4int bulletType = 0;			// For elementary particles
@@ -374,7 +416,8 @@ void G4CascadeInterface::createBullet(const G4HadProjectile& aTrack) {
       G4cerr << " G4CascadeInterface: " << trkDef->GetParticleName()
 	     << " not usable as bullet." << G4endl;
     }
-    return;
+    bullet = 0;
+    return false;
   }
 
   // Code momentum and energy -- Bertini wants z-axis and GeV units
@@ -389,36 +432,56 @@ void G4CascadeInterface::createBullet(const G4HadProjectile& aTrack) {
   G4LorentzVector momentumBullet(0., 0., projectileMomentum.rho(),
 				 projectileMomentum.e());
 
-  if (bulletType > 0)
-    bullet = new G4InuclElementaryParticle(momentumBullet, bulletType);
-  else
-    bullet = new G4InuclNuclei(momentumBullet, bulletA, bulletZ);
+  if (bulletType > 0) {
+    hadronBullet.fill(momentumBullet, bulletType);
+    bullet = &hadronBullet;
+  } else {
+    nucleusBullet.fill(momentumBullet, bulletA, bulletZ);
+    bullet = &nucleusBullet;
+  }
 
   if (verboseLevel > 2) {
     G4cout << "Bullet:  " << G4endl;  
     bullet->printParticle();
   }
+
+  return true;
 }
 
 
 // Convert input nuclear target to Bertini internal object
 
-void G4CascadeInterface::createTarget(G4Nucleus& theNucleus) {
-  createTarget(theNucleus.GetA_asInt(), theNucleus.GetZ_asInt());
+G4bool G4CascadeInterface::createTarget(G4Nucleus& theNucleus) {
+  return createTarget(theNucleus.GetA_asInt(), theNucleus.GetZ_asInt());
 }
 
-void G4CascadeInterface::createTarget(G4V3DNucleus* theNucleus) {
-  createTarget(theNucleus->GetMassNumber(), theNucleus->GetCharge());
-}
-
-void G4CascadeInterface::createTarget(G4int A, G4int Z) {
-  if (A > 1) target = new G4InuclNuclei(A, Z);
-  else target = new G4InuclElementaryParticle((Z==1)?proton:neutron);
+G4bool G4CascadeInterface::createTarget(G4V3DNucleus* theNucleus) {
+  nucleusTarget.copy(theNucleus);
+  target = &nucleusTarget;
 
   if (verboseLevel > 2) {
     G4cout << "Target:  " << G4endl;  
     target->printParticle();
   }
+
+  return true;		// Right now, target never fails
+}
+
+G4bool G4CascadeInterface::createTarget(G4int A, G4int Z) {
+  if (A > 1) {
+    nucleusTarget.fill(A, Z);
+    target = &nucleusTarget;
+  } else {
+    hadronTarget.fill(0., (Z=1?proton:neutron));
+    target = &hadronTarget;
+  }
+
+  if (verboseLevel > 2) {
+    G4cout << "Target:  " << G4endl;  
+    target->printParticle();
+  }
+
+  return true;		// Right now, target never fails
 }
 
 

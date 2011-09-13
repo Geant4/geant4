@@ -29,6 +29,7 @@
 // 20100514  M. Kelsey -- All functionality removed except quantum-number
 //		validation functions.
 // 20110719  M. Kelsey -- Repurpose as abstract base class for all channels.
+// 20110802  M. Kelsey -- Fix Coverity #29838: Virtual dtor required for base.
 
 #ifndef G4_CASCADE_CHANNEL_HH
 #define G4_CASCADE_CHANNEL_HH
@@ -39,6 +40,9 @@
 
 class G4CascadeChannel {
 public:
+  G4CascadeChannel() {}
+  virtual ~G4CascadeChannel() {}
+
   virtual G4double getCrossSection(double ke) const = 0;
   virtual G4double getCrossSectionSum(double ke) const = 0;
   virtual G4int getMultiplicity(G4double ke) const = 0;

@@ -97,6 +97,10 @@
 //		do not decay.
 // 20110722  M. Kelsey -- Deprecate "output_particles" list in favor of using
 //		output directly (will help with pre-cascade issues).
+// 20110801  M. Kelsey -- Use G4Inucl(Particle)::fill() functions to reduce
+//		creation of temporaries.  Add local target buffer for
+//		rescattering, to avoid memory leak.
+// 20110808  M. Kelsey -- Pass buffer to generateParticleFate() to avoid copy
 
 #include "G4IntraNucleiCascader.hh"
 #include "G4CascadParticle.hh"
@@ -136,17 +140,20 @@ const G4double G4IntraNucleiCascader::quasielast_cut = 1*MeV;
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
 G4IntraNucleiCascader::G4IntraNucleiCascader()
-  : G4CascadeColliderBase("G4IntraNucleiCascader"),
-    model(new G4NucleiModel),
+  : G4CascadeColliderBase("G4IntraNucleiCascader"), model(new G4NucleiModel),
     theElementaryParticleCollider(new G4ElementaryParticleCollider),
     theRecoilMaker(new G4CascadeRecoilMaker),
     tnuclei(0), bnuclei(0), bparticle(0),
-    minimum_recoil_A(0.), coulombBarrier(0.) {}
+    minimum_recoil_A(0.), coulombBarrier(0.),
+    nucleusTarget(new G4InuclNuclei),
+    protonTarget(new G4InuclElementaryParticle) {}
 
 G4IntraNucleiCascader::~G4IntraNucleiCascader() {
   delete model;
   delete theElementaryParticleCollider;
   delete theRecoilMaker;
+  delete nucleusTarget;
+  delete protonTarget;
 }
 
 void G4IntraNucleiCascader::setVerboseLevel(G4int verbose) {
@@ -321,8 +328,10 @@ void G4IntraNucleiCascader::generateCascade() {
       cascad_particles.back().print();
     }
     
-    new_cascad_particles = model->generateParticleFate(cascad_particles.back(),
-						       theElementaryParticleCollider);
+    model->generateParticleFate(cascad_particles.back(),
+				theElementaryParticleCollider,
+				new_cascad_particles);
+
     if (verboseLevel > 2) {
       G4cout << " After generate fate: New particles "
 	     << new_cascad_particles.size() << G4endl
@@ -595,14 +604,19 @@ G4IntraNucleiCascader::finalize(G4int itry, G4InuclParticle* bullet,
 // Create simple nucleus from rescattering target
 
 G4InuclParticle* 
-G4IntraNucleiCascader::createTarget(G4V3DNucleus* theNucleus) const {
+G4IntraNucleiCascader::createTarget(G4V3DNucleus* theNucleus) {
   G4int theNucleusA = theNucleus->GetMassNumber();
   G4int theNucleusZ = theNucleus->GetCharge();
   
-  if (theNucleusA == 1)
-    return new G4InuclElementaryParticle((theNucleusZ==1)?proton:neutron);
-  else
-    return new G4InuclNuclei(theNucleusA, theNucleusZ);
+  if (theNucleusA > 1) {
+    if (!nucleusTarget) nucleusTarget = new G4InuclNuclei;	// Just in case
+    nucleusTarget->fill(0., theNucleusA, theNucleusZ, 0.);
+    return nucleusTarget;
+  } else {
+    if (!protonTarget) protonTarget = new G4InuclElementaryParticle;
+    protonTarget->fill(0., (theNucleusZ==1)?proton:neutron);
+    return protonTarget;
+  }
 
   return 0;		// Can never actually get here
 }
@@ -623,58 +637,41 @@ void G4IntraNucleiCascader::copyWoundedNucleus(G4V3DNucleus* theNucleus) {
   if (verboseLevel > 1)
     G4cout << " >>> G4IntraNucleiCascader::copyWoundedNucleus" << G4endl;
 
-  // Need G4ParticleDefinition pointers to identify G4Nucleons
-  static const G4Proton*  pdProton  = G4Proton::Definition();
-  static const G4Neutron* pdNeutron = G4Neutron::Definition();
-  
-  // Loop over nucleons and count them
-  G4int nHitP=0, nHitN=0;
+  // Loop over nucleons and count hits as exciton holes
+  theExitonConfiguration.clear();
   hitNucleons.clear();
   if (theNucleus->StartLoop()) {
     G4Nucleon* nucl = 0;
+    G4int nuclType = 0;
     while ((nucl = theNucleus->GetNextNucleon())) {
       if (nucl->AreYouHit()) {	// Found previously interacted nucleon
-	if (nucl->GetParticleType() == pdProton)  nHitP++;
-	if (nucl->GetParticleType() == pdNeutron) nHitN++;
+	nuclType = G4InuclElementaryParticle::type(nucl->GetParticleType());
+	theExitonConfiguration.incrementHoles(nuclType);
 	hitNucleons.push_back(nucl->GetPosition());
       }
     }
   }
 
   if (verboseLevel > 3)
-    G4cout << " nucleus has " << nHitN << " neutrons hit, "
-	   << nHitP << " protons hit" << G4endl;
+    G4cout << " nucleus has " << theExitonConfiguration.neutronHoles
+	   << " neutrons hit, " << theExitonConfiguration.protonHoles
+	   << " protons hit" << G4endl;
 
   // Preload nuclear model with confirmed hits, including locations
-  model->reset(nHitN, nHitP, &hitNucleons);
+  model->reset(theExitonConfiguration.neutronHoles,
+	       theExitonConfiguration.protonHoles, &hitNucleons);
 }
 
-void G4IntraNucleiCascader::copySecondaries(G4KineticTrackVector* secondaries) {
+void 
+G4IntraNucleiCascader::copySecondaries(G4KineticTrackVector* secondaries) {
   if (verboseLevel > 1)
     G4cout << " >>> G4IntraNucleiCascader::copySecondaries" << G4endl;
 
-  const G4KineticTrack* ktrack;
-  G4ParticleDefinition* kpd;
   for (size_t i=0; i<secondaries->size(); i++) {
     if (verboseLevel > 3) G4cout << " processing secondary " << i << G4endl;
 
-    if (!(ktrack = (*secondaries)[i])) continue;	// NOTE Assignment!
-    if (!(kpd = ktrack->GetDefinition())) continue;	// NOTE Assignment!
-
-    // FIXME:  These could include light ions, which can't be propagated!
-    G4CascadParticle* cpart = convertKineticToCascade(ktrack);
-    if (cpart) {
-      if (verboseLevel > 2) {
-	G4cout << " Created pre-cascade particle " << G4endl;
-	cpart->print();
-      }
-
-      cascad_particles.push_back(*cpart);
-      delete cpart;
-    } else {			// Unusable secondaries go directly to output
-      releaseSecondary(ktrack);
-    }
-  }	// G4KineticTrackVector loop
+    processSecondary((*secondaries)[i]);      	// Copy to cascade or to output
+  }
 
   // Sort list of secondaries to put leading particle first
   std::sort(cascad_particles.begin(), cascad_particles.end(),
@@ -683,32 +680,52 @@ void G4IntraNucleiCascader::copySecondaries(G4KineticTrackVector* secondaries) {
   if (verboseLevel > 2) {
     G4cout << " Original list of " << secondaries->size() << " secondaries"
 	   << " produced " << cascad_particles.size() << " cascade, "
+	   << output.numberOfOutgoingParticles() << " released particles, "
 	   << output.numberOfOutgoingNuclei() << " fragments" << G4endl;
   }
 }
 
 
-// Convert from pre-cascade secondary to local verion
+// Convert from pre-cascade secondary to local version
 
-G4CascadParticle* G4IntraNucleiCascader::
-convertKineticToCascade(const G4KineticTrack* ktrack) const {
+void G4IntraNucleiCascader::processSecondary(const G4KineticTrack* ktrack) {
+  if (!ktrack) return;			// Sanity check
+
+  // Get particle type to determine whether to keep or release
   G4ParticleDefinition* kpd = ktrack->GetDefinition();
+  if (!kpd) return;
 
-  // Get particle type, and exit if not suitable for conversion
   G4int ktype = G4InuclElementaryParticle::type(kpd);
-  if (!ktype) return 0;
+  if (!ktype) {
+    releaseSecondary(ktrack);
+    return;
+  }
 
-  // NOTE: Must convert GEANT4 natural units to Bertini's GeV
-  G4InuclElementaryParticle iep(ktrack->Get4Momentum()/GeV, ktype);
-  
+  if (verboseLevel > 1) {
+    G4cout << " >>> G4IntraNucleiCascader::processSecondary "
+	   << kpd->GetParticleName() << G4endl;
+  }
+
+  // Allocate next local particle in buffer and fill
+  cascad_particles.resize(cascad_particles.size()+1);	// Like push_back();
+  G4CascadParticle& cpart = cascad_particles.back();
+
+  // Convert momentum to Bertini internal units
+  cpart.getParticle().fill(ktrack->Get4Momentum()/GeV, ktype);
+  cpart.setGeneration(0);
+  cpart.setMovingInsideNuclei();
+  cpart.initializePath(0);
+
   // Convert position units to Bertini's internal scale
-  const G4double lengthScale = model->getRadiusUnits();
+  G4ThreeVector cpos = ktrack->GetPosition()/model->getRadiusUnits();
 
-  G4ThreeVector cpos = ktrack->GetPosition();
-  cpos /= lengthScale;
-  G4int zone = model->getZone(cpos.mag());
-  
-  return new G4CascadParticle(iep, cpos, zone, 0., 0);
+  cpart.updatePosition(cpos);
+  cpart.updateZone(model->getZone(cpos.mag()));
+
+  if (verboseLevel > 2) {
+    G4cout << " Created cascade particle " << G4endl;
+    cpart.print();
+  }
 }
 
 
@@ -724,24 +741,27 @@ void G4IntraNucleiCascader::releaseSecondary(const G4KineticTrack* ktrack) {
 
   // Convert light ion into nucleus on fragment list
   if (dynamic_cast<G4Ions*>(kpd)) {
-    G4InuclNuclei inucl(ktrack->Get4Momentum()/GeV, kpd->GetAtomicMass(),
-			kpd->GetAtomicNumber());
+    // Use resize() and fill() to avoid memory churn
+    output.getOutgoingNuclei().resize(output.numberOfOutgoingNuclei()+1);
+    G4InuclNuclei& inucl = output.getOutgoingNuclei().back();
+
+    inucl.fill(ktrack->Get4Momentum()/GeV,
+	       kpd->GetAtomicMass(), kpd->GetAtomicNumber());
     if (verboseLevel > 2) {
       G4cout << " Created pre-cascade fragment " << G4endl;
       inucl.printParticle();
     }
-    
-    output.addOutgoingNucleus(inucl);
   } else {
+    // Use resize() and fill() to avoid memory churn
+    output.getOutgoingParticles().resize(output.numberOfOutgoingParticles()+1);
+    G4InuclElementaryParticle& ipart = output.getOutgoingParticles().back();
+
     // SPECIAL:  Use G4PartDef directly, allowing unknown type code
-    G4InuclElementaryParticle ipart(ktrack->Get4Momentum()/GeV,
-				    ktrack->GetDefinition());
+    ipart.fill(ktrack->Get4Momentum()/GeV, ktrack->GetDefinition());
     if (verboseLevel > 2) {
       G4cout << " Created invalid pre-cascade particle " << G4endl;
       ipart.printParticle();
     }
-    
-    output.addOutgoingParticle(ipart);	// Put on final-state list
   }
 }
 

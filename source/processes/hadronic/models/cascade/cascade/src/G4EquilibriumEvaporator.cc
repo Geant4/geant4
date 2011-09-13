@@ -55,6 +55,11 @@
 // 20110214  M. Kelsey -- Follow G4InuclParticle::Model enumerator migration
 // 20110728  M. Kelsey -- Fix Coverity #22951: check for "icase = -1" after
 //		loop which is supposed to set it.  Otherwise indexing is wrong.
+// 20110801  M. Kelsey -- Move "parms" buffer to data member, allocate in
+//		constructor.
+// 20110809  M. Kelsey -- Move "foutput" to data member, get list by reference;
+//		create final-state particles within "push_back" to avoid
+//		creation of temporaries.
 
 #include "G4EquilibriumEvaporator.hh"
 #include "G4BigBanger.hh"
@@ -71,7 +76,10 @@ using namespace G4InuclSpecialFunctions;
 
 
 G4EquilibriumEvaporator::G4EquilibriumEvaporator()
-  : G4CascadeColliderBase("G4EquilibriumEvaporator") {}
+  : G4CascadeColliderBase("G4EquilibriumEvaporator") {
+  parms.first.resize(6,0.);
+  parms.second.resize(6,0.);
+}
 
 G4EquilibriumEvaporator::~G4EquilibriumEvaporator() {}
 
@@ -160,9 +168,6 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
   G4bool fission_open = true;
   G4int itry_global = 0;
     
-  // Buffer for parameter sets
-  std::pair<std::vector<G4double>, std::vector<G4double> > parms;
-    
   while (try_again && itry_global < itry_global_max) {
     itry_global++;
 
@@ -179,7 +184,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
     if (explosion(A, Z, EEXS)) { 			// big bang
       if (verboseLevel > 2) 
 	G4cout << " big bang in eql step " << itry_global << G4endl;
-	
+
       G4InuclNuclei nuclei(PEX, A, Z, EEXS, G4InuclParticle::Equilib);        
       theBigBanger.collide(0, &nuclei, output);
 
@@ -335,10 +340,11 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	  PEX -= mom;			// Remaining four-momentum
 	  EEXS -= S*GeV;		// New excitation energy (in MeV)
 
-	  G4InuclElementaryParticle particle(mom, 10, G4InuclParticle::Equilib);
-	  output.addOutgoingParticle(particle);
+	  // NOTE:  In-situ construction will be optimized away (no copying)
+	  output.addOutgoingParticle(G4InuclElementaryParticle(mom, 10, G4InuclParticle::Equilib));
 	  
-	  if (verboseLevel > 3) particle.printParticle();
+	  if (verboseLevel > 3)
+	    output.getOutgoingParticles().back().printParticle();
 	  
 	  ppout += mom;
 	} else {
@@ -397,11 +403,10 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		if (verboseLevel > 2)
 		  G4cout << " particle " << ptype << " escape" << G4endl;
 		
-		G4InuclElementaryParticle particle(ptype);
-		particle.setModel(G4InuclParticle::Equilib);
-		
 		// generate particle momentum
-		G4double mass = particle.getMass();
+		G4double mass =
+		  G4InuclElementaryParticle::getParticleMass(ptype);
+
 		G4double pmod = std::sqrt((2.0 * mass + S) * S);
 		G4LorentzVector mom = generateWithRandomAngles(pmod, mass);
 
@@ -428,9 +433,12 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		A = A1[icase];
 		Z = Z1[icase]; 	      
 
-		particle.setMomentum(mom);
-		output.addOutgoingParticle(particle);
-		if (verboseLevel > 3) particle.printParticle();
+		// NOTE:  In-situ construction optimizes away (no copying)
+		output.addOutgoingParticle(G4InuclElementaryParticle(mom,
+			                   ptype, G4InuclParticle::Equilib));
+		
+		if (verboseLevel > 3)
+		  output.getOutgoingParticles().back().printParticle();
 
 		ppout += mom;
 		bad = false;
@@ -440,9 +448,9 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 			 << " escape icase " << icase << G4endl;
 		}
 		
-		G4InuclNuclei nuclei(AN[icase], Q[icase], 0.*GeV, 
-				     G4InuclParticle::Equilib);
-		G4double mass = nuclei.getMass();
+		G4double mass =
+		  G4InuclNuclei::getNucleiMass(AN[icase],Q[icase]);
+
 		// generate particle momentum
 		G4double pmod = std::sqrt((2.0 * mass + S) * S);
 		G4LorentzVector mom = generateWithRandomAngles(pmod,mass);
@@ -470,9 +478,13 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		A = A1[icase];
 		Z = Z1[icase];
 
-		nuclei.setMomentum(mom);
-		output.addOutgoingNucleus(nuclei);
-		if (verboseLevel > 3) nuclei.printParticle();
+		// NOTE:  In-situ constructor optimizes away (no copying)
+		output.addOutgoingNucleus(G4InuclNuclei(mom,
+				          AN[icase], Q[icase], 0.*GeV, 
+				          G4InuclParticle::Equilib));
+
+		if (verboseLevel > 3) 
+		  output.getOutgoingNuclei().back().printParticle();
 
 		ppout += mom;
 		bad = false;
@@ -491,20 +503,20 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	}
 
 	// Catch fission output separately for verification
-	G4CollisionOutput foutput;
-	theFissioner.collide(0, &nuclei, foutput);
+	fission_output.reset();
+	theFissioner.collide(0, &nuclei, fission_output);
 
-	if (foutput.getOutgoingNuclei().size() == 2) { // fission o'k
+	std::vector<G4InuclNuclei>& nuclea = fission_output.getOutgoingNuclei();
+	if (nuclea.size() == 2) { 		// fission ok
 	  if (verboseLevel > 2) G4cout << " fission done in eql" << G4endl;
 
 	  // Move fission fragments to lab frame for processing
-	  foutput.boostToLabFrame(toTheNucleiSystemRestFrame);
+	  fission_output.boostToLabFrame(toTheNucleiSystemRestFrame);
 
 	  // Now evaporate the fission fragments individually
 	  G4bool prevDoChecks = doConservationChecks;	// Turn off checking
 	  setConservationChecks(false);
 
-	  std::vector<G4InuclNuclei> nuclea = foutput.getOutgoingNuclei();
 	  this->collide(0, &nuclea[0], output);
 	  this->collide(0, &nuclea[1], output);
 
@@ -528,21 +540,15 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 
   G4LorentzVector pnuc = pin - ppout;
 
-  G4InuclNuclei nuclei(pnuc, A, Z, EEXS, G4InuclParticle::Equilib);
-
-  /***** THIS SHOULD NOT BE NECESSARY IF EEXS WAS COMPUTED RIGHT
-  pnuc = nuclei.getMomentum(); 
-  G4double eout = pnuc.e() + ppout.e();  
-  G4double eex_real = 1000.0 * (pin.e() - eout);        
-  nuclei.setExitationEnergy(eex_real);
-  *****/
+  // NOTE:  In-situ constructor will be optimized away (no copying)
+  output.addOutgoingNucleus(G4InuclNuclei(pnuc, A, Z, EEXS,
+					  G4InuclParticle::Equilib));
 
   if (verboseLevel > 3) {
     G4cout << " remaining nucleus " << G4endl;
-    nuclei.printParticle();
+    output.getOutgoingNuclei().back().printParticle();
   }
 
-  output.addOutgoingNucleus(nuclei);
 
   validateOutput(0, target, output);		// Check energy conservation
   return;

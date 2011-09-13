@@ -73,6 +73,7 @@
 // 20110718  M. Kelsey -- Use enum names in switch blocks (c.f. G4NucleiModel)
 // 20110720  M. Kelsey -- Follow interface change for cross-section tables,
 //		eliminating switch blocks.
+// 20110806  M. Kelsey -- Pre-allocate buffers to avoid memory churn
 
 #include "G4ElementaryParticleCollider.hh"
 #include "G4CascadeChannel.hh"
@@ -294,6 +295,8 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
     generateOutgoingPartTypes(is, multiplicity, ekin);
     if (particle_kinds.empty()) continue;
 
+    particles.resize(multiplicity);	// Preallocate buffer
+
     if (multiplicity == 2) {
       // Identify charge or strangeness exchange (non-elastic scatter)
       G4int finaltype = particle_kinds[0]*particle_kinds[1];
@@ -341,8 +344,8 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
       }
       G4LorentzVector mom1(-mom.vect(), mom.e());
 
-      particles.push_back(G4InuclElementaryParticle(mom, particle_kinds[0], G4InuclParticle::EPCollider));
-      particles.push_back(G4InuclElementaryParticle(mom1, particle_kinds[1], G4InuclParticle::EPCollider));
+      particles[0].fill(mom, particle_kinds[0], G4InuclParticle::EPCollider);
+      particles[1].fill(mom1, particle_kinds[1], G4InuclParticle::EPCollider);
       generate = false;
 
     } else {			 // 2 -> many
@@ -393,9 +396,9 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
 	    bad = false;
 	    generate = false;
 	    
-	    particles.push_back(G4InuclElementaryParticle(mom1, particle_kinds[0], G4InuclParticle::EPCollider));
-	    particles.push_back(G4InuclElementaryParticle(mom2, particle_kinds[1], G4InuclParticle::EPCollider));
-	    particles.push_back(G4InuclElementaryParticle(mom3, particle_kinds[2], G4InuclParticle::EPCollider));
+	    particles[0].fill(mom1, particle_kinds[0], G4InuclParticle::EPCollider);
+	    particles[1].fill(mom2, particle_kinds[1], G4InuclParticle::EPCollider);
+	    particles[2].fill(mom3, particle_kinds[2], G4InuclParticle::EPCollider);
 	  };
 	} else { // multiplicity > 3
 	  // generate first mult - 2 momentums
@@ -486,7 +489,8 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
 	    }
 	    
 	    for (i = 0; i < multiplicity; i++) {
-	      particles.push_back(G4InuclElementaryParticle(scm_momentums[i], particle_kinds[i], G4InuclParticle::EPCollider));
+	      particles[i].fill(scm_momentums[i], particle_kinds[i],
+				G4InuclParticle::EPCollider);
 	    };
 	  };
 	}; 
@@ -494,8 +498,8 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
 
       if (itry == itry_max) {
 	if (verboseLevel > 2){
-	  G4cout << " cannot generate the distr. for mult " << multiplicity  <<
-	    G4endl << " and set it to " << multiplicity - 1 << G4endl;
+	  G4cout << " cannot generate the distr. for mult " << multiplicity
+		 << "\n and set it to " << multiplicity - 1 << G4endl;
 	}
       };
     };
@@ -529,7 +533,6 @@ G4ElementaryParticleCollider::generateMomModules(G4int mult,
   G4InuclElementaryParticle dummy;
   G4int itry = 0;
 
-  // FIXME:  Code below wants to set modules[i] directly.  Bad practice
   modules.clear();			// Initialize buffer for this attempt
   modules.resize(mult,0.);
 
@@ -869,6 +872,8 @@ G4ElementaryParticleCollider::generateSCMpionAbsorption(G4double etot_scm,
   G4InuclElementaryParticle dummy;
 
   particles.clear();		// Initialize buffers for this event
+  particles.resize(2);
+
   particle_kinds.clear();
 
   G4int type1 = particle1->type();
@@ -937,8 +942,8 @@ G4ElementaryParticleCollider::generateSCMpionAbsorption(G4double etot_scm,
   G4LorentzVector mom2;
   mom2.setVectM(-mom1.vect(), m2);
 
-  particles.push_back(G4InuclElementaryParticle(mom1, particle_kinds[0], G4InuclParticle::EPCollider));
-  particles.push_back(G4InuclElementaryParticle(mom2, particle_kinds[1], G4InuclParticle::EPCollider));
+  particles[0].fill(mom1, particle_kinds[0], G4InuclParticle::EPCollider);
+  particles[1].fill(mom2, particle_kinds[1], G4InuclParticle::EPCollider);
 
   return;
 }

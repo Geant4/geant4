@@ -48,7 +48,7 @@ public:
     epot(ep) {
 };
 
-  void print() {
+  void print() const {
     G4cout << " new configuration " << G4endl
 	   << " a1 " << afirst << " z1 " << zfirst << " ez " << ezet <<
       " ekin " << ekin << " epot " << epot << G4endl;

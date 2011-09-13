@@ -56,6 +56,9 @@
 // 20110324  M. Kelsey -- Extend reset() to pass list of points; move
 //		implementation to .cc file.
 // 20110405  M. Kelsey -- Add "passTrailing()" to encapsulate trailing effect
+// 20110808  M. Kelsey -- Pass buffer into generateParticleFate instead of
+//		returning a vector to be copied.
+// 20110823  M. Kelsey -- Remove local cross-section tables entirely
 
 #ifndef G4NUCLEI_MODEL_HH
 #define G4NUCLEI_MODEL_HH
@@ -144,9 +147,9 @@ public:
     return std::pair<G4int, G4int>(current_nucl1, current_nucl2);
   }
 
-  const std::vector<G4CascadParticle>&
-  generateParticleFate(G4CascadParticle& cparticle,
-		       G4ElementaryParticleCollider* theElementaryParticleCollider); 
+  void generateParticleFate(G4CascadParticle& cparticle,
+			    G4ElementaryParticleCollider* theEPCollider,
+			    std::vector<G4CascadParticle>& cascade); 
 
   G4bool worthToPropagate(const G4CascadParticle& cparticle) const; 
     
@@ -199,7 +202,6 @@ private:
   G4double getRatio(G4int ip) const;
 
   // Buffers for processing interactions on each cycle
-  std::vector<G4CascadParticle> outgoing_cparticles;	// Return buffer
   G4CollisionOutput EPCoutput;		// For N-body inelastic collisions
 
   std::vector<G4InuclElementaryParticle> qdeutrons;	// For h+(NN) trials
@@ -262,17 +264,6 @@ private:
   static const G4double piTimes4thirds;
   static const G4double crossSectionUnits;
   static const G4double radiusUnits;
-
-  // Total cross sections (for kaons and hyperons only)
-  static const G4double kpPtot[30];
-  static const G4double kpNtot[30];
-  static const G4double kmPtot[30];
-  static const G4double kmNtot[30];
-  static const G4double lPtot[30];
-  static const G4double spPtot[30];
-  static const G4double smPtot[30];
-  static const G4double xi0Ptot[30];
-  static const G4double ximPtot[30];
 };        
 
 #endif // G4NUCLEI_MODEL_HH 

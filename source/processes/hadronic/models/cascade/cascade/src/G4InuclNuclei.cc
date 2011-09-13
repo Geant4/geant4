@@ -46,6 +46,7 @@
 // 20110308  M. Kelsey -- Follow new G4Fragment interface for hole types
 // 20110427  M. Kelsey -- Remove PDG-code warning
 // 20110721  M. Kelsey -- Follow base-class ctor change to pass model directly
+// 20110829  M. Kelsey -- Add constructor to copy G4V3DNucleus input
 
 #include "G4InuclNuclei.hh"
 #include "G4Fragment.hh"
@@ -54,8 +55,10 @@
 #include "G4Ions.hh"
 #include "G4IonTable.hh"
 #include "G4NucleiProperties.hh"
+#include "G4Nucleon.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
+#include "G4V3DNucleus.hh"
 #include <assert.h>
 #include <sstream>
 #include <map>
@@ -67,10 +70,13 @@ using namespace G4InuclSpecialFunctions;
 
 G4InuclNuclei::G4InuclNuclei(const G4Fragment& aFragment,
 			     G4InuclParticle::Model model)
-  : G4InuclParticle(makeDefinition(aFragment.GetA_asInt(),
-				   aFragment.GetZ_asInt()),
-		    aFragment.GetMomentum()/GeV, model) {	// Bertini units
-  setExitationEnergy(aFragment.GetExcitationEnergy());
+  : G4InuclParticle() {
+  copy(aFragment, model);
+}
+
+void G4InuclNuclei::copy(const G4Fragment& aFragment, Model model) {
+  fill(aFragment.GetMomentum()/GeV, aFragment.GetA_asInt(),
+       aFragment.GetZ_asInt(), aFragment.GetExcitationEnergy(), model);
 
   // Exciton configuration must be set by hand
   theExitonConfiguration.protonQuasiParticles = aFragment.GetNumberOfCharged();
@@ -103,6 +109,35 @@ G4Fragment G4InuclNuclei::makeG4Fragment() const {
 
 G4InuclNuclei::operator G4Fragment() const {
   return makeG4Fragment();
+}
+
+
+// Convert contents from (via constructor) G4V3DNucleus
+
+G4InuclNuclei::G4InuclNuclei(G4V3DNucleus* a3DNucleus,
+			     G4InuclParticle::Model model)
+  : G4InuclParticle() {
+  copy(a3DNucleus, model);
+}
+
+void G4InuclNuclei::copy(G4V3DNucleus* a3DNucleus, Model model) {
+  if (!a3DNucleus) return;		// Null pointer means no action
+
+  fill(0., a3DNucleus->GetMassNumber(), a3DNucleus->GetCharge(), 0., model);
+
+  // Convert every hit nucleon into an exciton hole
+  if (a3DNucleus->StartLoop()) {
+    G4Nucleon* nucl = 0;
+    while ((nucl = a3DNucleus->GetNextNucleon())) {
+      if (nucl->AreYouHit()) {	// Found previously interacted nucleon
+	if (nucl->GetParticleType() == G4Proton::Definition())
+	  theExitonConfiguration.protonHoles++;
+
+	if (nucl->GetParticleType() == G4Neutron::Definition())
+	  theExitonConfiguration.neutronHoles++;
+      }
+    }
+  }
 }
 
 

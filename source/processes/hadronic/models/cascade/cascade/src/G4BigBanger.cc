@@ -42,6 +42,7 @@
 // 20100726  M. Kelsey -- Move std::vector<> buffer to .hh file
 // 20100923  M. Kelsey -- Migrate to integer A and Z
 // 20110214  M. Kelsey -- Follow G4InuclParticle::Model enumerator migration
+// 20110806  M. Kelsey -- Pre-allocate buffers to reduce memory churn
 
 #include "G4BigBanger.hh"
 #include "G4CollisionOutput.hh"
@@ -230,10 +231,10 @@ void G4BigBanger::generateBangInSCM(G4double etot, G4int a, G4int z) {
   }	// while (bad && itry<itry_max)
 
   if (!bad) {
+    particles.resize(a);	// Use assignment to avoid temporaries
     for(G4int i = 0; i < a; i++) {
       G4int knd = i < z ? 1 : 2;
-      particles.push_back(G4InuclElementaryParticle(scm_momentums[i], knd,
-						    G4InuclParticle::BigBanger));
+      particles[i].fill(scm_momentums[i], knd, G4InuclParticle::BigBanger);
     };
   };
 
@@ -259,15 +260,15 @@ void G4BigBanger::generateMomentumModules(G4double etot, G4int a, G4int z) {
 
   if (a > 2) {			// For "large" nuclei, energy is distributed
     G4double promax = maxProbability(a);
-    
+
+    momModules.resize(a, 0.);	// Pre-allocate to avoid memory churn
     for(G4int i = 0; i < a; i++) { 
-      G4double x = generateX(a, promax);
+      momModules[i] = generateX(a, promax);
+      xtot += momModules[i];
       
       if (verboseLevel > 2) {
-	G4cout << " i " << i << " x " << x << G4endl;
+	G4cout << " i " << i << " x " << momModules[i] << G4endl;
       }
-      momModules.push_back(x);
-      xtot += x;
     }
   } else {			// Two-body case is special, must be 50%
     xtot = 1.;
@@ -278,7 +279,7 @@ void G4BigBanger::generateMomentumModules(G4double etot, G4int a, G4int z) {
   for(G4int i = 0; i < a; i++) {
     G4double m = i < z ? mp : mn;
 
-    momModules[i] = momModules[i] * etot / xtot;
+    momModules[i] *= etot/xtot;
     momModules[i] = std::sqrt(momModules[i] * (momModules[i] + 2.0 * m));
 
     if (verboseLevel > 2) {

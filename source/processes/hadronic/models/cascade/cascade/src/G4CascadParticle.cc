@@ -29,10 +29,14 @@
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100114  M. Kelsey -- Replace vector<G4Double> position with G4ThreeVector 
 // 20101012  M. Kelsey -- Check for negative d2 in getPathToTheNextZone()
+// 20110806  M. Kelsey -- Add fill() function to replicate ctor/op=() action
 
 #include "G4CascadParticle.hh"
 #include "G4ios.hh"
 #include <cmath>
+
+
+// Default constructor produces non-functional object
 
 G4CascadParticle::G4CascadParticle()
   : verboseLevel(0), current_zone(-1), current_path(-1.), movingIn(false),
@@ -41,6 +45,24 @@ G4CascadParticle::G4CascadParticle()
     G4cout << " >>> G4CascadParticle::G4CascadParticle" << G4endl;
   }
 }
+
+// Analogue to operator=() to support filling vectors w/o temporaries
+
+void G4CascadParticle::fill(const G4InuclElementaryParticle& particle, 
+			    const G4ThreeVector& pos, G4int izone,
+			    G4double cpath, G4int gen) {
+  if (verboseLevel > 3) G4cout << " >>> G4CascadParticle::fill" << G4endl;
+
+  theParticle = particle;
+  position = pos;
+  current_zone = izone;
+  current_path = cpath;
+  movingIn = true;
+  reflectionCounter = 0;
+  reflected = false;
+  generation = gen;
+}
+
 
 G4double G4CascadParticle::getPathToTheNextZone(G4double rz_in, 
 						G4double rz_out) {
@@ -90,7 +112,9 @@ G4double G4CascadParticle::getPathToTheNextZone(G4double rz_in,
 
   if (verboseLevel > 3) G4cout << " ds " << ds << " d2 " << d2 << G4endl;
 
-  path = ds * std::sqrt(d2) - rp / pp;
+  if (d2 < 0.0 && d2 > -1e-6) d2 = 0.;		// Account for round-off
+
+  if (d2 > 0.0) path = ds * std::sqrt(d2) - rp / pp;	// Avoid FPE failure
 
   return path;    
 }

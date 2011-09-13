@@ -33,15 +33,18 @@
 // 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class
 // 20100923  M. Kelsey -- Migrate to integer A and Z
 // 20100925  M. Kelsey -- Remove no longer necessary explosion() interface
+// 20110801  M. Kelsey -- Move "parms" buffer to data member, allocate in
+//		constructor.
+// 20110809  M. Kelsey -- Move "foutput" buffer to data member
 
 #ifndef G4EQUILIBRIUM_EVAPORATOR_HH
 #define G4EQUILIBRIUM_EVAPORATOR_HH
 
 #include "G4CascadeColliderBase.hh"
+#include "G4CollisionOutput.hh"
 #include "G4Fissioner.hh"
 #include "G4BigBanger.hh"
 
-class G4CollisionOutput;
 class G4InuclParticle;
 
 class G4EquilibriumEvaporator : public G4CascadeColliderBase {
@@ -70,6 +73,10 @@ private:
   G4double getPARLEVDEN(G4int A, G4int Z) const; 
   G4double getQF(G4double x, G4double x2, G4int a, G4int z, G4double e) const;
   G4double getAF(G4double x, G4int a, G4int z, G4double e) const; 
+
+  // Buffer for parameter sets
+  std::pair<std::vector<G4double>, std::vector<G4double> > parms;
+  G4CollisionOutput fission_output;
 
   G4Fissioner theFissioner;
   G4BigBanger theBigBanger;

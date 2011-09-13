@@ -93,6 +93,11 @@
 //		latter runtime adjustable (G4NUCMODEL_RAD_TRAILING)
 // 20110720  M. Kelsey -- Follow interface change for cross-section tables,
 //		eliminating switch blocks.
+// 20110806  M. Kelsey -- Reduce memory churn by pre-allocating buffers
+// 20110823  M. Kelsey -- Remove local cross-section tables entirely
+// 20110825  M. Kelsey -- Add comments regarding Fermi momentum scale, set of
+//		"best guess" parameter values
+// 20110831  M. Kelsey -- Make "best guess" parameters the defaults
 
 #include "G4NucleiModel.hh"
 #include "G4CascadeChannel.hh"
@@ -116,49 +121,57 @@ using namespace G4InuclSpecialFunctions;
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
+// For the best approximation to a physical-units model, set the following:
+//	setenv G4NUCMODEL_XSEC_SCALE   0.1
+//	setenv G4NUCMODEL_RAD_SCALE    1.0
+//	setenv G4NUCMODEL_RAD_2PAR     1
+//	setenv G4NUCMODEL_RAD_SMALL    1.992
+//	setenv G4NUCMODEL_RAD_ALPHA    0.84
+//	setenv G4NUCMODEL_FERMI_SCALE  0.685
+//	setenv G4NUCMODEL_RAD_TRAILING 1.2
+
 // Scaling factors for radii and cross-sections, currently different!
-
-// ==> Default as of 21 Mar 2011, crossSectionUnits = 0.1 (fm^2)
-// ==>	                          radiusUnits = 1.0 (fm)
-
 const G4double G4NucleiModel::crossSectionUnits = 
   getenv("G4NUCMODEL_XSEC_SCALE") ? strtod(getenv("G4NUCMODEL_XSEC_SCALE"),0)
-  : 1.0;
+  : 0.1;	/* 1.0; */
 
 #define OLD_RADIUS_UNITS (3.3836/1.2)
 const G4double G4NucleiModel::radiusUnits = 
   getenv("G4NUCMODEL_RAD_SCALE") ? strtod(getenv("G4NUCMODEL_RAD_SCALE"),0)
-  : OLD_RADIUS_UNITS;
+  : 1.0;	/* OLD_RADIUS_UNITS; */
 
 const G4double G4NucleiModel::skinDepth = (1.7234/OLD_RADIUS_UNITS)*radiusUnits;
 
 // One- vs. two-parameter nuclear radius based on envvar
 // ==> radius = radiusScale*cbrt(A) + radiusScale2/cbrt(A)
 
-const G4double G4NucleiModel::radiusScale  =
-  (getenv("G4NUCMODEL_RAD_2PAR") ? 1.16 : 1.2) * radiusUnits;
-const G4double G4NucleiModel::radiusScale2 = 
-  (getenv("G4NUCMODEL_RAD_2PAR") ? -1.3456 : 0.) * radiusUnits;
+const G4double G4NucleiModel::radiusScale  = 1.16;
+	/* (getenv("G4NUCMODEL_RAD_2PAR") ? 1.16 : 1.2) * radiusUnits; */
+const G4double G4NucleiModel::radiusScale2 = -1.3456;
+	/* (getenv("G4NUCMODEL_RAD_2PAR") ? -1.3456 : 0.) * radiusUnits; */
 
 // NOTE:  Old code used R_small = 8.0 (~2.83*units), and R_alpha = 0.7*R_small
 // Published data suggests R_small ~ 1.992 fm, R_alpha = 0.84*R_small
 
 const G4double G4NucleiModel::radiusForSmall =
   (getenv("G4NUCMODEL_RAD_SMALL") ? strtod(getenv("G4NUCMODEL_RAD_SMALL"),0)
-   : 8.0/OLD_RADIUS_UNITS) * radiusUnits;
+   : 1.992) * radiusUnits;	/* 8.0/OLD_RADIUS_UNITS) * radiusUnits; */
 
-const G4double G4NucleiModel::radScaleAlpha  =
+const G4double G4NucleiModel::radScaleAlpha =
   getenv("G4NUCMODEL_RAD_ALPHA") ? strtod(getenv("G4NUCMODEL_RAD_ALPHA"),0)
-  : 0.70;
+  : 0.84;	/* 0.70; */
 
+// Scale factor relating Fermi momentum to density of states, units GeV.fm
+// NOTE:  Old code has 0.685*units GeV.fm, literature suggests 0.470 GeV.fm,
+//        but this gives too small momentum; old value gives <P_F> ~ 270 MeV
 const G4double G4NucleiModel::fermiMomentum = 
   (getenv("G4NUCMODEL_FERMI_SCALE") ? strtod(getenv("G4NUCMODEL_FERMI_SCALE"),0)
-   : 1.932/OLD_RADIUS_UNITS) * radiusUnits;
+   : 0.685) * radiusUnits;	/* 1.932/OLD_RADIUS_UNITS) * radiusUnits; */
 
 // Effective radius (0.87 to 1.2 fm) of nucleon, for trailing effect
 const G4double G4NucleiModel::R_nucleon = 
   (getenv("G4NUCMODEL_RAD_TRAILING") ? strtod(getenv("G4NUCMODEL_RAD_TRAILING"),0)
-   : 1.2) * radiusUnits;
+   : 1.0) * radiusUnits;
 
 // Zone boundaries as fraction of nuclear radius (from outside in)
 const G4double G4NucleiModel::alfa3[3] = { 0.7, 0.3, 0.01 };
@@ -170,8 +183,7 @@ const G4double G4NucleiModel::pion_vp_small = 0.007;
 const G4double G4NucleiModel::kaon_vp = -0.015;		// WHY NEGATIVE?
 const G4double G4NucleiModel::hyperon_vp = 0.030;
 
-// FIXME:  We should not be using this!
-const G4double G4NucleiModel::piTimes4thirds = 4.188790204786;
+const G4double G4NucleiModel::piTimes4thirds = pi*4./3.;
 
 
 // Constructors
@@ -864,9 +876,10 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
 }
 
 
-const std::vector<G4CascadParticle>&
-G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
-                                    G4ElementaryParticleCollider* theElementaryParticleCollider) {
+void G4NucleiModel::
+generateParticleFate(G4CascadParticle& cparticle,
+		     G4ElementaryParticleCollider* theEPCollider,
+		     std::vector<G4CascadParticle>& outgoing_cparticles) {
   if (verboseLevel > 1)
     G4cout << " >>> G4NucleiModel::generateParticleFate" << G4endl;
 
@@ -888,7 +901,7 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
     if (verboseLevel)
       G4cerr << " generateParticleFate-> got empty interaction-partners list "
 	     << G4endl;
-    return outgoing_cparticles;
+    return;
   }
 
   G4int npart = thePartners.size();	// Last item is a total-path placeholder
@@ -924,7 +937,7 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
       }
 
       EPCoutput.reset();
-      theElementaryParticleCollider->collide(&bullet, &target, EPCoutput);
+      theEPCollider->collide(&bullet, &target, EPCoutput);
       
       if (verboseLevel > 2) {
 	EPCoutput.printCollisionOutput();
@@ -954,10 +967,12 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
       if (verboseLevel > 2)
 	G4cout << " adding " << outgoing_particles.size()
 	       << " output particles" << G4endl;
-      
+
+      // NOTE:  Embedded temporary is optimized away (no copying gets done)
       for (G4int ip = 0; ip < G4int(outgoing_particles.size()); ip++) { 
-	G4CascadParticle temp(outgoing_particles[ip], new_position, zone, 0.0, 0);
-	outgoing_cparticles.push_back(temp);
+	outgoing_cparticles.push_back(G4CascadParticle(outgoing_particles[ip],
+						       new_position, zone,
+						       0.0, 0));
       }
       
       no_interaction = false;
@@ -1034,7 +1049,7 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
     }
   }	// if (npart == 1) [else]
 
-  return outgoing_cparticles;
+  return;
 }
 
 G4bool G4NucleiModel::passFermi(const std::vector<G4InuclElementaryParticle>& particles, 
@@ -1656,80 +1671,9 @@ G4double G4NucleiModel::totalCrossSection(G4double ke, G4int rtype) const
 
   // Pion and nucleon scattering cross-sections are available from tables
   G4double xsec = 0.;
-  switch (rtype) {
-  case kpl*pro:			     
-  case k0*neu:  xsec = interp.interpolate(ke, kpPtot); break;
-  case kmi*pro:			     
-  case k0b*neu: xsec = interp.interpolate(ke, kmPtot); break;
-  case kpl*neu:			     
-  case k0*pro:  xsec = interp.interpolate(ke, kpNtot); break;
-  case kmi*neu:			     
-  case k0b*pro: xsec = interp.interpolate(ke, kmNtot); break;
-  case lam*pro:			     
-  case lam*neu:			     
-  case s0*pro:			     
-  case s0*neu:  xsec = interp.interpolate(ke, lPtot); break;
-  case sp*pro:			     
-  case sm*neu:  xsec = interp.interpolate(ke, spPtot); break;
-  case sm*pro:			     
-  case sp*neu:  xsec = interp.interpolate(ke, smPtot); break;
-  case xi0*pro:			     
-  case xim*neu: xsec = interp.interpolate(ke, xi0Ptot); break;
-  case xim*pro:			     
-  case xi0*neu: xsec = interp.interpolate(ke, ximPtot); break;
-  default:
-    const G4CascadeChannel* xsecTable = G4CascadeChannelTables::GetTable(rtype);
-    if (xsecTable) xsec = xsecTable->getCrossSection(ke);
-  }
+  const G4CascadeChannel* xsecTable = G4CascadeChannelTables::GetTable(rtype);
+  if (xsecTable) xsec = xsecTable->getCrossSection(ke);
+  else G4cerr << " unknown collison type = " << rtype << G4endl; 
 
-  if (0. == xsec) G4cerr << " unknown collison type = " << rtype << G4endl; 
-
-  return crossSectionUnits * xsec;
+  return (crossSectionUnits * xsec);
 }
-
-// Initialize cross-section interpolation tables
-
-const G4double G4NucleiModel::kpPtot[30] = {
-   10.0,  10.34, 10.44, 10.61, 10.82, 11.09, 11.43, 11.71, 11.75, 11.8,
-   11.98, 12.28, 12.56, 12.48, 12.67, 14.48, 15.92, 17.83, 17.93, 17.88,
-   17.46, 17.3,  17.3,  17.4,  17.4,  17.4,  17.4,  17.5,  17.7,  17.8};
-
-const G4double G4NucleiModel::kpNtot[30] = {
-    6.64,  6.99,  7.09,  7.27,  7.48,  7.75,  8.1,  8.49,  8.84, 9.31,
-    9.8,  10.62, 11.64, 13.08, 14.88, 16.60, 17.5, 18.68, 18.68, 18.29,
-   17.81, 17.6,  17.6,  17.6,  17.6,  17.6,  17.7, 17.8,  17.9,  18.0};
-
-const G4double G4NucleiModel::kmPtot[30] = {
- 1997.0, 1681.41, 1586.74, 1428.95, 1239.59, 987.12, 671.54, 377.85, 247.30, 75.54,
-    71.08, 54.74,   44.08,   44.38,   45.45,  45.07,  41.04,  35.75,  33.22, 30.08,
-    27.61, 26.5,    25.2,    24.0,    23.4,   22.8,   22.0,   21.3,   21.0,  20.9};
-
-const G4double G4NucleiModel::kmNtot[30] = {
-    6.15,  6.93,  7.16,  7.55,  8.02,  8.65,  9.43, 10.36, 11.34, 12.64,
-   14.01, 16.45, 19.32, 23.0,  27.6,  30.92, 29.78, 28.28, 25.62, 23.1,
-   22.31, 21.9,  21.73, 21.94, 21.23, 20.5,  20.4,  20.2,  20.1,  20.0};
-
-const G4double G4NucleiModel::lPtot[30] = {
-  300.0, 249.07, 233.8, 208.33, 177.78, 137.04, 86.11, 41.41, 28.86, 12.35,
-   13.82, 16.76, 20.68,  25.9,   30.37,  31.56, 32.83, 34.5,  34.91, 35.11,
-   35.03, 36.06, 35.13,  35.01,  35.0,   35.0,  35.0,  35.0,  35.0,  35.0};
-
-const G4double G4NucleiModel::spPtot[30] = {
-  150.0, 146.0, 144.8, 142.8, 140.4, 137.2, 133.2, 127.6, 120.0, 110.0,
-   98.06, 84.16, 72.28, 56.58, 43.22, 40.44, 36.14, 30.48, 31.53, 31.92,
-   29.25, 28.37, 29.81, 33.15, 33.95, 34.0,  34.0,  34.0,  34.0,  34.0};
-
-const G4double G4NucleiModel::smPtot[30] = {
-  937.0, 788.14, 743.48, 669.05, 579.74, 460.65, 311.79, 183.33, 153.65, 114.6,
-  105.18, 89.54,  70.58,  45.5,   32.17,  32.54,  32.95,  33.49,  33.55,  33.87,
-   34.02, 34.29,  33.93,  33.88,  34.0,   34.0,   34.0,   34.0,   34.0,   34.0};
-
-const G4double G4NucleiModel::xi0Ptot[30] = {
-  16.0,  14.72, 14.34, 13.7,  12.93, 11.9,  10.62, 9.29, 8.3,   7.0,
-   7.96,  9.56, 11.48, 14.04, 19.22, 25.29, 29.4, 34.8, 34.32, 33.33,
-  31.89, 29.55, 27.89, 21.43, 17.0,  16.0,  16.0, 16.0, 16.0,  16.0};
-
-const G4double G4NucleiModel::ximPtot[30] = {
-  33.0,  32.5,  32.35, 32.1,  31.8,  31.4,  30.9, 30.2, 29.25, 28.0,
-  26.5,  24.6,  22.8,  20.78, 18.22, 19.95, 21.7, 24.0, 24.74, 25.95,
-  27.59, 27.54, 23.16, 17.43, 12.94, 12.0,  12.0, 12.0, 12.0,  12.0};

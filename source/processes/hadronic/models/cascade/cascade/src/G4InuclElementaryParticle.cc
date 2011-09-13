@@ -34,6 +34,8 @@
 // 20110214  M. Kelsey -- Drop unused "generation"
 // 20110307  M. Kelsey -- Add random K0 mixing if K0S/K0L passed to type()
 // 20110321  M. Kelsey -- Fix getStrangeness to return int
+// 20110801  M. Kelsey -- Add fill() functions to replicate ctors, allowing
+//		reuse of objects as buffers; c.f. G4InuclNuclei.
 
 #include "G4InuclElementaryParticle.hh"
 
@@ -168,6 +170,31 @@ G4int G4InuclElementaryParticle::type(const G4ParticleDefinition *pd) {
 
 void G4InuclElementaryParticle::setType(G4int ityp) {
   setDefinition(makeDefinition(ityp));
+}
+
+
+// Overwrite data structure (avoids creating/copying temporaries)
+
+void G4InuclElementaryParticle::fill(const G4LorentzVector& mom, G4int type,
+				     G4InuclParticle::Model model) {
+  setType(type);
+  setMomentum(mom);
+  setModel(model);
+}
+
+void G4InuclElementaryParticle::fill(G4double ekin, G4int type,
+				     G4InuclParticle::Model model) {
+  setType(type);
+  setKineticEnergy(ekin);
+  setModel(model);
+}
+
+void G4InuclElementaryParticle::fill(const G4LorentzVector& mom,
+				     G4ParticleDefinition* pd,
+				     G4InuclParticle::Model model) {
+  setDefinition(pd);
+  setMomentum(mom);
+  setModel(model);
 }
 
 

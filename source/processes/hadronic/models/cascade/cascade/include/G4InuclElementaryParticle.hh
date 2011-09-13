@@ -40,6 +40,8 @@
 //		input instead of type code, to allow pass-through of unusable
 //		particles during rescattering.  Modify ctors to pass model to
 //		base ctor.
+// 20110801  M. Kelsey -- Add fill() functions to replicate ctors, allowing
+//		reuse of objects as buffers; c.f. G4InuclNuclei.
 
 #ifndef G4INUCL_ELEMENTARY_PARTICLE_HH
 #define G4INUCL_ELEMENTARY_PARTICLE_HH
@@ -82,6 +84,18 @@ public:
 
   G4InuclElementaryParticle& operator=(const G4InuclElementaryParticle& right);
 
+  // Overwrite data structure (avoids creating/copying temporaries)
+  void fill(G4int type, Model model=DefaultModel) { fill(0., type, model); }
+
+  void fill(const G4LorentzVector& mom, G4int type, Model model=DefaultModel);
+
+  void fill(G4double ekin, G4int type, Model model=DefaultModel);
+
+  // WARNING:  This may create a particle without a valid type code!
+  void fill(const G4LorentzVector& mom, G4ParticleDefinition* pd,
+	    Model model=DefaultModel);
+
+  // Assignment and accessor functions
   void setType(G4int ityp);
   G4int type() const { return type(getDefinition()); }
 
