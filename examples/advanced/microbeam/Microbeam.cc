@@ -100,7 +100,7 @@ int main(int argc,char** argv) {
   G4UImanager* UImanager = G4UImanager::GetUIpointer(); 
   
   // local user files created by the simulation
-  system ("rm -rf microbeam.root");
+  remove ("microbeam.root");
        
   if (argc==1)   // define UI session for interactive mode.
     {
