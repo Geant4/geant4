@@ -177,7 +177,7 @@ void computeExactSafeties(G4VPhysicalVolume *pTopNode)
   myNav.SetWorldVolume(pTopNode);
 
   // Enable use of Best Safety Estimate -- ie as exact as solids allow
-  myNav.UseBestSafety( true ); 
+  myNav.EnableBestSafety( true ); 
 
   myNav.SetVerboseLevel( 1 ); 
   myNav.CheckMode( true ); 

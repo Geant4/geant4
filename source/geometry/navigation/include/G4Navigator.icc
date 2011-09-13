@@ -93,13 +93,13 @@ void G4Navigator::SetWorldVolume(G4VPhysicalVolume* pWorld)
 {
   if ( !(pWorld->GetTranslation()==G4ThreeVector(0,0,0)) )
   {
-    G4Exception ("G4Navigator::SetWorldVolume()", "InvalidSetup",
+    G4Exception ("G4Navigator::SetWorldVolume()", "GeomNav0002",
                  FatalException, "Volume must be centered on the origin.");
   }
   const G4RotationMatrix* rm = pWorld->GetRotation();
   if ( rm && (!rm->isIdentity()) )
   {
-    G4Exception ("G4Navigator::SetWorldVolume()", "InvalidSetup",
+    G4Exception ("G4Navigator::SetWorldVolume()", "GeomNav0002",
                  FatalException, "Volume must not be rotated.");
   }
   fTopPhysical = pWorld;

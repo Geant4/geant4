@@ -528,7 +528,7 @@ G4Navigator::LocateGlobalPointWithinVolume(const G4ThreeVector& pGlobalpoint)
          break;
        case kReplica:
          G4Exception("G4Navigator::LocateGlobalPointWithinVolume()",
-                     "NotApplicable", FatalException,
+                     "GeomNav0001", FatalException,
                      "Not applicable for replicated volumes.");
          break;
      }
@@ -722,7 +722,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
             if(fHistory.GetTopVolume()->GetRegularStructureId() == 0 )
             { 
               G4Exception("G4Navigator::ComputeStep()",
-                          "Bad-location-of-point", JustWarning,
+                          "GeomNav1001", JustWarning,
                 "Point is relocated in voxels, while it should be outside!");
               Step = fnormalNav.ComputeStep(fLastLocatedPointLocal,
                                             localDirection,
@@ -786,7 +786,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
         }
         break;
       case kReplica:
-        G4Exception("G4Navigator::ComputeStep()", "NotApplicable",
+        G4Exception("G4Navigator::ComputeStep()", "GeomNav0001",
                     FatalException, "Not applicable for replicated volumes.");
         break;
     }
@@ -856,16 +856,18 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
 #ifdef G4VERBOSE
        if ((!fPushed) && (fWarnPush))
        {
-         G4cerr << "WARNING - G4Navigator::ComputeStep()" << G4endl
-                << "          Track stuck, not moving for " 
-                << fNumberZeroSteps << " steps" << G4endl
-                << "          in volume -" << motherPhysical->GetName()
-                << "- at point " << pGlobalpoint << G4endl
-                << "          direction: " << pDirection << "." << G4endl
-                << "          Potential geometry or navigation problem !"
-                << G4endl
-                << "          Trying pushing it of " << Step << " mm ..."
-                << G4endl;
+         std::ostringstream message;
+         message << "Track stuck or not moving." << G4endl
+                 << "          Track stuck, not moving for " 
+                 << fNumberZeroSteps << " steps" << G4endl
+                 << "          in volume -" << motherPhysical->GetName()
+                 << "- at point " << pGlobalpoint << G4endl
+                 << "          direction: " << pDirection << "." << G4endl
+                 << "          Potential geometry or navigation problem !"
+                 << G4endl
+                 << "          Trying pushing it of " << Step << " mm ...";
+         G4Exception("G4Navigator::ComputeStep()", "GeomNav1002",
+                     JustWarning, message, "Potential overlap in geometry!");
        }
 #endif
        fPushed = true;
@@ -874,16 +876,17 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
     {
       // Must kill this stuck track
       //
-      G4cerr << "ERROR - G4Navigator::ComputeStep()" << G4endl
-             << "        Track stuck, not moving for " 
-             << fNumberZeroSteps << " steps" << G4endl
-             << "        in volume -" << motherPhysical->GetName()
-             << "- at point " << pGlobalpoint << G4endl
-             << "        direction: " << pDirection << "." << G4endl;
+      std::ostringstream message;
+      message << "Stuck Track: potential geometry or navigation problem."
+              << G4endl
+              << "        Track stuck, not moving for " 
+              << fNumberZeroSteps << " steps" << G4endl
+              << "        in volume -" << motherPhysical->GetName()
+              << "- at point " << pGlobalpoint << G4endl
+              << "        direction: " << pDirection << ".";
       motherPhysical->CheckOverlaps(5000, false);
-      G4Exception("G4Navigator::ComputeStep()",
-                  "StuckTrack", EventMustBeAborted, 
-                  "Stuck Track: potential geometry or navigation problem.");
+      G4Exception("G4Navigator::ComputeStep()", "GeomNav0003",
+                  EventMustBeAborted, message);
     }
   }
   else
@@ -1344,45 +1347,48 @@ void G4Navigator::ComputeStepLog(const G4ThreeVector& pGlobalpoint,
     {
       G4int oldcoutPrec= G4cout.precision(8);
       G4int oldcerrPrec= G4cerr.precision(10);
-      G4Exception("G4Navigator::ComputeStep()",
-                  "UnexpectedPositionShift", JustWarning,
-                  "Accuracy error or slightly inaccurate position shift.");
-      G4cerr << "     The Step's starting point has moved " 
-             << std::sqrt(moveLenSq)/mm << " mm " << G4endl
-             << "     since the last call to a Locate method." << G4endl;
-      G4cerr << "     This has resulted in moving " 
-             << shiftOrigin/mm << " mm " 
-             << " from the last point at which the safety " 
-             << "     was calculated " << G4endl;
-      G4cerr << "     which is more than the computed safety= " 
-             << fPreviousSafety/mm << " mm  at that point." << G4endl;
-      G4cerr << "     This difference is " 
-             << diffShiftSaf/mm << " mm." << G4endl
-             << "     The tolerated accuracy is "
-             << fAccuracyForException/mm << " mm." << G4endl;
+      std::ostringstream message, suggestion;
+      message << "Accuracy error or slightly inaccurate position shift."
+              << G4endl
+              << "     The Step's starting point has moved " 
+              << std::sqrt(moveLenSq)/mm << " mm " << G4endl
+              << "     since the last call to a Locate method." << G4endl
+              << "     This has resulted in moving " 
+              << shiftOrigin/mm << " mm " 
+              << " from the last point at which the safety " 
+              << "     was calculated " << G4endl
+              << "     which is more than the computed safety= " 
+              << fPreviousSafety/mm << " mm  at that point." << G4endl
+              << "     This difference is " 
+              << diffShiftSaf/mm << " mm." << G4endl
+              << "     The tolerated accuracy is "
+              << fAccuracyForException/mm << " mm.";
 
+      suggestion << " ";
       static G4int warnNow = 0;
       if( ((++warnNow % 100) == 1) )
       {
-        G4cerr << "  This problem can be due to either " << G4endl;
-        G4cerr << "    - a process that has proposed a displacement"
-               << " larger than the current safety , or" << G4endl;
-        G4cerr << "    - inaccuracy in the computation of the safety"
-                   << G4endl;
-        G4cerr << "  We suggest that you " << G4endl
-               << "   - find i) what particle is being tracked, and "
-               << " ii) through what part of your geometry " << G4endl
-               << "      for example by re-running this event with "
-               << G4endl
-               << "         /tracking/verbose 1 "  << G4endl
-               << "    - check which processes you declare for"
-               << " this particle (and look at non-standard ones)"
-               << G4endl
-               << "   - in case, create a detailed logfile"
-               << " of this event using:" << G4endl
-               << "         /tracking/verbose 6 "
-               << G4endl;
+        message << G4endl
+               << "  This problem can be due to either " << G4endl
+               << "    - a process that has proposed a displacement"
+               << " larger than the current safety , or" << G4endl
+               << "    - inaccuracy in the computation of the safety";
+        suggestion << "We suggest that you " << G4endl
+                   << "   - find i) what particle is being tracked, and "
+                   << " ii) through what part of your geometry " << G4endl
+                   << "      for example by re-running this event with "
+                   << G4endl
+                   << "         /tracking/verbose 1 "  << G4endl
+                   << "    - check which processes you declare for"
+                   << " this particle (and look at non-standard ones)"
+                   << G4endl
+                   << "   - in case, create a detailed logfile"
+                   << " of this event using:" << G4endl
+                   << "         /tracking/verbose 6 ";
       }
+      G4Exception("G4Navigator::ComputeStep()",
+                  "GeomNav1002", JustWarning,
+                  message, G4String(suggestion.str()));
       G4cout.precision(oldcoutPrec);
       G4cerr.precision(oldcerrPrec);
     }
@@ -1400,14 +1406,14 @@ void G4Navigator::ComputeStepLog(const G4ThreeVector& pGlobalpoint,
   G4double safetyPlus = fPreviousSafety + fAccuracyForException;
   if ( shiftOriginSafSq > sqr(safetyPlus) )
   {
-    G4cerr << "ERROR - G4Navigator::ComputeStep()" << G4endl
-           << "        Position has shifted considerably without"
-           << " notifying the navigator !" << G4endl
-           << "        Tolerated safety: " << safetyPlus << G4endl
-           << "        Computed shift  : " << shiftOriginSafSq << G4endl;
-    G4Exception("G4Navigator::ComputeStep()",
-                "SignificantPositionShift", JustWarning,
-                "May lead to a crash or unreliable results.");
+    std::ostringstream message;
+    message << "May lead to a crash or unreliable results." << G4endl
+            << "        Position has shifted considerably without"
+            << " notifying the navigator !" << G4endl
+            << "        Tolerated safety: " << safetyPlus << G4endl
+            << "        Computed shift  : " << shiftOriginSafSq;
+    G4Exception("G4Navigator::ComputeStep()", "GeomNav1002",
+                JustWarning, message);
   }
 }
 

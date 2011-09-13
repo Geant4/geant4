@@ -190,12 +190,12 @@ G4MultiNavigator::ObtainFinalStep( G4int     navigatorId,
 {
   if( navigatorId > fNoActiveNavigators )
   { 
-     G4cerr << "ERROR - G4MultiNavigator::ObtainFinalStep()"
-            << "        Navigator Id = " << navigatorId 
-            << "        No Active = " << fNoActiveNavigators << " . "
-            << G4endl;
-     G4Exception("G4MultiNavigator::ObtainFinalStep()", "InvalidSetup",
-                 FatalException, "Bad Navigator Id" ); 
+     std::ostringstream message;
+     message << "Bad Navigator Id!" << G4endl
+             << "        Navigator Id = " << navigatorId 
+             << "        No Active = " << fNoActiveNavigators << ".";
+     G4Exception("G4MultiNavigator::ObtainFinalStep()", "GeomNav0002",
+                 FatalException, message); 
   }
 
   // Prepare the information to return
@@ -261,13 +261,14 @@ void G4MultiNavigator::PrepareNavigators()
 
   if( fNoActiveNavigators > fMaxNav )
   {
-    G4cerr << "ERROR - G4MultiNavigator::PrepareNavigators()"
-           << "        Too many active Navigators (worlds): "
-           << fNoActiveNavigators << G4endl
-           << "        which is more than the number allowed: "
-           << fMaxNav << " !" << G4endl;
-    G4Exception("G4MultiNavigator::PrepareNavigators()", "InvalidSetup",  
-                FatalException, "Too many active Navigators / worlds !"); 
+    std::ostringstream message;
+    message << "Too many active Navigators / worlds !" << G4endl
+            << "        Active Navigators (worlds): "
+            << fNoActiveNavigators << G4endl
+            << "        which is more than the number allowed: "
+            << fMaxNav << " !";
+    G4Exception("G4MultiNavigator::PrepareNavigators()", "GeomNav0002",  
+                FatalException, message); 
   }
 
   pNavigatorIter= pTransportManager-> GetActiveNavigatorsIterator();
@@ -454,7 +455,7 @@ G4TouchableHistoryHandle
 G4MultiNavigator::CreateTouchableHistoryHandle() const
 {
   G4Exception( "G4MultiNavigator::CreateTouchableHistoryHandle()", 
-               "215-TouchableFromWrongNavigator", FatalException,  
+               "GeomNav0001", FatalException,  
                "Getting a touchable from G4MultiNavigator is not defined."); 
 
   G4TouchableHistory* touchHist;
@@ -601,9 +602,9 @@ void G4MultiNavigator::ResetState()
 {
    fWasLimitedByGeometry= false; 
 
-   G4Exception("G4MultiNavigator::ResetState()", "217-NotImplemented",  
+   G4Exception("G4MultiNavigator::ResetState()", "GeomNav0001",  
                FatalException,  
-               "Cannot call ResetState() for navigators of G4MultiNavigator.");
+               "Cannot reset state for navigators of G4MultiNavigator.");
    
    std::vector<G4Navigator*>::iterator pNavigatorIter;
    pNavigatorIter= pTransportManager-> GetActiveNavigatorsIterator();
@@ -618,8 +619,8 @@ void G4MultiNavigator::ResetState()
 void G4MultiNavigator::SetupHierarchy()
 {
   G4Exception( "G4MultiNavigator::SetupHierarchy()", 
-               "217-NotImplemented", FatalException,  
-           "Cannot call SetupHierarchy() for navigators of G4MultiNavigator."); 
+               "GeomNav0001", FatalException,  
+               "Cannot setup hierarchy for navigators of G4MultiNavigator."); 
 }
 
 // -----------------------------------------------------------------------
@@ -632,7 +633,7 @@ void G4MultiNavigator::CheckMassWorld()
    if( navTrackWorld != fLastMassWorld )
    { 
       G4Exception( "G4MultiNavigator::CheckMassWorld()",
-                   "220-InvalidSetup", FatalException, 
+                   "GeomNav0003", FatalException, 
                    "Mass world pointer has been changed." ); 
    }
 }
@@ -657,7 +658,7 @@ G4MultiNavigator::ResetHierarchyAndLocate(const G4ThreeVector &point,
    else
    {
       G4Exception("G4MultiNavigator::ResetHierarchyAndLocate()",
-                  "218-TooEarlyToReset", FatalException,
+                  "GeomNav0002", FatalException,
                   "Cannot reset hierarchy before navigators are initialised.");
    }
 

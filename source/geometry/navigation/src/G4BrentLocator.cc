@@ -186,12 +186,8 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
   G4ThreeVector  StartPosition= CurveStartPointVelocity.GetPosition(); 
   if( (TrialPoint - StartPosition).mag() < tolerance * mm ) 
   {
-     G4cerr << "WARNING - G4BrentLocator::EstimateIntersectionPoint()"
-            << G4endl
-            << "          Intermediate F point is on top of starting point A."
-            << G4endl;
      G4Exception("G4BrentLocator::EstimateIntersectionPoint()", 
-                 "IntersectionPointIsAtStart", JustWarning,
+                 "GeomNav1002", JustWarning,
                  "Intersection point F is exactly at start point A." ); 
   }
 #endif
@@ -244,12 +240,8 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
       if( ApproxIntersecPointV.GetCurveLength() > 
           CurrentB_PointVelocity.GetCurveLength() * (1.0 + tolerance) )
       {
-        G4cerr << "ERROR - G4BrentLocator::EstimateIntersectionPoint()"
-               << G4endl
-               << "        Intermediate F point is more advanced than"
-               << " endpoint B." << G4endl;
         G4Exception("G4BrentLocator::EstimateIntersectionPoint()", 
-                    "IntermediatePointConfusion", FatalException,
+                    "GeomNav0003", FatalException,
                     "Intermediate F point is past end B point" ); 
       }
 #endif
@@ -484,55 +476,54 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
         }
         if( curveDist < 0.0 )
         {
-          G4cerr << "ERROR - G4BrentLocator::EstimateIntersectionPoint()"
-                 << G4endl
-                 << "        Error in advancing propagation." << G4endl;
           fVerboseLevel = 5; // Print out a maximum of information
           printStatus( CurrentA_PointVelocity,  CurrentB_PointVelocity,
                        -1.0, NewSafety,  substep_no );
-          G4cerr << "        Point A (start) is " << CurrentA_PointVelocity
-                 << G4endl;
-          G4cerr << "        Point B (end)   is " << CurrentB_PointVelocity
-                 << G4endl;
-          G4cerr << "        Curve distance is " << curveDist << G4endl;
-          G4cerr << G4endl
-                 << "The final curve point is not further along"
-                 << " than the original!" << G4endl;
+          std::ostringstream message;
+          message << "Error in advancing propagation." << G4endl
+                  << "        Error in advancing propagation." << G4endl
+                  << "        Point A (start) is " << CurrentA_PointVelocity
+                  << G4endl
+                  << "        Point B (end)   is " << CurrentB_PointVelocity
+                  << G4endl
+                  << "        Curve distance is " << curveDist << G4endl
+                  << G4endl
+                  << "The final curve point is not further along"
+                  << " than the original!" << G4endl;
 
           if( recalculatedEndPoint )
           {
-            G4cerr << "Recalculation of EndPoint was called with fEpsStep= "
-                   << GetEpsilonStepFor() << G4endl;
+            message << "Recalculation of EndPoint was called with fEpsStep= "
+                    << GetEpsilonStepFor() << G4endl;
           }
           oldprc = G4cerr.precision(20);
-          G4cerr << " Point A (Curve start)     is " << CurveStartPointVelocity
-                 << G4endl;
-          G4cerr << " Point B (Curve   end)     is " << CurveEndPointVelocity
-                 << G4endl;
-          G4cerr << " Point A (Current start)   is " << CurrentA_PointVelocity
-                 << G4endl;
-          G4cerr << " Point B (Current end)     is " << CurrentB_PointVelocity
-                 << G4endl;
-          G4cerr << " Point S (Sub start)       is " << SubStart_PointVelocity
-                 << G4endl;
-          G4cerr << " Point E (Trial Point)     is " << CurrentE_Point
-                 << G4endl;
-          G4cerr << " Old Point F(Intersection) is " << CurrentF_Point
-                 << G4endl;
-          G4cerr << " New Point F(Intersection) is " << ApproxIntersecPointV
-                 << G4endl;
-          G4cerr << "        LocateIntersection parameters are : Substep no= "
-                 << substep_no << G4endl;
-          G4cerr << "        Substep depth no= "<< substep_no_p  << " Depth= "
-                 << depth << G4endl;
-          G4cerr << "        Restarted no= "<< restartB  << " Epsilon= "
-                 << GetEpsilonStepFor() <<" DeltaInters= "
-                 << GetDeltaIntersectionFor() << G4endl;
+          message << " Point A (Curve start)     is " << CurveStartPointVelocity
+                  << G4endl
+                  << " Point B (Curve   end)     is " << CurveEndPointVelocity
+                  << G4endl
+                  << " Point A (Current start)   is " << CurrentA_PointVelocity
+                  << G4endl
+                  << " Point B (Current end)     is " << CurrentB_PointVelocity
+                  << G4endl
+                  << " Point S (Sub start)       is " << SubStart_PointVelocity
+                  << G4endl
+                  << " Point E (Trial Point)     is " << CurrentE_Point
+                  << G4endl
+                  << " Old Point F(Intersection) is " << CurrentF_Point
+                  << G4endl
+                  << " New Point F(Intersection) is " << ApproxIntersecPointV
+                  << G4endl
+                  << "        LocateIntersection parameters are : Substep no= "
+                  << substep_no << G4endl
+                  << "        Substep depth no= "<< substep_no_p  << " Depth= "
+                  << depth << G4endl
+                  << "        Restarted no= "<< restartB  << " Epsilon= "
+                  << GetEpsilonStepFor() <<" DeltaInters= "
+                  << GetDeltaIntersectionFor();
           G4cerr.precision( oldprc ); 
 
           G4Exception("G4BrentLocator::EstimateIntersectionPoint()",
-                      "FatalError", FatalException,
-                      "Error in advancing propagation.");
+                      "GeomNav0003", FatalException, message);
         }
 
         if(restoredFullEndpoint)
@@ -706,59 +697,48 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
       && !there_is_no_intersection
       && !found_approximate_intersection )
   {
-    G4cerr << "WARNING - G4BrentLocator::EstimateIntersectionPoint()"
-           << G4endl
-           << "          Convergence is requiring too many substeps: "
-           << substep_no << G4endl;
-    G4cerr << "          Abandoning effort to intersect. " << G4endl;
-    G4cerr << "          Information on start & current step follows in cout."
-           << G4endl;
-    G4cout << "WARNING - G4BrentLocator::EstimateIntersectionPoint()"
-           << G4endl
-           << "          Convergence is requiring too many substeps: "
-           << substep_no << G4endl;
-    G4cout << "          Found intersection = "
-           << found_approximate_intersection << G4endl
-           << "          Intersection exists = "
-           << !there_is_no_intersection << G4endl;
-    G4cout << "          Start and Endpoint of Requested Step:" << G4endl;
+    G4cout << "ERROR - G4BrentLocator::EstimateIntersectionPoint()" << G4endl
+           << "        Start and end-point of requested Step:" << G4endl;
     printStatus( CurveStartPointVelocity, CurveEndPointVelocity,
                  -1.0, NewSafety, 0);
-    G4cout << G4endl;
-    G4cout << "          'Bracketing' starting and endpoint of current Sub-Step"
-           << G4endl;
+    G4cout << "        Start and end-point of current Sub-Step:" << G4endl;
     printStatus( CurrentA_PointVelocity, CurrentA_PointVelocity,
                  -1.0, NewSafety, substep_no-1);
     printStatus( CurrentA_PointVelocity, CurrentB_PointVelocity,
                  -1.0, NewSafety, substep_no);
-    G4cout << G4endl;
+    std::ostringstream message;
+    message << "Too many substeps!" << G4endl
+            << "          Convergence is requiring too many substeps: "
+            << substep_no << G4endl
+            << "          Abandoning effort to intersect. " << G4endl
+            << "          Found intersection = "
+            << found_approximate_intersection << G4endl
+            << "          Intersection exists = "
+            << !there_is_no_intersection << G4endl;
     oldprc = G4cout.precision( 10 ); 
     G4double done_len = CurrentA_PointVelocity.GetCurveLength(); 
     G4double full_len = CurveEndPointVelocity.GetCurveLength();
-    G4cout << "ERROR - G4BrentLocator::EstimateIntersectionPoint()"
-           << G4endl
-           << "        Undertaken only length: " << done_len
-           << " out of " << full_len << " required." << G4endl;
-    G4cout << "        Remaining length = " << full_len - done_len << G4endl; 
+    message << "        Undertaken only length: " << done_len
+            << " out of " << full_len << " required." << G4endl
+            << "        Remaining length = " << full_len - done_len; 
     G4cout.precision( oldprc ); 
 
     G4Exception("G4BrentLocator::EstimateIntersectionPoint()",
-                "UnableToLocateIntersection", FatalException,
-                "Too many substeps while trying to locate intersection.");
+                "GeomNav0003", FatalException, message);
   }
   else if( substep_no >= warn_substeps )
   {  
     oldprc= G4cout.precision( 10 ); 
-    G4cout << "WARNING - G4BrentLocator::EstimateIntersectionPoint()"
-           << G4endl
-           << "          Undertaken length: "  
-           << CurrentB_PointVelocity.GetCurveLength(); 
-    G4cout << " - Needed: "  << substep_no << " substeps." << G4endl
-           << "          Warning level = " << warn_substeps
-           << " and maximum substeps = " << max_substeps << G4endl;
+    std::ostringstream message;
+    message << "Many substeps while trying to locate intersection."
+            << G4endl
+            << "          Undertaken length: "  
+            << CurrentB_PointVelocity.GetCurveLength()
+            << " - Needed: "  << substep_no << " substeps." << G4endl
+            << "          Warning level = " << warn_substeps
+            << " and maximum substeps = " << max_substeps;
     G4Exception("G4BrentLocator::EstimateIntersectionPoint()",
-                "DifficultyToLocateIntersection", JustWarning,
-                "Many substeps while trying to locate intersection.");
+                "GeomNav1002", JustWarning, message);
     G4cout.precision( oldprc ); 
   }
   return  !there_is_no_intersection; //  Success or failure

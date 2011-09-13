@@ -231,7 +231,6 @@ G4bool testG4PathFinder1(G4VPhysicalVolume *) // pTopNode)
 	     << "  id= " << located->GetCopyNo() << G4endl; 
     }
 
-    G4double stepAgain=
     pathFinder->ComputeStep( startFT, steplen, navId, stepNo, safetyRet, limited, endFT, located );   
     // Should not move, since the 'stepNo' is the same !!
  
