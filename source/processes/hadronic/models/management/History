@@ -14,6 +14,17 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+5 August 2011 - M. Kelsey   (hadr-modman-V09-04-01)
+---------------------------------------------------
+- G4V3DNucleus.hh:  Change GetNucleons() array to objects instead of pointers.
+
+  Requires consistent changes in other packages:
+  	hadr-modman-V09-04-01
+  	hadr-mod-util-V09-04-02
+	had-partonstring-mgt-V09-04-01
+  	hadr-qgsm-V09-04-04
+  	had-theo-HE-V09-04-01
+
 3 November 2010  - G.Folger   (hadr-modman-V09-04-00)
 ------------------------------------------------------
 - E/p checking extended to allow string models to set limits:
