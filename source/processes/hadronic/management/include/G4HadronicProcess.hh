@@ -80,9 +80,9 @@ public:
 
   // get cross section per element
   virtual 
-  G4double GetMicroscopicCrossSection(const G4DynamicParticle *aParticle, 
-				      const G4Element *anElement, 
-				      G4double aTemp );
+  G4double GetElementCrossSection(const G4DynamicParticle *aParticle, 
+				  const G4Element *anElement, 
+				  const G4Material* mat = 0);
 
   // generic PostStepDoIt recommended for all derived classes
   virtual G4VParticleChange* PostStepDoIt(const G4Track& aTrack, 

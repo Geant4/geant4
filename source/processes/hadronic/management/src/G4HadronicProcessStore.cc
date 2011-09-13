@@ -145,7 +145,7 @@ G4double G4HadronicProcessStore::GetElasticCrossSectionPerVolume(
   for (size_t i=0; i<nelm; ++i) {
     const G4Element* elm = (*theElementVector)[i];
     cross += theAtomNumDensityVector[i]*
-      GetElasticCrossSectionPerAtom(aParticle,kineticEnergy,elm);
+      GetElasticCrossSectionPerAtom(aParticle,kineticEnergy,elm,material);
   }
   return cross;
 }
@@ -155,15 +155,13 @@ G4double G4HadronicProcessStore::GetElasticCrossSectionPerVolume(
 G4double G4HadronicProcessStore::GetElasticCrossSectionPerAtom(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
-    const G4Element *anElement)
+    const G4Element *anElement, const G4Material* mat)
 {
   G4HadronicProcess* hp = FindProcess(aParticle, fHadronElastic);
   G4double cross = 0.0;
   localDP.SetKineticEnergy(kineticEnergy);
   if(hp) {
-    cross = hp->GetMicroscopicCrossSection(&localDP,
-					   anElement,
-					   STP_Temperature);
+    cross = hp->GetElementCrossSection(&localDP,anElement,mat);
   }
   return cross;
 }
@@ -192,7 +190,7 @@ G4double G4HadronicProcessStore::GetInelasticCrossSectionPerVolume(
   for (size_t i=0; i<nelm; ++i) {
     const G4Element* elm = (*theElementVector)[i];
     cross += theAtomNumDensityVector[i]*
-      GetInelasticCrossSectionPerAtom(aParticle,kineticEnergy,elm);
+      GetInelasticCrossSectionPerAtom(aParticle,kineticEnergy,elm,material);
   }
   return cross;
 }
@@ -202,15 +200,13 @@ G4double G4HadronicProcessStore::GetInelasticCrossSectionPerVolume(
 G4double G4HadronicProcessStore::GetInelasticCrossSectionPerAtom(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
-    const G4Element *anElement)
+    const G4Element *anElement, const G4Material* mat)
 {
   G4HadronicProcess* hp = FindProcess(aParticle, fHadronInelastic);
   localDP.SetKineticEnergy(kineticEnergy);
   G4double cross = 0.0;
   if(hp) { 
-    cross = hp->GetMicroscopicCrossSection(&localDP,
-					   anElement,
-					   STP_Temperature);
+    cross = hp->GetElementCrossSection(&localDP,anElement,mat);
   }
   return cross;
 }
@@ -239,7 +235,7 @@ G4double G4HadronicProcessStore::GetCaptureCrossSectionPerVolume(
   for (size_t i=0; i<nelm; ++i) {
     const G4Element* elm = (*theElementVector)[i];
     cross += theAtomNumDensityVector[i]*
-      GetCaptureCrossSectionPerAtom(aParticle,kineticEnergy,elm);
+      GetCaptureCrossSectionPerAtom(aParticle,kineticEnergy,elm,material);
   }
   return cross;
 }
@@ -249,15 +245,13 @@ G4double G4HadronicProcessStore::GetCaptureCrossSectionPerVolume(
 G4double G4HadronicProcessStore::GetCaptureCrossSectionPerAtom(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
-    const G4Element *anElement)
+    const G4Element *anElement, const G4Material* mat)
 {
   G4HadronicProcess* hp = FindProcess(aParticle, fCapture);
   localDP.SetKineticEnergy(kineticEnergy);
   G4double cross = 0.0;
   if(hp) {
-    cross = hp->GetMicroscopicCrossSection(&localDP,
-					   anElement,
-					   STP_Temperature);
+    cross = hp->GetElementCrossSection(&localDP,anElement,mat);
   }
   return cross;
 }
@@ -286,7 +280,7 @@ G4double G4HadronicProcessStore::GetFissionCrossSectionPerVolume(
   for (size_t i=0; i<nelm; i++) {
     const G4Element* elm = (*theElementVector)[i];
     cross += theAtomNumDensityVector[i]*
-      GetFissionCrossSectionPerAtom(aParticle,kineticEnergy,elm);
+      GetFissionCrossSectionPerAtom(aParticle,kineticEnergy,elm,material);
   }
   return cross;
 }
@@ -296,15 +290,13 @@ G4double G4HadronicProcessStore::GetFissionCrossSectionPerVolume(
 G4double G4HadronicProcessStore::GetFissionCrossSectionPerAtom(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
-    const G4Element *anElement)
+    const G4Element *anElement, const G4Material* mat)
 {
   G4HadronicProcess* hp = FindProcess(aParticle, fFission);
   localDP.SetKineticEnergy(kineticEnergy);
   G4double cross = 0.0;
   if(hp) {
-    cross = hp->GetMicroscopicCrossSection(&localDP,
-					   anElement,
-					   STP_Temperature);
+    cross = hp->GetElementCrossSection(&localDP,anElement,mat);
   }
   return cross;
 }
@@ -333,7 +325,7 @@ G4double G4HadronicProcessStore::GetChargeExchangeCrossSectionPerVolume(
   for (size_t i=0; i<nelm; ++i) {
     const G4Element* elm = (*theElementVector)[i];
     cross += theAtomNumDensityVector[i]*
-      GetChargeExchangeCrossSectionPerAtom(aParticle,kineticEnergy,elm);
+      GetChargeExchangeCrossSectionPerAtom(aParticle,kineticEnergy,elm,material);
   }
   return cross;
 }
@@ -343,15 +335,13 @@ G4double G4HadronicProcessStore::GetChargeExchangeCrossSectionPerVolume(
 G4double G4HadronicProcessStore::GetChargeExchangeCrossSectionPerAtom(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
-    const G4Element *anElement)
+    const G4Element *anElement, const G4Material* mat)
 {
   G4HadronicProcess* hp = FindProcess(aParticle, fChargeExchange);
   localDP.SetKineticEnergy(kineticEnergy);
   G4double cross = 0.0;
   if(hp) {
-    cross = hp->GetMicroscopicCrossSection(&localDP,
-					   anElement,
-					   STP_Temperature);
+    cross = hp->GetElementCrossSection(&localDP,anElement,mat);
   }
   return cross;
 }

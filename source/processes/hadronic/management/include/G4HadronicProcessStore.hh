@@ -85,7 +85,7 @@ public:
   G4double GetInelasticCrossSectionPerAtom(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
-    const G4Element *anElement);
+    const G4Element *anElement, const G4Material* mat=0);
 
   G4double GetInelasticCrossSectionPerIsotope(
     const G4ParticleDefinition *aParticle,
@@ -100,7 +100,7 @@ public:
   G4double GetElasticCrossSectionPerAtom(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
-    const G4Element *anElement);
+    const G4Element *anElement, const G4Material* mat=0);
 
   G4double GetElasticCrossSectionPerIsotope(
     const G4ParticleDefinition *aParticle,
@@ -115,7 +115,7 @@ public:
   G4double GetCaptureCrossSectionPerAtom(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
-    const G4Element *anElement);
+    const G4Element *anElement, const G4Material* mat=0);
 
   G4double GetCaptureCrossSectionPerIsotope(
     const G4ParticleDefinition *aParticle,
@@ -130,7 +130,7 @@ public:
   G4double GetFissionCrossSectionPerAtom(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
-    const G4Element *anElement);
+    const G4Element *anElement, const G4Material* mat=0);
 
   G4double GetFissionCrossSectionPerIsotope(
     const G4ParticleDefinition *aParticle,
@@ -145,7 +145,7 @@ public:
   G4double GetChargeExchangeCrossSectionPerAtom(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
-    const G4Element *anElement);
+    const G4Element *anElement, const G4Material* mat=0);
 
   G4double GetChargeExchangeCrossSectionPerIsotope(
     const G4ParticleDefinition *aParticle,

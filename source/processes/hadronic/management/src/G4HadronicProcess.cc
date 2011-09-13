@@ -173,12 +173,12 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
 }
 
 G4double G4HadronicProcess::
-GetMicroscopicCrossSection(const G4DynamicParticle *aParticle, 
-			   const G4Element *anElement, 
-			   G4double aTemp )
+GetElementCrossSection(const G4DynamicParticle *aParticle, 
+		       const G4Element *anElement, 
+		       const G4Material* aMaterial)
 {
   G4double x =
-    theCrossSectionDataStore->GetCrossSection(aParticle, anElement, aTemp);
+    theCrossSectionDataStore->GetCrossSection(aParticle, anElement, aMaterial);
   if(x < 0.0) { x = 0.0; }
   return x;
 }
@@ -191,7 +191,6 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
   //
   const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
   G4Material* aMaterial = aTrack.GetMaterial();
-  G4double aTemp = aMaterial->GetTemperature();
    
   G4Element* anElement = 0;
   try
@@ -207,7 +206,7 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
     "PostStepDoIt failed on element selection.");
   }
 
-  if (GetMicroscopicCrossSection(aParticle, anElement, aTemp) <= 0.0) {
+  if (GetElementCrossSection(aParticle, anElement, aMaterial) <= 0.0) {
     // No interaction
     //theTotalResult->Clear();
     theTotalResult->Initialize(aTrack);
@@ -454,7 +453,11 @@ G4HadronicProcess::FillResult(G4HadFinalState * aR, const G4Track & aT)
     newP4.rotate(rotation, it);
     newP4 *= aR->GetTrafoToLab();
     theTotalResult->ProposeMomentumDirection(newP4.vect().unit());
-    theTotalResult->ProposeEnergy( newP4.e() - newM );
+    newE = newP4.e() - newM ;
+    theTotalResult->ProposeEnergy( newE );
+    if(G4HadronicProcess_debug_flag && newE <= 0.0) {
+      DumpState(aT,"Primary has zero energy after interaction");
+    }
   }
 
   // check secondaries: apply rotation and Lorentz transformation
@@ -489,6 +492,14 @@ G4HadronicProcess::FillResult(G4HadFinalState * aR, const G4Track & aT)
 	track->SetWeight(newWeight);
 	track->SetTouchableHandle(aT.GetTouchableHandle());
 	theTotalResult->AddSecondary(track);
+	if(G4HadronicProcess_debug_flag) {
+	  G4double e = track->GetKineticEnergy();
+          if(e <= 0.0) {
+	    DumpState(aT,"Secondary has zero energy");
+            G4cout << "Secondary " << track->GetDefinition()->GetParticleName() 
+		   << G4endl;
+	  }
+	}
       }
   }
 
