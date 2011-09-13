@@ -370,8 +370,8 @@ G4DisplacedSolid::ComputeDimensions(       G4VPVParameterisation*,
 {
   DumpInfo();
   G4Exception("G4DisplacedSolid::ComputeDimensions()",
-                "NotApplicable", FatalException,
-                "Method not applicable in this context!");
+              "GeomSolids0001", FatalException,
+              "Method not applicable in this context!");
 }
 
 //////////////////////////////////////////////////////////////////////////
