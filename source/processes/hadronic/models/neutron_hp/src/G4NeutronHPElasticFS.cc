@@ -321,18 +321,22 @@ G4cout << "after " <<  ( n4p.e() - n4p.m() ) / eV<< G4endl;
 
       theNeutron.Lorentz(theNeutron, -1.*theCMS);
 //080904 Add Protection for very low energy (1e-6eV) scattering 
-      if ( theNeutron.GetKineticEnergy() < 0 )
+      if ( theNeutron.GetKineticEnergy() <= 0 )
       {
-         theNeutron.SetMomentum( G4ThreeVector(0) ); 
-         theNeutron.SetTotalEnergy ( theNeutron.GetMass() );
+         //theNeutron.SetMomentum( G4ThreeVector(0) ); 
+         //theNeutron.SetTotalEnergy ( theNeutron.GetMass() );
+//100822 Protection for not producing 0 kinetic energy neutron
+         theNeutron.SetTotalEnergy ( theNeutron.GetMass() * ( 1 + std::pow( 10 , -15.65 ) ) );
       }
 
       theTarget.Lorentz(theTarget, -1.*theCMS);
 //080904 Add Protection for very low energy (1e-6eV) scattering 
       if ( theTarget.GetKineticEnergy() < 0 )
       {
-         theTarget.SetMomentum( G4ThreeVector(0) ); 
-         theTarget.SetTotalEnergy ( theTarget.GetMass() );
+         //theTarget.SetMomentum( G4ThreeVector(0) ); 
+         //theTarget.SetTotalEnergy ( theTarget.GetMass()  );
+//100822 Protection for not producing 0 kinetic energy target
+         theTarget.SetTotalEnergy ( theTarget.GetMass() * ( 1 + std::pow( 10 , -15.65 ) ) );
       }
     }
     else
