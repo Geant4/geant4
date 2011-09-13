@@ -43,6 +43,11 @@
 // CHANGE HISTORY
 // --------------
 //
+// 27th July 2011, J Allison.  Added SetReferences and InvertFacets.
+//   SetReferences is necessary at the end to complete the polyhedron.
+//   It particularly matters if the polyhedron suffers subsequent
+//   boolean operations.
+//   InvertFacets can be useful.
 // 13 January 2006, J Allison.  Removed unnecessary operator= functions.
 // 31 October 2004, P R Truscott, QinetiQ Ltd, UK
 // Created.
@@ -75,6 +80,12 @@ class G4PolyhedronArbitrary : public G4Polyhedron
     void AddFacet (const G4int iv1, const G4int iv2, const G4int iv3,
       const G4int iv4=0);
     
+    // Call this after all vertices and facets have been added.
+    void SetReferences() {HepPolyhedron::SetReferences();}
+
+    // Can be useful.
+    void InvertFacets() {HepPolyhedron::InvertFacets();}
+
   protected:
     G4int nVertexCount;
     G4int nFacetCount;
