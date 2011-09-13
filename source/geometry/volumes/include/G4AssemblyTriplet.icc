@@ -87,7 +87,7 @@ void G4AssemblyTriplet::SetVolume( G4LogicalVolume* pVolume )
   if ( fAssembly ) 
   {
     G4Exception("G4AssemblyTriplet::SetVolume()",
-                "IllegalCall", JustWarning,
+                "GeomVol1001", JustWarning,
                 "There is an assembly already set, it will be ignored.");
   }
   fVolume = pVolume;
@@ -106,7 +106,7 @@ void G4AssemblyTriplet::SetAssembly( G4AssemblyVolume* pAssembly )
   if ( fVolume ) 
   {
     G4Exception("G4AssemblyTriplet::SetAssembly()",
-                "IllegalCall", JustWarning,
+                "GeomVol1001", JustWarning,
                 "There is a volume already set, it will be ignored.");
   }
   fAssembly = pAssembly;

@@ -302,7 +302,7 @@ void G4AssemblyVolume::MakeImprint( G4AssemblyVolume* pAssembly,
     else
     {
       G4Exception("G4AssemblyVolume::MakeImprint(..)",
-                  "NotApplicable", FatalException,
+                  "GeomVol0003", FatalException,
                   "Triplet has no volume and no assembly");
     }  
   }  
