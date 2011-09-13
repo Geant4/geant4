@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+20-08-11 mma (materials-V09-04-13)
+- G4Isotope : add flag fm to identify isomer level
 
 14-06-11 V.Ivanchenko (materials-V09-04-12)
 - Fixed typo in previous tag

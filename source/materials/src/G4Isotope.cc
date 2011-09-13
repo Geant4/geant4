@@ -53,8 +53,8 @@ G4IsotopeTable G4Isotope::theIsotopeTable;
 
 // Create an isotope
 //
-G4Isotope::G4Isotope(const G4String& Name, G4int Z, G4int N, G4double A)
-: fName(Name), fZ(Z), fN(N), fA(A), fCountUse(0)
+G4Isotope::G4Isotope(const G4String& Name,G4int Z,G4int N,G4double A,G4int m)
+: fName(Name), fZ(Z), fN(N), fA(A), fm(m), fCountUse(0)
 {
   if (Z<1) { G4Exception
     ("G4Isotope: ERROR! It is not allowed to create an Isotope with Z < 1" );
@@ -75,7 +75,7 @@ G4Isotope::G4Isotope(const G4String& Name, G4int Z, G4int N, G4double A)
 //                            for usage restricted to object persistency
 
 G4Isotope::G4Isotope(__void__&)
-  : fZ(0), fN(0), fA(0), fCountUse(0), fIndexInTable(0)
+  : fZ(0), fN(0), fA(0), fm(0), fCountUse(0), fIndexInTable(0)
 {
 }
 
@@ -114,6 +114,7 @@ G4Isotope & G4Isotope::operator=(const G4Isotope& right)
     fZ = right.fZ;
     fN = right.fN;
     fA = right.fA;
+    fm = right.fm;    
     fCountUse = right.fCountUse;
   }
   return *this;
