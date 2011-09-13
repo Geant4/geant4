@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 #ifndef G4Fancy3DNucleus_h
 #define G4Fancy3DNucleus_h 1
 
@@ -35,14 +33,20 @@
 //             by Gunter Folger, May 1998.
 //       class for a 3D nucleus, arranging nucleons in space and momentum.
 // ------------------------------------------------------------
+// 20110805  M. Kelsey -- Remove C-style array (pointer) of G4Nucleons,
+//		make vector a container of objects.  Move testSums,
+//		places, momentum and fermiM to class data members for
+//		reuse.  Remove args from ReduceSum(), use data members.
 
 #include "globals.hh"
 #include "G4DynamicParticle.hh"
+#include "G4Nucleon.hh"		/* FIXME: This should be forward decl! */
 #include "G4V3DNucleus.hh"
-#include "G4Nucleon.hh"
 #include "G4VNuclearDensity.hh"
 #include "G4FermiMomentum.hh"
 #include <vector>
+
+class G4Fancy3DNucleusHelper;
 
 // to test if we can drop old interface for (A,Z), comment next line..
 //#define NON_INTEGER_A_Z 1
@@ -66,7 +70,7 @@ class G4Fancy3DNucleus : public G4V3DNucleus
       void ChoosePositions();
       void ChooseFermiMomenta();
       G4double BindingEnergy();
-      G4bool ReduceSum(G4ThreeVector * momentum, G4double *);
+      G4bool ReduceSum();
 
   public:
 #if defined(NON_INTEGER_A_Z)
@@ -75,7 +79,7 @@ class G4Fancy3DNucleus : public G4V3DNucleus
       void Init(G4int theA, G4int theZ);
       G4bool StartLoop();
       G4Nucleon * GetNextNucleon();
-      const std::vector<G4Nucleon *> & GetNucleons();
+      const std::vector<G4Nucleon> & GetNucleons();
       G4int GetMassNumber();
       G4double GetMass();
       G4int GetCharge();
@@ -97,14 +101,19 @@ class G4Fancy3DNucleus : public G4V3DNucleus
   
   G4int myA;
   G4int myZ;
-  G4Nucleon * theNucleons;
-  std::vector<G4Nucleon *> theRWNucleons;  // should not have two...
-  struct DeleteNucleon{ void operator()(G4Nucleon *aN){delete aN;} };
+  std::vector<G4Nucleon> theNucleons;
+
   G4int currentNucleon;
   G4VNuclearDensity * theDensity;
   G4FermiMomentum theFermi;  
   const G4double nucleondistance;
+  
+  std::vector<G4ThreeVector> places;		// For selecting locations
+  std::vector<G4ThreeVector> momentum;		// For selecting nucleon motion
+  std::vector<G4double> fermiM;
+  std::vector<G4Fancy3DNucleusHelper> testSums;	// For sorting nucleon configs
 };
+
 
 inline G4int G4Fancy3DNucleus::GetCharge()
 {
@@ -115,6 +124,5 @@ inline G4int G4Fancy3DNucleus::GetMassNumber()
 {
 	return myA;
 }
+
 #endif
-
-
