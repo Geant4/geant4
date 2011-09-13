@@ -17,6 +17,22 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 24, 2011  G.Cosmo                   geommng-V09-04-04
+- Migrated to new G4Exception scheme for warnings and errors.
+- Defined scheme for warnings/errors coding:
+  + 1xxx for warnings, 0xxx for errors.
+  Code numbering:
+  + 0001: not supported or implemented features;
+  + 0002: invalid setup/construct;
+  + 0003: invalid run condition;
+  + 1001: incorrect setup; automatically adapted.
+  + 1002: notification.
+- Made default argument for G4RegionStore::UpdateMaterialList().
+
+August 10, 2011  M.Asai                    geommng-V09-04-03
+- Introducing parallel layered mass geometry. Material is now scanned for
+  all the regions in all defined worlds. Modified G4Region and G4RegionStore.
+
 May 12, 2011  G.Cosmo                      geommng-V09-04-02
 - Fixed trivial compilation warnings detected with gcc-4.6.0.
 

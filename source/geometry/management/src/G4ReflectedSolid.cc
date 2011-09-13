@@ -351,7 +351,7 @@ G4ReflectedSolid::CalculateExtent( const EAxis pAxis,
   {
     DumpInfo();
     G4Exception("G4ReflectedSolid::CalculateExtent()",
-                "FatalError", FatalException,
+                "GeomMgt0003", FatalException,
                 "Error in allocation of vertices. Out of memory !");
   }
   
@@ -538,7 +538,7 @@ G4ReflectedSolid::ComputeDimensions(       G4VPVParameterisation*,
 {
   DumpInfo();
   G4Exception("G4ReflectedSolid::ComputeDimensions()",
-               "NotApplicable", FatalException,
+               "GeomMgt0001", FatalException,
                "Method not applicable in this context!");
 }
 
@@ -616,12 +616,12 @@ G4ReflectedSolid::CreatePolyhedron () const
   }
   else
   {
-    std::ostringstream oss;
-    oss << "Solid - " << GetName()
-        << " - original solid has no" << G4endl
-        << " corresponding polyhedron. Returning NULL!";
-    G4Exception("G4ReflectedSolid::CreatePolyhedron()", "InvalidSetup",
-                JustWarning, oss.str().c_str());
+    std::ostringstream message;
+    message << "Solid - " << GetName()
+            << " - original solid has no" << G4endl
+            << "corresponding polyhedron. Returning NULL!";
+    G4Exception("G4ReflectedSolid::CreatePolyhedron()",
+                "GeomMgt1001", JustWarning, message);
     return 0;
   }
 }

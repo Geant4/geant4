@@ -205,20 +205,22 @@ G4double G4LogicalVolume::GetMass(G4bool forced,
   G4Material* logMaterial = parMaterial ? parMaterial : fMaterial;
   if (!logMaterial)
   {
-    G4cerr << "ERROR - G4LogicalVolume::GetMass()" << G4endl
-           << "        No material is associated to the logical volume: "
-           << fName << " !  Sorry, cannot compute the mass ..." << G4endl;
-    G4Exception("G4LogicalVolume::GetMass()", "InvalidSetup", FatalException,
-		"No material associated to the logical volume !");
+    std::ostringstream message;
+    message << "No material associated to the logical volume: " << fName << " !"
+            << G4endl
+            << "Sorry, cannot compute the mass ...";
+    G4Exception("G4LogicalVolume::GetMass()", "GeomMgt0002",
+                FatalException, message);
     return 0;
   }
   if (!fSolid)
   {
-    G4cerr << "ERROR - G4LogicalVolume::GetMass()" << G4endl
-           << "        No solid is associated to the logical volume: "
-           << fName << " !  Sorry, cannot compute the mass ..." << G4endl;
-    G4Exception("G4LogicalVolume::GetMass()", "InvalidSetup", FatalException,
-		"No solid associated to the logical volume !");
+    std::ostringstream message;
+    message << "No solid is associated to the logical volume: " << fName << " !"
+            << G4endl
+            << "Sorry, cannot compute the mass ...";
+    G4Exception("G4LogicalVolume::GetMass()", "GeomMgt0002",
+                FatalException, message);
     return 0;
   }
   G4double globalDensity = logMaterial->GetDensity();

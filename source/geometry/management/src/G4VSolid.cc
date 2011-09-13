@@ -139,10 +139,11 @@ void G4VSolid::ComputeDimensions(G4VPVParameterisation*,
                                  const G4int,
                                  const G4VPhysicalVolume*)
 {
-    G4cerr << "ERROR - Illegal call to G4VSolid::ComputeDimensions()" << G4endl
-           << "        Method not overloaded by derived class !" << G4endl;
-    G4Exception("G4VSolid::ComputeDimensions()", "NotApplicable",
-                FatalException, "Illegal call to case class.");
+    std::ostringstream message;
+    message << "Illegal call to G4VSolid::ComputeDimensions()" << G4endl
+            << "Method not overloaded by derived class !";
+    G4Exception("G4VSolid::ComputeDimensions()", "GeomMgt0003",
+                FatalException, message);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -151,11 +152,12 @@ void G4VSolid::ComputeDimensions(G4VPVParameterisation*,
 
 G4ThreeVector G4VSolid::GetPointOnSurface() const
 {
-    G4cerr << "WARNING - G4VSolid::GetPointOnSurface()" << G4endl
-           << "          Not implemented for solid: "
-           << this->GetEntityType() << " !" << G4endl;
-    G4Exception("G4VSolid::GetPointOnSurface()", "NotImplemented",
-        JustWarning, "Not implemented for this solid ! Returning origin.");
+    std::ostringstream message;
+    message << "Not implemented for solid: "
+            << this->GetEntityType() << " !" << G4endl
+            << "Returning origin.";
+    G4Exception("G4VSolid::GetPointOnSurface()", "GeomMgt1001",
+                JustWarning, message);
     return G4ThreeVector(0,0,0);
 }
 
@@ -320,10 +322,11 @@ G4double G4VSolid::EstimateSurfaceArea(G4int nStat, G4double ell) const
 
 G4VSolid* G4VSolid::Clone() const
 {
-  G4String ErrMessage = "Clone() method not implemented for type: "
-                      + GetEntityType() + "! Returning NULL pointer!";
-  G4Exception("G4VSolid::Clone()", "NotImplemented",
-              JustWarning, ErrMessage);
+  std::ostringstream message;
+  message << "Clone() method not implemented for type: "
+          << GetEntityType() << "!" << G4endl
+          << "Returning NULL pointer!";
+  G4Exception("G4VSolid::Clone()", "GeomMgt1001", JustWarning, message);
   return 0;
 }
 

@@ -165,11 +165,12 @@ G4LogicalVolumeStore::GetVolume(const G4String& name, G4bool verbose) const
   }
   if (verbose)
   {
-     G4cerr << "ERROR - G4LogicalVolumeStore::GetVolume()" << G4endl
-            << "        Volume " << name << " NOT found in store !" << G4endl
-            << "        Returning NULL pointer." << G4endl;
-     G4Exception("G4LogicalVolumeStore::GetVolume()", "InvalidQuery",
-                 JustWarning, "Volume NOT found in store !");
+     std::ostringstream message;
+     message << "Volume NOT found in store !" << G4endl
+             << "        Volume " << name << " NOT found in store !" << G4endl
+             << "        Returning NULL pointer.";
+     G4Exception("G4LogicalVolumeStore::GetVolume()",
+                 "GeomMgt1001", JustWarning, message);
   }
   return 0;
 }
