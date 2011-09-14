@@ -53,11 +53,13 @@
 #include "G4TheoFSGenerator.hh"
 #include "G4GeneratorPrecompoundInterface.hh"
 #include "G4ExcitedStringDecay.hh"
- 
+#include <iostream>
+
+
 class G4ElectroNuclearReaction : public G4HadronicInteraction
 {
 public: 
-  G4ElectroNuclearReaction():G4HadronicInteraction("CHIPS_wrapper")
+  G4ElectroNuclearReaction():G4HadronicInteraction("CHIPSElectroNuclear")
   {
     SetMinEnergy(0*GeV);
     SetMaxEnergy(30*TeV);
@@ -72,6 +74,7 @@ public:
     theHEModel->SetMaxEnergy(100*TeV);
     theElectronData = new G4ElectroNuclearCrossSection;
     thePhotonData = new G4PhotoNuclearCrossSection;
+    Description();
   }
 
   ~G4ElectroNuclearReaction()
@@ -83,7 +86,42 @@ public:
     delete thePhotonData;
   }
     
-  G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus);
+  G4HadFinalState*
+  ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus);
+
+  void Description() const 
+  {
+    char* dirName = getenv("G4PhysListDocDir");
+    if (dirName) {
+      std::ofstream outFile;
+      G4String outFileName = GetModelName() + ".html";
+      G4String pathName = G4String(dirName) + "/" + outFileName;
+
+      outFile.open(pathName);
+      outFile << "<html>\n";
+      outFile << "<head>\n";
+
+      outFile << "<title>Description of CHIPS ElectroNuclear Model</title>\n";
+      outFile << "</head>\n";
+      outFile << "<body>\n";
+
+      outFile << "G4ElectroNuclearReaction handles the inelastic scattering\n"
+              << "of e- and e+ from nuclei using the Chiral Invariant Phase\n"
+              << "Space (CHIPS) model of M. Kossov.  This model uses the\n"
+              << "Equivalent Photon Approximation in which the incoming\n"
+              << "electron generates a virtual photon at the electromagnetic\n"
+              << "vertex, and the virtual photon is converted to a real photon\n"
+              << "before it interacts with the nucleus.  The real photon\n"
+              << "interacts with the hadrons in the target by producing\n"
+              << "quasmons (or generalized excited hadrons) which then decay\n"
+              << "into final state hadrons.  This model is valid for e- and\n"
+              << "e+ of all incident energies.\n";
+
+      outFile << "</body>\n";
+      outFile << "</html>\n";
+      outFile.close();
+    }
+  }
 
 private:
 

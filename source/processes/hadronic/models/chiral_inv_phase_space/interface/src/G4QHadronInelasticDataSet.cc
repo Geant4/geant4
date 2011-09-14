@@ -35,13 +35,21 @@
 // 
 
 #include "G4QHadronInelasticDataSet.hh"
+#include <iostream>
 
 // Initialization of static vectors
-std::vector<G4int> G4QHadronInelasticDataSet::ElementZ; // Z of the element(i) in LastCalc
-std::vector<std::vector<G4int>*> G4QHadronInelasticDataSet::ElIsoN; // N of iso(j) of El(i)
-std::vector<std::vector<G4double>*> G4QHadronInelasticDataSet::IsoProbInEl;//SumProbIsoInEl
+std::vector<G4int> G4QHadronInelasticDataSet::ElementZ;
+// Z of the element(i) in LastCalc
 
-G4QHadronInelasticDataSet::G4QHadronInelasticDataSet()
+std::vector<std::vector<G4int>*> G4QHadronInelasticDataSet::ElIsoN;
+// N of iso(j) of El(i)
+
+std::vector<std::vector<G4double>*> G4QHadronInelasticDataSet::IsoProbInEl;
+//SumProbIsoInEl
+
+
+G4QHadronInelasticDataSet::G4QHadronInelasticDataSet(const G4String& name)
+ : G4VCrossSectionDataSet(name)
 {
   //CHIPSpAin    = G4QProtonNuclearCrossSection::GetPointer();
   //CHIPSnAin    = G4QNeutronNuclearCrossSection::GetPointer();
@@ -66,7 +74,36 @@ G4QHadronInelasticDataSet::G4QHadronInelasticDataSet()
   ////CHIPSananAin = G4QANuANuNuclearCrossSection::GetPointer();
 
   Isotopes = G4QIsotope::Get(); // Pointer to the G4QIsotopes singleton
+  Description();
 }
+
+
+void G4QHadronInelasticDataSet::Description() const
+{
+  char* dirName = getenv("G4PhysListDocDir");
+  if (dirName) {
+    std::ofstream outFile;
+    G4String outFileName = GetName() + ".html";
+    G4String pathName = G4String(dirName) + "/" + outFileName;
+
+    outFile.open(pathName);
+    outFile << "<html>\n";
+    outFile << "<head>\n";
+
+    outFile << "<title>Description of CHIPSInelasticXS</title>\n";
+    outFile << "</head>\n";
+    outFile << "<body>\n";
+
+    outFile << "CHIPSInelasticXS provides hadron-nuclear inelastic cross\n"
+            << "sections for all hadrons at all energies.  These cross\n"
+            << "sections represent parameterizations developed by M. Kossov.\n";
+
+    outFile << "</body>\n";
+    outFile << "</html>\n";
+    outFile.close();
+  }
+}
+
 
 G4bool G4QHadronInelasticDataSet::IsApplicable(const G4DynamicParticle* P,const G4Element*)
 {

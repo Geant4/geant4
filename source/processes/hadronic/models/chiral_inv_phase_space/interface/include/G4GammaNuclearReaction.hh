@@ -41,21 +41,23 @@
 #include "G4HadronicInteraction.hh"
 #include "G4ChiralInvariantPhaseSpace.hh"
 
+
 class G4GammaNuclearReaction : public G4HadronicInteraction
 {
-public: 
+  public: 
 
-  G4GammaNuclearReaction();
+    G4GammaNuclearReaction(const G4String& name = "CHIPSGammaNuclear");
 
-  virtual ~G4GammaNuclearReaction();
+    virtual ~G4GammaNuclearReaction();
     
-  virtual G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, 
-                                         G4Nucleus& aTargetNucleus);
+    virtual G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, 
+                                           G4Nucleus& aTargetNucleus);
 
-private:
+    void Description() const;
 
-  G4ChiralInvariantPhaseSpace theModel;
+  private:
 
+    G4ChiralInvariantPhaseSpace theModel;
 };
 
 #endif

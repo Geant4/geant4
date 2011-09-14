@@ -78,23 +78,34 @@
 
 class G4QHadronElasticDataSet : public G4VCrossSectionDataSet
 {
-public:
+  public:
 
-  G4QHadronElasticDataSet();
-  ~G4QHadronElasticDataSet() {}
-  G4bool IsApplicable(const G4DynamicParticle* aParticle, const G4Element* anElement);
-  G4bool IsZAApplicable(const G4DynamicParticle* aParticle, G4double Z, G4double A);
-  G4double GetCrossSection(const G4DynamicParticle* Part, const G4Element* El, G4double T);
-  G4double GetIsoZACrossSection(const G4DynamicParticle* P,G4double Z,G4double A,G4double);
-  void BuildPhysicsTable(const G4ParticleDefinition&){}
-  void DumpPhysicsTable(const G4ParticleDefinition&) {}
+    G4QHadronElasticDataSet(const G4String& name = "CHIPSElasticXS");
+    ~G4QHadronElasticDataSet() {}
+    G4bool IsApplicable(const G4DynamicParticle* aParticle,
+                        const G4Element* anElement);
+    G4bool IsZAApplicable(const G4DynamicParticle* aParticle,
+                          G4double Z, G4double A);
+    G4double GetCrossSection(const G4DynamicParticle* Part,
+                             const G4Element* El, G4double T);
+    G4double GetIsoZACrossSection(const G4DynamicParticle* P,
+                                  G4double Z,G4double A,G4double);
+    void BuildPhysicsTable(const G4ParticleDefinition&){}
+    void DumpPhysicsTable(const G4ParticleDefinition&) {}
 
-private:
+    void Description() const;
 
-  G4QIsotope* Isotopes;                             // Pointer to the G4QIsotopes singleton
-  static std::vector <G4int> ElementZ;                // Z of the element(i) in theLastCalc
-  static std::vector <std::vector<G4int>*> ElIsoN;    // N of isotope(j) of Element(i)
-  static std::vector <std::vector<G4double>*> IsoProbInEl;// SumProbabIsotopes in Element i
+  private:
+
+    G4QIsotope* Isotopes;      // Pointer to the G4QIsotopes singleton
+    static std::vector <G4int> ElementZ;
+    // Z of the element(i) in theLastCalc
+
+    static std::vector <std::vector<G4int>*> ElIsoN; 
+    // N of isotope(j) of Element(i)
+
+    static std::vector <std::vector<G4double>*> IsoProbInEl;
+    // SumProbabIsotopes in Element i
 };
 
 #endif

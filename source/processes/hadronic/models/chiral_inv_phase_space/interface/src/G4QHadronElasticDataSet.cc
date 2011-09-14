@@ -37,14 +37,50 @@
 #include "G4QHadronElasticDataSet.hh"
 
 // Initialization of static vectors
-std::vector<G4int> G4QHadronElasticDataSet::ElementZ; // Z of the element(i) in LastCalc
-std::vector<std::vector<G4int>*> G4QHadronElasticDataSet::ElIsoN; // N of iso(j) of El(i)
-std::vector<std::vector<G4double>*> G4QHadronElasticDataSet::IsoProbInEl;//SumProbIsoInEl
+std::vector<G4int> G4QHadronElasticDataSet::ElementZ;
+// Z of the element(i) in LastCalc
 
-G4QHadronElasticDataSet::G4QHadronElasticDataSet()
+std::vector<std::vector<G4int>*> G4QHadronElasticDataSet::ElIsoN;
+// N of iso(j) of El(i)
+
+std::vector<std::vector<G4double>*> G4QHadronElasticDataSet::IsoProbInEl;
+//SumProbIsoInEl
+
+
+G4QHadronElasticDataSet::G4QHadronElasticDataSet(const G4String& name)
+ : G4VCrossSectionDataSet(name)
 {
   Isotopes = G4QIsotope::Get(); // Pointer to the G4QIsotopes singleton
+  Description();
 }
+
+
+void G4QHadronElasticDataSet::Description() const
+{
+  char* dirName = getenv("G4PhysListDocDir");
+  if (dirName) {
+    std::ofstream outFile;
+    G4String outFileName = GetName() + ".html";
+    G4String pathName = G4String(dirName) + "/" + outFileName;
+
+    outFile.open(pathName);
+    outFile << "<html>\n";
+    outFile << "<head>\n";
+
+    outFile << "<title>Description of CHIPSElasticXS</title>\n";
+    outFile << "</head>\n";
+    outFile << "<body>\n";
+
+    outFile << "CHIPSElasticXS provides hadron-nuclear elastic cross\n"
+            << "sections for all hadrons at all energies.  These cross\n"
+            << "sections represent parameterizations developed by M. Kossov.\n";
+
+    outFile << "</body>\n";
+    outFile << "</html>\n";
+    outFile.close();
+  }
+}
+
 
 G4bool G4QHadronElasticDataSet::IsApplicable(const G4DynamicParticle* P,const G4Element*)
 {

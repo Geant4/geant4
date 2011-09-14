@@ -412,40 +412,39 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   }
   std::vector<G4QContent> theFinalContents;
   std::vector<G4LorentzVector*> theFinalMomenta;
-  if(theContents.size()<hitCount || 1) // Looks like the "else" is closed by "|| 1"
+
+  // Multiquasmon case: each particle creates a quasmon
+  //for(unsigned int hp = 0; hp<theContents.size(); hp++)
+  //{
+  //  G4QHadron* aHadron = new G4QHadron(theContents[hp], *(theMomenta[hp]) );
+  //  projHV.push_back(aHadron);
+  //}
+  // Energy flow: one Quasmon for each B>0 collection ----------
+  G4QContent EnFlowQC(0,0,0,0,0,0);
+  G4LorentzVector EnFlow4M(0.,0.,0.,0.);
+  //G4bool empty=true;
+  G4int  barys=0;
+  G4int  stras=0;
+  G4int  chars=0;
+  for(G4int hp = theContents.size()-1; hp>=0; hp--)
   {
-    // Multiquasmon case: each particle creates a quasmon
-    //for(unsigned int hp = 0; hp<theContents.size(); hp++)
-    //{
-    //  G4QHadron* aHadron = new G4QHadron(theContents[hp], *(theMomenta[hp]) );
-    //  projHV.push_back(aHadron);
-    //}
-    // Energy flow: one Quasmon for each B>0 collection ----------
-    G4QContent EnFlowQC(0,0,0,0,0,0);
-    G4LorentzVector EnFlow4M(0.,0.,0.,0.);
-    //G4bool empty=true;
-    G4int  barys=0;
-    G4int  stras=0;
-    G4int  chars=0;
-    for(G4int hp = theContents.size()-1; hp>=0; hp--)
-    {
-      G4QContent curQC=theContents[hp];
-      G4int baryn = curQC.GetBaryonNumber();
-      G4int stran = curQC.GetStrangeness();
-      G4int charg = curQC.GetCharge();
-      EnFlowQC += curQC;                        // Keep collecting energy flow
-      EnFlow4M += *(theMomenta[hp]);
-      barys += baryn;                           // Collected baryon number
-      stras += stran;                           // Collected strangeness
-      chars += charg;                           // Collected charge
-      //empty = false;
-    }
-    if(barys>pcl)                               // Split in two or more parts (to survive!)
-    {
-      G4int nprt=(barys-1)/pcl+1;               // Number of parts (pcl=4: 2:5-8,3:9-12...)
-      G4int curb=barys;
-      while (nprt>0)
-      {
+     G4QContent curQC=theContents[hp];
+     G4int baryn = curQC.GetBaryonNumber();
+     G4int stran = curQC.GetStrangeness();
+     G4int charg = curQC.GetCharge();
+     EnFlowQC += curQC;                        // Keep collecting energy flow
+     EnFlow4M += *(theMomenta[hp]);
+     barys += baryn;                           // Collected baryon number
+     stras += stran;                           // Collected strangeness
+     chars += charg;                           // Collected charge
+     //empty = false;
+  }
+  if(barys>pcl)                               // Split in two or more parts (to survive!)
+  {
+     G4int nprt=(barys-1)/pcl+1;               // Number of parts (pcl=4: 2:5-8,3:9-12...)
+     G4int curb=barys;
+     while (nprt>0)
+     {
         nprt--;                                 // One part is going to be created
         G4int brnm=pcl;                         // Baryon number of splitting part
         curb-=brnm;                             // The residual baryon number
@@ -576,71 +575,14 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 #ifdef debug
         G4cout<<"G4StringChipsParticleLevelInterface::Propagate: nprt="<<nprt<<G4endl;
 #endif
-      } // End of WHILE
-    }
-    else
-    {
-      G4QHadron* aHadron = new G4QHadron(EnFlowQC, EnFlow4M);
-      projHV.push_back(aHadron);
-    }
-    // End of Energy Flow ----------------------------------------
-    // Energy flow: one Quasmon for each B>0 collection ---------- too forward
-    //G4QContent EnFlowQC(0,0,0,0,0,0);
-    //G4LorentzVector EnFlow4M(0.,0.,0.,0.);
-    //G4bool empty=true;
-    //G4int  barys=0;
-    //for(G4int hp = theContents.size()-1; hp>=0; hp--)
-    //{
-    //  G4QContent curQC=theContents[hp];
-    //  G4int baryn = curQC.GetBaryonNumber();
-    //  if(baryn>0 && barys>0 && !empty) // New baryon and b-positive collection -> fill
-    //  {
-    //    G4QHadron* aHadron = new G4QHadron(EnFlowQC, EnFlow4M);
-    //    projHV.push_back(aHadron);
-    //    EnFlowQC = G4QContent(0,0,0,0,0,0);
-    //    EnFlow4M = G4LorentzVector(0.,0.,0.,0.);
-    //    barys=0;
-    //    empty=true;
-    //  }
-    //  EnFlowQC += curQC;               // Keep collecting energy flow
-    //  EnFlow4M += *(theMomenta[hp]);
-    //  barys += baryn;
-    //  empty = false;
-    //}
-    //if(!empty)
-    //{
-    //  G4QHadron* aHadron = new G4QHadron(EnFlowQC, EnFlow4M);
-    //  projHV.push_back(aHadron);
-    //}
-    // End of Energy Flow One Quasmon for each ----------------------------
+     } // End of WHILE
   }
-  else                                 // Never come here (!?)
+  else
   {
-    unsigned int hp;
-    for(hp=0; hp<hitCount; hp++)       // Initialize the arrays
-    {
-      G4QContent co(0, 0, 0, 0, 0, 0);
-      theFinalContents.push_back(co);
-      G4LorentzVector* mo = new G4LorentzVector(0,0,0,0);
-      theFinalMomenta.push_back(mo);
-    }
-    unsigned int running = 0;
-    while (running<theContents.size())
-    {
-      for(hp = 0; hp<hitCount; hp++)
-      {
-        theFinalContents[hp] +=theContents[running];
-        *(theFinalMomenta[hp])+=*(theMomenta[running]);
-        running++;
-        if(running == theContents.size()) break;
-      }
-    }
-    for(hp = 0; hp<hitCount; hp++)
-    {
-      G4QHadron* aHadron = new G4QHadron(theFinalContents[hp], *theFinalMomenta[hp]);
-      projHV.push_back(aHadron);
-    }
+     G4QHadron* aHadron = new G4QHadron(EnFlowQC, EnFlow4M);
+     projHV.push_back(aHadron);
   }
+
   // construct the quasmon
   size_t i;
   for (i=0; i<theFinalMomenta.size(); i++) delete theFinalMomenta[i];

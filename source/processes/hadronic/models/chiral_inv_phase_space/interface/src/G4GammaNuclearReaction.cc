@@ -36,13 +36,50 @@
 #include "G4Nucleus.hh"
 #include "G4HadFinalState.hh"
 #include "G4HadProjectile.hh"
+#include <iostream>
 
-G4GammaNuclearReaction::G4GammaNuclearReaction(): 
-  G4HadronicInteraction("CHIPS")
-{}
+
+G4GammaNuclearReaction::G4GammaNuclearReaction(const G4String& name): 
+  G4HadronicInteraction(name)
+{
+  Description();
+}
+
 
 G4GammaNuclearReaction::~G4GammaNuclearReaction()
 {}
+
+
+void G4GammaNuclearReaction::Description() const
+{
+  char* dirName = getenv("G4PhysListDocDir");
+  if (dirName) {
+    std::ofstream outFile;
+    G4String outFileName = GetModelName() + ".html";
+    G4String pathName = G4String(dirName) + "/" + outFileName;
+
+    outFile.open(pathName);
+    outFile << "<html>\n";
+    outFile << "<head>\n";
+
+    outFile << "<title>Description of CHIPS Gamma Nuclear Model</title>\n";
+    outFile << "</head>\n";
+    outFile << "<body>\n";
+
+    outFile << "G4GammaNuclearReaction handles inelastic gamma scattering\n"
+            << "using the Chiral Invariant Phase Space (CHIPS) model of\n"
+            << "M. Kossov.  The incident gamma is interacted directly with\n"
+            << "nucleons and clusters of nucleons within the target by\n"
+            << "forming quasmons (or generalized excited hadrons) which then\n"
+            << "decay into final state hadrons.  The model is valid for\n"
+            << "incident gamma energies up to 3.5 GeV.\n";
+
+    outFile << "</body>\n";
+    outFile << "</html>\n";
+    outFile.close();
+  }
+}
+
 
 G4HadFinalState * G4GammaNuclearReaction::ApplyYourself(
 	   const G4HadProjectile& aTrack, 

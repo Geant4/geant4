@@ -391,7 +391,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       delete output->operator[](particle);
       continue;
     }
-    theSec = new G4ReactionProduct;  
+    //  theSec = new G4ReactionProduct;   // JA - not used, and memory leaked (Coverity)
     G4int pdgCode = output->operator[](particle)->GetPDGCode();
     G4ParticleDefinition * theDefinition;
     // Note that I still have to take care of strange nuclei
