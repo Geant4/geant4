@@ -41,7 +41,7 @@
 // 13.01.10 M.Kosov: Commented not used G4QElasticCrossSection & G4QCHIPSWorld
 // 24.02.11 V.Ivanchenko use particle name in IfApplicable, 
 //                       added anti particles for light ions
-// 
+// 07.09.11 M.Kelsey: Follow chanhe to G4HadFinalState interface
 //
 
 #include "G4WHadronElasticProcess.hh"
@@ -140,7 +140,8 @@ G4VParticleChange* G4WHadronElasticProcess::PostStepDoIt(
   G4ThreeVector indir = track.GetMomentumDirection();
 
   //!! is not needed for models inheriting G4HadronElastic
-  G4ThreeVector outdir = (result->GetMomentumChange()).rotateUz(indir);
+  G4ThreeVector outdir = result->GetMomentumChange();
+  outdir.rotateUz(indir);
   
   if(verboseLevel>1) {
     G4cout << "Efin= " << result->GetEnergyChange()
