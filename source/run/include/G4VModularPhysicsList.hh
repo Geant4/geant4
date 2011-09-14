@@ -37,11 +37,6 @@
 //   by using 
 //         G4VModularPhysicsList::RegsiterPhysics() 
 //   to construt particles and processes.
-//   In addition the user must implement the four virtual methods
-//   in his own concrete class derived from this class. 
-//        G4VModularPhysicsList::SetCuts()
-//   to set cut values in range to all particles
-//   (rebuild of physics table will be invoked).
 //
 //   Only one physics constructor can be registered for each "physics_type".
 //   Physics constructors with same "physics_type" can be replaced by
@@ -70,10 +65,6 @@ class G4VModularPhysicsList: public virtual G4VUserPhysicsList
     virtual ~G4VModularPhysicsList();
 
   public:  // with description
-    //  "SetCuts" method sets a cut value for all particle types 
-    //   in the particle table
-    virtual void SetCuts() = 0; 
-
     // This method will be invoked in the Construct() method. 
     // each particle type will be instantiated
     virtual void ConstructParticle();

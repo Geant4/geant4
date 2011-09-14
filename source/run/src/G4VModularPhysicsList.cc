@@ -204,8 +204,8 @@ void  G4VModularPhysicsList::RemovePhysics(G4int pType)
     return;
   }
 
-  G4PhysConstVector::iterator itr= physicsVector->begin();
-  for (itr = physicsVector->begin(); itr!= physicsVector->end();) {
+  for (G4PhysConstVector::iterator itr = physicsVector->begin(); 
+                                     itr!= physicsVector->end();) {
     if ( pType  == (*itr)->GetPhysicsType()) {
       G4String pName = (*itr)->GetPhysicsName();  
 #ifdef G4VERBOSE
@@ -216,6 +216,7 @@ void  G4VModularPhysicsList::RemovePhysics(G4int pType)
       }
 #endif
       physicsVector->erase(itr);
+      break;
     } else {
       itr++;
     }
@@ -233,8 +234,8 @@ void G4VModularPhysicsList::RemovePhysics(G4VPhysicsConstructor* fPhysics)
     return;
   }
 
-  G4PhysConstVector::iterator itr= physicsVector->begin();
-  for (itr = physicsVector->begin(); itr!= physicsVector->end(); ++itr) {
+  for (G4PhysConstVector::iterator itr = physicsVector->begin(); 
+                                     itr!= physicsVector->end();) {
     if ( fPhysics == (*itr)) {
       G4String pName = (*itr)->GetPhysicsName();  
 #ifdef G4VERBOSE
@@ -246,6 +247,8 @@ void G4VModularPhysicsList::RemovePhysics(G4VPhysicsConstructor* fPhysics)
 #endif
       physicsVector->erase(itr);
       break;
+    } else {
+      itr++;
     }
   }
 }
@@ -261,7 +264,8 @@ void G4VModularPhysicsList::RemovePhysics(const G4String& name)
   }
 
   G4PhysConstVector::iterator itr= physicsVector->begin();
-  for (itr = physicsVector->begin(); itr!= physicsVector->end(); ++itr) {
+  for (G4PhysConstVector::iterator itr = physicsVector->begin(); 
+                                     itr!= physicsVector->end();) {
     G4String pName = (*itr)->GetPhysicsName();  
     if ( name == pName) {
 #ifdef G4VERBOSE
@@ -273,6 +277,8 @@ void G4VModularPhysicsList::RemovePhysics(const G4String& name)
 #endif
       physicsVector->erase(itr);
       break;
+    } else {
+      itr++;
     }
   }
 }

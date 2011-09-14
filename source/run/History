@@ -17,6 +17,25 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Sep. 6th, 2011,  H.Kurashige (run-V09-04-20)
+- Fix typo in Process type name in G4PhysicsListHelper
+
+Sep. 5th, 2011,  H.Kurashige (run-V09-04-19)
+- Remove pure virtual declaration for G4VModularPhysicsList::SetCuts()
+  (G4VModularPhysicsList is not an abstract class any more)
+
+Aug. 25th, 2011, G.Cosmo (run-V09-04-18)
+- Added banner for errors and warnings in G4ExceptionHandler.
+  Redirect warnings to cout instead of cerr.
+
+Aug. 10th, 2011, M.Asai (run-V09-04-17)
+- Introducing parallel layered mass geometry.
+  Co-working with geommng-V09-04-03, procuts-V09-04-05, procscore-V09-04-02
+
+Aug. 3rd, 2011, H.Kurashige (run-V09-04-16)
+- Fix errors of INVALID_ITERATOR in  G4VModularPhysicsList::RemovePhysics
+ ()reported by Coverity)
+
 July 24th, 2011, H.Kurashige (run-V09-04-15)
 - Fix a bug in constructor of G4VUserPhysicsList
   (add isSetDefaultCutValue flag)

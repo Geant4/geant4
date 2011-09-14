@@ -475,13 +475,13 @@ void G4RunManager::RestoreRandomNumberStatus(const G4String& fileN)
 
 void G4RunManager::DumpRegion(const G4String& rname) const
 {
-  kernel->UpdateRegion();
+//  kernel->UpdateRegion();
   kernel->DumpRegion(rname);
 }
 
 void G4RunManager::DumpRegion(G4Region* region) const
 {
-  kernel->UpdateRegion();
+//  kernel->UpdateRegion();
   kernel->DumpRegion(region);
 }
 
@@ -527,9 +527,10 @@ void G4RunManager::ConstructScoringWorlds()
         if(pmanager)
         {
           pmanager->AddProcess(theParallelWorldScoringProcess);
-          pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess, idxAtRest);
+          if(theParallelWorldScoringProcess->IsAtRestRequired(particle))
+          { pmanager->SetProcessOrdering(theParallelWorldScoringProcess, idxAtRest, 9999); }
           pmanager->SetProcessOrderingToSecond(theParallelWorldScoringProcess, idxAlongStep);
-          pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess, idxPostStep);
+          pmanager->SetProcessOrdering(theParallelWorldScoringProcess, idxPostStep, 9999);
         }
       }
     }

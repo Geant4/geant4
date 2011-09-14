@@ -567,7 +567,7 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   
   G4PhysicsListOrderingParameter tmp;
   
-  tmp.processTypeName = "Transprotation";
+  tmp.processTypeName = "Transportation";
   tmp.processType     = 1;
   tmp.processSubType  = 91;
   tmp.ordering[0]     = -1;

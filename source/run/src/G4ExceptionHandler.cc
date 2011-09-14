@@ -75,26 +75,31 @@ G4bool G4ExceptionHandler::Notify(const char* originOfException,
                         G4ExceptionSeverity severity,
                         const char* description)
 {
-  G4cerr << G4endl;
-  G4cerr << "*** G4Exception : " << exceptionCode << G4endl;
-  G4cerr << "      issued by : " << originOfException << G4endl;
-  G4cerr << description << G4endl;
+  G4String e_banner = "\n!!!!! - !!!!! - !!!!! - !!!!! - !!!!! - !!!!!\n";
+  G4String w_banner = "\nwwwww - wwwww - wwwww - wwwww - wwwww - wwwww\n";
+  std::ostringstream message;
+  message << "*** G4Exception : " << exceptionCode << G4endl
+          << "      issued by : " << originOfException << G4endl
+          << description << G4endl;
   G4bool abortionForCoreDump = false;
   G4ApplicationState aps = G4StateManager::GetStateManager()->GetCurrentState();
   switch(severity)
   {
    case FatalException:
-    G4cerr << "*** Fatal Exception *** core dump ***";
+    G4cerr << e_banner << message.str() << "*** Fatal Exception *** core dump ***"
+           << e_banner;
     abortionForCoreDump = true;
     break;
    case FatalErrorInArgument:
-    G4cerr << "*** Fatal Error In Argument *** core dump ***";
+    G4cerr << e_banner << message.str() << "*** Fatal Error In Argument *** core dump ***"
+           << e_banner;
     abortionForCoreDump = true;
     break;
    case RunMustBeAborted:
     if(aps==G4State_GeomClosed || aps==G4State_EventProc)
     {
-      G4cerr << "*** Run Must Be Aborted ";
+      G4cerr << e_banner << message.str() << "*** Run Must Be Aborted ***"
+             << e_banner;
       G4RunManager::GetRunManager()->AbortRun(false);
     }
     abortionForCoreDump = false;
@@ -102,18 +107,17 @@ G4bool G4ExceptionHandler::Notify(const char* originOfException,
    case EventMustBeAborted:
     if(aps==G4State_EventProc)
     {
-      G4cerr << "*** Event Must Be Aborted ";
+      G4cerr << e_banner << message.str() << "*** Event Must Be Aborted ***"
+             << e_banner;
       G4RunManager::GetRunManager()->AbortEvent();
     }
     abortionForCoreDump = false;
     break;
    default:
-    G4cerr << "*** This is just a warning message.";
+    G4cout << w_banner << message.str() << "*** This is just a warning message. ***"
+           << w_banner;
     abortionForCoreDump = false;
     break;
   }
-  G4cerr << G4endl;
   return abortionForCoreDump;
 }
-
-

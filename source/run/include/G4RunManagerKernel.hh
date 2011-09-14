@@ -141,6 +141,7 @@ class G4RunManagerKernel
     G4EventManager * eventManager;
     G4ExceptionHandler* defaultExceptionHandler;
     G4Region* defaultRegion;
+    G4Region* defaultRegionForParallelWorld;
     G4String versionString;
 
   public: // with description

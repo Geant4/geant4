@@ -100,7 +100,10 @@ G4RunManagerKernel::G4RunManagerKernel()
   // construction of Geant4 kernel classes
   eventManager = new G4EventManager();
   defaultRegion = new G4Region("DefaultRegionForTheWorld"); // deleted by store
+  defaultRegionForParallelWorld = new G4Region("DefaultRegionForParallelWorld"); // deleted by store
   defaultRegion->SetProductionCuts(
+    G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
+  defaultRegionForParallelWorld->SetProductionCuts(
     G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
 
   // Following line is tentatively moved from SetPhysics method
@@ -410,27 +413,74 @@ void G4RunManagerKernel::CheckRegions()
     //Let each region have a pointer to the world volume where it belongs to.
     //G4Region::SetWorld() checks if the region belongs to the given world and set it
     //only if it does. Thus, here we go through all the registered world volumes.
+    region->SetWorld(0); // reset
+    region->UsedInMassGeometry(false);
+    region->UsedInParallelGeometry(false);
     wItr = transM->GetWorldsIterator();
     for(size_t iw=0;iw<nWorlds;iw++)
     {
+      if(region->BelongsTo(*wItr))
+      {
+        if(*wItr==currentWorld)
+        { region->UsedInMassGeometry(true); }
+        else
+        { region->UsedInParallelGeometry(true); }
+      }
       region->SetWorld(*wItr);
       wItr++;
     }
 
-    //Now check for the regions which belongs to the tracking world
-    if(region->GetWorldPhysical()!=currentWorld) continue;
-
     G4ProductionCuts* cuts = region->GetProductionCuts();
     if(!cuts)
     {
-      G4cerr << "Warning : Region <" << region->GetName()
+      if(region->IsInMassGeometry())
+      {
+        G4cerr << "Warning : Region <" << region->GetName()
              << "> does not have specific production cuts," << G4endl
              << "even though it appears in the current tracking world." << G4endl;
-      G4cerr << "Default cuts are used for this region." << G4endl;
-      region->SetProductionCuts(
-          G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
+        G4cerr << "Default cuts are used for this region." << G4endl;
+      }
+
+      if(region->IsInMassGeometry()||region->IsInParallelGeometry())
+      {
+        region->SetProductionCuts(
+          G4ProductionCutsTable::GetProductionCutsTable()
+             ->GetDefaultProductionCuts());
+      }
     }
   }
+
+  //
+  // If a parallel world has no region, set default region for parallel world
+  //
+
+//DumpRegion();
+//
+//  while(defaultRegionForParallelWorld->GetNumberOfRootVolumes()>0)
+//  {
+//    std::vector<G4LogicalVolume*>::iterator lvItr
+//      = defaultRegionForParallelWorld->GetRootLogicalVolumeIterator();
+//    defaultRegionForParallelWorld->RemoveRootLogicalVolume(*lvItr,false);
+//  }
+
+  wItr = transM->GetWorldsIterator();
+  for(size_t iw=0;iw<nWorlds;iw++)
+  {
+    //G4cout << "+++ " << (*wItr)->GetName() << G4endl;
+    if(*wItr!=currentWorld)
+    {
+      G4LogicalVolume* pwLogical = (*wItr)->GetLogicalVolume();
+      if(!(pwLogical->GetRegion()))
+      {
+        pwLogical->SetRegion(defaultRegionForParallelWorld);
+        defaultRegionForParallelWorld->AddRootLogicalVolume(pwLogical);
+        //G4cout << "+++++ defaultRegionForParallelWorld is set to "
+        //       << (*wItr)->GetName() << " +++++" << G4endl;
+      }
+    }
+    wItr++;
+  }
+
 }
 
 void G4RunManagerKernel::DumpRegion(const G4String& rname) const
@@ -449,7 +499,7 @@ void G4RunManagerKernel::DumpRegion(G4Region* region) const
   else
   {
     G4cout << G4endl;
-    G4cout << "Region <" << region->GetName() << ">";
+    G4cout << "Region <" << region->GetName() << "> -- ";
     if(region->GetWorldPhysical())
     {
       G4cout << " -- appears in <" 
@@ -458,6 +508,10 @@ void G4RunManagerKernel::DumpRegion(G4Region* region) const
     else
     { G4cout << " -- is not associated to any world."; }
     G4cout << G4endl;
+    if(region->IsInMassGeometry())
+    { G4cout << " This region is in the mass world." << G4endl; }
+    if(region->IsInParallelGeometry())
+    { G4cout << " This region is in the parallel world." << G4endl; }
 
     G4cout << " Root logical volume(s) : ";
     size_t nRootLV = region->GetNumberOfRootVolumes();
@@ -471,11 +525,11 @@ void G4RunManagerKernel::DumpRegion(G4Region* region) const
            << "], G4FastSimulationManager[" << region->GetFastSimulationManager()
            << "], G4UserSteppingAction[" << region->GetRegionalSteppingAction() << "]" << G4endl;
     
-    if(region->GetWorldPhysical()!=currentWorld)
-    {
-      G4cout << G4endl;
-      return;
-    }
+//    if(region->GetWorldPhysical()!=currentWorld)
+//    {
+//      G4cout << G4endl;
+//      return;
+//    }
     G4cout << " Materials : ";
     std::vector<G4Material*>::const_iterator mItr = region->GetMaterialIterator();
     size_t nMaterial = region->GetNumberOfMaterials();
@@ -486,7 +540,7 @@ void G4RunManagerKernel::DumpRegion(G4Region* region) const
     }
     G4cout << G4endl;
     G4ProductionCuts* cuts = region->GetProductionCuts();
-    if(!cuts)
+    if(!cuts && region->IsInMassGeometry())
     {
       G4cerr << "Warning : Region <" << region->GetName()
              << "> does not have specific production cuts." << G4endl;
@@ -494,7 +548,7 @@ void G4RunManagerKernel::DumpRegion(G4Region* region) const
       region->SetProductionCuts(
           G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
     }
-    else
+    else if(cuts)
     {
       G4cout << " Production cuts : "
              << "  gamma "
