@@ -26,49 +26,68 @@
 #ifndef G4HadFinalState_hh
 #define G4HadFinalState_hh
 
-#include "G4ThreeVector.hh"
-#include "G4DynamicParticle.hh"
+// Modifications:
+// 20110810  M. Kelsey -- Store secondaries by value, not by pointer.
+//		Improve constness of argument passing.  Drop stale flag.
+// 20110907  M. Kelsey -- Improve constness of functions, discard add pointer,
+//		add function to concatenate vectors
+
 #include "globals.hh"
-#include <vector>
+#include "G4DynamicParticle.hh"
 #include "G4HadSecondary.hh"
 #include "G4LorentzRotation.hh"
+#include "G4ThreeVector.hh"
+#include <vector>
 
 enum G4HadFinalStateStatus{isAlive, stopAndKill, suspend};
 
+
 class G4HadFinalState
 {
-  public:
-   G4HadFinalState();
-   G4int GetNumberOfSecondaries();
-   void SetEnergyChange(G4double anEnergy);
-   G4double GetEnergyChange();
-   void SetMomentumChange(G4ThreeVector aV);
-   void SetMomentumChange(G4double x, G4double y, G4double z) ;
-   G4ThreeVector GetMomentumChange();
-   void AddSecondary(G4DynamicParticle * aP);
-   void AddSecondary(G4HadSecondary * aP);
-   void SetStatusChange(G4HadFinalStateStatus aS);
-   G4HadFinalStateStatus GetStatusChange();
-   void Clear();
-   G4LorentzRotation & GetTrafoToLab();
-   void SetTrafoToLab(G4LorentzRotation & aT);
-   void SetWeightChange(G4double aW);
-   G4double GetWeightChange();
-   G4HadSecondary * GetSecondary(size_t i);
-   void SetLocalEnergyDeposit(G4double aE);
-   G4double GetLocalEnergyDeposit();
-   void SecondariesAreStale();
-   void ClearSecondaries();
- 
-  private:
-   G4ThreeVector theDirection;
-   G4double theEnergy;
-   std::vector<G4HadSecondary *> theSecs;
-   G4HadFinalStateStatus theStat;
-   G4LorentzRotation theT;
-   G4double theW;
-   G4double theEDep;
-   G4bool hasStaleSecondaries;
+public:
+  G4HadFinalState();
+
+  G4int GetNumberOfSecondaries() const;
+  void SetEnergyChange(G4double anEnergy);
+  G4double GetEnergyChange() const;
+  void SetMomentumChange(const G4ThreeVector& aV);
+  void SetMomentumChange(G4double x, G4double y, G4double z) ;
+  const G4ThreeVector& GetMomentumChange() const;
+  void AddSecondary(G4DynamicParticle* aP);
+  void AddSecondary(const G4HadSecondary& aHS) { theSecs.push_back(aHS); }
+  void SetStatusChange(G4HadFinalStateStatus aS);
+  G4HadFinalStateStatus GetStatusChange() const;
+  void Clear();
+  const G4LorentzRotation& GetTrafoToLab() const;
+  void SetTrafoToLab(const G4LorentzRotation & aT);
+  void SetWeightChange(G4double aW);
+  G4double GetWeightChange() const;
+  G4HadSecondary* GetSecondary(size_t i);
+  const G4HadSecondary* GetSecondary(size_t i) const;
+  void SetLocalEnergyDeposit(G4double aE);
+  G4double GetLocalEnergyDeposit() const;
+  void SecondariesAreStale();		// Deprecated; not needed for values
+  void ClearSecondaries();
+
+  // Concatenate lists efficiently
+  void AddSecondaries(const std::vector<G4HadSecondary>& addSecs);
+
+  void AddSecondaries(const G4HadFinalState& addHFS) {
+    AddSecondaries(addHFS.theSecs);
+  }
+
+  void AddSecondaries(const G4HadFinalState* addHFS) {
+    if (addHFS) AddSecondaries(addHFS->theSecs);
+  }
+
+private:
+  G4ThreeVector theDirection;
+  G4double theEnergy;
+  std::vector<G4HadSecondary> theSecs;
+  G4HadFinalStateStatus theStat;
+  G4LorentzRotation theT;
+  G4double theW;
+  G4double theEDep;
 };
 
 #endif

@@ -24,6 +24,7 @@
 // ********************************************************************
 //
 #include "G4HadSecondary.hh"
+#include "G4DynamicParticle.hh"
 #include "G4HadronicException.hh"
 
 G4HadSecondary::G4HadSecondary(G4DynamicParticle * aT, G4double aWeight) :

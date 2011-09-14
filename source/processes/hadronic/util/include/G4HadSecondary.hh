@@ -23,20 +23,25 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// 20110907  M. Kelsey -- Fix constness for accessors
+
 #ifndef G4HadSecondary_hh
 #define G4HadSecondary_hh
 
-#include "G4DynamicParticle.hh"
+#include "globals.hh"
+
+class G4DynamicParticle;
 
 class G4HadSecondary
 {
   public:
     G4HadSecondary(G4DynamicParticle * aT, G4double aWeight = 1);
     G4DynamicParticle * GetParticle() {return theP;}
-    G4double GetWeight() {return theWeight;}
+    const G4DynamicParticle* GetParticle() const {return theP;}
+    G4double GetWeight() const {return theWeight;}
     void SetWeight(G4double aW){theWeight= aW;}
     void SetTime(G4double aT) {theTime = aT;}
-    G4double GetTime() {return theTime;}
+    G4double GetTime() const {return theTime;}
     
     
   private:

@@ -16,6 +16,7 @@ ifdef PRECOMPOUND_TEST
   CPPFLAGS += -DPRECOMPOUND_TEST
 endif
 
+CPPFLAGS += -DG4REACTIONPRODUCT_ALLOC_EXPORT
 CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPGeometry/include \
