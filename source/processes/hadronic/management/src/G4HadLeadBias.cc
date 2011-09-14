@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// 20110906  M. Kelsey -- Use reference to G4HadSecondary instead of pointer
+
 #include "G4HadLeadBias.hh"
 #include "G4Gamma.hh"
 #include "G4PionZero.hh"
@@ -90,19 +92,20 @@
     G4int randomPi0 = static_cast<G4int>((npi0+1)*G4UniformRand());
     G4int randomLepton = static_cast<G4int>((nLepton+1)*G4UniformRand());
     
-    std::vector<G4HadSecondary *> buffer;
+    std::vector<G4HadSecondary> buffer;
     G4int cMeson(0), cBaryon(0), cpi0(0), cgamma(0), cLepton(0);
     for(i=0; i<result->GetNumberOfSecondaries(); i++)
     {
       G4bool aCatch = false;
       G4double weight = 1;
-      G4HadSecondary * aSecTrack = result->GetSecondary(i);
+      const G4HadSecondary* aSecTrack = result->GetSecondary(i);
+      G4ParticleDefinition* aSecDef = aSecTrack->GetParticle()->GetDefinition();
       if(i==maxE)
       {
         aCatch = true;
 	weight = 1;
       }
-      else if(aSecTrack->GetParticle()->GetDefinition()->GetBaryonNumber()!=0) 
+      else if(aSecDef->GetBaryonNumber()!=0) 
       {
 	if(++cBaryon==randomBaryon) 
 	{
@@ -110,7 +113,7 @@
 	  weight = baryonWeight;
 	}
       }
-      else if(aSecTrack->GetParticle()->GetDefinition()->GetLeptonNumber()!=0) 
+      else if(aSecDef->GetLeptonNumber()!=0) 
       {
         if(++cLepton==randomLepton) 
 	{
@@ -118,7 +121,7 @@
 	  weight = leptonWeight;
 	}
       }
-      else if(aSecTrack->GetParticle()->GetDefinition()==G4Gamma::Gamma())
+      else if(aSecDef==G4Gamma::Gamma())
       {
         if(++cgamma==randomGamma) 
 	{
@@ -126,7 +129,7 @@
 	  weight = gammaWeight;
 	}
       }
-      else if(aSecTrack->GetParticle()->GetDefinition()==G4PionZero::PionZero())
+      else if(aSecDef==G4PionZero::PionZero())
       {
         if(++cpi0==randomPi0) 
 	{
@@ -144,8 +147,8 @@
       }
       if(aCatch)
       {
-	buffer.push_back(aSecTrack);
-	aSecTrack->SetWeight(aSecTrack->GetWeight()*weight);
+	buffer.push_back(*aSecTrack);
+	buffer.back().SetWeight(aSecTrack->GetWeight()*weight);
       }
       else
       {
@@ -154,10 +157,7 @@
     }
     result->ClearSecondaries();
     // G4cerr << "pre"<<G4endl;
-    for(i=0;i<static_cast<G4int>(buffer.size());i++)
-    {
-      result->AddSecondary(buffer[i]);
-    }
+    result->AddSecondaries(buffer);
      // G4cerr << "bias exit"<<G4endl;
     
     return result;

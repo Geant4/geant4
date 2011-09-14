@@ -559,8 +559,7 @@ G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
       G4double newP=std::sqrt(newE*newE - newM*newM);
       G4DynamicParticle * aNew = 
       new G4DynamicParticle(aT.GetParticleDefinition(), newE, newP*aR->GetMomentumChange());
-      G4HadSecondary * theSec = new G4HadSecondary(aNew, newWeight);
-      aR->AddSecondary(theSec);
+      aR->AddSecondary(G4HadSecondary(aNew, newWeight));
     }
     else
     {
@@ -596,8 +595,7 @@ G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
     G4DynamicParticle* aNew = new G4DynamicParticle(aT.GetParticleDefinition(), 
                                                     aR->GetMomentumChange(), 
                                                     newKE);
-    G4HadSecondary* theSec = new G4HadSecondary(aNew, 1.0);
-    aR->AddSecondary(theSec);
+    aR->AddSecondary(aNew);
     aR->SetStatusChange(stopAndKill);
 
     theTotalResult->ProposeTrackStatus(fStopAndKill);
