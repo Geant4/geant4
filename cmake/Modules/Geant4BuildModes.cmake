@@ -25,31 +25,27 @@
 #
 
 #------------------------------------------------------------------------------
-# Add TestRelease Mode
-# NB - the use of FORCE prevents user editting of the value in the GUI.
-# That's probably correct behaviour for now.
+# Add TestRelease Mode and cache init flags
+#
+set(CMAKE_CXX_FLAGS_TESTRELEASE "${CMAKE_CXX_FLAGS_TESTRELEASE_INIT}"
+  CACHE STRING "Flags used by the compiler during TestRelease builds"
+)
 
-# NB, these may be compiler specific, so be careful.
-
-set(CMAKE_CXX_FLAGS_TESTRELEASE "-O2 -g -DG4FPE_DEBUG -DG4DEBUG_VERBOSE"
-    CACHE STRING "Flags added to the C++ compiler during TestRelease builds")
 
 #------------------------------------------------------------------------------
 # Add Maintainer Mode
-# NB - the use of FORCE prevents user editting of the value in the GUI.
-# That's probably correct behaviour for now.
+#
+set(CMAKE_CXX_FLAGS_MAINTAINER "${CMAKE_CXX_FLAGS_MAINTAINER_INIT}"
+  CACHE STRING "Flags used by the compiler during Maintainer builds"
+)
 
-# NB, these may be compiler specific, so be careful.
-
-set(CMAKE_CXX_FLAGS_MAINTAINER "-g"
-    CACHE STRING "Flags added to the C++ compiler during Maintainer builds"
-    FORCE)
-
-# Mark all the additional flags as advanced because most users will nver need
-# to see them
+#----------------------------------------------------------------------------
+# Mark all the additional mode flags as advanced because most users will 
+# never need to see them
 mark_as_advanced(
-    CMAKE_CXX_FLAGS_TESTRELEASE
-    CMAKE_CXX_FLAGS_MAINTAINER)
+  CMAKE_CXX_FLAGS_TESTRELEASE
+  CMAKE_CXX_FLAGS_MAINTAINER
+)
 
 #------------------------------------------------------------------------------
 # Add the new configuration types ONLY if the build tool supports multiple

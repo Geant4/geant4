@@ -37,8 +37,11 @@ if(GEANT4_BUILD_VERBOSE_CODE)
     list(APPEND GEANT4_CORE_DEFINITIONS -DG4VERBOSE)
 endif()
 
-# - We do actually need G4LIB_BUILD_DLL, even for user applications...
-list(APPEND GEANT4_CORE_DEFINITIONS -DG4LIB_BUILD_DLL)
+# - We do actually need G4LIB_BUILD_DLL on Windows, even for user 
+# applications...
+if(WIN32)
+    list(APPEND GEANT4_CORE_DEFINITIONS -DG4LIB_BUILD_DLL)
+endif()
 
 
 # - Stuff from Geant4OptionalComponents.cmake
@@ -136,9 +139,12 @@ configure_file(${PROJECT_SOURCE_DIR}/cmake/Templates/Geant4ConfigVersion.cmake.i
     ${PROJECT_BINARY_DIR}/Geant4ConfigVersion.cmake
     @ONLY)
 
-# Copy the Use file into the build tree
+# Copy the Main and Internal Use file into the build tree
 configure_file(${PROJECT_SOURCE_DIR}/cmake/Templates/UseGeant4.cmake
     ${PROJECT_BINARY_DIR}/UseGeant4.cmake
+    COPYONLY)
+configure_file(${PROJECT_SOURCE_DIR}/cmake/Templates/UseGeant4_internal.cmake
+    ${PROJECT_BINARY_DIR}/UseGeant4_internal.cmake
     COPYONLY)
 
 

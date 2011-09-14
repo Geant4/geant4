@@ -29,6 +29,62 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+August 16th 2011 - P. Mato (cmake-V09-04-20)
+- Templates/UseGeant4_internal.cmake: Added support for tests on Windows with 
+  NMake and Visual Studio.
+
+- Modules/Geant4TestDriver.cmake: Avoid the use of ':' as separator since is used
+  already in the drive letters on Windows.
+
+August 16th 2011 - P. Mato (cmake-V09-04-19)
+- Modules/FindROOT.cmake : Added function ROOT_GENERATE_DICTIONARY() to facilitate
+  the generation of ROOT dictionaries
+
+- Modules/Geant4CTest.cmake (NEWFILE): Place for the configutation of CTest.
+
+- Modules/Geant4TestDriver.cmake: Added the pre- and post-commands for tests. This
+  was neeed to preform some initial cleanup of post processing on some tests.
+
+- Templates/UseGeant4_internal.cmake: Changed the function GEANT4_ADD_TEST() to
+  make use of the pre- and post-commands.
+
+August 16th 2011 - B.Morgan (cmake-V09-04-18)
+- Templates/UseGeant4.cmake : Fixed error is use of get_filename_component
+  to locate internal use file.
+
+
+August 10th 2011 - B.Morgan (cmake-V09-04-17)
+- Modules/Geant4BuildProjectConfig.cmake : Added copy of UseGeant4_internal 
+  file to build tree, but do not install it.
+
+- UseGeant4.cmake : Factored out internal only macros into UseGeant4_internal
+  module. Added optional inclusion of that module, which will only happen in the
+  build tree.
+
+- UseGeant4_internal.cmake (NEWFILE) : Added to hold CMake code only needed
+  by 'use' of Geant4 inside Geant4 itself, e.g. unit and validation tests.
+  This is done to fix a bug reported offline by Alberto Ribon, where including
+  UseGeant4.cmake fails due to an unfound custom CMake module. The functions
+  like GEANT4_ADD_TEST use extra functionality which is located in custom CMake
+  modules. Whilst these modules could be installed, this adds unneeded 
+  complexity to the use of Geant4 and may also clash with CMake itself. Also, 
+  the functions needing the modules are not intended for use by users, so are
+  factored out into this build tree only module.
+
+
+August 3rd 2011 - B.Morgan (cmake-V09-04-16)
+- Modules/Geant4MakeRules_cxx.cmake, Modules/Geant4BuildModes.cmake :
+  Moved setting of initial values for TestRelease and Maintainer mode compiler 
+  flags to make rules override file. Values are now set based on compiler and
+  platform, as G4FPE_DEBUG option should only be used for GNU compiler, and
+  with non-optimized code on Mac OS X (information from Gunter Folger).
+  Geant4BuildModes uses initial values as input to cache value, so variables
+  can be reset from the command line and within the cache interfaces if
+  needed.
+
+- Modules/Geant4BuildProjectConfig.cmake : Re-added WIN32 guard on export of 
+  the G4LIB_BUILD_DLL definition.
+
 
 July 29th 2011 - B.Morgan (cmake-V09-04-15)
 - Modules/Geant4InstallData.cmake : Corrected URL for use in downloading data

@@ -1,7 +1,9 @@
 #---------------------------------------------------------------------------------------------------
 # Geant4 test driver
 #   Script arguments: 
-#     CMD command to be executed
+#     CMD command to be executed for the test
+#     PRE command to be executed before the test command
+#     POST command to be executed after the test command
 #     OUT file to collect stdout
 #     ERR file to collect stderr
 #     ENV evironment VAR1=Value1;VAR2=Value2
@@ -14,12 +16,26 @@ endif()
 
 #---Massage arguments---------------------------------------------------------------------------------
 if(CMD)
-  string(REPLACE ":" ";" _cmd ${CMD})
+  string(REPLACE "#" ";" _cmd ${CMD})
   if(DBG)
     message(STATUS "testdriver:CMD=${_cmd}")
   endif()
 else()
   return()
+endif()
+
+if(PRE)
+  string(REPLACE "#" ";" _pre ${PRE})
+  if(DBG)
+    message(STATUS "testdriver:PRE=${_pre}")
+  endif()
+endif()
+
+if(POST)
+  string(REPLACE "#" ";" _post ${POST})
+  if(DBG)
+    message(STATUS "testdriver:POST=${_post}")
+  endif()
 endif()
 
 if(OUT)
@@ -48,7 +64,7 @@ endif()
 #---Set environment --------------------------------------------------------------------------------
 if(ENV)
   string(REPLACE "@" "=" _env ${ENV})
-  string(REPLACE ":" ";" _env ${_env})
+  string(REPLACE "#" ";" _env ${_env})
   foreach(pair ${_env})
     string(REPLACE "=" ";" pair ${pair})
     list(GET pair 0 var)
@@ -58,6 +74,14 @@ if(ENV)
       message(STATUS "testdriver[ENV]:${var}==>${val}")
     endif()
   endforeach()
+endif()
+
+#---Execute pre-command-----------------------------------------------------------------------------
+if(PRE)
+  execute_process(COMMAND ${_pre} ${_cwd} RESULT_VARIABLE _rc)
+  if(_rc)
+    message(FATAL_ERROR "pre-command error code : ${_rc}")
+  endif()
 endif()
 
 #---Execute the actual test ------------------------------------------------------------------------
@@ -70,6 +94,16 @@ endif()
 if(_rc)
   message(FATAL_ERROR "error code: ${_rc}")
 endif()
+
+
+#---Execute post-command-----------------------------------------------------------------------------
+if(POST)
+  execute_process(COMMAND ${_post} ${_cwd} RESULT_VARIABLE _rc)
+  if(_rc)
+    message(FATAL_ERROR "post-command error code : ${_rc}")
+  endif()
+endif()
+
 
 
 

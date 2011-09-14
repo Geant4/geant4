@@ -15,6 +15,16 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS_RELEASE_INIT "-O2 -DNDEBUG")
     set(CMAKE_CXX_FLAGS_MINSIZEREL_INIT "-Os -DNDEBUG")
     set(CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "-O2 -g")
+
+    # Extra Geant4 modes
+    set(__testrelease_flags "-g -DG4DEBUG_VERBOSE -DG4FPE_DEBUG")
+
+    if(NOT APPLE)
+        set(__testrelease_flags "-O2 ${__testrelease_flags}")
+    endif()
+
+    set(CMAKE_CXX_FLAGS_TESTRELEASE_INIT "${__testrelease_flags}")
+    set(CMAKE_CXX_FLAGS_MAINTAINER_INIT "-g")
 endif()
 
 
@@ -31,6 +41,10 @@ if(MSVC)
     set(CMAKE_CXX_FLAGS_MINSIZEREL_INIT "-Os -DNDEBUG")
     set(CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "-O2 -g")
 
+    # Extra modes
+    set(CMAKE_CXX_FLAGS_TESTRELEASE_INIT "-O2 -g -G4DEBUG_VERBOSE")
+    set(CMAKE_CXX_FLAGS_MAINTAINER_INIT "-g")
+
     # We may also have to set linker flags....
 endif()
 
@@ -45,6 +59,10 @@ if(CMAKE_CXX_COMPILER MATCHES "icpc.*")
     set(CMAKE_CXX_FLAGS_RELEASE_INIT "-O2 -DNDEBUG")
     set(CMAKE_CXX_FLAGS_MINSIZEREL_INIT "-Os -DNDEBUG")
     set(CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "-O2 -g")
+
+    # Extra modes
+    set(CMAKE_CXX_FLAGS_TESTRELEASE_INIT "-O2 -g -G4DEBUG_VERBOSE")
+    set(CMAKE_CXX_FLAGS_MAINTAINER_INIT "-g")
 endif()
 
 
