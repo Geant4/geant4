@@ -75,12 +75,11 @@ G4CHIPSElastic::G4CHIPSElastic() : G4HadronElastic("hElasticCHIPS")
     KPxsManager   = G4QKaonPlusElasticCrossSection::GetPointer();   // Uzhi
     KMxsManager   = G4QKaonMinusElasticCrossSection::GetPointer();  // Uzhi
   }
-  Description();
+  //Description();
 }
 
 G4CHIPSElastic::~G4CHIPSElastic()
 {}
-
 
 void G4CHIPSElastic::Description() const
 {

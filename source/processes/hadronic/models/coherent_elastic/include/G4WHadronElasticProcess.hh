@@ -68,7 +68,7 @@ public:
 
   inline void SetLowestEnergyNeutron(G4double);
 
-  void Description() const;
+  virtual void Description() const;
 
 private:
 

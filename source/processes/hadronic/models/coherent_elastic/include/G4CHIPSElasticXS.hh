@@ -76,7 +76,7 @@ public:
 			      const G4Isotope*, const G4Element*, 
 			      const G4Material*);
 
-  void Description();
+  virtual void Description() const;
 
 private: 
 

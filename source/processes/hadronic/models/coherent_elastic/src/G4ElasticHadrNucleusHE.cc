@@ -230,7 +230,7 @@ G4ElasticHadrNucleusHE::G4ElasticHadrNucleusHE(const G4String& name)
   verboseLevel = 0;
   plabLowLimit = 20.0*MeV;
   lowestEnergyLimit = 0.0;
-  Description();
+  //Description();
 
   MbToGeV2  =  2.568;
   sqMbToGeV =  1.602;

@@ -53,7 +53,7 @@ G4HadronElastic::G4HadronElastic(const G4String& name)
   theNeutron  = G4Neutron::Neutron();
   theDeuteron = G4Deuteron::Deuteron();
   theAlpha    = G4Alpha::Alpha();
-  Description();
+  //Description();
 }
 
 

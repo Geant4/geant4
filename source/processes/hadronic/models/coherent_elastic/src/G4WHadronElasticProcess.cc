@@ -60,7 +60,7 @@ G4WHadronElasticProcess::G4WHadronElasticProcess(const G4String& pName)
   theNeutron  = G4Neutron::Neutron();
   lowestEnergy = 1.*keV;
   lowestEnergyNeutron = 1.e-12*eV;
-  Description();
+  //Description();
 }
 
 

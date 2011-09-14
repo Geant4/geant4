@@ -116,7 +116,7 @@ public:
 				    G4double plab, 
 				    G4int Z, G4int A);
 
-  void Description() const;
+  virtual void Description() const;
 
   G4double SampleT(const G4ParticleDefinition* p, 
 		   G4double plab, 

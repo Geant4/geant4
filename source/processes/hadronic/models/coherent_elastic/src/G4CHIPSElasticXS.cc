@@ -80,7 +80,7 @@ G4CHIPSElasticXS::~G4CHIPSElasticXS()
 {}
 
 
-void G4CHIPSElasticXS::Description() 
+void G4CHIPSElasticXS::Description() const
 {
   char* dirName = getenv("G4PhysListDocDir");
   if (dirName) {
