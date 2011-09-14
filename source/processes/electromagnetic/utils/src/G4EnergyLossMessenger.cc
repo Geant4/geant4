@@ -328,6 +328,21 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   fiCmd->SetParameter(unitT);
   unitT->SetGuidance("unit of tlength");
 
+  brCmd = new G4UIcommand("/process/em/setSecBiasing",this);
+  brCmd->SetGuidance("Set bremsstrahlung or delta-electron splitting/Russian roullette per region.");
+  brCmd->SetGuidance("  bProcNam : process name");
+  brCmd->SetGuidance("  bRegNam  : region name");
+  brCmd->SetGuidance("  bFactor  : number of splitted gamma or probability of Russian roulette");
+
+  G4UIparameter* bProcNam = new G4UIparameter("bProcNam",'s',false);
+  brCmd->SetParameter(bProcNam);
+
+  G4UIparameter* bRegNam = new G4UIparameter("bRegNam",'s',false);
+  brCmd->SetParameter(bRegNam);
+
+  G4UIparameter* bFactor = new G4UIparameter("bFactor",'d',false);
+  brCmd->SetParameter(bFactor);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -371,6 +386,7 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
   delete mscfCmd;
   delete bfCmd;
   delete fiCmd;
+  delete brCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -495,6 +511,12 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     is >> s1 >> s2 >> v1 >> unt;
     v1 *= G4UIcommand::ValueOf(unt);
     opt->ActivateForcedInteraction(s1,v1,s2);
+  } else if (command == brCmd) {
+    G4double fb(1.0);
+    G4String s1(""),s2("");
+    std::istringstream is(newValue);
+    is >> s1 >> s2 >> fb;
+    opt->ActivateSecondaryBiasing(s1,s2,fb);
   }  
 }
 

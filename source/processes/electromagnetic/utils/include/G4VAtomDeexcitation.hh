@@ -52,15 +52,14 @@
 
 #include "globals.hh"
 #include "G4AtomicShell.hh"
+#include "G4AtomicShellEnumerator.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4Track.hh"
 #include <vector>
-#include "G4AtomicShellEnumerator.hh"
 
 class G4ParticleDefinition;
 class G4DynamicParticle;
 class G4MaterialCutsCouple;
-class G4VParticleChange;
 
 class G4VAtomDeexcitation {
 public:
@@ -161,7 +160,7 @@ public:
 					    const G4Material* mat = 0) = 0;
 
   // Sampling of PIXE for ionisation processes
-  void AlongStepDeexcitation(G4VParticleChange* pParticleChange,  
+  void AlongStepDeexcitation(std::vector<G4Track*>& tracks,  
 			     const G4Step& step, 
 			     G4double& eLoss,
                              G4int coupleIndex);
@@ -190,7 +189,6 @@ private:
   std::vector<G4bool>   AugerRegions;
   std::vector<G4bool>   PIXERegions;
   std::vector<G4DynamicParticle*> vdyn;
-  std::vector<G4Track*> secVect;
 };
 
 inline void G4VAtomDeexcitation::SetFluo(G4bool val)

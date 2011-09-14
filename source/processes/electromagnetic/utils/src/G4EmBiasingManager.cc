@@ -51,11 +51,14 @@
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
 #include "Randomize.hh"
+#include "G4DynamicParticle.hh"
+#include "G4Track.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4EmBiasingManager::G4EmBiasingManager() 
-  : nRegions(0),currentStepLimit(0.0),startTracking(true)
+  : nForcedRegions(0),nSecBiasedRegions(0),
+    currentStepLimit(0.0),startTracking(true)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -65,36 +68,63 @@ G4EmBiasingManager::~G4EmBiasingManager()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4EmBiasingManager::Initialise()
+void G4EmBiasingManager::Initialise(const G4ParticleDefinition& part,
+				    const G4String& procName, G4int verbose)
 {
   const G4ProductionCutsTable* theCoupleTable=
     G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
 
-  idxCouple.resize(numOfCouples, -1);
+  if(0 < nForcedRegions) { idxForcedCouple.resize(numOfCouples, -1); }
+  if(0 < nSecBiasedRegions) { idxSecBiasedCouple.resize(numOfCouples, -1); }
 
   // Deexcitation
-  if (nRegions>0) {
-
-    for (size_t j=0; j<numOfCouples; ++j) {
-      const G4MaterialCutsCouple* couple =
-        theCoupleTable->GetMaterialCutsCouple(j);
-      const G4ProductionCuts* pcuts = couple->GetProductionCuts();
-      for(G4int i=0; i<nRegions; ++i) {
+  for (size_t j=0; j<numOfCouples; ++j) {
+    const G4MaterialCutsCouple* couple =
+      theCoupleTable->GetMaterialCutsCouple(j);
+    const G4ProductionCuts* pcuts = couple->GetProductionCuts();
+    if(0 <  nForcedRegions) {
+      for(G4int i=0; i<nForcedRegions; ++i) {
 	if(forcedRegions[i]) {
 	  if(pcuts == forcedRegions[i]->GetProductionCuts()) { 
-	    idxCouple[j] = i;
+	    idxForcedCouple[j] = i;
+	    break; 
+	  }
+	}
+      }
+    }
+    if(0 < nSecBiasedRegions) { 
+      for(G4int i=0; i<nSecBiasedRegions; ++i) {
+	if(secBiasedRegions[i]) {
+	  if(pcuts == secBiasedRegions[i]->GetProductionCuts()) { 
+	    idxSecBiasedCouple[j] = i;
 	    break; 
 	  }
 	}
       }
     }
   }
-  if (nRegions > 0) {
-    G4cout << " Forced Interaction is activated for G4Regions: " << G4endl;
-    for (G4int i=0; i<nRegions; ++i) {
+  if (nForcedRegions > 0 && 0 < verbose) {
+    G4cout << " Forced Interaction is activated for "
+	   << part.GetParticleName() << " and " 
+	   << procName 
+	   << " inside G4Regions: " << G4endl;
+    for (G4int i=0; i<nForcedRegions; ++i) {
       const G4Region* r = forcedRegions[i];
       if(r) { G4cout << "           " << r->GetName() << G4endl; }
+    }
+  }
+  if (nSecBiasedRegions > 0 && 0 < verbose) {
+    G4cout << " Secondary biasing is activated for " 
+	   << part.GetParticleName() << " and " 
+	   << procName 
+	   << " inside G4Regions: " << G4endl;
+    for (G4int i=0; i<nSecBiasedRegions; ++i) {
+      const G4Region* r = secBiasedRegions[i];
+      if(r) { 
+	G4cout << "           " << r->GetName() 
+	       << "  BiasingWeight= " << secBiasedWeight[i] << G4endl; 
+      }
     }
   }
 }
@@ -111,15 +141,15 @@ void G4EmBiasingManager::ActivateForcedInteraction(G4double val,
   }
   const G4Region* reg = regionStore->GetRegion(name, false);
   if(!reg) { 
-    G4cout << "### G4EmBiasingManager::ActivateDeexcitation WARNING: "
+    G4cout << "### G4EmBiasingManager::ForcedInteraction WARNING: "
 	   << " G4Region <"
 	   << rname << "> is unknown" << G4endl;
     return; 
   }
 
   // the region is in the list
-  if (nRegions) {
-    for (G4int i=0; i<nRegions; ++i) {
+  if (0 < nForcedRegions) {
+    for (G4int i=0; i<nForcedRegions; ++i) {
       if (reg == forcedRegions[i]) {
 	lengthForRegion[i] = val; 
         return;
@@ -127,7 +157,7 @@ void G4EmBiasingManager::ActivateForcedInteraction(G4double val,
     }
   }
   if(val < 0.0) { 
-    G4cout << "### G4EmBiasingManager::ActivateDeexcitation WARNING: "
+    G4cout << "### G4EmBiasingManager::ForcedInteraction WARNING: "
 	   << val << " < 0.0, so no activation for the G4Region <"
 	   << rname << ">" << G4endl;
     return; 
@@ -136,7 +166,59 @@ void G4EmBiasingManager::ActivateForcedInteraction(G4double val,
   // new region 
   forcedRegions.push_back(reg);
   lengthForRegion.push_back(val);
-  ++nRegions;
+  ++nForcedRegions;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void 
+G4EmBiasingManager::ActivateSecondaryBiasing(const G4String& rname, 
+					     G4double factor)
+{
+  if(0.0 >= factor) { return; }
+  G4RegionStore* regionStore = G4RegionStore::GetInstance();
+  G4String name = rname;
+  if(name == "" || name == "world" || name == "World") {
+    name = "DefaultRegionForTheWorld";
+  }
+  const G4Region* reg = regionStore->GetRegion(name, false);
+  if(!reg) { 
+    G4cout << "### G4EmBiasingManager::ActivateBremsstrahlungSplitting WARNING: "
+	   << " G4Region <"
+	   << rname << "> is unknown" << G4endl;
+    return; 
+  }
+
+  G4int nsplit = 0;
+  G4double w = 1.0/factor;
+
+  if(factor >= 1.0) {
+    nsplit = G4int(factor + 0.5);
+    w /= G4double(nsplit); 
+  }
+
+  // the region is in the list
+  if (0 < nSecBiasedRegions) {
+    for (G4int i=0; i<nSecBiasedRegions; ++i) {
+      if (reg == secBiasedRegions[i]) {
+	secBiasedWeight[i] = w;
+        nBremSplitting[i]  = nsplit; 
+        return;
+      }
+    }
+  }
+  if(1 == nsplit) { 
+    G4cout << "### G4EmBiasingManager::ActivateSecondaryBiasing WARNING: "
+	   << nsplit << " = 1, so no activation for the G4Region <"
+	   << rname << ">" << G4endl;
+    return; 
+  }
+
+  // new region 
+  secBiasedRegions.push_back(reg);
+  secBiasedWeight.push_back(w);
+  nBremSplitting.push_back(nsplit);
+  ++nSecBiasedRegions;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -146,7 +228,7 @@ G4double G4EmBiasingManager::GetStepLimit(G4int coupleIdx,
 {
   if(startTracking) {
     startTracking = false;
-    G4int i = idxCouple[coupleIdx];
+    G4int i = idxForcedCouple[coupleIdx];
     if(i < 0) {
       currentStepLimit = DBL_MAX;
     } else {
@@ -156,7 +238,86 @@ G4double G4EmBiasingManager::GetStepLimit(G4int coupleIdx,
   } else {
     currentStepLimit -= previousStep;
   }
+  if(currentStepLimit < 0.0) { currentStepLimit = 0.0; }
   return currentStepLimit;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double 
+G4EmBiasingManager::ApplySecondaryBiasing(std::vector<G4DynamicParticle*>& vd,
+					  G4int coupleIdx)
+{
+  G4double weight = 1.0;
+  size_t n = vd.size();
+  G4int i = idxSecBiasedCouple[coupleIdx];
+  if(0 <= i && 0 < n) {
+
+    weight = secBiasedWeight[i];
+    G4int nsplit = nBremSplitting[i];
+
+    // splitting
+    if(1 < nsplit) {
+      for(size_t k=0; k<n; ++k) {
+	const G4DynamicParticle* dp = vd[k];
+	for(G4int j=1; j<nsplit; ++j) {
+	  G4DynamicParticle* dpnew = new G4DynamicParticle(*dp);
+	  vd.push_back(dpnew);
+	}
+      }
+      // Russian roulette
+    } else { 
+      for(size_t k=0; k<n; ++k) {
+	const G4DynamicParticle* dp = vd[k];
+        if(G4UniformRand()*weight > 1.0) {
+	  delete dp;
+          vd[k] = 0;
+	}
+      }
+    }
+  }
+  return weight;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void
+G4EmBiasingManager::ApplySecondaryBiasing(std::vector<G4Track*>& tr, 
+					  G4double primaryWeight, 
+					  G4int coupleIdx)
+{
+  G4double weight = primaryWeight;
+  size_t n = tr.size();
+  G4int i = idxSecBiasedCouple[coupleIdx];
+  if(0 <= i && 0 < n) {
+
+    weight *= secBiasedWeight[i];
+    G4int nsplit = nBremSplitting[i];
+
+    // splitting
+    if(1 < nsplit) {
+      for(size_t k=0; k<n; ++k) {
+	G4Track* t = tr[k];
+	t->SetWeight(weight);
+	for(G4int j=1; j<nsplit; ++j) {
+	  G4Track* tnew = new G4Track(*t);
+          tnew->SetWeight(weight);
+	  tr.push_back(tnew);
+	}
+      }
+      // Russian roulette
+    } else { 
+      for(size_t k=0; k<n; ++k) {
+	G4Track* t = tr[k];
+        if(G4UniformRand()*secBiasedWeight[i] <= 1.0) {
+          t->SetWeight(weight);
+	} else {
+	  delete t;
+          tr[k] = 0;
+	}
+      }
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

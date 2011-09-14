@@ -212,10 +212,12 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   // particle types
   theElectron   = G4Electron::Electron();
   thePositron   = G4Positron::Positron();
+  theGamma      = G4Gamma::Gamma();
   theGenericIon = 0;
 
   // run time objects
   pParticleChange = &fParticleChange;
+  fParticleChange.SetSecondaryWeightByProcess(true);
   modelManager = new G4EmModelManager();
   safetyHelper = G4TransportationManager::GetTransportationManager()
     ->GetSafetyHelper();
@@ -478,7 +480,7 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 
   // forced biasing
   if(biasManager) { 
-    biasManager->Initialise(); 
+    biasManager->Initialise(part,GetProcessName(),verboseLevel); 
     biasFlag = false; 
   }
 
@@ -894,6 +896,7 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
   if(theGenericIon == particle) {
     massRatio = proton_mass_c2/currPart->GetPDGMass();
   }  
+  /*
   if(!theDensityFactor || !theDensityIdx) {
     G4cout << "G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength 1: "
 	   <<  theDensityFactor << "  " << theDensityIdx
@@ -903,6 +906,7 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
 	   << " mat " << track.GetMaterialCutsCouple()->GetMaterial()->GetName()
 	   << G4endl;
   }
+  */
   DefineMaterial(track.GetMaterialCutsCouple());
   preStepKinEnergy    = track.GetKineticEnergy();
   preStepScaledEnergy = preStepKinEnergy*massRatio;
@@ -1001,7 +1005,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 
   // Get the actual (true) Step length
   G4double length = step.GetStepLength();
-  if(length <= DBL_MIN) { return &fParticleChange; }
+  if(length <= 0.0) { return &fParticleChange; }
   G4double eloss  = 0.0;
  
   /*  
@@ -1022,13 +1026,17 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 
   const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
 
+  // define new weight for primary and secondaries
+  G4double weight = fParticleChange.GetParentWeight()/biasFactor;
+  fParticleChange.ProposeParentWeight(weight);
+
   // stopping
   if (length >= fRange) {
     eloss = preStepKinEnergy;
     if (useDeexcitation) {
-      atomDeexcitation->AlongStepDeexcitation(&fParticleChange, step, 
+      atomDeexcitation->AlongStepDeexcitation(scTracks, step, 
 					      eloss, currentCoupleIndex);
-      if(eloss < 0.0) { eloss = 0.0; }
+      FillSecondariesAlongStep(eloss, weight);
     }
     fParticleChange.SetProposedKineticEnergy(0.0);
     fParticleChange.ProposeLocalEnergyDeposit(eloss);
@@ -1079,7 +1087,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
     if(idxSCoffRegions[currentCoupleIndex]) {
 
       G4bool yes = false;
-      G4StepPoint* prePoint  = step.GetPreStepPoint();
+      G4StepPoint* prePoint = step.GetPreStepPoint();
 
       // Check boundary
       if(prePoint->GetStepStatus() == fGeomBoundary) { yes = true; }
@@ -1107,14 +1115,13 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 	}
       }
   
-      // Decide to start subcut sampling
+      // Decided to start subcut sampling
       if(yes) {
 
         cut = (*theSubCuts)[currentCoupleIndex];
  	eloss -= GetSubDEDXForScaledEnergy(preStepScaledEnergy)*length;
-	scTracks.clear();
-	SampleSubCutSecondaries(scTracks, step, 
-				currentModel,currentCoupleIndex);
+	esec = SampleSubCutSecondaries(scTracks, step, 
+				       currentModel,currentCoupleIndex);
 	// add bremsstrahlung sampling
 	/*
 	if(nProcesses > 0) {
@@ -1125,22 +1132,8 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 		currentCoupleIndex);
 	  }
 	} 
-	*/   
-	G4int n = scTracks.size();
-	if(n>0) {
-	  G4ThreeVector mom = dynParticle->GetMomentum();
-	  fParticleChange.SetNumberOfSecondaries(n);
-	  for(G4int i=0; i<n; ++i) {
-	    G4Track* t = scTracks[i];
-	    G4double e = t->GetKineticEnergy();
-	    if (t->GetParticleDefinition() == thePositron) { 
-	      e += 2.0*electron_mass_c2; 
-	    }
-	    esec += e;
-	    pParticleChange->AddSecondary(t);
-	  }      
-	}
-      }
+	*/
+      }   
     }
   }
 
@@ -1177,7 +1170,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   // deexcitation
   if (useDeexcitation) {
     G4double eloss_before = eloss;
-    atomDeexcitation->AlongStepDeexcitation(&fParticleChange, step, 
+    atomDeexcitation->AlongStepDeexcitation(scTracks, step, 
 					    eloss, currentCoupleIndex);
     esec += eloss_before - eloss;
   }
@@ -1193,7 +1186,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 				      currentMaterial,finalT));
   }
 
-  if(eloss < 0.0) { eloss = 0.0; }
+  FillSecondariesAlongStep(eloss, weight);
   fParticleChange.SetProposedKineticEnergy(finalT);
   fParticleChange.ProposeLocalEnergyDeposit(eloss);
 
@@ -1213,16 +1206,47 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossProcess::SampleSubCutSecondaries(
-       std::vector<G4Track*>& tracks, 
-       const G4Step& step, 
-       G4VEmModel* model,
-       G4int idx) 
+void 
+G4VEnergyLossProcess::FillSecondariesAlongStep(G4double& eloss, G4double& weight)
+{
+  if(eloss < 0.0) { eloss = 0.0; }
+  G4int n = scTracks.size();
+  if(0 == n) { return; }
+
+  // weight may be changed by biasing manager
+  G4bool weightNotChanged = true;
+  if(biasManager) {
+    if(biasManager->SecondaryBiasingRegion(currentCoupleIndex)) {
+      biasManager->ApplySecondaryBiasing(scTracks,weight,currentCoupleIndex);
+      weightNotChanged = false;
+    }
+  }	  
+
+  // fill secondaries
+  fParticleChange.SetNumberOfSecondaries(n);
+  for(G4int i=0; i<n; ++i) {
+    G4Track* t = scTracks[i];
+    if(t) {
+      if(weightNotChanged) { t->SetWeight(weight); }
+      pParticleChange->AddSecondary(t);
+    }
+  }
+  scTracks.clear();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double 
+G4VEnergyLossProcess::SampleSubCutSecondaries(std::vector<G4Track*>& tracks, 
+					      const G4Step& step, 
+					      G4VEmModel* model,
+					      G4int idx) 
 {
   // Fast check weather subcutoff can work
+  G4double esec = 0.0;
   G4double subcut = (*theSubCuts)[idx];
   G4double cut = (*theCuts)[idx];
-  if(cut <= subcut) { return; }
+  if(cut <= subcut) { return esec; }
 
   const G4Track* track = step.GetTrack();
   const G4DynamicParticle* dp = track->GetDynamicParticle();
@@ -1232,7 +1256,7 @@ void G4VEnergyLossProcess::SampleSubCutSecondaries(
   G4double length = step.GetStepLength();
 
   // negligible probability to get any interaction
-  if(length*cross < perMillion) { return; }
+  if(length*cross < perMillion) { return esec; }
   /*      
   if(-1 < verboseLevel) 
     G4cout << "<<< Subcutoff for " << GetProcessName()
@@ -1285,6 +1309,10 @@ void G4VEnergyLossProcess::SampleSubCutSecondaries(
 	G4Track* t = new G4Track((*it), pretime + fragment*dt, r);
 	t->SetTouchableHandle(track->GetTouchableHandle());
 	tracks.push_back(t);
+	esec += t->GetKineticEnergy();
+	if (t->GetParticleDefinition() == thePositron) { 
+	  esec += 2.0*electron_mass_c2; 
+	}
 
 	/*	
 	if(-1 < verboseLevel) 
@@ -1296,6 +1324,7 @@ void G4VEnergyLossProcess::SampleSubCutSecondaries(
       }
     }
   } while (fragment <= 1.0);
+  return esec;
 } 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -1359,12 +1388,26 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
   secParticles.clear();
   currentModel->SampleSecondaries(&secParticles, currentCouple, dynParticle, tcut);
 
+  // bremsstrahlung splitting or Russian roulette  
+  if(biasManager) {
+    if(biasManager->SecondaryBiasingRegion(currentCoupleIndex)) {
+      weight *= biasManager->ApplySecondaryBiasing(secParticles,currentCoupleIndex);
+    }
+  }
+
   // save secondaries
   G4int num = secParticles.size();
   if(num > 0) {
     fParticleChange.SetNumberOfSecondaries(num);
     for (G4int i=0; i<num; ++i) {
-      fParticleChange.AddSecondary(secParticles[i]);
+
+      if(secParticles[i]) {
+	G4Track* t = new G4Track(secParticles[i], track.GetGlobalTime(), 
+				 track.GetPosition());
+	t->SetTouchableHandle(track.GetTouchableHandle());
+	t->SetWeight(weight); 
+	pParticleChange->AddSecondary(t);
+      }
     }
   }
 
@@ -1891,10 +1934,22 @@ const G4Element* G4VEnergyLossProcess::GetCurrentElement() const
 
 void 
 G4VEnergyLossProcess::ActivateForcedInteraction(G4double length, 
-						const G4String& r)
+						const G4String& region)
 {
   if(!biasManager) { biasManager = new G4EmBiasingManager(); }
-  biasManager->ActivateForcedInteraction(length, r);
+  biasManager->ActivateForcedInteraction(length, region);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void 
+G4VEnergyLossProcess::ActivateSecondaryBiasing(const G4String& region, 
+					       G4double factor)
+{
+  if (0.0 < factor ) { 
+    if(!biasManager) { biasManager = new G4EmBiasingManager(); }
+    biasManager->ActivateSecondaryBiasing(region, factor);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

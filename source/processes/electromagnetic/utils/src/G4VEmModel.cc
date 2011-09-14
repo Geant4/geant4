@@ -274,13 +274,6 @@ void G4VEmModel::CorrectionsAlongStep(const G4MaterialCutsCouple*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4VEmModel::SampleDeexcitationAlongStep(const G4Material*,
-					     const G4Track&,
-					     G4double& )
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4double G4VEmModel::MaxSecondaryEnergy(const G4ParticleDefinition*,
 					G4double kineticEnergy)
 {

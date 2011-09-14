@@ -60,19 +60,24 @@
 #include "Randomize.hh"
 #include "G4VParticleChange.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4VAtomDeexcitation::G4VAtomDeexcitation(const G4String& modname, 
 					 const G4String& pname) 
   : lowestKinEnergy(keV), verbose(1), name(modname), namePIXE(pname), 
     nameElectronPIXE(""),isActive(false), flagAuger(false), flagPIXE(false)
 {
   vdyn.reserve(5);
-  secVect.reserve(5);
   theCoupleTable = 0;
   SetDeexcitationActiveRegion("World");
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4VAtomDeexcitation::~G4VAtomDeexcitation()
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
 {
@@ -145,6 +150,8 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void 
 G4VAtomDeexcitation::SetDeexcitationActiveRegion(const G4String& rname,
 						 G4bool valDeexcitation,
@@ -177,8 +184,10 @@ G4VAtomDeexcitation::SetDeexcitationActiveRegion(const G4String& rname,
   PIXERegions.push_back(valPIXE);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void 
-G4VAtomDeexcitation::AlongStepDeexcitation(G4VParticleChange* pParticleChange,
+G4VAtomDeexcitation::AlongStepDeexcitation(std::vector<G4Track*>& tracks,
 					   const G4Step& step, 
 					   G4double& eLoss,
                                            G4int coupleIndex)
@@ -216,7 +225,6 @@ G4VAtomDeexcitation::AlongStepDeexcitation(G4VParticleChange* pParticleChange,
   G4int nelm = material->GetNumberOfElements();
 
   // loop over deexcitations
-  secVect.clear();
   for(G4int i=0; i<nelm; ++i) {
     G4int Z = G4int((*theElementVector)[i]->GetZ());
     if(Z >= 93)     { continue; } 
@@ -256,7 +264,7 @@ G4VAtomDeexcitation::AlongStepDeexcitation(G4VParticleChange* pParticleChange,
 		    // save new secondary if there is enough energy
 		    if(e <= eLoss) {
 		      G4Track* t = new G4Track(dp, time, r);
-		      secVect.push_back(t); 
+		      tracks.push_back(t); 
 		      eLoss -= e;
 		    } else {
 		      delete dp;
@@ -270,13 +278,6 @@ G4VAtomDeexcitation::AlongStepDeexcitation(G4VParticleChange* pParticleChange,
       }
     } 
   }
-  G4int nsec = secVect.size(); 
-  //G4cout << " !!!! Nsec= " << nsec << G4endl;
-  if(nsec > 0) {
-    G4int secondariesBefore = pParticleChange->GetNumberOfSecondaries();
-    pParticleChange->SetNumberOfSecondaries(nsec+secondariesBefore);
-    for(G4int j=0; j<nsec; ++j) {
-      pParticleChange->AddSecondary(secVect[j]);
-    }
-  }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

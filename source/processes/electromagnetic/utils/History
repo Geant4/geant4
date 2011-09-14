@@ -17,6 +17,22 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12 September 11: V.Ivant (emutils-V09-04-42)
+- G4EnergyLossMessenger - fixed new biasing UI command
+
+10 September 11: V.Ivant (emutils-V09-04-41)
+- G4VEnergyLossProcess, G4EmBiasingManager, G4EmProcessOptions,
+  G4EnergyLossMessenger - added Russian roulette
+
+7 September 11: V.Ivant (emutils-V09-04-40)
+- G4VEnergyLossProcess, G4EmBiasingManager, G4VEmProcess - updated 
+  computation of weight for biasing options
+
+7 September 11: V.Ivant (emutils-V09-04-39)
+- G4VEnergyLossProcess, G4EmBiasingManager, G4EmProcessOptions,
+  G4EnergyLossMessenger - added bremsstrahlung splitting
+- G4VEmModel - removed obsolete method SampleDeexcitationAlongStep
+
 29 August 11: V.Ivant (emutils-V09-04-38)
 - G4VEnergyLossProcess - fixed initialisation for alpha and He3 
                          introduced in previous tag

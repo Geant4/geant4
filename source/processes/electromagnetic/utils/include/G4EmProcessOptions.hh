@@ -146,6 +146,9 @@ public:
   void ActivateForcedInteraction(const G4String& name, G4double length=0.0, 
 				 const G4String& region="");
 
+  void ActivateSecondaryBiasing(const G4String& name,
+				const G4String& region, G4double factor);
+
 private:
 
   G4EmProcessOptions & operator=(const  G4EmProcessOptions &right);

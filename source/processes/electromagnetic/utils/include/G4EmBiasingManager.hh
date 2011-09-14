@@ -50,11 +50,14 @@
 #define G4EmBiasingManager_h 1
 
 #include "globals.hh"
+#include "G4ParticleDefinition.hh"
 #include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class G4Region;
+class G4DynamicParticle;
+class G4Track;
 
 class G4EmBiasingManager 
 {
@@ -64,12 +67,29 @@ public:
 
   ~G4EmBiasingManager();
 
+  void Initialise(const G4ParticleDefinition& part,
+		  const G4String& procName, G4int verbose);
+
+  // default parameters are possible
   void ActivateForcedInteraction(G4double length = 0.0, 
 				 const G4String& r = "");
 
-  void Initialise();
+  // no default parameters
+  void ActivateSecondaryBiasing(const G4String& region, G4double factor);
 
+  // return forced step limit
   G4double GetStepLimit(G4int coupleIdx, G4double previousStep);
+
+  // return weight of splitting or Russian roulette
+  // G4DynamicParticle may be deleted
+  G4double ApplySecondaryBiasing(std::vector<G4DynamicParticle*>&, 
+				 G4int coupleIdx);
+
+  // Splitting or Russian roulette, G4Track may be deleted
+  void ApplySecondaryBiasing(std::vector<G4Track*>&, G4double primaryWeight, 
+			     G4int coupleIdx);
+
+  inline G4bool SecondaryBiasingRegion(G4int coupleIdx);
 
   inline G4bool ForcedInteractionRegion(G4int coupleIdx);
 
@@ -81,18 +101,38 @@ private:
   G4EmBiasingManager(G4EmBiasingManager &);
   G4EmBiasingManager & operator=(const G4EmBiasingManager &right);
 
-  G4int                        nRegions;
+  G4int                        nForcedRegions;
+  G4int                        nSecBiasedRegions;
   std::vector<const G4Region*> forcedRegions;
   std::vector<G4double>        lengthForRegion;
-  std::vector<G4int>           idxCouple;
+  std::vector<const G4Region*> secBiasedRegions;
+  std::vector<G4double>        secBiasedWeight;
+  std::vector<G4int>           nBremSplitting;
+
+  std::vector<G4int>           idxForcedCouple;
+  std::vector<G4int>           idxSecBiasedCouple;
 
   G4double currentStepLimit;
   G4bool   startTracking;
 };
 
+inline G4bool 
+G4EmBiasingManager::SecondaryBiasingRegion(G4int coupleIdx)
+{
+  G4bool res = false;
+  if(nSecBiasedRegions > 0) {
+    if(idxSecBiasedCouple[coupleIdx] >= 0) { res = true; }
+  }
+  return res;
+}
+
 inline G4bool G4EmBiasingManager::ForcedInteractionRegion(G4int coupleIdx)
 {
-  return (idxCouple[coupleIdx] >= 0);
+  G4bool res = false;
+  if(nForcedRegions > 0) {
+    if(idxForcedCouple[coupleIdx] >= 0) { res = true; }
+  }
+  return res;
 }
 
 inline void G4EmBiasingManager::ResetForcedInteraction()

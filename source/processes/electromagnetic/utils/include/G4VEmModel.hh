@@ -166,11 +166,6 @@ public:
 				    G4double& niel,
 				    G4double length);
 
-  // sample PIXE deexcitation
-  virtual void SampleDeexcitationAlongStep(const G4Material*,
-					   const G4Track&,
-                                           G4double& eloss);
-
   // initilisation at run time for a given material
   virtual void SetupForMaterial(const G4ParticleDefinition*,
 				const G4Material*,

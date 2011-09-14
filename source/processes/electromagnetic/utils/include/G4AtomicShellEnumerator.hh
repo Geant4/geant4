@@ -50,15 +50,16 @@
 
 enum G4AtomicShellEnumerator // not following EADL syntax
 {
-  fKShell = 0,
-  fL1Shell = 1, 
-  fL2Shell = 2,
-  fL3Shell = 3,
-  fM1Shell = 4,
-  fM2Shell = 5,
-  fM3Shell = 6,
-  fM4Shell = 7,
-  fM5Shell = 8
+  //***********EADL shell Id              
+  fKShell = 0,  //  1
+  fL1Shell = 1, //  3
+  fL2Shell = 2,	//  5
+  fL3Shell = 3,	//  6
+  fM1Shell = 4,	//  8
+  fM2Shell = 5,	//  10
+  fM3Shell = 6,	//  11
+  fM4Shell = 7,	//  13
+  fM5Shell = 8  //  14
 };
 
 #endif

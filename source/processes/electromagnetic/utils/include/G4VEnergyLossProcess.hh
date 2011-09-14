@@ -190,8 +190,9 @@ public:
   G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&);
 
   // Sampling of secondaries in vicinity of geometrical boundary
-  void SampleSubCutSecondaries(std::vector<G4Track*>&, const G4Step&, 
-                               G4VEmModel* model, G4int matIdx); 
+  // Return sum of secodaries energy 
+  G4double SampleSubCutSecondaries(std::vector<G4Track*>&, const G4Step&, 
+				   G4VEmModel* model, G4int matIdx); 
 
   // PostStep sampling of secondaries
   G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
@@ -334,7 +335,9 @@ public:
 
   // Activate forced interaction
   void ActivateForcedInteraction(G4double length = 0.0, 
-				 const G4String& r = "");
+				 const G4String& region = "");
+
+  void ActivateSecondaryBiasing(const G4String& region, G4double factor);
 
   // Add subcutoff process (bremsstrahlung) to sample secondary 
   // particle production in vicinity of the geometry boundary
@@ -434,6 +437,8 @@ public:
 
 private:
 
+  void FillSecondariesAlongStep(G4double& eloss, G4double& weight);
+
   // define material and indexes
   inline void DefineMaterial(const G4MaterialCutsCouple* couple);
 
@@ -464,6 +469,7 @@ private:
   const G4ParticleDefinition* secondaryParticle;
   const G4ParticleDefinition* theElectron;
   const G4ParticleDefinition* thePositron;
+  const G4ParticleDefinition* theGamma;
   const G4ParticleDefinition* theGenericIon;
 
   //  G4PhysicsVector*            vstrag;

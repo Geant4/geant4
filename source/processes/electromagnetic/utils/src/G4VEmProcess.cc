@@ -259,7 +259,7 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
     }
     // forced biasing
     if(biasManager) { 
-      biasManager->Initialise(); 
+      biasManager->Initialise(part,GetProcessName(),verboseLevel); 
       biasFlag = false; 
     }
   }
