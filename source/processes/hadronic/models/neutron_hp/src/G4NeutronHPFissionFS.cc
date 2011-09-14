@@ -28,7 +28,8 @@
 // A prototype of the low energy neutron transport model.
 //
 // 12-Apr-06 fix in delayed neutron and photon emission without FS data by T. Koi
-//
+// 07-Sep-11 M. Kelsey -- Follow change to G4HadFinalState interface
+
 #include "G4NeutronHPFissionFS.hh"
 #include "G4Nucleus.hh"
 #include "G4DynamicParticleVector.hh"
@@ -158,9 +159,8 @@
      {
        G4double time = -std::log(G4UniformRand())/theDecayConstants[i];
        time += theTrack.GetGlobalTime();
-       G4HadSecondary * track = new G4HadSecondary(theDelayed->operator[](i));
-       track->SetTime(time);
-       theResult.AddSecondary(track);
+       theResult.AddSecondary(theDelayed->operator[](i));
+       theResult.GetSecondary(theResult.GetNumberOfSecondaries()-1)->SetTime(time);
      }
      delete theDelayed;                  
    }
@@ -183,10 +183,8 @@
      {
        G4double time = -std::log(G4UniformRand())/theDecayConstants[i0-Prompt];
        time += theTrack.GetGlobalTime();        
-       //G4HadSecondary * track = new G4HadSecondary(theNeutrons->operator[](i)); this line will be delete
-       G4HadSecondary * track = new G4HadSecondary( theNeutrons->operator[]( i0 ) );
-       track->SetTime(time);
-       theResult.AddSecondary(track);
+       theResult.AddSecondary(theNeutrons->operator[](i0));
+       theResult.GetSecondary(theResult.GetNumberOfSecondaries()-1)->SetTime(time);
      }
      delete theNeutrons;   
    }
