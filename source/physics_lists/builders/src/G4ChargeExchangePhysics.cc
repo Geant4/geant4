@@ -41,7 +41,6 @@
 
 #include "G4ChargeExchangeProcess.hh"
 #include "G4ChargeExchange.hh"
-#include "G4UElasticCrossSection.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
@@ -106,7 +105,6 @@ void G4ChargeExchangePhysics::ConstructProcess()
       
       G4ProcessManager* pmanager = particle->GetProcessManager();
       G4ChargeExchangeProcess* p = new G4ChargeExchangeProcess();
-      if(glFlag) p->AddDataSet(new G4UElasticCrossSection(particle));
       p->RegisterMe(model);
       pmanager->AddDiscreteProcess(p);
 

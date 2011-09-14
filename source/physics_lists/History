@@ -15,6 +15,19 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05-09-2011, A.M., M.K., S.I.         (phys-lists-V09-04-43)
+- Updated sources.cmake in builders for new dna architecture
+
+31-08-2011, A.M., M.K., S.I.         (phys-lists-V09-04-42)
+- Updated builders/GNUmakefile and builders/sources.cmake 
+for new DNA architecture. Must be applied on top of tag emdna-V09-04-19
+
+24-08-2011, S. Incerti               (phys-lists-V09-04-41)
+- G4EmDNAPhysics - changed elastic scattering model
+
+22-08-2011, V.Ivanchenko               (phys-lists-V09-04-40)
+- G4ChargeExchangePhysics - removed obsolete header
+
 01-08-2011, G.Folger                      (phys-lists-V09-04-39)
 - In HadronPhysicsFTFP_BERT_TRV, change overlap BERT/FTFP to be 
    from 3 to 12 GeV, affecting FTFP_BERT_TRV.

@@ -137,10 +137,10 @@ void G4EmDNAPhysics::ConstructProcess()
       // *** Elastic scattering (two alternative models available) ***
       
       G4DNAElastic* theDNAElasticProcess = new G4DNAElastic("e-_G4DNAElastic");
-      // theDNAElasticProcess->SetModel(new G4DNAChampionElasticModel());
+      theDNAElasticProcess->SetModel(new G4DNAChampionElasticModel());
       
       // or alternative model
-      theDNAElasticProcess->SetModel(new G4DNAScreenedRutherfordElasticModel());
+      //theDNAElasticProcess->SetModel(new G4DNAScreenedRutherfordElasticModel());
       
       ph->RegisterProcess(theDNAElasticProcess, particle);
 
