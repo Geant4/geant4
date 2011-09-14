@@ -38,10 +38,15 @@
 //               and plasma energy (used for Ionisation). L Pandola
 //  18 Mar 2010  Added method to retrieve number of atoms per 
 //               molecule. L. Pandola
+//  06 Sep 2011  Override the local Penelope database and use the main
+//               G4AtomicDeexcitation database to retrieve the shell 
+//               binding energies. L. Pandola
 //
 // -------------------------------------------------------------------
 
 #include "G4PenelopeOscillatorManager.hh"
+#include "G4AtomicTransitionManager.hh"
+#include "G4AtomicShell.hh"
 #include "G4Material.hh"
 #include "globals.hh"
 
@@ -1057,6 +1062,10 @@ void G4PenelopeOscillatorManager::ReadElementData()
       G4Exception("G4PenelopeOscillatorManager::ReadElementData()",
 		  "em0003",FatalException,excep);
     }
+
+  G4AtomicTransitionManager* theTransitionManager = 
+    G4AtomicTransitionManager::Instance();
+  
   //Read header (22 lines)
   G4String theHeader;
   for (G4int iline=0;iline<22;iline++)
@@ -1068,6 +1077,9 @@ void G4PenelopeOscillatorManager::ReadElementData()
   G4int occupationNumber = 0;
   G4double ionisationEnergy = 0.0*eV;
   G4double hartreeProfile = 0.;
+  G4int shellCounter = 0;
+  G4int oldZ = -1;
+  G4int numberOfShells = 0;
   //Start reading data
   for (G4int i=0;!file.eof();i++)
     {
@@ -1077,8 +1089,25 @@ void G4PenelopeOscillatorManager::ReadElementData()
 	  elementData[0][i] = Z;
 	  elementData[1][i] = shellCode;
 	  elementData[2][i] = occupationNumber;
-	  elementData[3][i] = ionisationEnergy*eV;
+	  //reset things
+	  if (Z != oldZ)
+	    {
+	      shellCounter = 0;
+	      oldZ = Z;
+	      numberOfShells = theTransitionManager->NumberOfShells(Z);
+	    }
+	  G4double bindingEnergy = -1*eV;
+	  if (shellCounter<numberOfShells)
+	    {
+	      G4AtomicShell* shell = theTransitionManager->Shell(Z,shellCounter);
+	      bindingEnergy = shell->BindingEnergy();	 
+	    }
+	  //Valid level found in the G4AtomicTransition database: keep it, otherwise use 
+	  //the ionisation energy found in the Penelope database
+	  elementData[3][i] = (bindingEnergy) ? bindingEnergy : ionisationEnergy*eV;	  	  
+	  //elementData[3][i] = ionisationEnergy*eV;
 	  elementData[4][i] = hartreeProfile;
+	  shellCounter++;
 	}
     }
   file.close();

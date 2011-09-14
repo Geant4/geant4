@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05.09.2011  L.Pandola, tag emlowen-V09-04-59
+	    Edited G4PenelopeOscillatorManager in order to 
+	    use the shell binding energy from the G4AtomicDeexcitation
+	    data, rather than from the local Penelope database. This 
+	    fixes small inconsistencies.
+
 01.09.2011  S.I., L.P., A.M., tag emlowen-V09-04-58
             Removed obsolete G4Exception syntax
 
