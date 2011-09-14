@@ -32,7 +32,8 @@
 // The last update: J.P. Wellisch, 06-June-02
 // 17.02.2009 M.Kossov, now it is recommended to use the G4QCollision process
 // 10.11.2010 V.Ivanchenko use cross sections by pointer and not by value
-//
+// 07.09.2011 M.Kelsey, follow changes to G4HadFinalState interface
+
 #ifndef G4ElectroNuclearReaction_h
 #define G4ElectroNuclearReaction_h 1
 
@@ -249,15 +250,13 @@ G4HadFinalState* G4ElectroNuclearReaction::ApplyYourself(const G4HadProjectile& 
   G4ThreeVector position(0,0,0);
   G4HadProjectile localTrack(localGamma);
   G4HadFinalState * result;
-  if(photonEnergy < 3*GeV) result = theLEModel.ApplyYourself(localTrack, aTargetNucleus,
-                                                             &theResult);
-  else 
-  {
+  if (photonEnergy < 3*GeV)
+    result = theLEModel.ApplyYourself(localTrack, aTargetNucleus, &theResult);
+  else {
     // G4cout << "0) Getting a high energy electro-nuclear reaction"<<G4endl;
     G4HadFinalState * aResult = theHEModel->ApplyYourself(localTrack, aTargetNucleus);
-    for(G4int all = 0; all < aResult->GetNumberOfSecondaries(); all++)
-                                   theResult.AddSecondary(aResult->GetSecondary(all));
-    aResult->SecondariesAreStale();
+    theResult.AddSecondaries(aResult);
+    aResult->Clear();
     result = &theResult;
   }
   return result;
