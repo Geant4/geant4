@@ -78,8 +78,8 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
 {
    if (endinnerrad < DBL_MIN)
    {
-      G4Exception("G4TwistedTubs::G4TwistedTubs()", "InvalidSetup",
-                  FatalException, "Invalid end-inner-radius!");
+      G4Exception("G4TwistedTubs::G4TwistedTubs()", "GeomSolids0002",
+                  FatalErrorInArgument, "Invalid end-inner-radius!");
    }
             
    G4double sinhalftwist = std::sin(0.5 * twistedangle);
@@ -112,14 +112,17 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
 
    if (!nseg)
    {
-     G4cerr << "ERROR - G4TwistedTubs::G4TwistedTubs()" << G4endl
-            << "        Invalid nseg. nseg = " << nseg << G4endl;
+      std::ostringstream message;
+      message << "Invalid number of segments." << G4endl
+              << "        nseg = " << nseg;
+      G4Exception("G4TwistedTubs::G4TwistedTubs()", "GeomSolids0002",
+                  FatalErrorInArgument, message);
    }
    if (totphi == DBL_MIN || endinnerrad < DBL_MIN)
    {
-      G4Exception("G4TwistedTubs::G4TwistedTubs()", "InvalidSetup",
-                  FatalException, "Invalid total-phi or end-inner-radius!");
-   }    
+      G4Exception("G4TwistedTubs::G4TwistedTubs()", "GeomSolids0002",
+                FatalErrorInArgument, "Invalid total-phi or end-inner-radius!");
+   }
          
    G4double sinhalftwist = std::sin(0.5 * twistedangle);
 
@@ -151,8 +154,8 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
 {
    if (innerrad < DBL_MIN)
    {
-      G4Exception("G4TwistedTubs::G4TwistedTubs()", "InvalidSetup",
-                  FatalException, "Invalid end-inner-radius!");
+      G4Exception("G4TwistedTubs::G4TwistedTubs()", "GeomSolids0002",
+                  FatalErrorInArgument, "Invalid end-inner-radius!");
    }
                  
    SetFields(twistedangle, innerrad, outerrad, negativeEndz, positiveEndz);
@@ -174,13 +177,16 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
 {
    if (!nseg)
    {
-     G4cerr << "ERROR - G4TwistedTubs::G4TwistedTubs()" << G4endl
-            << "        Invalid nseg. nseg = " << nseg << G4endl;
+      std::ostringstream message;
+      message << "Invalid number of segments." << G4endl
+              << "        nseg = " << nseg;
+      G4Exception("G4TwistedTubs::G4TwistedTubs()", "GeomSolids0002",
+                  FatalErrorInArgument, message);
    }
    if (totphi == DBL_MIN || innerrad < DBL_MIN)
    {
-      G4Exception("G4TwistedTubs::G4TwistedTubs()", "InvalidSetup",
-                  FatalException, "Invalid total-phi or end-inner-radius!");
+      G4Exception("G4TwistedTubs::G4TwistedTubs()", "GeomSolids0002",
+                FatalErrorInArgument, "Invalid total-phi or end-inner-radius!");
    }
             
    fDPhi = totphi / nseg;
@@ -308,7 +314,7 @@ void G4TwistedTubs::ComputeDimensions(G4VPVParameterisation* /* p */ ,
                                       const G4VPhysicalVolume* /* pRep */ )
 {
   G4Exception("G4TwistedTubs::ComputeDimensions()",
-              "NotSupported", FatalException,
+              "GeomSolids0001", FatalException,
               "G4TwistedTubs does not support Parameterisation.");
 }
 
@@ -826,7 +832,7 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p) const
       }
       default :
       {
-         G4Exception("G4TwistedTubs::DistanceToIn(p)", "InvalidCondition",
+         G4Exception("G4TwistedTubs::DistanceToIn(p)", "GeomSolids0003",
                      FatalException, "Unknown point location!");
       }
    } // switch end
@@ -1020,7 +1026,7 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p ) const
       }
       default :
       {
-         G4Exception("G4TwistedTubs::DistanceToOut(p)", "InvalidCondition",
+         G4Exception("G4TwistedTubs::DistanceToOut(p)", "GeomSolids0003",
                      FatalException, "Unknown point location!");
       }
    } // switch end
@@ -1036,6 +1042,7 @@ std::ostream& G4TwistedTubs::StreamInfo(std::ostream& os) const
   //
   // Stream object contents to an output stream
   //
+  G4int oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -1054,6 +1061,7 @@ std::ostream& G4TwistedTubs::StreamInfo(std::ostream& os) const
      << "    outer stereo angle     : " << fOuterStereo/degree << " degrees \n"
      << "    phi-width of a piece   : " << fDPhi/degree << " degrees \n"
      << "-----------------------------------------------------------\n";
+  os.precision(oldprc);
 
   return os;
 }

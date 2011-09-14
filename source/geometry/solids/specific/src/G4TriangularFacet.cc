@@ -108,17 +108,16 @@ G4TriangularFacet::G4TriangularFacet (const G4ThreeVector Pt0,
   if (Emag1 <= kCarTolerance || Emag2 <= kCarTolerance ||
       Emag3 <= kCarTolerance)
   {
-    G4Exception("G4TriangularFacet::G4TriangularFacet()", "InvalidSetup",
-                JustWarning, "Length of sides of facet are too small.");
-    G4cerr << G4endl;
-    G4cerr << "P0 = " << P0   << G4endl;
-    G4cerr << "P1 = " << P[0] << G4endl;
-    G4cerr << "P2 = " << P[1] << G4endl;
-    G4cerr << "Side lengths = P0->P1" << Emag1 << G4endl;    
-    G4cerr << "Side lengths = P0->P2" << Emag2 << G4endl;    
-    G4cerr << "Side lengths = P1->P2" << Emag3 << G4endl;    
-    G4cerr << G4endl;
-    
+    std::ostringstream message;
+    message << "Length of sides of facet are too small." << G4endl
+            << "P0 = " << P0   << G4endl
+            << "P1 = " << P[0] << G4endl
+            << "P2 = " << P[1] << G4endl
+            << "Side lengths = P0->P1" << Emag1 << G4endl
+            << "Side lengths = P0->P2" << Emag2 << G4endl
+            << "Side lengths = P1->P2" << Emag3;
+    G4Exception("G4TriangularFacet::G4TriangularFacet()",
+                "GeomSolids1001", JustWarning, message);
     isDefined     = false;
     geometryType  = "G4TriangularFacet";
     surfaceNormal = G4ThreeVector(0.0,0.0,0.0);
@@ -487,7 +486,7 @@ G4double G4TriangularFacet::Distance (const G4ThreeVector &p,
     G4double dist1   = std::sqrt(sqrDist);
     G4double dir     = v.dot(surfaceNormal);
     G4bool wrongSide = (dir > 0.0 && !outgoing) || (dir < 0.0 && outgoing);
-    if (dist1 <= kCarTolerance*0.5)
+    if (dist1 <= kCarTolerance)
     {
 //
 //
@@ -595,7 +594,7 @@ G4bool G4TriangularFacet::Intersect (const G4ThreeVector &p,
 // enough using a precise distance calculation.
 //
     G4ThreeVector u = Distance(p);
-    if (std::sqrt(sqrDist) <= 0.5*kCarTolerance)
+    if ( sqrDist <= kCarTolerance*kCarTolerance )
     {
 //
 //

@@ -138,7 +138,7 @@ G4Tet::G4Tet(const G4String& pName,
   if(degeneracyFlag) *degeneracyFlag=degenerate;
   else if (degenerate)
   {
-    G4Exception("G4Tet::G4Tet()", "InvalidSetup", FatalException,
+    G4Exception("G4Tet::G4Tet()", "GeomSolids0002", FatalException,
                 "Degenerate tetrahedron not allowed.");
   }
 
@@ -563,13 +563,14 @@ G4double G4Tet::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
     if (warningFlag && (tt == kInfinity || tt < -fTol))
     {
       DumpInfo();
-      G4cout << "p = " << p / mm << "mm" << G4endl;
-      G4cout << "v = " << v  << G4endl;
-      G4cout << "t1, t2, t3, t4 (mm) "
-             << t1/mm << ", " << t2/mm << ", " << t3/mm << ", " << t4/mm
-             << G4endl << G4endl;
-      G4Exception("G4Tet::DistanceToOut(p,v,...)", "Notification", JustWarning,
-                  "No good intersection found or already outside!?" );
+      std::ostringstream message;
+      message << "No good intersection found or already outside!?" << G4endl
+              << "p = " << p / mm << "mm" << G4endl
+              << "v = " << v  << G4endl
+              << "t1, t2, t3, t4 (mm) "
+              << t1/mm << ", " << t2/mm << ", " << t3/mm << ", " << t4/mm;
+      G4Exception("G4Tet::DistanceToOut(p,v,...)", "GeomSolids1002",
+                  JustWarning, message);
       if(validNorm)
       {
         *validNorm=false; // flag normal as meaningless
@@ -637,7 +638,7 @@ G4Tet::CreateRotatedVertices(const G4AffineTransform& pTransform) const
   {
     DumpInfo();
     G4Exception("G4Tet::CreateRotatedVertices()",
-                "FatalError", FatalException,
+                "GeomSolids0003", FatalException,
                 "Error in allocation of vertices. Out of memory !");
   }
   return vertices;
@@ -667,6 +668,7 @@ G4VSolid* G4Tet::Clone() const
 
 std::ostream& G4Tet::StreamInfo(std::ostream& os) const
 {
+  G4int oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
   << "    *** Dump for solid - " << GetName() << " ***\n"
   << "    ===================================================\n"
@@ -681,6 +683,7 @@ std::ostream& G4Tet::StreamInfo(std::ostream& os) const
   << "    normal142: " << fNormal142 << " \n"
   << "    normal234: " << fNormal234 << " \n"
   << "-----------------------------------------------------------\n";
+  os.precision(oldprc);
 
   return os;
 }

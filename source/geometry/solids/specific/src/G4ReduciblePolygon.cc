@@ -105,8 +105,8 @@ void G4ReduciblePolygon::Create( const G4double a[],
                                  const G4double b[], G4int n )
 {
   if (n<3)
-   G4Exception("G4ReduciblePolygon::Create()", "WrongArgumentValue",
-               FatalException, "Less than 3 vertices specified.");
+   G4Exception("G4ReduciblePolygon::Create()", "GeomSolids0002",
+               FatalErrorInArgument, "Less than 3 vertices specified.");
   
   const G4double *anext = a, *bnext = b;
   ABVertex *prev = 0;

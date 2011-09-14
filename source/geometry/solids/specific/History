@@ -17,6 +17,23 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13-Sep-2011  I.Hrivnacova (geom-specific-V09-04-06)
+- G4TriangularFacet: fixed tests where square root was compared to
+  half Cartesian tolerance; now compared to kCarTolerance.
+  Addressing problem report #1242.
+
+25-Aug-2011  G.Cosmo
+- Migrated to new G4Exception scheme for warnings and errors.
+- Defined scheme for warnings/errors coding:
+  + 1xxx for warnings, 0xxx for errors.
+  Code numbering:
+  + 0001: not supported or implemented features;
+  + 0002: invalid setup/construct;
+  + 0003: invalid run condition;
+  + 1001: incorrect setup; automatically adapted.
+  + 1002: notification.
+- Added unit test for G4ExtrudedSolid (J.Apostolakis).
+
 22-Aug-2011  I.Hrivnacova (geom-specific-V09-04-05)
 - Fix in G4TriangularFacet::Intersect() to take into account geometrical
   tolerance and cases of zero distance from surface's facet.

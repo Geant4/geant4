@@ -279,7 +279,7 @@ void G4PolyPhiFace::Diagnose( G4VSolid *owner )
     test -= 1E-6*corner->norm3D;
     
     if (owner->Inside(test) != kInside) 
-      G4Exception( "G4PolyPhiFace::Diagnose()", "InvalidSetup",
+      G4Exception( "G4PolyPhiFace::Diagnose()", "GeomSolids0002",
                    FatalException, "Bad vertex normal found." );
   } while( ++corner < corners+numEdges );
 }
@@ -1256,7 +1256,7 @@ void G4PolyPhiFace::Triangulate()
     if(i>=max_n_loops)
     {
       G4Exception( "G4PolyPhiFace::Triangulation()",
-                   "Bad_Definition_of_Solid", FatalException,
+                   "GeomSolids0003", FatalException,
                    "Maximum number of steps is reached for triangulation!" );
     }
   }   // end outer while loop
