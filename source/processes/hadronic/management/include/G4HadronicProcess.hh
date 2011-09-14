@@ -79,10 +79,22 @@ public:
   void RegisterMe(G4HadronicInteraction* a);
 
   // get cross section per element
-  virtual 
-  G4double GetElementCrossSection(const G4DynamicParticle *aParticle, 
-				  const G4Element *anElement, 
-				  const G4Material* mat = 0);
+  inline
+  G4double GetElementCrossSection(const G4DynamicParticle * part, 
+				  const G4Element * elm, 
+				  const G4Material* mat = 0)
+  {
+    G4double x = theCrossSectionDataStore->GetCrossSection(part, elm, mat);
+    if(x < 0.0) { x = 0.0; }
+    return x;
+  }
+
+  // obsolete method to get cross section per element
+  inline
+  G4double GetMicroscopicCrossSection(const G4DynamicParticle * part, 
+				      const G4Element * elm, 
+				      const G4Material* mat = 0)
+  { return GetElementCrossSection(part, elm, mat); }
 
   // generic PostStepDoIt recommended for all derived classes
   virtual G4VParticleChange* PostStepDoIt(const G4Track& aTrack, 
@@ -187,7 +199,7 @@ protected:
 
 private:
 
-  void DumpState(const G4Track&, const G4String&);
+  void DumpState(const G4Track&, const G4String&, G4ExceptionDescription&);
     
   void FillTotalResult(G4HadFinalState * aR, const G4Track & aT);
 
