@@ -85,39 +85,22 @@ void G4DNADingfelderChargeDecreaseModel::Initialise(const G4ParticleDefinition* 
   G4String alphaPlusPlus;
   G4String alphaPlus;
 
-  if (protonDef != 0)
-  {
+  // LIMITS
+  
     proton = protonDef->GetParticleName();
     lowEnergyLimit[proton] = 100. * eV;
     highEnergyLimit[proton] = 100. * MeV;
-  }
-  else
-  {
-    G4Exception("G4DNADingfelderChargeDecreaseModel::Initialise: proton is not defined");
-  }
 
-  if (alphaPlusPlusDef != 0)
-  {
     alphaPlusPlus = alphaPlusPlusDef->GetParticleName();
     lowEnergyLimit[alphaPlusPlus] = 1. * keV;
     highEnergyLimit[alphaPlusPlus] = 400. * MeV;
-  }
-  else
-  {
-    G4Exception("G4DNADingfelderChargeDecreaseModel::Initialise: alphaPlusPlus is not defined");
-  }
 
-  if (alphaPlusDef != 0)
-  {
     alphaPlus = alphaPlusDef->GetParticleName();
     lowEnergyLimit[alphaPlus] = 1. * keV;
     highEnergyLimit[alphaPlus] = 400. * MeV;
-  }
-  else
-  {
-    G4Exception("G4DNADingfelderChargeDecreaseModel::Initialise: alphaPlus is not defined");
-  }
 
+  //
+  
   if (particle==protonDef) 
   {
     SetLowEnergyLimit(lowEnergyLimit[proton]);
@@ -306,9 +289,8 @@ void G4DNADingfelderChargeDecreaseModel::SampleSecondaries(std::vector<G4Dynamic
   
   if (outK<0)
   {
-    G4String message;
-    message="G4DNADingfelderChargeDecreaseModel::SampleSecondaries: final kinetic energy is below 0! Process ";
-    G4Exception(message);
+    G4Exception("G4DNADingfelderChargeDecreaseModel::SampleSecondaries","em0004",
+                      FatalException,"Final kinetic energy is negative.");
   }
   
   fParticleChangeForGamma->ProposeTrackStatus(fStopAndKill);

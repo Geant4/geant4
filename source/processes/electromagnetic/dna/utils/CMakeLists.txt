@@ -11,6 +11,8 @@
 #
 #------------------------------------------------------------------------------
 
-add_subdirectory(processes)
-add_subdirectory(models)
-add_subdirectory(utils)
+if(GEANT4_BUILD_GRANULAR_LIBS)
+    include(Geant4MacroLibraryTargets)
+    GEANT4_GRANULAR_LIBRARY_TARGET(COMPONENT sources.cmake)
+endif()
+

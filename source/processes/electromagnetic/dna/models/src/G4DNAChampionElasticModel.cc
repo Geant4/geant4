@@ -119,8 +119,8 @@ void G4DNAChampionElasticModel::Initialise(const G4ParticleDefinition* /*particl
   G4ParticleDefinition* electronDef = G4Electron::ElectronDefinition();
   G4String electron;
  
-  if (electronDef != 0)
-  {
+  // *** ELECTRON
+  
     // For total cross section
     
     electron = electronDef->GetParticleName();
@@ -137,7 +137,8 @@ void G4DNAChampionElasticModel::Initialise(const G4ParticleDefinition* /*particl
  
     if (!path)
     {
-      G4Exception("G4ChampionElasticModel::Initialise: G4LEDATA environment variable not set");
+      G4Exception("G4ChampionElasticModel::Initialise","em0006",
+                  FatalException,"G4LEDATA environment variable not set.");
       return;
     }
        
@@ -145,8 +146,10 @@ void G4DNAChampionElasticModel::Initialise(const G4ParticleDefinition* /*particl
     eFullFileName << path << "/dna/sigmadiff_cumulatedshort_elastic_e_champion.dat";
     std::ifstream eDiffCrossSection(eFullFileName.str().c_str());
      
-    if (!eDiffCrossSection) G4Exception("G4DNAChampionElasticModel::Initialise: error opening electron DATA FILE");
-      
+    if (!eDiffCrossSection) 
+      G4Exception("G4DNAChampionElasticModel::Initialise","em0003",
+                  FatalException,"Missing data file:/dna/sigmadiff_cumulatedshort_elastic_e_champion.dat");
+    
     eTdummyVec.push_back(0.);
 
     while(!eDiffCrossSection.eof())
@@ -170,10 +173,7 @@ void G4DNAChampionElasticModel::Initialise(const G4ParticleDefinition* /*particl
     }
 
     // End final state
-  
-  }
-  else G4Exception("G4DNAChampionElasticModel::Initialise: electron is not defined");
-  
+    
   if (verboseLevel > 2) 
     G4cout << "Loaded cross section files for Champion Elastic model" << G4endl;
 
@@ -230,7 +230,8 @@ G4double G4DNAChampionElasticModel::CrossSectionPerVolume(const G4Material* mate
 	}
 	else
 	{
-	    G4Exception("G4DNAChampionElasticModel::ComputeCrossSectionPerVolume: attempting to calculate cross section for wrong particle");
+	   G4Exception("G4DNAChampionElasticModel::ComputeCrossSectionPerVolume","em0002",
+                      FatalException,"Model not applicable to particle type.");
 	}
   }
 

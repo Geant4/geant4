@@ -91,8 +91,8 @@ void G4DNAMillerGreenExcitationModel::Initialise(const G4ParticleDefinition* par
   G4String alphaPlus;
   G4String helium;
 
-  if (protonDef != 0)
-  {
+  // LIMITS AND CONSTANTS
+  
     proton = protonDef->GetParticleName();
     lowEnergyLimit[proton] = 10. * eV;
     highEnergyLimit[proton] = 500. * keV;
@@ -104,14 +104,7 @@ void G4DNAMillerGreenExcitationModel::Initialise(const G4ParticleDefinition* par
     sCoefficient[0][0] = 0.;
     sCoefficient[1][0] = 0.;
     sCoefficient[2][0] = 0.;
-  }
-  else
-  {
-    G4Exception("G4DNAMillerGreenExcitationModel::Initialise: proton is not defined");
-  }
 
-  if (hydrogenDef != 0)
-  {
     hydrogen = hydrogenDef->GetParticleName();
     lowEnergyLimit[hydrogen] = 10. * eV;
     highEnergyLimit[hydrogen] = 500. * keV;
@@ -123,14 +116,7 @@ void G4DNAMillerGreenExcitationModel::Initialise(const G4ParticleDefinition* par
     sCoefficient[0][0] = 0.;
     sCoefficient[1][0] = 0.;
     sCoefficient[2][0] = 0.;
-  }
-  else
-  {
-    G4Exception("G4DNAMillerGreenExcitationModel::Initialise: hydrogen is not defined");
-    
-  }
-  if (alphaPlusPlusDef != 0)
-  {
+
     alphaPlusPlus = alphaPlusPlusDef->GetParticleName();
     lowEnergyLimit[alphaPlusPlus] = 1. * keV;
     highEnergyLimit[alphaPlusPlus] = 400. * MeV;
@@ -142,14 +128,7 @@ void G4DNAMillerGreenExcitationModel::Initialise(const G4ParticleDefinition* par
     sCoefficient[0][1]=0.;
     sCoefficient[1][1]=0.;
     sCoefficient[2][1]=0.;
-  }
-  else
-  {
-      G4Exception("G4DNAMillerGreenExcitationModel::Initialise: alphaPlusPlus is not defined");
-  }
 
-  if (alphaPlusDef != 0)
-  {
     alphaPlus = alphaPlusDef->GetParticleName();
     lowEnergyLimit[alphaPlus] = 1. * keV;
     highEnergyLimit[alphaPlus] = 400. * MeV;
@@ -164,14 +143,7 @@ void G4DNAMillerGreenExcitationModel::Initialise(const G4ParticleDefinition* par
     sCoefficient[0][2]=0.7;
     sCoefficient[1][2]=0.15;
     sCoefficient[2][2]=0.15;
-  }
-  else
-  {
-    G4Exception("G4DNAMillerGreenExcitationModel::Initialise: alphaPlus is not defined");
-  }
 
-  if (heliumDef != 0)
-  {
     helium = heliumDef->GetParticleName();
     lowEnergyLimit[helium] = 1. * keV;
     highEnergyLimit[helium] = 400. * MeV;
@@ -183,13 +155,9 @@ void G4DNAMillerGreenExcitationModel::Initialise(const G4ParticleDefinition* par
     sCoefficient[0][3]=0.5;
     sCoefficient[1][3]=0.25;
     sCoefficient[2][3]=0.25;
-
-  }
-  else
-  {
-    G4Exception("G4DNAMillerGreenExcitationModel::Initialise: helium is not defined");
-  }
-
+ 
+  //
+  
   if (particle==protonDef) 
   {
     SetLowEnergyLimit(lowEnergyLimit[proton]);

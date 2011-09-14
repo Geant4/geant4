@@ -14,6 +14,41 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09.09.2011  G.Folger            tag emdna-V09-04-21
+            utils/sources.cmake: remove reference to non-existant 
+	     G4DNAMoleculeManager.cc 
+
+05.09.2011  A. M. M. K., S. I., tag emdna-V09-04-20
+            Updated sources.make and CMakeLists.txt
+
+30.08.2011  A. M. M. K., S. I., tag emdna-V09-04-19
+            Reorganized whole architecture.
+
+24.08.2011  A. Mantero, tag emdna-V09-04-18
+            Fixed a bug regarding energy deposition (bindingEnergy=0
+            if no deexcitation)
+
+22.08.2011  S. Incerti, tag emdna-V09-04-17
+            Changed code (em0006) numbering for G4Exception
+
+19.08.2011  S. Incerti, tag emdna-V09-04-16
+            Switched to new G4Exception syntax
+
+04.08.2011  A. Mantero, tag emdna-V09-04-15
+            Added enhanced debug information in ionisation models
+
+02.08.2011  S. Incerti,  tag emdna-V09-04-14
+	    Removed wrong pointer delete in G4DNARuddIonisation*
+
+28.07.2011  S. Incerti,  tag emdna-V09-04-13
+	    Removed obsolete information.
+
+28.07.2011  S. Incerti,  tag emdna-V09-04-12
+	    Updated deexcitation initialization in ionization models.
+
+21.07.2011  A. Mantero,  tag emdna-V09-04-11
+	    Coverity warnings removal
+
 11.07.2011  S.Incerti,  tag emdna-V09-04-10
 	    - Increased energy limits for
 	    G4DNAChargeIncrease

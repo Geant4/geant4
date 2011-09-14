@@ -29,7 +29,7 @@
 
 #include "G4DNABornIonisationModel.hh"
 #include "G4UAtomicDeexcitation.hh"
-
+#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -51,15 +51,13 @@ G4DNABornIonisationModel::G4DNABornIonisationModel(const G4ParticleDefinition*,
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
   
-  fAtomDeexcitation = new G4UAtomicDeexcitation();
-  //  G4LossTableManager::Instance()->SetAtomDeexcitation(fAtomDeexcitation);
-  fAtomDeexcitation->SetFluo(true);
-  fAtomDeexcitation->SetAuger(true);
-
   if( verboseLevel>0 ) 
   { 
     G4cout << "Born ionisation model is constructed " << G4endl;
   }
+
+  //Mark this model as "applicable" for atomic deexcitation
+  SetDeexcitationFlag(true);
 
 }
 
@@ -107,8 +105,8 @@ void G4DNABornIonisationModel::Initialise(const G4ParticleDefinition* particle,
 
   char *path = getenv("G4LEDATA");
 
-  if (electronDef != 0)
-  {
+  // *** ELECTRON
+  
     electron = electronDef->GetParticleName();
 
     tableFile[electron] = fileElectron;
@@ -131,7 +129,8 @@ void G4DNABornIonisationModel::Initialise(const G4ParticleDefinition* particle,
 
     if (!eDiffCrossSection)
     { 
-      G4Exception("G4DNABornIonisationModel::ERROR OPENING electron DATA FILE");
+      G4Exception("G4DNABornIonisationModel::Initialise","em0003",
+                  FatalException,"Missing data file:/dna/sigmadiff_ionisation_e_born.dat");
     }
       
     eTdummyVec.push_back(0.);
@@ -153,15 +152,8 @@ void G4DNABornIonisationModel::Initialise(const G4ParticleDefinition* particle,
       }
     }
 
-    //
-  }
-  else
-  {
-    G4Exception("G4DNABornIonisationModel::Initialise(): electron is not defined");
-  }
+  // *** PROTON
 
-  if (protonDef != 0)
-  {
     proton = protonDef->GetParticleName();
 
     tableFile[proton] = fileProton;
@@ -184,7 +176,8 @@ void G4DNABornIonisationModel::Initialise(const G4ParticleDefinition* particle,
     
     if (!pDiffCrossSection)
     { 
-      G4Exception("G4DNABornIonisationModel::ERROR OPENING proton DATA FILE");
+      G4Exception("G4DNABornIonisationModel::Initialise","em0003",
+                  FatalException,"Missing data file:/dna/sigmadiff_ionisation_p_born.dat");
     }
       
     pTdummyVec.push_back(0.);
@@ -205,11 +198,7 @@ void G4DNABornIonisationModel::Initialise(const G4ParticleDefinition* particle,
       }
     }
   
-  }
-  else
-  {
-    G4Exception("G4DNABornIonisationModel::Initialise(): proton is not defined");
-  }
+  //
 
   if (particle==electronDef) 
   {
@@ -234,9 +223,8 @@ void G4DNABornIonisationModel::Initialise(const G4ParticleDefinition* particle,
   }
   
   //
-  
-  fAtomDeexcitation->InitialiseAtomicDeexcitation();
-  fAtomDeexcitation->InitialiseForNewRun();
+
+  fAtomDeexcitation  = G4LossTableManager::Instance()->AtomDeexcitation();
 
   if (isInitialised) { return; }
   fParticleChangeForGamma = GetParticleChangeForGamma();
@@ -302,7 +290,8 @@ G4double G4DNABornIonisationModel::CrossSectionPerVolume(const G4Material* mater
       }
       else
       {
-        G4Exception("G4DNABornIonisationModel::CrossSectionPerVolume: attempting to calculate cross section for wrong particle");
+	  G4Exception("G4DNABornIonisationModel::CrossSectionPerVolume","em0002",
+                      FatalException,"Model not applicable to particle type.");
       }
     }
 
@@ -371,6 +360,9 @@ void G4DNABornIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
     G4int secNumberInit = 0;  // need to know at a certain point the enrgy of secondaries   
     G4int secNumberFinal = 0; // So I'll make the diference and then sum the energies
 
+    G4double bindingEnergy = 0;
+    bindingEnergy = waterStructure.IonisationEnergy(ionizationShell);
+
     if(fAtomDeexcitation) {
       G4int Z = 8;
       G4AtomicShellEnumerator as = fKShell;
@@ -383,11 +375,17 @@ void G4DNABornIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
 	{
 	  as = G4AtomicShellEnumerator(3);
 	}
-      
 
-      //      G4cout << "Z: " << Z << " as: " << as << G4endl;
-      //G4cout << "Press <Enter> key to continue...";
-      //G4cin.ignore();
+
+
+//	FOR DEBUG ONLY
+//	if (ionizationShell == 4) {
+//
+//	  G4cout << "Z: " << Z << " as: " << as 
+//               << " ionizationShell: " << ionizationShell << " bindingEnergy: "<< bindingEnergy/eV << G4endl;
+//        G4cout << "Press <Enter> key to continue..." << G4endl;
+//	  G4cin.ignore();
+//	}     
 
       const G4AtomicShell* shell = fAtomDeexcitation->GetAtomicShell(Z, as);    
       secNumberInit = fvect->size();
@@ -397,8 +395,6 @@ void G4DNABornIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
   
     G4double secondaryKinetic = RandomizeEjectedElectronEnergy(particle->GetDefinition(),k,ionizationShell);
   
-    G4double bindingEnergy = waterStructure.IonisationEnergy(ionizationShell);
-
     G4double cosTheta = 0.;
     G4double phi = 0.; 
     RandomizeEjectedElectronDirection(particle->GetDefinition(), k,secondaryKinetic, cosTheta, phi);
@@ -430,7 +426,7 @@ void G4DNABornIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
     
     else fParticleChangeForGamma->ProposeMomentumDirection(primaryDirection) ;
     
-
+    // note thta secondaryKinetic is the nergy of the delta ray, not of all secondaries. 
     G4double scatteredEnergy = k-bindingEnergy-secondaryKinetic;
     G4double deexSecEnergy = 0;
     for (G4int j=secNumberInit; j < secNumberFinal; j++) {
@@ -743,7 +739,8 @@ G4int G4DNABornIonisationModel::RandomSelect(G4double k, const G4String& particl
   }
   else
   {
-    G4Exception("G4DNABornIonisationModel::RandomSelect attempting to calculate cross section for wrong particle");
+	G4Exception("G4DNABornIonisationModel::RandomSelect","em0002",
+                      FatalException,"Model not applicable to particle type.");
   }
       
   return level;

@@ -85,39 +85,22 @@ void G4DNADingfelderChargeIncreaseModel::Initialise(const G4ParticleDefinition* 
   G4String alphaPlus;
   G4String helium;
 
-  if (hydrogenDef != 0)
-  {
+  // LIMITS
+  
     hydrogen = hydrogenDef->GetParticleName();
     lowEnergyLimit[hydrogen] = 100. * eV;
     highEnergyLimit[hydrogen] = 100. * MeV;
-  }
-  else
-  {
-    G4Exception("G4DNADingfelderChargeIncreaseModel::Initialise: hydrogen is not defined");
-  }
 
-  if (alphaPlusDef != 0)
-  {
     alphaPlus = alphaPlusDef->GetParticleName();
     lowEnergyLimit[alphaPlus] = 1. * keV;
     highEnergyLimit[alphaPlus] = 400. * MeV;
-  }
-  else
-  {
-    G4Exception("G4DNADingfelderChargeIncreaseModel::Initialise: alphaPlus is not defined");
-  }
 
-  if (heliumDef != 0)
-  {
     helium = heliumDef->GetParticleName();
     lowEnergyLimit[helium] = 1. * keV;
     highEnergyLimit[helium] = 400. * MeV;
-  }
-  else
-  {
-    G4Exception("G4DNADingfelderChargeIncreaseModel::Initialise: helium is not defined");
-  }
-  
+
+  //
+    
   if (particle==hydrogenDef) 
   {
     SetLowEnergyLimit(lowEnergyLimit[hydrogen]);
@@ -320,8 +303,8 @@ void G4DNADingfelderChargeIncreaseModel::SampleSecondaries(std::vector<G4Dynamic
   
   if (outK<0)
   {
-    G4String message;
-    message="G4DNADingfelderChargeIncreaseModel::SampleSecondaries: final kinetic energy is below 0! Process ";
+    G4Exception("G4DNADingfelderChargeIncreaseModel::SampleSecondaries","em0004",
+                      FatalException,"Final kinetic energy is negative.");
   }
   
   G4DynamicParticle* dp = new G4DynamicParticle 

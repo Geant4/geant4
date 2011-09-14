@@ -1,7 +1,7 @@
 #------------------------------------------------------------------------------
 # sources.cmake
-# Module : G4emdna
-# Package: Geant4.src.G4processes.G4electromagnetic.G4emdna
+# Module : G4emlowenergy
+# Package: Geant4.src.G4processes.G4electromagnetic.G4emlowenergy
 #
 # Sources description for a library.
 # Lists the sources and headers of the code explicitely.
@@ -43,56 +43,33 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 # Define the Geant4 Module.
 #
 include(Geant4MacroDefineModule)
-GEANT4_DEFINE_MODULE(NAME G4emdna
+GEANT4_DEFINE_MODULE(NAME G4emdna-models
     HEADERS
-        G4DNAAttachment.hh
         G4DNABornExcitationModel.hh
         G4DNABornIonisationModel.hh
         G4DNAChampionElasticModel.hh
-        G4DNAChargeDecrease.hh
-        G4DNAChargeIncrease.hh
-        G4DNACrossSectionDataSet.hh
         G4DNADingfelderChargeDecreaseModel.hh
         G4DNADingfelderChargeIncreaseModel.hh
-        G4DNAElastic.hh
         G4DNAEmfietzoglouExcitationModel.hh
-        G4DNAExcitation.hh
-        G4DNAGenericIonsManager.hh
-        G4DNAIonisation.hh
         G4DNAMeltonAttachmentModel.hh
         G4DNAMillerGreenExcitationModel.hh
-        G4DNAMoleculeManager.hh
         G4DNARuddIonisationExtendedModel.hh
         G4DNARuddIonisationModel.hh
         G4DNASancheExcitationModel.hh
         G4DNAScreenedRutherfordElasticModel.hh
-        G4DNAVibExcitation.hh
-        G4WaterExcitationStructure.hh
-        G4WaterIonisationStructure.hh
     SOURCES
-        G4DNAAttachment.cc
         G4DNABornExcitationModel.cc
         G4DNABornIonisationModel.cc
         G4DNAChampionElasticModel.cc
-        G4DNAChargeDecrease.cc
-        G4DNAChargeIncrease.cc
-        G4DNACrossSectionDataSet.cc
         G4DNADingfelderChargeDecreaseModel.cc
         G4DNADingfelderChargeIncreaseModel.cc
-        G4DNAElastic.cc
         G4DNAEmfietzoglouExcitationModel.cc
-        G4DNAExcitation.cc
-        G4DNAGenericIonsManager.cc
-        G4DNAIonisation.cc
         G4DNAMeltonAttachmentModel.cc
         G4DNAMillerGreenExcitationModel.cc
         G4DNARuddIonisationExtendedModel.cc
         G4DNARuddIonisationModel.cc
         G4DNASancheExcitationModel.cc
         G4DNAScreenedRutherfordElasticModel.cc
-        G4DNAVibExcitation.cc
-        G4WaterExcitationStructure.cc
-        G4WaterIonisationStructure.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

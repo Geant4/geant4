@@ -22,48 +22,23 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-// $Id: G4WaterIonisationStructure.hh,v 1.1 2007-11-08 20:38:40 pia Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-// 
-// Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
-//
-// History:
-// -----------
-// Date         Name              Modification
-// 28 Apr 2007  M.G. Pia          Created in compliance with design described in TNS paper
-//
-// -------------------------------------------------------------------
 
-// Class description:
-// Geant4-DNA Cross total cross section for electron elastic scattering in water
-// Reference: TNS Geant4-DNA paper
-// S. Chauvie et al., Geant4 physics processes for microdosimetry simulation:
-// design foundation and implementation of the first set of models,
-// IEEE Trans. Nucl. Sci., vol. 54, no. 6, Dec. 2007.
-// Reference for implementation model: NIM. 155, pp. 145-156, 1978
-// Further documentation available from http://www.ge.infn.it/geant4/dna
-
-// -------------------------------------------------------------------
-
-
-#ifndef G4WATERIONISATIONSTRUCTURE_HH
-#define G4WATERIONISATIONSTRUCTURE_HH 1
+#ifndef G4WATEREXCITATIONSTRUCTURE_HH
+#define G4WATEREXCITATIONSTRUCTURE_HH 1
  
 #include "globals.hh"
 #include <vector>
 
  
-class G4WaterIonisationStructure
+class G4WaterExcitationStructure
 {
 public:
   
-  G4WaterIonisationStructure();
+  G4WaterExcitationStructure();
   
-  virtual ~G4WaterIonisationStructure();
+  virtual ~G4WaterExcitationStructure();
   
-  G4double IonisationEnergy(G4int level);
+  G4double ExcitationEnergy(G4int level);
 
   G4int NumberOfLevels() { return nLevels; }
   
@@ -71,7 +46,7 @@ public:
     
 private:
    
- // Number of Ionisation levels of the water molecule
+ // Number of excitation levels of the water molecule
  G4int nLevels;
 
   std::vector<G4double> energyConstant;

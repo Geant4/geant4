@@ -91,8 +91,8 @@ void G4DNABornExcitationModel::Initialise(const G4ParticleDefinition* particle,
   
   G4double scaleFactor = (1.e-22 / 3.343) * m*m;
 
-  if (electronDef != 0)
-  {
+  // *** ELECTRON
+  
     electron = electronDef->GetParticleName();
 
     tableFile[electron] = fileElectron;
@@ -107,14 +107,8 @@ void G4DNABornExcitationModel::Initialise(const G4ParticleDefinition* particle,
       
     tableData[electron] = tableE;
     
-  }
-  else
-  {
-    G4Exception("G4DNABornExcitationModel::Initialise(): electron is not defined");
-  }
-
-  if (protonDef != 0)
-  {
+  // *** PROTON
+    
     proton = protonDef->GetParticleName();
 
     tableFile[proton] = fileProton;
@@ -129,12 +123,8 @@ void G4DNABornExcitationModel::Initialise(const G4ParticleDefinition* particle,
       
     tableData[proton] = tableP;
      
-  }
-  else
-  {
-    G4Exception("G4DNABornExcitationModel::Initialise(): proton is not defined");
-  }
-
+  //
+  
   if (particle==electronDef) 
   {
     SetLowEnergyLimit(lowEnergyLimit[electron]);
@@ -221,7 +211,8 @@ G4double G4DNABornExcitationModel::CrossSectionPerVolume(const G4Material* mater
       }
       else
       {
-        G4Exception("G4DNABornExcitationModel::CrossSectionPerVolume: attempting to calculate cross section for wrong particle");
+	  G4Exception("G4DNABornExcitationModel::CrossSectionPerVolume","em0002",
+                      FatalException,"Model not applicable to particle type.");
       }
     }
 
@@ -317,7 +308,8 @@ G4int G4DNABornExcitationModel::RandomSelect(G4double k, const G4String& particl
   }
   else
   {
-    G4Exception("G4DNABornExcitationModel::RandomSelect attempting to calculate cross section for wrong particle");
+	  G4Exception("G4DNABornExcitationModel::RandomSelect","em0002",
+                      FatalException,"Model not applicable to particle type.");
   }
   return level;
 }

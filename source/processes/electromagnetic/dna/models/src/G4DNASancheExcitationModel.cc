@@ -120,7 +120,8 @@ void G4DNASancheExcitationModel::Initialise(const G4ParticleDefinition* /*partic
 
   if (!input)
   { 
-    G4Exception("G4DNASancheExcitationModel:::ERROR OPENING XS DATA FILE");
+       G4Exception("G4DNASancheExcitationModel::Initialise","em0003",
+                  FatalException,"Missing data file:/dna/sigma_excitationvib_e_sanche.dat");
   }
   
   while(!input.eof())

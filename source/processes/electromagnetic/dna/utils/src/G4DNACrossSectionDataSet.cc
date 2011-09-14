@@ -91,10 +91,11 @@ G4bool G4DNACrossSectionDataSet::LoadData(const G4String & argFileName)
 
   if (!in.is_open())
     {
-      G4String message("G4DNACrossSectionDataSet::LoadData - data file \"");
+      G4String message("Data file \"");
       message+=fullFileName;
       message+="\" not found";
-      G4Exception(message);
+      G4Exception("G4DNACrossSectionDataSet::LoadData","em0003",
+                      FatalException,message);
       return false;
     }
 
@@ -200,10 +201,11 @@ G4bool G4DNACrossSectionDataSet::LoadData(const G4String & argFileName)
  
   if (maxI<2)
     {
-      G4String message("G4DNACrossSectionDataSet::LoadData - data file \"");
+      G4String message("Data file \"");
       message+=fullFileName;
       message+="\" should have at least two columns";
-      G4Exception(message);
+      G4Exception("G4DNACrossSectionDataSet::LoadData","em0005",
+                      FatalException,message);
       return false;
     }
  
@@ -214,10 +216,11 @@ G4bool G4DNACrossSectionDataSet::LoadData(const G4String & argFileName)
 
       if (maxJ!=columns[0]->size())
 	{
-	  G4String message("G4DNACrossSectionDataSet::LoadData - data file \"");
+	  G4String message("Data file \"");
 	  message+=fullFileName;
 	  message+="\" has lines with a different number of columns";
-	  G4Exception(message);
+	  G4Exception("G4DNACrossSectionDataSet::LoadData","em0005",
+                      FatalException,message);
 	  return false;
 	}
 
@@ -263,10 +266,11 @@ G4bool G4DNACrossSectionDataSet::LoadNonLogData(const G4String & argFileName)
 
   if (!in.is_open())
     {
-      G4String message("G4DNACrossSectionDataSet::LoadData - data file \"");
+      G4String message("Data file \"");
       message+=fullFileName;
       message+="\" not found";
-      G4Exception(message);
+      G4Exception("G4DNACrossSectionDataSet::LoadData","em0003",
+                      FatalException,message);
       return false;
     }
 
@@ -355,10 +359,11 @@ G4bool G4DNACrossSectionDataSet::LoadNonLogData(const G4String & argFileName)
  
   if (maxI<2)
     {
-      G4String message("G4DNACrossSectionDataSet::LoadData - data file \"");
+      G4String message("Data file \"");
       message+=fullFileName;
       message+="\" should have at least two columns";
-      G4Exception(message);
+      G4Exception("G4DNACrossSectionDataSet::LoadData","em0005",
+                      FatalException,message);
       return false;
     }
  
@@ -369,10 +374,11 @@ G4bool G4DNACrossSectionDataSet::LoadNonLogData(const G4String & argFileName)
 
       if (maxJ!=columns[0]->size())
 	{
-	  G4String message("G4DNACrossSectionDataSet::LoadData - data file \"");
+	  G4String message("Data file \"");
 	  message+=fullFileName;
-	  message+="\" has lines with a different number of columns";
-	  G4Exception(message);
+	  message+="\" has lines with a different number of columns.";
+          G4Exception("G4DNACrossSectionDataSet::LoadData","em0005",
+                      FatalException,message);
 	  return false;
 	}
 
@@ -410,7 +416,9 @@ G4bool G4DNACrossSectionDataSet::SaveData(const G4String & argFileName) const
  
   if (n==0)
     {
-      G4Exception("G4EMDataSet::SaveData - expected at least one component");
+      G4Exception("G4DNACrossSectionDataSet::SaveData","em0005",
+                      FatalException,"Expected at least one component");
+
       return false;
     }
  
@@ -419,10 +427,11 @@ G4bool G4DNACrossSectionDataSet::SaveData(const G4String & argFileName) const
 
   if (!out.is_open())
     {
-      G4String message("G4EMDataSet::SaveData - cannot open \"");
+      G4String message("Cannot open \"");
       message+=fullFileName;
       message+="\"";
-      G4Exception(message);
+      G4Exception("G4DNACrossSectionDataSet::SaveData","em0005",
+                      FatalException,message);
       return false;
     }
  
@@ -475,7 +484,9 @@ G4String G4DNACrossSectionDataSet::FullFileName(const G4String& argFileName) con
   char* path = getenv("G4LEDATA");
   if (!path)
   {
-      G4Exception("G4DNACrossSectionDataSet::FullFileName - G4LEDATA environment variable not set");
+      G4Exception("G4DNACrossSectionDataSet::FullFileName","em0006",
+                      FatalException,"G4LEDATA environment variable not set.");
+      
       return "";
   }
   
@@ -536,9 +547,11 @@ void G4DNACrossSectionDataSet::SetEnergiesData(G4DataVector* argEnergies,
     }
 
   std::ostringstream message;
-  message << "G4DNACrossSectionDataSet::SetEnergiesData - component " << argComponentId << " not found";
+  message << "Component " << argComponentId << " not found";
  
-  G4Exception(message.str().c_str());
+  G4Exception("G4DNACrossSectionDataSet::SetEnergiesData","em0005",
+                 FatalException,message.str().c_str());
+  
 }
 
 
@@ -557,9 +570,11 @@ void G4DNACrossSectionDataSet::SetLogEnergiesData(G4DataVector* argEnergies,
     }
 
   std::ostringstream message;
-  message << "G4DNACrossSectionDataSet::SetLogEnergiesData - component " << argComponentId << " not found";
+  message << "Component " << argComponentId << " not found";
  
-  G4Exception(message.str().c_str());
+  G4Exception("G4DNACrossSectionDataSet::SetLogEnergiesData","em0005",
+                 FatalException,message.str().c_str());
+
 }
 
 

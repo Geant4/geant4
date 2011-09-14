@@ -119,8 +119,8 @@ void G4DNAMeltonAttachmentModel::Initialise(const G4ParticleDefinition* /*partic
   G4ParticleDefinition* electronDef = G4Electron::ElectronDefinition();
   G4String electron;
  
-  if (electronDef != 0)
-  {
+  // ELECTRON
+
     // For total cross section
     
     electron = electronDef->GetParticleName();
@@ -131,9 +131,8 @@ void G4DNAMeltonAttachmentModel::Initialise(const G4ParticleDefinition* /*partic
     tableE->LoadData(fileElectron);
     tableData[electron] = tableE;
     
-  }
-  else G4Exception("G4DNAMeltonAttachmentModel::Initialise: electron is not defined");
-  
+  //
+    
   if (verboseLevel > 2) 
     G4cout << "Loaded cross section data for Melton Attachment model" << G4endl;
 
@@ -187,7 +186,8 @@ G4double G4DNAMeltonAttachmentModel::CrossSectionPerVolume(const G4Material* mat
 	}
 	else
 	{
-	    G4Exception("G4DNAMeltonAttachmentModel::ComputeCrossSectionPerVolume: attempting to calculate cross section for wrong particle");
+	  G4Exception("G4DNAMeltonAttachmentModel::ComputeCrossSectionPerVolume","em0002",
+                        FatalException,"Model not applicable to particle type.");
 	}
   }
 
