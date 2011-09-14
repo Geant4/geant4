@@ -45,6 +45,9 @@ class G4CsvAnalysisManager : public G4VAnalysisManager
   public:
     G4CsvAnalysisManager();
     ~G4CsvAnalysisManager();
+    
+    // static methods
+    static G4CsvAnalysisManager* Instance();
 
     // Methods to manipulate files
     virtual G4bool OpenFile(const G4String& fileName);
@@ -69,10 +72,18 @@ class G4CsvAnalysisManager : public G4VAnalysisManager
     virtual G4bool AddNtupleRow();
         
   private:
+    // static data members
+    //
+    static G4CsvAnalysisManager* fgInstance;
+
+    // methods
+    //
     tools::wcsv::ntuple::column<int>*    GetNtupleIColumn(G4int id) const;
     tools::wcsv::ntuple::column<float>*  GetNtupleFColumn(G4int id) const;
     tools::wcsv::ntuple::column<double>* GetNtupleDColumn(G4int id) const;
  
+    // data members
+    //
     std::ofstream* fFile;
 
     //std::vector<histo::h1d*>         fH1Vector;            

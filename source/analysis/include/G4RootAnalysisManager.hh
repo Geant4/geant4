@@ -46,6 +46,9 @@ class G4RootAnalysisManager : public G4VAnalysisManager
   public:
     G4RootAnalysisManager();
     virtual ~G4RootAnalysisManager();
+    
+    // static methods
+    static G4RootAnalysisManager* Instance();
 
     // Methods to manipulate files
     virtual G4bool OpenFile(const G4String& fileName);
@@ -75,10 +78,18 @@ class G4RootAnalysisManager : public G4VAnalysisManager
         // later
         
   private:
+    // static data members
+    //
+    static G4RootAnalysisManager* fgInstance;
+
+    // methods
+    //
     tools::wroot::ntuple::column<int>*    GetNtupleIColumn(G4int id) const;
     tools::wroot::ntuple::column<float>*  GetNtupleFColumn(G4int id) const;
     tools::wroot::ntuple::column<double>* GetNtupleDColumn(G4int id) const;
  
+    // data members
+    //
     tools::wroot::file*       fFile;
     tools::wroot::directory*  fHistoDirectory;
     tools::wroot::directory*  fNtupleDirectory;

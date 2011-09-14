@@ -45,6 +45,9 @@ class G4XmlAnalysisManager : public G4VAnalysisManager
   public:
     G4XmlAnalysisManager();
     ~G4XmlAnalysisManager();
+    
+    // static methods
+    static G4XmlAnalysisManager* Instance();
 
     // Methods to manipulate files
     virtual G4bool OpenFile(const G4String& fileName);
@@ -74,10 +77,18 @@ class G4XmlAnalysisManager : public G4VAnalysisManager
         // later
         
   private:
+    // static data members
+    //
+    static G4XmlAnalysisManager* fgInstance;
+
+    // methods
+    //
     tools::waxml::ntuple::column<int>*    GetNtupleIColumn(G4int id) const;
     tools::waxml::ntuple::column<float>*  GetNtupleFColumn(G4int id) const;
     tools::waxml::ntuple::column<double>* GetNtupleDColumn(G4int id) const;
  
+    // data members
+    //
     //waxml*  fFile;
     std::ofstream* fFile;
 

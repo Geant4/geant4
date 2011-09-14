@@ -35,6 +35,18 @@
 
 #include <iostream>
 
+G4CsvAnalysisManager* G4CsvAnalysisManager::fgInstance = 0;
+
+//_____________________________________________________________________________
+G4CsvAnalysisManager* G4CsvAnalysisManager::Instance()
+{
+  if ( fgInstance == 0 ) {
+    fgInstance = new G4CsvAnalysisManager();
+  }
+  
+  return fgInstance;
+}    
+
 //_____________________________________________________________________________
 G4CsvAnalysisManager::G4CsvAnalysisManager()
  : fFile(0),
@@ -45,6 +57,16 @@ G4CsvAnalysisManager::G4CsvAnalysisManager()
    fNtupleFColumnMap(),
    fNtupleDColumnMap()
 {
+  if ( fgInstance ) {
+    G4ExceptionDescription description;
+    description << "      " 
+                << "G4CsvAnalysisManager already exists." 
+                << "Cannot create another instance.";
+    G4Exception("G4CsvAnalysisManager::G4CsvAnalysisManager()",
+                "Analysis_F001", FatalException, description);
+  }              
+   
+  fgInstance = this;
 }
 
 //_____________________________________________________________________________
@@ -52,6 +74,8 @@ G4CsvAnalysisManager::~G4CsvAnalysisManager()
 {  
   delete fNtuple;
   delete fFile;
+
+  fgInstance = 0;
 }
 
 // 
@@ -65,8 +89,10 @@ G4CsvAnalysisManager::GetNtupleIColumn(G4int id) const
   std::map<G4int, tools::wcsv::ntuple::column<int>* >::const_iterator it
     = fNtupleIColumnMap.find(id);
   if ( it == fNtupleIColumnMap.end() ) {
-    G4cerr << "---> Warning from G4CsvAnalysisManager::GetNtupleIColumn():"
-           << " column " << id << " does not exist. " << G4endl;
+    G4ExceptionDescription description;
+    description << "      " << "column " << id << " does not exist.";
+    G4Exception("G4CsvAnalysisManager::GetNtupleIColumn()",
+                "Analysis_W009", JustWarning, description);
     return 0;
   }
   
@@ -80,8 +106,10 @@ G4CsvAnalysisManager::GetNtupleFColumn(G4int id) const
   std::map<G4int, tools::wcsv::ntuple::column<float>* >::const_iterator it
     = fNtupleFColumnMap.find(id);
   if ( it == fNtupleFColumnMap.end() ) {
-    G4cerr << "---> Warning from G4CsvAnalysisManager::GetNtupleFColumn():"
-           << " column " << id << " does not exist. " << G4endl;
+    G4ExceptionDescription description;
+    description << "      " << "column " << id << " does not exist.";
+    G4Exception("G4CsvAnalysisManager::GetNtupleFColumn()",
+                "Analysis_W009", JustWarning, description);
     return 0;
   }
   
@@ -96,8 +124,10 @@ G4CsvAnalysisManager::GetNtupleDColumn(G4int id) const
   std::map<G4int, tools::wcsv::ntuple::column<double>* >::const_iterator it
     = fNtupleDColumnMap.find(id);
   if ( it == fNtupleDColumnMap.end() ) {
-    G4cerr << "---> Warning from G4CsvAnalysisManager::GetNtupleDColumn():"
-           << " column " << id << " does not exist. " << G4endl;
+    G4ExceptionDescription description;
+    description << "      " << "column " << id << " does not exist.";
+    G4Exception("G4CsvAnalysisManager::GetNtupleDColumn()",
+                "Analysis_W009", JustWarning, description);
     return 0;
   }
   
@@ -111,14 +141,16 @@ G4CsvAnalysisManager::GetNtupleDColumn(G4int id) const
 //_____________________________________________________________________________
 G4bool G4CsvAnalysisManager::OpenFile(const G4String& fileName)
 {
-  // Add file extension .root if no extension is given
+  // Add file extension .csv if no extension is given
   G4String name(fileName);
   if ( name.find(".") == std::string::npos ) name.append(".csv");
 
   fFile = new std::ofstream(name);
   if ( fFile->fail() ) {
-    G4cerr << "---> Warning from G4CsvAnalysisManager::OpenFile(): "
-           << "Cannot open file " << name << std::endl;
+    G4ExceptionDescription description;
+    description << "      " << "Cannot open file " << fileName;
+    G4Exception("G4CsvAnalysisManager::OpenFile()",
+                "Analysis_W001", JustWarning, description);
     return false;
   }
 
@@ -144,8 +176,11 @@ G4int G4CsvAnalysisManager::CreateH1(const G4String& /*name*/,
                                const G4String& /*title*/, G4int /*nbins*/, 
                                G4double /*xmin*/, G4double /*xmax*/)
 {
-  G4cerr << "---> Warning from  G4CsvAnalysisManager::CreateH1():  "
-         << " histograms are not supported." << G4endl;
+  G4ExceptionDescription description;
+  description << "      " 
+              << "Histograms are not supported." ;
+  G4Exception("G4CsvAnalysisManager::CreatH1()",
+            "Analysis_W005", JustWarning, description);
   return 0;
 }                                         
 
@@ -154,9 +189,12 @@ void G4CsvAnalysisManager::CreateNtuple(const G4String& name,
                                         const G4String& title)
 {
   if ( fNtuple ) {
-    G4cerr << "---> Warning from G4CsvAnalysisManager::CreateNtuple():"
-           << " Ntuple already exists. (Only one ntuple is currently supported.)" 
-           << G4endl;
+    G4ExceptionDescription description;
+    description << "      " 
+                << "Ntuple already exists. "
+                << "(Only one ntuple is currently supported.)";
+    G4Exception("G4CsvAnalysisManager::CreateNtuple()",
+                "Analysis_W006", JustWarning, description);
     return;       
   }
 
@@ -203,8 +241,11 @@ void G4CsvAnalysisManager::FinishNtuple()
 G4bool G4CsvAnalysisManager::FillH1(G4int /*id*/, 
                                     G4double /*value*/, G4double /*weight*/)
 {
-  G4cerr << "---> Warning from  G4CsvAnalysisManager::FillH1():  "
-         << " histograms are not supported." << G4endl;
+  G4ExceptionDescription description;
+  description << "      " 
+              << "Histograms are not supported." ;
+  G4Exception("G4CsvAnalysisManager::FillH1()",
+            "Analysis_W007", JustWarning, description);
   return false;
 }
 
@@ -213,8 +254,10 @@ G4bool G4CsvAnalysisManager::FillNtupleIColumn(G4int id, G4int value)
 {
   tools::wcsv::ntuple::column<int>* column = GetNtupleIColumn(id);
   if ( ! column ) {
-    G4cout << "---> Warning from G4CsvAnalysisManager::FillNtupleIColumn():"
-           << " column " << id << " does not exist. " << G4endl;
+    G4ExceptionDescription description;
+    description << "      " << "column " << id << " does not exist.";
+    G4Exception("G4CsvAnalysisManager::FillNtupleIColumn()",
+                "Analysis_W009", JustWarning, description);
     return false;
   }  
   
@@ -226,8 +269,10 @@ G4bool G4CsvAnalysisManager::FillNtupleFColumn(G4int id, G4float value)
 {
   tools::wcsv::ntuple::column<float>* column = GetNtupleFColumn(id);
   if ( ! column ) {
-    G4cout << "---> Warning from G4CsvAnalysisManager::FillNtupleFColumn():"
-           << " column " << id << " does not exist. " << G4endl;
+    G4ExceptionDescription description;
+    description << "      " << "column " << id << " does not exist.";
+    G4Exception("G4CsvAnalysisManager::FillNtupleFColumn()",
+                "Analysis_W009", JustWarning, description);
     return false;
   }  
   
@@ -240,8 +285,10 @@ G4bool G4CsvAnalysisManager::FillNtupleDColumn(G4int id, G4double value)
 {
   tools::wcsv::ntuple::column<double>* column = GetNtupleDColumn(id);
   if ( ! column ) {
-    G4cout << "---> Warning from G4CsvAnalysisManager::FillNtupleDColumn():"
-           << " column " << id << " does not exist. " << G4endl;
+    G4ExceptionDescription description;
+    description << "      " << "column " << id << " does not exist.";
+    G4Exception("G4CsvAnalysisManager::FillNtupleDColumn()",
+                "Analysis_W009", JustWarning, description);
     return false;
   }  
   
@@ -253,8 +300,10 @@ G4bool G4CsvAnalysisManager::FillNtupleDColumn(G4int id, G4double value)
 G4bool G4CsvAnalysisManager::AddNtupleRow()
 { 
   if ( ! fNtuple ) {
-    G4cout << "---> Warning from G4CsvAnalysisManager::AddNtupleRow(): " 
-           << " ntuple does not exist. " << G4endl;
+    G4ExceptionDescription description;
+    description << "      " << "ntuple does not exist. ";
+    G4Exception("G4CsvAnalysisManager::AddNtupleRow()",
+                "Analysis_W008", JustWarning, description);
     return false;
   }  
   

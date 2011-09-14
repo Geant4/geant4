@@ -35,6 +35,18 @@
 
 #include <iostream>
 
+G4XmlAnalysisManager* G4XmlAnalysisManager::fgInstance = 0;
+
+//_____________________________________________________________________________
+G4XmlAnalysisManager* G4XmlAnalysisManager::Instance()
+{
+  if ( fgInstance == 0 ) {
+    fgInstance = new G4XmlAnalysisManager();
+  }
+  
+  return fgInstance;
+}    
+
 //_____________________________________________________________________________
 G4XmlAnalysisManager::G4XmlAnalysisManager()
  : fFile(0),
@@ -47,6 +59,15 @@ G4XmlAnalysisManager::G4XmlAnalysisManager()
    fNtupleFColumnMap(),
    fNtupleDColumnMap()
 {
+  if ( fgInstance ) {
+    G4ExceptionDescription description;
+    description << "G4XmlAnalysisManager already exists." 
+                << "Cannot create another instance.";
+    G4Exception("G4XmlAnalysisManager::G4XmlAnalysisManager",
+                "Analysis_F001", FatalException, description);
+  }              
+   
+  fgInstance = this;
 }
 
 //_____________________________________________________________________________
@@ -58,6 +79,8 @@ G4XmlAnalysisManager::~G4XmlAnalysisManager()
   }  
   delete fNtuple;
   delete fFile;  
+
+  fgInstance = 0;
 }
 
 // 
@@ -71,8 +94,10 @@ G4XmlAnalysisManager::GetNtupleIColumn(G4int id) const
   std::map<G4int, tools::waxml::ntuple::column<int>* >::const_iterator it
     = fNtupleIColumnMap.find(id);
   if ( it == fNtupleIColumnMap.end() ) {
-    G4cerr << "---> Warning from G4XmlAnalysisManager::GetNtupleIColumn():"
-           << " column " << id << " does not exist. " << G4endl;
+    G4ExceptionDescription description;
+    description << "      " << "column " << id << " does not exist.";
+    G4Exception("G4XmlAnalysisManager::GetNtupleIColumn()",
+                "Analysis_W009", JustWarning, description);
     return 0;
   }
   
@@ -86,8 +111,10 @@ G4XmlAnalysisManager::GetNtupleFColumn(G4int id) const
   std::map<G4int, tools::waxml::ntuple::column<float>* >::const_iterator it
     = fNtupleFColumnMap.find(id);
   if ( it == fNtupleFColumnMap.end() ) {
-    G4cerr << "---> Warning from G4XmlAnalysisManager::GetNtupleFColumn():"
-           << " column " << id << " does not exist. " << G4endl;
+    G4ExceptionDescription description;
+    description << "      " << "column " << id << " does not exist.";
+    G4Exception("G4XmlAnalysisManager::GetNtupleFColumn()",
+                "Analysis_W009", JustWarning, description);
     return 0;
   }
   
@@ -102,8 +129,10 @@ G4XmlAnalysisManager::GetNtupleDColumn(G4int id) const
   std::map<G4int, tools::waxml::ntuple::column<double>* >::const_iterator it
     = fNtupleDColumnMap.find(id);
   if ( it == fNtupleDColumnMap.end() ) {
-    G4cerr << "---> Warning from G4XmlAnalysisManager::GetNtupleDColumn():"
-           << " column " << id << " does not exist. " << G4endl;
+    G4ExceptionDescription description;
+    description << "      " << "column " << id << " does not exist.";
+    G4Exception("G4XmlAnalysisManager::GetNtupleDColumn()",
+                "Analysis_W009", JustWarning, description);
     return 0;
   }
   
@@ -117,14 +146,16 @@ G4XmlAnalysisManager::GetNtupleDColumn(G4int id) const
 //_____________________________________________________________________________
 G4bool G4XmlAnalysisManager::OpenFile(const G4String& fileName)
 {
-  // Add file extension .root if no extension is given
+  // Add file extension .Xml if no extension is given
   G4String name(fileName);
   if ( name.find(".") == std::string::npos ) name.append(".xml");
 
   fFile = new std::ofstream(name);
   if ( fFile->fail() ) {
-    G4cerr << "---> Warning from G4XmlAnalysisManager::OpenFile(): "
-           << "Cannot open file " << name << std::endl;
+    G4ExceptionDescription description;
+    description << "      " << "Cannot open file " << name;
+    G4Exception("G4XmlAnalysisManager::OpenFile()",
+              "Analysis_W001", JustWarning, description);
     return false;
   }
 
@@ -144,8 +175,10 @@ G4bool G4XmlAnalysisManager::Write()
     G4bool result
       = tools::waxml::write(*fFile, *(it->second), fHistoDirectoryName, it->first);
     if ( ! result ) {
-      G4cerr << "---> Warning from  G4XmlAnalysisManager::Write():"
-             << " saving histo " << it->first << " failed" << G4endl;
+      G4ExceptionDescription description;
+      description << "      " << "saving histo " << it->first << " failed";
+      G4Exception("G4XmlAnalysisManager::Write()",
+                "Analysis_W003", JustWarning, description);
       return false;       
     } 
   }
@@ -177,9 +210,12 @@ void G4XmlAnalysisManager::CreateNtuple(const G4String& name,
                                         const G4String& title)
 {
   if ( fNtuple ) {
-    G4cerr << "---> Warning from G4XmlAnalysisManager::CreateNtuple():"
-           << " Ntuple already exists. (Only one ntuple is currently supported.)" 
-           << G4endl;
+    G4ExceptionDescription description;
+    description << "      " 
+                << "Ntuple already exists. "
+                << "(Only one ntuple is currently supported.)";
+    G4Exception("G4XmlAnalysisManager::CreateNtuple()",
+                "Analysis_W006", JustWarning, description);
     return;       
   }
 
@@ -229,8 +265,10 @@ G4bool G4XmlAnalysisManager::FillH1(G4int id, G4double value, G4double weight)
 {
   tools::histo::h1d* h1d = GetH1(id, false);
   if ( ! h1d ) {
-    G4cerr << "---> Warning from G4XmlAnalysisManager::FillH1():"
-           << " histo " << id << " does not exist. " << G4endl;
+    G4ExceptionDescription description;
+    description << "      " << "histogram " << id << " does not exist.";
+    G4Exception("G4XmlAnalysisManager::FillH1()",
+                "Analysis_W007", JustWarning, description);
     return false;
   }  
 
@@ -243,8 +281,10 @@ G4bool G4XmlAnalysisManager::FillNtupleIColumn(G4int id, G4int value)
 {
   tools::waxml::ntuple::column<int>* column = GetNtupleIColumn(id);
   if ( ! column ) {
-    G4cerr << "---> Warning from G4XmlAnalysisManager::FillNtupleIColumn():"
-           << " column " << id << " does not exist. " << G4endl;
+    G4ExceptionDescription description;
+    description << "      " << "column " << id << " does not exist.";
+    G4Exception("G4XmlAnalysisManager::FillNtupleIColumn()",
+                "Analysis_W009", JustWarning, description);
     return false;
   }  
   
@@ -256,8 +296,10 @@ G4bool G4XmlAnalysisManager::FillNtupleFColumn(G4int id, G4float value)
 {
   tools::waxml::ntuple::column<float>* column = GetNtupleFColumn(id);
   if ( ! column ) {
-    G4cerr << "---> Warning from G4XmlAnalysisManager::FillNtupleFColumn():"
-           << " column " << id << " does not exist. " << G4endl;
+    G4ExceptionDescription description;
+    description << "      " << "column " << id << " does not exist.";
+    G4Exception("G4XmlAnalysisManager::FillNtupleFColumn()",
+                "Analysis_W009", JustWarning, description);
     return false;
   }  
   
@@ -270,8 +312,10 @@ G4bool G4XmlAnalysisManager::FillNtupleDColumn(G4int id, G4double value)
 {
   tools::waxml::ntuple::column<double>* column = GetNtupleDColumn(id);
   if ( ! column ) {
-    G4cerr << "---> Warning from G4XmlAnalysisManager::FillNtupleDColumn():"
-           << " column " << id << " does not exist. " << G4endl;
+    G4ExceptionDescription description;
+    description << "      " << "column " << id << " does not exist.";
+    G4Exception("G4XmlAnalysisManager::FillNtupleDColumn()",
+                "Analysis_W009", JustWarning, description);
     return false;
   }  
   
@@ -283,8 +327,10 @@ G4bool G4XmlAnalysisManager::FillNtupleDColumn(G4int id, G4double value)
 G4bool G4XmlAnalysisManager::AddNtupleRow()
 { 
   if ( ! fNtuple ) {
-    G4cerr << "---> Warning from G4XmlAnalysisManager::AddNtupleRow(): " 
-           << " ntuple does not exist. " << G4endl;
+    G4ExceptionDescription description;
+    description << "      " << "ntuple does not exist. ";
+    G4Exception("G4XmlAnalysisManager::AddNtupleRow()",
+                "Analysis_W008", JustWarning, description);
     return false;
   }  
   
@@ -298,8 +344,10 @@ tools::histo::h1d*  G4XmlAnalysisManager::GetH1(G4int id, G4bool warn) const
   G4int index = id - fFirstHistoId;
   if ( index < 0 || index >= G4int(fH1Vector.size()) ) {
     if ( warn) {
-      G4cerr << "---> Warning from G4XmlAnalysisManager::GetH1():"
-             << " histo " << id << " does not exist. " << G4endl;
+      G4ExceptionDescription description;
+      description << "      " << "histo " << id << " does not exist.";
+      G4Exception("G4XmlAnalysisManager::GetH1()",
+                  "Analysis_W007", JustWarning, description);
     }
     return 0;         
   }

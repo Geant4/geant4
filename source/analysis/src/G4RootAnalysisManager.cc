@@ -32,6 +32,18 @@
 
 #include <iostream>
 
+G4RootAnalysisManager* G4RootAnalysisManager::fgInstance = 0;
+
+//_____________________________________________________________________________
+G4RootAnalysisManager* G4RootAnalysisManager::Instance()
+{
+  if ( fgInstance == 0 ) {
+    fgInstance = new G4RootAnalysisManager();
+  }
+  
+  return fgInstance;
+}    
+
 //_____________________________________________________________________________
 G4RootAnalysisManager::G4RootAnalysisManager()
  : G4VAnalysisManager(),
@@ -47,6 +59,16 @@ G4RootAnalysisManager::G4RootAnalysisManager()
    fNtupleFColumnMap(),
    fNtupleDColumnMap()
 {
+  if ( fgInstance ) {
+    G4ExceptionDescription description;
+    description << "      " 
+                << "G4RootAnalysisManager already exists." 
+                << "Cannot create another instance.";
+    G4Exception("G4RootAnalysisManager::G4RootAnalysisManager()",
+                "Analysis_F001", FatalException, description);
+  }              
+   
+  fgInstance = this;
 }
 
 //_____________________________________________________________________________
@@ -61,6 +83,8 @@ G4RootAnalysisManager::~G4RootAnalysisManager()
   delete fNtuple;
 */
   delete fFile;  
+
+  fgInstance = 0;
 }
 
 // 
@@ -74,8 +98,10 @@ G4RootAnalysisManager::GetNtupleIColumn(G4int id) const
   std::map<G4int, tools::wroot::ntuple::column<int>* >::const_iterator it
     = fNtupleIColumnMap.find(id);
   if ( it == fNtupleIColumnMap.end() ) {
-    G4cerr << "---> Warning from G4RootAnalysisManager::GetNtupleIColumn():"
-           << " column " << id << " does not exist. " << G4endl;
+    G4ExceptionDescription description;
+    description << "      " << "column " << id << " does not exist.";
+    G4Exception("G4RootAnalysisManager::GetNtupleIColumn()",
+                "Analysis_W009", JustWarning, description);
     return 0;
   }
   
@@ -89,8 +115,10 @@ G4RootAnalysisManager::GetNtupleFColumn(G4int id) const
   std::map<G4int, tools::wroot::ntuple::column<float>* >::const_iterator it
     = fNtupleFColumnMap.find(id);
   if ( it == fNtupleFColumnMap.end() ) {
-    G4cerr << "---> Warning from G4RootAnalysisManager::GetNtupleFColumn():"
-           << " column " << id << " does not exist. " << G4endl;
+    G4ExceptionDescription description;
+    description << "      " << "column " << id << " does not exist.";
+    G4Exception("G4RootAnalysisManager::GetNtupleFColumn()",
+                "Analysis_W009", JustWarning, description);
     return 0;
   }
   
@@ -105,8 +133,10 @@ G4RootAnalysisManager::GetNtupleDColumn(G4int id) const
   std::map<G4int, tools::wroot::ntuple::column<double>* >::const_iterator it
     = fNtupleDColumnMap.find(id);
   if ( it == fNtupleDColumnMap.end() ) {
-    G4cerr << "---> Warning from G4RootAnalysisManager::GetNtupleDColumn():"
-           << " column " << id << " does not exist. " << G4endl;
+    G4ExceptionDescription description;
+    description << "      " << "column " << id << " does not exist.";
+    G4Exception("G4RootAnalysisManager::GetNtupleDColumn()",
+                "Analysis_W009", JustWarning, description);
     return 0;
   }
   
@@ -136,8 +166,10 @@ G4bool G4RootAnalysisManager::Write()
     G4bool result
       = to(*fHistoDirectory,*(it->second),it->first);
     if ( ! result ) {
-      G4cerr << "---> Warning from  G4RootAnalysisManager::Write():"
-             << " saving histo " << it->first << " failed" << G4endl;
+      G4ExceptionDescription description;
+      description << "      " << "saving histo " << it->first << " failed";
+      G4Exception("G4RootAnalysisManager::Write()",
+                "Analysis_W003", JustWarning, description);
       return false;       
     } 
   }
@@ -160,8 +192,11 @@ G4int G4RootAnalysisManager::CreateH1(const G4String& name,  const G4String& tit
   if ( ! fHistoDirectory ) {
     fHistoDirectory = fFile->dir().mkdir(fHistoDirectoryName);
     if ( ! fHistoDirectory ) {
-      G4cerr << "---> Warning from G4RootAnalysisManager::CreateH1(): " 
-             << "cannot create directory " << fHistoDirectoryName << std::endl;
+      G4ExceptionDescription description;
+      description << "      " 
+                  << "cannot create directory " << fHistoDirectoryName;
+      G4Exception("G4RootAnalysisManager::CreatH1()",
+                "Analysis_W002", JustWarning, description);
       return -1;       
     }       
   }
@@ -178,17 +213,23 @@ void G4RootAnalysisManager::CreateNtuple(const G4String& name,
                                          const G4String& title)
 {
   if ( fNtuple ) {
-    G4cerr << "---> Warning from G4RootAnalysisManager::CreateNtuple():"
-           << " Ntuple already exists. (Only one ntuple is currently supported.)" 
-           << G4endl;
+    G4ExceptionDescription description;
+    description << "      " 
+                << "Ntuple already exists. "
+                << "(Only one ntuple is currently supported.)";
+    G4Exception("G4RootAnalysisManager::CreateNtuple()",
+                "Analysis_W006", JustWarning, description);
     return;       
   }
 
   if ( ! fNtupleDirectory ) {
     fNtupleDirectory = fFile->dir().mkdir(fNtupleDirectoryName);
     if ( ! fNtupleDirectory ) {
-      G4cerr << "---> Warning from G4RootAnalysisManager::CreateH1(): " 
-             << "cannot create directory " << fNtupleDirectoryName << std::endl;
+      G4ExceptionDescription description;
+      description << "      " 
+                  << "cannot create directory " << fNtupleDirectoryName;
+      G4Exception("G4RootAnalysisManager::CreateNtuple()",
+                  "Analysis_W002", JustWarning, description);
       return;       
     }       
   }
@@ -236,7 +277,13 @@ void G4RootAnalysisManager::FinishNtuple()
 G4bool G4RootAnalysisManager::FillH1(G4int id, G4double value, G4double weight)
 {
   tools::histo::h1d* h1d = GetH1(id);
-  if ( ! h1d ) return false;
+  if ( ! h1d ) {
+    G4ExceptionDescription description;
+    description << "      " << "histogram " << id << " does not exist.";
+    G4Exception("G4RootAnalysisManager::FillH1()",
+                "Analysis_W007", JustWarning, description);
+    return false;
+  }
 
   h1d->fill(value, weight);
   return true;
@@ -247,8 +294,10 @@ G4bool G4RootAnalysisManager::FillNtupleIColumn(G4int id, G4int value)
 {
   tools::wroot::ntuple::column<int>* column = GetNtupleIColumn(id);
   if ( ! column ) {
-    G4cerr << "---> Warning from G4RootAnalysisManager::FillNtupleIColumn():"
-           << " column " << id << " does not exist. " << G4endl;
+    G4ExceptionDescription description;
+    description << "      " << "column " << id << " does not exist.";
+    G4Exception("G4RootAnalysisManager::FillNtupleIColumn()",
+                "Analysis_W009", JustWarning, description);
     return false;
   }  
   
@@ -260,8 +309,10 @@ G4bool G4RootAnalysisManager::FillNtupleFColumn(G4int id, G4float value)
 {
   tools::wroot::ntuple::column<float>* column = GetNtupleFColumn(id);
   if ( ! column ) {
-    G4cerr << "---> Warning from G4RootAnalysisManager::FillNtupleFColumn():"
-           << " column " << id << " does not exist. " << G4endl;
+    G4ExceptionDescription description;
+    description << "      " << "column " << id << " does not exist.";
+    G4Exception("G4RootAnalysisManager::FillNtupleFColumn()",
+                "Analysis_W009", JustWarning, description);
     return false;
   }  
   
@@ -273,8 +324,10 @@ G4bool G4RootAnalysisManager::FillNtupleDColumn(G4int id, G4double value)
 {
   tools::wroot::ntuple::column<double>* column = GetNtupleDColumn(id);
   if ( ! column ) {
-    G4cerr << "---> Warning from G4RootAnalysisManager::FillNtupleDColumn():"
-           << " column " << id << " does not exist. " << G4endl;
+    G4ExceptionDescription description;
+    description << "      " << "column " << id << " does not exist.";
+    G4Exception("G4RootAnalysisManager::FillNtupleDColumn()",
+                "Analysis_W009", JustWarning, description);
     return false;
   }  
   
@@ -286,15 +339,19 @@ G4bool G4RootAnalysisManager::FillNtupleDColumn(G4int id, G4double value)
 G4bool G4RootAnalysisManager::AddNtupleRow()
 { 
   if ( ! fNtuple ) {
-    G4cerr << "---> Warning from G4RootAnalysisManager::AddNtupleRow(): " 
-           << " ntuple does not exist. " << G4endl;
+    G4ExceptionDescription description;
+    description << "      " << "ntuple does not exist. ";
+    G4Exception("G4RootAnalysisManager::AddNtupleRow()",
+                "Analysis_W008", JustWarning, description);
     return false;
   }  
   
   G4bool result =fNtuple->add_row();
   if ( ! result ) {
-    G4cerr << "---> Warning from G4RootAnalysisManager::AddNtupleRow(): " 
-           << " adding row has failed. " << G4endl;
+    G4ExceptionDescription description;
+    description << "      " << "adding row has failed.";
+    G4Exception("G4RootAnalysisManager::AddNtupleRow()",
+                "Analysis_W004", JustWarning, description);
   }         
   return result;
 }
@@ -305,8 +362,10 @@ tools::histo::h1d*  G4RootAnalysisManager::GetH1(G4int id, G4bool warn) const
   G4int index = id - fFirstHistoId;
   if ( index < 0 || index >= G4int(fH1Vector.size()) ) {
     if ( warn) {
-      G4cerr << "---> Warning from G4RootAnalysisManager::GetH1():"
-             << " histo " << id << " does not exist. " << G4endl;
+      G4ExceptionDescription description;
+      description << "      " << "histo " << id << " does not exist.";
+      G4Exception("G4RootAnalysisManager::GetH1()",
+                  "Analysis_W007", JustWarning, description);
     }
     return 0;         
   }
