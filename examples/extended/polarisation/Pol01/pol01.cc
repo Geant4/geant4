@@ -68,7 +68,9 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(new PhysicsList);
   runManager->SetUserAction(prim = new PrimaryGeneratorAction(det));
 
-  G4VisManager* visManager = 0;
+#ifdef G4VIS_USE
+   G4VisManager* visManager = 0;
+#endif
     
   HistoManager*  histo = new HistoManager();
       

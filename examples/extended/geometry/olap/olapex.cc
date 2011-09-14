@@ -40,6 +40,7 @@
 
 // Geant4
 #include "G4RunManager.hh"
+#include "G4UImanager.hh"
 
 // this module
 #include "OlapGenerator.hh"

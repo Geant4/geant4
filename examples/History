@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12th September 2011  Pere Mato
+- Added CMakeLists.txt files for each example (novice, advade and externded) 
+- Fixed minor issues concetning the use of G4UI_USE macro in:
+  extended/hadronic/Hadr00/hadr00.cc, Hadr01/hadr01.cc, Hadr02/hadr02.cc,
+  extended/runAndEvent/RE01/exampleRE02.cc, extended/geometry/olap/olapex.cc,
+  extended/visualization/userVisAction/userVisAction.cc, 
+  extended/polarisation/Pol01/pol01.cc, advanced/gammaray_telescope/GammaRayTel.cc
+
 2nd August 2011  Gabriele Cosmo (examples-V09-04-07)
 - Updated reference outputs according to reference tag geant4-09-04-ref-07.
 - Includes tags: nanobeam-V09-04-01, exampleN04-V09-04-00.

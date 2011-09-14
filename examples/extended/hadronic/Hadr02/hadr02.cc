@@ -110,7 +110,9 @@ int main(int argc,char** argv) {
 
   //get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
-  G4VisManager* visManager = 0;
+#ifdef G4VIS_USE
+   G4VisManager* visManager = 0;
+#endif
 
   if (argc==1)   // Define UI terminal for interactive mode
     {
@@ -133,7 +135,9 @@ int main(int argc,char** argv) {
     }
 
   //job termination
-  delete visManager;
+#ifdef G4VIS_USE
+   delete visManager;
+#endif
   delete runManager;
 
   return 0;

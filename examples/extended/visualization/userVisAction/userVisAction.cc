@@ -90,9 +90,9 @@ int main(int argc,char** argv) {
   G4UImanager * UImanager = G4UImanager::GetUIpointer();  
 
   if(argc==1)
-#ifdef G4UI_USE
   // Define (G)UI terminal for interactive mode  
   { 
+#ifdef G4UI_USE
     G4UIExecutive * ui = new G4UIExecutive(argc, argv);
     UImanager->ApplyCommand("/control/execute vis.mac");    
     ui->SessionStart();

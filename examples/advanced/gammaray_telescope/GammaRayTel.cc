@@ -113,10 +113,9 @@ int main(int argc, char** argv)
   // Get the pointer to the UI manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   
-  G4UIExecutive* ui = 0;
 #ifdef G4UI_USE
+  G4UIExecutive* ui = 0;
   ui = new G4UIExecutive(argc, argv);
-#endif
 
   if (ui)
     {
@@ -140,6 +139,7 @@ int main(int argc, char** argv)
 	}
       delete ui;
     }
+#endif  
 
   // Job termination
 #ifdef G4VIS_USE
