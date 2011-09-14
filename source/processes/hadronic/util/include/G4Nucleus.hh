@@ -99,13 +99,14 @@
     void SetParameters( const G4double A, const G4double Z );
     void SetParameters( const G4int A, const G4int Z );
     
+#ifndef G4Hadr_Nucleus_IntegerAZ 
 //deprecated Jan 2010, GF
     inline G4double GetN() const
     { return aEff; }
     
     inline G4double GetZ() const
     { return zEff; }
-
+#endif
 //to be replaced by new 
     inline G4int GetA_asInt() const
     { return theA; }   

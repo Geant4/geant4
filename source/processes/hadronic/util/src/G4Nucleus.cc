@@ -193,10 +193,10 @@ G4Nucleus::SetParameters(const G4double A, const G4double Z)
 {
   theZ = G4int(Z + 0.5);
   theA = G4int(A + 0.5);   
-  if (theA<1 || theZ<0 || theZ>theA)
+  if (theA<1 || theZ<0 || theZ>theA) {
     throw G4HadronicException(__FILE__, __LINE__,
             "G4Nucleus::SetParameters called with non-physical parameters");
-
+  }
   aEff = A;  // atomic weight
   zEff = Z;  // atomic number
 }
