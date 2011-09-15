@@ -14,7 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+15 Sep 2011  Gabriele Cosmo             (hadr-util-V09-04-04)
+-------------------------------------------------------------
+- Changed DLL export flag for symbols to G4HADRONIC_ALLOC_EXPORT.
+
 14 Sep 2011  Gunter Folger              (hadr-util-V09-04-03)
+-------------------------------------------------------------
 -  G4Nucleus.hh: put obsolete interface GetN/GetZ into ifndef block.
     this allows to try to compile without the obsolete interface.
 	

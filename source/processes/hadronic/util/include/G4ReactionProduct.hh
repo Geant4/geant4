@@ -42,7 +42,7 @@
 
 // To support better memory management and reduced fragmentation
 class G4ReactionProduct;
-#if defined G4REACTIONPRODUCT_ALLOC_EXPORT
+#if defined G4HADRONIC_ALLOC_EXPORT
   extern G4DLLEXPORT G4Allocator<G4ReactionProduct> aRPAllocator;
 #else
   extern G4DLLIMPORT G4Allocator<G4ReactionProduct> aRPAllocator;
