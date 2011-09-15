@@ -12,6 +12,9 @@
 #
 #------------------------------------------------------------------------------
 
+# Add allocation export symbol for the hadronic category
+add_definitions(-DG4HADRONIC_ALLOC_EXPORT)
+
 add_subdirectory(biasing)
 add_subdirectory(cuts)
 add_subdirectory(decay)
