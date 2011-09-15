@@ -17,6 +17,10 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 15 2011 I.Hrivnacova (analysis-V09-04-06)
+- Added static access to specific manager classes.
+- Migration to G4Exception for all warning/error messages.
+
 August 4 2011 G.Cosmo (analysis-V09-04-05)
 - Extended fix in tools/vdata for compilation error on olders GCC compiler
   versions (MacOSX 10.5, SLC4, ...). Addressing problem report #1238.
