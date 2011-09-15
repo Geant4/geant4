@@ -121,12 +121,12 @@ include(Geant4BuildProjectConfig)
 #------------------------------------------------------------------------------
 # Add the examples and tests subdirectories
 # This is done after the Geant4Config.cmake file has been generated
-if(GEANT4_BUILD_EXAMPLES)
-  add_subdirectory(examples EXCLUDE_FROM_ALL)
-endif()
 if(GEANT4_ENABLE_TESTING)
-  enable_testing()
+  include(Geant4CTest)
   add_subdirectory(tests)
+endif()
+if(GEANT4_BUILD_EXAMPLES)
+  add_subdirectory(examples)
 endif()
 
 #-----------------------------------------------------------------------------
