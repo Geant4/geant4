@@ -159,13 +159,17 @@ if(GEANT4_BUILD_EXAMPLES)
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/eventgenerator/exgps
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/eventgenerator/exgps
                   BUILD exGPS)
+  GEANT4_ADD_TEST(example-ext-eventgenerator-particleGun-build 
+                    SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/eventgenerator/particleGun
+                    BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/eventgenerator/particleGun
+                    BUILD particleGun)
   foreach(_i 1 2 3 4)
     GEANT4_ADD_TEST(example-ext-eventgenerator-particleGun-r${_i} 
                     COMMAND ${CMAKE_BINARY_DIR}/examples/extended/eventgenerator/particleGun/particleGun 
                             ${CMAKE_SOURCE_DIR}/examples/extended/eventgenerator/particleGun/run${_i}.mac
                     SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/eventgenerator/particleGun
                     BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/eventgenerator/particleGun
-                    BUILD particleGun)
+                    DEPENDS example-ext-eventgenerator-particleGun-build)
   endforeach()
   GEANT4_ADD_TEST(example-ext-exoticphysics-monopole 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/monopole/monopole
@@ -320,26 +324,30 @@ if(GEANT4_BUILD_EXAMPLES)
                           ${CMAKE_SOURCE_DIR}/examples/extended/runAndEvent/RE02/run3.mac
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/runAndEvent/RE02
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/runAndEvent/RE02
-                  BUILD exampleRE02)
+                  DEPENDS example-ext-runandevent-re02)
   GEANT4_ADD_TEST(example-ext-runandevent-re02-run4 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/runAndEvent/RE02/exampleRE02
                           ${CMAKE_SOURCE_DIR}/examples/extended/runAndEvent/RE02/run4.mac
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/runAndEvent/RE02
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/runAndEvent/RE02
-                  BUILD exampleRE02)
+                  DEPENDS example-ext-runandevent-re02)
+  GEANT4_ADD_TEST(example-ext-visualization-uservisaction-build
+                  SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/visualization/userVisAction
+                  BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/visualization/userVisAction
+                  BUILD userVisAction)
   GEANT4_ADD_TEST(example-ext-visualization-uservisaction-uva
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/visualization/userVisAction/userVisAction
                           ${CMAKE_SOURCE_DIR}/examples/extended/visualization/userVisAction/userVisAction.in
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/visualization/userVisAction
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/visualization/userVisAction
-                  BUILD userVisAction)
+                  DEPENDS example-ext-visualization-uservisaction-build)
   foreach(_i 1 2)
     GEANT4_ADD_TEST(example-ext-visualization-uservisaction-run${_i}
                     COMMAND ${CMAKE_BINARY_DIR}/examples/extended/visualization/userVisAction/userVisAction
                             ${CMAKE_SOURCE_DIR}/examples/extended/visualization/userVisAction/run${_i}.mac
                     SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/visualization/userVisAction
                     BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/visualization/userVisAction
-                    BUILD userVisAction)
+                    DEPENDS example-ext-visualization-uservisaction-build)
   endforeach()
 
 
