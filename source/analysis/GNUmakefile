@@ -10,10 +10,12 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-.PHONY: all
-all: lib
-
 CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/analysis/include
             
 include $(G4INSTALL)/config/common.gmk
+
+.PHONY: global
+
+global: lib
+
