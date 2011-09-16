@@ -63,7 +63,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc93 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -308,7 +308,7 @@ hPairProd:   for  pi-    SubType= 4
         ionInelastic  Crs sctns:         TripathiLightIons: Emin(GeV)=    0  Emax(GeV)= 100000
                                                   Tripathi: Emin(GeV)=    0  Emax(GeV)= 100000
                                                   IonsShen: Emin(GeV)=    0  Emax(GeV)= 100000
-                                         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 
                                   Hadronic Processes for <anti_neutron>
@@ -316,7 +316,7 @@ hPairProd:   for  pi-    SubType= 4
 AntiNeutronInelastic  Models:     G4LEAntiNeutronInelastic: Emin(GeV)=    0  Emax(GeV)= 25
                                   G4HEAntiNeutronInelastic: Emin(GeV)=   20  Emax(GeV)= 100000
 
-AntiNeutronInelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 
                                   Hadronic Processes for <anti_proton>
@@ -325,69 +325,69 @@ AntiNeutronInelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Ema
                                               AntiAElastic: Emin(GeV)=  0.1  Emax(GeV)= 1000
 
           hadElastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
-                                           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
+                                            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
  AntiProtonInelastic  Models:      G4LEAntiProtonInelastic: Emin(GeV)=    0  Emax(GeV)= 25
                                    G4HEAntiProtonInelastic: Emin(GeV)=   20  Emax(GeV)= 100000
 
- AntiProtonInelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+ AntiProtonInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 
                                   Hadronic Processes for <e->
                                   -----------------------------------
-      ElectroNuclear  Models:                CHIPS_wrapper: Emin(GeV)=    0  Emax(GeV)= 30000
+      ElectroNuclear  Models:          CHIPSElectroNuclear: Emin(GeV)=    0  Emax(GeV)= 30000
 
-      ElectroNuclear  Crs sctns:           Electro-nuclear: Emin(GeV)=    0  Emax(GeV)= 100000
-                                         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+      ElectroNuclear  Crs sctns:          ElectroNuclearXS: Emin(GeV)=    0  Emax(GeV)= 100000
+                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 
                                   Hadronic Processes for <gamma>
                                   -----------------------------------
-     PhotonInelastic  Models:                        CHIPS: Emin(GeV)=    0  Emax(GeV)= 3.5
+     PhotonInelastic  Models:            CHIPSGammaNuclear: Emin(GeV)=    0  Emax(GeV)= 3.5
                                            TheoFSGenerator: Emin(GeV)=    3  Emax(GeV)= 100000
 
-     PhotonInelastic  Crs sctns:             Photo-nuclear: Emin(GeV)=    0  Emax(GeV)= 100000
-                                         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+     PhotonInelastic  Crs sctns:            PhotoNuclearXS: Emin(GeV)=    0  Emax(GeV)= 100000
+                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 
                                   Hadronic Processes for <kaon+>
                                   -----------------------------------
           hadElastic  Models:                 hElasticLHEP: Emin(GeV)=    0  Emax(GeV)= 100000
 
-          hadElastic  Crs sctns:           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
+          hadElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
    KaonPlusInelastic  Models:                         QGSP: Emin(GeV)=   12  Emax(GeV)= 100000
                                      G4LEKaonPlusInelastic: Emin(GeV)=  9.5  Emax(GeV)= 25
-                                           Bertini Cascade: Emin(GeV)=  2.9  Emax(GeV)= 9.9
-                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 3
+                                            BertiniCascade: Emin(GeV)=  2.9  Emax(GeV)= 9.9
+                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 3
 
-   KaonPlusInelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+   KaonPlusInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 
                                   Hadronic Processes for <kaon->
                                   -----------------------------------
           hadElastic  Models:                 hElasticLHEP: Emin(GeV)=    0  Emax(GeV)= 100000
 
-          hadElastic  Crs sctns:           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
+          hadElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
   KaonMinusInelastic  Models:                         QGSP: Emin(GeV)=   12  Emax(GeV)= 100000
                                     G4LEKaonMinusInelastic: Emin(GeV)=  9.5  Emax(GeV)= 25
-                                           Bertini Cascade: Emin(GeV)=  2.9  Emax(GeV)= 9.9
-                                           Bertini Cascade: Emin(GeV)=    0  Emax(GeV)= 3
+                                            BertiniCascade: Emin(GeV)=  2.9  Emax(GeV)= 9.9
+                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 3
 
-  KaonMinusInelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+  KaonMinusInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 
                                   Hadronic Processes for <lambda>
                                   -----------------------------------
           hadElastic  Models:                 hElasticLHEP: Emin(GeV)=    0  Emax(GeV)= 100000
 
-          hadElastic  Crs sctns:           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
+          hadElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
      LambdaInelastic  Models:          G4LELambdaInelastic: Emin(GeV)=    0  Emax(GeV)= 25
                                        G4HELambdaInelastic: Emin(GeV)=   20  Emax(GeV)= 100000
 
-     LambdaInelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+     LambdaInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 
                      Hadronic Processes for <mu->
@@ -398,26 +398,26 @@ AntiNeutronInelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Ema
           hadElastic  Models:                hElasticCHIPS: Emin(GeV)=    0  Emax(GeV)= 100000
 
           hadElastic  Crs sctns:            CHIPSElasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
-                                           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
+                                            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
     NeutronInelastic  Models:                         QGSP: Emin(GeV)=   12  Emax(GeV)= 100000
                                       G4LENeutronInelastic: Emin(GeV)=  9.5  Emax(GeV)= 25
-                                           Bertini Cascade: Emin(GeV)=  2.9  Emax(GeV)= 9.9
+                                            BertiniCascade: Emin(GeV)=  2.9  Emax(GeV)= 9.9
                                          INCL/ABLA Cascade: Emin(GeV)=    0  Emax(GeV)= 3
 
     NeutronInelastic  Crs sctns:          Wellisch-Laidlaw: Emin(GeV)=    0  Emax(GeV)= 100000
                                       G4CrossSectionPairGG: Emin(GeV)=    0  Emax(GeV)= 100000
                          G4CrossSectionPairGG: Wellisch-Laidlaw cross sections 
                            below 91 GeV, Glauber-Gribov above 
-                                         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
             nCapture  Models:                   G4LCapture: Emin(GeV)=    0  Emax(GeV)= 20000
 
-            nCapture  Crs sctns:           Gheisha capture: Emin(GeV)=    0  Emax(GeV)= 100000
+            nCapture  Crs sctns:          GheishaCaptureXS: Emin(GeV)=    0  Emax(GeV)= 100000
 
             nFission  Models:                   G4LFission: Emin(GeV)=    0  Emax(GeV)= 20000
 
-            nFission  Crs sctns:           Gheisha fission: Emin(GeV)=    0  Emax(GeV)= 100000
+            nFission  Crs sctns:          GheishaFissionXS: Emin(GeV)=    0  Emax(GeV)= 100000
 
 
                                   Hadronic Processes for <pi+>
@@ -425,18 +425,18 @@ AntiNeutronInelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Ema
           hadElastic  Models:                 hElasticLHEP: Emin(GeV)=    0  Emax(GeV)= 1
                                            hElasticGlauber: Emin(GeV)=    1  Emax(GeV)= 100000
 
-          hadElastic  Crs sctns: Barashenkov-Glauber-Gribov: Emin(GeV)=    0  Emax(GeV)= 100000
-                                           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
+          hadElastic  Crs sctns:       Barashenkov-Glauber: Emin(GeV)=    0  Emax(GeV)= 100000
+                                            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
    PionPlusInelastic  Models:                         QGSP: Emin(GeV)=   12  Emax(GeV)= 100000
                                      G4LEPionPlusInelastic: Emin(GeV)=  9.5  Emax(GeV)= 25
-                                           Bertini Cascade: Emin(GeV)=  2.9  Emax(GeV)= 9.9
+                                            BertiniCascade: Emin(GeV)=  2.9  Emax(GeV)= 9.9
                                          INCL/ABLA Cascade: Emin(GeV)=    0  Emax(GeV)= 3
 
    PionPlusInelastic  Crs sctns:      G4CrossSectionPairGG: Emin(GeV)=    0  Emax(GeV)= 100000
                          G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
                            below 91 GeV, Glauber-Gribov above 
-                                         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 
                                   Hadronic Processes for <pi->
@@ -444,19 +444,19 @@ AntiNeutronInelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Ema
           hadElastic  Models:                 hElasticLHEP: Emin(GeV)=    0  Emax(GeV)= 1
                                            hElasticGlauber: Emin(GeV)=    1  Emax(GeV)= 100000
 
-          hadElastic  Crs sctns: Barashenkov-Glauber-Gribov: Emin(GeV)=    0  Emax(GeV)= 100000
-                                           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
+          hadElastic  Crs sctns:       Barashenkov-Glauber: Emin(GeV)=    0  Emax(GeV)= 100000
+                                            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
   PionMinusInelastic  Models:                         QGSP: Emin(GeV)=   12  Emax(GeV)= 100000
                                     G4LEPionMinusInelastic: Emin(GeV)=  9.5  Emax(GeV)= 25
-                                           Bertini Cascade: Emin(GeV)=  2.9  Emax(GeV)= 9.9
+                                            BertiniCascade: Emin(GeV)=  2.9  Emax(GeV)= 9.9
                                          INCL/ABLA Cascade: Emin(GeV)=    0  Emax(GeV)= 3
 
   PionMinusInelastic  Crs sctns:   G4PiNuclearCrossSection: Emin(GeV)=    0  Emax(GeV)= 99900
                                       G4CrossSectionPairGG: Emin(GeV)=    0  Emax(GeV)= 100000
                          G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
                            below 91 GeV, Glauber-Gribov above 
-                                         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 
                                   Hadronic Processes for <proton>
@@ -464,25 +464,32 @@ AntiNeutronInelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Ema
           hadElastic  Models:                hElasticCHIPS: Emin(GeV)=    0  Emax(GeV)= 100000
 
           hadElastic  Crs sctns:            CHIPSElasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
-                                           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
+                                            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
      ProtonInelastic  Models:                         QGSP: Emin(GeV)=   12  Emax(GeV)= 100000
                                        G4LEProtonInelastic: Emin(GeV)=  9.5  Emax(GeV)= 25
-                                           Bertini Cascade: Emin(GeV)=  2.9  Emax(GeV)= 9.9
+                                            BertiniCascade: Emin(GeV)=  2.9  Emax(GeV)= 9.9
                                          INCL/ABLA Cascade: Emin(GeV)=    0  Emax(GeV)= 3
 
      ProtonInelastic  Crs sctns:             Axen-Wellisch: Emin(GeV)=    0  Emax(GeV)= 100000
                                       G4CrossSectionPairGG: Emin(GeV)=    0  Emax(GeV)= 100000
                          G4CrossSectionPairGG: Axen-Wellisch cross sections 
                            below 91 GeV, Glauber-Gribov above 
-                                         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 ============================================================================================
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Thorium 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -505,7 +512,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.32s Real=0.32s Sys=0s
+  User=0.28s Real=0.28s Sys=0s
 #
 # neutron at 1 GeV in Th
 #
@@ -515,10 +522,17 @@ Run Summary
 SimpleBox is now made of Th
 /run/beamOn 20
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Thorium 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -536,7 +550,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.16s Real=0.17s Sys=0s
+  User=0.21s Real=0.21s Sys=0s
 #
 # pi+ at 1 GeV in Th
 #
@@ -546,10 +560,17 @@ Run Summary
 SimpleBox is now made of Th
 /run/beamOn 20
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Thorium 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -567,7 +588,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.1s Real=1.09s Sys=0s
+  User=1.47s Real=1.47s Sys=0s
 #
 # pi- at 1 GeV in Th
 #
@@ -577,10 +598,17 @@ Run Summary
 SimpleBox is now made of Th
 /run/beamOn 20
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Thorium 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -598,7 +626,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.83s Real=0.84s Sys=0s
+  User=1.44s Real=1.44s Sys=0s
 #
 # proton at 1 GeV in U
 #
@@ -626,7 +654,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc93 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -862,10 +890,17 @@ hPairProd:   for  pi-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Uranium 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -888,7 +923,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.27s Real=0.27s Sys=0s
+  User=0.32s Real=0.33s Sys=0s
 #
 # neutron at 1 GeV in U
 #
@@ -898,10 +933,17 @@ Run Summary
 SimpleBox is now made of U
 /run/beamOn 20
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Uranium 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -924,7 +966,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.2s Real=0.2s Sys=0s
+  User=0.3s Real=0.3s Sys=0s
 #
 # pi+ at 1 GeV in U
 #
@@ -934,10 +976,17 @@ Run Summary
 SimpleBox is now made of U
 /run/beamOn 20
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Uranium 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -960,7 +1009,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.11s Real=1.11s Sys=0s
+  User=1.47s Real=1.47s Sys=0s
 #
 # pi- at 1 GeV in U
 #
@@ -970,10 +1019,17 @@ Run Summary
 SimpleBox is now made of U
 /run/beamOn 20
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Uranium 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -996,7 +1052,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.17s Real=1.18s Sys=0s
+  User=0.84s Real=0.84s Sys=0s
 #
 # proton at 1 GeV in Pb
 #
@@ -1024,7 +1080,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc93 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -1260,10 +1316,17 @@ hPairProd:   for  pi-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Lead 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -1291,7 +1354,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.24s Real=0.25s Sys=0s
+  User=0.25s Real=0.25s Sys=0s
 #
 # neutron at 1 GeV in Pb
 #
@@ -1301,10 +1364,17 @@ Run Summary
 SimpleBox is now made of Pb
 /run/beamOn 20
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Lead 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -1332,7 +1402,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.26s Real=0.26s Sys=0s
+  User=0.25s Real=0.25s Sys=0s
 #
 # pi+ at 1 GeV in Pb
 #
@@ -1342,10 +1412,17 @@ Run Summary
 SimpleBox is now made of Pb
 /run/beamOn 20
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Lead 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -1373,7 +1450,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.55s Real=1.54s Sys=0s
+  User=1.23s Real=1.23s Sys=0s
 #
 # pi- at 1 GeV in Pb
 #
@@ -1383,10 +1460,17 @@ Run Summary
 SimpleBox is now made of Pb
 /run/beamOn 20
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Lead 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -1414,7 +1498,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.8s Real=0.8s Sys=0s
+  User=1.04s Real=1.04s Sys=0s
 #
 # proton at 1 GeV in Cu
 #
@@ -1442,7 +1526,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc93 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -1678,10 +1762,17 @@ hPairProd:   for  pi-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Copper 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -1714,7 +1805,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.06s Real=0.06s Sys=0s
+  User=0.05s Real=0.05s Sys=0s
 #
 # neutron at 1 GeV in Cu
 #
@@ -1724,10 +1815,17 @@ Run Summary
 SimpleBox is now made of Cu
 /run/beamOn 20
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Copper 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -1770,10 +1868,17 @@ Run Summary
 SimpleBox is now made of Cu
 /run/beamOn 20
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Copper 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -1806,7 +1911,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.24s Real=0.23s Sys=0s
+  User=0.38s Real=0.38s Sys=0s
 #
 # pi- at 1 GeV in Cu
 #
@@ -1816,10 +1921,17 @@ Run Summary
 SimpleBox is now made of Cu
 /run/beamOn 20
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Copper 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -1852,7 +1964,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.25s Real=0.25s Sys=0s
+  User=0.29s Real=0.29s Sys=0s
 #
 # proton at 1 GeV in Si
 #
@@ -1880,7 +1992,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc93 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -2116,10 +2228,17 @@ hPairProd:   for  pi-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Silicon 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -2157,7 +2276,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.04s Real=0.05s Sys=0s
+  User=0.04s Real=0.04s Sys=0s
 #
 # neutron at 1 GeV in Si
 #
@@ -2167,10 +2286,17 @@ Run Summary
 SimpleBox is now made of Si
 /run/beamOn 20
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Silicon 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -2208,7 +2334,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.03s Real=0.03s Sys=0s
+  User=0.04s Real=0.04s Sys=0s
 #
 # pi+ at 1 GeV in Si
 #
@@ -2218,10 +2344,17 @@ Run Summary
 SimpleBox is now made of Si
 /run/beamOn 20
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Silicon 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -2259,7 +2392,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.13s Real=0.14s Sys=0s
+  User=0.11s Real=0.11s Sys=0s
 #
 # pi- at 1 GeV in Si
 #
@@ -2269,10 +2402,17 @@ Run Summary
 SimpleBox is now made of Si
 /run/beamOn 20
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Silicon 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -2310,7 +2450,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.14s Real=0.14s Sys=0.01s
+  User=0.1s Real=0.1s Sys=0s
 #
 # proton at 1 GeV in C
 #
@@ -2338,7 +2478,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc93 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -2574,10 +2714,17 @@ hPairProd:   for  pi-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Carbon 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -2630,10 +2777,17 @@ Run Summary
 SimpleBox is now made of C
 /run/beamOn 20
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Carbon 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -2686,10 +2840,17 @@ Run Summary
 SimpleBox is now made of C
 /run/beamOn 20
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Carbon 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -2732,7 +2893,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.06s Real=0.05s Sys=0s
+  User=0.07s Real=0.07s Sys=0s
 #
 # pi- at 1 GeV in C
 #
@@ -2742,10 +2903,17 @@ Run Summary
 SimpleBox is now made of C
 /run/beamOn 20
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Carbon 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -2788,7 +2956,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.06s Real=0.06s Sys=0s
+  User=0.07s Real=0.07s Sys=0s
 #
 # Deuteron at 1 GeV/nucleon on Pb
 #
@@ -2798,10 +2966,17 @@ Run Summary
 SimpleBox is now made of Pb
 /run/beamOn 20
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Lead 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -2854,10 +3029,17 @@ Run Summary
 SimpleBox is now made of Pb
 /run/beamOn 20
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Lead 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -2900,7 +3082,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.3s Real=0.3s Sys=0s
+  User=0.23s Real=0.23s Sys=0s
 #
 # Carbon at 290 MeV/nucleon on C
 #
@@ -2911,10 +3093,17 @@ Run Summary
 SimpleBox is now made of C
 /run/beamOn 20
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Carbon 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -2954,10 +3143,16 @@ Index : 5     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 Start Run processing.
+Four-momentum balance after spectator nucleus Fermi break-up:
+Magnitude: 42.4575 MeV
+Vector components (px, py, pz, E) = (0, 0, 0, 42.4575)
+Four-momentum balance after spectator nucleus Fermi break-up:
+Magnitude: 45.4966 MeV
+Vector components (px, py, pz, E) = (1.7053e-13, -2.4869e-14, -1.81899e-12, 45.4966)
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.03s Real=0.03s Sys=0s
+  User=0.05s Real=0.05s Sys=0s
 #
 # Carbon at 500 MeV/nucleon on Pb
 #
@@ -2967,10 +3162,17 @@ Run Summary
 SimpleBox is now made of Pb
 /run/beamOn 20
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Lead 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -3010,10 +3212,17 @@ Index : 5     used in the geometry : No      recalculation needed : No
 ====================================================================
 
 Start Run processing.
+Four-momentum balance after spectator nucleus Fermi break-up:
+Magnitude: 26.8784 MeV
+Vector components (px, py, pz, E) = (8.52651e-14, 2.84217e-14, -9.09495e-13, 26.8784)
+Error! Projectile H6[0.0] not defined!
+Error! Projectile H6[0.0] not defined!
+Error! Projectile H6[0.0] not defined!
+Error! Projectile H6[0.0] not defined!
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.15s Real=0.15s Sys=0s
+  User=0.18s Real=0.18s Sys=0s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.

@@ -327,10 +327,17 @@ hPairProd:   for  pi-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Galactic Silicon 
+ Production cuts :   gamma 7 um      e- 7 um      e+ 7 um  proton 1 mm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 7 um      e- 7 um      e+ 7 um  proton 1 mm 
 
 ========= Table of registered couples ==============================
@@ -386,45 +393,45 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=5.1s Real=7.93s Sys=2.82s
+  User=5.43s Real=7.85s Sys=2.43s
 
  ======================== run summary ======================
 
  The run was 100000 e- of 100 MeV through 20 um  of Silicon (density: 2.33 g/cm3 )
 
- Total energy deposit in absorber per event = 6.484 keV +- 16.85 eV 
+ Total energy deposit in absorber per event = 6.458 keV +- 16.35 eV 
 
- -----> Mean dE/dx = 3.242 MeV/cm	(1.391 MeV*cm2/g)
+ -----> Mean dE/dx = 3.229 MeV/cm	(1.386 MeV*cm2/g)
 
  From formulas :
    restricted dEdx = 3.016 MeV/cm	(1.295 MeV*cm2/g)
    full dEdx       = 13.55 MeV/cm	(5.817 MeV*cm2/g)
 
- Leakage :  primary = 99.98 MeV +- 2.561 keV   secondaries = 17.1 keV +- 2.561 keV
+ Leakage :  primary = 99.97 MeV +- 2.597 keV   secondaries = 19.12 keV +- 2.597 keV
  Energy balance :  edep + eleak = 100 MeV
 
- Total track length (charged) in absorber per event = 20.28 um  +- 8.283 nm 
- Total track length (neutral) in absorber per event = 29.14 nm  +- 1.97 nm 
+ Total track length (charged) in absorber per event = 20.27 um  +- 7.905 nm 
+ Total track length (neutral) in absorber per event = 29.62 nm  +- 1.956 nm 
 
- Number of steps (charged) in absorber per event = 3.676 +- 9.101e-06
- Number of steps (neutral) in absorber per event = 0.00319 +- 9.101e-06
+ Number of steps (charged) in absorber per event = 3.727 +- 8.891e-06
+ Number of steps (neutral) in absorber per event = 0.00337 +- 8.891e-06
 
- Number of secondaries per event : Gammas = 0.00319;   electrons = 0.01819;   positrons = 0
+ Number of secondaries per event : Gammas = 0.00337;   electrons = 0.01755;   positrons = 0
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
 
  Number of events with the primary particle reflected = 0 %
- Number of events with at least  1 particle reflected (same charge as primary) = 0.132 %
+ Number of events with at least  1 particle reflected (same charge as primary) = 0.137 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 1.323 mrad (central part only)
+  rms proj angle of transmit primary particle = 1.314 mrad (central part only)
   computed theta0 (Highland formula)          = 1.342 mrad
-  central part defined as +- 4.026 mrad;   Tail ratio = 2.77 %
+  central part defined as +- 4.026 mrad;   Tail ratio = 2.534 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 775780347, 259338800
+ Current couple of seeds = 1936139836, 1776173345
 ----------------------------------------
 #
 /testem/det/setAbsMat Gold
@@ -722,10 +729,17 @@ hPairProd:   for  pi-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Galactic Gold 
+ Production cuts :   gamma 7 um      e- 7 um      e+ 7 um  proton 1 mm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 7 um      e- 7 um      e+ 7 um  proton 1 mm 
 
 ========= Table of registered couples ==============================
@@ -760,7 +774,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 775780347, 259338800
+ Current couple of seeds = 1936139836, 1776173345
 ----------------------------------------
 Start Run processing.
 
@@ -786,45 +800,45 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=5.63s Real=8.49s Sys=2.84s
+  User=5.99s Real=8.44s Sys=2.45s
 
  ======================== run summary ======================
 
  The run was 100000 e- of 15.7 MeV through 9.66 um  of Gold (density: 19.3 g/cm3 )
 
- Total energy deposit in absorber per event = 18.68 keV +- 47.52 eV 
+ Total energy deposit in absorber per event = 18.56 keV +- 45.86 eV 
 
- -----> Mean dE/dx = 19.34 MeV/cm	(1.001 MeV*cm2/g)
+ -----> Mean dE/dx = 19.22 MeV/cm	(0.9948 MeV*cm2/g)
 
  From formulas :
    restricted dEdx = 17.93 MeV/cm	(0.9278 MeV*cm2/g)
    full dEdx       = 60.88 MeV/cm	(3.151 MeV*cm2/g)
 
- Leakage :  primary = 15.64 MeV +- 1.563 keV   secondaries = 42.9 keV +- 1.556 keV
+ Leakage :  primary = 15.64 MeV +- 1.503 keV   secondaries = 40.89 keV +- 1.498 keV
  Energy balance :  edep + eleak = 15.7 MeV
 
- Total track length (charged) in absorber per event = 9.967 um  +- 9.065 nm 
- Total track length (neutral) in absorber per event = 130.1 nm  +- 3.335 nm 
+ Total track length (charged) in absorber per event = 9.933 um  +- 8.198 nm 
+ Total track length (neutral) in absorber per event = 128.7 nm  +- 3.489 nm 
 
- Number of steps (charged) in absorber per event = 5.088 +- 9.521e-06
- Number of steps (neutral) in absorber per event = 0.02878 +- 9.521e-06
+ Number of steps (charged) in absorber per event = 5.114 +- 9.054e-06
+ Number of steps (neutral) in absorber per event = 0.02849 +- 9.054e-06
 
- Number of secondaries per event : Gammas = 0.02863;   electrons = 0.02312;   positrons = 0
+ Number of secondaries per event : Gammas = 0.02832;   electrons = 0.02235;   positrons = 0
 
- Number of events with the primary particle transmitted = 99.97 %
- Number of events with at least  1 particle transmitted (same charge as primary) = 99.97 %
+ Number of events with the primary particle transmitted = 99.98 %
+ Number of events with at least  1 particle transmitted (same charge as primary) = 99.98 %
 
- Number of events with the primary particle reflected = 0.033 %
- Number of events with at least  1 particle reflected (same charge as primary) = 0.351 %
+ Number of events with the primary particle reflected = 0.02 %
+ Number of events with at least  1 particle reflected (same charge as primary) = 0.317 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 34.45 mrad (central part only)
+  rms proj angle of transmit primary particle = 34.49 mrad (central part only)
   computed theta0 (Highland formula)          = 35.1 mrad
-  central part defined as +- 105.3 mrad;   Tail ratio = 2.643 %
+  central part defined as +- 105.3 mrad;   Tail ratio = 2.603 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1253096184, 170695663
+ Current couple of seeds = 433528561, 677795347
 ----------------------------------------
 #
 /testem/phys/setCuts 10 um

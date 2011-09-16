@@ -52,7 +52,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc93 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -216,130 +216,137 @@ hIoni:   for  pi-    SubType= 2
 
         IonInelastic  Crs sctns:                  IonsShen: Emin(GeV)=    0  Emax(GeV)= 100000
                                                   Tripathi: Emin(GeV)=    0  Emax(GeV)= 100000
-                                         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 
                                   Hadronic Processes for <anti_neutron>
                                   -----------------------------------
        HadronElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
 
-       HadronElastic  Crs sctns:           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
+       HadronElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
            inelastic  Models:     G4LEAntiNeutronInelastic: Emin(GeV)=    0  Emax(GeV)= 25
                                            TheoFSGenerator: Emin(GeV)=   19  Emax(GeV)= 100000
 
-           inelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+           inelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 
                                   Hadronic Processes for <anti_proton>
                                   -----------------------------------
        HadronElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
 
-       HadronElastic  Crs sctns:           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
+       HadronElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
            inelastic  Models:      G4LEAntiProtonInelastic: Emin(GeV)=    0  Emax(GeV)= 25
                                            TheoFSGenerator: Emin(GeV)=   19  Emax(GeV)= 100000
 
-           inelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+           inelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 
                                   Hadronic Processes for <kaon+>
                                   -----------------------------------
        HadronElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
 
-       HadronElastic  Crs sctns:           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
+       HadronElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
            inelastic  Models:        G4LEKaonPlusInelastic: Emin(GeV)=    0  Emax(GeV)= 25
                                            TheoFSGenerator: Emin(GeV)=   19  Emax(GeV)= 100000
 
-           inelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+           inelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 
                                   Hadronic Processes for <kaon->
                                   -----------------------------------
        HadronElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
 
-       HadronElastic  Crs sctns:           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
+       HadronElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
            inelastic  Models:       G4LEKaonMinusInelastic: Emin(GeV)=    0  Emax(GeV)= 25
                                            TheoFSGenerator: Emin(GeV)=   19  Emax(GeV)= 100000
 
-           inelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+           inelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 
                                   Hadronic Processes for <lambda>
                                   -----------------------------------
        HadronElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
 
-       HadronElastic  Crs sctns:           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
+       HadronElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
            inelastic  Models:          G4LELambdaInelastic: Emin(GeV)=    0  Emax(GeV)= 25
                                            TheoFSGenerator: Emin(GeV)=   19  Emax(GeV)= 100000
 
-           inelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+           inelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 
                                   Hadronic Processes for <neutron>
                                   -----------------------------------
        HadronElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
 
-       HadronElastic  Crs sctns:           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
+       HadronElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
            inelastic  Models:               Binary Cascade: Emin(GeV)=    0  Emax(GeV)= 10.1
                                            TheoFSGenerator: Emin(GeV)=   19  Emax(GeV)= 100000
 
-           inelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+           inelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
             nFission  Models:                   G4LFission: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
 
-            nFission  Crs sctns:           Gheisha fission: Emin(GeV)=    0  Emax(GeV)= 100000
+            nFission  Crs sctns:          GheishaFissionXS: Emin(GeV)=    0  Emax(GeV)= 100000
 
             nCapture  Models:                   G4LCapture: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
 
-            nCapture  Crs sctns:           Gheisha capture: Emin(GeV)=    0  Emax(GeV)= 100000
+            nCapture  Crs sctns:          GheishaCaptureXS: Emin(GeV)=    0  Emax(GeV)= 100000
 
 
                                   Hadronic Processes for <pi+>
                                   -----------------------------------
        HadronElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
 
-       HadronElastic  Crs sctns:           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
+       HadronElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
            inelastic  Models:        G4LEPionPlusInelastic: Emin(GeV)=    0  Emax(GeV)= 55
                                            TheoFSGenerator: Emin(GeV)=   19  Emax(GeV)= 100000
 
-           inelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+           inelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 
                                   Hadronic Processes for <pi->
                                   -----------------------------------
        HadronElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
 
-       HadronElastic  Crs sctns:           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
+       HadronElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
            inelastic  Models:       G4LEPionMinusInelastic: Emin(GeV)=    0  Emax(GeV)= 55
                                            TheoFSGenerator: Emin(GeV)=   19  Emax(GeV)= 100000
 
-           inelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+           inelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 
                                   Hadronic Processes for <proton>
                                   -----------------------------------
        HadronElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
 
-       HadronElastic  Crs sctns:           Gheisha elastic: Emin(GeV)=    0  Emax(GeV)= 100000
+       HadronElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
            inelastic  Models:               Binary Cascade: Emin(GeV)=    0  Emax(GeV)= 10.1
                                            TheoFSGenerator: Emin(GeV)=   19  Emax(GeV)= 100000
 
-           inelastic  Crs sctns:         Gheisha inelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+           inelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 ============================================================================================
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Uranium 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -360,49 +367,49 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
  Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 986.263, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0162591 fail
+ Primary: neutron (2112), E= 991.654, target nucleus (92,238)
+ relative limit 0.01 relative value = 0.0145763 fail
  absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
  Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 1005.23, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0115619 fail
+ Primary: neutron (2112), E= 990.548, target nucleus (92,238)
+ relative limit 0.01 relative value = 0.0148926 fail
  absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
  Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 997.659, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0130696 fail
+ Primary: neutron (2112), E= 987.86, target nucleus (92,238)
+ relative limit 0.01 relative value = 0.0157214 fail
  absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
  Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 998.899, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0127964 fail
+ Primary: neutron (2112), E= 1003.81, target nucleus (92,238)
+ relative limit 0.01 relative value = 0.0118187 fail
  absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
  Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 995.25, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0136351 fail
+ Primary: neutron (2112), E= 1003.67, target nucleus (92,238)
+ relative limit 0.01 relative value = 0.011845 fail
  absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
  Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 988.404, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0155463 fail
+ Primary: neutron (2112), E= 988.269, target nucleus (92,238)
+ relative limit 0.01 relative value = 0.0155893 fail
  absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
  Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 999.485, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0126713 fail
+ Primary: neutron (2112), E= 992.232, target nucleus (92,238)
+ relative limit 0.01 relative value = 0.0144163 fail
  absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
  Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 990.419, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0149304 fail
+ Primary: neutron (2112), E= 1005.19, target nucleus (92,238)
+ relative limit 0.01 relative value = 0.0115706 fail
  absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
  Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 1002.52, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0120601 fail
+ Primary: neutron (2112), E= 1008.65, target nucleus (92,238)
+ relative limit 0.01 relative value = 0.0109907 fail
  absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
  Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 1013.02, target nucleus (92,238)
- relative limit 0.01 relative value = 0.0103359 fail
+ Primary: proton (2212), E= 988.147, target nucleus (92,238)
+ relative limit 0.01 relative value = 0.0152233 fail
  absolute limit (MeV) 1 absolute value (MeV) = 0.759261 pass
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=22.68s Real=23.13s Sys=0.02s
+  User=22.05s Real=22.11s Sys=0.01s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
@@ -431,7 +438,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc93 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -586,10 +593,17 @@ hIoni:   for  pi-    SubType= 2
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : H 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -612,7 +626,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Silicon
 #
@@ -641,7 +655,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc93 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -796,10 +810,17 @@ hIoni:   for  pi-    SubType= 2
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Silicon 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -827,7 +848,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=4.67s Real=4.67s Sys=0s
+  User=4.23s Real=4.25s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -856,7 +877,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc93 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -1011,10 +1032,17 @@ hIoni:   for  pi-    SubType= 2
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Water 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -1047,7 +1075,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=2.04s Real=2.04s Sys=0s
+  User=2s Real=2.01s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1059,10 +1087,17 @@ Run Summary
 SimpleBox is now made of U
 /run/beamOn 4
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Uranium 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -1095,7 +1130,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=0s Real=0s Sys=0s
+  User=5.31s Real=5.32s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on H
 #
@@ -1106,10 +1141,17 @@ Run Summary
 SimpleBox is now made of H
 /run/beamOn 16
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : H 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -1153,10 +1195,17 @@ Run Summary
 SimpleBox is now made of Si
 /run/beamOn 16
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Silicon 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -1189,7 +1238,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0.47s Real=0.47s Sys=0s
+  User=1.83s Real=1.83s Sys=0s
 #
 #  .....end C(12,6)++............
 #
@@ -1221,7 +1270,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc93 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -1376,10 +1425,17 @@ hIoni:   for  pi-    SubType= 2
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Lead 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 ========= Table of registered couples ==============================
@@ -1414,150 +1470,10 @@ Index : 4     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 Start Run processing.
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 988.487, target nucleus (82,208)
- relative limit 0.01 relative value = 0.0115569 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565381 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 989.247, target nucleus (82,208)
- relative limit 0.01 relative value = 0.0113802 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565381 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 995.972, target nucleus (82,207)
- relative limit 0.01 relative value = 0.0100235 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565396 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 990.658, target nucleus (82,207)
- relative limit 0.01 relative value = 0.0110661 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565396 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 993.164, target nucleus (82,207)
- relative limit 0.01 relative value = 0.0105488 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565396 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 985.416, target nucleus (82,206)
- relative limit 0.01 relative value = 0.0123315 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565411 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 991.5, target nucleus (82,208)
- relative limit 0.01 relative value = 0.0108864 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565381 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 986.971, target nucleus (82,208)
- relative limit 0.01 relative value = 0.0119264 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565381 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 987.93, target nucleus (82,207)
- relative limit 0.01 relative value = 0.0116902 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565396 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 984.602, target nucleus (82,208)
- relative limit 0.01 relative value = 0.0125539 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565381 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 995.092, target nucleus (82,208)
- relative limit 0.01 relative value = 0.0101822 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565381 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 986.651, target nucleus (82,207)
- relative limit 0.01 relative value = 0.0120078 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565396 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 994.097, target nucleus (82,208)
- relative limit 0.01 relative value = 0.0103679 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565381 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 985.997, target nucleus (82,208)
- relative limit 0.01 relative value = 0.0121767 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565381 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 984.846, target nucleus (82,207)
- relative limit 0.01 relative value = 0.0124863 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565396 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 992.512, target nucleus (82,206)
- relative limit 0.01 relative value = 0.0106789 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565411 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 985.729, target nucleus (82,208)
- relative limit 0.01 relative value = 0.0122473 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565381 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 987.165, target nucleus (82,208)
- relative limit 0.01 relative value = 0.0118778 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565381 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 994.123, target nucleus (82,208)
- relative limit 0.01 relative value = 0.0103631 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565381 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 988.842, target nucleus (82,207)
- relative limit 0.01 relative value = 0.011474 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565396 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 995.809, target nucleus (82,208)
- relative limit 0.01 relative value = 0.0100524 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565381 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 993.944, target nucleus (82,207)
- relative limit 0.01 relative value = 0.0103973 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565396 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 991.817, target nucleus (82,208)
- relative limit 0.01 relative value = 0.0108204 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565381 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 995.32, target nucleus (82,208)
- relative limit 0.01 relative value = 0.0101404 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565381 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 988.409, target nucleus (82,206)
- relative limit 0.01 relative value = 0.011576 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565411 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 995.006, target nucleus (82,206)
- relative limit 0.01 relative value = 0.0101985 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565411 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 990.178, target nucleus (82,207)
- relative limit 0.01 relative value = 0.011171 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565396 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 992.182, target nucleus (82,206)
- relative limit 0.01 relative value = 0.0107459 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565411 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 991.309, target nucleus (82,208)
- relative limit 0.01 relative value = 0.0109265 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565381 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 993.835, target nucleus (82,207)
- relative limit 0.01 relative value = 0.0104184 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565396 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 990.513, target nucleus (82,207)
- relative limit 0.01 relative value = 0.0110976 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565396 pass
- Process: inelastic , Model: Binary Cascade
- Primary: proton (2212), E= 988.256, target nucleus (82,208)
- relative limit 0.01 relative value = 0.0113112 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565381 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 988.375, target nucleus (82,206)
- relative limit 0.01 relative value = 0.0115841 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565411 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 988.291, target nucleus (82,208)
- relative limit 0.01 relative value = 0.0116033 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565381 pass
- Process: inelastic , Model: Binary Cascade
- Primary: neutron (2112), E= 992.06, target nucleus (82,208)
- relative limit 0.01 relative value = 0.0107703 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565381 pass
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=21.76s Real=21.8s Sys=0.02s
+  User=15.63s Real=15.63s Sys=0.01s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.

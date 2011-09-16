@@ -61,5 +61,5 @@ Test49:NewRun:Targ=90073108,M=1.685151e+05,Proj=2212,E=3.999928e+05 MeV, Run #1 
 ***=>TEST19: 47000 events are simulated
 ***=>TEST19: 48000 events are simulated
 ***=>TEST19: 49000 events are simulated
-Test49:Time/Ev=8.058200e-03 s, DN=0.000000e+00 %
+Test49:Time/Ev=8.551400e-03 s, DN=0.000000e+00 %
 

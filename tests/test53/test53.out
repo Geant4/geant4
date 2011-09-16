@@ -352,10 +352,17 @@ hPairProd:   for  pi-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Galactic Lead liquidArgon 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
@@ -414,13 +421,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.1s Real=0.1s Sys=0s
+  User=0.12s Real=0.11s Sys=0s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 7.9506 MeV :  1.674 MeV     2.106 +- 0.2106 %      5.64 mm  +- 1.33 mm 
-   liquidArgon: 1.8384 MeV :  1.631 MeV      8.87 +- 0.887 %      9.28 mm  +- 8.65 mm 
+          Lead: 7.8768 MeV :  1.701 MeV      2.16 +- 0.216 %      5.67 mm  +- 1.36 mm 
+   liquidArgon: 1.9639 MeV :  1.741 MeV     8.863 +- 0.8863 %      9.85 mm  +- 9.17 mm 
 
 ------------------------------------------------------------
  Beam particle gamma  E = 10 MeV
@@ -428,15 +435,15 @@ Run Summary
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 7.9506 MeV
-liquidArgon:	 1.83836 MeV
+      Lead:	 7.87683 MeV
+liquidArgon:	 1.96386 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 632702446, 1047301604
+ Current couple of seeds = 1861505064, 297729008
 ----------------------------------------
 #
 #/run/particle/storePhysicsTable data_stand
