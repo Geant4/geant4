@@ -130,8 +130,9 @@ G4double G4CrossSectionPairGG::GetElementCrossSection(const G4DynamicParticle* a
            * (*iter).second[ZZ];
       if ( verboseLevel > 2 )
 	{  G4cout << " scaling .." << ZZ << " " << AA << " " <<
-		(*iter).second[ZZ]<< " " <<theHighX->GetInelasticGlauberGribov(aParticle,ZZ,AA) << "  " 
-		<< Xsec << G4endl;
+	    (*iter).second[ZZ]<< " " 
+		  <<theHighX->GetInelasticGlauberGribov(aParticle,ZZ,AA) 
+		  << "  " << Xsec << G4endl;
 	}	   
     }
     
@@ -143,8 +144,11 @@ void G4CrossSectionPairGG::BuildPhysicsTable(const G4ParticleDefinition& pDef)
     theLowX->BuildPhysicsTable(pDef);
     theHighX->BuildPhysicsTable(pDef);
 
-    G4cout << "G4CrossSectionPairGG::BuildPhysicsTable " << theLowX->GetName() 
-	   << "  " << theHighX->GetName() << G4endl;
+    if ( verboseLevel > 0 ) {
+      G4cout << "G4CrossSectionPairGG::BuildPhysicsTable " 
+	     << theLowX->GetName() 
+	     << "  " << theHighX->GetName() << G4endl;
+    }
     
     G4ParticleDefinition * myDef=const_cast<G4ParticleDefinition*>(&pDef);
     std::vector<ParticleXScale>::iterator iter;

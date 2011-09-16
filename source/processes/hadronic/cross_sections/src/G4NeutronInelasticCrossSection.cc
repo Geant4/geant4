@@ -55,7 +55,7 @@ G4double G4NeutronInelasticCrossSection::
 GetElementCrossSection(const G4DynamicParticle* aPart, 
 		       G4int Z, const G4Material*)
 {
-  G4double A = G4int(G4NistManager::Instance()->GetAtomicMassAmu(Z));
+  G4int A = G4int(G4NistManager::Instance()->GetAtomicMassAmu(Z));
   return GetCrossSection(aPart->GetKineticEnergy(), Z, A);
 }
 
