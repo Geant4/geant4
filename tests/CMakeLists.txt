@@ -59,51 +59,51 @@ if(GEANT4_BUILD_EXAMPLES)
                           ${CMAKE_SOURCE_DIR}/examples/novice/N01/exampleN01.in
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/novice/N01
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/novice/N01
-                  BUILD exampleN01)
+                  BUILD exampleN01 PROJECT N01)
   GEANT4_ADD_TEST(example-nov-n02 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/novice/N02/exampleN02
                           ${CMAKE_SOURCE_DIR}/examples/novice/N02/exampleN02.in
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/novice/N02
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/novice/N02
-                  BUILD exampleN02)
+                  BUILD exampleN02 PROJECT N02)
   GEANT4_ADD_TEST(example-nov-n03 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/novice/N03/exampleN03 
                           ${CMAKE_SOURCE_DIR}/examples/novice/N03/exampleN03.in
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/novice/N03
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/novice/N03
-                  BUILD exampleN03)
+                  BUILD exampleN03 PROJECT N03)
   GEANT4_ADD_TEST(example-nov-n04 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/novice/N04/exampleN04 
                           ${CMAKE_SOURCE_DIR}/examples/novice/N04/exampleN04.in
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/novice/N04
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/novice/N04
-                  BUILD exampleN04
+                  BUILD exampleN04 PROJECT N04
                   ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
   GEANT4_ADD_TEST(example-nov-n05 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/novice/N05/exampleN05 
                           ${CMAKE_SOURCE_DIR}/examples/novice/N05/exampleN05.in
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/novice/N05
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/novice/N05
-                  BUILD exampleN05)
+                  BUILD exampleN05 PROJECT N05)
   GEANT4_ADD_TEST(example-nov-n06 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/novice/N06/exampleN06 
                           ${CMAKE_SOURCE_DIR}/examples/novice/N06/exampleN06.in
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/novice/N06
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/novice/N06
-                  BUILD exampleN06)
+                  BUILD exampleN06 PROJECT N06)
   GEANT4_ADD_TEST(example-nov-n07 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/novice/N07/exampleN07 
                           ${CMAKE_SOURCE_DIR}/examples/novice/N07/exampleN07.in
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/novice/N07
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/novice/N07
-                  BUILD exampleN07)
+                  BUILD exampleN07 PROJECT N07)
   #---Extended-----------------------------------------------------------------------------------------
   GEANT4_ADD_TEST(example-ext-analysis-a01 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/analysis/A01/A01app 
                           ${CMAKE_SOURCE_DIR}/examples/extended/analysis/A01/test.in
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/analysis/A01
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/analysis/A01
-                  BUILD A01app)
+                  BUILD A01app PROJECT A01)
   GEANT4_ADD_TEST(example-ext-analysis-anaex01 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/analysis/AnaEx01/AnaEx01 
                           ${CMAKE_SOURCE_DIR}/examples/extended/analysis/AnaEx01/AnaEx01.in
@@ -131,7 +131,7 @@ if(GEANT4_BUILD_EXAMPLES)
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/biasing/B02/exampleB02
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/biasing/B02
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/biasing/B02
-                  BUILD exampleB02)
+                  BUILD exampleB02 PROJECT B02)
   GEANT4_ADD_TEST(example-ext-biasing-reversemc01 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/biasing/ReverseMC01/exampleRMC01
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/biasing/ReverseMC01
