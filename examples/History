@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16th September 2011  Gabriele Cosmo (examples-V09-04-08)
+- Updated reference outputs according to reference tag geant4-09-04-ref-08.
+- Includes tags: dnaphysics-V09-04-07, microbeam-V09-04-01,
+                 microdosimetry-V09-04-06, nanobeam-V09-04-04.
+
 12th September 2011  Pere Mato
 - Added CMakeLists.txt files for each example (novice, advade and externded) 
 - Fixed minor issues concetning the use of G4UI_USE macro in:
