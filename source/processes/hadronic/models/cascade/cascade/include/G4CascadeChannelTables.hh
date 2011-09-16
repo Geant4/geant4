@@ -30,6 +30,8 @@
 //
 // 20110728  M. Kelsey -- Use static instance() function to work around
 //		"disappearance" bug on Linux (GCC 4.1.2).
+// 20110915  M. Kelsey -- Move static implementations (won't work on Windows);
+//		Add local table instantiating function (to replace self-reg)
 
 #ifndef G4_CASCADE_CHANNEL_TABLES_HH
 #define G4_CASCADE_CHANNEL_TABLES_HH
@@ -43,22 +45,16 @@ class G4CascadeChannel;
 class G4CascadeChannelTables {
 public:
   // Argument is interaction code, product of G4InuclEP types
-  static const G4CascadeChannel* GetTable(G4int initialState) {
-    return instance().FindTable(initialState);
-  }
+  static const G4CascadeChannel* GetTable(G4int initialState);
 
   // Arguments are individual G4InuclElementaryParticle types
-  static const G4CascadeChannel* GetTable(G4int had1, G4int had2) {
-    return instance().FindTable(had1*had2);
-  }
+  static const G4CascadeChannel* GetTable(G4int had1, G4int had2);
 
   // Convenience function for diagnostic output
   static void PrintTable(G4int initialState);
 
   // Register cross-section table for later lookup
-  static void AddTable(G4int initialState, G4CascadeChannel* table) {
-    instance().SaveTable(initialState, table);
-  }
+  static void AddTable(G4int initialState, G4CascadeChannel* table);
 
 private:
   static G4CascadeChannelTables& instance();	// Singleton
@@ -71,6 +67,9 @@ private:
 
   // Save table for specified interaction in map 
   void SaveTable(G4int initialState, G4CascadeChannel* table);
+
+  // Special function to create and store table for specified interaction
+  const G4CascadeChannel* LoadTable(G4int initialState);
 
   typedef std::map<G4int, G4CascadeChannel*> TableMap;
   typedef std::pair<const G4int, G4CascadeChannel*> TableEntry;

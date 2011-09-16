@@ -29,6 +29,7 @@
 // 20100804  M. Kelsey -- Add name string to ctor
 // 20110719  M. Kelsey -- Add initial state code to ctor
 // 20110725  M. Kelsey -- Instantiate cross-section object for self-registration
+// 20110916  M. Kelsey -- Drop self-registration due to platform inconsistencies
 
 #include "G4CascadePiZeroPChannel.hh"
 #include "G4CascadePiZeroNChannel.hh"
@@ -690,16 +691,8 @@ G4CascadePiZeroPChannelData::data(pizP2bfs, pizP3bfs, pizP4bfs,
 				  pizP8bfs, pizP9bfs, pizPCrossSections,
 				  pizPtotXSec, pi0*pro, "PiZeroP");
 
-namespace {
-  G4CascadePiZeroPChannel lookup1;	// Force instantiation and registration
-}
-
 G4CascadePiZeroNChannelData::data_t
 G4CascadePiZeroNChannelData::data(pizN2bfs, pizN3bfs, pizN4bfs,
 				  pizN5bfs, pizN6bfs, pizN7bfs,
 				  pizN8bfs, pizN9bfs, pizPCrossSections,
 				  pizPtotXSec, pi0*neu, "PiZeroN");
-
-namespace {
-  G4CascadePiZeroNChannel lookup2;	// Force instantiation and registration
-}

@@ -456,15 +456,7 @@ G4bool G4CascadeInterface::createTarget(G4Nucleus& theNucleus) {
 }
 
 G4bool G4CascadeInterface::createTarget(G4V3DNucleus* theNucleus) {
-  nucleusTarget.copy(theNucleus);
-  target = &nucleusTarget;
-
-  if (verboseLevel > 2) {
-    G4cout << "Target:  " << G4endl;  
-    target->printParticle();
-  }
-
-  return true;		// Right now, target never fails
+  return createTarget(theNucleus->GetMassNumber(), theNucleus->GetCharge());
 }
 
 G4bool G4CascadeInterface::createTarget(G4int A, G4int Z) {

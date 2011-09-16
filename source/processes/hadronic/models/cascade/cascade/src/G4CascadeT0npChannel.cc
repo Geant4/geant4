@@ -29,6 +29,7 @@
 // 20100804  M. Kelsey -- Add name string to ctor
 // 20110719  M. Kelsey -- Add initial state code to ctor
 // 20110725  M. Kelsey -- Instantiate cross-section object for self-registration
+// 20110916  M. Kelsey -- Drop self-registration due to platform inconsistencies
 
 #include "G4CascadeNPChannel.hh"
 #include "G4InuclParticleNames.hh"
@@ -670,7 +671,3 @@ G4CascadeNPChannelData::data_t
 G4CascadeNPChannelData::data(np2bfs, np3bfs, np4bfs, np5bfs, np6bfs, np7bfs,
 			     np8bfs, np9bfs, npCrossSections, npTotXSec,
 			     neu*pro, "NeutronProton");
-
-namespace {
-  G4CascadeNPChannel lookup;	// Force instantiation and registration
-}

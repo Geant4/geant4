@@ -30,6 +30,7 @@
 // 20100804  M. Kelsey -- Add name string to ctor
 // 20110719  M. Kelsey -- Add initial state code to ctor
 // 20110725  M. Kelsey -- Instantiate cross-section object for self-registration
+// 20110916  M. Kelsey -- Drop self-registration due to platform inconsistencies
 
 #include "G4CascadePiPlusPChannel.hh"
 #include "G4CascadePiMinusNChannel.hh"
@@ -542,16 +543,8 @@ G4CascadePiPlusPChannelData::data(pipP2bfs, pipP3bfs, pipP4bfs,
 				  pipP8bfs, pipP9bfs, pipPCrossSections,
 				  pipPtotXSec, pip*pro, "PiPlusP");
 
-namespace {
-  G4CascadePiPlusPChannel lookup1;	// Force instantiation and registration
-}
-
 G4CascadePiMinusNChannelData::data_t
 G4CascadePiMinusNChannelData::data(pimN2bfs, pimN3bfs, pimN4bfs,
 				   pimN5bfs, pimN6bfs, pimN7bfs,
 				   pimN8bfs, pimN9bfs, pipPCrossSections,
 				   pipPtotXSec, pim*neu, "PiMinusN");
-
-namespace {
-  G4CascadePiMinusNChannel lookup2;	// Force instantiation and registration
-}

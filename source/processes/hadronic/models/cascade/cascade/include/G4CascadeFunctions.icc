@@ -35,6 +35,8 @@
 // 20110725  M. Kelsey -- Use ctor to register table in lookup factory
 // 20110728  M. Kelsey -- Fix Coverity #22955, recursive #include; fix
 //		Coverity #20228, test (mult>maxMult), set to max if over
+// 20110916  M. Kelsey -- Drop self-registration due to platform inconsistencies
+//		Drop "inline" keyword on complex functions
 
 #include "G4CascadeChannelTables.hh"
 #include "globals.hh"
@@ -43,15 +45,13 @@
 // Constructor registers table in lookup
 
 template <class DATA, class SAMP>
-G4CascadeFunctions<DATA,SAMP>::G4CascadeFunctions() : SAMP() {
-  G4CascadeChannelTables::AddTable(DATA::data.initialState, this);
-}
+G4CascadeFunctions<DATA,SAMP>::G4CascadeFunctions() : SAMP() {}
 
 
 // Compare summed partial cross section with total cross section
 // Truncate multiplicity at maximum if summed < total
 
-template <class DATA, class SAMP> inline 
+template <class DATA, class SAMP>
 G4int G4CascadeFunctions<DATA,SAMP>::getMultiplicity(G4double ke) const {
   // Use pointer comparison to see whether tot is just a ref to sum)
   if (&DATA::data.sum != &DATA::data.tot) {
@@ -66,7 +66,7 @@ G4int G4CascadeFunctions<DATA,SAMP>::getMultiplicity(G4double ke) const {
 
 // Generate list of final state particles
 
-template <class DATA, class SAMP> inline 
+template <class DATA, class SAMP>
 void G4CascadeFunctions<DATA,SAMP>::
 getOutgoingParticleTypes(std::vector<G4int>& kinds, 
 			 G4int mult, G4double ke) const {
@@ -111,7 +111,7 @@ getOutgoingParticleTypes(std::vector<G4int>& kinds,
 
 // Dump lookup tables, including interpolation bins, to log file
 
-template <class DATA, class SAMP> inline 
+template <class DATA, class SAMP>
 void G4CascadeFunctions<DATA,SAMP>::printTable() const {
   G4cout << " ---------- " << DATA::data.name << " ----------" << G4endl;
   SAMP::print();
