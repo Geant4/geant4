@@ -19,7 +19,7 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-SUBDIR1 =  externals analysis global intercoms graphics_reps materials
+SUBDIR1 =  externals global analysis intercoms graphics_reps materials
 SUBDIR2 =  geometry particles track digits_hits processes parameterisations
 SUBDIR2 += tracking event run error_propagation readout physics_lists
 SUBDIR3 =  persistency interfaces visualization
