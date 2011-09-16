@@ -676,10 +676,10 @@ G4double G4TessellatedSolid::DistanceToIn (const G4ThreeVector &p,
      std::ostringstream message;
      G4int oldprc = message.precision(16) ;
      message << "Point p is already inside!?" << G4endl
-             << "Position:"  << G4endl << G4endl ;
-             << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
-             << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
-             << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
+             << "Position:"  << G4endl << G4endl
+             << "   p.x() = "   << p.x()/mm << " mm" << G4endl
+             << "   p.y() = "   << p.y()/mm << " mm" << G4endl
+             << "   p.z() = "   << p.z()/mm << " mm" << G4endl
              << "DistanceToOut(p) == " << DistanceToOut(p);
      message.precision(oldprc) ;
      G4Exception("G4TriangularFacet::DistanceToIn(p,v)", "GeomSolids1002",
@@ -787,9 +787,9 @@ G4double G4TessellatedSolid::DistanceToOut (const G4ThreeVector &p,
      G4int oldprc = message.precision(16) ;
      message << "Point p is already outside!?" << G4endl
              << "Position:"  << G4endl << G4endl
-             << "p.x() = "   << p.x()/mm << " mm" << G4endl
-             << "p.y() = "   << p.y()/mm << " mm" << G4endl
-             << "p.z() = "   << p.z()/mm << " mm" << G4endl;
+             << "   p.x() = "   << p.x()/mm << " mm" << G4endl
+             << "   p.y() = "   << p.y()/mm << " mm" << G4endl
+             << "   p.z() = "   << p.z()/mm << " mm" << G4endl
              << "DistanceToIn(p) == " << DistanceToIn(p);
      message.precision(oldprc) ;
      G4Exception("G4TriangularFacet::DistanceToOut(p)", "GeomSolids1002",

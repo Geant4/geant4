@@ -915,7 +915,7 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p) const
              << "   p.x() = "   << p.x()/mm << " mm" << G4endl
              << "   p.y() = "   << p.y()/mm << " mm" << G4endl
              << "   p.z() = "   << p.z()/mm << " mm";
-     message.precision(6) ;
+     message.precision(oldprc) ;
      G4Exception("G4Ellipsoid::DistanceToOut(p)", "GeomSolids1002",
                  JustWarning, message);
   }

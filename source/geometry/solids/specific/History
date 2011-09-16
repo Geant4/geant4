@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16-Sep-2011  G.Cosmo (geom-specific-V09-04-07)
+- Fix compilation error in code within G4SPECSDEBUG. No functional changes.
+
 13-Sep-2011  I.Hrivnacova (geom-specific-V09-04-06)
 - G4TriangularFacet: fixed tests where square root was compared to
   half Cartesian tolerance; now compared to kCarTolerance.
