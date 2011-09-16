@@ -38,6 +38,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+16 Sept 2011, Pere Mato (test23-V09-04-03)
+----------------------------------------------
+- Updated CMakeLists.txt to fix test dependencies
+
 25 July 2011, Andrea Dotti (test23-V09-04-02)
 ----------------------------------------------
 - Update test23-large_N.in to replace obsolete /run/particle/setCut by /run/SetCut
