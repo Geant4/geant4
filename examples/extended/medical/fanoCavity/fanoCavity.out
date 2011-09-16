@@ -117,10 +117,17 @@ hIoni:   for  proton    SubType= 2
           BetheBloch :  Emin=        2 MeV   Emax=       10 GeV
       CSDA range table up to 10 GeV in 160 bins
 
-Region <DefaultRegionForTheWorld> -- appears in <Wall> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <Wall> world volume
+ This region is in the mass world.
  Root logical volume(s) : Chamber 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Water Water_vapor 
+ Production cuts :   gamma 10 km      e- 10 km      e+ 10 km  proton 10 km 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 10 km      e- 10 km      e+ 10 km  proton 10 km 
 
 ========= Table of registered couples ==============================
@@ -154,15 +161,15 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 ----------------------------------------
 Start Run processing.
 
- ---> NbofEvents= 1000   NbOfelectr= 70593   Tkin= 588.054 keV (0.000 %)   NbOfelec in cav= 4704   Dose/EnFluence= 30.448 cm2/g (0.000 %)
+ ---> NbofEvents= 1000   NbOfelectr= 70690   Tkin= 589.153 keV (0.000 %)   NbOfelec in cav= 4790   Dose/EnFluence= 30.121 cm2/g (0.000 %)
 
- ---> NbofEvents= 2000   NbOfelectr= 141587   Tkin= 588.695 keV (0.109 %)   NbOfelec in cav= 9406   Dose/EnFluence= 30.443 cm2/g (-0.017 %)
+ ---> NbofEvents= 2000   NbOfelectr= 140746   Tkin= 587.868 keV (-0.218 %)   NbOfelec in cav= 9490   Dose/EnFluence= 28.264 cm2/g (-6.164 %)
 
- ---> NbofEvents= 3000   NbOfelectr= 211798   Tkin= 588.771 keV (0.013 %)   NbOfelec in cav= 14334   Dose/EnFluence= 30.994 cm2/g (1.810 %)
+ ---> NbofEvents= 3000   NbOfelectr= 211134   Tkin= 588.425 keV (0.095 %)   NbOfelec in cav= 14407   Dose/EnFluence= 28.500 cm2/g (0.835 %)
 Run terminated.
 Run Summary
   Number of events processed : 4000
-  User=18.26s Real=18.3s Sys=0.03s
+  User=22.57s Real=22.57s Sys=0s
 
  ======================== run summary ======================
 
@@ -172,32 +179,32 @@ Run Summary
 
  ============================================================
 
- Process calls frequency --->  compt= 282435  Transportation= 76589  msc= 1522401  eIoni= 1810276
+ Process calls frequency --->  compt= 281521  Transportation= 78422  msc= 2407010  eIoni= 1710389  conv= 2
 
- Gamma crossSections in wall material :  compt= 63.447 cm2/g   --> total= 63.447 cm2/g
+ Gamma crossSections in wall material :  compt= 63.447 cm2/g  conv= 0.000 cm2/g   --> total= 63.447 cm2/g
 
- Mean energy of secondary e- = 588.0413 keV +- 0.1027 %  (--> range in wall material = 2.2207 mm )
- Mass_energy_transfer coef: 29.8476 cm2/g
+ Mean energy of secondary e- = 588.6269 keV +- 0.1030 %  (--> range in wall material = 2.2237 mm )
+ Mass_energy_transfer coef: 29.8773 cm2/g
 
- StoppingPower in wall   = 1.9640 MeV*cm2/g
-               in cavity = 1.9640 MeV*cm2/g
+ StoppingPower in wall   = 1.9637 MeV*cm2/g
+               in cavity = 1.9637 MeV*cm2/g
 
  Charged particle flow in cavity :
-      Enter --> nbParticles = 19059	 Energy = 9.6862 GeV
-      Exit  --> nbParticles = 19063	 Energy = 9.6827 GeV
+      Enter --> nbParticles = 18980	 Energy = 9.6490 GeV
+      Exit  --> nbParticles = 18995	 Energy = 9.6537 GeV
 
- Total edep in cavity = 13.6094 MeV +- 4.0077 %	 Total charged trackLength = 53.0292 m     (mean value = 2.7824 mm )
- Total dose in cavity = 21.6601 MeV/mg
- Dose/EnergyFluence   = 30.6212 cm2/g
+ Total edep in cavity = 12.6549 MeV +- 2.8552 %	 Total charged trackLength = 52.0807 m     (mean value = 2.7440 mm )
+ Total dose in cavity = 20.1408 MeV/mg
+ Dose/EnergyFluence   = 28.4734 cm2/g
 
- (Dose/EnergyFluence)/Mass_energy_transfer = 1.02592 +- 0.04113
+ (Dose/EnergyFluence)/Mass_energy_transfer = 0.95301 +- 0.02723
 
- StepSize of ch. tracks in wall   = 141.3973 um  +- 123.0642 um 	 (nbSteps/track = 11.9393)
- StepSize of ch. tracks in cavity = 1.7901 mm  +- 1.3864 mm 	 (nbSteps/track = 1.5543)
+ StepSize of ch. tracks in wall   = 113.3313 um  +- 71.6147 um 	 (nbSteps/track = 14.7740)
+ StepSize of ch. tracks in cavity = 1.7959 mm  +- 1.3728 mm 	 (nbSteps/track = 1.5279)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1947723681, 1826214024
+ Current couple of seeds = 868917045, 1589508372
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

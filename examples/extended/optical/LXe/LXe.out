@@ -71,7 +71,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc93 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -161,40 +161,40 @@ muPairProd:   for  mu-    SubType= 4
           muMinusCaptureAtRest
 ============================================================================================
 ### G4EmSaturation::FindBirksCoefficient Birks coefficient for LXe  0.126 mm/MeV
-	Energy weighted position of hits in LXe : (0.177163,0.101804,-103.366)
+	Energy weighted position of hits in LXe : (-0.224393,-0.0376675,-103.436)
 	Total energy deposition in scintillator : 511 (keV)
-	Reconstructed position of hits in LXe : (2.82311,2.10032,-20.004)
+	Reconstructed position of hits in LXe : (2.25513,2.34378,-17.9616)
 WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
   has been instantiated.  Use "/vis/open" or "/vis/sceneHandler/create".
   Alternatively, to avoid this message, suppress instantiation of vis
   manager (G4VisExecutive), possibly by setting G4VIS_NONE, and ensure
   drawing code is executed only if G4VVisManager::GetConcreteInstance()
   is non-zero.
-	Number of photons that hit PMTs in this event : 1420
+	Number of photons that hit PMTs in this event : 1445
 	Number of PMTs above threshold(1) : 32
-	Number of photons produced by scintillation in this event : 5676
-	Number of photons produced by cerenkov in this event : 0
-	Number of photons absorbed (OpAbsorption) in this event : 4256
+	Number of photons produced by scintillation in this event : 5689
+	Number of photons produced by cerenkov in this event : 3
+	Number of photons absorbed (OpAbsorption) in this event : 4247
 	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
 Unacounted for photons in this event : 0
-	Energy weighted position of hits in LXe : (0.0222843,-0.0338358,-104.326)
+	Energy weighted position of hits in LXe : (0.0621626,-0.0912387,-112.846)
 	Total energy deposition in scintillator : 511 (keV)
-	Reconstructed position of hits in LXe : (-2.2031,-0.312987,-16.3289)
-	Number of photons that hit PMTs in this event : 1437
+	Reconstructed position of hits in LXe : (-0.317859,-0.835824,-20.5044)
+	Number of photons that hit PMTs in this event : 1393
 	Number of PMTs above threshold(1) : 32
-	Number of photons produced by scintillation in this event : 5631
+	Number of photons produced by scintillation in this event : 5509
 	Number of photons produced by cerenkov in this event : 1
-	Number of photons absorbed (OpAbsorption) in this event : 4195
+	Number of photons absorbed (OpAbsorption) in this event : 4117
 	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
 Unacounted for photons in this event : 0
-	Energy weighted position of hits in LXe : (-1.1351,-5.03453,-59.8903)
+	Energy weighted position of hits in LXe : (48.0914,4.26453,6.21257)
 	Total energy deposition in scintillator : 511 (keV)
-	Reconstructed position of hits in LXe : (-1.57845,-2.36627,-21.0397)
-	Number of photons that hit PMTs in this event : 1467
+	Reconstructed position of hits in LXe : (11.0571,0.0628092,0.195731)
+	Number of photons that hit PMTs in this event : 1326
 	Number of PMTs above threshold(1) : 32
-	Number of photons produced by scintillation in this event : 5498
+	Number of photons produced by scintillation in this event : 5233
 	Number of photons produced by cerenkov in this event : 0
-	Number of photons absorbed (OpAbsorption) in this event : 4031
+	Number of photons absorbed (OpAbsorption) in this event : 3907
 	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
 Unacounted for photons in this event : 0
 Graphics systems deleted.

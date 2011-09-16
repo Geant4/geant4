@@ -71,7 +71,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc93 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
 
 pol-eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -114,10 +114,17 @@ annih- 1/2
 annih- 1
  building pol-annih ... 
 
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : G4_Galactic G4_Fe 
+ Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 1 mm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 1 mm 
 
 ========= Table of registered couples ==============================
@@ -152,39 +159,39 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.14s Real=0.14s Sys=0s
+  User=0.15s Real=0.16s Sys=0s
 
  The run consists of 10000 gamma of 10 MeV through 1.75 mm  of G4_Fe (density: 7.874 g/cm3 )
 
 --------- Ranlux engine status ---------
  Initial seed = 9876
- float_seed_table[] = 0.445452 0.443631 0.504718 0.865661 0.00084132 0.719154 0.762904 0.978739 0.385366 0.376931 0.475875 0.745262 0.0187912 0.146981 0.631483 0.220632 0.518362 0.104018 0.0167403 0.114911 0.393027 0.400918 0.257977 0.148487 
- i_lag = 21, j_lag = 7
- carry = 0, count24 = 7
+ float_seed_table[] = 0.23853 0.146662 0.0743787 0.645615 0.351806 0.948591 0.796822 0.261805 0.18427 0.666327 0.744222 0.396506 0.679064 0.734865 0.504441 0.612705 0.959969 0.01482 0.252834 0.257671 0.574941 0.303741 0.920424 0.594219 
+ i_lag = 12, j_lag = 22
+ carry = 5.96046e-08, count24 = 12
  luxury = 3 nskip = 199
 ----------------------------------------
 
  Process calls frequency --->
-	Transportation = 31156
-	pol-compt = 275
-	pol-eBrem = 356
-	msc = 2751
-	pol-conv = 195
-	pol-eIoni = 562
-	pol-annihil = 60
-	pol-phot = 161
+	Transportation = 31258
+	pol-compt = 281
+	pol-eBrem = 408
+	msc = 3253
+	pol-conv = 232
+	pol-phot = 181
+	pol-eIoni = 711
+	pol-annihil = 86
  Gamma: 
-Mean Number per Event :1.0109
-Mean Energy :9.5776 MeV +- 1.8989 MeV
-Mean Polarization :-0.96445 +- 0.18328
+Mean Number per Event :1.0154
+Mean Energy :9.5127 MeV +- 2.0476 MeV
+Mean Polarization :-0.95722 +- 0.1988
  Electron: 
-Mean Number per Event :0.0332
-Mean Energy :5.0755 MeV +- 2.6161 MeV
-Mean Polarization :-0.70648 +- 0.29987
+Mean Number per Event :0.0326
+Mean Energy :5.2181 MeV +- 2.4516 MeV
+Mean Polarization :-0.73093 +- 0.28004
  Positron: 
-Mean Number per Event :0.0137
-Mean Energy :4.3238 MeV +- 2.0341 MeV
-Mean Polarization :-0.60469 +- 0.32445
+Mean Number per Event :0.0149
+Mean Energy :4.3453 MeV +- 2.1636 MeV
+Mean Polarization :-0.61821 +- 0.32327
 #
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

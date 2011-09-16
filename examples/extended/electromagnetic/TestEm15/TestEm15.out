@@ -276,10 +276,17 @@ hIoni:   for  pi-    SubType= 2
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Galactic Water 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
@@ -347,10 +354,17 @@ Run Summary
 /gun/energy 100 keV
 /run/beamOn 10000
 
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Galactic Water 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
@@ -390,12 +404,12 @@ Run Summary
  Process calls frequency --->	msc = 10000
 
  truePathLength :	6.3051 um  +- 2009.6 fm 
- geomPathLength :	6.1802 um  +- 86.491 nm 
- lateralDisplac :	883.79 nm  +- 391.37 nm 
- Psi            :	142.11 mrad +- 63.589 mrad  (8.1425 deg +- 3.6434 deg)
+ geomPathLength :	6.1797 um  +- 86.613 nm 
+ lateralDisplac :	884.62 nm  +- 391.59 nm 
+ Psi            :	142.25 mrad +- 63.622 mrad  (8.1506 deg +- 3.6453 deg)
 
- Theta_plane    :	243.52 mrad  (13.953 deg)
- phi correlation:	0.064593 +- 0.14115  (std::cos(phi_pos - phi_dir))
+ Theta_plane    :	247.87 mrad  (14.202 deg)
+ phi correlation:	0.064971 +- 0.14048  (std::cos(phi_pos - phi_dir))
 
  Verification from G4EmCalculator. 
 
@@ -407,7 +421,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1413625465, 1967450713
+ Current couple of seeds = 1207576501, 764835538
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

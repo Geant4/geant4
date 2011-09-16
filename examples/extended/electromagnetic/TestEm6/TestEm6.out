@@ -67,7 +67,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 1 PeV in 91 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc93 :  Emin=        0 eV    Emax=      100 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=      100 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 1 PeV in 91 bins
@@ -207,10 +207,17 @@ hIoni:   for  pi-    SubType= 2
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=        1 PeV
 
-Region <DefaultRegionForTheWorld> -- appears in <Iron> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <Iron> world volume
+ This region is in the mass world.
  Root logical volume(s) : Iron 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Iron 
+ Production cuts :   gamma 1 km      e- 1 km      e+ 1 km  proton 1 km 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 km      e- 1 km      e+ 1 km  proton 1 km 
 
 ========= Table of registered couples ==============================
@@ -300,10 +307,17 @@ The cross section for AnnihiToMuPair is artificially increased by the CrossSecFa
 #
 /run/beamOn 5
 
-Region <DefaultRegionForTheWorld> -- appears in <Iron> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <Iron> world volume
+ This region is in the mass world.
  Root logical volume(s) : Iron 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Iron 
+ Production cuts :   gamma 1 km      e- 1 km      e+ 1 km  proton 1 km 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 km      e- 1 km      e+ 1 km  proton 1 km 
 
 ========= Table of registered couples ==============================
@@ -382,10 +396,17 @@ Run Summary
 /gun/energy 1 GeV
 /run/beamOn 2
 
-Region <DefaultRegionForTheWorld> -- appears in <Iron> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <Iron> world volume
+ This region is in the mass world.
  Root logical volume(s) : Iron 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Iron 
+ Production cuts :   gamma 1 km      e- 1 km      e+ 1 km  proton 1 km 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 km      e- 1 km      e+ 1 km  proton 1 km 
 
 ========= Table of registered couples ==============================
@@ -537,7 +558,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 2
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0s Sys=0s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0

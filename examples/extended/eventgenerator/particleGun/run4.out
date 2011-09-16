@@ -45,6 +45,6 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=5.56s Real=5.55s Sys=0s
+  User=5.01s Real=5.01s Sys=0.01s
 G4 kernel has come to Quit state.
 

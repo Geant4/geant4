@@ -293,10 +293,17 @@ hPairProd:   for  pi-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Galactic G4_Si 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
@@ -346,7 +353,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20000
-  User=8.87s Real=9.72s Sys=0.48s
+  User=9.7s Real=10.51s Sys=0.79s
 
  ======================== run summary ======================
 
@@ -355,20 +362,20 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 447.058 keV +- 105.087 keV
+ Total Energy deposited        = 448.587 keV +- 102.593 keV
 
- Track length of primary track = 877.358 um  +- 192.530 um 
+ Track length of primary track = 881.377 um  +- 188.549 um 
  Range from EmCalculator = 943.428 um  (from full dE/dx)
 
- Projected range               = 320.015 um  +- 203.438 um 
+ Projected range               = 325.289 um  +- 204.500 um 
 
- Nb of steps of primary track  = 88.26 +- 19.24	 Step size= 9.934 um  +- 76.309 nm 
+ Nb of steps of primary track  = 88.66 +- 18.84	 Step size= 9.935 um  +- 67.376 nm 
 
- absorbed = 78.04 %   transmit = 4.93 %   reflected = 17.03 %
+ absorbed = 78.12 %   transmit = 5.24 %   reflected = 16.64 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1662078257, 442562233
+ Current couple of seeds = 895709896, 294697426
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

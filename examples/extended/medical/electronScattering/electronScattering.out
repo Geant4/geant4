@@ -102,10 +102,17 @@ PhysicsList::SetCuts:CutLength : 1 mm
 #
 /run/beamOn 100000
 
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Galactic Air Titanium Mylar Helium Aluminium 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
@@ -201,7 +208,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=12.2s Real=14.68s Sys=2.48s
+  User=12.82s Real=15.1s Sys=2.28s
 
  ======================== run summary ======================
 
@@ -209,7 +216,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 848221609, 1904190045
+ Current couple of seeds = 1556267627, 385127944
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

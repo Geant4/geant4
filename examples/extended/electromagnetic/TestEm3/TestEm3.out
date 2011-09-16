@@ -90,7 +90,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc93 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -326,10 +326,17 @@ hPairProd:   for  pi-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Galactic Lead liquidArgon 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
@@ -388,33 +395,33 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=3.1s Real=3.13s Sys=0.02s
+  User=3.54s Real=3.55s Sys=0s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 780.63 MeV :  15.26 MeV     1.955 +- 0.1955 %      54.5 cm  +- 1.24 cm 
-   liquidArgon: 209.12 MeV :  14.94 MeV     7.142 +- 0.7142 %      1.03 m   +- 7.74 cm 
+          Lead:  778.8 MeV :  18.32 MeV     2.353 +- 0.2353 %      54.5 cm  +- 1.43 cm 
+   liquidArgon:  210.3 MeV :  17.73 MeV     8.429 +- 0.8429 %      1.04 m   +- 9.14 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
- Mean number of gamma  570
- Mean number of e-     962
- Mean number of e+     54.9
+ Mean number of gamma  563
+ Mean number of e-     950
+ Mean number of e+     55.4
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 780.63 MeV
-liquidArgon:	 209.115 MeV
+      Lead:	 778.729 MeV
+liquidArgon:	 210.362 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 913994106, 169208170
+ Current couple of seeds = 2086848530, 1771071677
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

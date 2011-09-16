@@ -131,7 +131,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc93 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -365,16 +365,16 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 264.194 MeV       total track length: 18.7586 cm 
-        Gap: total energy: 29.7527 MeV       total track length: 14.9538 cm 
+   Absorber: total energy: 262.003 MeV       total track length: 18.2143 cm 
+        Gap: total energy: 30.4886 MeV       total track length: 15.2761 cm 
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 264.194 MeV +- 0 eV 
- mean Energy in Gap      : 29.7527 MeV +- 0 eV 
+ mean Energy in Absorber : 262.003 MeV +- 0 eV 
+ mean Energy in Gap      : 30.4886 MeV +- 0 eV 
 
- mean trackLength in Absorber : 18.7586 cm  +- 0 fm 
- mean trackLength in Gap      : 14.9538 cm  +- 0 fm 
+ mean trackLength in Absorber : 18.2143 cm  +- 0 fm 
+ mean trackLength in Gap      : 15.2761 cm  +- 0 fm 
 ------------------------------------------------------------
 
      Transportation,                msc,              hIoni,            ionIoni
@@ -401,7 +401,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc93 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -606,19 +606,19 @@ hPairProd:   for  pi-    SubType= 4
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1981559432, 910142803
+ Current couple of seeds = 755144681, 1448336376
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 265.408 MeV       total track length: 19.3575 cm 
-        Gap: total energy: 17.4997 MeV       total track length: 9.02901 cm 
+   Absorber: total energy: 283.505 MeV       total track length: 20.0552 cm 
+        Gap: total energy: 16.0062 MeV       total track length: 7.76031 cm 
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 265.408 MeV +- 0 eV 
- mean Energy in Gap      : 17.4997 MeV +- 0 eV 
+ mean Energy in Absorber : 283.505 MeV +- 0 eV 
+ mean Energy in Gap      : 16.0062 MeV +- 0 eV 
 
- mean trackLength in Absorber : 19.3575 cm  +- 0 fm 
- mean trackLength in Gap      : 9.02901 cm  +- 0 fm 
+ mean trackLength in Absorber : 20.0552 cm  +- 0 fm 
+ mean trackLength in Gap      : 7.76031 cm  +- 0 fm 
 ------------------------------------------------------------
 
 
@@ -644,7 +644,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc93 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -849,19 +849,19 @@ hPairProd:   for  pi-    SubType= 4
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 923932714, 1773127380
+ Current couple of seeds = 1332280830, 1551549866
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 363.594 MeV       total track length: 85.0662 cm 
-        Gap: total energy: 87.5005 MeV       total track length:  2.4116 m  
+   Absorber: total energy: 350.187 MeV       total track length: 83.1241 cm 
+        Gap: total energy: 88.4755 MeV       total track length: 2.39842 m  
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 363.594 MeV +- 0 eV 
- mean Energy in Gap      : 87.5005 MeV +- 0 eV 
+ mean Energy in Absorber : 350.187 MeV +- 0 eV 
+ mean Energy in Gap      : 88.4755 MeV +- 0 eV 
 
- mean trackLength in Absorber : 85.0662 cm  +- 0 fm 
- mean trackLength in Gap      : 2.4116 m   +- 0 fm 
+ mean trackLength in Absorber : 83.1241 cm  +- 0 fm 
+ mean trackLength in Gap      : 2.39842 m   +- 0 fm 
 ------------------------------------------------------------
 
 Graphics systems deleted.

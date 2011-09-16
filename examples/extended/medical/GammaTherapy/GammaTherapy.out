@@ -181,22 +181,22 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=5.2s Real=5.23s Sys=0.02s
+  User=5.55s Real=5.56s Sys=0s
 RunAction: End of run actions are started
 Histo: End of run actions are started
 ========================================================
 Number of events                                  10000
 Average number of e-                         12.08
-Average number of gamma                      21.14
-Average number of e+                         0.7796
+Average number of gamma                      21.26
+Average number of e+                         0.7971
 Average number of neutrons                   0
-Average number of steps in absorber          31.72
-Average number of e- steps in target         18.69
-Average number of g  produced in the target  20.33
-Average number of e- produced in the target  7.131
-Average number of g produced in the phantom  0.4983
-Average number of e- produced in the phantom 2.776
-Total gamma fluence in front of phantom      8.786 MeV 
+Average number of steps in absorber          31.75
+Average number of e- steps in target         18.59
+Average number of g  produced in the target  20.41
+Average number of e- produced in the target  7.205
+Average number of g produced in the phantom  0.536
+Average number of e- produced in the phantom 2.767
+Total gamma fluence in front of phantom      8.62 MeV 
 ========================================================
 
 

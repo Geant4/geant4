@@ -78,7 +78,7 @@ msc:   for adj_e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc93 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -336,11 +336,11 @@ nb event 370000
 1%  Precision reached!
 Run terminated.
 Run Summary
-  Run Aborted after 374012 events processed.
-  User=133.31s Real=133.85s Sys=0.43s
+  Run Aborted after 374620 events processed.
+  User=148.79s Real=148.79s Sys=0s
 Results of reverse/adjoint simulation!
-normalised edep [MeV] = 0.00164091
-error[MeV] = 1.64084e-05
+normalised edep [MeV] = 0.00164858
+error[MeV] = 1.6485e-05
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

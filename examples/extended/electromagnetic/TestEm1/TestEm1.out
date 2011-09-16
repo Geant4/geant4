@@ -333,10 +333,17 @@ hPairProd:   for  pi-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-Region <DefaultRegionForTheWorld> -- appears in <Aluminium> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <Aluminium> world volume
+ This region is in the mass world.
  Root logical volume(s) : Aluminium 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Aluminium 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
@@ -367,7 +374,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=4.6s Real=4.67s Sys=0.05s
+  User=4.91s Real=4.97s Sys=0.06s
 
  ======================== run summary ======================
 
@@ -375,29 +382,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.811 MeV
+ total energy deposit: 99.806 MeV
 
- nb tracks/event   neutral:     27.576   charged:     146.26
- nb  steps/event   neutral:     139.13   charged:     397.67
+ nb tracks/event   neutral:      27.75   charged:     147.78
+ nb  steps/event   neutral:     140.73   charged:      399.3
 
  nb of process calls per event: 
    Transportation     annihil       compt        conv       eBrem       eIoni         msc        phot
-          0.932        1.45      111.56       1.449      24.835      371.08         0.3      25.198
+          0.958      1.4315      112.98       1.431       25.06      372.53      0.2805      25.363
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.113 cm    rms = 3.8552 cm 
- proj Range = 9.6822 cm    rms = 3.5983 cm 
- proj/true  = 0.87128
- transverse dispersion at end = 1.6806 cm 
-      mass true Range from simulation = 30.004 g/cm2 
+ true Range = 11.134 cm    rms = 3.7832 cm 
+ proj Range = 9.6988 cm    rms = 3.5161 cm 
+ proj/true  = 0.87107
+ transverse dispersion at end = 1.6551 cm 
+      mass true Range from simulation = 30.063 g/cm2 
        from PhysicsTable (csda range) = 31.72 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1831737349, 655686040
+ Current couple of seeds = 1451739399, 2122642220
 ----------------------------------------
 #
 /process/eLoss/verbose 0
@@ -406,10 +413,17 @@ Run Summary
 /testem/histo/setFileName run1
 /run/beamOn 2000
 
-Region <DefaultRegionForTheWorld> -- appears in <Aluminium> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <Aluminium> world volume
+ This region is in the mass world.
  Root logical volume(s) : Aluminium 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Aluminium 
+ Production cuts :   gamma 10 um      e- 10 um      e+ 10 um  proton 1 mm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 10 um      e- 10 um      e+ 10 um  proton 1 mm 
 
 ========= Table of registered couples ==============================
@@ -427,7 +441,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1831737349, 655686040
+ Current couple of seeds = 1451739399, 2122642220
 ----------------------------------------
 Start Run processing.
 
@@ -435,7 +449,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=7.72s Real=8.14s Sys=0.05s
+  User=8.16s Real=8.2s Sys=0.05s
 
  ======================== run summary ======================
 
@@ -443,29 +457,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.812 MeV
+ total energy deposit: 99.709 MeV
 
- nb tracks/event   neutral:     36.702   charged:     289.03
- nb  steps/event   neutral:     146.33   charged:     678.16
+ nb tracks/event   neutral:     36.807   charged:     288.96
+ nb  steps/event   neutral:     146.97   charged:     678.04
 
  nb of process calls per event: 
    Transportation     annihil       compt        conv       eBrem       eIoni         msc        phot
-         0.9385         1.4      109.63         1.4      33.148      642.93      0.6725       34.37
+          0.918        1.43      110.17        1.43      33.188      642.69        0.72      34.466
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.136 cm    rms = 3.7831 cm 
- proj Range = 9.6737 cm    rms = 3.4698 cm 
- proj/true  = 0.8687
- transverse dispersion at end = 1.7345 cm 
-      mass true Range from simulation = 30.067 g/cm2 
+ true Range = 11.097 cm    rms = 3.7766 cm 
+ proj Range = 9.6235 cm    rms = 3.5405 cm 
+ proj/true  = 0.86725
+ transverse dispersion at end = 1.6948 cm 
+      mass true Range from simulation = 29.961 g/cm2 
        from PhysicsTable (csda range) = 31.72 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1100896709, 681406257
+ Current couple of seeds = 11893215, 1409782213
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

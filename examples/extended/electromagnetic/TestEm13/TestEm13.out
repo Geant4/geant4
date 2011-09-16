@@ -236,10 +236,17 @@ hIoni:   for  pi-    SubType= 2
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 
-Region <DefaultRegionForTheWorld> -- appears in <Water> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <Water> world volume
+ This region is in the mass world.
  Root logical volume(s) : Water 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Water 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
@@ -288,7 +295,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=4.42s Real=4.42s Sys=0s
+  User=4.49s Real=4.49s Sys=0s
 
  The run consists of 1000000 gamma of 100 keV through 1 cm  of Water (density: 1 g/cm3 )
 
@@ -310,10 +317,17 @@ Run Summary
 /gun/energy 100 MeV
 /run/beamOn 1000000
 
-Region <DefaultRegionForTheWorld> -- appears in <Water> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <Water> world volume
+ This region is in the mass world.
  Root logical volume(s) : Water 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Water 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
@@ -357,22 +371,22 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=4.92s Real=4.92s Sys=0s
+  User=5.16s Real=5.16s Sys=0s
 
  The run consists of 1000000 e- of 100 MeV through 1 cm  of Water (density: 1 g/cm3 )
 
- Process calls frequency --->	Transportation = 541637	eBrem = 276492	eIoni = 181871
+ Process calls frequency --->	Transportation = 541026	eBrem = 277324	eIoni = 181650
 
- Nb of incident particles unaltered after 1 cm  of Water : 541637 over 1000000 incident particles.  Ratio = 54.164 %
- ---> CrossSection per volume:	0.61316 cm^-1 	CrossSection per mass: 0.61316 cm2/g
+ Nb of incident particles unaltered after 1 cm  of Water : 541026 over 1000000 incident particles.  Ratio = 54.103 %
+ ---> CrossSection per volume:	0.61429 cm^-1 	CrossSection per mass: 0.61429 cm2/g
 
  Verification from G4EmCalculator: 
-	eBrem= 0.37031 cm2/g	eIoni= 0.24337 cm2/g	total= 0.61368 cm2/g
-	Expected ratio of transmitted particles= 54.135 %
+	eBrem= 0.37141 cm2/g	eIoni= 0.24337 cm2/g	total= 0.61478 cm2/g
+	Expected ratio of transmitted particles= 54.076 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2035019090, 60517398
+ Current couple of seeds = 1646081657, 1389216455
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

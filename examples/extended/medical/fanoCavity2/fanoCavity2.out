@@ -115,10 +115,17 @@ hIoni:   for  proton    SubType= 2
           BetheBloch :  Emin=        2 MeV   Emax=       10 GeV
       CSDA range table up to 10 GeV in 160 bins
 
-Region <DefaultRegionForTheWorld> -- appears in <Wall> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <Wall> world volume
+ This region is in the mass world.
  Root logical volume(s) : Wall 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Water Water_gas 
+ Production cuts :   gamma 10 km      e- 10 km      e+ 10 km  proton 10 km 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 10 km      e- 10 km      e+ 10 km  proton 10 km 
 
 ========= Table of registered couples ==============================
@@ -165,37 +172,37 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
                in cavity = 1.8644 MeV*cm2/g
 Start Run processing.
 
---->evntNb= 10000 Nwall= 9999 Ncav= 2 Ic/Iw= 1.05391 Ne-_cav= 2936 doseCavity/Ebeam= 1.01915  (100*(ratio-1) = 1.91543 %)
+--->evntNb= 10000 Nwall= 10000 Ncav= 1 Ic/Iw= 0.52690 Ne-_cav= 2857 doseCavity/Ebeam= 1.12995  (100*(ratio-1) = 12.99508 %)
 
---->evntNb= 20000 Nwall= 19999 Ncav= 2 Ic/Iw= 0.52693 Ne-_cav= 5688 doseCavity/Ebeam= 0.99753  (100*(ratio-1) = -0.24704 %)
+--->evntNb= 20000 Nwall= 19997 Ncav= 4 Ic/Iw= 1.05396 Ne-_cav= 5794 doseCavity/Ebeam= 1.21705  (100*(ratio-1) = 21.70521 %)
 
---->evntNb= 30000 Nwall= 29995 Ncav= 6 Ic/Iw= 1.05398 Ne-_cav= 8519 doseCavity/Ebeam= 0.99367  (100*(ratio-1) = -0.63345 %)
+--->evntNb= 30000 Nwall= 29997 Ncav= 4 Ic/Iw= 0.70260 Ne-_cav= 8602 doseCavity/Ebeam= 1.17832  (100*(ratio-1) = 17.83206 %)
 Run terminated.
 Run Summary
   Number of events processed : 40000
-  User=5.42s Real=5.45s Sys=0.01s
+  User=6.67s Real=6.68s Sys=0s
 
- Process calls frequency --->  msc= 347020  eIoni= 623994  Transportation= 22633
+ Process calls frequency --->  msc= 551352  eIoni= 607848  Transportation= 22962
 
  Charged particle flow in cavity :
-      Enter --> nbParticles = 11316	 Energy = 7.189 GeV
-      Exit  --> nbParticles = 11317	 Energy = 7.189 GeV
+      Enter --> nbParticles = 11479	 Energy = 7.250 GeV
+      Exit  --> nbParticles = 11482	 Energy = 7.246 GeV
 
- beamFluence in wall = 39992	 in cavity = 8	 Icav/Iwall = 1.05401	 energyFluence = 37.95067 MeV*cm2/mg
+ beamFluence in wall = 39995	 in cavity = 5	 Icav/Iwall = 0.65871	 energyFluence = 37.95067 MeV*cm2/mg
 
- Total edep in cavity = 7.67077 MeV +- 2.96508 %
- Total dose in cavity = 38.35385 MeV*cm2/mg +- 2.96508 %
+ Total edep in cavity = 8.87270 MeV +- 3.71402 %
+ Total dose in cavity = 44.36348 MeV*cm2/mg +- 3.71402 %
 
- DoseCavity/EnergyFluence = 1.01062 +- 0.02997
+ DoseCavity/EnergyFluence = 1.16898 +- 0.04342
 
- Total charged trackLength in cavity = 36.3380 m     (mean value = 3.2112 mm )
+ Total charged trackLength in cavity = 39.0227 m     (mean value = 3.3995 mm )
 
- StepSize of ch. tracks in wall   = 180.5724 um  +- 184.3675 um 	 (nbSteps/track = 24.4362)
- StepSize of ch. tracks in cavity = 2.2167 mm  +- 2.2677 mm 	 (nbSteps/track = 1.4487)
+ StepSize of ch. tracks in wall   = 151.5547 um  +- 136.6789 um 	 (nbSteps/track = 29.1391)
+ StepSize of ch. tracks in cavity = 2.3306 mm  +- 3.0605 mm 	 (nbSteps/track = 1.4587)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1759688924, 673547032
+ Current couple of seeds = 1698495576, 1098188243
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

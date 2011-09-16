@@ -329,10 +329,17 @@ hPairProd:   for  pi-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-Region <DefaultRegionForTheWorld> -- appears in <Absorber> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <Absorber> world volume
+ This region is in the mass world.
  Root logical volume(s) : Absorber 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : G4_WATER 
+ Production cuts :   gamma 10 um      e- 10 um      e+ 10 um  proton 1 mm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 10 um      e- 10 um      e+ 10 um  proton 1 mm 
 
 ========= Table of registered couples ==============================
@@ -383,7 +390,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=6.97s Real=7.23s Sys=0.26s
+  User=7.27s Real=7.93s Sys=0.64s
 
  ======================== run summary ======================
 
@@ -391,18 +398,18 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 3.931 MeV +- 248.076 keV
+ Total Energy deposited        = 3.936 MeV +- 226.199 keV
 
- Track length of primary track = 2.028 cm  +- 2.843 mm 
+ Track length of primary track = 2.031 cm  +- 2.796 mm 
  Range from EmCalculator       = 2.036 cm  (from full dE/dx)
 
- Projected range               = 1.336 cm  +- 4.206 mm 
+ Projected range               = 1.335 cm  +- 4.235 mm 
 
- Nb of steps of primary track  = 109.58 +- 14.52	 Step size= 184.838 um  +- 4.036 um 
+ Nb of steps of primary track  = 109.82 +- 14.27	 Step size= 184.779 um  +- 4.065 um 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 340955459, 199666100
+ Current couple of seeds = 1355769772, 721127489
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

@@ -10,7 +10,7 @@
                             WWW : http://cern.ch/geant4
 *************************************************************
 
- creating G4RunManagerKernel 0xac5e890
+ creating G4RunManagerKernel 0x12a0fcc0
 
 The materials defined are : 
 
@@ -38,14 +38,14 @@ List of instantiated particles ============================================
 e+ e- gamma mu+ mu- pi+ pi- proton 
 physicsList->Construct() start.
  G4Transportation constructor> set fShortStepOptimisation to false
-0xaccbb50G4ErrorPhysicsList:: particle process manager e+ = 0xaccd050
-0xaccb940G4ErrorPhysicsList:: particle process manager e- = 0xacce660
-0xaccab40G4ErrorPhysicsList:: particle process manager gamma = 0xacce870
-0xaccbd60G4ErrorPhysicsList:: particle process manager mu+ = 0xacceac0
-0xaccc190G4ErrorPhysicsList:: particle process manager mu- = 0xacced10
-0xaccc600G4ErrorPhysicsList:: particle process manager pi+ = 0xaccef60
-0xaccca20G4ErrorPhysicsList:: particle process manager pi- = 0xaccf1b0
-0xaccce40G4ErrorPhysicsList:: particle process manager proton = 0xaccf400
+0x12a7d090G4ErrorPhysicsList:: particle process manager e+ = 0x12a7e590
+0x12a7ce80G4ErrorPhysicsList:: particle process manager e- = 0x12a7fba0
+0x12a7c080G4ErrorPhysicsList:: particle process manager gamma = 0x12a7fdb0
+0x12a7d2a0G4ErrorPhysicsList:: particle process manager mu+ = 0x12a80000
+0x12a7d6d0G4ErrorPhysicsList:: particle process manager mu- = 0x12a80250
+0x12a7db40G4ErrorPhysicsList:: particle process manager pi+ = 0x12a804a0
+0x12a7df60G4ErrorPhysicsList:: particle process manager pi- = 0x12a806f0
+0x12a7e380G4ErrorPhysicsList:: particle process manager proton = 0x12a80940
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 
@@ -63,10 +63,17 @@ phot:   for  gamma    SubType= 12
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        PhotoElectric :  Emin=        0 eV    Emax=       10 TeV
 
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air Cu Al Fe 
+ Production cuts :   gamma 10000 km      e- 10000 km      e+ 10000 km  proton 10000 km 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
  Production cuts :   gamma 10000 km      e- 10000 km      e+ 10000 km  proton 10000 km 
 
 ========= Table of registered couples ==============================
