@@ -1140,8 +1140,10 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   // Corrections, which cannot be tabulated
   if(isIon) {
     G4double eadd = 0.0;
+    G4double eloss_before = eloss;
     currentModel->CorrectionsAlongStep(currentCouple, dynParticle, 
 				       eloss, eadd, length);
+    if(eloss < 0.0) { eloss = 0.5*eloss_before; }
   }
 
   // Sample fluctuations

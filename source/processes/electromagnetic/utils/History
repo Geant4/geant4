@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16 September 11: V.Ivant (emutils-V09-04-44)
+- G4VEnergyLossProcess - added extra protection for correction to
+    energy loss to avoid ions travel foreever
+
+12 September 11: V.Ivant (emutils-V09-04-43)
+- G4EmBiasingManager - fixed biasing weight for splitting
+
 12 September 11: V.Ivant (emutils-V09-04-42)
 - G4EnergyLossMessenger - fixed new biasing UI command
 

@@ -194,7 +194,7 @@ G4EmBiasingManager::ActivateSecondaryBiasing(const G4String& rname,
 
   if(factor >= 1.0) {
     nsplit = G4int(factor + 0.5);
-    w /= G4double(nsplit); 
+    w = 1.0/G4double(nsplit); 
   }
 
   // the region is in the list
