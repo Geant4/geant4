@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15 Sep 2011, Pere Mato              (test02-V09-04-01)
+- Corrected dependencies between tests (CTest)
+
 29 Mar 2011, Gunter Folger              (test02-V09-04-00)
 - Correct GNUmakefile_hadronic_exerciser to work with global shared libs.
 
