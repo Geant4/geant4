@@ -301,14 +301,16 @@ void G4BetheBlochModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
     const G4Material* mat = couple->GetMaterial();
     G4double preKinEnergy = dp->GetKineticEnergy();
     G4double e = preKinEnergy - eloss*0.5;
-    if(e < 0.0) { e = preKinEnergy*0.5; }
+    if(e < preKinEnergy*0.75) { e = preKinEnergy*0.75; }
 
     G4double q2 = corr->EffectiveChargeSquareRatio(p,mat,e);
     GetModelOfFluctuations()->SetParticleAndCharge(p, q2);
     G4double qfactor = q2*corr->EffectiveChargeCorrection(p,mat,e)/corrFactor;
     G4double highOrder = length*corr->IonHighOrderCorrections(p,couple,e);
-    eloss *= qfactor; 
-    eloss += highOrder;
+    G4double elossnew  = eloss*qfactor + highOrder;
+    if(elossnew > preKinEnergy)   { elossnew = preKinEnergy; }
+    else if(elossnew < eloss*0.5) { elossnew = eloss*0.5; }
+    eloss = elossnew;
     //G4cout << "G4BetheBlochModel::CorrectionsAlongStep: e= " << preKinEnergy
     //	   << " qfactor= " << qfactor 
     //	   << " highOrder= " << highOrder << " (" << highOrder/eloss << ")" << G4endl;    

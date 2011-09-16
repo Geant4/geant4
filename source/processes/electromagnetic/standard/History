@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16 September 11: V.Ivanchenko (emstand-V09-04-44)
+- G4BetheBlochModel - added protection for high correction to 
+    energy loss (important if a step length is nearly the range) 
+
+14 September 11: V.Ivanchenko (emstand-V09-04-43)
+- G4eCoulombScatteringModel - low-limit is increased from 1 eV to 
+    10 eV; particles below this limit are killed - a protection 
+    against low-energy particles doing many steps
+
 4 September 11: V.Ivanchenko (emstand-V09-04-42)
 - G4UrbanMscModel95 - L.Urban return back optimisation of step
     limitation using FactorSafety parameter for the UseSafety 

@@ -84,8 +84,10 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(const G4String& nam)
   theParticleTable = G4ParticleTable::GetParticleTable();
   theProton   = G4Proton::Proton();
   currentMaterial = 0; 
-  lowEnergyLimit  = 1*eV;
+
+  lowEnergyLimit  = 10*eV;  // particle will be killed for lower energy
   recoilThreshold = 0.*keV; // by default does not work
+
   particle = 0;
   currentCouple = 0;
   wokvi = new G4WentzelOKandVIxSection();
@@ -184,7 +186,15 @@ void G4eCoulombScatteringModel::SampleSecondaries(
 		G4double)
 {
   G4double kinEnergy = dp->GetKineticEnergy();
-  if(kinEnergy < lowEnergyLimit) { return; }
+
+  // absorb particle below low-energy limit to avoid situation
+  // when a particle has no energy loss
+  if(kinEnergy < lowEnergyLimit) { 
+    fParticleChange->SetProposedKineticEnergy(0.0);
+    fParticleChange->ProposeLocalEnergyDeposit(kinEnergy);
+    fParticleChange->ProposeNonIonizingEnergyDeposit(kinEnergy);
+    return; 
+  }
   SetupParticle(dp->GetDefinition());
   DefineMaterial(couple);
 
