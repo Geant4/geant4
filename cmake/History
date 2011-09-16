@@ -29,6 +29,10 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+September 15th 2011 - P. Mato (cmake-V09-04-21)
+- Templates/UseGeant4_internal.cmake: Fixed a bug affecting tests on Windows.
+
 August 16th 2011 - P. Mato (cmake-V09-04-20)
 - Templates/UseGeant4_internal.cmake: Added support for tests on Windows with 
   NMake and Visual Studio.
