@@ -732,7 +732,7 @@ int main(int argc, char** argv)
 	histo.add1D("63","Ekin (MeV) for recoil particle",120,0.,energy*1.2/MeV);
 	histo.add1D("64","Theta (degree) for primary particle in Lab.Sys.",nbinsa,0.0,tetmax);
         G4double x2 = std::log10(tetmax);
-        G4double x1 = x2 - std::log10(nbinsa);
+        G4double x1 = x2 - std::log10((double)nbinsa);
         xxl = x2 - x1;
 	histo.add1D("65","log10(theta (degree)) for primary particle in Lab.Sys.",nbinsa,x1,x2);
 	// desactivate not needed hist for elastic
