@@ -17,7 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Jul 5th, 2005 G.Cosmo (gflash-V09-04-00)
+Sep 20th, 2011 M. Verderi (gflash-V09-04-01)
+-------------------------
+- Fixed bug in G4FlashShowerModel::ModelTrigger :
+  was  " (Ekin > Emin) || (Ekin < Emax) " instead of
+       " (Ekin > Emin) && (Ekin < Emax) "
+
+Jul 5th, 2011 G.Cosmo (gflash-V09-04-00)
 ---------------------
 - Fixed Coverity defects, mainly related to uninitialised static data.
 

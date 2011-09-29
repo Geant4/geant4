@@ -102,7 +102,7 @@ G4bool GFlashShowerModel::ModelTrigger(const G4FastTrack & fastTrack )
     G4double  ParticleEnergy = fastTrack.GetPrimaryTrack()->GetKineticEnergy(); 
     G4ParticleDefinition &ParticleType =
       *(fastTrack.GetPrimaryTrack()->GetDefinition()); 
-    if(ParticleEnergy > PBound->GetMinEneToParametrise(ParticleType) ||
+    if(ParticleEnergy > PBound->GetMinEneToParametrise(ParticleType) &&
        ParticleEnergy < PBound->GetMaxEneToParametrise(ParticleType) )
     {
       // check conditions depending on particle flavour
@@ -112,6 +112,7 @@ G4bool GFlashShowerModel::ModelTrigger(const G4FastTrack & fastTrack )
       if (select) EnergyStop= PBound->GetEneToKill(ParticleType);
     }
   }
+
   return select; 
 }
 
