@@ -14,6 +14,14 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+25 September 2011  Tatsumi Koi (hadr-hpn-V09-04-24)
+- Migrate to integer A and Z 
+	src/G4NeutronHPorLCaptureModel.cc
+	src/G4NeutronHPorLFissionModel.cc
+	src/G4NeutronHPorLElasticModel.cc
+	src/G4NeutronHPorLEInelasticModel.cc
+	src/G4NeutronHPThermalScattering.cc
+
 9 September 2011  Michael Kelsey (hadr-hpn-V09-04-23)
 - Migrate to new interface of G4HadFinalState (hadr-util-V09-04-02)
 	src/G4NeutronHPFissionFS.cc

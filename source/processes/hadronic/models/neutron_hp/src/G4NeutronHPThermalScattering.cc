@@ -353,7 +353,8 @@ G4HadFinalState* G4NeutronHPThermalScattering::ApplyYourself(const G4HadProjecti
    for ( G4int i = 0; i < n ; i++ )
    {
       G4int index = theMaterial->GetElement(i)->GetIndex();
-      if ( aNucleus.GetZ() == (*theElementTable)[index]->GetZ() && ( names.IsThisThermalElement ( (*theElementTable)[index]->GetName() ) ) ) 
+      //if ( aNucleus.GetZ() == (*theElementTable)[index]->GetZ() && ( names.IsThisThermalElement ( (*theElementTable)[index]->GetName() ) ) ) 
+      if ( aNucleus.GetZ_asInt() == (G4int)((*theElementTable)[index]->GetZ() + 0.5 ) && ( names.IsThisThermalElement ( (*theElementTable)[index]->GetName() ) ) ) 
       {
          ielement = index;
          findThermalElement = true;
