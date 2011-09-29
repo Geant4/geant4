@@ -186,7 +186,9 @@ void G4SteppingManager::GetProcessNumber()
 		 ->SetProcessDefinedStep(fCurrentProcess);
 	     break;
 	 case Conditionally:
-	     (*fSelectedPostStepDoItVector)[np] = Conditionally;
+	   //	     (*fSelectedPostStepDoItVector)[np] = Conditionally;
+	     G4Exception("G4SteppingManager::DefinePhysicalStepLength()", "Tracking1001", FatalException, "This feature no more supported");
+
 	     break;
 	 case Forced:
 	     (*fSelectedPostStepDoItVector)[np] = Forced;
@@ -487,7 +489,7 @@ void G4SteppingManager::InvokePostStepDoItProcs()
      if(Cond != InActivated){
        if( ((Cond == NotForced) && (fStepStatus == fPostStepDoItProc)) ||
 	   ((Cond == Forced) && (fStepStatus != fExclusivelyForcedProc)) ||
-	   ((Cond == Conditionally) && (fStepStatus == fAlongStepDoItProc)) ||
+	   //	   ((Cond == Conditionally) && (fStepStatus == fAlongStepDoItProc)) ||
 	   ((Cond == ExclusivelyForced) && (fStepStatus == fExclusivelyForcedProc)) || 
 	   ((Cond == StronglyForced) ) 
 	  ) {

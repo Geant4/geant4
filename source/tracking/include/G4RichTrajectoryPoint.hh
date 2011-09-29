@@ -62,6 +62,7 @@
 
 #include "G4TouchableHandle.hh"
 #include "G4ThreeVector.hh"
+#include "G4StepStatus.hh"
 #include <vector>
 
 class G4Track;
@@ -101,6 +102,8 @@ private:
   G4double fTotEDep;
   G4double fRemainingEnergy;
   const G4VProcess* fpProcess;
+  G4StepStatus fPreStepPointStatus;
+  G4StepStatus fPostStepPointStatus;
   G4double fPreStepPointGlobalTime;
   G4double fPostStepPointGlobalTime;
   G4TouchableHandle fpPreStepPointVolume;

@@ -18,10 +18,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15 September 2011 J.Allison (tracking-V09-04-05)
+- G4RichTrajectoryPoint: Added Pre and PostStepPointStatus.
+
+16 June 2011 T.Sasaki (tracking-V09-04-04)
+- "Conditonally" in G4ForceCondition nore suppoted
+
 16 June 2011 G.Folger (tracking-V09-04-03)
 - stepStatus is not used, but fpSteppingManager->Stepping() improves 
     performance ;-)
-    
+
 9 June 2011 T Sasaki(tracking-V09-04-02)
 - stepStaus is no more used in G4TrackingManager.cc
 
