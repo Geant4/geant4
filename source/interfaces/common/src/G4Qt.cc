@@ -79,12 +79,14 @@ G4Qt::G4Qt (
 {
   argn = 0;
   args = NULL;
+  externalApp = false;
 
 #ifdef G4DEBUG_INTERFACES_COMMON
   printf("G4Qt::G4Qt try to inited Qt\n");
 #endif
   // Check if Qt already init in another external app
   if(qApp) {
+    externalApp = true;
     QtInited  = TRUE;
     SetMainInteractor (qApp);
     SetArguments      (a_argn,a_args);
@@ -128,7 +130,7 @@ G4Qt::G4Qt (
         QtInited  = TRUE;
         if (a_argn != 0) {
 #ifdef G4DEBUG_INTERFACES_COMMON
-        printf("G4Qt::G4Qt SetMainInteractor\n");
+          printf("G4Qt::G4Qt SetMainInteractor\n");
 #endif
           SetMainInteractor (qApp);
         }
@@ -194,6 +196,15 @@ void G4Qt::FlushAndWaitExecution (
   //  printf("G4Qt::FlushAndWaitExecution ::  Flush ....\n");
   if(!qApp) return;
   qApp->processEvents();
+}
+
+/***************************************************************************/
+bool G4Qt::IsExternalApp (
+)
+/***************************************************************************/
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+{
+  return externalApp;
 }
 
 #endif

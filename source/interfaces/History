@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10th August 2011 Laurent Garnier (interfaces-V09-04-05)
+- Add a flag to know if there is a external Qapp inited
+
 27th June 2011 Gabriele Cosmo (interfaces-V09-04-04)
 - Fixed compilation gcc-4.6.0 warning for unused variable in G4UIQt.
 - Removed incomplete Wt code

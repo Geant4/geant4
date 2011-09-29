@@ -58,12 +58,14 @@ public:
   void* GetEvent();
   void FlushAndWaitExecution();
   virtual ~G4Qt();                     
+  bool IsExternalApp();
 
 private:
   G4Qt (int,char**,char*);                     
   static G4Qt* instance; // Pointer to single instance.
   int    argn;
   char** args;
+  bool externalApp;
 };
 
 #endif //HAS_QT
