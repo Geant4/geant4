@@ -4,7 +4,16 @@ $Id: History,v 1.9 2010-11-30 17:22:40 gunter Exp $
 History file for test/test202 subdirectory
 ------------------------------------------------
 
-30th November 2010  Gunter Folger (test202-V09-03-01)
+25th September 2011  John Allison  (test202-V09-04-00)
+- Tst202DetectorConstruction.cc:
+  o  Added box_in_box, a test of the BooleanProcessor for the case of a
+     "hollow" subtraction, i.e., making a hollow box using G4SubtractionSolid.
+  o Added G4GenericTrap and boolean operation thereon.
+  o Made experimental hall bigger to accommodate the above.
+  o Made calorimeter boxes transparent (test of transparency).
+- vis.mac: Disabled auto-refresh while establishing scene.
+
+30th November 2010  Gunter Folger  (test202-V09-03-01)
 - fix for windows compilation, use CLHEP::pi instead of M_PI 
    in Tst202DetectorConstruction.cc
 

@@ -2,7 +2,11 @@
 /vis/verbose warnings
 
 /vis/open OGL 600x600-0+0
+
+# Disable auto refresh and quieten vis messages whilst scene and
+# trajectories are established:
 /vis/viewer/set/autoRefresh false
+/vis/verbose errors
 
 /vis/drawVolume
 
@@ -15,4 +19,6 @@
 #/test202/select Elliptical_Cone false
 #/test202/select Twisted_Trd false
 
+# Re-establish auto refreshing and verbosity:
 /vis/viewer/set/autoRefresh true
+/vis/verbose confirmations
