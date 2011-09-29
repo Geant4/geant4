@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14.09.2011, MGP, tag empii-V09-04-03
+            Modified in compliance to G4Exception as announced in Asai's emails on 9 and 16 August 2011
+
+14.09.2011, MGP, tag empii-V09-04-02
+            Work in progress on beb-dm
+
 28.06.2011, MGP, tag empii-V09-04-01
             Workaround in logarithmic interpolator to deal with 
             zeros in new data library G4PII1.3
