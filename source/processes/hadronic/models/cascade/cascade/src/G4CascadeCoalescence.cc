@@ -39,6 +39,7 @@
 //	     tuning, replace polymorphic argument lists with use of
 //	     "ClusterCandidate"
 // 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration
+// 20110927  M. Kelsey -- Bug fix; missing <iterator> header, strtof -> strtod
 
 #include "G4CascadeCoalescence.hh"
 #include "G4CollisionOutput.hh"
@@ -51,6 +52,7 @@
 #include <vector>
 #include <numeric>
 #include <algorithm>
+#include <iterator>
 #include <stdlib.h>
 
 
@@ -62,13 +64,13 @@ typedef hadronList::const_iterator hadronIter;
 // Maximum relative momentum (in Bertini GeV) for nucleons in each cluster type
 
 const G4double G4CascadeCoalescence::dpMaxDoublet = 
-  getenv("DPMAX_2CLUSTER") ? strtof(getenv("DPMAX_2CLUSTER"),NULL) : 0.090;
+  getenv("DPMAX_2CLUSTER") ? strtod(getenv("DPMAX_2CLUSTER"),NULL) : 0.090;
 
 const G4double G4CascadeCoalescence::dpMaxTriplet = 
-  getenv("DPMAX_3CLUSTER") ? strtof(getenv("DPMAX_3CLUSTER"),NULL) : 0.108;
+  getenv("DPMAX_3CLUSTER") ? strtod(getenv("DPMAX_3CLUSTER"),NULL) : 0.108;
 
 const G4double G4CascadeCoalescence::dpMaxAlpha = 
-  getenv("DPMAX_4CLUSTER") ? strtof(getenv("DPMAX_4CLUSTER"),NULL) : 0.115;
+  getenv("DPMAX_4CLUSTER") ? strtod(getenv("DPMAX_4CLUSTER"),NULL) : 0.115;
 
 
 // Constructor and Destructor

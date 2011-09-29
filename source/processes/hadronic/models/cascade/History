@@ -15,6 +15,22 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+27 September 2011  Michael Kelsey (hadr-casc-V09-04-35)
+-------------------------------------------------------
+- G4CascadeCoalescence.cc: BUG FIX for Windows: Replace strtof() with strtod().
+
+27 September 2011  Michael Kelsey (hadr-casc-V09-04-34)
+-------------------------------------------------------
+- G4CascadeCoalescence.cc: BUG FIX for GCC>4.2: Add missing #include <iterator>.
+
+26 September 2011  Michael Kelsey (hadr-casc-V09-04-33)
+-------------------------------------------------------
+- G4ElementaryParticleCollider.cc:  Protect against non-physical arguments
+  and FPE in two-body angular distributions.
+
+- G4IntraNucleiCascader.cc:  Replace compiler flag with one-time envvar
+  access in ctor to enable clustering.
+
 23 September 2011  Michael Kelsey (hadr-casc-V09-04-32)
 -------------------------------------------------------
 - sources.cmake:  Add G4CascadeChannel.cc.

@@ -105,6 +105,8 @@
 //		now) with compiler flag G4CASCADE_DO_COALESCENCE
 // 20110922  M. Kelsey -- Follow migrations G4InuclParticle::print(ostream&)
 //		and G4CascadParticle::print(ostream&); drop Q,B printing
+// 20110926  M. Kelsey -- Replace compiler flag with one-time envvar in ctor
+//		for final-state clustering.
 
 #include "G4IntraNucleiCascader.hh"
 #include "G4CascadParticle.hh"
@@ -130,6 +132,7 @@
 #include "G4V3DNucleus.hh"
 #include "Randomize.hh"
 #include <algorithm>
+#include <stdlib.h>
 
 using namespace G4InuclParticleNames;
 using namespace G4InuclSpecialFunctions;
@@ -147,16 +150,14 @@ typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 G4IntraNucleiCascader::G4IntraNucleiCascader()
   : G4CascadeColliderBase("G4IntraNucleiCascader"), model(new G4NucleiModel),
     theElementaryParticleCollider(new G4ElementaryParticleCollider),
-    theRecoilMaker(new G4CascadeRecoilMaker),
-#ifdef G4CASCADE_DO_COALESCENCE
-    theClusterMaker(new G4CascadeCoalescence),
-#else
-    theClusterMaker(0),
-#endif
+    theRecoilMaker(new G4CascadeRecoilMaker), theClusterMaker(0),
     tnuclei(0), bnuclei(0), bparticle(0),
     minimum_recoil_A(0.), coulombBarrier(0.),
     nucleusTarget(new G4InuclNuclei),
-    protonTarget(new G4InuclElementaryParticle) {}
+    protonTarget(new G4InuclElementaryParticle) {
+  if (getenv("G4CASCADE_DO_COALESCENCE"))	// User may set this envvar
+    theClusterMaker = new G4CascadeCoalescence;
+}
 
 G4IntraNucleiCascader::~G4IntraNucleiCascader() {
   delete model;

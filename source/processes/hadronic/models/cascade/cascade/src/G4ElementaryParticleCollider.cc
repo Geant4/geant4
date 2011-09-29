@@ -75,6 +75,7 @@
 //		eliminating switch blocks.
 // 20110806  M. Kelsey -- Pre-allocate buffers to avoid memory churn
 // 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration
+// 20110926  M. Kelsey -- Protect sampleCMcosFor2to2 from unphysical arguments
 
 #include "G4ElementaryParticleCollider.hh"
 #include "G4CascadeChannel.hh"
@@ -768,53 +769,57 @@ G4ElementaryParticleCollider::sampleCMmomentumFor2to2(G4int is, G4int kw,
     // pion charge exchange (pi-p -> pi0n, pi+n -> pi0p, pi0p -> pi+n, pi0n -> pi-p
     if (verboseLevel > 3) G4cout << " pion-nucleon charge exchange " << G4endl;
 
-    static const G4double nnke[10] =   {0.0,   0.062,  0.12,   0.217,  0.533,  0.873,  1.34,   2.86,   5.86,  10.0};
-    static const G4double nnA[10] =    {0.0,   0.0,    2.48,   7.93,  10.0,    9.78,   5.08,   8.13,   8.13,   8.13};
-    static const G4double nnC[10] =    {0.0, -39.58, -12.55,  -4.38,   1.81,  -1.99,  -0.33,   1.2,    1.43,   8.13};
-    static const G4double nnCos[10] =  {1.0,   1.0,    0.604, -0.033,  0.25,   0.55,   0.65,   0.80,   0.916,  0.916};
-    static const G4double nnFrac[10] = {0.0,   0.0,    0.1156, 0.5832, 0.8125, 0.3357, 0.3269, 0.7765, 0.8633, 1.0};
+    static const G4double qxke[10] =   {0.0,   0.062,  0.12,   0.217,  0.533,  0.873,  1.34,   2.86,   5.86,  10.0};
+    static const G4double qxA[10] =    {0.0,   0.0,    2.48,   7.93,  10.0,    9.78,   5.08,   8.13,   8.13,   8.13};
+    static const G4double qxC[10] =    {0.0, -39.58, -12.55,  -4.38,   1.81,  -1.99,  -0.33,   1.2,    1.43,   8.13};
+    static const G4double qxCos[10] =  {1.0,   1.0,    0.604, -0.033,  0.25,   0.55,   0.65,   0.80,   0.916,  0.916};
+    static const G4double qxFrac[10] = {0.0,   0.0,    0.1156, 0.5832, 0.8125, 0.3357, 0.3269, 0.7765, 0.8633, 1.0};
 
-    static G4CascadeInterpolator<10> interp(nnke);	// Only need one!
-    pA = interp.interpolate(ekin, nnA);
-    pC = interp.interpolate(ekin, nnC);
-    pCos = interp.interpolate(ekin, nnCos);
-    pFrac = interp.interpolate(ekin, nnFrac);
+    static G4CascadeInterpolator<10> interp(qxke);	// Only need one!
+    pA = interp.interpolate(ekin, qxA);
+    pC = interp.interpolate(ekin, qxC);
+    pCos = interp.interpolate(ekin, qxCos);
+    pFrac = interp.interpolate(ekin, qxFrac);
   } else if (is == 3 || is == 7 || is == 14 || is == 10 || is == 11 ||
 	     is == 30 || is == 17 || is == 26) {
     // pi+p, pi0p, pi0n, pi-n, k+p, k0n, k0bp, or k-n
     if (verboseLevel > 3) G4cout << " meson-nucleon elastic (1)" << G4endl;
 
-    static const G4double nnke[10] =   {0.0,  0.062,  0.12,   0.217,  0.533,  0.873,  1.34,   2.86,   5.86,  10.0};
-    static const G4double nnA[10] =    {0.0,  0.0,   27.58,  19.83,   6.46,   4.59,   6.47,   6.68,   6.43,   6.7};
-    static const G4double nnC[10] =    {0.0, -26.4, -30.55, -19.42,  -5.05,  -5.24,  -1.00,   2.14,   2.9,    6.7};
-    static const G4double nnCos[10] =  {1.0,  1.0,    0.174, -0.174, -0.7,   -0.295,  0.5,    0.732,  0.837,  0.89};
-    static const G4double nnFrac[10] = {0.0,  0.0,    0.2980, 0.7196, 0.9812, 0.8363, 0.5602, 0.9601, 0.9901, 1.0};
+    static const G4double hn1ke[10] =   {0.0,  0.062,  0.12,   0.217,  0.533,  0.873,  1.34,   2.86,   5.86,  10.0};
+    static const G4double hn1A[10] =    {0.0,  0.0,   27.58,  19.83,   6.46,   4.59,   6.47,   6.68,   6.43,   6.7};
+    static const G4double hn1C[10] =    {0.0, -26.4, -30.55, -19.42,  -5.05,  -5.24,  -1.00,   2.14,   2.9,    6.7};
+    static const G4double hn1Cos[10] =  {1.0,  1.0,    0.174, -0.174, -0.7,   -0.295,  0.5,    0.732,  0.837,  0.89};
+    static const G4double hn1Frac[10] = {0.0,  0.0,    0.2980, 0.7196, 0.9812, 0.8363, 0.5602, 0.9601, 0.9901, 1.0};
 
-    static G4CascadeInterpolator<10> interp(nnke);	// Only need one!
-    pA = interp.interpolate(ekin, nnA);
-    pC = interp.interpolate(ekin, nnC);
-    pCos = interp.interpolate(ekin, nnCos);
-    pFrac = interp.interpolate(ekin, nnFrac);
+    static G4CascadeInterpolator<10> interp(hn1ke);	// Only need one!
+    pA = interp.interpolate(ekin, hn1A);
+    pC = interp.interpolate(ekin, hn1C);
+    pCos = interp.interpolate(ekin, hn1Cos);
+    pFrac = interp.interpolate(ekin, hn1Frac);
   } else if (is == 5 || is == 6 || is == 13 || is == 34 || is == 22 ||
 	     is == 15) {
     // pi-p, pi+n, k-p, k0bn, k+n, or k0p
     if (verboseLevel > 3) G4cout << " meson-nucleon elastic (2)" << G4endl;
 
-    static const G4double nnke[10] =   {0.0,  0.062, 0.12,   0.217,  0.533,  0.873,  1.34,   2.86,   5.86,  10.0};
-    static const G4double nnA[10] =    {0.0, 27.08, 19.32,   9.92,   7.74,   9.86,   5.51,   7.25,   7.23,   7.3};
-    static const G4double nnC[10] =    {0.0,  0.0, -19.49, -15.78,  -9.78,  -2.74,  -1.16,   2.31,   2.96,   7.3};
-    static const G4double nnCos[10] = {-1.0, -1.0,  -0.235, -0.259, -0.276,  0.336,  0.250,  0.732,  0.875,  0.9};
-    static const G4double nnFrac[10] = {1.0,  1.0,   0.6918, 0.6419, 0.7821, 0.6542, 0.8382, 0.9722, 0.9784, 1.0};
+    static const G4double hn2ke[10] =   {0.0,  0.062, 0.12,   0.217,  0.533,  0.873,  1.34,   2.86,   5.86,  10.0};
+    static const G4double hn2A[10] =    {0.0, 27.08, 19.32,   9.92,   7.74,   9.86,   5.51,   7.25,   7.23,   7.3};
+    static const G4double hn2C[10] =    {0.0,  0.0, -19.49, -15.78,  -9.78,  -2.74,  -1.16,   2.31,   2.96,   7.3};
+    static const G4double hn2Cos[10] = {-1.0, -1.0,  -0.235, -0.259, -0.276,  0.336,  0.250,  0.732,  0.875,  0.9};
+    static const G4double hn2Frac[10] = {1.0,  1.0,   0.6918, 0.6419, 0.7821, 0.6542, 0.8382, 0.9722, 0.9784, 1.0};
 
-    static G4CascadeInterpolator<10> interp(nnke);	// Only need one!
-    pA = interp.interpolate(ekin, nnA);
-    pC = interp.interpolate(ekin, nnC);
-    pCos = interp.interpolate(ekin, nnCos);
-    pFrac = interp.interpolate(ekin, nnFrac);
+    static G4CascadeInterpolator<10> interp(hn2ke);	// Only need one!
+    pA = interp.interpolate(ekin, hn2A);
+    pC = interp.interpolate(ekin, hn2C);
+    pCos = interp.interpolate(ekin, hn2Cos);
+    pFrac = interp.interpolate(ekin, hn2Frac);
   } else {
-    G4cout << " G4ElementaryParticleCollider::sampleCMmomentumFor2to2: interaction not recognized " 
-           << G4endl;
+    G4cout << " G4ElementaryParticleCollider::sampleCMmomentumFor2to2:"
+	   << " interaction is=" << is << " not recognized " << G4endl;
   } 
+
+  // Bound parameters to their physical ranges
+  pCos = std::max(-1.,std::min(pCos,1.));
+  pFrac = std::max(0.,std::min(pFrac,1.));
 
   // Use parameters determined above to get polar angle
   G4double ct = sampleCMcosFor2to2(pscm, pFrac, pA, pC, pCos);
@@ -838,6 +843,7 @@ G4ElementaryParticleCollider::sampleCMcosFor2to2(G4double pscm, G4double pFrac,
   G4double term1 = 2.0 * pscm*pscm * (smallAngle ? pA : pC);
 
   if (std::abs(term1) < 1e-7) return 1.0;	// No actual scattering here!
+  if (term1 > DBL_MAX_EXP) return 1.0;
 
   G4double term2 = std::exp(-2.0*term1);
   G4double randScale = (std::exp(-term1*(1.0 - pCos)) - term2)/(1.0 - term2);
