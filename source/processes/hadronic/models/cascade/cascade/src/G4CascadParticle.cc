@@ -30,6 +30,8 @@
 // 20100114  M. Kelsey -- Replace vector<G4Double> position with G4ThreeVector 
 // 20101012  M. Kelsey -- Check for negative d2 in getPathToTheNextZone()
 // 20110806  M. Kelsey -- Add fill() function to replicate ctor/op=() action
+// 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration,
+//		Add stream argument to print(), add operator<<().
 
 #include "G4CascadParticle.hh"
 #include "G4ios.hh"
@@ -127,11 +129,19 @@ void G4CascadParticle::propagateAlongThePath(G4double path) {
   position += getMomentum().vect().unit()*path;
 }
 
-void G4CascadParticle::print() const {
-  theParticle.printParticle();
-  G4cout << " zone " << current_zone << " current_path " << current_path
-	 << " reflectionCounter " << reflectionCounter << G4endl
-	 << " x " << position.x() << " y " << position.y()
-	 << " z " << position.z() << G4endl;
+
+// Proper stream output (just calls print())
+
+std::ostream& operator<<(std::ostream& os, const G4CascadParticle& part) {
+  part.print(os);
+  return os;
+}
+
+void G4CascadParticle::print(std::ostream& os) const {
+  os << theParticle << G4endl
+     << " zone " << current_zone << " current_path " << current_path
+     << " reflectionCounter " << reflectionCounter << G4endl
+     << " x " << position.x() << " y " << position.y()
+     << " z " << position.z() << G4endl;
 }
 

@@ -54,6 +54,8 @@
 // 20110519  M. Kelsey -- Drop unused "p2" variable from selectPairToTune()
 // 20110801  M. Kelsey -- Use resize to avoid temporaries when copying from
 //		G4ReactionProductVector
+// 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration,
+//		Add optional stream argument to printCollisionOutput
 
 #include "G4CollisionOutput.hh"
 #include "G4CascadParticle.hh"
@@ -157,13 +159,13 @@ void G4CollisionOutput::addOutgoingParticles(const G4ReactionProductVector* rpro
       outgoingParticles.resize(numberOfOutgoingParticles()+1);
       outgoingParticles.back().fill(mom, pd, G4InuclParticle::PreCompound);
 
-      if (verboseLevel>1) outgoingParticles.back().printParticle();
+      if (verboseLevel>1) G4cout << outgoingParticles.back() << G4endl;
     } else {
       outgoingNuclei.resize(numberOfOutgoingNuclei()+1);
       outgoingNuclei.back().fill(mom,pd->GetAtomicMass(),pd->GetAtomicNumber(),
 				 0.,G4InuclParticle::PreCompound);
 
-      if (verboseLevel>1) outgoingNuclei.back().printParticle();
+      if (verboseLevel>1) G4cout << outgoingNuclei.back() << G4endl;
     }
   }
 }
@@ -256,21 +258,19 @@ G4int G4CollisionOutput::getTotalBaryonNumber() const {
 }
 
 
-void G4CollisionOutput::printCollisionOutput() const {
-  G4cout << " Output: " << G4endl
-	 << " Outgoing Particles: " << outgoingParticles.size() << G4endl;
+void G4CollisionOutput::printCollisionOutput(std::ostream& os) const {
+  os << " Output: " << G4endl
+     << " Outgoing Particles: " << outgoingParticles.size() << G4endl;
 
   G4int i(0);
   for(i=0; i < G4int(outgoingParticles.size()); i++)
-    outgoingParticles[i].printParticle(); 
+    os << outgoingParticles[i] << G4endl;
 
-  G4cout << " Outgoing Nuclei: " << outgoingNuclei.size() << G4endl;      
+  os << " Outgoing Nuclei: " << outgoingNuclei.size() << G4endl;      
   for(i=0; i < G4int(outgoingNuclei.size()); i++)
-    outgoingNuclei[i].printParticle();
+    os << outgoingNuclei[i] << G4endl;
 
-  if (theRecoilFragment.GetA() > 0) {
-    G4cout << theRecoilFragment << G4endl;
-  }
+  if (theRecoilFragment.GetA() > 0) os << theRecoilFragment << G4endl;
 }
 
 
@@ -386,14 +386,14 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
 
   setRemainingExitationEnergy();       
 
-  if(verboseLevel > 2){
+  if(verboseLevel > 2) {
     printCollisionOutput();
     G4cout << " momentum non conservation: " << G4endl
-           << " e " << enc << " p " << pnc << G4endl;
-    G4cout << " remaining exitation " << eex_rest << G4endl;
+           << " e " << enc << " p " << pnc << G4endl
+	   << " remaining exitation " << eex_rest << G4endl;
   }
 
-  if(std::fabs(enc) <= accuracy && pnc <= accuracy) {
+  if (std::fabs(enc) <= accuracy && pnc <= accuracy) {
     on_shell = true;
     return;
   }

@@ -60,6 +60,7 @@
 // 20110809  M. Kelsey -- Move "foutput" to data member, get list by reference;
 //		create final-state particles within "push_back" to avoid
 //		creation of temporaries.
+// 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration
 
 #include "G4EquilibriumEvaporator.hh"
 #include "G4BigBanger.hh"
@@ -98,10 +99,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
     return;
   }
 
-  if (verboseLevel > 1) {
-    G4cout << " evaporating target: " << G4endl;
-    target->printParticle();
-  }
+  if (verboseLevel>1) G4cout << " evaporating target: \n" << *target << G4endl;
 
   theFissioner.setVerboseLevel(verboseLevel);
   theBigBanger.setVerboseLevel(verboseLevel);
@@ -344,7 +342,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	  output.addOutgoingParticle(G4InuclElementaryParticle(mom, 10, G4InuclParticle::Equilib));
 	  
 	  if (verboseLevel > 3)
-	    output.getOutgoingParticles().back().printParticle();
+	    G4cout << output.getOutgoingParticles().back() << G4endl;
 	  
 	  ppout += mom;
 	} else {
@@ -438,7 +436,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 			                   ptype, G4InuclParticle::Equilib));
 		
 		if (verboseLevel > 3)
-		  output.getOutgoingParticles().back().printParticle();
+		  G4cout << output.getOutgoingParticles().back() << G4endl;
 
 		ppout += mom;
 		bad = false;
@@ -484,7 +482,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 				          G4InuclParticle::Equilib));
 
 		if (verboseLevel > 3) 
-		  output.getOutgoingNuclei().back().printParticle();
+		  G4cout << output.getOutgoingNuclei().back() << G4endl;
 
 		ppout += mom;
 		bad = false;
@@ -545,8 +543,8 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 					  G4InuclParticle::Equilib));
 
   if (verboseLevel > 3) {
-    G4cout << " remaining nucleus " << G4endl;
-    output.getOutgoingNuclei().back().printParticle();
+    G4cout << " remaining nucleus \n" << output.getOutgoingNuclei().back()
+	   << G4endl;
   }
 
 

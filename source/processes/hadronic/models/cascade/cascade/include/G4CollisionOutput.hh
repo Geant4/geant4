@@ -43,6 +43,7 @@
 // 20110225  M. Kelsey -- Add interface to remove entries from lists
 // 20110311  M. Kelsey -- Add function to boost individual four-vector
 // 20110323  M. Kelsey -- Add non-const access to lists (for G4NucleiModel)
+// 20110922  M. Kelsey -- Add optional stream argument to printCollisionOutput
 
 #ifndef G4COLLISION_OUTPUT_HH
 #define G4COLLISION_OUTPUT_HH
@@ -52,6 +53,8 @@
 #include "G4InuclNuclei.hh"
 #include "G4LorentzRotation.hh"
 #include "G4ReactionProductVector.hh"
+#include "G4ios.hh"
+#include <iosfwd>
 #include <algorithm>
 #include <vector>
 
@@ -145,7 +148,7 @@ public:
   G4int getTotalCharge() const;			// NOTE:  No fractional charges!
   G4int getTotalBaryonNumber() const;
 
-  void printCollisionOutput() const;
+  void printCollisionOutput(std::ostream& os=G4cout) const;
 
   // ===== Manipulate final-state particles for kinematics =====
 

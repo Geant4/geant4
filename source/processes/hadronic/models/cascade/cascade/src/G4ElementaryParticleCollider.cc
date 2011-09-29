@@ -74,6 +74,7 @@
 // 20110720  M. Kelsey -- Follow interface change for cross-section tables,
 //		eliminating switch blocks.
 // 20110806  M. Kelsey -- Pre-allocate buffers to avoid memory churn
+// 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration
 
 #include "G4ElementaryParticleCollider.hh"
 #include "G4CascadeChannel.hh"
@@ -123,10 +124,7 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
 
   interCase.set(bullet, target);	// To identify kind of collision
 
-  if (verboseLevel > 1) {
-    bullet->printParticle();
-    target->printParticle();
-  }
+  if (verboseLevel > 1) G4cout << *bullet << G4endl << *target << G4endl;
 
   G4InuclElementaryParticle* particle1 =
     dynamic_cast<G4InuclElementaryParticle*>(bullet);
@@ -176,14 +174,14 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
 	ipart->setMomentum(mom); 
       };
 
-      // Check conservation in mutlibody final state
+      // Check conservation in multibody final state
       if (verboseLevel && !validateOutput(bullet, target, particles)) {
-	G4cout << " incoming particles: " << G4endl;
-	particle1->printParticle();
-	particle2->printParticle();
-	G4cout << " outgoing particles: " << G4endl;
+	G4cout << " incoming particles: \n" << *particle1 << G4endl
+	       << *particle2 << G4endl
+	       << " outgoing particles: " << G4endl;
 	for(ipart = particles.begin(); ipart != particles.end(); ipart++)
-	  ipart->printParticle();
+	  G4cout << *ipart << G4endl;
+
 	G4cout << " <<< Non-conservation in G4ElementaryParticleCollider"
 	       << G4endl;
       }
@@ -951,36 +949,37 @@ G4ElementaryParticleCollider::generateSCMpionAbsorption(G4double etot_scm,
 
 // Dump lookup tables for N-body final states
 
-void G4ElementaryParticleCollider::printFinalStateTables() const {
-  G4CascadeChannelTables::PrintTable(pro*pro);
-  G4CascadeChannelTables::PrintTable(neu*pro);
-  G4CascadeChannelTables::PrintTable(neu*neu);
-  G4CascadeChannelTables::PrintTable(kmi*neu);
-  G4CascadeChannelTables::PrintTable(kmi*pro);
-  G4CascadeChannelTables::PrintTable(kpl*neu);
-  G4CascadeChannelTables::PrintTable(kpl*pro);
-  G4CascadeChannelTables::PrintTable(k0b*neu);
-  G4CascadeChannelTables::PrintTable(k0b*pro);
-  G4CascadeChannelTables::PrintTable(k0*neu);
-  G4CascadeChannelTables::PrintTable(k0*pro);
-  G4CascadeChannelTables::PrintTable(lam*neu);
-  G4CascadeChannelTables::PrintTable(lam*pro);
-  G4CascadeChannelTables::PrintTable(pim*neu);
-  G4CascadeChannelTables::PrintTable(pim*pro);
-  G4CascadeChannelTables::PrintTable(pip*neu);
-  G4CascadeChannelTables::PrintTable(pip*pro);
-  G4CascadeChannelTables::PrintTable(pi0*neu);
-  G4CascadeChannelTables::PrintTable(pi0*pro);
-  G4CascadeChannelTables::PrintTable(sm*neu);
-  G4CascadeChannelTables::PrintTable(sm*pro);
-  G4CascadeChannelTables::PrintTable(sp*neu);
-  G4CascadeChannelTables::PrintTable(sp*pro);
-  G4CascadeChannelTables::PrintTable(s0*neu);
-  G4CascadeChannelTables::PrintTable(s0*pro);
-  G4CascadeChannelTables::PrintTable(xim*neu);
-  G4CascadeChannelTables::PrintTable(xim*pro);
-  G4CascadeChannelTables::PrintTable(xi0*neu);
-  G4CascadeChannelTables::PrintTable(xi0*pro);
+void G4ElementaryParticleCollider::
+printFinalStateTables(std::ostream& os) const {
+  G4CascadeChannelTables::PrintTable(pro*pro, os);
+  G4CascadeChannelTables::PrintTable(neu*pro, os);
+  G4CascadeChannelTables::PrintTable(neu*neu, os);
+  G4CascadeChannelTables::PrintTable(kmi*neu, os);
+  G4CascadeChannelTables::PrintTable(kmi*pro, os);
+  G4CascadeChannelTables::PrintTable(kpl*neu, os);
+  G4CascadeChannelTables::PrintTable(kpl*pro, os);
+  G4CascadeChannelTables::PrintTable(k0b*neu, os);
+  G4CascadeChannelTables::PrintTable(k0b*pro, os);
+  G4CascadeChannelTables::PrintTable(k0*neu, os);
+  G4CascadeChannelTables::PrintTable(k0*pro, os);
+  G4CascadeChannelTables::PrintTable(lam*neu, os);
+  G4CascadeChannelTables::PrintTable(lam*pro, os);
+  G4CascadeChannelTables::PrintTable(pim*neu, os);
+  G4CascadeChannelTables::PrintTable(pim*pro, os);
+  G4CascadeChannelTables::PrintTable(pip*neu, os);
+  G4CascadeChannelTables::PrintTable(pip*pro, os);
+  G4CascadeChannelTables::PrintTable(pi0*neu, os);
+  G4CascadeChannelTables::PrintTable(pi0*pro, os);
+  G4CascadeChannelTables::PrintTable(sm*neu, os);
+  G4CascadeChannelTables::PrintTable(sm*pro, os);
+  G4CascadeChannelTables::PrintTable(sp*neu, os);
+  G4CascadeChannelTables::PrintTable(sp*pro, os);
+  G4CascadeChannelTables::PrintTable(s0*neu, os);
+  G4CascadeChannelTables::PrintTable(s0*pro, os);
+  G4CascadeChannelTables::PrintTable(xim*neu, os);
+  G4CascadeChannelTables::PrintTable(xim*pro, os);
+  G4CascadeChannelTables::PrintTable(xi0*neu, os);
+  G4CascadeChannelTables::PrintTable(xi0*pro, os);
 }
 
 

@@ -33,6 +33,7 @@
 // 20110729  M. Kelsey -- Add initializer for _all_ data members (path, gen),
 //		re-organize declarations, with set/get pairs together
 // 20110806  M. Kelsey -- Add fill() function to replicate ctor/op=() action
+// 20110922  M. Kelsey -- Add stream argument to print(), add operator<<().
 
 #ifndef G4CASCAD_PARTICLE_HH
 #define G4CASCAD_PARTICLE_HH
@@ -40,6 +41,7 @@
 #include "G4InuclElementaryParticle.hh"
 #include "G4LorentzVector.hh"
 #include "G4ThreeVector.hh"
+#include <iosfwd>
 
 
 class G4CascadParticle {
@@ -103,7 +105,7 @@ public:
     return ((current_path < 1000.) && (cpath < young_path_cut));
   }
 
-  void print() const;
+  void print(std::ostream& os) const;
 
 private: 
   G4int verboseLevel;
@@ -116,5 +118,9 @@ private:
   G4bool reflected;
   G4int generation;
 };        
+
+// Proper stream output (just calls print())
+
+std::ostream& operator<<(std::ostream& os, const G4CascadParticle& part);
 
 #endif // G4CASCAD_PARTICLE_HH

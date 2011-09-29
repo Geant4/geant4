@@ -32,9 +32,12 @@
 //		"disappearance" bug on Linux (GCC 4.1.2).  Add diagnostics.
 // 20110916  M. Kelsey -- Add "load on demand" to GetTable(), with full set
 //		of channel .hh files for use with LoadTable().
+// 20110923  M. Kelsey -- Add optional stream& argument to printTable(),
+//		pass through.
 
 #include "G4CascadeChannelTables.hh"
 #include "G4CascadeChannel.hh"
+#include <iostream>
 #include <map>
 
 
@@ -95,9 +98,9 @@ G4CascadeChannelTables::SaveTable(G4int initialState, G4CascadeChannel* table) {
 
 // Convenience function for diagnostic output
 
-void G4CascadeChannelTables::PrintTable(G4int initialState) {
+void G4CascadeChannelTables::PrintTable(G4int initialState, std::ostream& os) {
   const G4CascadeChannel* tbl = GetTable(initialState);
-  if (tbl) tbl->printTable();
+  if (tbl) tbl->printTable(os);
 }
 
 

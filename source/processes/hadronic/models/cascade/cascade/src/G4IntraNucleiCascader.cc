@@ -101,9 +101,14 @@
 //		creation of temporaries.  Add local target buffer for
 //		rescattering, to avoid memory leak.
 // 20110808  M. Kelsey -- Pass buffer to generateParticleFate() to avoid copy
+// 20110919  M. Kelsey -- Add optional final-state clustering, controlled (for
+//		now) with compiler flag G4CASCADE_DO_COALESCENCE
+// 20110922  M. Kelsey -- Follow migrations G4InuclParticle::print(ostream&)
+//		and G4CascadParticle::print(ostream&); drop Q,B printing
 
 #include "G4IntraNucleiCascader.hh"
 #include "G4CascadParticle.hh"
+#include "G4CascadeCoalescence.hh"
 #include "G4CascadeRecoilMaker.hh"
 #include "G4CollisionOutput.hh"
 #include "G4DecayProducts.hh"
@@ -143,6 +148,11 @@ G4IntraNucleiCascader::G4IntraNucleiCascader()
   : G4CascadeColliderBase("G4IntraNucleiCascader"), model(new G4NucleiModel),
     theElementaryParticleCollider(new G4ElementaryParticleCollider),
     theRecoilMaker(new G4CascadeRecoilMaker),
+#ifdef G4CASCADE_DO_COALESCENCE
+    theClusterMaker(new G4CascadeCoalescence),
+#else
+    theClusterMaker(0),
+#endif
     tnuclei(0), bnuclei(0), bparticle(0),
     minimum_recoil_A(0.), coulombBarrier(0.),
     nucleusTarget(new G4InuclNuclei),
@@ -152,6 +162,7 @@ G4IntraNucleiCascader::~G4IntraNucleiCascader() {
   delete model;
   delete theElementaryParticleCollider;
   delete theRecoilMaker;
+  delete theClusterMaker;
   delete nucleusTarget;
   delete protonTarget;
 }
@@ -217,8 +228,8 @@ G4bool G4IntraNucleiCascader::initialize(G4InuclParticle* bullet,
   interCase.set(bullet,target);		// Classify collision type
 
   if (verboseLevel > 3) {
-    interCase.getBullet()->printParticle();
-    interCase.getTarget()->printParticle();
+    G4cout << *interCase.getBullet() << G4endl
+	   << *interCase.getTarget() << G4endl;
   }
   
   // Bullet may be nucleus or simple particle
@@ -324,8 +335,8 @@ void G4IntraNucleiCascader::generateCascade() {
     
     if (verboseLevel > 2) {
       G4cout << " Iteration " << iloop << ": Number of cparticles "
-	     << cascad_particles.size() << " last one: " << G4endl;
-      cascad_particles.back().print();
+	     << cascad_particles.size() << " last one: \n"
+	     << cascad_particles.back() << G4endl;
     }
     
     model->generateParticleFate(cascad_particles.back(),
@@ -381,22 +392,20 @@ void G4IntraNucleiCascader::generateCascade() {
 					  std::sqrt(mass*(coulombBarrier-KE)) );
 	  
 	  if (G4UniformRand() < CBP) {
-	    if (verboseLevel > 3) {
-	      G4cout << " tunneled " << G4endl;
-	      currentParticle.printParticle();
-	    }
+	    if (verboseLevel > 3) 
+	      G4cout << " tunneled\n" << currentParticle << G4endl;
+
 	    // Tunnelling through barrier leaves KE unchanged
 	    output.addOutgoingParticle(currentParticle);
 	  } else {
 	    processTrappedParticle(currentCParticle);
 	  }
 	} else {
-	  if (verboseLevel > 3) G4cout << " Goes out " << G4endl;
-	  
 	  output.addOutgoingParticle(currentParticle);
 	  
-	  if (verboseLevel > 3) 
-	    output.getOutgoingParticles().back().printParticle();
+	  if (verboseLevel > 3)
+	    G4cout << " Goes out\n" << output.getOutgoingParticles().back()
+		   << G4endl;
 	}
       } 
     } else { // interaction 
@@ -447,21 +456,26 @@ G4bool G4IntraNucleiCascader::finishCascade() {
   cascad_particles.clear();
 
   // Cascade is finished. Check if it's OK.
-  if (verboseLevel>2) G4cout << " G4IntraNucleiCascader finished" << G4endl;
   if (verboseLevel>3) {
-    // FIXME:  Replace with "output.printCollisionOutput()" after validation
-    std::vector<G4InuclElementaryParticle>& opart
-      = output.getOutgoingParticles();
+    G4cout << " G4IntraNucleiCascader finished" << G4endl;
+    output.printCollisionOutput();
+  }
 
-    G4cout << " output_particles  " << opart.size() << G4endl;
-    particleIterator ipart = opart.begin();
-    for (; ipart != opart.end(); ipart++) {
-      ipart->printParticle();
-      G4cout << "  charge " << ipart->getCharge() << " baryon number "
-	     << ipart->baryon() << G4endl;
+  // Apply cluster coalesence model to produce light ions
+  if (theClusterMaker) {
+    theClusterMaker->setVerboseLevel(verboseLevel);
+    theClusterMaker->FindClusters(output);
+
+    // Update recoil fragment after generating light ions
+    if (verboseLevel>3) G4cout << " Recomputing recoil fragment" << G4endl;
+    theRecoilMaker->collide(interCase.getBullet(), interCase.getTarget(),
+			    output);
+    if (verboseLevel>3) {
+      G4cout << " After cluster coalescence" << G4endl;
+      output.printCollisionOutput();
     }
   }
-  
+
   // Use last created recoil fragment instead of re-constructing
   G4int afin = theRecoilMaker->getRecoilA();
   G4int zfin = theRecoilMaker->getRecoilZ();
@@ -508,8 +522,8 @@ G4bool G4IntraNucleiCascader::finishCascade() {
 					    G4InuclParticle::INCascader);
     
     if (verboseLevel > 3) {
-      G4cout << " adding recoiling nucleon to output list" << G4endl;
-      last_particle.printParticle();
+      G4cout << " adding recoiling nucleon to output list\n"
+	     << last_particle  << G4endl;
     }
     
     output.addOutgoingParticle(last_particle);
@@ -722,10 +736,8 @@ void G4IntraNucleiCascader::processSecondary(const G4KineticTrack* ktrack) {
   cpart.updatePosition(cpos);
   cpart.updateZone(model->getZone(cpos.mag()));
 
-  if (verboseLevel > 2) {
-    G4cout << " Created cascade particle " << G4endl;
-    cpart.print();
-  }
+  if (verboseLevel > 2)
+    G4cout << " Created cascade particle \n" << cpart << G4endl;
 }
 
 
@@ -747,10 +759,8 @@ void G4IntraNucleiCascader::releaseSecondary(const G4KineticTrack* ktrack) {
 
     inucl.fill(ktrack->Get4Momentum()/GeV,
 	       kpd->GetAtomicMass(), kpd->GetAtomicNumber());
-    if (verboseLevel > 2) {
-      G4cout << " Created pre-cascade fragment " << G4endl;
-      inucl.printParticle();
-    }
+    if (verboseLevel > 2)
+      G4cout << " Created pre-cascade fragment\n" << inucl << G4endl;
   } else {
     // Use resize() and fill() to avoid memory churn
     output.getOutgoingParticles().resize(output.numberOfOutgoingParticles()+1);
@@ -758,10 +768,8 @@ void G4IntraNucleiCascader::releaseSecondary(const G4KineticTrack* ktrack) {
 
     // SPECIAL:  Use G4PartDef directly, allowing unknown type code
     ipart.fill(ktrack->Get4Momentum()/GeV, ktrack->GetDefinition());
-    if (verboseLevel > 2) {
-      G4cout << " Created invalid pre-cascade particle " << G4endl;
-      ipart.printParticle();
-    }
+    if (verboseLevel > 2)
+      G4cout << " Created invalid pre-cascade particle\n" << ipart << G4endl;
   }
 }
 
@@ -788,8 +796,8 @@ processTrappedParticle(const G4CascadParticle& trapped) {
   // non-standard exciton; release it
   // FIXME: this is a meson, so need to absorb it
   if (verboseLevel > 3) {
-    G4cout << " non-standard should be absorbed, now released" << G4endl;
-    trapped.print();
+    G4cout << " non-standard should be absorbed, now released\n"
+	   << trapped << G4endl;
   }
   
   output.addOutgoingParticle(trappedP);
@@ -846,7 +854,7 @@ decayTrappedParticle(const G4CascadParticle& trapped) {
     if (idaugEP.isPhoton()) output.addOutgoingParticle(idaugEP);
     else {
       G4CascadParticle idaugCP(idaugEP, decayPos, zone, 0., gen);
-      if (verboseLevel > 3) idaugCP.print();
+      if (verboseLevel > 3) G4cout << idaugCP << G4endl;
 
       cascad_particles.push_back(idaugCP);
     }

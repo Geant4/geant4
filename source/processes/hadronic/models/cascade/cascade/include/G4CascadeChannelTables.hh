@@ -32,11 +32,13 @@
 //		"disappearance" bug on Linux (GCC 4.1.2).
 // 20110915  M. Kelsey -- Move static implementations (won't work on Windows);
 //		Add local table instantiating function (to replace self-reg)
+// 20110923  M. Kelsey -- Add optional stream& argument to printTable().
 
 #ifndef G4_CASCADE_CHANNEL_TABLES_HH
 #define G4_CASCADE_CHANNEL_TABLES_HH
 
 #include "globals.hh"
+#include <iosfwd>
 #include <map>
 
 class G4CascadeChannel;
@@ -51,7 +53,7 @@ public:
   static const G4CascadeChannel* GetTable(G4int had1, G4int had2);
 
   // Convenience function for diagnostic output
-  static void PrintTable(G4int initialState);
+  static void PrintTable(G4int initialState, std::ostream& os=G4cout);
 
   // Register cross-section table for later lookup
   static void AddTable(G4int initialState, G4CascadeChannel* table);

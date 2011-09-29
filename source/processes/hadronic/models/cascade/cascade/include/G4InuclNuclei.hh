@@ -49,6 +49,8 @@
 // 20110721  M. Kelsey -- Follow base-class ctor change to pass model directly
 // 20110722  M. Kelsey -- BUG FIX:  Deleted excitation energy in one ctor
 // 20110829  M. Kelsey -- Add constructor to copy G4V3DNucleus input
+// 20110919  M. Kelsey -- Add clear() to restore completely empty state
+// 20110922  M. Kelsey -- Add stream argument to printParticle() => print()
 
 #ifndef G4INUCL_NUCLEI_HH
 #define G4INUCL_NUCLEI_HH
@@ -120,6 +122,8 @@ public:
 
   void copy(G4V3DNucleus* a3DNucleus, Model model=DefaultModel);
 
+  void clear();			// Discard all information (including A,Z)
+
   // Excitation energy is stored as dynamical mass of particle
   void setExitationEnergy(G4double e);
 
@@ -148,7 +152,7 @@ public:
 
   static G4double getNucleiMass(G4int a, G4int z, G4double exc=0.);
 
-  virtual void printParticle() const;
+  virtual void print(std::ostream& os) const;
 
   // Convert contents to G4Fragment for use outside package
   G4Fragment makeG4Fragment() const;

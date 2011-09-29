@@ -14,6 +14,9 @@
 # $Id: sources.cmake,v 1.4 2010-09-30 12:02:28 bmorgan Exp $
 #
 # 20110725  M. Kelsey -- Update HEADERS and SOURCES with new code
+# 20110919  M. Kelsey -- Add G4CascadeCoalescence
+# 20110922  M. Kelsey -- Add G4ExitonConfiguration, G4FissionConfiguration
+# 20110923  M. Kelsey -- Add G4CascadeChannel.cc
 #------------------------------------------------------------------------------
 
 # List external includes needed.
@@ -66,6 +69,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4CascadeChannel.hh
         G4CascadeChannelTables.hh
         G4CascadeCheckBalance.hh
+	G4CascadeCoalescence.hh
         G4CascadeColliderBase.hh
         G4CascadeData.hh
         G4CascadeData.icc
@@ -146,8 +150,10 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         bindingEnergy.cc
         G4Analyser.cc
         G4BigBanger.cc
+        G4CascadeChannel.cc
         G4CascadeChannelTables.cc
         G4CascadeCheckBalance.cc
+	G4CascadeCoalescence.cc
         G4CascadeColliderBase.cc
         G4CascadeDeexcitation.cc
         G4CascadeInterface.cc
@@ -184,6 +190,8 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4ElementaryParticleCollider.cc
         G4EquilibriumEvaporator.cc
         G4EvaporationInuclCollider.cc
+        G4ExitonConfiguration.cc
+        G4FissionConfiguration.cc
         G4Fissioner.cc
         G4FissionStore.cc
         G4InteractionCase.cc

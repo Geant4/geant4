@@ -61,6 +61,7 @@
 // 20110729  M. Kelsey -- Replace convertKineticToCascade() to reduce churn.
 // 20110801  M. Kelsey -- Add local target buffers for rescattering, to avoid
 //		memory leak.
+// 20110919  M. Kelsey -- Add optional final-state clustering
 
 #ifndef G4INTRA_NUCLEI_CASCADER_HH
 #define G4INTRA_NUCLEI_CASCADER_HH
@@ -71,8 +72,8 @@
 #include <vector>
 
 class G4CascadParticle;
+class G4CascadeCoalescence;
 class G4CascadeRecoilMaker;
-class G4CollisionOutput;
 class G4ElementaryParticleCollider;
 class G4InuclElementaryParticle;
 class G4InuclParticle;
@@ -132,6 +133,7 @@ private:
   G4NucleiModel* model;
   G4ElementaryParticleCollider* theElementaryParticleCollider;
   G4CascadeRecoilMaker* theRecoilMaker;
+  G4CascadeCoalescence* theClusterMaker;
 
   // Buffers and parameters for cascade attempts
   G4InuclNuclei* tnuclei;		// Target nucleus (must be non-zero)

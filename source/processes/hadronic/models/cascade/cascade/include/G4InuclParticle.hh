@@ -35,6 +35,10 @@
 // 20110225  M. Kelsey -- Add equality operator (NOT sorting!)
 // 20110721  M. Kelsey -- Add model ID as optional ctor argument (so subclasses
 //		don't have to call SetModel()).
+// 20110917  M. Kelsey -- Add coalesence to model ID list
+// 20110919  M. Kelsey -- Move setDefinition code to .cc to allow null argument
+// 20110922  M. Kelsey -- Add stream argument to printParticle() => print(),
+//		add operator<<().
 
 #ifndef G4INUCL_PARTICLE_HH
 #define G4INUCL_PARTICLE_HH
@@ -42,7 +46,7 @@
 #include "G4DynamicParticle.hh"
 #include "G4LorentzVector.hh"
 #include "globals.hh"
-
+#include <iosfwd>
 
 class G4InuclParticle {
 public:
@@ -57,8 +61,10 @@ public:
   // 7 G4Fissioner
   // 8 G4BigBanger
   // 9 G4PreCompound
+  // 10 G4CascadeCoalescence
   enum Model { DefaultModel, bullet, target, EPCollider, INCascader,
-	       NonEquilib, Equilib, Fissioner, BigBanger, PreCompound };
+	       NonEquilib, Equilib, Fissioner, BigBanger, PreCompound,
+	       Coalescence };
 
 public:
   G4InuclParticle() : modelId(DefaultModel) {}
@@ -120,7 +126,7 @@ public:
     return pDP.Get4Momentum()*MeV/GeV;		// From G4 to Bertini units
   }
 
-  virtual void printParticle() const;
+  virtual void print(std::ostream& os) const;
 
   G4ParticleDefinition* getDefinition() const {
     return pDP.GetDefinition();
@@ -149,11 +155,15 @@ protected:
 		  Model model=DefaultModel)
     : pDP(pd,G4ThreeVector(0.,0.,1.),ekin*GeV/MeV), modelId(model) {}
 
-  void setDefinition(G4ParticleDefinition* pd) { pDP.SetDefinition(pd); }
+  void setDefinition(G4ParticleDefinition* pd);
 
 private:
   G4DynamicParticle pDP;		// Carries all the kinematics and info
   Model modelId;
 };        
+
+// Proper stream output (just calls print())
+
+std::ostream& operator<<(std::ostream& os, const G4InuclParticle& part);
 
 #endif // G4INUCL_PARTICLE_HH 

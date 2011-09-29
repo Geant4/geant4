@@ -23,39 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeChannel.hh,v 1.7 2010-06-25 09:41:52 gunter Exp $
-// GEANT4 tag: $Name: not supported by cvs2svn $
-//
-// 20100514  M. Kelsey -- All functionality removed except quantum-number
-//		validation functions.
-// 20110719  M. Kelsey -- Repurpose as abstract base class for all channels.
-// 20110802  M. Kelsey -- Fix Coverity #29838: Virtual dtor required for base.
-// 20110923  M. Kelsey -- Add optional ostream& argument to printTable(), add
-//		stream operator<<, implemented in new .cc file.
+// 20110922  M. Kelsey -- Created to hold implementation of stream operator<<.
 
-#ifndef G4_CASCADE_CHANNEL_HH
-#define G4_CASCADE_CHANNEL_HH
-
-#include "globals.hh"
-#include <iosfwd>
-#include <vector>
+#include "G4ExitonConfiguration.hh"
+#include "G4ios.hh"
 
 
-class G4CascadeChannel {
-public:
-  G4CascadeChannel() {}
-  virtual ~G4CascadeChannel() {}
+std::ostream& operator<<(std::ostream& os, const G4ExitonConfiguration& ex) {
+  os << " Exiton configuration " << G4endl
+     << " proton particles " << ex.protonQuasiParticles << " holes " 
+     << ex.protonHoles << G4endl
+     << " neutron particles " << ex.neutronQuasiParticles << " holes " 
+     << ex.neutronHoles << G4endl;
 
-  virtual G4double getCrossSection(double ke) const = 0;
-  virtual G4double getCrossSectionSum(double ke) const = 0;
-  virtual G4int getMultiplicity(G4double ke) const = 0;
+  return os;
+}
+     
 
-  virtual void getOutgoingParticleTypes(std::vector<G4int>& kinds,
-					G4int mult, G4double ke) const = 0;
-
-  virtual void printTable(std::ostream& os=G4cout) const = 0;
-};
-
-std::ostream& operator<<(std::ostream& os, const G4CascadeChannel& chan);
-
-#endif	/* G4_CASCADE_CHANNEL_HH */

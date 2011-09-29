@@ -36,6 +36,7 @@
 // 20110321  M. Kelsey -- Fix getStrangeness to return int
 // 20110801  M. Kelsey -- Add fill() functions to replicate ctors, allowing
 //		reuse of objects as buffers; c.f. G4InuclNuclei.
+// 20110922  M. Kelsey -- Add stream argument to printParticle() => print()
 
 #include "G4InuclElementaryParticle.hh"
 
@@ -219,10 +220,10 @@ G4double G4InuclElementaryParticle::getParticleMass(G4int type) {
 
 // Print particle parameters
 
-void G4InuclElementaryParticle::printParticle() const {
-  G4InuclParticle::printParticle();
-  G4cout << " Particle: " << getDefinition()->GetParticleName() 
-	 << " type " << type() << " mass " << getMass()
-	 << " ekin " << getKineticEnergy() << G4endl; 
+void G4InuclElementaryParticle::print(std::ostream& os) const {
+  G4InuclParticle::print(os);
+  os << G4endl << " Particle: " << getDefinition()->GetParticleName() 
+     << " type " << type() << " mass " << getMass()
+     << " ekin " << getKineticEnergy(); 
 }
 

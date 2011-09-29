@@ -43,6 +43,7 @@
 // 20100914  M. Kelsey -- Migrate to integer A and Z: this involves replacing
 //		a number of G4double terms with G4int, with consequent casts.
 // 20110214  M. Kelsey -- Follow G4InuclParticle::Model enumerator migration
+// 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration
 
 #include "G4NonEquilibriumEvaporator.hh"
 #include "G4CollisionOutput.hh"
@@ -74,10 +75,7 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
     return;
   }
 
-  if (verboseLevel > 2) {
-    G4cout << " evaporating target: " << G4endl;
-    target->printParticle();
-  }
+  if (verboseLevel > 2) G4cout << " evaporating target:\n" << *target << G4endl;
   
   const G4int a_cut = 5;
   const G4int z_cut = 3;
@@ -366,11 +364,10 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		      
 		      particle.setMomentum(mom);
 		      output.addOutgoingParticle(particle);
-		      if (verboseLevel > 3) particle.printParticle();
-		      
 		      ppout += mom;
 		      if (verboseLevel > 3) {
-			G4cout << " ppout px " << ppout.px() << " py " << ppout.py()
+			G4cout << particle << G4endl
+			       << " ppout px " << ppout.px() << " py " << ppout.py()
 			       << " pz " << ppout.pz() << " E " << ppout.e() << G4endl;
 		      }
 
@@ -429,10 +426,7 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
     G4LorentzVector pnuc = pin - ppout;
     G4InuclNuclei nuclei(pnuc, A, Z, EEXS, G4InuclParticle::NonEquilib);
     
-    if (verboseLevel > 3) {
-      G4cout << " remaining nucleus " << G4endl;
-      nuclei.printParticle();
-    }
+    if (verboseLevel > 3) G4cout << " remaining nucleus\n" << nuclei << G4endl;
     output.addOutgoingNucleus(nuclei);
   }
 

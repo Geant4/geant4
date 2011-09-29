@@ -33,6 +33,7 @@
 //		simple data members.  Eliminate unnecessary G4InuclNuclei ctor.
 // 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class
 // 20110728  M. Kelsey -- Fix Coverity #23843, delete evaporator in dtor.
+// 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration
 
 #include "G4EvaporationInuclCollider.hh"
 #include "G4CollisionOutput.hh"
@@ -63,7 +64,7 @@ G4EvaporationInuclCollider::collide(G4InuclParticle* /*bullet*/,
 
   if (!dynamic_cast<G4InuclNuclei*>(target)) return;	// Only nuclei evaporate
 
-  if (verboseLevel>3) target->printParticle();
+  if (verboseLevel>3) G4cout << *target << G4endl;
 
   theEquilibriumEvaporator->collide(0, target, globalOutput);
 

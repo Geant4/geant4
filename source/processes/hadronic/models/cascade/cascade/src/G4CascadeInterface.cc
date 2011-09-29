@@ -90,6 +90,8 @@
 //		zero particles, but set kinetic energy from projectile.
 // 20110801  M. Kelsey -- Make bullet, target point to local buffers, no delete
 // 20110802  M. Kelsey -- Use new decay handler for Propagate interface
+// 20110922  M. Kelsey -- Follow migration of G4InuclParticle::print(), use
+//		G4ExceptionDescription for reporting before throwing exception
 
 #include "G4CascadeInterface.hh"
 #include "globals.hh"
@@ -286,7 +288,10 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
   }
 
   // Abort job if energy or momentum are not conserved
-  if (!balance->okay()) throwNonConservationFailure();
+  if (!balance->okay()) {
+    throwNonConservationFailure();
+    return NoInteraction(aTrack, theNucleus);
+  }
 
   // Successful cascade -- clean up and return
   if (verboseLevel) {
@@ -440,10 +445,7 @@ G4bool G4CascadeInterface::createBullet(const G4HadProjectile& aTrack) {
     bullet = &nucleusBullet;
   }
 
-  if (verboseLevel > 2) {
-    G4cout << "Bullet:  " << G4endl;  
-    bullet->printParticle();
-  }
+  if (verboseLevel > 2) G4cout << "Bullet:  \n" << *bullet << G4endl;  
 
   return true;
 }
@@ -468,10 +470,7 @@ G4bool G4CascadeInterface::createTarget(G4int A, G4int Z) {
     target = &hadronTarget;
   }
 
-  if (verboseLevel > 2) {
-    G4cout << "Target:  " << G4endl;  
-    target->printParticle();
-  }
+  if (verboseLevel > 2) G4cout << "Target:  \n" << *target << G4endl;
 
   return true;		// Right now, target never fails
 }
@@ -508,8 +507,7 @@ makeDynamicParticle(const G4InuclElementaryParticle& iep) const {
 G4DynamicParticle* 
 G4CascadeInterface::makeDynamicParticle(const G4InuclNuclei& inuc) const {
   if (verboseLevel > 2) {
-    G4cout << " Nuclei fragment: " << G4endl;
-    inuc.printParticle();
+    G4cout << " Nuclei fragment: \n" << inuc << G4endl;
   }
   
   // Copy local G4DynPart to public output 
@@ -715,42 +713,44 @@ G4bool G4CascadeInterface::retryInelasticNucleus() const {
 
 
 // Terminate job in case of persistent non-conservation
+// FIXME:  Need to migrate to G4ExceptionDescription
 
 void G4CascadeInterface::throwNonConservationFailure() {
-  G4cerr << " >>> G4CascadeInterface has non-conserving"
-	 << " cascade after " << numberOfTries << " attempts." << G4endl;
+  // NOTE:  Once G4HadronicException is changed, use the following line!
+  // G4ExceptionDescription errInfo;
+  std::ostream& errInfo = G4cerr;
+
+  errInfo << " >>> G4CascadeInterface has non-conserving"
+	  << " cascade after " << numberOfTries << " attempts." << G4endl;
 
   G4String throwMsg = "G4CascadeInterface - ";
   if (!balance->energyOkay()) {
     throwMsg += "Energy";
-    G4cerr << " Energy conservation violated by " << balance->deltaE()
-	   << " GeV (" << balance->relativeE() << ")" << G4endl;
+    errInfo << " Energy conservation violated by " << balance->deltaE()
+	    << " GeV (" << balance->relativeE() << ")" << G4endl;
   }
   
   if (!balance->momentumOkay()) {
     throwMsg += "Momentum";
-    G4cerr << " Momentum conservation violated by " << balance->deltaP()
-	   << " GeV/c (" << balance->relativeP() << ")" << G4endl;
+    errInfo << " Momentum conservation violated by " << balance->deltaP()
+	    << " GeV/c (" << balance->relativeP() << ")" << G4endl;
   }
   
   if (!balance->baryonOkay()) {
     throwMsg += "Baryon number";
-    G4cerr << " Baryon number violated by " << balance->deltaB() << G4endl;
+    errInfo << " Baryon number violated by " << balance->deltaB() << G4endl;
   }
   
   if (!balance->chargeOkay()) {
     throwMsg += "Charge";
-    G4cerr << " Charge conservation violated by " << balance->deltaQ()
-	   << G4endl;
+    errInfo << " Charge conservation violated by " << balance->deltaQ()
+	    << G4endl;
   }
-  
-  G4cout << "\n Final event output, for debugging:"
-	 << "\n Bullet:  " << G4endl;  
-  bullet->printParticle();
-  G4cout << "\n Target:  " << G4endl;  
-  target->printParticle();
-  
-  output->printCollisionOutput();
+
+  errInfo << " Final event output, for debugging:\n"
+	 << " Bullet:  \n" << *bullet << G4endl
+	 << " Target:  \n" << *target << G4endl;
+  output->printCollisionOutput(errInfo);
   
   throwMsg += " non-conservation. More info in output.";
   throw G4HadronicException(__FILE__, __LINE__, throwMsg);   // Job ends here!

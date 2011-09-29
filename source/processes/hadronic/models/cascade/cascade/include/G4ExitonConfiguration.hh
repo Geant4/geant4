@@ -28,9 +28,14 @@
 // 20100909  Add function to reset values to zero
 // 20100924  Migrate to integer A and Z
 // 20110225  M. Kelsey -- Add equality operator (NOT sorting!)
+// 20110922  M. Kelsey -- Replace print() with stream operator<<(), put
+//		implementation into new .cc file.
 
 #ifndef G4EXITON_CONFIGURATION_HH
 #define G4EXITON_CONFIGURATION_HH
+
+#include "globals.hh"
+#include <iosfwd>
 
 class G4ExitonConfiguration {
 public:
@@ -72,18 +77,14 @@ public:
     else if (ip == 2) neutronHoles++;
   }
 
-  void print() const {
-    G4cout << " Exiton configuration " << G4endl
-	   << " proton particles " << protonQuasiParticles << " holes " 
-	   << protonHoles << G4endl
-	   << " neutron particles " << neutronQuasiParticles << " holes " 
-	   << neutronHoles << G4endl;
-  }
-     
   G4int protonQuasiParticles;
   G4int neutronQuasiParticles;
   G4int protonHoles;
   G4int neutronHoles;
 };        
+
+// Dump information to output
+
+std::ostream& operator<<(std::ostream& os, const G4ExitonConfiguration& ex);
 
 #endif // G4EXITON_CONFIGURATION_HH 

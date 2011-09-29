@@ -43,6 +43,7 @@
 // 20100923  M. Kelsey -- Migrate to integer A and Z
 // 20110214  M. Kelsey -- Follow G4InuclParticle::Model enumerator migration
 // 20110806  M. Kelsey -- Pre-allocate buffers to reduce memory churn
+// 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration
 
 #include "G4BigBanger.hh"
 #include "G4CollisionOutput.hh"
@@ -85,9 +86,8 @@ G4BigBanger::collide(G4InuclParticle* /*bullet*/, G4InuclParticle* target,
   if (etot < 0.0) etot = 0.0;
   
   if (verboseLevel > 2) {
-    G4cout << " BigBanger: target " << G4endl;
-    nuclei_target->printParticle(); 
-    G4cout << " etot " << etot << G4endl;
+    G4cout << " BigBanger: target\n" << *nuclei_target
+	   << "\n etot " << etot << G4endl;
   }
 
   if (verboseLevel > 3) {
@@ -103,7 +103,7 @@ G4BigBanger::collide(G4InuclParticle* /*bullet*/, G4InuclParticle* target,
   if (verboseLevel > 2) {
     G4cout << " particles " << particles.size() << G4endl;
     for(G4int i = 0; i < G4int(particles.size()); i++) 
-      particles[i].printParticle();
+      G4cout << particles[i] << G4endl;
   }
 
   if (particles.empty()) {	// No bang!  Don't know why...
@@ -129,7 +129,7 @@ G4BigBanger::collide(G4InuclParticle* /*bullet*/, G4InuclParticle* target,
     if (verboseLevel > 2) totlab += mom;
 
     ipart->setMomentum(mom); 
-    if (verboseLevel > 2) ipart->printParticle();
+    if (verboseLevel > 2) G4cout << *ipart << G4endl;
   }
   
   std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());

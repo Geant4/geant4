@@ -5,6 +5,7 @@
 # Map user environment/GMake variables onto preprocessor debugging flags
 #
 # 20100922 J. Yarba -- Add include directories for pre-compound model
+# 20110919 M. Kelsey -- Add flag for final-state clustering
 # -----------------------------------------------------------
 
 name := G4hadronic_bert_cascade
@@ -39,6 +40,10 @@ endif
 
 ifdef G4CASCADE_CHECK_ECONS
   CPPFLAGS += -DG4CASCADE_CHECK_ECONS=1
+endif
+
+ifdef G4CASCADE_DO_COALESCENCE
+  CPPFLAGS += -DG4CASCADE_DO_COALESCENCE=1
 endif
 
 ifndef G4INSTALL

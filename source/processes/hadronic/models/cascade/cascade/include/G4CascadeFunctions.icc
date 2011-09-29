@@ -37,6 +37,8 @@
 //		Coverity #20228, test (mult>maxMult), set to max if over
 // 20110916  M. Kelsey -- Drop self-registration due to platform inconsistencies
 //		Drop "inline" keyword on complex functions
+// 20110923  M. Kelsey -- Add optional ostream& argument to printTable(),
+//		pass through to SAMP and DATA
 
 #include "G4CascadeChannelTables.hh"
 #include "globals.hh"
@@ -112,11 +114,11 @@ getOutgoingParticleTypes(std::vector<G4int>& kinds,
 // Dump lookup tables, including interpolation bins, to log file
 
 template <class DATA, class SAMP>
-void G4CascadeFunctions<DATA,SAMP>::printTable() const {
-  G4cout << " ---------- " << DATA::data.name << " ----------" << G4endl;
-  SAMP::print();
-  DATA::data.print();
-  G4cout << " ------------------------------" << G4endl;
+void G4CascadeFunctions<DATA,SAMP>::printTable(std::ostream& os) const {
+  os << " ---------- " << DATA::data.name << " ----------" << G4endl;
+  SAMP::print(os);
+  DATA::data.print(os);
+  os << " ------------------------------" << G4endl;
 }
 
 #endif	/* G4_CASCADE_FUNCTIONS_ICC */

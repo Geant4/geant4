@@ -27,6 +27,7 @@
 //
 // 20100728  Move ::addConfig() implementation to .cc file
 // 20110801  Make configuration probs a data member array, reduce memory churn
+// 20110922  Replace config::print() with stream output.
 
 #include "G4FissionStore.hh"
 #include "G4FissionConfiguration.hh"
@@ -41,7 +42,7 @@ void G4FissionStore::addConfig(G4double a, G4double z, G4double ez,
 			       G4double ek, G4double ev) {
   G4FissionConfiguration config(a, z, ez, ek, ev);
   configurations.push_back(config);
-  if (verboseLevel > 2) config.print();
+  if (verboseLevel > 2) G4cout << config << G4endl;
 }
 
 G4FissionConfiguration G4FissionStore::generateConfiguration(G4double amax, 
@@ -64,8 +65,7 @@ G4FissionConfiguration G4FissionStore::generateConfiguration(G4double amax,
     if (pr < small) pr = small;
     pr = std::exp(pr);
     if (verboseLevel > 2) {
-      configurations[i].print();
-      G4cout << " probability " << pr << G4endl; 
+      G4cout << configurations[i] << "\n probability " << pr << G4endl; 
     }
     totProb += pr;
     configProbs[i] = totProb;  

@@ -40,6 +40,7 @@
 //		suppressing elastic scattering off free nucleons (hydrogen)
 // 20110719  M. Kelsey -- Add ctor argument for two-body initial state
 // 20110725  M. Kelsey -- Save initial state as data member
+// 20110923  M. Kelsey -- Add optional ostream& argument to print() fns
 
 #ifndef G4_CASCADE_DATA_HH
 #define G4_CASCADE_DATA_HH
@@ -86,8 +87,10 @@ struct G4CascadeData
 
   G4int maxMultiplicity() const { return NM+1; }  // Used by G4CascadeFunctions
 
-  void print(G4int mult=-1) const;	// Dump multiplicty tables (-1 == all)
-  void printXsec(const G4double (&xsec)[NE]) const;
+  // Dump multiplicty tables to specified stream
+  void print(std::ostream& os=G4cout) const;
+  void print(G4int mult, std::ostream& os) const;
+  void printXsec(const G4double (&xsec)[NE], std::ostream& os) const;
 
   // Constructor for kaon/hyperon channels, with multiplicity <= 7
   G4CascadeData(const G4int (&the2bfs)[N2][2], const G4int (&the3bfs)[N3][3],

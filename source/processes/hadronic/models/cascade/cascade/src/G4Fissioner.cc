@@ -41,6 +41,7 @@
 // 20100914  M. Kelsey -- Migrate to integer A and Z
 // 20110214  M. Kelsey -- Follow G4InuclParticle::Model enumerator migration
 // 20110801  M. Kelsey -- Replace constant-size std::vector's w/C arrays
+// 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration
 
 #include "G4Fissioner.hh"
 #include "G4CollisionOutput.hh"
@@ -71,10 +72,8 @@ void G4Fissioner::collide(G4InuclParticle* /*bullet*/,
     return;
   }
 
-  if (verboseLevel > 1) {
-    G4cout << " Fissioner input " << G4endl;
-    nuclei_target->printParticle();
-  }
+  if (verboseLevel > 1) 
+    G4cout << " Fissioner input\n" << *nuclei_target << G4endl;
 
   // Initialize buffer for fission possibilities
   fissionStore.setVerboseLevel(verboseLevel);

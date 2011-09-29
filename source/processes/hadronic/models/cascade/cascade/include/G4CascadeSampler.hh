@@ -31,13 +31,15 @@
 // 20100512  M. Kelsey -- Make this templated on energy and multiplicity
 //		binning, as base to new sampler.
 // 20100803  M. Kelsey -- Add print function for debugging.
+// 20110923  M. Kelsey -- Add optional ostream& argument to print()
 
 #ifndef G4_CASCADE_SAMPLER_HH
 #define G4_CASCADE_SAMPLER_HH
 
-#include <vector>
 #include "globals.hh"
 #include "G4CascadeInterpolator.hh"
+#include <iosfwd>
+#include <vector>
 
 template <int NBINS, int NMULT>
 class G4CascadeSampler {
@@ -59,7 +61,7 @@ public:
   findFinalStateIndex(G4int mult, G4double ke, const G4int index[],
 		      const G4double xsec[][energyBins]) const;
 
-  virtual void print() const;
+  virtual void print(std::ostream& os) const;
 
 private:
   // Optional start/stop arguments default to inclusive arrays

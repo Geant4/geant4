@@ -41,6 +41,7 @@
 // 20110719  M. Kelsey -- Add inheritance from non-template base for factory,
 //		change static's to virtual (no more direct access)
 // 20110725  M. Kelsey -- Move ctor to .icc file for registration in lookup
+// 20110923  M. Kelsey -- Add optional ostream& argument to printTable()
 
 #ifndef G4_CASCADE_FUNCTIONS_HH
 #define G4_CASCADE_FUNCTIONS_HH
@@ -70,7 +71,7 @@ public:
   virtual void getOutgoingParticleTypes(std::vector<G4int>& kinds,
 				       G4int mult, G4double ke) const;
 
-  virtual void printTable() const;
+  virtual void printTable(std::ostream& os=G4cout) const;
 };
 
 #include "G4CascadeFunctions.icc"

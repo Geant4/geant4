@@ -15,6 +15,93 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+23 September 2011  Michael Kelsey (hadr-casc-V09-04-32)
+-------------------------------------------------------
+- sources.cmake:  Add G4CascadeChannel.cc.
+
+- G4CascadeChannel:  Add optional stream& argument to printTable(), and new
+  stream operator<<, calling virtual printTable().
+
+- G4CascadeChannelTables:  Add optional stream& argument to printTable().
+
+- G4CascadeData, G4CascadeFunctions, G4CascadeSampler,
+  G4CascadeInterpolator:  Add optional stream& argument to print()
+  functions, and pass through to members.
+
+- G4ElementaryParticleCollider:  Add optional stream& argument to
+  printFinalStateTables(), pass through to printing tables.
+
+22 September 2011  Michael Kelsey
+---------------------------------
+- sources.cmake:  Add G4ExitonConfiguration.cc, G4FissionConfiguration.cc
+
+- G4CascadeInterface.cc:  Modify throwNonConservationFailure() to be ready
+  to use G4ExceptionDescription, once G4HadronicException supports it.
+
+Replace most G4cout-specific print() functions with stream operators, in
+order to anticipate supporting G4ExceptionDescription streams.
+
+- G4CascadParticle: Add ostream& to print(), without trailing endl.  Define
+  operator<<, calling virtual print().  Affects two classes:
+
+	G4IntraNucleiCascader.cc	G4NucleiModel.cc
+
+- G4CollisionOutput:  Add optional ostream& to printCollisionOutput(), with
+  G4cout as the default.  No clients affected.
+
+- G4ExitonConfiguration, G4FissionConfiguration:  Replace print() with
+  stream operator<<, defined in new .cc files.  Affects G4FissionStore.cc.
+
+- G4InuclParticle, G4InuclNuclei, G4InuclElementaryParticle:  Add ostream&
+  to printParticle(), renamed as print(), without trailing endl.  Define
+  operator<< only in base class, calling virtual print().  Affects 12 classes:
+
+	G4BigBanger.cc			G4CascadParticle.cc
+	G4CascadeCoalescence.cc		G4CascadeInterface.cc
+	G4CollisionOutput.cc		G4ElementaryParticleCollider.cc
+	G4EquilibriumEvaporator.cc	G4EvaporationInuclCollider.cc
+	G4Fissioner.cc			G4IntraNucleiCascader.cc
+	G4NonEquilibriumEvaporator.cc	G4NucleiModel.cc
+
+22 September 2011  Michael Kelsey
+---------------------------------
+- G4CascadeCoalescence:  Add list of clusters already attempted, check list
+  at top of tryClusters() to reduce combinatorial explosion (factor of >10).
+
+22 September 2011  Michael Kelsey (hadr-casc-V09-04-31)
+-------------------------------------------------------
+- G4CascadeCoalescence.cc:  Create light ions without excitation energy.
+  This will violate energy conservation, but is necessary since the excess
+  from momentum exceeds the binding energy.
+
+- G4IntraNucleiCascader.cc:  Recompute recoil fragment after clustering, to
+  account for E-violation (above).
+
+20 September 2011  Michael Kelsey
+---------------------------------
+- G4CascadeCoalescence.cc:  Relative momenta computed in c.m. frame of
+  nucleon pair, not in event frame.  Add environment variables for cuts:
+  DPMAX_2CLUSTER, DPMAX_3CLUSTER, DPMAX_4CLUSTER.  Clean up interfaces
+  to use cluster as argument instead of polymorphic lists.  Improve
+  combinatorics.
+
+19 September 2011  Michael Kelsey
+---------------------------------
+- G4CascadeCoalescence:  NEW factory class to implement conversion of
+  final-state nucleon "clusters" into light ions.  Uses LAQGSM algorithm
+  (Sec. 2.3, http://lib-www.lanl.gov/la-pubs/00818645.pdf).
+
+- G4IntraNucleiCascader:  Add final-state clustering as OPTIONAL facility,
+  controlled through compile-time flag G4CASCADE_DO_COALESCENCE.  Clustering
+  is done during cascade finalization.
+
+- G4InuclNuclei.cc:  Allow A=0,Z=0 to produce null definition pointer.
+
+- G4InuclParticle:  Add Coalescence to list of model IDs; move setDefinition
+  to .cc file and allow passing null pointer.
+
+- GNUmakefile:  Add G4CASCADE_DO_COALESCENCE flag.
+
 16 September 2011  Michael Kelsey (hadr-casc-V09-04-30)
 -------------------------------------------------------
 - G4CascadeChannelTables:  Add load-on-demand via GetTable().  Move static

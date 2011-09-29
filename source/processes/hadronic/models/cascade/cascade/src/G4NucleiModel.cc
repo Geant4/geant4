@@ -98,6 +98,8 @@
 // 20110825  M. Kelsey -- Add comments regarding Fermi momentum scale, set of
 //		"best guess" parameter values
 // 20110831  M. Kelsey -- Make "best guess" parameters the defaults
+// 20110922  M. Kelsey -- Follow migrations G4InuclParticle::print(ostream&)
+//		and G4CascadParticle::print(ostream&)
 
 #include "G4NucleiModel.hh"
 #include "G4CascadeChannel.hh"
@@ -713,8 +715,8 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
 
     if (spath < path) {
       if (verboseLevel > 3) {
-	G4cout << " adding partner[" << thePartners.size() << "]: ";
-	particle.printParticle();
+	G4cout << " adding partner[" << thePartners.size() << "]: "
+	       << particle << G4endl;
       }
       thePartners.push_back(partner(particle, spath));
     }
@@ -726,8 +728,8 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
   
   if (cparticle.getParticle().pion()) { // absorption possible
     if (verboseLevel > 2) {
-      G4cout << " trying quasi-deuterons with bullet: ";
-      cparticle.getParticle().printParticle();
+      G4cout << " trying quasi-deuterons with bullet: "
+	     << cparticle.getParticle() << G4endl;
     }
 
     // Initialize buffers for quasi-deuteron results
@@ -756,10 +758,8 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
       
       G4double ekin = dummy_convertor.getKinEnergyInTheTRS();
       
-      if (verboseLevel > 2) {
-	G4cout << " ptype=" << ptype << " using pp target" << G4endl;
-	ppd.printParticle();
-      }
+      if (verboseLevel > 2)
+	G4cout << " ptype=" << ptype << " using pp target\n" << ppd << G4endl;
       
       abs_sec = absorptionCrossSection(ekin, ptype);
       abs_sec *= nucleon_densities[0][zone] * nucleon_densities[0][zone]*
@@ -780,10 +780,8 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
       
       G4double ekin = dummy_convertor.getKinEnergyInTheTRS();
       
-      if (verboseLevel > 2) {
-	G4cout << " using np target" << G4endl;
-	npd.printParticle();
-      }
+      if (verboseLevel > 2) 
+	G4cout << " ptype=" << ptype << " using np target\n" << npd << G4endl;
       
       abs_sec = absorptionCrossSection(ekin, ptype); 
       abs_sec *= pn_spec * nucleon_densities[0][zone] * nucleon_densities[1][zone] *
@@ -804,10 +802,8 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
       
       G4double ekin = dummy_convertor.getKinEnergyInTheTRS();
       
-      if (verboseLevel > 2) {
-	G4cout << " ptype=" << ptype << " using nn target" << G4endl;
-	nnd.printParticle();
-      }
+      if (verboseLevel > 2)
+	G4cout << " ptype=" << ptype << " using nn target\n" << nnd << G4endl;
       
       abs_sec = absorptionCrossSection(ekin, ptype); 
       abs_sec *= nucleon_densities[1][zone] * nucleon_densities[1][zone] *
@@ -883,10 +879,7 @@ generateParticleFate(G4CascadParticle& cparticle,
   if (verboseLevel > 1)
     G4cout << " >>> G4NucleiModel::generateParticleFate" << G4endl;
 
-  if (verboseLevel > 2) {
-    G4cout << " cparticle: ";
-    cparticle.print();
-  }
+  if (verboseLevel > 2) G4cout << " cparticle: " << cparticle << G4endl;
 
   // Create four-vector checking
 #ifdef G4CASCADE_CHECK_ECONS
@@ -912,10 +905,7 @@ generateParticleFate(G4CascadParticle& cparticle,
     boundaryTransition(cparticle);
     outgoing_cparticles.push_back(cparticle);
     
-    if (verboseLevel > 2) {
-      G4cout << " next zone " << G4endl;
-      cparticle.print();
-    }
+    if (verboseLevel > 2) G4cout << " next zone \n" << cparticle << G4endl;
   } else {			// there are possible interactions
     if (verboseLevel > 1)
       G4cout << " processing " << npart-1 << " possible interactions" << G4endl;
@@ -1231,7 +1221,7 @@ G4NucleiModel::initializeCascad(G4InuclElementaryParticle* particle) {
 
   G4CascadParticle cpart(*particle, pos, number_of_zones, large, 0);
 
-  if (verboseLevel > 2) cpart.print();
+  if (verboseLevel > 2) G4cout << cpart << G4endl;
 
   return cpart;
 }
@@ -1624,11 +1614,12 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
     G4int ip(0);
 
     G4cout << " cascad particles: " << casparticles.size() << G4endl;
-    for(ip = 0; ip < G4int(casparticles.size()); ip++) casparticles[ip].print();
+    for(ip = 0; ip < G4int(casparticles.size()); ip++)
+      G4cout << casparticles[ip] << G4endl;
 
     G4cout << " outgoing particles: " << particles.size() << G4endl;
     for(ip = 0; ip < G4int(particles.size()); ip++)
-      particles[ip].printParticle();
+      G4cout << particles[ip] << G4endl;
   }
 
   return;	// Buffer has been filled

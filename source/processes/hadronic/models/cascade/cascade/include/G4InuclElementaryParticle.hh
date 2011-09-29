@@ -42,6 +42,7 @@
 //		base ctor.
 // 20110801  M. Kelsey -- Add fill() functions to replicate ctors, allowing
 //		reuse of objects as buffers; c.f. G4InuclNuclei.
+// 20110922  M. Kelsey -- Add stream argument to printParticle() => print()
 
 #ifndef G4INUCL_ELEMENTARY_PARTICLE_HH
 #define G4INUCL_ELEMENTARY_PARTICLE_HH
@@ -128,7 +129,7 @@ public:
 
   G4bool valid() const { return type()>0; }
 
-  virtual void printParticle() const;
+  virtual void print(std::ostream& os) const;
 
   static G4int getStrangeness(G4int type);
   static G4double getParticleMass(G4int type);

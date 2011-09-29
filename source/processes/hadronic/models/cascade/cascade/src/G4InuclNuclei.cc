@@ -47,6 +47,8 @@
 // 20110427  M. Kelsey -- Remove PDG-code warning
 // 20110721  M. Kelsey -- Follow base-class ctor change to pass model directly
 // 20110829  M. Kelsey -- Add constructor to copy G4V3DNucleus input
+// 20110919  M. Kelsey -- Special case:  Allow fill(A=0,Z=0) to make dummy
+// 20110922  M. Kelsey -- Add stream argument to printParticle() => print()
 
 #include "G4InuclNuclei.hh"
 #include "G4Fragment.hh"
@@ -161,6 +163,12 @@ void G4InuclNuclei::fill(G4double ekin, G4int a, G4int z, G4double exc,
   setModel(model);
 }
 
+void G4InuclNuclei::clear() {
+  setDefinition(0);
+  clearExitonConfiguration();
+  setModel(G4InuclParticle::DefaultModel);
+}
+
 
 // Change excitation energy while keeping momentum vector constant
 
@@ -183,6 +191,9 @@ void G4InuclNuclei::setExitationEnergy(G4double e) {
 //	  G4ParticleTable::GetIon() uses (Z,A)!
 
 G4ParticleDefinition* G4InuclNuclei::makeDefinition(G4int a, G4int z) {
+  // SPECIAL CASE:  (0,0) means create dummy without definition
+  if (0 == a && 0 == z) return 0;
+
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition *pd = pTable->GetIon(z, a, 0.);
 
@@ -260,9 +271,9 @@ G4InuclNuclei& G4InuclNuclei::operator=(const G4InuclNuclei& right) {
 
 // Dump particle properties for diagnostics
 
-void G4InuclNuclei::printParticle() const {
-  G4InuclParticle::printParticle();
-  G4cout << " Nucleus: " << getDefinition()->GetParticleName() 
-	 << " A " << getA() << " Z " << getZ() << " mass " << getMass()
-	 << " Eex (MeV) " << getExitationEnergy() << G4endl;
+void G4InuclNuclei::print(std::ostream& os) const {
+  G4InuclParticle::print(os);
+  os << G4endl << " Nucleus: " << getDefinition()->GetParticleName() 
+     << " A " << getA() << " Z " << getZ() << " mass " << getMass()
+     << " Eex (MeV) " << getExitationEnergy();
 }
