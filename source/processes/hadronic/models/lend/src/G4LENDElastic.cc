@@ -9,8 +9,11 @@ G4HadFinalState * G4LENDElastic::ApplyYourself(const G4HadProjectile& aTrack, G4
 
    G4double temp = aTrack.GetMaterial()->GetTemperature();
 
-   G4int iZ = int ( aTarg.GetZ() );
-   G4int iA = int ( aTarg.GetN() );
+   //G4int iZ = int ( aTarg.GetZ() );
+   //G4int iA = int ( aTarg.GetN() );
+   //migrate to integer A and Z (GetN_asInt returns number of neutrons in the nucleus since this) 
+   G4int iZ = aTarg.GetZ_asInt();
+   G4int iA = aTarg.GetA_asInt();
 
    G4double ke = aTrack.GetKineticEnergy();
 
@@ -62,21 +65,37 @@ G4HadFinalState * G4LENDElastic::ApplyYourself(const G4HadProjectile& aTrack, G4
        G4double cms_theta=cms3Mom.theta();
        G4double cms_phi=cms3Mom.phi();
        G4ThreeVector tempVector;
-       tempVector.setX(std::cos(theta)*std::sin(cms_theta)*std::cos(cms_phi)
+       tempVector.setX( std::cos(theta)*std::sin(cms_theta)*std::cos(cms_phi)
                        +std::sin(theta)*std::cos(phi)*std::cos(cms_theta)*std::cos(cms_phi)
-                       -std::sin(theta)*std::sin(phi)*std::sin(cms_phi)  );
-       tempVector.setY(std::cos(theta)*std::sin(cms_theta)*std::sin(cms_phi)
+                       -std::sin(theta)*std::sin(phi)*std::sin(cms_phi) );
+       tempVector.setY( std::cos(theta)*std::sin(cms_theta)*std::sin(cms_phi)
                        +std::sin(theta)*std::cos(phi)*std::cos(cms_theta)*std::sin(cms_phi)
-                       +std::sin(theta)*std::sin(phi)*std::cos(cms_phi)  );
-       tempVector.setZ(std::cos(theta)*std::cos(cms_theta)
-                       -std::sin(theta)*std::cos(phi)*std::sin(cms_theta)  );
+                       +std::sin(theta)*std::sin(phi)*std::cos(cms_phi) );
+       tempVector.setZ( std::cos(theta)*std::cos(cms_theta)
+                       -std::sin(theta)*std::cos(phi)*std::sin(cms_theta) );
        tempVector *= en;
        theNeutron.SetMomentum(tempVector);
        theTarget.SetMomentum(-tempVector);
        G4double tP = theTarget.GetTotalMomentum();
        G4double tM = theTarget.GetMass();
        theTarget.SetTotalEnergy(std::sqrt((tP+tM)*(tP+tM)-2.*tP*tM));
+
+
        theNeutron.Lorentz(theNeutron, -1.*theCMS);
+
+//110913 Add Protection for very low energy (1e-6eV) scattering 
+      if ( theNeutron.GetKineticEnergy() <= 0 )
+      {
+         theNeutron.SetTotalEnergy ( theNeutron.GetMass() * ( 1 + std::pow( 10 , -15.65 ) ) );
+      }
+
+      theTarget.Lorentz(theTarget, -1.*theCMS);
+      if ( theTarget.GetKineticEnergy() < 0 )
+      {
+         theTarget.SetTotalEnergy ( theTarget.GetMass() * ( 1 + std::pow( 10 , -15.65 ) ) );
+      }
+//110913 END
+
        theTarget.Lorentz(theTarget, -1.*theCMS);
 
      theResult->SetEnergyChange(theNeutron.GetKineticEnergy());
@@ -92,3 +111,4 @@ G4HadFinalState * G4LENDElastic::ApplyYourself(const G4HadProjectile& aTrack, G4
    return theResult; 
 
 }
+

@@ -141,8 +141,11 @@ G4HadFinalState * G4LENDModel::ApplyYourself(const G4HadProjectile& aTrack, G4Nu
 
    G4double temp = aTrack.GetMaterial()->GetTemperature();
 
-   G4int iZ = int ( aTarg.GetZ() );
-   G4int iA = int ( aTarg.GetN() );
+   //G4int iZ = int ( aTarg.GetZ() );
+   //G4int iA = int ( aTarg.GetN() );
+   //migrate to integer A and Z (GetN_asInt returns number of neutrons in the nucleus since this) 
+   G4int iZ = aTarg.GetZ_asInt();
+   G4int iA = aTarg.GetA_asInt();
 
    G4double ke = aTrack.GetKineticEnergy();
 
