@@ -218,13 +218,35 @@ void G4EmStandardPhysics_option1::ConstructProcess()
       ph->RegisterProcess(new G4hMultipleScattering(), particle);
       ph->RegisterProcess(new G4ionIonisation(), particle);
 
-    } else if (particleName == "pi+" ||
-               particleName == "pi-" ||
-	       particleName == "kaon+" ||
-               particleName == "kaon-" ||
-               particleName == "proton" ) {
+    } else if (particleName == "pi+" || particleName == "pi-") {
 
-      ph->RegisterProcess(new G4hMultipleScattering(), particle);
+      G4MuMultipleScattering* msc = new G4MuMultipleScattering();
+      msc->AddEmModel(0, new G4WentzelVIModel());
+
+      ph->RegisterProcess(msc, particle);
+      //      ph->RegisterProcess(new G4hMultipleScattering(), particle);
+      ph->RegisterProcess(new G4hIonisation(), particle);
+      ph->RegisterProcess(new G4hBremsstrahlung(), particle);
+      ph->RegisterProcess(new G4hPairProduction(), particle);
+
+    } else if (particleName == "kaon+" || particleName == "kaon-") {
+
+      G4MuMultipleScattering* msc = new G4MuMultipleScattering();
+      msc->AddEmModel(0, new G4WentzelVIModel());
+
+      ph->RegisterProcess(msc, particle);
+      //ph->RegisterProcess(new G4hMultipleScattering(), particle);
+      ph->RegisterProcess(new G4hIonisation(), particle);
+      ph->RegisterProcess(new G4hBremsstrahlung(), particle);
+      ph->RegisterProcess(new G4hPairProduction(), particle);
+
+    } else if (particleName == "proton" || particleName == "anti_proton") {
+
+      G4MuMultipleScattering* msc = new G4MuMultipleScattering();
+      msc->AddEmModel(0, new G4WentzelVIModel());
+
+      ph->RegisterProcess(msc, particle);
+      //ph->RegisterProcess(new G4hMultipleScattering(), particle);
       ph->RegisterProcess(new G4hIonisation(), particle);
       ph->RegisterProcess(new G4hBremsstrahlung(), particle);
       ph->RegisterProcess(new G4hPairProduction(), particle);
@@ -240,7 +262,6 @@ void G4EmStandardPhysics_option1::ConstructProcess()
                particleName == "anti_deuteron" ||
                particleName == "anti_lambda_c+" ||
                particleName == "anti_omega-" ||
-               particleName == "anti_proton" ||
                particleName == "anti_sigma_c+" ||
                particleName == "anti_sigma_c++" ||
                particleName == "anti_sigma+" ||

@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14-09-2011, V.Ivanchenko               (phys-lists-V09-04-44)
+- G4EmStandardPhysics_option1,2 - pi+-, kaon+-, proton, anti_proton 
+      use WentzelVI model of multiple scattering
+- G4EmStandardPhysics_option2 - e- use Livermore bremsstrahlung 
+      below 100 MeV
+
 05-09-2011, A.M., M.K., S.I.         (phys-lists-V09-04-43)
 - Updated sources.cmake in builders for new dna architecture
 

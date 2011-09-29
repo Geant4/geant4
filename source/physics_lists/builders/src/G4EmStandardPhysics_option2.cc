@@ -72,6 +72,7 @@
 #include "G4eBremsstrahlungRelModel.hh"
 #include "G4eplusAnnihilation.hh"
 #include "G4Generator2BS.hh"
+#include "G4LivermoreBremsstrahlungModel.hh"
 #include "G4UAtomicDeexcitation.hh"
 
 #include "G4MuIonisation.hh"
@@ -193,7 +194,8 @@ void G4EmStandardPhysics_option2::ConstructProcess()
       msc->AddEmModel(0, new G4UrbanMscModel95());
       //      msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
       G4eBremsstrahlung* brem = new G4eBremsstrahlung();
-      G4eBremsstrahlungRelModel* br1 = new G4eBremsstrahlungRelModel();
+      //G4eBremsstrahlungRelModel* br1 = new G4eBremsstrahlungRelModel();
+      G4LivermoreBremsstrahlungModel* br1 = new G4LivermoreBremsstrahlungModel();
       G4eBremsstrahlungRelModel* br2 = new G4eBremsstrahlungRelModel();
       br1->SetAngularDistribution(new G4Generator2BS());
       br2->SetAngularDistribution(new G4Generator2BS());
@@ -212,18 +214,10 @@ void G4EmStandardPhysics_option2::ConstructProcess()
       //msc->AddEmModel(0, new G4WentzelVIModel());
       //msc->SetRangeFactor(0.04);
       // msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
-      G4eBremsstrahlung* brem = new G4eBremsstrahlung();
-      G4eBremsstrahlungRelModel* br1 = new G4eBremsstrahlungRelModel();
-      G4eBremsstrahlungRelModel* br2 = new G4eBremsstrahlungRelModel();
-      br1->SetAngularDistribution(new G4Generator2BS());
-      br2->SetAngularDistribution(new G4Generator2BS());
-      brem->SetEmModel(br1,1);
-      brem->SetEmModel(br2,2);
-      br2->SetLowEnergyLimit(100*MeV);
 
       ph->RegisterProcess(msc, particle);
       ph->RegisterProcess(new G4eIonisation(), particle);
-      ph->RegisterProcess(brem, particle);
+      ph->RegisterProcess(new G4eBremsstrahlung(), particle);
       ph->RegisterProcess(new G4eplusAnnihilation(), particle);
 
     } else if (particleName == "mu+" ||
@@ -253,16 +247,35 @@ void G4EmStandardPhysics_option2::ConstructProcess()
       ph->RegisterProcess(new G4hMultipleScattering(), particle);
       ph->RegisterProcess(ionIoni, particle);
 
-    } else if (particleName == "pi+" ||
-               particleName == "pi-" ||
-	       particleName == "kaon+" ||
-               particleName == "kaon-" ||
-               particleName == "proton" ) {
+    } else if (particleName == "pi+" || particleName == "pi-") {
 
-      G4hMultipleScattering* msc = new G4hMultipleScattering();
+      G4MuMultipleScattering* msc = new G4MuMultipleScattering();
       msc->AddEmModel(0, new G4WentzelVIModel());
 
       ph->RegisterProcess(msc, particle);
+      //      ph->RegisterProcess(new G4hMultipleScattering(), particle);
+      ph->RegisterProcess(new G4hIonisation(), particle);
+      ph->RegisterProcess(new G4hBremsstrahlung(), particle);
+      ph->RegisterProcess(new G4hPairProduction(), particle);
+
+    } else if (particleName == "kaon+" || particleName == "kaon-") {
+
+      G4MuMultipleScattering* msc = new G4MuMultipleScattering();
+      msc->AddEmModel(0, new G4WentzelVIModel());
+
+      ph->RegisterProcess(msc, particle);
+      //ph->RegisterProcess(new G4hMultipleScattering(), particle);
+      ph->RegisterProcess(new G4hIonisation(), particle);
+      ph->RegisterProcess(new G4hBremsstrahlung(), particle);
+      ph->RegisterProcess(new G4hPairProduction(), particle);
+
+    } else if (particleName == "proton" || particleName == "anti_proton") {
+
+      G4MuMultipleScattering* msc = new G4MuMultipleScattering();
+      msc->AddEmModel(0, new G4WentzelVIModel());
+
+      ph->RegisterProcess(msc, particle);
+      //ph->RegisterProcess(new G4hMultipleScattering(), particle);
       ph->RegisterProcess(new G4hIonisation(), particle);
       ph->RegisterProcess(new G4hBremsstrahlung(), particle);
       ph->RegisterProcess(new G4hPairProduction(), particle);
@@ -278,7 +291,6 @@ void G4EmStandardPhysics_option2::ConstructProcess()
                particleName == "anti_deuteron" ||
                particleName == "anti_lambda_c+" ||
                particleName == "anti_omega-" ||
-               particleName == "anti_proton" ||
                particleName == "anti_sigma_c+" ||
                particleName == "anti_sigma_c++" ||
                particleName == "anti_sigma+" ||
@@ -308,7 +320,7 @@ void G4EmStandardPhysics_option2::ConstructProcess()
   //    
   G4EmProcessOptions opt;
   opt.SetVerbose(verbose);
-  //opt.SetApplyCuts(true);
+  opt.SetApplyCuts(true);
   
   // Scattering options
   //
