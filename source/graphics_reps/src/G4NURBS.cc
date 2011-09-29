@@ -391,17 +391,21 @@ void G4NURBS::Conscheck() const
   { 
     if (m[dir].order<=0)
     { 
-      G4cerr << "\nFATAL ERROR: G4NURBS::G4NURBS: The order in the "
-             << G4NURBS::Tochar(dir) 
-             << " direction must be >= 1" << G4endl;
-      G4Exception("ERROR - G4NURBS::Conscheck()");
+      G4ExceptionDescription ed;
+      ed << "The order in the "
+	 << G4NURBS::Tochar(dir) 
+	 << " direction must be >= 1" << G4endl;
+      G4Exception("G4NURBS::Conscheck()",
+		  "greps1001", FatalException, ed);
     }
     if (m[dir].nbrCtrlPts<=0)
     {
-      G4cerr << "\nFATAL ERROR: G4NURBS::G4NURBS: The number of control points "
+      G4ExceptionDescription ed;
+      ed << "The number of control points "
              << G4NURBS::Tochar(dir) 
              << " direction must be >= 1" << G4endl;
-      G4Exception("ERROR - G4NURBS::Conscheck()");
+      G4Exception("G4NURBS::Conscheck()",
+		  "greps1002", FatalException, ed);
     }
   }  // end of dummy
 }
@@ -425,11 +429,12 @@ G4NURBS::G4NURBS ( t_order in_Uorder, t_order in_Vorder,
   // CtrlPts
   if (! (mpCtrlPts = in_pCtrlPts) )
   {
-    G4cerr << "\nFATAL ERROR: G4NURBS::G4NURBS: "
-           << "A NURBS MUST HAVE CONTROL POINTS!\n"
-           << "\teven if they are defined later, the array must be allocated."
-           << G4endl;
-    G4Exception("ERROR - G4NURBS::G4NURBS()");
+    G4ExceptionDescription ed;
+    ed << "A NURBS MUST HAVE CONTROL POINTS!\n"
+       << "\teven if they are defined later, the array must be allocated."
+       << G4endl;
+    G4Exception("G4NURBS::G4NURBS()",
+		"greps1003", FatalException, ed);
   }
   //mnbralias = 0;
 
@@ -442,12 +447,13 @@ G4NURBS::G4NURBS ( t_order in_Uorder, t_order in_Vorder,
     {  // make some regular knots between 0 & 1
       if(!MakeKnotVector(m[dir], Regular))
       {
-        G4cerr << "\nFATAL ERROR: G4NURBS::G4NURBS: "
-               << "Unable to make a Regular knot vector along "
-               << G4NURBS::Tochar(dir)
-               << " direction."
-               << G4endl;
-        G4Exception("ERROR - G4NURBS::G4NURBS()");
+	G4ExceptionDescription ed;
+        ed << "Unable to make a Regular knot vector along "
+	   << G4NURBS::Tochar(dir)
+	   << " direction."
+	   << G4endl;
+        G4Exception("G4NURBS::G4NURBS()",
+		    "greps1004", FatalException, ed);
       }
       //m[dir].nbralias = 0;
     }  // end of knots-making
@@ -485,15 +491,16 @@ G4NURBS::G4NURBS( t_order in_Uorder, t_order in_Vorder,
     m[dir].pKnots = 0;  // (allocation under our control)
     if ( flag != UserDefined && !MakeKnotVector(m[dir], flag) )
     {
-      G4cerr << "\nFATAL ERROR: G4NURBS::G4NURBS: "
-             << "Unable to make knot vector along "
-             << G4NURBS::Tochar(dir)
-             << " direction. (" << m[dir].nbrKnots 
-             << " knots requested for a " 
-             << flag 
-             << " knots vector)"
-             << G4endl;
-      G4Exception("ERROR - G4NURBS::G4NURBS()");
+      G4ExceptionDescription ed;
+      ed << "Unable to make knot vector along "
+	 << G4NURBS::Tochar(dir)
+	 << " direction. (" << m[dir].nbrKnots 
+	 << " knots requested for a " 
+	 << flag 
+	 << " knots vector)"
+	 << G4endl;
+      G4Exception("G4NURBS::G4NURBS()",
+		  "greps1005", FatalException, ed);
     }
     //m[dir].nbralias = 0;
   }

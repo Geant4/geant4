@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16th September 2011  John Allison  (greps-V09-04-05)
+- Migrated to new G4Exception.
+
 2nd August 2011  John Allison  (greps-V09-04-04)
 - G4PolyhedronArbitrary:  Added SetReferences and InvertFacets.
   SetReferences is necessary at the end to complete the polyhedron.

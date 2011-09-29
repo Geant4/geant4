@@ -35,15 +35,14 @@
 
 #include "globals.hh"
 #include "G4String.hh"
-#include <sstream>
 
 struct G4ConversionFatalError {
   
   void ReportError(const G4String& input, const G4String& message) const {
-    std::ostringstream o;
-    o <<input<<": "<<message;
-    G4Exception
-      ("G4ConversionAbort", "InvalidInput", FatalErrorInArgument, o.str().c_str());
+    G4ExceptionDescription ed; 
+    ed <<input<<": "<<message<<G4endl;
+    G4Exception("G4ConversionFatalError::ReportError",
+		"greps0101", FatalErrorInArgument, ed);
   }
   
 };

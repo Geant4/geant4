@@ -32,8 +32,6 @@
 
 #include "G4Colour.hh"
 
-#include <sstream>
-
 G4Colour::G4Colour (G4double r, G4double g, G4double b, G4double a):
 red (r), green (g), blue (b), alpha (a)
 {
@@ -85,11 +83,12 @@ G4Colour::AddToMap(const G4String& key, const G4Colour& colour)
   
   if (iter == fColourMap.end()) fColourMap[myKey] = colour;  
   else {
-    std::ostringstream o; 
-    o << "G4Colour with key "<<myKey<<" already exists ";
+    G4ExceptionDescription ed; 
+    ed << "G4Colour with key "<<myKey<<" already exists."<<G4endl;
     G4Exception
       ("G4Colour::AddToMap(const G4String& key, const G4Colour& colour)",
-       "ColourKeyExists", JustWarning, o.str().c_str());
+       "greps0001", JustWarning, ed,
+       "Colour key exists");
   }
 }
 

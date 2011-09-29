@@ -2120,8 +2120,8 @@ HepPolyhedronEllipsoid::HepPolyhedronEllipsoid(G4double ax, G4double by,
   rr = new G4double[np1+1];
   if (!zz || !rr)
     {
-      std::cerr << "Out of memory in HepPolyhedronEllipsoid!" << std::endl;
-        //Exception("Out of memory in HepPolyhedronEllipsoid!");
+      G4Exception("HepPolyhedronEllipsoid::HepPolyhedronEllipsoid",
+		  "greps0002", FatalException, "Out of memory");
     }
 
   G4double a = dthe/(np1-cutflag-1);
