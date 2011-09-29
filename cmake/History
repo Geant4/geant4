@@ -30,6 +30,21 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 16th 2011 - B. Morgan (cmake-V09-04-23)
+- Templates/Geant4Config.cmake.in : Addition of G4VIS_USE and G4UI_USE to list
+  of definitions has been made conditional on the existence of the variables
+  G4VIS_NONE and G4UI_NONE. If those variables are set, e.g. via -DG4UI_NONE,
+  the corresponding compile definition will not be set. This gives
+  requested behaviour, but as before this is a temporary hack.
+
+
+September 16th 2011 - B. Morgan (cmake-V09-04-22)
+- Templates/Geant4Config.cmake.in : Added G4VIS_USE and G4UI_USE to list
+  of core compile definitions. This is seemingly needed to support test
+  building, but should only be seen as a temporary fix. These variables
+  should be set at the application level.
+
+
 September 15th 2011 - P. Mato (cmake-V09-04-21)
 - Templates/UseGeant4_internal.cmake: Fixed a bug affecting tests on Windows.
 

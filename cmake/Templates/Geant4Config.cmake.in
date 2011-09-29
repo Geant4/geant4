@@ -97,9 +97,18 @@ get_filename_component(_thisdir "${CMAKE_CURRENT_LIST_FILE}" PATH)
 #----------------------------------------------------------------------------
 # Set the base compile definitions required to use Geant4
 # Components may append to this
+# We set VIS/UI_USE directly here, because for now they are, unfortunately,
+# always needed.
 #
 set(Geant4_DEFINITIONS @GEANT4_CORE_DEFINITIONS@)
 
+if(NOT G4UI_NONE)
+    list(APPEND Geant4_DEFINITIONS -DG4UI_USE)
+endif()
+
+if(NOT G4VIS_NONE)
+    list(APPEND Geant4_DEFINITIONS -DG4VIS_USE)
+endif()
 
 #----------------------------------------------------------------------------
 # Configure the path to the Geant4 headers, using a relative path if possible.
