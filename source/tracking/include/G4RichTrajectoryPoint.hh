@@ -108,6 +108,8 @@ private:
   G4double fPostStepPointGlobalTime;
   G4TouchableHandle fpPreStepPointVolume;
   G4TouchableHandle fpPostStepPointVolume;
+  G4double fPreStepPointWeight;
+  G4double fPostStepPointWeight;
 };
 
 #if defined G4TRACKING_ALLOC_EXPORT
