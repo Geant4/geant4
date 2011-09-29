@@ -1,6 +1,7 @@
 $Id: History,v 1.120 2010-11-10 08:42:47 kurasige Exp $
 -------------------------------------------------------------------
 
+
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
@@ -16,6 +17,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- Septeimber 21st,  2011  H.Kurashige (track-V09-04-10)
+- Re-Activate SetParentWeightByTracK() method because Adjoint Process relays on it
+- ProposeParenetWeight method affects seconday trackes if SecondaryTrackWeightByProcess flag 
+  is set true even wheen SetParentWeightByTracK is set to false
 
 -September 17, 2011, H.Kurashige (track-V09-04-09)
 - Fix problems related to treatments of weight in ParticleChange (see problem #1243)

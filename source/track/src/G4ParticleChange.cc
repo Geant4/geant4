@@ -314,11 +314,11 @@ G4Step* G4ParticleChange::UpdateStepForAlongStep(G4Step* pStep)
   pPostStepPoint->AddProperTime( theProperTimeChange 
 				 - pPreStepPoint->GetProperTime());
 
-  if (isParentWeightModified) {
+  if (isParentWeightProposed) {
     // update weight
     G4double newWeight= theParentWeight/(pPreStepPoint->GetWeight())
       * (pPostStepPoint->GetWeight());
-    pPostStepPoint->SetWeight( newWeight );
+    if (isParentWeightSetByProcess) pPostStepPoint->SetWeight( newWeight );
     
     if (!fSetSecondaryWeightByProcess) {    
       // Set weight of secondary tracks
@@ -370,9 +370,9 @@ G4Step* G4ParticleChange::UpdateStepForPostStep(G4Step* pStep)
   pPostStepPoint->SetLocalTime( theTimeChange );	       
   pPostStepPoint->SetProperTime( theProperTimeChange  );
 
-  if (isParentWeightModified) {
+  if (isParentWeightProposed) {
     // update weight
-    pPostStepPoint->SetWeight( theParentWeight );
+    if( isParentWeightSetByProcess) pPostStepPoint->SetWeight( theParentWeight );
     if (!fSetSecondaryWeightByProcess) {    
       // Set weight of secondary tracks
       for (G4int index= 0; index<theNumberOfSecondaries; index++){
@@ -419,9 +419,9 @@ G4Step* G4ParticleChange::UpdateStepForAtRest(G4Step* pStep)
   pPostStepPoint->SetLocalTime( theTimeChange );	       
   pPostStepPoint->SetProperTime( theProperTimeChange  );
 
-  if (isParentWeightModified) {
+  if (isParentWeightProposed ) {
     // update weight 
-    pPostStepPoint->SetWeight( theParentWeight );
+    if (isParentWeightSetByProcess) pPostStepPoint->SetWeight( theParentWeight );
     if (!fSetSecondaryWeightByProcess) {    
       // Set weight of secondary tracks
       for (G4int index= 0; index<theNumberOfSecondaries; index++){

@@ -126,10 +126,12 @@ G4Step* G4ParticleChangeForGamma::UpdateStepForAtRest(G4Step* pStep)
 {
   pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
   pStep->SetStepLength( 0.0 );
-  if (isParentWeightModified) {
-    // update weight
-    G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
-    pPostStepPoint->SetWeight( theParentWeight );
+  if (isParentWeightProposed) {
+    if (isParentWeightSetByProcess) {
+      // update weight
+      G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
+      pPostStepPoint->SetWeight( theParentWeight );
+    }
     if (!fSetSecondaryWeightByProcess) {    
       // Set weight of secondary tracks
       for (G4int index= 0; index<theNumberOfSecondaries; index++){
@@ -149,9 +151,9 @@ G4Step* G4ParticleChangeForGamma::UpdateStepForPostStep(G4Step* pStep)
   pPostStepPoint->SetMomentumDirection( proposedMomentumDirection );
   pPostStepPoint->SetPolarization( proposedPolarization );
 
-  if (isParentWeightModified ){
+  if (isParentWeightProposed ){
     // update weight
-    pPostStepPoint->SetWeight( theParentWeight );
+    if (isParentWeightSetByProcess) pPostStepPoint->SetWeight( theParentWeight );
     if (!fSetSecondaryWeightByProcess) {    
       // Set weight of secondary tracks
       for (G4int index= 0; index<theNumberOfSecondaries; index++){

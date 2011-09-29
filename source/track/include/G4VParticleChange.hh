@@ -208,16 +208,19 @@ class G4VParticleChange
 
     void     SetSecondaryWeightByProcess(G4bool);
     G4bool   IsSecondaryWeightSetByProcess() const;  
-    // In default (fSecondaryWeightByProcess flag is false), 
+    // In default (fSecondaryWeightByProcess flag is true), 
     // the weight of secondary tracks will not be changed 
     // (i.e. the process determine the secodary weight)
     // If fSecondaryWeightByProcess flag is false, the weight of 
     // secondary tracks will be set to the parent weight
 
-    void     SetParentWeightByProcess(G4bool);
-    G4bool   IsParentWeightSetByProcess() const;  
-    // These two methods are obsolete 
+    void   SetParentWeightByProcess(G4bool);
     // Weight of parent track can be changed only via ParticleChange 
+    // If you set this flag to 'false', 
+    // the weight of the parent track will not be modified,
+    // but the proposed weight is applied to secondaries
+    // (if SetSecondaryWeightByProcess is set to false) 
+    G4bool   IsParentWeightSetByProcess() const;  
 
     virtual void DumpInfo() const;
     //  Print out information
@@ -266,8 +269,9 @@ class G4VParticleChange
 
     G4double theParentWeight;
     // Weight ofparent track
-    G4bool isParentWeightModified;
-    // Weight ofparent track
+    G4bool isParentWeightSetByProcess;
+    G4bool isParentWeightProposed;
+    // flags for Weight ofparent track
     G4bool   fSetSecondaryWeightByProcess;  
     //  flag for setting weight of secondaries  
  

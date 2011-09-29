@@ -56,7 +56,8 @@ G4VParticleChange::G4VParticleChange():
    theFirstStepInVolume(false),
    theLastStepInVolume(false),
    theParentWeight(1.0),
-   isParentWeightModified(false),
+   isParentWeightSetByProcess(true),
+   isParentWeightProposed(false),
    fSetSecondaryWeightByProcess(true),
    verboseLevel(1), 
    debugFlag(false)
@@ -97,7 +98,8 @@ G4VParticleChange::G4VParticleChange(const G4VParticleChange &right):
   theFirstStepInVolume( right.theFirstStepInVolume),
   theLastStepInVolume(right.theLastStepInVolume),
   theParentWeight(right.theParentWeight),
-  isParentWeightModified(false),
+  isParentWeightSetByProcess(true),
+  isParentWeightProposed(false),
   fSetSecondaryWeightByProcess(right.fSetSecondaryWeightByProcess),
   verboseLevel(right.verboseLevel),
   debugFlag(right.debugFlag)
@@ -134,7 +136,8 @@ G4VParticleChange & G4VParticleChange::operator=(const G4VParticleChange &right)
     theLastStepInVolume =  right.theLastStepInVolume;
 
     theParentWeight = right.theParentWeight;
-    isParentWeightModified = right.isParentWeightModified;
+    isParentWeightSetByProcess = right.isParentWeightSetByProcess;
+    isParentWeightProposed = right.isParentWeightProposed;
     fSetSecondaryWeightByProcess = right.fSetSecondaryWeightByProcess;
 
     verboseLevel = right.verboseLevel;
@@ -202,8 +205,10 @@ G4Step* G4VParticleChange::UpdateStepInfo(G4Step* pStep)
 
 G4Step* G4VParticleChange::UpdateStepForAtRest(G4Step* Step)
 { 
-  if (isParentWeightModified) {
-    Step->GetPostStepPoint()->SetWeight( theParentWeight );
+  if (isParentWeightProposed ){
+    if (isParentWeightSetByProcess) {
+      Step->GetPostStepPoint()->SetWeight( theParentWeight );
+    }
 
     if (!fSetSecondaryWeightByProcess) {    
       // Set weight of secondary tracks
@@ -220,11 +225,13 @@ G4Step* G4VParticleChange::UpdateStepForAtRest(G4Step* Step)
 
 G4Step* G4VParticleChange::UpdateStepForAlongStep(G4Step* Step)
 {
-  if (isParentWeightModified) {
+  if (isParentWeightProposed ){ 
     // Weight is relaclulated 
     G4double newWeight= theParentWeight/(Step->GetPreStepPoint()->GetWeight())*(Step->GetPostStepPoint()->GetWeight());
-    Step->GetPostStepPoint()->SetWeight( newWeight );
-    
+    if (isParentWeightSetByProcess) {
+      Step->GetPostStepPoint()->SetWeight( newWeight );
+    }
+ 
     if (!fSetSecondaryWeightByProcess) {    
       // Set weight of secondary tracks
       for (G4int index= 0; index<theNumberOfSecondaries; index++){
@@ -240,9 +247,11 @@ G4Step* G4VParticleChange::UpdateStepForAlongStep(G4Step* Step)
 
 G4Step* G4VParticleChange::UpdateStepForPostStep(G4Step* Step)
 {
-  if (isParentWeightModified) {
-    Step->GetPostStepPoint()->SetWeight( theParentWeight );
-    
+  if (isParentWeightProposed) {
+    if (isParentWeightSetByProcess) {
+      Step->GetPostStepPoint()->SetWeight( theParentWeight );
+    }
+
     if (!fSetSecondaryWeightByProcess) {    
       // Set weight of secondary tracks
       for (G4int index= 0; index<theNumberOfSecondaries; index++){
@@ -451,38 +460,15 @@ G4double G4VParticleChange::GetAccuracyForException() const
 
 
 /////////////////////////////////////////////////////////
-// 
-// These are obsolete methods
-void  G4VParticleChange::SetParentWeightByProcess(G4bool )
+void  G4VParticleChange::SetParentWeightByProcess(G4bool val)
 {
-  static G4bool isCalled = false;
-  if (!isCalled) {
-#ifdef G4VERBOSE
-    if (verboseLevel>0) {
-      G4cout << "G4VParticleChange::SetParentWeightByProcess() "
-	     << " Warning : This method is obsolete. No effects!"
-	     << G4endl;
-    }
-#endif
-  }
-  isCalled = true;
+  isParentWeightSetByProcess = val;
 }
 
 
 G4bool   G4VParticleChange::IsParentWeightSetByProcess() const
 {
-  static G4bool isCalled = false;
-  if (!isCalled) {
-#ifdef G4VERBOSE
-    if (verboseLevel>0) {
-      G4cout << "G4VParticleChange::IsParentWeightByProcess() "
-	     << " Warning : This method is obsolete. No effects!"
-	     << G4endl;
-    }
-#endif
-  }
-  isCalled = true;
-  return true;
+  return  isParentWeightSetByProcess;
 }
 
 

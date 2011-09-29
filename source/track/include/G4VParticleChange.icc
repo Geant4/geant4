@@ -199,7 +199,7 @@ inline void G4VParticleChange::InitializeParentWeight(const G4Track& track)
 {
   // set the parent track's weight
   theParentWeight = track.GetWeight();
-  isParentWeightModified = false;
+  isParentWeightProposed = false;
 }
 
 inline void G4VParticleChange::InitializeTrueStepLength(const G4Track& track)
@@ -313,7 +313,7 @@ inline
  void     G4VParticleChange::ProposeWeight(G4double w)
 {
   theParentWeight = w;
-  isParentWeightModified = true;
+  isParentWeightProposed = true;
 }
 
 inline

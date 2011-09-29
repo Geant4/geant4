@@ -184,7 +184,7 @@ inline void G4ParticleChangeForGamma::InitializeForPostStep(const G4Track& track
   theNonIonizingEnergyDeposit = 0.0;
   InitializeSecondaries(track);
   theParentWeight = track.GetWeight();
-  isParentWeightModified = false;
+  isParentWeightProposed = false;
   proposedKinEnergy = track.GetKineticEnergy();
   proposedMomentumDirection = track.GetMomentumDirection();
   proposedPolarization = track.GetPolarization();

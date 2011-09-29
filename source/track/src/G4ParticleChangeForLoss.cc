@@ -116,7 +116,8 @@ G4ParticleChangeForLoss & G4ParticleChangeForLoss::operator=(
     theLocalEnergyDeposit = right.theLocalEnergyDeposit;
     theSteppingControlFlag = right.theSteppingControlFlag;
     theParentWeight = right.theParentWeight;
-    isParentWeightModified = right.isParentWeightModified;
+    isParentWeightProposed = right.isParentWeightProposed;
+    isParentWeightSetByProcess = right.isParentWeightSetByProcess;
     fSetSecondaryWeightByProcess = right.fSetSecondaryWeightByProcess;
 
     currentTrack = right.currentTrack;
@@ -223,12 +224,12 @@ G4Step* G4ParticleChangeForLoss::UpdateStepForAlongStep(G4Step* pStep)
   pPostStepPoint->SetVelocity(pStep->GetTrack()->CalculateVelocity());
   pStep->GetTrack()->SetKineticEnergy(pStep->GetPreStepPoint()->GetKineticEnergy()); 
 
-  if (isParentWeightModified) {
+  if (isParentWeightProposed) {
     // update weight 
     G4StepPoint* pPreStepPoint = pStep->GetPreStepPoint();
     G4double newWeight= theParentWeight/(pPreStepPoint->GetWeight())
       * (pPostStepPoint->GetWeight());
-    pPostStepPoint->SetWeight( newWeight );
+    if (isParentWeightSetByProcess) pPostStepPoint->SetWeight( newWeight );
     if (!fSetSecondaryWeightByProcess) {    
       //Set weight of secondary tracks
       for (G4int index= 0; index<theNumberOfSecondaries; index++){
@@ -254,8 +255,8 @@ G4Step* G4ParticleChangeForLoss::UpdateStepForPostStep(G4Step* pStep)
   pPostStepPoint->SetVelocity(pStep->GetTrack()->CalculateVelocity());
   pPostStepPoint->SetPolarization( proposedPolarization );
 
-  if (isParentWeightModified) {
-    pPostStepPoint->SetWeight( theParentWeight );
+  if (isParentWeightProposed) {
+    if (isParentWeightSetByProcess) pPostStepPoint->SetWeight( theParentWeight );
     if (!fSetSecondaryWeightByProcess) {    
       // Set weight of secondary tracks
       for (G4int index= 0; index<theNumberOfSecondaries; index++){
