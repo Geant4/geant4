@@ -16,6 +16,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21st september 2011 John Allison (config-V09-04-15)
+- G4UI_BUILD.gmk: Added G4INTY_BUILD_XT = 1 for G4VIS_BUILD_OPENGLXM_DRIVER
+  and G4VIS_BUILD_OIX_DRIVER.  The vis drivers need Xt, so this covers
+  the case when the user does not build Xt from G4UI_BUILD flags.
+
 31st August 2011 AM, MK, SI (config-V09-04-14)
 - Modified binmake.gmk to add new DNA architecture.
 
