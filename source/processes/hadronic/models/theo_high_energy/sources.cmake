@@ -37,6 +37,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/cross_sections
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/chiral_inv_phase_space/body/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/chiral_inv_phase_space/cross_sections/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/common/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/im_r_matrix/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/util/include)

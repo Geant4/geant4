@@ -35,8 +35,8 @@
 // Class Description - End
 //
 // Modified:
-// 20110809  M. Kelsey -- Remove unnecessary #includes, use forward decls,
-//            Change 3D nucleus to (owned) pointer to base.
+// 20110808  M. Kelsey -- Remove unnecessary #includes, use forward decls,
+//		Change 3D nucleus to (owned) pointer to base.
 
 #ifndef G4QuasiElasticChannel_h
 #define G4QuasiElasticChannel_h
@@ -49,17 +49,18 @@ class G4QuasiFreeRatios;
 class G4DynamicParticle;
 class G4V3DNucleus;
 
+
 class G4QuasiElasticChannel
 {
   public:
 	G4QuasiElasticChannel();
 	~G4QuasiElasticChannel();
-
+	
 	G4double GetFraction(G4Nucleus &theNucleus,
-			     const G4DynamicParticle & thePrimary);
+			     const G4DynamicParticle& thePrimary);
 
 	G4KineticTrackVector* Scatter(G4Nucleus &theNucleus,
-				      const G4DynamicParticle & thePrimary);
+				      const G4DynamicParticle& thePrimary);
 					
   private:
         G4QuasiElasticChannel(const G4QuasiElasticChannel &);

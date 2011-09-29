@@ -14,19 +14,25 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-9-Aug-2011, M. Kelsey	    had-theo-HE-V09-04-02 **BRANCH FROM -V09-04-00**
-- G4QuasiElasticChannel:  Move #includes from .hh to .cc to reduce external
-  dependences.  Follow change in return value of G4V3DNucleus::GetNucleons().
+21-Sep-2011, G.Folger	    had-theo-HE-V09-04-03 
+              note that had-theo-HE-V09-04-02 was done without record 
+- G4ProjectileDiffractiveChannel.cc: finish migration to integer A&Z 
+- G4QuasiElasticChannel: use QuasiFreeRatios in place of QuasiElRatios
 
-- G4TheoFSGenerator.cc: Follow change in return value of
-  G4V3DNucleus::GetNucleons().
+8-Aug-2011, M. Kelsey
+- G4QuasiElasticChannel:  Move #includes from .hh to .cc to reduce external
+  dependences.
+
+5-Aug-2011, M. Kelsey	    had-theo-HE-V09-04-01
+- G4TheoFSGenerator.cc, G4QuasiElasticChannel.cc: Follow change in return
+  value of G4V3DNucleus::GetNucleons()
 
   Requires consistent changes in other packages:
   	hadr-modman-V09-04-01
   	hadr-mod-util-V09-04-02
 	had-partonstring-mgt-V09-04-01
   	hadr-qgsm-V09-04-04
-  	had-theo-HE-V09-04-02
+  	had-theo-HE-V09-04-01
 
 17-Mar-2011 G.Folger        had-theo-HE-V09-04-00
 -  Add G4TheoFSGenerator::GetEnergyMomentumCheckLevel() method. 

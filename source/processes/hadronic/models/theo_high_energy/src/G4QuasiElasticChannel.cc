@@ -36,13 +36,14 @@
 // Class Description - End
 //
 // Modified:
-// 20110809  M. Kelsey -- Follow change to G4V3DNucleus::GetNucleons(), move
-//		Move #includes from .hh, add many missing ones.
+// 20110805  M. Kelsey -- Follow change to G4V3DNucleus::GetNucleons()
+// 20110808  M. Kelsey -- Move #includes from .hh, add many missing
 
 #include "G4QuasiElasticChannel.hh"
-#include "G4DynamicParticle.hh"
+
 #include "G4Fancy3DNucleus.hh"
-#include "G4HadTmpUtil.hh"      /* lrint */
+#include "G4DynamicParticle.hh"
+#include "G4HadTmpUtil.hh"	  /* lrint */
 #include "G4KineticTrack.hh"
 #include "G4KineticTrackVector.hh"
 #include "G4LorentzVector.hh"
@@ -57,8 +58,9 @@
 
 //#define debug_scatter
 
+
 G4QuasiElasticChannel::G4QuasiElasticChannel()
-  : theQuasiElastic(G4QuasiFreeRatios::GetPointer()), 
+  : theQuasiElastic(G4QuasiFreeRatios::GetPointer()),
     the3DNucleus(new G4Fancy3DNucleus) {}
 
 G4QuasiElasticChannel::~G4QuasiElasticChannel()
