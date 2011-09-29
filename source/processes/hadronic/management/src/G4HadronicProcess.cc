@@ -38,7 +38,8 @@
 // Modifications:
 // 05-Jul-2010 V.Ivanchenko cleanup commented lines 
 // 20-Jul-2011 M.Kelsey -- null-pointer checks in DumpState()
-//
+// 24-Sep-2011 M.Kelsey -- Use envvar G4HADRONIC_RANDOM_FILE to save random
+//		engine state before each model call
 
 #include "G4Types.hh"
 #include "G4HadronicProcess.hh"
@@ -62,6 +63,13 @@
 
 #include <typeinfo>
 #include <sstream>
+#include <stdlib.h>
+
+// File-scope variable to capture environment variable at startup
+
+static const char* G4Hadronic_Random_File = getenv("G4HADRONIC_RANDOM_FILE");
+
+// Initialize static variables for isotope production
 
 G4IsoParticleChange * G4HadronicProcess::theIsoResult = 0;
 G4IsoParticleChange * G4HadronicProcess::theOldIsoResult = 0;
@@ -261,6 +269,10 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
   {
     try
     {
+      // Save random engine if requested for debugging
+      if (G4Hadronic_Random_File)
+	CLHEP::HepRandom::saveEngineStatus(G4Hadronic_Random_File);
+
       // Call the interaction
       result = theInteraction->ApplyYourself( thePro, targetNucleus);
       ++reentryCount;
