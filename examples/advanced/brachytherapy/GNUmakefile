@@ -16,6 +16,7 @@ endif
 .PHONY: all
 all: lib bin
 
+
 include $(G4INSTALL)/config/binmake.gmk
 
 

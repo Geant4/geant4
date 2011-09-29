@@ -23,43 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Author: S. Guatelli (susanna@uow.edu.au), with 
+// the support of Ivana Hrivnacova (Ivana.Hrivnacova@cern.ch)
+// $Id$
 //
-// $Id: BrachyPhantomSD.hh,v 1.10 2006-06-29 15:47:48 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//    ********************************
-//    *                              *  
-//    *     BrachyPhantomSD.hh      *
-//    *                              *
-//    ********************************
 
-#ifndef BrachyPhantomSD_h
-#define BrachyPhantomSD_h 1
+#ifndef BrachyAnalysis_h
+#define BrachyAnalysis_h 1
 
-#include "G4VSensitiveDetector.hh"
+#include "g4analysis_defs.hh"
 
-class G4Step;
-class G4HCofThisEvent;
-class G4TouchableHistory;
+using namespace G4Root;
+//using namespace G4Xml;
 
-class BrachyPhantomSD : public G4VSensitiveDetector
-{
-public:
-  BrachyPhantomSD(G4String name);
-  ~BrachyPhantomSD();
-
-  void Initialize(G4HCofThisEvent*);
-  G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);
-  void EndOfEvent(G4HCofThisEvent*HCE);
-  void clear();
-  void DrawAll();
-  void PrintAll();
-
-private:
-  G4double x;
-  G4double y;
-  G4double z;
-};
 #endif
-
-

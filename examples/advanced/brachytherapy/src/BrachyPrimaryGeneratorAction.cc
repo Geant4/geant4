@@ -42,9 +42,6 @@
 //
 #include "globals.hh"
 #include "BrachyPrimaryGeneratorAction.hh"
-#ifdef G4ANALYSIS_USE
-#include "BrachyAnalysisManager.hh"
-#endif
 #include "G4ParticleTable.hh"
 #include "Randomize.hh"  
 #include "G4Event.hh"

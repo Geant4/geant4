@@ -43,14 +43,13 @@
 #include "G4UImanager.hh"
 #include "G4UIExecutive.hh"
 #include "BrachyFactoryIr.hh"
-
+#include "BrachyAnalysis.hh"
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
 #endif
 
 #include "BrachyDetectorConstruction.hh"
 #include "BrachyPhysicsList.hh"
-#include "BrachyPhantomSD.hh"
 #include "BrachyPrimaryGeneratorAction.hh"
 #include "G4SDManager.hh"
 #include "BrachyRunAction.hh"
@@ -60,15 +59,14 @@
 #include "G4UImanager.hh"
 #include "G4UImessenger.hh"
 
-#ifdef G4ANALYSIS_USE
-#include "BrachyAnalysisManager.hh"
-#endif
-
 #include "G4ScoringManager.hh"
 
 #ifdef G4UI_USE
 #include "G4UIExecutive.hh"
 #endif
+
+#include "G4ScoringManager.hh"
+#include "BrachyUserScoreWriter.hh"
 
 int main(int argc ,char ** argv)
 
@@ -77,13 +75,17 @@ int main(int argc ,char ** argv)
 
   G4RunManager* pRunManager = new G4RunManager;
 
-  G4String sensitiveDetectorName = "Phantom";
+  // Access to the Scoring Manager pointer
+  G4ScoringManager* scoringManager = G4ScoringManager::GetScoringManager();
+
+  // Overwrite the default output file with user-defined one 
+  scoringManager->SetScoreWriter(new BrachyUserScoreWriter());
 
   // Initialize the physics component
   pRunManager -> SetUserInitialization(new BrachyPhysicsList);
 
   // Initialize the detector component
-  BrachyDetectorConstruction  *pDetectorConstruction = new  BrachyDetectorConstruction(sensitiveDetectorName);
+  BrachyDetectorConstruction  *pDetectorConstruction = new  BrachyDetectorConstruction();
   pRunManager -> SetUserInitialization(pDetectorConstruction);
 
   // Initialize the primary particles
@@ -98,18 +100,6 @@ int main(int argc ,char ** argv)
   // Visualization manager
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
-#endif
-  
-  // Output environment variables concerning the analysis:
-#ifdef G4ANALYSIS_USE
-  G4cout << G4endl << G4endl << G4endl 
-	 << " User Environment " << G4endl
-	 << " Using AIDA 3.2.1 analysis " << G4endl;
-# else
-  G4cout << G4endl << G4endl << G4endl 
-	 << " User Environment " << G4endl
-	 << " G4ANALYSIS_USE environment variable not set, NO ANALYSIS " 
-	 << G4endl;
 #endif
   
   //Initialize G4 kernel
@@ -134,14 +124,6 @@ int main(int argc ,char ** argv)
       UImanager -> ApplyCommand(command+fileName);
     }  
 
-  // Close the output file containing histograms and n-tuple with the 
-  // results of the simulation.
-  // Finish the analysis.
-#ifdef G4ANALYSIS_USE
-  BrachyAnalysisManager* analysis = BrachyAnalysisManager::getInstance();
-  analysis -> finish();
-#endif
-  
   // Job termination
 #ifdef G4VIS_USE
   delete visManager;

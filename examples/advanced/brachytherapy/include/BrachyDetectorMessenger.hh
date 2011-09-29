@@ -41,13 +41,9 @@
 #include "G4UImessenger.hh"
 
 class BrachyDetectorConstruction;
-//class BrachyFactoryIr;
-//class BrachyRunAction;
 class G4UIdirectory;
 class G4UIcmdWithAString;
-//class G4UIcmdWithAnInteger;
-//class G4UIcmdWithADoubleAndUnit;
-//class G4UIcmdWithoutParameter;
+
 
 class BrachyDetectorMessenger: public G4UImessenger
 {

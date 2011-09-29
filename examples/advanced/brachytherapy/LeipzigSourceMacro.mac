@@ -2,4 +2,22 @@
 /run/verbose 0
 /event/verbose 0
 /source/switch Leipzig
-/run/beamOn  10000
+#
+# Scoring mesh is used to calculate
+#  the energy deposition in the phantom
+/score/create/boxMesh boxMesh_1
+#
+/score/mesh/boxSize 15. 15. 15. cm
+/score/mesh/nBin 300 300 300
+#
+/score/quantity/energyDeposit eDep
+#
+/score/close
+#
+/score/list  
+/run/beamOn  1000
+#
+# Dump scores to a file
+#
+/score/dumpQuantityToFile boxMesh_1 eDep EnergyDeposition.out
+#

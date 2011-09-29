@@ -23,70 +23,35 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: BrachyAnalysisManager.hh,v 1.14 2008-06-05 13:45:39 cirrone Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-
-// Code review: MG Pia, 14/05/2207
-// Contact: Geant4-INFN Genova group, MariaGrazia.Pia@ge.infn.it
-
-// The class BrachyAnalysisManager creates and manages histograms and ntuples
 //
 
-#ifndef G4BRACHYANALYSISMANAGER_HH
-#define G4BRACHYANALYSISMANAGER_HH
+#ifndef BrachyUserScoreWriter_h
+#define BrachyUserScoreWriter_h 1
 
 #include "globals.hh"
-#include <vector>
-#include "G4ThreeVector.hh"
+#include "G4VScoreWriter.hh"
+/*
+// Code developed by:
+// S.Guatelli, susanna@uow.edu.au
+//
+Original code from geant4/examples/extended/runAndEvent/RE03, by M. Asai
+*/
 
-#ifdef G4ANALYSIS_USE
-#include "AIDA/IHistogram1D.h"
-#include "AIDA/IHistogram2D.h"
-#include "AIDA/IAnalysisFactory.h"
-
-namespace AIDA{
-  class ITree;
-  class IHistogramFactory;
-  class IAnalysisFactory;
-  class ITupleFactory;
-  class ITuple;
-  class ITreeFactory;
-}
-#endif
-
-class BrachyAnalysisManager
-{
+// class description:
+//
+//  This class represents storing the scored quantity into a file.
+//
+class BrachyUserScoreWriter : public G4VScoreWriter {
 
 public:
-  ~BrachyAnalysisManager();
-  static BrachyAnalysisManager* getInstance();
+  BrachyUserScoreWriter();
+  virtual ~BrachyUserScoreWriter();
 
-  void book();
-  void FillNtupleWithEnergy(G4double,G4double,G4double,G4double);
-  void FillHistogramWithEnergy(G4double,G4double,G4double);
-  void PrimaryParticleEnergySpectrum(G4double);
-  void DoseDistribution(G4double,G4double);
-  void finish();
-
-private:
-  BrachyAnalysisManager();
-  static BrachyAnalysisManager* instance;
-
-#ifdef G4ANALYSIS_USE
-  AIDA::IAnalysisFactory*  aFact;
-  AIDA::ITree*             theTree;
-  AIDA::IHistogramFactory *histFact;
-  AIDA::ITupleFactory     *tupFact;
-  AIDA::ITreeFactory      *treeFact;
-  AIDA::IHistogram2D *h1;
-  AIDA::IHistogram1D *h2;
-  AIDA::IHistogram1D *h3;
-  AIDA::ITuple *ntuple;
-#endif
-
+public:
+  // store a quantity into a file
+  void DumpQuantityToFile(G4String & psName, G4String & fileName, G4String & option);
 };
 
 #endif
-
 
 
