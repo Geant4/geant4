@@ -8673,7 +8673,7 @@ void G4Incl::projo_spec(G4int, G4int ips,
       if(bl1->ind2[i_c] == 1) ps->z_projspec=ps->z_projspec+1;
     } // enddo
     G4double p_spec2=std::pow(p1_spec,2)+std::pow(p2_spec,2)+std::pow(p3_spec,2);
-    G4double s_spec = std::sqrt(std::pow(e_spec,2)-p_spec2);
+    G4double s_spec = sqrt(std::pow(e_spec,2)-p_spec2);
 
     // no projectile spectator if a>=4 and a=z or a=n (no dresner breakup)
     if(ips >= 4 && (ps->z_projspec == ips || ps->z_projspec == 0)) {
