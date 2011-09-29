@@ -396,7 +396,7 @@ protected:
   double dz;
   // The components.
 
-  static double tolerance;
+  DLL_API static double tolerance;
   // default tolerance criterion for isNear() to return true.
 };  // Hep3Vector
 

@@ -55,7 +55,7 @@ class HepLorentzRotation {
 public:
   // ----------  Identity HepLorentzRotation:
 
-  static const HepLorentzRotation IDENTITY;
+  DLL_API static const HepLorentzRotation IDENTITY;
 
   // ----------  Constructors and Assignment:
 

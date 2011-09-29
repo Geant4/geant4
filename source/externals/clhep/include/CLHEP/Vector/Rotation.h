@@ -366,7 +366,7 @@ public:
 
   // ---------- Identity Rotation:
 
-  static const HepRotation IDENTITY;
+  DLL_API static const HepRotation IDENTITY;
 
   // ---------- Tolerance
 

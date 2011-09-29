@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20 September 2011 - G.Cosmo
+- Added missing export statements for static symbols required for DLL build.
+
 22 June 2011 - B.Morgan
 - CMakeLists.txt : Added the CLHEP include directory to
   GEANT4_BUILDTREE_INCLUDE_DIRS so that its visible from the build tree if
