@@ -107,6 +107,7 @@ void G4PhysicsLnVector::ScaleVector(G4double factorE, G4double factorV)
 {
   G4PhysicsVector::ScaleVector(factorE, factorV);
   G4double theEmin = binVector[0];
+  dBin = std::log(binVector[1]/theEmin);
   baseBin = std::log(theEmin)/dBin;
 }
 

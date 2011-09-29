@@ -118,6 +118,7 @@ void G4PhysicsLogVector::ScaleVector(G4double factorE, G4double factorV)
 {
   G4PhysicsVector::ScaleVector(factorE, factorV);
   G4double theEmin = binVector[0];
+  dBin = std::log10(binVector[1]/theEmin);
   baseBin = std::log10(theEmin)/dBin;
 }
 
@@ -132,6 +133,7 @@ size_t G4PhysicsLogVector::FindBinLocation(G4double theEnergy) const
   // that the user access to the G4PhysicsLogVector object directly and 
   // not through pointers or references. In this case, the 'inline' will
   // be invoked. (See R.B.Murray, "C++ Strategies and Tactics", Chap.6.6)
+  //G4cout << "G4PhysicsLogVector::FindBinLocation: e= " << theEnergy
 
   return size_t( std::log10(theEnergy)/dBin - baseBin );
 }

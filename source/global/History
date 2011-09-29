@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 23, 2011 V.Ivantchenko (global-V09-04-17)
+- G4PhysicsLogVector, G4PhysicsLnVector, G4PhysicsLinearVector: updated
+  to safer implementation of ScaleVector() method.
+
 August 25, 2011 G.Cosmo (global-V09-04-16)
 - Added banner for errors and warnings in G4Exception.
   Redirect warnings to cout instead of cerr.

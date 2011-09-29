@@ -108,7 +108,9 @@ G4bool G4PhysicsLinearVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 void G4PhysicsLinearVector::ScaleVector(G4double factorE, G4double factorV)
 {
   G4PhysicsVector::ScaleVector(factorE, factorV);
-  dBin *= factorE;
+  G4double theEmin = binVector[0];
+  dBin = binVector[1]-theEmin;
+  baseBin = theEmin/dBin;
 }
 
 
