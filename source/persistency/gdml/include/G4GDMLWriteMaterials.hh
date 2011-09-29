@@ -71,6 +71,7 @@ class G4GDMLWriteMaterials : public G4GDMLWriteDefine
    void DWrite(xercesc::DOMElement*,const G4double&);
    void PWrite(xercesc::DOMElement*,const G4double&);
    void TWrite(xercesc::DOMElement*,const G4double&);
+   void MEEWrite(xercesc::DOMElement*,const G4double&);
    void IsotopeWrite(const G4Isotope* const);
    void ElementWrite(const G4Element* const);
    void MaterialWrite(const G4Material* const);

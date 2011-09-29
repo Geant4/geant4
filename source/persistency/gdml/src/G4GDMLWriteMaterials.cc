@@ -86,6 +86,15 @@ TWrite(xercesc::DOMElement* element,const G4double& T)
 }
 
 void G4GDMLWriteMaterials::
+MEEWrite(xercesc::DOMElement* element,const G4double& MEE)
+{
+   xercesc::DOMElement* PElement = NewElement("MEE");
+   PElement->setAttributeNode(NewAttribute("unit","eV"));
+   PElement->setAttributeNode(NewAttribute("value",MEE/electronvolt));
+   element->appendChild(PElement);
+}
+
+void G4GDMLWriteMaterials::
 IsotopeWrite(const G4Isotope* const isotopePtr)
 {
    const G4String name = GenerateName(isotopePtr->GetName(),isotopePtr);
@@ -158,6 +167,10 @@ void G4GDMLWriteMaterials::MaterialWrite(const G4Material* const materialPtr)
      { TWrite(materialElement,materialPtr->GetTemperature()); }
    if (materialPtr->GetPressure() != STP_Pressure)
      { PWrite(materialElement,materialPtr->GetPressure()); }
+
+   // Write Ionisation potential (mean excitation energy)
+   MEEWrite(materialElement,materialPtr->GetIonisation()->GetMeanExcitationEnergy());
+   
    DWrite(materialElement,materialPtr->GetDensity());
   
    const size_t NumberOfElements = materialPtr->GetNumberOfElements();

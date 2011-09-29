@@ -70,6 +70,7 @@ class G4GDMLReadMaterials : public G4GDMLReadDefine
    G4double DRead(const xercesc::DOMElement* const);
    G4double PRead(const xercesc::DOMElement* const);
    G4double TRead(const xercesc::DOMElement* const);
+   G4double MEERead(const xercesc::DOMElement* const);
    void ElementRead(const xercesc::DOMElement* const);
    G4double FractionRead(const xercesc::DOMElement* const,G4String&);
    void IsotopeRead(const xercesc::DOMElement* const);

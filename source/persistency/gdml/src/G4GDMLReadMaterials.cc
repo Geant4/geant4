@@ -222,6 +222,40 @@ G4double G4GDMLReadMaterials::TRead(const xercesc::DOMElement* const TElement)
    return value*unit;
 }
 
+G4double G4GDMLReadMaterials::MEERead(const xercesc::DOMElement* const PElement)
+{
+   G4double value = -1;
+   G4double unit = eV;
+
+   const xercesc::DOMNamedNodeMap* const attributes = PElement->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;
+        attribute_index<attributeCount; attribute_index++)
+   {
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE)
+      { continue; }
+
+      const xercesc::DOMAttr* const attribute
+            = dynamic_cast<xercesc::DOMAttr*>(attribute_node);
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadMaterials::MEERead()", "InvalidRead",
+                    FatalException, "No attribute found!");
+        return value;
+      }
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
+
+      if (attName=="value") { value = eval.Evaluate(attValue); } else
+      if (attName=="unit")  { unit = eval.Evaluate(attValue); }
+   }
+
+   return value*unit;
+}
+
 void G4GDMLReadMaterials::
 ElementRead(const xercesc::DOMElement* const elementElement) 
 {
@@ -392,6 +426,7 @@ MaterialRead(const xercesc::DOMElement* const materialElement)
    G4State state = kStateUndefined;
    G4double T = STP_Temperature;
    G4double P = STP_Pressure;
+   G4double MEE = -1.0;
 
    const xercesc::DOMNamedNodeMap* const attributes
          = materialElement->getAttributes();
@@ -447,9 +482,11 @@ MaterialRead(const xercesc::DOMElement* const materialElement)
       if (tag=="Dref") { D = GetQuantity(GenerateName(RefRead(child))); } else
       if (tag=="Pref") { P = GetQuantity(GenerateName(RefRead(child))); } else
       if (tag=="Tref") { T = GetQuantity(GenerateName(RefRead(child))); } else
+      if (tag=="MEEref") { MEE = GetQuantity(GenerateName(RefRead(child))); } else
       if (tag=="D") { D = DRead(child); } else
       if (tag=="P") { P = PRead(child); } else
       if (tag=="T") { T = TRead(child); } else
+      if (tag=="MEE") { MEE = MEERead(child); } else
       if (tag=="fraction" || tag=="composite")  { nComponents++; }
    }
 
@@ -463,6 +500,10 @@ MaterialRead(const xercesc::DOMElement* const materialElement)
    {
      material = new G4Material(Strip(name),D,nComponents,state,T,P);
      MixtureRead(materialElement, material);
+   }
+   if (MEE != -1)  // ionisation potential (mean excitation energy)
+   {
+     material->GetIonisation()->SetMeanExcitationEnergy(MEE);
    }
 
    for (xercesc::DOMNode* iter = materialElement->getFirstChild();
