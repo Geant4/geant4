@@ -10,3 +10,5 @@ file(GLOB sources ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cc)
 
 add_executable(${name} EXCLUDE_FROM_ALL ${name}.cc ${sources})
 target_link_libraries(${name} ${Geant4_LIBRARIES})
+
+configure_file(emstd.mac emstd.mac COPYONLY)

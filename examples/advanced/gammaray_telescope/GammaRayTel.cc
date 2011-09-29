@@ -125,12 +125,14 @@ int main(int argc, char** argv)
 
       if(argc>1)
 	{
+#endif
 	  G4String command = "/control/execute ";
 	  for (int i=2; i<=argc; i++) 
 	    {
 	      G4String macroFileName = argv[i-1];
 	      UImanager->ApplyCommand(command+macroFileName);
 	    }
+#ifdef G4UI_USE
 	}
       else  
 	{
