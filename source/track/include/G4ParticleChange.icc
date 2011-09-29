@@ -207,18 +207,6 @@ inline
   theMagneticMomentChange = finalMagneticMoment;
 }
   
-inline 
-  G4double  G4ParticleChange::GetWeight() const
-{
-  return  G4VParticleChange::GetParentWeight();
-}
-
-inline 
-  void G4ParticleChange::ProposeWeight(G4double w)
-{
-  G4VParticleChange::ProposeParentWeight(w);
-}
-
 inline  
   G4ThreeVector G4ParticleChange::CalcMomentum(G4double          energy,
 			    	              G4ThreeVector   direction,

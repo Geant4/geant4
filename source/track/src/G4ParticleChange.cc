@@ -58,8 +58,6 @@ G4ParticleChange::G4ParticleChange()
     theMassChange(0.), theChargeChange(0.),
     theMagneticMomentChange(0.), theCurrentTrack(0)
 {
-  G4VParticleChange::SetSecondaryWeightByProcess(false);
-  G4VParticleChange::SetParentWeightByProcess(false);
 }
 
 G4ParticleChange::~G4ParticleChange() 
@@ -72,7 +70,8 @@ G4ParticleChange::~G4ParticleChange()
 }
 
 // copy constructor
-G4ParticleChange::G4ParticleChange(const G4ParticleChange &right): G4VParticleChange(right)
+G4ParticleChange::G4ParticleChange(const G4ParticleChange &right)
+  : G4VParticleChange(right)
 {
    if (verboseLevel>1) {
     G4cout << "G4ParticleChange::  copy constructor is called " << G4endl;
@@ -106,8 +105,8 @@ G4ParticleChange & G4ParticleChange::operator=(const G4ParticleChange &right)
      if (theNumberOfSecondaries>0) {
 #ifdef G4VERBOSE
        if (verboseLevel>0) {
-	 G4cerr << "G4ParticleChange: assignment operator Warning  ";
-	 G4cerr << "theListOfSecondaries is not empty ";
+	 G4cout << "G4ParticleChange: assignment operator Warning  ";
+	 G4cout << "theListOfSecondaries is not empty ";
        }
 #endif
        for (G4int index= 0; index<theNumberOfSecondaries; index++){
@@ -315,11 +314,20 @@ G4Step* G4ParticleChange::UpdateStepForAlongStep(G4Step* pStep)
   pPostStepPoint->AddProperTime( theProperTimeChange 
 				 - pPreStepPoint->GetProperTime());
 
-  // update weight
-  if (!fSetParentWeightByProcess){
+  if (isParentWeightModified) {
+    // update weight
     G4double newWeight= theParentWeight/(pPreStepPoint->GetWeight())
-                        * (pPostStepPoint->GetWeight());
+      * (pPostStepPoint->GetWeight());
     pPostStepPoint->SetWeight( newWeight );
+    
+    if (!fSetSecondaryWeightByProcess) {    
+      // Set weight of secondary tracks
+      for (G4int index= 0; index<theNumberOfSecondaries; index++){
+	if ( (*theListOfSecondaries)[index] ) {
+	  ((*theListOfSecondaries)[index])->SetWeight(newWeight); ;
+	}
+      }
+    }
   }
 
 #ifdef G4VERBOSE
@@ -362,11 +370,18 @@ G4Step* G4ParticleChange::UpdateStepForPostStep(G4Step* pStep)
   pPostStepPoint->SetLocalTime( theTimeChange );	       
   pPostStepPoint->SetProperTime( theProperTimeChange  );
 
-  // update weight
-  if (!fSetParentWeightByProcess){
+  if (isParentWeightModified) {
+    // update weight
     pPostStepPoint->SetWeight( theParentWeight );
+    if (!fSetSecondaryWeightByProcess) {    
+      // Set weight of secondary tracks
+      for (G4int index= 0; index<theNumberOfSecondaries; index++){
+	if ( (*theListOfSecondaries)[index] ) {
+	  ((*theListOfSecondaries)[index])->SetWeight(theParentWeight); ;
+	}
+      }
+    }
   }
-
 
 #ifdef G4VERBOSE
   if (debugFlag) CheckIt(*aTrack);
@@ -404,9 +419,17 @@ G4Step* G4ParticleChange::UpdateStepForAtRest(G4Step* pStep)
   pPostStepPoint->SetLocalTime( theTimeChange );	       
   pPostStepPoint->SetProperTime( theProperTimeChange  );
 
-  // update weight 
-  if (!fSetParentWeightByProcess){
+  if (isParentWeightModified) {
+    // update weight 
     pPostStepPoint->SetWeight( theParentWeight );
+    if (!fSetSecondaryWeightByProcess) {    
+      // Set weight of secondary tracks
+      for (G4int index= 0; index<theNumberOfSecondaries; index++){
+	if ( (*theListOfSecondaries)[index] ) {
+	  ((*theListOfSecondaries)[index])->SetWeight(theParentWeight); ;
+	}
+      }
+    }
   }
 
 #ifdef G4VERBOSE
@@ -579,8 +602,7 @@ G4bool G4ParticleChange::CheckIt(const G4Track& aTrack)
   // Exit with error
   if (exitWithError) {
     G4Exception("G4ParticleChange::CheckIt",
-		"200",
-		EventMustBeAborted,
+		"TRACK003", EventMustBeAborted,
 		"momentum, energy, and/or time was illegal");
   }
   //correction

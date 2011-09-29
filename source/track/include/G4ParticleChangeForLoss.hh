@@ -237,6 +237,7 @@ inline void G4ParticleChangeForLoss::InitializeForAlongStep(const G4Track& track
   theNonIonizingEnergyDeposit = 0.0;
   InitializeSecondaries(track);
   theParentWeight = track.GetWeight();
+  isParentWeightModified = false;
   proposedKinEnergy = track.GetKineticEnergy();
   currentCharge = track.GetDynamicParticle()->GetCharge();
 }
@@ -248,6 +249,7 @@ inline void G4ParticleChangeForLoss::InitializeForPostStep(const G4Track& track)
   theNonIonizingEnergyDeposit = 0.0;
   InitializeSecondaries(track);
   theParentWeight = track.GetWeight();
+  isParentWeightModified = false;
   proposedKinEnergy = track.GetKineticEnergy();
   currentCharge = track.GetDynamicParticle()->GetCharge();
   proposedMomentumDirection = track.GetMomentumDirection();

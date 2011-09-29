@@ -81,8 +81,8 @@ G4ParticleChangeForDecay & G4ParticleChangeForDecay::operator=(const G4ParticleC
     if (theNumberOfSecondaries>0) {
 #ifdef G4VERBOSE
       if (verboseLevel>0) {
-	G4cerr << "G4ParticleChangeForDecay: assignment operator Warning  ";
-	G4cerr << "theListOfSecondaries is not empty ";
+	G4cout << "G4ParticleChangeForDecay: assignment operator Warning  ";
+	G4cout << "theListOfSecondaries is not empty ";
        }
 #endif
       for (G4int index= 0; index<theNumberOfSecondaries; index++){
@@ -144,6 +144,20 @@ void G4ParticleChangeForDecay::Initialize(const G4Track& track)
 
 G4Step* G4ParticleChangeForDecay::UpdateStepForPostStep(G4Step* pStep)
 { 
+  if (isParentWeightModified) {
+    // update weight
+    G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint(); 
+    pPostStepPoint->SetWeight( theParentWeight );
+    if (!fSetSecondaryWeightByProcess) {    
+      // Set weight of secondary tracks
+      for (G4int index= 0; index<theNumberOfSecondaries; index++){
+        if ( (*theListOfSecondaries)[index] ) {
+          ((*theListOfSecondaries)[index])->SetWeight(theParentWeight); ;
+        }
+      }
+    }
+  }
+
   //  Update the G4Step specific attributes 
   return UpdateStepInfo(pStep);
 }
@@ -153,7 +167,6 @@ G4Step* G4ParticleChangeForDecay::UpdateStepForAtRest(G4Step* pStep)
 { 
   // A physics process always calculates the final state of the particle
 
-  //G4StepPoint* pPreStepPoint  = pStep->GetPreStepPoint(); 
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint(); 
 
   // update polarization
@@ -168,6 +181,19 @@ G4Step* G4ParticleChangeForDecay::UpdateStepForAtRest(G4Step* pStep)
   G4Track*     aTrack  = pStep->GetTrack();
   if (debugFlag) CheckIt(*aTrack);
 #endif
+
+  if (isParentWeightModified) {
+    // update weight
+    pPostStepPoint->SetWeight( theParentWeight );
+    if (!fSetSecondaryWeightByProcess) {    
+      // Set weight of secondary tracks
+      for (G4int index= 0; index<theNumberOfSecondaries; index++){
+        if ( (*theListOfSecondaries)[index] ) {
+          ((*theListOfSecondaries)[index])->SetWeight(theParentWeight); ;
+        }
+      }
+    }
+  }
 
   //  Update the G4Step specific attributes 
   return UpdateStepInfo(pStep);
@@ -214,8 +240,7 @@ G4bool G4ParticleChangeForDecay::CheckIt(const G4Track& aTrack)
   // Exit with error
   if (exitWithError) {
     G4Exception("G4ParticleChangeForDecay::CheckIt",
-		"500",
-		EventMustBeAborted,
+		"TRACK005",EventMustBeAborted,
 		"time was  illegal");
   } 
 

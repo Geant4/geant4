@@ -182,10 +182,6 @@ class G4ParticleChange: public G4VParticleChange
     void ProposeMagneticMoment(G4double finalMagneticMoment);
     //   Get/Propose the final MagneticMoment in G4DynamicParticle
   
-    G4double GetWeight() const;
-    void ProposeWeight(G4double finalWeight);
-    //   Get/Propose the final Weight of the parent particle
-
     G4ThreeVector GetGlobalPosition(const G4ThreeVector& displacement) const;
     //  Convert the position displacement to the global position.
 

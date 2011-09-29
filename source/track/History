@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+-September 17, 2011, H.Kurashige (track-V09-04-09)
+- Fix problems related to treatments of weight in ParticleChange (see problem #1243)
+-- always set the parent track's weight to the value set by ProposeParentWeight() and  ProposeWeight() 
+   methods for all particle change classes.
+-- remove fSetParentWeightByProcess and all related code.
+-- SetSecondaryWeightByProcess() flag is set to true in default.
 
 -September 11, 2011, H.Kurashige (track-V09-04-08)
 - Modify ParticleChangeForTransport to fix a bug of wrong velocity
