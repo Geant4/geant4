@@ -39,7 +39,6 @@
 #include "G4VVisManager.hh"
 #include "G4UIcommand.hh"
 #include "G4AttValue.hh"
-#include <sstream>
 
 namespace G4TrajectoryDrawerUtils {
 
@@ -316,15 +315,13 @@ namespace G4TrajectoryDrawerUtils {
   void DrawLineAndPoints(const G4VTrajectory& traj, const G4VisTrajContext& context, const G4int& i_mode) 
   {
     static G4bool warnedAboutIMode = false;
-    std::ostringstream oss;
-    oss << "WARNING: DEPRECATED use of i_mode (i_mode: " << i_mode
+    G4ExceptionDescription ed;
+    ed << "WARNING: DEPRECATED use of i_mode (i_mode: " << i_mode
 	<< ").  Feature will be removed at a future major release.";
     if (!warnedAboutIMode) {
       G4Exception
 	("G4TrajectoryDrawerUtils::DrawLineAndPoints(traj, context, i_mode)",
-	 "",
-	 JustWarning,
-	 oss.str().c_str());
+	 "modeling0125", JustWarning, ed);
       warnedAboutIMode = true;
     }
 

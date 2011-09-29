@@ -34,7 +34,6 @@
 #include "G4TransportationManager.hh"
 #include "G4VisTrajContext.hh"
 #include "G4VTrajectoryPoint.hh"
-#include <sstream>
 
 G4TrajectoryDrawByOriginVolume::G4TrajectoryDrawByOriginVolume(const G4String& name, G4VisTrajContext* context)
   :G4VTrajectoryModel(name, context)
@@ -96,11 +95,10 @@ G4TrajectoryDrawByOriginVolume::SetDefault(const G4String& colour)
 
   // Will not modify default colour if colour key does not exist  
   if (!G4Colour::GetColour(colour, myColour)) {
-    std::ostringstream o;
-    o << "G4Colour with key "<<colour<<" does not exist ";
+    G4ExceptionDescription ed;
+    ed << "G4Colour with key "<<colour<<" does not exist ";
     G4Exception
-      ("G4TrajectoryDrawByOriginParticleID::SetDefault(const G4String& colour)",
-       "NonExistentColour", JustWarning, o.str().c_str());
+      ("G4TrajectoryDrawByOriginParticleID::SetDefault(const G4String& colour)", "modeling0123", JustWarning, ed);
     return;
   }
 

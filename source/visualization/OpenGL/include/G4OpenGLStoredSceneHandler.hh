@@ -109,6 +109,14 @@ protected:
   // Stop-gap solution of structure re-use.
   // A proper implementation would use geometry hierarchy.
   std::map <const G4VSolid*, G4int, std::less <const G4VSolid*> > fSolidMap;
+
+private :
+  // Number of stored list to wait until we made a single glFlush
+  int fNbListsBeforeFlush;
+
+  // Effective number of stored list
+  int fNbListsToBeFlush;
+
 };
 
 #endif

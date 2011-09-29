@@ -1495,11 +1495,11 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
   }
   UImanager->SetVerboseLevel(keepVerbose);
 
-  if (verbosity >= G4VisManager::warnings) {
+  if (verbosity >= G4VisManager::errors) {
     G4cout <<
       "Attributes available for modeling and filtering with"
-      "\n\"/vis/modeling/trajectories/create/drawByAttribute\" and"
-      "\n\"/vis/filtering/trajectories/create/attributeFilter\" commands:"
+      "\n  \"/vis/modeling/trajectories/create/drawByAttribute\" and"
+      "\n  \"/vis/filtering/trajectories/create/attributeFilter\" commands:"
 	   << G4endl;
     if (rich) {
       G4cout << G4RichTrajectory().GetAttDefs()

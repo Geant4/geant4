@@ -341,6 +341,47 @@ void G4OpenGLXViewer::CreateFontLists () {
   }
 }
 
+
+void G4OpenGLXViewer::DrawText(const char * textString,int x,int y,int z, int size){
+  
+  // gl2ps or GL window ?
+  if (! drawGl2psText(textString,size)) {
+
+    G4int font_base = G4OpenGLFontBaseStore::GetFontBase(this,size);
+    if (font_base < 0) {
+      static G4int callCount = 0;
+      ++callCount;
+      if (callCount <= 10 || callCount%100 == 0) {
+        G4cout <<
+          "G4OpenGLSceneHandler::AddPrimitive (const G4Text&) call count "
+               << callCount <<
+          "\n  No fonts available."
+          "\n  Called with text \""
+               << textString
+               << "\"\n  at "
+               << "x:"<< x
+               << "y:"<< y
+               << "z:"<< z
+               << ", size " << size
+          //               << ", offsets " << text.GetXOffset () << ", " << text.GetYOffset ()
+               << G4endl;
+      }
+      return;
+    }
+    glDisable (GL_DEPTH_TEST);
+    glDisable (GL_LIGHTING);
+    
+    glRasterPos3d(x,y,z);
+    
+    // No action on offset or layout at present.
+    glPushAttrib(GL_LIST_BIT);
+    glListBase(font_base);
+    glCallLists(strlen(textString), GL_UNSIGNED_BYTE, (GLubyte *)textString);
+    glPopAttrib();
+  }
+}
+
+
 G4OpenGLXViewer::G4OpenGLXViewer (G4OpenGLSceneHandler& scene):
 G4VViewer (scene, -1),
 G4OpenGLViewer (scene),

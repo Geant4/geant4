@@ -536,7 +536,8 @@ void G4GMocrenFileSceneHandler::AddPrimitive (const G4Polyline& polyline)
     G4TrajectoriesModel * pTrModel = dynamic_cast<G4TrajectoriesModel*>(fpModel);
     if (!pTrModel) { 
       G4Exception 
-	("G4VSceneHandler::AddCompound(const G4Polyline&): Not a G4TrajectoriesModel.");
+	("G4VSceneHandler::AddCompound(const G4Polyline&)",
+	 "gMocren0002", FatalException, "Not a G4TrajectoriesModel.");
     }
 
     G4ThreeVector trans;
@@ -871,7 +872,8 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
     G4VPhysicalVolume * pv[3] = {0,0,0};
     pv[0] = pPVModel->GetCurrentPV()->GetLogicalVolume()->GetDaughter(0);
     if(!pv[0]) {
-      G4Exception("Error[gMocrenFileSceneHandler]: Unexpected volume.");
+      G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
+		  "gMocren0003", FatalException, "Unexpected volume.");
     }
     G4int dirAxis[3] = {-1,-1,-1};
     G4int nDaughters[3] = {0,0,0};
@@ -883,7 +885,9 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
     case kXAxis: dirAxis[0] = 0; break;
     case kYAxis: dirAxis[0] = 1; break;
     case kZAxis: dirAxis[0] = 2; break;
-    default: G4Exception("Error.");
+    default:
+      G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
+		  "gMocren0004", FatalException, "Error.");
     }
     kNestedVolumeNames.push_back(pv[0]->GetName());
     if(GFDEBUG_DET) 
@@ -896,7 +900,8 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
 	G4cout << "# of daughters : " 
 	       << pv[0]->GetLogicalVolume()->GetNoDaughters() << G4endl;
       } else {
-	//G4Exception("Error: G4GMocrenFileSceneHandler: 0000010");
+	//G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
+	//	    "gMocren0005", FatalException, "Error.");
       }
     }
 
@@ -905,7 +910,8 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
 			   << pv[0]->GetLogicalVolume()->GetNoDaughters() << G4endl;
     if(pv[0]->GetLogicalVolume()->GetNoDaughters() == 0) {
       kFlagParameterization = 1;
-      //G4Exception("Error: G4GMocrenFileSceneHandler: 0000020");
+      //G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
+      //	    "gMocren0006", FatalException, "Error.");
     }
     
     if(kFlagParameterization == 0) {
@@ -918,7 +924,9 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
 	case kXAxis: dirAxis[1] = 0; break;
 	case kYAxis: dirAxis[1] = 1; break;
 	case kZAxis: dirAxis[1] = 2; break;
-	default: G4Exception("Error.");
+	default:
+	  G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
+		      "gMocren0007", FatalException, "Error.");
 	}
 	kNestedVolumeNames.push_back(pv[1]->GetName());
 	if(GFDEBUG_DET) 
@@ -937,7 +945,9 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
 	  if(nDaughters[2] > 1) {
 	    G4VNestedParameterisation * nestPara
 	      = dynamic_cast<G4VNestedParameterisation*>(pv[2]->GetParameterisation());
-	    if(!nestPara) G4Exception("Error[gMocrenFileSceneHandler]: None nested parameterisation");
+	    if(!nestPara)
+	      G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
+			  "gMocren0008", FatalException, "Non-nested parameterisation");
 	    nestPara->ComputeTransformation(0, pv[2]);
 	    G4ThreeVector trans0 = pv[2]->GetObjectTranslation();
 	    nestPara->ComputeTransformation(1, pv[2]);
@@ -949,7 +959,9 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
 	    if(diff.x() != 0.) dirAxis[2] = 0;
 	    else if(diff.y() != 0.) dirAxis[2] = 1;
 	    else if(diff.z() != 0.) dirAxis[2] = 2;
-	    else G4Exception("Error[gMocrenFileSceneHandler]: Unexpected nested parameterisation");
+	    else
+	      G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
+			  "gMocren0009", FatalException, "Unexpected nested parameterisation");
 	  }
 	}
       }
@@ -989,7 +1001,9 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
 	      xyz[2] = tbox.GetZHalfLength()/mm;
 	      if(n0 != 0 || n1 != 0 || n2 != 0) {
 		for(G4int i = 0; i < 3; i++) {
-		  if(xyz[i] != prexyz[i]) G4Exception("Error[gMocrenFileSceneHandler]: Unsupported parameterisation.");
+		  if(xyz[i] != prexyz[i])
+		    G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
+				"gMocren0010", FatalException, "Unsupported parameterisation");
 		}
 	      }
 	      if(GFDEBUG_DET) 
@@ -1028,7 +1042,8 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
       } else {
 	if(GFDEBUG_DET) 
 	  G4cout << pv[2]->GetName() << G4endl;
-	G4Exception("Error[gMocrenFileSceneHandler]: none nested parameterization");
+	G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
+		    "gMocren0011", FatalException, "Non-nested parameterisation");
       }
 
 
@@ -1106,7 +1121,8 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
       G4PhantomParameterisation * phantomPara
 	= dynamic_cast<G4PhantomParameterisation*>(pv[0]->GetParameterisation());
       if(!phantomPara) {
-	G4Exception("Error: G4GMocrenFileSceneHandler: no G4PhantomParameterisation");
+	G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
+		    "gMocren0012", FatalException, "no G4PhantomParameterisation");
       } else {
 	;
       }
@@ -1488,7 +1504,8 @@ void G4GMocrenFileSceneHandler::AddCompound(const G4VTrajectory & traj) {
     G4TrajectoriesModel * pTrModel = dynamic_cast<G4TrajectoriesModel*>(fpModel);
     if (!pTrModel) { 
       G4Exception 
-	("G4VSceneHandler::AddCompound(const G4VTrajectory&): Not a G4TrajectoriesModel.");
+	("G4VSceneHandler::AddCompound(const G4VTrajectory&)",
+	 "gMocren0013", FatalException, "Not a G4TrajectoriesModel.");
     } else {
       traj.DrawTrajectory(pTrModel->GetDrawingMode());
 
@@ -1607,7 +1624,8 @@ void G4GMocrenFileSceneHandler::AddCompound( const G4VHit & hit) {
 	}
       }
     } else {
-      G4Exception("Error in G4GMocrenFileSceneHandler::AddCompound(const G4VHit &)");
+      G4Exception("G4GMocrenFileSceneHandler::AddCompound(const G4VHit &)",
+		  "gMocren0014", FatalException, "Error");
     }
 
     delete attval;

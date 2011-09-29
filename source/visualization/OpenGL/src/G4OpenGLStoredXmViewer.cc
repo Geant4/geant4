@@ -69,16 +69,6 @@ void G4OpenGLStoredXmViewer::Initialise () {
 
   InitializeGLView ();
 
-// clear the buffers and window.
-  ClearView ();
-  FinishView ();
-  
-  glDepthFunc (GL_LEQUAL);
-  glDepthMask (GL_TRUE);
-  
-  glEnable (GL_BLEND);
-  glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
   glDrawBuffer (GL_BACK);
 }
 

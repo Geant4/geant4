@@ -17,6 +17,47 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26th September 2011  John Allison  (opengl-V09-04-08)
+- Re-instated QWidget* fUIViewComponentsTBWidget.
+
+23th September 2011  Laurent Garnier
+- G4OpenGLViewers : uncomment the glDrawBuffer (GL_FRONT) at initialisation
+- Add a flush in ShowView in Qt GL Viewers
+- Some improvments about DrawText in OpenGL (Still some problems on Store Qt)
+
+22th September 2011  Laurent Garnier
+ -add DrawText() method for X and Qt viewers :
+
+22th September 2011  Laurent Garnier
+- G4OpenGLStoredSceneHandler : Add a parameter to wait until 100 lists generate until do a
+  glFlush.  glFlush take about 90% time in store mode, divide glFluch  number by 100 will
+  change the first vis time from 100% to 10+90/100 = 10,9%
+
+20th September 2011  John Allison
+- Fix transparency problem:
+  G4OpenGLImmediateXViewer.cc, G4OpenGLStoredXViewer.cc,
+  G4OpenGLImmediateXmViewer.cc, G4OpenGLStoredXmViewer.cc,
+  G4OpenGLImmediateQtViewer.cc, G4OpenGLStoredQtViewer.cc,
+  G4OpenGLViewer.cc:
+  Move initial gl commands to G4OpenGLViewer::InitializeGLView,
+  which is called from each particular viewer's Initialise or, in
+  the case of G4OpenGLImmediate/StoredQtViewer::initializeGL, from Qt
+  at initialisation.  This includes the following commands relevant to
+  transparency, so they are now uniformly invoked for all viewers.
+    glEnable (GL_BLEND);
+    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+17th September 2011  John Allison
+- G4OpenGLQtViewer:
+  o Removed SetView (it did nothing).
+  o Removed unnecessary #include's.
+- G4OpenGLViewer.cc: Fixed printf statement.
+- Migrated to new G4Exception.
+
+10th August 2011 Laurent Garnier
+- Add flag to not include vis into tab widget if qApp is external
+- Remove static-cast on int values
+
 5th August 2011 Gabriele Cosmo (opengl-V09-04-07)
 - Added protection to restrict inclusion of headers in the previous tag
   only for MacOS systems, where the problem is observed.

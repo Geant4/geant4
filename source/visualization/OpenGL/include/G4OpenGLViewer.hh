@@ -53,11 +53,14 @@ class G4OpenGLViewer: virtual public G4VViewer {
 
 public:
   void ClearView  ();
+//////////////////////////////Vectored PostScript production functions///
+  void printEPS();
 
 protected:
   G4OpenGLViewer (G4OpenGLSceneHandler& scene);
   virtual ~G4OpenGLViewer ();
   void SetView    ();
+  virtual void DrawText(const char * ,int x,int y,int z, int size) = 0;
   void HaloingFirstPass ();
   void HaloingSecondPass ();
   void HLRFirstPass ();
@@ -71,7 +74,7 @@ protected:
   void rotateScene (G4double dx, G4double dy,G4double delta);
   void rotateSceneInViewDirection (G4double dx, G4double dy,G4double delta);
 //////////////////////////////Vectored PostScript production functions///
-  void printEPS();
+  bool drawGl2psText(const char * textString, int size);
   // print EPS file. Depending of fVectoredPs, it will print Vectored or not
   void setPrintSize(G4int,G4int);
   // set the new print size. 

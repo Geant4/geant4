@@ -284,7 +284,10 @@ void G4OpenGLXmViewer::CreateMainWindow () {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
   } else {
-    G4Exception("Invalid Representation style in G4OpenGLXmViewer::CreateContext");
+    G4Exception
+      ("G4OpenGLXmViewer::CreateMainWindow",
+       "opengl0014", FatalException,
+       "Invalid Representation style");
   }
   XmStringFree (polyhedron_str);
   XmStringFree (nurbs_str);
@@ -340,7 +343,10 @@ void G4OpenGLXmViewer::CreateMainWindow () {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
   } else {
-    G4Exception("Invalid Drawing style in G4OpenGLXmViewer::CreateContext");
+    G4Exception
+      ("G4OpenGLXmViewer::CreateMainWindow",
+       "opengl0015", FatalException,
+       "Invalid Drawing style in G4OpenGLXmViewer::CreateContext");
   }
 
   XmStringFree (wireframe_str);
@@ -503,7 +509,10 @@ void G4OpenGLXmViewer::CreateMainWindow () {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
   } else {
-    G4Exception("transparency_enabled in G4OpenGLXmViewer is neither true nor false!!");
+    G4Exception
+      ("G4OpenGLXmViewer::CreateMainWindow",
+       "opengl0016", FatalException,
+       "transparency_enabled in G4OpenGLXmViewer is neither true nor false!!");
   }
 
   //Add antialias pullright menu to special cascade...
@@ -535,7 +544,10 @@ void G4OpenGLXmViewer::CreateMainWindow () {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
   } else {
-    G4Exception("antialiasing_enabled in G4OpenGLXmViewer is neither true nor false!!");
+    G4Exception
+      ("G4OpenGLXmViewer::CreateMainWindow",
+       "opengl0017", FatalException,
+       "antialiasing_enabled in G4OpenGLXmViewer is neither true nor false!!");
   }
 
   //Add Haloing pullright menu to special cascade...
@@ -567,7 +579,10 @@ void G4OpenGLXmViewer::CreateMainWindow () {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
   } else {
-    G4Exception("haloing_enabled in G4OpenGLXmViewer is neither true nor false!!");
+    G4Exception
+      ("G4OpenGLXmViewer::CreateMainWindow",
+       "opengl0018", FatalException,
+       "haloing_enabled in G4OpenGLXmViewer is neither true nor false!!");
   }
 
   //Add Aux_Edge pullright menu to special cascade...

@@ -36,28 +36,19 @@
 #ifdef G4VIS_BUILD_OPENGLQT_DRIVER
 
 #include "G4OpenGLQtViewer.hh"
-#include "G4VViewer.hh"
-#include "G4VSceneHandler.hh"
-#include "G4OpenGLSceneHandler.hh"
 
-#include "G4ios.hh"
-#include "G4VisExtent.hh"
-#include "G4LogicalVolume.hh"
+#include "G4OpenGLSceneHandler.hh"
 #include "G4VSolid.hh"
-#include "G4Point3D.hh"
-#include "G4Normal3D.hh"
-#include "G4Scene.hh"
 #include "G4OpenGLQtExportDialog.hh"
 #include "G4OpenGLQtMovieDialog.hh"
-#include "G4UnitsTable.hh"
 #include "G4Qt.hh"
 #include "G4UIQt.hh"
 #include "G4UImanager.hh"
 #include "G4UIcommandTree.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4PhysicalVolumeStore.hh"
-#include "G4VPhysicalVolume.hh"
 #include "G4VisCommandsGeometrySet.hh"
+#include "G4PhysicalVolumeModel.hh"
 
 #include <qlayout.h>
 #include <qdialog.h>
@@ -79,21 +70,7 @@
 #include <qdialog.h>
 #include <qcolordialog.h>
 #include <qevent.h> //include <qcontextmenuevent.h>
-
-
-//////////////////////////////////////////////////////////////////////////////
-/**
-   Implementation of virtual method of G4VViewer
-*/
-void G4OpenGLQtViewer::SetView (
-) 
-//////////////////////////////////////////////////////////////////////////////
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
-{
-  G4OpenGLViewer::SetView ();
-}
-
-
+#include <qobject.h>
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -110,7 +87,7 @@ void G4OpenGLQtViewer::CreateMainWindow (
   fWindow = glWidget ;
   //  fWindow->makeCurrent();
 
-  //G4Qt* interactorManager = G4Qt::getInstance ();
+  G4Qt* interactorManager = G4Qt::getInstance ();
 
   ResizeWindow(fVP.GetWindowSizeHintX(),fVP.GetWindowSizeHintY());
     
@@ -131,19 +108,21 @@ void G4OpenGLQtViewer::CreateMainWindow (
   G4UIQt * uiQt = static_cast<G4UIQt*> (UI->GetG4UIWindow());
   
   bool isTabbedView = false;
-  if ( uiQt) {
-    if (!fBatchMode) {
-      isTabbedView = uiQt->AddTabWidget(fWindow,name,getWinWidth(),getWinHeight());
-      fUIViewComponentsTBWidget = uiQt->GetViewComponentsTBWidget();
-      fillUIViewComponent();
-    }
-    isTabbedView = true;
-  }
-#ifdef G4DEBUG_VIS_OGL
-  else {
-    printf("G4OpenGLQtViewer::CreateMainWindow :: UIQt NOt found \n");
-  }
-#endif
+   if ( uiQt) {
+     if (!fBatchMode) {
+       if (!interactorManager->IsExternalApp()) {
+         isTabbedView = uiQt->AddTabWidget(fWindow,name,getWinWidth(),getWinHeight());
+         fUIViewComponentsTBWidget = uiQt->GetViewComponentsTBWidget();
+         fillUIViewComponent();
+         isTabbedView = true;
+       }
+     }
+   }
+ #ifdef G4DEBUG_VIS_OGL
+   else {
+     printf("G4OpenGLQtViewer::CreateMainWindow :: UIQt NOt found \n");
+   }
+ #endif
 
   if (!isTabbedView) { // we have to do a dialog
 
@@ -1210,9 +1189,9 @@ void G4OpenGLQtViewer::moveScene(float dx,float dy, float dz,bool mouseMove)
     coefDepth = getSceneDepth()*fDeltaDepth;
   }
   fVP.IncrementPan(-dx*coefTrans,dy*coefTrans,dz*coefDepth);
-  Q_EMIT moveX(-static_cast<int>(dx*coefTrans));
-  Q_EMIT moveY(static_cast<int>(dy*coefTrans));
-  Q_EMIT moveZ(static_cast<int>(dz*coefTrans));
+  Q_EMIT moveX(-floor(dx*coefTrans+0.5));
+  Q_EMIT moveY(floor(dy*coefTrans+0.5));
+  Q_EMIT moveZ(floor(dz*coefTrans+0.5));
   
   updateQWidget();
   if (fAutoMove)
@@ -1235,11 +1214,11 @@ void G4OpenGLQtViewer::rotateQtScene(float dx, float dy)
   
   if( dx != 0) {
     rotateScene(dx,0,fDeltaRotation);
-    Q_EMIT rotateTheta(static_cast<int>(dx));
+    Q_EMIT rotateTheta(floor(dx+0.5));
   }
   if( dy != 0) {
     rotateScene(0,dy,fDeltaRotation);
-    Q_EMIT rotatePhi(static_cast<int>(dy));
+    Q_EMIT rotatePhi(floor(dy+0.5));
   }
   updateQWidget();
   
@@ -1262,8 +1241,8 @@ void G4OpenGLQtViewer::rotateQtSceneInViewDirection(float dx, float dy)
   
   rotateSceneInViewDirection(dx,dy,fDeltaRotation/100);
   
-  Q_EMIT rotateTheta(static_cast<int>(dx));
-  Q_EMIT rotatePhi(static_cast<int>(dy));
+  Q_EMIT rotateTheta(floor(dx+0.5));
+  Q_EMIT rotatePhi(floor(dy+0.5));
   updateQWidget();
   
   fHoldRotateEvent = false;
@@ -1281,8 +1260,8 @@ void G4OpenGLQtViewer::rotateQtCamera(float dx, float dy)
   fHoldRotateEvent = true;
 
   rotateScene(dx,dy,fDeltaRotation);
-  Q_EMIT rotateTheta(static_cast<int>(dx));
-  Q_EMIT rotatePhi(static_cast<int>(dy));
+  Q_EMIT rotateTheta(floor(dx+0.5));
+  Q_EMIT rotatePhi(floor(dy+0.5));
   updateQWidget();
   
   fHoldRotateEvent = false;
@@ -1308,8 +1287,8 @@ void G4OpenGLQtViewer::rotateQtCameraInViewDirection(float dx, float dy)
 
   rotateSceneInViewDirection(fXRot,fYRot,fDeltaRotation/100);
 
-  Q_EMIT rotateTheta(static_cast<int>(dx));
-  Q_EMIT rotatePhi(static_cast<int>(dy));
+  Q_EMIT rotateTheta(floor(dx+0.5));
+  Q_EMIT rotatePhi(floor(dy+0.5));
   updateQWidget();
   
   fHoldRotateEvent = false;
@@ -2284,7 +2263,9 @@ QWidget *G4OpenGLQtViewer::getParentWidget()
   }
 }
 
-
+/*
+ * Could only be done AFTER ProcessScene, then AFTER first draw
+ */
 void G4OpenGLQtViewer::fillUIViewComponent(){
   if (fUIViewComponentsTBWidget == NULL) {
     return;
@@ -2383,7 +2364,7 @@ void G4OpenGLQtViewer::parseVolumeTree(G4VPhysicalVolume * root, QTreeWidgetItem
   G4PhysicalVolumeStore *pPVStore = G4PhysicalVolumeStore::GetInstance();
   
   childLogicalItem = new QTreeWidgetItem(mother);
-  childLogicalItem->setText(0,QString(root->GetName().data()));
+  childLogicalItem->setText(0,QString(root->GetLogicalVolume()->GetName().data()));
 
   int mult = root->GetMultiplicity ();
   QString multTxt = "";
@@ -2522,8 +2503,30 @@ G4VPhysicalVolume* G4OpenGLQtViewer::parseAndFindVolumeTree(G4VPhysicalVolume * 
   return res;
 }
 
-
+void G4OpenGLQtViewer::DrawText(const char * textString,int x,int y,int z, int size) {
+  if (!fWindow)
+    return;
+  QFont font = QFont();
+  font.setPointSize(size);
+  
+  // gl2ps or GL window ?
+  int fontsize=font.pixelSize();
+  if(font.pointSize() > fontsize) {
+    fontsize = font.pointSize();
+  }
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLQtViewer::DrawText :: renderText.............. \n");
+#endif
+  if (! drawGl2psText(textString,fontsize)) {
+    fWindow->renderText(x,y,z, textString,font);
+  }
+}
         
+/** Initialise the display liste BEFORE any other OpenGL call */
+void G4OpenGLQtViewer::CreateFontLists () {
+  DrawText("",0,0,0,1);
+}
+
 /*
   
 void MultiLayer::exportToSVG(const QString& fname)

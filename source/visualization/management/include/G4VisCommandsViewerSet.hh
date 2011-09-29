@@ -73,6 +73,7 @@ private:
   G4ThreeVector         fLightsVector;
   G4UIcmdWithABool*     fpCommandPicking;
   G4UIcommand*          fpCommandProjection;
+  G4UIcmdWithAString*   fpCommandRotationStyle;
   G4UIcommand*          fpCommandSectionPlane;
   G4UIcmdWithAString*   fpCommandStyle;
   G4UIcmdWith3VectorAndUnit* fpCommandTargetPoint;

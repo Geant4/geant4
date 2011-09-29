@@ -38,7 +38,6 @@
 #include "G4UImessenger.hh"
 #include "G4VFilter.hh"
 #include "G4VModelFactory.hh"
-#include <sstream>
 #include <vector>
 
 namespace FilterMode {
@@ -176,10 +175,10 @@ G4VisFilterManager<T>::SetMode(const G4String& mode)
   else if (myMode == "hard") {result = true; SetMode(FilterMode::Hard);}
 
   if (!result) {
-    std::ostringstream o;
-    o << "Invalid Filter mode."<<mode;
+    G4ExceptionDescription ed;
+    ed << "Invalid Filter mode: "<<mode;
     G4Exception
-      ("G4VisFilterManager::SetMode(const G4String& mode)", "InvalidMode", JustWarning, o.str().c_str());
+      ("G4VisFilterManager::SetMode(const G4String& mode)", "visman0101", JustWarning, ed);
   }
 }
 

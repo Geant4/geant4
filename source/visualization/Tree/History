@@ -24,6 +24,12 @@ committal in the CVS repository !
 History file for visualization/Tree sub-category
 ------------------------------------------------
 
+25th September 2011  John Allison  (vistree-V09-04-01)
+- Tagged.
+
+17th September 2011  John Allison
+- Migrated to new G4Exception.
+
 2nd June 2011  John Allison  (vistree-V09-04-00)
 - Tagged.
 

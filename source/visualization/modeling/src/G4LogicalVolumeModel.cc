@@ -142,8 +142,9 @@ void G4LogicalVolumeModel::DescribeSolid
       G4VSolid* pSol1 = pSol -> GetConstituentSolid (1);
       if (!pSol1) {
 	G4Exception
-	  ("G4PhysicalVolumeModel::DescribeSolid:"
-	   " 2nd component solid is missing.");
+	  ("G4PhysicalVolumeModel::DescribeSolid",
+	   "modeling0001", FatalException,
+	   "2nd component solid in Boolean is missing.");
       }
       // Draw these constituents white and "forced wireframe"...
       G4VisAttributes constituentAttributes;

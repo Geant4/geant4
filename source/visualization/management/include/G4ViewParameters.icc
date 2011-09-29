@@ -209,6 +209,9 @@ inline G4bool G4ViewParameters::IsPicking () const {
   return fPicking;
 }
 
+inline G4ViewParameters::RotationStyle
+G4ViewParameters::GetRotationStyle() const {return fRotationStyle;}
+
 inline void
 G4ViewParameters::SetDrawingStyle (G4ViewParameters::DrawingStyle style) {
   fDrawingStyle = style;
@@ -366,4 +369,9 @@ inline void G4ViewParameters::SetBackgroundColour (const G4Colour& colour) {
 
 inline void G4ViewParameters::SetPicking (G4bool picking) {
   fPicking = picking;
+}
+
+inline void G4ViewParameters::SetRotationStyle
+  (G4ViewParameters::RotationStyle style) {
+  fRotationStyle = style;
 }

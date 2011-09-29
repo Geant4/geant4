@@ -20,6 +20,12 @@ committal in the CVS repository !
 History file for visualization/modeling
 ---------------------------------------
 
+25th September 2011  John Allison  (modeling-V09-04-02)
+- G4PhysicalVolumeModel: Tidied
+
+16th September 2011  John Allison
+- Migrated to new G4Exception.
+
 25th January 2011  John Allison  (modeling-V09-04-01)
 - G4TrajectortDrawerUtils.cc:
   o Fixed unresolved reference.

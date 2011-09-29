@@ -24,6 +24,22 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+25th September 2011  John Allison (vis-V09-04-08)
+- modeling-V09-04-02: Migrated to new G4Exception.
+- visman-V09-04-04:  Migrated to new G4Exception.  Also:
+  o G4VisCommandsSceneAdd.cc: When adding trajectories
+    (/vis/scene/add/trajectories) print attributes even if warnings
+    are suppressed.
+  o Added /vis/viewer/set/rotationStyle
+- opengl-V09-04-08: Migrated to new G4Exception.  Also:
+  o Fixed transparency problem.
+  o Improved first pass rendering speed (reduced use of glFlush).
+  o Fixed non-appearance of trajectories in Qt (added final glFlush).
+  o Many improvements in Qt.
+- vis-HepRep-V09-04-01: Migrated to new G4Exception.
+- vistree-V09-04-01: Migrated to new G4Exception.
+- gMocren-V09-04-01: Migrated to new G4Exception.
+
 17th June 2011 Ben Morgan (vis-V09-04-07)
 - opengl-V09-04-05 : Support added for CMake build of Xm and Win32 components.
 - raytracer-V09-04-04 : Changed to use new standard GEANT4_USE_RAYTRACER_X11

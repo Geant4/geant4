@@ -79,7 +79,10 @@ G4OpenGLStoredSceneHandler::G4OpenGLStoredSceneHandler
  const G4String& name):
 G4OpenGLSceneHandler (system, fSceneIdCount++, name),
 fAddPrimitivePreambleNestingDepth (0),
-fTopPODL (0)
+fTopPODL (0),
+fNbListsBeforeFlush(100), /* glFlush take about 90% time in store mode, divide glFluch
+ number by 100 will change the first vis time from 100% to 10+90/100 = 10,9% */
+fNbListsToBeFlush(0)
 {}
 
 G4OpenGLStoredSceneHandler::~G4OpenGLStoredSceneHandler ()
@@ -104,6 +107,7 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
 
   if (fMemoryForDisplayLists) {
     fDisplayListId = glGenLists (1);
+    fNbListsToBeFlush ++;
     if (glGetError() == GL_OUT_OF_MEMORY ||
 	fDisplayListId > fDisplayListLimit) {
       G4cout <<
@@ -193,7 +197,10 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePostamble()
   }
   if (fReadyForTransients || !fMemoryForDisplayLists) {
     glPopMatrix();
-    glFlush ();
+    if (fNbListsToBeFlush >= fNbListsBeforeFlush ) {
+      glFlush ();
+      fNbListsToBeFlush = 0;
+    }
     glDrawBuffer (GL_BACK);
   }
   fAddPrimitivePreambleNestingDepth--;
@@ -299,6 +306,7 @@ void G4OpenGLStoredSceneHandler::BeginModeling () {
 void G4OpenGLStoredSceneHandler::EndModeling () {
   // Make a List which calls the other lists.
   fTopPODL = glGenLists (1);
+  fNbListsToBeFlush ++;
   if (glGetError() == GL_OUT_OF_MEMORY) {  // Could pre-allocate?
     G4cout <<
       "ERROR: G4OpenGLStoredSceneHandler::EndModeling: Failure to allocate"

@@ -105,6 +105,11 @@ public: // With description
     cutawayIntersection // Intersection (multiplication) " .
   };
 
+  enum RotationStyle {
+    constrainUpDirection,  // Standard, HEP convention.
+    freeRotation           // Free, Google-like rotation, using mouse-grab.
+  };
+
   friend std::ostream& operator << (std::ostream&,
 				      const DrawingStyle&);
 
@@ -187,6 +192,7 @@ public: // With description
   G4double GetFarDistance     (G4double cameraDistance,
 			       G4double nearDistance, G4double radius) const;
   G4double GetFrontHalfHeight (G4double nearDistance, G4double radius) const;
+  RotationStyle GetRotationStyle() const;
 
   // Set, Add, Multiply, Increment, Unset and Clear functions.
   void SetDrawingStyle         (G4ViewParameters::DrawingStyle style);
@@ -240,6 +246,7 @@ public: // With description
   void SetAutoRefresh          (G4bool);
   void SetBackgroundColour     (const G4Colour&);
   void SetPicking              (G4bool);
+  void SetRotationStyle        (RotationStyle);
 
   void PrintDifferences (const G4ViewParameters& v) const;
 
@@ -304,6 +311,7 @@ private:
   G4bool       fAutoRefresh;     // ...after change of view parameters.
   G4Colour     fBackgroundColour;
   G4bool       fPicking;         // Request picking.
+  RotationStyle fRotationStyle;  // Rotation style.
 };
 
 #include "G4ViewParameters.icc"

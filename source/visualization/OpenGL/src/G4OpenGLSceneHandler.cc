@@ -45,7 +45,6 @@
 
 #include "G4OpenGLSceneHandler.hh"
 #include "G4OpenGLViewer.hh"
-#include "G4OpenGLFontBaseStore.hh"
 #include "G4OpenGLTransform3D.hh"
 #include "G4Point3D.hh"
 #include "G4Normal3D.hh"
@@ -267,37 +266,19 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Text& text) {
   G4ThreeVector position (text.GetPosition ());
   G4String textString = text.GetText();
 
-  G4int font_base = G4OpenGLFontBaseStore::GetFontBase(fpViewer,size);
-  if (font_base < 0) {
-    static G4int callCount = 0;
-    ++callCount;
-    if (callCount <= 10 || callCount%100 == 0) {
-      G4cout <<
-	"G4OpenGLSceneHandler::AddPrimitive (const G4Text&) call count "
-	     << callCount <<
-	"\n  No fonts available."
-	"\n  Called with text \""
-	     << text.GetText ()
-	     << "\"\n  at " << position
-	     << ", size " << size
-	     << ", offsets " << text.GetXOffset () << ", " << text.GetYOffset ()
-	     << ", type " << G4int(sizeType)
-	     << ", colour " << c
-	     << G4endl;
-    }
-    return;
+  G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
+  if ( pGLViewer ) {
+    const char* textCString = textString.c_str();
+    GLfloat color[4]; /* Ask OpenGL for the current color */
+    glGetFloatv(GL_CURRENT_COLOR, color);
+    glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
+#ifdef G4DEBUG_VIS_OGL
+    printf("G4OpenGLSceneHandler::AddPrimitive..............%f %f %f \n",c.GetRed (), c.GetGreen (), c.GetBlue ());
+#endif
+    
+    pGLViewer->DrawText(textCString,position.x(),position.y(),position.z(),size);
+    glColor3d (color[0], color[1], color[2]);
   }
-  const char* textCString = textString.c_str();
-  glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
-  glDisable (GL_DEPTH_TEST);
-  glDisable (GL_LIGHTING);
-  
-  glRasterPos3d(position.x(),position.y(),position.z());
-  // No action on offset or layout at present.
-   glPushAttrib(GL_LIST_BIT);
-   glListBase(font_base);
-   glCallLists(strlen(textCString), GL_UNSIGNED_BYTE, (GLubyte *)textCString);
-   glPopAttrib();
 }
 
 void G4OpenGLSceneHandler::AddPrimitive (const G4Circle& circle) {

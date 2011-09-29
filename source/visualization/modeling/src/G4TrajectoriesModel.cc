@@ -90,7 +90,7 @@ G4int G4TrajectoriesModel::GetDrawingMode() const
   else {
     G4Exception
       ("G4TrajectoriesModel::GetDrawingMode",
-       "",
+       "modeling0010",
        FatalException,
        "Illegal attempt to obtain i_mode."
        "\n  i_mode is an old trajectories parameter that is DEPRECATED"
@@ -106,7 +106,7 @@ void G4TrajectoriesModel::SetDrawingMode(G4int drawingMode)
   else {
     G4Exception
       ("G4TrajectoriesModel::SetDrawingMode",
-       "",
+       "modeling0011",
        FatalException,
        "Illegal attempt to set i_mode."
        "\n  i_mode is an old trajectories parameter that is DEPRECATED"

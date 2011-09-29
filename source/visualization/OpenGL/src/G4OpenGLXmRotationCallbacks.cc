@@ -212,7 +212,10 @@ void G4OpenGLXmViewer::set_rot_sens_callback (Widget w,
       ten_to_the_dp *= 10.;
     }
   } else {
-    G4Exception("Bad value returned for dp in set_rot_sens_callback");
+    G4Exception
+      ("G4OpenGLXmViewer::set_rot_sens_callback",
+       "opengl0004", FatalException,
+       "Bad value returned for dp in set_rot_sens_callback");
   }
 
   pView->rot_sens = (G4float)(cbs->value) / ten_to_the_dp;
@@ -239,7 +242,10 @@ void G4OpenGLXmViewer::set_rot_subject_callback (Widget w,
     }
   default:
     {
-      G4Exception("Unrecognised choice made in set_rot_subject_callback"); 
+      G4Exception
+	("G4OpenGLXmViewer::set_rot_subject_callback",
+	 "opengl0005", FatalException,
+	 "Unrecognised choice made in set_rot_subject_callback"); 
     }
   }
 }  

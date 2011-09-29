@@ -122,7 +122,9 @@ G4VisManager::G4VisManager (const G4String& verbosityString):
 
   if (fpInstance) {
     G4Exception
-      ("G4VisManager: attempt to Construct more than one VisManager.");
+      ("G4VisManager::G4VisManager",
+       "visman0001", FatalException,
+       "Attempt to Construct more than one VisManager");
   }
 
   fpInstance = this;
@@ -212,7 +214,8 @@ G4VisManager::~G4VisManager () {
 G4VisManager* G4VisManager::GetInstance () {
   if (!fpInstance) {
     G4Exception
-      ("G4VisManager::GetInstance: VisManager not yet instantiated!");
+      ("G4VisManager::GetInstance",
+       "visman0002", FatalException, "VisManager not yet instantiated");
   }
   return fpInstance;
 }

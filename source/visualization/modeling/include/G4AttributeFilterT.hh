@@ -39,7 +39,6 @@
 #include "G4AttValue.hh"
 #include "G4SmartFilter.hh"
 #include "G4VAttValueFilter.hh"
-#include <sstream>
 #include <vector>
 
 template <typename T>
@@ -108,10 +107,7 @@ G4AttributeFilterT<T>::Evaluate(const T& object) const
   if (fAttName.isNull()) {
 
     if (!fWarnedMissingAttribute) {
-      std::ostringstream o;
-      o<<"Null attribute name";
-      G4Exception("G4AttributeFilterT::Evaluate", "NullAttributeName", JustWarning, o.str().c_str());
-      
+      G4Exception("G4AttributeFilterT::Evaluate", "modeling0101", JustWarning, "Null attribute name");
       fWarnedMissingAttribute = true;
     }
     
@@ -129,10 +125,10 @@ G4AttributeFilterT<T>::Evaluate(const T& object) const
     if (!G4AttUtils::ExtractAttDef(object, fAttName, attDef)) {
       static G4bool warnedUnableToExtract = false;
       if (!warnedUnableToExtract) {
-	std::ostringstream o;
-	o <<"Unable to extract attribute definition named "<<fAttName;
+	G4ExceptionDescription ed;
+	ed <<"Unable to extract attribute definition named "<<fAttName;
 	G4Exception
-	  ("G4AttributeFilterT::Evaluate", "InvalidAttributeDefinition", JustWarning, o.str().c_str());
+	  ("G4AttributeFilterT::Evaluate", "modeling0102", JustWarning, ed, "Invalid attribute definition");
 	G4cout << "Available attributes:\n"
 	       << object.GetAttDefs();
 	warnedUnableToExtract = true;
@@ -160,14 +156,14 @@ G4AttributeFilterT<T>::Evaluate(const T& object) const
   if (!G4AttUtils::ExtractAttValue(object, fAttName, attVal)) {
     static G4bool warnedUnableToExtract = false;
     if (!warnedUnableToExtract) {
-      std::ostringstream o;
-      o <<"Unable to extract attribute value named "<<fAttName;
+      G4ExceptionDescription ed;
+      ed <<"Unable to extract attribute value named "<<fAttName;
       G4Exception
-	("G4AttributeFilterT::Evaluate", "InvalidAttributeValue", JustWarning, o.str().c_str());
+	("G4AttributeFilterT::Evaluate", "modeling0103", JustWarning, ed, "InvalidAttributeValue");
+      G4cout << "Available attributes:\n"
+	     << object.GetAttDefs();
+      warnedUnableToExtract = true;
     }
-    G4cout << "Available attributes:\n"
-	   << object.GetAttDefs();
-    warnedUnableToExtract = true;
     return false;
   }
 
@@ -214,10 +210,10 @@ G4AttributeFilterT<T>::AddInterval(const G4String& interval)
   typename ConfigVect::iterator iter = std::find(fConfigVect.begin(), fConfigVect.end(), myPair);
   
   if (iter != fConfigVect.end()) {
-    std::ostringstream o;
-    o <<"Interval "<< interval <<" already exists"<<std::endl;
+    G4ExceptionDescription ed;
+    ed <<"Interval "<< interval <<" already exists";
     G4Exception
-      ("G4AttributeFilterT::AddInterval", "InvalidInterval", FatalErrorInArgument, o.str().c_str());
+      ("G4AttributeFilterT::AddInterval", "modeling0104", FatalErrorInArgument, ed);
   }
 
   fConfigVect.push_back(myPair);
@@ -232,10 +228,10 @@ G4AttributeFilterT<T>::AddValue(const G4String& value)
   typename ConfigVect::iterator iter = std::find(fConfigVect.begin(), fConfigVect.end(), myPair);
   
   if (iter != fConfigVect.end()) {
-    std::ostringstream o;
-    o <<"Single value "<< value <<" already exists"<<std::endl;
+    G4ExceptionDescription ed;
+    ed <<"Single value "<< value <<" already exists";
     G4Exception
-      ("G4AttributeFilterT::AddValue", "InvalidValue", FatalErrorInArgument, o.str().c_str());
+      ("G4AttributeFilterT::AddValue", "modeling0105", FatalErrorInArgument, ed);
   }
   fConfigVect.push_back(myPair);
 }

@@ -70,7 +70,7 @@ G4GMocrenTouchable::G4GMocrenTouchable(G4int & _depth0, G4int & _depth1) {
 const G4ThreeVector& G4GMocrenTouchable::GetTranslation(G4int depth) const {
   // never used
   // in the purpose to avoid a warning in the compile process
-  G4ThreeVector * vec = 0;
+  G4ThreeVector * vec = new G4ThreeVector();
   *vec *= static_cast<G4double>(depth);
   return *vec;
 }
@@ -79,16 +79,18 @@ const G4RotationMatrix* G4GMocrenTouchable::GetRotation(G4int depth) const {
   // in the puspose to avoid a warning in the compile process
   G4RotationMatrix * rot = new G4RotationMatrix();
   rot->setPhi(static_cast<G4double>(depth));
-  delete rot;
   return rot;
 }
 inline
 G4int G4GMocrenTouchable::GetReplicaNumber(G4int depth) const {
   if(depth > 1) {
-    G4Exception("G4GMocrenTouchable::GetReplicaNumber(G4int)", "NotApplicable",
+    G4Exception("G4GMocrenTouchable::GetReplicaNumber(G4int)", "gMocren0001",
 		FatalException, "depth number is less than 2.");
   }
-  return  repno[depth];
+  G4int rvalue;
+  if(depth < 2) rvalue = depth;
+  else rvalue = 0;
+  return  rvalue;
 }
 
 

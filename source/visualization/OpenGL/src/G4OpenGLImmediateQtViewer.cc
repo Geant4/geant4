@@ -73,16 +73,9 @@ void G4OpenGLImmediateQtViewer::initializeGL () {
 
   InitializeGLView ();
 
-
   // If a double buffer context has been forced upon us, ignore the
   // back buffer for this OpenGLImmediate view.
-  //   glDrawBuffer (GL_FRONT); // FIXME : Ne marche pas avec cette ligne, mais affiche le run correctement...
-  // clear the buffers and window.
-  ClearView ();
-  FinishView ();
-
-  glDepthFunc (GL_LEQUAL);
-  glDepthMask (GL_TRUE);
+  //  glDrawBuffer (GL_FRONT); // FIXME : Ne marche pas avec cette ligne, mais affiche le run correctement...
 
   if (fSceneHandler.GetScene() == 0) {
     fHasToRepaint =false;

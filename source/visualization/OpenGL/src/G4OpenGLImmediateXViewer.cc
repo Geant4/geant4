@@ -68,10 +68,6 @@ void G4OpenGLImmediateXViewer::Initialise () {
 
   InitializeGLView ();
 
-  // clear the buffers and window.
-  ClearView ();
-  FinishView ();
-
   // If a double buffer context has been forced upon us, ignore the
   // back buffer for this OpenGLImmediate view.
   glDrawBuffer (GL_FRONT);

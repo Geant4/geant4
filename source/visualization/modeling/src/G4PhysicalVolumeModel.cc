@@ -133,7 +133,8 @@ void G4PhysicalVolumeModel::DescribeYourselfTo
 (G4VGraphicsScene& sceneHandler)
 {
   if (!fpMP) G4Exception
-    ("G4PhysicalVolumeModel::DescribeYourselfTo: No modeling parameters.");
+    ("G4PhysicalVolumeModel::DescribeYourselfTo",
+     "modeling0003", FatalException, "No modeling parameters.");
 
   // For safety...
   fCurrentDepth = 0;
@@ -717,7 +718,7 @@ std::vector<G4AttValue>* G4PhysicalVolumeModel::CreateCurrentAttValues() const
   if (!fpCurrentLV) {
      G4Exception
         ("G4PhysicalVolumeModel::CreateCurrentAttValues",
-         "",
+         "modeling0004",
          JustWarning,
          "Current logical volume not defined.");
      return values;
@@ -785,9 +786,9 @@ const G4ThreeVector& G4PhysicalVolumeModel::G4PhysicalVolumeModelTouchable::GetT
   size_t i = fFullPVPath.size() - depth - 1;
   if (i >= fFullPVPath.size()) {
     G4Exception("G4PhysicalVolumeModelTouchable::GetTranslation",
-		"Index out of range",
+		"modeling0005",
 		FatalErrorInArgument,
-		"Asking for non-existent depth");
+		"Index out of range. Asking for non-existent depth");
   }
   static G4ThreeVector tempTranslation;
   tempTranslation = fFullPVPath[i].GetTransform().getTranslation();
@@ -799,9 +800,9 @@ const G4RotationMatrix* G4PhysicalVolumeModel::G4PhysicalVolumeModelTouchable::G
   size_t i = fFullPVPath.size() - depth - 1;
   if (i >= fFullPVPath.size()) {
     G4Exception("G4PhysicalVolumeModelTouchable::GetRotation",
-		"Index out of range",
+		"modeling0006",
 		FatalErrorInArgument,
-		"Asking for non-existent depth");
+		"Index out of range. Asking for non-existent depth");
   }
   static G4RotationMatrix tempRotation;
   tempRotation = fFullPVPath[i].GetTransform().getRotation();
@@ -813,9 +814,9 @@ G4VPhysicalVolume* G4PhysicalVolumeModel::G4PhysicalVolumeModelTouchable::GetVol
   size_t i = fFullPVPath.size() - depth - 1;
   if (i >= fFullPVPath.size()) {
     G4Exception("G4PhysicalVolumeModelTouchable::GetVolume",
-		"Index out of range",
+		"modeling0007",
 		FatalErrorInArgument,
-		"Asking for non-existent depth");
+		"Index out of range. Asking for non-existent depth");
   }
   return fFullPVPath[i].GetPhysicalVolume();
 }
@@ -825,9 +826,9 @@ G4VSolid* G4PhysicalVolumeModel::G4PhysicalVolumeModelTouchable::GetSolid(G4int 
   size_t i = fFullPVPath.size() - depth - 1;
   if (i >= fFullPVPath.size()) {
     G4Exception("G4PhysicalVolumeModelTouchable::GetSolid",
-		"Index out of range",
+		"modeling0008",
 		FatalErrorInArgument,
-		"Asking for non-existent depth");
+		"Index out of range. Asking for non-existent depth");
   }
   return fFullPVPath[i].GetPhysicalVolume()->GetLogicalVolume()->GetSolid();
 }
@@ -837,9 +838,9 @@ G4int G4PhysicalVolumeModel::G4PhysicalVolumeModelTouchable::GetReplicaNumber(G4
   size_t i = fFullPVPath.size() - depth - 1;
   if (i >= fFullPVPath.size()) {
     G4Exception("G4PhysicalVolumeModelTouchable::GetReplicaNumber",
-		"Index out of range",
+		"modeling0009",
 		FatalErrorInArgument,
-		"Asking for non-existent depth");
+		"Index out of range. Asking for non-existent depth");
   }
   return fFullPVPath[i].GetCopyNo();
 }

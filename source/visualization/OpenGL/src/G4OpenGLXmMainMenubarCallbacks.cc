@@ -315,7 +315,10 @@ void G4OpenGLXmViewer::actions_callback (Widget w,
     }
   
   default:
-    G4Exception("Unrecognised widget child of control_callback");
+    G4Exception
+      ("G4OpenGLXmViewer::actions_callback",
+       "opengl0001", FatalException,
+       "Unrecognised widget child of control_callback");
   }
   
   return;
@@ -513,7 +516,10 @@ void G4OpenGLXmViewer::misc_callback (Widget w,
     }
   
   default:
-    G4Exception("Unrecognised widget child of misc_callback.");
+    G4Exception
+      ("G4OpenGLXmViewer::misc_callback",
+       "opengl0002", FatalException,
+       "Unrecognised widget child of misc_callback.");
   }
   
   return;
@@ -540,7 +546,10 @@ void G4OpenGLXmViewer::set_wob_sens_callback (Widget w,
       ten_to_the_dp *= 10.;
     }
   } else {
-    G4Exception("Bad value returned for dp in set_rot_sens_callback");
+    G4Exception
+      ("G4OpenGLXmViewer::set_wob_sens_callback",
+       "opengl0003", FatalException,
+       "Bad value returned for dp in set_rot_sens_callback");
   }
   
   pView->wob_sens = (G4float)(cbs->value) / ten_to_the_dp;

@@ -71,7 +71,6 @@ class G4OpenGLQtViewer: public QObject, virtual public G4OpenGLViewer {
 public:
   G4OpenGLQtViewer (G4OpenGLSceneHandler& scene);
   virtual ~G4OpenGLQtViewer ();
-  void SetView ();
   virtual void updateQWidget()=0;
   QString setEncoderPath(QString path);
   QString getEncoderPath();
@@ -100,8 +99,7 @@ public:
   void saveVideo();
   bool generateMpegEncoderParameters();
   void displayRecordingStatus();
-  void drawText(const char * ,int x,int y,int z, int size);
-
+  void DrawText(const char * ,int x,int y,int z, int size);
 public:
   void G4MousePressEvent(QMouseEvent *event);
   void G4wheelEvent (QWheelEvent * event); 
@@ -112,6 +110,7 @@ public:
 
 protected:
   void CreateGLQtContext ();
+  void CreateFontLists ();
   virtual void CreateMainWindow (QGLWidget*,QString);
   void G4manageContextMenuEvent(QContextMenuEvent *e);
   void rotateQtScene(float, float);
@@ -128,6 +127,7 @@ protected:
   QWidget* fGLWindow;
   bool hasPendingEvents();
   void savePPMToTemp();
+  void fillUIViewComponent();
   int fRecordFrameNumber;
 
   bool fHasToRepaint;
@@ -150,7 +150,6 @@ private:
   void setRecordingInfos(QString);
   QString getProcessErrorMsg();
   QWidget* getParentWidget();
-  void fillUIViewComponent();
   void parseVolumeTree(G4VPhysicalVolume * root, QTreeWidgetItem *);
   void setCheckComponent(QTreeWidgetItem* item,bool check);
   G4VPhysicalVolume* parseAndFindVolumeTree(G4VPhysicalVolume * root, G4String currentPath, G4String pathToMatch);

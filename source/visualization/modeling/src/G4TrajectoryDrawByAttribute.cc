@@ -38,7 +38,6 @@
 #include "G4VisTrajContext.hh"
 #include "G4VTrajectory.hh"
 #include <assert.h>
-#include <sstream>
 
 G4TrajectoryDrawByAttribute::G4TrajectoryDrawByAttribute(const G4String& name, G4VisTrajContext* context)
   :G4VTrajectoryModel(name, context)
@@ -76,10 +75,11 @@ G4TrajectoryDrawByAttribute::Draw(const G4VTrajectory& object,
   if (fAttName.isNull()) {
 
     if (!fWarnedMissingAttribute) {
-      std::ostringstream o;
-      o<<"Null attribute name";
-      G4Exception("G4TrajectoryDrawByAttribute::Draw", "NullAttributeName", JustWarning, o.str().c_str());
-      
+      G4ExceptionDescription ed;
+      ed<<"Null attribute name";
+      G4Exception("G4TrajectoryDrawByAttribute::Draw",
+		  "modeling0116",
+		  JustWarning, ed);
       fWarnedMissingAttribute = true;
     }
     
@@ -98,10 +98,11 @@ G4TrajectoryDrawByAttribute::Draw(const G4VTrajectory& object,
     if (!G4AttUtils::ExtractAttDef(object, fAttName, attDef)) {
       static G4bool warnedUnableToExtract = false;
       if (!warnedUnableToExtract) {
-	std::ostringstream o;
-	o <<"Unable to extract attribute definition named "<<fAttName;
+	G4ExceptionDescription ed;
+	ed <<"Unable to extract attribute definition named "<<fAttName;
 	G4Exception
-	  ("G4TrajectoryDrawByAttribute::Draw", "InvalidAttributeDefinition", JustWarning, o.str().c_str());
+	  ("G4TrajectoryDrawByAttribute::Draw",
+	   "modeling0117", JustWarning, ed, "Invalid attribute name");
 	G4cout << "Available attributes:\n"
 	       << object.GetAttDefs();
 	warnedUnableToExtract = true;
@@ -135,10 +136,11 @@ G4TrajectoryDrawByAttribute::Draw(const G4VTrajectory& object,
   if (!G4AttUtils::ExtractAttValue(object, fAttName, attVal)) {
     static G4bool warnedUnableToExtract = false;
     if (!warnedUnableToExtract) {
-      std::ostringstream o;
-      o <<"Unable to extract attribute value named "<<fAttName;
+      G4ExceptionDescription ed;
+      ed <<"Unable to extract attribute value named "<<fAttName;
       G4Exception
-	("G4TrajectoryDrawByAttribute::Draw", "InvalidAttributeValue", JustWarning, o.str().c_str());
+	("G4TrajectoryDrawByAttribute::Draw",
+	 "modeling0118", JustWarning, ed, "Invalid attribute name");
 	G4cout << "Available attributes:\n"
 	       << object.GetAttDefs();
       warnedUnableToExtract = true;
@@ -219,10 +221,11 @@ G4TrajectoryDrawByAttribute::AddIntervalContext(const G4String& name, G4VisTrajC
   ContextMap::iterator iter = fContextMap.find(myPair);
   
   if (iter != fContextMap.end()) {
-    std::ostringstream o;
-    o <<"Interval "<< name <<" already exists"<<std::endl;
+    G4ExceptionDescription ed;
+    ed <<"Interval "<< name <<" already exists";
     G4Exception
-      ("G4TrajectoryDrawByAttribute::AddIntervalContext", "InvalidInterval", FatalErrorInArgument, o.str().c_str());
+      ("G4TrajectoryDrawByAttribute::AddIntervalContext",
+       "modeling0119", FatalErrorInArgument, ed, "Invalid interval");
   }
 
   fContextMap[myPair] = context;
@@ -237,10 +240,11 @@ G4TrajectoryDrawByAttribute::AddValueContext(const G4String& name, G4VisTrajCont
   ContextMap::iterator iter = fContextMap.find(myPair);
   
   if (iter != fContextMap.end()) {
-    std::ostringstream o;
-    o <<"Single value "<< name <<" already exists"<<std::endl;
+    G4ExceptionDescription ed;
+    ed <<"Single value "<< name <<" already exists";
     G4Exception
-      ("G4TrajectoryDrawByAttribute::AddSingleValueContext", "InvalidInterval", FatalErrorInArgument, o.str().c_str());
+      ("G4TrajectoryDrawByAttribute::AddSingleValueContext",
+       "modeling0120", FatalErrorInArgument, ed, "Invalid value");
   }
 
   fContextMap[myPair] = context;

@@ -40,5 +40,7 @@ G4NullModel::G4NullModel (const G4ModelingParameters* pMP):
 G4NullModel::~G4NullModel () {}
 
 void G4NullModel::DescribeYourselfTo (G4VGraphicsScene&) {
-  G4Exception ("G4NullModel::DescribeYourselfTo called.");
+  G4Exception ("G4NullModel::DescribeYourselfTo",
+	       "modeling0002", FatalException,
+	       "There is a serious mistake if this is called!");
 }

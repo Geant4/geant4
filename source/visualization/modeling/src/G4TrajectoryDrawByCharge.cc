@@ -116,10 +116,10 @@ G4TrajectoryDrawByCharge::Set(const G4String& charge, const G4String& colour)
   Charge myCharge;
   
   if (!ConvertToCharge(charge, myCharge)) {
-    std::ostringstream o;
-    o << "Invalid charge "<<charge;
+    G4ExceptionDescription ed;
+    ed << "Invalid charge "<<charge;
     G4Exception   
-      ("G4TrajectoryDrawByCharge::Set(const G4int& charge, const G4String& colour)", "InvalidCharge", JustWarning, o.str().c_str());
+      ("G4TrajectoryDrawByCharge::Set(const G4int& charge, const G4String& colour)", "modeling0121", JustWarning, ed);
     return;
   }
 
@@ -132,10 +132,10 @@ G4TrajectoryDrawByCharge::Set(const G4String& charge, const G4Colour& colour)
   Charge myCharge;
   
   if (!ConvertToCharge(charge, myCharge)) {
-    std::ostringstream o;
-    o << "Invalid charge "<<charge;
+    G4ExceptionDescription ed;
+    ed << "Invalid charge "<<charge;
     G4Exception   
-      ("G4TrajectoryDrawByCharge::Set(const G4int& charge, const G4Colour& colour)", "InvalidCharge", JustWarning, o.str().c_str());
+      ("G4TrajectoryDrawByCharge::Set(const G4int& charge, const G4Colour& colour)", "modeling0122", JustWarning, ed);
   }
 
   return Set(myCharge, colour);

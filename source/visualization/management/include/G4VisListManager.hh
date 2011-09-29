@@ -39,7 +39,6 @@
 #include "G4String.hh"
 #include <map>
 #include <ostream>
-#include <sstream>
 
 template <typename T>
 class G4VisListManager {
@@ -106,11 +105,11 @@ G4VisListManager<T>::SetCurrent(const G4String& name)
 
   if (iter != fMap.end()) fpCurrent = fMap[name];
   else {
-    std::ostringstream o;
-    o << "Key "<<name<<" has not been registered";
+    G4ExceptionDescription ed;
+    ed << "Key "<<name<<" has not been registered";
     G4Exception
       ("G4VisListManager<T>::SetCurrent(T* ptr) ",
-       "NonExistentName", FatalErrorInArgument, o.str().c_str());
+       "visman0102", FatalErrorInArgument, ed, "Non-existent name");
   }
 }
 

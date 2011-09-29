@@ -116,14 +116,25 @@ void G4OpenGLViewer::InitializeGLView ()
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLViewer::InitializeGLView\n");
 #endif
-  glClearColor (0.0, 0.0, 0.0, 0.0);
-  glClearDepth (1.0);
-  glDisable (GL_BLEND);
-  glDisable (GL_LINE_SMOOTH);
-  glDisable (GL_POLYGON_SMOOTH);
 
   fWinSize_x = fVP.GetWindowSizeHintX();
   fWinSize_y = fVP.GetWindowSizeHintY();
+
+  glClearColor (0.0, 0.0, 0.0, 0.0);
+  glClearDepth (1.0);
+  glDisable (GL_LINE_SMOOTH);
+  glDisable (GL_POLYGON_SMOOTH);
+
+// clear the buffers and window?
+  ClearView ();
+  FinishView ();
+  
+  glDepthFunc (GL_LEQUAL);
+  glDepthMask (GL_TRUE);
+  
+  glEnable (GL_BLEND);
+  glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLViewer::InitializeGLView END\n");
 #endif
@@ -169,7 +180,7 @@ void G4OpenGLViewer::ResizeWindow(unsigned int aWidth, unsigned int aHeight) {
 void G4OpenGLViewer::ResizeGLView()
 {
 #ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLViewer::ResizeGLView %d %d &:%d\n",fWinSize_x,fWinSize_y,this);
+  printf("G4OpenGLViewer::ResizeGLView %d %d %#lx\n",fWinSize_x,fWinSize_y,(unsigned long)this);
 #endif
   // Check size
   GLint dims[2];
@@ -618,6 +629,19 @@ bool G4OpenGLViewer::printNonVectoredEPS () {
   //  fPrintSizeY = -1;
 
   return true;
+}
+
+/* Draw Gl2Ps text if needed
+   return true if it is draw
+ */
+bool G4OpenGLViewer::drawGl2psText(const char * textString, int size) {
+
+  if (!fGL2PSAction) return false;
+  if (fGL2PSAction->fileWritingEnabled()) {
+    gl2psText(textString,"Times-Roman",size);
+    return true;
+  }
+  return false;
 }
 
 

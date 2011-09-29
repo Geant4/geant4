@@ -132,11 +132,11 @@ void G4ModelCmdApplyStringColour<M>::SetNewValue(G4UIcommand* cmd, G4String newV
     
     // Colour key should exist
     if (!G4Colour::GetColour(colour, myColour)) {
-      std::ostringstream o;
-      o << "G4Colour with key "<<colour<<" does not exist ";
+      G4ExceptionDescription ed;
+      ed << "G4Colour with key "<<colour<<" does not exist ";
       G4Exception
 	("G4ModelCmdApplyStringColour<M>::SetNewValue",
-	 "NonExistentColour", JustWarning, o.str().c_str());
+	 "modeling0106", JustWarning, ed);
       return;
     }
   }
@@ -236,11 +236,11 @@ void G4ModelCmdApplyColour<M>::SetNewValue(G4UIcommand* cmd, G4String newValue)
     
     // Colour key should exist
     if (!G4Colour::GetColour(colour, myColour)) {
-      std::ostringstream o;
-      o << "G4Colour with key "<<colour<<" does not exist ";
+      G4ExceptionDescription ed;
+      ed << "G4Colour with key "<<colour<<" does not exist ";
       G4Exception
 	("G4ModelCmdApplyColour<M>::SetNewValue",
-	 "NonExistentColour", JustWarning, o.str().c_str());
+	 "modeling0107", JustWarning, ed);
       return;
     }
   }

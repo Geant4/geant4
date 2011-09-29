@@ -319,6 +319,17 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   //parameter->SetCurrentAsDefault(true);
   fpCommandProjection->SetParameter(parameter);
 
+  fpCommandRotationStyle = new G4UIcmdWithAString
+    ("/vis/viewer/set/rotationStyle",this);
+  fpCommandRotationStyle->SetGuidance
+    ("Set style of rotation - constrainUpDirection or freeRotation.");
+  fpCommandRotationStyle->SetGuidance
+    ("constrainUpDirection: conventional HEP view.");
+  fpCommandRotationStyle->SetGuidance
+    ("freeRotation: Google-like rotation, using mouse-grab.");
+  fpCommandRotationStyle->SetParameterName ("style",omitable = false);
+  fpCommandRotationStyle->SetCandidates("constrainUpDirection freeRotation");
+
   fpCommandSectionPlane = new G4UIcommand("/vis/viewer/set/sectionPlane",this);
   fpCommandSectionPlane -> SetGuidance
     ("Set plane for drawing section (DCUT).");
@@ -462,6 +473,7 @@ G4VisCommandsViewerSet::~G4VisCommandsViewerSet() {
   delete fpCommandLightsVector;
   delete fpCommandPicking;
   delete fpCommandProjection;
+  delete fpCommandRotationStyle;
   delete fpCommandSectionPlane;
   delete fpCommandStyle;
   delete fpCommandTargetPoint;
@@ -978,6 +990,26 @@ void G4VisCommandsViewerSet::SetNewValue
       G4cout << ".\nSection plane is now: "
 	     << vp.GetSectionPlane ();
       G4cout << G4endl;
+    }
+  }
+
+  else if (command == fpCommandRotationStyle) {
+    G4ViewParameters::RotationStyle style;
+    if (newValue == "constrainUpDirection")
+      style = G4ViewParameters::constrainUpDirection;
+    else if (newValue == "freeRotation")
+      style = G4ViewParameters::freeRotation;
+    else {
+      if (verbosity >= G4VisManager::errors) {
+	G4cout << "ERROR: \"" << newValue << "\" not recognised." << G4endl;
+      }
+      return;
+    }
+    vp.SetRotationStyle(style);
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Rotation style of viewer \"" << currentViewer->GetName()
+	     << "\" set to " << vp.GetRotationStyle()
+	     << G4endl;
     }
   }
 

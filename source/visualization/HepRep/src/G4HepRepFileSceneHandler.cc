@@ -487,7 +487,8 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 	G4TrajectoriesModel* pTrModel =
 		dynamic_cast<G4TrajectoriesModel*>(fpModel);
 	if (!pTrModel) G4Exception
-		("G4HepRepFileSceneHandler::AddCompound(const G4VTrajectory&): Not a G4TrajectoriesModel.");
+	  ("G4HepRepFileSceneHandler::AddCompound(const G4VTrajectory&)",
+	   "vis-HepRep0001", FatalException, "Not a G4TrajectoriesModel.");
 	
 	// Pointers to hold trajectory attribute values and definitions.
 	std::vector<G4AttValue>* rawTrajAttValues = traj.CreateAttValues();

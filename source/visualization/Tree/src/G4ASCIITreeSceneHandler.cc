@@ -264,7 +264,7 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
     // Check...
     if (pCurrentPV->IsReplicated()) {
       G4Exception("G4ASCIITreeSceneHandler::RequestPrimitives",
-		  "",
+		  "vistree0001",
 		  JustWarning,
 		  "Replica unexpected");
     }

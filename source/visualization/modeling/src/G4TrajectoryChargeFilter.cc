@@ -67,10 +67,11 @@ G4TrajectoryChargeFilter::Add(const G4String& charge)
   MyCharge myCharge;
   
   if (!ConvertToCharge(charge, myCharge)) {
-    std::ostringstream o;
-    o << "Invalid charge "<<charge;
+    G4ExceptionDescription ed;
+    ed << "Invalid charge "<<charge;
     G4Exception   
-      ("G4TrajectoryChargeFilter::Add(const G4String& charge)", "InvalidCharge", JustWarning, o.str().c_str());
+      ("G4TrajectoryChargeFilter::Add(const G4String& charge)",
+       "modeling0115", JustWarning, ed);
     return;
   }
   

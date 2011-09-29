@@ -26,6 +26,22 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+25th September 2011  John Allison  (visman-V09-04-04)
+- G4VisCommandsSceneAdd.cc: Tidied.
+
+16th September 2011  John Allison
+- G4VisCommandsSceneAdd.cc: When adding trajectories
+  (/vis/scene/add/trajectories) print attributes even if warnings
+  are suppressed.
+- Migrated to new G4Exception.
+
+21st and 30th June 2011  John Allison
+- Added /vis/viewer/set/rotationStyle
+  Guidance :
+  Set style of rotation - constrainUpDirection or freeRotation.
+  constrainUpDirection: conventional HEP view.
+  freeRotation: Google-like rotation, using mouse-grab.
+
 27th May 2011  Joseph Perl  (visman-V09-04-03)
 - Tagged.
 

@@ -68,19 +68,6 @@ void G4OpenGLImmediateXmViewer::Initialise () {
 
   InitializeGLView ();
 
-  // clear the buffers and window.
-  ClearView ();
-  FinishView ();
-
-  glDepthFunc (GL_LEQUAL);
-  glDepthMask (GL_TRUE);
-  
-  glColorMask (GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-  glLineWidth (1.0);
-
-  glEnable (GL_BLEND);
-  glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
   // If a double buffer context has been forced upon us, ignore the
   // back buffer for this OpenGLImmediate view.
   glDrawBuffer (GL_FRONT);

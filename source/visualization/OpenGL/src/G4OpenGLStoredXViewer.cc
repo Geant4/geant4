@@ -69,12 +69,7 @@ void G4OpenGLStoredXViewer::Initialise () {
 
   InitializeGLView ();
 
-// clear the buffers and window.
-  ClearView ();
-  FinishView ();
-
-  glDepthFunc (GL_LEQUAL);
-  glDepthMask (GL_TRUE);
+  glDrawBuffer (GL_BACK);
 }
 
 void G4OpenGLStoredXViewer::DrawView () {

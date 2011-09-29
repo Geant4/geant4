@@ -68,7 +68,9 @@ void G4OpenGLStoredQtViewer::Initialise() {
   fReadyToPaint = false;
   CreateMainWindow (this,QString(GetName()));
   CreateFontLists ();
-  
+
+  glDrawBuffer (GL_BACK);
+
   fReadyToPaint = true;
 }
 
@@ -79,13 +81,6 @@ void G4OpenGLStoredQtViewer::initializeGL () {
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredQtViewer::InitialiseGL () 1\n");
 #endif
-
-  // clear the buffers and window.
-  ClearView ();
-  FinishView ();
-   
-  glDepthFunc (GL_LEQUAL);
-  glDepthMask (GL_TRUE);
 
   if (fSceneHandler.GetScene() == 0) {
     fHasToRepaint =false;
@@ -316,6 +311,8 @@ void G4OpenGLStoredQtViewer::ShowView (
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
   activateWindow();
+  glFlush();
+
 }
 
 #endif

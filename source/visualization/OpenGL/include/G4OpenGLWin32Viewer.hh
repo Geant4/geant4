@@ -49,6 +49,7 @@ public:
   virtual ~G4OpenGLWin32Viewer ();
   void SetView ();
   void ShowView ();
+
 protected:
   void GetWin32Connection ();
   void CreateGLWin32Context ();
