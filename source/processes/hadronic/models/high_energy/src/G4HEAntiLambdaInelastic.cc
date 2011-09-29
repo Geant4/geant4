@@ -30,6 +30,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
+#include <iostream>
 
 // G4 Process: Gheisha High Energy Collision model.
 // This includes the high energy cascading model, the two-body-resonance model
@@ -38,9 +39,54 @@
 // processes for particles at rest.  
 // First work done by J.L.Chuma and F.W.Jones, TRIUMF, June 96.  
 // H. Fesefeldt, RWTH-Aachen, 23-October-1996
-// Last modified: 29-July-1998 
+//
  
 #include "G4HEAntiLambdaInelastic.hh"
+
+
+G4HEAntiLambdaInelastic::G4HEAntiLambdaInelastic(const G4String& name)
+ : G4HEInelastic(name)
+{
+  vecLength = 0;
+  theMinEnergy = 20*GeV;
+  theMaxEnergy = 10*TeV;
+  MAXPART      = 2048;
+  verboseLevel = 0;
+//  Description(); 
+}
+
+
+void G4HEAntiLambdaInelastic::Description() const
+{
+  char* dirName = getenv("G4PhysListDocDir");
+  if (dirName) {
+    std::ofstream outFile;
+    G4String outFileName = GetModelName() + ".html";
+    G4String pathName = G4String(dirName) + "/" + outFileName;
+
+    outFile.open(pathName);
+    outFile << "<html>\n";
+    outFile << "<head>\n";
+
+    outFile << "<title>Description of anti-Lambda High Energy Parameterized Model</title>\n";
+    outFile << "</head>\n";
+    outFile << "<body>\n";
+
+    outFile << "G4HEAntiLambdaInelastic is one of the High Energy\n"
+            << "Parameterized (HEP) models used to implement inelastic\n"
+            << "anti-Lambda scattering from nuclei.  It is a re-engineered\n"
+            << "version of the GHEISHA code of H. Fesefeldt.  It divides the\n"
+            << "initial collision products into backward- and forward-going\n"
+            << "clusters which are then decayed into final state hadrons.\n"
+            << "The model does not conserve energy on an event-by-event\n"
+            << "basis.  It may be applied to anti-Lambdas with initial energies\n"
+            << "above 20 GeV.\n";
+
+    outFile << "</body>\n";
+    outFile << "</html>\n";
+    outFile.close();
+  }
+}
 
 
 G4HadFinalState*

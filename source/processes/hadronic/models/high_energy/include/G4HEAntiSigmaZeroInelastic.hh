@@ -63,6 +63,8 @@ class G4HEAntiSigmaZeroInelastic : public G4HEInelastic
    }
 
    ~G4HEAntiSigmaZeroInelastic(){ };
+
+   void Description() const;
          
    G4int verboseLevel;
    G4int MAXPART;

@@ -64,6 +64,8 @@ class G4HEAntiProtonInelastic : public G4HEInelastic
    }
 
    ~G4HEAntiProtonInelastic(){ };
+
+   void Description() const;
          
    G4int vecLength;
         

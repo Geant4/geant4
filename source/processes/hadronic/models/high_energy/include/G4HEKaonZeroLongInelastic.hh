@@ -62,6 +62,8 @@ class G4HEKaonZeroLongInelastic : public G4HEInelastic
    }
 
    ~G4HEKaonZeroLongInelastic(){ };
+
+   void Description() const;
          
    G4int vecLength;
 

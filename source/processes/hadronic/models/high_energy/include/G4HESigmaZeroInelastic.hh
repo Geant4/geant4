@@ -23,15 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id: G4HESigmaZeroInelastic.hh,v 1.14 2007-04-11 18:11:30 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4 Gheisha High Energy model class -- header file
 // H. Fesefeldt, RWTH Aachen 23-October-1996
-// Last modified: 10-December-1996
-
 // A prototype of the Gheisha High Energy collision model.
 
 #ifndef G4HESigmaZeroInelastic_h
@@ -63,6 +60,8 @@ class G4HESigmaZeroInelastic : public G4HEInelastic
    }
 
    ~G4HESigmaZeroInelastic(){ };
+
+   void Description() const;
          
    G4int verboseLevel;
    G4int MAXPART;

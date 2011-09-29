@@ -64,6 +64,8 @@ class G4HEAntiOmegaMinusInelastic : public G4HEInelastic
    }
 
    ~G4HEAntiOmegaMinusInelastic(){ };
+
+   void Description() const;
          
    G4int vecLength;
         

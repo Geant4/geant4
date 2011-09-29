@@ -41,6 +41,40 @@
  
 #include "G4HEAntiSigmaPlusInelastic.hh"
 
+
+void G4HEAntiSigmaPlusInelastic::Description() const
+{
+  char* dirName = getenv("G4PhysListDocDir");
+  if (dirName) {
+    std::ofstream outFile;
+    G4String outFileName = GetModelName() + ".html";
+    G4String pathName = G4String(dirName) + "/" + outFileName;
+
+    outFile.open(pathName);
+    outFile << "<html>\n";
+    outFile << "<head>\n";
+
+    outFile << "<title>Description of anti-Sigma+ High Energy Parameterized Model</title>\n";
+    outFile << "</head>\n";
+    outFile << "<body>\n";
+
+    outFile << "G4HEAntiSigmaPlusInelastic is one of the High Energy\n"
+            << "Parameterized (HEP) models used to implement inelastic\n"
+            << "anti-Sigma+ scattering from nuclei.  It is a re-engineered\n"
+            << "version of the GHEISHA code of H. Fesefeldt.  It divides the\n"
+            << "initial collision products into backward- and forward-going\n"
+            << "clusters which are then decayed into final state hadrons.\n"
+            << "The model does not conserve energy on an event-by-event\n"
+            << "basis.  It may be applied to anti-Sigma+ with initial\n"
+            << "energies above 20 GeV.\n";
+
+    outFile << "</body>\n";
+    outFile << "</html>\n";
+    outFile.close();
+  }
+}
+
+
 G4HadFinalState*
 G4HEAntiSigmaPlusInelastic::ApplyYourself(const G4HadProjectile& aTrack,
                                           G4Nucleus& targetNucleus)
