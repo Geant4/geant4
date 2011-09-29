@@ -43,6 +43,8 @@
 #include "Tst50SteppingAction.hh"
 #include "Tst50SteppingVerbose.hh"
 #include "Tst50AnalysisManager.hh"
+#include <time.h>
+
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
 #endif
