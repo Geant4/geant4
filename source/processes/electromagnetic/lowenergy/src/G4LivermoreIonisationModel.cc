@@ -358,8 +358,8 @@ void G4LivermoreIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle
       G4cout << "Delta ray " << energyDelta/keV << " keV" << G4endl;
       G4cout << "Fluorescence: " << (bindingEnergy-theEnergyDeposit)/keV << " keV" << G4endl;
       G4cout << "Local energy deposit " << theEnergyDeposit/keV << " keV" << G4endl;
-      G4cout << "Total final state: " << (finalKinEnergy+energyDelta+bindingEnergy+
-					  theEnergyDeposit)/keV << " keV" << G4endl;
+      G4cout << "Total final state: " << (finalKinEnergy+energyDelta+bindingEnergy)
+					  << " keV" << G4endl;
       G4cout << "-----------------------------------------------------------" << G4endl;
     }
   return;

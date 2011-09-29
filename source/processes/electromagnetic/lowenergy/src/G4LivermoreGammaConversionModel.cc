@@ -106,7 +106,7 @@ G4LivermoreGammaConversionModel::Initialise(const G4ParticleDefinition*,
   //
   
   if (verboseLevel > 2) { 
-    G4cout << "Loaded cross section files for PenelopeGammaConversion" << G4endl;
+    G4cout << "Loaded cross section files for Livermore Gamma Conversion model" << G4endl;
   }
   if (verboseLevel > 0) { 
     G4cout << "Livermore Gamma Conversion model is initialized " << G4endl

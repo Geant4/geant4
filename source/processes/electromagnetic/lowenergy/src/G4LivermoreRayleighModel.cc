@@ -197,7 +197,7 @@ void G4LivermoreRayleighModel::SampleSecondaries(std::vector<G4DynamicParticle*>
 	  fcostheta = ( 1. + cosTheta*cosTheta)/2.;
 	} while (fcostheta < G4UniformRand());
 
-      if (photonEnergy0 > 5)
+      if (photonEnergy0 > 5.*MeV)
 	{
 	  cosTheta = 1.;
 	}

@@ -251,7 +251,13 @@ G4double G4LivermorePolarizedRayleighModel::GenerateCosTheta(G4double incomingPh
   G4double x;
   G4double fValue;
 
-  do
+  if (incomingPhotonEnergy > 5.*MeV)
+  {
+    cosTheta = 1.;
+  }
+  else
+  {
+    do
     {
       do
 	{
@@ -270,7 +276,8 @@ G4double G4LivermorePolarizedRayleighModel::GenerateCosTheta(G4double incomingPh
       fValue/=zAtom;
       fValue*=fValue;
     }
-  while(fValue < G4UniformRand());
+    while(fValue < G4UniformRand());
+  }
 
   return cosTheta;
 }

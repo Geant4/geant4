@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27.09.2011  S.I., F.L., G.D., tag emlowen-V09-04-60
+            Added similar protection for cosTheta above 5 MeV 
+            in G4LivermorePolarizedRayleighModel as in unpolarized model
+
 05.09.2011  L.Pandola, tag emlowen-V09-04-59
 	    Edited G4PenelopeOscillatorManager in order to 
 	    use the shell binding energy from the G4AtomicDeexcitation
