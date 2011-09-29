@@ -169,7 +169,7 @@ G4bool HadrontherapyMatrix::Fill(G4int trackID,
 		{   // Is it a primary or a secondary particle? 
 			if ( trackID ==1 && ionStore[l].isPrimary || trackID !=1 && !ionStore[l].isPrimary)
 			{
-				if (energyDeposit > 0.) ionStore[l].dose[Index(i, j, k)] += energyDeposit/massOfVoxel;
+				if (energyDeposit > 0.) ionStore[l].dose[Index(i, j, k)] += energyDeposit;
 				
 					// Fill a matrix per each ion with the fluence
 				if (fluence) ionStore[l].fluence[Index(i, j, k)]++;
@@ -203,7 +203,7 @@ G4bool HadrontherapyMatrix::Fill(G4int trackID,
 			newIon.dose[m] = 0.;
 			newIon.fluence[m] = 0;
 		}
-		if (energyDeposit > 0.) newIon.dose[Index(i, j, k)] += energyDeposit/massOfVoxel;
+		if (energyDeposit > 0.) newIon.dose[Index(i, j, k)] += energyDeposit;
 		if (fluence) newIon.fluence[Index(i, j, k)]++;
 		
 		ionStore.push_back(newIon);
@@ -395,14 +395,14 @@ void HadrontherapyMatrix::TotalEnergyDeposit()
     // Store the information of the matrix in a ntuple and in 
     // a 1D Histogram
 
-    HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::GetInstance();
+  //    HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::GetInstance();
     if (matrix)
     {  
 	for(G4int i = 0; i < numberOfVoxelAlongX; i++) 
 	    for(G4int j = 0; j < numberOfVoxelAlongY; j++) 
 		for(G4int k = 0; k < numberOfVoxelAlongZ; k++)
 		{
-		    G4int n = Index(i,j,k);
+		  //G4int n = Index(i,j,k);
 #ifdef G4ANALYSIS_USE_ROOT
 		    if (analysis -> IsTheTFile() )
 		    {

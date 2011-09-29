@@ -50,7 +50,7 @@
 //    are activated for the various processes of interest.
 //    Each builder is activated with the /Physics/addPhysics <nome builder> command
 //
-// 3. Defining a specific 'local' physics list. In Hadrontherapy two loca physics list are defined 
+// 3. Defining a specific 'local' physics list. In Hadrontherapy two local physics list are defined 
 //    (LocalINCLIonIonInelasticPhysic.cc and LocalIonIonInelasticPhysic.cc) where models for the 
 //    ion-ion interactions are activated.
 //    'Local' physics can be activated using the /Physics/addPhysics <nome builder> command
@@ -86,8 +86,6 @@
 #include "G4DecayPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4HadronElasticPhysicsHP.hh"
-#include "G4HadronDElasticPhysics.hh"
-#include "G4HadronHElasticPhysics.hh"
 #include "G4HadronQElasticPhysics.hh"
 #include "G4HadronInelasticQBBC.hh"
 #include "G4IonBinaryCascadePhysics.hh"
@@ -216,26 +214,6 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 	    helIsRegistered = true;
 	}
 	else  G4cout << "AN ELASTIC PHYSICS HAS BEEN ALREADY ACTIVATED!" << G4endl;
-    }
-    else if (name == "DElastic")
-    {
-	if(!helIsRegistered) 
-	{
-	    hadronPhys.push_back( new G4HadronDElasticPhysics());
-	    helIsRegistered = true;
-	}
-	else  G4cout << "AN ELASTIC PHYSICS HAS BEEN ALREADY ACTIVATED!" << G4endl;
-
-    }
-    else if (name == "HElastic")
-    {
-	if(!helIsRegistered) 
-	{
-	    hadronPhys.push_back( new G4HadronHElasticPhysics());
-	    helIsRegistered = true;
-	}
-	else  G4cout << "AN ELASTIC PHYSICS HAS BEEN ALREADY ACTIVATED!" << G4endl;
-
     }
     else if (name == "QElastic")
     {

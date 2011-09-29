@@ -394,7 +394,7 @@ void HadrontherapyDetectorConstruction::UpdateGeometry()
 	    massOfVoxel);
 
     // Initialize analysis
-    HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::GetInstance();
+    //    HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::GetInstance();
 #ifdef G4ANALYSIS_USE_ROOT
     analysis -> flush();     // Finalize the root file 
     analysis -> book();
