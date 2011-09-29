@@ -14,6 +14,37 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26 September 2011  Dennis Wright  (radioactive_decay-V09-04-09)
+---------------------------------------------------------------
+- fix compiler bug in G4BetaDecayCorrections switch/case
+- change exception codes to HAD_RDM_00n
+
+15 September 2011  Dennis Wright  (radioactive_decay-V09-04-08)
+---------------------------------------------------------------
+- replace G4HadronicException with G4Exception.  Files affected:
+  G4RadioactiveDecay.cc, G4RIsotopeTable.cc
+
+15 September 2011  Dennis Wright  (radioactive_decay-V09-04-07)
+---------------------------------------------------------------
+- add G4BetaDecayType.hh, .cc and G4BetaDecayCorrections.hh, .cc names
+  to sources.cmake
+
+- upgrade to new G4Exception.  Files affected: G4RadioactiveDecay.cc,
+  G4NuclearDecayChannel.cc
+ 
+9 September 2011  Dennis Wright  (radioactive_decay-V09-04-06)
+--------------------------------------------------------------
+- G4RadioactiveDecay.cc: mistakenly removed H. Kurasige's local time fix
+  from tag -04.  Re-instate it here.
+   
+9 September 2011  Dennis Wright  (radioactive_decay-V09-04-05)
+--------------------------------------------------------------
+- G4RadioactiveDecay.hh, .cc: add new Fermi function and forbidden beta
+    decay spectral shapes
+- create G4BetaDecayType, an enum of beta transition types
+- create G4BetaDecayCorrections, a class containing new Fermi function and
+    forbidden transition calculations
+
 9 July 2011  Dennis Wright  (radioactive_decay-V09-04-04)
 ---------------------------------------------------------
 - G4RadioactiveDecay.cc : add H. Kurasige's fix of local decay time

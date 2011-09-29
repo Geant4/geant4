@@ -54,6 +54,8 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4hadronic_radioactivedecay
     HEADERS
         G4AlphaDecayChannel.hh
+        G4BetaDecayCorrections.hh
+        G4BetaDecayType.hh
         G4BetaFermiFunction.hh
         G4BetaMinusDecayChannel.hh
         G4BetaPlusDecayChannel.hh
@@ -73,6 +75,8 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_radioactivedecay
         G4UIcmdWithNucleusLimits.hh
         G4UserLimitsForRD.hh
     SOURCES
+        G4BetaDecayCorrections.cc
+        G4BetaDecayType.cc
         G4BetaFermiFunction.cc
         G4NuclearDecayChannel.cc
         G4NucleusLimits.cc
