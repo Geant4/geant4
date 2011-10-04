@@ -646,7 +646,7 @@ int main()
      G4ParticleDefinition* pd = 0;
      G4ThreeVector  mom;
      G4LorentzVector totSum, lorV;
-     G4double e, p, m, sm;
+     G4double e, p, m;   //GF- unused  sm;
      // @@ G4double px, py, pz, pt;
      G4ParticleChange* aChange = 0;
      G4double e0 = energy+pMass;                  // Total energy of the projectile in IU
@@ -657,10 +657,9 @@ int main()
      //G4int nEvt=100;
      // Randomization loop: cycle random generator, using 2 lower digits in nEvt
      G4int    iRandCount = nEvt%100;
-     G4double vRandCount = 0.;
      while (iRandCount>0)                         // Shift of the RNDN values 
      {
-      vRandCount = G4UniformRand();               // Fake calls
+      G4UniformRand();                            // Fake calls
       iRandCount--;
      }
 #ifdef tdebug
@@ -1137,7 +1136,7 @@ int main()
             m   = pd->GetPDGMass();
             mom = sec->GetMomentumDirection();
             G4QPDGCode cQPDG(c);
-            sm   = cQPDG.GetMass();
+            //sm   = cQPDG.GetMass();
             e   = sec->GetKineticEnergy();
           }
           else                                // leading particle
@@ -1153,7 +1152,7 @@ int main()
             m   = aChange->GetMass();
             mom = *(aChange->GetMomentumDirection());
             G4QPDGCode cQPDG(c);
-            sm  = cQPDG.GetMass();
+            //sm  = cQPDG.GetMass();
             e   = aChange->GetEnergy();
           }
           p = std::sqrt(e*(e + m + m));
