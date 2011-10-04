@@ -718,9 +718,14 @@ G4double G4QKaonMinusElasticCrossSection::GetPTables(G4double LP,G4double ILP, G
   }
   else
   {
-    G4cout<<"*Error*G4QKaonMinusElasticCrossSection::GetPTables: PDG="<<PDG<<", Z="<<tgZ
-          <<", N="<<tgN<<", while it is defined only for PDG=-321"<<G4endl;
-    throw G4QException("G4QKaonMinusElasticCrossSection::GetPTables:onlyK-'s implemented");
+    // G4cout<<"*Error*G4QKaonMinusElasticCrossSection::GetPTables: PDG="<<PDG<<", Z="<<tgZ
+    //       <<", N="<<tgN<<", while it is defined only for PDG=-321"<<G4endl;
+    // throw G4QException("G4QKaonMinusElasticCrossSection::GetPTables:onlyK-'s implemented");
+    G4ExceptionDescription ed;
+    ed << "PDG = " << PDG << ", Z = " << tgZ << ", N = " << tgN
+       << ", while it is defined only for PDG=-321 (K-) " << G4endl;
+    G4Exception("G4QKaonMinusElasticCrossSection::GetPTables()", "HAD_CHPS_0000",
+                FatalException, ed);
   }
   return ILP;
 }
@@ -928,9 +933,12 @@ G4double G4QKaonMinusElasticCrossSection::GetSlope(G4int tgZ, G4int tgN, G4int P
   if(lastLP<-4.3) return 0.;          // S-wave for p<14 MeV/c (kinE<.1MeV)
   if(PDG != -321)
   {
-    G4cout<<"*Error*G4QKaonMinusElasticCrossSection::GetSlope: PDG="<<PDG<<", Z="<<tgZ
-          <<", N="<<tgN<<", while it is defined only for PDG=-321"<<G4endl;
-    throw G4QException("G4QKaonMinusElasticCrossSection::GetSlope:Only K- is implemented");
+    // G4cout<<"*Error*G4QKaonMinusElasticCrossSection::GetSlope: PDG="<<PDG<<", Z="<<tgZ
+    //       <<", N="<<tgN<<", while it is defined only for PDG=-321"<<G4endl;
+    // throw G4QException("G4QKaonMinusElasticCrossSection::GetSlope:Only K- is implemented");
+    G4ExceptionDescription ed;
+    ed << "PDG = " << PDG << ", Z = " << tgZ << ", N = " << tgN
+       << ", while it is defined only for PDG=-321 (K-)" << G4endl;
   }
   if(theB1<0.) theB1=0.;
   if(!(theB1>=-1.||theB1<=1.))G4cout<<"*NAN*G4QKaonMinusElCS::GetSlope:B1="<<theB1<<G4endl;
@@ -1091,8 +1099,14 @@ G4double G4QKaonMinusElasticCrossSection::GetQ2max(G4int PDG, G4int tgZ, G4int t
   }
   else
   {
-    G4cout<<"*Error*G4QKaonMinusElasticCrossSection::GetQ2m:PDG="<<PDG<<",Z="<<tgZ<<",N="
-          <<tgN<<", while it is defined only for p projectiles & Z_target>0"<<G4endl;
-    throw G4QException("G4QKaonMinusElasticCrossSection::GetQ2max:only K- is implemented");
+    // G4cout<<"*Error*G4QKaonMinusElasticCrossSection::GetQ2m:PDG="<<PDG<<",Z="<<tgZ<<",N="
+    //       <<tgN<<", while it is defined only for p projectiles & Z_target>0"<<G4endl;
+    // throw G4QException("G4QKaonMinusElasticCrossSection::GetQ2max:only K- is implemented");
+    G4ExceptionDescription ed;
+    ed << "PDG = " << PDG << ", Z = " << tgZ << ", N = " << tgN
+       << ", while it is defined only for p projectiles & Z_target>0" << G4endl;
+    G4Exception("G4QKaonMinusElasticCrossSection::GetQ2max()", "HAD_CHPS_0000",
+                FatalException, ed);
+    return 0;
   }
 }

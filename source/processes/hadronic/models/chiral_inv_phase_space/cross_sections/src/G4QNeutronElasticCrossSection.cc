@@ -1981,9 +1981,14 @@ G4double G4QNeutronElasticCrossSection::GetPTables(G4double LP, G4double ILP, G4
   }
   else
   {
-    G4cout<<"*Error*G4QNeutronElasticCrossSection::GetPTables: PDG="<<PDG<<", Z="<<tgZ
-          <<", N="<<tgN<<", while it is defined only for PDG=2112(n)"<<G4endl;
-    throw G4QException("G4QNeutronElasticCrossSection::GetPTables:only nA're implemented");
+    // G4cout<<"*Error*G4QNeutronElasticCrossSection::GetPTables: PDG="<<PDG<<", Z="<<tgZ
+    //       <<", N="<<tgN<<", while it is defined only for PDG=2112(n)"<<G4endl;
+    // throw G4QException("G4QNeutronElasticCrossSection::GetPTables:only nA're implemented");
+    G4ExceptionDescription ed;
+    ed << "PDG = " << PDG << ", Z = " << tgZ <<", N = " << tgN
+       << ", while it is defined only for PDG=2112 (n)" << G4endl;
+    G4Exception("G4QNeutronElasticCrossSection::GetPTables()", "HAD_CHPS_0000",
+                FatalException, ed);
   }
   return ILP;
 }
@@ -2181,9 +2186,14 @@ G4double G4QNeutronElasticCrossSection::GetSlope(G4int tgZ, G4int tgN, G4int PDG
   if(lastLP<-4.3) return 0.;          // S-wave for p<14 MeV/c (kinE<.1MeV)
   if(PDG!=2112)
   {
-    G4cout<<"*Error*G4QNeutronElasticCrossSection::GetSlope: PDG="<<PDG<<", Z="<<tgZ
-          <<", N="<<tgN<<", while it is defined only for PDG=2112"<<G4endl;
-    throw G4QException("G4QNeutronElasticCrossSection::GetSlope: only nA are implemented");
+    // G4cout<<"*Error*G4QNeutronElasticCrossSection::GetSlope: PDG="<<PDG<<", Z="<<tgZ
+    //       <<", N="<<tgN<<", while it is defined only for PDG=2112"<<G4endl;
+    // throw G4QException("G4QNeutronElasticCrossSection::GetSlope: only nA are implemented");
+    G4ExceptionDescription ed;
+    ed << "PDG = " << PDG << ", Z = " << tgZ << ", N = " << tgN
+       <<", while it is defined only for PDG=2112 (n) " << G4endl;
+    G4Exception("G4QNeutronElasticCrossSection::GetSlope()", "HAD_CHPS_0000",
+                FatalException, ed);
   }
   if(theB1<0.) theB1=0.;
   if(!(theB1>=-1.||theB1<=1.))G4cout<<"*NAN*G4QNeutElasticCrosS::Getslope:"<<theB1<<G4endl;
@@ -2351,8 +2361,14 @@ G4double G4QNeutronElasticCrossSection::GetQ2max(G4int PDG, G4int tgZ, G4int tgN
   }
   else
   {
-    G4cout<<"*Error*G4QNeutronElasticCrossSection::GetQ2max:PDG="<<PDG<<", Z="<<tgZ<<", N="
-          <<tgN<<", while it is defined only for n projectiles & Z_target>0"<<G4endl;
-    throw G4QException("G4QNeutronElasticCrossSection::GetQ2max: only nA implemented");
+    // G4cout<<"*Error*G4QNeutronElasticCrossSection::GetQ2max:PDG="<<PDG<<", Z="<<tgZ<<", N="
+    //       <<tgN<<", while it is defined only for n projectiles & Z_target>0"<<G4endl;
+    // throw G4QException("G4QNeutronElasticCrossSection::GetQ2max: only nA implemented");
+    G4ExceptionDescription ed;
+    ed << "PDG = " << PDG << ", Z = " << tgZ << ", N =" << tgN
+       <<", while it is defined only for n projectiles & Z_target>0" << G4endl;
+    G4Exception("G4QNeutronElasticCrossSection::GetQ2max()", "HAD_CHPS_0000",
+                FatalException, ed);
+    return 0;
   }
 }

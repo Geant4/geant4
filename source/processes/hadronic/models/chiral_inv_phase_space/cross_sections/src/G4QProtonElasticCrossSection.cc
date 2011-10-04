@@ -728,9 +728,14 @@ G4double G4QProtonElasticCrossSection::GetPTables(G4double LP, G4double ILP, G4i
   }
   else
   {
-    G4cout<<"*Error*G4QProtonElasticCrossSection::GetPTables: PDG="<<PDG<<", Z="<<tgZ
-          <<", N="<<tgN<<", while it is defined only for PDG=2212"<<G4endl;
-    throw G4QException("G4QProtonElasticCrossSection::GetPTables: only pA're implemented");
+    // G4cout<<"*Error*G4QProtonElasticCrossSection::GetPTables: PDG="<<PDG<<", Z="<<tgZ
+    //       <<", N="<<tgN<<", while it is defined only for PDG=2212"<<G4endl;
+    // throw G4QException("G4QProtonElasticCrossSection::GetPTables: only pA're implemented");
+    G4ExceptionDescription ed;
+    ed << "PDG = " << PDG << ", Z = " << tgZ << ", N = " << tgN
+       << ", while it is defined only for PDG=2212 (p)" << G4endl;
+    G4Exception("G4QProtonElasticCrossSection::GetPTables()", "HAD_CHPS_0000",
+                FatalException, ed);
   }
   return ILP;
 }
@@ -937,9 +942,14 @@ G4double G4QProtonElasticCrossSection::GetSlope(G4int tgZ, G4int tgN, G4int PDG)
   if(lastLP<-4.3) return 0.;          // S-wave for p<14 MeV/c (kinE<.1MeV)
   if(PDG!=2212)
   {
-    G4cout<<"*Error*G4QProtonElasticCrossSection::GetSlope: PDG="<<PDG<<", Z="<<tgZ<<", N="
-          <<tgN<<", while it is defined only for PDG=2212"<<G4endl;
-    throw G4QException("G4QProtonElasticCrossSection::GetSlope: pA are implemented");
+    // G4cout<<"*Error*G4QProtonElasticCrossSection::GetSlope: PDG="<<PDG<<", Z="<<tgZ<<", N="
+    //       <<tgN<<", while it is defined only for PDG=2212"<<G4endl;
+    // throw G4QException("G4QProtonElasticCrossSection::GetSlope: pA are implemented");
+    G4ExceptionDescription ed;
+    ed << "PDG = " << PDG << ", Z = " << tgZ << ", N = " << tgN
+       << ", while it is defined only for PDG=2212 (p)" << G4endl;
+    G4Exception("G4QProtonElasticCrossSection::GetSlope()", "HAD_CHPS_0000",
+                FatalException, ed);
   }
   if(theB1<0.) theB1=0.;
   if(!(theB1>=-1.||theB1<=1.))G4cout<<"*NAN*G4QElasticCrossSect::Getslope:"<<theB1<<G4endl;
@@ -1102,8 +1112,15 @@ G4double G4QProtonElasticCrossSection::GetQ2max(G4int PDG, G4int tgZ, G4int tgN,
   }
   else
   {
-    G4cout<<"*Error*G4QProtonElasticCrossSection::GetQ2max: PDG="<<PDG<<", Z="<<tgZ<<", N="
-          <<tgN<<", while it is defined only for p projectiles & Z_target>0"<<G4endl;
-    throw G4QException("G4QProtonElasticCrossSection::GetQ2max: only pA are implemented");
+    // G4cout<<"*Error*G4QProtonElasticCrossSection::GetQ2max: PDG="<<PDG<<", Z="<<tgZ<<", N="
+    //       <<tgN<<", while it is defined only for p projectiles & Z_target>0"<<G4endl;
+    // throw G4QException("G4QProtonElasticCrossSection::GetQ2max: only pA are implemented");
+    G4ExceptionDescription ed;
+    ed << "PDG = " << PDG << ", Z = " << tgZ << ", N = " << tgN
+       << ", while it is defined only for p projectiles & Z_target>0" << G4endl;
+    G4Exception("G4QProtonElasticCrossSection::GetQ2max()", "HAD_CHPS_0000",
+                FatalException, ed);
+    return 0;
   }
 }
+

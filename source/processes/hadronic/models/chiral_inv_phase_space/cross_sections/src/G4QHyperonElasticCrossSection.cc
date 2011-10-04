@@ -715,12 +715,15 @@ G4double G4QHyperonElasticCrossSection::GetPTables(G4double LP, G4double ILP, G4
     else G4cout<<"*Warning*G4QHyperonElasticCrossSection::GetPTab:PDG="<<PDG<<",Z="<<tgZ
                <<", N="<<tgN<<", LP="<<LP<<" <= ILP="<<ILP<<" nothing is done!"<<G4endl;
 #endif
-  }
-  else
-  {
-    G4cout<<"*Error*G4QHyperonElasticCrossSection::GetPTables: PDG="<<PDG<<", Z="<<tgZ
-          <<", N="<<tgN<<", while it is defined only for Hyperons"<<G4endl;
-    throw G4QException("G4QHyperonElasticCrossSection::GetPTables:onlyaBA implemented");
+  } else {
+    // G4cout<<"*Error*G4QHyperonElasticCrossSection::GetPTables: PDG="<<PDG<<", Z="<<tgZ
+    //       <<", N="<<tgN<<", while it is defined only for Hyperons"<<G4endl;
+    // throw G4QException("G4QHyperonElasticCrossSection::GetPTables:onlyaBA implemented");
+    G4ExceptionDescription ed;
+    ed << "PDG = " << PDG << ", Z = " << tgZ << ", N = " << tgN
+       << ", while it is defined only for Hyperons" << G4endl;
+    G4Exception("G4QHyperonElasticCrossSection::GetPTables()", "HAD_CHPS_0000",
+                FatalException, ed);
   }
   return ILP;
 }
@@ -927,9 +930,14 @@ G4double G4QHyperonElasticCrossSection::GetSlope(G4int tgZ, G4int tgN, G4int PDG
   if(lastLP<-4.3) return 0.;          // S-wave for p<14 MeV/c (kinE<.1MeV)
   if(PDG==3222 || PDG<3000 || PDG>3334)
   {
-    G4cout<<"*Error*G4QHyperonElasticCrossSection::GetSlope: PDG="<<PDG<<", Z="<<tgZ
-          <<", N="<<tgN<<", while it is defined only for Hyperons"<<G4endl;
-    throw G4QException("G4QHyperonElasticCrossSection::GetSlope: HypA are implemented");
+    // G4cout<<"*Error*G4QHyperonElasticCrossSection::GetSlope: PDG="<<PDG<<", Z="<<tgZ
+    //       <<", N="<<tgN<<", while it is defined only for Hyperons"<<G4endl;
+    // throw G4QException("G4QHyperonElasticCrossSection::GetSlope: HypA are implemented");
+    G4ExceptionDescription ed;
+    ed << "PDG = " << PDG << ", Z = " << tgZ << ", N = " << tgN
+       << ", while it is defined only for Hyperons" << G4endl;
+    G4Exception("G4QHyperonElasticCrossSection::GetSlope()", "HAD_CHPS_0000",
+                FatalException, ed);
   }
   if(theB1<0.) theB1=0.;
   if(!(theB1>=-1.||theB1<=1.)) G4cout<<"*NAN*G4QHyElasticCrossS::Getslope:"<<theB1<<G4endl;
@@ -1088,8 +1096,14 @@ G4double G4QHyperonElasticCrossSection::GetQ2max(G4int PDG, G4int tgZ, G4int tgN
   }
   else
   {
-    G4cout<<"*Error*G4QHyperonElasticCrossSection::GetQ2ma:PDG="<<PDG<<",Z="<<tgZ<<",N="
-          <<tgN<<", while it is defined only for p projectiles & Z_target>0"<<G4endl;
-    throw G4QException("G4QHyperonElasticCrossSection::GetQ2max: only HyperA implemented");
+    // G4cout<<"*Error*G4QHyperonElasticCrossSection::GetQ2ma:PDG="<<PDG<<",Z="<<tgZ<<",N="
+    //       <<tgN<<", while it is defined only for p projectiles & Z_target>0"<<G4endl;
+    // throw G4QException("G4QHyperonElasticCrossSection::GetQ2max: only HyperA implemented");
+    G4ExceptionDescription ed;
+    ed << "PDG = " << PDG << ", Z = " << tgZ << ", N = " << tgN
+       << ", while it is defined only for p projectiles & Z_target>0" << G4endl;
+    G4Exception("G4QHyperonElasticCrossSection::GetQ2max()", "HAD_CHPS_0000",
+                FatalException, ed);
+    return 0;
   }
 }

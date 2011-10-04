@@ -39,7 +39,7 @@
 #define G4QPionPlusElasticCrossSection_h 1
 
 #include "G4QPDGCode.hh"
-#include "G4QException.hh"
+// #include "G4QException.hh"
 #include <vector>
 #include "Randomize.hh"
 #include "G4VQCrossSection.hh"
