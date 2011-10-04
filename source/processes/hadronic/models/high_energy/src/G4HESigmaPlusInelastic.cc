@@ -94,8 +94,8 @@ G4HESigmaPlusInelastic::ApplyYourself(const G4HadProjectile& aTrack,
 {
   G4HEVector* pv = new G4HEVector[MAXPART];
   const G4HadProjectile* aParticle = &aTrack;
-  const G4double A = targetNucleus.GetN();
-  const G4double Z = targetNucleus.GetZ();
+  const G4double A = targetNucleus.GetA_asInt();
+  const G4double Z = targetNucleus.GetZ_asInt();
   G4HEVector incidentParticle(aParticle);
      
   G4double atomicNumber = Z;

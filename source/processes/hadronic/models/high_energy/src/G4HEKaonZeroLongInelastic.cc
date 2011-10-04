@@ -82,8 +82,8 @@ G4HEKaonZeroLongInelastic::ApplyYourself(const G4HadProjectile& aTrack,
 {
   G4HEVector* pv = new G4HEVector[MAXPART];
   const G4HadProjectile* aParticle = &aTrack;
-  const G4double atomicWeight = targetNucleus.GetN();
-  const G4double atomicNumber = targetNucleus.GetZ();
+  const G4double atomicWeight = targetNucleus.GetA_asInt();
+  const G4double atomicNumber = targetNucleus.GetZ_asInt();
   G4HEVector incidentParticle(aParticle);
 
   G4int incidentCode = incidentParticle.getCode();
