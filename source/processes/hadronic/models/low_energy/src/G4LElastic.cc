@@ -91,8 +91,8 @@ G4LElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleu
   if(getenv("debug_LElastic")) verboseLevel = 5;
   theParticleChange.Clear();
   const G4HadProjectile* aParticle = &aTrack;
-  G4double atno2 = targetNucleus.GetN();
-  G4double zTarget = targetNucleus.GetZ();
+  G4double atno2 = targetNucleus.GetA_asInt();
+  G4double zTarget = targetNucleus.GetZ_asInt();
   theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
   theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
 

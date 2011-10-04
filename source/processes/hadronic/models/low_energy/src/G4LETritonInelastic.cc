@@ -71,9 +71,9 @@
       }
 
     if(triton_debug)std::cout << "running LETritonInelastic 2"<<std::endl;
-    G4double A = targetNucleus.GetN();
-    G4double Z = targetNucleus.GetZ();
-    G4double theAtomicMass = targetNucleus.AtomicMass( A, Z );
+    G4double A = targetNucleus.GetA_asInt();
+    G4double Z = targetNucleus.GetZ_asInt();
+    G4double theAtomicMass = targetNucleus.AtomicMass(A, Z);
     G4double massVec[9];
     massVec[0] = targetNucleus.AtomicMass( A+3.0, Z+1.0 );
     massVec[1] = targetNucleus.AtomicMass( A+2.0, Z+1.0 );

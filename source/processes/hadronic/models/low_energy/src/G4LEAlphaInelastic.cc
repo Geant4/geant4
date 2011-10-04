@@ -84,8 +84,8 @@ G4LEAlphaInelastic::ApplyYourself(const G4HadProjectile& aTrack,
                                   G4Nucleus& targetNucleus)
 {
     theParticleChange.Clear();
-    G4double A = targetNucleus.GetN();
-    G4double Z = targetNucleus.GetZ();
+    G4double A = targetNucleus.GetA_asInt();
+    G4double Z = targetNucleus.GetZ_asInt();
         
     G4double kineticEnergy = aTrack.Get4Momentum().e()-aTrack.GetDefinition()->GetPDGMass();
     if( verboseLevel > 1 )

@@ -120,8 +120,8 @@ G4LFission::ApplyYourself(const G4HadProjectile & aTrack,G4Nucleus & targetNucle
    theParticleChange.Clear();
    const G4HadProjectile* aParticle = &aTrack;
 
-   G4double N = targetNucleus.GetN();
-   G4double Z = targetNucleus.GetZ();
+   G4double N = targetNucleus.GetA_asInt();
+   G4double Z = targetNucleus.GetZ_asInt();
    theParticleChange.SetStatusChange(stopAndKill);
 
    G4double P = aParticle->GetTotalMomentum()/MeV;
