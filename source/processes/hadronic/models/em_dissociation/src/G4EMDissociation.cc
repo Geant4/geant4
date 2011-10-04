@@ -187,8 +187,8 @@ G4HadFinalState *G4EMDissociation::ApplyYourself
   G4double E         = theTrack.GetKineticEnergy()/AP;
   G4double MP        = theTrack.GetTotalEnergy() - E*AP;
   G4double b         = pP.beta();
-  G4double AT        = theTarget.GetN();
-  G4double ZT        = theTarget.GetZ();
+  G4double AT        = theTarget.GetA_asInt();
+  G4double ZT        = theTarget.GetZ_asInt();
   G4double MT        = G4NucleiProperties::GetNuclearMass(AT,ZT);
 //
 //
