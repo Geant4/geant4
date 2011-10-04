@@ -108,7 +108,7 @@ public: // With description
     
   void SetMaxEnergy( G4double anEnergy, const G4Material *aMaterial );
   
-  inline const G4HadronicInteraction *GetMyPointer() const
+  inline const G4HadronicInteraction* GetMyPointer() const
   { return this; }
 
   inline G4int GetVerboseLevel() const
@@ -119,9 +119,9 @@ public: // With description
 
   inline const G4String& GetModelName() const
   { return theModelName; }
-    
-  void DeActivateFor( const G4Material *aMaterial );
-    
+
+  void DeActivateFor(const G4Material* aMaterial);
+ 
   inline void ActivateFor( const G4Material *aMaterial ) 
   { 
     Block(); 
