@@ -348,25 +348,25 @@ void G4PhotonEvaporation::CheckConservation(const G4Fragment & theInitialState,
     G4LorentzVector tmp = (*h)->GetMomentum();
     ProductsEnergy += tmp.e();
     ProductsMomentum += tmp.vect();
-    ProductsA += static_cast<G4int>((*h)->GetA());
-    ProductsZ += static_cast<G4int>((*h)->GetZ());
+    ProductsA += (*h)->GetA_asInt();
+    ProductsZ += (*h)->GetZ_asInt();
   }
 
-  if (ProductsA != theInitialState.GetA()) {
+  if (ProductsA != theInitialState.GetA_asInt()) {
     G4cout << "!!!!!!!!!! Baryonic Number Conservation Violation !!!!!!!!!!" << G4endl;
     G4cout << "G4PhotonEvaporation.cc: Barionic Number Conservation test for evaporation fragments" 
 	   << G4endl; 
-    G4cout << "Initial A = " << theInitialState.GetA() 
+    G4cout << "Initial A = " << theInitialState.GetA_asInt() 
 	   << "   Fragments A = " << ProductsA << "   Diference --> " 
-	   << theInitialState.GetA() - ProductsA << G4endl;
+	   << theInitialState.GetA_asInt() - ProductsA << G4endl;
   }
-  if (ProductsZ != theInitialState.GetZ()) {
+  if (ProductsZ != theInitialState.GetZ_asInt()) {
     G4cout << "!!!!!!!!!! Charge Conservation Violation !!!!!!!!!!" << G4endl;
     G4cout << "G4PhotonEvaporation.cc: Charge Conservation test for evaporation fragments" 
 	   << G4endl; 
-    G4cout << "Initial Z = " << theInitialState.GetZ() 
+    G4cout << "Initial Z = " << theInitialState.GetZ_asInt() 
 	   << "   Fragments Z = " << ProductsZ << "   Diference --> " 
-	   << theInitialState.GetZ() - ProductsZ << G4endl;
+	   << theInitialState.GetZ_asInt() - ProductsZ << G4endl;
   }
   if (std::abs(ProductsEnergy-theInitialState.GetMomentum().e()) > 1.0*keV) {
     G4cout << "!!!!!!!!!! Energy Conservation Violation !!!!!!!!!!" << G4endl;

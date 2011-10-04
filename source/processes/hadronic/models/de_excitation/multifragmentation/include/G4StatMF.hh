@@ -66,19 +66,17 @@ public:
 
     G4FragmentVector * BreakItUp(const G4Fragment &theNucleus);
 
-
-
-
 private:
 
     // This finds temperature of breaking channel.
     G4bool FindTemperatureOfBreakingChannel(const G4Fragment & theFragment, 
-					    const G4StatMFChannel * aChannel,G4double & Temperature);
+					    const G4StatMFChannel * aChannel,
+					    G4double & Temperature);
 
     // 
-    G4double CalcEnergy(const G4double A, const G4double Z, 
+    G4double CalcEnergy(G4int A, G4int Z, 
 			const G4StatMFChannel * aChannel,
-			const G4double T);
+			G4double T);
 
 
 private:

@@ -85,11 +85,11 @@ private:
     void CalculateTemperature(const G4Fragment & theFragment);
 
     // Determines fragments multiplicities and compute total fragment multiplicity
-    G4double ChooseA(const G4double A, std::vector<G4double> & ANumbers);
+    G4double ChooseA(G4int A, std::vector<G4int> & ANumbers);
 	
     // Samples charges of fragments
-    G4StatMFChannel * ChooseZ(const G4int & Z, 
-			      std::vector<G4double> & FragmentsA);
+    G4StatMFChannel * ChooseZ(G4int & Z, 
+			      std::vector<G4int> & FragmentsA);
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 

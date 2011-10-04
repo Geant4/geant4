@@ -174,8 +174,8 @@ G4FragmentVector *G4WilsonAblationModel::BreakItUp
 //
 // Get the A, Z and excitation of the nucleus.
 //
-  G4int A     = (G4int) theNucleus.GetA();
-  G4int Z     = (G4int) theNucleus.GetZ();
+  G4int A     = theNucleus.GetA_asInt();
+  G4int Z     = theNucleus.GetZ_asInt();
   G4double ex = theNucleus.GetExcitationEnergy();
   if (verboseLevel >= 2)
   {

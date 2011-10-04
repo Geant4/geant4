@@ -41,7 +41,7 @@ G4ProtonEvaporationProbability::G4ProtonEvaporationProbability() :
     G4EvaporationProbability(1,1,2,&theCoulombBarrier) // A,Z,Gamma,&theCoulombBarrier
 {
   ResidualA = ResidualZ = theA = theZ = FragmentA = 0;
-  ResidualAthrd = FragmentAthrd = 0.0;
+  ResidualAthrd = FragmentAthrd = U = 0.0;
 }
 
 G4ProtonEvaporationProbability::~G4ProtonEvaporationProbability() 
