@@ -55,8 +55,6 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   primaryParticleName = particleGun->GetParticleDefinition()->GetParticleName() ;
 
-  G4int numEvent;
-  numEvent=anEvent->GetEventID()+1;
   G4double x0,y0,z0,theta,phi,xMom0,yMom0,zMom0;
 
   x0 = 0;
