@@ -193,9 +193,8 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
   G4Box* solidLayer = new G4Box("Layer",widthX*0.49,EcalRadius*0.8,EcalLength*0.0099);
   G4LogicalVolume* logicLayer = new G4LogicalVolume(solidLayer,worldMaterial,"Layer");       
-  G4VPhysicalVolume* pv;
   for (G4int j=0; j<nl; j++) {
-    pv = new G4PVPlacement(0,G4ThreeVector(x0,0.,0.),"Layer",logicLayer,physVV,false,j);
+    new G4PVPlacement(0,G4ThreeVector(x0,0.,0.),"Layer",logicLayer,physVV,false,j);
     x0 += widthX;
   }
   
@@ -234,7 +233,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
   G4Box* solidM = new G4Box("VolM",EcalRadius*0.8,EcalRadius*0.8,EcalLength*0.1);
   G4LogicalVolume* logicM = new G4LogicalVolume( solidM,myMaterial,"VolM");
-  pv = new G4PVPlacement(0,G4ThreeVector(0.,0.,EcalLength*0.8),
+  new G4PVPlacement(0,G4ThreeVector(0.,0.,EcalLength*0.8),
                                        "VolM",logicM,world,false,0);
 
   //

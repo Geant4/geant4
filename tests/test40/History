@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30-09-2011 G.Folger        (test40-V09-04-02)
+- Fix gcc46 compilation warning in /DetectorConstruction.cc
+
 Sep 10, 2011  Pere Mato (test40-V09-04-01)
 - Fixed missing dependency between tests in CMakeLists.txt
 
