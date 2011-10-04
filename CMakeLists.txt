@@ -27,8 +27,8 @@ cmake_minimum_required(VERSION 2.6)
 set(CMAKE_USER_MAKE_RULES_OVERRIDE_CXX
    ${CMAKE_SOURCE_DIR}/cmake/Modules/Geant4MakeRules_cxx.cmake)
 
-set(CMAKE_USER_MAKE_RULES_OVERRIDE_Fortran
-   ${CMAKE_SOURCE_DIR}/cmake/Modules/Geant4MakeRules_fortran.cmake)
+#set(CMAKE_USER_MAKE_RULES_OVERRIDE_Fortran
+#   ${CMAKE_SOURCE_DIR}/cmake/Modules/Geant4MakeRules_fortran.cmake)
 
 #------------------------------------------------------------------------------
 # - Project definition
