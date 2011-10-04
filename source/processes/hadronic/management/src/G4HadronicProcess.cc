@@ -251,7 +251,8 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
   {
     G4ExceptionDescription ed;
     ed << "Target element "<<anElement->GetName()<<"  Z= " 
-       << targetNucleus.GetZ() << "  A= " << targetNucleus.GetN() << G4endl;
+       << targetNucleus.GetZ_asInt() << "  A= " 
+       << targetNucleus.GetN_asInt() << G4endl;
     DumpState(aTrack,"ChooseHadronicInteraction",ed);
     ed << " No HadronicInteraction found out" << G4endl;
     G4Exception("G4HadronicProcess::PostStepDoIt", "had005", FatalException,
@@ -282,7 +283,8 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
       G4ExceptionDescription ed;
       ed << "Call for " << theInteraction->GetModelName() << G4endl;
       ed << "Target element "<<anElement->GetName()<<"  Z= " 
-	 << targetNucleus.GetZ() << "  A= " << targetNucleus.GetN() << G4endl;
+	 << targetNucleus.GetZ_asInt() 
+	 << "  A= " << targetNucleus.GetN_asInt() << G4endl;
       DumpState(aTrack,"ApplyYourself",ed);
       ed << " ApplyYourself failed" << G4endl;
       G4Exception("G4HadronicProcess::PostStepDoIt", "had006", FatalException,
@@ -292,7 +294,8 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
       G4ExceptionDescription ed;
       ed << "Call for " << theInteraction->GetModelName() << G4endl;
       ed << "Target element "<<anElement->GetName()<<"  Z= " 
-	 << targetNucleus.GetZ() << "  A= " << targetNucleus.GetN() << G4endl;
+	 << targetNucleus.GetZ_asInt() 
+	 << "  A= " << targetNucleus.GetN_asInt() << G4endl;
       DumpState(aTrack,"ApplyYourself",ed);
       ed << " ApplyYourself does not completed after 100 attempts" << G4endl;
       G4Exception("G4HadronicProcess::PostStepDoIt", "had006", FatalException,
@@ -380,8 +383,8 @@ G4HadronicProcess::ExtractResidualNucleus(const G4Track&,
                                           const G4Nucleus& aNucleus,
                                           G4HadFinalState* aResult)
 {
-  G4double A = aNucleus.GetN();
-  G4double Z = aNucleus.GetZ();
+  G4double A = aNucleus.GetN_asInt();
+  G4double Z = aNucleus.GetZ_asInt();
   G4double bufferA = 0;
   G4double bufferZ = 0;
   
@@ -591,7 +594,8 @@ G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
     G4ExceptionDescription ed;
     G4cout << "Call for " << theInteraction->GetModelName() << G4endl;
     G4cout << "Target Z= " 
-	   << targetNucleus.GetZ() << "  A= " << targetNucleus.GetN() << G4endl;
+	   << targetNucleus.GetZ_asInt() 
+	   << "  A= " << targetNucleus.GetN_asInt() << G4endl;
     DumpState(aT,"FillTotalResult",ed);
     G4Exception("G4HadronicProcess", "had008", FatalException,
     "use of unsupported track-status.");
@@ -698,7 +702,8 @@ void
 G4HadronicProcess::CheckEnergyMomentumConservation(const G4Track& aTrack,
                                                    const G4Nucleus& aNucleus)
 {
-  G4double targetMass = G4NucleiProperties::GetNuclearMass(aNucleus.GetA_asInt(),aNucleus.GetZ_asInt());
+  G4double targetMass = 
+    G4NucleiProperties::GetNuclearMass(aNucleus.GetA_asInt(),aNucleus.GetZ_asInt());
   G4LorentzVector projectile4mom = aTrack.GetDynamicParticle()->Get4Momentum();
   G4LorentzVector target4mom(0, 0, 0, targetMass);
   G4LorentzVector initial4mom = projectile4mom + target4mom;
