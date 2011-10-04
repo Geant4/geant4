@@ -124,11 +124,13 @@ include(Geant4BuildProjectConfig)
 if(GEANT4_ENABLE_TESTING)
   include(Geant4CTest)
   add_subdirectory(tests)
+  if(EXISTS ${CMAKE_SOURCE_DIR}/benchmarks)
+    add_subdirectory(benchmarks)
+  endif()
 endif()
 if(GEANT4_BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif()
-
 #-----------------------------------------------------------------------------
 # Provide packaging with CPack.
 include(Geant4CPackBase)
