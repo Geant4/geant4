@@ -3,43 +3,47 @@
 #
 /control/verbose 2
 /run/verbose 2
-/tracking/verbose 1
+/tracking/verbose 0
 /event/verbose 0
-/testem/verbose 0
+/test31/verbose 0
 #
-/testem/phys/cutGamma    95 cm
+#/testem/phys/addPhysics emstandard
+/testem/phys/addPhysics emstandard_opt2
+#/testem/phys/addPhysics emlivermore
+#/testem/phys/addPhysics empenelope
+/testem/phys/addPhysics      step_limit
+#
+/testem/phys/setCuts     1 mm
+#/testem/phys/cutGamma    95 cm
 #/testem/phys/cutGamma    0.1 mm
-/testem/phys/cutElectron 95 cm
+#/testem/phys/cutElectron 95 cm
 /testem/phys/stepMax     0.2 mm
 #
-/testem/phys/addPhysics emstandard
-#
-/test31/AbsorberMaterial    Aluminum
-/test31/AbsorberThick       1000 cm
+/test31/AbsorberMaterial    G4_Au
+/test31/AbsorberThick       10 cm
 /test31/NumberOfAbsorbers   1
 /test31/maxDeltaEnergy      0.01 MeV
-/test31/WorldMaterial       Vacuum
+/test31/WorldMaterial       G4_AIR
 /test31/HistoNumber         0
-/test31/ntuple              false
-/test31/gun/beamE           100 MeV
 #
 /gun/particle e-
+/gun/energy                 100 MeV
 #/gun/particle proton
 #/gun/particle alpha
 #/gun/particle IonC12
 #
 /run/initialize
-/run/beamOn 0
-/run/dumpCouples
+#/run/beamOn 0
+#/run/dumpCouples
 #
-/process/inactivate   phot
-/process/inactivate   compt
-/process/inactivate   conv
-/process/inactivate   eBrem
+#/process/inactivate   phot
+#/process/inactivate   compt
+#/process/inactivate   conv
+#/process/inactivate   eBrem
 #/process/inactivate   eIoni
-/process/inactivate   msc
+#/process/inactivate   msc
 #
 #/process/eLoss/StepFunction 0.183 170 micrometer
-/process/eLoss/fluct     false
+#/process/eLoss/fluct     false
 #/process/eLoss/integral  false
 /run/beamOn 1

@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30-09-2011 G.Folger (test31-V09-04-02)
+- Fix gcc46 compilation warning in src/test31PrimaryGeneratorAction.cc and
+   src/test31Histo.cc
+
 20-07-11  G.Cosmo (test31-V09-04-01)
 - Removed vis setup.
 

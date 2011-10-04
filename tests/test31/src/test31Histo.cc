@@ -376,6 +376,11 @@ void test31Histo::TableControl()
   G4EmCalculator cal;
   cal.SetVerbose(0);
 
+  const G4Element* elm = mman->FindOrBuildElement(79, false);
+  G4double xsb = cal.ComputeCrossSectionPerAtom(9.66*MeV,"e-","eBrem",
+						elm,150*keV);
+  G4cout << "############  sig(b)= " << xsb/barn << G4endl; 
+
   // parameters
   // G4double tmin = 1.*keV;
   // G4double tmax = 1.*GeV;
@@ -474,6 +479,7 @@ void test31Histo::TableControl()
       ee0 += 0.003;
     }
     */
+
     //    G4bool icorr = true;
     G4bool icorr = false;
     if(icorr) {
@@ -490,10 +496,11 @@ void test31Histo::TableControl()
 
       G4double mass = part->GetPDGMass();
   
-      G4double L, L0, L1, L2, Spin, KS, LS, S, S0, del, mk, dedx, fac, fact, dc, fs(0), nuc;
+      G4double L, L0, L1, L2,  KS, LS, S, del, mk, dedx, fac, fact, fs(0), nuc;
+      //G4double Spin, S0, dc;
   
       for(G4int i=0; i<nm; i++) {
-	dc = 0.0;
+	//dc = 0.0;
 	mat = mman->FindOrBuildMaterial(nmat[i]);
 	fact = gram/(MeV*cm2*mat->GetDensity());
 	fac = 2.0*twopi_mc2_rcl2*(mat->GetElectronDensity())*fact;
@@ -506,11 +513,13 @@ void test31Histo::TableControl()
 	  //        G4double dedx0 = cal.ComputeDEDX(e,part,"hIoni",mat)*fact;
     
 	  L0   = emc->Bethe(part,mat,e);
-	  Spin = emc->SpinCorrection(part,mat,e);
+	  //Spin = 
+	         emc->SpinCorrection(part,mat,e);
 	  KS   = emc->KShellCorrection(part,mat,e);
 	  LS   = emc->LShellCorrection(part,mat,e);
 	  S    = emc->ShellCorrection(part,mat,e);
-	  S0   = emc->ShellCorrectionSTD(part,mat,e);
+	  //S0   = 
+	         emc->ShellCorrectionSTD(part,mat,e);
 	  L1   = emc->BarkasCorrection(part,mat,e);
 	  L2   = emc->BlochCorrection(part,mat,e);
 	  del  = -0.5*emc->DensityCorrection(part,mat,e);

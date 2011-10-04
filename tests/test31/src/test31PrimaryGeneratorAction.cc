@@ -236,10 +236,8 @@ void test31PrimaryGeneratorAction::SetBeamEnergy(G4double val)
   G4double mass = particle->GetPDGMass();
   energy = val;
   minE = std::max(0.0,energy - sigmaE);
-  G4double gamma = minE/mass + 1.;
   minBeta = std::sqrt(minE*(minE + 2.0*mass))/(minE + mass);
   maxE = energy + sigmaE;
-  gamma = maxE/mass + 1.;
   maxBeta = std::sqrt(maxE*(maxE + 2.0*mass))/(maxE + mass);
   if(maxE < (test31Histo::GetPointer())->GetMaxEnergy())
     (test31Histo::GetPointer())->SetMaxEnergy(energy);
