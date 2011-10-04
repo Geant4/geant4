@@ -56,6 +56,7 @@ G4ChargeExchangeProcess::G4ChargeExchangeProcess(const G4String& procName)
 {
   SetProcessSubType(fChargeExchange);
   thEnergy = 20.*MeV;
+  pPDG = 0;
   verboseLevel= 1;
   AddDataSet(new G4HadronElasticDataSet);
   theProton   = G4Proton::Proton();

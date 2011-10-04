@@ -89,13 +89,12 @@ G4LEpp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
     G4double ek = aParticle->GetKineticEnergy();
     G4ThreeVector theInitial = aParticle->Get4Momentum().vect();
 
-//    if (verboseLevel > 1) 
-         {
+    if (verboseLevel > 1) {
       G4double E = aParticle->GetTotalEnergy();
       G4double E0 = aParticle->GetDefinition()->GetPDGMass();
       G4double Q = aParticle->GetDefinition()->GetPDGCharge();
-      G4double N = targetNucleus.GetN();
-      G4double Z = targetNucleus.GetZ();
+      G4int N = targetNucleus.GetN_asInt();
+      G4int Z = targetNucleus.GetZ_asInt();
       G4cout << "G4LEpp:ApplyYourself: incident particle: "
              << aParticle->GetDefinition()->GetParticleName() << G4endl;
       G4cout << "P = " << P/GeV << " GeV/c"
@@ -115,9 +114,9 @@ G4LEpp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
       //
       // GHEISHA ADD operation to get total energy, mass, charge
       //
-      E += G4Proton::Proton()->GetPDGMass();
+      E += proton_mass_c2;
       G4double E02 = E*E - P*P;
-      E0 = std::sqrt(std::abs(E02));
+      E0 = std::sqrt(std::fabs(E02));
       if (E02 < 0)E0 *= -1;
       Q += Z;
       G4cout << "G4LEpp:ApplyYourself: total:" << G4endl;
@@ -138,8 +137,6 @@ G4LEpp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
       else
         je1 = midBin;
     } while (je2 - je1 > 1); 
-    //    G4int j;
-    //std::abs(ek-elab[je1]) < std::abs(ek-elab[je2]) ? j = je1 : j = je2;
     G4double delab = elab[je2] - elab[je1];
 
     // Sample the angle
@@ -175,37 +172,19 @@ G4LEpp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
                                   << sigint1 << " " << sigint2 << G4endl;
     } while (ke2 - ke1 > 1); 
 
-    // sigint1 and sigint2 should be recoverable from above loop
-
-    //    G4double dsig = sig[je2][ke1] - sig[je1][ke1];
-    //    G4double rc = dsig/delab;
-    //    G4double b = sig[je1][ke1] - rc*elab[je1];
-    //    G4double sigint1 = rc*ek + b;
-
-    //    G4double dsig = sig[je2][ke2] - sig[je1][ke2];
-    //    G4double rc = dsig/delab;
-    //    G4double b = sig[je1][ke2] - rc*elab[je1];
-    //    G4double sigint2 = rc*ek + b;
-
     dsig = sigint2 - sigint1;
     rc = 1./dsig;
     b = ke1 - rc*sigint1;
     G4double kint = rc*sample + b;
     G4double theta = (0.5 + kint)*pi/180.;
-    if (theta < 0.) theta = 0.;
-
-    //    G4int k;
-    //std::abs(sample-sig[j][ke1]) < std::abs(sample-sig[j][ke2]) ? k = ke1 : k = ke2;
-    //    G4double theta = (0.5 + k)*pi/180.;
+    if (theta < 0.) { theta = 0.; }
 
     if (verboseLevel > 1) {
       G4cout << "   energy bin " << je1 << " energy=" << elab[je1] << G4endl;
       G4cout << "   angle bin " << kint << " angle=" << theta/degree << G4endl;
     }
 
-
     // Get the target particle
-
     G4DynamicParticle* targetParticle = targetNucleus.ReturnTargetParticle();
 
     G4double E1 = aParticle->GetTotalEnergy();
@@ -214,7 +193,6 @@ G4LEpp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
     G4double M2 = targetParticle->GetDefinition()->GetPDGMass();
     G4double totalEnergy = E1 + E2;
     G4double pseudoMass = std::sqrt(totalEnergy*totalEnergy - P*P);
-    // pseudoMass also = std::sqrt(M1*M1 + M2*M2 + 2*M2*E1)
 
     // Transform into centre of mass system
 
@@ -227,7 +205,7 @@ G4LEpp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
       G4cout << "  E1, M1 (GeV) " << E1/GeV << " " << M1/GeV << G4endl;
       G4cout << "  E2, M2 (GeV) " << E2/GeV << " " << M2/GeV << G4endl;
       G4cout << "  particle  1 momentum in CM " << px/GeV << " " << py/GeV << " "
-           << pz/GeV << " " << p/GeV << G4endl;
+	     << pz/GeV << " " << p/GeV << G4endl;
     }
 
     // First scatter w.r.t. Z axis
@@ -240,18 +218,14 @@ G4LEpp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
     if (px*px + py*py > 0) {
       G4double cost, sint, ph, cosp, sinp;
       cost = pz/p;
-      sint = (std::sqrt(std::abs((1-cost)*(1+cost))) + std::sqrt(px*px+py*py)/p)/2;
+      sint = (std::sqrt(std::fabs((1-cost)*(1+cost))) + std::sqrt(px*px+py*py)/p)/2;
       py < 0 ? ph = 3*halfpi : ph = halfpi;
-      if (std::abs(px) > 0.000001*GeV) ph = std::atan2(py,px);
+      if (std::fabs(px) > 0.000001*GeV) ph = std::atan2(py,px);
       cosp = std::cos(ph);
       sinp = std::sin(ph);
       px = (cost*cosp*pxnew - sinp*pynew + sint*cosp*pznew);
       py = (cost*sinp*pxnew + cosp*pynew + sint*sinp*pznew);
       pz = (-sint*pxnew                  + cost*pznew);
-      //      G4ThreeVector it(a,b,c);
-      //      p0->SetMomentum(it);
-      //      G4ThreeVector aTargetMom = theInitial - it;
-      //      targetParticle->SetMomentum(aTargetMom);
     }
     else {
       px = pxnew;
@@ -307,7 +281,6 @@ G4LEpp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
     newP->SetDefinition(const_cast<G4ParticleDefinition *>(aParticle->GetDefinition()) );
     newP->SetMomentum(G4ThreeVector(PB[1], PB[2], PB[3]));
 
-
     //The target particle...
 
     PA[1] = -px;
@@ -325,51 +298,26 @@ G4LEpp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
 
     targetParticle->SetMomentum(G4ThreeVector(PB[1], PB[2], PB[3]));
 
-    // G4double ektotal = newP->GetKineticEnergy() + 
-    //                    targetParticle->GetKineticEnergy();
-
     if (verboseLevel > 1) {
       G4cout << "  particle 1 momentum in LAB " 
-           << newP->GetMomentum()*(1./GeV) 
+           << newP->GetMomentum()/GeV 
            << " " << newP->GetTotalMomentum()/GeV << G4endl;
       G4cout << "  particle 2 momentum in LAB " 
-           << targetParticle->GetMomentum()*(1./GeV) 
+           << targetParticle->GetMomentum()/GeV 
            << " " << targetParticle->GetTotalMomentum()/GeV << G4endl;
       G4cout << "  TOTAL momentum in LAB " 
-           << (newP->GetMomentum()+targetParticle->GetMomentum())*(1./GeV) 
+           << (newP->GetMomentum()+targetParticle->GetMomentum())/GeV 
            << " " 
            << (newP->GetMomentum()+targetParticle->GetMomentum()).mag()/GeV
            << G4endl;
     }
 
-    //    if (theta < pi/2.) {
-      //  G4double p = newP->GetMomentum().mag();
-      //      G4ThreeVector m = newP->GetMomentum();
-      //      if (p > DBL_MIN)
-      //        theParticleChange.SetMomentumChange(m.x()/p, m.y()/p, m.z()/p);
-      //      else
-      //        theParticleChange.SetMomentumChange(0., 0., 0.);
-
-      theParticleChange.SetMomentumChange( newP->GetMomentumDirection());
-      theParticleChange.SetEnergyChange(newP->GetKineticEnergy());
-      delete newP;
-
-      //    }
-      //    else {
-      //      // charge exchange
-      //      theParticleChange.SetNumberOfSecondaries(2);
-      //      theParticleChange.AddSecondary(newP);
-      //      theParticleChange.SetStatusChange(fStopAndKill);
-      //      //      theParticleChange.SetEnergyChange(0.0);
-      //    }
+    theParticleChange.SetMomentumChange( newP->GetMomentumDirection());
+    theParticleChange.SetEnergyChange(newP->GetKineticEnergy());
+    delete newP;
 
     // Recoil particle
-    G4DynamicParticle* p1 = new G4DynamicParticle;
-    p1->SetDefinition(targetParticle->GetDefinition());
-    p1->SetMomentum(targetParticle->GetMomentum());
-    theParticleChange.AddSecondary(p1);    
-    
-
+    theParticleChange.AddSecondary(targetParticle);    
     return &theParticleChange;
 }
 
