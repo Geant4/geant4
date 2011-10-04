@@ -1742,7 +1742,9 @@ G4QHadronVector* G4QIonIonCollision::Fragment()
     catch (G4QException& error)                             //                          | |
     {                                                       //                          | |
       G4cerr<<"***G4QIonIonCollision::Fragment: G4QE Exception is catched"<<G4endl; //  | |
-      G4Exception("G4QIonIonCollision::Fragment:","27",FatalException,"CHIPSCrash");//  | |
+      // G4Exception("G4QIonIonCollision::Fragment:","27",FatalException,"CHIPSCrash");//  | |
+      G4Exception("G4QIonIonCollision::Fragment()", "HAD_CHPS_0027",
+                  FatalException, "CHIPSCrash");
     }                                                       //                          | |
     delete pan;                              // Delete the Nuclear Environment <-----<--+-+
     if(output)                               // Output exists                           |

@@ -1987,7 +1987,9 @@ G4QHadronVector* G4QFragmentation::Fragment()
     catch (G4QException& error)                             //                          | |
     {                                                       //                          | |
       G4cerr<<"***G4QFragmentation::Fragment: G4QE Exception is catched"<<G4endl; //    | |
-      G4Exception("G4QFragmentation::Fragment:","27",FatalException,"CHIPSCrash");//    | |
+      // G4Exception("G4QFragmentation::Fragment:","27",FatalException,"CHIPSCrash");//    | |
+      G4Exception("G4QFragmentation::Fragment()", "HAD_CHPS_0027",
+                  FatalException, "CHIPSCrash");
     }                                                       //                          | |
 #ifdef debug
     G4cout<<"G4QFrag::Fragm: *** Before Del Pan ***"<<G4endl; //                        | |
@@ -2409,7 +2411,9 @@ G4QHadronVector* G4QFragmentation::Fragment()
         if(!theNew->DecayIn2(n4M,h4M))
         {
           G4cerr<<"***G4QFra::Fra:GamSup, tM="<<exRes4M.m()<<"<n+He3="<<mNeut+mHe3<<G4endl;
-          throw G4QException("***G4QFragmentation::Frag:GamSUPPRESION DecIn2(n+He3)error");
+          // throw G4QException("***G4QFragmentation::Frag:GamSUPPRESION DecIn2(n+He3)error");
+          G4Exception("G4QFragmentation::Fragment()", "HAD_CHPS_0000",
+                      FatalException, "GamSUPPRESSION DecIn2(n+He3)error");
         }
 #ifdef debug
         G4cout<<"G4QFrag::Frag:Gamma Suppression succided, n="<<n4M<<", He3="<<h4M<<G4endl;
@@ -2472,7 +2476,7 @@ G4QHadronVector* G4QFragmentation::Fragment()
             h4M=G4LorentzVector(0.,0.,0.,mNeut);
             G4LorentzVector p4M(0.,0.,0.,mProt);
             G4double sum=nuM+mNeut+mProt;
-            if(std::fabs(dhM-sum)<eps)
+            if(fabs(dhM-sum)<eps)
             {
               n4M=dh4M*(nuM/sum);
               h4M=dh4M*(mNeut/sum);
@@ -2481,7 +2485,9 @@ G4QHadronVector* G4QFragmentation::Fragment()
             else if(dhM<sum || !G4QHadron(dh4M).DecayIn3(n4M,h4M,p4M))
             {
               G4cerr<<"**G4QFragmentation::Frag:GamSupByD,M="<<dhM<<"<A+p+n="<<sum<<G4endl;
-              throw G4QException("G4QFragmentation::Frag:GammaSUPPRESSIONbyD DecIn3error");
+              // throw G4QException("G4QFragmentation::Frag:GammaSUPPRESSIONbyD DecIn3error");
+              G4Exception("G4QFragmentation::Fragment()", "HAD_CHPS_0001",
+                          FatalException, "GammaSUPPRESSION by D DecIn3error");
             }
 #ifdef debug
             G4cout<<"G4QFra::Fra:GamSuppression by d succided,h="<<h4M<<",A="<<n4M<<G4endl;
@@ -2499,7 +2505,9 @@ G4QHadronVector* G4QFragmentation::Fragment()
             if(!G4QHadron(dh4M).DecayIn2(n4M,h4M))
             {
               G4cerr<<"*G4QFra::Fra:GamSup,M="<<dh4M.m()<<"<A+h="<<n4M.m()+h4M.m()<<G4endl;
-              throw G4QException("G4QFragmentation::Frag:GamSUPPRESSION (3) DecIn2 error");
+              // throw G4QException("G4QFragmentation::Frag:GamSUPPRESSION (3) DecIn2 error");
+              G4Exception("G4QFragmentation::Fragment()", "HAD_CHPS_0002",
+                          FatalException, "GamSUPPRESSION (3) DecIn2 error");
             }
 #ifdef debug
             G4cout<<"G4QFra::Fra:Gamma Suppression succided, h="<<h4M<<", A="<<n4M<<G4endl;
@@ -4922,7 +4930,9 @@ void G4QFragmentation::EvaporateResidual(G4QHadron* qH)
       {
         G4cerr<<"***G4QFrag::EvaporateResid: CM="<<std::sqrt(chM2)<<" -> h1="<<h1QPDG<<"("
               <<h1M<<") + h2="<<h1QPDG<<"("<<h2M<<") = "<<h1M+h2M<<" **Failed**"<<G4endl;
-        throw G4QException("*G4QFragmentation::EvaporateResidual:QChipolino DecIn2 error");
+        // throw G4QException("*G4QFragmentation::EvaporateResidual:QChipolino DecIn2 error");
+        G4Exception("G4QFragmentation::EvaporateResidual()", "HAD_CHPS_0000",
+                    FatalException, "QChipolino DecIn2 error");
       }
       delete qH;                             // Kill the primary Chipolino
       G4QHadron* h1H = new G4QHadron(h1QPDG.GetPDGCode(),h14M);
@@ -4941,7 +4951,9 @@ void G4QFragmentation::EvaporateResidual(G4QHadron* qH)
       G4cerr<<"***G4QFragment::EvaporateResid: Chipolino="<<qH->GetQC()<<qH->Get4Momentum()
             <<", chipoM="<<std::sqrt(chM2)<<" < m1="<<h1M<<"("<<h1QPDG<<") + m2="<<h2M
             <<"("<<h2QPDG<<") = "<<h1M+h2M<<G4endl;
-      throw G4QException("G4QFragmentation::EvaporateResidual: LowMassChipolino in Input");
+      // throw G4QException("G4QFragmentation::EvaporateResidual: LowMassChipolino in Input");
+      G4Exception("G4QFragmentation::EvaporateResidual()", "HAD_CHPS_0001",
+                  FatalException, "LowMassChipolino in Input");
     }
     return;
   }
@@ -5003,7 +5015,7 @@ void G4QFragmentation::EvaporateResidual(G4QHadron* qH)
 #ifdef debug
     G4cout<<"G4QFragment::EvaRes: Excitation = "<<totMass-totGSM<<G4endl;
 #endif
-  if(std::fabs(totMass-totGSM) < eps)
+  if(fabs(totMass-totGSM) < eps)
   {
     theResult->push_back(qH);               // fill As It Is
   }
