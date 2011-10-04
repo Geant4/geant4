@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30-09-2011 G.Folger        (exampleN05-V09-04-02)
+- Fix gcc46 compilation warnings in ExN05DetectorConstruction.cc
+
 18th February 2011 G.Folger (exampleN05-V09-04-01)
 - ExN05DetectorConstruction: SetProductionCuts() needs array of 4 values, twice
 

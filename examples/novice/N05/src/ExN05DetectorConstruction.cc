@@ -152,7 +152,6 @@ G4VPhysicalVolume* ExN05DetectorConstruction::Construct()
   // same name (delayed copy)
   
   // -- and placements inside the calorimeter:
-  G4PVPlacement *crystalPhys;
   G4int copyNo=0;
   G4double xTlate, yTlate;
   G4int nX = 48;
@@ -163,7 +162,7 @@ G4VPhysicalVolume* ExN05DetectorConstruction::Construct()
       for (G4int i = 0; i < nX; i++)
 	{
 	  xTlate = -detectSize + 3*CrystalX + i*2*CrystalX;
-	  crystalPhys = new G4PVPlacement(0,G4ThreeVector(xTlate,yTlate,0*cm),
+	  new G4PVPlacement(0,G4ThreeVector(xTlate,yTlate,0*cm),
 					  tName1,
 					  theCrystalLog,
 					  calorimeterPhys,false,copyNo++);
@@ -202,7 +201,6 @@ G4VPhysicalVolume* ExN05DetectorConstruction::Construct()
   G4String tName2("Tower");
   
   // -- and placements inside the calorimeter:
-  G4PVPlacement *towerPhys;
   copyNo=0;
   G4int nXhad = 23;
   G4int nYhad = 23;
@@ -212,8 +210,7 @@ G4VPhysicalVolume* ExN05DetectorConstruction::Construct()
       for (G4int i = 0; i < nXhad; i++)
  	{
 	  xTlate = -detectSize + 3*TowerX + i*2*TowerX;
- 	  towerPhys
- 	    = new G4PVPlacement(0,G4ThreeVector(xTlate,yTlate,0*cm),
+ 	  new G4PVPlacement(0,G4ThreeVector(xTlate,yTlate,0*cm),
  				tName2,
  				theTowerLog,
  				hadCaloPhys,false,copyNo++);
