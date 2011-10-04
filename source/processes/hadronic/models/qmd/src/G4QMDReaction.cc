@@ -95,8 +95,11 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
       proj_Z = (int)( proj_pd->GetPDGCharge()/eplus );
       proj_A = 1;
    }
-   G4int targ_Z = int ( target.GetZ() + 0.5 );
-   G4int targ_A = int ( target.GetN() + 0.5 );
+   //G4int targ_Z = int ( target.GetZ() + 0.5 );
+   //G4int targ_A = int ( target.GetN() + 0.5 );
+   //migrate to integer A and Z (GetN_asInt returns number of neutrons in the nucleus since this) 
+   G4int targ_Z = target.GetZ_asInt();
+   G4int targ_A = target.GetA_asInt();
    G4ParticleDefinition* targ_pd = G4ParticleTable::GetParticleTable()->GetIon( targ_Z , targ_A , 0.0 );
 
 
@@ -195,8 +198,11 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
       }
 
 // Target
-      G4int iz = int ( target.GetZ() );
-      G4int ia = int ( target.GetN() );
+      //G4int iz = int ( target.GetZ() );
+      //G4int ia = int ( target.GetN() );
+      //migrate to integer A and Z (GetN_asInt returns number of neutrons in the nucleus since this) 
+      G4int iz = int ( target.GetZ_asInt() );
+      G4int ia = int ( target.GetA_asInt() );
 
       G4QMDGroundStateNucleus* targ = new G4QMDGroundStateNucleus( iz , ia );
 
