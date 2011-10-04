@@ -209,7 +209,6 @@ G4VPhysicalVolume* ExN04DetectorConstruction::Construct()
 		muBox_length);
   G4LogicalVolume * muoncounter_log
     = new G4LogicalVolume(muoncounter_box,Scinti,"mucounter_L",0,0,0);
-  G4VPhysicalVolume * muoncounter_phys;
   for(int i=0; i<nomucounter ; i++)
   {
     G4double phi, x, y, z;
@@ -219,8 +218,7 @@ G4VPhysicalVolume* ExN04DetectorConstruction::Construct()
     z = 0.*cm;
     G4RotationMatrix rm;
     rm.rotateZ(phi);
-    muoncounter_phys
-      = new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(x,y,z)),
+    new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(x,y,z)),
                           muoncounter_log, "muoncounter_P",
                           experimentalHall_log,false,i);
   }

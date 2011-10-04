@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30-09-2011 G.Folger        (exampleN04-V09-04-01)
+- Fix gcc46 compilation warning in ExN04DetectorConstruction.cc
+
 14-07-11 M.Asai (exampleN04-V09-04-00)
 - Optimise initialisation of Phi angles in parameterisations to avoid
   recomputation of trigonometry.
