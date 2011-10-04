@@ -56,6 +56,7 @@
 #include "globals.hh"
 #include "G4VProcess.hh"
 #include "G4FastSimulationManager.hh"
+#include "G4FastSimulationProcessType.hh"
 #include "G4Step.hh"
 #include "G4Navigator.hh"
 #include "G4VPhysicalVolume.hh"

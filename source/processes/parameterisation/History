@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Sep. 30, 2011, M. Verderi (param-V09-04-03)
+- Added missing new header file (G4FastSimulationProcessType.hh) in
+  sources.cmake.
+
+Sep. 30, 2011, M. Verderi (param-V09-04-02)
+- Migration to new G4Exception scheme.
+- what is V09-04-01 tag ?
+
 Feb. 11, 2011, M. Verderi (param-V09-04-00)
 - Implementation of method
   void ProposePrimaryTrackFinalKineticEnergy (G4double);

@@ -144,10 +144,8 @@ void G4GlobalFastSimulationManager::InActivateFastSimulationModel(const G4String
   for (size_t ifsm=0; ifsm<ManagedManagers.size(); ifsm++)
     result = result || ManagedManagers[ifsm]->
                        InActivateFastSimulationModel(aName);
-  if(result) 
-    G4cout << "Model " << aName << " inactivated.";
-  else
-    G4cout << "Model " << aName << " not found.";
+  if (result) G4cout << "Model " << aName << " inactivated.";
+  else        G4cout << "Model " << aName << " not found.";
   G4cout << G4endl;
 }
 
@@ -261,8 +259,7 @@ void G4GlobalFastSimulationManager::ListEnvelopes(const G4String&   aName,
 {
   if (theType == ISAPPLICABLE)
     {
-      for (size_t ifsm=0; ifsm<ManagedManagers.size(); ifsm++)
-	ManagedManagers[ifsm]->ListModels(aName);
+      for (size_t ifsm=0; ifsm<ManagedManagers.size(); ifsm++) ManagedManagers[ifsm]->ListModels(aName);
       return;
     }
   

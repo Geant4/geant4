@@ -41,6 +41,7 @@ GEANT4_DEFINE_MODULE(NAME G4parameterisation
         G4FastSimulationManager.hh
         G4FastSimulationManagerProcess.hh
         G4FastSimulationMessenger.hh
+        G4FastSimulationProcessType.hh
         G4FastSimulationVector.hh
         G4FastSimulationVector.icc
         G4FastStep.hh

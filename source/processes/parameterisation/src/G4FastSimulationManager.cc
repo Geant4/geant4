@@ -405,9 +405,14 @@ G4FastSimulationManager::ListModels(const G4ParticleDefinition* aPD) const
 	     << " (inactivated)." << G4endl;
     }
   
-  if(!unique)
-    G4cout << "\a\n >>>>>>Warning: two or more Models for the same "
-	   << "particle type attached to the same envelope!"
-	   << G4endl;
+  if( !unique )
+    {
+      G4ExceptionDescription ed;
+      ed << "Two or more Models are available for the same particle type, in the same envelope/region." << G4endl;
+      G4Exception("G4FastSimulationManager::ListModels(const G4ParticleDefinition* aPD) const",
+		  "FastSim001",
+		  JustWarning, ed,
+		  "Models risk to exclude each other.");
+    }
   unique=false;
 }
