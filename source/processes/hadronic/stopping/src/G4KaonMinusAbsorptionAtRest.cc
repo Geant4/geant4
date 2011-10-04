@@ -120,15 +120,15 @@ G4VParticleChange* G4KaonMinusAbsorptionAtRest::AtRestDoIt
     {
       // Select the nucleus, get nucleon
       nucleus = new G4Nucleus(material);
-      if (nucleus->GetN() < 1.5)
+      if (nucleus->GetA_asInt() < 1.5)
         {
           delete nucleus;
           nucleus = 0;
         }
     }  while(nucleus == 0);
     
-  G4double Z = nucleus->GetZ();
-  G4double A = nucleus->GetN();
+  G4double Z = nucleus->GetZ_asInt();
+  G4double A = nucleus->GetA_asInt();
 
   // Do the interaction with the nucleon
   G4DynamicParticleVector* absorptionProducts = KaonNucleonReaction();
@@ -193,8 +193,8 @@ G4VParticleChange* G4KaonMinusAbsorptionAtRest::AtRestDoIt
       productEnergy += (*absorptionProducts)[i]->GetKineticEnergy();
     }
 
-  G4double newZ = nucleus->GetZ();
-  G4double newA = nucleus->GetN();
+  G4double newZ = nucleus->GetZ_asInt();
+  G4double newA = nucleus->GetA_asInt();
 
   G4double bDiff = G4NucleiProperties::GetBindingEnergy(static_cast<G4int>(A),static_cast<G4int>(Z)) - 
     G4NucleiProperties::GetBindingEnergy(static_cast<G4int>(newA), static_cast<G4int>(newZ));
@@ -224,7 +224,7 @@ G4VParticleChange* G4KaonMinusAbsorptionAtRest::AtRestDoIt
     }
 
   if (energyDeposit < 0.)
-    G4Exception("G4KaonMinusAbsorptionAtRest::AtRestDoIt()", "HAD_STOP_001",
+    G4Exception("G4KaonMinusAbsorptionAtRest::AtRestDoIt()", "HAD_STOP_0001",
                 FatalException, "Excitation energy < 0");
   delete nucleus;    
 
@@ -287,8 +287,8 @@ G4ParticleDefinition* G4KaonMinusAbsorptionAtRest::SelectAbsorbingNucleon()
   
   G4double ranflat = G4UniformRand();   
   
-  G4double myZ = nucleus->GetZ();   // number of protons
-  G4double myN = nucleus->GetN();   // number of nucleons (not neutrons!!)
+  G4double myZ = nucleus->GetZ_asInt();   // number of protons
+  G4double myN = nucleus->GetA_asInt();   // number of nucleons (not neutrons!!)
   
   // See  VanderVelde-Wilquet et al, Nuov.Cim.39A(1978)538;
   G4double carbonRatioNP = 0.18;  // (Rn/Rp)c, see page 544 
@@ -336,8 +336,8 @@ G4DynamicParticleVector* G4KaonMinusAbsorptionAtRest::KaonNucleonReaction()
   G4ParticleDefinition* producedBaryonDef;
   G4ParticleDefinition* producedMesonDef;
   
-  G4double iniZ = nucleus->GetZ();
-  G4double iniA = nucleus->GetN();   
+  G4double iniZ = nucleus->GetZ_asInt();
+  G4double iniA = nucleus->GetA_asInt();   
   
   G4DynamicParticle aNucleon = GetAbsorbingNucleon();
   
@@ -399,8 +399,8 @@ G4DynamicParticleVector* G4KaonMinusAbsorptionAtRest::KaonNucleonReaction()
       return 0;
     }  
 
-  G4double newZ = nucleus->GetZ();
-  G4double newA = nucleus->GetN();   
+  G4double newZ = nucleus->GetZ_asInt();
+  G4double newA = nucleus->GetA_asInt();   
   
   // Modify the Kaon mass to take nuclear binding energy into account  
   // .. using mas formula ..
@@ -460,8 +460,8 @@ G4DynamicParticle* G4KaonMinusAbsorptionAtRest::SigmaLambdaConversion(G4DynamicP
   G4double  ranflat = G4UniformRand();
   G4double  sigmaLambdaConversionRate;
   
-  G4double A = nucleus->GetN();
-  G4double Z = nucleus->GetZ();
+  G4double A = nucleus->GetA_asInt();
+  G4double Z = nucleus->GetZ_asInt();
   
   G4double newZ = Z;
   // DHW 15 May 2011: unused: G4double nucleonMassDifference = 0;
