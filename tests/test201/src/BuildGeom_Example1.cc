@@ -143,11 +143,10 @@ G4VPhysicalVolume* BuildGeom_Example1()
   G4Box* watSFSBox = new G4Box("WSSBox",159.*cm,0.1*cm,159.*cm);
   G4LogicalVolume* watSFSLog = new G4LogicalVolume(watSFSBox,Scinti,"WSSLog",0,0,0);
   watSFSLog -> SetVisAttributes (blue);
-  G4PVPlacement* watSFSPhys;
   for(int iSFS=-10; iSFS<=10; iSFS++)
   {
     G4double SFSypos = iSFS*6.0*cm;
-    watSFSPhys = new G4PVPlacement(0,
+    new G4PVPlacement(0,
 	G4ThreeVector(0.*cm,SFSypos,0.*cm),
 	"watSFSPhys",watSFSLog,watSFWPhys,false,iSFS+10);
   }
@@ -204,19 +203,17 @@ G4VPhysicalVolume* BuildGeom_Example1()
 
   G4int muFeNo = 0;
   G4int muChNo = 0;
-  G4PVPlacement* muFePhys;
-  G4PVPlacement* muChPhys;
 
   for(G4int iMC1=0; iMC1<4; iMC1++)
   {
     muonChamberYPos += 10.*cm;
-    muChPhys = new G4PVPlacement(0,
+    new G4PVPlacement(0,
      G4ThreeVector(0.*cm,muonChamberYPos,0.*cm),
      "muChPhys",muChLog,myWorldPhys,false,muChNo++);
     muonChamberYPos += 10.*cm;
 
     muonChamberYPos += 5.*cm;
-    muFePhys = new G4PVPlacement(0,
+    new G4PVPlacement(0,
      G4ThreeVector(0.*cm,muonChamberYPos,0.*cm),
      "muFePhys",muFeLog,myWorldPhys,false,muFeNo++);
     muonChamberYPos += 5.*cm;
@@ -225,19 +222,19 @@ G4VPhysicalVolume* BuildGeom_Example1()
   for(G4int iMC2=0; iMC2<8; iMC2++)
   {
     muonChamberYPos += 10.*cm;
-    muChPhys = new G4PVPlacement(0,
+    new G4PVPlacement(0,
      G4ThreeVector(0.*cm,muonChamberYPos,0.*cm),
      "muChPhys",muChLog,myWorldPhys,false,muChNo++);
     muonChamberYPos += 10.*cm;
 
     muonChamberYPos += 5.*cm;
-    muFePhys = new G4PVPlacement(0,
+    new G4PVPlacement(0,
      G4ThreeVector(0.*cm,muonChamberYPos,0.*cm),
      "muFePhys",muFeLog,myWorldPhys,false,muFeNo++);
     muonChamberYPos += 5.*cm;
 
     muonChamberYPos += 5.*cm;
-    muFePhys = new G4PVPlacement(0,
+    new G4PVPlacement(0,
      G4ThreeVector(0.*cm,muonChamberYPos,0.*cm),
      "muFePhys",muFeLog,myWorldPhys,false,muFeNo++);
     muonChamberYPos += 5.*cm;

@@ -4,6 +4,9 @@ $Id: History,v 1.14 2010-05-27 15:05:08 allison Exp $
 History file for visualization/test subdirectory
 ------------------------------------------------
 
+30th Sept 2011 G.Folger      (test201-V09-04-00)
+             Fix gcc46 compilation warning in src/BuildGeom_Example1.cc
+
 27th May 2020  John Allison  (test201-V09-03-02)
 - MyCalorimeterHit.cc, MyCalorimeterSD.cc, MyTrackerHit.cc, MyTrackerSD.cc,
   ParametrisedBox.cc: Fixed compiler warnings.
