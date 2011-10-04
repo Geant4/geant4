@@ -1090,8 +1090,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
           else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rpZ,rpA,0,rpZ);
           if(!theDefinition)
 	    {
-	      G4cout<<"-Warning-G4QLowEn::PSDI: pDef=0, Z="<<rpZ<<", A="<<rpA<<G4endl;
-	      throw G4QException("G4QLowE::PoStDoIt: particle definition is a null pointer");
+	      // G4cout<<"-Warning-G4QLowEn::PSDI: pDef=0, Z="<<rpZ<<", A="<<rpA<<G4endl;
+	      // throw G4QException("G4QLowE::PoStDoIt: particle definition is a null pointer");
+              G4ExceptionDescription ed;
+              ed << "Particle definition is a null pointer: pDef=0, Z= " << rpZ
+                 << ", A=" << rpA << G4endl;
+              G4Exception("G4QLowEnergy::PostStepDoIt()", "HAD_CHPS_0000",
+                          JustWarning, ed);
 	    } 
 #ifdef edebug
           if(theDefinition == anAlpha)
@@ -1252,8 +1257,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
           else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rtZ,rtA,0,rtZ);
           if(!theDefinition)
           {
-            G4cout<<"-Warning-G4QLowEn::PSDI: tDef=0, Z="<<rtZ<<", A="<<rtA<<G4endl;
-	      throw G4QException("G4QLowE::PoStDoIt: particle definition is a null pointer");
+            // G4cout<<"-Warning-G4QLowEn::PSDI: tDef=0, Z="<<rtZ<<", A="<<rtA<<G4endl;
+	    // throw G4QException("G4QLowE::PoStDoIt: particle definition is a null pointer");
+            G4ExceptionDescription ed;
+            ed << "Particle definition is a null pointer: tDef=0, Z= " << rtZ
+               << ", A=" << rtA << G4endl;
+            G4Exception("G4QLowEnergy::PostStepDoIt()", "HAD_CHPS_0000",
+                        JustWarning, ed);
           }
 #ifdef edebug
           if(theDefinition == anAlpha)
@@ -1447,7 +1457,11 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
     G4cout<<"G4QLowEn::PoStDI:Reaction "<<projPDG<<"+"<<targPDG<<", P="<<Momentum<<G4endl;
     G4int nRes=result.size();
     if(nRes)G4cout<<"G4QLowEnergy::PoStDI: result exists with N="<<nRes<<" tracks"<<G4endl;
-    else throw G4QException("***G4QLowEnergy::PostStepDoIt: Can't decay ResidualCompound");
+//    else throw G4QException("***G4QLowEnergy::PostStepDoIt: Can't decay ResidualCompound");
+    else {
+      G4Exception("G4QLowEnergy::PostStepDoIt()", "HAD_CHPS_0000",
+                  FatalException, "Can't decay ResidualCompound"); 
+    }
     G4double minEx=1000000.;                       // Prototype of minimal excess
     G4bool found = false;                          // The solution is not found yet
     G4int cInd = 0;                                // Prototype of the best index
@@ -1503,7 +1517,9 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
     {
       G4cout<<"***G4QLowEnergy::PoStDI: One hadron coddection did not succeed***"<<G4endl;
       if(nRes>1) G4cout<<"***G4QLowEnergy::PoStDI:nRes's big enough to use 2PtCor"<<G4endl;
-      throw G4QException("G4QLowEnergy::PostStepDoIt: Can't correct by one particle.");
+      // throw G4QException("G4QLowEnergy::PostStepDoIt: Can't correct by one particle.");
+      G4Exception("G4QLowEnergy::PostStepDoIt()", "HAD_CHPS_0000",
+                  FatalException, "Can't correct by one particle");
     }
   }
   // @@ Convert it to G4QHadrons    
@@ -1531,8 +1547,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
        else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
        if(!theDefinition)
        {
-         G4cerr<<"-Warning-G4LE::PSDI: notDef(0), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
-         throw G4QException("G4QLowE::PostStepDoIt: ParticleDefinition is a null pointer");
+         // G4cerr<<"-Warning-G4LE::PSDI: notDef(0), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+         // throw G4QException("G4QLowE::PostStepDoIt: ParticleDefinition is a null pointer");
+         G4ExceptionDescription ed;
+         ed << "Particle definition is a null pointer: notDef(0), Z= " << rZ
+	    << ", A=" << rA << ", L=" << rL << G4endl;
+         G4Exception("G4QLowEnergy::PostStepDoIt()", "HAD_CHPS_0000",
+                        JustWarning, ed);
        }
        ResSec->SetDefinition( theDefinition );
        FstSec->SetDefinition( aGamma );
@@ -1554,8 +1575,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
        else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
        if(!theDefinition)
        {
-         G4cerr<<"-Warning-G4LE::PSDI: notDef(1), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
-	   throw G4QException("G4QLowE::PostStepDoIt: ParticleDefinition is a null pointer");
+         // G4cerr<<"-Warning-G4LE::PSDI: notDef(1), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+	 // throw G4QException("G4QLowE::PostStepDoIt: ParticleDefinition is a null pointer");
+         G4ExceptionDescription ed;
+         ed << "Particle definition is a null pointer: notDef(1), Z= " << rZ
+	    << ", A=" << rA << ", L=" << rL << G4endl;
+         G4Exception("G4QLowEnergy::PostStepDoIt()", "HAD_CHPS_0001",
+                        JustWarning, ed);
        }
        ResSec->SetDefinition( theDefinition );
        SecSec->SetDefinition( aGamma );
@@ -1578,8 +1604,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
        else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
        if(!theDefinition)
        {
-         G4cerr<<"-Warning-G4LE::PSDI: notDef(2), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
-	   throw G4QException("G4QLowE::PostStepDoIt: ParticleDefinition is a null pointer");
+         // G4cerr<<"-Warning-G4LE::PSDI: notDef(2), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+	 // throw G4QException("G4QLowE::PostStepDoIt: ParticleDefinition is a null pointer");
+          G4ExceptionDescription ed;
+          ed << "Particle definition is a null pointer: notDef(2), Z= " << rZ
+	     << ", A=" << rA << ", L="<< rL << G4endl;
+          G4Exception("G4QLowEnergy::PostStepDoIt()", "HAD_CHPS_0002",
+                      JustWarning, ed);
        }
        ResSec->SetDefinition( theDefinition );
        SecSec->SetDefinition( aGamma );
@@ -1602,8 +1633,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
        else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
        if(!theDefinition)
        {
-         G4cerr<<"-Warning-G4LE::PSDI: notDef(3), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
-	   throw G4QException("G4QLowE::PostStepDoIt: ParticleDefinition is a null pointer");
+         // G4cerr<<"-Warning-G4LE::PSDI: notDef(3), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+	 // throw G4QException("G4QLowE::PostStepDoIt: ParticleDefinition is a null pointer");
+         G4ExceptionDescription ed;
+         ed << "Particle definition is a null pointer: notDef(3), Z= " << rZ
+	    << ", A=" << rA << ", L=" << rL << G4endl;
+         G4Exception("G4QLowEnergy::PostStepDoIt()", "HAD_CHPS_0003",
+                        JustWarning, ed);
        }
        ResSec->SetDefinition( theDefinition );
        SecSec->SetDefinition( aGamma );
@@ -1626,8 +1662,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
        else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
        if(!theDefinition)
        {
-         G4cerr<<"-Warning-G4LE::PSDI: notDef(4), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
-	   throw G4QException("G4QLowE::PostStepDoIt: ParticleDefinition is a null pointer");
+         // G4cerr<<"-Warning-G4LE::PSDI: notDef(4), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+	 // throw G4QException("G4QLowE::PostStepDoIt: ParticleDefinition is a null pointer");
+         G4ExceptionDescription ed;
+         ed << "Particle definition is a null pointer: notDef(4), Z= " << rZ
+	    << ", A=" << rA << ", L=" << rL << G4endl;
+         G4Exception("G4QLowEnergy::PostStepDoIt()", "HAD_CHPS_0004",
+                     JustWarning, ed);
        }
        ResSec->SetDefinition( theDefinition );
        SecSec->SetDefinition( aGamma );
@@ -1650,8 +1691,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
        else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
        if(!theDefinition)
        {
-         G4cerr<<"-Warning-G4LE::PSDI: notDef(5), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
-	   throw G4QException("G4QLowE::PostStepDoIt: ParticleDefinition is a null pointer");
+         // G4cerr<<"-Warning-G4LE::PSDI: notDef(5), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+	 // throw G4QException("G4QLowE::PostStepDoIt: ParticleDefinition is a null pointer");
+         G4ExceptionDescription ed;
+         ed << "Particle definition is a null pointer: notDef(5), Z= " << rZ
+	    << ", A=" << rA << ", L=" << rL << G4endl;
+         G4Exception("G4QLowEnergy::PostStepDoIt()", "HAD_CHPS_0005",
+                     JustWarning, ed);
        }
        ResSec->SetDefinition( theDefinition );
        SecSec->SetDefinition( aGamma );
@@ -1674,8 +1720,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
        else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
        if(!theDefinition)
        {
-         G4cerr<<"-Warning-G4LE::PSDI: notDef(6), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
-	   throw G4QException("G4QLowE::PostStepDoIt: ParticleDefinition is a null pointer");
+         // G4cerr<<"-Warning-G4LE::PSDI: notDef(6), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+	 // throw G4QException("G4QLowE::PostStepDoIt: ParticleDefinition is a null pointer");
+         G4ExceptionDescription ed;
+         ed << "Particle definition is a null pointer: notDef(6), Z= " << rZ
+            << ", A=" << rA << ", L=" << rL << G4endl;
+         G4Exception("G4QLowEnergy::PostStepDoIt()", "HAD_CHPS_0006",
+                     JustWarning, ed);
        }
        ResSec->SetDefinition( theDefinition );
        SecSec->SetDefinition( aGamma );
@@ -1695,8 +1746,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
      {
-       G4cerr<<"-Warning-G4LE::PSDI: notDef(7), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
-       throw G4QException("G4QLowE::PostStepDoIt: ParticleDefinition is a null pointer");
+       // G4cerr<<"-Warning-G4LE::PSDI: notDef(7), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       // throw G4QException("G4QLowE::PostStepDoIt: ParticleDefinition is a null pointer");
+       G4ExceptionDescription ed;
+       ed << "Particle definition is a null pointer: notDef(7), Z= " << rZ
+          << ", A=" << rA << ", L=" << rL << G4endl;
+       G4Exception("G4QLowEnergy::PostStepDoIt()", "HAD_CHPS_0007",
+                   JustWarning, ed);
      }
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aNeutron );
@@ -1721,8 +1777,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
      {
-       G4cerr<<"-Warning-G4LE::PSDI: notDef(8), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
-       throw G4QException("G4QLowEn::PostStepDoIt: Darticle Definition is a null pointer");
+       // G4cerr<<"-Warning-G4LE::PSDI: notDef(8), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       // throw G4QException("G4QLowEn::PostStepDoIt: Darticle Definition is a null pointer");
+       G4ExceptionDescription ed;
+       ed << "Particle definition is a null pointer: notDef(8), Z= " << rZ
+          << ", A=" << rA << ", L=" << rL << G4endl;
+       G4Exception("G4QLowEnergy::PostStepDoIt()", "HAD_CHPS_0008",
+                      JustWarning, ed);
      }
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aNeutron );
@@ -1737,8 +1798,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
      {
-       G4cerr<<"-Warning-G4LE::PSDI: notDef(9), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
-       throw G4QException("G4QLowEn::PostStepDoIt: Particle Definition is a null pointer");
+       // G4cerr<<"-Warning-G4LE::PSDI: notDef(9), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       // throw G4QException("G4QLowEn::PostStepDoIt: Particle Definition is a null pointer");
+       G4ExceptionDescription ed;
+       ed << "Particle definition is a null pointer: notDef(9), Z= " << rZ
+          << ", A=" << rA << ", L=" << rL << G4endl;
+       G4Exception("G4QLowEnergy::PostStepDoIt()", "HAD_CHPS_0009",
+                   JustWarning, ed);
      }
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aProton );
@@ -1753,8 +1819,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
      {
-       G4cerr<<"-Warning-G4LE::PSDI: notDef(10), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
-       throw G4QException("G4QLowEn::PostStepDoIt: Particle Definition is a null pointer");
+       // G4cerr<<"-Warning-G4LE::PSDI: notDef(10), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       // throw G4QException("G4QLowEn::PostStepDoIt: Particle Definition is a null pointer");
+       G4ExceptionDescription ed;
+       ed << "Particle definition is a null pointer: notDef(10), Z= " << rZ
+          << ", A=" << rA << ", L=" << rL << G4endl;
+       G4Exception("G4QLowEnergy::PostStepDoIt()", "HAD_CHPS_0010",
+                   JustWarning, ed);
      }
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aProton );
@@ -1769,8 +1840,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
      {
-       G4cerr<<"-Warning-G4LE::PSDI: notDef(11), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
-       throw G4QException("G4QLowEn::PostStepDoIt: Particle Definition is a null pointer");
+       // G4cerr<<"-Warning-G4LE::PSDI: notDef(11), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       // throw G4QException("G4QLowEn::PostStepDoIt: Particle Definition is a null pointer");
+       G4ExceptionDescription ed;
+       ed << "Particle definition is a null pointer: notDef(0), Z= " << rZ
+          << ", A=" << rA << ", L=" << rL << G4endl;
+       G4Exception("G4QLowEnergy::PostStepDoIt()", "HAD_CHPS_0011",
+                      JustWarning, ed);
      }
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aNeutron );
@@ -1785,8 +1861,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
      {
-       G4cerr<<"-Warning-G4LE::PSDI: notDef(12), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
-       throw G4QException("G4QLowEn::PostStepDoIt: Particle Definition is a null pointer");
+       // G4cerr<<"-Warning-G4LE::PSDI: notDef(12), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       // throw G4QException("G4QLowEn::PostStepDoIt: Particle Definition is a null pointer");
+       G4ExceptionDescription ed;
+       ed << "Particle definition is a null pointer: notDef(12), Z= " << rZ
+          << ", A=" << rA << ", L=" << rL << G4endl;
+       G4Exception("G4QLowEnergy::PostStepDoIt()", "HAD_CHPS_0012",
+                   JustWarning, ed);
      }
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aDeuteron );
@@ -1801,8 +1882,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
      {
-       G4cerr<<"-Warning-G4LE::PSDI: notDef(13), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
-       throw G4QException("G4QLowEn::PostStepDoIt: Particle Definition is a null pointer");
+       // G4cerr<<"-Warning-G4LE::PSDI: notDef(13), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       // throw G4QException("G4QLowEn::PostStepDoIt: Particle Definition is a null pointer");
+       G4ExceptionDescription ed;
+       ed << "Particle definition is a null pointer: notDef(13), Z= " << rZ
+          << ", A=" << rA << ", L=" << rL << G4endl;
+       G4Exception("G4QLowEnergy::PostStepDoIt()", "HAD_CHPS_0013",
+                   JustWarning, ed);
      }
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aProton );
@@ -1817,8 +1903,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
      {
-       G4cerr<<"-Warning-G4LE::PSDI: notDef(14), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
-       throw G4QException("G4QLowEn::PostStepDoIt: Particle Definition is a null pointer");
+       // G4cerr<<"-Warning-G4LE::PSDI: notDef(14), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       // throw G4QException("G4QLowEn::PostStepDoIt: Particle Definition is a null pointer");
+       G4ExceptionDescription ed;
+       ed << "Particle definition is a null pointer: notDef(14), Z= " << rZ
+          << ", A=" << rA << ", L=" << rL << G4endl;
+       G4Exception("G4QLowEnergy::PostStepDoIt()", "HAD_CHPS_0014",
+                   JustWarning, ed);
      }
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aNeutron );
@@ -1833,8 +1924,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
      {
-       G4cerr<<"-Warning-G4LE::PSDI: notDef(15), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
-       throw G4QException("G4QLowEn::PostStepDoIt: Particle Definition is a null pointer");
+       // G4cerr<<"-Warning-G4LE::PSDI: notDef(15), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       // throw G4QException("G4QLowEn::PostStepDoIt: Particle Definition is a null pointer");
+       G4ExceptionDescription ed;
+       ed << "Particle definition is a null pointer: notDef(15), Z= " << rZ
+          << ", A=" << rA << ", L=" << rL << G4endl;
+       G4Exception("G4QLowEnergy::PostStepDoIt()", "HAD_CHPS_0015",
+                   JustWarning, ed);
      }
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aProton);
@@ -1849,8 +1945,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
      {
-       G4cerr<<"-Warning-G4LE::PSDI: notDef(16), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
-       throw G4QException("G4QLowEn::PostStepDoIt: Particle Definition is a null pointer");
+       // G4cerr<<"-Warning-G4LE::PSDI: notDef(16), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       // throw G4QException("G4QLowEn::PostStepDoIt: Particle Definition is a null pointer");
+       G4ExceptionDescription ed;
+       ed << "Particle definition is a null pointer: notDef(16), Z= " << rZ
+          << ", A=" << rA << ", L=" << rL << G4endl;
+       G4Exception("G4QLowEnergy::PostStepDoIt()", "HAD_CHPS_0016",
+                      JustWarning, ed);
      }
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aNeutron );
@@ -1865,8 +1966,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
      {
-       G4cerr<<"-Warning-G4LE::PSDI: notDef(17), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
-       throw G4QException("G4QLowEn::PostStepDoIt: Particle Definition is a null pointer");
+       // G4cerr<<"-Warning-G4LE::PSDI: notDef(17), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       // throw G4QException("G4QLowEn::PostStepDoIt: Particle Definition is a null pointer");
+       G4ExceptionDescription ed;
+       ed << "Particle definition is a null pointer: notDef(17), Z= " << rZ
+          << ", A=" << rA << ", L=" << rL << G4endl;
+       G4Exception("G4QLowEnergy::PostStepDoIt()", "HAD_CHPS_0017",
+                   JustWarning, ed);
      }
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aProton );
@@ -1881,8 +1987,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
      {
-       G4cerr<<"-Warning-G4LE::PSDI: notDef(18), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
-       throw G4QException("G4QLowEn::PostStepDoIt: Particle Definition is a null pointer");
+       // G4cerr<<"-Warning-G4LE::PSDI: notDef(18), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       // throw G4QException("G4QLowEn::PostStepDoIt: Particle Definition is a null pointer");
+       G4ExceptionDescription ed;
+       ed << "Particle definition is a null pointer: notDef(18), Z= " << rZ
+          << ", A=" << rA << ", L=" << rL << G4endl;
+       G4Exception("G4QLowEnergy::PostStepDoIt()", "HAD_CHPS_0018",
+                   JustWarning, ed);
      }
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aNeutron );
@@ -1897,8 +2008,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
      {
-       G4cerr<<"-Warning-G4LE::PSDI: notDef(19), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
-       throw G4QException("G4QLowEn::PostStepDoIt: Particle Definition is a null pointer");
+       // G4cerr<<"-Warning-G4LE::PSDI: notDef(19), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       // throw G4QException("G4QLowEn::PostStepDoIt: Particle Definition is a null pointer");
+       G4ExceptionDescription ed;
+       ed << "Particle definition is a null pointer: notDef(19), Z= " << rZ
+          << ", A=" << rA << ", L=" << rL << G4endl;
+       G4Exception("G4QLowEnergy::PostStepDoIt()", "HAD_CHPS_0019",
+                      JustWarning, ed);
      }
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aLambda );
@@ -1913,8 +2029,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
      {
-       G4cerr<<"-Warning-G4LE::PSDI: notDef(20), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
-       throw G4QException("G4QLowEn::PostStepDoIt: Particle Definition is a null pointer");
+       // G4cerr<<"-Warning-G4LE::PSDI: notDef(20), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       // throw G4QException("G4QLowEn::PostStepDoIt: Particle Definition is a null pointer");
+       G4ExceptionDescription ed;
+       ed << "Particle definition is a null pointer: notDef(20), Z= " << rZ
+          << ", A=" << rA << ", L=" << rL << G4endl;
+       G4Exception("G4QLowEnergy::PostStepDoIt()", "HAD_CHPS_0020",
+                      JustWarning, ed);
      }
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aProton );
@@ -1929,8 +2050,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
      {
-       G4cerr<<"-Warning-G4LE::PSDI: notDef(21), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
-       throw G4QException("G4QLowEn::PostStepDoIt: Particle Pefinition is a null pointer");
+       // G4cerr<<"-Warning-G4LE::PSDI: notDef(21), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       // throw G4QException("G4QLowEn::PostStepDoIt: Particle Pefinition is a null pointer");
+       G4ExceptionDescription ed;
+       ed << "Particle definition is a null pointer: notDef(21), Z= " << rZ
+          << ", A=" << rA << ", L=" << rL << G4endl;
+       G4Exception("G4QLowEnergy::PostStepDoIt()", "HAD_CHPS_0021",
+                      JustWarning, ed);
      }
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aNeutron );
@@ -1946,8 +2072,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
      {
-       G4cerr<<"-Warning-G4LE::PSDI: notDef(22), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
-       throw G4QException("G4QLowEn::PostStepDoIt: Particle Definition is a null pointer");
+       // G4cerr<<"-Warning-G4LE::PSDI: notDef(22), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       // throw G4QException("G4QLowEn::PostStepDoIt: Particle Definition is a null pointer");
+       G4ExceptionDescription ed;
+       ed << "Particle definition is a null pointer: notDef(22), Z= " << rZ
+          << ", A=" << rA << ", L=" << rL << G4endl;
+       G4Exception("G4QLowEnergy::PostStepDoIt()", "HAD_CHPS_0022",
+                      JustWarning, ed);
      }
     ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aDeuteron );
@@ -1963,8 +2094,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
      {
-       G4cerr<<"-Warning-G4LE::PSDI: notDef(23), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
-       throw G4QException("G4QLowEn::PostStepDoIt: Particle Definition is a null pointer");
+       // G4cerr<<"-Warning-G4LE::PSDI: notDef(23), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       // throw G4QException("G4QLowEn::PostStepDoIt: Particle Definition is a null pointer");
+       G4ExceptionDescription ed;
+       ed << "Particle definition is a null pointer: notDef(23), Z= " << rZ
+          << ", A=" << rA << ", L=" << rL << G4endl;
+       G4Exception("G4QLowEnergy::PostStepDoIt()", "HAD_CHPS_0023",
+                      JustWarning, ed);
      }
     ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aTriton );
@@ -1980,8 +2116,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition) 
      {
-       G4cerr<<"-Warning-G4LE::PSDI: notDef(24), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
-       throw G4QException("G4QLowEn::PostStepDoIt: particle definition is a null pointer");
+       // G4cerr<<"-Warning-G4LE::PSDI: notDef(24), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       // throw G4QException("G4QLowEn::PostStepDoIt: particle definition is a null pointer");
+       G4ExceptionDescription ed;
+       ed << "Particle definition is a null pointer: notDef(24), Z= " << rZ
+          << ", A=" << rA << ", L=" << rL << G4endl;
+       G4Exception("G4QLowEnergy::PostStepDoIt()", "HAD_CHPS_0024",
+                      JustWarning, ed);
      }
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( aHe3 );
@@ -1997,8 +2138,13 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
      else theDefinition=G4ParticleTable::GetParticleTable()->FindIon(rZ,rA,rL,rZ);
      if(!theDefinition)
      {
-       G4cerr<<"-Warning-G4LE::PSDI: notDef(25), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
-       throw G4QException("G4QLowEn::PostStepDoIt: Particle Definition is a null pointer");
+       // G4cerr<<"-Warning-G4LE::PSDI: notDef(25), Z="<<rZ<<", A="<<rA<<", L="<<rL<<G4endl;
+       // throw G4QException("G4QLowEn::PostStepDoIt: Particle Definition is a null pointer");
+       G4ExceptionDescription ed;
+       ed << "Particle definition is a null pointer: notDef(25), Z= " << rZ
+          << ", A=" << rA << ", L=" << rL << G4endl;
+       G4Exception("G4QLowEnergy::PostStepDoIt()", "HAD_CHPS_0025",
+                      JustWarning, ed);
      }
      ResSec->SetDefinition( theDefinition );
      FstSec->SetDefinition( anAlpha );
@@ -2017,9 +2163,15 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
   // @@ Can be repeated to take into account the Coulomb Barrier
   if(!G4QHadron(tot4M).CopDecayIn3(fst4Mom,snd4Mom,res4Mom,dir4Mom,cosp))
   {
-    G4cerr<<"**G4LowEnergy::PoStDoIt:i="<<index<<",tM="<<totM<<"->M1="<<res4Mom.m()<<"+M2="
-     <<fst4Mom.m()<<"+M3="<<snd4Mom.m()<<"=="<<res4Mom.m()+fst4Mom.m()+snd4Mom.m()<<G4endl;
-    throw G4QException("G4QLowEnergy::PostStepDoIt: Can't decay the Compound");
+    // G4cerr<<"**G4LowEnergy::PoStDoIt:i="<<index<<",tM="<<totM<<"->M1="<<res4Mom.m()<<"+M2="
+    //  <<fst4Mom.m()<<"+M3="<<snd4Mom.m()<<"=="<<res4Mom.m()+fst4Mom.m()+snd4Mom.m()<<G4endl;
+    // throw G4QException("G4QLowEnergy::PostStepDoIt: Can't decay the Compound");
+    G4ExceptionDescription ed;
+    ed << "Can't decay the Compound: i=" << index << ",tM=" << totM << "->M1="
+       << res4Mom.m() << "+M2=" << fst4Mom.m() << "+M3=" << snd4Mom.m() << "=="
+       << res4Mom.m()+fst4Mom.m()+snd4Mom.m() << G4endl;
+    G4Exception("G4QLowEnergy::PostStepDoIt()", "HAD_CHPS_0000",
+                FatalException, ed);
   }
 #ifdef debug
   G4cout<<"G4QLowEn::PSDI:r4M="<<res4Mom<<",f4M="<<fst4Mom<<",s4M="<<snd4Mom<<G4endl;

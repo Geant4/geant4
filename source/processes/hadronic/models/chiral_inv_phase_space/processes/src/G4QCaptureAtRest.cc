@@ -721,7 +721,9 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
       //#ifdef pdebug
       G4cerr<<"***G4QCaptureAtRest::AtRestDoIt: Exception is catched"<<G4endl; //    |
       //#endif
-      G4Exception("G4QCaptureAtRest::AtRestDoIt:","27",FatalException,"Gen.CHIPS Except.");
+      // G4Exception("G4QCaptureAtRest::AtRestDoIt:","27",FatalException,"Gen.CHIPS Except.");
+      G4Exception("G4QCaptureAtRest::AtRestDoIt()","HAD_CHPS_0027",
+                  FatalException," General CHIPS Exception");
     }                                                             //                 |
     delete pan;                              // Delete the Nuclear Environment <--<--+
 #ifdef debug

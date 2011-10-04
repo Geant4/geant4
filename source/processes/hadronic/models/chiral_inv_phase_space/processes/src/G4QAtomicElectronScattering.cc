@@ -477,7 +477,9 @@ G4VParticleChange* G4QAtomicElectronScattering::PostStepDoIt(const G4Track& trac
       //#ifdef pdebug
       G4cerr<<"**G4QAtomElectScat::PostStepDoIt:G4QE Exception is catched"<<G4endl;//|   .
       //#endif
-      G4Exception("G4QAtomElScat::PostStepDoIt:","27",FatalException,"CHIPScrash");//|   .
+      // G4Exception("G4QAtomElScat::PostStepDoIt:","27",FatalException,"CHIPScrash");//|   .
+      G4Exception("G4QAtomElScat::PostStepDoIt()", "HAD_CHPS_0027",
+                  FatalException, "CHIPScrash");
     }                                                             //                 |   ^
     delete pan;                              // Delete the Nuclear Environment <--<--*   .
   //}//                                                                                   ^

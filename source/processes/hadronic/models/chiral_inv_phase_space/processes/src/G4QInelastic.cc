@@ -1003,7 +1003,9 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
       catch (G4QException& error)                                   //                    |
       {                                                             //                    |
         G4cerr<<"***G4QInelastic::PostStepDoIt: G4Quasmon Exception is catched"<<G4endl;//|
-        G4Exception("G4QInelastic::PostStepDoIt:","72",FatalException,"QuasmonCrash");  //|
+        // G4Exception("G4QInelastic::PostStepDoIt:","72",FatalException,"QuasmonCrash");  //|
+        G4Exception("G4QInelastic::PostStepDoIt()","HAD_CHPS_0072",
+                    FatalException, "QuasmonCrash");
       }                                                             //                    |
       delete pan;                              // Delete the Nuclear Environment <----<---+
 #ifdef ppdebug
@@ -1245,7 +1247,9 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
       if(!G4QHadron(c4M).RelDecayIn2(scat4M, t4M, proj4M, cost, cost))
       {
         G4cerr<<"G4QIn::PStD:c4M="<<c4M<<sqs<<",mM="<<ml<<",tM="<<mOT<<",c="<<cost<<G4endl;
-        throw G4QException("G4QInelastic::HadronizeQuasm: Can't dec QE nu,lept Compound");
+        // throw G4QException("G4QInelastic::HadronizeQuasm: Can't dec QE nu,lept Compound");
+        G4Exception("G4QInelastic::PostStepDoIt()", "HAD_CHPS_0000",
+                    FatalException, "Hadronize quasmon: Can't dec QE nu,lept Compound");
       }
       proj4M=t4M;                               // 4mom of the new projectile nucleon
     }
@@ -1435,7 +1439,9 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
           if(!G4QHadron(tot4M).DecayIn2(r4M, g4M))
           {
             G4cerr<<"G4QInelastic::PostStDoIt:tM="<<std::sqrt(totM2)<<" < rM="<<rM<<G4endl;
-            throw G4QException("G4QInelastic::HadronizeQuasm:Can'tDec TotNuc->ResNuc+gam");
+            // throw G4QException("G4QInelastic::HadronizeQuasm:Can'tDec TotNuc->ResNuc+gam");
+            G4Exception("G4QInelastic::PostStepDoIt()", "HAD_CHPS_0001",
+                        FatalException, "Hadronize quasmon: Can't Dec TotNuc->ResNuc+gam");
           }
 #ifdef qedebug
           G4cout<<"G4QIn::PStDoIt:n->g, R="<<r4M.rho()<<r4M<<",G="<<g4M.rho()<<g4M<<G4endl;
@@ -1556,7 +1562,9 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
         if(!G4QHadron(t4M).DecayIn2(r4M, n4M))
         {
           G4cerr<<"G4QInel::PostStDoIt:M="<<tM<<"<rM="<<rM<<"+nM="<<nM<<"="<<rM+nM<<G4endl;
-          throw G4QException("G4QInelastic::HadronizeQuasm:Can'tDec totNuc->QENuc+ResNuc");
+          // throw G4QException("G4QInelastic::HadronizeQuasm:Can'tDec totNuc->QENuc+ResNuc");
+          G4Exception("G4QInelastic::PostStepDoIt()", "HAD_CHPS_0002",
+                      FatalException, "Hadronize quasmon: Can't Dec totNuc->QENuc+ResNuc");
         }
 #ifdef qedebug
         G4cout<<"G4QIn::PStDoIt:QE-N, RA="<<r4M.rho()<<r4M<<",QN="<<n4M.rho()<<n4M<<G4endl;
@@ -1648,7 +1656,9 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
         if(!G4QHadron(t4M).DecayIn2(r4M, n4M))
         {
           G4cerr<<"G4QInel::PostStDoIt:M="<<tM<<"<rM="<<rM<<"+cM="<<nM<<"="<<rM+nM<<G4endl;
-          throw G4QException("G4QInelastic::HadronizeQuasm:Can'tDec totNuc->QEClu+ResNuc");
+          // throw G4QException("G4QInelastic::HadronizeQuasm:Can'tDec totNuc->QEClu+ResNuc");
+          G4Exception("G4QInelastic::PostStepDoIt()", "HAD_CHPS_0003",
+                      FatalException, "Hadronize quasmon: Can't Dec totNuc->QEClu+ResNuc");
         }
         // --- End of the moving cluster implementation ---
 #ifdef qedebug
@@ -1974,7 +1984,9 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
     catch (G4QException& error)
     {
       G4cerr<<"***G4QInelastic::PostStepDoIt: G4QE Exception is catched in hA"<<G4endl;
-      G4Exception("G4QInelastic::PostStepDoIt:","27",FatalException,"CHIPS hA crash");
+      // G4Exception("G4QInelastic::PostStepDoIt:","27",FatalException,"CHIPS hA crash");
+      G4Exception("G4QInelastic::PostStepDoIt()", "HAD_CHPS_0027",
+                  FatalException, "CHIPS hA crash");
     }
   }
   else                                                    // --> A projectile hadron
@@ -2019,7 +2031,9 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
         catch (G4QException& error)
         {
           G4cerr<<"***G4QInelastic::PostStepDoIt: G4QE Exception is catched in hA"<<G4endl;
-          G4Exception("G4QInelastic::PostStepDoIt:","27",FatalException,"CHIPS hA crash");
+          // G4Exception("G4QInelastic::PostStepDoIt:","27",FatalException,"CHIPS hA crash");
+          G4Exception("G4QInelastic::PostStepDoIt()", "HAD_CHPS_0027",
+                      FatalException, "CHIPS hA crash");
         }
 	//}
       outN=output->size();
@@ -2174,7 +2188,9 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
       if(!G4QHadron(t4M).DecayIn2(f4M, s4M))
       {
         G4cerr<<"G4QIn::PostStDoIt: ADB, M="<<t4M.m()<<" < 2*rM="<<rM<<" = "<<2*rM<<G4endl;
-        throw G4QException("G4QInelastic::HadronizeQuasm:Can't decay anti-dibaryon");
+        // throw G4QException("G4QInelastic::HadronizeQuasm:Can't decay anti-dibaryon");
+        G4Exception("G4QInelastic::PostStepDoIt()", "HAD_CHPS_0004",
+                    FatalException, "Hadronize quasmon: Can't decay anti-dibaryon");
       }
       // --- End of the moving cluster implementation ---
 #ifdef qedebug
@@ -2218,7 +2234,9 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
       if(!G4QHadron(t4M).DecayIn3(f4M, s4M, u4M))
       {
         G4cerr<<"G4QIn::PostStDoIt: AND, tM="<<t4M.m()<<" < 2*mB+mPi="<<2*rM+iM<<G4endl;
-        throw G4QException("G4QInelastic::HadronizeQuasm:Can't decay anti-NDelta");
+        // throw G4QException("G4QInelastic::HadronizeQuasm:Can't decay anti-NDelta");
+        G4Exception("G4QInelastic::PostStepDoIt()", "HAD_CHPS_0005",
+                    FatalException, "Hadronize quasmon: Can't decay anti-NDelta");
       }
       // --- End of the moving cluster implementation ---
 #ifdef qedebug
