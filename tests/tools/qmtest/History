@@ -12,6 +12,9 @@ $Id$
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30-Sep-2011, G.Folger                (testtools-QMtest-V09-04-10)
+-  disable eRosita, removed from examples_adv_common.qms
+
 06-Jul-2011, G.Folger                (testtools-QMtest-V09-04-09)
 -  create hierarchical qms files; this allows  to not do certain tests
      for platform/slot combinations. Ie. do not test on windows example 
