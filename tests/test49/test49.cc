@@ -425,7 +425,7 @@ int main()
   }
   else
   { // **************** GHAD process definition starts here *******************************
-    G4HadronicInteraction*      aModel = 0;
+    //G4HadronicInteraction*      aModel = 0;
     G4PreCompoundModel*      precModel = 0;
     G4CascadeInterface*      bertModel = 0;
     G4BinaryCascade*         binaModel = 0;
@@ -451,7 +451,7 @@ int main()
 #ifdef debug
       G4cout<<"Test49: Preco Model is defined ="<<precModel<<G4endl;
 #endif
-      aModel = precModel;
+      //aModel = precModel;
     }
     else if(mName == "bertini")
     {
@@ -459,7 +459,7 @@ int main()
 #ifdef debug
       G4cout<<"Test49: Preco Model is defined ="<<bertModel<<G4endl;
 #endif
-      aModel = bertModel;
+      //aModel = bertModel;
     }
     else if(mName == "binary")
     {
@@ -467,7 +467,7 @@ int main()
 #ifdef debug
       G4cout<<"Test49: Preco Model is defined ="<<binaModel<<G4endl;
 #endif
-      aModel = binaModel;
+      //aModel = binaModel;
     }
     else if(mName == "lep")
     {
@@ -477,7 +477,7 @@ int main()
 #ifdef debug
         G4cout<<"Test49: LEP p Model is defined ="<<lephModel<<G4endl;
 #endif
-        aModel = lephModel;
+        //aModel = lephModel;
       }
       else if(pPDG==2112)
       {
@@ -485,7 +485,7 @@ int main()
 #ifdef debug
         G4cout<<"Test49: LEP n Model is defined ="<<lenhModel<<G4endl;
 #endif
-        aModel = lenhModel;
+        //aModel = lenhModel;
       }
       else if(pPDG==-211)
       {
@@ -493,7 +493,7 @@ int main()
 #ifdef debug
         G4cout<<"Test49: LEP pim Model is defined ="<<lepmModel<<G4endl;
 #endif
-        aModel = lepmModel;
+        //aModel = lepmModel;
       }
       else if(pPDG== 211)
       {
@@ -501,7 +501,7 @@ int main()
 #ifdef debug
         G4cout<<"Test49: LEP pip Model is defined ="<<leppModel<<G4endl;
 #endif
-        aModel = leppModel;
+        //aModel = leppModel;
       }
       else if(pPDG==-321)
       {
@@ -509,7 +509,7 @@ int main()
 #ifdef debug
         G4cout<<"Test49: LEP km Model is defined ="<<lekmModel<<G4endl;
 #endif
-        aModel = lekmModel;
+        //aModel = lekmModel;
       }
       else if(pPDG== 321)
       {
@@ -517,7 +517,7 @@ int main()
 #ifdef debug
         G4cout<<"Test49: LEP kp Model is defined ="<<lekpModel<<G4endl;
 #endif
-        aModel = lekpModel;
+        //aModel = lekpModel;
       }
       else if(pPDG==-2112)
       {
@@ -525,12 +525,12 @@ int main()
 #ifdef debug
         G4cout<<"Test49: LEP ap Model is defined ="<<leapModel<<G4endl;
 #endif
-        aModel = leapModel;
+        //aModel = leapModel;
       }
       else
       {
         G4cout<<"-Error-Test49: Process is not defined in LEP for PDG="<<pPDG<<G4endl;
-        aModel = new G4LEProtonInelastic;
+        //aModel = new G4LEProtonInelastic;
       }
     }
     else if(mName == "hep")
@@ -541,7 +541,7 @@ int main()
 #ifdef debug
         G4cout<<"Test49: HEP p Model is defined ="<<hephModel<<G4endl;
 #endif
-        aModel = hephModel;
+        //aModel = hephModel;
       }
       else if(pPDG==2112)
       {
@@ -549,7 +549,7 @@ int main()
 #ifdef debug
         G4cout<<"Test49: HEP n Model is defined ="<<henhModel<<G4endl;
 #endif
-        aModel = henhModel;
+        //aModel = henhModel;
       }
       else if(pPDG==-211)
       {
@@ -557,7 +557,7 @@ int main()
 #ifdef debug
         G4cout<<"Test49: HEP pim Model is defined ="<<hepmModel<<G4endl;
 #endif
-        aModel = hepmModel;
+        //aModel = hepmModel;
       }
       else if(pPDG== 211)
       {
@@ -565,7 +565,7 @@ int main()
 #ifdef debug
         G4cout<<"Test49: HEP pip Model is defined ="<<heppModel<<G4endl;
 #endif
-        aModel = heppModel;
+        //aModel = heppModel;
       }
       else if(pPDG==-321)
       {
@@ -573,7 +573,7 @@ int main()
 #ifdef debug
         G4cout<<"Test49: HEP km Model is defined ="<<hekmModel<<G4endl;
 #endif
-        aModel = hekmModel;
+        //aModel = hekmModel;
       }
       else if(pPDG== 321)
       {
@@ -581,7 +581,7 @@ int main()
 #ifdef debug
         G4cout<<"Test49: HEP kp Model is defined ="<<hekpModel<<G4endl;
 #endif
-        aModel = hekpModel;
+        //aModel = hekpModel;
       }
       else if(pPDG==-2112)
       {
@@ -589,11 +589,11 @@ int main()
 #ifdef debug
         G4cout<<"Test49: HEP ap Model is defined ="<<heapModel<<G4endl;
 #endif
-        aModel = heapModel;
+        //aModel = heapModel;
       }
       else
       {
-        aModel = new G4HEProtonInelastic;
+        //aModel = new G4HEProtonInelastic;
         G4cout<<"-Error-Test49: Process is not defined in HEP for PDG="<<pPDG<<G4endl;
       }
     }
@@ -622,7 +622,7 @@ int main()
 
       hModel->SetMinEnergy(0.);
       hModel->SetMaxEnergy(100*TeV);
-      aModel = hModel;
+      //aModel = hModel;
 #ifdef debug
       G4cout<<"Test49: model="<<mName<<"(QGSC) is defined"<<G4endl;
 #endif
@@ -654,7 +654,7 @@ int main()
 
       hModel->SetMinEnergy(0.);
       hModel->SetMaxEnergy(100*TeV);
-      aModel = hModel;
+      //aModel = hModel;
 #ifdef debug
       G4cout<<"Test49: model="<<mName<<"(QGSP) is defined"<<G4endl;
 #endif
@@ -684,7 +684,7 @@ int main()
 
       hModel->SetMinEnergy(0.);
       hModel->SetMaxEnergy(100*TeV);
-      aModel = hModel;
+      //aModel = hModel;
 #ifdef debug
       G4cout<<"Test49: model="<<mName<<"(FTFC) is defined"<<G4endl;
 #endif
@@ -716,7 +716,7 @@ int main()
 
       hModel->SetMinEnergy(0.);
       hModel->SetMaxEnergy(100*TeV);
-      aModel = hModel;
+      //aModel = hModel;
 #ifdef debug
       G4cout<<"Test49: model="<<mName<<"(FTFP) is defined"<<G4endl;
 #endif
@@ -1081,10 +1081,9 @@ int main()
      //G4int nEvt=100;
      // Randomization loop: cycle random generator, using 2 lower digits in nEvt
      G4int    iRandCount = nEvt%100;
-     G4double vRandCount = 0.;
      while (iRandCount>0)                // Shift of the RNDN values 
      {
-      vRandCount = G4UniformRand();     // Fake calls
+      G4UniformRand();     // Fake calls
       iRandCount--;
      }
 #ifdef tdebug
