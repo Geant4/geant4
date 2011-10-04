@@ -238,13 +238,13 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
 // momentum, etc).
 //
   const G4ParticleDefinition *definitionP = theTrack.GetDefinition();
-  const G4double AP   = definitionP->GetBaryonNumber();
-  const G4double ZP   = definitionP->GetPDGCharge();
-  G4LorentzVector pP  = theTrack.Get4Momentum();
-  G4double E          = theTrack.GetKineticEnergy()/AP;
-  G4double AT         = theTarget.GetN();
-  G4double ZT         = theTarget.GetZ();
-  G4double TotalEPre  = theTrack.GetTotalEnergy() +
+  const G4double AP  = definitionP->GetBaryonNumber();
+  const G4double ZP  = definitionP->GetPDGCharge();
+  G4LorentzVector pP = theTrack.Get4Momentum();
+  G4double E         = theTrack.GetKineticEnergy()/AP;
+  G4double AT        = theTarget.GetA_asInt();
+  G4double ZT        = theTarget.GetZ_asInt();
+  G4double TotalEPre = theTrack.GetTotalEnergy() +
     theTarget.AtomicMass(AT, ZT) + theTarget.GetEnergyDeposit();
   G4double TotalEPost = 0.0;
 //
