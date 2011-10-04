@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Sep 30, 2011  Gabriele Cosmo (test10-V09-04-01)
+- Fixed compilation warnings for unused variables set on gcc-4.6.
+
 Sep 12, 2011  Pere Mato (test10-V09-04-00)
 - Added missing dependency between tests in CMakeLists.txt.
 

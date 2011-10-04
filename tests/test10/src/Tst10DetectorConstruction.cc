@@ -346,52 +346,64 @@ Tst10DetectorConstruction::SelectDetector( const G4String& val )
 
   // ------------ Surfaces definition ------------------
 
-  G4LogicalBorderSurface* BorderSurfaces[12];   
-  BorderSurfaces[0] = new G4LogicalBorderSurface("VolumeSurface",
+  // G4LogicalBorderSurface* BorderSurfaces[12];   
+  // BorderSurfaces[0] =
+  new G4LogicalBorderSurface("VolumeSurface",
                                PhysicalVolume,
                                aVolume_phys1,
                                aSurface);
-  BorderSurfaces[1] = new G4LogicalBorderSurface("VolumeSurface",
+  // BorderSurfaces[1] =
+  new G4LogicalBorderSurface("VolumeSurface",
                                PhysicalVolume,
                                aVolume_phys2,
                                aSurface);
-  BorderSurfaces[2] = new G4LogicalBorderSurface("VolumeSurface",
+  // BorderSurfaces[2] =
+  new G4LogicalBorderSurface("VolumeSurface",
                                PhysicalVolume,
                                aVolume_phys3,
                                aSurface);
-  BorderSurfaces[3] = new G4LogicalBorderSurface("VolumeSurface",
+  // BorderSurfaces[3] =
+  new G4LogicalBorderSurface("VolumeSurface",
                                PhysicalVolume,
                                aVolume_phys4,
                                aSurface);
-  BorderSurfaces[4] = new G4LogicalBorderSurface("VolumeSurface",
+  // BorderSurfaces[4] =
+  new G4LogicalBorderSurface("VolumeSurface",
                                PhysicalVolume,
                                aVolume_phys5,
                                aSurface);
-  BorderSurfaces[5] = new G4LogicalBorderSurface("VolumeSurface",
+  // BorderSurfaces[5] =
+  new G4LogicalBorderSurface("VolumeSurface",
                                PhysicalVolume,
                                aVolume_phys6,
                                aSurface);
-  BorderSurfaces[6] = new G4LogicalBorderSurface("VolumeSurface",
+  // BorderSurfaces[6] =
+  new G4LogicalBorderSurface("VolumeSurface",
                                aVolume_phys1,
                                PhysicalVolume,
                                aSurface);
-  BorderSurfaces[7] = new G4LogicalBorderSurface("VolumeSurface",
+  // BorderSurfaces[7] =
+  new G4LogicalBorderSurface("VolumeSurface",
                                aVolume_phys2,
                                PhysicalVolume,
                                aSurface);
-  BorderSurfaces[8] = new G4LogicalBorderSurface("VolumeSurface",
+  // BorderSurfaces[8] =
+  new G4LogicalBorderSurface("VolumeSurface",
                                aVolume_phys3,
                                PhysicalVolume,
                                aSurface);
-  BorderSurfaces[9] = new G4LogicalBorderSurface("VolumeSurface",
+  // BorderSurfaces[9] =
+  new G4LogicalBorderSurface("VolumeSurface",
                                aVolume_phys4,
                                PhysicalVolume,
                                aSurface);
-  BorderSurfaces[10] = new G4LogicalBorderSurface("VolumeSurface",
+  // BorderSurfaces[10] =
+  new G4LogicalBorderSurface("VolumeSurface",
                                aVolume_phys5,
                                PhysicalVolume,
                                aSurface);
-  BorderSurfaces[11] = new G4LogicalBorderSurface("VolumeSurface",
+  // BorderSurfaces[11] =
+  new G4LogicalBorderSurface("VolumeSurface",
                                aVolume_phys6,
                                PhysicalVolume,
                                aSurface);
