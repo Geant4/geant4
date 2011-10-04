@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Sep. 28, 2011 Pere Mato (exampleRE01-V09-04-00)
+- Changed SVN property eol to native for file sample.err needed for testing
+
 Nov. 24, 2010 M.Asai (exampleRE01-V09-03-05)
 - Add a protection against empty stack : RE01StackingAction.cc
 
