@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+test35-V09-04-03  30 September 2011 V.Ivanchenko
+- fixed compillation gcc.4.6; use cross section
+  depending on flags in macro file; changed default macro 
+
 test35-V09-04-02  1 September 2011 V.Ivanchenko
 - migrate to new interface for cross sections 
 

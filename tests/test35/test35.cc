@@ -122,10 +122,10 @@ int main(int argc, char** argv)
   G4String  namePart = "proton";
   G4String  nameMat  = "G4_Al";
   G4String  nameGen  = "Binary";
-  G4bool    logx     = false;
+
   G4bool    usepaw   = false;
   G4bool    isInitH  = false;
-  G4bool    inclusive= true;
+
   G4int     verbose  = 0;
   G4double  energy   = 100.*MeV;
   G4double  sigmae   = 0.0;
@@ -152,9 +152,7 @@ int main(int argc, char** argv)
   G4double eBound    = 70.*MeV;
   G4double kBound    = 0.2;
   G4Material* material = 0;
-  G4bool nevap       = false;
-  G4bool gtran       = false;
-  G4bool gemis       = false;
+
   G4bool xssolang    = true;
   G4bool xsbgg       = true;
   G4bool saverand    = false;
@@ -263,10 +261,6 @@ int main(int argc, char** argv)
 	    G4cout<<"Number of events is forced to "<< nevt << G4endl;
 	  }
 	}
-      } else if(line == "#exclusive") {
-        inclusive = false;
-      } else if(line == "#inclusive") {
-        inclusive = true;
       } else if(line == "#nbins") {
         (*fin) >> nbins;
       } else if(line == "#nbinse") {
@@ -318,20 +312,35 @@ int main(int argc, char** argv)
 	}
         hFile = nameGen;
         if(nameGen == "binary")       { hFile = "bic"; }
-        else if(nameGen == "bertini") { hFile = "bert"; }
-        else if(nameGen == "lepar")   { nameGen = "lhep";  hFile = "lhep"; }
-        else if(nameGen == "CHIPS")   { nameGen = "chips"; hFile = "chips"; }
-	else if(nameGen == "elastic") { break; }
 
+	// Bertini and LHEP always active
+        else if(nameGen == "bertini") { 
+	  hFile = "bert"; 
+          break;
+	}
+        else if(nameGen == "lepar")   { 
+	  nameGen = "lhep";  
+	  hFile = "lhep"; 
+          break;
+	}
+	// CHIPS name
+        else if(nameGen == "CHIPS")   { 
+	  nameGen = "chips"; 
+	  hFile = "chips"; 
+	}
+	// Elastic always active
+	else if(nameGen == "elastic") { break; }
+	// Other generators should check environment variable
 	char* c = getenv(nameGen);
-        if(!c) {
+	if(!c) {
 	  G4cout << "Generator <" << nameGen << "> is not included in the "
 		 << " list SetModels.csh, so is ignored!" 
 		 << G4endl; 
 	  continue;
 	}
 	G4String s(c);
-	if(s=="1") { break; }	
+	if(s=="1") { break; }
+ 	
       } else if(line == "#rad") {
 	xssolang = false;
       } else if(line == "#xs_ghad") {
@@ -361,17 +370,9 @@ int main(int argc, char** argv)
       } else if(line == "#time(ns)") {
         (*fin) >> aTime;
         aTime *= ns;
-      } else if(line == "#logx") {
-        logx = true;
       } else if(line == "#exit") {
         end = false;
         break;
-      } else if(line == "#HETCEmission") {
-        gemis = true;
-      } else if(line == "#GNASHTransition") {
-        gtran = true;
-      } else if(line == "#GEMEvaporation") {
-        nevap = true;
       }
     } while(end);
 
@@ -470,17 +471,20 @@ int main(int argc, char** argv)
 
     if(chips) {
       chips->SetParameters();
-    } else if(nameGen == "LElastic" || nameGen == "BertiniElastic") {
-      cs = new G4HadronElasticDataSet();
-    } else if(part == proton && Z > 1 && nameGen != "lepar") {
-      if(xsbgg) cs = new G4BGGNucleonInelasticXS(part);
-      else      cs = new G4ProtonInelasticCrossSection();
-    } else if(part == neutron && Z > 1 && nameGen != "lepar") {
-      if(xsbgg) cs = new G4BGGNucleonInelasticXS(part);
-      else      cs = new G4NeutronInelasticCrossSection();
-    } else if((part == pin || part == pip) && Z > 1 && nameGen != "lepar") {
-      if(xsbgg) cs = new G4BGGPionInelasticXS(part);
-      else cs = new G4PiNuclearCrossSection();
+    } else if(nameGen == "lepar") {
+      cs = new G4HadronInelasticDataSet();
+    } else if(part == proton) {
+      if(xsbgg)      { cs = new G4BGGNucleonInelasticXS(part); }
+      else if(Z > 1) { cs = new G4ProtonInelasticCrossSection(); }
+      else           { cs = new G4HadronInelasticDataSet(); }
+    } else if(part == neutron) {
+      if(xsbgg)      { cs = new G4BGGNucleonInelasticXS(part); }
+      else if(Z > 1) { cs = new G4NeutronInelasticCrossSection(); }
+      else           { cs = new G4HadronInelasticDataSet(); }
+    } else if(part == pin || part == pip) {
+      if(xsbgg)      { cs = new G4BGGPionInelasticXS(part); }
+      else if(Z > 1) { cs = new G4PiNuclearCrossSection(); }
+      else           { cs = new G4HadronInelasticDataSet(); }
     } else { 
       cs = new G4HadronInelasticDataSet();
     }
@@ -520,8 +524,8 @@ int main(int argc, char** argv)
 		       chips->GetMeanFreePath(*gTrack, DBL_MAX, 
 					      &condition));
     } else {
-      cross_sec = (G4HadronCrossSections::Instance())->
-        GetInelasticCrossSection(&dParticle, Z, A);
+      cs->BuildPhysicsTable(*part);
+      cross_sec = cs->GetCrossSection(&dParticle, elm);
     }
 
     G4double factor = 
@@ -577,7 +581,7 @@ int main(int argc, char** argv)
     G4ParticleDefinition* pd;
     G4ThreeVector  mom;
     G4LorentzVector labv, fm;
-    G4double e, p, m, px, py, pz, pt, theta, x;
+    G4double e, p, m, px, py, pt, theta, x;
     G4VParticleChange* aChange = 0;
 
     for (G4int iter=0; iter<nevt; ++iter) {
@@ -633,7 +637,7 @@ int main(int argc, char** argv)
 	labv -= fm;
         px = mom.x();
         py = mom.y();
-        pz = mom.z();
+	//        pz = mom.z();
         pt = sqrt(px*px +py*py);
 
         G4double thetamr = theta*1000.;
