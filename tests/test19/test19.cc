@@ -894,10 +894,9 @@ int main()
      //G4int nEvt=100;
      // Randomization loop: cycle random generator, using 2 lower digits in nEvt
      G4int    iRandCount = nEvt%100;
-     G4double vRandCount = 0.;
      while (iRandCount>0)                // Shift of the RNDN values 
      {
-      vRandCount = G4UniformRand();     // Fake calls
+      G4UniformRand();     // Fake calls
       iRandCount--;
      }
 #ifdef tdebug
