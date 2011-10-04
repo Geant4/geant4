@@ -117,43 +117,42 @@ void Tst14DetectorConstruction::DefineMaterials()
 //
   density = 1.848*g/cm3;
   a = 9.01*g/mole;
-  G4Material* Be = new G4Material(name="Beryllium", z=4., a, density);
-  size_t dummy = Be->GetNumberOfElements();
+  //G4Material* Be = 
+  new G4Material(name="Beryllium", z=4., a, density);
 
   density = 2.700*g/cm3;
   a = 26.98*g/mole;
-  G4Material* Al = new G4Material(name="Aluminium", z=13., a, density);
-  dummy = Al->GetNumberOfElements();
+  //G4Material* Al = 
+  new G4Material(name="Aluminium", z=13., a, density);
 
   density = 2.330*g/cm3;
   a = 28.09*g/mole;
-  G4Material* Si = new G4Material(name="Silicon", z=14., a, density);
-  dummy = Si->GetNumberOfElements();
+  //G4Material* Si = 
+  new G4Material(name="Silicon", z=14., a, density);
 
   density = 1.390*g/cm3;
   a = 39.95*g/mole;
-  G4Material* lAr = new G4Material(name="liquidArgon", z=18., a, density);
-  dummy = lAr->GetNumberOfElements();
+  //G4Material* lAr = 
+  new G4Material(name="liquidArgon", z=18., a, density);
 
   density = 7.870*g/cm3;
   a = 55.85*g/mole;
-  G4Material* Fe = new G4Material(name="Iron"   , z=26., a, density);
-  dummy = Fe->GetNumberOfElements();
+  //G4Material* Fe = 
+  new G4Material(name="Iron"   , z=26., a, density);
 
   density = 8.960*g/cm3;
   a = 63.55*g/mole;
-  G4Material* Cu = new G4Material(name="Copper"   , z=29., a, density);
-  dummy = Cu->GetNumberOfElements();
+  //G4Material* Cu = 
+  new G4Material(name="Copper"   , z=29., a, density);
 
   density = 19.32*g/cm3;
   a =196.97*g/mole;
-  G4Material* Au = new G4Material(name="Gold"   , z=79., a, density);
-  dummy = Au->GetNumberOfElements();
+  //G4Material* Au = 
+  new G4Material(name="Gold"   , z=79., a, density);
 
   density = 11.35*g/cm3;
   a = 207.19*g/mole;
   G4Material* Pb = new G4Material(name="Lead"     , z=82., a, density);
-  dummy = Pb->GetNumberOfElements();
 
 //
 // define a material from elements.   case 1: chemical molecule

@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30 Sept 2011 G.Folger tag test14-V09-04-03
+             Fix gcc46 compilation warning in Tst14DetectorConstruction.cc
+
 07 June 2011  - V.Ivanchenko tag test14-V09-04-02
               - reduce size of log output for teh default macro
 
