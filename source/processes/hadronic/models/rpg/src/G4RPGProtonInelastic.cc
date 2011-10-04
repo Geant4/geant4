@@ -127,9 +127,8 @@ void
 G4RPGProtonInelastic::SlowProton(const G4HadProjectile *originalIncident,
                                  G4Nucleus &targetNucleus )
 {
-  const G4double A = targetNucleus.GetN();    // atomic weight
-  const G4double Z = targetNucleus.GetZ();    // atomic number
-//  G4double currentKinetic = originalIncident->GetKineticEnergy();
+  const G4double A = targetNucleus.GetA_asInt();    // atomic weight
+  const G4double Z = targetNucleus.GetZ_asInt();    // atomic number
   //
   // calculate Q-value of reactions
   //

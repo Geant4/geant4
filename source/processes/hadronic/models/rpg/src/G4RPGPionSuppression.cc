@@ -64,8 +64,8 @@ ReactionStage(const G4HadProjectile* /*originalIncident*/,
   G4double eAvailable = cmEnergy - mOriginal - targetMass;
   for (G4int i = 0; i < vecLen; i++) eAvailable -= vec[i]->GetMass()/GeV;
 
-  const G4double atomicWeight = targetNucleus.GetN();
-  const G4double atomicNumber = targetNucleus.GetZ();
+  const G4double atomicWeight = targetNucleus.GetA_asInt();
+  const G4double atomicNumber = targetNucleus.GetZ_asInt();
   const G4double pOriginal = modifiedOriginal.GetTotalMomentum()/GeV;
     
   G4ParticleDefinition *aPiMinus = G4PionMinus::PionMinus();

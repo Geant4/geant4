@@ -126,8 +126,8 @@ G4RPGNeutronInelastic::SlowNeutron(const G4HadProjectile* originalIncident,
                               G4ReactionProduct& targetParticle,
                               G4Nucleus& targetNucleus)
 {        
-  const G4double A = targetNucleus.GetN();    // atomic weight
-  const G4double Z = targetNucleus.GetZ();    // atomic number
+  const G4double A = targetNucleus.GetA_asInt();    // atomic weight
+  const G4double Z = targetNucleus.GetZ_asInt();    // atomic number
     
   G4double currentKinetic = modifiedOriginal.GetKineticEnergy()/MeV;
   G4double currentMass = modifiedOriginal.GetMass()/MeV;

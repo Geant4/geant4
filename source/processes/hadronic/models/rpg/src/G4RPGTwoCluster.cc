@@ -106,8 +106,8 @@ ReactionStage(const G4HadProjectile* originalIncident,
     veryForward = true;
   }
 
-  const G4double atomicWeight = targetNucleus.GetN();
-  const G4double atomicNumber = targetNucleus.GetZ();
+  const G4double atomicWeight = targetNucleus.GetA_asInt();
+  const G4double atomicNumber = targetNucleus.GetZ_asInt();
   //
   // particles have been distributed in forward and backward hemispheres
   // in center of mass system of the hadron nucleon interaction
@@ -640,9 +640,9 @@ ReactionStage(const G4HadProjectile* originalIncident,
   numberofFinalStateNucleons = std::max(1, numberofFinalStateNucleons);
 
   G4int PinNucleus = std::max(0, 
-    G4int(targetNucleus.GetZ()) - protonsInFinalState);
+    G4int(targetNucleus.GetZ_asInt()) - protonsInFinalState);
   G4int NinNucleus = std::max(0,
-    G4int(targetNucleus.GetN()-targetNucleus.GetZ()) - neutronsInFinalState);
+    G4int(targetNucleus.GetA_asInt()-targetNucleus.GetZ_asInt()) - neutronsInFinalState);
   //
   //  for various reasons, the energy balance is not sufficient,
   //  check that,  energy balance, angle of final system, etc.

@@ -253,7 +253,7 @@ G4RPGInelastic::CalculateMomenta(G4FastVector<G4ReactionProduct,256>& vec,
       
     const G4double tarmas = originalTarget->GetDefinition()->GetPDGMass();
     if( ek > 1.0*GeV )ekcor = 1./(ek/GeV);
-    const G4double atomicWeight = targetNucleus.GetN();
+    const G4double atomicWeight = targetNucleus.GetA_asInt();
     ek = 2*tarmas + ek*(1.+ekcor/atomicWeight);
     G4double tkin = targetNucleus.Cinema(ek);
     ek += tkin;
