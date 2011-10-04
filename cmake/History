@@ -30,6 +30,21 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 30th 2011 - P. Mato (cmake-V09-04-25)
+- Modules/Geant4MakeRules_cxx.cmake: Fixed debug flag to -Zi for Visual C++
+
+- Modules/Geant4CTest.cmake: Moved from tests/CMakeLists.txt the logic to 
+  construct the GEANT_TEST_ENVIRONMENT with data file locations to be useful
+  for benchmarks tests.
+
+September 29th 2011 - B. Morgan (cmake-V09-04-24)
+- Modules/Geant4OptionalComponents.cmake : Removed enabling of Fortran language
+  when G3toG4 is enabled. Gunter Folger reported problems with obtaining correct
+  Fortran setup, so we disable this since we don't actually compile the rztog4
+  app at present. A change has also been made in the top level CMakeLists.txt
+  so that the Make rules initialization for Fortran is no longer set up.
+
+
 September 16th 2011 - B. Morgan (cmake-V09-04-23)
 - Templates/Geant4Config.cmake.in : Addition of G4VIS_USE and G4UI_USE to list
   of definitions has been made conditional on the existence of the variables

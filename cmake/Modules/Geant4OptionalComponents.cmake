@@ -122,18 +122,21 @@ GEANT4_ADD_FEATURE(GEANT4_USE_GDML "Build Geant4 with GDML support")
 
 
 #----------------------------------------------------------------------------
-# Optional support for G3TOG4 converter application - requires Fortran compiler
+# Optional support for G3TOG4 convertion interface.
+# We do not build the rztog4 application.
+# -- OLDER NOTES --
 # The G3toG4 *library* should always be built, but the rztog4 application 
 # requires a Fortran compiler AND CERNLIB, so is optional.
 # Only on *NIX because converter requires CERNLIB, and Windows support for
 # this is an unknown quantity at present (can always change later).
+# -- OLDER NOTES --
 #
 if(UNIX)
     option(GEANT4_USE_G3TOG4 "Build the rztog4 application for converting Geant3 geometries to Geant4" OFF)
-    if(GEANT4_USE_G3TOG4)
-        enable_language(Fortran)
-        #find_package(CERNLIB REQUIRED)
-    endif(GEANT4_USE_G3TOG4)
+    #if(GEANT4_USE_G3TOG4)
+    #enable_language(Fortran)
+    #find_package(CERNLIB REQUIRED)
+    #endif(GEANT4_USE_G3TOG4)
 
     GEANT4_ADD_FEATURE(GEANT4_USE_G3TOG4 "Build the rztog4 application")
 endif()
