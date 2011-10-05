@@ -9,6 +9,9 @@ $Id: History,v 1.31 2010-11-17 20:42:36 allison Exp $
                        Package History file
                        --------------------
 
+04 October 2011 - S.Incerti - tag microbeam-V09-04-04
+- more clean-up after Gunter's improvements
+
 03 October 2011 - G.Folger  - tag microbeam-V09-04-03
 - fix missed compilation warnings from gcc46 in MicrobeamEMField.cc 
 
