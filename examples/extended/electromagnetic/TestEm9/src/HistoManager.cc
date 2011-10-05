@@ -425,11 +425,6 @@ void HistoManager::ScoreNewTrack(const G4Track* aTrack)
       mass = particle->GetPDGMass();
       histo->fillTuple("MASS", mass/MeV);
       histo->fillTuple("CHAR",(particle->GetPDGCharge())/eplus);
-      G4double beta = 1.;
-	if(mass > 0.) {
-          G4double gamma = kinE/mass + 1.;
-          beta = std::sqrt(1. - 1./(gamma*gamma));
-	}
     }
 
     G4ThreeVector dir = dynParticle->GetMomentumDirection();

@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+03-10-11 G.Folger (testem09-V09-04-02)
+- Fix gcc46 compilation warning in DetectorConstruction.cc and HistoManager.cc
+
 07-06-11 mma (testem9-V09-04-01)
 - PhysListEmStandard migrated to the new approach based on G4PhysicsListHelper
 
