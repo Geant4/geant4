@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+test30-V09-04-06  30 SEptember 2011 V.Ivanchenko
+- test30.cc - cleanup of usage of cross sections
+
 test30-V09-04-05  16 September 2011 Pere Mato
 - test30.cc - fixed std::log10(int) ambiguity error on VC9
 

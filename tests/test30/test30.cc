@@ -67,6 +67,7 @@
 #include "G4TripathiLightCrossSection.hh"
 #include "G4HadronElasticDataSet.hh"
 #include "G4PiNuclearCrossSection.hh"
+#include "G4IonProtonCrossSection.hh"
 
 #include "G4BGGNucleonElasticXS.hh"
 #include "G4BGGPionElasticXS.hh"
@@ -744,7 +745,7 @@ int main(int argc, char** argv)
     if(usepaw) {
       histo.setFileName(hFile);
       histo.book();
-      G4cout << "Histograms are booked output file <" << hFile << "> "
+      G4cout << "Histograms are booked output file <" << hFile << ".root> "
 	     << G4endl;
     }
 
@@ -756,6 +757,7 @@ int main(int argc, char** argv)
     if(chips) {
       chips->SetParameters();
     } else if(extraproc && namegen1 == "Elas") {
+
       cs = new G4HadronElasticDataSet();
       if(nameGen == "Elastic" || nameGen == "ElasticHE" || 
 	 nameGen == "ElasticDIFF") {
@@ -787,35 +789,39 @@ int main(int argc, char** argv)
       extraproc->RegisterMe(els);
       man->AddDiscreteProcess(extraproc); 
 
-    } else if(part == proton && Z > 1 && nameGen != "lepar") {
-      if(xsbgg) cs = new G4BGGNucleonInelasticXS(part);
-      else      cs = new G4ProtonInelasticCrossSection();
-
-    } else if(part == neutron && Z > 1 && nameGen != "lepar") {
-      if(xsbgg) cs = new G4BGGNucleonInelasticXS(part);
-      else      cs = new G4NeutronInelasticCrossSection();
-
-    } else if((part == pin || part == pip) && Z > 1 && nameGen != "lepar") {
-      if(xsbgg) cs = new G4BGGPionInelasticXS(part);
-      else cs = new G4PiNuclearCrossSection();
+    } else if(nameGen == "lepar") {
+      cs = new G4HadronInelasticDataSet();
+    } else if(part == proton) {
+      if(xsbgg)      { cs = new G4BGGNucleonInelasticXS(part); }
+      else if(Z > 1) { cs = new G4ProtonInelasticCrossSection(); }
+      else           { cs = new G4HadronInelasticDataSet(); }
+    } else if(part == neutron) {
+      if(xsbgg)      { cs = new G4BGGNucleonInelasticXS(part); }
+      else if(Z > 1) { cs = new G4NeutronInelasticCrossSection(); }
+      else           { cs = new G4HadronInelasticDataSet(); }
+    } else if(part == pin || part == pip) {
+      if(xsbgg)      { cs = new G4BGGPionInelasticXS(part); }
+      else if(Z > 1) { cs = new G4PiNuclearCrossSection(); }
+      else           { cs = new G4HadronInelasticDataSet(); }
 
     } else if( ionParticle || 
 	       part == deu || part == tri ||part == he3 ||part == alp) {
-      cs = new G4TripathiLightCrossSection();
-      if(cs->IsIsoApplicable(&dParticle,Z,A)) {
-	G4cout << "Using Tripathi Light Cross section for Ions" << G4endl;
-      } else {
-	delete cs;
-	cs = 0;
+
+      if(1 == Z && 1 == A) {
+        cs = new G4IonProtonCrossSection();
+        G4cout << "Using Axen-Wellisch Cross section for Ions" << G4endl;
+      }
+      if(!cs) {
+	cs = new G4TripathiLightCrossSection();
+	if(cs->IsElementApplicable(&dParticle,Z)) {
+	  G4cout << "Using Tripathi Light Cross section for Ions" << G4endl;
+	} else { cs = 0; }
       }
       if(!cs) {
 	cs = new G4TripathiCrossSection();
-	if(cs->IsIsoApplicable(&dParticle,Z,A)) {
+	if(cs->IsElementApplicable(&dParticle,Z)) {
 	  G4cout << "Using Tripathi Cross section for Ions" << G4endl;
-	} else {
-	  delete cs;
-	  cs = 0;
-	}
+	} else { cs = 0;}
       }
       if(!cs) {
 	cs = new G4IonsShenCrossSection();

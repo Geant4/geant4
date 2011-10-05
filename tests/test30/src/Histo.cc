@@ -55,7 +55,7 @@ Histo::Histo()
 {
   verbose    = 0;
   histName   = "test30";
-  histType   = "hbook";
+  histType   = "root";
   nHisto     = 0;
   defaultAct = true;
   tupleName  = "tuple";
@@ -314,8 +314,8 @@ void Histo::setFileName(const G4String& nam)
 
 void Histo::setFileType(const G4String& nam) 
 {
-  if(nam == "root" || nam == "hbook" || nam == "aida") histType = nam;
-  else if(nam == "xml" || nam == "XML") histType = "aida";
+  if(nam == "root" || nam == "hbook" || nam == "aida") { histType = nam; }
+  else if(nam == "xml" || nam == "XML")                { histType = "aida"; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
