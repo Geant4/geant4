@@ -212,7 +212,7 @@ double MuCrossSections::CRK_Mephi(double z,double a,double tkin,double ep)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-double MuCrossSections::CRN_Mephi(double z,double a,double tkin,double ep)
+double MuCrossSections::CRN_Mephi(double /* z */,double a,double tkin,double ep)
 
 //***********************************************************************
 //***	Differential cross section for photonuclear muon interaction.
@@ -225,7 +225,7 @@ double MuCrossSections::CRN_Mephi(double z,double a,double tkin,double ep)
 {
 //    double Z,A,Tkin,EP;
     double crn_g4;
-    double dummy,e,aeff,sigph,v,v1,v2,amu2,up,down;
+    double e,aeff,sigph,v,v1,v2,amu2,up,down;
 //***
     double amu=0.105658389; // GeV
     double avno=6.022137e23;
@@ -238,7 +238,6 @@ double MuCrossSections::CRN_Mephi(double z,double a,double tkin,double ep)
     double alam =0.632456; // sqrt(alam2)
     double coeffn=alpha/pi*avno*1e-30; // cm^2/microbarn
 //***
-	dummy=z; // Z is a formal parameter at the moment
 	e=tkin+amu;
 	crn_g4=0.;
 	if(ep >= e-0.5*amp) return crn_g4;
