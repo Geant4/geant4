@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 3rd, 2011 G.Folger     - olapex-V09-04-00 
+- Fix gcc46 compilation warning in OlapEventAction
+
 November 16th, 2010  G.Cosmo   - olapex-V09-03-04
 - Fixed uninitialised data in OlapInfo, causing undefined behavior.
 - OlapDetConstr: moved printout for no daughter in world to cout.

@@ -201,12 +201,7 @@ void OlapEventAction::EndOfEventAction(const G4Event* anEvent)
    G4int axx = -1;
    if (aGenerator)
      axx = aGenerator->GetAxis();  
-   
-   G4double distAB, distBA;
-   distAB = (ABSteps[0])->thePoint[axx]
-            - (ABSteps[ABSteps.size()-1])->thePoint[axx];
-   distBA = (BASteps[0])->thePoint[axx]
-            - (BASteps[BASteps.size()-1])->thePoint[axx];
+    
    #ifdef OLAP_DEBUG
       G4cout << "OlapEventAction::EndOfEventAction(): "
              << "deltaAB=" 
