@@ -32,12 +32,9 @@ class G4LENDModel : public G4HadronicInteraction
   
       virtual G4HadFinalState * ApplyYourself( const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus );
 
-      //void ChangeDefaultEvaluation( G4String name ){ default_evaluation = name; recreate_used_target_map(); };
-      //void AllowNaturalAbundanceTarget(){ allow_nat = true; recreate_used_target_map(); };
-      //void AllowAnyCandidateTarget(){ allow_any = true; recreate_used_target_map(); };
-      void ChangeDefaultEvaluation( G4String name ){ default_evaluation = name; };
-      void AllowNaturalAbundanceTarget(){ allow_nat = true; };
-      void AllowAnyCandidateTarget(){ allow_any = true; };
+      void ChangeDefaultEvaluation( G4String name ){ default_evaluation = name; recreate_used_target_map(); };
+      void AllowNaturalAbundanceTarget(){ allow_nat = true; recreate_used_target_map(); };
+      void AllowAnyCandidateTarget(){ allow_any = true; recreate_used_target_map(); };
       //Same argument to the CrossSectionDataSet 
       void BuildPhysicsTable( const G4ParticleDefinition& ){ recreate_used_target_map(); };
 
