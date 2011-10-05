@@ -155,7 +155,7 @@ G4HadFinalState* G4ElectroNuclearReaction::ApplyYourself(const G4HadProjectile& 
         "G4ElectroNuclearReaction::ApplyYourself called for neither electron or positron");
   const G4ElementTable* aTab = G4Element::GetElementTable();
   G4Element * anElement = 0;
-  G4int aZ = static_cast<G4int>(aTargetNucleus.GetZ()+.1);
+  G4int aZ = static_cast<G4int>(aTargetNucleus.GetZ_asInt()+.1);
   for(size_t ii=0; ii<aTab->size(); ++ii) if ( std::abs((*aTab)[ii]->GetZ()-aZ) < .1)
   {
     anElement = (*aTab)[ii];
@@ -164,7 +164,7 @@ G4HadFinalState* G4ElectroNuclearReaction::ApplyYourself(const G4HadProjectile& 
   if(0==anElement) 
   {
     G4cerr<<"***G4ElectroNuclearReaction::ApplyYourself: element with Z="
-          <<aTargetNucleus.GetZ()<<" is not in the element table"<<G4endl;
+          <<aTargetNucleus.GetZ_asInt()<<" is not in the element table"<<G4endl;
     throw G4HadronicException(__FILE__, __LINE__, "Anomalous element error.");
   }
 

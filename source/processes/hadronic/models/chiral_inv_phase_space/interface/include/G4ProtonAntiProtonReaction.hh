@@ -51,7 +51,7 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
   {
     throw G4HadronicException(__FILE__, __LINE__, "Calling G4ProtonAntiProtonReaction with particle other than p-bar!!!");
   }
-  if(aTargetNucleus.GetZ() != 1)
+  if(aTargetNucleus.GetZ_asInt() != 1)
   {
     throw G4HadronicException(__FILE__, __LINE__, "Calling G4ProtonAntiProtonReaction for target other than Hydrogen!!!");
   }

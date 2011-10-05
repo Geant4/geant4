@@ -12,6 +12,15 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+04-Oct-2011 Dennis Wright                      (hadr-chips-inter-V09-04-04)
+---------------------------------------------------------------------------
+- integer Z and A migration:  change GetZ to GetZ_asInt and GetN to
+  GetA_asInt for instances of G4Nucleus, for the following files:
+     G4ProtonAntiProtonAtRestChips.hh
+     G4ElectroNuclearReaction.hh
+     G4ProtonAntiProtonReaction.hh
+     G4PionMinusNuclearAtRestChips.hh
+
 09-Sep-2011 M.Kelsey                           (hadr-chips-inter-V09-04-03)
 ---------------------------------------------------------------------------
 - G4ElectroNuclearReaction.hh: Follow migration of G4HadFinalState interface
