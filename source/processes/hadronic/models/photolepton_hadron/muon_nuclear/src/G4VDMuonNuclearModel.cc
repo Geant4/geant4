@@ -127,7 +127,7 @@ G4VDMuonNuclearModel::CalculateEMVertex(const G4HadProjectile& aTrack,
   G4double KineticEnergy = aTrack.GetKineticEnergy();
   G4double TotalEnergy = aTrack.GetTotalEnergy();
   G4double Mass = G4MuonMinus::MuonMinus()->GetPDGMass();
-  G4double lnZ = std::log(targetNucleus.GetZ());
+  G4double lnZ = std::log(G4double(targetNucleus.GetZ_asInt() ) );
 
   G4double epmin = CutFixed;
   G4double epmax = TotalEnergy - 0.5*proton_mass_c2;
