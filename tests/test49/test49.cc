@@ -1101,7 +1101,7 @@ int main()
 	 G4cout<<"Test49: ## "<<iter<<"-th event ##,energy="<<energy<<",proc="<<proc<<G4endl;
 #endif
 
-      if(!(iter%1000)&&iter)G4cout<<"***=>TEST19: "<<iter<<" events are simulated"<<G4endl;
+      if(!(iter%1000)&&iter)G4cout<<"***=>TEST49: "<<iter<<" events are simulated"<<G4endl;
 
       gTrack->SetStep(step);            // Now step is included in the Track (see above)
       gTrack->SetKineticEnergy(energy); // Duplication of Kin. Energy for the Track (?!)
@@ -1508,7 +1508,7 @@ int main()
         //                            <<",P="<<pmax<<",dR="<<dR<<G4endl;
 #endif
 #ifdef pdebug
-        G4cout<<">TEST19: r4M="<<totSum<<",rCh="<<totCharge<<",rBN="<<totBaryN<<G4endl;
+        G4cout<<">TEST49: r4M="<<totSum<<",rCh="<<totCharge<<",rBN="<<totBaryN<<G4endl;
 #endif
         if(mName == "chips")
         {
