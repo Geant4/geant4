@@ -9,6 +9,10 @@ $Id: History,v 1.31 2010-12-23 11:34:22 chauvie Exp $
 
                       ---------------------
 
+03.10.2011 - G.Folger   (DICOM-V09-04-02)
+             Fix gcc46 compilation warning in DicomHandler.cc 
+              and DicomPhantomParameterisationColour.cc
+
 05.06.2011 - Pedro Arce (DICOM-V09-04-01)
              Corrected name for sensitive detector to be consistently
              named as "phantomSD" in DicomRunAction. Addressing problem

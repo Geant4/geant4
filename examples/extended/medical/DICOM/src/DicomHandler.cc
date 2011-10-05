@@ -379,7 +379,6 @@ void DicomHandler::StoreData(std::ofstream& foutG4DCM)
   G4int mean;
   G4double density;
   G4bool overflow = false;
-  G4int cpt=1;
 
   //----- Print indices of material 
   if(compression == 1) { // no compression: each pixel has a density value)
@@ -407,7 +406,6 @@ void DicomHandler::StoreData(std::ofstream& foutG4DCM)
 	  if(overflow) break;
 	}
 	mean /= compression*compression;
-	cpt = 1;
 	
 	if(!overflow) {
 	  G4double density = Pixel2density(mean);
@@ -445,7 +443,6 @@ void DicomHandler::StoreData(std::ofstream& foutG4DCM)
 	  if(overflow) break;
 	}
 	mean /= compression*compression;
-	cpt = 1;
 	
 	if(!overflow) {
 	  G4double density = Pixel2density(mean);
@@ -497,7 +494,6 @@ G4int DicomHandler::ReadData(FILE *dicom,char * filename2)
 
     //  READING THE PIXELS :
     G4int w = 0;
-    G4int len = 0;
     
     tab = new G4int*[rows];
     for ( G4int i = 0; i < rows; i ++ ) {
@@ -512,7 +508,6 @@ G4int DicomHandler::ReadData(FILE *dicom,char * filename2)
 
 	unsigned char ch = 0;
 
-	len = rows*columns;
 	for(G4int j = 0; j < rows; j++) {
 	    for(G4int i = 0; i < columns; i++) {
 		w++;
@@ -525,7 +520,6 @@ G4int DicomHandler::ReadData(FILE *dicom,char * filename2)
     } else { //  from 12 to 16 bits :
 	char sbuff[2];
 	short pixel;
-	len = rows*columns;
 	for( G4int j = 0; j < rows; j++) {
 	    for( G4int i = 0; i < columns; i++) {
 		w++;
@@ -590,7 +584,6 @@ G4int DicomHandler::ReadData(FILE *dicom,char * filename2)
     G4int mean;
     G4float density;
     G4bool overflow = false;
-    G4int cpt=1;
 
     //----- Write index of material for each pixel
     if(compSize == 1) { // no compression: each pixel has a density value)
@@ -618,7 +611,6 @@ G4int DicomHandler::ReadData(FILE *dicom,char * filename2)
 	    if(overflow) break;
 	  }
 	  mean /= compSize*compSize;
-	  cpt = 1;
 	  
 	  if(!overflow) {
 	    density = Pixel2density(mean);
@@ -655,7 +647,6 @@ G4int DicomHandler::ReadData(FILE *dicom,char * filename2)
 	    if(overflow) break;
 	  }
 	  mean /= compSize*compSize;
-	  cpt = 1;
 	  
 	  if(!overflow) {
 	    density = Pixel2density(mean);
