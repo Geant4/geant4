@@ -1,46 +1,3 @@
-#---Many tests require access to the Geant4 data----------------------------------------------------
-if(GEANT4_INSTALL_DATA)
-  set(GEANT4_DATA_DIR ${CMAKE_BINARY_DIR}/data CACHE PATH "Directory where the Geant4 data is located")
-else()
-  set(GEANT4_DATA_DIR "" CACHE PATH "Directory where the Geant4 data is located")
-endif()
-
-if(NOT GEANT4_DATA_DIR)
-  message("GEANT4_DATA_DIR not defined! This may cause many Geant4 tests to fail")
-endif()
-
-set(Geant4_DIR ${CMAKE_BINARY_DIR} CACHE PATH "Current build directory")
-
-#---Helper function to locate the most recent version of a dataset-----------------------------------
-function(GEANT4_LATEST_VERSION dir name var)
-  file(GLOB files RELATIVE ${dir} ${dir}/${name}*)
-  set(newer 0.0)
-  foreach(file ${files})
-    string(REPLACE ${name} "" version ${file})
-    if(${version} VERSION_GREATER ${newer})
-      set(newer ${version})
-    endif()
-  endforeach()
-  set(${var} ${dir}/${name}${newer} PARENT_SCOPE)
-endfunction()
-
-
-#---Define the TEST environment (basically the varibles pointing to DATA files)----------------------
-foreach( tuple "G4LEVELGAMMADATA;PhotonEvaporation" 
-               "G4LEDATA;G4EMLOW"
-               "G4RADIOACTIVEDATA;RadioactiveDecay"
-               "G4ELASTICDATA;G4ELASTIC"
-               "NeutronHPCrossSections;G4NDL"
-               "G4NEUTRONHPDATA;G4NDL"
-               "G4ABLADATA;G4ABLA"
-               "G4PIIDATA;G4PII"
-               "G4NEUTRONXSDATA;G4NEUTRONXS")
-  list(GET tuple 0 envname)
-  list(GET tuple 1 dirname)
-  GEANT4_LATEST_VERSION(${GEANT4_DATA_DIR} ${dirname} _result)
-  list(APPEND GEANT4_TEST_ENVIRONMENT ${envname}=${_result}) 
-endforeach()
-
 #---Add all subdirectories that contains a CMakeLists.txt file -------------------------------------
 file(GLOB_RECURSE files RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} CMakeLists.txt)
 foreach( file ${files} )
@@ -134,6 +91,7 @@ if(GEANT4_BUILD_EXAMPLES)
                   BUILD exampleB02 PROJECT B02)
   GEANT4_ADD_TEST(example-ext-biasing-reversemc01 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/biasing/ReverseMC01/exampleRMC01
+                          ${CMAKE_SOURCE_DIR}/examples/extended/biasing/ReverseMC01/run_adjoint_simulation_electron.g4mac
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/biasing/ReverseMC01
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/biasing/ReverseMC01
                   BUILD exampleRMC01)
@@ -156,6 +114,7 @@ if(GEANT4_BUILD_EXAMPLES)
                               G4ERROR_PROP=UNTIL_TARGET )
   GEANT4_ADD_TEST(example-ext-eventgenerator-exgps 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/eventgenerator/exgps/exGPS
+                          ${CMAKE_SOURCE_DIR}/examples/extended/eventgenerator/exgps/exgps_batch.in
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/eventgenerator/exgps
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/eventgenerator/exgps
                   BUILD exGPS)
@@ -373,12 +332,14 @@ if(GEANT4_BUILD_EXAMPLES)
   GEANT4_ADD_TEST(example-adv-gammaray_telescope 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/gammaray_telescope/GammaRayTel 
                           ${CMAKE_SOURCE_DIR}/examples/advanced/gammaray_telescope/gammaraytel.in
+                  ERROR gammaraytel.err
+                  POSTCMD ${CMAKE_COMMAND} -E compare_files gammaraytel.err ${CMAKE_SOURCE_DIR}/examples/advanced/gammaray_telescope/gammaraytel.err
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/gammaray_telescope
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/gammaray_telescope
                   BUILD GammaRayTel  ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
   GEANT4_ADD_TEST(example-adv-microdosimetry 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/microdosimetry/Microdosimetry 
-                          ${CMAKE_SOURCE_DIR}/examples/advanced/microdosimetry/microdosimetry.in
+                          ${CMAKE_SOURCE_DIR}/examples/advanced/microdosimetry/microdosimetry.mac
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/microdosimetry
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/microdosimetry
                   BUILD Microdosimetry ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
@@ -390,7 +351,5 @@ if(GEANT4_BUILD_EXAMPLES)
                     BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/nanobeam
                     BUILD Nanobeam)
   endif()
-  
 endif()
-
 
