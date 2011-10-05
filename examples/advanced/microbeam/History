@@ -9,6 +9,13 @@ $Id: History,v 1.31 2010-11-17 20:42:36 allison Exp $
                        Package History file
                        --------------------
 
+03 October 2011 - G.Folger  - tag microbeam-V09-04-03
+- fix missed compilation warnings from gcc46 in MicrobeamEMField.cc 
+
+03 October 2011 - G.Folger  - tag microbeam-V09-04-02
+- fix compilation warnings from gcc46 in MicrobeamEMField.cc 
+     and MicrobeamPhantomConfiguration.cc
+
 11 August 2011 - S. Incerti - tag microbeam-V09-04-01
 - Removed system command
 - Removed web page
