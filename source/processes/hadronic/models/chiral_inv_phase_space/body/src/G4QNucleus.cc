@@ -2408,7 +2408,7 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
           sLim+=S*CoulBarPenProb(0.,ken,0,1)*sqrt(ken);
         }
         G4double aLim=sLim;
-        if(evalph&&aFlag&&mAlph+GSResNa<totMass)
+        if(evalph&&aFlag&&mAlph+GSResNa+ABarr<totMass)
         {
           G4double ken=totMass-mAlph-GSResNa;
           if(barf) ken-=ABarr;
