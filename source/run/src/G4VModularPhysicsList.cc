@@ -155,7 +155,7 @@ void G4VModularPhysicsList::ReplacePhysics(G4VPhysicsConstructor* fPhysics)
     // register 
     physicsVector->push_back(fPhysics);
 #ifdef G4VERBOSE
-    if (verboseLevel >1){
+    if (verboseLevel >0){
       G4cout << "G4VModularPhysicsList::ReplacePhysics: "
 	     <<  pName  << "with type : " << pType 
 	     << "  is added" 
@@ -175,7 +175,7 @@ void G4VModularPhysicsList::ReplacePhysics(G4VPhysicsConstructor* fPhysics)
     physicsVector->push_back(fPhysics);
   } else {
 #ifdef G4VERBOSE
-    if (verboseLevel >1){
+    if (verboseLevel >0){
       G4cout << "G4VModularPhysicsList::ReplacePhysics: "
 	     << (*itr)->GetPhysicsName()  << "with type : " << pType 
 	     << "  is replaces with " << pName
@@ -209,7 +209,7 @@ void  G4VModularPhysicsList::RemovePhysics(G4int pType)
     if ( pType  == (*itr)->GetPhysicsType()) {
       G4String pName = (*itr)->GetPhysicsName();  
 #ifdef G4VERBOSE
-      if (verboseLevel > 1){
+      if (verboseLevel > 0){
 	G4cout << "G4VModularPhysicsList::RemovePhysics: "
 	       <<  pName  << "  is removed" 
 	       << G4endl;
@@ -239,7 +239,7 @@ void G4VModularPhysicsList::RemovePhysics(G4VPhysicsConstructor* fPhysics)
     if ( fPhysics == (*itr)) {
       G4String pName = (*itr)->GetPhysicsName();  
 #ifdef G4VERBOSE
-    if (verboseLevel > 1){
+    if (verboseLevel > 0 ){
       G4cout << "G4VModularPhysicsList::RemovePhysics: "
 	     <<  pName  << "  is removed" 
 	     << G4endl;
@@ -263,13 +263,12 @@ void G4VModularPhysicsList::RemovePhysics(const G4String& name)
     return;
   }
 
-  G4PhysConstVector::iterator itr= physicsVector->begin();
   for (G4PhysConstVector::iterator itr = physicsVector->begin(); 
                                      itr!= physicsVector->end();) {
     G4String pName = (*itr)->GetPhysicsName();  
     if ( name == pName) {
 #ifdef G4VERBOSE
-    if (verboseLevel > 1){
+    if (verboseLevel > 0){
       G4cout << "G4VModularPhysicsList::RemovePhysics: "
 	     <<  pName  << "  is removed" 
 	     << G4endl;

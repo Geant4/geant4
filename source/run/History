@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Sep. 23rd, 2011,  H.Kurashige (run-V09-04-21)
+- Change G4VModularPhysicsList to issue messages 
+  always if physics is added and/or removed.
+  Cleared compilation warning on gcc-4.6.
+
 Sep. 6th, 2011,  H.Kurashige (run-V09-04-20)
 - Fix typo in Process type name in G4PhysicsListHelper
 
