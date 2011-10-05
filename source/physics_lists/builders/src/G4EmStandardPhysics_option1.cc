@@ -61,6 +61,7 @@
 #include "G4hMultipleScattering.hh"
 #include "G4CoulombScattering.hh"
 #include "G4WentzelVIModel.hh"
+#include "G4UrbanMscModel93.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -178,6 +179,7 @@ void G4EmStandardPhysics_option1::ConstructProcess()
       eioni->SetStepFunction(0.8, 1.0*mm);
       G4eMultipleScattering* msc = new G4eMultipleScattering;
       msc->SetStepLimitType(fMinimal);
+      msc->AddEmModel(0,new G4UrbanMscModel93());
 
       ph->RegisterProcess(msc, particle);
       ph->RegisterProcess(eioni, particle);
@@ -189,6 +191,7 @@ void G4EmStandardPhysics_option1::ConstructProcess()
       eioni->SetStepFunction(0.8, 1.0*mm);
       G4eMultipleScattering* msc = new G4eMultipleScattering;
       msc->SetStepLimitType(fMinimal);
+      msc->AddEmModel(0,new G4UrbanMscModel93());
 
       ph->RegisterProcess(msc, particle);
       ph->RegisterProcess(eioni, particle);

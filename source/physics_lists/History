@@ -15,6 +15,28 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05-10-2011, G.Cosmo             (phys-lists-V09-04-48)
+- Added missing header in builders/sources.cmake introduced in tag -45.
+
+04-10-2011, P.Gumplinger        (phys-lists-V09-04-47)
+- builders: G4OpticalPhysicsMessenger modified to allow G4State_PreInit
+            for most commands
+
+03-10-2011, T.Koi               (phys-lists-V09-04-46)
+- Enable to change the default data library of LEND
+	builders/include/G4HadronElasticPhysicsLEND.hh
+	builders/include/G4NeutronLENDBuilder.hh
+	builders/src/G4HadronElasticPhysicsLEND.cc
+	builders/src/G4NeutronLENDBuilder.cc
+	lists/include/Shielding.icc
+	lists/include/HadronPhysicsShielding.hh
+	lists/src/HadronPhysicsShielding.cc
+
+30-09-2011, P.Gumplinger               (phys-lists-V09-04-45)
+- builders: G4OpticalPhysics, G4OpticalPhysicsMessenger modified
+            G4OpticalProcessIndex class added
+            fix bug report #1216
+
 14-09-2011, V.Ivanchenko               (phys-lists-V09-04-44)
 - G4EmStandardPhysics_option1,2 - pi+-, kaon+-, proton, anti_proton 
       use WentzelVI model of multiple scattering

@@ -23,60 +23,62 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysicsLEND.hh,v 1.1 2010-06-03 11:04:33 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4HadronElasticPhysicsLEND
+// ClassName:   G4OpticalProcessIndex
 //
-// Author: 02 June 2011 Tatsumi Koi
+// Author:      P.Gumplinger 29.09.2011
+//              (based on code from I. Hrivnacova)
 //
 // Modified:
 //
 //----------------------------------------------------------------------------
 //
+// Enumeration for processes defined in G4OpticalPhysics
+//
+// The enumeration constants are used as the indices of the instatianted
+// processes in the vector of processes; needed to configure G4OpticalPhysics
+// (PhysicsList) according to selected process choices.
+//
 
-#ifndef G4HadronElasticPhysicsLEND_h
-#define G4HadronElasticPhysicsLEND_h 1
+#ifndef G4OpticalProcessIndex_h
+#define G4OpticalProcessIndex_h 1
 
 #include "globals.hh"
-#include "G4VPhysicsConstructor.hh"
 
-class G4HadronElasticPhysics;
-
-class G4HadronElasticPhysicsLEND : public G4VPhysicsConstructor
-{
-public: 
-
-  G4HadronElasticPhysicsLEND(G4int ver = 1,G4String evaluation=""); 
-
-  virtual ~G4HadronElasticPhysicsLEND();
-
-  // This method will be invoked in the Construct() method. 
-  // each particle type will be instantiated
-  virtual void ConstructParticle();
- 
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type 
-  virtual void ConstructProcess();
-
-private:
-
-  G4int    verbose;
-  G4bool   wasActivated;
-  G4HadronElasticPhysics* mainElasticBuilder;
-  G4String evaluation;
+enum G4OpticalProcessIndex {
+  kCerenkov,      ///< Cerenkov process index
+  kScintillation, ///< Scintillation process index
+  kAbsorption,    ///< Absorption process index
+  kRayleigh,      ///< Rayleigh scattering process index
+  kMieHG,         ///< Mie scattering process index
+  kBoundary,      ///< Boundary process index
+  kWLS,           ///< Wave Length Shifting process index
+  kNoProcess      ///< Number of processes, no selected process
 };
 
+/// Return the name for a given optical process index
+G4String G4OpticalProcessName(G4int );
 
-#endif
+////////////////////
+// Inline methods
+////////////////////
 
+inline
+G4String G4OpticalProcessName(G4int processNumber)
+{
+  switch ( processNumber ) {
+    case kCerenkov:      return "Cerenkov";
+    case kScintillation: return "Scintillation";
+    case kAbsorption:    return "OpAbsorption";
+    case kRayleigh:      return "OpRayleigh";
+    case kMieHG:         return "OpMieHG";
+    case kBoundary:      return "OpBoundary";
+    case kWLS:           return "OpWLS";
+    default:             return "NoProcess";
+  }
+}
 
-
-
-
-
-
-
+#endif // G4OpticalProcessIndex_h

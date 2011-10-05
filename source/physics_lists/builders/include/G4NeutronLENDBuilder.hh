@@ -21,7 +21,7 @@
 class G4NeutronLENDBuilder : public G4VNeutronBuilder
 {
   public: 
-    G4NeutronLENDBuilder();
+    G4NeutronLENDBuilder(G4String);
     virtual ~G4NeutronLENDBuilder();
 
   public: 
@@ -66,6 +66,7 @@ class G4NeutronLENDBuilder : public G4VNeutronBuilder
     G4LENDCapture * theLENDCapture;
     G4LENDCaptureCrossSection * theLENDCaptureCrossSection;
 
+    G4String evaluation;
 };
 
 #endif

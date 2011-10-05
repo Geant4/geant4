@@ -144,7 +144,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4HadronHElasticPhysics.hh
         G4HadronQElasticPhysics.hh
         G4HyperonCHIPSBuilder.hh
-	    G4HyperonFTFPBuilder.hh
+	G4HyperonFTFPBuilder.hh
         G4HyperonLHEPBuilder.hh
         G4InclAblaNeutronBuilder.hh
         G4InclAblaPiKBuilder.hh
@@ -174,6 +174,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4NeutronTrackingCut.hh
         G4OpticalPhysics.hh
         G4OpticalPhysicsMessenger.hh
+        G4OpticalProcessIndex.hh
         G4PiKBuilder.hh
         G4PionBuilder.hh
         G4PrecoNeutronBuilder.hh

@@ -71,7 +71,7 @@ class HadronPhysicsShielding : public G4VPhysicsConstructor
   public: 
     virtual void ConstructParticle();
     virtual void ConstructProcess();
-    void UseLEND(){useLEND=true;};
+    void UseLEND( G4String s="" ){useLEND=true;evaluation=s;};
     void UnuseLEND(){useLEND=false;};
 
   private:
@@ -102,6 +102,7 @@ class HadronPhysicsShielding : public G4VPhysicsConstructor
     G4VCrossSectionDataSet * BGGxsProton;
 
     G4bool useLEND;
+    G4String evaluation;
 };
 
 #endif

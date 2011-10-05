@@ -50,9 +50,10 @@
 #include "G4LENDElastic.hh"
 #include "G4LENDElasticCrossSection.hh"
 
-G4HadronElasticPhysicsLEND::G4HadronElasticPhysicsLEND(G4int ver)
+G4HadronElasticPhysicsLEND::G4HadronElasticPhysicsLEND(G4int ver,G4String eva)
   : G4VPhysicsConstructor("hElasticWEL_CHIPS_LEND"), verbose(ver), 
-    wasActivated(false)
+    wasActivated(false),
+    evaluation(eva)
 {
   if(verbose > 1) { 
     G4cout << "### G4HadronElasticPhysicsLEND: " << GetPhysicsName() 
@@ -84,10 +85,12 @@ void G4HadronElasticPhysicsLEND::ConstructProcess()
   G4HadronicProcess* hel = mainElasticBuilder->GetNeutronProcess();
 
   G4LENDElastic* lend = new G4LENDElastic( G4Neutron::Neutron() );
+  if ( evaluation.size() > 0 ) lend->ChangeDefaultEvaluation( evaluation );
   //lend->AllowNaturalAbundanceTarget();
   lend->AllowAnyCandidateTarget();
   hel->RegisterMe(lend);
   G4LENDElasticCrossSection* lend_XS = new G4LENDElasticCrossSection( G4Neutron::Neutron() );
+  if ( evaluation.size() > 0 ) lend_XS->ChangeDefaultEvaluation( evaluation );
   //lend_XS->AllowNaturalAbundanceTarget();
   lend_XS->AllowAnyCandidateTarget();
   hel->AddDataSet( lend_XS );

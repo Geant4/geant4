@@ -82,7 +82,9 @@ void HadronPhysicsShielding::CreateModels()
   if ( useLEND != true )
      theNeutrons->RegisterMe(theLENeutron=new G4NeutronHPBuilder);
   else
-     theNeutrons->RegisterMe(theLENeutron=new G4NeutronLENDBuilder);
+  {
+     theNeutrons->RegisterMe(theLENeutron=new G4NeutronLENDBuilder(evaluation));
+  }
 
   thePro=new G4ProtonBuilder;
   theFTFPPro=new G4FTFPProtonBuilder(QuasiElastic);
@@ -160,6 +162,7 @@ void HadronPhysicsShielding::ConstructProcess()
 
   theMiscCHIPS->Build();
 }
+
 G4HadronicProcess* 
 HadronPhysicsShielding::FindInelasticProcess(const G4ParticleDefinition* p)
 {

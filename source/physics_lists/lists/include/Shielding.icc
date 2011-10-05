@@ -91,6 +91,17 @@ template<class T> TShielding<T>::TShielding( G4int verbose, G4String LEN_model )
   //if ( rad == true ) this->RegisterPhysics( new G4RadioactiveDecayPhysics(verbose) );
   this->RegisterPhysics( new G4RadioactiveDecayPhysics(verbose) );
 
+  size_t find = LEN_model.find("LEND__");
+G4cout << LEN_model << G4endl;
+  G4String evaluation;
+  if ( find != G4String::npos )
+  {
+G4cout << LEN_model << G4endl;
+      evaluation=LEN_model;
+      evaluation.erase(0,find+6);
+      LEN_model="LEND";
+  }
+
   // Hadron Elastic scattering
   if ( LEN_model == "HP" ) 
   {
@@ -98,7 +109,7 @@ template<class T> TShielding<T>::TShielding( G4int verbose, G4String LEN_model )
   }
   else if ( LEN_model == "LEND" ) 
   {
-     this->RegisterPhysics( new G4HadronElasticPhysicsLEND(verbose) );
+     this->RegisterPhysics( new G4HadronElasticPhysicsLEND(verbose,evaluation) );
   }
   else 
   {
@@ -116,7 +127,7 @@ template<class T> TShielding<T>::TShielding( G4int verbose, G4String LEN_model )
   }
   else if ( LEN_model == "LEND" ) 
   {
-     hps->UseLEND(); 
+     hps->UseLEND(evaluation); 
   }
   else 
   {
