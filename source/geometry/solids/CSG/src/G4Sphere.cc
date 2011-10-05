@@ -91,17 +91,15 @@ G4Sphere::G4Sphere( const G4String& pName,
                           G4double pRmin, G4double pRmax,
                           G4double pSPhi, G4double pDPhi,
                           G4double pSTheta, G4double pDTheta )
-  : G4CSGSolid(pName), fFullPhiSphere(true), fFullThetaSphere(true)
+  : G4CSGSolid(pName), fEpsilon(2.e-11),
+    fFullPhiSphere(true), fFullThetaSphere(true)
 {
-  const G4double fEpsilon = 2.e-11;  // Relative radial tolerance constant
-
   kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 
   // Check radii and set radial tolerances
 
-  G4double kRadTolerance = G4GeometryTolerance::GetInstance()
-                         ->GetRadialTolerance();
-  if ( (pRmin >= pRmax) || (pRmax < 10*kRadTolerance) || (pRmin < 0) )
+  kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
+  if ( (pRmin >= pRmax) || (pRmax < 1.1*kRadTolerance) || (pRmin < 0) )
   {
     std::ostringstream message;
     message << "Invalid radii for Solid: " << GetName() << G4endl
@@ -110,7 +108,7 @@ G4Sphere::G4Sphere( const G4String& pName,
                 FatalException, message);
   }
   fRmin=pRmin; fRmax=pRmax;
-  fRminTolerance = (pRmin) ? std::max( kRadTolerance, fEpsilon*fRmin ) : 0;
+  fRminTolerance = (fRmin) ? std::max( kRadTolerance, fEpsilon*fRmin ) : 0;
   fRmaxTolerance = std::max( kRadTolerance, fEpsilon*fRmax );
 
   // Check angles

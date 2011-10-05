@@ -217,7 +217,8 @@ class G4Sphere : public G4CSGSolid
     //
     enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNSTheta,kNETheta};
 
-    G4double fRminTolerance, fRmaxTolerance, kAngTolerance;
+    G4double fRminTolerance, fRmaxTolerance, kAngTolerance,
+             kRadTolerance, fEpsilon;
       //
       // Radial and angular tolerances
 

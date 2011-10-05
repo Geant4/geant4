@@ -217,20 +217,21 @@ inline
 void G4Sphere::SetInsideRadius(G4double newRmin)
 {
   fRmin= newRmin;
+  fRminTolerance = (fRmin) ? std::max( kRadTolerance, fEpsilon*fRmin ) : 0;
   Initialize();
 }
 
 inline
 void G4Sphere::SetInnerRadius(G4double newRmin)
 {
-  fRmin= newRmin;
-  Initialize();
+  SetInsideRadius(newRmin);
 }
 
 inline
 void G4Sphere::SetOuterRadius(G4double newRmax)
 {
   fRmax= newRmax;
+  fRmaxTolerance = std::max( kRadTolerance, fEpsilon*fRmax );
   Initialize();
 }
 
