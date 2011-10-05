@@ -95,6 +95,7 @@ void Em10PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   // 
   thePrimaryParticleName = particleGun->GetParticleDefinition()->
                                                 GetParticleName() ;
+  /* ****************************************************
   G4double x0,y0,z0 ;
   if(vertexdefined)
   {
@@ -108,7 +109,6 @@ void Em10PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     y0 = 0. ;
     z0 = 0. ; // -0.5*(Em10Detector->GetWorldSizeZ()) ;
   }
-  /* ****************************************************
   G4double r0,phi0 ;
   if (rndmFlag == "on")
   {
