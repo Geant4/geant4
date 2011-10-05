@@ -55,7 +55,7 @@ Test17SteppingAction::~Test17SteppingAction()
 
 void Test17SteppingAction::UserSteppingAction(const G4Step* aStep)
 { 
-  G4double Edep,Theta,xend,Tkin;
+  G4double Edep,xend,Tkin;
 
   G4double Tsec = aStep->GetPreStepPoint()->GetKineticEnergy();
   G4int evno = eventaction->GetEventNo(); 
@@ -66,7 +66,6 @@ void Test17SteppingAction::UserSteppingAction(const G4Step* aStep)
 
   Tkin  = aStep->GetTrack()->GetKineticEnergy(); 
   Edep  = aStep->GetTotalEnergyDeposit();         
-  Theta = std::acos(aStep->GetTrack()->GetMomentumDirection().x());
   xend  = aStep->GetPostStepPoint()->GetPosition().x()/mm;
 
   eventaction->AddE(Edep);
