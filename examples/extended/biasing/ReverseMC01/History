@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+03-October, 2011  G.Folger     (ReverseMC01-V09-04-01)
+- Fix gcc46 compilation warning in  RMC01AnalysisManager.cc
+
 25-January, 2011  G.Folger     (ReverseMC01-V09-04-00)
 - Add protection for unitialised mean&error in RMC01AnalysisManager::ComputeMeanEdepAndError()
 

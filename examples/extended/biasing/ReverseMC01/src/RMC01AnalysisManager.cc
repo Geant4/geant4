@@ -311,13 +311,13 @@ void RMC01AnalysisManager::EndOfEvent(const G4Event* anEvent)
    //Test convergence. The error is already computed
    //--------------------------------------
    G4int nb_event=anEvent->GetEventID()+1;
-   G4double factor=1.;
+   //G4double factor=1.;
    if (adjoint_sim_mode) {
    	G4double  n_adj_evt= nb_event/nb_evt_per_adj_evt;
 	// nb_event/nb_evt_per_adj_evt;
 	if (n_adj_evt*nb_evt_per_adj_evt == nb_event) {
 		nb_event =static_cast<G4int>(n_adj_evt);
-		factor=1.*G4AdjointSimManager::GetInstance()->GetNbEvtOfLastRun();
+		//factor=1.*G4AdjointSimManager::GetInstance()->GetNbEvtOfLastRun();
 	}	
 	else nb_event=0;
 	
