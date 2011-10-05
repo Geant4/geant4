@@ -597,11 +597,10 @@ int main()
     G4double pmax=std::sqrt(e0*e0-pMass*pMass);
     // Randomization loop: cycle random generator, using 2 lower digits in nEvt
     G4int    iRandCount = nEvt%100;
-    G4double vRandCount = 0.;
     while (iRandCount>0)                // Shift of the RNDN values 
     {
       G4int nr = static_cast<G4int>(10*G4UniformRand())+1;        // Fake cicle number
-      for(G4int j=0; j<nr; j++) vRandCount = G4UniformRand();     // Fake calls
+      for(G4int j=0; j<nr; j++)  G4UniformRand();                 // Fake calls
       iRandCount--;
     }
     iRandCount = nEvt%100;
@@ -610,9 +609,8 @@ int main()
 #endif
     for (G4int iter=0; iter<nEvt; iter++)
     {
-      G4double vRandCount = 0.;
       G4int nr = static_cast<G4int>(iRandCount*G4UniformRand())+1;// Fake cicle number
-      for(G4int j=0; j<nr; j++) vRandCount = G4UniformRand();     // Fake calls
+      for(G4int j=0; j<nr; j++) G4UniformRand();                  // Fake calls
 #ifdef debug
       G4cout<<"Test29: ### "<<iter<< "-th event starts.###"<<G4endl;
 #endif
