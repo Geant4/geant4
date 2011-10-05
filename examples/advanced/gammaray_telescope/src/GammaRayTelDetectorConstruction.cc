@@ -544,9 +544,6 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
   G4int j=0;
   G4int k=0;
   
-  G4VPhysicalVolume* physiTKRActiveTileX = 0;
-  G4VPhysicalVolume* physiTKRActiveTileY = 0;
-  
   G4double x=0.;
   G4double y=0.;
   G4double z=0.;
@@ -566,8 +563,7 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
 				   TKRActiveTileXY);
 	  z = 0.;
 	  
-	  physiTKRActiveTileY =
-	    new G4PVPlacement(0,
+	  new G4PVPlacement(0,
 			      G4ThreeVector(x,y,z),
 			      "Active Tile Y",		
 			      logicTKRActiveTileY,
@@ -584,8 +580,7 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
 				   TilesSeparation+TKRActiveTileXY);
 	  z = 0.;
 	      
-	  physiTKRActiveTileX =
-	    new G4PVPlacement(0,
+	  new G4PVPlacement(0,
 			      G4ThreeVector(x,y,z),
 			      "Active Tile X",		
 			      logicTKRActiveTileX,
