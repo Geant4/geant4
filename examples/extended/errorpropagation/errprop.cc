@@ -159,7 +159,7 @@ void ProcessEvent( G4int iProp, size_t )
 
   G4ErrorPropagatorManager* g4emgr = G4ErrorPropagatorManager::GetErrorPropagatorManager();
 
-  int ierr = 0;
+  //int ierr = 0;
 
   G4Point3D surfPos(224.*cm,0.,0.);
   G4Normal3D surfNorm(1.,0.,0.);
@@ -167,7 +167,8 @@ void ProcessEvent( G4int iProp, size_t )
 
   if( iProp == 0){
     // Propagate until G4ErrorTarget is found all in one go
-     ierr = g4emgr->Propagate( theG4ErrorTrajState, theTarget, theG4ErrorMode );
+     //ierr = 
+     g4emgr->Propagate( theG4ErrorTrajState, theTarget, theG4ErrorMode );
   } else if( iProp == 1){
 
     // Propagate until G4ErrorTarget is reached step by step
@@ -178,7 +179,8 @@ void ProcessEvent( G4int iProp, size_t )
     bool moreEvt = TRUE;
     while( moreEvt ){
       
-      ierr = g4emgr->PropagateOneStep( theG4ErrorTrajState, theG4ErrorMode );
+      //ierr = 
+      g4emgr->PropagateOneStep( theG4ErrorTrajState, theG4ErrorMode );
       
       //---- Check if target is reached
       if( g4emgr->GetPropagator()->CheckIfLastStep( theG4ErrorTrajState->GetG4Track() )) {

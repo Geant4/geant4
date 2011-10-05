@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct 3, 2011  G.Folger (exerrprop-V09-04-00)
+- Fix gcc46 compilation warning in errprop.cc
+
 Mar 6, 2009  G.Barrand (exerrprop-V09-02-00)
 - GNUmakefile: removed logic for setting AIDA with G4ANALYSIS_USE.
   since it already handled in the internal configuration scripts.
