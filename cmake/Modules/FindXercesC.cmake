@@ -44,7 +44,7 @@ find_path(
 # Look for the library, preferentially searching below XERCESC_ROOT_DIR
 find_library(
     XERCESC_LIBRARY
-    NAMES xerces-c
+    NAMES xerces-c xerces-c_3
     PATHS ${XERCESC_ROOT_DIR}
     PATH_SUFFIXES lib64 lib32 lib
     NO_DEFAULT_PATH
@@ -52,7 +52,7 @@ find_library(
 
 find_library(
     XERCESC_LIBRARY
-    NAMES xerces-c
+    NAMES xerces-c xerces-c_3
 )
 
 

@@ -20,8 +20,6 @@ if(CMD)
   if(DBG)
     message(STATUS "testdriver:CMD=${_cmd}")
   endif()
-else()
-  return()
 endif()
 
 if(PRE)
@@ -84,15 +82,17 @@ if(PRE)
   endif()
 endif()
 
-#---Execute the actual test ------------------------------------------------------------------------
-execute_process(COMMAND ${_cmd} ${_out} ${_err} ${_cwd} RESULT_VARIABLE _rc)
+if(CMD)
+  #---Execute the actual test ------------------------------------------------------------------------
+  execute_process(COMMAND ${_cmd} ${_out} ${_err} ${_cwd} RESULT_VARIABLE _rc)
 
-#---Return error is test returned an error code of write somthing to the stderr---------------------
-if(_errvar)
-  message(FATAL_ERROR "output error: ${_errvar}")
-endif()
-if(_rc)
-  message(FATAL_ERROR "error code: ${_rc}")
+  #---Return error is test returned an error code of write somthing to the stderr---------------------
+  if(_errvar)
+    message(FATAL_ERROR "output error: ${_errvar}")
+  endif()
+  if(_rc)
+    message(FATAL_ERROR "error code: ${_rc}")
+  endif()
 endif()
 
 

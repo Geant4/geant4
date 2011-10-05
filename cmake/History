@@ -30,6 +30,12 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 4th 2011 - P. Mato (cmake-V09-04-27)
+- Modules/Geant4TestDriver.cmake: Fix to allow an empty command
+
+October 4th 2011 - P. Mato (cmake-V09-04-26)
+- Modules/FindXercesC.cmake: Added xerces-c_3 as a possible name for libraries (for windows)
+
 September 30th 2011 - P. Mato (cmake-V09-04-25)
 - Modules/Geant4MakeRules_cxx.cmake: Fixed debug flag to -Zi for Visual C++
 
