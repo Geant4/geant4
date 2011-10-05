@@ -1,0 +1,258 @@
+
+                       geant4-09-04-ref-09
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o Migration to new G4Exception scheme implemented in most modules.
+ o Extended GDML schema for materials to include ionisation potential (mean
+   excitation energy) property to materials (GDML-3.0.1).
+ o Completed migration to integer Z and A for hadronics models.
+ o Improvements to Qt visualization driver and rendering speed.
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+cmake                                            cmake-V09-04-27
+-----
+- Added xerces-c_3 as a possible name for libraries on Windows.
+  Fixed debug flag to -Zi for Visual C++.
+- Removed enabling of Fortran language when G3toG4 is enabled.
+- Added G4VIS_USE and G4UI_USE to list of core compile definitions
+  conditional on the existence of the variables G4VIS_NONE and G4UI_NONE to
+  match original GNUmake behavior.
+
+config                                           config-V09-04-15
+------
+- G4UI_BUILD.gmk: added setting of G4INTY_BUILD_XT for OPENGLXM and OIX.
+  Visualization drivers need Xt, so this covers the case when the user does
+  not build Xt from G4UI_BUILD flags. Addressing problem report #1250.
+
+externals                                        externals-V09-04-09
+---------
+- Added missing export statements for static symbols required for DLL build
+  of internal CLHEP module.
+
+geometry/solids/CSG                              geom-csg-V09-04-06
+-------------------
+- G4Sphere: fix for setting of relative radial tolerances when setters
+  for radiuses are explicitely called (affecting parameterisations on
+  radius for spheres).
+  Relaxed validity condition in construction for the minimum size of the
+  outer radius.
+
+global                                           global-V09-04-17
+------
+- G4PhysicsLogVector, G4PhysicsLnVector, G4PhysicsLinearVector: updated
+  to safer implementation of ScaleVector() method.
+
+graphics_reps                                    greps-V09-04-05
+-------------
+- Migrated to new G4Exception scheme.
+
+interfaces                                       interfaces-V09-04-05
+----------
+- Added a flag in G4Qt to know if there is an external Qapp started.
+
+parameterisations/gflash                         gflash-V09-04-01
+------------------------
+- Fixed bug in G4FlashShowerModel::ModelTrigger() for energy condition.
+
+persistency/gdml                                 gdml-V09-04-04
+----------------
+- Extended GDML schema for materials to include ionisation potential (mean
+  excitation energy) property to materials (GDML-3.0.1). Adapted reader and
+  writer plugins accordingly.
+
+physics_lists                                    phys-lists-V09-04-48
+-------------
+- G4EmStandardPhysics_option1,2: pi+-, kaon+-, proton, anti_proton
+  use WentzelVI model of multiple-scattering.
+- G4EmStandardPhysics_option2: e- use Livermore bremsstrahlung below 100 MeV.
+- Modified G4OpticalPhysics in builders; added new class G4OpticalProcessIndex.
+  Addressing problem report #1216.
+  Modified G4OpticalPhysicsMessenger to allow G4State_PreInit for most commands.
+- Modified LEND builders to enable to change the default data library for LEND.
+
+processes/electromagnetic/lowenergy              emlowen-V09-04-60
+-----------------------------------
+- Added protection in G4LivermorePolarizedRayleighModel for cosTheta above
+  5 MeV.
+
+processes/electromagnetic/pii                    empii-V09-04-03
+-----------------------------
+- Migrated to new G4Exception scheme.
+
+processes/hadronic
+------------------
+- management (hadr-man-V09-04-14)
+  o G4HadronicProcess: completed migration to integer Z and A.
+    Added file-scope variable to capture envvar with name of file for saving
+    random engine state. Used immediately prior to model ApplyYourself() call.
+- models/abrasion (had-abrasion-V09-04-00)
+  o Completed migration to integer Z and A.
+- models/cascade (hadr-casc-V09-04-36)
+  o Completed migration to integer Z and A.
+  o G4CascadeCoalescence: NEW factory class to implement conversion of
+    final-state nucleon "clusters" into light ions. Uses LAQGSM algorithm
+    (Sec. 2.3, http://lib-www.lanl.gov/la-pubs/00818645.pdf).
+  o G4ElementaryParticleCollider: added protection against non-physical
+    arguments and FPE in two-body angular distributions.
+  o Added optional stream& argument to printing methods, and new stream
+    G4CascadeChannel::operator<<.
+  o G4IntraNucleiCascader: added final-state clustering as optional facility,
+    controlled through compile-time flag G4CASCADE_DO_COALESCENCE. Clustering
+    is done during cascade finalization.
+- models/chiral_inv_phase_space/body (hadr-chips-body-V09-04-02)
+  o Fixed case of FPE for unprotected sqrt() with possible negative argument
+    in G4QNucleus. Addressing problem report #1251.
+- models/chiral_inv_phase_space/cross_sections (hadr-chips-cs-V09-04-00)
+- models/chiral_inv_phase_space/fragmentation (hadr_chips-frag-V09-04-00)
+  o Migrated to new G4Exception scheme.
+- models/chiral_inv_phase_space/interface (hadr-chips-inter-V09-04-04)
+  o Completed migration to integer Z and A.
+- models/chiral_inv_phase_space/processes (hadr-chips-proc-V09-04-04)
+  o Migrated to new G4Exception scheme.
+- models/coherent_elastic (hadr-cohe-V09-04-13)
+  o Completed migration to integer Z and A.
+  o Fixed Coverity reports in G4NuclNuclDiffuseElastic and G4DiffuseElastic.
+- models/de_excitation (hadr-deex-V09-04-19)
+- models/em_dissociation (hadr-emd-V09-04-00)
+- models/high_energy (hadr-hep-V09-04-02)
+  o Completed migration to integer Z and A.
+- models/incl (hadr-incl-V09-04-03)
+  o Migrated to new G4Exception scheme.
+- models/lend (hadr-lend-V09-04-21)
+  o Completed migration to integer Z and A.
+  o Added protection in G4LENDElastic against 0 or negative kinetic energy
+    neutrons produced by numerical precision issues.
+- models/low_energy (hadr-lep-V09-04-03)
+- models/management (hadr-modman-V09-04-02)
+- models/neutron_hp (hadr-hpn-V09-04-24)
+- models/photolepton_hadron/muon_nuclear (hadr-munuclear-V09-04-03)
+- models/qmd (hadr-qmd-V09-04-03)
+  o Completed migration to integer Z and A.
+- models/radioactive_decay (radioactive_decay-V09-04-09)
+  o G4RadioactiveDecay: added new Fermi function and forbidden beta decay
+    spectral shapes. Created G4BetaDecayType, an enum of beta transition types
+    Created G4BetaDecayCorrections, a class containing new Fermi function and
+    forbidden transition calculations
+  o Migrated to new G4Exception scheme.
+- models/rpg (hadr-rpg-V09-04-00)
+  o Completed migration to integer Z and A.
+- models/theo_high_energy (had-theo-HE-V09-04-03)
+  o Completed migration to integer Z and A.
+  o G4QuasiElasticChannel: use QuasiFreeRatios in place of QuasiElRatios.
+- stopping (hadr-stopping-V09-04-02)
+  o Completed migration to integer Z and A.
+  o Migrated to new G4Exception scheme.
+
+processes/parameterisation                       param-V09-04-03
+--------------------------
+- Migrated to new G4Exception scheme.
+
+run                                              run-V09-04-21
+---
+- Changed G4VModularPhysicsList to issue messages always if physics is
+  added and/or removed. Cleared compilation warning on gcc-4.6.
+
+track                                            track-V09-04-10
+-----
+- Modified G4ParticleChangeForTransport to fix a bug of wrong velocity
+  in PostStepPoint after Along/PostStepDoIt().
+- Fix problems related to treatment of weight in G4ParticleChange.
+  (addressing problem report #1243), to always set the parent track's weight
+  to the value set by ProposeParentWeight() and  ProposeWeight() methods for
+  all particle change classes.
+
+tracking                                         tracking-V09-04-06
+--------
+- Removed "Conditionally"-forced status in G4ForceCondition enum in
+  G4SteppingManager, no longer applicable.
+- G4RichTrajectoryPoint: added Pre/PostStepPointStatus and
+  Pre/PostStepPointWeight. Fixed bug in copy constructor (volume
+  touchable handle was not copied)
+
+visualization                                    vis-V09-04-08
+-------------
+- Migrated to new G4Exception scheme.
+- management:
+  o Added /vis/viewer/set/rotationStyle UI command.
+- OpenGL:
+  o Fixed transparency problem.
+  o Improved first pass rendering speed (reduced use of glFlush).
+  o Fixed non-appearance of trajectories in Qt (added final glFlush).
+  o Many improvements in Qt.
+
+examples                                         examples-V09-04-09
+--------
+- Updated reference outputs.
+- advanced/brachytheraphy (brachy-V09-04-01)
+  o Migrated to use new internal analysis module.
+  o Deleted sensitive detector and ReadOutGeometry components.
+- advanced/gammaray_telescope (gammaraytel-V09-04-03)
+  o Fixed compilation warnings from gcc-4.6.
+  o Added gammaraytel.err file with the expected error output.
+- advanced/hadrontherapy (hadrontherapy-V09-04-01)
+- advanced/microbeam (microbeam-V09-04-04)
+- advanced/nanobeam (nanobeam-V09-04-04)
+- extended/biasing/ReverseMC01 (ReverseMC01-V09-04-01)
+- extended/electromagnetic/TestEm9 (testem09-V09-04-02)
+- extended/electromagnetic/TestEm10 (testem10-V09-04-00)
+- extended/electromagnetic/TestEm17 (testem17-V09-04-00)
+- extended/errorpropagation (exerrprop-V09-04-00)
+- extended/geometry/olap (olapex-V09-04-00)
+- extended/medical/DICOM (DICOM-V09-04-02)
+  o Fixed compilation warnings from gcc-4.6.
+- extended/persistency/gdml/G02 (G02-V09-04-00)
+  o Updated test.gdml to add example of ionisation potential to materials.
+    Requires upgrade of the schema to GDML-3.0.1.
+- extended/runAndEvent/RE01 (exampleRE01-V09-04-00)
+  o Added sample.err file with expected error log.
+- novice/N04 (exampleN04-V09-04-01)
+- novice/N05 (exampleN05-V09-04-02)
+  o Fixed compilation warnings from gcc-4.6.
+
+tests                                            tests-V09-04-09
+-----
+- Updated reference outputs and tools.
+- test10 (test10-V09-04-01)
+- test14 (test14-V09-04-03)
+- test17 (test17-V09-04-02)
+- test19 (test19-V09-04-01)
+  o Fixed compilation warnings from gcc-4.6.
+- test23 (test23-V09-04-03)
+  o Updated CMake scripts to fix test dependencies.
+- test29 (test29-V09-04-01)
+  o Fixed compilation warnings from gcc-4.6.
+- test30 (test30-V09-04-06)
+  o Cleanup in usage of cross sections in main().
+- test31 (test31-V09-04-02)
+  o Fixed compilation warnings from gcc-4.6.
+- test35 (test35-V09-04-02)
+  o Fixed compilation warnings from gcc-4.6.
+  o use cross section depending on flags in macro file; changed default macro.
+- test39 (test39-V09-04-02)
+  o Fixed compilation warnings from gcc-4.6.
+- test40 (test40-V09-04-02)
+  o Fixed compilation warnings from gcc-4.6.
+  o Updated CMake scripts to fix test dependencies.
+- test49 (test49-V09-04-04)
+  o Fixed compilation warnings from gcc-4.6.
+  o Fixed name of test in cout.
+- test50 (test50-V09-04-02)
+  o Added missing <time.h> header (needed to allow for compilation on Windows).
+- test60 (test60-V09-04-03)
+  o Fixed compilation warnings from gcc-4.6.
+  o Updated CMake scripts to fix test dependencies.
+- test201 (test201-V09-04-00)
+  o Fixed compilation warnings from gcc-4.6.
+- test202 (test202-V09-04-00)
+  o Added box_in_box, a test of the BooleanProcessor for the case of a
+    "hollow" subtraction, i.e., making a hollow box using G4SubtractionSolid.
+  o Added G4GenericTrap and Boolean operation thereon.
+  o Made experimental hall bigger to accommodate the above.
+  o Made calorimeter boxes transparent (test of transparency).
+  o Disabled auto-refresh while establishing scene in vis.mac.
