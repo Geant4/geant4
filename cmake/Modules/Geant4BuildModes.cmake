@@ -25,10 +25,14 @@
 #
 
 #------------------------------------------------------------------------------
-# Add TestRelease Mode and cache init flags
+# Add TestRelease{Debug} Modes and cache init flags
 #
 set(CMAKE_CXX_FLAGS_TESTRELEASE "${CMAKE_CXX_FLAGS_TESTRELEASE_INIT}"
   CACHE STRING "Flags used by the compiler during TestRelease builds"
+)
+
+set(CMAKE_CXX_FLAGS_TESTRELEASEDEBUG "${CMAKE_CXX_FLAGS_TESTRELEASEDEBUG_INIT}"
+  CACHE STRING "Flags used by the compiler during TestReleaseDebug builds"
 )
 
 
@@ -44,6 +48,7 @@ set(CMAKE_CXX_FLAGS_MAINTAINER "${CMAKE_CXX_FLAGS_MAINTAINER_INIT}"
 # never need to see them
 mark_as_advanced(
   CMAKE_CXX_FLAGS_TESTRELEASE
+  CMAKE_CXX_FLAGS_TESTRELEASEDEBUG
   CMAKE_CXX_FLAGS_MAINTAINER
 )
 
@@ -52,12 +57,14 @@ mark_as_advanced(
 # configurations
 #
 if(CMAKE_CONFIGURATION_TYPES)
-    list(APPEND CMAKE_CONFIGURATION_TYPES TestRelease)
-    list(APPEND CMAKE_CONFIGURATION_TYPES Maintainer)
-    list(REMOVE_DUPLICATES CMAKE_CONFIGURATION_TYPES)
-    set(CMAKE_CONFIGURATION_TYPES "${CMAKE_CONFIGURATION_TYPES}" 
-        CACHE STRING "Geant4 configurations for multimode build tools"
-        FORCE)
+  list(APPEND CMAKE_CONFIGURATION_TYPES TestRelease)
+  list(APPEND CMAKE_CONFIGURATION_TYPES TestReleaseDebug)
+  list(APPEND CMAKE_CONFIGURATION_TYPES Maintainer)
+  list(REMOVE_DUPLICATES CMAKE_CONFIGURATION_TYPES)
+  set(CMAKE_CONFIGURATION_TYPES "${CMAKE_CONFIGURATION_TYPES}" 
+    CACHE STRING "Geant4 configurations for multimode build tools"
+    FORCE
+    )
 endif()
 
 #------------------------------------------------------------------------------
@@ -68,15 +75,17 @@ endif()
 # Good enough for now!
 #
 if(NOT CMAKE_CONFIGURATION_TYPES)
-    if(NOT CMAKE_BUILD_TYPE)
-        # Default to a Release build if nothing else...
-        set(CMAKE_BUILD_TYPE Release
-            CACHE STRING "Choose the type of build, options are: None Release TestRelease MinSizeRel Debug RelWithDebInfo MinSizeRel Maintainer."
-            FORCE)
-    else()
-        # Force to the cache, but use existing value.
-        set(CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}"
-            CACHE STRING "Choose the type of build, options are: None Release TestRelease MinSizeRel Debug RelWithDebInfo MinSizeRel Maintainer."
-            FORCE)
-    endif()
+  if(NOT CMAKE_BUILD_TYPE)
+    # Default to a Release build if nothing else...
+    set(CMAKE_BUILD_TYPE Release
+      CACHE STRING "Choose the type of build, options are: None Release MinSizeRel Debug RelWithDebInfo TestRelease TestReleaseDebug Maintainer."
+      FORCE
+      )
+  else()
+    # Force to the cache, but use existing value.
+    set(CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}"
+      CACHE STRING "Choose the type of build, options are: None Release MinSizeRel Debug RelWithDebInfo TestRelease TestReleaseDebug Maintainer."
+      FORCE
+      )
+  endif()
 endif()

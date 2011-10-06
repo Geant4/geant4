@@ -29,6 +29,18 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+October 6th - B.Morgan (cmake-V09-04-28)
+- Modules/Geant4BuildModes.cmake : Added TestReleaseDebug mode to 
+  CMAKE_BUILD_TYPES and CMAKE_CONFIGURATION_TYPES.
+  NB: Diaganosed problem reported by Pere, whereby added modes were not
+  appearing in VS. This is likely because CMAKE_CONFIGURATION_TYPES is set
+  *after* the project(...) call: http://www.itk.org/Bug/view.php?id=6788
+  Will fix after new modes are confirmed.
+- Modules/Geant4MakeRules_cxx.cmake : Split TestRelease mode into two, 
+  TestRelease, which is optimized and has debugging symbols, and
+  TestReleaseDebug, which has debug symbols only. Both still use
+  G4DEBUG_VERBOSE and G4FPE_DEBUG definitions.
+
 
 October 4th 2011 - P. Mato (cmake-V09-04-27)
 - Modules/Geant4TestDriver.cmake: Fix to allow an empty command
