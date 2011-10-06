@@ -36,7 +36,7 @@ externals                                        externals-V09-04-09
 - Added missing export statements for static symbols required for DLL build
   of internal CLHEP module.
 
-geometry/solids/CSG                              geom-csg-V09-04-06
+geometry/solids/CSG                              geom-csg-V09-04-07
 -------------------
 - G4Sphere: fix for setting of relative radial tolerances when setters
   for radiuses are explicitely called (affecting parameterisations on
@@ -181,7 +181,7 @@ visualization                                    vis-V09-04-08
 - Migrated to new G4Exception scheme.
 - management:
   o Added /vis/viewer/set/rotationStyle UI command.
-- OpenGL (opengl-V09-04-09):
+- OpenGL (opengl-V09-04-10):
   o Fixed transparency problem.
   o Improved first pass rendering speed (reduced use of glFlush).
   o Fixed non-appearance of trajectories in Qt (added final glFlush).
