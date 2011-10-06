@@ -36,7 +36,7 @@ externals                                        externals-V09-04-09
 - Added missing export statements for static symbols required for DLL build
   of internal CLHEP module.
 
-geometry/solids/CSG                              geom-csg-V09-04-07
+geometry/solids/CSG                              geom-csg-V09-04-08
 -------------------
 - G4Sphere: fix for setting of relative radial tolerances when setters
   for radiuses are explicitely called (affecting parameterisations on
