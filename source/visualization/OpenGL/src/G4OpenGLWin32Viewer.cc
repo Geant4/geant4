@@ -77,8 +77,7 @@ void G4OpenGLWin32Viewer::ShowView (
 }
 
 //////////////////////////////////////////////////////////////////////////////
-void G4OpenGLWin32Viewer::DrawText(const char * ,double x,double y,double z, double size) (
-) 
+void G4OpenGLWin32Viewer::DrawText(const char * ,double x,double y,double z, double size) 
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
