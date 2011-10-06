@@ -15,7 +15,7 @@ Major development/fixes included since the last development tag are:
 
 Summarised, the list of changes is the following:
 
-cmake                                            cmake-V09-04-27
+cmake                                            cmake-V09-04-28
 -----
 - Added xerces-c_3 as a possible name for libraries on Windows.
   Fixed debug flag to -Zi for Visual C++.
@@ -23,6 +23,7 @@ cmake                                            cmake-V09-04-27
 - Added G4VIS_USE and G4UI_USE to list of core compile definitions
   conditional on the existence of the variables G4VIS_NONE and G4UI_NONE to
   match original GNUmake behavior.
+- Added "TestReleaseDebug" build mode.
 
 config                                           config-V09-04-15
 ------
@@ -180,7 +181,7 @@ visualization                                    vis-V09-04-08
 - Migrated to new G4Exception scheme.
 - management:
   o Added /vis/viewer/set/rotationStyle UI command.
-- OpenGL:
+- OpenGL (opengl-V09-04-09):
   o Fixed transparency problem.
   o Improved first pass rendering speed (reduced use of glFlush).
   o Fixed non-appearance of trajectories in Qt (added final glFlush).
