@@ -57,7 +57,7 @@ public:
   virtual ~G4OpenGLXViewer ();
   void SetView ();
   void ShowView ();
-  void DrawText(const char * ,int x,int y,int z, int size);
+  void DrawText(const char * ,double x,double y,double z, double size);
 
 protected:
   void GetXConnection ();

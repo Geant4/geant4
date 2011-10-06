@@ -49,6 +49,7 @@ public:
   virtual ~G4OpenGLWin32Viewer ();
   void SetView ();
   void ShowView ();
+  void DrawText(const char * ,double x,double y,double z, double size);
 
 protected:
   void GetWin32Connection ();

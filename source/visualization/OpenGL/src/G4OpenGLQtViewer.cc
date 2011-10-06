@@ -2503,16 +2503,16 @@ G4VPhysicalVolume* G4OpenGLQtViewer::parseAndFindVolumeTree(G4VPhysicalVolume * 
   return res;
 }
 
-void G4OpenGLQtViewer::DrawText(const char * textString,int x,int y,int z, int size) {
+void G4OpenGLQtViewer::DrawText(const char * textString,double x,double y,double z, double size) {
   if (!fWindow)
     return;
   QFont font = QFont();
-  font.setPointSize(size);
+  font.setPointSizeF(size);
   
   // gl2ps or GL window ?
   int fontsize=font.pixelSize();
-  if(font.pointSize() > fontsize) {
-    fontsize = font.pointSize();
+  if(font.pointSizeF() > (double)fontsize) {
+    fontsize = (int)font.pointSizeF();
   }
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLQtViewer::DrawText :: renderText.............. \n");
@@ -2524,7 +2524,7 @@ void G4OpenGLQtViewer::DrawText(const char * textString,int x,int y,int z, int s
         
 /** Initialise the display liste BEFORE any other OpenGL call */
 void G4OpenGLQtViewer::CreateFontLists () {
-  DrawText("",0,0,0,1);
+  DrawText("",0.0,0.0,0.0,1.0);
 }
 
 /*

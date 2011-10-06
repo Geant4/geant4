@@ -60,7 +60,7 @@ protected:
   G4OpenGLViewer (G4OpenGLSceneHandler& scene);
   virtual ~G4OpenGLViewer ();
   void SetView    ();
-  virtual void DrawText(const char * ,int x,int y,int z, int size) = 0;
+  virtual void DrawText(const char * ,double x,double y,double z, double size) = 0;
   void HaloingFirstPass ();
   void HaloingSecondPass ();
   void HLRFirstPass ();

@@ -99,7 +99,7 @@ public:
   void saveVideo();
   bool generateMpegEncoderParameters();
   void displayRecordingStatus();
-  void DrawText(const char * ,int x,int y,int z, int size);
+  void DrawText(const char * ,double x,double y,double z, double size);
 public:
   void G4MousePressEvent(QMouseEvent *event);
   void G4wheelEvent (QWheelEvent * event); 

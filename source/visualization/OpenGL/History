@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+3rd Octobre 2011 Laurent Garnier (opengl-V09-04-09)
+- Fix Warning with DrawText and compilation error on Windows.
+
 26th September 2011  John Allison  (opengl-V09-04-08)
 - Re-instated QWidget* fUIViewComponentsTBWidget.
 
