@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-October 6, 2011  G.Cosmo                 geom-csg-V09-04-07
+October 6, 2011  G.Cosmo                 geom-csg-V09-04-08, geom-csg-V09-04-07
 - Fixed Coverity defect for uninitialised static data in G4Sphere.
 
 October 3, 2011  G.Cosmo                 geom-csg-V09-04-06

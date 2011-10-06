@@ -149,6 +149,7 @@ G4Sphere::~G4Sphere()
 G4Sphere::G4Sphere(const G4Sphere& rhs)
   : G4CSGSolid(rhs), fRminTolerance(rhs.fRminTolerance),
     fRmaxTolerance(rhs.fRmaxTolerance), kAngTolerance(rhs.kAngTolerance),
+    kRadTolerance(rhs.kRadTolerance), fEpsilon(rhs.fEpsilon),
     fRmin(rhs.fRmin), fRmax(rhs.fRmax), fSPhi(rhs.fSPhi), fDPhi(rhs.fDPhi),
     fSTheta(rhs.fSTheta), fDTheta(rhs.fDTheta),
     sinCPhi(rhs.sinCPhi), cosCPhi(rhs.cosCPhi),
@@ -182,7 +183,8 @@ G4Sphere& G4Sphere::operator = (const G4Sphere& rhs)
    // Copy data
    //
    fRminTolerance = rhs.fRminTolerance; fRmaxTolerance = rhs.fRmaxTolerance;
-   kAngTolerance = rhs.kAngTolerance; fRmin = rhs.fRmin; fRmax = rhs.fRmax;
+   kAngTolerance = rhs.kAngTolerance; kRadTolerance = rhs.kRadTolerance;
+   fEpsilon = rhs.fEpsilon; fRmin = rhs.fRmin; fRmax = rhs.fRmax;
    fSPhi = rhs.fSPhi; fDPhi = rhs.fDPhi; fSTheta = rhs.fSTheta;
    fDTheta = rhs.fDTheta; sinCPhi = rhs.sinCPhi; cosCPhi = rhs.cosCPhi;
    cosHDPhiOT = rhs.cosHDPhiOT; cosHDPhiIT = rhs.cosHDPhiIT;
