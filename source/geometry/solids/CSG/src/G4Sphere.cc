@@ -123,7 +123,8 @@ G4Sphere::G4Sphere( const G4String& pName,
 //                            for usage restricted to object persistency.
 //
 G4Sphere::G4Sphere( __void__& a )
-  : G4CSGSolid(a), fRminTolerance(0.), fRmaxTolerance(0.), kAngTolerance(0.),
+  : G4CSGSolid(a), fRminTolerance(0.), fRmaxTolerance(0.),
+    kAngTolerance(0.), kRadTolerance(0.), fEpsilon(0.),
     fRmin(0.), fRmax(0.), fSPhi(0.), fDPhi(0.), fSTheta(0.),
     fDTheta(0.), sinCPhi(0.), cosCPhi(0.), cosHDPhiOT(0.), cosHDPhiIT(0.),
     sinSPhi(0.), cosSPhi(0.), sinEPhi(0.), cosEPhi(0.), hDPhi(0.), cPhi(0.),

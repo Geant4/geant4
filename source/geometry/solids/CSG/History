@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 6, 2011  G.Cosmo                 geom-csg-V09-04-07
+- Fixed Coverity defect for uninitialised static data in G4Sphere.
+
 October 3, 2011  G.Cosmo                 geom-csg-V09-04-06
 - Fix in G4Sphere for setting of relative radial tolerances when setters
   for radiuses are explicitely called.
