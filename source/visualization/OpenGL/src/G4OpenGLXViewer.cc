@@ -345,7 +345,7 @@ void G4OpenGLXViewer::CreateFontLists () {
 void G4OpenGLXViewer::DrawText(const char * textString,double x,double y,double z, double size){
   
   // gl2ps or GL window ?
-  if (! drawGl2psText(textString,size)) {
+  if (! drawGl2psText(textString,(int)size)) {
 
     G4int font_base = G4OpenGLFontBaseStore::GetFontBase(this,(int)size);
     if (font_base < 0) {

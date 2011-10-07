@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+7th October 2011 Laurent Garnier (opengl-V09-04-11)
+- Fixed compilation warning on X Viewer.
+
 6th October 2011 Laurent Garnier (opengl-V09-04-10)
 - Fixed one more compilation error on Windows in G4OpenGLWin32Viewer.
 
