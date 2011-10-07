@@ -181,7 +181,7 @@ visualization                                    vis-V09-04-08
 - Migrated to new G4Exception scheme.
 - management:
   o Added /vis/viewer/set/rotationStyle UI command.
-- OpenGL (opengl-V09-04-10):
+- OpenGL (opengl-V09-04-11):
   o Fixed transparency problem.
   o Improved first pass rendering speed (reduced use of glFlush).
   o Fixed non-appearance of trajectories in Qt (added final glFlush).
