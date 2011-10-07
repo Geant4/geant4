@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-07    (29-July-2011)
+ Geant4 version Name: geant4-09-04-ref-09    (7-October-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -92,7 +92,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=2.38s Real=2.38s Sys=0s
+  User=2.4s Real=2.41s Sys=0s
 
  ======================== run summary ======================
  The run was 100000 Ne24[0.0] of 0 eV 
@@ -100,15 +100,15 @@ Run Summary
 
  Nb of generated particles: 
 
-   Na24[1346.6]:    7943  Emean =  27.48 eV 	( 0.06592 eV  --> 53.72 eV )
-    Na24[472.2]:   92057  Emean =  72.73 eV 	( 0.004726 eV  --> 134.8 eV )
+   Na24[1346.6]:    7943  Emean =  27.49 eV 	( 0.06607 eV  --> 53.72 eV )
+    Na24[472.2]:   92057  Emean =  72.73 eV 	( 0.005133 eV  --> 134.8 eV )
       Ne24[0.0]:  100000  Emean =      0 eV 	( 0 eV  --> 0 eV )
-      anti_nu_e:  100000  Emean =  1.128 MeV	( 27.84 keV --> 1.998 MeV)
-             e-:  100000  Emean =  800.4 keV	( 82.06 eV  --> 1.97 MeV)
+      anti_nu_e:  100000  Emean =  1.128 MeV	( 27.83 keV --> 1.998 MeV)
+             e-:  100000  Emean =  800.7 keV	( 82.78 eV  --> 1.97 MeV)
 
    Ekin Total (Q): mean =  1.928 MeV	( 1.123 MeV --> 1.998 MeV)
 
-   Momentum balance (excluding gamma desexcitation): mean = 0.01536 eV 	( 2.289e-10 eV  --> 3.289 eV )
+   Momentum balance (excluding gamma desexcitation): mean = 0.01527 eV 	( 0 eV  --> 0.5493 eV )
 
    Total time of life : mean =  4.899 min  half-life =  3.396 min   ( 10.4 ms  --> 50.72 min)
 
