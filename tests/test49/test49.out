@@ -1,0 +1,65 @@
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+*************************************************************
+ Geant4 version Name: geant4-09-04-ref-09    (7-October-2011)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+Test49:Par's: T=1.800000e+02,S=3.000000e-01,Eta=3.000000e-01,nop=152,p=4.009300e+05,e=0.000000e+00,pPDG=1000010010,tPDG=1000731810,nEv=50000,fN=4.000000e-01,fD=2.000000e-01,cP=5.000000e+00,rM=1.000000e+00,sA=5.000000e-01,modName=qgsp
+Test49:NewRun:Targ=90073108,M=1.685151e+05,Proj=2212,E=3.999928e+05 MeV, Run #1 of 1, Model=qgsp
+***=>TEST49: 1000 events are simulated
+***=>TEST49: 2000 events are simulated
+***=>TEST49: 3000 events are simulated
+***=>TEST49: 4000 events are simulated
+***=>TEST49: 5000 events are simulated
+***=>TEST49: 6000 events are simulated
+***=>TEST49: 7000 events are simulated
+***=>TEST49: 8000 events are simulated
+***=>TEST49: 9000 events are simulated
+***=>TEST49: 10000 events are simulated
+***=>TEST49: 11000 events are simulated
+***=>TEST49: 12000 events are simulated
+***=>TEST49: 13000 events are simulated
+***=>TEST49: 14000 events are simulated
+***=>TEST49: 15000 events are simulated
+***=>TEST49: 16000 events are simulated
+***=>TEST49: 17000 events are simulated
+***=>TEST49: 18000 events are simulated
+***=>TEST49: 19000 events are simulated
+***=>TEST49: 20000 events are simulated
+***=>TEST49: 21000 events are simulated
+***=>TEST49: 22000 events are simulated
+***=>TEST49: 23000 events are simulated
+***=>TEST49: 24000 events are simulated
+***=>TEST49: 25000 events are simulated
+***=>TEST49: 26000 events are simulated
+***=>TEST49: 27000 events are simulated
+***=>TEST49: 28000 events are simulated
+***=>TEST49: 29000 events are simulated
+***=>TEST49: 30000 events are simulated
+***=>TEST49: 31000 events are simulated
+***=>TEST49: 32000 events are simulated
+***=>TEST49: 33000 events are simulated
+***=>TEST49: 34000 events are simulated
+***=>TEST49: 35000 events are simulated
+***=>TEST49: 36000 events are simulated
+***=>TEST49: 37000 events are simulated
+***=>TEST49: 38000 events are simulated
+***=>TEST49: 39000 events are simulated
+***=>TEST49: 40000 events are simulated
+***=>TEST49: 41000 events are simulated
+***=>TEST49: 42000 events are simulated
+***=>TEST49: 43000 events are simulated
+***=>TEST49: 44000 events are simulated
+***=>TEST49: 45000 events are simulated
+***=>TEST49: 46000 events are simulated
+***=>TEST49: 47000 events are simulated
+***=>TEST49: 48000 events are simulated
+***=>TEST49: 49000 events are simulated
+Test49:Time/Ev=8.146200e-03 s, DN=0.000000e+00 %
+

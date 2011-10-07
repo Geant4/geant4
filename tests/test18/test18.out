@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-07    (29-July-2011)
+ Geant4 version Name: geant4-09-04-ref-09    (7-October-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -339,7 +339,7 @@ Run Summary
   Number of events processed : 1
   User=0.01s Real=0s Sys=0s
     1000.000           1           0     Na24[0.0]
-         347           1    4.61e+04     e-
+         348           1    4.61e+04     e-
     1.04e+03           1    4.61e+04     anti_nu_e
       0.0554           1    4.61e+04     Mg24[4122.9]
     2.75e+03           1    4.61e+04     gamma
@@ -385,7 +385,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
        1e+03           1           0     Ne24[0.0]
     1.11e+03           1       162.1     e-
          884           1       162.1     anti_nu_e
@@ -394,7 +394,7 @@ Run Summary
            0           1       162.1     Na24[0.0]
          451           1   7.383e+04     e-
          940           1   7.383e+04     anti_nu_e
-      0.0021           1   7.383e+04     Mg24[4122.9]
+     0.00209           1   7.383e+04     Mg24[4122.9]
     2.75e+03           1   7.383e+04     gamma
            0           1   7.383e+04     Mg24[1368.7]
     1.37e+03           1   7.383e+04     gamma
@@ -438,10 +438,10 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
        1e+03           1           0     F24[0.0]
     5.63e+03           1      0.2206     e-
-    7.09e+03           1      0.2206     anti_nu_e
+    7.08e+03           1      0.2206     anti_nu_e
          1.1           1      0.2206     Ne24[1981.6]
     1.98e+03           1      0.2206     gamma
            0           1      0.2206     Ne24[0.0]
@@ -498,11 +498,11 @@ Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
        1e+03           1           0     Al24[0.0]
-    1.89e+03           1       1.028     e+
+    1.87e+03           1       1.028     e+
          511           1       1.028     gamma
          511           1       1.028     gamma
-    1.45e+03           1       1.028     nu_e
-       0.258           1       1.028     Mg24[9516.2]
+    1.47e+03           1       1.028     nu_e
+       0.257           1       1.028     Mg24[9516.2]
     5.39e+03           1       1.028     gamma
            0           1       1.028     Mg24[4122.9]
     2.75e+03           1       1.028     gamma
@@ -600,16 +600,16 @@ Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
        1e+03           1           0     Cr46[0.0]
-    1.28e+03           1      0.1193     e+
+    1.21e+03           1      0.1193     e+
          511           1      0.1193     gamma
          511           1      0.1193     gamma
-     5.3e+03           1      0.1193     nu_e
-       0.379           1      0.1193     V46[0.0]
-    1.05e+03           1       1.076     e+
-         511           1       1.076     gamma
-         511           1       1.076     gamma
-    4.98e+03           1       1.076     nu_e
-        0.15           1       1.076     Ti46[0.0]
+    5.37e+03           1      0.1193     nu_e
+       0.384           1      0.1193     V46[0.0]
+         880           1      0.2833     e+
+         511           1      0.2833     gamma
+         511           1      0.2833     gamma
+    5.15e+03           1      0.2833     nu_e
+       0.199           1      0.2833     Ti46[0.0]
 
 #
 #
@@ -649,10 +649,10 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0.02s Sys=0s
        1e+03           1           0     Po215[0.0]
-    7.39e+03           1   0.0008714     alpha
-         140           1   0.0008714     Pb211[0.0]
+    7.39e+03           1   0.0003328     alpha
+         140           1   0.0003328     Pb211[0.0]
 
 G4 kernel has come to Quit state.
 
