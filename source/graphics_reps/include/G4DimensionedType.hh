@@ -53,6 +53,10 @@ namespace {
     G4String fName;
   };
   
+/*** The following function is not currently used in Geant4.  It is
+     commented out to suppress warning messages.  It is used in one of
+     the constructors below, so if you need that, then uncomment this
+     too.
   // Get unit value from input string. Return value indicates if 
   // conversion was successful.
   G4bool GetUnitValue(const G4String& unit, G4double& value) 
@@ -83,6 +87,7 @@ namespace {
     
     return gotUnit;
   }
+***/
 }
 
 // Default error handling done through G4ConversionFatalError
@@ -132,6 +137,9 @@ G4DimensionedType<T, ConversionErrorPolicy>::G4DimensionedType()
   ,fDimensionedValue(0) 
 {}
 
+/*** The following constructor is not currently used in Geant4.  It is
+     commented out to suppress warning messages.  If you need it,
+     uncomment it and uncomment GetUnitValue above.
 template <typename T, typename ConversionErrorPolicy>
 G4DimensionedType<T, ConversionErrorPolicy>::G4DimensionedType(const T& value, const G4String& unit)
   :fValue(value)
@@ -144,6 +152,7 @@ G4DimensionedType<T, ConversionErrorPolicy>::G4DimensionedType(const T& value, c
 
   fDimensionedValue = value*unitValue;
 }
+***/
 
 template <typename T, typename ConversionErrorPolicy>
 G4DimensionedType<T, ConversionErrorPolicy>::~G4DimensionedType() {}
