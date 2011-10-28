@@ -20,6 +20,9 @@ committal in the CVS repository !
 History file for visualization/HepRep sub-category
 --------------------------------------------------
 
+13th October 2011  Andrea Dotti (vis-HepRep-V09-04-02)
+- Solving "variable set but not used" warning in GCC 4.6 
+
 26th September 2011  John Allison  (vis-HepRep-V09-04-01)
 - Tagged.
 
