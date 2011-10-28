@@ -1,0 +1,33 @@
+//---------------------------------------
+//        Macro file for test30
+//         elastic scattering 
+//---------------------------------------
+#verbose
+2
+#events
+10
+//--------Proton_processes
+#particle
+proton
+//--------
+#material
+G4_C
+#nbinsa
+180
+#thetamax
+180
+//--------
+#generator
+Elastic
+#run
+#generator
+ElasticDIFF
+#run
+#generator
+ElasticLHEP
+#run
+#generator
+ElasticCHIPS
+#run
+#exit
+

@@ -47,13 +47,14 @@
 #include <iomanip>
 
 #include "G4Material.hh"
+#include "G4MaterialCutsCouple.hh"
 #include "G4ElementVector.hh"
 #include "Test30Material.hh"
 #include "Test30Physics.hh"
-#include "G4VContinuousDiscreteProcess.hh"
+
 #include "G4ProcessManager.hh"
-#include "G4VParticleChange.hh"
 #include "G4ParticleChange.hh"
+#include "G4VParticleChange.hh"
 #include "G4HadronCrossSections.hh"
 #include "G4HadronicProcess.hh"
 #include "G4ChargeExchangeProcess.hh"
@@ -128,6 +129,8 @@
 #include "G4TouchableHistory.hh"
 
 #include "G4NucleiProperties.hh"
+#include "G4ProductionCuts.hh"
+#include "G4ProductionCutsTable.hh"
 
 int main(int argc, char** argv)
 {
@@ -551,6 +554,12 @@ int main(int argc, char** argv)
 	     << G4endl;
 	     exit(1);
     }
+    G4ProductionCuts* cuts = new G4ProductionCuts();
+    G4MaterialCutsCouple* couple = new G4MaterialCutsCouple(material,cuts);
+    couple->SetIndex(0);
+    G4ProductionCutsTable* pkt = G4ProductionCutsTable::GetProductionCutsTable();
+    std::vector<G4double>* vc = const_cast<std::vector<G4double>*>(pkt->GetEnergyCutsVector(3));
+    vc->push_back(0.0); 
     const G4Element* elm = material->GetElement(0); 
 
     // -------- Projectile
@@ -736,6 +745,7 @@ int main(int argc, char** argv)
         G4double x1 = x2 - std::log10((double)nbinsa);
         xxl = x2 - x1;
 	histo.add1D("65","log10(theta (degree)) for primary particle in Lab.Sys.",nbinsa,x1,x2);
+	histo.add1D("66","Theta (degree) for primary particle in CM.Sys.",nbinsa,0.0,tetmax);
 	// desactivate not needed hist for elastic
 	histo.activate(50, false);
 	for(i=0; i<13; i++) {histo.activate(14+i, false);}
@@ -855,6 +865,7 @@ int main(int argc, char** argv)
     aPoint = new G4StepPoint();
     aPoint->SetPosition(aPosition);
     aPoint->SetMaterial(material);
+    aPoint->SetMaterialCutsCouple(couple);
     G4double safety = 10000.*cm;
     aPoint->SetSafety(safety);
     step->SetPreStepPoint(aPoint);
@@ -992,7 +1003,7 @@ int main(int argc, char** argv)
     G4ParticleDefinition* pd;
     G4ThreeVector  mom;
     G4LorentzVector labv, fm;
-    G4double e, p, m, px, py, pz, pt, theta;
+    G4double e, p, px, py, pz, pt, theta;
     G4VParticleChange* aChange = 0;
     G4int warn = 0;
 
@@ -1014,7 +1025,7 @@ int main(int argc, char** argv)
 
       gTrack->SetStep(step);
       gTrack->SetKineticEnergy(e0);
-      G4double amass = phys->GetNucleusMass();
+      G4double amass = 0.0;
 
       // note: check of 4-momentum balance for CHIPS is not guranteed due to
       // unknown isotope      
@@ -1024,8 +1035,10 @@ int main(int argc, char** argv)
         amass = G4NucleiProperties::GetNuclearMass(Nt+Z, Z);
       } else if(extraproc) {
 	aChange = extraproc->PostStepDoIt(*gTrack,*step); 
+        amass = G4NucleiProperties::GetNuclearMass(A, Z);
       } else { 
 	aChange = proc->PostStepDoIt(*gTrack,*step); 
+        amass = phys->GetNucleusMass();
       }
 
       labv = G4LorentzVector(0.0, 0.0, std::sqrt(e0*(e0 + 2.*mass)), 
@@ -1058,7 +1071,7 @@ int main(int argc, char** argv)
 	// for exclusive reaction 2 particles in final state
         if(!inclusive && nbar != 2) { break; }
 
-        m = pd->GetPDGMass();
+        G4double m = pd->GetPDGMass();
 	p = mom.mag();
         labv -= fm;
 
@@ -1079,7 +1092,9 @@ int main(int argc, char** argv)
         G4double thetad = theta/degree;
 
         fm.boost(-bst);
-        G4double costcm = std::cos(fm.theta());
+        G4double tetcm  = fm.theta();
+        G4double tetcmd = tetcm/degree;
+        G4double costcm = std::cos(tetcm);
 
 	if(usepaw) {
           if(extraproc) {
@@ -1093,6 +1108,7 @@ int main(int argc, char** argv)
 	      histo.fill(62,costcm,factora);
 	      histo.fill(63,thetad,factoraa/std::sin(theta));
 	      histo.fill(64,std::log10(thetad),factoral*theta/std::sin(theta));
+	      histo.fill(65,tetcmd,factoraa/std::sin(tetcm));
 	    }
 	  }
 
@@ -1217,10 +1233,47 @@ int main(int argc, char** argv)
 	//	delete sec;       	 
         delete aChange->GetSecondary(i);
       }
+      if(aChange->GetTrackStatus() == fAlive) {
+	G4ParticleChange* bChange = dynamic_cast<G4ParticleChange*>(aChange);
+        G4double ekin = bChange->GetEnergy();
+        G4ThreeVector dir = *(bChange->GetMomentumDirection());
+        G4double mom = sqrt(ekin*(ekin + 2*m));
 
-      if(verbose > 1 && std::fabs(labv.e()) > 0.1*MeV) 
+        theta = dir.theta();
+        G4double cost  = std::cos(theta);
+        G4double thetad = theta/degree;
+        G4LorentzVector fm(dir.x()*mom,dir.y()*mom,dir.z()*mom,ekin + mass);
+
+        labv -= fm;
+
+        fm.boost(-bst);
+        G4double tetcm  = fm.theta();
+        G4double tetcmd = tetcm/degree;
+        G4double costcm = std::cos(tetcm);
+       
+	histo.fill(58,ekin/MeV,1.0);
+	histo.fill(60,cost,factora);
+	histo.fill(62,costcm,factora);
+	histo.fill(63,thetad,factoraa/std::sin(theta));
+	histo.fill(64,std::log10(thetad),factoral*theta/std::sin(theta));
+	histo.fill(65,tetcmd,factoraa/std::sin(tetcm));
+        if(verbose>1) {
+          G4cout /*<< "Warning! evt# " << iter*/ 
+                 << "primary  "
+		 << namePart << "  Ekin(MeV)= "
+                 << ekin/MeV
+		 << "  p(MeV)= " << mom/MeV
+		 << "  m(MeV)= " << mass/MeV
+		 << "  Etot(MeV)= " << (ekin+mass)/MeV
+                 << "  std::sin(tet)= " << sin(theta)
+                 << "  phi(deg)= " << dir.phi()/degree
+                 << G4endl;
+        }
+      }
+
+      if(verbose > 1 && std::fabs(labv.e()) > 0.1*MeV) {
         G4cout << iter << "-event Energy/Momentum balance= " << labv << G4endl;
-
+      }
       px = labv.px();
       py = labv.py();
       pz = labv.pz();
