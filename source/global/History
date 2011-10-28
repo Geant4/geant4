@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 7, 2011 V.Ivantchenko (global-V09-04-18)
+- G4Physics2DVector, G4Physics2DVectorCache: new classes implementing
+  a 2-dimensional vector with linear interpolation.
+
 September 23, 2011 V.Ivantchenko (global-V09-04-17)
 - G4PhysicsLogVector, G4PhysicsLnVector, G4PhysicsLinearVector: updated
   to safer implementation of ScaleVector() method.

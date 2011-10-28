@@ -58,6 +58,9 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4PhysicsVector.icc
         G4PhysicsVectorCache.hh
         G4PhysicsVectorType.hh
+        G4Physics2DVector.hh
+        G4Physics2DVector.icc
+        G4Physics2DVectorCache.hh
         G4Pow.hh
         G4ReferenceCountedHandle.hh
         G4RotationMatrix.hh
@@ -101,6 +104,8 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4PhysicsTable.cc
         G4PhysicsVector.cc
         G4PhysicsVectorCache.cc
+        G4Physics2DVector.cc
+        G4Physics2DVectorCache.cc
         G4Pow.cc
         G4SliceTimer.cc
         G4StateManager.cc
