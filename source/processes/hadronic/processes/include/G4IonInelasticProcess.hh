@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // Hadronic Process: Ion Inelastic Process
 // J.P. Wellisch, CERN, Apr. 14 2000
 
@@ -48,7 +47,7 @@ class G4IonInelasticProcess : public G4HadronInelasticProcess
 
     ~G4IonInelasticProcess() {}
 
-    void Description() const;
+    virtual void ProcessDescription(std::ostream& outFile) const;
 };
 
 #endif

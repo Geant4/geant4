@@ -45,7 +45,7 @@ public:
 
   virtual ~G4PositronNuclearProcess();
 
-  void Description() const;
+  virtual void ProcessDescription(std::ostream& outFile) const;
 
 };
 

@@ -35,33 +35,12 @@
 
 G4AntiNeutronInelasticProcess::G4AntiNeutronInelasticProcess(const G4String& name)
  :G4HadronInelasticProcess(name, G4AntiNeutron::AntiNeutron() )
+{}
+
+
+void G4AntiNeutronInelasticProcess::ProcessDescription(std::ostream& outFile) const
 {
-  Description();
-}
-
-
-void G4AntiNeutronInelasticProcess::Description() const
-{
-  char* dirName = getenv("G4PhysListDocDir");
-  if (dirName) {
-    std::ofstream outFile;
-    G4String outFileName = GetProcessName() + ".html";
-    G4String pathName = G4String(dirName) + "/" + outFileName;
-
-    outFile.open(pathName);
-    outFile << "<html>\n";
-    outFile << "<head>\n";
-
-    outFile << "<title>Description of G4AntiNeutronInelasticProcess</title>\n";
-    outFile << "</head>\n";
-    outFile << "<body>\n";
-
-    outFile << "This process handles the inelastic scattering of anti-neutrons\n" 
-            << "from nuclei by invoking one or more hadronic models and one\n"
-            << "or more hadronic cross sections.\n";
-
-    outFile << "</body>\n";
-    outFile << "</html>\n";
-    outFile.close();
-  }
+  outFile << "This process handles the inelastic scattering of anti-neutrons\n" 
+          << "from nuclei by invoking one or more hadronic models and one\n"
+          << "or more hadronic cross sections.\n";
 }

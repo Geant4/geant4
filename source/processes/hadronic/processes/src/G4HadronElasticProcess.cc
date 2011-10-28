@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // G4 Process: Low-energy Elastic scattering
 // F.W. Jones, TRIUMF, 04-JUN-96
 // 
@@ -57,7 +56,6 @@ G4HadronElasticProcess::G4HadronElasticProcess(const G4String& processName) :
 {
   SetProcessSubType(fHadronElastic);
   AddDataSet(new G4HadronElasticDataSet());
-  Description();
 }
 
 
@@ -99,27 +97,9 @@ G4HadronElasticProcess::IsApplicable(const G4ParticleDefinition& aParticleType)
 }
 
 
-void G4HadronElasticProcess::Description() const
+void G4HadronElasticProcess::ProcessDescription(std::ostream& outFile) const
 {
-  char* dirName = getenv("G4PhysListDocDir");
-  if (dirName) {
-    std::ofstream outFile;
-    G4String outFileName = GetProcessName() + ".html";
-    G4String pathName = G4String(dirName) + "/" + outFileName;
-    outFile.open(pathName);
-    outFile << "<html>\n";
-    outFile << "<head>\n";
-
-    outFile << "<title>Description of G4HadronElasticProcess</title>\n";
-    outFile << "</head>\n";
-    outFile << "<body>\n";
-
-    outFile << "This process handles the elastic scattering of hadrons by\n"
-            << "invoking one or more hadronic models and one or more hadronic\n"
-            << "cross sections.\n";
-
-    outFile << "</body>\n";
-    outFile << "</html>\n";
-    outFile.close();
-  }
+  outFile << "This process handles the elastic scattering of hadrons by\n"
+          << "invoking one or more hadronic models and one or more hadronic\n"
+          << "cross sections.\n";
 }

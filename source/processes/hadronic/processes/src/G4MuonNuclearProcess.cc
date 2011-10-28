@@ -46,7 +46,6 @@ G4MuonNuclearProcess::G4MuonNuclearProcess(const G4String& processName) :
 {
   SetProcessSubType(fHadronInelastic);
   G4HadronicProcess::AddDataSet(new G4KokoulinMuonNuclearXS());
-  Description();
 }
 
 
@@ -62,27 +61,9 @@ G4MuonNuclearProcess::IsApplicable(const G4ParticleDefinition& aParticleType)
 }
 
 
-void G4MuonNuclearProcess::Description() const
+void G4MuonNuclearProcess::ProcessDescription(std::ostream& outFile) const
 {
-  char* dirName = getenv("G4PhysListDocDir");
-  if (dirName) {
-    std::ofstream outFile;
-    G4String outFileName = GetProcessName() + ".html";
-    G4String pathName = G4String(dirName) + "/" + outFileName;
-    outFile.open(pathName);
-    outFile << "<html>\n";
-    outFile << "<head>\n";
-
-    outFile << "<title>Description of G4MuonNuclearProcess</title>\n";
-    outFile << "</head>\n";
-    outFile << "<body>\n";
-
-    outFile << "This process handles inelastic muon scattering from\n" 
-            << "nuclei by invoking one or more hadronic models and one\n"
-            << "or more hadronic cross sections.\n";
-
-    outFile << "</body>\n";
-    outFile << "</html>\n";
-    outFile.close();
-  }
+  outFile << "This process handles inelastic muon scattering from\n" 
+          << "nuclei by invoking one or more hadronic models and one\n"
+          << "or more hadronic cross sections.\n";
 }

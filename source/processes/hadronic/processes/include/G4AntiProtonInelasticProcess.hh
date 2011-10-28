@@ -46,7 +46,7 @@ class G4AntiProtonInelasticProcess : public G4HadronInelasticProcess
     
     ~G4AntiProtonInelasticProcess() {}
 
-    void Description() const;
+    virtual void ProcessDescription(std::ostream& outFile) const;
 };
 
 #endif

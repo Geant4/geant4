@@ -51,13 +51,11 @@ class G4PhotoNuclearProcess : public G4HadronInelasticProcess
     {
       G4CrossSectionDataStore* theStore = GetCrossSectionDataStore();
       theStore->AddDataSet(new G4PhotoNuclearCrossSection);
-      Description();
     }
 
-  ~G4PhotoNuclearProcess()
-  {}
+  ~G4PhotoNuclearProcess() {}
 
-  void Description() const;
+  virtual void ProcessDescription(std::ostream& outFile) const;
 };
 
 #endif

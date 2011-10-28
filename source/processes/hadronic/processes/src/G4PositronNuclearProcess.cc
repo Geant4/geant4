@@ -40,7 +40,6 @@ G4PositronNuclearProcess(const G4String& processName)
 { 
   G4CrossSectionDataStore * theStore = GetCrossSectionDataStore();
   theStore->AddDataSet(new G4ElectroNuclearCrossSection);
-  Description();
 }
 
 
@@ -48,27 +47,9 @@ G4PositronNuclearProcess::~G4PositronNuclearProcess()
 {}
 
 
-void G4PositronNuclearProcess::Description() const
+void G4PositronNuclearProcess::ProcessDescription(std::ostream& outFile) const
 {
-  char* dirName = getenv("G4PhysListDocDir");
-  if (dirName) {
-    std::ofstream outFile;
-    G4String outFileName = GetProcessName() + ".html";
-    G4String pathName = G4String(dirName) + "/" + outFileName;
-    outFile.open(pathName);
-    outFile << "<html>\n";
-    outFile << "<head>\n";
-
-    outFile << "<title>Description of G4PositronNuclearProcess</title>\n";
-    outFile << "</head>\n";
-    outFile << "<body>\n";
-
-    outFile << "This process handles inelastic positron scattering from\n" 
-            << "nuclei by invoking one or more hadronic models and one\n"
-            << "or more hadronic cross sections.\n";
-
-    outFile << "</body>\n";
-    outFile << "</html>\n";
-    outFile.close();
-  }
+  outFile << "This process handles inelastic positron scattering from\n" 
+          << "nuclei by invoking one or more hadronic models and one\n"
+          << "or more hadronic cross sections.\n";
 }

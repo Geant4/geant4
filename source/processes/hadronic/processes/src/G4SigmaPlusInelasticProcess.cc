@@ -35,33 +35,12 @@
 
 G4SigmaPlusInelasticProcess::G4SigmaPlusInelasticProcess(const G4String& name)
  :G4HadronInelasticProcess(name, G4SigmaPlus::SigmaPlus() )
+{}
+
+
+void G4SigmaPlusInelasticProcess::ProcessDescription(std::ostream& outFile) const
 {
-  Description();
-}
-
-
-void G4SigmaPlusInelasticProcess::Description() const
-{
-  char* dirName = getenv("G4PhysListDocDir");
-  if (dirName) {
-    std::ofstream outFile;
-    G4String outFileName = GetProcessName() + ".html";
-    G4String pathName = G4String(dirName) + "/" + outFileName;
-
-    outFile.open(pathName);
-    outFile << "<html>\n";
-    outFile << "<head>\n";
-
-    outFile << "<title>Description of G4SigmaPlusInelasticProcess</title>\n";
-    outFile << "</head>\n";
-    outFile << "<body>\n";
-
-    outFile << "This process handles the inelastic scattering of Sigma+\n" 
-            << "from nuclei by invoking one or more hadronic models and one\n"
-            << "or more hadronic cross sections.\n";
-
-    outFile << "</body>\n";
-    outFile << "</html>\n";
-    outFile.close();
-  }
+  outFile << "This process handles the inelastic scattering of Sigma+\n" 
+          << "from nuclei by invoking one or more hadronic models and one\n"
+          << "or more hadronic cross sections.\n";
 }

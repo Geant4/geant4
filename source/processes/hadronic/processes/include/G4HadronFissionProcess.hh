@@ -60,7 +60,7 @@ public:
  
   virtual G4bool IsApplicable(const G4ParticleDefinition& p);
 
-  void Description() const;
+  virtual void ProcessDescription(std::ostream& outFile) const;
 };
 
 #endif

@@ -16,6 +16,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+06 October 2011 Dennis Wright      (hadr-proc-V09-04-06)
+--------------------------------------------------------
+- replace Description() with ProcessDescription(std::ostream& outFile)
+  in all process classes.
+ 
 08 August 2011 Dennis Wright       (hadr-proc-V09-04-05)
 --------------------------------------------------------
 - add names of new .src files to sources.cmake

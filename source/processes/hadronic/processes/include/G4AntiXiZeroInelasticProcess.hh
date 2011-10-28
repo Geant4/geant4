@@ -46,7 +46,7 @@ class G4AntiXiZeroInelasticProcess : public G4HadronInelasticProcess
     
     ~G4AntiXiZeroInelasticProcess() {}
 
-    void Description() const;
+    virtual void ProcessDescription(std::ostream& outFile) const;
 };
 
 #endif
