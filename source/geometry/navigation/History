@@ -16,6 +16,37 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 28th, 2011 - J.Apostolakis (geomnav-V09-04-07)
+-----------------------------
+ Navigator::GetLocalExitNormal
+ - Fix to use end-point of last step  (not start point) when calculating normal
+    at end of step.
+ - New method GetLocalExitNormalAndCheck( 3-vec, *valid) for checking
+    (now used by GetGlobalExitNormal)
+ Added to the state of G4Navigator: 
+ - New state fLastStepEndPointLocal to aid in this.
+
+Oct 26th, 2011 - J.Apostolakis (geomnav-V09-04-06)
+-----------------------------
+ Major fix to GetLocalExitNormal
+  Rewrote the case when ComputeStep has been called but not Locate.
+  - If 'entering', must first transform fLastLocatedPointLocal to 
+    the new daughter coordinates before using them.
+  - If 'exiting' use the stored values (as after Locate).
+
+ Created new method GetMotherToDaughterTransform
+
+ Note / Reason
+  * fLastLocatedPointLocal remains in the coordinates 
+    of current step's volume  -- ie what is called mother (always) --
+    until after the Relocation  (ie call to LocateGlobalPointAndSetup) 
+
+Oct 25th, 2011 - J.Apostolakis (geomnav-V09-04-05)
+-----------------------------
+ G4Navigator
+   - ComputeSafety no longer sets flag meant for ComputeStep
+
 Oct 24th, 2011 - J.Apostolakis (geomnav-V09-04-04)
 -----------------------------
  G4VIntersectionLocator (for use in GetLocalSurfaceNormal)

@@ -207,6 +207,8 @@ class G4Navigator
 
   virtual G4ThreeVector GetLocalExitNormal(G4bool* valid); // const
   // virtual G4ThreeVector GetGlobalExitNormal(G4bool* valid); // const
+  virtual G4ThreeVector GetLocalExitNormalAndCheck(const G4ThreeVector &CurrentE_Point,
+						   G4bool* valid); // const
   virtual G4ThreeVector GetGlobalExitNormal(const G4ThreeVector &CurrentE_Point,
 					          G4bool        *valid); // const
     // Return Exit Surface Normal and validity too.
@@ -354,6 +356,9 @@ class G4Navigator
   G4ThreeVector fStepEndPoint;
     //  Endpoint of last ComputeStep 
     //  - can be used for optimisation (eg when computing safety)
+  G4ThreeVector fLastStepEndPointLocal; 
+    // Position of the end-point of the last call to ComputeStep 
+    //    (in last Local coordinates)
 
   G4int  fVerbose;
     // Verbose(ness) level  [if > 0, printout can occur].

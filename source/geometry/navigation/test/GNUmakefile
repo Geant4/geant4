@@ -34,8 +34,14 @@ LDLIBS   := -lG4csg -lG4navigation -lG4volumes \
             -lG4graphics_reps \
 	    -lG4materials \
             -lG4intercoms -lG4UIbasic -lG4UIcommon \
-            -lG4hepnumerics -lG4globman 
-            
+            -lG4hepnumerics -lG4globman \
+            -lG4clhep
+
+#  For external CLHEP must delete the last line, ie end on
+#           -lG4hepnumerics -lG4globman
+# ifndef CLHEP_BASE_DIR
+# LDLIBS   += -lG4clhep 
+# endif            
 
 include $(G4INSTALL)/config/binmake.gmk
 

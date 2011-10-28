@@ -102,7 +102,7 @@ CheckPointExiting( const G4VSolid* sampleSolid,
   G4bool        exiting = false;
 
   EInside insideSolid = sampleSolid->Inside(localPoint); 
-  if( (insideSolid==kSurface) )
+  if( insideSolid==kSurface )
   {
     localDirection= sampleTransform.TransformAxis(*globalDirection); 
 
