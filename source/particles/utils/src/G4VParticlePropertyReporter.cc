@@ -35,6 +35,8 @@
 // 
 // ---------------------------------------------------------------
 #include "G4VParticlePropertyReporter.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTable.hh"
 
 ////////////////////////////
 G4VParticlePropertyReporter::G4VParticlePropertyReporter()

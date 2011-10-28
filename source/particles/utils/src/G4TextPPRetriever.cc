@@ -37,7 +37,10 @@
 #include "G4TextPPRetriever.hh"
 #include "G4ios.hh"
 #include "globals.hh"
+#include "G4ParticleTable.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4DecayTable.hh"  
+#include "G4VDecayChannel.hh"  
 #include "G4Tokenizer.hh"
 #include <iomanip>
 #include <fstream>       

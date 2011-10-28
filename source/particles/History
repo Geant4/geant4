@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 17 Oct. 2011 H.Kurashige (particles-V09-04-18)
+- fix minor bugs reported by Coverity 
+
 - 22 Aug. 2011 P.Gumplinger (particles-V09-04-17)
 - fix the scale of som0 in G4MuonRadiativeDecayChannelWithSpin.cc
 
