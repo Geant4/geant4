@@ -37,6 +37,9 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
             electromagnetic/dna/processes/sources.cmake
             electromagnetic/dna/models/sources.cmake
             electromagnetic/dna/utils/sources.cmake
+            electromagnetic/dna/management/sources.cmake
+            electromagnetic/dna/molecules/management/sources.cmake
+            electromagnetic/dna/molecules/types/sources.cmake
             electromagnetic/highenergy/sources.cmake
             electromagnetic/lowenergy/sources.cmake
             electromagnetic/muons/sources.cmake
@@ -57,7 +60,6 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
             hadronic/models/chiral_inv_phase_space/fragmentation/sources.cmake
             hadronic/models/chiral_inv_phase_space/interface/sources.cmake
             hadronic/models/chiral_inv_phase_space/processes/sources.cmake
-            #hadronic/models/common/sources.cmake
             hadronic/models/coherent_elastic/sources.cmake
             hadronic/models/de_excitation/ablation/sources.cmake
             hadronic/models/de_excitation/evaporation/sources.cmake
@@ -73,9 +75,9 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
             hadronic/models/high_energy/sources.cmake
             hadronic/models/im_r_matrix/sources.cmake
             hadronic/models/incl/sources.cmake
-            #hadronic/models/inclxx/utils/sources.cmake
-            #hadronic/models/inclxx/incl_physics/sources.cmake
-            #hadronic/models/inclxx/interface/sources.cmake
+            hadronic/models/inclxx/utils/sources.cmake
+            hadronic/models/inclxx/incl_physics/sources.cmake
+            hadronic/models/inclxx/interface/sources.cmake
             hadronic/models/isotope_production/sources.cmake
             hadronic/models/lend/sources.cmake
             hadronic/models/lll_fission/sources.cmake
@@ -90,6 +92,7 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
             hadronic/models/pre_equilibrium/exciton_model/sources.cmake
             hadronic/models/qmd/sources.cmake
             hadronic/models/radioactive_decay/sources.cmake
+            hadronic/models/quasi_elastic/sources.cmake
             hadronic/models/rpg/sources.cmake
             hadronic/models/theo_high_energy/sources.cmake
             hadronic/models/util/sources.cmake
