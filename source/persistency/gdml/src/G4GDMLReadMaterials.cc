@@ -661,7 +661,7 @@ PropertyRead(const xercesc::DOMElement* const propertyElement,
      G4MaterialPropertyVector* propvect = new G4MaterialPropertyVector(0,0,0);
      for (size_t i=0; i<matrix.GetRows(); i++)
      {
-       propvect->AddElement(matrix.Get(i,0),matrix.Get(i,1));
+       propvect->InsertValues(matrix.Get(i,0),matrix.Get(i,1));
      }
      matprop->AddProperty(Strip(name),propvect);
    }

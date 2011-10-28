@@ -49,7 +49,7 @@
 class G4Isotope;
 class G4Element;
 class G4Material;
-class G4MaterialPropertyVector;
+class G4PhysicsOrderedFreeVector;
 
 class G4GDMLWriteMaterials : public G4GDMLWriteDefine
 {
@@ -77,7 +77,7 @@ class G4GDMLWriteMaterials : public G4GDMLWriteDefine
    void MaterialWrite(const G4Material* const);
    void PropertyWrite(xercesc::DOMElement*, const G4Material* const);
    void PropertyVectorWrite(const G4String&,
-                            const G4MaterialPropertyVector* const);
+                            const G4PhysicsOrderedFreeVector* const);
  protected:
 
    std::vector<const G4Isotope*> isotopeList;

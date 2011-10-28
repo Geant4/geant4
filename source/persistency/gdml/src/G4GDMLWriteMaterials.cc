@@ -206,18 +206,17 @@ void G4GDMLWriteMaterials::MaterialWrite(const G4Material* const materialPtr)
 }
 
 void G4GDMLWriteMaterials::PropertyVectorWrite(const G4String& key,
-                           const G4MaterialPropertyVector* const pvec)
+                           const G4PhysicsOrderedFreeVector* const pvec)
 {
    const G4String matrixref = GenerateName(key, pvec);
    xercesc::DOMElement* matrixElement = NewElement("matrix");
    matrixElement->setAttributeNode(NewAttribute("name", matrixref));
    matrixElement->setAttributeNode(NewAttribute("coldim", "2"));
    std::ostringstream pvalues;
-   for (G4int i=0; i<pvec->Entries(); i++)
+   for (size_t i=0; i<pvec->GetVectorLength(); i++)
    {
-     G4MPVEntry cval = pvec->GetEntry(i);
-     if (i!=0)  { pvalues << " "; }
-     pvalues << cval.GetPhotonEnergy() << " " << cval.GetProperty();
+       if (i!=0)  { pvalues << " "; }
+       pvalues << pvec->Energy(i) << " " << (*pvec)[i];
    }
    matrixElement->setAttributeNode(NewAttribute("values", pvalues.str()));
 
@@ -229,11 +228,11 @@ void G4GDMLWriteMaterials::PropertyWrite(xercesc::DOMElement* matElement,
 {
    xercesc::DOMElement* propElement;
    G4MaterialPropertiesTable* ptable = mat->GetMaterialPropertiesTable();
-   const std::map< G4String, G4MaterialPropertyVector*,
+   const std::map< G4String, G4PhysicsOrderedFreeVector*,
                  std::less<G4String> >* pmap = ptable->GetPropertiesMap();
    const std::map< G4String, G4double,
                  std::less<G4String> >* cmap = ptable->GetPropertiesCMap();
-   std::map< G4String, G4MaterialPropertyVector*,
+   std::map< G4String, G4PhysicsOrderedFreeVector*,
                  std::less<G4String> >::const_iterator mpos;
    std::map< G4String, G4double,
                  std::less<G4String> >::const_iterator cpos;
