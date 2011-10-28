@@ -23,39 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclParticleNames.hh,v 1.3 2010/06/25 09:43:30 gunter Exp $
-// Geant4 tag: $Name:  $
-//
-// Defines enums to map G4InuclElementaryParticle type codes to human
-// readable names.  Meant to replace similar local enums scattered through
-// the code.
-//
-// 20101029  M. Kelsey -- Move antinucleons to 50-series, add deuteron
-// 20111007  M. Kelsey -- Change photon code to 9, for use in initial states
+// $Id: $
+// GEANT4 tag: $Name: not supported by cvs2svn $
 
-#ifndef G4INUCL_PARTICLE_NAMES_HH
-#define G4INUCL_PARTICLE_NAMES_HH
+#ifndef G4_CASCADE_GAMP_CHANNEL_HH
+#define G4_CASCADE_GAMP_CHANNEL_HH
 
-namespace G4InuclParticleNames {
-  enum Long { nuclei=0, proton=1, neutron=2,
-	      pionPlus=3, pionMinus=5, pionZero=7, photon=9,
-	      kaonPlus=11, kaonMinus=13, kaonZero=15, kaonZeroBar=17, 
-	      lambda=21, sigmaPlus=23, sigmaZero=25, sigmaMinus=27, 
-	      xiZero=29, xiMinus=31, omegaMinus=33, 
-	      deuteron=41, triton=43, He3=45, alpha=47,
-	      antiProton=51, antiNeutron=53,
-	      antiDeuteron=61, antiTriton=63, antiHe3=65, antiAlpha=67,
-	      diproton=111, unboundPN=112, dineutron=122 };
+#include "G4CascadeData.hh"
+#include "G4CascadeFunctions.hh"
+#include "G4PionNucSampler.hh"
 
-  // NOTE:  "km" cannot be used as conflicts with "kilometers" unit!
-  enum Short { nuc=nuclei, pro=proton, neu=neutron,
-	       pip=pionPlus, pim=pionMinus, pi0=pionZero, gam=photon,
-	       kpl=kaonPlus, kmi=kaonMinus, k0=kaonZero, k0b=kaonZeroBar,
-	       lam=lambda, sp=sigmaPlus, s0=sigmaZero, sm=sigmaMinus,
-	       xi0=xiZero, xim=xiMinus, om=omegaMinus, deu=deuteron,
-	       ap=antiProton, an=antiNeutron, 
-	       ade=antiDeuteron, atr=antiTriton, ahe=antiHe3, aal=antiAlpha,
-	       pp=diproton, pn=unboundPN, nn=dineutron };
-}
+struct G4CascadeGamPChannelData {
+  typedef G4CascadeData<30,6,6,4,5,6,7,7,7> data_t;
+  static data_t data;
+};
 
-#endif	/* G4INUCL_PARTICLE_NAMES_HH */
+typedef G4CascadeFunctions<G4CascadeGamPChannelData,G4PionNucSampler> G4CascadeGamPChannel;
+
+#endif	/* G4_CASCADE_GAMP_CHANNEL_HH */

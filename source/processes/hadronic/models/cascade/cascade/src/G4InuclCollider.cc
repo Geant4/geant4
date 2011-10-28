@@ -60,8 +60,11 @@
 //		for single-nucleon "fragment", rather than for null fragment
 // 20110413  M. Kelsey -- Modify diagnostic messages in ::rescatter() to be
 //		equivalent to those from ::collide().
+// 20111003  M. Kelsey -- Prepare for gamma-N interactions by checking for
+//		final-state tables instead of particle "isPhoton()"
 
 #include "G4InuclCollider.hh"
+#include "G4CascadeChannelTables.hh"
 #include "G4CascadeCheckBalance.hh"
 #include "G4CascadeDeexcitation.hh"
 #include "G4CollisionOutput.hh"
@@ -160,17 +163,21 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
   if (interCase.hadNucleus()) { 	// particle with nuclei
     G4InuclElementaryParticle* pbullet = 
       dynamic_cast<G4InuclElementaryParticle*>(interCase.getBullet());
+
     if (!pbullet) {
       G4cerr << " InuclCollider -> ERROR bullet is not a hadron " << G4endl;
       globalOutput.trivialise(bullet, target);
       return;
-    } else if (pbullet->isPhoton()) {
-      G4cerr << " InuclCollider -> can not collide with photon " << G4endl;
+    }
+
+    if (!G4CascadeChannelTables::GetTable(pbullet->type())) {
+      G4cerr << " InuclCollider -> ERROR can not collide with "
+	     << pbullet->getDefinition()->GetParticleName() << G4endl;
       globalOutput.trivialise(bullet, target);
       return;
-    } else {
-      btype = pbullet->type();
-    } 
+    }
+
+    btype = pbullet->type();
   } else { 				// nuclei with nuclei
     G4InuclNuclei* nbullet = 
       dynamic_cast<G4InuclNuclei*>(interCase.getBullet());

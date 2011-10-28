@@ -34,6 +34,7 @@
 //		of channel .hh files for use with LoadTable().
 // 20110923  M. Kelsey -- Add optional stream& argument to printTable(),
 //		pass through.
+// 20111007  M. Kelsey -- Add new gamma-n and gamma-p tables.
 
 #include "G4CascadeChannelTables.hh"
 #include "G4CascadeChannel.hh"
@@ -106,6 +107,8 @@ void G4CascadeChannelTables::PrintTable(G4int initialState, std::ostream& os) {
 
 // Special function to create and store table for specified interaction
 
+#include "G4CascadeGamNChannel.hh"
+#include "G4CascadeGamPChannel.hh"
 #include "G4CascadeKminusNChannel.hh"
 #include "G4CascadeKminusPChannel.hh"
 #include "G4CascadeKplusNChannel.hh"
@@ -145,6 +148,8 @@ const G4CascadeChannel* G4CascadeChannelTables::LoadTable(G4int initialState) {
 
   G4CascadeChannel* tbl = 0;
   switch (initialState) {
+  case gam*neu: tbl = new G4CascadeGamNChannel; break;
+  case gam*pro: tbl = new G4CascadeGamPChannel; break;
   case k0*neu:  tbl = new G4CascadeKzeroNChannel; break;
   case k0*pro:  tbl = new G4CascadeKzeroPChannel; break;
   case k0b*neu: tbl = new G4CascadeKzeroBarNChannel; break;

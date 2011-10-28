@@ -100,6 +100,7 @@
 // 20110831  M. Kelsey -- Make "best guess" parameters the defaults
 // 20110922  M. Kelsey -- Follow migrations G4InuclParticle::print(ostream&)
 //		and G4CascadParticle::print(ostream&)
+// 20111018  M. Kelsey -- Correct kaon potential to be positive, not negative
 
 #include "G4NucleiModel.hh"
 #include "G4CascadeChannel.hh"
@@ -180,10 +181,10 @@ const G4double G4NucleiModel::alfa3[3] = { 0.7, 0.3, 0.01 };
 const G4double G4NucleiModel::alfa6[6] = { 0.9, 0.6, 0.4, 0.2, 0.1, 0.05 };
 
 // Flat nuclear potentials for mesons and hyperons (GeV)
-const G4double G4NucleiModel::pion_vp = 0.007;
+const G4double G4NucleiModel::pion_vp       = 0.007;
 const G4double G4NucleiModel::pion_vp_small = 0.007;
-const G4double G4NucleiModel::kaon_vp = -0.015;		// WHY NEGATIVE?
-const G4double G4NucleiModel::hyperon_vp = 0.030;
+const G4double G4NucleiModel::kaon_vp       = 0.015;
+const G4double G4NucleiModel::hyperon_vp    = 0.030;
 
 const G4double G4NucleiModel::piTimes4thirds = pi*4./3.;
 

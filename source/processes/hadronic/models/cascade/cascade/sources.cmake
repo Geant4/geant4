@@ -17,6 +17,7 @@
 # 20110919  M. Kelsey -- Add G4CascadeCoalescence
 # 20110922  M. Kelsey -- Add G4ExitonConfiguration, G4FissionConfiguration
 # 20110923  M. Kelsey -- Add G4CascadeChannel.cc
+# 20111007  M. Kelsey -- Add new gamma-nucleon tables
 #------------------------------------------------------------------------------
 
 # List external includes needed.
@@ -79,6 +80,8 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4CascadeInterface.hh
         G4CascadeInterpolator.hh
         G4CascadeInterpolator.icc
+        G4CascadeGamNChannel.hh
+        G4CascadeGamPChannel.hh
         G4CascadeKminusNChannel.hh
         G4CascadeKminusPChannel.hh
         G4CascadeKplusNChannel.hh
@@ -176,6 +179,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4CascadeSigmaZeroPChannel.cc
         G4CascadeT0npChannel.cc
         G4CascadeT11pizNChannel.cc
+        G4CascadeT1GamNChannel.cc
         G4CascadeT1NNChannel.cc
         G4CascadeT31piNChannel.cc
         G4CascadeT33piNChannel.cc

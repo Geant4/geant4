@@ -107,9 +107,12 @@
 //		and G4CascadParticle::print(ostream&); drop Q,B printing
 // 20110926  M. Kelsey -- Replace compiler flag with one-time envvar in ctor
 //		for final-state clustering.
+// 20111003  M. Kelsey -- Prepare for gamma-N interactions by checking for
+//		final-state tables instead of particle "isPhoton()"
 
 #include "G4IntraNucleiCascader.hh"
 #include "G4CascadParticle.hh"
+#include "G4CascadeChannelTables.hh"
 #include "G4CascadeCoalescence.hh"
 #include "G4CascadeRecoilMaker.hh"
 #include "G4CollisionOutput.hh"
@@ -125,10 +128,10 @@
 #include "G4KineticTrack.hh"
 #include "G4KineticTrackVector.hh"
 #include "G4LorentzConvertor.hh"
+#include "G4Neutron.hh"
 #include "G4NucleiModel.hh"
 #include "G4ParticleLargerEkin.hh"
 #include "G4Proton.hh"
-#include "G4Neutron.hh"
 #include "G4V3DNucleus.hh"
 #include "Randomize.hh"
 #include <algorithm>
@@ -851,13 +854,13 @@ decayTrappedParticle(const G4CascadParticle& trapped) {
 
     G4InuclElementaryParticle idaugEP(*idaug, G4InuclParticle::INCascader);
 
-    // Only hadronic secondaries can be propagated; photons escape
-    if (idaugEP.isPhoton()) output.addOutgoingParticle(idaugEP);
-    else {
-      G4CascadParticle idaugCP(idaugEP, decayPos, zone, 0., gen);
-      if (verboseLevel > 3) G4cout << idaugCP << G4endl;
-
-      cascad_particles.push_back(idaugCP);
+    // Propagate hadronic secondaries with known interactions (tables)
+    if (G4CascadeChannelTables::GetTable(idaugEP.type())) {
+      if (verboseLevel > 3) G4cout << " propagating " << idaugEP << G4endl;
+      cascad_particles.push_back(G4CascadParticle(idaugEP,decayPos,zone,0.,gen));
+    } else {
+      if (verboseLevel > 3) G4cout << " releasing " << idaugEP << G4endl;
+      output.addOutgoingParticle(idaugEP);
     }
   }
 }

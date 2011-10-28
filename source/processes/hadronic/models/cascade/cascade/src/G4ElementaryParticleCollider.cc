@@ -76,6 +76,9 @@
 // 20110806  M. Kelsey -- Pre-allocate buffers to avoid memory churn
 // 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration
 // 20110926  M. Kelsey -- Protect sampleCMcosFor2to2 from unphysical arguments
+// 20111003  M. Kelsey -- Prepare for gamma-N interactions by checking for
+//		final-state tables instead of particle "isPhoton()"
+// 20111007  M. Kelsey -- Add gamma-N final-state tables to printFinalState
 
 #include "G4ElementaryParticleCollider.hh"
 #include "G4CascadeChannel.hh"
@@ -133,17 +136,19 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
     dynamic_cast<G4InuclElementaryParticle*>(target);
 
   if (!particle1 || !particle2) {	// Redundant with useEPCollider()
-    G4cerr << " ElementaryParticleCollider -> can collide only particle with particle " 
+    G4cerr << " ElementaryParticleCollider -> can only collide hadrons"
            << G4endl;
     return;
   }
 
-  if (particle1->isPhoton() || particle2->isPhoton()) {
-    G4cerr << " ElementaryParticleCollider -> cannot collide photons " 
-           << G4endl;
+  // Check for available interaction, or pion+dibaryon special case
+  if (!G4CascadeChannelTables::GetTable(interCase.hadrons()) &&
+      !particle1->quasi_deutron() && !particle2->quasi_deutron()) {
+    G4cerr << " ElementaryParticleCollider -> cannot collide " 
+	   << particle1->getDefinition()->GetParticleName() << " with "
+           << particle2->getDefinition()->GetParticleName() << G4endl;
     return;
   }
-
   // Generate nucleon or pion collision with nucleon
   // or pion with quasi-deuteron
 
@@ -986,6 +991,10 @@ printFinalStateTables(std::ostream& os) const {
   G4CascadeChannelTables::PrintTable(xim*pro, os);
   G4CascadeChannelTables::PrintTable(xi0*neu, os);
   G4CascadeChannelTables::PrintTable(xi0*pro, os);
+
+  os << " * * * PRELIMINARY -- GAMMA-NUCLEON TABLES * * *" << G4endl;
+  G4CascadeChannelTables::PrintTable(gam*neu, os);
+  G4CascadeChannelTables::PrintTable(gam*pro, os);
 }
 
 

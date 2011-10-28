@@ -15,6 +15,43 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+27 October 2011  Gabriele Cosmo (hadr-casc-V09-04-39)
+-----------------------------------------------------
+- Added workaround to use 'this' pointer for internal calls in
+  G4CascadeFunctions.hh/.icc, to allow for compilation on Xcode on MacOX Lion.
+
+18 October 2011  Michael Kelsey (hadr-casc-V09-04-38)
+-----------------------------------------------------
+- G4CascadParticle.cc:  In getPathToTheNextZone(), check for zero momentum
+  (pp < 1e-9) and return zero path-length; this will support capture at rest.
+
+- G4NucleiModel.cc:  Change kaon potential to be positive, not negative, so
+  slow kaons will occasionally be captured.
+
+7 October 2011  Dennis Wright, Michael Kelsey
+---------------------------------------------
+- sources.cmake:  Add new channel files below.
+
+- G4CascadeGamNChannel.hh, G4CascadeGamPChannel.hh, G4CascadeT1GamNChannel.cc:
+  NEW final state tables for gamma-nucleon interactions, with final states
+  up to 9-body, using the same energy binning as pion-nucleon.
+
+- G4CascadeChannelTables.cc:  Add new gamma-nucleon interaction states to
+  LoadTable() switch block.
+
+- G4ElementaryParticleCollider.cc:  Add printing of gamma-nucleon tables.
+
+- G4EquilibriumEvaporator.cc:  Replace hardwired particle codes with enums.
+
+- G4InuclParticleNames.hh:  Change photon code to '9', to avoid initial
+  state conflict between piMinus-n (= 5*2 = 10) and gamma-p (= 10*1 = 10).
+
+4 October 2011  Michael Kelsey (hadr-casc-V09-04-37)
+----------------------------------------------------
+- G4IntraNucleiCascader.cc, G4ElementaryParticleCollider.cc,
+  G4InuclCollider.cc:  Prepare for gamma-N interactions by checking for
+  existence of final-state tables, rather than for "isPhoton()".
+
 28 September 2011  Michael Kelsey (hadr-casc-V09-04-36)
 -------------------------------------------------------
 - evaporation/src/G4BertiniEvaporation.cc: Migrate to integer A&Z.  This

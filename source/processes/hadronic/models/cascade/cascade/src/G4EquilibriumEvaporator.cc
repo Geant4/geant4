@@ -61,6 +61,7 @@
 //		create final-state particles within "push_back" to avoid
 //		creation of temporaries.
 // 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration
+// 20111007  M. Kelsey -- Add G4InuclParticleNames, replace hardcoded numbers
 
 #include "G4EquilibriumEvaporator.hh"
 #include "G4BigBanger.hh"
@@ -69,10 +70,12 @@
 #include "G4Fissioner.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclSpecialFunctions.hh"
+#include "G4InuclParticleNames.hh"
 #include "G4LorentzConvertor.hh"
 #include "G4LorentzVector.hh"
 #include "G4ThreeVector.hh"
 
+using namespace G4InuclParticleNames;
 using namespace G4InuclSpecialFunctions;
 
 
@@ -132,7 +135,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
   
   if (verboseLevel > 3) G4cout << " after noeq: eexs " << EEXS << G4endl;
 
-  G4InuclElementaryParticle dummy(small_ekin, 1);
+  G4InuclElementaryParticle dummy(small_ekin, proton);
   G4LorentzConvertor toTheNucleiSystemRestFrame;
   //*** toTheNucleiSystemRestFrame.setVerbose(verboseLevel);
   toTheNucleiSystemRestFrame.setBullet(dummy);
@@ -339,7 +342,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	  EEXS -= S*GeV;		// New excitation energy (in MeV)
 
 	  // NOTE:  In-situ construction will be optimized away (no copying)
-	  output.addOutgoingParticle(G4InuclElementaryParticle(mom, 10, G4InuclParticle::Equilib));
+	  output.addOutgoingParticle(G4InuclElementaryParticle(mom, photon, G4InuclParticle::Equilib));
 	  
 	  if (verboseLevel > 3)
 	    G4cout << output.getOutgoingParticles().back() << G4endl;

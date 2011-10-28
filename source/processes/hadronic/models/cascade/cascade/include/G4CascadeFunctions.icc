@@ -57,12 +57,12 @@ template <class DATA, class SAMP>
 G4int G4CascadeFunctions<DATA,SAMP>::getMultiplicity(G4double ke) const {
   // Use pointer comparison to see whether tot is just a ref to sum)
   if (&DATA::data.sum != &DATA::data.tot) {
-    G4double summed = findCrossSection(ke, DATA::data.sum); 
-    G4double total  = findCrossSection(ke, DATA::data.tot);
+    G4double summed = this->findCrossSection(ke, DATA::data.sum); 
+    G4double total  = this->findCrossSection(ke, DATA::data.tot);
     if (G4UniformRand() > summed/total) return DATA::data.maxMultiplicity();
   }
 
-  return findMultiplicity(ke, DATA::data.multiplicities);
+  return this->findMultiplicity(ke, DATA::data.multiplicities);
 }
 
 
@@ -82,8 +82,8 @@ getOutgoingParticleTypes(std::vector<G4int>& kinds,
   kinds.clear();
   kinds.reserve(mult);
 
-  G4int channel = findFinalStateIndex(mult, ke, DATA::data.index,
-				      DATA::data.crossSections);
+  G4int channel = this->findFinalStateIndex(mult, ke, DATA::data.index,
+				            DATA::data.crossSections);
 #ifdef G4CASCADE_DEBUG_SAMPLER
   G4cout << " getOutgoingParticleTypes: mult=" << mult << " KE=" << ke
 	 << ": channel=" << channel << G4endl;

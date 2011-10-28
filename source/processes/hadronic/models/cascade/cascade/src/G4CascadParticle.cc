@@ -32,6 +32,7 @@
 // 20110806  M. Kelsey -- Add fill() function to replicate ctor/op=() action
 // 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration,
 //		Add stream argument to print(), add operator<<().
+// 20111017  M. Kelsey -- Add check for zero momentum in path calculation.
 
 #include "G4CascadParticle.hh"
 #include "G4ios.hh"
@@ -79,6 +80,11 @@ G4double G4CascadParticle::getPathToTheNextZone(G4double rz_in,
   G4double rp = mom.vect().dot(position);
   G4double rr = position.mag2();
   G4double pp = mom.vect().mag2();
+
+  if (std::abs(pp) < 1e-9) {	// Cut-off for "at rest" is 1 eV momentum
+    if (verboseLevel > 3) G4cout << " at rest; path length is zero" << G4endl;
+    return 0.;
+  }
 
   G4double ra = rr - rp * rp / pp;
   pp = std::sqrt(pp);
