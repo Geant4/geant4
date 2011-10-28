@@ -61,7 +61,7 @@ G4BGGNucleonInelasticXS::G4BGGNucleonInelasticXS(const G4ParticleDefinition* p)
   verboseLevel = 0;
   fGlauberEnergy = 91.*GeV;
   fLowEnergy = 20.*MeV;
-  for (G4int i = 0; i < 93; i++) {
+  for (G4int i = 0; i < 93; ++i) {
     theGlauberFac[i] = 0.0;
     theCoulombFac[i] = 0.0;
     theA[i] = 1;
@@ -125,14 +125,14 @@ G4BGGNucleonInelasticXS::GetElementCrossSection(const G4DynamicParticle* dp,
     cross = fNucleon->GetElementCrossSection(dp, Z);
   }
 
-  if(verboseLevel > 1) 
+  if(verboseLevel > 1) {
     G4cout << "G4BGGNucleonInelasticXS::GetCrossSection  for "
 	   << dp->GetDefinition()->GetParticleName()
 	   << "  Ekin(GeV)= " << dp->GetKineticEnergy()
 	   << " in nucleus Z= " << Z << "  A= " << theA[Z]
 	   << " XS(b)= " << cross/barn 
 	   << G4endl;
-
+  }
   return cross;
 }
 
@@ -284,7 +284,11 @@ G4double G4BGGNucleonInelasticXS::CoulombFactor(G4double kinEnergy, G4int Z)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4BGGNucleonInelasticXS::Description() const
-{}
+void G4BGGNucleonInelasticXS::CrossSectionDescription(std::ostream& outFile) const
+{
+  outFile << "The Barashenkov-Glauber-Gribov cross section handles inelastic\n"
+          << "scattering of protons and neutrons from nuclei using the\n"
+          << "Glauber-Gribov parameterization.\n";
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

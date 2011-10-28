@@ -23,14 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 //
 // GEANT4 physics class: G4ElectroNuclearCrossSection -- header file
 // M.V. Kossov, ITEP(Moscow), 24-OCT-01
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 25-Sept-03
-//
 
 #ifndef G4ElectroNuclearCrossSection_h
 #define G4ElectroNuclearCrossSection_h 1
@@ -52,7 +49,7 @@ public:
   G4ElectroNuclearCrossSection(const G4String& name = "ElectroNuclearXS");
   virtual ~G4ElectroNuclearCrossSection();
 
-  virtual void Description() const;
+  virtual void CrossSectionDescription(std::ostream&) const;
 
   virtual G4bool
   IsIsoApplicable(const G4DynamicParticle* aParticle, G4int /*Z*/,

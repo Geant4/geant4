@@ -172,5 +172,7 @@ void G4VCrossSectionDataSet::BuildPhysicsTable(const G4ParticleDefinition&)
 void G4VCrossSectionDataSet::DumpPhysicsTable(const G4ParticleDefinition&)
 {}
 
-void G4VCrossSectionDataSet::Description() const
-{}
+void G4VCrossSectionDataSet::CrossSectionDescription(std::ostream& outFile) const
+{
+  outFile << "The description for this cross section data set has not been written yet.\n";
+}

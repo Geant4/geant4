@@ -55,35 +55,6 @@
 #include "G4VProcess.hh"
 #include "G4DynamicParticle.hh"
 #include "G4HadTmpUtil.hh"
-#include "G4PionPlus.hh"
-#include "G4PionZero.hh"
-#include "G4PionMinus.hh"
-#include "G4KaonPlus.hh"
-#include "G4KaonZeroShort.hh"
-#include "G4KaonZeroLong.hh"
-#include "G4KaonMinus.hh"
-#include "G4Proton.hh"
-#include "G4AntiProton.hh"
-#include "G4Neutron.hh"
-#include "G4Deuteron.hh"
-#include "G4Triton.hh"
-#include "G4Alpha.hh"
-#include "G4AntiNeutron.hh"
-#include "G4Lambda.hh"
-#include "G4AntiLambda.hh"
-#include "G4SigmaPlus.hh"
-#include "G4SigmaZero.hh" 
-#include "G4SigmaMinus.hh"
-#include "G4AntiSigmaPlus.hh"
-#include "G4AntiSigmaZero.hh"
-#include "G4AntiSigmaMinus.hh"
-#include "G4XiZero.hh"
-#include "G4XiMinus.hh"
-#include "G4AntiXiZero.hh"
-#include "G4AntiXiMinus.hh"
-#include "G4OmegaMinus.hh"
-#include "G4AntiOmegaMinus.hh"
-
 
 enum { TSIZE=41, NPARTS=35, NELAB=17, NCNLW=15, NFISS=21 };
 
@@ -91,24 +62,13 @@ class G4HadronCrossSections
 {
   public:
 
-    G4HadronCrossSections()
-     : prevParticleDefinition(0), prevElement(0), prevZZ(0), prevAA(0), 
-       prevKineticEnergy(DBL_MAX), lastEkx(0.), lastEkxPower(0.), verboseLevel(0)
-    {}
+    G4HadronCrossSections();
 
-    ~G4HadronCrossSections() {}
+    ~G4HadronCrossSections();
 
-    static G4HadronCrossSections* Instance()
-    {
-       if (!theInstance) theInstance = new G4HadronCrossSections();
-       return theInstance;
-    }
+    static G4HadronCrossSections* Instance();
 
-    G4bool IsApplicable(const G4DynamicParticle* aParticle)
-    {
-      return (GetParticleCode(aParticle) > 0);
-    }
-
+    G4bool IsApplicable(const G4DynamicParticle* aParticle);
 
     G4double GetElasticCrossSection(const G4DynamicParticle*,
                                     G4int /*ZZ*/, G4int /*AA*/);

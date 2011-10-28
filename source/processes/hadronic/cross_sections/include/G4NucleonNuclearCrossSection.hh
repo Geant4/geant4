@@ -59,7 +59,7 @@ public:
 					  G4int Z, 
 					  const G4Material* mat = 0);
 
-  virtual void Description() const;
+  virtual void CrossSectionDescription(std::ostream&) const;
 
   inline G4double GetElasticCrossSection(const G4DynamicParticle* aParticle, 
 					 G4int Z);

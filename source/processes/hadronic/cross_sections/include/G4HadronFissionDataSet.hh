@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // GEANT4 physics class: G4HadronFissionDataSet -- header file
 // F.W. Jones, TRIUMF, 19-MAY-98
 //
@@ -49,7 +48,7 @@ public:
 
   virtual ~G4HadronFissionDataSet();
 
-  virtual void Description() const;
+  virtual void CrossSectionDescription(std::ostream&) const;
 
   virtual G4bool
   IsElementApplicable(const G4DynamicParticle* aParticle, G4int /*Z*/,

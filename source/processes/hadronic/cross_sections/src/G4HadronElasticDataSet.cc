@@ -42,39 +42,21 @@ G4HadronElasticDataSet::G4HadronElasticDataSet(const G4String& name)
  : G4VCrossSectionDataSet(name)
 {
   theHadronCrossSections = G4HadronCrossSections::Instance(); 
-  //Description();
 }
 
-G4HadronElasticDataSet::~G4HadronElasticDataSet()
-{}
 
-void G4HadronElasticDataSet::Description() const
+G4HadronElasticDataSet::~G4HadronElasticDataSet() {}
+
+
+void G4HadronElasticDataSet::CrossSectionDescription(std::ostream& outFile) const
 {
-  char* dirName = getenv("G4PhysListDocDir");
-  if (dirName) {
-    std::ofstream outFile;
-    G4String outFileName = GetName() + ".html";
-    G4String pathName = G4String(dirName) + "/" + outFileName;
-
-    outFile.open(pathName);
-    outFile << "<html>\n";
-    outFile << "<head>\n";
-
-    outFile << "<title>Description of Gheisha Elastic Cross Section Set</title>\n";
-    outFile << "</head>\n";
-    outFile << "<body>\n";
-
-    outFile << "G4HadronElasticDataSet contains elastic cross sections for\n"
-            << "all long-lived hadrons at all incident energies.  It was\n"
-            << "developed as part of the Gheisha hadronic package\n"
-            << "by H. Fesefeldt, and consists of a set of parameterizations\n"
-            << "of elastic scattering data.\n";
-
-    outFile << "</body>\n";
-    outFile << "</html>\n";
-    outFile.close();
-  }
+  outFile << "G4HadronElasticDataSet contains elastic cross sections for\n"
+          << "all long-lived hadrons at all incident energies.  It was\n"
+          << "developed as part of the Gheisha hadronic package\n"
+          << "by H. Fesefeldt, and consists of a set of parameterizations\n"
+          << "of elastic scattering data.\n";
 }
+
 
 G4bool
 G4HadronElasticDataSet::IsElementApplicable(const G4DynamicParticle* aParticle, 

@@ -63,7 +63,7 @@ class G4CrossSectionPairGG : public G4VCrossSectionDataSet
 			      
   virtual ~G4CrossSectionPairGG();
 
-  virtual void Description() const;
+  virtual void CrossSectionDescription(std::ostream&) const;
 
   virtual
   G4bool IsElementApplicable(const G4DynamicParticle*, G4int Z, 

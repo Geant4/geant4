@@ -74,7 +74,7 @@ public:
   G4double GetElementCrossSection(const G4DynamicParticle* aPart, 
 				  G4int Z, const G4Material*);
 
-  virtual void Description() const;
+  virtual void CrossSectionDescription(std::ostream&) const;
 
 private: // Without Description
 

@@ -760,7 +760,11 @@ G4GlauberGribovCrossSection::GetHadronNucleonXscNS(const G4DynamicParticle* aPar
 
   if(theParticle == theNeutron) 
   {
-    if( proj_momentum >= 10.)
+    if( proj_momentum >= 373.)
+    {
+      return GetHadronNucleonXscPDG(aParticle,At,Zt);
+    }
+    else if( proj_momentum >= 10.)
     // if( proj_momentum >= 2.)
     {
       //  Delta = 1.;  // DHW 19 May 2011: variable set but not used
@@ -816,7 +820,11 @@ G4GlauberGribovCrossSection::GetHadronNucleonXscNS(const G4DynamicParticle* aPar
   } 
   else if(theParticle == theProton) 
   {
-    if( proj_momentum >= 10.)
+    if( proj_momentum >= 373.)
+    {
+      return GetHadronNucleonXscPDG(aParticle,At,Zt);
+    }
+    else if( proj_momentum >= 10.)
     // if( proj_momentum >= 2.)
     {
       // Delta = 1.;  DHW 19 May 2011: variable set but not used
@@ -1434,7 +1442,7 @@ G4double G4GlauberGribovCrossSection::CalcMandelstamS( const G4double mp ,
 //
 //
 
-void G4GlauberGribovCrossSection::Description() const
+void G4GlauberGribovCrossSection::CrossSectionDescription(std::ostream& /*outFile*/) const
 {}
 
 //

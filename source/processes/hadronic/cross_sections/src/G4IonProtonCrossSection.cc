@@ -74,6 +74,7 @@ G4IonProtonCrossSection::GetElementCrossSection(
     theForward->GetProtonCrossSection(e, G4lrint(p->GetPDGCharge()/eplus));
 }
 
-void G4IonProtonCrossSection::Description() const
+void 
+G4IonProtonCrossSection::CrossSectionDescription(std::ostream& /*outFile*/) const
 {}
 

@@ -91,7 +91,7 @@ public:
   G4double GetNucleusRadius(const G4DynamicParticle*, const G4Element*);
   G4double GetNucleusRadius(G4int At);
 
-  virtual void Description() const;
+  virtual void CrossSectionDescription(std::ostream&) const;
 
   inline G4double GetElasticGlauberGribov(const G4DynamicParticle*, G4int Z, G4int A);
   inline G4double GetInelasticGlauberGribov(const G4DynamicParticle*, G4int Z, G4int A);

@@ -23,18 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id: G4ElectroNuclearCrossSection.cc,v 1.33 2011-01-09 02:37:48 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 //
 // G4 Physics class: G4ElectroNuclearCrossSection for gamma+A cross sections
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 10-OCT-01
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 17-Oct-03
-// 
-//============================================================================
 
-///#define debug
+//#define debug
 #define edebug
 //#define pdebug
 //#define ppdebug
@@ -78,9 +74,7 @@ std::vector<G4double*> G4ElectroNuclearCrossSection::J3;
 
 G4ElectroNuclearCrossSection::G4ElectroNuclearCrossSection(const G4String& name)
  : G4VCrossSectionDataSet(name)
-{
-  //Description();
-}
+{}
 
 G4ElectroNuclearCrossSection::~G4ElectroNuclearCrossSection()
 {
@@ -96,35 +90,17 @@ G4ElectroNuclearCrossSection::~G4ElectroNuclearCrossSection()
   J3.clear();
 }
 
-void G4ElectroNuclearCrossSection::Description() const
+void
+G4ElectroNuclearCrossSection::CrossSectionDescription(std::ostream& outFile) const
 {
-  char* dirName = getenv("G4PhysListDocDir");
-  if (dirName) {
-    std::ofstream outFile;
-    G4String outFileName = GetName() + ".html";
-    G4String pathName = G4String(dirName) + "/" + outFileName;
-
-    outFile.open(pathName);
-    outFile << "<html>\n";
-    outFile << "<head>\n";
-
-    outFile << "<title>Description of G4ElectroNuclearCrossSection</title>\n";
-    outFile << "</head>\n";
-    outFile << "<body>\n";
-
-    outFile << "G4ElectroNuclearCrossSection provides the total inelastic\n"
-            << "cross section for e- and e+ interactions with nuclei.  The\n"
-            << "cross sections are retrieved from a table which is\n"
-            << "generated using the equivalent photon approximation.  In\n"
-            << "this approximation real gammas are produced from the virtual\n"
-            << "ones generated at the electromagnetic vertex.  This cross\n"
-            << "section set is valid for incident electrons and positrons at\n"
-            << "all energies.\n";
-
-    outFile << "</body>\n";
-    outFile << "</html>\n";
-    outFile.close();
-  }
+  outFile << "G4ElectroNuclearCrossSection provides the total inelastic\n"
+          << "cross section for e- and e+ interactions with nuclei.  The\n"
+          << "cross sections are retrieved from a table which is\n"
+          << "generated using the equivalent photon approximation.  In\n"
+          << "this approximation real gammas are produced from the virtual\n"
+          << "ones generated at the electromagnetic vertex.  This cross\n"
+          << "section set is valid for incident electrons and positrons at\n"
+          << "all energies.\n";
 }
 
 G4bool
@@ -214,7 +190,8 @@ G4ElectroNuclearCrossSection::GetIsoCrossSection(
 	  } // End of creation of the new set of parameters
     } // End of parameters udate
 
-    else if(std::abs((lastE-Energy)/Energy)<.001) return lastSig*millibarn; // Don't calc. same CS twice
+    //    else if(std::abs((lastE-Energy)/Energy)<.001) return lastSig*millibarn; // Don't calc. same CS twice
+    else if(lastE == Energy) return lastSig*millibarn; // Don't calc. same CS twice
     // ============================== NOW Calculate the Cross Section ==========================
     lastE=Energy;                          // lastE - the electron energy
     if (Energy<=lastTH)                    // Once more check that the eE is higher than the ThreshE
@@ -2416,6 +2393,8 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
 
 G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy()
 {
+  if(lastSig <= 0.0) { return 0.0; }  // VI
+
   // All constants are the copy of that from GetCrossSection funct.
   //  => Make them general.
   static const G4int nE=336; // !!  If you change this, change it in 
@@ -2441,16 +2420,19 @@ G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy()
   G4double lastLE=lastG+lmel;   // recover std::log(eE) from the gamma (lastG)
   G4double dlg1=lastG+lastG-1.;
   G4double lgoe=lastG/lastE;
-  for (G4int i=lastF;i<=lastL;i++)
+  for (G4int i=lastF;i<=lastL;i++) {
     Y[i] = dlg1*lastJ1[i]-lgoe*(lastJ2[i]+lastJ2[i]-lastJ3[i]/lastE);
-
+    if(Y[i] < 0.0) { Y[i] = 0.0; }
+  }
   // Tempory IF of H.P.: delete it if the *HP* err message does not 
   // show up M.K.
   if(lastSig>0.99*Y[lastL] && lastL<mL && Y[lastL]<1.E-30)
   {
     G4cerr << "*HP*G4ElNucCS::GetEqPhotE:S=" << lastSig <<">" << Y[lastL]
            << ",l=" << lastL << ">" << mL << G4endl;
-    return 3.0*MeV; // quick and dirty workaround @@@ HP.
+    if(lastSig <= 0.0) { return 0.0; }  // VI
+
+    //return 3.0*MeV; // quick and dirty workaround @@@ HP.
                     // (now can be not necessary M.K.)
   }
   G4double ris=lastSig*G4UniformRand(); // Sig can be > Y[lastL=mL], then it
@@ -2532,7 +2514,7 @@ G4double G4ElectroNuclearCrossSection::SolveTheEquation(G4double f)
       G4cerr<<"*G4ElNCS::SolveTheEq:*Correction*"<<i<<",d="<<d<<",x="<<x<<">lE="<<lastLE<<",f="<<f
             <<",fx="<<fx<<",df="<<df<<",A(Z="<<lastZ<<",N="<<lastN<<")"<<G4endl;
       x=topLim;
-      if(i)G4Exception("G4ElectroNuclearCrossSection::SolveTheEquation()","009",FatalException,"E>eE");
+      //if(i)G4Exception("G4ElectroNuclearCrossSection::SolveTheEquation()","009",FatalException,"E>eE");
     }
     if(std::abs(d)<eps) break;
     if(i+1>=imax) G4cerr<<"*G4ElNucCS::SolveTheEq:"<<i+2<<">"<<imax<<"->Use bigger max. ln(eE)="
@@ -2543,6 +2525,8 @@ G4double G4ElectroNuclearCrossSection::SolveTheEquation(G4double f)
 
 G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonQ2(G4double nu)
 {
+  if(lastG <= 0.0 || lastE <= 0.0) { return 0.; } // VI
+  if(lastSig <= 0.0) { return 0.0; }  // VI
   static const G4double mel=0.5109989;    // Mass of electron in MeV
   static const G4double mel2=mel*mel;     // Squared Mass of electron in MeV
   G4double y=nu/lastE;                    // Part of energy carried by the equivalent pfoton
@@ -2596,6 +2580,7 @@ G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonQ2(G4double nu)
 
 G4double G4ElectroNuclearCrossSection::GetVirtualFactor(G4double nu, G4double Q2)
 {
+  if(nu <= 0.0 || Q2 <= 0.0) { return 0.0; }
   static const G4double dM=938.27+939.57; // Mean double nucleon mass = m_n+m_p (@@ no binding)
   static const G4double Q0=843.;          // Coefficient of the dipole nucleonic form-factor
   static const G4double Q02=Q0*Q0;        // Squared coefficient of the dipole nucleonic form-factor
@@ -2605,7 +2590,7 @@ G4double G4ElectroNuclearCrossSection::GetVirtualFactor(G4double nu, G4double Q2
   static const G4double cp=3.;            // Power of the c-function
   //G4double x=Q2/dM/nu;                  // Direct x definition
   G4double K=nu-Q2/dM;                    // K=nu*(1-x)
-  if(K<0.)
+  if(K <= 0.) // VI
   {
 #ifdef edebug
     G4cerr<<"**G4ElectroNucCrossSec::GetVirtFact:K="<<K<<",nu="<<nu<<",Q2="<<Q2<<",dM="<<dM<<G4endl;

@@ -23,13 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id: G4HadronInelasticDataSet.cc,v 1.9 2011-01-09 02:37:48 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4 Physics class: HadronInelasticDataSet for cross sections
 // F.W. Jones, TRIUMF, 19-MAY-98
-// 
 
 #include "G4HadronInelasticDataSet.hh"
 #include "G4DynamicParticle.hh"
@@ -42,39 +40,21 @@ G4HadronInelasticDataSet::G4HadronInelasticDataSet(const G4String& name)
  : G4VCrossSectionDataSet(name)
 {
   theHadronCrossSections = G4HadronCrossSections::Instance(); 
-  //Description();
 }
 
-G4HadronInelasticDataSet::~G4HadronInelasticDataSet()
-{}
 
-void G4HadronInelasticDataSet::Description() const
+G4HadronInelasticDataSet::~G4HadronInelasticDataSet() {}
+
+
+void G4HadronInelasticDataSet::CrossSectionDescription(std::ostream& outFile) const
 {
-  char* dirName = getenv("G4PhysListDocDir");
-  if (dirName) {
-    std::ofstream outFile;
-    G4String outFileName = GetName() + ".html";
-    G4String pathName = G4String(dirName) + "/" + outFileName;
-
-    outFile.open(pathName);
-    outFile << "<html>\n";
-    outFile << "<head>\n";
-
-    outFile << "<title>Description of Gheisha Inelastic Cross Section Set</title>\n";
-    outFile << "</head>\n";
-    outFile << "<body>\n";
-
-    outFile << "G4HadronInelasticDataSet contains inelastic cross sections\n"
-            << "for all long-lived hadrons at all incident energies.  It was\n"
-            << "developed as part of the Gheisha hadronic package\n"
-            << "by H. Fesefeldt, and consists of a set of parameterizations\n"
-            << "of inelastic scattering data.\n";
-
-    outFile << "</body>\n";
-    outFile << "</html>\n";
-    outFile.close();
-  }
+  outFile << "G4HadronInelasticDataSet contains inelastic cross sections\n"
+          << "for all long-lived hadrons at all incident energies.  It was\n"
+          << "developed as part of the Gheisha hadronic package\n"
+          << "by H. Fesefeldt, and consists of a set of parameterizations\n"
+          << "of inelastic scattering data.\n";
 }
+
 
 G4bool
 G4HadronInelasticDataSet::IsElementApplicable(const G4DynamicParticle* aParticle, 

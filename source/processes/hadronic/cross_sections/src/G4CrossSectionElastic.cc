@@ -94,7 +94,7 @@ void G4CrossSectionElastic::DumpPhysicsTable(const G4ParticleDefinition& p)
   component->DumpPhysicsTable(p);
 }
 
-void G4CrossSectionElastic::Description() const
+void G4CrossSectionElastic::CrossSectionDescription(std::ostream& /*outFile*/) const
 {
   component->Description();
 }

@@ -14,6 +14,31 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+26 October 2011 D.H. Wright  (hadr-cross-V09-04-28)
+---------------------------------------------------
+- switch from Description() to CrossSectionDescription(std::ostream&)
+
+24 October 2011 D.H. Wright for Vladimir Grichine  (hadr-cross-V09-04-27)
+-------------------------------------------------------------------------
+- modified p-p cross sections in G4GGNuclNuclCrossSection.hh, .cc,  
+  G4GlauberGribovCrossSection.cc and G4HadronNucleonXsc.cc to include 
+  latest TOTEM data at 7 TeV
+
+21 October 2011 Vladimir Ivanchenko   (hadr-cross-V09-04-26)
+------------------------------------------------------------
+- G4ElectroNuclearCrossSection - removed not needed G4Exception
+- G4PiData - use G4HadronicException instead of G4Exception
+- G4HadronCrossSection - moved constructor, destructor and other 
+    inline methods to the source; make singleton patern classical;
+    substitute G4Exception by G4hadronicException
+
+20 October 2011 Vladimir Ivanchenko   (hadr-cross-V09-04-25)
+------------------------------------------------------------
+- G4BGGNucleonInelasticXS - improved cout
+- G4ElectroNuclearCrossSection - removed check of "tolarance"; added
+    numerical protections in methods computing equivavalent photon
+    energy, Q^2, and virtual factor; FPE crash is not seen anymore;
+
 16 September 2011 Gunter Folger       (hadr-cross-V09-04-24)
 ------------------------------------------------------------
 -  G4NeutronInelasticCrossSection.cc: fix passing double for int

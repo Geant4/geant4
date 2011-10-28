@@ -31,13 +31,10 @@
 // Modified:
 //
 // 19 Aug 2011, V.Ivanchenko move to new design and make x-section per element
-//
 
-//
 // Description: use Kokoulin's parameterized calculation of virtual 
 //              photon production cross section and conversion to
 //              real photons.
-//
 
 #include "G4KokoulinMuonNuclearXS.hh"
 

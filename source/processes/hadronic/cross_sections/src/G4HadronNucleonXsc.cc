@@ -333,9 +333,9 @@ G4HadronNucleonXsc::GetHadronNucleonXscPDG(const G4DynamicParticle* aParticle,
   xsection *= millibarn; // parametrised in mb
 
   fTotalXsc     = xsection;
-  fInelasticXsc = 0.83*xsection;
+  fInelasticXsc = 0.75*xsection;
   fElasticXsc   = fTotalXsc - fInelasticXsc;
-  if (fElasticXsc < 0.)fElasticXsc = 0.;
+  if (fElasticXsc < 0.) fElasticXsc = 0.;
 
   return xsection;
 }
@@ -387,7 +387,11 @@ G4HadronNucleonXsc::GetHadronNucleonXscNS(const G4DynamicParticle* aParticle,
 
   if( theParticle == theNeutron && pORn) 
   {
-    if( proj_momentum >= 10.)
+    if( proj_momentum >= 373.)
+    {
+      return GetHadronNucleonXscPDG(aParticle,nucleon);
+    }
+    else if( proj_momentum >= 10.)
     // if( proj_momentum >= 2.)
     {
       // Delta = 1.;   DHW 19 May 2011: variable set but not used
@@ -451,7 +455,11 @@ G4HadronNucleonXsc::GetHadronNucleonXscNS(const G4DynamicParticle* aParticle,
   } 
   else if(theParticle == theProton && pORn) 
   {
-    if( proj_momentum >= 10.)
+    if( proj_momentum >= 373.)
+    {
+      return GetHadronNucleonXscPDG(aParticle,nucleon);
+    }
+    else if( proj_momentum >= 10.)
     // if( proj_momentum >= 2.)
     {
       // Delta = 1.;  DHW 19 May 2011: variable set but not used

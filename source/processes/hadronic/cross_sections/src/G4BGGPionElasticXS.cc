@@ -71,7 +71,6 @@ G4BGGPionElasticXS::G4BGGPionElasticXS(const G4ParticleDefinition*)
   particle = 0;
   isPiplus = false;
   isInitialized = false;
-  //Description();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -236,30 +235,12 @@ void G4BGGPionElasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
   }
 }
 
-void G4BGGPionElasticXS::Description() const 
+void
+G4BGGPionElasticXS::CrossSectionDescription(std::ostream& outFile) const 
 {
-  char* dirName = getenv("G4PhysListDocDir");
-  if (dirName) {
-    std::ofstream outFile;
-    G4String outFileName = GetName() + ".html";
-    G4String pathName = G4String(dirName) + "/" + outFileName;
-
-    outFile.open(pathName);
-    outFile << "<html>\n";
-    outFile << "<head>\n";
-
-    outFile << "<title>Description of Barashenkov Glauber Gribov Elastic Cross Section Set</title>\n";
-    outFile << "</head>\n";
-    outFile << "<body>\n";
-
-    outFile << "The Barashenkov-Glauber-Gribov cross sections describe\n"
-            << "hadron-nuclear elastic scattering. They are valid for pions\n"
-            << "and nucleons at all incident energies.\n";
-
-    outFile << "</body>\n";
-    outFile << "</html>\n";
-    outFile.close();
-  }
+  outFile << "The Barashenkov-Glauber-Gribov cross sections describe\n"
+          << "hadron-nuclear elastic scattering. They are valid for pions\n"
+          << "and nucleons at all incident energies.\n";
 }
 
 G4double G4BGGPionElasticXS::CoulombFactor(G4double kinEnergy, G4int A)

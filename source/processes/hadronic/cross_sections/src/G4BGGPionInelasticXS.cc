@@ -70,7 +70,6 @@ G4BGGPionInelasticXS::G4BGGPionInelasticXS(const G4ParticleDefinition* p)
   particle = p;
   isPiplus = false;
   isInitialized = false;
-  //Description();
 }
 
 
@@ -271,30 +270,12 @@ G4double G4BGGPionInelasticXS::CoulombFactor(G4double kinEnergy, G4int Z)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4BGGPionInelasticXS::Description() const 
+void
+G4BGGPionInelasticXS::CrossSectionDescription(std::ostream& outFile) const 
 {
-  char* dirName = getenv("G4PhysListDocDir");
-  if (dirName) {
-    std::ofstream outFile;
-    G4String outFileName = GetName() + ".html";
-    G4String pathName = G4String(dirName) + "/" + outFileName;
-
-    outFile.open(pathName);
-    outFile << "<html>\n";
-    outFile << "<head>\n";
-
-    outFile << "<title>Description of Barashenkov Glauber Gribov Inelastic Cross Section Set</title>\n";
-    outFile << "</head>\n";
-    outFile << "<body>\n";
-
-    outFile << "The Barashenkov-Glauber-Gribov cross sections describe hadron-nuclear\n"
-            << "inelastic scattering. They are valid for pions and nucleons at all\n"
-            << "incident energies.\n";
-
-    outFile << "</body>\n";
-    outFile << "</html>\n";
-    outFile.close();
-  }
+  outFile << "The Barashenkov-Glauber-Gribov cross sections describe hadron-nuclear\n"
+          << "inelastic scattering. They are valid for pions and nucleons at all\n"
+          << "incident energies.\n";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

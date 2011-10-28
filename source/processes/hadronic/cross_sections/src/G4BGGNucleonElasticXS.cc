@@ -67,7 +67,6 @@ G4BGGNucleonElasticXS::G4BGGNucleonElasticXS(const G4ParticleDefinition*)
   particle = 0;
   isProton = false;
   isInitialized = false;
-  //Description();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -263,7 +262,11 @@ G4double G4BGGNucleonElasticXS::CoulombFactor(G4double kinEnergy, G4int A)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4BGGNucleonElasticXS::Description() const
-{}
+void G4BGGNucleonElasticXS::CrossSectionDescription(std::ostream& outFile) const
+{
+  outFile << "The Barashenkov-Glauber-Gribov cross section handles elastic\n"
+          << "scattering of protons and neutrons from nuclei using the\n"
+          << "Glauber-Gribov parameterization.\n";
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

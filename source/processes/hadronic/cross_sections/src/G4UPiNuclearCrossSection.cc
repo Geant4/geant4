@@ -321,6 +321,6 @@ void G4UPiNuclearCrossSection::BuildPhysicsTable(const G4ParticleDefinition& p)
   AddDataSet("pi+",u_p_t,  u_p_in,  e7, 30);
 }
 
-void G4UPiNuclearCrossSection::Description() const
+void G4UPiNuclearCrossSection::CrossSectionDescription(std::ostream& /*outFile*/) const
 {}
 

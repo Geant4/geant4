@@ -23,15 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // The lust update: M.V. Kossov, CERN/ITEP(Moscow) 17-June-02
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 //
 // G4 Physics class: G4PhotoNuclearCrossSection for gamma+A cross sections
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 10-OCT-01
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 17-May-02
-// 
+ 
 //#define debug
 //#define pdebug
 //#define debug3
@@ -71,9 +69,7 @@ std::vector<G4double*> G4PhotoNuclearCrossSection::HEN;
 
 G4PhotoNuclearCrossSection::G4PhotoNuclearCrossSection(const G4String& name)
  : G4VCrossSectionDataSet(name)
-{
-  //Description();
-}
+{}
 
 G4PhotoNuclearCrossSection::~G4PhotoNuclearCrossSection()
 {
@@ -86,31 +82,13 @@ G4PhotoNuclearCrossSection::~G4PhotoNuclearCrossSection()
   HEN.clear();
 }
 
-void G4PhotoNuclearCrossSection::Description() const
+void
+G4PhotoNuclearCrossSection::CrossSectionDescription(std::ostream& outFile) const
 {
-  char* dirName = getenv("G4PhysListDocDir");
-  if (dirName) {
-    std::ofstream outFile;
-    G4String outFileName = GetName() + ".html";
-    G4String pathName = G4String(dirName) + "/" + outFileName;
-
-    outFile.open(pathName);
-    outFile << "<html>\n";
-    outFile << "<head>\n";
-
-    outFile << "<title>Description of G4PhotoNuclearCrossSection</title>\n";
-    outFile << "</head>\n";
-    outFile << "<body>\n";
-
-    outFile << "G4PhotoNuclearCrossSection provides the total inelastic\n"
-            << "cross section for photon interactions with nuclei.  The\n"
-            << "cross section is a parameterization of data which covers\n" 
-            << "all incident gamma energies.\n";
-
-    outFile << "</body>\n";
-    outFile << "</html>\n";
-    outFile.close();
-  }
+  outFile << "G4PhotoNuclearCrossSection provides the total inelastic\n"
+          << "cross section for photon interactions with nuclei.  The\n"
+          << "cross section is a parameterization of data which covers\n" 
+          << "all incident gamma energies.\n";
 }
 
 G4bool

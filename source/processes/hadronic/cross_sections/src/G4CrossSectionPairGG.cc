@@ -51,7 +51,6 @@ G4CrossSectionPairGG::G4CrossSectionPairGG(G4VCrossSectionDataSet* low,
   NistMan = G4NistManager::Instance();
   theHighX=new G4GlauberGribovCrossSection();
   verboseLevel=0;
-  //Description();
 }
 
 G4CrossSectionPairGG::~G4CrossSectionPairGG()
@@ -62,36 +61,18 @@ G4CrossSectionPairGG::~G4CrossSectionPairGG()
 }
 
 
-void G4CrossSectionPairGG::Description() const
+void
+G4CrossSectionPairGG::CrossSectionDescription(std::ostream& outFile) const
 {
-  char* dirName = getenv("G4PhysListDocDir");
-  if (dirName) {
-    std::ofstream outFile;
-    G4String outFileName = GetName() + ".html";
-    G4String pathName = G4String(dirName) + "/" + outFileName;
-
-    outFile.open(pathName);
-    outFile << "<html>\n";
-    outFile << "<head>\n";
-
-    outFile << "<title>Description of G4CrossSectionPairGG</title>\n";
-    outFile << "</head>\n";
-    outFile << "<body>\n";
-
-    outFile << "G4CrossSectionPairGG is used to add the relativistic rise to\n"
-            << "hadronic cross section data sets above a given energy.  In this\n"
-            << "case, the Glauber-Gribov cross section is used above 91 GeV.\n"
-            << "At this energy the low energy cross section is smoothly joined\n"
-            << "to the high energy cross section.  Below 91 GeV the Barashenkov\n"
-            << "cross section is used for pions (G4PiNuclearCrossSection), the\n"
-            << "Axen-Wellisch cross section is used for protons\n"
-            << "(G4ProtonInelasticCrossSection), and the Wellisch-Laidlaw cross\n"
-            << "section is used for neutrons (G4NeutronInelasticCrossSection).\n";
-
-    outFile << "</body>\n";
-    outFile << "</html>\n";
-    outFile.close();
-  }
+  outFile << "G4CrossSectionPairGG is used to add the relativistic rise to\n"
+          << "hadronic cross section data sets above a given energy.  In this\n"
+          << "case, the Glauber-Gribov cross section is used above 91 GeV.\n"
+          << "At this energy the low energy cross section is smoothly joined\n"
+          << "to the high energy cross section.  Below 91 GeV the Barashenkov\n"
+          << "cross section is used for pions (G4PiNuclearCrossSection), the\n"
+          << "Axen-Wellisch cross section is used for protons\n"
+          << "(G4ProtonInelasticCrossSection), and the Wellisch-Laidlaw cross\n"
+          << "section is used for neutrons (G4NeutronInelasticCrossSection).\n";
 }
 
 G4bool G4CrossSectionPairGG::IsElementApplicable(const G4DynamicParticle* aParticle, 

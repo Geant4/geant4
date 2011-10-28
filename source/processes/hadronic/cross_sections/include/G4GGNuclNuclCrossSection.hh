@@ -81,8 +81,8 @@ public:
   G4double GetHadronNucleonXsc(const G4DynamicParticle*, const G4Element*);
   G4double GetHadronNucleonXsc(const G4DynamicParticle*, G4int At, G4int Zt);
 
-  G4double GetHadronNucleonXscPDG(const G4DynamicParticle*, const G4Element*);
-  G4double GetHadronNucleonXscPDG(const G4DynamicParticle*, G4int At, G4int Zt);
+ 
+  G4double GetHadronNucleonXscPDG(G4ParticleDefinition*,G4double sMand, G4ParticleDefinition*);
   G4double GetHadronNucleonXscNS(G4ParticleDefinition*,G4double pTkin, G4ParticleDefinition*);
 
   G4double GetHNinelasticXscVU(const G4DynamicParticle*, G4int At, G4int Zt);

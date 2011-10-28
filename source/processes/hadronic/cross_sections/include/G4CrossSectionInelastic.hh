@@ -84,7 +84,7 @@ public:
   virtual
   void DumpPhysicsTable(const G4ParticleDefinition&);
 
-  virtual void Description() const;
+  virtual void CrossSectionDescription(std::ostream&) const;
 
 private:
 

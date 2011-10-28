@@ -703,5 +703,6 @@ Interpolate(G4int Z1, G4int Z2, G4int Z, G4double x1, G4double x2)
   return result;
 }
 
-void G4NucleonNuclearCrossSection::Description() const
+void
+G4NucleonNuclearCrossSection::CrossSectionDescription(std::ostream& /*outFile*/) const
 {}

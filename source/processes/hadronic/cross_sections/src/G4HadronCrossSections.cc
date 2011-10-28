@@ -54,11 +54,11 @@
 
 #include "G4HadronCrossSections.hh"
 #include "G4ios.hh"
- 
+#include "G4HadronicException.hh"
 
+ 
 // Initialize static pointer for singleton instance
-G4HadronCrossSections* 
-G4HadronCrossSections::theInstance = 0;
+G4HadronCrossSections* G4HadronCrossSections::theInstance = 0;
 
 
 // Cross section tables from G3.21/GHEISHA routine GHESIG
@@ -1214,6 +1214,28 @@ G4int G4HadronCrossSections::ipart2[7] = {9, 8, 7, 11, 10, 13, 12};
 
 G4bool G4HadronCrossSections::correctInelasticNearZero = 0;
 
+G4HadronCrossSections::G4HadronCrossSections()
+  : prevParticleDefinition(0), prevElement(0), prevZZ(0), prevAA(0), 
+    prevKineticEnergy(DBL_MAX), lastEkx(0.), lastEkxPower(0.), verboseLevel(0)
+{}
+
+G4HadronCrossSections::~G4HadronCrossSections() 
+{}
+
+G4HadronCrossSections* G4HadronCrossSections::Instance()
+{
+  if (!theInstance) {
+    static G4HadronCrossSections xsection;
+    theInstance = &xsection;
+  }
+  return theInstance;
+}
+
+G4bool G4HadronCrossSections::IsApplicable(const G4DynamicParticle* aParticle)
+{
+  return (GetParticleCode(aParticle) > 0);
+}
+
 G4double
 G4HadronCrossSections::GetInelasticCrossSection(const G4DynamicParticle* particle,
                                                 G4int ZZ, G4int AA)
@@ -1675,9 +1697,9 @@ G4HadronCrossSections::GetParticleCode(const G4DynamicParticle* aParticle)
     case -3334:
       ipart = 34;  // anti-omega-
       break;
-    default:
-      G4Exception("G4HadronCrossSections", "007", FatalException,
-                  "GetParticleCode: unsupported particle");
+    default:      
+      throw G4HadronicException(__FILE__, __LINE__,
+        "G4HadronCrossSections::GetParticleCode: unsupported particle");
       return 0;
   }
 
