@@ -132,8 +132,9 @@ G4String G4UIbatch::ReadCommand()
         qcontinued= true;
         // check nothing after line continuation character
         if( i != G4int(tokens.size())-1) {
-          G4Exception("unexpected character after "
-                      "line continuation character");
+          G4Exception("G4UIbatch::ReadCommand","UIBatch0001",
+             JustWarning,
+             "unexpected character after line continuation character");
         }
         break; // stop parsing
       }

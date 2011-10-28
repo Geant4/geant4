@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20 October, 2011 M. Asai (intercoms-V09-04-00)
+ - Eliminating obsolete G4Exception.
+
 11 November, 2010 G. Cosmo (intercoms-V09-03-04)
  - Corrected printout spelling in G4UIbatch.
 
