@@ -145,7 +145,7 @@ void G4tgbVolume::ConstructG4Volumes( const G4tgrPlace* place,
   G4tgbVolumeMgr* g4vmgr = G4tgbVolumeMgr::GetInstance();
   G4LogicalVolume* logvol = g4vmgr->FindG4LogVol( GetName() );
   G4bool bFirstCopy = false;
-  if( (logvol == 0) ) 
+  if( logvol == 0 ) 
   {
     bFirstCopy = true;
     if( theTgrVolume->GetType() != "VOLDivision" )
