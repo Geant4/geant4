@@ -39,7 +39,8 @@
 
 G4VIntraNuclearTransportModel::G4VIntraNuclearTransportModel(const G4String& modName) 
   : G4HadronicInteraction(modName),
-    theTransportModelName(modName), the3DNucleus(0), theDeExcitation(0)
+    theTransportModelName(modName), the3DNucleus(0), theDeExcitation(0),
+    thePrimaryProjectile(0)
 {}
 
 G4VIntraNuclearTransportModel::~G4VIntraNuclearTransportModel()
