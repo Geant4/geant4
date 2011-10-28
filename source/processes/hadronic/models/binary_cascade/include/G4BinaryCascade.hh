@@ -149,29 +149,32 @@ private:
   void DebugEpConservation(const G4HadProjectile & aTrack, G4ReactionProductVector* products);			   
 			   
 private:
-  G4KineticTrackVector theProjectileList;
+  G4KineticTrackVector theProjectileList;  // replaced by theProjectile4Momentum
   G4KineticTrackVector theTargetList;
   G4KineticTrackVector theSecondaryList;
   G4KineticTrackVector theCapturedList;
   G4KineticTrackVector theFinalState;
 
+
   G4ExcitationHandler * theExcitationHandler;
   G4CollisionManager * theCollisionMgr;
 
-  
   G4Scatterer * theH1Scatterer;
-
+  
   std::vector<G4BCAction *> theImR;
   G4BCDecay * theDecay;
   G4BCLateParticle * theLateParticle;
   G4VFieldPropagation * thePropagator;
+
   G4double theCurrentTime;
   G4double theBCminP;
   G4double theCutOnP;
   G4double theCutOnPAbsorb;
-  G4LorentzVector theInitial4Mom;
+  G4LorentzVector theInitial4Mom;   // suppress?
+  G4LorentzVector theProjectile4Momentum;
   G4int currentA, currentZ;
-  G4double massInNucleus;
+  G4int initialZ, initialA;
+  G4double massInNucleus, initial_nuclear_mass;
   G4double currentInitialEnergy;   // for debugging
   G4LorentzRotation precompoundLorentzboost;
   G4double theOuterRadius;
