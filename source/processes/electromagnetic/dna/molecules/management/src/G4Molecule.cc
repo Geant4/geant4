@@ -50,6 +50,7 @@
 #include "G4MolecularConfiguration.hh"
 #include "Randomize.hh"
 #include "G4Track.hh"
+#include "G4ExceptionOrigin.hh"
 
 using namespace std;
 
@@ -270,18 +271,11 @@ G4Track * G4Molecule::BuildTrack(G4double globalTime, const G4ThreeVector& Posit
 {
     if(fTrack != 0)
     {
-        G4String orignException(__PRETTY_FUNCTION__);
-        orignException += " ";
-        orignException += __FILE__;
-        orignException += " (";
-        std::ostringstream os;
-        os << __LINE__;
-        orignException += os.str();
-        orignException += ")";
+        __Exception_Origin__
         G4String exceptionCode ("Molecule001");
         G4ExceptionDescription exceptionDescription ;
         exceptionDescription << "A track was already assigned to this molecule";
-        G4Exception(orignException.data(),exceptionCode.data(),
+        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
                     FatalErrorInArgument,exceptionDescription);
     }
 

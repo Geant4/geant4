@@ -208,18 +208,13 @@ G4MolecularConfiguration* G4MolecularConfiguration::MoveOneElectron(G4int orbitT
     return ChangeConfiguration(newElectronOccupancy);
 }
 
-void G4MolecularConfiguration::SetName()
-{
-    fName = fMoleculeDefinition->GetName();
-    fName+= "^";
-    fName+= G4UIcommand::ConvertToString(fDynCharge);
-}
-
 const G4String& G4MolecularConfiguration::GetName() const
 {
     if(fName.isNull())
     {
-       ((G4MolecularConfiguration*)this)->SetName();
+        fName = fMoleculeDefinition->GetName();
+        fName+= "^";
+        fName+= G4UIcommand::ConvertToString(fDynCharge);
     }
     return fName;
 }

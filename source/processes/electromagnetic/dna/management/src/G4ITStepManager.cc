@@ -203,20 +203,13 @@ void G4ITStepManager::SynchronizeTracks()
 {
     if(fpWaitingList != 0)
     {
-        G4String orignException(__PRETTY_FUNCTION__);
-        orignException += " ";
-        orignException += __FILE__;
-        orignException += " (";
-        std::ostringstream os;
-        os << __LINE__;
-        orignException += os.str();
-        orignException += ")";
+        __Exception_Origin__
         G4String exceptionCode ("ITStepManager002");
         G4ExceptionDescription exceptionDescription ;
         exceptionDescription << "There is a waiting track list (fpWaitingList != 0).";
         exceptionDescription << " When G4ITStepManager::SynchronizeTracks() is called, ";
         exceptionDescription << "no more tracks should remain in the fpWaitingList.";
-        G4Exception(orignException.data(),exceptionCode.data(),
+        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
                     FatalErrorInArgument,exceptionDescription);
     }
 
@@ -279,18 +272,11 @@ void G4ITStepManager::SynchronizeTracks()
                 G4cerr << "G4ITStepManager::fTmpGlobalTime (should big the biggest time in the simulation) = "
                        << fTmpGlobalTime / picosecond<< G4endl;
 
-                G4String orignException(__PRETTY_FUNCTION__);
-                orignException += " ";
-                orignException += __FILE__;
-                orignException += " (";
-                std::ostringstream os;
-                os << __LINE__;
-                orignException += os.str();
-                orignException += ")";
+                __Exception_Origin__
                 G4String exceptionCode ("ITStepManager003");
                 G4ExceptionDescription exceptionDescription ;
                 exceptionDescription << "The next time in delayed tracks is bigger than the maximum allowed simulation time.";
-                G4Exception(orignException.data(),exceptionCode.data(),
+                G4Exception(exceptionOrigin.data(),exceptionCode.data(),
                             FatalErrorInArgument,exceptionDescription);
             }
 
@@ -452,18 +438,11 @@ void G4ITStepManager::FindUserPreDefinedTimeStep()
     {
         if(! fpUserTimeSteps)
         {
-            G4String orignException(__PRETTY_FUNCTION__);
-            orignException += " ";
-            orignException += __FILE__;
-            orignException += " (";
-            std::ostringstream os;
-            os << __LINE__;
-            orignException += os.str();
-            orignException += ")";
+            __Exception_Origin__
             G4String exceptionCode ("ITStepManager004");
             G4ExceptionDescription exceptionDescription ;
             exceptionDescription << "You are asking to use user defined steps but you did not give any.";
-            G4Exception(orignException.data(),exceptionCode.data(),
+            G4Exception(exceptionOrigin.data(),exceptionCode.data(),
                         FatalErrorInArgument,exceptionDescription);
         }
         map<double, double>::iterator fpUserTimeSteps_i   = fpUserTimeSteps->upper_bound(fGlobalTime) ;
@@ -523,21 +502,14 @@ void G4ITStepManager::CalculateMinStep()
 
     if(fpMasterModelProcessor == 0)
     {
-        G4String orignException(__PRETTY_FUNCTION__);
-        orignException += " ";
-        orignException += __FILE__;
-        orignException += " (";
-        std::ostringstream os;
-        os << __LINE__;
-        orignException += os.str();
-        orignException += ")";
+        __Exception_Origin__
         G4String exceptionCode ("ITStepManager005");
         G4ExceptionDescription exceptionDescription ;
         exceptionDescription << "There is no G4ITModelProcessor to hande IT reaction. ";
         exceptionDescription << "You probably did not initialize the G4ITStepManager. ";
         exceptionDescription << "Just do G4ITStepManager::Instance()->Initialize(); ";
         exceptionDescription << " but only after initializing the run manager.";
-        G4Exception(orignException.data(),exceptionCode.data(),
+        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
                     FatalErrorInArgument,exceptionDescription);
     }
 
@@ -550,18 +522,11 @@ void G4ITStepManager::CalculateMinStep()
 
         if(track == 0)
         {
-            G4String orignException(__PRETTY_FUNCTION__);
-            orignException += " ";
-            orignException += __FILE__;
-            orignException += " (";
-            std::ostringstream os;
-            os << __LINE__;
-            orignException += os.str();
-            orignException += ")";
+            __Exception_Origin__
             G4String exceptionCode ("ITStepManager006");
             G4ExceptionDescription exceptionDescription ;
             exceptionDescription << "No track found.";
-            G4Exception(orignException.data(),exceptionCode.data(),
+            G4Exception(exceptionOrigin.data(),exceptionCode.data(),
                         FatalErrorInArgument,exceptionDescription);
         }
 
@@ -676,18 +641,11 @@ void G4ITStepManager::ExtractTimeStepperData(G4ITModelProcessor* MP)
                     G4cerr<< "reactants == 0"<< G4endl;
                     G4cerr<< "sampledMinTimeStep : " << sampledMinTimeStep<< G4endl;
 
-                    G4String orignException(__PRETTY_FUNCTION__);
-                    orignException += " ";
-                    orignException += __FILE__;
-                    orignException += " (";
-                    std::ostringstream os;
-                    os << __LINE__;
-                    orignException += os.str();
-                    orignException += ")";
+                    __Exception_Origin__
                     G4String exceptionCode ("ITStepManager007");
                     G4ExceptionDescription exceptionDescription ;
                     exceptionDescription << "No reactants were registered.";
-                    G4Exception(orignException.data(),exceptionCode.data(),
+                    G4Exception(exceptionOrigin.data(),exceptionCode.data(),
                                 FatalErrorInArgument,exceptionDescription);
 
                     continue ;
@@ -739,18 +697,11 @@ void G4ITStepManager::ExtractTimeStepperData(G4ITModelProcessor* MP)
                     G4cerr<< "reactants == 0"<< G4endl;
                     G4cerr<< "sampledMinTimeStep : " << sampledMinTimeStep<< G4endl;
 
-                    G4String orignException(__PRETTY_FUNCTION__);
-                    orignException += " ";
-                    orignException += __FILE__;
-                    orignException += " (";
-                    std::ostringstream os;
-                    os << __LINE__;
-                    orignException += os.str();
-                    orignException += ")";
+                    __Exception_Origin__
                     G4String exceptionCode ("ITStepManager008");
                     G4ExceptionDescription exceptionDescription ;
                     exceptionDescription << "No reactants were registered.";
-                    G4Exception(orignException.data(),exceptionCode.data(),
+                    G4Exception(exceptionOrigin.data(),exceptionCode.data(),
                                 FatalErrorInArgument,exceptionDescription);
                 }
 
@@ -791,18 +742,11 @@ void G4ITStepManager::ExtractTimeStepperData(G4ITModelProcessor* MP)
 
                     // TODO
                     // Find a exception description
-                    G4String orignException(__PRETTY_FUNCTION__);
-                    orignException += " ";
-                    orignException += __FILE__;
-                    orignException += " (";
-                    std::ostringstream os;
-                    os << __LINE__;
-                    orignException += os.str();
-                    orignException += ")";
+                    __Exception_Origin__
                     G4String exceptionCode ("ITStepManager009");
                     G4ExceptionDescription exceptionDescription ;
                     exceptionDescription << " ... ";
-                    G4Exception(orignException.data(),exceptionCode.data(),
+                    G4Exception(exceptionOrigin.data(),exceptionCode.data(),
                                 FatalErrorInArgument,exceptionDescription);
                 }
                 stepper -> ResetReactants();
@@ -816,8 +760,6 @@ void G4ITStepManager::ExtractTimeStepperData(G4ITModelProcessor* MP)
 
 void G4ITStepManager::ComputeInteractionLength()
 {
-    fpMasterStepProcessor -> InitializeIL() ;
-
     G4TrackList::iterator fpMainList_i = fpMainList->begin();
 
     for( ; fpMainList_i != fpMainList->end() ; fpMainList_i++)
@@ -921,8 +863,6 @@ void G4ITStepManager::DoIt()
 // on the given time step.
 
 {
-    fpMasterStepProcessor -> InitializeDoIt() ;
-
     int initialListSize = fpMainList -> size() ;
 
     for(int i = 0 ; i < initialListSize; i++)
@@ -933,18 +873,11 @@ void G4ITStepManager::DoIt()
         if(!track)
         {
 
-            G4String orignException(__PRETTY_FUNCTION__);
-            orignException += " ";
-            orignException += __FILE__;
-            orignException += " (";
-            std::ostringstream os;
-            os << __LINE__;
-            orignException += os.str();
-            orignException += ")";
+            __Exception_Origin__
             G4String exceptionCode ("ITStepManager010");
             G4ExceptionDescription exceptionDescription ;
             exceptionDescription << "No track was pop back the main track list.";
-            G4Exception(orignException.data(),exceptionCode.data(),
+            G4Exception(exceptionOrigin.data(),exceptionCode.data(),
                         FatalErrorInArgument,exceptionDescription);
         }
         fpStepProcessor -> Stepping(track, fMinTimeStep) ;
@@ -1090,20 +1023,13 @@ void G4ITStepManager::ComputeInteractionBetweenTracks()
                         G4cerr << secondary->GetGlobalTime()  << G4endl;
                         G4cerr << fGlobalTime  << G4endl;
 
-                        G4String orignException(__PRETTY_FUNCTION__);
-                        orignException += " ";
-                        orignException += __FILE__;
-                        orignException += " (";
-                        std::ostringstream os;
-                        os << __LINE__;
-                        orignException += os.str();
-                        orignException += ")";
+                        __Exception_Origin__
                         G4String exceptionCode ("ITStepManager011");
                         G4ExceptionDescription exceptionDescription ;
                         exceptionDescription << "The time of the secondary is going back ";
                         exceptionDescription << "(ie the time of the secondary in the reference frame is less than ";
                         exceptionDescription << "the global time of the simulation).";
-                        G4Exception(orignException.data(),exceptionCode.data(),
+                        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
                                     FatalErrorInArgument,exceptionDescription);
                     }
 
@@ -1144,18 +1070,11 @@ void G4ITStepManager::ComputeInteractionBetweenTracks()
                        <<   trackB->GetParentID() << G4endl;
 
 
-                G4String orignException(__PRETTY_FUNCTION__);
-                orignException += " ";
-                orignException += __FILE__;
-                orignException += " (";
-                std::ostringstream os;
-                os << __LINE__;
-                orignException += os.str();
-                orignException += ")";
+                __Exception_Origin__
                 G4String exceptionCode ("ITStepManager012");
                 G4ExceptionDescription exceptionDescription ;
                 exceptionDescription << "The ID of one of the reaction track was not setup.";
-                G4Exception(orignException.data(),exceptionCode.data(),
+                G4Exception(exceptionOrigin.data(),exceptionCode.data(),
                             FatalErrorInArgument,exceptionDescription);
             }
 
@@ -1226,20 +1145,12 @@ void G4ITStepManager::PushTrack(G4Track* track)
 {
     if(fRunning)
     {
-
-        G4String orignException(__PRETTY_FUNCTION__);
-        orignException += " ";
-        orignException += __FILE__;
-        orignException += " (";
-        std::ostringstream os;
-        os << __LINE__;
-        orignException += os.str();
-        orignException += ")";
+        __Exception_Origin__
         G4String exceptionCode ("ITStepManager013");
         G4ExceptionDescription exceptionDescription ;
         exceptionDescription
         << "G4ITStepManager::PushTrack : You are trying to push tracks while the ITStepManager is running";
-        G4Exception(orignException.data(),exceptionCode.data(),
+        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
                     FatalErrorInArgument,exceptionDescription);
     }
     _PushTrack(track);
@@ -1256,20 +1167,12 @@ void G4ITStepManager::_PushTrack(G4Track* track)
         G4cerr<<"fGlobalTime : " << fGlobalTime /picosecond << "[ps]" << G4endl;
         G4cerr<<"globalTime : " << globalTime   /picosecond << "[ps]" << G4endl;
 
-
-        G4String orignException(__PRETTY_FUNCTION__);
-        orignException += " ";
-        orignException += __FILE__;
-        orignException += " (";
-        std::ostringstream os;
-        os << __LINE__;
-        orignException += os.str();
-        orignException += ")";
+        __Exception_Origin__
         G4String exceptionCode ("ITStepManager014");
         G4ExceptionDescription exceptionDescription ;
         exceptionDescription
         << "G4ITStepManager::PushTrack : You are trying to push tracks with a global time inferior to the current simulation time ";
-        G4Exception(orignException.data(),exceptionCode.data(),
+        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
                     FatalErrorInArgument,exceptionDescription);
     }
 

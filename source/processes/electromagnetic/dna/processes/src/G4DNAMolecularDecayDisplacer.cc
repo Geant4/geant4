@@ -353,27 +353,17 @@ G4ThreeVector G4DNAMolecularDecayDisplacer::radialDistributionOfElectron() const
     {
         G4double aRandomfValue = fMaxValue*G4UniformRand();
 
-        G4double sign1;
+        G4double sign;
         if(G4UniformRand() > 0.5)
         {
-            sign1 = +1;
+            sign = +1;
         }
         else
         {
-            sign1 = -1;
+            sign = -1;
         }
 
-        G4double sign2;
-        if(G4UniformRand() > 0.5)
-        {
-            sign2 = +1;
-        }
-        else
-        {
-            sign2 = -1;
-        }
-
-        R = (expectationValue * G4UniformRand() )+ sign2*3*sigma* G4UniformRand();
+        R = (expectationValue * G4UniformRand() )+ sign*3*sigma* G4UniformRand();
         G4double f = 4* R * exp(- 2. * R);
 
         if(aRandomfValue < f)

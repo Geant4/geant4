@@ -45,6 +45,7 @@
 #include "G4ChordFinder.hh"
 #include "G4SafetyHelper.hh"
 #include "G4FieldManagerStore.hh"
+#include "G4ExceptionOrigin.hh"
 
 class G4VSensitiveDetector;
 
@@ -771,7 +772,12 @@ G4VParticleChange* G4ITTransportation::PostStepDoIt( const G4Track& track,
 
         if( State(fCurrentTouchableHandle)->GetVolume() == 0 )
         {
-            G4Exception(" State(fCurrentTouchableHandle)->GetVolume() == 0") ;
+            __Exception_Origin__
+            G4String exceptionCode ("G4ITTransportation001");
+            G4ExceptionDescription exceptionDescription ;
+            exceptionDescription << "No current touchable found found " ;
+            G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+                        FatalErrorInArgument,exceptionDescription);
         }
 
         fLinearNavigator->SetGeometricallyLimitedStep() ;

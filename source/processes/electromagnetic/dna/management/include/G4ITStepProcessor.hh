@@ -87,11 +87,6 @@ public:
 
 
   virtual void Initialize(void* o = 0);
-  void InitializePreTrackingProc();
-  void InitializeStepper(const G4double& /*currentGlobalTime*/ ,
-			 const G4double& /*userMinTimeStep*/);
-  void InitializeIL();
-  void InitializeDoIt();
   void Initialize(G4Track*);
   
   void DefinePhysicalStepLength(G4Track*);
@@ -102,7 +97,6 @@ public:
   void DoIt(G4Track*,double);
   
   void FindTransportationStep();
-  void CallPreTrackingProc(G4Track*);
   void UpdateTrack(G4Track*);
   
   inline double GetInteractionTime();

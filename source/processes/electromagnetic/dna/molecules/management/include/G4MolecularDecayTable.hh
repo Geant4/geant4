@@ -109,8 +109,8 @@ public:
 //------------Inline fuctions------------
 // Get methods to retrieve data
 
-    const std::vector<const G4MolecularDecayChannel*>* const GetDecayChannels(const G4ElectronOccupancy*) const ;
-    const std::vector<const G4MolecularDecayChannel*>* const GetDecayChannels(const G4String&) const ;
+    const std::vector<const G4MolecularDecayChannel*>* GetDecayChannels(const G4ElectronOccupancy*) const ;
+    const std::vector<const G4MolecularDecayChannel*>* GetDecayChannels(const G4String&) const ;
 
     const G4String& GetExcitedState(const G4ElectronOccupancy*) const ;
     const G4ElectronOccupancy& GetElectronOccupancy (const G4String&) const ;

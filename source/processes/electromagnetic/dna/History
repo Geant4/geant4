@@ -13,6 +13,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+28.10.2011  M.K			tag emdna-V09-04-34
+            Remove __PRETTY_FUNCTION__ introduce __Exception_Origin__
+
 28.10.2011  M.K			tag emdna-V09-04-33
             Displace G4DNAChemistryManager, G4DNAMolecularReactionTable,
             G4VDNAReactionModel to utils

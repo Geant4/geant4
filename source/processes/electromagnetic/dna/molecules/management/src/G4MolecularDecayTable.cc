@@ -83,7 +83,7 @@ G4MolecularDecayTable& G4MolecularDecayTable::operator=(const G4MolecularDecayTa
     return *this;
 }
 
-const vector<const G4MolecularDecayChannel*>* const G4MolecularDecayTable::GetDecayChannels(const G4ElectronOccupancy* conf) const
+const vector<const G4MolecularDecayChannel*>* G4MolecularDecayTable::GetDecayChannels(const G4ElectronOccupancy* conf) const
 {
     statesMap::const_iterator it_exstates  = fExcitedStatesMap.find(*conf);
     if(it_exstates == fExcitedStatesMap.end()) return 0;
@@ -92,7 +92,7 @@ const vector<const G4MolecularDecayChannel*>* const G4MolecularDecayTable::GetDe
     return &(it_decchannel->second);
 }
 
-const vector<const G4MolecularDecayChannel*>* const G4MolecularDecayTable::GetDecayChannels(const G4String& exState) const
+const vector<const G4MolecularDecayChannel*>* G4MolecularDecayTable::GetDecayChannels(const G4String& exState) const
 {
     channelsMap::const_iterator it_decchannel = fDecayChannelsMap.find(exState);
     if(it_decchannel == fDecayChannelsMap.end()) return 0;

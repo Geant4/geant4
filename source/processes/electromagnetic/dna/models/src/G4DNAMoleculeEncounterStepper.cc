@@ -181,17 +181,10 @@ G4double G4DNAMoleculeEncounterStepper::CalculateStep(const G4Track& trackA, con
             G4IT* reactiveB = (G4IT*) results->GetItemData() ;
             if (reactiveB->GetTrack()->GetTrackStatus() != fAlive)
             {
-                G4String orignException(__PRETTY_FUNCTION__);
-                orignException += " ";
-                orignException += __FILE__;
-                orignException += " (";
-                std::ostringstream os;
-                os << __LINE__;
-                orignException += os.str();
-                orignException += ")";
+                __Exception_Origin__
                 G4String exceptionCode ("MoleculeEncounterStepper001");
                 G4ExceptionDescription exceptionDescription ("The track status of one of the nearby reactants is not fAlive");
-                G4Exception(orignException.data(),exceptionCode.data(),
+                G4Exception(exceptionOrigin.data(),exceptionCode.data(),
                             FatalErrorInArgument,exceptionDescription);
                 continue ;
             }
@@ -211,18 +204,11 @@ G4double G4DNAMoleculeEncounterStepper::CalculateStep(const G4Track& trackA, con
                 G4cerr << "Asked molecule type : " << moleculeB->GetName()<< G4endl;
                 G4cerr << "Molecule A is of type : "<< moleculeA->GetName() << G4endl;
 
-                G4String orignException(__PRETTY_FUNCTION__);
-                orignException += " ";
-                orignException += __FILE__;
-                orignException += " (";
-                std::ostringstream os;
-                os << __LINE__;
-                orignException += os.str();
-                orignException += ")";
+                __Exception_Origin__
                 G4String exceptionCode ("MoleculeEncounterStepper002");
                 G4ExceptionDescription exceptionDescription ("The track you are requested nearby reactants for ");
                 exceptionDescription << " and the nearby reactant returned by the ITManager are the same" ;
-                G4Exception(orignException.data(),exceptionCode.data(),
+                G4Exception(exceptionOrigin.data(),exceptionCode.data(),
                             FatalErrorInArgument,exceptionDescription);
 
             }
@@ -240,17 +226,10 @@ G4double G4DNAMoleculeEncounterStepper::CalculateStep(const G4Track& trackA, con
                 G4cerr << "trackID : " << trackB->GetTrackID()
                        << "\t Name :" << moleculeB->GetName()
                        << "\t trackB->GetGlobalTime() = " << trackB->GetGlobalTime() << G4endl;
-                G4String orignException(__PRETTY_FUNCTION__);
-                orignException += " ";
-                orignException += __FILE__;
-                orignException += " (";
-                std::ostringstream os;
-                os << __LINE__;
-                orignException += os.str();
-                orignException += ")";
+                __Exception_Origin__
                 G4String exceptionCode ("MoleculeEncounterStepper003");
                 G4ExceptionDescription exceptionDescription ("The tracks are not synchronized in time");
-                G4Exception(orignException.data(),exceptionCode.data(),
+                G4Exception(exceptionOrigin.data(),exceptionCode.data(),
                             FatalErrorInArgument,exceptionDescription);
             }
 

@@ -34,6 +34,7 @@
 
 #include "G4TrackingInformation.hh"
 #include "G4VITProcess.hh"
+#include "G4ExceptionOrigin.hh"
 
 static const size_t SizeOfSelectedDoItVector=100;
 
@@ -42,11 +43,10 @@ G4TrackingInformation::G4TrackingInformation() :
     fStepStatus                     (fUndefined),
     fPhysicalStep                   (-1.),
     fTouchableHandle                (0),
-    fSelectedAtRestDoItVector       (SizeOfSelectedDoItVector,0),
-    fSelectedAlongStepDoItVector    (SizeOfSelectedDoItVector,0),
-    fSelectedPostStepDoItVector     (SizeOfSelectedDoItVector,0),
+    fSelectedAtRestDoItVector       ((size_t)G4VITProcess::GetMaxProcessIndex(),0),
+    fSelectedAlongStepDoItVector    ((size_t)G4VITProcess::GetMaxProcessIndex(),0),
+    fSelectedPostStepDoItVector     ((size_t)G4VITProcess::GetMaxProcessIndex(),0),
     fProcessState                   ((size_t)G4VITProcess::GetMaxProcessIndex(),0)
-//  fProcessState                   (SizeOfSelectedDoItVector,0)
 {
     //ctor
     fpTrajectory_Lock = 0;
@@ -55,22 +55,15 @@ G4TrackingInformation::G4TrackingInformation() :
 G4TrackingInformation::~G4TrackingInformation()
 {
     //dtor
-    if(!fProcessState.empty())
+    for(int i = 0 ; i < (int) fProcessState.size() - 1 ; i++)
     {
-        for(int i = 0 ; i < (int) fProcessState.size() - 1 ; i++)
+        if(fProcessState[i])
         {
-//            G4cout << i << " " << G4VITProcess::GetMaxProcessIndex() << G4endl;
-            if(fProcessState[i])
-            {
-//                G4cout << "delete : " << i << " "
-//                       << fProcessState[i] << " "
-//                       << this << " " << &fProcessState<< G4endl;
-                delete fProcessState[i];
-                fProcessState[i] = 0;
-            }
+            delete fProcessState[i];
+            fProcessState[i] = 0;
         }
-        fProcessState.clear();
     }
+    fProcessState.clear();
 }
 
 G4TrackingInformation::G4TrackingInformation(const G4TrackingInformation& /*other*/)
@@ -89,9 +82,13 @@ G4ProcessState_Lock* G4TrackingInformation::GetProcessState(G4int index)
 {
     if(index> G4VITProcess::GetMaxProcessIndex() || index<0)
     {
-        G4String errMsg = "G4TrackingInformation::GetProcInfo : Wrong process subType : ";
-        errMsg += index;
-        G4Exception(errMsg);
+        __Exception_Origin__
+        G4String exceptionCode ("G4TrackingInformation003");
+        G4ExceptionDescription exceptionDescription ;
+        exceptionDescription << "G4TrackingInformation::GetProcInfo : Wrong process subType : " ;
+        exceptionDescription << index ;
+        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+                    FatalErrorInArgument,exceptionDescription);
     }
 
     return fProcessState[index];

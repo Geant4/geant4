@@ -51,7 +51,7 @@ class G4VMolecularDecayDisplacer
 {
 public :
     virtual std::vector<G4ThreeVector> GetProductsDisplacement(const G4MolecularDecayChannel*) const = 0;
-    virtual G4ThreeVector GetMotherMoleculeDisplacement(const G4MolecularDecayChannel*/*, G4Molecule**/) const = 0;
+    virtual G4ThreeVector GetMotherMoleculeDisplacement(const G4MolecularDecayChannel*) const = 0;
     inline void SetVerbose(G4int);
     virtual ~G4VMolecularDecayDisplacer();
 

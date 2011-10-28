@@ -2,8 +2,9 @@
 #include "Randomize.hh"
 #include "G4Track.hh"
 #include "G4DNAMolecularReactionTable.hh"
+#include "G4ExceptionOrigin.hh"
 
-pthread_mutex_t G4DNADiffusionControlledModel::fMutex = PTHREAD_MUTEX_INITIALIZER;
+//pthread_mutex_t G4DNADiffusionControlledModel::fMutex = PTHREAD_MUTEX_INITIALIZER;
 
 G4DNADiffusionControlledModel::G4DNADiffusionControlledModel() : G4VDNAReactionModel()
 {
@@ -103,7 +104,15 @@ G4bool G4DNADiffusionControlledModel::FindReaction(const G4Track& __trackA,
         G4ThreeVector __preStepPositionB = __trackB.GetStep()->GetPreStepPoint() ->GetPosition();
 
         if(__preStepPositionA == __trackA.GetPosition())
-        G4Exception();
+        {
+            __Exception_Origin__
+            G4String exceptionCode ("G4DNADiffusionControlledModel001");
+            G4ExceptionDescription exceptionDescription ;
+            exceptionDescription << "The molecule : " <<  __moleculeA->GetName();
+            exceptionDescription << " did not move since the previous step ";
+            G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+                        FatalErrorInArgument,exceptionDescription);
+        }
 
         G4double __preStepSeparation = (__preStepPositionA - __preStepPositionB).mag();
 

@@ -42,6 +42,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
     HEADERS
         AddClone_def.hh
         G4AllITManager.hh
+        G4ExceptionOrigin.hh
         G4ITBox.hh
         G4IT.hh
         G4ITManager.hh

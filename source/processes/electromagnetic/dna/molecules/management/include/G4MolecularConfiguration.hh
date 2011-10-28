@@ -161,7 +161,6 @@ protected :
     G4MolecularConfiguration(const G4MolecularConfiguration&);
     G4MolecularConfiguration & operator=(/*const*/ G4MolecularConfiguration &right);
     ~G4MolecularConfiguration();
-    void SetName();
     G4MolecularConfiguration* ChangeConfiguration(const G4ElectronOccupancy& newElectronOccupancy);
 
     const G4MoleculeDefinition* fMoleculeDefinition;
@@ -182,7 +181,7 @@ protected :
     G4double fDynDecayTime;
     G4double fDynMass;
     G4int fDynCharge;
-    G4String fName;
+    mutable G4String fName; // mutable allowed this member to be changed in const methods
 };
 
 struct comparator

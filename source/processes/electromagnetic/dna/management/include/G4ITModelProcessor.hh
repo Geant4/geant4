@@ -164,14 +164,7 @@ inline void G4ITModelProcessor::SetModelHandler(G4ITModelHandler* modelHandler)
 {
     if((fNbProc!=0 && fNbProc!= fID) || fInitialized == 1)
     {
-        G4String orignException(__PRETTY_FUNCTION__);
-        orignException += " ";
-        orignException += __FILE__;
-        orignException += " (";
-        std::ostringstream os;
-        os << __LINE__;
-        orignException += os.str();
-        orignException += ")";
+        __Exception_Origin__
         G4String exceptionCode ("ITModelProcessor001");
         G4ExceptionDescription exceptionDescription ;
 
@@ -184,7 +177,7 @@ inline void G4ITModelProcessor::SetModelHandler(G4ITModelHandler* modelHandler)
             exceptionDescription << "You are trying to set a new model to a wrong model processor. It is probably a Clone model processor and not the master one.";
         }
 
-        G4Exception(orignException.data(),exceptionCode.data(),
+        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
                     FatalErrorInArgument,exceptionDescription);
     }
     fpModelHandler = modelHandler;

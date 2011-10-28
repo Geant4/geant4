@@ -112,18 +112,11 @@ void G4ITModelProcessor::InitializeStepper(const G4double& currentGlobalTime,
     // G4cout << "G4ITModelProcessor::InitializeStepper" << G4endl;
     if(fpModelHandler==0)
     {
-        G4String orignException(__PRETTY_FUNCTION__);
-        orignException += " ";
-        orignException += __FILE__;
-        orignException += " (";
-        std::ostringstream os;
-        os << __LINE__;
-        orignException += os.str();
-        orignException += ")";
+        __Exception_Origin__
         G4String exceptionCode ("ITModelProcessor002");
         G4ExceptionDescription exceptionDescription ;
         exceptionDescription << "No G4ITModelHandler was passed to the modelProcessor.";
-        G4Exception(orignException.data(),exceptionCode.data(),
+        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
                     FatalErrorInArgument,exceptionDescription);
     }
     const std::vector<std::vector<G4ITModelManager*> >* modelManager = fpModelHandler
@@ -131,18 +124,11 @@ void G4ITModelProcessor::InitializeStepper(const G4double& currentGlobalTime,
 
     if(modelManager==0)
     {
-        G4String orignException(__PRETTY_FUNCTION__);
-        orignException += " ";
-        orignException += __FILE__;
-        orignException += " (";
-        std::ostringstream os;
-        os << __LINE__;
-        orignException += os.str();
-        orignException += ")";
+        __Exception_Origin__
         G4String exceptionCode ("ITModelProcessor003");
         G4ExceptionDescription exceptionDescription ;
         exceptionDescription << "No G4ITModelManager was register to G4ITModelHandler.";
-        G4Exception(orignException.data(),exceptionCode.data(),
+        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
                     FatalErrorInArgument,exceptionDescription);
     }
 
@@ -202,18 +188,11 @@ void G4ITModelProcessor::CalculateStep(const G4Track* track, const G4double user
     CleanProcessor();
     if(track == 0)
     {
-        G4String orignException(__PRETTY_FUNCTION__);
-        orignException += " ";
-        orignException += __FILE__;
-        orignException += " (";
-        std::ostringstream os;
-        os << __LINE__;
-        orignException += os.str();
-        orignException += ")";
+        __Exception_Origin__
         G4String exceptionCode ("ITModelProcessor004");
         G4ExceptionDescription exceptionDescription ;
         exceptionDescription << "No track was passed to the method (track == 0).";
-        G4Exception(orignException.data(),exceptionCode.data(),
+        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
                     FatalErrorInArgument,exceptionDescription);
     }
     SetTrack(track);
@@ -295,19 +274,12 @@ void G4ITModelProcessor::FindReaction(std::map<G4Track*, G4TrackVectorHandle>* t
 
             if(trackB == trackA)
             {
-                G4String orignException(__PRETTY_FUNCTION__);
-                orignException += " ";
-                orignException += __FILE__;
-                orignException += " (";
-                std::ostringstream os;
-                os << __LINE__;
-                orignException += os.str();
-                orignException += ")";
+                __Exception_Origin__
                 G4String exceptionCode ("ITModelProcessor005");
                 G4ExceptionDescription exceptionDescription ;
                 exceptionDescription << "The IT reaction process sent back a reaction between trackA and trackB. ";
                 exceptionDescription << "The problem is trackA == trackB";
-                G4Exception(orignException.data(),exceptionCode.data(),
+                G4Exception(exceptionOrigin.data(),exceptionCode.data(),
                             FatalErrorInArgument,exceptionDescription);
             }
 

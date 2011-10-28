@@ -43,6 +43,7 @@
 #include <vector>
 #include <map>
 #include "G4ITModelHandler.hh"
+#include "G4ExceptionOrigin.hh"
 
 class G4ITTrackingManager;
 class G4ITModelProcessor;
@@ -169,19 +170,11 @@ inline void G4ITStepManager::SetNbProc(G4int __nbProc)
 {
     if(fInitialized)
     {
-        G4String orignException(__PRETTY_FUNCTION__);
-        orignException += " ";
-        orignException += __FILE__;
-        orignException += " (";
-        std::ostringstream os;
-        os << __LINE__;
-        orignException += os.str();
-        orignException += ")";
+        __Exception_Origin__
         G4String exceptionCode ("ITStepManager001");
         G4ExceptionDescription exceptionDescription ("You are trying to change the number\
                                                     of processors after the ITStepManager has been initialized");
-                                                    G4Exception(orignException.data(),exceptionCode.data(),
-                                                                FatalErrorInArgument,exceptionDescription);
+        G4Exception(exceptionOrigin.data(),exceptionCode.data(), FatalErrorInArgument,exceptionDescription);
     }
     fNbProc = __nbProc;
 }

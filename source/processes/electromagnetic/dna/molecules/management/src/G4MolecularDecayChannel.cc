@@ -113,7 +113,7 @@ G4int G4MolecularDecayChannel::GetNbProducts() const
     return 0;
 }
 
-const G4Molecule* const G4MolecularDecayChannel::GetProduct(int index) const
+const G4Molecule* G4MolecularDecayChannel::GetProduct(int index) const
 {
     if(fProductsVector)
         return ((*fProductsVector)[index]).get();

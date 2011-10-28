@@ -244,18 +244,11 @@ G4KDTreeResultHandle G4ITMANAGER::FindNearest(const T* point0, const T* key)
 
         if(!node0)
         {
-            G4String orignException(__PRETTY_FUNCTION__);
-            orignException += " ";
-            orignException += __FILE__;
-            orignException += " (";
-            std::ostringstream os;
-            os << __LINE__;
-            orignException += os.str();
-            orignException += ")";
+            __Exception_Origin__
             G4String exceptionCode ("ITManager002");
             G4ExceptionDescription exceptionDescription
             ("Bad request : no node found in the IT you are searching closest neighbourg for");
-            G4Exception(orignException.data(),exceptionCode.data(),
+            G4Exception(exceptionOrigin.data(),exceptionCode.data(),
                         FatalErrorInArgument,exceptionDescription);
         }
 

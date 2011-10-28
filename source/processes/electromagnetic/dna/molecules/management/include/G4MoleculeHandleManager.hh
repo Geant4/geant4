@@ -52,7 +52,7 @@ typedef CLHEP::shared_ptr<const G4Molecule> G4MoleculeHandle;
 class G4MoleculeHandleManager
 {
 public:
-    static G4MoleculeHandleManager* const Instance();
+    static G4MoleculeHandleManager* Instance();
     ~G4MoleculeHandleManager();
     G4MoleculeHandle GetMoleculeHandle(const G4Molecule*);
 

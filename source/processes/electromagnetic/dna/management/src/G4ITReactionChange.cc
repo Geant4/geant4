@@ -33,6 +33,7 @@
 // -------------------------------------------------------------------
 
 #include "G4ITReactionChange.hh"
+#include "G4ExceptionOrigin.hh"
 
 G4ITReactionChange::G4ITReactionChange():
     fSecondaries(0),
@@ -78,20 +79,13 @@ void G4ITReactionChange::Initialize(const G4Track& trackA,
 
         if(test == false)
         {
-            G4String orignException(__PRETTY_FUNCTION__);
-            orignException += " ";
-            orignException += __FILE__;
-            orignException += " (";
-            std::ostringstream os;
-            os << __LINE__;
-            orignException += os.str();
-            orignException += ")";
+            __Exception_Origin__
             G4String exceptionCode ("ITChange001");
             G4ExceptionDescription exceptionDescription ;
             exceptionDescription << "If you give for one track a particleChange, ";
             exceptionDescription << "G4ITReactionChange is expecting that you give for both ";
             exceptionDescription << "reacting tracks a particleChange.";
-            G4Exception(orignException.data(),exceptionCode.data(),
+            G4Exception(exceptionOrigin.data(),exceptionCode.data(),
                         FatalErrorInArgument,exceptionDescription);
         }
 
@@ -144,18 +138,11 @@ const G4Track* G4ITReactionChange::GetTrackA()
     std::map<const G4Track*, G4VParticleChange*>::iterator it = fParticleChange.begin();
     if(it == fParticleChange.end())
     {
-        G4String orignException(__PRETTY_FUNCTION__);
-        orignException += " ";
-        orignException += __FILE__;
-        orignException += " (";
-        std::ostringstream os;
-        os << __LINE__;
-        orignException += os.str();
-        orignException += ")";
+        __Exception_Origin__
         G4String exceptionCode ("ITReactionChange001");
         G4ExceptionDescription exceptionDescription ;
         exceptionDescription << "No track A found ! Have you initialized the ReactionChange ?";
-        G4Exception(orignException.data(),exceptionCode.data(),
+        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
                     FatalErrorInArgument,exceptionDescription);
     }
 
@@ -168,18 +155,11 @@ const G4Track* G4ITReactionChange::GetTrackB()
     std::map<const G4Track*, G4VParticleChange*>::iterator next = it++;
     if(next == fParticleChange.end())
     {
-        G4String orignException(__PRETTY_FUNCTION__);
-        orignException += " ";
-        orignException += __FILE__;
-        orignException += " (";
-        std::ostringstream os;
-        os << __LINE__;
-        orignException += os.str();
-        orignException += ")";
+        __Exception_Origin__
         G4String exceptionCode ("ITReactionChange002");
         G4ExceptionDescription exceptionDescription ;
         exceptionDescription << "No track B found ! Have you initialized the ReactionChange ?";
-        G4Exception(orignException.data(),exceptionCode.data(),
+        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
                     FatalErrorInArgument,exceptionDescription);
     }
 

@@ -51,6 +51,8 @@
 #include <iomanip>              // Include from 'system'
 #include <vector>               // Include from 'system'
 
+#include "G4ExceptionOrigin.hh"
+
 using namespace std;
 
 static const size_t SizeOfSelectedDoItVector=100;
@@ -177,17 +179,10 @@ inline void G4ITStepProcessor::SetTrack(G4Track* track)
         {
             fpTrackingInfo = 0;
             G4cerr << "Track ID : " << fpTrack->GetTrackID() << G4endl;
-            G4String orignException(__PRETTY_FUNCTION__);
-            orignException += " ";
-            orignException += __FILE__;
-            orignException += " (";
-            std::ostringstream os;
-            os << __LINE__;
-            orignException += os.str();
-            orignException += ")";
+            __Exception_Origin__
             G4String exceptionCode ("ITStepProcessor001");
             G4ExceptionDescription exceptionDescription ("No IT pointer was attached to the track you try to process.");
-            G4Exception(orignException.data(),exceptionCode.data(),
+            G4Exception(exceptionOrigin.data(),exceptionCode.data(),
                         FatalErrorInArgument,exceptionDescription);
         }
     }
@@ -531,7 +526,14 @@ void G4ITStepProcessor::DoDefinePhysicalStepLength()
                 fpTransportation = dynamic_cast<G4ITTransportation*>(fpCurrentProcess);
 
                 if(! fpTransportation)
-                    G4Exception("Error: no fTtransportation") ;
+                {
+                    __Exception_Origin__
+                    G4String exceptionCode ("G4ITStepProcessor001");
+                    G4ExceptionDescription exceptionDescription ;
+                    exceptionDescription << "No transportation process found " ;
+                    G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+                                FatalErrorInArgument,exceptionDescription);
+                }
 
                 fTimeStep 		= fpTransportation->GetInteractionTimeLeft();
 
@@ -549,7 +551,14 @@ void G4ITStepProcessor::DoDefinePhysicalStepLength()
                 fpTransportation = dynamic_cast<G4ITTransportation*>(fpCurrentProcess);
 
                 if(! fpTransportation)
-                    G4Exception("Error: no fTtransportation") ;
+                {
+                    __Exception_Origin__
+                    G4String exceptionCode ("G4ITStepProcessor002");
+                    G4ExceptionDescription exceptionDescription ;
+                    exceptionDescription << "No transportation process found " ;
+                    G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+                                FatalErrorInArgument,exceptionDescription);
+                }
 
                 fTimeStep 		= fpTransportation->GetInteractionTimeLeft();
             }
@@ -600,8 +609,12 @@ G4StepStatus G4ITStepProcessor::DoStepping()
             !fpAlongStepDoItVector    &&
             !fpPostStepDoItVector)
     {
-        G4Exception("No DO IT process given");
-        fpTrack->SetTrackStatus( fStopAndKill );
+        __Exception_Origin__
+        G4String exceptionCode ("G4ITStepProcessor003");
+        G4ExceptionDescription exceptionDescription ;
+        exceptionDescription << "No DoIt process found " ;
+        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+                    FatalErrorInArgument,exceptionDescription);
         return fUndefined;
     }
     else if(fpTrack->GetTrackStatus() == fStopAndKill )
@@ -636,19 +649,12 @@ G4StepStatus G4ITStepProcessor::DoStepping()
             G4cerr << " !!! Particle Name : "<< fpTrack -> GetDefinition() -> GetParticleName() << G4endl;
 
 
-            G4String orignException(__PRETTY_FUNCTION__);
-            orignException += " ";
-            orignException += __FILE__;
-            orignException += " (";
-            std::ostringstream os;
-        os << __LINE__;
-        orignException += os.str();
-            orignException += ")";
+            __Exception_Origin__
             G4String exceptionCode ("ITStepProcessor002");
             G4ExceptionDescription exceptionDescription ;
             exceptionDescription
             << "No G4ITStepProcessor::fpITrack found";
-            G4Exception(orignException.data(),exceptionCode.data(),
+            G4Exception(exceptionOrigin.data(),exceptionCode.data(),
                         FatalErrorInArgument,exceptionDescription);
         }
 
@@ -841,56 +847,33 @@ void G4ITStepProcessor::FindTransportationStep()
 
     if(!fpTrack)
     {        
-        G4String orignException(__PRETTY_FUNCTION__);
-        orignException += " ";
-        orignException += __FILE__;
-        orignException += " (";
-        std::ostringstream os;
-        os << __LINE__;
-        orignException += os.str();
-        orignException += ")";
+        __Exception_Origin__
         G4String exceptionCode ("ITStepProcessor003");
         G4ExceptionDescription exceptionDescription ;
         exceptionDescription
         << "No G4ITStepProcessor::fpTrack found";
-        G4Exception(orignException.data(),exceptionCode.data(),
+        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
                     FatalErrorInArgument,exceptionDescription);
 
     }
     if(!fpITrack)
     {        
-
-        G4String orignException(__PRETTY_FUNCTION__);
-        orignException += " ";
-        orignException += __FILE__;
-        orignException += " (";
-        std::ostringstream os;
-        os << __LINE__;
-        orignException += os.str();
-        orignException += ")";
+        __Exception_Origin__
         G4String exceptionCode ("ITStepProcessor004");
         G4ExceptionDescription exceptionDescription ;
         exceptionDescription
         << "No G4ITStepProcessor::fITrack" ;
-        G4Exception(orignException.data(),exceptionCode.data(),
+        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
                     FatalErrorInArgument,exceptionDescription);
     }
     if(!(fpITrack->GetTrack()))
     {
-
-        G4String orignException(__PRETTY_FUNCTION__);
-        orignException += " ";
-        orignException += __FILE__;
-        orignException += " (";
-        std::ostringstream os;
-        os << __LINE__;
-        orignException += os.str();
-        orignException += ")";
+        __Exception_Origin__
         G4String exceptionCode ("ITStepProcessor005");
         G4ExceptionDescription exceptionDescription ;
         exceptionDescription
         << "No G4ITStepProcessor::fITrack->GetTrack()" ;
-        G4Exception(orignException.data(),exceptionCode.data(),
+        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
                     FatalErrorInArgument,exceptionDescription);
     }
 
@@ -910,26 +893,3 @@ void G4ITStepProcessor::FindTransportationStep()
     *fpPhysicalStep = physicalStep ;
 }
 //______________________________________________________________________________
-
-void G4ITStepProcessor::InitializePreTrackingProc()
-{
-
-}
-//______________________________________________________________________________
-
-void G4ITStepProcessor::CallPreTrackingProc(G4Track* /*track*/)
-{
-    ;
-}
-//______________________________________________________________________________
-
-void G4ITStepProcessor::InitializeDoIt()
-{
-
-}
-//______________________________________________________________________________
-
-void G4ITStepProcessor::InitializeIL()
-{
-
-}

@@ -40,7 +40,7 @@
 
 #include "globals.hh"
 #include <stdlib.h>
-
+#include "G4ExceptionOrigin.hh"
 
 template <typename PROC>
 class G4VITProcessor
@@ -162,19 +162,12 @@ void Join(G4VITProcessor<PROC>* processor)
             int rc = pthread_join(tmpProcessor->GetThreadID(), &status);
             if (rc)
             {
-                G4String orignException(__PRETTY_FUNCTION__);
-                orignException += " ";
-                orignException += __FILE__;
-                orignException += " (";
-                std::ostringstream os;
-                os << __LINE__;
-                orignException += os.str();
-                orignException += ")";
+                __Exception_Origin__
                 G4String exceptionCode ("ITProcessor001");
                 G4ExceptionDescription exceptionDescription ;
                 exceptionDescription << "return code from pthread_join() is :";
                 exceptionDescription << rc ;
-                G4Exception(orignException.data(),exceptionCode.data(),
+                G4Exception(exceptionOrigin.data(),exceptionCode.data(),
                             FatalErrorInArgument,exceptionDescription);
             }
             tmpProcessor->fRunning = false;

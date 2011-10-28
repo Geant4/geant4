@@ -33,7 +33,7 @@ void G4MoleculeHandleManager::DeleteInstance()
     fInstance.reset();
 }
 
-G4MoleculeHandleManager* const G4MoleculeHandleManager::Instance()
+G4MoleculeHandleManager* G4MoleculeHandleManager::Instance()
 {
     if(!fInstance.get())
     {

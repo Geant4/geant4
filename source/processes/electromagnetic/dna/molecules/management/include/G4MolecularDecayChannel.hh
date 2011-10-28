@@ -85,7 +85,7 @@ public:
 
     inline const G4String& GetName() const;
     G4int GetNbProducts() const;
-    const G4Molecule* const GetProduct(int) const;
+    const G4Molecule* GetProduct(int) const;
     inline const std::vector<G4double>& GetRMSProductsDisplacement() const;
     inline G4double GetEnergy() const;
     inline G4double GetProbability() const;

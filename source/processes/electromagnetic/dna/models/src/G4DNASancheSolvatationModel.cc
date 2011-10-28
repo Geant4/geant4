@@ -55,8 +55,13 @@ G4double G4DNASancheSolvatationModel::CrossSectionPerVolume(const G4Material* ma
         G4cout << "Calling CrossSectionPerVolume() of G4SancheSolvatationModel" << G4endl;
 
     if (particleDefinition != G4Electron::ElectronDefinition())
-    {
-        G4Exception("G4SancheSolvatationModel::CrossSectionPerVolume: attempting to calculate cross section for wrong particle");
+    {        
+        __Exception_Origin__
+        G4String exceptionCode ("G4DNASancheSolvatationModel001");
+        G4ExceptionDescription exceptionDescription ;
+        exceptionDescription << "Attempting to calculate cross section for wrong particle";
+        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+                    FatalErrorInArgument,exceptionDescription);
         return 0;
     }
 

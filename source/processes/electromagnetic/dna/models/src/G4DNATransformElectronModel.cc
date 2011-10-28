@@ -54,7 +54,12 @@ G4double G4DNATransformElectronModel::CrossSectionPerVolume(const G4Material* ma
 
     if (particleDefinition != G4Electron::ElectronDefinition())
     {
-        G4Exception("G4DNATransformElectronModel::CrossSectionPerVolume: attempting to calculate cross section for wrong particle");
+        __Exception_Origin__
+        G4String exceptionCode ("G4DNATransformElectronModel001");
+        G4ExceptionDescription exceptionDescription ;
+        exceptionDescription << "Attempting to calculate cross section for wrong particle";
+        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+                    FatalErrorInArgument,exceptionDescription);
         return 0;
     }
 

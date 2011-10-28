@@ -34,6 +34,7 @@
 
 #include "G4ITModelManager.hh"
 #include "G4ITType.hh"
+#include "G4ExceptionOrigin.hh"
 
 using namespace std;
 
@@ -90,18 +91,11 @@ void G4ITModelManager::SetModel(G4VITModel* aModel, G4double startingTime)
     assert(fIsInitialized == FALSE);
     if(fIsInitialized == true)
     {
-        G4String orignException(__PRETTY_FUNCTION__);
-        orignException += " ";
-        orignException += __FILE__;
-        orignException += " (";
-        std::ostringstream os;
-        os << __LINE__;
-        orignException += os.str();
-        orignException += ")";
+        __Exception_Origin__
         G4String exceptionCode ("ITModelManager001");
         G4ExceptionDescription exceptionDescription ;
         exceptionDescription << "You are trying to insert a new model after initialization of th model manager.";
-        G4Exception(orignException.data(),exceptionCode.data(),
+        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
                     FatalErrorInArgument,exceptionDescription);
     }
     fModels[startingTime] = aModel;

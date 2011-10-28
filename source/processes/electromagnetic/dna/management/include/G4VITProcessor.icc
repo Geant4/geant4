@@ -189,38 +189,22 @@ int G4VITPROCESSOR::start_thread(void* action)
 
         if(status)
         {
-
-            G4String orignException(__PRETTY_FUNCTION__);
-            orignException += " ";
-            orignException += __FILE__;
-            orignException += " (";
-            std::ostringstream os;
-            os << __LINE__;
-            orignException += os.str();
-            orignException += ")";
+            __Exception_Origin__
             G4String exceptionCode ("ITProcessor002");
             G4ExceptionDescription exceptionDescription ;
             exceptionDescription << "pthread_create failed with status :";
             exceptionDescription << status ;
-            G4Exception(orignException.data(),exceptionCode.data(),
+            G4Exception(exceptionOrigin.data(),exceptionCode.data(),
                         FatalErrorInArgument,exceptionDescription);
         }
     }
     else
     {
-
-        G4String orignException(__PRETTY_FUNCTION__);
-        orignException += " ";
-        orignException += __FILE__;
-        orignException += " (";
-        std::ostringstream os;
-        os << __LINE__;
-        orignException += os.str();
-        orignException += ")";
+        __Exception_Origin__
         G4String exceptionCode ("ITProcessor003");
         G4ExceptionDescription exceptionDescription ;
         exceptionDescription << "trying to create a thread while the ITProcessor is actually occupied.";
-        G4Exception(orignException.data(),exceptionCode.data(),
+        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
                     FatalErrorInArgument,exceptionDescription);
     }
 

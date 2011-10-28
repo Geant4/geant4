@@ -41,6 +41,7 @@
 #include "G4ParticleTable.hh"
 #include "G4SafetyHelper.hh"
 #include "G4TransportationManager.hh"
+#include "G4ExceptionOrigin.hh"
 
 using namespace std;
 
@@ -107,7 +108,16 @@ void G4DNABrownianTransportation::ComputeStep(const G4Track& track,
     // In order to do so, the flag IsLeadingStep
     // is on. Meaning : this track has the minimum
     // interaction length over all others.
-    if(GetIT(track)->GetTrackingInfo()->IsLeadingStep()) G4Exception();
+    if(GetIT(track)->GetTrackingInfo()->IsLeadingStep())
+    {
+        __Exception_Origin__
+        G4String exceptionCode ("G4DNABrownianTransportation001");
+        G4ExceptionDescription exceptionDescription ;
+        exceptionDescription << "ComputeStep is called while the track has the minimum interaction time";
+        exceptionDescription << " so it should not recompute a timeStep ";
+        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+                    FatalErrorInArgument,exceptionDescription);
+    }
 
     State(fGeometryLimitedStep) = false;
     // TODO : generalize this process to all kind of brownian objects
@@ -338,7 +348,7 @@ G4double G4DNABrownianTransportation::AlongStepGetPhysicalInteractionLength(
 //        State(fTransportEndPosition) = startPosition+geometryStepLength*startMomentumDir ;
 //        // since the brownian motion is not straight the above formula is not correct
 //        // However, at present time, in DNA no other processes are used in combinaison
-//        // with the brownian motion, so this is not a problem, because the caculated
+//        // with the brownian motion, so this is not a problem, because the calculated
 //        // position will not be used
     }
 
@@ -397,27 +407,20 @@ G4VParticleChange* G4DNABrownianTransportation::AlongStepDoIt( const G4Track& tr
 
     if (State(fEndGlobalTimeComputed) == false) // means the track is leading the step
     {
-        /*G4cerr << GetIT(track)->GetStepSelection()->IsLeadingStep() << G4endl;
-        G4cerr << "Track ID : " << track.GetTrackID()
-        << " IT name : " << GetIT(track)->GetName() << G4endl;
-        G4Exception();*/
-
         if(GetIT(track)->GetTrackingInfo()->IsLeadingStep() == false )
         {
-            G4Exception("Should not be leading step") ;
+            __Exception_Origin__
+            G4String exceptionCode ("G4DNABrownianTransportation002");
+            G4ExceptionDescription exceptionDescription ;
+            exceptionDescription << "The track " << track.GetTrackID()
+                                 << " should be the step leader";
+            G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+                        FatalErrorInArgument,exceptionDescription);
         }
 
         deltaTime = step.GetPostStepPoint()->GetGlobalTime() - startTime;
-        ///////////////
-        // Should be replaced by the stepping manager ?? :
-        // Attention, tu devrais calculer le temps d'interaction
-        // car dans le cas ci-dessous :
-        // step.GetPostStepPoint()->GetGlobalTime() = 0
-        G4cout << step.GetPostStepPoint()->GetGlobalTime() << G4endl;
-        G4Exception();
-        /*        fParticleChange.ProposeGlobalTime(  step.GetPostStepPoint()->GetGlobalTime() );*/
+
         fParticleChange.ProposeGlobalTime(  State(fCandidateEndGlobalTime) );
-        ///////////////
         fParticleChange.ProposePosition(State(fTransportEndPosition)) ;
     }
     else // the track should not be leading the step
@@ -426,7 +429,13 @@ G4VParticleChange* G4DNABrownianTransportation::AlongStepDoIt( const G4Track& tr
 
         if(GetIT(track)->GetTrackingInfo()->IsLeadingStep())
         {
-            G4Exception("Should not be leading step") ;
+            __Exception_Origin__
+            G4String exceptionCode ("G4DNABrownianTransportation002");
+            G4ExceptionDescription exceptionDescription ;
+            exceptionDescription << "The track " << track.GetTrackID()
+                                 << " should not be the step leader";
+            G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+                        FatalErrorInArgument,exceptionDescription);
         }
 
         fParticleChange.ProposePosition(State(fTransportEndPosition)) ;
