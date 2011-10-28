@@ -158,7 +158,9 @@ public: // With description
   inline void SetEnergyMomentumCheckLevels(G4double relativeLevel, G4double absoluteLevel)
   { epCheckLevels.first = relativeLevel;
     epCheckLevels.second = absoluteLevel; }
-    
+
+  virtual void ModelDescription(std::ostream& outFile) const;
+
 private:
     
   G4HadronicInteraction(const G4HadronicInteraction &right );

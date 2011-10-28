@@ -236,6 +236,12 @@ G4HadronicInteraction::GetEnergyMomentumCheckLevels() const
   return epCheckLevels;
 }
 
+
+void G4HadronicInteraction::ModelDescription(std::ostream& outFile) const
+{
+  outFile << "The description for this model has not been written yet.\n";
+}
+
 /*
 G4HadronicInteraction::G4HadronicInteraction(const G4HadronicInteraction &right )
 { 
