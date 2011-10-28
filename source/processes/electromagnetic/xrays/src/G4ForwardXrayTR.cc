@@ -114,7 +114,7 @@ G4ForwardXrayTR( const G4String& matName1,   //  G4Material* pMat1,
   }
   if(iMat == numOfCouples)
   {
-    G4Exception("Invalid first material name in G4ForwardXrayTR constructor");
+    G4Exception("G4ForwardXrayTR::G4ForwardXrayTR", "ForwardXrayTR01", JustWarning, "Invalid first material name in G4ForwardXrayTR constructor!");
     build = false;
   }
 
@@ -130,7 +130,7 @@ G4ForwardXrayTR( const G4String& matName1,   //  G4Material* pMat1,
       }
     if(iMat == numOfCouples)
       {
-	G4Exception("Invalid second material name in G4ForwardXrayTR constructor");
+        G4Exception("G4ForwardXrayTR::G4ForwardXrayTR", "ForwardXrayTR02", JustWarning, "Invalid second material name in G4ForwardXrayTR constructor!");
 	build = false;
       }
   }

@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13 October 11: P.Gumplinger (xrays-V09-04-08)
+- modify to work with materials-V09-04-14
+
+06 October 11: P.Gumplinger (xrays-V09-04-07)
+- update G4Exception syntax in G4Scintillation.cc, G4ForwardXrayTR.cc and
+  G4VXTRenergyLoss.cc
+
 19 August 11: G.Cosmo (xrays-V09-04-06)
 - G4ForwardXrayTR: made 'fProtonEnergyVector' non static pointer; allocate
   and deallocate it directly inside class constructors/destructor.

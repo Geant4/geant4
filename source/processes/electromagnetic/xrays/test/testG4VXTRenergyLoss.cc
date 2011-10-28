@@ -559,7 +559,7 @@ int main()
                                        foilNumber,
                                        "GammaXTRadiator");
   }
-  else if(fXTRModel == "gammaM" )
+  else if( fXTRModel == "gammaM" )
   {
     // G4XTRGammaRadModel*
     processXTR = new G4XTRGammaRadModel(logicRadiator,
@@ -572,7 +572,7 @@ int main()
                                        foilNumber,
                                        "GammaXTRmodel");
   }
-  else if(fXTRModel == "strawR" )
+  else if( fXTRModel == "strawR" )
   {
 
     // G4StrawTubeXTRadiator*
@@ -585,7 +585,7 @@ int main()
                                          true,
                                          "strawXTRadiator");
   }
-  else if(fXTRModel == "regR" )
+  else if( fXTRModel == "regR" )
   {
     // G4RegularXTRadiator*
     processXTR = new G4RegularXTRadiator(logicRadiator,
@@ -596,7 +596,7 @@ int main()
                                          foilNumber,
                                          "RegularXTRadiator");
   }
-  else if(fXTRModel == "transpR" )
+  else if( fXTRModel == "transpR" )
   {
     // G4TransparentRegXTRadiator*
     processXTR = new G4TransparentRegXTRadiator(logicRadiator,
@@ -607,7 +607,7 @@ int main()
                                                 foilNumber,
                                                 "TranspRegXTRadiator");
   }
-  else if(fXTRModel == "regM" )
+  else if( fXTRModel == "regM" )
   {
     // G4XTRRegularRadModel*
     processXTR = new G4XTRRegularRadModel(logicRadiator,
@@ -619,7 +619,7 @@ int main()
                                          "RegularXTRmodel");
 
   }
-  else if(fXTRModel == "transpM" )
+  else if( fXTRModel == "transpM" )
   {
     // G4XTRTransparentRegRadModel*
     processXTR = new G4XTRTransparentRegRadModel(logicRadiator,
@@ -638,7 +638,7 @@ int main()
   processXTR->SetVerboseLevel(1);
   // processXTR->SetAngleRadDistr(true);
 
-  // processXTR->BuildPhysicsTable(proton);
+  processXTR->BuildPhysicsTable(proton);
 
   // processXTR->SetVerboseLevel(1);
 
@@ -697,13 +697,13 @@ int main()
 
   G4double TkinScaled = (gamma - 1.)*proton_mass_c2;
 
-  /*  
+   
   for( iTkin = 0; iTkin < totBin; iTkin++ )
   {
     if(TkinScaled < processXTR->GetProtonVector()->
                                         GetLowEdgeEnergy(iTkin)) break;    
   }
-
+  G4cout<<"iTkin = "<<iTkin<<G4endl;
   G4double xtrEnergy[100];
   G4int spectrum[100];
 
@@ -725,82 +725,93 @@ int main()
     }
     spectrum[k] += 1;
   }
+  for( k = 0; k < 100; k++ )
+  {
+    G4cout<<k<<"\t"<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;   
+  }
 
   // output to file
+  G4int kMax = 41;
 
-
-  if(fXTRModel == "gammaR" )
+  if( fXTRModel == "gammaR" )
   {
     std::ofstream fileWrite("gammaR.dat", std::ios::out ) ;
     fileWrite.setf( std::ios::scientific, std::ios::floatfield );
 
-    for( k = 0; k < 41; k++ )
+    fileWrite<<kMax<<G4endl;
+    for( k = 0; k < kMax; k++ )
     {    
       G4cout<<k<<"\t"<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;
       fileWrite<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;  
     }
   }
-  else if(fXTRModel == "gammaM" )
+  else if( fXTRModel == "gammaM" )
   {
     std::ofstream fileWrite("gammaM.dat", std::ios::out ) ;
     fileWrite.setf( std::ios::scientific, std::ios::floatfield );
 
-    for( k = 0; k < 41; k++ )
+    fileWrite<<kMax<<G4endl;
+    for( k = 0; k < kMax; k++ )
     {    
       G4cout<<k<<"\t"<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;
       fileWrite<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;  
     }
   }
-  else if(fXTRModel == "strawR" )
+  else if( fXTRModel == "strawR" )
   {
     std::ofstream fileWrite("strawR.dat", std::ios::out ) ;
     fileWrite.setf( std::ios::scientific, std::ios::floatfield );
 
-    for( k = 0; k < 41; k++ )
+    fileWrite<<kMax<<G4endl;
+    for( k = 0; k < kMax; k++ )
     {    
       G4cout<<k<<"\t"<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;
       fileWrite<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;  
     }
   }
-  else if(fXTRModel == "regR" )
+  else if( fXTRModel == "regR" )
   {
     std::ofstream fileWrite("regR.dat", std::ios::out ) ;
     fileWrite.setf( std::ios::scientific, std::ios::floatfield );
 
-    for( k = 0; k < 41; k++ )
+    fileWrite<<kMax<<G4endl;
+    for( k = 0; k < kMax; k++ )
     {    
       G4cout<<k<<"\t"<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;
       fileWrite<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;  
     }
   }
-  else if(fXTRModel == "transpR" )
+  else if( fXTRModel == "transpR" )
   {
     std::ofstream fileWrite("transpR.dat", std::ios::out ) ;
     fileWrite.setf( std::ios::scientific, std::ios::floatfield );
 
-    for( k = 0; k < 41; k++ )
+    fileWrite<<kMax<<G4endl;
+    for( k = 0; k < kMax; k++ )
     {    
       G4cout<<k<<"\t"<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;
       fileWrite<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;  
     }
   }
-  else if(fXTRModel == "regM" )
+  else if( fXTRModel == "regM" )
   {
     std::ofstream fileWrite("regM.dat", std::ios::out ) ;
     fileWrite.setf( std::ios::scientific, std::ios::floatfield );
 
-    for( k = 0; k < 41; k++ )
+    fileWrite<<kMax<<G4endl;
+    for( k = 0; k < kMax; k++ )
     {    
       G4cout<<k<<"\t"<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;
       fileWrite<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;  
     }
   }
-  else if(fXTRModel == "transpM" )
+  else if( fXTRModel == "transpM" )
   {
     std::ofstream fileWrite("transpM.dat", std::ios::out ) ;
     fileWrite.setf( std::ios::scientific, std::ios::floatfield );
 
-    for( k = 0; k < 41; k++ )
+    fileWrite<<kMax<<G4endl;
+    for( k = 0; k < kMax; k++ )
     {    
       G4cout<<k<<"\t"<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;
       fileWrite<<xtrEnergy[k]/keV<<"\t"<<spectrum[k]<<G4endl;  
@@ -811,18 +822,20 @@ int main()
     G4Exception("Invalid XTR model name, no output file", "InvalidSetup",
                  FatalException, "XTR model name is out of the name list");
   }
-*/
 
 
 
+  /*
   G4cout.precision(12);
   G4double ksi, prob;
   G4SynchrotronRadiation* sr = new G4SynchrotronRadiation();
   // sr->SetRootNumber(100);
   // ksi = 1.e-8;
   // ksi = 0.;
-  prob = sr->GetIntProbSR( ksi);
+  //  prob = sr->GetIntProbSR( ksi);
   G4cout<<"ksi = "<<ksi<<"; SR probability = "<<prob<<G4endl;
+  */
+
   return 1 ;
 }
 

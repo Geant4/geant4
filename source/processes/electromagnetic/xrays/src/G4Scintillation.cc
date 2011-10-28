@@ -70,6 +70,7 @@
 ////////////////////////////////////////////////////////////////////////
 
 #include "G4ios.hh"
+#include "globals.hh"
 #include "G4ParticleTypes.hh"
 #include "G4EmProcessSubType.hh"
 
@@ -181,9 +182,9 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         if (!aMaterialPropertiesTable)
              return G4VRestDiscreteProcess::PostStepDoIt(aTrack, aStep);
 
-        const G4MaterialPropertyVector* Fast_Intensity = 
+        G4MaterialPropertyVector* Fast_Intensity = 
                 aMaterialPropertiesTable->GetProperty("FASTCOMPONENT"); 
-        const G4MaterialPropertyVector* Slow_Intensity =
+        G4MaterialPropertyVector* Slow_Intensity =
                 aMaterialPropertiesTable->GetProperty("SLOWCOMPONENT");
 
         if (!Fast_Intensity && !Slow_Intensity )
@@ -200,7 +201,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
            // Get the definition of the current particle
            G4ParticleDefinition *pDef = aParticle->GetDefinition();
-           const G4MaterialPropertyVector *Scint_Yield_Vector = NULL;
+           G4MaterialPropertyVector *Scint_Yield_Vector = NULL;
 
            // Obtain the G4MaterialPropertyVectory containing the
            // scintillation light yield as a function of the deposited
@@ -255,13 +256,14 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
            // Throw an exception if no scintillation yield is found
            if (!Scint_Yield_Vector) {
-              G4cerr << "\nG4Scintillation::PostStepDoIt(): "
+              G4ExceptionDescription ed;
+              ed << "\nG4Scintillation::PostStepDoIt(): "
                      << "Request for scintillation yield for energy deposit and particle type without correct entry in MaterialPropertiesTable\n"
                      << "ScintillationByParticleType requires at minimum that ELECTRONSCINTILLATIONYIELD is set by the user\n"
                      << G4endl;
-             G4Exception("G4Scintillation::PostStepDoIt",
-                         "No correct entry in MaterialPropertiesTable",
-                         FatalException,"Missing MaterialPropertiesTable entry.");
+             G4String comments = "Missing MaterialPropertiesTable entry - No correct entry in MaterialPropertiesTable";
+             G4Exception("G4Scintillation::PostStepDoIt","Scint01",
+                         FatalException,ed,comments);
              return G4VRestDiscreteProcess::PostStepDoIt(aTrack, aStep);
            }
 
@@ -270,7 +272,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                     << "Particle = " << pDef->GetParticleName() << "\n"
                     << "Energy Dep. = " << TotalEnergyDeposit/MeV << "\n"
                     << "Yield = " 
-                    << Scint_Yield_Vector->GetProperty(TotalEnergyDeposit) 
+                    << Scint_Yield_Vector->Value(TotalEnergyDeposit) 
                     << "\n" << G4endl;
            }
 
@@ -279,7 +281,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
            // Units: [# scintillation photons]
            ScintillationYield = Scint_Yield_Vector->
-                                            GetProperty(TotalEnergyDeposit);
+                                            Value(TotalEnergyDeposit);
         } else {
            // The default linear scintillation process
            ScintillationYield = aMaterialPropertiesTable->
@@ -571,19 +573,14 @@ void G4Scintillation::BuildThePhysicsTable()
                       // Retrieve the first intensity point in vector
                       // of (photon energy, intensity) pairs 
 
-                      theFastLightVector->ResetIterator();
-                      ++(*theFastLightVector);  // advance to 1st entry 
-
-                      G4double currentIN = theFastLightVector->
-                                               GetProperty();
+                      G4double currentIN = (*theFastLightVector)[0];
 
                       if (currentIN >= 0.0) {
 
                          // Create first (photon energy, Scintillation 
                          // Integral pair  
 
-                         G4double currentPM = theFastLightVector->
-                                                  GetPhotonEnergy();
+                         G4double currentPM = theFastLightVector->Energy(0);
 
                          G4double currentCII = 0.0;
 
@@ -599,13 +596,12 @@ void G4Scintillation::BuildThePhysicsTable()
                          // loop over all (photon energy, intensity)
                          // pairs stored for this material  
 
-                         while(++(*theFastLightVector))
+                         for (size_t i = 1;
+                              i < theFastLightVector->GetVectorLength();
+                              i++)
                          {
-                                currentPM = theFastLightVector->
-                                                GetPhotonEnergy();
-
-                                currentIN = theFastLightVector->	
-                                                GetProperty();
+                                currentPM = theFastLightVector->Energy(i);
+                                currentIN = (*theFastLightVector)[i];
 
                                 currentCII = 0.5 * (prevIN + currentIN);
 
@@ -631,19 +627,14 @@ void G4Scintillation::BuildThePhysicsTable()
                       // Retrieve the first intensity point in vector
                       // of (photon energy, intensity) pairs
 
-                      theSlowLightVector->ResetIterator();
-                      ++(*theSlowLightVector);  // advance to 1st entry
-
-                      G4double currentIN = theSlowLightVector->
-                                           GetProperty();
+                      G4double currentIN = (*theSlowLightVector)[0];
 
                       if (currentIN >= 0.0) {
 
                          // Create first (photon energy, Scintillation
                          // Integral pair
 
-                         G4double currentPM = theSlowLightVector->
-                                                 GetPhotonEnergy();
+                         G4double currentPM = theSlowLightVector->Energy(0);
 
                          G4double currentCII = 0.0;
 
@@ -659,13 +650,12 @@ void G4Scintillation::BuildThePhysicsTable()
                          // loop over all (photon energy, intensity)
                          // pairs stored for this material
 
-                         while(++(*theSlowLightVector))
+                         for (size_t i = 1;
+                              i < theSlowLightVector->GetVectorLength();
+                              i++)
                          {
-                                currentPM = theSlowLightVector->
-                                                GetPhotonEnergy();
-
-                                currentIN=theSlowLightVector->
-                                                GetProperty();
+                                currentPM = theSlowLightVector->Energy(i);
+                                currentIN = (*theSlowLightVector)[i];
 
                                 currentCII = 0.5 * (prevIN + currentIN);
 
@@ -700,8 +690,8 @@ void G4Scintillation::BuildThePhysicsTable()
 void G4Scintillation::SetScintillationByParticleType(const G4bool scintType)
 {
         if (emSaturation) {
-           G4Exception("G4Scintillation::SetScintillationByParticleType", "Redefinition",
-                       JustWarning, "Birks Saturation is replaced by ScintillationByParticleType!");
+           G4Exception("G4Scintillation::SetScintillationByParticleType", "Scint02",
+                       JustWarning, "Redefinition: Birks Saturation is replaced by ScintillationByParticleType!");
            RemoveSaturation();
         }
         scintillationByParticleType = scintType;

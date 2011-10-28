@@ -64,6 +64,7 @@
 #include "G4DynamicParticle.hh"
 #include "G4Material.hh" 
 #include "G4PhysicsTable.hh"
+#include "G4MaterialPropertyVector.hh"
 #include "G4MaterialPropertiesTable.hh"
 #include "G4PhysicsOrderedFreeVector.hh"
 
@@ -185,7 +186,7 @@ private:
 	G4double GetAverageNumberOfPhotons(const G4double charge,
                                 const G4double beta,
 		    		const G4Material *aMaterial,
-				const G4MaterialPropertyVector* Rindex) const;
+				G4MaterialPropertyVector* Rindex) const;
 
         ///////////////////////
         // Class Data Members

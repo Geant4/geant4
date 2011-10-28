@@ -111,7 +111,7 @@ G4VXTRenergyLoss::G4VXTRenergyLoss(G4LogicalVolume *anEnvelope,
 	  <<fPlateNumber<<G4endl ;
   if(fPlateNumber == 0)
   {
-    G4Exception("G4VXTRenergyLoss: No plates in X-ray TR radiator") ;
+     G4Exception("G4VXTRenergyLoss::G4VXTRenergyLoss", "VXTRenergyLoss01", JustWarning, "No plates in X-ray TR radiator!");
   }
   // default is XTR dEdx, not flux after radiator
 
@@ -262,7 +262,7 @@ void G4VXTRenergyLoss::BuildPhysicsTable(const G4ParticleDefinition& pd)
 {
   if(pd.GetPDGCharge()  == 0.) 
   {
-    G4Exception("G4VXTRenergyLoss::BuildPhysicsTable", "Notification", JustWarning,
+    G4Exception("G4VXTRenergyLoss::BuildPhysicsTable", "VXTRenergyLoss02", JustWarning,
                  "XTR initialisation for neutral particle ?!" );   
   }
   BuildTable();
