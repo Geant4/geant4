@@ -40,6 +40,8 @@
 //
 // CHANGE HISTORY
 // --------------
+// 17 October 2011, L Desorgher - Add the method AddUserDecayDataFile
+//
 // 01 June 2011, M. Kelsey -- Add directional biasing interface to allow for
 //		"collimation" of decay daughters.
 //
@@ -66,6 +68,7 @@
 #include "G4ThreeVector.hh"
 
 #include <vector>
+#include <map>
 
 class G4RadioactiveDecaymessenger;
 
@@ -153,6 +156,13 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
 
     G4DecayTable *LoadDecayTable (G4ParticleDefinition & theParentNucleus);
     // Load the decay data of isotope theParentNucleus
+
+    void AddUserDecayDataFile(G4int Z, G4int A,G4String filename);
+    //Allow the user to replace the radio-active decay data provided in Geant4
+    // by its own data file for a given isotope
+
+
+
 
     inline void  SetVerboseLevel(G4int value) {verboseLevel = value;}
     // Sets the VerboseLevel which controls duggering display
@@ -298,9 +308,14 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
     G4int decayWindows[99];
     static const G4double levelTolerance;
 
+    //User define radioactive decay data files replacing some files in the G4RADECAY database
+    std::map<G4int, G4String> theUserRadioactiveDataFiles;
+
+
     // Remainder of life time at rest
     G4double fRemainderLifeTime;
     G4int verboseLevel;
+
 
     // ParticleChange for decay process
     G4ParticleChangeForRadDecay fParticleChangeForRadDecay;

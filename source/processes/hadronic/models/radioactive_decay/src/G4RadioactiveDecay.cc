@@ -43,6 +43,11 @@
 // 
 // CHANGE HISTORY
 // --------------
+// 17 Oct 2011, L. Desorgher
+//			-Add possibility for the user to load its own decay file.
+//			-Set halflifethreshold negative by default to allow the tracking of all
+//			   excited nuclei resulting from a radioactive decay
+//
 // 01 June 2011, M. Kelsey -- Add directional biasing interface to allow for
 //		"collimation" of decay daughters.
 // 16 February 2006, V.Ivanchenko fix problem in IsApplicable connected with
@@ -149,8 +154,15 @@ G4RadioactiveDecay::G4RadioactiveDecay(const G4String& processName)
   // have been loaded.
   LoadedNuclei.clear();
 
-  // Apply default values
+  //
+  //Reset the list of user define data file
+  //
+  theUserRadioactiveDataFiles.clear();
 
+  //
+  //
+  // Apply default values.
+  //
   NSourceBin  = 1;
   SBin[0]     = 0.* s;
   SBin[1]     = 1.* s;
@@ -170,7 +182,7 @@ G4RadioactiveDecay::G4RadioactiveDecay(const G4String& processName)
   BRBias      = true ;
   applyICM    = true ;
   applyARM    = true ;
-  halflifethreshold = 0.*second;
+  halflifethreshold = -1.*second;
   //
   // RDM applies to xall logical volumes as default
   SelectAllVolumes();
@@ -576,21 +588,27 @@ G4RadioactiveDecay::LoadDecayTable(G4ParticleDefinition& theParentNucleus)
   G4int Z    = ((const G4Ions*)(&theParentNucleus))->GetAtomicNumber();
   G4double E = ((const G4Ions*)(&theParentNucleus))->GetExcitationEnergy();
 
-  if ( !getenv("G4RADIOACTIVEDATA") ) {
-    G4cout << "Please setenv G4RADIOACTIVEDATA to point to the radioactive decay data files."
-           << G4endl;
-    throw G4HadronicException(__FILE__, __LINE__, 
-			      "Please setenv G4RADIOACTIVEDATA to point to the radioactive decay data files.");
-  }
-  G4String dirName = getenv("G4RADIOACTIVEDATA");
-  LoadedNuclei.push_back(theParentNucleus.GetParticleName());
-  // sort in order to allow binary_search
-  std::sort( LoadedNuclei.begin(), LoadedNuclei.end() );
 
-  // Open input data file and initialize input stream with it 
-  std::ostringstream os;
-  os << dirName << "/z" << Z << ".a" << A << '\0';
-  G4String file = os.str();
+
+  //Check if data have been provided by the user
+  G4String file= theUserRadioactiveDataFiles[1000*A+Z];
+
+  if (file ==""){
+	  if ( !getenv("G4RADIOACTIVEDATA") ) {
+		  G4cout << "Please setenv G4RADIOACTIVEDATA to point to the radioactive decay data files." << G4endl;
+		  throw G4HadronicException(__FILE__, __LINE__,
+			      "Please setenv G4RADIOACTIVEDATA to point to the radioactive decay data files.");
+	  }
+	  G4String dirName = getenv("G4RADIOACTIVEDATA");
+	  LoadedNuclei.push_back(theParentNucleus.GetParticleName());
+	  std::sort( LoadedNuclei.begin(), LoadedNuclei.end() );
+	  // sort needed to allow binary_search
+
+	  std::ostringstream os;
+	  os <<dirName <<"/z" <<Z <<".a" <<A <<'\0';
+	  file = os.str();
+  }
+
   std::ifstream DecaySchemeFile(file);
 
   G4bool found(false);
@@ -894,6 +912,24 @@ G4RadioactiveDecay::LoadDecayTable(G4ParticleDefinition& theParentNucleus)
 
   return theDecayTable;
 }
+////////////////////////////////////////////////////////////////////
+//
+void G4RadioactiveDecay::AddUserDecayDataFile(G4int Z, G4int A,G4String filename)
+{ if (Z<1 || A<2) {
+	G4cout<<"Z and A not valid!"<<G4endl;
+  }
+
+  std::ifstream DecaySchemeFile(filename);
+  if (DecaySchemeFile){
+	G4int ID_ion=A*1000+Z;
+	theUserRadioactiveDataFiles[ID_ion]=filename;
+  }
+  else {
+	G4cout<<"The file "<<filename<<" does not exist!"<<G4endl;
+  }
+}
+////////////////////////////////////////////////////////////////////////
+//
 
 
 void

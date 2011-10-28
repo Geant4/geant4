@@ -26,6 +26,7 @@
 
 //
 #include "G4RadioactiveDecaymessenger.hh"
+#include "G4NuclearLevelStore.hh"
 
 #include <sstream>
 
@@ -194,6 +195,36 @@ G4RadioactiveDecaymessenger::G4RadioactiveDecaymessenger
   verboseCmd->SetDefaultValue(1);
   verboseCmd->SetRange("VerboseLevel>=0");
 
+  //
+  //This commansd allows the user to define its own decay datafile for
+  // a given isotope
+  //
+  userDecayDataCmd = new G4UIcommand("/grdm/setRadioactiveDecayFile",this);
+  G4UIparameter*  Z_para= new G4UIparameter("Z_isotope",'i',true);
+  Z_para->SetParameterRange("Z_isotope > 0");
+  Z_para->SetGuidance("Z: Charge number of isotope");
+
+
+  G4UIparameter*  A_para= new G4UIparameter("A_isotope",'i',true);
+  A_para->SetParameterRange("A_isotope > 1");
+  A_para->SetGuidance("A: mass number of isotope");
+
+  G4UIparameter*  FileName_para= new G4UIparameter("file_name",'s',true);
+  FileName_para->SetGuidance("Name of the user data file");
+  userDecayDataCmd->SetParameter(Z_para);
+  userDecayDataCmd->SetParameter(A_para);
+  userDecayDataCmd->SetParameter(FileName_para);
+
+  //
+  //This commands allows the user to define its own evaporation data file for
+  // a given isotope
+  //
+  userEvaporationDataCmd = new G4UIcommand("/grdm/setPhotoEvaporationFile",this);
+  userEvaporationDataCmd->SetParameter(Z_para);
+  userEvaporationDataCmd->SetParameter(A_para);
+  userEvaporationDataCmd->SetParameter(FileName_para);
+
+
 }
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -215,8 +246,11 @@ G4RadioactiveDecaymessenger::~G4RadioactiveDecaymessenger ()
   delete icmCmd;
   delete armCmd;
   delete hlthCmd;
+  delete userDecayDataCmd;
+  delete userEvaporationDataCmd;
   delete colldirCmd;
   delete collangleCmd;
+
 }
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -252,6 +286,23 @@ void G4RadioactiveDecaymessenger::SetNewValue (G4UIcommand *command, G4String ne
       SetARM(armCmd->GetNewBoolValue(newValues));}
   else if (command==hlthCmd ) {theRadioactiveDecayContainer->
       SetHLThreshold(hlthCmd->GetNewDoubleValue(newValues));}
+
+  else if (command ==userDecayDataCmd){
+	  G4int  Z,A;
+	  G4String  file_name;
+	  const char* nv = (const char*)newValues;
+	  std::istringstream is(nv);
+	  is >> Z>>A>>file_name;
+	  theRadioactiveDecayContainer->AddUserDecayDataFile(Z,A,file_name);
+  }
+  else if (command ==userEvaporationDataCmd){
+	  G4int  Z,A;
+	  G4String  file_name;
+	  const char* nv = (const char*)newValues;
+	  std::istringstream is(nv);
+	  is >> Z>>A>>file_name;
+	  G4NuclearLevelStore::GetInstance()->AddUserEvaporationDataFile(Z,A,file_name);
+  }
   else if (command==colldirCmd) {theRadioactiveDecayContainer->
       SetDecayDirection(colldirCmd->GetNew3VectorValue(newValues));}
   else if (command==collangleCmd) {theRadioactiveDecayContainer->

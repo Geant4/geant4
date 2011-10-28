@@ -52,6 +52,8 @@
 //
 #include "G4UImessenger.hh"
 #include "G4UIdirectory.hh"
+#include "G4UIcommand.hh"
+#include "G4UIcmdWith3VectorAndUnit.hh"
 #include "G4UIcmdWith3Vector.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAnInteger.hh"
@@ -108,8 +110,13 @@ public: //with description
   G4UIcmdWithABool               *icmCmd;
   G4UIcmdWithABool               *armCmd;
   G4UIcmdWithADoubleAndUnit      *hlthCmd;
+
+  G4UIcommand					 *userDecayDataCmd;
+  G4UIcommand					 *userEvaporationDataCmd;
+
   G4UIcmdWith3Vector             *colldirCmd;
   G4UIcmdWithADoubleAndUnit      *collangleCmd;
+
 };
 
 #endif

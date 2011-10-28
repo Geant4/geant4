@@ -50,6 +50,11 @@
 //            1) Use PhotonEvaporation instead of DiscreteGammaDeexcitation
 //            2) verbose control
 //
+// 17 October 2011, L. Desorgher
+//			  -Allow the atomic relaxation after de-excitation of exited nuclei even for beta and alpha
+//			    decay. Bug found and solution proposed by Ko Abe.
+//			  -Set halflifethreshold by default to a negative value
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -101,7 +106,7 @@ G4NuclearDecayChannel::G4NuclearDecayChannel
   SetNumberOfDaughters (1);
   FillDaughterNucleus (0, A, Z, theDaughterExcitation);
   Qtransition = theQtransition;
-  halflifethreshold = 1e-6*second;
+  halflifethreshold = -1.*second;
   applyICM = true;
   applyARM = true;
 }
@@ -134,7 +139,7 @@ G4NuclearDecayChannel::G4NuclearDecayChannel
   SetDaughter(0, theDaughterName1);
   FillDaughterNucleus (1, A, Z, theDaughterExcitation);
   Qtransition = theQtransition;
-  halflifethreshold = 1e-6*second;
+  halflifethreshold = -1.*second;
   applyICM = true;
   applyARM = true;
 }
@@ -172,7 +177,7 @@ G4NuclearDecayChannel::G4NuclearDecayChannel
   FillDaughterNucleus(1, A, Z, theDaughterExcitation);
   RandomEnergy = randBeta;
   Qtransition = theQtransition;
-  halflifethreshold = 1e-6*second;
+  halflifethreshold = -1*second;
   applyICM = true;
   applyARM = true;
 }
@@ -412,10 +417,10 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double theParentMass)
       }
   }
 
-  // Also have to deal with the IT case where ICM may have been applied
-  if (decayMode == 0) {
-    eShell = shellIndex;
-  }
+  // For other cases eShell comes from shellIndex resulting from  the photo decay
+  // modeled by G4PhotonEvaporation* de-excitation (see above)
+
+  else eShell = shellIndex;
 
   // now apply ARM if it is requested and there is a vaccancy
   if (applyARM && eShell != -1) {

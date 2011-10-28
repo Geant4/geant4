@@ -13,6 +13,17 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+18 October 2011 Laurent Desorgher(radioactive_decay-V09-04-10)
+---------------------------------
+--G4RadioactiveDecay:
+		-Add possibility for the user to load its own decay file.
+		-Set halflifethreshold negative by default to allow the tracking of all
+	   								excited nuclei resulting from a radioactive decay
+--G4RadioactiveDecayChannel:
+		-Correction to allow the atomic relaxation of de-excited nuclei produce also during beta and alpha decay.
+		 Problem ersaed and solution proposed by Ko Abe 
+--G4RadioactiveDecayMessenger:
+		-Add macro commands  /grdm/setRadioactiveDecayFile and  /grdm/setPhotoEvaporationFile
 
 26 September 2011  Dennis Wright  (radioactive_decay-V09-04-09)
 ---------------------------------------------------------------
