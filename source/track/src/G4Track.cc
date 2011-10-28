@@ -271,7 +271,7 @@ G4double G4Track::CalculateVelocityForOpticalPhoton() const
     G4double current_momentum = fpDynamicParticle->GetTotalMomentum();
     if( update_groupvel || (current_momentum != prev_momentum) ) {
       velocity =
-	groupvel->GetProperty(current_momentum);
+	groupvel->Value(current_momentum);
       prev_velocity = velocity;
       prev_momentum = current_momentum;
     }

@@ -18,7 +18,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-- Septeimber 21st,  2011  H.Kurashige (track-V09-04-10)
+- October 21th, 2011 G.Folger     (track-V09-04-12)
+-  retag all of track, track-V09-04-11 was in src only.
+
+- October 14th, 2011 P.Gumplinger (track-V09-04-11)
+- modify G4Track.cc to work with materials-V09-04-15 (and 14)
+
+- September 21st,  2011  H.Kurashige (track-V09-04-10)
 - Re-Activate SetParentWeightByTracK() method because Adjoint Process relays on it
 - ProposeParenetWeight method affects seconday trackes if SecondaryTrackWeightByProcess flag 
   is set true even wheen SetParentWeightByTracK is set to false
