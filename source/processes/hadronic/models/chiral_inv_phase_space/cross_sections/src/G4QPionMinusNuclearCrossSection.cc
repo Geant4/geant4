@@ -266,7 +266,7 @@ G4double G4QPionMinusNuclearCrossSection::CalculateCrossSection(G4bool, G4int F,
       lastHEN = new G4double[nH];      // Allocate memory for the new HEN cross sections
       // --- Instead of making a separate function ---
       G4double P=THmiG;                // Table threshold in GeV/c
-      for(G4int m=0; m<nL; m++)
+     for(G4int m=0; m<nL; m++)
       {
         lastLEN[m] = CrossSectionLin(targZ, targN, P);
         P+=dPG;
@@ -349,6 +349,8 @@ G4double G4QPionMinusNuclearCrossSection::CrossSectionFormula(G4int tZ, G4int tN
   G4double sigma=0.;
   if(tZ==1 && !tN)                        // PiMin-Proton interaction from G4QuasiElRatios
   {
+    G4double lr=lP+1.27;                    // From G4QuasiFreeRatios.cc Uzhi
+    G4double LE=1.53/(lr*lr+.0676);         // From G4QuasiFreeRatios.cc Uzhi
     G4double ld=lP-3.5;
     G4double ld2=ld*ld;
     G4double p2=P*P;
@@ -361,6 +363,7 @@ G4double G4QPionMinusNuclearCrossSection::CrossSectionFormula(G4int tZ, G4int tN
     G4double El=(.0557*ld2+2.4+7./sp)/(1.+.7/p4);
     G4double To=(.3*ld2+22.3+12./sp)/(1.+.4/p4);
     sigma=(To-El)+.4/md+.01/hd;
+    sigma+=LE*2;                            //  Uzhi       
   }
   else if(tZ==1 && tN==1)                   // pimp_tot
   {

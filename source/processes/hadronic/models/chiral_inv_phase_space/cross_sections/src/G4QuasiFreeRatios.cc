@@ -442,7 +442,7 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::CalcElTot(G4double p, G4int I)
     else
     {
       G4double lr=lp+1.27;                    // p1
-      G4double LE=1.53/(lr*lr+.0676);         // p2, p3        
+      G4double LE=1.53/(lr*lr+.0676);         // p2, p3         
       G4double ld=lp-lmi;                     // p4 (lmi=3.5)
       G4double ld2=ld*ld;
       G4double p2=p*p;

@@ -1007,6 +1007,7 @@ G4double G4QPionMinusElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G
     G4double ld=lp-lastPAR[14];
     G4double dl3=lp+lastPAR[4]; // lm
     G4double dl4=lp-lastPAR[6]; // lh
+//G4cout<<"lastPAR[13] "<<lastPAR[13]<<" lastPAR[6] "<<lastPAR[6]<<" lastPAR[7] "<<lastPAR[7]<<G4endl;
     return lastPAR[1]/(lr*lr+lastPAR[2])+
            (lastPAR[8]*ld*ld+lastPAR[9]+lastPAR[10]/sp)/(1.+lastPAR[11]/p4)+
            lastPAR[12]/(dl3*dl3+lastPAR[5])+lastPAR[13]/(dl4*dl4+lastPAR[7]);

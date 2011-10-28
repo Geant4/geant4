@@ -1005,8 +1005,11 @@ G4double G4QKaonPlusElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4
 #endif
     // Returns the total elastic pim-p cross-section (to avoid spoiling lastSIG)
     G4double dp=lp-lastPAR[4];
+//G4cout<<"lastPAR[8] "<<lastPAR[8]<<" lastPAR[9] "<<lastPAR[9]<<" lastPAR[10] "<<lastPAR[10]<<G4endl; 
     return lastPAR[0]/(lastPAR[2]+sqr(p-lastPAR[1]))+(lastPAR[3]*dp*dp+lastPAR[5])/
-           (1.-lastPAR[6]/sp+lastPAR[7]/p4);
+           (1.-lastPAR[6]/sp+lastPAR[7]/p4)
+           +lastPAR[8]/(sqr(p-lastPAR[9])+lastPAR[10]);    // Uzhi
+
   }
   else
   {

@@ -46,7 +46,7 @@
 #include "G4NucleiProperties.hh"
 #include <vector>
 #include "G4VQCrossSection.hh"
-#include "G4QPDGCode.hh"
+#include "G4QPDGCode.hh"     
 
 class G4QPionPlusNuclearCrossSection : public G4VQCrossSection
 {
