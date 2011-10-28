@@ -93,6 +93,10 @@ public:
   inline void SetLPMconstant(G4double val);
   inline G4double LPMconstant() const;
 
+protected:
+
+  virtual G4double ComputeDXSectionPerAtom(G4double gammaEnergy);
+
 private:
 
   void InitialiseConstants();
@@ -102,8 +106,6 @@ private:
   G4double ComputeBremLoss(G4double cutEnergy);
 
   G4double ComputeXSectionPerAtom(G4double cutEnergy);
-
-  G4double ComputeDXSectionPerAtom(G4double gammaEnergy);
 
   G4double ComputeRelDXSectionPerAtom(G4double gammaEnergy);
 
@@ -127,6 +129,8 @@ protected:
   const G4ParticleDefinition* particle;
   G4ParticleDefinition*       theGamma;
   G4ParticleChangeForLoss*    fParticleChange;
+
+  G4double bremFactor;
 
   static const G4double xgi[8], wgi[8];
   static const G4double Fel_light[5];
@@ -158,7 +162,6 @@ private:
   G4double lowKinEnergy;
   G4double fMigdalConstant;
   G4double fLPMconstant;
-  G4double bremFactor;
   G4double energyThresholdLPM;
   G4double facFel, facFinel;
   G4double preS1,logTwo;

@@ -165,19 +165,21 @@ void G4eeToTwoGammaModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
 					    G4double)
 {
   G4double PositKinEnergy = dp->GetKineticEnergy();
-
+  G4DynamicParticle *aGamma1, *aGamma2;
+   
   // Case at rest
   if(PositKinEnergy == 0.0) {
     G4double cost = 2.*G4UniformRand()-1.;
     G4double sint = sqrt((1. - cost)*(1. + cost));
     G4double phi  = twopi * G4UniformRand();
-    G4ThreeVector dir (sint*cos(phi), sint*sin(phi), cost);
-    G4DynamicParticle* aGamma1 = new G4DynamicParticle(theGamma,
-						       dir, electron_mass_c2);
-    G4DynamicParticle* aGamma2 = new G4DynamicParticle(theGamma,
-						       -dir, electron_mass_c2);
-    vdp->push_back(aGamma1);
-    vdp->push_back(aGamma2);
+    G4ThreeVector dir(sint*cos(phi), sint*sin(phi), cost);
+    phi = twopi * G4UniformRand();
+    G4ThreeVector pol(cos(phi), sin(phi), 0.0);
+    pol.rotateUz(dir);
+    aGamma1 = new G4DynamicParticle(theGamma, dir, electron_mass_c2);
+    aGamma1->SetPolarization(pol.x(),pol.y(),pol.z());
+    aGamma2 = new G4DynamicParticle(theGamma,-dir, electron_mass_c2);
+    aGamma1->SetPolarization(-pol.x(),-pol.y(),-pol.z());
 
   } else {
 
@@ -220,8 +222,6 @@ void G4eeToTwoGammaModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
     G4double sint = sqrt((1.+cost)*(1.-cost));
     G4double phi  = twopi * G4UniformRand();
 
-    G4double dirx = sint*cos(phi) , diry = sint*sin(phi) , dirz = cost;
-
     //
     // kinematic of the created pair
     //
@@ -229,11 +229,13 @@ void G4eeToTwoGammaModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
     G4double TotalAvailableEnergy = PositKinEnergy + 2.0*electron_mass_c2;
     G4double Phot1Energy = epsil*TotalAvailableEnergy;
 
-    G4ThreeVector Phot1Direction (dirx, diry, dirz);
+    G4ThreeVector Phot1Direction(sint*cos(phi), sint*sin(phi), cost);
     Phot1Direction.rotateUz(PositDirection);
-    G4DynamicParticle* aGamma1 = 
-      new G4DynamicParticle (theGamma,Phot1Direction, Phot1Energy);
-    vdp->push_back(aGamma1);
+    aGamma1 = new G4DynamicParticle (theGamma,Phot1Direction, Phot1Energy);
+    phi = twopi * G4UniformRand();
+    G4ThreeVector pol1(cos(phi), sin(phi), 0.0);
+    pol1.rotateUz(Phot1Direction);
+    aGamma1->SetPolarization(pol1.x(),pol1.y(),pol1.z());
 
     G4double Phot2Energy =(1.-epsil)*TotalAvailableEnergy;
     G4double PositP= sqrt(PositKinEnergy*(PositKinEnergy+2.*electron_mass_c2));
@@ -241,18 +243,22 @@ void G4eeToTwoGammaModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
     G4ThreeVector Phot2Direction = dir.unit();
 
     // create G4DynamicParticle object for the particle2
-    G4DynamicParticle* aGamma2= 
-      new G4DynamicParticle (theGamma,Phot2Direction, Phot2Energy);
-    vdp->push_back(aGamma2);
-    /*
-      G4cout << "Annihilation in fly: e0= " << PositKinEnergy
-      << " m= " << electron_mass_c2
-      << " e1= " << Phot1Energy 
-      << " e2= " << Phot2Energy << " dir= " <<  dir 
-      << " -> " << Phot1Direction << " " 
-      << Phot2Direction << G4endl;
-    */
+    aGamma2 = new G4DynamicParticle (theGamma,Phot2Direction, Phot2Energy);
+
+    //!!! likely problematic direction to be checked
+    aGamma2->SetPolarization(-pol1.x(),-pol1.y(),-pol1.z());
   }
+  /*
+    G4cout << "Annihilation in fly: e0= " << PositKinEnergy
+    << " m= " << electron_mass_c2
+    << " e1= " << Phot1Energy 
+    << " e2= " << Phot2Energy << " dir= " <<  dir 
+    << " -> " << Phot1Direction << " " 
+    << Phot2Direction << G4endl;
+  */
+ 
+  vdp->push_back(aGamma1);
+  vdp->push_back(aGamma2);
   fParticleChange->SetProposedKineticEnergy(0.);
   fParticleChange->ProposeTrackStatus(fStopAndKill);
 }

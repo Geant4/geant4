@@ -45,7 +45,8 @@
 // optimization has been removed (facsafety) 
 // 04-09-2011 L.Urban
 // facsafety optimization is back for UseSafety
-//
+// 10-10-2011 L.Urban 
+//  facsafety=0.5 instead of 0.3  
 //
 // Class Description:
 //
@@ -97,6 +98,7 @@ G4UrbanMscModel95::G4UrbanMscModel95(const G4String& nam)
   geommin       = 1.e-3*mm;
   geomlimit     = geombig;
   presafety     = 0.*mm;
+  facsafety     = 0.50 ;
                           
   y             = 0.;
 

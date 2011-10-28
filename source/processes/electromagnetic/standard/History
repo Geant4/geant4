@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10 October 11: V.Ivanchenko (emstand-V09-04-45)
+- G4UrbanMscModel95 - speadup a bit in the case UseSafety (FacSafety = 0.5)
+- G4eeToTwoGammaModel - added polarization
+- G4eBremsstrahlungRelModel - make few methods and class members protected
+    to be used in G4SeltzerBergerModel
+- G4SeltzerBergerModel - new model for bremsstrahlung 
+
 16 September 11: V.Ivanchenko (emstand-V09-04-44)
 - G4BetheBlochModel - added protection for high correction to 
     energy loss (important if a step length is nearly the range) 

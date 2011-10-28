@@ -76,18 +76,17 @@ const G4double G4eBremsstrahlungRelModel::wgi[]={ 0.0506, 0.1112, 0.1569, 0.1813
 const G4double G4eBremsstrahlungRelModel::Fel_light[]  = {0., 5.31  , 4.79  , 4.74 ,  4.71} ;
 const G4double G4eBremsstrahlungRelModel::Finel_light[] = {0., 6.144 , 5.621 , 5.805 , 5.924} ;
 
-
 using namespace std;
 
 G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(const G4ParticleDefinition* p,
 						     const G4String& name)
   : G4VEmModel(name),
     particle(0),
+    bremFactor(fine_structure_const*classic_electr_radius*classic_electr_radius*16./3.),
     fXiLPM(0), fPhiLPM(0), fGLPM(0),
     isElectron(true),
     fMigdalConstant(classic_electr_radius*electron_Compton_length*electron_Compton_length*4.0*pi),
     fLPMconstant(fine_structure_const*electron_mass_c2*electron_mass_c2/(4.*pi*hbarc)*0.5),
-    bremFactor(fine_structure_const*classic_electr_radius*classic_electr_radius*16./3.),
     use_completescreening(true),isInitialised(false)
 {
   theGamma = G4Gamma::Gamma();

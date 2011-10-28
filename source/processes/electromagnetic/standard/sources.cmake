@@ -81,6 +81,7 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4PSTARStopping.hh
         G4PairProductionRelModel.hh
         G4PhotoElectricEffect.hh
+        G4SeltzerBergerModel.hh
         G4UniversalFluctuation.hh
         G4UrbanMscModel90.hh
         G4UrbanMscModel93.hh
@@ -138,6 +139,7 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4PSTARStopping.cc
         G4PairProductionRelModel.cc
         G4PhotoElectricEffect.cc
+        G4SeltzerBergerModel.cc
         G4UniversalFluctuation.cc
         G4UrbanMscModel90.cc
         G4UrbanMscModel93.cc
