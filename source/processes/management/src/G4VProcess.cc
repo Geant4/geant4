@@ -106,7 +106,7 @@ void G4VProcess::SubtractNumberOfInteractionLengthLeft(
     G4String msg = "Negative currentInteractionLength for ";
     msg += 	theProcessName;
     G4Exception("G4VProcess::SubtractNumberOfInteractionLengthLeft()",
-		"ProcMan",EventMustBeAborted,
+		"ProcMan201",EventMustBeAborted,
 		msg);
   }
 }
