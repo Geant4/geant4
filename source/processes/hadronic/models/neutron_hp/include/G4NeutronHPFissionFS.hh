@@ -48,7 +48,7 @@ class G4NeutronHPFissionFS : public G4NeutronHPFinalState
   
   G4NeutronHPFissionFS(){ hasXsec = false; }
   ~G4NeutronHPFissionFS(){}
-  void Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType);
+  void Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType);
   G4HadFinalState * ApplyYourself(const G4HadProjectile & theTrack);
   G4NeutronHPFinalState * New() 
   {

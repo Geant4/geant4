@@ -43,11 +43,11 @@
 #include "G4ParticleTable.hh"
 #include "G4NeutronHPDataUsed.hh"
 
-  void G4NeutronHPElasticFS::Init (G4double A, G4double Z, G4String & dirName, G4String & )
+  void G4NeutronHPElasticFS::Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & )
   {
     G4String tString = "/FS/";
     G4bool dbool;
-    G4NeutronHPDataUsed aFile = theNames.GetName(static_cast<G4int>(A), static_cast<G4int>(Z), dirName, tString, dbool);
+    G4NeutronHPDataUsed aFile = theNames.GetName(static_cast<G4int>(A), static_cast<G4int>(Z), M, dirName, tString, dbool);
     G4String filename = aFile.GetName();
     theBaseA = aFile.GetA();
     theBaseZ = aFile.GetZ();
@@ -281,6 +281,9 @@
       // and back to lab
       theNeutron.Lorentz(theNeutron, -1.*theCMS);
       theTarget.Lorentz(theTarget, -1.*theCMS);      
+//111005 Protection for not producing 0 kinetic energy target
+      if ( theNeutron.GetKineticEnergy() <= 0 ) theNeutron.SetTotalEnergy ( theNeutron.GetMass() * ( 1 + std::pow( 10 , -15.65 ) ) );
+      if ( theTarget.GetKineticEnergy() <= 0 ) theTarget.SetTotalEnergy ( theTarget.GetMass() * ( 1 + std::pow( 10 , -15.65 ) ) );
     }
     else if (frameFlag == 2) // CMS
     {

@@ -286,7 +286,7 @@
   }
 
 #include <sstream> 
-  void G4NeutronHPCaptureFS::Init (G4double A, G4double Z, G4String & dirName, G4String & )
+  void G4NeutronHPCaptureFS::Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & )
   {
 
      //TK110430 BEGIN
@@ -298,8 +298,22 @@
      iss << static_cast<G4int>(A);
      G4String sA;
      iss >> sA;
+
+     iss.clear();
+     G4String sM;
+     if ( M > 0 ) 
+     {
+        iss << m;
+        if ( M > 1 ) 
+        {
+           iss << M;
+        }
+        iss >> sM;
+        iss.clear();
+     }
+
      G4String element_name = theNames.GetName( static_cast<G4int>(Z)-1 );
-     G4String filenameMF6 = dirName+"FSMF6/"+sZ+"_"+sA+"_"+element_name;
+     G4String filenameMF6 = dirName+"FSMF6/"+sZ+"_"+sA+sM+"_"+element_name;
      std::ifstream dummyIFS(filenameMF6, std::ios::in);
      if ( dummyIFS.good() == true ) hasExactMF6=true;
 
@@ -331,7 +345,7 @@
 
     G4String tString = "/FS/";
     G4bool dbool;
-    G4NeutronHPDataUsed aFile = theNames.GetName(static_cast<G4int>(A), static_cast<G4int>(Z), dirName, tString, dbool);
+    G4NeutronHPDataUsed aFile = theNames.GetName(static_cast<G4int>(A), static_cast<G4int>(Z), M, dirName, tString, dbool);
 
     G4String filename = aFile.GetName();
     theBaseA = A;

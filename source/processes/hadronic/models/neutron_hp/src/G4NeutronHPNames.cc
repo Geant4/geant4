@@ -61,8 +61,26 @@
 
   G4String G4NeutronHPNames::GetName(G4int i) { return theString[i]; }
 
-G4NeutronHPDataUsed G4NeutronHPNames::GetName(G4int A, G4int Z, G4String base, G4String rest, G4bool & aFlag)
+//G4NeutronHPDataUsed G4NeutronHPNames::GetName(G4int A, G4int Z, G4String base, G4String rest, G4bool & aFlag)
+G4NeutronHPDataUsed G4NeutronHPNames::GetName(G4int A, G4int Z, G4int M, G4String base, G4String rest, G4bool & aFlag)
 {
+
+   //G4cout << Z << " " << A << " " << M << " " << base << " " << rest << G4endl;
+
+   //Excited isomer indicator
+   std::stringstream iss;
+   G4String sM;
+   if ( M > 0 ) 
+   {
+      iss << "m";
+      if ( M > 1 ) 
+      {
+         iss << M;
+      }
+      iss >> sM;
+      iss.clear();
+   }
+
 
    G4NeutronHPDataUsed result;
    aFlag = true;
@@ -96,7 +114,7 @@ if(getenv("NeutronHPNames"))  G4cout << "entered GetName!!!"<<G4endl;
     {
        aFlag = true;
        G4String * biff = new G4String(); // delete here as theName
-       *biff = base+"/"+"CrossSection/"+itoa(myZ)+"_"+itoa(myA)+"_"+theString[myZ-1];
+       *biff = base+"/CrossSection/"+itoa(myZ)+"_"+itoa(myA)+sM+"_"+theString[myZ-1];
       
        if(theName!=0) delete theName;
        theName = biff;
@@ -123,7 +141,7 @@ if(getenv("NeutronHPNames")) G4cout <<"HPWD 1 "<<*theName<<G4endl;
              aFlag = true;
              first = false;
              biff = new G4String(); // delete here as theName
-             *biff = base+"/"+"CrossSection/"+itoa(myZ)+"_"+"nat"+"_"+theString[myZ-1];
+             *biff = base+"/CrossSection/"+itoa(myZ)+"_"+"nat"+"_"+theString[myZ-1];
              if(theName!=0) delete theName;
              theName = biff;
 if(getenv("NeutronHPNames"))    G4cout <<"HPWD 2 "<<*theName<<G4endl;
@@ -175,7 +193,7 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4 "<<*theName<<G4endl;
           if ( rest == "/CrossSection/" )
           {
 
-             fileName = base+"/"+rest+itoa(myZ)+"_"+itoa(myA)+"_"+theString[myZ-1];
+             fileName = base+"/"+rest+itoa(myZ)+"_"+itoa(myA)+sM+"_"+theString[myZ-1];
 if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4a "<<*theName<<G4endl;
 
           }
@@ -183,7 +201,7 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4a "<<*theName<<G4endl;
           {
 
 // For FS
-             fileName = base+"/"+rest+itoa(myZ)+"_"+itoa(myA)+"_"+theString[myZ-1];
+             fileName = base+"/"+rest+itoa(myZ)+"_"+itoa(myA)+sM+"_"+theString[myZ-1];
              file = new std::ifstream(fileName);
 
              if ( *file )

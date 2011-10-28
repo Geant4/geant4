@@ -115,6 +115,9 @@ class G4NeutronHPThermalScattering : public G4HadronicInteraction
 
       std::pair< G4double , E_isoAng > create_sE_and_EPM_from_pE_and_vE_P_E_isoAng ( G4double , G4double , std::vector < E_P_E_isoAng* >* );
 
+      std::map < std::pair < const G4Material* , const G4Element* > , G4int > dic;   
+      void buildPhysicsTable();
+      G4int getTS_ID( const G4Material* , const G4Element* );
 
 };
 

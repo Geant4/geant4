@@ -64,7 +64,7 @@ class G4NeutronHPInelasticBaseFS : public G4NeutronHPFinalState
     if(theAngularDistribution!=0) delete theAngularDistribution;
   }
   
-  void Init (G4double A, G4double Z, G4String & dirName, G4String & bit);
+  void Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & bit);
   void BaseApply(const G4HadProjectile & theTrack, G4ParticleDefinition ** theDefs, G4int nDef);
   void InitGammas(G4double AR, G4double ZR);
   virtual G4HadFinalState * ApplyYourself(const G4HadProjectile & theTrack) = 0;

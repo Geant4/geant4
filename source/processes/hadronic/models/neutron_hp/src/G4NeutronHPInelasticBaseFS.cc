@@ -67,7 +67,7 @@ void G4NeutronHPInelasticBaseFS::InitGammas(G4double AR, G4double ZR)
    //   delete aName;
 }
 
-void G4NeutronHPInelasticBaseFS::Init (G4double A, G4double Z, G4String & dirName, G4String & bit)
+void G4NeutronHPInelasticBaseFS::Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & bit)
 {
   gammaPath = "/Inelastic/Gammas/";
     if(!getenv("G4NEUTRONHPDATA")) 
@@ -76,7 +76,7 @@ void G4NeutronHPInelasticBaseFS::Init (G4double A, G4double Z, G4String & dirNam
   gammaPath = tBase+gammaPath;
   G4String tString = dirName;
   G4bool dbool;
-  G4NeutronHPDataUsed aFile = theNames.GetName(static_cast<G4int>(A), static_cast<G4int>(Z), tString, bit, dbool);
+  G4NeutronHPDataUsed aFile = theNames.GetName(static_cast<G4int>(A), static_cast<G4int>(Z), M,tString, bit, dbool);
   G4String filename = aFile.GetName();
   theBaseA = aFile.GetA();
   theBaseZ = aFile.GetZ();

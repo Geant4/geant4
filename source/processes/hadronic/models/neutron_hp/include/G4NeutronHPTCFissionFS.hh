@@ -41,7 +41,7 @@ class G4NeutronHPTCFissionFS : public G4NeutronHPFissionBaseFS
   
   G4NeutronHPTCFissionFS(){ hasXsec = false; }
   ~G4NeutronHPTCFissionFS(){}
-  void Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType);
+  void Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType);
   G4DynamicParticleVector * ApplyYourself(G4int NNeutrons);
   G4NeutronHPFinalState * New() 
   {

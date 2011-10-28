@@ -117,7 +117,9 @@ public:
 
   void Init(G4Element * theElement, const G4String dirName, const G4String fsType); 
   
-  void UpdateData(G4int A, G4int Z, G4int index, G4double abundance);
+  //void UpdateData(G4int A, G4int Z, G4int index, G4double abundance);
+  void UpdateData(G4int A, G4int Z, G4int index, G4double abundance) { G4int M = 0; UpdateData( A, Z, M, index, abundance); };
+  void UpdateData(G4int A, G4int Z, G4int M, G4int index, G4double abundance);
   
   void Harmonise(G4NeutronHPVector *& theStore, G4NeutronHPVector * theNew);
 

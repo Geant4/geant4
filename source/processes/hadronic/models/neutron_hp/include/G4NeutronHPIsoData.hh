@@ -61,9 +61,15 @@ public:
   {
     return std::max(0., theChannelData->GetXsec(energy));
   }
-  G4bool Init(G4int A, G4int Z, G4double abun, G4String dirName, G4String aFSType);
+
+  //G4bool Init(G4int A, G4int Z, G4double abun, G4String dirName, G4String aFSType);
+  G4bool Init(G4int A, G4int Z, G4double abun, G4String dirName, G4String aFSType){ G4int M = 0 ; return Init( A, Z, M, abun, dirName, aFSType); };
+  G4bool Init(G4int A, G4int Z, G4int M, G4double abun, G4String dirName, G4String aFSType);
   
-  void Init(G4int A, G4int Z, G4double abun); //fill PhysicsVector for this Isotope
+  //void Init(G4int A, G4int Z, G4double abun); //fill PhysicsVector for this Isotope
+  void Init(G4int A, G4int Z, G4double abun)  { G4int M =0;
+  Init( A, Z, M, abun); }; 
+  void Init(G4int A, G4int Z, G4int M, G4double abun); //fill PhysicsVector for this Isotope
   
   inline G4NeutronHPVector * MakeElasticData()
     {return theElasticData;}

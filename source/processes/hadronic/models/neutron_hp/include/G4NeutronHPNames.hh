@@ -45,7 +45,9 @@ class G4NeutronHPNames
   G4NeutronHPNames(G4int maxOffSet){theMaxOffSet = maxOffSet;}
   ~G4NeutronHPNames(){}
   
-  G4NeutronHPDataUsed GetName(G4int A, G4int Z, G4String base, G4String rest, G4bool & active);
+  //G4NeutronHPDataUsed GetName(G4int A, G4int Z, G4String base, G4String rest, G4bool & active);
+  G4NeutronHPDataUsed GetName(G4int A, G4int Z, G4String base, G4String rest, G4bool & active) { G4int M = 0; return GetName( A, Z, M, base, rest, active); };
+  G4NeutronHPDataUsed GetName(G4int A, G4int Z, G4int M, G4String base, G4String rest, G4bool & active);
   G4String GetName(G4int i);
   void SetMaxOffSet(G4int anOffset) { theMaxOffSet = anOffset; }
   

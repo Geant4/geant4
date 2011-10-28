@@ -40,27 +40,32 @@
 #include "G4ElementTable.hh"
 //#include "G4NeutronHPData.hh"
 
-
-
 G4NeutronHPThermalScatteringNames::G4NeutronHPThermalScatteringNames()
 {
    names.insert ( std::pair < G4String , G4String > ( "TS_H_of_Water" , "h_water" ) ); 
    names.insert ( std::pair < G4String , G4String > ( "TS_H_of_Polyethylene" , "h_polyethylene" ) ); 
    names.insert ( std::pair < G4String , G4String > ( "TS_C_of_Graphite" , "graphite" ) ); 
+
+   nist_names.insert ( std::pair < std::pair < G4String , G4String > , G4String > ( std::pair < G4String , G4String > ( "G4_WATER" , "H" ) , "h_water" ) );
+   nist_names.insert ( std::pair < std::pair < G4String , G4String > , G4String > ( std::pair < G4String , G4String > ( "G4_POLYETHYLENE" , "H" ) , "h_polyethylene" ) );
+   nist_names.insert ( std::pair < std::pair < G4String , G4String > , G4String > ( std::pair < G4String , G4String > ( "G4_GRAPHITE" , "C" ) , "graphite" ) );
 }
-
-
 
 G4NeutronHPThermalScatteringNames::~G4NeutronHPThermalScatteringNames()
 {
 ;
 }
 
-
-
 G4bool G4NeutronHPThermalScatteringNames::IsThisThermalElement( G4String aname)
 {
    G4bool result = false;
    if ( names.find ( aname ) != names.end() ) result = true; 
+   return result;
+}
+
+G4bool G4NeutronHPThermalScatteringNames::IsThisThermalElement( G4String material , G4String element )
+{
+   G4bool result = false;
+   if ( nist_names.find ( std::pair<G4String,G4String>(material,element) ) != nist_names.end() ) result = true; 
    return result;
 }

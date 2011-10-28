@@ -62,7 +62,9 @@ public:
   
   virtual ~G4NeutronHPFinalState(){};
 
-  virtual void Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType) = 0;
+  //virtual void Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType) = 0;
+  void Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType) { G4int M = 0; Init ( A, Z, M, dirName, aFSType); };
+  virtual void Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType) =0;
   virtual G4HadFinalState * ApplyYourself(const G4HadProjectile & ) 
   {
     throw G4HadronicException(__FILE__, __LINE__, "G4HadFinalState * ApplyYourself(const G4HadProjectile & theTrack) needs implementation");

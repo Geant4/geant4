@@ -43,6 +43,8 @@
 #include "G4Neutron.hh"
 #include "G4ElementTable.hh"
 //#include "G4NeutronHPData.hh"
+#include <list>
+#include <algorithm>
 
 G4NeutronHPThermalScatteringData::G4NeutronHPThermalScatteringData()
 :G4VCrossSectionDataSet("NeutronHPThermalScatteringData")
@@ -61,7 +63,7 @@ G4NeutronHPThermalScatteringData::G4NeutronHPThermalScatteringData()
 
    names = new G4NeutronHPThermalScatteringNames();
 
-   BuildPhysicsTable( *G4Neutron::Neutron() );
+   //BuildPhysicsTable( *G4Neutron::Neutron() );
 }
 
 G4NeutronHPThermalScatteringData::~G4NeutronHPThermalScatteringData()
@@ -75,9 +77,19 @@ G4NeutronHPThermalScatteringData::~G4NeutronHPThermalScatteringData()
 G4bool G4NeutronHPThermalScatteringData::IsIsoApplicable( const G4DynamicParticle* dp , 
                                                 G4int /*Z*/ , G4int /*A*/ ,
                                                 const G4Element* element ,
-                                                const G4Material* /*mat*/ )
+                                                const G4Material* material )
 {
-   return IsApplicable( dp , element );
+   G4double eKin = dp->GetKineticEnergy();
+   if ( eKin > 4.0*eV //GetMaxKinEnergy() 
+     || eKin < 0 //GetMinKinEnergy() 
+     || dp->GetDefinition() != G4Neutron::Neutron() ) return false;                                   
+
+   if ( dic.find( std::pair < const G4Material* , const G4Element* > ( NULL , element ) ) != dic.end() 
+     || dic.find( std::pair < const G4Material* , const G4Element* > ( material , element ) ) != dic.end() ) return true;
+
+   return false;
+
+//   return IsApplicable( dp , element );
 /*
    G4double eKin = dp->GetKineticEnergy();
    if ( eKin > 4.0*eV //GetMaxKinEnergy() 
@@ -98,7 +110,8 @@ G4double G4NeutronHPThermalScatteringData::GetIsoCrossSection( const G4DynamicPa
    ke_cache = dp->GetKineticEnergy();
    element_cache = element;
    material_cache = material;
-   G4double xs = GetCrossSection( dp , element , material->GetTemperature() );
+   //G4double xs = GetCrossSection( dp , element , material->GetTemperature() );
+   G4double xs = GetCrossSection( dp , element , material );
    xs_cache = xs;
    return xs;
    //return GetCrossSection( dp , element , material->GetTemperature() );
@@ -192,21 +205,97 @@ void G4NeutronHPThermalScatteringData::BuildPhysicsTable(const G4ParticleDefinit
    if ( &aP != G4Neutron::Neutron() ) 
       throw G4HadronicException(__FILE__, __LINE__, "Attempt to use NeutronHP data for particles other than neutrons!!!");  
 
-   indexOfThermalElement.clear(); 
+   //std::map < std::pair < G4Material* , const G4Element* > , G4int > dic;   
+   dic.clear();   
+   std::map < G4String , G4int > co_dic;   
 
-   clearCurrentXSData();
-
-   static const G4ElementTable* theElementTable = G4Element::GetElementTable();
-   size_t numberOfElements = G4Element::GetNumberOfElements();
-   size_t numberOfThermalElements = 0; 
-   for ( size_t i = 0 ; i < numberOfElements ; i++ )
+   //Searching Nist Materials
+   static const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+   size_t numberOfMaterials = G4Material::GetNumberOfMaterials();
+   for ( size_t i = 0 ; i < numberOfMaterials ; i++ )
    {
-      if ( names->IsThisThermalElement ( (*theElementTable)[i]->GetName() ) )
+      G4Material* material = (*theMaterialTable)[i];
+      size_t numberOfElements = material->GetNumberOfElements();
+      for ( size_t j = 0 ; j < numberOfElements ; j++ )
       {
-         indexOfThermalElement.push_back( i ); 
-         numberOfThermalElements++;
+         const G4Element* element = material->GetElement(j);
+         if ( names->IsThisThermalElement ( material->GetName() , element->GetName() ) )
+         {                                    
+            G4int ts_ID_of_this_geometry; 
+            G4String ts_ndl_name = names->GetTS_NDL_Name( material->GetName() , element->GetName() ); 
+            if ( co_dic.find ( ts_ndl_name ) != co_dic.end() )
+            {
+               ts_ID_of_this_geometry = co_dic.find ( ts_ndl_name ) -> second;
+            }
+            else
+            {
+               ts_ID_of_this_geometry = co_dic.size();
+               co_dic.insert ( std::pair< G4String , G4int >( ts_ndl_name , ts_ID_of_this_geometry ) );
+            }
+
+            //G4cout << "Neutron HP Thermal Scattering Data : Registering a material-element pair of " 
+            //       << material->GetName() << " " << element->GetName() 
+            //       << " as internal thermal scattering id of  " <<  ts_ID_of_this_geometry << "." << G4endl;
+
+            dic.insert( std::pair < std::pair < G4Material* , const G4Element* > , G4int > ( std::pair < G4Material* , const G4Element* > ( material , element ) , ts_ID_of_this_geometry ) );
+         }
       }
    }
+
+   //Searching TS Elements 
+   static const G4ElementTable* theElementTable = G4Element::GetElementTable();
+   size_t numberOfElements = G4Element::GetNumberOfElements();
+   //size_t numberOfThermalElements = 0; 
+   for ( size_t i = 0 ; i < numberOfElements ; i++ )
+   {
+      const G4Element* element = (*theElementTable)[i];
+      if ( names->IsThisThermalElement ( element->GetName() ) )
+      {
+         if ( names->IsThisThermalElement ( element->GetName() ) )
+         {                                    
+            G4int ts_ID_of_this_geometry; 
+            G4String ts_ndl_name = names->GetTS_NDL_Name( element->GetName() ); 
+            if ( co_dic.find ( ts_ndl_name ) != co_dic.end() )
+            {
+               ts_ID_of_this_geometry = co_dic.find ( ts_ndl_name ) -> second;
+            }
+            else
+            {
+               ts_ID_of_this_geometry = co_dic.size();
+               co_dic.insert ( std::pair< G4String , G4int >( ts_ndl_name , ts_ID_of_this_geometry ) );
+            }
+
+            //G4cout << "Neutron HP Thermal Scattering: Registering an element of " 
+            //       << material->GetName() << " " << element->GetName() 
+            //       << " as internal thermal scattering id of  " <<  ts_ID_of_this_geometry << "." << G4endl;
+
+            dic.insert( std::pair < std::pair < const G4Material* , const G4Element* > , G4int > ( std::pair < const G4Material* , const G4Element* > ( NULL , element ) ,  ts_ID_of_this_geometry ) );
+         }
+      }
+   }
+
+   G4cout << G4endl;
+   G4cout << "Neutron HP Thermal Scattering Data: Following material-element pairs and/or elements are registered." << G4endl;
+   for ( std::map < std::pair < const G4Material* , const G4Element* > , G4int >::iterator it = dic.begin() ; it != dic.end() ; it++ )   
+   {
+      if ( it->first.first != NULL ) 
+      {
+         G4cout << "Material " << it->first.first->GetName() << " - Element " << it->first.second->GetName() << ",  internal thermal scattering id " << it->second << G4endl;
+      }
+      else
+      {
+         G4cout << "Element " << it->first.second->GetName() << ",  internal thermal scattering id " << it->second << G4endl;
+      }
+   }
+   G4cout << G4endl;
+
+
+   //G4cout << "Neutron HP Thermal Scattering Data: Following NDL thermal scattering files are assigned to the internal thermal scattering id." << G4endl;
+   //for ( std::map < G4String , G4int >::iterator it = co_dic.begin() ; it != co_dic.end() ; it++ )  
+   //{
+   //   G4cout << "NDL file name " << it->first << ", internal thermal scattering id " << it->second << G4endl;
+   //}
+
 
    // Read Cross Section Data files
 
@@ -220,24 +309,26 @@ void G4NeutronHPThermalScatteringData::BuildPhysicsTable(const G4ParticleDefinit
    G4String ndl_filename;
    G4String name;
 
-   for ( size_t i = 0 ; i < numberOfThermalElements ; i++ )
+   for ( std::map < G4String , G4int >::iterator it = co_dic.begin() ; it != co_dic.end() ; it++ )  
    {
-      ndl_filename = names->GetTS_NDL_Name( (*theElementTable)[ indexOfThermalElement[ i ] ]->GetName() ); 
+      ndl_filename = it->first;
+      G4int ts_ID = it->second;
 
       // Coherent
       name = dirName + "/Coherent/CrossSection/" + ndl_filename; 
       std::map< G4double , G4NeutronHPVector* >*  coh_amapTemp_EnergyCross = readData( name );
-      coherent.insert ( std::pair < G4int , std::map< G4double , G4NeutronHPVector* >* > ( indexOfThermalElement[ i ] , coh_amapTemp_EnergyCross ) );
+      coherent.insert ( std::pair < G4int , std::map< G4double , G4NeutronHPVector* >* > ( ts_ID , coh_amapTemp_EnergyCross ) );
 
       // Incoherent
       name = dirName + "/Incoherent/CrossSection/" + ndl_filename; 
       std::map< G4double , G4NeutronHPVector* >*  incoh_amapTemp_EnergyCross = readData( name );
-      incoherent.insert ( std::pair < G4int , std::map< G4double , G4NeutronHPVector* >* > ( indexOfThermalElement[ i ] , incoh_amapTemp_EnergyCross ) );
+      incoherent.insert ( std::pair < G4int , std::map< G4double , G4NeutronHPVector* >* > ( ts_ID , incoh_amapTemp_EnergyCross ) );
 
       // Inelastic
       name = dirName + "/Inelastic/CrossSection/" + ndl_filename; 
       std::map< G4double , G4NeutronHPVector* >*  inela_amapTemp_EnergyCross = readData( name );
-      inelastic.insert ( std::pair < G4int , std::map< G4double , G4NeutronHPVector* >* > ( indexOfThermalElement[ i ] , inela_amapTemp_EnergyCross ) );
+      inelastic.insert ( std::pair < G4int , std::map< G4double , G4NeutronHPVector* >* > ( ts_ID , inela_amapTemp_EnergyCross ) );
+
    }
 
 }
@@ -287,11 +378,27 @@ void G4NeutronHPThermalScatteringData::DumpPhysicsTable( const G4ParticleDefinit
 
 
 
+/*
 G4double G4NeutronHPThermalScatteringData::GetCrossSection( const G4DynamicParticle* aP , const G4Element*anE , G4double aT )
 {
+
    G4double result = 0;
-   
+   const G4Material* aM = NULL;
+
    G4int iele = anE->GetIndex();
+
+   if ( dic.find( std::pair < const G4Material* , const G4Element* > ( NULL , anE ) ) != dic.end() )
+   {
+      iele = dic.find( std::pair < const G4Material* , const G4Element* > ( NULL , anE ) )->second;
+   }
+   else if ( dic.find( std::pair < const G4Material* , const G4Element* > ( aM , anE ) ) != dic.end() )
+   {
+      iele = dic.find( std::pair < const G4Material* , const G4Element* > ( aM , anE ) )->second;
+   }
+   else
+   {
+      return result;
+   }
 
    G4double Xcoh = GetX ( aP , aT , coherent.find(iele)->second );
    G4double Xincoh = GetX ( aP , aT , incoherent.find(iele)->second );
@@ -302,36 +409,69 @@ G4double G4NeutronHPThermalScatteringData::GetCrossSection( const G4DynamicParti
    //G4cout << "G4NeutronHPThermalScatteringData::GetCrossSection  Tot= " << result/barn << " Coherent= " << Xcoh/barn << " Incoherent= " << Xincoh/barn << " Inelastic= " << Xinela/barn << G4endl;
 
    return result;
+
+}
+*/
+
+G4double G4NeutronHPThermalScatteringData::GetCrossSection( const G4DynamicParticle* aP , const G4Element*anE , const G4Material* aM )
+{
+   G4double result = 0;
+   
+   G4int ts_id =getTS_ID( aM , anE );
+
+   if ( ts_id == -1 ) return result;
+
+   G4double aT = aM->GetTemperature();
+
+   G4double Xcoh = GetX ( aP , aT , coherent.find(ts_id)->second );
+   G4double Xincoh = GetX ( aP , aT , incoherent.find(ts_id)->second );
+   G4double Xinela = GetX ( aP , aT , inelastic.find(ts_id)->second );
+
+   result = Xcoh + Xincoh + Xinela;
+
+   //G4cout << "G4NeutronHPThermalScatteringData::GetCrossSection  Tot= " << result/barn << " Coherent= " << Xcoh/barn << " Incoherent= " << Xincoh/barn << " Inelastic= " << Xinela/barn << G4endl;
+
+   return result;
 }
 
 
-
-G4double G4NeutronHPThermalScatteringData::GetInelasticCrossSection( const G4DynamicParticle* aP , const G4Element*anE , G4double aT )
+G4double G4NeutronHPThermalScatteringData::GetInelasticCrossSection( const G4DynamicParticle* aP , const G4Element*anE , const G4Material* aM )
 {
    G4double result = 0;
-   G4int iele = anE->GetIndex();
-   result = GetX ( aP , aT , inelastic.find(iele)->second );
+   G4int ts_id = getTS_ID( aM , anE );
+   G4double aT = aM->GetTemperature();
+   result = GetX ( aP , aT , inelastic.find( ts_id )->second );
+   return result;
+}
+
+G4double G4NeutronHPThermalScatteringData::GetCoherentCrossSection( const G4DynamicParticle* aP , const G4Element*anE , const G4Material* aM )
+{
+   G4double result = 0;
+   G4int ts_id = getTS_ID( aM , anE );
+   G4double aT = aM->GetTemperature();
+   result = GetX ( aP , aT , coherent.find( ts_id )->second );
+   return result;
+}
+
+G4double G4NeutronHPThermalScatteringData::GetIncoherentCrossSection( const G4DynamicParticle* aP , const G4Element*anE , const G4Material* aM )
+{
+   G4double result = 0;
+   G4int ts_id = getTS_ID( aM , anE );
+   G4double aT = aM->GetTemperature();
+   result = GetX ( aP , aT , incoherent.find( ts_id )->second );
    return result;
 }
 
 
 
-G4double G4NeutronHPThermalScatteringData::GetCoherentCrossSection( const G4DynamicParticle* aP , const G4Element*anE , G4double aT )
+G4int G4NeutronHPThermalScatteringData::getTS_ID ( const G4Material* material , const G4Element* element )
 {
-   G4double result = 0;
-   G4int iele = anE->GetIndex();
-   result = GetX ( aP , aT , coherent.find(iele)->second );
-   return result;
-}
-
-
-
-G4double G4NeutronHPThermalScatteringData::GetIncoherentCrossSection( const G4DynamicParticle* aP , const G4Element*anE , G4double aT )
-{
-   G4double result = 0;
-   G4int iele = anE->GetIndex();
-   result = GetX ( aP , aT , incoherent.find(iele)->second );
-   return result;
+   G4int result = -1;
+   if ( dic.find( std::pair < const G4Material* , const G4Element* > ( NULL , element ) ) != dic.end() ) 
+      return dic.find( std::pair < const G4Material* , const G4Element* > ( NULL , element ) )->second; 
+   if ( dic.find( std::pair < const G4Material* , const G4Element* > ( material , element ) ) != dic.end() ) 
+      return dic.find( std::pair < const G4Material* , const G4Element* > ( material , element ) )->second; 
+   return result; 
 }
 
 
@@ -372,3 +512,5 @@ G4double G4NeutronHPThermalScatteringData::GetX ( const G4DynamicParticle* aP, G
   
    return result;
 }
+
+

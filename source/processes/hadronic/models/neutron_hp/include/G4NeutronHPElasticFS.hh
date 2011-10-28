@@ -58,7 +58,7 @@ class G4NeutronHPElasticFS : public G4NeutronHPFinalState
     if(theCoefficients!=0) delete theCoefficients;
     if(theProbArray!=0) delete theProbArray;
   }
-  void Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType);
+  void Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType);
   G4HadFinalState * ApplyYourself(const G4HadProjectile & theTrack);
   G4NeutronHPFinalState * New() 
   {

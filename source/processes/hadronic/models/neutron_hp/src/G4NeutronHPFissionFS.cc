@@ -34,13 +34,13 @@
 #include "G4Nucleus.hh"
 #include "G4DynamicParticleVector.hh"
 #include "G4NeutronHPFissionERelease.hh"
- void G4NeutronHPFissionFS::Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType)
+ void G4NeutronHPFissionFS::Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType)
  {
-    theFS.Init(A, Z, dirName, aFSType);
-    theFC.Init(A, Z, dirName, aFSType);
-    theSC.Init(A, Z, dirName, aFSType);
-    theTC.Init(A, Z, dirName, aFSType);
-    theLC.Init(A, Z, dirName, aFSType);
+    theFS.Init(A, Z, M, dirName, aFSType);
+    theFC.Init(A, Z, M, dirName, aFSType);
+    theSC.Init(A, Z, M, dirName, aFSType);
+    theTC.Init(A, Z, M, dirName, aFSType);
+    theLC.Init(A, Z, M, dirName, aFSType);
  }
  G4HadFinalState * G4NeutronHPFissionFS::ApplyYourself(const G4HadProjectile & theTrack)
  {  

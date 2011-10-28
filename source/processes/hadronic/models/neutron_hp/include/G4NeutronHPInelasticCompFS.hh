@@ -73,7 +73,7 @@ class G4NeutronHPInelasticCompFS : public G4NeutronHPFinalState
       if(theFinalStatePhotons[i] != 0) delete theFinalStatePhotons[i];
     }
   }
-  void Init (G4double A, G4double Z, G4String & dirName, G4String & aSFType);
+  void Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aSFType);
   void InitGammas(G4double AR, G4double ZR);
   virtual G4HadFinalState * ApplyYourself(const G4HadProjectile & theTrack) = 0;
   virtual G4NeutronHPFinalState * New() = 0;

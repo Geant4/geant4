@@ -53,7 +53,7 @@ class G4NeutronHPFissionBaseFS : public G4NeutronHPFinalState
     delete theXsection;
   }
 
-  void Init (G4double A, G4double Z, G4String & dirName, G4String & bit);
+  void Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & bit);
 
   G4DynamicParticleVector * ApplyYourself(G4int Prompt);
 
