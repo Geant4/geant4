@@ -28,6 +28,7 @@
 //
 
 #include "G4DNABornExcitationModel.hh"
+#include "G4DNAChemistryManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -255,6 +256,14 @@ void G4DNABornExcitationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
       fParticleChangeForGamma->ProposeMomentumDirection(aDynamicParticle->GetMomentumDirection());
       fParticleChangeForGamma->SetProposedKineticEnergy(newEnergy);
       fParticleChangeForGamma->ProposeLocalEnergyDeposit(excitationEnergy);
+  }
+
+  if(G4DNAChemistryManager::Instance()->IsChemistryActived())
+  {
+      const G4Track * theIncomingTrack = fParticleChangeForGamma->GetCurrentTrack();
+      G4DNAChemistryManager::Instance()->CreateWaterMolecule(fExcitedMolecule,
+                                                            level,
+                                                            theIncomingTrack);
   }
 
 }

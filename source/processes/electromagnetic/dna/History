@@ -13,6 +13,50 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+28.10.2011  M.K			tag emdna-V09-04-33
+            Displace G4DNAChemistryManager, G4DNAMolecularReactionTable,
+            G4VDNAReactionModel to utils
+            Displace G4DNAMoleculeEncouterStepper, G4DNAMoleculeReaction
+            to models
+
+27.10.2011  M.K			tag emdna-V09-04-32
+	    Fix BornIonisation + the two RuddIoni
+	    coverity errors.
+
+26.10.2011  M.K			tag emdna-V09-04-31
+	    change std::shared_ptr to CLHEP::shared_ptr	    
+
+26.10.2011  M.K.		tag emdna-V09-04-30
+	    Memory leak fixes
+	    G4MolecularConfiguration::fManager added
+
+26.10.2011  M.K.		tag emdna-V09-04-29
+	    G4DNAIonisation : add models for C/N/O/Fe
+	    Add electron solvatation process & models
+	    Add chemical processes
+
+21.10.2011  M.K.		tag emdna-V09-04-28
+	    Same as emdna-V09-04-27 including models/ & processes/ from 
+	    emdna-V09-04-24
+	    
+21.10.2011  M.K.		tag emdna-V09-04-27
+	    CMake fixes from emdna-V09-04-24
+	    
+21.10.2011  M.K.		tag emdna-V09-04-26
+	    Bug fixes and new dev from the previous tag	    
+
+21.10.2011  S. Incerti		tag emdna-V09-04-25
+	    Extension of ionisation by HZE proposed by Z. Francis
+
+20.10.2011  M.K.		tag emdna-V09-04-24
+	    Bug fixes and new dev from the previous tag
+     
+07.10.2011  M.K.		tag emdna-V09-04-23
+	    First tag with "molecules" files     
+     
+07.10.2011  M.K.		tag emdna-V09-04-22
+	    Add molecules+management directory
+	    First tag with "management" files
 
 09.09.2011  G.Folger            tag emdna-V09-04-21
             utils/sources.cmake: remove reference to non-existant 

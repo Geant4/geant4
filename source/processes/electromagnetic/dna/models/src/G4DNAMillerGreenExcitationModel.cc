@@ -28,6 +28,7 @@
 //
 
 #include "G4DNAMillerGreenExcitationModel.hh"
+#include "G4DNAChemistryManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -360,6 +361,14 @@ void G4DNAMillerGreenExcitationModel::SampleSecondaries(std::vector<G4DynamicPar
       fParticleChangeForGamma->ProposeMomentumDirection(aDynamicParticle->GetMomentumDirection());
       fParticleChangeForGamma->SetProposedKineticEnergy(newEnergy);
       fParticleChangeForGamma->ProposeLocalEnergyDeposit(excitationEnergy);
+
+      if(G4DNAChemistryManager::Instance()->IsChemistryActived())
+      {
+          const G4Track * theIncomingTrack = fParticleChangeForGamma->GetCurrentTrack();
+          G4DNAChemistryManager::Instance()->CreateWaterMolecule(fExcitedMolecule,
+                                                                level,
+                                                                theIncomingTrack);
+      }
   }
 
 }

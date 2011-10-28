@@ -39,6 +39,7 @@
 // Available models
 #include "G4DNABornIonisationModel.hh"
 #include "G4DNARuddIonisationModel.hh"
+#include "G4DNARuddIonisationExtendedModel.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

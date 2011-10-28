@@ -59,6 +59,10 @@ G4bool G4DNAIonisation::IsApplicable(const G4ParticleDefinition& p)
    || &p == instance->GetIon("alpha++")
    || &p == instance->GetIon("alpha+")
    || &p == instance->GetIon("helium")
+   || &p == instance->GetIon("carbon")
+   || &p == instance->GetIon("nitrogen")
+   || &p == instance->GetIon("oxygen")
+   || &p == instance->GetIon("iron")
   );
 }
 
@@ -110,6 +114,17 @@ void G4DNAIonisation::InitialiseProcess(const G4ParticleDefinition* p)
       if(!Model()) SetModel(new G4DNARuddIonisationModel);
       Model()->SetLowEnergyLimit(0*keV);
       Model()->SetHighEnergyLimit(400*MeV);
+
+      AddEmModel(1, Model());   
+    }
+
+    // Extension to HZE proposed by Z. Francis
+    
+    if(name == "carbon" || name == "nitrogen" || name == "oxygen" || name == "iron")
+    {
+      if(!Model()) SetModel(new G4DNARuddIonisationExtendedModel);
+      Model()->SetLowEnergyLimit(0*keV);
+      Model()->SetHighEnergyLimit(p->GetAtomicMass()*1e6*MeV);
 
       AddEmModel(1, Model());   
     }

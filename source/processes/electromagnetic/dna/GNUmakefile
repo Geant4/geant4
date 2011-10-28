@@ -9,9 +9,8 @@ ifndef G4INSTALL
   G4INSTALL = ../../../..
 endif
 
-SUBDIRS  = processes models utils
-
-SUBLIBS = G4emdna-processes G4emdna-models G4emdna-utils  
+SUBDIRS  = management molecules/management molecules/types utils models processes
+SUBLIBS = G4emdna-man G4emdna-molman G4emdna-moltypes G4emdna-utils G4emdna-models G4emdna-processes
 
 include $(G4INSTALL)/config/globlib.gmk
 

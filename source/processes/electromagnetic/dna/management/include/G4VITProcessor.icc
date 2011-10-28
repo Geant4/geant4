@@ -1,0 +1,251 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// Author: Mathieu Karamitros (kara@cenbg.in2p3.fr)
+//
+// WARNING : This class is released as a prototype.
+// It might strongly evolve or even disapear in the next releases.
+//
+// History:
+// -----------
+// 10 Oct 2011 M.Karamitros created
+//
+// -------------------------------------------------------------------
+
+TEMPLATE int G4VITPROCESSOR::fNbProc(0) ;
+TEMPLATE pthread_attr_t G4VITPROCESSOR::fThreadAttribute;
+
+TEMPLATE
+G4VITPROCESSOR::G4VITProcessor(G4int nbProc)
+{
+    //ctor
+
+    fID = nbProc ;
+    fRunning = false;
+    fOccupied = false ;
+    fInitialized = false;
+
+    // initialize attribute object
+    int status = 0;
+
+    // If master ie fNbProc never setup
+    if(fNbProc == 0)
+    {
+        fNbProc = nbProc ;
+
+        status = pthread_attr_init(&fThreadAttribute);
+
+        pthread_attr_setdetachstate(&fThreadAttribute, PTHREAD_CREATE_JOINABLE);
+//      pthread_attr_setdetachstate(&fThreadAttribute, PTHREAD_CREATE_DETACHED);
+    }
+
+    if(status)
+    {
+        printError("pthread_attr_init failed at", status,
+                   __FILE__, __LINE__);
+        exit(status);
+    }
+
+    // set the scheduling scope attribute
+//    status = pthread_attr_setscope(&fThreadAttribute,
+//                                   PTHREAD_SCOPE_SYSTEM);
+//    if(status)
+//    {
+//        printError("pthread_attr_setscope failed at", status,
+//                   __FILE__, itoa(__LINE__, line, 10), line, 10));
+//        exit(status);
+//    }
+
+    pthread_mutex_init(&fMutex, NULL);
+
+    fNext = 0;
+}
+
+TEMPLATE
+G4VITPROCESSOR::~G4VITProcessor()
+{
+    //dtor
+    if(fNext && fNext->fID != fNbProc) delete fNext ;
+}
+
+TEMPLATE
+G4VITPROCESSOR::G4VITProcessor(const G4VITPROCESSOR& /*other*/)
+{
+    //copy ctor
+    fRunning = false;
+    fOccupied = false ;
+    fInitialized = false;
+    pthread_mutex_init(&fMutex, NULL);
+    fNext = 0;
+}
+
+TEMPLATE
+G4VITPROCESSOR& G4VITPROCESSOR::operator=(const G4VITPROCESSOR& rhs)
+{
+    if (this == &rhs) return *this; // handle self assignment
+    //assignment operator
+    return *this;
+}
+
+//______________________________________________________________________________
+TEMPLATE
+void G4VITPROCESSOR::Initialize(void* objectToPass)
+{
+    fInitialized = true ;
+
+    // If multi processor and not last processor
+    if(fID > 0)
+    {
+        fNext = new PROC(fID - 1);
+        fNext->Initialize(objectToPass);
+    }
+    else fNext = 0 ;
+
+    // If master
+    if(fID == fNbProc)
+    {
+        if(fNext)
+        {
+            PROC* lastProcessor = fNext ;
+            while(lastProcessor -> fNext)
+            {
+                lastProcessor = lastProcessor -> fNext ;
+            };
+            lastProcessor-> fNext = (PROC*) this ;
+            // Setup loop
+        }
+        else
+        {
+            fNext = (PROC*) this ;
+            // Setup "auto-loop"
+        }
+    }
+
+    fInitialized = true ;
+}
+
+//______________________________________________________________________________
+TEMPLATE
+void G4VITPROCESSOR::run(Action method)
+{
+    fRunning = true;
+    ApplyMethod* action = new ApplyMethod((PROC*) this, method);
+
+    if(fNbProc > 0)
+    {
+        action -> fThreaded = true ;
+        start_thread(action);
+        return ;
+    }
+    else
+    {
+        action -> fThreaded = false ;
+//        fOccupied = true ;
+        start(action);
+//        fOccupied = false ;
+    }
+}
+
+
+//______________________________________________________________________________
+TEMPLATE
+int G4VITPROCESSOR::start_thread(void* action)
+{
+    int status(0) ;
+
+    if(fOccupied == false)
+    {
+//		pthread_mutex_lock(&fMutex);
+        fOccupied = true;
+//		pthread_mutex_lock(&fMutex);
+
+        status = pthread_create(&fThreadID,
+                                &fThreadAttribute,
+                                G4VITPROCESSOR::start,
+                                (void*) action);
+
+        if(status)
+        {
+
+            G4String orignException(__PRETTY_FUNCTION__);
+            orignException += " ";
+            orignException += __FILE__;
+            orignException += " (";
+            std::ostringstream os;
+            os << __LINE__;
+            orignException += os.str();
+            orignException += ")";
+            G4String exceptionCode ("ITProcessor002");
+            G4ExceptionDescription exceptionDescription ;
+            exceptionDescription << "pthread_create failed with status :";
+            exceptionDescription << status ;
+            G4Exception(orignException.data(),exceptionCode.data(),
+                        FatalErrorInArgument,exceptionDescription);
+        }
+    }
+    else
+    {
+
+        G4String orignException(__PRETTY_FUNCTION__);
+        orignException += " ";
+        orignException += __FILE__;
+        orignException += " (";
+        std::ostringstream os;
+        os << __LINE__;
+        orignException += os.str();
+        orignException += ")";
+        G4String exceptionCode ("ITProcessor003");
+        G4ExceptionDescription exceptionDescription ;
+        exceptionDescription << "trying to create a thread while the ITProcessor is actually occupied.";
+        G4Exception(orignException.data(),exceptionCode.data(),
+                    FatalErrorInArgument,exceptionDescription);
+    }
+
+    return status ;
+}
+
+//______________________________________________________________________________
+TEMPLATE
+void* G4VITPROCESSOR::start(void* action_)
+{
+    ApplyMethod* myAction = reinterpret_cast<ApplyMethod*>(action_) ;
+    (myAction->fProcessor->*(myAction->fAction))();
+
+    if(myAction->fThreaded == true)
+    {
+//        pthread_mutex_lock(&myAction->fProcessor->fMutex);
+        myAction->fProcessor->fOccupied = false ;
+//        pthread_mutex_unlock(&myAction->fProcessor->fMutex);
+        delete myAction ;
+        pthread_exit((void*) 0);
+    }
+    else
+    {
+        myAction->fProcessor->fOccupied = false ;
+        delete myAction ;
+    }
+    return 0;
+}

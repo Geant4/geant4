@@ -45,16 +45,21 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4emdna-utils
     HEADERS
+        G4DNAChemistryManager.hh
         G4DNACrossSectionDataSet.hh
         G4DNAGenericIonsManager.hh
-        G4DNAMoleculeManager.hh
+        G4DNAMolecularReactionTable.hh
+        G4VDNAReactionModel.hh
         G4WaterExcitationStructure.hh
-	G4WaterIonisationStructure.hh
+        G4WaterIonisationStructure.hh
     SOURCES
+        G4DNAChemistryManager.cc
         G4DNACrossSectionDataSet.cc
         G4DNAGenericIonsManager.cc
+        G4DNAMolecularReactionTable.cc
+        G4VDNAReactionModel.cc
         G4WaterExcitationStructure.cc
-	G4WaterIonisationStructure.cc
+        G4WaterIonisationStructure.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

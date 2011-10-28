@@ -14,3 +14,6 @@
 add_subdirectory(processes)
 add_subdirectory(models)
 add_subdirectory(utils)
+add_subdirectory(management)
+add_subdirectory(molecules/management)
+add_subdirectory(molecules/types)

@@ -48,28 +48,40 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-models
         G4DNABornExcitationModel.hh
         G4DNABornIonisationModel.hh
         G4DNAChampionElasticModel.hh
+        G4DNADiffusionControlledModel.hh
         G4DNADingfelderChargeDecreaseModel.hh
         G4DNADingfelderChargeIncreaseModel.hh
         G4DNAEmfietzoglouExcitationModel.hh
         G4DNAMeltonAttachmentModel.hh
         G4DNAMillerGreenExcitationModel.hh
+        G4DNAMolecularReaction.hh
+        G4DNAMolecularStepByStepModel.hh
+        G4DNAMoleculeEncounterStepper.hh
         G4DNARuddIonisationExtendedModel.hh
         G4DNARuddIonisationModel.hh
         G4DNASancheExcitationModel.hh
+        G4DNASancheSolvatationModel.hh
         G4DNAScreenedRutherfordElasticModel.hh
+        G4DNATransformElectronModel.hh
     SOURCES
         G4DNABornExcitationModel.cc
         G4DNABornIonisationModel.cc
         G4DNAChampionElasticModel.cc
+        G4DNADiffusionControlledModel.cc
         G4DNADingfelderChargeDecreaseModel.cc
         G4DNADingfelderChargeIncreaseModel.cc
         G4DNAEmfietzoglouExcitationModel.cc
         G4DNAMeltonAttachmentModel.cc
         G4DNAMillerGreenExcitationModel.cc
+        G4DNAMolecularReaction.cc
+        G4DNAMolecularStepByStepModel.cc
+        G4DNAMoleculeEncounterStepper.cc
         G4DNARuddIonisationExtendedModel.cc
         G4DNARuddIonisationModel.cc
         G4DNASancheExcitationModel.cc
+        G4DNASancheSolvatationModel.cc
         G4DNAScreenedRutherfordElasticModel.cc
+        G4DNATransformElectronModel.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

@@ -24,35 +24,49 @@
 // ********************************************************************
 //
 //
+// Author: Mathieu Karamitros (kara@cenbg.in2p3.fr)
+//
+// WARNING : This class is released as a prototype.
+// It might strongly evolve or even disapear in the next releases.
+//
+// History:
+// -----------
+// 10 Oct 2011 M.Karamitros created
+//
+// -------------------------------------------------------------------
+
+#include "G4DNAElectronSolvatation.hh"
+#include "G4Electron.hh"
+#include "G4WaterExcitationStructure.hh"
+
+G4DNAElectronSolvatation::G4DNAElectronSolvatation(const G4String& processName,
+        G4ProcessType type):G4VEmProcess (processName, type),
+    isInitialised(false)
+{
+    SetProcessSubType(58);
+}
+
+G4DNAElectronSolvatation::~G4DNAElectronSolvatation()
+{}
+
+G4bool G4DNAElectronSolvatation::IsApplicable(const G4ParticleDefinition& p)
+{
+    return (&p == G4Electron::Electron() ) ;
+}
+
+void G4DNAElectronSolvatation::PrintInfo()
+{;}
+
+void G4DNAElectronSolvatation::InitialiseProcess(const G4ParticleDefinition*)
+{
+    if(!isInitialised)
+    {
+        isInitialised = true;
+        SetBuildTableFlag(false);
+
+        if(!Model()) SetModel(new G4DNASancheSolvatationModel);
+        AddEmModel(1, Model());
+    }
+}
 
 
-#ifndef   G4DNAGENERICMOLECULEMANAGER_HH
- #define  G4DNAGENERICMOLECULEMANAGER_HH 1
- 
- #include "globals.hh"
- 
- #include <map>
- 
- class G4Ions;
- class G4ParticleDefinition;
- 
- class G4DNAGenericIonsManager
- {
-  public:
-   static G4DNAGenericIonsManager *      Instance(void);
-   G4ParticleDefinition *                GetIon(const G4String & name);
-
-  private:
-                                         G4DNAGenericIonsManager();
-                                        ~G4DNAGenericIonsManager();
-
-                                         G4DNAGenericIonsManager(const G4DNAGenericIonsManager &);
-   const G4DNAGenericIonsManager        &operator=(const G4DNAGenericIonsManager &);
-
-   static G4DNAGenericIonsManager *      theInstance;
-   
-   typedef std::map<G4String, G4ParticleDefinition *> IonsMap;
-
-   IonsMap                               map;
- };
-#endif /* G4DNAGENERICIONSMANAGER_HH */

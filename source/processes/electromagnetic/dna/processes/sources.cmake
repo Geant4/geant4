@@ -19,11 +19,13 @@
 include_directories(${CLHEP_INCLUDE_DIRS})
 
 # List internal includes needed.
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPNumerics/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPRandom/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/geometry/navigation/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/geometry/volumes/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/materials/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/bosons/include)
@@ -46,19 +48,27 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4emdna-processes
     HEADERS
         G4DNAAttachment.hh
+        G4DNABrownianTransportation.hh
         G4DNAChargeDecrease.hh
         G4DNAChargeIncrease.hh
         G4DNAElastic.hh
+        G4DNAElectronSolvatation.hh
         G4DNAExcitation.hh
         G4DNAIonisation.hh
+        G4DNAMolecularDecayDisplacer.hh
+        G4DNAMolecularDecay.hh
         G4DNAVibExcitation.hh
     SOURCES
         G4DNAAttachment.cc
+        G4DNABrownianTransportation.cc
         G4DNAChargeDecrease.cc
         G4DNAChargeIncrease.cc
         G4DNAElastic.cc
+        G4DNAElectronSolvatation.cc
         G4DNAExcitation.cc
         G4DNAIonisation.cc
+        G4DNAMolecularDecay.cc
+        G4DNAMolecularDecayDisplacer.cc
         G4DNAVibExcitation.cc
     GRANULAR_DEPENDENCIES
         G4baryons
@@ -68,6 +78,8 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-processes
         G4emstandard
         G4emutils
         G4geometrymng
+        G4navigation
+        G4volumes
         G4globman
         G4hepnumerics
         G4intercoms

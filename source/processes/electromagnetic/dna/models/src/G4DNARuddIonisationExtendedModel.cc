@@ -33,6 +33,7 @@
 #include "G4DNARuddIonisationExtendedModel.hh"
 #include "G4UAtomicDeexcitation.hh"
 #include "G4LossTableManager.hh"
+#include "G4DNAChemistryManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -617,7 +618,7 @@ void G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicPa
     G4double deexSecEnergy = 0;
     for (G4int j=secNumberInit; j < secNumberFinal; j++) {
 
-      deexSecEnergy =+ (*fvect)[j]->GetKineticEnergy();
+      deexSecEnergy = deexSecEnergy + (*fvect)[j]->GetKineticEnergy();
 
     }
 
@@ -626,6 +627,14 @@ void G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicPa
 
       G4DynamicParticle* dp = new G4DynamicParticle (G4Electron::Electron(),deltaDirection,secondaryKinetic) ;
       fvect->push_back(dp);
+
+      if(G4DNAChemistryManager::Instance()->IsChemistryActived())
+      {
+          const G4Track * theIncomingTrack = fParticleChangeForGamma->GetCurrentTrack();
+          G4DNAChemistryManager::Instance()->CreateWaterMolecule(fIonizedMolecule,
+                                                             ionizationShell,
+                                                             theIncomingTrack);
+      }
 
   }
 
