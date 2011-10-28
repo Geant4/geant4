@@ -16,6 +16,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14-10-11 gum (materials-V09-04-15)
+- remove G4MaterialPropertyVector.icc, G4MaterialPropertyVector.cc,
+  G4MPVEntry.hh and G4MPVEntry.cc from sources.cmake and put all
+  entries in alphabetic order
+
+13-10-11 gum (materials-V09-04-14)
+- typedef G4PhysicsOrderedFreeVector G4MaterialPropertyVector;
+  remove G4MPVEntry and modify G4MaterialPropertiesTable accordingly
      
 20-08-11 mma (materials-V09-04-13)
 - G4Isotope : add flag fm to identify isomer level

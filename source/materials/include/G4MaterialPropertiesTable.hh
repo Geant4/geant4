@@ -81,10 +81,10 @@ class G4MaterialPropertiesTable
                                  G4double PropertyValue);
     // Add a new property to the table by giving a key-name and value 
 
-    inline void AddProperty(const char     *key,
-                            G4double *PhotonEnergies,
-                            G4double *PropertyValues,
-                            G4int     NumEntries);
+    inline G4MaterialPropertyVector* AddProperty(const char     *key,
+                                                 G4double *PhotonEnergies,
+                                                 G4double *PropertyValues,
+                                                 G4int     NumEntries);
     // Add a new property to the table by giving a key-name and the
     // arrays x and y of size NumEntries.
 
@@ -110,9 +110,6 @@ class G4MaterialPropertiesTable
     inline void AddEntry(const char *key, G4double aPhotonEnergy,
                                           G4double aPropertyValue);
     // Add a new entry (pair of numbers) to the table for a given key.
-
-    inline void RemoveEntry(const char *key, G4double  aPhotonEnergy);
-    // Remove an entry from the table for a given key and x-value.
 
     void DumpTable();
 
