@@ -125,7 +125,9 @@ public:
   // access to the target nucleus
   inline const G4Nucleus* GetTargetNucleus() const
   { return &targetNucleus; }
-   
+  
+  virtual void ProcessDescription(std::ostream& outFile) const;
+ 
 protected:    
 
   // reset number of interaction length and save  

@@ -40,6 +40,7 @@
 // 20-Jul-2011 M.Kelsey -- null-pointer checks in DumpState()
 // 24-Sep-2011 M.Kelsey -- Use envvar G4HADRONIC_RANDOM_FILE to save random
 //		engine state before each model call
+// 18-Oct-2011 M.Kelsey -- Handle final-state cases in conservation checks.
 
 #include "G4Types.hh"
 #include "G4HadronicProcess.hh"
@@ -328,6 +329,13 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
   }
   return theTotalResult;
 }
+
+
+void G4HadronicProcess::ProcessDescription(std::ostream& outFile) const
+{
+  outFile << "The description for this process has not been written yet.\n"; 
+}
+
 
 G4HadFinalState* 
 G4HadronicProcess::DoIsotopeCounting(G4HadFinalState * aResult,
@@ -708,34 +716,47 @@ G4HadronicProcess::CheckEnergyMomentumConservation(const G4Track& aTrack,
   G4LorentzVector target4mom(0, 0, 0, targetMass);
   G4LorentzVector initial4mom = projectile4mom + target4mom;
 
-  G4Track* sec;
+  // Compute final-state momentum for scattering and "do nothing" results
   G4LorentzVector final4mom;
-  G4int nSec = theTotalResult->GetNumberOfSecondaries();
-  for (G4int i = 0; i < nSec; i++) {
-    sec = theTotalResult->GetSecondary(i);
-    final4mom += sec->GetDynamicParticle()->Get4Momentum();
+  if (theTotalResult->GetTrackStatus() == fStopAndKill) {
+    G4Track* sec;
+    G4int nSec = theTotalResult->GetNumberOfSecondaries();
+    for (G4int i = 0; i < nSec; i++) {
+      sec = theTotalResult->GetSecondary(i);
+      final4mom += sec->GetDynamicParticle()->Get4Momentum();
+    }
+  } else {	// Interaction didn't complete, returned "do nothing" state
+    G4Track temp(aTrack);
+    temp.SetMomentumDirection(*theTotalResult->GetMomentumDirection());
+    temp.SetKineticEnergy(theTotalResult->GetEnergy());
+    final4mom = temp.GetDynamicParticle()->Get4Momentum() + target4mom;
   }
 
-  G4LorentzVector diff = initial4mom - final4mom;
-  G4double absolute = diff.e();
-  G4double relative = absolute/aTrack.GetKineticEnergy();
-
+  // Get level-checking information (used to cut-off relative checks)
   G4String processName = GetProcessName();
   G4HadronicInteraction* theModel = GetHadronicInteraction();
   G4String modelName("none");
   if (theModel) modelName = theModel->GetModelName();
-  std::pair<G4double, G4double> checkLevels = epCheckLevels;;
+  std::pair<G4double, G4double> checkLevels = epCheckLevels;
   if (!levelsSetByProcess) {
     if (theModel) checkLevels = theModel->GetEnergyMomentumCheckLevels();
     checkLevels.first= std::min(checkLevels.first,  epCheckLevels.first);
     checkLevels.second=std::min(checkLevels.second, epCheckLevels.second);
   }
 
+  // Compute absolute total-energy difference, and relative kinetic-energy
+  G4bool checkRelative = (aTrack.GetKineticEnergy() > checkLevels.second);
+
+  G4LorentzVector diff = initial4mom - final4mom;
+  G4double absolute = diff.e();
+  G4double relative = checkRelative ? absolute/aTrack.GetKineticEnergy() : 0.;
+
+  // Evaluate relative and absolute conservation
   G4bool relPass = false;
   G4String relResult = "fail";
   if (std::abs(relative) < checkLevels.first) {
     relPass = true;
-    relResult = "pass";
+    relResult = checkRelative ? "pass" : "N/A";
   }
 
   G4bool absPass = false;
