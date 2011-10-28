@@ -96,8 +96,8 @@ void G4PSNofStep::SetUnit(const G4String& unit)
     unitName = unit;
     unitValue = 1.0;
   }else{
-      G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] )";
-      G4Exception(GetName(),"DetScorer0000",JustWarning,msg);
+      G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] ) for " + GetName();
+      G4Exception("G4PSNofStep::SetUnit","DetPS0011",JustWarning,msg);
   }
 
 }

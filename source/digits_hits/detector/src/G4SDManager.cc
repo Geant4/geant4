@@ -91,10 +91,17 @@ void G4SDManager::AddNewCollection(G4String SDname,G4String DCname)
   G4int i = HCtable->Registor(SDname,DCname);
   if(verboseLevel>0)
   {
-    if(i<0) G4cerr << "G4SDManager::AddNewCollection : the collection <"
-     << SDname << "/" << DCname << "> has already been reginstered." << G4endl;
-    else G4cout << "G4SDManager::AddNewCollection : the collection <"
-     << SDname << "/" << DCname << "> is registered at " << i << G4endl;
+    if(i<0) {
+     G4ExceptionDescription ED;
+     ED << "G4SDManager::AddNewCollection : the collection <"
+      << SDname << "/" << DCname << "> has already been reginstered." << G4endl;
+     G4Exception("G4SDManager::AddNewCollection","Det0001",JustWarning,ED);
+    }
+    else
+    {
+      G4cout << "G4SDManager::AddNewCollection : the collection <"
+       << SDname << "/" << DCname << "> is registered at " << i << G4endl;
+    }
   }
 }
 

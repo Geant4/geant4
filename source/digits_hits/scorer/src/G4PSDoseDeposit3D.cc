@@ -73,29 +73,16 @@ G4int G4PSDoseDeposit3D::GetIndex(G4Step* aStep)
   G4int j = touchable->GetReplicaNumber(fDepthj);
   G4int k = touchable->GetReplicaNumber(fDepthk);
   
-if(i<0)
+if(i<0||j<0||k<0)
 { 
-  G4Exception("G4PSEnergyDeposit3D","G4PSEnergyDeposit3D::GetIndex",JustWarning,
-              "GetReplicaNumber is negative");
-  G4cerr << "touchable->GetReplicaNumber(fDepthi) returns " << i << G4endl
-         << "for volume: " << touchable->GetVolume(fDepthi)->GetName()
-         << G4endl;
-}
-if(j<0)
-{
-  G4Exception("G4PSEnergyDeposit3D","G4PSEnergyDeposit3D::GetIndex",JustWarning,
-              "GetReplicaNumber is negative");
-  G4cerr << "touchable->GetReplicaNumber(fDepthj) returns " << j << G4endl
-         << "for volume: " << touchable->GetVolume(fDepthj)->GetName()
-         << G4endl;
-}
-if(k<0)
-{
-  G4Exception("G4PSEnergyDeposit3D","G4PSEnergyDeposit3D::GetIndex",JustWarning,
-              "GetReplicaNumber is negative");
-  G4cerr << "touchable->GetReplicaNumber(fDepthk) returns " << k << G4endl
-         << "for volume: " << touchable->GetVolume(fDepthk)->GetName()
-         << G4endl;
+  G4ExceptionDescription ED;
+  ED << "GetReplicaNumber is negative" << G4endl
+     << "touchable->GetReplicaNumber(fDepthi) returns i,j,k = "
+     << i << "," << j << "," << k << " for volume " 
+     << touchable->GetVolume(fDepthi)->GetName() << ","
+     << touchable->GetVolume(fDepthj)->GetName() << ","
+     << touchable->GetVolume(fDepthk)->GetName() << G4endl;
+  G4Exception("G4PSDoseDeposit3D::GetIndex","DetPS0005",JustWarning,ED);
 }
 
   return i*fNj*fNk+j*fNk+k;

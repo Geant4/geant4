@@ -49,7 +49,7 @@ void G4CellScoreComposer::EstimatorCalculation(const G4Step &aStep){
   G4StepPoint *p = 0;
   p = aStep.GetPreStepPoint();
   if (!p) {
-    G4Exception("G4CellScoreComposer::EstimatorCalculation: no pointer to pre PreStepPoint!");
+    G4Exception("G4CellScoreComposer::EstimatorCalculation","Det0191",FatalException," no pointer to pre PreStepPoint!");
   }
   G4double sl = aStep.GetStepLength();
   G4double slw = sl * p->GetWeight();

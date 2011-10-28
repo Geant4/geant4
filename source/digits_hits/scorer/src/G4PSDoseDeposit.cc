@@ -127,9 +127,9 @@ G4double G4PSDoseDeposit::ComputeVolume(G4Step* aStep, G4int idx){
   { // for parameterized volume
     if(idx<0)
     {
-      G4Exception("G4PSDoseDeposit","G4PSDoseDeposit::ProcessHits",JustWarning,
-                  "Incorrect replica number");
-      G4cerr << " --- GetReplicaNumber : " << idx << G4endl;
+      G4ExceptionDescription ED;
+      ED << "Incorrect replica number --- GetReplicaNumber : " << idx << G4endl;
+      G4Exception("G4PSDoseDeposit::ComputeVolume","DetPS0004",JustWarning,ED);
     }
     solid = physParam->ComputeSolid(idx, physVol);
     solid->ComputeDimensions(physParam,idx,physVol);

@@ -52,6 +52,7 @@
 // 2010-07-22   Introduce Unit specification.
 // 2010-07-22   Add weighted and divideByAre options
 // 2011-02-21   Get correct momentum direction in Flux_Out. 
+// 2011-09-09   Modify comment in PrintAll().
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSSphereSurfaceFlux::G4PSSphereSurfaceFlux(G4String name, 
@@ -219,7 +220,7 @@ void G4PSSphereSurfaceFlux::PrintAll()
   std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
   for(; itr != EvtMap->GetMap()->end(); itr++) {
     G4cout << "  copy no.: " << itr->first
-	   << "  current  : " << *(itr->second)/GetUnitValue()
+	   << "  Flux  : " << *(itr->second)/GetUnitValue()
 	   << " ["<<GetUnit()<<"]"
 	   << G4endl;
   }
@@ -234,8 +235,8 @@ void G4PSSphereSurfaceFlux::SetUnit(const G4String& unit)
 	    unitName = unit;
 	    unitValue = 1.0;
 	}else{
-	    G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] )";
-	    G4Exception(GetName(),"DetScorer0000",JustWarning,msg);
+	    G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] ) for " + GetName();
+	    G4Exception("G4PSSphereSurfaceFlux::SetUnit","DetPS0016",JustWarning,msg);
 	}
     }
 }

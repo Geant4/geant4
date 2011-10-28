@@ -62,8 +62,11 @@ G4bool G4MultiFunctionalDetector::RegisterPrimitive(G4VPrimitiveScorer* aPS)
    {
      if(primitives[iPrim]==aPS)
      {
-       G4cerr << "Primitive <" << aPS->GetName() << "> is already defined in <" << SensitiveDetectorName
+       G4ExceptionDescription ED;
+       ED << "Primitive <" << aPS->GetName() << "> is already defined in <" << SensitiveDetectorName
               << ">." << G4endl << "Method RegisterPrimitive() is ignored." << G4endl;
+       G4Exception("G4MultiFunctionalDetector::RegisterPrimitive","Det0101",
+                   JustWarning,ED);
        return false;
      }
    }

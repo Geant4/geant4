@@ -140,9 +140,9 @@ G4double G4PSCellFlux::ComputeVolume(G4Step* aStep, G4int idx){
   { // for parameterized volume
     if(idx<0)
     {
-      G4Exception("G4PSCellFlux","G4PSCellFlux::ProcessHits",JustWarning,
-                  "Incorrect replica number");
-      G4cerr << " --- GetReplicaNumber : " << idx << G4endl;
+      G4ExceptionDescription ED;
+      ED << "Incorrect replica number --- GetReplicaNumber : " << idx << G4endl;
+      G4Exception("G4PSCellFlux::ComputeVolume","DetPS0001",JustWarning,ED);
     }
     solid = physParam->ComputeSolid(idx, physVol);
     solid->ComputeDimensions(physParam,idx,physVol);

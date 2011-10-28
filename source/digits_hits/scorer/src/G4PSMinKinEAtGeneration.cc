@@ -37,6 +37,7 @@
 //
 // Created: 2005-11-17  Tsukasa ASO, Akinori Kimura.
 // 2010-07-22   Introduce Unit specification.
+// 2011-09-09   Modify comment in PrintAll().  T.Aso
 //
 
 G4PSMinKinEAtGeneration::G4PSMinKinEAtGeneration(G4String name, G4int depth)
@@ -120,7 +121,7 @@ void G4PSMinKinEAtGeneration::PrintAll()
   std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
   for(; itr != EvtMap->GetMap()->end(); itr++) {
     G4cout << "  copy no.: " << itr->first
-	   << "  num of step: " << *(itr->second)/GetUnitValue()
+	   << "  energy: " << *(itr->second)/GetUnitValue()
 	   << " ["<<GetUnit()<<"]"
 	   << G4endl;
   }

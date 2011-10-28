@@ -36,7 +36,8 @@
 // 
 //
 // Created: 2007-02-02  Tsukasa ASO, Akinori Kimura.
-//          2010-07-22   Introduce Unit specification.
+//          2010-07-22  Introduce Unit specification.
+//          2011-09-09  Modify comment in PrintAll().
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -110,7 +111,14 @@ void G4PSTrackLength::PrintAll()
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
   std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
   for(; itr != EvtMap->GetMap()->end(); itr++) {
-      G4cout << "  copy no.: " << itr->first << " value ";
+      G4cout << "  copy no.: " << itr->first ;
+      if ( multiplyKinE ){
+	if ( divideByVelocity ) G4cout << " EnergyFlux: ";
+	else                    G4cout << " EnergyFlow: ";
+      }else{
+	if ( divideByVelocity ) G4cout << " Time: ";
+	else                    G4cout << " Length: ";
+      }
       G4cout << *(itr->second)/GetUnitValue()
 	     << " ["<< GetUnit() << "]";
       G4cout << G4endl;

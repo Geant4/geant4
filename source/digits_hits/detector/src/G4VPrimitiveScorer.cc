@@ -80,7 +80,7 @@ void G4VPrimitiveScorer::CheckAndSetUnit(const G4String& unit,
 	unitName = unit;
 	unitValue = G4UnitDefinition::GetValueOf(unit);
     } else {
-	G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] )";
-	G4Exception(GetName(),"DetPS0000",JustWarning,msg);
+	G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] ) requested for " + GetName();
+	G4Exception("G4VPrimitiveScorer::CheckAndSetUnit","Det0151",JustWarning,msg);
     }
 }
