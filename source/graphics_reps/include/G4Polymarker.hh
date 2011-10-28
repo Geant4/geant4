@@ -48,10 +48,9 @@ public: // With description
   friend std::ostream& operator << (std::ostream& os, const G4Polymarker& marker);
   enum MarkerType {dots, circles, squares};
   G4Polymarker ();
-  G4Polymarker (const G4VMarker&);
   virtual ~G4Polymarker ();
   MarkerType GetMarkerType () const;
-  void SetMarkerType (MarkerType);
+  void SetMarkerType (MarkerType type);
 private:
   MarkerType fMarkerType;
 };

@@ -101,8 +101,7 @@ public: // With description
   //////////////////////////////////////////////////////
   // Constructors...
   G4VMarker ();
-  G4VMarker (const G4VMarker&);
-  G4VMarker (const G4Point3D& position);
+  G4VMarker (const G4Point3D& pos);
 
   //////////////////////////////////////////////////////
   // Destructor...

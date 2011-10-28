@@ -37,18 +37,8 @@ G4VMarker::G4VMarker ():
   fPosition   (G4Point3D ()),
   fWorldSize  (0.),
   fScreenSize (0.),
-  fFillStyle  (noFill)
-{
-  // fInfo: default initialisation.
-}
-
-G4VMarker::G4VMarker (const G4VMarker& m):
-  G4Visible   (m),
-  fPosition   (m.fPosition),
-  fWorldSize  (m.fWorldSize),
-  fScreenSize (m.fScreenSize),
-  fFillStyle  (m.fFillStyle),
-  fInfo       (m.fInfo)
+  fFillStyle  (noFill),
+  fInfo       (G4String())
 {}
 
 G4VMarker::G4VMarker (const G4Point3D& pos):
@@ -57,9 +47,7 @@ G4VMarker::G4VMarker (const G4Point3D& pos):
   fScreenSize (0.),
   fFillStyle  (noFill),
   fInfo       (G4String())
-{
-  // fInfo: default initialisation.
-}
+{}
 
 G4VMarker::~G4VMarker () {}
 
@@ -69,8 +57,7 @@ G4bool G4VMarker::operator != (const G4VMarker& m) const {
       (fWorldSize  != m.fWorldSize)   ||
       (fScreenSize != m.fScreenSize)  ||
       (fFillStyle  != m.fFillStyle)   ||
-      !(fPosition  == m.fPosition)    ||
-      (fInfo       != m.fInfo)
+      !(fPosition  == m.fPosition)
       )
     return true;
   return false;
@@ -94,7 +81,6 @@ std::ostream& operator << (std::ostream& os, const G4VMarker& marker) {
   default:
     os << "unrecognised"; break;
   }
-  if (!marker.fInfo.empty()) os << "\n  User information: " << marker.fInfo;
   os << "\n           " << (const G4Visible&) marker;
   return os;
 }

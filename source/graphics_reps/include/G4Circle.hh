@@ -46,8 +46,8 @@ class G4Circle: public G4VMarker {
 public: // With description
 
   G4Circle ();
-  G4Circle (const G4VMarker&);
-  G4Circle (const G4Point3D& position);
+  G4Circle (const G4VMarker& marker);
+  G4Circle (const G4Point3D& pos);
   virtual ~G4Circle ();
 
  };

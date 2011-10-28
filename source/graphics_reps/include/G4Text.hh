@@ -77,8 +77,8 @@ public: // With description
 
   enum Layout {left, centre, right};
   G4Text (const G4String& text);
-  G4Text (const G4String& text, const G4Point3D& position);
-  G4Text (const G4VMarker&);
+  G4Text (const G4String& text, const G4Point3D& pos);
+  G4Text (const G4VMarker& marker);
   ~G4Text ();
 
   G4String GetText   () const;
@@ -88,7 +88,7 @@ public: // With description
   G4double GetYOffset () const ;
 
   void SetText   (const G4String& text);
-  void SetLayout (Layout);
+  void SetLayout (Layout layout);
 
   void SetOffset ( double dx,  double dy ) ;   
 

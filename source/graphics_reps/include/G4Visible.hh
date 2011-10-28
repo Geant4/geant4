@@ -54,7 +54,7 @@ public: // With description
 
   G4Visible ();
   G4Visible (const G4Visible&);
-  G4Visible (const G4VisAttributes*);
+  G4Visible (const G4VisAttributes* pVA);
 
   virtual ~G4Visible ();
 
@@ -64,8 +64,8 @@ public: // With description
 
   const G4VisAttributes* GetVisAttributes () const;
 
-  void SetVisAttributes (const G4VisAttributes*);
-  void SetVisAttributes (const G4VisAttributes&);
+  void SetVisAttributes (const G4VisAttributes* pVA);
+  void SetVisAttributes (const G4VisAttributes& VA);
   // The G4VisAttributes object is not stored in a G4Visible; only a
   // reference, a const pointer, is kept.  Therefore the
   // G4VisAttributes object to which it refers must have a life long
