@@ -30,7 +30,6 @@
 // G4 Gheisha High Energy model class -- header file
 // H. Fesefeldt, RWTH Aachen 23-October-1996
 // A prototype of the Gheisha High Energy collision model.
-//
 
 #ifndef G4HEAntiNeutronInelastic_h
 #define G4HEAntiNeutronInelastic_h 1
@@ -55,7 +54,7 @@ class G4HEAntiNeutronInelastic : public G4HEInelastic
     G4HEAntiNeutronInelastic(const G4String& name = "G4HEAntiNeutronInelastic");
     ~G4HEAntiNeutronInelastic(){};
 
-    void Description() const;
+    virtual void ModelDescription(std::ostream&) const;
         
     G4int vecLength;
         

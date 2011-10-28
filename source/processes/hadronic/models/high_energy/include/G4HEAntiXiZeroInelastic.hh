@@ -50,34 +50,34 @@
 
 class G4HEAntiXiZeroInelastic : public G4HEInelastic  
 {
- public:  // with description
-   G4HEAntiXiZeroInelastic() : G4HEInelastic("G4HEAntiXiZeroInelastic")
-   {
-     vecLength = 0;
-     theMinEnergy = 20*GeV;
-     theMaxEnergy = 10*TeV;
-     MAXPART      = 2048;
-     verboseLevel = 0; 
-   }
+  public:  // with description
+    G4HEAntiXiZeroInelastic() : G4HEInelastic("G4HEAntiXiZeroInelastic")
+    {
+      vecLength = 0;
+      theMinEnergy = 20*GeV;
+      theMaxEnergy = 10*TeV;
+      MAXPART      = 2048;
+      verboseLevel = 0; 
+    }
 
-   ~G4HEAntiXiZeroInelastic(){ };
+    ~G4HEAntiXiZeroInelastic() {};
 
-   void Description() const;
+    virtual void ModelDescription(std::ostream&) const;
          
-   G4int vecLength;
+    G4int vecLength;
         
-   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
-                                  G4Nucleus& targetNucleus);
+    G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+                                   G4Nucleus& targetNucleus);
 
-   G4int GetNumberOfSecondaries() {return vecLength;}
+    G4int GetNumberOfSecondaries() {return vecLength;}
 
-   void FirstIntInCasAntiXiZero(G4bool& inElastic,
-                                const G4double availableEnergy,
-                                G4HEVector pv[],
-                                G4int& vecLen, 
-                                const G4HEVector& incidentParticle,
-                                const G4HEVector& targetParticle,
-                                const G4double atomicWeight);
+    void FirstIntInCasAntiXiZero(G4bool& inElastic,
+                                 const G4double availableEnergy,
+                                 G4HEVector pv[],
+                                 G4int& vecLen, 
+                                 const G4HEVector& incidentParticle,
+                                 const G4HEVector& targetParticle,
+                                 const G4double atomicWeight);
 };
 #endif
 

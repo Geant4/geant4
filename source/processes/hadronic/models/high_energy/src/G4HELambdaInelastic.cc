@@ -50,39 +50,19 @@ G4HELambdaInelastic::G4HELambdaInelastic(const G4String& name)
   theMaxEnergy = 10*TeV;
   MAXPART      = 2048;
   verboseLevel = 0;
-//  Description(); 
 }
 
 
-void G4HELambdaInelastic::Description() const
+void G4HELambdaInelastic::ModelDescription(std::ostream& outFile) const
 {
-  char* dirName = getenv("G4PhysListDocDir");
-  if (dirName) {
-    std::ofstream outFile;
-    G4String outFileName = GetModelName() + ".html";
-    G4String pathName = G4String(dirName) + "/" + outFileName;
-
-    outFile.open(pathName);
-    outFile << "<html>\n";
-    outFile << "<head>\n";
-
-    outFile << "<title>Description of Lambda High Energy Parameterized Model</title>\n";
-    outFile << "</head>\n";
-    outFile << "<body>\n";
-
-    outFile << "G4HELambdaInelastic is one of the High Energy Parameterized\n"
-            << "(HEP) models used to implement inelastic Lambda scattering\n"
-            << "from nuclei.  It is a re-engineered version of the GHEISHA\n"
-            << "code of H. Fesefeldt.  It divides the initial collision\n"
-            << "products into backward- and forward-going clusters which are\n"
-            << "then decayed into final state hadrons.  The model does not\n"
-            << "conserve energy on an event-by-event basis.  It may be\n"
-            << "applied to lambdas with initial energies above 20 GeV.\n";
-
-    outFile << "</body>\n";
-    outFile << "</html>\n";
-    outFile.close();
-  }
+  outFile << "G4HELambdaInelastic is one of the High Energy Parameterized\n"
+          << "(HEP) models used to implement inelastic Lambda scattering\n"
+          << "from nuclei.  It is a re-engineered version of the GHEISHA\n"
+          << "code of H. Fesefeldt.  It divides the initial collision\n"
+          << "products into backward- and forward-going clusters which are\n"
+          << "then decayed into final state hadrons.  The model does not\n"
+          << "conserve energy on an event-by-event basis.  It may be\n"
+          << "applied to lambdas with initial energies above 20 GeV.\n";
 }
 
 

@@ -52,41 +52,41 @@
 
 class G4HEKaonZeroShortInelastic : public G4HEInelastic  
 {
- public:  // with description
-   G4HEKaonZeroShortInelastic() : G4HEInelastic("G4HEKaonZeroShortInelastic") 
-   {
-     theMinEnergy = 20*GeV;
-     theMaxEnergy = 10*TeV;
-     MAXPART      = 2048;
-     verboseLevel = 0; 
-   }
+  public:  // with description
+    G4HEKaonZeroShortInelastic() : G4HEInelastic("G4HEKaonZeroShortInelastic") 
+    {
+      theMinEnergy = 20*GeV;
+      theMaxEnergy = 10*TeV;
+      MAXPART      = 2048;
+      verboseLevel = 0; 
+    }
 
-   ~G4HEKaonZeroShortInelastic(){ };
+    ~G4HEKaonZeroShortInelastic() {};
 
-   void Description() const;
+    virtual void ModelDescription(std::ostream&) const;
          
-   G4int vecLength;
+    G4int vecLength;
 
-   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
-                                  G4Nucleus& targetNucleus);
+    G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+                                   G4Nucleus& targetNucleus);
 
-   G4int GetNumberOfSecondaries()
-        { return vecLength;};           
+    G4int GetNumberOfSecondaries()
+         { return vecLength;};           
 
-   void FirstIntInCasKaonZero(G4bool& inElastic,
-                              const G4double availableEnergy,
-                              G4HEVector pv[],
-                              G4int& vecLen,
-                              const G4HEVector& incidentParticle,
-                              const G4HEVector& targetParticle,
-                              const G4double atomicWeight);
+    void FirstIntInCasKaonZero(G4bool& inElastic,
+                               const G4double availableEnergy,
+                               G4HEVector pv[],
+                               G4int& vecLen,
+                               const G4HEVector& incidentParticle,
+                               const G4HEVector& targetParticle,
+                               const G4double atomicWeight);
 
-   void FirstIntInCasAntiKaonZero(G4bool& inElastic,
-                                  const G4double availableEnergy,
-                                  G4HEVector pv[],
-                                  G4int& vecLen,
-                                  const G4HEVector& incidentParticle,
-                                  const G4HEVector& targetParticle);
+    void FirstIntInCasAntiKaonZero(G4bool& inElastic,
+                                   const G4double availableEnergy,
+                                   G4HEVector pv[],
+                                   G4int& vecLen,
+                                   const G4HEVector& incidentParticle,
+                                   const G4HEVector& targetParticle);
 };
 #endif
 

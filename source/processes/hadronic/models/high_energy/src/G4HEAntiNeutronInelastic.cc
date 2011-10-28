@@ -38,7 +38,6 @@
 // processes for particles at rest.  
 // First work done by J.L.Chuma and F.W.Jones, TRIUMF, June 96.  
 // H. Fesefeldt, RWTH-Aachen, 23-October-1996
-// Last modified: 29-July-1998 
  
 #include "G4HEAntiNeutronInelastic.hh"
 
@@ -51,40 +50,20 @@ G4HEAntiNeutronInelastic::G4HEAntiNeutronInelastic(const G4String& name)
   theMaxEnergy = 10*TeV;
   MAXPART      = 2048;
   verboseLevel = 0;
-//  Description(); 
 }
 
 
-void G4HEAntiNeutronInelastic::Description() const
+void G4HEAntiNeutronInelastic::ModelDescription(std::ostream& outFile) const
 {
-  char* dirName = getenv("G4PhysListDocDir");
-  if (dirName) {
-    std::ofstream outFile;
-    G4String outFileName = GetModelName() + ".html";
-    G4String pathName = G4String(dirName) + "/" + outFileName;
-
-    outFile.open(pathName);
-    outFile << "<html>\n";
-    outFile << "<head>\n";
-
-    outFile << "<title>Description of anti-neutron High Energy Parameterized Model</title>\n";
-    outFile << "</head>\n";
-    outFile << "<body>\n";
-
-    outFile << "G4HEAntiNeutronInelastic is one of the High Energy\n"
-            << "Parameterized (HEP) models used to implement inelastic\n"
-            << "anti-neutron scattering from nuclei.  It is a re-engineered\n"
-            << "version of the GHEISHA code of H. Fesefeldt.  It divides the\n"
-            << "initial collision products into backward- and forward-going\n"
-            << "clusters which are then decayed into final state hadrons.\n"
-            << "The model does not conserve energy on an event-by-event\n"
-            << "basis.  It may be applied to anti-neutrons with initial energies\n"
-            << "above 20 GeV.\n";
-
-    outFile << "</body>\n";
-    outFile << "</html>\n";
-    outFile.close();
-  }
+  outFile << "G4HEAntiNeutronInelastic is one of the High Energy\n"
+          << "Parameterized (HEP) models used to implement inelastic\n"
+          << "anti-neutron scattering from nuclei.  It is a re-engineered\n"
+          << "version of the GHEISHA code of H. Fesefeldt.  It divides the\n"
+          << "initial collision products into backward- and forward-going\n"
+          << "clusters which are then decayed into final state hadrons.\n"
+          << "The model does not conserve energy on an event-by-event\n"
+          << "basis.  It may be applied to anti-neutrons with initial energies\n"
+          << "above 20 GeV.\n";
 }
 
 

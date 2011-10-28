@@ -50,34 +50,34 @@
 
 class G4HEPionPlusInelastic : public G4HEInelastic  
 {
- public:  // with description 
-   G4HEPionPlusInelastic() : G4HEInelastic("G4HEPionPlusInelastic")
-   {
-     vecLength = 0;
-     theMinEnergy = 45*GeV;
-     theMaxEnergy = 10*TeV;
-     MAXPART      = 2048;
-     verboseLevel = 0; 
-   }
+  public:  // with description 
+    G4HEPionPlusInelastic() : G4HEInelastic("G4HEPionPlusInelastic")
+    {
+      vecLength = 0;
+      theMinEnergy = 45*GeV;
+      theMaxEnergy = 10*TeV;
+      MAXPART      = 2048;
+      verboseLevel = 0; 
+    }
 
-   ~G4HEPionPlusInelastic(){ };
+    ~G4HEPionPlusInelastic() {};
 
-   void Description() const;
+    virtual void ModelDescription(std::ostream&) const;
          
-   G4int vecLength;
+    G4int vecLength;
         
-   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
-                                  G4Nucleus& targetNucleus);
+    G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+                                   G4Nucleus& targetNucleus);
 
-   G4int GetNumberOfSecondaries() {return vecLength;}
+    G4int GetNumberOfSecondaries() {return vecLength;}
 
-   void FirstIntInCasPionPlus(G4bool& inElastic,
-                              const G4double availableEnergy,
-                              G4HEVector pv[],
-                              G4int& vecLen, 
-                              const G4HEVector& incidentParticle,
-                              const G4HEVector& targetParticle,
-                              const G4double atomicWeight);
+    void FirstIntInCasPionPlus(G4bool& inElastic,
+                               const G4double availableEnergy,
+                               G4HEVector pv[],
+                               G4int& vecLen, 
+                               const G4HEVector& incidentParticle,
+                               const G4HEVector& targetParticle,
+                               const G4double atomicWeight);
 };
 #endif
 

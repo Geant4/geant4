@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id: G4HEAntiLambdaInelastic.cc,v 1.17 2010-11-27 02:00:07 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -39,7 +38,6 @@
 // processes for particles at rest.  
 // First work done by J.L.Chuma and F.W.Jones, TRIUMF, June 96.  
 // H. Fesefeldt, RWTH-Aachen, 23-October-1996
-//
  
 #include "G4HEAntiLambdaInelastic.hh"
 
@@ -52,40 +50,20 @@ G4HEAntiLambdaInelastic::G4HEAntiLambdaInelastic(const G4String& name)
   theMaxEnergy = 10*TeV;
   MAXPART      = 2048;
   verboseLevel = 0;
-//  Description(); 
 }
 
 
-void G4HEAntiLambdaInelastic::Description() const
+void G4HEAntiLambdaInelastic::ModelDescription(std::ostream& outFile) const
 {
-  char* dirName = getenv("G4PhysListDocDir");
-  if (dirName) {
-    std::ofstream outFile;
-    G4String outFileName = GetModelName() + ".html";
-    G4String pathName = G4String(dirName) + "/" + outFileName;
-
-    outFile.open(pathName);
-    outFile << "<html>\n";
-    outFile << "<head>\n";
-
-    outFile << "<title>Description of anti-Lambda High Energy Parameterized Model</title>\n";
-    outFile << "</head>\n";
-    outFile << "<body>\n";
-
-    outFile << "G4HEAntiLambdaInelastic is one of the High Energy\n"
-            << "Parameterized (HEP) models used to implement inelastic\n"
-            << "anti-Lambda scattering from nuclei.  It is a re-engineered\n"
-            << "version of the GHEISHA code of H. Fesefeldt.  It divides the\n"
-            << "initial collision products into backward- and forward-going\n"
-            << "clusters which are then decayed into final state hadrons.\n"
-            << "The model does not conserve energy on an event-by-event\n"
-            << "basis.  It may be applied to anti-Lambdas with initial energies\n"
-            << "above 20 GeV.\n";
-
-    outFile << "</body>\n";
-    outFile << "</html>\n";
-    outFile.close();
-  }
+  outFile << "G4HEAntiLambdaInelastic is one of the High Energy\n"
+          << "Parameterized (HEP) models used to implement inelastic\n"
+          << "anti-Lambda scattering from nuclei.  It is a re-engineered\n"
+          << "version of the GHEISHA code of H. Fesefeldt.  It divides the\n"
+          << "initial collision products into backward- and forward-going\n"
+          << "clusters which are then decayed into final state hadrons.\n"
+          << "The model does not conserve energy on an event-by-event\n"
+          << "basis.  It may be applied to anti-Lambdas with initial energies\n"
+          << "above 20 GeV.\n";
 }
 
 
@@ -93,7 +71,7 @@ G4HadFinalState*
 G4HEAntiLambdaInelastic::ApplyYourself(const G4HadProjectile &aTrack,
                                        G4Nucleus &targetNucleus)
 {
-  G4HEVector * pv = new G4HEVector[MAXPART];
+  G4HEVector* pv = new G4HEVector[MAXPART];
   const G4HadProjectile *aParticle = &aTrack;
   const G4double atomicWeight = targetNucleus.GetA_asInt();
   const G4double atomicNumber = targetNucleus.GetZ_asInt();
@@ -102,9 +80,6 @@ G4HEAntiLambdaInelastic::ApplyYourself(const G4HadProjectile &aTrack,
   G4int incidentCode = incidentParticle.getCode();
   G4double incidentMass = incidentParticle.getMass();
   G4double incidentTotalEnergy = incidentParticle.getEnergy();
-
-  // G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
-  // DHW 19 May 2011: variable set but not used
 
   G4double incidentKineticEnergy = incidentTotalEnergy - incidentMass;
 

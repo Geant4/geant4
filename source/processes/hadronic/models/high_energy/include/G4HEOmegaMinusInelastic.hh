@@ -62,7 +62,7 @@ class G4HEOmegaMinusInelastic : public G4HEInelastic
 
    ~G4HEOmegaMinusInelastic(){ };
 
-   void Description() const;
+   virtual void ModelDescription(std::ostream&) const;
          
    G4int vecLength;
         

@@ -25,7 +25,6 @@
 //
 // $Id: G4HEXiMinusInelastic.cc,v 1.17 2010-11-29 05:44:44 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -37,41 +36,21 @@
 // processes for particles at rest.  
 // First work done by J.L.Chuma and F.W.Jones, TRIUMF, June 96.  
 // H. Fesefeldt, RWTH-Aachen, 23-October-1996
-// Last modified: 29-July-1998 
  
 #include "G4HEXiMinusInelastic.hh"
 
 
-void G4HEXiMinusInelastic::Description() const
+void G4HEXiMinusInelastic::ModelDescription(std::ostream& outFile) const
 {
-  char* dirName = getenv("G4PhysListDocDir");
-  if (dirName) {
-    std::ofstream outFile;
-    G4String outFileName = GetModelName() + ".html";
-    G4String pathName = G4String(dirName) + "/" + outFileName;
-
-    outFile.open(pathName);
-    outFile << "<html>\n";
-    outFile << "<head>\n";
-
-    outFile << "<title>Description of Xi- High Energy Parameterized Model</title>\n";
-    outFile << "</head>\n";
-    outFile << "<body>\n";
-
-    outFile << "G4HEXiMinusInelastic is one of the High Energy\n"
-            << "Parameterized (HEP) models used to implement inelastic\n"
-            << "Xi- scattering from nuclei.  It is a re-engineered\n"
-            << "version of the GHEISHA code of H. Fesefeldt.  It divides the\n"
-            << "initial collision products into backward- and forward-going\n"
-            << "clusters which are then decayed into final state hadrons.\n"
-            << "The model does not conserve energy on an event-by-event\n"
-            << "basis.  It may be applied to Xi- with initial energies\n"
-            << "above 20 GeV.\n";
-
-    outFile << "</body>\n";
-    outFile << "</html>\n";
-    outFile.close();
-  }
+  outFile << "G4HEXiMinusInelastic is one of the High Energy\n"
+          << "Parameterized (HEP) models used to implement inelastic\n"
+          << "Xi- scattering from nuclei.  It is a re-engineered\n"
+          << "version of the GHEISHA code of H. Fesefeldt.  It divides the\n"
+          << "initial collision products into backward- and forward-going\n"
+          << "clusters which are then decayed into final state hadrons.\n"
+          << "The model does not conserve energy on an event-by-event\n"
+          << "basis.  It may be applied to Xi- with initial energies\n"
+          << "above 20 GeV.\n";
 }
 
 

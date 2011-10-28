@@ -57,7 +57,7 @@ class G4HELambdaInelastic : public G4HEInelastic
 
     ~G4HELambdaInelastic() {};
 
-    void Description() const;
+    virtual void ModelDescription(std::ostream&) const;
              
     G4int vecLength;
         

@@ -25,7 +25,6 @@
 //
 // $Id: G4HESigmaMinusInelastic.cc,v 1.17 2010-11-29 05:44:44 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -50,39 +49,19 @@ G4HESigmaMinusInelastic::G4HESigmaMinusInelastic(const G4String& name)
   theMaxEnergy = 10*TeV;
   MAXPART      = 2048;
   verboseLevel = 0;
-//  Description();
 } 
 
 
-void G4HESigmaMinusInelastic::Description() const
+void G4HESigmaMinusInelastic::ModelDescription(std::ostream& outFile) const
 {
-  char* dirName = getenv("G4PhysListDocDir");
-  if (dirName) {
-    std::ofstream outFile;
-    G4String outFileName = GetModelName() + ".html";
-    G4String pathName = G4String(dirName) + "/" + outFileName;
-
-    outFile.open(pathName);
-    outFile << "<html>\n";
-    outFile << "<head>\n";
-
-    outFile << "<title>Description of Sigma- High Energy Parameterized Model</title>\n";
-    outFile << "</head>\n";
-    outFile << "<body>\n";
-
-    outFile << "G4HESigmaMinusInelastic is one of the High Energy Parameterized\n"
-            << "(HEP) models used to implement inelastic Sigma- scattering\n"
-            << "from nuclei.  It is a re-engineered version of the GHEISHA\n"
-            << "code of H. Fesefeldt.  It divides the initial collision\n"
-            << "products into backward- and forward-going clusters which are\n"
-            << "then decayed into final state hadrons.  The model does not\n"
-            << "conserve energy on an event-by-event basis.  It may be\n"
-            << "applied to sigmas with initial energies above 20 GeV.\n";
-
-    outFile << "</body>\n";
-    outFile << "</html>\n";
-    outFile.close();
-  }
+  outFile << "G4HESigmaMinusInelastic is one of the High Energy Parameterized\n"
+          << "(HEP) models used to implement inelastic Sigma- scattering\n"
+          << "from nuclei.  It is a re-engineered version of the GHEISHA\n"
+          << "code of H. Fesefeldt.  It divides the initial collision\n"
+          << "products into backward- and forward-going clusters which are\n"
+          << "then decayed into final state hadrons.  The model does not\n"
+          << "conserve energy on an event-by-event basis.  It may be\n"
+          << "applied to sigmas with initial energies above 20 GeV.\n";
 }
 
 

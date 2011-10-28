@@ -54,9 +54,9 @@ class G4HESigmaPlusInelastic : public G4HEInelastic
   public:  // with description 
     G4HESigmaPlusInelastic(const G4String& name = "G4HESigmaPlusInelastic");
 
-    ~G4HESigmaPlusInelastic(){ };
+    ~G4HESigmaPlusInelastic() {};
     
-    void Description() const;
+    virtual void ModelDescription(std::ostream&) const;
      
     G4int vecLength;
   

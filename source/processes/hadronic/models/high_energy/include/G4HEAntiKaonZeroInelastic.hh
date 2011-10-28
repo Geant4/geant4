@@ -26,7 +26,6 @@
 // $Id: G4HEAntiKaonZeroInelastic.hh,v 1.15 2010-11-27 02:02:19 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
 // G4 Gheisha High Energy model class -- header file
 // H. Fesefeldt, RWTH Aachen 23-October-1996
 // A prototype of the Gheisha High Energy collision model.
@@ -55,7 +54,7 @@ class G4HEAntiKaonZeroInelastic : public G4HEInelastic
 
     ~G4HEAntiKaonZeroInelastic(){ };
 
-    void Description() const;
+    virtual void ModelDescription(std::ostream&) const;
          
     G4int vecLength;
         
