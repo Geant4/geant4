@@ -29,7 +29,10 @@
 // 04-10-2010  M. Kelsey -- Replace G4String keys with integers (ZZZAAA),
 //		            move string operation to GenerateFilename()
 // 17-11-2010 V. Ivanchenko - make as a classical singleton. 
+//
 
+// 17-10-2011 L. Desorgher -- Allow the user to replace the radioactive decay data provided in Geant4
+// 							by its own data file for a given isotope
 #ifndef G4NuclearLevelStore_hh 
 #define G4NuclearLevelStore_hh 1
 
@@ -49,6 +52,9 @@ public:
   G4NuclearLevelManager* GetManager(G4int Z, G4int A);
   ~G4NuclearLevelStore();
 
+  void AddUserEvaporationDataFile(G4int Z, G4int A,G4String filename);
+
+
 private:
   G4int GenerateKey(G4int Z, G4int A) const { return Z*1000+A; }
 
@@ -60,5 +66,8 @@ private:
   G4String dirName;
 
   static G4NuclearLevelStore* theInstance;
+
+
+  std::map<G4int, G4String> theUserEvaporationDataFiles;
 };
 #endif
