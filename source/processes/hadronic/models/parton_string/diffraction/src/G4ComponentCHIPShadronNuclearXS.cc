@@ -96,7 +96,7 @@ G4ComponentCHIPShadronNuclearXS::~G4ComponentCHIPShadronNuclearXS()
 G4double G4ComponentCHIPShadronNuclearXS::GetTotalElementCrossSection
 (const G4ParticleDefinition* aParticle, G4double kinEnergy, G4int Z, G4double N)
 {
-  G4double momentum = std::sqrt(kinEnergy*(kinEnergy+aParticle->GetPDGMass()));
+  G4double momentum = std::sqrt(kinEnergy*(kinEnergy+2.*aParticle->GetPDGMass()));
   G4int PDGcode=aParticle->GetPDGEncoding();
 
   G4VQCrossSection* CHIPSmanagerEl=0; 
@@ -148,7 +148,7 @@ G4double G4ComponentCHIPShadronNuclearXS::GetTotalIsotopeCrossSection
 G4double G4ComponentCHIPShadronNuclearXS::GetInelasticElementCrossSection
 (const G4ParticleDefinition* aParticle, G4double kinEnergy, G4int Z, G4double N)
 {
-  G4double momentum = std::sqrt(kinEnergy*(kinEnergy+aParticle->GetPDGMass()));
+  G4double momentum = std::sqrt(kinEnergy*(kinEnergy+2.*aParticle->GetPDGMass()));
   G4int PDGcode=aParticle->GetPDGEncoding();
 
   G4VQCrossSection* CHIPSmanagerInEl=0;
@@ -197,7 +197,7 @@ G4double G4ComponentCHIPShadronNuclearXS::GetInelasticIsotopeCrossSection
 G4double G4ComponentCHIPShadronNuclearXS::GetElasticElementCrossSection
 (const G4ParticleDefinition* aParticle, G4double kinEnergy, G4int Z, G4double N)
 {
-  G4double momentum = std::sqrt(kinEnergy*(kinEnergy+aParticle->GetPDGMass()));
+  G4double momentum = std::sqrt(kinEnergy*(kinEnergy+2.*aParticle->GetPDGMass()));
   G4int PDGcode=aParticle->GetPDGEncoding();
 
   G4VQCrossSection* CHIPSmanagerEl=0; 

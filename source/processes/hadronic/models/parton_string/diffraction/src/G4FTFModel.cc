@@ -58,8 +58,6 @@ G4FTFModel::G4FTFModel():theExcitation(new G4DiffractiveExcitation()),
         theParameters=0;
 	NumberOfInvolvedNucleon=0;
         NumberOfInvolvedNucleonOfProjectile=0;
-	SetEnergyMomentumCheckLevels(2*perCent, 150*MeV);
-
 }
 
 struct DeleteVSplitableHadron { void operator()(G4VSplitableHadron * aH){ delete aH;} };
@@ -202,7 +200,8 @@ G4cout<<"             "<<aNucleus.GetN()<<" "<<aNucleus.GetZ()<<G4endl;
 //G4cout<<" End Init "<<theProjectile.GetMomentum()<<G4endl;
 // To turn on/off (1/0) elastic scattering close/open ...
 //theParameters->SetProbabilityOfElasticScatt(0.); 
-//G4cout<<theParameters->GetProbabilityOfElasticScatt()<<G4endl;
+//G4cout<<" etProbabilityOfElasticScatt "<<theParameters->GetProbabilityOfElasticScatt()<<G4endl;
+//G4cout<<" INIT ";
 //G4int Uzhi; G4cin>>Uzhi;
 
    if(theAdditionalString.size() != 0)
@@ -413,8 +412,15 @@ if(std::abs(theProjectile.GetDefinition()->GetBaryonNumber()) <= 1)
 //G4cout<<"ZcoordinateOfCurrentInteraction "<<ZcoordinateOfCurrentInteraction/fermi<<G4endl;
 //G4cout<<"TimeOfPreviousCollision "<<TimeOfPreviousCollision<<G4endl;
 
-            TimeOfCurrentCollision=TimeOfPreviousCollision+ 
-            (ZcoordinateOfCurrentInteraction-ZcoordinateOfPreviousCollision)/betta_z; 
+            // A.R. 18-Oct-2011 : Protection needed for nuclear capture of
+            //                    anti-proton at rest.
+	    if ( betta_z > 1.0e-10 ) {
+              TimeOfCurrentCollision=TimeOfPreviousCollision+ 
+              (ZcoordinateOfCurrentInteraction-ZcoordinateOfPreviousCollision)/betta_z;
+            } else {
+              TimeOfCurrentCollision=TimeOfPreviousCollision;
+            } 
+
 //G4cout<<"TimeOfCurrentCollision "<<TimeOfCurrentCollision<<G4endl;
 // It is assumed that the nucleons are ordered on increasing z-coordinate ------------
             aNucleon->GetSplitableHadron()->SetTimeOfCreation(TimeOfCurrentCollision);
@@ -760,7 +766,7 @@ G4bool G4FTFModel::PutOnMassShell()
         G4int ResidualCharge    =theNucleus->GetCharge();
 
         ResidualExcitationEnergy=0.;
-	G4LorentzVector PnuclearResidual(0.,0.,0.,0.);
+	G4LorentzVector Ptarget(0.,0.,0.,0.);                    // Uzhi 20 Sept.
 
         G4double ExcitationEnergyPerWoundedNucleon=
                   theParameters->GetExcitationEnergyPerWoundedNucleon();
@@ -771,10 +777,12 @@ G4bool G4FTFModel::PutOnMassShell()
 
 	while ((aNucleon = theNucleus->GetNextNucleon()))
         {
+         Ptarget+=aNucleon->Get4Momentum();                       // Uzhi 20 Sept.
+
          if(aNucleon->AreYouHit())
          {   // Involved nucleons
 //G4cout<<"PutOn Tr "<<aNucleon->Get4Momentum()<<G4endl;
-          Psum += aNucleon->Get4Momentum();
+//        Psum += aNucleon->Get4Momentum();                       // Uzhi 20 Sept.
           if(!ProjectileIsAntiBaryon)
           {
            SumMasses += aNucleon->GetDefinition()->GetPDGMass();  
@@ -808,12 +816,12 @@ G4bool G4FTFModel::PutOnMassShell()
          }
          else
          {   // Spectator nucleons
-          PnuclearResidual += aNucleon->Get4Momentum();
+//        PnuclearResidual += aNucleon->Get4Momentum();          // Uzhi 20 Sept.
          }  // end of if(!aNucleon->AreYouHit())
 	}   // end of while (theNucleus->GetNextNucleon())
 
-        Psum += PnuclearResidual;
-//G4cout<<"ResidualCharge ,ResidualMassNumber "<<ResidualCharge<<" "<<ResidualMassNumber<<G4endl;
+        Psum += Ptarget;   // PnuclearResidual; // Uzhi 20 Sept.
+//G4cout<<"ResidualCharge ,ResidualMassNumber "<<ResidualCharge<<" "<<ResidualMassNumber<<" "<<Ptarget<<G4endl;
         G4double ResidualMass(0.);
         if(ResidualMassNumber == 0)
         {
@@ -882,12 +890,16 @@ G4bool G4FTFModel::PutOnMassShell()
            //G4cout << " abort ColliDeleteVSplitableHadronsion!! " << G4endl;
          return false; 
         }
-
+//G4cout<<"Yprojectile hadron "<<Ptmp.rapidity()<<G4endl;
 //        toCms.rotateZ(-1*Ptmp.phi());              // Uzhi 5.12.09
 //        toCms.rotateY(-1*Ptmp.theta());            // Uzhi 5.12.09
 	
         G4LorentzRotation toLab(toCms.inverse());
 
+//      Ptmp=toCms*PnuclearResidual;                 // Uzhi 20 Sept.
+        Ptmp=toCms*Ptarget;                          // Uzhi 20 Sept.
+        G4double YtargetNucleus=Ptmp.rapidity();
+//G4cout<<"YtargetNucleus "<<YtargetNucleus<<G4endl;
 //-------------------------------------------------------------
 //------- Ascribing of the involved nucleons Pt and Xminus ----
         G4double Dcor        = theParameters->GetDofNuclearDestruction()/
@@ -895,7 +907,7 @@ G4bool G4FTFModel::PutOnMassShell()
 
         G4double AveragePt2  = theParameters->GetPt2ofNuclearDestruction();
         G4double maxPtSquare = theParameters->GetMaxPt2ofNuclearDestruction();
-//G4cout<<"Dcor "<<Dcor<<" AveragePt2 "<<AveragePt2<<G4endl;
+//G4cout<<"Dcor "<<theParameters->GetDofNuclearDestruction()<<" "<<Dcor<<" AveragePt2 "<<AveragePt2<<G4endl;
         G4double M2target(0.);
         G4double WminusTarget(0.);
         G4double WplusProjectile(0.);
@@ -912,6 +924,7 @@ G4bool G4FTFModel::PutOnMassShell()
 
             NumberOfTries++;
 //G4cout<<"NumberOfTries "<<NumberOfTries<<G4endl;
+//{G4int Uzhi; G4cin>>Uzhi;}
             if(NumberOfTries == 100*(NumberOfTries/100))   // 100
             { // At large number of tries it would be better to reduce the values
               ScaleFactor/=2.;
@@ -919,7 +932,7 @@ G4bool G4FTFModel::PutOnMassShell()
               AveragePt2 *=ScaleFactor;
             }
 
-            G4ThreeVector PtSum(0.,0.,0.);
+            G4ThreeVector PtSum(0.,0.,0.), PtRes(0.,0.,0.);
             G4double XminusSum(0.);
             G4double Xminus(0.);
             G4bool InerSuccess=true;
@@ -934,9 +947,10 @@ G4bool G4FTFModel::PutOnMassShell()
 	     for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )
              {
                G4Nucleon * aNucleon = TheInvolvedNucleon[i];
-
+PtRes-=aNucleon->Get4Momentum().vect();
                G4ThreeVector tmpPt = GaussianPt(AveragePt2, maxPtSquare);
                PtSum += tmpPt;
+//G4cout<<"Dcor at sampling "<<Dcor<<G4endl;
                G4ThreeVector tmpX=GaussianPt(Dcor*Dcor, 1.);
                Xminus=tmpX.x();
                XminusSum+=Xminus;
@@ -950,15 +964,17 @@ G4bool G4FTFModel::PutOnMassShell()
              }   // end of for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )
 
 //---------------------------------------------------------------------------
-             G4double DeltaX(0.);
-             G4double DeltaY(0.);
+             G4double DeltaX(PtSum.x());  //0.);
+             G4double DeltaY(PtSum.y());  //0.);
              G4double DeltaXminus(0.);
 
 //G4cout<<"ResidualMassNumber "<<ResidualMassNumber<<" "<<PtSum<<G4endl;
+DeltaX      = (PtSum.x()-PtRes.x())/NumberOfInvolvedNucleon;
+DeltaY      = (PtSum.y()-PtRes.y())/NumberOfInvolvedNucleon;
              if(ResidualMassNumber == 0)
              {
-              DeltaX      = PtSum.x()/NumberOfInvolvedNucleon;
-              DeltaY      = PtSum.y()/NumberOfInvolvedNucleon;
+//              DeltaX      = PtSum.x()/NumberOfInvolvedNucleon;
+//              DeltaY      = PtSum.y()/NumberOfInvolvedNucleon;
               DeltaXminus = (XminusSum-1.)/NumberOfInvolvedNucleon;
              }
              else
@@ -988,18 +1004,19 @@ G4bool G4FTFModel::PutOnMassShell()
                G4double Px=aNucleon->Get4Momentum().px() - DeltaX;
                G4double Py=aNucleon->Get4Momentum().py() - DeltaY;
 //G4cout<<" i Px Py "<<i<<" "<<Px<<" "<<Py<<G4endl;
-               if(!ProjectileIsAntiBaryon)                          // 4.12.2010
-               {
+//               if(!ProjectileIsAntiBaryon)                          // 4.12.2010
+//               {
                 M2target +=(aNucleon->GetSplitableHadron()->GetDefinition()->GetPDGMass()*
                             aNucleon->GetSplitableHadron()->GetDefinition()->GetPDGMass()  + 
                             Px*Px + Py*Py)/Xminus;
+/*
                } else
                {
                 M2target +=(aNucleon->Get4Momentum().e() *
                             aNucleon->Get4Momentum().e()  +      // 6.12.2010
                             Px*Px + Py*Py)/Xminus;
                }
-
+*/
                G4LorentzVector tmp(Px,Py,Xminus,aNucleon->Get4Momentum().e()); // 6.12.2010
                aNucleon->SetMomentum(tmp);
              }   // end of for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )
@@ -1008,7 +1025,7 @@ G4bool G4FTFModel::PutOnMassShell()
 
              if(InerSuccess && (ResidualMassNumber != 0))
              {
-              M2target +=(ResidualMass*ResidualMass + PtSum.mag2())/XminusSum;
+              M2target +=(ResidualMass*ResidualMass + PtRes.mag2())/XminusSum;//PtSum
              }
 //G4cout<<"InerSuccess "<<InerSuccess<<" "<<std::sqrt(M2target)<<G4endl;
 //G4int Uzhi;G4cin>>Uzhi;
@@ -1024,6 +1041,12 @@ G4bool G4FTFModel::PutOnMassShell()
 
           G4double Pzprojectile=WplusProjectile/2. - M2projectile/2./WplusProjectile;// 8.06.11
           G4double Eprojectile =WplusProjectile/2. + M2projectile/2./WplusProjectile;// 8.06.11
+          G4double Yprojectile=0.5*std::log((Eprojectile+Pzprojectile)/
+                                            (Eprojectile-Pzprojectile));            // 1.07.11
+
+//G4cout<<"Yprojectile "<<Yprojectile<<G4endl;
+//G4LorentzVector TestPprojectile=Pprojectile;
+//TestPprojectile.setPz(Pzprojectile);  TestPprojectile.setE(Eprojectile);
 
 //G4cout<<"DecayMomentum2 "<<DecayMomentum2<<G4endl;
 //G4cout<<"WminusTarget WplusProjectile "<<WminusTarget<<" "<<WplusProjectile<<G4endl;
@@ -1033,27 +1056,55 @@ G4bool G4FTFModel::PutOnMassShell()
           {
            G4Nucleon * aNucleon = TheInvolvedNucleon[i];
            G4LorentzVector tmp=aNucleon->Get4Momentum();
-//G4cout<<"Invol Nucl "<<tmp<<G4endl;
+//G4cout<<"Invol Nucl Mom "<<tmp<<G4endl;
            G4double Mt2(0.);
 
-           if(!ProjectileIsAntiBaryon)                          // 4.12.2010
-           {
+//           if(!ProjectileIsAntiBaryon)                          // 4.12.2010
+//           {
             Mt2 = sqr(tmp.x())+sqr(tmp.y())+
                   aNucleon->GetSplitableHadron()->GetDefinition()->GetPDGMass()*
                   aNucleon->GetSplitableHadron()->GetDefinition()->GetPDGMass();
+/*
            } else
            {
             Mt2 = sqr(tmp.x())+sqr(tmp.y())+                   // 4.12.2010
-                  aNucleon->Get4Momentum().e();
+                  sqr(aNucleon->Get4Momentum().e());    // sqr
            }
+*/
            G4double Xminus=tmp.z();
 
            G4double Pz=-WminusTarget*Xminus/2. + Mt2/(2.*WminusTarget*Xminus);
            G4double E = WminusTarget*Xminus/2. + Mt2/(2.*WminusTarget*Xminus);
+           G4double YtargetNucleon=0.5*std::log((E+Pz)/(E-Pz));   // 1.07.11 //Uzhi 20 Sept.
+
+//G4cout<<"YtargetNucleon "<<YtargetNucleon<<G4endl;
+
+/*
+tmp.setPz(Pz); 
+tmp.setE(E);
+G4LorentzVector TestPsum=TestPprojectile+tmp;
+G4LorentzRotation toCms(-1*TestPsum.boostVector());
+G4LorentzVector Ptmp=toCms*TestPprojectile;
+if ( Ptmp.pz() <= 0. )                                
+{
+// "String" moving backwards in  CMS, abort collision !!
+OuterSuccess=false; 
+break;
+}
+*/
+
+//G4cout<<"Pz E "<<Pz<<" "<<E<<G4endl;
+//G4cout<<"Pz/E > Pzprojectile/Eprojectile "<<Pz/E <<" "<< Pzprojectile/Eprojectile<<G4endl;
+//G4cout<<"Pz+E > Pzprojectile+Eprojectile "<<Pz+E <<" "<< Pzprojectile+Eprojectile<<G4endl;
 //           if( E+Pz > WplusProjectile ){OuterSuccess=false; break;}        // 8.06.11
-           if( Pz/E > Pzprojectile/Eprojectile ){OuterSuccess=false; break;} // 8.06.11
+//           if( Pz/E > Pzprojectile/Eprojectile ){OuterSuccess=false; break;} // 8.06.11
+//G4cout<<"YtargetNucleon-YtargetNucleus "<<YtargetNucleon-YtargetNucleus<<G4endl;
+//G4cout<<"Yprojectile  YtargetNucleon "<<Yprojectile<<" "<<YtargetNucleon<<G4endl;
+if((std::abs(YtargetNucleon-YtargetNucleus) > 2) || 
+            (Yprojectile  < YtargetNucleon))        {OuterSuccess=false; break;} // 1.07.11
+
           }   // end of for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )
-//G4int Uzhi;G4cin>>Uzhi;
+//if(ProjectileIsAntiBaryon) {G4int Uzhi;G4cin>>Uzhi;}
         } while(!OuterSuccess);
 
 //-------------------------------------------------------------
@@ -1078,17 +1129,18 @@ G4bool G4FTFModel::PutOnMassShell()
 
            G4double Mt2(0.);
 
-           if(!ProjectileIsAntiBaryon)                          // 4.12.2010
-           {
+//           if(!ProjectileIsAntiBaryon)                          // 4.12.2010
+//           {
             Mt2 = sqr(tmp.x())+sqr(tmp.y())+
                   aNucleon->GetSplitableHadron()->GetDefinition()->GetPDGMass()*
                   aNucleon->GetSplitableHadron()->GetDefinition()->GetPDGMass();
+/*
            } else
            {
             Mt2 = sqr(tmp.x())+sqr(tmp.y())+                   // 4.12.2010
                   aNucleon->Get4Momentum().e()*aNucleon->Get4Momentum().e();
            }
-
+*/
            G4double Xminus=tmp.z();
 
            G4double Pz=-WminusTarget*Xminus/2. + Mt2/(2.*WminusTarget*Xminus);
@@ -1125,10 +1177,11 @@ G4bool G4FTFModel::PutOnMassShell()
         Residual4Momentum.setPy(Residual3Momentum.y());
         Residual4Momentum.setPz(PzResidual); 
         Residual4Momentum.setE(EResidual);
-//G4cout<<"Residual4Momentum in CMS "<<Residual4Momentum<<G4endl;
+//G4cout<<"Residual4Momentum in CMS Y "<<Residual4Momentum.rapidity()<<G4endl;
 //G4int Uzhi; G4cin>>Uzhi;
         Residual4Momentum.transform(toLab);
 //G4cout<<"Residual4Momentum in Lab "<<Residual4Momentum<<G4endl;
+//G4int Uzhi; G4cin>>Uzhi;
 //-------------------------------------------------------------
  return true;
 }
@@ -1137,7 +1190,7 @@ G4bool G4FTFModel::PutOnMassShell()
 G4bool G4FTFModel::ExciteParticipants()
 {
 //G4cout<<"G4FTFModel::ExciteParticipants() "<<G4endl;
-        G4bool Successfull(false);
+        G4bool Successfull(true);  //(false); // 1.07.11
 
         theParticipants.StartLoop();
         G4int CurrentInteraction(0);   // Uzhi Feb26
@@ -1175,17 +1228,17 @@ G4bool G4FTFModel::ExciteParticipants()
 
 	   G4VSplitableHadron * projectile=collision.GetProjectile();
 	   G4VSplitableHadron * target=collision.GetTarget();
-/*
+//
 //G4cout<<"Ppr tr "<<projectile<<" "<<target<<G4endl;
 //G4cout<<"theInter Time "<<collision.GetInteractionTime()/fermi<<G4endl;
-G4cout<<"Int Status    "<<collision.GetStatus()<<" "<<CurrentInteraction<<G4endl;
-G4cout<<"Proj M "<<projectile->Get4Momentum()<<G4endl;
-G4cout<<"Targ M "<<target->Get4Momentum()<<G4endl;
-G4cout<<"ProbabilityOfElasticScatt "<<theParameters->GetProbabilityOfElasticScatt()<<G4endl;
-G4cout<<"ProbabilityOfAnnihilation "<<theParameters->GetProbabilityOfAnnihilation()<<G4endl;
-*/
+//G4cout<<"Int Status    "<<collision.GetStatus()<<" "<<CurrentInteraction<<G4endl;
+//G4cout<<"Proj M "<<projectile->Get4Momentum()<<G4endl;
+//G4cout<<"Targ M "<<target->Get4Momentum()<<G4endl;
+//G4cout<<"ProbabilityOfElasticScatt "<<theParameters->GetProbabilityOfElasticScatt()<<G4endl;
+//G4cout<<"ProbabilityOfAnnihilation "<<theParameters->GetProbabilityOfAnnihilation()<<G4endl;
 //G4cout<<"projectile->GetStatus target->GetStatus "<<projectile->GetStatus()<<" "<<target->GetStatus()<<G4endl;
 //if((projectile->GetStatus() == 1) && (target->GetStatus() ==1))
+//
 if(collision.GetStatus())                                          // Uzhi Feb26
 {
 
@@ -1194,6 +1247,10 @@ if(collision.GetStatus())                                          // Uzhi Feb26
 //G4cout<<"before tar "<<target->Get4Momentum()<<" "<<target->Get4Momentum().mag()<<G4endl;
 //G4cout<<"Prob el "<<theParameters->GetProbabilityOfElasticScatt()<<G4endl;
 //G4cout<<"Prob an "<<theParameters->GetProbabilityOfAnnihilation()<<G4endl;
+
+//G4cout<<"Pr Tr "<<projectile->GetDefinition()->GetPDGEncoding()<<" "<<target->GetDefinition()->GetPDGEncoding()<<G4endl;
+//G4int Uzhi; G4cin>>Uzhi;
+
            if(G4UniformRand()< theParameters->GetProbabilityOfElasticScatt())
            { //   Elastic scattering -------------------------
 //G4cout<<"Elastic FTF"<<G4endl;
@@ -1202,11 +1259,13 @@ if(collision.GetStatus())                                          // Uzhi Feb26
 //G4cout<<"Elastic FTF  Successfull "<<target->GetStatus()<<G4endl;
 //G4cout<<"After  pro "<<projectile->Get4Momentum()<<" "<<projectile->Get4Momentum().mag()<<G4endl;
 //G4cout<<"After  tar "<<target->Get4Momentum()<<" "<<target->Get4Momentum().mag()<<G4endl;
-            Successfull = Successfull || true;
+//            Successfull = Successfull || true;  //1.07.11
             } else
             {
 //G4cout<<"Elastic FTF  Not Successfull "<<target->GetStatus()<<G4endl;
-             Successfull = Successfull || false;
+//           Successfull = Successfull || false;
+//       Successfull = Successfull && false;
+Successfull = false; break;                         // 1.07.11
              if(NumberOfInvolvedTargetNucleon > 1)
              {
               NumberOfInvolvedTargetNucleon--;
@@ -1223,11 +1282,13 @@ if(collision.GetStatus())                                          // Uzhi Feb26
              if(theExcitation->ExciteParticipants(projectile, target, 
                                                  theParameters, theElastic))
              {
-              Successfull = Successfull || true; 
+//              Successfull = Successfull || true; 
               NumberOfInel--;
              } else
              {
-              Successfull = Successfull || false;
+//            Successfull = Successfull || false;
+//              Successfull = Successfull && false;
+Successfull = false; break;                         // 1.07.11
               if(NumberOfInvolvedTargetNucleon > 1)
               {
                NumberOfInvolvedTargetNucleon--;
@@ -1238,10 +1299,12 @@ if(collision.GetStatus())                                          // Uzhi Feb26
             {
              if(theElastic->ElasticScattering(projectile, target, theParameters))
              {
-              Successfull = Successfull || true;
+//              Successfull = Successfull || true;
              } else
              {
-              Successfull = Successfull || false;
+//            Successfull = Successfull || false;
+//Successfull = Successfull && false;
+Successfull = false; break;                         // 1.07.11
               if(NumberOfInvolvedTargetNucleon > 1)
               {
                NumberOfInvolvedTargetNucleon--;
@@ -1302,7 +1365,7 @@ if(collision.GetStatus())                                          // Uzhi Feb26
         }       // end of while (theParticipants.Next())
 
 //Successfull=true;
-//G4cout<<"Successfull "<<Successfull<<G4endl;
+//G4cout<<"G4FTFModel::ExciteParticipants() Successfull "<<Successfull<<G4endl;
 //G4int Uzhi; G4cin>>Uzhi;
 	return Successfull;
 }

@@ -150,7 +150,7 @@ G4bool G4FTFAnnihilation::
                   2.*S*M0projectile2 - 2.*S*M0target2 - 2.*M0projectile2*M0target2;
               Prel2/=S;
 
-     if(Prel2 < 1600. )  // *MeV*MeV
+     if(Prel2 < 0. )  // *MeV*MeV 1600.
      { // Annihilation at rest! Values are copied from Paratemets.
       X_a=       625.1;    // mb  // 3-shirt diagram
       X_b=         9.780;  // mb  // anti-quark-quark annihilation
@@ -169,7 +169,7 @@ G4bool G4FTFAnnihilation::
                                      // mb anti-quark-quark annihilation
       if(SqrtS < MesonProdThreshold)
       {
-       X_b=3.13+140.*std::pow((MesonProdThreshold - SqrtS)/GeV,2.5); 
+       X_b=3.13+140.*pow((MesonProdThreshold - SqrtS)/GeV,2.5); 
       } 
       else
       {
@@ -232,7 +232,8 @@ G4bool G4FTFAnnihilation::
 //X_a=0.;
 //X_b=0.;
 //X_c=0.;
-//X_d=100.;
+//X_d=0.;
+//G4cout<<"Annih X a b c d "<<X_a<<" "<<X_b<<" "<<X_c<<" "<<X_d<<G4endl;
 //=========================================
      G4double Xannihilation=X_a+X_b+X_c+X_d;
 // ------------------------------------------------------

@@ -202,7 +202,7 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
 
         if(SqrtS < MesonProdThreshold)
         {
-         X_b=3.13+140.*std::pow(MesonProdThreshold-SqrtS,2.5);// mb anti-quark-quark annihilation
+         X_b=3.13+140.*pow(MesonProdThreshold-SqrtS,2.5);// mb anti-quark-quark annihilation
          Xelastic-=3.*X_b;  // Xel-X(PbarP->NNbar)
         } else
         {
@@ -475,12 +475,12 @@ if(Xtotal-Xelastic != 0.)
       {SetProbabilityOfAnnihilation(Xannihilation/(Xtotal-Xelastic));}
 //
 //SetProbabilityOfElasticScatt(Xtotal, 0.);
-/* //==== No elastic scattering ============================
-      SetProbabilityOfElasticScatt(Xtotal, 0.);
-      SetRadiusOfHNinteractions2((Xtotal-Xelastic)/pi/10.);
-      SetProbabilityOfAnnihilation(1.);
+// //==== No elastic scattering ============================
+//      SetProbabilityOfElasticScatt(Xtotal, 0.);
+//      SetRadiusOfHNinteractions2((Xtotal-Xelastic)/pi/10.);
+//      SetProbabilityOfAnnihilation(1.);
 //        SetProbabilityOfAnnihilation(0.);
-*/ //=======================================================
+// //=======================================================
 
 //-----------------------------------------------------------------------------------  
 
@@ -509,7 +509,7 @@ if(Xtotal-Xelastic != 0.)
               SetProjMinDiffMass(1.16);                   // GeV 
               SetProjMinNonDiffMass(1.16);                // GeV 
 //G4cout<<"Param Get Min Dif "<<GetProjMinNonDiffMass()<<G4endl;
-              SetProbabilityOfProjDiff(0.805*std::exp(-0.35*Ylab));// 0.5
+              SetProbabilityOfProjDiff(0.805*std::exp(-0.35*Ylab));// 0.5  0.805
 
               SetTarMinDiffMass(1.16);                    // GeV
               SetTarMinNonDiffMass(1.16);                 // GeV 
@@ -635,7 +635,8 @@ SetProbabilityOfProjDiff(0.);
       SetMaxPt2ofNuclearDestruction(1.0*GeV*GeV);
 
       SetExcitationEnergyPerWoundedNucleon(75.*MeV);
-      if(Plab < 2.*GeV)
+
+      if(Plab < 2.)   // 2 GeV/c
       { // For slow anti-baryon we have to garanty putting on mass-shell
        SetCofNuclearDestruction(0.);
        SetR2ofNuclearDestruction(1.5*fermi*fermi);
@@ -686,7 +687,7 @@ SetProbabilityOfProjDiff(0.);
 //G4cout<<"Cnd "<<GetCofNuclearDestruction()<<G4endl;
 //SetCofNuclearDestruction(0.4);// (0.2); //(0.4);                  
 //SetExcitationEnergyPerWoundedNucleon(0.*MeV); //(75.*MeV); 
-//SetDofNuclearDestruction(0.4);                  
+//SetDofNuclearDestruction(0.);                  
 //SetPt2ofNuclearDestruction(0.*GeV*GeV); //(0.168*GeV*GeV); 
 //G4cout<<"Pt2 "<<GetPt2ofNuclearDestruction()/GeV/GeV<<G4endl;
 //G4int Uzhi; G4cin>>Uzhi;

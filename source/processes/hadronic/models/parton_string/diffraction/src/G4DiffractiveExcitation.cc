@@ -677,7 +677,7 @@ G4cout<<"SqrtS "<<SqrtS<<G4endl;
 
 G4cout<<"Prob ProjDiff TargDiff "<<ProbProjectileDiffraction<<" "<<ProbTargetDiffraction<<" "<<ProbOfDiffraction<<G4endl;
 G4cout<<"Pr Y "<<Pprojectile.rapidity()<<" Tr Y "<<Ptarget.rapidity()<<G4endl;
-//G4int Uzhi; G4cin>>Uzhi;
+G4int Uzhi; G4cin>>Uzhi;
 */
 /*
      if(ProjectileNonDiffStateMinMass + TargetNonDiffStateMinMass > SqrtS) // 24.07.10
@@ -946,15 +946,16 @@ G4cout<<Seco<<G4endl;
              PMinusMin=std::sqrt(ProjMassT2+PZcms2)-PZcms;
              PMinusMax=SqrtS-TargMassT;
 
-             PMinusNew=ChooseP(PMinusMin, PMinusMax);
-
+//           PMinusNew=ChooseP(PMinusMin, PMinusMax);  // 12.06.11
+             PMinusNew=(PMinusMax-PMinusMin)*G4UniformRand() + PMinusMin;
              Qminus=PMinusNew-Pprojectile.minus();
 
              TPlusMin=std::sqrt(TargMassT2+PZcms2)-PZcms;
 //           TPlusMax=SqrtS-PMinusNew;                      
              TPlusMax=SqrtS-ProjMassT;      
 
-             TPlusNew=ChooseP(TPlusMin, TPlusMax);
+//           TPlusNew=ChooseP(TPlusMin, TPlusMax); // 12.06.11
+             TPlusNew=(TPlusMax-TPlusMin)*G4UniformRand() +TPlusMin;
 
              Qplus=-(TPlusNew-Ptarget.plus());
 
@@ -965,7 +966,7 @@ G4cout<<(Pprojectile+Qmomentum).mag2()<<" "<<ProjectileNonDiffStateMinMass2<<G4e
 G4cout<<(Ptarget    -Qmomentum).mag2()<<" "<<TargetNonDiffStateMinMass2<<G4endl;
 G4int Uzhi; G4cin>>Uzhi;
 */
-       } while (
+       } while ( 
  ((Pprojectile+Qmomentum).mag2() <  ProjectileNonDiffStateMinMass2) || //No double Diffraction
  ((Ptarget    -Qmomentum).mag2() <  TargetNonDiffStateMinMass2    ));
      }
@@ -1383,6 +1384,7 @@ G4double G4DiffractiveExcitation::ChooseP(G4double Pmin, G4double Pmax) const
 	}
 
 	G4double P=Pmin * std::pow(Pmax/Pmin,G4UniformRand()); 
+//	G4double P=(Pmax-Pmin)*G4UniformRand()+Pmin;
 	return P;
 }
 
