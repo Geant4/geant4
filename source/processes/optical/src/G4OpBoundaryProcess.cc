@@ -204,13 +204,13 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
           theLocalNormal = -theLocalNormal;
         }
         else {
-          G4cerr << " G4OpBoundaryProcess/PostStepDoIt(): "
+          G4ExceptionDescription ed;
+          ed << " G4OpBoundaryProcess/PostStepDoIt(): "
                  << " The Navigator reports that it returned an invalid normal"
                  << G4endl;
-          G4Exception("G4OpBoundaryProcess::PostStepDoIt",
-                      "Invalid Surface Normal",
-                      EventMustBeAborted,
-                      "Geometry must return valid surface normal");
+          G4Exception("G4OpBoundaryProcess::PostStepDoIt", "OpBoun01",
+                      EventMustBeAborted,ed,
+                      "Invalid Surface Normal - Geometry must return valid surface normal");
         }
 
         theGlobalNormal = theNavigator->GetLocalToGlobalTransform().
@@ -241,7 +241,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	}
 
         if (Rindex) {
-		Rindex1 = Rindex->GetProperty(thePhotonMomentum);
+		Rindex1 = Rindex->Value(thePhotonMomentum);
 	}
 	else {
 	        theStatus = NoRINDEX;
@@ -312,7 +312,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                   theFinish == groundbackpainted ) {
                   Rindex = aMaterialPropertiesTable->GetProperty("RINDEX");
 	          if (Rindex) {
-                     Rindex2 = Rindex->GetProperty(thePhotonMomentum);
+                     Rindex2 = Rindex->Value(thePhotonMomentum);
                   }
                   else {
 		     theStatus = NoRINDEX;
@@ -336,7 +336,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
               if (PropertyPointer) {
 
                  theReflectivity =
-                          PropertyPointer->GetProperty(thePhotonMomentum);
+                          PropertyPointer->Value(thePhotonMomentum);
 
               } else if (PropertyPointer1 && PropertyPointer2) {
 
@@ -348,14 +348,14 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
               aMaterialPropertiesTable->GetProperty("EFFICIENCY");
               if (PropertyPointer) {
                       theEfficiency =
-                      PropertyPointer->GetProperty(thePhotonMomentum);
+                      PropertyPointer->Value(thePhotonMomentum);
               }
 
               PropertyPointer =
               aMaterialPropertiesTable->GetProperty("TRANSMITTANCE");
               if (PropertyPointer) {
                       theTransmittance =
-                      PropertyPointer->GetProperty(thePhotonMomentum);
+                      PropertyPointer->Value(thePhotonMomentum);
               }
 
 	      if ( theModel == unified ) {
@@ -363,7 +363,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 		aMaterialPropertiesTable->GetProperty("SPECULARLOBECONSTANT");
 	        if (PropertyPointer) {
                          prob_sl =
-			 PropertyPointer->GetProperty(thePhotonMomentum);
+			 PropertyPointer->Value(thePhotonMomentum);
                 } else {
                          prob_sl = 0.0;
                 }
@@ -372,7 +372,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 		aMaterialPropertiesTable->GetProperty("SPECULARSPIKECONSTANT");
 	        if (PropertyPointer) {
                          prob_ss =
-			 PropertyPointer->GetProperty(thePhotonMomentum);
+			 PropertyPointer->Value(thePhotonMomentum);
                 } else {
                          prob_ss = 0.0;
                 }
@@ -381,7 +381,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 		aMaterialPropertiesTable->GetProperty("BACKSCATTERCONSTANT");
 	        if (PropertyPointer) {
                          prob_bs =
-			 PropertyPointer->GetProperty(thePhotonMomentum);
+			 PropertyPointer->Value(thePhotonMomentum);
                 } else {
                          prob_bs = 0.0;
                 }
@@ -408,7 +408,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
               if (aMaterialPropertiesTable)
                  Rindex = aMaterialPropertiesTable->GetProperty("RINDEX");
               if (Rindex) {
-                 Rindex2 = Rindex->GetProperty(thePhotonMomentum);
+                 Rindex2 = Rindex->Value(thePhotonMomentum);
               }
               else {
 		 theStatus = NoRINDEX;
@@ -1099,9 +1099,9 @@ G4double G4OpBoundaryProcess::GetReflectivity(G4double E1_perp,
 void G4OpBoundaryProcess::CalculateReflectivity()
 {
   G4double RealRindex =
-           PropertyPointer1->GetProperty(thePhotonMomentum);
+           PropertyPointer1->Value(thePhotonMomentum);
   G4double ImaginaryRindex =
-           PropertyPointer2->GetProperty(thePhotonMomentum);
+           PropertyPointer2->Value(thePhotonMomentum);
 
   // calculate FacetNormal
   if ( theFinish == ground ) {

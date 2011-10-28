@@ -16,6 +16,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13th Oct 2011 P.Gumplinger (op-V09-04-02)
+              modify to work with materials-V09-04-14
+
+6th  Oct 2011 P.Gumplinger (op-V09-04-01)
+              update G4Exception syntax in G4OpWLS.cc and
+              G4OpBoundaryProcess.cc
+
 14th Jun 2011 Peter Gumplinger (op-V09-04-00)
               A dielectric_dielectric surface may now have a wavelength
               dependent property "TRANSMITTANCE". If this is specified

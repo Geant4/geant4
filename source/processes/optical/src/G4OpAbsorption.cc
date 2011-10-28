@@ -136,7 +136,7 @@ G4double G4OpAbsorption::GetMeanFreePath(const G4Track& aTrack,
                                                 GetProperty("ABSLENGTH");
            if ( AttenuationLengthVector ){
              AttenuationLength = AttenuationLengthVector->
-                                         GetProperty (thePhotonMomentum);
+                                         Value(thePhotonMomentum);
            }
            else {
 //             G4cout << "No Absorption length specified" << G4endl;
