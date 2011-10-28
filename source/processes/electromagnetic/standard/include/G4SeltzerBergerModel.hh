@@ -69,6 +69,12 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
+  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+				 const G4MaterialCutsCouple*,
+				 const G4DynamicParticle*,
+				 G4double cutEnergy,
+				 G4double maxEnergy);
+
 protected:
 
   virtual G4double ComputeDXSectionPerAtom(G4double gammaEnergy);

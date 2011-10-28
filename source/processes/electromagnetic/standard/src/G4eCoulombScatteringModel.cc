@@ -85,7 +85,7 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(const G4String& nam)
   theProton   = G4Proton::Proton();
   currentMaterial = 0; 
 
-  lowEnergyLimit  = 10*eV;  // particle will be killed for lower energy
+  lowEnergyLimit  = 1*keV;  // particle will be killed for lower energy
   recoilThreshold = 0.*keV; // by default does not work
 
   particle = 0;

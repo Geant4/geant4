@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+ 
+28 October 11: V.Ivanchenko (emstand-V09-04-46)
+- G4PAIxSection, G4PAIySection,
+- G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable - migration to 
+    the new G4Exception signature
+- G4ScreeningMottCrossSection, G4eSingleCoulombScatteringModel - new classes
+- G4eBremsstrahlungRelModel - only members used in a derived class are
+                              protected, other moved to be private
+- G4UrbanMscModel95 - return back default FacSafety = 0.3
+- G4SeltzerBergerModel - G4LEDATA is used as a path to the data structure  
+- G4eCoulombScatteringModel - low-limit is increased from 10 eV to 1 keV
+    for the reason of HEP production, may be changed by low-energy user 
 
 10 October 11: V.Ivanchenko (emstand-V09-04-45)
 - G4UrbanMscModel95 - speadup a bit in the case UseSafety (FacSafety = 0.5)

@@ -83,10 +83,10 @@ G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(const G4ParticleDefinition*
   : G4VEmModel(name),
     particle(0),
     bremFactor(fine_structure_const*classic_electr_radius*classic_electr_radius*16./3.),
-    fXiLPM(0), fPhiLPM(0), fGLPM(0),
     isElectron(true),
     fMigdalConstant(classic_electr_radius*electron_Compton_length*electron_Compton_length*4.0*pi),
     fLPMconstant(fine_structure_const*electron_mass_c2*electron_mass_c2/(4.*pi*hbarc)*0.5),
+    fXiLPM(0), fPhiLPM(0), fGLPM(0),
     use_completescreening(true),isInitialised(false)
 {
   theGamma = G4Gamma::Gamma();
@@ -469,7 +469,7 @@ void G4eBremsstrahlungRelModel::SampleSecondaries(
   G4double emax = std::min(maxEnergy, kineticEnergy);
   if(cut >= emax) { return; }
 
-  SetupForMaterial(particle, couple->GetMaterial(),kineticEnergy);
+  SetupForMaterial(particle, couple->GetMaterial(), kineticEnergy);
 
   const G4Element* elm = 
     SelectRandomAtom(couple,particle,kineticEnergy,cut,emax);
@@ -480,7 +480,7 @@ void G4eBremsstrahlungRelModel::SampleSecondaries(
   densityCorr = densityFactor*totalEnergy*totalEnergy;
   G4ThreeVector direction = dp->GetMomentumDirection();
 
-  //  G4double fmax= fMax;
+  //G4double fmax= fMax;
   G4bool highe = true;
   if(totalEnergy < energyThresholdLPM) { highe = false; }
  
@@ -490,16 +490,17 @@ void G4eBremsstrahlungRelModel::SampleSecondaries(
 
   do {
     x = exp(xmin + G4UniformRand()*(xmax - xmin)) - densityCorr;
-    if(x < 0.0) x = 0.0;
+    if(x < 0.0) { x = 0.0; }
     gammaEnergy = sqrt(x);
-    if(highe) f = ComputeRelDXSectionPerAtom(gammaEnergy);
-    else      f = ComputeDXSectionPerAtom(gammaEnergy);
+    if(highe) { f = ComputeRelDXSectionPerAtom(gammaEnergy); }
+    else      { f = ComputeDXSectionPerAtom(gammaEnergy); }
 
     if ( f > fMax ) {
       G4cout << "### G4eBremsstrahlungRelModel Warning: Majoranta exceeded! "
 	     << f << " > " << fMax
 	     << " Egamma(MeV)= " << gammaEnergy
-	     << " E(mEV)= " << kineticEnergy
+	     << " Ee(MeV)= " << kineticEnergy
+	     << "  " << GetName()
 	     << G4endl;
     }
 

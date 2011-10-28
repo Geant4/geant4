@@ -2156,6 +2156,16 @@ G4double G4PAIxSection::GetRutherfordEnergyTransfer()
   return energyTransfer;
 }
 
+/////////////////////////////////////////////////////////////////////////////
+//
+
+void G4PAIxSection::CallError(G4int i, const G4String& methodName) const
+{
+  G4String head = "G4PAIxSection::" + methodName + "()";
+  G4ExceptionDescription ed;
+  ed << "Wrong index " << i << " fSplineNumber= " << fSplineNumber << G4endl;
+  G4Exception(head,"pai001",FatalException,ed);
+}
 
 /////////////////////////////////////////////////////////////////////////////
 //

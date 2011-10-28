@@ -1302,7 +1302,16 @@ G4double G4PAIySection::GetStepPlasmonLoss( G4double step )
   return loss;
 }
 
+/////////////////////////////////////////////////////////////////////////////
+//
 
+void G4PAIySection::CallError(G4int i, const G4String& methodName) const
+{
+  G4String head = "G4PAIySection::" + methodName + "()";
+  G4ExceptionDescription ed;
+  ed << "Wrong index " << i << " fSplineNumber= " << fSplineNumber << G4endl;
+  G4Exception(head,"pai001",FatalException,ed);
+}
 
 /////////////////////////////////////////////////////////////////////////////
 //

@@ -165,6 +165,7 @@ private:
   G4double formfactA;
   G4double factorA2;
   G4double factB;
+  G4double factB1;
   G4double factD;
   G4double gam0pcmp;
   G4double pcmp2;

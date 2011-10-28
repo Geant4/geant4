@@ -97,6 +97,8 @@ G4WentzelOKandVIxSection::G4WentzelOKandVIxSection() :
   elecXSRatio = factB = factD = formfactA = screenZ = 0.0;
   cosTetMaxElec = cosTetMaxNuc = invbeta2 = kinFactor = gam0pcmp = pcmp2 = 1.0;
 
+  factB1= 0.5*CLHEP::pi*fine_structure_const;
+
   Initialise(theElectron, 1.0);
   targetMass = proton_mass_c2;
 }
@@ -164,8 +166,8 @@ G4WentzelOKandVIxSection::SetupTarget(G4int Z, G4double cut)
       screenZ *=std::min(Z*invbeta2,
       	(1.13 +3.76*Z*Z*invbeta2*alpha2*std::sqrt(tau/(tau + fG4pow->Z23(Z)))));
     }
-    if(targetZ == 1 && cosTetMaxNuc < 0.0 && particle == theProton) {
-      cosTetMaxNuc = 0.0;
+    if(targetZ == 1 && cosTetMaxNuc2 < 0.0 && particle == theProton) {
+      cosTetMaxNuc2 = 0.0;
     }
     formfactA = FormFactor[targetZ]*mom2;
 
@@ -309,7 +311,8 @@ G4WentzelOKandVIxSection::SampleSingleScattering(G4double cosTMin,
 
   //G4double fm =  1.0 + formf*z1/(1.0 + (mass + tkin)*z1/targetMass);
   G4double fm =  1.0 + formf*z1;
-  G4double grej = (1. - z1*factB)/( (1.0 + z1*factD)*fm*fm );
+  //G4double grej = (1. - z1*factB)/( (1.0 + z1*factD)*fm*fm );
+  G4double grej = (1. - z1*factB + factB1*targetZ*sqrt(z1*factB)*(2 - z1))/( (1.0 + z1*factD)*fm*fm );
   // "false" scattering
   if( G4UniformRand() > grej ) { return v; }
     // } 

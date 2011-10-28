@@ -97,6 +97,9 @@ protected:
 
   virtual G4double ComputeDXSectionPerAtom(G4double gammaEnergy);
 
+  // * fast inline functions *
+  inline void SetCurrentElement(const G4double);
+
 private:
 
   void InitialiseConstants();
@@ -110,9 +113,6 @@ private:
   G4double ComputeRelDXSectionPerAtom(G4double gammaEnergy);
 
   void SetParticle(const G4ParticleDefinition* p);
-
-  // * fast inline functions *
-  inline void SetCurrentElement(const G4double);
 
   inline G4double Phi1(G4double,G4double);
   inline G4double Phi1M2(G4double,G4double);
@@ -132,31 +132,23 @@ protected:
 
   G4double bremFactor;
 
-  static const G4double xgi[8], wgi[8];
-  static const G4double Fel_light[5];
-  static const G4double Finel_light[5];
-
   // cash
   G4double particleMass;
   G4double kinEnergy;
   G4double totalEnergy;
   G4double currentZ;
-  G4double z13, z23, lnZ;
-  G4double Fel, Finel, fCoulomb, fMax; 
+  //G4double z13, z23, lnZ;
+  //G4double Fel, Finel, fCoulomb, fMax; 
   G4double densityFactor;
   G4double densityCorr;
-
-  // LPM effect
-  G4double lpmEnergy;
-  G4PhysicsVector  *fXiLPM, *fPhiLPM, *fGLPM;
-  G4double xiLPM, phiLPM, gLPM;
-
-  // critical gamma energies
-  G4double klpm, kp;
 
   G4bool   isElectron;
 
 private:
+
+  static const G4double xgi[8], wgi[8];
+  static const G4double Fel_light[5];
+  static const G4double Finel_light[5];
 
   // consts
   G4double lowKinEnergy;
@@ -166,8 +158,26 @@ private:
   G4double facFel, facFinel;
   G4double preS1,logTwo;
 
-  G4bool   use_completescreening;
+  // cash
+  //G4double particleMass;
+  //G4double kinEnergy;
+  //G4double totalEnergy;
+  //G4double currentZ;
+  G4double z13, z23, lnZ;
+  G4double Fel, Finel, fCoulomb, fMax; 
+  //G4double densityFactor;
+  //G4double densityCorr;
 
+  // LPM effect
+  G4double lpmEnergy;
+  G4PhysicsVector  *fXiLPM, *fPhiLPM, *fGLPM;
+  G4double xiLPM, phiLPM, gLPM;
+
+  // critical gamma energies
+  G4double klpm, kp;
+
+  // flags
+  G4bool   use_completescreening;
   G4bool   isInitialised;
 };
 

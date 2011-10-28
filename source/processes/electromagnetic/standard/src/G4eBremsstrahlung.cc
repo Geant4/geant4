@@ -78,6 +78,7 @@
 #include "G4eBremsstrahlung.hh"
 #include "G4Gamma.hh"
 #include "G4eBremsstrahlungModel.hh"
+#include "G4SeltzerBergerModel.hh"
 #include "G4eBremsstrahlungRelModel.hh"
 #include "G4UnitsTable.hh"
 #include "G4LossTableManager.hh"
@@ -119,11 +120,15 @@ void G4eBremsstrahlung::InitialiseEnergyLossProcess(
     SetSecondaryParticle(G4Gamma::Gamma());
     SetIonisation(false);
 
-    if (!EmModel(1)) { SetEmModel(new G4eBremsstrahlungModel(), 1); }
+    //    if (!EmModel(1)) { SetEmModel(new G4eBremsstrahlungModel(), 1); }
+    if (!EmModel(1)) { SetEmModel(new G4SeltzerBergerModel(), 1); }
     if (!EmModel(2)) { SetEmModel(new G4eBremsstrahlungRelModel(), 2); }
 
+    G4double energyLimit = 1*GeV;
+
     EmModel(1)->SetLowEnergyLimit(MinKinEnergy());
-    EmModel(1)->SetHighEnergyLimit(EmModel(2)->LowEnergyLimit());
+    EmModel(1)->SetHighEnergyLimit(energyLimit);
+    EmModel(2)->SetLowEnergyLimit(energyLimit);
     EmModel(2)->SetHighEnergyLimit(MaxKinEnergy());
                 
     G4VEmFluctuationModel* fm = 0;

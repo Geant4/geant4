@@ -762,8 +762,9 @@ void G4GoudsmitSaundersonMscModel::LoadELSEPAXSections()
   char* path = getenv("G4LEDATA");
   if (!path)
     {
-      G4String excep = "G4GoudsmitSaundersonTable: G4LEDATA environment variable not set properly";
-      G4Exception(excep);
+      G4Exception("G4GoudsmitSaundersonMscModel::LoadELSEPAXSections()","em0006",
+		  FatalException,
+                  "Environment variable G4LEDATA not defined");
       return;
     }
 
@@ -773,8 +774,10 @@ void G4GoudsmitSaundersonMscModel::LoadELSEPAXSections()
   infile = fopen(dirFile,"r"); 
   if (infile == 0)
     {
-      G4String excep = "G4GoudsmitSaunderson - data files: " + dirFile + " not found";
-      G4Exception(excep);
+      G4ExceptionDescription ed;
+      ed << "Data file <" + dirFile + "> is not opened!" << G4endl;
+      G4Exception("G4GoudsmitSaundersonMscModel::LoadELSEPAXSections()",
+		  "em0003",FatalException,ed);
       return;
     }
 

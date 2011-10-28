@@ -81,6 +81,7 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4PSTARStopping.hh
         G4PairProductionRelModel.hh
         G4PhotoElectricEffect.hh
+        G4ScreeningMottCrossSection.hh
         G4SeltzerBergerModel.hh
         G4UniversalFluctuation.hh
         G4UrbanMscModel90.hh
@@ -98,6 +99,7 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4eCoulombScatteringModel.hh
         G4eIonisation.hh
         G4eMultipleScattering.hh
+        G4eSingleCoulombScatteringModel.hh
         G4eeToTwoGammaModel.hh
         G4eplusAnnihilation.hh
         G4hIonisation.hh
@@ -139,6 +141,7 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4PSTARStopping.cc
         G4PairProductionRelModel.cc
         G4PhotoElectricEffect.cc
+        G4ScreeningMottCrossSection.hh
         G4SeltzerBergerModel.cc
         G4UniversalFluctuation.cc
         G4UrbanMscModel90.cc
@@ -156,6 +159,7 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4eCoulombScatteringModel.cc
         G4eIonisation.cc
         G4eMultipleScattering.cc
+        G4eSingleCoulombScatteringModel.cc
         G4eeToTwoGammaModel.cc
         G4eplusAnnihilation.cc
         G4hIonisation.cc

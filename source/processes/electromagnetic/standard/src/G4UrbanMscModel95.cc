@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id:   $
 // GEANT4 tag $Name:  $
 //
@@ -98,7 +97,7 @@ G4UrbanMscModel95::G4UrbanMscModel95(const G4String& nam)
   geommin       = 1.e-3*mm;
   geomlimit     = geombig;
   presafety     = 0.*mm;
-  facsafety     = 0.50 ;
+  //facsafety     = 0.50 ;
                           
   y             = 0.;
 

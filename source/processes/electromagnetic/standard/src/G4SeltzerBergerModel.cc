@@ -101,7 +101,7 @@ void G4SeltzerBergerModel::Initialise(const G4ParticleDefinition* p,
 {
   // check environment variable
   // Build the complete string identifying the file with the data set
-  char* path = getenv("G4BREM");
+  char* path = getenv("G4LEDATA");
 
   // Access to elements
   const G4ElementTable* theElmTable = G4Element::GetElementTable();
@@ -111,7 +111,7 @@ void G4SeltzerBergerModel::Initialise(const G4ParticleDefinition* p,
       G4int Z = G4int(((*theElmTable)[i])->GetZ());
       if(Z < 1)        { Z = 1; }
       else if(Z > 100) { Z = 100; }
-      G4cout << "Z= " << Z << G4endl;
+      //G4cout << "Z= " << Z << G4endl;
       // Initialisation
       if(!dataSB[Z]) { ReadData(Z, path); }
     }
@@ -129,20 +129,38 @@ void G4SeltzerBergerModel::ReadData(size_t Z, const char* path)
   //if(path) { G4cout << path << G4endl; }
   if(dataSB[Z]) { return; }
   const char* datadir = path;
+
   if(!datadir) {
-    datadir = getenv("G4BREM");
+    datadir = getenv("G4LEDATA");
+    if(!datadir) {
+      G4Exception("G4SeltzerBergerModel::ReadData()","em0006",FatalException,
+		  "Environment variable G4LEDATA not defined");
+      return;
+    }
   }
   G4Physics2DVector* v = new G4Physics2DVector();
   std::ostringstream ost;
-  ost << datadir << "/br" << Z;
+  ost << datadir << "/brem_SB/br" << Z;
   std::ifstream fin(ost.str().c_str());
-  G4cout << "G4SeltzerBergerModel read from <" << ost.str().c_str() 
-	 << ">" << G4endl;
+  if( !fin.is_open()) {
+    G4ExceptionDescription ed;
+    ed << "Bremsstrahlung data file <" << ost.str().c_str()
+       << "> is not opened!" << G4endl;
+    G4Exception("G4SeltzerBergerModel::ReadData()","em0003",FatalException,
+		ed,"G4LEDATA version should be G4EMLOW6.23 or later.");
+    return;
+  } 
+  //G4cout << "G4SeltzerBergerModel read from <" << ost.str().c_str() 
+  //	 << ">" << G4endl;
   if(v->Retrieve(fin)) { dataSB[Z] = v; }
+  else {
+    G4ExceptionDescription ed;
+    ed << "Bremsstrahlung data file <" << ost.str().c_str()
+       << "> is not retrieved!" << G4endl;
+    G4Exception("G4SeltzerBergerModel::ReadData()","em0005",FatalException,
+		ed,"G4LEDATA version should be G4EMLOW6.23 or later.");
+  }
   // G4cout << dataSB[Z] << G4endl;
-  std::ofstream* fout = new std::ofstream("test");
-  v->Store(*fout);
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -150,7 +168,7 @@ void G4SeltzerBergerModel::ReadData(size_t Z, const char* path)
 G4double G4SeltzerBergerModel::ComputeDXSectionPerAtom(G4double gammaEnergy)
 {
 
-  if(gammaEnergy <= 0.0 || kinEnergy <= 0.0) { return 0.0; }
+  if(gammaEnergy < 0.0 || kinEnergy <= 0.0) { return 0.0; }
   G4double x = gammaEnergy/kinEnergy;
   G4double y = log(kinEnergy/MeV);
   G4int Z = G4int(currentZ);
@@ -161,6 +179,104 @@ G4double G4SeltzerBergerModel::ComputeDXSectionPerAtom(G4double gammaEnergy)
     *millibarn/(bremFactor*kinEnergy*(kinEnergy + 2*electron_mass_c2));
 
   return cross;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void 
+G4SeltzerBergerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp, 
+					const G4MaterialCutsCouple* couple,
+					const G4DynamicParticle* dp,
+					G4double cutEnergy,
+					G4double maxEnergy)
+{
+  G4double kineticEnergy = dp->GetKineticEnergy();
+  G4double cut  = std::min(cutEnergy, kineticEnergy);
+  G4double emax = std::min(maxEnergy, kineticEnergy);
+  if(cut >= emax) { return; }
+
+  SetupForMaterial(particle, couple->GetMaterial(), kineticEnergy);
+
+  const G4Element* elm = 
+    SelectRandomAtom(couple,particle,kineticEnergy,cut,emax);
+  SetCurrentElement(elm->GetZ());
+  G4int Z = G4int(currentZ);
+
+  totalEnergy = kineticEnergy + particleMass;
+  densityCorr = densityFactor*totalEnergy*totalEnergy;
+  G4ThreeVector direction = dp->GetMomentumDirection();
+  /*
+  G4cout << "G4SeltzerBergerModel::SampleSecondaries E(MeV)= " 
+	 << kineticEnergy/MeV
+	 << " Z= " << Z << " cut(MeV)= " << cut/MeV 
+	 << " emax(MeV)= " << emax/MeV << " corr= " << densityCorr << G4endl;
+  */
+  G4double xmin = log(cut*cut + densityCorr);
+  G4double xmax = log(emax*emax  + densityCorr);
+
+  G4double y = log(kineticEnergy/MeV);
+  G4double vmax = std::max(1.1*dataSB[Z]->Value(1.0, y),
+    1.03*dataSB[Z]->Value(sqrt(exp(xmin)-densityCorr)/kineticEnergy, y));
+
+  //G4cout<<"y= "<<y<<" xmin= "<<xmin<<" xmax= "<<xmax<<" vmax= "<<vmax<<G4endl;
+
+  G4double gammaEnergy, v, x; 
+
+  do {
+    x = exp(xmin + G4UniformRand()*(xmax - xmin)) - densityCorr;
+    if(x < 0.0) { x = 0.0; }
+    gammaEnergy = sqrt(x);
+    v = dataSB[Z]->Value(gammaEnergy/kineticEnergy, y);
+
+    if ( v > 1.5*vmax ) {
+      G4cout << "### G4SeltzerBergerModel Warning: Majoranta exceeded! "
+	     << v << " > " << vmax
+	     << " Egamma(MeV)= " << gammaEnergy
+	     << " Ee(MeV)= " << kineticEnergy
+	     << G4endl;
+    }
+
+  } while (v < vmax*G4UniformRand());
+
+  //
+  // angles of the emitted gamma. ( Z - axis along the parent particle)
+  // use general interface
+  //
+  G4double theta = GetAngularDistribution()->PolarAngle(totalEnergy,
+							totalEnergy-gammaEnergy,
+							(G4int)currentZ);
+
+  G4double sint = sin(theta);
+  G4double phi = twopi * G4UniformRand();
+  G4ThreeVector gammaDirection(sint*cos(phi),sint*sin(phi), cos(theta));
+  gammaDirection.rotateUz(direction);
+
+  // create G4DynamicParticle object for the Gamma
+  G4DynamicParticle* g = new G4DynamicParticle(theGamma,gammaDirection,
+                                                        gammaEnergy);
+  vdp->push_back(g);
+  
+  G4double totMomentum = sqrt(kineticEnergy*(totalEnergy + electron_mass_c2));
+  G4ThreeVector dir = totMomentum*direction - gammaEnergy*gammaDirection;
+  direction = dir.unit();
+
+  // energy of primary
+  G4double finalE = kineticEnergy - gammaEnergy;
+
+  // stop tracking and create new secondary instead of primary
+  if(gammaEnergy > SecondaryThreshold()) {
+    fParticleChange->ProposeTrackStatus(fStopAndKill);
+    fParticleChange->SetProposedKineticEnergy(0.0);
+    G4DynamicParticle* el = 
+      new G4DynamicParticle(const_cast<G4ParticleDefinition*>(particle),
+			    direction, finalE);
+    vdp->push_back(el);
+
+    // continue tracking
+  } else {
+    fParticleChange->SetProposedMomentumDirection(direction);
+    fParticleChange->SetProposedKineticEnergy(finalE);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
