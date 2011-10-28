@@ -9,10 +9,13 @@ name := G4electromagnetic
 
 SUBDIRS  = muons standard utils xrays lowenergy
 SUBDIRS += pii highenergy adjoint polarisation
-SUBDIRS += dna/processes dna/models dna/utils
+SUBDIRS += dna/processes dna/models dna/utils dna/management
+SUBDIRS += dna/molecules/management dna/molecules/types
+
 SUBLIBS  = G4muons G4emstandard G4emutils G4xrays G4emlowenergy
 SUBLIBS += G4empii G4emhighenergy G4emadjoint G4empolar
-SUBLIBS += G4emdna-processes G4emdna-models G4emdna-utils
+SUBLIBS += G4emdna-processes G4emdna-models G4emdna-utils G4emdna-man
+SUBLIBS += G4emdna-molman G4emdna-moltypes
 
 ifndef G4INSTALL
   G4INSTALL = ../../..
