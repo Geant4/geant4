@@ -107,11 +107,9 @@ void WLSPrimaryGeneratorAction::BuildEmissionSpectrum()
                       aMaterialPropertiesTable->GetProperty("WLSCOMPONENT");
 
           if (theWLSVector) {
-             theWLSVector->ResetIterator();
-             ++(*theWLSVector);
-             G4double currentIN = theWLSVector->GetProperty();
+             G4double currentIN = (*theWLSVector)[0];
              if (currentIN >= 0.0) {
-                G4double currentPM = theWLSVector->GetPhotonEnergy();
+                G4double currentPM = theWLSVector->Energy(0);
                 G4double currentCII = 0.0;
                 aPhysicsOrderedFreeVector->
                                      InsertValues(currentPM , currentCII);
@@ -119,9 +117,12 @@ void WLSPrimaryGeneratorAction::BuildEmissionSpectrum()
                 G4double prevCII = currentCII;
                 G4double prevIN  = currentIN;
 
-                while(++(*theWLSVector)) {
-                  currentPM = theWLSVector->GetPhotonEnergy();
-                  currentIN=theWLSVector->GetProperty();
+                for (size_t i = 1;
+                     i < theWLSVector->GetVectorLength();
+                     i++)
+                {
+                  currentPM = theWLSVector->Energy(i);
+                  currentIN = (*theWLSVector)[i];
                   currentCII = 0.5 * (prevIN + currentIN);
                   currentCII = prevCII + (currentPM - prevPM) * currentCII;
                   aPhysicsOrderedFreeVector->
@@ -144,6 +145,8 @@ void WLSPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
      BuildEmissionSpectrum();
   }
 
+
+#ifdef use_sampledEnergy
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
   G4double sampledEnergy = 3*eV;
@@ -170,6 +173,7 @@ void WLSPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   }
 
   //particleGun->SetParticleEnergy(sampledEnergy);
+#endif
 
   if(particleGun->GetParticleDefinition()->GetParticleName()=="opticalphoton"){
     SetOptPhotonPolar();

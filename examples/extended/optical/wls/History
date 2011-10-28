@@ -16,6 +16,15 @@ track of all tags.
  
      ----------------------------------------------------------
 
+Oct 14th, 2011 Peter Gumpinger  (WLS-V09-04-02)
+-----------------------------------------------
+    modify to work with materials-V09-04-15
+
+Oct 10th, 2011 Gunter Folger    (WLS-V09-04-01)
+-----------------------------------------------
+    Fix compilation gcc46 compilation warning in WLSMaterials.cc and
+      WLSPrimaryGeneratorAction.cc
+    
 Feb 3rd, 2011 Gunter Folger     (WLS-V09-04-00)
 -----------------------------------------------
     add missing #include <ctime> in  src/WLSRunAction.cc (Windows)

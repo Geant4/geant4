@@ -1,7 +1,5 @@
-
-        ############################################
-        !!! WARNING - FPE detection is activated !!!
-        ############################################
+ PiF: Zero Step Threshold set to 0.0001 mm.
+ PiF:   Value of kCarTolerance = 1e-09 mm. 
 
 *************************************************************
  Geant4 version Name: geant4-09-04-ref-09    (7-October-2011)
@@ -41,6 +39,8 @@ Current available graphics systems are:
   OpenGLStoredX (OGLS)
   OpenGLImmediateX (OGLIX)
   OpenGLStoredX (OGLSX)
+  OpenGLImmediateXm (OGLIXm)
+  OpenGLStoredXm (OGLSXm)
 
 Registering model factories...
 
@@ -956,4 +956,3 @@ n_trajectories: 0
 draw all trajectories
 Graphics systems deleted.
 Visualization Manager deleting...
-
