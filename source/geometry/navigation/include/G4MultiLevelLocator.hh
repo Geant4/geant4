@@ -73,7 +73,7 @@ class G4MultiLevelLocator : public G4VIntersectionLocator
 
    private:
 
-     static const G4int max_depth=4;
+     static const G4int max_depth=10;
 
      G4FieldTrack* ptrInterMedFT[max_depth+1];
        // Used to store intermediate tracks values in case of too slow progress

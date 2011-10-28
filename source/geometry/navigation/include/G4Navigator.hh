@@ -205,15 +205,21 @@ class G4Navigator
   virtual G4TouchableHistoryHandle CreateTouchableHistoryHandle() const;
     // Returns a reference counted handle to a touchable history.
 
-  virtual G4ThreeVector GetLocalExitNormal(G4bool* valid);
-    // Returns Exit Surface Normal and validity too.
-    // It can only be called if the Navigator's last Step has crossed a
+  virtual G4ThreeVector GetLocalExitNormal(G4bool* valid); // const
+  // virtual G4ThreeVector GetGlobalExitNormal(G4bool* valid); // const
+  virtual G4ThreeVector GetGlobalExitNormal(const G4ThreeVector &CurrentE_Point,
+					          G4bool        *valid); // const
+    // Return Exit Surface Normal and validity too.
+    // Can only be called if the Navigator's last Step has crossed a
     // volume geometrical boundary.
     // It returns the Normal to the surface pointing out of the volume that
     // was left behind and/or into the volume that was entered.
-    // (The normal is in the coordinate system of the final volume.)
-    // This function takes full care about how to calculate this normal,
-    // but if the surfaces are not convex it will return valid=false.
+    // Convention:
+    //   The *local* normal is in the coordinate system of the *final* volume.
+    // Restriction:
+    //   Normals are not available for replica volumes (returns valid= false)
+    // These methods takes full care about how to calculate this normal,
+    // but if the surfaces are not convex it will return valid=false.  (tbc)
 
   inline G4int GetVerboseLevel() const;
   inline void  SetVerboseLevel(G4int level);
@@ -356,6 +362,12 @@ class G4Navigator
 
   G4bool fActive;
     // States if the navigator is activated or not.
+
+  G4bool fLastTriedStepComputation; 
+    // Whether ComputeStep was called since the last call to a Locate method
+    // Uses: - distinguish parts of state which differ before/after calls
+    //         to ComputeStep or one of the Locate methods;
+    //       - avoid two consecutive calls to compute-step (illegal).
 
   G4bool fEntering,fExiting;
     // Entering/Exiting volumes blocking/setup

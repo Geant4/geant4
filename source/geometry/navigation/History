@@ -16,6 +16,72 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Oct 24th, 2011 - J.Apostolakis (geomnav-V09-04-04)
+-----------------------------
+ G4VIntersectionLocator (for use in GetLocalSurfaceNormal)
+   - Improvement: make a data member of type G4TouchableHistoryHandle
+     to replace interim use of 'static' for local variable 
+     in GetLocalSurfaceNormal.
+     (keeps optimisation, so as *not* to allocate for every call.)
+ G4MultiLevelNavigator - put in missing change of threshold (Oct 18).
+
+Oct 21th, 2011 - J.Apostolakis (geomnav-V09-04-03)
+-----------------------------
+Several fixes and improvements in G4VIntersectionLocator.cc
+ - GetSurfaceNormal - Fix
+     Fixed check of normal in case of 'last computed' normal. 
+ - GetGlobalSurfaceNormal - Fix
+     Use correct navigator (helper) to transform normal from local to global
+ - GetLocalSurfaceNormal
+     Optimisation: reuse G4TouchableHistoryHandle (via static ad interim) 
+      -- do not allocate for every call.
+ Note: *limitation* of using helper - cannot cope with coincident surfaces in
+       this version. ( Need to use direction of trial *chord* when locating. )
+ - GetLocalExitNormal
+     Call Surface Normal only if on Surface or near inside.
+     Else return 'false' for validity
+ - All 'Normal' methods
+    Check Normal vector to make sure its magnitude is within 0.001 of 1. 
+
+
+Oct 18th, 2011 - J.Apostolakis 
+-----------------------------
+Locators (Simple, Brent, Multi-Level)
+- Refined the threshold for accepting a candidate intersection
+  The new criterion is much smaller (to capture more cases) : 
+        sagitta < tolerance    ~=   1e-9 mm
+  whereas it used to be
+        sagitta < geom_mean( tolerance, delta_intersection )
+        ie.  sagitta < 1e-6 mm
+- Corrected compilation warning from gcc 4.6 (unused variables.)
+G4Navigator
+- Corrected problem in G4Navigator::GetLocalExitNormal
+    ( not set variable 'valid' on one branch. )
+
+Oct 11th, 2011 - J.Apostolakis (geomnav-V09-04-02)
+-----------------------------
+Created *fix* for ATLAS problem of tracks stuck on boundary of volumes:
+- Improved the condition for accepting a candidate intersection with
+  a boundary in the Locator classes.
+  >> It now *checks* that the track will enter the new volume. <<
+  All three Locator classes were revised to use the new convergence 
+      condition ( ie G4SimpleLocator, G4BrentLocator and
+      G4MultiLevelLocator).
+  Note: the check uses the dot product between the exiting normal and
+        the estimated momentum of the track at the approximate curve
+        point near the entry/intersection point.
+- Revised G4VIntersectionLocator:
+    * New method GetSurfaceNormal, to get last normal or, if not
+      available obtain new estimate from GetGlocalSurfaceNormal;
+    * Corrected AdjustmentOfFoundIntersection() to use GlobalExitNormal 
+      instead of Local(ExitNormal);
+    * Renamed arguments of IntersectChord (to no longer use fP prefix).
+- Revised G4Navigator, 
+    * improved GetLocalExitNormal() method, to allow it to be called
+      before Locate is called at the endpoint of the last ComputeStep;
+    * adding state to identify whether ComputeStep was called last 
+      (rather than a Locate method);
+    * adding a method to provides the Exit Normal in Global coordinates. 
 
 August 11th, 2011 - G.Cosmo (geomnav-V09-04-01)
 ---------------------------

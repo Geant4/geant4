@@ -49,6 +49,7 @@ G4Navigator::G4Navigator()
     fTopPhysical(0), fCheck(false), fPushed(false), fWarnPush(true)
 {
   fActive= false; 
+  fLastTriedStepComputation= false;
   ResetStackAndState();
 
   fActionThreshold_NoZeroSteps  = 10; 
@@ -79,6 +80,7 @@ G4Navigator::ResetHierarchyAndLocate(const G4ThreeVector &p,
   ResetState();
   fHistory = *h.GetHistory();
   SetupHierarchy();
+  fLastTriedStepComputation= false;  // Redundant, but best
   return LocateGlobalPointAndSetup(p, &direction, true, false);
 }
 
@@ -112,7 +114,8 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
   EInside insideCode;
   
   G4bool considerDirection = (!ignoreDirection) || fLocatedOnEdge;
-  
+  fLastTriedStepComputation= false;   
+
   if( considerDirection && pGlobalDirection != 0 )
   {
     globalDirection=*pGlobalDirection;
@@ -489,6 +492,7 @@ void
 G4Navigator::LocateGlobalPointWithinVolume(const G4ThreeVector& pGlobalpoint)
 {  
    fLastLocatedPointLocal = ComputeLocalPoint(pGlobalpoint);
+   fLastTriedStepComputation= false;
 
 #ifdef G4DEBUG_NAVIGATION
    if( fVerbose > 2 )
@@ -632,6 +636,8 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
   static G4int sNavCScalls=0;
   sNavCScalls++;
 
+  fLastTriedStepComputation= true; 
+
 #ifdef G4VERBOSE
   if( fVerbose > 0 )
   {
@@ -668,6 +674,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
       // Relocate the point within the same volume
       //
       LocateGlobalPointWithinVolume( pGlobalpoint );
+      fLastTriedStepComputation= true;     // Ensure that this is set again !!
     }
   }
   if ( fHistory.GetTopVolumeType()!=kReplica )
@@ -709,6 +716,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
           else  // Regular (non-voxelised) structure
           {
             LocateGlobalPointAndSetup( pGlobalpoint, &pDirection, true, true );
+            fLastTriedStepComputation= true;     // Ensure that this is set again !!
             //
             // if physical process limits the step, the voxel will not be the
             // one given by ComputeStepSkippingEqualMaterials() and the local
@@ -1085,30 +1093,100 @@ void G4Navigator::SetupHierarchy()
 //
 G4ThreeVector G4Navigator::GetLocalExitNormal( G4bool* valid )
 {
-  G4ThreeVector ExitNormal(0.,0.,0.);
+  G4ThreeVector    ExitNormal(0.,0.,0.);
+  G4VSolid        *currentSolid=0;
+  G4LogicalVolume *candidateLogical;
+  if ( fLastTriedStepComputation ) 
+  {
+    // use fLastLocatedPointLocal
+    // and next candidate volume
+    G4ThreeVector nextSolidExitNormal(0.,0.,0.);
 
-  if ( EnteredDaughterVolume() )
-  {
-    ExitNormal= -(fHistory.GetTopVolume()->GetLogicalVolume()->
-                  GetSolid()->SurfaceNormal(fLastLocatedPointLocal));
-    *valid = true;
-  }
-  else
-  {
-    if( fExitedMother )
+    // NAIVE implementation 
+    if( fBlockedPhysicalVolume ) 
+    { 
+      candidateLogical= fBlockedPhysicalVolume->GetLogicalVolume();
+      if( candidateLogical ) 
+      {
+        if( CharacteriseDaughters(candidateLogical) != kReplica )
+	{
+	  // OK if it is a parameterised volume
+	  G4bool onSurface;
+	  currentSolid= candidateLogical->GetSolid(); 
+	  onSurface = currentSolid->Inside(fLastLocatedPointLocal) != kOutside; 
+          // Treating inside as likely to be nearly on surface 
+          //  - chose to be lenient for inside points.
+          //    and not to check that they are near-enough to the surface
+	  if( onSurface ) {
+	    nextSolidExitNormal= currentSolid->SurfaceNormal(fLastLocatedPointLocal);  
+	    ExitNormal = - nextSolidExitNormal;  // Entering the solid ==> opposite
+	  }
+          *valid = onSurface;   //   was =true;
+   	}
+	else
+	{
+	  *valid = false; 
+	  // TODO: Need Separate code for replica!!!!
+#ifdef G4DEBUG_NAVIGATION
+          G4Exception("G4Navigator::ComputeSafety()", "NotAvailable", FatalException, 
+		      "Local Normal is not (yet) available for replicated volumes.");
+#endif 
+	}
+      }
+    }
+    else  // ie  ( fBlockedPhysicalVolume == 0 )
     {
-      ExitNormal = fGrandMotherExitNormal;
+      *valid = false;
+      // G4cerr << "G4Navigator::GetLocalExitNormal - unexpected condition: " << G4endl;
+      // G4cerr << "  The candidate volume pointer (fBlockedPhysicalVolume) is 0. " << G4endl;
+    }
+  }
+  else 
+  {
+    if ( EnteredDaughterVolume() )
+    {
+      ExitNormal= -(fHistory.GetTopVolume()->GetLogicalVolume()->
+		    GetSolid()->SurfaceNormal(fLastLocatedPointLocal));
       *valid = true;
     }
     else
     {
-      // We are not at a boundary.
-      // ExitNormal remains (0,0,0)
-      //
-      *valid = false;
+      if( fExitedMother )
+      {
+	ExitNormal = fGrandMotherExitNormal;
+	*valid = true;
+      }
+      else
+      {
+	// We are not at a boundary.
+	// ExitNormal remains (0,0,0)
+	*valid = false;
+      }
     }
   }
   return ExitNormal;
+}
+
+// ********************************************************************
+// GetGlobalExitNormal
+//
+// Obtains the Normal vector to a surface (in global coordinates)
+// pointing out of previous volume and into current volume
+// ********************************************************************
+//
+G4ThreeVector 
+G4Navigator::GetGlobalExitNormal(const G4ThreeVector& ,  // IntersectPoint, - for future checks
+				       G4bool*        pValidNormal) // const
+{
+  G4bool         validNormal;
+  G4ThreeVector  localNormal, globalNormal;
+
+  localNormal=   GetLocalExitNormal( &validNormal);
+  *pValidNormal= validNormal; 
+  G4AffineTransform localToGlobal= this->GetLocalToGlobalTransform(); 
+  globalNormal = localToGlobal.TransformAxis( localNormal );
+  
+  return globalNormal;
 }
 
 // ********************************************************************
@@ -1145,6 +1223,7 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
 #endif
 
   if (keepState)  { SetSavedState(); }
+  fLastTriedStepComputation= true; 
 
   G4double distEndpointSq = (pGlobalpoint-fStepEndPoint).mag2(); 
   G4bool   stayedOnEndpoint  = distEndpointSq < kCarTolerance*kCarTolerance; 

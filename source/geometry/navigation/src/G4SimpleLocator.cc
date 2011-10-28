@@ -28,7 +28,8 @@
 //
 // Class G4SimpleLocator implementation
 //
-// 27.10.08 - Tatiana Nikitina.
+// 27.10.08 - Tatiana Nikitina, extracted from G4PropagatorInField class
+// 04.10.11 - John Apostolakis, revised convergence to use Surface Normal
 // ---------------------------------------------------------------------------
 
 #include <iomanip>
@@ -94,6 +95,9 @@ G4bool G4SimpleLocator::EstimateIntersectionPoint(
   G4FieldTrack  CurrentA_PointVelocity = CurveStartPointVelocity; 
   G4FieldTrack  CurrentB_PointVelocity = CurveEndPointVelocity;
   G4ThreeVector CurrentE_Point = TrialPoint;
+  G4bool        validNormalAtE= false;
+  G4ThreeVector NormalAtEntry;
+
   G4FieldTrack  ApproxIntersecPointV(CurveEndPointVelocity); // FT-Def-Construct
   G4double      NewSafety = 0.0;
   G4bool last_AF_intersection = false;
@@ -105,8 +109,6 @@ G4bool G4SimpleLocator::EstimateIntersectionPoint(
 
   G4int substep_no = 0;
 
-  G4int oldprc;  // cout/cerr precision settings
-
   // Limits for substep number
   //
   const G4int max_substeps  = 100000000;  // Test 120  (old value 100 )
@@ -115,7 +117,10 @@ G4bool G4SimpleLocator::EstimateIntersectionPoint(
   // Statistics for substeps
   //
   static G4int max_no_seen= -1; 
- 
+
+  NormalAtEntry= GetGlobalSurfaceNormal( CurrentE_Point, validNormalAtE); 
+
+// #define DEBUG_FIELD 1
 #ifdef G4DEBUG_FIELD
   static G4double tolerance= 1.0e-8; 
   G4ThreeVector  StartPosition= CurveStartPointVelocity.GetPosition(); 
@@ -159,7 +164,28 @@ G4bool G4SimpleLocator::EstimateIntersectionPoint(
      //
      G4ThreeVector  ChordEF_Vector = CurrentF_Point - CurrentE_Point;
 
-     if ( ChordEF_Vector.mag2() <= sqr(GetDeltaIntersectionFor()) )
+     G4ThreeVector  NewMomentumDir= ApproxIntersecPointV.GetMomentumDir(); 
+     G4double       MomDir_dot_Norm= NewMomentumDir.dot( NormalAtEntry ) ;
+
+     G4ThreeVector  ChordAB           = Point_B - Point_A;
+     // G4double       ABchord_length    = ChordAB.mag(); 
+     // G4double       MomDir_dot_ABchord;
+     // MomDir_dot_ABchord= (1.0 / ABchord_length) * NewMomentumDir.dot( ChordAB );
+
+#ifdef  DEBUG_FIELD
+     G4VIntersectionLocator::
+       ReportTrialStep( substep_no, ChordAB, ChordEF_Vector, 
+		      NewMomentumDir, NormalAtEntry, validNormalAtE ); 
+#endif
+     G4bool adequate_angle;
+     adequate_angle=  ( MomDir_dot_Norm >= 0.0 ) // Check Sign is always exiting !! TODO
+                                                 //   Could ( > -epsilon) be used instead?
+                   || (! validNormalAtE );       // Invalid ==> cannot use this criterion
+     G4double EF_dist2= ChordEF_Vector.mag2();
+     if(
+        ( EF_dist2  <= sqr(fiDeltaIntersection) && ( adequate_angle ) )
+       || ( EF_dist2 <= kCarTolerance*kCarTolerance ) 
+       )
      {
        found_approximate_intersection = true;
         
@@ -205,11 +231,16 @@ G4bool G4SimpleLocator::EstimateIntersectionPoint(
 
        G4ThreeVector PointG;   // Candidate intersection point
        G4double stepLengthAF; 
-       G4bool Intersects_AF = IntersectChord( Point_A,   CurrentF_Point,
-                                              NewSafety,fPreviousSafety,
+       G4bool usedNavigatorAF=false; 
+       G4bool Intersects_AF = IntersectChord( Point_A,   
+                                              CurrentF_Point,
+                                              NewSafety,
+                                              fPreviousSafety,
                                               fPreviousSftOrigin,
                                               stepLengthAF,
-                                              PointG );
+                                              PointG,
+                                              &usedNavigatorAF
+                                              );
        last_AF_intersection = Intersects_AF;
        if( Intersects_AF )
        {
@@ -221,6 +252,15 @@ G4bool G4SimpleLocator::EstimateIntersectionPoint(
 
          CurrentB_PointVelocity = ApproxIntersecPointV;
          CurrentE_Point = PointG;  
+         // Need to recalculate the Exit Normal at the new PointG 
+
+         // Relies on a call to Navigator::ComputeStep in IntersectChord above
+         //  If the safety was adequate (for the step) this would NOT be called !!
+         //  But this must not occur -- no intersection can be found in that case,
+         //  so this branch, ie if( Intersects_AF ) would not be reached!
+         G4bool validNormalLast; 
+         NormalAtEntry = GetSurfaceNormal( PointG, validNormalLast ); 
+         validNormalAtE= validNormalLast; 
 
          // By moving point B, must take care if current
          // AF has no intersection to try current FB!!
@@ -247,6 +287,7 @@ G4bool G4SimpleLocator::EstimateIntersectionPoint(
 
          G4double stepLengthFB;
          G4ThreeVector PointH;
+         G4bool usedNavigatorFB=false; 
 
          // Check whether any volumes are encountered by the chord FB
          // ---------------------------------------------------------
@@ -255,7 +296,7 @@ G4bool G4SimpleLocator::EstimateIntersectionPoint(
                                                 NewSafety,fPreviousSafety,
                                                 fPreviousSftOrigin,
                                                 stepLengthFB,
-                                                PointH );
+                                                PointH, &usedNavigatorFB );
          if( Intersects_FB )
          { 
            // There is an intersection of FB with a volume boundary
@@ -272,6 +313,15 @@ G4bool G4SimpleLocator::EstimateIntersectionPoint(
            //
            CurrentA_PointVelocity = ApproxIntersecPointV;
            CurrentE_Point = PointH;
+           // Need to recalculate the Exit Normal at the new PointG 
+
+           // Relies on a call to Navigator::ComputeStep in IntersectChord above
+           //  If the safety was adequate (for the step) this would NOT be called !!
+           //  But this must not occur -- no intersection can be found in that case,
+           //  so this branch, ie if( Intersects_AF ) would not be reached!
+           G4bool validNormalLast; 
+           NormalAtEntry = GetSurfaceNormal( PointH, validNormalLast ); 
+           validNormalAtE= validNormalLast;
          }
          else  // not Intersects_FB
          {
@@ -349,7 +399,7 @@ G4bool G4SimpleLocator::EstimateIntersectionPoint(
            message << "Recalculation of EndPoint was called with fEpsStep= "
                    << GetEpsilonStepFor() << G4endl;
          }
-         oldprc = G4cerr.precision(20);
+         message.precision(20);
          message << " Point A (Curve start)   is " << CurveStartPointVelocity
                  << G4endl
                  << " Point B (Curve   end)   is " << CurveEndPointVelocity
@@ -364,7 +414,6 @@ G4bool G4SimpleLocator::EstimateIntersectionPoint(
                  << G4endl
                  << "        LocateIntersection parameters are : Substep no= "
                  << substep_no;
-         G4cerr.precision(oldprc);
 
          G4Exception("G4SimpleLocator::EstimateIntersectionPoint()",
                      "GeomNav0003", FatalException, message);
@@ -440,28 +489,27 @@ G4bool G4SimpleLocator::EstimateIntersectionPoint(
             << found_approximate_intersection << G4endl
             << "          Intersection exists = "
             << !there_is_no_intersection << G4endl;
-    oldprc = G4cout.precision(10); 
+    message.precision(10); 
     G4double done_len = CurrentA_PointVelocity.GetCurveLength(); 
     G4double full_len = CurveEndPointVelocity.GetCurveLength();
     message << "          Undertaken only length: " << done_len
             << " out of " << full_len << " required." << G4endl
             << "          Remaining length = " << full_len-done_len; 
-    G4cout.precision(oldprc); 
 
     G4Exception("G4SimpleLocator::EstimateIntersectionPoint()",
                 "GeomNav0003", FatalException, message);
   }
   else if( substep_no >= warn_substeps )
   {  
-    oldprc= G4cout.precision(10); 
     std::ostringstream message;
+    message.precision(10); 
+
     message << "Many substeps while trying to locate intersection." << G4endl
             << "          Undertaken length: "  
             << CurrentB_PointVelocity.GetCurveLength() 
             << " - Needed: "  << substep_no << " substeps." << G4endl
             << "          Warning level = " << warn_substeps
             << " and maximum substeps = " << max_substeps;
-    G4cout.precision(oldprc); 
     G4Exception("G4SimpleLocator::EstimateIntersectionPoint()",
                 "GeomNav1002", JustWarning, message);
   }

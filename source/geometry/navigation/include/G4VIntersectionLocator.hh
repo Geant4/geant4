@@ -87,10 +87,11 @@ class G4VIntersectionLocator
      inline G4bool IntersectChord( G4ThreeVector  StartPointA, 
                                    G4ThreeVector  EndPointB,
                                    G4double      &NewSafety,
-                                   G4double      &fPreviousSafety,    // In/Out
-                                   G4ThreeVector &fPreviousSftOrigin, // In/Out
+                                   G4double      &PreviousSafety,    // In/Out
+                                   G4ThreeVector &PreviousSftOrigin, // In/Out
                                    G4double      &LinearStepLength,
-                                   G4ThreeVector &IntersectionPoint);
+                                   G4ThreeVector &IntersectionPoint,
+				   G4bool        *calledNavigator=0 );
        // Intersect the chord from StartPointA to EndPointB and return
        // whether an intersection occurred. NOTE: changes the Safety!
 
@@ -135,10 +136,23 @@ class G4VIntersectionLocator
       // CurrentStateA, to replace EstimtdEndStateB, and report displacement
       // (if field is compiled verbose)
 
-     
-    G4ThreeVector GetLocalSurfaceNormal(const G4ThreeVector &CurrentE_Point,
-                                              G4bool &validNormal);
-      // Return the SurfaceNormal of Intersecting Solid
+    G4ThreeVector GetSurfaceNormal(const G4ThreeVector &CurrentInt_Point,
+				         G4bool        &validNormal); // const
+      //  Position *must* be the intersection point from last call
+      //    to G4Navigator's ComputeStep  (via IntersectChord )
+      //  Will try to use cached (last) value in Navigator for speed, 
+      //    if it was kept and valid.
+      //  Value returned is in global coordinates.
+      //  It does NOT guarantee to obtain Normal. This can happen eg if:
+      //    - the "Intersection" Point is not on a surface, potentially due to
+      //    - inaccuracies in the transformations used, or
+      //    - issues with the Solid.
+
+    G4ThreeVector GetGlobalSurfaceNormal(const G4ThreeVector &CurrentE_Point,
+					       G4bool        &validNormal);
+                                  // ?? const G4ThreeVector *CurrentE_Direction
+      // Return the SurfaceNormal of Intersecting Solid in global coordinates
+      // Costlier then GetSurfaceNormal
 
     G4bool AdjustmentOfFoundIntersection(const G4ThreeVector &A,
                                          const G4ThreeVector &CurrentE_Point, 
@@ -152,6 +166,27 @@ class G4VIntersectionLocator
       // Optional method for adjustment of located intersection point
       // using the surface-normal
   
+    void ReportTrialStep( int step_no, 
+			  const G4ThreeVector& ChordAB_v,
+			  const G4ThreeVector& ChordEF_v,
+			  const G4ThreeVector& NewMomentumDir,
+			  const G4ThreeVector& NormalAtEntry,
+			  G4bool validNormal   );
+      // Print a three-line report on the current "sub-step", ie trial intersection
+
+  private:  // no description
+
+      // Return the SurfaceNormal of Intersecting Solid  in local coordinates
+    G4ThreeVector GetLocalSurfaceNormal(const G4ThreeVector &CurrentE_Point,
+                                              G4bool &validNormal);
+
+      // Implementation methods for normals 
+    G4ThreeVector GetLastSurfaceNormal(  G4ThreeVector intersectPoint, 
+					 G4bool        &validNormal) const; 
+      //  Position *must* be the intersection point from last call
+      //    to G4Navigator's ComputeStep  (via IntersectChord )
+      //  Temporary - will use the same method in the Navigator
+
   protected:
 
     G4double kCarTolerance;         // Constant
@@ -170,6 +205,9 @@ class G4VIntersectionLocator
 
     G4Navigator *fHelpingNavigator;
       // Helper for location
+
+    G4TouchableHistory* fpTouchable;
+    // G4TouchableHistory  fTouchableHistory;
 };
 
 #include "G4VIntersectionLocator.icc"
