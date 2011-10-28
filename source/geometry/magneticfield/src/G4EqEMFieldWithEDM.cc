@@ -60,7 +60,7 @@ G4EqEMFieldWithEDM::SetChargeMomentumMass(G4double particleCharge, // e+ units
    fElectroMagCof =  eplus*particleCharge*c_light ;
    fMassCof = particleMass*particleMass ;
 
-   omegac = 0.105658387*GeV/particleMass * 2.837374841e-3*(rad/cm/kilogauss);
+   omegac = (eplus/particleMass)*c_light;
 
    pcharge = particleCharge;
 

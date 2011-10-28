@@ -300,6 +300,10 @@ G4FieldManager* SetupField(G4int type)
     return    pFieldMgr;
 }
 
+#include "G4SimpleLocator.hh"
+#include "G4BrentLocator.hh"
+#include "G4MultiLevelLocator.hh"
+
 G4PropagatorInField*  SetupPropagator( G4int type)
 {
     // G4FieldManager* fieldMgr= 
@@ -314,6 +318,16 @@ G4PropagatorInField*  SetupPropagator( G4int type)
     // Let us test the new Minimum Epsilon Step functionality
     // thePropagator -> SetMinimumEpsilonStep( 1.0e-3 ) ; 
     // thePropagator -> SetMaximumEpsilonStep( 1.0e-5 ) ; 
+
+    G4Navigator *theNavigator= G4TransportationManager::GetTransportationManager()->
+       GetNavigatorForTracking();
+    // Test the options for Locator
+    G4VIntersectionLocator *pLocator=0;
+    pLocator= new G4SimpleLocator(theNavigator);
+    // pLocator= new G4BrentLocator(theNavigator);
+    // pLocator= new G4MultiLevelLocator(theNavigator);   // The default 
+
+    thePropagator->SetIntersectionLocator(pLocator);
 
     return thePropagator;
 }
