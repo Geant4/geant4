@@ -15,6 +15,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25 October 2011  Tatsumi Koi		(test11-V09-04-04)
+- Add Nist Thermal Materials 
+- Change checking elements (H, C, Al, Fe, Ag, Pb and U)
+	test11_hadronic_exerciser.cc
+	src/Tst11DetectorConstruction.cc
+- Cosmetic change in XS output  
+	src/Tst11PhysicsList.cc
+
 6 September 2011  Tatsumi Koi		(test11-V09-04-03)
 - Migrate to "hadr-man-V09-04-10"
   from Process::GetMicroscopicCrossSection to Process::GetElementCrossSection

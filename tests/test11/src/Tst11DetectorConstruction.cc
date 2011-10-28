@@ -150,14 +150,16 @@ void Tst11DetectorConstruction::defineNISTMaterials()
    G4NistManager* nistMan = G4NistManager::Instance();
 
    nistMan->FindOrBuildMaterial( "G4_H" );
+/*
    nistMan->FindOrBuildMaterial( "G4_He" );
    nistMan->FindOrBuildMaterial( "G4_Li" );
    nistMan->FindOrBuildMaterial( "G4_Be" );
    nistMan->FindOrBuildMaterial( "G4_B" );
+*/
    nistMan->FindOrBuildMaterial( "G4_C" );
+/*
    nistMan->FindOrBuildMaterial( "G4_N" );
    nistMan->FindOrBuildMaterial( "G4_O" );
-/*
    nistMan->FindOrBuildMaterial( "G4_F" );
    nistMan->FindOrBuildMaterial( "G4_Ne" );
    nistMan->FindOrBuildMaterial( "G4_Na" );
@@ -182,14 +184,10 @@ void Tst11DetectorConstruction::defineNISTMaterials()
 /*
    nistMan->FindOrBuildMaterial( "G4_Co" );
    nistMan->FindOrBuildMaterial( "G4_Ni" );
-*/
    nistMan->FindOrBuildMaterial( "G4_Cu" );
    nistMan->FindOrBuildMaterial( "G4_Zn" );
-/*
    nistMan->FindOrBuildMaterial( "G4_Ga" );
-*/
    nistMan->FindOrBuildMaterial( "G4_Ge" );
-/*
    nistMan->FindOrBuildMaterial( "G4_As" );
    nistMan->FindOrBuildMaterial( "G4_Se" );
    nistMan->FindOrBuildMaterial( "G4_Br" );
@@ -238,12 +236,12 @@ void Tst11DetectorConstruction::defineNISTMaterials()
    nistMan->FindOrBuildMaterial( "G4_Os" );
    nistMan->FindOrBuildMaterial( "G4_Ir" );
    nistMan->FindOrBuildMaterial( "G4_Pt" );
-*/
    nistMan->FindOrBuildMaterial( "G4_Au" );
-/*
-   //nistMan->FindOrBuildMaterial( "G4_Hg" ); // No data HP
+   nistMan->FindOrBuildMaterial( "G4_Hg" ); // No data HP
    nistMan->FindOrBuildMaterial( "G4_Tl" );
+*/
    nistMan->FindOrBuildMaterial( "G4_Pb" );
+/*
    nistMan->FindOrBuildMaterial( "G4_Bi" );
    nistMan->FindOrBuildMaterial( "G4_Po" );
    nistMan->FindOrBuildMaterial( "G4_At" );
@@ -282,15 +280,29 @@ void Tst11DetectorConstruction::defineTKMaterials()
    Hydrogen1->AddElement( elH1 , fractionmass = 1 );
 
    // Create Element for Thermal Scattering
+
    G4Element* elTSHW= new G4Element( "TS_H_of_Water" , "H_WATER" , 1.0 , 1.0079*g/mole );
+
    G4Element* elTSH= new G4Element( "TS_H_of_Polyethylene" , "H_POLYETHYLENE" , 1.0 , 1.0079*g/mole );
+
+   G4Element* elTSC= new G4Element( "TS_C_of_Graphite" , "C_GRAPHITE" , 6.0 , 12.0107*g/mole );
+
    // Create Materials from the elements
    G4Material* matH2O_TS = new G4Material( "Water_TS" , density = 1.0*g/cm3 , ncomponents= 2 );
    matH2O_TS -> AddElement(elTSHW,natoms=2);
    matH2O_TS -> AddElement(nistMan->FindOrBuildElement( "O" ), natoms = 1);
+
    G4Material* matCH2_TS = new G4Material( "Polyethylene_TS" , density = 0.94*g/cm3 , ncomponents= 2 );
    matCH2_TS -> AddElement(elTSH,natoms=2);
    matCH2_TS -> AddElement(nistMan->FindOrBuildElement( "C" ), natoms= 1);
+
+   G4Material* matC_TS = new G4Material( "Graphite_TS" , density = 2.267*g/cm3 , ncomponents= 1 );
+   matC_TS -> AddElement(elTSC,natoms=1);
+
+
+   nistMan->FindOrBuildMaterial( "G4_WATER" ); 
+   nistMan->FindOrBuildMaterial( "G4_GRAPHITE" ); 
+   nistMan->FindOrBuildMaterial( "G4_POLYETHYLENE" ); 
 
 }
 

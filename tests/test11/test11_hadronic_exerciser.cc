@@ -113,25 +113,30 @@ int main (int argc, char** argv) {
   std::vector <G4String> TK_particleNameList;
   TK_particleNameList.push_back ("neutron");
   std::vector <G4double> TK_energyList;
-  TK_energyList.push_back (  10 * MeV);
-  TK_energyList.push_back (   1 * MeV);
-  TK_energyList.push_back ( 100 * keV);
-  TK_energyList.push_back (  10 * keV);
-  TK_energyList.push_back (   1 * keV);
-  TK_energyList.push_back ( 100 *  eV);
-  TK_energyList.push_back (  10 *  eV);
-  TK_energyList.push_back (   1 *  eV);
+  TK_energyList.push_back (   10 * MeV);
+  TK_energyList.push_back (    1 * MeV);
+  TK_energyList.push_back (  100 * keV);
+  TK_energyList.push_back (   10 * keV);
+  TK_energyList.push_back (    1 * keV);
+  TK_energyList.push_back (  100 *  eV);
+  TK_energyList.push_back (   10 *  eV);
+  TK_energyList.push_back (    1 *  eV);
+  TK_energyList.push_back (  0.1 *  eV);
+  TK_energyList.push_back ( 0.01 *  eV);
+  TK_energyList.push_back (0.001 *  eV);
 
   std::vector <G4String> TK_materialNameList;
    TK_materialNameList.push_back ( "G4_H" );
+/*
    TK_materialNameList.push_back ( "G4_He" );
    TK_materialNameList.push_back ( "G4_Li" );
    TK_materialNameList.push_back ( "G4_Be" );
    TK_materialNameList.push_back ( "G4_B" );
+*/
    TK_materialNameList.push_back ( "G4_C" );
+/*
    TK_materialNameList.push_back ( "G4_N" );
    TK_materialNameList.push_back ( "G4_O" );
-/*
    TK_materialNameList.push_back ( "G4_F" );
    TK_materialNameList.push_back ( "G4_Ne" );
    TK_materialNameList.push_back ( "G4_Na" );
@@ -156,14 +161,10 @@ int main (int argc, char** argv) {
 /*
    TK_materialNameList.push_back ( "G4_Co" );
    TK_materialNameList.push_back ( "G4_Ni" );
-*/
    TK_materialNameList.push_back ( "G4_Cu" );
    TK_materialNameList.push_back ( "G4_Zn" );
-/*
    TK_materialNameList.push_back ( "G4_Ga" );
-*/
    TK_materialNameList.push_back ( "G4_Ge" );
-/*
    TK_materialNameList.push_back ( "G4_As" );
    TK_materialNameList.push_back ( "G4_Se" );
    TK_materialNameList.push_back ( "G4_Br" );
@@ -196,7 +197,7 @@ int main (int argc, char** argv) {
    TK_materialNameList.push_back ( "G4_Nd" );
    TK_materialNameList.push_back ( "G4_Pm" );
    TK_materialNameList.push_back ( "G4_Sm" );
-   //TK_materialNameList.push_back ( "G4_Eu" );
+   TK_materialNameList.push_back ( "G4_Eu" );
    TK_materialNameList.push_back ( "G4_Gd" );
    TK_materialNameList.push_back ( "G4_Tb" );
    TK_materialNameList.push_back ( "G4_Dy" );
@@ -238,8 +239,15 @@ int main (int argc, char** argv) {
 
 //080901
    TK_materialNameList.push_back ( "Hydrogen1" );
+
+//111025 Add Nist Materials
    TK_materialNameList.push_back ( "Water_TS" );
+   TK_materialNameList.push_back ( "G4_WATER" ); 
    TK_materialNameList.push_back ( "Polyethylene_TS" );
+   TK_materialNameList.push_back ( "G4_POLYETHYLENE" ); 
+   TK_materialNameList.push_back ( "Graphite_TS" );
+   TK_materialNameList.push_back ( "G4_GRAPHITE" ); 
+
 /*
   if (argc > 1) {
     if (strcmp (argv[1], "large_N") == 0) {

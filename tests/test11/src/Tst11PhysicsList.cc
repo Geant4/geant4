@@ -433,6 +433,8 @@ void Tst11PhysicsList::ConstructHad()
 
 //080901 TK add 
 
+         G4cout << G4endl;
+         G4cout << "Cross Section Dump Through HPData->DumpPhysicsTable() " << G4endl;
          G4cout << "NeutronHP Elastic Cross Sections " << G4endl;
          theNeutronData->DumpPhysicsTable( *G4Neutron::Neutron() );
          G4cout << "NeutronHP Inelastic Cross Sections " << G4endl;
@@ -442,9 +444,7 @@ void Tst11PhysicsList::ConstructHad()
          G4cout << "NeutronHP Fission Cross Sections " << G4endl;
          theNeutronData3->DumpPhysicsTable( *G4Neutron::Neutron() );
 
-
-         //G4cout << "Cross Section Dump Through Process::GetMicroscopicCrossSection " << G4endl;
-         // 110906 TK migaration to "hadr-man-V09-04-10"
+         G4cout << G4endl;
          G4cout << "Cross Section Dump Through Process::GetElementCrossSection " << G4endl;
          G4int nmat = G4Material::GetNumberOfMaterials();
          std::map< G4int , G4double > tmp_map;
@@ -463,23 +463,19 @@ void Tst11PhysicsList::ConstructHad()
 
                //G4cout << ele->GetName() << ": " << mat->GetTemperature()/kelvin << " kelvin " << mat->GetName() << G4endl;
                G4cout << ele->GetName() << ": " << mat->GetTemperature()/kelvin << " kelvin " << G4endl;
-               G4cout << "Energy[eV]  Elastic[mb] Inelastic[mb] Capture[mb] Fission[mb] " << G4endl;
+               G4cout << "Energy[eV]" << '\t' << "Elastic[mb]" << '\t' << "Inelastic[mb]" << '\t' << "Capture[mb]" << '\t' << "Fission[mb]" << G4endl;
 
                for ( G4int ie = 1 ; ie < 150 ; ie++ )
                {
                   G4double e = 1.0e-5*eV*std::pow( 10.0 , 1.0*ie/10 );  
                   G4DynamicParticle* dp = new G4DynamicParticle( G4Neutron::Neutron(), G4ThreeVector(1,0,0), e);
-                  G4cout << e/eV   
-                         //<< " " << ((G4HadronicProcess*)theElasticProcess1)->GetMicroscopicCrossSection( dp , ele , 300*kelvin )/millibarn
-                         //<< " " << ((G4HadronicProcess*)theInelasticProcess)->GetMicroscopicCrossSection( dp , ele , 300*kelvin )/millibarn
-                         //<< " " << ((G4HadronicProcess*)theCaptureProcess)->GetMicroscopicCrossSection( dp , ele , 300*kelvin )/millibarn
-                         //<< " " << ((G4HadronicProcess*)theFissionProcess)->GetMicroscopicCrossSection( dp , ele , 300*kelvin )/millibarn
-                         // 110906 TK migaration to "hadr-man-V09-04-10"
-                         << " " << ((G4HadronicProcess*)theElasticProcess1)->GetElementCrossSection( dp , ele , mat )/millibarn
-                         << " " << ((G4HadronicProcess*)theInelasticProcess)->GetElementCrossSection( dp , ele , mat )/millibarn
-                         << " " << ((G4HadronicProcess*)theCaptureProcess)->GetElementCrossSection( dp , ele , mat )/millibarn
-                         << " " << ((G4HadronicProcess*)theFissionProcess)->GetElementCrossSection( dp , ele , mat )/millibarn
-                         << G4endl;
+                  G4cout.precision(7);
+                  G4cout << std::scientific << e/eV 
+                                    << '\t' << ((G4HadronicProcess*)theElasticProcess1) ->GetElementCrossSection( dp , ele , mat )/millibarn
+                                    << '\t' << ((G4HadronicProcess*)theInelasticProcess)->GetElementCrossSection( dp , ele , mat )/millibarn
+                                    << '\t' << ((G4HadronicProcess*)theCaptureProcess)  ->GetElementCrossSection( dp , ele , mat )/millibarn
+                                    << '\t' << ((G4HadronicProcess*)theFissionProcess)  ->GetElementCrossSection( dp , ele , mat )/millibarn
+                                            << G4endl;
                } 
 /*
                // 1 - 20 MeV
@@ -496,6 +492,7 @@ void Tst11PhysicsList::ConstructHad()
 */
             }
          }
+         G4cout << G4endl;
 
       }  
       else if (particleName == "anti_neutron") {
