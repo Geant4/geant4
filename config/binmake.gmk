@@ -81,6 +81,9 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/electromagnetic/dna/processes/include \
               -I$(G4BASE)/processes/electromagnetic/dna/models/include \
               -I$(G4BASE)/processes/electromagnetic/dna/utils/include \
+              -I$(G4BASE)/processes/electromagnetic/dna/management/include \
+              -I$(G4BASE)/processes/electromagnetic/dna/molecules/management/include \
+              -I$(G4BASE)/processes/electromagnetic/dna/molecules/types/include \
               -I$(G4BASE)/processes/electromagnetic/pii/include \
               -I$(G4BASE)/processes/electromagnetic/polarisation/include \
               -I$(G4BASE)/processes/hadronic/cross_sections/include \
@@ -126,6 +129,7 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/hadronic/models/photolepton_hadron/muon_nuclear/include \
               -I$(G4BASE)/processes/hadronic/models/pre_equilibrium/exciton_model/include \
               -I$(G4BASE)/processes/hadronic/models/qmd/include \
+              -I$(G4BASE)/processes/hadronic/models/quasi_elastic/include \
               -I$(G4BASE)/processes/hadronic/models/radioactive_decay/include \
               -I$(G4BASE)/processes/hadronic/models/rpg/include \
               -I$(G4BASE)/processes/hadronic/models/theo_high_energy/include \

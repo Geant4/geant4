@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18th October 2011 Gunter Folger  (config-V09-04-16)
+- binmake.gmk: add new directories in electromagnetic/dna and 
+    new hadronic/models/quasi_elastic
+	 
 21st september 2011 John Allison (config-V09-04-15)
 - G4UI_BUILD.gmk: Added G4INTY_BUILD_XT = 1 for G4VIS_BUILD_OPENGLXM_DRIVER
   and G4VIS_BUILD_OIX_DRIVER.  The vis drivers need Xt, so this covers
