@@ -100,6 +100,8 @@ public:
   bool generateMpegEncoderParameters();
   void displayRecordingStatus();
   void DrawText(const char * ,double x,double y,double z, double size);
+  void ResetView ();
+
 public:
   void G4MousePressEvent(QMouseEvent *event);
   void G4wheelEvent (QWheelEvent * event); 
@@ -114,9 +116,7 @@ protected:
   virtual void CreateMainWindow (QGLWidget*,QString);
   void G4manageContextMenuEvent(QContextMenuEvent *e);
   void rotateQtScene(float, float);
-  void rotateQtCamera(float, float);
-  void rotateQtSceneInViewDirection(float, float);
-  void rotateQtCameraInViewDirection(float, float);
+  void rotateQtSceneToggle(float, float);
   void moveScene(float, float, float,bool);
   void FinishView();
   void updateKeyModifierState(Qt::KeyboardModifiers);
@@ -160,16 +160,11 @@ private:
   QPoint fLastPos1;
   QPoint fLastPos2;
   QPoint fLastPos3;
-  /** delta of scene rotation. This delta is put in degree */
-  G4double fDeltaRotation;
-  /** delta of scene translation. This delta is put in % of the scene view */
-  G4double fDeltaSceneTranslation;
+
   /** delta of depth move. This delta is put in % of the scene view */
   G4double fDeltaDepth;
   /** delta of zoom move. This delta is put in % of the scene view */
   G4double fDeltaZoom;
-  /** delta of auto move/rotation. This delta is put in % of the move/rotation param */
-  G4double fDeltaMove;
   /** To ensure key event are keep one by one */
   bool fHoldKeyEvent;
   /** To ensure move event are keep one by one */
@@ -201,8 +196,6 @@ private:
   int fLaunchSpinDelay;
   QWidget* fUIViewComponentsTBWidget;
   QVBoxLayout* fLayoutViewComponentsTBWidget;
-  G4double fXRot;
-  G4double fYRot;
   bool fNoKeyPress;
   bool fAltKeyPress;
   bool fControlKeyPress;
@@ -210,14 +203,6 @@ private:
   bool fBatchMode;
   bool fCheckViewComponentLock;
   QTreeWidget * fViewerComponentTreeWidget;
-
-  Q_SIGNALS:
-//signals:
- void rotateTheta(int);
- void rotatePhi(int);
- void moveX(int);
- void moveY(int);
- void moveZ(int);
 
 public Q_SLOTS :
   void startPauseVideo();

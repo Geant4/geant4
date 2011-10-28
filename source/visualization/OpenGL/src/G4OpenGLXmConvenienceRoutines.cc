@@ -532,7 +532,7 @@ G4bool G4OpenGLXmViewer::get_boolean_userData (Widget w)
 {
   XtPointer userData;
   XtVaGetValues (w,XmNuserData,&userData,NULL);
-  return (G4bool)(unsigned long)userData;
+  return (G4bool)(((unsigned long)userData)&0xffff);
 }
 
 G4int G4OpenGLXmViewer::get_int_userData (Widget w)

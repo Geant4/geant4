@@ -20,6 +20,10 @@ committal in the CVS repository !
 History file for visualization/gMocren sub-category
 ---------------------------------------------------
 
+8th October 2011  Akinori Kimura (gMocren-V09-04-02)
+- Fixed Coverity defects in G4GMocrenFileSceneHandler.cc, G4GMocrenIO.cc, 
+  G4GMocrenFileViewer.cc, and G4GMocrenMessenger.cc.
+
 25th September 2011  John Allison (gMocren-V09-04-01)
 - Tagged.
 

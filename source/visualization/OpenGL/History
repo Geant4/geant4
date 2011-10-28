@@ -17,6 +17,68 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18th October 2011  John Allison  (opengl-V09-04-13)
+- Tagged.
+
+17th October 2011  Laurent Garnier
+- G4OpenGLXmViewer :
+  o Fix null pointer when open Panning panel.
+  o Add a UpdateControlPanel method
+
+16th October 2011  John Allison
+- G4OpenGLStoredSceneHandler.cc:
+  o Moved
+      if (fReadyForTransients) glDrawBuffer (GL_FRONT);
+    from AddPrimitivePreamble to BeginPrimitives and
+      ScaledFlush();
+      glDrawBuffer (GL_BACK);
+    from AddPrimitivePostamble to EndPrimitives.  The number of calls
+    to glDrawBuffer and number of (scaled) flushes is reduced, i.e.,
+    once per bunch of primitives instead of every primitive.
+
+15th October 2011  John Allison (opengl-V09-04-12)
+- G4OpenGLStoredXViewer, G4OpenGLStoredXmViewer:
+  o Added ClearView (see note on 13th October re non-appearence of
+    trajectories).
+- G4OpenGLStoredSceneHandler.cc:
+  o Move ScaledFlush back to AddPrimitivePostamble (see note of 13th Oct).
+    This addresses the problem of seeing trajectories in real time
+    as generated.  I was wrong to move it to EndPrimitives.  It has
+    to be done on the front buffer, before switching back to the
+    back buffer, so it has to be done for each primitive.  But now it's
+    scaled, that's not a problem.
+
+14th October 2011  Laurent Garnier
+- G4OpenGLXmViewer : Implement ResetView method, move some parameters
+  into .hh files. Call ResetView at beggining to set parameters
+
+13th October 2011  John Allison
+- G4OpenGLSceneHandler: 
+  o Introduced ScaledFlush to flush after every 100 primitives.
+- G4OpenGLStoredSceneHandler:
+  o Re-engineered to use ScaledFlush in EndPrimitives.  It was in
+    AddPrimitivePostamble, i.e, it was getting a flush after each
+    primitive, which is more often than necessary.  The flush should
+    have been after each bunch of primitives, i.e., in EndPrimitives.
+    (I think this is why drawing slowed down a couple of years ago.)
+    Even so, a flush would happen too often, so it is scaled.
+- G4OpenGLImmediateSceneHandler:
+  o Use ScaledFlush in EndPrimitives.
+- G4OpenGLStoredXViewer, G4OpenGLStoredXmViewer:
+  o Implement ShowView, which calls DrawView, to handle non appearence
+    of trajectories on some X servers, particularly Mac XQuartz.
+    Re-visit this at some future date.
+
+11th October 2011  John Allison
+- G4OpenGLViewer::ResetView: Invoke G4VViewer::ResetView.
+- Fix G4OpenGLXmViewer::get_boolean_userData (mask lower 16 bits).
+
+11th Octobre 2011 Laurent Garnier
+- move pan and rotation sensibility management in G4OpenGLViewer claa
+- Integrate free rotation in all GL viewers
+- G4OpenGLQtViewer : Remove emit of non-used move/rotate signals, remove unused methods
+- OpenGL viewer : Implement ResetView (useful for Xm and Qt for the moment)
+
 7th October 2011 Laurent Garnier (opengl-V09-04-11)
 - Fixed compilation warning on X Viewer.
 

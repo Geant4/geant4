@@ -102,6 +102,13 @@ protected:
 
   G4bool fProcessing2D;
 
+  // Shared code to wait until we make a single glFlush
+  void ScaledFlush () ;
+  // Number of stored list to wait until we make a single glFlush
+  const G4int fNbListsBeforeFlush;
+  // Effective number of stored list
+  G4int fNbListsToBeFlush;
+
 private:
 
   void AddCircleSquare (const G4VMarker&, G4OpenGLBitMapStore::Shape);

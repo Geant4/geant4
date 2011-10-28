@@ -131,11 +131,14 @@ G4GMocrenFileSceneHandler::G4GMocrenFileSceneHandler(G4GMocrenFile& system,
 
   // g4.gdd filename and its directory
   if(getenv("G4GMocrenFile_DEST_DIR") == NULL) {
-    std::strcpy(kGddDestDir , "");                    // output dir
-    std::strcpy(kGddFileName, DEFAULT_GDD_FILE_NAME); // filename
+    kGddDestDir[0] = '\0';
+    //std::strcpy(kGddDestDir , "");                    // output dir
+    //std::strcpy(kGddFileName, DEFAULT_GDD_FILE_NAME); // filename
+    std::strncpy(kGddFileName, DEFAULT_GDD_FILE_NAME, std::strlen(DEFAULT_GDD_FILE_NAME)); // filename
   } else {
-    std::strcpy(kGddDestDir , getenv("G4GMocrenFile_DEST_DIR")); // output dir
-    std::strcpy(kGddFileName, DEFAULT_GDD_FILE_NAME); // filename 
+    const char * env = getenv("G4GMocrenFile_DEST_DIR");
+    std::strncpy(kGddDestDir, env, std::strlen(env)); // output dir
+    std::strncpy(kGddFileName, DEFAULT_GDD_FILE_NAME, std::strlen(DEFAULT_GDD_FILE_NAME)); // filename 
   }
 		
   // maximum number of g4.gdd files in the dest directory
@@ -180,6 +183,8 @@ void G4GMocrenFileSceneHandler::InitializeParameters() {
     kNestedVolumeDirAxis[i] = -1;
   }
 
+  // delete kgMocrenIO;
+
 }
 
 //-----
@@ -189,10 +194,10 @@ void G4GMocrenFileSceneHandler::SetGddFileName()
   const G4int MAX_FILE_INDEX = kMaxFileNum - 1 ;
 
   // dest directory (null if no environmental variables is set)
-  std::strcpy ( kGddFileName, kGddDestDir) ; 
+  std::strncpy(kGddFileName, kGddDestDir, std::strlen(kGddDestDir));
 
   // create full path name (default)
-  std::strcat ( kGddFileName, DEFAULT_GDD_FILE_NAME );
+  std::strncat ( kGddFileName, DEFAULT_GDD_FILE_NAME, std::strlen(DEFAULT_GDD_FILE_NAME));
 
   // Automatic updation of file names
   static G4int currentNumber = 0;
@@ -945,9 +950,10 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
 	  if(nDaughters[2] > 1) {
 	    G4VNestedParameterisation * nestPara
 	      = dynamic_cast<G4VNestedParameterisation*>(pv[2]->GetParameterisation());
-	    if(!nestPara)
+	    if(nestPara == NULL)
 	      G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
 			  "gMocren0008", FatalException, "Non-nested parameterisation");
+
 	    nestPara->ComputeTransformation(0, pv[2]);
 	    G4ThreeVector trans0 = pv[2]->GetObjectTranslation();
 	    nestPara->ComputeTransformation(1, pv[2]);
@@ -977,7 +983,7 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
       // get densities
       G4VNestedParameterisation * nestPara
 	= dynamic_cast<G4VNestedParameterisation*>(pv[2]->GetParameterisation());
-      if(nestPara) {
+      if(nestPara != NULL) {
 	G4double prexyz[3] = {0.,0.,0.}, xyz[3] = {0.,0.,0.};
 	for(G4int n0 = 0; n0 < nDaughters[0]; n0++) {
 	  for(G4int n1 = 0; n1 < nDaughters[1]; n1++) {
@@ -1120,7 +1126,7 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
       // get the dimension of the parameterized patient geometry
       G4PhantomParameterisation * phantomPara
 	= dynamic_cast<G4PhantomParameterisation*>(pv[0]->GetParameterisation());
-      if(!phantomPara) {
+      if(phantomPara == NULL) {
 	G4Exception("G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )",
 		    "gMocren0012", FatalException, "no G4PhantomParameterisation");
       } else {

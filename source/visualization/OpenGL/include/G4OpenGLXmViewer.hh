@@ -60,6 +60,7 @@ public:
   
 protected:
   virtual void ShowView ();
+  void ResetView ();
   void GetXmConnection ();
   virtual void CreateMainWindow ();
 
@@ -120,8 +121,8 @@ protected:
                                     fov,
                                     rot_sens_limit,
                                     pan_sens_limit,
-                                    rot_sens,
-                                    pan_sens,
+                                    wob_high,
+                                    wob_low,
                                     wob_sens;
 
   Pixel                             bgnd, 
@@ -372,7 +373,8 @@ public:
 private:
   G4OpenGLXmViewer (const G4OpenGLXmViewer&);
   G4OpenGLXmViewer& operator = (const G4OpenGLXmViewer&);
-  
+  void UpdateControlPanel();
+  // Update the content of the control panel
 };
 
 #endif

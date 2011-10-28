@@ -26,6 +26,16 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+11th October 2011  John Allison  (visman-V09-04-06)
+- G4VisCommandsViewer: Introduce RefreshIfRequired.
+
+10th October 2011  John Allison  (visman-V09-04-05)
+- G4VViewer: Added virtual function ResetView.
+
+27th September 2011  John Allison
+- G4VisCommandsViewerSet.cc: Avoid setting auto-refresh for viewers
+  that are not auto-refresh by default.
+
 25th September 2011  John Allison  (visman-V09-04-04)
 - G4VisCommandsSceneAdd.cc: Tidied.
 

@@ -32,6 +32,10 @@
 
 inline void G4VViewer::Initialise () {}
 
+inline void G4VViewer::ResetView () {
+  fVP = fDefaultVP;
+}
+
 inline G4int G4VViewer::GetViewId () const {
   return fViewId;
 }

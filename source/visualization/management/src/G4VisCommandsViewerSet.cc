@@ -539,6 +539,18 @@ void G4VisCommandsViewerSet::SetNewValue
 
   else if (command == fpCommandAutoRefresh) {
     G4bool autoRefresh = G4UIcommand::ConvertToBool(newValue);
+    const G4ViewParameters& defaultVP =
+      currentViewer->GetDefaultViewParameters();
+    if (autoRefresh && !defaultVP.IsAutoRefresh()) {
+      if (verbosity >= G4VisManager::warnings) {
+	G4cout
+	  << "WARNING: "
+	  << currentViewer->GetName() << " is NOT auto-refesh by default"
+	  << "\n  so cannot be set to auto-refresh."
+	  << G4endl;
+	return;
+      }
+    }
     vp.SetAutoRefresh(autoRefresh);
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Views will ";
@@ -548,7 +560,7 @@ void G4VisCommandsViewerSet::SetNewValue
     }
     if (!vp.IsAutoRefresh()) {
       currentViewer->SetViewParameters(vp);
-      return;  // Avoid a refresh id auto-refresh has been set to off...
+      return;  // Avoid a refresh if auto-refresh has been set to off...
     }  // ...otherwise take normal action.
   }
 

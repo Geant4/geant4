@@ -60,6 +60,8 @@ protected:
   G4OpenGLViewer (G4OpenGLSceneHandler& scene);
   virtual ~G4OpenGLViewer ();
   void SetView    ();
+  void ResetView ();
+
   virtual void DrawText(const char * ,double x,double y,double z, double size) = 0;
   void HaloingFirstPass ();
   void HaloingSecondPass ();
@@ -71,8 +73,8 @@ protected:
   void ResizeWindow(unsigned int, unsigned int);
   void Pick(GLdouble x, GLdouble y);
   virtual void CreateFontLists () {}
-  void rotateScene (G4double dx, G4double dy,G4double delta);
-  void rotateSceneInViewDirection (G4double dx, G4double dy,G4double delta);
+  void rotateScene (G4double dx, G4double dy);
+  void rotateSceneToggle (G4double dx, G4double dy);
 //////////////////////////////Vectored PostScript production functions///
   bool drawGl2psText(const char * textString, int size);
   // print EPS file. Depending of fVectoredPs, it will print Vectored or not
@@ -113,6 +115,9 @@ protected:
   G4double fDisplayLightFrontRed, fDisplayLightFrontGreen, fDisplayLightFrontBlue;
   G4OpenGL2PSAction* fGL2PSAction;
 
+  G4double     fRot_sens;        // Rotation sensibility in degrees
+  G4double     fPan_sens;        // Translation sensibility
+
 private :
   G4int                             fPrintSizeX;
   G4int                             fPrintSizeY;
@@ -122,6 +127,8 @@ private :
   G4float                           fPointSize;
   G4bool fSizeHasChanged;
   // size of the OpenGL frame
+  void rotateSceneThetaPhi(G4double dx, G4double dy);
+  void rotateSceneInViewDirection (G4double dx, G4double dy);
   bool printGl2PS();
   G4int getRealPrintSizeX();
   G4int getRealPrintSizeY();

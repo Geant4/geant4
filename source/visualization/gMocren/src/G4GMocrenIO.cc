@@ -508,7 +508,10 @@ bool G4GMocrenIO::storeData4() {
   char cmt[1025];
   for(int i = 0; i < 1025; i++) cmt[i] = '\0';
   //std::strncpy(cmt, kComment.c_str(), 1024);
-  std::strcpy(cmt, kComment.c_str());
+  const char * cm = kComment.c_str();
+  size_t lcm = std::strlen(cm);
+  if(lcm > 1024) lcm = 1024;
+  std::strncpy(cmt, cm, lcm);
   ofile.write((char *)cmt, 1024);
   if(DEBUG || kVerbose > 0) {
     G4cout << "Data comment : "
@@ -735,7 +738,10 @@ bool G4GMocrenIO::storeData4() {
       // dose distribution unit
       char cdunit[13];
       for(int i = 0; i < 13; i++) cdunit[i] = '\0';
-      std::strcpy(cdunit, kDoseUnit.c_str());
+      const char * cu = kDoseUnit.c_str();
+      size_t lcu = std::strlen(cu);
+      if(lcu > 1024) lcu = 1024;
+      std::strncpy(cdunit, cu, lcu);
       ofile.write((char *)cdunit, 12);
       if(DEBUG || kVerbose > 0) {
 	G4cout << "Dose dist. unit : " << kDoseUnit << G4endl;
@@ -1662,7 +1668,7 @@ bool G4GMocrenIO::retrieveData4() {
   }
 
   // data buffer
-  char ctmp[12];
+  char ctmp[24];
 
   // file identifier
   char verid[9];
@@ -1855,6 +1861,8 @@ bool G4GMocrenIO::retrieveData4() {
       convertEndian(pdmap+i*sizeof(float), ftmp);
       kModalityImageDensityMap.push_back(ftmp); 
     }
+    delete [] pdmap;
+
     if(DEBUG || kVerbose > 0) {
       G4cout << "density map : " << std::ends;
       for(int i = 0; i < 10; i++)
@@ -2375,6 +2383,7 @@ bool G4GMocrenIO::retrieveData3() {
       convertEndian(pdmap+i*sizeof(float), ftmp);
       kModalityImageDensityMap.push_back(ftmp); 
     }
+    delete [] pdmap;
     if(DEBUG || kVerbose > 0) {
       G4cout << "density map : " << std::ends;
       for(int i = 0; i < 10; i++)
@@ -2792,6 +2801,7 @@ bool G4GMocrenIO::retrieveData2() {
       convertEndian(pdmap+i*sizeof(float), ftmp);
       kModalityImageDensityMap.push_back(ftmp); 
     }
+    delete [] pdmap;
     if(DEBUG || kVerbose > 0) {
       G4cout << "density map : " << std::ends;
       for(int i = 0; i < 10; i++)

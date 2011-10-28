@@ -45,7 +45,10 @@
 #include "G4Point3D.hh"
 #include "G4Normal3D.hh"
 
+#include "G4Scene.hh"
+
 #include "G4OpenGLXmSliderBar.hh"
+#include "G4OpenGLXmTextField.hh"
 
 #include "G4Xt.hh"
 #include <X11/Shell.h>
@@ -60,6 +63,46 @@ void G4OpenGLXmViewer::ShowView () {
   G4Xt::getInstance () -> SecondaryLoop ();
 
 }
+
+void G4OpenGLXmViewer::ResetView () {
+  // reset global parameters
+  G4OpenGLViewer::ResetView();
+
+  //reset Xm parameteres
+  zoom_high  = fVP.GetZoomFactor() * 10.0;
+  zoom_low = fVP.GetZoomFactor() / 10.0;
+  rot_sens_limit = 90.;
+  wob_low = 0.;
+  wob_high = 50.;
+  wob_sens = 20.;
+  
+  bool firstInit = true;
+  if (GetSceneHandler() != NULL) {
+    if (GetSceneHandler()->GetScene() != NULL) {
+      firstInit = false;
+    }
+  }
+  if (firstInit) {
+    pan_sens_limit = 100.;
+    fPan_sens = pan_sens_limit / 10.0;
+    dolly_low  = fVP.GetDolly() - 1000.0;
+    dolly_high = fVP.GetDolly() + 1000.0;
+  } else {
+    fPan_sens = GetSceneHandler()->GetScene()->GetExtent().GetExtentRadius() / 10.0;
+    pan_sens_limit = GetSceneHandler()->GetScene()->GetExtent().GetExtentRadius();
+    
+    dolly_high = GetSceneHandler()->GetScene()->GetExtent().GetExtentRadius();
+    dolly_low = -(GetSceneHandler()->GetScene()->GetExtent().GetExtentRadius());
+  }
+
+  UpdateControlPanel ();
+
+
+  // FIXME : L.Garnier 12 Oct 2011
+  // Has also to change the Camera/Object, but tricky to do...  
+
+}
+
 
 void G4OpenGLXmViewer::GetXmConnection () {
   
@@ -670,15 +713,7 @@ G4OpenGLXmViewer::G4OpenGLXmViewer (G4OpenGLSceneHandler& scene):
 G4VViewer (scene, -1),
 G4OpenGLViewer (scene),
 G4OpenGLXViewer (scene),
-zoom_high (fVP.GetZoomFactor() * 10.0),
-zoom_low (fVP.GetZoomFactor() / 10.0),
-dolly_low (fVP.GetDolly() - 1000.0),
-dolly_high (fVP.GetDolly() + 1000.0),
 fov (0.0),
-rot_sens_limit (90.),
-pan_sens_limit (100.),
-rot_sens (1.),
-wob_sens (20.),
 original_vp(fVP.GetViewpointDirection()),
 frameNo (0),
 fprotation_top (0),
@@ -688,12 +723,77 @@ fppanning_slider (0),
 fpzoom_slider (0),
 fpdolly_slider (0),
 fpsetting_top (0),
+fppan_set (0),
+fprot_set (0),
+fpzoom_upper (0),
+fpzoom_lower (0),
+fpdolly_upper (0),
+fpdolly_lower (0),
 fpmiscellany_top (0),
+fpwobble_slider (0),
 fpprint_top (0)
 {
   GetXmConnection ();
+  ResetView();
   if (fViewId < 0) return;
 }
+
+
+void G4OpenGLXmViewer::UpdateControlPanel () {
+
+  // set new values
+
+  if (fprotation_slider) {
+    fprotation_slider->SetInitialValue(fRot_sens);
+    fprotation_slider->SetMaxValue(rot_sens_limit);
+    fprotation_slider->SetMinValue(0);
+  }
+  if (fppanning_slider) {
+    fppanning_slider->SetInitialValue(fPan_sens);
+    fppanning_slider->SetMaxValue(pan_sens_limit);
+    fppanning_slider->SetMinValue(0);
+  }
+  if (fpzoom_slider) {
+    fpzoom_slider->SetInitialValue(fVP.GetZoomFactor());
+    fpzoom_slider->SetMinValue(zoom_low);
+    fpzoom_slider->SetMaxValue(zoom_high);
+  }
+  if (fpdolly_slider) {
+    fpdolly_slider->SetInitialValue(fVP.GetDolly());
+    fpdolly_slider->SetMinValue(dolly_low);
+    fpdolly_slider->SetMaxValue(dolly_high);
+  }
+
+  if (fpwobble_slider) {
+    fpwobble_slider->SetInitialValue(fVP.GetDolly());
+  }
+
+  if (fppan_set) {
+    fppan_set->SetValue(pan_sens_limit);
+  }
+
+  if (fprot_set) {
+    fprot_set->SetValue(rot_sens_limit);
+  }
+
+  if (fpzoom_upper) {
+    fpzoom_upper->SetValue(zoom_high);
+  }
+
+  if (fpzoom_lower) {
+    fpzoom_lower->SetValue(zoom_low);
+  }
+  if (fpdolly_upper) {
+    fpdolly_upper->SetValue(dolly_high);
+  }
+
+  if (fpdolly_lower) {
+    fpdolly_lower->SetValue(dolly_low);
+  }
+
+
+}
+
 
 G4OpenGLXmViewer::~G4OpenGLXmViewer ()
 {

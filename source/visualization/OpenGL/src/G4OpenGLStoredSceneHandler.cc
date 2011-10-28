@@ -79,14 +79,42 @@ G4OpenGLStoredSceneHandler::G4OpenGLStoredSceneHandler
  const G4String& name):
 G4OpenGLSceneHandler (system, fSceneIdCount++, name),
 fAddPrimitivePreambleNestingDepth (0),
-fTopPODL (0),
-fNbListsBeforeFlush(100), /* glFlush take about 90% time in store mode, divide glFluch
- number by 100 will change the first vis time from 100% to 10+90/100 = 10,9% */
-fNbListsToBeFlush(0)
+fTopPODL (0)
 {}
 
 G4OpenGLStoredSceneHandler::~G4OpenGLStoredSceneHandler ()
 {}
+
+void G4OpenGLStoredSceneHandler::BeginPrimitives
+(const G4Transform3D& objectTransformation)
+{  
+  G4OpenGLSceneHandler::BeginPrimitives (objectTransformation);
+  if (fReadyForTransients) glDrawBuffer (GL_FRONT);
+  // Display list setup moved to AddPrimitivePreamble.  See notes there.
+}
+
+void G4OpenGLStoredSceneHandler::EndPrimitives ()
+{
+  // See all primitives immediately...  At least soon...
+  ScaledFlush();
+  glDrawBuffer (GL_BACK);
+  G4OpenGLSceneHandler::EndPrimitives ();
+}
+
+void G4OpenGLStoredSceneHandler::BeginPrimitives2D
+(const G4Transform3D& objectTransformation)
+{
+  G4OpenGLSceneHandler::BeginPrimitives2D(objectTransformation);
+  if (fReadyForTransients) glDrawBuffer (GL_FRONT);
+}
+
+void G4OpenGLStoredSceneHandler::EndPrimitives2D ()
+{
+  // See all primitives immediately...  At least soon...
+  ScaledFlush();
+  glDrawBuffer (GL_BACK);
+  G4OpenGLSceneHandler::EndPrimitives2D ();
+}
 
 void G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
 {
@@ -107,7 +135,6 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
 
   if (fMemoryForDisplayLists) {
     fDisplayListId = glGenLists (1);
-    fNbListsToBeFlush ++;
     if (glGetError() == GL_OUT_OF_MEMORY ||
 	fDisplayListId > fDisplayListLimit) {
       G4cout <<
@@ -131,7 +158,6 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
       to.fStartTime = pVA->GetStartTime();
       to.fEndTime = pVA->GetEndTime();
       fTOList.push_back(to);
-      glDrawBuffer (GL_FRONT);
       glPushMatrix();
       G4OpenGLTransform3D oglt (*fpObjectTransformation);
       glMultMatrixd (oglt.GetGLMatrix ());
@@ -197,11 +223,6 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePostamble()
   }
   if (fReadyForTransients || !fMemoryForDisplayLists) {
     glPopMatrix();
-    if (fNbListsToBeFlush >= fNbListsBeforeFlush ) {
-      glFlush ();
-      fNbListsToBeFlush = 0;
-    }
-    glDrawBuffer (GL_BACK);
   }
   fAddPrimitivePreambleNestingDepth--;
 }
@@ -270,30 +291,6 @@ void G4OpenGLStoredSceneHandler::AddPrimitive (const G4NURBS& nurbs)
   AddPrimitivePostamble();
 }
 
-void G4OpenGLStoredSceneHandler::BeginPrimitives
-(const G4Transform3D& objectTransformation)
-{  
-  G4OpenGLSceneHandler::BeginPrimitives (objectTransformation);
-
-  // Display list setup moved to AddPrimitivePreamble.  See notes there.
-}
-
-void G4OpenGLStoredSceneHandler::EndPrimitives ()
-{
-  G4OpenGLSceneHandler::EndPrimitives ();
-}
-
-void G4OpenGLStoredSceneHandler::BeginPrimitives2D
-(const G4Transform3D& objectTransformation)
-{
-  G4OpenGLSceneHandler::BeginPrimitives2D(objectTransformation);
-}
-
-void G4OpenGLStoredSceneHandler::EndPrimitives2D ()
-{
-  G4OpenGLSceneHandler::EndPrimitives2D ();
-}
-
 void G4OpenGLStoredSceneHandler::BeginModeling () {
   G4VSceneHandler::BeginModeling();
   ClearStore();  // ...and all that goes with it.
@@ -306,7 +303,6 @@ void G4OpenGLStoredSceneHandler::BeginModeling () {
 void G4OpenGLStoredSceneHandler::EndModeling () {
   // Make a List which calls the other lists.
   fTopPODL = glGenLists (1);
-  fNbListsToBeFlush ++;
   if (glGetError() == GL_OUT_OF_MEMORY) {  // Could pre-allocate?
     G4cout <<
       "ERROR: G4OpenGLStoredSceneHandler::EndModeling: Failure to allocate"

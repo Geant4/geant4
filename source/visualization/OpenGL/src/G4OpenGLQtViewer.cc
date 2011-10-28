@@ -186,11 +186,8 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
   ,fRecordFrameNumber(0)
   ,fContextMenu(0)
   ,fMouseAction(STYLE1)
-  ,fDeltaRotation(1)
-  ,fDeltaSceneTranslation(0.01)
   ,fDeltaDepth(0.01)
   ,fDeltaZoom(0.05)
-  ,fDeltaMove(0.05)
   ,fHoldKeyEvent(false)
   ,fHoldMoveEvent(false)
   ,fHoldRotateEvent(false)
@@ -207,8 +204,6 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
   ,fNbMaxAnglePerSec(360)
   ,fLaunchSpinDelay(100)
   ,fUIViewComponentsTBWidget(NULL)
-  ,fXRot(0)
-  ,fYRot(0)
   ,fNoKeyPress(true)
   ,fAltKeyPress(false)
   ,fControlKeyPress(false)
@@ -603,7 +598,7 @@ void G4OpenGLQtViewer::showShortcuts() {
   G4cout << "========= Mouse Shortcuts =========" << G4endl;
   if (fMouseAction == STYLE1) {  // rotate
     G4cout << "Click and move mouse to rotate volume " << G4endl;
-    G4cout << "ALT + Click and move mouse to rotate volume (View Direction)" << G4endl;
+    G4cout << "ALT + Click and move mouse to rotate volume (Toggle View/Theta-Phi Direction)" << G4endl;
     G4cout << "CTRL + Click and zoom mouse to zoom in/out" << G4endl;
     G4cout << "SHIFT + Click and zoommove camera point of view" << G4endl;
   } else  if (fMouseAction == STYLE2) { //move
@@ -1087,7 +1082,7 @@ void G4OpenGLQtViewer::G4MouseReleaseEvent()
           if (fNoKeyPress) {
             rotateQtScene(((float)delta.x())/correctionFactor,((float)delta.y())/correctionFactor);
           } else if (fAltKeyPress) {
-            rotateQtSceneInViewDirection(((float)delta.x())/correctionFactor,((float)delta.y())/correctionFactor);
+            rotateQtSceneToggle(((float)delta.x())/correctionFactor,((float)delta.y())/correctionFactor);
           }
           
         } else if (fMouseAction == STYLE2) {  // move
@@ -1139,7 +1134,7 @@ void G4OpenGLQtViewer::G4MouseMoveEvent(QMouseEvent *event)
       if (fNoKeyPress) {
         rotateQtScene(((float)deltaX),((float)deltaY));
       } else if (fAltKeyPress) {
-        rotateQtSceneInViewDirection(((float)deltaX),((float)deltaY));
+        rotateQtSceneToggle(((float)deltaX),((float)deltaY));
       } else if (fShiftKeyPress) {
         unsigned int sizeWin;
         sizeWin = getWinWidth();
@@ -1185,13 +1180,10 @@ void G4OpenGLQtViewer::moveScene(float dx,float dy, float dz,bool mouseMove)
       coefTrans = ((G4double)getSceneNearWidth())/((G4double)getWinHeight());
     }
   } else {
-    coefTrans = getSceneNearWidth()*fDeltaSceneTranslation;
+    coefTrans = getSceneNearWidth()*fPan_sens;
     coefDepth = getSceneDepth()*fDeltaDepth;
   }
   fVP.IncrementPan(-dx*coefTrans,dy*coefTrans,dz*coefDepth);
-  Q_EMIT moveX(-floor(dx*coefTrans+0.5));
-  Q_EMIT moveY(floor(dy*coefTrans+0.5));
-  Q_EMIT moveZ(floor(dz*coefTrans+0.5));
   
   updateQWidget();
   if (fAutoMove)
@@ -1212,14 +1204,8 @@ void G4OpenGLQtViewer::rotateQtScene(float dx, float dy)
     return;
   fHoldRotateEvent = true;
   
-  if( dx != 0) {
-    rotateScene(dx,0,fDeltaRotation);
-    Q_EMIT rotateTheta(floor(dx+0.5));
-  }
-  if( dy != 0) {
-    rotateScene(0,dy,fDeltaRotation);
-    Q_EMIT rotatePhi(floor(dy+0.5));
-  }
+  rotateScene(dx,dy);
+
   updateQWidget();
   
   fHoldRotateEvent = false;
@@ -1230,65 +1216,14 @@ void G4OpenGLQtViewer::rotateQtScene(float dx, float dy)
    @param dy delta mouse y position
 */
 
-void G4OpenGLQtViewer::rotateQtSceneInViewDirection(float dx, float dy)
+void G4OpenGLQtViewer::rotateQtSceneToggle(float dx, float dy)
 {
   if (fHoldRotateEvent)
     return;
   fHoldRotateEvent = true;
   
-  fXRot +=dx;
-  fYRot +=dy;
-  
-  rotateSceneInViewDirection(dx,dy,fDeltaRotation/100);
-  
-  Q_EMIT rotateTheta(floor(dx+0.5));
-  Q_EMIT rotatePhi(floor(dy+0.5));
-  updateQWidget();
-  
-  fHoldRotateEvent = false;
-}
+  rotateSceneToggle(dx,dy);
 
-/**
-   @param dx delta mouse x position
-   @param dy delta mouse y position
-*/
-
-void G4OpenGLQtViewer::rotateQtCamera(float dx, float dy)
-{
-  if (fHoldRotateEvent)
-    return;
-  fHoldRotateEvent = true;
-
-  rotateScene(dx,dy,fDeltaRotation);
-  Q_EMIT rotateTheta(floor(dx+0.5));
-  Q_EMIT rotatePhi(floor(dy+0.5));
-  updateQWidget();
-  
-  fHoldRotateEvent = false;
-}
-
-/**
-   @param dx delta mouse x position
-   @param dy delta mouse y position
-*/
-
-void G4OpenGLQtViewer::rotateQtCameraInViewDirection(float dx, float dy)
-{
-  if (fHoldRotateEvent)
-    return;
-  fHoldRotateEvent = true;
-
-  fVP.SetUpVector(G4Vector3D(0.0, 1.0, 0.0));
-  fVP.SetViewAndLights (G4Vector3D(0.0, 0.0, 1.0));
-
-
-  fXRot +=dx;
-  fYRot +=dy;
-
-  rotateSceneInViewDirection(fXRot,fYRot,fDeltaRotation/100);
-
-  Q_EMIT rotateTheta(floor(dx+0.5));
-  Q_EMIT rotatePhi(floor(dy+0.5));
   updateQWidget();
   
   fHoldRotateEvent = false;
@@ -1422,15 +1357,7 @@ void G4OpenGLQtViewer::G4wheelEvent (QWheelEvent * event)
   
   // H : Return Home view
   if (event->key() == Qt::Key_H){ // go Home
-    fDeltaRotation = 1;
-    fDeltaSceneTranslation = 0.01;
-    fDeltaDepth = 0.01;
-    fDeltaZoom = 0.05;
-    fDeltaMove = 0.05;
-    
-    fVP.SetZoomFactor(1.);
-    fVP.SetUpVector(G4Vector3D (0., 1., 0.));
-    fVP.SetViewAndLights (G4Vector3D (0., 0., 1.));
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/reset");
 
     updateQWidget();
   }
@@ -1438,42 +1365,42 @@ void G4OpenGLQtViewer::G4wheelEvent (QWheelEvent * event)
   // Shift Modifier
   if (fShiftKeyPress) {
     if (event->key() == Qt::Key_Down) { // rotate phi
-      rotateQtScene(0,-fDeltaRotation);
+      rotateQtScene(0,-fRot_sens);
     }
     else if (event->key() == Qt::Key_Up) { // rotate phi
-      rotateQtScene(0,fDeltaRotation);
+      rotateQtScene(0,fRot_sens);
     }
     if (event->key() == Qt::Key_Left) { // rotate theta
-      rotateQtScene(fDeltaRotation,0);
+      rotateQtScene(fRot_sens,0);
     }
     else if (event->key() == Qt::Key_Right) { // rotate theta
-      rotateQtScene(-fDeltaRotation,0);
+      rotateQtScene(-fRot_sens,0);
     }
 
   // Alt Modifier
   }
   if ((fAltKeyPress)) {
     if (event->key() == Qt::Key_Down) { // rotate phi
-      rotateQtSceneInViewDirection(0,-fDeltaRotation);
+      rotateQtSceneToggle(0,-fRot_sens);
     }
     else if (event->key() == Qt::Key_Up) { // rotate phi
-      rotateQtSceneInViewDirection(0,fDeltaRotation);
+      rotateQtSceneToggle(0,fRot_sens);
     }
     if (event->key() == Qt::Key_Left) { // rotate theta
-      rotateQtSceneInViewDirection(fDeltaRotation,0);
+      rotateQtSceneToggle(fRot_sens,0);
     }
     else if (event->key() == Qt::Key_Right) { // rotate theta
-      rotateQtSceneInViewDirection(-fDeltaRotation,0);
+      rotateQtSceneToggle(-fRot_sens,0);
     }
 
     // Rotatio +/-
     if (event->key() == Qt::Key_Plus) {
-      fDeltaRotation = fDeltaRotation/0.7;
-      G4cout << "Auto-rotation set to : " << fDeltaRotation << G4endl;
+      fRot_sens = fRot_sens/0.7;
+      G4cout << "Auto-rotation set to : " << fRot_sens << G4endl;
     }
     else if (event->key() == Qt::Key_Minus) {
-      fDeltaRotation = fDeltaRotation*0.7;
-      G4cout << "Auto-rotation set to : " << fDeltaRotation << G4endl;
+      fRot_sens = fRot_sens*0.7;
+      G4cout << "Auto-rotation set to : " << fRot_sens << G4endl;
     }
 
   // Control Modifier OR Command on MAC
@@ -2526,6 +2453,14 @@ void G4OpenGLQtViewer::DrawText(const char * textString,double x,double y,double
 void G4OpenGLQtViewer::CreateFontLists () {
   DrawText("",0.0,0.0,0.0,1.0);
 }
+
+
+void G4OpenGLQtViewer::ResetView () {
+  G4OpenGLViewer::ResetView();
+  fDeltaDepth = 0.01;
+  fDeltaZoom = 0.05;
+}
+
 
 /*
   

@@ -71,6 +71,10 @@ G4OpenGLSceneHandler::G4OpenGLSceneHandler (G4VGraphicsSystem& system,
   G4VSceneHandler (system, id, name),
   fPickName(0),
   fProcessing2D (false),
+  // glFlush take about 90% time.  Dividing glFlush number by 100 will
+  // change the first vis time from 100% to 10+90/100 = 10,9%.
+  fNbListsBeforeFlush(100),
+  fNbListsToBeFlush(0),
   fProcessingPolymarker(false)
 {}
 
@@ -103,6 +107,14 @@ void G4OpenGLSceneHandler::ClearAndDestroyAtts()
   std::map<GLuint, G4AttHolder*>::iterator i;
   for (i = fPickMap.begin(); i != fPickMap.end(); ++i) delete i->second;
   fPickMap.clear();
+}
+
+void G4OpenGLSceneHandler::ScaledFlush()
+{
+  fNbListsToBeFlush++;
+  if (fNbListsToBeFlush < fNbListsBeforeFlush) return;
+  glFlush();
+  fNbListsToBeFlush = 0;
 }
 
 void G4OpenGLSceneHandler::PreAddSolid

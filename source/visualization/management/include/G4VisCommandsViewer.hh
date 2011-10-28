@@ -49,6 +49,7 @@ public:
   virtual ~G4VVisCommandViewer ();
 protected:
   void SetViewParameters(G4VViewer*, const G4ViewParameters&);
+  void RefreshIfRequired(G4VViewer*);
 private:
   G4VVisCommandViewer (const G4VVisCommandViewer&);
   G4VVisCommandViewer& operator = (const G4VVisCommandViewer&);

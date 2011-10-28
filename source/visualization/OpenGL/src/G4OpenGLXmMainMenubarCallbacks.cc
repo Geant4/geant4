@@ -120,7 +120,7 @@ void G4OpenGLXmViewer::actions_callback (Widget w,
 							    rot_slider_list,
 							    True,
 							    2,
-							    pView->rot_sens,
+							    pView->fRot_sens,
 							    pView->rot_sens_limit,
 							    0);
 	pView->fprotation_slider_box->AddChild (pView->fprotation_slider);
@@ -209,7 +209,7 @@ void G4OpenGLXmViewer::actions_callback (Widget w,
 							   pan_slider_list,
 							   True,
 							   2,
-							   pView->pan_sens = pView->GetSceneHandler()->GetScene()->GetExtent().GetExtentRadius() / 10.0,
+							   pView->fPan_sens = pView->GetSceneHandler()->GetScene()->GetExtent().GetExtentRadius() / 10.0,
 							   pView->pan_sens_limit = pView->GetSceneHandler()->GetScene()->GetExtent().GetExtentRadius(),
 							   0);
 	pView->fppanning_box->AddChild (pView->fppanning_slider);
@@ -253,6 +253,7 @@ void G4OpenGLXmViewer::actions_callback (Widget w,
 	pView->fpdolly_box->AddChild (pView->fpdolly_slider);
 	
 	pView->fppanning_top->Realize ();
+        pView->UpdateControlPanel ();
       }
 
       break;
@@ -370,9 +371,9 @@ void G4OpenGLXmViewer::misc_callback (Widget w,
 							  wobble_slider_list,
 							  True,
 							  0,
-							  20,
-							  50,
-							  0);
+							  pView->wob_sens,
+							  pView->wob_high,
+							  pView->wob_low);
 	pView->fpwobble_box->AddChild (pView->fpwobble_button);
 	pView->fpwobble_box->AddChild (pView->fpwobble_slider);
 	

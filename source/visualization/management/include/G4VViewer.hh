@@ -65,6 +65,14 @@ public: // With description
   //////////////////////////////////////////////////////////////
   // View manipulation functions.
 
+  virtual void ResetView ();
+  // Reset view parameters to default, including sub-class parameters, if any.
+  // The sub-class should always invoke the base class implementation, i.e:
+  // virtual void SubClass::ResetView () {
+  //   G4VViewer::ResetView();
+  //   // Then reset sub-class parameters
+  //   ...
+
   virtual void SetView () = 0;
   // Take view parameters and work out model/view transformation,
   // projection transformation, lighting, etc.

@@ -65,24 +65,24 @@ void G4OpenGLXmViewer::rotate_in_theta (XtPointer clientData,
   G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*) clientData;
 
   if (pView->rotate_right) {
-    pView->rotateScene((G4double)pView->rot_sens,0,1);
+    pView->rotateScene(1,0);
   } else {
-    pView->rotateScene(-(G4double)pView->rot_sens,0,1);
+    pView->rotateScene(-1,0);
   }
   /*
   G4double delta_theta;
 
   if (pView->fVP.GetLightsMoveWithCamera()) {
     if (pView->rotate_right) {
-      delta_theta = -((G4double)pView->rot_sens);
+      delta_theta = -(pView->fRot_sens);
     } else {
-      delta_theta = (G4double)pView->rot_sens;
+      delta_theta = pView->fRot_sens;
     }
   } else {
     if (pView->rotate_right) {
-      delta_theta = (G4double)pView->rot_sens;
+      delta_theta = pView->fRot_sens;
     } else {
-      delta_theta = -((G4double)pView->rot_sens);
+      delta_theta = -(pView->fRot_sens);
     }
   }    
   delta_theta *= deg;
@@ -143,22 +143,22 @@ void G4OpenGLXmViewer::rotate_in_phi (XtPointer clientData,
   G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*) clientData;
 
   if (pView -> rotate_up) {
-    pView->rotateScene(0,-(G4double)pView->rot_sens,1);
+    pView->rotateScene(0,-1);
   } else {
-    pView->rotateScene(0,(G4double)pView->rot_sens,1);
+    pView->rotateScene(0,1);
   }
   /*
   if (pView->fVP.GetLightsMoveWithCamera()) {
     if (pView -> rotate_up) {
-      delta_alpha = -((G4double)pView->rot_sens);
+      delta_alpha = -(pView->fRot_sens);
     } else {
-      delta_alpha = (G4double)pView->rot_sens;
+      delta_alpha = pView->fRot_sens;
     }
   } else {
     if (pView -> rotate_up) {
-      delta_alpha = (G4double)pView->rot_sens;
+      delta_alpha = pView->fRot_sens;
     } else {
-      delta_alpha = -((G4double)pView->rot_sens);
+      delta_alpha = -(pView->fRot_sens);
     }
   }    
 
@@ -218,7 +218,7 @@ void G4OpenGLXmViewer::set_rot_sens_callback (Widget w,
        "Bad value returned for dp in set_rot_sens_callback");
   }
 
-  pView->rot_sens = (G4float)(cbs->value) / ten_to_the_dp;
+  pView->fRot_sens = (G4float)(cbs->value) / ten_to_the_dp;
 }  
 
 void G4OpenGLXmViewer::set_rot_subject_callback (Widget w, 

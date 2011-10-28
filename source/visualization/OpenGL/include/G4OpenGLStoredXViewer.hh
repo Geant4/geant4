@@ -49,6 +49,7 @@ public:
   G4OpenGLStoredXViewer (G4OpenGLStoredSceneHandler& scene, const G4String& name = "");
   virtual ~G4OpenGLStoredXViewer ();
   void Initialise ();
+  void ShowView ();
   void DrawView ();
   void FinishView ();
 };

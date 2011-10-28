@@ -155,8 +155,8 @@ void G4OpenGLImmediateSceneHandler::EndPrimitives ()
 {
   glPopMatrix();
 
-  // See all primitives immediately...
-  glFlush ();
+  // See all primitives immediately...  At least soon...
+  ScaledFlush();
 
   G4OpenGLSceneHandler::EndPrimitives ();
 }

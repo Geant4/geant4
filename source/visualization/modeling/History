@@ -20,6 +20,11 @@ committal in the CVS repository !
 History file for visualization/modeling
 ---------------------------------------
 
+27th September 2011  John Allison  (modeling-V09-04-03)
+- G4PhysicalVolumeModel::Validate: Strengthen case for issuing warnings so
+  that warning not issued in normal case.
+- Added some files to svn::ignore.
+
 25th September 2011  John Allison  (modeling-V09-04-02)
 - G4PhysicalVolumeModel: Tidied
 

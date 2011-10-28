@@ -595,9 +595,6 @@ G4bool G4PhysicalVolumeModel::Validate (G4bool warn)
     -> GetNavigatorForTracking () -> GetWorldVolume ();
   // The idea now is to seek a PV with the same name and copy no
   // in the hope it's the same one!!
-  if (warn) {
-    G4cout << "G4PhysicalVolumeModel::Validate() called." << G4endl;
-  }
   G4PhysicalVolumeModel searchModel (world);
   G4PhysicalVolumeSearchScene searchScene
     (&searchModel, fTopPVName, fTopPVCopyNo);
@@ -607,12 +604,14 @@ G4bool G4PhysicalVolumeModel::Validate (G4bool warn)
   searchModel.DescribeYourselfTo (searchScene);
   G4VPhysicalVolume* foundVolume = searchScene.GetFoundVolume ();
   if (foundVolume) {
-    if (warn) {
-      G4cout << "  Volume of the same name and copy number (\""
+    if (foundVolume != fpTopPV && warn) {
+      G4cout <<
+  "G4PhysicalVolumeModel::Validate(): A volume of the same name and"
+  "\n  copy number (\""
 	     << fTopPVName << "\", copy " << fTopPVCopyNo
 	     << ") still exists and is being used."
-	"\n  WARNING: This does not necessarily guarantee it's the same"
-	"\n  volume you originally specified in /vis/scene/add/."
+  "\n  But it is not the same volume you originally specified"
+  "\n  in /vis/scene/add/."
 	     << G4endl;
     }
     fpTopPV = foundVolume;
@@ -621,7 +620,9 @@ G4bool G4PhysicalVolumeModel::Validate (G4bool warn)
   }
   else {
     if (warn) {
-      G4cout << "  A volume of the same name and copy number (\""
+      G4cout <<
+	"G4PhysicalVolumeModel::Validate(): A volume of the same name and"
+	"\n  copy number (\""
 	     << fTopPVName << "\", copy " << fTopPVCopyNo
 	     << ") no longer exists."
 	     << G4endl;

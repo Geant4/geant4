@@ -81,6 +81,8 @@ fDisplayLightFrontT(0.),
 fDisplayLightFrontRed(0.),
 fDisplayLightFrontGreen(1.),
 fDisplayLightFrontBlue(0.),
+fRot_sens(1.),
+fPan_sens(0.01),
 fPrintSizeX(-1),
 fPrintSizeY(-1),
 fPrintFilename ("G4OpenGL"),
@@ -357,6 +359,15 @@ void G4OpenGLViewer::SetView () {
   background = fVP.GetBackgroundColour ();
 
 }
+
+
+
+void G4OpenGLViewer::ResetView () {
+  G4VViewer::ResetView();
+  fRot_sens = 1;
+  fPan_sens = 0.01;
+}
+
 
 void G4OpenGLViewer::HaloingFirstPass () {
   
@@ -824,7 +835,36 @@ GLdouble G4OpenGLViewer::getSceneDepth()
 
 
 
-void G4OpenGLViewer::rotateScene(G4double dx, G4double dy,G4double deltaRotation)
+void G4OpenGLViewer::rotateScene(G4double dx, G4double dy)
+{
+  if (fVP.GetRotationStyle() == G4ViewParameters::freeRotation) {
+    rotateSceneInViewDirection(dx,dy);
+  } else {
+    if( dx != 0) {
+      rotateSceneThetaPhi(dx,0);
+    }
+    if( dy != 0) {
+      rotateSceneThetaPhi(0,dy);
+    }
+  }
+}
+
+
+void G4OpenGLViewer::rotateSceneToggle(G4double dx, G4double dy)
+{
+  if (fVP.GetRotationStyle() != G4ViewParameters::freeRotation) {
+    rotateSceneInViewDirection(dx,dy);
+  } else {
+    if( dx != 0) {
+      rotateSceneThetaPhi(dx,0);
+    }
+    if( dy != 0) {
+      rotateSceneThetaPhi(0,dy);
+    }
+  }
+}
+
+void G4OpenGLViewer::rotateSceneThetaPhi(G4double dx, G4double dy)
 {
   if (!fSceneHandler.GetScene()) {
     return;
@@ -861,11 +901,11 @@ void G4OpenGLViewer::rotateScene(G4double dx, G4double dy,G4double deltaRotation
   zprime = (vp.cross(yprime)).unit();
   
   if (fVP.GetLightsMoveWithCamera()) {
-    delta_alpha = dy * deltaRotation;
-    delta_theta = -dx * deltaRotation;
+    delta_alpha = dy * fRot_sens;
+    delta_theta = -dx * fRot_sens;
   } else {
-    delta_alpha = -dy * deltaRotation;
-    delta_theta = dx * deltaRotation;
+    delta_alpha = -dy * fRot_sens;
+    delta_theta = dx * fRot_sens;
   }    
   
   delta_alpha *= deg;
@@ -908,7 +948,7 @@ void G4OpenGLViewer::rotateScene(G4double dx, G4double dy,G4double deltaRotation
 }
 
 
-void G4OpenGLViewer::rotateSceneInViewDirection(G4double dx, G4double dy,G4double deltaRotation)
+void G4OpenGLViewer::rotateSceneInViewDirection(G4double dx, G4double dy)
 {
   if (!fSceneHandler.GetScene()) {
     return;
@@ -929,11 +969,13 @@ void G4OpenGLViewer::rotateSceneInViewDirection(G4double dx, G4double dy,G4doubl
   G4Vector3D delta;
   G4Vector3D viewPoint;
 
-    
+  dx = dx/100;
+  dy = dy/100;
+
   //phi spin stuff here
   
 #ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLViewer::rotateScene dx:%f dy:%f delta:%f\n",dx,dy, deltaRotation);
+  printf("G4OpenGLViewer::rotateScene dx:%f dy:%f delta:%f\n",dx,dy, fRot_sens);
 #endif
 
   vp = fVP.GetViewpointDirection ().unit();
@@ -943,7 +985,7 @@ void G4OpenGLViewer::rotateSceneInViewDirection(G4double dx, G4double dy,G4doubl
                              up.z()*vp.x()-up.x()*vp.z(),
                              up.x()*vp.y()-up.y()*vp.x());
 
-  viewPoint = vp/deltaRotation + (zPrimeVector*dx - up*dy) ;
+  viewPoint = vp/fRot_sens + (zPrimeVector*dx - up*dy) ;
   new_up = G4Vector3D(viewPoint.y()*zPrimeVector.z()-viewPoint.z()*zPrimeVector.y(),
                        viewPoint.z()*zPrimeVector.x()-viewPoint.x()*zPrimeVector.z(),
                        viewPoint.x()*zPrimeVector.y()-viewPoint.y()*zPrimeVector.x());

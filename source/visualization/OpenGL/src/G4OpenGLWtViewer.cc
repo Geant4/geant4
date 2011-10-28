@@ -1159,11 +1159,6 @@ void G4OpenGLWtViewer::moveScene(float dx,float dy, float dz,bool mouseMove)
     coefDepth = getSceneDepth()*fDeltaDepth;
   }
   fVP.IncrementPan(-dx*coefTrans,dy*coefTrans,dz*coefDepth);
-#ifdef _A_FINIR_FIXME
-  emit moveX(-static_cast<int>(dx*coefTrans));
-  emit moveY(static_cast<int>(dy*coefTrans));
-  emit moveZ(static_cast<int>(dz*coefTrans));
-#endif  
   updateWWidget();
   if (fAutoMove)
 #ifdef _A_FINIR_FIXME
@@ -1186,16 +1181,10 @@ void G4OpenGLWtViewer::rotateWtScene(float dx, float dy)
   fHoldRotateEvent = true;
   
   if( dx != 0) {
-    rotateScene(dx,0,fDeltaRotation);
-#ifdef _A_FINIR_FIXME
-    emit rotateTheta(static_cast<int>(dx));
-#endif
+    rotateScene(dx,0);
   }
   if( dy != 0) {
-    rotateScene(0,dy,fDeltaRotation);
-#ifdef _A_FINIR_FIXME
-    emit rotatePhi(static_cast<int>(dy));
-#endif
+    rotateScene(0,dy);
   }
   updateWWidget();
   
@@ -1216,12 +1205,8 @@ void G4OpenGLWtViewer::rotateWtSceneInViewDirection(float dx, float dy)
   fXRot +=dx;
   fYRot +=dy;
   
-  rotateSceneInViewDirection(dx,dy,fDeltaRotation/100);
+  rotateSceneInViewDirection(dx/100,dy/100);
   
-#ifdef _A_FINIR_FIXME
-  emit rotateTheta(static_cast<int>(dx));
-  emit rotatePhi(static_cast<int>(dy));
-#endif
   updateWWidget();
   
   fHoldRotateEvent = false;
@@ -1238,11 +1223,7 @@ void G4OpenGLWtViewer::rotateWtCamera(float dx, float dy)
     return;
   fHoldRotateEvent = true;
 
-  rotateScene(dx,dy,fDeltaRotation);
-#ifdef _A_FINIR_FIXME
-  emit rotateTheta(static_cast<int>(dx));
-  emit rotatePhi(static_cast<int>(dy));
-#endif
+  rotateScene(dx,dy);
   updateWWidget();
   
   fHoldRotateEvent = false;
@@ -1266,12 +1247,8 @@ void G4OpenGLWtViewer::rotateWtCameraInViewDirection(float dx, float dy)
   fXRot +=dx;
   fYRot +=dy;
 
-  rotateSceneInViewDirection(fXRot,fYRot,fDeltaRotation/100);
+  rotateSceneInViewDirection(fXRot/100,fYRot/100);
 
-#ifdef _A_FINIR_FIXME
-  emit rotateTheta(static_cast<int>(dx));
-  emit rotatePhi(static_cast<int>(dy));
-#endif
   updateWWidget();
   
   fHoldRotateEvent = false;

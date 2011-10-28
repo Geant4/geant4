@@ -72,6 +72,16 @@ void G4OpenGLStoredXViewer::Initialise () {
   glDrawBuffer (GL_BACK);
 }
 
+void G4OpenGLStoredXViewer::ShowView () {
+  // Some X servers fail to draw all trajectories, particularly Mac
+  // XQuartz.  Revisit this at a future date.  Meanwhile, issue an
+  // extra...
+  ClearView();
+  DrawView();
+  // ..then call parent method.
+  G4OpenGLXViewer::ShowView();
+}
+
 void G4OpenGLStoredXViewer::DrawView () {
 
 #ifdef G4DEBUG_VIS_OGL

@@ -186,7 +186,7 @@ G4String G4GMocrenMessenger::GetCurrentValue(G4UIcommand * command) {
   } else if (command == kAddgMocrenHitScorerNameCommand) {
     G4String strval;
     std::vector<G4String>::iterator itr = kgMocrenHitScorerNames.begin();
-    for(; itr != kgMocrenHitNames.end(); itr++) {
+    for(; itr != kgMocrenHitScorerNames.end(); itr++) {
       strval += *itr;
       strval += " ";
     }

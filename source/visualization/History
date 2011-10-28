@@ -24,6 +24,44 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+18th October 2011  John Allison  (vis-V09-04-09)
+- opengl-V09-04-13:
+  Xm: Fixed consistency and rest issue with control panels.
+  Stored mode: Improved efficiency for handling transients (trajectories).
+
+15th October 2011  John Allison
+- opengl-V09-04-12: Fixes to several problems:
+  o Failure to see complete drawing on Mac (missing trajectories).
+  o Slow drawing in Mac (reduced the frequency of glFlush).
+  o Inconsistent parameters on Xm panels.
+  o Sub-class parameters not being restet (introduced new virtual
+      function, ResetView).
+
+13th October 2011  Andrea Dotti
+- vis-HepRep-V09-04-02:
+  o Solving "variable set but not used" warning in GCC 4.6 
+
+11th October 2011  John Allison
+- visman-V09-04-06: G4VisCommandsViewer: Introduce RefreshIfRequired.
+
+10th October 2011  John Allison
+- visman-V09-04-05:
+  o G4VViewer: Added virtual function ResetView.
+  o Do not set auto-refresh for viewers that are not auto-refresh by default.
+
+8th October 2011  Akinori Kimura
+- gMocren-V09-04-02: Fixed Coverity defects.
+
+7th October 2011  John Allison
+- modeling-V09-04-03: Improve warning messages.
+- opengl-V09-04-11: Fixed compilation warnings.
+
+6th October 2011 Laurent Garnier
+- opengl-V09-04-10: Fixed one more compilation error on Windows.
+
+3rd October 2011 Laurent Garnier
+- opengl-V09-04-09: Fix Warning with DrawText and compilation error on Windows.
+
 25th September 2011  John Allison (vis-V09-04-08)
 - modeling-V09-04-02: Migrated to new G4Exception.
 - visman-V09-04-04:  Migrated to new G4Exception.  Also:
