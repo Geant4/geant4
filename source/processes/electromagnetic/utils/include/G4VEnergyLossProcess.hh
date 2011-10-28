@@ -337,7 +337,8 @@ public:
   void ActivateForcedInteraction(G4double length = 0.0, 
 				 const G4String& region = "");
 
-  void ActivateSecondaryBiasing(const G4String& region, G4double factor);
+  void ActivateSecondaryBiasing(const G4String& region, G4double factor,
+				G4double energyLimit);
 
   // Add subcutoff process (bremsstrahlung) to sample secondary 
   // particle production in vicinity of the geometry boundary

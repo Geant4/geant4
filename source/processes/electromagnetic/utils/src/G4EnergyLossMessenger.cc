@@ -85,7 +85,7 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   emDirectory->SetGuidance("General commands for EM processes.");
 
   RndmStepCmd = new G4UIcmdWithABool("/process/eLoss/useCutAsFinalRange",this);
-  RndmStepCmd->SetGuidance("Randomize the proposed step by eLoss.");
+  RndmStepCmd->SetGuidance("Use cut in range as a final range");
   RndmStepCmd->SetParameterName("choice",true);
   RndmStepCmd->SetDefaultValue(false);
   RndmStepCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
@@ -308,6 +308,7 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
 
   G4UIparameter* procFact = new G4UIparameter("procFact",'d',false);
   bfCmd->SetParameter(procFact);
+  bfCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   fiCmd = new G4UIcommand("/process/em/setForcedInteraction",this);
   fiCmd->SetGuidance("Set factor for the process cross section.");
@@ -327,12 +328,14 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   G4UIparameter* unitT = new G4UIparameter("unitT",'s',true);
   fiCmd->SetParameter(unitT);
   unitT->SetGuidance("unit of tlength");
+  fiCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   brCmd = new G4UIcommand("/process/em/setSecBiasing",this);
   brCmd->SetGuidance("Set bremsstrahlung or delta-electron splitting/Russian roullette per region.");
   brCmd->SetGuidance("  bProcNam : process name");
   brCmd->SetGuidance("  bRegNam  : region name");
   brCmd->SetGuidance("  bFactor  : number of splitted gamma or probability of Russian roulette");
+  brCmd->SetGuidance("  bEnergy  : max energy of a secondary for this biasing method");
 
   G4UIparameter* bProcNam = new G4UIparameter("bProcNam",'s',false);
   brCmd->SetParameter(bProcNam);
@@ -343,6 +346,14 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   G4UIparameter* bFactor = new G4UIparameter("bFactor",'d',false);
   brCmd->SetParameter(bFactor);
 
+  G4UIparameter* bEnergy = new G4UIparameter("bEnergy",'d',false);
+  brCmd->SetParameter(bEnergy);
+
+  G4UIparameter* bUnit = new G4UIparameter("bUnit",'s',true);
+  brCmd->SetParameter(bUnit);
+  brCmd->SetGuidance("unit of tlength");
+
+  brCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -428,7 +439,14 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   } else if (command == pixeCmd) {
     opt->SetPIXE(pixeCmd->GetNewBoolValue(newValue));
   } else if (command == pixeXsCmd) {
-    opt->SetPIXECrossSectionModel(newValue);
+    G4String name;
+    if (newValue == "ecpssr_analytical") 
+      {name = "ECPSSR_Analytical";}
+    else if (newValue == "ecpssr_interpolated") 
+      {name = "ECPSSR_FormFactor";}
+    else 
+      {name = newValue;}
+    opt->SetPIXECrossSectionModel(name);
   } else if (command == pixeeXsCmd) {
     opt->SetPIXEElectronCrossSectionModel(newValue);
   } else if (command == mscCmd) {
@@ -512,11 +530,12 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     v1 *= G4UIcommand::ValueOf(unt);
     opt->ActivateForcedInteraction(s1,v1,s2);
   } else if (command == brCmd) {
-    G4double fb(1.0);
-    G4String s1(""),s2("");
+    G4double fb(1.0),en(1.e+30);
+    G4String s1(""),s2(""),unt("MeV");
     std::istringstream is(newValue);
-    is >> s1 >> s2 >> fb;
-    opt->ActivateSecondaryBiasing(s1,s2,fb);
+    is >> s1 >> s2 >> fb >> en >> unt;
+    en *= G4UIcommand::ValueOf(unt);    
+    opt->ActivateSecondaryBiasing(s1,s2,fb,en);
   }  
 }
 

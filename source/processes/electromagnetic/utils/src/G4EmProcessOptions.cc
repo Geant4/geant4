@@ -468,7 +468,8 @@ G4EmProcessOptions::ActivateForcedInteraction(const G4String& name, G4double len
 void 
 G4EmProcessOptions::ActivateSecondaryBiasing(const G4String& name,
 					     const G4String& region, 
-					     G4double factor)
+					     G4double factor,
+					     G4double energyLimit)
 {
   if(0.0 >= factor) { return; }
   const std::vector<G4VEnergyLossProcess*>& v =
@@ -478,7 +479,7 @@ G4EmProcessOptions::ActivateSecondaryBiasing(const G4String& name,
     G4VEnergyLossProcess* p = *itr;
     if(p) {
       if (p->GetProcessName() == name) { 
-	p->ActivateSecondaryBiasing(region, factor); 
+	p->ActivateSecondaryBiasing(region, factor, energyLimit); 
       }
     }
   }

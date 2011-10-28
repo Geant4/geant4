@@ -1946,11 +1946,12 @@ G4VEnergyLossProcess::ActivateForcedInteraction(G4double length,
 
 void 
 G4VEnergyLossProcess::ActivateSecondaryBiasing(const G4String& region, 
-					       G4double factor)
+					       G4double factor, 
+					       G4double energyLimit)
 {
-  if (0.0 < factor ) { 
+  if (0.0 < factor) { 
     if(!biasManager) { biasManager = new G4EmBiasingManager(); }
-    biasManager->ActivateSecondaryBiasing(region, factor);
+    biasManager->ActivateSecondaryBiasing(region, factor, energyLimit);
   }
 }
 

@@ -173,7 +173,8 @@ void G4EmBiasingManager::ActivateForcedInteraction(G4double val,
 
 void 
 G4EmBiasingManager::ActivateSecondaryBiasing(const G4String& rname, 
-					     G4double factor)
+					     G4double factor,
+					     G4double energyLimit)
 {
   if(0.0 >= factor) { return; }
   G4RegionStore* regionStore = G4RegionStore::GetInstance();
@@ -203,6 +204,7 @@ G4EmBiasingManager::ActivateSecondaryBiasing(const G4String& rname,
       if (reg == secBiasedRegions[i]) {
 	secBiasedWeight[i] = w;
         nBremSplitting[i]  = nsplit; 
+	secBiasedEnegryLimit[i] = energyLimit;
         return;
       }
     }
@@ -218,6 +220,7 @@ G4EmBiasingManager::ActivateSecondaryBiasing(const G4String& rname,
   secBiasedRegions.push_back(reg);
   secBiasedWeight.push_back(w);
   nBremSplitting.push_back(nsplit);
+  secBiasedEnegryLimit.push_back(energyLimit);
   ++nSecBiasedRegions;
 }
 
@@ -253,25 +256,28 @@ G4EmBiasingManager::ApplySecondaryBiasing(std::vector<G4DynamicParticle*>& vd,
   G4int i = idxSecBiasedCouple[coupleIdx];
   if(0 <= i && 0 < n) {
 
-    weight = secBiasedWeight[i];
-    G4int nsplit = nBremSplitting[i];
+    // apply biasing if first secondary has energy below the threshold
+    if(vd[0]->GetKineticEnergy() < secBiasedEnegryLimit[i]) {
+      weight = secBiasedWeight[i];
+      G4int nsplit = nBremSplitting[i];
 
-    // splitting
-    if(1 < nsplit) {
-      for(size_t k=0; k<n; ++k) {
-	const G4DynamicParticle* dp = vd[k];
-	for(G4int j=1; j<nsplit; ++j) {
-	  G4DynamicParticle* dpnew = new G4DynamicParticle(*dp);
-	  vd.push_back(dpnew);
+      // splitting
+      if(1 < nsplit) {
+	for(size_t k=0; k<n; ++k) {
+	  const G4DynamicParticle* dp = vd[k];
+	  for(G4int j=1; j<nsplit; ++j) {
+	    G4DynamicParticle* dpnew = new G4DynamicParticle(*dp);
+	    vd.push_back(dpnew);
+	  }
 	}
-      }
-      // Russian roulette
-    } else { 
-      for(size_t k=0; k<n; ++k) {
-	const G4DynamicParticle* dp = vd[k];
-        if(G4UniformRand()*weight > 1.0) {
-	  delete dp;
-          vd[k] = 0;
+	// Russian roulette
+      } else { 
+	for(size_t k=0; k<n; ++k) {
+	  const G4DynamicParticle* dp = vd[k];
+	  if(G4UniformRand()*weight > 1.0) {
+	    delete dp;
+	    vd[k] = 0;
+	  }
 	}
       }
     }

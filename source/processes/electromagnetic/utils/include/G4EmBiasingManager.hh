@@ -75,7 +75,8 @@ public:
 				 const G4String& r = "");
 
   // no default parameters
-  void ActivateSecondaryBiasing(const G4String& region, G4double factor);
+  void ActivateSecondaryBiasing(const G4String& region, G4double factor,
+				G4double energyLimit);
 
   // return forced step limit
   G4double GetStepLimit(G4int coupleIdx, G4double previousStep);
@@ -107,6 +108,7 @@ private:
   std::vector<G4double>        lengthForRegion;
   std::vector<const G4Region*> secBiasedRegions;
   std::vector<G4double>        secBiasedWeight;
+  std::vector<G4double>        secBiasedEnegryLimit;
   std::vector<G4int>           nBremSplitting;
 
   std::vector<G4int>           idxForcedCouple;
