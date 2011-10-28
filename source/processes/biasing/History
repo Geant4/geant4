@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct 21st, 2011 Alex Howard (procbiasing-V09-04-01)
+- G4ProcessPlacer: Migrated to new G4Exception
+
 May 30th, 2011 Alex Howard (procbiasing-V09-04-00)
 - G4ProcessPlacer: Using SetProcessOrderingToSecond for biasing process, and 
 leaving transportation where it is (hopefully first). Previously biasing was 

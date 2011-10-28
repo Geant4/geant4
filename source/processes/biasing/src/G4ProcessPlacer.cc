@@ -101,13 +101,13 @@ void G4ProcessPlacer::AddProcessAs(G4VProcess *process, SecondOrLast sol)
 
     if (!transportation)
     {
-      G4Exception(" G4ProcessPlacer:: could not get process id=0");
+      G4Exception("G4ProcessPlacer::AddProcessAs","Bias0001",RunMustBeAborted," could not get process id=0");
     }
     if (transportation->GetProcessName() != "Transportation" && transportation->GetProcessName() != "Transportation8" && transportation->GetProcessName() != "CoupledTransportation")
     {
       //      G4cout << " GOT HERE CoupledTransportation" << G4endl;
       G4cout << transportation->GetProcessName() << G4endl;
-      G4Exception(" G4ProcessPlacer:: process id=0 is not Transportation");
+      G4Exception("G4ProcessPlacer::AddProcessAs","Bias0002",RunMustBeAborted," process id=0 is not Transportation");
     }
 
     // place the given proces as first for the moment
