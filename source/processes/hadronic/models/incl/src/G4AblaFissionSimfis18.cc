@@ -446,11 +446,8 @@ void G4AblaFissionSimfis18::fissionDistri(G4double &a,G4double &z,G4double &e,
   //      /* Energy dissipated from saddle to scission                        */
   //      /* F. Rejmund et al., Nucl. Phys. A 678 (2000) 215, fig. 4 b        */
   //      E_saddle_scission = DMAX1(0.,E_saddle_scission);
-  if (e_saddle_scission > 0.) {
-    e_saddle_scission = e_saddle_scission;
-  }
-  else {
-    e_saddle_scission = 0.;
+  if(e_saddle_scission <= 0.0) {
+    e_saddle_scission = 0.0;
   }
   //     /* Semiempirical fission model: */
 

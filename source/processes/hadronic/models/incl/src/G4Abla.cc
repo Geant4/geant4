@@ -970,7 +970,9 @@ void G4Abla::initEvapora()
     }
   }
   else {
-    G4Exception("ERROR: Failed to read datafiles.");
+    // G4Exception("ERROR: Failed to read datafiles.");
+    G4Exception("G4Abla::initEvapora()", "HAD_INCL_0000", FatalException,
+                "Failed to read datafiles");
   }
   
   for(int z = 0; z < 99; z++) { //do 30  z = 0,98,1                                                 
@@ -2322,7 +2324,7 @@ void G4Abla::densniv(G4double a, G4double z, G4double ee, G4double esous, G4doub
   iz=idnint(z);
 
   // level density parameter                                               
-  if((ald->optafan == 1)) {
+  if(ald->optafan == 1) {
     pa = (ald->av)*a + (ald->as)*std::pow(a,(2.e0/3.e0)) + (ald->ak)*std::pow(a,(1.e0/3.e0));
   }
   else {
@@ -2371,8 +2373,6 @@ void G4Abla::densniv(G4double a, G4double z, G4double ee, G4double esous, G4doub
 	parite(z,&parz);
 	if (parz > 0.e0) {
 	  e = e - 2.0*delta0/std::sqrt(a);
-	} else {
-	  e = e;
 	}
       }
     } else {                                                          
