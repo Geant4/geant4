@@ -15,6 +15,36 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27-10-2011, P.Kaitaniemi               (phys-lists-V09-04-54)
+- Added new physics list QGSP_INCLXX and assosiated builders
+- Uses INLC++ for protons, neutrons and pions in the energy
+  range 0 - 3 GeV
+- This tag requires hadr-inclxx-V09-04-03 (or later)
+
+21-10-2011, S.Incerti                  (phys-lists-V09-04-53)
+- Extended G4EmDNAPhysics builder to the handling of HZE
+- to be used on top of tag emdna-V09-04-25
+
+21-10-2011, V.Ivanchenko               (phys-lists-V09-04-52)
+- G4EmStandardPhysics_option1 - use UrbanMsc95 
+- G4EmStandardPhysics_option2 - copy of Opt1 with UrbanMsc93
+- G4HadronElasticBuilder - He3 x-section from the new AntiNuclei class
+                           to avoid crash in GHEISHA x-sections  
+- G4HadronDElasticBuilder - x-sections from CHIPS, Diffuse model 
+- G4HadronHElasticBuilder - alternative x-sections and models  
+
+18-10-2011, A. Ribon            (phys-lists-V09-04-51)
+- Fixed small mistake in builders/sources.cmake.
+
+18-10-2011, A.Ribon             (phys-lists-V09-04-50)
+- Changed FTFP_BERT_TRV to use Fritiof for the nuclear capture of
+  anti-protons at rest. Introduced the class G4QandFTFStoppingPhysics.
+
+14-10-2011, P.Gumplinger        (phys-lists-V09-04-49)
+- modify G4OpticalPhysicsMessenger so that: /optics_engine/setOpProcessVerbose
+  and /optics_engine/setTrackSecondariesFirst work in G4State_PreInit
+  required changing the signature of: G4OpticalPhysics::SetProcessVerbose
+
 05-10-2011, G.Cosmo             (phys-lists-V09-04-48)
 - Added missing header in builders/sources.cmake introduced in tag -45.
 

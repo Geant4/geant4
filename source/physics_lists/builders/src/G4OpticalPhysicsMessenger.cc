@@ -204,9 +204,15 @@ void G4OpticalPhysicsMessenger::SetNewValue(G4UIcommand* command, G4String newVa
        Configure(fUseProcess,fSetOpProcessUseCmd->GetNewBoolValue(newValue));
   }  
   else if (command == fSetOpProcessVerboseCmd) {
-    if ( fSelectedProcess )
-    fSelectedProcess->SetVerboseLevel
+    if ( fSelectedProcess ) {
+       fSelectedProcess->SetVerboseLevel
                            (fSetOpProcessVerboseCmd->GetNewIntValue(newValue));
+    } else {
+      for ( G4int i=0; i<kNoProcess; i++ ) {
+          fOpticalPhysics->
+            SetProcessVerbose(i,fSetOpProcessVerboseCmd->GetNewIntValue(newValue));
+      }
+    }
   }
   else if (command == fSetCerenkovMaxPhotonsCmd) {
     fOpticalPhysics
@@ -258,6 +264,9 @@ void G4OpticalPhysicsMessenger::SetNewValue(G4UIcommand* command, G4String newVa
                    static_cast<G4Cerenkov*>(fSelectedProcess);
        if (cerenkov) cerenkov ->
           SetTrackSecondariesFirst(
+                      fSetTrackSecondariesFirstCmd->GetNewBoolValue(newValue));
+    } else {
+      fOpticalPhysics->SetTrackSecondariesFirst(
                       fSetTrackSecondariesFirstCmd->GetNewBoolValue(newValue));
     }
   }

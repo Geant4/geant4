@@ -347,7 +347,7 @@ void G4OpticalPhysics::Configure(G4OpticalProcessIndex index, G4bool isUse)
   fProcessUse[index] = isUse;
 }
 
-void G4OpticalPhysics::SetProcessVerbose(G4OpticalProcessIndex index,
+void G4OpticalPhysics::SetProcessVerbose(G4int index,
                                          G4int verboseLevel)
 {
   // Set new verbose level to a selected process

@@ -152,10 +152,6 @@ void G4HadronElasticPhysics::ConstructProcess()
        pname == "anti_sigma+"  || 
        pname == "anti_xi-"  || 
        pname == "anti_xi0"  || 
-       pname == "kaon-"     || 
-       pname == "kaon+"     || 
-       pname == "kaon0S"    || 
-       pname == "kaon0L"    || 
        pname == "lambda"    || 
        pname == "omega-"    || 
        pname == "sigma-"    || 
@@ -163,8 +159,7 @@ void G4HadronElasticPhysics::ConstructProcess()
        pname == "xi-"       || 
        pname == "alpha"     ||
        pname == "deuteron"  ||
-       pname == "triton"    ||
-       pname == "He3"       
+       pname == "triton"   
        ) {
       
       G4WHadronElasticProcess* hel = new G4WHadronElasticProcess();
@@ -212,7 +207,22 @@ void G4HadronElasticPhysics::ConstructProcess()
 	       << " added for " << particle->GetParticleName() << G4endl;
       }
 
+    } else if(pname == "kaon-"     || 
+	      pname == "kaon+"     || 
+	      pname == "kaon0S"    || 
+	      pname == "kaon0L" 
+	      ) {
+      
+      G4WHadronElasticProcess* hel = new G4WHadronElasticProcess();
+      hel->RegisterMe(lhep0);
+      pmanager->AddDiscreteProcess(hel);
+      if(verbose > 1) {
+	G4cout << "### HadronElasticPhysics: " << hel->GetProcessName()
+	       << " added for " << particle->GetParticleName() << G4endl;
+      }
+
     } else if(
+       pname == "He3"            ||
        pname == "anti_proton"    || 
        pname == "anti_alpha"     ||
        pname == "anti_deuteron"  ||

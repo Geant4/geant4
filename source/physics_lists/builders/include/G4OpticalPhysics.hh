@@ -108,7 +108,7 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
                                        { return fOpBoundaryProcess; }
 
     // set methods
-    void SetProcessVerbose(G4OpticalProcessIndex , G4int );
+    void SetProcessVerbose(G4int , G4int );
 
     void SetMaxNumPhotonsPerStep(G4int );
     void SetMaxBetaChangePerStep(G4double );

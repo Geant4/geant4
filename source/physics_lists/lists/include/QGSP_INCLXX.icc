@@ -23,21 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FTFP_BERT_TRV.icc,v 1.5 2010-08-16 07:14:44 kurasige Exp $
+// $Id: QGSP_INCLXX.icc,v 1.6 2010-08-16 07:14:44 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   FTFP_BERT_TRV
+// ClassName:   QGSP_INCLXX
 //
-// Author: 2009 John Apostolakis
-//
-//   created from FTFP_BERT - simple variant changing inelastic thresholds
+// Author: 2011 Pekka Kaitaniemi
+//   Created as a copy of QGSP_INCL_ABLA.icc
 //
 // Modified:
-// 16.08.2010 H.Kurashige: Remove inclusion of G4ParticleWithCuts 
-// 18.10.2011 A.Ribon: Replace CHIPS with FTF/Preco for nuclear capture
-//                     at rest of anti-protons.
+// 27.11.2011 P.Kaitaniemi: Created physics list for INCL++ model
 //
 //----------------------------------------------------------------------------
 //
@@ -56,28 +53,28 @@
 #include "G4DecayPhysics.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4EmExtraPhysics.hh"
-#include "G4IonPhysics.hh"
-#include "G4QandFTFStoppingPhysics.hh"
+#include "G4IonInclAblaPhysics.hh"
+#include "G4QStoppingPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 
 #include "G4DataQuestionaire.hh"
-#include "HadronPhysicsFTFP_BERT_TRV.hh"
+#include "HadronPhysicsQGSP_INCLXX.hh"
 
 #include "G4WarnPLStatus.hh"
 
-template<class T> TFTFP_BERT_TRV<T>::TFTFP_BERT_TRV(G4int ver):  T()
+template<class T> TQGSP_INCLXX<T>::TQGSP_INCLXX(G4int ver):  T()
 {
-  // default cut value  (1.0mm) 
-  // defaultCutValue = 1.0*mm;
+
   G4DataQuestionaire it(photon);
-  G4cout << "<<< Geant4 Physics List simulation engine: FTFP_BERT_TRV 1.1"<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: QGSP_INCLXX 0.2"<<G4endl;
   G4cout <<G4endl;
+
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(ver);
 
   G4WarnPLStatus exp;
-  exp.Experimental("FTFP_BERT_TRV");
+  exp.Experimental("QGSP_INCLXX");
 
   // EM Physics
   this->RegisterPhysics( new G4EmStandardPhysics(ver) );
@@ -85,40 +82,44 @@ template<class T> TFTFP_BERT_TRV<T>::TFTFP_BERT_TRV(G4int ver):  T()
   // Synchroton Radiation & GN Physics
   this->RegisterPhysics( new G4EmExtraPhysics(ver) );
 
-  // Decays 
+  // Decays
   this->RegisterPhysics( new G4DecayPhysics(ver) );
 
    // Hadron Elastic scattering
   this->RegisterPhysics( new G4HadronElasticPhysics(ver) );
 
-   // Hadron Physics
-  this->RegisterPhysics(  new HadronPhysicsFTFP_BERT_TRV(ver));
+  // Hadron Physics
+  this->RegisterPhysics( new HadronPhysicsQGSP_INCLXX(ver));
 
   // Stopping Physics
-  this->RegisterPhysics( new G4QandFTFStoppingPhysics(ver) );
+  this->RegisterPhysics( new G4QStoppingPhysics(ver) );
 
   // Ion Physics
-  this->RegisterPhysics( new G4IonPhysics(ver));
+  this->RegisterPhysics( new G4IonInclAblaPhysics(ver));
   
   // Neutron tracking cut
   this->RegisterPhysics( new G4NeutronTrackingCut(ver));
 
 }
 
-template<class T> TFTFP_BERT_TRV<T>::~TFTFP_BERT_TRV()
+template<class T> TQGSP_INCLXX<T>::~TQGSP_INCLXX()
 {
 }
 
-template<class T> void TFTFP_BERT_TRV<T>::SetCuts()
+template<class T> void TQGSP_INCLXX<T>::SetCuts()
 {
   if (this->verboseLevel >1){
-    G4cout << "FTFP_BERT_TRV::SetCuts:";
+    G4cout << "QGSP_INCLXX::SetCuts:";
   }  
   //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
   //   the default cut value for all particle types 
 
   this->SetCutsWithDefault();   
- 
-//  if (this->verboseLevel > 0)
+  
+//  if (this->verboseLevel >0)
 //    G4VUserPhysicsList::DumpCutValuesTable();  
 }
+
+
+
+// 2002 by J.P. Wellisch

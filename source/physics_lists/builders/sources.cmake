@@ -69,6 +69,9 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_exci
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/high_energy/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/im_r_matrix/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/incl/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/inclxx/utils/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/inclxx/incl_physics/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/inclxx/interface/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/lend/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/low_energy/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
@@ -146,6 +149,9 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4HyperonCHIPSBuilder.hh
 	G4HyperonFTFPBuilder.hh
         G4HyperonLHEPBuilder.hh
+	G4INCLXXPiKBuilder.hh
+	G4INCLXXNeutronBuilder.hh
+	G4INCLXXProtonBuilder.hh
         G4InclAblaNeutronBuilder.hh
         G4InclAblaPiKBuilder.hh
         G4InclAblaProtonBuilder.hh
@@ -180,6 +186,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4PrecoNeutronBuilder.hh
         G4PrecoProtonBuilder.hh
         G4ProtonBuilder.hh
+        G4QandFTFStoppingPhysics.hh
         G4QAtomicPhysics.hh
         G4QCaptureAtRestPhysics.hh
         G4QElasticPhysics.hh
@@ -268,6 +275,9 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4HyperonCHIPSBuilder.cc
         G4HyperonFTFPBuilder.cc
         G4HyperonLHEPBuilder.cc
+	G4INCLXXPiKBuilder.cc
+	G4INCLXXNeutronBuilder.cc
+	G4INCLXXProtonBuilder.cc
         G4InclAblaNeutronBuilder.cc
         G4InclAblaPiKBuilder.cc
         G4InclAblaProtonBuilder.cc
@@ -301,6 +311,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4PrecoNeutronBuilder.cc
         G4PrecoProtonBuilder.cc
         G4ProtonBuilder.cc
+        G4QandFTFStoppingPhysics.cc
         G4QAtomicPhysics.cc
         G4QCaptureAtRestPhysics.cc
         G4QElasticPhysics.cc

@@ -64,12 +64,13 @@
 #include "QGS_BIC.hh"
 #include "QGSP_INCL_ABLA.hh"
 #include "Shielding.hh"
+#include "QGSP_INCLXX.hh"
 
 G4PhysListFactory::G4PhysListFactory() 
 {
   defName = "QGSP_BERT";
   nlists = 26;
-  G4String s[26] = {
+  G4String s[27] = {
     "CHIPS",
     "FTFP_BERT","FTFP_BERT_EMV","FTFP_BERT_EMX","FTFP_BERT_TRV","FTF_BIC",
     "LBE","LHEP","LHEP_EMV",
@@ -79,7 +80,7 @@ G4PhysListFactory::G4PhysListFactory()
     "QGSP_BERT_NOLEP","QGSP_BERT_TRV","QGSP_BERT_CHIPS",
     "QGSP_BIC","QGSP_BIC_EMY","QGSP_BIC_HP",
     "QGSP_FTFP_BERT","QGS_BIC", "QGSP_INCL_ABLA",
-    "Shielding"};
+    "Shielding", "QGSP_INCLXX"};
 
   for(size_t i=0; i<nlists; ++i) {
     listnames.push_back(s[i]);
@@ -139,6 +140,7 @@ G4VModularPhysicsList* G4PhysListFactory::GetReferencePhysList(
   else if(name == "QGSP_INCL_ABLA"){p = new QGSP_INCL_ABLA();}
   else if(name == "Shielding")     {p = new Shielding();}
   else if(name == "ShieldingLEND") {p = new Shielding(1,"LEND");}
+	else if(name == "QGSP_INCLXX")   {p = new QGSP_INCLXX;}
   else {
     G4cout << "### G4PhysListFactory WARNING: "
 	   << "PhysicsList " << name << " is not known"

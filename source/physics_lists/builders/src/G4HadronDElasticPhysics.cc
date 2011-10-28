@@ -65,19 +65,17 @@
 #include "G4WHadronElasticProcess.hh"
 #include "G4HadronElastic.hh"
 #include "G4CHIPSElastic.hh"
-#include "G4CHIPSElasticXS.hh"
 #include "G4ElasticHadrNucleusHE.hh"
-#include "G4BGGNucleonElasticXS.hh"
-#include "G4BGGPionElasticXS.hh"
-#include "G4NeutronElasticXS.hh"
-
-#include "G4DiffuseElastic.hh"
 #include "G4AntiNuclElastic.hh"
-#include "G4CrossSectionElastic.hh"
 
-#include "G4NeutronElasticXS.hh"
 #include "G4BGGNucleonElasticXS.hh"
 #include "G4BGGPionElasticXS.hh"
+#include "G4NeutronElasticXS.hh"
+#include "G4CHIPSElasticXS.hh"
+
+#include "G4ComponentAntiNuclNuclearXS.hh"  
+#include "G4CrossSectionElastic.hh"
+#include "G4DiffuseElastic.hh"
 
 G4HadronDElasticPhysics::G4HadronDElasticPhysics(G4int ver)
   : G4VPhysicsConstructor("hElasticDIFFUSE"), verbose(ver), 
@@ -113,7 +111,7 @@ void G4HadronDElasticPhysics::ConstructProcess()
 
   G4double elimitAntiNuc = 100*MeV;
   if(verbose > 1) {
-    G4cout << "### HadronDElasticPhysics Construct Processes with the limit"
+    G4cout << "### HadronDElasticPhysics Construct Processes " 
 	   << " for anti-neuclei " 
 	   << elimitAntiNuc/GeV << " GeV"	   << G4endl;
   }
@@ -123,6 +121,7 @@ void G4HadronDElasticPhysics::ConstructProcess()
   G4CrossSectionElastic* anucxs = 
     new G4CrossSectionElastic(anuc->GetComponentCrossSection());
 
+  G4HadronElastic* lhep0 = new G4HadronElastic();
   G4HadronElastic* lhep2 = new G4HadronElastic();
   lhep2->SetMaxEnergy(elimitAntiNuc);
 
@@ -141,10 +140,6 @@ void G4HadronDElasticPhysics::ConstructProcess()
        pname == "anti_sigma+"  || 
        pname == "anti_xi-"  || 
        pname == "anti_xi0"  || 
-       pname == "kaon-"     || 
-       pname == "kaon+"     || 
-       pname == "kaon0S"    || 
-       pname == "kaon0L"    || 
        pname == "lambda"    || 
        pname == "omega-"    || 
        pname == "sigma-"    || 
@@ -152,13 +147,11 @@ void G4HadronDElasticPhysics::ConstructProcess()
        pname == "xi-"       || 
        pname == "alpha"     ||
        pname == "deuteron"  ||
-       pname == "triton"    ||
-       pname == "He3"       
+       pname == "triton"    
        ) {
       
       G4WHadronElasticProcess* hel = new G4WHadronElasticProcess();
-      model = new G4DiffuseElastic();
-      hel->RegisterMe(model);
+      hel->RegisterMe(lhep0);
       pmanager->AddDiscreteProcess(hel);
       if(verbose > 1) {
 	G4cout << "### HadronDElasticPhysics: " << hel->GetProcessName()
@@ -168,7 +161,8 @@ void G4HadronDElasticPhysics::ConstructProcess()
     } else if(pname == "proton") {   
 
       G4WHadronElasticProcess* hel = new G4WHadronElasticProcess();
-      hel->AddDataSet(new G4NeutronElasticXS());
+      hel->AddDataSet(new G4BGGNucleonElasticXS(particle));
+      //hel->AddDataSet(new G4CHIPSElasticXS());
       model = new G4DiffuseElastic();
       hel->RegisterMe(model);
       pmanager->AddDiscreteProcess(hel);
@@ -180,8 +174,7 @@ void G4HadronDElasticPhysics::ConstructProcess()
     } else if(pname == "neutron") {   
 
       G4WHadronElasticProcess* hel = new G4WHadronElasticProcess();
-      //hel->AddDataSet(new G4BGGNucleonElasticXS(particle));
-      hel->AddDataSet(new G4CHIPSElasticXS());
+      hel->AddDataSet(new G4NeutronElasticXS());
       model = new G4DiffuseElastic();
       hel->RegisterMe(model);
       pmanager->AddDiscreteProcess(hel);
@@ -203,7 +196,23 @@ void G4HadronDElasticPhysics::ConstructProcess()
 	       << " added for " << particle->GetParticleName() << G4endl;
       }
 
+    } else if(pname == "kaon-"     || 
+	      pname == "kaon+"     || 
+	      pname == "kaon0S"    || 
+	      pname == "kaon0L" 
+	      ) {
+      
+      G4WHadronElasticProcess* hel = new G4WHadronElasticProcess();
+      hel->AddDataSet(new G4CHIPSElasticXS());
+      model = new G4DiffuseElastic();
+      hel->RegisterMe(model);
+      pmanager->AddDiscreteProcess(hel);
+      if(verbose > 1) {
+	G4cout << "### HadronElasticPhysics: " << hel->GetProcessName()
+	       << " added for " << particle->GetParticleName() << G4endl;
+      }
     } else if(
+       pname == "He3"            ||
        pname == "anti_proton"    || 
        pname == "anti_alpha"     ||
        pname == "anti_deuteron"  ||

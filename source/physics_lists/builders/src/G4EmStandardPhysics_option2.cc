@@ -62,6 +62,7 @@
 #include "G4hMultipleScattering.hh"
 #include "G4MuMultipleScattering.hh"
 #include "G4CoulombScattering.hh"
+#include "G4UrbanMscModel93.hh"
 #include "G4UrbanMscModel95.hh"
 #include "G4WentzelVIModel.hh"
 //#include "G4GoudsmitSaundersonMscModel.hh"
@@ -177,25 +178,21 @@ void G4EmStandardPhysics_option2::ConstructProcess()
 
     if (particleName == "gamma") {
 
-      G4PhotoElectricEffect* pe = new G4PhotoElectricEffect;
-      pe->SetModel(new G4PEEffectFluoModel());
-      G4ComptonScattering* cs   = new G4ComptonScattering;
-      cs->SetModel(new G4KleinNishinaModel());
-
-      ph->RegisterProcess(pe, particle);
-      ph->RegisterProcess(cs, particle);
+      ph->RegisterProcess(new G4PhotoElectricEffect(), particle);
+      ph->RegisterProcess(new G4ComptonScattering(), particle);
       ph->RegisterProcess(new G4GammaConversion(), particle);
 
     } else if (particleName == "e-") {
 
-      G4eMultipleScattering* msc = new G4eMultipleScattering();
-      //msc->AddEmModel(0, new G4WentzelVIModel());
-      //msc->SetRangeFactor(0.04);
-      msc->AddEmModel(0, new G4UrbanMscModel95());
-      //      msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
+      G4eIonisation* eioni = new G4eIonisation();
+      eioni->SetStepFunction(0.8, 1.0*mm);
+      G4eMultipleScattering* msc = new G4eMultipleScattering;
+      msc->SetStepLimitType(fMinimal);
+      msc->AddEmModel(0,new G4UrbanMscModel93());
+
       G4eBremsstrahlung* brem = new G4eBremsstrahlung();
-      //G4eBremsstrahlungRelModel* br1 = new G4eBremsstrahlungRelModel();
-      G4LivermoreBremsstrahlungModel* br1 = new G4LivermoreBremsstrahlungModel();
+      //G4LivermoreBremsstrahlungModel* br1 = new G4LivermoreBremsstrahlungModel();
+      G4eBremsstrahlungModel* br1 = new G4eBremsstrahlungModel();
       G4eBremsstrahlungRelModel* br2 = new G4eBremsstrahlungRelModel();
       br1->SetAngularDistribution(new G4Generator2BS());
       br2->SetAngularDistribution(new G4Generator2BS());
@@ -204,19 +201,19 @@ void G4EmStandardPhysics_option2::ConstructProcess()
       br2->SetLowEnergyLimit(100*MeV);
 
       ph->RegisterProcess(msc, particle);
-      ph->RegisterProcess(new G4eIonisation(), particle);
+      ph->RegisterProcess(eioni, particle);
       ph->RegisterProcess(brem, particle);
 
     } else if (particleName == "e+") {
 
-      G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc->AddEmModel(0, new G4UrbanMscModel95());
-      //msc->AddEmModel(0, new G4WentzelVIModel());
-      //msc->SetRangeFactor(0.04);
-      // msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
+      G4eIonisation* eioni = new G4eIonisation();
+      eioni->SetStepFunction(0.8, 1.0*mm);
+      G4eMultipleScattering* msc = new G4eMultipleScattering;
+      msc->SetStepLimitType(fMinimal);
+      msc->AddEmModel(0,new G4UrbanMscModel93());
 
       ph->RegisterProcess(msc, particle);
-      ph->RegisterProcess(new G4eIonisation(), particle);
+      ph->RegisterProcess(eioni, particle);
       ph->RegisterProcess(new G4eBremsstrahlung(), particle);
       ph->RegisterProcess(new G4eplusAnnihilation(), particle);
 

@@ -182,6 +182,20 @@ void G4EmDNAPhysics::ConstructProcess()
       ph->RegisterProcess(new G4DNAExcitation("helium_G4DNAExcitation"), particle);
       ph->RegisterProcess(new G4DNAIonisation("helium_G4DNAIonisation"), particle);
       ph->RegisterProcess(new G4DNAChargeIncrease("helium_G4DNAChargeIncrease"), particle);
+    
+    // Extension to HZE proposed by Z. Francis
+
+    } else if ( particleName == "carbon" ) {
+      ph->RegisterProcess(new G4DNAIonisation("carbon_G4DNAIonisation"), particle);
+
+    } else if ( particleName == "nitrogen" ) {
+      ph->RegisterProcess(new G4DNAIonisation("nitrogen_G4DNAIonisation"), particle);
+
+    } else if ( particleName == "oxygen" ) {
+      ph->RegisterProcess(new G4DNAIonisation("oxygen_G4DNAIonisation"), particle);
+
+    } else if ( particleName == "iron" ) {
+      ph->RegisterProcess(new G4DNAIonisation("iron_G4DNAIonisation"), particle);
 
     }
     
