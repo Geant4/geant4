@@ -76,9 +76,15 @@ void G4QDiscProcessMixer::AddDiscreteProcess(G4VDiscreteProcess* DP, G4double ME
     }
     else // Wrong Max Energy Order for the new process in the sequence of processes
     {
-      G4cerr<<"G4QDiscProcessMixer::AddDiscreteProcess:LastMaxE("<<theDPVector.size()-1
-            <<")="<<theDPVector[theDPVector.size()-1]->second<<" <= MaxE="<<ME<<G4endl;
-      G4Exception("G4QDiscProcessMixer::AddDiscreteProcess: Wrong Max Energy Order");
+      // G4cerr<<"G4QDiscProcessMixer::AddDiscreteProcess:LastMaxE("<<theDPVector.size()-1
+      //       <<")="<<theDPVector[theDPVector.size()-1]->second<<" <= MaxE="<<ME<<G4endl;
+      // G4Exception("G4QDiscProcessMixer::AddDiscreteProcess: Wrong Max Energy Order");
+      G4ExceptionDescription ed;
+      ed << " LastMaxE(" << theDPVector.size()-1 << ")="
+         << theDPVector[theDPVector.size()-1]->second << " <= MaxE=" << ME
+         << G4endl;
+      G4Exception("G4QDiscProcessMixer::AddDiscreteProcess()", "HAD_CHPS_0000",
+                  FatalException, ed);
     }
   }
 }
