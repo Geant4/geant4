@@ -33,6 +33,7 @@
 //  21 Apr 2009   ALF   1st implementation
 //  29 Apr 2009   ALF Updated Desing for Integration
 //  15 Mar 2011   ALF introduced the usage of G4AtomicShellEnumerator
+//  20 Oct 2011   ALF updated to take into account ECPSSR Form Factor
 //
 
 
@@ -40,12 +41,28 @@
 #include "G4teoCrossSection.hh"
 #include "G4Proton.hh"
 //#include "G4Alpha.hh"
+#include "G4AnalyticalEcpssrKCrossSection.hh"
+#include "G4AnalyticalEcpssrLiCrossSection.hh"
+
+#include "G4ECPSSRFormFactorKCrossSection.hh"
+#include "G4ECPSSRFormFactorLiCrossSection.hh"
 
 G4teoCrossSection::G4teoCrossSection(const G4String& nam)
   :G4VhShellCrossSection(nam),totalCS(0.0)
 { 
-  ecpssrShellK  = new G4AnalyticalEcpssrKCrossSection();  
-  ecpssrShellLi = new G4AnalyticalEcpssrLiCrossSection();
+
+  if (nam == "Analytical") 
+    {
+      ecpssrShellK  = new G4AnalyticalEcpssrKCrossSection();  
+      ecpssrShellLi = new G4AnalyticalEcpssrLiCrossSection();      
+    }
+  else if (nam == "ECPSSR_FormFactor")
+    {
+      ecpssrShellK  = new G4ECPSSRFormFactorKCrossSection();  
+      ecpssrShellLi = new G4ECPSSRFormFactorLiCrossSection(); 
+
+    }
+
 }
 
 G4teoCrossSection::~G4teoCrossSection()

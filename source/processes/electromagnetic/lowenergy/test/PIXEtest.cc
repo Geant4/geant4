@@ -80,10 +80,10 @@ int main()
    //  implementation from ISICS tables.
    //  G4hShellCrossSectionDoubleExp is previous work with ownmade fitting functions to Pauli for Alpha.
 
-   G4cout << "Enter model (analytical/interpolated/empirical): " << G4endl;
+   G4cout << "Enter model (analytical/ECPSSR_FormFactor/empirical): " << G4endl;
    G4cin >> model;
 
-   if (model == "analytical" || model == "interpolated") {
+   if (model == "analytical" || model == "ECPSSR_FormFactor") {
 
      shellCS = new G4teoCrossSection(model);
    }
@@ -124,7 +124,7 @@ int main()
    else if (shellNumber == 3) {shellName = "L3";}
 
    if (model  == "analytical" ) { nameId = "A";}
-   else if (model  == "interpolated" ) { nameId = "I";}
+   else if (model  == "ECPSSR_FormFactor" ) { nameId = "I";}
    else if (model  == "empirical" ) { nameId = "E";}
    G4String fileNameTxt = fileName;
    char buffer[3];

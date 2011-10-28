@@ -618,12 +618,29 @@ G4double G4PenelopeBremsstrahlungFS::SampleGammaEnergy(G4double energy,const G4M
 
   //Start the game
   G4double pbcut = (*(thePBcut->find(theKey)->second))[eBin];
-  G4double pCumulative = (*theVec)[nBinsX-1]; //last value
+  G4double pCumulative = (*theVec)[nBinsX-1]; //last value  
 
   G4double eGamma = 0;
   do
     {    
       G4double pt = pbcut + G4UniformRand()*(pCumulative - pbcut);
+
+      //Try to protect against numerical rounding
+      if ((pCumulative-pbcut)<0) 
+	//the < should never be: could happen only for numerical rounding
+	{	  
+	  //the two numbers are very different: real problem
+	  if ((pCumulative-pbcut)< -1e-5*pCumulative)
+	    {
+	      G4cout << "pCumulative = " << pCumulative << G4endl;
+	      G4cout << "pbcut = " << pbcut << G4endl;
+	      G4Exception("G4PenelopeBremsstrahlungFS::SampleGammaEnergy()",
+			  "em2015",FatalException,
+			  "Invalid call, pCumulative and pbcut are very different");
+	    }
+	  else //ok, pCumulative=pbcut
+	    pt = pbcut;
+	}
 
       //find where it is
       size_t ibin = 0;

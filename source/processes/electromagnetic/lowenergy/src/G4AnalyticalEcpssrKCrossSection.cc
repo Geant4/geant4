@@ -55,6 +55,7 @@ G4AnalyticalEcpssrKCrossSection::G4AnalyticalEcpssrKCrossSection()
 
     // Storing FK data needed for medium velocities region
     char *path = 0;
+
     path = getenv("G4LEDATA");
  
     if (!path) {

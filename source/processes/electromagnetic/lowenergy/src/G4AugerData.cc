@@ -125,6 +125,7 @@ G4int G4AugerData::VacancyId(G4int Z, G4int vacancyIndex) const
     trans_Table::const_iterator element = augerTransitionTable.find(Z);
     if (element == augerTransitionTable.end()) {
       G4Exception("G4AugerData::VacancyId()","de0004", FatalErrorInArgument,  "Check element");
+      return 0;
     }
     std::vector<G4AugerTransition> dataSet = (*element).second;
     n = (G4int) dataSet[vacancyIndex].FinalShellId();
@@ -149,6 +150,7 @@ size_t G4AugerData::NumberOfTransitions(G4int Z, G4int vacancyIndex) const
     if (element == augerTransitionTable.end()) 
       {
 	G4Exception("G4AugerData::VacancyId()","de0004", FatalErrorInArgument,  "Check element");
+	return 0;
       }
     std::vector<G4AugerTransition> dataSet = (*element).second;
     n = (G4int)dataSet[vacancyIndex].TransitionOriginatingShellIds()->size();
@@ -164,11 +166,13 @@ size_t G4AugerData::NumberOfAuger(G4int Z, G4int initIndex, G4int vacancyId) con
   if (initIndex<0 || initIndex>=numberOfVacancies[Z])
     {
       G4Exception("G4AugerData::VacancyId()","de0002", FatalErrorInArgument,"");
+      return 0;
     }
   else {
     trans_Table::const_iterator element = augerTransitionTable.find(Z);
     if (element == augerTransitionTable.end()) {
       G4Exception("G4AugerData::VacancyId()","de0004", FatalErrorInArgument,  "Check element");
+      return 0;
     }
     std::vector<G4AugerTransition> dataSet = (*element).second;
     const std::vector<G4int>* temp =  dataSet[initIndex].AugerOriginatingShellIds(vacancyId);
@@ -183,6 +187,7 @@ size_t G4AugerData::AugerShellId(G4int Z, G4int vacancyIndex, G4int transId, G4i
   if (vacancyIndex<0 || vacancyIndex>=numberOfVacancies[Z])
     {
       G4Exception("G4AugerData::VacancyId()","de0002", FatalErrorInArgument,"");
+      return 0;
     }
   else {
     trans_Table::const_iterator element = augerTransitionTable.find(Z);
@@ -202,6 +207,7 @@ G4int G4AugerData::StartShellId(G4int Z, G4int vacancyIndex, G4int transitionShe
    if (vacancyIndex<0 || vacancyIndex>=numberOfVacancies[Z]) 
      {
        G4Exception("G4AugerData::VacancyId()","de0002", FatalErrorInArgument,"");
+       return 0;
      }
   else {
     trans_Table::const_iterator element = augerTransitionTable.find(Z);
@@ -223,6 +229,7 @@ G4double G4AugerData::StartShellEnergy(G4int Z, G4int vacancyIndex, G4int transi
   if (vacancyIndex<0 || vacancyIndex>=numberOfVacancies[Z])
     {
       G4Exception("G4AugerData::VacancyId()","de0002", FatalErrorInArgument,"");
+      return 0;
     }
   else {
     trans_Table::const_iterator element = augerTransitionTable.find(Z);
@@ -244,6 +251,7 @@ G4double G4AugerData::StartShellProb(G4int Z, G4int vacancyIndex,G4int transitio
     if (vacancyIndex<0 || vacancyIndex>=numberOfVacancies[Z]) 
       {
 	G4Exception("G4AugerData::VacancyId()","de0002", FatalErrorInArgument,"");
+	return 0;
       }
   else {
     trans_Table::const_iterator element = augerTransitionTable.find(Z);

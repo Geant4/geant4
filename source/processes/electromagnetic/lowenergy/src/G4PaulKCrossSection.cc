@@ -28,6 +28,7 @@
 // -----------
 //  21 Apr 2008   H. Abdelohauwed - 1st implementation
 //  29 Apr 2009   ALF  Major Design Revision
+//  22 Oct 2011   ALF  Warning removals and Z checks fix for alphas
 //
 // -------------------------------------------------------------------
 
@@ -92,22 +93,32 @@ G4double G4PaulKCrossSection::CalculateKCrossSection(G4int zTarget,G4double mass
 
   if (massIncident == aProtone->GetPDGMass() && zTarget < 93 && zTarget > 3)
     {
-      
-      sigma = protonDataSetMap[zTarget]->FindValue(energyIncident/MeV); 
-      
+
+      //      G4EMDataSet* currentDataset =  protonDataSetMap[zTarget];
+      //      currentDataset->GetEnergies
+
+  if (energyIncident > protonDataSetMap[zTarget]->GetEnergies(0).back() ||
+      energyIncident < protonDataSetMap[zTarget]->GetEnergies(0).front() )
+	{sigma = 0;}
+      else {     
+	sigma = protonDataSetMap[zTarget]->FindValue(energyIncident/MeV); 
+      }
     }
   else
     {
-      if (massIncident == aAlpha->GetPDGMass() && zTarget < 93 && zTarget > 3)
+      if (massIncident == aAlpha->GetPDGMass() && zTarget < 93 && zTarget > 5)
 	{
-	  
-          sigma = alphaDataSetMap[zTarget]->FindValue(energyIncident/MeV); 
-	  
+	  if (energyIncident > alphaDataSetMap[zTarget]->GetEnergies(0).back() ||
+	      energyIncident < alphaDataSetMap[zTarget]->GetEnergies(0).front() )
+	    {sigma = 0;}
+	  else {
+	    sigma = alphaDataSetMap[zTarget]->FindValue(energyIncident/MeV); 
+	  }
 	}
       else
 	{ 
-
-	  G4Exception("G4PaulKCrossSection::CalculateKCrossSection()","de0004",JustWarning, "Energy deposited locally");
+	  
+// G4Exception("G4PaulKCrossSection::CalculateKCrossSection()","de0004",JustWarning, "Energy deposited locally");
 	  sigma = 0.;
 
 	}

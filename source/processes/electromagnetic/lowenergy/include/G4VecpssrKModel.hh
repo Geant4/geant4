@@ -34,9 +34,8 @@
 // -------------------------------------------------------------------
 
 // Class description:
-// Low Energy Electromagnetic Physics, Cross section, p and alpha ionisation, L shell
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
-
+// Low Energy Electromagnetic Physics, Cross section, p and alpha ionisation, K shell
+// Further documentation available from http://goo.gl/4bQgf
 // -------------------------------------------------------------------
 
 

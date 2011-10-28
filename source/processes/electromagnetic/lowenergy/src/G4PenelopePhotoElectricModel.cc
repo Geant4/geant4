@@ -36,6 +36,7 @@
 //                          above threshold
 // 25 May 2011   L Pandola  Renamed (make v2008 as default Penelope)
 // 10 Jun 2011   L Pandola  Migrate atomic deexcitation interface
+// 07 Oct 2011   L Pandola  Bug fix (potential violation of energy conservation)
 //
 
 #include "G4PenelopePhotoElectricModel.hh"
@@ -283,16 +284,17 @@ void G4PenelopePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicPartic
 							   eKineticEnergy);
       fvect->push_back(electron);
     } 
-  else
-    {
-      bindingEnergy = photonEnergy;
-    }
+  else    
+    bindingEnergy = photonEnergy;
+
 
   G4double energyInFluorescence = 0; //testing purposes
   G4double energyInAuger = 0; //testing purposes
-
-  //Now, take care of fluorescence, if required
-  if (fAtomDeexcitation)
+ 
+  //Now, take care of fluorescence, if required. According to the Penelope
+  //recipe, I have to skip fluoresence completely if shellIndex == 9 
+  //(= sampling of a shell outer than K,L,M)
+  if (fAtomDeexcitation && shellIndex<9)
     {      
       G4int index = couple->GetIndex();
       if (fAtomDeexcitation->CheckDeexcitationActiveRegion(index))
@@ -324,7 +326,7 @@ void G4PenelopePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicPartic
   if (localEnergyDeposit < 0)
     {
       G4cout << "WARNING - "
-	     << "G4PenelopePhotoElectric::PostStepDoIt - Negative energy deposit"
+	     << "G4PenelopePhotoElectricModel::SampleSecondaries() - Negative energy deposit"
 	     << G4endl;
       localEnergyDeposit = 0;
     }
@@ -356,10 +358,29 @@ void G4PenelopePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicPartic
       G4double energyDiff = 
 	std::fabs(eKineticEnergy+energyInFluorescence+localEnergyDeposit+energyInAuger-photonEnergy);
       if (energyDiff > 0.05*keV)
-	G4cout << "Warning from G4PenelopePhotoElectric: problem with energy conservation: " << 
-	  (eKineticEnergy+energyInFluorescence+localEnergyDeposit+energyInAuger)/keV 
-	       << " keV (final) vs. " << 
-	  photonEnergy/keV << " keV (initial)" << G4endl;
+	{
+	  G4cout << "Warning from G4PenelopePhotoElectric: problem with energy conservation: " << 
+	    (eKineticEnergy+energyInFluorescence+localEnergyDeposit+energyInAuger)/keV 
+		 << " keV (final) vs. " << 
+	    photonEnergy/keV << " keV (initial)" << G4endl;
+	  G4cout << "-----------------------------------------------------------" << G4endl;
+	  G4cout << "Energy balance from G4PenelopePhotoElectric" << G4endl;
+	  G4cout << "Selected shell: " << WriteTargetShell(shellIndex) << " of element " << 
+	    anElement->GetName() << G4endl;
+	  G4cout << "Incoming photon energy: " << photonEnergy/keV << " keV" << G4endl;
+	  G4cout << "-----------------------------------------------------------" << G4endl;
+	  if (eKineticEnergy)
+	    G4cout << "Outgoing electron " << eKineticEnergy/keV << " keV" << G4endl;
+	  if (energyInFluorescence)
+	    G4cout << "Fluorescence x-rays: " << energyInFluorescence/keV << " keV" << G4endl;
+	  if (energyInAuger)
+	    G4cout << "Auger electrons: " << energyInAuger/keV << " keV" << G4endl;
+	  G4cout << "Local energy deposit " << localEnergyDeposit/keV << " keV" << G4endl;
+	  G4cout << "Total final state: " << 
+	    (eKineticEnergy+energyInFluorescence+localEnergyDeposit+energyInAuger)/keV << 
+	    " keV" << G4endl;
+	  G4cout << "-----------------------------------------------------------" << G4endl;
+	}
     }
 }
 

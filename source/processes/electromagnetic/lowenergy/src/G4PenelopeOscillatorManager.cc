@@ -600,11 +600,15 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 
   if (conductionStrength < 0.5 || plasmaEnergy<1.0*eV) //this is an insulator
     {
+      if (verbosityLevel >1 )
+	G4cout << material->GetName() << " is an insulator " << G4endl;
       //remove conduction band oscillator
       helper->erase(helper->begin());
     }
   else //this is a conductor, Outer shells moved to conduction band
     {
+      if (verbosityLevel >1 )		
+	G4cout << material->GetName() << " is a conductor " << G4endl;	   
       isAConductor = true;
       //copy the conduction strenght.. The number is going to change.
       G4double conductionStrengthCopy = conductionStrength;
@@ -613,7 +617,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 	{
 	  G4double oscStre = (*helper)[i].GetOscillatorStrength();
 	  //loop is repeated over here
-	  if (oscStre < conductionStrength)
+	  if (oscStre < conductionStrengthCopy)
 	    {
 	      conductionStrengthCopy = conductionStrengthCopy-oscStre;
 	      (*helper)[i].SetOscillatorStrength(0.);
@@ -640,7 +644,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 					Bohr_radius*Bohr_radius*Bohr_radius*conductionStrength);
       (*helper)[0].SetHartreeFactor(hartree/fine_structure_const);
     }
-  
+
   //Check f-sum rule
   G4double sum = 0;
   for (size_t i=0;i<helper->size();i++)
@@ -650,7 +654,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
   if (std::fabs(sum-totalZ) > (1e-6*totalZ))
     {
       G4ExceptionDescription ed;
-      ed << "Inconsistent oscillator data " << G4endl;
+      ed << "Inconsistent oscillator data for " << material->GetName() << G4endl;
       ed << sum << " " << totalZ << G4endl;
       G4Exception("G4PenelopeOscillatorManager::BuildOscillatorTable()",
 		  "em2036",FatalException,ed);

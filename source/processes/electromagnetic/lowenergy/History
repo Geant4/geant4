@@ -17,6 +17,35 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28.10.2011  L.Pandola, tag emlowen-V09-04-66
+	    Include files G4ECPSSRFormFactorKCrossSection.* and 
+	    G4ECPSSRFormFactorLiCrossSection.* from A. Mantero.
+	    Edit the sources.cmake accordingly
+
+26.10.2011  L.Pandola, tag emlowen-V09-04-65
+            Added protection in G4PenelopeBremsstrahlungFS.cc in the 
+	    attempt to avoid exception em2015 which caused the rejection 
+            of emlowen-V09-04-61. The problem might be system-dependent
+
+22.10.2011  A.Mantero, tag emlowen-V09-04-64
+            Fixed warning and X control in G4PaulKCrossSection
+            Fixed a bug on return unit of G4ECPSSRFormFactorLiCrossSection.cc, 
+            G4ECPSSRFormFactorKCrossSection.cc
+
+20.10.2011  A.Mantero, tag emlowen-V09-04-63
+	    Added G4ECPSSRFormFactor*CrossSection classes and
+            modified the other accordingly.
+
+19.10.2011  L.Pandola, tag emlowen-V09-04-62
+	    Bug fix in G4PenelopeOscillatorManager, which caused 
+	    a G4Exception for some materials (found by 
+	    L. Urban)
+
+07.10.2011  L.Pandola, tag emlowen-V09-04-61
+	    Bug fix in G4PenelopePhotoElectricModel, which 
+	    caused a potential violation of energy conservation 
+            in high-Z materials (found by L. Urban)
+
 27.09.2011  S.I., F.L., G.D., tag emlowen-V09-04-60
             Added similar protection for cosTheta above 5 MeV 
             in G4LivermorePolarizedRayleighModel as in unpolarized model

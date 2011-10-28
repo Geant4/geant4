@@ -36,7 +36,7 @@
 //
 // Modified:
 // ---------
-//  
+// 20 Oct 2011  Alf  modified to take into account ECPSSR form Form Factor  
 //
 // -------------------------------------------------------------------
 //
@@ -108,6 +108,12 @@ void G4UAtomicDeexcitation::InitialiseForNewRun()
     {
       SetPIXECrossSectionModel("Analytical");
     }
+  else if (PIXECrossSectionModel() == "ECPSSR_FormFactor" ||
+	   PIXECrossSectionModel() == "ECPSSR_Tabulated" ||
+	   PIXECrossSectionModel() == "Analytical_Tabulated") 
+    {
+      SetPIXECrossSectionModel("ECPSSR_FormFactor");
+    }
   else 
     {
       G4cout << "### G4UAtomicDeexcitation::InitialiseForNewRun WARNING "
@@ -128,10 +134,17 @@ void G4UAtomicDeexcitation::InitialiseForNewRun()
     }
 
   // Instantiate empirical model
-  if(!PIXEshellCS && PIXECrossSectionModel() == "Empirical")
-    {
-      PIXEshellCS = new G4empCrossSection("Empirical");
-    }
+  if(!PIXEshellCS) {
+    if (PIXECrossSectionModel() == "Empirical")
+      {
+	PIXEshellCS = new G4empCrossSection("Empirical");
+      }
+
+    if (PIXECrossSectionModel() == "ECPSSR_FormFactor")
+      {
+	PIXEshellCS = new G4empCrossSection("ECPSSR_FormFactor");
+      }
+  }
 
   // Electron cross section
   // initializing PIXE x-section name

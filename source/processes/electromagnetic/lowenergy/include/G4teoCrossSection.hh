@@ -49,8 +49,8 @@
 #include "globals.hh"
 #include "G4VhShellCrossSection.hh"
 
-#include "G4AnalyticalEcpssrKCrossSection.hh"
-#include "G4AnalyticalEcpssrLiCrossSection.hh"
+class G4VecpssrKModel;
+class G4VecpssrLiModel;
 
 class G4teoCrossSection : public G4VhShellCrossSection 
 {

@@ -58,6 +58,8 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4CrossSectionHandler.hh
         G4DopplerProfile.hh
         G4eBremsstrahlungSpectrum.hh
+	G4ECPSSRFormFactorKCrossSection.hh
+	G4ECPSSRFormFactorLiCrossSection.hh
         G4eCrossSectionHandler.hh
         G4eIonisationCrossSectionHandler.hh
         G4eIonisationParameters.hh
@@ -176,6 +178,8 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4CrossSectionHandler.cc
         G4DopplerProfile.cc
         G4eBremsstrahlungSpectrum.cc
+	G4ECPSSRFormFactorKCrossSection.cc
+	G4ECPSSRFormFactorLiCrossSection.cc
         G4eCrossSectionHandler.cc
         G4eIonisationCrossSectionHandler.cc
         G4eIonisationParameters.cc
