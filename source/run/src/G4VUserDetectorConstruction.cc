@@ -49,7 +49,7 @@ void G4VUserDetectorConstruction::RegisterParallelWorld(G4VUserParallelWorld* aP
       eM += aPW->GetName();
       eM += "> is already registered to the user detector construction.";
       G4Exception("G4VUserDetectorConstruction::RegisterParallelWorld",
-                  "RunUDet000",FatalErrorInArgument,eM);
+                  "Run0051",FatalErrorInArgument,eM);
     }
   }
   parallelWorld.push_back(aPW);

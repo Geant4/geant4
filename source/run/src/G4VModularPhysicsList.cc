@@ -83,7 +83,7 @@ void G4VModularPhysicsList::RegisterPhysics(G4VPhysicsConstructor* fPhysics)
   G4ApplicationState currentState = stateManager->GetCurrentState();
   if(!(currentState==G4State_PreInit)){
     G4Exception("G4VModularPhysicsList::RegisterPhysics",
-		"RUN106", JustWarning,
+		"Run0201", JustWarning,
                 "Geant4 kernel is not PreInit state : Method ignored.");
     return;
   }
@@ -126,7 +126,7 @@ void G4VModularPhysicsList::RegisterPhysics(G4VPhysicsConstructor* fPhysics)
     G4String comment ="Duplicate type for ";
     comment += pName;
     G4Exception("G4VModularPhysicsList::RegisterPhysics",
-		"RUN107", JustWarning, comment); 
+		"Run0202", JustWarning, comment); 
     return;
   }
 
@@ -141,7 +141,7 @@ void G4VModularPhysicsList::ReplacePhysics(G4VPhysicsConstructor* fPhysics)
   G4ApplicationState currentState = stateManager->GetCurrentState();
   if(!(currentState==G4State_PreInit)){
     G4Exception("G4VModularPhysicsList::ReplacePhysics",
-		"RUN106", JustWarning,
+		"Run0203", JustWarning,
                 "Geant4 kernel is not PreInit state : Method ignored.");
      return;
   }
@@ -199,7 +199,7 @@ void  G4VModularPhysicsList::RemovePhysics(G4int pType)
   G4ApplicationState currentState = stateManager->GetCurrentState();
   if(!(currentState==G4State_PreInit)){
     G4Exception("G4VModularPhysicsList::RemovePhysics",
-		"RUN106", JustWarning,
+		"Run0204", JustWarning,
                 "Geant4 kernel is not PreInit state : Method ignored.");
     return;
   }
@@ -229,7 +229,7 @@ void G4VModularPhysicsList::RemovePhysics(G4VPhysicsConstructor* fPhysics)
   G4ApplicationState currentState = stateManager->GetCurrentState();
   if(!(currentState==G4State_PreInit)){
     G4Exception("G4VModularPhysicsList::RemovePhysics",
-		"RUN106", JustWarning,
+		"Run0205", JustWarning,
                 "Geant4 kernel is not PreInit state : Method ignored.");
     return;
   }
@@ -258,7 +258,7 @@ void G4VModularPhysicsList::RemovePhysics(const G4String& name)
   G4ApplicationState currentState = stateManager->GetCurrentState();
   if(!(currentState==G4State_PreInit)){
     G4Exception("G4VModularPhysicsList::RemovePhysics",
-		"RUN106", JustWarning,
+		"Run0206", JustWarning,
                 "Geant4 kernel is not PreInit state : Method ignored.");
     return;
   }

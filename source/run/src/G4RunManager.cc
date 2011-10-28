@@ -77,7 +77,7 @@ G4RunManager::G4RunManager()
 {
   if(fRunManager)
   {
-    G4Exception("G4RunManager::G4RunManager()", "Run0001",
+    G4Exception("G4RunManager::G4RunManager()", "Run0031",
                 FatalException, "G4RunManager constructed twice.");
   }
   fRunManager = this;
@@ -261,7 +261,7 @@ G4Event* G4RunManager::GenerateEvent(G4int i_event)
 {
   if(!userPrimaryGeneratorAction)
   {
-    G4Exception("G4RunManager::GenerateEvent()", "Run0002", FatalException,
+    G4Exception("G4RunManager::GenerateEvent()", "Run0032", FatalException,
                 "G4VUserPrimaryGeneratorAction is not defined!");
     return 0;
   }
@@ -347,7 +347,7 @@ void G4RunManager::InitializeGeometry()
 {
   if(!userDetector)
   {
-    G4Exception("G4RunManager::InitializeGeometry", "Run0003",
+    G4Exception("G4RunManager::InitializeGeometry", "Run0033",
                 FatalException, "G4VUserDetectorConstruction is not defined!");
     return;
   }
@@ -368,7 +368,7 @@ void G4RunManager::InitializePhysics()
   }
   else
   {
-    G4Exception("G4RunManager::InitializePhysics()", "Run0004",
+    G4Exception("G4RunManager::InitializePhysics()", "Run0034",
                 FatalException, "G4VUserPhysicsList is not defined!");
   }
   physicsInitialized = true;

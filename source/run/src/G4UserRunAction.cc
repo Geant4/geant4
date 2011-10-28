@@ -45,7 +45,7 @@ G4UserRunAction::G4UserRunAction()
    msg += "set it to G4RunManager before instantiating other user action classes\n";
    msg += "such as G4UserRunAction.";
    G4Exception("G4UserRunAction::G4UserRunAction()",
-              "Run0002",FatalException,msg);
+              "Run0041",FatalException,msg);
  }
 }
 

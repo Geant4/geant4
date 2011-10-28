@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct. 20th, 2011, M.Asai (run-V09-04-23)
+- Improve G4Exception error messages
+
+Oct. 20th, 2011, M.Asai (run-V09-04-22)
+- Remove obsolete G4Exception
+- Re-number G4Exception error numbers.
+
 Sep. 23rd, 2011,  H.Kurashige (run-V09-04-21)
 - Change G4VModularPhysicsList to issue messages 
   always if physics is added and/or removed.

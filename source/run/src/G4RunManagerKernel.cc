@@ -77,7 +77,7 @@ G4RunManagerKernel::G4RunManagerKernel()
   defaultExceptionHandler = new G4ExceptionHandler();
   if(fRunManagerKernel)
   {
-    G4Exception("G4RunManagerKernel::G4RunManagerKernel()","MoreThanOneRunManager",
+    G4Exception("G4RunManagerKernel::G4RunManagerKernel()","Run0001",
                 FatalException,"More than one G4RunManagerKernel is constructed.");
   }
   fRunManagerKernel = this;
@@ -86,15 +86,16 @@ G4RunManagerKernel::G4RunManagerKernel()
   if(particleTable->entries()>0)
   {
     // No particle should be registered beforehand
-    G4cerr<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<G4endl;
-    G4cerr<<" G4RunManagerKernel fatal exception"<<G4endl;
-    G4cerr<<"  -- Following particles have already been registered"<<G4endl;
-    G4cerr<<"     before G4RunManagerKernel is instantiated."<<G4endl;
+    G4ExceptionDescription ED;
+    ED<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<G4endl;
+    ED<<" G4RunManagerKernel fatal exception"<<G4endl;
+    ED<<"  -- Following particles have already been registered"<<G4endl;
+    ED<<"     before G4RunManagerKernel is instantiated."<<G4endl;
     for(int i=0;i<particleTable->entries();i++)
-    { G4cerr<<"     "<<particleTable->GetParticle(i)->GetParticleName()<<G4endl; }
-    G4cerr<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<G4endl;
-    G4Exception("G4RunManagerKernel::G4RunManagerKernel()","StaticParticleDefinition",
-       FatalException,"Particles have already been instantiated before G4RunManagerKernel.");
+    { ED<<"     "<<particleTable->GetParticle(i)->GetParticleName()<<G4endl; }
+    ED<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<G4endl;
+    G4Exception("G4RunManagerKernel::G4RunManagerKernel()","Run0002",
+       FatalException,ED);
   }
   
   // construction of Geant4 kernel classes
@@ -169,11 +170,9 @@ void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,
   if(!(currentState==G4State_Idle||currentState==G4State_PreInit))
   { 
     G4Exception("G4RunManagerKernel::DefineWorldVolume",
-                "DefineWorldVolumeAtIncorrectState",
+                "Run00031",
                 JustWarning,
                 "Geant4 kernel is not PreInit or Idle state : Method ignored.");
-    if(verboseLevel>1) G4cerr << "Current application state is " 
-      << stateManager->GetStateString(currentState) << G4endl;
     return;
   }
 
@@ -182,13 +181,14 @@ void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,
   {
     if(worldVol->GetLogicalVolume()->GetRegion()!=defaultRegion)
     {
-      G4cerr << "The world volume has a user-defined region <"
+      G4ExceptionDescription ED;
+      ED << "The world volume has a user-defined region <"
            << worldVol->GetLogicalVolume()->GetRegion()->GetName()
            << ">." << G4endl;
+      ED << "World would have a default region assigned by RunManagerKernel."
+         << G4endl;
       G4Exception("G4RunManager::DefineWorldVolume",
-                "RUN:WorldHasUserDefinedRegion",
-                FatalException,
-                "World would have a default region assigned by RunManagerKernel.");
+                "Run0004", FatalException, ED);
     }
   }
 
@@ -198,7 +198,7 @@ void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,
     if(defaultRegion->GetNumberOfRootVolumes()>size_t(1))
     {
       G4Exception("G4RunManager::DefineWorldVolume",
-                "DefaultRegionHasMoreThanOneVolume",
+                "Run0005",
                 FatalException,
                 "Default world region should have a unique logical volume.");
     }
@@ -260,7 +260,7 @@ void G4RunManagerKernel::InitializePhysics()
   if(!(currentState==G4State_Idle||currentState==G4State_PreInit))
   { 
     G4Exception("G4RunManagerKernel::InitializePhysics",
-                "InitializePhysicsAtIncorrectState", JustWarning,
+                "Run0011", JustWarning,
                 "Geant4 kernel is not PreInit or Idle state : Method ignored.");
     return;
   }
@@ -268,7 +268,7 @@ void G4RunManagerKernel::InitializePhysics()
   if(!physicsList)
   {
     G4Exception("G4RunManagerKernel::InitializePhysics",
-                "PhysicsListIsNotDefined", FatalException,
+                "Run0012", FatalException,
                 "G4VUserPhysicsList is not defined");
     return;
   }
@@ -295,7 +295,7 @@ G4bool G4RunManagerKernel::RunInitialization()
   if(!geometryInitialized) 
   { 
     G4Exception("G4RunManagerKernel::RunInitialization",
-                "GeometryHasNotYetInitialized",
+                "Run0021",
                 JustWarning,
                 "Geometry has not yet initialized : method ignored.");
     return false;
@@ -304,7 +304,7 @@ G4bool G4RunManagerKernel::RunInitialization()
   if(!physicsInitialized) 
   { 
     G4Exception("G4RunManagerKernel::RunInitialization",
-                "PhysicsHasNotYetInitialized",
+                "Run0022",
                 JustWarning,
                 "Physics has not yet initialized : method ignored.");
     return false;
@@ -313,7 +313,7 @@ G4bool G4RunManagerKernel::RunInitialization()
   if( currentState != G4State_Idle )
   { 
     G4Exception("G4RunManagerKernel::RunInitialization",
-                "RunInitializationAtIncorrectState",
+                "Run0023",
                 JustWarning,
                 "Geant4 kernel not in Idle state : method ignored.");
     return false;
@@ -375,7 +375,7 @@ void G4RunManagerKernel::UpdateRegion()
   if( currentState != G4State_Idle )
   { 
     G4Exception("G4RunManagerKernel::UpdateRegion",
-                "RegionUpdateAtIncorrectState",
+                "Run0024",
                 JustWarning,
                 "Geant4 kernel not in Idle state : method ignored.");
     return;

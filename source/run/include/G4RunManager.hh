@@ -359,7 +359,7 @@ class G4RunManager
       if(sysret!=0)
       { 
         G4String errmsg = "\"" + shellCmd + "\" returns non-zero value. Directory creation failed.";
-        G4Exception("GrRunManager::SetRandomNumberStoreDir()","RUN",JustWarning,errmsg);
+        G4Exception("GrRunManager::SetRandomNumberStoreDir","Run0071",JustWarning,errmsg);
         G4cerr << " return value = " << sysret << G4endl;
       }
     }
@@ -370,7 +370,9 @@ class G4RunManager
     inline const G4String& GetRandomNumberStatusForThisEvent() const
     {
       if(storeRandomNumberStatusToG4Event==0 || storeRandomNumberStatusToG4Event==2)
-      { G4Exception("Random number status is not available for this event."); }
+      { G4Exception("GrRunManager::SetRandomNumberStoreDir",
+                    "Run0072",JustWarning,
+                    "Random number status is not available for this event."); }
       return randomNumberStatusForThisEvent;
     }
 

@@ -153,7 +153,7 @@ void G4PhysicsListHelper::CheckParticleList() const
     }
 #endif
     G4Exception("G4PhysicsListHelper::CheckParticleList",
-		"RUN003", FatalException,
+		"Run0101", FatalException,
 		"Missing EM basic particle");
   }
 
@@ -172,7 +172,7 @@ void G4PhysicsListHelper::CheckParticleList() const
 #endif
     missingName += " should be created ";
     G4Exception("G4PhysicsListHelper::CheckParticleList",
-		"RUN003", FatalException,
+		"Run0102", FatalException,
 		"Missing Proton");
   }
    
@@ -190,7 +190,7 @@ void G4PhysicsListHelper::CheckParticleList() const
     }
 #endif
     G4Exception("G4PhysicsListHelper::CheckParticleList",
-		"RUN003", FatalException,
+		"Run0103", FatalException,
 		"Missing GenericIon");
   }
       
@@ -247,7 +247,7 @@ void G4PhysicsListHelper::AddTransportation()
       }
 #endif
       G4Exception("G4PhysicsListHelper::AddTransportation",
-		  "RUN001", FatalException,
+		  "Run0104", FatalException,
 		  "No process manager");
       continue;
     } 
@@ -286,7 +286,7 @@ void G4PhysicsListHelper::ReadOrdingParameterTable()
       }
 #endif
       G4Exception("G4PhysicsListHelper::ReadOrdingParameterTable",
-		  "RUN103", JustWarning, 
+		  "Run0105", JustWarning, 
 		  "Fail to open ordering paramter table ");
     } else {
       readInFile = true;
@@ -328,7 +328,7 @@ void G4PhysicsListHelper::ReadOrdingParameterTable()
     }
 #endif
     G4Exception("G4PhysicsListHelper::ReadOrdingParameterTable",
-		"RUN104", JustWarning, 
+		"Run0106", JustWarning, 
 		"The ordering parameter table is empty ");
     delete theTable;
     theTable=0;
@@ -418,7 +418,7 @@ G4bool G4PhysicsListHelper::RegisterProcess(G4VProcess*            process,
     }
 #endif
     G4Exception("G4PhysicsListHelper::RegisterPorcess",
-		"RUN004", FatalException, 
+		"Run0107", FatalException, 
 		"No Ordering Parameter Table");
     return false;
   }
@@ -448,7 +448,7 @@ G4bool G4PhysicsListHelper::RegisterProcess(G4VProcess*            process,
     }
 #endif
     G4Exception("G4PhysicsListHelper::RegisterPorcess",
-		"RUN003", FatalException, 
+		"Run0108", FatalException, 
 		"No Matching process Type/SubType");
     return false;
   }
@@ -479,7 +479,7 @@ G4bool G4PhysicsListHelper::RegisterProcess(G4VProcess*            process,
     }
 #endif
     G4Exception("G4PhysicsListHelper::RegisterPorcess",
-		"RUN003", FatalException, 
+		"Run0109", FatalException, 
 		"No Matching process Type/SubType");
     return false;
   }
@@ -496,7 +496,7 @@ G4bool G4PhysicsListHelper::RegisterProcess(G4VProcess*            process,
     }
 #endif
     G4Exception("G4PhysicsListHelper::RegisterProcess   ",
-		"RUN001", FatalException,
+		"Riun0110", FatalException,
 		"No process manager");
     return false;
   }
@@ -524,7 +524,7 @@ G4bool G4PhysicsListHelper::RegisterProcess(G4VProcess*            process,
 	}
 #endif
 	G4Exception("G4PhysicsListHelper::RegisterPorcess",
-		    "RUN105", JustWarning, 
+		    "Run0111", JustWarning, 
 		    "Duplication of processes");
       }
     }

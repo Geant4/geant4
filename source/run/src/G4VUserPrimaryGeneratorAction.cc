@@ -44,7 +44,7 @@ G4VUserPrimaryGeneratorAction::G4VUserPrimaryGeneratorAction()
    msg += "set it to G4RunManager before instantiating other user action classes\n";
    msg += "such as G4VUserPrimaryParticleGeneratorAction.";
    G4Exception("G4VUserPrimaryGeneratorAction::G4VUserPrimaryGeneratorAction()",
-              "Run0001",FatalException,msg);
+              "Run0061",FatalException,msg);
  }
 }
 

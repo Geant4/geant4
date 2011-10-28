@@ -151,14 +151,14 @@ void G4VUserPhysicsList::AddProcessManager(G4ParticleDefinition* newParticle,
 	  // no process manager has been registered yet
 	  newManager = new G4ProcessManager(newParticle);
 	  G4Exception("G4VUserPhysicsList::AddProcessManager",
-		      "RUN201", RunMustBeAborted,
+		      "Run0251", RunMustBeAborted,
 		      "GenericIon has no ProcessMamanger"); 	
 	}
       } else {
 	// "GenericIon" does not exist
 	newManager = new G4ProcessManager(newParticle);
 	G4Exception("G4VUserPhysicsList::AddProcessManager",
-		    "RUN201", RunMustBeAborted,
+		    "Run0252", RunMustBeAborted,
 		    "GenericIon does not exist"); 	
       }
 
@@ -299,7 +299,7 @@ G4double G4VUserPhysicsList::GetCutValue(const G4String& name) const
     }
 #endif
     G4Exception("G4VUserPhysicsList::GetCutValue",
-		"RUN005", FatalException,
+		"Run0253", FatalException,
 		"No Default Region");
     return -1.*mm;
   }
@@ -381,7 +381,7 @@ void G4VUserPhysicsList::SetParticleCuts( G4double cut, const G4String& particle
       }
 #endif
       G4Exception("G4VUserPhysicsList::SetParticleCuts ",
-		  "RUN005", FatalException,
+		  "Run0254", FatalException,
 		"No Default Region");
       return;
     }
@@ -425,7 +425,7 @@ void G4VUserPhysicsList::BuildPhysicsTable()
       }
 #endif	
       G4Exception("G4VUserPhysicsList::BuildPhysicsTable",
-		  "RUN203", RunMustBeAborted,
+		  "Run0255", RunMustBeAborted,
 		  "Fail to retrieve Production Cut Table");
     } else {
 #ifdef G4VERBOSE
@@ -522,7 +522,7 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
       }
 #endif
       G4Exception("G4VUserPhysicsList::BuildPhysicsTable",
-		  "RUN001", FatalException,  
+		  "Run0271", FatalException,  
 		  "No process manager");
       return;
     }
@@ -536,7 +536,7 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
       }
 #endif
       G4Exception("G4VUserPhysicsList::BuildPhysicsTable",
-		  "RUN002", FatalException,
+		  "Run0272", FatalException,
 		  "No process Vector");
       return;
     }
@@ -564,7 +564,7 @@ void G4VUserPhysicsList::PreparePhysicsTable(G4ParticleDefinition* particle)
       }
 #endif
       G4Exception("G4VUserPhysicsList::PreparePhysicsTable",
-		  "RUN001", FatalException, 
+		  "Run0273", FatalException, 
 		  "No process manager");
       return;
     }
@@ -579,7 +579,7 @@ void G4VUserPhysicsList::PreparePhysicsTable(G4ParticleDefinition* particle)
       }
 #endif
       G4Exception("G4VUserPhysicsList::PreparePhysicsTable",
-		  "RUN002", FatalException,
+		  "Run0274", FatalException,
 		  "No process Vector");
       return;
     }
@@ -662,7 +662,7 @@ G4bool G4VUserPhysicsList::StorePhysicsTable(const G4String& directory)
   // store CutsTable info
   if (!fCutsTable->StoreCutsTable(dir, ascii)) {
     G4Exception("G4VUserPhysicsList::StorePhysicsTable",
-		"RUN101", JustWarning,
+		"Run0281", JustWarning,
 		"Fail to store Cut Table"); 	
     return false;
   }
@@ -688,7 +688,7 @@ G4bool G4VUserPhysicsList::StorePhysicsTable(const G4String& directory)
 	comment += (*pVector)[j]->GetProcessName();
 	comment += "(" + particle->GetParticleName()  + ")";
 	G4Exception("G4VUserPhysicsList::StorePhysicsTable",
-		    "RUN102", JustWarning,
+		    "Run0282", JustWarning,
 		    comment); 	
 	success = false;
       }
