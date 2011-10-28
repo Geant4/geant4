@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14th October 2011 P. Gumplinger (exampleN06-V09-04-00)
+- modify to work with materials-V09-04-15 and use spline interpolation
+  for some of the G4MaterialPropertyVector (e.g. G4PhysicsOrderedFreeVector)
+
 23rd October 2010 P. Gumplinger (exampleN06-V09-03-01)
 - add G4OpMieHG scattering process and associated material properties
 
