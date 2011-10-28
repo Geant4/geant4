@@ -1,0 +1,44 @@
+$Id: README,v 1.1 2008-11-10 11:06:21 kaitanie Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            Test69
+                            ------
+
+Geant4 system test for the INCL++ cascade model and the QGSP_INCXX physics list.
+
+Test configurations for proton, neutron, pi+, and pi- projectiles and
+Th, U, Pb, Cu, Si and C targets:
+
+p    +  U    @ 1 GeV
+n    +  U    @ 1 GeV
+pi+  +  U    @ 1 GeV
+pi-  +  U    @ 1 GeV
+
+p    +  Th   @ 1 GeV
+n    +  Th   @ 1 GeV
+pi+  +  Th   @ 1 GeV
+pi-  +  Th   @ 1 GeV
+
+p    +  Pb   @ 1 GeV
+n    +  Pb   @ 1 GeV
+pi+  +  Pb   @ 1 GeV
+pi-  +  Pb   @ 1 GeV
+
+p    +  Cu   @ 1 GeV
+n    +  Cu   @ 1 GeV
+pi+  +  Cu   @ 1 GeV
+pi-  +  Cu   @ 1 GeV
+
+p    +  Si   @ 1 GeV
+n    +  Si   @ 1 GeV
+pi+  +  Si   @ 1 GeV
+pi-  +  Si   @ 1 GeV
+
+p    +  C    @ 1 GeV
+n    +  C    @ 1 GeV
+pi+  +  C    @ 1 GeV
+pi-  +  C    @ 1 GeV

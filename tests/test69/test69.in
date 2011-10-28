@@ -1,0 +1,206 @@
+#
+# Auto-generated test input file for test12 hadronics.
+#
+/control/verbose 2
+/run/verbose 2
+/run/setCut 1 m
+/run/initialize
+/gun/direction 1 0 0
+#
+# proton at 1 GeV in Th
+#
+/gun/particle proton
+/gun/energy 1 GeV
+/mydet/SelectMaterial Th
+/run/beamOn 20
+#
+# neutron at 1 GeV in Th
+#
+/gun/particle neutron
+/gun/energy 1 GeV
+/mydet/SelectMaterial Th
+/run/beamOn 20
+#
+# pi+ at 1 GeV in Th
+#
+/gun/particle pi+
+/gun/energy 1 GeV
+/mydet/SelectMaterial Th
+/run/beamOn 20
+#
+# pi- at 1 GeV in Th
+#
+/gun/particle pi-
+/gun/energy 1 GeV
+/mydet/SelectMaterial Th
+/run/beamOn 20
+#
+# proton at 1 GeV in U
+#
+/gun/particle proton
+/gun/energy 1 GeV
+/mydet/SelectMaterial U
+/run/beamOn 20
+#
+# neutron at 1 GeV in U
+#
+/gun/particle neutron
+/gun/energy 1 GeV
+/mydet/SelectMaterial U
+/run/beamOn 20
+#
+# pi+ at 1 GeV in U
+#
+/gun/particle pi+
+/gun/energy 1 GeV
+/mydet/SelectMaterial U
+/run/beamOn 20
+#
+# pi- at 1 GeV in U
+#
+/gun/particle pi-
+/gun/energy 1 GeV
+/mydet/SelectMaterial U
+/run/beamOn 20
+#
+# proton at 1 GeV in Pb
+#
+/gun/particle proton
+/gun/energy 1 GeV
+/mydet/SelectMaterial Pb
+/run/beamOn 20
+#
+# neutron at 1 GeV in Pb
+#
+/gun/particle neutron
+/gun/energy 1 GeV
+/mydet/SelectMaterial Pb
+/run/beamOn 20
+#
+# pi+ at 1 GeV in Pb
+#
+/gun/particle pi+
+/gun/energy 1 GeV
+/mydet/SelectMaterial Pb
+/run/beamOn 20
+#
+# pi- at 1 GeV in Pb
+#
+/gun/particle pi-
+/gun/energy 1 GeV
+/mydet/SelectMaterial Pb
+/run/beamOn 20
+#
+# proton at 1 GeV in Cu
+#
+/gun/particle proton
+/gun/energy 1 GeV
+/mydet/SelectMaterial Cu
+/run/beamOn 20
+#
+# neutron at 1 GeV in Cu
+#
+/gun/particle neutron
+/gun/energy 1 GeV
+/mydet/SelectMaterial Cu
+/run/beamOn 20
+#
+# pi+ at 1 GeV in Cu
+#
+/gun/particle pi+
+/gun/energy 1 GeV
+/mydet/SelectMaterial Cu
+/run/beamOn 20
+#
+# pi- at 1 GeV in Cu
+#
+/gun/particle pi-
+/gun/energy 1 GeV
+/mydet/SelectMaterial Cu
+/run/beamOn 20
+#
+# proton at 1 GeV in Si
+#
+/gun/particle proton
+/gun/energy 1 GeV
+/mydet/SelectMaterial Si
+/run/beamOn 20
+#
+# neutron at 1 GeV in Si
+#
+/gun/particle neutron
+/gun/energy 1 GeV
+/mydet/SelectMaterial Si
+/run/beamOn 20
+#
+# pi+ at 1 GeV in Si
+#
+/gun/particle pi+
+/gun/energy 1 GeV
+/mydet/SelectMaterial Si
+/run/beamOn 20
+#
+# pi- at 1 GeV in Si
+#
+/gun/particle pi-
+/gun/energy 1 GeV
+/mydet/SelectMaterial Si
+/run/beamOn 20
+#
+# proton at 1 GeV in C
+#
+/gun/particle proton
+/gun/energy 1 GeV
+/mydet/SelectMaterial C
+/run/beamOn 20
+#
+# neutron at 1 GeV in C
+#
+/gun/particle neutron
+/gun/energy 1 GeV
+/mydet/SelectMaterial C
+/run/beamOn 20
+#
+# pi+ at 1 GeV in C
+#
+/gun/particle pi+
+/gun/energy 1 GeV
+/mydet/SelectMaterial C
+/run/beamOn 20
+#
+# pi- at 1 GeV in C
+#
+/gun/particle pi-
+/gun/energy 1 GeV
+/mydet/SelectMaterial C
+/run/beamOn 20
+#
+# Deuteron at 1 GeV/nucleon on Pb
+#
+/gun/particle deuteron
+/gun/energy 2 GeV
+/mydet/SelectMaterial Pb
+/run/beamOn 20
+#
+# Alpha at 500 MeV/nucleon on Pb
+#
+/gun/particle alpha
+/gun/energy 2 GeV
+/mydet/SelectMaterial Pb
+/run/beamOn 20
+#
+# Carbon at 290 MeV/nucleon on C
+#
+/gun/particle ion
+/gun/ion 6 12
+/gun/energy 3840 MeV
+/mydet/SelectMaterial C
+/run/beamOn 20
+#
+# Carbon at 500 MeV/nucleon on Pb
+#
+/gun/particle ion
+/gun/ion 6 12
+/mydet/SelectMaterial Pb
+/run/beamOn 20
+
