@@ -1067,7 +1067,7 @@ G4int G4VTwistSurface::GetEdgeVisibility( G4int i, G4int j, G4int m, G4int n, G4
   else if ( i == n-2 && j == m-2 ) { // signs (c) : -++-
     return ( number == 1 || number == 2 ) ? 1 : -1 ;
   }
-  else if ( i == n-2 && j == j ) {   // signs (d) : ++--
+  else if ( i == n-2 && j == 0 ) {   // signs (d) : ++--
     return ( number == 0 || number == 1 ) ? 1 : -1 ;
   }
   else {

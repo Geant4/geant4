@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25-Oct-2011  G.Cosmo (geom-specific-V09-04-08)
+- Fixed logic in G4VTwistSurface::GetEdgeVisibility() in treatment of corners.
+
 16-Sep-2011  G.Cosmo (geom-specific-V09-04-07)
 - Fix compilation error in code within G4SPECSDEBUG. No functional changes.
 
