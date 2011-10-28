@@ -12,12 +12,12 @@ namespace histo {
 class h3d : public h3<double,unsigned int,double,double> {
   typedef h3<double,unsigned int,double,double> parent;
 public:
-  inline static const std::string& s_class() {
+  static const std::string& s_class() {
     static const std::string s_v("tools::histo::h3d");
     return s_v;
   }
 public:
-  inline h3d(const std::string& a_title,
+  h3d(const std::string& a_title,
                      bn_t aXnumber,double aXmin,double aXmax,
                      bn_t aYnumber,double aYmin,double aYmax,
                      bn_t aZnumber,double aZmin,double aZmax)
@@ -26,7 +26,7 @@ public:
                   aZnumber,aZmin,aZmax)
   {}
 
-  inline h3d(const std::string& a_title,
+  h3d(const std::string& a_title,
                      const std::vector<double>& aEdgesX,
                      const std::vector<double>& aEdgesY,
                      const std::vector<double>& aEdgesZ)
@@ -35,8 +35,8 @@ public:
 
   virtual ~h3d(){}
 public:
-  inline h3d(const h3d& a_from): parent(a_from){}
-  inline h3d& operator=(const h3d& a_from){
+  h3d(const h3d& a_from): parent(a_from){}
+  h3d& operator=(const h3d& a_from){
     parent::operator=(a_from);
     return *this;
   }

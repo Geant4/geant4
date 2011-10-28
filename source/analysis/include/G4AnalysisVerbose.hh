@@ -25,54 +25,37 @@
 //
 // $Id$
 
-// Author: Ivana Hrivnacova, 15/06/2011  (ivana@ipno.in2p3.fr)
+// Author: Ivana Hrivnacova, 17/10/2011  (ivana@ipno.in2p3.fr)
 
-#include "G4VAnalysisManager.hh"
-#include "G4UnitsTable.hh"
+#ifndef G4AnalysisVerbose_h
+#define G4AnalysisVerbose_h 1
 
-#include <iostream>
+#include "globals.hh"
 
-//_____________________________________________________________________________
-G4VAnalysisManager::G4VAnalysisManager(const G4String& type)
-  : fVerboseLevel(0),
-    fFirstHistoId(0),
-    fFirstNtupleId(0),
-    //fHistoDirectoryName("histograms"), 
-    fHistoDirectoryName("histo"), 
-    fNtupleDirectoryName("ntuple"),
-    fVerboseL1(type,1),
-    fVerboseL2(type,2),
-    fpVerboseL1(0),
-    fpVerboseL2(0)
-{}
-
-//_____________________________________________________________________________
-G4VAnalysisManager::~G4VAnalysisManager()
-{}
-
-//_____________________________________________________________________________
-void G4VAnalysisManager::SetVerboseLevel(G4int verboseLevel) 
+class G4AnalysisVerbose
 {
-  if ( verboseLevel == fVerboseLevel || verboseLevel < 0 ) return;
-  
-  fVerboseLevel = verboseLevel;
-  
-  if ( verboseLevel == 0 ) {
-    fpVerboseL1 = 0;
-    fpVerboseL2 = 0;
-  }
-  else if ( verboseLevel == 1 ) {  
-    fpVerboseL1 = &fVerboseL1;
-    fpVerboseL2 = 0;
-  }
-  else {
-    fpVerboseL1 = &fVerboseL1;
-    fpVerboseL2 = &fVerboseL2;
-  }
+  public:
+    G4AnalysisVerbose(const G4String& type, G4int verboseLevel);
+    virtual ~G4AnalysisVerbose();
 
-  G4cout << "fpVerboseL1: " << fpVerboseL1 << G4endl;
-  G4cout << "fpVerboseL2: " << fpVerboseL2 << G4endl;
+    void Message(const G4String& action, 
+                 const G4String& object, 
+                 const G4String& objectName,
+                 G4bool success = true);
 
-}  
+    void Message(const G4String& action, 
+                 const G4String& object, 
+                 G4ExceptionDescription& description,
+                 G4bool success = true);
+        
+  private:
+    // data members
+    //
+    G4String fType;
+    G4String fToBeDoneText;
+    G4String fDoneText;
+    G4String fFailureText;
+};
 
+#endif
 

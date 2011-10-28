@@ -23,17 +23,16 @@ namespace tools {
 namespace wroot {
 
 class directory : public virtual idir {
-  static const uint32 class_version = 1;
-  static const uint32 START_BIG_FILE = 2000000000;
+  static uint32 class_version() {return 1;}
 public:
-  inline static const std::string& s_class() {
+  static const std::string& s_class() {
     static const std::string s_v("tools::wroot::directory");
     return s_v;
   }
 public: //idir
-  inline virtual ifile& file() {return m_file;}
-  inline virtual seek seek_directory() const {return m_seek_directory;}
-  inline virtual void append_object(iobject* a_object) {
+  virtual ifile& file() {return m_file;}
+  virtual seek seek_directory() const {return m_seek_directory;}
+  virtual void append_object(iobject* a_object) {
     //take ownership of a_object
     m_objs.push_back(a_object);
   }
@@ -201,10 +200,10 @@ protected:
     return *this;
   }
 public:
-  inline bool is_valid() const {return m_is_valid;}
-  inline void set_seek_directory(seek a_seek) {m_seek_directory = a_seek;}
+  bool is_valid() const {return m_is_valid;}
+  void set_seek_directory(seek a_seek) {m_seek_directory = a_seek;}
 
-  inline directory* mkdir(const std::string& a_name,
+  directory* mkdir(const std::string& a_name,
                           const std::string& a_title = ""){
     // Create a sub-directory and return a pointer to the created directory.
     // Note that the directory name cannot contain slashes.
@@ -234,10 +233,10 @@ public:
     return dir;
   }
 
-  //inline uint32 nbytes_name() const {return m_nbytes_name;}
-  inline void set_nbytes_name(uint32 a_n) {m_nbytes_name = a_n;}
+  //uint32 nbytes_name() const {return m_nbytes_name;}
+  void set_nbytes_name(uint32 a_n) {m_nbytes_name = a_n;}
 
-  inline uint32 record_size() const {
+  uint32 record_size() const {
     uint32 nbytes = sizeof(short);
     nbytes += sizeof(date); //m_date_C.record_size();
     nbytes += sizeof(date); //m_date_M.record_size();
@@ -250,7 +249,7 @@ public:
     return nbytes;
   }
 
-  inline bool close() {
+  bool close() {
     if(!save()) return false;
     clear_dirs();
     clear_objs();
@@ -258,10 +257,10 @@ public:
     return true;
   }
 
-  inline bool to_buffer(wbuf& a_wb){
+  bool to_buffer(wbuf& a_wb){
     // Decode input buffer.
     // (Name, title) are stored in the (name, title) of the associated key.
-    short version = class_version;
+    short version = class_version();
     version += 1000; //GB : enforce writing on seek (and not seek32).
     if(!a_wb.write(version)) return false;
     if(!a_wb.write(m_date_C)) return false;
@@ -282,7 +281,7 @@ public:
     return true;
   }
 
-  inline bool write(uint32& a_nbytes){
+  bool write(uint32& a_nbytes){
     // Write all objects in memory to disk.
     // Loop on all objects in memory (including subdirectories).
     // A new key is created in the m_keys linked list for each object.
@@ -333,7 +332,7 @@ public:
     return true;
   }
 protected:
-  inline void clear_keys() {
+  void clear_keys() {
     std::list<key*>::iterator it;
     for(it=m_keys.begin();it!=m_keys.end();) {
       key* k = *it;
@@ -343,7 +342,7 @@ protected:
     m_keys.clear();
   }
 
-  inline bool save(){
+  bool save(){
     if(!save_self()) return false;
    {std::vector<directory*>::iterator it;
     for(it=m_dirs.begin();it!=m_dirs.end();++it) {
@@ -352,7 +351,7 @@ protected:
     return true;
   }
 
-  inline bool save_self() {
+  bool save_self() {
     // Save Directory keys and header :
     //  If the directory has been modified (fModified set), write the keys
     //  and the directory header.
@@ -367,10 +366,10 @@ protected:
     return true;
   }
 
-  //inline const std::list<key*>& keys() const {return m_keys;}
-  //inline std::list<key*>& keys() {return m_keys;}
+  //const std::list<key*>& keys() const {return m_keys;}
+  //std::list<key*>& keys() {return m_keys;}
 
-  inline key* find_key(const std::string& a_name) {
+  key* find_key(const std::string& a_name) {
     if(m_file.verbose()) {
       m_file.out() << "tools::wroot::directory::find_key :" 
                    << " " << sout(a_name) << " ..."
@@ -383,12 +382,12 @@ protected:
 
     return 0;
   }
-  inline seek seek_keys() const {return m_seek_keys;}
+  seek seek_keys() const {return m_seek_keys;}
 
-  inline void clear_dirs() {clear<directory>(m_dirs);}
-  inline void clear_objs() {clear<iobject>(m_objs);}
+  void clear_dirs() {clear<directory>(m_dirs);}
+  void clear_objs() {clear<iobject>(m_objs);}
 
-  inline uint16 append_key(key* a_key){ //take ownership of a_key
+  uint16 append_key(key* a_key){ //take ownership of a_key
     std::list<key*>::iterator itk;
     for(itk=m_keys.begin();itk!=m_keys.end();++itk) {
       if((*itk)->object_name()==a_key->object_name()) {
@@ -401,7 +400,7 @@ protected:
     return 1;
   }
 
-  inline bool write_keys(){
+  bool write_keys(){
     // The list of keys (m_keys) is written as a single data record
     // Delete the old keys structure if it exists
 
@@ -461,7 +460,7 @@ protected:
     return headerkey.write_file(n);
   }
 
-  inline bool write_header(){
+  bool write_header(){
     // Overwrite the Directory header record.
     uint32 nbytes = record_size();
     char* header = new char[nbytes];
@@ -491,7 +490,7 @@ protected:
     return true;
   }
 
-  inline bool write_object(iobject& a_obj,uint32& a_nbytes){
+  bool write_object(iobject& a_obj,uint32& a_nbytes){
     buffer bref(m_file.out(),m_file.byte_swap(),256*128); //32768
     if(!a_obj.stream(bref)) {
       m_file.out() << "tools::wroot::directory::write_object :" 
@@ -501,23 +500,31 @@ protected:
       a_nbytes = 0;
       return false;
     }
+
     std::string name = a_obj.name();
     strip(name);
 
-    char* kbuf = 0;
-    uint32 klen = 0;
-    bool kdelete = false;
-    m_file.compress_buffer(bref,kbuf,klen,kdelete);
+    //first create the key to get key_length();
 
     wroot::key* key = new wroot::key(m_file,m_seek_directory,
                                      name,
                                      a_obj.title(),a_obj.store_class_name(),
                                      bref.length()); //set m_END
+
     if(!key->seek_key()) {
-      if(kdelete) delete [] kbuf;
       delete key;
       return false;
     }
+
+    if(!bref.displace_mapped(key->key_length())) { //done before compression.
+      delete key;
+      return false;
+    }
+
+    char* kbuf = 0;
+    uint32 klen = 0;
+    bool kdelete = false;
+    m_file.compress_buffer(bref,kbuf,klen,kdelete);
 
     ::memcpy(key->data_buffer(),kbuf,klen);
     if(kdelete) delete [] kbuf;
@@ -548,7 +555,7 @@ protected:
   }
 
 protected:
-  inline static std::string sout(const std::string& a_string) {
+  static std::string sout(const std::string& a_string) {
     return std::string("\"")+a_string+"\"";
   }
 protected:

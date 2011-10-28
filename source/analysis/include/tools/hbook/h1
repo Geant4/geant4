@@ -11,7 +11,7 @@ namespace hbook {
 
 class h1 : public base_histo {
 public:
-  inline h1(int aID,const std::string& a_title,
+  h1(int aID,const std::string& a_title,
              int aXnumber,rarg aXmin,rarg aXmax)
   :base_histo(aID)
   ,m_axis(m_path,aID,1,true,true)
@@ -21,7 +21,7 @@ public:
     CHBOOK1(m_id,a_title,aXnumber,aXmin,aXmax);
     cd_end();
   }
-  inline h1(int aID,const std::string& a_title,
+  h1(int aID,const std::string& a_title,
              const std::vector<rarg>& a_edges)
   :base_histo(aID)
   ,m_axis(m_path,aID,1,true,false)
@@ -30,23 +30,23 @@ public:
     CHBOOKB(m_id,a_title,a_edges);
     cd_end();
   }
-  inline virtual ~h1(){
+  virtual ~h1(){
     cd_beg();
     CHDELET(m_id);
     cd_end();
   }
 private:
-  inline h1(const h1& a_from)
+  h1(const h1& a_from)
   :base_histo(a_from)
   ,m_axis(a_from.m_axis)
   {}
-  inline h1& operator=(const h1& a_from){
+  h1& operator=(const h1& a_from){
     base_histo::operator=(a_from);
     m_axis = a_from.m_axis;
     return *this;
   }
 public:
-  inline std::string title() const {
+  std::string title() const {
     std::string title;
     int ncx,ncy;
     rarg xmin,xmax,ymin,ymax;
@@ -55,25 +55,25 @@ public:
     cd_end();
     return title;
   }
-  //inline bool set_title(const std::string& a_title) {
+  //bool set_title(const std::string& a_title) {
   //  return false;
   //}
-  inline int dimension() const {return 1;}
-  inline bool reset() {
+  int dimension() const {return 1;}
+  bool reset() {
     cd_beg();
     CHRESET(m_id," ");
     cd_end();
     return true;
   }
 
-  inline int all_entries() const {
+  int all_entries() const {
     cd_beg();
     int v = CHNOENT(m_id);
     cd_end();
     return v;
   }
 
-  inline rret sum_bin_heights() const {
+  rret sum_bin_heights() const {
     int NX = axis().bins();
     rret w = 0;
     cd_beg();
@@ -83,7 +83,7 @@ public:
     cd_end();
     return w;
   }
-  inline rret sum_all_bin_heights() const {
+  rret sum_all_bin_heights() const {
     int NX1 = axis().bins()+1;
     rret w = 0;
     cd_beg();
@@ -93,7 +93,7 @@ public:
     cd_end();
     return w;
   }
-  inline rret sum_extra_bin_heights() const {
+  rret sum_extra_bin_heights() const {
     int NX1 = axis().bins()+1;
     rret w = 0;
     cd_beg();
@@ -102,7 +102,7 @@ public:
     cd_end();
     return w;
   }
-  inline bool scale(rarg aScale) {
+  bool scale(rarg aScale) {
     //FIXME : Do we want the E option ?
     cd_beg();
     CHOPERA(m_id,"+E",m_id,m_id,aScale,0);
@@ -110,61 +110,61 @@ public:
     return true;
   }
 
-  inline rret min_bin_height() const {
+  rret min_bin_height() const {
     cd_beg();
     rret v = CHMIN(m_id);
     cd_end();
     return v;  
   }
-  inline rret max_bin_height() const {
+  rret max_bin_height() const {
     cd_beg();
     rret v = CHMAX(m_id);
     cd_end();
     return v;
   }
 
-  inline void fill(rarg aX,rarg aWeight = 1) {
+  void fill(rarg aX,rarg aWeight = 1) {
     cd_beg();
     CHFILL(m_id,aX,0,aWeight);
     cd_end();
   }
 
   // optimization :
-  inline void fill_beg() const {cd_beg();}
-  inline void fill_fast(rarg aX,rarg aWeight = 1) {
+  void fill_beg() const {cd_beg();}
+  void fill_fast(rarg aX,rarg aWeight = 1) {
     CHFILL(m_id,aX,0,aWeight);
   }
-  inline void fill_end() const {cd_end();}
+  void fill_end() const {cd_end();}
 
-  inline rret bin_height(int aIndex) const {
+  rret bin_height(int aIndex) const {
     cd_beg();
     rret v = CHI(m_id,hindex(aIndex,axis()));
     cd_end();
     return v;
   }
-  inline rret bin_error(int aIndex) const {
+  rret bin_error(int aIndex) const {
     cd_beg();
     rret v = CHIE(m_id,aIndex+1);
     cd_end();
     return v;
   }
 
-  inline rret mean() const {
+  rret mean() const {
     cd_beg();
     rret v = CHSTATI(m_id,1," ",0);
     cd_end();
     return v;
   }
-  inline rret rms() const {
+  rret rms() const {
     cd_beg();
     rret v = CHSTATI(m_id,2," ",0);
     cd_end();
     return v;
   }
 
-  inline hbook::axis& axis() {return m_axis;}
-  inline const hbook::axis& axis() const {return m_axis;}
-  inline int coord_to_index(rarg aCoord) const {
+  hbook::axis& axis() {return m_axis;}
+  const hbook::axis& axis() const {return m_axis;}
+  int coord_to_index(rarg aCoord) const {
     return m_axis.coord_to_index(aCoord);
   }
 protected:

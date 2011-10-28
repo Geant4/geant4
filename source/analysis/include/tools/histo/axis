@@ -19,13 +19,13 @@ public:
 public:
   enum { UNDERFLOW_BIN = -2, OVERFLOW_BIN = -1 }; //AIDA casing.
 public:
-  inline bool is_fixed_binning() const {return m_fixed;}
-  inline TC lower_edge() const {return m_minimum_value;}
-  inline TC upper_edge() const {return m_maximum_value;}
-  inline bn_t bins() const {return m_number_of_bins;}
-  inline const std::vector<TC>& edges() const {return m_edges;}
+  bool is_fixed_binning() const {return m_fixed;}
+  TC lower_edge() const {return m_minimum_value;}
+  TC upper_edge() const {return m_maximum_value;}
+  bn_t bins() const {return m_number_of_bins;}
+  const std::vector<TC>& edges() const {return m_edges;}
 
-  inline TC bin_width(int aBin) const {
+  TC bin_width(int aBin) const {
     if(aBin==UNDERFLOW_BIN) {
       return 0; //FIXME return DBL_MAX;
     } else if(aBin==OVERFLOW_BIN) {
@@ -41,7 +41,7 @@ public:
     }
   }
 
-  inline TC bin_lower_edge(int aBin) const {
+  TC bin_lower_edge(int aBin) const {
     if(aBin==UNDERFLOW_BIN) {
       return 0; //FIXME return -DBL_MAX;
     } else if(aBin==OVERFLOW_BIN) {
@@ -57,7 +57,7 @@ public:
     }
   }
 
-  inline TC bin_upper_edge(int aBin) const {
+  TC bin_upper_edge(int aBin) const {
     if(aBin==UNDERFLOW_BIN) {
       return 0; //FIXME bin_lower_edge(0)
     } else if(aBin==OVERFLOW_BIN) {
@@ -73,7 +73,7 @@ public:
     }
   }
 
-  inline TC bin_center(int aBin) const {
+  TC bin_center(int aBin) const {
     if(aBin==UNDERFLOW_BIN) {
       return 0; //FIXME : -INF
     } else if(aBin==OVERFLOW_BIN) {
@@ -91,7 +91,7 @@ public:
     }
   }
 
-  inline int coord_to_index(TC aValue) const {
+  int coord_to_index(TC aValue) const {
     if( aValue <  m_minimum_value) {
       return UNDERFLOW_BIN;
     } else if( aValue >= m_maximum_value) {
@@ -111,7 +111,7 @@ public:
     }
   }
 
-  inline bool coord_to_absolute_index(TC aValue,bn_t& a_index) const {
+  bool coord_to_absolute_index(TC aValue,bn_t& a_index) const {
     if( aValue <  m_minimum_value) {
       a_index = 0;
       return true;
@@ -136,7 +136,7 @@ public:
     }
   }
 
-  inline bool in_range_to_absolute_index(int a_in,bn_t& a_out) const {
+  bool in_range_to_absolute_index(int a_in,bn_t& a_out) const {
     // a_in is given in in-range indexing :
     //  - [0,n-1] for in-range bins
     //  - UNDERFLOW_BIN for the iaxis underflow bin
@@ -158,7 +158,7 @@ public:
 
 public:
   // Partition :
-  inline bool configure(const std::vector<TC>& aEdges) {
+  bool configure(const std::vector<TC>& aEdges) {
     // init :
     m_number_of_bins = 0;
     m_minimum_value = 0;
@@ -182,7 +182,7 @@ public:
     return true;
   }
 
-  inline bool configure(bn_t aNumber,TC aMin,TC aMax) {
+  bool configure(bn_t aNumber,TC aMin,TC aMax) {
     // init :
     m_number_of_bins = 0;
     m_minimum_value = 0;
@@ -201,7 +201,7 @@ public:
     return true;
   }
   
-  inline bool is_compatible(const axis& a_axis) const {
+  bool is_compatible(const axis& a_axis) const {
     if(m_number_of_bins!=a_axis.m_number_of_bins) return false;
     if(m_minimum_value!=a_axis.m_minimum_value) return false;
     if(m_maximum_value!=a_axis.m_maximum_value) return false;
@@ -209,7 +209,7 @@ public:
   }
   
 public:
-  inline axis()
+  axis()
   :m_offset(0)
   ,m_number_of_bins(0)
   ,m_minimum_value(0)
@@ -220,7 +220,7 @@ public:
 
   virtual ~axis(){}
 public:
-  inline axis(const axis& a_axis)
+  axis(const axis& a_axis)
   :m_offset(a_axis.m_offset)
   ,m_number_of_bins(a_axis.m_number_of_bins)
   ,m_minimum_value(a_axis.m_minimum_value)
@@ -230,7 +230,7 @@ public:
   ,m_edges(a_axis.m_edges)
   {}
 
-  inline axis& operator=(const axis& a_axis) {
+  axis& operator=(const axis& a_axis) {
     m_offset = a_axis.m_offset;
     m_number_of_bins = a_axis.m_number_of_bins;
     m_minimum_value = a_axis.m_minimum_value;

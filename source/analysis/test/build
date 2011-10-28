@@ -69,6 +69,6 @@ if [ ${build_icc} = "yes" ] ; then
   eval icpc -o tools_test_${exa} ${cppflags} ${files}
 else
   # G4 flags :
-  cppflags="${cppflags} -Wall -ansi -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual"
+  cppflags="${cppflags} -W -Wall -ansi -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual"
   eval c++ -o tools_test_${exa} ${cppflags} ${files}
 fi

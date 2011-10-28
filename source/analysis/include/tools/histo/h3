@@ -35,27 +35,27 @@ public:
   }
 
 public:
-  inline bool multiply(TW aFactor){
+  bool multiply(TW aFactor){
     if(!parent::base_multiply(aFactor)) return false;
     this->update_fast_getters();
     return true;
   }
-  inline bool scale(TW aFactor) {return multiply(aFactor);}
+  bool scale(TW aFactor) {return multiply(aFactor);}
 
-  inline void copy_from_data(const histo_data<TC,TN,TW>& a_from) {
+  void copy_from_data(const histo_data<TC,TN,TW>& a_from) {
     parent::base_from_data(a_from);
   }
-  inline histo_data<TC,TN,TW> get_histo_data() const {
+  histo_data<TC,TN,TW> get_histo_data() const {
     return parent::base_get_data();
   }
 
-  inline bool reset() {
+  bool reset() {
     parent::base_reset();
     this->update_fast_getters();
     return true;
   }
 
-  inline bool fill(TC aX,TC aY,TC aZ,TW aWeight = 1) {
+  bool fill(TC aX,TC aY,TC aZ,TW aWeight = 1) {
     //m_coords[0] = aX;
     //m_coords[1] = aY;
     //m_coords[2] = aZ;
@@ -117,24 +117,24 @@ public:
     return true;
   }
 
-  inline bool add(const h3& a_histo){
+  bool add(const h3& a_histo){
     parent::base_add(a_histo);
     this->update_fast_getters();
     return true;
   }
-  inline bool subtract(const h3& a_histo){
+  bool subtract(const h3& a_histo){
     parent::base_subtract(a_histo);
     this->update_fast_getters();
     return true;
   }
 
-  inline bool multiply(const h3& a_histo) {  
+  bool multiply(const h3& a_histo) {  
     if(!parent::base_multiply(a_histo)) return false;
     this->update_fast_getters();
     return true;
   }
   
-  inline bool divide(const h3& a_histo) {
+  bool divide(const h3& a_histo) {
     if(!parent::base_divide(a_histo)) return false;
     this->update_fast_getters();
     return true;
@@ -143,12 +143,12 @@ public:
 public:
 /*
   // Slices :
-  inline h2d* slice_xy(int aKbeg,int aKend) const;
-  inline h2d* slice_yz(int aIbeg,int aIend) const;
-  inline h2d* slice_xz(int aJbeg,int aJend) const;
+  h2d* slice_xy(int aKbeg,int aKend) const;
+  h2d* slice_yz(int aIbeg,int aIend) const;
+  h2d* slice_xz(int aJbeg,int aJend) const;
 */
 public:
-  inline h3(const std::string& a_title,
+  h3(const std::string& a_title,
                      bn_t aXnumber,TC aXmin,TC aXmax,
                      bn_t aYnumber,TC aYmin,TC aYmax,
                      bn_t aZnumber,TC aZmin,TC aZmax)
@@ -157,7 +157,7 @@ public:
                   aZnumber,aZmin,aZmax)
   {}
 
-  inline h3(const std::string& a_title,
+  h3(const std::string& a_title,
                      const std::vector<TC>& aEdgesX,
                      const std::vector<TC>& aEdgesY,
                      const std::vector<TC>& aEdgesZ)
@@ -166,8 +166,8 @@ public:
 
   virtual ~h3(){}
 public:
-  inline h3(const h3& a_from): parent(a_from){}
-  inline h3& operator=(const h3& a_from){
+  h3(const h3& a_from): parent(a_from){}
+  h3& operator=(const h3& a_from){
     parent::operator=(a_from);
     return *this;
   }

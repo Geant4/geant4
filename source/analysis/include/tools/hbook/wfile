@@ -21,7 +21,7 @@ namespace hbook {
 
 class wfile {
 public:
-  inline wfile(std::ostream& a_out,const std::string& a_file,
+  wfile(std::ostream& a_out,const std::string& a_file,
                unsigned int a_unit = 1,bool a_verbose = false)
   :m_out(a_out)
   ,m_verbose(a_verbose)
@@ -71,7 +71,7 @@ public:
     m_unit = a_unit;
     m_is_valid = true;
   }
-  inline virtual ~wfile() {
+  virtual ~wfile() {
     if(m_verbose) {
       m_out << "tools::hbook::wfile::~wfile : cleanup..." << std::endl;
     }
@@ -102,12 +102,12 @@ public:
     }
   }
 private:
-  inline wfile(const wfile& a_from):m_out(a_from.m_out){}
-  inline wfile& operator=(const wfile&){return *this;}
+  wfile(const wfile& a_from):m_out(a_from.m_out){}
+  wfile& operator=(const wfile&){return *this;}
 public:
-  inline const std::string& store_name() const {return m_file_name;}
-  inline bool is_valid() const {return m_is_valid;}
-  inline bool write() {
+  const std::string& store_name() const {return m_file_name;}
+  bool is_valid() const {return m_is_valid;}
+  bool write() {
     if(!m_is_valid) return false;
 
     std::string pwd = CHPWD();
@@ -123,7 +123,7 @@ public:
 
     return true;
   }
-  inline bool close() {
+  bool close() {
     if(!m_is_valid) return true; //done or not opened.
     CHREND(m_dir);
 #ifdef WIN32
@@ -136,12 +136,12 @@ public:
     return true;
   }
 
-  inline bool cd_home(){
+  bool cd_home(){
     if(!m_is_valid) return false;
     CHCDIR("//PAWC/"+m_dir," ");
     return true;
   }
-  inline bool cd_up(){
+  bool cd_up(){
     if(!m_is_valid) return false;
 
     std::string pwd = CHPWD();  // pwd should be //PAWC/LUN<unit>/<something>
@@ -173,7 +173,7 @@ public:
     return true;
   }
 
-  inline bool mkdir(const std::string& a_name){
+  bool mkdir(const std::string& a_name){
     // create a directory under
     //   //LUN<unit>/<something>
     // and 
@@ -225,7 +225,7 @@ public:
 
     return true;
   }
-  inline bool mkcd(const std::string& a_name){
+  bool mkcd(const std::string& a_name){
     if(!mkdir(a_name)) return false;
     CHCDIR(a_name," ");
     return true;

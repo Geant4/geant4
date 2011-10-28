@@ -17,8 +17,8 @@ class args {
 public:
   typedef std::pair<std::string,std::string> arg;
 public:
-  inline args(){}
-  inline args(int a_argc,char* a_argv[]){
+  args(){}
+  args(int a_argc,char* a_argv[]){
     for(int index=0;index<a_argc;index++) {
       std::string s(a_argv[index]);
       std::string::size_type pos = s.find('=');
@@ -32,33 +32,33 @@ public:
       }     
     }
   }
-  inline args(const std::vector<std::string>& a_args){add(a_args);}
-  inline args(const std::vector<arg>& a_args):m_args(a_args){}
-  inline args(const std::string& a_args,const std::string& a_sep = " ",bool a_strip = false){
+  args(const std::vector<std::string>& a_args){add(a_args);}
+  args(const std::vector<arg>& a_args):m_args(a_args){}
+  args(const std::string& a_args,const std::string& a_sep = " ",bool a_strip = false){
     std::vector<std::string> args;
     words(a_args,a_sep,false,args);  
     add(args,a_strip);
   }
   virtual ~args(){}
 public:
-  inline args(const args& a_from):m_args(a_from.m_args){}
-  inline args& operator=(const args& a_from){
+  args(const args& a_from):m_args(a_from.m_args){}
+  args& operator=(const args& a_from){
     m_args = a_from.m_args;
     return *this;
   }
 public:
-  inline const std::vector<arg>& get_args() const {return m_args;}
+  const std::vector<arg>& get_args() const {return m_args;}
 
-  inline bool is_arg(const std::string& a_string) const {
+  bool is_arg(const std::string& a_string) const {
     for(std::vector<arg>::const_iterator it = m_args.begin();
         it!=m_args.end();++it) {
       if((*it).first==a_string) return true;
     }
     return false;
   }
-  inline unsigned int size() const {return m_args.size();}
-  inline unsigned int number() const {return m_args.size();} //back comp.
-  inline bool find(const std::string& a_key,std::string& a_value) const {
+  unsigned int size() const {return m_args.size();}
+  unsigned int number() const {return m_args.size();} //back comp.
+  bool find(const std::string& a_key,std::string& a_value) const {
     for(std::vector<arg>::const_iterator it = m_args.begin();
         it!=m_args.end();++it) {
       if((*it).first==a_key) {
@@ -69,7 +69,7 @@ public:
     a_value.clear();
     return false;
   }
-  inline std::vector<std::string> find(const std::string& a_key) const {
+  std::vector<std::string> find(const std::string& a_key) const {
     std::vector<std::string> vals;
     for(std::vector<arg>::const_iterator it = m_args.begin();
       it!=m_args.end();++it) {
@@ -77,18 +77,18 @@ public:
     }
     return vals;
   }
-  inline bool find(const std::string& a_string,bool& a_value) const {
+  bool find(const std::string& a_string,bool& a_value) const {
     std::string s;
     if(!find(a_string,s)) {a_value = false;return false;}
     return to(s,a_value);
   }
   template <class aT>
-  inline bool find(const std::string& a_string,aT& a_value) const {
+  bool find(const std::string& a_string,aT& a_value) const {
     std::string s;
-    if(!find(a_string,s)) {a_value = 0;return false;}
+    if(!find(a_string,s)) {a_value = aT();return false;}
     return to<aT>(s,a_value);
   }
-  inline std::vector<std::string> tovector() const {
+  std::vector<std::string> tovector() const {
     // Return a vector of string <name=value>
     std::vector<std::string> vec;
     for(std::vector<arg>::const_iterator it = m_args.begin();
@@ -106,7 +106,7 @@ public:
     return vec;
   }
 
-  inline bool add(const std::string& a_key,const std::string& a_value,bool a_override = true){
+  bool add(const std::string& a_key,const std::string& a_value,bool a_override = true){
     if(a_override) {
       for(std::vector<arg>::iterator it = m_args.begin();
           it!=m_args.end();++it) {
@@ -121,7 +121,7 @@ public:
     return true;
   }
 
-  inline void add(const std::vector<std::string>& a_args,bool a_strip = false) {
+  void add(const std::vector<std::string>& a_args,bool a_strip = false) {
     for(std::vector<std::string>::const_iterator it = a_args.begin();
         it!=a_args.end();++it) {
       std::vector<std::string> ws;
@@ -142,7 +142,7 @@ public:
     }
   }
 
-  inline int remove(const std::string& a_key){
+  int remove(const std::string& a_key){
     unsigned int nbeg = m_args.size();
     for(std::vector<arg>::iterator it = m_args.begin();it!=m_args.end();) {
       if(a_key==(*it).first) {
@@ -154,9 +154,9 @@ public:
     return nbeg - m_args.size();
   }
 
-  inline void remove_first(){m_args.erase(m_args.begin());}
+  void remove_first(){m_args.erase(m_args.begin());}
 
-  inline bool last(std::string& a_key,std::string& a_value) const {
+  bool last(std::string& a_key,std::string& a_value) const {
     a_key.clear();
     a_value.clear();
     if(m_args.empty()) return false;
@@ -165,7 +165,7 @@ public:
     return true;
   }
   
-  inline bool file(std::string& a_file) const {
+  bool file(std::string& a_file) const {
     std::string slast;
     std::string s;
     if((m_args.size()>1) //first arg is the program name !
@@ -180,7 +180,7 @@ public:
     }
   }
   
-  inline std::vector<std::string> files(bool a_skip_first = true) const {
+  std::vector<std::string> files(bool a_skip_first = true) const {
     // Get the serie of trailing args not beginning with '-'
     // and without a value (not of the form [-]xxx=yyy). 
     // Note that an argument like that in between arguments
@@ -198,7 +198,7 @@ public:
     }
     return files;
   }  
-  inline bool argcv(int& a_argc,char**& a_argv) const {
+  bool argcv(int& a_argc,char**& a_argv) const {
     // If using with :
     //   int argc;
     //   char** argv;
@@ -206,8 +206,8 @@ public:
     // you can delete with :
     //   args.delete_argcv(argc,argv);
     if(m_args.empty()) {a_argc = 0;a_argv = 0;return true;}
-    typedef char* cstring;
-    cstring* av = new cstring[m_args.size()];
+    typedef char* cstr_t;
+    cstr_t* av = new cstr_t[m_args.size()];
     if(!av) {a_argc = 0;a_argv = 0;return false;}
     a_argv = av;
     for(std::vector<arg>::const_iterator it = m_args.begin();
@@ -234,13 +234,13 @@ public:
     a_argc = (int)m_args.size();
     return true;
   }
-  inline void delete_argcv(int& a_argc,char**& a_argv) const {
+  void delete_argcv(int& a_argc,char**& a_argv) const {
     for(int index=0;index<a_argc;index++) delete [] a_argv[index];
     delete [] a_argv;
     a_argc = 0;
     a_argv = 0;
   }
-  inline bool known_options(const std::vector<std::string>& a_opts) const {
+  bool known_options(const std::vector<std::string>& a_opts) const {
     for(std::vector<arg>::const_iterator it = m_args.begin();
         it!=m_args.end();++it) {
       if((*it).first.find('-')==0) { //find '-' at first pos.
@@ -258,7 +258,7 @@ public:
     return true;
   }
 
-  inline void files_at_end(bool a_skip_first = true) {
+  void files_at_end(bool a_skip_first = true) {
     // reorder to have "file" arguments at end.
     if(m_args.empty()) return;
     std::vector<arg> args;
@@ -288,7 +288,7 @@ public:
   }
 
   //NOTE : print is a Python keyword.
-  inline void dump(std::ostream& a_out) const {
+  void dump(std::ostream& a_out) const {
     for(std::vector<arg>::const_iterator it = m_args.begin();
         it!=m_args.end();++it) {
       a_out << "key = " << sout((*it).first)

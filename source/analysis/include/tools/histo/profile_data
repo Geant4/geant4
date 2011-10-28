@@ -12,7 +12,7 @@ namespace histo {
 template <class TC,class TN,class TW,class TV>
 class profile_data : public histo_data<TC,TN,TW> {
 public:
-  inline profile_data()
+  profile_data()
   : histo_data<TC,TN,TW>()
   ,m_is_profile(true)
   ,m_cut_v(false)
@@ -20,7 +20,7 @@ public:
   ,m_max_v(0)
   {}
 
-  inline profile_data(const histo_data<TC,TN,TW>& a_from)
+  profile_data(const histo_data<TC,TN,TW>& a_from)
   : histo_data<TC,TN,TW>(a_from)
   ,m_is_profile(false)
   ,m_cut_v(false)
@@ -29,7 +29,7 @@ public:
   {}
 
 public:
-  inline profile_data(const profile_data& a_from)
+  profile_data(const profile_data& a_from)
   : histo_data<TC,TN,TW>(a_from)
   ,m_is_profile(a_from.m_is_profile)
   ,m_bin_Svw(a_from.m_bin_Svw)
@@ -39,7 +39,7 @@ public:
   ,m_max_v(a_from.m_max_v)
   {}
 
-  inline profile_data& operator=(const profile_data& a_from) {
+  profile_data& operator=(const profile_data& a_from) {
     histo_data<TC,TN,TW>::operator=(a_from);
     m_is_profile = a_from.m_is_profile;
     m_bin_Svw = a_from.m_bin_Svw;
@@ -53,7 +53,7 @@ public:
   virtual ~profile_data(){}
 
 public:
-  inline profile_data& operator=(const histo_data<TC,TN,TW>& a_from) {
+  profile_data& operator=(const histo_data<TC,TN,TW>& a_from) {
     //for Rio_THisogram.
     histo_data<TC,TN,TW>::operator=(a_from);
     m_is_profile = false;

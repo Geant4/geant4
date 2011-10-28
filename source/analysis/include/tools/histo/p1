@@ -54,7 +54,7 @@ public:
   }
 
 public:
-  inline bool multiply(TW aFactor){
+  bool multiply(TW aFactor){
     if(!parent::base_multiply(aFactor)) return false;
     for(bn_t ibin=0;ibin<parent::m_bin_number;ibin++) {
       m_bin_Svw[ibin] *= aFactor;
@@ -62,22 +62,22 @@ public:
     this->update_fast_getters();
     return true;
   }
-  inline bool scale(TW aFactor) {return multiply(aFactor);}
+  bool scale(TW aFactor) {return multiply(aFactor);}
 
-  inline TV bin_Svw(int aI) const {
+  TV bin_Svw(int aI) const {
     if(parent::m_bin_number==0) return 0;
     bn_t offset;
     if(!parent::m_axes[0].in_range_to_absolute_index(aI,offset)) return 0;
     return parent::m_bin_Svw(offset);
   }
-  inline TV bin_Sv2w(int aI) const {
+  TV bin_Sv2w(int aI) const {
     if(parent::m_bin_number==0) return 0;
     bn_t offset;
     if(!parent::m_axes[0].in_range_to_absolute_index(aI,offset)) return 0;
     return parent::m_bin_Sv2w(offset);
   }
 
-  inline bool reset() {
+  bool reset() {
     parent::base_reset();
     for(bn_t ibin=0;ibin<parent::m_bin_number;ibin++) {
       m_bin_Svw[ibin] = 0;
@@ -87,7 +87,7 @@ public:
     return true;
   }
 
-  inline void copy_from_data(const profile_data<TC,TN,TW,TV>& a_from) {
+  void copy_from_data(const profile_data<TC,TN,TW,TV>& a_from) {
     parent::base_from_data(a_from);
     m_bin_Svw = a_from.m_bin_Svw;
     m_bin_Sv2w = a_from.m_bin_Sv2w;
@@ -95,7 +95,7 @@ public:
     m_min_v = a_from.m_min_v;
     m_max_v = a_from.m_max_v;
   }
-  inline profile_data<TC,TN,TW,TV> get_histo_data() const {
+  profile_data<TC,TN,TW,TV> get_histo_data() const {
     profile_data<TC,TN,TW,TV> hd(parent::base_get_data());
     hd.m_is_profile = true;
     hd.m_bin_Svw = m_bin_Svw;
@@ -106,7 +106,7 @@ public:
     return hd;
   }
 
-  inline bool fill(TC aX,TV aV,TW aWeight = 1) {
+  bool fill(TC aX,TV aV,TW aWeight = 1) {
     //m_coords[0] = aX;
     //return fill_bin(m_coords,aV,aWeight);
 
@@ -137,7 +137,7 @@ public:
     return true;
   }
 
-  inline TV bin_rms_value(int aI) const {
+  TV bin_rms_value(int aI) const {
     if(parent::m_bin_number==0) return 0;
     bn_t offset;
     if(!parent::m_axes[0].in_range_to_absolute_index(aI,offset)) return 0;
@@ -150,7 +150,7 @@ public:
     return ::sqrt(::fabs((sv2w / sw) - mean * mean));
   }
 
-  inline bool add(const p1& a_histo){
+  bool add(const p1& a_histo){
     parent::base_add(a_histo);
     for(bn_t ibin=0;ibin<parent::m_bin_number;ibin++) {
       m_bin_Svw[ibin] += a_histo.m_bin_Svw[ibin];      
@@ -159,7 +159,7 @@ public:
     this->update_fast_getters();
     return true;
   }
-  inline bool subtract(const p1& a_histo){
+  bool subtract(const p1& a_histo){
     parent::base_subtract(a_histo);
     for(bn_t ibin=0;ibin<parent::m_bin_number;ibin++) {
       m_bin_Svw[ibin] -= a_histo.m_bin_Svw[ibin];      
@@ -169,7 +169,7 @@ public:
     return true;
   }
 
-  inline bool gather_bins(unsigned int a_factor) { //for exa 2,3.
+  bool gather_bins(unsigned int a_factor) { //for exa 2,3.
     if(!a_factor) return false;
 
     // actual bin number must be a multiple of a_factor.
@@ -245,12 +245,12 @@ public:
     return true;
   }
 
-  inline bool cut_v() const {return m_cut_v;}
-  inline TV min_v() const {return m_min_v;}
-  inline TV max_v() const {return m_max_v;}
+  bool cut_v() const {return m_cut_v;}
+  TV min_v() const {return m_min_v;}
+  TV max_v() const {return m_max_v;}
 
 public:
-  inline p1(const std::string& a_title,
+  p1(const std::string& a_title,
                    bn_t aXnumber,TC aXmin,TC aXmax)
   : parent(a_title,aXnumber,aXmin,aXmax)
   ,m_cut_v(false)
@@ -261,7 +261,7 @@ public:
     m_bin_Sv2w.resize(parent::m_bin_number,0);
   }
 
-  inline p1(const std::string& a_title,
+  p1(const std::string& a_title,
                    bn_t aXnumber,TC aXmin,TC aXmax,
                    TV aVmin,TV aVmax)
   : parent(a_title,aXnumber,aXmin,aXmax)
@@ -273,7 +273,7 @@ public:
     m_bin_Sv2w.resize(parent::m_bin_number,0);
   }
 
-  inline p1(const std::string& a_title,
+  p1(const std::string& a_title,
                    const std::vector<TC>& aEdges)
   : parent(a_title,aEdges)
   ,m_cut_v(false)
@@ -284,7 +284,7 @@ public:
     m_bin_Sv2w.resize(parent::m_bin_number,0);
   }
 
-  inline p1(const std::string& a_title,
+  p1(const std::string& a_title,
                    const std::vector<TC>& aEdges,
                    TV aVmin,TV aVmax)
   : parent(a_title,aEdges) 
@@ -298,7 +298,7 @@ public:
 
   virtual ~p1(){}
 public:
-  inline p1(const p1& a_from)
+  p1(const p1& a_from)
   : parent(a_from)
   ,m_cut_v(a_from.m_cut_v)
   ,m_min_v(a_from.m_min_v)
@@ -306,7 +306,7 @@ public:
   ,m_bin_Svw(a_from.m_bin_Svw)
   ,m_bin_Sv2w(a_from.m_bin_Sv2w)
   {}
-  inline p1& operator=(const p1& a_from){
+  p1& operator=(const p1& a_from){
     parent::operator=(a_from);
     m_cut_v = a_from.m_cut_v;
     m_min_v = a_from.m_min_v;
@@ -316,8 +316,8 @@ public:
     return *this;
   }
 public:
-  inline const std::vector<TV>& bins_sum_vw() const {return m_bin_Svw;}
-  inline const std::vector<TV>& bins_sum_v2w() const {return m_bin_Sv2w;}
+  const std::vector<TV>& bins_sum_vw() const {return m_bin_Svw;}
+  const std::vector<TV>& bins_sum_v2w() const {return m_bin_Sv2w;}
 protected:
   bool m_cut_v;
   TV m_min_v;

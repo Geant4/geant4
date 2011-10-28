@@ -12,20 +12,18 @@ namespace tools {
 namespace wroot {
 
 class basket : public virtual ibo, public key {
-  static const uint32 START_BIG_FILE = 2000000000;
-  static const uint32 kDisplacementMask = 0xFF000000;
-  static const uint32 kMAXBUF = 0xffffff;
+  static uint32 START_BIG_FILE() {return 2000000000;}
 public:
-  inline static const std::string& s_class() {
+  static const std::string& s_class() {
     static const std::string s_v("tools::wroot::basket");
     return s_v;
   }
 public: //ibo
-  inline virtual const std::string& store_cls() const {
+  virtual const std::string& store_cls() const {
     static const std::string s_v("TBasket");
     return s_v;
   }
-  inline virtual bool stream(buffer& a_buffer) const {
+  virtual bool stream(buffer& a_buffer) const {
     // in principle we pass here only for the last basket
     // of a branch when it is streamed from branch::stream().
 
@@ -76,6 +74,15 @@ public: //ibo
       }
     }
  
+    if(m_data.to_displace()) {
+      //NOTE : how / when handle the displacements ?
+      m_file.out() << "tools::wroot::basket::stream :" 
+                   << " WARNING : m_data buffer has offsets to displace."
+                   << std::endl;
+      //if(!const_cast<basket&>(*this).m_data.displace_mapped(m_key_length))
+      //  return false; //???
+    }
+
     buffer bref(m_file.out(),m_file.byte_swap(),256);
     if(!_stream_header(bref)) return false; //then header stored twice !
     //if(bref.length()!=m_key_length) {}
@@ -85,7 +92,7 @@ public: //ibo
     return true;
   }
 public:
-  inline basket(ifile& a_file,
+  basket(ifile& a_file,
                 seek a_seek_parent_dir,
                 const std::string& a_object_name,
                 const std::string& a_object_title,
@@ -109,7 +116,7 @@ public:
 
     if(m_nev_buf_size) m_entry_offset = new uint32[m_nev_buf_size];
   }
-  inline virtual ~basket(){
+  virtual ~basket(){
     delete [] m_entry_offset;
     delete [] m_displacement;
     m_entry_offset = 0;
@@ -119,7 +126,7 @@ public:
 #endif
   }
 protected:
-  inline basket(const basket& a_from)
+  basket(const basket& a_from)
   : ibo(a_from)
   ,key(a_from)
   ,m_data(m_file.out(),m_file.byte_swap(),256)
@@ -133,7 +140,7 @@ protected:
     mem::increment(s_class().c_str());
 #endif
   }
-  inline basket& operator=(const basket& a_from){
+  basket& operator=(const basket& a_from){
     key::operator=(a_from);
     m_nev_buf_size = a_from.m_nev_buf_size;
     m_nev = a_from.m_nev;
@@ -141,9 +148,9 @@ protected:
     return *this;
   }
 public:
-  inline buffer& datbuf() {return m_data;}
+  buffer& datbuf() {return m_data;}
 
-  inline bool update(uint32 a_offset) {
+  bool update(uint32 a_offset) {
     if(m_entry_offset) {
       if((m_nev+1)>=m_nev_buf_size) { //why +1 ?
         uint32 newsize = mx<uint32>(10,2*m_nev_buf_size);
@@ -183,7 +190,7 @@ public:
     return true;
   }
 
-  inline bool write_on_file(uint16 a_cycle,uint32& a_nbytes) {
+  bool write_on_file(uint16 a_cycle,uint32& a_nbytes) {
     // write m_data buffer into file.
     //NOTE : m_data does not contain the key at its head.
     //       At this point m_seek_key should be 0.
@@ -199,7 +206,7 @@ public:
 
     if(m_version>1000) {
     } else {
-      if(m_file.END()>START_BIG_FILE) {
+      if(m_file.END()>START_BIG_FILE()) {
         //GB : enforce m_version>1000 if m_version is still 2 but
         //     seek_key>START_BIG_FILE. If not doing that we shall
         //     write a big m_seek_key on a seek32 and then have
@@ -209,14 +216,6 @@ public:
         //             << " WARNING : pos>START_BIG_FILE."
         //             << std::endl;
 
-        //NOTE : we do not handle an object write map for the moment.
-        //if(!m_data.displace_mapped(8)) {
-        //  m_file.out() << "tools::wroot::basket::write_on_file : " 
-        //               << " displace_mapped failed."
-        //               << std::endl;
-        //  return false;
-        //}
-  
         m_version += 1000;
         m_key_length += 8;
   
@@ -258,6 +257,8 @@ public:
     m_object_size = m_data.length(); //uncompressed size.
 
     m_cycle = a_cycle;
+
+    if(!m_data.displace_mapped(m_key_length)) return false;
 
     char* kbuf = 0;
     uint32 klen = 0;
@@ -307,7 +308,7 @@ public:
     return true;
   }
 protected:
-  inline uint32 header_record_size(uint32 a_version) const {
+  uint32 header_record_size(uint32 a_version) const {
     // header only.
     uint32 nbytes = key::record_size(a_version);
 
@@ -320,7 +321,7 @@ protected:
 
     return nbytes;
   }
-  inline bool _stream_header(buffer& a_buffer,char a_flag = 0) const {
+  bool _stream_header(buffer& a_buffer,char a_flag = 0) const {
    {uint32 l = key::record_size(m_version);
     if((a_buffer.length()+l)>a_buffer.size()) {
       if(!a_buffer.expand(a_buffer.size()+l)) return false;

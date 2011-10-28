@@ -41,7 +41,7 @@ public:
   template <class T>
   class column : public virtual icol {
   public:
-    inline static const std::string& s_class() {
+    static const std::string& s_class() {
       static const std::string s_v
         ("tools::hbook::wntuple::column<"+tools::stype(T())+">");
       return s_v;
@@ -54,29 +54,29 @@ public:
     virtual const std::string& s_cls() const {return s_class();}
     virtual const std::string& name() const {return m_name;}
   public:
-    inline column(const std::string& a_name)
+    column(const std::string& a_name)
     :m_name(a_name),m_tmp(0)
     {}
-    inline virtual ~column(){}
+    virtual ~column(){}
   protected:
-    inline column(const column& a_from)
+    column(const column& a_from)
     :icol(a_from),m_name(a_from.m_name),m_tmp(a_from.m_tmp)
     {}
-    inline column& operator=(const column& a_from){
+    column& operator=(const column& a_from){
       m_name = a_from.m_name;
       m_tmp = a_from.m_tmp;
       return *this;
     }
   public:
-    inline void set_address(T* a_pos) {m_tmp = a_pos;}
-    inline bool fill(const T& a_value) {*m_tmp = a_value;return true;}
+    void set_address(T* a_pos) {m_tmp = a_pos;}
+    bool fill(const T& a_value) {*m_tmp = a_value;return true;}
   protected:
     std::string m_name;
     T* m_tmp;
   };
   
 public:
-  inline wntuple(int a_id,const std::string& a_title)
+  wntuple(int a_id,const std::string& a_title)
   :m_path(CHPWD()),m_id(a_id),m_path_file(CHPWD())
   {
     // WARNING : the below assumes that we are under //PAWC/<something>
@@ -86,7 +86,7 @@ public:
     CHBNT(m_id,a_title," ");
     cd_end();
   }
-  inline virtual ~wntuple(){
+  virtual ~wntuple(){
     cd_beg();
     CHDELET(m_id);
     cd_end();
@@ -94,17 +94,17 @@ public:
   }
 protected:
   //Can we copy the HBOOK object ?
-  inline wntuple(const wntuple& a_from)
+  wntuple(const wntuple& a_from)
   :m_path(a_from.m_path),m_id(a_from.m_id)
   {}
-  inline wntuple& operator=(const wntuple& a_from){
+  wntuple& operator=(const wntuple& a_from){
     m_path = a_from.m_path;
     m_id = a_from.m_id;
     return *this;
   }
 public:
   template <class T>
-  inline column<T>* create_column(const std::string& a_name) {
+  column<T>* create_column(const std::string& a_name) {
     if(tools::find_named<icol>(m_cols,a_name)) return 0;
 
     std::string block("blk"); //8 chars max.
@@ -134,7 +134,7 @@ public:
     return col;
   }
 
-  inline bool add_row() {
+  bool add_row() {
     cd_beg();
     CHFNT(m_id);
     cd_end();
@@ -142,19 +142,19 @@ public:
   }
 
   // optimization :
-  inline void add_row_beg() const {cd_beg();}
-  inline bool add_row_fast() {CHFNT(m_id);return true;}
-  inline void add_row_end() const {cd_end();}
+  void add_row_beg() const {cd_beg();}
+  bool add_row_fast() {CHFNT(m_id);return true;}
+  void add_row_end() const {cd_end();}
 
 
   template <class T>
-  inline column<T>* find_column(const std::string& a_name) {
+  column<T>* find_column(const std::string& a_name) {
     icol* col = tools::find_named<icol>(m_cols,a_name);
     if(!col) return 0;
     return tools::cast<icol, column<T> >(*col);
   }
 
-  //inline std::string title() const {
+  //std::string title() const {
   //  std::string title;
   //  int ncx,ncy;
   //  rarg xmin,xmax,ymin,ymax;
@@ -164,30 +164,30 @@ public:
   //  return title;
   //}
 
-  inline const std::vector<icol*>& columns() const {return m_cols;}
+  const std::vector<icol*>& columns() const {return m_cols;}
 
 protected:
-  inline static const std::string& h_type(int) {
+  static const std::string& h_type(int) {
     static const std::string s_v("I*4");
     return s_v;
   }
-  inline static const std::string& h_type(float) {
+  static const std::string& h_type(float) {
     static const std::string s_v("R*4");
     return s_v;
   }
-  inline static const std::string& h_type(double) {
+  static const std::string& h_type(double) {
     static const std::string s_v("R*8");
     return s_v;
   }
 
 protected:
-  inline void cd_beg() const{
+  void cd_beg() const{
     wntuple& self = const_cast<wntuple&>(*this);
     CHPWDF(self.m_tmp);
     CHCDIR(m_path," ");
     CHCDIR(m_path_file," "); // cd on file.
   }
-  inline void cd_end() const {CHCDIR(m_tmp," ");}
+  void cd_end() const {CHCDIR(m_tmp," ");}
 protected:
   std::string m_path;
   int m_id;

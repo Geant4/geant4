@@ -11,25 +11,25 @@ namespace hbook {
 
 class base_histo {
 protected:
-  inline base_histo(int aID):m_path(CHPWD()),m_id(aID){}
-  inline virtual ~base_histo(){}
+  base_histo(int aID):m_path(CHPWD()),m_id(aID){}
+  virtual ~base_histo(){}
 protected:
-  inline base_histo(const base_histo& aFrom)
+  base_histo(const base_histo& aFrom)
   :m_path(aFrom.m_path),m_id(aFrom.m_id){}
-  inline base_histo& operator=(const base_histo& aFrom){
+  base_histo& operator=(const base_histo& aFrom){
     m_path = aFrom.m_path;
     m_id = aFrom.m_id;
     return *this;
   }
 protected:
-  inline void cd_beg() const{
+  void cd_beg() const{
     base_histo& self = const_cast<base_histo&>(*this);
     CHPWDF(self.m_tmp);
     CHCDIR(m_path," ");
   }
-  inline void cd_end() const {CHCDIR(m_tmp," ");}
+  void cd_end() const {CHCDIR(m_tmp," ");}
 protected:
-  inline static int hindex(int aIndex,const hbook::axis& aAxis){
+  static int hindex(int aIndex,const hbook::axis& aAxis){
     if(aIndex==hbook::axis::UNDERFLOW_BIN) 
       return 0;
     else if(aIndex==hbook::axis::OVERFLOW_BIN) 

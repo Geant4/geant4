@@ -26,7 +26,7 @@ inline T power(const T& a_A,unsigned int a_B){
 }
 
 // for Lib/ExpFunc.
-inline bool in_domain_all(double a_x){return true;}
+inline bool in_domain_all(double){return true;}
 inline bool in_domain_log(double a_x){return (a_x>0?true:false);}
 inline bool in_domain_tan(double a_x){
   int n = int(a_x/half_pi());

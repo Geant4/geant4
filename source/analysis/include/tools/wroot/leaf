@@ -33,10 +33,10 @@ inline const std::string& leaf_store_class(double) {
 template <class T>
 class leaf : public base_leaf {
 public: //ibo
-  inline virtual const std::string& store_cls() const {
+  virtual const std::string& store_cls() const {
     return leaf_store_class(T());
   }
-  inline virtual bool stream(buffer& a_buffer) const {
+  virtual bool stream(buffer& a_buffer) const {
     unsigned int c;
     if(!a_buffer.write_version(1,c)) return false;
     if(!base_leaf::stream(a_buffer)) return false;
@@ -46,11 +46,11 @@ public: //ibo
     return true;
   }
 public: //base_leaf
-  inline virtual bool fill_basket(buffer& a_buffer) const {
+  virtual bool fill_basket(buffer& a_buffer) const {
     return a_buffer.write<T>(m_value);
   }
 public:
-  inline leaf(std::ostream& a_out,
+  leaf(std::ostream& a_out,
               wroot::branch& a_branch,
               const std::string& a_name,
               const std::string& a_title)
@@ -61,12 +61,12 @@ public:
     m_length = 1;
     m_length_type = sizeof(T);
   }
-  inline virtual ~leaf(){}
+  virtual ~leaf(){}
 protected:
-  inline leaf(const leaf& a_from): base_leaf(a_from){}
-  inline leaf& operator=(const leaf&){return *this;}
+  leaf(const leaf& a_from): base_leaf(a_from){}
+  leaf& operator=(const leaf&){return *this;}
 public:
-  inline void fill(const T& a_value) {m_value = a_value;}
+  void fill(const T& a_value) {m_value = a_value;}
 protected:
   T m_min;    //Minimum value if leaf range is specified
   T m_max;    //Maximum value if leaf range is specified

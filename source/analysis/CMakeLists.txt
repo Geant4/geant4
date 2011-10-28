@@ -41,6 +41,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
 # This isn't critical for building the analysis library.
 set(G4analysis_HEADERS
     include/g4analysis_defs.hh       
+    include/G4AnalysisVerbose.hh
     include/G4RootAnalysisManager.hh  
     include/G4XmlAnalysisManager.hh
     include/G4CsvAnalysisManager.hh
@@ -49,6 +50,7 @@ set(G4analysis_HEADERS
 
 # - Sources
 set(G4analysis_SOURCES
+    src/G4AnalysisVerbose.cc
     src/G4CsvAnalysisManager.cc
     src/G4VAnalysisManager.cc
     src/G4RootAnalysisManager.cc

@@ -17,6 +17,28 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 27 2011 G.Cosmo (analysis-V09-04-09)
+- Added workaround to use 'this' pointer for internal calls in histo/b1,
+  to allow for compilation on Xcode on MacOX Lion.
+
+October 18 2011 I.Hrivnacova (analysis-V09-04-08)
+- Fix in CMakeLists.txt - adding new G4AnalysisVerbose.* files
+
+October 17 2011 I.Hrivnacova (analysis-V09-04-07)
+- Added support for H2 histograms
+- Added verbose printing (for levels: 0,1,2)
+- Updated to g4tools-1.0.2 (G. Barrand): 
+  - Removed "inline" keyword for the methods having code implementation
+    within classes. Dixit C++ docs, this kind of method is treated defacto 
+    as "inline". The keyword "inline" remains or for functions or for the 
+    few methods having their implementation outside the class.
+  - Fixed some warnings (coming from Coverity or some specific version of g++) 
+    about the lacking of calling the copy constructor of an inherited interface 
+    in some copy constructors.
+  - wroot/tree : have the streaming of the list of leaves. This permits to have
+    the ROOT/TTree::Scan() method working when looking for a ntuple
+    stored in a .root file as a TTree.
+
 September 15 2011 I.Hrivnacova (analysis-V09-04-06)
 - Added static access to specific manager classes.
 - Migration to G4Exception for all warning/error messages.

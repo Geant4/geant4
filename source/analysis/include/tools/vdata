@@ -10,7 +10,7 @@ namespace tools {
 
 template <class T>
 inline const T* vec_data(const std::vector<T>& a_vec) {
-#if TARGET_OS_IPHONE || WIN32 || __INTEL_COMPILER || !__GXX_EXPERIMENTAL_CXX0X__
+#if TARGET_OS_IPHONE || WIN32 || __INTEL_COMPILER
   const T& vf = a_vec.front();
   return &vf;
 #else
@@ -20,7 +20,7 @@ inline const T* vec_data(const std::vector<T>& a_vec) {
 
 template <class T>
 inline T* vec_data(std::vector<T>& a_vec) {
-#if TARGET_OS_IPHONE || WIN32 || __INTEL_COMPILER || !__GXX_EXPERIMENTAL_CXX0X__
+#if TARGET_OS_IPHONE || WIN32 || __INTEL_COMPILER
   T& vf = a_vec.front();
   return &vf;
 #else

@@ -13,17 +13,17 @@ namespace wroot {
 
 class bufobj : public virtual iobject,public buffer {
 public:
-  inline static const std::string& s_class() {
+  static const std::string& s_class() {
     static const std::string s_v("tools::wroot::bufobj");
     return s_v;
   }
 public:
-  inline virtual const std::string& name() const {return m_name;}
-  inline virtual const std::string& title() const {return m_title;}
-  inline virtual const std::string& store_class_name() const {
+  virtual const std::string& name() const {return m_name;}
+  virtual const std::string& title() const {return m_title;}
+  virtual const std::string& store_class_name() const {
     return m_store_cls;
   }
-  inline virtual bool stream(buffer& a_buffer) const {
+  virtual bool stream(buffer& a_buffer) const {
     return a_buffer.write_fast_array(m_buffer,length());
   }
 public:

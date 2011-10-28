@@ -19,17 +19,17 @@ namespace tools {
 
 class mem {
 public:
-  inline mem(){increment();}
-  inline virtual ~mem(){decrement();}
+  mem(){increment();}
+  virtual ~mem(){decrement();}
 private:
-  inline mem(const mem&){}
-  inline mem& operator=(const mem&){return *this;}
+  mem(const mem&){}
+  mem& operator=(const mem&){return *this;}
 public:
-  inline static void increment(){counter()++;}
-  inline static void decrement(){counter()--;}
+  static void increment(){counter()++;}
+  static void decrement(){counter()--;}
 
 
-  inline static void increment(const char* a_class){
+  static void increment(const char* a_class){
     counter()++;
     if(check_by_class()) {
       mem_list::iterator it;
@@ -43,7 +43,7 @@ public:
     }
   }
 
-  inline static void decrement(const char* a_class){
+  static void decrement(const char* a_class){
     counter()--;
     if(check_by_class()) {
       mem_list::iterator it;
@@ -57,14 +57,14 @@ public:
     }
   }
 
-  inline static void set_check_by_class(bool a_value) {
+  static void set_check_by_class(bool a_value) {
     check_by_class() = a_value;
   }
 /*
   static void reset();
 */
 
-  inline static void balance(std::ostream& a_out){
+  static void balance(std::ostream& a_out){
     if(counter()) {
       a_out << "tools::mem::balance :"
             << " bad global object balance : " << counter() 
@@ -91,18 +91,18 @@ public:
     list().clear();
   }
 private:
-  inline static int& counter() {
+  static int& counter() {
     static int s_count = 0;
     return s_count;
   }
-  inline static bool& check_by_class() {
+  static bool& check_by_class() {
     static bool s_check_by_class = false;
     return s_check_by_class;
   }
 
   typedef std::list< std::pair<std::string,int> > mem_list;
 
-  inline static mem_list& list() {
+  static mem_list& list() {
     static mem_list s_list;
     return s_list;
   }

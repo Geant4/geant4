@@ -12,7 +12,7 @@ namespace randf {
 
 class flat {
 public:
-  inline float shoot() const {
+  float shoot() const {
     // Shoot random numbers in [0,1] according a flat distribution.
     float value  = (float)::rand();
     value /= (float)RAND_MAX;
@@ -33,7 +33,7 @@ public:
     return *this;
   }
 public:
-  inline float shoot() const {
+  float shoot() const {
     //  Shoot random numbers according a 
     // gaussian distribution of mean 0 and sigma 1.
     float v1,v2,r,fac;
@@ -64,7 +64,7 @@ public:
     return *this;
   }
 public:
-  inline float shoot() const {
+  float shoot() const {
     float rval = 2 * m_flat.shoot() - 1;
     float displ = 0.5f * m_gamma * ftan(rval * fhalf_pi());
     return m_mean + displ;
@@ -82,7 +82,7 @@ public:
   exp(const exp& a_from):m_rate(a_from.m_rate){}
   exp& operator=(const exp& a_from) {m_rate = a_from.m_rate;return *this;}
 public:
-  inline float shoot() const {
+  float shoot() const {
     float v;
     do {
       v = m_flat.shoot();

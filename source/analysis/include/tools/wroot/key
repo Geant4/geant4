@@ -19,14 +19,14 @@ namespace tools {
 namespace wroot {
 
 class key {
-  static const uint32 class_version = 2;
-  static const uint32 START_BIG_FILE = 2000000000;
-  inline static const std::string& s_class() {
+  static uint32 class_version() {return 2;}
+  static uint32 START_BIG_FILE() {return 2000000000;}
+  static const std::string& s_class() {
     static const std::string s_v("tools::wroot::key");
     return s_v;
   }
 public:
-  inline static unsigned int std_string_record_size(const std::string& x) {
+  static unsigned int std_string_record_size(const std::string& x) {
     // Returns size string will occupy on I/O buffer.
     if (x.size() > 254)
       return x.size()+sizeof(unsigned char)+sizeof(int);
@@ -34,7 +34,7 @@ public:
       return x.size()+sizeof(unsigned char);
   }
 public:
-  inline key(ifile& a_file,
+  key(ifile& a_file,
       seek a_seek_parent_dir,
       const std::string& a_object_name,
       const std::string& a_object_title,
@@ -45,7 +45,7 @@ public:
   ,m_buffer(0)
   // Record :
   ,m_nbytes(0)
-  ,m_version(class_version)
+  ,m_version(class_version())
   ,m_object_size(a_object_size)
   ,m_date(0)
   ,m_key_length(0)
@@ -61,11 +61,11 @@ public:
 #endif
 
     if(a_object_size) {
-      if(m_file.END()>START_BIG_FILE) m_version += 1000;
+      if(m_file.END()>START_BIG_FILE()) m_version += 1000;
     }
     if(m_version>1000) {
     } else {
-      if(a_seek_parent_dir>START_BIG_FILE) m_version += 1000;
+      if(a_seek_parent_dir>START_BIG_FILE()) m_version += 1000;
     }
 
     m_key_length = record_size(m_version);
@@ -81,29 +81,29 @@ public:
 #endif
   }
 protected:
-  inline key(const key& a_from):m_file(a_from.m_file){
+  key(const key& a_from):m_file(a_from.m_file){
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
   }
-  inline key& operator=(const key &){return *this;}
+  key& operator=(const key &){return *this;}
 public:
-  inline uint16 cycle() const {return m_cycle;}
-  inline void set_cycle(uint16 a_cycle) {m_cycle = a_cycle;}
+  uint16 cycle() const {return m_cycle;}
+  void set_cycle(uint16 a_cycle) {m_cycle = a_cycle;}
 
-  inline const std::string& object_name() const {return m_object_name;}
-  inline std::string object_name() {return m_object_name;}
+  const std::string& object_name() const {return m_object_name;}
+  std::string object_name() {return m_object_name;}
 
-  inline const std::string& object_class() const {return m_object_class;}
-  inline std::string object_class() {return m_object_class;}
+  const std::string& object_class() const {return m_object_class;}
+  std::string object_class() {return m_object_class;}
 
-  inline bool write_self() {
+  bool write_self() {
     char* buffer = m_buffer;
     wbuf wb(m_file.out(),m_file.byte_swap(),eob(),buffer);
     return to_buffer(wb);
   }
 
-  inline bool write_file(uint32& a_nbytes){
+  bool write_file(uint32& a_nbytes){
     if(!m_file.set_pos(m_seek_key)) {
       a_nbytes = 0;
       return false;
@@ -130,18 +130,18 @@ public:
     return true;
   }
 
-  inline void set_number_of_bytes(uint32 a_n) {m_nbytes = a_n;}
-  inline uint32 number_of_bytes() const {return m_nbytes;}
+  void set_number_of_bytes(uint32 a_n) {m_nbytes = a_n;}
+  uint32 number_of_bytes() const {return m_nbytes;}
 
-  inline uint32 object_size() const {return m_object_size;}
+  uint32 object_size() const {return m_object_size;}
 
-  inline seek seek_key() const {return m_seek_key;}
-  inline short key_length() const {return m_key_length;}
+  seek seek_key() const {return m_seek_key;}
+  short key_length() const {return m_key_length;}
 
-  inline char* data_buffer() {return m_buffer + m_key_length;}
-  inline const char* eob() const {return m_buffer + m_buf_size;}
+  char* data_buffer() {return m_buffer + m_key_length;}
+  const char* eob() const {return m_buffer + m_buf_size;}
 
-  inline bool to_buffer(wbuf& a_wb) const {
+  bool to_buffer(wbuf& a_wb) const {
     if(!a_wb.write(m_nbytes)) return false;
     short version = m_version;
     if(!a_wb.write(version)) return false;
@@ -154,7 +154,7 @@ public:
       if(!a_wb.write(m_seek_key)) return false;
       if(!a_wb.write(m_seek_parent_dir)) return false;
     } else {
-      if(m_seek_key>START_BIG_FILE) {
+      if(m_seek_key>START_BIG_FILE()) {
         m_file.out() << "tools::wroot::key::to_buffer :"
                      << " attempt to write big seek "
                      << m_seek_key << " on 32 bits."
@@ -162,7 +162,7 @@ public:
         return false;
       }
       if(!a_wb.write((seek32)m_seek_key)) return false;
-      if(m_seek_parent_dir>START_BIG_FILE) {
+      if(m_seek_parent_dir>START_BIG_FILE()) {
         m_file.out() << "tools::wroot::key::to_buffer :"
                      << " (2) attempt to write big seek "
                      << m_seek_parent_dir << " on 32 bits."
@@ -188,11 +188,11 @@ public:
   }
 
 protected:
-  inline static std::string sout(const std::string& a_string) {
+  static std::string sout(const std::string& a_string) {
     return std::string("\"")+a_string+"\"";
   }
 protected:
-  inline uint32 record_size(uint32 a_version) const {
+  uint32 record_size(uint32 a_version) const {
     // Return the size in bytes of the key header structure.
     uint32 nbytes = sizeof(m_nbytes);
     nbytes += sizeof(short);
@@ -213,7 +213,7 @@ protected:
     return nbytes;
   }
 
-  inline bool initialize(uint32 a_nbytes) {
+  bool initialize(uint32 a_nbytes) {
     uint32 nsize = m_key_length+a_nbytes;
 
     m_date = get_date();

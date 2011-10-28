@@ -35,6 +35,7 @@
 
 #include "tools/waxml/ntuple"
 #include "tools/histo/h1d"
+#include "tools/histo/h2d"
 
 #include <fstream>
 #include <vector>
@@ -57,6 +58,9 @@ class G4XmlAnalysisManager : public G4VAnalysisManager
     // Methods for handling histogrammes, ntuples
     virtual G4int CreateH1(const G4String& name, const G4String& title,
                            G4int nbins, G4double xmin, G4double xmax);
+    virtual G4int CreateH2(const G4String& name, const G4String& title,
+                           G4int nxbins, G4double xmin, G4double xmax, 
+                           G4int nybins, G4double ymin, G4double ymax);
                            
     virtual void  CreateNtuple(const G4String& name, const G4String& title);
     virtual G4int CreateNtupleIColumn(const G4String& name);
@@ -66,6 +70,8 @@ class G4XmlAnalysisManager : public G4VAnalysisManager
     
     // Methods to fill histogrammes, ntuples
     virtual G4bool FillH1(G4int id, G4double value, G4double weight = 1.0);
+    virtual G4bool FillH2(G4int id, G4double xvalue, G4double yvalue,
+                          G4double weight = 1.0);
     virtual G4bool FillNtupleIColumn(G4int id, G4int value);
     virtual G4bool FillNtupleFColumn(G4int id, G4float value);
     virtual G4bool FillNtupleDColumn(G4int id, G4double value);
@@ -73,6 +79,7 @@ class G4XmlAnalysisManager : public G4VAnalysisManager
     
     // Access methods
     virtual tools::histo::h1d* GetH1(G4int id, G4bool warn = true) const;
+    virtual tools::histo::h2d* GetH2(G4int id, G4bool warn = true) const;
     //tools::histo::h1d*  GetH1D(const G4String& name, G4bool warn = true) const;
         // later
         
@@ -94,6 +101,9 @@ class G4XmlAnalysisManager : public G4VAnalysisManager
 
     std::vector<tools::histo::h1d*>         fH1Vector;            
     std::map<G4String, tools::histo::h1d*>  fH1MapByName;
+    
+    std::vector<tools::histo::h2d*>         fH2Vector;            
+    std::map<G4String, tools::histo::h2d*>  fH2MapByName;
     
     G4String  fNtupleName;
     G4String  fNtupleTitle;

@@ -13,20 +13,20 @@ namespace tools {
 namespace wroot {
 
 class branch : public virtual ibo {
-  static const uint32 START_BIG_FILE = 2000000000;
-  //static const uint32 kDoNotProcess = (1<<10); // Active bit for branches
+  static uint32 START_BIG_FILE() {return 2000000000;}
+  //static uint32 kDoNotProcess() {return (1<<10);} // Active bit for branches
 #ifdef TOOLS_MEM
-  inline static const std::string& s_class() {
+  static const std::string& s_class() {
     static const std::string s_v("tools::wroot::branch");
     return s_v;
   }
 #endif
 public: //ibo
-  inline virtual const std::string& store_cls() const {
+  virtual const std::string& store_cls() const {
     static const std::string s_v("TBranch");
     return s_v;
   }
-  inline virtual bool stream(buffer& a_buffer) const {
+  virtual bool stream(buffer& a_buffer) const {
     unsigned int c;
     if(!a_buffer.write_version(8,c)) return false;
     if(!Named_stream(a_buffer,m_name,m_title)) return false;
@@ -66,9 +66,9 @@ public: //ibo
 
     char isBigFile = 1;
     //GB : begin
-    //if(fTree.directory().file().end()>RIO_START_BIG_FILE) isBigFile = 2;
+    //if(fTree.directory().file().end()>RIO_START_BIG_FILE()) isBigFile = 2;
    {for(uint32 i=0;i<m_max_baskets;i++) {
-      if(fBasketSeek[i]>START_BIG_FILE) {
+      if(fBasketSeek[i]>START_BIG_FILE()) {
         isBigFile = 2;
         break;
       }
@@ -80,7 +80,7 @@ public: //ibo
       if(!a_buffer.write_fast_array(fBasketSeek,m_max_baskets)) return false;
     } else {
       for(uint32 i=0;i<m_max_baskets;i++) {
-        if(fBasketSeek[i]>START_BIG_FILE) { //G.Barrand : add this test.
+        if(fBasketSeek[i]>START_BIG_FILE()) { //G.Barrand : add this test.
           m_out << "tools::wroot::branch::stream :"
                 << " attempt to write big Seek "
                 << fBasketSeek[i] << " on 32 bits."
@@ -100,7 +100,7 @@ public: //ibo
   }
 
 public:
-  inline branch(itree& a_tree,
+  branch(itree& a_tree,
                 const std::string& a_name,
                 const std::string& a_title)
   :m_tree(a_tree)
@@ -138,7 +138,7 @@ public:
                                    m_name,m_title,"TBasket",
                                    m_basket_size));
   }
-  inline virtual ~branch(){
+  virtual ~branch(){
     delete [] fBasketBytes;
     delete [] fBasketEntry;
     delete [] fBasketSeek;
@@ -150,24 +150,26 @@ public:
 #endif
   }
 protected:
-  inline branch(const branch& a_from)
+  branch(const branch& a_from)
   : ibo(a_from)
   ,m_tree(a_from.m_tree)
   ,m_out(a_from.m_out)
   {}
-  inline branch& operator=(const branch&){return *this;}
+  branch& operator=(const branch&){return *this;}
 public:
-  inline void set_basket_size(uint32 a_size) {m_basket_size = a_size;}
+  void set_basket_size(uint32 a_size) {m_basket_size = a_size;}
 
   template <class T>
-  inline leaf<T>* create_leaf(const std::string& a_name,
+  leaf<T>* create_leaf(const std::string& a_name,
                               const std::string& a_title){
     leaf<T>* lf = new leaf<T>(m_out,*this,a_name,a_title);
     m_leaves.push_back(lf);
     return lf;
   }
 
-  inline bool fill(uint32& a_nbytes) {
+  const std::vector<base_leaf*>& leaves() const {return m_leaves;}
+
+  bool fill(uint32& a_nbytes) {
     a_nbytes = 0;
 
     //FIXME if (TestBit(kDoNotProcess)) return 0;
@@ -232,7 +234,7 @@ public:
         //Increase BasketEntry buffer of a minimum of 10 locations
         // and a maximum of 50 per cent of current size
         uint32 newsize = mx<uint32>(10,uint32(1.5*m_max_baskets));
-        if(newsize>=START_BIG_FILE) {
+        if(newsize>=START_BIG_FILE()) {
           //we are going to have pb with uint32[] indexing.
           m_out << "tools::wroot::branch::fill :"
                 << " new size for fBasket[Bytes,Entry,Seek] arrays"
@@ -266,7 +268,7 @@ public:
     return true;
   }
 protected:
-  inline bool fill_leaves(buffer& a_buffer) {
+  bool fill_leaves(buffer& a_buffer) {
     std::vector<base_leaf*>::iterator it;
     for(it=m_leaves.begin();it!=m_leaves.end();++it) {
       if(!(*it)->fill_basket(a_buffer)) return false;

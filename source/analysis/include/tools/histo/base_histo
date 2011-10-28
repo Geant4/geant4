@@ -22,7 +22,7 @@ namespace histo {
 
 template <class TC,class TN,class TW,class TH>
 class base_histo {
-  inline static const std::string& s_class() {
+  static const std::string& s_class() {
     static const std::string s_v("tools::histo::base_histo");
     return s_v;
   }
@@ -32,7 +32,7 @@ public:
 protected:
   virtual TH get_bin_height(int) const = 0;  //histo/profile
 protected:
-  inline void base_from_data(const histo_data<TC,TN,TW>& a_from) {
+  void base_from_data(const histo_data<TC,TN,TW>& a_from) {
     m_title = a_from.m_title;
     m_dimension = a_from.m_dimension;
     m_bin_number = a_from.m_bin_number;
@@ -45,7 +45,7 @@ protected:
     m_axes = a_from.m_axes;
     //m_annotations = a_from.m_annotations;
   }
-  inline histo_data<TC,TN,TW> base_get_data() const {
+  histo_data<TC,TN,TW> base_get_data() const {
     histo_data<TC,TN,TW> hd;
     hd.m_title = m_title;
     hd.m_dimension = m_dimension;
@@ -61,7 +61,7 @@ protected:
     return hd;
   }
 protected:
-  inline base_histo()
+  base_histo()
   :m_dimension(0)
   ,m_bin_number(0)
   {
@@ -76,7 +76,7 @@ protected:
 #endif
   }
 protected:
-  inline base_histo(const base_histo& a_from)
+  base_histo(const base_histo& a_from)
   :m_title(a_from.m_title)
   ,m_dimension(a_from.m_dimension)
   ,m_bin_number(a_from.m_bin_number)
@@ -94,7 +94,7 @@ protected:
 #endif
   }
 
-  inline base_histo& operator=(const base_histo& a_from) {
+  base_histo& operator=(const base_histo& a_from) {
     m_title = a_from.m_title;
     m_dimension = a_from.m_dimension;
     m_bin_number = a_from.m_bin_number;
@@ -110,20 +110,20 @@ protected:
   }
 
 public:
-  inline const std::string& title() const {return m_title;}
-  inline std::string title() {return m_title;}
-  inline bool set_title(const std::string& aTitle){m_title = aTitle;return true;}
-  inline dim_t dimension() const {return m_dimension;}
+  const std::string& title() const {return m_title;}
+  std::string title() {return m_title;}
+  bool set_title(const std::string& a_title){m_title = a_title;return true;}
+  dim_t dimension() const {return m_dimension;}
 
-  inline TN entries() const { return get_entries();}
-  inline TN all_entries() const {
+  TN entries() const { return get_entries();}
+  TN all_entries() const {
     TN number = 0;
     for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
       number += m_bin_entries[ibin];
     }
     return number;
   }
-  inline TN extra_entries() const {
+  TN extra_entries() const {
     TN number = 0;
     for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
       if(is_out(ibin)) {
@@ -132,7 +132,7 @@ public:
     }
     return number;
   }
-  inline TW equivalent_bin_entries() const {
+  TW equivalent_bin_entries() const {
     TW sw = 0;
     TW sw2 = 0;
     for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
@@ -145,7 +145,7 @@ public:
     return (sw * sw)/sw2;
   }
   
-  inline TH sum_bin_heights() const {
+  TH sum_bin_heights() const {
     TH sh = 0;
     for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
       if(!is_out(ibin)) {
@@ -155,7 +155,7 @@ public:
     return sh;
   }
 
-  inline TH sum_all_bin_heights() const {
+  TH sum_all_bin_heights() const {
     TH sh = 0;
     for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
       sh += get_bin_height(ibin);
@@ -163,7 +163,7 @@ public:
     return sh;
   }
 
-  inline TH sum_extra_bin_heights() const {
+  TH sum_extra_bin_heights() const {
     TH sh = 0;
     for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
       if(is_out(ibin)) {
@@ -173,7 +173,7 @@ public:
     return sh;
   }
 
-  inline TH min_bin_height() const {
+  TH min_bin_height() const {
     TH value = 0;
     bool first = true;
     for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
@@ -190,7 +190,7 @@ public:
     return value;
   }
   
-  inline TH max_bin_height() const {
+  TH max_bin_height() const {
     TH value = 0;
     bool first = true;
     for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
@@ -210,7 +210,7 @@ public:
 protected:
   enum {AxisX=0,AxisY=1,AxisZ=2};
 
-  inline bool configure(dim_t a_dim,const std::vector<bn_t>& aNumbers,const std::vector<TC>& aMins,const std::vector<TC>& aMaxs) {
+  bool configure(dim_t a_dim,const std::vector<bn_t>& aNumbers,const std::vector<TC>& aMins,const std::vector<TC>& aMaxs) {
     // Clear :
     m_bin_entries.clear();
     m_bin_Sw.clear();
@@ -245,7 +245,7 @@ protected:
     return true;
   }
 
-  inline bool configure(dim_t a_dim,const std::vector< std::vector<TC> >& aEdges) {
+  bool configure(dim_t a_dim,const std::vector< std::vector<TC> >& aEdges) {
     // Clear :
     m_bin_entries.clear();
     m_bin_Sw.clear();
@@ -275,7 +275,7 @@ protected:
     return true;
   }
 
-  inline void base_reset() {
+  void base_reset() {
     // Reset content (different of clear that deallocate all internal things).
     for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
       m_bin_entries[ibin] = 0;
@@ -290,7 +290,7 @@ protected:
   }
 
 protected:
-  inline void base_allocate() {
+  void base_allocate() {
     dim_t iaxis;
     // Add two bins for the [under,out]flow data.
     bn_t n_bin = 1;
@@ -319,7 +319,7 @@ protected:
 
 public:
   // for BatchLab::Rio::TH::streamTH1 :
-  inline TN get_entries() const {
+  TN get_entries() const {
     TN number = 0;
     for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
       if(!is_out(ibin)) {
@@ -328,7 +328,7 @@ public:
     }
     return number;
   }
-  inline TW get_Sw() const {
+  TW get_Sw() const {
     TW sw = 0;
     for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
       if(!is_out(ibin)) {
@@ -338,7 +338,7 @@ public:
     return sw;
   }
 
-  inline TW get_Sw2() const {
+  TW get_Sw2() const {
     TW sw2 = 0;
     for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
       if(!is_out(ibin)) {
@@ -348,7 +348,7 @@ public:
     return sw2;
   }
 
-  inline bool get_ith_axis_Sxw(dim_t a_axis,TC& a_value) const {
+  bool get_ith_axis_Sxw(dim_t a_axis,TC& a_value) const {
     a_value = 0;
     if(a_axis>=m_dimension) return false;
     for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
@@ -359,7 +359,7 @@ public:
     return true;
   }
 
-  inline bool get_ith_axis_Sx2w(dim_t a_axis,TC& a_value) const {
+  bool get_ith_axis_Sx2w(dim_t a_axis,TC& a_value) const {
     a_value = 0;
     if(a_axis>=m_dimension) return false;
     for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
@@ -370,7 +370,7 @@ public:
     return true;
   }
 
-  inline TN get_all_entries() const {
+  TN get_all_entries() const {
     TN number = 0;
     for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
       number += m_bin_entries[ibin];
@@ -378,7 +378,7 @@ public:
     return number;
   }
 
-  inline void get_indices(bn_t aOffset,std::vector<int>& aIs) const {
+  void get_indices(bn_t aOffset,std::vector<int>& aIs) const {
     int offset = aOffset;
    {for(int iaxis=m_dimension-1;iaxis>=0;iaxis--) { 
       aIs[iaxis] = offset/m_axes[iaxis].m_offset;
@@ -395,7 +395,7 @@ public:
     }
   }
 
-  inline bool is_out(bn_t aOffset) const {
+  bool is_out(bn_t aOffset) const {
     int offset = aOffset;
     int index;
     for(int iaxis=m_dimension-1;iaxis>=0;iaxis--) { 
@@ -407,7 +407,7 @@ public:
     return false;
   }
 
-  inline bool get_offset(const std::vector<int>& aIs,bn_t& a_offset) const {
+  bool get_offset(const std::vector<int>& aIs,bn_t& a_offset) const {
     // aIs[iaxis] is given in in-range indexing :
     //  - [0,n[iaxis]-1] for in-range bins
     //  - UNDERFLOW_BIN for the iaxis underflow bin
@@ -426,28 +426,28 @@ public:
   }
 
   // to access data from methods :
-  inline const std::vector<TN>& bins_entries() const {return m_bin_entries;}
-  inline const std::vector<TW>& bins_sum_w() const {return m_bin_Sw;}
-  inline const std::vector<TW>& bins_sum_w2() const {return m_bin_Sw2;}
-  inline const std::vector< std::vector<TC> >& bins_sum_xw() const {return m_bin_Sxw;}
-  inline const std::vector< std::vector<TC> >& bins_sum_x2w() const {return m_bin_Sx2w;}
+  const std::vector<TN>& bins_entries() const {return m_bin_entries;}
+  const std::vector<TW>& bins_sum_w() const {return m_bin_Sw;}
+  const std::vector<TW>& bins_sum_w2() const {return m_bin_Sw2;}
+  const std::vector< std::vector<TC> >& bins_sum_xw() const {return m_bin_Sxw;}
+  const std::vector< std::vector<TC> >& bins_sum_x2w() const {return m_bin_Sx2w;}
 
 public:
-  inline const axis<TC>& get_axis(int aIndex) const {return m_axes[aIndex];}
-  inline bn_t get_bins() const {return m_bin_number;}
-  inline const std::string& get_title() const {return m_title;}
-  inline dim_t get_dimension() const {return m_dimension;}
-  inline bool is_valid() const {return (m_dimension?true:false);}
+  const axis<TC>& get_axis(int aIndex) const {return m_axes[aIndex];}
+  bn_t get_bins() const {return m_bin_number;}
+  const std::string& get_title() const {return m_title;}
+  dim_t get_dimension() const {return m_dimension;}
+  bool is_valid() const {return (m_dimension?true:false);}
 
 /*
 public: //annotations :
   typedef std::map<std::string,std::string> annotations_t;
-  inline const annotations_t& annotations() const {return m_annotations;}
-  inline annotations_t annotations() {return m_annotations;}
-  inline void add_annotation(const std::string& a_key,const std::string& a_value) {
+  const annotations_t& annotations() const {return m_annotations;}
+  annotations_t annotations() {return m_annotations;}
+  void add_annotation(const std::string& a_key,const std::string& a_value) {
     m_annotations[a_key] = a_value; //override if a_key already exists.
   }
-  inline bool annotation(const std::string& a_key,std::string& a_value) const {
+  bool annotation(const std::string& a_key,std::string& a_value) const {
     annotations_t::const_iterator it = m_annotations.find(a_key);
     if(it==m_annotations.end()) {a_value.clear();return false;}
     a_value = (*it).second;
@@ -455,7 +455,7 @@ public: //annotations :
   }
 */
 protected:
-  inline bool is_compatible(const base_histo& a_histo){
+  bool is_compatible(const base_histo& a_histo){
     if(m_dimension!=a_histo.m_dimension) return false;
     for(dim_t iaxis=0;iaxis<m_dimension;iaxis++) { 
       if(!m_axes[iaxis].is_compatible(a_histo.m_axes[iaxis])) return false;
@@ -463,7 +463,7 @@ protected:
     return true;
   }
 
-  inline void base_add(const base_histo& a_histo){
+  void base_add(const base_histo& a_histo){
     // The only histogram operation that makes sense.
     for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
       m_bin_entries[ibin] += a_histo.m_bin_entries[ibin];      
@@ -476,7 +476,7 @@ protected:
     }
   }
 
-  inline void base_subtract(const base_histo& a_histo) {
+  void base_subtract(const base_histo& a_histo) {
     //ill-defined operation. We keep that because of the "ill-defined past".
     // We build a new histo with one entry in each bin.
     for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
@@ -492,7 +492,7 @@ protected:
     }
   }
 
-  inline bool base_multiply(const base_histo& a_histo) {  
+  bool base_multiply(const base_histo& a_histo) {  
     //ill-defined operation. We keep that because of the "ill-defined past".
 
     // We build a new histo with one entry in each bin of weight : 
@@ -522,7 +522,7 @@ protected:
     return true;
   }
   
-  inline bool base_divide(const base_histo& a_histo) {
+  bool base_divide(const base_histo& a_histo) {
     //ill-defined operation. We keep that because of the "ill-defined past".
   
     // We build a new histo with one entry in each bin of weight : 
@@ -563,7 +563,7 @@ protected:
     return true;
   }
 
-  inline bool base_multiply(TW aFactor) {
+  bool base_multiply(TW aFactor) {
     if(aFactor<0) return false;
     TW factor2 = aFactor * aFactor;
     for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
@@ -577,7 +577,7 @@ protected:
     return true;
   }
 
-  inline bool get_ith_axis_mean(dim_t a_axis,TC& a_value) const {
+  bool get_ith_axis_mean(dim_t a_axis,TC& a_value) const {
     a_value = 0;
     if(a_axis>=m_dimension) return false;
     TW sw = 0;
@@ -593,7 +593,7 @@ protected:
     return true;
   }
 
-  inline bool get_ith_axis_rms(dim_t a_axis,TC& a_value) const {
+  bool get_ith_axis_rms(dim_t a_axis,TC& a_value) const {
     a_value = 0;
     if(a_axis>=m_dimension) return false;
     TW sw = 0;
@@ -612,7 +612,7 @@ protected:
     return true;
   }
 
-  inline TN get_bin_entries(const std::vector<int>& aIs) const {
+  TN get_bin_entries(const std::vector<int>& aIs) const {
     if(m_bin_number==0) return 0;
     bn_t offset;
     if(!get_offset(aIs,offset)) return 0;

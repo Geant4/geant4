@@ -37,7 +37,7 @@ public:
       m_leaf->branch().set_basket_size(a_size);
     }
   public:
-    inline column(tree& a_tree,
+    column(tree& a_tree,
                   const std::string& a_name,
                   const T& a_def)
     :m_tree(a_tree),m_leaf(0)
@@ -46,23 +46,23 @@ public:
       branch* br = m_tree.create_branch(a_name);
       m_leaf = br->create_leaf<T>(a_name,a_name);
     }
-    inline virtual ~column(){}
+    virtual ~column(){}
   protected:
-    inline column(const column& a_from)
+    column(const column& a_from)
     :icol(a_from)
     ,m_tree(a_from.m_tree) 
     ,m_leaf(0)
     ,m_def(a_from.m_def)
     ,m_tmp(a_from.m_tmp)    
     {}
-    inline column& operator=(const column& a_from){
+    column& operator=(const column& a_from){
       m_leaf = 0;
       m_def = a_from.m_def;
       m_tmp = a_from.m_tmp;
       return *this;
     }
   public:
-    inline bool fill(const T& a_value) {m_tmp = a_value;return true;}
+    bool fill(const T& a_value) {m_tmp = a_value;return true;}
   protected:
     tree& m_tree;
     leaf<T>* m_leaf;
@@ -71,20 +71,20 @@ public:
   };
 
 public:
-  inline ntuple(idir& a_dir,
+  ntuple(idir& a_dir,
                 const std::string& a_name,const std::string& a_title)
   : tree(a_dir,a_name,a_title){}
-  inline virtual ~ntuple() {}
+  virtual ~ntuple() {}
 protected:
-  inline ntuple(const ntuple& a_from)
+  ntuple(const ntuple& a_from)
   :iobject(a_from),itree(a_from),tree(a_from)
   {}
-  inline ntuple& operator=(const ntuple&){return *this;}
+  ntuple& operator=(const ntuple&){return *this;}
 public:
-  inline const std::vector<icol*>& columns() const {return m_cols;}
+  const std::vector<icol*>& columns() const {return m_cols;}
 
   template <class T>
-  inline column<T>* create_column(const std::string& a_name,
+  column<T>* create_column(const std::string& a_name,
                                   const T& a_def = T()) {
     if(find_named<icol>(m_cols,a_name)) return 0;
     column<T>* col = new column<T>(*this,a_name,a_def);
@@ -93,14 +93,14 @@ public:
     return col;
   }
 
-  inline bool add_row() {
+  bool add_row() {
     if(m_cols.empty()) return false;
    {std::vector<icol*>::iterator it;
     for(it=m_cols.begin();it!=m_cols.end();++it) (*it)->add();}
     uint32 n;
     return tree::fill(n);
   }
-  inline void set_basket_size(uint32 a_size) {
+  void set_basket_size(uint32 a_size) {
     std::vector<icol*>::iterator it;
     for(it=m_cols.begin();it!=m_cols.end();++it) {
       (*it)->set_basket_size(a_size);

@@ -12,19 +12,32 @@ if [ "${use_sys_cernlib}" = "yes" ] ; then
     on_lal_lx=yes
   fi
 
+  cernlib_home=
+
   if [ `uname` = Darwin ] ; then
     if [ "`sysctl hw.optional.x86_64 | grep 1`" != "" ] ; then
       # May 2011 : we don't have cernlib on 64 bits intel machines.
       echo " We don't have cernlib on Mac 64 bits machines."
-      exit
+      echo " We try to use exlib/hbook/hdummy.c."
+
+      # gfortran is 32 bits !
+      cernlib_cflags="-m32"
+      obj="hdummy.o"
+      eval ${cc_compiler} -c ${ccflags} ${cernlib_cflags} -o ${obj} ${tools_mgr}/../../tools/hbook/hdummy.c
+
+      objs="${objs} ${obj}"
+      f77_objs="${f77_objs} ${obj}"
+
+    else
+      if [ ! -d /cern/pro/lib ] ; then
+        echo " You don't have cernlib under /cern/pro/lib."
+        echo " If you have them elsewhere, change exlib/mgr/use_cernlib."
+        exit
+      else
+        no_shift=
+        cernlib_home=/cern/pro
+      fi
     fi
-    if [ ! -d /cern/pro/lib ] ; then
-      echo " You don't have cernlib under /cern/pro/lib."
-      echo " If you have them elsewhere, change exlib/mgr/use_cernlib."
-      exit
-    fi
-    no_shift=
-    cernlib_home=/cern/pro
     f77_for_C_libs="-lgfortran -lg2c"
   else
     no_shift=_noshift
@@ -59,7 +72,9 @@ if [ "${use_sys_cernlib}" = "yes" ] ; then
 
   fi
 
-  f77_libs="${f77_libs} -L${cernlib_home}/lib -lmathlib -lpacklib${no_shift}"
+  if [ "${cernlib_home}" != "" ] ; then
+    f77_libs="${f77_libs} -L${cernlib_home}/lib -lmathlib -lpacklib${no_shift}"
+  fi
   f77_libs="${f77_libs} ${f77_end_libs}"
  
   # if linking from c/c++ :

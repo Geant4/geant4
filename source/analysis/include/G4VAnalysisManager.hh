@@ -30,12 +30,13 @@
 #ifndef G4VAnalysisManager_h
 #define G4VAnalysisManager_h 1
 
+#include "G4AnalysisVerbose.hh"
 #include "globals.hh"
 
 class G4VAnalysisManager
 {
   public:
-    G4VAnalysisManager();
+    G4VAnalysisManager(const G4String& type = "");
     virtual ~G4VAnalysisManager();
    
     // Methods to manipulate files
@@ -50,6 +51,9 @@ class G4VAnalysisManager
     // Methods for handling histogrammes, ntuples
     virtual G4int CreateH1(const G4String& name, const G4String& title,
                            G4int nbins, G4double xmin, G4double xmax) = 0;
+    virtual G4int CreateH2(const G4String& name, const G4String& title,
+                           G4int nxbins, G4double xmin, G4double xmax, 
+                           G4int nybins, G4double ymin, G4double ymax) = 0;
                            
     virtual void  CreateNtuple(const G4String& name, const G4String& title) = 0;
     virtual G4int CreateNtupleIColumn(const G4String& name) = 0;
@@ -65,16 +69,27 @@ class G4VAnalysisManager
   
     // Methods to fill histogrammes, ntuples
     virtual G4bool FillH1(G4int id, G4double value, G4double weight) = 0;
+    virtual G4bool FillH2(G4int id, G4double xvalue, G4double yvalue,
+                          G4double weight) = 0;
     virtual G4bool FillNtupleIColumn(G4int id, G4int value) = 0;
     virtual G4bool FillNtupleFColumn(G4int id, G4float value) = 0;
     virtual G4bool FillNtupleDColumn(G4int id, G4double value) = 0;
     virtual G4bool AddNtupleRow() = 0;
     
+    // Verbosity
+    virtual G4int GetVerboseLevel() const;
+    virtual void  SetVerboseLevel(G4int verboseLevel);
+    
   protected:
+    G4int    fVerboseLevel;
     G4int    fFirstHistoId;
     G4int    fFirstNtupleId;
     G4String fHistoDirectoryName;
     G4String fNtupleDirectoryName;      
+    G4AnalysisVerbose  fVerboseL1;
+    G4AnalysisVerbose  fVerboseL2;
+    G4AnalysisVerbose* fpVerboseL1;
+    G4AnalysisVerbose* fpVerboseL2;
 };
 
 // inline functions
@@ -94,6 +109,10 @@ inline void G4VAnalysisManager::SetFirstHistoId(G4int firstId) {
 inline void G4VAnalysisManager::SetFirstNtupleId(G4int firstId) {
   fFirstNtupleId = firstId;
 }
+
+inline G4int G4VAnalysisManager::GetVerboseLevel() const {
+  return fVerboseLevel;
+}  
 
 #endif
 

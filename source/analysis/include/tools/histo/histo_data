@@ -22,13 +22,13 @@ public:
   typedef typename axis<TC>::bn_t bn_t;
   typedef unsigned int dim_t;
 public:
-  inline histo_data()
+  histo_data()
   :m_dimension(0)
   ,m_bin_number(0)
   //,m_mode(0)
   {}
 public:
-  inline histo_data(const histo_data& a_from)
+  histo_data(const histo_data& a_from)
   :m_title(a_from.m_title)
   ,m_dimension(a_from.m_dimension)
   ,m_bin_number(a_from.m_bin_number)
@@ -43,7 +43,7 @@ public:
   //,m_annotations(a_from.m_annotations)
   {}
 
-  inline histo_data& operator=(const histo_data& a_from) {
+  histo_data& operator=(const histo_data& a_from) {
     m_title = a_from.m_title;
     m_dimension = a_from.m_dimension;
     m_bin_number = a_from.m_bin_number;
@@ -62,7 +62,7 @@ public:
 
   virtual ~histo_data(){}
 public: 
-  inline void base_reset() { //used in multiply,divide.
+  void base_reset() { //used in multiply,divide.
     // Reset content (different of clear that deallocate all internal things).
     for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
       m_bin_entries[ibin] = 0;
@@ -77,7 +77,7 @@ public:
 
 public:
   // for BatchLab::Rio::TH::streamTH1 :
-  inline TN get_entries() const {
+  TN get_entries() const {
     TN number = 0;
     for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
       if(!is_out(ibin)) {
@@ -86,7 +86,7 @@ public:
     }
     return number;
   }
-  inline TW get_Sw() const {
+  TW get_Sw() const {
     TW sw = 0;
     for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
       if(!is_out(ibin)) {
@@ -96,7 +96,7 @@ public:
     return sw;
   }
 
-  inline TW get_Sw2() const {
+  TW get_Sw2() const {
     TW sw2 = 0;
     for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
       if(!is_out(ibin)) {
@@ -106,7 +106,7 @@ public:
     return sw2;
   }
 
-  inline bool get_ith_axis_Sxw(dim_t a_axis,TC& a_value) const {
+  bool get_ith_axis_Sxw(dim_t a_axis,TC& a_value) const {
     a_value = 0;
     if(a_axis>=m_dimension) return false;
     for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
@@ -117,7 +117,7 @@ public:
     return true;
   }
 
-  inline bool get_ith_axis_Sx2w(dim_t a_axis,TC& a_value) const {
+  bool get_ith_axis_Sx2w(dim_t a_axis,TC& a_value) const {
     a_value = 0;
     if(a_axis>=m_dimension) return false;
     for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
@@ -128,7 +128,7 @@ public:
     return true;
   }
 
-  inline TN get_all_entries() const {
+  TN get_all_entries() const {
     TN number = 0;
     for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
       number += m_bin_entries[ibin];
@@ -136,7 +136,7 @@ public:
     return number;
   }
 
-  inline bool is_out(bn_t aOffset) const {
+  bool is_out(bn_t aOffset) const {
     int offset = aOffset;
     int index;
     for(int iaxis=m_dimension-1;iaxis>=0;iaxis--) { 
@@ -148,7 +148,7 @@ public:
     return false;
   }
 
-  inline void get_indices(bn_t aOffset,std::vector<int>& aIs) const {
+  void get_indices(bn_t aOffset,std::vector<int>& aIs) const {
     int offset = aOffset;
    {for(int iaxis=m_dimension-1;iaxis>=0;iaxis--) { 
       aIs[iaxis] = offset/m_axes[iaxis].m_offset;
@@ -166,7 +166,7 @@ public:
   }
 
   // for raxml :
-  inline bool get_offset(const std::vector<int>& aIs,bn_t& a_offset) const {
+  bool get_offset(const std::vector<int>& aIs,bn_t& a_offset) const {
     // aIs[iaxis] is given in in-range indexing :
     //  - [0,n[iaxis]-1] for in-range bins
     //  - UNDERFLOW_BIN for the iaxis underflow bin

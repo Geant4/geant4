@@ -6,6 +6,7 @@
 
 build_debug=no
 build_verbose=no
+build_icc=no
 
 use_from=sys
 
@@ -36,18 +37,38 @@ if [ ${build_debug} = "yes" ] ; then
 else
   cppflags="${cppflags} -O2"
 fi
+if [ `uname` = Darwin ] ; then
+  if [ "`sysctl hw.optional.x86_64 | grep 1`" != "" ] ; then
+    # gfortran is 32 bits !
+    cppflags="${cppflags} -m32"
+  fi
+fi
 
 # G4 flags. Do not put in cppflags here because some application
 # may want to not include them (as LHCb_artist_X11).
 G4_cppflags="-Wall -ansi -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual"
 
-cpp_compiler=c++
+ccflags=
+if [ ${build_debug} = "yes" ] ; then
+  ccflags="${ccflags} -g"
+else
+  ccflags="${ccflags} -O2"
+fi
+
+if [ ${build_icc} = "yes" ] ; then
+  cc_compiler=icc
+  cpp_compiler=icpc
+else
+  cc_compiler=cc
+  cpp_compiler=c++
+fi
 
 #////////////////////////////////////
 #/// f77 mess ///////////////////////
 #////////////////////////////////////
 
 f77flags=
+
 f77_compiler=gfortran
 if [ "`uname -n | grep lal.in2p3.fr | grep lx`" != "" ] ; then
   f77_compiler=g77
@@ -83,7 +104,11 @@ else
   shext=so
 fi
 
+objs=""
 libs=""
+
+f77_objs=""
+f77_libs=""
 
 use_sys_cernlib=yes
 . ${tools_mgr}/use_cernlib
@@ -100,20 +125,18 @@ ${f77_compiler} ${f77flags} -o ./tools_test_hello_f77 hello_f77.o
 # ////////////////////////////////////
 # /// hbook.f ////////////////////////
 # ////////////////////////////////////
-
 echo "build hbook.f ..."
 
 ${f77_compiler} ${f77flags} -c -o hbook.o hbook.f
-${f77_compiler} ${f77flags} -o ./tools_test_hbook hbook.o ${f77_libs}
-
+${f77_compiler} ${f77flags} -o ./tools_test_hbook hbook.o ${f77_objs} ${f77_libs}
 # ////////////////////////////////////
-# /// hbooknt.f ////////////////////////
+# /// hbooknt.f //////////////////////
 # ////////////////////////////////////
 
 echo "build hbooknt.f ..."
 
 ${f77_compiler} ${f77flags} -c -o hbooknt.o hbooknt.f
-${f77_compiler} ${f77flags} -o ./tools_test_hbooknt hbooknt.o ${f77_libs}
+${f77_compiler} ${f77flags} -o ./tools_test_hbooknt hbooknt.o ${f77_objs} ${f77_libs}
 
 # ////////////////////////////////////
 # /// chbook.cpp /////////////////////
@@ -125,10 +148,10 @@ ${f77_compiler} ${f77flags} -c -o setpawc.o ../include/tools/hbook/setpawc.f
 
 cppflags="${cppflags} ${G4_cppflags}"
 cppflags="${cppflags} -I../.."
-cppflags="${cppflags} -I../../../tools"
+cppflags="${cppflags} -I../include/tools"
 
 ${cpp_compiler} -c ${cppflags} -o chbook.o chbook.cpp
-${cpp_compiler} ${cppflags} -o ./tools_test_chbook chbook.o close.o setpawc.o ${libs}
+${cpp_compiler} ${cppflags} -o ./tools_test_chbook chbook.o close.o setpawc.o ${objs} ${libs}
 
 # ////////////////////////////////////
 # /// whbook.cpp /////////////////////
@@ -138,7 +161,7 @@ echo "build whbook.cpp ..."
 ${f77_compiler} ${f77flags} -c -o setntuc.o ../include/tools/hbook/setntuc.f
 
 ${cpp_compiler} -c ${cppflags} -o whbook.o whbook.cpp
-${cpp_compiler} ${cppflags} -o ./tools_test_whbook whbook.o setntuc.o setpawc.o close.o ${libs}
+${cpp_compiler} ${cppflags} -o ./tools_test_whbook whbook.o setntuc.o setpawc.o close.o ${objs} ${libs}
 
 # ////////////////////////////////////
 # ////////////////////////////////////

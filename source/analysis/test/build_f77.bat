@@ -12,10 +12,9 @@ IF ERRORLEVEL 1 (
 
 SET flags=/nologo /DWIN32 /MD /O2 /W3  /GX /GR 
 
-SET head=..\..\..
-
 SET cppflags=%flags%
-SET cppflags=%cppflags% /I%head%\tools /I%head%\tools
+REM // WARNING : the below is modified by g4tools/mgr/build.
+SET cppflags=%cppflags% /I..\.. /I..\..
 
 REM //////////////////////////////////////////////////////////////
 REM /// F77 //////////////////////////////////////////////////////

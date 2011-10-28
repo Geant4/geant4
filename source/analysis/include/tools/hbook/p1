@@ -11,7 +11,7 @@ namespace hbook {
 
 class p1 : public base_histo {
 public:
-  inline p1(int aID,const std::string& aTitle,
+  p1(int aID,const std::string& aTitle,
              int aXnumber,rarg aXmin,rarg aXmax,
              rarg aVmin,rarg aVmax)
   :base_histo(aID)
@@ -24,36 +24,36 @@ public:
             ""); //FIXME : or "S" or "T" ?
     cd_end();
   }
-  inline virtual ~p1(){
+  virtual ~p1(){
     cd_beg();
     CHDELET(m_id);
     cd_end();
   }
 private:
-  inline p1(const p1& a_from)
+  p1(const p1& a_from)
   :base_histo(a_from)
   ,m_axis(a_from.m_axis)
   {}
-  inline p1& operator=(const p1& a_from){
+  p1& operator=(const p1& a_from){
     base_histo::operator=(a_from);
     m_axis = a_from.m_axis;
     return *this;
   }
 public:
-  inline void fill(rarg aX,rarg aY,rarg aWeight = 1) {
+  void fill(rarg aX,rarg aY,rarg aWeight = 1) {
     cd_beg();
     CHFILL(m_id,aX,aY,aWeight);
     cd_end();
   }
 
   // optimization :
-  inline void fill_beg() const {cd_beg();}
-  inline void fill_fast(rarg aX,rarg aY,rarg aWeight = 1) {
+  void fill_beg() const {cd_beg();}
+  void fill_fast(rarg aX,rarg aY,rarg aWeight = 1) {
     CHFILL(m_id,aX,aY,aWeight);
   }
-  inline void fill_end() const {cd_end();}
+  void fill_end() const {cd_end();}
 
-  inline std::string title() const {
+  std::string title() const {
     std::string title;
     int ncx,ncy;
     rarg xmin,xmax,ymin,ymax;
@@ -62,24 +62,24 @@ public:
     cd_end();
     return title;
   }
-  inline int dimension() const {return 1;}
-  inline bool reset() {
+  int dimension() const {return 1;}
+  bool reset() {
     cd_beg();
     CHRESET(m_id," ");
     cd_end();
     return true;
   }
-  inline int all_entries() const {
+  int all_entries() const {
     cd_beg();
     int v = CHNOENT(m_id);
     cd_end();
     return v;
   }
 
-  inline const hbook::axis& axis() const {return m_axis;}
-  inline hbook::axis& axis() {return m_axis;}
+  const hbook::axis& axis() const {return m_axis;}
+  hbook::axis& axis() {return m_axis;}
 
-  inline int coord_to_index(rarg aCoord) const {
+  int coord_to_index(rarg aCoord) const {
     return m_axis.coord_to_index(aCoord);
   }
 protected:

@@ -19,7 +19,7 @@ namespace wroot {
 // sizeof(TObjArray) = 40
 
 class StreamerInfo : public virtual ibo {
-  inline static const std::string& s_class() {
+  static const std::string& s_class() {
     static const std::string s_v("tools::wroot::StreamerInfo");
     return s_v;
   }

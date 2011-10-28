@@ -10,7 +10,7 @@
 #include <iostream>
 #include <cstdlib>
 
-int main(int argc,char** argv) {
+int main(int,char**) {
 
 #ifdef TOOLS_MEM
   tools::mem::set_check_by_class(true);{

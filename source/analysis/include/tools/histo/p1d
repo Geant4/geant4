@@ -12,28 +12,28 @@ namespace histo {
 class p1d : public p1<double,unsigned int,double,double,double> {
   typedef p1<double,unsigned int,double,double,double> parent;
 public:
-  inline static const std::string& s_class() {
+  static const std::string& s_class() {
     static const std::string s_v("tools::histo::p1d");
     return s_v;
   }
 public:
-  inline p1d(const std::string& a_title,
+  p1d(const std::string& a_title,
                    int aXnumber,double aXmin,double aXmax)
   : parent(a_title,aXnumber,aXmin,aXmax)
   {}
 
-  inline p1d(const std::string& a_title,
+  p1d(const std::string& a_title,
                    int aXnumber,double aXmin,double aXmax,
                    double aVmin,double aVmax)
   : parent(a_title,aXnumber,aXmin,aXmax,aVmin,aVmax)
   {}
 
-  inline p1d(const std::string& a_title,
+  p1d(const std::string& a_title,
                    const std::vector<double>& aEdges)
   : parent(a_title,aEdges)
   {}
 
-  inline p1d(const std::string& a_title,
+  p1d(const std::string& a_title,
                    const std::vector<double>& aEdges,
                    double aVmin,double aVmax)
   : parent(a_title,aEdges,aVmin,aVmax) 
@@ -41,8 +41,8 @@ public:
 
   virtual ~p1d(){}
 public:
-  inline p1d(const p1d& a_from): parent(a_from){}
-  inline p1d& operator=(const p1d& a_from){
+  p1d(const p1d& a_from): parent(a_from){}
+  p1d& operator=(const p1d& a_from){
     parent::operator=(a_from);
     return *this;
   }

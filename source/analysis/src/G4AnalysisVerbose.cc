@@ -25,54 +25,81 @@
 //
 // $Id$
 
-// Author: Ivana Hrivnacova, 15/06/2011  (ivana@ipno.in2p3.fr)
+// Author: Ivana Hrivnacova, 17/10/2011  (ivana@ipno.in2p3.fr)
 
-#include "G4VAnalysisManager.hh"
+#include "G4AnalysisVerbose.hh"
 #include "G4UnitsTable.hh"
 
 #include <iostream>
 
 //_____________________________________________________________________________
-G4VAnalysisManager::G4VAnalysisManager(const G4String& type)
-  : fVerboseLevel(0),
-    fFirstHistoId(0),
-    fFirstNtupleId(0),
-    //fHistoDirectoryName("histograms"), 
-    fHistoDirectoryName("histo"), 
-    fNtupleDirectoryName("ntuple"),
-    fVerboseL1(type,1),
-    fVerboseL2(type,2),
-    fpVerboseL1(0),
-    fpVerboseL2(0)
-{}
-
-//_____________________________________________________________________________
-G4VAnalysisManager::~G4VAnalysisManager()
-{}
-
-//_____________________________________________________________________________
-void G4VAnalysisManager::SetVerboseLevel(G4int verboseLevel) 
+G4AnalysisVerbose::G4AnalysisVerbose(const G4String& type, G4int verboseLevel)
+ : fType(type),
+   fToBeDoneText(),
+   fDoneText(),
+   fFailureText()
 {
-  if ( verboseLevel == fVerboseLevel || verboseLevel < 0 ) return;
-  
-  fVerboseLevel = verboseLevel;
-  
-  if ( verboseLevel == 0 ) {
-    fpVerboseL1 = 0;
-    fpVerboseL2 = 0;
-  }
-  else if ( verboseLevel == 1 ) {  
-    fpVerboseL1 = &fVerboseL1;
-    fpVerboseL2 = 0;
-  }
-  else {
-    fpVerboseL1 = &fVerboseL1;
-    fpVerboseL2 = &fVerboseL2;
-  }
+   if ( verboseLevel == 1 ) fDoneText = "- done";
+   if ( verboseLevel == 2 ) fToBeDoneText = "going to ";
+   fFailureText = "has failed";
+}
 
-  G4cout << "fpVerboseL1: " << fpVerboseL1 << G4endl;
-  G4cout << "fpVerboseL2: " << fpVerboseL2 << G4endl;
+//_____________________________________________________________________________
+G4AnalysisVerbose::~G4AnalysisVerbose()
+{  
+}
 
+// 
+// public method
+//
+
+//_____________________________________________________________________________
+void G4AnalysisVerbose::Message(const G4String& action, 
+                                const G4String& object, 
+                                const G4String& objectName,
+                                G4bool success)
+{
+  G4cout << "... "
+         << fToBeDoneText
+         << action
+         << " "
+         << fType
+         << " "
+         << object 
+         << " : "
+         << objectName 
+         << " ";
+
+  if ( success )
+     G4cout << fDoneText;
+  else   
+     G4cout << fFailureText;
+        
+  G4cout << G4endl;
 }  
+  
+//_____________________________________________________________________________
+void G4AnalysisVerbose::Message(const G4String& action, 
+                                const G4String& object, 
+                                G4ExceptionDescription& description,
+                                G4bool success)
+{
+  G4cout << "... "
+         << fToBeDoneText
+         << action
+         << " "
+         << fType
+         << " "
+         << object 
+         << " : "
+         << description.str() 
+         << " ";
 
-
+  if ( success )
+     G4cout << fDoneText;
+  else   
+     G4cout << fFailureText;
+        
+  G4cout << G4endl;
+}  
+  

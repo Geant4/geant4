@@ -100,9 +100,18 @@ int main(int argc,char** argv) {
 
   tools::randf::bw rbw(0,1);
   for(unsigned int count=0;count<entries;count++) {    
-    col_index->fill(count);
-    col_rgauss->fill(rg.shoot());
-    col_rbw->fill(rbw.shoot());
+    if(!col_index->fill(count)) {
+      std::cout << "col_index fill failed." << std::endl;
+      break;
+    }
+    if(!col_rgauss->fill(rg.shoot())) {
+      std::cout << "col_rgauss fill failed." << std::endl;
+      break;
+    }
+    if(!col_rbw->fill(rbw.shoot())) {
+      std::cout << "col_rbw fill failed." << std::endl;
+      break;
+    }
     if(!ntu->add_row()) {
       std::cout << "ntuple fill failed." << std::endl;
       break;

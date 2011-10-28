@@ -34,7 +34,7 @@ inline bool Named_stream(buffer& a_buffer,
 
 template <class T>
 class ObjArray : public virtual ibo, public std::vector<T*> {
-  static const unsigned int kNullTag = 0;
+  static unsigned int kNullTag() {return 0;}
 public: //ibo
   virtual const std::string& store_cls() const {
     static const std::string s_v("TObjArray");
@@ -47,7 +47,6 @@ public: //ibo
     if(!a_buffer.write(std::string(""))) return false;
     int nobjects = std::vector<T*>::size();
     if(!a_buffer.write(nobjects)) return false;
-    //debug int lowerBound = 211;
     int lowerBound = 0;
     if(!a_buffer.write(lowerBound)) return false;
     
@@ -57,7 +56,7 @@ public: //ibo
       if(*it) {
         if(!a_buffer.write_object(*(*it))) return false;
       } else { //Could happen with branch::m_baskets.
-        if(!a_buffer.write(kNullTag)) return false;
+        if(!a_buffer.write(kNullTag())) return false;
       }
     }
     if(!a_buffer.set_byte_count(c)) return false;

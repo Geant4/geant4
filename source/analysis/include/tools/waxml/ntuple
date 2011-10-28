@@ -23,9 +23,9 @@ namespace waxml {
 
 class ntuple {
 protected:
-  inline static cid _cid(int)    {return 1;}
-  inline static cid _cid(float)  {return 2;}
-  inline static cid _cid(double) {return 3;}
+  static cid _cid(int)    {return 1;}
+  static cid _cid(float)  {return 2;}
+  static cid _cid(double) {return 3;}
 
   class iobj {
   public:
@@ -38,7 +38,7 @@ protected:
 
   class leaf : public virtual iobj {
   public:
-    inline static cid id_class() {return 100;}
+    static cid id_class() {return 100;}
   public: //iobj
     virtual void* cast(cid a_class) const {
       if(void* p = cmp_cast<leaf>(this,a_class)) {return p;}
@@ -54,15 +54,15 @@ protected:
     leaf& operator=(const leaf&){return *this;}
   };
   
-  inline static const std::string& s_aida_type(int) {
+  static const std::string& s_aida_type(int) {
     static const std::string s_v("int");
     return s_v;
   }
-  inline static const std::string& s_aida_type(float) {
+  static const std::string& s_aida_type(float) {
     static const std::string s_v("float");
     return s_v;
   }
-  inline static const std::string& s_aida_type(double) {
+  static const std::string& s_aida_type(double) {
     static const std::string s_v("double");
     return s_v;
   }
@@ -71,7 +71,7 @@ public:
   template <class T>
   class column : public leaf {
   public:
-    inline static cid id_class() {return 200+_cid(T());}
+    static cid id_class() {return 200+_cid(T());}
   public: //iobj
     virtual void* cast(cid a_class) const {
       if(void* p = cmp_cast< column<T> >(this,a_class)) {return p;}
@@ -83,25 +83,25 @@ public:
     virtual std::string s_def() const {return tos(m_def);}
     virtual std::string s_value() const {return tos(m_tmp);}
   public:
-    inline column(const std::string& a_name,const T& a_def)
+    column(const std::string& a_name,const T& a_def)
     :m_name(a_name),m_def(a_def),m_tmp(a_def)
     {}
-    inline virtual ~column(){}
+    virtual ~column(){}
   protected:
-    inline column(const column& a_from)
+    column(const column& a_from)
     :leaf(a_from)
     ,m_name(a_from.m_name) 
     ,m_def(a_from.m_def)
     ,m_tmp(a_from.m_tmp)
     {}
-    inline column& operator=(const column& a_from){
+    column& operator=(const column& a_from){
       m_name = a_from.m_name;
       m_def = a_from.m_def;
       m_tmp = a_from.m_tmp;
       return *this;
     }
   public:
-    inline bool fill(const T& a_value) {m_tmp = a_value;return true;}
+    bool fill(const T& a_value) {m_tmp = a_value;return true;}
   protected:
     std::string m_name;
     T m_def;
@@ -111,7 +111,7 @@ public:
 
   class sub_ntuple : public virtual iobj {
   public:
-    inline static cid id_class() {return 300;}
+    static cid id_class() {return 300;}
   public: //iobj
     virtual void* cast(cid a_class) const {
       if(void* p = cmp_cast<sub_ntuple>(this,a_class)) {return p;}
@@ -120,17 +120,17 @@ public:
     virtual const std::string& name() const {return m_name;}
     virtual std::string aida_type() const {return "ITuple";}
   public:
-    inline sub_ntuple(const std::string& a_name,
+    sub_ntuple(const std::string& a_name,
                       const std::string& a_spaces)
     :m_name(a_name),m_spaces(a_spaces){}
-    inline virtual ~sub_ntuple(){}
+    virtual ~sub_ntuple(){}
   protected:
-    inline sub_ntuple(const sub_ntuple& a_from)
+    sub_ntuple(const sub_ntuple& a_from)
     :iobj(a_from),m_name(a_from.m_name){}
-    inline sub_ntuple& operator=(const sub_ntuple&){return *this;}
+    sub_ntuple& operator=(const sub_ntuple&){return *this;}
   public:
     template <class T>
-    inline column<T>* create_column(const std::string& a_name,
+    column<T>* create_column(const std::string& a_name,
                                     const T& a_def = T()) {
       if(find_named<iobj>(m_cols,a_name)) return 0;
       column<T>* col = new column<T>(a_name,a_def);
@@ -139,7 +139,7 @@ public:
       return col;
     }
 
-    inline sub_ntuple* create_sub_ntuple(const std::string& a_name){
+    sub_ntuple* create_sub_ntuple(const std::string& a_name){
       if(find_named<iobj>(m_cols,a_name)) return 0;
       std::string spaces;
       for(unsigned int i=0;i<4;i++) spaces += " ";
@@ -150,17 +150,17 @@ public:
     }
 
 
-    inline const std::vector<iobj*>& columns() const {return m_cols;}
+    const std::vector<iobj*>& columns() const {return m_cols;}
 
-    inline std::string booking() const {
+    std::string booking() const {
       std::string s;
       get_booking(m_cols,s);
       return s;
     }
-    inline void reset() {m_tmp.clear();}
-    inline const std::string& value() const {return m_tmp;}
+    void reset() {m_tmp.clear();}
+    const std::string& value() const {return m_tmp;}
 
-    inline bool add_row() {
+    bool add_row() {
       if(m_cols.empty()) return false;
       std::ostringstream sout;
       sout << m_spaces << "<row>" << std::endl;
@@ -191,28 +191,28 @@ public:
   };
 
 public:
-  inline ntuple(std::ostream& a_writer,
+  ntuple(std::ostream& a_writer,
                 unsigned int a_spaces = 0)
   :m_writer(a_writer){
     for(unsigned int i=0;i<a_spaces;i++) m_spaces += " ";
   }
-  inline virtual ~ntuple() {
+  virtual ~ntuple() {
     tools::clear<iobj>(m_cols);
   }
 protected:
-  inline ntuple(const ntuple& a_from)
+  ntuple(const ntuple& a_from)
   :m_writer(a_from.m_writer)
   ,m_spaces(a_from.m_spaces)
   {}
-  inline ntuple& operator=(const ntuple& a_from){
+  ntuple& operator=(const ntuple& a_from){
     m_spaces = a_from.m_spaces;
     return *this;
   }
 public:
-  inline const std::vector<iobj*>& columns() const {return m_cols;}
+  const std::vector<iobj*>& columns() const {return m_cols;}
 
   template <class T>
-  inline column<T>* create_column(const std::string& a_name,
+  column<T>* create_column(const std::string& a_name,
                                   const T& a_def = T()) {
     if(find_named<iobj>(m_cols,a_name)) return 0;
     column<T>* col = new column<T>(a_name,a_def);
@@ -221,7 +221,7 @@ public:
     return col;
   }
 
-  inline sub_ntuple* create_sub_ntuple(const std::string& a_name){
+  sub_ntuple* create_sub_ntuple(const std::string& a_name){
     if(find_named<iobj>(m_cols,a_name)) return 0;
     std::string spaces;
     for(unsigned int i=0;i<10;i++) spaces += " ";
@@ -231,7 +231,7 @@ public:
     return col;
   }
 
-  inline void write_header(const std::string& a_path,
+  void write_header(const std::string& a_path,
                            const std::string& a_name,
                            const std::string& a_title){
 
@@ -268,7 +268,7 @@ public:
     m_writer << m_spaces << "    <rows>" << std::endl;
   }
 
-  inline bool add_row() {
+  bool add_row() {
     if(m_cols.empty()) return false;
     m_writer << m_spaces << "      <row>" << std::endl;
     std::vector<iobj*>::const_iterator it;
@@ -288,13 +288,13 @@ public:
     return true;
   }
 
-  inline void write_trailer() {
+  void write_trailer() {
     m_writer << m_spaces << "    </rows>" << std::endl;
     m_writer << m_spaces << "  </tuple>" << std::endl;
   }
 
 protected:
-  inline static void get_booking(const std::vector<iobj*>& a_cols,
+  static void get_booking(const std::vector<iobj*>& a_cols,
                                  std::string& a_string) {
     a_string += "{"; //we need the + because of the tuple in tuple.
 

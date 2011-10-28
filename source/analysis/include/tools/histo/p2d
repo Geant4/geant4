@@ -12,32 +12,32 @@ namespace histo {
 class p2d : public p2<double,unsigned int,double,double,double> {
   typedef p2<double,unsigned int,double,double,double> parent;
 public:
-  inline static const std::string& s_class() {
+  static const std::string& s_class() {
     static const std::string s_v("tools::histo::p2d");
     return s_v;
   }
 public:
-  inline p2d(const std::string& a_title,
+  p2d(const std::string& a_title,
                    int aXnumber,double aXmin,double aXmax,
                    int aYnumber,double aYmin,double aYmax)
   : parent(a_title,aXnumber,aXmin,aXmax,
                    aYnumber,aYmin,aYmax)
   {}
 
-  inline p2d(const std::string& a_title,
+  p2d(const std::string& a_title,
                    int aXnumber,double aXmin,double aXmax,
                    int aYnumber,double aYmin,double aYmax,
                    double aVmin,double aVmax)
   : parent(a_title,aXnumber,aXmin,aXmax,aYnumber,aYmin,aYmax,aVmin,aVmax)
   {}
 
-  inline p2d(const std::string& a_title,
+  p2d(const std::string& a_title,
                    const std::vector<double>& aEdgesX,
                    const std::vector<double>& aEdgesY)
   : parent(a_title,aEdgesX,aEdgesY)
   {}
 
-  inline p2d(const std::string& a_title,
+  p2d(const std::string& a_title,
                    const std::vector<double>& aEdgesX,
                    const std::vector<double>& aEdgesY,
                    double aVmin,double aVmax)
@@ -46,8 +46,8 @@ public:
 
   virtual ~p2d(){}
 public:
-  inline p2d(const p2d& a_from): parent(a_from){}
-  inline p2d& operator=(const p2d& a_from){
+  p2d(const p2d& a_from): parent(a_from){}
+  p2d& operator=(const p2d& a_from){
     parent::operator=(a_from);
     return *this;
   }

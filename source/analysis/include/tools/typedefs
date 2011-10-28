@@ -74,6 +74,8 @@ typedef unsigned short uint16;
 typedef uint32 ref;
 // sizeof(long)==sizeof(void*) on all platforms.
 typedef unsigned long diff_pointer_t;
+typedef char* cstr_t;
+typedef const char* const_cstr_t;
 
 }
 

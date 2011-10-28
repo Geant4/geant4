@@ -12,17 +12,17 @@ namespace histo {
 class h2d : public h2<double,unsigned int,double,double> {
   typedef h2<double,unsigned int,double,double> parent;
 public:
-  inline static const std::string& s_class() {
+  static const std::string& s_class() {
     static const std::string s_v("tools::histo::h2d");
     return s_v;
   }
 public:
-  inline h2d(const std::string& a_title,
+  h2d(const std::string& a_title,
                      bn_t aXnumber,double aXmin,double aXmax,
                      bn_t aYnumber,double aYmin,double aYmax)
   : parent(a_title,aXnumber,aXmin,aXmax,aYnumber,aYmin,aYmax)
   {}
-  inline h2d(const std::string& a_title,
+  h2d(const std::string& a_title,
                      const std::vector<double>& aEdgesX,
                      const std::vector<double>& aEdgesY)
   : parent(a_title,aEdgesX,aEdgesY)
@@ -30,16 +30,16 @@ public:
 
   virtual ~h2d(){}
 public:
-  inline h2d(const h2d& a_from): parent(a_from){}
-  inline h2d& operator=(const h2d& a_from){
+  h2d(const h2d& a_from): parent(a_from){}
+  h2d& operator=(const h2d& a_from){
     parent::operator=(a_from);
     return *this;
   }
 #if defined(__CINT__)
-  inline bool fill(double aX,double aY,double aW = 1) {
+  bool fill(double aX,double aY,double aW = 1) {
     h2<double,unsigned int,double,double>::fill(aX,aY,aW);    
   }
-  inline void hprint(std::ostream& a_out) {
+  void hprint(std::ostream& a_out) {
     h2<double,unsigned int,double,double>::hprint(a_out);
   }
 #endif
