@@ -23,25 +23,37 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
- // Hadronic Process: Triton Inelastic Process
- // J.L. Chuma, TRIUMF, 25-Feb-1997
- // Last modified: 27-Mar-1997
- // J.L. Chuma, 08-May-2001: Update original incident passed back in vec[0]
- //                          from NuclearReaction
- //
+// Hadronic Process: Triton Inelastic Process
+// J.L. Chuma, TRIUMF, 25-Feb-1997
+// J.L. Chuma, 08-May-2001: Update original incident passed back in vec[0]
+//                          from NuclearReaction
+
 #include "G4LETritonInelastic.hh"
 #include "Randomize.hh"
 #include "G4Electron.hh"
- 
- G4HadFinalState *
-  G4LETritonInelastic::ApplyYourself( const G4HadProjectile &aTrack,
-                                      G4Nucleus &targetNucleus )
-  {
-    bool triton_debug = false;
-    if(getenv("TritonLEDebug")) triton_debug = true;
-    theParticleChange.Clear();
-    const G4HadProjectile *originalIncident = &aTrack;
+
+void G4LETritonInelastic::ModelDescription(std::ostream& outFile) const
+{
+  outFile << "G4LETritonInelastic is one of the Low Energy Parameterized\n"
+          << "(LEP) models used to implement inelastic triton scattering\n"
+          << "from nuclei.  It is a re-engineered version of the GHEISHA\n"
+          << "code of H. Fesefeldt.  It divides the initial collision\n"
+          << "products into backward- and forward-going clusters which are\n"
+          << "then decayed into final state hadrons.  The model does not\n"
+          << "conserve energy on an event-by-event basis.  It may be\n"
+          << "applied to tritons with initial energies between 0 and 25\n"
+          << "GeV.\n";
+}
+
+
+G4HadFinalState*
+G4LETritonInelastic::ApplyYourself(const G4HadProjectile& aTrack,
+                                   G4Nucleus& targetNucleus)
+{
+  G4bool triton_debug = false;
+  if (getenv("TritonLEDebug")) triton_debug = true;
+  theParticleChange.Clear();
+  const G4HadProjectile *originalIncident = &aTrack;
     if(triton_debug)  std::cout << "entering LETritonInelastic "<<originalIncident->GetKineticEnergy()<<std::endl;
     if (originalIncident->GetKineticEnergy()<= 0.1*MeV) 
     {
@@ -113,9 +125,9 @@
       delete vec[i];
     }
     
-    if(triton_debug)std::cout << "leaving LETritonInelastic"<<std::endl;
-    return &theParticleChange;
-  }
+  if(triton_debug)std::cout << "leaving LETritonInelastic"<<std::endl;
+  return &theParticleChange;
+}
  
  /* end of file */
  

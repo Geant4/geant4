@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 // Physics model class G4LElastic
-//
-//
 // G4 Model: Low-energy Elastic scattering
 // F.W. Jones, TRIUMF, 04-JUN-96
 //
@@ -35,7 +33,6 @@
 // 25-JUN-98 FWJ: replaced missing Initialize for ParticleChange.
 // 14-DEC-05 V.Ivanchenko: restore 1.19 version (7.0)
 // 23-JAN-07 V.Ivanchenko: add protection inside sqrt
-//
 
 #include "globals.hh"
 #include "G4LElastic.hh"
@@ -50,38 +47,18 @@ G4LElastic::G4LElastic(const G4String& name)
 {
   SetMinEnergy(0.0);
   SetMaxEnergy(DBL_MAX);
-  Description();
 }
 
 
-void G4LElastic::Description() const
+void G4LElastic::ModelDescription(std::ostream& outFile) const
 {
-  char* dirName = getenv("G4PhysListDocDir");
-  if (dirName) {
-    std::ofstream outFile;
-    G4String outFileName = GetModelName() + ".html";
-    G4String pathName = G4String(dirName) + "/" + outFileName;
-
-    outFile.open(pathName);
-    outFile << "<html>\n";
-    outFile << "<head>\n";
-
-    outFile << "<title>Description of Elastic Low Energy Parameterized Model</title>\n";
-    outFile << "</head>\n";
-    outFile << "<body>\n";
-
-    outFile << "G4LElastic is one of the Low Energy Parameterized (LEP)\n"
-            << "models used to implement elastic hadron scattering from nuclei.\n"
-            << "It is a re-engineered version of the GHEISHA code of\n"
-            << "H. Fesefeldt.  It performs simplified two-body elastic\n"
-            << "scattering for all long-lived hadronic projectiles by using\n"
-            << "a two-exponential parameterization in momentum transfer.\n"
-            << "It is valid for incident hadrons of all energies.\n";
-
-    outFile << "</body>\n";
-    outFile << "</html>\n";
-    outFile.close();
-  }
+  outFile << "G4LElastic is one of the Low Energy Parameterized (LEP)\n"
+          << "models used to implement elastic hadron scattering from nuclei.\n"
+          << "It is a re-engineered version of the GHEISHA code of\n"
+          << "H. Fesefeldt.  It performs simplified two-body elastic\n"
+          << "scattering for all long-lived hadronic projectiles by using\n"
+          << "a two-exponential parameterization in momentum transfer.\n"
+          << "It is valid for incident hadrons of all energies.\n";
 }
 
 

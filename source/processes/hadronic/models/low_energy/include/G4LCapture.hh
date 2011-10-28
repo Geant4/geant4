@@ -74,7 +74,8 @@ class G4LCapture : public G4HadronicInteraction
     G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
                                    G4Nucleus& targetNucleus);
 
-    void Description() const;
+    // void Description() const;
+    virtual void ModelDescription(std::ostream& outFile) const;
 
   private:
 

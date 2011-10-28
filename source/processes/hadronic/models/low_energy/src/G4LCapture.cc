@@ -52,7 +52,7 @@ G4LCapture::G4LCapture(const G4String& name)
 {   
   SetMinEnergy(0.0*GeV);
   SetMaxEnergy(DBL_MAX);
-  Description();
+  // Description();
 }
 
 
@@ -62,35 +62,16 @@ G4LCapture::~G4LCapture()
 }
 
 
-void G4LCapture::Description() const
+void G4LCapture::ModelDescription(std::ostream& outFile) const
 {
-  char* dirName = getenv("G4PhysListDocDir");
-  if (dirName) {
-    std::ofstream outFile;
-    G4String outFileName = GetModelName() + ".html";
-    G4String pathName = G4String(dirName) + "/" + outFileName;
-
-    outFile.open(pathName);
-    outFile << "<html>\n";
-    outFile << "<head>\n";
-
-    outFile << "<title>Description of Low Energy Capture Model</title>\n";
-    outFile << "</head>\n";
-    outFile << "<body>\n";
-
-    outFile << "G4LCapture is one of the Low Energy Parameterized\n"
-            << "(LEP) models used to implement neutron capture on nuclei.\n"
-            << "It is a re-engineered version of the GHEISHA code of\n"
-            << "H. Fesefeldt which simply adds the neutron mass and energy\n"
-            << "to the target nucleus, and emits gammas isotropically as\n"
-            << "long as there is sufficient excitation energy in the\n"
-            << "daughter nucleus.  The model is\n"
-            << "applicable to all incident neutron energies.\n";
-
-    outFile << "</body>\n";
-    outFile << "</html>\n";
-    outFile.close();
-  }
+  outFile << "G4LCapture is one of the Low Energy Parameterized\n"
+          << "(LEP) models used to implement neutron capture on nuclei.\n"
+          << "It is a re-engineered version of the GHEISHA code of\n"
+          << "H. Fesefeldt which simply adds the neutron mass and energy\n"
+          << "to the target nucleus, and emits gammas isotropically as\n"
+          << "long as there is sufficient excitation energy in the\n"
+          << "daughter nucleus.  The model is applicable to all incident\n"
+          << "neutron energies.\n";
 }
 
 

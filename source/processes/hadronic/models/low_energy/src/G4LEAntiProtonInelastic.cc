@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id: G4LEAntiProtonInelastic.cc,v 1.15 2007-02-24 05:11:27 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -43,40 +42,20 @@ G4LEAntiProtonInelastic::G4LEAntiProtonInelastic(const G4String& name)
 {
   SetMinEnergy(0.0);
   SetMaxEnergy(25.*GeV);
-  Description();
 }
 
 
-void G4LEAntiProtonInelastic::Description() const
+void G4LEAntiProtonInelastic::ModelDescription(std::ostream& outFile) const
 {
-  char* dirName = getenv("G4PhysListDocDir");
-  if (dirName) {
-    std::ofstream outFile;
-    G4String outFileName = GetModelName() + ".html";
-    G4String pathName = G4String(dirName) + "/" + outFileName;
-
-    outFile.open(pathName);
-    outFile << "<html>\n";
-    outFile << "<head>\n";
-
-    outFile << "<title>Description of anti-proton Low Energy Parameterized Model</title>\n";
-    outFile << "</head>\n";
-    outFile << "<body>\n";
-
-    outFile << "G4LEAntiProtonInelastic is one of the Low Energy Parameterized\n"
-            << "(LEP) models used to implement inelastic anti-proton scattering\n"
-            << "from nuclei.  It is a re-engineered version of the GHEISHA\n"
-            << "code of H. Fesefeldt.  It divides the initial collision\n"
-            << "products into backward- and forward-going clusters which are\n"
-            << "then decayed into final state hadrons.  The model does not\n"
-            << "conserve energy on an event-by-event basis.  It may be\n"
-            << "applied to anti-protons with initial energies between 0 and 25\n"
-            << "GeV.\n";
-
-    outFile << "</body>\n";
-    outFile << "</html>\n";
-    outFile.close();
-  }
+  outFile << "G4LEAntiProtonInelastic is one of the Low Energy Parameterized\n"
+          << "(LEP) models used to implement inelastic anti-proton scattering\n"
+          << "from nuclei.  It is a re-engineered version of the GHEISHA\n"
+          << "code of H. Fesefeldt.  It divides the initial collision\n"
+          << "products into backward- and forward-going clusters which are\n"
+          << "then decayed into final state hadrons.  The model does not\n"
+          << "conserve energy on an event-by-event basis.  It may be\n"
+          << "applied to anti-protons with initial energies between 0 and 25\n"
+          << "GeV.\n";
 }
 
 

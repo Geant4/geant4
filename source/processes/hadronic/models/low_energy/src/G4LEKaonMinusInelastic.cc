@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id: G4LEKaonMinusInelastic.cc,v 1.15 2006-06-29 20:44:59 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -43,40 +42,20 @@ G4LEKaonMinusInelastic::G4LEKaonMinusInelastic(const G4String& name)
 {
   SetMinEnergy(0.0);
   SetMaxEnergy(25.*GeV);
-  Description();
 }
 
 
-void G4LEKaonMinusInelastic::Description() const
+void G4LEKaonMinusInelastic::ModelDescription(std::ostream& outFile) const
 {
-  char* dirName = getenv("G4PhysListDocDir");
-  if (dirName) {
-    std::ofstream outFile;
-    G4String outFileName = GetModelName() + ".html";
-    G4String pathName = G4String(dirName) + "/" + outFileName;
-
-    outFile.open(pathName);
-    outFile << "<html>\n";
-    outFile << "<head>\n";
-
-    outFile << "<title>Description of K- Low Energy Parameterized Model</title>\n";
-    outFile << "</head>\n";
-    outFile << "<body>\n";
-
-    outFile << "G4LEKaonMinusInelastic is one of the Low Energy Parameterized\n"
-            << "(LEP) models used to implement inelastic K- scattering\n"
-            << "from nuclei.  It is a re-engineered version of the GHEISHA\n"
-            << "code of H. Fesefeldt.  It divides the initial collision\n"
-            << "products into backward- and forward-going clusters which are\n"
-            << "then decayed into final state hadrons.  The model does not\n"
-            << "conserve energy on an event-by-event basis.  It may be\n"
-            << "applied to kaons with initial energies between 0 and 25\n"
-            << "GeV.\n";
-
-    outFile << "</body>\n";
-    outFile << "</html>\n";
-    outFile.close();
-  }
+  outFile << "G4LEKaonMinusInelastic is one of the Low Energy Parameterized\n"
+          << "(LEP) models used to implement inelastic K- scattering\n"
+          << "from nuclei.  It is a re-engineered version of the GHEISHA\n"
+          << "code of H. Fesefeldt.  It divides the initial collision\n"
+          << "products into backward- and forward-going clusters which are\n"
+          << "then decayed into final state hadrons.  The model does not\n"
+          << "conserve energy on an event-by-event basis.  It may be\n"
+          << "applied to kaons with initial energies between 0 and 25\n"
+          << "GeV.\n";
 }
 
 

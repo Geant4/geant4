@@ -23,14 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id: G4LELambdaInelastic.cc,v 1.11 2006-06-29 20:45:05 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Lambda Inelastic Process
 // J.L. Chuma, TRIUMF, 18-Feb-1997
 // Modified by J.L.Chuma 30-Apr-97: added originalTarget for CalculateMomenta
-//
  
 #include "G4LELambdaInelastic.hh"
 #include "Randomize.hh"
@@ -42,40 +40,20 @@ G4LELambdaInelastic::G4LELambdaInelastic(const G4String& name)
 {
   SetMinEnergy(0.0);
   SetMaxEnergy(25.*GeV);
-  Description();
 }
 
 
-void G4LELambdaInelastic::Description() const
+void G4LELambdaInelastic::ModelDescription(std::ostream& outFile) const
 {
-  char* dirName = getenv("G4PhysListDocDir");
-  if (dirName) {
-    std::ofstream outFile;
-    G4String outFileName = GetModelName() + ".html";
-    G4String pathName = G4String(dirName) + "/" + outFileName;
-
-    outFile.open(pathName);
-    outFile << "<html>\n";
-    outFile << "<head>\n";
-
-    outFile << "<title>Description of Lambda Low Energy Parameterized Model</title>\n";
-    outFile << "</head>\n";
-    outFile << "<body>\n";
-
-    outFile << "G4LELambdaInelastic is one of the Low Energy Parameterized\n"
-            << "(LEP) models used to implement inelastic Lambda scattering\n"
-            << "from nuclei.  It is a re-engineered version of the GHEISHA\n"
-            << "code of H. Fesefeldt.  It divides the initial collision\n"
-            << "products into backward- and forward-going clusters which are\n"
-            << "then decayed into final state hadrons.  The model does not\n"
-            << "conserve energy on an event-by-event basis.  It may be\n"
-            << "applied to lambdas with initial energies between 0 and 25\n"
-            << "GeV.\n";
-
-    outFile << "</body>\n";
-    outFile << "</html>\n";
-    outFile.close();
-  }
+  outFile << "G4LELambdaInelastic is one of the Low Energy Parameterized\n"
+          << "(LEP) models used to implement inelastic Lambda scattering\n"
+          << "from nuclei.  It is a re-engineered version of the GHEISHA\n"
+          << "code of H. Fesefeldt.  It divides the initial collision\n"
+          << "products into backward- and forward-going clusters which are\n"
+          << "then decayed into final state hadrons.  The model does not\n"
+          << "conserve energy on an event-by-event basis.  It may be\n"
+          << "applied to lambdas with initial energies between 0 and 25\n"
+          << "GeV.\n";
 }
 
 

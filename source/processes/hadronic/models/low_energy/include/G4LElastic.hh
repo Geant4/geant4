@@ -34,7 +34,6 @@
 //
 // use -scheme for elastic scattering: HPW, 20th June 1997
 // most of the code comes from the old Low-energy Elastic class
-//
 
 #ifndef G4LElastic_h
 #define G4LElastic_h 1
@@ -71,7 +70,7 @@ class G4LElastic : public G4HadronicInteraction
     G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, 
                                    G4Nucleus& targetNucleus);
 
-    void Description() const;
+    virtual void ModelDescription(std::ostream& outFile) const;
 
   private:
 

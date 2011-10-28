@@ -23,15 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id: G4LEProtonInelastic.hh,v 1.12 2007-02-26 18:31:19 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
- // Hadronic Process: Low Energy Proton Inelastic Process
- // original by H.P. Wellisch
- // modified by J.L. Chuma, TRIUMF, 19-Nov-1996
- // Last modified: 27-Mar-1997
- // Modified by J.L.Chuma 8-Jul-97 to implement Nucleus changes
+// Hadronic Process: Low Energy Proton Inelastic Process
+// original by H.P. Wellisch
+// modified by J.L. Chuma, TRIUMF, 19-Nov-1996
+// Modified by J.L.Chuma 8-Jul-97 to implement Nucleus changes
  
 #ifndef G4LEProtonInelastic_h
 #define G4LEProtonInelastic_h 1
@@ -52,13 +50,12 @@ class G4LEProtonInelastic : public G4InelasticInteraction
 
     G4LEProtonInelastic(const G4String& name = "G4LEProtonInelastic");
 
-    ~G4LEProtonInelastic()
-    {}
+    ~G4LEProtonInelastic() {}
     
     G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
                                    G4Nucleus& targetNucleus);
 
-    void Description() const;
+    virtual void ModelDescription(std::ostream& outFile) const;
 
   private:
     

@@ -23,13 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id: G4LELambdaInelastic.hh,v 1.11 2007-02-26 18:27:08 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Low Energy Lambda Inelastic Process
 // J.L. Chuma, TRIUMF, 18-Feb-1997
-//
  
 #ifndef G4LELambdaInelastic_h
 #define G4LELambdaInelastic_h 1
@@ -55,7 +53,7 @@ class G4LELambdaInelastic : public G4InelasticInteraction
     G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
                                    G4Nucleus& targetNucleus);
 
-    void Description() const;
+    virtual void ModelDescription(std::ostream& outFile) const;
 
   private:
     

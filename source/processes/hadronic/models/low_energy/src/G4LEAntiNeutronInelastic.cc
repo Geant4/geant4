@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id: G4LEAntiNeutronInelastic.cc,v 1.14 2006-06-29 20:44:43 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -44,41 +43,20 @@ G4LEAntiNeutronInelastic::G4LEAntiNeutronInelastic(const G4String& name)
 {
   SetMinEnergy(0.0);
   SetMaxEnergy(25.*GeV);
-  Description();
 }
 
 
-void G4LEAntiNeutronInelastic::Description() const
+void G4LEAntiNeutronInelastic::ModelDescription(std::ostream& outFile) const
 {
-  char* dirName = getenv("G4PhysListDocDir");
-  if (dirName) {
-    std::ofstream outFile;
-    G4String outFileName = GetModelName() + ".html";
-    G4String pathName = G4String(dirName) + "/" + outFileName;
-
-    outFile.open(pathName);
-    outFile << "<html>\n";
-    outFile << "<head>\n";
-
-    outFile << "<title>Description of anti-neutron Low Energy Parameterized\n"
-            << "Model</title>\n";
-    outFile << "</head>\n";
-    outFile << "<body>\n";
-
-    outFile << "G4LEAntiNeutronInelastic is one of the Low Energy\n"
-            << "Parameterized (LEP) models used to implement inelastic\n"
-            << "anti-neutron scattering from nuclei.  It is a re-engineered\n"
-            << "version of the GHEISHA code of H. Fesefeldt.  It divides the\n"
-            << "initial collision products into backward- and forward-going\n"
-            << "clusters which are then decayed into final state hadrons.\n"
-            << "The model does not conserve energy on an event-by-event\n"
-            << "basis.  It may be applied to anti-neutrons with initial\n"
-            << "energies between 0 and 25 GeV.\n";
-
-    outFile << "</body>\n";
-    outFile << "</html>\n";
-    outFile.close();
-  }
+  outFile << "G4LEAntiNeutronInelastic is one of the Low Energy\n"
+          << "Parameterized (LEP) models used to implement inelastic\n"
+          << "anti-neutron scattering from nuclei.  It is a re-engineered\n"
+          << "version of the GHEISHA code of H. Fesefeldt.  It divides the\n"
+          << "initial collision products into backward- and forward-going\n"
+          << "clusters which are then decayed into final state hadrons.\n"
+          << "The model does not conserve energy on an event-by-event\n"
+          << "basis.  It may be applied to anti-neutrons with initial\n"
+          << "energies between 0 and 25 GeV.\n";
 }
 
 

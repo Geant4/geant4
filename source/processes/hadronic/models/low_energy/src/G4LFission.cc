@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id: G4LFission.cc,v 1.15 2007-02-26 19:29:30 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -40,7 +39,6 @@
 // the code comes mostly from the old Low-energy Fission class
 //
 // 25-JUN-98 FWJ: replaced missing Initialize for ParticleChange.
-//
 
 #include "globals.hh"
 #include "G4LFission.hh"
@@ -54,7 +52,6 @@ G4LFission::G4LFission(const G4String& name)
   init();
   SetMinEnergy(0.0*GeV);
   SetMaxEnergy(DBL_MAX);
-  Description();  
 }
 
 
@@ -64,38 +61,17 @@ G4LFission::~G4LFission()
 }
 
 
-void G4LFission::Description() const
+void G4LFission::ModelDescription(std::ostream& outFile) const
 {
-  char* dirName = getenv("G4PhysListDocDir");
-  if (dirName) {
-    std::ofstream outFile;
-    G4String outFileName = GetModelName() + ".html";
-    G4String pathName = G4String(dirName) + "/" + outFileName;
-
-    outFile.open(pathName);
-    outFile << "<html>\n";
-    outFile << "<head>\n";
-
-    outFile << "<title>Description of Low Energy Fission Model</title>\n";
-    outFile << "</head>\n";
-    outFile << "<body>\n";
-
-    outFile << "G4LFission is one of the Low Energy Parameterized\n"
-            << "(LEP) models used to implement neutron-induced fission of\n"
-            << "nuclei.  It is a re-engineered version of the GHEISHA code\n"
-            << "of H. Fesefeldt which emits neutrons and gammas but no\n"
-            << "nuclear fragments.  The model is applicable to all incident\n"
-            << "neutron energies.\n";
-
-    outFile << "</body>\n";
-    outFile << "</html>\n";
-    outFile.close();
-  }
+  outFile << "G4LFission is one of the Low Energy Parameterized\n"
+          << "(LEP) models used to implement neutron-induced fission of\n"
+          << "nuclei.  It is a re-engineered version of the GHEISHA code\n"
+          << "of H. Fesefeldt which emits neutrons and gammas but no\n"
+          << "nuclear fragments.  The model is applicable to all incident\n"
+          << "neutron energies.\n";
 }
 
-
-void 
-G4LFission::init()
+void G4LFission::init()
 {
    G4int i;
    G4double xx = 1. - 0.5;

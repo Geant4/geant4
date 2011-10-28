@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
- // Hadronic Process: Low Energy Neutron Inelastic Process
- // original by J.L. Chuma, TRIUMF, 04-Feb-1997
+// Hadronic Process: Low Energy Neutron Inelastic Process
+// original by J.L. Chuma, TRIUMF, 04-Feb-1997
  
 #ifndef G4LENeutronInelastic_h
 #define G4LENeutronInelastic_h 1
@@ -47,16 +47,14 @@ class G4LENeutronInelastic : public G4InelasticInteraction
     {
       SetMinEnergy(0.0);
       SetMaxEnergy(55.*GeV);
-      Description();
     }
     
-    ~G4LENeutronInelastic()
-    {}
+    ~G4LENeutronInelastic() {}
     
     G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
                                    G4Nucleus& targetNucleus);
 
-    void Description() const;
+    virtual void ModelDescription(std::ostream& outFile) const;
     
   private:
     

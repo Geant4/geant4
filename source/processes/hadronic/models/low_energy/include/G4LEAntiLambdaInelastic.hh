@@ -57,6 +57,8 @@
     
     G4HadFinalState * ApplyYourself(const G4HadProjectile &aTrack,
                                       G4Nucleus &targetNucleus );
+
+    virtual void ModelDescription(std::ostream& outFile) const;
     
  private:
     

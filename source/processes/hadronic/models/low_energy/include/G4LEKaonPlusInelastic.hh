@@ -23,13 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id: G4LEKaonPlusInelastic.hh,v 1.11 2007-02-26 18:21:57 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Low Energy KaonPlus Inelastic Process
 // J.L. Chuma, TRIUMF, 12-Feb-1997
-//
  
 #ifndef G4LEKaonPlusInelastic_h
 #define G4LEKaonPlusInelastic_h 1
@@ -55,8 +53,8 @@ class G4LEKaonPlusInelastic : public G4InelasticInteraction
     G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
                                    G4Nucleus& targetNucleus);
 
-    void Description() const;
-    
+    virtual void ModelDescription(std::ostream& outFile) const;
+ 
   private:
     
     void Cascade(                               // derived from CASKP
