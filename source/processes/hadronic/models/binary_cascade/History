@@ -13,6 +13,24 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+14-October-2011, Gunter Folger  had-binary-V09-04-07
+   svn rev 53102
+-  G4GeneratorPrecompoundInterface: without de-excitation, need to 
+    add Fragment Nucleus to reaction products.
+-  BinaryCascade: More cleanup. Revised claculation of excitation energy 
+    when used for rescattering, removing systematic energy non-conservation. 	 
+
+12-October-2011, Gunter Folger  had-binary-V09-04-06
+   svn rev 53051
+-  G4GeneratorPrecompoundInterface: If (exact) excitation energy is <0,
+    not not try to de-execite; energy non-conservation remains, but at a 
+	smaller value. 
+
+28-September-2011, Gunter Folger
+   svn rev 52599
+-  Some code cleanup in G4BinaryCascade, mostly ApplyCollision. No change in
+    functionality. 
+
 4-August-2011, M.Kelsey			had-binary-V09-04-05
 -  G4GeneratorPrecompoundInterface.cc: BUG FIXES: had wrong order of iterators
    in theFinalResult->insert(...), and incorrectly deleted precompound

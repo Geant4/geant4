@@ -116,6 +116,10 @@ private:
   G4double GetExcitationEnergy();
   G4bool CheckDecay(G4KineticTrackVector *);
   void CorrectFinalPandE();
+  G4double CorrectShortlivedPrimaryForFermi(
+  		G4KineticTrack* primary,G4KineticTrackVector target_collection);
+  G4bool CorrectShortlivedFinalsForFermi(
+		  G4KineticTrackVector * products, G4double initial_Efermi);
   void UpdateTracksAndCollisions(G4KineticTrackVector * oldSecondaries,
 				 G4KineticTrackVector * oldTarget,
 				 G4KineticTrackVector * newSecondaries);
@@ -138,6 +142,8 @@ private:
 // for debugging purpose
   void PrintKTVector(G4KineticTrackVector * ktv, std::string comment=std::string(""));
   void PrintKTVector(G4KineticTrack* kt, std::string comment=std::string(""));
+  void DebugApplyCollisionFail(G4CollisionInitialState * collision,
+		  	  	  	  	   G4KineticTrackVector * products);
   void DebugApplyCollision(G4CollisionInitialState * collision, 
                            G4KineticTrackVector *products);
   void DebugEpConservation(const G4HadProjectile & aTrack, G4ReactionProductVector* products);			   
@@ -151,6 +157,7 @@ private:
 
   G4ExcitationHandler * theExcitationHandler;
   G4CollisionManager * theCollisionMgr;
+
   
   G4Scatterer * theH1Scatterer;
 
