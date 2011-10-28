@@ -47,7 +47,7 @@ void G4UserEventAction::BeginOfEventAction(const G4Event*)
    msg += "set it to G4RunManager before instantiating other user action classes\n";
    msg += "such as G4UserEventAction.";
    G4Exception("G4UserEventAction::G4UserEventAction()",
-              "Event0001",FatalException,msg);
+              "Event0032",FatalException,msg);
  }
 }
 

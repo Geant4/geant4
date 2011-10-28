@@ -54,7 +54,8 @@ G4EventManager::G4EventManager()
 {
  if(fpEventManager)
  {
-  G4Exception("G4EventManager::G4EventManager() has already been made.");
+  G4Exception("G4EventManager::G4EventManager","Event0001",FatalException,
+  "G4EventManager::G4EventManager() has already been made.");
  }
  else
  {
@@ -103,9 +104,8 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
   if(currentState!=G4State_GeomClosed)
   {
     G4Exception("G4EventManager::ProcessOneEvent",
-                "IllegalApplicationState",
-                JustWarning,
-                "Geometry is not closed : cannot process an event.");
+                "Event0002", JustWarning,
+                "IllegalApplicationState -- Geometry is not closed : cannot process an event.");
     return;
   }
   currentEvent = anEvent;
@@ -366,8 +366,7 @@ void G4EventManager::SetUserInformation(G4VUserEventInformation* anInfo)
   if(currentState!=G4State_EventProc || currentEvent==0)
   {
     G4Exception("G4EventManager::SetUserInformation",
-                "IllegalApplicationState",
-                JustWarning,
+                "Event0003", JustWarning,
                 "G4VUserEventInformation cannot be set because of ansense of G4Event.");
     return;
   }

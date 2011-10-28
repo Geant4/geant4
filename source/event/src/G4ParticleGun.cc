@@ -76,32 +76,46 @@ G4ParticleGun::~G4ParticleGun()
 
 G4ParticleGun::G4ParticleGun(const G4ParticleGun& /*right*/)
 :G4VPrimaryGenerator()
-{ G4Exception("G4ParticleGun : Copy constructor should not be used."); }
+{ G4Exception(
+  "G4ParticleGun::G4ParticleGun","Event0191",FatalException,
+  "G4ParticleGun : Copy constructor should not be used."); }
 
 const G4ParticleGun& G4ParticleGun::operator=(const G4ParticleGun& right)
-{ G4Exception("G4ParticleGun : Equal operator should not be used."); return right; }
+{ G4Exception(
+  "G4ParticleGun::operator=","Event0192",FatalException,
+  "G4ParticleGun : Equal operator should not be used.");
+  return right; }
 
 G4int G4ParticleGun::operator==(const G4ParticleGun& /*right*/) const
-{ G4Exception("G4ParticleGun : == operator should not be used."); return true; }
+{ G4Exception(
+  "G4ParticleGun::operator==","Event0193",FatalException,
+  "G4ParticleGun : == operator should not be used.");
+  return true; }
 
 G4int G4ParticleGun::operator!=(const G4ParticleGun& /*right*/) const
-{ G4Exception("G4ParticleGun : == operator should not be used."); return false; }
+{ G4Exception(
+  "G4ParticleGun::operator!=","Event0193",FatalException,
+  "G4ParticleGun : != operator should not be used.");
+  return false; }
 
 void G4ParticleGun::SetParticleDefinition
                  (G4ParticleDefinition * aParticleDefinition)
 { 
   if(!aParticleDefinition)
   {
-    G4Exception("G4ParticleGun::SetParticleDefinition()","Event00003",FatalException,
-     "Null pointer is given.");
+    G4Exception("G4ParticleGun::SetParticleDefinition()","Event0101",
+     FatalException,"Null pointer is given.");
   }
   if(aParticleDefinition->IsShortLived())
   {
     if(!(aParticleDefinition->GetDecayTable()))
     {
-      G4cerr << "G4ParticleGun does not support shooting a short-lived particle without a valid decay table." << G4endl;
-      G4cerr << "G4ParticleGun::SetParticleDefinition for "
-             << aParticleDefinition->GetParticleName() << " is ignored." << G4endl;
+      G4ExceptionDescription ED;
+      ED << "G4ParticleGun does not support shooting a short-lived particle without a valid decay table." << G4endl;
+      ED << "G4ParticleGun::SetParticleDefinition for "
+         << aParticleDefinition->GetParticleName() << " is ignored." << G4endl;
+      G4Exception("G4ParticleGun::SetParticleDefinition()","Event0102",
+      JustWarning,ED);
       return;
     }
   }

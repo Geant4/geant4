@@ -185,13 +185,18 @@ class G4Event
       inline const G4String& GetRandomNumberStatus() const 
       {
         if(!validRandomNumberStatus)
-        { G4Exception("Random number status is not available for this event."); }
+        { G4Exception(
+              "G4Event::GetRandomNumberStatus","Event0701",JustWarning,
+              "Random number status is not available for this event."); }
         return *randomNumberStatus;
       }
       inline const G4String& GetRandomNumberStatusForProcessing() const 
       {
         if(!validRandomNumberStatusForProcessing)
-        { G4Exception("Random number status is not available for this event."); }
+        { G4Exception(
+              "G4Event::GetRandomNumberStatusForProcessing","Event0702",
+              JustWarning,
+              "Random number status is not available for this event."); }
         return *randomNumberStatusForProcessing;
       }
 };

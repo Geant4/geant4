@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 20th, 2011, M.Asai (event-V09-04-07)
+- Removing obsolete G4Exception.
+
 July 7th, 2011, G.Cosmo (event-V09-04-06)
 - Fixed Coverity defects for uninitialised static data.
 

@@ -47,7 +47,7 @@ G4UserStackingAction::G4UserStackingAction()
    msg += "set it to G4RunManager before instantiating other user action classes\n";
    msg += "such as G4UserStackingAction.";
    G4Exception("G4UserStackingAction::G4UserStackingAction()",
-              "Event0002",FatalException,msg);
+              "Event0031",FatalException,msg);
  }
 }
 

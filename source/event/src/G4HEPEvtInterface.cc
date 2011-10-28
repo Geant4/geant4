@@ -46,7 +46,8 @@ G4HEPEvtInterface::G4HEPEvtInterface(char* evfile)
     fileName = evfile;
   }
   else {
-    G4Exception("G4HEPEvtInterface:: cannot open file.");
+    G4Exception("G4HEPEvtInterface::G4HEPEvtInterface","Event0201",FatalException,
+    "G4HEPEvtInterface:: cannot open file.");
   }
   G4ThreeVector zero;
   particle_position = zero;
@@ -62,7 +63,8 @@ G4HEPEvtInterface::G4HEPEvtInterface(G4String evfile)
     fileName = evfile;
   }
   else {
-    G4Exception("G4HEPEvtInterface:: cannot open file.");
+    G4Exception("G4HEPEvtInterface::G4HEPEvtInterface","Event0201",FatalException,
+    "G4HEPEvtInterface:: cannot open file.");
   }
   G4ThreeVector zero;
   particle_position = zero;
@@ -78,7 +80,8 @@ void G4HEPEvtInterface::GeneratePrimaryVertex(G4Event* evt)
   inputFile >> NHEP;
   if( inputFile.eof() ) 
   {
-    G4Exception("End-Of-File : HEPEvt input file");
+    G4Exception("G4HEPEvtInterface::GeneratePrimaryVertex","Event0202",
+    JustWarning,"End-Of-File : HEPEvt input file");
     return;
   }
 
