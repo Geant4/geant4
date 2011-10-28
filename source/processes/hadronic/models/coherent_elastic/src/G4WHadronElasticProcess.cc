@@ -152,7 +152,17 @@ G4VParticleChange* G4WHadronElasticProcess::PostStepDoIt(
   }
 
   // primary change  
-  aParticleChange.ProposeEnergy(result->GetEnergyChange());
+  G4double edep = result->GetLocalEnergyDeposit();
+  G4double efinal = result->GetEnergyChange();
+
+  // protection against numerical problems
+  if((part == theNeutron && efinal <= lowestEnergyNeutron) || 
+     (part != theNeutron && efinal <= lowestEnergy)) {
+    edep += efinal;
+    efinal = 0.0;
+  }
+
+  aParticleChange.ProposeEnergy(efinal);
   aParticleChange.ProposeMomentumDirection(outdir);
 
   // recoil
@@ -168,9 +178,9 @@ G4VParticleChange* G4WHadronElasticProcess::PostStepDoIt(
     aParticleChange.AddSecondary(p);
   } else {
     aParticleChange.SetNumberOfSecondaries(0);
-    aParticleChange.ProposeLocalEnergyDeposit(result->GetLocalEnergyDeposit());
-    aParticleChange.ProposeNonIonizingEnergyDeposit(result->GetLocalEnergyDeposit());
   }
+  aParticleChange.ProposeLocalEnergyDeposit(edep);
+  aParticleChange.ProposeNonIonizingEnergyDeposit(edep);
   result->Clear();
 
   return G4VDiscreteProcess::PostStepDoIt(track,step);

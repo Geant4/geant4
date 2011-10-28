@@ -52,9 +52,9 @@
 G4AntiNuclElastic::G4AntiNuclElastic() 
   : G4HadronElastic("AntiAElastic")
 {
-
-  SetMinEnergy( 0.1*GeV );
-  SetMaxEnergy( 1.*TeV );
+  //V.Ivanchenko commented out 
+  //SetMinEnergy( 0.1*GeV );
+  //SetMaxEnergy( 10.*TeV );
 
 
   theAProton       = G4AntiProton::AntiProton();
@@ -94,7 +94,7 @@ G4AntiNuclElastic::~G4AntiNuclElastic()
 ////////////////////////////////////////////////////////////////////////
 // sample momentum transfer in the CMS system 
 G4double G4AntiNuclElastic::SampleInvariantT(const G4ParticleDefinition* particle, 
-				   G4double Plab,  G4int Z, G4int A)
+					     G4double Plab,  G4int Z, G4int A)
 {
    G4double T;
    G4double Mproj = particle->GetPDGMass();
