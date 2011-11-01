@@ -59,7 +59,7 @@ class G4Track;
 G4IT* GetIT(const G4Track* track) ;
 G4IT* GetIT(const G4Track& track) ;
 
-#if defined G4IT_ALLOC_EXPORT
+#if defined G4EM_ALLOC_EXPORT
 extern G4DLLEXPORT G4Allocator<G4IT> aITAllocator;
 #else
 extern G4DLLIMPORT G4Allocator<G4IT> aITAllocator;

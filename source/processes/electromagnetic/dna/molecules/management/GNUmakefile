@@ -6,7 +6,7 @@
 name := G4emdna-molman
 
 ifndef G4INSTALL
-  G4INSTALL = ../../../../../../
+  G4INSTALL = ../../../../../..
 endif
 
 include $(G4INSTALL)/config/architecture.gmk
@@ -15,6 +15,7 @@ ifndef G4BASE
 G4BASE := $(G4INSTALL)/source
 endif
 
+CPPFLAGS += -DG4EM_ALLOC_EXPORT
 CPPFLAGS += -I$(G4BASE)/processes/electromagnetic/dna/management/include \
             -I$(G4BASE)/geometry/management/include \
             -I$(G4BASE)/global/management/include \

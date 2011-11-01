@@ -73,8 +73,9 @@ G4TrackListNode::~G4TrackListNode()
 
 //***********************************************************
 
-G4TrackList::G4TrackList() : fListRef(new _ListRef(this)), fBoundary()
+G4TrackList::G4TrackList() : fBoundary()
 {
+    fListRef    = new _ListRef(this);
     fStart      = 0;
     fFinish     = 0;
     fNbTracks   = 0 ;

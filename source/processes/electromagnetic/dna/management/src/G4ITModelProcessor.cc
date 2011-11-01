@@ -62,7 +62,7 @@ G4ITModelProcessor::~G4ITModelProcessor()
     fReactionInfo.clear();
 }
 
-G4ITModelProcessor::G4ITModelProcessor(const G4ITModelProcessor& other)
+G4ITModelProcessor::G4ITModelProcessor(const G4ITModelProcessor& /*other*/)
 {
     //copy ctorr
 }

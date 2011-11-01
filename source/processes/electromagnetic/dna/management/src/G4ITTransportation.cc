@@ -132,7 +132,7 @@ G4ITTransportation::G4ITTransportationState::G4ITTransportationState() : G4Proce
     fTransportEndKineticEnergy = -1;
     fTransportEndSpin = G4ThreeVector(0,0,0);
     fMomentumChanged = false;
-    fEnergyChanged = -1;
+    fEnergyChanged = false;
     fEndGlobalTimeComputed = -1;
     fCandidateEndGlobalTime = -1;
     static G4TouchableHandle nullTouchableHandle; // Points to (G4VTouchable*) 0

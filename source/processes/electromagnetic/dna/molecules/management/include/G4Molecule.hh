@@ -236,7 +236,7 @@ private:
 };
 
 
-#if defined G4MOLECULE_ALLOC_EXPORT
+#if defined G4EM_ALLOC_EXPORT
 extern G4DLLEXPORT G4Allocator<G4Molecule> aMoleculeAllocator;
 #else
 extern G4DLLIMPORT G4Allocator<G4Molecule> aMoleculeAllocator;

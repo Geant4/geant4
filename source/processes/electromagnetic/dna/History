@@ -13,6 +13,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+01.11.2011  M.K.                tag emdna-V09-04-36
+            Remove warnings on G4ITModelProcessor,
+            G4ITTransportation, G4TrackList on Windows
+
+01.11.2011  G.Cosmo
+            Renamed export flags for DLL builds to G4EM_ALLOC_EXPORT and
+            updated GNUMakefiles to have it properly defined.
+
 31.10.2011  M.K			tag emdna-V09-04-35
             Remove obsolete G4Exception
 	    Remove "friend class G4KDTree" in G4KDNode
