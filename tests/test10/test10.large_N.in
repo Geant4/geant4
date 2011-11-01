@@ -28,6 +28,10 @@
 /mydet/SelectDetector Tube
 /run/beamOn 25
 #
+# CutTube
+/mydet/SelectDetector CutTube
+/run/beamOn 25
+#
 # Hype
 /mydet/SelectDetector Hype
 /run/beamOn 25

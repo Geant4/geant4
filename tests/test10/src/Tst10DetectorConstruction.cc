@@ -43,6 +43,7 @@
 #include "G4Box.hh"
 #include "G4Orb.hh"
 #include "G4Tubs.hh"
+#include "G4CutTubs.hh"
 #include "G4Sphere.hh"
 #include "G4Cons.hh"
 #include "G4Hype.hh"
@@ -140,6 +141,9 @@ Tst10DetectorConstruction::SelectDetector( const G4String& val )
                            10*cm, 10*deg, 300*deg ); 
   else if (val == "Tube")
     aVolume = new G4Tubs ( "aTube", 5*cm, 10*cm, 7*cm, 70*deg, 100*deg);
+  else if (val == "CutTube")
+    aVolume = new G4CutTubs ( "aCutTube", 5*cm, 10*cm, 15*cm, 70*deg, 100*deg,
+                           G4ThreeVector(0,-0.7,-0.7),G4ThreeVector(0.,0.7,0.7));
   else if (val == "Hype")
     aVolume = new G4Hype ("aHype", 10*cm, 20*cm, 0*deg, 360*deg, 10*cm );
   else if (val == "Torus")

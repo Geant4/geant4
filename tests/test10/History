@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 1, 2011  Tatiana Nikitina (test10-V09-04-02)
+- Added G4CutTubs shape to the test suite.
+
 Sep 30, 2011  Gabriele Cosmo (test10-V09-04-01)
 - Fixed compilation warnings for unused variables set on gcc-4.6.
 

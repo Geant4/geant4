@@ -46,7 +46,7 @@ Tst10DetectorMessenger::Tst10DetectorMessenger(Tst10DetectorConstruction * myDC)
   selDetCmd->SetGuidance("  Choice : Detector type ");
   selDetCmd->SetParameterName("choice",true);
   selDetCmd->SetDefaultValue("Sphere");
-  selDetCmd->SetCandidates("Sphere Orb Box Cone Tube Hype Torus Para Paraboloid Trd GenericTrap Polyhedra Polycone TwistedBox TwistedTrd TwistedTrap TwistedTrap2  TwistedTubs Ellipsoid EllipticalTube EllipticalCone Tet TessellatedSolid ExtrudedSolid UnionSolid IntersectionSolid SubtractionSolid");
+  selDetCmd->SetCandidates("Sphere Orb Box Cone Tube CutTube Hype Torus Para Paraboloid Trd GenericTrap Polyhedra Polycone TwistedBox TwistedTrd TwistedTrap TwistedTrap2  TwistedTubs Ellipsoid EllipticalTube EllipticalCone Tet TessellatedSolid ExtrudedSolid UnionSolid IntersectionSolid SubtractionSolid");
   selDetCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
