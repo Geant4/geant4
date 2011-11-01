@@ -12,6 +12,9 @@
 #
 #------------------------------------------------------------------------------
 
+# Add allocation export symbol for the EM category
+add_definitions(-DG4EM_ALLOC_EXPORT)
+
 # Add allocation export symbol for the hadronic category
 add_definitions(-DG4HADRONIC_ALLOC_EXPORT)
 
