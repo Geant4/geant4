@@ -17,12 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+1 November 2011 Tatiana Nikitina (gdml-V09-04-07)
+- Extended reader and writer to support new shape G4CutTubs.
+
 14 October 2011 Peter Gumplinger (gdml-V09-04-06)
-- complete migration to work with materials-V09-04-15
-  now includes G4GDMLWriteMaterials.cc
+- Completed migration to work with tag "materials-V09-04-15" also for writer.
 
 13 October 2011 Peter Gumplinger (gdml-V09-04-05)
-- modify to work with materials-V09-04-14
+- Modify to comply with modifications in tag "materials-V09-04-14".
 
 27 September 2010 Anton Pytel (gdml-V09-04-04)
 - Extended GDML schema for materials to include ionisation potential (mean

@@ -91,6 +91,7 @@ class G4GDMLReadSolids : public G4GDMLReadMaterials
    void TrapRead(const xercesc::DOMElement* const);
    void TrdRead(const xercesc::DOMElement* const);
    void TubeRead(const xercesc::DOMElement* const);
+   void CutTubeRead(const xercesc::DOMElement* const);
    void TwistedboxRead(const xercesc::DOMElement* const);
    void TwistedtrapRead(const xercesc::DOMElement* const);
    void TwistedtrdRead(const xercesc::DOMElement* const);
