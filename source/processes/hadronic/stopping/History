@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+18 October 2011  Alberto Ribon    (hadr-stopping-V09-04-03)
+-----------------------------------------------------------
+- Added class G4FTFCaptureAtRest to handle nuclear capture
+  of anti-protons at rest with Fritiof.
+
 27 September 2011  Dennis Wright  (hadr-stopping-V09-04-02)
 -----------------------------------------------------------
 - Migrate to integer Z and A.  File affected: 
