@@ -46,7 +46,7 @@ FredPrimaryGeneratorAction::FredPrimaryGeneratorAction( FredMessenger *ourMessen
 	//
 	// Fred has a few interesting ways of generating particles
 	//
-	sprayGun = new SprayParticleGun( 1 );
+	sprayGun = new SprayParticleGun( );
 	gridGun  = new GridParticleGun( );
 	g4Gun    = new G4ParticleGun();
 	

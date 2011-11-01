@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November, 1st, 2011,   T.Nikitina     -  geom-solids-tests-V09-04-01
+- Added G4CutTubs to SBT suite, SurfaceVisTest and OpticalEscape test.
+
 May, 5th, 2011,   G.Cosmo             -  geom-solids-tests-V09-04-00
 - Added genericTrap and paraboloid test to SBT.
 - Correction to SBT G4InteractiveSolid class.

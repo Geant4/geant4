@@ -36,6 +36,7 @@
 #include "G4Box.hh"
 #include "G4Orb.hh"
 #include "G4Tubs.hh"
+#include "G4CutTubs.hh"
 #include "G4Sphere.hh"
 #include "G4Cons.hh"
 #include "G4Hype.hh"
@@ -380,7 +381,17 @@ else if (val == "Q6Shell")
     fTrackerpDz = 80*cm ;
     fTrackerR = 11*cm ;
 
-    aVolume = new G4Tubs ( "aTube",0.8*fTrackerR,fTrackerR,fTrackerpDz,40.,100*deg) ;
+    aVolume = new G4Tubs ( "aTube",0.8*fTrackerR,fTrackerR,fTrackerpDz,40.*deg,100*deg) ;
+
+  }
+ else if (val == "CutTubs")
+  {
+
+    // only solid Tube is supported.
+    fTrackerpDz = 80*cm ;
+    fTrackerR = 11*cm ;
+
+    aVolume = new G4CutTubs ( "aTube",0.8*fTrackerR,fTrackerR,fTrackerpDz,40.*deg,100*deg,G4ThreeVector(0,-1,-1),G4ThreeVector(0,0.7,0.7)) ;
 
   }
   else if (val == "Hype")

@@ -3,7 +3,7 @@
 # I.Hrivnacova, IPN Orsay 28/01/2008 
 
 #
-test/maxPoints 1000
+/test/maxPoints 10000
 #
 # --- extrudedSolid.a1.log
 # Extruded solid with triangular polygon
@@ -56,6 +56,35 @@ test/maxPoints 1000
 /voxel/run
 /test/gridSizes 0.2 0.2 0.2 m
 /test/errorFileName  log/extrudedSolid.d2.log
+/test/run
+#
+# --- extrudedSolid.e1.log
+# Extruded solid from ATLAS(Solid1) 
+# 
+#
+/solid/G4ExtrudedSolid 4 (2.749,0.07,0.07,2.769922671698) (0.,2.412182434678,2.43102129288,0.) 2 (-0.25,0.25) (0.0,0.0) (0.0,0.0) (1.0,1.0)
+/test/gridSizes 0.1 0.1 0.1 m
+/test/errorFileName  log/extrudedSolid.e1.log
+/test/run
+/voxel/errorFileName log/extrudedSolidv.e1.log
+/voxel/run
+/test/gridSizes 0.02 0.02 0.02 m
+/test/errorFileName  log/extrudedSolid.e2.log
+/test/run
+#
+# --- extrudedSolid.f1.log
+# Extruded solid from ATLAS(Solid2) 
+# 
+#
+#/solid/G4ExtrudedSolid 5 (2.769922671698,0.07,0.07,-0.57032145896047177,2.417226262059300569) (0.,2.43102129288,2.690,2.690,0.) 2 (-0.009,0.009) (0.0,0.0) (0.0,0.0) (1.0,1.0)
+/solid/G4ExtrudedSolid 5 (2.417226262059300569,-0.57032145896047177,0.07,0.07,2.769922671698) (0.,2.69,2.69,2.43102129288,0.) 2 (-0.009,0.009) (0.0,0.0) (0.0,0.0) (1.0,1.0)
+/test/gridSizes 0.1 0.1 0.1 m
+/test/errorFileName  log/extrudedSolid.f1.log
+/test/run
+/voxel/errorFileName log/extrudedSolidv.f1.log
+/voxel/run
+/test/gridSizes 0.02 0.02 0.02 m
+/test/errorFileName  log/extrudedSolid.f2.log
 /test/run
 #
 exit

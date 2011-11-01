@@ -452,10 +452,10 @@ G4int SBTrun::DebugToOutPV( const G4VSolid *testVolume, std::istream &logger, co
   //
   // Call
   //
-  //G4bool validNorm;
-  //G4ThreeVector norm;
+  G4bool validNorm;
+  G4ThreeVector norm;
   G4double answer = testVolume->DistanceToOut( p, v );
-  G4cout << "testVolume->DistanceToOut( p, v ): " << answer << G4endl; 
+  G4cout << "testVolume->DistanceToOut( p, v ): " << answer << " validNorm: " << validNorm << G4endl; 
 
   p += answer*v;
   G4cout << "testVolume->Inside(p += answer*v): " << testVolume->Inside(p) << G4endl; 
@@ -959,4 +959,5 @@ void SBTrunPointList::AddPoint( G4ThreeVector newPoint )
     pointList[irand] = newPoint;
   }
 }
+
 

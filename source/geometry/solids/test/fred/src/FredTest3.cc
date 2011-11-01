@@ -444,7 +444,7 @@ void FredTest3::TestOutsidePoint( const G4VSolid *testVolume, G4int *nError,
 	// Check if point is really outside
 	G4double safeDistance = testVolume->DistanceToIn( point );
 	if (safeDistance <= 0.0) {
-		ReportError( nError, point, 0, "T0: DistanceToIn(p) <= 0", logger );
+		ReportError( nError, point, G4ThreeVector(), "T0: DistanceToIn(p) <= 0", logger );
 		return;
 	}
 	
@@ -579,7 +579,7 @@ void FredTest3::TestInsidePoint( const G4VSolid *testVolume, G4int *nError,
 	// Check if point is really inside
 	G4double safeDistance = testVolume->DistanceToOut( point );
 	if (safeDistance <= 0.0) {
-		ReportError( nError, point, 0, "TI: DistanceToOut(p) <= 0", logger );
+		ReportError( nError, point, G4ThreeVector(), "TI: DistanceToOut(p) <= 0", logger );
 		return;
 	}
 	

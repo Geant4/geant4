@@ -49,6 +49,7 @@
 #include "G4GenericTrap.hh"
 #include "G4Paraboloid.hh"
 #include "G4Tubs.hh"
+#include "G4CutTubs.hh"
 #include "G4Ellipsoid.hh"
 #include "G4EllipticalCone.hh"
 #include "G4EllipticalTube.hh"
@@ -217,6 +218,19 @@ G4InteractiveSolid::G4InteractiveSolid( const G4String &prefix )
 	G4String tubsPath = prefix+"G4Tubs";
 	tubsCmd = new G4UIcmdWithPargs( tubsPath, this, tubsArgs, 5 );
 	tubsCmd->SetGuidance( "Declare a G4Tubs solid" );
+	//
+	// Declare G4CutTubs
+	//
+	cuttubsArgs[0] = new G4UIcmdPargDouble( "rmin", 1.0, m );
+	cuttubsArgs[1] = new G4UIcmdPargDouble( "rmax", 1.0, m );
+	cuttubsArgs[2] = new G4UIcmdPargDouble( "dz",   1.0, m );
+	cuttubsArgs[3] = new G4UIcmdPargDouble( "startPhi",  1.0, deg );
+	cuttubsArgs[4] = new G4UIcmdPargDouble( "deltaPhi",  1.0, deg );
+        cuttubsArgs[5] = new G4UIcmdPargListDouble( "lowNorm", 3, mm );
+	cuttubsArgs[6] = new G4UIcmdPargListDouble( "highNorm", 3, mm );
+	G4String cuttubsPath = prefix+"G4CutTubs";
+	cuttubsCmd = new G4UIcmdWithPargs( cuttubsPath, this, cuttubsArgs, 7 );
+	cuttubsCmd->SetGuidance( "Declare a G4CutTubs solid" );
 
 	//
 	// Declare G4Ellipsoid
@@ -501,6 +515,9 @@ G4InteractiveSolid::~G4InteractiveSolid()
 
 	delete tubsCmd;
 	DeleteArgArray( tubsArgs,      sizeof(     tubsArgs)/sizeof(G4UIcmdParg**) );
+
+	delete cuttubsCmd;
+	DeleteArgArray( cuttubsArgs,   sizeof(  cuttubsArgs)/sizeof(G4UIcmdParg**) );
 
 	delete ellipsoidCmd;
 	DeleteArgArray( ellipsoidArgs, sizeof(ellipsoidArgs)/sizeof(G4UIcmdParg**) );
@@ -811,6 +828,40 @@ void G4InteractiveSolid::MakeMeATubs( G4String values )
 	}
 	else
 		G4cerr << "G4Tubs not created" << G4endl;
+}
+
+//
+// MakeMeACutTubs
+//
+void G4InteractiveSolid::MakeMeACutTubs( G4String values )
+{
+	if (cuttubsCmd->GetArguments( values )) {
+		delete solid;
+		
+                G4UIcmdPargDouble *drMinArg     = (G4UIcmdPargDouble *)cuttubsArgs[0],
+				  *drMaxArg     = (G4UIcmdPargDouble *)cuttubsArgs[1],
+				  *dzArg        = (G4UIcmdPargDouble *)cuttubsArgs[2],
+                                  *dphiStartArg = (G4UIcmdPargDouble *)cuttubsArgs[3],
+                                  *dphiDeltaArg = (G4UIcmdPargDouble *)cuttubsArgs[4];
+        	G4UIcmdPargListDouble    *lArg  = (G4UIcmdPargListDouble*)cuttubsArgs[5];
+		G4UIcmdPargListDouble    *hArg  = (G4UIcmdPargListDouble*)cuttubsArgs[6];
+				  
+
+                G4ThreeVector lowNorm  = G4ThreeVector(lArg->GetValues()[0],
+                                               lArg->GetValues()[1],lArg->GetValues()[2]);
+                G4ThreeVector highNorm = G4ThreeVector(hArg->GetValues()[0],
+                                               hArg->GetValues()[1],hArg->GetValues()[2]);
+
+		
+		solid = new G4CutTubs( "interactiveCutTubs", drMinArg->GetValue(),
+						       drMaxArg->GetValue(),
+						       dzArg->GetValue(),
+						       dphiStartArg->GetValue(),
+				                       dphiDeltaArg->GetValue(),
+                                                       lowNorm,highNorm );
+	}
+	else
+		G4cerr << "G4CutTubs not created" << G4endl;
 }
 
 
@@ -1560,6 +1611,8 @@ void G4InteractiveSolid::SetNewValue( G4UIcommand *command, G4String newValues )
 		MakeMeAParaboloid( newValues );
 	else if (command == tubsCmd) 
 		MakeMeATubs( newValues );
+	else if (command == cuttubsCmd) 
+		MakeMeACutTubs( newValues );
 	else if (command == ellipsoidCmd) 
 		MakeMeAnEllipsoid( newValues );
 	else if (command == elConeCmd) 
@@ -1633,6 +1686,8 @@ G4String G4InteractiveSolid::GetCurrentValue( G4UIcommand *command )
 		return ConvertArgsToString(    parabolArgs, sizeof(  parabolArgs)/sizeof(G4UIcmdParg**) );
 	else if (command == tubsCmd)
 		return ConvertArgsToString( 	  tubsArgs, sizeof(	tubsArgs)/sizeof(G4UIcmdParg**) );
+        else if (command == cuttubsCmd)
+		return ConvertArgsToString(    cuttubsArgs, sizeof(   cuttubsArgs)/sizeof(G4UIcmdParg**) );
 	else if (command == ellipsoidCmd)
 		return ConvertArgsToString(  ellipsoidArgs, sizeof( ellipsoidArgs)/sizeof(G4UIcmdParg**) );
 	else if (command == elConeCmd)

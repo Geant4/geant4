@@ -36,6 +36,7 @@
 //Solids
 #include "G4Box.hh"
 #include "G4Tubs.hh"
+#include "G4CutTubs.hh"
 #include "G4Sphere.hh"
 #include "G4Orb.hh"
 #include "G4Cons.hh"
@@ -374,6 +375,12 @@ else if (val == "Q6Shell")
     // only solid Tube is supported.
   
     aVolume = new G4Tubs ( "aTube",0.1,5.9*mm,3.*mm,0.,180*deg) ;
+
+  }  else if (val == "CutTubs")
+  {
+
+     
+    aVolume = new G4CutTubs ( "aTube",0.1,5.9*mm,3.*mm,0.,180*deg,G4ThreeVector(0,0,-1),G4ThreeVector(0,0.3,0.95)) ;
 
   }
   else if (val == "Hype")

@@ -47,7 +47,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * myDC)
   selDetCmd->SetParameterName("choice",true);
   selDetCmd->SetDefaultValue("Polyhedra");
 
- selDetCmd->SetCandidates("Trap Trd Tet Sphere HalfSphere HollowSphere HalfHollowSphere  Ring Shell Orb Box Cons manyCons Tubs Hype Torus Para Paraboloid Polycone PolyconeGen PolyconeGenComplex Polyhedra PolyhedraGen PolyhedraGenComplex BREPBox Trd b1Ib2 b1Ub2 b1Sb2 b1Ub1 b1Ib1 b1Sb1 Ellipsoid EllipticalCone EllipticalTube GenericTrap TwistedBox TwistedTrd TwistedTrap TwistedTubs TessellatedSolid ExtrudedSolid Tet ");
+ selDetCmd->SetCandidates("Trap Trd Tet Sphere HalfSphere HollowSphere HalfHollowSphere  Ring Shell Orb Box Cons manyCons Tubs CutTubs Hype Torus Para Paraboloid Polycone PolyconeGen PolyconeGenComplex Polyhedra PolyhedraGen PolyhedraGenComplex BREPBox Trd b1Ib2 b1Ub2 b1Sb2 b1Ub1 b1Ib1 b1Sb1 Ellipsoid EllipticalCone EllipticalTube GenericTrap TwistedBox TwistedTrd TwistedTrap TwistedTubs TessellatedSolid ExtrudedSolid Tet ");
   selDetCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
     myDetector->SelectDetector(defParam="Polyhedra");

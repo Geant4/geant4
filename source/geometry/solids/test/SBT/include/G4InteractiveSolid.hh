@@ -114,6 +114,10 @@ protected:
   G4UIcmdParg		*tubsArgs[5];
   G4UIcmdWithPargs	*tubsCmd;
   void MakeMeATubs( G4String values );
+
+  G4UIcmdParg		*cuttubsArgs[7];
+  G4UIcmdWithPargs	*cuttubsCmd;
+  void MakeMeACutTubs( G4String values );
 	
   G4UIcmdParg		*ellipsoidArgs[5];
   G4UIcmdWithPargs	*ellipsoidCmd;
