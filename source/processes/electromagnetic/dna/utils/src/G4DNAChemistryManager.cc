@@ -43,7 +43,7 @@
 
 using namespace std;
 
-auto_ptr<G4DNAChemistryManager> G4DNAChemistryManager::fInstance(0);
+G4DNAChemistryManager* G4DNAChemistryManager::fInstance(0);
 
 G4DNAChemistryManager::G4DNAChemistryManager() : fActiveChemistry(false)
 {
@@ -52,8 +52,8 @@ G4DNAChemistryManager::G4DNAChemistryManager() : fActiveChemistry(false)
 
 G4DNAChemistryManager* G4DNAChemistryManager::Instance()
 {
-    if(!fInstance.get()) fInstance = auto_ptr<G4DNAChemistryManager>(new G4DNAChemistryManager());
-    return fInstance.get();
+    if(!fInstance) fInstance = new G4DNAChemistryManager();
+    return fInstance;
 }
 
 G4DNAChemistryManager::~G4DNAChemistryManager()
@@ -63,7 +63,7 @@ G4DNAChemistryManager::~G4DNAChemistryManager()
 
 void G4DNAChemistryManager::DeleteInstance()
 {
-    if(fInstance.get()) fInstance.reset();
+    if(fInstance)  delete fInstance;
 }
 
 void G4DNAChemistryManager::CreateWaterMolecule(ElectronicModification modification,

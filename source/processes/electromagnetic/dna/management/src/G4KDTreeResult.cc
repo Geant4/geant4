@@ -38,24 +38,24 @@
 
 using namespace std;
 
-//struct ResNode
-//{
-//    G4KDNode* fNode;
-//    double fDistanceSqr;
-//    ResNode():fNode(0),fDistanceSqr(0){;}
-//    ResNode(double distsqr, G4KDNode* node):fNode(node),fDistanceSqr(distsqr){;}
-//    ResNode(const ResNode& right)
-//    {
-//        fNode = right.fNode;
-//        fDistanceSqr= right.fDistanceSqr;
-//    }
-//    ~ResNode(){;}
+struct ResNode
+{
+    G4KDNode* fNode;
+    double fDistanceSqr;
+    ResNode():fNode(0),fDistanceSqr(0){;}
+    ResNode(double distsqr, G4KDNode* node):fNode(node),fDistanceSqr(distsqr){;}
+    ResNode(const ResNode& right)
+    {
+        fNode = right.fNode;
+        fDistanceSqr= right.fDistanceSqr;
+    }
+    ~ResNode(){;}
 
-//    bool operator<(const ResNode& right) const
-//    {
-//        return (fDistanceSqr < right.fDistanceSqr);
-//    }
-//};
+    bool operator<(const ResNode& right) const
+    {
+        return (fDistanceSqr < right.fDistanceSqr);
+    }
+};
 
 // comparison
 bool CompareResNode(const ResNode& first, const ResNode& second)
@@ -112,7 +112,6 @@ bool G4KDTreeResult::End()
 void G4KDTreeResult::Next()
 {
     fIterator++;
-//    return (fIterator != end());
 }
 
 void* G4KDTreeResult::GetItem(double*& pos)

@@ -13,8 +13,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+31.10.2011  M.K			tag emdna-V09-04-35
+            Remove obsolete G4Exception
+	    Remove "friend class G4KDTree" in G4KDNode
+	    Remove G4VITProcessor and all relatives 
+	    Fix windows compilation errors & warnings
+
 28.10.2011  M.K			tag emdna-V09-04-34
             Remove __PRETTY_FUNCTION__ introduce __Exception_Origin__
+            Plus remove obsolete G4Exception
 
 28.10.2011  M.K			tag emdna-V09-04-33
             Displace G4DNAChemistryManager, G4DNAMolecularReactionTable,

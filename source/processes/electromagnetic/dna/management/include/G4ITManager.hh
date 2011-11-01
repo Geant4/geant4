@@ -44,7 +44,6 @@
 #include "G4ITBox.hh"
 #include "G4KDTree.hh"
 #include "G4Track.hh"
-#include "G4ExceptionOrigin.hh"
 
 class G4VITManager
 {    
@@ -189,10 +188,8 @@ public :
 
         if(!myIT)
         {
-            __Exception_Origin__
-            G4String exceptionCode ("ITManager001");
             G4ExceptionDescription exceptionDescription ("You are requested a bad IT");
-            G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+            G4Exception("G4ITManager::GetBox","ITManager001",
                         FatalErrorInArgument,exceptionDescription);
         }
 

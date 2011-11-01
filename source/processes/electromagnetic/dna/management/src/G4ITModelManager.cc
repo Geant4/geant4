@@ -34,7 +34,7 @@
 
 #include "G4ITModelManager.hh"
 #include "G4ITType.hh"
-#include "G4ExceptionOrigin.hh"
+#include "G4UnitsTable.hh"
 
 using namespace std;
 
@@ -91,12 +91,50 @@ void G4ITModelManager::SetModel(G4VITModel* aModel, G4double startingTime)
     assert(fIsInitialized == FALSE);
     if(fIsInitialized == true)
     {
-        __Exception_Origin__
-        G4String exceptionCode ("ITModelManager001");
         G4ExceptionDescription exceptionDescription ;
         exceptionDescription << "You are trying to insert a new model after initialization of th model manager.";
-        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+        G4Exception("G4ITModelManager::SetModel","ITModelManager001",
                     FatalErrorInArgument,exceptionDescription);
     }
     fModels[startingTime] = aModel;
+}
+
+G4VITModel* G4ITModelManager::GetModel(const G4double globalTime)
+{
+    if(!fModels.empty())
+    {
+        mapModels::reverse_iterator rit = fModels.rbegin();
+        if(rit != fModels.rend())
+        {
+            if(globalTime > rit->first)
+            {
+                return rit->second;
+            }
+            else
+            {
+                mapModels::iterator it = fModels.begin();
+
+                if(globalTime < it->first)
+                {
+                    G4ExceptionDescription exceptionDescription ;
+                    exceptionDescription << "No model was found at time ";
+                    exceptionDescription << G4BestUnit(globalTime,"Time");
+                    exceptionDescription << ". The first model is registered at time : ";
+                    exceptionDescription << G4BestUnit(it->first,"Time") << ". ";
+                    G4Exception("G4ITModelManager::GetModel","ITModelManager003",
+                                FatalErrorInArgument,exceptionDescription);
+                }
+
+                it = fModels.lower_bound(globalTime);
+
+                if(it != fModels.end()) return it->second;
+            }
+        }
+    }
+
+    G4ExceptionDescription exceptionDescription ;
+    exceptionDescription << "No model was found.";
+    G4Exception("G4ITModelManager::GetModel","ITModelManager004",
+                FatalErrorInArgument,exceptionDescription);
+    return 0;
 }

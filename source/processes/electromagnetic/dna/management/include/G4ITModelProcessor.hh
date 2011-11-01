@@ -39,7 +39,6 @@
 #define G4ITMODELPROCESSOR_H
 
 #include <vector>
-#include "G4VITProcessor.hh"
 #include "G4ITReactionChange.hh"
 #include "G4ITType.hh"
 #include "G4ITModelHandler.hh"
@@ -59,18 +58,18 @@ typedef G4ReferenceCountedHandle< std::vector<G4Track*> > G4TrackVectorHandle;
      * The second one, the ReactionProcess will make the tracks reacting.
      */ 
 
-class G4ITModelProcessor : public G4VITProcessor<G4ITModelProcessor>
+class G4ITModelProcessor
 {
 public:
     /** Default constructor */
-    G4ITModelProcessor(G4int);
+    G4ITModelProcessor();
     /** Default destructor */
     virtual ~G4ITModelProcessor();
 
 
     inline void SetModelHandler(G4ITModelHandler*);
 
-    virtual void Initialize(void* o = 0);
+    void Initialize();
     
     /**
      * Restaure original state of the modelProcessor.
@@ -88,7 +87,7 @@ protected :
     inline void SetTrack(const G4Track*);
 
 public :
-    void CalculateStep(const G4Track*, const G4double);
+    void CalculateTimeStep(const G4Track*, const G4double);
     void DoCalculateStep();
 
     //____________________________________________________________
@@ -96,8 +95,7 @@ public :
     void FindReaction(std::map<G4Track*, G4TrackVectorHandle>*,
                       const double previousStepTime,
                       const bool reachedUserStepTimeLimit) ;
-    // TODO
-    //    void FindReaction(G4TrackList*); // To be studied
+
     //____________________________________________________________
     // Get results
     inline const std::vector<std::vector<G4VITModel*> >* GetCurrentModel();
@@ -126,6 +124,7 @@ protected:
 
     //_____________________________
     // Members
+    G4bool fInitialized;
     G4ITModelHandler* fpModelHandler ;
 
     // Attributes for interaction between many IT types
@@ -162,22 +161,11 @@ inline const std::vector<std::vector<G4VITModel*> >* G4ITModelProcessor::GetCurr
 
 inline void G4ITModelProcessor::SetModelHandler(G4ITModelHandler* modelHandler)
 {
-    if((fNbProc!=0 && fNbProc!= fID) || fInitialized == 1)
+    if(fInitialized == 1)
     {
-        __Exception_Origin__
-        G4String exceptionCode ("ITModelProcessor001");
         G4ExceptionDescription exceptionDescription ;
-
-        if(fInitialized)
-        {
-            exceptionDescription << "You are trying to set a new model while the model processor has alreaday be initialized";
-        }
-        if( fNbProc!=0 && fNbProc!= fID )
-        {
-            exceptionDescription << "You are trying to set a new model to a wrong model processor. It is probably a Clone model processor and not the master one.";
-        }
-
-        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+        exceptionDescription << "You are trying to set a new model while the model processor has alreaday be initialized";
+        G4Exception("G4ITModelProcessor::SetModelHandler","ITModelProcessor001",
                     FatalErrorInArgument,exceptionDescription);
     }
     fpModelHandler = modelHandler;

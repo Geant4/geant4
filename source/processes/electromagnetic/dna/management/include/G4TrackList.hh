@@ -192,10 +192,16 @@ struct G4TrackList_iterator
     { return fNode; }
 
     G4Track*
-    operator*() /*const*/;
+    operator*();
+
+    const G4Track*
+    operator*() const;
 
     G4Track*
-    operator->() /*const*/;
+    operator->() ;
+
+    const G4Track*
+    operator->() const;
 
     _Self&
     operator++()
@@ -227,14 +233,6 @@ struct G4TrackList_iterator
         return __tmp;
     }
 
-/*    _Self
-    operator+(const difference_type& __n) const
-    { return _Self(fNode + __n); }
-
-    _Self
-    operator-(const difference_type& __n) const
-    { return _Self(fNode - __n); }*/
-
     bool
     operator==(const _Self& __x) const
     { return (fNode == __x.fNode); }
@@ -242,7 +240,6 @@ struct G4TrackList_iterator
     bool
     operator!=(const _Self& __x) const
     {
-/*        G4cout << "node : " << fNode << " other : " << __x.fNode << G4endl;*/
          return (fNode != __x.fNode);
     }
 
@@ -261,15 +258,6 @@ G4TrackList::iterator G4TrackList::end()
 { return iterator( &(fBoundary.fEmptyNode) ); }
 // return an iterator that contains an empty node
 // use for boundary checking only
-
-// TODO
-/*inline G4TrackList::reverse_iterator rbegin()
-{ return reverse_iterator(fBoundary->fEmptyNode.GetNext()); }
-
-inline G4TrackList::reverse_iterator rend();
-{ return reverse_iterator( &(fBoundary->fEmptyNode) ); }
-// return an iterator that contains an empty node
-// use for boundary checking only*/
 
 inline void G4TrackList::push_front(G4Track* track)
 {

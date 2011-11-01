@@ -40,9 +40,10 @@
 #include "G4VDNAReactionModel.hh"
 #include <iomanip>
 #include "G4MoleculeHandleManager.hh"
+
 using namespace std;
 
-auto_ptr<G4DNAMolecularReactionTable> G4DNAMolecularReactionTable::fInstance(0);
+G4DNAMolecularReactionTable* G4DNAMolecularReactionTable::fInstance(0);
 
 G4DNAMolecularReactionData::G4DNAMolecularReactionData():
     fReactive1(),fReactive2(),
@@ -76,12 +77,6 @@ G4DNAMolecularReactionData::~G4DNAMolecularReactionData()
 {
     if(fProducts)
     {
-        //DEBUG
-//        for(int i = 0 ; i < GetNbProducts() ; i++)
-//        {
-//            G4cout << GetProduct(i)->GetName() << G4endl;
-//        }
-
         fProducts->clear() ;
         delete fProducts;
         fProducts = 0;
@@ -111,18 +106,18 @@ void G4DNAMolecularReactionData::AddProduct(const G4Molecule* molecule)
 //_____________________________________________________________________________________
 G4DNAMolecularReactionTable* G4DNAMolecularReactionTable::GetReactionTable()
 {
-    if(!fInstance.get())
+    if(!fInstance)
     {
-        fInstance = auto_ptr<G4DNAMolecularReactionTable>(new G4DNAMolecularReactionTable());
+        fInstance = new G4DNAMolecularReactionTable();
     }
-    return fInstance.get();
+    return fInstance;
 }
 
 void G4DNAMolecularReactionTable::DeleteInstance()
 {
     // DEBUG
 //        G4cout << "G4MolecularReactionTable::DeleteInstance" << G4endl;
-        fInstance.reset();
+        delete fInstance;
 }
 //_____________________________________________________________________________________
 G4DNAMolecularReactionTable::G4DNAMolecularReactionTable() : G4ITReactionTable(),
@@ -139,7 +134,7 @@ G4DNAMolecularReactionTable::~G4DNAMolecularReactionTable()
 //    G4cout << "G4MolecularReactionTable::~G4MolecularReactionTable" << G4endl;
     ReactionDataMap::iterator it1 = fReactionData.begin();
 
-    std::map<const G4Molecule* const,
+    std::map<const G4Molecule*,
              const G4DNAMolecularReactionData*,
              compMoleculeP>::iterator it2;
 
@@ -150,14 +145,12 @@ G4DNAMolecularReactionTable::~G4DNAMolecularReactionTable()
             const G4DNAMolecularReactionData* reactionData = it2->second;
             if(reactionData)
             {
-                const G4Molecule* const reactive1 = reactionData->GetReactive1();
-                const G4Molecule* const reactive2 = reactionData->GetReactive2();
+                const G4Molecule* reactive1 = reactionData->GetReactive1();
+                const G4Molecule* reactive2 = reactionData->GetReactive2();
 
                 fReactionData[reactive1][reactive2] = 0;
                 fReactionData[reactive2][reactive1] = 0;
 
-                // DEBUG
-//                G4cout << reactive1->GetName() << reactive2->GetName() << G4endl;
                 delete reactionData;
             }
         }
@@ -282,7 +275,7 @@ void G4DNAMolecularReactionTable::PrintTable(G4VDNAReactionModel* pReactionModel
             }
         }
     }
-    G4cout<<"Nombre de reactions possibles = "<< n << G4endl;
+    G4cout<<"Number of possible reactions: "<< n << G4endl;
 
     ////////////////////////////////////////////////////////////////////
     // Tableau dynamique en fonction du nombre de caractère maximal dans
@@ -316,11 +309,11 @@ void G4DNAMolecularReactionTable::PrintTable(G4VDNAReactionModel* pReactionModel
     title[1] = "Reaction Rate [dm3/(mol*s)]";
     title[2] = "Interaction Range for chosen reaction model";
 
-    G4cout<<setfill(' ')
-         << setw(maxlengthOutputReaction) << left << title[0]
-         << setw(maxlengthOutputReactionRate) << left << title[1]
-         << setw(2)  << left << title[2]
-         << G4endl;
+    G4cout<< setfill(' ')
+          << setw(maxlengthOutputReaction)     << left << title[0]
+          << setw(maxlengthOutputReactionRate) << left << title[1]
+          << setw(2)  << left << title[2]
+          << G4endl;
 
     G4cout.fill('-');
     G4cout.width(maxlengthOutputReaction+2+maxlengthOutputReactionRate+2+(G4int)title[2].length());
@@ -424,7 +417,7 @@ G4DNAMolecularReactionTable::CanReactWith(const G4Molecule * aMolecule) const
 }
 
 //_____________________________________________________________________________________
-const std::map<const G4Molecule* const, const G4DNAMolecularReactionData*, compMoleculeP>*
+const std::map<const G4Molecule*, const G4DNAMolecularReactionData*, compMoleculeP>*
 G4DNAMolecularReactionTable::GetReativesNData(const G4Molecule* molecule) const
 {
 

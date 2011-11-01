@@ -63,7 +63,6 @@ G4MoleculeDefinition::G4MoleculeDefinition(const G4String& name,
 {
     fElectronOccupancy = new G4ElectronOccupancy(fNbOfMolecularShells);
     fDecayTable = NULL;
-    // fMolecularConfiguration = G4MolecularConfiguration::GetMolecularConfiguration(this);
 }
 //___________________________________________________________________________
 G4MoleculeDefinition::~G4MoleculeDefinition()

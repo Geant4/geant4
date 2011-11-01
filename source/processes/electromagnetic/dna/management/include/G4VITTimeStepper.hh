@@ -58,7 +58,7 @@ public:
 
     // First initialization (done once for all at the begin of the run)
     // eg. check if the reaction table is given ...
-    virtual void Initialize(){;}
+    inline virtual void Initialize(){;}
 
     // Preparation part
     static void SetTimes(const G4double&, const G4double&);
@@ -66,12 +66,12 @@ public:
     inline virtual void Prepare() ;
 
     virtual G4double CalculateStep(const G4Track&, const G4double&) = 0;
-//    std::vector<G4Track*>* GetReactants() ;
-    G4TrackVectorHandle& GetReactants();
-    virtual void ResetReactants(){fReactants = 0;}
+
+    inline G4TrackVectorHandle GetReactants();
+    inline virtual void ResetReactants(){fReactants = 0;}
 
     //
-    G4double GetSampledMinTimeStep() ;
+    inline G4double GetSampledMinTimeStep() ;
     
     inline void SetReactionTable(const G4ITReactionTable*);
     inline const G4ITReactionTable* GetReactionTable();
@@ -109,8 +109,7 @@ inline G4double G4VITTimeStepper::GetSampledMinTimeStep()
     return fSampledMinTimeStep ;
 }
 
-//inline std::vector<G4Track*>* G4VITTimeStepper::GetReactants()
-inline G4TrackVectorHandle& G4VITTimeStepper::GetReactants()
+inline G4TrackVectorHandle G4VITTimeStepper::GetReactants()
 {
     return  fReactants ;
 }

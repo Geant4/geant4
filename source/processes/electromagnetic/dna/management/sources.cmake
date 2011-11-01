@@ -42,7 +42,6 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
     HEADERS
         AddClone_def.hh
         G4AllITManager.hh
-        G4ExceptionOrigin.hh
         G4ITBox.hh
         G4IT.hh
         G4ITManager.hh
@@ -67,8 +66,6 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4UserReactionAction.hh
         G4VITModel.hh
         G4VITProcess.hh
-        G4VITProcessor.hh
-        G4VITProcessor.icc
         G4VITReactionProcess.hh
         G4VITRestDiscreteProcess.hh
         G4VITRestProcess.hh

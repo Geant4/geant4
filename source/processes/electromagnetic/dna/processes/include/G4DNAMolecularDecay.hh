@@ -102,7 +102,6 @@ inline void G4DNAMolecularDecay::SetVerbose(G4int verbose)
     fVerbose = verbose ;
 }
 
-
 inline G4double G4DNAMolecularDecay::AtRestGetPhysicalInteractionLength(
     const G4Track& track,
     G4ForceCondition* condition

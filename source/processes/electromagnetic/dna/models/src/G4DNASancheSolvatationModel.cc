@@ -1,3 +1,40 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// Author: Mathieu Karamitros (kara@cenbg.in2p3.fr)
+//
+// WARNING : This class is released as a prototype.
+// It might strongly evolve or even disapear in the next releases.
+//
+// History:
+// -----------
+// 10 Oct 2011 M.Karamitros created
+//
+// -------------------------------------------------------------------
+
 #include "G4DNASancheSolvatationModel.hh"
 #include "G4WaterExcitationStructure.hh"
 #include "G4ParticleChangeForGamma.hh"
@@ -23,11 +60,20 @@ G4DNASancheSolvatationModel::~G4DNASancheSolvatationModel()
 {}
 
 //______________________________________________________________________
-void G4DNASancheSolvatationModel::Initialise(const G4ParticleDefinition*,
+void G4DNASancheSolvatationModel::Initialise(const G4ParticleDefinition* particleDefinition,
         const G4DataVector& /*cuts*/)
 {
     if (verboseLevel > 1)
         G4cout << "Calling G4SancheSolvatationModel::Initialise()" << G4endl;
+
+    if (particleDefinition != G4Electron::ElectronDefinition())
+    {
+        G4ExceptionDescription exceptionDescription ;
+        exceptionDescription << "Attempting to calculate cross section for wrong particle";
+        G4Exception("G4DNASancheSolvatationModel::CrossSectionPerVolume","G4DNASancheSolvatationModel001",
+                    FatalErrorInArgument,exceptionDescription);
+        return;
+    }
 
     if(!isInitialised)
     {
@@ -46,24 +92,13 @@ void G4DNASancheSolvatationModel::Initialise(const G4ParticleDefinition*,
 
 //______________________________________________________________________
 G4double G4DNASancheSolvatationModel::CrossSectionPerVolume(const G4Material* material,
-        const G4ParticleDefinition* particleDefinition,
+        const G4ParticleDefinition*,
         G4double ekin,
         G4double,
         G4double)
 {
     if (verboseLevel > 1)
         G4cout << "Calling CrossSectionPerVolume() of G4SancheSolvatationModel" << G4endl;
-
-    if (particleDefinition != G4Electron::ElectronDefinition())
-    {        
-        __Exception_Origin__
-        G4String exceptionCode ("G4DNASancheSolvatationModel001");
-        G4ExceptionDescription exceptionDescription ;
-        exceptionDescription << "Attempting to calculate cross section for wrong particle";
-        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
-                    FatalErrorInArgument,exceptionDescription);
-        return 0;
-    }
 
     if (material->GetName() == "G4_WATER")
     {

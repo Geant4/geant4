@@ -62,7 +62,6 @@ private:
     const G4DNAMolecularReactionTable*& fMolecularReactionTable ;
     G4VDNAReactionModel* fReactionModel;
     G4int fVerbose ;
-    static pthread_mutex_t fMutex;
 };
 
 inline void G4DNAMoleculeEncounterStepper::SetReactionModel(G4VDNAReactionModel* reactionModel)

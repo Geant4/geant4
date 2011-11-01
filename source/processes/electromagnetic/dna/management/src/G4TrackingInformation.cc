@@ -34,7 +34,6 @@
 
 #include "G4TrackingInformation.hh"
 #include "G4VITProcess.hh"
-#include "G4ExceptionOrigin.hh"
 
 static const size_t SizeOfSelectedDoItVector=100;
 
@@ -82,12 +81,10 @@ G4ProcessState_Lock* G4TrackingInformation::GetProcessState(G4int index)
 {
     if(index> G4VITProcess::GetMaxProcessIndex() || index<0)
     {
-        __Exception_Origin__
-        G4String exceptionCode ("G4TrackingInformation003");
         G4ExceptionDescription exceptionDescription ;
         exceptionDescription << "G4TrackingInformation::GetProcInfo : Wrong process subType : " ;
         exceptionDescription << index ;
-        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+        G4Exception("G4TrackingInformation::GetProcessState","G4TrackingInformation003",
                     FatalErrorInArgument,exceptionDescription);
     }
 

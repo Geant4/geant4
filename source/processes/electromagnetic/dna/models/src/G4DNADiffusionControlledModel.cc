@@ -2,9 +2,6 @@
 #include "Randomize.hh"
 #include "G4Track.hh"
 #include "G4DNAMolecularReactionTable.hh"
-#include "G4ExceptionOrigin.hh"
-
-//pthread_mutex_t G4DNADiffusionControlledModel::fMutex = PTHREAD_MUTEX_INITIALIZER;
 
 G4DNADiffusionControlledModel::G4DNADiffusionControlledModel() : G4VDNAReactionModel()
 {
@@ -14,8 +11,6 @@ G4DNADiffusionControlledModel::G4DNADiffusionControlledModel() : G4VDNAReactionM
 G4DNADiffusionControlledModel::G4DNADiffusionControlledModel(const G4DNADiffusionControlledModel& __right) :
     G4VDNAReactionModel(__right)
 {
-//    G4cout << "G4DiffusionControlledModel::G4DiffusionControlledModel(const G4DiffusionControlledModel& right)"
-//        << G4endl;
     fReactionData = 0 ;
 }
 G4DNADiffusionControlledModel::~G4DNADiffusionControlledModel()
@@ -36,19 +31,13 @@ void G4DNADiffusionControlledModel::InitialiseToPrint(const G4Molecule* __molecu
 G4double G4DNADiffusionControlledModel::GetReactionRadius(const G4Molecule* mol1,
                                                                const G4Molecule* mol2)
 {
-    //pthread_mutex_lock(&fMutex);
     G4double __output = fReactionTable -> GetReactionData(mol1,mol2)->GetReducedReactionRadius();
-    //pthread_mutex_unlock(&fMutex);
-
     return  __output ;
 }
 
 G4double G4DNADiffusionControlledModel::GetReactionRadius(const G4int __i)
 {
-    //pthread_mutex_lock(&fMutex);
     G4double __output = (*fReactionData)[__i] -> GetReducedReactionRadius();
-    //pthread_mutex_unlock(&fMutex);
-
     return  __output ;
 }
 
@@ -105,12 +94,10 @@ G4bool G4DNADiffusionControlledModel::FindReaction(const G4Track& __trackA,
 
         if(__preStepPositionA == __trackA.GetPosition())
         {
-            __Exception_Origin__
-            G4String exceptionCode ("G4DNADiffusionControlledModel001");
             G4ExceptionDescription exceptionDescription ;
             exceptionDescription << "The molecule : " <<  __moleculeA->GetName();
             exceptionDescription << " did not move since the previous step ";
-            G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+            G4Exception("G4DNADiffusionControlledModel::FindReaction","G4DNADiffusionControlledModel001",
                         FatalErrorInArgument,exceptionDescription);
         }
 

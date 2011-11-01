@@ -48,9 +48,7 @@ class G4VITManager;
 class G4ITBox;
 class G4Track;
 template<typename T> class G4ITManager;
-/*
-Class Description :
-*/
+
 class G4AllITManager
 {
 private :

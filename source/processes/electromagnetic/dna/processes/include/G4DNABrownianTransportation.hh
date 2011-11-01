@@ -59,10 +59,10 @@ public:
                              double&) ;
 
     virtual G4double AlongStepGetPhysicalInteractionLength( const G4Track& /*track*/,
-            G4double , //   previousStepSize
-            G4double /*currentMinimumStep*/,
-            G4double& /*currentSafety*/,
-            G4GPILSelection* /*selection*/);
+                                                            G4double /*previousStepSize*/,
+                                                            G4double /*currentMinimumStep*/,
+                                                            G4double& /*currentSafety*/,
+                                                            G4GPILSelection* /*selection*/);
     virtual G4VParticleChange* PostStepDoIt( const G4Track& track, const G4Step& ) ;
 
     G4VParticleChange* AlongStepDoIt(const G4Track& track, const G4Step&);

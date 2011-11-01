@@ -50,11 +50,10 @@
 #include "G4MolecularConfiguration.hh"
 #include "Randomize.hh"
 #include "G4Track.hh"
-#include "G4ExceptionOrigin.hh"
 
 using namespace std;
 
-double gTemperature = 293.15;
+double G4Molecule::fgTemperature = 293.15;
 // 20°C, used to shoot a energy
 
 ITImp(G4Molecule)
@@ -271,12 +270,8 @@ G4Track * G4Molecule::BuildTrack(G4double globalTime, const G4ThreeVector& Posit
 {
     if(fTrack != 0)
     {
-        __Exception_Origin__
-        G4String exceptionCode ("Molecule001");
-        G4ExceptionDescription exceptionDescription ;
-        exceptionDescription << "A track was already assigned to this molecule";
-        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
-                    FatalErrorInArgument,exceptionDescription);
+        G4Exception("G4Molecule::BuildTrack","Molecule001",
+                    FatalErrorInArgument,"A track was already assigned to this molecule");
     }
 
     // Kinetic Values
@@ -321,11 +316,11 @@ G4double G4Molecule::GetDiffusionVelocity() const
     // Different possibilities
     ////
     // Ideal Gaz case : Maxwell Boltzmann Distribution
-    //    double sigma = k_Boltzmann * gTemperature / m;
+    //    double sigma = k_Boltzmann * fgTemperature / m;
     //    return G4RandGauss::shoot( 0, sigma );
     ////
     // Ideal Gaz case : mean velocity from equipartition theorem
-    return sqrt(3*k_Boltzmann*gTemperature/m);
+    return sqrt(3*k_Boltzmann*fgTemperature/m);
     ////
     // Using this approximation for liquid is wrong
     // However the brownian process avoid taking

@@ -66,8 +66,6 @@ class G4DynamicParticle;
 G4Molecule* GetMolecule(const G4Track& track) ;
 G4Molecule* GetMolecule(const G4Track* track) ;
 
-extern double gTemperature;
-
 /** Class Description
  *  The dynamic molecule holds all the data that change for a molecule
  *  It has a pointer to G4MoleculeDefinition object, which holds
@@ -221,6 +219,9 @@ public:
 
     inline G4MolecularConfiguration* GetMolecularConfiguration() ;
 
+    inline static void SetGlobalTemperature(double);
+    inline static double GetGlobalTemperature();
+
 private:
     /** Default molecule builder
      */
@@ -230,6 +231,8 @@ private:
     G4DynamicParticle* fDynamicParticle;
 
     G4MolecularConfiguration* fMolecularConfiguration;
+
+    static double fgTemperature;
 };
 
 
@@ -261,6 +264,16 @@ inline void G4Molecule::operator delete(void * aMolecule)
 inline G4MolecularConfiguration* G4Molecule::GetMolecularConfiguration()
 {
     return fMolecularConfiguration ;
+}
+
+inline void G4Molecule::SetGlobalTemperature(double temperature)
+{
+    fgTemperature = temperature;
+}
+
+inline double G4Molecule::GetGlobalTemperature()
+{
+    return fgTemperature;
 }
 
 #endif

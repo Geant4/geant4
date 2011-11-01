@@ -44,7 +44,6 @@ G4ITBox::~G4ITBox()
         G4IT * aIT = fFirstIT;
         G4IT * nextIT;
 
-        // delete tracks in the stack
         while( aIT != 0 )
         {
             nextIT = aIT->GetNext();
@@ -86,7 +85,6 @@ void G4ITBox::Push( G4IT * aIT )
 
 void G4ITBox::Extract( G4IT * aStackedIT )
 {
-    //Take off an IT from the box
     if( aStackedIT == fFirstIT )
     {
         fFirstIT = aStackedIT->GetNext();
@@ -156,7 +154,5 @@ void G4ITBox::TransferTo(G4ITBox * aStack)
         Extract(ITToTransfer);
         aStack->Push(ITToTransfer);
         ITToTransfer = ITToTransfer->GetNext();
-        // DEBUG
-        // G4cout<<n_IT<<G4endl;
     }
 }

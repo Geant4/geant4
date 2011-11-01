@@ -41,7 +41,6 @@
 #include <vector>
 #include <map>
 #include "G4VMolecularDecayDisplacer.hh"
-#include "G4ReferenceCountedHandle.hh"
 #include "G4MoleculeHandleManager.hh"
 
 // ######################################################################

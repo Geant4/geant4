@@ -45,7 +45,6 @@
 #include "G4ChordFinder.hh"
 #include "G4SafetyHelper.hh"
 #include "G4FieldManagerStore.hh"
-#include "G4ExceptionOrigin.hh"
 
 class G4VSensitiveDetector;
 
@@ -125,7 +124,7 @@ G4ITTransportation::G4ITTransportation(const G4ITTransportation& right) :
 //////////////////////////////////////////////////////////////////////////////
 /// Process State
 //////////////////////////////////////////////////////////////////////////////
-G4ITTransportation::G4ITTransportationInfo::G4ITTransportationInfo() : G4ProcessState(),
+G4ITTransportation::G4ITTransportationState::G4ITTransportationState() : G4ProcessState(),
     fCurrentTouchableHandle(0)
 {
     fTransportEndPosition = G4ThreeVector(0,0,0);
@@ -145,7 +144,7 @@ G4ITTransportation::G4ITTransportationInfo::G4ITTransportationInfo() : G4Process
     endpointDistance= -1;
 }
 
-G4ITTransportation::G4ITTransportationInfo::~G4ITTransportationInfo()
+G4ITTransportation::G4ITTransportationState::~G4ITTransportationState()
 {
     ;
 }
@@ -516,43 +515,10 @@ void G4ITTransportation::ComputeStep(const G4Track& track,
                                       double& oPhysicalStep)
 {
     const G4DynamicParticle*    pParticle  = track.GetDynamicParticle() ;
-    //    const G4ParticleDefinition* pParticleDef   = pParticle->GetDefinition() ;
     G4ThreeVector startMomentumDir       = pParticle->GetMomentumDirection() ;
     G4ThreeVector startPosition          = track.GetPosition() ;
-    /*
-      // TODO
-      // DEAL WITH EM Field
-        // Is the particle charged ?
-        //
-        G4double              particleCharge = pParticle->GetCharge() ;
 
-        // Check whether the particle have an (EM) field force exerting upon it
-        //
-        G4FieldManager* fieldMgr=0;
-        G4bool          fieldExertsForce = false ;
-        if( (particleCharge != 0.0) )
-        {
-            fieldMgr= fFieldPropagator->FindAndSetFieldManager( track.GetVolume() );
-            if (fieldMgr != 0)
-            {
-                // Message the field Manager, to configure it for this track
-                fieldMgr->ConfigureForTrack( &track );
-                // Moved here, in order to allow a transition
-                //   from a zero-field  status (with fieldMgr->(field)0
-                //   to a finite field  status
-
-                // If the field manager has no field, there is no field !
-                fieldExertsForce = (fieldMgr->GetDetectorField() != 0);
-            }
-        }
-    */
-    // Calculate  Lab Time of Flight (ONLY if field Equations used it!)
-    // G4double endTime   = State(fCandidateEndGlobalTime);
-    // G4double delta_time = endTime - startTime;
-
-    /*    G4double startTime       = track.GetGlobalTime() ;*/
     G4double finalVelocity   = track.GetVelocity() ;
-    /*    G4double initialVelocity = stepData.GetPreStepPoint()->GetVelocity() ;*/
 
     /////////////////////////
     // !!! CASE NO FIELD !!!
@@ -570,9 +536,6 @@ void G4ITTransportation::ComputeStep(const G4Track& track,
         //
         State(fTransportEndPosition) = startPosition + oPhysicalStep*startMomentumDir ;
     }
-    // TODO : have a integration system against time
-    //else
-
 }
 
 
@@ -646,7 +609,6 @@ G4VParticleChange* G4ITTransportation::AlongStepDoIt( const G4Track& track,
         deltaTime = State(fCandidateEndGlobalTime) - startTime ;
     }
 
-    /*    fParticleChange.ProposeGlobalTime( startTime);*/
     fParticleChange.ProposeGlobalTime( State(fCandidateEndGlobalTime) ) ;
 
     // Now Correct by Lorentz factor to get "proper" deltaTime
@@ -658,8 +620,6 @@ G4VParticleChange* G4ITTransportation::AlongStepDoIt( const G4Track& track,
     /// A REVOIR !!!
     ///___________________________________________________________________________
     ///
-
-    //fParticleChange. ProposeTrueStepLength( track.GetStepLength() ) ;
 
     // If the particle is caught looping or is stuck (in very difficult
     // boundaries) in a magnetic field (doing many steps)
@@ -688,7 +648,7 @@ G4VParticleChange* G4ITTransportation::AlongStepDoIt( const G4Track& track,
             if( (fVerboseLevel > 1) ||
                     ( endEnergy > fThreshold_Warning_Energy )  )
             {
-                G4cout << " G4Transportation is killing track that is looping or stuck "
+                G4cout << " G4ITTransportation is killing track that is looping or stuck "
                        << G4endl
                        << "   This track has " << track.GetKineticEnergy() / MeV
                        << " MeV energy." << G4endl;
@@ -705,7 +665,7 @@ G4VParticleChange* G4ITTransportation::AlongStepDoIt( const G4Track& track,
 #ifdef G4VERBOSE
             if( (fVerboseLevel > 2) )
             {
-                G4cout << "   G4Transportation::AlongStepDoIt(): Particle looping -  "
+                G4cout << "   G4ITTransportation::AlongStepDoIt(): Particle looping -  "
                        << "   Number of trials = " << State(fNoLooperTrials)
                        << "   No of calls to  = " << noCalls
                        << G4endl;
@@ -772,11 +732,9 @@ G4VParticleChange* G4ITTransportation::PostStepDoIt( const G4Track& track,
 
         if( State(fCurrentTouchableHandle)->GetVolume() == 0 )
         {
-            __Exception_Origin__
-            G4String exceptionCode ("G4ITTransportation001");
             G4ExceptionDescription exceptionDescription ;
             exceptionDescription << "No current touchable found found " ;
-            G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+            G4Exception(" G4ITTransportation::PostStepDoIt","G4ITTransportation001",
                         FatalErrorInArgument,exceptionDescription);
         }
 
@@ -892,7 +850,7 @@ G4ITTransportation::StartTracking(G4Track* track)
 {
     G4VProcess::StartTracking(track);
     if(InstantiateProcessState())
-        G4VITProcess::fState = new G4ITTransportationInfo();
+        G4VITProcess::fState = new G4ITTransportationState();
         // Will set in the same time fTransportationState
 
     // The actions here are those that were taken in AlongStepGPIL

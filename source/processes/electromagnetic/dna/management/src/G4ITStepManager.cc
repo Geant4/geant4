@@ -43,6 +43,7 @@
 #include <stdlib.h>
 #include "G4ITTrackingManager.hh"
 #include "G4TrackingInformation.hh"
+#include "G4UnitsTable.hh"
 
 using namespace std;
 
@@ -65,11 +66,6 @@ G4ITStepManager* G4ITStepManager::Instance()
 
 G4ITStepManager::G4ITStepManager()
 {
-    //    fNbProc = get_nprocs ();
-    fNbProc = 1 ;
-    // DEBUG
-    //    G4cout <<"Number of processors detected : " << fNbProc << G4endl;
-
     fpMainList = 0 ;
     fpWaitingList = 0 ;
 
@@ -153,7 +149,7 @@ void G4ITStepManager::Initialize()
 
     //______________________________________________________________
 
-    fpMasterModelProcessor = new G4ITModelProcessor(fNbProc-1);
+    fpMasterModelProcessor = new G4ITModelProcessor();
     fpMasterModelProcessor->SetModelHandler(fpModelHandler);
     fpModelProcessor      = fpMasterModelProcessor;
 
@@ -203,13 +199,11 @@ void G4ITStepManager::SynchronizeTracks()
 {
     if(fpWaitingList != 0)
     {
-        __Exception_Origin__
-        G4String exceptionCode ("ITStepManager002");
         G4ExceptionDescription exceptionDescription ;
         exceptionDescription << "There is a waiting track list (fpWaitingList != 0).";
         exceptionDescription << " When G4ITStepManager::SynchronizeTracks() is called, ";
         exceptionDescription << "no more tracks should remain in the fpWaitingList.";
-        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+        G4Exception("G4ITStepManager::SynchronizeTracks","ITStepManager002",
                     FatalErrorInArgument,exceptionDescription);
     }
 
@@ -268,15 +262,13 @@ void G4ITStepManager::SynchronizeTracks()
             if(fDelayedList_i->first > fTmpGlobalTime)
             {
 
-                G4cerr << "Next time to consider = " << fDelayedList_i->first / picosecond << G4endl;
+                G4cerr << "Next time to consider = " << G4BestUnit(fDelayedList_i->first,"Time") << G4endl;
                 G4cerr << "G4ITStepManager::fTmpGlobalTime (should big the biggest time in the simulation) = "
-                       << fTmpGlobalTime / picosecond<< G4endl;
+                       << G4BestUnit(fTmpGlobalTime,"Time")<< G4endl;
 
-                __Exception_Origin__
-                G4String exceptionCode ("ITStepManager003");
                 G4ExceptionDescription exceptionDescription ;
                 exceptionDescription << "The next time in delayed tracks is bigger than the maximum allowed simulation time.";
-                G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+                G4Exception("G4ITStepManager::SynchronizeTracks","ITStepManager003",
                             FatalErrorInArgument,exceptionDescription);
             }
 
@@ -332,13 +324,13 @@ void G4ITStepManager::SynchronizeTracks()
 void G4ITStepManager::DoProcess()
 // We split it from the Process() method to avoid repeating code in SynchronizeTracks
 {
-    G4cout << "G4ITStepManager::DoProcess()"<<G4endl;
+//    G4cout << "G4ITStepManager::DoProcess()"<<G4endl;
     while(fGlobalTime <= fEndTime &&  ! (fpMainList -> empty()) )
     {
         Stepping() ;
     }
 
-    G4cout << "!!!******** Ending at time : " << fGlobalTime / microsecond << "[microsecond]"<< G4endl;
+    G4cout << "!!!******** Ending at time : " << G4BestUnit(fGlobalTime,"Time") << G4endl;
 }
 //_________________________________________________________________________
 
@@ -370,8 +362,7 @@ void G4ITStepManager::Stepping()
 //        G4cout << "\33[1;31m"
 //                 << "CalculateMinStep :"
 //                 << " !!!! ***** fMinTimeStep : "
-//                 << fMinTimeStep /picosecond
-//                 << " [ps]"
+//                 << G4BestUnit(fMinTimeStep,"Time")
 //                 << "\33[0m"
 //                 << G4endl;
 //        G4cout << "ComputeInteractionLength()" << G4endl;
@@ -386,13 +377,13 @@ void G4ITStepManager::Stepping()
         // Only the transportation calculates the corresponding
         // time step
         // DEBUG
-//        G4cout << "(ComputeInteractionLength) :"  << " !!!! **** Time Step : "     << fMinTimeStep /picosecond << " [ps]"<< G4endl;
+//        G4cout << "(ComputeInteractionLength) :"  << " !!!! **** Time Step : "<< G4BestUnit(fMinTimeStep,"Time")<< G4endl;
 //        G4cout << " fInteractionStep : " << fInteractionStep << G4endl;
 
 
         fReachedUserTimeLimit  = (fMinTimeStep == fDefinedMinTimeStep)    ? true : false;
         // DEBUG
-//        G4cout << " !!!! **** Global time : "   << fGlobalTime  /picosecond << " [ps]"<< G4endl;
+//        G4cout << " !!!! **** Global time : "<< G4BestUnit(fGlobalTime,"Time")<< G4endl;
 //        G4cout << "DoIt()" << G4endl;
 
         DoIt(); // should redo transportation ASIL
@@ -420,12 +411,10 @@ void G4ITStepManager::Stepping()
     // DEBUG
     //    G4cout  << "___________________________________" << G4endl;
     //    G4cout  << "*** End Of Step ***" << G4endl;
-    //    G4cout  << "Previous global time : " << (fGlobalTime- fMinTimeStep)
-    //                                    / picosecond
-    //            << "[ps]\t Chosen time :"
-    //            << fMinTimeStep / picosecond<<G4endl;
-    //    G4cout  << "Next global time : " << fGlobalTime
-    //               / picosecond << G4endl;
+    //    G4cout  << "Previous global time : " << G4BestUnit(fGlobalTime- fMinTimeStep, "Time")
+    //            << "\t Chosen step time :"
+    //            << G4BestUnit(fMinTimeStep,"Time")<<G4endl;
+    //    G4cout  << "Next global time : " << G4BestUnit(fGlobalTime,"Time") << G4endl;
     //    G4cout  << "___________________________________" << G4endl;
     
 
@@ -438,22 +427,20 @@ void G4ITStepManager::FindUserPreDefinedTimeStep()
     {
         if(! fpUserTimeSteps)
         {
-            __Exception_Origin__
-            G4String exceptionCode ("ITStepManager004");
             G4ExceptionDescription exceptionDescription ;
             exceptionDescription << "You are asking to use user defined steps but you did not give any.";
-            G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+            G4Exception("G4ITStepManager::FindUserPreDefinedTimeStep","ITStepManager004",
                         FatalErrorInArgument,exceptionDescription);
         }
         map<double, double>::iterator fpUserTimeSteps_i   = fpUserTimeSteps->upper_bound(fGlobalTime) ;
         map<double, double>::iterator fpUserTimeSteps_low = fpUserTimeSteps->lower_bound(fGlobalTime) ;
 
         // DEBUG
-        //        G4cout << "fGlobalTime : " << fGlobalTime /picosecond  << G4endl;
+        //        G4cout << "fGlobalTime : " << G4BestUnit(fGlobalTime,"Time") << G4endl;
         //        G4cout << "fpUserTimeSteps_i : "
-        //        <<"<"<<fpUserTimeSteps_i->first / picosecond<<", "<< fpUserTimeSteps_i->second / picosecond<<">"
+        //        <<"<"<<G4BestUnit(fpUserTimeSteps_i->first,"Time")<<", "<< G4BestUnit(fpUserTimeSteps_i->second,"Time")<<">"
         //        << "\t fpUserTimeSteps_low : "
-        //        <<"<"<<fpUserTimeSteps_low->first / picosecond<<", "<< fpUserTimeSteps_low->second / picosecond<<">"
+        //        <<"<"<<G4BestUnit(fpUserTimeSteps_low->first,"Time")<<", "<< G4BestUnit(fpUserTimeSteps_low->second,"Time")<<">"
         //        << G4endl;
 
 
@@ -490,8 +477,8 @@ void G4ITStepManager::FindUserPreDefinedTimeStep()
         fDefinedMinTimeStep = fpUserTimeSteps_i->second ;
 
         // DEBUG
-        //        G4cout << "fGlobalTime : " << fGlobalTime /picosecond << "\t chosen step time : " << fDefinedMinTimeStep /picosecond<< G4endl;
-        //        G4cout << "fpUserTimeSteps_i : "<< fpUserTimeSteps_i->second / picosecond << "\t fpUserTimeSteps_low : "<< fpUserTimeSteps_low->second / picosecond<< G4endl;
+        //        G4cout << "fGlobalTime : " << G4BestUnit(fGlobalTime,"Time") << "\t chosen step time : " << G4BestUnit(fDefinedMinTimeStep,"Time") << G4endl;
+        //        G4cout << "fpUserTimeSteps_i : "<< G4BestUnit(fpUserTimeSteps_i->second,"Time") << "\t fpUserTimeSteps_low : "<< G4BestUnit(fpUserTimeSteps_low->second,"Time")<< G4endl;
     }
     else fDefinedMinTimeStep = 0 ;
 }
@@ -502,14 +489,12 @@ void G4ITStepManager::CalculateMinStep()
 
     if(fpMasterModelProcessor == 0)
     {
-        __Exception_Origin__
-        G4String exceptionCode ("ITStepManager005");
         G4ExceptionDescription exceptionDescription ;
         exceptionDescription << "There is no G4ITModelProcessor to hande IT reaction. ";
         exceptionDescription << "You probably did not initialize the G4ITStepManager. ";
         exceptionDescription << "Just do G4ITStepManager::Instance()->Initialize(); ";
         exceptionDescription << " but only after initializing the run manager.";
-        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+        G4Exception("G4ITStepManager::CalculateMinStep","ITStepManager005",
                     FatalErrorInArgument,exceptionDescription);
     }
 
@@ -522,11 +507,9 @@ void G4ITStepManager::CalculateMinStep()
 
         if(track == 0)
         {
-            __Exception_Origin__
-            G4String exceptionCode ("ITStepManager006");
             G4ExceptionDescription exceptionDescription ;
             exceptionDescription << "No track found.";
-            G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+            G4Exception("G4ITStepManager::CalculateMinStep","ITStepManager006",
                         FatalErrorInArgument,exceptionDescription);
         }
 
@@ -541,61 +524,11 @@ void G4ITStepManager::CalculateMinStep()
         {
             continue ;
         }
-
-        while (fpModelProcessor->Occupied())
-        {
-            fpModelProcessor = fpModelProcessor -> GetNext() ;
-        };
-
         ExtractTimeStepperData(fpModelProcessor) ;
-
-        //DEBUG
-        //        if(fUsePreDefinedTimeSteps)
-        //        {
-        //                G4cout << "Calculate step for track : "
-        //                 << track->GetTrackID()
-        //                 << " in stepProcessor : " << fpStepProcessor
-        //                 << G4endl;
-
-        // DEBUG
-        //  G4cout << "send to model processor" << G4endl;
-        fpModelProcessor->CalculateStep(track, fDefinedMinTimeStep);
-
-        //        } //DEBUG
-
+        fpModelProcessor->CalculateTimeStep(track, fDefinedMinTimeStep);
     }
 
-    // DEBUG
-    // G4cout << "done" << G4endl;
-
-    Join(fpModelProcessor);
-
-
-    ExtractRemainingData(&G4ITStepManager::ExtractTimeStepperData, fpModelProcessor) ;
-
-    // DEBUG
-    //        G4cout << "done 2 | time : " << fGlobalTime /picosecond << G4endl;
-    //     std::map<G4Track*, std::vector<G4Track*>* > ::iterator fReactingTracks_i ;
-    //
-    //     for(fReactingTracks_i = fReactingTracks.begin() ; fReactingTracks_i != fReactingTracks.end()
-    //             ; fReactingTracks_i ++)
-    //     {
-    //         G4Track* trackA = fReactingTracks_i->first;
-    //         std::vector<G4Track*>* trackB_vector = fReactingTracks_i->second ;
-    //         std::vector<G4Track*>::iterator trackB_i = trackB_vector->begin();
-    //         G4Track* trackB = 0 ;
-    //
-    //         G4cout << "track A : "  << trackA->GetTrackID() << G4endl;
-    //
-    //         for(; trackB_i != trackB_vector->end() ; trackB_i++)
-    //         {
-    //             trackB = *trackB_i;
-    //             G4cout << "\t\t track B : "  << trackB->GetTrackID() << G4endl;
-    //
-    //         }
-    //
-    //     }
-
+    ExtractTimeStepperData(fpModelProcessor);
 }
 //_________________________________________________________________________
 
@@ -607,12 +540,6 @@ void G4ITStepManager::ExtractTimeStepperData(G4ITModelProcessor* MP)
         MP->CleanProcessor();
         return ;
     }
-    // DEBUG
-    //    else
-    //    {
-    //      G4cout << "track address : " << track << G4endl;
-    //      G4cout << "Particle name : " << track->GetParticleDefinition()->GetParticleName() << G4endl;
-    //    }
 
     const std::vector<std::vector<G4VITModel*> >* model = MP->GetCurrentModel();
 
@@ -641,11 +568,9 @@ void G4ITStepManager::ExtractTimeStepperData(G4ITModelProcessor* MP)
                     G4cerr<< "reactants == 0"<< G4endl;
                     G4cerr<< "sampledMinTimeStep : " << sampledMinTimeStep<< G4endl;
 
-                    __Exception_Origin__
-                    G4String exceptionCode ("ITStepManager007");
                     G4ExceptionDescription exceptionDescription ;
                     exceptionDescription << "No reactants were registered.";
-                    G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+                    G4Exception("G4ITStepManager::ExtractTimeStepperData","ITStepManager007",
                                 FatalErrorInArgument,exceptionDescription);
 
                     continue ;
@@ -656,38 +581,6 @@ void G4ITStepManager::ExtractTimeStepperData(G4ITModelProcessor* MP)
                 fReactingTracks.insert(make_pair(track, reactants));
 
                 stepper -> ResetReactants();
-
-                // DEBUG
-                //                G4cout << "Reactants ptr : " << stepper -> GetReactants() << G4endl;
-                //                for(G4int i = 0 ; i < fReactingTracks[track]->size() ; i++)
-                //                {
-                //                	G4cout << "\t\t track ID in fReactingTracks : "
-                //                	<< (*fReactingTracks[track])[i]->GetTrackID() << G4endl;
-                //
-                //                }
-                //
-                //                 G4cout << "-------------------------" << G4endl;
-                //                 G4cout << "Stepper has found reaction for "
-                //                 << GetMolecule(track)->GetName()
-                //                 << " (" <<  track->GetTrackID()<<") | at time "
-                //                 << (fGlobalTime + sampledMinTimeStep) / picosecond
-                //                 << " corresponding TS : " << sampledMinTimeStep /picosecond << "[ps]"
-                //                 << G4endl;
-                //                 for(G4int i = 0 ; i < (G4int) fReactingTracks[track]->size() ; i++)
-                //                 {
-                //                     G4cout <<"\t \t \t"<<  GetMolecule((*fReactingTracks[track])[i])->GetName()
-                //                     << " ID : "<< (*fReactingTracks[track])[i]->GetTrackID()
-                //                     << " distance : "
-                //                     << (track->GetPosition() - (*fReactingTracks[track])[i]->GetPosition()).mag()
-                //                     << G4endl;
-                //
-                //                     if(track == (*fReactingTracks[track])[i])
-                //                     {
-                //                         G4cout << "BIG PB" << G4endl;
-                //                         G4Exception();
-                //                     }
-                //                 }
-                //
             }
             else if(fMinTimeStep == sampledMinTimeStep )
             {
@@ -697,58 +590,18 @@ void G4ITStepManager::ExtractTimeStepperData(G4ITModelProcessor* MP)
                     G4cerr<< "reactants == 0"<< G4endl;
                     G4cerr<< "sampledMinTimeStep : " << sampledMinTimeStep<< G4endl;
 
-                    __Exception_Origin__
-                    G4String exceptionCode ("ITStepManager008");
                     G4ExceptionDescription exceptionDescription ;
                     exceptionDescription << "No reactants were registered.";
-                    G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+                    G4Exception("G4ITStepManager::ExtractTimeStepperData","ITStepManager008",
                                 FatalErrorInArgument,exceptionDescription);
                 }
 
                 fReactingTracks.insert(make_pair(track, reactants));
 
                 stepper -> ResetReactants();
-
-                // DEBUG
-                //
-                //                G4cout << "-------------------------" << G4endl;
-                //                 G4cout << "Stepper has found reaction for "
-                //                 << GetMolecule(track)->GetName()
-                //                 << " (" <<  track->GetTrackID()<<") | at time "
-                //                 << (fGlobalTime + sampledMinTimeStep) / picosecond
-                //                 << " corresponding TS : " << sampledMinTimeStep /picosecond << "[ps]"
-                //                 << G4endl;
-                //                 for(G4int i = 0 ; i < (G4int) fReactingTracks[track]->size() ; i++)
-                //                 {
-                //                     G4cout <<"\t \t \t"<<  GetMolecule((*fReactingTracks[track])[i])->GetName()
-                //                     << " ID : "<< (*fReactingTracks[track])[i]->GetTrackID() << G4endl;
-                //
-                //                     if(track == (*fReactingTracks[track])[i])
-                //                     {
-                //                         G4cout << "BIG PB" << G4endl;
-                //                         G4Exception();
-                //                     }
-                //                 }
-                //
             }
             else
             {
-                if(fabs(fMinTimeStep-sampledMinTimeStep) <= 1e-12)
-                {
-                    G4cerr << "fMinTimeStep : " << fMinTimeStep / picosecond
-                           << "[ps]"<<G4endl;
-                    G4cerr << "sampledMinTimeStep : " << sampledMinTimeStep/ picosecond
-                           << "[ps]"<<G4endl;
-
-                    // TODO
-                    // Find a exception description
-                    __Exception_Origin__
-                    G4String exceptionCode ("ITStepManager009");
-                    G4ExceptionDescription exceptionDescription ;
-                    exceptionDescription << " ... ";
-                    G4Exception(exceptionOrigin.data(),exceptionCode.data(),
-                                FatalErrorInArgument,exceptionDescription);
-                }
                 stepper -> ResetReactants();
             }
         }
@@ -770,7 +623,6 @@ void G4ITStepManager::ComputeInteractionLength()
 
         if(fpStepProcessor->GetTrack()) ExtractILData(fpStepProcessor) ;
     }
-
 }
 //_________________________________________________________________________
 
@@ -872,12 +724,9 @@ void G4ITStepManager::DoIt()
         fpMainList->pop_back();
         if(!track)
         {
-
-            __Exception_Origin__
-            G4String exceptionCode ("ITStepManager010");
             G4ExceptionDescription exceptionDescription ;
             exceptionDescription << "No track was pop back the main track list.";
-            G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+            G4Exception("G4ITStepManager::DoIt","ITStepManager009",
                         FatalErrorInArgument,exceptionDescription);
         }
         fpStepProcessor -> Stepping(track, fMinTimeStep) ;
@@ -997,7 +846,9 @@ void G4ITStepManager::ComputeInteractionBetweenTracks()
                 fpUserITAction->UserReactionAction(*trackA, *trackB, *trackVector, nbSecondaries);
             }
 
-            G4cout << "Reaction : "
+
+            G4cout << "At time : " << setw(7) << left << G4BestUnit(fGlobalTime,"Time")
+                   << " Reaction : "
                    << GetIT(trackA)->GetName() << " (" << trackA->GetTrackID()
                    << ") + "
                    << GetIT(trackB)->GetName() << " (" << trackB->GetTrackID()
@@ -1023,13 +874,11 @@ void G4ITStepManager::ComputeInteractionBetweenTracks()
                         G4cerr << secondary->GetGlobalTime()  << G4endl;
                         G4cerr << fGlobalTime  << G4endl;
 
-                        __Exception_Origin__
-                        G4String exceptionCode ("ITStepManager011");
                         G4ExceptionDescription exceptionDescription ;
                         exceptionDescription << "The time of the secondary is going back ";
                         exceptionDescription << "(ie the time of the secondary in the reference frame is less than ";
                         exceptionDescription << "the global time of the simulation).";
-                        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+                        G4Exception("G4ITStepManager::ComputeInteractionBetweenTracks","ITStepManager010",
                                     FatalErrorInArgument,exceptionDescription);
                     }
 
@@ -1041,7 +890,7 @@ void G4ITStepManager::ComputeInteractionBetweenTracks()
                 G4cout<<"No product vector" ;
             }
 
-            G4cout << " | At time : " << fGlobalTime /picosecond << G4endl;
+            G4cout << G4endl;
 
             if(trackA->GetTrackID() == 0 || trackB->GetTrackID() == 0)
             {
@@ -1070,11 +919,9 @@ void G4ITStepManager::ComputeInteractionBetweenTracks()
                        <<   trackB->GetParentID() << G4endl;
 
 
-                __Exception_Origin__
-                G4String exceptionCode ("ITStepManager012");
                 G4ExceptionDescription exceptionDescription ;
                 exceptionDescription << "The ID of one of the reaction track was not setup.";
-                G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+                G4Exception("G4ITStepManager::ComputeInteractionBetweenTracks","ITStepManager011",
                             FatalErrorInArgument,exceptionDescription);
             }
 
@@ -1082,9 +929,9 @@ void G4ITStepManager::ComputeInteractionBetweenTracks()
             {
                 // DEBUG
                 //                G4cout << "Erasing tracks : "
-                //                 << "trackA at time : " << trackA->GetGlobalTime() / picosecond
-                //                 << "\t trackB at time : "<< trackB->GetGlobalTime() / picosecond
-                //                 << "\t GlobalTime : " << fGlobalTime / picosecond
+                //                 << "trackA at time : " << G4BestUnit(trackA->GetGlobalTime() , "Time")
+                //                 << "\t trackB at time : "<< G4BestUnit(trackB->GetGlobalTime(), "Time")
+                //                 << "\t GlobalTime : " << G4BestUnit(fGlobalTime, "Time")
                 //                 << G4endl;
 
                 trackA->SetTrackStatus(fStopAndKill);
@@ -1109,32 +956,6 @@ void G4ITStepManager::ComputeInteractionBetweenTracks()
 }
 //_________________________________________________________________________
 
-//void G4ITStepManager::CallPreTrackingProcessesForSecondaries()
-//{
-//    fpMasterModelProcessor -> InitializePreTrackingProc() ;
-
-//    G4TrackList::iterator fSecondaries_i = fSecondaries.begin();
-
-//    while(fSecondaries_i!= fSecondaries.end())
-//    {
-//        ExtractPreTrackingProcData(fpModelProcessor) ;
-
-//        G4Track* track = fSecondaries.back();
-//        // Make Action
-//        fSecondaries_i ++ ;
-//    }
-//}
-//_________________________________________________________________________
-
-//void G4ITStepManager::ExtractPreTrackingProcData(G4ITModelProcessor* SP)
-//{
-//    G4Track* track = SP -> GetTrack() ;
-//    if(!track) return ;
-
-//    SP->CleanProcessor();
-//}
-//_________________________________________________________________________
-
 void G4ITStepManager::MergeSecondariesWithMainList()
 {
     fSecondaries.transferTo(fpMainList);
@@ -1145,12 +966,10 @@ void G4ITStepManager::PushTrack(G4Track* track)
 {
     if(fRunning)
     {
-        __Exception_Origin__
-        G4String exceptionCode ("ITStepManager013");
         G4ExceptionDescription exceptionDescription ;
         exceptionDescription
         << "G4ITStepManager::PushTrack : You are trying to push tracks while the ITStepManager is running";
-        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+        G4Exception("G4ITStepManager::PushTrack","ITStepManager012",
                     FatalErrorInArgument,exceptionDescription);
     }
     _PushTrack(track);
@@ -1164,15 +983,13 @@ void G4ITStepManager::_PushTrack(G4Track* track)
     if(globalTime < fGlobalTime)
     {
         G4cerr<< "Erreur : G4ITStepManager le temps recul"<<G4endl;
-        G4cerr<<"fGlobalTime : " << fGlobalTime /picosecond << "[ps]" << G4endl;
-        G4cerr<<"globalTime : " << globalTime   /picosecond << "[ps]" << G4endl;
+        G4cerr<<"fGlobalTime : " << G4BestUnit(fGlobalTime,"Time")<< G4endl;
+        G4cerr<<"globalTime : " << G4BestUnit(globalTime,"Time") << G4endl;
 
-        __Exception_Origin__
-        G4String exceptionCode ("ITStepManager014");
         G4ExceptionDescription exceptionDescription ;
         exceptionDescription
         << "G4ITStepManager::PushTrack : You are trying to push tracks with a global time inferior to the current simulation time ";
-        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+        G4Exception("G4ITStepManager::_PushTrack","ITStepManager014",
                     FatalErrorInArgument,exceptionDescription);
     }
 

@@ -103,7 +103,6 @@ void G4ITMANAGER::Push(G4Track* track)
     G4IT* aIT = GetIT(track) ;
     aIT->RecordCurrentPositionNTime();
 
-//    const T key(dynamic_cast<const T&>(*aIT));
     const T& key = dynamic_cast<const T&>(*aIT);
 
     typename BoxMap::iterator it = fBox.find(key);
@@ -116,7 +115,6 @@ void G4ITMANAGER::Push(G4Track* track)
     else
     {
         G4ITBox * itBox = new G4ITBox();
-//        fBox[key] = itBox ;
         std::pair<typename BoxMap::iterator,bool> ret = fBox.insert(std::make_pair (T(key), itBox)) ;
 
         typename BoxMap::iterator box_placement = ret.first;
@@ -149,9 +147,6 @@ void G4ITMANAGER::Push(G4Track* track)
         itBox -> Push(aIT);
     }
 
-    // DEBUG
-    // G4cout << key.GetName() << " : "<< fBox[key]->GetNTrack() << endl;
-
     if(!(aIT->GetNode()))
     {
         G4KDNode* node =  0;
@@ -169,8 +164,7 @@ void G4ITMANAGER::Push(G4Track* track)
         else
         {
             G4KDTree* aTree = new G4KDTree() ;
-//            fTree[key] = aTree;
-            fTree.insert(std::make_pair(T(key)/*key*/,aTree));
+            fTree.insert(std::make_pair(T(key),aTree));
             node = aTree->Insert(position.x(),
                                          position.y(),
                                          position.z(),
@@ -244,11 +238,9 @@ G4KDTreeResultHandle G4ITMANAGER::FindNearest(const T* point0, const T* key)
 
         if(!node0)
         {
-            __Exception_Origin__
-            G4String exceptionCode ("ITManager002");
             G4ExceptionDescription exceptionDescription
             ("Bad request : no node found in the IT you are searching closest neighbourg for");
-            G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+            G4Exception("G4ITManager::FindNearest","ITManager002",
                         FatalErrorInArgument,exceptionDescription);
         }
 
@@ -369,8 +361,6 @@ void G4ITMANAGER::UpdatePositionMap()
     {
         buffBox = allbox.GetBox() ;
         currentIT = (*allbox);
-
-//        G4cout << currentIT->GetName() << G4endl;
 
         if(currentBox != buffBox)
         {

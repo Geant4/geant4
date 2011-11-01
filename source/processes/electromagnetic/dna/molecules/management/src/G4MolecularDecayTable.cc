@@ -50,7 +50,6 @@ G4MolecularDecayTable::G4MolecularDecayTable()
 G4MolecularDecayTable::~G4MolecularDecayTable()
 {
     channelsMap::iterator it_map = fDecayChannelsMap.begin();
-    // fDecayChannelsMap.erase(fDecayChannelsMap.begin(),fDecayChannelsMap.end());
 
      for(;it_map != fDecayChannelsMap.end() ; it_map++)
      {
@@ -104,7 +103,8 @@ const G4String& G4MolecularDecayTable::GetExcitedState(const G4ElectronOccupancy
     statesMap::const_iterator it_exstates  = fExcitedStatesMap.find(*conf);
     if(it_exstates == fExcitedStatesMap.end())
     {
-        // TODO exception
+        G4String errMsg = "Excited state not found";
+        G4Exception("G4MolecularDecayTable::GetExcitedState","G4MolecularDecayTable001",FatalErrorInArgument, errMsg);
     }
     return it_exstates->second;
 }
@@ -120,7 +120,8 @@ const G4ElectronOccupancy& G4MolecularDecayTable::GetElectronOccupancy(const G4S
 
     if(statesIter == fExcitedStatesMap.end())
     {
-        // TODO exception
+        G4String errMsg = "Excited state" + exState + " not found";
+        G4Exception("G4MolecularDecayTable::GetElectronOccupancy","G4MolecularDecayTable002",FatalErrorInArgument, errMsg);
     }
     return *conf;
 }
@@ -130,8 +131,8 @@ void G4MolecularDecayTable::AddExcitedState(const G4String& label)
     channelsMap::iterator channelsIter = fDecayChannelsMap.find(label);
     if(channelsIter != fDecayChannelsMap.end())
     {
-        G4String errMsg = "Excited State" + label + " already Exsisting in decayChannelsMap";
-        G4Exception("G4MolecularDecayTable::AddExcitedState","",FatalErrorInArgument, errMsg);
+        G4String errMsg = "Excited state" + label + " already Exsisting in decayChannelsMap";
+        G4Exception("G4MolecularDecayTable::AddExcitedState","G4MolecularDecayTable003",FatalErrorInArgument, errMsg);
     }
     fDecayChannelsMap[label] ;
 }
@@ -146,7 +147,7 @@ void G4MolecularDecayTable::AddeConfToExcitedState(const G4String& label, const 
     }
     else
     {
-        G4Exception("G4MolecularDecayTable::AddExcitedState","",FatalErrorInArgument,"Electronic Configuration already Exsisting in excitedStatesMap");
+        G4Exception("G4MolecularDecayTable::AddExcitedState","G4MolecularDecayTable004",FatalErrorInArgument,"Electronic Configuration already Exsisting in excitedStatesMap");
     }
 }
 
@@ -179,8 +180,7 @@ void G4MolecularDecayTable::CheckDataConsistency()
         if (sum != 1)
         {
             G4String errMsg = "Deexcitation Channels probabilities in " + channelsIter->first + "excited state don't sum up to 1";
-
-            G4Exception("G4MolecularDecayTable::CheckDataConsistency","",FatalErrorInArgument, errMsg);
+            G4Exception("G4MolecularDecayTable::CheckDataConsistency","G4MolecularDecayTable005",FatalErrorInArgument, errMsg);
         }
     }
 

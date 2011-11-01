@@ -52,33 +52,12 @@ public:
     G4ITModelManager(const G4ITModelManager& other);
     G4ITModelManager& operator=(const G4ITModelManager& rhs);
     void SetModel(G4VITModel* aModel, G4double startingTime);
-    inline G4VITModel* GetModel(const G4double globalTime);
+    G4VITModel* GetModel(const G4double globalTime);
 
 protected :
     typedef std::map<G4double /*startingTime*/, G4VITModel* /*aModel*/>  mapModels ;
     mapModels fModels ;
     G4bool fIsInitialized ;
 };
-
-
-inline G4VITModel* G4ITModelManager::GetModel(const G4double globalTime)
-{
-    if(!fModels.empty())
-    {
-        mapModels::reverse_iterator rit;
-
-        for(rit = fModels.rbegin() ; rit != fModels.rend() ;  rit++)
-        {
-            if(globalTime >= rit->first) break;
-        }
-
-        return (*rit).second;
-    }
-    else
-    {
-        G4cout<<"No models"<< fModels[0] <<G4endl;
-        exit(-1);
-    }
-}
 
 #endif // G4ITMODELMANAGER_H

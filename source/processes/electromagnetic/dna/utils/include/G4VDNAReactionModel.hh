@@ -22,7 +22,6 @@ public :
     virtual void InitialiseToPrint(const G4Molecule*) = 0 ;
     virtual G4double GetReactionRadius(const G4Molecule*, const G4Molecule*) = 0;
     virtual G4double GetReactionRadius(const int) = 0;
-    virtual G4double CheckForPreStepDistance(const G4int){ return -1 ;}
     virtual G4bool FindReaction(const G4Track&, const G4Track&,
                                 const G4double, G4double&, const G4bool) = 0;
 

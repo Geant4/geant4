@@ -37,8 +37,7 @@
 
 #ifndef G4ITTYPE_HH
 #define G4ITTYPE_HH 1
-#include "globals.hh"
-#include <vector>
+
 #include <cstddef>
 
 struct G4ITType
@@ -52,8 +51,7 @@ public :
 
     static size_t size();
 
-    G4ITType(const int d_) : i(d_) {;}
-    G4ITType(){i=0;}
+    G4ITType(const int d_ = 0) : i(d_) {;}
     G4ITType(const G4ITType & d_) : i(d_.i){;}
     inline G4ITType & operator=(const G4ITType & rhs) { this->i = rhs.i; return *this;}
     G4ITType & operator=(const int & rhs) { this->i = rhs; return *this;}
@@ -62,6 +60,7 @@ public :
     inline bool operator==(const G4ITType & rhs) const { return i == rhs.i; }
     inline bool operator==(const int & rhs) const { return i == rhs; }
     inline bool operator<(const G4ITType & rhs) const { return i < rhs.i; }
+    inline void operator++() { i++; }
 };
 
 inline G4ITType operator +(const G4ITType& left,const int& right) {
@@ -74,13 +73,15 @@ inline G4ITType operator -(const G4ITType& left,const int& right) {
     return output;
 }
 
-class G4ITTypeManager : public std::vector<G4ITType>
+class G4ITTypeManager
 {
 private:
     static G4ITTypeManager* fInstance ;
+    G4ITType fLastType;
 
 public :
     G4ITType NewType() ;
+    static size_t size();
     static G4ITTypeManager* Instance();
     G4ITTypeManager();
     virtual ~G4ITTypeManager();

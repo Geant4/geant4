@@ -53,12 +53,6 @@ const double* GetNodePosition(G4KDNode* node)
 
 //______________________________________________________________________
 
-//int RemoveNode(G4KDNode* node)
-//{
-//    if(!node) return 0;
-//    return node->RemoveNode() ;
-//}
-
 void InactiveNode(G4KDNode* node)
 {
     if(!node) return ;
@@ -78,6 +72,7 @@ G4KDNode::G4KDNode(G4KDTree* tree, const double* position, void* data,
     fPosition(0), fData(data), fTree(tree),
     fLeft(0), fRight(0), fParent(parent)
 {
+    fSide = 0;
     fAxis = axis;
     SetPosition(position);
 }
@@ -212,7 +207,7 @@ void G4KDNode::PullSubTree()
     fParent  = 0 ;
     fRight   = 0 ;
     fLeft    = 0 ;
-    fTree 	= 0 ;
+    fTree    = 0 ;
 }
 
 void G4KDNode::RetrieveNodeList(std::list<G4KDNode*>& output)
@@ -225,120 +220,3 @@ void G4KDNode::RetrieveNodeList(std::list<G4KDNode*>& output)
     if(fRight)
         fRight->RetrieveNodeList(output);
 }
-
-// NOT READY YET
-//G4KDNode* G4KDNode::FindNearestOnDirection(G4KDNode* node, const int& k,
-//                                           double& bestmatch, G4KDNode** bestnode)
-//{
-//    if(!node) return 0 ;
-//    double dist = fabs(node->fPosition[k] - fPosition[k]);
-
-//    if(dist < bestmatch)
-//    {
-//        bestmatch = dist ;
-//        *bestnode = node ;
-//    }
-
-//    if(node->fAxis == k)
-//    {
-//        G4KDNode* nextNode = node->fPosition[k] < fPosition[k] ? node->fRight : node->fLeft ;
-//        if(nextNode) FindNearestOnDirection(nextNode, k, bestmatch, bestnode);
-//    }
-//    else
-//    {
-//        if(node->fRight) FindNearestOnDirection(node->fRight, k, bestmatch, bestnode) ;
-//        if(node->fLeft)  FindNearestOnDirection(node->fLeft,  k, bestmatch, bestnode) ;
-//    }
-
-//    return *bestnode ;
-//}
-
-//int G4KDNode::UpdateSubTree()
-//{
-//    G4KDNode* c_node_on_k (0) ;
-
-//    double best_dist = DBL_MAX;
-
-//    if(fLeft) {   FindNearestOnDirection(fLeft,  fAxis, best_dist, &c_node_on_k) ;}
-//    if(fRight){   FindNearestOnDirection(fRight, fAxis, best_dist, &c_node_on_k) ;}
-
-//    if(!fLeft && !fRight)
-//    {
-//        if(fSide == 1)
-//        {
-//            fParent->fRight = 0 ;
-//        }
-//        else
-//            fParent->fLeft = 0 ;
-//        return 0 ;
-//    }
-//    else if(!c_node_on_k)
-//    {
-//        G4String errMsg = "Something wrong : no closest nodes on direction";
-//        errMsg += fAxis ;
-//        errMsg += " found and yet the node has kids" ;
-//        G4Exception(__PRETTY_FUNCTION__,"",FatalErrorInArgument, errMsg);
-//    }
-//    else
-//    {
-//        if(c_node_on_k->fLeft||c_node_on_k->fRight)
-//        {
-//            c_node_on_k->UpdateSubTree();
-//        }
-//        if(fSide == 1)
-//        {
-//            fParent->fRight = c_node_on_k ;
-//        }
-//        else
-//            fParent->fLeft = c_node_on_k ;
-
-//        c_node_on_k->fParent = fParent ;
-
-//        if(fRight)
-//        {
-//            c_node_on_k->fRight = fRight ;
-//            fRight->fParent = c_node_on_k ;
-//        }
-//        if(fLeft)
-//        {
-//            c_node_on_k->fLeft = fLeft ;
-//            fLeft->fParent = c_node_on_k ;
-//        }
-//    }
-//    return 0 ;
-//}
-
-//int G4KDNode::RemoveNode()
-//{
-//    if(fParent)
-//    {
-//        //int returned_value ;
-//        UpdateSubTree();
-//        fParent = 0; fLeft = 0; fRight = 0;
-//        fTree = 0;
-//    }
-//    else
-//    {
-//        // Refaire un tree à partir du tree existant
-//        std::list<G4KDNode*> node_lst;
-//        RetrieveNodeList(node_lst);
-//        PullSubTree();
-
-//        std::list<G4KDNode*> ::iterator it = node_lst.begin();
-
-//        G4KDNode* newRoot = *it;
-
-//        for(it++ ; it != node_lst.end() ; it++)
-//        {
-//            G4KDNode* node = *it;
-//            newRoot->Insert(node, node->fPosition) ;
-//        }
-
-//        fTree -> fRoot  = newRoot ;
-//        this -> fLeft  = 0 ;
-//        this -> fRight = 0 ;
-//        this -> fTree  = 0 ;
-//    }
-
-//    return 0;
-//}

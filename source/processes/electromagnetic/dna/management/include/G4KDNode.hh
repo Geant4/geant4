@@ -42,25 +42,14 @@
 
 class G4KDTree;
 
-//*********************************************
+//°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
 // This class is only for internal use
 class G4KDNode
 {
-    friend class G4KDTree ;
-
-protected :
-    double* fPosition;
-    int fAxis; // axis : x, y, z ...
-    void *fData;
-    int fSide ; // left/right
-    G4KDTree* fTree ;
-    G4KDNode *fLeft, *fRight, *fParent;	/* negative/positive side */
-
-    int SetPosition(const double* newposition);
 
 public :
     // For root node :
-    // parent = 0, axis = 0
+    // parent = 0, axis = 0, side = 0
     G4KDNode(G4KDTree*, const double* /*position*/, void* /*data*/,
              G4KDNode* /*parent*/, int axis0);
     virtual ~G4KDNode();
@@ -72,7 +61,9 @@ public :
 
     int GetDim();
 
-    inline void* GetData();
+    inline int       GetAxis();
+    inline void*     GetData();
+    inline void      SetData(void*);
     inline G4KDNode* GetParent();
     inline G4KDNode* GetLeft();
     inline G4KDNode* GetRight();
@@ -88,14 +79,44 @@ public :
     void PullSubTree();
     void RetrieveNodeList(std::list<G4KDNode*>& node_list);
 
-    //    G4KDNode* FindNearestOnDirection(G4KDNode* node, const int& k, double& bestmatch, G4KDNode** bestnode);
-    //    int  RemoveNode();
-    //    int  UpdateSubTree();
+protected :
+
+    int SetPosition(const double* newposition);
+
+    //°°°°°°°°°°°
+    // Members
+    //°°°°°°°°°°°
+    double* fPosition;
+    int fAxis;              // axis : x, y, z ...
+    void *fData;
+    int fSide ;             // left/right
+    /* fSide == 0  : Is the root node
+     * fSide == -1 : It is the left of the parent node
+     * fSide == 1  : It is the right of the parent node
+     */
+
+    G4KDTree* fTree ;
+    G4KDNode *fLeft, *fRight, *fParent;
+    /* Left : fLeft->fPosition[axis] < this->fPosition[axis]
+     * Right : fRight->fPosition[axis] > this->fPosition[axis]
+     * Root node : fParent = 0
+     */
+
 };
+
+inline int G4KDNode::GetAxis()
+{
+    return fAxis;
+}
 
 inline void* G4KDNode::GetData()
 {
     return fData;
+}
+
+inline void  G4KDNode::SetData(void* data)
+{
+    fData = data;
 }
 
 inline const double* G4KDNode::GetPosition()

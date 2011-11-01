@@ -52,7 +52,6 @@
 //__________________________________
 // Methods to act on kdnode
 // Methods defined in G4KDNode.cc :
-//int RemoveNode(G4KDNode*);
 void InactiveNode(G4KDNode*);
 void Free(G4KDNode*&);
 void* GetData(G4KDNode*);
@@ -63,7 +62,7 @@ class G4KDTree
 {
     friend class G4KDNode ;
     int fDim;
-    struct kdhyperrect *fRect;
+    struct HyperRect *fRect;
     void (*fDestr)(void*);
     int fNbNodes;
 
@@ -124,14 +123,14 @@ protected :
                              const double *pos,
                              G4KDNode *&result,
                              double *result_dist_sq,
-                             struct kdhyperrect* fRect);
+                             struct HyperRect* fRect);
 
     void __NearestToNode(G4KDNode *source_node,
                          G4KDNode *node,
                          const double *pos,
                          std::vector<G4KDNode*>& result,
                          double *result_dist_sq,
-                         struct kdhyperrect* fRect,
+                         struct HyperRect* fRect,
                          int& nbresult) ;
 };
 

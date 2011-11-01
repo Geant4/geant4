@@ -48,7 +48,7 @@ public :
     virtual ~G4DNAMolecularDecayDisplacer() ;
 
     virtual std::vector<G4ThreeVector> GetProductsDisplacement(const G4MolecularDecayChannel*) const;
-    virtual G4ThreeVector GetMotherMoleculeDisplacement(const G4MolecularDecayChannel*/*, G4Molecule**/) const;
+    virtual G4ThreeVector GetMotherMoleculeDisplacement(const G4MolecularDecayChannel*) const;
     G4ThreeVector radialDistributionOfElectron() const;
 
     static const DisplacementType Ionisation_DissociationDecay;

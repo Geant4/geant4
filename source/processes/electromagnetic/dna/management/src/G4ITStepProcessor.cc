@@ -51,8 +51,6 @@
 #include <iomanip>              // Include from 'system'
 #include <vector>               // Include from 'system'
 
-#include "G4ExceptionOrigin.hh"
-
 using namespace std;
 
 static const size_t SizeOfSelectedDoItVector=100;
@@ -163,7 +161,7 @@ void G4ITStepProcessor::ActiveOnlyITProcess(G4ProcessManager* processManager)
 }
 // ******************************************************************
 
-inline void G4ITStepProcessor::SetTrack(G4Track* track)
+void G4ITStepProcessor::SetTrack(G4Track* track)
 {
   fpTrack = track ;
   if(fpTrack)
@@ -179,10 +177,9 @@ inline void G4ITStepProcessor::SetTrack(G4Track* track)
         {
             fpTrackingInfo = 0;
             G4cerr << "Track ID : " << fpTrack->GetTrackID() << G4endl;
-            __Exception_Origin__
-            G4String exceptionCode ("ITStepProcessor001");
+
             G4ExceptionDescription exceptionDescription ("No IT pointer was attached to the track you try to process.");
-            G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+            G4Exception("G4ITStepProcessor::SetTrack","ITStepProcessor001",
                         FatalErrorInArgument,exceptionDescription);
         }
     }
@@ -527,11 +524,9 @@ void G4ITStepProcessor::DoDefinePhysicalStepLength()
 
                 if(! fpTransportation)
                 {
-                    __Exception_Origin__
-                    G4String exceptionCode ("G4ITStepProcessor001");
                     G4ExceptionDescription exceptionDescription ;
                     exceptionDescription << "No transportation process found " ;
-                    G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+                    G4Exception("G4ITStepProcessor::DoDefinePhysicalStepLength","G4ITStepProcessor001",
                                 FatalErrorInArgument,exceptionDescription);
                 }
 
@@ -552,11 +547,9 @@ void G4ITStepProcessor::DoDefinePhysicalStepLength()
 
                 if(! fpTransportation)
                 {
-                    __Exception_Origin__
-                    G4String exceptionCode ("G4ITStepProcessor002");
                     G4ExceptionDescription exceptionDescription ;
                     exceptionDescription << "No transportation process found " ;
-                    G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+                    G4Exception("G4ITStepProcessor::DoDefinePhysicalStepLength","G4ITStepProcessor002",
                                 FatalErrorInArgument,exceptionDescription);
                 }
 
@@ -609,11 +602,9 @@ G4StepStatus G4ITStepProcessor::DoStepping()
             !fpAlongStepDoItVector    &&
             !fpPostStepDoItVector)
     {
-        __Exception_Origin__
-        G4String exceptionCode ("G4ITStepProcessor003");
         G4ExceptionDescription exceptionDescription ;
         exceptionDescription << "No DoIt process found " ;
-        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+        G4Exception("G4ITStepProcessor::DoStepping","G4ITStepProcessor003",
                     FatalErrorInArgument,exceptionDescription);
         return fUndefined;
     }
@@ -648,13 +639,10 @@ G4StepStatus G4ITStepProcessor::DoStepping()
             G4cerr << " !!! Track status : "<<  fpTrack->GetTrackStatus() << G4endl;
             G4cerr << " !!! Particle Name : "<< fpTrack -> GetDefinition() -> GetParticleName() << G4endl;
 
-
-            __Exception_Origin__
-            G4String exceptionCode ("ITStepProcessor002");
             G4ExceptionDescription exceptionDescription ;
             exceptionDescription
             << "No G4ITStepProcessor::fpITrack found";
-            G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+            G4Exception("G4ITStepProcessor::DoStepping","ITStepProcessor002",
                         FatalErrorInArgument,exceptionDescription);
         }
 
@@ -814,7 +802,7 @@ void G4ITStepProcessor::SetInitialStep()
                    << "        Primary particle starting at - "
                    << fpTrack->GetPosition()
                    << " - is outside of the world volume." << G4endl;
-            G4Exception("G4ITStepProcessor::SetInitialStep()", "Tracking0010",
+            G4Exception("G4ITStepProcessor::SetInitialStep()", "ITStepProcessor003",
                         FatalException, "Primary vertex outside of the world!");
         }
 
@@ -847,33 +835,27 @@ void G4ITStepProcessor::FindTransportationStep()
 
     if(!fpTrack)
     {        
-        __Exception_Origin__
-        G4String exceptionCode ("ITStepProcessor003");
         G4ExceptionDescription exceptionDescription ;
         exceptionDescription
         << "No G4ITStepProcessor::fpTrack found";
-        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+        G4Exception("G4ITStepProcessor::FindTransportationStep","ITStepProcessor004",
                     FatalErrorInArgument,exceptionDescription);
 
     }
     if(!fpITrack)
     {        
-        __Exception_Origin__
-        G4String exceptionCode ("ITStepProcessor004");
         G4ExceptionDescription exceptionDescription ;
         exceptionDescription
         << "No G4ITStepProcessor::fITrack" ;
-        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+        G4Exception("G4ITStepProcessor::FindTransportationStep","ITStepProcessor005",
                     FatalErrorInArgument,exceptionDescription);
     }
     if(!(fpITrack->GetTrack()))
     {
-        __Exception_Origin__
-        G4String exceptionCode ("ITStepProcessor005");
         G4ExceptionDescription exceptionDescription ;
         exceptionDescription
         << "No G4ITStepProcessor::fITrack->GetTrack()" ;
-        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+        G4Exception("G4ITStepProcessor::FindTransportationStep","ITStepProcessor006",
                     FatalErrorInArgument,exceptionDescription);
     }
 

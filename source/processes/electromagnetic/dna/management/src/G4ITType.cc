@@ -51,25 +51,20 @@ G4ITTypeManager*  G4ITTypeManager::Instance()
     return fInstance;
 }
 
-G4ITTypeManager::G4ITTypeManager() : std::vector<G4ITType>()
-{;}
+G4ITTypeManager::G4ITTypeManager()
+{ fLastType = 0;}
 
 G4ITTypeManager::~G4ITTypeManager()
+{;}
+
+size_t G4ITTypeManager::size()
 {
-    clear();
+    return fInstance->fLastType;
 }
 
 G4ITType G4ITTypeManager::NewType()
 {
-    G4ITType newType = -1;
-
-    if(empty())
-    {
-        newType = 0;
-    }
-    else
-        newType = (*rbegin()) + 1;
-    push_back(newType);
-
+    G4ITType newType = fLastType;
+    fLastType++;
     return newType;
 }

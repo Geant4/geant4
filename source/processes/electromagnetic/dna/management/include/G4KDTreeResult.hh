@@ -43,38 +43,17 @@
 #include "G4ReferenceCountedHandle.hh"
 class G4KDTree;
 class G4KDNode;
-//struct ResNode;
-
-struct ResNode
-{
-    G4KDNode* fNode;
-    double fDistanceSqr;
-    ResNode():fNode(0),fDistanceSqr(0){;}
-    ResNode(double distsqr, G4KDNode* node):fNode(node),fDistanceSqr(distsqr){;}
-    ResNode(const ResNode& right)
-    {
-        fNode = right.fNode;
-        fDistanceSqr= right.fDistanceSqr;
-    }
-    ~ResNode(){;}
-
-    bool operator<(const ResNode& right) const
-    {
-        return (fDistanceSqr < right.fDistanceSqr);
-    }
-};
+struct ResNode;
 
 class G4KDTreeResult;
 
 typedef G4ReferenceCountedHandle<G4KDTreeResult> G4KDTreeResultHandle;
 typedef G4ReferenceCountedHandle<ResNode> ResNodeHandle;
 
-class G4KDTreeResult : public std::list<ResNode>
-//        class G4KDTreeResult : protected std::list<ResNode>
+class G4KDTreeResult : protected std::list<ResNode>
 {
 protected :
     G4KDTree *fTree;
-//    std::list<ResNodeHandle>::iterator fIterator;
     std::list<ResNode>::iterator fIterator;
 
 public:

@@ -38,9 +38,9 @@
 #ifndef G4DNACHEMISTRYMANAGER_HH
 #define G4DNACHEMISTRYMANAGER_HH
 
-#include "G4Track.hh"
-#include "G4ReferenceCountedHandle.hh"
-#include <memory>
+#include "globals.hh"
+
+class G4Track;
 
 enum ElectronicModification
 {
@@ -52,8 +52,7 @@ class G4DNAChemistryManager
 {
 private:
     G4DNAChemistryManager();
-    static std::auto_ptr<G4DNAChemistryManager> fInstance;
-//    static G4ReferenceCountedHandle<G4DNAChemistryManager> fInstance;
+    static G4DNAChemistryManager* fInstance;
     bool fActiveChemistry;
 
 public:

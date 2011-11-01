@@ -132,7 +132,6 @@ private:
     G4double fVanDerVaalsRadius;
 
     G4ElectronOccupancy* fElectronOccupancy;
-    // G4MolecularConfiguration* fMolecularConfiguration;
     G4MolecularDecayTable* fDecayTable;
 };
 

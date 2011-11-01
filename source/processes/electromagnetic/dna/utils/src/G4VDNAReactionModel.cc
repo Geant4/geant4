@@ -1,5 +1,4 @@
 #include "G4VDNAReactionModel.hh"
-#include "G4DNAMolecularReactionTable.hh"
 
 G4VDNAReactionModel::G4VDNAReactionModel()
 {

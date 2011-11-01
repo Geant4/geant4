@@ -35,20 +35,25 @@
 #include "G4TrackList.hh"
 #include "G4IT.hh"
 #include "G4Track.hh"
-#include "G4ExceptionOrigin.hh"
 
 using namespace std;
 
 //***********************************************************
 // TrackList_iterator
-
-
 G4Track*
-G4TrackList_iterator::operator*() /*const*/
+G4TrackList_iterator::operator*()
 { return fNode->GetTrack(); }
 
 G4Track*
-G4TrackList_iterator::operator->() /*const*/
+G4TrackList_iterator::operator->()
+{ return fNode->GetTrack(); }
+
+const G4Track*
+G4TrackList_iterator::operator*() const
+{ return fNode->GetTrack(); }
+
+const G4Track*
+G4TrackList_iterator::operator->() const
 { return fNode->GetTrack(); }
 
 
@@ -98,11 +103,9 @@ G4TrackList::~G4TrackList()
         G4TrackListNode * __stackedTrack = fStart;
         G4TrackListNode * __nextStackedTrack;
 
-        // int i = 0 ;
         // delete tracks in the stack
         while(  __stackedTrack && __stackedTrack != &(fBoundary.fEmptyNode) )
         {
-            //G4cout <<" i : "<< i << G4endl;
             __nextStackedTrack = __stackedTrack->GetNext();
             G4Track* __track = __stackedTrack->GetTrack();
 
@@ -115,7 +118,6 @@ G4TrackList::~G4TrackList()
             }
 
             __stackedTrack = __nextStackedTrack;
-            //i++;
         }
     }
     fNbTracks = 0;
@@ -130,12 +132,10 @@ G4TrackListNode* G4TrackList::Flag(G4Track* __track)
     {
         if(__trackListNode->fAttachedToList)
         {
-            __Exception_Origin__
-            G4String exceptionCode ("G4TrackList001");
             G4ExceptionDescription exceptionDescription ;
             exceptionDescription << "This track "<< __iTrack->GetName() ;
             exceptionDescription << " is already attached to a TrackList ";
-            G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+            G4Exception("G4TrackList::Flag","G4TrackList001",
                         FatalErrorInArgument,exceptionDescription);
          }
     }
@@ -253,12 +253,10 @@ void G4TrackList::CheckFlag(G4TrackListNode* __trackListNode)
 {
     if(__trackListNode -> fListRef->fTrackList != this)
     {
-        __Exception_Origin__
-        G4String exceptionCode ("G4TrackList002");
         G4ExceptionDescription exceptionDescription ;
         exceptionDescription << "This track "<< GetIT(__trackListNode->GetTrack())->GetName() ;
         exceptionDescription << " is not correctly linked to a TrackList ";
-        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+        G4Exception("G4TrackList::CheckFlag","G4TrackList002",
                     FatalErrorInArgument,exceptionDescription);
     }
 }
@@ -270,12 +268,10 @@ G4TrackListNode* G4TrackList::Unflag(G4Track* __track)
     // TODO : complete the exception
     if(__trackListNode == 0)
     {
-        __Exception_Origin__
-        G4String exceptionCode ("G4TrackList003");
         G4ExceptionDescription exceptionDescription ;
         exceptionDescription << "This track "<< GetIT(__track)->GetName() ;
         exceptionDescription << " was not connected to any trackList ";
-        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
+        G4Exception("G4TrackList::Unflag","G4TrackList003",
                     FatalErrorInArgument,exceptionDescription);
     }
     CheckFlag(__trackListNode);

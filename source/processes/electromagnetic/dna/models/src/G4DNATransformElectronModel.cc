@@ -21,11 +21,20 @@ G4DNATransformElectronModel::~G4DNATransformElectronModel()
 {}
 
 //______________________________________________________________________
-void G4DNATransformElectronModel::Initialise(const G4ParticleDefinition*,
+void G4DNATransformElectronModel::Initialise(const G4ParticleDefinition* particleDefinition,
         const G4DataVector& /*cuts*/)
 {
     if (verboseLevel > 1)
         G4cout << "Calling G4DNATransformElectronModel::Initialise()" << G4endl;
+
+    if (particleDefinition != G4Electron::ElectronDefinition())
+    {
+        G4ExceptionDescription exceptionDescription ;
+        exceptionDescription << "Attempting to calculate cross section for wrong particle";
+        G4Exception("G4DNATransformElectronModel::CrossSectionPerVolume","G4DNATransformElectronModel001",
+                    FatalErrorInArgument,exceptionDescription);
+        return;
+    }
 
     if(!isInitialised)
     {
@@ -42,7 +51,7 @@ void G4DNATransformElectronModel::Initialise(const G4ParticleDefinition*,
 
 //______________________________________________________________________
 G4double G4DNATransformElectronModel::CrossSectionPerVolume(const G4Material* material,
-        const G4ParticleDefinition* particleDefinition,
+        const G4ParticleDefinition* /*particleDefinition*/,
         G4double ekin,
         G4double,
         G4double)
@@ -51,17 +60,6 @@ G4double G4DNATransformElectronModel::CrossSectionPerVolume(const G4Material* ma
         G4cout << "Calling CrossSectionPerVolume() of G4DNATransformElectronModel" << G4endl;
 
     if(ekin > highEnergyLimit) return 0;
-
-    if (particleDefinition != G4Electron::ElectronDefinition())
-    {
-        __Exception_Origin__
-        G4String exceptionCode ("G4DNATransformElectronModel001");
-        G4ExceptionDescription exceptionDescription ;
-        exceptionDescription << "Attempting to calculate cross section for wrong particle";
-        G4Exception(exceptionOrigin.data(),exceptionCode.data(),
-                    FatalErrorInArgument,exceptionDescription);
-        return 0;
-    }
 
     if (material->GetName() == "G4_WATER")
     {

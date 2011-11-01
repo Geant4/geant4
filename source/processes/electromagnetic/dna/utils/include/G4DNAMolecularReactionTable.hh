@@ -43,7 +43,6 @@
 #include <vector>
 #include <map>
 #include "G4ReferenceCast.hh"
-#include <memory>
 
 class G4VDNAReactionModel ;
 class G4DNAMolecularReactionTable;
@@ -102,7 +101,7 @@ class G4DNAMolecularReactionTable : public G4ITReactionTable
 {
 protected:
     G4DNAMolecularReactionTable();
-    static std::auto_ptr<G4DNAMolecularReactionTable> fInstance;
+    static G4DNAMolecularReactionTable* fInstance;
 
 public :
     static G4DNAMolecularReactionTable* GetReactionTable();
@@ -127,7 +126,7 @@ public :
     //_________________________________________________________________
     /** Given a molecule's type, it returns with which a reaction is allowed*/
     const std::vector<const G4Molecule*>* CanReactWith(const G4Molecule* aMolecule) const ;
-    const std::map<const G4Molecule* const, const G4DNAMolecularReactionData*, compMoleculeP>* GetReativesNData(const G4Molecule* aMolecule) const ;
+    const std::map<const G4Molecule*, const G4DNAMolecularReactionData*, compMoleculeP>* GetReativesNData(const G4Molecule* aMolecule) const ;
     const std::vector<const G4DNAMolecularReactionData*>* GetReactionData(const G4Molecule*) const ;
 
     //_________________________________________________________________
@@ -138,13 +137,13 @@ protected :
     G4bool fVerbose;
 
     //_________________________________________________
-    typedef std::map<const G4Molecule* const,
-                        std::map<const G4Molecule* const,
+    typedef std::map<const G4Molecule*,
+                        std::map<const G4Molecule*,
                                  const G4DNAMolecularReactionData*,
                                  compMoleculeP>,
                     compMoleculeP > ReactionDataMap;
-    typedef std::map<const G4Molecule* const,std::vector<const G4Molecule*>,compMoleculeP> ReactivesMV ;
-    typedef std::map<const G4Molecule* const,std::vector<const G4DNAMolecularReactionData*>,compMoleculeP> ReactionDataMV ;
+    typedef std::map<const G4Molecule*,std::vector<const G4Molecule*>,compMoleculeP> ReactivesMV ;
+    typedef std::map<const G4Molecule*,std::vector<const G4DNAMolecularReactionData*>,compMoleculeP> ReactionDataMV ;
 
     ReactionDataMap fReactionData;
     ReactivesMV     fReactivesMV;

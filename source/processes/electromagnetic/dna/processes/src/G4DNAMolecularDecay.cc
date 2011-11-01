@@ -52,7 +52,7 @@ G4DNAMolecularDecay::G4DNAMolecularDecay(const G4String& processName,
     enablePostStepDoIt = false;
     enableAtRestDoIt=true;
 
-    fVerbose = 1 ;
+    fVerbose = 0 ;
 
 #ifdef G4VERBOSE
     if (verboseLevel>1)

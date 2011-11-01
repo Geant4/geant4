@@ -40,7 +40,6 @@
 
 #include "AddClone_def.hh"
 #include "G4VDNAReactionModel.hh"
-//#include <pthread.h>
 #include <vector>
 
 class G4DNAMolecularReactionData;
@@ -68,7 +67,5 @@ public :
 
 private :
     const std::vector<const G4DNAMolecularReactionData*>* fReactionData ;
-//    static pthread_mutex_t fMutex;
-
 };
 #endif

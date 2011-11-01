@@ -43,7 +43,6 @@
 #include <vector>
 #include <map>
 #include "G4ITModelHandler.hh"
-#include "G4ExceptionOrigin.hh"
 
 class G4ITTrackingManager;
 class G4ITModelProcessor;
@@ -67,8 +66,6 @@ public :
     void SetEndTime(const double);
 
     inline G4ITModelHandler* GetModelHandler();
-    inline G4int GetNbProc();
-    inline void SetNbProc(G4int /*__nbProc*/);
     inline void SetTimeSteps(std::map<double,double>*);
     inline G4int GetNbSteps();
     inline G4double GetEndTime();
@@ -87,7 +84,6 @@ protected:
     void ComputeInteractionLength();
     void DoIt();
     void ComputeInteractionBetweenTracks();
-//    void CallPreTrackingProcessesForSecondaries();
     void MergeSecondariesWithMainList();
 
     void PushSecondaries(G4ITStepProcessor*);
@@ -101,10 +97,6 @@ protected:
     void ExtractTimeStepperData(G4ITModelProcessor*);
     void ExtractILData(G4ITStepProcessor*);
     void ExtractDoItData(G4ITStepProcessor*);
-//    void ExtractPreTrackingProcData(G4ITModelProcessor*);
-
-    template<typename PROC>
-    void ExtractRemainingData(void (G4ITStepManager::*ExtractAction)(PROC*), PROC*);
 
 private:
     G4ITStepManager();
@@ -157,27 +149,10 @@ private:
 
     int fNbTracks ;
 
-    G4int fNbProc ;
-
     static G4ITStepManager* fgStepManager ;
 };
 
 inline G4ITModelHandler* G4ITStepManager::GetModelHandler() {return fpModelHandler;}
-
-inline G4int G4ITStepManager::GetNbProc() {return fNbProc;}
-
-inline void G4ITStepManager::SetNbProc(G4int __nbProc)
-{
-    if(fInitialized)
-    {
-        __Exception_Origin__
-        G4String exceptionCode ("ITStepManager001");
-        G4ExceptionDescription exceptionDescription ("You are trying to change the number\
-                                                    of processors after the ITStepManager has been initialized");
-        G4Exception(exceptionOrigin.data(),exceptionCode.data(), FatalErrorInArgument,exceptionDescription);
-    }
-    fNbProc = __nbProc;
-}
 
 inline void G4ITStepManager::SetEndTime(const double __endtime) { fEndTime = __endtime ;}
 
@@ -216,20 +191,6 @@ inline void G4ITStepManager::SetUserITAction(G4UserReactionAction* userITAction)
 inline G4UserReactionAction* G4ITStepManager::GetUserITAction()
 {
     return fpUserITAction;
-}
-
-template<typename PROC>
-void G4ITStepManager::ExtractRemainingData(void (G4ITStepManager::*ExtractAction)(PROC*), PROC* processor)
-{
-    G4int IDstart = processor->GetID();
-    PROC* tmpProcessor = processor;
-    do
-    {
-        (this->*(ExtractAction))(tmpProcessor);
-        tmpProcessor = tmpProcessor->GetNext();
-    }
-    while(tmpProcessor->GetID() != IDstart);
-
 }
 
 #endif

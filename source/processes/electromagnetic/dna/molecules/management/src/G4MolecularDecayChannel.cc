@@ -51,8 +51,6 @@ struct CompMoleculePointer
     }
 };
 
-// constructors and destructor
-
 G4MolecularDecayChannel::G4MolecularDecayChannel(G4String aName) : fName(aName)
 {
     fProductsVector = 0;
@@ -117,7 +115,6 @@ const G4Molecule* G4MolecularDecayChannel::GetProduct(int index) const
 {
     if(fProductsVector)
         return ((*fProductsVector)[index]).get();
-//    return ((*fProductsVector)[index])();
 
     return 0;
 }
@@ -131,7 +128,6 @@ G4double G4MolecularDecayChannel::GetRMSRadialDisplacementOfProduct(const G4Mole
     for (G4int i=0; i<sz ; i++)
     {
         if(*product != *((*fProductsVector)[i]).get())
-//            if(*product != *((*fProductsVector)[i])())
         {
             value = fRMSProductsDisplacementVector[i];
         }

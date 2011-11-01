@@ -154,11 +154,11 @@ protected :
 
     //________________________________________________________________
     // Process information
-    struct G4ITTransportationInfo : public G4ProcessState
+    struct G4ITTransportationState : public G4ProcessState
     {
     public :
-        G4ITTransportationInfo();
-        virtual ~G4ITTransportationInfo();
+        G4ITTransportationState();
+        virtual ~G4ITTransportationState();
 
         G4ThreeVector        fTransportEndPosition;
         G4ThreeVector        fTransportEndMomentumDir;
@@ -191,7 +191,7 @@ protected :
         G4double endpointDistance;
     };
 
-    G4ITTransportationInfo* const & fTransportationState;
+    G4ITTransportationState* const & fTransportationState;
 
     //________________________________________________________________
     // Informations relative to the process only (meaning no information
