@@ -14,6 +14,7 @@ ifndef G4INSTALL
 endif
 include $(G4INSTALL)/config/architecture.gmk
 
+CPPFLAGS += -DG4HADRONIC_ALLOC_EXPORT
 CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPNumerics/include \

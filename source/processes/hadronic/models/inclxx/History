@@ -16,6 +16,14 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+01 November 2011 - Gabriele Cosmo (hadr-inclxx-V09-04-05)
+---------------------------------------------------------
+- Correction to GNUmakefiles to allow for DLL build on Windows.
+
+31 October 2011 - Pekka Kaitaniemi (hadr-inclxx-V09-04-04)
+----------------------------------------------------------
+- Fixed Windows/VC++ compiler warning
+
 24 October 2011 - Pekka Kaitaniemi (hadr-inclxx-V09-04-03)
 ----------------------------------------------------------
 - Fixed Mac/Windows compilation problem (incl_physics/include/G4INCL.hh clashed

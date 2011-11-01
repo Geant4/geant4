@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_alpha2
+// INCL++ revision: v5.0_alpha2-1-g9138683
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -43,7 +43,7 @@
 namespace G4INCL {
   const G4double ClusteringModelIntercomparison::limitCosEscapeAngle = 0.7;
 
-  static G4bool participantsFirstPredicate(Particle *lhs, Particle */*rhs*/) {
+  static G4bool participantsFirstPredicate(Particle *lhs, Particle * /*rhs*/) {
     return lhs->isParticipant();
   }
 
