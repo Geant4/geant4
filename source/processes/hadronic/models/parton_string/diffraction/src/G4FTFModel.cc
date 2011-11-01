@@ -1177,7 +1177,7 @@ if((std::abs(YtargetNucleon-YtargetNucleus) > 2) ||
         Residual4Momentum.setPy(Residual3Momentum.y());
         Residual4Momentum.setPz(PzResidual); 
         Residual4Momentum.setE(EResidual);
-//G4cout<<"Residual4Momentum in CMS Y "<<Residual4Momentum.rapidity()<<G4endl;
+//G4cout<<"Residual4Momentum in CMS Y "<<Residual4Momentum.beta()<<G4endl;
 //G4int Uzhi; G4cin>>Uzhi;
         Residual4Momentum.transform(toLab);
 //G4cout<<"Residual4Momentum in Lab "<<Residual4Momentum<<G4endl;
@@ -1336,7 +1336,7 @@ Successfull = false; break;                         // 1.07.11
             for(G4int I=0; I < CurrentInteraction; I++) theParticipants.Next();
             
 //-----------------------------------------
-            AjustTargetNucleonForAnnihilation(projectile, target);
+// 1Nov2011            AjustTargetNucleonForAnnihilation(projectile, target);
 //-----------------------------------------
 //G4cout<<"After Ajsd pro "<<projectile->Get4Momentum()<<G4endl;
 //G4cout<<"After Ajst tar "<<target->Get4Momentum()<<G4endl;
