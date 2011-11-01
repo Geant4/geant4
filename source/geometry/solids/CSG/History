@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 31, 2011  T.Nikitina             geom-csg-V09-04-09
+- First implementation of G4CutTubs solid, a tube with possible cuts in +-Z.
+
 October 6, 2011  G.Cosmo                 geom-csg-V09-04-08, geom-csg-V09-04-07
 - Fixed Coverity defect for uninitialised static data in G4Sphere.
 
