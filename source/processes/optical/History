@@ -16,9 +16,6 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-28th Oct 2011 P.Gumplinger (op-V09-04-03)
-              add logic for ProposeVelocity to G4OpBoundaryProcess::PostStepDoIt
-
 13th Oct 2011 P.Gumplinger (op-V09-04-02)
               modify to work with materials-V09-04-14
 
