@@ -6392,6 +6392,8 @@ void G4Incl::collis(G4double *p1_p, G4double *p2_p, G4double *p3_p, G4double *e1
 
   G4int np = (*np_p);
   G4int ip = (*ip_p);
+  ip = ip + 1; // "dummy" usage of the variable
+  ip--;
 
   G4int k2 = (*k2_p);
   G4int k3 = (*k3_p);

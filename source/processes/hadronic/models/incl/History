@@ -16,6 +16,10 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+31 October 2011 - Pekka Kaitaniemi (hadr-incl-V09-04-06)
+--------------------------------------------------------
+- Fixed a GCC 4.6 compiler warning
+
 26 October 2011 - Pekka Kaitaniemi (hadr-incl-V09-04-05)
 --------------------------------------------------------
 - Eliminated some Mac/Xcode compilation warnings
