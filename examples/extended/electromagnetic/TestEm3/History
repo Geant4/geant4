@@ -15,6 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+01-11-11 V.Ivant (testem3-V09-04-07)
+- SteppingAction - use track weight
+- TestEm3.in test Russian roulette biasing option
+     
+31-10-11 mma (testem3-V09-04-06)
+- PhysListEmStandard : msc95 by default
+- remove PhysListEmStandardGS, PhysListEmStandardWVI 
      
 02-06-11 mma (testem3-V09-04-05)
 - PhysListEmStandard migrated to the new approach based on G4PhysicsListHelper

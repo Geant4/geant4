@@ -74,8 +74,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4int absorNum  = prePoint->GetTouchableHandle()->GetCopyNumber(0);
   G4int layerNum  = prePoint->GetTouchableHandle()->GetCopyNumber(1);
          
-  // collect energy deposit
-  G4double edep = aStep->GetTotalEnergyDeposit();
+  // collect energy deposit taking into account track weight
+  G4double edep = aStep->GetTotalEnergyDeposit()*aStep->GetTrack()->GetWeight();
   
   // collect step length of charged particles
   G4double stepl = 0.;

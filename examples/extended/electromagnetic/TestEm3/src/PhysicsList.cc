@@ -41,9 +41,6 @@
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
 
-#include "PhysListEmStandardGS.hh"
-#include "PhysListEmStandardWVI.hh"
-
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -255,18 +252,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new G4EmPenelopePhysics();
-
-  } else if (name == "standardGS") {
-
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandardGS(name);
-
-  } else if (name == "standardWVI") {
-
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandardWVI(name);
 
   } else {
 
