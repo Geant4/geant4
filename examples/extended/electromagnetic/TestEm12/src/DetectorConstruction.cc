@@ -95,7 +95,7 @@ void DetectorConstruction::DefineMaterials()
   
   man->FindOrBuildMaterial("G4_AIR"  , isotopes);
   man->FindOrBuildMaterial("G4_WATER", isotopes);
-
+  
  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 

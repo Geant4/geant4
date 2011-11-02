@@ -11,17 +11,18 @@
 /testem/det/setMat G4_WATER
 /testem/det/setRadius  3 cm
 #
-/testem/phys/addPhysics  emstandard_opt0	# em physics
+###/testem/phys/addPhysics  emstandard_opt3	# em physics
+/testem/phys/addPhysics  local	# em physics
 #
 /run/setCut 2 um	#will include cut for proton
 #
 /run/initialize
 #
 /gun/particle e-
-/gun/energy 100 keV
+/gun/energy 1000 keV
 #
 /testem/histo/setFileType root
-/testem/histo/setFileName berger/100keV.opt0
+/testem/histo/setFileName berger/1MeV.local
 /testem/histo/setHisto 8 120  0.  1.2 none	#normalized edep profile
 #
 /testem/event/printModulo 10000
