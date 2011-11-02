@@ -71,6 +71,9 @@ G4EmBiasingManager::~G4EmBiasingManager()
 void G4EmBiasingManager::Initialise(const G4ParticleDefinition& part,
 				    const G4String& procName, G4int verbose)
 {
+  //G4cout << "G4EmBiasingManager::Initialise for "
+  //	 << part.GetParticleName()
+  //	 << " and " << procName << G4endl;
   const G4ProductionCutsTable* theCoupleTable=
     G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
@@ -176,6 +179,9 @@ G4EmBiasingManager::ActivateSecondaryBiasing(const G4String& rname,
 					     G4double factor,
 					     G4double energyLimit)
 {
+  //G4cout << "G4EmBiasingManager::ActivateSecondaryBiasing: "
+  //	 << rname << " F= " << factor << " E(MeV)= " << energyLimit/MeV
+  //	 << G4endl; 
   if(0.0 >= factor) { return; }
   G4RegionStore* regionStore = G4RegionStore::GetInstance();
   G4String name = rname;
@@ -222,6 +228,7 @@ G4EmBiasingManager::ActivateSecondaryBiasing(const G4String& rname,
   nBremSplitting.push_back(nsplit);
   secBiasedEnegryLimit.push_back(energyLimit);
   ++nSecBiasedRegions;
+  //G4cout << "nSecBiasedRegions= " << nSecBiasedRegions << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

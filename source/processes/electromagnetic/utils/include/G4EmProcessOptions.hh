@@ -141,10 +141,12 @@ public:
 
   void SetFactorForAngleLimit(G4double val);
 
-  void SetProcessBiasingFactor(const G4String& name, G4double val);
+  void SetProcessBiasingFactor(const G4String& name, G4double val, 
+			       G4bool flag = true);
 
   void ActivateForcedInteraction(const G4String& name, G4double length=0.0, 
-				 const G4String& region="");
+				 const G4String& region="",
+				 G4bool flag = true);
 
   void ActivateSecondaryBiasing(const G4String& name, const G4String& region, 
 				G4double factor, G4double energyLimit);

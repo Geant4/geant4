@@ -230,6 +230,7 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
 
   biasManager  = 0;
   biasFlag     = false; 
+  weightFlag   = false; 
 
   scTracks.reserve(5);
   secParticles.reserve(5);
@@ -638,6 +639,7 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable(G4EmTableType tType)
   }
   if(!table) return table;
 
+  G4LossTableBuilder* bld = (G4LossTableManager::Instance())->GetTableBuilder();
   G4bool splineFlag = (G4LossTableManager::Instance())->SplineFlag();
   G4PhysicsLogVector* aVector = 0;
   G4PhysicsLogVector* bVector = 0;
@@ -645,14 +647,15 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable(G4EmTableType tType)
   for(size_t i=0; i<numOfCouples; ++i) {
 
     if(1 < verboseLevel) {
-      G4cout << "G4VEnergyLossProcess::BuildDEDXVector flag=  " 
-	     << table->GetFlag(i) << G4endl;
+      G4cout << "G4VEnergyLossProcess::BuildDEDXVector flagTable=  " 
+	     << table->GetFlag(i) << " Flag= " << bld->GetFlag(i) << G4endl;
     }
-    if (table->GetFlag(i)) {
+    if (/*table->GetFlag(i)*/bld->GetFlag(i)) {
 
       // create physics vector and fill it
       const G4MaterialCutsCouple* couple = 
 	theCoupleTable->GetMaterialCutsCouple(i);
+      //bVector = static_cast<G4PhysicsLogVector*>((*table)[i]);
       if(!bVector) {
 	aVector = new G4PhysicsLogVector(minKinEnergy, emax, bin);
         bVector = aVector;
@@ -711,13 +714,15 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildLambdaTable(G4EmTableType tType)
         G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
 
+  G4LossTableBuilder* bld = (G4LossTableManager::Instance())->GetTableBuilder();
   G4bool splineFlag = (G4LossTableManager::Instance())->SplineFlag();
   G4PhysicsLogVector* aVector = 0;
   G4double scale = std::log(maxKinEnergy/minKinEnergy);
 
   for(size_t i=0; i<numOfCouples; ++i) {
 
-    if (table->GetFlag(i)) {
+    if (/*table->GetFlag(i)*/bld->GetFlag(i)) {
+      //    if (table->GetFlag(i)) {
 
       // create physics vector and fill it
       const G4MaterialCutsCouple* couple = 
@@ -867,16 +872,14 @@ G4double G4VEnergyLossProcess::AlongStepGetPhysicalInteractionLength(
       finR = std::min(finR,currentCouple->GetProductionCuts()->GetProductionCut(1)); 
     }
     if(x > finR) { x = y + finR*(1.0 - dRoverRange)*(2.0 - finR/fRange); }
-    //if(x > finalRange && y < currentMinStep) { 
-    //  x = y + finalRange*(1.0 - dRoverRange)*(2.0 - finalRange/fRange);
-    //} else if (rndmStepFlag) { x = SampleRange(); }
-    //G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy
-    //   <<" range= "<<fRange <<" cMinSt="<<currentMinStep
-    //	  << " y= " << y << " finR= " << prec
-    //    << " limit= " << x <<G4endl;
+    /*
+    G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy
+	  <<" range= "<<fRange << " idx= " << basedCoupleIndex
+    	  << " y= " << y << " finR= " << finR
+	  << " limit= " << x <<G4endl;
+    */
   }
-  //G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy
-  //  <<" stepLimit= "<<x<<G4endl;
+  //G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy <<" stepLimit= "<<x<<G4endl;
   return x;
 }
 
@@ -951,7 +954,6 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
   if(preStepLambda > 0.0) { 
     if (theNumberOfInteractionLengthLeft < 0.0) {
       // beggining of tracking (or just after DoIt of this process)
-      //G4cout<<"G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength Reset"<<G4endl;
       ResetNumberOfInteractionLengthLeft();
     } else if(currentInteractionLength < DBL_MAX) {
       // subtract NumberOfInteractionLengthLeft
@@ -1008,8 +1010,8 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   if(length <= 0.0) { return &fParticleChange; }
   G4double eloss  = 0.0;
  
-  /*  
-  if(-1 < verboseLevel) {
+  /*
+  if(1 < verboseLevel) {
     const G4ParticleDefinition* d = track.GetParticleDefinition();
     G4cout << "AlongStepDoIt for "
            << GetProcessName() << " and particle "
@@ -1017,6 +1019,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
            << "  eScaled(MeV)= " << preStepScaledEnergy/MeV
            << "  range(mm)= " << fRange/mm
            << "  s(mm)= " << length/mm
+	   << "  rf= " << reduceFactor
            << "  q^2= " << chargeSqRatio
            << " md= " << d->GetPDGMass()
            << "  status= " << track.GetTrackStatus()
@@ -1027,8 +1030,11 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
 
   // define new weight for primary and secondaries
-  G4double weight = fParticleChange.GetParentWeight()/biasFactor;
-  fParticleChange.ProposeParentWeight(weight);
+  G4double weight = fParticleChange.GetParentWeight();
+  if(weightFlag) {
+    weight /= biasFactor;
+    fParticleChange.ProposeParentWeight(weight);
+  }
 
   // stopping
   if (length >= fRange) {
@@ -1353,11 +1359,14 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
   */
 
   // forced process - should happen only once per track
-  if(biasFlag && biasManager->ForcedInteractionRegion(currentCoupleIndex)) {
-    biasFlag = false;
+  if(biasFlag) {
+    if(biasManager->ForcedInteractionRegion(currentCoupleIndex)) {
+      biasFlag = false;
+    }
+  }
 
   // Integral approach
-  } else if (integral) {
+  if (integral) {
     G4double lx = GetLambdaForScaledEnergy(postStepScaledEnergy);
     /*
     if(preStepLambda<lx && 1 < verboseLevel && nWarnings<200) {
@@ -1380,8 +1389,11 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
   SelectModel(postStepScaledEnergy);
 
   // define new weight for primary and secondaries
-  G4double weight = fParticleChange.GetParentWeight()/biasFactor;
-  fParticleChange.ProposeParentWeight(weight);
+  G4double weight = fParticleChange.GetParentWeight();
+  if(weightFlag) {
+    weight /= biasFactor;
+    fParticleChange.ProposeParentWeight(weight);
+  }
 
   const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
   G4double tcut = (*theCuts)[currentCoupleIndex];
@@ -1934,11 +1946,38 @@ const G4Element* G4VEnergyLossProcess::GetCurrentElement() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void G4VEnergyLossProcess::SetCrossSectionBiasingFactor(G4double f, 
+							G4bool flag)
+{
+  if(f > 0.0) { 
+    biasFactor = f; 
+    weightFlag = flag;
+    if(1 < verboseLevel) {
+      G4cout << "### SetCrossSectionBiasingFactor: for " 
+	     << " process " << GetProcessName()
+	     << " biasFactor= " << f << " weightFlag= " << flag 
+	     << G4endl; 
+    }
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void 
 G4VEnergyLossProcess::ActivateForcedInteraction(G4double length, 
-						const G4String& region)
+						const G4String& region,
+						G4bool flag)
 {
   if(!biasManager) { biasManager = new G4EmBiasingManager(); }
+  if(1 < verboseLevel) {
+    G4cout << "### ActivateForcedInteraction: for " 
+	   << " process " << GetProcessName()
+	   << " length(mm)= " << length/mm
+	   << " in G4Region <" << region
+	   << "> weightFlag= " << flag 
+	   << G4endl; 
+  }
+  weightFlag = flag;
   biasManager->ActivateForcedInteraction(length, region);
 }
 
@@ -1952,6 +1991,14 @@ G4VEnergyLossProcess::ActivateSecondaryBiasing(const G4String& region,
   if (0.0 < factor) { 
     if(!biasManager) { biasManager = new G4EmBiasingManager(); }
     biasManager->ActivateSecondaryBiasing(region, factor, energyLimit);
+    if(1 < verboseLevel) {
+      G4cout << "### ActivateSecondaryBiasing: for " 
+	     << " process " << GetProcessName()
+	     << " factor= " << factor
+	     << " in G4Region <" << region 
+	     << "> energyLimit(MeV)= " << energyLimit/MeV
+	     << G4endl; 
+    }
   }
 }
 

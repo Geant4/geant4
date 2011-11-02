@@ -333,9 +333,12 @@ public:
   // Add subcutoff option for the region
   void ActivateSubCutoff(G4bool val, const G4Region* region = 0);
 
-  // Activate forced interaction
+  // Activate biasing
+  void SetCrossSectionBiasingFactor(G4double f, G4bool flag = true);
+
   void ActivateForcedInteraction(G4double length = 0.0, 
-				 const G4String& region = "");
+				 const G4String& region = "",
+				 G4bool flag = true);
 
   void ActivateSecondaryBiasing(const G4String& region, G4double factor,
 				G4double energyLimit);
@@ -355,7 +358,6 @@ public:
   inline G4bool IsIonisationProcess() const;
 
   // Redefine parameteters for stepping control
-  //
   inline void SetLinearLossLimit(G4double val);
   inline void SetMinSubRange(G4double val);
   inline void SetLambdaFactor(G4double val);
@@ -396,7 +398,6 @@ public:
   inline void SetMaxKinEnergyForCSDARange(G4double e);
 
   // Biasing parameters
-  inline void SetCrossSectionBiasingFactor(G4double f);
   inline G4double CrossSectionBiasingFactor() const;
 
   // Return values for given G4MaterialCutsCouple
@@ -537,6 +538,7 @@ private:
   G4bool   useSubCutoff;
   G4bool   useDeexcitation;
   G4bool   biasFlag;
+  G4bool   weightFlag;
 
 protected:
 
@@ -1032,13 +1034,6 @@ inline G4double G4VEnergyLossProcess::MaxKinEnergy() const
 inline void G4VEnergyLossProcess::SetMaxKinEnergyForCSDARange(G4double e)
 {
   maxKinEnergyCSDA = e;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEnergyLossProcess::SetCrossSectionBiasingFactor(G4double f)
-{
-  if(f > 0.0) { biasFactor = f; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

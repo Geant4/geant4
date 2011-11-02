@@ -230,17 +230,18 @@ public:
   // access atom on which interaction happens
   const G4Element* GetCurrentElement() const;
 
+  // Biasing parameters
+  void SetCrossSectionBiasingFactor(G4double f, G4bool flag = true);
+  inline G4double CrossSectionBiasingFactor() const;
+
   // Activate forced interaction
   void ActivateForcedInteraction(G4double length = 0.0, 
-				 const G4String& r = "");
+				 const G4String& r = "",
+				 G4bool flag = true);
 
   // Single scattering parameters
   inline void SetPolarAngleLimit(G4double a);
   inline G4double PolarAngleLimit() const;
-
-  // Biasing parameters
-  inline void SetCrossSectionBiasingFactor(G4double f);
-  inline G4double CrossSectionBiasingFactor() const;
 
   inline void SetLambdaFactor(G4double val);
 
@@ -370,6 +371,7 @@ private:
   G4double                     preStepLambda;
   G4double                     fFactor;
   G4bool                       biasFlag;
+  G4bool                       weightFlag;
 };
 
 // ======== Run time inline methods ================
@@ -565,13 +567,6 @@ inline void G4VEmProcess::SetPolarAngleLimit(G4double val)
 inline G4double G4VEmProcess::PolarAngleLimit() const
 {
   return polarAngleLimit;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEmProcess::SetCrossSectionBiasingFactor(G4double f)
-{
-  if(f > 0.0) { biasFactor = f; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

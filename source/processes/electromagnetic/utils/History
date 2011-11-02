@@ -17,6 +17,24 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+1 November 11: V.Ivant (emutils-V09-04-49)
+- G4VEnergyLossProcess, G4VEmProcess, G4EmBiasingManager - fixed 
+    initialisation and improved cout for usage of secondary biasing
+
+31 October 11: V.Ivant (emutils-V09-04-48)
+- G4LossTableBuilder - fixed initialisation logic for usage by
+    G4EnergyLossForExtrapolator
+
+31 October 11: V.Ivant (emutils-V09-04-47)
+- G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering,
+  G4LossTableBuilder - fixed initialisation for the case of usage
+    of variable density materials and a session with more than 1 run
+
+28 October 11: V.Ivant (emutils-V09-04-46)
+- G4VEnergyLossProcess, G4VEmProcess, G4EmProcessOptions,
+  G4EnergyLossMessenger - added a flag of change of weight for
+     cross section biasing and forced interaction option 
+
 21 September 11: V.Ivant (emutils-V09-04-45)
 - G4VEnergyLossProcess, G4EmBiasingManager, G4EmProcessOptions,
   G4EnergyLossMessenger - added upper limit in energy for secondary 
@@ -25,7 +43,7 @@ committal in the CVS repository !
 
 16 September 11: V.Ivant (emutils-V09-04-44)
 - G4VEnergyLossProcess - added extra protection for correction to
-    energy loss to avoid ions travel foreever
+    energy loss to avoid ions travel forever
 
 12 September 11: V.Ivant (emutils-V09-04-43)
 - G4EmBiasingManager - fixed biasing weight for splitting

@@ -125,6 +125,7 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   modelManager = new G4EmModelManager();
   biasManager  = 0;
   biasFlag     = false; 
+  weightFlag   = false;
   (G4LossTableManager::Instance())->Register(this);
 }
 
@@ -320,6 +321,7 @@ void G4VEmProcess::BuildLambdaTable()
         G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
 
+  G4LossTableBuilder* bld = (G4LossTableManager::Instance())->GetTableBuilder();
   G4bool splineFlag = (G4LossTableManager::Instance())->SplineFlag();
 
   G4PhysicsLogVector* aVector = 0;
@@ -330,7 +332,7 @@ void G4VEmProcess::BuildLambdaTable()
     
   for(size_t i=0; i<numOfCouples; ++i) {
 
-    if (theLambdaTable->GetFlag(i)) {
+    if (/*theLambdaTable->GetFlag(i)*/bld->GetFlag(i)) {
 
       // create physics vector and fill it
       const G4MaterialCutsCouple* couple = 
@@ -375,8 +377,8 @@ void G4VEmProcess::PrintInfoDefinition()
   if(verboseLevel > 0) {
     G4cout << G4endl << GetProcessName() << ":   for  "
            << particle->GetParticleName();
-    if(integral) G4cout << ", integral: 1 ";
-    if(applyCuts) G4cout << ", applyCuts: 1 ";
+    if(integral)  { G4cout << ", integral: 1 "; }
+    if(applyCuts) { G4cout << ", applyCuts: 1 "; }
     G4cout << "    SubType= " << GetProcessSubType();;
     if(biasFactor != 1.0) { G4cout << "   BiasingFactor= " << biasFactor; }
     G4cout << G4endl;
@@ -490,17 +492,21 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
   G4double finalT = track.GetKineticEnergy();
 
   // forced process - should happen only once per track
-  if(biasFlag && biasManager->ForcedInteractionRegion(currentCoupleIndex)) {
-    biasFlag = false;
+  if(biasFlag) {
+    if(biasManager->ForcedInteractionRegion(currentCoupleIndex)) {
+      biasFlag = false;
+    }
+  }
 
   // Integral approach
-  } else if (integral) {
+  if (integral) {
     G4double lx = GetLambda(finalT, currentCouple);
     if(preStepLambda<lx && 1 < verboseLevel) {
       G4cout << "WARING: for " << currentParticle->GetParticleName() 
              << " and " << GetProcessName()
              << " E(MeV)= " << finalT/MeV
-             << " preLambda= " << preStepLambda << " < " << lx << " (postLambda) "
+             << " preLambda= " << preStepLambda << " < " 
+	     << lx << " (postLambda) "
 	     << G4endl;  
     }
 
@@ -514,9 +520,10 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
   if(!currentModel->IsActive(finalT)) { return &fParticleChange; }
 
   // define new weight for primary and secondaries
-  G4double weight = fParticleChange.GetParentWeight()/biasFactor;
-  fParticleChange.ProposeParentWeight(weight);
-
+  if(weightFlag) {
+    G4double weight = fParticleChange.GetParentWeight()/biasFactor;
+    fParticleChange.ProposeParentWeight(weight);
+  }
   /*  
   if(0 < verboseLevel) {
     G4cout << "G4VEmProcess::PostStepDoIt: Sample secondary; E= "
@@ -782,10 +789,38 @@ const G4Element* G4VEmProcess::GetCurrentElement() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void G4VEmProcess::SetCrossSectionBiasingFactor(G4double f, G4bool flag)
+{
+  if(f > 0.0) { 
+    biasFactor = f; 
+    weightFlag = flag;
+    if(1 < verboseLevel) {
+      G4cout << "### SetCrossSectionBiasingFactor: for " 
+	     << particle->GetParticleName() 
+	     << " and process " << GetProcessName()
+	     << " biasFactor= " << f << " weightFlag= " << flag 
+	     << G4endl; 
+    }
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void 
-G4VEmProcess::ActivateForcedInteraction(G4double length, const G4String& r)
+G4VEmProcess::ActivateForcedInteraction(G4double length, const G4String& r,
+					G4bool flag)
 {
   if(!biasManager) { biasManager = new G4EmBiasingManager(); }
+  if(1 < verboseLevel) {
+    G4cout << "### ActivateForcedInteraction: for " 
+	   << particle->GetParticleName() 
+	   << " and process " << GetProcessName()
+	   << " length(mm)= " << length/mm
+	   << " in G4Region <" << r 
+	   << "> weightFlag= " << flag 
+	   << G4endl; 
+  }
+  weightFlag = flag;
   biasManager->ActivateForcedInteraction(length, r);
 }
 

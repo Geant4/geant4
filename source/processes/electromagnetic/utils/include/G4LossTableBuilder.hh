@@ -80,6 +80,8 @@ public:
 
   inline const std::vector<G4double>* GetDensityFactors();
 
+  inline G4bool GetFlag(size_t idx) const;
+
   inline void SetSplineFlag(G4bool flag);
 
   inline void SetInitialisationFlag(G4bool flag);
@@ -112,6 +114,11 @@ G4LossTableBuilder::GetDensityFactors()
 {
   if(theDensityIdx->size() == 0) { InitialiseCouples(); }
   return theDensityFactor;
+}
+
+inline G4bool G4LossTableBuilder::GetFlag(size_t idx) const
+{
+  return (*theFlag)[idx];
 }
 
 inline void G4LossTableBuilder::SetSplineFlag(G4bool flag)

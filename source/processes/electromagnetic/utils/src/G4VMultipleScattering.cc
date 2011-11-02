@@ -269,6 +269,7 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
           G4ProductionCutsTable::GetProductionCutsTable();
     size_t numOfCouples = theCoupleTable->GetTableSize();
 
+    //G4LossTableBuilder* bld = (G4LossTableManager::Instance())->GetTableBuilder();
     G4bool splineFlag = (G4LossTableManager::Instance())->SplineFlag();
 
     G4PhysicsLogVector* aVector = 0;
@@ -276,7 +277,7 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
 
     for (size_t i=0; i<numOfCouples; ++i) {
 
-      if (theLambdaTable->GetFlag(i)) {
+      if (theLambdaTable->GetFlag(i)/*bld->GetFlag(i)*/) {
         // create physics vector and fill it
         const G4MaterialCutsCouple* couple = 
 	  theCoupleTable->GetMaterialCutsCouple(i);

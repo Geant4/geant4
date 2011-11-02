@@ -302,12 +302,16 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   bfCmd->SetGuidance("Set factor for the process cross section.");
   bfCmd->SetGuidance("  procName   : process name");
   bfCmd->SetGuidance("  procFact   : factor");
+  bfCmd->SetGuidance("  flagFact   : flag to change weight");
 
   G4UIparameter* procName = new G4UIparameter("procName",'s',false);
   bfCmd->SetParameter(procName);
 
   G4UIparameter* procFact = new G4UIparameter("procFact",'d',false);
   bfCmd->SetParameter(procFact);
+
+  G4UIparameter* flagFact = new G4UIparameter("flagFact",'s',false);
+  bfCmd->SetParameter(flagFact);
   bfCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   fiCmd = new G4UIcommand("/process/em/setForcedInteraction",this);
@@ -315,6 +319,7 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   fiCmd->SetGuidance("  procNam    : process name");
   fiCmd->SetGuidance("  regNam     : region name");
   fiCmd->SetGuidance("  tlength    : fixed target length");
+  fiCmd->SetGuidance("  tflag      : flag to change weight");
 
   G4UIparameter* procNam = new G4UIparameter("procNam",'s',false);
   fiCmd->SetParameter(procNam);
@@ -328,6 +333,9 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   G4UIparameter* unitT = new G4UIparameter("unitT",'s',true);
   fiCmd->SetParameter(unitT);
   unitT->SetGuidance("unit of tlength");
+
+  G4UIparameter* flagT = new G4UIparameter("tflag",'s',true);
+  fiCmd->SetParameter(flagT);
   fiCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   brCmd = new G4UIcommand("/process/em/setSecBiasing",this);
@@ -518,17 +526,21 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
   } else if (command == bfCmd) {
     G4double v1(1.0);
-    G4String s("");
+    G4String s(""),s1("");
     std::istringstream is(newValue);
-    is >> s >> v1;
-    opt->SetProcessBiasingFactor(s,v1);
+    is >> s >> v1 >> s1;
+    G4bool yes = false;
+    if(s1 == "true") { yes = true; }
+    opt->SetProcessBiasingFactor(s,v1,yes);
   } else if (command == fiCmd) {
     G4double v1(0.0);
-    G4String s1(""),s2(""),unt("mm");
+    G4String s1(""),s2(""),s3(""),unt("mm");
     std::istringstream is(newValue);
-    is >> s1 >> s2 >> v1 >> unt;
+    is >> s1 >> s2 >> v1 >> unt >> s3;
+    G4bool yes = false;
+    if(s3 == "true") { yes = true; }
     v1 *= G4UIcommand::ValueOf(unt);
-    opt->ActivateForcedInteraction(s1,v1,s2);
+    opt->ActivateForcedInteraction(s1,v1,s2,yes);
   } else if (command == brCmd) {
     G4double fb(1.0),en(1.e+30);
     G4String s1(""),s2(""),unt("MeV");
