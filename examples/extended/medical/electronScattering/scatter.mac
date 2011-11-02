@@ -24,7 +24,8 @@
 #
 /run/initialize
 #
-/run/setCut 10 um	#including proton cut
+##/testem/phys/setCut 10 um
+/testem/phys/setCut 1 mm
 #
 /gun/particle e- 
 /gun/energy 13 MeV

@@ -64,7 +64,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   InitFluence();  
 
   // save Rndm status
-  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+  G4RunManager::GetRunManager()->SetRandomNumberStore(false);
   CLHEP::HepRandom::showEngineStatus();
 }
 
