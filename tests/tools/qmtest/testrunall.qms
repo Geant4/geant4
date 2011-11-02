@@ -157,6 +157,7 @@
       <text>test61-run</text>
       <text>test62-run</text>
       <text>test67-run</text>
+	  <text>test69-run</text>
     </set>
   </argument>
 </extension>

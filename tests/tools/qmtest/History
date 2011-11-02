@@ -12,6 +12,13 @@ $Id$
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+1-Nov-2011, G.Folger                (testtools-QMtest-V09-04-12)
+- add test69, testing incl++ to testing suites tests_common.qms, 
+   and to old test{build,run}all.qms
+
+28-Oct-2011, G.Folger                (testtools-QMtest-V09-04-11)
+- add test69, testing incl++
+
 30-Sep-2011, G.Folger                (testtools-QMtest-V09-04-10)
 -  disable eRosita, removed from examples_adv_common.qms
 
