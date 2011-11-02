@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct 31, 2011, M.Asai (digits_hits-V09-04-08)
+- G4THitsMap.hh : removed the print-out of total value, avoiding the problem
+  caused by a class <T> which does not have += or cannot be initilized by = 0.
+- Addressing to the problem report #1258.
+
 Oct 20, 2011, M.Asai (digits_hits-V09-04-07)
 - Eliminating obsolete G4Exception
 - Re-ordering exception error IDs and improving error messages.

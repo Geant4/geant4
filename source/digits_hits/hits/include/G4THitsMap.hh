@@ -194,14 +194,17 @@ template <typename T> void G4THitsMap<T>::DrawAllHits()
 template <typename T> void G4THitsMap<T>::PrintAllHits() 
 {
  G4cout << "G4THitsMap " << SDname << " / " << collectionName << " --- " << entries() << " entries" << G4endl;
+/*----- commented out for the use-case where <T> cannot be initialized
+        to be zero or does not support += operator.
  std::map<G4int,T*> * theHitsMap = GetMap();
  typename std::map<G4int, T*>::iterator itr = theHitsMap->begin();
- G4double sum = 0.;
+ T sum = 0.;
  for(; itr != theHitsMap->end(); itr++) {
   ///////////////////////////////G4cout << "  " << itr->first << " : " << *(itr->second) << G4endl;
   sum += *(itr->second);
  }
  G4cout << "             Total : " << sum << G4endl;
+----------------------------------------------------------------------*/
 }
 
 template <typename T> void G4THitsMap<T>::clear() {
