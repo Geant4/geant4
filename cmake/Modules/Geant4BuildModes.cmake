@@ -58,7 +58,6 @@ mark_as_advanced(
 #
 if(CMAKE_CONFIGURATION_TYPES)
   list(APPEND CMAKE_CONFIGURATION_TYPES TestRelease)
-  list(APPEND CMAKE_CONFIGURATION_TYPES TestReleaseDebug)
   list(APPEND CMAKE_CONFIGURATION_TYPES Maintainer)
   list(REMOVE_DUPLICATES CMAKE_CONFIGURATION_TYPES)
   set(CMAKE_CONFIGURATION_TYPES "${CMAKE_CONFIGURATION_TYPES}" 
@@ -78,13 +77,13 @@ if(NOT CMAKE_CONFIGURATION_TYPES)
   if(NOT CMAKE_BUILD_TYPE)
     # Default to a Release build if nothing else...
     set(CMAKE_BUILD_TYPE Release
-      CACHE STRING "Choose the type of build, options are: None Release MinSizeRel Debug RelWithDebInfo TestRelease TestReleaseDebug Maintainer."
+      CACHE STRING "Choose the type of build, options are: None Release TestRelease MinSizeRel Debug RelWithDebInfo MinSizeRel Maintainer."
       FORCE
       )
   else()
     # Force to the cache, but use existing value.
     set(CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}"
-      CACHE STRING "Choose the type of build, options are: None Release MinSizeRel Debug RelWithDebInfo TestRelease TestReleaseDebug Maintainer."
+      CACHE STRING "Choose the type of build, options are: None Release TestRelease MinSizeRel Debug RelWithDebInfo MinSizeRel Maintainer."
       FORCE
       )
   endif()

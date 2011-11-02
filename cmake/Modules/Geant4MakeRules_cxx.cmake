@@ -17,13 +17,18 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "-O2 -g")
 
   # Extra Geant4 modes
-  # - TestRelease{Debug} Modes
-  set(__testrelease_common_flags "-g -DG4DEBUG_VERBOSE -DG4FPE_DEBUG")
+  # - TestRelease
+  set(__testrelease_flags "-g -DG4DEBUG_VERBOSE -DG4FPE_DEBUG")
 
-  set(CMAKE_CXX_FLAGS_TESTRELEASE_INIT "-O2 ${__testrelease_common_flags}")
-  set(CMAKE_CXX_FLAGS_TESTRELEASEDEBUG_INIT "${__testrelease_common_flags}")
+  if(NOT APPLE)
+    # Only non-Apple platforms should have optimization - on Apple, this
+    # is reported to cause problems with floating point debugging.
+    set(__testrelease_flags "-O2 ${__testrelease_flags}")
+  endif()
 
-  # - Maintainer Mode
+  set(CMAKE_CXX_FLAGS_TESTRELEASE_INIT "${__testrelease_flags}")
+
+  # - Maintainer
   set(CMAKE_CXX_FLAGS_MAINTAINER_INIT "-g")
 endif()
 
@@ -41,12 +46,8 @@ if(MSVC)
   set(CMAKE_CXX_FLAGS_MINSIZEREL_INIT "-Os -DNDEBUG")
   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "-O2 -Zi")
 
-  # Extra Geant4 modes
-  # - TestRelease{Debug} Modes
+  # Extra modes
   set(CMAKE_CXX_FLAGS_TESTRELEASE_INIT "-O2 -Zi -G4DEBUG_VERBOSE")
-  set(CMAKE_CXX_FLAGS_TESTRELEASEDEBUG_INIT "-Zi -G4DEBUG_VERBOSE")
-
-  # - Maintainer
   set(CMAKE_CXX_FLAGS_MAINTAINER_INIT "-Zi")
 
   # We may also have to set linker flags....
@@ -64,11 +65,8 @@ if(CMAKE_CXX_COMPILER MATCHES "icpc.*")
   set(CMAKE_CXX_FLAGS_MINSIZEREL_INIT "-Os -DNDEBUG")
   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "-O2 -g")
 
-  # Extra Geant4 modes
-  # - TestRelease{Debug} Modes
+  # Extra modes
   set(CMAKE_CXX_FLAGS_TESTRELEASE_INIT "-O2 -g -G4DEBUG_VERBOSE")
-  set(CMAKE_CXX_FLAGS_TESTRELEASEDEBUG_INIT "-g -G4DEBUG_VERBOSE")
-
   set(CMAKE_CXX_FLAGS_MAINTAINER_INIT "-g")
 endif()
 

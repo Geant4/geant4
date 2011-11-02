@@ -29,7 +29,49 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-October 6th - B.Morgan (cmake-V09-04-28)
+November 2nd 2011 - B.Morgan (cmake-V09-04-31)
+- Modules/Geant4InstallData.cmake : Bumped version of G4EMLOW library to be
+  installed from 6.22 -> 6.23.
+
+
+November 2nd 2011 - B.Morgan (cmake-V09-04-30)
+- Modules/Geant4BuildModes.cmake : Reverted file to revision 51604
+  (cmake-V04-04-28 tag) which removes the TestReleaseDebug mode.
+- Modules/Geant4MakeRules_cxx.cmake : Reverted file to revision 52696
+  (cmake-V09-04-28 tag) which removes the TestReleaseDebug mode. This reverts 
+  TestRelease to having platform dependent flags, specifically there is no 
+  optimization on Apple.
+- Modules/geant4-config.in : Fixed typo error that used incorrect name for
+  CMake supplied variable Geant4_VERSION, preventing correct expansion.
+- Modules/Geant4ConfigureConfigScript.cmake : Tidied up indenting to standard
+  two space format. Added skeleton setup for making script relocatable in 
+  the Install Tree.
+
+
+October 11th 2011 - B.Morgan
+- Templates/Geant4Config.cmake.in [BUGFIX #1253] : Jean Jacquemier reported
+  a problem when building applications using a pure static build of Geant4.
+  This was traced to incorrect list syntax in Geant4Config.cmake, as detailed
+  in the above Bug Report #1253. The fix is to remove the quotes around the
+  list as these cause it to be represented as one single string.
+
+
+October 10th 2011 - B.Morgan (cmake-V09-04-29)
+- Modules/Geant4ValidateSources.cmake (NEWFILE) : Module to configure the
+  geant4_validate_sources.cmake.in and create a custom 'validate_sources'
+  target which runs the resulting configured script.
+- Templates/geant4_validate_sources.cmake.in (NEWFILE) : CMake script that
+  locates all sources.cmake files in the Geant4 source tree, parses them to
+  extract all listed sources/headers and compares that list with sources and
+  headers on disk. Any mismatches whether files listed in sources.cmake and no
+  longer on disk, or files on disk but not listed in sources.cmake, are
+  reported. If any mismatches are found, the script will fail with FATAL_ERROR,
+  though it will not do so until the whole tree has been scanned to ensure all
+  mismatches are located. It ignores certain files that are known to cause
+  mismatch detection but which are no longer part of the Geant4 CMake build. 
+
+
+October 6th 2011 - B.Morgan (cmake-V09-04-28)
 - Modules/Geant4BuildModes.cmake : Added TestReleaseDebug mode to 
   CMAKE_BUILD_TYPES and CMAKE_CONFIGURATION_TYPES.
   NB: Diaganosed problem reported by Pere, whereby added modes were not

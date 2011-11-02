@@ -354,7 +354,7 @@ list(APPEND _geant4_internal_libraries
 )
 
 # - Any externals built by Geant4
-foreach(_extlib "@GEANT4_EXTERNALS_TARGETS@")
+foreach(_extlib @GEANT4_EXTERNALS_TARGETS@)
     list(APPEND 
         _geant4_internal_libraries
         ${_extlib}${_geant4_lib_use_suffix}
