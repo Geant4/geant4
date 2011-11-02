@@ -15,6 +15,16 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+01-11-11 V.Ivant (testem7-V09-04-12)
+- c2_function.hh - removed compiler depended selection of the math library 
+     
+31-10-11 mma (testem7-V09-04-11)
+- PhysListEmStandard : msc95 by default
+
+31-10-11 V.Ivant (testem7-V09-04-10)
+- TestEm7.in, DetectorConstruction - added Water_1.05 material and 
+    test of variable density option
+
 07-06-11 V.Ivant (testem7-V09-04-09)
 - c2_function.hh - added compiler depended selection of the math library 
      

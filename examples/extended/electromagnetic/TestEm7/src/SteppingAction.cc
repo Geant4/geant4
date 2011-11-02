@@ -59,8 +59,16 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
 
   runAction->FillEdep(edep, niel);
 
-  if (step->GetTrack()->GetTrackID() == 1) runAction->AddPrimaryStep();  
- 
+  if (step->GetTrack()->GetTrackID() == 1) {
+    runAction->AddPrimaryStep();
+    /*
+    G4cout << step->GetTrack()->GetMaterial()->GetName()
+	   << "  E1= " << step->GetPreStepPoint()->GetKineticEnergy()
+	   << "  E2= " << step->GetPostStepPoint()->GetKineticEnergy()
+	   << " Edep= " << edep << G4endl;
+    */
+  } 
+
   //Bragg curve
   //	
   G4StepPoint* prePoint  = step->GetPreStepPoint();

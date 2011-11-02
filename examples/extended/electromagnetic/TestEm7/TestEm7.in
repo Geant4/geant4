@@ -65,3 +65,11 @@
 /gun/particle alpha
 /gun/energy 100 MeV
 /run/beamOn 100
+#
+/testem/det/setMat Water_1.05
+/gun/particle proton
+/gun/energy 160 MeV
+/testem/stepMax 1 mm
+/tracking/verbose 0
+/run/beamOn 1000
+#
