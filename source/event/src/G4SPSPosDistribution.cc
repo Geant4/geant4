@@ -703,7 +703,7 @@ void G4SPSPosDistribution::GeneratePointsOnSurface()
 	  // side is +x
 	  x = halfx + z*std::tan(ParTheta)*std::cos(ParPhi) + y*std::tan(ParAlpha);
 	  y = y + z*std::tan(ParTheta)*std::sin(ParPhi);
-	  z = z;
+	  // z = z;
 	  // Cosine-law
 	  G4ThreeVector xdash(halfz*std::tan(ParTheta)*std::cos(ParPhi),
 			      halfz*std::tan(ParTheta)*std::sin(ParPhi), 
@@ -721,7 +721,7 @@ void G4SPSPosDistribution::GeneratePointsOnSurface()
 	  // side is -x
 	  x = -halfx + z*std::tan(ParTheta)*std::cos(ParPhi) + y*std::tan(ParAlpha);
 	  y = y + z*std::tan(ParTheta)*std::sin(ParPhi);
-	  z = z;
+	  // z = z;
 	  // Cosine-law
 	  G4ThreeVector xdash(halfz*std::tan(ParTheta)*std::cos(ParPhi),
 			      halfz*std::tan(ParTheta)*std::sin(ParPhi), 
@@ -739,7 +739,7 @@ void G4SPSPosDistribution::GeneratePointsOnSurface()
 	  // side is +y
 	  x = x + z*std::tan(ParTheta)*std::cos(ParPhi) + halfy*std::tan(ParAlpha);
 	  y = halfy + z*std::tan(ParTheta)*std::sin(ParPhi);
-	  z = z;
+	  // z = z;
 	  // Cosine-law
 	  G4ThreeVector ydash(halfz*std::tan(ParTheta)*std::cos(ParPhi),
 			      halfz*std::tan(ParTheta)*std::sin(ParPhi), 
@@ -756,7 +756,7 @@ void G4SPSPosDistribution::GeneratePointsOnSurface()
 	  // side is -y
 	  x = x + z*std::tan(ParTheta)*std::cos(ParPhi) - halfy*std::tan(ParAlpha);
 	  y = -halfy + z*std::tan(ParTheta)*std::sin(ParPhi);
-	  z = z;
+	  // z = z;
 	  // Cosine-law
 	  G4ThreeVector ydash(halfz*std::tan(ParTheta)*std::cos(ParPhi),
 			      halfz*std::tan(ParTheta)*std::sin(ParPhi), 
@@ -898,7 +898,7 @@ void G4SPSPosDistribution::GeneratePointsInVolume()
       z = (z*2.*halfz) - halfz;
       x = x + z*std::tan(ParTheta)*std::cos(ParPhi) + y*std::tan(ParAlpha);
       y = y + z*std::tan(ParTheta)*std::sin(ParPhi);
-      z = z;
+      // z = z;
     }
   else
     G4cout << "Error: Volume Shape Doesnt Exist" << G4endl;
