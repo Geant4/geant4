@@ -11,7 +11,7 @@
 /testem/phys/addPhysics  emstandard_opt0
 #
 /run/initialize
-/process/em/verbose 1
+/process/eLoss/verbose 1
 /process/msc/Skin 1
 #
 /gun/particle e-
@@ -29,9 +29,3 @@
 /testem/event/printModulo 50
 #
 /run/beamOn 100
-#
-/process/em/setSecBiasing eIoni World 0.3 2 MeV
-/process/em/setSecBiasing eBrem World 0.2 1 MeV
-/run/physicsModified
-/run/beamOn 100
-#
