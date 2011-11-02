@@ -2,7 +2,7 @@
    gROOT->Reset();
 
    // Draw histograms fill by Geant4 TestEm5 simulation
-   TFile f1("./ref10.opt0.root");
+   TFile f1("./opt0.root");
    TH1D* h1 = (TH1D*) f1.Get("10");
    h1->SetTitle("1 TeV muon in 3 m iron : kinetic energy at exit (GeV)");
    h1->GetXaxis()->SetTitle("Ekine (GeV)");
@@ -11,7 +11,7 @@
    h1->SetLineColor(1);   //black      
    h1->Draw("HIST");
    
-   TFile f2("./ref10.opt2.root");
+   TFile f2("./local.root");
    TH1D* h2 = (TH1D*) f2.Get("10");
    h2->SetStats(kFALSE);  // Eliminate statistics box
    h2->SetLineColor(4);   //blue   
@@ -46,8 +46,8 @@
 
    // Print the histograms legend
    TLegend* legend = new TLegend(0.2,0.55,0.45,0.70);
-   legend->AddEntry(h1,"ref10-opt0","l");
-   legend->AddEntry(h2,"ref10-opt2","l");   
+   legend->AddEntry(h1,"opt0 (vwi)","l");
+   legend->AddEntry(h2,"local (msc90)","l");   
    legend->AddEntry(h1f,"Mars14 simul ","L");
    legend->Draw();
 

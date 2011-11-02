@@ -41,7 +41,6 @@
 #include "G4KleinNishinaModel.hh"
 
 #include "G4eMultipleScattering.hh"
-#include "G4UrbanMscModel95.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
@@ -100,10 +99,8 @@ void PhysListEmStandard::ConstructProcess()
       ph->RegisterProcess(new G4GammaConversion, particle);
      
     } else if (particleName == "e-") {
-
-      G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc->AddEmModel(0, new G4UrbanMscModel95());
-      ph->RegisterProcess(msc, particle);            
+    
+      ph->RegisterProcess(new G4eMultipleScattering(), particle);            
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetStepFunction(0.1, 100*um);      
       ph->RegisterProcess(eIoni, particle);
@@ -111,9 +108,7 @@ void PhysListEmStandard::ConstructProcess()
 	    
     } else if (particleName == "e+") {
 
-      G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc->AddEmModel(0, new G4UrbanMscModel95());
-      ph->RegisterProcess(msc, particle);                  
+      ph->RegisterProcess(new G4eMultipleScattering(), particle);                  
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetStepFunction(0.1, 100*um);      
       ph->RegisterProcess(eIoni, particle);
@@ -123,7 +118,7 @@ void PhysListEmStandard::ConstructProcess()
     } else if (particleName == "mu+" || 
                particleName == "mu-"    ) {
 
-      ph->RegisterProcess(new G4MuMultipleScattering, particle);
+      ph->RegisterProcess(new G4MuMultipleScattering(), particle);
       G4MuIonisation* muIoni = new G4MuIonisation();
       muIoni->SetStepFunction(0.1, 50*um);      
       ph->RegisterProcess(muIoni, particle);

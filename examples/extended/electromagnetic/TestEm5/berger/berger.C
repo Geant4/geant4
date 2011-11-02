@@ -2,7 +2,7 @@
    gROOT->Reset();
 
    // Draw histograms fill by Geant4 TestEm5 simulation
-   TFile f1("./ref10.opt0.root");
+   TFile f1("./msc93.root");
    TH1D* h1 = (TH1D*) f1.Get("1");
    h1->SetTitle("Energy deposited in 530 um of Si by 1 MeV e-");
    h1->GetXaxis()->SetTitle("Ekine (MeV)");
@@ -11,7 +11,7 @@
    h1->SetLineColor(1);   // black
    h1->Draw("HIST");
    
-   TFile f2("./ref10.opt2.root");
+   TFile f2("./local.root");
    TH1D* h2 = (TH1D*) f2.Get("1");
    h2->SetStats(kFALSE);  // Eliminate statistics box
    h2->SetLineColor(4);   // blue
@@ -49,8 +49,8 @@
 
    // Print the histograms legend
    TLegend *legend = new TLegend(0.6,0.6,0.8,0.8);
-   legend->AddEntry(h1,"ref10-opt0","l");
-   legend->AddEntry(h2,"ref10-opt2","l");   
+   legend->AddEntry(h1,"Urban93","l");
+   legend->AddEntry(h2,"Urban95","l");   
    legend->AddEntry(h3,"Berger data","L");
    legend->Draw();
 
