@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 2, 2011  G.Cosmo                geom-csg-V09-04-10
+- Removed declaration of methods not implemented in G4CutTubs and included
+  by mistake.
+
 October 31, 2011  T.Nikitina             geom-csg-V09-04-09
 - First implementation of G4CutTubs solid, a tube with possible cuts in +-Z.
 

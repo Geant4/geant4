@@ -45,11 +45,3 @@ G4ThreeVector G4CutTubs::GetHighNorm () const
 {
   return fHighNorm;
 }
-
-inline
-G4double G4CutTubs::GetCubicVolume()
-{
-  if(fCubicVolume != 0.) {;}
-  else   { fCubicVolume = fDPhi*fDz*(fRMax*fRMax-fRMin*fRMin); }
-  return fCubicVolume;
-}

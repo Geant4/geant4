@@ -75,9 +75,6 @@ class G4CutTubs : public G4Tubs
     
     // Methods for solid
 
-    inline G4double GetCubicVolume();
-           G4double GetSurfaceArea();
-
     G4bool CalculateExtent( const EAxis pAxis,
                             const G4VoxelLimits& pVoxelLimit,
                             const G4AffineTransform& pTransform,
