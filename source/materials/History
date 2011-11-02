@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+29-10-11 mma (materials-V09-04-17)
+- G4Exception : unified exceptionCode
+     
+28-10-11 mma (materials-V09-04-16)
+- new scheme for G4Exception
 
 14-10-11 gum (materials-V09-04-15)
 - remove G4MaterialPropertyVector.icc, G4MaterialPropertyVector.cc,

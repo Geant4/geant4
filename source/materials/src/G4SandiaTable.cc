@@ -39,6 +39,7 @@
 // 10.07.01 Migration to STL. M. Verderi.
 // 03.02.04 Update distructor V.Ivanchenko
 // 05.03.04 New methods for old sorting algorithm for PAI model. V.Grichine
+// 26.10.11 new scheme for G4Exception  (mma) 
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -540,7 +541,8 @@ G4SandiaTable::G4SandiaTable(G4int matIndex)
     }
   else
     {
-      G4Exception("G4SandiaTable::G4SandiaTable(G4int matIndex): wrong matIndex ");
+      G4Exception("G4SandiaTable::G4SandiaTable(G4int matIndex)", "mat401",
+       FatalException, "wrong matIndex");
     }
 }
 

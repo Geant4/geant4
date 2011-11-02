@@ -64,7 +64,8 @@
 // 10-01-07, compute fAtomVector in the case of mass fraction (V.Ivanchenko) 
 // 27-07-07, improve destructor (V.Ivanchenko) 
 // 18-10-07, move definition of material index to InitialisePointers (V.Ivanchenko) 
-// 13-08-08, do not use fixed size arrays (V.Ivanchenko) 
+// 13-08-08, do not use fixed size arrays (V.Ivanchenko)
+// 26-10-11, new scheme for G4Exception  (mma) 
 // 
 
 // 
@@ -347,9 +348,9 @@ void G4Material::AddElement(G4Element* element, G4int nAtoms)
   } else {
     G4cout << "G4Material::AddElement ERROR for " << fName << " nElement= " 
 	   <<  fNumberOfElements << G4endl;
-    G4Exception
-    ("ERROR!!! - Attempt to add more than the declared number of elements.");
-  }
+    G4Exception ("G4Material::AddElement()", "mat031", FatalException, 
+           "Attempt to add more than the declared number of elements.");
+  } 
   // filled.
   if ( G4int(fNumberOfElements) == maxNbComponents ) {     
     // compute proportion by mass
@@ -378,7 +379,8 @@ void G4Material::AddElement(G4Element* element, G4double fraction)
     G4cout << "G4Material::AddElement ERROR for " << fName << " and " 
 	   << element->GetName() << "  mass fraction= " << fraction 
 	   << " is wrong " << G4endl;
-    G4Exception("ERROR!!! - Attempt to add element with wrong mass fraction");
+    G4Exception ("G4Material::AddElement()", "mat032", FatalException, 	   
+                 "Attempt to add element with wrong mass fraction");
   }
   // initialization
   if (fNumberOfComponents == 0) {
@@ -400,8 +402,8 @@ void G4Material::AddElement(G4Element* element, G4double fraction)
   } else {
     G4cout << "G4Material::AddElement ERROR for " << fName << " nElement= " 
 	   <<  fNumberOfElements << G4endl;
-    G4Exception
-    ("ERROR!!! - Attempt to add more than the declared number of components.");
+    G4Exception ("G4Material::AddElement()", "mat033", FatalException, 
+           "Attempt to add more than the declared number of elements.");
   }    
 
   // filled.
@@ -440,7 +442,8 @@ void G4Material::AddMaterial(G4Material* material, G4double fraction)
     G4cout << "G4Material::AddMaterial ERROR for " << fName << " and " 
 	   << material->GetName() << "  mass fraction= " << fraction 
 	   << " is wrong " << G4endl;
-    G4Exception("ERROR!!! - Attempt to add material with wrong mass fraction");
+    G4Exception ("G4Material::AddMaterial()", "mat034", FatalException, 	   
+                 "Attempt to add material with wrong mass fraction");	   
   }
   // initialization
   if (fNumberOfComponents == 0) {
@@ -487,8 +490,8 @@ void G4Material::AddMaterial(G4Material* material, G4double fraction)
   } else {
     G4cout << "G4Material::AddMaterial ERROR for " << fName << " nElement= " 
 	   <<  fNumberOfElements << G4endl;
-    G4Exception
-      ("ERROR!!! - Attempt to add more than the declared number of components.");
+    G4Exception ("G4Material::AddMaterial()", "mat035", FatalException, 
+           "Attempt to add more than the declared number of components.");
   }    
 
   // filled.
@@ -592,7 +595,8 @@ G4double G4Material::GetZ() const
   if (fNumberOfElements > 1) {
      G4cout << "G4Material ERROR in GetZ. The material: " << fName << " is a mixture."
             << G4endl;
-     G4Exception ( " the Atomic number is not well defined." );
+     G4Exception ("G4Material::GetZ()", "mat036", FatalException, 
+                  "the Atomic number is not well defined." );
   } 
   return (*theElementVector)[0]->GetZ();      
 }
@@ -604,7 +608,8 @@ G4double G4Material::GetA() const
   if (fNumberOfElements > 1) { 
      G4cout << "G4Material ERROR in GetA. The material: " << fName << " is a mixture."
             << G4endl;
-     G4Exception ( " the Atomic mass is not well defined." );
+     G4Exception ("G4Material::GetA()", "mat037", FatalException,  
+                  "the Atomic mass is not well defined." );
   } 
   return  (*theElementVector)[0]->GetA();      
 }

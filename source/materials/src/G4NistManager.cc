@@ -46,6 +46,7 @@
 // 27-07-07, improve destructor (V.Ivanchenko) 
 // 28.07.07 V.Ivanchneko make simple methods inline
 // 28.07.07 V.Ivanchneko simplify Print methods
+// 26.10.11, new scheme for G4Exception  (mma) 
 //
 // -------------------------------------------------------------------
 //
@@ -142,7 +143,8 @@ G4NistManager::BuildMaterialWithNewDensity(const G4String& name,
     G4cout << "G4NistManager::BuildMaterialWithNewDensity ERROR: " << G4endl;
     G4cout << " New material <" << name << "> cannot be built because material"
 	   << " with the same name already exist" << G4endl;
-    G4Exception("Wrong material name");
+    G4Exception("G4NistManager::BuildMaterialWithNewDensity()", "mat101",
+                 FatalException, "Wrong material name");
     return 0;
   }
   bmat = FindOrBuildMaterial(basename);
@@ -150,7 +152,8 @@ G4NistManager::BuildMaterialWithNewDensity(const G4String& name,
     G4cout << "G4NistManager::BuildMaterialWithNewDensity ERROR: " << G4endl;
     G4cout << " New material <" << name << "> cannot be built because " << G4endl;
     G4cout << " base material <" << basename << "> does not exist" << G4endl;
-    G4Exception("Wrong material name");
+    G4Exception("G4NistManager::BuildMaterialWithNewDensity()", "mat102",
+                 FatalException, "Wrong material name");    
     return 0;
   }
   G4double dens = density;

@@ -38,6 +38,7 @@
 // 06-09-04, Update calculated values after any change of ionisation 
 //           potential change. V.Ivanchenko
 // 29-04-10, Using G4Pow and mean ionisation energy from NIST V.Ivanchenko
+// 27.10.11: new scheme for G4Exception  (mma)
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -51,7 +52,8 @@ G4IonisParamElm::G4IonisParamElm(G4double AtomNumber)
 {
   G4int Z = G4int(AtomNumber + 0.5);
   if (Z < 1) {
-    G4Exception("G4IonisParamElm: ERROR! It is not allowed to create an Element with Z<1");
+    G4Exception("G4IonisParamElm::G4IonisParamElm()",  "mat501", FatalException,
+                "It is not allowed to create an Element with Z<1");
   }
   G4Pow* g4pow = G4Pow::GetInstance();
 

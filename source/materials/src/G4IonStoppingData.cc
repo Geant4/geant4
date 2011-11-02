@@ -39,6 +39,7 @@
 //
 // Modifications:
 // 25.10.2010 V.Ivanchenko fixed warnings reported by the Coverity tool
+// 25.10.2011: new scheme for G4Exception  (mma)
 //
 //
 // Class description: Class which can read ion stopping power data from
@@ -381,7 +382,8 @@ G4bool G4IonStoppingData::BuildPhysicsVector(
 
   char* path = getenv("G4LEDATA");
   if ( !path ) {
-    G4Exception("G4IonStoppingData::BuildPhysicsVector: G4LEDATA environment variable not set");
+    G4Exception("G4IonStoppingData::BuildPhysicsVector()", "mat521",
+                FatalException, "G4LEDATA environment variable not set");
     return false;
   }
   
@@ -431,7 +433,8 @@ G4bool G4IonStoppingData::BuildPhysicsVector(
 
   char* path = getenv("G4LEDATA");
   if ( !path ) {
-    G4Exception("G4IonStoppingData::BuildPhysicsVector: G4LEDATA environment variable not set");
+    G4Exception("G4IonStoppingData::BuildPhysicsVector()", "mat522",
+                FatalException, "G4LEDATA environment variable not set");
     return false;
   }
   std::ostringstream file;

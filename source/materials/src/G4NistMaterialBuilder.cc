@@ -53,6 +53,7 @@
 // 14.06.11 A.Ivantchenko updated body materials (G4_....ICRP)
 //                    according ICRU Report 46 (1992) instead of 1975 
 //                    data from ICRU Report 37 used previously
+// 26.10.11 new scheme for G4Exception  (mma) 
 //
 // -------------------------------------------------------------------
 //
@@ -184,7 +185,8 @@ G4Material* G4NistMaterialBuilder::BuildMaterial(G4int i, G4bool isotopes)
 	       << "  ERROR: elements Z= " << Z << " is not found "
 	       << " for material " << names[i]
 	       << G4endl;
-	G4Exception("Fail to construct material");
+	G4Exception("G4NistMaterialBuilder::BuildMaterial()", "mat103",
+	             FatalException, "Fail to construct material");
 	return 0;
       }
       mat->AddElement(el,fractions[idx+j]);

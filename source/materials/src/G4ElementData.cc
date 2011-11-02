@@ -73,7 +73,8 @@ void G4ElementData::InitialiseForElement(G4int Z, G4PhysicsVector* v)
   if(Z < 1 || Z >= maxNumElements) {
     G4cout << "G4ElementData::InitialiseForElement ERROR for " << name 
 	   << "  Z = " << Z << " is out of range!" << G4endl;
-    G4Exception("Wrong data handling");
+    G4Exception("G4ElementData::InitialiseForElement()", "mat601", 
+                 FatalException, "Wrong data handling");
     return;
   } 
   if(elmData[Z]) { delete elmData[Z]; }
@@ -85,7 +86,8 @@ void G4ElementData::InitialiseForComponent(G4int Z, G4int nComponents)
   if(Z < 1 || Z >= maxNumElements) {
     G4cout << "G4ElementData::InitialiseForComponent ERROR for " << name 
 	   << "  Z = " << Z << " is out of range!" << G4endl;
-    G4Exception("Wrong data handling");
+    G4Exception("G4ElementData::InitialiseForComponent()", "mat602", 
+                 FatalException, "Wrong data handling");	   
     return;
   }
   // delete old structure 
@@ -109,14 +111,16 @@ G4ElementData::AddComponent(G4int Z, G4int id, size_t idx, G4PhysicsVector* v)
   if(Z < 1 || Z >= maxNumElements) {
     G4cout << "G4ElementData::AddComponent ERROR for " << name 
 	   << "  Z = " << Z << " is out of range!" << G4endl;
-    G4Exception("Wrong data handling");
+    G4Exception("G4ElementData::AddComponent()", "mat603", 
+                 FatalException, "Wrong data handling");	   
     return;
   }
   if(idx >= compLength[Z]) {
     G4cout << "G4ElementData::AddComponent ERROR for " << name 
 	   << "  Z = " << Z << " idx= " << idx 
 	   << " nComponents= " << compLength[Z] << G4endl;
-    G4Exception("Wrong data handling");
+    G4Exception("G4ElementData::AddComponent()", "mat604", 
+                 FatalException, "Wrong data handling");	   	   
     return;
   }
   (compData[Z])[idx] = v;

@@ -96,7 +96,7 @@ G4OpticalSurface::G4OpticalSurface(const G4String& name,
                 polish = 0.0;
         }
 	else {
-                G4Exception("G4OpticalSurface::G4OpticalSurface()", "ma0109",
+                G4Exception("G4OpticalSurface::G4OpticalSurface()", "mat309",
                             FatalException,
 			    "Constructor called with INVALID model.");
 	}
@@ -254,7 +254,7 @@ void G4OpticalSurface::ReadFile()
   if (!path) {
      G4String excep =
         "G4OpBoundaryProcess - G4REALSURFACEDATA environment variable not set";
-     G4Exception("G4OpticalSurface::ReadFile()", "ma0110",
+     G4Exception("G4OpticalSurface::ReadFile()", "mat310",
                  FatalException, excep);
      return;
   }
@@ -276,7 +276,7 @@ void G4OpticalSurface::ReadFile()
   }
   else {
      G4String excep = "LUT - data file: " + readFileName + " not found";
-     G4Exception("G4OpticalSurface::ReadFile()", "ma0111",
+     G4Exception("G4OpticalSurface::ReadFile()", "mat311",
                  FatalException, excep);
      return;
   }

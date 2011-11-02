@@ -89,7 +89,7 @@ void G4MaterialPropertiesTable::DumpTable()
     }
     else
     {
-      G4Exception("G4MaterialPropertiesTable::DumpTable()", "ma0104",
+      G4Exception("G4MaterialPropertiesTable::DumpTable()", "mat204",
                   JustWarning, "NULL Material Property Vector Pointer.");
     }
   }
@@ -103,7 +103,7 @@ void G4MaterialPropertiesTable::DumpTable()
     }
     else
     {
-      G4Exception("G4MaterialPropertiesTable::DumpTable()", "ma0102",
+      G4Exception("G4MaterialPropertiesTable::DumpTable()", "mat202",
                   JustWarning, "No Material Constant Property.");
     }
   }
@@ -134,7 +134,7 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::SetGROUPVEL()
 
   if (E0 <= 0.)
   {
-    G4Exception("G4MaterialPropertiesTable::SetGROUPVEL()", "ma0105",
+    G4Exception("G4MaterialPropertiesTable::SetGROUPVEL()", "mat205",
                 FatalException, "Optical Photon Energy <= 0");
   }
                                                                                 
@@ -148,7 +148,7 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::SetGROUPVEL()
 
     if (E1 <= 0.)
     {
-      G4Exception("G4MaterialPropertiesTable::SetGROUPVEL()", "ma0105",
+      G4Exception("G4MaterialPropertiesTable::SetGROUPVEL()", "mat205",
                   FatalException, "Optical Photon Energy <= 0");
     }
 
@@ -185,7 +185,7 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::SetGROUPVEL()
 
       if (E1 <= 0.)
       {
-        G4Exception("G4MaterialPropertiesTable::SetGROUPVEL()", "ma0105",
+        G4Exception("G4MaterialPropertiesTable::SetGROUPVEL()", "mat205",
                     FatalException, "Optical Photon Energy <= 0");
       }
     }
