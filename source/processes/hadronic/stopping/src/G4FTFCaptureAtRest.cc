@@ -30,7 +30,8 @@
 //
 // Date:      18 October 2011
 //
-// Modified:
+// Modified:  
+//            02 November 2011, A. Ribon : migration to the new exceptions.
 //
 //----------------------------------------------------------------------------
 //
@@ -108,12 +109,14 @@ G4bool G4FTFCaptureAtRest::IsApplicable( const G4ParticleDefinition& particle ) 
 
 
 G4VParticleChange* G4FTFCaptureAtRest::AtRestDoIt( const G4Track& track, const G4Step& step ) {
-
-  //G4cout << "*** G4FTFCaptureAtRest::AtRestDoIt ***" << G4endl;
   
   // Check applicability
   if ( ! IsApplicable( *(track.GetDynamicParticle()->GetDefinition()) ) ) {
-    G4cerr  << "G4FTFCaptureAtRest:ERROR, particle must be an anti-proton!" << G4endl;
+    G4ExceptionDescription ed;
+    ed << "Error: particle is: " << track.GetDynamicParticle()->GetDefinition()->GetParticleName()
+       << "\t ; it must be an anti-proton ! " << G4endl;
+    G4Exception( "G4FTFCaptureAtRest::AtRestDoIt()", "HAD_FTF_0000", 
+                 FatalException, ed );
     return 0;
   }
   
@@ -142,20 +145,23 @@ G4VParticleChange* G4FTFCaptureAtRest::AtRestDoIt( const G4Track& track, const G
       ++reentryCount;
     }
     catch( G4HadronicException aR ) {
-      G4cout << "Call for " << theModel->GetModelName() << G4endl
-             << "Target nucleus Z=" << targetNucleusZ 
-             << "  A=" << targetNucleusA << G4endl;
-      DumpState( track, "ApplyYourself" );
-      G4Exception( "G4FTFCaptureAtRest", "007", FatalException,
-                   "AtRestDoIt failed." );
+      DumpState( track, "G4FTFCaptureAtRest::AtRestDoIt()" );
+      G4ExceptionDescription ed;
+      ed << "Call for " << theModel->GetModelName() << G4endl
+         << "Target nucleus Z=" << targetNucleusZ 
+         << "  A=" << targetNucleusA;
+      G4Exception( "G4FTFCaptureAtRest::AtRestDoIt()", "HAD_FTF_0001", 
+                   FatalException, ed );
     }
     if ( reentryCount > 100 ) {
-      G4cout << "Call for " << theModel->GetModelName() << G4endl
-             << "Target nucleus Z=" << targetNucleusZ 
-             << "  A=" << targetNucleusA << G4endl;
-      DumpState( track, "ApplyYourself" );
-      G4Exception( "G4FTFCaptureAtRest", "007", FatalException,
-                   "Reentering ApplyYourself too often - AtRestDoIt failed." );  
+      DumpState( track, "G4FTFCaptureAtRest::AtRestDoIt()" );
+      G4ExceptionDescription ed;
+      ed << "Reentering AtRestDoIt too often." << G4endl
+         << "Call for " << theModel->GetModelName() << G4endl
+         << "Target nucleus Z=" << targetNucleusZ 
+         << "  A=" << targetNucleusA;
+      G4Exception( "G4FTFCaptureAtRest::AtRestDoIt()", "HAD_FTF_0002", 
+                   FatalException, ed );
     } 
   } while ( !result );
 
@@ -171,12 +177,14 @@ G4VParticleChange* G4FTFCaptureAtRest::AtRestDoIt( const G4Track& track, const G
     aParticleChange.ProposeTrackStatus( fStopAndKill );
     aParticleChange.ProposeEnergy( 0.0 );
   } else {
-    G4cout << "Call for " << theModel->GetModelName() << G4endl
-           << "Target nucleus Z=" << targetNucleusZ 
-           << "  A=" << targetNucleusA << G4endl;
-    DumpState( track, "AtRestDoIt" );
-    G4Exception( "G4FTFCaptureAtRest", "007", FatalException,
-                 "AtRestDoIt did not kill the absorbed particle." );
+    DumpState( track, "G4FTFCaptureAtRest::AtRestDoIt()" );
+    G4ExceptionDescription ed;
+    ed << "AtRestDoIt did not kill the absorbed particle." << G4endl
+       << "Call for " << theModel->GetModelName() << G4endl
+       << "Target nucleus Z=" << targetNucleusZ 
+       << "  A=" << targetNucleusA;
+    G4Exception( "G4FTFCaptureAtRest::AtRestDoIt()", "HAD_FTF_0003", 
+                 FatalException, ed );
   }
 
   G4int nSec = result->GetNumberOfSecondaries();
