@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AnalyticalEcpssrLiCrossSection.hh,v 1.2 2010-06-25 09:41:09 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Haifa Ben Abdelouahed
 //         
@@ -35,6 +33,7 @@
 //  28 Apr 2008   MGP        Major revision according to a design iteration
 //  29 Apr 2009   ALF Updated Desing for Integration
 //  01 Sep 2009   ALF Updated to G4AnalyticalEcpssrLiCrossSection
+//  28 Oct 2011   ALF Changed name G4AnalyticalEcpssrLiCrossSection to G4ecpssrBaseLixsModel
 //
 // -------------------------------------------------------------------
 
@@ -45,22 +44,22 @@
 // -------------------------------------------------------------------
 
 
-#ifndef G4ANALYTICALECPSSRLICROSSSECTION_HH
-#define G4ANALYTICALECPSSRLICROSSSECTION_HH 1
+#ifndef G4ecpssrBaseLixsModel_hh
+#define G4ecpssrBaseLixsModel_hh 1
 
 #include "G4VecpssrLiModel.hh"
 #include "globals.hh"
 #include <map>
 #include <vector>
 
-class G4AnalyticalEcpssrLiCrossSection : public G4VecpssrLiModel
+class G4ecpssrBaseLixsModel : public G4VecpssrLiModel
 
 {
 public:
 
-  G4AnalyticalEcpssrLiCrossSection();
+  G4ecpssrBaseLixsModel();
 
-  ~G4AnalyticalEcpssrLiCrossSection();
+  ~G4ecpssrBaseLixsModel();
 			     
   G4double CalculateL1CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident);//according to W.Brandt and G.Lapicki, Phys.Rev.A23(1981)
 
@@ -77,8 +76,8 @@ public:
 private:
 
 
-  G4AnalyticalEcpssrLiCrossSection(const G4AnalyticalEcpssrLiCrossSection&);
-  G4AnalyticalEcpssrLiCrossSection & operator = (const G4AnalyticalEcpssrLiCrossSection &right);
+  G4ecpssrBaseLixsModel(const G4ecpssrBaseLixsModel&);
+  G4ecpssrBaseLixsModel & operator = (const G4ecpssrBaseLixsModel &right);
 
   G4double FunctionFL1(G4double k, G4double theta);
   

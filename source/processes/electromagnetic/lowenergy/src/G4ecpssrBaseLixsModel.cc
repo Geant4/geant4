@@ -25,7 +25,7 @@
 //
 
 #include "globals.hh"
-#include "G4AnalyticalEcpssrLiCrossSection.hh"
+#include "G4ecpssrBaseLixsModel.hh"
 #include "G4AtomicTransitionManager.hh"
 #include "G4NistManager.hh"
 #include "G4Proton.hh"
@@ -36,7 +36,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4AnalyticalEcpssrLiCrossSection::G4AnalyticalEcpssrLiCrossSection()
+G4ecpssrBaseLixsModel::G4ecpssrBaseLixsModel()
 {
     verboseLevel=0;
 
@@ -45,7 +45,7 @@ G4AnalyticalEcpssrLiCrossSection::G4AnalyticalEcpssrLiCrossSection()
     char *path = getenv("G4LEDATA");
 
     if (!path) {      
-      G4Exception("G4ecpssrLCrossSection::G4AnalyticalEcpssrLiCrossSection()","em0006", FatalException ,"G4LEDATA environment variable not set");
+      G4Exception("G4ecpssrLCrossSection::G4ecpssrBaseLixsModel()","em0006", FatalException ,"G4LEDATA environment variable not set");
       return;
     }
     std::ostringstream fileName1;
@@ -57,7 +57,7 @@ G4AnalyticalEcpssrLiCrossSection::G4AnalyticalEcpssrLiCrossSection()
     // Reading of FL1.dat
 
     std::ifstream FL1(fileName1.str().c_str());
-    if (!FL1) G4Exception("G4ecpssrLCrossSection::G4AnalyticalEcpssrLiCrossSection()","em0003",FatalException, "error opening FL1 data file");
+    if (!FL1) G4Exception("G4ecpssrLCrossSection::G4ecpssrBaseLixsModel()","em0003",FatalException, "error opening FL1 data file");
   
     dummyVec1.push_back(0.);
 
@@ -83,7 +83,7 @@ G4AnalyticalEcpssrLiCrossSection::G4AnalyticalEcpssrLiCrossSection()
     // Reading of FL2.dat
     
     std::ifstream FL2(fileName2.str().c_str());
-    if (!FL2) G4Exception("G4ecpssrLCrossSection::G4AnalyticalEcpssrLiCrossSection()","em0003", FatalException," error opening FL2 data file");
+    if (!FL2) G4Exception("G4ecpssrLCrossSection::G4ecpssrBaseLixsModel()","em0003", FatalException," error opening FL2 data file");
     
     dummyVec2.push_back(0.);
 
@@ -110,12 +110,12 @@ G4AnalyticalEcpssrLiCrossSection::G4AnalyticalEcpssrLiCrossSection()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4AnalyticalEcpssrLiCrossSection::~G4AnalyticalEcpssrLiCrossSection()
+G4ecpssrBaseLixsModel::~G4ecpssrBaseLixsModel()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4AnalyticalEcpssrLiCrossSection::ExpIntFunction(G4int n,G4double x)
+G4double G4ecpssrBaseLixsModel::ExpIntFunction(G4int n,G4double x)
 
 {
 // this function allows fast evaluation of the n order exponential integral function En(x)
@@ -138,7 +138,7 @@ G4double G4AnalyticalEcpssrLiCrossSection::ExpIntFunction(G4int n,G4double x)
   const G4double eps = 1.0e-7;
   nm1=n-1;
   if (n<0 || x<0.0 || (x==0.0 && (n==0 || n==1)))
-  G4cout << "*** WARNING in G4AnalyticalEcpssrLiCrossSection::ExpIntFunction: bad arguments in ExpIntFunction" 
+  G4cout << "*** WARNING in G4ecpssrBaseLixsModel::ExpIntFunction: bad arguments in ExpIntFunction" 
          << G4endl;
   else {
        if (n==0) ans=std::exp(-x)/x;
@@ -185,7 +185,7 @@ return ans;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4AnalyticalEcpssrLiCrossSection::CalculateL1CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident)
+G4double G4ecpssrBaseLixsModel::CalculateL1CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident)
 {
 
   if (zTarget <=4) return 0.;
@@ -213,7 +213,7 @@ G4double G4AnalyticalEcpssrLiCrossSection::CalculateL1CrossSection(G4int zTarget
 
       else
 	{
-	  G4cout << "*** WARNING in G4AnalyticalEcpssrLiCrossSection::CalculateL1CrossSection : Proton or Alpha incident particles only. " << G4endl;
+	  G4cout << "*** WARNING in G4ecpssrBaseLixsModel::CalculateL1CrossSection : Proton or Alpha incident particles only. " << G4endl;
 	  G4cout << massIncident << ", " << aAlpha->GetPDGMass() << " (alpha)" << aProtone->GetPDGMass() << " (proton)" << G4endl;
 	  return 0;
 	}
@@ -400,7 +400,7 @@ G4double G4AnalyticalEcpssrLiCrossSection::CalculateL1CrossSection(G4int zTarget
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4AnalyticalEcpssrLiCrossSection::CalculateL2CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident)
+G4double G4ecpssrBaseLixsModel::CalculateL2CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident)
 
 {
   if (zTarget <=13 ) return 0.;
@@ -429,7 +429,7 @@ G4double G4AnalyticalEcpssrLiCrossSection::CalculateL2CrossSection(G4int zTarget
 
       else
 	{
-	  G4cout << "*** WARNING in G4AnalyticalEcpssrLiCrossSection::CalculateL2CrossSection : Proton or Alpha incident particles only. " << G4endl;
+	  G4cout << "*** WARNING in G4ecpssrBaseLixsModel::CalculateL2CrossSection : Proton or Alpha incident particles only. " << G4endl;
 	  G4cout << massIncident << ", " << aAlpha->GetPDGMass() << " (alpha)" << aProtone->GetPDGMass() << " (proton)" << G4endl;
 	  return 0;
 	}
@@ -567,7 +567,7 @@ G4double G4AnalyticalEcpssrLiCrossSection::CalculateL2CrossSection(G4int zTarget
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
-G4double G4AnalyticalEcpssrLiCrossSection::CalculateL3CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident)
+G4double G4ecpssrBaseLixsModel::CalculateL3CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident)
 
 {
   if (zTarget <=13) return 0.;
@@ -596,7 +596,7 @@ G4double G4AnalyticalEcpssrLiCrossSection::CalculateL3CrossSection(G4int zTarget
 
       else
 	{
-	  G4cout << "*** WARNING in G4AnalyticalEcpssrLiCrossSection::CalculateL3CrossSection : Proton or Alpha incident particles only. " << G4endl;
+	  G4cout << "*** WARNING in G4ecpssrBaseLixsModel::CalculateL3CrossSection : Proton or Alpha incident particles only. " << G4endl;
 	  G4cout << massIncident << ", " << aAlpha->GetPDGMass() << " (alpha)" << aProtone->GetPDGMass() << " (proton)" << G4endl;
 	  return 0;
 	}
@@ -737,7 +737,7 @@ G4double G4AnalyticalEcpssrLiCrossSection::CalculateL3CrossSection(G4int zTarget
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4AnalyticalEcpssrLiCrossSection::CalculateVelocity(G4int subShell, G4int zTarget, G4double massIncident,  G4double energyIncident)
+G4double G4ecpssrBaseLixsModel::CalculateVelocity(G4int subShell, G4int zTarget, G4double massIncident,  G4double energyIncident)
 
 {
 
@@ -750,7 +750,7 @@ G4double G4AnalyticalEcpssrLiCrossSection::CalculateVelocity(G4int subShell, G4i
 
   if (!((massIncident == aProtone->GetPDGMass()) || (massIncident == aAlpha->GetPDGMass())))
     {
-      G4cout << "*** WARNING in G4AnalyticalEcpssrLiCrossSection::CalculateVelocity : Proton or Alpha incident particles only. " << G4endl;
+      G4cout << "*** WARNING in G4ecpssrBaseLixsModel::CalculateVelocity : Proton or Alpha incident particles only. " << G4endl;
       G4cout << massIncident << ", " << aAlpha->GetPDGMass() << " (alpha)" << aProtone->GetPDGMass() << " (proton)" << G4endl;
       return 0;
     }
@@ -775,7 +775,7 @@ G4double G4AnalyticalEcpssrLiCrossSection::CalculateVelocity(G4int subShell, G4i
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4AnalyticalEcpssrLiCrossSection::FunctionFL1(G4double k, G4double theta)
+G4double G4ecpssrBaseLixsModel::FunctionFL1(G4double k, G4double theta)
 {
 
   G4double sigma = 0.;
@@ -866,7 +866,7 @@ G4double G4AnalyticalEcpssrLiCrossSection::FunctionFL1(G4double k, G4double thet
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4AnalyticalEcpssrLiCrossSection::FunctionFL2(G4double k, G4double theta)
+G4double G4ecpssrBaseLixsModel::FunctionFL2(G4double k, G4double theta)
 {
 
   G4double sigma = 0.;
@@ -957,7 +957,7 @@ G4double G4AnalyticalEcpssrLiCrossSection::FunctionFL2(G4double k, G4double thet
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4AnalyticalEcpssrLiCrossSection::LinLinInterpolate(G4double e1,
+G4double G4ecpssrBaseLixsModel::LinLinInterpolate(G4double e1,
 						        G4double e2,
 						        G4double e,
 						        G4double xs1,
@@ -969,7 +969,7 @@ G4double G4AnalyticalEcpssrLiCrossSection::LinLinInterpolate(G4double e1,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4AnalyticalEcpssrLiCrossSection::LinLogInterpolate(G4double e1,
+G4double G4ecpssrBaseLixsModel::LinLogInterpolate(G4double e1,
 						        G4double e2,
 						        G4double e,
 						        G4double xs1,
@@ -983,7 +983,7 @@ G4double G4AnalyticalEcpssrLiCrossSection::LinLogInterpolate(G4double e1,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4AnalyticalEcpssrLiCrossSection::LogLogInterpolate(G4double e1,
+G4double G4ecpssrBaseLixsModel::LogLogInterpolate(G4double e1,
 						        G4double e2,
 						        G4double e,
 						        G4double xs1,
@@ -998,7 +998,7 @@ G4double G4AnalyticalEcpssrLiCrossSection::LogLogInterpolate(G4double e1,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4AnalyticalEcpssrLiCrossSection::QuadInterpolator(G4double e11, G4double e12,
+G4double G4ecpssrBaseLixsModel::QuadInterpolator(G4double e11, G4double e12,
 						       G4double e21, G4double e22,
 						       G4double xs11, G4double xs12,
 						       G4double xs21, G4double xs22,

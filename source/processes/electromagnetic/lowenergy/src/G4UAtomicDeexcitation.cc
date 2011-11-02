@@ -73,11 +73,11 @@ G4UAtomicDeexcitation::G4UAtomicDeexcitation():
 {
   PIXEshellCS    = 0;
   ePIXEshellCS   = 0;
-  anaPIXEshellCS = new G4teoCrossSection("Analytical");
   emcorr = G4LossTableManager::Instance()->EmCorrections();
-  transitionManager = G4AtomicTransitionManager::Instance();
   theElectron = G4Electron::Electron();
   thePositron = G4Positron::Positron();
+  transitionManager = 0;
+  anaPIXEshellCS = 0;
 }
 
 G4UAtomicDeexcitation::~G4UAtomicDeexcitation()
@@ -90,10 +90,15 @@ G4UAtomicDeexcitation::~G4UAtomicDeexcitation()
 void G4UAtomicDeexcitation::InitialiseForNewRun()
 {
  
+  if(!IsFluoActive()) { return; }
+  transitionManager = G4AtomicTransitionManager::Instance();
   if(IsPIXEActive()) {
     G4cout << G4endl;
     G4cout << "### === G4UAtomicDeexcitation::InitialiseForNewRun()" << G4endl;
-  }
+    anaPIXEshellCS = new G4teoCrossSection("Analytical");
+ 
+ }
+  else  {return;}
   // initializing PIXE x-section name
   // 
   if (PIXECrossSectionModel() == "" ||

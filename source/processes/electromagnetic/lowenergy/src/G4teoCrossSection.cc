@@ -41,11 +41,11 @@
 #include "G4teoCrossSection.hh"
 #include "G4Proton.hh"
 //#include "G4Alpha.hh"
-#include "G4AnalyticalEcpssrKCrossSection.hh"
-#include "G4AnalyticalEcpssrLiCrossSection.hh"
+#include "G4ecpssrBaseKxsModel.hh"
+#include "G4ecpssrBaseLixsModel.hh"
 
-#include "G4ECPSSRFormFactorKCrossSection.hh"
-#include "G4ECPSSRFormFactorLiCrossSection.hh"
+#include "G4ecpssrFormFactorKxsModel.hh"
+#include "G4ecpssrFormFactorLixsModel.hh"
 
 G4teoCrossSection::G4teoCrossSection(const G4String& nam)
   :G4VhShellCrossSection(nam),totalCS(0.0)
@@ -53,13 +53,13 @@ G4teoCrossSection::G4teoCrossSection(const G4String& nam)
 
   if (nam == "Analytical") 
     {
-      ecpssrShellK  = new G4AnalyticalEcpssrKCrossSection();  
-      ecpssrShellLi = new G4AnalyticalEcpssrLiCrossSection();      
+      ecpssrShellK  = new G4ecpssrBaseKxsModel();  
+      ecpssrShellLi = new G4ecpssrBaseLixsModel();      
     }
   else if (nam == "ECPSSR_FormFactor")
     {
-      ecpssrShellK  = new G4ECPSSRFormFactorKCrossSection();  
-      ecpssrShellLi = new G4ECPSSRFormFactorLiCrossSection(); 
+      ecpssrShellK  = new G4ecpssrFormFactorKxsModel();  
+      ecpssrShellLi = new G4ecpssrFormFactorLixsModel(); 
 
     }
 

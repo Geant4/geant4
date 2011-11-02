@@ -27,7 +27,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "globals.hh"
-#include "G4AnalyticalEcpssrKCrossSection.hh"
+#include "G4ecpssrBaseKxsModel.hh"
 #include "G4AtomicTransitionManager.hh"
 #include "G4NistManager.hh"
 #include "G4Proton.hh"
@@ -38,7 +38,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4AnalyticalEcpssrKCrossSection::G4AnalyticalEcpssrKCrossSection()
+G4ecpssrBaseKxsModel::G4ecpssrBaseKxsModel()
 { 
     verboseLevel=0;
     
@@ -59,7 +59,7 @@ G4AnalyticalEcpssrKCrossSection::G4AnalyticalEcpssrKCrossSection()
     path = getenv("G4LEDATA");
  
     if (!path) {
-      G4Exception("G4AnalyticalEcpssrKCrossSection::G4AnalyticalEcpssrKCrossSection()", "em0006", FatalException,"G4LEDATA environment variable not set" );
+      G4Exception("G4ecpssrBaseKxsModel::G4ecpssrBaseKxsModel()", "em0006", FatalException,"G4LEDATA environment variable not set" );
       return;
     }
 
@@ -68,7 +68,7 @@ G4AnalyticalEcpssrKCrossSection::G4AnalyticalEcpssrKCrossSection()
     std::ifstream FK(fileName.str().c_str());
 
     if (!FK) 
-      G4Exception("G4AnalyticalEcpssrKCrossSection::G4AnalyticalEcpssrKCrossSection()", "em0003", FatalException,"error opening FK data file" );
+      G4Exception("G4ecpssrBaseKxsModel::G4ecpssrBaseKxsModel()", "em0003", FatalException,"error opening FK data file" );
 
     dummyVec.push_back(0.);
 
@@ -106,7 +106,7 @@ void print (G4double elem)
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4AnalyticalEcpssrKCrossSection::~G4AnalyticalEcpssrKCrossSection()
+G4ecpssrBaseKxsModel::~G4ecpssrBaseKxsModel()
 { 
 
   delete tableC1;
@@ -117,7 +117,7 @@ G4AnalyticalEcpssrKCrossSection::~G4AnalyticalEcpssrKCrossSection()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4AnalyticalEcpssrKCrossSection::ExpIntFunction(G4int n,G4double x)
+G4double G4ecpssrBaseKxsModel::ExpIntFunction(G4int n,G4double x)
 
 {
 // this "ExpIntFunction" function allows fast evaluation of the n order exponential integral function En(x)
@@ -140,7 +140,7 @@ G4double G4AnalyticalEcpssrKCrossSection::ExpIntFunction(G4int n,G4double x)
   const G4double eps = 1.0e-7;
   nm1=n-1;
   if (n<0 || x<0.0 || (x==0.0 && (n==0 || n==1))) {
-    G4cout << "*** WARNING in G4AnalyticalEcpssrKCrossSection::ExpIntFunction: bad arguments in ExpIntFunction" << G4endl;
+    G4cout << "*** WARNING in G4ecpssrBaseKxsModel::ExpIntFunction: bad arguments in ExpIntFunction" << G4endl;
     G4cout << n << ", " << x << G4endl;
   }
   else {
@@ -189,7 +189,7 @@ return ans;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
 
-G4double G4AnalyticalEcpssrKCrossSection::CalculateCrossSection(G4int zTarget,G4double massIncident, G4double energyIncident) 
+G4double G4ecpssrBaseKxsModel::CalculateCrossSection(G4int zTarget,G4double massIncident, G4double energyIncident) 
  
 {
 
@@ -215,7 +215,7 @@ G4double G4AnalyticalEcpssrKCrossSection::CalculateCrossSection(G4int zTarget,G4
 	}
       else
 	{ 
-	  G4cout << "*** WARNING in G4AnalyticalEcpssrKCrossSection::CalculateCrossSection : we can treat only Proton or Alpha incident particles " << G4endl;
+	  G4cout << "*** WARNING in G4ecpssrBaseKxsModel::CalculateCrossSection : we can treat only Proton or Alpha incident particles " << G4endl;
 	  return 0;
 	}
   }
@@ -411,7 +411,7 @@ G4double G4AnalyticalEcpssrKCrossSection::CalculateCrossSection(G4int zTarget,G4
       if (FunctionFK((sigmaPSS*tetaK),86.6)<=0.) 
 	{
         G4cout << 
-        "*** WARNING in G4AnalyticalEcpssrKCrossSection::CalculateCrossSection : unable to interpolate FK function in high velocity region ! ***" << G4endl;
+        "*** WARNING in G4ecpssrBaseKxsModel::CalculateCrossSection : unable to interpolate FK function in high velocity region ! ***" << G4endl;
 	return 0;
 	}
 
@@ -456,7 +456,7 @@ G4double G4AnalyticalEcpssrKCrossSection::CalculateCrossSection(G4int zTarget,G4
       if (universalFunction2<=0) 
       {
         G4cout << 
-        "*** WARNING : G4AnalyticalEcpssrKCrossSection::CalculateCrossSection is unable to interpolate FK function in medium velocity region ! ***" << G4endl;
+        "*** WARNING : G4ecpssrBaseKxsModel::CalculateCrossSection is unable to interpolate FK function in medium velocity region ! ***" << G4endl;
 	return 0;
       }
       
@@ -534,7 +534,7 @@ G4double G4AnalyticalEcpssrKCrossSection::CalculateCrossSection(G4int zTarget,G4
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4AnalyticalEcpssrKCrossSection::FunctionFK(G4double k, G4double theta) 							  
+G4double G4ecpssrBaseKxsModel::FunctionFK(G4double k, G4double theta) 							  
 {
 
   G4double sigma = 0.;
@@ -638,7 +638,7 @@ G4double G4AnalyticalEcpssrKCrossSection::FunctionFK(G4double k, G4double theta)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4AnalyticalEcpssrKCrossSection::LinLogInterpolate(G4double e1, 
+G4double G4ecpssrBaseKxsModel::LinLogInterpolate(G4double e1, 
 						        G4double e2, 
 						        G4double e, 
 						        G4double xs1, 
@@ -652,7 +652,7 @@ G4double G4AnalyticalEcpssrKCrossSection::LinLogInterpolate(G4double e1,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4AnalyticalEcpssrKCrossSection::LogLogInterpolate(G4double e1, 
+G4double G4ecpssrBaseKxsModel::LogLogInterpolate(G4double e1, 
 						        G4double e2, 
 						        G4double e, 
 						        G4double xs1, 
@@ -667,7 +667,7 @@ G4double G4AnalyticalEcpssrKCrossSection::LogLogInterpolate(G4double e1,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4AnalyticalEcpssrKCrossSection::QuadInterpolator(G4double e11, G4double e12, 
+G4double G4ecpssrBaseKxsModel::QuadInterpolator(G4double e11, G4double e12, 
 						       G4double e21, G4double e22, 
 						       G4double xs11, G4double xs12, 
 						       G4double xs21, G4double xs22, 

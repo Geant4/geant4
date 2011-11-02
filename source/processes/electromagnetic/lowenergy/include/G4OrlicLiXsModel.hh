@@ -23,55 +23,59 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// 
+//
+// Author: Haifa Ben Abdelouahed
+//         
+//
 // History:
 // -----------
-//  21 Apr 2008   H. Abdelohauwed - 1st implementation
-//  29 Apr 2009   ALF  Major Design Revision
+//  23 Apr 2008   H. Ben Abdelouahed   1st implementation
+//  28 Apr 2008   MGP        Major revision according to a design iteration
+//  21 Apr 2009	  ALF Some correction for compatibility to G4VShellCrossSection
+//		  and changed name to G4OrlicLiCrossSection 
+//  29 Oct 2011   ALF changed name to G4OrlicLiXsModel
 //
 // -------------------------------------------------------------------
 
+
 // Class description:
-// Low Energy Electromagnetic Physics, Cross section, p ionisation, K shell
+// Low Energy Electromagnetic Physics, Cross section, proton ionisation, L shell
 // Further documentation available from http://www.ge.infn.it/geant4/lowE
 
 // -------------------------------------------------------------------
 
 
-#ifndef G4PAULKCROSSSECTION_HH
-#define G4PAULKCROSSSECTION_HH 1
+#ifndef G4OrlicLiXsModel_hh
+#define G4OrlicLiXsModel_hh 1
 
-//#include "G4VDataSetAlgorithm.hh"
 #include "globals.hh"
-#include <map>
+#include "G4AtomicTransitionManager.hh"
 
-class G4VDataSetAlgorithm;
-class G4VEMDataSet;
-
-class G4PaulKCrossSection 
+class G4OrlicLiXsModel 
 
 {
 public:
 
-  G4PaulKCrossSection();
+  G4OrlicLiXsModel();
 
-  virtual ~G4PaulKCrossSection();
-			     
-  G4double CalculateKCrossSection(G4int zTarget,G4double massIncident, G4double energyIncident);
-				    
+  virtual ~G4OrlicLiXsModel();
+
+
+//according to I.ORLIC, C.H.SOW and S.M.TANG,International Journal of PIXE.Vol.4(1997) 217-230	
+		     
+  G4double CalculateL1CrossSection(G4int zTarget, G4double energyIncident);
+
+  G4double CalculateL2CrossSection(G4int zTarget, G4double energyIncident);				    
  
+  G4double CalculateL3CrossSection(G4int zTarget, G4double energyIncident);
+
 private:
 
 
-  G4PaulKCrossSection(const G4PaulKCrossSection&);
-  G4PaulKCrossSection & operator = (const G4PaulKCrossSection &right);
+  G4OrlicLiXsModel(const G4OrlicLiXsModel&);
+  G4OrlicLiXsModel & operator = (const G4OrlicLiXsModel &right);
 
-  G4VDataSetAlgorithm* interpolation;
-
-  std::map< G4int , G4VEMDataSet* > protonDataSetMap;
-
-  std::map< G4int , G4VEMDataSet* > alphaDataSetMap;
-  
+  G4AtomicTransitionManager*  transitionManager;
 
 };
 

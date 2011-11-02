@@ -648,8 +648,14 @@ G4double G4PenelopeBremsstrahlungFS::SampleGammaEnergy(G4double energy,const G4M
 	ibin = 0;
       else if (pt > (*theVec)[nBinsX-1])
 	{
+	  G4ExceptionDescription ed;
+	  ed << "Crash at (pt > (*theVec)[nBinsX-1]) with pt = " << pt << 
+	    " , (*theVec)[nBinsX-1]=" << (*theVec)[nBinsX-1] << " and nBinsX = " << 
+	    nBinsX << G4endl;
+	  ed << "Material: " << mat->GetName() << ", energy = " << energy/keV << " keV" << 
+	    G4endl;
 	  G4Exception("G4PenelopeBremsstrahlungFS::SampleGammaEnergy()",
-		      "em2015",FatalException,"Invalid call");
+		      "em2015",FatalException,ed);	  
 	}
       else
 	{

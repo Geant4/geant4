@@ -34,41 +34,36 @@
 //  X-Ray Spectrom. 2011, 40, 127-134
 // ---------------------------------------------------------------------------------------
 
-#ifndef G4ECPSSRFormFactorLiCrossSection_HH
-#define G4ECPSSRFormFactorLiCrossSection_HH 1
+#ifndef G4ecpssrFormFactorKxsModel_HH
+#define G4ecpssrFormFactorKxsModel_HH 1
 
-#include "G4VecpssrLiModel.hh"
+#include "G4VecpssrKModel.hh"
 #include "globals.hh"
 #include <map>
 
 class G4VDataSetAlgorithm;
 class G4VEMDataSet;
 
-class G4ECPSSRFormFactorLiCrossSection : public G4VecpssrLiModel
+class G4ecpssrFormFactorKxsModel : public G4VecpssrKModel
 
 {
 public:
 
-  G4ECPSSRFormFactorLiCrossSection();
+  G4ecpssrFormFactorKxsModel();
 
-  virtual ~G4ECPSSRFormFactorLiCrossSection();
+  virtual ~G4ecpssrFormFactorKxsModel();
 			     
-  G4double CalculateL1CrossSection (G4int zTarget, G4double massIncident, G4double energyIncident);
-  G4double CalculateL2CrossSection (G4int zTarget, G4double massIncident, G4double energyIncident);
-  G4double CalculateL3CrossSection (G4int zTarget, G4double massIncident, G4double energyIncident);				     
+  G4double CalculateCrossSection (G4int zTarget, G4double massIncident, G4double energyIncident);
+				     
 private:
 
-  G4ECPSSRFormFactorLiCrossSection(const G4ECPSSRFormFactorLiCrossSection&);
-  G4ECPSSRFormFactorLiCrossSection & operator = (const G4ECPSSRFormFactorLiCrossSection &right);
+  G4ecpssrFormFactorKxsModel(const G4ecpssrFormFactorKxsModel&);
+  G4ecpssrFormFactorKxsModel & operator = (const G4ecpssrFormFactorKxsModel &right);
 
   G4VDataSetAlgorithm* interpolation;
 
-  std::map< G4int , G4VEMDataSet* > protonL1DataSetMap;
-  std::map< G4int , G4VEMDataSet* > protonL2DataSetMap;
-  std::map< G4int , G4VEMDataSet* > protonL3DataSetMap;
-  std::map< G4int , G4VEMDataSet* > alphaL1DataSetMap;
-  std::map< G4int , G4VEMDataSet* > alphaL2DataSetMap;
-  std::map< G4int , G4VEMDataSet* > alphaL3DataSetMap;
+  std::map< G4int , G4VEMDataSet* > protonDataSetMap;
+  std::map< G4int , G4VEMDataSet* > alphaDataSetMap;
 
 };
 

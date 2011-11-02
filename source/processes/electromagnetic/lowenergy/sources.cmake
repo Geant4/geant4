@@ -44,8 +44,10 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4emlowenergy
     HEADERS
-        G4AnalyticalEcpssrKCrossSection.hh
-        G4AnalyticalEcpssrLiCrossSection.hh
+        G4ecpssrBaseKxsModel.hh
+        G4ecpssrBaseLixsModel.hh
+	G4ecpssrFormFactorKxsModel.hh
+	G4ecpssrFormFactorLixsModel.hh
         G4AtomicDeexcitation.hh
         G4AtomicTransitionManager.hh
         G4AugerData.hh
@@ -107,8 +109,8 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LivermorePolarizedRayleighModel.hh
         G4LivermoreRayleighModel.hh
         G4LogLogInterpolation.hh
-        G4OrlicLiCrossSection.hh
-        G4PaulKCrossSection.hh
+        G4OrlicLixsModel.hh
+        G4PaulKxsModel.hh
         G4Penelope01BremsstrahlungAngular.hh
 	G4Penelope01BremsstrahlungContinuous.hh
 	G4Penelope01BremsstrahlungModel.hh
@@ -164,8 +166,10 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4VPhotoElectricAngularDistribution.hh
         G4VRangeTest.hh
     SOURCES
-        G4AnalyticalEcpssrKCrossSection.cc
-        G4AnalyticalEcpssrLiCrossSection.cc
+        G4ecpssrBaseKxsModel.cc
+        G4ecpssrBaseLixsModel.cc
+	G4ecpssrFormFactorKxsModel.cc
+	G4ecpssrFormFactorLixsModel.cc
         G4AtomicDeexcitation.cc
         G4AtomicTransitionManager.cc
         G4AugerData.cc
@@ -226,8 +230,8 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LivermorePolarizedRayleighModel.cc
         G4LivermoreRayleighModel.cc
         G4LogLogInterpolation.cc
-        G4OrlicLiCrossSection.cc
-        G4PaulKCrossSection.cc
+        G4OrlicLixsModel.cc
+        G4PaulKxsModel.cc
       	G4Penelope01BremsstrahlungAngular.cc
 	G4Penelope01BremsstrahlungContinuous.cc
 	G4Penelope01BremsstrahlungModel.cc

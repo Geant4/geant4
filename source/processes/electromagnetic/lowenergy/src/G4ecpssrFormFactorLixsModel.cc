@@ -44,11 +44,11 @@
 #include "G4Proton.hh"
 #include "G4Alpha.hh"
 
-#include "G4ECPSSRFormFactorLiCrossSection.hh"
+#include "G4ecpssrFormFactorLixsModel.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ECPSSRFormFactorLiCrossSection::G4ECPSSRFormFactorLiCrossSection()
+G4ecpssrFormFactorLixsModel::G4ecpssrFormFactorLixsModel()
 { 
   interpolation = new G4LinInterpolation();
 
@@ -80,7 +80,7 @@ G4ECPSSRFormFactorLiCrossSection::G4ECPSSRFormFactorLiCrossSection()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ECPSSRFormFactorLiCrossSection::~G4ECPSSRFormFactorLiCrossSection()
+G4ecpssrFormFactorLixsModel::~G4ecpssrFormFactorLixsModel()
 { 
   protonL1DataSetMap.clear();
   alphaL1DataSetMap.clear();
@@ -96,7 +96,7 @@ G4ECPSSRFormFactorLiCrossSection::~G4ECPSSRFormFactorLiCrossSection()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4ECPSSRFormFactorLiCrossSection::CalculateL1CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident)
+G4double G4ecpssrFormFactorLixsModel::CalculateL1CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident)
 {
   G4Proton* aProton = G4Proton::Proton();
   G4Alpha* aAlpha = G4Alpha::Alpha();  
@@ -124,7 +124,7 @@ G4double G4ECPSSRFormFactorLiCrossSection::CalculateL1CrossSection(G4int zTarget
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4ECPSSRFormFactorLiCrossSection::CalculateL2CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident)
+G4double G4ecpssrFormFactorLixsModel::CalculateL2CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident)
 {
   G4Proton* aProton = G4Proton::Proton();
   G4Alpha* aAlpha = G4Alpha::Alpha();  
@@ -152,7 +152,7 @@ G4double G4ECPSSRFormFactorLiCrossSection::CalculateL2CrossSection(G4int zTarget
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4ECPSSRFormFactorLiCrossSection::CalculateL3CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident)
+G4double G4ecpssrFormFactorLixsModel::CalculateL3CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident)
 {
   G4Proton* aProton = G4Proton::Proton();
   G4Alpha* aAlpha = G4Alpha::Alpha();  

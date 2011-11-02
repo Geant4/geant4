@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AnalyticalEcpssrKCrossSection.hh,v 1.1 2010-06-06 23:40:35 mantero Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 
-#ifndef G4ANALYTICALECPSSRKCROSSSECTION_HH
-#define G4ANALYTICALECPSSRKCROSSSECTION_HH 1
+#ifndef G4ecpssrBaseKxsModel_hh
+#define G4ecpssrBaseKxsModel_hh 1
 
 #include "G4VecpssrKModel.hh"
 #include "globals.hh"
@@ -37,13 +35,13 @@
 #include "G4CrossSectionDataSet.hh"
 
 
-class G4AnalyticalEcpssrKCrossSection : public G4VecpssrKModel
+class G4ecpssrBaseKxsModel : public G4VecpssrKModel
 {
 public:
 
-  G4AnalyticalEcpssrKCrossSection();
+  G4ecpssrBaseKxsModel();
 
-  ~G4AnalyticalEcpssrKCrossSection();
+  ~G4ecpssrBaseKxsModel();
 			     
   
   G4double CalculateCrossSection(G4int, G4double, G4double);//according to W.Brandt and G.Lapicki, Phys.Rev.A23(1981)
@@ -52,8 +50,8 @@ public:
   
 private:
   
-  G4AnalyticalEcpssrKCrossSection(const G4AnalyticalEcpssrKCrossSection&);
-  G4AnalyticalEcpssrKCrossSection & operator = (const G4AnalyticalEcpssrKCrossSection &right);
+  G4ecpssrBaseKxsModel(const G4ecpssrBaseKxsModel&);
+  G4ecpssrBaseKxsModel & operator = (const G4ecpssrBaseKxsModel &right);
 
   G4double FunctionFK(G4double k, G4double theta);
 

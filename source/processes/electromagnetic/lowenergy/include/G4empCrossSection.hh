@@ -45,8 +45,8 @@
 
 #include "globals.hh"
 #include "G4VhShellCrossSection.hh"
-#include "G4PaulKCrossSection.hh"
-#include "G4OrlicLiCrossSection.hh"
+#include "G4PaulKxsModel.hh"
+#include "G4OrlicLiXsModel.hh"
 
 class G4empCrossSection : public G4VhShellCrossSection 
 {
@@ -80,8 +80,8 @@ private:
   
   G4double totalCS;
               
-  G4PaulKCrossSection*  paulShellK;
-  G4OrlicLiCrossSection* orlicShellLi;  
+  G4PaulKxsModel*  paulShellK;
+  G4OrlicLiXsModel* orlicShellLi;  
 						
   G4empCrossSection(const G4empCrossSection&);
   G4empCrossSection & operator = (const G4empCrossSection &right);

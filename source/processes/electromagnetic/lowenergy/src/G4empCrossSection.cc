@@ -44,8 +44,8 @@ G4empCrossSection::G4empCrossSection(const G4String& nam)
   :G4VhShellCrossSection(nam),totalCS(0.0)
 { 
 
-  paulShellK = new G4PaulKCrossSection();
-  orlicShellLi = new G4OrlicLiCrossSection();
+  paulShellK = new G4PaulKxsModel();
+  orlicShellLi = new G4OrlicLiXsModel();
 
 }
 

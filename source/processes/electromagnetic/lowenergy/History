@@ -17,6 +17,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+02.11.2011  L.Pandola tag emlowen-V09-04-69
+	    Add additional verbosity in G4PenelopeBremsstrahlungFS 
+            in the attempt to sort of the reason of G4Exception 
+	    em2015 observed in STT.
+
+28.10.2011  A.Mantero, V.Ivantchenko tag emlowen-V09-04-68
+	    added iniatialization of data members in constructor
+	    og G4UAtomDeexcitation to avoid Coverity warnings
+
+28.10.2011  A.Mantero, tag emlowen-V09-04-67
+	    Changed names for Ecpssr calculations from Form Factor
+	    according to A.Taborda et al. X-Ray Spectrom. 
+	    2011, 40, 127-134. Update of G4UAtomDeexcitationto remove
+            runtime warning if Deexciation is not used
+
 28.10.2011  L.Pandola, tag emlowen-V09-04-66
 	    Include files G4ECPSSRFormFactorKCrossSection.* and 
 	    G4ECPSSRFormFactorLiCrossSection.* from A. Mantero.

@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: G4OrlicLiCrossSection.cc,v 1.6 2010-11-22 18:32:00 mantero Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 // Author: Haifa Ben Abdelouahed
 //         
 //
@@ -36,7 +33,7 @@
 //  21 Apr 2009	  ALF Some correction for compatibility to G4VShellCrossSection
 //		  and changed name to G4OrlicLiCrossSection 
 //  21 Mar 2011   ALF some bug fixing (Z checks, )
-
+//  29 Oct 2011   ALF Changed name to G4OrlicLiXsModel
 //
 // -------------------------------------------------------------------
 // Class description:
@@ -46,18 +43,18 @@
 
 
 #include "globals.hh"
-#include "G4OrlicLiCrossSection.hh"
+#include "G4OrlicLiXsModel.hh"
 #include "G4Proton.hh"
 
 
-G4OrlicLiCrossSection::G4OrlicLiCrossSection()
+G4OrlicLiXsModel::G4OrlicLiXsModel()
 { 
 
   transitionManager =  G4AtomicTransitionManager::Instance();
 
 }
 
-G4OrlicLiCrossSection::~G4OrlicLiCrossSection()
+G4OrlicLiXsModel::~G4OrlicLiXsModel()
 { 
 
 }
@@ -68,7 +65,7 @@ G4OrlicLiCrossSection::~G4OrlicLiCrossSection()
 
 //*****************************************************************************************************************************************
 
-G4double G4OrlicLiCrossSection::CalculateL1CrossSection(G4int zTarget, G4double energyIncident)
+G4double G4OrlicLiXsModel::CalculateL1CrossSection(G4int zTarget, G4double energyIncident)
   			       
 {
 
@@ -197,7 +194,7 @@ G4double analyticalFunction = a0 + (a1*x)+(a2*x*x)+(a3*std::pow(x,3))+(a4*std::p
 //*****************************************************************************************************************************************
 
 
-G4double G4OrlicLiCrossSection::CalculateL2CrossSection(G4int zTarget, G4double energyIncident)
+G4double G4OrlicLiXsModel::CalculateL2CrossSection(G4int zTarget, G4double energyIncident)
   			       
 {
 
@@ -303,7 +300,7 @@ G4double G4OrlicLiCrossSection::CalculateL2CrossSection(G4int zTarget, G4double 
 //*****************************************************************************************************************************************
 
 
-G4double G4OrlicLiCrossSection::CalculateL3CrossSection(G4int zTarget, G4double energyIncident)
+G4double G4OrlicLiXsModel::CalculateL3CrossSection(G4int zTarget, G4double energyIncident)
   			       
 {
   

@@ -22,83 +22,121 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// 
+//
+//
 // History:
 // -----------
-//  01 Oct 2011   A.M., S.I. - 1st implementation
-// 
-// Class description
-// ----------------
-//  Computation of K, L & M shell ECPSSR ionisation cross sections for protons and alphas
-//  Based on the work of A. Taborda et al. 
-//  X-Ray Spectrom. 2011, 40, 127-134
-// ---------------------------------------------------------------------------------------
+//  21 Apr 2008   H. Abdelohauwed - 1st implementation
+//  29 Apr 2009   ALF  Major Design Revision
+//  22 Oct 2011   ALF  Warning removals and Z checks fix for alphas
+//
+// -------------------------------------------------------------------
+
+// Class description:
+// Low Energy Electromagnetic Physics, Cross section, p ionisation, K shell
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+
+// -------------------------------------------------------------------
 
 #include "globals.hh"
 #include "G4ios.hh"
 #include <fstream>
 #include <iomanip>
-
+//#include "G4CompositeEMDataSet.hh"
+//#include "G4ShellEMDataSet.hh"
 #include "G4EMDataSet.hh"
+//#include "G4VEMDataSet.hh"
+//#include "G4VDataSetAlgorithm.hh"
 #include "G4LogLogInterpolation.hh"
+#include "G4PaulKxsModel.hh"
 #include "G4Proton.hh"
 #include "G4Alpha.hh"
 
-#include "G4ECPSSRFormFactorKCrossSection.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4ECPSSRFormFactorKCrossSection::G4ECPSSRFormFactorKCrossSection()
+G4PaulKxsModel::G4PaulKxsModel()
 { 
+
+  
   interpolation = new G4LogLogInterpolation();
 
-  for (G4int i=11; i<93; i++) 
-  {
-      protonDataSetMap[i] = new G4EMDataSet(i,interpolation);
-      protonDataSetMap[i]->LoadData("pixe/ecpssr/proton/k-");
-  }
 
-  for (G4int i=11; i<93; i++) 
-  {
+    for (G4int i=4; i<93; i++) {
+      protonDataSetMap[i] = new G4EMDataSet(i,interpolation);
+      protonDataSetMap[i]->LoadData("pixe/kpcsPaul/kcs-");
+    }
+    for (G4int i=6; i<93; i++) {
       alphaDataSetMap[i] = new G4EMDataSet(i,interpolation);
-      alphaDataSetMap[i]->LoadData("pixe/ecpssr/alpha/k-");
-  }
+      alphaDataSetMap[i]->LoadData("pixe/kacsPaul/kacs-");
+    }
+
+
+
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4ECPSSRFormFactorKCrossSection::~G4ECPSSRFormFactorKCrossSection()
+G4PaulKxsModel::~G4PaulKxsModel()
 { 
+
   protonDataSetMap.clear();
   alphaDataSetMap.clear();
   delete interpolation;
+
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4ECPSSRFormFactorKCrossSection::CalculateCrossSection(G4int zTarget,G4double massIncident, G4double energyIncident)
+G4double G4PaulKxsModel::CalculateKCrossSection(G4int zTarget,G4double massIncident, G4double energyIncident)
 {
-  G4Proton* aProton = G4Proton::Proton();
-  G4Alpha* aAlpha = G4Alpha::Alpha();  
+  
+  G4Proton* aProtone = G4Proton::Proton();
+  G4Alpha* aAlpha = G4Alpha::Alpha();
+  
   G4double sigma = 0;
 
-  if (energyIncident > 0.1*MeV && energyIncident < 10*MeV && zTarget < 93 && zTarget > 10) {
+  if (massIncident == aProtone->GetPDGMass() && zTarget < 93 && zTarget > 3)
+    {
 
-    if (massIncident == aProton->GetPDGMass())
-      {      
-	sigma = protonDataSetMap[zTarget]->FindValue(energyIncident/MeV);  
+      //      G4EMDataSet* currentDataset =  protonDataSetMap[zTarget];
+      //      currentDataset->GetEnergies
+
+  if (energyIncident > protonDataSetMap[zTarget]->GetEnergies(0).back() ||
+      energyIncident < protonDataSetMap[zTarget]->GetEnergies(0).front() )
+	{sigma = 0;}
+      else {     
+	sigma = protonDataSetMap[zTarget]->FindValue(energyIncident/MeV); 
       }
-    else if (massIncident == aAlpha->GetPDGMass())
-      {
-      sigma = alphaDataSetMap[zTarget]->FindValue(energyIncident/MeV); 
-      }
-    else
-      { 
-	sigma = 0.;
-      }
-  }
+    }
+  else
+    {
+      if (massIncident == aAlpha->GetPDGMass() && zTarget < 93 && zTarget > 5)
+	{
+	  if (energyIncident > alphaDataSetMap[zTarget]->GetEnergies(0).back() ||
+	      energyIncident < alphaDataSetMap[zTarget]->GetEnergies(0).front() )
+	    {sigma = 0;}
+	  else {
+	    sigma = alphaDataSetMap[zTarget]->FindValue(energyIncident/MeV); 
+	  }
+	}
+      else
+	{ 
+	  
+// G4Exception("G4PaulKxsModel::CalculateKCrossSection()","de0004",JustWarning, "Energy deposited locally");
+	  sigma = 0.;
+
+	}
+    }
   
-  // sigma is expressed in barn: returning it in internal units.
-  return sigma*barn;
+  
+  // sigma is in internal units (mm^2)
+  return sigma;
 }
+
+
+
+
+
+
+
+
+
+
+
+
