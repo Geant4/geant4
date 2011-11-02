@@ -17,6 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29th September 2011  John Allison  (greps-V09-04-08)
+- G4DimensionedType.hh:
+  o Reversed action of 27th Sep.  Warnings are false.  Function is needed.
+
+27th September 2011  John Allison  (greps-V09-04-07)
+- G4DimensionedType.hh:
+  o Commented out unused function to suppress project warnings.
+- G4Polymarker: Added constructor G4Polymarker(const G4VMarker&).
+- G4VMarker: Added constructor G4VMarker(const G4VMarker&);
+- G4VMarker.hh, G4Circle.hh, G4Square.hh, G4Polymarker.hh, G4Text.hh:
+  o Tidied.
+- greps-V09-04-06: Inadvertent tag.
+
 16th September 2011  John Allison  (greps-V09-04-05)
 - Migrated to new G4Exception.
 

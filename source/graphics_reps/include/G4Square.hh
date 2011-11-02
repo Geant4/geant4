@@ -46,8 +46,8 @@ class G4Square: public G4VMarker {
 public: // With description
 
   G4Square ();
-  G4Square (const G4Point3D& pos);
-  G4Square (const G4VMarker& marker);
+  G4Square (const G4VMarker&);
+  G4Square (const G4Point3D& position);
   ~G4Square ();
 
 };
