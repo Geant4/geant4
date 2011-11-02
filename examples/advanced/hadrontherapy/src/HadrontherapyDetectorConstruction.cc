@@ -382,7 +382,6 @@ void HadrontherapyDetectorConstruction::UpdateGeometry()
     numberOfVoxelsAlongZ = lrint(detectorSizeZ / sizeOfVoxelAlongZ);
     sizeOfVoxelAlongZ = ( detectorSizeZ / numberOfVoxelsAlongZ );
 
-    //G4cout << "*************** DetectorToWorldPosition " << GetDetectorToWorldPosition()/cm << "\n";
     ConstructSensitiveDetector(GetDetectorToWorldPosition());
 
     volumeOfVoxel = sizeOfVoxelAlongX * sizeOfVoxelAlongY * sizeOfVoxelAlongZ;
@@ -394,8 +393,8 @@ void HadrontherapyDetectorConstruction::UpdateGeometry()
 	    massOfVoxel);
 
     // Initialize analysis
-    //    HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::GetInstance();
 #ifdef G4ANALYSIS_USE_ROOT
+        HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::GetInstance();
     analysis -> flush();     // Finalize the root file 
     analysis -> book();
 #endif

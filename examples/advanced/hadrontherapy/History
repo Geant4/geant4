@@ -8,6 +8,10 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
              History file of the Hadrontherapy application
          ====================================================
 
+29.10.2011 G.A.P.Cirrone; Tag: hadrontherapy-V09-04-02
+	   - Various warnings removed.
+	   - Removed a wrong dependence on ROOT.
+
 23.09.2011 G.A.P.Cirrone; Tag: hadrontherapy-V09-04-01
 	   - Warnings removal.
 

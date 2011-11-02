@@ -394,8 +394,10 @@ void HadrontherapyMatrix::TotalEnergyDeposit()
     // Convert energy deposited to dose.
     // Store the information of the matrix in a ntuple and in 
     // a 1D Histogram
+#ifdef G4ANALYSIS_USE_ROOT
+      HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::GetInstance();
+#endif
 
-  //    HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::GetInstance();
     if (matrix)
     {  
 	for(G4int i = 0; i < numberOfVoxelAlongX; i++) 
