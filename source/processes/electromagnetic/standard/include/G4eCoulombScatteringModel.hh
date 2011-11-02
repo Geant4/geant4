@@ -102,7 +102,7 @@ public:
 				 G4double maxEnergy);
 
   // defines low energy limit of the model
-  inline void SetLowEnergyLimit(G4double val);
+  inline void SetLowEnergyThreshold(G4double val);
 
   // user definition of low-energy threshold of recoil
   inline void SetRecoilThreshold(G4double eth);
@@ -144,7 +144,7 @@ protected:
   const G4ParticleDefinition* particle;
   const G4ParticleDefinition* theProton;
 
-  G4double                  lowEnergyLimit;
+  G4double                  lowEnergyThreshold;
 
 private:
 
@@ -178,9 +178,9 @@ void G4eCoulombScatteringModel::SetupParticle(const G4ParticleDefinition* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4eCoulombScatteringModel::SetLowEnergyLimit(G4double val)
+inline void G4eCoulombScatteringModel::SetLowEnergyThreshold(G4double val)
 {
-  lowEnergyLimit = val;
+  lowEnergyThreshold = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -16,6 +16,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+1 November 11: V.Ivanchenko (emstand-V09-04-48)
+- G4eCoulombScatteringModel - fixed compilation problem introduced 
+    in the previous tag
+
+31 October 11: V.Ivanchenko (emstand-V09-04-47)
+- G4eCoulombScatteringModel - rename local member and set method
+    SetLowEnergyThreshold to avoid hidden of the method of the
+    base class (addressed bug# 1256)
  
 28 October 11: V.Ivanchenko (emstand-V09-04-46)
 - G4PAIxSection, G4PAIySection,

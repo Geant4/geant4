@@ -85,7 +85,7 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(const G4String& nam)
   theProton   = G4Proton::Proton();
   currentMaterial = 0; 
 
-  lowEnergyLimit  = 1*keV;  // particle will be killed for lower energy
+  lowEnergyThreshold = 1*keV;  // particle will be killed for lower energy
   recoilThreshold = 0.*keV; // by default does not work
 
   particle = 0;
@@ -150,7 +150,7 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
   if(p != particle) { SetupParticle(p); }
 
   // cross section is set to zero to avoid problems in sample secondary
-  if(kinEnergy < lowEnergyLimit) { return xsec; }
+  if(kinEnergy <= 0.0) { return xsec; }
   DefineMaterial(CurrentCouple());
   cosTetMinNuc = wokvi->SetupKinematic(kinEnergy, currentMaterial);
   if(cosThetaMax < cosTetMinNuc) {
@@ -189,7 +189,7 @@ void G4eCoulombScatteringModel::SampleSecondaries(
 
   // absorb particle below low-energy limit to avoid situation
   // when a particle has no energy loss
-  if(kinEnergy < lowEnergyLimit) { 
+  if(kinEnergy < lowEnergyThreshold) { 
     fParticleChange->SetProposedKineticEnergy(0.0);
     fParticleChange->ProposeLocalEnergyDeposit(kinEnergy);
     fParticleChange->ProposeNonIonizingEnergyDeposit(kinEnergy);
@@ -232,7 +232,7 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   G4double trec = mom2*(1.0 - cost)/(targetMass + (mass + kinEnergy)*(1.0 - cost));
   G4double finalT = kinEnergy - trec; 
   //G4cout<<"G4eCoulombScatteringModel: finalT= "<<finalT<<" Trec= "<<trec<<G4endl;
-  if(finalT <= lowEnergyLimit) { 
+  if(finalT <= lowEnergyThreshold) { 
     trec = kinEnergy;  
     finalT = 0.0;
   } 
