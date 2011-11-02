@@ -155,7 +155,7 @@ void A01EventAction::EndOfEventAction(const G4Event* evt)
     {
       A01DriftChamberHit* aHit = (*DHC1)[i1];
       G4ThreeVector localPos = aHit->GetLocalPos();
-      if (dc1XY) dc1XY->fill(localPos.x(), localPos.y());
+      if (dc1XY) dc1XY->fill(localPos.y(), localPos.x());
     }
   }
   if (DHC2 && dc2Hits)
@@ -166,7 +166,7 @@ void A01EventAction::EndOfEventAction(const G4Event* evt)
     {
       A01DriftChamberHit* aHit = (*DHC2)[i1];
       G4ThreeVector localPos = aHit->GetLocalPos();
-      if (dc2XY) dc2XY->fill(localPos.x(), localPos.y());
+      if (dc2XY) dc2XY->fill(localPos.y(), localPos.x());
     }
   }
 
