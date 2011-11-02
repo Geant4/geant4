@@ -1,4 +1,4 @@
-/physics/SetList Opt3
+/testem/phys/addPhysics emstandard_opt3
 /run/initialize
 /run/setCut 0.01 mm
 /primFoil/material G4_Cu

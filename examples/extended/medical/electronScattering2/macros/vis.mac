@@ -1,5 +1,5 @@
 # Specify physics list
-/physics/SetList Opt2
+/testem/phys/addPhysics emstandard_opt0
 #
 # Initialize the run (must be after specify physics list)
 /run/initialize
