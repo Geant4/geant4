@@ -466,9 +466,6 @@ G4VParticleChange* G4CoupledTransportation::AlongStepDoIt( const G4Track& track,
                                                     const G4Step&  stepData )
 {
   static G4int noCalls=0;
-  static const G4ParticleDefinition* fOpticalPhoton =
-           G4ParticleTable::GetParticleTable()->FindParticle("opticalphoton");
-
   noCalls++;
 
   fParticleChange.Initialize(track) ;
@@ -506,19 +503,7 @@ G4VParticleChange* G4CoupledTransportation::AlongStepDoIt( const G4Track& track,
      if( initialVelocity > 0.0 ) { initialInverseVel= 1.0 / initialVelocity; }
      G4double stepLength      = track.GetStepLength() ;
 
-     const G4DynamicParticle* fpDynamicParticle = track.GetDynamicParticle();
-     if (fpDynamicParticle->GetDefinition()== fOpticalPhoton)
-     {
-        //  A photon is in the medium of the final point
-        //  during the step, so Peter says it has the final velocity.
-        finalVelocity   = track.CalculateVelocityForOpticalPhoton();
-	if( finalVelocity > 0.0 ) { finalInverseVel= 1.0 / finalVelocity; }
-	fParticleChange.ProposeVelocity(finalVelocity);
-        deltaTime = stepLength * finalInverseVel ;
-	// G4cout << " dt = s / finalV "  << "  s = "   << stepLength
-	//        << " 1 / finalV= " << finalInverseVel << G4endl; 
-     }
-     else if (finalVelocity > 0.0)
+     if (finalVelocity > 0.0)
      {
         // deltaTime = stepLength/finalVelocity ;
         G4double meanInverseVelocity = 0.5 * ( initialInverseVel + finalInverseVel );

@@ -16,18 +16,38 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct. 28th, 2011, P.Gumplinger transport-V09-04-10
+- allow for spin tracking of neutral particles with a magn. moment
+  allow for uniform gravity field tracking of neutral particles
+  tag coworks with field-V09-04-03
+
+Oct. 28th, 2011, P.Gumplinger transport-V09-04-09
+-----------------------------
+- remove all special reverence and logic regarding "opticalphoton" from code
+  in G4Transportation.cc and G4CoupledTransportation.cc
+
 Aug. 8th, 2011, H.Kurashige  transport-V09-04-08
-- Modify calcuation of deltaTime for optical photon in Transportation (and CoupledTtansportation)
-  The final velocity obtained by G4Track::CalculateVelocityForOpticalPhoton
-  should be used instead of the initial velocity of the step.  
+---------------------------
+- Modify calculation of deltaTime for optical photon in Transportation (and CoupledTransportation)
+  Use the updated velocity obtained from G4Track::CalculateVelocityForOpticalPhoton
+  instead of the initial velocity of the step.  
   (see problem #1239)
+  [ This is because the velocity at the initial point can refer to 
+  a previous volume.  If the PreStepPoint was on a surface, we 
+  the previous step was in another volume, which shared this 
+  PreStepPoint --> and its velocity would be wrong. ]
 
 July 6th, 2011, H.Kurashige  transport-V09-04-07
-- Modify G4Transportaion (and CoupledTtansportation)
+---------------------------
+- Modify G4Transportation (and CoupledTtansportation)
   to propose the final local time rather than the global time
-  so that local time can be updated properly
+  so that local time can be updated properly.
   (see problem #1224)  
-
+  [ This adapts to the recent change in Tracking, which made
+  the change of LocalTime trigger the change of Global Time 
+  (instead of vice-versa). ] 
+ 
 June 10th, 2011, J.Apostolakis  transport-V09-04-06
 ------------------------------
 - Fix for invalid safety passed to SafetyHelper.
