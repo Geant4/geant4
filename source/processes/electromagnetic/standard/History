@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+2 November 11: G.Cosmo (emstand-V09-04-49)
+- Correction in sources.cmake script.
+
 1 November 11: V.Ivanchenko (emstand-V09-04-48)
 - G4eCoulombScatteringModel - fixed compilation problem introduced 
     in the previous tag
