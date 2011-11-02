@@ -64,9 +64,6 @@
 #include "G4ChordFinder.hh"
 #include "G4SafetyHelper.hh"
 #include "G4FieldManagerStore.hh"
-
-#include "G4UniformGravityField.hh"
-
 class G4VSensitiveDetector;
 
 //////////////////////////////////////////////////////////////////////////
@@ -184,10 +181,9 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
      currentSafety = fPreviousSafety - std::sqrt(MagSqShift) ;
   }
 
-  // Is the particle charged or has it a magnetic moment?
+  // Is the particle charged ?
   //
-  G4double particleCharge = pParticle->GetCharge() ; 
-  G4double magneticMoment = pParticle->GetMagneticMoment() ;
+  G4double              particleCharge = pParticle->GetCharge() ; 
 
   fGeometryLimitedStep = false ;
   // fEndGlobalTimeComputed = false ;
@@ -200,17 +196,9 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   //
   G4FieldManager* fieldMgr=0;
   G4bool          fieldExertsForce = false ;
-
-  G4UniformGravityField* gravity = NULL;
-
-  fieldMgr = fFieldPropagator->FindAndSetFieldManager( track.GetVolume() );
-
-  if (fieldMgr != 0) gravity
-     = dynamic_cast<G4UniformGravityField*>
-                        (const_cast<G4Field*>(fieldMgr->GetDetectorField()));
-
-  if((particleCharge != 0.0) || (magneticMoment != 0.0 ) || (gravity != NULL))
+  if( (particleCharge != 0.0) )
   {
+     fieldMgr= fFieldPropagator->FindAndSetFieldManager( track.GetVolume() ); 
      if (fieldMgr != 0) {
 	// Message the field Manager, to configure it for this track
 	fieldMgr->ConfigureForTrack( &track );
@@ -473,8 +461,13 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
                                                     const G4Step&  stepData )
 {
+  // set  pdefOpticalPhoton
+  static  G4ParticleDefinition* pdefOpticalPhoton =
+    G4ParticleTable::GetParticleTable()->FindParticle("opticalphoton");
+
   static G4int noCalls=0;
   noCalls++;
+
 
   fParticleChange.Initialize(track) ;
 
@@ -503,8 +496,14 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
      G4double stepLength      = track.GetStepLength();
 
      deltaTime= 0.0;  // in case initialVelocity = 0 
-     if ( initialVelocity > 0.0 ) deltaTime = stepLength/initialVelocity ;
-
+     if (track.GetParticleDefinition() == pdefOpticalPhoton) {
+       // For only Optical Photon, final velocity is used 
+       double finalVelocity = track.CalculateVelocityForOpticalPhoton();
+       fParticleChange.ProposeVelocity(finalVelocity);
+       deltaTime = stepLength/finalVelocity ; 
+     } else if( initialVelocity > 0.0 ) {
+        deltaTime = stepLength/initialVelocity ;
+     }
      fCandidateEndGlobalTime   = startTime + deltaTime ;
      fParticleChange.ProposeLocalTime(  track.GetLocalTime() + deltaTime) ;
   }
