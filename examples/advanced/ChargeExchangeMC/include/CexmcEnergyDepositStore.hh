@@ -111,7 +111,7 @@ extern G4Allocator< CexmcEnergyDepositStore >  energyDepositStoreAllocator;
 
 inline void *  CexmcEnergyDepositStore::operator new( size_t )
 {
-  return energyDepositStoreAllocator.MallocSingle();
+    return energyDepositStoreAllocator.MallocSingle();
 }
 
 

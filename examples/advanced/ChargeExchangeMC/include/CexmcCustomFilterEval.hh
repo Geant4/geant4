@@ -55,7 +55,7 @@ class  CexmcEventFastSObject;
 class  CexmcEventSObject;
 
 
-class  CexmcCustomFilterEval : public CexmcAST::BasicEval
+class  CexmcCustomFilterEval
 {
     private:
         typedef std::vector< CexmcCustomFilter::ParseResult >

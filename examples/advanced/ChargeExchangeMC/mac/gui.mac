@@ -12,4 +12,6 @@
 #/gui/addButton viewer "Draw world (OI)" "/control/execute mac/visOI.mac"
 /gui/addButton viewer "Set style solid" "/vis/viewer/set/style solid"
 /gui/addButton viewer "Set style wireframe" "/vis/viewer/set/style wire"
+/gui/addButton viewer "Highlight inner crystals" "/cexmc/vis/hlIC"
+/gui/addButton viewer "Unhighlight inner crystals" "/cexmc/vis/hlIC false"
 /gui/addButton viewer "Update scene" "/vis/scene/notifyHandlers"

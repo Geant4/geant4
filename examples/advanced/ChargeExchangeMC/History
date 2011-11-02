@@ -1,4 +1,4 @@
- -------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 History File, 2010/11/18 G.A.P. Cirrone, Created
 cirrone@lns.infn.it
 -------------------------------------------------------------------------------
@@ -7,16 +7,35 @@ cirrone@lns.infn.it
              History file of the ChargeExchangeMC application
          ====================================================
 
+01.11.2011, G.A.P.Cirrone & A.Radkov,  Tag: ChargeExchangeMC-V09-04-05
+	    - Header files added.
+
+31.10.2011, G.A.P.Cirrone & A.Radkov,  Tag: ChargeExchangeMC-V09-04-04
+	    - Minor revision and removal of no more used files.
+
+31.10.2011, G.A.P.Cirrone & A.Radkov,  Tag: ChargeExchangeMC-V09-04-03
+            - A new framework for easy creation of various scene primitives
+              implemented. 3 primitives were added: center of the target mark,
+              auxiliary radial lines and inner crystals area highlights.
+            - New algorithms for energy deposit collection strategies added
+            - New reconstruction parameter added: expected momentum at the
+              center of the taget
+            - Calculation of physical values was significantly optimized
+            - Multiple optimizations and code cleanup
+
+31.10.2011, G.A.P.Cirrone & A.Radkov,  Tag: ChargeExchangeMC-V09-04-02
+	    - Minor revisions and code cleanup
+
 23.11.2010, G.A.P.Cirrone & A.Radkov,  Tag: ChargeExchangeMC-V09-03-03
             - Possibility to remove the boost dependence
-	    - Documentation updated
-	    - README updated 
+            - Documentation updated
+            - README updated
 
 18.11.2010, G.A.P.Cirrone & A.Radkov,  Tag: ChargeExchangeMC-V09-03-02
-            - Corrected tag name erroneously assigned 
+            - Corrected tag name erroneously assigned
 
-18.11.2010, G.A.P.Cirrone & A.Radkov,  Tag: ChargeExchangeMC-V09-03-01
-            - General code revision and update 
+18.11.2010, G.A.P.Cirrone & A.Radkov,  Tag: ChargeExchangeMC-V09-04-01
+            - General code revision and update
 
-18.11.2010, G.A.P. Cirrone, Tag: ChargeExchangeMC-V09-03-00
-	    - First tag of the example
+18.11.2010, G.A.P. Cirrone, Tag: ChargeExchangeMC-V09-04-00
+            - First tag of the example

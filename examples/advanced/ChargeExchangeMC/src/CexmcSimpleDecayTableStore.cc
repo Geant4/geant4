@@ -58,7 +58,7 @@ CexmcSimpleDecayTableStore::CexmcSimpleDecayTableStore(
     for ( G4int  i( 0 ); i < decayTable->entries(); ++i )
     {
         decayBranches.insert(
-                std::pair< G4int, G4double >( i,
+                CexmcDecayBranchesStore::value_type( i,
                             decayTable->GetDecayChannel( i )->GetBR() ) );
     }
 }

@@ -144,7 +144,7 @@ namespace
 }
 
 
-const G4double CexmcASTEval::constants[] = { eV, keV, MeV, GeV, mm, cm, m };
+const G4double  CexmcASTEval::constants[] = { eV, keV, MeV, GeV, mm, cm, m };
 
 
 CexmcASTEval::CexmcASTEval( const CexmcEventFastSObject *  evFastSObject,

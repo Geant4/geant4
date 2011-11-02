@@ -44,6 +44,7 @@
 #include <G4UIcmdWithAString.hh>
 #include <G4UIcmdWithAnInteger.hh>
 #include <G4UIcmdWithABool.hh>
+#include <G4UIcmdWithoutParameter.hh>
 #include "CexmcRunManager.hh"
 #include "CexmcRunManagerMessenger.hh"
 #include "CexmcMessenger.hh"
@@ -57,7 +58,7 @@ CexmcRunManagerMessenger::CexmcRunManagerMessenger(
 #ifdef CEXMC_USE_PERSISTENCY
     replayEvents( NULL ), seekTo( NULL ), skipInteractionsWithoutEDT( NULL ), 
 #endif
-    validateGdmlFile( NULL )
+    registerScenePrimitives( NULL ), validateGdmlFile( NULL )
 {
     setProductionModel = new G4UIcmdWithAString(
         ( CexmcMessenger::physicsDirName + "productionModel" ).c_str(), this );
@@ -85,8 +86,8 @@ CexmcRunManagerMessenger::CexmcRunManagerMessenger(
             "    interaction - events with studied interaction triggered,\n"
             "    trigger - only events with trigger" );
     setEventCountPolicy->SetParameterName( "EventCountPolicy", false );
-    setEventCountPolicy->SetDefaultValue( "all" );
     setEventCountPolicy->SetCandidates( "all interaction trigger" );
+    setEventCountPolicy->SetDefaultValue( "all" );
     setEventCountPolicy->AvailableForStates( G4State_PreInit, G4State_Idle );
 
     setEventDataVerboseLevel = new G4UIcmdWithAString(
@@ -98,8 +99,8 @@ CexmcRunManagerMessenger::CexmcRunManagerMessenger(
             "    interaction - when studied interaction triggered (TPT)" );
     setEventDataVerboseLevel->SetParameterName( "EventDataVerboseLevel",
                                                 false );
-    setEventDataVerboseLevel->SetDefaultValue( "trigger" );
     setEventDataVerboseLevel->SetCandidates( "nosave trigger interaction" );
+    setEventDataVerboseLevel->SetDefaultValue( "trigger" );
     setEventDataVerboseLevel->AvailableForStates( G4State_PreInit,
                                                   G4State_Idle );
 
@@ -111,8 +112,8 @@ CexmcRunManagerMessenger::CexmcRunManagerMessenger(
            "\n    If number of events is 0 (or not specified) then all"
            "\n    run will be replayed" );
     replayEvents->SetParameterName( "ReplayEvents", true );
-    replayEvents->SetDefaultValue( 0 );
     replayEvents->SetRange( "ReplayEvents >= 0" );
+    replayEvents->SetDefaultValue( 0 );
     replayEvents->AvailableForStates( G4State_PreInit, G4State_Idle );
 
     seekTo = new G4UIcmdWithAnInteger(
@@ -123,8 +124,8 @@ CexmcRunManagerMessenger::CexmcRunManagerMessenger(
            "\n    first recorded event with interaction after fourth recorded"
            "\n    event with trigger" );
     seekTo->SetParameterName( "SeekTo", false );
-    seekTo->SetDefaultValue( 0 );
     seekTo->SetRange( "SeekTo >= 0" );
+    seekTo->SetDefaultValue( 0 );
     seekTo->AvailableForStates( G4State_PreInit, G4State_Idle );
 
     skipInteractionsWithoutEDT = new G4UIcmdWithABool(
@@ -140,6 +141,14 @@ CexmcRunManagerMessenger::CexmcRunManagerMessenger(
     skipInteractionsWithoutEDT->AvailableForStates( G4State_PreInit,
                                                     G4State_Idle );
 #endif
+
+    registerScenePrimitives = new G4UIcmdWithoutParameter(
+        ( CexmcMessenger::visDirName + "registerScenePrimitives" ).c_str(),
+        this );
+    registerScenePrimitives->SetGuidance( "Register custom scene primitives "
+        "(radial lines,\n    inner crystals highlights etc.)" );
+    registerScenePrimitives->AvailableForStates( G4State_PreInit,
+                                                 G4State_Idle );
 
     validateGdmlFile = new G4UIcmdWithABool(
         ( CexmcMessenger::geometryDirName + "validateGdmlFile" ).c_str(),
@@ -163,6 +172,7 @@ CexmcRunManagerMessenger::~CexmcRunManagerMessenger()
     delete seekTo;
     delete skipInteractionsWithoutEDT;
 #endif
+    delete registerScenePrimitives;
     delete validateGdmlFile;
 }
 
@@ -265,6 +275,11 @@ void  CexmcRunManagerMessenger::SetNewValue( G4UIcommand *  cmd,
             break;
         }
 #endif
+        if ( cmd == registerScenePrimitives )
+        {
+            runManager->RegisterScenePrimitives();
+            break;
+        }
         if ( cmd == validateGdmlFile )
         {
             runManager->SetGdmlFileValidation(

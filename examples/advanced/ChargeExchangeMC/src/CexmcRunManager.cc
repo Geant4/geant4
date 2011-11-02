@@ -43,6 +43,7 @@
 
 #include <stdlib.h>
 #include <sys/stat.h>
+#include <vector>
 #include <fstream>
 #ifdef CEXMC_USE_PERSISTENCY
 #include <boost/archive/binary_iarchive.hpp>
@@ -59,6 +60,9 @@
 #include <G4Region.hh>
 #include <G4RegionStore.hh>
 #include <G4ProductionCuts.hh>
+#include <G4VisManager.hh>
+#include <G4Scene.hh>
+#include <G4VModel.hh>
 #include "CexmcRunManager.hh"
 #include "CexmcRunManagerMessenger.hh"
 #include "CexmcRunAction.hh"
@@ -87,6 +91,7 @@
 #include "CexmcBasicPhysicsSettings.hh"
 #include "CexmcSensitiveDetectorsAttributes.hh"
 #include "CexmcCustomFilterEval.hh"
+#include "CexmcScenePrimitives.hh"
 
 
 namespace
@@ -141,35 +146,11 @@ CexmcRunManager::CexmcRunManager( const G4String &  projectId,
 }
 
 
-void  CexmcRunManager::BeamParticleChangeHook( void )
-{
-    const CexmcEventAction *  eventAction(
-                static_cast< const CexmcEventAction * >( userEventAction ) );
-    if ( ! eventAction )
-        throw CexmcException( CexmcWeirdException );
-
-    CexmcEventAction *        theEventAction( const_cast< CexmcEventAction * >(
-                                                                eventAction ) );
-    theEventAction->BeamParticleChangeHook();
-}
-
-
 CexmcRunManager::~CexmcRunManager()
 {
-#ifdef CEXMC_USE_PERSISTENCY
-    if ( ProjectIsRead() && zipGdmlFile )
-    {
-        G4String  cmd( G4String( "bzip2 " ) + projectsDir + "/" + rProject +
-                       gdmlFileExtension );
-        if ( system( cmd ) != 0 )
-            G4cerr << "Failed to zip geometry data" << G4endl;
-    }
-
 #ifdef CEXMC_USE_CUSTOM_FILTER
     delete customFilter;
 #endif
-#endif
-
     delete messenger;
 }
 
@@ -182,8 +163,8 @@ void  CexmcRunManager::ReadPreinitProjectData( void )
         return;
 
     /* read run data */
-    std::ifstream    runDataFile( ( projectsDir + "/" + rProject + ".rdb" ).
-                                  c_str() );
+    std::ifstream  runDataFile( ( projectsDir + "/" + rProject + ".rdb" ).
+                                c_str() );
     if ( ! runDataFile )
         throw CexmcException( CexmcReadProjectIncomplete );
 
@@ -197,13 +178,16 @@ void  CexmcRunManager::ReadPreinitProjectData( void )
     productionModelType = sObject.productionModelType;
 
     /* read gdml file */
-    G4String  fileExtension( zipGdmlFile ? gdmlbz2FileExtension :
-                                           gdmlFileExtension );
-    G4String  cmd( G4String( "cp " ) + projectsDir + "/" + rProject +
-                   fileExtension + " " + projectsDir + "/" + projectId +
-                   fileExtension );
-    if ( ProjectIsSaved() && system( cmd ) != 0 )
-        throw CexmcException( CexmcReadProjectIncomplete );
+    G4String       cmd;
+    if ( ProjectIsSaved() )
+    {
+        G4String  fileExtension( zipGdmlFile ? gdmlbz2FileExtension :
+                                               gdmlFileExtension );
+        cmd = G4String( "cp " ) + projectsDir + "/" + rProject + fileExtension +
+                            " " + projectsDir + "/" + projectId + fileExtension;
+        if ( system( cmd ) != 0 )
+            throw CexmcException( CexmcReadProjectIncomplete );
+    }
 
     if ( zipGdmlFile )
     {
@@ -331,6 +315,8 @@ void  CexmcRunManager::ReadProject( void )
     reconstructor->SetAbsorbedEnergyCutCLWidth( sObject.aeCutCLWidth );
     reconstructor->SetAbsorbedEnergyCutCRWidth( sObject.aeCutCRWidth );
     reconstructor->SetAbsorbedEnergyCutEllipseAngle( sObject.aeCutAngle );
+    reconstructor->SetExpectedMomentumAmp( sObject.expectedMomentumAmp );
+    reconstructor->SetEDCollectionAlgorithm( sObject.edCollectionAlgorithm );
 
     physicsManager->SetProposedMaxIL( sObject.proposedMaxIL );
 
@@ -412,7 +398,7 @@ void  CexmcRunManager::SaveProject( void )
         nmbOfSavedFastEvents = run->GetNmbOfSavedFastEvents();
     }
 
-    CexmcRunSObject  sObjectToWrite(
+    CexmcRunSObject  sObjectToWrite = {
         basePhysicsUsed, productionModelType, gdmlFileName, etaDecayTable,
         physicsManager->GetProductionModel()->GetAngularRanges(),
         physicsManager->GetProductionModel()->IsFermiMotionOn(),
@@ -456,7 +442,9 @@ void  CexmcRunManager::SaveProject( void )
         nmbOfFalseHitsTriggeredRec, nmbOfSavedEvents, nmbOfSavedFastEvents,
         numberOfEventsProcessed, numberOfEventsProcessedEffective,
         numberOfEventToBeProcessed, rProject, skipInteractionsWithoutEDTonWrite,
-        cfFileName, evDataVerboseLevel, physicsManager->GetProposedMaxIL() );
+        cfFileName, evDataVerboseLevel, physicsManager->GetProposedMaxIL(),
+        reconstructor->GetExpectedMomentumAmp(),
+        reconstructor->GetEDCollectionAlgorithm(), 0 };
 
     std::ofstream   runDataFile( ( projectsDir + "/" + projectId + ".rdb" ).
                                         c_str() );
@@ -465,20 +453,6 @@ void  CexmcRunManager::SaveProject( void )
         boost::archive::binary_oarchive  archive( runDataFile );
         archive << sObjectToWrite;
     }
-
-    /* save gdml file */
-    G4String            cmd( G4String( "cp " ) + gdmlFileName + " " +
-                             projectsDir + "/" + projectId +
-                             gdmlFileExtension );
-    CexmcExceptionType  exceptionType( CexmcSystemException );
-    if ( zipGdmlFile )
-    {
-        cmd = G4String( "bzip2 -c " ) + gdmlFileName + " > " + projectsDir +
-                                        "/" + projectId + gdmlbz2FileExtension;
-        exceptionType = CexmcFileCompressException;
-    }
-    if ( system( cmd ) != 0 )
-        throw CexmcException( exceptionType );
 }
 
 #endif
@@ -490,7 +464,7 @@ void  CexmcRunManager::DoCommonEventLoop( G4int  nEvent, const G4String &  cmd,
     G4int  iEvent( 0 );
     G4int  iEventEffective( 0 );
 
-    for( iEvent = 0; iEventEffective < nEvent; ++iEvent )
+    for ( iEvent = 0; iEventEffective < nEvent; ++iEvent )
     {
         currentEvent = GenerateEvent( iEvent );
         eventManager->ProcessOneEvent( currentEvent );
@@ -515,11 +489,11 @@ void  CexmcRunManager::DoCommonEventLoop( G4int  nEvent, const G4String &  cmd,
         }
         AnalyzeEvent( currentEvent );
         UpdateScoring();
-        if( iEvent < nSelect )
+        if ( iEvent < nSelect )
             G4UImanager::GetUIpointer()->ApplyCommand( cmd );
         StackPreviousEvent( currentEvent );
         currentEvent = 0;
-        if( runAborted )
+        if ( runAborted )
             break;
     }
 
@@ -939,7 +913,6 @@ void  CexmcRunManager::DoEventLoop( G4int  nEvent, const char *  macroFile,
             std::ofstream   eventsDataFile(
                         ( projectsDir + "/" + projectId + ".edb" ).c_str() );
             boost::archive::binary_oarchive  eventsArchive_( eventsDataFile );
-            eventsArchive = &eventsArchive_;
             std::ofstream   fastEventsDataFile(
                         ( projectsDir + "/" + projectId + ".fdb" ).c_str() );
             boost::archive::binary_oarchive  fastEventsArchive_(
@@ -979,12 +952,12 @@ void  CexmcRunManager::DoEventLoop( G4int  nEvent, const char *  macroFile,
     DoCommonEventLoop( nEvent, cmd, nSelect );
 #endif
 
-    if( verboseLevel > 0 )
+    if ( verboseLevel > 0 )
     {
         timer->Stop();
         G4cout << "Run terminated." << G4endl;
         G4cout << "Run Summary" << G4endl;
-        if( runAborted )
+        if ( runAborted )
         {
             G4cout << "  Run Aborted after " << numberOfEventsProcessed <<
                       " events processed." << G4endl;
@@ -1006,6 +979,8 @@ void  CexmcRunManager::PrintReadRunData( void ) const
 {
     if ( ! ProjectIsRead() )
         return;
+
+    G4bool  refCrystalInfoPrinted( false );
 
     G4cout << CEXMC_LINE_START << "Run data read from project '" << rProject <<
               "'" << G4endl;
@@ -1105,6 +1080,20 @@ void  CexmcRunManager::PrintReadRunData( void ) const
                   sObject.crystalResolutionData;
     }
     G4cout << "  -- Reconstructor settings: " << G4endl;
+    if ( sObject.expectedMomentumAmp > 0 )
+    {
+        G4cout << "     -- expected momentum in the target: " <<
+                  G4BestUnit( sObject.expectedMomentumAmp, "Energy" ) << G4endl;
+    }
+    G4cout << "     -- ed collection algorithm (0 - all, 1 - adjacent): " <<
+              sObject.edCollectionAlgorithm << G4endl;
+    if ( sObject.edCollectionAlgorithm == CexmcCollectEDInAdjacentCrystals )
+    {
+        G4cout <<
+            "     -- inner crystal used as reference (0 - no, 1 - yes): " <<
+            sObject.useInnerRefCrystal << G4endl;
+        refCrystalInfoPrinted = true;
+    }
     G4cout << "     -- entry point definition algorithm " << G4endl;
     G4cout << "        (0 - center of calorimeter, 1 - center of crystal with "
                        "max ED," << G4endl;
@@ -1122,12 +1111,13 @@ void  CexmcRunManager::PrintReadRunData( void ) const
             "     -- crystal selection algorithm (0 - all, 1 - adjacent): " <<
             sObject.csAlgorithm << G4endl;
     }
-    if ( sObject.epDefinitionAlgorithm ==
+    if ( ! refCrystalInfoPrinted &&
+         ( sObject.epDefinitionAlgorithm ==
                                 CexmcEntryPointInTheCenterOfCrystalWithMaxED ||
          ( ( sObject.epDefinitionAlgorithm == CexmcEntryPointBySqrtEDWeights ||
              sObject.epDefinitionAlgorithm ==
                                         CexmcEntryPointByLinearEDWeights ) &&
-               sObject.csAlgorithm == CexmcSelectAdjacentCrystals ) )
+               sObject.csAlgorithm == CexmcSelectAdjacentCrystals ) ) )
     {
         G4cout <<
             "     -- inner crystal used as reference (0 - no, 1 - yes): " <<
@@ -1168,7 +1158,7 @@ void  CexmcRunManager::PrintReadRunData( void ) const
         G4cout << "     -- absorbed energy cut angle of the ellipse: " <<
                   sObject.aeCutAngle / deg << " deg" << G4endl;
     }
-    G4cout << "  -- Setup acceptances (real, rec): " << G4endl;
+    G4cout << G4endl;
     CexmcRunAction::PrintResults( sObject.nmbOfHitsSampled,
                                   sObject.nmbOfHitsSampledFull,
                                   sObject.nmbOfHitsTriggeredRealRange,
@@ -1177,13 +1167,15 @@ void  CexmcRunManager::PrintReadRunData( void ) const
                                   sObject.angularRanges,
                                   sObject.nmbOfFalseHitsTriggeredEDT,
                                   sObject.nmbOfFalseHitsTriggeredRec );
-
     G4cout << G4endl;
 }
 
 
 void  CexmcRunManager::ReadAndPrintEventsData( void ) const
 {
+    if ( ! ProjectIsRead() )
+        return;
+
     CexmcEventSObject  evSObject;
 
     /* read events data */
@@ -1229,6 +1221,9 @@ void  CexmcRunManager::ReadAndPrintEventsData( void ) const
 void  CexmcRunManager::PrintReadData(
                             const CexmcOutputDataTypeSet &  outputData ) const
 {
+    if ( ! ProjectIsRead() )
+        return;
+
     G4bool  addSpace( false );
 
     CexmcOutputDataTypeSet::const_iterator  found(
@@ -1238,7 +1233,15 @@ void  CexmcRunManager::PrintReadData(
         G4String  cmd( G4String( "cat " ) + projectsDir + "/" + rProject +
                        gdmlFileExtension );
         if ( system( cmd ) != 0 )
-            G4cerr << "Failed to cat geometry data" << G4endl;
+            throw CexmcException( CexmcReadProjectIncomplete );
+
+        if ( zipGdmlFile )
+        {
+            cmd = G4String( "bzip2 " ) + projectsDir + "/" + rProject +
+                                                            gdmlFileExtension;
+            if ( system( cmd ) != 0 )
+                throw CexmcException( CexmcFileCompressException );
+        }
 
         addSpace = true;
     }
@@ -1267,6 +1270,7 @@ void  CexmcRunManager::PrintReadData(
         {
             etaDecayTable->GetDecayChannel( k->first )->SetBR( k->second );
         }
+
         PrintReadRunData();
     }
 }
@@ -1297,4 +1301,84 @@ void  CexmcRunManager::SetCustomFilter( const G4String &  cfFileName_ )
 #endif
 
 #endif
+
+
+void  CexmcRunManager::RegisterScenePrimitives( void )
+{
+    G4VisManager *  visManager( static_cast< G4VisManager * >(
+                                    G4VVisManager::GetConcreteInstance() ) );
+    if ( ! visManager )
+        return;
+
+    G4Scene *       curScene( visManager->GetCurrentScene() );
+    if ( ! curScene )
+        return;
+
+    /* G4Scene declarations lack this kind of typedef */
+    typedef std::vector< G4VModel * >  MList;
+    const MList &  mList( curScene->GetRunDurationModelList() );
+
+    for ( MList::const_iterator  k( mList.begin() ); k != mList.end(); ++k )
+    {
+        if ( ( *k )->GetGlobalDescription() == CexmcScenePrimitivesDescription )
+            return;
+    }
+
+    CexmcSetup *  setup( static_cast< CexmcSetup * >( userDetector ) );
+    if ( ! setup )
+        throw CexmcException( CexmcWeirdException );
+
+    /* BEWARE: looks like G4Scene won't delete models from its lists upon
+     * termination! Hence destructor of the new model won't be called */
+    curScene->AddRunDurationModel( new CexmcScenePrimitives( setup ) );
+}
+
+
+void  CexmcRunManager::BeamParticleChangeHook( void )
+{
+    const CexmcEventAction *  eventAction(
+                static_cast< const CexmcEventAction * >( userEventAction ) );
+    if ( ! eventAction )
+        throw CexmcException( CexmcWeirdException );
+
+    CexmcEventAction *        theEventAction( const_cast< CexmcEventAction * >(
+                                                                eventAction ) );
+    theEventAction->BeamParticleChangeHook();
+}
+
+
+void  CexmcRunManager::SetupConstructionHook( void )
+{
+#ifdef CEXMC_USE_PERSISTENCY
+    /* save gdml file */
+    G4String            cmd( "" );
+    CexmcExceptionType  exceptionType( CexmcSystemException );
+
+    if ( zipGdmlFile )
+    {
+        if ( ProjectIsRead() )
+        {
+            cmd = G4String( "bzip2 " ) + projectsDir + "/" + rProject +
+                                                            gdmlFileExtension;
+        }
+        else
+        {
+            if ( ProjectIsSaved() )
+                cmd = G4String( "bzip2 -c " ) + gdmlFileName + " > " +
+                        projectsDir + "/" + projectId + gdmlbz2FileExtension;
+        }
+        exceptionType = CexmcFileCompressException;
+    }
+    else
+    {
+        if ( ! ProjectIsRead() && ProjectIsSaved() )
+            cmd = G4String( "cp " ) + gdmlFileName + " " + projectsDir + "/" +
+                                                projectId + gdmlFileExtension;
+        /* else already saved in ReadPreinitProjectData() */
+    }
+
+    if ( ! cmd.empty() && system( cmd ) != 0 )
+        throw CexmcException( exceptionType );
+#endif
+}
 

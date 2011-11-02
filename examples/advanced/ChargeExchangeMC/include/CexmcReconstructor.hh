@@ -56,7 +56,7 @@ class  CexmcEnergyDepositStore;
 class  CexmcReconstructor
 {
     public:
-        CexmcReconstructor();
+        explicit CexmcReconstructor();
 
         virtual ~CexmcReconstructor();
 
@@ -131,6 +131,19 @@ class  CexmcReconstructor
 
         void                   ReconstructAngle( void );
 
+    private:
+        void  CollectEDInAdjacentCrystals(
+                const CexmcEnergyDepositCalorimeterCollection &  edHits,
+                G4int  row, G4int  column, G4double &  ed );
+
+        void  CalculateWeightedEPPosition(
+                const CexmcEnergyDepositCalorimeterCollection &  edHits,
+                G4int  row, G4int  column, G4double &  x, G4double &  y,
+                G4double &  ed );
+
+        void  TransformToAdjacentInnerCrystal( G4int &  column,
+                                               G4int &  row ) const;
+
     protected:
         G4bool                               hasBasicTrigger;
 
@@ -172,6 +185,13 @@ class  CexmcReconstructor
         G4ThreeVector                        targetEPWorldDirection;
 
         G4double                             theAngle;
+
+    protected:
+        G4double                             calorimeterEDLeftAdjacent;
+
+        G4double                             calorimeterEDRightAdjacent;
+
+        G4bool                               collectEDInAdjacentCrystals;
 
     private:
         CexmcSetup::CalorimeterGeometryData  calorimeterGeometry;
@@ -352,6 +372,20 @@ inline G4double  CexmcReconstructor::GetTheAngle( void ) const
 inline G4bool  CexmcReconstructor::HasBasicTrigger( void ) const
 {
     return hasBasicTrigger;
+}
+
+
+inline void  CexmcReconstructor::TransformToAdjacentInnerCrystal(
+                                        G4int &  column, G4int &  row ) const
+{
+    if ( column == 0 )
+        ++column;
+    if ( column == calorimeterGeometry.nCrystalsInRow - 1 )
+        --column;
+    if ( row == 0 )
+        ++row;
+    if ( row == calorimeterGeometry.nCrystalsInColumn - 1 )
+        --row;
 }
 
 

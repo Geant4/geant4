@@ -48,7 +48,7 @@
 /cexmc/gun/particle pi-
 /cexmc/gun/position 0 0 -36 cm
 /cexmc/gun/direction 0 0 1
-/cexmc/gun/momentumAmp 730 MeV
+/cexmc/gun/momentumAmp 732.1 MeV
 /cexmc/gun/fwhmPosX 3.0 cm
 /cexmc/gun/fwhmPosY 3.5 cm
 /cexmc/gun/fwhmDirX 1.12 deg
@@ -62,9 +62,12 @@
 #/cexmc/physics/addAngularRange -0.5 -0.8 2
 /cexmc/physics/setAngularRange 1.0 -1.0 10
 
+/cexmc/reconstructor/momentumAmpDiff -2.1 MeV
+
+/cexmc/reconstructor/edCollectionAlgo all
+/cexmc/reconstructor/useInnerRefCrystal true
 /cexmc/reconstructor/entryPointDefinitionAlgo sqrt
 /cexmc/reconstructor/crystalSelectionAlgo all
-/cexmc/reconstructor/useInnerRefCrystal true
 /cexmc/reconstructor/entryPointDepthDefinitionAlgo plain
 /cexmc/reconstructor/entryPointDepth 0 cm
 /cexmc/reconstructor/useTableMass false

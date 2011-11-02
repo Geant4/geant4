@@ -58,7 +58,7 @@ class  CexmcEnergyDepositInLeftRightSet : public CexmcSimpleEnergyDeposit
                                           const CexmcSetup *  setup );
 
     public:
-        void  PrintAll( void );
+        void   PrintAll( void );
 
     protected:
         G4int  GetIndex( G4Step *  step );
@@ -72,7 +72,7 @@ class  CexmcEnergyDepositInLeftRightSet : public CexmcSimpleEnergyDeposit
         static G4int  GetLeftRightBitsOffset( void );
 
     protected:
-        static G4int  leftRightBitsOffset;
+        static const G4int  leftRightBitsOffset = 16;
 };
 
 

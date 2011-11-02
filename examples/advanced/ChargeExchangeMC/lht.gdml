@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- also schema located at "/usr/local/share/GDML_3_0_0/schema/gdml.xsd -->
 <gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:gdml="http://cern.ch/2001/Schemas/GDML"
     xsi:noNamespaceSchemaLocation=
@@ -18,24 +17,6 @@
 
         <constant name="NCrystalsHor" value="6"/>
         <constant name="NCrystalsVert" value="4"/>
-
-        <!-- sensitive detector roles; -->
-        <!-- a single logical volume may have only one detector role, -->
-        <!-- for example vMonitor may not have MonitorRole and TargetRole -->
-        <!-- simultaneously -->
-        <constant name="MonitorRole" value="0"/>
-        <constant name="VetoCounterRole" value="1"/>
-        <constant name="CalorimeterRole" value="2"/>
-        <constant name="TargetRole" value="3"/>
-
-        <!-- region types -->
-        <constant name="CalorimeterRegion" value="0"/>
-
-        <!-- special volumes -->
-        <constant name="MonitorVolume" value="0"/>
-        <constant name="VetoCounterVolume" value="1"/>
-        <constant name="CalorimeterVolume" value="2"/>
-        <constant name="TargetVolume" value="3"/>
 
 
         <!-- these values are supposed to be changed -->
@@ -77,8 +58,7 @@
         <constant name="CalorimeterLength" value="CrystalLength"/>
         <constant name="CalorimeterHeight"
             value="CrystalHeight * NCrystalsVert"/>
-        <constant name="CalorimeterWidth"
-            value="CrystalWidth * NCrystalsHor"/>
+        <constant name="CalorimeterWidth" value="CrystalWidth * NCrystalsHor"/>
         <constant name="VetoCounterWidth" value="CalorimeterWidth"/>
         <constant name="VetoCounterHeight" value="25.0"/>
         <constant name="VetoCounterThickness" value="0.5"/>
@@ -111,7 +91,8 @@
         <constant name="VetoCounterLeftDistance"
             value="CalorimeterLeftDistance - VetoCounterDistanceToCalorimeter"/>
         <constant name="VetoCounterRightDistance"
-            value="CalorimeterRightDistance - VetoCounterDistanceToCalorimeter"/>
+            value="CalorimeterRightDistance -
+                   VetoCounterDistanceToCalorimeter"/>
 
         <!-- if TargetColumnsRotWithTarget is 1 then target columns -->
         <!-- will rotate together with target, if its value is 0 -->
@@ -124,58 +105,76 @@
         <constant name="TargetWindowEntranceDebugShift" value="0.0"/>
         <constant name="TargetWindowCuttingShift" value="1.0"/>
         <constant name="TargetWindowDistance"
-            value="TargetWindowLength/2 - TargetWindowCuttingShift + TargetOuterCoverRadius"/>
+            value="TargetWindowLength/2 - TargetWindowCuttingShift +
+                   TargetOuterCoverRadius"/>
         <constant name="TargetWindowCapDistance"
-            value="TargetWindowDistance + TargetWindowLength/2 - TargetWindowCapLength/2"/>
+            value="TargetWindowDistance + TargetWindowLength/2 -
+                   TargetWindowCapLength/2"/>
         <constant name="TargetWindowDebugDistance"
             value="TargetWindowDistance + TargetWindowDistanceDebugShift"/>
         <constant name="TargetWindowEntranceDistance"
-            value="TargetWindowDebugDistance + TargetWindowLength/2 - TargetWindowEntranceOffset + TargetWindowEntranceDebugShift"/>
+            value="TargetWindowDebugDistance + TargetWindowLength/2 -
+                   TargetWindowEntranceOffset +
+                   TargetWindowEntranceDebugShift"/>
         <constant name="TargetWindowCoverThickness"
-            value="TargetWindowMylarCoverLength + TargetWindowAluminiumCoverLength"/>
+            value="TargetWindowMylarCoverLength +
+                   TargetWindowAluminiumCoverLength"/>
 
         <!-- positions and rotations -->
         <position name="MonitorPos" x="0.0" y="0.0" z="MonitorPosZ" unit="cm"/>
-        <position name="MonitorBackPos" x="0.0" y="0.0" z="MonitorBackPosZ" unit="cm"/>
+        <position name="MonitorBackPos" x="0.0" y="0.0" z="MonitorBackPosZ"
+            unit="cm"/>
         <position name="TargetPos" x="TargetPosX" y="TargetPosY" z="TargetPosZ"
             unit="cm"/>
         <rotation name="TargetRot" x="90.0" y="0.0" z="-TargetRotZ" unit="deg"/>
         <position name="CalorimeterLeftPos"
-            x="(CalorimeterLeftDistance + CalorimeterLength/2) * sin(CalorimeterLeftAngle/180*pi)"
+            x="(CalorimeterLeftDistance + CalorimeterLength/2) *
+               sin(CalorimeterLeftAngle/180*pi)"
             y="CalorimeterLeftVertShift"
-            z="(CalorimeterLeftDistance + CalorimeterLength/2) * cos(CalorimeterLeftAngle/180*pi)"
+            z="(CalorimeterLeftDistance + CalorimeterLength/2) *
+               cos(CalorimeterLeftAngle/180*pi)"
             unit="cm"/>
-        <rotation name="CalorimeterLeftRot" x="0.0" y="-CalorimeterLeftAngle" z="0.0" unit="deg"/>
+        <rotation name="CalorimeterLeftRot" x="0.0" y="-CalorimeterLeftAngle"
+            z="0.0" unit="deg"/>
         <position name="CalorimeterRightPos"
-            x="- (CalorimeterRightDistance + CalorimeterLength/2) * sin(CalorimeterRightAngle/180*pi)"
+            x="-(CalorimeterRightDistance + CalorimeterLength/2) *
+               sin(CalorimeterRightAngle/180*pi)"
             y="CalorimeterRightVertShift"
-            z="(CalorimeterRightDistance + CalorimeterLength/2) * cos(CalorimeterRightAngle/180*pi)"
+            z="(CalorimeterRightDistance + CalorimeterLength/2) *
+               cos(CalorimeterRightAngle/180*pi)"
             unit="cm"/>
-        <rotation name="CalorimeterRightRot" x="0.0" y="CalorimeterRightAngle" z="0.0" unit="deg"/>
+        <rotation name="CalorimeterRightRot" x="0.0" y="CalorimeterRightAngle"
+            z="0.0" unit="deg"/>
         <position name="VetoCounterLeftPos"
             x="VetoCounterLeftDistance * sin(CalorimeterLeftAngle/180*pi)"
             y="CalorimeterLeftVertShift"
             z="VetoCounterLeftDistance * cos(CalorimeterLeftAngle/180*pi)"
             unit="cm"/>
         <position name="VetoCounterRightPos"
-            x="- VetoCounterRightDistance * sin(CalorimeterRightAngle/180*pi)"
+            x="-VetoCounterRightDistance * sin(CalorimeterRightAngle/180*pi)"
             y="CalorimeterRightVertShift"
             z="VetoCounterRightDistance * cos(CalorimeterRightAngle/180*pi)"
             unit="cm"/>
         <position name="TargetColumn1Pos"
-            x="TargetPosX + TargetColumnDistance * sin((TargetColumn1Angle + TargetRotZ * TargetColumnsRotWithTarget)/180*pi)"
+            x="TargetPosX + TargetColumnDistance * sin((TargetColumn1Angle +
+               TargetRotZ * TargetColumnsRotWithTarget)/180*pi)"
             y="TargetPosY"
-            z="TargetPosZ + TargetColumnDistance * cos((TargetColumn1Angle + TargetRotZ * TargetColumnsRotWithTarget)/180*pi)"
+            z="TargetPosZ + TargetColumnDistance * cos((TargetColumn1Angle +
+               TargetRotZ * TargetColumnsRotWithTarget)/180*pi)"
             unit="cm"/>
         <position name="TargetColumn2Pos"
-            x="TargetPosX + TargetColumnDistance * sin((TargetColumn2Angle + TargetRotZ * TargetColumnsRotWithTarget)/180*pi)"
+            x="TargetPosX + TargetColumnDistance * sin((TargetColumn2Angle +
+               TargetRotZ * TargetColumnsRotWithTarget)/180*pi)"
             y="TargetPosY"
-            z="TargetPosZ + TargetColumnDistance * cos((TargetColumn2Angle + TargetRotZ * TargetColumnsRotWithTarget)/180*pi)"
+            z="TargetPosZ + TargetColumnDistance * cos((TargetColumn2Angle +
+               TargetRotZ * TargetColumnsRotWithTarget)/180*pi)"
             unit="cm"/>
         <position name="TargetColumn3Pos"
-            x="TargetPosX + TargetColumnDistance * sin((TargetColumn3Angle + TargetRotZ * TargetColumnsRotWithTarget)/180*pi)"
+            x="TargetPosX + TargetColumnDistance * sin((TargetColumn3Angle +
+               TargetRotZ * TargetColumnsRotWithTarget)/180*pi)"
             y="TargetPosY"
-            z="TargetPosZ + TargetColumnDistance * cos((TargetColumn3Angle + TargetRotZ * TargetColumnsRotWithTarget)/180*pi)"
+            z="TargetPosZ + TargetColumnDistance * cos((TargetColumn3Angle +
+               TargetRotZ * TargetColumnsRotWithTarget)/180*pi)"
             unit="cm"/>
         <position name="TargetInnerColumn1Pos"
             x="TargetInnerColumnDistance * sin(TargetInnerColumnAngle/180*pi)"
@@ -203,42 +202,58 @@
         <position name="InnerCuprumRingLowerPos" x="TargetPosX"
             y="TargetPosY - InnerCuprumRingGauge - InnerCuprumRingHeight/2"
             z="TargetPosZ" unit="cm"/>
-        <position name="TargetWindowCutPos1" x="0.0" y="0.0" z="TargetWindowDistance"
-            unit="cm"/>
+        <position name="TargetWindowCutPos1" x="0.0" y="0.0"
+            z="TargetWindowDistance" unit="cm"/>
         <position name="TargetWindowCutPos2" x="0.0"
             y="OuterFerrumRingGauge + OuterFerrumRingHeight/2"
             z="TargetWindowDistance" unit="cm"/>
         <position name="TargetWindowCutPos3" x="0.0"
             y="-OuterFerrumRingGauge - OuterFerrumRingHeight/2"
             z="TargetWindowDistance" unit="cm"/>
-        <rotation name="TargetWindowCutRot" x="90.0" y="0.0" z="0.0" unit="deg"/>
+        <rotation name="TargetWindowCutRot" x="90.0" y="0.0" z="0.0"
+            unit="deg"/>
         <position name="TargetOuterCoverCutPos" x="0.0"
             y="TargetWindowDistance" z="0.0" unit="cm"/>
-        <rotation name="TargetOuterCoverCutRot" x="90.0" y="0.0" z="0.0" unit="deg"/>
+        <rotation name="TargetOuterCoverCutRot" x="90.0" y="0.0" z="0.0"
+            unit="deg"/>
         <position name="TargetWindowPos"
             x="TargetPosX - TargetWindowDebugDistance * sin(TargetRotZ/180*pi)"
             y="TargetPosY"
             z="TargetPosZ - TargetWindowDebugDistance * cos(TargetRotZ/180*pi)"
             unit="cm"/>
-        <rotation name="TargetWindowRot" x="0.0" y="-TargetRotZ" z="0.0" unit="deg"/>
+        <rotation name="TargetWindowRot" x="0.0" y="-TargetRotZ" z="0.0"
+            unit="deg"/>
         <position name="TargetWindowMylarCoverPos"
-            x="TargetPosX - (TargetWindowEntranceDistance - TargetWindowCoverThickness/2) * sin(TargetRotZ/180*pi)"
+            x="TargetPosX -
+               (TargetWindowEntranceDistance - TargetWindowCoverThickness/2) *
+               sin(TargetRotZ/180*pi)"
             y="TargetPosY"
-            z="TargetPosZ - (TargetWindowEntranceDistance - TargetWindowCoverThickness/2) * cos(TargetRotZ/180*pi)"
+            z="TargetPosZ -
+               (TargetWindowEntranceDistance - TargetWindowCoverThickness/2) *
+               cos(TargetRotZ/180*pi)"
             unit="cm"/>
         <position name="TargetWindowAluminiumCoverPos"
-            x="TargetPosX - TargetWindowEntranceDistance * sin(TargetRotZ/180*pi)"
+            x="TargetPosX -
+               TargetWindowEntranceDistance * sin(TargetRotZ/180*pi)"
             y="TargetPosY"
-            z="TargetPosZ - TargetWindowEntranceDistance * cos(TargetRotZ/180*pi)"
+            z="TargetPosZ -
+               TargetWindowEntranceDistance * cos(TargetRotZ/180*pi)"
             unit="cm"/>
         <position name="TargetWindowCapPos"
-            x="TargetPosX - (TargetWindowCapDistance + TargetWindowDistanceDebugShift) * sin(TargetRotZ/180*pi)"
+            x="TargetPosX -
+               (TargetWindowCapDistance + TargetWindowDistanceDebugShift) *
+               sin(TargetRotZ/180*pi)"
             y="TargetPosY"
-            z="TargetPosZ - (TargetWindowCapDistance + TargetWindowDistanceDebugShift) * cos(TargetRotZ/180*pi)"
+            z="TargetPosZ -
+               (TargetWindowCapDistance + TargetWindowDistanceDebugShift) *
+               cos(TargetRotZ/180*pi)"
             unit="cm"/>
-        <position name="TargetVacuumUnionPos" x="0.0"
-            y="TargetWindowDistance - TargetWindowEntranceOffset -TargetWindowCoverThickness/2"
-            z="0.0" unit="cm"/>
+        <position name="TargetVacuumUnionPos"
+            x="0.0"
+            y="TargetWindowDistance - TargetWindowEntranceOffset -
+               TargetWindowCoverThickness/2"
+            z="0.0"
+            unit="cm"/>
     </define> 
 
     <materials>
@@ -315,9 +330,9 @@
         <tube name="sTargetWindowStub0" rmin="0" rmax="TargetWindowRadius"
             z="TargetWindowLength" deltaphi="FullCircle" aunit="deg"
             lunit="cm"/>
-        <tube name="sTargetWindowLongHole" rmin="0" rmax="TargetWindowHoleRadius"
-            z="TargetWindowLength + LENGTHMAKER" deltaphi="FullCircle"
-            aunit="deg" lunit="cm"/>
+        <tube name="sTargetWindowLongHole" rmin="0"
+            rmax="TargetWindowHoleRadius" z="TargetWindowLength + LENGTHMAKER"
+            deltaphi="FullCircle" aunit="deg" lunit="cm"/>
         <tube name="sTargetWindowHole" rmin="0" rmax="TargetWindowHoleRadius"
             z="TargetWindowLength" deltaphi="FullCircle" aunit="deg"
             lunit="cm"/>
@@ -336,8 +351,8 @@
         </subtraction>
         <tube name="sOuterFerrumRingWholeCylinder" rmin="0"
             rmax="TargetOuterCoverRadius + OuterFerrumRingThickness + EPSILON"
-            z="OuterFerrumRingHeight + EPSILON" deltaphi="FullCircle" aunit="deg"
-            lunit="cm"/>
+            z="OuterFerrumRingHeight + EPSILON" deltaphi="FullCircle"
+            aunit="deg" lunit="cm"/>
         <subtraction name="sTargetWindowStub3">
             <first ref="sTargetWindowStub2"/>
             <second ref="sOuterFerrumRingWholeCylinder"/>
@@ -365,19 +380,19 @@
             <positionref ref="TargetVacuumUnionPos"/>
             <rotationref ref="TargetOuterCoverCutRot"/>
         </union>
-        <tube name="sTargetWindowMylarCover" rmin="0" rmax="TargetWindowHoleRadius"
-            z="TargetWindowMylarCoverLength" deltaphi="FullCircle" aunit="deg"
-            lunit="cm"/>
-        <tube name="sTargetWindowAluminiumCover" rmin="0" rmax="TargetWindowHoleRadius"
-            z="TargetWindowAluminiumCoverLength" deltaphi="FullCircle" aunit="deg"
-            lunit="cm"/>
+        <tube name="sTargetWindowMylarCover" rmin="0"
+            rmax="TargetWindowHoleRadius" z="TargetWindowMylarCoverLength"
+            deltaphi="FullCircle" aunit="deg" lunit="cm"/>
+        <tube name="sTargetWindowAluminiumCover" rmin="0"
+            rmax="TargetWindowHoleRadius" z="TargetWindowAluminiumCoverLength"
+            deltaphi="FullCircle" aunit="deg" lunit="cm"/>
     </solids>
 
     <structure>
         <volume name="vMonitor">
             <materialref ref="Scintillator"/>
             <solidref ref="sMonitor"/>
-            <auxiliary auxtype="SpecialVolume" auxvalue="MonitorVolume"/>
+            <auxiliary auxtype="SpecialVolume" auxvalue="Monitor"/>
             <auxiliary auxtype="EnergyDepositDetector" auxvalue="MonitorRole"/>
             <auxiliary auxtype="TrackPointsDetector" auxvalue="MonitorRole"/>
         </volume>
@@ -388,7 +403,7 @@
         <volume name="vTarget">
             <materialref ref="G4_lH2"/>
             <solidref ref="sTarget"/>
-            <auxiliary auxtype="SpecialVolume" auxvalue="TargetVolume"/>
+            <auxiliary auxtype="SpecialVolume" auxvalue="Target"/>
             <auxiliary auxtype="TrackPointsDetector" auxvalue="TargetRole"/>
         </volume>
         <volume name="vTargetInnerCover">
@@ -454,13 +469,13 @@
                     <offset value="0" unit="cm"/>
                 </replicate_along_axis>
             </replicavol>
-            <auxiliary auxtype="SpecialVolume" auxvalue="CalorimeterVolume"/>
+            <auxiliary auxtype="SpecialVolume" auxvalue="Calorimeter"/>
             <auxiliary auxtype="SensitiveRegion" auxvalue="CalorimeterRegion"/>
         </volume>
         <volume name="vVetoCounter">
             <materialref ref="Scintillator"/>
             <solidref ref="sVetoCounter"/>
-            <auxiliary auxtype="SpecialVolume" auxvalue="VetoCounterVolume"/>
+            <auxiliary auxtype="SpecialVolume" auxvalue="VetoCounter"/>
             <auxiliary auxtype="EnergyDepositDetector"
                        auxvalue="VetoCounterRole"/>
             <auxiliary auxtype="TrackPointsDetector"

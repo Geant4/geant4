@@ -49,8 +49,6 @@
 #include <G4StepPoint.hh>
 #include <G4ThreeVector.hh>
 #include <G4AffineTransform.hh>
-#include "CexmcStudiedPhysics.hh"
-#include "CexmcStudiedProcess.hh"
 #include "CexmcPhysicsManager.hh"
 #include "CexmcProductionModel.hh"
 #include "CexmcIncidentParticleTrackInfo.hh"

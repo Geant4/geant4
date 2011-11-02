@@ -88,7 +88,7 @@ CexmcChargeExchangeProductionModel< OutputParticle >::
     outputParticle = OutputParticle::Definition();
     nucleusOutputParticle = G4Neutron::Definition();
 
-    nucleusParticleMass =  nucleusParticle->GetPDGMass();
+    nucleusParticleMass = nucleusParticle->GetPDGMass();
 
     productionModelData.incidentParticle = incidentParticle;
     productionModelData.nucleusParticle = nucleusParticle;

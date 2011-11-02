@@ -110,11 +110,11 @@ class  CexmcSetup : public G4VUserDetectorConstruction
         G4bool  IsRightCalorimeter( const G4VPhysicalVolume *  pVolume ) const;
 
     private:
-        void    SetupSpecialVolumes( G4GDMLParser &  gdmlParser );
+        void    SetupSpecialVolumes( const G4GDMLParser &  gdmlParser );
 
-        void    ReadTransforms( const G4GDMLParser & gdmlParser );
+        void    ReadTransforms( const G4GDMLParser &  gdmlParser );
 
-        void    ReadCalorimeterGeometryData( const G4LogicalVolume * lVolume );
+        void    ReadCalorimeterGeometryData( const G4LogicalVolume *  lVolume );
 
         void    ReadRightDetectors( void );
 
@@ -199,10 +199,8 @@ inline const G4LogicalVolume *  CexmcSetup::GetVolume(
     case Target :
         return targetVolume;
     default :
-        break;
+        return NULL;
     }
-
-    return NULL;
 }
 
 

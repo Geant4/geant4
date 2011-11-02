@@ -24,41 +24,60 @@
 // ********************************************************************
 //
 /*
- * ============================================================================
+ * =============================================================================
  *
- *       Filename:  CexmcEventFastSObject.cc
+ *       Filename:  CexmcScenePrimitivesMessenger.hh
  *
- *    Description:  event data serialization helper
+ *    Description:  draw auxiliary scene primitives
  *
  *        Version:  1.0
- *        Created:  02.01.2010 20:31:12
+ *        Created:  03.01.2011 12:34:09
  *       Revision:  none
  *       Compiler:  gcc
  *
  *         Author:  Alexey Radkov (), 
  *        Company:  PNPI
  *
- * ============================================================================
+ * =============================================================================
  */
 
-#ifdef CEXMC_USE_PERSISTENCY
+#ifndef CEXMC_SCENE_PRIMITIVES_MESSENGER_HH
+#define CEXMC_SCENE_PRIMITIVES_MESSENGER_HH
 
-#include "CexmcEventFastSObject.hh"
+#include <G4UImessenger.hh>
+
+class  G4UIcommand;
+class  G4UIcmdWith3Vector;
+class  G4UIcmdWithABool;
+class  G4UIcmdWithoutParameter;
+class  CexmcScenePrimitives;
 
 
-CexmcEventFastSObject::CexmcEventFastSObject()
+class  CexmcScenePrimitivesMessenger : public G4UImessenger
 {
-}
+    public:
+        explicit CexmcScenePrimitivesMessenger(
+                                    CexmcScenePrimitives *  scenePrimitives );
 
+        ~CexmcScenePrimitivesMessenger();
 
-CexmcEventFastSObject::CexmcEventFastSObject( G4int  eventId,
-                G4double  opCosThetaSCM, G4bool  edDigitizerHasTriggered,
-                G4bool  edDigitizerMonitorHasTriggered ) :
-    eventId( eventId ), opCosThetaSCM( opCosThetaSCM ),
-    edDigitizerHasTriggered( edDigitizerHasTriggered ),
-    edDigitizerMonitorHasTriggered( edDigitizerMonitorHasTriggered )
-{
-}
+    public:
+        void  SetNewValue( G4UIcommand *  cmd, G4String  value );
+
+    private:
+        CexmcScenePrimitives *     scenePrimitives;
+
+        G4UIcmdWith3Vector *       drawRadialLine;
+
+        G4UIcmdWithoutParameter *  clearRadialLines;
+
+        G4UIcmdWithABool *         markTargetCenter;
+
+        G4UIcmdWithABool *         highlightInnerCrystals;
+
+        G4UIcommand *              setColour;
+};
+
 
 #endif
 

@@ -55,7 +55,7 @@ class  CexmcEventInfo : public G4VUserEventInformation
                         G4bool  reconstructionIsOk );
 
     public:
-        void  Print( void ) const;
+        void    Print( void ) const;
 
     public:
         G4bool  EdTriggerIsOk( void ) const;

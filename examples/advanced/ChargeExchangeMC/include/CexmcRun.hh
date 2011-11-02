@@ -48,7 +48,9 @@
 #include <G4Run.hh>
 
 
-typedef std::map< G4int, G4int >  CexmcNmbOfHitsInRanges;
+typedef std::map< G4int, G4int >            CexmcNmbOfHitsInRanges;
+
+typedef CexmcNmbOfHitsInRanges::value_type  CexmcNmbOfHitsInRangesData;
 
 
 class  CexmcRun : public G4Run

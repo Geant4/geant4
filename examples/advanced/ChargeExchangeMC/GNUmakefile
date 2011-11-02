@@ -32,14 +32,6 @@ ifndef G4INSTALL
   G4INSTALL = ../../..
 endif
 
-ifdef BOOST_INCLUDE_PATH
-  CPPFLAGS += -I$(BOOST_INCLUDE_PATH)
-endif
-
-ifdef BOOST_LIBRARY_PATH
-  EXTRALIBS += -L$(BOOST_LIBRARY_PATH)
-endif
-
 ifeq ($(CEXMC_USE_GENBOD),yes)
   CPPFLAGS += -DCEXMC_USE_GENBOD
   EXTRALIBS += `cernlib geant321 phtools packlib kernlib`
@@ -58,6 +50,14 @@ ifeq ($(CEXMC_USE_GENBOD),yes)
       EXTRALIBS += -lgfortran
     endif
   endif
+endif
+
+ifdef BOOST_INCLUDE_PATH
+  CPPFLAGS += -I$(BOOST_INCLUDE_PATH)
+endif
+
+ifdef BOOST_LIBRARY_PATH
+  EXTRALIBS += -L$(BOOST_LIBRARY_PATH)
 endif
 
 ifeq ($(CEXMC_USE_PERSISTENCY),yes)

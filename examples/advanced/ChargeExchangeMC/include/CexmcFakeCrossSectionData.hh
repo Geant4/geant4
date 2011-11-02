@@ -26,12 +26,12 @@
 /*
  * =============================================================================
  *
- *       Filename:  CexmcSimpleRangeWithValue.cc
+ *       Filename:  CexmcFakeCrossSectionData.hh
  *
- *    Description:  auxiliary functions for simple range instances
+ *    Description:  fake cross section data (to be never really applied)
  *
  *        Version:  1.0
- *        Created:  17.02.2010 22:46:01
+ *        Created:  18.09.2011 21:47:10
  *       Revision:  none
  *       Compiler:  gcc
  *
@@ -41,33 +41,37 @@
  * =============================================================================
  */
 
-#include <iostream>
-#include <iomanip>
-#include <G4UnitsTable.hh>
-#include "CexmcSimpleRangeWithValue.hh"
+#ifndef CEXMC_FAKE_CROSS_SECTION_DATA_HH
+#define CEXMC_FAKE_CROSS_SECTION_DATA_HH
+
+#include <G4VCrossSectionDataSet.hh>
+
+class  G4DynamicParticle;
+class  G4Element;
+class  G4ParticleDefinition;
 
 
-std::ostream &  operator<<( std::ostream &  out,
-                        const CexmcEnergyRangeWithDoubleValue &  range )
+class  CexmcFakeCrossSectionData : public G4VCrossSectionDataSet
 {
-    out << "[ " << std::setw( 3 ) << G4BestUnit( range.bottom, "Energy" ) <<
-           ", " << std::setw( 3 ) << G4BestUnit( range.top, "Energy" ) <<
-           " )   " << range.value;
+    public:
+        G4bool    IsApplicable( const G4DynamicParticle *, const G4Element * )
+        {
+            return false;
+        }
 
-    return out;
-}
+        G4double  GetCrossSection( const G4DynamicParticle *,
+                                   const G4Element *, G4double )
+        {
+            return 0;
+        }
+
+        void      BuildPhysicsTable( const G4ParticleDefinition & )
+        {}
+
+        void      DumpPhysicsTable( const G4ParticleDefinition & )
+        {}
+};
 
 
-std::ostream &  operator<<( std::ostream &  out,
-                        const CexmcEnergyRangeWithDoubleValueList &  ranges )
-{
-    out << std::endl;
-    for ( CexmcEnergyRangeWithDoubleValueList::const_iterator
-                                  k( ranges.begin() ); k != ranges.end(); ++k )
-    {
-        out << "          " << *k << std::endl;
-    }
-
-    return out;
-}
+#endif
 

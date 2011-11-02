@@ -64,6 +64,16 @@ namespace
 
        return 0;
     }
+
+
+    G4double  PDK( G4double  a, G4double  b, G4double  c )
+    {
+        G4double  x( ( a - b - c ) * ( a + b + c ) * ( a - b + c ) *
+                     ( a + b - c ) );
+        x = std::sqrt( x ) / ( 2 * a );
+
+        return x;
+    }
 }
 
 
@@ -109,7 +119,7 @@ G4double  CexmcReimplementedGenbod::Generate( void )
     G4double  wt( maxWeight );
     G4double  pd[ maxParticles ];
 
-    for ( int i( 0 ); i < nmbOfOutputParticles - 1; ++i )
+    for ( int  i( 0 ); i < nmbOfOutputParticles - 1; ++i )
     {
         pd[ i ] = PDK( invMas[ i + 1 ], invMas[ i ],
                        outVec[ i + 1 ].mass / GeV );
@@ -224,15 +234,5 @@ void  CexmcReimplementedGenbod::SetMaxWeight( void )
         }
         maxWeight = 1 / wtmax;
     }
-}
-
-
-G4double  CexmcReimplementedGenbod::PDK( G4double  a, G4double  b, G4double  c )
-{
-    G4double  x( ( a - b - c ) * ( a + b + c ) * ( a - b + c ) *
-                 ( a + b - c ) );
-    x = std::sqrt( x ) / ( 2 * a );
-
-    return x;
 }
 

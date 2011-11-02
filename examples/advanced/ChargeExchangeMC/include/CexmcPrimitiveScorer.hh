@@ -26,12 +26,12 @@
 /*
  * =============================================================================
  *
- *       Filename:  CexmcSimpleRangeWithValue.cc
+ *       Filename:  CexmcPrimitiveScorer.hh
  *
- *    Description:  auxiliary functions for simple range instances
+ *    Description:  primitive scorer with a messenger
  *
  *        Version:  1.0
- *        Created:  17.02.2010 22:46:01
+ *        Created:  24.01.2011 18:22:41
  *       Revision:  none
  *       Compiler:  gcc
  *
@@ -41,33 +41,31 @@
  * =============================================================================
  */
 
-#include <iostream>
-#include <iomanip>
-#include <G4UnitsTable.hh>
-#include "CexmcSimpleRangeWithValue.hh"
+#ifndef CEXMC_PRIMITIVE_SCORER_HH
+#define CEXMC_PRIMITIVE_SCORER_HH
+
+#include <G4VPrimitiveScorer.hh>
+
+class  CexmcSensitiveDetectorMessenger;
 
 
-std::ostream &  operator<<( std::ostream &  out,
-                        const CexmcEnergyRangeWithDoubleValue &  range )
+class  CexmcPrimitiveScorer : public G4VPrimitiveScorer
 {
-    out << "[ " << std::setw( 3 ) << G4BestUnit( range.bottom, "Energy" ) <<
-           ", " << std::setw( 3 ) << G4BestUnit( range.top, "Energy" ) <<
-           " )   " << range.value;
+    public:
+        explicit CexmcPrimitiveScorer( const G4String &  name );
 
-    return out;
-}
+        virtual ~CexmcPrimitiveScorer();
+
+    public:
+        void  InitializeMessenger( void );
+
+    protected:
+        void  PrintHeader( G4int  nmbOfEntries ) const;
+
+    private:
+        CexmcSensitiveDetectorMessenger *  messenger;
+};
 
 
-std::ostream &  operator<<( std::ostream &  out,
-                        const CexmcEnergyRangeWithDoubleValueList &  ranges )
-{
-    out << std::endl;
-    for ( CexmcEnergyRangeWithDoubleValueList::const_iterator
-                                  k( ranges.begin() ); k != ranges.end(); ++k )
-    {
-        out << "          " << *k << std::endl;
-    }
-
-    return out;
-}
+#endif
 

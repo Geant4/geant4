@@ -51,9 +51,6 @@
 #include "CexmcSetup.hh"
 
 
-G4int  CexmcEnergyDepositInCalorimeter::copyDepth1BitsOffset( 8 );
-
-
 CexmcEnergyDepositInCalorimeter::CexmcEnergyDepositInCalorimeter(
                         const G4String &  name, const CexmcSetup *  setup ) :
     CexmcEnergyDepositInLeftRightSet( name, setup )
@@ -88,13 +85,11 @@ void  CexmcEnergyDepositInCalorimeter::PrintAll( void )
     if ( nmbOfEntries == 0 )
         return;
 
-    G4cout << " --- MultiFunctionalDet " << detector->GetName() << G4endl;
-    G4cout << "     PrimitiveScorer " << GetName() << G4endl;
-    G4cout << "     Number of entries " << nmbOfEntries << G4endl;
+    PrintHeader( nmbOfEntries );
 
-    for( std::map< G4int, G4double* >::iterator
-                                     itr( eventMap->GetMap()->begin() );
-         itr != eventMap->GetMap()->end(); ++itr )
+    for ( CexmcEnergyDepositCollectionData::iterator
+                         itr( eventMap->GetMap()->begin() );
+                                     itr != eventMap->GetMap()->end(); ++itr )
     {
         G4bool  isRightDetector( itr->first >> leftRightBitsOffset );
         G4int   index( itr->first &

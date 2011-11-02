@@ -55,7 +55,7 @@
 
 namespace  CexmcAST
 {
-    void Subtree::Print( int  level ) const
+    void  Subtree::Print( int  level ) const
     {
         static const std::string  opId[] =
             { "UNINITIALIZED", "TOP", "u -", "!", "*", "/", "+", "-", "<", "<=",
@@ -97,7 +97,7 @@ namespace  CexmcAST
     }
 
 
-    void Subtree::PrintLeaf( const Leaf *  leaf, int  level ) const
+    void  Subtree::PrintLeaf( const Leaf *  leaf, int  level ) const
     {
         const Variable *   variable( NULL );
         std::stringstream  value;

@@ -51,9 +51,6 @@
 #include "CexmcSetup.hh"
 
 
-G4int  CexmcTrackPointsInLeftRightSet::leftRightBitsOffset( 24 );
-
-
 CexmcTrackPointsInLeftRightSet::CexmcTrackPointsInLeftRightSet(
                         const G4String &  name, const CexmcSetup *  setup ) :
     CexmcTrackPoints( name ), setup( setup )
@@ -81,13 +78,11 @@ void  CexmcTrackPointsInLeftRightSet::PrintAll( void )
     if ( nmbOfEntries == 0 )
         return;
 
-    G4cout << " --- MultiFunctionalDet " << detector->GetName() << G4endl;
-    G4cout << "     PrimitiveScorer " << GetName() << G4endl;
-    G4cout << "     Number of entries " << nmbOfEntries << G4endl;
+    PrintHeader( nmbOfEntries );
 
-    for( std::map< G4int, CexmcTrackPointInfo* >::iterator
-                                     itr( eventMap->GetMap()->begin() );
-         itr != eventMap->GetMap()->end(); ++itr )
+    for ( CexmcTrackPointsCollectionData::iterator
+                         itr( eventMap->GetMap()->begin() );
+                                     itr != eventMap->GetMap()->end(); ++itr )
     {
         G4bool  isRightDetector( itr->first >> leftRightBitsOffset );
         const G4String  detectorSide( isRightDetector ? "right" : "left" );

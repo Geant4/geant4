@@ -63,7 +63,7 @@ struct  CexmcTrackPointsStore
         monitorTP( monitorTP ), targetTPBeamParticle( targetTPBeamParticle ),
         targetTPOutputParticle( targetTPOutputParticle ),
         targetTPNucleusParticle( targetTPNucleusParticle ),
-        targetTPOutputParticleDecayProductParticle1 (
+        targetTPOutputParticleDecayProductParticle1(
                                 targetTPOutputParticleDecayProductParticle1 ),
         targetTPOutputParticleDecayProductParticle2(
                                 targetTPOutputParticleDecayProductParticle2 ),
@@ -104,7 +104,7 @@ extern G4Allocator< CexmcTrackPointsStore >  trackPointsStoreAllocator;
 
 inline void *  CexmcTrackPointsStore::operator new( size_t )
 {
-  return trackPointsStoreAllocator.MallocSingle();
+    return trackPointsStoreAllocator.MallocSingle();
 }
 
 

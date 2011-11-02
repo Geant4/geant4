@@ -116,7 +116,7 @@ void  CexmcHistoManager::Destroy( void )
 
 CexmcHistoManager::CexmcHistoManager() : outFile( NULL ),
     isInitialized( false ), opName( "" ), nopName( "" ), opMass( 0. ),
-    nopMass( 0. ),
+    nopMass( 0. ), verboseLevel( 0 ),
 #ifdef CEXMC_USE_ROOTQT
     rootCanvas( NULL ),
 #endif
@@ -128,7 +128,7 @@ CexmcHistoManager::CexmcHistoManager() : outFile( NULL ),
                                        CexmcHistoVector() ) );
     }
 
-    messenger = new CexmcHistoManagerMessenger;
+    messenger = new CexmcHistoManagerMessenger( this );
 }
 
 
@@ -199,7 +199,7 @@ void  CexmcHistoManager::AddHisto( const CexmcHistoData &  data,
     CexmcHistosMap::iterator  found( histos.find( data.type ) );
     
     if ( found == histos.end() )
-        throw CexmcException ( CexmcWeirdException );
+        throw CexmcException( CexmcWeirdException );
 
     CexmcHistoVector &  histoVector( found->second );
 
@@ -286,13 +286,13 @@ void  CexmcHistoManager::Initialize( void )
     CexmcPhysicsManager *   physicsManager( runManager->GetPhysicsManager() );
 
     if ( ! physicsManager )
-        throw CexmcException ( CexmcWeirdException );
+        throw CexmcException( CexmcWeirdException );
 
     CexmcProductionModel *  productionModel( physicsManager->
                                                         GetProductionModel() );
 
     if ( ! productionModel )
-        throw CexmcException ( CexmcWeirdException );
+        throw CexmcException( CexmcWeirdException );
 
     G4ParticleDefinition *  outputParticle(
                                 productionModel->GetOutputParticle() );
@@ -300,7 +300,7 @@ void  CexmcHistoManager::Initialize( void )
                                 productionModel->GetNucleusOutputParticle() );
 
     if ( ! outputParticle || ! nucleusOutputParticle )
-        throw CexmcException ( CexmcIncompleteProductionModel );
+        throw CexmcException( CexmcIncompleteProductionModel );
 
     opName = outputParticle->GetParticleName();
     nopName = nucleusOutputParticle->GetParticleName();
@@ -327,12 +327,12 @@ void  CexmcHistoManager::Initialize( void )
     const CexmcSetup *  setup( static_cast< const CexmcSetup * >(
                                 runManager->GetUserDetectorConstruction() ) );
     if ( ! setup )
-        throw CexmcException ( CexmcWeirdException );
+        throw CexmcException( CexmcWeirdException );
 
     const G4LogicalVolume *  lVolume( setup->GetVolume( CexmcSetup::Monitor ) );
 
     if ( ! lVolume )
-        throw CexmcException ( CexmcIncompatibleGeometry );
+        throw CexmcException( CexmcIncompatibleGeometry );
 
     nBinsMinX = CexmcHistoBeamMomentumMin;
     nBinsMaxX = CexmcHistoBeamMomentumMax;
@@ -343,11 +343,17 @@ void  CexmcHistoManager::Initialize( void )
           false, CexmcTPT, "mombp", "Beam momentum at the monitor", axes ) );
     AddHisto( CexmcHistoData( CexmcMomentumBP_RT_Histo, Cexmc_TH1F, false,
           false, CexmcRT, "mombp", "Beam momentum at the monitor", axes ) );
+    if ( verboseLevel > 0 )
+    {
+        AddHisto( CexmcHistoData( CexmcMomentumIP_TPT_Histo, Cexmc_TH1F, false,
+            false, CexmcTPT, "momip", "Momentum of the incident particle",
+            axes ) );
+    }
 
     G4Box *   box( dynamic_cast< G4Box * >( lVolume->GetSolid() ) );
 
     if ( ! box )
-        throw CexmcException ( CexmcIncompatibleGeometry );
+        throw CexmcException( CexmcIncompatibleGeometry );
 
     G4double  width( box->GetXHalfLength() * 2 );
     G4double  height( box->GetYHalfLength() * 2 );
@@ -366,7 +372,7 @@ void  CexmcHistoManager::Initialize( void )
     G4Tubs *  tube( dynamic_cast< G4Tubs * >( lVolume->GetSolid() ) );
 
     if ( ! tube )
-        throw CexmcException ( CexmcIncompatibleGeometry );
+        throw CexmcException( CexmcIncompatibleGeometry );
 
     G4double  radius( tube->GetOuterRadius() );
     height = tube->GetZHalfLength() * 2;
@@ -410,9 +416,9 @@ void  CexmcHistoManager::Initialize( void )
     axes.push_back( CexmcHistoAxisData( nBinsX, nBinsMinX, nBinsMaxX ) );
     axes.push_back( CexmcHistoAxisData( nBinsY, nBinsMinY, nBinsMaxY ) );
     AddHisto( CexmcHistoData( CexmcAbsorbedEnergy_EDT_Histo, Cexmc_TH2F, false,
-        false, CexmcEDT, "ae", "Absorbed energy (rc vs. ls)", axes ) );
+        false, CexmcEDT, "ae", "Absorbed energy (rc vs. lc)", axes ) );
     AddHisto( CexmcHistoData( CexmcAbsorbedEnergy_RT_Histo, Cexmc_TH2F, false,
-        false, CexmcRT, "ae", "Absorbed energy (rc vs. ls)", axes ) );
+        false, CexmcRT, "ae", "Absorbed energy (rc vs. lc)", axes ) );
 
     SetupARHistos( runManager->GetPhysicsManager()->GetProductionModel()->
                    GetAngularRanges() );
@@ -499,7 +505,7 @@ void  CexmcHistoManager::AddARHistos( const CexmcAngularRange &  aRange )
     const CexmcSetup *  setup( static_cast< const CexmcSetup * >(
                                 runManager->GetUserDetectorConstruction() ) );
     if ( ! setup )
-        throw CexmcException ( CexmcWeirdException );
+        throw CexmcException( CexmcWeirdException );
 
     const G4LogicalVolume *  lVolume( setup->GetVolume(
                                                     CexmcSetup::Calorimeter ) );
@@ -507,7 +513,7 @@ void  CexmcHistoManager::AddARHistos( const CexmcAngularRange &  aRange )
     G4Box *   box( dynamic_cast< G4Box * >( lVolume->GetSolid() ) );
 
     if ( ! box )
-        throw CexmcException ( CexmcIncompatibleGeometry );
+        throw CexmcException( CexmcIncompatibleGeometry );
 
     G4double  width( box->GetXHalfLength() * 2 );
     G4double  height( box->GetYHalfLength() * 2 );
@@ -650,7 +656,7 @@ void  CexmcHistoManager::AddARHistos( const CexmcAngularRange &  aRange )
     G4Tubs *  tube( dynamic_cast< G4Tubs * >( lVolume->GetSolid() ) );
 
     if ( ! tube )
-        throw CexmcException ( CexmcIncompatibleGeometry );
+        throw CexmcException( CexmcIncompatibleGeometry );
 
     G4double  radius( tube->GetOuterRadius() );
     height = tube->GetZHalfLength() * 2;
@@ -676,7 +682,7 @@ void  CexmcHistoManager::Add( CexmcHistoType  histoType, unsigned int  index,
 {
     CexmcHistosMap::iterator  found( histos.find( histoType ) );
     if ( found == histos.end() || histos[ histoType ].size() <= index )
-        throw CexmcException ( CexmcWeirdException );
+        throw CexmcException( CexmcWeirdException );
 
     histos[ histoType ][ index ]->Fill( x );
 }
@@ -687,7 +693,7 @@ void  CexmcHistoManager::Add( CexmcHistoType  histoType, unsigned int  index,
 {
     CexmcHistosMap::iterator  found( histos.find( histoType ) );
     if ( found == histos.end() || histos[ histoType ].size() <= index )
-        throw CexmcException ( CexmcWeirdException );
+        throw CexmcException( CexmcWeirdException );
 
     /* no cast needed because TH1 has virtual method
      * Fill( Double_t, Double_t ) */
@@ -700,7 +706,7 @@ void  CexmcHistoManager::Add( CexmcHistoType  histoType, unsigned int  index,
 {
     CexmcHistosMap::iterator  found( histos.find( histoType ) );
     if ( found == histos.end() || histos[ histoType ].size() <= index )
-        throw CexmcException ( CexmcWeirdException );
+        throw CexmcException( CexmcWeirdException );
 
     /* cast needed because TH1 does not have virtual method
      * Fill( Double_t, Double_t, Double_t ) */
@@ -715,7 +721,7 @@ void  CexmcHistoManager::Add( CexmcHistoType  histoType, unsigned int  index,
 {
     CexmcHistosMap::iterator  found( histos.find( histoType ) );
     if ( found == histos.end() || histos[ histoType ].size() <= index )
-        throw CexmcException ( CexmcWeirdException );
+        throw CexmcException( CexmcWeirdException );
 
     ++binX;
     ++binY;

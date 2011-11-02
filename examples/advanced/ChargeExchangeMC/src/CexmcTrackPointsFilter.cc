@@ -58,7 +58,7 @@ CexmcTrackPointsFilter::CexmcTrackPointsFilter( const G4String &  name ) :
 
 G4bool  CexmcTrackPointsFilter::Accept( const G4Step *  step ) const
 {
-    G4Track *  track( step->GetTrack() );
+    G4Track *         track( step->GetTrack() );
     CexmcTrackInfo *  trackInfo( static_cast< CexmcTrackInfo * >(
                                                 track->GetUserInformation() ) );
 

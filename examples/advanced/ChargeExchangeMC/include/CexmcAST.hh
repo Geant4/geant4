@@ -93,7 +93,7 @@ namespace  CexmcAST
 
     struct  Variable
     {
-        Variable() : index1 ( 0 ), index2( 0 ), addr( ( const int * ) NULL )
+        Variable() : index1( 0 ), index2( 0 ), addr( ( const int * ) NULL )
         {}
 
         std::string                             name;
@@ -123,7 +123,7 @@ namespace  CexmcAST
 
     struct  Subtree
     {
-        Subtree() : type ( Operator( Uninitialized ) )
+        Subtree() : type( Operator( Uninitialized ) )
         {}
 
         void  Print( int  level = 0 ) const;

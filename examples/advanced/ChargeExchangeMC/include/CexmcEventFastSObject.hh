@@ -46,37 +46,21 @@
 
 #ifdef CEXMC_USE_PERSISTENCY
 
-#include <boost/serialization/access.hpp>
 #include <G4Types.hh>
 
 
-class  CexmcEventFastSObject
+struct  CexmcEventFastSObject
 {
-    friend class  boost::serialization::access;
-    friend class  CexmcRunManager;
-#ifdef CEXMC_USE_CUSTOM_FILTER
-    friend class  CexmcASTEval;
-#endif
+    G4int     eventId;
 
-    public:
-        CexmcEventFastSObject();
+    G4double  opCosThetaSCM;
 
-        CexmcEventFastSObject( G4int  eventId, G4double  opCosThetaSCM,
-                               G4bool  edDigitizerHasTriggered,
-                               G4bool  edDigitizerMonitorHasTriggered );
+    G4bool    edDigitizerHasTriggered;
 
-    private:
-        template  < typename  Archive >
-        void  serialize( Archive &  archive, const unsigned int  version );
+    G4bool    edDigitizerMonitorHasTriggered;
 
-    private:
-        G4int     eventId;
-
-        G4double  opCosThetaSCM;
-
-        G4bool    edDigitizerHasTriggered;
-
-        G4bool    edDigitizerMonitorHasTriggered;
+    template  < typename  Archive >
+    void  serialize( Archive &  archive, const unsigned int  version );
 };
 
 

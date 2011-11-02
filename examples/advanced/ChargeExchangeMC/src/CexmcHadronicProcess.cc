@@ -70,9 +70,9 @@ CexmcHadronicProcess::~CexmcHadronicProcess()
 
 
 void  CexmcHadronicProcess::RegisterProductionModel(
-                                    CexmcProductionModel *  productionModel_ )
+                                                CexmcProductionModel *  model )
 {
-    productionModel = productionModel_;
+    productionModel = model;
 
     interaction = dynamic_cast< G4HadronicInteraction * >( productionModel );
 
@@ -122,7 +122,7 @@ void  CexmcHadronicProcess::FillTotalResult( G4HadFinalState *  hadFinalState,
     if ( hadFinalState->GetStatusChange() == stopAndKill )
         theTotalResult->ProposeTrackStatus( fStopAndKill );
 
-    for( G4int  i( 0 ); i < numberOfSecondaries; ++i )
+    for ( G4int  i( 0 ); i < numberOfSecondaries; ++i )
     {
         G4double   time( hadFinalState->GetSecondary( i )->GetTime() );
         if ( time < 0 )

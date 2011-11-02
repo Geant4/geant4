@@ -74,11 +74,9 @@ class  CexmcEventAction : public G4UserEventAction
     public:
         void      BeamParticleChangeHook( void );
 
-        void      SetVerboseOnCexmcLevel( G4int  verbose_ );
+        void      SetVerboseOnCexmcLevel( G4int  value );
 
-        void      SetVerboseDrawLevel( G4int  verboseDraw_ );
-
-        void      DrawTrajectoryMarkers( G4bool  on );
+        void      SetVerboseDrawLevel( G4int  value );
 
         CexmcChargeExchangeReconstructor *  GetReconstructor( void );
 
@@ -95,7 +93,7 @@ class  CexmcEventAction : public G4UserEventAction
                 const CexmcProductionModelData &  pmData,
                 const CexmcAngularRangeList &  triggeredAngularRanges ) const;
 
-        void  FillRTHistos( G4bool reconstructorHasFullTrigger,
+        void  FillRTHistos( G4bool  reconstructorHasFullTrigger,
                 const CexmcEnergyDepositStore *  edStore,
                 const CexmcTrackPointsStore *  tpStore,
                 const CexmcProductionModelData &  pmData,
@@ -132,8 +130,7 @@ class  CexmcEventAction : public G4UserEventAction
 
     public:
         static CexmcEnergyDepositStore *  MakeEnergyDepositStore(
-                            const CexmcEnergyDepositDigitizer *  digitizer,
-                            G4bool  useInnerRefCrystal );
+                            const CexmcEnergyDepositDigitizer *  digitizer );
 
         static CexmcTrackPointsStore *  MakeTrackPointsStore(
                             const CexmcTrackPointsDigitizer *  digitizer );
@@ -151,35 +148,28 @@ class  CexmcEventAction : public G4UserEventAction
     private:
         CexmcPhysicsManager *               physicsManager;
 
-    private:
         CexmcChargeExchangeReconstructor *  reconstructor;
+
+        G4double                            opKinEnergy;
 
     private:
         G4int                               verbose;
 
         G4int                               verboseDraw;
 
-        G4bool                              drawTrajectoryMarkers;
-
         CexmcEventActionMessenger *         messenger;
 };
 
 
-inline void  CexmcEventAction::SetVerboseOnCexmcLevel( G4int  verbose_ )
+inline void  CexmcEventAction::SetVerboseOnCexmcLevel( G4int  value )
 {
-    verbose = verbose_;
+    verbose = value;
 }
 
 
-inline void  CexmcEventAction::SetVerboseDrawLevel( G4int  verboseDraw_ )
+inline void  CexmcEventAction::SetVerboseDrawLevel( G4int  value )
 {
-    verboseDraw = verboseDraw_;
-}
-
-
-inline void  CexmcEventAction::DrawTrajectoryMarkers( G4bool  on )
-{
-    drawTrajectoryMarkers = on;
+    verboseDraw = value;
 }
 
 

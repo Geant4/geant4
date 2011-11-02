@@ -45,20 +45,12 @@
 #include <G4AffineTransform.hh>
 #include <G4UnitsTable.hh>
 #include "CexmcTrackPoints.hh"
-#include "CexmcSensitiveDetectorMessenger.hh"
 #include "CexmcTrackInfo.hh"
 
 
 CexmcTrackPoints::CexmcTrackPoints( const G4String &  name ) :
-    G4VPrimitiveScorer( name ), messenger( NULL ), hcId( -1 )
+    CexmcPrimitiveScorer( name ), hcId( -1 )
 {
-    messenger = new CexmcSensitiveDetectorMessenger( this, name );
-}
-
-
-CexmcTrackPoints::~CexmcTrackPoints()
-{
-    delete messenger;
 }
 
 
@@ -122,12 +114,12 @@ G4bool  CexmcTrackPoints::ProcessHits( G4Step *  step, G4TouchableHistory * )
 
 void  CexmcTrackPoints::Initialize( G4HCofThisEvent *  hcOfEvent )
 {
-    eventMap = new CexmcTrackPointsCollection(
-                          GetMultiFunctionalDetector()->GetName(), GetName() );
-    if( hcId < 0 )
-    {
+    eventMap = new CexmcTrackPointsCollection( detector->GetName(),
+                                               primitiveName );
+
+    if ( hcId < 0 )
         hcId = GetCollectionID( 0 );
-    }
+
     hcOfEvent->AddHitsCollection( hcId, eventMap );
 }
 
@@ -157,13 +149,11 @@ void  CexmcTrackPoints::PrintAll( void )
     if ( nmbOfEntries == 0 )
         return;
 
-    G4cout << " --- MultiFunctionalDet " << detector->GetName() << G4endl;
-    G4cout << "     PrimitiveScorer " << GetName() << G4endl;
-    G4cout << "     Number of entries " << nmbOfEntries << G4endl;
+    PrintHeader( nmbOfEntries );
 
-    for( std::map< G4int, CexmcTrackPointInfo* >::iterator
-                                     itr( eventMap->GetMap()->begin() );
-         itr != eventMap->GetMap()->end(); ++itr )
+    for ( CexmcTrackPointsCollectionData::iterator
+                         itr( eventMap->GetMap()->begin() );
+                                     itr != eventMap->GetMap()->end(); ++itr )
     {
         G4cout << "       track id " << itr->first << G4endl;
         G4cout << "         , position: " <<

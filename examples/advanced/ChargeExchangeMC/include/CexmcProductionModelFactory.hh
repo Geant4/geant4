@@ -53,26 +53,23 @@
 
 namespace  CexmcPrivate
 {
-    template  < typename  BasePhysics >
-    class  CexmcBasePhysicsInstance
+    template  < typename >
+    struct  CexmcBasePhysicsInstance
     {
-        public:
-            static const CexmcBasePhysicsUsed  value = CexmcNoBasePhysics;
+        static const CexmcBasePhysicsUsed  value = CexmcNoBasePhysics;
     };
 
 #ifdef CEXMC_USE_QGSP_BIC_EMY
-    template<>
-    class CexmcBasePhysicsInstance< QGSP_BIC_EMY >
+    template  <>
+    struct  CexmcBasePhysicsInstance< QGSP_BIC_EMY >
     {
-        public:
-            static const CexmcBasePhysicsUsed  value = Cexmc_QGSP_BIC_EMY;
+        static const CexmcBasePhysicsUsed  value = Cexmc_QGSP_BIC_EMY;
     };
 #else
-    template<>
-    class CexmcBasePhysicsInstance< QGSP_BERT >
+    template  <>
+    struct  CexmcBasePhysicsInstance< QGSP_BERT >
     {
-        public:
-            static const CexmcBasePhysicsUsed  value = Cexmc_QGSP_BERT;
+        static const CexmcBasePhysicsUsed  value = Cexmc_QGSP_BERT;
     };
 #endif
 }

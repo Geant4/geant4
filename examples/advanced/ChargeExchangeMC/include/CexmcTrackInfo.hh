@@ -52,10 +52,10 @@ class  CexmcTrackInfo : public G4VUserTrackInformation
 {
     public:
         explicit CexmcTrackInfo( CexmcTrackType  trackType = CexmcInsipidTrack,
-                                 G4int copyNumber = 0 );
+                                 G4int  copyNumber = 0 );
 
     public:
-        void  Print( void ) const;
+        void            Print( void ) const;
 
     public:
         virtual G4int   GetTypeInfo( void ) const;

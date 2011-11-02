@@ -47,12 +47,13 @@
 #include "CexmcRunManager.hh"
 
 
-CexmcReconstructor::CexmcReconstructor() :
-    hasBasicTrigger( false ),
+CexmcReconstructor::CexmcReconstructor() : hasBasicTrigger( false ),
     epDefinitionAlgorithm( CexmcEntryPointBySqrtEDWeights ),
     epDepthDefinitionAlgorithm( CexmcEntryPointDepthPlain ),
     csAlgorithm( CexmcSelectAllCrystals ), useInnerRefCrystal( false ),
-    epDepth( 0 ), theAngle( 0 ), targetEPInitialized( false ), messenger( NULL )
+    epDepth( 0 ), theAngle( 0 ), calorimeterEDLeftAdjacent( 0 ),
+    calorimeterEDRightAdjacent( 0 ), collectEDInAdjacentCrystals( false ),
+    targetEPInitialized( false ), messenger( NULL )
 {
     G4RunManager *      runManager( G4RunManager::GetRunManager() );
     const CexmcSetup *  setup( static_cast< const CexmcSetup * >(
@@ -72,7 +73,8 @@ CexmcReconstructor::~CexmcReconstructor()
 }
 
 
-void  CexmcReconstructor::Reconstruct( const CexmcEnergyDepositStore * edStore )
+void  CexmcReconstructor::Reconstruct(
+                                    const CexmcEnergyDepositStore *  edStore )
 {
     ReconstructEntryPoints( edStore );
     if ( hasBasicTrigger )
@@ -89,13 +91,19 @@ G4bool  CexmcReconstructor::HasFullTrigger( void ) const
 
 
 void  CexmcReconstructor::ReconstructEntryPoints(
-                                    const CexmcEnergyDepositStore * edStore )
+                                    const CexmcEnergyDepositStore *  edStore )
 {
-    G4int     nCrystalsInColumn( calorimeterGeometry.nCrystalsInColumn );
-    G4int     nCrystalsInRow( calorimeterGeometry.nCrystalsInRow );
-    G4double  crystalWidth( calorimeterGeometry.crystalWidth );
-    G4double  crystalHeight( calorimeterGeometry.crystalHeight );
+    G4int     columnLeft( edStore->calorimeterEDLeftMaxX );
+    G4int     rowLeft( edStore->calorimeterEDLeftMaxY );
+    G4int     columnRight( edStore->calorimeterEDRightMaxX );
+    G4int     rowRight( edStore->calorimeterEDRightMaxY );
     G4double  crystalLength( calorimeterGeometry.crystalLength );
+
+    if ( useInnerRefCrystal )
+    {
+        TransformToAdjacentInnerCrystal( columnLeft, rowLeft );
+        TransformToAdjacentInnerCrystal( columnRight, rowRight );
+    }
 
     calorimeterEPLeftPosition.setX( 0 );
     calorimeterEPLeftPosition.setY( 0 );
@@ -110,196 +118,54 @@ void  CexmcReconstructor::ReconstructEntryPoints(
     calorimeterEPRightDirection.setY( 0 );
     calorimeterEPRightDirection.setZ( 0 );
 
-    G4int     columnLeft( edStore->calorimeterEDLeftMaxX );
-    G4int     rowLeft( edStore->calorimeterEDLeftMaxY );
-    G4int     columnRight( edStore->calorimeterEDRightMaxX );
-    G4int     rowRight( edStore->calorimeterEDRightMaxY );
-    G4double  xInCalorimeterLeftOffset(
-                ( G4double( columnLeft ) - G4double( nCrystalsInRow ) / 2 ) *
-                                        crystalWidth  + crystalWidth / 2 );
-    G4double   yInCalorimeterLeftOffset(
-                ( G4double( rowLeft ) - G4double( nCrystalsInColumn ) / 2 ) *
-                                        crystalHeight + crystalHeight / 2 );
-    G4double  xInCalorimeterRightOffset(
-                ( G4double( columnRight ) - G4double( nCrystalsInRow ) / 2 ) *
-                                        crystalWidth  + crystalWidth / 2 );
-    G4double   yInCalorimeterRightOffset(
-                ( G4double( rowRight ) - G4double( nCrystalsInColumn ) / 2 ) *
-                                        crystalHeight + crystalHeight / 2 );
-    G4int     i( 0 );
-    G4double  xWeightsSum( 0 );
-    G4double  yWeightsSum( 0 );
-    G4double  energySum( 0 );
+    G4bool  edInAdjacentCrystalsCollected( false );
 
     switch ( epDefinitionAlgorithm )
     {
     case CexmcEntryPointInTheCenter :
         break;
     case CexmcEntryPointInTheCenterOfCrystalWithMaxED :
-        calorimeterEPLeftPosition.setX( xInCalorimeterLeftOffset );
-        calorimeterEPLeftPosition.setY( yInCalorimeterLeftOffset );
-        calorimeterEPRightPosition.setX( xInCalorimeterRightOffset );
-        calorimeterEPRightPosition.setY( yInCalorimeterRightOffset );
+        {
+            G4int     nCrystalsInColumn(
+                                    calorimeterGeometry.nCrystalsInColumn );
+            G4int     nCrystalsInRow( calorimeterGeometry.nCrystalsInRow );
+            G4double  crystalWidth( calorimeterGeometry.crystalWidth );
+            G4double  crystalHeight( calorimeterGeometry.crystalHeight );
+
+            calorimeterEPLeftPosition.setX(
+                ( G4double( columnLeft ) - G4double( nCrystalsInRow ) / 2 ) *
+                                        crystalWidth  + crystalWidth / 2 );
+            calorimeterEPLeftPosition.setY(
+                ( G4double( rowLeft ) - G4double( nCrystalsInColumn ) / 2 ) *
+                                        crystalHeight + crystalHeight / 2 );
+            calorimeterEPRightPosition.setX(
+                ( G4double( columnRight ) - G4double( nCrystalsInRow ) / 2 ) *
+                                        crystalWidth  + crystalWidth / 2 );
+            calorimeterEPRightPosition.setY(
+                ( G4double( rowRight ) - G4double( nCrystalsInColumn ) / 2 ) *
+                                        crystalHeight + crystalHeight / 2 );
+        }
         break;
     case CexmcEntryPointByLinearEDWeights :
-        for ( CexmcEnergyDepositCalorimeterCollection::const_iterator
-                  k( edStore->calorimeterEDLeftCollection.begin() );
-                  k != edStore->calorimeterEDLeftCollection.end(); ++k )
-        {
-            if ( csAlgorithm == CexmcSelectAdjacentCrystals &&
-                 ( i - rowLeft > 1 || i - rowLeft < -1 ) )
-            {
-                ++i;
-                continue;
-            }
-
-            G4int  j( 0 );
-            for ( CexmcEnergyDepositCrystalRowCollection::const_iterator
-                      l( k->begin() ); l != k->end(); ++l )
-            {
-                if ( csAlgorithm == CexmcSelectAdjacentCrystals &&
-                     ( j - columnLeft > 1 || j - columnLeft < -1 ) )
-                {
-                    ++j;
-                    continue;
-                }
-
-                xInCalorimeterLeftOffset = ( G4double( j ) -
-                                        G4double( nCrystalsInRow ) / 2 ) *
-                        crystalWidth  + crystalWidth / 2;
-                xWeightsSum += *l * xInCalorimeterLeftOffset;
-                yInCalorimeterLeftOffset = ( G4double( i ) -
-                                        G4double( nCrystalsInColumn ) / 2 ) *
-                        crystalHeight  + crystalHeight / 2;
-                yWeightsSum += *l * yInCalorimeterLeftOffset;
-                energySum += *l;
-                ++j;
-            }
-            ++i;
-        }
-        calorimeterEPLeftPosition.setX( xWeightsSum / energySum );
-        calorimeterEPLeftPosition.setY( yWeightsSum / energySum );
-        i = 0;
-        xWeightsSum = 0;
-        yWeightsSum = 0;
-        energySum = 0;
-        for ( CexmcEnergyDepositCalorimeterCollection::const_iterator
-                  k( edStore->calorimeterEDRightCollection.begin() );
-                  k != edStore->calorimeterEDRightCollection.end(); ++k )
-        {
-            if ( csAlgorithm == CexmcSelectAdjacentCrystals &&
-                 ( i - rowRight > 1 || i - rowRight < -1 ) )
-            {
-                ++i;
-                continue;
-            }
-
-            G4int  j( 0 );
-            for ( CexmcEnergyDepositCrystalRowCollection::const_iterator
-                      l( k->begin() ); l != k->end(); ++l )
-            {
-                if ( csAlgorithm == CexmcSelectAdjacentCrystals &&
-                     ( j - columnRight > 1 || j - columnRight < -1 ) )
-                {
-                    ++j;
-                    continue;
-                }
-
-                xInCalorimeterRightOffset = ( G4double( j ) -
-                                        G4double( nCrystalsInRow ) / 2 ) *
-                        crystalWidth  + crystalWidth / 2;
-                xWeightsSum += *l * xInCalorimeterRightOffset;
-                yInCalorimeterRightOffset = ( G4double( i ) -
-                                        G4double( nCrystalsInColumn ) / 2 ) *
-                        crystalHeight  + crystalHeight / 2;
-                yWeightsSum += *l * yInCalorimeterRightOffset;
-                energySum += *l;
-                ++j;
-            }
-            ++i;
-        }
-        calorimeterEPRightPosition.setX( xWeightsSum / energySum );
-        calorimeterEPRightPosition.setY( yWeightsSum / energySum );
-        break;
     case CexmcEntryPointBySqrtEDWeights :
-        for ( CexmcEnergyDepositCalorimeterCollection::const_iterator
-                  k( edStore->calorimeterEDLeftCollection.begin() );
-                  k != edStore->calorimeterEDLeftCollection.end(); ++k )
         {
-            if ( csAlgorithm == CexmcSelectAdjacentCrystals &&
-                 ( i - rowLeft > 1 || i - rowLeft < -1 ) )
-            {
-                ++i;
-                continue;
-            }
+            G4double  x( 0 );
+            G4double  y( 0 );
 
-            G4int  j( 0 );
-            for ( CexmcEnergyDepositCrystalRowCollection::const_iterator
-                      l( k->begin() ); l != k->end(); ++l )
-            {
-                if ( csAlgorithm == CexmcSelectAdjacentCrystals &&
-                     ( j - columnLeft > 1 || j - columnLeft < -1 ) )
-                {
-                    ++j;
-                    continue;
-                }
+            CalculateWeightedEPPosition( edStore->calorimeterEDLeftCollection,
+                                         rowLeft, columnLeft, x, y,
+                                         calorimeterEDLeftAdjacent );
+            calorimeterEPLeftPosition.setX( x );
+            calorimeterEPLeftPosition.setY( y );
+            CalculateWeightedEPPosition( edStore->calorimeterEDRightCollection,
+                                         rowRight, columnRight, x, y,
+                                         calorimeterEDRightAdjacent );
+            calorimeterEPRightPosition.setX( x );
+            calorimeterEPRightPosition.setY( y );
 
-                xInCalorimeterLeftOffset = ( G4double( j ) -
-                                        G4double( nCrystalsInRow ) / 2 ) *
-                        crystalWidth  + crystalWidth / 2;
-                xWeightsSum += std::sqrt( *l ) * xInCalorimeterLeftOffset;
-                yInCalorimeterLeftOffset = ( G4double( i ) -
-                                        G4double( nCrystalsInColumn ) / 2 ) *
-                        crystalHeight  + crystalHeight / 2;
-                yWeightsSum += std::sqrt( *l ) * yInCalorimeterLeftOffset;
-                energySum += std::sqrt( *l );
-                ++j;
-            }
-            ++i;
+            if ( csAlgorithm == CexmcSelectAdjacentCrystals )
+                edInAdjacentCrystalsCollected = true;
         }
-        calorimeterEPLeftPosition.setX( xWeightsSum / energySum );
-        calorimeterEPLeftPosition.setY( yWeightsSum / energySum );
-        i = 0;
-        xWeightsSum = 0;
-        yWeightsSum = 0;
-        energySum = 0;
-        for ( CexmcEnergyDepositCalorimeterCollection::const_iterator
-                  k( edStore->calorimeterEDRightCollection.begin() );
-                  k != edStore->calorimeterEDRightCollection.end(); ++k )
-        {
-            if ( csAlgorithm == CexmcSelectAdjacentCrystals &&
-                 ( i - rowRight > 1 || i - rowRight < -1 ) )
-            {
-                ++i;
-                continue;
-            }
-
-            G4int  j( 0 );
-            for ( CexmcEnergyDepositCrystalRowCollection::const_iterator
-                      l( k->begin() ); l != k->end(); ++l )
-            {
-                if ( csAlgorithm == CexmcSelectAdjacentCrystals &&
-                     ( j - columnRight > 1 || j - columnRight < -1 ) )
-                {
-                    ++j;
-                    continue;
-                }
-
-                xInCalorimeterRightOffset = ( G4double( j ) -
-                                        G4double( nCrystalsInRow ) / 2 ) *
-                        crystalWidth  + crystalWidth / 2;
-                xWeightsSum += std::sqrt( *l ) * xInCalorimeterRightOffset;
-                yInCalorimeterRightOffset = ( G4double( i ) -
-                                        G4double( nCrystalsInColumn ) / 2 ) *
-                        crystalHeight  + crystalHeight / 2;
-                yWeightsSum += std::sqrt( *l ) * yInCalorimeterRightOffset;
-                energySum += std::sqrt( *l );
-                ++j;
-            }
-            ++i;
-        }
-        calorimeterEPRightPosition.setX( xWeightsSum / energySum );
-        calorimeterEPRightPosition.setY( yWeightsSum / energySum );
         break;
     default :
         break;
@@ -351,6 +217,8 @@ void  CexmcReconstructor::ReconstructEntryPoints(
                                          calorimeterEPRightPositionZOffset );
         }
         break;
+    default :
+        break;
     }
 
     calorimeterEPLeftWorldPosition = calorimeterLeftTransform.TransformPoint(
@@ -361,6 +229,16 @@ void  CexmcReconstructor::ReconstructEntryPoints(
                                                  calorimeterEPRightPosition );
     calorimeterEPRightWorldDirection = calorimeterRightTransform.TransformAxis(
                                                  calorimeterEPRightDirection );
+
+    if ( collectEDInAdjacentCrystals && ! edInAdjacentCrystalsCollected )
+    {
+        CollectEDInAdjacentCrystals( edStore->calorimeterEDLeftCollection,
+                                     rowLeft, columnLeft,
+                                     calorimeterEDLeftAdjacent );
+        CollectEDInAdjacentCrystals( edStore->calorimeterEDRightCollection,
+                                     rowRight, columnRight,
+                                     calorimeterEDRightAdjacent );
+    }
 
     hasBasicTrigger = true;
 }
@@ -396,5 +274,102 @@ void  CexmcReconstructor::ReconstructAngle( void )
     theAngle = epLeft.angle( epRight );
 
     hasBasicTrigger = true;
+}
+
+
+void  CexmcReconstructor::CollectEDInAdjacentCrystals(
+                        const CexmcEnergyDepositCalorimeterCollection &  edHits,
+                        G4int  row, G4int  column, G4double &  ed )
+{
+    G4int  i( 0 );
+
+    for ( CexmcEnergyDepositCalorimeterCollection::const_iterator
+                                k( edHits.begin() ); k != edHits.end(); ++k )
+    {
+        if ( i - row > 1 || i - row < -1 )
+        {
+            ++i;
+            continue;
+        }
+
+        G4int  j( 0 );
+        for ( CexmcEnergyDepositCrystalRowCollection::const_iterator
+                  l( k->begin() ); l != k->end(); ++l )
+        {
+            if ( j - column > 1 || j - column < -1 )
+            {
+                ++j;
+                continue;
+            }
+            ed += *l;
+            ++j;
+        }
+        ++i;
+    }
+}
+
+
+void  CexmcReconstructor::CalculateWeightedEPPosition(
+                const CexmcEnergyDepositCalorimeterCollection &  edHits,
+                G4int  row, G4int  column, G4double &  x, G4double &  y,
+                G4double &  ed )
+{
+    G4int     nCrystalsInColumn( calorimeterGeometry.nCrystalsInColumn );
+    G4int     nCrystalsInRow( calorimeterGeometry.nCrystalsInRow );
+    G4double  crystalWidth( calorimeterGeometry.crystalWidth );
+    G4double  crystalHeight( calorimeterGeometry.crystalHeight );
+
+    G4int     i( 0 );
+    G4double  xWeightsSum( 0 );
+    G4double  yWeightsSum( 0 );
+    G4double  energyWeightsSum( 0 );
+
+    if ( csAlgorithm == CexmcSelectAdjacentCrystals )
+        ed = 0.;
+
+    for ( CexmcEnergyDepositCalorimeterCollection::const_iterator
+                                k( edHits.begin() ); k != edHits.end(); ++k )
+    {
+        if ( csAlgorithm == CexmcSelectAdjacentCrystals &&
+                                         ( i - row > 1 || i - row < -1 ) )
+        {
+            ++i;
+            continue;
+        }
+
+        G4int  j( 0 );
+        for ( CexmcEnergyDepositCrystalRowCollection::const_iterator
+                  l( k->begin() ); l != k->end(); ++l )
+        {
+            if ( csAlgorithm == CexmcSelectAdjacentCrystals &&
+                                         ( j - column > 1 || j - column < -1 ) )
+            {
+                ++j;
+                continue;
+            }
+
+            if ( csAlgorithm == CexmcSelectAdjacentCrystals )
+                ed += *l;
+            
+            G4double  xInCalorimeterOffset(
+                        ( G4double( j ) - G4double( nCrystalsInRow ) / 2 ) *
+                        crystalWidth  + crystalWidth / 2 );
+            G4double  energyWeight(
+                        epDefinitionAlgorithm ==
+                                        CexmcEntryPointBySqrtEDWeights ?
+                                                        std::sqrt( *l ) : *l );
+            xWeightsSum += energyWeight * xInCalorimeterOffset;
+            G4double  yInCalorimeterOffset(
+                        ( G4double( i ) - G4double( nCrystalsInColumn ) / 2 ) *
+                        crystalHeight  + crystalHeight / 2 );
+            yWeightsSum += energyWeight * yInCalorimeterOffset;
+            energyWeightsSum += energyWeight;
+            ++j;
+        }
+        ++i;
+    }
+
+    x = xWeightsSum / energyWeightsSum;
+    y = yWeightsSum / energyWeightsSum;
 }
 

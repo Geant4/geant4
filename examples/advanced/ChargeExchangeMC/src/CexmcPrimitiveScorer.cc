@@ -26,12 +26,12 @@
 /*
  * =============================================================================
  *
- *       Filename:  CexmcSimpleRangeWithValue.cc
+ *       Filename:  CexmcPrimitiveScorer.cc
  *
- *    Description:  auxiliary functions for simple range instances
+ *    Description:  primitive scorer with a messenger
  *
  *        Version:  1.0
- *        Created:  17.02.2010 22:46:01
+ *        Created:  24.01.2011 18:34:30
  *       Revision:  none
  *       Compiler:  gcc
  *
@@ -41,33 +41,33 @@
  * =============================================================================
  */
 
-#include <iostream>
-#include <iomanip>
-#include <G4UnitsTable.hh>
-#include "CexmcSimpleRangeWithValue.hh"
+#include <G4ios.hh>
+#include "CexmcPrimitiveScorer.hh"
+#include "CexmcSensitiveDetectorMessenger.hh"
 
 
-std::ostream &  operator<<( std::ostream &  out,
-                        const CexmcEnergyRangeWithDoubleValue &  range )
+CexmcPrimitiveScorer::CexmcPrimitiveScorer( const G4String &  name ) :
+    G4VPrimitiveScorer( name ), messenger( NULL )
 {
-    out << "[ " << std::setw( 3 ) << G4BestUnit( range.bottom, "Energy" ) <<
-           ", " << std::setw( 3 ) << G4BestUnit( range.top, "Energy" ) <<
-           " )   " << range.value;
-
-    return out;
 }
 
 
-std::ostream &  operator<<( std::ostream &  out,
-                        const CexmcEnergyRangeWithDoubleValueList &  ranges )
+CexmcPrimitiveScorer::~CexmcPrimitiveScorer()
 {
-    out << std::endl;
-    for ( CexmcEnergyRangeWithDoubleValueList::const_iterator
-                                  k( ranges.begin() ); k != ranges.end(); ++k )
-    {
-        out << "          " << *k << std::endl;
-    }
+    delete messenger;
+}
 
-    return out;
+
+void  CexmcPrimitiveScorer::InitializeMessenger( void )
+{
+    messenger = new CexmcSensitiveDetectorMessenger( this );
+}
+
+
+void  CexmcPrimitiveScorer::PrintHeader( G4int  nmbOfEntries ) const
+{
+    G4cout << " --- MultiFunctionalDet " << detector->GetName() << G4endl;
+    G4cout << "     PrimitiveScorer " << primitiveName << G4endl;
+    G4cout << "     Number of entries " << nmbOfEntries << G4endl;
 }
 

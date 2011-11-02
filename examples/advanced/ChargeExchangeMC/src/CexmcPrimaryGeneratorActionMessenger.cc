@@ -59,8 +59,8 @@ CexmcPrimaryGeneratorActionMessenger::CexmcPrimaryGeneratorActionMessenger(
     fwhmPosX->SetGuidance( "Set positional fwhm of the beam along X axis" );
     fwhmPosX->SetParameterName( "FwhmPosX", false );
     fwhmPosX->SetDefaultValue( 0 );
-    fwhmPosX->SetDefaultUnit( "cm" );
     fwhmPosX->SetUnitCandidates( "mm cm m" );
+    fwhmPosX->SetDefaultUnit( "cm" );
     fwhmPosX->AvailableForStates( G4State_PreInit, G4State_Idle );
 
     fwhmPosY = new G4UIcmdWithADoubleAndUnit(
@@ -68,8 +68,8 @@ CexmcPrimaryGeneratorActionMessenger::CexmcPrimaryGeneratorActionMessenger(
     fwhmPosY->SetGuidance( "Set positional fwhm of the beam along Y axis" );
     fwhmPosY->SetParameterName( "FwhmPosY", false );
     fwhmPosY->SetDefaultValue( 0 );
-    fwhmPosY->SetDefaultUnit( "cm" );
     fwhmPosY->SetUnitCandidates( "mm cm m" );
+    fwhmPosY->SetDefaultUnit( "cm" );
     fwhmPosY->AvailableForStates( G4State_PreInit, G4State_Idle );
 
     fwhmDirX = new G4UIcmdWithADoubleAndUnit(
@@ -77,8 +77,8 @@ CexmcPrimaryGeneratorActionMessenger::CexmcPrimaryGeneratorActionMessenger(
     fwhmDirX->SetGuidance( "Set directional fwhm of the beam along X axis" );
     fwhmDirX->SetParameterName( "FwhmDirX", false );
     fwhmDirX->SetDefaultValue( 0 );
-    fwhmDirX->SetDefaultUnit( "deg" );
     fwhmDirX->SetUnitCandidates( "deg rad" );
+    fwhmDirX->SetDefaultUnit( "deg" );
     fwhmDirX->AvailableForStates( G4State_PreInit, G4State_Idle );
 
     fwhmDirY = new G4UIcmdWithADoubleAndUnit(
@@ -86,16 +86,16 @@ CexmcPrimaryGeneratorActionMessenger::CexmcPrimaryGeneratorActionMessenger(
     fwhmDirY->SetGuidance( "Set directional fwhm of the beam along Y axis" );
     fwhmDirY->SetParameterName( "FwhmDirY", false );
     fwhmDirY->SetDefaultValue( 0 );
-    fwhmDirY->SetDefaultUnit( "deg" );
     fwhmDirY->SetUnitCandidates( "deg rad" );
+    fwhmDirY->SetDefaultUnit( "deg" );
     fwhmDirY->AvailableForStates( G4State_PreInit, G4State_Idle );
 
     fwhmMomentumAmp = new G4UIcmdWithADouble(
             ( CexmcMessenger::gunDirName + "fwhmMomentumAmp" ).c_str(), this );
     fwhmMomentumAmp->SetGuidance( "Set fwhm of the beam momentum as fraction "
                                   "of its value" );
-    fwhmMomentumAmp->SetDefaultValue( 0 );
     fwhmMomentumAmp->SetParameterName( "FwhmMomentumAmp", false );
+    fwhmMomentumAmp->SetDefaultValue( 0 );
     fwhmMomentumAmp->AvailableForStates( G4State_PreInit, G4State_Idle );
 }
 

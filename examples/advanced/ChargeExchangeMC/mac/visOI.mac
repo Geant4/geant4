@@ -34,8 +34,6 @@
 #/vis/scene/add/hits
 #/vis/scene/add/axes
 
-/cexmc/vis/drawTrajMarkers false
-
 /vis/viewer/flush
 
 /vis/scene/endOfEventAction accumulate 10

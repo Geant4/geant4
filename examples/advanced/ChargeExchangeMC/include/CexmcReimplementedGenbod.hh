@@ -61,10 +61,7 @@ class  CexmcReimplementedGenbod : public CexmcPhaseSpaceGenerator
 
         void      FermiEnergyDepStatusChangeHook( void );
 
-    private:
         void      SetMaxWeight( void );
-
-        G4double  PDK( G4double  a, G4double  b, G4double  c );
 
     private:
         G4double  maxWeight;
