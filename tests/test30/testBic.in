@@ -5,7 +5,7 @@
 //      Created: 13.03.2002 V.Ivanchenko
 //--------------------------------------- 
 #verbose
-2
+1
 #events
 4465
 #print
@@ -33,4 +33,5 @@ G4_Bi
 30. 60. 90. 120. 150.  
 #generator
 binary
+#run
 #exit

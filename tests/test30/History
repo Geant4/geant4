@@ -14,6 +14,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+test30-V09-04-10   1 November 2011 V.Ivanchenko
+test30-V09-04-09  21 October 2011 V.Ivanchenko
+- test30.cc - fixed sort out elastic cross sections according to builders;
+    fix call sequence in the event loop; removed old G4EXception;
+- Histo - removed old G4Exception
+- Test30VSecondaryGenerator - consistently migrated to integer Z and A
+
 test30-V09-04-08  14 October 2011 Pere Mato
 - Test30VSecondaryGenerator.cc - Added initialized for member tagetNucleus
   Fixes error G4NucleiProperties::GetNuclearMass: Wrong values for A = 0 and Z = 0

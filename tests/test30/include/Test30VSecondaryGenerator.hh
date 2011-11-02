@@ -88,8 +88,8 @@ private:
   const G4Element* elm;
   G4Nucleus targetNucleus;
   G4HadFinalState* result;
-  G4double targetZ;
-  G4double targetN;
+  G4int targetZ;
+  G4int targetN;
 
 };
 

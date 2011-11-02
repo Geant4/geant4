@@ -128,11 +128,13 @@ void Histo::book()
 #ifdef G4ANALYSIS_USE_ROOT
   m_ROOT_file = 
     new TFile(nam,"RECREATE","ROOT file with trees and histograms");
-  if(m_ROOT_file)
+  if(m_ROOT_file) {
     G4cout << "[Histo::book] File created: " << nam << G4endl;
-  else
-    G4Exception("[Histo::book] ERROR: file " + nam + " has not been created!");
-
+  } else {
+    G4cout << "[Histo::book] ERROR: file " << nam << " has not been created!"
+	   << G4endl;
+    exit(1);
+  }
 
   // Creating an 1-dimensional histograms in the root directory of the tree
   for(G4int i=0; i<nHisto; i++) {

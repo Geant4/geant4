@@ -192,6 +192,7 @@ int main(int argc, char** argv)
   G4bool gtran = false;
   G4bool gemis = false;
   G4bool xsbgg = true;
+  G4bool xschips = false;
 
   G4double ang[20] = {0.0};
   G4double bng1[20] = {0.0};
@@ -465,6 +466,13 @@ int main(int argc, char** argv)
         logx = true;
       } else if(line == "#xs_ghad") {
 	xsbgg = false;
+	xschips = false;
+      } else if(line == "#xs_chips") {
+	xsbgg = false;
+	xschips = true;
+      } else if(line == "#xs_bgg") {
+	xsbgg = true;
+	xschips = false;
       } else if(line == "#exit") {
         end = false;
         break;
@@ -552,13 +560,14 @@ int main(int argc, char** argv)
       G4cout << "Material <" << nameMat
 	     << "> is not found out"
 	     << G4endl;
-	     exit(1);
+      exit(1);
     }
     G4ProductionCuts* cuts = new G4ProductionCuts();
     G4MaterialCutsCouple* couple = new G4MaterialCutsCouple(material,cuts);
     couple->SetIndex(0);
     G4ProductionCutsTable* pkt = G4ProductionCutsTable::GetProductionCutsTable();
-    std::vector<G4double>* vc = const_cast<std::vector<G4double>*>(pkt->GetEnergyCutsVector(3));
+    std::vector<G4double>* vc = 
+      const_cast<std::vector<G4double>*>(pkt->GetEnergyCutsVector(3));
     vc->push_back(0.0); 
     const G4Element* elm = material->GetElement(0); 
 
@@ -570,7 +579,7 @@ int main(int argc, char** argv)
     if (!part) {
       G4cout << " Sorry, No definition for particle" <<namePart 
 	     << " found" << G4endl;
-      G4Exception(" ");  
+      exit(1);  
     }
     G4DynamicParticle dParticle(part,aDirection,energy);
 
@@ -578,7 +587,7 @@ int main(int argc, char** argv)
     G4HadronicProcess* extraproc = 0;
     G4VProcess* proc = 0;
     G4String namegen1 = nameGen.substr(0, 4);
-    //G4cout << "<" << namegen1 << ">" << G4endl; 
+    G4cout << "<" << namegen1 << ">" << G4endl; 
     if(namegen1 == "Elas") { 
       extraproc = new G4WHadronElasticProcess(); 
     } else if (nameGen == "chargeex") { 
@@ -593,7 +602,7 @@ int main(int argc, char** argv)
     if(!proc && !chips && !extraproc) {
       G4cout << "For particle: " << part->GetParticleName()
 	     << " generator " << nameGen << " is unavailable"<< G4endl;
-	     exit(1);
+      exit(1);
     }
 
     // ------- Define target A
@@ -769,14 +778,20 @@ int main(int argc, char** argv)
     } else if(extraproc && namegen1 == "Elas") {
 
       cs = new G4HadronElasticDataSet();
-      if(nameGen == "Elastic" || nameGen == "ElasticHE" || 
-	 nameGen == "ElasticDIFF") {
+      if(nameGen == "Elastic" 
+	 || nameGen == "ElasticHE" 
+	 //|| nameGen == "ElasticDIFF"
+	 ) {
 	if(part == proton || part == neutron) {
-	  if(xsbgg) { cs = new G4BGGNucleonElasticXS(part); }
+	  if(xsbgg)        { cs = new G4BGGNucleonElasticXS(part); }
+	  else if(xschips) { cs = new G4CHIPSElasticXS(); }
 	} else if(part == pip || part == pin) {
-	  if(xsbgg) { cs = new G4BGGPionElasticXS(part); }
+	  if(xsbgg)        { cs = new G4BGGPionElasticXS(part); }
+	  else if(xschips) { cs = new G4CHIPSElasticXS(); }
 	}
-      } else if(nameGen == "ElasticCHIPS") {
+      } else if(nameGen == "ElasticCHIPS"
+		|| nameGen == "ElasticDIFF"
+		) {
 	cs = new G4CHIPSElasticXS(); 
       } else if(nameGen == "ElasticHP") {
 	cs = new G4NeutronHPElasticData(); 
@@ -785,7 +800,7 @@ int main(int argc, char** argv)
       G4ProcessManager* man = new G4ProcessManager(part);
       if(!man) {  
 	G4cout << " Sorry, No manager available for particle" <<namePart << G4endl;
-	G4Exception(" ");  
+	exit(1);  
       }
 
       G4HadronicInteraction* els = 0;
@@ -1026,19 +1041,26 @@ int main(int argc, char** argv)
       gTrack->SetStep(step);
       gTrack->SetKineticEnergy(e0);
       G4double amass = 0.0;
-
-      // note: check of 4-momentum balance for CHIPS is not guranteed due to
-      // unknown isotope      
+      
       if(chips) { 
+	// note: check of 4-momentum balance for CHIPS is not guranteed due to
+	// unknown isotope, however, the problem may be fixed with CHIPS update
 	aChange = chips->PostStepDoIt(*gTrack,*step);
-	G4int Nt = chips->GetNumberOfNeutronsInTarget(); 
-        amass = G4NucleiProperties::GetNuclearMass(Nt+Z, Z);
+	G4int At = chips->GetNumberOfNeutronsInTarget() + Z; 
+	amass = G4NucleiProperties::GetNuclearMass(At, Z);
+
       } else if(extraproc) {
+	// elastic and change exchenage processes
+	// for extra processes isotope is selected by the process
 	aChange = extraproc->PostStepDoIt(*gTrack,*step); 
-        amass = G4NucleiProperties::GetNuclearMass(A, Z);
+	G4int At = extraproc->GetTargetNucleus()->GetA_asInt(); 
+	amass = G4NucleiProperties::GetNuclearMass(At, Z);
+
       } else { 
-	aChange = proc->PostStepDoIt(*gTrack,*step); 
+	// test30 special process, isotope may be set in macro (Z and A)
+	// or is sampled in GetNuclearMass method
         amass = phys->GetNucleusMass();
+	aChange = proc->PostStepDoIt(*gTrack,*step); 
       }
 
       labv = G4LorentzVector(0.0, 0.0, std::sqrt(e0*(e0 + 2.*mass)), 

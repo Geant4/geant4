@@ -72,9 +72,6 @@ public:
 
   void SetA(G4int A) {if(theProcess) theProcess->SetA(A);};
 
-//    void setCutOnP(G4double val) {if(hkmod) hkmod->setCutOnP(val);};
-//    void setCutOnPPP(G4double val) {if(hkmod) hkmod->setCutOnPPP(val);};
-
 private:
 
   void Initialise();
