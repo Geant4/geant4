@@ -15,6 +15,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+01-11-2011, P.Gumplinger               (phys-lists-V09-04-56)
+- Add SetFiniteRiseTime to G4OpticalPhysics and
+  G4OpticalPhysicsMessenger
+
+01-11-2011, S.Incerti                  (phys-lists-V09-04-55)
+- Further extended G4EmDNAPhysics builder to the handling of HZE
+- to be used on top of tag emdna-V09-04-36
+
 27-10-2011, P.Kaitaniemi               (phys-lists-V09-04-54)
 - Added new physics list QGSP_INCLXX and assosiated builders
 - Uses INLC++ for protons, neutrons and pions in the energy

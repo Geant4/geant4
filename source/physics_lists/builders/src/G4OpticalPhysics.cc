@@ -62,6 +62,7 @@ G4OpticalPhysics::G4OpticalPhysics(G4int verbose, const G4String& name)
     fSurfaceModel(unified),
     fProfile("delta"),
     fTrackSecondariesFirst(true),
+    fFiniteRiseTime(false),
     fScintillationByParticleType(false)
 {
   verboseLevel = verbose;
@@ -190,8 +191,9 @@ void G4OpticalPhysics::ConstructProcess()
   fProcesses[kScintillation] = fScintillationProcess = new G4Scintillation();
   fScintillationProcess->SetScintillationYieldFactor(fYieldFactor);
   fScintillationProcess->SetScintillationExcitationRatio(fExcitationRatio);
-  fScintillationProcess->SetTrackSecondariesFirst(fTrackSecondariesFirst);
+  fScintillationProcess->SetFiniteRiseTime(fFiniteRiseTime);
   fScintillationProcess->SetScintillationByParticleType(fScintillationByParticleType);
+  fScintillationProcess->SetTrackSecondariesFirst(fTrackSecondariesFirst);
 
   // Use Birks Correction in the Scintillation process
 
@@ -333,6 +335,13 @@ void G4OpticalPhysics::SetTrackSecondariesFirst(G4bool trackSecondariesFirst)
     fScintillationProcess->SetTrackSecondariesFirst(trackSecondariesFirst);
 
 }
+
+void G4OpticalPhysics::SetFiniteRiseTime(G4bool finiteRiseTime)
+{
+  fFiniteRiseTime = finiteRiseTime;
+  if(fScintillationProcess)
+    fScintillationProcess->SetFiniteRiseTime(finiteRiseTime);
+} 
 
 void G4OpticalPhysics::Configure(G4OpticalProcessIndex index, G4bool isUse)
 {

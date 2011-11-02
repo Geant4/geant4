@@ -121,6 +121,7 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
     void AddScintillationSaturation(G4EmSaturation* );
 
     void SetTrackSecondariesFirst(G4bool );
+    void SetFiniteRiseTime(G4bool );
 
   private:
 
@@ -172,6 +173,11 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
 
     /// option to track secondaries before finishing their parent track
     G4bool                      fTrackSecondariesFirst;
+
+    /// option to set a finite rise-time; Note: the G4Scintillation 
+    /// process expects the user to have set the constant material 
+    /// property FAST/SLOWSCINTILLATIONRISETIME
+    G4bool                      fFiniteRiseTime;
 
     /// option to  allow for the light yield to be a function of
     /// particle type and deposited energy in case of non-linear

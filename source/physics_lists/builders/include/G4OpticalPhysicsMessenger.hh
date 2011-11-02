@@ -69,6 +69,7 @@ class G4UIcmdWithAnInteger;
 // - /optics_engine/setOpticalSurfaceModel glisur|unified
 // - /optics_engine/setWLSTimeProfile delta|exponential
 // - /optics_engine/setTrackSecondariesFirst true|false
+// - /optics_engine/setFiniteRiseTime true|false
 
 class G4OpticalPhysicsMessenger: public G4UImessenger
 {
@@ -130,6 +131,9 @@ private:
 
   /// setTrackSecondariesFirst command
   G4UIcmdWithABool*      fSetTrackSecondariesFirstCmd;
+
+  /// setFiniteRiseTime command
+  G4UIcmdWithABool*      fSetFiniteRiseTimeCmd;
 
 };
 

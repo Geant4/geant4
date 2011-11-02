@@ -117,6 +117,10 @@ void G4EmDNAPhysics::ConstructParticle()
   genericIonsManager->GetIon("alpha+");
   genericIonsManager->GetIon("helium");
   genericIonsManager->GetIon("hydrogen");
+  genericIonsManager->GetIon("carbon");
+  genericIonsManager->GetIon("nitrogen");
+  genericIonsManager->GetIon("oxygen");
+  genericIonsManager->GetIon("iron");
 
 }
 

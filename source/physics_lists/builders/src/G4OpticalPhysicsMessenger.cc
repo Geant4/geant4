@@ -71,7 +71,8 @@ G4OpticalPhysicsMessenger::G4OpticalPhysicsMessenger(
     fSetScintillationByParticleTypeCmd(0),
     fSetOpticalSurfaceModelCmd(0),
     fSetWLSTimeProfileCmd(0),
-    fSetTrackSecondariesFirstCmd(0)
+    fSetTrackSecondariesFirstCmd(0),
+    fSetFiniteRiseTimeCmd(0)
 {
   fDir = new G4UIdirectory("/optics_engine/");
   fDir->SetGuidance("Commands related to the optical physics simulation engine.");
@@ -152,6 +153,13 @@ G4OpticalPhysicsMessenger::G4OpticalPhysicsMessenger(
     ->SetGuidance("Set option to track secondaries before finishing their parent track");
   fSetTrackSecondariesFirstCmd->SetParameterName("TrackSecondariesFirst", false);
   fSetTrackSecondariesFirstCmd->AvailableForStates(G4State_PreInit, G4State_Idle, G4State_GeomClosed, G4State_EventProc);
+
+  fSetFiniteRiseTimeCmd
+    = new G4UIcmdWithABool("/optics_engine/setFiniteRiseTime", this);
+  fSetFiniteRiseTimeCmd
+     ->SetGuidance("Set option of a finite rise-time for G4Scintillation - If set, the G4Scintillation process expects the user to have set the constant material property FAST/SLOWSCINTILLATIONRISETIME");
+  fSetFiniteRiseTimeCmd->SetParameterName("FiniteRiseTime", false);
+  fSetFiniteRiseTimeCmd->AvailableForStates(G4State_PreInit, G4State_Idle, G4State_GeomClosed, G4State_EventProc);
 }
 
 G4OpticalPhysicsMessenger::~G4OpticalPhysicsMessenger()
@@ -169,6 +177,7 @@ G4OpticalPhysicsMessenger::~G4OpticalPhysicsMessenger()
   delete fSetOpticalSurfaceModelCmd;
   delete fSetWLSTimeProfileCmd;
   delete fSetTrackSecondariesFirstCmd;
+  delete fSetFiniteRiseTimeCmd;
 }
 
 void G4OpticalPhysicsMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
@@ -233,6 +242,11 @@ void G4OpticalPhysicsMessenger::SetNewValue(G4UIcommand* command, G4String newVa
     fOpticalPhysics
       ->SetScintillationByParticleType(
          fSetScintillationByParticleTypeCmd->GetNewBoolValue(newValue));
+  }
+  else if (command == fSetFiniteRiseTimeCmd) {
+    fOpticalPhysics
+      ->SetFiniteRiseTime(
+         fSetFiniteRiseTimeCmd->GetNewBoolValue(newValue));
   }
   else if (command == fSetOpticalSurfaceModelCmd) {
     if ( newValue == "glisur" ) {
