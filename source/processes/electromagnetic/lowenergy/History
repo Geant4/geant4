@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+03.11.2011  G.Cosmo tag emlowen-V09-04-72
+            Again fix to source.cmake for case sensitive specifications of
+            file G4OrlicLiXsModel[.hh.cc]...
+
 03.11.2011  G.Cosmo tag emlowen-V09-04-71
             Again fix to source.cmake for classes deleted...
 

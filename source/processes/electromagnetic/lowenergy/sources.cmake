@@ -107,7 +107,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LivermorePolarizedRayleighModel.hh
         G4LivermoreRayleighModel.hh
         G4LogLogInterpolation.hh
-        G4OrlicLixsModel.hh
+        G4OrlicLiXsModel.hh
         G4PaulKxsModel.hh
         G4Penelope01BremsstrahlungAngular.hh
 	G4Penelope01BremsstrahlungContinuous.hh
@@ -226,7 +226,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LivermorePolarizedRayleighModel.cc
         G4LivermoreRayleighModel.cc
         G4LogLogInterpolation.cc
-        G4OrlicLixsModel.cc
+        G4OrlicLiXsModel.cc
         G4PaulKxsModel.cc
       	G4Penelope01BremsstrahlungAngular.cc
 	G4Penelope01BremsstrahlungContinuous.cc
