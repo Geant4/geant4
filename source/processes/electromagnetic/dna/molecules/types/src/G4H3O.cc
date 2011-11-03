@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// Author: Mathieu Karamitors (kara@cenbg.in2p3.fr)
+// Author: Mathieu Karamitors 
 //
 // History:
 // -----------

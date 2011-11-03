@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// Author: Mathieu Karamitors (kara@cenbg.in2p3.fr)
+// Author: Mathieu Karamitors 
 //
 // WARNING : This class is released as a prototype.
 // It might strongly evolve or even disapear in the next releases.

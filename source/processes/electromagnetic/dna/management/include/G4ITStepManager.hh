@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// Author: Mathieu Karamitros (kara@cenbg.in2p3.fr)
+// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
 // WARNING : This class is released as a prototype.
 // It might strongly evolve or even disapear in the next releases.
@@ -73,6 +73,9 @@ public :
     inline G4double GetGlobalTime();
     inline void SetUserITAction(G4UserReactionAction* /*userITAction*/);
     inline G4UserReactionAction* GetUserITAction();
+
+    inline void SetVerbose(int);
+    inline int GetVerbose();
 
 protected:
     void DoProcess();
@@ -149,6 +152,8 @@ private:
 
     int fNbTracks ;
 
+    int fVerbose;
+
     static G4ITStepManager* fgStepManager ;
 };
 
@@ -191,6 +196,16 @@ inline void G4ITStepManager::SetUserITAction(G4UserReactionAction* userITAction)
 inline G4UserReactionAction* G4ITStepManager::GetUserITAction()
 {
     return fpUserITAction;
+}
+
+inline void G4ITStepManager::SetVerbose(int verbose)
+{
+    fVerbose = verbose;
+}
+
+inline int G4ITStepManager::GetVerbose()
+{
+    return fVerbose ;
 }
 
 #endif

@@ -13,6 +13,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+01.11.2011  M.K.                tag emdna-V09-04-37
+            Add G4ITStepManager fVerbose
+	    Add dna includes in sources.cmake
+     
 01.11.2011  M.K.                tag emdna-V09-04-36
             Remove warnings on G4ITModelProcessor,
             G4ITTransportation, G4TrackList on Windows

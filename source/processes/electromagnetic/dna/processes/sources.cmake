@@ -39,6 +39,11 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/standar
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/lowenergy/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/utils/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/dna/models/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/dna/utils/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/dna/molecules/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/dna/molecules/types/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/dna/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 
 #

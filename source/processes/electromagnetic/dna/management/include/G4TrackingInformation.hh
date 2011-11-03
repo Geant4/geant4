@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// Author: Mathieu Karamitros (kara@cenbg.in2p3.fr)
+// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
 // WARNING : This class is released as a prototype.
 // It might strongly evolve or even disapear in the next releases.
@@ -54,7 +54,7 @@ typedef std::vector<G4int>
         G4SelectedPostStepDoItVector;
 
 class G4Trajectory_Lock;
-class G4ProcessState_Lock;
+struct G4ProcessState_Lock;
 
 /** The class G4TrackingInformation (hold by G4IT)
  *  emcompasses processes informations computed

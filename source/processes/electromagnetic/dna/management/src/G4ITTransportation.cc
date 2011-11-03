@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// Author: Mathieu Karamitros (kara@cenbg.in2p3.fr)
+// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
 // This class is slightly modified version of G4Transportation
 // But it should use the exact same algorithm
@@ -133,8 +133,9 @@ G4ITTransportation::G4ITTransportationState::G4ITTransportationState() : G4Proce
     fTransportEndSpin = G4ThreeVector(0,0,0);
     fMomentumChanged = false;
     fEnergyChanged = false;
-    fEndGlobalTimeComputed = -1;
+    fEndGlobalTimeComputed = false;
     fCandidateEndGlobalTime = -1;
+    fParticleIsLooping = false;
     static G4TouchableHandle nullTouchableHandle; // Points to (G4VTouchable*) 0
     fCurrentTouchableHandle = nullTouchableHandle;
     fGeometryLimitedStep = false;

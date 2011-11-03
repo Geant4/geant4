@@ -27,6 +27,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/materials/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/dna/management/include)
 
 #
 # Define the Geant4 Module.
