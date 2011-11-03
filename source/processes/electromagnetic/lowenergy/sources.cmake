@@ -44,10 +44,6 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4emlowenergy
     HEADERS
-        G4ecpssrBaseKxsModel.hh
-        G4ecpssrBaseLixsModel.hh
-	G4ecpssrFormFactorKxsModel.hh
-	G4ecpssrFormFactorLixsModel.hh
         G4AtomicDeexcitation.hh
         G4AtomicTransitionManager.hh
         G4AugerData.hh
@@ -60,8 +56,10 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4CrossSectionHandler.hh
         G4DopplerProfile.hh
         G4eBremsstrahlungSpectrum.hh
-	G4ECPSSRFormFactorKCrossSection.hh
-	G4ECPSSRFormFactorLiCrossSection.hh
+        G4ecpssrBaseKxsModel.hh
+        G4ecpssrBaseLixsModel.hh
+	G4ecpssrFormFactorKxsModel.hh
+	G4ecpssrFormFactorLixsModel.hh
         G4eCrossSectionHandler.hh
         G4eIonisationCrossSectionHandler.hh
         G4eIonisationParameters.hh
@@ -166,10 +164,6 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4VPhotoElectricAngularDistribution.hh
         G4VRangeTest.hh
     SOURCES
-        G4ecpssrBaseKxsModel.cc
-        G4ecpssrBaseLixsModel.cc
-	G4ecpssrFormFactorKxsModel.cc
-	G4ecpssrFormFactorLixsModel.cc
         G4AtomicDeexcitation.cc
         G4AtomicTransitionManager.cc
         G4AugerData.cc
@@ -182,8 +176,10 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4CrossSectionHandler.cc
         G4DopplerProfile.cc
         G4eBremsstrahlungSpectrum.cc
-	G4ECPSSRFormFactorKCrossSection.cc
-	G4ECPSSRFormFactorLiCrossSection.cc
+        G4ecpssrBaseKxsModel.cc
+        G4ecpssrBaseLixsModel.cc
+	G4ecpssrFormFactorKxsModel.cc
+	G4ecpssrFormFactorLixsModel.cc
         G4eCrossSectionHandler.cc
         G4eIonisationCrossSectionHandler.cc
         G4eIonisationParameters.cc

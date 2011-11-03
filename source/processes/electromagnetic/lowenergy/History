@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+03.11.2011  G.Cosmo tag emlowen-V09-04-71
+            Again fix to source.cmake for classes deleted...
+
+02.11.2011  V.Ivanchenko tag emlowen-V09-04-70
+            Fixed source.cmake
+
 02.11.2011  L.Pandola tag emlowen-V09-04-69
 	    Add additional verbosity in G4PenelopeBremsstrahlungFS 
             in the attempt to sort of the reason of G4Exception 
