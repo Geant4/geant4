@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-09    (7-October-2011)
+ Geant4 version Name: geant4-09-04-ref-10    (4-November-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -63,10 +63,10 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :  Emin=        0 eV    Emax=      100 MeV   AngularGenUrban
-            eBremLPM :  Emin=      100 MeV   Emax=       10 TeV   AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -78,10 +78,10 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :  Emin=        0 eV    Emax=      100 MeV   AngularGenUrban
-            eBremLPM :  Emin=      100 MeV   Emax=       10 TeV   AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
 
 annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -312,7 +312,7 @@ AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Ema
                                   Hadronic Processes for <anti_proton>
                                   -----------------------------------
           hadElastic  Models:                 hElasticLHEP: Emin(GeV)=    0  Emax(GeV)= 0.1
-                                              AntiAElastic: Emin(GeV)=  0.1  Emax(GeV)= 1000
+                                              AntiAElastic: Emin(GeV)=  0.1  Emax(GeV)= 100000
 
           hadElastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
                                             GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
@@ -456,14 +456,6 @@ AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Ema
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 ============================================================================================
- Process: AntiProtonInelastic , Model: FTFP
- Primary: anti_proton (-2212), E= 5097.71, target nucleus (82,206)
- relative limit 0.02 relative value = -0.0505354 fail
- absolute limit (MeV) 150 absolute value (MeV) = -210.199 fail
-G4Fragment::CalculateExcitationEnergy(): WARNING 
-Fragment: A = 205, Z =  81, U = -2.596e-03 MeV
-          P = (3.582e+00,-2.899e+01,-1.174e+01) MeV   E = 1.909e+05 MeV
-
 Idle> #
 Idle> # neutron at 100 GeV in Pb
 Idle> #
@@ -472,10 +464,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 100
- Process: AntiSigmaMinusInelastic , Model: FTFP
- Primary: anti_sigma- (-3112), E= 12498.3, target nucleus (82,208)
- relative limit 0.02 relative value = -0.0150626 pass
- absolute limit (MeV) 150 absolute value (MeV) = -170.22 fail
 Idle> #
 Idle> # pi+ at 100 GeV in Pb
 Idle> #
@@ -484,18 +472,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 100
- Process: AntiSigmaMinusInelastic , Model: FTFP
- Primary: anti_sigma- (-3112), E= 23146.8, target nucleus (82,208)
- relative limit 0.02 relative value = -0.0110199 pass
- absolute limit (MeV) 150 absolute value (MeV) = -241.88 fail
- Process: AntiProtonInelastic , Model: FTFP
- Primary: anti_proton (-2212), E= 8171.42, target nucleus (82,207)
- relative limit 0.02 relative value = -0.034381 fail
- absolute limit (MeV) 150 absolute value (MeV) = -248.683 fail
- Process: AntiLambdaInelastic , Model: FTFP
- Primary: anti_lambda (-3122), E= 5505.8, target nucleus (82,207)
- relative limit 0.02 relative value = -0.0513859 fail
- absolute limit (MeV) 150 absolute value (MeV) = -225.59 fail
 Idle> #
 Idle> # pi- at 100 GeV in Pb
 Idle> #
@@ -504,34 +480,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 100
- Process: AntiNeutronInelastic , Model: FTFP
- Primary: anti_neutron (-2112), E= 5594.19, target nucleus (82,208)
- relative limit 0.02 relative value = -0.0292556 fail
- absolute limit (MeV) 150 absolute value (MeV) = -136.174 pass
- Process: AntiNeutronInelastic , Model: FTFP
- Primary: anti_neutron (-2112), E= 14584.3, target nucleus (82,208)
- relative limit 0.02 relative value = -0.0219496 fail
- absolute limit (MeV) 150 absolute value (MeV) = -299.497 fail
- Process: AntiXiZeroInelastic , Model: FTFP
- Primary: anti_xi0 (-3322), E= 13839.7, target nucleus (82,207)
- relative limit 0.02 relative value = -0.0150623 pass
- absolute limit (MeV) 150 absolute value (MeV) = -188.654 fail
- Process: AntiLambdaInelastic , Model: FTFP
- Primary: anti_lambda (-3122), E= 5246.37, target nucleus (82,206)
- relative limit 0.02 relative value = -0.0586537 fail
- absolute limit (MeV) 150 absolute value (MeV) = -242.28 fail
- Process: AntiNeutronInelastic , Model: FTFP
- Primary: anti_neutron (-2112), E= 13282.9, target nucleus (82,206)
- relative limit 0.02 relative value = -0.0195674 pass
- absolute limit (MeV) 150 absolute value (MeV) = -241.527 fail
- Process: AntiProtonInelastic , Model: FTFP
- Primary: anti_proton (-2212), E= 6786.01, target nucleus (82,208)
- relative limit 0.02 relative value = -0.0206631 fail
- absolute limit (MeV) 150 absolute value (MeV) = -120.832 pass
- Process: AntiNeutronInelastic , Model: FTFP
- Primary: anti_neutron (-2112), E= 5841.32, target nucleus (82,207)
- relative limit 0.02 relative value = -0.0483228 fail
- absolute limit (MeV) 150 absolute value (MeV) = -236.867 fail
 Idle> #
 Idle> # kaon+ at 100 GeV in Pb
 Idle> #
@@ -540,10 +488,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 100
- Process: AntiNeutronInelastic , Model: FTFP
- Primary: anti_neutron (-2112), E= 6360.55, target nucleus (82,207)
- relative limit 0.02 relative value = -0.0366199 fail
- absolute limit (MeV) 150 absolute value (MeV) = -198.516 fail
 Idle> #
 Idle> # kaon- at 100 GeV in Pb
 Idle> #
@@ -552,22 +496,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 100
- Process: AntiProtonInelastic , Model: FTFP
- Primary: anti_proton (-2212), E= 27472.6, target nucleus (82,208)
- relative limit 0.02 relative value = -0.00607259 pass
- absolute limit (MeV) 150 absolute value (MeV) = -161.132 fail
- Process: AntiProtonInelastic , Model: FTFP
- Primary: anti_proton (-2212), E= 7623.64, target nucleus (82,204)
- relative limit 0.02 relative value = -0.0278961 fail
- absolute limit (MeV) 150 absolute value (MeV) = -186.496 fail
- Process: AntiLambdaInelastic , Model: FTFP
- Primary: anti_lambda (-3122), E= 7415.53, target nucleus (82,208)
- relative limit 0.02 relative value = -0.0268554 fail
- absolute limit (MeV) 150 absolute value (MeV) = -169.185 fail
- Process: PionPlusInelastic , Model: FTFP
- Primary: pi+ (211), E= 6360.14, target nucleus (82,208)
- relative limit 0.02 relative value = -0.211172 fail
- absolute limit (MeV) 150 absolute value (MeV) = -1313.61 fail
 Idle> #
 Idle> # kaon0S at 100 GeV in Pb
 Idle> #
@@ -576,18 +504,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 100
- Process: AntiNeutronInelastic , Model: FTFP
- Primary: anti_neutron (-2112), E= 14568.4, target nucleus (82,208)
- relative limit 0.02 relative value = -0.0125476 pass
- absolute limit (MeV) 150 absolute value (MeV) = -171.009 fail
- Process: AntiNeutronInelastic , Model: FTFP
- Primary: anti_neutron (-2112), E= 21025.4, target nucleus (82,208)
- relative limit 0.02 relative value = -0.00834085 pass
- absolute limit (MeV) 150 absolute value (MeV) = -167.533 fail
- Process: AntiLambdaInelastic , Model: FTFP
- Primary: anti_lambda (-3122), E= 9928.68, target nucleus (82,206)
- relative limit 0.02 relative value = -0.0273809 fail
- absolute limit (MeV) 150 absolute value (MeV) = -241.307 fail
 Idle> #
 Idle> # kaon0L at 100 GeV in Pb
 Idle> #
@@ -596,22 +512,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 100
- Process: AntiNeutronInelastic , Model: FTFP
- Primary: anti_neutron (-2112), E= 7942.67, target nucleus (82,207)
- relative limit 0.02 relative value = -0.0263069 fail
- absolute limit (MeV) 150 absolute value (MeV) = -184.23 fail
- Process: AntiLambdaInelastic , Model: FTFP
- Primary: anti_lambda (-3122), E= 14104.9, target nucleus (82,206)
- relative limit 0.02 relative value = -0.0204202 fail
- absolute limit (MeV) 150 absolute value (MeV) = -265.242 fail
- Process: AntiNeutronInelastic , Model: FTFP
- Primary: anti_neutron (-2112), E= 13676.1, target nucleus (82,208)
- relative limit 0.02 relative value = -0.0128451 pass
- absolute limit (MeV) 150 absolute value (MeV) = -163.601 fail
- Process: AntiProtonInelastic , Model: FTFP
- Primary: anti_proton (-2212), E= 8879.85, target nucleus (82,207)
- relative limit 0.02 relative value = -0.02564 fail
- absolute limit (MeV) 150 absolute value (MeV) = -203.622 fail
 Idle> #
 Idle> # proton at 100 GeV in Al
 Idle> #
@@ -651,10 +551,10 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :  Emin=        0 eV    Emax=      100 MeV   AngularGenUrban
-            eBremLPM :  Emin=      100 MeV   Emax=       10 TeV   AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -666,10 +566,10 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :  Emin=        0 eV    Emax=      100 MeV   AngularGenUrban
-            eBremLPM :  Emin=      100 MeV   Emax=       10 TeV   AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
 
 annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -874,6 +774,10 @@ hPairProd:   for  pi-    SubType= 4
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
+G4Fragment::CalculateExcitationEnergy(): WARNING 
+Fragment: A =  26, Z =  12, U = -9.901e-01 MeV
+          P = (5.129e+01,-2.166e+02,3.688e+01) MeV   E = 2.420e+04 MeV
+
 Idle> #
 Idle> # neutron at 100 GeV in Al
 Idle> #
@@ -890,10 +794,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 Idle> /run/beamOn 100
- Process: AntiNeutronInelastic , Model: FTFP
- Primary: anti_neutron (-2112), E= 3073.13, target nucleus (13,27)
- relative limit 0.02 relative value = -0.0261257 fail
- absolute limit (MeV) 150 absolute value (MeV) = -55.7408 pass
 Idle> #
 Idle> # pi- at 100 GeV in Al
 Idle> #
@@ -902,10 +802,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 Idle> /run/beamOn 100
- Process: AntiNeutronInelastic , Model: FTFP
- Primary: anti_neutron (-2112), E= 2766.32, target nucleus (13,27)
- relative limit 0.02 relative value = -0.0305136 fail
- absolute limit (MeV) 150 absolute value (MeV) = -55.7408 pass
 Idle> #
 Idle> # kaon+ at 100 GeV in Al
 Idle> #
@@ -914,10 +810,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 Idle> /run/beamOn 100
- Process: AntiProtonInelastic , Model: FTFP
- Primary: anti_proton (-2212), E= 6274.47, target nucleus (13,27)
- relative limit 0.02 relative value = -0.0367489 fail
- absolute limit (MeV) 150 absolute value (MeV) = -196.099 fail
 Idle> #
 Idle> # kaon- at 100 GeV in Al
 Idle> #
@@ -926,18 +818,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 Idle> /run/beamOn 100
- Process: AntiProtonInelastic , Model: FTFP
- Primary: anti_proton (-2212), E= 8601.16, target nucleus (13,27)
- relative limit 0.02 relative value = -0.0211042 fail
- absolute limit (MeV) 150 absolute value (MeV) = -161.719 fail
- Process: AntiProtonInelastic , Model: FTFP
- Primary: anti_proton (-2212), E= 5868.54, target nucleus (13,27)
- relative limit 0.02 relative value = -0.020835 fail
- absolute limit (MeV) 150 absolute value (MeV) = -102.722 pass
- Process: AntiProtonInelastic , Model: FTFP
- Primary: anti_proton (-2212), E= 3815.43, target nucleus (13,27)
- relative limit 0.02 relative value = -0.0200717 fail
- absolute limit (MeV) 150 absolute value (MeV) = -57.7493 pass
 Idle> #
 Idle> # kaon0S at 100 GeV in Al
 Idle> #
@@ -946,10 +826,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 Idle> /run/beamOn 100
- Process: AntiLambdaInelastic , Model: FTFP
- Primary: anti_lambda (-3122), E= 2592.55, target nucleus (13,27)
- relative limit 0.02 relative value = -0.0201452 fail
- absolute limit (MeV) 150 absolute value (MeV) = -29.7518 pass
 Idle> #
 Idle> # kaon0L at 100 GeV in Al
 Idle> #
@@ -958,18 +834,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 Idle> /run/beamOn 100
- Process: AntiProtonInelastic , Model: FTFP
- Primary: anti_proton (-2212), E= 6145.47, target nucleus (13,27)
- relative limit 0.02 relative value = -0.0208547 fail
- absolute limit (MeV) 150 absolute value (MeV) = -108.594 pass
- Process: AntiProtonInelastic , Model: FTFP
- Primary: anti_proton (-2212), E= 6184.46, target nucleus (13,27)
- relative limit 0.02 relative value = -0.0223906 fail
- absolute limit (MeV) 150 absolute value (MeV) = -117.465 pass
- Process: AntiProtonInelastic , Model: FTFP
- Primary: anti_proton (-2212), E= 5168.8, target nucleus (13,27)
- relative limit 0.02 relative value = -0.0337102 fail
- absolute limit (MeV) 150 absolute value (MeV) = -142.612 pass
 Idle> #
 Idle> # proton at 100 GeV in Air
 Idle> #
@@ -1009,10 +873,10 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :  Emin=        0 eV    Emax=      100 MeV   AngularGenUrban
-            eBremLPM :  Emin=      100 MeV   Emax=       10 TeV   AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -1024,10 +888,10 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :  Emin=        0 eV    Emax=      100 MeV   AngularGenUrban
-            eBremLPM :  Emin=      100 MeV   Emax=       10 TeV   AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
 
 annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -1296,10 +1160,6 @@ Idle> /gun/energy 10 GeV
 Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 5
- Process: AntiProtonInelastic , Model: FTFP
- Primary: anti_proton (-2212), E= 10864.7, target nucleus (82,208)
- relative limit 0.02 relative value = -0.0277394 fail
- absolute limit (MeV) 150 absolute value (MeV) = -275.352 fail
 Idle> #
 Idle> # anti_neutron at 10 GeV in Pb
 Idle> #
@@ -1308,10 +1168,6 @@ Idle> /gun/energy 10 GeV
 Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 5
- Process: AntiNeutronInelastic , Model: FTFP
- Primary: anti_neutron (-2112), E= 10939.6, target nucleus (82,208)
- relative limit 0.02 relative value = -0.0186464 pass
- absolute limit (MeV) 150 absolute value (MeV) = -186.464 fail
 Idle> #
 Idle> # anti_deuteron at 10 GeV in Pb
 Idle> #
@@ -1320,10 +1176,6 @@ Idle> /gun/energy 10 GeV
 Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 5
- Process: AntiProtonInelastic , Model: FTFP
- Primary: anti_proton (-2212), E= 5341.71, target nucleus (82,207)
- relative limit 0.02 relative value = -0.0408249 fail
- absolute limit (MeV) 150 absolute value (MeV) = -179.77 fail
 Idle> #
 Idle> # anti_triton at 10 GeV in Pb
 Idle> #
@@ -1372,10 +1224,6 @@ Idle> /gun/energy 10 GeV
 Idle> /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 Idle> /run/beamOn 5
- Process: AntiNeutronInelastic , Model: FTFP
- Primary: anti_neutron (-2112), E= 7024.12, target nucleus (13,27)
- relative limit 0.02 relative value = -0.0293791 fail
- absolute limit (MeV) 150 absolute value (MeV) = -178.759 fail
 Idle> #
 Idle> # anti_triton at 10 GeV in Al
 Idle> #

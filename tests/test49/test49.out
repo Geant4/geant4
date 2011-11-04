@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-09    (7-October-2011)
+ Geant4 version Name: geant4-09-04-ref-10    (4-November-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -61,5 +61,5 @@ Test49:NewRun:Targ=90073108,M=1.685151e+05,Proj=2212,E=3.999928e+05 MeV, Run #1 
 ***=>TEST49: 47000 events are simulated
 ***=>TEST49: 48000 events are simulated
 ***=>TEST49: 49000 events are simulated
-Test49:Time/Ev=8.146200e-03 s, DN=0.000000e+00 %
+Test49:Time/Ev=8.006200e-03 s, DN=0.000000e+00 %
 

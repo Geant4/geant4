@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-09    (7-October-2011)
+ Geant4 version Name: geant4-09-04-ref-10    (4-November-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -121,7 +121,7 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            LowEnBrem :  Emin=        0 eV    Emax=        1 GeV
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
@@ -136,10 +136,10 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :  Emin=        0 eV    Emax=      100 MeV   AngularGenUrban
-            eBremLPM :  Emin=      100 MeV   Emax=       10 TeV   AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
 
 annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -394,18 +394,18 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   3 kByte
-    Total CPU time elapsed for geometry optimisation: 0 seconds
+    Total CPU time elapsed for geometry optimisation: 0.01 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-       0.00         0.00         0.00            3k Calorimeter
+     100.00         0.01         0.00            3k Calorimeter
        0.00         0.00         0.00            0k Layer
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      92.05          2k         1       50         50         0.00    Calorimeter
+      92.05          2k         1       50         50         0.01    Calorimeter
        7.95          0k         1        3          4         0.00    Layer
 ### Run 0 start.
 
@@ -421,13 +421,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.12s Real=0.12s Sys=0s
+  User=0.09s Real=0.1s Sys=0.01s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 7.8768 MeV :  1.701 MeV      2.16 +- 0.216 %      5.67 mm  +- 1.36 mm 
-   liquidArgon: 1.9639 MeV :  1.741 MeV     8.863 +- 0.8863 %      9.85 mm  +- 9.17 mm 
+          Lead: 7.8436 MeV :  1.718 MeV      2.19 +- 0.219 %      5.67 mm  +-  1.4 mm 
+   liquidArgon: 1.8561 MeV :  1.634 MeV     8.802 +- 0.8802 %      9.09 mm  +- 8.42 mm 
 
 ------------------------------------------------------------
  Beam particle gamma  E = 10 MeV
@@ -435,15 +435,15 @@ Run Summary
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 7.87683 MeV
-liquidArgon:	 1.96386 MeV
+      Lead:	 7.8436 MeV
+liquidArgon:	 1.85607 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1861505064, 297729008
+ Current couple of seeds = 1067958163, 512303301
 ----------------------------------------
 #
 #/run/particle/storePhysicsTable data_stand
