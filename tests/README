@@ -86,6 +86,7 @@ test61 ## QMD hadronic model.
 test62 ## INCL/ABLA hadronic model.
 test65 ## LEND hadronic model.
 test67 ## EM low-energy Penelope (and also others)
+test69 ## INCL++ model 
 test201 # Visualization and graphical interfaces
 test202 # Visualization setup of generic geometry constructs
 ______________________________________________________________________________

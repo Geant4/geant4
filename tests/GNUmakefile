@@ -90,6 +90,7 @@ SUBDIRS += test34
 SUBDIRS += test39
 SUBDIRS += test40
 SUBDIRS += test61
+SUBDIRS += test69
 
 SUBDIRS_AIDA += test50
 
@@ -97,7 +98,7 @@ SUBDIRS_AIDA += test50
 HADEXERDIRS = test02 test11 test12 test13 test15 test16 test21 
 
 HADRONICSDIRS = test02 test11 test12 test13 test15 test16 
-HADRONICSDIRS += test21 test22 test23 test24 test25 test27 test28 test61
+HADRONICSDIRS += test21 test22 test23 test24 test25 test27 test28 test61 test69
 
 #temp ADV_EXAMPLES += 01 02  03 04 05 06 07
 
