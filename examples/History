@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+7th November 2011  Gabriele Cosmo (examples-V09-04-10)
+- Updated reference outputs according to reference tag geant4-09-04-ref-10.
+- Includes tags: ChargeExchangeMC-V09-04-05, hadrontherapy-V09-04-02,
+                 exampleA01-V09-04-00, testem1-V09-04-04, testem2-V09-04-06,
+                 testem3-V09-04-07, testem5-V09-04-10, testem7-V09-04-12,
+                 testem9-V09-04-03, testem11-V09-04-06, testem12-V09-04-07,
+                 electronScattering-V09-04-05, exampleES2-V09-04-04,
+                 WLS-V09-04-02, exampleRE02-V09-04-00, exampleN06-V09-04-00.
+
 7th October 2011  Gabriele Cosmo (examples-V09-04-09)
 - Updated reference outputs according to reference tag geant4-09-04-ref-09.
 - Includes tags: brachy-V09-04-01, gammaraytel-V09-04-03,
