@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-09    (7-October-2011)
+ Geant4 version Name: geant4-09-04-ref-10    (4-November-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -97,10 +97,10 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :  Emin=        0 eV    Emax=      100 MeV   AngularGenUrban
-            eBremLPM :  Emin=      100 MeV   Emax=       10 TeV   AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -112,10 +112,10 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :  Emin=        0 eV    Emax=      100 MeV   AngularGenUrban
-            eBremLPM :  Emin=      100 MeV   Emax=       10 TeV   AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
 
 annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -370,7 +370,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     7  -12.9 cm   2.95 mm   2.73 m    52.7 keV  4.94 keV  1.14 cm   18.8 cm        World       eIoni
     8  -12.9 cm   4.77 mm   2.74 m      46 keV  6.74 keV  9.99 mm   19.8 cm        World       eIoni
     9  -12.6 cm   1.09 cm   2.74 m    41.5 keV  4.44 keV  8.18 mm   20.6 cm        World       eIoni
-   10    -12 cm   1.17 cm   2.75 m    32.8 keV  8.78 keV  7.09 mm   21.3 cm        World       eIoni
+   10    -12 cm   1.17 cm   2.75 m    32.8 keV  8.78 keV  7.08 mm   21.3 cm        World       eIoni
    11  -11.7 cm   8.65 mm   2.75 m    27.2 keV  5.55 keV  5.18 mm   21.8 cm        World       eIoni
    12  -11.4 cm   7.84 mm   2.75 m      22 keV   5.2 keV  4.15 mm   22.2 cm        World       eIoni
    13  -11.6 cm   5.65 mm   2.74 m    18.4 keV  3.58 keV  3.31 mm   22.6 cm        World       eIoni
@@ -432,31 +432,16 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     1   3.69 mm  -1.46 mm   39.2 cm   82.3 keV   8.6 keV  2.36 cm   2.36 cm      Tracker       eIoni
     2    360 um   1.74 cm   39.5 cm     68 keV  14.3 keV  2.01 cm   4.37 cm      Tracker       eIoni
     3  -2.54 mm   2.81 cm   40.4 cm   63.5 keV  4.54 keV  1.48 cm   5.85 cm      Tracker       eIoni
-    4   1.62 mm   2.27 cm   41.6 cm     58 keV   5.5 keV  1.33 cm   7.18 cm      Tracker       eIoni
+    4   1.63 mm   2.27 cm   41.6 cm     58 keV   5.5 keV  1.33 cm   7.18 cm      Tracker       eIoni
     5   2.97 mm   1.38 cm   42.2 cm   50.9 keV  7.04 keV  1.15 cm   8.34 cm      Tracker       eIoni
     6   7.06 mm   9.76 mm   42.9 cm   44.9 keV  6.03 keV  9.49 mm   9.29 cm      Tracker       eIoni
-    7   6.58 mm   7.77 mm   43.7 cm   38.3 keV  6.54 keV   7.9 mm   10.1 cm      Tracker       eIoni
-    8   7.19 mm   1.06 cm   44.2 cm   34.5 keV  3.85 keV  6.35 mm   10.7 cm      Tracker       eIoni
+    7   6.59 mm   7.77 mm   43.7 cm   38.3 keV  6.54 keV   7.9 mm   10.1 cm      Tracker       eIoni
+    8    7.2 mm   1.06 cm   44.2 cm   34.5 keV  3.85 keV  6.35 mm   10.7 cm      Tracker       eIoni
     9    1.9 mm   9.74 mm   44.2 cm   19.7 keV  14.8 keV  5.53 mm   11.3 cm      Tracker       eIoni
-   10    1.3 mm   9.46 mm   44.2 cm   11.9 keV   956 eV    669 um   11.3 cm      Tracker       eBrem
-   11    465 um    8.5 mm   44.3 cm   8.19 keV  3.74 keV  1.95 mm   11.5 cm      Tracker       eIoni
-   12  -5.22 um   7.95 mm   44.3 cm      0 eV   8.19 keV  1.41 mm   11.7 cm      Tracker       eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 9,   Parent ID = 3
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    1.3 mm   9.46 mm   44.2 cm    6.8 keV     0 eV      0 fm      0 fm      Tracker    initStep
-    1  -6.33 cm  -35.7 cm   56.3 cm      0 eV    543 eV   39.1 cm   39.1 cm      Tracker        phot
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 10,   Parent ID = 9
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0  -6.33 cm  -35.7 cm   56.3 cm   6.26 keV     0 eV      0 fm      0 fm      Tracker    initStep
-    1   -6.3 cm  -35.7 cm   56.3 cm      0 eV   6.26 keV 1e+03 um  1e+03 um      Tracker       eIoni
+   10    237 um   8.22 mm   44.1 cm   16.2 keV  3.52 keV  2.97 mm   11.6 cm      Tracker       eIoni
+   11  -1.91 mm   7.45 mm   44.2 cm   10.3 keV  5.86 keV  2.49 mm   11.8 cm      Tracker       eIoni
+   12  -2.28 mm    7.8 mm     44 cm   4.69 keV  5.62 keV  1.74 mm     12 cm      Tracker       eIoni
+   13  -2.33 mm   7.39 mm     44 cm      0 eV   4.69 keV   612 um     12 cm      Tracker       eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
@@ -464,17 +449,16 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   5.47 mm  -1.03 cm  -88.8 cm   24.2 keV     0 eV      0 fm      0 fm      Tracker    initStep
-    1    4.2 mm  -1.35 cm  -88.7 cm   20.8 keV  3.39 keV  3.65 mm   3.65 mm      Tracker       eIoni
-    2   2.71 mm  -1.61 cm  -88.6 cm   15.1 keV  5.66 keV  3.13 mm   6.78 mm      Tracker       eIoni
-    3    755 um  -1.72 cm  -88.6 cm   10.5 keV  4.65 keV  2.36 mm   9.14 mm      Tracker       eIoni
-    4    412 um  -1.79 cm  -88.4 cm      5 keV   5.5 keV  1.76 mm   1.09 cm      Tracker       eIoni
-    5    708 um   -1.8 cm  -88.4 cm      0 eV      5 keV   681 um   1.16 cm      Tracker       eIoni
+    1   3.81 mm  -1.32 cm  -88.8 cm   12.3 keV  11.9 keV  3.65 mm   3.65 mm      Tracker       eIoni
+    2   2.37 mm  -1.36 cm  -88.7 cm   7.03 keV  5.24 keV  1.99 mm   5.64 mm      Tracker       eIoni
+    3   2.07 mm  -1.32 cm  -88.8 cm    892 eV   6.14 keV  1.19 mm   6.83 mm      Tracker       eIoni
+    4   2.08 mm  -1.32 cm  -88.8 cm      0 eV    892 eV   45.3 um   6.88 mm      Tracker       eIoni
 >>> Event 0
     0 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
  This region is in the mass world.
@@ -525,7 +509,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0s Sys=0s
 Graphics systems deleted.
 Visualization Manager deleting...
 UserDetectorConstruction deleted.

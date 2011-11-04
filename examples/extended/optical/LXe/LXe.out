@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-09    (7-October-2011)
+ Geant4 version Name: geant4-09-04-ref-10    (4-November-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -83,10 +83,10 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :  Emin=        0 eV    Emax=      100 MeV   AngularGenUrban
-            eBremLPM :  Emin=      100 MeV   Emax=       10 TeV   AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -98,10 +98,10 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :  Emin=        0 eV    Emax=      100 MeV   AngularGenUrban
-            eBremLPM :  Emin=      100 MeV   Emax=       10 TeV   AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
 
 annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -161,40 +161,40 @@ muPairProd:   for  mu-    SubType= 4
           muMinusCaptureAtRest
 ============================================================================================
 ### G4EmSaturation::FindBirksCoefficient Birks coefficient for LXe  0.126 mm/MeV
-	Energy weighted position of hits in LXe : (-0.224393,-0.0376675,-103.436)
+	Energy weighted position of hits in LXe : (-0.157228,0.0278298,-103.449)
 	Total energy deposition in scintillator : 511 (keV)
-	Reconstructed position of hits in LXe : (2.25513,2.34378,-17.9616)
+	Reconstructed position of hits in LXe : (-1.0812,-2.29024,-15.8245)
 WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
   has been instantiated.  Use "/vis/open" or "/vis/sceneHandler/create".
   Alternatively, to avoid this message, suppress instantiation of vis
   manager (G4VisExecutive), possibly by setting G4VIS_NONE, and ensure
   drawing code is executed only if G4VVisManager::GetConcreteInstance()
   is non-zero.
-	Number of photons that hit PMTs in this event : 1445
+	Number of photons that hit PMTs in this event : 1442
 	Number of PMTs above threshold(1) : 32
-	Number of photons produced by scintillation in this event : 5689
-	Number of photons produced by cerenkov in this event : 3
-	Number of photons absorbed (OpAbsorption) in this event : 4247
+	Number of photons produced by scintillation in this event : 5711
+	Number of photons produced by cerenkov in this event : 2
+	Number of photons absorbed (OpAbsorption) in this event : 4271
 	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
 Unacounted for photons in this event : 0
-	Energy weighted position of hits in LXe : (0.0621626,-0.0912387,-112.846)
+	Energy weighted position of hits in LXe : (-0.0653229,-0.0258992,-90.3224)
 	Total energy deposition in scintillator : 511 (keV)
-	Reconstructed position of hits in LXe : (-0.317859,-0.835824,-20.5044)
-	Number of photons that hit PMTs in this event : 1393
+	Reconstructed position of hits in LXe : (-2.28179,0.0603662,-16.8821)
+	Number of photons that hit PMTs in this event : 1427
 	Number of PMTs above threshold(1) : 32
 	Number of photons produced by scintillation in this event : 5509
-	Number of photons produced by cerenkov in this event : 1
-	Number of photons absorbed (OpAbsorption) in this event : 4117
+	Number of photons produced by cerenkov in this event : 0
+	Number of photons absorbed (OpAbsorption) in this event : 4082
 	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
 Unacounted for photons in this event : 0
-	Energy weighted position of hits in LXe : (48.0914,4.26453,6.21257)
+	Energy weighted position of hits in LXe : (3.94583,3.90908,-93.2662)
 	Total energy deposition in scintillator : 511 (keV)
-	Reconstructed position of hits in LXe : (11.0571,0.0628092,0.195731)
-	Number of photons that hit PMTs in this event : 1326
+	Reconstructed position of hits in LXe : (-0.121048,2.92385,-19.5951)
+	Number of photons that hit PMTs in this event : 1460
 	Number of PMTs above threshold(1) : 32
-	Number of photons produced by scintillation in this event : 5233
-	Number of photons produced by cerenkov in this event : 0
-	Number of photons absorbed (OpAbsorption) in this event : 3907
+	Number of photons produced by scintillation in this event : 5555
+	Number of photons produced by cerenkov in this event : 2
+	Number of photons absorbed (OpAbsorption) in this event : 4097
 	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
 Unacounted for photons in this event : 0
 Graphics systems deleted.

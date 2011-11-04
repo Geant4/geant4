@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-09    (7-October-2011)
+ Geant4 version Name: geant4-09-04-ref-10    (4-November-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -109,10 +109,10 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :  Emin=        0 eV    Emax=      100 MeV   AngularGenUrban
-            eBremLPM :  Emin=      100 MeV   Emax=       10 TeV   AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
 
 annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -170,6 +170,11 @@ alpha+_G4DNAChargeIncrease:   for  alpha+    SubType= 57
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNADingfelderChargeIncreaseModel :  Emin=        0 eV    Emax=      400 MeV
 
+carbon_G4DNAIonisation:   for  carbon    SubType= 53
+ Total cross sections computed from DNARuddIonisationExtendedModel
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNARuddIonisationExtendedModel :  Emin=        0 eV    Emax=       10 TeV  FluoActive
+
 helium_G4DNAExcitation:   for  helium    SubType= 52
  Total cross sections computed from DNAMillerGreenExcitationModel
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -199,6 +204,21 @@ hydrogen_G4DNAChargeIncrease:   for  hydrogen    SubType= 57
  Total cross sections computed from DNADingfelderChargeIncreaseModel model
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNADingfelderChargeIncreaseModel :  Emin=        0 eV    Emax=      100 MeV
+
+iron_G4DNAIonisation:   for  iron    SubType= 53
+ Total cross sections computed from DNARuddIonisationExtendedModel
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNARuddIonisationExtendedModel :  Emin=        0 eV    Emax=       10 TeV  FluoActive
+
+nitrogen_G4DNAIonisation:   for  nitrogen    SubType= 53
+ Total cross sections computed from DNARuddIonisationExtendedModel
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNARuddIonisationExtendedModel :  Emin=        0 eV    Emax=       10 TeV  FluoActive
+
+oxygen_G4DNAIonisation:   for  oxygen    SubType= 53
+ Total cross sections computed from DNARuddIonisationExtendedModel
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNARuddIonisationExtendedModel :  Emin=        0 eV    Emax=       10 TeV  FluoActive
 
 Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
  This region is in the mass world.
@@ -233,7 +253,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=6.53s Real=6.54s Sys=0s
+  User=6.46s Real=6.46s Sys=0s
 Graphics systems deleted.
 Visualization Manager deleting...
 UserDetectorConstruction deleted.

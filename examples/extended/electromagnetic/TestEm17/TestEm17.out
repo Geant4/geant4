@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-09    (7-October-2011)
+ Geant4 version Name: geant4-09-04-ref-10    (4-November-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -226,7 +226,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=2.61s Real=2.85s Sys=0.24s
+  User=2.71s Real=3.32s Sys=0.61s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
@@ -297,7 +297,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=2.61s Real=2.81s Sys=0.21s
+  User=2.65s Real=3.26s Sys=0.63s
 
  The run consists of 10000 pi+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
@@ -367,7 +367,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=2.36s Real=2.59s Sys=0.22s
+  User=2.37s Real=3.1s Sys=0.71s
 
  The run consists of 10000 proton of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-09    (7-October-2011)
+ Geant4 version Name: geant4-09-04-ref-10    (4-November-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -90,10 +90,10 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :  Emin=        0 eV    Emax=      100 MeV   AngularGenUrban
-            eBremLPM :  Emin=      100 MeV   Emax=       10 TeV   AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
 ========== Computation of cross section matrices for adjoint models ==========
 Build adjoint cross section matrices for Inv_eIon_model
 Build adjoint cross section matrices for AdjointeBremModel
@@ -337,15 +337,14 @@ nb event 375000
 nb event 380000
 nb event 385000
 nb event 390000
-nb event 395000
 1%  Precision reached!
 Run terminated.
 Run Summary
-  Run Aborted after 399624 events processed.
-  User=153.92s Real=153.93s Sys=0s
+  Run Aborted after 391344 events processed.
+  User=157.68s Real=157.72s Sys=0.02s
 Results of reverse/adjoint simulation!
-normalised edep [MeV] = 0.00137238
-error[MeV] = 1.37237e-05
+normalised edep [MeV] = 0.00140926
+error[MeV] = 1.40924e-05
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

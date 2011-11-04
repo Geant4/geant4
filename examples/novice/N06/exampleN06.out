@@ -1,8 +1,10 @@
- PiF: Zero Step Threshold set to 0.0001 mm.
- PiF:   Value of kCarTolerance = 1e-09 mm. 
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-09    (7-October-2011)
+ Geant4 version Name: geant4-09-04-ref-10    (4-November-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -27,8 +29,6 @@ Current available graphics systems are:
   OpenGLStoredX (OGLS)
   OpenGLImmediateX (OGLIX)
   OpenGLStoredX (OGLSX)
-  OpenGLImmediateXm (OGLIXm)
-  OpenGLStoredXm (OGLSXm)
 
 Registering model factories...
 
@@ -98,10 +98,10 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :  Emin=        0 eV    Emax=      100 MeV   AngularGenUrban
-            eBremLPM :  Emin=      100 MeV   Emax=       10 TeV   AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -113,10 +113,10 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :  Emin=        0 eV    Emax=      100 MeV   AngularGenUrban
-            eBremLPM :  Emin=      100 MeV   Emax=       10 TeV   AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
 
 annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -454,10 +454,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (0.956255,0.286552,0.0588638)
- Old Polarization:       (-0.228779,0.607146,0.760943)
- New Momentum Direction: (0.917749,0.389038,0.0799168)
- New Polarization:       (0.311353,-0.829671,0.463363)
+ Old Momentum Direction: (0.956256,0.286548,0.0588683)
+ Old Polarization:       (-0.22878,0.607147,0.760941)
+ New Momentum Direction: (0.91775,0.389034,0.0799229)
+ New Polarization:       (0.311355,-0.829688,0.463332)
  *** FresnelRefraction *** 
     1      5 m     1.5 m    30.8 cm    3.5 eV      0 eV   5.23 m    5.23 m          Tank  Transportation
     2     10 m    3.62 m    74.3 cm    3.5 eV      0 eV   5.45 m    10.7 m    OutOfWorld  Transportation
@@ -481,12 +481,12 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (0.9725,0.198356,0.122063)
- Old Polarization:       (-0.196071,0.414399,0.888724)
- New Momentum Direction: (0.948508,0.269767,0.166007)
- New Polarization:       (0.266954,-0.962901,0.0394583)
+ Old Momentum Direction: (0.9725,0.198353,0.122068)
+ Old Polarization:       (-0.196074,0.4144,0.888723)
+ New Momentum Direction: (0.948508,0.269762,0.166013)
+ New Polarization:       (0.266958,-0.962902,0.0394128)
  *** FresnelRefraction *** 
-    1      5 m    1.02 m    62.7 cm      4 eV      0 eV   5.14 m    5.14 m          Tank  Transportation
+    1      5 m    1.02 m    62.8 cm      4 eV      0 eV   5.14 m    5.14 m          Tank  Transportation
     2     10 m    2.44 m     1.5 m       4 eV      0 eV   5.27 m    10.4 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
@@ -508,10 +508,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (0.933212,0.358004,-0.0307994)
- Old Polarization:       (-0.276422,0.770021,0.575028)
- New Momentum Direction: (0.873559,0.484927,-0.0417186)
- New Polarization:       (0.375935,-0.617802,0.690647)
+ Old Momentum Direction: (0.933213,0.358001,-0.0307947)
+ Old Polarization:       (-0.276422,0.770023,0.575027)
+ New Momentum Direction: (0.873562,0.484922,-0.0417123)
+ New Polarization:       (0.375935,-0.617821,0.69063)
  *** FresnelRefraction *** 
     1      5 m    1.92 m   -16.5 cm   3.03 eV      0 eV   5.36 m    5.36 m          Tank  Transportation
     2     10 m    4.69 m   -40.4 cm   3.03 eV      0 eV   5.72 m    11.1 m    OutOfWorld  Transportation
@@ -525,10 +525,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (0.982085,0.108198,0.154278)
- Old Polarization:       (-0.175265,0.223766,0.958755)
- New Momentum Direction: (0.966629,0.147095,0.20974)
- New Polarization:       (0.23835,-0.816489,-0.525866)
+ Old Momentum Direction: (0.982085,0.108195,0.154282)
+ Old Polarization:       (-0.175269,0.223766,0.958754)
+ New Momentum Direction: (0.966629,0.147091,0.209746)
+ New Polarization:       (0.238355,-0.816461,-0.525907)
  *** FresnelRefraction *** 
     1      5 m    55.1 cm   78.5 cm   3.88 eV      0 eV   5.09 m    5.09 m          Tank  Transportation
     2     10 m    1.31 m    1.87 m    3.88 eV      0 eV   5.17 m    10.3 m    OutOfWorld  Transportation
@@ -542,10 +542,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (0.757274,0.0472321,-0.651387)
- Old Polarization:       (-0.652585,0.0942047,-0.751836)
- New Momentum Direction: (0.459837,0.0642206,-0.885678)
- New Polarization:       (0.887404,0.0034165,0.460981)
+ Old Momentum Direction: (0.757279,0.0472302,-0.651381)
+ Old Polarization:       (-0.652579,0.0942063,-0.751842)
+ New Momentum Direction: (0.459854,0.0642179,-0.88567)
+ New Polarization:       (0.887395,0.00341934,0.460997)
  *** FresnelRefraction *** 
     1      5 m    31.2 cm   -4.3 m    3.92 eV      0 eV    6.6 m     6.6 m          Tank  Transportation
     2   7.96 m    72.5 cm    -10 m    3.92 eV      0 eV   6.44 m      13 m    OutOfWorld  Transportation
@@ -559,10 +559,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (0.760407,-0.0525452,-0.647318)
- Old Polarization:       (-0.648371,-0.118762,-0.752004)
- New Momentum Direction: (0.472341,-0.0713133,-0.878527)
- New Polarization:       (0.880149,-0.0152703,0.474452)
+ Old Momentum Direction: (0.760412,-0.0525468,-0.647312)
+ Old Polarization:       (-0.648365,-0.118761,-0.752009)
+ New Momentum Direction: (0.472356,-0.0713154,-0.878518)
+ New Polarization:       (0.880141,-0.0152638,0.474467)
  *** FresnelRefraction *** 
     1      5 m   -34.6 cm  -4.26 m    3.44 eV      0 eV   6.58 m    6.58 m          Tank  Transportation
     2   8.09 m   -81.2 cm    -10 m    3.44 eV      0 eV   6.54 m    13.1 m    OutOfWorld  Transportation
@@ -576,10 +576,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (0.835923,0.409957,-0.364922)
- Old Polarization:       (-0.485514,0.862399,-0.143334)
- New Momentum Direction: (0.665365,0.557606,-0.496351)
- New Polarization:       (0.66524,-0.14118,0.73316)
+ Old Momentum Direction: (0.835927,0.409954,-0.364916)
+ Old Polarization:       (-0.48551,0.8624,-0.143338)
+ New Momentum Direction: (0.665375,0.557601,-0.496343)
+ New Polarization:       (0.665233,-0.141192,0.733164)
  *** FresnelRefraction *** 
     1      5 m    2.45 m   -2.18 m    4.03 eV      0 eV   5.98 m    5.98 m          Tank  Transportation
     2     10 m    6.64 m   -5.91 m    4.03 eV      0 eV   7.51 m    13.5 m    OutOfWorld  Transportation
@@ -593,13 +593,13 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (0.767546,-0.00608295,-0.640965)
- Old Polarization:       (-0.640944,-0.0197514,-0.767333)
- New Momentum Direction: (0.501949,-0.00820777,-0.864858)
- New Polarization:       (0.864838,-0.00695279,0.502003)
+ Old Momentum Direction: (0.767551,-0.00608472,-0.640959)
+ Old Polarization:       (-0.640938,-0.0197499,-0.767339)
+ New Momentum Direction: (0.501964,-0.00821016,-0.86485)
+ New Polarization:       (0.864829,-0.00694772,0.502018)
  *** FresnelRefraction *** 
     1      5 m   -3.96 cm  -4.18 m    2.49 eV      0 eV   6.51 m    6.51 m          Tank  Transportation
-    2   8.38 m   -9.49 cm    -10 m    2.49 eV      0 eV   6.73 m    13.2 m    OutOfWorld  Transportation
+    2   8.38 m   -9.49 cm    -10 m    2.49 eV      0 eV   6.74 m    13.2 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 8,   Parent ID = 1
@@ -610,10 +610,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (0.952739,0.302872,0.0236002)
- Old Polarization:       (-0.229761,0.667568,0.708211)
- New Momentum Direction: (0.912234,0.408431,0.0318255)
- New Polarization:       (0.310691,-0.740378,0.59608)
+ Old Momentum Direction: (0.95274,0.302869,0.0236048)
+ Old Polarization:       (-0.229762,0.66757,0.708209)
+ New Momentum Direction: (0.912236,0.408426,0.0318316)
+ New Polarization:       (0.310692,-0.740398,0.596055)
  *** FresnelRefraction *** 
     1      5 m    1.59 m    12.4 cm   2.43 eV      0 eV   5.25 m    5.25 m          Tank  Transportation
     2     10 m    3.83 m    29.8 cm   2.43 eV      0 eV   5.48 m    10.7 m    OutOfWorld  Transportation
@@ -627,10 +627,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (0.866802,-0.400207,-0.29747)
- Old Polarization:       (-0.421277,-0.906901,-0.00744858)
- New Momentum Direction: (0.741298,-0.538671,-0.400389)
- New Polarization:       (0.570718,0.191962,0.798393)
+ Old Momentum Direction: (0.866804,-0.400207,-0.297465)
+ Old Polarization:       (-0.421277,-0.906901,-0.0074518)
+ New Momentum Direction: (0.741302,-0.538671,-0.400382)
+ New Polarization:       (0.570719,0.191981,0.798388)
  *** FresnelRefraction *** 
     1      5 m   -2.31 m   -1.72 m    2.21 eV      0 eV   5.77 m    5.77 m          Tank  Transportation
     2     10 m   -5.94 m   -4.42 m    2.21 eV      0 eV   6.74 m    12.5 m    OutOfWorld  Transportation
@@ -645,14 +645,14 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = 1
 
  Exiting from G4Scintillation::DoIt -- NumberOfSecondaries = 3
-    3   1.14 mm  -1.94 um   -222 um    260 keV  54.5 keV   292 um   1.18 mm         Tank    Cerenkov
+    3   1.14 mm  -1.95 um   -222 um    260 keV  54.5 keV   292 um   1.18 mm         Tank    Cerenkov
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 30,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   1.03 mm  -4.98 um   -215 um    3.8 eV      0 eV      0 fm      0 fm         Tank    initStep
+    0   1.03 mm  -4.99 um   -215 um    3.8 eV      0 eV      0 fm      0 fm         Tank    initStep
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
@@ -718,7 +718,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   1.03 mm  -4.96 um   -215 um    3.1 eV      0 eV      0 fm      0 fm         Tank    initStep
+    0   1.03 mm  -4.97 um   -215 um    3.1 eV      0 eV      0 fm      0 fm         Tank    initStep
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
@@ -735,7 +735,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   1.01 mm  -5.45 um   -214 um   3.82 eV      0 eV      0 fm      0 fm         Tank    initStep
+    0   1.01 mm  -5.46 um   -214 um   3.82 eV      0 eV      0 fm      0 fm         Tank    initStep
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
@@ -752,14 +752,14 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   1.01 mm  -5.61 um   -214 um    2.7 eV      0 eV      0 fm      0 fm         Tank    initStep
+    0   1.01 mm  -5.62 um   -214 um    2.7 eV      0 eV      0 fm      0 fm         Tank    initStep
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (0.95984,-0.195443,-0.20127)
- Old Polarization:       (-0.272511,-0.820008,-0.503314)
- New Momentum Direction: (0.92529,-0.26421,-0.272088)
- New Polarization:       (0.368508,0.456704,0.809706)
+ Old Momentum Direction: (0.95984,-0.195443,-0.201269)
+ Old Polarization:       (-0.27251,-0.820008,-0.503314)
+ New Momentum Direction: (0.925291,-0.26421,-0.272086)
+ New Polarization:       (0.368507,0.45671,0.809703)
  *** FresnelRefraction *** 
     1      5 m   -1.02 m   -1.05 m     2.7 eV      0 eV   5.21 m    5.21 m          Tank  Transportation
     2     10 m   -2.45 m   -2.52 m     2.7 eV      0 eV    5.4 m    10.6 m    OutOfWorld  Transportation
@@ -769,9 +769,9 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    3   1.14 mm  -1.94 um   -222 um    260 keV     0 eV      0 fm   1.18 mm         Tank    initStep
-CAImin = 4.12609e-08
-ge = 1.1054e-06
+    3   1.14 mm  -1.95 um   -222 um    260 keV     0 eV      0 fm   1.18 mm         Tank    initStep
+CAImin = 4.12743e-08
+ge = 1.10539e-06
 
  Exiting from G4Scintillation::DoIt -- NumberOfSecondaries = 2
     4   1.19 mm   29.8 um   -242 um    247 keV  12.6 keV  67.7 um   1.25 mm         Tank    Cerenkov
@@ -781,7 +781,7 @@ ge = 1.1054e-06
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   1.15 mm   3.78 um   -226 um   3.47 eV      0 eV      0 fm      0 fm         Tank    initStep
+    0   1.15 mm   3.77 um   -226 um   3.47 eV      0 eV      0 fm      0 fm         Tank    initStep
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
@@ -816,10 +816,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     4   1.19 mm   29.8 um   -242 um    247 keV     0 eV      0 fm   1.25 mm         Tank    initStep
-CAImin = 4.71285e-07
-ge = 6.75378e-07
-CAImin = 7.61144e-07
-ge = 3.8552e-07
+CAImin = 4.71299e-07
+ge = 6.75365e-07
+CAImin = 7.61162e-07
+ge = 3.85502e-07
     5   1.21 mm   35.1 um   -252 um    243 keV  4.66 keV  18.5 um   1.27 mm         Tank    Cerenkov
 
  Exiting from G4Scintillation::DoIt -- NumberOfSecondaries = 10
@@ -1162,10 +1162,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
- Old Momentum Direction: (-0.861336,0.175431,-0.476786)
- Old Polarization:       (0.302223,-0.577431,-0.758442)
- New Momentum Direction: (-0.726166,0.237408,-0.645229)
- New Polarization:       (-0.415745,-0.899091,0.13708)
+ Old Momentum Direction: (-0.861334,0.175437,-0.476786)
+ Old Polarization:       (0.302219,-0.577433,-0.758442)
+ New Momentum Direction: (-0.726162,0.237417,-0.64523)
+ New Polarization:       (-0.41574,-0.899097,0.137057)
  *** FresnelRefraction *** 
     1     -5 m    1.03 m   -2.76 m    2.85 eV      0 eV   5.79 m    5.79 m          Tank  Transportation
     2    -10 m    2.66 m   -7.21 m    2.85 eV      0 eV   6.89 m    12.7 m    OutOfWorld  Transportation
@@ -2091,7 +2091,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   1.42 mm     77 um   -376 um   3.15 eV      0 eV      0 fm      0 fm         Tank    initStep
+    0   1.42 mm   76.9 um   -376 um   3.15 eV      0 eV      0 fm      0 fm         Tank    initStep
  Photon at Boundary! 
  thePrePV:  Tank
  thePostPV: World
@@ -2310,7 +2310,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     1     -5 m   -2.69 m   -3.37 m    2.47 eV      0 eV    6.6 m     6.6 m          Tank  Transportation
     2  -9.58 m   -7.98 m     -10 m    2.47 eV      0 eV   9.65 m    16.2 m    OutOfWorld  Transportation
 Number of optical photons produced in this event : 93
-number of event = 1 User=0.03s Real=0.05s Sys=0.01s
+number of event = 1 User=0.01s Real=0.01s Sys=0s
 #
 #/process/inactivate Scintillation
 #/N06/phys/verbose 0
@@ -2318,3 +2318,4 @@ number of event = 1 User=0.03s Real=0.05s Sys=0.01s
 #/run/beamOn 1
 Graphics systems deleted.
 Visualization Manager deleting...
+

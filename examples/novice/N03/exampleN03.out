@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-09    (7-October-2011)
+ Geant4 version Name: geant4-09-04-ref-10    (4-November-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -143,10 +143,10 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :  Emin=        0 eV    Emax=      100 MeV   AngularGenUrban
-            eBremLPM :  Emin=      100 MeV   Emax=       10 TeV   AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -158,10 +158,10 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :  Emin=        0 eV    Emax=      100 MeV   AngularGenUrban
-            eBremLPM :  Emin=      100 MeV   Emax=       10 TeV   AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
 
 annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -365,16 +365,16 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 262.003 MeV       total track length: 18.2143 cm 
-        Gap: total energy: 30.4886 MeV       total track length: 15.2761 cm 
+   Absorber: total energy: 273.398 MeV       total track length: 19.1354 cm 
+        Gap: total energy: 21.3497 MeV       total track length: 11.1727 cm 
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 262.003 MeV +- 0 eV 
- mean Energy in Gap      : 30.4886 MeV +- 0 eV 
+ mean Energy in Absorber : 273.398 MeV +- 0 eV 
+ mean Energy in Gap      : 21.3497 MeV +- 0 eV 
 
- mean trackLength in Absorber : 18.2143 cm  +- 0 fm 
- mean trackLength in Gap      : 15.2761 cm  +- 0 fm 
+ mean trackLength in Absorber : 19.1354 cm  +- 0 fm 
+ mean trackLength in Gap      : 11.1727 cm  +- 0 fm 
 ------------------------------------------------------------
 
      Transportation,                msc,              hIoni,            ionIoni
@@ -413,10 +413,10 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :  Emin=        0 eV    Emax=      100 MeV   AngularGenUrban
-            eBremLPM :  Emin=      100 MeV   Emax=       10 TeV   AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -428,10 +428,10 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :  Emin=        0 eV    Emax=      100 MeV   AngularGenUrban
-            eBremLPM :  Emin=      100 MeV   Emax=       10 TeV   AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
 
 annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -606,19 +606,19 @@ hPairProd:   for  pi-    SubType= 4
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 755144681, 1448336376
+ Current couple of seeds = 163076247, 1475805945
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 283.505 MeV       total track length: 20.0552 cm 
-        Gap: total energy: 16.0062 MeV       total track length: 7.76031 cm 
+   Absorber: total energy: 284.213 MeV       total track length:  19.713 cm 
+        Gap: total energy: 14.6054 MeV       total track length: 7.16177 cm 
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 283.505 MeV +- 0 eV 
- mean Energy in Gap      : 16.0062 MeV +- 0 eV 
+ mean Energy in Absorber : 284.213 MeV +- 0 eV 
+ mean Energy in Gap      : 14.6054 MeV +- 0 eV 
 
- mean trackLength in Absorber : 20.0552 cm  +- 0 fm 
- mean trackLength in Gap      : 7.76031 cm  +- 0 fm 
+ mean trackLength in Absorber : 19.713 cm  +- 0 fm 
+ mean trackLength in Gap      : 7.16177 cm  +- 0 fm 
 ------------------------------------------------------------
 
 
@@ -656,10 +656,10 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :  Emin=        0 eV    Emax=      100 MeV   AngularGenUrban
-            eBremLPM :  Emin=      100 MeV   Emax=       10 TeV   AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -671,10 +671,10 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :  Emin=        0 eV    Emax=      100 MeV   AngularGenUrban
-            eBremLPM :  Emin=      100 MeV   Emax=       10 TeV   AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
 
 annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -849,19 +849,19 @@ hPairProd:   for  pi-    SubType= 4
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1332280830, 1551549866
+ Current couple of seeds = 1542181503, 513268797
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 350.187 MeV       total track length: 83.1241 cm 
-        Gap: total energy: 88.4755 MeV       total track length: 2.39842 m  
+   Absorber: total energy: 405.085 MeV       total track length: 94.6074 cm 
+        Gap: total energy: 87.6017 MeV       total track length: 2.44841 m  
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 350.187 MeV +- 0 eV 
- mean Energy in Gap      : 88.4755 MeV +- 0 eV 
+ mean Energy in Absorber : 405.085 MeV +- 0 eV 
+ mean Energy in Gap      : 87.6017 MeV +- 0 eV 
 
- mean trackLength in Absorber : 83.1241 cm  +- 0 fm 
- mean trackLength in Gap      : 2.39842 m   +- 0 fm 
+ mean trackLength in Absorber : 94.6074 cm  +- 0 fm 
+ mean trackLength in Gap      : 2.44841 m   +- 0 fm 
 ------------------------------------------------------------
 
 Graphics systems deleted.

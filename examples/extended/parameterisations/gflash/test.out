@@ -9,7 +9,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-09    (7-October-2011)
+ Geant4 version Name: geant4-09-04-ref-10    (4-November-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -116,10 +116,10 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :  Emin=        0 eV    Emax=      100 MeV   AngularGenUrban
-            eBremLPM :  Emin=      100 MeV   Emax=       10 TeV   AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -131,10 +131,10 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 0.1 GeV
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :  Emin=        0 eV    Emax=      100 MeV   AngularGenUrban
-            eBremLPM :  Emin=      100 MeV   Emax=       10 TeV   AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
 
 annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -287,9 +287,9 @@ WARNING: Scene "refresh" not found.
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.01
+Internal Real Elapsed Time is: 0.02
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0.02
 ******************************************
  ------ ExGflashEventAction::End of event nr. 0  -----
  Total energy deposited in the calorimeter: 0 (GeV)
@@ -360,7 +360,7 @@ Internal GetUserElapsed Time: 0.01
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.02
+Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
@@ -377,7 +377,7 @@ Internal GetUserElapsed Time: 0.01
 ******************************************
 Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0.02
 ******************************************
  ------ ExGflashEventAction::End of event nr. 6  -----
   11970 hits are stored in ExGflashHitsCollection 
@@ -436,8 +436,8 @@ Visualization Manager deleting...
 Internal Real Elapsed Time /event is: 0.0122222
 
 ******************************************
-Total Real Elapsed Time is: 0.56
+Total Real Elapsed Time is: 0.58
 Total System Elapsed Time: 0
-Total GetUserElapsed Time: 0.56
+Total GetUserElapsed Time: 0.57
 ******************************************
 

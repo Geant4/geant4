@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-09    (7-October-2011)
+ Geant4 version Name: geant4-09-04-ref-10    (4-November-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -124,7 +124,7 @@ AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Ema
                                   Hadronic Processes for <anti_proton>
                                   -----------------------------------
           hadElastic  Models:                 hElasticLHEP: Emin(GeV)=    0  Emax(GeV)= 0.1
-                                              AntiAElastic: Emin(GeV)=  0.1  Emax(GeV)= 1000
+                                              AntiAElastic: Emin(GeV)=  0.1  Emax(GeV)= 100000
 
           hadElastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
                                             GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
@@ -301,10 +301,6 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
 exrdmAnalysisManager: Histograms are booked and the run has been started
 ### Run : 0
- Process: ProtonInelastic , Model: Binary Cascade
- Primary: proton (2212), E= 993.953, target nucleus (82,207)
- relative limit 0.01 relative value = 0.0101542 fail
- absolute limit (MeV) 1 absolute value (MeV) = 0.565396 pass
 exrdmAnalysisManager: Histograms have been saved!
 Graphics systems deleted.
 Visualization Manager deleting...
