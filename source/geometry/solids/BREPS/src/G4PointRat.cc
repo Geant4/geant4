@@ -52,6 +52,8 @@ G4PointRat::~G4PointRat()
 
 G4PointRat& G4PointRat::operator=(const G4PointRat& a)
 {
+    if (this == &a)  { return *this; }
+
     pt3d.setX(a.x());
     pt3d.setY(a.y());
     pt3d.setZ(a.z());
