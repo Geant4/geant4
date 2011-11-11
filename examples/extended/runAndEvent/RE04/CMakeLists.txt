@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
 
-set(name exampleRE04)
+set(name RE04)
 project(${name})
 find_package(Geant4 REQUIRED)
 include(${Geant4_USE_FILE})
