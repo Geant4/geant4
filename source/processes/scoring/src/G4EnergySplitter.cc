@@ -272,9 +272,10 @@ void G4EnergySplitter::GetPhantomParam(G4bool mustExist)
     }
   }
   
-  if( !thePhantomParam && mustExist ) G4Exception("GmRegularParamUtils::GetPhantomParam:  No G4PhantomParameterisation found ");
- 
-  
+  if( !thePhantomParam && mustExist )
+    G4Exception("G4EnergySplitter::GetPhantomParam",
+                "PhantomParamError", FatalException,
+                "No G4PhantomParameterisation found !");
 }
 
 

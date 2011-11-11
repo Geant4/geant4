@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 10, 2011 M.Asai (procscore-V09-04-04)
+- Removed call to obsolete G4Exception in G4EnergySplitter.
+
+August 10, 2011 M.Asai (procscore-V09-04-03)
+- Adding test/test2 for parallel layered mass geometry
+
 August 10, 2011 M.Asai (procscore-V09-04-02)
 - Introducing parallel layered mass geometry
   G4ParallelWorldProcess takes care of both layered mass geometry
