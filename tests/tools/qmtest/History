@@ -12,6 +12,10 @@ $Id$
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10-Nov-2011, G.Folger               (testtools-QMtest-V09-04-13)
+- remove tests of unsupported lists QGSP_BERT_TRV and QGSP_BERT_NOLEP
+    from testing using HadCalCMS benchmark. 
+
 1-Nov-2011, G.Folger                (testtools-QMtest-V09-04-12)
 - add test69, testing incl++ to testing suites tests_common.qms, 
    and to old test{build,run}all.qms
