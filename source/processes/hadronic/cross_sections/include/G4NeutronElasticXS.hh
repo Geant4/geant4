@@ -76,6 +76,8 @@ public: // With Description
   virtual
   void BuildPhysicsTable(const G4ParticleDefinition&);
 
+  virtual void CrossSectionDescription(std::ostream&) const;
+
 private: 
 
   void Initialise(G4int Z, G4DynamicParticle* dp = 0, const char* = 0);

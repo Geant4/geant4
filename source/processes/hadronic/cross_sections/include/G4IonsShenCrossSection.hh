@@ -70,6 +70,8 @@ public:
 			      const G4Element* elm = 0,
 			      const G4Material* mat = 0);
 
+  virtual void CrossSectionDescription(std::ostream&) const;
+
 private:
   const G4double upperLimit;
   const G4double lowerLimit; 

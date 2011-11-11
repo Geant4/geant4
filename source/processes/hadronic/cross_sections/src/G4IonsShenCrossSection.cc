@@ -45,6 +45,17 @@ G4IonsShenCrossSection::G4IonsShenCrossSection()
 
 G4IonsShenCrossSection::~G4IonsShenCrossSection()
 {}
+
+void
+G4IonsShenCrossSection::CrossSectionDescription(std::ostream& outFile) const
+{
+  outFile << "G4IonsShenCrossSection calculates the total reaction cross\n"
+          << "section for nucleus-nucleus scattering using the Shen\n"
+          << "parameterization.  It is valid for projectiles and targets of\n"
+          << "all Z, and projectile energies up to 1 TeV/n.  Above 10 GeV/n"
+          << "the cross section is constant.  Below 10 MeV/n zero cross\n"
+          << "is returned.\n";
+}
    
 G4bool G4IonsShenCrossSection::IsElementApplicable(const G4DynamicParticle* aDP, 
 						   G4int, const G4Material*)

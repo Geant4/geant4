@@ -57,6 +57,7 @@
 class G4GlauberGribovCrossSection;
 class G4NucleonNuclearCrossSection;
 class G4HadronNucleonXsc;
+class G4HadronInelasticDataSet;
 class G4Material;
 class G4Element;
 class G4Isotope;
@@ -110,6 +111,7 @@ private:
   G4GlauberGribovCrossSection*    fGlauber;
   G4NucleonNuclearCrossSection*   fNucleon;
   G4HadronNucleonXsc*             fHadron;
+  G4HadronInelasticDataSet*       fGHEISHA;
   G4bool                          isProton;
   G4bool                          isInitialized;
 };

@@ -99,6 +99,8 @@ virtual
  void DumpPhysicsTable(const G4ParticleDefinition&) 
  {}
 
+virtual void CrossSectionDescription(std::ostream&) const;
+
 // Method for calculation of Anti-Hadron Nucleon Total Cross-section
 G4double GetAntiHadronNucleonTotCrSc(const G4ParticleDefinition* aParticle, G4double kinEnergy);
 

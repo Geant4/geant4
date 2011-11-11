@@ -238,9 +238,10 @@ void G4BGGPionElasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 void
 G4BGGPionElasticXS::CrossSectionDescription(std::ostream& outFile) const 
 {
-  outFile << "The Barashenkov-Glauber-Gribov cross sections describe\n"
-          << "hadron-nuclear elastic scattering. They are valid for pions\n"
-          << "and nucleons at all incident energies.\n";
+  outFile << "The Barashenkov-Glauber-Gribov cross section handles elastic\n"
+          << "scattering of pions from nuclei at all energies. The\n"
+          << "Barashenkov parameterization is used below 91 GeV and the\n"
+          << "Glauber-Gribov parameterization is used above 91 GeV.\n";
 }
 
 G4double G4BGGPionElasticXS::CoulombFactor(G4double kinEnergy, G4int A)

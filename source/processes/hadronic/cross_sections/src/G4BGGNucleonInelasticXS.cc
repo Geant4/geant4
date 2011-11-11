@@ -46,6 +46,7 @@
 #include "G4GlauberGribovCrossSection.hh"
 #include "G4NucleonNuclearCrossSection.hh"
 #include "G4HadronNucleonXsc.hh"
+#include "G4HadronInelasticDataSet.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
 #include "G4NistManager.hh"
@@ -69,6 +70,7 @@ G4BGGNucleonInelasticXS::G4BGGNucleonInelasticXS(const G4ParticleDefinition* p)
   fNucleon = 0;
   fGlauber = 0;
   fHadron  = 0;
+  fGHEISHA = 0;
   particle = p;
   isProton = false;
   isInitialized = false;
@@ -143,24 +145,23 @@ G4BGGNucleonInelasticXS::GetIsoCrossSection(const G4DynamicParticle* dp,
 					    G4int Z, G4int A,
 					    const G4Isotope*,
 					    const G4Element*,
-					    const G4Material*)
+					    const G4Material* mat)
 {
   // this method should be called only for Z = 1
 
   G4double cross = 0.0;
   G4double ekin = dp->GetKineticEnergy();
 
-  if(ekin <= fLowEnergy) {
-    cross = theCoulombFac[1]*CoulombFactor(ekin, 1);
-  } else if( A < 2) {
-    fHadron->GetHadronNucleonXscNS(dp, G4Proton::Proton());
-    cross = fHadron->GetInelasticHadronNucleonXsc();
+  if(ekin <= 20*GeV) {
+    cross = theCoulombFac[1]*fGHEISHA->GetElementCrossSection(dp, 1, mat);
   } else {
-    fHadron->GetHadronNucleonXscNS(dp, G4Proton::Proton());
+    fHadron->GetHadronNucleonXscPDG(dp, G4Proton::Proton());
     cross = fHadron->GetInelasticHadronNucleonXsc();
-    fHadron->GetHadronNucleonXscNS(dp, G4Neutron::Neutron());
-    cross += fHadron->GetInelasticHadronNucleonXsc();
-  }
+  } 
+  if(A > 1) { cross *= A; }
+  //   fHadron->GetHadronNucleonXscNS(dp, G4Neutron::Neutron());
+  //  cross += fHadron->GetInelasticHadronNucleonXsc();
+  // }
 
   if(verboseLevel > 1) {
     G4cout << "G4BGGNucleonInelasticXS::GetCrossSection  for "
@@ -194,6 +195,7 @@ void G4BGGNucleonInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
   fNucleon = new G4NucleonNuclearCrossSection();
   fGlauber = new G4GlauberGribovCrossSection();
   fHadron  = new G4HadronNucleonXsc();
+  fGHEISHA = new G4HadronInelasticDataSet();
   fNucleon->BuildPhysicsTable(*particle);
   fGlauber->BuildPhysicsTable(*particle);
   if(particle == G4Proton::Proton()) { isProton = true; }
@@ -225,11 +227,14 @@ void G4BGGNucleonInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 	     << " factor= " << theGlauberFac[iz] << G4endl; 
     }
   }
-  dp.SetKineticEnergy(fLowEnergy);
-  fHadron->GetHadronNucleonXscNS(&dp, G4Proton::Proton());
-  theCoulombFac[1] = 
-    fHadron->GetInelasticHadronNucleonXsc()/CoulombFactor(fLowEnergy,1);
+  dp.SetKineticEnergy(20*GeV);
+  const G4Material* mat = 0;
+  fHadron->GetHadronNucleonXscPDG(&dp, G4Proton::Proton());
+  theCoulombFac[1] = fHadron->GetInelasticHadronNucleonXsc()
+    /fGHEISHA->GetElementCrossSection(&dp, 1, mat);
+  //    fHadron->GetInelasticHadronNucleonXsc()/CoulombFactor(fLowEnergy,1);
      
+  dp.SetKineticEnergy(fLowEnergy);
   for(G4int iz=2; iz<93; iz++) {
     theCoulombFac[iz] = 
       fNucleon->GetElementCrossSection(&dp, iz)/CoulombFactor(fLowEnergy, iz);
@@ -286,9 +291,12 @@ G4double G4BGGNucleonInelasticXS::CoulombFactor(G4double kinEnergy, G4int Z)
 
 void G4BGGNucleonInelasticXS::CrossSectionDescription(std::ostream& outFile) const
 {
-  outFile << "The Barashenkov-Glauber-Gribov cross section handles inelastic\n"
+  outFile << "The Barashenkov-Glauber-Gribov cross section calculates inelastic\n"
           << "scattering of protons and neutrons from nuclei using the\n"
-          << "Glauber-Gribov parameterization.\n";
+          << "Barashenkov parameterization below 91 GeV and the Glauber-Gribov\n"
+          << "parameterization above 91 GeV.  It uses the G4HadronNucleonXsc\n"
+          << "cross section component for hydrogen targets, and the\n"
+          << "G4GlauberGribovCrossSection component for other targets.\n";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

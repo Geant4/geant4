@@ -44,6 +44,17 @@ G4IonsKoxCrossSection::G4IonsKoxCrossSection()
 G4IonsKoxCrossSection::~G4IonsKoxCrossSection()
 {}
 
+void
+G4IonsKoxCrossSection::CrossSectionDescription(std::ostream& outFile) const
+{
+  outFile << "G4IonsKoxCrossSection calculates the total reaction cross\n"
+          << "section for nucleus-nucleus scattering using the Kox\n"
+          << "parameterization.  It is valid for projectiles and targets\n"
+          << "of all Z, at projectile energies up to 10 GeV/n.  If the\n"
+          << "projectile energy is less than 10 MeV/n, a zero cross section\n"
+          << "is returned.\n";
+}
+
 G4bool G4IonsKoxCrossSection::IsElementApplicable(const G4DynamicParticle* aDP, 
 						  G4int, const G4Material*)
 {

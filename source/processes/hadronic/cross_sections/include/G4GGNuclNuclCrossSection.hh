@@ -75,6 +75,8 @@ public:
   void DumpPhysicsTable(const G4ParticleDefinition&) 
   {G4cout << "G4NuclNuclCrossSection: uses Glauber-Gribov formula"<<G4endl;}
 
+  virtual void CrossSectionDescription(std::ostream&) const;
+
   G4double GetRatioSD(const G4DynamicParticle*, G4double At, G4double Zt);
   G4double GetRatioQE(const G4DynamicParticle*, G4double At, G4double Zt);
 

@@ -321,6 +321,11 @@ void G4UPiNuclearCrossSection::BuildPhysicsTable(const G4ParticleDefinition& p)
   AddDataSet("pi+",u_p_t,  u_p_in,  e7, 30);
 }
 
-void G4UPiNuclearCrossSection::CrossSectionDescription(std::ostream& /*outFile*/) const
-{}
+void G4UPiNuclearCrossSection::CrossSectionDescription(std::ostream& outFile) const
+{
+  outFile << "G4UPiNuclearCrossSection calculates the total, elastic and\n"
+          << "inelastic cross sections for pion scattering from nuclei\n"
+          << "heavier than hydrogen.  It is based on the Barashenkov\n"
+          << "parameterization and is valid for all incident energies.\n";
+}
 

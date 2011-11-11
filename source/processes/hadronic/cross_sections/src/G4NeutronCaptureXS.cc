@@ -72,6 +72,15 @@ G4NeutronCaptureXS::~G4NeutronCaptureXS()
   }
 }
 
+void G4NeutronCaptureXS::CrossSectionDescription(std::ostream& outFile) const
+{
+  outFile << "G4NeutronCaptureXS calculates the neutron capture cross sections\n"
+          << "on nuclei using data from the high precision neutron database.\n"
+          << "These data are simplified and smoothed over the resonance region\n"
+          << "in order to reduce CPU time.  G4NeutronCaptureXS is valid up to\n"
+          << "20 MeV for all targets through U.\n";
+}
+ 
 G4bool 
 G4NeutronCaptureXS::IsElementApplicable(const G4DynamicParticle*, 
 					G4int, const G4Material*)

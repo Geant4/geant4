@@ -58,6 +58,8 @@ public:
 
   G4double GetCrossSection(G4double kineticEnergy, G4int Z, G4int A);
 
+  virtual void CrossSectionDescription(std::ostream&) const;
+
 private:
 
 G4double minEnergy;

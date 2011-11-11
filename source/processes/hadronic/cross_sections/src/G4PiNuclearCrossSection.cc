@@ -442,12 +442,23 @@ G4PiNuclearCrossSection::
   std::for_each(thePipData.begin(), thePipData.end(), G4PiData::Delete());
 }
 
+void
+G4PiNuclearCrossSection::CrossSectionDescription(std::ostream& outFile) const
+{
+  outFile << "G4PiNuclearCrossSection calculates the pion inelastic cross\n"
+          << "section for all nuclei heavier than hydrogen.  It uses the\n"
+          << "Barashenkov cross sections and is valid for all incident\n"
+          << "energies.\n"; 
+}
+
+
 G4bool 
 G4PiNuclearCrossSection::IsElementApplicable(const G4DynamicParticle*,
 					     G4int Z, const G4Material*)
 {
   return (1 < Z);
 }
+
 
 void G4PiNuclearCrossSection::BuildPhysicsTable(const G4ParticleDefinition& p)
 {

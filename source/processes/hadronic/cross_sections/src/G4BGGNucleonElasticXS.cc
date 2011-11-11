@@ -266,7 +266,8 @@ void G4BGGNucleonElasticXS::CrossSectionDescription(std::ostream& outFile) const
 {
   outFile << "The Barashenkov-Glauber-Gribov cross section handles elastic\n"
           << "scattering of protons and neutrons from nuclei using the\n"
-          << "Glauber-Gribov parameterization.\n";
+          << "Barashenkov parameterization below 91 GeV and the Glauber-Gribov\n"
+          << "parameterization above 91 GeV. n";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

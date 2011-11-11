@@ -41,6 +41,15 @@ G4IonsSihverCrossSection::G4IonsSihverCrossSection()
 
 G4IonsSihverCrossSection::~G4IonsSihverCrossSection()
 {}
+
+void
+G4IonsSihverCrossSection::CrossSectionDescription(std::ostream& outFile) const
+{
+  outFile << "G4IonsSihverCrossSection calculates the total reaction cross\n"
+          << "section for nucleus-nucleus scattering using the Sihver\n"
+          << "parameterization.  It is valid for projectiles and targets of\n"
+          << "all Z, and for all projectile energies above 100 MeV/n.\n"; 
+}
    
 G4bool 
 G4IonsSihverCrossSection::IsElementApplicable(const G4DynamicParticle* aDP, 

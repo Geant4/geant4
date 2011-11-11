@@ -49,6 +49,14 @@ G4GGNuclNuclCrossSection::G4GGNuclNuclCrossSection()
 G4GGNuclNuclCrossSection::~G4GGNuclNuclCrossSection()
 {}
 
+void
+G4GGNuclNuclCrossSection::CrossSectionDescription(std::ostream& outFile) const
+{
+  outFile << "G4GGNuclNuclCrossSection calculates total, inelastic and\n"
+          << "elastic cross sections for nucleus-nucleus collisions using\n"
+          << "the Glauber model with Gribov corrections.  It is valid for\n"
+          << "all incident energies above 100 keV./n";
+}
 
 G4bool 
 G4GGNuclNuclCrossSection::IsElementApplicable(const G4DynamicParticle* aDP, 

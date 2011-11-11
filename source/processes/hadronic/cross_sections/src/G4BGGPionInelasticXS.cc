@@ -273,9 +273,10 @@ G4double G4BGGPionInelasticXS::CoulombFactor(G4double kinEnergy, G4int Z)
 void
 G4BGGPionInelasticXS::CrossSectionDescription(std::ostream& outFile) const 
 {
-  outFile << "The Barashenkov-Glauber-Gribov cross sections describe hadron-nuclear\n"
-          << "inelastic scattering. They are valid for pions and nucleons at all\n"
-          << "incident energies.\n";
+  outFile << "The Barashenkov-Glauber-Gribov cross section handles inelastic\n"
+          << "pion scattering from nuclei at all energies.  The Barashenkov\n"
+          << "parameterization is used below 91 GeV and the Glauber-Gribov\n"
+          << "parameterization is used above 91 GeV.\n";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -43,6 +43,15 @@ G4NeutronInelasticCrossSection::G4NeutronInelasticCrossSection()
 G4NeutronInelasticCrossSection::~G4NeutronInelasticCrossSection()
 {}
 
+void
+G4NeutronInelasticCrossSection::CrossSectionDescription(std::ostream& outFile) const
+{
+  outFile << "G4NeutronInelasticCrossSection calculates the inelastic neutron\n"
+          << "scattering cross section for nuclei using the Wellisch-Laidlaw\n"
+          << "parameterization between 19.9 MeV and 19.9 GeV.  Above 19.9 GeV\n"
+          << "the cross section is assumed to be constant.\n";
+}
+
 G4bool 
 G4NeutronInelasticCrossSection::IsElementApplicable(
    const G4DynamicParticle* part, G4int Z, const G4Material*)

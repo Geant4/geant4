@@ -72,7 +72,18 @@ G4ComponentAntiNuclNuclearXS::~G4ComponentAntiNuclNuclearXS()
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
+void
+G4ComponentAntiNuclNuclearXS::CrossSectionDescription(std::ostream& outFile) const
+{
+  outFile << "G4ComponentAntiNuclNuclearXS describes the total, elastic\n"
+          << "and inelastic cross sections for the scattering of light\n"
+          << "antinuclei from nuclei using the Glauber approach and Grichine\n"
+          << "parameterization.  It is valid from 10 MeV to 10 TeV incident\n"
+          << "energies and applies to antiprotons, antineutrons, antideuterons,\n"
+          << "anti3He, antitritons and antialphas.  This is a cross section\n"
+          << "component which is to be used as part of a cross section data\n"
+          << "set.\n";
+} 
 
 ////////////////////////////////////////////////////////////////////////////////
 //

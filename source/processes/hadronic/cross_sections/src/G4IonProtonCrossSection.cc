@@ -75,6 +75,11 @@ G4IonProtonCrossSection::GetElementCrossSection(
 }
 
 void 
-G4IonProtonCrossSection::CrossSectionDescription(std::ostream& /*outFile*/) const
-{}
+G4IonProtonCrossSection::CrossSectionDescription(std::ostream& outFile) const
+{
+  outFile << "G4IonProtonCrossSection calculates the inelastic cross section\n"
+          << "for ions scattering from protons using inverse kinematics and\n"
+          << "the Axen-Wellisch inelastic cross sections in the\n"
+          << "G4ProtonInelasticCrossSection class.\n"; 
+}
 

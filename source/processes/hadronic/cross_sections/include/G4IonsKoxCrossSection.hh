@@ -59,6 +59,8 @@ public:
   G4double GetElementCrossSection(const G4DynamicParticle*, 
 				  G4int Z, const G4Material*);
 
+  virtual void CrossSectionDescription(std::ostream&) const;
+
 private:
 
   G4double calEcm ( G4double , G4double , G4double ); 

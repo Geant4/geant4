@@ -80,6 +80,16 @@ G4NeutronElasticXS::~G4NeutronElasticXS()
   }
 }
 
+void G4NeutronElasticXS::CrossSectionDescription(std::ostream& outFile) const
+{
+  outFile << "G4NeutronElasticXS calculates the neutron elastic scattering\n"
+          << "cross section on nuclei using data from the high precision\n"
+          << "neutron database.  These data are simplified and smoothed over\n"
+          << "the resonance region in order to reduce CPU time.\n"
+          << "G4NeutronElasticXS is valid for energies up to 20 MeV, for all\n"
+          << "targets through U.\n";  
+}
+
 G4bool 
 G4NeutronElasticXS::IsElementApplicable(const G4DynamicParticle*, 
 					G4int, const G4Material*)

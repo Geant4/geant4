@@ -50,6 +50,7 @@
 #include "G4VCrossSectionDataSet.hh"
 
 class G4ParticleDefinition;
+class G4HadronNucleonXsc;
 
 class G4GlauberGribovCrossSection : public G4VCrossSectionDataSet
 {
@@ -79,6 +80,7 @@ public:
   G4double GetHadronNucleonXscPDG(const G4DynamicParticle*, G4int At, G4int Zt);
   G4double GetHadronNucleonXscNS(const G4DynamicParticle*, const G4Element*);
   G4double GetHadronNucleonXscNS(const G4DynamicParticle*, G4int At, G4int Zt);
+  G4double GetKaonNucleonXscVector(const G4DynamicParticle*, G4int At, G4int Zt);
 
   G4double GetHNinelasticXsc(const G4DynamicParticle*, const G4Element*);
   G4double GetHNinelasticXsc(const G4DynamicParticle*, G4int At, G4int Zt);
@@ -159,6 +161,8 @@ private:
   G4ParticleDefinition* theT;
   G4ParticleDefinition* theA;
   G4ParticleDefinition* theHe3;
+
+  G4HadronNucleonXsc* hnXsc;
 
 };
 

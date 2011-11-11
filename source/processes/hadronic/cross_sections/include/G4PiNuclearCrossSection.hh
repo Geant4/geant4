@@ -52,6 +52,8 @@ class G4PiNuclearCrossSection : public G4VCrossSectionDataSet
     virtual
     void BuildPhysicsTable(const G4ParticleDefinition&);
 
+    virtual void CrossSectionDescription(std::ostream&) const;
+
     inline G4double GetTotalXsc()   {return fTotalXsc;};
     inline G4double GetElasticXsc() {return fElasticXsc;};
   
