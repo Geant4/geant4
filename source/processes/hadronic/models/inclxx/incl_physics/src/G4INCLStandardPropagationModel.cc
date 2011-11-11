@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_alpha2-1-g9138683
+// INCL++ revision: v5.0_rc1-1-g42ec38e
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -160,9 +160,10 @@ namespace G4INCL {
           )
         return NULL;
 
-      // Is the CM energy > cutNN?
-      if(KinematicsUtils::squareTotalEnergyInCM(p1,p2) < BinaryCollisionAvatar::cutNNSquared
-          && p1->isNucleon() && p2->isNucleon()) return NULL;
+      // Is the CM energy > cutNN? (no cutNN on the first collision)
+      if(theNucleus->getStore()->getBook()->getAcceptedCollisions()>0
+          && p1->isNucleon() && p2->isNucleon()
+          && KinematicsUtils::squareTotalEnergyInCM(p1,p2) < BinaryCollisionAvatar::cutNNSquared) return NULL;
 
       // Will the avatar take place between now and the end of the cascade?
       G4double minDistOfApproachSquared = 0.0;

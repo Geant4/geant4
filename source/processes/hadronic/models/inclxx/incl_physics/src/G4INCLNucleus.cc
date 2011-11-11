@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_alpha2-1-g9138683
+// INCL++ revision: v5.0_rc1-1-g42ec38e
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -622,6 +622,7 @@ barr32:
       ParticleList created = fs->getCreatedParticles();
       for(ParticleIter j = created.begin(); j != created.end(); ++j)
         theStore->addToOutgoing(*j);
+      delete fs;
       delete decay;
     }
 

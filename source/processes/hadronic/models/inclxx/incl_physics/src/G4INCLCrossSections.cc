@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_alpha2-1-g9138683
+// INCL++ revision: v5.0_rc1-1-g42ec38e
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -294,6 +294,7 @@ namespace G4INCL {
      */
     const G4double s = KinematicsUtils::squareTotalEnergyInCM(part1, part2);
     G4double plab = KinematicsUtils::momentumInLab(s, ParticleTable::effectiveNucleonMass, ParticleTable::effectiveNucleonMass);
+    if(plab <= 0.0) return 0.0; // Safeguard against FPE
     G4double p1=0.001*plab;
     if(plab > 2000.) goto sel13;
     if(part1->isNucleon() && part2->isNucleon())

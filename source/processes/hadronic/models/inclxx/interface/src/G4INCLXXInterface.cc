@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_alpha2-1-g9138683
+// INCL++ revision: v5.0_rc1-1-g42ec38e
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -63,6 +63,8 @@ G4INCLXXInterface::G4INCLXXInterface(const G4String& nam)
   } else {
     storeDebugOutput = false;
   }
+
+  dumpInput = false;
 }
 
 G4INCLXXInterface::~G4INCLXXInterface()
@@ -87,11 +89,28 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
   // momentum vectors of the outcoming particles to the original
   // coordinate system.
   G4LorentzVector projectileMomentum = aTrack.Get4Momentum();
+
+  // INCL++ assumes that the projectile is going in the direction of
+  // the z-axis. In principle, if the coordinate system used by G4
+  // hadronic framework is defined differently we need a rotation to
+  // transform the INCL++ reaction products to the appropriate
+  // frame. Please note that it isn't necessary to apply this
+  // transform to the projectile because when creating the INCL++
+  // projectile particle G4INCLXXFactory::createProjectile needs to
+  // use only the projectile energy (direction is simply assumed to be
+  // along z-axis).
   G4LorentzRotation toZ;
   toZ.rotateZ(-projectileMomentum.phi());
   toZ.rotateY(-projectileMomentum.theta());
   G4LorentzRotation toLabFrame = toZ.inverse();
-  
+  // However, it turns out that the projectile given to us by G4
+  // hadronic framework is already going in the direction of the
+  // z-axis so this rotation is actually unnecessary. Both toZ and
+  // toLabFrame turn out to be unit matrices as can be seen by
+  // uncommenting the folowing two lines:
+  // G4cout <<"toZ = " << toZ << G4endl;
+  // G4cout <<"toLabFrame = " << toLabFrame << G4endl;
+
   theResult.Clear(); // Make sure the output data structure is clean.
   theResult.SetStatusChange(stopAndKill);
 
@@ -105,12 +124,16 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
   do {
     G4INCL::Particle *theProjectile = G4INCLXXFactory::createProjectile(aTrack);
     G4INCL::INCL *theINCLModel = G4INCLXXFactory::createModel(theNucleus);
+
+    if(dumpInput) {
+      G4cout << theINCLModel->configToString() << G4endl;
+    }
     const G4INCL::EventInfo eventInfo = theINCLModel->processEvent(theProjectile);
     //    eventIsOK = !eventInfo.transparent && nTries < maxTries;
     eventIsOK = !eventInfo.transparent;
     if(eventIsOK) {
       
-      for(G4int i = 0; i < eventInfo.nParticles; ++i) {
+      for(G4int i = 0; i < eventInfo.nParticles; i++) {
 	G4int A = eventInfo.A[i];
 	G4int Z = eventInfo.Z[i];
 	//	G4cout <<"INCL particle A = " << A << " Z = " << Z << G4endl;
@@ -119,21 +142,26 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
 	G4double py = eventInfo.py[i];
 	G4double pz = eventInfo.pz[i];
 	G4DynamicParticle *p = G4INCLXXFactory::toG4Particle(A, Z , kinE, px, py, pz);
-	const G4LorentzVector momentum = p->Get4Momentum();
-	p->Set4Momentum(toLabFrame * momentum);
-	theResult.AddSecondary(p);
+	if(p != 0) {
+	  const G4LorentzVector momentum = p->Get4Momentum();
+	  // Set the four-momentum of the reaction products and apply the toLabFrame rotation 
+	  p->Set4Momentum(toLabFrame * momentum);
+	  theResult.AddSecondary(p);
 
-	if(storeDebugOutput) {
-	  (*debugOutputFile) << "p " << eventInfo.A[i] << '\t' << eventInfo.Z[i] <<
-	    '\t' << eventInfo.emissionTime[i] << '\t' << eventInfo.EKin[i] << '\t' <<
-	    eventInfo.px[i] << '\t' << eventInfo.py[i] << '\t' <<
-	    eventInfo.pz[i] << '\t' << eventInfo.theta[i] << '\t' <<
-	    eventInfo.phi[i] << '\t' << eventInfo.origin[i] << '\t' <<
-	    eventInfo.history[i] << std::endl;
+	  if(storeDebugOutput) {
+	    (*debugOutputFile) << "p " << eventInfo.A[i] << '\t' << eventInfo.Z[i] <<
+	      '\t' << eventInfo.emissionTime[i] << '\t' << eventInfo.EKin[i] << '\t' <<
+	      eventInfo.px[i] << '\t' << eventInfo.py[i] << '\t' <<
+	      eventInfo.pz[i] << '\t' << eventInfo.theta[i] << '\t' <<
+	      eventInfo.phi[i] << '\t' << eventInfo.origin[i] << '\t' <<
+	      eventInfo.history[i] << std::endl;
+	  }
+	} else {
+	  G4cout <<"Warning: INCL++ produced a particle that couldn't be converted to Geant4 particle." << G4endl;
 	}
       }
 
-      for(G4int i = 0; i < eventInfo.nRemnants; ++i) {
+      for(G4int i = 0; i < eventInfo.nRemnants; i++) {
 	G4int A = eventInfo.ARem[i];
 	G4int Z = eventInfo.ZRem[i];
 	//	G4cout <<"INCL particle A = " << A << " Z = " << Z << G4endl;
@@ -148,6 +176,10 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
 								    px, py, pz);
 	G4LorentzVector fourMomentum(scaling * px, scaling * py, scaling * pz,
 				     nuclearMass + kinE);
+	if(std::abs(scaling - 1.0) > 0.01) {
+	  G4cout <<"WARNING: momentum scaling = " << scaling << G4endl;
+	  G4cout <<"Lorentz vector = " << fourMomentum << G4endl;
+	}
 	G4Fragment remnant(A, Z, fourMomentum);
 	remnants.push_back(remnant);
 	if(storeDebugOutput) {
@@ -168,7 +200,7 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
 
   if(theExcitationHandler != 0) {
     for(std::list<G4Fragment>::const_iterator i = remnants.begin();
-	i != remnants.end(); ++i) {
+	i != remnants.end(); i++) {
       const G4LorentzVector remnant4Momentum = (*i).GetMomentum();
       G4LorentzRotation toRemnantZ;
       toRemnantZ.rotateZ(-remnant4Momentum.theta());
@@ -198,12 +230,12 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
 	    G4int Z = def->GetAtomicNumber();
 	    G4double fragmentEkin = theFragment->GetKineticEnergy() / MeV;
 	    G4ThreeVector mom = theFragment->GetMomentum();
-	    (*debugOutputFile) << "p " << A << '\t' << Z << '\t' <<
-	      -1.0 << '\t' << fragmentEkin << '\t' <<
+	    (*debugOutputFile) << "de-excitation: p " << A << '\t' << Z << '\t' <<
+	      "-1.0" << '\t' << fragmentEkin << '\t' <<
 	      mom.x() << '\t' << mom.y() << '\t' << mom.z() << '\t' <<
 	      mom.theta() << '\t' <<
-	      mom.phi() << '\t' << -2 << '\t' <<
-	      0 << std::endl;
+	      mom.phi() << '\t' << "-2" << '\t' <<
+	      "0" << std::endl;
 	  }
 	}
       }

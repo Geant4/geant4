@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_alpha2-1-g9138683
+// INCL++ revision: v5.0_rc1-1-g42ec38e
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -47,7 +47,7 @@ namespace G4INCL {
   class StandaloneParticleDataSource : public IParticleDataSource {
   public:
     StandaloneParticleDataSource();
-    ~StandaloneParticleDataSource();
+    virtual ~StandaloneParticleDataSource();
 
     std::string getPDSName(ParticleType t);
     std::string getPDSName(G4int A, G4int Z);

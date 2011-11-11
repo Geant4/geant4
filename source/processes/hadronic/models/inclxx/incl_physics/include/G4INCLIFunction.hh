@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_alpha2-1-g9138683
+// INCL++ revision: v5.0_rc1-1-g42ec38e
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -48,7 +48,7 @@ namespace G4INCL {
   public:
     IFunction1D() {};
     IFunction1D(G4double, G4double, G4double) {};
-    ~IFunction1D() {};
+    virtual ~IFunction1D() {};
 
     /**
      * Compute the value of the function
@@ -70,7 +70,7 @@ namespace G4INCL {
        theDiffusenessParameter(diffusenessParameter)
     {};
 
-    ~WoodsSaxon() {};
+    virtual ~WoodsSaxon() {};
 
     /**
      * r^2 / (1.0 - exp((r-r0)/adif))
@@ -99,7 +99,7 @@ namespace G4INCL {
        theDiffusenessParameter(diffusenessParameter)
     {};
 
-    ~DerivWoodsSaxon() {};
+    virtual ~DerivWoodsSaxon() {};
 
     inline G4double getValue(G4double r) {
       G4double derivwsax = std::pow(r,3)
@@ -127,7 +127,7 @@ namespace G4INCL {
        theDiffusenessParameter(diffusenessParameter)
     {};
 
-    ~DerivModifiedHarmonicOscillator() {};
+    virtual ~DerivModifiedHarmonicOscillator() {};
 
     inline G4double getValue(G4double r) {
       const G4double arg = std::pow((r/theDiffusenessParameter),2);
@@ -153,7 +153,7 @@ namespace G4INCL {
        theDiffusenessParameter(diffusenessParameter)
     {};
 
-    ~DerivGaussian() {};
+    virtual ~DerivGaussian() {};
 
     inline G4double getValue(G4double r) {
       const G4double arg = std::pow((r/theDiffusenessParameter),2);

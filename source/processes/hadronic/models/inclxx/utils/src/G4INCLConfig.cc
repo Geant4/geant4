@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_alpha2-1-g9138683
+// INCL++ revision: v5.0_rc1-1-g42ec38e
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -78,9 +78,12 @@ namespace G4INCL {
      localEnergyBBString("first-collision"), localEnergyBBType(FirstCollisionLocalEnergy),
      localEnergyPiString("first-collision"), localEnergyPiType(FirstCollisionLocalEnergy),
      clusterAlgorithmString("G4intercomparison"), clusterAlgorithmType(IntercomparisonClusterAlgorithm),
-     clusterMaxMass(5) // Maximum mass of cluster emission set to 5
-     // to have acceptable performance.
-  {}
+     clusterMaxMass(8),
+     backToSpectator(true),
+     backToSpectatorThreshold(18.)
+  {
+    //    std::cout << echo() << std::endl;
+  }
 
   // NOT used in Geant4 mode
 #ifdef HAS_BOOST_PROGRAM_OPTIONS

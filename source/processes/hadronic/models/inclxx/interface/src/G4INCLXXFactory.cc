@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_alpha2-1-g9138683
+// INCL++ revision: v5.0_rc1-1-g42ec38e
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -98,7 +98,7 @@ G4ParticleDefinition* G4INCLXXFactory::toG4ParticleDefinition(G4int A,
   else if(A == 3 && Z == 1)  return G4Triton::Triton();
   else if(A == 3 && Z == 2)  return G4He3::He3();
   else if(A == 4 && Z == 2)  return G4Alpha::Alpha();
-  else if(A > 0 && Z >= 5) { // Returns ground state ion definition
+  else if(A > 0 && Z > 0 && A > Z) { // Returns ground state ion definition
     return G4ParticleTable::GetParticleTable()->GetIon(Z, A, 0.0);
   } else { // Error, unrecognized particle
     return 0;
@@ -110,6 +110,9 @@ G4DynamicParticle* G4INCLXXFactory::toG4Particle(G4int A, G4int Z,
 						 G4double px,
 						 G4double py, G4double pz) {
   const G4ParticleDefinition *def = toG4ParticleDefinition(A, Z);
+  if(def == 0) { // Check if we have a valid particle definition
+    return 0;
+  }
   const G4double energy = kinE / MeV;
   const G4ThreeVector momentum(px, py, pz);
   const G4ThreeVector momentumDirection = momentum.unit();

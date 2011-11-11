@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_alpha2-1-g9138683
+// INCL++ revision: v5.0_rc1-1-g42ec38e
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -405,7 +405,7 @@ namespace G4INCL {
       else
         (*i)->setPotentialEnergy(0.);
 
-      if(shouldUseLocalEnergy && !(*i)->isPion()) { // This translates AECSVT's loops 1, 3 and 4
+      if(shouldUseLocalEnergy && !(*i)->isPion() && theNucleus) { // This translates AECSVT's loops 1, 3 and 4
         // assert(theNucleus); // Local energy without a nucleus doesn't make sense
         const G4double energy = (*i)->getEnergy(); // Store the energy of the particle
         G4double locE = KinematicsUtils::getLocalEnergy(theNucleus, *i); // Initial value of local energy

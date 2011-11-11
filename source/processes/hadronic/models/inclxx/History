@@ -16,6 +16,27 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+10 November 2011 - Pekka Kaitaniemi (hadr-inclxx-V09-04-09)
+-----------------------------------------------------------
+- Added safeguard against FPE in G4INCLCrossSections.cc
+
+07 November 2011 - Pekka Kaitaniemi (hadr-inclxx-V09-04-08)
+-----------------------------------------------------------
+- Don't apply nucleon-nucleon collision energy cut to the first collision
+- Bugfixes:
+  o Check that the nucleus pointer isn't NULL
+  o G4INCLFinalState memory leaks
+  o Proper use of ion definitions in the INCL++ G4 interface
+
+04 November 2011 - Pekka Kaitaniemi (hadr-inclxx-V09-04-07)
+-----------------------------------------------------------
+- Set the maximum coalescence cluster mass to 8
+
+03 November 2011 - Pekka Kaitaniemi (hadr-inclxx-V09-04-06)
+-----------------------------------------------------------
+- Declared G4INCLIFunction, G4INCLIParticleDataSource and
+  G4INCLIClusteringModel destructors as virtual
+
 01 November 2011 - Gabriele Cosmo (hadr-inclxx-V09-04-05)
 ---------------------------------------------------------
 - Correction to GNUmakefiles to allow for DLL build on Windows.
