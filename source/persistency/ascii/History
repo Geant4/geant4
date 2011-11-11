@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10 November 2011 - G.Cosmo (ascii-V09-04-08)
+- Removed call to obsolete G4Exception format in G4tgrMaterialFactory.
+
 27 October 2011 - G.Cosmo (ascii-V09-04-07)
 - Fixed trivial compilation warning from Xcode in G4tgbVolume.
 

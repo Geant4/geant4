@@ -327,7 +327,8 @@ ErrorAlreadyExists(const G4String& object,
   if( bNoRepeating )
   {
     G4tgrUtils::DumpVS( wl, (G4String("!!!! EXITING: ") + msg).c_str() );
-    G4Exception("");
+    G4Exception("G4tgrMaterialFactory", "FatalError",
+                FatalException, "Aborting...");
   }
   else
   {
