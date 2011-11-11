@@ -57,6 +57,7 @@ G4Visible::~G4Visible () {
 }
 
 G4Visible& G4Visible::operator= (const G4Visible& rhs) {
+  if (&rhs == this) return *this;
   fAllocatedVisAttributes = rhs.fAllocatedVisAttributes;
   if (fAllocatedVisAttributes) {
     delete fpVisAttributes;

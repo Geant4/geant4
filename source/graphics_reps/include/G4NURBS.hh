@@ -60,7 +60,7 @@ class G4NURBS : public G4Visible
   // this string is *not* yours (const char)
   virtual const char* Whoami() const = 0;
 
-  // the copy constructor is private.
+  // the copy constructor and assignment opertor are private.
 
   // destructor. 
   virtual ~G4NURBS();
@@ -403,6 +403,10 @@ class G4NURBS : public G4Visible
   // copy constructor.
   // Not really necessary for geant. A warning is issued when used.
   G4NURBS(const G4NURBS &);
+
+  // Private assignment operator - don't use, doesn't exist.
+  // (Added to satisfy Coverity, JA 11/11/11.)
+  G4NURBS& operator= (const G4NURBS&);
 
 };
 

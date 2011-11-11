@@ -109,6 +109,10 @@ public: // With description
   virtual ~G4VMarker ();
 
   //////////////////////////////////////////////////////
+  // Assignment...
+  G4VMarker& operator = (const G4VMarker&);
+
+  //////////////////////////////////////////////////////
   // Logical...
   G4bool operator != (const G4VMarker&) const;
 

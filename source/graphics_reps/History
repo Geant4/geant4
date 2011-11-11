@@ -17,6 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11th November 2011  John Allison  (greps-V09-04-10)
+- Fixed most Coverity warnings.
+
+2nd November 2011  John Allison  (greps-V09-04-09)
+- G4Colour.hh:
+  o Removed "using std::map" statement.
+  o Addwd GetMap so that current colour map options can be listed.
+- G4Colour.cc:
+  o Made std scope explicit.
+  o Implemented GetMap.
+
 29th September 2011  John Allison  (greps-V09-04-08)
 - G4DimensionedType.hh:
   o Reversed action of 27th Sep.  Warnings are false.  Function is needed.

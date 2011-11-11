@@ -43,6 +43,8 @@
 // CHANGE HISTORY
 // --------------
 //
+// 11th November 2011, J Allison.  Added private copy constructor and
+//    assignment operator added to satisfy Coverity.
 // 27th July 2011, J Allison.  Added SetReferences and InvertFacets.
 //   SetReferences is necessary at the end to complete the polyhedron.
 //   It particularly matters if the polyhedron suffers subsequent
@@ -90,6 +92,11 @@ class G4PolyhedronArbitrary : public G4Polyhedron
     G4int nVertexCount;
     G4int nFacetCount;
 
+  private:
+    // Private copy constructor and assignment operator added to satisfy
+    // Coverity - JA 11/11/11.
+    G4PolyhedronArbitrary(const G4PolyhedronArbitrary&);
+    G4PolyhedronArbitrary& operator= (const G4PolyhedronArbitrary&);
 };
 #endif
 ///////////////////////////////////////////////////////////////////////////////

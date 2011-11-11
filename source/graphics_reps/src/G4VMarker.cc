@@ -63,6 +63,17 @@ G4VMarker::G4VMarker (const G4Point3D& pos):
 
 G4VMarker::~G4VMarker () {}
 
+G4VMarker& G4VMarker::operator = (const G4VMarker& m) {
+  if (&m == this) return *this;
+  G4Visible::operator = (m);
+  fPosition   = m.fPosition;
+  fWorldSize  = m.fWorldSize;
+  fScreenSize = m.fScreenSize;
+  fFillStyle  = m.fFillStyle;
+  fInfo       = m.fInfo;
+  return *this;
+}
+
 G4bool G4VMarker::operator != (const G4VMarker& m) const {
   if (
       (G4Visible::operator != (m))   ||

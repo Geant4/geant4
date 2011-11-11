@@ -63,6 +63,11 @@ class  G4NURBStubesector : public G4NURBS
 
   private:
     static t_inddCtrlPt DecideNbrCtrlPts(G4double PHI1, G4double PHI2);
+    // Private copy constructor and assignment operator added to satisfy
+    // Coverity - JA 11/11/11.
+    G4NURBStubesector(const G4NURBStubesector&);
+    G4NURBStubesector& operator= (const G4NURBStubesector&);
+
 };
 
 #endif
