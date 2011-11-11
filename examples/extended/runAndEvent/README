@@ -13,7 +13,7 @@ RE01
 ----
 
  This example demonstrates how to connect the information between
-primary particles and hits. It also utilize some user-information 
+primary particles and hits. It also utilizes some user-information 
 classes.
 
 RE02
@@ -29,11 +29,10 @@ RE03
  This example demonstrates how to use UI-command base scoring.
 It create parallel world(s) for defining scoring mesh(es).
 
-****************************************************************
-* IMPORTANT NOTICE for version 9.1 release                     *
-*  This UI-command base scoring is still in alpha release and  *
-* functionality offered is preliminary. We do not guarantee    *
-* the correctness of the code. Also, we may change any of the  *
-* commands / methods in the near future release.               *
-****************************************************************
+RE04
+----
+
+ This example demonstrates how to define layered mass geometry in
+a parallel world and use it in a simulation.
+
 

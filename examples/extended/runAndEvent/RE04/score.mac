@@ -1,0 +1,9 @@
+/score/create/boxMesh BM
+/score/mesh/boxSize 40. 40. 40. cm
+/score/mesh/nBin 45 45 45
+/score/quantity/energyDeposit eDep
+/score/close
+/vis/disable
+/run/beamOn 1000
+/vis/enable
+/score/drawProjection BM eDep ! 100
