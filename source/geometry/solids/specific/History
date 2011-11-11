@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10-Nov-2011  G.Cosmo (geom-specific-V09-04-09)
+- Fixed trivial Coverity defects on assignment operators...
+
 25-Oct-2011  G.Cosmo (geom-specific-V09-04-08)
 - Fixed logic in G4VTwistSurface::GetEdgeVisibility() in treatment of corners.
 

@@ -213,6 +213,7 @@ class G4VTwistedFaceted: public G4VSolid
       LastState(const LastState& r) : p(r.p), inside(r.inside){}
       LastState& operator=(const LastState& r)
       {
+        if (this == &r)  { return *this; }
         p = r.p; inside = r.inside;
         return *this;
       }
