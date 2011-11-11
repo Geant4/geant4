@@ -97,8 +97,8 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
          const  G4ThreeVector&      TrialPoint,                    // E
                 G4FieldTrack&       IntersectedOrRecalculatedFT,   // Output
                 G4bool&             recalculatedEndPoint,          // Out
-                G4double            &previousSafety,              // In/Out
-                G4ThreeVector       &previousSftOrigin)           // In/Out
+                G4double&           previousSafety,                // In/Out
+                G4ThreeVector&      previousSftOrigin)             // In/Out
 {
   // Find Intersection Point ( A, B, E )  of true path AB - start at E.
 
@@ -108,7 +108,7 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
   G4FieldTrack  CurrentA_PointVelocity = CurveStartPointVelocity; 
   G4FieldTrack  CurrentB_PointVelocity = CurveEndPointVelocity;
   G4ThreeVector CurrentE_Point = TrialPoint;
-  G4bool        validNormalAtE= false;
+  G4bool        validNormalAtE = false;
   G4ThreeVector NormalAtEntry;
 
   G4FieldTrack  ApproxIntersecPointV(CurveEndPointVelocity); // FT-Def-Construct
@@ -145,7 +145,7 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
   //  until 'max_depth'.
   //--------------------------------------------------------------------------
 
-  const G4int param_substeps=5; // Test value for the maximum number
+  const G4int param_substeps=5;  // Test value for the maximum number
                                  // of substeps
   const G4double fraction_done=0.3;
 
@@ -170,7 +170,7 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
   }
 #endif
 
-  NormalAtEntry= GetGlobalSurfaceNormal( CurrentE_Point, validNormalAtE); 
+  NormalAtEntry = GetGlobalSurfaceNormal(CurrentE_Point, validNormalAtE); 
 
   // Intermediates Points on the Track = Subdivided Points must be stored.
   // Give the initial values to 'InterMedFt'
@@ -235,27 +235,25 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
       G4double       MomDir_dot_Norm= NewMomentumDir.dot( NormalAtEntry ) ;
       
 #ifdef  DEBUG_FIELD
-      if( VerboseLevel > 3 ){ 
+      if( VerboseLevel > 3 )
+      { 
          G4ThreeVector  ChordAB           = Point_B - Point_A;
          G4double       ABchord_length    = ChordAB.mag(); 
          G4double       MomDir_dot_ABchord;
-         MomDir_dot_ABchord= (1.0 / ABchord_length) * NewMomentumDir.dot( ChordAB );
-
-         G4VIntersectionLocator::
-	   ReportTrialStep( substep_no, ChordAB, ChordEF_Vector, 
-		      NewMomentumDir, NormalAtEntry, validNormalAtE ); 
-         G4cout << " dot( MomentumDir, ABchord_unit ) = " << MomDir_dot_ABchord << G4endl;
-      } 
+         MomDir_dot_ABchord = (1.0 / ABchord_length)
+                            * NewMomentumDir.dot( ChordAB );
+         G4VIntersectionLocator::ReportTrialStep( substep_no, ChordAB,
+              ChordEF_Vector, NewMomentumDir, NormalAtEntry, validNormalAtE ); 
+         G4cout << " dot( MomentumDir, ABchord_unit ) = "
+                << MomDir_dot_ABchord << G4endl;
+      }
 #endif
-      G4bool adequate_angle;
-      adequate_angle=  ( MomDir_dot_Norm >= 0.0 ) // Can use ( > -epsilon) instead
-                   || (! validNormalAtE );  // Invalid ==> cannot use this criterion
-      G4double EF_dist2= ChordEF_Vector.mag2();
-      if(
-	 ( EF_dist2  <= sqr(fiDeltaIntersection) && ( adequate_angle ) )
-	 || ( EF_dist2 <= kCarTolerance*kCarTolerance ) 
-	 )
-
+      G4bool adequate_angle =
+             ( MomDir_dot_Norm >= 0.0 ) // Can use ( > -epsilon) instead
+          || (! validNormalAtE );       // Invalid, cannot use this criterion
+      G4double EF_dist2 = ChordEF_Vector.mag2();
+      if ( ( EF_dist2 <= sqr(fiDeltaIntersection) && ( adequate_angle ) )
+        || ( EF_dist2 <= kCarTolerance*kCarTolerance ) )
       { 
         found_approximate_intersection = true;
 
@@ -299,7 +297,7 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
         G4ThreeVector PointG;   // Candidate intersection point
         G4double stepLengthAF; 
         G4bool Intersects_AF = IntersectChord( Point_A,   CurrentF_Point,
-                                               NewSafety,previousSafety,
+                                               NewSafety, previousSafety,
                                                previousSftOrigin,
                                                stepLengthAF,
                                                PointG );
@@ -315,9 +313,9 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
           CurrentB_PointVelocity = ApproxIntersecPointV;
           CurrentE_Point = PointG;  
 
-	  G4bool validNormalLast; 
-	  NormalAtEntry = GetSurfaceNormal( PointG, validNormalLast ); 
-	  validNormalAtE= validNormalLast; 
+          G4bool validNormalLast; 
+          NormalAtEntry  = GetSurfaceNormal( PointG, validNormalLast ); 
+          validNormalAtE = validNormalLast; 
 
           // By moving point B, must take care if current
           // AF has no intersection to try current FB!!
@@ -350,7 +348,7 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
           // ---------------------------------------------------------
 
           G4bool Intersects_FB = IntersectChord( CurrentF_Point, Point_B, 
-                                                 NewSafety,previousSafety,
+                                                 NewSafety, previousSafety,
                                                  previousSftOrigin,
                                                  stepLengthFB,
                                                  PointH );
@@ -371,9 +369,9 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
             CurrentA_PointVelocity = ApproxIntersecPointV;
             CurrentE_Point = PointH;
 
-	    G4bool validNormalH;
-	    NormalAtEntry = GetSurfaceNormal( PointH, validNormalH ); 
-	    validNormalAtE= validNormalH; 
+            G4bool validNormalH;
+            NormalAtEntry  = GetSurfaceNormal( PointH, validNormalH ); 
+            validNormalAtE = validNormalH; 
 
           }
           else  // not Intersects_FB
@@ -586,7 +584,7 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
         GetNavigatorFor()->LocateGlobalPointWithinVolume(Point_A);
         G4bool Intersects_AB = IntersectChord(Point_A, SubE_point,
                                               NewSafety, previousSafety,
-                                              previousSftOrigin,stepLengthAB,
+                                              previousSftOrigin, stepLengthAB,
                                               PointGe);
         if( Intersects_AB )
         {
@@ -594,9 +592,9 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
           CurrentE_Point = PointGe;
           fin_section_depth[depth]=true;
 
-	  G4bool validNormalAB; 
-	  NormalAtEntry = GetSurfaceNormal( PointGe, validNormalAB ); 
-	  validNormalAtE= validNormalAB;
+          G4bool validNormalAB; 
+          NormalAtEntry  = GetSurfaceNormal( PointGe, validNormalAB ); 
+          validNormalAtE = validNormalAB;
         }
         else
         {
@@ -650,16 +648,16 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
         GetNavigatorFor()->LocateGlobalPointWithinVolume(Point_A);
         G4bool Intersects_AB = IntersectChord(Point_A, SubE_point, NewSafety,
                                               previousSafety,
-                                              previousSftOrigin,stepLengthAB,
+                                              previousSftOrigin, stepLengthAB,
                                               PointGe);
         if( Intersects_AB )
         {
           last_AF_intersection = Intersects_AB;
           CurrentE_Point = PointGe;
 
-	  G4bool validNormalAB; 
-	  NormalAtEntry = GetSurfaceNormal( PointGe, validNormalAB ); 
-	  validNormalAtE= validNormalAB;
+          G4bool validNormalAB; 
+          NormalAtEntry  = GetSurfaceNormal( PointGe, validNormalAB ); 
+          validNormalAtE = validNormalAB;
         }       
         depth--;
         fin_section_depth[depth]=true;

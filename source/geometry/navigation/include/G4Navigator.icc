@@ -190,7 +190,6 @@ EVolume G4Navigator::CharacteriseDaughters(const G4LogicalVolume *pLog) const
   return type;
 }
 
-
 // ********************************************************************
 // GetDaughtersRegularStructureId
 // ********************************************************************

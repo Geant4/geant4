@@ -59,6 +59,7 @@ class G4GeomTestPoint
     virtual ~G4GeomTestPoint();
       // Constructors and virtual destructor
 
+    G4GeomTestPoint& operator=(const G4GeomTestPoint& other);
     G4bool operator==( const G4GeomTestPoint &other ) const;
     G4bool operator< ( const G4GeomTestPoint &other ) const;
     G4bool operator<=( const G4GeomTestPoint &other ) const;

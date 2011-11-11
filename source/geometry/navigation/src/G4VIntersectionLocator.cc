@@ -297,19 +297,14 @@ GetLocalSurfaceNormal(const G4ThreeVector &CurrentE_Point, G4bool &validNormal)
   delete fpTouchable;
   fpTouchable = fHelpingNavigator->CreateTouchableHistory();
 
-  // located = fHelpingNavigator->LocateGlobalPointAndUpdateTouchableHandle( CurrentE_Point, 
-  //									  // Direction,  
-  //									  fTouchable
-  // 									  );
-
-  // Check if we can use GetGlobalExitNormal(const G4ThreeVector &Position, G4bool *valid); 
-
+  // To check if we can use GetGlobalExitNormal() 
+  //
   G4ThreeVector localPosition = fpTouchable->GetHistory()
                 ->GetTopTransform().TransformPoint(CurrentE_Point);
 
-  // Issue:  in the case of coincident surfaces, this version does not recognise 
-  //         which side you are located onto ( ==> can return vector with wrong sign.)
-  // TO-DO:  use direction (of chord) to identify volume we will be "entering"
+  // Issue: in the case of coincident surfaces, this version does not recognise 
+  //        which side you are located onto (can return vector with wrong sign.)
+  // TO-DO: use direction (of chord) to identify volume we will be "entering"
 
   if( located != 0)
   { 
@@ -321,24 +316,21 @@ GetLocalSurfaceNormal(const G4ThreeVector &CurrentE_Point, G4bool &validNormal)
       // G4bool     goodPoint,    nearbyPoint;   
       // G4int   numGoodPoints,   numNearbyPoints;  // --> use for stats
       if ( ( pSolid->Inside(localPosition)==kSurface )
-	   || ( pSolid->DistanceToOut(localPosition) < 1000.0 * kCarTolerance )
-	 )
+           || ( pSolid->DistanceToOut(localPosition) < 1000.0 * kCarTolerance )
+         )
       {
-	Normal = pSolid->SurfaceNormal(localPosition);
-	validNormal = true;
+        Normal = pSolid->SurfaceNormal(localPosition);
+        validNormal = true;
 
 #ifdef DEBUG_FIELD
-	//  G4cout << "Get Last SN @ last point.  Validity=  " 
-	//         << validNormalLast << std::endl; 
-	if( std::fabs(Normal.mag2() - 1.0 ) > perMille) 
-	  {
-	    G4cerr << " PROBLEM in G4VIntersectionLocator::GetLocalSurfaceNormal." 
-		   << G4endl;
-	    G4cerr << "          Normal is not unit - mag=" 
-		   <<  Normal.mag() << G4endl; 
-	    G4cerr << "          at trial local point " << CurrentE_Point << G4endl;
-	    G4err <<  "          Solid is " << *pSolid << G4endl;
-	  }
+        if( std::fabs(Normal.mag2() - 1.0 ) > perMille) 
+        {
+          G4cerr << "PROBLEM in G4VIntersectionLocator::GetLocalSurfaceNormal."
+                 << G4endl;
+          G4cerr << "  Normal is not unit - mag=" << Normal.mag() << G4endl; 
+          G4cerr << "  at trial local point " << CurrentE_Point << G4endl;
+          G4cerr <<  "  Solid is " << *pSolid << G4endl;
+        }
 #endif
       }
     }
@@ -368,7 +360,7 @@ AdjustmentOfFoundIntersection( const G4ThreeVector &CurrentA_Point,
 
   // Get SurfaceNormal of Intersecting Solid
   //
-  Normal= GetGlobalSurfaceNormal(CurrentE_Point,validNormal);
+  Normal = GetGlobalSurfaceNormal(CurrentE_Point,validNormal);
   if(!validNormal) { return false; }
 
   // Intersection between Line and Plane
@@ -445,14 +437,15 @@ G4ThreeVector G4VIntersectionLocator::GetSurfaceNormal(const G4ThreeVector &Curr
 
 
 #ifdef DEBUG_FIELD
-  //  G4cout << "Get Last SN @ last point.  Validity=  " 
-  //         << validNormalLast << std::endl; 
-  if( validNormalLast && ( std::fabs(NormalAtEntryLast.mag2() - 1.0) > perThousand ) )
+  if  ( validNormalLast
+   && ( std::fabs(NormalAtEntryLast.mag2() - 1.0) > perThousand ) )
   {
-    G4cerr << " G4VIntersectionLocator::GetSurfaceNormal -- identified problem." << G4endl;
-    G4cerr << " PROBLEM: Normal is not unit - mag=" <<  NormalAtEntryLast.mag() << G4endl; 
-    G4cerr << "          at trial intersection point " << CurrentInt_Point << G4endl;
-    G4cerr << "          Obtained from Get *Last* Surface Normal." << G4endl; 
+    G4cerr << "G4VIntersectionLocator::GetSurfaceNormal -- identified problem."
+           << G4endl;
+    G4cerr << "PROBLEM: Normal is not unit - mag = " << NormalAtEntryLast.mag()
+           << G4endl; 
+    G4cerr << "   at trial intersection point " << CurrentInt_Point << G4endl;
+    G4cerr << "   Obtained from Get *Last* Surface Normal." << G4endl; 
   }
 #endif
 
@@ -465,56 +458,56 @@ G4ThreeVector G4VIntersectionLocator::GetSurfaceNormal(const G4ThreeVector &Curr
   {
     G4bool validNormalNew;
 
-    // G4cout << " Calling GetGlobal (which calls GetLocal) in G4VIntersectionLocator" << G4endl;
-    NormalAtEntryGlobal = GetGlobalSurfaceNormal( CurrentInt_Point, validNormalNew); 
+    NormalAtEntryGlobal =
+      GetGlobalSurfaceNormal(CurrentInt_Point, validNormalNew); 
     
-    NormalAtEntry=NormalAtEntryGlobal; 
-    validNormal=  validNormalNew; 
+    NormalAtEntry = NormalAtEntryGlobal; 
+    validNormal   = validNormalNew; 
 
 #ifdef DEBUG_FIELD
-    if( validNormalNew && ( std::fabs(NormalAtEntryGlobal.mag2()-1.0) > perThousand ) )   
+    if   ( validNormalNew
+      && ( std::fabs(NormalAtEntryGlobal.mag2()-1.0) > perThousand ) )   
     {
-      G4cerr << " G4VIntersectionLocator::GetSurfaceNormal -- identified problem." << G4endl;
-      G4cerr << " ERROR: Normal is not unit vector - magnitude=" 
-	     <<  NormalAtEntryGlobal.mag() << G4endl; 
-      G4cerr << "          at point " << CurrentInt_Point << G4endl;
-      G4cerr << "          Obtained from Get *Global* Surface Normal " << G4endl; 
+      G4cerr << "G4VIntersectionLocator::GetSurfaceNormal -- identified problem." << G4endl;
+      G4cerr << "ERROR: Normal is not unit vector - magnitude = " 
+             <<  NormalAtEntryGlobal.mag() << G4endl; 
+      G4cerr << "  at point " << CurrentInt_Point << G4endl;
+      G4cerr << "  Obtained from Get *Global* Surface Normal " << G4endl; 
     }
 #endif
   }
   return NormalAtEntry; 
 }
 
-//  G4Navigator method:
-//   const G4AffineTransform  GetLocalToGlobalTransform() const;2
-
-G4ThreeVector 
-G4VIntersectionLocator::GetGlobalSurfaceNormal(const G4ThreeVector &CurrentE_Point,
-                                               G4bool &validNormal) // const
+G4ThreeVector G4VIntersectionLocator::
+GetGlobalSurfaceNormal(const G4ThreeVector &CurrentE_Point,
+                             G4bool &validNormal)
 {
   G4ThreeVector     localNormal=
-      GetLocalSurfaceNormal( CurrentE_Point, validNormal);
-  G4AffineTransform localToGlobal= 
-      fHelpingNavigator->GetLocalToGlobalTransform();    //  Must use the same Navigator !!
+      GetLocalSurfaceNormal( CurrentE_Point, validNormal );
+  G4AffineTransform localToGlobal=           //  Must use the same Navigator !!
+      fHelpingNavigator->GetLocalToGlobalTransform();
   G4ThreeVector     globalNormal =
     localToGlobal.TransformAxis( localNormal );
 
 #ifdef DEBUG_FIELD
   if( validNormal && ( std::fabs(globalNormal.mag2() - 1.0) > perThousand ) ) 
   {
-    G4cerr << "**************************************************************** "
-	   << G4endl;
+    G4cerr << "****************************************************************"
+           << G4endl;
     G4cerr << " Bad Normal in G4VIntersectionLocator::GetGlobalSurfaceNormal"
-	   << G4endl;
+           << G4endl;
     G4cerr << "  * Constituents: " << G4endl;
-    G4cerr << "     Local  Normal= " << localNormal << G4endl;
-    G4cerr << "     Transform: " << G4endl
-	   << "        Net Translation= " << localToGlobal.NetTranslation() << G4endl
-	   << "        Net Rotation   = " << localToGlobal.NetRotation() << G4endl;
+    G4cerr << "    Local  Normal= " << localNormal << G4endl;
+    G4cerr << "    Transform: " << G4endl
+           << "      Net Translation= " << localToGlobal.NetTranslation()
+           << G4endl
+           << "      Net Rotation   = " << localToGlobal.NetRotation()
+           << G4endl;
     G4cerr << "  * Result: " << G4endl;
     G4cerr << "     Global Normal= " << localNormal << G4endl;
-    G4cerr << "**************************************************************** "
-	   << G4endl;
+    G4cerr << "****************************************************************"
+           << G4endl;
   }
 #endif
 
@@ -534,16 +527,15 @@ G4VIntersectionLocator::GetLastSurfaceNormal( G4ThreeVector intersectPoint,
 }
 
 
-void G4VIntersectionLocator::ReportTrialStep( int step_no, 
-                      const G4ThreeVector& ChordAB_v,
-                      const G4ThreeVector& ChordEF_v,
-                      const G4ThreeVector& NewMomentumDir,
-                      const G4ThreeVector& NormalAtEntry,
-                      G4bool validNormal
-                    )
+void G4VIntersectionLocator::ReportTrialStep( G4int step_no, 
+                                        const G4ThreeVector& ChordAB_v,
+                                        const G4ThreeVector& ChordEF_v,
+                                        const G4ThreeVector& NewMomentumDir,
+                                        const G4ThreeVector& NormalAtEntry,
+                                              G4bool validNormal )
 {
-  G4double       ABchord_length    = ChordAB_v.mag(); 
-  G4double       MomDir_dot_Norm= NewMomentumDir.dot( NormalAtEntry ) ;
+  G4double       ABchord_length  = ChordAB_v.mag(); 
+  G4double       MomDir_dot_Norm = NewMomentumDir.dot( NormalAtEntry ) ;
   G4double       MomDir_dot_ABchord;
   MomDir_dot_ABchord= (1.0 / ABchord_length) * NewMomentumDir.dot( ChordAB_v );
 
@@ -575,10 +567,9 @@ void G4VIntersectionLocator::ReportTrialStep( int step_no,
   if( ( std::fabs(NormalAtEntry.mag2() - 1.0) > perThousand ) ) 
   {
     G4cerr << " PROBLEM in G4VIntersectionLocator::ReportTrialStep " << G4endl
-	   << "         Normal is not unit - mag=" <<  NormalAtEntry.mag() 
+           << "         Normal is not unit - mag=" <<  NormalAtEntry.mag() 
            << "         ValidNormalAtE = " << validNormal
            << G4endl; 
   }
   return; 
 }
-

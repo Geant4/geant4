@@ -901,12 +901,8 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
   fEnteredDaughter = fEntering;   // I expect to enter a volume in this Step
   fExitedMother = fExiting;
 
-  fStepEndPoint=          pGlobalpoint           + Step * pDirection; 
-  fLastStepEndPointLocal= fLastLocatedPointLocal + Step * localDirection; 
-
-  // G4cout << "G4Navigator::ComputeStep:                " 
-  // 	 << "End of Step (global coord)=         " 
-  // 	 << fStepEndPoint << G4endl;
+  fStepEndPoint = pGlobalpoint + Step * pDirection; 
+  fLastStepEndPointLocal = fLastLocatedPointLocal + Step * localDirection; 
 
   if( fExiting )
   {
@@ -1111,28 +1107,23 @@ G4ThreeVector G4Navigator::GetLocalExitNormal( G4bool* valid )
       candidateLogical= fBlockedPhysicalVolume->GetLogicalVolume();
       if( candidateLogical ) 
       {
-	// fLastStepEndPointLocal is in the coordinates of the mother
-	//   we need it in the daughter's coordinate system.
+        // fLastStepEndPointLocal is in the coordinates of the mother
+        // we need it in the daughter's coordinate system.
 
         if( CharacteriseDaughters(candidateLogical) != kReplica )
         {
-	  G4AffineTransform GetMotherToDaughterTransform( G4VPhysicalVolume* daughterVolume, 
-							  G4int              daughterReplicaNo,
-							  EVolume            daughterVolumeType );
-	  // First transform fLastLocatedPointLocal to the new daughter coordinates
-	  G4AffineTransform MotherToDaughterTransform=
-	    GetMotherToDaughterTransform( fBlockedPhysicalVolume, 
-					  fBlockedReplicaNo,
-					  VolumeType(fBlockedPhysicalVolume) ); 
+          // First transform fLastLocatedPointLocal to the new daughter
+          // coordinates
+          G4AffineTransform MotherToDaughterTransform=
+            GetMotherToDaughterTransform( fBlockedPhysicalVolume, 
+                                          fBlockedReplicaNo,
+                                          VolumeType(fBlockedPhysicalVolume) ); 
           G4ThreeVector daughterPointOwnLocal= 
             MotherToDaughterTransform.TransformPoint( fLastStepEndPointLocal ); 
 
-	  // G4cout << "G4Navigator::GetLocalExitNormal         "  
-	  //                 << "Daughter Point (Local Coord):  "
-	  //                 << daughterPointOwnLocal << G4endl;
-
           // OK if it is a parameterised volume
-	  EInside  inSideIt; 
+          //
+          EInside  inSideIt; 
           G4bool   onSurface;
           G4double safety= -1.0; 
           currentSolid= candidateLogical->GetSolid(); 
@@ -1154,52 +1145,66 @@ G4ThreeVector G4Navigator::GetLocalExitNormal( G4bool* valid )
 
           if( onSurface ) 
           {
-            nextSolidExitNormal= currentSolid->SurfaceNormal(daughterPointOwnLocal);  
-            ExitNormal = - nextSolidExitNormal;  // Entering the solid ==> opposite
-          }else{
-            G4cerr << " G4Nav:GetLocalExitNormal>  Point not on surface ! " << G4endl;
-            G4cerr << "       point       =  " << daughterPointOwnLocal << G4endl; 
-            G4cerr << "       physical Vol=  " << fBlockedPhysicalVolume->GetName() << G4endl;
-            G4cerr << "       logical  Vol=  " << candidateLogical->GetName() << G4endl;
-            G4cerr << "       solid       =  " << currentSolid->GetName() 
-		   << " type= " << currentSolid->GetEntityType() << G4endl
-		   << *currentSolid << G4endl;
-            if( inSideIt == kOutside )
-            { 
-              G4cerr << "     Point is Outside. " << G4endl;
-              G4cerr << "     safety (from Out) = " << safety << G4endl;
-            }
-            else // if( inSideIt == kInside ) 
+            nextSolidExitNormal =
+              currentSolid->SurfaceNormal(daughterPointOwnLocal); 
+ 
+            // Entering the solid ==> opposite
+            //
+            ExitNormal = -nextSolidExitNormal;
+          }
+          else
+          {
+#ifdef G4VERBOSE
+            if(( fVerbose == 1 ) && ( fCheck ))
             {
-              G4cerr << "     Point is Inside. " << G4endl;
-              G4cerr << "     safety (from In)  = " << safety << G4endl;              
+              std::ostringstream message;
+              message << "Point not on surface ! " << G4endl
+                      << "  Point           = "
+                      << daughterPointOwnLocal << G4endl 
+                      << "  Physical volume = "
+                      << fBlockedPhysicalVolume->GetName() << G4endl
+                      << "  Logical volume  = "
+                      << candidateLogical->GetName() << G4endl
+                      << "  Solid           = " << currentSolid->GetName() 
+                      << "  Type            = "
+                      << currentSolid->GetEntityType() << G4endl
+                      << *currentSolid << G4endl;
+              if( inSideIt == kOutside )
+              { 
+                message << "Point is Outside. " << G4endl
+                        << "  Safety (from outside) = " << safety << G4endl;
+              }
+              else // if( inSideIt == kInside ) 
+              {
+                message << "Point is Inside. " << G4endl
+                        << "  Safety (from inside) = " << safety << G4endl;              
+              }
+              G4Exception("G4Navigator::GetLocalExitNormal()", "GeomNav1001",
+                          JustWarning, message);
             }
+#endif
           }
           *valid = onSurface;   //   was =true;
         }
         else
         {
-          *valid = false; 
-          // TODO: Need Separate code for replica!!!!
-          // G4cout << " G4Nav:GetLocalExitNormal> Replicas have no 'last' exit normal !" << G4endl;
-          // G4cout << " - in fact there are *no* normals at all for replicas !! " << G4endl;
+          *valid = false;  // TODO: Need Separate code for replica!!!!
 #ifdef G4DEBUG_NAVIGATION
-          G4Exception("G4Navigator::ComputeSafety()", "NotAvailable", FatalException, 
-		      "Local Normal is not (yet) available for replicated volumes.");
+          G4Exception("G4Navigator::GetLocalExitNormal()", "GeomNav0001",
+                      FatalException, 
+                      "Local normal not (yet) available for replica volumes.");
 #endif 
         }
       }
     }
     else if ( fExiting ) 
     {
-        ExitNormal = fGrandMotherExitNormal;
-        *valid = fValidExitNormal;
+      ExitNormal = fGrandMotherExitNormal;
+      *valid = fValidExitNormal;
     }
     else  // ie  ( fBlockedPhysicalVolume == 0 )
     {
       *valid = false;
-      // G4cerr << "G4Navigator::GetLocalExitNormal - unexpected condition: " << G4endl;
-      // G4cerr << "  The candidate volume pointer (fBlockedPhysicalVolume) is 0. " << G4endl;
     }
   }
   else 
@@ -1207,43 +1212,90 @@ G4ThreeVector G4Navigator::GetLocalExitNormal( G4bool* valid )
     if ( EnteredDaughterVolume() )
     {
       ExitNormal= -(fHistory.GetTopVolume()->GetLogicalVolume()->
-		    GetSolid()->SurfaceNormal(fLastLocatedPointLocal));
+                    GetSolid()->SurfaceNormal(fLastLocatedPointLocal));
       *valid = true;
     }
     else
     {
       if( fExitedMother )
       {
-	ExitNormal = fGrandMotherExitNormal;
-	*valid = true;
+        ExitNormal = fGrandMotherExitNormal;
+        *valid = true;
       }
-      else
+      else  // We are not at a boundary. ExitNormal remains (0,0,0)
       {
-	// We are not at a boundary.
-	// ExitNormal remains (0,0,0)
-	*valid = false;
+        *valid = false;
       }
     }
   }
   return ExitNormal;
 }
 
-// virtual
-G4ThreeVector
-G4Navigator::GetLocalExitNormalAndCheck(const G4ThreeVector &ExpectedBoundaryPointGlobal,
-						   G4bool* pValid) // const
+// ********************************************************************
+// GetMotherToDaughterTransform
+//
+// Obtains the mother to daughter affine transformation
+// ********************************************************************
+//
+G4AffineTransform
+G4Navigator::GetMotherToDaughterTransform( G4VPhysicalVolume *pEnteringPhysVol,   // not Const 
+                                           G4int   enteringReplicaNo,
+                                           EVolume enteringVolumeType ) 
+{
+  switch (enteringVolumeType)
+  {
+    case kNormal:  // Nothing is needed to prepare the transformation
+      break;       // It is stored already in the physical volume (placement)
+    case kReplica: // Sets the transform in the Replica - tbc
+      G4Exception("G4Navigator::GetMotherToDaughterTransform()",
+                  "GeomNav0001", FatalException,
+                  "Method NOT Implemented yet for replica volumes.");
+      break;
+    case kParameterised:
+      if( pEnteringPhysVol->GetRegularStructureId() == 0 )
+      {
+        G4VPVParameterisation *pParam =
+          pEnteringPhysVol->GetParameterisation();
+        G4VSolid* pSolid =
+          pParam->ComputeSolid(enteringReplicaNo, pEnteringPhysVol);
+        pSolid->ComputeDimensions(pParam, enteringReplicaNo, pEnteringPhysVol);
+
+        // Sets the transform in the Parameterisation
+        //
+        pParam->ComputeTransformation(enteringReplicaNo, pEnteringPhysVol);
+
+        // Set the correct solid and material in Logical Volume
+        //
+        G4LogicalVolume* pLogical = pEnteringPhysVol->GetLogicalVolume();
+        pLogical->SetSolid( pSolid );
+      }
+      break;
+  }
+  return G4AffineTransform(pEnteringPhysVol->GetRotation(), 
+                           pEnteringPhysVol->GetTranslation()).Invert(); 
+}
+
+// ********************************************************************
+// GetLocalExitNormalAndCheck
+//
+// Obtains the Normal vector to a surface (in local coordinates)
+// pointing out of previous volume and into current volume, and
+// checks the current point against expected 'local' value.
+// ********************************************************************
+//
+G4ThreeVector G4Navigator::
+GetLocalExitNormalAndCheck(const G4ThreeVector& ExpectedBoundaryPointGlobal,
+                                 G4bool*        pValid)
 {
   G4ThreeVector ExpectedBoundaryPointLocal;
 
-  // G4cout << "G4Navigator::GetLocalExitNormalAndCheck "  
-  //	 << " Boundary Point (Global Coord):      "
-  //	 << ExpectedBoundaryPointGlobal  << G4endl;
-
   // Check Current point against expected 'local' value
+  //
   if ( fLastTriedStepComputation ) 
   {
-     const G4AffineTransform& GlobalToLocal= this->GetGlobalToLocalTransform(); 
-     ExpectedBoundaryPointLocal= GlobalToLocal.TransformPoint( ExpectedBoundaryPointGlobal ); 
+     const G4AffineTransform& GlobalToLocal= GetGlobalToLocalTransform(); 
+     ExpectedBoundaryPointLocal =
+       GlobalToLocal.TransformPoint( ExpectedBoundaryPointGlobal ); 
   }
 
   return GetLocalExitNormal( pValid); 
@@ -1257,20 +1309,15 @@ G4Navigator::GetLocalExitNormalAndCheck(const G4ThreeVector &ExpectedBoundaryPoi
 // ********************************************************************
 //
 G4ThreeVector 
-G4Navigator::GetGlobalExitNormal(const G4ThreeVector&  IntersectPointGlobal, // - for checking
-				       G4bool*        pValidNormal)    // const ?
+G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
+                                       G4bool*        pValidNormal)
 {
   G4bool         validNormal;
   G4ThreeVector  localNormal, globalNormal;
 
-  // G4cout << "G4Navigator::GetGlobalExitNormal         "  
-  //	 << "Intersection Point (Global Coord):  "
-  //	 << IntersectPointGlobal  << G4endl;
-
-  // localNormal=   GetLocalExitNormal( &validNormal);
-  localNormal=   GetLocalExitNormalAndCheck( IntersectPointGlobal, &validNormal);
-  *pValidNormal= validNormal; 
-  G4AffineTransform localToGlobal= this->GetLocalToGlobalTransform(); 
+  localNormal = GetLocalExitNormalAndCheck( IntersectPointGlobal, &validNormal);
+  *pValidNormal = validNormal; 
+  G4AffineTransform localToGlobal = GetLocalToGlobalTransform(); 
   globalNormal = localToGlobal.TransformAxis( localNormal );
   
   return globalNormal;
@@ -1591,49 +1638,4 @@ std::ostream& operator << (std::ostream &os,const G4Navigator &n)
 {
   os << "Current History: " << G4endl << n.fHistory;
   return os;
-}
-
-// 
-G4AffineTransform
-GetMotherToDaughterTransform( G4VPhysicalVolume *pEnteringPhysVol,   // not Const 
-			      G4int               enteringReplicaNo,
-			      EVolume             enteringVolumeType ) 
-{
-  switch (enteringVolumeType)
-  // switch (VolumeType(pEnteringPhysVol))
-    {
-    case kNormal:
-      // Nothing is needed to prepare the transformation
-      // It is stored already in the physical volume (for a Placement)
-      break;
-    case kReplica:
-      // Sets the transform in the Replica - not a const method (tbc)
-      // freplicaNav.ComputeTransformation(enteringReplicaNo,
-      //				pEnteringPhysVol);
-      G4Exception("G4Navigator::GetMotherToDaughterTransform()", "NotImplemented",
-		  FatalException, "Method NOT Implemented yet for replicated volumes.");
-      break;
-    case kParameterised:
-      if( pEnteringPhysVol->GetRegularStructureId() == 0 )
-	{
-	  G4VSolid *pSolid;
-	  G4VPVParameterisation *pParam;
-	  pParam = pEnteringPhysVol->GetParameterisation();
-	  pSolid = pParam->ComputeSolid(enteringReplicaNo,
-					pEnteringPhysVol);
-	  pSolid->ComputeDimensions(pParam, enteringReplicaNo,
-				    pEnteringPhysVol);
-          // Sets the transform in the Parameterisation - not a const method (tbc)
-	  pParam->ComputeTransformation(enteringReplicaNo,
-					pEnteringPhysVol);
-	  // Set the correct solid and material in Logical Volume -- else it is not ready!
-	  G4LogicalVolume *pLogical;
-	  pLogical = pEnteringPhysVol->GetLogicalVolume();
-	  pLogical->SetSolid( pSolid );
-	}
-      break;
-    }
-
-  return G4AffineTransform(pEnteringPhysVol->GetRotation(), 
-			   pEnteringPhysVol->GetTranslation()).Invert(); 
 }

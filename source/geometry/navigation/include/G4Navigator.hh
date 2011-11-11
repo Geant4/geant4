@@ -205,12 +205,11 @@ class G4Navigator
   virtual G4TouchableHistoryHandle CreateTouchableHistoryHandle() const;
     // Returns a reference counted handle to a touchable history.
 
-  virtual G4ThreeVector GetLocalExitNormal(G4bool* valid); // const
-  // virtual G4ThreeVector GetGlobalExitNormal(G4bool* valid); // const
-  virtual G4ThreeVector GetLocalExitNormalAndCheck(const G4ThreeVector &CurrentE_Point,
-						   G4bool* valid); // const
-  virtual G4ThreeVector GetGlobalExitNormal(const G4ThreeVector &CurrentE_Point,
-					          G4bool        *valid); // const
+  virtual G4ThreeVector GetLocalExitNormal(G4bool* valid);
+  virtual G4ThreeVector GetLocalExitNormalAndCheck(const G4ThreeVector& point,
+                                                         G4bool* valid);
+  virtual G4ThreeVector GetGlobalExitNormal(const G4ThreeVector& point,
+                                                  G4bool* valid);
     // Return Exit Surface Normal and validity too.
     // Can only be called if the Navigator's last Step has crossed a
     // volume geometrical boundary.
@@ -221,7 +220,7 @@ class G4Navigator
     // Restriction:
     //   Normals are not available for replica volumes (returns valid= false)
     // These methods takes full care about how to calculate this normal,
-    // but if the surfaces are not convex it will return valid=false.  (tbc)
+    // but if the surfaces are not convex it will return valid=false.
 
   inline G4int GetVerboseLevel() const;
   inline void  SetVerboseLevel(G4int level);
@@ -261,6 +260,11 @@ class G4Navigator
   inline const G4AffineTransform  GetLocalToGlobalTransform() const;
     // Obtain the transformations Global/Local (and inverse).
     // Clients of these methods must copy the data if they need to keep it.
+
+  G4AffineTransform GetMotherToDaughterTransform(G4VPhysicalVolume* dVolume, 
+                                                 G4int dReplicaNo,
+                                                 EVolume dVolumeType );
+    // Obtain mother to daughter transformation
 
   inline void ResetStackAndState();
     // Reset stack and minimum or navigator state machine necessary for reset
@@ -354,11 +358,11 @@ class G4Navigator
     // Set true if last Step was limited by geometry.
 
   G4ThreeVector fStepEndPoint;
-    //  Endpoint of last ComputeStep 
-    //  - can be used for optimisation (eg when computing safety)
+    // Endpoint of last ComputeStep 
+    // can be used for optimisation (e.g. when computing safety).
   G4ThreeVector fLastStepEndPointLocal; 
     // Position of the end-point of the last call to ComputeStep 
-    //    (in last Local coordinates)
+    // in last Local coordinates.
 
   G4int  fVerbose;
     // Verbose(ness) level  [if > 0, printout can occur].
@@ -386,14 +390,10 @@ class G4Navigator
   G4VPhysicalVolume *fBlockedPhysicalVolume;
   G4int fBlockedReplicaNo;
 
-  // G4VPhysicalVolume *fCandidatePhysicalVolume;   // Unused 
-  // G4int fCandidateReplicaNo;   
-
   G4ThreeVector fLastLocatedPointLocal;
     // Position of the last located point relative to its containing volume.
   G4bool fLocatedOutsideWorld;
     // Whether the last call to Locate methods left the world
-  // G4PhysicalVolume* fLastVolumeLocated; 
 
   G4bool fValidExitNormal;    // Set true if have leaving volume normal
   G4ThreeVector fExitNormal;  // Leaving volume normal, in the

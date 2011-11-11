@@ -108,10 +108,9 @@ G4VIntersectionLocator::IntersectChord( G4ThreeVector  StartPointA,
                                         G4ThreeVector &PreviousSftOrigin,
                                         G4double      &LinearStepLength,
                                         G4ThreeVector &IntersectionPoint,
-					G4bool        *ptrCalledNavigator
-					)
+                                        G4bool        *ptrCalledNavigator )
 {
-  G4bool        CalledNavigator= false; 
+  G4bool CalledNavigator = false; 
 
   // Calculate the direction and length of the chord AB
 
@@ -153,7 +152,7 @@ G4VIntersectionLocator::IntersectChord( G4ThreeVector  StartPointA,
        // and it did not find a surface boundary at that length
 
     LinearStepLength = std::min( LinearStepLength, ChordAB_Length);
-    CalledNavigator= true; 
+    CalledNavigator = true; 
 
     // Save the last calculated safety!
 
@@ -167,8 +166,10 @@ G4VIntersectionLocator::IntersectChord( G4ThreeVector  StartPointA,
        IntersectionPoint = StartPointA + LinearStepLength * ChordAB_Dir;
     }
   }
-  if( ptrCalledNavigator ) 
+  if( ptrCalledNavigator )
+  { 
     *ptrCalledNavigator = CalledNavigator; 
+  }
 
   return intersects;
 }

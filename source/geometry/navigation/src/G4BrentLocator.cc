@@ -131,7 +131,7 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
   G4FieldTrack  CurrentA_PointVelocity = CurveStartPointVelocity; 
   G4FieldTrack  CurrentB_PointVelocity = CurveEndPointVelocity;
   G4ThreeVector CurrentE_Point = TrialPoint;
-  G4bool        validNormalAtE= false;
+  G4bool        validNormalAtE = false;
   G4ThreeVector NormalAtEntry;
 
   G4FieldTrack  ApproxIntersecPointV(CurveEndPointVelocity); // FT-Def-Construct
@@ -177,7 +177,7 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
 
   G4bool Second_half = false;     // First half or second half of divided step
 
-  NormalAtEntry= GetGlobalSurfaceNormal( CurrentE_Point, validNormalAtE); 
+  NormalAtEntry = GetGlobalSurfaceNormal(CurrentE_Point, validNormalAtE); 
 
   // We need to know this for the 'final_section':
   // real 'final_section' or first half 'final_section'
@@ -262,24 +262,18 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
       G4double       MomDir_dot_Norm= NewMomentumDir.dot( NormalAtEntry ) ;
      
 #ifdef DEBUG_FIELD
-      G4ThreeVector  ChordAB           = Point_B - Point_A;
-      // G4double       ABchord_length    = ChordAB.mag(); 
-      // G4double       MomDir_dot_ABchord;
-      // MomDir_dot_ABchord= (1.0 / ABchord_length) * NewMomentumDir.dot( ChordAB );
+      G4ThreeVector  ChordAB = Point_B - Point_A;
 
-      G4VIntersectionLocator::
-	ReportTrialStep( substep_no, ChordAB, ChordEF_Vector, 
-			 NewMomentumDir, NormalAtEntry, validNormalAtE ); 
+      G4VIntersectionLocator::ReportTrialStep( substep_no, ChordAB,
+               ChordEF_Vector, NewMomentumDir, NormalAtEntry, validNormalAtE ); 
 #endif
 
       G4bool adequate_angle;
-      adequate_angle=  ( MomDir_dot_Norm >= 0.0 ) // Can use -epsilon instead.
-                   || (! validNormalAtE );       //  Makes criterion invalid
-      G4double EF_dist2= ChordEF_Vector.mag2();
-      if(
-	 ( EF_dist2  <= sqr(fiDeltaIntersection) && ( adequate_angle ) )
-         || ( EF_dist2 <= kCarTolerance*kCarTolerance ) 
-         )
+      adequate_angle =  ( MomDir_dot_Norm >= 0.0 ) // Can use -epsilon instead.
+                    || (! validNormalAtE );        //  Makes criterion invalid
+      G4double EF_dist2 = ChordEF_Vector.mag2();
+      if ( ( EF_dist2 <= sqr(fiDeltaIntersection) && ( adequate_angle ) )
+        || ( EF_dist2 <= kCarTolerance*kCarTolerance ) )
       {
         found_approximate_intersection = true;
     
@@ -323,13 +317,13 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
 
         G4ThreeVector PointG;   // Candidate intersection point
         G4double stepLengthAF; 
-	G4bool usedNavigatorAF=false; 
+        G4bool usedNavigatorAF = false; 
         G4bool Intersects_AF = IntersectChord( Point_A,   CurrentF_Point,
                                                NewSafety,fPreviousSafety,
                                                fPreviousSftOrigin,
                                                stepLengthAF,
                                                PointG,
-					       &usedNavigatorAF);
+                                               &usedNavigatorAF);
         last_AF_intersection = Intersects_AF;
         if( Intersects_AF )
         {
@@ -347,12 +341,13 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
           CurrentB_PointVelocity = EndPoint;
           CurrentE_Point = PointG;
 
-         // Need to recalculate the Exit Normal at the new PointG 
-         // > Know that a call was made to Navigator::ComputeStep in
-	 //   IntersectChord above.
-         G4bool validNormalLast; 
-         NormalAtEntry = GetSurfaceNormal( PointG, validNormalLast ); 
-         validNormalAtE= validNormalLast; 
+          // Need to recalculate the Exit Normal at the new PointG 
+          // Know that a call was made to Navigator::ComputeStep in
+          // IntersectChord above.
+          //
+          G4bool validNormalLast; 
+          NormalAtEntry  = GetSurfaceNormal( PointG, validNormalLast ); 
+          validNormalAtE = validNormalLast; 
             
           // By moving point B, must take care if current
           // AF has no intersection to try current FB!!
@@ -378,7 +373,7 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
 
           G4double stepLengthFB;
           G4ThreeVector PointH;
-	  G4bool usedNavigatorFB=false; 
+          G4bool usedNavigatorFB = false; 
 
           // Check whether any volumes are encountered by the chord FB
           // ---------------------------------------------------------
@@ -388,7 +383,7 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
                                                  fPreviousSftOrigin,
                                                  stepLengthFB,
                                                  PointH,
-						 &usedNavigatorFB);
+                                                 &usedNavigatorFB);
           if( Intersects_FB )
           { 
             // There is an intersection of FB with a volume boundary
@@ -411,10 +406,11 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
             CurrentA_PointVelocity = InterMed;
             CurrentE_Point = PointH;
 
-	    // Need to recalculate the Exit Normal at the new PointG 
-	    G4bool validNormalLast; 
-	    NormalAtEntry = GetSurfaceNormal( PointH, validNormalLast ); 
-	    validNormalAtE= validNormalLast;
+            // Need to recalculate the Exit Normal at the new PointG
+            //
+            G4bool validNormalLast; 
+            NormalAtEntry = GetSurfaceNormal( PointH, validNormalLast ); 
+            validNormalAtE= validNormalLast;
           }
           else  // not Intersects_FB
           {
@@ -654,10 +650,11 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
           CurrentE_Point = PointGe;
           fin_section_depth[depth]=true;
 
-	  // Need to recalculate the Exit Normal at the new PointG 
-	  G4bool validNormalAB; 
-	  NormalAtEntry = GetSurfaceNormal( PointGe, validNormalAB ); 
-	  validNormalAtE= validNormalAB;	  	  	  
+          // Need to recalculate the Exit Normal at the new PointG
+          //
+          G4bool validNormalAB; 
+          NormalAtEntry = GetSurfaceNormal( PointGe, validNormalAB ); 
+          validNormalAtE= validNormalAB;  
         }
         else
         {
@@ -719,9 +716,9 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
           last_AF_intersection = Intersects_AB;
           CurrentE_Point = PointGe;
 
-	  G4bool validNormalAB; 
-	  NormalAtEntry = GetSurfaceNormal( PointGe, validNormalAB ); 
-	  validNormalAtE= validNormalAB;
+          G4bool validNormalAB; 
+          NormalAtEntry  = GetSurfaceNormal( PointGe, validNormalAB ); 
+          validNormalAtE = validNormalAB;
         }
        
         depth--;

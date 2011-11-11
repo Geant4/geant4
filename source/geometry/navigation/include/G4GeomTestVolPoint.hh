@@ -65,6 +65,9 @@ class G4GeomTestVolPoint : public G4GeomTestPoint
     virtual ~G4GeomTestVolPoint();
       // Constructors and virtual destructor
 
+    G4GeomTestVolPoint& operator=(const G4GeomTestVolPoint& other);
+      // Assignment operator
+
     G4int GetDaughterIndex() const;
       // Accessors
 

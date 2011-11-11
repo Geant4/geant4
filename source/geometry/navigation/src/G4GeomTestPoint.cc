@@ -75,6 +75,24 @@ G4GeomTestPoint::G4GeomTestPoint( const G4GeomTestPoint &other )
 //
 G4GeomTestPoint::~G4GeomTestPoint() {;}
 
+//
+// Assignment operator
+//
+G4GeomTestPoint& G4GeomTestPoint::operator=(const G4GeomTestPoint& other)
+{
+   // Check assignment to self
+   //
+   if (this == &other)  { return *this; }
+
+   // Copy data
+   //
+   p = other.p;
+   s = other.s;
+   entering = other.entering;
+
+   return *this;
+}
+
 
 //
 // Equivalence operator

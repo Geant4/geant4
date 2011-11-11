@@ -93,11 +93,32 @@ G4GeomTestVolPoint::G4GeomTestVolPoint()
 {;}
 
 
-
 //
 // Destructor
 //
 G4GeomTestVolPoint::~G4GeomTestVolPoint() {;}
+
+
+//
+// Assignment operator
+//
+G4GeomTestVolPoint&
+G4GeomTestVolPoint::operator=(const G4GeomTestVolPoint& other)
+{
+   // Check assignment to self
+   //
+   if (this == &other)  { return *this; }
+
+   // Copy base class data
+   //
+   G4GeomTestPoint::operator=(other);
+
+   // Copy data
+   //
+   daughterIndex = other.daughterIndex;
+
+   return *this;
+}
 
 
 //
