@@ -134,9 +134,13 @@ void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
   if(theCoupleTable) {
     G4int numOfCouples = theCoupleTable->GetTableSize();
 
-    // clear old data    
     G4int nn = partialSumSigma.size();
     G4int nc = cuts.size();
+
+    // do we need to perform initialisation?
+    if(nn == numOfCouples) { return; }
+
+    // clear old data    
     if(nn > 0) {
       for (G4int ii=0; ii<nn; ii++){
 	G4DataVector* a = partialSumSigma[ii];

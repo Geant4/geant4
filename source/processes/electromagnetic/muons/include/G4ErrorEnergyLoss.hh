@@ -77,6 +77,10 @@ private:
   void InstantiateEforExtrapolator();
   // Create the G4EnergyLossForExtrapolator
 
+  // copy constructor and hide assignment operator
+  G4ErrorEnergyLoss(G4ErrorEnergyLoss &);
+  G4ErrorEnergyLoss & operator=(const G4ErrorEnergyLoss &right);
+
 private:
   G4EnergyLossForExtrapolator* theELossForExtrapolator;
 

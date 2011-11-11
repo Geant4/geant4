@@ -82,8 +82,6 @@
 #include "G4VEmModel.hh"
 
 class G4Material;
-class G4VEmFluctuationModel;
-class G4ParticleChangeForLoss;
 
 class G4MuIonisation : public G4VEnergyLossProcess
 {
@@ -118,10 +116,6 @@ private:
 
   const G4ParticleDefinition* theParticle;
   const G4ParticleDefinition* theBaseParticle;
-  G4VEmFluctuationModel*      flucModel;
-
-  G4ParticleChangeForLoss*    fParticleChange;
-
   G4bool                      isInitialised;
 };
 

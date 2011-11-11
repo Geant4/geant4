@@ -126,12 +126,12 @@ void G4MuPairProduction::InitialiseEnergyLossProcess(
     SetSecondaryParticle(G4Positron::Positron());
     SetIonisation(false);
 
-    G4MuPairProductionModel* em = new G4MuPairProductionModel();
-    em->SetLowestKineticEnergy(lowestKinEnergy);
+    if (!EmModel()) { SetEmModel(new G4MuPairProductionModel()); }
+
     G4VEmFluctuationModel* fm = 0;
-    em->SetLowEnergyLimit(MinKinEnergy());
-    em->SetHighEnergyLimit(MaxKinEnergy());
-    AddEmModel(1, em, fm);
+    EmModel()->SetLowEnergyLimit(MinKinEnergy());
+    EmModel()->SetHighEnergyLimit(MaxKinEnergy());
+    AddEmModel(1, EmModel(), fm);
   }
 }
 

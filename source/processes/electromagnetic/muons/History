@@ -17,7 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-20 January 2010: V.Ivant (emmuons-V09-04-00)
+10 November 2011: V.Ivant (emmuons-V09-04-02)
+- G4ErrorEnergyLoss, G4MuIonisation, G4MuPairProduction - fixed
+    defects reported by the Coverity tool
+
+3 November 2011: V.Ivant (emmuons-V09-04-01)
+- G4MuBremsstrahlung, G4MuPairProduction, G4MuBremsstrahlungModel - 
+    improved initialisation allowing to used model instantiated in 
+    Physics List (potential saving initialisation time)
+
+20 January 2011: V.Ivant (emmuons-V09-04-00)
 - G4ErrorEnergyLoss - fixed initialisation in constructor 
                       (problem identified at Windows)
 
