@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10 November 2011 - G.Cosmo (error_propagation-V09-04-03)
+- Removed calls to obsolete G4Exception format in G4ErrorRunManagerHelper.
+
 1 July 2011 - G.Cosmo (error_propagation-V09-04-02)
 - Fixed Coverity defects for uninitialised static data and cases of ios
   format not restored. 

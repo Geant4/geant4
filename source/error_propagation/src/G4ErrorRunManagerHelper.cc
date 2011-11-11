@@ -55,8 +55,11 @@ G4ErrorRunManagerHelper* G4ErrorRunManagerHelper::GetRunManagerKernel()
 //-----------------------------------------------------------------------
 G4ErrorRunManagerHelper::G4ErrorRunManagerHelper()
 {
-  if(fRunManagerKernel)
-  { G4Exception("G4eRunManageKernel constructed twice."); }
+  if(fRunManagerKernel) {
+    G4Exception("G4ErrorRunManagerHelper::G4ErrorRunManagerHelper()",
+                "InvalidSetup", FatalException,
+                "G4eRunManageKernel constructed twice.");
+  }
   fRunManagerKernel = this;
 
   //----- Look if somebody has created a G4RunManagerKernel
@@ -117,7 +120,9 @@ void G4ErrorRunManagerHelper::InitializeGeometry()
     //--- Check that indeed geometry has been defined to GEANT4
     if ( G4TransportationManager::GetTransportationManager()
          ->GetNavigatorForTracking()->GetWorldVolume() == 0 ) {
-      G4Exception("G4ErrorRunManagerHelper::InitializeGeometry no world defined in your geometry!" );
+      G4Exception("G4ErrorRunManagerHelper::InitializeGeometry()",
+                  "InvalisSetup", FatalException,
+                  "No world defined in your geometry!" );
     }
     
   }
