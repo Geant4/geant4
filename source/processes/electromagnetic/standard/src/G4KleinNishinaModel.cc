@@ -70,6 +70,8 @@ G4KleinNishinaModel::G4KleinNishinaModel(const G4String& nam)
   limitFactor       = 4;
   fProbabilities.resize(9,0.0);
   SetDeexcitationFlag(true);
+  fParticleChange = 0;
+  fAtomDeexcitation = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

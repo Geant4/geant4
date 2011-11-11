@@ -228,7 +228,6 @@ G4double G4BetheBlochModel::CrossSectionPerVolume(
                                                  G4double cutEnergy,
                                                  G4double maxEnergy)
 {
-  currentMaterial   = material;
   G4double eDensity = material->GetElectronDensity();
   G4double cross = eDensity*ComputeCrossSectionPerElectron
                                          (p,kineticEnergy,cutEnergy,maxEnergy);

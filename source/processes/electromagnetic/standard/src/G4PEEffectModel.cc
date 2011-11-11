@@ -68,6 +68,7 @@ G4PEEffectModel::G4PEEffectModel(const G4ParticleDefinition*,
   theGamma    = G4Gamma::Gamma();
   theElectron = G4Electron::Electron();
   fminimalEnergy = 1.0*eV;
+  fParticleChange = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

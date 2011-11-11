@@ -146,7 +146,6 @@ private:
   G4BetheBlochModel(const  G4BetheBlochModel&);
 
   const G4ParticleDefinition* particle;
-  const G4Material*           currentMaterial;
   G4ParticleDefinition*       theElectron;
   G4EmCorrections*            corr;
   G4ParticleChangeForLoss*    fParticleChange;

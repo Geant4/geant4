@@ -94,6 +94,10 @@ G4WentzelVIModel::G4WentzelVIModel(const G4String& nam) :
   preKinEnergy = tPathLength = zPathLength = lambdaeff = currentRange = xtsec = 0;
   currentMaterialIndex = 0;
   cosThetaMax = cosTetMaxNuc = 1.0;
+
+  fParticleChange = 0;
+  currentCuts = 0;
+  currentMaterial = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

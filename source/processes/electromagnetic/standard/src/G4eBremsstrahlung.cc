@@ -111,12 +111,11 @@ G4bool G4eBremsstrahlung::IsApplicable(const G4ParticleDefinition& p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eBremsstrahlung::InitialiseEnergyLossProcess(
-                                                const G4ParticleDefinition* p,
-                                                const G4ParticleDefinition*)
+void 
+G4eBremsstrahlung::InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+					       const G4ParticleDefinition*)
 {
   if(!isInitialised) {
-    particle = p;
     SetSecondaryParticle(G4Gamma::Gamma());
     SetIonisation(false);
 

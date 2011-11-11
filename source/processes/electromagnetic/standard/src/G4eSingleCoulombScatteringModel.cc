@@ -72,6 +72,7 @@ G4eSingleCoulombScatteringModel::G4eSingleCoulombScatteringModel(const G4String&
 {
   	fNistManager = G4NistManager::Instance();
   	theParticleTable = G4ParticleTable::GetParticleTable();
+	fParticleChange = 0;
 
 	pCuts=0;
   	currentMaterial = 0;

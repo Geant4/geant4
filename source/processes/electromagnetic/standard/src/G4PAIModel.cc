@@ -95,6 +95,9 @@ G4PAIModel::G4PAIModel(const G4ParticleDefinition* p, const G4String& nam)
   fSandiaIntervalNumber = 0;
   fMatIndex = 0;
   fDeltaCutInKinEnergy = 0.0;
+  fParticleChange = 0;
+  fMaterial = 0;
+  fCutCouple = 0;
 
   if(p) { SetParticle(p); }
   else  { SetParticle(fElectron); }

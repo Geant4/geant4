@@ -17,6 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11 November 11: V.Ivanchenko (emstand-V09-04-50)
+- G4eeToTwoGammaModel, G4eSingleCoulombScatteringModel, G4eCoulombScatteringModel,
+  G4eBremsstrahlungRelModel, G4eBremsstrahlungModel, G4eBremsstrahlung,
+  G4XrayRayleighModel, G4WentzelVIModel, G4UrbanMscModel95, G4UrbanMscModel93,
+  G4UrbanMscModel90, G4SeltzerBergerModel, G4ScreeningMottCrossSection,
+  G4PEEffectModel, G4PEEffectFluoModel, G4PAIPhotonModel, G4PAIModel,
+  G4MollerBhabhaModel, G4KleinNishinaModel, G4KleinNishinaCompton, G4ICRU73QOModel,
+  G4BraggModel, G4BetheBlochModel, G4PAIxSection, G4InitXscPAI - fixed trivial 
+    problems (mainly pedantic initialisation) reported by the Coverity tool 
+- G4alphaIonisation - warning is added saying that the process should not be used
+
 2 November 11: G.Cosmo (emstand-V09-04-49)
 - Correction in sources.cmake script.
 

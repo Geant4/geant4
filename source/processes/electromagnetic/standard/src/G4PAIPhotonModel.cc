@@ -105,6 +105,8 @@ G4PAIPhotonModel::G4PAIPhotonModel(const G4ParticleDefinition* p, const G4String
   fSandiaIntervalNumber = 0;
   fMatIndex = 0;
 
+  fParticleChange = 0;
+
   if(p) { SetParticle(p); }
   else  { SetParticle(fElectron); }
 

@@ -52,8 +52,6 @@ public:
 	  // Constructors
   G4InitXscPAI( const G4MaterialCutsCouple* matCC);
 
-
-
   virtual ~G4InitXscPAI() ;
 
   // Methods
@@ -123,6 +121,9 @@ public:
 protected :
 
 private :
+
+  G4InitXscPAI & operator=(const G4InitXscPAI &right);
+  G4InitXscPAI(const G4InitXscPAI&);
 
   // Local class constants
 

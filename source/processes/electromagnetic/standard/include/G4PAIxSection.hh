@@ -214,6 +214,9 @@ private :
 
   void CallError(G4int i, const G4String& methodName) const;
 
+  G4PAIxSection & operator=(const G4PAIxSection &right);
+  G4PAIxSection(const G4PAIxSection&);
+
 // Local class constants
  
 static const G4double fDelta; // energy shift from interval border = 0.001

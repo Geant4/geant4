@@ -88,6 +88,7 @@ G4eeToTwoGammaModel::G4eeToTwoGammaModel(const G4ParticleDefinition*,
     isInitialised(false)
 {
   theGamma = G4Gamma::Gamma();
+  fParticleChange = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

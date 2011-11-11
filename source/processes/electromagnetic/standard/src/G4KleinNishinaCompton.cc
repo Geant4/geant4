@@ -66,6 +66,7 @@ G4KleinNishinaCompton::G4KleinNishinaCompton(const G4ParticleDefinition*,
   theGamma = G4Gamma::Gamma();
   theElectron = G4Electron::Electron();
   lowestGammaEnergy = 1.0*eV;
+  fParticleChange = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

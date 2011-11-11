@@ -85,6 +85,7 @@ G4BraggModel::G4BraggModel(const G4ParticleDefinition* p, const G4String& nam)
     isIon(false),
     isInitialised(false)
 {
+  fParticleChange = 0;
   SetHighEnergyLimit(2.0*MeV);
 
   lowestKinEnergy  = 1.0*keV;

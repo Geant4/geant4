@@ -107,7 +107,6 @@ private:
   G4eIonisation(const G4eIonisation&);
 
   const G4ParticleDefinition* theElectron;
-  const G4ParticleDefinition* particle;
 
   G4bool isElectron;
   G4bool isInitialised;

@@ -96,6 +96,7 @@ G4eBremsstrahlungModel::G4eBremsstrahlungModel(const G4ParticleDefinition* p,
   SetAngularDistribution(new G4ModifiedTsai());
   highKinEnergy = HighEnergyLimit();
   lowKinEnergy  = LowEnergyLimit();
+  fParticleChange = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

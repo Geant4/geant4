@@ -65,6 +65,8 @@ G4alphaIonisation::G4alphaIonisation(const G4String& name)
     theParticle(0),
     isInitialised(false)
 {
+  G4Exception("G4alphaIonisation::G4alphaIonisation","em0007",JustWarning,
+	      " The process is not ready for use - incorrect results are expected");
   SetLinearLossLimit(0.02);
   SetStepFunction(0.2, 0.01*mm);
   //  SetIntegral(true);

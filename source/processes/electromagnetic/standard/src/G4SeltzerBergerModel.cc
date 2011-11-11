@@ -138,7 +138,6 @@ void G4SeltzerBergerModel::ReadData(size_t Z, const char* path)
       return;
     }
   }
-  G4Physics2DVector* v = new G4Physics2DVector();
   std::ostringstream ost;
   ost << datadir << "/brem_SB/br" << Z;
   std::ifstream fin(ost.str().c_str());
@@ -152,6 +151,7 @@ void G4SeltzerBergerModel::ReadData(size_t Z, const char* path)
   } 
   //G4cout << "G4SeltzerBergerModel read from <" << ost.str().c_str() 
   //	 << ">" << G4endl;
+  G4Physics2DVector* v = new G4Physics2DVector();
   if(v->Retrieve(fin)) { dataSB[Z] = v; }
   else {
     G4ExceptionDescription ed;
@@ -159,6 +159,7 @@ void G4SeltzerBergerModel::ReadData(size_t Z, const char* path)
        << "> is not retrieved!" << G4endl;
     G4Exception("G4SeltzerBergerModel::ReadData()","em0005",FatalException,
 		ed,"G4LEDATA version should be G4EMLOW6.23 or later.");
+    delete v;
   }
   // G4cout << dataSB[Z] << G4endl;
 }

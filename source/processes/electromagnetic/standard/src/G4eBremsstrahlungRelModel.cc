@@ -89,6 +89,7 @@ G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(const G4ParticleDefinition*
     fXiLPM(0), fPhiLPM(0), fGLPM(0),
     use_completescreening(true),isInitialised(false)
 {
+  fParticleChange = 0;
   theGamma = G4Gamma::Gamma();
 
   lowKinEnergy = 0.1*GeV;

@@ -80,10 +80,13 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(const G4String& nam)
     cosThetaMax(-1.0),
     isInitialised(false)
 {
+  fParticleChange = 0;
   fNistManager = G4NistManager::Instance();
   theParticleTable = G4ParticleTable::GetParticleTable();
   theProton   = G4Proton::Proton();
   currentMaterial = 0; 
+
+  pCuts = 0;
 
   lowEnergyThreshold = 1*keV;  // particle will be killed for lower energy
   recoilThreshold = 0.*keV; // by default does not work

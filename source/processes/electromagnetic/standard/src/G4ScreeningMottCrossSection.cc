@@ -55,6 +55,7 @@
 // -------------------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 #include "G4ScreeningMottCrossSection.hh"
 #include "Randomize.hh"
 #include "G4Proton.hh"
@@ -62,7 +63,6 @@
 #include "G4NucleiProperties.hh"
 #include "G4Element.hh"
 #include "G4UnitsTable.hh"
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -88,6 +88,8 @@ G4ScreeningMottCrossSection::G4ScreeningMottCrossSection():
 
 	Trec=targetZ = targetMass = As =0;
 	etag = ecut = 0.0;
+
+        targetA = 0;
 
 	cosTetMinNuc=0;
         cosTetMaxNuc=0;

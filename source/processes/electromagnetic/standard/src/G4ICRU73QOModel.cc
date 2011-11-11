@@ -86,6 +86,8 @@ G4ICRU73QOModel::G4ICRU73QOModel(const G4ParticleDefinition* p, const G4String& 
 	indexZ[ZElementAvailable[i]] = i;
       }
     }
+  fParticleChange = 0;
+  denEffData = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

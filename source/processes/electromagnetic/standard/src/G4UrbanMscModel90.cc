@@ -100,7 +100,10 @@ G4UrbanMscModel90::G4UrbanMscModel90(const G4String& nam)
   currentKinEnergy = currentRange = currentRadLength = masslimite = masslimitmu 
     = lambda0 = lambdaeff = tPathLength = zPathLength = par1 = par2 = par3 = 0;
 
-  currentMaterialIndex = 0;
+  currentMaterialIndex = -1;
+  fParticleChange = 0;
+  theLambdaTable = 0;
+  couple = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

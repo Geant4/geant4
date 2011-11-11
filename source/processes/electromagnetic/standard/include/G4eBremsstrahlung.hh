@@ -98,7 +98,6 @@ protected:
   virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
 					   const G4ParticleDefinition*);
 
-  const G4ParticleDefinition* particle;
   G4bool   isInitialised;
 
 private:

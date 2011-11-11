@@ -173,6 +173,9 @@ G4UrbanMscModel93::G4UrbanMscModel93(const G4String& nam)
     = zPathLength = par1 = par2 = par3 = 0;
 
   currentMaterialIndex = -1;
+  fParticleChange = 0;
+  theLambdaTable = 0;
+  couple = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
