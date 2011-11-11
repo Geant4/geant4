@@ -55,6 +55,29 @@ G4VModularPhysicsList::~G4VModularPhysicsList()
   delete physicsVector;
 }
 
+G4VModularPhysicsList::G4VModularPhysicsList(const G4VModularPhysicsList& right)  : G4VUserPhysicsList(right),
+    verboseLevel(0)
+{
+   physicsVector = new G4PhysConstVector();
+}
+
+G4VModularPhysicsList & G4VModularPhysicsList::operator=(const G4VModularPhysicsList& right)
+{
+   if (this != &right) {
+    defaultCutValue = right.defaultCutValue;
+    isSetDefaultCutValue = right.isSetDefaultCutValue;
+    fRetrievePhysicsTable = right.fRetrievePhysicsTable;
+    fStoredInAscii = right.fStoredInAscii;
+    fIsCheckedForRetrievePhysicsTable = right.fIsCheckedForRetrievePhysicsTable;
+    fIsRestoredCutValues = right.fIsRestoredCutValues;
+    directoryPhysicsTable = right.directoryPhysicsTable;
+    fDisplayThreshold = right.fDisplayThreshold;
+    fIsPhysicsTableBuilt = right.fIsPhysicsTableBuilt;
+    fDisableCheckParticleList = right.fDisableCheckParticleList;
+  }
+  return *this;
+}
+
 void G4VModularPhysicsList::ConstructParticle()
 {
   // create particles

@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov. 10th, 2011, G.Cosmo (run-V09-04-26)
+- Updated G4ExceptionHandler banner.
+
+Nov. 9th, 2011, H.Kurashige (run-V09-04-25)
+- Fix Coverity defects in PhysicsList classes
+
+Nov. 8th, 2011, H.Kurashige (run-V09-04-24)
+- Update PhysicsListHelper for new DNA processes (Mathieu) 
+
 Oct. 20th, 2011, M.Asai (run-V09-04-23)
 - Improve G4Exception error messages
 

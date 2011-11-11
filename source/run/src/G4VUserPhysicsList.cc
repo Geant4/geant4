@@ -120,6 +120,56 @@ G4VUserPhysicsList::~G4VUserPhysicsList()
 }
 
 ////////////////////////////////////////////////////////
+G4VUserPhysicsList::G4VUserPhysicsList(const G4VUserPhysicsList& right)
+  :verboseLevel(right.verboseLevel),
+   defaultCutValue(right.defaultCutValue),
+   isSetDefaultCutValue(right.isSetDefaultCutValue),
+   fRetrievePhysicsTable(right.fRetrievePhysicsTable),
+   fStoredInAscii(right.fStoredInAscii),
+   fIsCheckedForRetrievePhysicsTable(right.fIsCheckedForRetrievePhysicsTable),
+   fIsRestoredCutValues(right.fIsRestoredCutValues),
+   directoryPhysicsTable(right.directoryPhysicsTable),
+   fDisplayThreshold(right.fDisplayThreshold),
+   fIsPhysicsTableBuilt(right.fIsPhysicsTableBuilt),
+   fDisableCheckParticleList(right.fDisableCheckParticleList)
+{
+  // pointer to the particle table
+  theParticleTable = G4ParticleTable::GetParticleTable();
+  theParticleIterator = theParticleTable->GetIterator();
+
+  // pointer to the cuts table
+  fCutsTable =  G4ProductionCutsTable::GetProductionCutsTable();
+
+  // UI Messenger
+  theMessenger = new G4UserPhysicsListMessenger(this);
+ 
+  // PhysicsListHelper
+  thePLHelper = G4PhysicsListHelper::GetPhysicsListHelper();
+  thePLHelper->SetVerboseLevel(verboseLevel);
+
+}
+
+
+////////////////////////////////////////////////////////
+G4VUserPhysicsList & G4VUserPhysicsList::operator=(const G4VUserPhysicsList & right)
+{
+  if (this != &right) {
+    verboseLevel   = right.verboseLevel;
+    defaultCutValue = right.defaultCutValue;
+    isSetDefaultCutValue = right.isSetDefaultCutValue;
+    fRetrievePhysicsTable = right.fRetrievePhysicsTable;
+    fStoredInAscii = right.fStoredInAscii;
+    fIsCheckedForRetrievePhysicsTable = right.fIsCheckedForRetrievePhysicsTable;
+    fIsRestoredCutValues = right.fIsRestoredCutValues;
+    directoryPhysicsTable = right.directoryPhysicsTable;
+    fDisplayThreshold = right.fDisplayThreshold;
+    fIsPhysicsTableBuilt = right.fIsPhysicsTableBuilt;
+    fDisableCheckParticleList = right.fDisableCheckParticleList;
+  }
+  return *this;
+}
+
+////////////////////////////////////////////////////////
 void G4VUserPhysicsList::AddProcessManager(G4ParticleDefinition* newParticle,
 					   G4ProcessManager*     newManager)
 {

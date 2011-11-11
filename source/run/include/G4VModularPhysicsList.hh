@@ -63,6 +63,11 @@ class G4VModularPhysicsList: public virtual G4VUserPhysicsList
   public: 
     G4VModularPhysicsList();
     virtual ~G4VModularPhysicsList();
+  
+ protected:
+    // hide copy constructor and assignment operator
+    G4VModularPhysicsList(const G4VModularPhysicsList&);
+    G4VModularPhysicsList & operator=(const G4VModularPhysicsList&);
 
   public:  // with description
     // This method will be invoked in the Construct() method. 
@@ -109,7 +114,7 @@ class G4VModularPhysicsList: public virtual G4VUserPhysicsList
    // vector of pointers to G4VPhysicsConstructor
    typedef std::vector<G4VPhysicsConstructor*> G4PhysConstVector;
    G4PhysConstVector* physicsVector;
-   G4int    verboseLevel;
+   G4int verboseLevel;
 };
    
 

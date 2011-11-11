@@ -100,6 +100,10 @@ class G4VUserPhysicsList
     G4VUserPhysicsList();
     virtual ~G4VUserPhysicsList();
 
+  // copy constructor and assignment operator
+    G4VUserPhysicsList(const G4VUserPhysicsList&);
+    G4VUserPhysicsList & operator=(const G4VUserPhysicsList&);
+
   public:  // with description
    // Each particle type will be instantiated
    // This method is invoked by the RunManger 

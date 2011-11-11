@@ -75,8 +75,14 @@ G4bool G4ExceptionHandler::Notify(const char* originOfException,
                         G4ExceptionSeverity severity,
                         const char* description)
 {
-  G4String e_banner = "\n!!!!! - !!!!! - !!!!! - !!!!! - !!!!! - !!!!!\n";
-  G4String w_banner = "\nwwwww - wwwww - wwwww - wwwww - wwwww - wwwww\n";
+  static const G4String es_banner
+    = "\n-------- EEEE ------- G4Exception-START -------- EEEE -------\n";
+  static const G4String ee_banner
+    = "\n-------- EEEE -------- G4Exception-END --------- EEEE -------\n";
+  static const G4String ws_banner
+    = "\n-------- WWWW ------- G4Exception-START -------- WWWW -------\n";
+  static const G4String we_banner
+    = "\n-------- WWWW -------- G4Exception-END --------- WWWW -------\n";
   std::ostringstream message;
   message << "*** G4Exception : " << exceptionCode << G4endl
           << "      issued by : " << originOfException << G4endl
@@ -86,20 +92,20 @@ G4bool G4ExceptionHandler::Notify(const char* originOfException,
   switch(severity)
   {
    case FatalException:
-    G4cerr << e_banner << message.str() << "*** Fatal Exception *** core dump ***"
-           << e_banner;
+    G4cerr << es_banner << message.str() << "*** Fatal Exception *** core dump ***"
+           << ee_banner;
     abortionForCoreDump = true;
     break;
    case FatalErrorInArgument:
-    G4cerr << e_banner << message.str() << "*** Fatal Error In Argument *** core dump ***"
-           << e_banner;
+    G4cerr << es_banner << message.str() << "*** Fatal Error In Argument *** core dump ***"
+           << ee_banner;
     abortionForCoreDump = true;
     break;
    case RunMustBeAborted:
     if(aps==G4State_GeomClosed || aps==G4State_EventProc)
     {
-      G4cerr << e_banner << message.str() << "*** Run Must Be Aborted ***"
-             << e_banner;
+      G4cerr << es_banner << message.str() << "*** Run Must Be Aborted ***"
+             << ee_banner;
       G4RunManager::GetRunManager()->AbortRun(false);
     }
     abortionForCoreDump = false;
@@ -107,15 +113,15 @@ G4bool G4ExceptionHandler::Notify(const char* originOfException,
    case EventMustBeAborted:
     if(aps==G4State_EventProc)
     {
-      G4cerr << e_banner << message.str() << "*** Event Must Be Aborted ***"
-             << e_banner;
+      G4cerr << es_banner << message.str() << "*** Event Must Be Aborted ***"
+             << ee_banner;
       G4RunManager::GetRunManager()->AbortEvent();
     }
     abortionForCoreDump = false;
     break;
    default:
-    G4cout << w_banner << message.str() << "*** This is just a warning message. ***"
-           << w_banner;
+    G4cout << ws_banner << message.str() << "*** This is just a warning message. ***"
+           << we_banner;
     abortionForCoreDump = false;
     break;
   }
