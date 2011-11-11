@@ -3,6 +3,9 @@ $Id: History,v 1.63 2008-11-17 08:34:11 gcosmo Exp $
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
 
+g3tog4-V09-04-03 11-Nov-2011 G.Folger
+- make safe to compile with -j and drop compilation of fortran
+
 g3tog4-V09-04-02 06-Jul-2011 G.Cosmo
 - Fixed Coverity defects.
 - Use canonic indexed form for G4Exception.
