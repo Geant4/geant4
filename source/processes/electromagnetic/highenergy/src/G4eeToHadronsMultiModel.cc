@@ -70,6 +70,8 @@ G4eeToHadronsMultiModel::G4eeToHadronsMultiModel(G4int ver, const G4String& name
 {
   thKineticEnergy  = DBL_MAX;
   maxKineticEnergy = 1.2*GeV;
+  fParticleChange  = 0;
+  cross = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

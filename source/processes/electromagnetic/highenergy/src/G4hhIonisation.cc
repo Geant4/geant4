@@ -69,6 +69,7 @@ G4hhIonisation::G4hhIonisation(const G4String& name)
   SetProcessSubType(fIonisation);
   mass = 0.0;
   ratio = 0.0;
+  flucModel = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

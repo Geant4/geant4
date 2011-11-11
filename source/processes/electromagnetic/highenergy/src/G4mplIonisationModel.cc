@@ -80,6 +80,7 @@ G4mplIonisationModel::G4mplIonisationModel(G4double mCharge, const G4String& nam
   dedxlim = 45.*nmpl*nmpl*GeV*cm2/g;
   fParticleChange = 0;
   mass = 0.0;
+  monopole = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

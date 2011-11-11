@@ -99,13 +99,12 @@ void G4hBremsstrahlung::InitialiseEnergyLossProcess(
     SetSecondaryParticle(G4Gamma::Gamma());
     SetIonisation(false);
 
-    G4hBremsstrahlungModel* em = new G4hBremsstrahlungModel();
-    em->SetLowestKineticEnergy(lowestKinEnergy);
+    if (!EmModel()) { SetEmModel(new G4hBremsstrahlungModel()); }
 
-    G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
-    em->SetLowEnergyLimit(0.1*keV);
-    em->SetHighEnergyLimit(100.0*TeV);
-    AddEmModel(1, em, fm);
+    G4VEmFluctuationModel* fm = 0;
+    EmModel()->SetLowEnergyLimit(MinKinEnergy());
+    EmModel()->SetHighEnergyLimit(MaxKinEnergy());
+    AddEmModel(1, EmModel(), fm);
   }
 }
 

@@ -58,8 +58,6 @@
 #include "G4VEnergyLossProcess.hh"
 #include "G4VEmModel.hh"
 
-class G4ParticleChangeForLoss;
-
 class G4hPairProduction : public G4VEnergyLossProcess
 {
 public:
@@ -88,8 +86,6 @@ private:
 
   const G4ParticleDefinition* theParticle;
   const G4ParticleDefinition* theBaseParticle;
-
-  G4ParticleChangeForLoss*    fParticleChange;
 
   G4double                    lowestKinEnergy;
   G4bool                      isInitialised;

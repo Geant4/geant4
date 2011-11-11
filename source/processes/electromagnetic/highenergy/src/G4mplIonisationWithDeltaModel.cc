@@ -85,6 +85,7 @@ G4mplIonisationWithDeltaModel::G4mplIonisationWithDeltaModel(G4double mCharge, c
   G4cout << "### Monopole ionisation model with d-electron production, Gmag= " 
 	 << magCharge/eplus << G4endl;
   mass = 0.0;
+  monopole = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
