@@ -23,61 +23,49 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhysListFactory.hh,v 1.2 2008-11-21 16:50:30 vnivanch Exp $
+//
+// $Id: G4StepLimiterBuilder.hh,v 1.2 2006-06-29 17:26:25 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//---------------------------------------------------------------------------
-//
-// ClassName:  G4PhysListFactory
-//
-// Author: 21 April 2008 V. Ivanchenko
-//
-// Modified:
-//
-//----------------------------------------------------------------------------
-//
-#ifndef G4PhysListFactory_h
-#define G4PhysListFactory_h 1
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4VModularPhysicsList.hh"
+#ifndef G4StepLimiterBuilder_h
+#define G4StepLimiterBuilder_h 1
+
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
-class G4PhysListFactory
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class G4StepLimiter;
+
+class G4StepLimiterBuilder : public G4VPhysicsConstructor
 {
 public:
 
-  G4PhysListFactory();
+  G4StepLimiterBuilder(const G4String& name = "stepLimiter");
+  virtual ~G4StepLimiterBuilder();
 
-  ~G4PhysListFactory();
+public:
 
-  G4VModularPhysicsList* GetReferencePhysList(const G4String&);
-  // instantiate PhysList by name
+  // This method is dummy for physics
+  virtual void ConstructParticle();
 
-  G4VModularPhysicsList* ReferencePhysList();
-  // instantiate PhysList by environment variable "PHYSLIST"
-
-  G4bool IsReferencePhysList(const G4String&);
-  // check if the name is in the list of PhysLists names
-
-  const std::vector<G4String>& AvailablePhysLists() const;
-  // list of avalable base Phys Lists
-
-  const std::vector<G4String>& AvailablePhysListsEM() const;
-  // list of avalable EM options
-
-  inline void SetVerbose(G4int val) { verbose = val; }
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type
+  virtual void ConstructProcess();
 
 private:
 
-  G4String defName;  
-  std::vector<G4String> listnames_hadr;
-  std::vector<G4String> listnames_em;
-  size_t nlists_hadr;
-  size_t nlists_em;
-  G4int verbose;
+   // hide assignment operator
+  G4StepLimiterBuilder & operator=(const G4StepLimiterBuilder &right);
+  G4StepLimiterBuilder(const G4StepLimiterBuilder&);
+
+  G4StepLimiter* fStepLimiter;
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif
-
-
-

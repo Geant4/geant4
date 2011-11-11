@@ -159,7 +159,6 @@ void G4EmDNAPhysics::ConstructProcess()
       
       // *** Attachment ***
       ph->RegisterProcess(new G4DNAAttachment("e-_G4DNAAttachment"), particle); 
-
     
     } else if ( particleName == "proton" ) {
       ph->RegisterProcess(new G4DNAExcitation("proton_G4DNAExcitation"), particle);

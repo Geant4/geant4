@@ -40,6 +40,9 @@ include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/shortlived/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/cuts/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/decay/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/dna/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/dna/molecules/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/dna/molecules/types/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/dna/models/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/dna/processes/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/dna/utils/include)
@@ -102,14 +105,16 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4phys_builders
     HEADERS
-        G4AntiBarionBuilder.hh
         CompileTimeConstraints.hh
+        G4AntiBarionBuilder.hh
+        G4BertiniKaonBuilder.hh
         G4BertiniNeutronBuilder.hh
         G4BertiniPiKBuilder.hh
         G4BertiniPionBuilder.hh
         G4BertiniProtonBuilder.hh
         G4BinaryNeutronBuilder.hh
         G4BinaryPiKBuilder.hh
+        G4BinaryPionBuilder.hh
         G4BinaryProtonBuilder.hh
         G4BuilderType.hh
         G4ChargeExchangePhysics.hh
@@ -117,6 +122,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4DataQuestionaire.hh
         G4DecayPhysics.hh
         G4ElectroNuclearBuilder.hh
+        G4EmDNAPhysicsChemistry.hh
         G4EmDNAPhysics.hh
         G4EmExtraPhysics.hh
         G4EmLivermorePhysics.hh
@@ -127,8 +133,10 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4EmStandardPhysics_option1.hh
         G4EmStandardPhysics_option2.hh
         G4EmStandardPhysics_option3.hh
+        G4FTFBinaryKaonBuilder.hh
         G4FTFBinaryNeutronBuilder.hh
         G4FTFBinaryPiKBuilder.hh
+        G4FTFBinaryPionBuilder.hh
         G4FTFBinaryProtonBuilder.hh
         G4FTFBuilder.hh
         G4FTFCNeutronBuilder.hh
@@ -147,14 +155,14 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4HadronHElasticPhysics.hh
         G4HadronQElasticPhysics.hh
         G4HyperonCHIPSBuilder.hh
-	G4HyperonFTFPBuilder.hh
+        G4HyperonFTFPBuilder.hh
         G4HyperonLHEPBuilder.hh
-	G4INCLXXPiKBuilder.hh
-	G4INCLXXNeutronBuilder.hh
-	G4INCLXXProtonBuilder.hh
         G4InclAblaNeutronBuilder.hh
         G4InclAblaPiKBuilder.hh
         G4InclAblaProtonBuilder.hh
+        G4INCLXXNeutronBuilder.hh
+        G4INCLXXPiKBuilder.hh
+        G4INCLXXProtonBuilder.hh
         G4IonBinaryCascadePhysics.hh
         G4IonFTFPBinaryCascadePhysics.hh
         G4IonInclAblaPhysics.hh
@@ -175,8 +183,8 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4MiscQGSCBuilder.hh
         G4NeutronBuilder.hh
         G4NeutronCrossSectionXS.hh
-        G4NeutronLENDBuilder.hh
         G4NeutronHPBuilder.hh
+        G4NeutronLENDBuilder.hh
         G4NeutronTrackingCut.hh
         G4OpticalPhysics.hh
         G4OpticalPhysicsMessenger.hh
@@ -220,6 +228,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4QProtonBuilder.hh
         G4QStoppingPhysics.hh
         G4RadioactiveDecayPhysics.hh
+        G4StepLimiterBuilder.hh
         G4StoppingHadronBuilder.hh
         G4VAntiBarionBuilder.hh
         G4VHadronModelBuilder.hh
@@ -232,18 +241,21 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         TheoModelFactory.hh
     SOURCES
         G4AntiBarionBuilder.cc
+        G4BertiniKaonBuilder.cc
         G4BertiniNeutronBuilder.cc
         G4BertiniPiKBuilder.cc
         G4BertiniPionBuilder.cc
         G4BertiniProtonBuilder.cc
         G4BinaryNeutronBuilder.cc
         G4BinaryPiKBuilder.cc
+        G4BinaryPionBuilder.cc
         G4BinaryProtonBuilder.cc
         G4ChargeExchangePhysics.cc
         G4ChipsKaonBuilder.cc
         G4DecayPhysics.cc
         G4ElectroNuclearBuilder.cc
         G4EmDNAPhysics.cc
+        G4EmDNAPhysicsChemistry.cc
         G4EmExtraPhysics.cc
         G4EmLivermorePhysics.cc
         G4EmLivermorePolarizedPhysics.cc
@@ -253,8 +265,10 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4EmStandardPhysics_option1.cc
         G4EmStandardPhysics_option2.cc
         G4EmStandardPhysics_option3.cc
+        G4FTFBinaryKaonBuilder.cc
         G4FTFBinaryNeutronBuilder.cc
         G4FTFBinaryPiKBuilder.cc
+        G4FTFBinaryPionBuilder.cc
         G4FTFBinaryProtonBuilder.cc
         G4FTFBuilder.cc
         G4FTFCNeutronBuilder.cc
@@ -275,12 +289,12 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4HyperonCHIPSBuilder.cc
         G4HyperonFTFPBuilder.cc
         G4HyperonLHEPBuilder.cc
-	G4INCLXXPiKBuilder.cc
-	G4INCLXXNeutronBuilder.cc
-	G4INCLXXProtonBuilder.cc
         G4InclAblaNeutronBuilder.cc
         G4InclAblaPiKBuilder.cc
         G4InclAblaProtonBuilder.cc
+        G4INCLXXNeutronBuilder.cc
+        G4INCLXXPiKBuilder.cc
+        G4INCLXXProtonBuilder.cc
         G4IonBinaryCascadePhysics.cc
         G4IonFTFPBinaryCascadePhysics.cc
         G4IonInclAblaPhysics.cc
@@ -301,8 +315,8 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4MiscQGSCBuilder.cc
         G4NeutronBuilder.cc
         G4NeutronCrossSectionXS.cc
-        G4NeutronLENDBuilder.cc
         G4NeutronHPBuilder.cc
+        G4NeutronLENDBuilder.cc
         G4NeutronTrackingCut.cc
         G4OpticalPhysics.cc
         G4OpticalPhysicsMessenger.cc
@@ -345,6 +359,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4QProtonBuilder.cc
         G4QStoppingPhysics.cc
         G4RadioactiveDecayPhysics.cc
+        G4StepLimiterBuilder.cc
         G4StoppingHadronBuilder.cc
         G4VAntiBarionBuilder.cc
         G4VHadronModelBuilder.cc
@@ -354,6 +369,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4VPionBuilder.cc
         G4VProtonBuilder.cc
         G4WarnPLStatus.cc
+
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

@@ -75,13 +75,15 @@ void HadronPhysicsFTF_BIC::CreateModels()
   thePro->RegisterMe(theBinaryPro=new G4BinaryProtonBuilder);
   theBinaryPro->SetMaxEnergy(5.0*GeV);
   
-  thePiK=new G4PiKBuilder;
-  thePiK->RegisterMe(theFTFBinaryPiK=new G4FTFBinaryPiKBuilder(QuasiElastic));
-  thePiK->RegisterMe(theBICPiK = new G4BinaryPiKBuilder);
-  thePiK->RegisterMe(theLEPPiK=new G4LEPPiKBuilder);
-  theLEPPiK->SetMinPionEnergy(10*GeV);   // don't use LEP for pion
-  theBICPiK->SetMaxEnergy(5*GeV);        //  use Binary up to 5GeV for pion
-  theLEPPiK->SetMaxEnergy(5*GeV); 
+  thePion=new G4PionBuilder;
+  thePion->RegisterMe(theFTFBinaryPion=new G4FTFBinaryPionBuilder(QuasiElastic));
+  thePion->RegisterMe(theBICPion = new G4BinaryPionBuilder);
+  theBICPion->SetMaxEnergy(5*GeV);        //  use Binary up to 5GeV for pion
+
+  theKaon=new G4KaonBuilder;
+  theKaon->RegisterMe(theFTFBinaryKaon=new G4FTFBinaryKaonBuilder(QuasiElastic));
+  theKaon->RegisterMe(theBertiniKaon=new G4BertiniKaonBuilder);
+  theBertiniKaon->SetMaxEnergy(5*GeV);
 
   
   theHyperon=new G4HyperonFTFPBuilder;
@@ -101,10 +103,13 @@ HadronPhysicsFTF_BIC::~HadronPhysicsFTF_BIC()
    delete theBinaryPro;
    delete thePro;
 
-   delete theFTFBinaryPiK;
-   delete theBICPiK;
-   delete theLEPPiK;
-   delete thePiK;
+   delete theFTFBinaryPion;
+   delete theBICPion;
+   delete thePion;
+
+   delete theFTFBinaryKaon;
+   delete theBertiniKaon;
+   delete theKaon;
 
    delete theHyperon;
    delete theAntiBaryon;
@@ -132,15 +137,9 @@ void HadronPhysicsFTF_BIC::ConstructProcess()
   CreateModels();
   theNeutrons->Build();
   thePro->Build();
-  thePiK->Build();
-  // use CHIPS cross sections also for Kaons
-  theCHIPSInelastic = new G4QHadronInelasticDataSet();
+  thePion->Build();
+  theKaon->Build();
   
-  G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(theCHIPSInelastic);
-  G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(theCHIPSInelastic);
-  G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(theCHIPSInelastic);
-  G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(theCHIPSInelastic);
-
   theHyperon->Build();
   theAntiBaryon->Build();
 }

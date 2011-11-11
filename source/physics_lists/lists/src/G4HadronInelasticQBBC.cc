@@ -63,7 +63,8 @@
 #include "G4QGSBuilder.hh"
 #include "G4FTFBuilder.hh"
 
-#include "G4QStringChipsParticleLevelInterface.hh"
+#include "G4QHadronInelasticDataSet.hh"
+
 #include "G4CascadeInterface.hh"
 #include "G4BinaryCascade.hh"
 #include "G4LCapture.hh"
@@ -72,13 +73,6 @@
 #include "G4PreCompoundModel.hh"
 #include "G4ExcitationHandler.hh"
 #include "G4Evaporation.hh"
-
-enum QBBCType
-{
-  fQBBC = 0,     // default QBBC
-  fQBBC_XGG,     // neutron x-sections from BGG
-  fQBBC_XGGSN    // n, p, pi+- x-sections from QGSP_BERT
-};
 
 G4HadronInelasticQBBC::G4HadronInelasticQBBC(G4int ver) 
   : G4VHadronPhysics("hInelastic"),verbose(ver),wasActivated(false)
@@ -125,16 +119,16 @@ void G4HadronInelasticQBBC::ConstructProcess()
   //G4HadronicInteraction* theQGSP = 
   //  BuildModel(new G4QGSBuilder("QGSP",thePreCompound,true,false),12.5*GeV,emax);
   G4HadronicInteraction* theFTFP = 
-    BuildModel(new G4FTFBuilder("FTFP",thePreCompound),2.0*GeV,emax);
+    BuildModel(new G4FTFBuilder("FTFP",thePreCompound),3.0*GeV,emax);
   G4HadronicInteraction* theFTFP1 = 
-    BuildModel(new G4FTFBuilder("FTFP",thePreCompound),2.0*GeV,emax);
+    BuildModel(new G4FTFBuilder("FTFP",thePreCompound),3.0*GeV,emax);
   G4HadronicInteraction* theFTFP2 = 
     BuildModel(new G4FTFBuilder("FTFP",thePreCompound),0.0,emax);
 
   G4HadronicInteraction* theBERT = 
-    NewModel(new G4CascadeInterface(),1.0*GeV,6.0*GeV);
+    NewModel(new G4CascadeInterface(),1.0*GeV,12.0*GeV);
   G4HadronicInteraction* theBERT1 = 
-    NewModel(new G4CascadeInterface(),0.0*GeV,6.0*GeV);
+    NewModel(new G4CascadeInterface(),0.0*GeV,12.0*GeV);
 
   G4BinaryCascade* bic = new G4BinaryCascade();
   bic->SetDeExcitation(thePreCompound);
@@ -148,6 +142,9 @@ void G4HadronInelasticQBBC::ConstructProcess()
   theAntiNuclXS = new G4ComponentAntiNuclNuclearXS();
   G4CrossSectionInelastic* anucxs = 
     new G4CrossSectionInelastic(theAntiNuclXS);
+
+  // use CHIPS cross sections also for Kaons
+  G4QHadronInelasticDataSet* theCHIPSInelastic = new G4QHadronInelasticDataSet();
 
   // loop over particles
   theParticleIterator->reset();
@@ -193,8 +190,13 @@ void G4HadronInelasticQBBC::ConstructProcess()
     } else if(pname == "kaon-"     || 
 	      pname == "kaon+"     || 
 	      pname == "kaon0S"    || 
-	      pname == "kaon0L"    ||
-	      pname == "lambda"    || 
+	      pname == "kaon0L") {
+      G4HadronicProcess* hp = FindInelasticProcess(particle);
+      hp->RegisterMe(theFTFP1);
+      hp->RegisterMe(theBERT1);
+      hp->AddDataSet(theCHIPSInelastic);
+
+    } else if(pname == "lambda"    || 
               pname == "omega-"    ||
 	      pname == "sigma-"    || 
 	      pname == "sigma+"    || 

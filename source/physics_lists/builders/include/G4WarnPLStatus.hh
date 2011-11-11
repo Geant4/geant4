@@ -35,6 +35,7 @@ public:
   ~G4WarnPLStatus();
 
   void Replaced(const G4String aPL, const G4String Replacement) const ;
+  void OnlyFromFactory(const G4String aPL, const G4String basePL) const;
   void Unsupported(const G4String aPL, const G4String Replacement ="") const ;
   void Experimental(const G4String aPL) const ;
 };

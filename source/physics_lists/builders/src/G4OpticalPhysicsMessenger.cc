@@ -60,8 +60,7 @@ G4OpticalPhysicsMessenger::G4OpticalPhysicsMessenger(
                                             G4OpticalPhysics* opticalPhysics)
   : G4UImessenger(),
     fOpticalPhysics(opticalPhysics),
-    fUseProcess(kNoProcess),
-    fSelectedProcess(0),
+    fSelectedProcessIndex(kNoProcess),
     fSelectOpProcessCmd(0),
     fSetOpProcessUseCmd(0),
     fSetOpProcessVerboseCmd(0),
@@ -186,36 +185,31 @@ void G4OpticalPhysicsMessenger::SetNewValue(G4UIcommand* command, G4String newVa
 
   if (command == fSelectOpProcessCmd) {
     if      ( newValue == "Cerenkov" )        {
-            fUseProcess = kCerenkov;
-            fSelectedProcess = fOpticalPhysics->GetCerenkovProcess();
+            fSelectedProcessIndex = kCerenkov;
     } else if ( newValue == "Scintillation" ) {
-            fUseProcess = kScintillation;
-            fSelectedProcess = fOpticalPhysics->GetScintillationProcess();
+            fSelectedProcessIndex = kScintillation;
     } else if ( newValue == "OpAbsorption" )  {
-            fUseProcess = kAbsorption;
-            fSelectedProcess = fOpticalPhysics->GetOpAbsorptionProcess();
+            fSelectedProcessIndex = kAbsorption;
     } else if ( newValue == "OpRayleigh" )    {
-            fUseProcess = kRayleigh;
-            fSelectedProcess = fOpticalPhysics->GetOpRayleighProcess();
+            fSelectedProcessIndex = kRayleigh;
     } else if ( newValue == "OpMieHG" )       {
-            fUseProcess = kMieHG;
-            fSelectedProcess = fOpticalPhysics->GetOpMieHGProcess();
+            fSelectedProcessIndex = kMieHG;
     } else if ( newValue == "OpBoundary" )    {
-           fUseProcess = kBoundary;
-           fSelectedProcess = fOpticalPhysics->GetOpBoundaryProcess();
+           fSelectedProcessIndex = kBoundary;
     } else if ( newValue == "OpWLS" )         {
-           fUseProcess = kWLS;
-           fSelectedProcess = fOpticalPhysics->GetOpWLSProcess();
+           fSelectedProcessIndex = kWLS;
     }
   }
   else if (command == fSetOpProcessUseCmd) {
     fOpticalPhysics->
-       Configure(fUseProcess,fSetOpProcessUseCmd->GetNewBoolValue(newValue));
+       Configure(fSelectedProcessIndex,
+                 fSetOpProcessUseCmd->GetNewBoolValue(newValue));
   }  
   else if (command == fSetOpProcessVerboseCmd) {
-    if ( fSelectedProcess ) {
-       fSelectedProcess->SetVerboseLevel
-                           (fSetOpProcessVerboseCmd->GetNewIntValue(newValue));
+    if ( fSelectedProcessIndex < kNoProcess ) {
+       fOpticalPhysics->
+          SetProcessVerbose(fSelectedProcessIndex,
+                            fSetOpProcessVerboseCmd->GetNewIntValue(newValue));
     } else {
       for ( G4int i=0; i<kNoProcess; i++ ) {
           fOpticalPhysics->
@@ -268,20 +262,8 @@ void G4OpticalPhysicsMessenger::SetNewValue(G4UIcommand* command, G4String newVa
     }
   } 
   else if (command == fSetTrackSecondariesFirstCmd) {
-    if ( fSelectedProcess ) {
-       G4Scintillation* scintillation =
-                     static_cast<G4Scintillation*>(fSelectedProcess);
-       if (scintillation) scintillation ->
-          SetTrackSecondariesFirst(
-                      fSetTrackSecondariesFirstCmd->GetNewBoolValue(newValue));
-       G4Cerenkov* cerenkov =
-                   static_cast<G4Cerenkov*>(fSelectedProcess);
-       if (cerenkov) cerenkov ->
-          SetTrackSecondariesFirst(
-                      fSetTrackSecondariesFirstCmd->GetNewBoolValue(newValue));
-    } else {
-      fOpticalPhysics->SetTrackSecondariesFirst(
-                      fSetTrackSecondariesFirstCmd->GetNewBoolValue(newValue));
-    }
+    fOpticalPhysics->SetTrackSecondariesFirst(fSelectedProcessIndex,
+                                              fSetTrackSecondariesFirstCmd->
+                                                    GetNewBoolValue(newValue));
   }
 }

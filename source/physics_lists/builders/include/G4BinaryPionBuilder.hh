@@ -23,61 +23,52 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhysListFactory.hh,v 1.2 2008-11-21 16:50:30 vnivanch Exp $
+// $Id$
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:  G4PhysListFactory
+// ClassName:   G4BinaryPionBuilder
 //
-// Author: 21 April 2008 V. Ivanchenko
+// Author: 2011 Gunter Folger
 //
-// Modified:
 //
 //----------------------------------------------------------------------------
 //
-#ifndef G4PhysListFactory_h
-#define G4PhysListFactory_h 1
+#ifndef G4BinaryPionBuilder_h
+#define G4BinaryPionBuilder_h 1
 
-#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
 
-class G4PhysListFactory
+#include "G4HadronElasticProcess.hh"
+#include "G4HadronFissionProcess.hh"
+#include "G4HadronCaptureProcess.hh"
+#include "G4NeutronInelasticProcess.hh"
+#include "G4VPionBuilder.hh"
+
+#include "G4VCrossSectionDataSet.hh"
+#include "G4BinaryCascade.hh"   
+
+class G4BinaryPionBuilder : public G4VPionBuilder
 {
-public:
+  public: 
+    G4BinaryPionBuilder();
+    virtual ~G4BinaryPionBuilder();
 
-  G4PhysListFactory();
+  public: 
+    virtual void Build(G4HadronElasticProcess * aP);
+    virtual void Build(G4PionPlusInelasticProcess * aP);
+    virtual void Build(G4PionMinusInelasticProcess * aP);
+    
+    void SetMinEnergy(G4double aM) {theMin = aM;}
+    void SetMaxEnergy(G4double aM) {theMax = aM;}
 
-  ~G4PhysListFactory();
+  private:
+    G4VCrossSectionDataSet * thePiData;
+    G4BinaryCascade * theModel;    
+    G4double theMin;
+    G4double theMax;
 
-  G4VModularPhysicsList* GetReferencePhysList(const G4String&);
-  // instantiate PhysList by name
-
-  G4VModularPhysicsList* ReferencePhysList();
-  // instantiate PhysList by environment variable "PHYSLIST"
-
-  G4bool IsReferencePhysList(const G4String&);
-  // check if the name is in the list of PhysLists names
-
-  const std::vector<G4String>& AvailablePhysLists() const;
-  // list of avalable base Phys Lists
-
-  const std::vector<G4String>& AvailablePhysListsEM() const;
-  // list of avalable EM options
-
-  inline void SetVerbose(G4int val) { verbose = val; }
-
-private:
-
-  G4String defName;  
-  std::vector<G4String> listnames_hadr;
-  std::vector<G4String> listnames_em;
-  size_t nlists_hadr;
-  size_t nlists_em;
-  G4int verbose;
 };
-
 #endif
-
-
 

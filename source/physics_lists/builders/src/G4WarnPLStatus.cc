@@ -51,6 +51,43 @@ void G4WarnPLStatus::Replaced(const G4String aPL, const G4String Replacement) co
 G4endl;   
 }
 
+void G4WarnPLStatus::OnlyFromFactory(const G4String aPL, const G4String basePL) const
+{
+    G4ExceptionDescription desc;
+    desc <<
+"*=====================================================================" <<G4endl <<
+"*                                                                     " <<G4endl <<
+"*   The Physics list "<<aPL<<", a variation of "<< basePL<< " is now  " <<G4endl <<
+"*      available only via the physics list factory                    " <<G4endl <<
+"*                                                                     " <<G4endl <<
+"*   Please replace code like                                          " <<G4endl <<
+"*                                                                     " <<G4endl <<
+"       runManager->SetUserInitialization( new " << aPL << " );        " <<G4endl <<
+"*                                                                     " <<G4endl <<
+"*   by the following                                                  " <<G4endl <<
+"*                                                                     " <<G4endl <<
+"       G4PhysListFactory factory;                                     " <<G4endl <<
+"       runManager->SetUserInitialization("                              <<G4endl <<
+"                      factory.GetReferencePhysList(\"" << aPL << "\");" <<G4endl <<
+"*                                                                      " <<G4endl <<
+"*   For more information how to use G4PhysListFactory, please refer    " <<G4endl <<
+"*    to the documentation available at                                 " <<G4endl <<
+"*     http://cern.ch/geant4/support/physicsLists/PhysListFactory.shtml " <<G4endl <<
+"*                                                                      " <<G4endl <<
+"*   We invite you to report your use case for, and your experience with" <<G4endl <<
+"*    this physics list on the Geant4 User Forum dedicated to physics   " <<G4endl <<
+"*    lists:                                                            " <<G4endl <<
+"*  http://hypernews.slac.stanford.edu/HyperNews/geant4/get/phys-list.html"<<G4endl <<
+"*                                                                      " <<G4endl <<
+"*=====================================================================*" <<G4endl<<
+G4endl;
+    G4String txtPL;
+    txtPL=aPL + "::" + aPL;
+    G4Exception(txtPL,"PhysicsLists001", FatalException,desc);
+
+}
+
+
 void G4WarnPLStatus::Unsupported(const G4String aPL, const G4String Replacement) const
 {
     G4cout << 

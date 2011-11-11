@@ -23,78 +23,82 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_BERT_EMX.icc,v 1.5 2010-08-16 07:14:44 kurasige Exp $
+// $Id$
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName: QGSP_BERT_EMX
+// ClassName:   G4FTFBinaryPionBuilder
 //
-// Author: 11 May 2009  V.Ivanchenko
-//   created from QGSP_BERT
+// Author: 2011 G.Folger
 //
 // Modified:
-// 27.11.2009 G.Folger: Mark as experimental
-// 04.06.2010 G.Folger: Use new ctor for builders
-// 16.08.2010 H.Kurashige: Remove inclusion of G4ParticleWithCuts 
+// 18.11.2010 G.Folger, use G4CrossSectionPairGG for relativistic rise of cross
+//             section at high energies.
+// 30.03.2009 V.Ivanchenko create cross section by new
 //
 //----------------------------------------------------------------------------
 //
-
-#include "globals.hh"
-#include "G4ProcessManager.hh"
-#include "G4ProcessVector.hh"
-#include "G4ParticleTypes.hh"
+#include "G4FTFBinaryPionBuilder.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
+#include "G4ProcessManager.hh"
+#include "G4PiNuclearCrossSection.hh"
+#include "G4CrossSectionPairGG.hh"
 
-#include "G4Material.hh"
-#include "G4MaterialTable.hh"
-#include "G4ios.hh"
-#include <iomanip>   
-
-#include "G4DecayPhysics.hh"
-#include "G4EmStandardPhysics_option2.hh"
-#include "G4EmExtraPhysics.hh"
-#include "G4IonPhysics.hh"
-#include "G4QStoppingPhysics.hh"
-#include "G4HadronElasticPhysics.hh"
-#include "G4NeutronTrackingCut.hh"
-
-#include "G4DataQuestionaire.hh"
-#include "HadronPhysicsQGSP_BERT.hh"
-
-#include "G4WarnPLStatus.hh"
-
-template<class T> TQGSP_BERT_EMX<T>::TQGSP_BERT_EMX(G4int):  T()
+G4FTFBinaryPionBuilder::
+G4FTFBinaryPionBuilder(G4bool quasiElastic)
 {
+  thePiData = new G4CrossSectionPairGG(new G4PiNuclearCrossSection(), 91*GeV);
+  theMin = 4*GeV;
+  theModel = new G4TheoFSGenerator("FTFB");
 
-  G4DataQuestionaire it(photon);
-  G4cout << "<<< Geant4 Physics List simulation engine: QGSP_BERT_EMX 1.1"<<G4endl;
-  G4cout <<G4endl;
+  theStringModel = new G4FTFModel;
+  theStringDecay = new G4ExcitedStringDecay(new G4LundStringFragmentation);
+  theStringModel->SetFragmentationModel(theStringDecay);
 
-  G4WarnPLStatus factory;
-  factory.OnlyFromFactory("QGSP_BERT_EMX","QGSP_BERT");
+  theCascade = new G4BinaryCascade;
+  thePreEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
+  theCascade->SetDeExcitation(thePreEquilib);  
 
- }
+  theModel->SetHighEnergyGenerator(theStringModel);
+  if (quasiElastic)
+  {
+     theQuasiElastic=new G4QuasiElasticChannel;
+     theModel->SetQuasiElasticChannel(theQuasiElastic);
+  } else 
+  {  theQuasiElastic=0;}  
 
-template<class T> TQGSP_BERT_EMX<T>::~TQGSP_BERT_EMX()
-{
+  theModel->SetTransport(theCascade);
+  theModel->SetMinEnergy(theMin);
+  theModel->SetMaxEnergy(100*TeV);
 }
 
-template<class T> void TQGSP_BERT_EMX<T>::SetCuts()
+G4FTFBinaryPionBuilder:: ~G4FTFBinaryPionBuilder()
 {
-  if (this->verboseLevel >1){
-    G4cout << "QGSP_BERT_EMX::SetCuts:";
-  }  
-  //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
-  //   the default cut value for all particle types 
-
-  this->SetCutsWithDefault();   
-  
-//  if (this->verboseLevel >0)
-//    G4VUserPhysicsList::DumpCutValuesTable();  
+  delete theCascade;
+  delete theStringDecay;
+  delete theStringModel;
+  delete theModel;
+  if ( theQuasiElastic ) delete theQuasiElastic;
 }
 
+void G4FTFBinaryPionBuilder::
+Build(G4HadronElasticProcess * ) {}
 
+void G4FTFBinaryPionBuilder::
+Build(G4PionPlusInelasticProcess * aP)
+{
+  theModel->SetMinEnergy(theMin);
+  aP->AddDataSet(thePiData);
+  aP->RegisterMe(theModel);
+}
 
-// 2002 by J.P. Wellisch
+void G4FTFBinaryPionBuilder::
+Build(G4PionMinusInelasticProcess * aP)
+{
+  theModel->SetMinEnergy(theMin);
+  aP->AddDataSet(thePiData);
+  aP->RegisterMe(theModel);
+}
+

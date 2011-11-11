@@ -62,6 +62,8 @@
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsCHIPS.hh"
 
+#include "G4WarnPLStatus.hh"
+
 template<class T> TCHIPS<T>::TCHIPS(G4int ver):  T()
 {
   // default cut value  (1.0mm) 
@@ -71,6 +73,9 @@ template<class T> TCHIPS<T>::TCHIPS(G4int ver):  T()
   G4cout <<G4endl<<G4endl;
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(ver);
+
+  G4WarnPLStatus exp;
+  exp.Experimental("CHIPS");
 
   // EM Physics
   //this->RegisterPhysics( new G4QAtomicPhysics(ver));

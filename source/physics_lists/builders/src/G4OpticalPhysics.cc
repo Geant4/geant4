@@ -61,7 +61,6 @@ G4OpticalPhysics::G4OpticalPhysics(G4int verbose, const G4String& name)
     fExcitationRatio(0.0),
     fSurfaceModel(unified),
     fProfile("delta"),
-    fTrackSecondariesFirst(true),
     fFiniteRiseTime(false),
     fScintillationByParticleType(false)
 {
@@ -72,6 +71,7 @@ G4OpticalPhysics::G4OpticalPhysics(G4int verbose, const G4String& name)
     fProcesses.push_back(NULL);
     fProcessUse.push_back(true);
     fProcessVerbose.push_back(verbose);
+    fProcessTrackSecondariesFirst.push_back(true);
   }
 }
 
@@ -111,12 +111,14 @@ void G4OpticalPhysics::PrintStatistics() const
       if ( i == kCerenkov ) {
         G4cout << "    Max number of photons per step: " << fMaxNumPhotons << G4endl;
         G4cout << "    Max beta change per step:       " << fMaxBetaChange << G4endl;
+        if ( fProcessTrackSecondariesFirst[kCerenkov] ) G4cout << "  Track secondaries first:  activated" << G4endl;
       }
       if ( i == kScintillation ) {
         if (fScintillationByParticleType)
         G4cout << "    Scintillation by Particle Type:  activated " << G4endl;
         G4cout << "    Yield factor: "  << fYieldFactor << G4endl;
         G4cout << "    ExcitationRatio: " << fExcitationRatio << G4endl;
+        if ( fProcessTrackSecondariesFirst[kScintillation] ) G4cout << "  Track secondaries first:  activated" << G4endl;
       }
       if ( i == kBoundary ) {
         G4cout << "    OpticalSurfaceModel:  ";
@@ -127,9 +129,6 @@ void G4OpticalPhysics::PrintStatistics() const
         G4cout << "     WLS process time profile: " << fProfile << G4endl;
       }
     }
-  }
-  if ( fTrackSecondariesFirst ) {
-    G4cout << "  Track secondaries first:  activated" << G4endl;
   }
 }
 
@@ -193,7 +192,8 @@ void G4OpticalPhysics::ConstructProcess()
   fScintillationProcess->SetScintillationExcitationRatio(fExcitationRatio);
   fScintillationProcess->SetFiniteRiseTime(fFiniteRiseTime);
   fScintillationProcess->SetScintillationByParticleType(fScintillationByParticleType);
-  fScintillationProcess->SetTrackSecondariesFirst(fTrackSecondariesFirst);
+  fScintillationProcess->
+       SetTrackSecondariesFirst(fProcessTrackSecondariesFirst[kScintillation]);
 
   // Use Birks Correction in the Scintillation process
 
@@ -203,7 +203,8 @@ void G4OpticalPhysics::ConstructProcess()
   fProcesses[kCerenkov] = fCerenkovProcess = new G4Cerenkov();
   fCerenkovProcess->SetMaxNumPhotonsPerStep(fMaxNumPhotons);
   fCerenkovProcess->SetMaxBetaChangePerStep(fMaxBetaChange);
-  fCerenkovProcess->SetTrackSecondariesFirst(fTrackSecondariesFirst);
+  fCerenkovProcess->
+       SetTrackSecondariesFirst(fProcessTrackSecondariesFirst[kCerenkov]);
 
   theParticleIterator->reset();
 
@@ -324,16 +325,18 @@ void G4OpticalPhysics::SetScintillationByParticleType(G4bool scintillationByPart
      fScintillationProcess->SetScintillationByParticleType(scintillationByParticleType);
 }
 
-void G4OpticalPhysics::SetTrackSecondariesFirst(G4bool trackSecondariesFirst)
+void G4OpticalPhysics::SetTrackSecondariesFirst(G4OpticalProcessIndex index,
+                                                G4bool trackSecondariesFirst)
 {
-  fTrackSecondariesFirst = trackSecondariesFirst;
+  if ( index >= kNoProcess ) return;
+  if ( fProcessTrackSecondariesFirst[index] == trackSecondariesFirst ) return;
+  fProcessTrackSecondariesFirst[index] = trackSecondariesFirst;
 
-  if(fCerenkovProcess)
+  if(fCerenkovProcess && index == kCerenkov )
     fCerenkovProcess->SetTrackSecondariesFirst(trackSecondariesFirst);
 
-  if(fScintillationProcess)
+  if(fScintillationProcess && index == kScintillation)
     fScintillationProcess->SetTrackSecondariesFirst(trackSecondariesFirst);
-
 }
 
 void G4OpticalPhysics::SetFiniteRiseTime(G4bool finiteRiseTime)

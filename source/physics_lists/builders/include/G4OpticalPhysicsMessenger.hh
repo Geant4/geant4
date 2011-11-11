@@ -99,8 +99,7 @@ private:
   G4UIdirectory*         fDir;
 
   /// selected optical process
-  G4OpticalProcessIndex  fUseProcess;
-  G4VProcess*            fSelectedProcess;
+  G4OpticalProcessIndex  fSelectedProcessIndex;
 
   /// selectOpProcess command
   G4UIcmdWithAString*    fSelectOpProcessCmd;

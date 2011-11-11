@@ -61,18 +61,17 @@
 #include "G4IonFTFPBinaryCascadePhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 
-QBBC::QBBC( G4int ver, const G4String& type )
+QBBC::QBBC( G4int ver, const G4String&)
 {
-  G4DataQuestionaire it(photon, neutron, no, no, no, neutronxs);
-  G4cout << "<<< Geant4 Physics List simulation engine: QBBC of type <"
-	 << type <<">" <<G4endl;	
-  G4cout <<G4endl;
+  G4DataQuestionaire it(photon, neutronxs);
+  G4cout << "<<< Reference Physics List QBBC "
+	 <<G4endl;	
+
   defaultCutValue = 0.7*mm;  
   SetVerboseLevel(ver);
 
   // EM Physics
-  //RegisterPhysics( new G4EmStandardPhysics(ver));
-  RegisterPhysics( new G4EmStandardPhysics_option2(ver) );
+  RegisterPhysics( new G4EmStandardPhysics(ver) );
 
   // Synchroton Radiation & GN Physics
   RegisterPhysics( new G4EmExtraPhysics(ver) );
@@ -84,8 +83,8 @@ QBBC::QBBC( G4int ver, const G4String& type )
   RegisterPhysics( new G4HadronElasticPhysicsXS(ver) );
 
   RegisterPhysics( new G4QStoppingPhysics(ver) );
+
   RegisterPhysics( new G4IonFTFPBinaryCascadePhysics(ver) );
-  //  RegisterPhysics( new G4IonBinaryCascadePhysics(ver) );
 
   RegisterPhysics( new G4HadronInelasticQBBC(ver));
 

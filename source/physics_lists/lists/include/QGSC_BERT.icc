@@ -61,6 +61,8 @@
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsQGSC_BERT.hh"
 
+#include "G4WarnPLStatus.hh"
+
 template<class T> TQGSC_BERT<T>::TQGSC_BERT(G4int ver):  T()
 {
   // default cut value  (1.0mm) 
@@ -70,6 +72,9 @@ template<class T> TQGSC_BERT<T>::TQGSC_BERT(G4int ver):  T()
   G4cout <<G4endl<<G4endl;
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(ver);
+
+  G4WarnPLStatus exp;
+  exp.Experimental("QGSC_BERT");
 
   // EM Physics
   this->RegisterPhysics( new G4EmStandardPhysics(ver) );

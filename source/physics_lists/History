@@ -1,4 +1,4 @@
-q$Id: History,v 1.174 2011-01-05 15:41:39 gunter Exp $
+$Id: History,v 1.174 2011-01-05 15:41:39 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,79 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+10-11-2011, M.Karamitros               (phys-lists-V09-04-71)
+- Add comments into EmDNAPhysChem builder
+- Make transparent the use of ITStepMan from outside the builder
+
+10-11-2011, G.Folger                   (phys-lists-V09-04-70)
+- correct builders/source.cmake for new classes
+- G4DataQuestionaire: fix typo in new abla part; replace G4cout by 
+	G4ExceptionDescription
+- QGSP_BERT_ENV: add missing #include "G4QWarnStatus.hh"
+
+10-11-2011,M.Karamitros                (phys-lists-V09-04-69)
+- Correct another typo in the process name DNAElectronSolvatation
+
+10-11-2011, V.Ivanchenko               (phys-lists-V09-04-68)
+- G4PhysListFactory - fixed printout
+
+09-11-2011, V.Ivanchenko               (phys-lists-V09-04-67)
+- QBBC - cleanup of the code
+- G4HadronInelasticQBBC - use CHIPS x-sections for kaons
+
+09-11-2011, G.Folger                   (phys-lists-V09-04-66)
+- implement changes of supportlevel:
+   mark unsupported: QGSP_BERT_NOLEP, QGSP_BERT_TRV,
+   make supported:   Shielding
+   mark experimental:  CHIPS
+- EM variants (EMV, EMX, EMY) are now available only from 
+    physics list factory, with the exception of FTFP_BERT_EMV 
+	and QGSP_BIC_EMY. The following now raise G4Exception explaining
+	to the user what he needs to do:
+	  FTFP_BERT_EMX, QGSP_BERT_EMX, QGSP_BERT_EMV
+- FTF_BIC: remove use of LEP for Kaons; this required new builders
+	  G4KaonBuilder, G4FTFBinaryPionBuilder,  G4FTFBinaryKaonBuilder,
+	  G4BinaryPionBuilder, G4BertiniKaonBuilder
+- G4DataQuestionaire: updated for use more datasets.
+- updated lists to ask for check datasets needed:
+	QGSP_BIC_HP, Shielding, QGSP_BERT_EMV, QGSP_INCL_ABLA
+
+08-11-2011, P.Gumplinger               (phys-lists-V09-04-65)
+- changes to G4OpticalPhysics and G4OpticalPhysicsMessenger
+  to avoid dynamic_cast
+
+08-11-2011, V.Ivanchenko               (phys-lists-V09-04-64)
+- Removed He3 from elastic builders, because cross section is 
+  still unavailable
+- G4PhysListFactory - implemented selection of EM builder via 
+  Physics List name
+- QBBC - cleanup printout and use default EM builder
+- G4HadronInelasticQBBC - use Bertini up tp 12 GeV, 
+    FTFP - down to 3 GeV
+
+04-11-2011, M.Karamitros               (phys-lists-V09-04-63)
+- Add History description
+     
+04-11-2011, M.Karamitros               (phys-lists-V09-04-62)
+- Add G4DNAEmPhysicsChemistry builder
+  
+04-11-2011, P.Gumplinger               (phys-lists-V09-04-60)
+- change static_cast to dynamic_cast in G4OpticalPhysicsMessenger
+  this is a bug fix - of an old bug!
+
+04-11-2011, T.Koi                      (phys-lists-V09-04-59)
+-Fix Xcode warning 
+	builders/include/G4NeutronLENDBuilder.hh
+	builders/src/G4NeutronLENDBuilder.cc
+
+03-10-2011, V.Ivanchenko               (phys-lists-V09-04-58)
+- Updated mu+-, pi+-, kaon+-, configuration reusing the same
+  bremsstrahlung and pair production models for particle and 
+  anti-particle; by this some memory is saved and expected reduction
+  of initialisation time
+
+02-11-2011, P.Gumplinger               (phys-lists-V09-04-57)
+- Add class G4StepLimiterBuilder to /builders
 
 01-11-2011, P.Gumplinger               (phys-lists-V09-04-56)
 - Add SetFiniteRiseTime to G4OpticalPhysics and

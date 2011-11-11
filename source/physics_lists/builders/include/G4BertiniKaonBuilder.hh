@@ -23,61 +23,56 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhysListFactory.hh,v 1.2 2008-11-21 16:50:30 vnivanch Exp $
+// $Id$
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:  G4PhysListFactory
+// ClassName:   G4BertiniKaonBuilder
 //
-// Author: 21 April 2008 V. Ivanchenko
+// Author: 2011 G.Folger
+//  devired from G4BertiniPionBuilder
 //
 // Modified:
 //
 //----------------------------------------------------------------------------
 //
-#ifndef G4PhysListFactory_h
-#define G4PhysListFactory_h 1
+#ifndef G4BertiniKaonBuilder_h
+#define G4BertiniKaonBuilder_h 1
 
-#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
 
-class G4PhysListFactory
+#include "G4HadronElasticProcess.hh"
+#include "G4HadronFissionProcess.hh"
+#include "G4HadronCaptureProcess.hh"
+#include "G4NeutronInelasticProcess.hh"
+#include "G4VKaonBuilder.hh"
+
+#include "G4QHadronInelasticDataSet.hh"
+#include "G4CascadeInterface.hh"   
+
+class G4BertiniKaonBuilder : public G4VKaonBuilder
 {
-public:
+  public: 
+    G4BertiniKaonBuilder();
+    virtual ~G4BertiniKaonBuilder();
 
-  G4PhysListFactory();
+  public: 
+    virtual void Build(G4HadronElasticProcess * aP);
+    virtual void Build(G4KaonPlusInelasticProcess * aP);
+    virtual void Build(G4KaonMinusInelasticProcess * aP);
+    virtual void Build(G4KaonZeroLInelasticProcess * aP);
+    virtual void Build(G4KaonZeroSInelasticProcess * aP);
 
-  ~G4PhysListFactory();
+    void SetMinEnergy(G4double aM) {theMin = aM;}
+    void SetMaxEnergy(G4double aM) {theMax = aM;}
 
-  G4VModularPhysicsList* GetReferencePhysList(const G4String&);
-  // instantiate PhysList by name
+  private:
+    G4QHadronInelasticDataSet * theKaonData;
+    G4CascadeInterface * theModel;    
+    G4double theMin;
+    G4double theMax;
 
-  G4VModularPhysicsList* ReferencePhysList();
-  // instantiate PhysList by environment variable "PHYSLIST"
-
-  G4bool IsReferencePhysList(const G4String&);
-  // check if the name is in the list of PhysLists names
-
-  const std::vector<G4String>& AvailablePhysLists() const;
-  // list of avalable base Phys Lists
-
-  const std::vector<G4String>& AvailablePhysListsEM() const;
-  // list of avalable EM options
-
-  inline void SetVerbose(G4int val) { verbose = val; }
-
-private:
-
-  G4String defName;  
-  std::vector<G4String> listnames_hadr;
-  std::vector<G4String> listnames_em;
-  size_t nlists_hadr;
-  size_t nlists_em;
-  G4int verbose;
 };
-
 #endif
-
-
 

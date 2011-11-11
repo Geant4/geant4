@@ -23,61 +23,66 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhysListFactory.hh,v 1.2 2008-11-21 16:50:30 vnivanch Exp $
+// $Id$
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:  G4PhysListFactory
+// ClassName:   G4FTFBinaryKaonBuilder
 //
-// Author: 21 April 2008 V. Ivanchenko
+// Author: 2008 G.Folger
 //
-// Modified:
 //
 //----------------------------------------------------------------------------
 //
-#ifndef G4PhysListFactory_h
-#define G4PhysListFactory_h 1
+#ifndef G4FTFBinaryKaonBuilder_h
+#define G4FTFBinaryKaonBuilder_h 1
 
-#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
 
-class G4PhysListFactory
+#include "G4HadronElasticProcess.hh"
+#include "G4HadronFissionProcess.hh"
+#include "G4HadronCaptureProcess.hh"
+#include "G4NeutronInelasticProcess.hh"
+#include "G4VKaonBuilder.hh"
+
+#include "G4TheoFSGenerator.hh"
+#include "G4ExcitationHandler.hh"
+#include "G4PreCompoundModel.hh"
+#include "G4BinaryCascade.hh"
+#include "G4FTFModel.hh"
+#include "G4LundStringFragmentation.hh"
+#include "G4ExcitedStringDecay.hh"
+#include "G4QuasiElasticChannel.hh"
+#include "G4VCrossSectionDataSet.hh"
+
+class G4FTFBinaryKaonBuilder : public G4VKaonBuilder
 {
-public:
+  public: 
+    G4FTFBinaryKaonBuilder(G4bool quasiElastic=false);
+    virtual ~G4FTFBinaryKaonBuilder();
 
-  G4PhysListFactory();
+  public: 
+    virtual void Build(G4HadronElasticProcess * aP);
+    virtual void Build(G4KaonPlusInelasticProcess * aP);
+    virtual void Build(G4KaonMinusInelasticProcess * aP);
+    virtual void Build(G4KaonZeroLInelasticProcess * aP);
+    virtual void Build(G4KaonZeroSInelasticProcess * aP);
+    
+    void SetMinEnergy(G4double aM) {theMin = aM;}
 
-  ~G4PhysListFactory();
+  private:
+    G4TheoFSGenerator * theModel;
+    G4PreCompoundModel * thePreEquilib;
+    G4BinaryCascade * theCascade;
+    G4FTFModel * theStringModel;
+    G4ExcitedStringDecay * theStringDecay;
+    G4QuasiElasticChannel * theQuasiElastic;
 
-  G4VModularPhysicsList* GetReferencePhysList(const G4String&);
-  // instantiate PhysList by name
+    G4VCrossSectionDataSet* theKaonData;
+    G4double theMin;
 
-  G4VModularPhysicsList* ReferencePhysList();
-  // instantiate PhysList by environment variable "PHYSLIST"
-
-  G4bool IsReferencePhysList(const G4String&);
-  // check if the name is in the list of PhysLists names
-
-  const std::vector<G4String>& AvailablePhysLists() const;
-  // list of avalable base Phys Lists
-
-  const std::vector<G4String>& AvailablePhysListsEM() const;
-  // list of avalable EM options
-
-  inline void SetVerbose(G4int val) { verbose = val; }
-
-private:
-
-  G4String defName;  
-  std::vector<G4String> listnames_hadr;
-  std::vector<G4String> listnames_em;
-  size_t nlists_hadr;
-  size_t nlists_em;
-  G4int verbose;
 };
 
 #endif
-
-
 

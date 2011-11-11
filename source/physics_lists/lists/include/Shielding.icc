@@ -64,21 +64,16 @@
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsShielding.hh"
 
-#include "G4WarnPLStatus.hh"
-
 //template<class T> TShielding<T>::TShielding(G4int ver):  T()
 template<class T> TShielding<T>::TShielding( G4int verbose, G4String LEN_model ):  T()
 {
   // default cut value  (1.0mm) 
   // defaultCutValue = 1.0*mm;
-  G4DataQuestionaire it(photon);
-  G4cout << "<<< Geant4 Physics List simulation engine: Shielding 0.2"<<G4endl;
+  G4DataQuestionaire it(photon, neutron, radioactive);
+  G4cout << "<<< Geant4 Physics List simulation engine: Shielding 1.0"<<G4endl;
   G4cout <<G4endl;
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(verbose);
-
-  G4WarnPLStatus exp;
-  exp.Experimental("Shielding");
 
  // EM Physics
   this->RegisterPhysics( new G4EmStandardPhysics(verbose));
@@ -110,6 +105,7 @@ G4cout << LEN_model << G4endl;
   else if ( LEN_model == "LEND" ) 
   {
      this->RegisterPhysics( new G4HadronElasticPhysicsLEND(verbose,evaluation) );
+     G4DataQuestionaire it(lend);
   }
   else 
   {

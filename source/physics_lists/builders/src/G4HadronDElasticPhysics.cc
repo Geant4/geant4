@@ -212,7 +212,6 @@ void G4HadronDElasticPhysics::ConstructProcess()
 	       << " added for " << particle->GetParticleName() << G4endl;
       }
     } else if(
-       pname == "He3"            ||
        pname == "anti_proton"    || 
        pname == "anti_alpha"     ||
        pname == "anti_deuteron"  ||

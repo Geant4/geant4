@@ -55,6 +55,7 @@
 
 class G4QCaptureAtRest;
 class G4FTFCaptureAtRest;
+class G4PiMinusAbsorptionBertini;
 
 
 class G4QandFTFStoppingPhysics : public G4VPhysicsConstructor {
@@ -85,6 +86,7 @@ private:
   G4MuonMinusCaptureAtRest* muProcess;
   G4QCaptureAtRest* hProcess;
   G4FTFCaptureAtRest* hFTFProcess;
+  G4PiMinusAbsorptionBertini* hBertProcess;
   
   G4int    verbose;
   G4bool   wasActivated;

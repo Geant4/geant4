@@ -23,61 +23,74 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhysListFactory.hh,v 1.2 2008-11-21 16:50:30 vnivanch Exp $
+// $Id$
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:  G4PhysListFactory
+// ClassName:   G4BertiniKaonBuilder
 //
-// Author: 21 April 2008 V. Ivanchenko
+// Author: 2011 G.Folger
+//  devired from G4BertiniPionBuilder
 //
 // Modified:
 //
 //----------------------------------------------------------------------------
 //
-#ifndef G4PhysListFactory_h
-#define G4PhysListFactory_h 1
+#include "G4BertiniKaonBuilder.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTable.hh"
+#include "G4ProcessManager.hh"
 
-#include "G4VModularPhysicsList.hh"
-#include "globals.hh"
+G4BertiniKaonBuilder::
+G4BertiniKaonBuilder() 
+ {
+   theKaonData = new G4QHadronInelasticDataSet;
+   theMin = 0*GeV;
+   theMax = 9.9*GeV;
+   theModel = new G4CascadeInterface;
+   theModel->SetMinEnergy(theMin);
+   theModel->SetMaxEnergy(theMax); 
+ }
 
-class G4PhysListFactory
+G4BertiniKaonBuilder::~G4BertiniKaonBuilder() 
 {
-public:
+	delete theKaonData;
+}
 
-  G4PhysListFactory();
+void G4BertiniKaonBuilder::
+Build(G4KaonPlusInelasticProcess * aP)
+ {
+   aP->RegisterMe(theModel);
+   theModel->SetMinEnergy(theMin);
+   theModel->SetMaxEnergy(theMax);
+ }
 
-  ~G4PhysListFactory();
+void G4BertiniKaonBuilder::
+Build(G4KaonMinusInelasticProcess * aP)
+ {
+   aP->RegisterMe(theModel);
+   theModel->SetMinEnergy(theMin);
+   theModel->SetMaxEnergy(theMax);
+ }
 
-  G4VModularPhysicsList* GetReferencePhysList(const G4String&);
-  // instantiate PhysList by name
+void G4BertiniKaonBuilder::
+Build(G4KaonZeroLInelasticProcess * aP)
+ {
+   aP->RegisterMe(theModel);
+   theModel->SetMinEnergy(theMin);
+   theModel->SetMaxEnergy(theMax);
+ }
 
-  G4VModularPhysicsList* ReferencePhysList();
-  // instantiate PhysList by environment variable "PHYSLIST"
+void G4BertiniKaonBuilder::
+Build(G4KaonZeroSInelasticProcess * aP)
+ {
+   aP->RegisterMe(theModel);
+   theModel->SetMinEnergy(theMin);
+   theModel->SetMaxEnergy(theMax);
+ }
 
-  G4bool IsReferencePhysList(const G4String&);
-  // check if the name is in the list of PhysLists names
+void G4BertiniKaonBuilder::
+Build(G4HadronElasticProcess * ) {}
 
-  const std::vector<G4String>& AvailablePhysLists() const;
-  // list of avalable base Phys Lists
-
-  const std::vector<G4String>& AvailablePhysListsEM() const;
-  // list of avalable EM options
-
-  inline void SetVerbose(G4int val) { verbose = val; }
-
-private:
-
-  G4String defName;  
-  std::vector<G4String> listnames_hadr;
-  std::vector<G4String> listnames_em;
-  size_t nlists_hadr;
-  size_t nlists_em;
-  G4int verbose;
-};
-
-#endif
-
-
-
+         

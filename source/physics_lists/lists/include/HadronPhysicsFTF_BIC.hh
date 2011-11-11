@@ -45,10 +45,12 @@
 
 #include "G4VPhysicsConstructor.hh"
 
-#include "G4PiKBuilder.hh"
-#include "G4BinaryPiKBuilder.hh"
-#include "G4LEPPiKBuilder.hh"
-#include "G4FTFBinaryPiKBuilder.hh"
+#include "G4PionBuilder.hh"
+#include "G4KaonBuilder.hh"
+#include "G4BinaryPionBuilder.hh"
+#include "G4BertiniKaonBuilder.hh"
+#include "G4FTFBinaryPionBuilder.hh"
+#include "G4FTFBinaryKaonBuilder.hh"
 
 #include "G4ProtonBuilder.hh"
 #include "G4LEPProtonBuilder.hh"
@@ -82,10 +84,12 @@ class HadronPhysicsFTF_BIC : public G4VPhysicsConstructor
     G4FTFBinaryNeutronBuilder * theFTFBinaryNeutron;
     G4BinaryNeutronBuilder * theBinaryNeutron;
     
-    G4PiKBuilder * thePiK;
-    G4BinaryPiKBuilder * theBICPiK;
-    G4LEPPiKBuilder * theLEPPiK;
-    G4FTFBinaryPiKBuilder * theFTFBinaryPiK;
+    G4PionBuilder * thePion;
+    G4KaonBuilder * theKaon;
+    G4BinaryPionBuilder * theBICPion;
+    G4BertiniKaonBuilder * theBertiniKaon;
+    G4FTFBinaryPionBuilder * theFTFBinaryPion;
+    G4FTFBinaryKaonBuilder * theFTFBinaryKaon;
     
     G4ProtonBuilder * thePro;
     G4FTFBinaryProtonBuilder * theFTFBinaryPro; 

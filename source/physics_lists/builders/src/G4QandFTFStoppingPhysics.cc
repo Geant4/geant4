@@ -43,6 +43,7 @@
 
 #include "G4QCaptureAtRest.hh"
 #include "G4FTFCaptureAtRest.hh"
+#include "G4PiMinusAbsorptionBertini.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
@@ -51,6 +52,7 @@
 #include "G4MesonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4MuonMinus.hh"
+#include "G4PionMinus.hh"
 
 
 G4QandFTFStoppingPhysics::G4QandFTFStoppingPhysics( G4int ver )
@@ -74,6 +76,7 @@ G4QandFTFStoppingPhysics::~G4QandFTFStoppingPhysics() {
     if ( muProcess ) delete muProcess;
     delete hProcess;
     delete hFTFProcess;
+    delete hBertProcess;
   }
 }
 
@@ -104,6 +107,7 @@ void G4QandFTFStoppingPhysics::ConstructProcess() {
   }   
   hProcess = new G4QCaptureAtRest();
   hFTFProcess = new G4FTFCaptureAtRest();
+  hBertProcess = new G4PiMinusAbsorptionBertini();
 
   G4double mThreshold = 130.*MeV;
 
@@ -138,6 +142,14 @@ void G4QandFTFStoppingPhysics::ConstructProcess() {
         pmanager->AddRestProcess( hFTFProcess );
         if ( verbose > 1 ) {
 	  G4cout << "### G4FTFCaptureAtRest added for "
+                 << particle->GetParticleName() << G4endl;
+        }
+      }
+      // Use Bertini/Precompound for pi-
+      else if ( particle == G4PionMinus::PionMinus() ) {
+        pmanager->AddRestProcess( hBertProcess );
+        if ( verbose > 1 ) {
+	  G4cout << "### G4PiMinusAbsorptionBertini added for "
                  << particle->GetParticleName() << G4endl;
         }
       } else { 

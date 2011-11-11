@@ -32,18 +32,31 @@
 #include "G4ProtonInelasticProcess.hh"
 #include "G4VPiKBuilder.hh"
 
-enum G4DataType {no, photon, neutron, radioactive, lowenergy, optical, neutronxs};
+enum G4DataType {no, photon, neutron, radioactive, lowenergy, optical, neutronxs, lend, abla};
 class G4DataQuestionaire
 {
   public: 
     G4DataQuestionaire(G4DataType t1=no, G4DataType t2=no, G4DataType t3=no, 
-		       G4DataType t4=no, G4DataType t5=no, G4DataType t6=no) 
+		       G4DataType t4=no, G4DataType t5=no, G4DataType t6=no,
+		       G4DataType t7=no, G4DataType t8=no, G4DataType t9=no)
     {
-      G4cout << G4endl;
-      G4cout << "<<< Geant4 Physics List engine packaging library: PACK 5.5"<<G4endl;
-      //      G4cout <<G4endl<<G4endl;
-      // G4cout << "##### the input "<<t1<<" "<<t2<<" "<<t3<<" "<<t4<<G4endl;
-      for(G4int i=0; i<6; ++i)
+        G4ExceptionDescription desc;
+	desc << G4endl;
+
+	G4bool fail(false);
+
+        // always need LEdata since 9.5
+    	if(!getenv("G4LEDATA") )
+	  {
+	     desc << "Low energy electromagnetic data are needed."<<G4endl
+	          << "This is a NEW requirement for standard EM physics since geant4 9.5."<<G4endl
+	          << "Please set the environmental variable G4LEDATA"<<G4endl
+	          << "to point to your G4EMLOW directory. "<<G4endl
+	          << "Note: EMLOW6.23 or above is needed for Bremsstrahlung data."<<G4endl
+	          << "Data are available from the Geant4 download page."<<G4endl<<G4endl;
+	     fail=true;
+	  }
+      for(G4int i=0; i<9; ++i)
       {
 	G4DataType t(no);
 	if(i==0) t=t1;
@@ -52,74 +65,93 @@ class G4DataQuestionaire
 	if(i==3) t=t4;
 	if(i==4) t=t5;
 	if(i==5) t=t6;
+	if(i==6) t=t7;
+	if(i==7) t=t8;
+	if(i==8) t=t9;
+
 	switch(t)
 	{
           case photon:
 	    if(!getenv("G4LEVELGAMMADATA") )
 	    {
-	      G4cout << "Photon-evaporation data are needed."<<G4endl;
-	      G4cout << "Please set the environmental variable G4LEVELGAMMADATA"<<G4endl;
-	      G4cout << "to point to your PhotonEvaporation directory."<<G4endl;
-	      G4cout << "Data are available from the Geant4 download page."<<G4endl;
-              G4Exception("G4DataQuestionaire", "007", FatalException,
-	                  "Fatal error: Missing mandatory data for this simulation engine");
+	      desc << "Photon-evaporation data are needed."<<G4endl
+	           << "Please set the environmental variable G4LEVELGAMMADATA"<<G4endl
+	      	   << "to point to your PhotonEvaporation directory."<<G4endl
+	      	   << "Data are available from the Geant4 download page."<<G4endl<<G4endl;
+	      fail=true;
 	    }
 	    break;
           case neutron:
 	    if(!getenv("G4NEUTRONHPDATA") )
 	    {
-	      G4cout << "G4NDL are needed."<<G4endl;
-	      G4cout << "Please set the environmental variable G4NEUTRONHPDATA"<<G4endl;
-	      G4cout << "to point to your G4NDL directory."<<G4endl;
-	      G4cout << "Data are available from the Geant4 download page."<<G4endl;
-              G4Exception("G4DataQuestionaire", "007", FatalException,
-	                  "Fatal error: Missing mandatory data for this simulation engine");
+	      desc << "G4NDL are needed."<<G4endl
+	           << "Please set the environmental variable G4NEUTRONHPDATA"<<G4endl
+	      	   << "to point to your G4NDL directory."<<G4endl
+	      	   << "Data are available from the Geant4 download page."<<G4endl<<G4endl;
+	      fail=true;
+	    }
+	    break;
+          case lend:
+	    if(!getenv("G4LENDDATA") )
+	    {
+	      desc << "Data files for Low Energy Nuclear Data (LEND) are needed."<<G4endl
+	           << "Please set the environmental variable G4LENDDATA"<<G4endl
+	      	   << "to point to the directory containing these LEND data."<<G4endl
+	      	   << "Data files for Low Energy Nuclear Data (LEND) are available from" <<
+	    		  " ftp://gdo-nuclear.ucllnl.org/pub/."<<G4endl<<G4endl;
+	      fail=true;
 	    }
 	    break;
           case radioactive:
 	    if(!getenv("G4RADIOACTIVEDATA") )
 	    {
-	      G4cout << "Radioactive decay data are needed."<<G4endl;
-	      G4cout << "Please set the environmental variable G4RADIOACTIVEDATA"<<G4endl;
-	      G4cout << "to point to your RadiativeDecay directory."<<G4endl;
-	      G4cout << "Data are available from the Geant4 download page."<<G4endl;
-              G4Exception("G4DataQuestionaire", "007", FatalException,
-	                  "Fatal error: Missing mandatory data for this simulation engine");
+	      desc << "Radioactive decay data are needed."<<G4endl
+	           << "Please set the environmental variable G4RADIOACTIVEDATA"<<G4endl
+	      	   << "to point to your RadiativeDecay directory."<<G4endl
+	      	   << "Data are available from the Geant4 download page."<<G4endl<<G4endl;
+	      fail=true;
 	    }
 	    break;
           case lowenergy:
 	    if(!getenv("G4LEDATA") )
 	    {
-	      G4cout << "Low energy electromagnetic data are needed."<<G4endl;
-	      G4cout << "Please set the environmental variable G4LEDATA"<<G4endl;
-	      G4cout << "to point to your G4EMLOW directory."<<G4endl;
-	      G4cout << "Data are available from the Geant4 download page."<<G4endl;
-              G4Exception("G4DataQuestionaire", "007", FatalException,
-	                  "Fatal error: Missing mandatory data for this simulation engine");
+	      desc << "Low energy electromagnetic data are needed."<<G4endl
+	           << "Please set the environmental variable G4LEDATA"<<G4endl
+	      	   << "to point to your G4EMLOW directory."<<G4endl
+	      	   << "Data are available from the Geant4 download page."<<G4endl<<G4endl;
+	      fail=true;
 	    }
 	    break;
           case optical:
 	    /*
 	    if(!getenv("G4REALSURFACEDATA") )
 	    {
-	      G4cout << "Data describing surface propeties for optical photons are needed."<<G4endl;
-	      G4cout << "Please set the environmental variable G4REALSURFACEDATA"<<G4endl;
-	      G4cout << "to point to your RealSurface directory."<<G4endl;
-	      G4cout << "Data are available from the Geant4 download page."<<G4endl;
-              G4Exception("G4DataQuestionaire", "007", FatalException,
-	                  "Fatal error: Missing mandatory data for this simulation engine");
+	      desc << "Data describing surface propeties for optical photons are needed."<<G4endl
+	           << "Please set the environmental variable G4REALSURFACEDATA"<<G4endl
+	      	   << "to point to your RealSurface directory."<<G4endl
+	      	   << "Data are available from the Geant4 download page."<<G4endl<<G4endl;
+	      fail=true;
 	    }
 	    */
 	    break;
           case neutronxs:
 	    if(!getenv("G4NEUTRONXSDATA") )
 	    {
-	      G4cout << "G4NEUTRONXS are needed."<<G4endl;
-	      G4cout << "Please set the environmental variable G4NEUTRONXSDATA"<<G4endl;
-	      G4cout << "to point to your G4NEUTRONXS directory."<<G4endl;
-	      G4cout << "Data are available from the Geant4 download page."<<G4endl;
-              G4Exception("G4DataQuestionaire", "007", FatalException,
-	                  "Fatal error: Missing mandatory data for this simulation engine");
+	      desc << "G4NEUTRONXS are needed."<<G4endl
+	           << "Please set the environmental variable G4NEUTRONXSDATA"<<G4endl
+	      	   << "to point to your G4NEUTRONXS directory."<<G4endl
+	      	   << "Data are available from the Geant4 download page."<<G4endl<<G4endl;
+	      fail=true;
+	    }
+	    break;
+          case abla:
+	    if(!getenv("G4ABLADATA") )
+	    {
+	      desc << "ABLA data are needed."<<G4endl
+	           << "Please set the environmental variable G4ABLADATA"<<G4endl
+	      	   << "to point to your ABLA data directory."<<G4endl
+	      	   << "Data are available from the Geant4 download page."<<G4endl<<G4endl;
+	      fail=true;
 	    }
 	    break;
 	  case no:
@@ -128,16 +160,19 @@ class G4DataQuestionaire
 	  default:
             if(t!=no) 
 	    {
-              G4Exception("G4DataQuestionaire", "007", FatalException,
+              G4Exception("G4DataQuestionaire", "PhysicsLists003", FatalException,
 	                  "data type requested is not known to the system");
 	    }
 	}
      }
+     if (fail) {
+
+        desc << "*** Fatal error: Missing mandatory data for this simulation engine ***"<<G4endl;
+     	G4Exception("G4DataQuestionaire", "PhysicsLists002", FatalException, desc);
+     }
    }
     ~G4DataQuestionaire() {}
 };
-
-// 2002 by J.P. Wellisch
 
 #endif
 

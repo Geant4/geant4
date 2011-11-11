@@ -222,7 +222,6 @@ void G4HadronElasticPhysics::ConstructProcess()
       }
 
     } else if(
-       pname == "He3"            ||
        pname == "anti_proton"    || 
        pname == "anti_alpha"     ||
        pname == "anti_deuteron"  ||

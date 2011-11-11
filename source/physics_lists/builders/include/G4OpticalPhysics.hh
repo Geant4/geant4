@@ -120,7 +120,7 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
     void SetScintillationByParticleType(G4bool );
     void AddScintillationSaturation(G4EmSaturation* );
 
-    void SetTrackSecondariesFirst(G4bool );
+    void SetTrackSecondariesFirst(G4OpticalProcessIndex, G4bool );
     void SetFiniteRiseTime(G4bool );
 
   private:
@@ -143,6 +143,10 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
 
     // The vector of process verbose level
     std::vector<G4int>          fProcessVerbose;
+
+    // The vector of track secondaries options;
+    // the option to track secondaries before finishing their parent track
+    std::vector<G4bool>         fProcessTrackSecondariesFirst;
 
     G4Scintillation*     fScintillationProcess;
     G4Cerenkov*          fCerenkovProcess;
@@ -170,9 +174,6 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
 
     /// the WLS process time profile
     G4String                    fProfile;
-
-    /// option to track secondaries before finishing their parent track
-    G4bool                      fTrackSecondariesFirst;
 
     /// option to set a finite rise-time; Note: the G4Scintillation 
     /// process expects the user to have set the constant material 

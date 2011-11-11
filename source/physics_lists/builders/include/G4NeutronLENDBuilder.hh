@@ -21,7 +21,7 @@
 class G4NeutronLENDBuilder : public G4VNeutronBuilder
 {
   public: 
-    G4NeutronLENDBuilder(G4String);
+    G4NeutronLENDBuilder(G4String eva="");
     virtual ~G4NeutronLENDBuilder();
 
   public: 
