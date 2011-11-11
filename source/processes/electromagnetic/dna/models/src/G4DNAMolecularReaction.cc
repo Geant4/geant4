@@ -48,8 +48,9 @@ G4DNAMolecularReaction::G4DNAMolecularReaction():G4VITReactionProcess(),
 {
     //ctor
     fVerbose = 0;
-    fChanges = 0 ;
     fReactionModel = 0;
+    R = -1;
+    r = -1;
 }
 
 G4DNAMolecularReaction::~G4DNAMolecularReaction()
@@ -64,11 +65,20 @@ G4DNAMolecularReaction::G4DNAMolecularReaction(const G4DNAMolecularReaction& oth
     //copy ctor
     fVerbose 	   = other.fVerbose ;
     fMolReactionTable = other.fMolReactionTable;
+    fReactionModel = 0;
+    R = -1;
+    r = -1;
 }
 
 G4DNAMolecularReaction& G4DNAMolecularReaction::operator=(const G4DNAMolecularReaction& rhs)
 {
     if (this == &rhs) return *this; // handle self assignment
+
+    fVerbose 	   = rhs.fVerbose ;
+    fMolReactionTable = rhs.fMolReactionTable;
+    R = -1;
+    r = -1;
+
     //assignment operator
     return *this;
 }
@@ -88,12 +98,14 @@ G4bool G4DNAMolecularReaction::TestReactibility(const G4Track& trackA,
         G4ExceptionDescription exceptionDescription ("You have to give a reaction model to the molecular reaction process");
         G4Exception("G4DNAMolecularReaction::TestReactibility","MolecularReaction001",
                     FatalErrorInArgument,exceptionDescription);
+        return false; // makes coverity happy
     }
     if(fMolReactionTable==0)
     {
         G4ExceptionDescription exceptionDescription ("You have to give a reaction table to the molecular reaction process");
         G4Exception("G4DNAMolecularReaction::TestReactibility","MolecularReaction002",
                     FatalErrorInArgument,exceptionDescription);
+        return false; // makes coverity happy
     }
 
     // Retrieve reaction range

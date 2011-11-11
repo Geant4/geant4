@@ -64,7 +64,7 @@ G4DNAScreenedRutherfordElasticModel::G4DNAScreenedRutherfordElasticModel
            << highEnergyLimit / MeV << " MeV"
            << G4endl;
   }
-  
+  fParticleChangeForGamma = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

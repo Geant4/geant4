@@ -24,25 +24,20 @@
 // ********************************************************************
 //
 //
-//
+// WARNING : This class is released as a prototype.
+// It might strongly evolve or even disapear in the next releases.
 //
 // ----------------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
 //      History: first implementation by Alfonso Mantero 4 Mar 2009
 //
-// **********************************************************************
+// ----------------------------------------------------------------
 
 #include "G4MolecularDecayTable.hh"
 #include "G4MolecularDecayChannel.hh"
 
 using namespace std;
-
-// ######################################################################
-// ###                      MolecularDecayTable                       ###
-// ######################################################################
-
-// constructors and destructor
 
 G4MolecularDecayTable::G4MolecularDecayTable()
 {;}
@@ -51,23 +46,23 @@ G4MolecularDecayTable::~G4MolecularDecayTable()
 {
     channelsMap::iterator it_map = fDecayChannelsMap.begin();
 
-     for(;it_map != fDecayChannelsMap.end() ; it_map++)
-     {
-         vector<const G4MolecularDecayChannel*>& decayChannels = it_map->second;
-         if(!decayChannels.empty())
-         {
-             for(int i = 0 ; i < (int) decayChannels.size() ; i++)
-             {
-                 if(decayChannels [i])
-                 {
-                     delete decayChannels[i];
-                     decayChannels[i] = 0;
-                 }
-             }
-             decayChannels.clear();
-         }
-     }
-     fDecayChannelsMap.clear();
+    for(;it_map != fDecayChannelsMap.end() ; it_map++)
+    {
+        vector<const G4MolecularDecayChannel*>& decayChannels = it_map->second;
+        if(!decayChannels.empty())
+        {
+            for(int i = 0 ; i < (int) decayChannels.size() ; i++)
+            {
+                if(decayChannels [i])
+                {
+                    delete decayChannels[i];
+                    decayChannels[i] = 0;
+                }
+            }
+            decayChannels.clear();
+        }
+    }
+    fDecayChannelsMap.clear();
 }
 
 G4MolecularDecayTable::G4MolecularDecayTable(const G4MolecularDecayTable& right)
@@ -101,12 +96,15 @@ const vector<const G4MolecularDecayChannel*>* G4MolecularDecayTable::GetDecayCha
 const G4String& G4MolecularDecayTable::GetExcitedState(const G4ElectronOccupancy* conf) const
 {
     statesMap::const_iterator it_exstates  = fExcitedStatesMap.find(*conf);
-    if(it_exstates == fExcitedStatesMap.end())
+    if(it_exstates != fExcitedStatesMap.end())
     {
-        G4String errMsg = "Excited state not found";
-        G4Exception("G4MolecularDecayTable::GetExcitedState","G4MolecularDecayTable001",FatalErrorInArgument, errMsg);
+        return it_exstates->second;
     }
-    return it_exstates->second;
+
+    G4String errMsg = "Excited state not found";
+    G4Exception("G4MolecularDecayTable::GetExcitedState(const G4ElectronOccupancy*)",
+                "G4MolecularDecayTable001",FatalErrorInArgument, errMsg);
+    exit(-1); // makes coverity happy
 }
 
 const G4ElectronOccupancy& G4MolecularDecayTable::GetElectronOccupancy(const G4String& exState) const
@@ -121,7 +119,8 @@ const G4ElectronOccupancy& G4MolecularDecayTable::GetElectronOccupancy(const G4S
     if(statesIter == fExcitedStatesMap.end())
     {
         G4String errMsg = "Excited state" + exState + " not found";
-        G4Exception("G4MolecularDecayTable::GetElectronOccupancy","G4MolecularDecayTable002",FatalErrorInArgument, errMsg);
+        G4Exception("G4MolecularDecayTable::GetElectronOccupancy(const G4String&)",
+                    "G4MolecularDecayTable002",FatalErrorInArgument, errMsg);
     }
     return *conf;
 }
@@ -131,8 +130,9 @@ void G4MolecularDecayTable::AddExcitedState(const G4String& label)
     channelsMap::iterator channelsIter = fDecayChannelsMap.find(label);
     if(channelsIter != fDecayChannelsMap.end())
     {
-        G4String errMsg = "Excited state" + label + " already Exsisting in decayChannelsMap";
-        G4Exception("G4MolecularDecayTable::AddExcitedState","G4MolecularDecayTable003",FatalErrorInArgument, errMsg);
+        G4String errMsg = "Excited state" + label + " already registered in the decay table.";
+        G4Exception("G4MolecularDecayTable::AddExcitedState",
+                    "G4MolecularDecayTable003",FatalErrorInArgument, errMsg);
     }
     fDecayChannelsMap[label] ;
 }
@@ -147,7 +147,8 @@ void G4MolecularDecayTable::AddeConfToExcitedState(const G4String& label, const 
     }
     else
     {
-        G4Exception("G4MolecularDecayTable::AddExcitedState","G4MolecularDecayTable004",FatalErrorInArgument,"Electronic Configuration already Exsisting in excitedStatesMap");
+        G4Exception("G4MolecularDecayTable::AddExcitedState","G4MolecularDecayTable004",
+                    FatalErrorInArgument,"Electronic configuration already registered in the decay table");
     }
 }
 
@@ -179,8 +180,10 @@ void G4MolecularDecayTable::CheckDataConsistency()
 
         if (sum != 1)
         {
-            G4String errMsg = "Deexcitation Channels probabilities in " + channelsIter->first + "excited state don't sum up to 1";
-            G4Exception("G4MolecularDecayTable::CheckDataConsistency","G4MolecularDecayTable005",FatalErrorInArgument, errMsg);
+            G4String errMsg = "Deexcitation Channels probabilities in " + channelsIter->first
+                    + "excited state don't sum up to 1";
+            G4Exception("G4MolecularDecayTable::CheckDataConsistency",
+                        "G4MolecularDecayTable005",FatalErrorInArgument, errMsg);
         }
     }
 

@@ -10,6 +10,9 @@ G4VITProcess::G4VITProcess(const G4String& name, G4ProcessType type) :
 {
         fNbProcess++;
         SetInstantiateProcessState(true);
+        currentInteractionLength            = 0;
+        theInteractionTimeLeft              = 0;
+        theNumberOfInteractionLengthLeft    = 0;
 }
 
 G4VITProcess::G4ProcessState::G4ProcessState()
@@ -24,14 +27,17 @@ G4VITProcess::G4ProcessState::~G4ProcessState()
 
 G4VITProcess::~G4VITProcess()
 {
-	//dtor
-	// G4IT should delete fProcInfo because that the one supposed to hold it
+    //dtor
+    // As the owner, G4IT should delete fProcessState
 }
 
 G4VITProcess::G4VITProcess(const G4VITProcess& other)  : G4VProcess(other), fProcessID(other.fProcessID)
 {
 	//copy ctor
-        fState = 0 ;
+        fState                              = 0 ;
+        currentInteractionLength            = 0;
+        theInteractionTimeLeft              = 0;
+        theNumberOfInteractionLengthLeft    = 0;
 }
 
 G4VITProcess& G4VITProcess::operator=(const G4VITProcess& rhs)

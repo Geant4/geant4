@@ -60,6 +60,7 @@ G4DNAMillerGreenExcitationModel::G4DNAMillerGreenExcitationModel(const G4Particl
   { 
     G4cout << "Miller & Green excitation model is constructed " << G4endl;
   }
+  fParticleChangeForGamma = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -362,13 +363,11 @@ void G4DNAMillerGreenExcitationModel::SampleSecondaries(std::vector<G4DynamicPar
       fParticleChangeForGamma->SetProposedKineticEnergy(newEnergy);
       fParticleChangeForGamma->ProposeLocalEnergyDeposit(excitationEnergy);
 
-      if(G4DNAChemistryManager::Instance()->IsChemistryActived())
-      {
-          const G4Track * theIncomingTrack = fParticleChangeForGamma->GetCurrentTrack();
-          G4DNAChemistryManager::Instance()->CreateWaterMolecule(fExcitedMolecule,
-                                                                level,
-                                                                theIncomingTrack);
-      }
+      const G4Track * theIncomingTrack = fParticleChangeForGamma->GetCurrentTrack();
+      G4DNAChemistryManager::Instance()->CreateWaterMolecule(fExcitedMolecule,
+                                                            level,
+                                                            theIncomingTrack);
+
   }
 
 }

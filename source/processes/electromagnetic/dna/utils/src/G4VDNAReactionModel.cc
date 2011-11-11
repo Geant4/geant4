@@ -14,3 +14,10 @@ G4VDNAReactionModel::~G4VDNAReactionModel()
 {
     fReactionTable = 0;
 }
+
+G4VDNAReactionModel& G4VDNAReactionModel::operator=(const G4VDNAReactionModel& right)
+{
+    if(this == &right) return *this;
+    fReactionTable = right.fReactionTable ;
+    return *this;
+}

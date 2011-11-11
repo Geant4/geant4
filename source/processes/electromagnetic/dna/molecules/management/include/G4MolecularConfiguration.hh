@@ -41,6 +41,7 @@
 #include <G4MoleculeDefinition.hh>
 #include <map>
 #include <vector>
+#include <CLHEP/Utility/memory.h>
 
 struct comparator;
 
@@ -68,6 +69,9 @@ public :
 
     // Get ground state electronic configuration
     static G4MolecularConfiguration* GetMolecularConfiguration(const G4MoleculeDefinition*);
+
+    // Release memory of the mol conf manager
+    static void DeleteManager();
     ///////////////
 
     // Methods
@@ -159,7 +163,7 @@ public :
 protected :
     G4MolecularConfiguration(const G4MoleculeDefinition*, const G4ElectronOccupancy&);
     G4MolecularConfiguration(const G4MolecularConfiguration&);
-    G4MolecularConfiguration & operator=(/*const*/ G4MolecularConfiguration &right);
+    G4MolecularConfiguration & operator=(G4MolecularConfiguration &right);
     ~G4MolecularConfiguration();
     G4MolecularConfiguration* ChangeConfiguration(const G4ElectronOccupancy& newElectronOccupancy);
 
@@ -171,16 +175,19 @@ protected :
         G4MolecularConfigurationManager(){;}
         ~G4MolecularConfigurationManager();
 
-        std::map<const G4MoleculeDefinition*, std::map<const G4ElectronOccupancy, G4MolecularConfiguration*, comparator> > fTable;
+        typedef std::map<const G4MoleculeDefinition*, std::map<const G4ElectronOccupancy, G4MolecularConfiguration*, comparator> > MolecularConfigurationTable;
+        MolecularConfigurationTable fTable;
     };
 
-    static G4MolecularConfigurationManager fManager;
+    static G4MolecularConfigurationManager* fgManager;
+
+    static G4MolecularConfigurationManager* GetManager();
 
     G4double fDynDiffusionCoefficient;
     G4double fDynVanDerVaalsRadius;
     G4double fDynDecayTime;
     G4double fDynMass;
-    G4int fDynCharge;
+    G4int    fDynCharge;
     mutable G4String fName; // mutable allowed this member to be changed in const methods
 };
 

@@ -41,6 +41,9 @@
 #include "G4ITType.hh"
 #include "G4ITModelManager.hh"
 
+/**
+  * G4ITModelHandler holds for two IT types the corresponding model manager
+  */
 class G4ITModelHandler
 {
 public:

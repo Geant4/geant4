@@ -54,8 +54,8 @@ public :
              G4KDNode* /*parent*/, int axis0);
     virtual ~G4KDNode();
 
-    G4KDTree* GetTree();
-    void SetTree(G4KDTree*);
+    inline G4KDTree* GetTree();
+    inline void SetTree(G4KDTree*);
 
     inline const double* GetPosition();
 
@@ -101,7 +101,9 @@ protected :
      * Right : fRight->fPosition[axis] > this->fPosition[axis]
      * Root node : fParent = 0
      */
-
+private :
+    G4KDNode(const G4KDNode& right);
+    G4KDNode& operator=(const G4KDNode& right);
 };
 
 inline int G4KDNode::GetAxis()
@@ -137,6 +139,16 @@ inline G4KDNode* G4KDNode::GetLeft()
 inline G4KDNode* G4KDNode::GetRight()
 {
     return fRight;
+}
+
+inline G4KDTree* G4KDNode::GetTree()
+{
+    return fTree;
+}
+
+inline void G4KDNode::SetTree(G4KDTree* tree)
+{
+    fTree = tree;
 }
 
 #endif // G4KDNODE_HH

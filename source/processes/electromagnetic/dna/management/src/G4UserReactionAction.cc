@@ -41,3 +41,9 @@ G4UserReactionAction::~G4UserReactionAction()
 {;}
 
 G4UserReactionAction::G4UserReactionAction(const G4UserReactionAction& /*other*/){;}
+
+G4UserReactionAction& G4UserReactionAction::operator=(const G4UserReactionAction& rhs)
+{
+    if (this == &rhs) return *this;
+    return *this;
+}

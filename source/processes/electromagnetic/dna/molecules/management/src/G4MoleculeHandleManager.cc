@@ -3,7 +3,7 @@
 
 using namespace std;
 
-auto_ptr<G4MoleculeHandleManager> G4MoleculeHandleManager::fInstance (0);
+G4MoleculeHandleManager* G4MoleculeHandleManager::fInstance (0);
 
 G4MoleculeHandleManager::G4MoleculeHandleManager()
 {
@@ -17,7 +17,6 @@ G4bool G4MoleculeHandleManager::CompMoleculePointer::operator()(const G4Molecule
 
 G4MoleculeHandleManager::~G4MoleculeHandleManager()
 {
-//    G4cout << "G4MoleculeHandleManager::~G4MoleculeHandleManager()" << G4endl;
     if(!fMoleculeHandle.empty())
     {
         MoleculeHandleMap::iterator it = fMoleculeHandle.begin();
@@ -30,16 +29,20 @@ G4MoleculeHandleManager::~G4MoleculeHandleManager()
 
 void G4MoleculeHandleManager::DeleteInstance()
 {
-    fInstance.reset();
+    if(fInstance)
+    {
+        delete fInstance;
+        fInstance = 0;
+    }
 }
 
 G4MoleculeHandleManager* G4MoleculeHandleManager::Instance()
 {
-    if(!fInstance.get())
+    if(!fInstance)
     {
-        fInstance = auto_ptr<G4MoleculeHandleManager>(new G4MoleculeHandleManager);
+        fInstance = new G4MoleculeHandleManager;
     }
-    return fInstance.get();
+    return fInstance;
 }
 
 G4MoleculeHandle G4MoleculeHandleManager::GetMoleculeHandle(const G4Molecule* molecule)

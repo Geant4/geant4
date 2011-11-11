@@ -63,7 +63,7 @@ G4DNAChampionElasticModel::G4DNAChampionElasticModel(const G4ParticleDefinition*
            << highEnergyLimit / MeV << " MeV"
            << G4endl;
   }
-  
+  fParticleChangeForGamma = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

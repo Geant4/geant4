@@ -81,14 +81,15 @@ G4MoleculeDefinition::~G4MoleculeDefinition()
 }
 //___________________________________________________________________________
 void G4MoleculeDefinition::AddeConfToExcitedState(const G4String& exStId,
-                                                  const G4ElectronOccupancy& conf)
+                                                  const G4ElectronOccupancy& conf,
+                                                  double decayTime)
 {
     if (!fDecayTable)
     {
         fDecayTable = new G4MolecularDecayTable();
     }
     fDecayTable->AddeConfToExcitedState(exStId, conf);
-
+    G4MolecularConfiguration::GetMolecularConfiguration(this,conf)->SetDecayTime(decayTime);
 }
 //___________________________________________________________________________
 void G4MoleculeDefinition::SetLevelOccupation(G4int shell, G4int eNb)

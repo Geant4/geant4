@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Contact: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
 // WARNING : This class is released as a prototype.
 // It might strongly evolve or even disapear in the next releases.
@@ -125,6 +126,11 @@ public:
     /** Returns the nomber of atoms compouning the molecule
      */
     G4int GetAtomsNumber() const;
+
+    /** Will set up the correct molecularConfiguration given
+      * an electron configuration
+      */
+    void SetElectronOccupancy(const G4ElectronOccupancy*);
 
     /** Method used in Geant4-DNA to excite water molecules
     */

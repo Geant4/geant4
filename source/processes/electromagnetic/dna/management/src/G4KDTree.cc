@@ -54,9 +54,7 @@ using namespace std;
 //______________________________________________________________________
 struct HyperRect
 {
-    int fDim;
-    double *fMin, *fMax;              /* minimum/maximum coords */
-
+public:
     HyperRect(int dim, const double *min, const double *max)
     {
         fDim = dim;
@@ -120,6 +118,22 @@ struct HyperRect
         }
 
         return true ;
+    }
+
+    int GetDim(){return fDim;}
+    double* GetMin(){return fMin;}
+    double* GetMax(){return fMax;}
+
+protected:
+    int fDim;
+    double *fMin, *fMax;              /* minimum/maximum coords */
+
+private:
+    // should not be used
+    HyperRect& operator=(const HyperRect& rhs)
+    {
+        if(this == &rhs) return *this;
+        return *this;
     }
 };
 
@@ -280,15 +294,15 @@ void G4KDTree::__NearestToPosition(G4KDNode *node, const double *pos, G4KDNode *
         nearer_subtree = node->GetLeft();
         farther_subtree = node->GetRight();
 
-        nearer_hyperrect_coord = rect->fMax + dir;
-        farther_hyperrect_coord = rect->fMin + dir;
+        nearer_hyperrect_coord = rect->GetMax() + dir;
+        farther_hyperrect_coord = rect->GetMin() + dir;
     }
     else
     {
         nearer_subtree = node->GetRight();
         farther_subtree = node->GetLeft();
-        nearer_hyperrect_coord = rect->fMin + dir;
-        farther_hyperrect_coord = rect->fMax + dir;
+        nearer_hyperrect_coord = rect->GetMin() + dir;
+        farther_hyperrect_coord = rect->GetMax() + dir;
     }
 
     if (nearer_subtree)
@@ -391,15 +405,15 @@ void G4KDTree::__NearestToNode(G4KDNode *source_node, G4KDNode *node,
     {
         nearer_subtree = node->GetLeft();
         farther_subtree = node->GetRight();
-        nearer_hyperrect_coord = rect->fMax + dir;
-        farther_hyperrect_coord = rect->fMin + dir;
+        nearer_hyperrect_coord = rect->GetMax() + dir;
+        farther_hyperrect_coord = rect->GetMin() + dir;
     }
     else
     {
         nearer_subtree = node->GetRight();
         farther_subtree = node->GetLeft();
-        nearer_hyperrect_coord = rect->fMin + dir;
-        farther_hyperrect_coord = rect->fMax + dir;
+        nearer_hyperrect_coord = rect->GetMin() + dir;
+        farther_hyperrect_coord = rect->GetMax() + dir;
     }
 
     if (nearer_subtree)

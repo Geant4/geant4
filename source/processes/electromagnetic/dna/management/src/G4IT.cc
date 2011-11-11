@@ -58,8 +58,7 @@ G4IT* GetIT(const G4Track& track)
 // Constructors / Destructors
 ///
 G4IT::G4IT() : G4VUserTrackInformation("G4IT"),
-    fTrack (0), fRecordedTrackPosition (0),
-    fRecordedTrackLocalTime (0.),fRecordedTrackGlobalTime (0.),
+    fTrack (0),
     fPreviousIT(0), fNextIT(0), fTrackingInformation(new G4TrackingInformation())
 {
     fITBox=0;
@@ -67,25 +66,39 @@ G4IT::G4IT() : G4VUserTrackInformation("G4IT"),
     fTrackNode = 0;
 }
 
+// Use only by inheriting classes
 G4IT::G4IT(const G4IT& /*right*/) : G4VUserTrackInformation("G4IT"),
-    fTrack (0), fRecordedTrackPosition (0),
-    fRecordedTrackLocalTime (0.),fRecordedTrackGlobalTime (0.),
+    fTrack (0),
     fPreviousIT(0), fNextIT(0), fTrackingInformation(new G4TrackingInformation())
 {
     fITBox=0;
     fKDNode = 0 ;
     fTrackNode = 0;
+}
+
+// Should not be used
+G4IT& G4IT::operator=(const G4IT& right)
+{
+    if(this == &right) return *this;
+
+    fTrack = 0;
+    fPreviousIT = 0;
+    fNextIT = 0;
+    fTrackingInformation = 0;
+    fITBox = 0;
+    fKDNode = 0 ;
+    fTrackNode = 0;
+    return *this;
 }
 
 G4IT::G4IT(G4Track * aTrack) : G4VUserTrackInformation("G4IT"),
     fPreviousIT(0), fNextIT(0), fTrackingInformation(new G4TrackingInformation())
 {
+    fITBox = 0;
     fTrack = aTrack;
-    fRecordedTrackPosition = fTrack->GetPosition();
-    fRecordedTrackGlobalTime = fTrack->GetGlobalTime();
-    fRecordedTrackLocalTime = fTrack->GetLocalTime();
     fKDNode = 0 ;
     fTrackNode = 0;
+    RecordCurrentPositionNTime();
 }
 
 void G4IT::TakeOutBox()
@@ -122,9 +135,10 @@ G4IT::~G4IT()
 ///
 void G4IT::RecordCurrentPositionNTime()
 {
-    fRecordedTrackPosition = fTrack->GetPosition();
-    fRecordedTrackLocalTime = fTrack->GetLocalTime();
-    fRecordedTrackGlobalTime = fTrack->GetGlobalTime();
+    if(fTrack)
+    {
+        fTrackingInformation->RecordCurrentPositionNTime(fTrack);
+    }
 }
 
 G4bool G4IT::operator<(const G4IT& right) const

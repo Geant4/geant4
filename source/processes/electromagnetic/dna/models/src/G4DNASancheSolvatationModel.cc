@@ -53,6 +53,7 @@ G4DNASancheSolvatationModel::G4DNASancheSolvatationModel(const G4ParticleDefinit
     SetLowEnergyLimit(0.025*eV);
     G4WaterExcitationStructure exStructure ;
     SetHighEnergyLimit(exStructure.ExcitationEnergy(0));
+    fParticleChangeForGamma = 0;
 }
 
 //______________________________________________________________________
@@ -82,12 +83,8 @@ void G4DNASancheSolvatationModel::Initialise(const G4ParticleDefinition* particl
         G4WaterExcitationStructure exStructure ;
         SetHighEnergyLimit(exStructure.ExcitationEnergy(0));
 
-        if(pParticleChange)
-            fParticleChangeForGamma = reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
-        else
-            fParticleChangeForGamma = new G4ParticleChangeForGamma();
+        fParticleChangeForGamma = GetParticleChangeForGamma();
     }
-
 }
 
 //______________________________________________________________________
@@ -180,13 +177,9 @@ void G4DNASancheSolvatationModel::SampleSecondaries(std::vector<G4DynamicParticl
 
             G4ThreeVector displacement = radialDistributionOfProducts (r_mean);
             //______________________________________________________________
-            G4Molecule* e_aq = new G4Molecule(G4Electron_aq::Definition());
             const G4Track * theIncomingTrack = fParticleChangeForGamma->GetCurrentTrack();
-            G4Track * e_aqTrack = e_aq->BuildTrack(picosecond,theIncomingTrack->GetPosition()+displacement);
-            e_aqTrack -> SetTrackStatus(fAlive);
-
-            G4ITStepManager::Instance()->PushTrack(e_aqTrack);
-            G4ITManager<G4Molecule>::Instance()->Push(e_aqTrack);
+            G4ThreeVector finalPosition(theIncomingTrack->GetPosition()+displacement);
+            G4DNAChemistryManager::Instance()->CreateSolvatedElectron(theIncomingTrack,&finalPosition);
         }
 
         fParticleChangeForGamma->ProposeTrackStatus(fStopAndKill);

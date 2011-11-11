@@ -37,11 +37,24 @@
 
 using namespace std;
 
-G4MolecularConfiguration::G4MolecularConfigurationManager G4MolecularConfiguration::fManager;
+//°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+// G4MolecularConfigurationManager
+G4MolecularConfiguration::G4MolecularConfigurationManager* G4MolecularConfiguration::fgManager = 0 ;
+
+G4MolecularConfiguration::G4MolecularConfigurationManager*
+        G4MolecularConfiguration::GetManager()
+{
+    if(!fgManager)
+    {
+        fgManager = new G4MolecularConfiguration::G4MolecularConfigurationManager;
+    }
+
+    return fgManager;
+}
 
 G4MolecularConfiguration::G4MolecularConfigurationManager::~G4MolecularConfigurationManager()
 {
-    std::map<const G4MoleculeDefinition*, std::map<const G4ElectronOccupancy, G4MolecularConfiguration*, comparator> >::iterator it1;
+    G4MolecularConfigurationManager::MolecularConfigurationTable::iterator it1;
     std::map<const G4ElectronOccupancy, G4MolecularConfiguration*, comparator>::iterator it2;
 
     for(it1 = fTable.begin() ; it1 != fTable.end() ; it1++)
@@ -56,12 +69,14 @@ G4MolecularConfiguration::G4MolecularConfigurationManager::~G4MolecularConfigura
     }
 }
 
+//°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+// Static method in G4MolecularConfiguration
 G4MolecularConfiguration* G4MolecularConfiguration::GetMolecularConfiguration(const G4MoleculeDefinition* molDef)
 {
     const G4ElectronOccupancy& elecOcc = *molDef->GetGroundStateElectronOccupancy();
-    if(fManager.fTable[molDef][elecOcc])
+    if(GetManager()->fTable[molDef][elecOcc])
     {
-        return fManager.fTable[molDef][elecOcc];
+        return GetManager()->fTable[molDef][elecOcc];
     }
     else
     {
@@ -73,9 +88,9 @@ G4MolecularConfiguration* G4MolecularConfiguration::GetMolecularConfiguration(co
 G4MolecularConfiguration* G4MolecularConfiguration::GetMolecularConfiguration(const G4MoleculeDefinition* molDef,
         const G4ElectronOccupancy& elecOcc )
 {
-    if(fManager.fTable[molDef][elecOcc])
+    if(GetManager()->fTable[molDef][elecOcc])
     {
-        return fManager.fTable[molDef][elecOcc];
+        return GetManager()->fTable[molDef][elecOcc];
     }
     else
     {
@@ -84,13 +99,21 @@ G4MolecularConfiguration* G4MolecularConfiguration::GetMolecularConfiguration(co
     }
 }
 
+void G4MolecularConfiguration::DeleteManager()
+{
+    if(fgManager) delete fgManager;
+    fgManager = 0;
+}
+
+//°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+// G4MolecularConfiguration
 G4MolecularConfiguration::G4MolecularConfiguration(const G4MoleculeDefinition* moleculeDef,
         const G4ElectronOccupancy& elecOcc)
 {
     fMoleculeDefinition = moleculeDef ;
-    fManager.fTable[fMoleculeDefinition][elecOcc] = this;
+    fgManager->fTable[fMoleculeDefinition][elecOcc] = this;
     std::map<const G4ElectronOccupancy, G4MolecularConfiguration*, comparator>::iterator it ;
-    it = fManager.fTable[moleculeDef].find(elecOcc);
+    it = fgManager->fTable[moleculeDef].find(elecOcc);
     fElectronOccupancy = &(it->first);
 
     fDynCharge = fMoleculeDefinition->GetNbElectrons()-fElectronOccupancy->GetTotalOccupancy();
@@ -112,7 +135,7 @@ G4MolecularConfiguration::~G4MolecularConfiguration()
 
 G4MolecularConfiguration* G4MolecularConfiguration::ChangeConfiguration(const G4ElectronOccupancy& newElectronOccupancy)
 {
-    G4MolecularConfiguration* output = fManager.fTable[fMoleculeDefinition][newElectronOccupancy] ;
+    G4MolecularConfiguration* output = fgManager->fTable[fMoleculeDefinition][newElectronOccupancy] ;
     if(! output)
     {
         output = new G4MolecularConfiguration(fMoleculeDefinition, newElectronOccupancy);
@@ -120,10 +143,10 @@ G4MolecularConfiguration* G4MolecularConfiguration::ChangeConfiguration(const G4
     return output ;
 }
 
-G4MolecularConfiguration& G4MolecularConfiguration::operator=(/*const*/ G4MolecularConfiguration& right)
+G4MolecularConfiguration& G4MolecularConfiguration::operator=(G4MolecularConfiguration& right)
 {
     if (&right==this) return *this;
-    return right;
+    return *this;
 }
 
 

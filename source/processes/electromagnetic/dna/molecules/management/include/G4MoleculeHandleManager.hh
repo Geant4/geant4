@@ -42,7 +42,6 @@
 #include "globals.hh"
 #include "G4ReferenceCountedHandle.hh"
 #include <map>
-#include <memory>
 #include <CLHEP/Utility/memory.h>
 
 class G4Molecule;
@@ -60,7 +59,7 @@ public:
 
 private:
     G4MoleculeHandleManager();
-    static std::auto_ptr<G4MoleculeHandleManager> fInstance;
+    static G4MoleculeHandleManager* fInstance;
 
     struct CompMoleculePointer
     {

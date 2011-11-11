@@ -65,7 +65,7 @@ G4DNASancheExcitationModel::G4DNASancheExcitationModel(const G4ParticleDefinitio
            << highEnergyLimit / eV << " eV"
            << G4endl;
   }
-  
+  fParticleChangeForGamma = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

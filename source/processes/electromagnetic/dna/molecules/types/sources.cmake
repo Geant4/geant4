@@ -56,6 +56,8 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-moltypes
         G4materials
         G4partman
         G4track
+        G4emdna-man
+        G4emdna-molman
     GLOBAL_DEPENDENCIES
         G4geometry
         G4global

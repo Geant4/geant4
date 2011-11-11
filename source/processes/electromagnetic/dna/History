@@ -13,7 +13,40 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-01.11.2011  M.K.                tag emdna-V09-04-37
+10.11.2011  M.K.                tag emdna-V09-04-43
+            Clean classes for release
+            Add comment into source
+            Change name of some methods
+            Transform two independent singleton pointers to auto_ptr
+            in order to prevent the user from deleting those classes
+            (ITStepMan + DNAChemMan)
+
+10.11.2011  M.K.                tag emdna-V09-04-42
+            For safety (at the time of static members destruction)
+            change fgManager in MolConf into a pointer delete by
+            the chemistryManager.
+
+09.11.2011  M.K.                tag emdna-V09-04-41
+            Add friend class G4TrackList_Boundary;
+            in G4TrackListNode.
+            Simplify and improve the use of dnaChemMan
+            Add more convenient methods in userReactionAction
+
+08.11.2011  M.K.                tag emdna-V09-04-40
+            Fix coverity warnings
+
+07.11.2011  M.K.                tag emdna-V09-04-39
+            Add correct types/sub-types for DNAElectronSolvatation
+            DNAMolecularDecay, DNABrownianTransportation, ITTransp
+            Add the possibility to link a decay time to a given
+            electronic configuration while declaring the decay
+            scheme through : G4MoleculeDef::AddeConfToExcitedState
+            Clean classes for release
+
+03.11.2011  M.K.                tag emdna-V09-04-38
+            Add dna libs in sources.cmake
+
+03.11.2011  M.K.                tag emdna-V09-04-37
             Add G4ITStepManager fVerbose
 	    Add dna includes in sources.cmake
      

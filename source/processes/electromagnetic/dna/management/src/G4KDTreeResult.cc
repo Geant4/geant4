@@ -40,8 +40,7 @@ using namespace std;
 
 struct ResNode
 {
-    G4KDNode* fNode;
-    double fDistanceSqr;
+public:
     ResNode():fNode(0),fDistanceSqr(0){;}
     ResNode(double distsqr, G4KDNode* node):fNode(node),fDistanceSqr(distsqr){;}
     ResNode(const ResNode& right)
@@ -54,6 +53,20 @@ struct ResNode
     bool operator<(const ResNode& right) const
     {
         return (fDistanceSqr < right.fDistanceSqr);
+    }
+
+    G4KDNode* GetNode() { return fNode;}
+    double GetDistanceSqr() { return fDistanceSqr;}
+
+protected:
+    G4KDNode* fNode;
+    double fDistanceSqr;
+
+private:
+    ResNode& operator=(const ResNode& rhs)
+    {
+        if(this == &rhs) return *this;
+        return *this;
     }
 };
 
@@ -117,37 +130,37 @@ void G4KDTreeResult::Next()
 void* G4KDTreeResult::GetItem(double*& pos)
 {
     if(!pos)   pos = new double[fTree->GetDim()];
-    memcpy(pos, (*fIterator).fNode->GetPosition(), fTree->GetDim() * sizeof *pos);
-    return (*fIterator).fNode->GetData();
+    memcpy(pos, (*fIterator).GetNode()->GetPosition(), fTree->GetDim() * sizeof *pos);
+    return (*fIterator).GetNode()->GetData();
 }
 
 void* G4KDTreeResult::GetItem(double& x, double& y, double& z)
 {
-    x = (*fIterator).fNode->GetPosition()[0];
-    y = (*fIterator).fNode->GetPosition()[1];
-    z = (*fIterator).fNode->GetPosition()[2];
+    x = (*fIterator).GetNode()->GetPosition()[0];
+    y = (*fIterator).GetNode()->GetPosition()[1];
+    z = (*fIterator).GetNode()->GetPosition()[2];
 
-    return (*fIterator).fNode->GetData();
+    return (*fIterator).GetNode()->GetData();
 }
 
 void* G4KDTreeResult::GetItemNDistanceSQ(double& dist_sq)
 {
-    dist_sq = (*fIterator).fDistanceSqr;
-    return (*fIterator).fNode->GetData();
+    dist_sq = (*fIterator).GetDistanceSqr();
+    return (*fIterator).GetNode()->GetData();
 }
 
 void* G4KDTreeResult::GetItemNDistanceSQ(double*& pos, double& dist_sq)
 {
-    dist_sq = (*fIterator).fDistanceSqr;
+    dist_sq = (*fIterator).GetDistanceSqr();
     return GetItem(pos);
 }
 
 void* G4KDTreeResult::GetItemData()
 {
-    return (*fIterator).fNode->GetData();
+    return (*fIterator).GetNode()->GetData();
 }
 
-const double& G4KDTreeResult::GetDistanceSqr()
+double G4KDTreeResult::GetDistanceSqr()
 {
-    return (*fIterator).fDistanceSqr;
+    return (*fIterator).GetDistanceSqr();
 }

@@ -42,23 +42,28 @@
 #include "G4Track.hh"
 #include "G4TrackFastVector.hh"
 
-typedef G4FastVector<const G4Track, G4TrackFastVectorSize> G4ConstTrackFastVector;
-
 class G4UserReactionAction
 {
-    //--------
-    public: // with description
-    //--------
+public:
+   G4UserReactionAction();
+   G4UserReactionAction(const G4UserReactionAction& );
+   virtual ~G4UserReactionAction();
 
-    // Constructor and destructors
-       G4UserReactionAction();
-       G4UserReactionAction(const G4UserReactionAction& /*other*/);
-       virtual ~G4UserReactionAction();
+   virtual void StartProcessing(){;}
 
-    // Member functions
-       virtual void UserReactionAction(const G4Track& /*trackA*/,const G4Track& /*trackB*/,
-                                       const G4ConstTrackFastVector& /*products*/,
-                                       int /*nbProducts*/){;}
+   // In this method, the user can use :
+   // G4ITStepManager::Instance()->GetGlobalTime(), to know the current simulation time
+   // G4ITStepManager::Instance()->GetMinTime(), to know the selected minimum time
+   virtual void StepAction(){;}
+
+   // This method enables to kill products right after they are generated
+   virtual void UserReactionAction(const G4Track& /*trackA*/,const G4Track& /*trackB*/,
+                                   const G4TrackFastVector& /*products*/,
+                                   int /*nbProducts*/){;}
+   virtual void EndProcessing(){;}
+
+private:
+    G4UserReactionAction& operator=(const G4UserReactionAction& );
 };
 
 #endif // G4VUSERITACTION_H

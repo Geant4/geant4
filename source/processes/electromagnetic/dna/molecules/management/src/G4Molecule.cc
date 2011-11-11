@@ -53,8 +53,8 @@
 
 using namespace std;
 
-double G4Molecule::fgTemperature = 293.15;
-// 20°C, used to shoot a energy
+double G4Molecule::fgTemperature = 310;
+// 37°C, used to shoot an energy
 
 ITImp(G4Molecule)
 
@@ -152,10 +152,6 @@ G4Molecule::G4Molecule(G4MoleculeDefinition * moleculeDefinition) :
     G4VUserTrackInformation("G4Molecule"), G4IT()
 //////////////////////////
 {
-// #ifdef G4DEBUG
-    // G4cout<<"Calling G4Molecule(G4MoleculeDefinition * moleculeDef) constructor"<<G4endl;
-// #endif
-
     Init();
     fMolecularConfiguration = G4MolecularConfiguration::GetMolecularConfiguration(moleculeDefinition);
 }
@@ -215,6 +211,11 @@ G4Molecule::G4Molecule(G4MoleculeDefinition * moleculeDefinition, G4int Level, G
     }
 
     fMolecularConfiguration = G4MolecularConfiguration::GetMolecularConfiguration(moleculeDefinition, dynElectronOccupancy);
+}
+
+void G4Molecule::SetElectronOccupancy(const G4ElectronOccupancy* occ)
+{
+    fMolecularConfiguration = G4MolecularConfiguration::GetMolecularConfiguration(fMolecularConfiguration->GetDefinition(), *occ);
 }
 
 /** Method used in Geant4-DNA to excite water molecules

@@ -80,7 +80,7 @@ G4DNARuddIonisationExtendedModel::G4DNARuddIonisationExtendedModel(const G4Parti
 
   //Mark this model as "applicable" for atomic deexcitation
   SetDeexcitationFlag(true);
-
+  fParticleChangeForGamma = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -628,14 +628,10 @@ void G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicPa
       G4DynamicParticle* dp = new G4DynamicParticle (G4Electron::Electron(),deltaDirection,secondaryKinetic) ;
       fvect->push_back(dp);
 
-      if(G4DNAChemistryManager::Instance()->IsChemistryActived())
-      {
-          const G4Track * theIncomingTrack = fParticleChangeForGamma->GetCurrentTrack();
-          G4DNAChemistryManager::Instance()->CreateWaterMolecule(fIonizedMolecule,
-                                                             ionizationShell,
-                                                             theIncomingTrack);
-      }
-
+      const G4Track * theIncomingTrack = fParticleChangeForGamma->GetCurrentTrack();
+      G4DNAChemistryManager::Instance()->CreateWaterMolecule(fIonizedMolecule,
+                                                         ionizationShell,
+                                                         theIncomingTrack);
   }
 
   // SI - not useful since low energy of model is 0 eV

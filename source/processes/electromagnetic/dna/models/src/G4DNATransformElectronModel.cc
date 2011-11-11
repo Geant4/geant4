@@ -14,6 +14,7 @@ G4DNATransformElectronModel::G4DNATransformElectronModel(const G4ParticleDefinit
     verboseLevel = 0 ;
     SetLowEnergyLimit(0.*eV);
     SetHighEnergyLimit(0.025*eV);
+    fParticleChangeForGamma = 0;
 }
 
 //______________________________________________________________________
@@ -41,11 +42,7 @@ void G4DNATransformElectronModel::Initialise(const G4ParticleDefinition* particl
         isInitialised = true;
         highEnergyLimit = 0.025*eV;
         SetHighEnergyLimit(highEnergyLimit);
-
-        if(pParticleChange)
-            fParticleChangeForGamma = reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
-        else
-            fParticleChangeForGamma = new G4ParticleChangeForGamma();
+        fParticleChangeForGamma = GetParticleChangeForGamma();
     }
 }
 
@@ -86,16 +83,8 @@ void G4DNATransformElectronModel::SampleSecondaries(std::vector<G4DynamicParticl
 
     if (k <= highEnergyLimit)
     {
-        if(G4DNAChemistryManager::Instance()->IsChemistryActived())
-        {
-            G4Molecule* e_aq = new G4Molecule(G4Electron_aq::Definition());
-            const G4Track * track = fParticleChangeForGamma->GetCurrentTrack();
-            G4Track * e_aqTrack = e_aq->BuildTrack(picosecond,track->GetPosition());
-            e_aqTrack -> SetTrackStatus(fAlive);
-
-            G4ITStepManager::Instance()->PushTrack(e_aqTrack);
-            G4ITManager<G4Molecule>::Instance()->Push(e_aqTrack);
-        }
+        const G4Track * track = fParticleChangeForGamma->GetCurrentTrack();
+        G4DNAChemistryManager::Instance()->CreateSolvatedElectron(track);
         fParticleChangeForGamma->ProposeTrackStatus(fStopAndKill);
         fParticleChangeForGamma->ProposeLocalEnergyDeposit(k);
     }

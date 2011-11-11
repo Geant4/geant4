@@ -40,54 +40,189 @@
 #include "G4ITStepManager.hh"
 #include "G4H2O.hh"
 #include "G4DNAMolecularReactionTable.hh"
+#include "G4WaterExcitationStructure.hh"
+#include "G4WaterIonisationStructure.hh"
+#include "G4Electron_aq.hh"
+#include "G4ITManager.hh"
+#include "G4MolecularConfiguration.hh"
 
 using namespace std;
 
-G4DNAChemistryManager* G4DNAChemistryManager::fInstance(0);
+auto_ptr<G4DNAChemistryManager> G4DNAChemistryManager::fInstance(0);
 
-G4DNAChemistryManager::G4DNAChemistryManager() : fActiveChemistry(false)
+G4DNAChemistryManager::G4DNAChemistryManager() :
+    fActiveChemistry(false)
 {
-    ;
+    fExcitationLevel = 0;
+    fIonisationLevel = 0;
 }
 
 G4DNAChemistryManager* G4DNAChemistryManager::Instance()
 {
-    if(!fInstance) fInstance = new G4DNAChemistryManager();
-    return fInstance;
+    if(!fInstance.get()) fInstance = auto_ptr<G4DNAChemistryManager>(new G4DNAChemistryManager());
+    return fInstance.get();
 }
 
 G4DNAChemistryManager::~G4DNAChemistryManager()
 {
+    if (fOutput.is_open())
+    {
+        fOutput.close();
+    }
+    if(fIonisationLevel) delete fIonisationLevel;
+    if(fExcitationLevel) delete fExcitationLevel;
     G4DNAMolecularReactionTable::DeleteInstance();
+    G4MoleculeHandleManager::DeleteInstance();
+    G4MolecularConfiguration::DeleteManager();
+    fInstance.release();
 }
 
 void G4DNAChemistryManager::DeleteInstance()
 {
-    if(fInstance)  delete fInstance;
+    if(fInstance.get())
+        fInstance.reset();
+}
+
+void G4DNAChemistryManager::WriteInto(const G4String& output,
+                                      ios_base::openmode mode)
+{
+    fOutput.open(output.data(), mode);
+    fOutput << std::setprecision(2) << std::scientific;
+
+    fOutput << setw(11) << left << "Parent ID"
+            << setw(10) << "Molecule"
+            << setw(14) << "Elec Modif"
+            << setw(13) << "Energy (eV)"
+            << setw(22) << "X pos of parent [nm]"
+            << setw(22) << "Y pos of parent [nm]"
+            << setw(22) << "Z pos of parent [nm]"
+            << setw(12) << "X pos [nm]"
+            << setw(12) << "Y pos [nm]"
+            << setw(12) << "Z pos [nm]"
+            << G4endl
+            << setw(21) << ""
+            << setw(13) << "1)io/ex=0/1"
+            << G4endl
+            << setw(21) << ""
+            << setw(13) << "2)level=0...5"
+            << G4endl;
+    fWriteFile = true;
+}
+
+void G4DNAChemistryManager::CloseFile()
+{
+    if (fOutput.is_open())
+    {
+        fOutput.close();
+    }
+    fWriteFile = false;
+}
+
+G4WaterExcitationStructure* G4DNAChemistryManager::GetExcitationLevel()
+{
+    if(!fExcitationLevel)
+    {
+        fExcitationLevel = new G4WaterExcitationStructure;
+    }
+    return fExcitationLevel;
+}
+
+G4WaterIonisationStructure* G4DNAChemistryManager::GetIonisationLevel()
+{
+    if(!fIonisationLevel)
+    {
+        fIonisationLevel = new G4WaterIonisationStructure;
+    }
+    return fIonisationLevel;
 }
 
 void G4DNAChemistryManager::CreateWaterMolecule(ElectronicModification modification,
-                                           G4int electronicLevel,
-                                           const G4Track* theIncomingTrack)
+                                                G4int electronicLevel,
+                                                const G4Track* theIncomingTrack)
 {
-    G4Molecule * H2O = new G4Molecule (G4H2O::Definition());
-
-    switch (modification)
+    if(fWriteFile)
     {
+        G4double energy = -1.;
+
+        switch (modification)
+        {
+        case fExcitedMolecule :
+            energy = GetExcitationLevel()->ExcitationEnergy(electronicLevel);
+            break;
+        case fIonizedMolecule :
+            energy = GetIonisationLevel()->IonisationEnergy(electronicLevel);
+            break;
+        }
+
+        fOutput << setw(11) << left << theIncomingTrack->GetTrackID()
+                << setw(10) << "H20"
+                << left << modification
+                << internal <<":"
+                << right <<electronicLevel
+                << left
+                << setw(11) << ""
+                << setw(13) << energy/eV
+                << setw(22) << (theIncomingTrack->GetPosition().x())/nanometer
+                << setw(22) << (theIncomingTrack->GetPosition().y())/nanometer
+                << setw(22) << (theIncomingTrack->GetPosition().z())/nanometer
+                << G4endl;
+    }
+
+    if(fActiveChemistry)
+    {
+        G4Molecule * H2O = new G4Molecule (G4H2O::Definition());
+
+        switch (modification)
+        {
         case fExcitedMolecule :
             H2O -> ExciteMolecule(electronicLevel);
             break;
         case fIonizedMolecule :
             H2O -> IonizeMolecule(electronicLevel);
             break;
+        }
+
+        G4Track * H2OTrack = H2O->BuildTrack(1*picosecond,
+                                             theIncomingTrack->GetPosition());
+
+        H2OTrack -> SetParentID(theIncomingTrack->GetTrackID());
+        H2OTrack -> SetTrackStatus(fStopButAlive);
+        H2OTrack -> SetKineticEnergy(0.);
+
+        G4ITStepManager::Instance()->PushTrack(H2OTrack);
+    }
+}
+
+void G4DNAChemistryManager::CreateSolvatedElectron(const G4Track* theIncomingTrack,
+                                                   G4ThreeVector* finalPosition)
+{
+    if(fWriteFile)
+    {
+        fOutput << setw(11)<< theIncomingTrack->GetTrackID()
+                << setw(10)<< "e_aq"
+                << setw(14)<< -1
+                << setw(13)<< -1.
+                << setw(22)<< (theIncomingTrack->GetPosition().x())/nanometer
+                << setw(22)<< (theIncomingTrack->GetPosition().y())/nanometer
+                << setw(22)<< (theIncomingTrack->GetPosition().z())/nanometer  ;
+
+        if(finalPosition != 0)
+        {
+            fOutput<< setw(12)<< (finalPosition->x())/nanometer << "\t"
+                   << setw(12)<< (finalPosition->y())/nanometer << "\t"
+                   << setw(12)<< (finalPosition->z())/nanometer ;
+        }
+
+        fOutput << G4endl;
     }
 
-    G4Track * H2OTrack = H2O->BuildTrack(1*picosecond,
-                                         theIncomingTrack->GetPosition());
-
-    H2OTrack -> SetParentID(theIncomingTrack->GetTrackID());
-    H2OTrack -> SetTrackStatus(fStopButAlive);
-    H2OTrack -> SetKineticEnergy(0.);
-
-    G4ITStepManager::Instance()->PushTrack(H2OTrack);
+    if(fActiveChemistry)
+    {
+        G4Molecule* e_aq = new G4Molecule(G4Electron_aq::Definition());
+        G4Track * e_aqTrack = e_aq->BuildTrack(picosecond,theIncomingTrack->GetPosition());
+        e_aqTrack -> SetTrackStatus(fAlive);
+        e_aqTrack -> SetParentID(theIncomingTrack->GetTrackID());
+        G4ITStepManager::Instance()->PushTrack(e_aqTrack);
+        G4ITManager<G4Molecule>::Instance()->Push(e_aqTrack);
+    }
 }

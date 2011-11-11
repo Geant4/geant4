@@ -38,11 +38,12 @@
 #ifndef G4ITStepManager_h
 #define G4ITStepManager_h
 
+#include "globals.hh"
 #include "G4TrackList.hh"
-#include <globals.hh>
+#include "G4ITModelHandler.hh"
 #include <vector>
 #include <map>
-#include "G4ITModelHandler.hh"
+#include <memory>
 
 class G4ITTrackingManager;
 class G4ITModelProcessor;
@@ -50,11 +51,19 @@ class G4ITStepProcessor;
 class G4Track ;
 class G4UserReactionAction;
 
+/**
+  * G4ITStepManager enables to synchronize in time
+  * the step of tracks.
+  */
 class G4ITStepManager
 {
 
 public :
     static G4ITStepManager* Instance();
+    /** DeleteInstance should be used instead
+      * of the destructor
+      */
+    static void DeleteInstance();
 
     ~G4ITStepManager();
 
@@ -66,18 +75,19 @@ public :
     void SetEndTime(const double);
 
     inline G4ITModelHandler* GetModelHandler();
-    inline void SetTimeSteps(std::map<double,double>*);
-    inline G4int GetNbSteps();
+    inline void     SetTimeSteps(std::map<double,double>*);
+    inline G4int    GetNbSteps();
     inline G4double GetEndTime();
     inline G4double GetMinTimeStep();
     inline G4double GetGlobalTime();
-    inline void SetUserITAction(G4UserReactionAction* /*userITAction*/);
+    inline void     SetUserAction(G4UserReactionAction* /*userITAction*/);
     inline G4UserReactionAction* GetUserITAction();
 
     inline void SetVerbose(int);
     inline int GetVerbose();
 
 protected:
+
     void DoProcess();
     void SynchronizeTracks();
     void Stepping();
@@ -101,11 +111,18 @@ protected:
     void ExtractILData(G4ITStepProcessor*);
     void ExtractDoItData(G4ITStepProcessor*);
 
+    void AddTrackID(G4Track*);
+
 private:
     G4ITStepManager();
 
+    static std::auto_ptr<G4ITStepManager> fgStepManager ;
+    int fVerbose;
     bool fInitialized;
     bool fRunning ;
+
+    int fNbTracks ;
+    int fNbSteps ;
 
     // Time members
     double fGlobalTime;
@@ -124,8 +141,6 @@ private:
     std::map<double, double>* fpUserTimeSteps ; // One can give time steps in respect to the global time
     double fDefinedMinTimeStep  ; // selected user time step in respect to the global time
     bool fReachedUserTimeLimit ; // if fMinTimeStep == the user time step
-
-    int fNbSteps ;
 
     std::map<G4Track*, G4TrackVectorHandle> fReactingTracks ;
     std::vector<G4Track*> fLeadingTracks ;
@@ -148,13 +163,8 @@ private:
     G4ITModelHandler* fpModelHandler;
 
     G4ITTrackingManager* fpTrackingManager;
-    G4UserReactionAction* fpUserITAction;
+    G4UserReactionAction* fpUserReactionAction;
 
-    int fNbTracks ;
-
-    int fVerbose;
-
-    static G4ITStepManager* fgStepManager ;
 };
 
 inline G4ITModelHandler* G4ITStepManager::GetModelHandler() {return fpModelHandler;}
@@ -188,14 +198,14 @@ inline G4double G4ITStepManager::GetGlobalTime()
     return fGlobalTime ;
 }
 
-inline void G4ITStepManager::SetUserITAction(G4UserReactionAction* userITAction)
+inline void G4ITStepManager::SetUserAction(G4UserReactionAction* userITAction)
 {
-    fpUserITAction = userITAction;
+    fpUserReactionAction = userITAction;
 }
 
 inline G4UserReactionAction* G4ITStepManager::GetUserITAction()
 {
-    return fpUserITAction;
+    return fpUserReactionAction;
 }
 
 inline void G4ITStepManager::SetVerbose(int verbose)

@@ -46,8 +46,17 @@ using namespace std;
 G4DNAMoleculeEncounterStepper::G4DNAMoleculeEncounterStepper() :
     G4VITTimeStepper(),
     fMolecularReactionTable(reference_cast<const G4DNAMolecularReactionTable*>(fReactionTable)),
-    fVerbose(0)
+    fReactionModel(0),fVerbose(0)
 {}
+
+G4DNAMoleculeEncounterStepper& G4DNAMoleculeEncounterStepper::operator=(const G4DNAMoleculeEncounterStepper& rhs)
+{
+    if(this == &rhs) return *this;
+    fReactionModel = 0;
+    fVerbose = rhs.fVerbose;
+    fMolecularReactionTable = rhs.fMolecularReactionTable;
+    return *this;
+}
 
 G4DNAMoleculeEncounterStepper::~G4DNAMoleculeEncounterStepper()
 {}
@@ -58,6 +67,7 @@ G4DNAMoleculeEncounterStepper::G4DNAMoleculeEncounterStepper(const G4DNAMolecule
 {
     fVerbose                 = right.fVerbose ;
     fMolecularReactionTable  = right.fMolecularReactionTable;
+    fReactionModel           = 0;
 }
 
 void G4DNAMoleculeEncounterStepper::PrepareForAllProcessors()
@@ -152,18 +162,19 @@ G4double G4DNAMoleculeEncounterStepper::CalculateStep(const G4Track& trackA, con
         {
 
             G4IT* reactiveB = (G4IT*) results->GetItemData() ;
-            if (reactiveB->GetTrack()->GetTrackStatus() != fAlive)
-            {
-                G4ExceptionDescription exceptionDescription ("The track status of one of the nearby reactants is not fAlive");
-                G4Exception("G4DNAMoleculeEncounterStepper::CalculateStep","MoleculeEncounterStepper001",
-                            FatalErrorInArgument,exceptionDescription);
-                continue ;
-            }
 
             if (reactiveB==0)
             {
                 //  DEBUG
                 //  G4cout<<"Continue 1"<<G4endl;
+                continue ;
+            }
+
+            if (reactiveB->GetTrack()->GetTrackStatus() != fAlive)
+            {
+                G4ExceptionDescription exceptionDescription ("The track status of one of the nearby reactants is not fAlive");
+                G4Exception("G4DNAMoleculeEncounterStepper::CalculateStep","MoleculeEncounterStepper001",
+                            FatalErrorInArgument,exceptionDescription);
                 continue ;
             }
 

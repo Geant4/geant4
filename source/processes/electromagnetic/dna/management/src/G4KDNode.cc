@@ -77,6 +77,32 @@ G4KDNode::G4KDNode(G4KDTree* tree, const double* position, void* data,
     SetPosition(position);
 }
 
+// Copy constructor should not be used
+G4KDNode::G4KDNode(const G4KDNode& ):
+    fPosition(0), fData(0), fTree(0),
+    fLeft(0), fRight(0), fParent(0)
+{
+    fSide = 0;
+    fAxis = 0;
+    fPosition = 0;
+}
+
+// Assignement should not be used
+G4KDNode& G4KDNode::operator=(const G4KDNode& right)
+{
+    if (this == &right) return *this;
+    fPosition = 0;
+    fData = right.fData;
+    fTree = right.fTree;
+    fLeft = right.fLeft;
+    fRight = right.fRight;
+    fParent = right.fParent;
+    fSide = right.fSide;
+    fAxis = right.fAxis;
+    SetPosition(right.fPosition);
+    return *this;
+}
+
 G4KDNode::~G4KDNode()
 {
     delete[] fPosition;

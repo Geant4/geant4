@@ -62,6 +62,8 @@ G4ITStepProcessor::G4ITStepProcessor()
 //    fpUserSteppingAction = 0 ;
 //    fpUserTrackingAction = 0;
     fpTrackingManager = 0;
+    fpNavigator = 0;
+    fpTouchableHandle = 0;
     CleanProcessor();
 }
 //____________________________________________________________________________________
@@ -94,10 +96,16 @@ G4ITStepProcessor::~G4ITStepProcessor()
 //    if(fpUserSteppingAction)             delete fpUserSteppingAction;
 }
 //______________________________________________________________________________
-
-G4ITStepProcessor::G4ITStepProcessor(const G4ITStepProcessor& /*other*/)
+// should not be used
+G4ITStepProcessor::G4ITStepProcessor(const G4ITStepProcessor& rhs)
 {
-
+    verboseLevel = rhs.verboseLevel ;
+//    fpUserSteppingAction = 0 ;
+//    fpUserTrackingAction = 0;
+    fpTrackingManager = 0;
+    fpNavigator = 0;
+    fpTouchableHandle = 0;
+    CleanProcessor();
 }
 //______________________________________________________________________________
 
@@ -618,7 +626,7 @@ G4StepStatus G4ITStepProcessor::DoStepping()
     //---------------------------------
     else  if( fpTrack->GetTrackStatus() == fStopButAlive )
     {
-        if( MAXofAtRestLoops>0 )
+        if( MAXofAtRestLoops>0 && fpAtRestDoItVector != 0) // second condition to make coverity happy
         {
             //-----------------
             // AtRestStepDoIt
@@ -634,7 +642,7 @@ G4StepStatus G4ITStepProcessor::DoStepping()
     else if(fTimeStep > 0.) // Bye, because PostStepIL can return 0 => time =0
     {
 
-        if(! fpITrack)
+        if(fpITrack == 0)
         {
             G4cerr << " !!! Track status : "<<  fpTrack->GetTrackStatus() << G4endl;
             G4cerr << " !!! Particle Name : "<< fpTrack -> GetDefinition() -> GetParticleName() << G4endl;
@@ -644,6 +652,7 @@ G4StepStatus G4ITStepProcessor::DoStepping()
             << "No G4ITStepProcessor::fpITrack found";
             G4Exception("G4ITStepProcessor::DoStepping","ITStepProcessor002",
                         FatalErrorInArgument,exceptionDescription);
+            return fUndefined; // to make coverity happy
         }
 
         if(! fpITrack->GetTrackingInfo()->IsLeadingStep())
@@ -700,26 +709,27 @@ G4StepStatus G4ITStepProcessor::DoStepping()
     // Send G4Step information to Hit/Dig if the volume is sensitive
     fpCurrentVolume = fpStep->GetPreStepPoint()->GetPhysicalVolume();
     StepControlFlag =  fpStep->GetControlFlag();
-//    if( fpCurrentVolume != 0 && StepControlFlag != AvoidHitInvocation)
-//    {
-//        fpSensitive = fpStep->GetPreStepPoint()->
-//                GetSensitiveDetector();
-//        if( fpSensitive != 0 )
-//        {
-//            fpSensitive->Hit(fpStep);
-//        }
-//    }
+/***
+    if( fpCurrentVolume != 0 && StepControlFlag != AvoidHitInvocation)
+    {
+        fpSensitive = fpStep->GetPreStepPoint()->
+                GetSensitiveDetector();
+        if( fpSensitive != 0 )
+        {
+            fpSensitive->Hit(fpStep);
+        }
+    }
 
-    // User intervention process.
-//    if( fpUserSteppingAction != 0 )
-//    {
-//        fpUserSteppingAction->UserSteppingAction(fpStep);
-//    }
-//    G4UserSteppingAction* regionalAction
-//            = fpStep->GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume()->GetRegion()
-//            ->GetRegionalSteppingAction();
-//    if( regionalAction ) regionalAction->UserSteppingAction(fpStep);
-
+     User intervention process.
+    if( fpUserSteppingAction != 0 )
+    {
+        fpUserSteppingAction->UserSteppingAction(fpStep);
+    }
+    G4UserSteppingAction* regionalAction
+            = fpStep->GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume()->GetRegion()
+            ->GetRegionalSteppingAction();
+    if( regionalAction ) regionalAction->UserSteppingAction(fpStep);
+***/
     fpTrackingManager->AppendTrajectory(fpTrack,fpStep);
     // Stepping process finish. Return the value of the StepStatus.
     return *fpStepStatus;
@@ -840,6 +850,7 @@ void G4ITStepProcessor::FindTransportationStep()
         << "No G4ITStepProcessor::fpTrack found";
         G4Exception("G4ITStepProcessor::FindTransportationStep","ITStepProcessor004",
                     FatalErrorInArgument,exceptionDescription);
+        return;
 
     }
     if(!fpITrack)
@@ -849,6 +860,7 @@ void G4ITStepProcessor::FindTransportationStep()
         << "No G4ITStepProcessor::fITrack" ;
         G4Exception("G4ITStepProcessor::FindTransportationStep","ITStepProcessor005",
                     FatalErrorInArgument,exceptionDescription);
+        return;
     }
     if(!(fpITrack->GetTrack()))
     {
@@ -857,6 +869,7 @@ void G4ITStepProcessor::FindTransportationStep()
         << "No G4ITStepProcessor::fITrack->GetTrack()" ;
         G4Exception("G4ITStepProcessor::FindTransportationStep","ITStepProcessor006",
                     FatalErrorInArgument,exceptionDescription);
+        return;
     }
 
     if(fpTransportation)

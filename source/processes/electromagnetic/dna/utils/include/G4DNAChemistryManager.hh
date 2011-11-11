@@ -39,8 +39,13 @@
 #define G4DNACHEMISTRYMANAGER_HH
 
 #include "globals.hh"
+#include "G4ThreeVector.hh"
+#include <fstream>
+#include <memory>
 
 class G4Track;
+class G4WaterExcitationStructure;
+class G4WaterIonisationStructure;
 
 enum ElectronicModification
 {
@@ -50,20 +55,62 @@ enum ElectronicModification
 
 class G4DNAChemistryManager
 {
-private:
-    G4DNAChemistryManager();
-    static G4DNAChemistryManager* fInstance;
-    bool fActiveChemistry;
-
 public:
-    ~G4DNAChemistryManager();
     static G4DNAChemistryManager* Instance();
+
+    /**
+      * You should rather use DeleteInstance than the destructor of this class
+      */
     static void DeleteInstance();
+
+    ~G4DNAChemistryManager();
+
+    /**
+      * Tells the chemMan to write into a file
+      * the position and electronic state of the water molecule
+      * and the position thermalized or not of the solvated electron
+      */
+    void WriteInto(const G4String&, std::ios_base::openmode mode = std::ios_base::out);
+
+    /** Close the file specified with WriteInto
+      */
+    void CloseFile();
     inline G4bool IsChemistryActived();
     inline void SetChemistryActivation(G4bool);
+
+    /**
+      * Method used by DNA physics model to create a water molecule.
+      * The ElectronicModification is a flag telling wheter the molecule
+      * is ionized or excited, the electronic level is calculated by the
+      * model and the IncomingTrack is the track responsible for the creation
+      * of this molecule, for instance an electron.
+      */
     void CreateWaterMolecule(ElectronicModification,
-                        G4int /*electronicLevel*/,
-                        const G4Track* /*theIncomingTrack*/);
+                             G4int /*electronicLevel*/,
+                             const G4Track* /*theIncomingTrack*/);
+
+    /**
+      * On the same idea as the previous method but for solvated electron.
+      * This method should be used by the physics model of the ElectronSolvatation
+      * process.
+      */
+    void CreateSolvatedElectron(const G4Track* /*theIncomingTrack*/,
+                                G4ThreeVector* finalPosition = 0);
+
+protected :
+    G4WaterExcitationStructure* GetExcitationLevel();
+    G4WaterIonisationStructure* GetIonisationLevel();
+
+private:
+    G4DNAChemistryManager();
+    static std::auto_ptr<G4DNAChemistryManager> fInstance;
+    bool fActiveChemistry;
+
+    std::ofstream  fOutput;
+    G4bool fWriteFile;
+
+    G4WaterExcitationStructure* fExcitationLevel;
+    G4WaterIonisationStructure* fIonisationLevel;
 };
 
 inline G4bool G4DNAChemistryManager::IsChemistryActived()

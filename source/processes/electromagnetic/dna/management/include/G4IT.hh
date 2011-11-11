@@ -71,7 +71,6 @@ class G4IT : public virtual G4VUserTrackInformation
 {
 public :
     G4IT();
-    G4IT(const G4IT&);
     G4IT(G4Track*);
     virtual ~G4IT();
 
@@ -112,10 +111,10 @@ public :
     void TakeOutBox();
     inline void SetNode(G4KDNode*);
 
-    inline G4ThreeVector    GetPreStepPosition() const;
-    inline G4double         GetPreStepLocalTime() const;
-    inline G4double         GetPreStepGlobalTime() const;
-    inline G4KDNode*        GetNode() const;
+    inline const G4ThreeVector&    GetPreStepPosition() const;
+    inline G4double                GetPreStepLocalTime() const;
+    inline G4double                GetPreStepGlobalTime() const;
+    inline G4KDNode*               GetNode() const;
 
     inline G4TrackingInformation* GetTrackingInfo(){return fTrackingInformation;}
 
@@ -125,11 +124,9 @@ public :
     virtual const G4ITType GetITType() const = 0 ;
 
 protected :
+    G4IT(const G4IT&);
+    G4IT& operator=(const G4IT&);
     G4Track* fTrack ;
-
-    G4ThreeVector fRecordedTrackPosition;
-    G4double fRecordedTrackLocalTime;
-    G4double fRecordedTrackGlobalTime;
 
 private :
     G4ITBox *   fITBox;
@@ -184,6 +181,11 @@ inline G4IT* G4IT::GetNext()
     return fNextIT;
 }
 
+inline void G4IT::SetTrack(G4Track* track)
+{
+    fTrack = track;
+}
+
 inline G4Track* G4IT::GetTrack()
 {
     return fTrack;
@@ -196,17 +198,17 @@ inline const G4Track* G4IT::GetTrack() const
 
 inline G4double G4IT::GetPreStepGlobalTime() const
 {
-    return fRecordedTrackGlobalTime;
+    return fTrackingInformation->GetPreStepGlobalTime();
 }
 
 inline G4double G4IT::GetPreStepLocalTime() const
 {
-    return fRecordedTrackLocalTime;
+    return fTrackingInformation->GetPreStepLocalTime();
 }
 
-inline G4ThreeVector G4IT::GetPreStepPosition() const
+inline const G4ThreeVector& G4IT::GetPreStepPosition() const
 {
-    return fRecordedTrackPosition;
+    return fTrackingInformation->GetPreStepPosition();
 }
 
 inline const G4IT* G4IT::GetPrevious() const

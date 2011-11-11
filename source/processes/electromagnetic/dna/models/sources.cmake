@@ -104,6 +104,10 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-models
         G4partman
         G4procman
         G4track
+        G4emdna-man
+        G4emdna-molman
+        G4emdna-moltypes
+        G4emdna-utils
     GLOBAL_DEPENDENCIES
         G4geometry
         G4global

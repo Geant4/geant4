@@ -59,6 +59,7 @@ public:
     inline G4VDNAReactionModel* GetReactionModel();
 
 private:
+    G4DNAMoleculeEncounterStepper& operator=(const G4DNAMoleculeEncounterStepper&);
     const G4DNAMolecularReactionTable*& fMolecularReactionTable ;
     G4VDNAReactionModel* fReactionModel;
     G4int fVerbose ;

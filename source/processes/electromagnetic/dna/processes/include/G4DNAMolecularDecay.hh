@@ -48,7 +48,7 @@ class G4MoleculeDefinition;
 class G4DNAMolecularDecay: public G4VITRestProcess
 {
 public:
-    G4DNAMolecularDecay(const G4String& processName = "MolecularDecayProcess",
+    G4DNAMolecularDecay(const G4String& processName = "DNAMolecularDecay",
                             G4ProcessType type = fDecay);
 
     virtual ~G4DNAMolecularDecay();
@@ -69,18 +69,14 @@ public:
     inline void SetVerbose(G4int);
 
     //__________________________________________________________________
-    void SetDecayDisplacer(const G4MoleculeDefinition*, G4VMolecularDecayDisplacer*);
-    G4VMolecularDecayDisplacer* GetDecayDisplacer(const G4MoleculeDefinition*);
+    void SetDecayDisplacer(const G4ParticleDefinition*, G4VMolecularDecayDisplacer*);
+    G4VMolecularDecayDisplacer* GetDecayDisplacer(const G4ParticleDefinition*);
 
 protected:
     //__________________________________________________________________
     // Make the decay
-    virtual G4VParticleChange* DecayIt(
-        const G4Track& /*track*/,
-        const G4Step& /*stepData*/);
-
-    virtual G4double GetMeanLifeTime(const G4Track& aTrack  ,
-                                     G4ForceCondition*);
+    virtual G4VParticleChange* DecayIt(const G4Track& ,const G4Step&);
+    virtual G4double GetMeanLifeTime(const G4Track&,G4ForceCondition*);
 
 private:
     G4DNAMolecularDecay();
@@ -88,10 +84,9 @@ private:
     G4DNAMolecularDecay & operator=(const G4DNAMolecularDecay &right);
 
 private:
-    G4double      fRemainderLifeTime;
     G4bool fDecayAtFixedTime ;
 
-    typedef std::map<const G4MoleculeDefinition*, G4VMolecularDecayDisplacer*>  DecayDisplacementMap;
+    typedef std::map<const G4ParticleDefinition*, G4VMolecularDecayDisplacer*>  DecayDisplacementMap;
     DecayDisplacementMap fDecayDisplacementMap;
 
     G4int fVerbose;
@@ -104,8 +99,7 @@ inline void G4DNAMolecularDecay::SetVerbose(G4int verbose)
 
 inline G4double G4DNAMolecularDecay::AtRestGetPhysicalInteractionLength(
     const G4Track& track,
-    G4ForceCondition* condition
-    )
+    G4ForceCondition* condition)
 {
     if(fDecayAtFixedTime)
     {

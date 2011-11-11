@@ -50,11 +50,14 @@ G4ITReactionChange::~G4ITReactionChange()
     fSecondaries = 0 ;
 }
 
-G4ITReactionChange::G4ITReactionChange(const G4ITReactionChange& /*other*/)
+// Should not be used
+G4ITReactionChange::G4ITReactionChange(const G4ITReactionChange& /*other*/) :
+    fSecondaries(0)
 {
     //copy ctor
 }
 
+// should not be used
 G4ITReactionChange& G4ITReactionChange::operator=(const G4ITReactionChange& rhs)
 {
     if (this == &rhs) return *this; // handle self assignment
@@ -133,15 +136,16 @@ G4VParticleChange* G4ITReactionChange::GetParticleChange(const G4Track* track)
 const G4Track* G4ITReactionChange::GetTrackA()
 {
     std::map<const G4Track*, G4VParticleChange*>::iterator it = fParticleChange.begin();
-    if(it == fParticleChange.end())
+    if(it != fParticleChange.end())
     {
-        G4ExceptionDescription exceptionDescription ;
-        exceptionDescription << "No track A found ! Have you initialized the ReactionChange ?";
-        G4Exception("G4ITReactionChange::GetTrackA","ITReactionChange001",
-                    FatalErrorInArgument,exceptionDescription);
+        return it->first;
     }
 
-    return it->first;
+    G4ExceptionDescription exceptionDescription ;
+    exceptionDescription << "No track A found ! Have you initialized the ReactionChange ?";
+    G4Exception("G4ITReactionChange::GetTrackA","ITReactionChange001",
+                FatalErrorInArgument,exceptionDescription);
+    return 0;
 }
 
 const G4Track* G4ITReactionChange::GetTrackB()

@@ -45,7 +45,7 @@ class G4SafetyHelper;
 class G4DNABrownianTransportation : public G4ITTransportation
 {
 public:
-    G4DNABrownianTransportation( G4int verbosityLevel= 1);
+    G4DNABrownianTransportation(const G4String& aName =  "DNABrownianTransportation", G4int verbosityLevel= 1);
     AddClone(G4VITProcess,G4DNABrownianTransportation)
     virtual ~G4DNABrownianTransportation();
     G4DNABrownianTransportation(const G4DNABrownianTransportation& other);
@@ -69,7 +69,6 @@ public:
 
 protected:
     void Diffusion(const G4Track& track);
-    G4int fVerbose ;
     G4SafetyHelper* fpSafetyHelper;
 };
 

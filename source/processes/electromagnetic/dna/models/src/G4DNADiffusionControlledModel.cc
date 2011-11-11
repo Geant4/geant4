@@ -13,6 +13,14 @@ G4DNADiffusionControlledModel::G4DNADiffusionControlledModel(const G4DNADiffusio
 {
     fReactionData = 0 ;
 }
+
+G4DNADiffusionControlledModel& G4DNADiffusionControlledModel::operator=(const G4DNADiffusionControlledModel& right)
+{
+    if(this == &right) return *this;
+    fReactionData = 0;
+    return *this;
+}
+
 G4DNADiffusionControlledModel::~G4DNADiffusionControlledModel()
 {
     fReactionData = 0 ;

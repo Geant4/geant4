@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Contact: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
 // WARNING : This class is released as a prototype.
 // It might strongly evolve or even disapear in the next releases.
@@ -42,11 +43,7 @@
 
 class G4MolecularDecayChannel;
 
-// ######################################################################
-// ###                  MolecularDecayTable                           ###
-// ######################################################################
-
-
+//°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
 struct eOccComp
 {
     bool operator() (const G4ElectronOccupancy& occ1, const G4ElectronOccupancy& occ2) const
@@ -79,31 +76,37 @@ struct eOccComp
     }
 };
 
+//°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
 typedef std::map<G4ElectronOccupancy, G4String, eOccComp>  statesMap;
 typedef std::map<G4String, std::vector<const G4MolecularDecayChannel*>, std::less <G4String> > channelsMap;
 
+/** Class Description
+ *  G4MolecularDecayTable operates as a container of deexcitation modes
+ *  for excited or ionized molecules
+ */
+
 class G4MolecularDecayTable
 {
-    // Class Description
-    // this class operates as a container of deexcitation modes
-    // of excited or ionixed molecules
 
-public: //With Description
+public:
 
-    G4MolecularDecayTable(); // the table must be build interactiovley
+    G4MolecularDecayTable();
     ~G4MolecularDecayTable();
     G4MolecularDecayTable(const G4MolecularDecayTable&);
     G4MolecularDecayTable & operator=(const G4MolecularDecayTable &right);
 
 public:
 
+    //°°°°°°°°°°°°°°°°°°
+    // Create the table
+    ////
     // methods to construct the table "interactively"
     void  AddExcitedState(const G4String&); // creates an empty excited state
 
     // creates or adds to an existing excited state an electronic configuration
     void  AddeConfToExcitedState(const G4String&,const G4ElectronOccupancy&);
     void  AddDecayChannel(const G4String&,const G4MolecularDecayChannel*);
-    void  CheckDataConsistency();
+    void  CheckDataConsistency() ;
     // Checks that probabilities sum up to 100% for each excited state
 
 //------------Inline fuctions------------

@@ -49,6 +49,11 @@ G4TrackingInformation::G4TrackingInformation() :
 {
     //ctor
     fpTrajectory_Lock = 0;
+    fRecordedTrackGlobalTime = -1;
+    fRecordedTrackLocalTime = -1;
+    fSafety = -1;
+    fPreviousStepSize = -1;
+
 }
 
 G4TrackingInformation::~G4TrackingInformation()
@@ -65,11 +70,22 @@ G4TrackingInformation::~G4TrackingInformation()
     fProcessState.clear();
 }
 
-G4TrackingInformation::G4TrackingInformation(const G4TrackingInformation& /*other*/)
+// should not be used
+G4TrackingInformation::G4TrackingInformation(const G4TrackingInformation& /*other*/) :
+    fStepLeader                     (false),
+    fStepStatus                     (fUndefined),
+    fPhysicalStep                   (-1.),
+    fTouchableHandle                (0)
 {
     //copy ctor
+    fpTrajectory_Lock = 0;
+    fRecordedTrackGlobalTime = -1;
+    fRecordedTrackLocalTime = -1;
+    fSafety = -1;
+    fPreviousStepSize = -1;
 }
 
+// should not be used
 G4TrackingInformation& G4TrackingInformation::operator=(const G4TrackingInformation& rhs)
 {
     if (this == &rhs) return *this; // handle self assignment
@@ -90,3 +106,14 @@ G4ProcessState_Lock* G4TrackingInformation::GetProcessState(G4int index)
 
     return fProcessState[index];
 }
+
+void G4TrackingInformation::RecordCurrentPositionNTime(G4Track* track)
+{
+    if(track)
+    {
+        fRecordedTrackPosition = track->GetPosition();
+        fRecordedTrackLocalTime = track->GetLocalTime();
+        fRecordedTrackGlobalTime = track->GetGlobalTime();
+    }
+}
+

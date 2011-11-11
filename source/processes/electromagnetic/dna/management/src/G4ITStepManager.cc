@@ -47,7 +47,7 @@
 
 using namespace std;
 
-G4ITStepManager* G4ITStepManager::fgStepManager = 0 ;
+auto_ptr<G4ITStepManager> G4ITStepManager::fgStepManager(0) ;
 
 template<typename T>
 inline bool IsInf(T value)
@@ -59,9 +59,16 @@ inline bool IsInf(T value)
 
 G4ITStepManager* G4ITStepManager::Instance()
 {
-    if(!fgStepManager) fgStepManager = new G4ITStepManager();
-    return fgStepManager ;
+    if(fgStepManager.get() == 0)
+        fgStepManager = auto_ptr<G4ITStepManager>(new G4ITStepManager());
+    return fgStepManager.get() ;
 } 
+//_________________________________________________________________________
+
+void G4ITStepManager::DeleteInstance()
+{
+    if(fgStepManager.get()) fgStepManager.reset();
+}
 //_________________________________________________________________________
 
 G4ITStepManager::G4ITStepManager()
@@ -90,7 +97,7 @@ G4ITStepManager::G4ITStepManager()
     fRunning = false;
     fInitialized = false;
 
-    fpUserITAction = 0;
+    fpUserReactionAction = 0;
     fpTrackingManager = 0;
 
     fNbTracks = -1;
@@ -98,11 +105,27 @@ G4ITStepManager::G4ITStepManager()
     fpTrackingManager = new G4ITTrackingManager();
 
     fVerbose = 0;
+    fDefinedMinTimeStep = -1.;
+    fReachedUserTimeLimit = false;
+    fTmpEndTime = -1.;
+    fTmpGlobalTime = -1.;
+}
+//_________________________________________________________________________
+
+G4ITStepManager::~G4ITStepManager()
+{
+    if(fpMasterStepProcessor) delete fpMasterStepProcessor ;
+    if(fpMasterModelProcessor) delete fpMasterModelProcessor ;
+    delete G4ITTypeManager::Instance();
+    ClearList();
+    if(fpTrackingManager) delete fpTrackingManager;
+    fgStepManager.release();
 }
 //_________________________________________________________________________
 
 void G4ITStepManager::ClearList()
 {
+    if(fNbTracks == 0) return;
     if(fpMainList)
     {
         delete fpMainList;
@@ -115,27 +138,21 @@ void G4ITStepManager::ClearList()
         fpWaitingList = 0;
     }
 
-    std::map<double,G4TrackList* >::iterator fDelayedList_i = fDelayedList.begin() ;
-
-    for(; fDelayedList_i != fDelayedList.end() ; fDelayedList_i++)
+    if(!fDelayedList.empty())
     {
-        if(fDelayedList_i->second)
-            delete (fDelayedList_i->second);
-        fDelayedList_i->second = 0 ;
+        std::map<double,G4TrackList* >::iterator fDelayedList_i = fDelayedList.begin() ;
+
+        for(; fDelayedList_i != fDelayedList.end() ; fDelayedList_i++)
+        {
+            if(fDelayedList_i->second)
+                delete (fDelayedList_i->second);
+            fDelayedList_i->second = 0 ;
+        }
+        fDelayedList.clear();
     }
-    fDelayedList.clear();
     fNbTracks = -1;
 }
-//_________________________________________________________________________
 
-G4ITStepManager::~G4ITStepManager()
-{
-    delete fpMasterStepProcessor ;
-    delete fpMasterModelProcessor ;
-    delete G4ITTypeManager::Instance();
-    G4ITStepManager::Instance() -> ClearList();
-    delete fpTrackingManager;
-}
 //_________________________________________________________________________
 
 void G4ITStepManager::Initialize()
@@ -187,10 +204,14 @@ void G4ITStepManager::Process()
 
     // ___________________
     fRunning = true ;
+    if(fpUserReactionAction) fpUserReactionAction->StartProcessing();
+
     if( ! fDelayedList.empty())     SynchronizeTracks() ;
     DoProcess() ;
 
+    if(fpUserReactionAction) fpUserReactionAction->EndProcessing();
     EndTracking();
+
 
     // ___________________
     fRunning = false;
@@ -372,6 +393,8 @@ void G4ITStepManager::Stepping()
     //                 << G4endl;
     //        G4cout << "ComputeInteractionLength()" << G4endl;
 
+    if(fpUserReactionAction) fpUserReactionAction->StepAction();
+
 
     if(fMinTimeStep > 0)
     {
@@ -430,12 +453,13 @@ void G4ITStepManager::FindUserPreDefinedTimeStep()
 {
     if(fUsePreDefinedTimeSteps)
     {
-        if(! fpUserTimeSteps)
+        if(fpUserTimeSteps == 0)
         {
             G4ExceptionDescription exceptionDescription ;
             exceptionDescription << "You are asking to use user defined steps but you did not give any.";
             G4Exception("G4ITStepManager::FindUserPreDefinedTimeStep","ITStepManager004",
                         FatalErrorInArgument,exceptionDescription);
+            return ; // makes coverity happy
         }
         map<double, double>::iterator fpUserTimeSteps_i   = fpUserTimeSteps->upper_bound(fGlobalTime) ;
         map<double, double>::iterator fpUserTimeSteps_low = fpUserTimeSteps->lower_bound(fGlobalTime) ;
@@ -501,6 +525,7 @@ void G4ITStepManager::CalculateMinStep()
         exceptionDescription << " but only after initializing the run manager.";
         G4Exception("G4ITStepManager::CalculateMinStep","ITStepManager005",
                     FatalErrorInArgument,exceptionDescription);
+        return ; // makes coverity happy
     }
 
     fpMasterModelProcessor -> InitializeStepper(fGlobalTime, fDefinedMinTimeStep) ;
@@ -516,6 +541,7 @@ void G4ITStepManager::CalculateMinStep()
             exceptionDescription << "No track found.";
             G4Exception("G4ITStepManager::CalculateMinStep","ITStepManager006",
                         FatalErrorInArgument,exceptionDescription);
+            return ; // makes coverity happy
         }
 
         G4TrackStatus trackStatus = track->GetTrackStatus();
@@ -799,8 +825,7 @@ void G4ITStepManager::PushSecondaries(G4ITStepProcessor* SP)
     for( ; secondaries_i != secondaries->end() ; secondaries_i++)
     {
         G4Track* secondary = *secondaries_i ;
-        secondary->SetTrackID(fNbTracks);
-        fNbTracks--;
+        AddTrackID(secondary);
         fSecondaries.push_back(secondary);
     }
 
@@ -839,16 +864,16 @@ void G4ITStepManager::ComputeInteractionBetweenTracks()
 
             G4int nbSecondaries = changes->GetNumberOfSecondaries();
 
-            if(fpUserITAction)
+            if(fpUserReactionAction)
             {
-                const G4ConstTrackFastVector* trackVector = (G4ConstTrackFastVector*) changes->GetfSecondary();
-                fpUserITAction->UserReactionAction(*trackA, *trackB, *trackVector, nbSecondaries);
+                const G4TrackFastVector* productsVector = changes->GetfSecondary();
+                fpUserReactionAction->UserReactionAction(*trackA, *trackB, *productsVector, nbSecondaries);
             }
 
 #ifdef G4VERBOSE
             if(fVerbose)
             {
-                G4cout << "At time : " << setw(7) << left << G4BestUnit(fGlobalTime,"Time")
+                G4cout << "At time : " << setw(7) << G4BestUnit(fGlobalTime,"Time")
                        << " Reaction : "
                        << GetIT(trackA)->GetName() << " (" << trackA->GetTrackID()
                        << ") + "
@@ -867,12 +892,8 @@ void G4ITStepManager::ComputeInteractionBetweenTracks()
 
                     G4Track* secondary = changes->GetSecondary(i);
 
-                    if(secondary->GetTrackID() == 0)
-                    {
-                        if(fNbTracks == 0) fNbTracks = -1;
-                        secondary->SetTrackID(fNbTracks);
-                        fNbTracks--;
-                    }
+                    AddTrackID(secondary);
+
                     fpMainList->push_back(secondary);
 
                     if(secondary->GetGlobalTime() - fGlobalTime > (1-1/100)*fGlobalTime)
@@ -968,6 +989,16 @@ void G4ITStepManager::MergeSecondariesWithMainList()
 {
     fSecondaries.transferTo(fpMainList);
 }
+
+//_________________________________________________________________________
+
+void G4ITStepManager::AddTrackID(G4Track* track)
+{
+    if(fNbTracks == 0) fNbTracks = -1;
+    track->SetTrackID(fNbTracks);
+    fNbTracks--;
+}
+
 //_________________________________________________________________________
 
 void G4ITStepManager::PushTrack(G4Track* track)
@@ -1002,12 +1033,7 @@ void G4ITStepManager::_PushTrack(G4Track* track)
     }
 
     // Set track ID
-    if(track->GetTrackID() == 0)
-    {
-        if(fNbTracks == 0) fNbTracks = -1;
-        track->SetTrackID(fNbTracks);
-        fNbTracks--;
-    }
+    AddTrackID(track);
 
     // Push the track to the rigth track list :
     // If the track time is the same as the main track list,

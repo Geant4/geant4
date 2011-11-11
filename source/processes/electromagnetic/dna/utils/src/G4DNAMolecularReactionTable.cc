@@ -117,7 +117,9 @@ void G4DNAMolecularReactionTable::DeleteInstance()
 {
     // DEBUG
 //        G4cout << "G4MolecularReactionTable::DeleteInstance" << G4endl;
+    if(fInstance)
         delete fInstance;
+    fInstance = 0;
 }
 //_____________________________________________________________________________________
 G4DNAMolecularReactionTable::G4DNAMolecularReactionTable() : G4ITReactionTable(),
@@ -359,6 +361,7 @@ G4DNAMolecularReactionTable::GetReactionData(const G4Molecule* reactive1,
         G4String errMsg = "No reaction table was implemented for this molecule Definition : "
                 + reactive1 -> GetName();
         G4Exception("G4MolecularInteractionTable::CanReactWith","",FatalErrorInArgument, errMsg);
+        exit(-1);
     }
 
     std::map<const G4Molecule*,
@@ -371,6 +374,7 @@ G4DNAMolecularReactionTable::GetReactionData(const G4Molecule* reactive1,
         G4String errMsg = "No reaction table was implemented for this molecule Definition : "
                 + reactive2 -> GetName();
         G4Exception("G4MolecularInteractionTable::CanReactWith","",FatalErrorInArgument, errMsg);
+        exit(-1);
     }
 
     return (it2->second);

@@ -38,6 +38,8 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/lowener
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/utils/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/dna/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/dna/molecules/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/dna/molecules/types/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 
 #
@@ -79,6 +81,9 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-utils
         G4partman
         G4procman
         G4track
+        G4emdna-man
+        G4emdna-molman
+        G4emdna-moltypes
     GLOBAL_DEPENDENCIES
         G4geometry
         G4global

@@ -56,6 +56,11 @@ G4ITTrackingManager::G4ITTrackingManager()
     fpUserTrackingAction = trackingManager->GetUserTrackingAction();
     fSetNewUserTrackingAction = false;
 ***/
+
+    // if you uncomment the above part, please comment the part below
+    fStoreTrajectory = 0;
+    fVerboseLevel = 0;
+    fSetNewUserTrackingAction = false;
 }
 //___________________________________________________
 void G4ITTrackingManager::Initialize()

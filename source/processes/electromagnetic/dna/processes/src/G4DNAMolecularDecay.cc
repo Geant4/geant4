@@ -44,10 +44,10 @@
 using namespace std;
 
 G4DNAMolecularDecay::G4DNAMolecularDecay(const G4String& processName,
-                                                 G4ProcessType) : G4VITRestProcess(processName, fDecay)
+                                                 G4ProcessType type) : G4VITRestProcess(processName, type)
 {
     // set Process Sub Type
-    SetProcessSubType(static_cast<int>(201));
+    SetProcessSubType(59); // DNA sub-type
     enableAlongStepDoIt = false;
     enablePostStepDoIt = false;
     enableAtRestDoIt=true;
@@ -64,7 +64,6 @@ G4DNAMolecularDecay::G4DNAMolecularDecay(const G4String& processName,
     pParticleChange = &aParticleChange;
 
     fDecayAtFixedTime = true ;
-    SetProcessSubType(60);
 }
 
 G4DNAMolecularDecay::~G4DNAMolecularDecay()
@@ -95,9 +94,9 @@ G4bool G4DNAMolecularDecay::IsApplicable(const G4ParticleDefinition& aParticleTy
     if(aParticleType.GetParticleType()=="Molecule")
     {
         #ifdef G4VERBOSE
-        if(verboseLevel>1)
+        if(fVerbose>1)
         {
-            G4cout<<"G4MolecularDecayProcess::IsApplicable(";
+            G4cout<<"G4MolecularDecay::IsApplicable(";
             G4cout<<aParticleType.GetParticleName()<<",";
             G4cout<<aParticleType.GetParticleType()<<")"<<G4endl;
         }
@@ -110,17 +109,16 @@ G4bool G4DNAMolecularDecay::IsApplicable(const G4ParticleDefinition& aParticleTy
     }
 }
 
-G4double G4DNAMolecularDecay::GetMeanLifeTime(const G4Track& /*track*/  ,
+G4double G4DNAMolecularDecay::GetMeanLifeTime(const G4Track& track  ,
                                                   G4ForceCondition*)
 {
-    /* G4double output = GetMolecule(aTrack)-> GetDecayTime() - track.GetProperTime() ;
-        return (output > 0 ? output : 0 );*/
-    return 0.; // for water molecules in DNA
+    G4double output = GetMolecule(track)-> GetDecayTime() - track.GetProperTime() ;
+    return (output > 0 ? output : 0 );
 }
 
 G4VParticleChange* G4DNAMolecularDecay::DecayIt(
     const G4Track& track,
-    const G4Step& /*step*/)
+    const G4Step& )
 {
     // DEBUG
     //    G4cout << "Is calling G4MolecularDecayProcess::DecayIt" << G4endl;
@@ -130,12 +128,9 @@ G4VParticleChange* G4DNAMolecularDecay::DecayIt(
     const G4MoleculeDefinition* moleculeDefinition = theMotherMolecule->GetDefinition();
 
 //    DEBUG
-//    if(fVerbose > 1)
-//    {
 //        G4cout <<"Calling G4MolecularDecayProcess::DecayIt"<<G4endl;
 //        G4cout << "The mother molecule state : " << G4endl;
 //        theMotherMolecule -> PrintState();
-//    }
 
     if(moleculeDefinition-> GetDecayTable())
     {
@@ -144,7 +139,6 @@ G4VParticleChange* G4DNAMolecularDecay::DecayIt(
 
         G4int DecayVectorSize = DecayVector-> size();
 //        DEBUG
-//        if(fVerbose > 1)
 //            G4cout<< "Number of decay channels : " << DecayVectorSize<<G4endl;
         G4double RdmValue = G4UniformRand();
 
@@ -160,10 +154,7 @@ G4VParticleChange* G4DNAMolecularDecay::DecayIt(
         while(i< DecayVectorSize);
 
 //        DEBUG
-//        if(fVerbose > 1)
-//        {
 //            G4cout<< "Selected Decay channel : " << decayChannel->GetName()<<G4endl;
-//        }
 
         G4double decayEnergy = decayChannel->GetEnergy();
         G4int nbProducts = decayChannel->GetNbProducts();
@@ -171,10 +162,7 @@ G4VParticleChange* G4DNAMolecularDecay::DecayIt(
         if(decayEnergy)
         {
 //            DEBUG
-//            if(fVerbose > 1)
-//            {
 //                G4cout<<"Deposit energy :" <<decayChannel->GetEnergy()/eV << " eV"<<G4endl;
-//            }
 
             aParticleChange.ProposeLocalEnergyDeposit(decayChannel->GetEnergy());
         }
@@ -183,13 +171,10 @@ G4VParticleChange* G4DNAMolecularDecay::DecayIt(
         {
 
 //            DEBUG
-//            if(fVerbose > 1)
-//            {
-//                G4cout<<"Number of products :" <<productsVectorSize<<G4endl;
-//            }
+//                G4cout<<"Number of products :" <<nbProducts<<G4endl;
 
             vector<G4ThreeVector> ProductsDisplacement(nbProducts);
-            G4ThreeVector theMotherMoleculeDisplacement = G4ThreeVector(0,0,0);
+            G4ThreeVector theMotherMoleculeDisplacement;
 
             DecayDisplacementMap::iterator it = fDecayDisplacementMap.find(moleculeDefinition);
 
@@ -205,59 +190,49 @@ G4VParticleChange* G4DNAMolecularDecay::DecayIt(
                 errMsg += theMotherMolecule->GetName() +"]" ;
                 G4Exception("G4MolecularDecayProcess::DecayIt","",FatalErrorInArgument, errMsg);
             }
-//          DEBUG
-//          G4cout<<"ProductsDisplacement size = " << ProductsDisplacement.size()<<G4endl;
 
             aParticleChange.SetNumberOfSecondaries(nbProducts);
 
+#ifdef G4VERBOSE
             if(fVerbose)
             {
                 G4cout<<"Decay Process : "
                      << theMotherMolecule->GetName()
-                     <<" "<< decayChannel->GetName() ;
-//                DEBUG
-//                if(fVerbose>1)
-//                {
-//                    G4cout<<" | Track ID : "<< track.GetTrackID()
-//                         <<" | Position : "<<track.GetPosition() / nanometer << "[nm]";
-//                }
-                G4cout<< G4endl;
+                     << "(trackID :" << track.GetTrackID() << ") "
+                     << decayChannel->GetName()
+                     << G4endl;
             }
+#endif
 
             for (G4int j=0; j<nbProducts ; j++)
             {
                 G4Molecule* product = new G4Molecule(*decayChannel->GetProduct(j));
 
                 // create a new track object
-                G4Track* secondary = product->BuildTrack(picosecond/*track.GetGlobalTime()*/,track.GetPosition()
+                // Be carefull as this processes is dedicated to be used in the DNA module
+                // The molecular decay will happen one picosecond after the start of the simulation.
+                // This may be seen as a bug and will be hopefully improve in the next releases
+                G4Track* secondary = product->BuildTrack(picosecond,track.GetPosition()
                                                          + theMotherMoleculeDisplacement + ProductsDisplacement[j]);
-//                DEBUG
-//                if(fVerbose>1)
-//                {
-//                    G4cout<<"theMotherMoleculeDisplacement : "<<theMotherMoleculeDisplacement<<G4endl;
-//                    G4cout<<"ProductsDisplacement["<<j<<"] : "<<ProductsDisplacement[j]<<G4endl;
-//                }
 
                 secondary-> SetTrackStatus(fAlive);
-
+#ifdef G4VERBOSE
                 if(fVerbose)
                 {
                     G4cout<<"Product : "<< product->GetName()<<G4endl;
-                    // DEBUG
-                    // <<" | Position : "<< secondary->GetPosition()/ nanometer << "[nm]"
-                    // <<G4endl;
                 }
-
+#endif
                 // add the secondary track in the List
                 aParticleChange.G4VParticleChange::AddSecondary(secondary);
                 G4ITManager<G4Molecule>::Instance()->Push(secondary);
             }
-
+#ifdef G4VERBOSE
             if(fVerbose)
                 G4cout<<"-------------"<<G4endl;
+#endif
         }
 //        DEBUG
-//        else if(fVerbose > 1 && decayEnergy)
+//        else if(decayEnergy)
 //        {
 //            G4cout << "No products for this channel" << G4endl ;
 //            G4cout<<"-------------"<<G4endl;
@@ -274,12 +249,12 @@ G4VParticleChange* G4DNAMolecularDecay::DecayIt(
     return &aParticleChange;
 }
 
-void G4DNAMolecularDecay::SetDecayDisplacer (const G4MoleculeDefinition* molDef, G4VMolecularDecayDisplacer* aDisplacer)
+void G4DNAMolecularDecay::SetDecayDisplacer (const G4ParticleDefinition* molDef, G4VMolecularDecayDisplacer* aDisplacer)
 {
     fDecayDisplacementMap[molDef] = aDisplacer;
 }
 
-G4VMolecularDecayDisplacer* G4DNAMolecularDecay::GetDecayDisplacer(const G4MoleculeDefinition* molDef)
+G4VMolecularDecayDisplacer* G4DNAMolecularDecay::GetDecayDisplacer(const G4ParticleDefinition* molDef)
 {
     return fDecayDisplacementMap[molDef] ;
 }

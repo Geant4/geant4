@@ -36,10 +36,17 @@
 
 G4ITTypeManager* G4ITTypeManager::fInstance = 0;
 
-
+// static method
 size_t G4ITType::size()
 {
     return  G4ITTypeManager::Instance()->size();
+}
+
+G4ITType& G4ITType::operator=(const G4ITType & rhs)
+{
+    if (this == &rhs) return *this;
+    i = rhs.i;
+    return *this;
 }
 
 G4ITTypeManager*  G4ITTypeManager::Instance()

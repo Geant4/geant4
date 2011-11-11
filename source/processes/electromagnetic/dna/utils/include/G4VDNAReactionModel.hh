@@ -29,6 +29,7 @@ public :
     inline const G4DNAMolecularReactionTable* GetReactionTable();
 
 protected :
+    G4VDNAReactionModel& operator=(const G4VDNAReactionModel&);
     const G4DNAMolecularReactionTable* fReactionTable ;
 };
 

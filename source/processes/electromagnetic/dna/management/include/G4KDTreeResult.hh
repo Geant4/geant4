@@ -89,7 +89,7 @@ public:
     void* GetItem(double& x, double& y, double& z); // 3D
     void* GetItemNDistanceSQ(double& /*distance*/);
     void* GetItemNDistanceSQ(double*& /*position*/, double& /*distance*/);
-    const double& GetDistanceSqr();
+    double GetDistanceSqr();
 };
 
 #endif // G4KDTREERESULT_HH

@@ -49,32 +49,29 @@ using namespace std;
 #define State(theXInfo) (fTransportationState->theXInfo)
 #endif
 
-//DEBUG
+//COLOR FOR DEBUGING
 //#define RED_ON_WHITE  "\033[0;31m"
-//#define GREEN_ON_BLUE "\033[1;32;44m"
 //#define GREEN "\033[32;40m"
-//#define RESET "\033[0m"
+#define GREEN_ON_BLUE "\033[1;32;44m"
+#define RESET "\033[0m"
 
-G4DNABrownianTransportation::G4DNABrownianTransportation(G4int verbosity) :
-    G4ITTransportation(verbosity)
+G4DNABrownianTransportation::G4DNABrownianTransportation(const G4String& aName, G4int verbosity) :
+    G4ITTransportation(aName, verbosity)
 {
     //ctor
-    fVerbose = 0 ;
     fpSafetyHelper = G4TransportationManager::GetTransportationManager()
             ->GetSafetyHelper();
+    SetProcessSubType(61);
+    verboseLevel = 1;
 }
 
 G4DNABrownianTransportation::~G4DNABrownianTransportation()
-{
-    //dtor
-    // It should be the job of the trackingInformation to delete process information
-}
+{;}
 
 G4DNABrownianTransportation::G4DNABrownianTransportation(const G4DNABrownianTransportation& right) :
     G4ITTransportation(right)
 {
     //copy ctor
-    fVerbose = right.fVerbose;
     fpSafetyHelper = G4TransportationManager::GetTransportationManager()
             ->GetSafetyHelper();
 }
@@ -86,9 +83,16 @@ G4DNABrownianTransportation& G4DNABrownianTransportation::operator=(const G4DNAB
     return *this;
 }
 
-void G4DNABrownianTransportation::BuildPhysicsTable(const G4ParticleDefinition& /*part*/)
+void G4DNABrownianTransportation::BuildPhysicsTable(const G4ParticleDefinition& particle)
 {
     fpSafetyHelper->InitialiseHelper();
+
+    if(verboseLevel > 0)
+    {
+        G4cout << G4endl << GetProcessName() << ":   for  "
+               << setw(24) << particle.GetParticleName()
+               << "\tSubType= " << GetProcessSubType()   << G4endl;
+    }
 }
 
 void G4DNABrownianTransportation::ComputeStep(const G4Track& track,
@@ -146,15 +150,21 @@ void G4DNABrownianTransportation::ComputeStep(const G4Track& track,
 
     State(fEndGlobalTimeComputed) = true ;
 
+#ifdef G4VERBOSE
     //    DEBUG
-    //    if(fVerbose >= 1)
-    //    {
-    //        G4cout<<"\033[1;32;44m"<<"G4ITBrownianTransportation::ComputeStep() : "
-    //             << " trackID : " << track.GetTrackID()
-    //             <<" : Molecule name: "<< molecule-> GetName() << G4endl;
-    //        G4cout<<"Diffusion length : "<< spaceStep / nm <<"[nm] within time step : "
-    //             << G4BestUnit(timeStep,"Time")<<"\033[0m\n"<<G4endl;
-    //    }
+    if(fVerboseLevel>1)
+    {
+        G4cout<< GREEN_ON_BLUE
+              << "G4ITBrownianTransportation::ComputeStep() : "
+              << " trackID : "         << track.GetTrackID()
+              << " : Molecule name: "  << molecule-> GetName()
+              << G4endl
+              << "Diffusion length : " << G4BestUnit(spaceStep, "Length")
+              << " within time step : "  << G4BestUnit(timeStep,"Time")
+              << RESET
+              << G4endl<< G4endl;
+    }
+#endif
 }
 
 G4VParticleChange* G4DNABrownianTransportation::PostStepDoIt( const G4Track& track, const G4Step& step)
@@ -162,36 +172,39 @@ G4VParticleChange* G4DNABrownianTransportation::PostStepDoIt( const G4Track& tra
     G4ITTransportation::PostStepDoIt(track,step);
     Diffusion(track);
 
+#ifdef G4VERBOSE
     //    DEBUG
-    //    if(fVerbose >= 1)
-    //    {
-    //        G4cout<<"\033[1;32;44m"<<"G4ITBrownianTransportation::PostStepDoIt() :"
-    //             << " trackID : " << track.GetTrackID()
-    //             <<" Molecule name: "<< GetMolecule(track)-> GetName() << G4endl;
-    //        G4cout<<"Diffusion length : "<< step.GetStepLength() / nm <<"[nm] within time step : "
-    //             << G4BestUnit(step.GetDeltaTime(),"Time") << "\t"
-    //             <<" Current global time : " << G4BestUnit(track.GetGlobalTime(),"Time")<<"\033[0m\n"<<G4endl;
-    //    }
-
+    if(fVerboseLevel>1)
+    {
+        G4cout<< GREEN_ON_BLUE
+              << "G4ITBrownianTransportation::PostStepDoIt() :"
+              << " trackID : "        << track.GetTrackID()
+              << " Molecule name: "   << GetMolecule(track)-> GetName() << G4endl;
+        G4cout<< "Diffusion length : "<< G4BestUnit(step.GetStepLength(),"Length") <<" within time step : "
+              << G4BestUnit(step.GetDeltaTime(),"Time") << "\t"
+              << " Current global time : " << G4BestUnit(track.GetGlobalTime(),"Time")
+              << RESET
+              << G4endl<< G4endl;
+    }
+#endif
     return &fParticleChange ;
 }
 
 void G4DNABrownianTransportation::Diffusion(
     const G4Track& track)
 {
-    // DEBUG
-    //  G4cout << "G4ITBrownianTransportation::Diffusion" << G4endl;
-    //  G4cout << track.GetTrackID() << "\t\t" << track.GetPosition() << G4endl;
 
 #ifdef G4VERBOSE
-    if (fVerboseLevel > 1)
+    // DEBUG
+    if (fVerboseLevel>1)
     {
-        G4cout<<"\033[1;32;44m"
-             << setw(18)<< left <<"Diffusion :"
-             << setw(8) << left << GetIT(track)->GetName()
-             <<"\t" << track.GetTrackID() <<"\t"
-            <<" Global Time = " << setprecision(15)
-           <<G4BestUnit(track.GetGlobalTime(),"Time")<<"\033[0m\n"<<G4endl;
+        G4cout<< GREEN_ON_BLUE
+              << setw(18)<< "G4DNABrownianTransportation::Diffusion :"
+              << setw(8) <<  GetIT(track)->GetName()
+              << "\t trackID:"      << track.GetTrackID() <<"\t"
+              << " Global Time = "  << G4BestUnit(track.GetGlobalTime(),"Time")
+              << RESET
+              << G4endl<< G4endl;
     }
 #endif
 
@@ -201,7 +214,6 @@ void G4DNABrownianTransportation::Diffusion(
         G4cout << (track.GetLocalTime()) /s<<G4endl;
         G4cout<< "Step Number :" << track.GetCurrentStepNumber() <<G4endl;
 
-        fParticleChange.ProposeLocalEnergyDeposit (track.GetKineticEnergy()) ;
         fParticleChange.ProposeEnergy(0.) ;
         fParticleChange.ProposeTrackStatus(fStopButAlive);
 
@@ -366,10 +378,8 @@ G4double G4DNABrownianTransportation::AlongStepGetPhysicalInteractionLength(
     {
         if( currentSafety == 0.0 )  State(fGeometryLimitedStep) = true ;
     }
-    //    fParticleChange.ProposeTrueStepLength(geometryStepLength) ;
 
     return geometryStepLength ;
-    // return currentSafety;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -384,11 +394,6 @@ G4VParticleChange* G4DNABrownianTransportation::AlongStepDoIt( const G4Track& tr
 
     fParticleChange.Initialize(track) ;
 
-    //  Code for specific process
-    //
-    //    G4cout << "!! G4ITTransportation::AlongStepDoIt :: State(fTransportEndPosition)"
-    //    << State(fTransportEndPosition) << G4endl;
-    //    G4cout << "State(fTransportEndPosition) pointeur : " << &(State(fTransportEndPosition))<< G4endl;
     fParticleChange.ProposeMomentumDirection(State(fTransportEndMomentumDir)) ;
     fParticleChange.ProposeEnergy(State(fTransportEndKineticEnergy)) ;
     fParticleChange.SetMomentumChanged(State(fMomentumChanged)) ;
@@ -396,10 +401,6 @@ G4VParticleChange* G4DNABrownianTransportation::AlongStepDoIt( const G4Track& tr
     fParticleChange.ProposePolarization(State(fTransportEndSpin));
 
     G4double deltaTime = 0.0 ;
-
-    // Calculate  Lab Time of Flight (ONLY if field Equations used it!)
-    // G4double endTime   = State(fCandidateEndGlobalTime);
-    // G4double delta_time = endTime - startTime;
 
     G4double startTime = track.GetGlobalTime() ;
 
@@ -435,26 +436,26 @@ G4VParticleChange* G4DNABrownianTransportation::AlongStepDoIt( const G4Track& tr
         fParticleChange.ProposePosition(State(fTransportEndPosition)) ;
 
         ///////////////
-        // Should be replaced ? :
         fParticleChange.ProposeGlobalTime( State(fCandidateEndGlobalTime) ) ;
         ///////////////
     }
 
+#ifdef G4VERBOSE
     //    DEBUG
-    //    if(fVerbose >= 1)
-    //    {
-    //        /*    G4cout<<"\033[1;32;44m"<<"G4ITBrownianTransportation::AlongStepDoIt() :"*/
-    //        G4cout<<GREEN_ON_BLUE<<"G4ITBrownianTransportation::AlongStepDoIt() :"
-    //             << " trackID : " << track.GetTrackID()
-    //             <<" Molecule name: "<< GetMolecule(track)-> GetName() << G4endl;
-    //        G4cout<<"Diffusion length : "<< step.GetStepLength() / nm <<"[nm] within time step : "
-    //             << G4BestUnit((State(fCandidateEndGlobalTime) - step.GetPreStepPoint() -> GetGlobalTime()), "Time")
-    //             << "[ps]"
-    //             <<"\033[0m\n"<<G4endl;
-    //        //<< G4BestUnit(step.GetDeltaTime(),"Time")<<"\033[0m\n"<<G4endl;
-    //    }
-
-    // Now Correct by Lorentz factor to get "proper" deltaTime
+    if(fVerboseLevel > 1)
+    {
+        G4cout<< GREEN_ON_BLUE<<"G4ITBrownianTransportation::AlongStepDoIt() :"
+              << " trackID : " << track.GetTrackID()
+              <<" Molecule name: "<< GetMolecule(track)-> GetName()
+              << G4endl
+              << "Current diffusion length : "<< G4BestUnit(step.GetStepLength(),"Length") <<" within time step : "
+              << G4BestUnit((State(fCandidateEndGlobalTime) - step.GetPreStepPoint() -> GetGlobalTime()), "Time")
+              << G4endl
+              << "Propose diffusion length :" << (State(fTransportEndPosition) - track.GetPosition()).mag()
+              << RESET
+              << G4endl << G4endl;
+    }
+#endif
 
     G4double  restMass       = track.GetDynamicParticle()->GetMass() ;
     G4double deltaProperTime = deltaTime*( restMass/track.GetTotalEnergy() ) ;
@@ -475,7 +476,7 @@ G4VParticleChange* G4DNABrownianTransportation::AlongStepDoIt( const G4Track& tr
         {
             // Kill the looping particle
             //
-            //            G4cout << "G4ITTransportation will killed the molecule"<< G4endl;
+            //            G4cout << "G4DNABrownianTransportation will killed the molecule"<< G4endl;
             fParticleChange.ProposeTrackStatus( fStopAndKill )  ;
 
             // 'Bare' statistics
@@ -489,7 +490,7 @@ G4VParticleChange* G4DNABrownianTransportation::AlongStepDoIt( const G4Track& tr
             if( (fVerboseLevel > 1) ||
                     ( endEnergy > fThreshold_Warning_Energy )  )
             {
-                G4cout << " G4Transportation is killing track that is looping or stuck "
+                G4cout << " G4DNABrownianTransportation is killing track that is looping or stuck "
                        << G4endl
                        << "   This track has " << track.GetKineticEnergy() / MeV
                        << " MeV energy." << G4endl;
@@ -506,7 +507,7 @@ G4VParticleChange* G4DNABrownianTransportation::AlongStepDoIt( const G4Track& tr
 #ifdef G4VERBOSE
             if( (fVerboseLevel > 2) )
             {
-                G4cout << "   G4Transportation::AlongStepDoIt(): Particle looping -  "
+                G4cout << "   G4DNABrownianTransportation::AlongStepDoIt(): Particle looping -  "
                        << "   Number of trials = " << State(fNoLooperTrials)
                        << "   No of calls to  = " << noCalls
                        << G4endl;
@@ -521,11 +522,6 @@ G4VParticleChange* G4DNABrownianTransportation::AlongStepDoIt( const G4Track& tr
 
     // Another (sometimes better way) is to use a user-limit maximum Step size
     // to alleviate this problem ..
-
-    // Introduce smooth curved trajectories to particle-change
-    //
-    //    fParticleChange.SetPointerToVectorOfAuxiliaryPoints
-    //            (fFieldPropagator->GimmeTrajectoryVectorAndForgetIt() );
 
     return &fParticleChange ;
 }

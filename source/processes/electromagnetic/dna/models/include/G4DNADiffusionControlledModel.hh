@@ -67,5 +67,6 @@ public :
 
 private :
     const std::vector<const G4DNAMolecularReactionData*>* fReactionData ;
+    G4DNADiffusionControlledModel& operator=(const G4DNADiffusionControlledModel&);
 };
 #endif

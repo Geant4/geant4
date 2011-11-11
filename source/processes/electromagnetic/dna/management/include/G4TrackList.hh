@@ -43,10 +43,12 @@
 
 class G4Track;
 class G4TrackList;
+class G4TrackList_Boundary;
 
 /** Comments :
-* - A track cannot belong to two different track list
+* - A track cannot belong to two different track lists
 * - Erase a given track is constant complexity
+* - This development was thought to be used together with G4IT
 */
 
 struct _ListRef
@@ -62,6 +64,7 @@ struct _ListRef
 class G4TrackListNode
 {
      friend class G4TrackList;
+     friend class G4TrackList_Boundary;
 
 public :
      G4Track* GetTrack() { return fTrack; }
@@ -79,7 +82,7 @@ protected:
         void SetNext(G4TrackListNode* node) { fNext = node;}
         void SetPrevious(G4TrackListNode* node) { fPrevious = node;}
 
-        G4Track* fTrack;
+        G4Track*         fTrack;
         G4TrackListNode* fPrevious;
         G4TrackListNode* fNext;
 };
@@ -88,10 +91,10 @@ struct G4TrackList_iterator ;
 class G4TrackList
 {
     private :
-        G4int fNbTracks;
-        G4TrackListNode * fStart;
-        G4TrackListNode * fFinish;
-        G4ReferenceCountedHandle<_ListRef>   fListRef;
+        G4int                               fNbTracks;
+        G4TrackListNode *                   fStart;
+        G4TrackListNode *                   fFinish;
+        G4ReferenceCountedHandle<_ListRef>  fListRef;
 
         struct G4TrackList_Boundary
         {

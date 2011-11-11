@@ -47,6 +47,8 @@ G4VITReactionProcess::~G4VITReactionProcess()
 G4VITReactionProcess::G4VITReactionProcess(const G4VITReactionProcess& /*other*/)
 {
     //copy ctor
+    fChanges = 0;
+    fReactionTable = 0;
 }
 
 G4VITReactionProcess& G4VITReactionProcess::operator=(const G4VITReactionProcess& rhs)

@@ -45,7 +45,7 @@ G4ITModelProcessor::G4ITModelProcessor()
     fpModelHandler = 0;
     fpModel = 0;
     fInitialized = false;
-
+    fpModelManager = 0;
     fCurrentModel.assign(G4ITType::size(), std::vector<G4VITModel*>());
 
     for(int i = 0 ; i < (int) G4ITType::size() ; i++)
@@ -62,11 +62,18 @@ G4ITModelProcessor::~G4ITModelProcessor()
     fReactionInfo.clear();
 }
 
+// Should not be used
 G4ITModelProcessor::G4ITModelProcessor(const G4ITModelProcessor& /*other*/)
 {
     //copy ctorr
+    fTrack = 0;
+    fpModelHandler = 0;
+    fpModel = 0;
+    fInitialized = false;
+    fpModelManager = 0;
 }
 
+// Should not be used
 G4ITModelProcessor& G4ITModelProcessor::operator=(const G4ITModelProcessor& rhs)
 {
     if (this == &rhs) return *this; // handle self assignment

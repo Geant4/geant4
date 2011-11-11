@@ -56,7 +56,7 @@ G4DNADingfelderChargeIncreaseModel::G4DNADingfelderChargeIncreaseModel(const G4P
   { 
     G4cout << "Dingfelder charge increase model is constructed " << G4endl;
   }
-
+  fParticleChangeForGamma = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

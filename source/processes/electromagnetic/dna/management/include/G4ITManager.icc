@@ -50,7 +50,6 @@ G4ITMANAGER * G4ITMANAGER::Instance()
 TEMPLATE
 G4ITMANAGER::G4ITManager() : G4VITManager()
 {
-    fPrint = true;
     fType =  T::ITType();
     SetVerboseLevel(G4AllITManager::Instance()->GetVerboseLevel());
     G4AllITManager::Instance()->RegisterManager(this);
@@ -236,7 +235,7 @@ G4KDTreeResultHandle G4ITMANAGER::FindNearest(const T* point0, const T* key)
 //        G4cout << "Equal keys !"<< G4endl;
         G4KDNode* node0 = point0->GetNode() ;
 
-        if(!node0)
+        if(node0 == 0)
         {
             G4ExceptionDescription exceptionDescription
             ("Bad request : no node found in the IT you are searching closest neighbourg for");

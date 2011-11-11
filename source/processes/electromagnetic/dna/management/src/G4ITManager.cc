@@ -35,4 +35,6 @@
 #include "G4ITManager.hh"
 
 G4VITManager::G4VITManager()
-{;}
+{
+    fVerbose = 0;
+}

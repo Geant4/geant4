@@ -53,8 +53,8 @@ public :
 
     G4ITType(const int d_ = 0) : i(d_) {;}
     G4ITType(const G4ITType & d_) : i(d_.i){;}
-    inline G4ITType & operator=(const G4ITType & rhs) { this->i = rhs.i; return *this;}
-    G4ITType & operator=(const int & rhs) { this->i = rhs; return *this;}
+    G4ITType & operator=(const G4ITType & rhs);
+    inline G4ITType & operator=(const int & rhs) { i = rhs; return *this;}
     inline operator int & () { return i; }
     inline operator const int & () const { return i; }
     inline bool operator==(const G4ITType & rhs) const { return i == rhs.i; }

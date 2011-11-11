@@ -26,8 +26,6 @@
 // This class is a slightly modified version of G4Transportation
 // But it should use the exact same algorithm
 //
-// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
-//
 // WARNING : This class is released as a prototype.
 // It might strongly evolve or even disapear in the next releases.
 //
@@ -55,7 +53,7 @@ class G4ITTransportation : public G4VITProcess
     // Concrete class that does the geometrical transport
 public:  // with description
 
-    G4ITTransportation( G4int verbosityLevel= 1);
+    G4ITTransportation(const G4String& aName =  "ITTransportation",G4int verbosityLevel= 1);
     virtual ~G4ITTransportation();
 
     G4ITTransportation(const G4ITTransportation&);
@@ -150,8 +148,6 @@ protected :
     G4bool               DoesGlobalFieldExist();
     // Checks whether a field exists for the "global" field manager.
 
-    void ComputeGlobalTimeStepInConservativeField(G4double &);
-
     //________________________________________________________________
     // Process information
     struct G4ITTransportationState : public G4ProcessState
@@ -200,9 +196,6 @@ protected :
     G4PropagatorInField* fFieldPropagator;
     // The Propagators used to transport the particle
 
-    // G4FieldManager*      fGlobalFieldMgr;     // Used MagneticField CC
-    // Field Manager for the whole Detector
-
     static const G4TouchableHandle nullTouchableHandle;  // Points to (G4VTouchable*) 0
 
     G4ParticleChangeForTransport fParticleChange;
@@ -241,6 +234,7 @@ protected :
 
 private :
     G4bool fInstantiateProcessState;
+    G4ITTransportation& operator=(const G4ITTransportation&);
 };
 
 #include "G4ITTransportation.icc"

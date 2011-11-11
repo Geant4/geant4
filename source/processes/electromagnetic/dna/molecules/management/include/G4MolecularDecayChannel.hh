@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Contact: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
 // WARNING : This class is released as a prototype.
 // It might strongly evolve or even disapear in the next releases.
@@ -99,7 +100,7 @@ private:
     std::vector<G4MoleculeHandle>* fProductsVector;
     G4double fReleasedEnergy;
     G4double fProbability;
-    G4double fDecayTime;
+    G4double fDecayTime; // To be taken into account in the next releases
 
     //Root Mean Square radial distance jump of a excited/ionised MotherMolecule molecule
     G4double fRMSMotherMoleculeDisplacement;

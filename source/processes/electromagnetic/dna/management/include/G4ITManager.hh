@@ -50,7 +50,6 @@ class G4VITManager
 protected :
     G4ITType fType ;
     G4int fVerbose;
-    G4bool fPrint ;
 
 public :
     G4VITManager();
@@ -133,6 +132,14 @@ public :
     };
 };
 
+/**
+  * G4VITManager is able to save into different boxes
+  * the ITs that will be used in the simulation.
+  * It is a stack-like.
+  * Those boxes are used to fill a tree which helps
+  * finding the closest neighboor.
+  */
+
 template<typename T>
 class G4ITManager : public G4VITManager
 {
@@ -186,7 +193,7 @@ public :
     {
         const T* myIT = dynamic_cast<const T*>(IT);
 
-        if(!myIT)
+        if(myIT == 0)
         {
             G4ExceptionDescription exceptionDescription ("You are requested a bad IT");
             G4Exception("G4ITManager::GetBox","ITManager001",

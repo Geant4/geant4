@@ -54,6 +54,7 @@ typedef std::vector<G4int>
         G4SelectedPostStepDoItVector;
 
 class G4Trajectory_Lock;
+class G4Track;
 struct G4ProcessState_Lock;
 
 /** The class G4TrackingInformation (hold by G4IT)
@@ -96,6 +97,11 @@ public:
         fpTrajectory_Lock = trajLock;
     }
 
+    void RecordCurrentPositionNTime(G4Track*);
+    inline const G4ThreeVector&    GetPreStepPosition() const;
+    inline G4double         GetPreStepLocalTime() const;
+    inline G4double         GetPreStepGlobalTime() const;
+
     //-------------
 protected:
     //-------------
@@ -115,9 +121,9 @@ protected:
     G4Trajectory_Lock* fpTrajectory_Lock;
 
     //_______________________________________________________
-    G4ThreeVector   fPreStepTrackPosition;
-    G4double        fPreStepTrackLocalTime;
-    G4double        fPreStepTrackGlobalTime;
+    G4ThreeVector   fRecordedTrackPosition;
+    G4double        fRecordedTrackLocalTime;
+    G4double        fRecordedTrackGlobalTime;
 
     //_______________________________________________________
     G4SelectedAtRestDoItVector      fSelectedAtRestDoItVector;
@@ -148,6 +154,22 @@ inline void G4TrackingInformation::RecordProcessState(G4ProcessState_Lock* state
                                G4int index)
 {
     fProcessState[index] = state;
+}
+
+
+inline G4double G4TrackingInformation::GetPreStepGlobalTime() const
+{
+    return fRecordedTrackGlobalTime;
+}
+
+inline G4double G4TrackingInformation::GetPreStepLocalTime() const
+{
+    return fRecordedTrackLocalTime;
+}
+
+inline const G4ThreeVector& G4TrackingInformation::GetPreStepPosition() const
+{
+    return fRecordedTrackPosition;
 }
 
 

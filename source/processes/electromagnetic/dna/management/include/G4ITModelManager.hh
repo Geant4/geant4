@@ -42,6 +42,10 @@
 #include <map>
 #include "G4VITModel.hh"
 
+/**
+  * G4ITModelManager chooses which model to use according
+  * to the global simulation time.
+  */
 class G4ITModelManager
 {
 

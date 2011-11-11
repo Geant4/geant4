@@ -49,7 +49,7 @@ class G4VITModel
 {
 public:
     /** Default constructor */
-    G4VITModel();
+    G4VITModel(const G4String& aName = "NoName");
     /** Default destructor */
     virtual ~G4VITModel();
 
@@ -57,6 +57,7 @@ public:
     ParentToClone(G4VITModel)
 
     void IsApplicable(G4ITType& type1, G4ITType& type2) ;
+    void virtual PrintInfo(){;}
 
     virtual void Initialize();
 
@@ -64,12 +65,16 @@ public:
     inline void SetReactionProcess(G4VITReactionProcess* reactionProcess);
 
     inline G4VITTimeStepper* GetTimeStepper();
+    inline const G4String& GetName();
 
     inline G4VITReactionProcess* GetReactionProcess();
     inline void SetReactionTable(G4ITReactionTable*);
     inline const G4ITReactionTable* GetReactionTable();
 
 protected:
+
+    G4String fName;
+
     G4VITTimeStepper* fTimeStepper;
     G4VITReactionProcess* fReactionProcess;
 
@@ -118,6 +123,11 @@ inline G4VITTimeStepper* G4VITModel::GetTimeStepper()
 inline G4VITReactionProcess* G4VITModel::GetReactionProcess()
 {
     return fReactionProcess ;
+}
+
+inline const G4String& G4VITModel::GetName()
+{
+    return fName;
 }
 
 #endif // G4VITMODEL_HH

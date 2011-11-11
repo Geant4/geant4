@@ -67,6 +67,7 @@ G4DNAEmfietzoglouExcitationModel::G4DNAEmfietzoglouExcitationModel(const G4Parti
            << highEnergyLimit / MeV << " MeV"
            << G4endl;
   } 
+  fParticleChangeForGamma = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -187,14 +188,10 @@ void G4DNAEmfietzoglouExcitationModel::SampleSecondaries(std::vector<G4DynamicPa
       fParticleChangeForGamma->ProposeLocalEnergyDeposit(electronEnergy0);
     }
 
-    if(G4DNAChemistryManager::Instance()->IsChemistryActived())
-    {
-        const G4Track * theIncomingTrack = fParticleChangeForGamma->GetCurrentTrack();
-        G4DNAChemistryManager::Instance()->CreateWaterMolecule(fExcitedMolecule,
-                                                              level,
-                                                              theIncomingTrack);
-    }
-
+    const G4Track * theIncomingTrack = fParticleChangeForGamma->GetCurrentTrack();
+    G4DNAChemistryManager::Instance()->CreateWaterMolecule(fExcitedMolecule,
+                                                          level,
+                                                          theIncomingTrack);
   }
 }
 

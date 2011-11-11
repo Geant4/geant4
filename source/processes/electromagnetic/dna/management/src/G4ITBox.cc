@@ -113,7 +113,7 @@ G4IT* G4ITBox::FindIT(const G4Track& track)
     G4IT * temp = fLastIT;
     G4bool find = false;
 
-    while(!find || temp)
+    while(find == false && temp != 0)
     {
         if(temp-> GetTrack() == &track)
         {
@@ -133,7 +133,7 @@ const G4IT* G4ITBox::FindIT(const G4Track& track) const
     const G4IT * temp = fLastIT;
     G4bool find = false;
 
-    while(!find || temp)
+    while(find == false && temp != 0)
     {
         if(temp-> GetTrack() == &track)
         {

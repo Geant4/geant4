@@ -84,9 +84,13 @@ G4TrackList::G4TrackList() : fBoundary()
     fBoundary.fEmptyNode.fAttachedToList = true;
 }
 
+// should not be used
 G4TrackList::G4TrackList(const G4TrackList& /*other*/) : fBoundary()
 {
-    // One track should not belong to two different trackList
+    // One track should not belong to two different trackLists
+
+    fFinish = 0;
+    fStart = 0;
 }
 
 G4TrackList& G4TrackList::operator=(const G4TrackList& other)
@@ -111,10 +115,13 @@ G4TrackList::~G4TrackList()
             G4Track* __track = __stackedTrack->GetTrack();
 
             delete __stackedTrack;
+            __stackedTrack = 0;
+
             if(__track)
             {
                 //////////////
                 DeleteTrack(__track);
+                __track = 0;
                 //////////////
             }
 
@@ -324,6 +331,7 @@ G4TrackList::iterator G4TrackList::erase(G4Track* __track)
     G4TrackListNode* __next_node = EraseTrackListNode(__track);
     //////////////////
     DeleteTrack(__track);
+    __track = 0;
     //////////////////
     iterator __next(__next_node);
     return __next;

@@ -65,6 +65,7 @@ G4DNAMeltonAttachmentModel::G4DNAMeltonAttachmentModel(const G4ParticleDefinitio
            << highEnergyLimit / eV << " eV"
            << G4endl;
   }
+  fParticleChangeForGamma = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

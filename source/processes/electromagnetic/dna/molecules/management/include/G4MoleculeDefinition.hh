@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Contact: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
 // WARNING : This class is released as a prototype.
 // It might strongly evolve or even disapear in the next releases.
@@ -76,6 +77,7 @@ public: //With Description
 
     virtual ~G4MoleculeDefinition();
 
+    // Set the electronic configuration at ground level
     void SetLevelOccupation(G4int, G4int eNb=2);
     // set the occupation(0(def), 1 or 2) of the level specified
     //(levels numbering starts from 0)
@@ -90,25 +92,29 @@ public: //With Description
     inline void SetVanDerVaalsRadius(G4double);
     inline G4double GetVanDerVaalsRadius() const;
 
-    inline const G4ElectronOccupancy* GetGroundStateElectronOccupancy() const;
-
+    //°°°°°°°°°°°°°°°°°°°°°°°°
+    // Build the decay table
     void AddExcitedState(const G4String&) ;
     const G4String& GetExcitedState(const G4ElectronOccupancy*) const;
     void AddDecayChannel(const G4String&, const G4MolecularDecayChannel*) ;
+    void AddeConfToExcitedState(const G4String&,const G4ElectronOccupancy&, double decayTime = 0.);
 
+    //°°°°°°°°°°°°°°°°°°°°°°°°
+    // "Get" methods related to decay
     const std::vector<const G4MolecularDecayChannel*>* GetDecayChannels(const G4ElectronOccupancy*) const;
     const std::vector<const G4MolecularDecayChannel*>* GetDecayChannels(const G4String&) const;
 
-    void AddeConfToExcitedState(const G4String&,const G4ElectronOccupancy&);
-
-    inline const G4String& GetName() const;
-    inline G4double GetMass() const;
-    inline const G4String& GetType() const;
-    inline G4int    GetNbElectrons() const;
-    inline G4int    GetNbMolecularShells() const;
+    //°°°°°°°°°°°°°°°°°°°°°°°°
+    // General "Get" methods
+    inline const G4ElectronOccupancy*   GetGroundStateElectronOccupancy() const;
+    inline const G4String&              GetName() const;
+    inline G4double                     GetMass() const;
+    inline const G4String&              GetType() const;
+    inline G4int                        GetNbElectrons() const;
+    inline G4int                        GetNbMolecularShells() const;
     inline const G4MolecularDecayTable* GetDecayTable() const ;
-    inline G4MolecularDecayTable* GetDecayTable() ;
-    inline G4double GetDecayTime() const;
+    inline G4MolecularDecayTable*       GetDecayTable() ;
+    inline G4double                     GetDecayTime() const;
 
 protected :
     G4MoleculeDefinition();
@@ -124,8 +130,11 @@ private:
     G4int fNbOfElectrons;
     G4int fNbOfMolecularShells;
 
-    // Diffusion Coefficients in Water
-    // map<G4Material*, G4double>
+    // Diffusion Coefficient in one medium only
+    // Note : For the time being, we will consider only one diffusion
+    // coefficient for the all simulation => diffusion in one medium only
+    // If the user needs to use the diffusion in different medium,
+    // he should contact the developpers/mainteners of this package
     G4double fDiffusionCoefficient;
 
     G4int fAtomsNb;

@@ -48,7 +48,7 @@ class G4DNAMolecularStepByStepModel : public G4VITModel
 {
 public:
     /** Default constructor */
-    G4DNAMolecularStepByStepModel();
+    G4DNAMolecularStepByStepModel(const G4String& name = "DNAMolecularStepByStepModel");
     /** Default destructor */
     virtual ~G4DNAMolecularStepByStepModel();
 
@@ -65,9 +65,11 @@ public:
 
     AddClone(G4VITModel, G4DNAMolecularStepByStepModel)
 
+    virtual void PrintInfo();
     virtual void Initialize();
 
     inline void SetReactionModel(G4VDNAReactionModel*);
+    inline G4VDNAReactionModel* GetReactionModel();
 
 protected:
     const G4DNAMolecularReactionTable*& fMolecularReactionTable;
@@ -79,6 +81,11 @@ inline void G4DNAMolecularStepByStepModel::SetReactionModel(G4VDNAReactionModel*
     fReactionModel = reactionModel;
     ((G4DNAMolecularReaction*)      fReactionProcess)-> SetReactionModel(reactionModel);
     ((G4DNAMoleculeEncounterStepper*) 	fTimeStepper)	 -> SetReactionModel(reactionModel);
+}
+
+inline G4VDNAReactionModel* G4DNAMolecularStepByStepModel::GetReactionModel()
+{
+    return fReactionModel;
 }
 
 #endif // G4MOLECULARSTEPBYSTEPMODEL_H
