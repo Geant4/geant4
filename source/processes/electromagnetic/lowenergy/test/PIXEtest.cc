@@ -75,15 +75,15 @@ int main()
    G4ParticleDefinition* particle;
 
    //    G4VhShellCrossSection* shellExp = new G4hShellCrossSectionDoubleExp();
-   //  here you deiude the implementation: G4teoCrossSection is ECPSSR theory: 
+   //  here you decide the implementation: G4teoCrossSection is ECPSSR theory: 
    //  you can choose the "analytical" implementetation of the theory or the "interpolated" 
-   //  implementation from ISICS tables.
-   //  G4hShellCrossSectionDoubleExp is previous work with ownmade fitting functions to Pauli for Alpha.
+   //  implementation from REIS et al.
+   //  G4hShellCrossSectionDoubleExp is previous work with ownmade fitting functions to Paul for Alpha.
 
-   G4cout << "Enter model (analytical/ECPSSR_FormFactor/empirical): " << G4endl;
+   G4cout << "Enter model (Analytical/ECPSSR_FormFactor/empirical): " << G4endl;
    G4cin >> model;
 
-   if (model == "analytical" || model == "ECPSSR_FormFactor") {
+   if (model == "Analytical" || model == "ECPSSR_FormFactor") {
 
      shellCS = new G4teoCrossSection(model);
    }
@@ -115,7 +115,7 @@ int main()
      } 
   
 
-   G4cout << "Enter shell number: " << G4endl;
+   G4cout << "Enter shell Index (0=K 3=L3): " << G4endl;
    G4cin >> shellNumber;
 
    if (shellNumber == 0) {shellName = "K";}
@@ -123,7 +123,7 @@ int main()
    else if (shellNumber == 2) {shellName = "L2";}
    else if (shellNumber == 3) {shellName = "L3";}
 
-   if (model  == "analytical" ) { nameId = "A";}
+   if (model  == "Analytical" ) { nameId = "A";}
    else if (model  == "ECPSSR_FormFactor" ) { nameId = "I";}
    else if (model  == "empirical" ) { nameId = "E";}
    G4String fileNameTxt = fileName;
@@ -135,7 +135,6 @@ int main()
      { 
        G4cout << "Z = " << Z << G4endl;
        snprintf(buffer, 3, "%d", Z);
-
        
        fileNameTxt = nameId + "-" + shellName + "-" + partType + "-" + buffer + ".dat";
        
@@ -147,12 +146,23 @@ int main()
 	 {
 	   incidentEnergy = energies[k];//*MeV;
 	   deltaEnergy = 0.0;
+
+	   /*
+	   
+	   // put zero to mimick behavior of REIS + Analytical
+
+	   if ((incidentEnergy > 0.1 * MeV && incidentEnergy < 10*MeV) && (model  == "Analytical" )) {
+	     
+	     G4cout << incidentEnergy/MeV << "Energy "<<  model << " model" << G4endl;
+	     myfile << incidentEnergy/MeV << "\t\t" << 0 << G4endl;
+	   }
+
+	   else { */
+	     std::vector<G4double> CS = shellCS->GetCrossSection(Z,incidentEnergy,mass,deltaEnergy,false);
+	     myfile << incidentEnergy/MeV << "\t\t" << CS[shellNumber]/barn << G4endl;  
+
+	     //	   }
 	   	   
-	   std::vector<G4double> CS = shellCS->GetCrossSection(Z,incidentEnergy,mass,deltaEnergy,false);
-	   
-	   
-	   myfile << incidentEnergy/MeV << "\t\t" << CS[shellNumber]/barn << G4endl;  
-	   
 	   
 	 }
        

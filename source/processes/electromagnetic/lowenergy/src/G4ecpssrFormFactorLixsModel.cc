@@ -118,8 +118,9 @@ G4double G4ecpssrFormFactorLixsModel::CalculateL1CrossSection(G4int zTarget,G4do
       }
   }
   
-  // sigma is expressed in barn:  returning it in internal units
-  return sigma*barn;
+  // sigma is in internal units: it has been converted from 
+  // the input file in barns bt the EmDataset
+  return sigma;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -146,8 +147,9 @@ G4double G4ecpssrFormFactorLixsModel::CalculateL2CrossSection(G4int zTarget,G4do
       }
   }
   
-  // sigma is expressed in barn: returning it in internal units
-  return sigma*barn;
+  // sigma is in internal units: it has been converted from 
+  // the input file in barns bt the EmDataset
+  return sigma;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -174,6 +176,7 @@ G4double G4ecpssrFormFactorLixsModel::CalculateL3CrossSection(G4int zTarget,G4do
       }
   }
   
-  // sigma is expressed in barn: returning it in internal units
-  return sigma * barn;
+  // sigma is in internal units: it has been converted from 
+  // the input file in barns bt the EmDataset
+  return sigma;
 }

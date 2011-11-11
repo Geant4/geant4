@@ -313,7 +313,7 @@ G4double G4ecpssrBaseLixsModel::CalculateL1CrossSection(G4int zTarget,G4double m
 
   // low velocity formula
   // *****************  
-  if ( velocityl1 <5.  )
+  if ( velocityl1 <20.  )
   {
 
     L1etaOverTheta2 =(reducedEnergy* l1relativityCorrection)/((tetal1*sigmaPSS_l1)*(tetal1*sigmaPSS_l1));
@@ -505,7 +505,7 @@ G4double G4ecpssrBaseLixsModel::CalculateL2CrossSection(G4int zTarget,G4double m
 
   G4double sigmaPSSR_l2 ;
  
-  if ( velocityl2 < 5. )
+  if ( velocityl2 < 20. )
   {
 
     L2etaOverTheta2 = (reducedEnergy*l2relativityCorrection)/((sigmaPSS_l2*tetal2)*(sigmaPSS_l2*tetal2));
@@ -672,7 +672,7 @@ G4double G4ecpssrBaseLixsModel::CalculateL3CrossSection(G4int zTarget,G4double m
  
   G4double sigmaPSSR_l3;
 
-  if ( velocityl3 < 5. )
+  if ( velocityl3 < 20. )
   {
 
     L3etaOverTheta2 = (reducedEnergy* l3relativityCorrection)/((sigmaPSS_l3*tetal3)*(sigmaPSS_l3*tetal3));

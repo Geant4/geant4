@@ -91,7 +91,7 @@ G4double G4ecpssrFormFactorKxsModel::CalculateCrossSection(G4int zTarget,G4doubl
       }
     else if (massIncident == aAlpha->GetPDGMass())
       {
-      sigma = alphaDataSetMap[zTarget]->FindValue(energyIncident/MeV); 
+	sigma = alphaDataSetMap[zTarget]->FindValue(energyIncident/MeV); 
       }
     else
       { 
@@ -99,6 +99,7 @@ G4double G4ecpssrFormFactorKxsModel::CalculateCrossSection(G4int zTarget,G4doubl
       }
   }
   
-  // sigma is expressed in barn: returning it in internal units.
-  return sigma*barn;
+  // sigma is in internal units: it has been converted from 
+  // the input file in barns bt the EmDataset
+  return sigma;
 }

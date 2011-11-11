@@ -58,7 +58,7 @@ G4PenelopeSamplingData::~G4PenelopeSamplingData()
   if (ITTU) delete ITTU;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.......oooOO0OOooo...
 size_t G4PenelopeSamplingData::GetNumberOfStoredPoints()
 {
   size_t points = x->size();
@@ -68,9 +68,10 @@ size_t G4PenelopeSamplingData::GetNumberOfStoredPoints()
       b->size() != points || ITTL->size() != points ||
       ITTU->size() != points)
     {
-      G4cout << "G4PenelopeSamplingData::GetNumberOfStoredPoints()" << G4endl;
-      G4cout << "Data vectors look to have different dimensions !" << G4endl;
-      G4Exception();      
+      G4ExceptionDescription ed;
+      ed << "Data vectors look to have different dimensions !" << G4endl;
+      G4Exception("G4PenelopeSamplingData::GetNumberOfStoredPoints()","em2040",
+		  FatalException,ed);      
     }
   return points;
 }

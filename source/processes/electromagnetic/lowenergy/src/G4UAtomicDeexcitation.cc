@@ -36,7 +36,11 @@
 //
 // Modified:
 // ---------
-// 20 Oct 2011  Alf  modified to take into account ECPSSR form Form Factor  
+// 20 Oct 2011  Alf  modified to take into account ECPSSR form Form Factor
+// 03 Nov 2011  Alf  Extended Empirical and Form Factor ionisation XS models
+//                   out thei ranges with Analytical one.
+// 07 Nov 2011  Alf  Restored original ioniation XS for alphas, 
+//                   letting scaled ones for other ions.   
 //
 // -------------------------------------------------------------------
 //
@@ -54,6 +58,7 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4Proton.hh"
+#include "G4Alpha.hh"
 
 #include "G4teoCrossSection.hh"
 #include "G4empCrossSection.hh"
@@ -147,7 +152,7 @@ void G4UAtomicDeexcitation::InitialiseForNewRun()
 
     if (PIXECrossSectionModel() == "ECPSSR_FormFactor")
       {
-	PIXEshellCS = new G4empCrossSection("ECPSSR_FormFactor");
+	PIXEshellCS = new G4teoCrossSection("ECPSSR_FormFactor");
       }
   }
 
@@ -257,12 +262,12 @@ void G4UAtomicDeexcitation::GenerateParticles(
 	    if  ( provShellId >0) 
 	      {
 		aParticle = GenerateFluorescence(Z,givenShellId,provShellId);
-		//		if (aParticle != 0) { G4cout << "****FLUO!****" << G4endl;} //debug  
+		//if (aParticle != 0) { G4cout << "****FLUO!****" << G4endl;} //debug  
 	      }
 	    else if ( provShellId == -1)
 	      {
 		aParticle = GenerateAuger(Z, givenShellId);
-		//		if (aParticle != 0) { G4cout << "****AUGER!****" << G4endl;} //debug
+		//if (aParticle != 0) { G4cout << "****AUGER!****" << G4endl;} //debug
 	      }
 	    else
 	      {
@@ -277,12 +282,12 @@ void G4UAtomicDeexcitation::GenerateParticles(
 	    if  (provShellId >0)
 	      {
 		aParticle = GenerateFluorescence(Z,newShellId,provShellId);
-		//		if (aParticle != 0) { G4cout << "****FLUO!****" << G4endl;} //debug
+		//if (aParticle != 0) { G4cout << "****FLUO!****" << G4endl;} //debug
 	      }
 	    else if ( provShellId == -1)
 	      {
 		aParticle = GenerateAuger(Z, newShellId);
-		//		if (aParticle != 0) { G4cout << "****AUGER!****" << G4endl;} //debug
+		//if (aParticle != 0) { G4cout << "****AUGER!****" << G4endl;} //debug
 	      }
 	    else
 	      {
@@ -293,7 +298,7 @@ void G4UAtomicDeexcitation::GenerateParticles(
 	if (aParticle != 0) 
 	  {
 	    vectorOfParticles->push_back(aParticle);
-	    //	    G4cout << "Deexcitation Occurred!" << G4endl; //debug
+	    //G4cout << "Deexcitation Occurred!" << G4endl; //debug
 	  }
 	else {provShellId = -2;}
       }  
@@ -332,20 +337,33 @@ G4UAtomicDeexcitation::GetShellIonisationCrossSectionPerAtom(
     return xsec;
   }
 
-  // scaling to protons
-  G4double mass = proton_mass_c2;
-  G4double escaled = kineticEnergy*mass/(pdef->GetPDGMass());
+  G4double mass = pdef->GetPDGMass();
+  G4double escaled = kineticEnergy;
   G4double q2 = 0.0;
-  if(mat) {
-    q2 = emcorr->EffectiveChargeSquareRatio(pdef,mat,kineticEnergy);
-  } else {
-    G4double q = pdef->GetPDGCharge()/eplus;
-    q2 = q*q;
+
+  // scaling to protons
+  if ((pdef->GetParticleName() != "proton" && pdef->GetParticleName() != "alpha" ) )
+  {
+    mass = proton_mass_c2;
+    escaled = kineticEnergy*mass/(pdef->GetPDGMass());
+
+    if(mat) {
+      q2 = emcorr->EffectiveChargeSquareRatio(pdef,mat,kineticEnergy);
+    } else {
+      G4double q = pdef->GetPDGCharge()/eplus;
+      q2 = q*q;
+    }
+  }
+  
+  if(PIXEshellCS) { xsec = PIXEshellCS->CrossSection(Z,shellEnum,escaled,mass); }
+  if(xsec < 1e-100) { 
+    
+    xsec = anaPIXEshellCS->CrossSection(Z,shellEnum,escaled,mass); 
+    
   }
 
-  if(PIXEshellCS) { xsec = PIXEshellCS->CrossSection(Z,shellEnum,escaled,mass); }
-  if(0.0 == xsec) { xsec = anaPIXEshellCS->CrossSection(Z,shellEnum,escaled,mass); }
-  xsec *= q2;
+  if (q2)  {xsec *= q2;}
+
   return xsec;
 }
 
@@ -691,7 +709,10 @@ G4DynamicParticle* G4UAtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
 	G4cout << "transitionShellId: " << transitionRandomShellId << G4endl;
       */
       
-      if (transitionEnergy < minElectronEnergy) return 0;
+      if (transitionEnergy < minElectronEnergy) {
+	//G4cout << "Problem!" << G4endl; // debug
+	return 0;
+      }
 
       // This is the shell where the new vacancy is: it is the same
       // shell where the electron came from

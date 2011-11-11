@@ -37,6 +37,9 @@
 #include "Randomize.hh"
 #include "G4Proton.hh"
 #include "G4Alpha.hh"
+#include "G4He3.hh"
+
+
 
 using namespace CLHEP;
 
@@ -57,6 +60,7 @@ int main(int argc, char* argv[]){
   G4int startId;
   G4int vacancyIndex;
   G4int numberOfRun;
+  G4String PIXEmodel;
   G4int batch=0;
   G4int element = 0;
   if (argv[1]) {batch = atoi(argv[1]);}
@@ -77,6 +81,8 @@ int main(int argc, char* argv[]){
     G4cin >> a;
     G4cout << "Enter the index of the vacancy" << G4endl;
     G4cin >> startId;
+    G4cout<<"Enter model for PIXE XS ( Empirical / Analytical / ECPSSR_FormFactor )"<<G4endl;
+    G4cin>> PIXEmodel;
     G4cout<<"Enter the number of runs "<<G4endl;
     G4cin>> numberOfRun;
   }
@@ -129,11 +135,10 @@ int main(int argc, char* argv[]){
 
  std::map<G4int,G4int> shellNumberTable;
   
- deexcitation->SetPIXECrossSectionModel("ECPSSR_Analytical");
- deexcitation->InitialiseForNewRun();    
+ deexcitation->SetPIXECrossSectionModel(PIXEmodel);
  deexcitation->SetAuger(true);
  deexcitation->SetPIXE(true);
-
+ deexcitation->InitialiseForNewRun();    
   
   for (Z = a; Z<=b; Z++) {    
   G4cout << "******** Z = "<< Z << "*********" << G4endl;
@@ -165,7 +170,7 @@ int main(int argc, char* argv[]){
 	max = min;
       }
 
-      for (vacancyIndex = min; vacancyIndex < max; vacancyIndex++) { 
+      for (vacancyIndex = min; vacancyIndex <= max; vacancyIndex++) { 
 
 	G4AtomicShell* shell = transitionManager->Shell(Z, vacancyIndex);
 	G4AtomicShellEnumerator as;
@@ -201,13 +206,19 @@ int main(int argc, char* argv[]){
 
       	G4double crossSecAlpha = deexcitation->GetShellIonisationCrossSectionPerAtom
 	  (particle, Z, as, 5.8 * MeV) /* * barn */;
- 
-	deexcitation->GenerateParticles(vectorOfParticles, shell, Z, 0, 0);
+
+	particle = G4He3::He3();
+
+      	G4double crossSecHe3 = deexcitation->GetShellIonisationCrossSectionPerAtom
+	  (particle, Z, as, 5.8 * MeV) /* * barn */;
       
 	G4cout << "Shell ID: " << shell->ShellId() << G4endl; 
 	G4cout<<  vectorOfParticles->size()<<" particles in the vector "<<G4endl;
 	G4cout<< as <<" XS for p @ 3 MeV: "<< crossSecProton/barn  << "barns" << G4endl;
 	G4cout<< as <<" XS for alpha @ 5.8 MeV: "<< crossSecAlpha/barn << "barns" << G4endl; 
+	G4cout<< as <<" XS for He3 @ 5.8 MeV: "<< crossSecHe3/barn << "barns" << G4endl; 
+
+	deexcitation->GenerateParticles(vectorOfParticles, shell, Z, 0, 0);
 
 	for (G4int k=0; k< vectorOfParticles->size();k++)
 	  {

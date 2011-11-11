@@ -29,6 +29,7 @@
 //  21 Apr 2008   H. Abdelohauwed - 1st implementation
 //  29 Apr 2009   ALF  Major Design Revision
 //  22 Oct 2011   ALF  Warning removals and Z checks fix for alphas
+//  29 Oct 2011   ALF  Changed name to G4PAulKxsModel
 //
 // -------------------------------------------------------------------
 

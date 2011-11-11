@@ -193,6 +193,7 @@ size_t G4AugerData::AugerShellId(G4int Z, G4int vacancyIndex, G4int transId, G4i
     trans_Table::const_iterator element = augerTransitionTable.find(Z);
     if (element == augerTransitionTable.end()) {
       G4Exception("G4AugerData::VacancyId()","de0004", FatalErrorInArgument,  "Check element");
+      return 0;
     }
     std::vector<G4AugerTransition> dataSet = (*element).second;
     n = dataSet[vacancyIndex].AugerOriginatingShellId(augerIndex,transId);
@@ -213,6 +214,7 @@ G4int G4AugerData::StartShellId(G4int Z, G4int vacancyIndex, G4int transitionShe
     trans_Table::const_iterator element = augerTransitionTable.find(Z);
     if (element == augerTransitionTable.end()) {
       G4Exception("G4AugerData::VacancyId()","de0004", FatalErrorInArgument,  "Check element");
+      return 0; 
     }
     std::vector<G4AugerTransition> dataSet = (*element).second;
     n = dataSet[vacancyIndex].TransitionOriginatingShellId(transitionShellIndex);
@@ -235,6 +237,7 @@ G4double G4AugerData::StartShellEnergy(G4int Z, G4int vacancyIndex, G4int transi
     trans_Table::const_iterator element = augerTransitionTable.find(Z);
     if (element == augerTransitionTable.end()) {
       G4Exception("G4AugerData::VacancyId()","de0004", FatalErrorInArgument,  "Check element");
+      return 0;
     }
     std::vector<G4AugerTransition> dataSet = (*element).second;
     energy = dataSet[vacancyIndex].AugerTransitionEnergy(augerIndex,transitionId);
@@ -257,6 +260,7 @@ G4double G4AugerData::StartShellProb(G4int Z, G4int vacancyIndex,G4int transitio
     trans_Table::const_iterator element = augerTransitionTable.find(Z);
     if (element == augerTransitionTable.end()) {
       G4Exception("G4AugerData::VacancyId()","de0004", FatalErrorInArgument,  "Check element");
+      return 0;
     }
     std::vector<G4AugerTransition> dataSet = (*element).second;
     prob = dataSet[vacancyIndex].AugerTransitionProbability(augerIndex, transitionId);

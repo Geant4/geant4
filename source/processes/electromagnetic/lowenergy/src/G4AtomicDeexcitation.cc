@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4AtomicDeexcitation.cc,v 1.11 
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Authors: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //          Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
@@ -50,6 +48,17 @@ G4AtomicDeexcitation::G4AtomicDeexcitation():
   minElectronEnergy(100.*eV),
   fAuger(false)
 {
+
+  G4cout << " ********************************************************** " << G4endl; 
+  G4cout << " *                  W A R N I N G ! ! !                   * " << G4endl;
+  G4cout << " ********************************************************** " << G4endl;
+  G4cout << " *                                                        * " << G4endl; 
+  G4cout << " *  Class G4AtomicDeexcitation is obsolete. It has been   * " << G4endl;
+  G4cout << " * discontinued and is going to be removed by next Geant4 * " << G4endl; 
+  G4cout << " *     release please migrate to G4UAtomDeexcitation.     * " << G4endl;
+  G4cout << " *                                                        * " << G4endl;
+  G4cout << " ********************************************************** " << G4endl; 
+
   augerVacancyId=0;
   newShellId=0;
 }

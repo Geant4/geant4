@@ -63,7 +63,7 @@ G4OrlicLiXsModel::~G4OrlicLiXsModel()
 //I.ORLIC, C.H.SOW and S.M.TANG,International Journal of PIXE.Vol.4(1994) 217-230	
  
 
-//*****************************************************************************************************************************************
+//********************************************************************************
 
 G4double G4OrlicLiXsModel::CalculateL1CrossSection(G4int zTarget, G4double energyIncident)
   			       
@@ -107,7 +107,10 @@ G4double G4OrlicLiXsModel::CalculateL1CrossSection(G4int zTarget, G4double energ
 
                                        
   if ( (zTarget>=41 &&  zTarget<=50) && (normalizedEnergy>=0.013 && normalizedEnergy<=1) )
-       { 	  
+    { 	  
+      
+      G4cout << "Energy1 (keV) = " << normalizedEnergy * lamda*l1BindingEnergy << G4endl; //debug
+      
       a0=11.274881;
       a1=-0.187401;
       a2=-0.943341;
@@ -118,10 +121,13 @@ G4double G4OrlicLiXsModel::CalculateL1CrossSection(G4int zTarget, G4double energ
       a7=0.;
       a8=0.;
       a9=0.;
-       }
+    }
   
-  else if ( (zTarget>=51 &&  zTarget<=60) && (normalizedEnergy>=0.01 && normalizedEnergy<=0.95)) 
+  else if ( (zTarget>=51 &&  zTarget<=60) && (normalizedEnergy>=0.012 && normalizedEnergy<=0.95)) 
     { 
+
+      //      G4cout << "Energy2 (keV) = " << normalizedEnergy * lamda*l1BindingEnergy << G4endl; //debug
+
       a0=11.242637;
       a1=-0.162515;
       a2=1.035774;
@@ -136,6 +142,9 @@ G4double G4OrlicLiXsModel::CalculateL1CrossSection(G4int zTarget, G4double energ
   
   else if ( (zTarget>=61 &&  zTarget<=70) && (normalizedEnergy>=0.01 && normalizedEnergy<=0.6) ) 
     { 
+
+      //      G4cout << "Energy3 (keV) = " << normalizedEnergy * lamda*l1BindingEnergy << G4endl; //debug
+
       a0=6.476722;
       a1=-25.804787;
       a2=-54.061629;
@@ -149,6 +158,9 @@ G4double G4OrlicLiXsModel::CalculateL1CrossSection(G4int zTarget, G4double energ
     } 
   else if ( (zTarget>=71 &&  zTarget<=80) && (normalizedEnergy>=0.01 && normalizedEnergy<=0.45) )  
     { 
+
+      //      G4cout << "Energy4 (keV) = " << normalizedEnergy * lamda*l1BindingEnergy << G4endl; //debug
+
       a0=12.776794;
       a1=6.562907;
       a2=10.158703;
@@ -162,6 +174,9 @@ G4double G4OrlicLiXsModel::CalculateL1CrossSection(G4int zTarget, G4double energ
     } 
   else if ( (zTarget>=81 &&  zTarget<=92) && (normalizedEnergy>=0.008 && normalizedEnergy<=0.3) )  
     { 
+
+      //      G4cout << "Energy5 (keV) = " << normalizedEnergy * lamda*l1BindingEnergy << G4endl; //debug
+
       a0=28.243087;
       a1=50.199585;
       a2=58.281684;

@@ -17,6 +17,27 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+
+11.11.2011  L.Pandola tag emlowen-V09-04-78
+	    Remove a left-over old-style G4Exception(), which 
+	    did not compile any longer.
+
+10.11.2011  A.Mantero tag emlowen-V09-04-77
+            BugFix: G4OrlicLiXsModel lower edge for L1 adjusted
+
+09.11.2011  A.Mantero tag emlowen-V09-04-76
+            BugFix: G4EmpCrossSection returns zero for alpha particles on L-shells
+
+07.11.2011  A.Mantero tag emlowen-V09-04-75
+            Minor bug fixing in G4UAtomDeexcitation +
+            coverity waring fixes for Deexcitation Classes
+
+05.11.2011  A.Mantero tag emlowen-V09-04-74
+            re-tag of the previous gone bad due to svn random behavior
+
+05.11.2011  A.Mantero tag emlowen-V09-04-73
+            Some minimal bug fixes on Deexcitation classes
+
 03.11.2011  G.Cosmo tag emlowen-V09-04-72
             Again fix to source.cmake for case sensitive specifications of
             file G4OrlicLiXsModel[.hh.cc]...
@@ -33,8 +54,8 @@ committal in the CVS repository !
 	    em2015 observed in STT.
 
 28.10.2011  A.Mantero, V.Ivantchenko tag emlowen-V09-04-68
-	    added iniatialization of data members in constructor
-	    og G4UAtomDeexcitation to avoid Coverity warnings
+	    added initialization of data members in constructor
+	    of G4UAtomDeexcitation to avoid Coverity warnings
 
 28.10.2011  A.Mantero, tag emlowen-V09-04-67
 	    Changed names for Ecpssr calculations from Form Factor

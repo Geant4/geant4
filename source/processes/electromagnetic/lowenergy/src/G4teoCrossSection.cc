@@ -48,7 +48,7 @@
 #include "G4ecpssrFormFactorLixsModel.hh"
 
 G4teoCrossSection::G4teoCrossSection(const G4String& nam)
-  :G4VhShellCrossSection(nam),totalCS(0.0)
+  :G4VhShellCrossSection(nam),totalCS(0.0),ecpssrShellK(0),ecpssrShellLi(0)
 { 
 
   if (nam == "Analytical") 
@@ -60,8 +60,9 @@ G4teoCrossSection::G4teoCrossSection(const G4String& nam)
     {
       ecpssrShellK  = new G4ecpssrFormFactorKxsModel();  
       ecpssrShellLi = new G4ecpssrFormFactorLixsModel(); 
-
     }
+  else { G4cout << "ERROR" << G4endl;}
+
 
 }
 
