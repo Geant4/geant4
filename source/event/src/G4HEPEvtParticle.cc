@@ -45,8 +45,7 @@ G4HEPEvtParticle::G4HEPEvtParticle(G4PrimaryParticle* pp,
 G4HEPEvtParticle::~G4HEPEvtParticle()
 {;}
 
-const G4HEPEvtParticle & 
-G4HEPEvtParticle::operator=(const G4HEPEvtParticle &)
+G4HEPEvtParticle& G4HEPEvtParticle::operator=(const G4HEPEvtParticle &)
 { return *this; }
 
 G4int G4HEPEvtParticle::operator==(const G4HEPEvtParticle &right) const

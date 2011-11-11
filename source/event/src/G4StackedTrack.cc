@@ -48,7 +48,7 @@ G4StackedTrack::G4StackedTrack(G4Track * newTrack, G4VTrajectory * aTrajectory)
 G4StackedTrack::~G4StackedTrack()
 { }
 
-const G4StackedTrack & G4StackedTrack::operator=(const G4StackedTrack &)
+G4StackedTrack& G4StackedTrack::operator=(const G4StackedTrack &)
 { return *this; }
 G4int G4StackedTrack::operator==(const G4StackedTrack &right) const 
 { return (this==&right); }

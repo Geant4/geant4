@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 10th, 2011, M.Asai (event-V09-04-09)
+- Fixing Coverity warnings.
+
 October 28th, 2011, M.Asai (event-V09-04-08)
 - Cleaning up
  -- G4ParticleGun.hh : added "const" to get methods and removed unnecessary inline keyword

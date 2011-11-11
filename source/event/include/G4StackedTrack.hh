@@ -56,7 +56,7 @@ class G4StackedTrack
       G4StackedTrack(G4Track * aTrack, G4VTrajectory * aTrajectory = 0);
       ~G4StackedTrack();
 
-      const G4StackedTrack & operator=(const G4StackedTrack &right);
+      G4StackedTrack & operator=(const G4StackedTrack &right);
       G4int operator==(const G4StackedTrack &right) const;
       G4int operator!=(const G4StackedTrack &right) const;
 

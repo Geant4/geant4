@@ -53,7 +53,7 @@ class G4HEPEvtParticle
         G4int isthep, G4int jdahep1, G4int jdahep2);
       ~G4HEPEvtParticle();
 
-      const G4HEPEvtParticle & operator=(const G4HEPEvtParticle &right);
+      G4HEPEvtParticle & operator=(const G4HEPEvtParticle &right);
       G4int operator==(const G4HEPEvtParticle &right) const;
       G4int operator!=(const G4HEPEvtParticle &right) const;
 
