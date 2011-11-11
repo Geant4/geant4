@@ -53,7 +53,7 @@ gRunManager.SetUserInitialization(exN03geom)
 # setup for physics list
 # ------------------------------------------------------------------
 # normal way for constructing user physics list
-exN03PL= g4py.ExN03pl.ExN03PhysicsList()
+exN03PL= g4py.ExN03pl.PhysicsList()
 gRunManager.SetUserInitialization(exN03PL)
 
 # 2nd way, short-cut way

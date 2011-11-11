@@ -18,6 +18,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+envs-V09-04-01 / 10 November 2011 Koichi Murakami
+[g4py]
+ - include fixes on OSX Lion
+
+envs-V09-04-00 / 8 November 2011 Koichi Murakami
+[g4py]
+ - update for 9.5 release
+ - eliminate obsolete G4Exception.
+
 envs-V09-03-02 / 2 December 2010 Koichi Murakami
  [g4py]
  - updates for 9.4 release

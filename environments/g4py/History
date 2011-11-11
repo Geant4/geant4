@@ -14,6 +14,14 @@ Geant4Py is a Geant4-Python bridge.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10 Nomvembter 2011 K.Murakami
+ - fixes on OSX Lion matters
+ - some minor fixes for 9.5 release
+
+8 November 2011 K.Murakami
+ - update for 9.5 release
+ - eliminate obsolete G4Exception.
+
 1 December 2010 K.Murakami
  - update for chages of G4 classes (G4GDMLParser, physics list)
  - add a new example using GTK (examples/emplot/emcalc_gui.py)

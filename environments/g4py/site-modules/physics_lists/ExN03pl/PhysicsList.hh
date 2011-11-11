@@ -23,38 +23,45 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsListEMlowE.hh,v 1.1 2006-07-12 08:46:18 kmura Exp $
-// $Name: not supported by cvs2svn $
-// ====================================================================
-//   PhysicsListEMlowE.hh
 //
-//   Physics list for electron/positron/gamma
-//   model: EM-lowE package
+// $Id: PhysicsList.hh,v 1.1 2010-10-18 15:56:17 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-//                                         2006 Q
-// ====================================================================
-#ifndef PHYSICS_LIST_EMLOWE_H
-#define PHYSICS_LIST_EMLOWE_H
+// 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#ifndef PhysicsList_h
+#define PhysicsList_h 1
 
 #include "G4VUserPhysicsList.hh"
+#include "globals.hh"
 
-// ====================================================================
-//
-// class definition
-//
-// ====================================================================
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsListEMlowE : public G4VUserPhysicsList {
-
+class PhysicsList: public G4VUserPhysicsList
+{
 public:
-  PhysicsListEMlowE();
-  ~PhysicsListEMlowE();
+  PhysicsList();
+  virtual ~PhysicsList();
 
-  virtual void ConstructParticle();
-  virtual void ConstructProcess();
-  virtual void SetCuts();
+  // Construct particle and physics
+  void ConstructParticle();
+  void ConstructProcess();
+ 
+  void SetCuts();
+   
+private:
 
+  // these methods Construct physics processes and register them
+  void ConstructDecay();
+  void ConstructEM();
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif
+
+
 
