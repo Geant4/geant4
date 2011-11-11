@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 10th, 2011  Gabriele Cosmo G03-V09-04-00
+- Changed from no longer supported physics-list QGSP-BERT-EMV to QGSP-BERT.
+
 November 17th, 2010  Gabriele Cosmo G03-V09-03-06
 - Restored generic OGL viewer in macros.
 
