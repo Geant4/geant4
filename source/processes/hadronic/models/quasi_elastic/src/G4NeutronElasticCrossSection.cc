@@ -163,14 +163,10 @@ G4double G4NeutronElasticCrossSection::GetCrossSection(G4bool fCS, G4double pMom
   // ***---*** End of the mandatory Static Definitions of the Associative Memory ***---***
   G4double pEn=pMom;
   onlyCS=fCS;
-#ifdef debug
-  G4cout<<"G4QNElCS::GetCS:>>> f="<<fCS<<", p="<<pMom<<", Z="<<tgZ<<"("<<lastZ<<") ,N="
-        <<tgN<<"("<<lastN<<"), T="<<pEn<<"("<<lastTH<<")"<<",Sz="<<colN.size()<<G4endl;
-  //CalculateCrossSection(fCS,-27,j,pPDG,lastZ,lastN,pMom); // DUMMY TEST
-#endif
+
   if(pPDG!=2112)
   {
-    G4cout<<"G4QNeutronElCS::GetCS: *** Found pPDG="<<pPDG<<" =--=> CS=0"<<G4endl;
+    G4cout<<"G4NeutronElCS::GetCS: *** Found pPDG="<<pPDG<<" =--=> CS=0"<<G4endl;
     //CalculateCrossSection(fCS,-27,j,pPDG,lastZ,lastN,pMom); // DUMMY TEST
     return 0.;                         // projectile PDG=0 is a mistake (?!) @@
   }
@@ -185,16 +181,9 @@ G4double G4NeutronElasticCrossSection::GetCrossSection(G4bool fCS, G4double pMom
     {
       lastI=i;
       lastTH =colTH[i];              // Last THreshold (A-dependent)
-#ifdef debug
-      G4cout<<"G4QNeutElCS::GetCS:Found,P="<<pMom<<",Threshold="<<lastTH<<",i="<<i<<G4endl;
-      //CalculateCrossSection(fCS,-27,i,pPDG,lastZ,lastN,pMom); // DUMMY TEST
-#endif
+
       if(pEn<=lastTH)
       {
-#ifdef debug
-        G4cout<<"G4QNeutElCS::GetCS:Found,T="<<pEn<<"<Threshold="<<lastTH<<",CS=0"<<G4endl;
-        //CalculateCrossSection(fCS,-27,i,pPDG,lastZ,lastN,pMom); // DUMMY TEST
-#endif
         return 0.;                   // Energy is below the Threshold value
       }
       lastP  =colP [i];                // Last Momentum  (A-dependent)
@@ -202,86 +191,44 @@ G4double G4NeutronElasticCrossSection::GetCrossSection(G4bool fCS, G4double pMom
       //  if(std::fabs(lastP/pMom-1.)<tolerance) //VI (do not use tolerance)
       if(lastP == pMom)              // Do not recalculate
       {
-#ifdef debug
-        G4cout<<"G4QNeutronElasticCS::GetCrosS:P="<<pMom<<",CS="<<lastCS*millibarn<<G4endl;
-#endif
         CalculateCrossSection(fCS,-1,i,pPDG,lastZ,lastN,pMom); // Update param's only
         return lastCS*millibarn;     // Use theLastCS
       }
       in = true;                       // This is the case when the isotop is found in DB
       // Momentum pMom is in IU ! @@ Units
-#ifdef debug
-      G4cout<<"G4QNElCrS::G:UpdateDB,P="<<pMom<<",f="<<fCS<<",I="<<lastI<<",i="<<i<<G4endl;
-#endif
       lastCS=CalculateCrossSection(fCS,-1,i,pPDG,lastZ,lastN,pMom); // read & update
-#ifdef debug
-      G4cout<<"G4QNeutronElCS::GetCrosSec:*****>New (inDB) Calculated CS="<<lastCS<<G4endl;
-      //CalculateCrossSection(fCS,-27,i,pPDG,lastZ,lastN,pMom); // DUMMY TEST
-#endif
+
       if(lastCS<=0. && pEn>lastTH)    // Correct the threshold
       {
-#ifdef debug
-        G4cout<<"G4QNeutronElCS::GetCS:New,T="<<pEn<<"(CS=0) > Threshold="<<lastTH<<G4endl;
-#endif
         lastTH=pEn;
       }
       break;                           // Go out of the LOOP with found lastI
     }
-#ifdef debug
-    G4cout<<"---G4NeutronElasticCrossSection::GetCrosSec:pPDG="<<pPDG<<",i="<<i<<",N="
-          <<colN[i]<<",Z["<<i<<"]="<<colZ[i]<<G4endl;
-    //CalculateCrossSection(fCS,-27,i,pPDG,lastZ,lastN,pMom); // DUMMY TEST
-#endif
   }
   if(!in)                            // This nucleus has not been calculated previously
   {
-#ifdef debug
-    G4cout<<"G4QNElCrS::GetCrosSec:CalcNew P="<<pMom<<",f="<<fCS<<",lastI="<<lastI<<G4endl;
-#endif
     //!!The slave functions must provide cross-sections in millibarns (mb) !! (not in IU)
     lastCS=CalculateCrossSection(fCS,0,lastI,pPDG,lastZ,lastN,pMom);//calculate&create
     if(lastCS<=0.)
     {
       lastTH = ThresholdEnergy(tgZ, tgN); // The Threshold Energy which is now the last
-#ifdef debug
-      G4cout<<"G4QNeutronElCrosSect::GetCrossSect: NewThresh="<<lastTH<<",T="<<pEn<<G4endl;
-#endif
       if(pEn>lastTH)
       {
-#ifdef debug
-        G4cout<<"G4QNeutElCS::GetCS: First T="<<pEn<<"(CS=0) > Threshold="<<lastTH<<G4endl;
-#endif
         lastTH=pEn;
       }
     }
-#ifdef debug
-    G4cout<<"G4QNElCrS::GetCrosSec: New CS="<<lastCS<<",lZ="<<lastN<<",lN="<<lastZ<<G4endl;
-    //CalculateCrossSection(fCS,-27,lastI,pPDG,lastZ,lastN,pMom); // DUMMY TEST
-#endif
     colN.push_back(tgN);
     colZ.push_back(tgZ);
     colP.push_back(pMom);
     colTH.push_back(lastTH);
     colCS.push_back(lastCS);
-#ifdef debug
-    G4cout<<"G4QNElCrS::GetCS:1st,P="<<pMom<<"(MeV),CS="<<lastCS*millibarn<<"(mb)"<<G4endl;
-    //CalculateCrossSection(fCS,-27,lastI,pPDG,lastZ,lastN,pMom); // DUMMY TEST
-#endif
     return lastCS*millibarn;
   } // End of creation of the new set of parameters
   else
   {
-#ifdef debug
-    G4cout<<"G4NeutronElasticCrossSection::GetCS: Update lastI="<<lastI<<G4endl;
-#endif
     colP[lastI]=pMom;
     colCS[lastI]=lastCS;
   }
-#ifdef debug
-  G4cout<<"G4QNElCS::GetCrSec:End,P="<<pMom<<"(MeV),CS="<<lastCS*millibarn<<"(mb)"<<G4endl;
-  //CalculateCrossSection(fCS,-27,lastI,pPDG,lastZ,lastN,pMom); // DUMMY TEST
-  G4cout<<"G4NeutronElasticCrossSection::GetCrSec:***End***, onlyCS="<<onlyCS<<G4endl;
-#endif
   return lastCS*millibarn;
 }
 
@@ -295,9 +242,6 @@ G4double G4NeutronElasticCrossSection::CalculateCrossSection(G4bool CS, G4int F,
   // *** End of Static Definitions (Associative Memory Data Base) ***
   G4double pMom=pIU/GeV;                // All calculations are in GeV
   onlyCS=CS;                            // Flag to calculate only CS (not Si/Bi)
-#ifdef debug
-  G4cout<<"G4QNeutronElasticCrosS::CalcCS:->onlyCS="<<onlyCS<<",F="<<F<<",p="<<pIU<<G4endl;
-#endif
   lastLP=std::log(pMom);                // Make a logarithm of the momentum for calculation
   if(F)                                 // This isotope was found in AMDB =>RETRIEVE/UPDATE
   {
@@ -315,19 +259,10 @@ G4double G4NeutronElasticCrossSection::CalculateCrossSection(G4bool CS, G4int F,
       lastB3T = B3T[I];                 // Pointer to the rhird slope
       lastS4T = S4T[I];                 // Pointer to the 4-th mantissa
       lastB4T = B4T[I];                 // Pointer to the 4-th slope
-#ifdef debug
-      G4cout<<"G4QNElasticCS::CalcCS: DB is updated for I="<<I<<",*,PIN4="<<PIN[4]<<G4endl;
-#endif
     }
-#ifdef debug
-    G4cout<<"G4QNeutronElasticCrosS::CalcCS:*read*, LP="<<lastLP<<",PIN="<<lastPIN<<G4endl;
-#endif
     if(lastLP>lastPIN && lastLP<lPMax)
     {
       lastPIN=GetPTables(lastLP,lastPIN,PDG,tgZ,tgN);// Can update upper logP-Limit in tabs
-#ifdef debug
-      G4cout<<"G4QNElCrS::CalcCS:updated(I),LP="<<lastLP<<"<IN["<<I<<"]="<<lastPIN<<G4endl;
-#endif
       PIN[I]=lastPIN;                   // Remember the new P-Limit of the tables
     }
   }
@@ -345,13 +280,7 @@ G4double G4NeutronElasticCrossSection::CalculateCrossSection(G4bool CS, G4int F,
     lastB3T = new G4double[nPoints];    // Allocate memory for Tabulated third slope    
     lastS4T = new G4double[nPoints];    // Allocate memory for Tabulated 4-th mantissa 
     lastB4T = new G4double[nPoints];    // Allocate memory for Tabulated 4-th slope    
-#ifdef debug
-    G4cout<<"G4QNeutronElasticCrosS::CalcCS:*ini*,lastLP="<<lastLP<<",min="<<lPMin<<G4endl;
-#endif
     lastPIN = GetPTables(lastLP,lPMin,PDG,tgZ,tgN); // Returns the new P-limit for tables
-#ifdef debug
-    G4cout<<"G4QNElCS::CalcCS:i,Z="<<tgZ<<",N="<<tgN<<",PDG="<<PDG<<",LP"<<lastPIN<<G4endl;
-#endif
     PIN.push_back(lastPIN);             // Fill parameters of CS function to AMDB
     PAR.push_back(lastPAR);             // Fill parameters of CS function to AMDB
     CST.push_back(lastCST);             // Fill Tabulated CS function to AMDB    
@@ -366,30 +295,18 @@ G4double G4NeutronElasticCrossSection::CalculateCrossSection(G4bool CS, G4int F,
     B4T.push_back(lastB4T);             // Fill Tabulated 4-th slope to AMDB    
   } // End of creation/update of the new set of parameters and tables
   // =-------= NOW Update (if necessary) and Calculate the Cross Section =---------=
-#ifdef debug
-  G4cout<<"G4QNElCrS::CalcCS:?update?,LP="<<lastLP<<",IN="<<lastPIN<<",ML="<<lPMax<<G4endl;
-#endif
   if(lastLP>lastPIN && lastLP<lPMax)
   {
     lastPIN = GetPTables(lastLP,lastPIN,PDG,tgZ,tgN);
-#ifdef debug
-    G4cout<<"G4QNeutronElCrS::CalcCS:*updated(O)*, LP="<<lastLP<<" < IN="<<lastPIN<<G4endl;
-#endif
   }
-#ifdef debug
-  G4cout<<"G4QNEltCrS::CalcCS: lastLP="<<lastLP<<",lPM="<<lPMin<<",lPIN="<<lastPIN<<G4endl;
-#endif
   if(!onlyCS) lastTM=GetQ2max(PDG, tgZ, tgN, pMom); // Calculate (-t)_max=Q2_max (GeV2)
-#ifdef debug
-  G4cout<<"G4QNeutElastCroSec::CalcCS:oCS="<<onlyCS<<",-t="<<lastTM<<",p="<<lastLP<<G4endl;
-#endif
   if(lastLP>lPMin && lastLP<=lastPIN)   // Linear fit is made using precalculated tables
   {
     if(lastLP==lastPIN)
     {
       G4double shift=(lastLP-lPMin)/dlnP+.000001; // Log distance from lPMin
       G4int    blast=static_cast<int>(shift); // this is a bin number of the lower edge (0)
-      if(blast<0 || blast>=nLast) G4cout<<"G4QNeutElCS::CCS:b="<<blast<<","<<nLast<<G4endl;
+      if(blast<0 || blast>=nLast) G4cout<<"G4NeutElCS::CCS:b="<<blast<<","<<nLast<<G4endl;
       lastSIG = lastCST[blast];
       if(!onlyCS)                       // Skip the differential cross-section parameters
       {
@@ -403,9 +320,6 @@ G4double G4NeutronElasticCrossSection::CalculateCrossSection(G4bool CS, G4int F,
         theS4  = lastS4T[blast];
         theB4  = lastB4T[blast];
       }
-#ifdef debug
-      G4cout<<"G4NeutronElasticCrossSection::CalcCS:(E)S1="<<theS1<<",B1="<<theB1<<G4endl;
-#endif
     }
     else
     {
@@ -417,10 +331,6 @@ G4double G4NeutronElasticCrossSection::CalculateCrossSection(G4bool CS, G4int F,
       G4int lastL=blast+1;                       // the upper bin number
       G4double SIGL=lastCST[blast];              // the basic value of the cross-section
       lastSIG= SIGL+shift*(lastCST[lastL]-SIGL); // calculated total elastic cross-section
-#ifdef debug
-      G4cout<<"G4QNeutronElCS::CalcCrossSection: Sig="<<lastSIG<<", P="<<pMom<<", Z="<<tgZ
-            <<", N="<<tgN<<", PDG="<<PDG<<", onlyCS="<<onlyCS<<G4endl;
-#endif
       if(!onlyCS)                       // Skip the differential cross-section parameters
       {
         G4double SSTL=lastSST[blast];           // the low bin of the first squared slope
@@ -428,10 +338,6 @@ G4double G4NeutronElasticCrossSection::CalculateCrossSection(G4bool CS, G4int F,
         G4double S1TL=lastS1T[blast];           // the low bin of the first mantissa
         theS1=S1TL+shift*(lastS1T[lastL]-S1TL); // the basic value of the first mantissa
         G4double B1TL=lastB1T[blast];           // the low bin of the first slope
-#ifdef debug
-        G4cout<<"G4QNeutronElCrS::CalcCrossSection:bl="<<blast<<",ls="<<lastL<<",SL="<<S1TL
-              <<",SU="<<lastS1T[lastL]<<",BL="<<B1TL<<",BU="<<lastB1T[lastL]<<G4endl;
-#endif
         theB1=B1TL+shift*(lastB1T[lastL]-B1TL); // the basic value of the first slope
         G4double S2TL=lastS2T[blast];           // the low bin of the second mantissa
         theS2=S2TL+shift*(lastS2T[lastL]-S2TL); // the basic value of the second mantissa
@@ -439,31 +345,17 @@ G4double G4NeutronElasticCrossSection::CalculateCrossSection(G4bool CS, G4int F,
         theB2=B2TL+shift*(lastB2T[lastL]-B2TL); // the basic value of the second slope
         G4double S3TL=lastS3T[blast];           // the low bin of the third mantissa
         theS3=S3TL+shift*(lastS3T[lastL]-S3TL); // the basic value of the third mantissa
-#ifdef debug
-        G4cout<<"G4QNElCS::CCS: s3l="<<S3TL<<",sh3="<<shift<<",s3h="<<lastS3T[lastL]<<",b="
-              <<blast<<",l="<<lastL<<G4endl;
-#endif
         G4double B3TL=lastB3T[blast];           // the low bin of the third slope
         theB3=B3TL+shift*(lastB3T[lastL]-B3TL); // the basic value of the third slope
         G4double S4TL=lastS4T[blast];           // the low bin of the 4-th mantissa
         theS4=S4TL+shift*(lastS4T[lastL]-S4TL); // the basic value of the 4-th mantissa
-#ifdef debug
-        G4cout<<"G4QNElCS::CCS: s4l="<<S4TL<<",sh4="<<shift<<",s4h="<<lastS4T[lastL]<<",b="
-              <<blast<<",l="<<lastL<<G4endl;
-#endif
         G4double B4TL=lastB4T[blast];           // the low bin of the 4-th slope
         theB4=B4TL+shift*(lastB4T[lastL]-B4TL); // the basic value of the 4-th slope
       }
-#ifdef debug
-      G4cout<<"G4NeutronElasticCrossSection::CalcCS:(I)S1="<<theS1<<",B1="<<theB1<<G4endl;
-#endif
     }
   }
   else lastSIG=GetTabValues(lastLP, PDG, tgZ, tgN); // Direct calculation beyond the table
   if(lastSIG<0.) lastSIG = 0.;                   // @@ a Warning print can be added
-#ifdef debug
-  G4cout<<"G4NeutronElasticCrossSection::CalculateCS: END, onlyCS="<<onlyCS<<G4endl;
-#endif
   return lastSIG;
 }
 
@@ -1754,17 +1646,11 @@ G4double G4NeutronElasticCrossSection::GetPTables(G4double LP, G4double ILP, G4i
         lastPAR[13]=0.;                                                       // reserved
         lastPAR[14]=0.;                                                       // reserved
         G4int nn=NIso[tgZ];
-#ifdef pdebug
-	  G4cout<<"G4QNElCrS::CalcCS: Z="<<tgZ<<", nIs="<<nn<<G4endl;
-#endif
         G4bool nfound=true;
         if(nn) for (G4int in=0; in<nn; in++)
         {
           std::pair<G4int, const G4double*> curIs=Pars[tgZ][in];
           G4int cn=curIs.first;
-#ifdef pdebug
-	   G4cout<<"G4QNElCrS::CalcCS: N="<<tgN<<", cn="<<cn<<G4endl;
-#endif
           if(cn == tgN)
           {
             const G4double* curT=curIs.second;
@@ -1775,9 +1661,6 @@ G4double G4NeutronElasticCrossSection::GetPTables(G4double LP, G4double ILP, G4i
             lastPAR[10]=curT[4];                                           // p10
             lastPAR[11]=curT[5];                                           // p11
             lastPAR[12]=curT[6];                                           // p12
-#ifdef pdebug
-		G4cout<<"G4QNElCrS::CalcCS: Parameters are filled, p12="<<lastPAR[12]<<G4endl;
-#endif
             nfound = false;
             break;
           }
@@ -1842,10 +1725,6 @@ G4double G4NeutronElasticCrossSection::GetPTables(G4double LP, G4double ILP, G4i
           // The gloria slope           (pel_ub)
           lastPAR[49]=920.+.03*a8*a3;                        // p1
           lastPAR[50]=93.+.0023*a12;                         // p2
-#ifdef debug
-         G4cout<<"G4QNElCrS::CalcCS:la "<<lastPAR[44]<<", "<<lastPAR[45]<<", "<<lastPAR[46]
-               <<", "<<lastPAR[48]<<", "<<lastPAR[49]<<", "<<lastPAR[50]<<G4endl;
-#endif
         }
         else
         {
@@ -1905,10 +1784,6 @@ G4double G4NeutronElasticCrossSection::GetPTables(G4double LP, G4double ILP, G4i
           lastPAR[54]=20./sa;                                // p2
           lastPAR[55]=7.e3*a/(sa+1.);                        // p3
           lastPAR[56]=900.*sa/(1.+500./a3);                  // p4
-#ifdef debug
-         G4cout<<"G4QNElCrS::CalcCS:ha "<<lastPAR[47]<<", "<<lastPAR[48]<<", "<<lastPAR[49]
-               <<", "<<lastPAR[50]<<", "<<lastPAR[51]<<", "<<lastPAR[52]<<G4endl;
-#endif
         }
         // Parameter for lowEnergyNeutrons
         lastPAR[57]=1.e15+2.e27/a4/(1.+2.e-18*a16);
@@ -1929,11 +1804,6 @@ G4double G4NeutronElasticCrossSection::GetPTables(G4double LP, G4double ILP, G4i
       lastB3T[0]=theB3;
       lastS4T[0]=theS4;
       lastB4T[0]=theB4;
-#ifdef debug
-      G4cout<<"G4NeutronElasticCrossSection::GetPTables: ip=0(init), lp="<<lp<<", S1="
-            <<theS1<<",B1="<<theB1<<",S2="<<theS2<<",B2="<<theB3<<",S3="<<theS3
-            <<",B3="<<theB3<<",S4="<<theS4<<",B4="<<theB4<<G4endl;
-#endif
     }
     if(LP>ILP)
     {
@@ -1962,11 +1832,6 @@ G4double G4NeutronElasticCrossSection::GetPTables(G4double LP, G4double ILP, G4i
             lastB3T[ip]=theB3;
             lastS4T[ip]=theS4;
             lastB4T[ip]=theB4;
-#ifdef debug
-            G4cout<<"G4NeutronElasticCrossSection::GetPTables: ip="<<ip<<", lp="<<lp
-                  <<", S1="<<theS1<<", B1="<<theB1<<", S2="<<theS2<<", B2="<<theB2<<", S3="
-                  <<theS3<<", B3="<<theB3<<", S4="<<theS4<<", B4="<<theB4<<G4endl;
-#endif
           }
           return lp;
         }
@@ -1978,10 +1843,6 @@ G4double G4NeutronElasticCrossSection::GetPTables(G4double LP, G4double ILP, G4i
                  <<tgZ<<", N="<<tgN<<", i="<<ini<<">= max="<<nPoints<<", LP="<<LP
                  <<" > ILP="<<ILP<<", lPMax="<<lPMax<<" nothing is done!"<<G4endl;
     }
-#ifdef debug
-    else G4cout<<"*Warning*G4QNeutronElasticCrossSect::GetPTables: PDG="<<PDG<<", Z="<<tgZ
-               <<", N="<<tgN<<", LP="<<LP<<" <= ILP="<<ILP<<" nothing is done!"<<G4endl;
-#endif
   }
   else
   {
@@ -1998,44 +1859,16 @@ G4double G4NeutronElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int 
   static const G4double third=1./3.;
   static const G4double fifth=1./5.;
   static const G4double sevth=1./7.;
-#ifdef tdebug
-  G4cout<<"G4QNeutElCrS::GetExcT:F="<<onlyCS<<",Z="<<tgZ<<",N="<<tgN<<",PDG="<<PDG<<G4endl;
-#endif
   if(PDG!=2112) G4cout<<"*Warning*G4NeutronElasticCrossSection::GetExT:PDG="<<PDG<<G4endl;
   if(onlyCS) G4cout<<"*Warning*G4NeutronElasticCrossSection::GetExchangeT:onCS=1"<<G4endl;
   if(lastLP<-4.3) return lastTM*GeVSQ*G4UniformRand();// S-wave for p<14 MeV/c (kinE<.1MeV)
   G4double q2=0.;
   if(tgZ==1 && tgN==0)                // ===> n+p=n+p
   {
-#ifdef tdebug
-    G4cout<<"G4QNeutronElasticCrS::GetExchangeT: TM="<<lastTM<<",S1="<<theS1<<",B1="<<theB1
-          <<",S2="<<theS2<<",B2="<<theB2<<",GeV2="<<GeVSQ<<G4endl;
-#endif
     G4double E1=lastTM*theB1;
     G4double R1=(1.-std::exp(-E1));
-#ifdef tdebug
-    G4double ts1=-std::log(1.-R1)/theB1;
-    G4double ds1=std::fabs(ts1-lastTM)/lastTM;
-    if(ds1>.0001)
-      G4cout<<"*Warning*G4NeutronElasticCrossSection::GetExT:1n "<<ts1<<"#"<<lastTM<<",d="
-            <<ds1<<",R1="<<R1<<",E1="<<E1<<G4endl;
-#endif
     G4double E2=lastTM*theB2;
     G4double R2=(1.-std::exp(-E2));
-#ifdef tdebug
-    G4double ts2=-std::log(1.-R2)/theB2;
-    G4double ds2=std::fabs(ts2-lastTM)/lastTM;
-    if(ds2>.0001)
-      G4cout<<"*Warning*G4NeutronElasticCrossSection::GetExT:2n "<<ts2<<"#"<<lastTM<<",d="
-            <<ds2<<",R2="<<R2<<",E2="<<E2<<G4endl;
-#endif
-    //G4double E3=lastTM*theB3;
-    //G4double R3=(1.-std::exp(-E3));
-#ifdef tdebug
-    //G4double ts3=-std::log(1.-R3)/theB3;
-    //G4double ds3=std::fabs(ts3-lastTM)/lastTM;
-    //if(ds3>.01)G4cout<<"Warn*G4QNElCS::GetExT:3n="<<ts3<<"#"<<lastTM<<",d="<<ds3<<G4endl;
-#endif
     G4double I1=R1*theS1;
     G4double I2=R2*theS2/theB2;
     //G4double I3=R3*theS3/theB3;
@@ -2058,55 +1891,18 @@ G4double G4NeutronElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int 
   else
   {
     G4double a=tgZ+tgN;
-#ifdef tdebug
-    G4cout<<"G4QNeutronElCroSec::GetExT:a="<<a<<",t="<<lastTM<<",S1="<<theS1<<",B1="<<theB1
-          <<",SS="<<theSS<<",S2="<<theS2<<",B2="<<theB2<<",S3="<<theS3<<",B3="<<theB3
-          <<",S4="<<theS4<<",B4="<<theB4<<G4endl;
-#endif
     G4double E1=lastTM*(theB1+lastTM*theSS);
     G4double R1=(1.-std::exp(-E1));
     G4double tss=theSS+theSS; // for future solution of quadratic equation (imediate check)
-#ifdef tdebug
-    G4double ts1=-std::log(1.-R1)/theB1;
-    if(std::fabs(tss)>1.e-7) ts1=(std::sqrt(theB1*(theB1+(tss+tss)*ts1))-theB1)/tss;
-    G4double ds1=(ts1-lastTM)/lastTM;
-    if(ds1>.0001)
-      G4cout<<"*Warning*G4NeutronElasticCrossSection::GetExT:1a "<<ts1<<"#"<<lastTM<<",d="
-            <<ds1<<",R1="<<R1<<",E1="<<E1<<G4endl;
-#endif
     G4double tm2=lastTM*lastTM;
     G4double E2=lastTM*tm2*theB2;                   // power 3 for lowA, 5 for HighA (1st)
     if(a>6.5)E2*=tm2;                               // for heavy nuclei
     G4double R2=(1.-std::exp(-E2));
-#ifdef tdebug
-    G4double ts2=-std::log(1.-R2)/theB2;
-    if(a<6.5)ts2=std::pow(ts2,third);
-    else     ts2=std::pow(ts2,fifth);
-    G4double ds2=std::fabs(ts2-lastTM)/lastTM;
-    if(ds2>.0001)
-      G4cout<<"*Warning*G4NeutronElasticCrossSection::GetExT:2a "<<ts2<<"#"<<lastTM<<",d="
-            <<ds2<<",R2="<<R2<<",E2="<<E2<<G4endl;
-#endif
     G4double E3=lastTM*theB3;
     if(a>6.5)E3*=tm2*tm2*tm2;                       // power 1 for lowA, 7 (2nd) for HighA
     G4double R3=(1.-std::exp(-E3));
-#ifdef tdebug
-    G4double ts3=-std::log(1.-R3)/theB3;
-    if(a>6.5)ts3=std::pow(ts3,sevth);
-    G4double ds3=std::fabs(ts3-lastTM)/lastTM;
-    if(ds3>.0001)
-      G4cout<<"*Warning*G4NeutronElasticCrossSection::GetExT:3a "<<ts3<<"#"<<lastTM<<",d="
-            <<ds3<<",R3="<<R3<<",E3="<<E3<<G4endl;
-#endif
     G4double E4=lastTM*theB4;
     G4double R4=(1.-std::exp(-E4));
-#ifdef tdebug
-    G4double ts4=-std::log(1.-R4)/theB4;
-    G4double ds4=std::fabs(ts4-lastTM)/lastTM;
-    if(ds4>.0001)
-      G4cout<<"*Warning*G4QNeutronElasticCrissSection::GetExT:4a "<<ts4<<"#"<<lastTM<<",d="
-            <<ds4<<",R4="<<R4<<",E4="<<E4<<G4endl;
-#endif
     G4double I1=R1*theS1;
     G4double I2=R2*theS2;
     G4double I3=R3*theS3;
@@ -2114,18 +1910,12 @@ G4double G4NeutronElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int 
     G4double I12=I1+I2;
     G4double I13=I12+I3;
     G4double rand=(I13+I4)*G4UniformRand();
-#ifdef tdebug
-    G4cout<<"G4QNElCS::GtExT:1="<<I1<<",2="<<I2<<",3="<<I3<<",4="<<I4<<",r="<<rand<<G4endl;
-#endif
     if(rand<I1)
     {
       G4double ran=R1*G4UniformRand();
       if(ran>1.) ran=1.;
       q2=-std::log(1.-ran)/theB1;
       if(std::fabs(tss)>1.e-7) q2=(std::sqrt(theB1*(theB1+(tss+tss)*q2))-theB1)/tss;
-#ifdef tdebug
-      G4cout<<"G4QNElCS::GetET:Q2="<<q2<<",ss="<<tss/2<<",b1="<<theB1<<",t1="<<ts1<<G4endl;
-#endif
     }
     else if(rand<I12)
     {
@@ -2135,9 +1925,6 @@ G4double G4NeutronElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int 
       if(q2<0.) q2=0.;
       if(a<6.5) q2=std::pow(q2,third);
       else      q2=std::pow(q2,fifth);
-#ifdef tdebug
-      G4cout<<"G4QNElCS::GetExT: Q2="<<q2<<",r2="<<R2<<", b2="<<theB2<<",t2="<<ts2<<G4endl;
-#endif
     }
     else if(rand<I13)
     {
@@ -2146,9 +1933,6 @@ G4double G4NeutronElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int 
       q2=-std::log(1.-ran)/theB3;
       if(q2<0.) q2=0.;
       if(a>6.5) q2=std::pow(q2,sevth);
-#ifdef tdebug
-      G4cout<<"G4QNElCS::GetExT:Q2="<<q2<<", r3="<<R2<<", b3="<<theB2<<",t3="<<ts2<<G4endl;
-#endif
     }
     else
     {
@@ -2156,18 +1940,12 @@ G4double G4NeutronElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int 
       if(ran>1.) ran=1.;
       q2=-std::log(1.-ran)/theB4;
       if(a<6.5) q2=lastTM-q2;                    // u reduced for lightA (starts from 0)
-#ifdef tdebug
-      G4cout<<"G4QNElCS::GetET:Q2="<<q2<<",m="<<lastTM<<",b4="<<theB3<<",t4="<<ts3<<G4endl;
-#endif
     }
   }
   if(q2<0.) q2=0.;
-  if(!(q2>=-1.||q2<=1.)) G4cout<<"*NAN*G4QNeutronElCroSect::GetExchangeT: -t="<<q2<<G4endl;
+  if(!(q2>=-1.||q2<=1.)) G4cout<<"*NAN*G4NeutronElCroSect::GetExchangeT: -t="<<q2<<G4endl;
   if(q2>lastTM)
   {
-#ifdef tdebug
-    G4cout<<"*Warning*G4NeutronElasticCrossSection::GetExT:-t="<<q2<<" >"<<lastTM<<G4endl;
-#endif
     q2=lastTM;
   }
   return q2*GeVSQ;
@@ -2177,9 +1955,6 @@ G4double G4NeutronElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int 
 G4double G4NeutronElasticCrossSection::GetSlope(G4int tgZ, G4int tgN, G4int PDG)
 {
   static const G4double GeVSQ=gigaelectronvolt*gigaelectronvolt;
-#ifdef tdebug
-  G4cout<<"G4QNeutrElCS::GetSlope:"<<onlyCS<<", Z="<<tgZ<<",N="<<tgN<<",PDG="<<PDG<<G4endl;
-#endif
   if(onlyCS) G4cout<<"Warning*G4NeutronElasticCrossSection::GetSlope:onlyCS=true"<<G4endl;
   if(lastLP<-4.3) return 0.;          // S-wave for p<14 MeV/c (kinE<.1MeV)
   if(PDG!=2112)
@@ -2188,7 +1963,7 @@ G4double G4NeutronElasticCrossSection::GetSlope(G4int tgZ, G4int tgN, G4int PDG)
           <<", N="<<tgN<<", while it is defined only for PDG=2112"<<G4endl;
   }
   if(theB1<0.) theB1=0.;
-  if(!(theB1>=-1.||theB1<=1.))G4cout<<"*NAN*G4QNeutElasticCrosS::Getslope:"<<theB1<<G4endl;
+  if(!(theB1>=-1.||theB1<=1.))G4cout<<"*NAN*G4NeutElasticCrosS::Getslope:"<<theB1<<G4endl;
   return theB1/GeVSQ;
 }
 
@@ -2206,7 +1981,7 @@ G4double G4NeutronElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4in
   if(PDG!=2112) G4cout<<"*Warning*G4NeutronElasticCrossSection::GetTaV:PDG="<<PDG<<G4endl;
   if(tgZ<0 || tgZ>92)
   {
-    G4cout<<"*Warning*G4QNElasticCrS::GetTabValue: (1-92) No isotopes for Z="<<tgZ<<G4endl;
+    G4cout<<"*Warning*G4NElasticCrS::GetTabValue: (1-92) No isotopes for Z="<<tgZ<<G4endl;
     return 0.;
   }
   G4int iZ=tgZ-1; // Z index
@@ -2216,16 +1991,6 @@ G4double G4NeutronElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4in
     tgZ=1;
     tgN=0;
   }
-  //if(nN[iZ][0] < 0)
-  //{
-#ifdef isodebug
-  //  G4cout<<"*Warning*G4QNeutronElasticCS::GetTabValue: No isotopes for Z="<<tgZ<<G4endl;
-#endif
-  //  return 0.;
-  //}
-#ifdef debug
-  G4cout<<"G4QNElasticCS::GetTabVal:lp="<<lp<<",Z="<<tgZ<<",N="<<tgN<<",PDG="<<PDG<<G4endl;
-#endif
   G4double p=std::exp(lp);              // momentum
   G4double sp=std::sqrt(p);             // sqrt(p)
   G4double p2=p*p;            
@@ -2246,10 +2011,6 @@ G4double G4NeutronElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4in
     theB3=0.; 
     theS4=0.;
     theB4=0.; 
-#ifdef tdebug
-    G4cout<<"G4QNeutronElasticCroS::GetTableValues:(np) TM="<<lastTM<<",S1="<<theS1<<",B1="
-          <<theB1<<",S2="<<theS2<<",B2="<<theB2<<",S3="<<theS1<<",B3="<<theB1<<G4endl;
-#endif
     // Returns the total elastic pp cross-section (to avoid spoiling lastSIG)
     return lastPAR[0]/(p2s+lastPAR[1]*p+lastPAR[2]/ssp)+lastPAR[4]/p
            +(lastPAR[5]+lastPAR[6]*dl1*dl1+lastPAR[7]/p)/(1.+lastPAR[8]/p4);
@@ -2281,11 +2042,6 @@ G4double G4NeutronElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4in
       theS4=p2*(pah*lastPAR[44]*std::exp(-pah*lastPAR[45])+
                 lastPAR[46]/(1.+lastPAR[47]*std::pow(p,lastPAR[48])));
       theB4=lastPAR[49]*pa/p2/(1.+pa*lastPAR[50]);
-#ifdef tdebug
-      G4cout<<"G4QNElCS::GetTabV: lA, p="<<p<<",S1="<<theS1<<",B1="<<theB1<<",SS="<<theSS
-            <<",S2="<<theS2<<",B2="<<theB2<<",S3="<<theS3<<",B3="<<theB3<<",S4="<<theS4
-            <<",B4="<<theB4<<G4endl;
-#endif
     }
     else
     {
@@ -2302,20 +2058,8 @@ G4double G4NeutronElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4in
       theS4=(lastPAR[47]/p4+lastPAR[52]/p)/(1.+lastPAR[48]/p10)+
             (lastPAR[49]+lastPAR[50]*dl*dl)/(1.+lastPAR[51]/p12);
       theB4=lastPAR[53]/(1.+lastPAR[54]/p)+lastPAR[55]*p4/(1.+lastPAR[56]*p5);
-#ifdef tdebug
-      G4cout<<"G4QNElCS::GetTabV: hA, p="<<p<<",S1="<<theS1<<",B1="<<theB1<<",SS="<<theSS
-            <<",S2="<<theS2<<",B2="<<theB2<<",S3="<<theS3<<",B3="<<theB3<<",S4="<<theS4
-            <<",B4="<<theB4<<G4endl;
-#endif
     }
     // Returns the total elastic (n/p)A cross-section (to avoid spoiling lastSIG)
-#ifdef tdebug
-    G4cout<<"G4QNeutronElCS::GetTabV: PDG="<<PDG<<",P="<<p<<",N="<<tgN<<",Z="<<tgZ<<G4endl;
-#endif
-#ifdef pdebug
-    G4cout<<"G4QNElCS::GetTV: p="<<p<<",P12="<<lastPAR[12]<<",N="<<tgN<<",Z="<<tgZ<<G4endl;
-#endif
-    //         p1(p6)          p2(p7)          p3(p4)       o4(p8)       (p9)p5
     return (lastPAR[0]*dl*dl+lastPAR[1])/(1.+lastPAR[2]/p+lastPAR[3]/p4)+lastPAR[5]/
 	     (p3+lastPAR[6]/p3)+lastPAR[7]/(p2+lastPAR[4]/(p2+lastPAR[8])+lastPAR[9]/p)+
            lastPAR[10]/(p5+lastPAR[11]/p2)+lastPAR[12]/p;

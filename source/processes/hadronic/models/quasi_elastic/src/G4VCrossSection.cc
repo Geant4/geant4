@@ -94,12 +94,6 @@ G4double G4VCrossSection::LinearFit(G4double X, G4int N, G4double* XN, G4double*
 G4double G4VCrossSection::EquLinearFit(G4double X, G4int N, G4double X0, G4double DX,
                                         G4double* Y)
 {
-#ifdef pdebug
-  G4cout<<"G4VCrossSection::EquLinearFit: ***Called*** X="<<X<<", N="<<N<<", X0="<<X0
-        <<", DX="<<DX<<G4endl;
-  G4cout<<"G4VCrossSection::EquLinearFit: Y[0]="<<Y[0]<<", Y[N-1]="<<Y[N-1]<<G4endl;
-  //for(G4int i=1; i<N; i++)G4cout<<"-----G4VQCS::EquLinearFit: Y["<<i<<"]="<<Y[i]<<G4endl;
-#endif
   if(DX<=0. || N<2)
   {
     G4cerr<<"***G4VCrossSection::EquLinearFit: DX="<<DX<<", N="<<N<<G4endl;
@@ -113,8 +107,5 @@ G4double G4VCrossSection::EquLinearFit(G4double X, G4int N, G4double X0, G4doubl
   d-=j; // excess
   G4double yi=Y[j];
   G4double sigma=yi+(Y[j+1]-yi)*d;
-#ifdef pdebug
-  G4cout<<"G4VCrossSection::EquLinearFit: CS="<<sigma<<G4endl;
-#endif
   return sigma;
 }

@@ -60,9 +60,6 @@ std::vector<std::pair<G4double,G4double>*> G4QuasiElRatios::vX; // ETPointers to
 
 G4QuasiElRatios::G4QuasiElRatios()
 {
-#ifdef pdebug
-    G4cout<<"***^^^*** G4QuasiElRatios singletone is created ***^^^***"<<G4endl;
-#endif
 }
 
 G4QuasiElRatios::~G4QuasiElRatios()
@@ -92,9 +89,6 @@ G4QuasiElRatios* G4QuasiElRatios::GetPointer()
 std::pair<G4double,G4double> G4QuasiElRatios::GetRatios(G4double pIU, G4int pPDG,
                                                          G4int tgZ,    G4int tgN)
 {
-#ifdef pdebug
-    G4cout<<">>>IN>>>G4QFRat::GetQF:P="<<pIU<<",pPDG="<<pPDG<<",Z="<<tgZ<<",N="<<tgN<<G4endl;
-#endif
     G4double R=0.;
     G4double QF2In=1.;                        // Prototype of QuasiFree/Inel ratio for hN_tot
     G4int tgA=tgZ+tgN;
@@ -107,9 +101,6 @@ std::pair<G4double,G4double> G4QuasiElRatios::GetRatios(G4double pIU, G4int pPDG
         R=ElTot.first/ElTot.second;             // El/Total ratio (does not depend on units
         QF2In=GetQF2IN_Ratio(ElTot.second/millibarn, tgZ+tgN);   // QuasiFree/Inelastic ratio
     }
-#ifdef pdebug
-    G4cout<<">>>OUT>>>G4QuasiFreeRatio::GetQF2IN_Ratio: QF2In="<<QF2In<<", R="<<R<<G4endl;
-#endif
     return std::make_pair(QF2In,R);
 }
 
@@ -146,14 +137,11 @@ G4double G4QuasiElRatios::GetQF2IN_Ratio(G4double s, G4int A)
     static G4double* lastT=0;             // theLast of pointer to LinTable in the C++ heap
     static G4double* lastL=0;             // theLast of pointer to LogTable in the C++ heap
     // LogTable is created only if necessary. The ratio R(s>8100 mb) = 0 for any nuclei
-#ifdef pdebug
-    G4cout<<"+++G4QuasiFreeRatio::GetQF2IN_Ratio:A="<<A<<", s="<<s<<G4endl;
-#endif
     if(s<toler || A<2) return 1.;
     if(s>ms) return 0.;
     if(A>238)
     {
-        G4cout<<"-Warning-G4QuasiFreeRatio::GetQF2IN_Ratio:A="<<A<<">238, return zero"<<G4endl;
+        G4cout<<"-Warning-G4QuasiElRatio::GetQF2IN_Ratio:A="<<A<<">238, return zero"<<G4endl;
         return 0.;
     }
     G4int nDB=vA.size();                  // A number of nuclei already initialized in AMDB
@@ -166,15 +154,9 @@ G4double G4QuasiElRatios::GetQF2IN_Ratio(G4double s, G4int A)
         found=true;                         // The A value is found
         break;
     }
-#ifdef pdebug
-    G4cout<<"+++G4QuasiFreeRatio::GetQF2IN_Ratio: nDB="<<nDB<<", found="<<found<<G4endl;
-#endif
     if(!nDB || !found)                    // Create new line in the AMDB
     {
         lastA = A;
-#ifdef pdebug
-        G4cout<<"G4QuasiElRatios::GetQF2IN_Ratio: NewT, A="<<A<<", nDB="<<nDB<<G4endl;
-#endif
         lastT = new G4double[mps];          // Create the linear Table
         lastN = static_cast<int>(s/ds)+1;   // MaxBin to be initialized
         if(lastN>nps)
@@ -193,9 +175,6 @@ G4double G4QuasiElRatios::GetQF2IN_Ratio(G4double s, G4int A)
         lastL=new G4double[mls];            // Create the logarithmic Table
         if(s>sma)                           // Initialize the logarithmic Table
         {
-#ifdef pdebug
-            G4cout<<"G4QuasiElRatios::GetQF2IN_Ratio: NewL, A="<<A<<", nDB="<<nDB<<G4endl;
-#endif
             G4double ls=std::log(s);
             lastK = static_cast<int>((ls-lsi)/dl)+1; // MaxBin to be initialized in LogTaB
             if(lastK>nls)
@@ -234,15 +213,9 @@ G4double G4QuasiElRatios::GetQF2IN_Ratio(G4double s, G4int A)
         lastK=vK[i];
         lastT=vT[i];
         lastL=vL[i];
-#ifdef pdebug
-        G4cout<<"G4QuasiElRatios::GetQF2IN_Ratio: Found, s="<<s<<", lastM="<<lastM<<G4endl;
-#endif
         if(s>lastM)                          // At least LinTab must be updated
         {
             G4int nextN=lastN+1;               // The next bin to be initialized
-#ifdef pdebug
-            G4cout<<"G4QuasiElRatios::GetQF2IN_Ratio: lastN="<<lastN<<" ?< nps="<<nps<<G4endl;
-#endif
             if(lastN<nps)
             {
                 lastN = static_cast<int>(s/ds)+1;// MaxBin to be initialized
@@ -258,13 +231,7 @@ G4double G4QuasiElRatios::GetQF2IN_Ratio(G4double s, G4int A)
                     sv+=ds;
                     lastT[j]=CalcQF2IN_Ratio(sv,A);
                 }
-#ifdef pdebug
-                G4cout<<"G4QuasiElRatios::GetQF2IN_Ratio: End of LinTab update"<<G4endl;
-#endif
             } // End of LinTab update
-#ifdef pdebug
-            G4cout<<"G4QFRatios::GetQF2IN_Ratio: lN="<<lastN<<", nN="<<nextN<<", i="<<i<<G4endl;
-#endif
             if(lastN>=nextN)
             {
                 vH[i]=lastH;
@@ -272,9 +239,6 @@ G4double G4QuasiElRatios::GetQF2IN_Ratio(G4double s, G4int A)
             }
             G4int nextK=lastK+1;
             if(!lastK) nextK=0;
-#ifdef pdebug
-            G4cout<<"G4QFRat::GetQF2IN_Ratio: sma="<<sma<<", lastK="<<lastK<<" < "<<nls<<G4endl;
-#endif
             if(s>sma && lastK<nls)             // LogTab must be updated
             {
                 G4double sv=std::exp(lastM+lsi); // Define starting poit (lastM will be changed)
@@ -286,24 +250,12 @@ G4double G4QuasiElRatios::GetQF2IN_Ratio(G4double s, G4int A)
                     lastM=lsa-lsi;
                 }
                 else lastM = lastK*dl;           // Calculate max initialized ln(s)-lsi for LogTab
-#ifdef pdebug
-                G4cout<<"G4QFRat::GetQF2IN_Ratio: nK="<<nextK<<", lK="<<lastK<<", sv="<<sv<<G4endl;
-#endif
                 for(G4int j=nextK; j<=lastK; j++)// Calculate LogTab values
                 {
                     sv*=edl;
-#ifdef pdebug
-                    G4cout<<"G4QFRat::GetQF2IN_Ratio: j="<<j<<", sv="<<sv<<", A="<<A<<G4endl;
-#endif
                     lastL[j]=CalcQF2IN_Ratio(sv,A);
                 }
-#ifdef pdebug
-                G4cout<<"G4QuasiElRatios::GetQF2IN_Ratio: End of LinTab update"<<G4endl;
-#endif
             } // End of LogTab update
-#ifdef pdebug
-            G4cout<<"G4QFRatios::GetQF2IN_Ratio: lK="<<lastK<<", nK="<<nextK<<", i="<<i<<G4endl;
-#endif
             if(lastK>=nextK)
             {
                 vM[i]=lastM;
@@ -311,9 +263,6 @@ G4double G4QuasiElRatios::GetQF2IN_Ratio(G4double s, G4int A)
             }
         }
     }
-#ifdef pdebug
-    G4cout<<"G4QuasiElRatios::GetQF2IN_Ratio: BeforeTab s="<<s<<", sma="<<sma<<G4endl;
-#endif
     // Now one can use tabeles to calculate the value
     if(s<sma)                             // Use linear table
     {
@@ -332,9 +281,6 @@ G4double G4QuasiElRatios::GetQF2IN_Ratio(G4double s, G4int A)
     }
     if(lastR<0.) lastR=0.;
     if(lastR>1.) lastR=1.;
-#ifdef pdebug
-    G4cout<<"G4QuasiElRatios::GetQF2IN_Ratio: BeforeRet lastR="<<lastR<<G4endl;
-#endif
     return lastR;
 } // End of CalcQF2IN_Ratio
 
@@ -369,17 +315,11 @@ std::pair<G4double,G4double> G4QuasiElRatios::CalcElTot(G4double p, G4int I)
     }
     if     (!I)                          // pp/nn
     {
-#ifdef debug
-        G4cout<<"G4QuasiFreeR::CalcElTot:I=0, p="<<p<<", pmi="<<pmi<<", pma="<<pma<<G4endl;
-#endif
         if(p<pmi)
         {
             G4double p2=p*p;
             El=1./(.00012+p2*.2);
             To=El;
-#ifdef debug
-            G4cout<<"G4QuasiFreeR::CalcElTot:I=0i, El="<<El<<", To="<<To<<", p2="<<p2<<G4endl;
-#endif
         }
         else if(p>pma)
         {
@@ -387,9 +327,6 @@ std::pair<G4double,G4double> G4QuasiElRatios::CalcElTot(G4double p, G4int I)
             G4double lp2=lp*lp;
             El=pbe*lp2+6.72;
             To=pbt*lp2+38.2;
-#ifdef debug
-            G4cout<<"G4QuasiFreeR::CalcElTot:I=0a, El="<<El<<", To="<<To<<", lp2="<<lp2<<G4endl;
-#endif
         }
         else
         {
@@ -400,9 +337,6 @@ std::pair<G4double,G4double> G4QuasiElRatios::CalcElTot(G4double p, G4int I)
             G4double rp2=1./p2;
             El=LE+(pbe*lp2+6.72+32.6/p)/(1.+rp2/p);
             To=LE+(pbt*lp2+38.2+52.7*rp2)/(1.+2.72*rp2*rp2);
-#ifdef debug
-            G4cout<<"G4QuasiFreeR::CalcElTot:0,E="<<El<<",T="<<To<<",s="<<p2<<",l="<<lp2<<G4endl;
-#endif
         }
     }
     else if(I==1)                        // np/pn
@@ -613,7 +547,7 @@ std::pair<G4double,G4double> G4QuasiElRatios::CalcElTot(G4double p, G4int I)
     else
     {
         G4cout<<"*Error*G4QuasiElRatios::CalcElTot:ind="<<I<<" is not defined (0-7)"<<G4endl;
-        G4Exception("G4QuasiElRatios::CalcElTot:","23",FatalException,"CHIPScrash");
+        G4Exception("G4QuasiElRatios::CalcElTot:","23",FatalException,"QEcrash");
     }
     if(El>To) El=To;
     return std::make_pair(El,To);
@@ -641,7 +575,7 @@ std::pair<G4double,G4double> G4QuasiElRatios::GetElTotXS(G4double p, G4int PDG, 
     else {
         G4cout<<"*Error*G4QuasiElRatios::CalcElTotXS: PDG="<<PDG
         <<", while it is defined only for p,n,hyperons,anti-baryons,pi,K/antiK"<<G4endl;
-        G4Exception("G4QuasiFreeRatio::CalcElTotXS:","22",FatalException,"CHIPScrash");
+        G4Exception("G4QuasiElRatio::CalcElTotXS:","22",FatalException,"QEcrash");
     }
     return CalcElTot(p,ind);
 }
@@ -673,9 +607,6 @@ std::pair<G4double,G4double> G4QuasiElRatios::FetchElTot(G4double p, G4int PDG, 
     static std::pair<G4double,G4double>* lastX=0; // The Last ETPointers to LogTable in heap
     // LogTable is created only if necessary. The ratio R(s>8100 mb) = 0 for any nuclei
     G4int nDB=vI.size();                   // A number of hadrons already initialized in AMDB
-#ifdef pdebug
-    G4cout<<"G4QuasiFreeR::FetchElTot:p="<<p<<",PDG="<<PDG<<",F="<<F<<",nDB="<<nDB<<G4endl;
-#endif
     if(nDB && lastH==PDG && lastF==F && p>0. && p==lastP) return lastR;// VI don't use toler.
     //  if(nDB && lastH==PDG && lastF==F && p>0. && std::fabs(p-lastP)/p<toler) return lastR;
     lastH=PDG;
@@ -701,7 +632,7 @@ std::pair<G4double,G4double> G4QuasiElRatios::FetchElTot(G4double p, G4int PDG, 
     else {
         G4cout<<"*Error*G4QuasiElRatios::FetchElTot: PDG="<<PDG
         <<", while it is defined only for p,n,hyperons,anti-baryons,pi,K/antiK"<<G4endl;
-        G4Exception("G4QuasiFreeRatio::FetchElTot:","22",FatalException,"CHIPScrash");
+        G4Exception("G4QuasiELRatio::FetchElTot:","22",FatalException,"QECrash");
     }
     if(nDB && lastI==ind && p>0. && p==lastP) return lastR;  // VI do not use toler
     //  if(nDB && lastI==ind && p>0. && std::fabs(p-lastP)/p<toler) return lastR;
@@ -714,14 +645,8 @@ std::pair<G4double,G4double> G4QuasiElRatios::FetchElTot(G4double p, G4int PDG, 
         break;
     }
     G4double lp=std::log(p);
-#ifdef pdebug
-    G4cout<<"G4QuasiFreeR::FetchElTot:I="<<ind<<",i="<<i<<",fd="<<found<<",lp="<<lp<<G4endl;
-#endif
     if(!nDB || !found)                            // Create new line in the AMDB
     {
-#ifdef pdebug
-        G4cout<<"G4QuasiElRatios::FetchElTot: NewX, ind="<<ind<<", nDB="<<nDB<<G4endl;
-#endif
         lastX = new std::pair<G4double,G4double>[mlp]; // Create logarithmic Table for ElTot
         lastI = ind;                                // Remember the initialized inex
         lastK = static_cast<int>((lp-lpi)/dl)+1;    // MaxBin to be initialized in LogTaB
@@ -735,10 +660,6 @@ std::pair<G4double,G4double> G4QuasiElRatios::FetchElTot(G4double p, G4int PDG, 
         for(G4int j=0; j<=lastK; j++)        // Calculate LogTab values
         {
             lastX[j]=CalcElTot(pv,ind);
-#ifdef pdebug
-            G4cout<<"G4QuasiFreeR::FetchElTot:I,j="<<j<<",pv="<<pv<<",E="<<lastX[j].first<<",T="
-            <<lastX[j].second<<G4endl;
-#endif
             if(j!=lastK) pv*=edl;
         }
         i++;                                 // Make a new record to AMDB and position on it
@@ -755,15 +676,9 @@ std::pair<G4double,G4double> G4QuasiElRatios::FetchElTot(G4double p, G4int PDG, 
         lastX=vX[i];
         G4int nextK=lastK+1;
         G4double lpM=lastM+lpi;
-#ifdef pdebug
-        G4cout<<"G4QuasiFreeR::FetchElTo:M="<<lpM<<",l="<<lp<<",K="<<lastK<<",n="<<nlp<<G4endl;
-#endif
         if(lp>lpM && lastK<nlp)              // LogTab must be updated
         {
             lastK = static_cast<int>((lp-lpi)/dl)+1; // MaxBin to be initialized in LogTab
-#ifdef pdebug
-            G4cout<<"G4QuasiFreeR::FetET:K="<<lastK<<",lp="<<lp<<",li="<<lpi<<",dl="<<dl<<G4endl;
-#endif
             if(lastK>nlp)
             {
                 lastK=nlp;
@@ -775,10 +690,6 @@ std::pair<G4double,G4double> G4QuasiElRatios::FetchElTot(G4double p, G4int PDG, 
             {
                 pv*=edl;
                 lastX[j]=CalcElTot(pv,ind);
-#ifdef pdebug
-                G4cout<<"G4QuasiFreeR::FetchElTot:U:j="<<j<<",p="<<pv<<",E="<<lastX[j].first<<",T="
-                <<lastX[j].second<<G4endl;
-#endif
             }
         } // End of LogTab update
         if(lastK>=nextK)                   // The AMDB was apdated
@@ -797,9 +708,6 @@ std::pair<G4double,G4double> G4QuasiElRatios::FetchElTot(G4double p, G4int PDG, 
     G4double t=lastX[n].second;                // T-Base
     lastR.second=t+d*(lastX[n+1].second-t)/dl; // T-Result
     if(lastR.second<0.) lastR.second= 0.;
-#ifdef pdebug
-    G4cout<<"=O=>G4QuasiFreeR::FetchElTot:1st="<<lastR.first<<", 2nd="<<lastR.second<<G4endl;
-#endif
     if(lastR.first>lastR.second) lastR.first = lastR.second;
     return lastR;
 } // End of FetchElTot
@@ -809,20 +717,13 @@ std::pair<G4double,G4double> G4QuasiElRatios::GetElTot(G4double pIU, G4int hPDG,
                                                         G4int Z,       G4int N)
 {
     G4double pGeV=pIU/gigaelectronvolt;
-#ifdef pdebug
-    G4cout<<"-->G4QuasiFreeR::GetElTot: P="<<pIU<<",pPDG="<<hPDG<<",Z="<<Z<<",N="<<N<<G4endl;
-#endif
     if(Z<1 && N<1)
     {
-        G4cout<<"-Warning-G4QuasiFreeRatio::GetElTot:Z="<<Z<<",N="<<N<<", return zero"<<G4endl;
+        G4cout<<"-Warning-G4QuasiElRatio::GetElTot:Z="<<Z<<",N="<<N<<", return zero"<<G4endl;
         return std::make_pair(0.,0.);
     }
     std::pair<G4double,G4double> hp=FetchElTot(pGeV, hPDG, true);
     std::pair<G4double,G4double> hn=FetchElTot(pGeV, hPDG, false);
-#ifdef pdebug
-    G4cout<<"-OUT->G4QFRat::GetElTot: hp("<<hp.first<<","<<hp.second<<"), hn("<<hn.first<<","
-    <<hn.second<<")"<<G4endl;
-#endif
     G4double A=(Z+N)/millibarn;                // To make the result in independent units(IU)
     return std::make_pair((Z*hp.first+N*hn.first)/A,(Z*hp.second+N*hn.second)/A);
 } // End of GetElTot
@@ -836,7 +737,7 @@ std::pair<G4double,G4double> G4QuasiElRatios::GetChExFactor(G4double pIU, G4int 
     G4double resN=0.;
     if(Z<1 && N<1)
     {
-        G4cout<<"-Warning-G4QuasiFreeRatio::GetChExF:Z="<<Z<<",N="<<N<<", return zero"<<G4endl;
+        G4cout<<"-Warning-G4QuasiElRatio::GetChExF:Z="<<Z<<",N="<<N<<", return zero"<<G4endl;
         return std::make_pair(resP,resN);
     }
     G4double A=Z+N;
@@ -873,16 +774,7 @@ std::pair<G4double,G4double> G4QuasiElRatios::GetChExFactor(G4double pIU, G4int 
 // if(newN4M.e()==0.) - below threshold, XS=0, no scattering of the progectile happened
 std::pair<G4LorentzVector,G4LorentzVector> G4QuasiElRatios::Scatter(G4int NPDG,
                                                                      G4LorentzVector N4M, G4int pPDG, G4LorentzVector p4M)
-{
-    /*         
-     static const G4double mNeut= G4QPDGCode(2112).GetMass();
-     static const G4double mProt= G4QPDGCode(2212).GetMass();
-     static const G4double mDeut= G4QPDGCode(2112).GetNuclMass(1,1,0);// Mass of deuteron
-     static const G4double mTrit= G4QPDGCode(2112).GetNuclMass(1,2,0);// Mass of tritium
-     static const G4double mHel3= G4QPDGCode(2112).GetNuclMass(2,1,0);// Mass of Helium3
-     static const G4double mAlph= G4QPDGCode(2112).GetNuclMass(2,2,0);// Mass of alpha
-     */
-    
+{    
     static const G4double mNeut= G4Neutron::Neutron()->GetPDGMass();
     static const G4double mProt= G4Proton::Proton()->GetPDGMass();
     static const G4double mDeut= G4Deuteron::Deuteron()->GetPDGMass();
@@ -893,9 +785,6 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiElRatios::Scatter(G4int NPDG,
     G4LorentzVector pr4M=p4M/megaelectronvolt;   // Convert 4-momenta in MeV (keep p4M)
     N4M/=megaelectronvolt;
     G4LorentzVector tot4M=N4M+p4M;
-#ifdef ppdebug
-    G4cerr<<"->G4QFR::Scat:p4M="<<pr4M<<",N4M="<<N4M<<",t4M="<<tot4M<<",NPDG="<<NPDG<<G4endl;
-#endif
     G4double mT=mNeut;
     G4int Z=0;
     G4int N=1;
@@ -932,31 +821,22 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiElRatios::Scatter(G4int NPDG,
     else if(NPDG!=2112&&NPDG!=90000001)
     {
         G4cout<<"Error:G4QuasiElRatios::Scatter:NPDG="<<NPDG<<" is not 2212 or 2112"<<G4endl;
-        G4Exception("G4QuasiElRatios::Scatter:","21",FatalException,"CHIPScomplain");
+        G4Exception("G4QuasiElRatios::Scatter:","21",FatalException,"QEcomplain");
         //return std::make_pair(G4LorentzVector(0.,0.,0.,0.),p4M);// Use this if not exception
     }
     G4double mT2=mT*mT;
     G4double mP2=pr4M.m2();
     G4double E=(tot4M.m2()-mT2-mP2)/(mT+mT);
-#ifdef pdebug
-    G4cerr<<"G4QFR::Scat:qM="<<mT<<",qM2="<<mT2<<",pM2="<<mP2<<",totM2="<<tot4M.m2()<<G4endl;
-#endif
     G4double E2=E*E;
     if(E<0. || E2<mP2)
     {
-#ifdef ppdebug
-        G4cerr<<"-Warning-G4QFR::Scat:*Negative Energy*E="<<E<<",E2="<<E2<<"<M2="<<mP2<<G4endl;
-#endif
         return std::make_pair(G4LorentzVector(0.,0.,0.,0.),p4M); // Do Nothing Action
     }
     G4double P=std::sqrt(E2-mP2);                   // Momentum in pseudo laboratory system
     G4VCrossSection* PCSmanager=G4ProtonElasticCrossSection::GetPointer();
     G4VCrossSection* NCSmanager=G4NeutronElasticCrossSection::GetPointer();
-#ifdef ppdebug
-    G4cout<<"G4QFR::Scatter: Before XS, P="<<P<<", Z="<<Z<<", N="<<N<<", PDG="<<pPDG<<G4endl;
-#endif
     // @@ Temporary NN t-dependence for all hadrons
-    if(pPDG>3400 || pPDG<-3400) G4cout<<"-Warning-G4QElast::Scatter: pPDG="<<pPDG<<G4endl;
+    if(pPDG>3400 || pPDG<-3400) G4cout<<"-Warning-G4QE::Scatter: pPDG="<<pPDG<<G4endl;
     G4int PDG=2212;                                                // *TMP* instead of pPDG
     if(pPDG==2112||pPDG==-211||pPDG==-321) PDG=2112;               // *TMP* instead of pPDG
     if(!Z && N==1)                 // Change for Quasi-Elastic on neutron
@@ -969,19 +849,9 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiElRatios::Scatter(G4int NPDG,
     G4double xSec=0.;                        // Prototype of Recalculated Cross Section *TMP*
     if(PDG==2212) xSec=PCSmanager->GetCrossSection(false, P, Z, N, PDG); // P CrossSect *TMP*
     else          xSec=NCSmanager->GetCrossSection(false, P, Z, N, PDG); // N CrossSect *TMP*
-#ifdef ppdebug
-    G4cout<<"G4QElast::Scatter:pPDG="<<pPDG<<",P="<<P<<",CS="<<xSec/millibarn<<G4endl;
-#endif
-#ifdef nandebug
-    if(xSec>0. || xSec<0. || xSec==0);
-    else  G4cout<<"*Warning*G4QElast::Scatter: xSec="<<xSec/millibarn<<G4endl;
-#endif
     // @@ check a possibility to separate p, n, or alpha (!)
     if(xSec <= 0.)                                    // The cross-section iz 0 -> Do Nothing
     {
-#ifdef ppdebug
-        G4cerr<<"-Warning-G4QFR::Scat:**Zero XS**PDG="<<pPDG<<",NPDG="<<NPDG<<",P="<<P<<G4endl;
-#endif
         return std::make_pair(G4LorentzVector(0.,0.,0.,0.),p4M); //Do Nothing Action
     }
     G4double mint=0.;                        // Prototype of functional rand -t (MeV^2) *TMP*
@@ -990,18 +860,7 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiElRatios::Scatter(G4int NPDG,
     G4double maxt=0.;                                    // Prototype of max possible -t
     if(PDG==2212) maxt=PCSmanager->GetHMaxT();           // max possible -t
     else          maxt=NCSmanager->GetHMaxT();           // max possible -t
-#ifdef ppdebug
-    G4cout<<"G4QFR::Scat:PDG="<<PDG<<",P="<<P<<",X="<<xSec<<",-t="<<mint<<"<"<<maxt<<", Z="
-    <<Z<<",N="<<N<<G4endl;
-#endif
-#ifdef nandebug
-    if(mint>-.0000001);
-    else  G4cout<<"*Warning*G4QFR::Scat: -t="<<mint<<G4endl;
-#endif
     G4double cost=1.-(mint+mint)/maxt; // cos(theta) in CMS
-#ifdef ppdebug
-    G4cout<<"G4QFR::Scat:-t="<<mint<<"<"<<maxt<<", cost="<<cost<<", Z="<<Z<<",N="<<N<<G4endl;
-#endif
     if(cost>1. || cost<-1. || !(cost>-1. || cost<=1.))
     {
         if     (cost>1.)  cost=1.;
@@ -1023,9 +882,6 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiElRatios::Scatter(G4int NPDG,
         //G4Exception("G4QFR::Scat:","009",FatalException,"Decay of ElasticComp");
         return std::make_pair(G4LorentzVector(0.,0.,0.,0.),p4M); // Do Nothing Action
     }
-#ifdef ppdebug
-    G4cout<<"G4QFR::Scat:p4M="<<pr4M<<"+r4M="<<reco4M<<",dr="<<dir4M<<",t4M="<<tot4M<<G4endl;
-#endif
     return std::make_pair(reco4M*megaelectronvolt,pr4M*megaelectronvolt); // Result
 } // End of Scatter
 
@@ -1077,14 +933,14 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiElRatios::ChExer(G4int NPDG,
     else
     {
         G4cout<<"Error:G4QuasiElRatios::ChExer: NPDG="<<NPDG<<" is not 2212 or 2112"<<G4endl;
-        G4Exception("G4QuasiElRatios::ChExer:","21",FatalException,"CHIPS complain");
+        G4Exception("G4QuasiElRatios::ChExer:","21",FatalException,"QE complain");
         //return std::make_pair(G4LorentzVector(0.,0.,0.,0.),p4M);// Use this if not exception
     }
     if(sPDG) mS=mNeut;
     else
     {
         G4cout<<"Error:G4QuasiElRatios::ChExer: BAD pPDG="<<pPDG<<", NPDG="<<NPDG<<G4endl;
-        G4Exception("G4QuasiElRatios::ChExer:","21",FatalException,"CHIPS complain");
+        G4Exception("G4QuasiElRatios::ChExer:","21",FatalException,"QE complain");
         //return std::make_pair(G4LorentzVector(0.,0.,0.,0.),p4M);// Use this if not exception
     }
     G4double mT2=mT*mT;
@@ -1093,17 +949,11 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiElRatios::ChExer(G4int NPDG,
     G4double E2=E*E;
     if(E<0. || E2<mS2)
     {
-#ifdef pdebug
-        G4cerr<<"-Warning-G4QFR::ChEx:*Negative Energy*E="<<E<<",E2="<<E2<<"<M2="<<mS2<<G4endl;
-#endif
         return std::make_pair(G4LorentzVector(0.,0.,0.,0.),p4M); // Do Nothing Action
     }
     G4double P=std::sqrt(E2-mS2);                   // Momentum in pseudo laboratory system
     G4VCrossSection* PCSmanager=G4ProtonElasticCrossSection::GetPointer();
     G4VCrossSection* NCSmanager=G4NeutronElasticCrossSection::GetPointer();
-#ifdef debug
-    G4cout<<"G4QFR::ChExer: Before XS, P="<<P<<", Z="<<Z<<", N="<<N<<", PDG="<<pPDG<<G4endl;
-#endif
     // @@ Temporary NN t-dependence for all hadrons
     G4int PDG=2212;                                                // *TMP* instead of pPDG
     if(pPDG==2112||pPDG==-211||pPDG==-321) PDG=2112;               // *TMP* instead of pPDG
@@ -1117,38 +967,18 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiElRatios::ChExer(G4int NPDG,
     G4double xSec=0.;                        // Prototype of Recalculated Cross Section *TMP*
     if(PDG==2212) xSec=PCSmanager->GetCrossSection(false, P, Z, N, PDG); // P CrossSect *TMP*
     else          xSec=NCSmanager->GetCrossSection(false, P, Z, N, PDG); // N CrossSect *TMP*
-#ifdef debug
-    G4cout<<"G4QElast::ChExer:pPDG="<<pPDG<<",P="<<P<<",CS="<<xSec/millibarn<<G4endl;
-#endif
-#ifdef nandebug
-    if(xSec>0. || xSec<0. || xSec==0);
-    else  G4cout<<"*Warning*G4QElast::ChExer: xSec="<<xSec/millibarn<<G4endl;
-#endif
     // @@ check a possibility to separate p, n, or alpha (!)
     if(xSec <= 0.) // The cross-section iz 0 -> Do Nothing
     {
-#ifdef pdebug
-        G4cerr<<"-Warning-G4QFR::ChEx:**Zero XS**PDG="<<pPDG<<",NPDG="<<NPDG<<",P="<<P<<G4endl;
-#endif
         return std::make_pair(G4LorentzVector(0.,0.,0.,0.),p4M); //Do Nothing Action
     }
     G4double mint=0.;                        // Prototype of functional rand -t (MeV^2) *TMP*
     if(PDG==2212) mint=PCSmanager->GetExchangeT(Z,N,PDG);// P functional rand -t(MeV^2) *TMP*
     else          mint=NCSmanager->GetExchangeT(Z,N,PDG);// N functional rand -t(MeV^2) *TMP*
-#ifdef pdebug
-    G4cout<<"G4QFR::ChEx:PDG="<<pPDG<<", P="<<P<<", CS="<<xSec<<", -t="<<mint<<G4endl;
-#endif
-#ifdef nandebug
-    if(mint>-.0000001);
-    else  G4cout<<"*Warning*G4QFR::ChExer: -t="<<mint<<G4endl;
-#endif
     G4double maxt=0.;                                    // Prototype of max possible -t
     if(PDG==2212) maxt=PCSmanager->GetHMaxT();           // max possible -t
     else          maxt=NCSmanager->GetHMaxT();           // max possible -t
     G4double cost=1.-mint/maxt;                          // cos(theta) in CMS
-#ifdef pdebug
-    G4cout<<"G4QuasiFfreeRatio::ChExer: -t="<<mint<<", maxt="<<maxt<<", cost="<<cost<<G4endl;
-#endif
     if(cost>1. || cost<-1. || !(cost>-1. || cost<=1.))
     {
         if     (cost>1.)  cost=1.;
@@ -1168,9 +998,6 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiElRatios::ChExer(G4int NPDG,
         //G4Exception("G4QFR::ChExer:","009",FatalException,"Decay of ElasticComp");
         return std::make_pair(G4LorentzVector(0.,0.,0.,0.),p4M); // Do Nothing Action
     }
-#ifdef debug
-    G4cout<<"G4QFR::ChEx:p4M="<<p4M<<"+r4M="<<reco4M<<"="<<p4M+reco4M<<"="<<tot4M<<G4endl;
-#endif
     return std::make_pair(reco4M*megaelectronvolt,pr4M*megaelectronvolt); // Result
 } // End of ChExer
 
@@ -1183,7 +1010,7 @@ G4double G4QuasiElRatios::ChExElCoef(G4double p, G4int Z, G4int N, G4int pPDG)
     G4double C=0.;
     if     (pPDG==2212) C=N/(A+Z);
     else if(pPDG==2112) C=Z/(A+N);
-    else G4cout<<"*Warning*G4QCohChrgExchange::ChExElCoef: wrong PDG="<<pPDG<<G4endl;
+    else G4cout<<"*Warning*G4CohChrgExchange::ChExElCoef: wrong PDG="<<pPDG<<G4endl;
     C*=C;                         // Coherent processes squares the amplitude
     // @@ This is true only for nucleons: other projectiles must be treated differently
     G4double sp=std::sqrt(p);
@@ -1222,31 +1049,18 @@ G4bool G4QuasiElRatios::RelDecayIn2(G4LorentzVector& theMomentum, G4LorentzVecto
     G4ThreeVector ltb = theMomentum.boostVector();// Boost vector for backward Lorentz Trans.
     G4ThreeVector ltf = -ltb;              // Boost vector for forward Lorentz Trans.
     G4LorentzVector cdir = dir;            // A copy to make a transformation to CMS
-#ifdef ppdebug
-    if(cdir.e()+.001<cdir.rho()) G4cerr<<"*G4QH::RDIn2:*Boost* cd4M="<<cdir<<",e-p="
-        <<cdir.e()-cdir.rho()<<G4endl;
-#endif
     cdir.boost(ltf);                       // Direction transpormed to CMS of the Momentum
     G4ThreeVector vdir = cdir.vect();      // 3-Vector of the direction-particle
-#ifdef ppdebug
-    G4cout<<"G4QHad::RelDI2:dir="<<dir<<",ltf="<<ltf<<",cdir="<<cdir<<",vdir="<<vdir<<G4endl;
-#endif
     G4ThreeVector vx(0.,0.,1.);            // Ort in the direction of the reference particle
     G4ThreeVector vy(0.,1.,0.);            // First ort orthogonal to the direction
     G4ThreeVector vz(1.,0.,0.);            // Second ort orthoganal to the direction
     if(vdir.mag2() > 0.)                   // the refference particle isn't at rest in CMS
     {
         vx = vdir.unit();                    // Ort in the direction of the reference particle
-#ifdef ppdebug
-        G4cout<<"G4QH::RelDecIn2:Vx="<<vx<<",M="<<theMomentum<<",d="<<dir<<",c="<<cdir<<G4endl;
-#endif
         G4ThreeVector vv= vx.orthogonal();   // Not normed orthogonal vector (!)
         vy = vv.unit();                      // First ort orthogonal to the direction
         vz = vx.cross(vy);                   // Second ort orthoganal to the direction
     }
-#ifdef ppdebug
-    G4cout<<"G4QHad::RelDecIn2:iM="<<iM<<"=>fM="<<fM<<"+sM="<<sM<<",ob="<<vx<<vy<<vz<<G4endl;
-#endif
     if(maxCost> 1.) maxCost= 1.;
     if(minCost<-1.) minCost=-1.;
     if(maxCost<-1.) maxCost=-1.;
@@ -1269,9 +1083,6 @@ G4bool G4QuasiElRatios::RelDecayIn2(G4LorentzVector& theMomentum, G4LorentzVecto
     G4double p2 = (d2*d2/4.-fM2*sM2)/iM2;    // Decay momentum(^2) in CMS of Quasmon
     if(p2<0.)
     {
-#ifdef ppdebug
-        G4cout<<"**G4QH:RDIn2:p2="<<p2<<"<0,d2^2="<<d2*d2/4.<<"<4*fM2*sM2="<<4*fM2*sM2<<G4endl;
-#endif
         p2=0.;
     }
     G4double p  = sqrt(p2);
@@ -1286,37 +1097,22 @@ G4bool G4QuasiElRatios::RelDecayIn2(G4LorentzVector& theMomentum, G4LorentzVecto
     if(fabs(ct)<1.) ps = p * sqrt(1.-ct*ct);
     else
     {
-#ifdef ppdebug
-        G4cout<<"**G4QH::RDIn2:ct="<<ct<<",mac="<<maxCost<<",mic="<<minCost<<G4endl;
-        //throw G4QException("***G4QHadron::RDIn2: bad cos(theta)");
-#endif
         if(ct>1.) ct=1.;
         if(ct<-1.) ct=-1.;
     }
     G4ThreeVector pVect=(ps*sin(phi))*vz+(ps*cos(phi))*vy+p*ct*vx;
-#ifdef ppdebug
-    G4cout<<"G4QH::RelDIn2:ct="<<ct<<",p="<<p<<",ps="<<ps<<",ph="<<phi<<",v="<<pVect<<G4endl;
-#endif
     
     f4Mom.setVect(pVect);
     f4Mom.setE(sqrt(fM2+p2));
     s4Mom.setVect((-1)*pVect);
     s4Mom.setE(sqrt(sM2+p2));
     
-#ifdef ppdebug
-    G4cout<<"G4QHadr::RelDecIn2:p2="<<p2<<",v="<<ltb<<",f4M="<<f4Mom<<" + s4M="<<s4Mom<<" = "
-    <<f4Mom+s4Mom<<", M="<<iM<<G4endl;
-#endif
     if(f4Mom.e()+.001<f4Mom.rho())G4cerr<<"*G4QH::RDIn2:*Boost* f4M="<<f4Mom<<",e-p="
         <<f4Mom.e()-f4Mom.rho()<<G4endl;
     f4Mom.boost(ltb);                        // Lor.Trans. of 1st hadron back to LS
     if(s4Mom.e()+.001<s4Mom.rho())G4cerr<<"*G4QH::RDIn2:*Boost* s4M="<<s4Mom<<",e-p="
         <<s4Mom.e()-s4Mom.rho()<<G4endl;
     s4Mom.boost(ltb);                        // Lor.Trans. of 2nd hadron back to LS
-#ifdef ppdebug
-    G4cout<<"G4QHadron::RelDecayIn2:Output, f4Mom="<<f4Mom<<" + s4Mom="<<s4Mom<<" = "
-    <<f4Mom+s4Mom<<", d4M="<<theMomentum-f4Mom-s4Mom<<G4endl;
-#endif
     return true;
 } // End of "RelDecayIn2"
 
