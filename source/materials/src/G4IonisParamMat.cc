@@ -475,7 +475,7 @@ G4IonisParamMat::G4IonisParamMat(const G4IonisParamMat& right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-const G4IonisParamMat& G4IonisParamMat::operator=(const G4IonisParamMat& right)
+G4IonisParamMat& G4IonisParamMat::operator=(const G4IonisParamMat& right)
 {
   if (this != &right)
     {

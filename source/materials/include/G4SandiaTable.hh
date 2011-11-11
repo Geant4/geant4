@@ -157,6 +157,10 @@ private:
 
   void ComputeMatTable();
 
+  // copy constructor and hide assignment operator
+  G4SandiaTable(G4SandiaTable &);
+  G4SandiaTable & operator=(const G4SandiaTable &right);
+
 //////////////////////////////////////////////////////////////////////////
 //
 // data members for PAI model

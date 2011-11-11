@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10-11-11 V.Ivanchenko (materials-V09-04-18)
+- G4SandiaTable, G4IonisParamElm, G4IonisParamMat, G4OpticalSurface
+    fixed problems reported by Coverity, mainly in assignment operator
      
 29-10-11 mma (materials-V09-04-17)
 - G4Exception : unified exceptionCode

@@ -161,7 +161,7 @@ G4IonisParamElm::G4IonisParamElm(G4IonisParamElm& right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-const G4IonisParamElm& G4IonisParamElm::operator=(const G4IonisParamElm& right)
+G4IonisParamElm& G4IonisParamElm::operator=(const G4IonisParamElm& right)
 {
   if (this != &right)
     {

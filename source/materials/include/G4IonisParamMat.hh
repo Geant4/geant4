@@ -115,7 +115,7 @@ public:
 public:  // without description
 
   G4IonisParamMat(const G4IonisParamMat&);
-  const G4IonisParamMat& operator=(const G4IonisParamMat&);          
+  G4IonisParamMat& operator=(const G4IonisParamMat&);          
   G4int operator==(const G4IonisParamMat&) const;
   G4int operator!=(const G4IonisParamMat&) const;
 

@@ -52,8 +52,7 @@
         // Operators
         //////////////
 
-const G4OpticalSurface& 
-      G4OpticalSurface::operator=(const G4OpticalSurface& right)
+G4OpticalSurface& G4OpticalSurface::operator=(const G4OpticalSurface& right)
 {
   if (this != &right)
     {
