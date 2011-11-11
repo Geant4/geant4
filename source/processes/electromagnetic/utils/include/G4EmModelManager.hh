@@ -119,6 +119,9 @@ private:
     return theRegion;
   };
 
+  G4RegionModels(G4RegionModels &);
+  G4RegionModels & operator=(const G4RegionModels &right);
+
   const G4Region*    theRegion;
   G4int              nModelsForRegion;
   G4int*             theListOfModelIndexes;

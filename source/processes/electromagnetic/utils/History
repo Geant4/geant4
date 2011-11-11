@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10 November 11: V.Ivant (emutils-V09-04-51)
+- G4LossTableManager, G4EmModelManager - fixed defects reported by 
+    Coverity - private assignment operator and copy constructor added
+
+3 November 11: V.Ivant (emutils-V09-04-50)
+- G4VEnergyLossProcess, G4VEmProcess - a check on zero kinetic
+  energy PostStep is added; the status is changed to fStopAndKill or
+  fStopButAlive 
+
 1 November 11: V.Ivant (emutils-V09-04-49)
 - G4VEnergyLossProcess, G4VEmProcess, G4EmBiasingManager - fixed 
     initialisation and improved cout for usage of secondary biasing

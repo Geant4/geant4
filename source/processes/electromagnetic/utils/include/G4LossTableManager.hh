@@ -297,6 +297,9 @@ private:
 
   void CopyDEDXTables();
 
+  G4LossTableManager(G4LossTableManager &);
+  G4LossTableManager & operator=(const G4LossTableManager &right);
+
   static G4LossTableManager* theInstance;
 
   typedef const G4ParticleDefinition* PD;

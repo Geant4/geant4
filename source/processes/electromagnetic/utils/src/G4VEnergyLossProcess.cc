@@ -122,6 +122,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4VEnergyLossProcess.hh"
+#include "G4ProcessManager.hh"
 #include "G4LossTableManager.hh"
 #include "G4LossTableBuilder.hh"
 #include "G4Step.hh"
@@ -1423,6 +1424,13 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
 	pParticleChange->AddSecondary(t);
       }
     }
+  }
+
+  if(0.0 == fParticleChange.GetProposedKineticEnergy() &&
+     fAlive == fParticleChange.GetTrackStatus()) {
+    if(particle->GetProcessManager()->GetAtRestProcessVector()->size() > 0)
+         { fParticleChange.ProposeTrackStatus(fStopButAlive); }
+    else { fParticleChange.ProposeTrackStatus(fStopAndKill); }
   }
 
   /*
