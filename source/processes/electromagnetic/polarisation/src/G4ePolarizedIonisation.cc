@@ -82,6 +82,8 @@ G4ePolarizedIonisation::G4ePolarizedIonisation(const G4String& name)
   //  SetMaxKinEnergy(100.0*TeV);
   //  PrintInfoDefinition();
   SetProcessSubType(fIonisation);
+  flucModel = 0;
+  emModel = 0; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

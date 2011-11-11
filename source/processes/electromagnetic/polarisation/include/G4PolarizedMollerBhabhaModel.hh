@@ -107,6 +107,11 @@ public:
     return fPositronPolarization;
   }
 private:
+
+  // copy constructor and hide assignment operator
+  G4PolarizedMollerBhabhaModel(G4PolarizedMollerBhabhaModel &);
+  G4PolarizedMollerBhabhaModel & operator=(const G4PolarizedMollerBhabhaModel &right);
+
   G4StokesVector theBeamPolarization;
   G4StokesVector theTargetPolarization;
 

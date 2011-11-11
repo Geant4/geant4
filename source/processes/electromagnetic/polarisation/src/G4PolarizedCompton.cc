@@ -81,6 +81,7 @@ G4PolarizedCompton::G4PolarizedCompton(const G4String& processName,
   SetMinKinEnergy(0.1*keV);
   SetMaxKinEnergy(100.0*GeV);
   SetProcessSubType(fComptonScattering);
+  emModel = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

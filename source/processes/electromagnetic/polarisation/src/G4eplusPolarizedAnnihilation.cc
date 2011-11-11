@@ -78,6 +78,7 @@ G4eplusPolarizedAnnihilation::G4eplusPolarizedAnnihilation(const G4String& name)
 {
   enableAtRestDoIt = true;
   SetProcessSubType(fAnnihilation);
+  emModel = 0; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

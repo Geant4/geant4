@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10 November 11: V.Ivanchenko (empolar-V09-04-03)
+- G4PolarizedCompton, G4ePolarizedIonisation, 
+  G4PolarizedMollerBhabhaModel, G4eplusPolarizedAnnihilation - fixed
+    initialisation problems reported by the Coverity tool
+
 16 May 11: V.Ivanchenko (empolar-V09-04-02)
 - G4PolarizedAnnihilationModel - fixed gcc-4.6.0 warnings
 
