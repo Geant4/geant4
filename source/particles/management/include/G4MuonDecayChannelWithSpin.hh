@@ -61,6 +61,14 @@ public:  // With Description
   //  Destructor
   virtual ~G4MuonDecayChannelWithSpin();
 
+protected:
+  // Copy constructor and assignment operator
+  G4MuonDecayChannelWithSpin(const G4MuonDecayChannelWithSpin &);
+  G4MuonDecayChannelWithSpin & operator=(const G4MuonDecayChannelWithSpin &);
+  
+private:
+  G4MuonDecayChannelWithSpin();
+
 public:  // With Description
 
   virtual G4DecayProducts *DecayIt(G4double);

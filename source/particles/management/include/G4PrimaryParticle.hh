@@ -90,7 +90,7 @@ class G4PrimaryParticle
   // nextParticle and daughterParticle is copied by object (i.e. deep copy)
   // userInfo will nt be copied
   G4PrimaryParticle(const G4PrimaryParticle &right);   
-  const G4PrimaryParticle & operator=(const G4PrimaryParticle &right);
+  G4PrimaryParticle & operator=(const G4PrimaryParticle &right);
   
   // equal operator  returns 'true' only if the same object (i.e comarison by pointer value)
   G4int operator==(const G4PrimaryParticle &right) const;

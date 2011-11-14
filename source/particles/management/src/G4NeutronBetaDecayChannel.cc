@@ -46,6 +46,11 @@
 #include "G4LorentzVector.hh"
 #include "G4LorentzRotation.hh"
 
+G4NeutronBetaDecayChannel::G4NeutronBetaDecayChannel()
+                   :G4VDecayChannel(),
+		    aENuCorr(-0.102)
+{
+}
 
 G4NeutronBetaDecayChannel::G4NeutronBetaDecayChannel(
 				       const G4String& theParentName, 
@@ -81,6 +86,40 @@ G4NeutronBetaDecayChannel::G4NeutronBetaDecayChannel(
 
 G4NeutronBetaDecayChannel::~G4NeutronBetaDecayChannel()
 {
+}
+
+G4NeutronBetaDecayChannel::G4NeutronBetaDecayChannel(const G4NeutronBetaDecayChannel &right)
+    : G4VDecayChannel(right),
+      aENuCorr(-0.102)
+{
+}
+
+
+G4NeutronBetaDecayChannel & G4NeutronBetaDecayChannel::operator=(const G4NeutronBetaDecayChannel & right)
+{
+  if (this != &right) { 
+    kinematics_name = right.kinematics_name;
+    verboseLevel = right.verboseLevel;
+    rbranch = right.rbranch;
+
+    // copy parent name
+    parent_name = new G4String(*right.parent_name);
+
+    // clear daughters_name array
+    ClearDaughtersName();
+
+    // recreate array
+    numberOfDaughters = right.numberOfDaughters;
+    if ( numberOfDaughters >0 ) {
+      if (daughters_name !=0) ClearDaughtersName();
+      daughters_name = new G4String*[numberOfDaughters];
+      //copy daughters name
+      for (G4int index=0; index < numberOfDaughters; index++) {
+          daughters_name[index] = new G4String(*right.daughters_name[index]);
+      }
+    }
+  }
+  return *this;
 }
 
 G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double) 

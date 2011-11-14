@@ -52,6 +52,14 @@ class G4KL3DecayChannel :public G4VDecayChannel
 			const G4String& theNutrinoName);
     //  Destructor
       virtual ~G4KL3DecayChannel();
+ 
+  protected:
+    // Copy constructor and assignment operator
+      G4KL3DecayChannel(const G4KL3DecayChannel &);
+      G4KL3DecayChannel & operator=(const G4KL3DecayChannel &);
+
+  private:
+      G4KL3DecayChannel();
 
   public:  // With Description
      virtual G4DecayProducts *DecayIt(G4double);     

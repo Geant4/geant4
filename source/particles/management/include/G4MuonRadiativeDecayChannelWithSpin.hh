@@ -70,6 +70,14 @@ class G4MuonRadiativeDecayChannelWithSpin : public G4VDecayChannel
     //  Destructor
     virtual ~G4MuonRadiativeDecayChannelWithSpin();
 
+  protected:
+    // Copy constructor and assignment operator
+    G4MuonRadiativeDecayChannelWithSpin(const G4MuonRadiativeDecayChannelWithSpin &);
+    G4MuonRadiativeDecayChannelWithSpin & operator=(const G4MuonRadiativeDecayChannelWithSpin &);
+  
+  private:
+    G4MuonRadiativeDecayChannelWithSpin();
+
   public:  // With Description
 
     virtual G4DecayProducts *DecayIt(G4double);

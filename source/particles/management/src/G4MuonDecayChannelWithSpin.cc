@@ -46,17 +46,65 @@
 #include "G4DecayProducts.hh"
 #include "G4LorentzVector.hh"
 
+G4MuonDecayChannelWithSpin::G4MuonDecayChannelWithSpin()
+  : G4MuonDecayChannel(),
+    parent_polarization(),
+    EMMU( 0.*MeV),
+    EMASS( 0.*MeV) 
+{
+}
+
 G4MuonDecayChannelWithSpin::G4MuonDecayChannelWithSpin(const G4String& theParentName, 
 						       G4double        theBR)
-                           : G4MuonDecayChannel(theParentName,theBR)
+  : G4MuonDecayChannel(theParentName,theBR),
+    parent_polarization(),
+    EMMU( 0.*MeV),
+    EMASS( 0.*MeV) 
 {
-  EMMU  = 0.*MeV;
-  EMASS = 0.*MeV;
 }
 
 G4MuonDecayChannelWithSpin::~G4MuonDecayChannelWithSpin()
 {
 }
+
+G4MuonDecayChannelWithSpin::G4MuonDecayChannelWithSpin(const G4MuonDecayChannelWithSpin &right):
+  G4MuonDecayChannel(right)
+{
+  parent_polarization = right.parent_polarization;
+  EMMU  = right.EMMU;
+  EMASS = right.EMASS;
+}
+
+G4MuonDecayChannelWithSpin & G4MuonDecayChannelWithSpin::operator=(const G4MuonDecayChannelWithSpin & right)
+{
+  if (this != &right) { 
+    kinematics_name = right.kinematics_name;
+    verboseLevel = right.verboseLevel;
+    rbranch = right.rbranch;
+
+    // copy parent name
+    parent_name = new G4String(*right.parent_name);
+
+    // clear daughters_name array
+    ClearDaughtersName();
+
+    // recreate array
+    numberOfDaughters = right.numberOfDaughters;
+    if ( numberOfDaughters >0 ) {
+      if (daughters_name !=0) ClearDaughtersName();
+      daughters_name = new G4String*[numberOfDaughters];
+      //copy daughters name
+      for (G4int index=0; index < numberOfDaughters; index++) {
+          daughters_name[index] = new G4String(*right.daughters_name[index]);
+      }
+    }
+    parent_polarization = right.parent_polarization;
+    EMMU  = right.EMMU;
+    EMASS = right.EMASS;
+  }
+  return *this;
+}
+
 
 G4DecayProducts *G4MuonDecayChannelWithSpin::DecayIt(G4double) 
 {

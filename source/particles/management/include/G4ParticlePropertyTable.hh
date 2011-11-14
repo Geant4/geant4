@@ -58,7 +58,7 @@ class G4ParticlePropertyTable
   G4ParticlePropertyTable();
   G4ParticlePropertyTable(const G4ParticlePropertyTable &right);
       
-  const G4ParticlePropertyTable & operator=(const G4ParticlePropertyTable &right);
+  G4ParticlePropertyTable & operator=(const G4ParticlePropertyTable &right);
   
  public:
   G4int operator==(const G4ParticlePropertyTable &right) const;

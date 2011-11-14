@@ -58,6 +58,25 @@ G4ShortLivedTable::~G4ShortLivedTable()
   fShortLivedList =0;
 }
 
+G4ShortLivedTable::G4ShortLivedTable(const G4ShortLivedTable & right)
+{
+  fShortLivedList = new G4ShortLivedList(*(right.fShortLivedList)); 
+}
+
+G4ShortLivedTable & G4ShortLivedTable::operator=(const G4ShortLivedTable &right)
+{
+  if (this != & right) {
+    if (fShortLivedList !=0){
+      fShortLivedList->clear();
+      delete fShortLivedList;
+      fShortLivedList = new G4ShortLivedList(*(right.fShortLivedList));
+    } else {
+      fShortLivedList = new G4ShortLivedList();
+    }
+  }
+  return *this;
+}
+
 G4int G4ShortLivedTable::GetVerboseLevel() const
 {
   return G4ParticleTable::GetParticleTable()->GetVerboseLevel();

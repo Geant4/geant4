@@ -68,7 +68,9 @@ class G4VDecayChannel
     //  Destructor
       virtual ~G4VDecayChannel();
 
-  private:
+  protected:
+    //  default constructor
+     G4VDecayChannel();
     //  copy constructor and assignment operatotr
      G4VDecayChannel(const G4VDecayChannel &);
      G4VDecayChannel & operator=(const G4VDecayChannel &);
@@ -163,7 +165,7 @@ class G4VDecayChannel
   private:
     const G4String& GetNoName() const;
 
-  private:  
+  protected:  
     // controle flag for output message
     G4int verboseLevel;
     //  0: Silent

@@ -80,8 +80,11 @@ class G4ParticleTable
    typedef G4ParticleTableIterator<G4int, G4ParticleDefinition*> G4PTblEncodingDicIterator;
 
  protected:
+   // default constructor
    G4ParticleTable();
+   // Copy constructor and assignment operator
    G4ParticleTable(const  G4ParticleTable &right);
+   G4ParticleTable & operator=(const G4ParticleTable &);
 
  public:
    virtual ~G4ParticleTable();

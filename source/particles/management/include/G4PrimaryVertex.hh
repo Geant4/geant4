@@ -60,7 +60,7 @@ class G4PrimaryVertex
 
  public:
   G4PrimaryVertex(const G4PrimaryVertex &right);
-  const G4PrimaryVertex & operator=(const G4PrimaryVertex &right);
+  G4PrimaryVertex & operator=(const G4PrimaryVertex &right);
 
   G4int operator==(const G4PrimaryVertex &right) const;
   G4int operator!=(const G4PrimaryVertex &right) const;

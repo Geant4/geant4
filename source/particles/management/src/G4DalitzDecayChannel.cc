@@ -44,6 +44,11 @@
 #include "G4LorentzVector.hh"
 #include "G4LorentzRotation.hh"
 
+G4DalitzDecayChannel::G4DalitzDecayChannel()
+  :G4VDecayChannel()
+{
+}
+
 G4DalitzDecayChannel::G4DalitzDecayChannel(
 			   const G4String& theParentName,
 			   G4double        theBR,
@@ -63,6 +68,38 @@ G4DalitzDecayChannel::G4DalitzDecayChannel(
 
 G4DalitzDecayChannel::~G4DalitzDecayChannel()
 {
+}
+
+G4DalitzDecayChannel::G4DalitzDecayChannel(const G4DalitzDecayChannel &right):
+  G4VDecayChannel(right)
+{
+}
+
+G4DalitzDecayChannel & G4DalitzDecayChannel::operator=(const G4DalitzDecayChannel & right)
+{
+  if (this != &right) { 
+    kinematics_name = right.kinematics_name;
+    verboseLevel = right.verboseLevel;
+    rbranch = right.rbranch;
+
+    // copy parent name
+    parent_name = new G4String(*right.parent_name);
+
+    // clear daughters_name array
+    ClearDaughtersName();
+
+    // recreate array
+    numberOfDaughters = right.numberOfDaughters;
+    if ( numberOfDaughters >0 ) {
+      if (daughters_name !=0) ClearDaughtersName();
+      daughters_name = new G4String*[numberOfDaughters];
+      //copy daughters name
+      for (G4int index=0; index < numberOfDaughters; index++) {
+          daughters_name[index] = new G4String(*right.daughters_name[index]);
+      }
+    }
+  }
+  return *this;
 }
 
 G4DecayProducts *G4DalitzDecayChannel::DecayIt(G4double) 

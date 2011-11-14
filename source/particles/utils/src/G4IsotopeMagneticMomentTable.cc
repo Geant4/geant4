@@ -51,6 +51,7 @@ const G4double G4IsotopeMagneticMomentTable::nuclearMagneton = eplus*hbar_Planck
  
 ///////////////////////////////////////////////////////////////////////////////
 G4IsotopeMagneticMomentTable::G4IsotopeMagneticMomentTable()
+  :G4VIsotopeTable("MagneticMoment")
 {
   if ( !getenv("G4IONMAGNETICMOMENT")) {
 #ifdef G4VERBOSE
@@ -132,6 +133,18 @@ G4IsotopeMagneticMomentTable::~G4IsotopeMagneticMomentTable()
   fIsotopeList.clear();
 }
 
+///////////////////////////////////////////////////////////////////////////////
+G4IsotopeMagneticMomentTable::G4IsotopeMagneticMomentTable(const  G4IsotopeMagneticMomentTable & right)   
+  :G4VIsotopeTable(right),
+   fIsotopeList(0)
+{
+}
+
+///////////////////////////////////////////////////////////////////////////////
+G4IsotopeMagneticMomentTable & G4IsotopeMagneticMomentTable::operator= (const  G4IsotopeMagneticMomentTable &)
+{
+  return *this;
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 G4bool G4IsotopeMagneticMomentTable::FindIsotope(G4IsotopeProperty* pP)

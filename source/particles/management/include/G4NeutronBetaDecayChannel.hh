@@ -55,6 +55,14 @@ class G4NeutronBetaDecayChannel :public G4VDecayChannel
     //  Destructor
       virtual ~G4NeutronBetaDecayChannel();
 
+  protected:
+    // Copy constructor and assignment operator
+      G4NeutronBetaDecayChannel(const G4NeutronBetaDecayChannel &);
+      G4NeutronBetaDecayChannel & operator=(const G4NeutronBetaDecayChannel &);
+
+  protected:
+      G4NeutronBetaDecayChannel();
+
   public:  // With Description
      virtual G4DecayProducts *DecayIt(G4double);     
   

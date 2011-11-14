@@ -48,10 +48,17 @@
 #include "G4DecayProducts.hh"
 #include "G4LorentzVector.hh"
 
+G4MuonRadiativeDecayChannelWithSpin::G4MuonRadiativeDecayChannelWithSpin()
+	     : G4VDecayChannel(),
+	       parent_polarization()
+{
+}
+
 G4MuonRadiativeDecayChannelWithSpin::
            G4MuonRadiativeDecayChannelWithSpin(const G4String& theParentName,
                                                G4double        theBR)
-                            : G4VDecayChannel("Radiative Muon Decay",1)
+	     : G4VDecayChannel("Radiative Muon Decay",1),
+	       parent_polarization()
 {
   // set names for daughter particles
   if (theParentName == "mu+") {
@@ -84,6 +91,41 @@ G4MuonRadiativeDecayChannelWithSpin::
 G4MuonRadiativeDecayChannelWithSpin::~G4MuonRadiativeDecayChannelWithSpin()
 {
 }
+
+G4MuonRadiativeDecayChannelWithSpin::G4MuonRadiativeDecayChannelWithSpin(const G4MuonRadiativeDecayChannelWithSpin &right):
+  G4VDecayChannel(right)
+{
+  parent_polarization = right.parent_polarization;
+}
+
+G4MuonRadiativeDecayChannelWithSpin & G4MuonRadiativeDecayChannelWithSpin::operator=(const G4MuonRadiativeDecayChannelWithSpin & right)
+{
+  if (this != &right) { 
+    kinematics_name = right.kinematics_name;
+    verboseLevel = right.verboseLevel;
+    rbranch = right.rbranch;
+
+    // copy parent name
+    parent_name = new G4String(*right.parent_name);
+
+    // clear daughters_name array
+    ClearDaughtersName();
+
+    // recreate array
+    numberOfDaughters = right.numberOfDaughters;
+    if ( numberOfDaughters >0 ) {
+      if (daughters_name !=0) ClearDaughtersName();
+      daughters_name = new G4String*[numberOfDaughters];
+      //copy daughters name
+      for (G4int index=0; index < numberOfDaughters; index++) {
+          daughters_name[index] = new G4String(*right.daughters_name[index]);
+      }
+    }
+    parent_polarization = right.parent_polarization;
+  }
+  return *this;
+}
+
 
 G4DecayProducts *G4MuonRadiativeDecayChannelWithSpin::DecayIt(G4double) 
 {

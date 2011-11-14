@@ -135,7 +135,7 @@ G4ParticlePropertyData::G4ParticlePropertyData(const G4ParticlePropertyData &rig
 }
       
 ////////////////////////
-const G4ParticlePropertyData & G4ParticlePropertyData::operator=(const G4ParticlePropertyData &right)
+G4ParticlePropertyData & G4ParticlePropertyData::operator=(const G4ParticlePropertyData &right)
 {
   if (this != &right) {
     verboseLevel      = right.verboseLevel; 

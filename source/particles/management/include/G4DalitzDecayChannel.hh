@@ -57,6 +57,14 @@ class G4DalitzDecayChannel :public G4VDecayChannel
     //  Destructor
       virtual ~G4DalitzDecayChannel();
 
+  protected:
+    // Copy constructor and assignment operator
+      G4DalitzDecayChannel(const G4DalitzDecayChannel &);
+      G4DalitzDecayChannel & operator=(const G4DalitzDecayChannel &);
+
+  private:
+      G4DalitzDecayChannel();
+
   public: // With Description
      virtual G4DecayProducts *DecayIt(G4double);     
 

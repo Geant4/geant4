@@ -64,7 +64,7 @@ class G4ParticlePropertyData
  
   virtual ~G4ParticlePropertyData();
       
-  const G4ParticlePropertyData & operator=(const G4ParticlePropertyData &right);
+  G4ParticlePropertyData & operator=(const G4ParticlePropertyData &right);
   
   G4int operator==(const G4ParticlePropertyData &right) const;
   G4int operator!=(const G4ParticlePropertyData &right) const;

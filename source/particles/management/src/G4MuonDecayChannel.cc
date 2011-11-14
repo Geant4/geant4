@@ -50,6 +50,10 @@
 #include "G4LorentzRotation.hh"
 #include "G4RotationMatrix.hh"
 
+G4MuonDecayChannel::G4MuonDecayChannel()
+                   :G4VDecayChannel()
+{
+}
 
 G4MuonDecayChannel::G4MuonDecayChannel(const G4String& theParentName, 
 				       G4double        theBR)
@@ -81,8 +85,40 @@ G4MuonDecayChannel::G4MuonDecayChannel(const G4String& theParentName,
   }
 }
 
+G4MuonDecayChannel::G4MuonDecayChannel(const G4MuonDecayChannel &right):
+  G4VDecayChannel(right)
+{
+}
+
 G4MuonDecayChannel::~G4MuonDecayChannel()
 {
+}
+
+G4MuonDecayChannel & G4MuonDecayChannel::operator=(const G4MuonDecayChannel & right)
+{
+  if (this != &right) { 
+    kinematics_name = right.kinematics_name;
+    verboseLevel = right.verboseLevel;
+    rbranch = right.rbranch;
+
+    // copy parent name
+    parent_name = new G4String(*right.parent_name);
+
+    // clear daughters_name array
+    ClearDaughtersName();
+
+    // recreate array
+    numberOfDaughters = right.numberOfDaughters;
+    if ( numberOfDaughters >0 ) {
+      if (daughters_name !=0) ClearDaughtersName();
+      daughters_name = new G4String*[numberOfDaughters];
+      //copy daughters name
+      for (G4int index=0; index < numberOfDaughters; index++) {
+          daughters_name[index] = new G4String(*right.daughters_name[index]);
+      }
+    }
+  }
+  return *this;
 }
 
 G4DecayProducts *G4MuonDecayChannel::DecayIt(G4double) 

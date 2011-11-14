@@ -76,7 +76,7 @@ G4ParticlePropertyTable::G4ParticlePropertyTable(const G4ParticlePropertyTable &
 }
       
 ////////////////////////
-const G4ParticlePropertyTable & G4ParticlePropertyTable::operator=(const G4ParticlePropertyTable &right)
+G4ParticlePropertyTable & G4ParticlePropertyTable::operator=(const G4ParticlePropertyTable &right)
 {
   if (this != &right) {
     fParticleTable = right.fParticleTable;

@@ -45,15 +45,30 @@
 
 const G4String G4VDecayChannel::noName = " ";
 
+G4VDecayChannel::G4VDecayChannel()
+  :kinematics_name(""),
+   rbranch(0.0),
+   numberOfDaughters(0),
+   parent_name(0), daughters_name(0),
+   particletable(0),
+   parent(0), daughters(0),
+   parent_mass(0.0), daughters_mass(0),
+   verboseLevel(1)		
+{
+  // set pointer to G4ParticleTable (static and singleton object)
+  particletable = G4ParticleTable::GetParticleTable();
+}
+
+
 G4VDecayChannel::G4VDecayChannel(const G4String &aName, G4int Verbose)
-               :kinematics_name(aName),
-		rbranch(0.0),
-		numberOfDaughters(0),
-		parent_name(0), daughters_name(0),
-		particletable(0),
-		parent(0), daughters(0),
-		parent_mass(0.0), daughters_mass(0),
-		verboseLevel(Verbose)		
+  :kinematics_name(aName),
+   rbranch(0.0),
+   numberOfDaughters(0),
+   parent_name(0), daughters_name(0),
+   particletable(0),
+   parent(0), daughters(0),
+   parent_mass(0.0), daughters_mass(0),
+   verboseLevel(Verbose)		
 {
   // set pointer to G4ParticleTable (static and singleton object)
   particletable = G4ParticleTable::GetParticleTable();

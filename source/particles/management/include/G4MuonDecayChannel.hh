@@ -57,6 +57,14 @@ class G4MuonDecayChannel :public G4VDecayChannel
     //  Destructor
       virtual ~G4MuonDecayChannel();
 
+  protected:
+    // Copy constructor and assignment operator
+      G4MuonDecayChannel(const G4MuonDecayChannel &);
+      G4MuonDecayChannel & operator=(const G4MuonDecayChannel &);
+
+  protected:
+      G4MuonDecayChannel();
+
   public:  // With Description
      virtual G4DecayProducts *DecayIt(G4double);     
   

@@ -58,6 +58,7 @@ G4PrimaryVertex::G4PrimaryVertex(const G4PrimaryVertex & right)
 :theParticle(0),theTail(0),
  nextVertex(0),tailVertex(0),userInfo(0)
 {
+  numberOfParticle = right.numberOfParticle;
   *this = right;
 }
 
@@ -77,7 +78,7 @@ G4PrimaryVertex::~G4PrimaryVertex()
   }
 }
 
-const G4PrimaryVertex &  G4PrimaryVertex::operator=(const G4PrimaryVertex & right)
+G4PrimaryVertex &  G4PrimaryVertex::operator=(const G4PrimaryVertex & right)
 { 
   if (this != &right) {
     X0       = right.X0;

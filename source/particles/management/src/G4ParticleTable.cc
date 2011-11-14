@@ -139,6 +139,19 @@ G4ParticleTable::G4ParticleTable(const G4ParticleTable &right)
 }
 
 ////////////////////
+G4ParticleTable & G4ParticleTable::operator=(const G4ParticleTable & right)
+{
+  if (this != &right) {
+    G4Exception("G4ParticleTable::G4ParticleTable()",
+		"PART001", FatalException,
+		"Illegal call of assignment operator for G4ParticleTable");    
+    fDictionary = new G4PTblDictionary(*(right.fDictionary));
+    fIterator   = new G4PTblDicIterator(*fDictionary);
+  }
+  return *this;
+}
+
+////////////////////
 G4UImessenger* G4ParticleTable::CreateMessenger()
 {
   if (fParticleMessenger== 0) {

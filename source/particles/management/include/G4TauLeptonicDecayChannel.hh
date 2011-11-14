@@ -57,6 +57,15 @@ class G4TauLeptonicDecayChannel :public G4VDecayChannel
     //  Destructor
       virtual ~G4TauLeptonicDecayChannel();
 
+  protected:
+    // Copy constructor and assignment operator
+      G4TauLeptonicDecayChannel(const G4TauLeptonicDecayChannel &);
+      G4TauLeptonicDecayChannel & operator=(const G4TauLeptonicDecayChannel &);
+
+  protected:
+      G4TauLeptonicDecayChannel();
+
+
   public:  // With Description
      virtual G4DecayProducts *DecayIt(G4double);   
   

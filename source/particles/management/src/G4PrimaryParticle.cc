@@ -146,7 +146,7 @@ G4PrimaryParticle::G4PrimaryParticle(const G4PrimaryParticle& right)
   *this = right;
 }
 
-const G4PrimaryParticle & G4PrimaryParticle::operator=(const G4PrimaryParticle & right)
+G4PrimaryParticle & G4PrimaryParticle::operator=(const G4PrimaryParticle & right)
 { 
   if (this != &right) {
     PDGcode      = right.PDGcode;

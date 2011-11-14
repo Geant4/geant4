@@ -16,6 +16,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- 12 Nov. 2011 H.Kurashige (particles-V09-04-21)
+- Fix obsolete G4Exception in G4DynamicParticle
+
+- 12 Nov. 2011 H.Kurashige (particles-V09-04-20)
+- Fixed bug in G4IsotopeMagneticMoment constructors
+
+- 8 Nov. 2011 H.Kurashige (particles-V09-04-19)
+- Fixed bugs reported by Coverity
+  (Most of them are 'Missing assignement operator')
 
 - 17 Oct. 2011 H.Kurashige (particles-V09-04-18)
 - fix minor bugs reported by Coverity 
