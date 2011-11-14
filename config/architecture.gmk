@@ -112,6 +112,13 @@ ifneq ($(G4LIB_BUILD_ZLIB),)
   G4LIB_USE_ZLIB = 1
 endif
 
+# Specify if to build the EXPAT module or not. Default is NO.
+#
+ifneq ($(G4LIB_BUILD_EXPAT),)
+  G4LIB_BUILD_EXPAT = 1
+  G4LIB_USE_EXPAT = 1
+endif
+
 # If not specified, the default path for G4 binaries G4BIN is
 # set to $G4WORKDIR/bin/$G4SYSTEM ...
 #
@@ -137,6 +144,7 @@ endif
 #
 ifndef CLHEP_BASE_DIR
   CLHEP_BASE_DIR  := $(G4BASE)/externals/clhep
+  G4LIB_BUILD_CLHEP := 1
   G4LIB_USE_CLHEP := 1
 endif
 ifndef G4LIB_USE_CLHEP
@@ -226,10 +234,13 @@ else
   endif
 endif
 ifeq (,$(findstring WIN32-VC,$(G4SYSTEM)))
-  LOADLIBS += -lm -lexpat
+  ifndef G4LIB_USE_EXPAT
+    LOADLIBS += -lexpat
+  endif
   ifndef G4LIB_USE_ZLIB
     LOADLIBS += -lz
   endif
+  LOADLIBS += -lm
 endif
 
 # Graphic variables...

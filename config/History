@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+7th November 2011 Gunter Folger  (config-V09-04-17)
+- Abilited possibility to force building of internal 'expat' module also
+  for Linux and Mac, through use of G4LIB_BUILD_EXPAT flag.
+
 18th October 2011 Gunter Folger  (config-V09-04-16)
 - binmake.gmk: add new directories in electromagnetic/dna and 
     new hadronic/models/quasi_elastic
