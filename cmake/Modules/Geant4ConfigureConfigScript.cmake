@@ -74,6 +74,13 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
     set(G4_BUILTWITH_OPENGLX11 "no")
   endif()
 
+  # - OpenInventor
+  if(GEANT4_USE_INVENTOR)
+    set(G4_BUILTWITH_INVENTOR "yes")
+  else()
+    set(G4_BUILTWITH_INVENTOR "no")
+  endif()
+
   # If we have a module that uses X11, We have to play with the X11 paths to 
   # get a clean set suitable for inclusion
   if(G4_CONFIG_NEEDS_X11)
@@ -133,18 +140,18 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
   # Non-Relocatable case...
   if(CMAKE_INSTALL_IS_NONRELOCATABLE)
     # Hardcoded paths
-    set(GEANT4_CONFIG_SELF_LOCATION "# INSTALL WAS BUILT NONRELOCATABLE")
     set(GEANT4_CONFIG_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
     set(GEANT4_CONFIG_INSTALL_EXECPREFIX \"\")
     set(GEANT4_CONFIG_LIBDIR "${CMAKE_INSTALL_FULL_LIBDIR}")
     set(GEANT4_CONFIG_INCLUDE_DIRS "${CMAKE_INSTALL_FULL_INCLUDEDIR}/Geant4")
   else()
-    # Calculate self location based on relative path from CMAKE_INSTALL_BINDIR
-    # to CMAKE_INSTALL_PREFIX
-    # TODO
+    # Calculate base of self contained install based on relative path from 
+    # CMAKE_INSTALL_FULL_BINDIR to CMAKE_INSTALL_PREFIX.
+    file(RELATIVE_PATH _bin_to_prefix ${CMAKE_INSTALL_FULL_BINDIR} ${CMAKE_INSTALL_PREFIX})
+    # Strip any trailing path separators just for neatness.
+    string(REGEX REPLACE "[/\\]$" "" _bin_to_prefix "${_bin_to_prefix}")
 
-    set(GEANT4_CONFIG_SELF_LOCATION "# INSTALL WAS BUILT NONRELOCATABLE")
-    set(GEANT4_CONFIG_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
+    set(GEANT4_CONFIG_INSTALL_PREFIX "$scriptloc/${_bin_to_prefix}")
     set(GEANT4_CONFIG_INSTALL_EXECPREFIX \"\")
     set(GEANT4_CONFIG_LIBDIR "\${prefix}/${CMAKE_INSTALL_LIBDIR}")
     set(GEANT4_CONFIG_INCLUDE_DIRS "\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}/Geant4")

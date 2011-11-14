@@ -54,6 +54,7 @@
 #  vis_opengl_x11    (OpenGL visualization with X11 interface)
 #  vis_opengl_win32  (OpenGL visualization with X11 interface)
 #  vis_raytracer_x11 (RayTracer visualization with X11 interface)
+#  vis_openinventor  (OpenInventor visualization)
 #
 #
 # ===========================================================================
@@ -78,6 +79,8 @@ if(Geant4_CONFIG_DEBUG)
    foreach(_cpt ${Geant4_FIND_COMPONENTS})
        message(STATUS "G4CFG_DEBUG : Geant4_FIND_REQUIRED_${_cpt} = ${Geant4_FIND_REQUIRED_${_cpt}}")
     endforeach()
+
+    message(STATUS "G4CFG_DEBUG : Geant4_LIBDEPS_LOADED = ${Geant4_LIBDEPS_LOADED}")
 endif()
 
 
@@ -98,7 +101,8 @@ get_filename_component(_thisdir "${CMAKE_CURRENT_LIST_FILE}" PATH)
 # Set the base compile definitions required to use Geant4
 # Components may append to this
 # We set VIS/UI_USE directly here, because for now they are, unfortunately,
-# always needed.
+# always needed for the Examples. 
+# However, they ARE NOT required to use Geant4 itself.
 #
 set(Geant4_DEFINITIONS @GEANT4_CORE_DEFINITIONS@)
 
@@ -148,11 +152,14 @@ set(Geant4_INCLUDE_DIRS
 
 #----------------------------------------------------------------------------
 # Include the file listing all the imported targets.
-# (Not needed if used in the same Geant4 project) 
+# (Not needed if used in the same Geant4 project, or if we have run before) 
 # This is always installed in the same location as us...
 #
 if(NOT CMAKE_PROJECT_NAME STREQUAL Geant4)
-  include("${_thisdir}/Geant4LibraryDepends.cmake")
+  if(NOT Geant4_LIBDEPS_LOADED)
+    include("${_thisdir}/Geant4LibraryDepends.cmake")
+    set(Geant4_LIBDEPS_LOADED 1)
+  endif()
 endif()
 
 
@@ -167,48 +174,48 @@ endif()
 # - GDML
 set(Geant4_gdml_FOUND @GEANT4_USE_GDML@)
 if(Geant4_gdml_FOUND)
-    list(REMOVE_ITEM Geant4_FIND_COMPONENTS gdml)
+  list(REMOVE_ITEM Geant4_FIND_COMPONENTS gdml)
 endif()
 
 # - UI : TCSH
 set(Geant4_ui_tcsh_FOUND @UNIX@)
 if(Geant4_ui_tcsh_FOUND)
-    if(Geant4_FIND_REQUIRED_ui_tcsh)
-        list(APPEND Geant4_DEFINITIONS -DG4UI_USE_TCSH)
-    endif()
-    list(REMOVE_ITEM Geant4_FIND_COMPONENTS ui_tcsh)
+  if(Geant4_FIND_REQUIRED_ui_tcsh)
+    list(APPEND Geant4_DEFINITIONS -DG4UI_USE_TCSH)
+  endif()
+  list(REMOVE_ITEM Geant4_FIND_COMPONENTS ui_tcsh)
 endif()
 
 # - UI : win32
 set(Geant4_ui_win32_FOUND @WIN32@)
 if(Geant4_ui_win32_FOUND)
-    if(Geant4_FIND_REQUIRED_ui_win32)
-        list(APPEND 
-            Geant4_DEFINITIONS 
-            -DG4INTY_USE_WIN32
-            -DG4UI_USE_WIN32
-        )
-    endif()
-    list(REMOVE_ITEM Geant4_FIND_COMPONENTS ui_win32)
+  if(Geant4_FIND_REQUIRED_ui_win32)
+    list(APPEND 
+      Geant4_DEFINITIONS 
+      -DG4INTY_USE_WIN32
+      -DG4UI_USE_WIN32
+      )
+  endif()
+  list(REMOVE_ITEM Geant4_FIND_COMPONENTS ui_win32)
 endif()
 
 
 # - Visualization : Network DAWN
 set(Geant4_vis_dawn_network_FOUND @GEANT4_USE_NETWORK_DAWN@)
 if(Geant4_vis_dawn_network_FOUND)
-    if(Geant4_FIND_REQUIRED_vis_dawn_network)
-        list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_DAWN)
-    endif()
-    list(REMOVE_ITEM Geant4_FIND_COMPONENTS vis_dawn_network)
+  if(Geant4_FIND_REQUIRED_vis_dawn_network)
+    list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_DAWN)
+  endif()
+  list(REMOVE_ITEM Geant4_FIND_COMPONENTS vis_dawn_network)
 endif()
 
 # - Visualization : Network VRML
 set(Geant4_vis_vrml_network_FOUND @GEANT4_USE_NETWORK_VRML@)
 if(Geant4_vis_vrml_network_FOUND)
-    if(Geant4_FIND_REQUIRED_vis_vrml_network)
-        list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_VRML)
-    endif()
-    list(REMOVE_ITEM Geant4_FIND_COMPONENTS vis_vrml_network)
+  if(Geant4_FIND_REQUIRED_vis_vrml_network)
+    list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_VRML)
+  endif()
+  list(REMOVE_ITEM Geant4_FIND_COMPONENTS vis_vrml_network)
 endif()
 
 
@@ -218,77 +225,101 @@ endif()
 # - Visualization : RayTracerX
 set(Geant4_vis_raytracer_x11_FOUND @GEANT4_USE_RAYTRACER_X11@)
 if(Geant4_vis_raytracer_x11_FOUND)
-    if(Geant4_FIND_REQUIRED_vis_raytracer_x11)
-        list(APPEND
-            Geant4_DEFINITIONS
-            -DG4INTY_USE_XT
-            -DG4VIS_USE_RAYTRACERX
-        )
-    endif()
-    list(REMOVE_ITEM Geant4_FIND_COMPONENTS vis_raytracer_x11)
+  if(Geant4_FIND_REQUIRED_vis_raytracer_x11)
+    list(APPEND
+      Geant4_DEFINITIONS
+      -DG4INTY_USE_XT
+      -DG4VIS_USE_RAYTRACERX
+      )
+  endif()
+  list(REMOVE_ITEM Geant4_FIND_COMPONENTS vis_raytracer_x11)
 endif()
 
 
 # - Qt
 set(Geant4_qt_FOUND @GEANT4_USE_QT@)
 if(Geant4_qt_FOUND)
-    if(Geant4_FIND_REQUIRED_qt)
-        list(APPEND 
-            Geant4_DEFINITIONS 
-            -DG4INTY_USE_QT
-            -DG4UI_USE_QT
-            -DG4VIS_USE_OPENGLQT
-        )
-        set(_geant4_use_opengl_library ON)
-    endif()
-    list(REMOVE_ITEM Geant4_FIND_COMPONENTS qt)
+  if(Geant4_FIND_REQUIRED_qt)
+    list(APPEND 
+      Geant4_DEFINITIONS 
+      -DG4INTY_USE_QT
+      -DG4UI_USE_QT
+      -DG4VIS_USE_OPENGLQT
+      )
+    set(_geant4_use_opengl_library ON)
+  endif()
+  list(REMOVE_ITEM Geant4_FIND_COMPONENTS qt)
 endif()
-        
+
 # - Motif
 set(Geant4_motif_FOUND @GEANT4_USE_XM@)
 if(Geant4_motif_FOUND)
-    if(Geant4_FIND_REQUIRED_motif)
-        list(APPEND
-            Geant4_DEFINITIONS
-            -DG4INTY_USE_XT
-            -DG4UI_USE_XM
-            -DG4VIS_USE_OPENGLXM
-        )
-        set(_geant4_use_opengl_library ON)
-    endif()
+  if(Geant4_FIND_REQUIRED_motif)
+    list(APPEND
+      Geant4_DEFINITIONS
+      -DG4INTY_USE_XT
+      -DG4UI_USE_XM
+      -DG4VIS_USE_OPENGLXM
+      )
+    set(_geant4_use_opengl_library ON)
+  endif()
 
-    list(REMOVE_ITEM Geant4_FIND_COMPONENTS motif)
+  list(REMOVE_ITEM Geant4_FIND_COMPONENTS motif)
 endif()
 
 # - OpenGL X11
 set(Geant4_vis_opengl_x11_FOUND @GEANT4_USE_OPENGL_X11@)
 if(Geant4_vis_opengl_x11_FOUND)
-    if(Geant4_FIND_REQUIRED_vis_opengl_x11)
-        list(APPEND
-            Geant4_DEFINITIONS
-            -DG4INTY_USE_XT
-            -DG4VIS_USE_OPENGLX
-        )
-        set(_geant4_use_opengl_library ON)    
-    endif()
+  if(Geant4_FIND_REQUIRED_vis_opengl_x11)
+    list(APPEND
+      Geant4_DEFINITIONS
+      -DG4INTY_USE_XT
+      -DG4VIS_USE_OPENGLX
+      )
+    set(_geant4_use_opengl_library ON)    
+  endif()
 
-    list(REMOVE_ITEM Geant4_FIND_COMPONENTS vis_opengl_x11)
+  list(REMOVE_ITEM Geant4_FIND_COMPONENTS vis_opengl_x11)
 endif()
 
 # - OpenGL Win32
 set(Geant4_vis_opengl_win32_FOUND @GEANT4_USE_OPENGL_WIN32@)
 if(Geant4_vis_opengl_win32_FOUND)
-    if(Geant4_FIND_REQUIRED_vis_opengl_win32)
-        list(APPEND
-            Geant4_DEFINITIONS
-            -DG4INTY_USE_WIN32
-            -DG4VIS_USE_OPENGLWIN32
-        )
-        set(_geant4_use_opengl_library ON)    
-    endif()
+  if(Geant4_FIND_REQUIRED_vis_opengl_win32)
+    list(APPEND
+      Geant4_DEFINITIONS
+      -DG4INTY_USE_WIN32
+      -DG4VIS_USE_OPENGLWIN32
+      )
+    set(_geant4_use_opengl_library ON)    
+  endif()
 
-    list(REMOVE_ITEM Geant4_FIND_COMPONENTS vis_opengl_win32)
+  list(REMOVE_ITEM Geant4_FIND_COMPONENTS vis_opengl_win32)
 endif()
+
+# - OpenInventor
+set(Geant4_vis_openinventor_FOUND @GEANT4_USE_INVENTOR@)
+if(Geant4_vis_openinventor_FOUND)
+  if(Geant4_FIND_REQUIRED_vis_openinventor)
+    if(UNIX AND NOT WIN32)
+      list(APPEND Geant4_DEFINITIONS
+        -DG4INTY_USE_XT
+        -DG4VIS_USE_OI
+        -DG4VIS_USE_OIX
+        )
+    elseif(WIN32)
+      list(APPEND Geant4_DEFINITIONS
+        -G4INTY_USE_WIN32
+        -DG4VIS_USE_OI
+        -DG4VIS_USE_OIWIN32
+        )
+    endif()
+  endif()
+
+  list(REMOVE_ITEM Geant4_FIND_COMPONENTS vis_openinventor)
+endif()
+
+
 
 
 #----------------------------------------------------------------------------
@@ -325,6 +356,13 @@ if(_geant4_use_opengl_library)
         G4gl2ps${_geant4_lib_use_suffix}
     )
     list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_OPENGL)
+endif()
+
+# G4OpenInventor if it's requested.
+if(Geant4_FIND_REQUIRED_vis_openinventor)
+  list(APPEND _geant4_internal_libraries
+    G4OpenInventor${_geant4_lib_use_suffix}
+    )
 endif()
 
 # - 'Kernel' libraries

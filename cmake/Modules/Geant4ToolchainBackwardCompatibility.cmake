@@ -265,6 +265,18 @@ macro(_g4tc_configure_tc_variables SHELL_FAMILY)
         set(GEANT4_TC_G4VIS_USE_VRML "# NOT BUILT WITH NETWORK VRML SUPPORT")
     endif()
 
+    # - OpenInventor
+    if(GEANT4_USE_INVENTOR)
+      if(UNIX)
+        _g4tc_setenv_command(GEANT4_TC_G4VIS_USE_OPENINVENTOR ${SHELL_FAMILY} G4VIS_USE_OIX 1)
+      else()
+        _g4tc_setenv_command(GEANT4_TC_G4VIS_USE_OPENINVENTOR ${SHELL_FAMILY} G4VIS_USE_OIWIN32 1)
+      endif()
+    else()
+      set(GEANT4_TC_G4VIS_USE_OPENINVENTOR "# NOT BUILT WITH INVENTOR SUPPORT")
+    endif()
+
+
     # - X11 OpenGL
     if(GEANT4_USE_OPENGL_X11)
         _g4tc_setenv_command(GEANT4_TC_G4VIS_USE_OPENGLX ${SHELL_FAMILY} G4VIS_USE_OPENGLX 1)

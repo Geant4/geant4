@@ -60,11 +60,21 @@ endmacro()
 #----------------------------------------------------------------------------
 # Configure OpenInventor support (CROSSPLATFORM??)
 #
-#option(GEANT4_USE_OPENINVENTOR "Build Geant4 OpenInventor Visualization Driver" OFF)
+option(GEANT4_USE_INVENTOR "Build Geant4 OpenInventor Visualization Driver" OFF)
 
-#if(GEANT4_USE_OPENINVENTOR)
-    #find_package(Inventor REQUIRED)
-#endif()
+if(GEANT4_USE_INVENTOR)
+  find_package(Inventor REQUIRED)
+
+  # On UNIX, we also require Xm and X11...
+  if(UNIX)
+    find_package(Motif REQUIRED)
+    find_package(X11 REQUIRED)
+  endif()
+
+  GEANT4_ADD_FEATURE(
+    GEANT4_USE_INVENTOR "Build OpenInventor Driver"
+    )
+endif()
 
 
 #----------------------------------------------------------------------------

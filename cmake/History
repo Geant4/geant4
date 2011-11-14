@@ -29,6 +29,45 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+November 8th 2011 - B.Morgan (cmake-V09-04-32)
+- Templates/Geant4Config.cmake.in [BUGFIX #1196, #1261]: Added support for 
+  G4OpenInventor as a component, named 'vis_openinventor'. Prtected inclusion of
+  Geant4LibraryDepends file by test on a variable Geant4_LIBDEPS_LOADED so that
+  multiple calls to the config file from find_package are possible. This allows
+  option selecting of the components. NB Full Inventor build requires tag
+  openinventor-V09-04-02).
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : Added support for 
+  configuration of OpenInventor environment variables in
+  geant4-environment-setup scripts.
+- Templates/geant4-environment-skeleton.in : Added support for OpenInventor
+  environment variables needed by old Makefile toolchain. At present, OIVHOME is
+  not set, as the Geant4 public interface should not need this.
+- Modules/Geant4ConfigureConfigScript.cmake : Added support for configuration 
+  of OpenInventor feature.
+- Templates/geant4-config.in : Added support for OpenInventor feature.
+- Modules/Geant4InterfaceOptions.cmake : Added support for OpenInventor, with
+  new CMake option GEANT4_USE_INVENTOR to enable build. On Unix platforms, X11
+  and Xm are also searched for as these are used in Geant4's Inventor module.
+- Modules/FindInventor.cmake (NEWFILE) : Find module for Inventor, adapted from
+  post on CMake mailing list by Jan Peciva. Tested against Coin3d
+  implementation.
+
+
+November 4th 2011 - B.Morgan
+- Modules/Geant4ConfigureConfigScript.cmake : Added setup of installed script 
+  to use self location functionality in geant4-config when installation is
+  relocatable.
+- Templates/geant4-config.in : Added capability for script to self locate
+  itself. The technique is to fully resolve any softlinks to the script file
+  itself using readlink, but with workarounds because the '-f' option to
+  readlink is not available on all platforms. No attempt is made to resolve
+  any softlinks in the path elements or to replace occurrence of '.' or '..'.
+  However, the algorithm has been tested in several softlinking situations
+  and should cover everything but real corner cases... The result of the
+  resolution is the diectory in which the script resides. This can be used
+  later in the script as necessary.
+
+
 November 2nd 2011 - B.Morgan (cmake-V09-04-31)
 - Modules/Geant4InstallData.cmake : Bumped version of G4EMLOW library to be
   installed from 6.22 -> 6.23.
