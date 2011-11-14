@@ -1,5 +1,5 @@
-#ifndef HEP_NONCOPYABLE_H
-#define HEP_NONCOPYABLE_H
+#ifndef CLHEP_NONCOPYABLE_H
+#define CLHEP_NONCOPYABLE_H
 
 // ======================================================================
 //
@@ -10,7 +10,7 @@
 // ======================================================================
 
 
-#include "CLHEP/Utility/keywords.h"
+#include "CLHEP/Utility/defs.h"
 
 
 namespace CLHEP {
@@ -18,8 +18,8 @@ namespace CLHEP {
 class noncopyable
 {
 protected:
-  noncopyable () noexcept { }
-  ~noncopyable() noexcept { }
+  noncopyable () throw () { }
+  ~noncopyable() throw () { }
 
 private:
   noncopyable              ( noncopyable const & );  // = delete;

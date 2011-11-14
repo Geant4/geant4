@@ -1,5 +1,5 @@
-#ifndef HEP_MEMORY_H
-#define HEP_MEMORY_H
+#ifndef CLHEP_MEMORY_H
+#define CLHEP_MEMORY_H
 
 // ======================================================================
 //
@@ -31,7 +31,7 @@
 // ======================================================================
 
 
-#include "CLHEP/Utility/keywords.h"
+#include "CLHEP/Utility/defs.h"
 #include "CLHEP/Utility/noncopyable.h"
 #include "CLHEP/Utility/type_traits.h"
 
@@ -66,12 +66,12 @@ class bad_weak_ptr
   : public std::exception
 {
 public:
-  inline  virtual  char const *  what() const throw();  // noexcept
+  inline  virtual  char const *  what() const throw();
 
 };  // bad_weak_ptr
 
 char const *
-  bad_weak_ptr::what() const throw()  // noexcept
+  bad_weak_ptr::what() const throw()
 {
   return "bad_weak_ptr";
 }
@@ -88,24 +88,24 @@ class abstract_ctrl_block
   : public noncopyable
 {
 public:
-  inline  void  class_invariant() const noexcept;
+  inline  void  class_invariant() const throw();
   // class class_invariant
 
   inline           abstract_ctrl_block();
-  inline  virtual  ~abstract_ctrl_block() noexcept;
+  inline  virtual  ~abstract_ctrl_block() throw();
   // constructor and destructor
 
   inline           void    add_ref();
   inline           bool    add_ref_lock();
-  inline           void    weak_add_ref() noexcept;
+  inline           void    weak_add_ref() throw();
           virtual  void *  get_deleter( std::type_info const & ti ) = 0;
-  inline           void    release() noexcept;
-  inline           void    weak_release() noexcept;
-          virtual  void    dispose() noexcept = 0;
-  inline  virtual  void    destroy() noexcept;
+  inline           void    release() throw();
+  inline           void    weak_release() throw();
+          virtual  void    dispose() throw() = 0;
+  inline  virtual  void    destroy() throw();
   // resource management functions
 
-  inline  long use_count() const noexcept;
+  inline  long use_count() const throw();
   // accessor
 
 private:
@@ -115,7 +115,7 @@ private:
 };  // abstract_ctrl_block
 
 void
-  abstract_ctrl_block::class_invariant() const noexcept
+  abstract_ctrl_block::class_invariant() const throw()
 {
   assert( n_shared_ptrs == 0  || n_weak_ptrs >= 1 );
 }
@@ -127,7 +127,7 @@ abstract_ctrl_block::abstract_ctrl_block()
   class_invariant();
 }
 
-abstract_ctrl_block::~abstract_ctrl_block() noexcept
+abstract_ctrl_block::~abstract_ctrl_block() throw()
 {
   class_invariant();
 }
@@ -147,14 +147,14 @@ bool
 }
 
 void
-  abstract_ctrl_block::weak_add_ref() noexcept
+  abstract_ctrl_block::weak_add_ref() throw()
 {
   class_invariant();
   ++n_weak_ptrs;
 }
 
 void
-  abstract_ctrl_block::release() noexcept
+  abstract_ctrl_block::release() throw()
 {
   class_invariant();
   if( 0 == --n_shared_ptrs )
@@ -162,7 +162,7 @@ void
 }
 
 void
-  abstract_ctrl_block::weak_release() noexcept
+  abstract_ctrl_block::weak_release() throw()
 {
   class_invariant();
   if( 0 == --n_weak_ptrs )
@@ -170,14 +170,14 @@ void
 }
 
 void
-  abstract_ctrl_block::destroy() noexcept
+  abstract_ctrl_block::destroy() throw()
 {
   assert( n_weak_ptrs == 0 );
   delete this;
 }
 
 long
-  abstract_ctrl_block::use_count() const noexcept
+  abstract_ctrl_block::use_count() const throw()
 {
   class_invariant();
   return n_shared_ptrs;
@@ -199,7 +199,7 @@ template< typename P >  // P is pointee type
 
 public:
   inline  explicit ctrl_block_p( P * );
-  inline           ~ctrl_block_p() noexcept;
+  inline           ~ctrl_block_p() throw();
   // constructor and destructor
 
   inline  void *  operator new ( std::size_t );
@@ -207,7 +207,7 @@ public:
   // allocation functions
 
   inline  virtual  void *  get_deleter( std::type_info const & );
-  inline  virtual  void    dispose() noexcept;
+  inline  virtual  void    dispose() throw();
   // resource management functions
 
 private:
@@ -222,12 +222,12 @@ ctrl_block_p<P>::ctrl_block_p( P * p )
 { }
 
 template< typename P >
-ctrl_block_p<P>::~ctrl_block_p() noexcept
+ctrl_block_p<P>::~ctrl_block_p() throw()
 { }
 
 template< typename P >
 void
-  ctrl_block_p<P>::dispose() noexcept
+  ctrl_block_p<P>::dispose() throw()
 {
   delete owned_ptr;
 }
@@ -236,7 +236,7 @@ template< typename P >
 void *
   ctrl_block_p<P>::get_deleter( std::type_info const & )
 {
-  return nullptr;
+  return 0;
 }
 
 template< typename P >
@@ -263,7 +263,7 @@ template< typename P  // pointee type
 
 public:
   inline  ctrl_block_pd( P *, D );
-  inline  ~ctrl_block_pd() noexcept;
+  inline  ~ctrl_block_pd() throw();
   // constructor and destructor
 
   inline  void *  operator new ( std::size_t );
@@ -271,7 +271,7 @@ public:
   // allocation functions
 
   inline  virtual  void *  get_deleter( std::type_info const & );
-  inline  virtual  void    dispose() noexcept;
+  inline  virtual  void    dispose() throw();
   // resource management functions
 
 private:
@@ -289,12 +289,12 @@ ctrl_block_pd<P,D>::ctrl_block_pd( P * p, D d )
 { }
 
 template< typename P, typename D >
-ctrl_block_pd<P,D>::~ctrl_block_pd() noexcept
+ctrl_block_pd<P,D>::~ctrl_block_pd() throw()
 { }
 
 template< typename P, typename D >
 void
-  ctrl_block_pd<P,D>::dispose() noexcept
+  ctrl_block_pd<P,D>::dispose() throw()
 {
   deleter( owned_ptr );
 }
@@ -303,7 +303,7 @@ template< typename P, typename D >
 void *
   ctrl_block_pd<P,D>::get_deleter( std::type_info const & ti )
 {
-  return ti == typeid(D) ? &reinterpret_cast<char&>( deleter ) : nullptr;
+  return ti == typeid(D) ? &reinterpret_cast<char&>( deleter ) : 0;
 }
 
 template< typename P, typename D >
@@ -331,12 +331,12 @@ template< typename P  // pointee type
 
 public:
   inline  ctrl_block_pda( P *, D, A );
-  inline  ~ctrl_block_pda() noexcept;
+  inline  ~ctrl_block_pda() throw();
   // constructor and destructor
 
   inline  virtual  void *  get_deleter( std::type_info const & );
-  inline  virtual  void    dispose() noexcept;
-  inline  virtual  void    destroy() noexcept;
+  inline  virtual  void    dispose() throw();
+  inline  virtual  void    destroy() throw();
   // resource management functions
 
 private:
@@ -356,19 +356,19 @@ ctrl_block_pda<P,D,A>::ctrl_block_pda( P * p, D d, A a )
 { }
 
 template< typename P, typename D, typename A >
-ctrl_block_pda<P,D,A>::~ctrl_block_pda() noexcept
+ctrl_block_pda<P,D,A>::~ctrl_block_pda() throw()
 { }
 
 template< typename P, typename D, typename A >
 void
-  ctrl_block_pda<P,D,A>::dispose() noexcept
+  ctrl_block_pda<P,D,A>::dispose() throw()
 {
   deleter( owned_ptr );
 }
 
 template< typename P, typename D, typename A >
 void
-  ctrl_block_pda<P,D,A>::destroy() noexcept
+  ctrl_block_pda<P,D,A>::destroy() throw()
 {
   typename A::template rebind< this_type >::other  this_allocator( allocator );
 
@@ -380,7 +380,7 @@ template< typename P, typename D, typename A >
 void *
   ctrl_block_pda<P,D,A>::get_deleter( std::type_info const & ti )
 {
-  return ti == typeid( D ) ? &reinterpret_cast<char&>( deleter ) : nullptr;
+  return ti == typeid( D ) ? &reinterpret_cast<char&>( deleter ) : 0;
 }
 
 
@@ -398,7 +398,7 @@ class shared_ctrl_handle
   friend  class weak_ctrl_handle;
 
 public:
-  inline  shared_ctrl_handle() noexcept;
+  inline  shared_ctrl_handle() throw();
   template< typename P >
     inline  explicit
     shared_ctrl_handle( P * );
@@ -409,13 +409,13 @@ public:
   template< typename P >
     inline  explicit
     shared_ctrl_handle( std::auto_ptr<P> & );
-  inline  ~shared_ctrl_handle() noexcept;
+  inline  ~shared_ctrl_handle() throw();
   // constructors and destructor
 
-  inline  void  swap( shared_ctrl_handle & ) noexcept;
-  inline  shared_ctrl_handle( shared_ctrl_handle const & ) noexcept;
+  inline  void  swap( shared_ctrl_handle & ) throw();
+  inline  shared_ctrl_handle( shared_ctrl_handle const & ) throw();
   inline  shared_ctrl_handle &
-    operator = ( shared_ctrl_handle const & ) noexcept;
+    operator = ( shared_ctrl_handle const & ) throw();
   // copy functions
 
   inline  explicit
@@ -424,9 +424,9 @@ public:
   // copy-like functions
 
   inline  void *  get_deleter( std::type_info const & ) const;
-  inline  bool    unique() const noexcept;
-  inline  bool    empty() const noexcept;
-  inline  long    use_count() const noexcept;
+  inline  bool    unique() const throw();
+  inline  bool    empty() const throw();
+  inline  long    use_count() const throw();
   // accessors
 
   friend inline
@@ -442,15 +442,15 @@ private:
 
 };  // shared_ctrl_handle
 
-shared_ctrl_handle::shared_ctrl_handle() noexcept
-  : acb_ptr( nullptr )
+shared_ctrl_handle::shared_ctrl_handle() throw()
+  : acb_ptr( 0 )
 { }
 
 template< typename P >
   shared_ctrl_handle::shared_ctrl_handle( P * p )
   // a fctn-try block would be slightly more efficient here,
   // but some older compilers don't understand it
-  : acb_ptr( nullptr )
+  : acb_ptr( 0 )
 {
   try  {
     acb_ptr = new ctrl_block_p<P>(p);
@@ -465,7 +465,7 @@ template< typename P, typename D >
   shared_ctrl_handle::shared_ctrl_handle( P * p, D d )
   // a fctn-try block would be slightly more efficient here,
   // but some older compilers don't understand it
-  : acb_ptr( nullptr )
+  : acb_ptr( 0 )
 {
   try  {
     acb_ptr = new ctrl_block_pd<P,D>(p, d);
@@ -478,7 +478,7 @@ template< typename P, typename D >
 
 template< typename P, typename D, typename A >
   shared_ctrl_handle::shared_ctrl_handle( P * p, D d, A a )
-  : acb_ptr( nullptr )
+  : acb_ptr( 0 )
 {
   typedef  ctrl_block_pda<P,D,A>
            ctrl_block;
@@ -494,7 +494,7 @@ template< typename P, typename D, typename A >
   catch(...)
   {
     d( p );
-    if( acb_ptr != nullptr )
+    if( acb_ptr != 0 )
       cba.deallocate( static_cast<ctrl_block*>( acb_ptr ), 1 );
     throw;
   }
@@ -507,36 +507,36 @@ template< typename P >
   p.release();
 }
 
-shared_ctrl_handle::~shared_ctrl_handle() noexcept
+shared_ctrl_handle::~shared_ctrl_handle() throw()
 {
-  if( acb_ptr != nullptr )
+  if( acb_ptr != 0 )
     acb_ptr->release();
 }
 
 void
-  shared_ctrl_handle::swap( shared_ctrl_handle & other ) noexcept
+  shared_ctrl_handle::swap( shared_ctrl_handle & other ) throw()
 {
   abstract_ctrl_block * tmp = other.acb_ptr;
   other.acb_ptr = acb_ptr;
   acb_ptr = tmp;
 }
 
-shared_ctrl_handle::shared_ctrl_handle( shared_ctrl_handle const & other ) noexcept
+shared_ctrl_handle::shared_ctrl_handle( shared_ctrl_handle const & other ) throw()
   : acb_ptr( other.acb_ptr )
 {
-  if( acb_ptr != nullptr )
+  if( acb_ptr != 0 )
     acb_ptr->add_ref();
 }
 
 shared_ctrl_handle &
-  shared_ctrl_handle::operator = ( shared_ctrl_handle const & other ) noexcept
+  shared_ctrl_handle::operator = ( shared_ctrl_handle const & other ) throw()
 {
   abstract_ctrl_block * tmp = other.acb_ptr;
 
   if( tmp != acb_ptr )
   {
-    if( tmp     != nullptr ) tmp->add_ref();
-    if( acb_ptr != nullptr ) acb_ptr->release();
+    if( tmp     != 0 ) tmp->add_ref();
+    if( acb_ptr != 0 ) acb_ptr->release();
     acb_ptr = tmp;
   }
 
@@ -546,25 +546,25 @@ shared_ctrl_handle &
 void *
   shared_ctrl_handle::get_deleter( std::type_info const & ti ) const
 {
-  return acb_ptr ? acb_ptr->get_deleter( ti ) : nullptr;
+  return acb_ptr ? acb_ptr->get_deleter( ti ) : 0;
 }
 
 bool
-  shared_ctrl_handle::unique() const noexcept
+  shared_ctrl_handle::unique() const throw()
 {
   return 1L == use_count();
 }
 
 bool
-  shared_ctrl_handle::empty() const noexcept
+  shared_ctrl_handle::empty() const throw()
 {
-  return acb_ptr == nullptr;
+  return acb_ptr == 0;
 }
 
 long
-  shared_ctrl_handle::use_count() const noexcept
+  shared_ctrl_handle::use_count() const throw()
 {
-  return acb_ptr == nullptr ? 0L : acb_ptr->use_count();
+  return acb_ptr == 0 ? 0L : acb_ptr->use_count();
 }
 
 bool
@@ -585,21 +585,21 @@ class weak_ctrl_handle
 
 public:
 
-  inline  weak_ctrl_handle() noexcept;
-  inline  weak_ctrl_handle( shared_ctrl_handle const & ) noexcept;
-  inline  ~weak_ctrl_handle() noexcept;
+  inline  weak_ctrl_handle() throw();
+  inline  weak_ctrl_handle( shared_ctrl_handle const & ) throw();
+  inline  ~weak_ctrl_handle() throw();
   // constructors and destructor
 
-  inline  void  swap( weak_ctrl_handle & ) noexcept;
-  inline  weak_ctrl_handle( weak_ctrl_handle const & ) noexcept;
-  inline  weak_ctrl_handle & operator = ( shared_ctrl_handle const & ) noexcept;
+  inline  void  swap( weak_ctrl_handle & ) throw();
+  inline  weak_ctrl_handle( weak_ctrl_handle const & ) throw();
+  inline  weak_ctrl_handle & operator = ( shared_ctrl_handle const & ) throw();
   // copy functions
 
-  inline  weak_ctrl_handle & operator = ( weak_ctrl_handle const & ) noexcept;
+  inline  weak_ctrl_handle & operator = ( weak_ctrl_handle const & ) throw();
   // copy-like functions
 
-  inline  bool  empty() const noexcept;
-  inline  long  use_count() const noexcept;
+  inline  bool  empty() const throw();
+  inline  long  use_count() const throw();
   // accessors
 
   friend inline
@@ -615,47 +615,47 @@ private:
 
 };  // weak_ctrl_handle
 
-weak_ctrl_handle::weak_ctrl_handle() noexcept
-  : acb_ptr( nullptr )
+weak_ctrl_handle::weak_ctrl_handle() throw()
+  : acb_ptr( 0 )
 { }
 
-weak_ctrl_handle::weak_ctrl_handle( shared_ctrl_handle const & other ) noexcept
+weak_ctrl_handle::weak_ctrl_handle( shared_ctrl_handle const & other ) throw()
   : acb_ptr( other.acb_ptr )
 {
-  if( acb_ptr != nullptr )
+  if( acb_ptr != 0 )
     acb_ptr->weak_add_ref();
 }
 
-weak_ctrl_handle::~weak_ctrl_handle() noexcept
+weak_ctrl_handle::~weak_ctrl_handle() throw()
 {
-  if( acb_ptr != nullptr )
+  if( acb_ptr != 0 )
     acb_ptr->weak_release();
 }
 
 void
-  weak_ctrl_handle::swap( weak_ctrl_handle & other ) noexcept
+  weak_ctrl_handle::swap( weak_ctrl_handle & other ) throw()
 {
   abstract_ctrl_block *  tmp = other.acb_ptr;
   other.acb_ptr = acb_ptr;
   acb_ptr = tmp;
 }
 
-weak_ctrl_handle::weak_ctrl_handle( weak_ctrl_handle const & other ) noexcept
+weak_ctrl_handle::weak_ctrl_handle( weak_ctrl_handle const & other ) throw()
   : acb_ptr( other.acb_ptr )
 {
-  if( acb_ptr != nullptr )
+  if( acb_ptr != 0 )
     acb_ptr->weak_add_ref();
 }
 
 weak_ctrl_handle &
-  weak_ctrl_handle::operator = ( shared_ctrl_handle const & other ) noexcept
+  weak_ctrl_handle::operator = ( shared_ctrl_handle const & other ) throw()
 {
   abstract_ctrl_block *  tmp = other.acb_ptr;
 
   if( tmp != acb_ptr )
   {
-    if( tmp     != nullptr ) tmp->weak_add_ref();
-    if( acb_ptr != nullptr ) acb_ptr->weak_release();
+    if( tmp     != 0 ) tmp->weak_add_ref();
+    if( acb_ptr != 0 ) acb_ptr->weak_release();
     acb_ptr = tmp;
 }
 
@@ -663,14 +663,14 @@ weak_ctrl_handle &
 }
 
 weak_ctrl_handle &
-  weak_ctrl_handle::operator = ( weak_ctrl_handle const & other ) noexcept
+  weak_ctrl_handle::operator = ( weak_ctrl_handle const & other ) throw()
 {
   abstract_ctrl_block *  tmp = other.acb_ptr;
 
   if( tmp != acb_ptr )
 {
-    if( tmp     != nullptr ) tmp->weak_add_ref();
-    if( acb_ptr != nullptr ) acb_ptr->weak_release();
+    if( tmp     != 0 ) tmp->weak_add_ref();
+    if( acb_ptr != 0 ) acb_ptr->weak_release();
     acb_ptr = tmp;
 }
 
@@ -678,15 +678,15 @@ weak_ctrl_handle &
 }
 
 bool
-  weak_ctrl_handle::empty() const noexcept
+  weak_ctrl_handle::empty() const throw()
 {
-  return acb_ptr == nullptr;
+  return acb_ptr == 0;
 }
 
 long
-  weak_ctrl_handle::use_count() const noexcept
+  weak_ctrl_handle::use_count() const throw()
 {
-  return acb_ptr == nullptr ? 0L : acb_ptr->use_count();
+  return acb_ptr == 0 ? 0L : acb_ptr->use_count();
 }
 
 bool
@@ -704,7 +704,7 @@ bool
 shared_ctrl_handle::shared_ctrl_handle( weak_ctrl_handle const & other )
   : acb_ptr( other.acb_ptr )
 {
-  if( acb_ptr == nullptr  ||  ! acb_ptr->add_ref_lock() )
+  if( acb_ptr == 0  ||  ! acb_ptr->add_ref_lock() )
     throw bad_weak_ptr();
 }
 
@@ -712,8 +712,8 @@ shared_ctrl_handle::shared_ctrl_handle( weak_ctrl_handle const & other
                                       , sp_nothrow_tag )
   : acb_ptr( other.acb_ptr )
 {
-  if( acb_ptr != nullptr  &&  ! acb_ptr->add_ref_lock() )
-    acb_ptr = nullptr;
+  if( acb_ptr != 0  &&  ! acb_ptr->add_ref_lock() )
+    acb_ptr = 0;
 }
 
 
@@ -773,7 +773,7 @@ inline void
                             , enable_shared_from_this<T> const * pe
                             )
 {
-  if( pe != nullptr )
+  if( pe != 0 )
     pe->_internal_accept_owner( ppx, const_cast<Y*>( py ) );
 }
 
@@ -784,7 +784,7 @@ inline void
                             , enable_shared_from_this2<T> const * pe
                             )
 {
-  if( pe != nullptr )
+  if( pe != 0 )
     pe->_internal_accept_owner( ppx, const_cast<Y*>( py ) );
 }
 
@@ -812,7 +812,7 @@ public:
   typedef  P  element_type;
   // pointee type
 
-  shared_ptr() noexcept;
+  shared_ptr() throw();
   template< typename P2 >
     inline  explicit
     shared_ptr( P2 * );
@@ -822,17 +822,17 @@ public:
     inline  shared_ptr( P2 *, D, A );
   // constructors
 
-  inline  void          swap( shared_ptr<P> & ) noexcept;
-  inline  shared_ptr &  operator = ( shared_ptr const & ) noexcept;
+  inline  void          swap( shared_ptr<P> & ) throw();
+  inline  shared_ptr &  operator = ( shared_ptr const & ) throw();
   // copy functions; generated copy constructor, destructor are fine
 
   template< typename P2 >
     inline  explicit
     shared_ptr( weak_ptr<P2> const & );
   template< typename P2 >
-    inline  shared_ptr( weak_ptr<P2> const &, sp::sp_nothrow_tag ) noexcept;
+    inline  shared_ptr( weak_ptr<P2> const &, sp::sp_nothrow_tag ) throw();
   template< typename P2 >
-    inline  shared_ptr( shared_ptr<P2> const &, P * ) noexcept;
+    inline  shared_ptr( shared_ptr<P2> const &, P * ) throw();
   template< typename P2 >
     inline  shared_ptr( shared_ptr<P2> const &, sp::static_cast_tag );
   template< typename P2 >
@@ -847,15 +847,15 @@ public:
   template< typename AP >
     inline  explicit
     shared_ptr( AP
-              , typename enable_if_auto_ptr<AP,void*>::type = nullptr
+              , typename enable_if_auto_ptr<AP,void*>::type = 0
               );
   template< typename P2 >
     inline
     shared_ptr( shared_ptr<P2> const &
-              , typename enable_if_ptr_convertible<P2,P,void*>::type = nullptr
-              ) noexcept;
+              , typename enable_if_ptr_convertible<P2,P,void*>::type = 0
+              ) throw();
   template< typename P2 >
-    inline  shared_ptr &  operator = ( shared_ptr<P2> const & ) noexcept;
+    inline  shared_ptr &  operator = ( shared_ptr<P2> const & ) throw();
   template< typename P2 >
     inline  shared_ptr &  operator = ( std::auto_ptr<P2> & );
   template< typename AP >
@@ -863,7 +863,7 @@ public:
     operator = ( AP );
   // copy-like functions
 
-  inline  void reset() noexcept;
+  inline  void reset() throw();
   template< typename P2 >
     inline  void  reset( P2 * );
   template< typename P2, typename D >
@@ -874,14 +874,14 @@ public:
     inline  void  reset( shared_ptr<P2> const &, P * );
   // reset functions
 
-             inline  operator bool () const noexcept;
-  inline  reference  operator *    () const noexcept;
-  inline  P *        operator ->   () const noexcept;
+             inline  operator bool () const throw();
+  inline  reference  operator *    () const throw();
+  inline  P *        operator ->   () const throw();
   // pointer-like behavior
 
-  inline  P *      get() const noexcept;
-  inline  bool     unique() const noexcept;
-  inline  long     use_count() const noexcept;
+  inline  P *      get() const throw();
+  inline  bool     unique() const throw();
+  inline  long     use_count() const throw();
   // accessors
 
   template< typename P2 >
@@ -924,8 +924,8 @@ template< typename C, typename T, typename P >
                                                 );
 
 template< typename P >
-  shared_ptr<P>::shared_ptr() noexcept
-  : px( nullptr )
+  shared_ptr<P>::shared_ptr() throw()
+  : px( 0 )
   , pn(         )
 { }
 
@@ -958,7 +958,7 @@ template< typename P2, typename D, typename A >  // D's, A's copy c'tors must no
 
 template< typename P >
   void
-  shared_ptr<P>::swap( shared_ptr<P> & other ) noexcept
+  shared_ptr<P>::swap( shared_ptr<P> & other ) throw()
 {
   std::swap( px, other.px );
   pn.swap( other.pn );
@@ -966,7 +966,7 @@ template< typename P >
 
 template< typename P >
   shared_ptr<P> &
-  shared_ptr<P>::operator = ( shared_ptr const & other ) noexcept
+  shared_ptr<P>::operator = ( shared_ptr const & other ) throw()
 {
   this_type( other ).swap( *this );
   return *this;
@@ -975,7 +975,7 @@ template< typename P >
 template< typename P >
 template< typename P2 >
   shared_ptr<P>::shared_ptr( weak_ptr<P2> const & other )
-  : px( nullptr  )  // temporarily
+  : px( 0  )  // temporarily
   , pn( other.pn )  // may throw
 {
   px = other.px;  // safe to copy other.px, as pn(other.pn) did not throw
@@ -985,8 +985,8 @@ template< typename P >
 template< typename P2 >
   shared_ptr<P>::shared_ptr( weak_ptr<P2> const & other
                            , sp::sp_nothrow_tag
-                           ) noexcept
-  : px( nullptr                        )  // temporarily
+                           ) throw()
+  : px( 0                        )  // temporarily
   , pn( other.pn, sp::sp_nothrow_tag() )
 {
   if( ! pn.empty() )
@@ -997,7 +997,7 @@ template< typename P >
 template< typename P2 >
   shared_ptr<P>::shared_ptr( shared_ptr<P2> const & other
                            , P * p
-                           ) noexcept
+                           ) throw()
   : px( p        )
   , pn( other.pn )
 { }
@@ -1028,7 +1028,7 @@ template< typename P2 >
   : px( dynamic_cast<element_type*>( other.px ) )
   , pn( other.pn                                )
 {
-  if( px == nullptr )               // cast failed?
+  if( px == 0 )               // cast failed?
     pn = sp::shared_ctrl_handle();  // yes; need our own control information
 }
 
@@ -1040,7 +1040,7 @@ template< typename P2 >
   : px( dynamic_cast<element_type*>( other.px ) )
   , pn( other.pn                                )
 {
-  if( px == nullptr )
+  if( px == 0 )
     throw std::bad_cast();
 }
 
@@ -1072,7 +1072,7 @@ template< typename P >
 template< typename P2 >
   shared_ptr<P>::shared_ptr( shared_ptr<P2> const & other
                            , typename enable_if_ptr_convertible<P2,P,void*>::type
-                           ) noexcept
+                           ) throw()
   : px( other.px )
   , pn( other.pn )
   { }
@@ -1080,7 +1080,7 @@ template< typename P2 >
 template< typename P >
 template< typename P2 >
   shared_ptr<P> &
-  shared_ptr<P>::operator = ( shared_ptr<P2> const & other ) noexcept
+  shared_ptr<P>::operator = ( shared_ptr<P2> const & other ) throw()
 {
   this_type( other ).swap( *this );
   return *this;
@@ -1106,7 +1106,7 @@ template< typename AP >
 
 template< typename P >
   void
-  shared_ptr<P>::reset() noexcept
+  shared_ptr<P>::reset() throw()
 {
   this_type().swap( *this );
 }
@@ -1116,7 +1116,7 @@ template< typename P2 >
   void
   shared_ptr<P>::reset( P2 * p )  // P2 must be a complete type
 {
-  assert( p == nullptr || p != px );  // oughtn't reset oneself
+  assert( p == 0 || p != px );  // oughtn't reset oneself
   this_type( p ).swap( *this );
 }
 
@@ -1145,7 +1145,7 @@ template< typename P2 >
 }
 
 template< typename P >
-  shared_ptr<P>::operator bool () const noexcept
+  shared_ptr<P>::operator bool () const throw()
 {
   return px;
 }
@@ -1153,37 +1153,37 @@ template< typename P >
 template< typename P >
   typename sp::shared_ptr_traits<P>::reference
   //typename shared_ptr<P>::reference
-  shared_ptr<P>::operator * () const noexcept
+  shared_ptr<P>::operator * () const throw()
 {
-  assert( px != nullptr );
+  assert( px != 0 );
   return *px;
 }
 
 template< typename P >
   P *
-  shared_ptr<P>::operator -> () const noexcept
+  shared_ptr<P>::operator -> () const throw()
 {
-  assert( px != nullptr );
+  assert( px != 0 );
   return px;
 }
 
 template< typename P >
   P *
-  shared_ptr<P>::get() const noexcept
+  shared_ptr<P>::get() const throw()
 {
   return px;
 }
 
 template< typename P >
   bool
-  shared_ptr<P>::unique() const noexcept
+  shared_ptr<P>::unique() const throw()
 {
   return pn.unique();
 }
 
 template< typename P >
   long
-  shared_ptr<P>::use_count() const noexcept
+  shared_ptr<P>::use_count() const throw()
 {
   return pn.use_count();
 }
@@ -1297,32 +1297,32 @@ template< typename P >
 public:
   typedef  P  element_type;
 
-  inline  weak_ptr() noexcept;
+  inline  weak_ptr() throw();
 
   //  generated copy constructor, assignment, destructor are fine
 
-  inline  void  swap( this_type & other ) noexcept;
+  inline  void  swap( this_type & other ) throw();
   template< typename P2 >
   inline
   weak_ptr( weak_ptr<P2> const & r
-          , typename enable_if_ptr_convertible<P2,P,void*>::type = nullptr
-          ) noexcept;
+          , typename enable_if_ptr_convertible<P2,P,void*>::type = 0
+          ) throw();
   template< typename P2 >
   inline
   weak_ptr( shared_ptr<P2> const & r
-          , typename enable_if_ptr_convertible<P2,P,void*>::type = nullptr
-          ) noexcept;
+          , typename enable_if_ptr_convertible<P2,P,void*>::type = 0
+          ) throw();
   template< typename P2 >
-  inline  weak_ptr &  operator = (weak_ptr<P2> const & r) noexcept;
+  inline  weak_ptr &  operator = (weak_ptr<P2> const & r) throw();
   template< typename P2 >
-  inline  weak_ptr &  operator = (shared_ptr<P2> const & r) noexcept;
+  inline  weak_ptr &  operator = (shared_ptr<P2> const & r) throw();
   // copy-like functions
 
-  inline  shared_ptr<P>  lock() const noexcept;
-  inline  long           use_count() const noexcept;
-  inline  bool           expired() const noexcept;
+  inline  shared_ptr<P>  lock() const throw();
+  inline  long           use_count() const throw();
+  inline  bool           expired() const throw();
   inline  bool           _empty() const; // extension, not in std::weak_ptr
-  inline  void           reset() noexcept;
+  inline  void           reset() throw();
   // accessors
 
   inline  void  _internal_assign( P * px2, sp::shared_ctrl_handle const & pn2 );
@@ -1342,8 +1342,8 @@ template< typename P >
   inline  void  swap( weak_ptr<P> & a, weak_ptr<P> & b );
 
 template< typename P >
-weak_ptr<P>::weak_ptr() noexcept
-  : px( nullptr )
+weak_ptr<P>::weak_ptr() throw()
+  : px( 0 )
   , pn(         )
 { }
 
@@ -1351,7 +1351,7 @@ template< typename P >
 template< typename P2 >
   weak_ptr<P>::weak_ptr( weak_ptr<P2> const & r
                        , typename enable_if_ptr_convertible<P2,P,void*>::type
-                       ) noexcept
+                       ) throw()
   : px( r.lock().get() )  // same as r.px, but doesn't risk invalidation
   , pn( r.pn           )
 { }
@@ -1360,7 +1360,7 @@ template< typename P >
 template< typename P2 >
   weak_ptr<P>::weak_ptr( shared_ptr<P2> const & r
                        , typename enable_if_ptr_convertible<P2,P,void*>::type
-                       ) noexcept
+                       ) throw()
   : px( r.px )
   , pn( r.pn )
 { }
@@ -1368,7 +1368,7 @@ template< typename P2 >
 template< typename P >
 template< typename P2 >
   weak_ptr<P> &
-  weak_ptr<P>::operator = (weak_ptr<P2> const & r) noexcept
+  weak_ptr<P>::operator = (weak_ptr<P2> const & r) throw()
 {
   px = r.lock().get();
   pn = r.pn;
@@ -1378,7 +1378,7 @@ template< typename P2 >
 template< typename P >
 template< typename P2 >
   weak_ptr<P> &
-  weak_ptr<P>::operator = (shared_ptr<P2> const & r) noexcept
+  weak_ptr<P>::operator = (shared_ptr<P2> const & r) throw()
 {
   px = r.px;
   pn = r.pn;
@@ -1387,21 +1387,21 @@ template< typename P2 >
 
 template< typename P >
   shared_ptr<P>
-  weak_ptr<P>::lock() const noexcept
+  weak_ptr<P>::lock() const throw()
 {
   return shared_ptr<element_type>( *this, sp::sp_nothrow_tag() );
 }
 
 template< typename P >
   long
-  weak_ptr<P>::use_count() const noexcept
+  weak_ptr<P>::use_count() const throw()
 {
   return pn.use_count();
 }
 
 template< typename P >
   bool
-  weak_ptr<P>::expired() const noexcept
+  weak_ptr<P>::expired() const throw()
 {
   return pn.use_count() == 0;
 }
@@ -1415,14 +1415,14 @@ template< typename P >
 
 template< typename P >
   void
-  weak_ptr<P>::reset() noexcept
+  weak_ptr<P>::reset() throw()
 {
   this_type().swap(*this);
 }
 
 template< typename P >
   void
-  weak_ptr<P>::swap( this_type & other ) noexcept
+  weak_ptr<P>::swap( this_type & other ) throw()
 {
   std::swap(px, other.px);
   pn.swap(other.pn);
@@ -1617,7 +1617,7 @@ private:
   {
     if( weak_this_._empty() )
     {
-      shared_this_.reset( static_cast< T* >( nullptr )
+      shared_this_.reset( static_cast< T* >( 0 )
                         , detail::esft2_deleter_wrapper()
                         );
       weak_this_ = shared_this_;
@@ -1631,7 +1631,7 @@ public:  // actually private, but avoids compiler template friendship issues
     void
     _internal_accept_owner( shared_ptr<X> * ppx, Y * py ) const
   {
-    assert( ppx != nullptr );
+    assert( ppx != 0 );
 
     if( weak_this_.use_count() == 0 )
       weak_this_ = shared_ptr<T>( *ppx, py );

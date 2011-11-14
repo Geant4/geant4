@@ -1,5 +1,5 @@
-#ifndef HEP_TYPE_TRAITS_H
-#define HEP_TYPE_TRAITS_H
+#ifndef CLHEP_TYPE_TRAITS_H
+#define CLHEP_TYPE_TRAITS_H
 
 // ======================================================================
 //
@@ -10,7 +10,7 @@
 // ======================================================================
 
 
-#include "CLHEP/Utility/keywords.h"
+#include "CLHEP/Utility/defs.h"
 
 #include <memory>  // for auto_ptr
 

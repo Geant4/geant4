@@ -1,5 +1,5 @@
-#ifndef HEP_KEYWORDS_H
-#define HEP_KEYWORDS_H
+#ifndef CLHEP_KEYWORDS_H
+#define CLHEP_KEYWORDS_H
 
 // ======================================================================
 //
@@ -9,12 +9,16 @@
 //
 // ======================================================================
 
+
+#include "CLHEP/Utility/defs.h"
+
+
 // C++0X-like keywords: remove once C++0X is here to stay
-#define constexpr const
-#define noexcept throw()
-#define nullptr 0
+//#define constexpr const
+//#define noexcept throw()
+//#define nullptr 0
 
 
-#endif  // HEP_KEYWORDS_H
+#endif  // CLHEP_KEYWORDS_H
 //
 // ======================================================================

@@ -10,17 +10,12 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-# Linux
-ifeq ($(G4SYSTEM),Linux-g++)
- CPPFLAGS += -DHAVE_EXPAT_CONFIG_H    -Isrc
-endif
-
-#Windows
-ifeq ($(G4SYSTEM),WIN32-VC)
+ifeq ($(G4SYSTEM),WIN32-VC)  # Windows
   #orig    /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_LIB" /D "COMPILED_FROM_DSP" /D "XML_UNICODE_WCHAR_T" /D "_VC80_UPGRADE=0x0600" /D "_MBCS" /FD /EHsc /RTC1 /MTd /Fp".\..\win32\tmp\Debug-w_static/expatw_static.pch"
 
   CPPFLAGS += -DWIN32 -D_WINDOWS -D_LIB -DCOMPILED_FROM_DSP -DXML_UNICODE_WCHAR_T -D_VC80_UPGRADE=0x0600 -D_MBCS
+else                         # Linux, Mac
+  CPPFLAGS += -DHAVE_EXPAT_CONFIG_H    -Isrc
 endif
-
 
 include $(G4INSTALL)/config/common.gmk
