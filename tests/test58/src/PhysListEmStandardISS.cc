@@ -41,6 +41,7 @@
 
 #include "G4CoulombScattering.hh"
 #include "G4IonCoulombScatteringModel.hh"
+#include "G4eSingleCoulombScatteringModel.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -91,16 +92,23 @@ void PhysListEmStandardISS::ConstructProcess()
       
     } else if (particleName == "e-") {
       //electron
+
       pmanager->AddProcess(new G4eIonisation,        -1, 1, 1);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1, 2, 2);
-      pmanager->AddDiscreteProcess(new G4CoulombScattering);
+
+      G4CoulombScattering* cs = new G4CoulombScattering();
+      cs->AddEmModel(0, new G4eSingleCoulombScatteringModel());
+      pmanager->AddDiscreteProcess(cs);
 	    
     } else if (particleName == "e+") {
       //positron
       pmanager->AddProcess(new G4eIonisation,        -1, 1, 1);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1, 2, 2);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1, 3);
-      pmanager->AddDiscreteProcess(new G4CoulombScattering); 
+
+      G4CoulombScattering* cs = new G4CoulombScattering();
+      cs->AddEmModel(0, new G4eSingleCoulombScatteringModel());
+      pmanager->AddDiscreteProcess(cs); 
             
     } else if (particleName == "mu+" || 
                particleName == "mu-"    ) {
