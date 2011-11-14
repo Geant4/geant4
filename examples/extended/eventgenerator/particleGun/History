@@ -13,6 +13,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      
+08-11-11 mma (particleGunExample-V09-04-01)
+- modify SteppingVerbose for OutOfWorld
+          
 28-01-11 mma (particleGunExample-V09-04-00)
 - HistoManager : fix aida fileOption
      
