@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 14th, 2011 G.Cosmo - exbiasing-V09-04-01
+- Archived obsolete example B03 laying on the trunk.
+
 Nov 14th, 2011 A.Howard - exbiasing-V09-04-00
 - migrated B01 example (B01DetectorConstruction.cc) to new G4Exception
 
