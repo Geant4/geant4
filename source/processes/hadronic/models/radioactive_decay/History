@@ -13,6 +13,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+03 November 2011  Laurent Desorgher(radioactive_decay-V09-04-11)
+--G4NucleusLimits.cc:
+	-Suppress the Z<100 limit
+--G4RadioactiveDecay:
+	-Add the reading of Spontaneous Fission mode from data files
+--G4RadioactiveDecayMode:
+	-Add SpFission mode 
 18 October 2011 Laurent Desorgher(radioactive_decay-V09-04-10)
 ---------------------------------
 --G4RadioactiveDecay:

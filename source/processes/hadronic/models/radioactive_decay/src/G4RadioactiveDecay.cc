@@ -833,8 +833,9 @@ G4RadioactiveDecay::LoadDecayTable(G4ParticleDefinition& theParentNucleus)
                 break;
 
               case Alpha:
+            	  //G4cout<<"Alpha channel"<<a<<'\t'<<b<<'\t'<<c<<std::endl;
 
-                if (modeFirstRecord[6]) {
+            	  if (modeFirstRecord[6]) {
                   modeFirstRecord[6] = false;
                   modeTotalBR[6] = b;
                 } else {
@@ -849,7 +850,10 @@ G4RadioactiveDecay::LoadDecayTable(G4ParticleDefinition& theParentNucleus)
                   modeSumBR[6] += b;
                 }
                 break;
-
+              case SpFission:
+            	  //Still needed to be implemented
+            	  //G4cout<<"Sp fission channel"<<a<<'\t'<<b<<'\t'<<c<<std::endl;
+            	  break;
               case ERROR:
 
               default:
