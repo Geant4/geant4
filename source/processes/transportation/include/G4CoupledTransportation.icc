@@ -126,3 +126,10 @@ inline void G4CoupledTransportation::ResetKilledStatistics(G4int report)
 }
      // Statistics for tracks killed (currently due to looping in field)
 
+
+inline G4bool G4CoupledTransportation::EnableUseMagneticMoment(G4bool useMoment)
+{
+  G4bool lastValue= fUseMagneticMoment;
+  fUseMagneticMoment= useMoment;
+  return lastValue; 
+}

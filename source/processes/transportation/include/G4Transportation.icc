@@ -130,3 +130,10 @@ inline void G4Transportation::EnableShortStepOptimisation(G4bool optimiseShortSt
 { 
   fShortStepOptimisation=optimiseShortStep;
 }
+
+inline G4bool G4Transportation::EnableUseMagneticMoment(G4bool useMoment)
+{
+  G4bool lastValue= fUseMagneticMoment;
+  fUseMagneticMoment= useMoment;
+  return lastValue; 
+}

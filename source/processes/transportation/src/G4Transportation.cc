@@ -41,6 +41,7 @@
 //
 // =======================================================================
 // Modified:   
+//   28 Oct  2011, P.Gumpl./J.Ap: Detect gravity field, use magnetic moment 
 //   20 Nov  2008, J.Apostolakis: Push safety to helper - after ComputeSafety
 //    9 Nov  2007, J.Apostolakis: Flag for short steps, push safety to helper
 //   19 Jan  2006, P.MoraDeFreitas: Fix for suspended tracks (StartTracking)
@@ -64,6 +65,7 @@
 #include "G4ChordFinder.hh"
 #include "G4SafetyHelper.hh"
 #include "G4FieldManagerStore.hh"
+
 class G4VSensitiveDetector;
 
 //////////////////////////////////////////////////////////////////////////
@@ -82,6 +84,7 @@ G4Transportation::G4Transportation( G4int verboseLevel )
     fNoLooperTrials(0),
     fSumEnergyKilled( 0.0 ), fMaxEnergyKilled( 0.0 ), 
     fShortStepOptimisation(false),    // Old default: true (=fast short steps)
+    fUseMagneticMoment(false),  
     fVerboseLevel( verboseLevel )
 {
   // set Process Sub Type
@@ -181,9 +184,11 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
      currentSafety = fPreviousSafety - std::sqrt(MagSqShift) ;
   }
 
-  // Is the particle charged ?
+  // Is the particle charged or has it a magnetic moment?
   //
-  G4double              particleCharge = pParticle->GetCharge() ; 
+  G4double particleCharge = pParticle->GetCharge() ; 
+  G4double magneticMoment = pParticle->GetMagneticMoment() ;
+  G4double       restMass = pParticleDef->GetPDGMass() ;
 
   fGeometryLimitedStep = false ;
   // fEndGlobalTimeComputed = false ;
@@ -192,30 +197,42 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   //   On track construction 
   //   By the tracking, after all AlongStepDoIts, in "Relocation"
 
-  // Check whether the particle have an (EM) field force exerting upon it
+  // Check if the particle has a force, EM or gravitational, exerted on it
   //
   G4FieldManager* fieldMgr=0;
   G4bool          fieldExertsForce = false ;
-  if( (particleCharge != 0.0) )
+
+  G4bool gravityOn = false;
+  G4bool fieldExists= false;  // Field is not 0 (null pointer)
+
+  fieldMgr = fFieldPropagator->FindAndSetFieldManager( track.GetVolume() );
+  if( fieldMgr != 0 )
   {
-     fieldMgr= fFieldPropagator->FindAndSetFieldManager( track.GetVolume() ); 
-     if (fieldMgr != 0) {
-	// Message the field Manager, to configure it for this track
-	fieldMgr->ConfigureForTrack( &track );
-	// Moved here, in order to allow a transition
-	//   from a zero-field  status (with fieldMgr->(field)0
-	//   to a finite field  status
+     // Message the field Manager, to configure it for this track
+     fieldMgr->ConfigureForTrack( &track );
+     // Is here to allow a transition from no-field pointer 
+     //   to finite field (non-zero pointer).
 
-        // If the field manager has no field, there is no field !
-        fieldExertsForce = (fieldMgr->GetDetectorField() != 0);
-     } 
+     // If the field manager has no field ptr, the field is zero 
+     //     by definition ( = there is no field ! )
+     const G4Field* ptrField= fieldMgr->GetDetectorField();
+     fieldExists = (ptrField!=0) ;
+     if( fieldExists ) 
+     {
+        gravityOn= ptrField->IsGravityActive();
+
+        if(  (particleCharge != 0.0) 
+	    || (fUseMagneticMoment && (magneticMoment != 0.0) )
+            || (gravityOn          && (restMass != 0.0) )
+          )
+        {
+           fieldExertsForce = fieldExists; 
+        }
+     }
   }
-
   // G4cout << " G4Transport:  field exerts force= " << fieldExertsForce
-  // 	 << "  fieldMgr= " << fieldMgr << G4endl;
-
-  // Choose the calculation of the transportation: Field or not 
-  //
+  //        << "  fieldMgr= " << fieldMgr << G4endl;
+  
   if( !fieldExertsForce ) 
   {
      G4double linearStepLength ;
@@ -240,8 +257,6 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
        fPreviousSafety    = newSafety ; 
        fpSafetyHelper->SetCurrentSafety( newSafety, startPosition);
 
-       // The safety at the initial point has been re-calculated:
-       //
        currentSafety = newSafety ;
           
        fGeometryLimitedStep= (linearStepLength <= currentMinimumStep); 
@@ -276,7 +291,6 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
      G4double       momentumMagnitude = pParticle->GetTotalMomentum() ;
      G4ThreeVector  EndUnitMomentum ;
      G4double       lengthAlongCurve ;
-     G4double       restMass = pParticleDef->GetPDGMass() ;
  
      fFieldPropagator->SetChargeMomentumMass( particleCharge,    // in e+ units
                                               momentumMagnitude, // in Mev/c 
@@ -420,11 +434,8 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   //
   if( currentSafety < endpointDistance ) 
   {
-      // if( particleCharge == 0.0 ) 
-      //    G4cout  << "  Avoiding call to ComputeSafety : charge = 0.0 " << G4endl;
- 
-      if( particleCharge != 0.0 ) {
-
+      if( particleCharge != 0.0 ) 
+      {
 	 G4double endSafety =
                fLinearNavigator->ComputeSafety( fTransportEndPosition) ;
 	 currentSafety      = endSafety ;
@@ -441,9 +452,14 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 	 G4cout.precision(12) ;
 	 G4cout << "***G4Transportation::AlongStepGPIL ** " << G4endl  ;
 	 G4cout << "  Called Navigator->ComputeSafety at " << fTransportEndPosition
-		<< "    and it returned safety= " << endSafety << G4endl ; 
-	 G4cout << "  Adding endpoint distance " << endpointDistance 
-		<< "   to obtain pseudo-safety= " << currentSafety << G4endl ; 
+		<< "    and it returned safety=  " << endSafety << G4endl ; 
+	 G4cout << "  Adding endpoint distance   " << endpointDistance 
+		<< "    to obtain pseudo-safety= " << currentSafety << G4endl ; 
+      }else{
+	 G4cout << "***G4Transportation::AlongStepGPIL ** " << G4endl  ;
+         G4cout << "  Avoiding call to ComputeSafety : " << G4endl;
+	 G4cout << "    charge     = " << particleCharge     << G4endl;
+	 G4cout << "    mag moment = " << magneticMoment     << G4endl;
 #endif
       }
   }            
@@ -461,13 +477,8 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
                                                     const G4Step&  stepData )
 {
-  // set  pdefOpticalPhoton
-  static  G4ParticleDefinition* pdefOpticalPhoton =
-    G4ParticleTable::GetParticleTable()->FindParticle("opticalphoton");
-
   static G4int noCalls=0;
   noCalls++;
-
 
   fParticleChange.Initialize(track) ;
 
@@ -496,14 +507,8 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
      G4double stepLength      = track.GetStepLength();
 
      deltaTime= 0.0;  // in case initialVelocity = 0 
-     if (track.GetParticleDefinition() == pdefOpticalPhoton) {
-       // For only Optical Photon, final velocity is used 
-       double finalVelocity = track.CalculateVelocityForOpticalPhoton();
-       fParticleChange.ProposeVelocity(finalVelocity);
-       deltaTime = stepLength/finalVelocity ; 
-     } else if( initialVelocity > 0.0 ) {
-        deltaTime = stepLength/initialVelocity ;
-     }
+     if ( initialVelocity > 0.0 ) deltaTime = stepLength/initialVelocity ;
+
      fCandidateEndGlobalTime   = startTime + deltaTime ;
      fParticleChange.ProposeLocalTime(  track.GetLocalTime() + deltaTime) ;
   }
