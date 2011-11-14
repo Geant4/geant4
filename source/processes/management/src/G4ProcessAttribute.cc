@@ -71,7 +71,7 @@ G4ProcessAttribute::G4ProcessAttribute(const G4ProcessAttribute &right)
    // do nothing
 }
 
-G4ProcessAttribute & G4ProcessAttribute::operator=(G4ProcessAttribute &right)
+G4ProcessAttribute & G4ProcessAttribute::operator=(const G4ProcessAttribute &right)
 {
   if (this != &right) {
     pProcess       = right.pProcess;

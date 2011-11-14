@@ -113,9 +113,8 @@ class G4ProcessManager
 
   private:
       // hide default constructor and assignment operator
-      G4ProcessManager & operator=(G4ProcessManager &right);
+      G4ProcessManager & operator=(const G4ProcessManager &right);
       G4ProcessManager();
-
 
   public:
  

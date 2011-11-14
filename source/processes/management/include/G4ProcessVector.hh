@@ -48,14 +48,15 @@ class G4ProcessVector
 {
   public:
     //  Constructors
-    G4ProcessVector(size_t dummy=0);
+    G4ProcessVector();
+    explicit G4ProcessVector(size_t);
     G4ProcessVector(const G4ProcessVector &);
 
     //  Destructor.
     virtual ~G4ProcessVector();
 
     //assignment operator
-    G4ProcessVector & operator=(G4ProcessVector &right);
+    G4ProcessVector & operator=(const G4ProcessVector &right);
  
     // equal operator
     G4bool operator==(const G4ProcessVector &right) const;

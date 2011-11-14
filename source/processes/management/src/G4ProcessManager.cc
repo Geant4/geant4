@@ -99,18 +99,17 @@ G4ProcessManager::G4ProcessManager(const G4ParticleDefinition* aParticleType):
 
 // ///////////////////////////////////////
 G4ProcessManager::G4ProcessManager(G4ProcessManager &right)
-               :duringTracking(false)
+            : theParticleType(right.theParticleType),
+	      numberOfProcesses(0),
+	      duringTracking(false),
+	      verboseLevel(right.verboseLevel)
 {
-   verboseLevel = right.verboseLevel;
 #ifdef G4VERBOSE
    if (GetVerboseLevel() > 2) {
      G4cout <<  "G4ProcessManageer:: copy constructor " <<G4endl; 
     }
 #endif
 
-   theParticleType    = right.theParticleType;
-   numberOfProcesses  = 0;
- 
    // create the process List and ProcessAttr Vector
    theProcessList = new G4ProcessVector();
    theAttrVector = new G4ProcessAttrVector();
@@ -152,6 +151,11 @@ G4ProcessManager::G4ProcessManager(G4ProcessManager &right)
     }
   }
 
+  for (G4int i=0; i<NDoit; ++i) {
+    isSetOrderingFirstInvoked[i]= right.isSetOrderingFirstInvoked[i];
+    isSetOrderingLastInvoked[i] = right.isSetOrderingLastInvoked[i];
+  }
+
   // Increment counter of G4ProcessManager objects
   counterOfObjects+=1; 
 }
@@ -182,7 +186,7 @@ G4ProcessManager::G4ProcessManager():
 }
 
 // ///////////////////////////////////////
-G4ProcessManager & G4ProcessManager::operator=(G4ProcessManager &)
+G4ProcessManager & G4ProcessManager::operator=(const G4ProcessManager &)
 {
   // clear the process List and ProcessAttr Vector
   theProcessList = 0;
@@ -228,6 +232,7 @@ G4ProcessManager::~G4ProcessManager()
     }
   }
 }
+
 ////////////////////////////////////////////////////////////////
 G4int G4ProcessManager::GetProcessVectorIndex(
                            G4VProcess* aProcess,

@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- Nov. 9th, 2011     H.Kurashige (procman-V09-04-07)
+- Fix Coverity defects
+- Fix bugs in copy constructor and assignment operator of G4ProcessVector
+
 - Oct. 17th, 2011   H.Kurashige  (procman-V09-04-06)
 - Fix obsolete G4Exception
 - Add b-flavor baryons in G4ParticleTypes.hh

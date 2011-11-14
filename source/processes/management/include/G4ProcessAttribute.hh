@@ -64,7 +64,7 @@ class G4ProcessAttribute
     ~G4ProcessAttribute();
     //  Destructor
 
-    G4ProcessAttribute & operator=(G4ProcessAttribute &right);
+    G4ProcessAttribute & operator=(const G4ProcessAttribute &right);
     // Assignment operator
 
     G4int operator==(const G4ProcessAttribute &right) const;
