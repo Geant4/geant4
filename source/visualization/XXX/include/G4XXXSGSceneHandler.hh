@@ -32,14 +32,37 @@
 // A template for a sophisticated graphics driver with a scene graph.
 //?? Lines beginning like this require specialisation for your driver.
 
-#ifdef G4VIS_BUILD_XXXSG_DRIVER
-
 #ifndef G4XXXSGSCENEHANDLER_HH
 #define G4XXXSGSCENEHANDLER_HH
 
 #include "G4VSceneHandler.hh"
 
-#include "tree/tree.h"
+#include "G4PhysicalVolumeModel.hh"
+#include <iostream>
+
+namespace JA {
+  // Ad hoc tree class and utilities.
+  
+  typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
+  typedef std::vector<PVNodeID> PVPath;
+
+  struct Node {
+    Node(PVNodeID pvNodeID = PVNodeID(), G4int index = -1):
+      pvNodeID(pvNodeID), index(index) {}
+    PVNodeID pvNodeID;
+    G4int index;
+    std::vector<Node*> daughters;
+  };
+
+  void Insert(const PVNodeID* pvPath, size_t pathLength,
+	      G4int index, Node* node);
+
+  void PrintTree(std::ostream&, Node*);
+
+  void Clear(Node*);
+}
+
+typedef JA::Node SceneGraph;
 
 class G4XXXSGSceneHandler: public G4VSceneHandler {
 
@@ -123,18 +146,8 @@ protected:
   // Utility for PreAddSolid and BeginPrimitives.
   void CreateCurrentItem(const G4String&);
 
-  //?? Define the scene graph.  (For emulation, a tree class by Troy
-  //?? A. Johnson, tajohnson@ieee.orglist.  Unfortunately, it does
-  //?? not compile with SUN CC, hence #ifdef G4VIS_BUILD_XXXSG_DRIVER.)
-  typedef taj::tree<G4String> SceneGraph;
-  typedef taj::tree<G4String>::iterator SceneGraphIterator;
+  //?? Define the scene graph.  (For emulation, use an ad hoc tree class.)
   SceneGraph fSceneGraph;
-  SceneGraphIterator fRoot, fPermanentsRoot, fTransientsRoot, fCurrentItem;
-
-  // Keep track of mothers...
-  std::map<const G4LogicalVolume*,SceneGraphIterator> fLVMap;
-  typedef std::map<const G4LogicalVolume*,SceneGraphIterator>::iterator
-  LVMapIterator;
 
 private:
 
@@ -143,7 +156,5 @@ private:
 #endif
 
 };
-
-#endif
 
 #endif

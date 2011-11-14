@@ -498,7 +498,7 @@ G4ModelCmdApplyInteger<M>::~G4ModelCmdApplyInteger()
 }
 
 template <typename M>
-void G4ModelCmdApplyInteger<M>::SetNewValue(G4UIcommand* cmd, G4String newValue)
+void G4ModelCmdApplyInteger<M>::SetNewValue(G4UIcommand*, G4String newValue)
 {
   Apply(fpCmd->GetNewIntValue(newValue));
   G4VVisManager* visManager = G4VVisManager::GetConcreteInstance();

@@ -3,6 +3,13 @@ $Id: History,v 1.126 2010-10-27 11:17:48 allison Exp $
 History file for visualization/test subdirectory
 ------------------------------------------------
 
+26th October 2011  John Allison  vistest-V09-04-01
+- MyEventAction.cc: Fixed warning.
+
+25th October 2011  John Allison  vistest-V09-04-00
+- MySteppingAction.cc: Un-commented circle and square test.
+- test19.g4m: Removed old ray tracer commands.
+
 $Log: not supported by cvs2svn $
 Revision 1.125  2010/10/27 11:16:59  allison
 vistest-V09-03-00

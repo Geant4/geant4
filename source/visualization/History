@@ -24,9 +24,90 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+12th November 2011  John Allison
+- opengl-V09-04-22: Minor fixes, suppression of debug printing.
+
+11th November 2011 Joseph Perl (vis-V09-04-16)
+- tag global tag for release 9.5
+
+11th November 2011  John Allison
+- modeling-V09-04-05: Coverity fix.
+- visman-V09-04-10: Fixed compiler warnings.
+- visman-V09-04-11: Coverity fix.
+- opengl-V09-04-20: Fixed compiler errors and warnings.
+- opengl-V09-04-21: Coverity fix.
+- visXXX-V09-04-01: Fixed compiler warnings.
+
+10th November 2011  Laurent Garnier
+- visexternal-V09-04-03: Fixes to gl2ps.
+- visXXX-V08-04-01: Implemented simple ad hoc tree and removed include/tree.
+
+8th November 2011  Ben Morgan
+- openinventor-V09-04-02:
+  o source.cmake [BUGFIX #1196]: Added support for CMake build of OpenInventor 
+    driver (NB requires cotag cmake-V09-04-32).
+
+6th November 2011  Joseph Perl (vis-V09-04-15)
+- global tag for release 9.5
+- opengl-V09-04-19 backed off on release of tree viewer
+
+5th November 2011  Joseph Perl (vis-V09-04-14)
+- global tag for release 9.5
+- opengl-V09-04-17 fixed missing file from sources.cmake
+
+5th November 2011  Joseph Perl (vis-V09-04-13)
+- global tag for release 9.5
+- visman-V09-04-09 fixed missing file from sources.cmake
+
+5th November 2011  Joseph Perl (vis-V09-04-12)
+- global tag for release 9.5
+- On top of vis-V09-04-11:
+  o modeling-V09-04-04  o visman-V09-04-08  o vis-HepRep-V09-04-03  o vistest-V09-04-01  o opengl-V09-04-16
+
+4th November 2011  John Allison
+- visman-V09-04-08 (needs greps-V09-04-09):
+  o Added printing of available colours on nitialisation and in /vis/lst.
+- opengl-V09-04-15:
+  o Qt improvements.
+  o Use program loop to call display lists for "permanent objects"
+    (instead of using a "top display list").
+  o Fixed compilation warnings.
+
+30th October 2011  John Allison
+- modeling-V09-04-04:
+  o Fixed compiler warning.
+  o G4PhysicalVolumeModel: Added flag to G4PhysicalVolumeNodeID: true if drawn.
+- visman-V09-04-07:
+  o Added concept of default view parameters.
+  o These can be set in the vis manager for future operations either
+    by code or by command.
+  o Added /vis/default/hiddenEdge and /vis/default/style.
+
+28th October 2011  Joseph Perl
+- vis-HepRep-V09-04-03:
+  o Add /vis/heprep/scale and /vis/heprep/center
+
+26th October 2011  John Allison
+- vistest-V09-04-01: Minor improvements.
+
+25th October 2011  John Allison
+- vistest-V09-04-00: Minor improvements.
+
+25th October 2011  John Allison  (vis-V09-04-11)
+- Another interim tag.
+- Branch for Begin/EndDrawGroup development - vis-V09-04-11-branch.
+
+21st October 2011  John Allison  (vis-V09-04-10)
+- Interim tag:
+  o opengl-V09-04-14:
+    . Fixed circles/squares problem.
+    . Some work on ogl/print and gl2ps.
+  o visexternal-V09-04-02:
+    . gl2ps improvements.
+
 18th October 2011  John Allison  (vis-V09-04-09)
 - opengl-V09-04-13:
-  Xm: Fixed consistency and rest issue with control panels.
+  Xm: Fixed consistency and reset issue with control panels.
   Stored mode: Improved efficiency for handling transients (trajectories).
 
 15th October 2011  John Allison

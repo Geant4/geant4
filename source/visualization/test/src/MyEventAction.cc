@@ -83,8 +83,6 @@ void MyEventAction::EndOfEventAction(const G4Event* anEvent)
     G4cout << "MyEventAction::EndOfEventActionAction called." << G4endl;
   }
 
-  const G4Event* evt = anEvent;
-
 #ifdef DRAWTRAJHIT
 
   G4SDManager * SDman = G4SDManager::GetSDMpointer();
@@ -103,6 +101,7 @@ void MyEventAction::EndOfEventAction(const G4Event* anEvent)
 
 #ifdef DRAWTRAJHIT
 
+  const G4Event* evt = anEvent;
   G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
   G4int n_trajectories = 0;
   if(trajectoryContainer)

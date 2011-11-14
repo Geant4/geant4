@@ -291,6 +291,8 @@ void G4OpenGLViewerMessenger::SetNewValue
   if (command == fpCommandPrintEPS) 
     {
       pOGLViewer->printEPS();
+      if (pOGLViewer->fVP.IsAutoRefresh())
+	G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
       return;
     }
 

@@ -62,7 +62,8 @@ public:
   void AddPrimitive (const G4Text&);
   void AddPrimitive (const G4Circle&);
   void AddPrimitive (const G4Square&);
-  void AddPrimitives (std::vector <G4VMarker>);
+  void AddPrimitivesCircle (std::vector <G4VMarker>);
+  void AddPrimitivesSquare (std::vector <G4VMarker>);
   void AddPrimitive (const G4Scale&);
   void AddPrimitive (const G4Polyhedron&);
   void AddPrimitive (const G4NURBS&);

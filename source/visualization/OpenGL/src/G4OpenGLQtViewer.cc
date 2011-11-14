@@ -51,6 +51,7 @@
 #include "G4PhysicalVolumeModel.hh"
 
 #include <qlayout.h>
+#include <qlabel.h>
 #include <qdialog.h>
 #include <qprocess.h>
 #include <qapplication.h>
@@ -113,7 +114,6 @@ void G4OpenGLQtViewer::CreateMainWindow (
        if (!interactorManager->IsExternalApp()) {
          isTabbedView = uiQt->AddTabWidget(fWindow,name,getWinWidth(),getWinHeight());
          fUIViewComponentsTBWidget = uiQt->GetViewComponentsTBWidget();
-         fillUIViewComponent();
          isTabbedView = true;
        }
      }
@@ -196,7 +196,7 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
   ,fTempFolderPath("")
   ,fMovieTempFolderPath("")
   ,fSaveFileName("")
-  ,fParameterFileName("mpeg_encode_parameter_file.par")
+  ,fParameterFileName("ppmtompeg_encode_parameter_file.par")
   ,fMovieParametersDialog(NULL)
   ,fRecordingStep(WAIT)
   ,fProcess(NULL)
@@ -211,6 +211,8 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
   ,fBatchMode(false)
   ,fCheckViewComponentLock(false)
   ,fViewerComponentTreeWidget(NULL)
+  ,fNbRotation(0)
+  ,fTimeRotation(0)
 {
 
   // launch Qt if not
@@ -452,9 +454,9 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   QAction *auxOn = mAux->addAction("On");
   QAction *auxOff = mAux->addAction("Off");
   if (!fVP.IsAuxEdgeVisible()) {
-    createRadioAction(auxOn,auxOff,SLOT(toggleAux(bool)),1);
-  } else {
     createRadioAction(auxOn,auxOff,SLOT(toggleAux(bool)),2);
+  } else {
+    createRadioAction(auxOn,auxOff,SLOT(toggleAux(bool)),1);
   }
 
 
@@ -1084,6 +1086,11 @@ void G4OpenGLQtViewer::G4MouseReleaseEvent()
           } else if (fAltKeyPress) {
             rotateQtSceneToggle(((float)delta.x())/correctionFactor,((float)delta.y())/correctionFactor);
           }
+#ifdef G4DEBUG_VIS_OGL
+          fNbRotation ++;
+          fTimeRotation += lastMoveTime.elapsed ();
+      printf("G4OpenGLQtViewer %d \n",fTimeRotation/fNbRotation);
+#endif
           
         } else if (fMouseAction == STYLE2) {  // move
           moveScene(-((float)delta.x())/correctionFactor,-((float)delta.y())/correctionFactor,0,true);
@@ -1492,7 +1499,7 @@ void G4OpenGLQtViewer::startPauseVideo() {
    
   // first time, if temp parameter is wrong, display parameters dialog and return
 
-  if (( fRecordingStep == WAIT)) {
+  if ( fRecordingStep == WAIT) {
     if ( fRecordFrameNumber == 0) {
       if (getTempFolderPath() == "") { // BAD_OUTPUT
         showMovieParametersDialog();
@@ -1513,7 +1520,7 @@ void G4OpenGLQtViewer::startPauseVideo() {
       }
     }
   }
-  if ((fRecordingStep == WAIT)) {
+  if (fRecordingStep == WAIT) {
     setRecordingStatus(START); 
   } else if (fRecordingStep == START) {
     setRecordingStatus(PAUSE);
@@ -1588,7 +1595,7 @@ void G4OpenGLQtViewer::initMovieParameters() {
      QObject ::connect(fProcess,SIGNAL(finished ( int)),
 		       this,SLOT(processLookForFinished()));
      fProcess->setReadChannelMode(QProcess::MergedChannels);
-     fProcess->start ("which mpeg_encode");
+     fProcess->start ("which ppmtompeg");
   
 }
 
@@ -1621,7 +1628,7 @@ QString G4OpenGLQtViewer::setEncoderPath(QString path) {
   }
   fEncoderPath = path;
 
-  if ((fRecordingStep == BAD_ENCODER)) {
+  if (fRecordingStep == BAD_ENCODER) {
     setRecordingStatus(STOP);
   } 
   return "";
@@ -1747,7 +1754,7 @@ QString G4OpenGLQtViewer::setTempFolderPath(QString path) {
     return path +" is write protected";
   }
   
-  if ((fRecordingStep == BAD_TMP)) {
+  if (fRecordingStep == BAD_TMP) {
     setRecordingStatus(WAIT); 
   }
   fTempFolderPath = path;
@@ -1781,7 +1788,7 @@ QString G4OpenGLQtViewer::setSaveFileName(QString path) {
     return path +" is read protected";
   }
   
-  if ((fRecordingStep == BAD_OUTPUT)) {
+  if (fRecordingStep == BAD_OUTPUT) {
     setRecordingStatus(STOP); 
   }
   fSaveFileName = path;
@@ -1873,41 +1880,12 @@ bool G4OpenGLQtViewer::generateMpegEncoderParameters () {
     return false;
   }
 
-  fprintf (fp,"# parameter file template with lots of comments to assist you\n");
-  fprintf (fp,"#\n");
-  fprintf (fp,"# you can use this as a template, copying it to a separate file then modifying\n");
-  fprintf (fp,"# the copy\n");
-  fprintf (fp,"#\n");
-  fprintf (fp,"#\n");
-  fprintf (fp,"# any line beginning with '#' is a comment\n");
-  fprintf (fp,"#\n");
-  fprintf (fp,"# no line should be longer than 255 characters\n");
-  fprintf (fp,"#\n");
-  fprintf (fp,"#\n");
-  fprintf (fp,"# general format of each line is:\n");
-  fprintf (fp,"#	  \n");
-  fprintf (fp,"#\n");
-  fprintf (fp,"# lines can generally be in any order\n");
-  fprintf (fp,"#\n");
-  fprintf (fp,"# an exception is the option 'INPUT' which must be followed by input\n");
-  fprintf (fp,"# files in the order in which they must appear, followed by 'END_INPUT'\n");
-  fprintf (fp,"#\n");
-  fprintf (fp,"# Also, if you use the `command` method of generating input file names,\n");
-  fprintf (fp,"# the command will only be executed in the INPUT_DIR if INPUT_DIR preceeds\n");
-  fprintf (fp,"# the INPUT parameter.\n");
-  fprintf (fp,"#\n");
-  fprintf (fp,"#  MUST be in UPPER CASE\n");
-  fprintf (fp,"#\n");
-  fprintf (fp,"\n");
   fprintf (fp,"# Pattern affects speed, quality and compression. See the User's Guide\n");
   fprintf (fp,"# for more info.\n");
   fprintf (fp,"\n");
   fprintf (fp,"PATTERN		IBBPBBPBBPBBPBBP\n");
   fprintf (fp,"OUTPUT		%s\n",getSaveFileName().toStdString().c_str());
   fprintf (fp,"\n");
-  fprintf (fp,"# mpeg_encode really only accepts 3 different file formats, but using a\n");
-  fprintf (fp,"# conversion statement it can effectively handle ANY file format\n");
-  fprintf (fp,"#\n");
   fprintf (fp,"# You must specify the type of the input files.  The choices are:\n");
   fprintf (fp,"#    YUV, PPM, JMOVIE, Y, JPEG, PNM\n");
   fprintf (fp,"#	(must be upper case)\n");
@@ -2105,7 +2083,7 @@ void G4OpenGLQtViewer::processLookForFinished()
     // if not found, return "not found"
     if (fEncoderPath.contains(" ")) {
       fEncoderPath = "";
-    } else if (!fEncoderPath.contains("mpeg_encode")) {
+    } else if (!fEncoderPath.contains("ppmtompeg")) {
       fEncoderPath = "";
     }
     setEncoderPath(fEncoderPath);
@@ -2190,210 +2168,33 @@ QWidget *G4OpenGLQtViewer::getParentWidget()
   }
 }
 
-/*
- * Could only be done AFTER ProcessScene, then AFTER first draw
- */
-void G4OpenGLQtViewer::fillUIViewComponent(){
+void G4OpenGLQtViewer::initViewComponent(){
   if (fUIViewComponentsTBWidget == NULL) {
     return;
   }
 
-  fLayoutViewComponentsTBWidget = new QVBoxLayout();
+  fUIViewComponentsTBWidget->setVisible(true);
 
+  if (fUIViewComponentsTBWidget->layout() == 0) {
+    fLayoutViewComponentsTBWidget = new QVBoxLayout();
+  } else {
+    fLayoutViewComponentsTBWidget = (QVBoxLayout*)fUIViewComponentsTBWidget->layout();
+  }
 
+  QLabel *fTreeLabel = new QLabel(fGLWindow->windowTitle ());
 
   fViewerComponentTreeWidget = new QTreeWidget();
   fViewerComponentTreeWidget->setSelectionMode(QAbstractItemView::SingleSelection);
-
   QStringList labels;
-  labels << QString("Volumes") << QString("Type");
+  labels << QString("Touchables") << QString("Information") << QString("");
   fViewerComponentTreeWidget->setHeaderLabels(labels);
-
-  QTreeWidgetItem * rootPhysicalItem = NULL;
-  QTreeWidgetItem * childLogicalItem = NULL;
-  G4LogicalVolumeStore *pLVStore = G4LogicalVolumeStore::GetInstance();
-  G4PhysicalVolumeStore *pPVStore = G4PhysicalVolumeStore::GetInstance();
-
-  G4VPhysicalVolume * pPV = NULL;
-  for (size_t iLV = 0; iLV < pLVStore->size(); iLV++ ) {
-    G4LogicalVolume* pLV = (*pLVStore)[iLV];
-
-    for (size_t iPV = 0; iPV < pPVStore->size(); iPV++ ) {
-      if ( (*pPVStore)[iPV]->GetLogicalVolume() == pLV) {
-        pPV = (*pPVStore)[iPV];
-      }
-    }
-    if (pPV != NULL) {
-      G4LogicalVolume * mother = pPV->GetMotherLogical();
-      if (mother == NULL){
-        childLogicalItem = new QTreeWidgetItem(fViewerComponentTreeWidget);
-        childLogicalItem->setText(0,QString(pLV->GetName().data()));
-        int mult = pPV->GetMultiplicity ();
-        QString multTxt = "";
-        if (mult > 1) {
-          multTxt = QString(" (")+QString::number(mult)+" replicats)";
-        }
-        childLogicalItem->setText(1,"Logical Volume"+multTxt);
-
-        childLogicalItem->setFlags(childLogicalItem->flags()|Qt::ItemIsUserCheckable);
-        childLogicalItem->setCheckState(0,Qt::Checked);
-        
-        rootPhysicalItem = new QTreeWidgetItem(childLogicalItem);
-        rootPhysicalItem->setText(0,QString(pPV->GetName().data()));
-        rootPhysicalItem->setText(1,pLV->GetSolid ()->GetEntityType().data());
-        rootPhysicalItem->setFlags(rootPhysicalItem->flags()|Qt::ItemIsUserCheckable);
-
-        const G4VisAttributes *attr = pLV->GetVisAttributes();
-        if (attr != NULL) {
-          if (attr->IsVisible()) {
-            rootPhysicalItem->setCheckState(0,Qt::Checked);
-          } else {
-            rootPhysicalItem->setCheckState(0,Qt::Unchecked);
-          }
-        } else {
-          rootPhysicalItem->setCheckState(0,Qt::Checked);
-        }
-#if QT_VERSION < 0x040202
-        fViewerComponentTreeWidget->setItemExpanded(childLogicalItem,false); 
-#else
-        childLogicalItem->setExpanded(false);
-#endif
-        
-        int daughters = pLV->GetNoDaughters ();
-        
-        for (int a = 0; a< daughters; a++) {
-          parseVolumeTree(pLV->GetDaughter(a),childLogicalItem);
-        }
-      }
-    }
-  }
-
+  fViewerComponentTreeWidget->setColumnHidden (2,true);
+  fLayoutViewComponentsTBWidget->addWidget(fTreeLabel);
   fLayoutViewComponentsTBWidget->addWidget(fViewerComponentTreeWidget);
   fUIViewComponentsTBWidget->setLayout(fLayoutViewComponentsTBWidget);
+  fViewerComponentTreeWidget->setColumnWidth (0,150);
 
-#if QT_VERSION < 0x040200
-  fUIViewComponentsTBWidget->show();
-#else
-  fUIViewComponentsTBWidget->setVisible(true);
-#endif
   connect(fViewerComponentTreeWidget,SIGNAL(itemChanged(QTreeWidgetItem*, int)),SLOT(viewComponentItemChanged(QTreeWidgetItem*, int)));
-}
-
-
-void G4OpenGLQtViewer::parseVolumeTree(G4VPhysicalVolume * root, QTreeWidgetItem *mother) {
-  
-  int daughters = root->GetLogicalVolume()->GetNoDaughters ();
-  QTreeWidgetItem * rootPhysicalItem = NULL;
-  QTreeWidgetItem * childLogicalItem = NULL;
-  
-  if (root == NULL) return;
-  if (mother == NULL) return;
-  G4PhysicalVolumeStore *pPVStore = G4PhysicalVolumeStore::GetInstance();
-  
-  childLogicalItem = new QTreeWidgetItem(mother);
-  childLogicalItem->setText(0,QString(root->GetLogicalVolume()->GetName().data()));
-
-  int mult = root->GetMultiplicity ();
-  QString multTxt = "";
-  if (mult > 1) {
-    multTxt = QString(" (")+QString::number(mult)+" replicats)";
-  }
-  childLogicalItem->setText(1,"Logical Volume"+multTxt);
-  childLogicalItem->setFlags(childLogicalItem->flags()|Qt::ItemIsUserCheckable);
-  childLogicalItem->setCheckState(0,Qt::Checked);
-  
-  if (pPVStore->GetVolume(root->GetLogicalVolume()->GetName(),false)) { ;
-    rootPhysicalItem = new QTreeWidgetItem(childLogicalItem);
-    rootPhysicalItem->setText(0,QString(root->GetName().data()));
-    rootPhysicalItem->setText(1,root->GetLogicalVolume()->GetSolid ()->GetEntityType().data());
-    rootPhysicalItem->setFlags(rootPhysicalItem->flags()|Qt::ItemIsUserCheckable);
-    const G4VisAttributes *attr =  root->GetLogicalVolume()->GetVisAttributes();
-    if (attr != NULL) {
-      if (attr->IsVisible()) {
-        rootPhysicalItem->setCheckState(0,Qt::Checked);
-      } else {
-        rootPhysicalItem->setCheckState(0,Qt::Unchecked);
-    }
-    } else {
-      rootPhysicalItem->setCheckState(0,Qt::Checked);
-    }
-  }
-  
-  
-  
-  for (int a = 0; a< daughters; a++) {
-    parseVolumeTree(root->GetLogicalVolume()->GetDaughter(a) ,childLogicalItem);
-  }
-}
-
-
-void G4OpenGLQtViewer::viewComponentItemChanged(QTreeWidgetItem* item, int) {
-
-  if (fCheckViewComponentLock == false) {
-    fCheckViewComponentLock = true;
-    std::string check = "";
-    bool checkBool = false;
-
-    std::string traverse = "";
-    G4int traverseInt = 0;
-    if (item->checkState(0) == Qt::Checked) {
-      check = "1";
-      checkBool = true;
-      setCheckComponent(item,true);
-    } else {
-      check = "0";
-      checkBool = false;
-      setCheckComponent(item,false);
-    }
-    if (item->childCount () == 0) {
-      traverse = "0";
-      traverseInt = 0;
-    } else {
-      traverse = "-1";
-      traverseInt = -1;
-    }
-    
-    // Find item path
-    G4String currentPath = G4String("");
-    if (item->parent() != NULL) {
-      if (item->parent()->text(0) != item->text(0)) {
-        currentPath = G4String("/")+G4String(item->text(0).toStdString().c_str());
-      }
-    }
-
-    while (item->parent() != NULL) {
-      item = item->parent();
-      currentPath = G4String("/")+G4String(item->text(0).toStdString().c_str())+currentPath;
-    }
-
-    G4LogicalVolumeStore *pLVStore = G4LogicalVolumeStore::GetInstance();
-    G4PhysicalVolumeStore *pPVStore = G4PhysicalVolumeStore::GetInstance();
-    
-    G4VPhysicalVolume *itemPV = NULL;
-    G4VPhysicalVolume * pPV = NULL;
-    for (size_t iLV = 0; iLV < pLVStore->size(); iLV++ ) {
-      if (itemPV == NULL) {
-        G4LogicalVolume *pLV = (*pLVStore)[iLV];
-        
-        pPV = NULL;
-        
-        for (size_t iPV = 0; iPV < pPVStore->size(); iPV++ ) {
-          if ( (*pPVStore)[iPV]->GetLogicalVolume() == pLV) {
-            pPV = (*pPVStore)[iPV];
-          }
-        }
-        
-        itemPV = parseAndFindVolumeTree(pPV,G4String(""),currentPath);
-      }
-    }
-
-    if (itemPV != NULL) {
-      G4VisCommandGeometrySetVisibility *commVisible = new G4VisCommandGeometrySetVisibility();
-      commVisible->SetNewValueOnLV (itemPV->GetLogicalVolume() , traverseInt,checkBool);
-    }
-    
-    fCheckViewComponentLock = false;
-  }
 }
 
 
@@ -2413,23 +2214,6 @@ void G4OpenGLQtViewer::setCheckComponent(QTreeWidgetItem* item,bool check)
 }
 
 
-G4VPhysicalVolume* G4OpenGLQtViewer::parseAndFindVolumeTree(G4VPhysicalVolume * root, G4String currentPath, G4String pathToMatch) {
-  
-  int daughters = root->GetLogicalVolume()->GetNoDaughters ();
-  G4VPhysicalVolume *res = NULL;
-  if (root == NULL) return NULL;
-  currentPath += G4String("/")+root->GetName();
-  if (currentPath == pathToMatch) {
-    return root;
-  }
-  for (int a = 0; a< daughters; a++) {
-    if (res == NULL) {
-      res = parseAndFindVolumeTree(root->GetLogicalVolume()->GetDaughter(a) ,currentPath,pathToMatch);
-    }
-  }
-  return res;
-}
-
 void G4OpenGLQtViewer::DrawText(const char * textString,double x,double y,double z, double size) {
   if (!fWindow)
     return;
@@ -2441,16 +2225,17 @@ void G4OpenGLQtViewer::DrawText(const char * textString,double x,double y,double
   if(font.pointSizeF() > (double)fontsize) {
     fontsize = (int)font.pointSizeF();
   }
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLQtViewer::DrawText :: renderText.............. \n");
-#endif
-  if (! drawGl2psText(textString,fontsize)) {
+
+  if (isGl2psWriting()) {
+    G4OpenGLViewer::DrawText(textString,x,y,z,fontsize);
+  } else {    
     fWindow->renderText(x,y,z, textString,font);
   }
 }
         
 /** Initialise the display liste BEFORE any other OpenGL call */
 void G4OpenGLQtViewer::CreateFontLists () {
+  //  fWindow->makeCurrent();
   DrawText("",0.0,0.0,0.0,1.0);
 }
 
@@ -2461,6 +2246,204 @@ void G4OpenGLQtViewer::ResetView () {
   fDeltaZoom = 0.05;
 }
 
+
+void G4OpenGLQtViewer::addTreeElement(const G4String model, std::vector < std::pair<std::string,std::pair <unsigned int, unsigned int> > > treeVect) {
+
+  QString modelShortName = model.data();
+  modelShortName = modelShortName.mid(modelShortName.indexOf("G4")+2,modelShortName.indexOf("Model")-modelShortName.indexOf("G4")-2);
+
+  if (modelShortName == "") {
+    return ;
+  }
+  // try to init it
+  if (fViewerComponentTreeWidget == NULL) {
+    initViewComponent();
+  }
+
+  fViewerComponentTreeWidget->blockSignals(true);
+
+  // Add the "volume" node if not
+
+  QList<QTreeWidgetItem *> resItem;
+  resItem =  fViewerComponentTreeWidget->findItems (modelShortName, Qt::MatchExactly, 0 );
+  QTreeWidgetItem * currentItem;
+  if (resItem.empty()) {
+    currentItem =  new QTreeWidgetItem(fViewerComponentTreeWidget);
+    currentItem->setText(0,modelShortName);
+    currentItem->setText(1,"");
+    currentItem->setFlags(currentItem->flags()|Qt::ItemIsUserCheckable);
+
+    currentItem->setCheckState(0,Qt::Checked);
+  } else {
+    currentItem = resItem.first();
+  }
+
+  bool added = parseAndInsertInTree(currentItem,treeVect,modelShortName);
+  if (!added) {
+  }
+  
+  fViewerComponentTreeWidget->blockSignals(false);
+  
+}
+
+/**
+   @return true if inserted, false if already present
+ */
+bool G4OpenGLQtViewer::parseAndInsertInTree(QTreeWidgetItem * treeNode, std::vector<std::pair <std::string, std::pair < unsigned int, unsigned int> > > treeVect, QString parentRoot){
+
+
+  // look in all children
+  bool isFound = false;
+  for (int i = 0; i < treeNode->childCount() ; ++i) {
+
+    // if already inside
+    // -> return true
+    // special case, do not have to deal with hierarchy except for PhysicalVolume
+    if (((parentRoot == QString("PhysicalVolume")) &&
+         (treeVect.at(0).second.second == treeNode->child(i)->text(1).toUInt()) && 
+         (treeVect.at(0).first == treeNode->child(i)->text(0).toStdString()))
+  ||
+        ((parentRoot != QString("PhysicalVolume")) &&
+         (treeVect.at(0).second.second == treeNode->child(i)->text(1).toUInt()) && 
+         (treeVect.at(0).first == treeNode->child(i)->text(0).toStdString()) &&
+         (treeVect.at(0).second.first == treeNode->child(i)->text(2).toUInt()) )) {
+      
+      if (treeVect.size() == 1) {
+        // already exist
+        // transparency object ? Have to change the PO index
+        if (treeVect.at(0).second.first >= treeNode->child(i)->text(2).toUInt()) {
+          treeNode->child(i)->setText(2,QString::number(treeVect.at(0).second.first));
+        }
+        return true;
+      } else {
+        
+        // if name is ok and this <map> is depper
+        // -> go ahead
+        
+        // copy iterator end
+        std::vector<std::pair <std::string, std::pair < unsigned int, unsigned int> > > subTreeVect;
+        
+        // copy
+        for (unsigned int itPos2 = 0; itPos2!=treeVect.size(); itPos2++) {
+          subTreeVect.push_back(treeVect.at(itPos2));;
+        }
+        subTreeVect.erase(subTreeVect.begin());
+        if (!subTreeVect.empty()) {
+          // Equal ?  Continue
+          isFound = parseAndInsertInTree(treeNode->child(i),subTreeVect,parentRoot);
+          if (isFound) {
+            return true;
+          }
+        }
+        // no need to go to next child ?
+        
+      }
+    }
+  } // end for
+  
+  // not already add ? 
+  // -> add a new leaf
+    
+    // Add the first child
+    QTreeWidgetItem * newItem = new QTreeWidgetItem(treeNode);
+    newItem->setText(0,QString(treeVect.at(0).first.c_str()));
+    newItem->setText(1,QString::number(treeVect.at(0).second.second));
+    newItem->setText(2,QString::number(treeVect.at(0).second.first));
+    newItem->setFlags(newItem->flags()|Qt::ItemIsUserCheckable);
+    newItem->setCheckState(0,Qt::Checked);
+    return true;
+}
+
+bool G4OpenGLQtViewer::isTouchableVisible(unsigned int POindex){
+  bool isFound = false;
+
+  if (fViewerComponentTreeWidget == NULL) {
+    return true;
+  }
+
+  for (int i = 0; i < fViewerComponentTreeWidget->topLevelItemCount () ; ++i) {
+
+    if (fViewerComponentTreeWidget->topLevelItem(i)->text(2).toUInt() == POindex) {
+      if (fViewerComponentTreeWidget->topLevelItem(i)->checkState(0) == Qt::Checked) {
+        return true;
+      }
+    }
+    isFound = parseAndCheckVisibility(fViewerComponentTreeWidget->topLevelItem(i),POindex);
+    if (isFound) {
+      return true;
+    }
+  } // end for
+  return false;
+
+}
+
+
+bool G4OpenGLQtViewer::parseAndCheckVisibility(QTreeWidgetItem * treeNode,unsigned int POindex){
+  bool isFound = false;
+  for (int i = 0; i < treeNode->childCount() ; ++i) {
+
+    if (treeNode->child(i)->text(2).toUInt() == POindex) {
+      if (treeNode->child(i)->checkState(0) == Qt::Checked) {
+        return true;
+      }
+    }
+    isFound = parseAndCheckVisibility(treeNode->child(i),POindex);
+    if (isFound) {
+      return true;
+    }
+  } // end for
+    return false;
+}
+
+
+void G4OpenGLQtViewer::viewComponentItemChanged(QTreeWidgetItem* item, int) {
+  if (fCheckViewComponentLock == false) {
+    fCheckViewComponentLock = true;
+    //std::string check = "";
+    //bool checkBool = false;
+
+    //std::string traverse = "";
+    //G4int traverseInt = 0;
+    if (item->checkState(0) == Qt::Checked) {
+      //check = "1";
+      //checkBool = true;
+      setCheckComponent(item,true);
+    } else {
+      //check = "0";
+      //checkBool = false;
+      setCheckComponent(item,false);
+    }
+    //if (item->childCount () == 0) {
+    //  traverse = "0";
+    //  traverseInt = 0;
+    //} else {
+    //  traverse = "-1";
+    //  traverseInt = -1;
+    //}
+    
+    updateQWidget();
+
+    fCheckViewComponentLock = false;
+  }
+}
+
+
+/**
+   Should replace actual tree by the one in this class
+ */
+
+void G4OpenGLQtViewer::displayViewComponentTree() {
+  if (fUIViewComponentsTBWidget->layout() == 0) {
+    return; 
+  }
+  if (fViewerComponentTreeWidget == NULL) {
+    return; 
+  }
+  if (fLayoutViewComponentsTBWidget == NULL) {
+    return; 
+  }
+ return;
+}
 
 /*
   

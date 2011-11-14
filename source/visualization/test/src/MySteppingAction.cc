@@ -41,14 +41,14 @@
 #include "G4Circle.hh"
 #include "G4Square.hh"
 
-void MySteppingAction::UserSteppingAction(const G4Step*) {
+void MySteppingAction::UserSteppingAction(const G4Step* pStep) {
   // User Action Example - begin snippet.
   static int coutCount = 0;
   if (coutCount < 10) {
     coutCount++;
     G4cout << "MySteppingAction::UserSteppingAction called." << G4endl;
   }
-  /*
+
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   if(pVVisManager) {
     G4Polyline pl;
@@ -115,6 +115,4 @@ void MySteppingAction::UserSteppingAction(const G4Step*) {
     circle333.SetVisAttributes(attribs333);
     pVVisManager->Draw(circle333);
   }
-  // User Action Example - end snippet.
-  */
 }

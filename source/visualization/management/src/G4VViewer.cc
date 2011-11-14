@@ -60,6 +60,9 @@ fNeedKernelVisit (true)
   }
   fShortName = fName (0, fName.find (' '));
   fShortName.strip ();
+
+  fVP = G4VisManager::GetInstance()->GetDefaultViewParameters();
+  fDefaultVP = fVP;
 }
 
 G4VViewer::~G4VViewer () {

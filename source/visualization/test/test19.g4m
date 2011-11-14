@@ -448,12 +448,11 @@
 /vis/ogl/set/printFilename output-test19-17
 /vis/ogl/printEPS
 #
-# You can use /vis/rayTracer/... commands
-/vis/rayTracer/column 150
-/vis/rayTracer/row 100
-/vis/rayTracer/backgroundColour .3 .2 .1
-/vis/rayTracer/trace
+/vis/open RayTracerX
+/vis/viewer/refresh
+# Odd!!?  Image seems upside down for default view direction...
 #
+/vis/open OGL
 /vis/viewer/create ! ! 200x300
 /vis/viewer/set/projection perspective  30
 /vis/viewer/set/viewpointThetaPhi 45 45
@@ -463,7 +462,6 @@
 /vis/ogl/set/printFilename output-test19-18
 /vis/ogl/printEPS
 #
-# Odd!!?  JPEG image seems upside down for default view direction...
 /vis/viewer/create ! ! 200
 /vis/viewer/flush
 /vis/ogl/set/printMode vectored

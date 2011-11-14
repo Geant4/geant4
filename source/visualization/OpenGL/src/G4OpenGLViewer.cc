@@ -90,7 +90,9 @@ fPrintFilenameIndex(0),
 fWinSize_x(0),
 fWinSize_y(0),
 fPointSize (0),
-fSizeHasChanged(0)
+fSizeHasChanged(0),
+fGl2psDefaultLineWith(1),
+fGl2psDefaultPointSize(2)
 {
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLViewer:: Creation\n");
@@ -111,6 +113,7 @@ fSizeHasChanged(0)
 
 G4OpenGLViewer::~G4OpenGLViewer ()
 {
+  delete fGL2PSAction;
 }
 
 void G4OpenGLViewer::InitializeGLView () 
@@ -387,7 +390,7 @@ void G4OpenGLViewer::HaloingFirstPass () {
   glClearDepth (1.0);
 
   //Finally, set the line width to something wide...
-  glLineWidth (3.0);
+  ChangeLineWidth(3.0);
 
 }
 
@@ -396,7 +399,7 @@ void G4OpenGLViewer::HaloingSecondPass () {
   //And finally, turn the colour buffer back on with a sesible line width...
   glColorMask (GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
   glDepthFunc (GL_LEQUAL);
-  glLineWidth (1.0);
+  ChangeLineWidth(1.0);
 
 }
 
@@ -621,7 +624,7 @@ bool G4OpenGLViewer::printNonVectoredEPS () {
   curpix = (GLubyte*) pixels;
   pos = 0;
   for (i = width*height*components; i>0; i--) {
-    fprintf (fp, "%02hx ", *(curpix++));
+    fprintf (fp, "%02hx ", (unsigned short)(*(curpix++)));
     if (++pos >= 32) {
       fprintf (fp, "\n");
       pos = 0; 
@@ -642,17 +645,48 @@ bool G4OpenGLViewer::printNonVectoredEPS () {
   return true;
 }
 
-/* Draw Gl2Ps text if needed
-   return true if it is draw
+/** Return if gl2ps is currently writing
  */
-bool G4OpenGLViewer::drawGl2psText(const char * textString, int size) {
+bool G4OpenGLViewer::isGl2psWriting() {
 
   if (!fGL2PSAction) return false;
   if (fGL2PSAction->fileWritingEnabled()) {
-    gl2psText(textString,"Times-Roman",size);
     return true;
   }
   return false;
+}
+
+
+/* Draw Gl2Ps text if needed
+ */
+void G4OpenGLViewer::DrawText(const char * textString,double,double,double, double size) {
+
+  if (isGl2psWriting()) {
+    gl2psText(textString,"Times-Roman",GLshort(size));
+  }
+}
+
+/** Change PointSize on gl2ps if needed
+ */
+void G4OpenGLViewer::ChangePointSize(G4double size) {
+
+  if (isGl2psWriting()) {
+    fGL2PSAction->setPointSize(int(size));
+  } else {
+    glPointSize (size);
+  }
+}
+
+
+/** Change LineSize on gl2ps if needed
+ */
+void G4OpenGLViewer::ChangeLineWidth(G4double width) {
+
+  if (isGl2psWriting()) {
+    fGL2PSAction->setLineWidth(int(width));
+  } else {
+    glLineWidth (width);
+  }
 }
 
 
@@ -679,24 +713,42 @@ bool G4OpenGLViewer::printGl2PS() {
   // http://developer.apple.com/Mac/library/documentation/GraphicsImaging/Conceptual/OpenGL-MacProgGuide/opengl_offscreen/opengl_offscreen.html
   // http://www.songho.ca/opengl/gl_fbo.html
 
-  ResizeGLView();
-  if (fGL2PSAction->enableFileWriting()) {
+   ResizeGLView();
+   bool extendBuffer = true;
+   bool endWriteAction = false;
+   bool beginWriteAction = true;
+   while ((extendBuffer) && (! endWriteAction)) {
+     
+     beginWriteAction = fGL2PSAction->enableFileWriting();
+     if (beginWriteAction) {
+       
+       // Set the viewport
+       //    fGL2PSAction->setViewport(0, 0, getRealPrintSizeX(),getRealPrintSizeY());  
+       // By default, we choose the line width (trajectories...)
+       fGL2PSAction->setLineWidth(fGl2psDefaultLineWith);
+       // By default, we choose the point size (markers...)
+       fGL2PSAction->setPointSize(fGl2psDefaultPointSize);
+       
+       DrawView ();
+       endWriteAction = fGL2PSAction->disableFileWriting();
+     }
+     if ((! endWriteAction) || (! beginWriteAction)) {
+       extendBuffer = fGL2PSAction->extendBufferSize();
+     }
+   }
+   fGL2PSAction->resetBufferSizeParameters();
 
-    // Set the viewport
-    //    fGL2PSAction->setViewport(0, 0, getRealPrintSizeX(),getRealPrintSizeY());  
-    // By default, we choose the line width (trajectories...)
-    fGL2PSAction->setLineWidth(1);
-    // By default, we choose the point size (markers...)
-    fGL2PSAction->setPointSize(2);
-
-    DrawView ();
-    fGL2PSAction->disableFileWriting();
-  }
-
+   if (!extendBuffer ) {
+     G4cerr << "gl2ps buffer size is not big enough to print this geometry. Thy to extend it. No output produced"<< G4endl;
+   }
+   if (!beginWriteAction ) {
+     G4cerr << "Error while writing in the file "<<getRealPrintFilename().c_str()<<". Check read/write access No output produced" << G4endl;
+   }
+   if (!endWriteAction ) {
+     G4cerr << "gl2ps error. No output produced" << G4endl;
+   }
   fWinSize_x = X;
   fWinSize_y = Y;
-  ResizeGLView();
-  DrawView ();
 
   // Reset for next time (useful is size change)
   //  fPrintSizeX = 0;

@@ -147,6 +147,8 @@ void G4VisCommandList::SetNewValue (G4UIcommand*, G4String newValue)
   G4cout << G4endl;
   fpVisManager->PrintAvailableModels(verbosity);
   G4cout << G4endl;
+  fpVisManager->PrintAvailableColours(verbosity);
+  G4cout << G4endl;
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   UImanager->ApplyCommand(G4String("/vis/viewer/list ! ") + verbosityString);
   if (verbosity < G4VisManager::parameters)

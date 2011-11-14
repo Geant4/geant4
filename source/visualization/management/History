@@ -26,6 +26,48 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+11th November 2011  John Allison  (visman-V09-04-11)
+- G4VisModelManager.hh: Coverity fix.
+
+11th November 2011  John Allison  (visman-V09-04-10)
+- Tagged.
+
+10th November 2011  John Allison
+- G4VisManager.cc: Fixed compiler warning.
+
+5th November 2011  Joseph Perl  (visman-V09-04-09)
+- source.cmake needs G4VisCommandsDefault
+
+4th November 2011  John Allison  (visman-V09-04-08 - needs greps-V09-04-09)
+- G4VisManager:
+  o Added PrintAvailableColours.
+  o Prints available colours  on initialisation.
+- G4VisCommands.cc:
+  o /vis/list prints available colours.
+
+30th October 2011  John Allison  (visman-V09-04-07)
+- G4VisManager:
+  o Added Get/SetDefaultViewParameters.
+  o These are used by viewers during instantiation.
+  o This allows you to set defaults for future operations.
+  o You can do this in code or by commands.  In code, e.g., where you
+    instantiate the vis manager:
+      G4VisManager* visManager = new G4VisExecutive;
+      // You can change the default view parameters, i.e., those used on
+      // instantiation of a viewer.  First instantiate a view parameters
+      // object with default values (e.g., it would draw in wireframe mode).
+      G4ViewParameters vp;
+      // Change drawing style to "Draw surfaces - hidden surfaces removed".
+      vp.SetDrawingStyle(G4ViewParameters::hsr);
+      // Make this default for all new viewers.
+      visManager->SetDefaultViewParameters(vp);
+      visManager->Initialize();
+- G4VisCommandsDefault:
+  o Added /vis/default/hiddenEdge and /vis/default/style.
+  o Sets defaults for future viewers.
+- G4VViewer.cc:
+  o Pick up default view parameters from vis manager.
+
 11th October 2011  John Allison  (visman-V09-04-06)
 - G4VisCommandsViewer: Introduce RefreshIfRequired.
 

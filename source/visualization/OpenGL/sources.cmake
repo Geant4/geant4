@@ -208,6 +208,7 @@ if(GEANT4_USE_QT)
         G4OpenGLQtMovieDialog.hh
         G4OpenGLQtViewer.hh
         G4OpenGLStoredQt.hh
+	G4OpenGLStoredQtSceneHandler.hh
         G4OpenGLStoredQtViewer.hh)
 
     list(APPEND G4VIS_MODULE_OPENGL_SOURCES
@@ -217,6 +218,7 @@ if(GEANT4_USE_QT)
         G4OpenGLQtMovieDialog.cc
         G4OpenGLQtViewer.cc
         G4OpenGLStoredQt.cc
+	G4OpenGLStoredQtSceneHandler.cc
         G4OpenGLStoredQtViewer.cc)
 
 

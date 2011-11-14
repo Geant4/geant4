@@ -84,6 +84,10 @@ inline G4bool G4VisManager::GetAbortReviewKeptEvents() const {
   return fAbortReviewKeptEvents;
 }
 
+inline const G4ViewParameters& G4VisManager::GetDefaultViewParameters() const {
+  return fDefaultViewParameters;
+}
+
 inline void G4VisManager::SetUserActionExtent (const G4VisExtent& extent) {
   fUserVisActionExtent = extent;
 }
@@ -115,4 +119,9 @@ inline void G4VisManager::SetRequestedEvent (const G4Event* event) {
 
 inline void G4VisManager::SetAbortReviewKeptEvents (G4bool abort) {
   fAbortReviewKeptEvents = abort;
+}
+
+inline void G4VisManager::SetDefaultViewParameters
+(const G4ViewParameters& vp) {
+  fDefaultViewParameters = vp;
 }

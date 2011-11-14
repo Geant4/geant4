@@ -342,11 +342,13 @@ void G4OpenGLXViewer::CreateFontLists () {
 }
 
 
-void G4OpenGLXViewer::DrawText(const char * textString,double x,double y,double z, double size){
+void G4OpenGLXViewer::DrawText(const char * textString,double,double,double, double size) {
   
   // gl2ps or GL window ?
-  if (! drawGl2psText(textString,(int)size)) {
-
+  if (isGl2psWriting()) {
+    // Don't car about position
+    G4OpenGLViewer::DrawText(textString,0.,0.,0.,size);
+  } else {
     G4int font_base = G4OpenGLFontBaseStore::GetFontBase(this,(int)size);
     if (font_base < 0) {
       static G4int callCount = 0;
@@ -358,10 +360,6 @@ void G4OpenGLXViewer::DrawText(const char * textString,double x,double y,double 
           "\n  No fonts available."
           "\n  Called with text \""
                << textString
-               << "\"\n  at "
-               << "x:"<< x
-               << "y:"<< y
-               << "z:"<< z
                << ", size " << size
           //               << ", offsets " << text.GetXOffset () << ", " << text.GetYOffset ()
                << G4endl;
@@ -370,8 +368,6 @@ void G4OpenGLXViewer::DrawText(const char * textString,double x,double y,double 
     }
     glDisable (GL_DEPTH_TEST);
     glDisable (GL_LIGHTING);
-    
-    glRasterPos3d(x,y,z);
     
     // No action on offset or layout at present.
     glPushAttrib(GL_LIST_BIT);

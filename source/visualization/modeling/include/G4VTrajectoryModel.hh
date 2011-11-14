@@ -71,6 +71,11 @@ public:
 
 private:
 
+  // Private copy constructor and assigment operator - copying and
+  // assignment not allowed.  Keeps Coverity happy.
+  G4VTrajectoryModel (const G4VTrajectoryModel&);
+  G4VTrajectoryModel& operator = (const G4VTrajectoryModel&);
+
   G4String fName;
   G4bool fVerbose;
   G4VisTrajContext* fpContext;

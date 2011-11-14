@@ -250,18 +250,18 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Cons& cons) {
 		
 		vertex1 = (*fpObjectTransformation) * vertex1;
 		vertex2 = (*fpObjectTransformation) * vertex2;
-		
+				
 		// Outer cylinder.
 		hepRepXMLWriter->addPrimitive();
-		hepRepXMLWriter->addAttValue("Radius1",cons.GetOuterRadiusMinusZ());
-		hepRepXMLWriter->addAttValue("Radius2",cons.GetOuterRadiusPlusZ());
+		hepRepXMLWriter->addAttValue("Radius1",messenger->getScale() * cons.GetOuterRadiusMinusZ());
+		hepRepXMLWriter->addAttValue("Radius2",messenger->getScale() * cons.GetOuterRadiusPlusZ());
 		hepRepXMLWriter->addPoint(vertex1.x(), vertex1.y(), vertex1.z());
 		hepRepXMLWriter->addPoint(vertex2.x(), vertex2.y(), vertex2.z());
 		
 		// Inner cylinder.
 		hepRepXMLWriter->addPrimitive();
-		hepRepXMLWriter->addAttValue("Radius1",cons.GetInnerRadiusMinusZ());
-		hepRepXMLWriter->addAttValue("Radius2",cons.GetInnerRadiusPlusZ());
+		hepRepXMLWriter->addAttValue("Radius1",messenger->getScale() * cons.GetInnerRadiusMinusZ());
+		hepRepXMLWriter->addAttValue("Radius2",messenger->getScale() * cons.GetInnerRadiusPlusZ());
 		hepRepXMLWriter->addPoint(vertex1.x(), vertex1.y(), vertex1.z());
 		hepRepXMLWriter->addPoint(vertex2.x(), vertex2.y(), vertex2.z());
 	}
@@ -318,16 +318,16 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Tubs& tubs) {
 		
 		// Outer cylinder.
 		hepRepXMLWriter->addPrimitive();
-		hepRepXMLWriter->addAttValue("Radius1", tubs.GetOuterRadius());
-		hepRepXMLWriter->addAttValue("Radius2", tubs.GetOuterRadius());
+		hepRepXMLWriter->addAttValue("Radius1", messenger->getScale() * tubs.GetOuterRadius());
+		hepRepXMLWriter->addAttValue("Radius2", messenger->getScale() * tubs.GetOuterRadius());
 		hepRepXMLWriter->addPoint(vertex1.x(), vertex1.y(), vertex1.z());
 		hepRepXMLWriter->addPoint(vertex2.x(), vertex2.y(), vertex2.z());
 		
 		// Inner cylinder.
 		if (tubs.GetInnerRadius() != 0.) {
 			hepRepXMLWriter->addPrimitive();
-			hepRepXMLWriter->addAttValue("Radius1", tubs.GetInnerRadius());
-			hepRepXMLWriter->addAttValue("Radius2", tubs.GetInnerRadius());
+			hepRepXMLWriter->addAttValue("Radius1", messenger->getScale() * tubs.GetInnerRadius());
+			hepRepXMLWriter->addAttValue("Radius2", messenger->getScale() * tubs.GetInnerRadius());
 			hepRepXMLWriter->addPoint(vertex1.x(), vertex1.y(), vertex1.z());
 			hepRepXMLWriter->addPoint(vertex2.x(), vertex2.y(), vertex2.z());
 		}

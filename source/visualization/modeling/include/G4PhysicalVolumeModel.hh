@@ -78,21 +78,25 @@ public: // With description
     (G4VPhysicalVolume* pPV = 0,
      G4int iCopyNo = 0,
      G4int depth = 0,
-     const G4Transform3D& transform = G4Transform3D()):
+     const G4Transform3D& transform = G4Transform3D(),
+     G4bool drawn = true):
       fpPV(pPV),
       fCopyNo(iCopyNo),
       fNonCulledDepth(depth),
-      fTransform(transform) {}
+      fTransform(transform),
+      fDrawn(drawn) {}
     G4VPhysicalVolume* GetPhysicalVolume() const {return fpPV;}
     G4int GetCopyNo() const {return fCopyNo;}
     G4int GetNonCulledDepth() const {return fNonCulledDepth;}
     const G4Transform3D& GetTransform() const {return fTransform;}
+    G4bool GetDrawn() const {return fDrawn;}
     G4bool operator< (const G4PhysicalVolumeNodeID& right) const;
   private:
     G4VPhysicalVolume* fpPV;
     G4int fCopyNo;
     G4int fNonCulledDepth;
     G4Transform3D fTransform;
+    G4bool fDrawn;
   };
   // Nested class for identifying physical volume nodes.
 

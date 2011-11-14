@@ -17,6 +17,130 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12th November 2011  John Allison (opengl-V09-04-22)
+- G4OpenGLQtViewer.cc: Fixed default auxiliary edge tick-mark.
+- G4OpenGLStoredQtSceneHandler::ExtraTOProcessing:
+  o Suppressed debug printing.
+
+11th November 2011  John Allison (opengl-V09-04-21)
+- G4OpenGLViewer.cc: Coverity fix.
+
+11th November 2011  John Allison (opengl-V09-04-20)
+- G4OpenGLStoredQtSceneHandler.hh/cc: Protected with
+  #ifdef G4VIS_BUILD_OPENGLQT_DRIVER
+- G4OpenGLQtViewer::viewComponentItemChanged:
+  o Commented out unused lines to prevent compiler warnings.
+- G4OpenGLViewer::DrawText, ChangePointSize and ChangeLineWidth:
+  o Converted doubles to prevent compiler warnings.
+
+10th November 2011  John Allison
+- G4OpenGLStoredQtViewer.cc: Fixed compiler warning and tidied.
+- G4OpenGLStoredQtSceneHandler.cc: Tidied.
+
+9th November 2011  Laurent Garnier
+- G4OpenGLViewer : Fix bug on printEPS vectored blank scene
+
+7th November 2011  John Allison
+- G4OpenGLViewerMessenger.cc:
+  o ApplyCommand("/vis/viewer/refresh") after /vis/ogl/printEPS.
+
+6th November 2011  Joseph Perl (opengl-V09-04-19)
+- Retagged. previous tag was misapplied.
+
+6th November 2011  John Allison (opengl-V09-04-18)
+- Transparency still an issue:
+  o Revert to "always select" (G4OpenGLStoredQtViewer::POSelected:
+    return true;).
+  o No tag of interefaces, therefore no "Viewer components" window.
+
+6st November 2011  Laurent Garnier
+- G4OpenGLQtViewer : Fix transparency problem
+
+5st November 2011  Laurent Garnier
+- G4OpenGLStoredQtViewer : Fiw a redraw problem for Qt (John)
+- G4OpenGLQtViewer : Add label on tree
+
+5st November 2011  Laurent Garnier
+- Fix compiler warnings in 
+ o src/G4OpenGLStoredQtViewer.cc
+ o include/G4OpenGLStoredSceneHandler.hh
+ o include/G4OpenGLStoredViewer.hh
+
+5st November 2011  Joseph Perl (opengl-V09-04-17)
+- sources.cmake needs G4OpenGLStoredQtSceneHandler
+
+5st November 2011  Laurent Garnier 
+- G4OpenGLQtViewer/ G4StoredQtViewer : Begin work for changing tree when changing tab
+
+4st November 2011  Laurent Garnier 
+- G4OpenGLQtViewer : Improvments on touchable tree viewer
+- Add files : 
+  o G4OpenGLStoredQtSceneHandler.hh
+  o G4OpenGLStoredQtSceneHandler.cc
+
+4st November 2011  Laurent Garnier 
+- G4OpenGLStoreViewer/ G4OpenGLStoreQtViewer : Add methods POSelected/TOSelected (John)
+- G4OpenGLQtViewer :
+  o Add method to manipulate tree volume
+  o Add variables to check performance
+  o Remove old tree volume methods (here for testing)
+- G4OpenGLStoreSceneHandler : Add methods ExtraPOProcessing/ExtraTOProcessing (John)
+- G4OpenGLStoredQt.cc : Implementation of StoreQtViewer (John)
+
+
+4st November 2011  Laurent Garnier  (opengl-V09-04-15)
+- Display message when using Text on Stored mode in Qt (problem not fixed)
+
+27th October 2011  John Allison
+- G4OpenGLStoredViewer.cc:
+  o Unwrap PODLs (permanent object display lists, geometry volumes
+    mainly).  Previously, the PODLs were called from a "top PODL".
+    Instead, so that we can have control over which are drawn, they
+    are called in a loop, like the TODLs (transient ODLs).  The is no
+    measureable performance penalty, even on complex geometies.  (The
+    top PODL still exists, but is not used; the corresponding code to
+    call the top PODL is commented out.)
+- G4OpenGLViewer.cc: Fix compilation warning.
+
+27st October 2011  Laurent Garnier
+- fix compilation warning on XCode
+
+26st October 2011  Laurent Garnier
+- Change minor things for ppmtompeg tool
+- speed improvements in G4StoreViewer (+10%)
+
+24st October 2011  Laurent Garnier
+- G4OpenGLXViewer, G4OpenGLQtViewer, G4OpenGLViewer :
+  o Change name of drawGl2psText in DrawText in order to be able to
+    Draw gl2ps text even on viewers where no 2D text is implemented
+- Fix problem with marker size on gl2ps
+  o G4OpenGLViewer : Add two methods ChangePointSize and ChangeLineWidth 
+
+21st October 2011  Laurent Garnier
+- G4OpenGLXViewer : move text positioning in SceneHandler (factorising)
+- G4OpenGLSceneHandler : set text position
+-> Fix bad positionning text in gl2ps
+-> Fix text color in gl2ps
+
+21st October 2011  John Allison  (opengl-V09-04-14)
+- Tagged.
+
+21st October 2011  Laurent Garnier
+- G4OpenGLViewer : Fix missing text after printEPS in Immediate mode (need visexternal-V09-04-02 )
+
+20th October 2011  Laurent Garnier
+- G4OpenGLViewer 
+  o automaticaly extend gl2ps buffer size if needed
+  o Add some error messages
+
+19th October 2011  Laurent Garnier
+- G4OpenGLSceneHandler :
+  Fix a bug with marker, circle markers now appear with a circle marker
+  For this, copy AddPrimitives in 2 methods
+    AddPrimitivesCircle and AddPrimitivesSquare
+-G4OpenGLViewer : add default parameter for gl2ps line width and point
+  size in variable
+
 18th October 2011  John Allison  (opengl-V09-04-13)
 - Tagged.
 
@@ -196,6 +320,9 @@ committal in the CVS repository !
 
 1st March 2011  Laurent Garnier
 - Fix Xm OpenGL inclusion problem by invert moving GL include at the beginning 
+
+23st February 2011  Laurent Garnier
+- Replace mpeg_encoder by ppmtompeg 
 
 10th January 2011  Laurent Garnier
 - Try to fix mix between GL include from X11 and GL include from Qt (APPLE stuff)

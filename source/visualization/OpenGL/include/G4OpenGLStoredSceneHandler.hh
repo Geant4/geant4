@@ -77,6 +77,11 @@ protected:
   void AddPrimitivePreamble(const G4Visible& visible);
   void AddPrimitivePostamble();
 
+  // Two virtual functions for extra processing in a sub-class, for
+  // example, to make a display tree.
+  virtual void ExtraPOProcessing(size_t) {}
+  virtual void ExtraTOProcessing(size_t) {}
+
   static G4int  fSceneIdCount;   // static counter for OpenGLStored scenes.
   // Display list management.  All static since there's only one OGL store.
   static G4int  fDisplayListId;  // Workspace.

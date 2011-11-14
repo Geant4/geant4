@@ -20,6 +20,13 @@ committal in the CVS repository !
 History file for visualization/modeling
 ---------------------------------------
 
+11th November 2011  John Allison  (modeling-V09-04-05)
+- G4VTrajectoryModel.hh: Coverity fix.
+
+30th October 2011  John Allison  (modeling-V09-04-04)
+- G4ModelApplyCommandsT: Fixed compiler warning.
+- G4PhysicalVolumeModel: Added flag to G4PhysicalVolumeNodeID: true if drawn.
+
 27th September 2011  John Allison  (modeling-V09-04-03)
 - G4PhysicalVolumeModel::Validate: Strengthen case for issuing warnings so
   that warning not issued in normal case.

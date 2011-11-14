@@ -386,7 +386,7 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   G4int copyNo = fpCurrentPV->GetCopyNo();
   fFullPVPath.push_back
     (G4PhysicalVolumeNodeID
-     (fpCurrentPV,copyNo,fCurrentDepth,*fpCurrentTransform));
+     (fpCurrentPV,copyNo,fCurrentDepth,*fpCurrentTransform,thisToBeDrawn));
 
   if (thisToBeDrawn) {
 
@@ -394,7 +394,7 @@ void G4PhysicalVolumeModel::DescribeAndDescend
     G4int copyNo = fpCurrentPV->GetCopyNo();
     fDrawnPVPath.push_back
       (G4PhysicalVolumeNodeID
-       (fpCurrentPV,copyNo,fCurrentDepth,*fpCurrentTransform));
+       (fpCurrentPV,copyNo,fCurrentDepth,*fpCurrentTransform,thisToBeDrawn));
 
     if (fpMP->IsExplode() && fDrawnPVPath.size() == 1) {
       // For top-level drawn volumes, explode along radius...
@@ -772,6 +772,7 @@ std::ostream& operator<<
        << ':' << node.GetCopyNo()
        << '[' << node.GetNonCulledDepth() << ']'
        << ':' << node.GetTransform();
+    if (!node.GetDrawn()) os << "  Not "; os << "drawn";
   } else {
     os << "Null node";
   }

@@ -24,63 +24,33 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.hh,v 1.10 2010-03-10 11:03:46 lgarnier Exp $
+// $Id: G4OpenGLStoredSceneHandler.hh,v 1.32 2010-11-10 17:10:49 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// Class G4OpenGLStoredQtViewer : a class derived from
-//   G4OpenGLQtViewer and G4OpenGLStoredViewer.
+// Laurent Garnier  27th October 2011
 
 #ifdef G4VIS_BUILD_OPENGLQT_DRIVER
 
-#ifndef G4OPENGLSTOREDQTVIEWER_HH
-#define G4OPENGLSTOREDQTVIEWER_HH
+#ifndef G4OPENGLSTOREDQTSCENEHANDLER_HH
+#define G4OPENGLSTOREDQTSCENEHANDLER_HH
 
-#include "G4OpenGLStoredViewer.hh"
-#include "G4OpenGLQtViewer.hh"
-#include <qgl.h>  // include qglwidget
+#include "G4OpenGLStoredSceneHandler.hh"
 
-class QMouseEvent;
-class QWheelEvent;
-class QContextMenuEvent;
+class G4OpenGLStoredQtSceneHandler: public G4OpenGLStoredSceneHandler {
 
-class G4OpenGLStoredSceneHandler;
-
-class G4OpenGLStoredQtViewer:
-  public G4OpenGLQtViewer, public G4OpenGLStoredViewer, public QGLWidget {
-  
 public:
-  G4OpenGLStoredQtViewer (G4OpenGLStoredSceneHandler& scene,
-				const G4String& name = "");
-  ~G4OpenGLStoredQtViewer ();
-  void Initialise ();
-  void initializeGL ();
-  void DrawView ();
-  void resizeGL(int width,int height);
-  void paintGL();
-  void updateQWidget();
-  void ShowView ();
-  void DrawText(const char * ,double x,double y,double z, double size);
 
-protected:
+  G4OpenGLStoredQtSceneHandler (G4VGraphicsSystem& system, const G4String& name = "");
+  virtual ~G4OpenGLStoredQtSceneHandler ();
 
-  // Two virtual functions to return sub-class selection.
-  G4bool POSelected(size_t POListIndex);
-  G4bool TOSelected(size_t TOListIndex);
+  // Two virtual functions for extra processing in a sub-class, for
+  // example, to make a display tree.
+  void ExtraPOProcessing(size_t currentPOListIndex);
+  void ExtraTOProcessing(size_t currentTOListIndex);
 
-  void showEvent(QShowEvent * event );
-  void wheelEvent(QWheelEvent *event);
-  void mousePressEvent(QMouseEvent *event);
-  void mouseMoveEvent(QMouseEvent *event);
-  void mouseDoubleClickEvent(QMouseEvent *event);
-  void mouseReleaseEvent(QMouseEvent *event);
-  void contextMenuEvent(QContextMenuEvent *e);
-  void keyPressEvent (QKeyEvent * event); 
-  void paintEvent(QPaintEvent *event);
-private:
-  void ComputeView ();
-
-  //  QImage glBufferImage;
+  void ClearStore ();
+  void ClearTransientStore ();
 };
 
 #endif

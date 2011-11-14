@@ -62,7 +62,6 @@ class QTreeWidgetItem;
 class QTreeWidget;
 class G4OpenGLSceneHandler;
 class G4OpenGLQtMovieDialog;
-class G4VPhysicalVolume;
 
 class G4OpenGLQtViewer: public QObject, virtual public G4OpenGLViewer {
 
@@ -101,6 +100,8 @@ public:
   void displayRecordingStatus();
   void DrawText(const char * ,double x,double y,double z, double size);
   void ResetView ();
+  void addTreeElement(const G4String model,std::vector < std::pair<std::string,std::pair <unsigned int, unsigned int> > >);
+  bool isTouchableVisible(unsigned int POindex);
 
 public:
   void G4MousePressEvent(QMouseEvent *event);
@@ -120,6 +121,7 @@ protected:
   void moveScene(float, float, float,bool);
   void FinishView();
   void updateKeyModifierState(Qt::KeyboardModifiers);
+  void displayViewComponentTree();
 
 
 protected:
@@ -127,7 +129,6 @@ protected:
   QWidget* fGLWindow;
   bool hasPendingEvents();
   void savePPMToTemp();
-  void fillUIViewComponent();
   int fRecordFrameNumber;
 
   bool fHasToRepaint;
@@ -150,9 +151,10 @@ private:
   void setRecordingInfos(QString);
   QString getProcessErrorMsg();
   QWidget* getParentWidget();
-  void parseVolumeTree(G4VPhysicalVolume * root, QTreeWidgetItem *);
+  bool parseAndInsertInTree(QTreeWidgetItem *,std::vector < std::pair<std::string,std::pair <unsigned int, unsigned int> > > treeVect,QString parentRoot);
   void setCheckComponent(QTreeWidgetItem* item,bool check);
-  G4VPhysicalVolume* parseAndFindVolumeTree(G4VPhysicalVolume * root, G4String currentPath, G4String pathToMatch);
+  void initViewComponent();
+  bool parseAndCheckVisibility(QTreeWidgetItem * treeNode,unsigned int POindex);
 
   QMenu *fContextMenu;
 
@@ -203,6 +205,8 @@ private:
   bool fBatchMode;
   bool fCheckViewComponentLock;
   QTreeWidget * fViewerComponentTreeWidget;
+  int fNbRotation ;
+  int fTimeRotation;
 
 public Q_SLOTS :
   void startPauseVideo();

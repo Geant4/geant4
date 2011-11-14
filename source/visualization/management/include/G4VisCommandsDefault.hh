@@ -24,65 +24,41 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.hh,v 1.10 2010-03-10 11:03:46 lgarnier Exp $
+// $Id: G4VisCommandsDefault.hh,v 1.3 2006-06-29 21:28:34 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
-// 
-// Class G4OpenGLStoredQtViewer : a class derived from
-//   G4OpenGLQtViewer and G4OpenGLStoredViewer.
 
-#ifdef G4VIS_BUILD_OPENGLQT_DRIVER
+// /vis/default commands - John Allison  30th October 2011
 
-#ifndef G4OPENGLSTOREDQTVIEWER_HH
-#define G4OPENGLSTOREDQTVIEWER_HH
+#ifndef G4VISCOMMANDSDEFAULT_HH
+#define G4VISCOMMANDSDEFAULT_HH
 
-#include "G4OpenGLStoredViewer.hh"
-#include "G4OpenGLQtViewer.hh"
-#include <qgl.h>  // include qglwidget
+#include "G4VVisCommand.hh"
 
-class QMouseEvent;
-class QWheelEvent;
-class QContextMenuEvent;
+class G4UIcmdWithAString;
+class G4UIcmdWithABool;
 
-class G4OpenGLStoredSceneHandler;
-
-class G4OpenGLStoredQtViewer:
-  public G4OpenGLQtViewer, public G4OpenGLStoredViewer, public QGLWidget {
-  
+class G4VisCommandDefaultStyle: public G4VVisCommand {
 public:
-  G4OpenGLStoredQtViewer (G4OpenGLStoredSceneHandler& scene,
-				const G4String& name = "");
-  ~G4OpenGLStoredQtViewer ();
-  void Initialise ();
-  void initializeGL ();
-  void DrawView ();
-  void resizeGL(int width,int height);
-  void paintGL();
-  void updateQWidget();
-  void ShowView ();
-  void DrawText(const char * ,double x,double y,double z, double size);
-
-protected:
-
-  // Two virtual functions to return sub-class selection.
-  G4bool POSelected(size_t POListIndex);
-  G4bool TOSelected(size_t TOListIndex);
-
-  void showEvent(QShowEvent * event );
-  void wheelEvent(QWheelEvent *event);
-  void mousePressEvent(QMouseEvent *event);
-  void mouseMoveEvent(QMouseEvent *event);
-  void mouseDoubleClickEvent(QMouseEvent *event);
-  void mouseReleaseEvent(QMouseEvent *event);
-  void contextMenuEvent(QContextMenuEvent *e);
-  void keyPressEvent (QKeyEvent * event); 
-  void paintEvent(QPaintEvent *event);
+  G4VisCommandDefaultStyle();
+  virtual ~G4VisCommandDefaultStyle();
+  G4String GetCurrentValue(G4UIcommand* command);
+  void SetNewValue(G4UIcommand* command, G4String newValue);
 private:
-  void ComputeView ();
-
-  //  QImage glBufferImage;
+  G4VisCommandDefaultStyle(const G4VisCommandDefaultStyle&);
+  G4VisCommandDefaultStyle& operator=(const G4VisCommandDefaultStyle&);
+  G4UIcmdWithAString* fpCommand;
 };
 
-#endif
+class G4VisCommandDefaultHiddenEdge: public G4VVisCommand {
+public:
+  G4VisCommandDefaultHiddenEdge();
+  virtual ~G4VisCommandDefaultHiddenEdge();
+  G4String GetCurrentValue(G4UIcommand* command);
+  void SetNewValue(G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandDefaultHiddenEdge(const G4VisCommandDefaultHiddenEdge&);
+  G4VisCommandDefaultHiddenEdge& operator=(const G4VisCommandDefaultHiddenEdge&);
+  G4UIcmdWithABool* fpCommand;
+};
 
 #endif

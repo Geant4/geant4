@@ -193,7 +193,10 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
     fpViewer -> GetApplicableVisAttributes (line.GetVisAttributes ());
 
   G4double lineWidth = GetLineWidth(pVA);
-  glLineWidth(lineWidth);
+  G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
+  if ( pGLViewer ) {
+    pGLViewer->ChangeLineWidth(lineWidth);
+  }
 
   glBegin (GL_LINE_STRIP);
   for (G4int iPoint = 0; iPoint < nPoints; iPoint++) {
@@ -243,7 +246,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
         circleV.push_back(circle);
         //      G4OpenGLSceneHandler::AddPrimitive (circle);
       }
-      G4OpenGLSceneHandler::AddPrimitives (circleV);
+      G4OpenGLSceneHandler::AddPrimitivesCircle (circleV);
     }
     break;
   case G4Polymarker::squares:
@@ -255,7 +258,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
         squareV.push_back(square);
         //      G4OpenGLSceneHandler::AddPrimitive (square);
       }
-      G4OpenGLSceneHandler::AddPrimitives (squareV);
+      G4OpenGLSceneHandler::AddPrimitivesSquare (squareV);
     }
     break;
   }
@@ -283,11 +286,13 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Text& text) {
     const char* textCString = textString.c_str();
     GLfloat color[4]; /* Ask OpenGL for the current color */
     glGetFloatv(GL_CURRENT_COLOR, color);
-    glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
-#ifdef G4DEBUG_VIS_OGL
-    printf("G4OpenGLSceneHandler::AddPrimitive..............%f %f %f \n",c.GetRed (), c.GetGreen (), c.GetBlue ());
-#endif
     
+    // Change to new color
+    glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
+    
+    // set position
+    glRasterPos3d( position.x(),position.y(),position.z() );
+
     pGLViewer->DrawText(textCString,position.x(),position.y(),position.z(),size);
     glColor3d (color[0], color[1], color[2]);
   }
@@ -303,9 +308,14 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Square& square) {
   AddCircleSquare (square, G4OpenGLBitMapStore::square);
 }
 
-void G4OpenGLSceneHandler::AddPrimitives (std::vector <G4VMarker> square) {
+void G4OpenGLSceneHandler::AddPrimitivesCircle (std::vector <G4VMarker> marker) {
+  glEnable (GL_POINT_SMOOTH);
+  AddCircleSquareVector (marker, G4OpenGLBitMapStore::square);
+}
+
+void G4OpenGLSceneHandler::AddPrimitivesSquare (std::vector <G4VMarker> marker) {
   glDisable (GL_POINT_SMOOTH);
-  AddCircleSquareVector (square, G4OpenGLBitMapStore::square);
+  AddCircleSquareVector (marker, G4OpenGLBitMapStore::circle);
 }
 
 void G4OpenGLSceneHandler::AddCircleSquare
@@ -349,7 +359,10 @@ void G4OpenGLSceneHandler::AddCircleSquareVector
     fpViewer -> GetApplicableVisAttributes (marker[0].GetVisAttributes ());
 
   G4double lineWidth = GetLineWidth(pVA);
-  glLineWidth(lineWidth);
+  G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
+  if ( pGLViewer ) {
+    pGLViewer->ChangeLineWidth(lineWidth);
+  }
 
   G4VMarker::FillStyle style = marker[0].GetFillStyle();
 
@@ -395,19 +408,21 @@ void G4OpenGLSceneHandler::AddCircleSquareVector
      }
    } else { // Size specified in screen (window) coordinates.
      // A few useful quantities...
-     glPointSize (size);
+     G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
+     if ( pGLViewer ) {
+       pGLViewer->ChangePointSize(size);
+     }
+     //Antialiasing only for circles
+     //Transparency
+     glEnable(GL_BLEND);
+     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+          
      glBegin (GL_POINTS);
      for (unsigned int a=0;a<marker.size();a++) {
        G4Point3D centre = marker[a].GetPosition();
        glVertex3f(centre.x(),centre.y(),centre.z());
      }
-     glEnd();
-     //Antialiasing
-     glEnable (GL_POINT_SMOOTH);
-     //Transparency
-     glEnable(GL_BLEND);
-     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+     glEnd();     
      // L. GARNIER 1 March 2009
      // Old method, we draw a bitmap instead of a GL_POINT. 
      // I remove it because it cost in term of computing performances
@@ -501,7 +516,10 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   }
 
   G4double lineWidth = GetLineWidth(pVA);
-  glLineWidth(lineWidth);
+  G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
+  if ( pGLViewer ) {
+    pGLViewer->ChangeLineWidth(lineWidth);
+  }
 
   GLfloat clear_colour[4];
   glGetFloatv (GL_COLOR_CLEAR_VALUE, clear_colour);

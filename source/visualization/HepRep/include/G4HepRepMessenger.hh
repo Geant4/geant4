@@ -34,7 +34,10 @@
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithADouble.hh"
+#include "G4UIcmdWith3VectorAndUnit.hh"
 #include "G4UIcommand.hh"
+#include "G4ThreeVector.hh"
 
 class G4HepRepMessenger : public G4UImessenger {
     
@@ -51,6 +54,8 @@ class G4HepRepMessenger : public G4UImessenger {
         virtual G4bool getOverwrite();
         virtual G4bool getCullInvisibles();
 		virtual G4bool renderCylAsPolygons();
+		virtual G4double getScale();
+		virtual G4ThreeVector getCenter();
 	
 	// Used by HepRepXML
         virtual G4String getEventNumberSuffix();
@@ -79,6 +84,12 @@ class G4HepRepMessenger : public G4UImessenger {
 	
 		G4bool cylAsPolygons;
 		G4UIcmdWithABool* renderCylAsPolygonsCommand;
+	
+		G4double scale;
+		G4UIcmdWithADouble* setScaleCommand;
+	
+		G4ThreeVector center;
+		G4UIcmdWith3VectorAndUnit* setCenterCommand;
 	
         G4String suffix;
         G4UIcmdWithAString* setEventNumberSuffixCommand;

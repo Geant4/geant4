@@ -79,7 +79,7 @@ void G4OpenGLStoredQtViewer::initializeGL () {
   InitializeGLView ();
 
 #ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLStoredQtViewer::InitialiseGL () 1\n");
+  printf("G4OpenGLStoredQtViewer::InitialiseGL () 1 %d\n", this);
 #endif
 
   if (fSceneHandler.GetScene() == 0) {
@@ -93,6 +93,24 @@ void G4OpenGLStoredQtViewer::initializeGL () {
 #endif
 }
 
+// Until tree is fixed use this
+G4bool G4OpenGLStoredQtViewer::POSelected(size_t)
+{
+  return true;
+}
+
+/***
+// When tree is fixed use this
+G4bool G4OpenGLStoredQtViewer::POSelected(size_t POListIndex)
+{
+  return isTouchableVisible(POListIndex);
+}
+***/
+
+G4bool G4OpenGLStoredQtViewer::TOSelected(size_t)
+{
+  return true;
+}
 
 void G4OpenGLStoredQtViewer::DrawView () {  
   updateQWidget();
@@ -242,6 +260,8 @@ void G4OpenGLStoredQtViewer::paintGL()
 
   fHasToRepaint = false;
 
+  // update the view component tree
+  displayViewComponentTree();
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredQtViewer::paintGL ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ready %d\n",fReadyToPaint);
 #endif
@@ -310,9 +330,21 @@ void G4OpenGLStoredQtViewer::ShowView (
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
+  // Some X servers fail to draw all trajectories, particularly Mac
+  // XQuartz.  Revisit this at a future date.  Meanwhile, issue an
+  // extra...
+  ClearView();
+  DrawView();
   activateWindow();
   glFlush();
 
 }
+void G4OpenGLStoredQtViewer::DrawText(const char * ,double /* x */,double /* y */,double /* z */, double /* size */){
+    G4cerr <<
+      "Text is not implemented in Qt Stored mode, please use Immediate"
+      "\n  mode if you want to see it."
+	   << G4endl;
+}
+
 
 #endif

@@ -33,6 +33,7 @@
 
 #include "G4VisCommands.hh"
 #include "G4VisCommandsCompound.hh"
+#include "G4VisCommandsDefault.hh"
 #include "G4VisCommandsGeometry.hh"
 #include "G4VisCommandsGeometrySet.hh"
 #include "G4VisCommandsScene.hh"
@@ -313,8 +314,13 @@ void G4VisManager::Initialise () {
   if (fVerbosity >= startup) {
     G4cout <<
       "\nYou have successfully registered the following model factories."
-	 << G4endl;
+	   << G4endl;
     PrintAvailableModels (fVerbosity);
+    G4cout << G4endl;
+  }
+
+  if (fVerbosity >= startup) {
+    PrintAvailableColours (fVerbosity);
     G4cout << G4endl;
   }
 
@@ -1121,6 +1127,12 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandOpen);
   RegisterMessenger(new G4VisCommandSpecify);
 
+  directory = new G4UIdirectory ("/vis/default/");
+  directory -> SetGuidance("Set default values for future operations.");
+  fDirectoryList.push_back (directory);
+  RegisterMessenger(new G4VisCommandDefaultHiddenEdge);
+  RegisterMessenger(new G4VisCommandDefaultStyle);
+
   directory = new G4UIdirectory ("/vis/geometry/");
   directory -> SetGuidance("Operations on vis attributes of Geant4 geometry.");
   fDirectoryList.push_back (directory);
@@ -1298,6 +1310,19 @@ void G4VisManager::PrintAvailableModels (Verbosity verbosity) const
       }
     }
   }
+}
+
+void G4VisManager::PrintAvailableColours (Verbosity) const {
+  G4cout <<
+    "Some /vis commands (optionally) take a string to specify colour."
+    "\nAvailable colours:\n  ";
+  const std::map<G4String, G4Colour>& map = G4Colour::GetMap();
+  for (std::map<G4String, G4Colour>::const_iterator i = map.begin();
+       i != map.end();) {
+    G4cout << i->first;
+    if (++i != map.end()) G4cout << ", ";
+  }
+  G4cout << G4endl;
 }
 
 void G4VisManager::PrintInvalidPointers () const {

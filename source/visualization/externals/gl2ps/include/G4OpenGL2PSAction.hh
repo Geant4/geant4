@@ -43,18 +43,23 @@ public:
  bool enableFileWriting();
   // return true if ok, false is an error occured
 
- void disableFileWriting();
+ bool disableFileWriting();
+  // return true when OK, false if errror
 
  bool fileWritingEnabled() const;
  void setLineWidth(int);
  void setPointSize(int);
  void setViewport(int,int,int,int);
+ bool extendBufferSize();
+ void resetBufferSizeParameters();
 
 protected:
- void G4gl2psBegin();
+ bool G4gl2psBegin();
  const char * fFileName;
  FILE* fFile;
  GLint fViewport[4];
+ int fBufferSize;
+ int fBufferSizeLimit;
 };
 
 #endif

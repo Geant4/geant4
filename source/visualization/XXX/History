@@ -20,6 +20,13 @@ committal in the CVS repository !
 History file for visualization/XXX sub-category (a template graphics system)
 ---------------------------------------------------------------------------
 
+11th November 2011  John Allison  (visXXX-V09-04-01)
+- G4XXXSGSceneHandler.cc: Fixed compiler warnings.
+
+10th November 2011  John Allison  (visXXX-V08-04-01 - note wrong V08!)
+- G4XXXSGSceneHandler/Viewer: Implemented simple ad hoc tree.
+- Removed include/tree.
+
 2nd June 2011  John Allison  (visXXX-V08-04-00)
 - Tagged
 

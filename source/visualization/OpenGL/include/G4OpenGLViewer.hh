@@ -62,7 +62,9 @@ protected:
   void SetView    ();
   void ResetView ();
 
-  virtual void DrawText(const char * ,double x,double y,double z, double size) = 0;
+  virtual void DrawText(const char * ,double x,double y,double z, double size);
+  void ChangePointSize(G4double size);
+  void ChangeLineWidth(G4double width);
   void HaloingFirstPass ();
   void HaloingSecondPass ();
   void HLRFirstPass ();
@@ -76,7 +78,6 @@ protected:
   void rotateScene (G4double dx, G4double dy);
   void rotateSceneToggle (G4double dx, G4double dy);
 //////////////////////////////Vectored PostScript production functions///
-  bool drawGl2psText(const char * textString, int size);
   // print EPS file. Depending of fVectoredPs, it will print Vectored or not
   void setPrintSize(G4int,G4int);
   // set the new print size. 
@@ -94,6 +95,7 @@ protected:
   GLdouble getSceneNearWidth();
   GLdouble getSceneFarWidth();
   GLdouble getSceneDepth();
+  G4bool isGl2psWriting();
   G4bool                            fPrintColour;
   G4bool                            fVectoredPs;
 
@@ -126,6 +128,9 @@ private :
   unsigned int fWinSize_x, fWinSize_y;
   G4float                           fPointSize;
   G4bool fSizeHasChanged;
+  int fGl2psDefaultLineWith;
+  int fGl2psDefaultPointSize;
+
   // size of the OpenGL frame
   void rotateSceneThetaPhi(G4double dx, G4double dy);
   void rotateSceneInViewDirection (G4double dx, G4double dy);

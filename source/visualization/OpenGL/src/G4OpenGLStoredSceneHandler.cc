@@ -157,6 +157,7 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
 	fpViewer->GetApplicableVisAttributes(visible.GetVisAttributes());
       to.fStartTime = pVA->GetStartTime();
       to.fEndTime = pVA->GetEndTime();
+      ExtraTOProcessing(fTOList.size());  // Pass TO list index of next item.
       fTOList.push_back(to);
       glPushMatrix();
       G4OpenGLTransform3D oglt (*fpObjectTransformation);
@@ -167,6 +168,7 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
     else {
       PO po(fDisplayListId, *fpObjectTransformation);
       po.fPickName = fPickName;
+      ExtraPOProcessing(fPOList.size());  // Pass PO list index of next item.
       fPOList.push_back(po);
       glNewList (fDisplayListId, GL_COMPILE);
       glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
@@ -461,6 +463,7 @@ void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid)
 	fPickMap[++fPickName] = holder;
 	po.fPickName = fPickName;
       }
+      ExtraPOProcessing(fPOList.size());  // Pass PO list index of next item.
       fPOList.push_back(po);
     }
     else {

@@ -20,6 +20,10 @@ committal in the CVS repository !
 History file for visualization/OpenInventor
 -------------------------------------------
 
+8th November 2011 Ben Morgan (openinventor-V09-04-02)
+- source.cmake [BUGFIX #1196]: Added support for CMake build of OpenInventor 
+  driver (NB requires cotag cmake-V09-04-32).
+
 27th December 2010  Gabriele Cosmo  (openinventor-V09-04-01)
 - Fixed compilation error in SbPainterPS.cc introduced in previous tag.
 
