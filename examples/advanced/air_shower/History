@@ -7,6 +7,10 @@ $Id: History,v 1.25 2010-11-09 14:50:21 allison Exp $
 
                            History file
                            ------------
+
+31.10.2011 - L.Pandola (air_shower-V09-04-01)
+	     Migrated G4Exceptions to the new scheme
+
 17.01.2011 - G.A.P.Cirrone (air_shower-V09-04-00)
 	     Solved compilation error related to the new CLHEP version
 

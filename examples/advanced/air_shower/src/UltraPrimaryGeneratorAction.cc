@@ -159,7 +159,8 @@ void UltraPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
               << h_Planck*c_light/lambda_min/eV << "] eV"
               << G4endl ;
 	
-             G4Exception("") ;
+	       G4Exception("UltraPrimaryGeneratorAction::GeneratePrimaries()","AirSh005",
+			   FatalException,"Wavelength outside the valid range") ;
 	}
  }
 
