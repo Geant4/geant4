@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11 November 11: V.Ivanchenko (empolar-V09-04-04)
+- G4ePolarizedBremsstrahlung - fixed problem provoked by the tag 
+    of standard
+
 10 November 11: V.Ivanchenko (empolar-V09-04-03)
 - G4PolarizedCompton, G4ePolarizedIonisation, 
   G4PolarizedMollerBhabhaModel, G4eplusPolarizedAnnihilation - fixed

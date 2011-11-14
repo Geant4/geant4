@@ -62,12 +62,11 @@ G4ePolarizedBremsstrahlung::G4ePolarizedBremsstrahlung(const G4String& name):
 {}
 
 
-void G4ePolarizedBremsstrahlung::InitialiseEnergyLossProcess(const G4ParticleDefinition* p,
+void G4ePolarizedBremsstrahlung::InitialiseEnergyLossProcess(const G4ParticleDefinition*,
                                                              const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
-    particle = p;
     SetSecondaryParticle(G4Gamma::Gamma());
     SetIonisation(false);
 
