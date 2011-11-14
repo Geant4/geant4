@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08 November 2011 Peter Gumplinger (LXe-V09-04-00)
+- exercise the optics_engine in LXe.in
+
 03 June 2010 Peter Gumplinger    (LXe-V09-03-01)
 -  in LXeEventAction.cc fix initialisation of G4ThreeVector required by 
    CLHEP 2.1.x.
