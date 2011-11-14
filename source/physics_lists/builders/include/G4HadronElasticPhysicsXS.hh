@@ -44,6 +44,8 @@
 #include "G4VPhysicsConstructor.hh"
 
 class G4HadronElasticPhysics;
+class G4VCrossSectionDataSet;
+class G4ParticleDefinition;
 
 class G4HadronElasticPhysicsXS : public G4VPhysicsConstructor
 {
@@ -61,6 +63,9 @@ public:
   // each physics process will be instantiated and
   // registered to the process manager of each particle type 
   virtual void ConstructProcess();
+
+  void AddXSection(const G4ParticleDefinition*,
+		   G4VCrossSectionDataSet*); 
 
 private:
 

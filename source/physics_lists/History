@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12-11-2011, V.Ivanchenko               (phys-lists-V09-04-72)
+- G4HadronElasticXS - use G4BGGHadronElasticXS proton cross section
+
 10-11-2011, M.Karamitros               (phys-lists-V09-04-71)
 - Add comments into EmDNAPhysChem builder
 - Make transparent the use of ITStepMan from outside the builder

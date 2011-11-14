@@ -42,8 +42,16 @@
 
 #include "G4HadronElasticPhysicsXS.hh"
 #include "G4HadronElasticPhysics.hh"
+#include "G4HadronicProcessType.hh"
+#include "G4HadronicProcess.hh"
+#include "G4ProcessManager.hh"
+#include "G4VCrossSectionDataSet.hh"
 #include "G4Neutron.hh"
+#include "G4Proton.hh"
+#include "G4PionPlus.hh"
+#include "G4PionMinus.hh"
 #include "G4BGGNucleonElasticXS.hh"
+#include "G4BGGPionElasticXS.hh"
 #include "G4NeutronElasticXS.hh"
 
 G4HadronElasticPhysicsXS::G4HadronElasticPhysicsXS(G4int ver)
@@ -78,10 +86,36 @@ void G4HadronElasticPhysicsXS::ConstructProcess()
   mainElasticBuilder->GetNeutronProcess()->
     AddDataSet(new G4NeutronElasticXS());
 
+  const G4ParticleDefinition* part = G4Proton::Proton();
+  AddXSection(part, new G4BGGNucleonElasticXS(part));
+  /*
+  part = G4PionPlus::PionPlus();
+  AddXSection(part, new G4BGGPionElasticXS(part));
+
+  part = G4PionMinus::PionMinus();
+  AddXSection(part, new G4BGGPionElasticXS(part));
+  */
+
   if(verbose > 1) { 
     G4cout << "### G4HadronElasticPhysicsXS is constructed " 
 	   << G4endl; 
   }
 }
 
+void 
+G4HadronElasticPhysicsXS::AddXSection(const G4ParticleDefinition* part,
+				      G4VCrossSectionDataSet* cross) 
+{
+  G4ProcessVector* pv = part->GetProcessManager()->GetPostStepProcessVector();
+  size_t n = pv->size();
+  if(0 < n) {
+    for(size_t i=0; i<n; ++i) {
+      if((*pv)[i]->GetProcessSubType() == fHadronElastic) {
+        G4HadronicProcess* hp = static_cast<G4HadronicProcess*>((*pv)[i]);
+	hp->AddDataSet(cross);
+        return;
+      }
+    }
+  }
+}
 
