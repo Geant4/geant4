@@ -70,6 +70,7 @@ public:
 protected:
     void Diffusion(const G4Track& track);
     G4SafetyHelper* fpSafetyHelper;
+    G4Material* fNistWater ;
 };
 
 #endif // G4ITBROWNIANTRANSPORTATION_H

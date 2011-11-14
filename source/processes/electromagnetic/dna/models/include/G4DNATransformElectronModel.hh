@@ -65,8 +65,8 @@ protected:
     G4ParticleChangeForGamma* fParticleChangeForGamma;
 
 private:
-    G4double highEnergyLimit;
 
+    G4Material* fNistWater;
     G4bool isInitialised;
     G4int verboseLevel;
 

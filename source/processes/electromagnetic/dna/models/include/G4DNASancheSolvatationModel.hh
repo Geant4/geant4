@@ -64,6 +64,7 @@ public :
 protected:
     G4ThreeVector radialDistributionOfProducts(G4double Rrms) const ;
     G4ParticleChangeForGamma* fParticleChangeForGamma;
+    G4Material* fNistWater ;
 
     G4bool isInitialised;
     G4int verboseLevel;

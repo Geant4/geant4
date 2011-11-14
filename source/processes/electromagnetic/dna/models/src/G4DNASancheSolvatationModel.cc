@@ -39,6 +39,7 @@
 #include "G4WaterExcitationStructure.hh"
 #include "G4ParticleChangeForGamma.hh"
 #include "G4Electron.hh"
+#include "G4NistManager.hh"
 #include "G4Molecule.hh"
 #include "G4Electron_aq.hh"
 #include "G4ITManager.hh"
@@ -79,11 +80,8 @@ void G4DNASancheSolvatationModel::Initialise(const G4ParticleDefinition* particl
     if(!isInitialised)
     {
         isInitialised = true;
-
-        G4WaterExcitationStructure exStructure ;
-        SetHighEnergyLimit(exStructure.ExcitationEnergy(0));
-
         fParticleChangeForGamma = GetParticleChangeForGamma();
+        fNistWater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
     }
 }
 
@@ -97,7 +95,12 @@ G4double G4DNASancheSolvatationModel::CrossSectionPerVolume(const G4Material* ma
     if (verboseLevel > 1)
         G4cout << "Calling CrossSectionPerVolume() of G4SancheSolvatationModel" << G4endl;
 
-    if (material->GetName() == "G4_WATER")
+    if(ekin > HighEnergyLimit())
+    {
+        return 0.0;
+    }
+
+    if (material == fNistWater || material->GetBaseMaterial() == fNistWater)
     {
         if (ekin <= HighEnergyLimit())
         {
@@ -169,18 +172,15 @@ void G4DNASancheSolvatationModel::SampleSecondaries(std::vector<G4DynamicParticl
 
     if (k <= HighEnergyLimit())
     {
-        if(G4DNAChemistryManager::Instance()->IsChemistryActived())
-        {
-            G4double r_mean =
-                (-0.003*pow(k/eV,6) + 0.0749*pow(k/eV,5) - 0.7197*pow(k/eV,4)
-                 + 3.1384*pow(k/eV,3) - 5.6926*pow(k/eV,2) + 5.6237*k/eV - 0.7883)*nanometer;
+        G4double r_mean =
+            (-0.003*pow(k/eV,6) + 0.0749*pow(k/eV,5) - 0.7197*pow(k/eV,4)
+             + 3.1384*pow(k/eV,3) - 5.6926*pow(k/eV,2) + 5.6237*k/eV - 0.7883)*nanometer;
 
-            G4ThreeVector displacement = radialDistributionOfProducts (r_mean);
-            //______________________________________________________________
-            const G4Track * theIncomingTrack = fParticleChangeForGamma->GetCurrentTrack();
-            G4ThreeVector finalPosition(theIncomingTrack->GetPosition()+displacement);
-            G4DNAChemistryManager::Instance()->CreateSolvatedElectron(theIncomingTrack,&finalPosition);
-        }
+        G4ThreeVector displacement = radialDistributionOfProducts (r_mean);
+        //______________________________________________________________
+        const G4Track * theIncomingTrack = fParticleChangeForGamma->GetCurrentTrack();
+        G4ThreeVector finalPosition(theIncomingTrack->GetPosition()+displacement);
+        G4DNAChemistryManager::Instance()->CreateSolvatedElectron(theIncomingTrack,&finalPosition);
 
         fParticleChangeForGamma->ProposeTrackStatus(fStopAndKill);
         fParticleChangeForGamma->ProposeLocalEnergyDeposit(k);

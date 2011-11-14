@@ -42,6 +42,7 @@
 #include "G4SafetyHelper.hh"
 #include "G4TransportationManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4NistManager.hh"
 
 using namespace std;
 
@@ -63,6 +64,7 @@ G4DNABrownianTransportation::G4DNABrownianTransportation(const G4String& aName, 
             ->GetSafetyHelper();
     SetProcessSubType(61);
     verboseLevel = 1;
+    fNistWater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
 }
 
 G4DNABrownianTransportation::~G4DNABrownianTransportation()
@@ -208,8 +210,10 @@ void G4DNABrownianTransportation::Diffusion(
     }
 #endif
 
-    if (track.GetMaterial() -> GetName() != "G4_WATER")
+    G4Material* material = track.GetMaterial();
+    if (material != fNistWater && material->GetBaseMaterial() != fNistWater)
     {
+
 
         G4cout << (track.GetLocalTime()) /s<<G4endl;
         G4cout<< "Step Number :" << track.GetCurrentStepNumber() <<G4endl;

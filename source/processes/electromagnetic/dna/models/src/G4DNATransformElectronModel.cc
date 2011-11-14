@@ -1,6 +1,7 @@
 #include "G4DNATransformElectronModel.hh"
 #include "G4ParticleChangeForGamma.hh"
 #include "G4Electron.hh"
+#include "G4NistManager.hh"
 #include "G4Molecule.hh"
 #include "G4Electron_aq.hh"
 #include "G4ITStepManager.hh"
@@ -40,9 +41,8 @@ void G4DNATransformElectronModel::Initialise(const G4ParticleDefinition* particl
     if(!isInitialised)
     {
         isInitialised = true;
-        highEnergyLimit = 0.025*eV;
-        SetHighEnergyLimit(highEnergyLimit);
         fParticleChangeForGamma = GetParticleChangeForGamma();
+        fNistWater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
     }
 }
 
@@ -56,17 +56,20 @@ G4double G4DNATransformElectronModel::CrossSectionPerVolume(const G4Material* ma
     if (verboseLevel > 1)
         G4cout << "Calling CrossSectionPerVolume() of G4DNATransformElectronModel" << G4endl;
 
-    if(ekin > highEnergyLimit) return 0;
-
-    if (material->GetName() == "G4_WATER")
+    if(ekin > HighEnergyLimit())
     {
-        if (ekin <= highEnergyLimit)
+        return 0.0;
+    }
+
+    if (material == fNistWater || material->GetBaseMaterial() == fNistWater)
+    {
+        if (ekin <= HighEnergyLimit())
         {
             return DBL_MAX;
         }
     }
 
-    return -1 ;
+    return 0.0 ;
 }
 
 //______________________________________________________________________
@@ -81,7 +84,7 @@ void G4DNATransformElectronModel::SampleSecondaries(std::vector<G4DynamicParticl
 
     G4double k = particle->GetKineticEnergy();
 
-    if (k <= highEnergyLimit)
+    if (k <= HighEnergyLimit())
     {
         const G4Track * track = fParticleChangeForGamma->GetCurrentTrack();
         G4DNAChemistryManager::Instance()->CreateSolvatedElectron(track);

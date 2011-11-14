@@ -13,6 +13,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+10.11.2011  M.K.                tag emdna-V09-04-44
+            Fix a bug in G4DNATransformElectronModel
+
 10.11.2011  M.K.                tag emdna-V09-04-43
             Clean classes for release
             Add comment into source
