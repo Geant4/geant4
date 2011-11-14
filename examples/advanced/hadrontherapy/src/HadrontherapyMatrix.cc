@@ -83,7 +83,7 @@ HadrontherapyMatrix::HadrontherapyMatrix(G4int voxelX, G4int voxelY, G4int voxel
 		numberOfVoxelAlongX*numberOfVoxelAlongY*numberOfVoxelAlongZ <<
 		" voxels has been allocated " << G4endl;
 	}
-	else G4Exception(" HadrontherapyMatrix::HadrontherapyMatrix. Can't allocate memory to store physical dose!");
+	else G4Exception("HadrontherapyMatrix::HadrontherapyMatrix()", "Hadrontherapy0005", FatalException, "Can't allocate memory to store physical dose!");
 		// Hit voxel (TrackID) marker
 		// This array mark the status of voxel, if a hit occur, with the trackID of the particle
 		// Must be initialized

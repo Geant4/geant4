@@ -8,6 +8,9 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
              History file of the Hadrontherapy application
          ====================================================
 
+02.11.2011 F.Romano; Tag: hadrontherapy-V09-04-03
+	   - Migration to new G4Exception scheme
+
 29.10.2011 G.A.P.Cirrone; Tag: hadrontherapy-V09-04-02
 	   - Various warnings removed.
 	   - Removed a wrong dependence on ROOT.

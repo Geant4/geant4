@@ -263,18 +263,18 @@ void  HadrontherapyDetectorConstruction::ParametersCheck()
 		phantomSizeZ,
 		detectorToPhantomPosition
 		))
-	G4Exception("Error at HadrontherapyDetectorConstruction::ParametersCheck(). Detector is not fully inside Phantom!");
+      G4Exception("HadrontherapyDetectorConstruction::ParametersCheck()", "Hadrontherapy0001", FatalException, "Error: Detector is not fully inside Phantom!");
 
     // Check Detector sizes respect to the voxel ones
 
     if ( detectorSizeX < sizeOfVoxelAlongX) {
-	G4Exception("Error at HadrontherapyDetectorConstruction::ParametersCheck(). Detector X size must be bigger or equal than that of Voxel X");
+      G4Exception("HadrontherapyDetectorConstruction::ParametersCheck()", "Hadrontherapy0002", FatalException, "Error:  Detector X size must be bigger or equal than that of Voxel X!");
     }
     if ( detectorSizeY < sizeOfVoxelAlongY) {
-	G4Exception("Error at HadrontherapyDetectorConstruction::ParametersCheck(). Detector Y size must be bigger or equal than that of Voxel Y");
+      G4Exception(" HadrontherapyDetectorConstruction::ParametersCheck()", "Hadrontherapy0003", FatalException, "Error:  Detector Y size must be bigger or equal than that of Voxel Y!");
     }
     if ( detectorSizeZ < sizeOfVoxelAlongZ) {
-	G4Exception("Error at HadrontherapyDetectorConstruction::ParametersCheck(). Detector Z size must be bigger or equal than that of Voxel Z");
+      G4Exception(" HadrontherapyDetectorConstruction::ParametersCheck()", "Hadrontherapy0004", FatalException, "Error:  Detector Z size must be bigger or equal than that of Voxel Z!");
     }
 
 }
