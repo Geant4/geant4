@@ -15,7 +15,9 @@
 #
 /run/initialize
 #
+/process/em/deexcitation world true true true
 /process/em/pixe true
+/process/em/auger true
 #
 /testem/gun/setDefault
 /gun/particle proton 
