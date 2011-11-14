@@ -55,8 +55,11 @@ class Tst11DetectorConstruction : public G4VUserDetectorConstruction
      void SetMaterial( G4String materialChoice );
 
   private:
+     //                          Z       A       name       temparature           m
+     void createIsotopeMaterial( G4int , G4int , G4String , G4double temp = 0.0 , G4int = 0 );
      void defineNISTMaterials();
      void defineTKMaterials();
+     void defineENDFVIIMaterials();
      void SelectMaterialPointer();
 
      G4LogicalVolume*   simpleBoxLog;

@@ -448,7 +448,7 @@ void Tst11PhysicsList::ConstructHad()
          G4cout << "Cross Section Dump Through Process::GetElementCrossSection " << G4endl;
          G4int nmat = G4Material::GetNumberOfMaterials();
          std::map< G4int , G4double > tmp_map;
-         for ( G4int imat = 1 ; imat < nmat ; imat ++ )
+         for ( G4int imat = 0 ; imat < nmat ; imat ++ )
          {
             const G4Material* mat = (*(G4Material::GetMaterialTable()))[ imat ];
             G4int ne = mat->GetNumberOfElements();

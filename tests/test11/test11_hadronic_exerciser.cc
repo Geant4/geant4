@@ -213,12 +213,12 @@ int main (int argc, char** argv) {
    TK_materialNameList.push_back ( "G4_Os" );
    TK_materialNameList.push_back ( "G4_Ir" );
    TK_materialNameList.push_back ( "G4_Pt" );
-*/
    TK_materialNameList.push_back ( "G4_Au" );
-/*
    TK_materialNameList.push_back ( "G4_Hg" ); // No data HP
    TK_materialNameList.push_back ( "G4_Tl" );
+*/
    TK_materialNameList.push_back ( "G4_Pb" );
+/*
    TK_materialNameList.push_back ( "G4_Bi" );
    TK_materialNameList.push_back ( "G4_Po" );
    //TK_materialNameList.push_back ( "G4_At" );
@@ -247,6 +247,29 @@ int main (int argc, char** argv) {
    TK_materialNameList.push_back ( "G4_POLYETHYLENE" ); 
    TK_materialNameList.push_back ( "Graphite_TS" );
    TK_materialNameList.push_back ( "G4_GRAPHITE" ); 
+
+   TK_materialNameList.push_back ( "Heavy_Water_TS" ); 
+   TK_materialNameList.push_back ( "ZrH_TS" ); 
+   TK_materialNameList.push_back ( "Beryllium_Oxide_TS" ); 
+   TK_materialNameList.push_back ( "G4_BERYLLIUM_OXIDE" ); 
+   TK_materialNameList.push_back ( "Uranium_Dioxide_TS" ); 
+   TK_materialNameList.push_back ( "G4_URANIUM_OXIDE" ); 
+
+   TK_materialNameList.push_back ( "Be_TS" ); 
+   TK_materialNameList.push_back ( "Al_TS" ); 
+   TK_materialNameList.push_back ( "Fe_TS" ); 
+
+//111101 Add Excited Isomer Materials
+   TK_materialNameList.push_back ( "Water_TS" );
+   TK_materialNameList.push_back ( "27Co58m1" );
+   TK_materialNameList.push_back ( "47Ag110m1" );
+   TK_materialNameList.push_back ( "48Cd115m1" );
+   TK_materialNameList.push_back ( "52Te127m1" );
+   TK_materialNameList.push_back ( "52Te129m1" );
+   TK_materialNameList.push_back ( "61Pm148m1" );
+   TK_materialNameList.push_back ( "67Ho166m1" );
+   //TK_materialNameList.push_back ( "95Am242m1" );
+   //TK_materialNameList.push_back ( "95Am244m1" );
 
 /*
   if (argc > 1) {
