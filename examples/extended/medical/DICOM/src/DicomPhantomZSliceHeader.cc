@@ -127,7 +127,7 @@ DicomPhantomZSliceHeader DicomPhantomZSliceHeader::operator+( const DicomPhantom
 	   << "  Y=  " << fNoVoxelY << " =? " << rhs.GetNoVoxelY()  
 	   << "  Z=  " << fNoVoxelZ << " =? " << rhs.GetNoVoxelZ() 
 	   << G4endl;
-    G4Exception("");
+    G4Exception("DicomPhantomZSliceHeader::DicomPhantomZSliceHeader","",FatalErrorInArgument,"");
   }
   //----- Check that both slices has the same extensions
   if( fMinX != rhs.GetMinX() || fMaxX != rhs.GetMaxX() 
@@ -138,19 +138,19 @@ DicomPhantomZSliceHeader DicomPhantomZSliceHeader::operator+( const DicomPhantom
 	   << "  Ymin= " << fMinY << " =? " << rhs.GetMinY() 
 	   << "  Ymax= " << fMaxY << " =? " << rhs.GetMaxY() 
 	   << G4endl;
-    G4Exception("");
+    G4Exception("DicomPhantomZSliceHeader::operator+","",FatalErrorInArgument,"");
   }
   
   //----- Check that both slices has the same materials
   std::vector<G4String> fMaterialNames2 = rhs.GetMaterialNames();
   if( fMaterialNames.size() != fMaterialNames2.size() ) {
     G4cerr << "DicomPhantomZSliceHeader error adding two slice headers: !!! Different number of materials: " << fMaterialNames.size() << " =? " << fMaterialNames2.size() << G4endl;
-    G4Exception("");
+    G4Exception("DicomPhantomZSliceHeader::operator+","",FatalErrorInArgument,"");
   }
   for( unsigned int ii = 0; ii < fMaterialNames.size(); ii++ ) {
     if( fMaterialNames[ii] != fMaterialNames2[ii] ) {
       G4cerr << "DicomPhantomZSliceHeader error adding two slice headers: !!! Different material number " << ii << " : " << fMaterialNames[ii] << " =? " << fMaterialNames2[ii] << G4endl;
-      G4Exception("");
+    G4Exception("DicomPhantomZSliceHeader::operator+","",FatalErrorInArgument,"");
     }
   }
    
@@ -161,7 +161,7 @@ DicomPhantomZSliceHeader DicomPhantomZSliceHeader::operator+( const DicomPhantom
 	   << "  Zmin= " << fMinZ << " & " << rhs.GetMinZ() 
 	   << "  Zmax= " << fMaxZ << " & " << rhs.GetMaxZ() 
 	   << G4endl;
-    G4Exception("");
+    G4Exception("DicomPhantomZSliceHeader::operator+","",FatalErrorInArgument,"");
   }
 
   //----- Build slice header copying first one

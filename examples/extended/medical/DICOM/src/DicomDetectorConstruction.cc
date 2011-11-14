@@ -280,7 +280,10 @@ void DicomDetectorConstruction::ReadPhantomData()
   std::ifstream finDF("Data.dat");
   G4String fname;
   if(finDF.good() != 1 ) {
-    G4Exception(" DicomDetectorConstruction::ReadPhantomData.  Problem reading data file: Data.dat");
+    G4Exception(" DicomDetectorConstruction::ReadPhantomData",
+		"",
+		FatalException,
+		"Problem reading data file: Data.dat");
   }
 
   G4int compression;
@@ -309,7 +312,10 @@ void DicomDetectorConstruction::ReadPhantomDataFile(const G4String& fname)
 #endif 
   std::ifstream fin(fname.c_str(), std::ios_base::in);
   if( !fin.is_open() ) {
-    G4Exception("DicomDetectorConstruction::ReadPhantomDataFile. File not found " + fname );
+    G4Exception("DicomDetectorConstruction::ReadPhantomDataFile",
+		"",
+		FatalErrorInArgument,
+		G4String("File not found " + fname ).c_str());
   }
   //----- Define density differences (maximum density difference to create a new material)
   char* part = getenv( "DICOM_CHANGE_MATERIAL_DENSITY" );
@@ -385,7 +391,10 @@ void DicomDetectorConstruction::ReadPhantomDataFile(const G4String& fname)
 	fMateIDs[voxelCopyNo] = fMaterials.size()-1;
       } else {
 	G4cerr << " im " << im << " < " << fMaterials.size() << " name " << newMateName << G4endl;
-	G4Exception("Wrong index in material"); //it should never reach here
+	G4Exception("DicomDetectorConstruction::ReadPhantomDataFile",
+		    "",
+		    FatalErrorInArgument,
+		    "Wrong index in material"); //it should never reach here
       }
     }
   }
