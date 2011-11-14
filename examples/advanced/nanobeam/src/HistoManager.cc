@@ -52,7 +52,7 @@ HistoManager::HistoManager()
  
   fileName[0] = "nanobeam";
   fileType    = "root";
-  fileOption  = "export=root";
+  fileOption  = "";
   ntupl0=0;
   ntupl1=0;
   
