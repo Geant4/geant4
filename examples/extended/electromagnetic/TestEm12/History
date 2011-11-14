@@ -14,7 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+     
+08-11-11 mma (testem12-V09-04-09)
+- modify SteppingVerbose for OutOfWorld
+          
+06-11-11 mma (testem12-V09-04-08)
+- add back PhysListEmStandardGS, PhysListEmStandardWVI
+ 
 31-10-11 mma (testem12-V09-04-07)
 - PhysListEmStandard : msc95 by default
 - remove PhysListEmStandardGS, PhysListEmStandardWVI 
