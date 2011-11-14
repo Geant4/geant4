@@ -53,7 +53,7 @@ public:
   void ConstructProcess();    
   void AddDecay();
   void AddStepMax();       
-    
+
   void SetCuts();
   void SetCutForGamma(G4double);
   void SetCutForElectron(G4double);

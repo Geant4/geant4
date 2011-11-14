@@ -62,8 +62,8 @@ private:
   G4UIcmdWithADoubleAndUnit* electCutCmd;
   G4UIcmdWithADoubleAndUnit* protoCutCmd;    
   G4UIcmdWithADoubleAndUnit* allCutCmd;        
-  G4UIcmdWithABool*          fluoCmd;
-  G4UIcmdWithABool*          pixeCmd;
+  //  G4UIcmdWithABool*          fluoCmd;
+  //  G4UIcmdWithABool*          pixeCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

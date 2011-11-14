@@ -35,18 +35,19 @@
 #include "XrayFluoPhysicsListMessenger.hh"
 
 #include "G4LossTableManager.hh"
-
+#include "G4EmProcessOptions.hh"
+#include "G4ProcessManager.hh"
 
 //#include "PhysListEmStandard.hh"
 
-//#include "G4EmStandardPhysics.hh"
-//#include "G4EmStandardPhysics_option1.hh"
-//#include "G4EmStandardPhysics_option2.hh"
-//#include "G4EmStandardPhysics_option3.hh"
-#include "XrayFluoPhysListEmStandardFLUO.hh"
-//#include "G4EmLivermorePhysics.hh"
-//#include "G4EmPenelopePhysics.hh"
-#include "G4UAtomicDeexcitation.hh"
+#include "G4EmStandardPhysics.hh"
+#include "G4EmStandardPhysics_option1.hh"
+#include "G4EmStandardPhysics_option2.hh"
+#include "G4EmStandardPhysics_option3.hh"
+//#include "XrayFluoPhysListEmStandardFLUO.hh"
+#include "G4EmLivermorePhysics.hh"
+#include "G4EmPenelopePhysics.hh"
+//#include "G4UAtomicDeexcitation.hh"
 
 #include "G4Decay.hh"
 #include "XrayFluoStepMax.hh"
@@ -87,8 +88,6 @@ XrayFluoPhysicsList::XrayFluoPhysicsList() : G4VModularPhysicsList()
    
   // EM physics
   G4LossTableManager::Instance()->SetVerbose(1);
-  emName = G4String("local");
-  emPhysicsList = new XrayFluoPhysListEmStandardFLUO(emName);
       
   defaultCutValue = 1.*mm;
 
@@ -98,6 +97,11 @@ XrayFluoPhysicsList::XrayFluoPhysicsList() : G4VModularPhysicsList()
   cutForProton    = defaultCutValue;
 
   SetVerboseLevel(1);
+
+  // EM physics
+  emName = G4String("emlivermore");
+  emPhysicsList = new G4EmLivermorePhysics;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -151,6 +155,17 @@ void XrayFluoPhysicsList::ConstructProcess()
   emPhysicsList->ConstructProcess();
   AddDecay();  
   AddStepMax();
+
+  // Em options
+  //
+  G4EmProcessOptions emOptions;
+  emOptions.SetBuildCSDARange(true);
+  emOptions.SetDEDXBinningForCSDARange(10*10);
+  //emOptions.SetDeexcitationActiveRegion(true); //TBC
+  emOptions.SetFluo(true);
+  emOptions.SetAuger(true);
+  emOptions.SetPIXE(true);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -207,17 +222,16 @@ void XrayFluoPhysicsList::AddPhysicsList(const G4String& name)
 
   if (name == emName) return;
 
-  if (name == "local") {
+  if (name == "emlivermore") {
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new XrayFluoPhysListEmStandardFLUO(name);
+    emPhysicsList = new G4EmLivermorePhysics;
 
-  } /*else if (name == "emstandard_opt0") {
-
+  } else if (name == "emstandard") {
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics();
+    emPhysicsList = new G4EmStandardPhysics(); 
 
   } else if (name == "emstandard_opt1") {
 
@@ -231,12 +245,6 @@ void XrayFluoPhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics_option2();
 
-  } else if (name == "emstandard") {
-
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandard();
-    
   } else if (name == "emstandard_opt3") {
 
     emName = name;
@@ -248,12 +256,7 @@ void XrayFluoPhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new G4EmPenelopePhysics();
 
-  } else if (name == "emlivermore"){
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmLivermorePhysics();
-                        
-    }*/ else {
+  } else {
 
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
            << " is not defined"
@@ -313,18 +316,18 @@ void XrayFluoPhysicsList::SetCutForProton(G4double cut)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void XrayFluoPhysicsList::SetFluorescence(G4bool value)
-{
-  G4VAtomDeexcitation* de = G4LossTableManager::Instance()->AtomDeexcitation();
-  if(de) { de->SetActive(value); }
-}
+//void XrayFluoPhysicsList::SetFluorescence(G4bool value)
+//{
+//  G4VAtomDeexcitation* de = G4LossTableManager::Instance()->AtomDeexcitation();
+//  if(de) { de->SetFluo(value); }
+//}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void XrayFluoPhysicsList::SetPIXE(G4bool value)
-{
-  G4VAtomDeexcitation* de = G4LossTableManager::Instance()->AtomDeexcitation();
-  if(de) { de->SetPIXEActive(value); }
-}
+//void XrayFluoPhysicsList::SetPIXE(G4bool value)
+//{
+//  G4VAtomDeexcitation* de = G4LossTableManager::Instance()->AtomDeexcitation();
+//  if(de) { de->SetPIXE(value); }
+//}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

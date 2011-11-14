@@ -13,6 +13,10 @@
 # viewing in a VRML viewer:
 #/vis/open VRML2FILE
 #
+# Use this open statement to create a qt view:
+#/vis/open OGLS
+#
+
 # Disable auto refresh and quieten vis messages whilst scene and
 # trajectories are established:
 /vis/viewer/set/autoRefresh false
@@ -28,7 +32,7 @@
 #/vis/viewer/zoom 2.
 #
 # Specify style (surface or wireframe):
-#/vis/viewer/set/style wireframe
+/vis/viewer/set/style wireframe
 #
 # Draw coordinate axes:
 #/vis/scene/add/axes 0 0 0 1 m
@@ -37,8 +41,8 @@
 # as markers 2 pixels wide:
 /vis/scene/add/trajectories smooth
 /vis/modeling/trajectories/create/drawByCharge
-/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
-/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+#/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+#/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
 # (if too many tracks cause core dump => /tracking/storeTrajectory 0)
 #
 # Draw hits at end of event:

@@ -1,0 +1,41 @@
+#
+# Macro file for "XrayFluo advanced example"
+#
+# Livermore Physics List
+#
+/control/verbose 2
+/run/verbose 2
+/tracking/verbose 1
+
+# activating livermore processes
+/phys/addPhysics emlivermore
+# Setting production edges 
+/cuts/setLowEdge 250 eV
+
+/run/initialize
+
+#Setting fluorescence ON  and Auger OFF
+/process/em/fluo true
+/process/em/auger true
+/process/em/pixe true
+#Selecting Reis model for PIXE. Analytical PIXE will be used outsie 01-10 MeV energy Range
+/process/em/pixeXSmodel ecpssr_interpolated
+
+#setting cuts
+/phys/setGCut  1 nm
+/phys/setECut  1 nm
+
+/run/setCut  0.01 mm
+
+#if we want to have an M-Flare Spectrum (default)
+#/gun/spectrum on  
+
+#otherwise
+#setting 3 MeV protons as incident particles
+/gun/particle proton
+/gun/energy 3 MeV 
+
+
+
+#just one shot: put /tracking/verbose 0 for more particles
+/run/beamOn 1

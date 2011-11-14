@@ -164,28 +164,31 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
   }
 
   else if (geometryNumber == 3) {
-   stepAction->SetMercuryFlag(true);
-   eventAction = new XrayFluoEventAction(mercuryDetector);
-   runManager->SetUserAction(new XrayFluoMercuryPrimaryGeneratorAction(mercuryDetector));
-      }
+    stepAction->SetMercuryFlag(true);
+    eventAction = new XrayFluoEventAction(mercuryDetector);
+    runManager->SetUserAction(new XrayFluoMercuryPrimaryGeneratorAction(mercuryDetector));
+  }
  
   runManager->SetUserAction(eventAction); 
   runManager->SetUserAction(runAction);
   runManager->SetUserAction(stepAction);
   
   //Initialize G4 kernel
-  runManager->Initialize();
+  //runManager->Initialize();
   
   // get the pointer to the User Interface manager 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
-  
+
+  if (getenv("G4VIS_USE")) {
+    UImanager->ApplyCommand("/control/execute vis.mac");
+  }     
+
   if (argc == 1)   // Define UI session for interactive mode.
     {
+      UImanager->ApplyCommand("/control/execute initInter.mac");     
 #ifdef G4UI_USE
       G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#ifdef G4VIS_USE
-      UImanager->ApplyCommand("/control/execute initInter.mac");     
-#endif
+
       if (ui->IsGUI())
         UImanager->ApplyCommand("/control/execute gui.mac");     
       ui->SessionStart();

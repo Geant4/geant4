@@ -19,6 +19,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+
+03-11-2011 A.Mantero Tag: XrayFluo-V09-04-03
+update for README file
+
+03-11-2011 A.Mantero Tag: XrayFluo-V09-04-02
+Updates for 9.5
+- Migrated PhysicsList to all pre-built PL generating deexcitation products
+- Added example for macro (livermore.mac)
+- removed old macros
+- Removed XrayFluoPhysListEmStandardFLUO.cc
+
 27-03-2011 A.Mantero Tag: XrayFluo-V09-04-01
   Re commit of the previous tag.
 
