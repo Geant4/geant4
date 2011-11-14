@@ -253,3 +253,11 @@
 
 	test.mac: macro used to check if the right physics processes are assigned to different particles.
   
+    
+    UserRadDataPb210Test.mac : show how  the user can define its own radioactive decay datafile
+    
+    UserEvapDataBiTest.mac : show how  the user can define its own photo evaporation datafile 
+	
+	No252.mac : show how to simulate Radoactive decay for nuclei with Z>100 based on user datafile
+	
+    
