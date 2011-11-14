@@ -41,6 +41,9 @@ class G4VIsotopeProduction
 {
 public:// With Description
 
+  G4VIsotopeProduction() {}
+
+  virtual ~G4VIsotopeProduction() {}
   // This is the interface to implement for isotope production models.
   virtual G4IsoResult * GetIsotope(const G4Track & aTrack, const G4Nucleus & aNucleus) = 0;
   
