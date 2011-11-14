@@ -17,6 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 10, 2011 V.Ivantchenko (global-V09-04-21)
+- Fixed Coverity defects on G4Physics2DVector.
+
+November 10, 2011 G.Cosmo (global-V09-04-20)
+- Updated banner for G4Exception and some cleanup.
+- Changed date for release 9.5.
+
+October 20, 2011 M.Asai (global-V09-04-19)
+- Removing obsolete G4Exception from globals.hh and G4Exception.cc.
+
 October 7, 2011 V.Ivantchenko (global-V09-04-18)
 - G4Physics2DVector, G4Physics2DVectorCache: new classes implementing
   a 2-dimensional vector with linear interpolation.

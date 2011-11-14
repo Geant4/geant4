@@ -85,7 +85,7 @@ G4Physics2DVector::G4Physics2DVector(const G4Physics2DVector& right)
   xVector      = right.xVector;
   yVector      = right.yVector;
 
-  cache->Clear();
+  cache = new G4Physics2DVectorCache();
   PrepareVectors();
   CopyData(right);
 }
@@ -94,6 +94,7 @@ G4Physics2DVector::G4Physics2DVector(const G4Physics2DVector& right)
 
 G4Physics2DVector& G4Physics2DVector::operator=(const G4Physics2DVector& right)
 {
+  if (&right==this)  { return *this; }
   ClearVectors();
 
   type         = right.type;
@@ -219,6 +220,7 @@ G4Physics2DVector::PutVectors(const std::vector<G4double>& vecX,
 void G4Physics2DVector::Store(std::ofstream& out)
 {
   // binning
+  G4int prec = out.precision();
   out << G4int(type) << " " << numberOfXNodes << " " << numberOfYNodes 
       << G4endl; 
   out << std::setprecision(5);
@@ -238,6 +240,7 @@ void G4Physics2DVector::Store(std::ofstream& out)
     }
     out << GetValue(numberOfXNodes-1,j) << G4endl;
   }
+  out.precision(prec);
   out.close();
 }
 
