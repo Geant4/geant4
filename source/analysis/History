@@ -17,6 +17,10 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 8 2011 G.Cosmo (analysis-V09-04-10)
+- tools/vdata: restored protection __GXX_EXPERIMENTAL_CXX0X__ to use of
+  std::vector<>::data() feature, to allow compilation on Leopard systems.
+
 October 27 2011 G.Cosmo (analysis-V09-04-09)
 - Added workaround to use 'this' pointer for internal calls in histo/b1,
   to allow for compilation on Xcode on MacOX Lion.
