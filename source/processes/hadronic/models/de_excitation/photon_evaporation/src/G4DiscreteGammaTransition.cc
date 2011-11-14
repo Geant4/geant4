@@ -58,6 +58,10 @@
 //              Removed unphysical corretions of gamma energy; fixed default particle 
 //              as gamma; do not subtract bounding energy in case of electron emmision
 //
+//		  03 November 2011, L. Desorgher
+//				Extend the use of the code for Z>100 by not calling G4AtomicShells::GetBindingEnergy for Z>100
+//				For Z>100 the binding energy is set to 0, the atomic relaxation is not simulated in G4RadDecay
+//
 // -------------------------------------------------------------------
 
 #include "G4DiscreteGammaTransition.hh"
@@ -175,6 +179,12 @@ void G4DiscreteGammaTransition::SelectGamma()
 		iShell = iShell -2;
 	      }
 	    }
+	    //L.Desorgher 02/11/2011
+	    //Atomic shell information is available in Geant4 only up top Z=100
+	    //To extend the photo evaporation code to Z>100  the call to G4AtomicShells::GetBindingEnergy should
+	    // be forbidden for Z>100
+	    _bondE = 0.;
+	    if (_nucleusZ <=100)
 	    _bondE = G4AtomicShells::GetBindingEnergy(_nucleusZ, iShell);
 	    if (_verbose > 0) {
 	      G4cout << "G4DiscreteGammaTransition: _nucleusZ = " <<_nucleusZ 

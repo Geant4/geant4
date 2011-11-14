@@ -13,6 +13,12 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+03 November 2011 Laurent Desorgher (hadr-deex-V09-04-21)
+----------------------------------------------------------
+- Extend the use of G4PhotoEvaporation to Z>100. Note that for Z>100 at the moment the binding 
+  energy of the vacant e- shell left after internal  conversion is set as 0. and the atomic relaxation 
+  will not be simulated later on. 
+ 
      
 17 October 2011 Laurent Desorgher (hadr-deex-V09-04-20)
 ----------------------------------------------------------
