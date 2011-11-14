@@ -63,7 +63,8 @@
 G4PreCompoundModel::G4PreCompoundModel(G4ExcitationHandler * const value) 
   : G4VPreCompoundModel(value), useHETCEmission(false), useGNASHTransition(false), 
     OPTxs(3), useSICB(false), useNGB(false), useSCO(false), useCEMtr(true),
-    maxZ(9), maxA(17)
+    maxZ(3), maxA(5) 
+				      //maxZ(9), maxA(17)
 {
   theParameters = G4PreCompoundParameters::GetAddress();
 
@@ -164,7 +165,7 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
   //G4cout << aFragment << G4endl;
  
   // Perform Equilibrium Emission 
-  if ((Z < maxZ && A < maxA) || Eex < keV /*|| Eex > 3.*MeV*A*/) {
+  if ((Z < maxZ && A < maxA) || Eex < MeV /*|| Eex > 3.*MeV*A*/) {
     PerformEquilibriumEmission(aFragment, Result);
     return Result;
   }
