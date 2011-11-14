@@ -54,7 +54,9 @@ HpdSiEnergyLoss::HpdSiEnergyLoss(const G4String& materialName,
     
   }
   if(iMat >= numberOfMat ) {
-    G4Exception("Invalid material Name in HpdSiEnergyLoss constructor" );
+    G4Exception("HpdSiEnergyLoss::HpdSiEnergyLoss()",
+		"Rich001",FatalException,
+		"Invalid material Name in HpdSiEnergyLoss constructor" );
   }
 }
 

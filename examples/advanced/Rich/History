@@ -9,6 +9,9 @@ $Id: History,v 1.20 2010-11-18 16:54:23 allison Exp $
                       Category History file
                       ---------------------
 
+31.10.2011 - L.Pandola (Rich-V09-04-00)
+	     Migrated G4Exception to the new scheme
+
 18.11.2010 - J.Allison (Rich-V09-03-03)
 	     RichTbSim.cc: Tidied up use of G4UIExecutive.
 	     RichTbVis0.mac, macro/gui.mac: Improved. 
