@@ -43,7 +43,9 @@ class G4PhotoElectricEffect;
 class G4ComptonScattering;
 class G4GammaConversion;
 
-class G4MultipleScattering;
+class G4eMultipleScattering;
+class G4MuMultipleScattering;
+class G4hMultipleScattering;
 
 class G4eIonisation;
 class G4eBremsstrahlung;
@@ -115,15 +117,16 @@ private:
   G4ComptonScattering*   theComptonScattering;
   G4GammaConversion*     theGammaConversion;
     
-  G4MultipleScattering*  theeminusMultipleScattering;
+  G4eMultipleScattering* theeminusMultipleScattering;
   G4eIonisation*         theeminusIonisation;
   G4eBremsstrahlung*     theeminusBremsstrahlung;
     
-  G4MultipleScattering*  theeplusMultipleScattering;
+  G4eMultipleScattering* theeplusMultipleScattering;
   G4eIonisation*         theeplusIonisation;
   G4eBremsstrahlung*     theeplusBremsstrahlung;
   G4eplusAnnihilation*   theeplusAnnihilation;
     
+  //  G4hMultipleScattering* theHadronMultipleScattering;
   NTSTPhysicsListMessenger* physicsListMessenger;
 };
 

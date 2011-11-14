@@ -41,6 +41,7 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4ElectroMagneticField.hh
         G4EqEMFieldWithEDM.hh
         G4EqEMFieldWithSpin.hh
+        G4EqGravityField.hh
         G4EqMagElectricField.hh
         G4EquationOfMotion.hh
         G4EquationOfMotion.icc
@@ -83,6 +84,7 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4TrialsCounter.hh
         G4TrialsCounter.icc
         G4UniformElectricField.hh
+        G4UniformGravityField.hh
         G4UniformMagField.hh
     SOURCES
         G4CachedMagneticField.cc
@@ -96,11 +98,13 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4ElectroMagneticField.cc
         G4EqEMFieldWithEDM.cc
         G4EqEMFieldWithSpin.cc
+        G4EqGravityField.cc
         G4EqMagElectricField.cc
         G4EquationOfMotion.cc
         G4ErrorMag_UsualEqRhs.cc
         G4ExactHelixStepper.cc
         G4ExplicitEuler.cc
+        G4Field.cc
         G4FieldManager.cc
         G4FieldManagerStore.cc
         G4FieldTrack.cc
@@ -129,6 +133,7 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4SimpleRunge.cc
         G4TrialsCounter.cc
         G4UniformElectricField.cc
+        G4UniformGravityField.cc
         G4UniformMagField.cc
     GRANULAR_DEPENDENCIES
         G4globman

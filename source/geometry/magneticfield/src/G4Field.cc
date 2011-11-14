@@ -24,30 +24,30 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroMagneticField.cc,v 1.3 2006-06-29 18:23:44 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// --------------------------------------------------------------------
+// First implementation class for G4Field 
+//  J. Apostolakis,  4 Nov 2011 - to add fGravityActive data member
+// -------------------------------------------------------------------
 
-#include "G4ElectroMagneticField.hh"
+#include "G4Field.hh"
 
-G4ElectroMagneticField::G4ElectroMagneticField()
-  : G4Field( false ) // No gravitational field (default)
+G4Field::G4Field( G4bool gravityOn):
+  fGravityActive( gravityOn )
+{
+}
+ 
+G4Field::~G4Field()
 {
 }
 
-G4ElectroMagneticField::~G4ElectroMagneticField()
+G4Field& G4Field::operator = (const G4Field &p)
 {
+   if (&p == this) return *this;
+   fGravityActive= p.fGravityActive;
+   return *this;
 }
 
-G4ElectroMagneticField::G4ElectroMagneticField(const G4ElectroMagneticField &r)
-  : G4Field( r.IsGravityActive() )    // To allow extension to joint EM & g field
+G4Field::G4Field (const G4Field &p)
+  : fGravityActive(p.fGravityActive)
 {
 }
-
-G4ElectroMagneticField& 
-G4ElectroMagneticField::operator = (const G4ElectroMagneticField &p)
-{
-  if (&p == this) return *this;
-  *this = p; return *this;
-}
+// ------------------------------------------------------------------------

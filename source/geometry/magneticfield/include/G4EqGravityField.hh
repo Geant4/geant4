@@ -23,31 +23,52 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// 
+// class G4EqGravityField
 //
-// $Id: G4ElectroMagneticField.cc,v 1.3 2006-06-29 18:23:44 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// Class description:
 //
-// --------------------------------------------------------------------
+// This is the right-hand side of equation of motion in a 
+// gravity field.
+//
+// History:
+// - 14.06.11 P.Gumplinger, Created.
+// -------------------------------------------------------------------
+// Adopted from G4EqMagElectricField.hh
+//
+// Thanks to Peter Fierlinger (PSI) and
+// A. Capra and A. Fontana (INFN Pavia)
+// -------------------------------------------------------------------
 
-#include "G4ElectroMagneticField.hh"
+#ifndef G4EQGRAVITYFIELD_hh
+#define G4EQGRAVITYFIELD_hh
 
-G4ElectroMagneticField::G4ElectroMagneticField()
-  : G4Field( false ) // No gravitational field (default)
+#include "G4EquationOfMotion.hh"
+#include "G4UniformGravityField.hh"
+
+class G4EqGravityField : public G4EquationOfMotion
 {
-}
+  public:  // with description
 
-G4ElectroMagneticField::~G4ElectroMagneticField()
-{
-}
+    G4EqGravityField(G4UniformGravityField *gField ) 
+      : G4EquationOfMotion( gField ) {;}
 
-G4ElectroMagneticField::G4ElectroMagneticField(const G4ElectroMagneticField &r)
-  : G4Field( r.IsGravityActive() )    // To allow extension to joint EM & g field
-{
-}
+    ~G4EqGravityField() {;}
 
-G4ElectroMagneticField& 
-G4ElectroMagneticField::operator = (const G4ElectroMagneticField &p)
-{
-  if (&p == this) return *this;
-  *this = p; return *this;
-}
+    void SetChargeMomentumMass(G4double particleCharge, // in e+ units
+                               G4double MomentumXc,
+                               G4double mass);
+
+    void EvaluateRhsGivenB( const G4double y[],
+                            const G4double Field[],
+                            G4double dydx[] ) const;
+      // Given the value of the gravitational field, this function
+      // calculates the value of the derivative dydx.
+
+  private:
+
+    G4double  fMass;
+
+};
+
+#endif /* G4EQGRAVITYFIELD */

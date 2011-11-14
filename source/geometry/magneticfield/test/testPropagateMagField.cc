@@ -323,9 +323,11 @@ G4PropagatorInField*  SetupPropagator( G4int type)
        GetNavigatorForTracking();
     // Test the options for Locator
     G4VIntersectionLocator *pLocator=0;
-    pLocator= new G4SimpleLocator(theNavigator);
-    // pLocator= new G4BrentLocator(theNavigator);
-    // pLocator= new G4MultiLevelLocator(theNavigator);   // The default 
+    G4cout << "Over-riding  PropagatorInField to use ";
+    pLocator= new G4MultiLevelLocator(theNavigator); G4cout << "Multi"; // default
+    // pLocator= new G4SimpleLocator(theNavigator); G4cout << "Simple";
+    // pLocator= new G4BrentLocator(theNavigator); G4cout << " Brent "; 
+    G4cout << " Locator. ( In the unit test code. ) " << G4endl;
 
     thePropagator->SetIntersectionLocator(pLocator);
 
@@ -673,9 +675,7 @@ int main(int argc, char **argv)
 
     G4GeometryManager::GetInstance()->OpenGeometry();
 
-
-
-
+    // Cannot delete G4TransportationManager::GetInstance(); 
     return 0;
 }
 

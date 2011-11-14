@@ -35,7 +35,18 @@ LDLIBS   := -lG4csg -lG4navigation -lG4volumes -lG4magneticfield -lG4geometrymng
             -lG4graphics_reps \
             -lG4intercoms \
 	    -lG4hepnumerics \
-            -lG4globman 
+            -lG4globman  
+
+ifdef G4LIB_USE_CLHEP
+    LDLIBS += -lG4clhep
+endif
+
+# Alternative adaptation of last line of LDLIBS
+#  For internal CLHEP -- revised as above
+#            -lG4globman  -lG4clhep 
+#
+#  For external CLHEP this would be
+#           -lG4globman  
 
 include $(G4INSTALL)/config/binmake.gmk
 

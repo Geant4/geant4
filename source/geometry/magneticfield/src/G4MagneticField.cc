@@ -32,6 +32,7 @@
 #include "G4MagneticField.hh"
 
 G4MagneticField::G4MagneticField()
+  : G4ElectroMagneticField()
 {
 }
 
@@ -39,12 +40,14 @@ G4MagneticField::~G4MagneticField()
 {
 }
 
-G4MagneticField::G4MagneticField(const G4MagneticField &)
-  : G4ElectroMagneticField()
+G4MagneticField::G4MagneticField(const G4MagneticField &MagField)
+  : G4ElectroMagneticField( MagField )
 {
 }
 
 G4MagneticField& G4MagneticField::operator = (const G4MagneticField &p)
 {
-  if (&p == this) return *this; *this = p; return *this;
+  if (&p == this) return *this; 
+  *this = p; 
+  return *this;
 }

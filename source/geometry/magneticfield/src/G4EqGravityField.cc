@@ -24,30 +24,57 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroMagneticField.cc,v 1.3 2006-06-29 18:23:44 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//  This is the right-hand side for equation of motion for a
+//  massive particle in a gravitational field.
 //
-// --------------------------------------------------------------------
+// History:
+// - 14.06.11 P.Gumplinger, Created.
+// -------------------------------------------------------------------
+// Adopted from G4EqMagElectricField.hh
+//
+// Thanks to Peter Fierlinger (PSI) and
+// A. Capra and A. Fontana (INFN Pavia)
+// -------------------------------------------------------------------
 
-#include "G4ElectroMagneticField.hh"
+#include "G4EqGravityField.hh"
+#include "globals.hh"
 
-G4ElectroMagneticField::G4ElectroMagneticField()
-  : G4Field( false ) // No gravitational field (default)
+void
+G4EqGravityField::SetChargeMomentumMass(G4double,
+                                        G4double,
+                                        G4double particleMass )
 {
+  fMass = particleMass;
 }
 
-G4ElectroMagneticField::~G4ElectroMagneticField()
+void
+G4EqGravityField::EvaluateRhsGivenB(const G4double y[],
+                                    const G4double G[],
+                                    G4double dydx[] ) const
 {
-}
 
-G4ElectroMagneticField::G4ElectroMagneticField(const G4ElectroMagneticField &r)
-  : G4Field( r.IsGravityActive() )    // To allow extension to joint EM & g field
-{
-}
+  // Components of y:
+  //    0-2 dr/ds,
+  //    3-5 dp/ds - momentum derivatives
 
-G4ElectroMagneticField& 
-G4ElectroMagneticField::operator = (const G4ElectroMagneticField &p)
-{
-  if (&p == this) return *this;
-  *this = p; return *this;
+  G4double momentum_mag_square = y[3]*y[3] + y[4]*y[4] + y[5]*y[5];
+  G4double inv_momentum_magnitude = 1.0 / std::sqrt( momentum_mag_square );
+
+  G4double Energy = std::sqrt(momentum_mag_square + fMass*fMass);
+  G4double cof2 = Energy/c_light;
+  G4double cof1 = inv_momentum_magnitude*fMass;
+  G4double inverse_velocity = Energy*inv_momentum_magnitude/c_light;
+
+  dydx[0] = y[3]*inv_momentum_magnitude;       //  (d/ds)x = Vx/V
+  dydx[1] = y[4]*inv_momentum_magnitude;       //  (d/ds)y = Vy/V
+  dydx[2] = y[5]*inv_momentum_magnitude;       //  (d/ds)z = Vz/V
+
+  dydx[3] = G[0]*cof1*cof2;
+  dydx[4] = G[1]*cof1*cof2;                    //  m*g
+  dydx[5] = G[2]*cof1*cof2;
+
+  // Lab Time of flight
+  dydx[7] = inverse_velocity;
+
+  return;
 }

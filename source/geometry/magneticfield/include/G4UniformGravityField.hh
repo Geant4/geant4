@@ -24,30 +24,53 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroMagneticField.cc,v 1.3 2006-06-29 18:23:44 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// class G4UniformGravifyField
 //
-// --------------------------------------------------------------------
+// Class description:
+//
+// Class for creation of Uniform Gravitation Field.
+//
 
-#include "G4ElectroMagneticField.hh"
+// History:
+// - 14.06.11 P.Gumplinger, Created.
+// -------------------------------------------------------------------
+// Adapted from G4UniformElectricField.hh
+//
+// Thanks to Peter Fierlinger (PSI) and
+// A. Capra and A. Fontana (INFN Pavia)
+// -------------------------------------------------------------------
+//
+#ifndef G4UNIFORMGRAVITYFIELD_HH
+#define G4UNIFORMGRAVITYFIELD_HH
 
-G4ElectroMagneticField::G4ElectroMagneticField()
-  : G4Field( false ) // No gravitational field (default)
+#include "G4Types.hh"
+#include "G4ThreeVector.hh"
+#include "G4Field.hh"
+
+class G4UniformGravityField : public G4Field
 {
-}
+  public:  // with description
 
-G4ElectroMagneticField::~G4ElectroMagneticField()
-{
-}
+    G4UniformGravityField(const G4ThreeVector FieldVector );
+      // A field with value equal to FieldVector.
 
-G4ElectroMagneticField::G4ElectroMagneticField(const G4ElectroMagneticField &r)
-  : G4Field( r.IsGravityActive() )    // To allow extension to joint EM & g field
-{
-}
+    G4UniformGravityField(const G4double gy = -9.81*m/s/s/c_light );
+      // Standard Gravitational field on earth's surface
 
-G4ElectroMagneticField& 
-G4ElectroMagneticField::operator = (const G4ElectroMagneticField &p)
-{
-  if (&p == this) return *this;
-  *this = p; return *this;
-}
+    virtual ~G4UniformGravityField();
+
+    G4UniformGravityField(const G4UniformGravityField &p);
+    G4UniformGravityField& operator = (const G4UniformGravityField &p);
+      // Copy constructor and assignment operator
+
+    G4bool   DoesFieldChangeEnergy() const { return true; }
+      // Since a gravitational field can change track energy
+
+    virtual void GetFieldValue(const G4double Point[4], G4double *field) const;
+
+  private:
+
+    G4double fFieldComponents[3];
+};
+
+#endif
