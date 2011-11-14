@@ -145,6 +145,11 @@ protected:
 							aMaterial,anElement);
   }
 
+  // access to the target nucleus
+  inline G4Nucleus* GetTargetNucleusPointer() 
+  { return &targetNucleus; }
+  
+
 public:
 
   // Methods for isotope production    
@@ -182,6 +187,8 @@ public:
   { aScaleFactor = factor; }
 
 protected:
+
+  void DumpState(const G4Track&, const G4String&, G4ExceptionDescription&);
             
   // obsolete method will be removed
   inline const G4EnergyRangeManager &GetEnergyRangeManager() const
@@ -200,8 +207,6 @@ protected:
   { return theLastCrossSection; }
 
 private:
-
-  void DumpState(const G4Track&, const G4String&, G4ExceptionDescription&);
     
   void FillTotalResult(G4HadFinalState * aR, const G4Track & aT);
 

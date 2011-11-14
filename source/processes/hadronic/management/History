@@ -14,6 +14,25 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+6 November 2011 Vladimir Ivantchenko (hadr-man-V09-04-22)
+--------------------------------------------------------
+- G4HadronicProcess - more accurate check of zero primary energy
+
+4 November 2011 Vladimir Ivantchenko (hadr-man-V09-04-21)
+--------------------------------------------------------
+- G4HadronicProcess - more accurate check of zero primary energy
+
+3 November 2011 Vladimir Ivantchenko (hadr-man-V09-04-20)
+--------------------------------------------------------
+- G4HadronicProcess - added change status if final energy
+    of primary particle is zero
+
+1 November 2011 Vladimir Ivanchenko (hadr-man-V09-04-19)
+21 October 2011 Vladimir Ivanchenko (hadr-man-V09-04-18)
+----------------------------------------------------------
+- G4HadronicProcess: added protected method GetTargetNucleusPointer;
+                     make DumpState method protected
+
 18 October 2011 Michael Kelsey (hadr-man-V09-04-17)
 ---------------------------------------------------
 - G4HadronicProcess.cc: In ::CheckEnergyMomentumConservation(), check for

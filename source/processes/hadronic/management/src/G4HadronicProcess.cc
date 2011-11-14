@@ -64,7 +64,7 @@
 
 #include <typeinfo>
 #include <sstream>
-#include <stdlib.h>
+//#include <stdlib.h>
 
 // File-scope variable to capture environment variable at startup
 
@@ -102,6 +102,7 @@ G4HadronicProcess::G4HadronicProcess(const G4String& processName,
   epCheckLevels.first = DBL_MAX;
   epCheckLevels.second = DBL_MAX;
   levelsSetByProcess = false;
+
   // Make ep checking possible via environment variables
   if ( char * ReportLevel = getenv("G4Hadronic_epReportLevel")) {
      std::stringstream sRL (ReportLevel);
@@ -253,7 +254,7 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
     G4ExceptionDescription ed;
     ed << "Target element "<<anElement->GetName()<<"  Z= " 
        << targetNucleus.GetZ_asInt() << "  A= " 
-       << targetNucleus.GetN_asInt() << G4endl;
+       << targetNucleus.GetA_asInt() << G4endl;
     DumpState(aTrack,"ChooseHadronicInteraction",ed);
     ed << " No HadronicInteraction found out" << G4endl;
     G4Exception("G4HadronicProcess::PostStepDoIt", "had005", FatalException,
@@ -272,9 +273,9 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
     try
     {
       // Save random engine if requested for debugging
-      if (G4Hadronic_Random_File)
+      if (G4Hadronic_Random_File) {
 	CLHEP::HepRandom::saveEngineStatus(G4Hadronic_Random_File);
-
+      }
       // Call the interaction
       result = theInteraction->ApplyYourself( thePro, targetNucleus);
       ++reentryCount;
@@ -285,7 +286,7 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
       ed << "Call for " << theInteraction->GetModelName() << G4endl;
       ed << "Target element "<<anElement->GetName()<<"  Z= " 
 	 << targetNucleus.GetZ_asInt() 
-	 << "  A= " << targetNucleus.GetN_asInt() << G4endl;
+	 << "  A= " << targetNucleus.GetA_asInt() << G4endl;
       DumpState(aTrack,"ApplyYourself",ed);
       ed << " ApplyYourself failed" << G4endl;
       G4Exception("G4HadronicProcess::PostStepDoIt", "had006", FatalException,
@@ -296,7 +297,7 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
       ed << "Call for " << theInteraction->GetModelName() << G4endl;
       ed << "Target element "<<anElement->GetName()<<"  Z= " 
 	 << targetNucleus.GetZ_asInt() 
-	 << "  A= " << targetNucleus.GetN_asInt() << G4endl;
+	 << "  A= " << targetNucleus.GetA_asInt() << G4endl;
       DumpState(aTrack,"ApplyYourself",ed);
       ed << " ApplyYourself does not completed after 100 attempts" << G4endl;
       G4Exception("G4HadronicProcess::PostStepDoIt", "had006", FatalException,
@@ -391,7 +392,7 @@ G4HadronicProcess::ExtractResidualNucleus(const G4Track&,
                                           const G4Nucleus& aNucleus,
                                           G4HadFinalState* aResult)
 {
-  G4double A = aNucleus.GetN_asInt();
+  G4double A = aNucleus.GetA_asInt();
   G4double Z = aNucleus.GetZ_asInt();
   G4double bufferA = 0;
   G4double bufferZ = 0;
@@ -460,29 +461,41 @@ G4HadronicProcess::FillResult(G4HadFinalState * aR, const G4Track & aT)
   G4double rotation = CLHEP::twopi*G4UniformRand();
   G4ThreeVector it(0., 0., 1.);
 
+  G4double efinal = aR->GetEnergyChange();
+  if(efinal < 0.0) { efinal = 0.0; }
+
   // check status of primary
   if(aR->GetStatusChange() == stopAndKill) {
     theTotalResult->ProposeTrackStatus(fStopAndKill);
     theTotalResult->ProposeEnergy( 0.0 );
 
-    // if it is not killed apply rotation and Lorentz transformation
-  } else {
+    // check its final energy
+  } else if(0.0 == efinal) {
+    theTotalResult->ProposeEnergy( 0.0 );
+    if(aT.GetParticleDefinition()->GetProcessManager()
+       ->GetAtRestProcessVector()->size() > 0)
+         { aParticleChange.ProposeTrackStatus(fStopButAlive); }
+    else { aParticleChange.ProposeTrackStatus(fStopAndKill); }
+
+    // primary is not killed apply rotation and Lorentz transformation
+  } else  {
     theTotalResult->ProposeTrackStatus(fAlive);
-    G4double newM=aT.GetParticleDefinition()->GetPDGMass();
-    G4double newE=aR->GetEnergyChange() + newM;
-    G4double newP=std::sqrt(newE*newE - newM*newM);
+    G4double mass = aT.GetParticleDefinition()->GetPDGMass();
+    G4double newE = efinal + mass;
+    G4double newP = std::sqrt(efinal*(efinal + 2*mass));
     G4ThreeVector newPV = newP*aR->GetMomentumChange();
     G4LorentzVector newP4(newE, newPV);
     newP4.rotate(rotation, it);
     newP4 *= aR->GetTrafoToLab();
     theTotalResult->ProposeMomentumDirection(newP4.vect().unit());
-    newE = newP4.e() - newM ;
-    theTotalResult->ProposeEnergy( newE );
+    newE = newP4.e() - mass;
     if(G4HadronicProcess_debug_flag && newE <= 0.0) {
       G4ExceptionDescription ed;
       DumpState(aT,"Primary has zero energy after interaction",ed);
       G4Exception("G4HadronicProcess::FillResults", "had011", JustWarning, ed);
     }
+    if(newE < 0.0) { newE = 0.0; }
+    theTotalResult->ProposeEnergy( newE );
   }
 
   // check secondaries: apply rotation and Lorentz transformation
@@ -603,7 +616,7 @@ G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
     G4cout << "Call for " << theInteraction->GetModelName() << G4endl;
     G4cout << "Target Z= " 
 	   << targetNucleus.GetZ_asInt() 
-	   << "  A= " << targetNucleus.GetN_asInt() << G4endl;
+	   << "  A= " << targetNucleus.GetA_asInt() << G4endl;
     DumpState(aT,"FillTotalResult",ed);
     G4Exception("G4HadronicProcess", "had008", FatalException,
     "use of unsupported track-status.");
