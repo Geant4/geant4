@@ -9,6 +9,9 @@ $Id: History,v 1.13 2010-11-18 13:10:47 allison Exp $
                       Category History file
                       ---------------------
 
+31.10.2011 - Luciano Pandola (purtag-V09-04-00)
+- Migrated G4Exception to the new scheme
+
 18.11.2010 - John Allison (purtag-V09-03-02)
 - PurgMag.cc: Introduced G4UIExecutive.
 - PurgMagPhysicsList.cc: Fixed G4MultipleScattering.

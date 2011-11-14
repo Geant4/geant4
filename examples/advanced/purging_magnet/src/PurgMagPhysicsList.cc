@@ -242,7 +242,8 @@ void PurgMagPhysicsList::SetPositronLowLimit(G4double lowcut)
   }  
 
   G4cerr << "PurgMagPhysicsList::SetPositronLowLimit: Not currently able to set Positron LowLimit." << G4endl;
-  G4Exception("Positron Low Limit: not implemented in PurgMagPhysicsList"); 
+  G4Exception("PurgMagPhysicsList::SetPositronLowLimit()","PurMag001",
+	      FatalException,"Positron Low Limit: not implemented in PurgMagPhysicsList"); 
   //
   // G4Positron::SetEnergyRange(lowcut,1e5);
 }
@@ -258,7 +259,8 @@ void PurgMagPhysicsList::SetProtonLowLimit(G4double lowcut)
   }  
 
   G4cerr << "PurgMagPhysicsList::SetProtonLowLimit: Not currently able to set Proton LowLimit." << G4endl;
-  G4Exception("Proton Low Limit: not implemented in PurgMagPhysicsList"); 
+  G4Exception("PurgMagPhysicsList::SetProtonLowLimit()","PurMag002",
+	      FatalException,"Proton Low Limit: not implemented in PurgMagPhysicsList"); 
   //
   // G4Proton::SetEnergyRange(lowcut,1e5);
   // G4AntiProton::SetEnergyRange(lowcut,1e5);
