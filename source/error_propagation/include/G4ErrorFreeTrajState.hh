@@ -109,6 +109,9 @@ class G4ErrorFreeTrajState : public G4ErrorTrajState
   G4ErrorFreeTrajParam GetParameters() const
     { return fTrajParam; }
 
+  G4ErrorMatrix GetTransfMat() const
+    { return theTransfMat; }
+
  private:  
 
   void Init();

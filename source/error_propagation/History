@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13 November 2011 - P.Arce (error_propagation-V09-04-04)
+- Add GetTranfMat in G4ErrorFreeTrajectoryState.hh
+
 10 November 2011 - G.Cosmo (error_propagation-V09-04-03)
 - Removed calls to obsolete G4Exception format in G4ErrorRunManagerHelper.
 
