@@ -147,9 +147,16 @@ G4TripathiLightCrossSection::GetElementCrossSection(const G4DynamicParticle* the
   G4double mT = G4NucleiProperties::GetNuclearMass(AT, ZT);
   G4LorentzVector pT(0.0, 0.0, 0.0, mT);
   G4LorentzVector pP(theProjectile->Get4Momentum());
-  pT = pT + pP;
+  pT += pP;
   G4double E_cm = (pT.mag()-mT-pP.m())/MeV;
+
+  //G4cout << G4endl;
+  //G4cout << "### EA= " << EA << " ZT= " << ZT << " AT= " << AT 
+  //	 << "  ZP= " << ZP << " AP= " << AP << " E_cm= " << E_cm 
+  //	 << " Elim= " << (0.8 + 0.04*ZT)*xAP << G4endl;
+
   if (E_cm <= 0.0) { return 0.; }
+  if (E_cm <= (0.8 + 0.04*ZT)*xAP && !lowEnergyCheck) { return 0.; }
   
   G4double E_cm13 = g4pow->A13(E_cm);
 
@@ -221,17 +228,19 @@ G4TripathiLightCrossSection::GetElementCrossSection(const G4DynamicParticle* the
   G4double X1     = 0.0;
   if (AT >= AP)
   {
-    deltaE = 1.85*S + 0.16*S/E_cm13 - C_E + 0.91*(AT-2.0*ZT)*ZP/AT/AP;
+    deltaE = 1.85*S + 0.16*S/E_cm13 - C_E + 0.91*(AT-2*ZT)*ZP/(xAT*xAP);
     X1     = 2.83 - 3.1E-2*AT + 1.7E-4*AT*AT;
   }
   else
   {
-    deltaE = 1.85*S + 0.16*S/E_cm13 - C_E + 0.91*(AP-2.0*ZP)*ZT/AT/AP;
+    deltaE = 1.85*S + 0.16*S/E_cm13 - C_E + 0.91*(AP-2*ZP)*ZT/(xAT*xAP);
     X1     = 2.83 - 3.1E-2*AP + 1.7E-4*AP*AP;
   }
   G4double S_L = 1.2 + 1.6*(1.0-std::exp(-E/15.0));
   //JMQ 241110 bug fixed 
   G4double X_m = 1.0 - X1*std::exp(-E/(X1*S_L));
+
+  //G4cout << "deltaE= " << deltaE << "  X1= " << X1 << " S_L= " << S_L << " X_m= " << X_m << G4endl;
 
   // R_c is also highly dependent upon the A and Z of the projectile and
   // target.
@@ -274,22 +283,21 @@ G4TripathiLightCrossSection::GetElementCrossSection(const G4DynamicParticle* the
 
   G4double xr = r_0*(AT13 + AP13 + deltaE);
   result = pi * xr * xr * (1.0 - R_c*B/E_cm) * X_m;
-  if (!lowEnergyCheck)
-  {
-    if (result < 0.0)
-      result = 0.0;
-    else if (E < 6.0*MeV)
-    {
-      G4double f  = 0.95;
-      G4DynamicParticle slowerProjectile = *theProjectile;
-      slowerProjectile.SetKineticEnergy(f * EA * MeV);
+  //G4cout << "       result= " << result << " E= " << E << "  check= "<< lowEnergyCheck << G4endl;
+  if (result < 0.0) {
+    result = 0.0;
 
-      G4bool savelowenergy = lowEnergyCheck;
-      SetLowEnergyCheck(true);
-      G4double resultp = GetElementCrossSection(&slowerProjectile, ZT);
-      SetLowEnergyCheck(savelowenergy);
-      if (resultp > result) { result = 0.0; }
-    }
+  } else if (!lowEnergyCheck && E < 6.0) {
+    G4double f  = 0.95;
+    G4DynamicParticle slowerProjectile = *theProjectile;
+    slowerProjectile.SetKineticEnergy(f * EA * MeV);
+
+    G4bool savelowenergy = lowEnergyCheck;
+    SetLowEnergyCheck(true);
+    G4double resultp = GetElementCrossSection(&slowerProjectile, ZT);
+    SetLowEnergyCheck(savelowenergy);
+    //G4cout << "           newres= " << resultp << " f*EA= " << f*EA << G4endl;  
+    if (resultp > result) { result = 0.0; }
   }
 
   return result;

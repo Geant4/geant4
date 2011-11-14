@@ -60,6 +60,7 @@
 class G4GlauberGribovCrossSection;
 class G4UPiNuclearCrossSection;
 class G4HadronNucleonXsc;
+class G4HadronInelasticDataSet;
 class G4Material;
 class G4Element;
 class G4Isotope;
@@ -110,9 +111,11 @@ private:
   G4int    theA[93];
 
   const G4ParticleDefinition*     particle;
+  const G4ParticleDefinition*     theProton;
   G4GlauberGribovCrossSection*    fGlauber;
   G4UPiNuclearCrossSection*       fPion;
   G4HadronNucleonXsc*             fHadron;
+  G4HadronInelasticDataSet*       fGHEISHA;
   G4bool                          isPiplus;
   G4bool                          isInitialized;
 };

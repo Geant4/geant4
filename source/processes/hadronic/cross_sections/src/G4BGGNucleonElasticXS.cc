@@ -55,7 +55,7 @@ G4BGGNucleonElasticXS::G4BGGNucleonElasticXS(const G4ParticleDefinition*)
 {
   verboseLevel = 0;
   fGlauberEnergy = 91.*GeV;
-  fLowEnergy = 20.*MeV;
+  fLowEnergy = 14.*MeV;
   for (G4int i = 0; i < 93; ++i) {
     theGlauberFac[i] = 0.0;
     theCoulombFac[i] = 0.0;
@@ -149,15 +149,14 @@ G4BGGNucleonElasticXS::GetIsoCrossSection(const G4DynamicParticle* dp,
   if(ekin <= fLowEnergy) {
     cross = theCoulombFac[1];
 
-  } else if( A < 2) {
+  } else if(ekin <= 20*GeV) {
     fHadron->GetHadronNucleonXscNS(dp, G4Proton::Proton());
-    cross = fHadron->GetElasticHadronNucleonXsc();
+    cross = theGlauberFac[1]*fHadron->GetElasticHadronNucleonXsc();
   } else {
-    fHadron->GetHadronNucleonXscNS(dp, G4Proton::Proton());
+    fHadron->GetHadronNucleonXscPDG(dp, G4Proton::Proton());
     cross = fHadron->GetElasticHadronNucleonXsc();
-    fHadron->GetHadronNucleonXscNS(dp, G4Neutron::Neutron());
-    cross += fHadron->GetElasticHadronNucleonXsc();
   }
+  cross *= A;
 
   if(verboseLevel > 1) {
     G4cout << "G4BGGNucleonElasticXS::GetIsoCrossSection  for "
@@ -224,9 +223,15 @@ void G4BGGNucleonElasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 	     << " factor= " << theGlauberFac[iz] << G4endl;
     } 
   }
+  dp.SetKineticEnergy(20*GeV);
+  fHadron->GetHadronNucleonXscPDG(&dp, G4Proton::Proton());
+  theGlauberFac[1] = fHadron->GetElasticHadronNucleonXsc();
+  fHadron->GetHadronNucleonXscNS(&dp, G4Proton::Proton());
+  theGlauberFac[1] /= fHadron->GetElasticHadronNucleonXsc();
+
   dp.SetKineticEnergy(fLowEnergy);
   fHadron->GetHadronNucleonXscNS(&dp, G4Proton::Proton());
-  theCoulombFac[1] = fHadron->GetElasticHadronNucleonXsc();
+  theCoulombFac[1] = theGlauberFac[1]*fHadron->GetElasticHadronNucleonXsc();
 
   for(G4int iz=2; iz<93; iz++) {
     theCoulombFac[iz] = fNucleon->GetElasticCrossSection(&dp, iz);

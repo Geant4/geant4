@@ -45,6 +45,9 @@
 #include "G4GlauberGribovCrossSection.hh"
 #include "G4UPiNuclearCrossSection.hh"
 #include "G4HadronNucleonXsc.hh"
+#include "G4HadronInelasticDataSet.hh"
+
+#include "G4Proton.hh"
 #include "G4PionPlus.hh"
 #include "G4PionMinus.hh"
 #include "G4NistManager.hh"
@@ -67,7 +70,10 @@ G4BGGPionInelasticXS::G4BGGPionInelasticXS(const G4ParticleDefinition* p)
   fPion = 0;
   fGlauber = 0;
   fHadron  = 0;
+  fGHEISHA = 0;
+
   particle = p;
+  theProton= G4Proton::Proton();
   isPiplus = false;
   isInitialized = false;
 }
@@ -114,10 +120,10 @@ G4BGGPionInelasticXS::GetElementCrossSection(const G4DynamicParticle* dp,
   if(Z > 92) { Z = 92; }
   else if(Z < 2) { Z = 2; }
 
-  if(ekin <= fLowEnergy) {
+  if(ekin <= fLowEnergy && !isPiplus) {
     cross = theCoulombFac[Z];
-    if(isPiplus) { cross *= CoulombFactor(ekin, Z); } 
-
+  } else if(ekin <= 2*MeV && isPiplus) {
+    cross = theCoulombFac[Z]*CoulombFactor(ekin, Z);  
   } else if(ekin > fGlauberEnergy) {
     cross = theGlauberFac[Z]*fGlauber->GetInelasticGlauberGribov(dp, Z, theA[Z]);
   } else {
@@ -141,26 +147,32 @@ G4BGGPionInelasticXS::GetIsoCrossSection(const G4DynamicParticle* dp,
 					 G4int Z, G4int A, 
 					 const G4Isotope*,
 					 const G4Element*,
-					 const G4Material*)
+					 const G4Material* mat)
 {
   // this method should be called only for Z = 1
 
   G4double cross = 0.0;
   G4double ekin = dp->GetKineticEnergy();
 
-  if(ekin <= fLowEnergy) {
-    cross = theCoulombFac[1];
-    if(isPiplus) { cross *= CoulombFactor(ekin, 1); } 
-
-  } else if( A < 2) {
-    fHadron->GetHadronNucleonXscNS(dp, G4Proton::Proton());
-    cross = fHadron->GetInelasticHadronNucleonXsc();
+  if(isPiplus) { 
+    if(ekin <= 20*GeV) {
+      cross = theCoulombFac[1]*fGHEISHA->GetElementCrossSection(dp, 1, mat);
+    } else {
+      fHadron->GetHadronNucleonXscPDG(dp, theProton);
+      cross = fHadron->GetInelasticHadronNucleonXsc();
+    }
   } else {
-    fHadron->GetHadronNucleonXscNS(dp, G4Proton::Proton());
-    cross = fHadron->GetInelasticHadronNucleonXsc();
-    fHadron->GetHadronNucleonXscNS(dp, G4Neutron::Neutron());
-    cross += fHadron->GetInelasticHadronNucleonXsc();
+    if(ekin <= fLowEnergy) {
+      cross = theCoulombFac[1];
+    } else if(ekin <= 20*GeV) {
+      fHadron->GetHadronNucleonXscNS(dp, theProton);
+      cross = theGlauberFac[1]*fHadron->GetInelasticHadronNucleonXsc();
+    } else {
+      fHadron->GetHadronNucleonXscPDG(dp, theProton);
+      cross = fHadron->GetInelasticHadronNucleonXsc();
+    }
   }
+  cross *= A;
 
   if(verboseLevel > 1) {
     G4cout << "G4BGGPionInelasticXS::GetCrossSection  for "
@@ -191,12 +203,14 @@ void G4BGGPionInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
   if(isInitialized) { return; }
   isInitialized = true;
 
-  fPion = new G4UPiNuclearCrossSection();
+  fPion    = new G4UPiNuclearCrossSection();
   fGlauber = new G4GlauberGribovCrossSection();
   fHadron  = new G4HadronNucleonXsc();
+  fGHEISHA = new G4HadronInelasticDataSet();
+
   fPion->BuildPhysicsTable(*particle);
   fGlauber->BuildPhysicsTable(*particle);
-  if(particle == G4PionPlus::PionPlus()) isPiplus = true;
+  if(particle == G4PionPlus::PionPlus()) { isPiplus = true; }
 
   G4ParticleDefinition* part = const_cast<G4ParticleDefinition*>(particle);
   G4ThreeVector mom(0.0,0.0,1.0);
@@ -228,18 +242,32 @@ void G4BGGPionInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 	     << " factor= " << theGlauberFac[iz] << G4endl; 
     }
   }
-  dp.SetKineticEnergy(fLowEnergy);
-  fHadron->GetHadronNucleonXscNS(&dp, G4Proton::Proton());
-  theCoulombFac[1] = fHadron->GetInelasticHadronNucleonXsc();
-  if(isPiplus) { theCoulombFac[1] /= CoulombFactor(fLowEnergy,1); }
+  dp.SetKineticEnergy(20*GeV);
+  const G4Material* mat = 0;
+  if(isPiplus) { 
+    fHadron->GetHadronNucleonXscPDG(&dp, theProton);
+    theCoulombFac[1] = fHadron->GetInelasticHadronNucleonXsc()
+      /fGHEISHA->GetElementCrossSection(&dp, 1, mat);
+  } else {
+    fHadron->GetHadronNucleonXscPDG(&dp, theProton);
+    theGlauberFac[1] = fHadron->GetInelasticHadronNucleonXsc();
+    fHadron->GetHadronNucleonXscNS(&dp, theProton);
+    theGlauberFac[1] /= fHadron->GetInelasticHadronNucleonXsc();
+  }
      
-  for(G4int iz=2; iz<93; iz++) {
-    theCoulombFac[iz] = fPion->GetInelasticCrossSection(&dp, iz, theA[iz]);
-    if(isPiplus) { theCoulombFac[iz] /= CoulombFactor(fLowEnergy,iz); }
+  if(isPiplus) { 
+    dp.SetKineticEnergy(2*MeV);
+    for(G4int iz=2; iz<93; iz++) {
+      theCoulombFac[iz] = fPion->GetInelasticCrossSection(&dp, iz, theA[iz])
+	/CoulombFactor(2*MeV,iz); 
+    }
 
-    if(verboseLevel > 0) {
-      G4cout << "Z= " << iz <<  "  A= " << theA[iz] 
-	     << " factor= " << theCoulombFac[iz] << G4endl; 
+  } else {
+    dp.SetKineticEnergy(fLowEnergy);
+    fHadron->GetHadronNucleonXscNS(&dp, theProton);
+    theCoulombFac[1] = theGlauberFac[1]*fHadron->GetInelasticHadronNucleonXsc();
+    for(G4int iz=2; iz<93; iz++) {
+      theCoulombFac[iz] = fPion->GetInelasticCrossSection(&dp, iz, theA[iz]);
     }
   }
 }
@@ -253,10 +281,19 @@ G4double G4BGGPionInelasticXS::CoulombFactor(G4double kinEnergy, G4int Z)
   if(kinEnergy <= DBL_MIN) { return res; }
   else if(A < 2) { return kinEnergy*kinEnergy; }
   
-  G4double elog = std::log10(kinEnergy/GeV);
+  G4double elog = std::log10(6.7*kinEnergy/GeV);
   G4double aa = A;
 
   // from G4ProtonInelasticCrossSection
+  G4double ff1 = 0.70 - 0.002*aa;           // slope of the drop at medium energies.
+  G4double ff2 = 1.00 + 1/aa;               // start of the slope.
+  G4double ff3 = 0.8  + 18/aa - 0.002*aa;   // stephight
+  res = 1.0 + ff3*(1.0 - (1.0/(1+std::exp(-8*ff1*(elog + 1.37*ff2)))));
+
+  ff1 = 1.   - 1./aa - 0.001*aa; // slope of the rise
+  ff2 = 1.17 - 2.7/aa-0.0014*aa; // start of the rise
+  res /= (1 + std::exp(-8.*ff1*(elog + 2*ff2)));
+    /*
   G4double f1 = 8.0  - 8.0/aa - 0.008*aa;
   G4double f2 = 2.34 - 5.4/aa - 0.0028*aa;
 
@@ -265,6 +302,7 @@ G4double G4BGGPionInelasticXS::CoulombFactor(G4double kinEnergy, G4int Z)
   f1 = 5.6 - 0.016*aa;
   f2 = 1.37 + 1.37/aa;
   res *= ( 1.0 + (0.8 + 18./aa - 0.002*aa)/(1.0 + std::exp(f1*(elog + f2))));
+    */
   return res;  
 }
 
