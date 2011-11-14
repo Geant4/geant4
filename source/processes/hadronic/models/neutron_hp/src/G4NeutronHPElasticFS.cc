@@ -45,7 +45,7 @@
 
   void G4NeutronHPElasticFS::Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & )
   {
-    G4String tString = "/FS/";
+    G4String tString = "/FS";
     G4bool dbool;
     G4NeutronHPDataUsed aFile = theNames.GetName(static_cast<G4int>(A), static_cast<G4int>(Z), M, dirName, tString, dbool);
     G4String filename = aFile.GetName();

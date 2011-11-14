@@ -150,7 +150,7 @@
     }
     else // get data from CrossSection directory
     {
-      G4String tString = "/CrossSection/";
+      G4String tString = "/CrossSection";
       //active[index] = theIsotopeWiseData[index].Init(A, Z, abundance, theDir, tString);
       active[index] = theIsotopeWiseData[index].Init(A, Z, M, abundance, theDir, tString);
       if(active[index]) theBuffer = theIsotopeWiseData[index].MakeChannelData();

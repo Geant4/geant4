@@ -290,26 +290,23 @@
   {
 
      //TK110430 BEGIN
-     std::stringstream iss;
-     iss << static_cast<G4int>(Z);
+     std::stringstream ss;
+     ss << static_cast<G4int>(Z);
      G4String sZ;
-     iss >> sZ;
-     iss.clear();
-     iss << static_cast<G4int>(A);
+     ss >> sZ;
+     ss.clear();
+     ss << static_cast<G4int>(A);
      G4String sA;
-     iss >> sA;
+     ss >> sA;
 
-     iss.clear();
+     ss.clear();
      G4String sM;
      if ( M > 0 ) 
      {
-        iss << m;
-        if ( M > 1 ) 
-        {
-           iss << M;
-        }
-        iss >> sM;
-        iss.clear();
+        ss << m;
+        ss << M;
+        ss >> sM;
+        ss.clear();
      }
 
      G4String element_name = theNames.GetName( static_cast<G4int>(Z)-1 );
@@ -343,7 +340,7 @@
      //TK110430 END
 
 
-    G4String tString = "/FS/";
+    G4String tString = "/FS";
     G4bool dbool;
     G4NeutronHPDataUsed aFile = theNames.GetName(static_cast<G4int>(A), static_cast<G4int>(Z), M, dirName, tString, dbool);
 

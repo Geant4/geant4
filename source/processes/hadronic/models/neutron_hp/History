@@ -14,6 +14,36 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+9 November 2011  Gabriele Cosmo (hadr-hpn-V09-04-31)
+- Workaround fixes to allow compilation on Windows/VC++10
+	src/G4NeutronHPThermalScattering.cc
+	src/G4NeutronHPThermalScatteringData.cc
+
+3 November 2011  Tatsumi Koi (hadr-hpn-V09-04-30)
+- Fix Bug which introduced previous tag and add several administrations
+	src/G4NeutronHPNames.cc
+- Fix memory leak 
+	src/G4NeutronHPThermalScatteringData.cc
+- Fix FPE error
+	src/G4NeutronHPThermalScattering.cc
+
+
+31 October 2011  Tatsumi Koi (hadr-hpn-V09-04-29)
+- Cosmetic fix
+	src/G4NeutronHPNames.cc
+	src/G4NeutronHPCapture.cc
+	src/G4NeutronHPChannel.cc
+	src/G4NeutronHPFission.cc
+	src/G4NeutronHPInelastic.cc
+	src/G4NeutronHPIsoData.cc
+	src/G4NeutronHPCaptureFS.cc
+	src/G4NeutronHPElasticFS.cc
+	src/G4NeutronHPElastic.cc
+- Add ENDF/B-VII Thermal Scattering Materials 
+Excluding para (ortho) H and D, liquid (solid) methane and benzene
+	src/G4NeutronHPThermalScatteringNames.cc
+
+
 17 October 2011  Tatsumi Koi (hadr-hpn-V09-04-28)
 - Enable to handle excited isomer nuclie as targets 
 	include/G4NeutronHP4NInelasticFS.hh

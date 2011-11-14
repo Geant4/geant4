@@ -84,7 +84,7 @@
     if(Z>87) //TK Modifed for ENDF VII.0 
     {
       //Init(A, Z, abun, dirName, "/CrossSection/");
-      Init(A, Z, M, abun, dirName, "/CrossSection/");
+      Init(A, Z, M, abun, dirName, "/CrossSection");
     }
     else
     {
@@ -94,17 +94,17 @@
     theChannelData = 0; // fast fix for double delete; revisit later. @@@@@@@
     dirName = baseName+"/Capture";
     //Init(A, Z, abun, dirName, "/CrossSection/");
-    Init(A, Z, M, abun, dirName, "/CrossSection/");
+    Init(A, Z, M, abun, dirName, "/CrossSection");
     theCaptureData = theChannelData;
     theChannelData = 0;
     dirName = baseName+"/Elastic";
     //Init(A, Z, abun, dirName, "/CrossSection/");
-    Init(A, Z, M, abun, dirName, "/CrossSection/");
+    Init(A, Z, M, abun, dirName, "/CrossSection");
     theElasticData = theChannelData;
     theChannelData = 0;
     dirName = baseName+"/Inelastic";
     //Init(A, Z, abun, dirName, "/CrossSection/");
-    Init(A, Z, M, abun, dirName, "/CrossSection/");
+    Init(A, Z, M, abun, dirName, "/CrossSection");
     theInelasticData = theChannelData;
     theChannelData = 0;
     

@@ -68,19 +68,15 @@ G4NeutronHPDataUsed G4NeutronHPNames::GetName(G4int A, G4int Z, G4int M, G4Strin
    //G4cout << Z << " " << A << " " << M << " " << base << " " << rest << G4endl;
 
    //Excited isomer indicator
-   std::stringstream iss;
+   std::stringstream ss;
    G4String sM;
    if ( M > 0 ) 
    {
-      iss << "m";
-      if ( M > 1 ) 
-      {
-         iss << M;
-      }
-      iss >> sM;
-      iss.clear();
+      ss << "m";
+      ss << M;
+      ss >> sM;
+      ss.clear();
    }
-
 
    G4NeutronHPDataUsed result;
    aFlag = true;
@@ -161,7 +157,8 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 2 "<<*theName<<G4endl;
              {
                 biff = new G4String(); // delete here as theName
                 if(theName!=0) delete theName;
-                *biff = base+"/"+rest+itoa(myZ)+"_"+"nat"+"_"+theString[myZ-1];  
+                *biff = base+"/"+rest+"/"+itoa(myZ)+"_"+"nat"+"_"+theString[myZ-1];  
+                if ( rest=="/CrossSection" ) *biff = base+rest+"/"+itoa(myZ)+"_"+"nat"+"_"+theString[myZ-1];  
                 theName = biff;
 if(getenv("NeutronHPNames"))    G4cout <<"HPWD 3 "<<*theName<<G4endl;
                 result.SetName(*theName);
@@ -190,10 +187,11 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4 "<<*theName<<G4endl;
           std::ifstream* file = NULL;
           G4String fileName;
 
-          if ( rest == "/CrossSection/" )
+          if ( rest == "/CrossSection" )
           {
 
-             fileName = base+"/"+rest+itoa(myZ)+"_"+itoa(myA)+sM+"_"+theString[myZ-1];
+             //fileName = base+"/"+rest+"/"+itoa(myZ)+"_"+itoa(myA)+sM+"_"+theString[myZ-1];
+             fileName = base+rest+"/"+itoa(myZ)+"_"+itoa(myA)+sM+"_"+theString[myZ-1];
 if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4a "<<*theName<<G4endl;
 
           }
@@ -201,7 +199,7 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4a "<<*theName<<G4endl;
           {
 
 // For FS
-             fileName = base+"/"+rest+itoa(myZ)+"_"+itoa(myA)+sM+"_"+theString[myZ-1];
+             fileName = base+"/"+rest+"/"+itoa(myZ)+"_"+itoa(myA)+sM+"_"+theString[myZ-1];
              file = new std::ifstream(fileName);
 
              if ( *file )
@@ -214,7 +212,7 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4b1 "<<*theName<<G4endl;
              {
 
 // _nat_ FS
-                fileName  = base+"/"+rest+itoa(myZ)+"_"+"nat"+"_"+theString[myZ-1];
+                fileName  = base+"/"+rest+"/"+itoa(myZ)+"_"+"nat"+"_"+theString[myZ-1];
 
                 delete file;
                 file = new std::ifstream(fileName);
@@ -229,6 +227,7 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4b2a "<<*theName<<G4endl;
                 else
                 {
 if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4b2c "<<*theName<<G4endl;
+                   fileName="INVALID";
                 }
              }
 
@@ -283,9 +282,9 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4b2c "<<*theName<<G4endl;
              flip_Z *= -1;
              
              myA = A;
-             if ( myZ > 99 ) 
+             if ( myZ > 100 ) 
              {
-                myZ = 99;
+                myZ = 100;
              }
              if ( myZ < 1 ) 
              {
@@ -326,7 +325,7 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4b2c "<<*theName<<G4endl;
 // administration and anouncement for lacking of exact data in NDL 
     if ( Z != result.GetZ() || A != result.GetA() )
     {
-       if ( rest == "/CrossSection/" )
+       if ( rest == "/CrossSection" )
        {
           G4String reac = base;
           G4String dir = getenv("G4NEUTRONHPDATA"); 
@@ -334,18 +333,18 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4b2c "<<*theName<<G4endl;
           if ( getenv ( "G4NEUTRONHP_SKIP_MISSING_ISOTOPES" ) && !( Z == result.GetZ() && result.IsThisNaturalAbundance() ) )
           {
              G4cout << "NeutronHP: " << reac << " file for Z = " << Z << ", A = " << A << " is not found and CrossSection set to 0." << G4endl;
-             G4String new_name = base+"/"+rest+"0_0_Zero";  
+             G4String new_name = base+"/"+rest+"/"+"0_0_Zero";  
              result.SetName( new_name );
           }
           else
           { 
              //080901 Add protection that deuteron data do not selected for hydrogen and so on by T. Koi
-             if ( (reac.find("Inelastic") != reac.size() && 
-                   ((Z == 1 && A == 1) || (Z == 2 && A == 4) ) ) 
-                 ||   
-                  (reac.find("Capture") != reac.size() && (Z == 2 && A == 4) ) )
+             if ( ( reac.find("Inelastic") != reac.size() && ( (Z == 1 && A == 1) || (Z == 2 && A == 4) ) ) 
+               || ( reac.find("Capture")   != reac.size() && ( (Z == 1 && A == 3) || (Z == 2 && A == 4) ) )  
+               || ( reac.find("Fission")   != reac.size() && ( (Z == 88 && A == 224) || (Z == 88 && A == 225) || (Z == 89 && A == 225) || (Z == 88 && A == 226) ) ) ) 
+                   
              {
-                G4String new_name = base+"/"+rest+"0_0_Zero";
+                G4String new_name = base+"/"+rest+"/"+"0_0_Zero";
                 result.SetName( new_name );
              }
              else

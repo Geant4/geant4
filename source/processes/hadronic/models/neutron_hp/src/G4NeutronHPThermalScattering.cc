@@ -509,6 +509,8 @@ G4HadFinalState* G4NeutronHPThermalScattering::ApplyYourself(const G4HadProjecti
          G4double Ei = vE_T[ k ];
 
          G4double mu = 1 - 2 * Ei / (E/eV) ;  
+         //111102
+         if ( mu < -1.0 ) mu = -1.0;
 
          theParticleChange.SetEnergyChange( E );
          theParticleChange.SetMomentumChange( 0.0 , std::sqrt ( 1 - mu*mu ) , mu );
@@ -933,7 +935,7 @@ void G4NeutronHPThermalScattering::buildPhysicsTable()
             //       << material->GetName() << " " << element->GetName() 
             //       << " as internal thermal scattering id of  " <<  ts_ID_of_this_geometry << "." << G4endl;
 
-            dic.insert( std::pair < std::pair < const G4Material* , const G4Element* > , G4int > ( std::pair < const G4Material* , const G4Element* > ( NULL , element ) ,  ts_ID_of_this_geometry ) );
+            dic.insert( std::pair < std::pair < const G4Material* , const G4Element* > , G4int > ( std::pair < const G4Material* , const G4Element* > ( (G4Material*)NULL , element ) ,  ts_ID_of_this_geometry ) );
          }
       }
    }
