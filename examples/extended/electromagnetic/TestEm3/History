@@ -14,7 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+     
+08-11-11 mma (testem3-V09-04-08)
+- modify SteppingVerbose for OutOfWorld
+     
 01-11-11 V.Ivant (testem3-V09-04-07)
 - SteppingAction - use track weight
 - TestEm3.in test Russian roulette biasing option
