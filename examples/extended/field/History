@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+7th Nov 2011 Peter Gumplinger (fieldex-V09-04-00)
+-------------------------------------------------
+- Add new field example field06. This example excercises the gravity field.
+
 19th Nov 2009 Peter Gumplinger (fieldex-V09-02-00)
 --------------------------------------------------
 - Add new field example field05. This example checks the so-called 
