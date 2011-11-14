@@ -55,7 +55,11 @@ UVA_ChamberParameterisation::UVA_ChamberParameterisation(
    if( NoChambers > 0 ){
       fHalfLengthIncr =  0.5 * (lengthFinal-lengthInitial)/NoChambers;
       if (spacingZ < widthChamber) {
-       G4Exception("UVA_ChamberParameterisation construction: Width>Spacing");
+       G4Exception
+	 ("UVA_ChamberParameterisation::UVA_ChamberParameterisation",
+	  "UVA0001",
+	  FatalException,
+	  "Width>Spacing");
       }
    }
    

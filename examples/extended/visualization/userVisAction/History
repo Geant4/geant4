@@ -16,6 +16,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11th November 2011  John Allison  (exam-ext-vis-UVA-V09-04-00)
+- Changed to new G4Exception.
+
 9th November 2010  John Allison  (exam-ext-vis-UVA-V09-03-02)
 - vis.mac: /vis/open OGL.
 
