@@ -55,7 +55,7 @@ void G4CustomFemaleBuilder::BuildUterus(const G4String& colourName, G4bool solid
 {
 if (trunkVolume == 0)
 
-   G4Exception("The trunk volume is missing !!!!!");
+  G4Exception("G4CustomFemaleBuilder::BuildUterus()", "human_phantom0001", FatalException, "The trunk volume is missing !!!!!");
 
  body -> CreateOrgan("Uterus",trunkVolume, colourName, solidVis, sensitivity);  }
 
@@ -63,7 +63,7 @@ void G4CustomFemaleBuilder::BuildLeftOvary(const G4String& colourName, G4bool so
 
 {
 if (trunkVolume == 0)
-    G4Exception("The trunk volume is missing !!!!!");
+  G4Exception("G4CustomFemaleBuilder::BuildLeftOvary()", "human_phantom0002", FatalException, "The trunk volume is missing !!!!!");
 
   body -> CreateOrgan("LeftOvary",trunkVolume, colourName,
  		     solidVis, sensitivity);  
@@ -72,9 +72,8 @@ if (trunkVolume == 0)
 void G4CustomFemaleBuilder::BuildRightOvary(const G4String& colourName, G4bool solidVis, G4bool sensitivity )
 
 {
- if (trunkVolume == 0)
-
-    G4Exception("The trunk volume is missing !!!!!");
+  if (trunkVolume == 0)
+   G4Exception("G4CustomFemaleBuilder::BuildRightOvary()", "human_phantom0003", FatalException, "The trunk volume is missing !!!!!");
 
   body -> CreateOrgan("RightOvary",trunkVolume, colourName,
  		     solidVis, sensitivity);  
@@ -85,7 +84,7 @@ void G4CustomFemaleBuilder::BuildVoxelLeftBreast(const G4String& colourName,
 { 
   G4cout << "BuildVoxelLeftBreast" << G4endl;
   if (motherVolume == 0)
-    G4Exception("The world volume is missing !!!!!");
+    G4Exception("G4CustomFemaleBuilder::BuildVoxelLeftBreast()", "human_phantom0004", FatalException, "The world volume is missing !!!!!");
  
   G4VBodyFactory* customBody = new G4VoxelBreastFactory();
   customBody -> CreateOrgan("LeftBreast",motherVolume, colourName,
@@ -99,7 +98,7 @@ void G4CustomFemaleBuilder::BuildVoxelRightBreast(const G4String& colourName,
 				       G4bool sensitivity)
 {
   if (motherVolume == 0)
-  G4Exception("The world volume is missing !!!!!");
+    G4Exception("G4CustomFemaleBuilder::BuildVoxelRightBreast()", "human_phantom0005", FatalException, "The world volume is missing !!!!!");
 
   G4VBodyFactory* customBody = new G4VoxelBreastFactory();
   customBody -> CreateOrgan("RightBreast",motherVolume, colourName,

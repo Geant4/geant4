@@ -37,9 +37,7 @@
 #include "G4ThreeVector.hh"
 #include "G4SDManager.hh"
 #include "G4ios.hh"
-#ifdef G4ANALYSIS_USE	
-#include "G4HumanPhantomAnalysisManager.hh"
-#endif
+#include "G4HumanPhantomAnalysis.hh"
 
 G4VoxelLeftBreastSD::G4VoxelLeftBreastSD(G4String name)
 :G4VSensitiveDetector(name)
@@ -66,20 +64,19 @@ G4bool G4VoxelLeftBreastSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist
 
  if(edep != 0)                       
 	    { 
-             
-#ifdef G4ANALYSIS_USE 
-G4HumanPhantomAnalysisManager* analysis = 
-  G4HumanPhantomAnalysisManager::getInstance();   
+ 
+// Get analysis manager
+ /* G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
 
  if (aStep -> GetPreStepPoint() -> GetPhysicalVolume() -> 
      GetName() == "LeftBreast")
    {
      G4int sector = ROhist -> GetReplicaNumber();
      G4int slice = ROhist -> GetReplicaNumber(1);	             
-     analysis -> voxelLeftBreastEnergyDeposit(slice,sector,edep/MeV);    
+     analysisManager -> FillH2(1,slice, sector,edep/MeV);    
      //     G4cout << "LeftBreast:" << "slice: " << slice << ",sector: "<< sector << " "<< edep/MeV << G4endl;           
    }
-#endif	
+*/
     }
   return true;
 }

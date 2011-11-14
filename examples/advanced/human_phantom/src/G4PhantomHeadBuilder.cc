@@ -54,7 +54,7 @@ G4PhantomHeadBuilder::~G4PhantomHeadBuilder()
 void G4PhantomHeadBuilder::BuildHead(const G4String& colourName, G4bool solidVis, G4bool sensitivity)
 { 
   if (motherVolume == 0)
-    G4Exception("The moder Volume volume is missing !!!!!");
+    G4Exception("G4PhantomHeadBuilder::BuildHead()", "human_phantom0011", FatalException, "The moder Volume volume is missing !!!!!");
   
   G4cout <<"MotherVolume: " <<  motherVolume -> GetName()<< G4endl;
   G4cout << "sensitivity : "<< sensitivity << G4endl; 
@@ -64,7 +64,7 @@ void G4PhantomHeadBuilder::BuildHead(const G4String& colourName, G4bool solidVis
 void G4PhantomHeadBuilder::BuildSkull(const G4String& colourName, G4bool solidVis, G4bool sensitivity)
 { 
   if (headVolume == 0)
-    G4Exception("The head volume is missing !!!!!");
+    G4Exception("G4PhantomHeadBuilder::BuildSkull()", "human_phantom0012", FatalException, "The head volume is missing !!!!!");
   
   G4cout <<"MotherVolume: " <<  headVolume -> GetName()<< G4endl;
   G4cout << "sensitivity : "<< sensitivity << G4endl; 
@@ -74,7 +74,7 @@ void G4PhantomHeadBuilder::BuildSkull(const G4String& colourName, G4bool solidVi
 void G4PhantomHeadBuilder::BuildBrain(const G4String& colourName, G4bool solidVis, G4bool sensitivity)
 { 
  if (headVolume == 0)
-   G4Exception("The head volume is missing !!!!!");
+   G4Exception("G4PhantomHeadBuilder::BuildBrain()", "human_phantom0013", FatalException, "The head volume is missing !!!!!");
 
     body -> CreateOrgan("Brain",headVolume, colourName, solidVis, sensitivity);
 }
