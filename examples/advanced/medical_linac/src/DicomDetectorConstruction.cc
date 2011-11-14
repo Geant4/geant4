@@ -154,7 +154,9 @@ G4ThreeVector DicomDetectorConstruction::getHalfContainerSize()
 	std::ifstream finDF(fullDataFileName);
 	G4String fname;
 	if(finDF.good() != 1 ) {
-	G4Exception(" DicomDetectorConstruction::ReadPatientData.  Problem reading data file: "+this->fileData);
+	  G4ExceptionDescription ed1;
+	  ed1 << "Problem reading data file " <<  this->fileData << G4endl;
+	  G4Exception("DicomDetectorConstruction::getHalfContainerSize()", "medical_linac0001", FatalException,ed1);
 	}
 	
 	G4int compression;
@@ -171,7 +173,9 @@ G4ThreeVector DicomDetectorConstruction::getHalfContainerSize()
 		std::ifstream fin(fullDicomFileName);
 		if(fin.good() != 1 )
 		{
-			G4Exception(" DicomDetectorConstruction::ReadPatientData.  Problem reading data file: "+fullDicomFileName);
+		  G4ExceptionDescription ed2;
+		  ed2 << "Problem reading data file " <<  fullDicomFileName << G4endl;
+		  G4Exception("DicomDetectorConstruction::getHalfContainerSize()", "medical_linac0002", FatalException,ed2);
 		}
 		else
 		{
@@ -483,7 +487,9 @@ void DicomDetectorConstruction::ReadPatientData(G4String directory, G4String fil
   std::ifstream finDF(fullDataFileName);
   G4String fname;
   if(finDF.good() != 1 ) {
-    G4Exception(" DicomDetectorConstruction::ReadPatientData.  Problem reading data file: "+fileName);
+    G4ExceptionDescription ed3;
+    ed3 << "Problem reading data file " <<  fileName << G4endl;
+    G4Exception("DicomDetectorConstruction::ReadPatientData()", "medical_linac0003", FatalException,ed3);
   }
 
   
@@ -529,7 +535,9 @@ void DicomDetectorConstruction::ReadPatientDataFile(const G4String& fname)
 #endif 
   std::ifstream fin(fname.c_str(), std::ios_base::in);
   if( !fin.is_open() ) {
-    G4Exception("DicomDetectorConstruction::ReadPatientDataFil. File not found " + fname );
+    G4ExceptionDescription ed4;
+    ed4 << "File not found " <<  fname << G4endl;
+    G4Exception("DicomDetectorConstruction::ReadPatientDataFile()", "medical_linac0004", FatalException,ed4);
   }
   //----- Define density differences (maximum density difference to create a new material)
   G4double densityDiff = 0.1; 
