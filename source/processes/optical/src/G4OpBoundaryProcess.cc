@@ -479,6 +479,11 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	aParticleChange.ProposeMomentumDirection(NewMomentum);
 	aParticleChange.ProposePolarization(NewPolarization);
 
+        if ( theStatus == FresnelRefraction ) {
+           G4double finalVelocity = aTrack.CalculateVelocityForOpticalPhoton();
+           aParticleChange.ProposeVelocity(finalVelocity);
+        }
+
         return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 }
 
