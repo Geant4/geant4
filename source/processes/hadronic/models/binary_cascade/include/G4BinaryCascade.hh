@@ -55,6 +55,8 @@
 #include "G4BCLateParticle.hh"
 #include "G4BCAction.hh"
 
+#include "G4DecayKineticTracks.hh"
+
 class G4CollisionManager;
 
 class G4Track;
@@ -79,6 +81,8 @@ public:
                                               G4Nucleus& theNucleus);
   virtual G4ReactionProductVector * Propagate(G4KineticTrackVector *,
 					      G4V3DNucleus *);
+
+  virtual void ModelDescription(std::ostream&) const;
 
 private:
 
@@ -134,6 +138,9 @@ private:
 					 G4V3DNucleus *);
   G4double GetIonMass(G4int Z, G4int A);
   
+  G4ReactionProductVector * HighEnergyModelFSProducts(G4ReactionProductVector *,
+		  	  	  	 G4KineticTrackVector * secondaries);
+  G4ReactionProductVector * FillVoidNucleusProducts(G4ReactionProductVector * );
 // utility methods
   G4ThreeVector GetSpherePoint(G4double r, const G4LorentzVector & momentumdirection);
   void ClearAndDestroy(G4KineticTrackVector * ktv);
@@ -149,11 +156,11 @@ private:
   void DebugEpConservation(const G4HadProjectile & aTrack, G4ReactionProductVector* products);			   
 			   
 private:
-  G4KineticTrackVector theProjectileList;  // replaced by theProjectile4Momentum
-  G4KineticTrackVector theTargetList;
-  G4KineticTrackVector theSecondaryList;
-  G4KineticTrackVector theCapturedList;
-  G4KineticTrackVector theFinalState;
+  G4KineticTrackVector theProjectileList;	// replaced by theProjectile4Momentum
+  G4KineticTrackVector theTargetList;		// list of nucleons in Nucleus
+  G4KineticTrackVector theSecondaryList;	// particles being followed
+  G4KineticTrackVector theCapturedList;		// captured particles
+  G4KineticTrackVector theFinalState;		// particles for final state
 
 
   G4ExcitationHandler * theExcitationHandler;
@@ -165,6 +172,7 @@ private:
   G4BCDecay * theDecay;
   G4BCLateParticle * theLateParticle;
   G4VFieldPropagation * thePropagator;
+  G4DecayKineticTracks decayKTV;
 
   G4double theCurrentTime;
   G4double theBCminP;

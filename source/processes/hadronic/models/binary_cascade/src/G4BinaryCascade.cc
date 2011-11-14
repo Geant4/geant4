@@ -144,6 +144,18 @@ G4BinaryCascade::~G4BinaryCascade()
 	delete theH1Scatterer;
 }
 
+void G4BinaryCascade::ModelDescription(std::ostream& outFile) const
+{
+  outFile << "G4BinaryCascade is an intra-nuclear cascade model in which\n"
+          << "an incident hadron collides with a nucleon, forming two\n"
+          << "final-state particles, one or both of which may be resonances.\n"
+          << "The resonances then decay hadronically and the decay products\n"
+          << "are then propagated through the nuclear potential along curved\n"
+          << "trajectories until they re-interact or leave the nucleus.\n"
+          << "This model is valid for incident pions up to 1.5 GeV and\n"
+          << "nucleons up to 10 GeV.\n";
+}
+
 //----------------------------------------------------------------------------
 
 //
@@ -355,9 +367,9 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 					<< ", state " << (*iter)->GetState() << G4endl;
 #endif
 		}
-		//    theCollisionMgr->Print();
-
 	}
+    //theCollisionMgr->Print();
+
     const G4HadProjectile * primary = GetPrimaryProjectile();	// check for primary from TheoHE model
     if (primary){
     	G4LorentzVector mom=primary->Get4Momentum();
@@ -375,44 +387,11 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 			#ifdef debug_G4BinaryCascade
     			G4cout << "BIC: Proj.e / initial excitation: " << theProjectile4Momentum.e() << " / " << excitation << G4endl;
 			#endif
-    			for(iter = secondaries->begin(); iter != secondaries->end(); ++iter)
-    			{
-    				G4ReactionProduct * aNew = new G4ReactionProduct((*iter)->GetDefinition());
-    				aNew->SetMomentum((*iter)->Get4Momentum().vect());
-    				aNew->SetTotalEnergy((*iter)->Get4Momentum().e());
-     				aNew->SetNewlyAdded(true);
-    				//G4cout << " Particle Ekin " << aNew->GetKineticEnergy() << G4endl;
-    				products->push_back(aNew);
-    			}
-    			G4ParticleDefinition* fragment = 0;
-    			if (currentA == 1 && currentZ == 0) {
-    				fragment = G4Neutron::NeutronDefinition();
-    			} else if (currentA == 1 && currentZ == 1) {
-    				fragment = G4Proton::ProtonDefinition();
-    			} else if (currentA == 2 && currentZ == 1) {
-    				fragment = G4Deuteron::DeuteronDefinition();
-    			} else if (currentA == 3 && currentZ == 1) {
-    				fragment = G4Triton::TritonDefinition();
-    			} else if (currentA == 3 && currentZ == 2) {
-    				fragment = G4He3::He3Definition();
-    			} else if (currentA == 4 && currentZ == 2) {
-    				fragment = G4Alpha::AlphaDefinition();;
-    			} else {
-    				fragment =
-    						G4ParticleTable::GetParticleTable()->GetIonTable()->GetIon(currentZ,currentA,0.0);
-    			}
-    			if (fragment != 0) {
-    				G4ReactionProduct * theNew = new G4ReactionProduct(fragment);
-    				theNew->SetMomentum(G4ThreeVector(0,0,0));
-    				theNew->SetTotalEnergy(massInNucleus);
-    				//theNew->SetFormationTime(??0.??);
-       				//G4cout << " Nucleus (" << currentZ << ","<< currentA << "), mass "<< massInNucleus << G4endl;
-    				products->push_back(theNew);
-    			}
-					#ifdef debug_BIC_return
-    				   G4cout << "return @ begin1,  excit<0 "<< G4endl;
-					#endif
-    			return products;
+			#ifdef debug_BIC_return
+    			G4cout << "return @ begin1,  excit<0 "<< G4endl;
+			#endif
+    		products=HighEnergyModelFSProducts(products, secondaries);
+    		return products;
     	}
     }
 	secondaries->clear(); // Don't leave "G4KineticTrack *"s in two vectors
@@ -440,7 +419,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 	G4bool haveProducts = false;
 	G4int collisionCount=0;
 	theMomentumTransfer=G4ThreeVector(0,0,0);
-	while(theCollisionMgr->Entries() > 0)
+	while(theCollisionMgr->Entries() > 0 && currentZ)
 	{
 		// G4cout << "Propagate Captured size: " << theCapturedList.size() << G4endl;
 		// FixMe: at the moment I absorb pi with mom < theCutOnp, and I capture
@@ -490,6 +469,12 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 	}
 
 	//--------- end of while on Collisions
+	//G4cout << "currentZ @ end loop " << currentZ << G4endl;
+	if ( ! currentZ ){
+		// nucleus completely destroyed, fill in ReactionProductVector
+		products = FillVoidNucleusProducts(products);
+		return products;
+	}
 
 	// No more collisions: absorb, capture and propagate the secondaries out of the nucleus
 	if(Absorb()) {
@@ -914,7 +899,7 @@ G4double G4BinaryCascade::GetExcitationEnergy()
 
 	excitationE = GetFinalNucleusMomentum().mag() - nucleusMass;
 
-	G4double exE2 = GetFinal4Momentum().mag() - nucleusMass;
+	//G4double exE2 = GetFinal4Momentum().mag() - nucleusMass;
 
 	//G4cout << "old/new excitE " << excitationE << " / "<< exE2 << G4endl;
 
@@ -1869,7 +1854,6 @@ void G4BinaryCascade::UpdateTracksAndCollisions(
 		G4KineticTrackVector * oldTarget,
 		G4KineticTrackVector * newSecondaries)
 {
-	// G4cout << "Entering ... "<<oldTarget<<G4endl;
 	std::vector<G4KineticTrack *>::iterator iter1, iter2;
 
 	// remove old secondaries from the secondary list
@@ -2785,9 +2769,150 @@ G4double G4BinaryCascade::GetIonMass(G4int Z, G4int A)
 	{
 		G4cerr << "G4BinaryCascade::GetIonMass() - invalid (A,Z) = ("
 				<< A << "," << Z << ")" <<G4endl;
-		G4Exception("G4BinaryCascade::GetIonMass() - giving up");
+		throw G4HadronicException(__FILE__, __LINE__, "G4BinaryCascade::GetIonMass() - giving up");
+
 	}
 	return mass;
+}
+G4ReactionProductVector * G4BinaryCascade::FillVoidNucleusProducts(G4ReactionProductVector * products)
+{
+// return product when nucleus is destroyed, i.e. charge=0
+	G4double Esecondaries(0.);
+	std::vector<G4KineticTrack *>::iterator iter;
+	decayKTV.Decay(&theFinalState);
+	//PrintKTVector(&theFinalState, " theFinalState @ void Nucl");
+	for(iter = theFinalState.begin(); iter != theFinalState.end(); ++iter)
+	{
+		G4ReactionProduct * aNew = new G4ReactionProduct((*iter)->GetDefinition());
+		aNew->SetMomentum((*iter)->Get4Momentum().vect());
+		aNew->SetTotalEnergy((*iter)->Get4Momentum().e());
+		Esecondaries +=(*iter)->Get4Momentum().e();
+		aNew->SetNewlyAdded(true);
+		//G4cout << " Particle Ekin " << aNew->GetKineticEnergy() << G4endl;
+		products->push_back(aNew);
+	}
+
+	//PrintKTVector(&theCapturedList, " theCapturedList @ void Nucl");
+	for(iter = theCapturedList.begin(); iter != theCapturedList.end(); ++iter)
+	{
+		G4ReactionProduct * aNew = new G4ReactionProduct((*iter)->GetDefinition());
+		aNew->SetMomentum((*iter)->Get4Momentum().vect());
+		aNew->SetTotalEnergy((*iter)->Get4Momentum().e());
+		Esecondaries +=(*iter)->Get4Momentum().e();
+		aNew->SetNewlyAdded(true);
+		//G4cout << " Particle Ekin " << aNew->GetKineticEnergy() << G4endl;
+		products->push_back(aNew);
+	}
+	// pull out late particles from collisions
+	//theCollisionMgr->Print();
+	while(theCollisionMgr->Entries() > 0)
+	{
+		G4CollisionInitialState *
+			collision = theCollisionMgr->GetNextCollision();
+
+		if ( ! collision->GetTargetCollection().size() ){
+			G4KineticTrackVector * lates = collision->GetFinalState();
+			if ( lates->size() == 1 ) {
+				G4KineticTrack * atrack=*(lates->begin());
+				G4ReactionProduct * aNew = new G4ReactionProduct(atrack->GetDefinition());
+				aNew->SetMomentum(atrack->Get4Momentum().vect());
+				aNew->SetTotalEnergy(atrack->Get4Momentum().e());
+				Esecondaries +=atrack->Get4Momentum().e();
+				aNew->SetNewlyAdded(true);
+				//G4cout << " Particle Ekin " << aNew->GetKineticEnergy() << G4endl;
+				products->push_back(aNew);
+
+			}
+		}
+		theCollisionMgr->RemoveCollision(collision);
+
+	}
+
+	// decay must be after loop on Collisions, and Decay() will delete entries in theSecondaryList, refered
+	//   to by Collisions.
+	decayKTV.Decay(&theSecondaryList);
+	//PrintKTVector(&theSecondaryList, " secondaires @ void Nucl");
+	for(iter = theSecondaryList.begin(); iter != theSecondaryList.end(); ++iter)
+	{
+		G4ReactionProduct * aNew = new G4ReactionProduct((*iter)->GetDefinition());
+		aNew->SetMomentum((*iter)->Get4Momentum().vect());
+		aNew->SetTotalEnergy((*iter)->Get4Momentum().e());
+		Esecondaries +=(*iter)->Get4Momentum().e();
+		aNew->SetNewlyAdded(true);
+		//G4cout << " Particle Ekin " << aNew->GetKineticEnergy() << G4endl;
+		products->push_back(aNew);
+	}
+
+
+	G4double SumMassNucleons(0.);
+	for(iter = theTargetList.begin(); iter != theTargetList.end(); ++iter)
+	{
+		SumMassNucleons += (*iter)->GetDefinition()->GetPDGMass();
+	}
+
+	G4double Ekinetic=theProjectile4Momentum.e() + initial_nuclear_mass - Esecondaries - SumMassNucleons;
+    //G4cout << "Void nucleus nucleons : "<<theTargetList.size() << " ,  T: " << Ekinetic << G4endl;
+	if (Ekinetic > 0.){
+		if (theTargetList.size() ) Ekinetic /= theTargetList.size();
+	} else {
+		//G4cout << " zero or negative kinetic energy, use random: " << Ekinetic<< G4endl;
+		Ekinetic= ( 0.1 + G4UniformRand()*5.) * MeV;	// violate Energy conservation by small amount here
+	}
+    //G4cout << " using T per nucleon: " << Ekinetic << G4endl;
+
+	for(iter = theTargetList.begin(); iter != theTargetList.end(); ++iter)
+	{
+		G4ReactionProduct * aNew = new G4ReactionProduct((*iter)->GetDefinition());
+		G4double m=(*iter)->GetDefinition()->GetPDGMass();
+		G4double p=std::sqrt(sqr(Ekinetic) + 2.*Ekinetic*m);
+		aNew->SetMomentum(p*(*iter)->Get4Momentum().vect().unit());
+		aNew->SetTotalEnergy(m+Ekinetic);
+		aNew->SetNewlyAdded(true);
+		//G4cout << " Particle Ekin " << aNew->GetKineticEnergy() << G4endl;
+		products->push_back(aNew);
+	}
+
+	return products;
+}
+G4ReactionProductVector * G4BinaryCascade::HighEnergyModelFSProducts(G4ReactionProductVector * products,
+				G4KineticTrackVector * secondaries)
+{
+	std::vector<G4KineticTrack *>::iterator iter;
+	for(iter = secondaries->begin(); iter != secondaries->end(); ++iter)
+	{
+		G4ReactionProduct * aNew = new G4ReactionProduct((*iter)->GetDefinition());
+		aNew->SetMomentum((*iter)->Get4Momentum().vect());
+		aNew->SetTotalEnergy((*iter)->Get4Momentum().e());
+		aNew->SetNewlyAdded(true);
+		//G4cout << " Particle Ekin " << aNew->GetKineticEnergy() << G4endl;
+		products->push_back(aNew);
+	}
+	G4ParticleDefinition* fragment = 0;
+	if (currentA == 1 && currentZ == 0) {
+		fragment = G4Neutron::NeutronDefinition();
+	} else if (currentA == 1 && currentZ == 1) {
+		fragment = G4Proton::ProtonDefinition();
+	} else if (currentA == 2 && currentZ == 1) {
+		fragment = G4Deuteron::DeuteronDefinition();
+	} else if (currentA == 3 && currentZ == 1) {
+		fragment = G4Triton::TritonDefinition();
+	} else if (currentA == 3 && currentZ == 2) {
+		fragment = G4He3::He3Definition();
+	} else if (currentA == 4 && currentZ == 2) {
+		fragment = G4Alpha::AlphaDefinition();;
+	} else {
+		fragment =
+				G4ParticleTable::GetParticleTable()->GetIonTable()->GetIon(currentZ,currentA,0.0);
+	}
+	if (fragment != 0) {
+		G4ReactionProduct * theNew = new G4ReactionProduct(fragment);
+		theNew->SetMomentum(G4ThreeVector(0,0,0));
+		theNew->SetTotalEnergy(massInNucleus);
+		//theNew->SetFormationTime(??0.??);
+		//G4cout << " Nucleus (" << currentZ << ","<< currentA << "), mass "<< massInNucleus << G4endl;
+		products->push_back(theNew);
+	}
+	return products;
 }
 
 void G4BinaryCascade::PrintWelcomeMessage()

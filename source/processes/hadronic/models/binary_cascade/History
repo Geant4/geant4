@@ -13,6 +13,19 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+11-November-2011, Gunter Folger  had-binary-V09-04-12
+-  move to G4HadronicException in G4BinaryCascade::GetIonMass()
+
+11-November 2011, Dennis Wright  had-binary-V09-04-11
+- G4BinaryCascade.cc : update G4Exception to new format
+
+07-November 2011, Dennis Wright  had-binary-V09-04-10
+- G4BinaryCascade.hh, .cc: add ModelDescription()
+
+03/04-November 2011, Gunter Folger had-binary-V09-04-09
+-  G4RKFieldIntegrator.cc fix for Xcode warning.
+-  BinaryCascade: add handling of detroyed nucleus, ie. when charge becomes 0
+
 28-October-2011, Gunter Folger  had-binary-V09-04-08
    svn rev 53628 ( except History)
 -  BinaryCascade: more changes/fixes for use with propagate interface.

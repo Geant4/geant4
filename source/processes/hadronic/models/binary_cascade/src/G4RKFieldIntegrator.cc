@@ -143,7 +143,7 @@ G4double G4RKFieldIntegrator::Erf(G4double X)
         H = 1 - std::exp(-V*V)*(C1+Y*(P30 + P31*Y)/(Q30 + Y))/V;
         }
      if (X < 0) 
-        H =- H;
+        H = -H;
      }
    return H;
 }
