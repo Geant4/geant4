@@ -72,7 +72,7 @@ G4LEnp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
       G4double E = aParticle->GetTotalEnergy();
       G4double E0 = aParticle->GetDefinition()->GetPDGMass();
       G4double Q = aParticle->GetDefinition()->GetPDGCharge();
-      G4int N = targetNucleus.GetN_asInt();
+      G4int A = targetNucleus.GetA_asInt();
       G4int Z = targetNucleus.GetZ_asInt();
       G4cout << "G4LEnp:ApplyYourself: incident particle: "
              << aParticle->GetDefinition()->GetParticleName() << G4endl;
@@ -85,7 +85,7 @@ G4LEnp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
              << ", mass = " << E0/GeV << " GeV"
              << ", charge = " << Q << G4endl;
       G4cout << "G4LEnp:ApplyYourself: material:" << G4endl;
-      G4cout << "A = " << N
+      G4cout << "A = " << A
              << ", Z = " << Z
              << ", atomic mass " 
              <<  G4Proton::Proton()->GetPDGMass()/GeV << "GeV" 

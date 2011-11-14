@@ -142,14 +142,14 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
 
   // problem in sampling
   if(cost > 1.0 || cost < -1.0) {
-    if(verboseLevel > 0) {
-      G4cout << "G4HadronElastic WARNING cost= " << cost
+    //if(verboseLevel > 0) {
+      G4cout << "G4HadronElastic WARNING (1 - cost)= " << 1 - cost
 	     << " after scattering of " 
 	     << aParticle->GetDefinition()->GetParticleName()
 	     << " p(GeV/c)= " << plab
 	     << " on an ion Z= " << Z << " A= " << A
 	     << G4endl;
-    }
+      //}
     cost = 1.0;
     sint = 0.0;
 
@@ -159,8 +159,8 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   }    
   if (verboseLevel>1) {
     G4cout << " t= " << t << " tmax= " << tmax 
-	   << " Pcms= " << momentumCMS << "cos(t)=" << cost 
-	   << " std::sin(t)=" << sint << G4endl;
+	   << " Pcms= " << momentumCMS << " cos(t)=" << cost 
+	   << " sin(t)=" << sint << G4endl;
   }
   G4ThreeVector v1(sint*std::cos(phi),sint*std::sin(phi),cost);
   v1 *= momentumCMS;

@@ -41,6 +41,7 @@
 //
 
 #include "G4CHIPSElasticXS.hh"
+#include "G4HadronicException.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Element.hh"
@@ -129,22 +130,51 @@ G4CHIPSElasticXS::GetIsoCrossSection(const G4DynamicParticle* dyn,
   G4double momentum = dyn->GetTotalMomentum();
   G4int    uPDGcode = dyn->GetPDGcode();
   G4VQCrossSection* CHIPSmanager = 0; 
+  G4double cross = 0.0;
 
-  if     (uPDGcode == 2212)  {CHIPSmanager=pCManager;    } // Projectile is Proton
-  else if(uPDGcode == 2112)  {CHIPSmanager=nCManager;    } // Projectile is Neutron
-  else if(uPDGcode == -2212) {CHIPSmanager=PBARxsManager;} // Projectile is Anti-Proton
-  else if(uPDGcode == -2112) {CHIPSmanager=PBARxsManager;} // Projectile is Anti-Neutron
-  else if(uPDGcode ==   211) {CHIPSmanager=PIPxsManager; } // Projectile is Pi+
-  else if(uPDGcode ==  -211) {CHIPSmanager=PIMxsManager; } // Projectile is Pi-
-  else if(uPDGcode ==   321) {CHIPSmanager=KPxsManager;  } // Projectile is K+
-  else if(uPDGcode ==  -321) {CHIPSmanager=KMxsManager;  } // Projectile is K-
-  
-  if(!CHIPSmanager) { 
-    G4cout << "G4CHIPSElasticXS ERROR: not applicable for " 
-	   << dyn->GetDefinition()->GetParticleName() 
-	   << G4endl;
-    G4Exception("G4CHIPSElasticXS", "", FatalException,"Not applicable");
-    return 0.0; 
+  switch(uPDGcode) {
+  case 2212:
+    CHIPSmanager=pCManager;
+    break;
+  case 2112:
+    CHIPSmanager=nCManager;
+    break;
+  case -2212:
+    CHIPSmanager=PBARxsManager;
+    break;
+  case -2112:
+    CHIPSmanager=PBARxsManager;
+    break;
+  case 211:
+    CHIPSmanager=PIPxsManager;
+    break;
+  case -211:
+    CHIPSmanager=PIMxsManager;
+    break;
+  case 321:
+    CHIPSmanager=KPxsManager;
+    break;
+  case -321:
+    CHIPSmanager=KMxsManager;
+    break;
+  case 130:
+    break;
+  case 310:
+    break;
+  case 311:
+    break;
+  case -311:
+    break;
+  default:
+    throw G4HadronicException(__FILE__, __LINE__,
+			      "G4CHIPSElasticXS: not applicable for a particle"); 
+    return cross; 
   }
-  return CHIPSmanager->GetCrossSection(false,momentum,Z,N,uPDGcode); 
+  if(CHIPSmanager) {
+    cross = CHIPSmanager->GetCrossSection(false,momentum,Z,N,uPDGcode);
+  } else {
+    cross = 0.5*(KPxsManager->GetCrossSection(false,momentum,Z,N,uPDGcode) +
+		 KMxsManager->GetCrossSection(false,momentum,Z,N,uPDGcode));
+  }
+  return cross; 
 }

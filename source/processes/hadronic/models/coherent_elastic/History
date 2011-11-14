@@ -14,6 +14,20 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+31 October 2011 - A.Galoyan (hadr-cohe-V09-04-19)
+-  G4AntiNuclElastic - antiProton-Proton elastic scattering is improved 
+--------------------------------------------------------------
+21 October 2011 - V.Ivanchenko (hadr-cohe-V09-04-18)
+------------------------------------------------------
+- G4CHIPSElasticXS - used G4HadronicException; added cross sections for neutral
+                     kaons; use "case" instead of "if"
+
+21 October 2011 - V.Ivanchenko (hadr-cohe-V09-04-17)
+------------------------------------------------------
+- G4HadronElastic - lowest limit is set to 1.e-6 eV
+- G4WHadronElasticProcess - moved to hadronic/processes
+- G4LEpp, G4LEnp - fixed extraction of A from G4Nucleaus
+
 04 October 2011 - V.Ivanchenko (hadr-cohe-V09-04-16)
 ------------------------------------------------------
 - G4AntiNuclElastic - removed internal low and high energy limits

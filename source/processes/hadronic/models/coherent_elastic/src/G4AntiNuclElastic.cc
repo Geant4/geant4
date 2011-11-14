@@ -47,7 +47,7 @@
 #include "G4Pow.hh"
 #include "G4AntiNuclElastic.hh"
 
-#include "G4NucleiProperties.hh"       // 8 May 2011
+#include "G4NucleiProperties.hh"       
 
 G4AntiNuclElastic::G4AntiNuclElastic() 
   : G4HadronElastic("AntiAElastic")
@@ -88,7 +88,7 @@ G4AntiNuclElastic::G4AntiNuclElastic()
 /////////////////////////////////////////////////////////////////////////
 G4AntiNuclElastic::~G4AntiNuclElastic()
 {
-  delete cs;  // 8 May 2011
+  delete cs;  
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -102,7 +102,7 @@ G4double G4AntiNuclElastic::SampleInvariantT(const G4ParticleDefinition* particl
    G4double ctet1 = GetcosTeta1(Plab, A); 
 
    G4double energy=Pproj.e()-Mproj;   
-
+  
   const G4ParticleDefinition* theParticle = particle;
 
   G4ParticleDefinition * theDef = 0;
@@ -112,19 +112,16 @@ G4double G4AntiNuclElastic::SampleInvariantT(const G4ParticleDefinition* particl
   else if (Z == 1 && A == 3) theDef = G4Triton::Triton();
   else if (Z == 2 && A == 3) theDef = G4He3::He3();
   else if (Z == 2 && A == 4) theDef = theAlpha;
-/*                                                            // 8 May 2011
-  else theDef = G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z);
 
-  G4double TargMass = theDef->GetPDGMass(); 
-*/                                                            // 8 May 2011
 
-  G4double TargMass =G4NucleiProperties::GetNuclearMass(A,Z); // 8 May 2011
+  G4double TargMass =G4NucleiProperties::GetNuclearMass(A,Z); 
 
   //transform to CMS
 
    G4LorentzVector lv(0.0,0.0,0.0,TargMass);   
    lv += Pproj;
   G4double S = lv.mag2()/GeV/GeV;
+
   G4ThreeVector bst = lv.boostVector();
   Pproj.boost(-bst);
 
@@ -144,26 +141,22 @@ G4double G4AntiNuclElastic::SampleInvariantT(const G4ParticleDefinition* particl
    fWaveVector = ptot;     //   /hbarc; 
     
    G4LorentzVector Fproj(0.,0.,0.,0.);  
- 
- 
 G4double  XsCoulomb = sqr(n/fWaveVector)*pi*(1+ctet1)/(1.+Am)/(1.+2.*Am-ctet1); 
 XsCoulomb=XsCoulomb*0.38938e+6;
-//XsCoulomb=0;
 
-// 8 May 2011
-//G4double XsElastHad =cs->ComputeElasticCrossSection(particle, energy, Z, (G4double)A);
-//G4double XstotalHad =cs->ComputeTotalCrossSection(particle, energy, Z, (G4double)A);
 
 G4double XsElastHad =cs->GetElasticElementCrossSection(particle, energy, Z, (G4double)A);
 G4double XstotalHad =cs->GetTotalElementCrossSection(particle, energy, Z, (G4double)A);
-// 8 May 2011
 
-//XsElastHad=0.;
 
  XsElastHad/=millibarn; XstotalHad/=millibarn;
-   G4double CoulombProb =  XsCoulomb/(XsCoulomb+XsElastHad);
 
-//G4cout<<" XsCol"<< XsCoulomb <<" Elast" << XsElastHad<<G4endl;
+
+  G4double CoulombProb =  XsCoulomb/(XsCoulomb+XsElastHad);
+
+// G4cout<<" XselastHadron " << XsElastHad << "  XsCol "<< XsCoulomb <<G4endl; 
+// G4cout <<"  XsTotal" << XstotalHad <<G4endl;  
+// G4cout<<"XsInel"<< XstotalHad-XsElastHad<<G4endl;        
 
   if(G4UniformRand() < CoulombProb)
   {  // Simulation of Coulomb scattering
@@ -191,15 +184,15 @@ G4double XstotalHad =cs->GetTotalElementCrossSection(particle, energy, Z, (G4dou
  {  
 ///////Simulation of strong interaction scattering////////////////////////////
 
-   G4double Qmax = 2.*ptot*197.33;    // in fm^-1
-   G4double Amag = 70*70;    //  A1 in Magora funct:A1*exp(-q*A2)
-   G4double SlopeMag = 2.*3.0; // A2 in Magora funct:A1*exp(-q*A2)
+//   G4double Qmax = 2.*ptot*197.33;    // in fm^-1
+   G4double Qmax = 2.*3.0*197.33;    // in fm^-1
+   G4double Amag = 70*70;          //  A1 in Magora funct:A1*exp(-q*A2)
+   G4double SlopeMag = 2.*3.0;    // A2 in Magora funct:A1*exp(-q*A2)
 
   G4double sig_pbarp= cs->GetAntiHadronNucleonTotCrSc(particle,energy); 
    
-// fRa = 1.113*std::pow(A,0.333333) - 0.227/std::pow(A,0.333333); // 8 May 2011
-   fRa = 1.113*G4Pow::GetInstance()->Z13(A) -                     // 8 May 2011
-         0.227/G4Pow::GetInstance()->Z13(A);                      // 8 May 2011
+   fRa = 1.113*G4Pow::GetInstance()->Z13(A) -                     
+         0.227/G4Pow::GetInstance()->Z13(A);                      
    if(A == 3) fRa=1.81;
    if(A == 4) fRa=1.37;
  
@@ -209,23 +202,42 @@ G4double XstotalHad =cs->GetTotalElementCrossSection(particle, energy, Z, (G4dou
 
  G4double Ref2 = 0;
  G4double ceff2 =0;
- // G4double A2 = 0;
-
+ G4double rho = 0;
  if  ((theParticle == theAProton) || (theParticle == theANeutron))  
 {
   if(theDef == theProton)
   { 
-   G4double Mp2=sqr(theDef->GetPDGMass()/GeV ); 
-// Ref2=0.8/pow((S-4.*Mp2),0.25) + 0.55;           // 8 May 2011
-   Ref2=0.8/std::sqrt(std::sqrt(S-4.*Mp2)) + 0.55; // 8 May 2011
-   Ref2=Ref2*Ref2;
-   ceff2 = 0.035/(sqr(S-4.3)+0.4) + 0.085 * std::log(S) ;
-   ceff2 = ceff2*ceff2;
-   //A2 = (4.0/std::sqrt(S-4.*Mp2) + 0.3) / 256.8/pi;
+//   G4double Mp2=sqr(theDef->GetPDGMass()/GeV ); 
 
-SlopeMag = 0.5;  // Uzhi
-Amag=1.;         // Uzhi
+// change 30 October
+  
+ if(Plab < 610.) 
+   { rho = 1.3347-10.342*Plab/1000.+22.277*Plab/1000.*Plab/1000.-
+      13.634*Plab/1000.*Plab/1000.*Plab/1000. ;}
+  if((Plab < 5500.)&&(Plab >= 610.) )
+   { rho = 0.22; }
+  if((Plab >= 5500.)&&(Plab < 12300.) )
+   { rho = -0.32; }
+  if( Plab >= 12300.)
+   { rho = 0.135-2.26/(std::sqrt(S)) ;}
+
+ Ref2 = 0.35 + 0.9/std::sqrt(std::sqrt(S-4.*0.88))+0.04*std::log(S) ;
+ ceff2 = 0.375 - 2./S + 0.44/(sqr(S-4.)+1.5) ;
+
+/*   
+   Ref2=0.8/std::sqrt(std::sqrt(S-4.*Mp2)) + 0.55; 
+   if(S>1000.) Ref2=0.62+0.02*std::log(S) ;
+   ceff2 = 0.035/(sqr(S-4.3)+0.4) + 0.085 * std::log(S) ;
+   if(S>1000.) ceff2 = 0.005 * std::log(S) + 0.29;
+*/
+
+   Ref2=Ref2*Ref2;
+   ceff2 = ceff2*ceff2;
+
+SlopeMag = 0.5;        // Uzhi
+Amag= 1.;              // Uzhi
   }
+
  if(Z>2) 
  {  Ref2 = fRa*fRa +2.48*0.01*sig_pbarp*fRa - 2.23e-6*sig_pbarp*sig_pbarp*fRa*fRa; 
     ceff2 = 0.16+3.3e-4*sig_pbarp+0.35*exp(-0.03*sig_pbarp);
@@ -330,29 +342,24 @@ Amag=1.;         // Uzhi
 
     fRef=std::sqrt(Ref2);
     fceff = std::sqrt(ceff2);     
-//    G4cout<<" Ref  "<<fRef<<" c_eff "<<fceff<<G4endl; 
+// G4cout<<" Ref  "<<fRef<<" c_eff "<<fceff<< " rho "<< rho<<G4endl; 
 
-  
+ 
    G4double Q = 0.0 ;
   G4double BracFunct;
  do 
  {
   Q = -std::log(1.-(1.- std::exp(-SlopeMag * Qmax))* G4UniformRand() )/SlopeMag;
   G4double x = fRef * Q;
+BracFunct = ( ( sqr(BesselOneByArg(x))+sqr(rho/2. * BesselJzero(x)) )
+* sqr(DampFactor(pi*fceff*Q))) /(Amag*std::exp(-SlopeMag*Q));
 
- BracFunct = sqr(BesselOneByArg(x)*DampFactor(pi*fceff*Q))/
- (Amag*std::exp(-SlopeMag*Q));
-
-//G4cout<<"Amag Bess "<<Amag<<" "<<BesselOneByArg(0.)*DampFactor(pi*fceff*0.)<<G4endl;
-//G4int Uzhi; G4cin>>Uzhi;
-
-// BracFunct = BracFunct * Q * std::pow(fRef,4.); // 8 May 2011
-   BracFunct = BracFunct * Q * sqr(sqr(fRef));   // 8 May 2011
+   BracFunct = BracFunct * Q * sqr(sqr(fRef));   
   } 
    while (G4UniformRand()>BracFunct);
     T= sqr(Q); 
     T*=3.893913e+4;                // fm -> MeV^2
-      }
+  }
 
  G4double cosTet=1.0-T/(2.*ptot*ptot);
  
@@ -492,13 +499,64 @@ G4double G4AntiNuclElastic::CalculateAm( G4double momentum, G4double n, G4double
 {
   G4double k   = momentum/hbarc;
   G4double ch  = 1.13 + 3.76*n*n;
-//G4double zn  = 1.77*k*std::pow(Z,-1./3.)*Bohr_radius;           // 8 May 2011
-  G4double zn  = 1.77*k/G4Pow::GetInstance()->A13(Z)*Bohr_radius; // 8 May 2011
+  G4double zn  = 1.77*k/G4Pow::GetInstance()->A13(Z)*Bohr_radius; 
   G4double zn2 = zn*zn;
   fAm          = ch/zn2;
 
   return fAm;
 }
+
+/////////////////////////////////////////////////////////////
+//
+// Bessel J0 function based on rational approximation from
+// J.F. Hart, Computer Approximations, New York, Willey 1968, p. 141
+   
+G4double G4AntiNuclElastic::BesselJzero(G4double value)
+{  
+  G4double modvalue, value2, fact1, fact2, arg, shift, bessel;
+
+  modvalue = fabs(value);
+
+  if ( value < 8.0 && value > -8.0 )
+  {
+    value2 = value*value;
+                 
+    fact1  = 57568490574.0 + value2*(-13362590354.0
+                           + value2*( 651619640.7  
+                           + value2*(-11214424.18
+                           + value2*( 77392.33017
+                           + value2*(-184.9052456   ) ) ) ) );
+                              
+    fact2  = 57568490411.0 + value2*( 1029532985.0
+                           + value2*( 9494680.718
+                           + value2*(59272.64853
+                           + value2*(267.8532712
+                           + value2*1.0               ) ) ) );
+ 
+    bessel = fact1/fact2;
+  }
+  else
+  {
+    arg    = 8.0/modvalue;
+
+    value2 = arg*arg;
+ 
+    shift  = modvalue-0.785398164;
+
+    fact1  = 1.0 + value2*(-0.1098628627e-2
+                 + value2*(0.2734510407e-4
+                 + value2*(-0.2073370639e-5
+                 + value2*0.2093887211e-6    ) ) );
+  fact2  = -0.1562499995e-1 + value2*(0.1430488765e-3
+                              + value2*(-0.6911147651e-5
+                              + value2*(0.7621095161e-6
+                              - value2*0.934945152e-7    ) ) );
+
+    bessel = sqrt(0.636619772/modvalue)*(cos(shift)*fact1 - arg*sin(shift)*fact2);
+  }
+  return bessel;
+}
+
 
 //////////////////////////////////////////////////////////////////////////////
 // Bessel J1 function based on rational approximation from
@@ -577,6 +635,7 @@ G4double G4AntiNuclElastic::GetcosTeta1(G4double plab, G4int A)
   G4double p0 = 1.*hbarc/fermi;
 //G4double cteta1 = 1.0 - p0*p0/2.0 * pow(A,2./3.)/(plab*plab);
   G4double cteta1 = 1.0 - p0*p0/2.0 * G4Pow::GetInstance()->Z23(A)/(plab*plab);
+//////////////////
   if(cteta1 < -1.) cteta1 = -1.0;
   return cteta1;
 }

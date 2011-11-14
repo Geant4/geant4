@@ -75,6 +75,8 @@ public:
  
  G4double DampFactor(G4double z);
 
+ G4double BesselJzero(G4double z);
+
  G4double BesselJone(G4double z);
 
  G4double BesselOneByArg(G4double z); 
