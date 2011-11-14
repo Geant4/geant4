@@ -63,6 +63,9 @@ public:
 
   void EventEnergy(G4double energy);
 
+  void SetRandomSeed(G4int rs){fRandomSeed = rs;};
+  G4int GetRandomSeed(){return fRandomSeed;};
+
 
 private:
   G4int counter; //peak efficiency
@@ -73,6 +76,9 @@ private:
   std::ofstream *outFile;
   
   PhysicsList* fPL;  
+
+  G4int fRandomSeed;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

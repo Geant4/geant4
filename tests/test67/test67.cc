@@ -59,14 +59,6 @@ int main(int argc,char** argv) {
 
   theTimer->Start();
 
-  //choose the Random engine
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-  G4int seed = time(0);
-  CLHEP::HepRandom::setTheSeed(seed);
-  //G4cout << "WARNING: Random seed is constant " << G4endl;
-  CLHEP::HepRandom::showEngineStatus();
-
-
   // Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
 

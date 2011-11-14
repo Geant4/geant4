@@ -44,18 +44,20 @@ class G4UIcmdWithAnInteger;
 
 class EventActionMessenger: public G4UImessenger
 {
-  public:
-    EventActionMessenger(EventAction*);
-   ~EventActionMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-    
-  private:
-    EventAction*          eventAction;
-    
-    G4UIdirectory*        eventDir;         
-    G4UIcmdWithAString*   DrawCmd;
-    G4UIcmdWithAnInteger* PrintCmd;    
+public:
+  EventActionMessenger(EventAction*);
+  ~EventActionMessenger();
+  
+  void SetNewValue(G4UIcommand*, G4String);
+  
+private:
+  EventAction*          eventAction;
+  
+  G4UIdirectory*        eventDir;         
+  G4UIcmdWithAString*   DrawCmd;
+  G4UIcmdWithAnInteger* PrintCmd;   
+  G4UIcmdWithAnInteger* randomCmd;
+  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -44,6 +44,8 @@
 #include "PhysicsList.hh"
 #include "Randomize.hh"
 
+#include <time.h>    //needed on Windows for time()
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(PhysicsList* pl) : 
@@ -51,6 +53,7 @@ RunAction::RunAction(PhysicsList* pl) :
 {
   primaryEnergy = 1.0*keV;
   runID = -1;
+  fRandomSeed = -1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -71,6 +74,22 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 {
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   runID = aRun->GetRunID();
+
+  //For Run=0, check the random seed
+  if (!runID)
+    {
+      if (fRandomSeed < 0) // not set by anyone!
+	{
+	  fRandomSeed = time(0);
+	  G4cout << "Choosing random seed according to time(0) " << G4endl;	  
+	}
+      else
+	G4cout << "Constant random seed: " << fRandomSeed << G4endl;
+
+      CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
+      CLHEP::HepRandom::setTheSeed(fRandomSeed);  
+      CLHEP::HepRandom::showEngineStatus();      
+    }
 
   if (!outFile)
     {

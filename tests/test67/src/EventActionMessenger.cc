@@ -32,10 +32,13 @@
 #include "EventActionMessenger.hh"
 #include "EventAction.hh"
 
+#include "G4RunManager.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "globals.hh"
+
+#include "RunAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -50,6 +53,14 @@ EventActionMessenger::EventActionMessenger(EventAction* EvAct)
   PrintCmd->SetParameterName("EventNb",false);
   PrintCmd->SetRange("EventNb>0");
   PrintCmd->AvailableForStates(G4State_PreInit,G4State_Idle);    
+
+  randomCmd = new G4UIcmdWithAnInteger("/testem/setSeed",this);
+  randomCmd->SetGuidance("Set manually the random seed");
+  randomCmd->SetGuidance("Default: seed according to time(0)");
+  randomCmd->SetParameterName("RandomSeed",false);
+  randomCmd->SetRange("RandomSeed>0");
+  randomCmd->AvailableForStates(G4State_PreInit,G4State_Idle);    
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,7 +68,8 @@ EventActionMessenger::EventActionMessenger(EventAction* EvAct)
 EventActionMessenger::~EventActionMessenger()
 {
   delete PrintCmd;
-  delete eventDir;             
+  delete eventDir;  
+  delete randomCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,8 +77,14 @@ EventActionMessenger::~EventActionMessenger()
 void EventActionMessenger::SetNewValue(G4UIcommand* command,
                                           G4String newValue)
 {   
-  if(command == PrintCmd)
-    {eventAction->SetPrintModulo(PrintCmd->GetNewIntValue(newValue));}       
+  if(command == PrintCmd)    
+    eventAction->SetPrintModulo(PrintCmd->GetNewIntValue(newValue));       
+  else if (command == randomCmd)
+    {
+      RunAction* theRunAction = (RunAction*) 
+	G4RunManager::GetRunManager()->GetUserRunAction();
+      theRunAction->SetRandomSeed(randomCmd->GetNewIntValue(newValue));  
+    }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

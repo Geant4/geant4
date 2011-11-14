@@ -15,6 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14-Nov-2011 G.Folger  (test67-V09-04-11)
+        Add include of time.h needed on Windows.
+
+02-Nov-2011 L.Pandola (test67-V09-04-10)
+	    Added a UI command to give the possibility to use a 
+            fixed (user-chosen) random seed instead of time(0)
+
 23-Aug-2011 L.Pandola (test67-V09-04-09)
 	    Migrated G4Exception(). Added macro for high-statistics
 	    production.
@@ -37,7 +44,7 @@ track of all tags.
 	    Update to tag emlowen-V09-04-36, where v2008 is the default 
             for Penelope models and v2001 is the (obsolete) alternative. 
             Changed physics lists, README and macros accordingly. 
-G
+
 25-May-2011 L. Pandola (test67-V09-04-03)
 	    Improve coding according to Gunter's suggestions
 	    
