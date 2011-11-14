@@ -229,8 +229,8 @@ void G4ScreenedCoulombCrossSection::BuildMFPTables()
 
 	// sum up inverse MFPs per element for each material	
 	const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-	if (materialTable == 0)
-		G4Exception("G4ScreenedCoulombCrossSection::BuildMFPTables - no MaterialTable found)");
+	if (materialTable == 0) { return; }
+	//G4Exception("G4ScreenedCoulombCrossSection::BuildMFPTables - no MaterialTable found)");
 	
 	G4int nMaterials = G4Material::GetNumberOfMaterials();
 
@@ -868,8 +868,8 @@ void G4NativeScreenedCoulombCrossSection::LoadData(G4String screeningKey, G4int 
 	a1=standardmass(z1); // use standardized values for mass for building tables
 	
 	const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-	if (materialTable == 0)
-		G4Exception("mhmNativeCrossSection::LoadData - no MaterialTable found)");
+	if (materialTable == 0) { return; }
+	//G4Exception("mhmNativeCrossSection::LoadData - no MaterialTable found)");
 	
 	G4int nMaterials = G4Material::GetNumberOfMaterials();
 	
@@ -949,9 +949,7 @@ void G4NativeScreenedCoulombCrossSection::LoadData(G4String screeningKey, G4int 
 				try {
 					x0=x0_solution(2*q-q*q);
 				} catch(c2_exception e) {
-					G4Exception(
-						G4String("G4ScreenedNuclearRecoil: failure in inverse solution to generate MFP Tables: ")+e.what()
-					);
+				  //G4Exception(G4String("G4ScreenedNuclearRecoil: failure in inverse solution to generate MFP Tables: ")+e.what());
 				}
 				G4double betasquared=x0*x0 - x0*phiau(x0)/eps;	
 				G4double sigma=pi*betasquared*au*au;

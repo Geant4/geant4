@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11-11-11 V.Ivant (testem7-V09-04-14)
+- G4ScreenedNuclearRecoil - commented out G4Exceptions
+     
+08-11-11 mma (testem7-V09-04-13)
+- modify SteppingVerbose for OutOfWorld
+     
 01-11-11 V.Ivant (testem7-V09-04-12)
 - c2_function.hh - removed compiler depended selection of the math library 
      
