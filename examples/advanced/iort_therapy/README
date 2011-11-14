@@ -1,0 +1,423 @@
+
+	     =========================================================
+                     Text version of the IORT README file
+             =========================================================
+
+First revision: G.Russo, C.Casarino, G.A.P. Cirrone, F.Romano, September 2011;
+It will be released with the Geant4 9.4 patch 02 version or next Geant4 version
+
+
+------------------------------------------------------------------------------------------------
+ADVERTISEMENT: this is the text version of the README file of the 'basic' IORT, 
+as it should be released in the official Geant4 9.4 release
+-------------------------------------------------------------------------------------------------
+
+             =========================================================
+                                       IORT
+             =========================================================
+
+ Main Authors:
+ G.Russo(a,b), C.Casarino*(c), G.C. Candiano(c), G.A.P. Cirrone(d), F.Romano(d)
+ 
+ Contributor Authors:
+ S.Guatelli(e)
+
+ Past Authors:
+ G.Arnetta(c), S.E.Mazzaglia(d)
+
+ (a) Fondazione Istituto San Raffaele G.Giglio, Cefalù, Italy
+
+ (b) IBFM-CNR , Segrate (Milano), Italy
+
+ (c) LATO (Laboratorio di Tecnologie Oncologiche), Cefalù, Italy
+ 
+ (d) Laboratori Nazionali del Sud of the INFN, Catania, Italy
+
+ (e) University of Wallongong, Australia
+
+
+  *Corresponding author, email to carlo.casarino@polooncologicocefalu.it
+-------------------------------------------------------------------------------------------------
+
+IORT:
+
+WHAT IT IS, WHAT IT DOES AND WHAT IT WILL PROVIDE          
+
+IORT is a Geant4-based application specifically developed to address typical needs related to the Intra-Operative Radio-Therapy (IORT) tecnique. The application presents the main structure and facilities of the Hadrontherapy advanced example (developed by the G.A.P. Cirrone team).
+ 
+This is the first BETA release. At this time IORT is capable to simulate a well specified intra-operative electron radio-therapy facility: the collimator beam line system of a typical medical mobile linac and the relative target (water-phantom). IORT application is currently used by the G.Russo team in clinical and research activities carried out in Fondazione Istituto San Raffaele G.Giglio Hospital (Cefalù, Italy) where a NOVAC7 linac is installed.
+
+IORT, is flexible and show many capabilities. Its geometrical set-up, for example, is completely interchangeable permitting a simple switch between different geometrical collimator system configurations; the possibility to simulate a composite metallic protection disc inside the water-phantom was also implemented.
+
+
+Folder structure of IORT
+
+IORT distribution contain these sub-folders:
+
+\src: where source .cc files are stored
+\include: where header .hh files are stored
+\macro: where a set of ready-to-use macro files are provided
+
+
+Currently this folders structure is in development and in the meanwhile new features and capabilities will be added. 
+
+
+DOWNLOAD AND INSTALLATION
+
+IORT source code would be soon released inside the official distribution of the Geant4 toolkit in the $G4INSTALL/examples/AdvancedExamples folder.
+
+To run IORT you must first install the Geant4 package. Once Geant4 is installed the example must be first compiled (with the command gmake inside the
+../IORT folder). When compilation is completed the program can be executed.
+
+A complete guide for the Geant4 installation in different operating systems can be found inside the official installation Geant4 pages.
+
+If you have troubles with the Geant4 installation please send an e-mail to us.
+
+SISTEM SET-UP: enviroment variables
+
+A standard Geant4 example GNUmakefile is provided                                                         
+
+The following section reports the environment variables that are necessary for the run of IORT.
+#-------------------------------------
+#    SET UP LINUX  GCC
+#-------------------------------------
+
+VERSION="geant4-09-04-patch-02"
+
+# Path to the directory in which you have put data files and CLHEP
+LIBPATH=$HOME/Geant4Library
+
+export G4SYSTEM=Linux-g++
+
+# Path to the directory in which you put your Geant4 installation
+export G4INSTALL=$HOME/${VERSION}
+
+export G4LIB=$G4INSTALL/lib
+export G4WORKDIR=$G4INSTALL/workdir
+export G4EXE=$G4WORKDIR/bin/$G4SYSTEM
+
+export CLHEP_BASE_DIR=$LIBPATH/CLHEP2.0.4.5
+export G4LEDATA=$LIBPATH/G4EMLOW6.9
+export G4LEVELGAMMADATA=$LIBPATH/PhotonEvaporation2.0
+export G4NEUTRONHPDATA=$LIBPATH/G4NDL3.13
+export G4RADIOACTIVEDATA=$LIBPATH/RadioactiveDecay3.2
+export G4ABLADATA=$LIBPATH/G4ABLA3.0
+
+export LD_LIBRARY_PATH=$CLHEP_BASE_DIR/lib:$LD_LIBRARY_PATH
+
+# For the generation .root file directly using the ROOT (if ROOT is
+# instaled in you machine)
+export G4ANALYSIS_USE_ROOT=1
+export LD_LIBRARY_PATH=$ROOTSYS/lib:$LD_LIBRARY_PATH
+
+#-------------------------------------
+#    SET UP    VRML VIEW
+#-------------------------------------
+export G4VIS_BUILD_VRML_DRIVER=1
+export G4VIS_USE_VRML=1
+export G4VIS_USE_VRMLFILE=1
+export G4VRMLFILE_MAX_FILE_NUM=100
+export G4VRMLFILE_VIEWER=vrmlview    #if installed
+
+# Add path to your VRML installation 
+export PATH=$PATH:~/VRML
+
+#-------------------------------------
+#    SET UP    OpenGL o Mesa
+#-------------------------------------
+export G4VIS_BUILD_OPENGLX_DRIVER=1
+export G4VIS_USE_OPENGLX=1
+     
+# Add path to your OpenGL installation
+#export OGLHOME=/usr/lib
+
+
+#-------------------------------------
+#    SET UP    DAWN (if installed)
+#-------------------------------------
+export G4VIS_BUILD_DAWN_DRIVER=1
+export G4VIS_BUILD_DOWNFILE_DRIVER=1
+export G4VIS_USE_DAWN=1
+export G4VIS_USE_DAWNFILE=1
+# Add path to your DAWN installation
+# export PATH=$PATH:~/dawn_3_86a
+
+# VARIOUS USER INTERFACES
+export G4UI_USE_XM=1
+export G4UI_USE_TCSH=1
+export G4UI_BUILD_QT_SESSION=1
+export G4UI_USE_QT=1
+
+# VARIOUS GRPHICAL USER INTERFACES
+export G4VIS_BUILD_QT_SESSION=1
+export G4VIS_BUILD_OPENGLQT_DRIVER=1
+export G4VIS_USE_OPENGLQT=1
+
+# If the QT libraries want be used for the User interfaces than the
+# correct path must be addressed
+
+export QTHOME=/usr/lib/qt4
+export PATH=$PATH:/usr/lib/qt4/include/
+export PATH=$PATH:/usr/lib/qt4/
+
+
+
+GEOMETRICAL SET-UP
+
+The idea of IORT is to provide a tool useful for Users interested in the field of electron intra-operative radio-therapy. These can include the simple calculation of dose distribution curves in water or other materials, the possibility to study and plan dose distribution in the treatment region with different clinical set-up, and to optimize radio-protection of normal patient tissues simulating a composite metallic protection disc.
+
+The main component of the simulation is collimator beam line system, the phantom, the detector and the composite metallic protection disc.
+
+
+COLLIMATOR BEAM LINE SYSTEM
+
+At moment IORT include the simulation of a collimator beam line system, based on a typical medical mobile linac structure us the NOVAC7. This  collimator beam line is elaborated in the files CollimatorXXBeamLine.cc , where XX may be 40, 50, 60, 70 ,80 or 100 (mm) depending on the diameter collimator set-up chosen. 
+In fact,there is also a facility in IORT that allows the user to make a choice, via macro, between alternative collimator beam line set-up. This can be done by using command:
+
+/geometrySetup/selectGeometry <name>
+
+where <name> is coll40, coll50, coll60, coll70, coll80 or coll100 depending on the diameter collimator set-up chosen (40mm, 50mm, 60mm, 70mm, 80mm or 100mm). The standard "default" geometry is coll60.
+
+The Collimnator beam line system class file
+
+The following is the description of the elements of the collimator beam line system from the accelerator head to the final collimator. This line is completely simulated inside this class.
+
+The main elements are the accelerator head and the applicator.
+The accelerator head performs as a primary collimator system. It consists of titanium exit window and a cylindrical PMMA structure where two monitor chambers are installed.
+The applicator consists of a cylindrical PMMA tube (the final collimator). In the order we have implemented the following functions:
+
+  IortBeamLineVacuumSource();
+  IortBeamLineTitaniumWindows();
+  IortBeamLineMonitorChambers();
+  IortBeamLineBlocks() ;
+  IortBeamLineJunctions(); 
+  IortBeamLineFinalCollimator();
+
+
+
+The user has now the possibility to vary, via messenger, the inner and outer radius of the final collimator.
+
+
+THE PHANTOM 
+
+At the end of the beam line a phantom (a box of 20cmx20cmx20cm default dimensions) is reproduced.
+Inside it, a user-defined region (the detector) is divided (via the ROGeomtry classes of Geant4) in cubic and identical voxels. The voxels size can be varied as well as the voxelized region.
+At the end of a simulation run the dose deposited by primaries and secondaries in each voxel is collected. This information is available as an .out file.  
+
+THE DETECTOR
+
+The default sizes of the sensible voxelized region (detector) are 7cmx15cmx15cm and actually the default voxel configuration is   0.5mm x 0.5mm x 0.5mm, which means a matrix of 140x300x300 cubic voxels each with a lateral dimension of 0.5 mm. Of course this default can be modified.
+
+As concern the cut and stepMax values, the default configuration implies a cut value of 0.01 mm in the whole  world (use the command /physic/setCuts <length>  in order to set the cut for all, and the command /physic/setDetectorCuts <length> to set the cut for the detector only)  and a stepMax of 0.01 mm just in the phantom (use the command /Step/waterPhantomStepMax 0.01 mm).
+In any case it is strongly recommended to use a stepMax value not bigger than 5% of the dose slice thickness.
+
+
+PROTECTION DISC
+
+Inside the detector is positioned a double layered protection disc. For both layers it is possible via macro to change the outer and inner radius,the thickness, the position along the beam axis and the material.
+ADVERTISEMENT: to delete the disc out the entire geometry the relative macro command must be used!!
+ADVERTISEMENT: to re-insert the disc in the entire geometry the relative macro command must be used!!
+  
+ 
+
+PHYSICS PROCESSES AND PHYSICS MODELS IMPLEMENTATION
+
+ Physics models in IORT, following the Geant4 organisation, can be definided using two different approaches:
+
+
+Activating one of the 'Reference Physics Lists' that are already prepared by the Geant4 Collaboration and are contained in the $G4INSTALL/source/physics_lists/lists folderlist.
+The 'Reference Physics Lists' can be activated setting a specific enviroment variable to the name of the physics. For example if the QGSP_BIC Reference Physics Lists  must be activated the User must set export PHYSLIST=QGSP_BIC (or setenv PHYSLIST QGSP_BIC). A 'Reference Physics Lists' contains all the physics process necessary to a particle  transport.
+If  the  User set the PHYSLIST variable,  IORT  will  start  with  the             defaultMacroWithReferencePhysicsList.mac macro. See this macro file for more details.
+Activating the 'Builders' already prepared by the Geant4 Collaboration and contained in the $G4INSTALL/source/physics_lists/builder folder.
+Each builder is specific  of  a  given  model.  There  are  builders  for  the  electromagnetic processes, for the hadronic one, etc.
+If the PHYSLIST variable is not defined IORT starts with the defaultMacro.mac where the single builders are activated for the various processes of interest.
+Each builder is activated with the /Physics/addPhysics <nome builder> command.
+
+
+       ******       SUGGESTED PHYSICS       *********
+
+    AT MOMENT, IF ACCURATE RESULTS ARE NEDED, WE STRONGLY RECOMMEND: 
+    1. The use of the emstandard_opt3, or
+    2. the QGSP_BIC_EMY Reference Physics Lists (define the PHYSLIST eviroment variable):
+       export PHYSLIST=QGSP_BIC_EMY
+A particular care is addressed to the simulation of the physic processes.
+
+
+INTERACTIVE COMMANDS
+
+
+
+How to change Phantom, Detector and Protection Disc geometries
+
+In order to let the end user to change phantom and detector geometries and voxelization, some interactive commands have been provided. All parameters are mandatory, except those inside square brackets.
+
+
+Phantom geometry
+
+(1) The phantom size. As usually, zero or negatives values mean: <<don't change it>>.
+(2) The phantom position respect to the world. In this case specified values refer to the three components of the position of the phantom's center respect to the world's.
+
+Command synopsis:
+
+/changePhantom/size <dimX> <dimY> <dimZ> <[unit]> # 20 20 20 cm
+/changePhantom/position <posX> <posY> <posZ> <[unit]> # 4.5 0 0 cm
+
+
+Detector geometry 
+
+The user can change:
+
+(1) The detector (box) size.
+ 
+(2) The voxels sizes. Changing this parameters, and/or the detector sizes, user should choose values in order to be divisors of the detector correspondent sizes.
+For both above commands, zero or negative values mean << don't change it >>
+
+(3) The displacement between the phantom and the detector.  Displacement parameters refer to the lower left corner of the detector respect to that of the phantom, by the point of view of the beam. In this case zero or positive values are allowed, while the negatives ones mean: << don't change it>>.
+
+
+Command synopsis:
+
+
+/changeDetector/size <dimX> <dimY> <dimZ> <[unit]>
+/changeDetector/voxelSize <dimX> <dimY> <dimZ> <[unit]> 
+/changeDetector/displacement <dispX> <dispY> <dispZ> <[unit]> 
+
+Default size values are 7x15x15 cm for the detector, 0.5x0.5x0.5 mm for any voxel. The default detector position is chosen so that the 15x15 detector face is aligned and centred respect the detector beam exposed face.
+
+
+
+Protection Disc geometry
+
+Command synopsis:
+
+/ProtectionDisc1/OuterRadiusDisc1 <dim>       # default -> 40*mm ; 
+/ProtectionDisc1/InnerRadiusDisc1 <dim>       # default -> 0*mm
+/ProtectionDisc1/HeightDisc1      <dim>       # default -> 2*mm
+/ProtectionDisc1/XPositionDisc1  <dimX>       # default -> -11*mm   
+/ProtectionDisc1/material    <G4_Material>    # default -> G4_WATER ;
+
+/ProtectionDisc2/OuterRadiusDisc2 <dim>       # default -> 40*mm ;
+/ProtectionDisc2/InnerRadiusDisc2 <dim>       # default -> 0*mm
+/ProtectionDisc2/HeightDisc2      <dim>       # default -> 1*mm
+/ProtectionDisc2/XPositionDisc2  <dimX>       # default -> -8*mm
+/ProtectionDisc2/material    <G4_Material>    # default -> G4_WATER ;
+
+
+All   these    commands    must be   followed   by the  command  /changePhantom/update
+in order to check and eventually apply changes to the real geometry.
+Moreover  they  must   be    issued  between   runs  (so   where you   want but   after  the /run/initialize initialization command, or the G4State_Idle Geant4 state machine).
+Obviously all the previous sizes must be set in order to maintain the detector fully inside the phantom, otherwise system complains.
+
+
+To Delete Disc geometry
+
+Command synopsis:
+
+/DeleteProtectionDisc/delete
+
+To Re-insert Disc geometry
+
+Command synopsis:
+
+/InsertProtectionDisc/insert
+
+ 
+Stopping powers calculation
+
+It is possible for the end-user to calculate, via macro command, stopping powers only for those materials inserted into G4NistMaterialBuilder class (about 300).
+To get stopping powers user must provide this command line on the idle interactive terminal (or into a macro file) :
+
+/parameter/getstopping <G4_material> <Emin> <Emax> <nPoints> <[particle]> <[output_filename]>
+
+All parameters are mandatory except those inside square brackets [].
+Default values for parameters inside square brackets are respectively proton and standard output (usually the user console terminal).
+
+Parameters are respectively:
+
+The material (NIST) name (something like G4_..., the complete list of elements and materials is available into the G4NistMaterialBuilder class and can be printed  to the terminal screen via the macro command: /parameter/nist )
+Kinetic energy range in MeV and the number of data points to be retrieved (in a logarithmically uniform space)
+The particle name (proton, e+, e-, He3, neutron,... a full list can be gotten via the macro command: /particle/list).
+         Only for ions, user must firstly give them to the particle gun, for example issuing the  macro commands:
+/gun/particle ion
+/gun/ion <Z> <A> <[charge]>
+The output filename: if users leave this blank then the standard output is used.
+
+Below is an example in order to calculate the stopping power for alphas into Hydrogen between 1 keV to 150 MeV for 15 points:
+
+/parameter/getstopping G4_H 0.001 150 15 alpha 
+
+# and for C12 ion:
+
+/gun/particle ion
+/gun/ion 6 12 6
+/parameter/getstopping G4_H 0.001 150 15 C12[0.0]
+
+# Value inside square brackets is the excitation energy of the ion (ground state in this case).
+
+
+To set initial beam features
+
+By default, the beam propagates along the positive X direction with Gaussian momentum and Y-Z distributions. 
+It is possible to select: particle type, mean energy and relative standard deviation, X,Y and Z coordinates, Y and Z standard deviations and, finally, the beam spread along X direction (Theta). 
+
+Command synopsis:
+
+/gun/particle 
+/beam/energy/meanEnergy 
+/beam/energy/sigmaEnergy  
+/beam/position/Xposition
+/beam/position/Yposition
+/beam/position/Yposition/sigmaY
+/beam/position/Zposition
+/beam/position/Zposition/sigmaZ 
+/beam/momentum/Theta
+ 
+
+
+HOW RUN IORT
+
+Run the example in interactive mode                                      
+
+> $G4WORDIR/bin/Linux-g++/IORT
+
+In this case the main file (IORT.cc) performs different operations depending on which environment variable is activated;
+For example, if the environment variable G4UI_USE_TCSH is activated, IORT will start with the TCSH User Interface that has many useful functionalities. On the other hand, if this first variables is not defined, the program will continue searching for the G4UI_USE_QT variable and, finally, will open the standard G4UITerminal.
+
+Run the example using macro files          
+
+IORT can be launched using a macro file:
+
+> $G4WORDIR/bin/Linux-g++/IORT macroFile.mac
+
+The defaultMacro.mac file is contained in the main directory of IORT and is automatically readed in case the user launch the executable without a parameter.
+
+
+SIMULATION OUTPUT
+
+Store results in an ASCII file
+
+A .out ASCII file is generated at the end of each run, Dose.out is its default name that can be changed in the IORTMatrix.cc file.
+The file contains four columns; the first three columns represent the voxel indexes (that univocally identify the voxel volume), while the last column represents the dose deposited in that given voxel.
+
+
+FUTURE CHALLENGES
+
+This is a list of future components that will be added in IORT.
+
+In the next future IORT will be improved making it possible to simulate roto-translations of the collimator beam    line respect the target thus reproducing the mobility characteristics of the linac.
+
+
+Dicom Interface
+
+A first work in progress version IORT-DICOM is underdeveloped. This application imports in IORT the main parts and facilities of the Dicom extended-medical exmple, so it permits to replace the water phantom with a voxellized phantom version of the dicom images.
+
+Human-Phantom Interface
+
+Also a second work in progress version IORT-Human-Phantom is underdeveloped. It is based on the Human-Phantom advanced example. Thus there will be the possibility to replace the water phantom with the human phantom. 
+
+All these configuration will be setted by macro commands.
+
+
+Please contact carlo.casarino@polooncologicocefalu.it for more details or suggestions and feedbacks on this document.
+
+
