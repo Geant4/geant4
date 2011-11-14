@@ -52,7 +52,7 @@ G4ecpssrFormFactorLixsModel::G4ecpssrFormFactorLixsModel()
 { 
   interpolation = new G4LinInterpolation();
 
-  for (G4int i=11; i<93; i++) 
+  for (G4int i=6; i<93; i++) 
   {
       protonL1DataSetMap[i] = new G4EMDataSet(i,interpolation);
       protonL1DataSetMap[i]->LoadData("pixe/ecpssr/proton/l1-");
@@ -64,7 +64,7 @@ G4ecpssrFormFactorLixsModel::G4ecpssrFormFactorLixsModel()
       protonL3DataSetMap[i]->LoadData("pixe/ecpssr/proton/l3-");
   }
 
-  for (G4int i=11; i<93; i++) 
+  for (G4int i=6; i<93; i++) 
   {
       alphaL1DataSetMap[i] = new G4EMDataSet(i,interpolation);
       alphaL1DataSetMap[i]->LoadData("pixe/ecpssr/alpha/l1-");
@@ -102,15 +102,17 @@ G4double G4ecpssrFormFactorLixsModel::CalculateL1CrossSection(G4int zTarget,G4do
   G4Alpha* aAlpha = G4Alpha::Alpha();  
   G4double sigma = 0;
 
-  if (energyIncident > 0.1*MeV && energyIncident < 10*MeV && zTarget < 93 && zTarget > 10) {
+  if (energyIncident > 0.1*MeV && energyIncident < 10*MeV && zTarget < 93 && zTarget > 5) {
 
     if (massIncident == aProton->GetPDGMass())
       {      
 	sigma = protonL1DataSetMap[zTarget]->FindValue(energyIncident/MeV);  
+        if (sigma !=0 && energyIncident > protonL1DataSetMap[zTarget]->GetEnergies(0).back()*MeV) return 0.;
       }
     else if (massIncident == aAlpha->GetPDGMass())
       {
-      sigma = alphaL1DataSetMap[zTarget]->FindValue(energyIncident/MeV); 
+        sigma = alphaL1DataSetMap[zTarget]->FindValue(energyIncident/MeV); 
+        if (sigma !=0 && energyIncident > alphaL1DataSetMap[zTarget]->GetEnergies(0).back()*MeV) return 0.;
       }
     else
       { 
@@ -131,15 +133,17 @@ G4double G4ecpssrFormFactorLixsModel::CalculateL2CrossSection(G4int zTarget,G4do
   G4Alpha* aAlpha = G4Alpha::Alpha();  
   G4double sigma = 0;
 
-  if (energyIncident > 0.1*MeV && energyIncident < 10*MeV && zTarget < 93 && zTarget > 10) {
+  if (energyIncident > 0.1*MeV && energyIncident < 10*MeV && zTarget < 93 && zTarget > 5) {
 
     if (massIncident == aProton->GetPDGMass())
       {      
 	sigma = protonL2DataSetMap[zTarget]->FindValue(energyIncident/MeV);  
+        if (sigma !=0 && energyIncident > protonL2DataSetMap[zTarget]->GetEnergies(0).back()*MeV) return 0.;
       }
     else if (massIncident == aAlpha->GetPDGMass())
       {
-      sigma = alphaL2DataSetMap[zTarget]->FindValue(energyIncident/MeV); 
+        sigma = alphaL2DataSetMap[zTarget]->FindValue(energyIncident/MeV); 
+        if (sigma !=0 && energyIncident > alphaL2DataSetMap[zTarget]->GetEnergies(0).back()*MeV) return 0.;
       }
     else
       { 
@@ -160,15 +164,17 @@ G4double G4ecpssrFormFactorLixsModel::CalculateL3CrossSection(G4int zTarget,G4do
   G4Alpha* aAlpha = G4Alpha::Alpha();  
   G4double sigma = 0;
 
-  if (energyIncident > 0.1*MeV && energyIncident < 10*MeV && zTarget < 93 && zTarget > 10) {
+  if (energyIncident > 0.1*MeV && energyIncident < 10*MeV && zTarget < 93 && zTarget > 5) {
 
     if (massIncident == aProton->GetPDGMass())
       {      
 	sigma = protonL3DataSetMap[zTarget]->FindValue(energyIncident/MeV);  
+        if (sigma !=0 && energyIncident > protonL3DataSetMap[zTarget]->GetEnergies(0).back()*MeV) return 0.;
       }
     else if (massIncident == aAlpha->GetPDGMass())
       {
-      sigma = alphaL3DataSetMap[zTarget]->FindValue(energyIncident/MeV); 
+        sigma = alphaL3DataSetMap[zTarget]->FindValue(energyIncident/MeV); 
+        if (sigma !=0 && energyIncident > alphaL3DataSetMap[zTarget]->GetEnergies(0).back()*MeV) return 0.;
       }
     else
       { 

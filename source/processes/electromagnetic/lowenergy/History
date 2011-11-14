@@ -18,6 +18,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 
+13.11.2011  S. Incerti tag emlowen-V09-04-79
+	    Adapted form factor ionization cross sections for the new 
+	    set of ionization data proposed by M. Reis & A. Taborda.
+
 11.11.2011  L.Pandola tag emlowen-V09-04-78
 	    Remove a left-over old-style G4Exception(), which 
 	    did not compile any longer.
