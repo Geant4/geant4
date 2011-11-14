@@ -85,6 +85,10 @@ class G4Step
    G4Step();
    ~G4Step();
 
+// Copy Counstructor and assignment operator
+   G4Step(const G4Step& );
+   G4Step & operator=(const G4Step &);   
+
 //--------
    public: // WIth description
 

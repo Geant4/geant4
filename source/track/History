@@ -17,6 +17,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- November 9th, 2011 H.Kurashige  (track-V09-04-13)
+- Fix Coverity defects
+  (copy constructor/assignment operator for G4Step/G4StepPoint)
 
 - October 21th, 2011 G.Folger     (track-V09-04-12)
 -  retag all of track, track-V09-04-11 was in src only.

@@ -272,9 +272,14 @@ inline
    return fSecondary;
 }
 
-inline void G4Step::DeleteSecondaryVector()  {
-   delete fSecondary;
-    }
+inline void G4Step::DeleteSecondaryVector()  
+{
+   if (fSecondary !=0) {
+     fSecondary->clear();
+     delete fSecondary;
+     fSecondary = 0;
+   }
+}
 
 inline G4bool G4Step::IsFirstStepInVolume() const
 {

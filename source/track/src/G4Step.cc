@@ -55,15 +55,15 @@ G4Step::G4Step()
 ////////////////
   :  fTotalEnergyDeposit(0.0),fNonIonizingEnergyDeposit(0.0),
      fStepLength(0.), fpTrack(0), 
-     fpSteppingControlFlag(NormalCondition),fSecondary(0),
+     fpSteppingControlFlag(NormalCondition),
+     fFirstStepInVolume(false),
+     fLastStepInVolume(false),
+     fSecondary(0),
      nSecondaryByLastStep(0), secondaryInCurrentStep(),
      fpVectorOfAuxiliaryPointsPointer(0)
 {
   fpPreStepPoint  = new G4StepPoint();
   fpPostStepPoint = new G4StepPoint();
-
-  fFirstStepInVolume =false;
-  fLastStepInVolume = false;
 
   secondaryInCurrentStep = new std::vector<CT>;
 }
@@ -74,10 +74,87 @@ G4Step::~G4Step()
 {
   delete fpPreStepPoint;
   delete fpPostStepPoint;
+
   secondaryInCurrentStep->clear();
   delete secondaryInCurrentStep;
+
+  if (fSecondary !=0 ) {
+    fSecondary->clear();
+    delete fSecondary;
+  }
 }
 
+// Copy Counstructor and assignment operator
+
+/////////////////
+G4Step::G4Step(const G4Step& right)
+/////////////////
+  :  fTotalEnergyDeposit(right.fTotalEnergyDeposit),
+     fNonIonizingEnergyDeposit(right.fNonIonizingEnergyDeposit),
+     fStepLength(right.fStepLength), 
+     fpTrack(right.fpTrack), 
+     fpSteppingControlFlag(right.fpSteppingControlFlag),
+     fFirstStepInVolume(right.fFirstStepInVolume),
+     fLastStepInVolume(right.fLastStepInVolume),
+     nSecondaryByLastStep(right.nSecondaryByLastStep), 
+     secondaryInCurrentStep(right.secondaryInCurrentStep),
+     fpVectorOfAuxiliaryPointsPointer(right.fpVectorOfAuxiliaryPointsPointer)
+{
+  if (right.fpPreStepPoint !=0) {
+    fpPreStepPoint  = new G4StepPoint(*(right.fpPreStepPoint));
+  } else {
+    fpPreStepPoint  = new G4StepPoint();
+  }
+  if (right.fpPostStepPoint !=0) {
+    fpPostStepPoint  = new G4StepPoint(*(right.fpPostStepPoint));
+  } else {
+    fpPostStepPoint  = new G4StepPoint();
+  }
+
+  if (right.fSecondary !=0) {
+    fSecondary = new G4TrackVector(*(right.fSecondary));
+  } else {
+    fSecondary = new G4TrackVector();
+  }
+  secondaryInCurrentStep = new std::vector<CT>;
+}
+
+/////////////////
+G4Step& G4Step::operator=(const G4Step & right)   
+/////////////////
+{
+  if (this != &right){
+    fTotalEnergyDeposit  = right.fTotalEnergyDeposit;
+    fNonIonizingEnergyDeposit = right.fNonIonizingEnergyDeposit;
+    fStepLength            = right.fStepLength; 
+    fpTrack                = right.fpTrack; 
+    fpSteppingControlFlag  = right.fpSteppingControlFlag;
+    fFirstStepInVolume     = right.fFirstStepInVolume;
+    fLastStepInVolume      = right.fLastStepInVolume;
+    nSecondaryByLastStep   = right.nSecondaryByLastStep; 
+    secondaryInCurrentStep = right.secondaryInCurrentStep;
+    fpVectorOfAuxiliaryPointsPointer = right.fpVectorOfAuxiliaryPointsPointer;
+
+    if (fpPreStepPoint !=0 ) delete fpPreStepPoint;
+    if (right.fpPreStepPoint !=0) {
+      fpPreStepPoint  = new G4StepPoint(*(right.fpPreStepPoint));
+    } else {
+      fpPreStepPoint  = new G4StepPoint();
+    }
+    if (fpPostStepPoint !=0 ) delete fpPostStepPoint;
+    if (right.fpPostStepPoint !=0) {
+      fpPostStepPoint  = new G4StepPoint(*(right.fpPostStepPoint));
+    } else {
+      fpPostStepPoint  = new G4StepPoint();
+    }
+    if (right.fSecondary !=0) {
+      fSecondary = new G4TrackVector(*(right.fSecondary));
+    } else {
+      fSecondary = new G4TrackVector();
+    }
+  }
+  return *this;
+}
 
 /////////////////
 G4ThreeVector G4Step::GetDeltaMomentum() const
