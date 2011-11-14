@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07 November, 2011 K. Murakami (intercoms-V09-04-01)
+ - G4Exception ID is modified. (set sequential ID in UI)
+
 20 October, 2011 M. Asai (intercoms-V09-04-00)
  - Eliminating obsolete G4Exception.
 

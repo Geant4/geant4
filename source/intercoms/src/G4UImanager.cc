@@ -63,7 +63,8 @@ G4UImanager * G4UImanager::GetUIpointer()
 }
 
 G4UImanager::G4UImanager()
-:G4VStateDependent(true)
+  : G4VStateDependent(true),
+    UImessenger(0), UnitsMessenger(0)
 {
   savedCommand = 0;
   treeTop = new G4UIcommandTree("/");
@@ -99,8 +100,18 @@ G4UImanager::~G4UImanager()
   fUImanager = NULL;
 }
 
-G4UImanager::G4UImanager(const G4UImanager &)
-:G4VStateDependent(true) {;}
+G4UImanager::G4UImanager(const G4UImanager& ui)
+  : G4VStateDependent(true)
+{
+  UImessenger = ui.UImessenger;
+  UnitsMessenger = ui.UnitsMessenger;
+  aliasList = ui.aliasList;
+  g4UIWindow = ui.g4UIWindow;
+  savedCommand= ui.savedCommand;
+  session = ui.session;
+  treeTop = ui.treeTop;
+}
+
 const G4UImanager & G4UImanager::operator=(const G4UImanager &right)
 { return right; }
 G4int G4UImanager::operator==(const G4UImanager &right) const

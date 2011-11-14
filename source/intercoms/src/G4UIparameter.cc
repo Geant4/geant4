@@ -47,6 +47,8 @@ G4UIparameter::G4UIparameter():paramERR(0)
   currentAsDefaultFlag = false;
   parameterCandidate = nullString;
   widget = 0;
+  bp = 0;
+  token = NONE;
 }
 
 G4UIparameter::G4UIparameter(char theType):paramERR(0)
@@ -61,6 +63,8 @@ G4UIparameter::G4UIparameter(char theType):paramERR(0)
   currentAsDefaultFlag = false;
   parameterCandidate = nullString;
   widget = 0;
+  bp = 0;
+  token = NONE;
 }
 
 G4UIparameter::G4UIparameter(const char * theName, char theType, G4bool theOmittable):paramERR(0)
@@ -75,6 +79,8 @@ G4UIparameter::G4UIparameter(const char * theName, char theType, G4bool theOmitt
   currentAsDefaultFlag = false;
   parameterCandidate = nullString;
   widget = 0;
+  bp = 0;
+  token = NONE;
 }
 
 G4UIparameter::~G4UIparameter()

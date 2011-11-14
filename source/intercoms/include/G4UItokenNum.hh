@@ -36,6 +36,7 @@
 
 enum  tokenNum
 {
+  NONE       = 0,
   IDENTIFIER = 257,
   CONSTINT   = 258,
   CONSTDOUBLE= 259,
@@ -59,13 +60,13 @@ enum  tokenNum
 
 typedef struct yystype
 {
-    tokenNum      type;
+    tokenNum type;
     G4double D;
     G4int    I;
     char     C;
     G4String S;
 
-    yystype() : D(0.0), I(0), C(' '), S("")
+    yystype() : type(NONE), D(0.0), I(0), C(' '), S("")
     {
     }
     G4int operator==(const yystype& right) const

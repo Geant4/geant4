@@ -40,8 +40,9 @@
 #include <sstream>
 
 G4UIcommand::G4UIcommand()
-:messenger(0),token(IDENTIFIER),paramERR(0)
-{;}
+  : messenger(0), bp(0), token(IDENTIFIER), paramERR(0)
+{
+}
 
 G4UIcommand::G4UIcommand(const char * theCommandPath,
 			 G4UImessenger * theMessenger)
