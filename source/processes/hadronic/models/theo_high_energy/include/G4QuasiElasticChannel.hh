@@ -45,7 +45,7 @@
 
 class G4KineticTrackVector;
 class G4Nucleus;
-class G4QuasiFreeRatios;
+class G4QuasiElRatios;
 class G4DynamicParticle;
 class G4V3DNucleus;
 
@@ -69,7 +69,7 @@ class G4QuasiElasticChannel
 	int operator!=(const G4QuasiElasticChannel &) const;
 
    private:
-   	G4QuasiFreeRatios* theQuasiElastic;
+   	G4QuasiElRatios* theQuasiElastic;
 	G4V3DNucleus* the3DNucleus;
 };
 

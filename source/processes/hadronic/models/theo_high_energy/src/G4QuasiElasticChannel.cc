@@ -52,7 +52,7 @@
 #include "G4Nucleus.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
-#include "G4QuasiFreeRatios.hh"
+#include "G4QuasiElRatios.hh"
 #include "globals.hh"
 #include <vector>
 
@@ -60,7 +60,7 @@
 
 
 G4QuasiElasticChannel::G4QuasiElasticChannel()
-  : theQuasiElastic(G4QuasiFreeRatios::GetPointer()),
+  : theQuasiElastic(G4QuasiElRatios::GetPointer()),
     the3DNucleus(new G4Fancy3DNucleus) {}
 
 G4QuasiElasticChannel::~G4QuasiElasticChannel()
