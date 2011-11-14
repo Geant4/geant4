@@ -69,8 +69,10 @@ static void SignalHandler(G4int)
     G4cout << G4endl
            << "Session terminated." << G4endl;
     theshell-> ResetTerminal();
-    G4Exception("G4UIterminal/SignalHandler", "KeyboardInterrupt",
-                FatalException, "Interrupt with Ctrl-C");
+    G4Exception("G4UIterminal::SignalHandler()",
+                "UI0001",
+                FatalException, 
+                "KeyboardInterrput with Ctrl-C");
   }
 
   // for original Unix / System V

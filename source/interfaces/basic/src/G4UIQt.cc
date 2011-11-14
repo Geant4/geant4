@@ -185,12 +185,12 @@ G4UIQt::G4UIQt (
 
   // the splitter 
   //  fToolBox->addItem(fVisParametersTBWidget,"Vis parameters");
-  //  fToolBox->addItem(fViewComponentsTBWidget,"Viewer components");
+  // fToolBox->addItem(fViewComponentsTBWidget,"Viewer components");
   fToolBox->addItem(fHelpTBWidget,"Help");
   fToolBox->addItem(fCoutTBWidget,"Cout");
   fToolBox->addItem(fHistoryTBWidget,"History");
 
-
+  fToolBox->resize (300,200);
 
   fToolBox->setSizePolicy (QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
 

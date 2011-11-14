@@ -414,10 +414,10 @@ void G4UIGainServer::WaitingConnection(){
 #endif
             G4cerr<<"accept:"<<i<<G4endl;
             //exit(1);
-            G4Exception("G4UIGainServer::WaitingConnection", "Invalid Socket",
-                        FatalException, "Cannot establish connection");
-
-
+            G4Exception("G4UIGainServer::WaitingConnection()",
+                        "UI0004",
+                        FatalException,
+                        "Invalid Socket. Cannot establish connection");
         }
     }
     close(socketD[0]);

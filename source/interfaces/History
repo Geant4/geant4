@@ -17,6 +17,24 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12 November 2011 Koichi Murakami (interfaces-V09-04-11)
+- G4UIExective is rollback to interfaces-V09-04-05. (w/o run-time selection)
+
+12 November 2011 Koichi Murakami (interfaces-V09-04-10)
+- add G4UIExecutive.cc in sources.cmake
+
+10 November 2011 Koichi Murakami (interfaces-V09-04-09)
+- update G4UIExecutive (if-else instead of goto)
+
+07 November 2011 Koichi Murakami (interfaces-V09-04-08)
+- Code quality improvements by Coverity.
+- Change G4UIExecutive. Run-time selection of UI session.
+- Messages of G4Exception are modified in collaboration format.
+
+
+4th November 2011 Laurent Garnier
+- Resize toolBox
+
 10th August 2011 Laurent Garnier (interfaces-V09-04-05)
 - Add a flag to know if there is a external Qapp inited
 
