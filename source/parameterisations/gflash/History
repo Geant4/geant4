@@ -17,6 +17,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 3rd, 2011 M. Verderi (gflash-V09-04-02)
+------------------------
+- fix compilation warnings in
+  GFlashHomoShowerParameterisation.cc:152
+  GFlashSamplingShowerParameterisation.cc:144
+  due to respectiveley deletion of
+      GVFlashHomoShowerTuning
+      GFlashSamplingShowerTuning
+  which have no virtual destructor.
+
+  Empty constructor and destructor added to these (utility) classes.
+
 Sep 20th, 2011 M. Verderi (gflash-V09-04-01)
 -------------------------
 - Fixed bug in G4FlashShowerModel::ModelTrigger :

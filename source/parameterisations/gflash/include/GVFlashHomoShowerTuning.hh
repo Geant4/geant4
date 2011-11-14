@@ -62,6 +62,10 @@
 
 class GVFlashHomoShowerTuning
 {
+  public:
+    GVFlashHomoShowerTuning() {}
+    virtual ~GVFlashHomoShowerTuning() {}
+  
   public: // with description
 
     virtual G4double ParAveT1(){ return -0.812;} // t1

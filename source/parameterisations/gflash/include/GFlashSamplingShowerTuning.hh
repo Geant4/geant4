@@ -54,6 +54,12 @@
 
 class GFlashSamplingShowerTuning : public GVFlashHomoShowerTuning
 {
+  public:
+
+    GFlashSamplingShowerTuning() {}
+    virtual ~GFlashSamplingShowerTuning() {}
+  
+
   public: // with description
 
   G4double ParsAveT1(){ return -0.55;} // t1
