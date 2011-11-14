@@ -144,7 +144,7 @@ G4CascadeInterface::G4CascadeInterface(const G4String& name)
     bullet(0), target(0), output(new G4CollisionOutput) {
   SetEnergyMomentumCheckLevels(5*perCent, 10*MeV);
   balance->setLimits(5*perCent, 10*MeV/GeV);	// Bertini internal units
-  Description();                                // Model description
+  // Description();                                // Model description
 }
 
 
@@ -155,35 +155,18 @@ G4CascadeInterface::~G4CascadeInterface() {
   delete output; output=0;
 }
 
-void G4CascadeInterface::Description() const
+void G4CascadeInterface::ModelDescription(std::ostream& outFile) const
 {
-  const char* pathName = getenv("G4PhysListDocDir");
-  if (!pathName) return;		// Avoid unnecessary work
-
-  G4String outFileName(pathName);
-  outFileName += "/" + GetModelName() + ".html";
-
-  std::ofstream outFile(outFileName);
-  if (!outFile) {			// Make sure file opened successfully
-    G4cerr << " >>> G4CascadeInterface::Description() unable to open "
-	   << pathName << G4endl;
-    return;
-  }
-  
-  outFile << "<html><head>\n"
-	  << "<title>Description of Bertini Cascade Model</title>\n"
-	  << "</head><body>\n<P>"
-	  << "The Bertini-style cascade implements the inelastic scattering\n"
-	  << "of hadrons by nuclei.  Nucleons, pions, kaons and hyperons\n" 
-	  << "from 0 to 15 GeV may be used as projectiles in this model.\n"
-	  << "Final state hadrons are produced by a classical cascade\n"
-	  << "consisting of individual hadron-nucleon scatterings which use\n"
-	  << "free-space partial cross sections, corrected for various\n"
-	  << "nuclear medium effects.  The target nucleus is modeled as a\n"
-	  << "set of 1, 3 or 6 spherical shells, in which scattered hadrons\n"
-	  << "travel in straight lines until they are reflected from or\n"
-	  << "transmitted through shell boundaries.\n"
-	  << "</body></html>\n";
+  outFile << "The Bertini-style cascade implements the inelastic scattering\n"
+          << "of hadrons by nuclei.  Nucleons, pions, kaons and hyperons\n"
+          << "from 0 to 15 GeV may be used as projectiles in this model.\n"
+          << "Final state hadrons are produced by a classical cascade\n"
+          << "consisting of individual hadron-nucleon scatterings which use\n"
+          << "free-space partial cross sections, corrected for various\n"
+          << "nuclear medium effects.  The target nucleus is modeled as a\n"
+          << "set of 1, 3 or 6 spherical shells, in which scattered hadrons\n"
+          << "travel in straight lines until they are reflected from or\n"
+          << "transmitted through shell boundaries.\n";
 }
 
 

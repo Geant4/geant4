@@ -79,6 +79,8 @@
 // 20111003  M. Kelsey -- Prepare for gamma-N interactions by checking for
 //		final-state tables instead of particle "isPhoton()"
 // 20111007  M. Kelsey -- Add gamma-N final-state tables to printFinalState
+// 20111107  M. Kelsey -- In sampleCMmomentumFor2to2(), hide message about
+//		unrecognized gamma-N initial state behind verbosity.
 
 #include "G4ElementaryParticleCollider.hh"
 #include "G4CascadeChannel.hh"
@@ -818,8 +820,9 @@ G4ElementaryParticleCollider::sampleCMmomentumFor2to2(G4int is, G4int kw,
     pCos = interp.interpolate(ekin, hn2Cos);
     pFrac = interp.interpolate(ekin, hn2Frac);
   } else {
-    G4cout << " G4ElementaryParticleCollider::sampleCMmomentumFor2to2:"
-	   << " interaction is=" << is << " not recognized " << G4endl;
+    if (verboseLevel)
+      G4cerr << " G4ElementaryParticleCollider::sampleCMmomentumFor2to2:"
+	     << " interaction is=" << is << " not recognized " << G4endl;
   } 
 
   // Bound parameters to their physical ranges

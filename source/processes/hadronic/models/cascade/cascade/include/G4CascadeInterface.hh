@@ -95,7 +95,7 @@ public:
   void useCascadeDeexcitation();
   void usePreCompoundDeexcitation();
 
-  void Description() const;
+  virtual void ModelDescription(std::ostream& outFile) const;
 
 protected:
   void clear();			// Delete previously created particles

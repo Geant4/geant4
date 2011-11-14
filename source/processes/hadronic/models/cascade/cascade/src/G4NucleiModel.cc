@@ -101,6 +101,7 @@
 // 20110922  M. Kelsey -- Follow migrations G4InuclParticle::print(ostream&)
 //		and G4CascadParticle::print(ostream&)
 // 20111018  M. Kelsey -- Correct kaon potential to be positive, not negative
+// 20111107  M. Kelsey -- *** REVERT TO OLD NON-PHYSICAL PARAMETERS FOR 9.5 ***
 
 #include "G4NucleiModel.hh"
 #include "G4CascadeChannel.hh"
@@ -136,45 +137,45 @@ typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 // Scaling factors for radii and cross-sections, currently different!
 const G4double G4NucleiModel::crossSectionUnits = 
   getenv("G4NUCMODEL_XSEC_SCALE") ? strtod(getenv("G4NUCMODEL_XSEC_SCALE"),0)
-  : 0.1;	/* 1.0; */
+  : 1.0;
 
 #define OLD_RADIUS_UNITS (3.3836/1.2)
 const G4double G4NucleiModel::radiusUnits = 
   getenv("G4NUCMODEL_RAD_SCALE") ? strtod(getenv("G4NUCMODEL_RAD_SCALE"),0)
-  : 1.0;	/* OLD_RADIUS_UNITS; */
+  : OLD_RADIUS_UNITS;
 
 const G4double G4NucleiModel::skinDepth = (1.7234/OLD_RADIUS_UNITS)*radiusUnits;
 
 // One- vs. two-parameter nuclear radius based on envvar
 // ==> radius = radiusScale*cbrt(A) + radiusScale2/cbrt(A)
 
-const G4double G4NucleiModel::radiusScale  = 1.16;
-	/* (getenv("G4NUCMODEL_RAD_2PAR") ? 1.16 : 1.2) * radiusUnits; */
-const G4double G4NucleiModel::radiusScale2 = -1.3456;
-	/* (getenv("G4NUCMODEL_RAD_2PAR") ? -1.3456 : 0.) * radiusUnits; */
+const G4double G4NucleiModel::radiusScale  = 
+  (getenv("G4NUCMODEL_RAD_2PAR") ? 1.16 : 1.2) * radiusUnits;
+const G4double G4NucleiModel::radiusScale2 =
+  (getenv("G4NUCMODEL_RAD_2PAR") ? -1.3456 : 0.) * radiusUnits;
 
 // NOTE:  Old code used R_small = 8.0 (~2.83*units), and R_alpha = 0.7*R_small
 // Published data suggests R_small ~ 1.992 fm, R_alpha = 0.84*R_small
 
 const G4double G4NucleiModel::radiusForSmall =
   (getenv("G4NUCMODEL_RAD_SMALL") ? strtod(getenv("G4NUCMODEL_RAD_SMALL"),0)
-   : 1.992) * radiusUnits;	/* 8.0/OLD_RADIUS_UNITS) * radiusUnits; */
+   : 8.0/OLD_RADIUS_UNITS) * radiusUnits;
 
 const G4double G4NucleiModel::radScaleAlpha =
   getenv("G4NUCMODEL_RAD_ALPHA") ? strtod(getenv("G4NUCMODEL_RAD_ALPHA"),0)
-  : 0.84;	/* 0.70; */
+  : 0.70;
 
 // Scale factor relating Fermi momentum to density of states, units GeV.fm
 // NOTE:  Old code has 0.685*units GeV.fm, literature suggests 0.470 GeV.fm,
 //        but this gives too small momentum; old value gives <P_F> ~ 270 MeV
 const G4double G4NucleiModel::fermiMomentum = 
   (getenv("G4NUCMODEL_FERMI_SCALE") ? strtod(getenv("G4NUCMODEL_FERMI_SCALE"),0)
-   : 0.685) * radiusUnits;	/* 1.932/OLD_RADIUS_UNITS) * radiusUnits; */
+   : 1.932/OLD_RADIUS_UNITS) * radiusUnits;
 
 // Effective radius (0.87 to 1.2 fm) of nucleon, for trailing effect
 const G4double G4NucleiModel::R_nucleon = 
   (getenv("G4NUCMODEL_RAD_TRAILING") ? strtod(getenv("G4NUCMODEL_RAD_TRAILING"),0)
-   : 1.0) * radiusUnits;
+   : 0.0) * radiusUnits;
 
 // Zone boundaries as fraction of nuclear radius (from outside in)
 const G4double G4NucleiModel::alfa3[3] = { 0.7, 0.3, 0.01 };

@@ -15,6 +15,18 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+7 November 2011  Michael Kelsey (hadr-casc-V09-04-41)
+-----------------------------------------------------
+- G4NucleiModel.cc:  Due to some validation discrepancies, revert structure
+  parameters to old non-physical values.
+
+- G4ElementaryParticleCollider.cc:  In sampleCMmomentumFor2to2(), hide
+  message about unrecognized initial-state behind verbosity flag.
+
+3 November 2011  Dennis Wright  (hadr-casc-V09-04-40)
+-----------------------------------------------------
+- G4CascadeInterface.hh, .cc: switch from Description() to ModelDescription()
+ 
 27 October 2011  Gabriele Cosmo (hadr-casc-V09-04-39)
 -----------------------------------------------------
 - Added workaround to use 'this' pointer for internal calls in
