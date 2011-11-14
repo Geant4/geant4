@@ -35,20 +35,22 @@
 #include "RemSimEventAction.hh"
 #include "RemSimRunAction.hh"
 #include "RemSimSteppingAction.hh"
+#include "G4ScoringManager.hh"
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
 #endif
 #ifdef G4UI_USE
 #include "G4UIExecutive.hh"
 #endif
-#ifdef G4ANALYSIS_USE
-#include "RemSimAnalysisManager.hh"
-#endif 
+#include "QGSP_BIC_HP.hh"
 
 int main(int argc,char** argv)
 {
   // Construct the default run manager
   G4RunManager* runManager = new G4RunManager;
+
+  // Access to the Scoring Manager pointer
+  G4ScoringManager::GetScoringManager();
 
   //  HepRandom :: setTheSeed(0);
   // Set mandatory initialization classes
@@ -58,8 +60,9 @@ int main(int argc,char** argv)
   runManager -> SetUserInitialization(detector);
   
   // Physics
-  runManager->SetUserInitialization(new RemSimPhysicsList);
-
+   runManager->SetUserInitialization(new RemSimPhysicsList);
+  //runManager -> SetUserInitialization(new QGSP_BIC_HP());
+  
   // Set mandatory user action class
 
   // Primary particles
@@ -79,11 +82,6 @@ int main(int argc,char** argv)
    // Visualisation
    G4VisManager* visManager = new G4VisExecutive;
    visManager -> Initialize();
-#endif
-
-#ifdef G4ANALYSIS_USE
- RemSimAnalysisManager* analysis = RemSimAnalysisManager::getInstance();
- analysis -> SetFormat("hbook");
 #endif
  
   // get the pointer to the UI manager and set verbosities
@@ -109,9 +107,6 @@ int main(int argc,char** argv)
       UImanager -> ApplyCommand(command+fileName);
     }
 
-#ifdef G4ANALYSIS_USE
- analysis -> finish();
-#endif
 
 #ifdef G4VIS_USE
  delete visManager;

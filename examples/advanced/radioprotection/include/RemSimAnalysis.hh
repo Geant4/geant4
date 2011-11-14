@@ -23,37 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//    ************************
-//    *                      *
-//    *    RemSimDecay.hh    *
-//    *                      *           
-//    ************************
-//
-// $Id: RemSimDecay.hh,v 1.3 2006-06-29 16:22:08 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// Author:Susanna Guatelli, guatelli@ge.infn.it 
-//
-#ifndef REMSIMDECAY_HH
-#define REMSIMDECAY_HH 1
+// $Id$
+// Author: S. Guatelli, susanna@uow.edu.au
+/// \file RemSimAnalysis.hh
+/// \brief Selection of the analysis technology
 
-#include "G4VPhysicsConstructor.hh"
-#include "globals.hh"
-#include "G4Decay.hh"
+#ifndef RemSimAnalysis_h
+#define RemSimAnalysis_h 1
 
-class RemSimDecay : public G4VPhysicsConstructor {
+#include "g4analysis_defs.hh"
 
-public: 
+using namespace G4Root;
+//using namespace G4Xml;
 
-  RemSimDecay(const G4String& name = "decay");
-  
-  virtual ~RemSimDecay();
-  
-  // This method is dummy for physics
-  virtual void ConstructParticle() {};
-  
-  virtual void ConstructProcess();  
-};
 #endif
-
