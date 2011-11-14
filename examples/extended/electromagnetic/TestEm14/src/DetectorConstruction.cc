@@ -118,7 +118,9 @@ void DetectorConstruction::DefineMaterials()
   new G4Material("Copper"     , z=29., a= 63.55*g/mole, density= 8.920*g/cm3);  
 
   new G4Material("Germanium"  , z=32., a= 72.61*g/mole, density= 5.323*g/cm3);
-  
+
+  new G4Material("Nb"         , z=41., a= 92.906*g/mole,density= 8.57*g/cm3);
+    
   G4Material* NaI = 
   new G4Material("NaI", density= 3.67*g/cm3, ncomponents=2);
   NaI->AddElement(Na, natoms=1);
