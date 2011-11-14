@@ -47,13 +47,13 @@ public:
     G4LundStringFragmentation();
     virtual ~G4LundStringFragmentation();
 
+    virtual G4KineticTrackVector* FragmentString(const G4ExcitedString& theString);
+
 private:
     G4LundStringFragmentation(const G4LundStringFragmentation &right);
     const G4LundStringFragmentation & operator=(const G4LundStringFragmentation &right);
     int operator==(const G4LundStringFragmentation &right) const;
     int operator!=(const G4LundStringFragmentation &right) const;
-
-    virtual G4KineticTrackVector* FragmentString(const G4ExcitedString& theString);
 
 private:
    void SetMinimalStringMass(const G4FragmentingString  * const string);		    
@@ -82,6 +82,31 @@ private:
    G4double lambda(G4double s, G4double m1_Sqr, G4double m2_Sqr);
 
 private:
+   // Internal methods introduced to improve the code structure (AR Nov 2011)
+
+   G4bool Loop_toFragmentString(G4ExcitedString * & theStringInCMS, 
+                                G4KineticTrackVector * & LeftVector, 
+                                G4KineticTrackVector * & RightVector);
+
+   G4bool Diquark_AntiDiquark_belowThreshold_lastSplitting(G4FragmentingString * & string,
+                                                           G4ParticleDefinition * & LeftHadron,
+                                                           G4ParticleDefinition * & RightHadron);
+
+   G4bool Diquark_AntiDiquark_aboveThreshold_lastSplitting(G4FragmentingString * & string,
+                                                           G4ParticleDefinition * & LeftHadron,
+                                                           G4ParticleDefinition * & RightHadron);
+
+   G4bool Quark_AntiQuark_lastSplitting(G4FragmentingString * & string,
+                                        G4ParticleDefinition * & LeftHadron,
+                                        G4ParticleDefinition * & RightHadron);
+
+   G4bool Quark_Diquark_lastSplitting(G4FragmentingString * & string,
+                                      G4ParticleDefinition * & LeftHadron,
+                                      G4ParticleDefinition * & RightHadron );
+
+   G4int SampleState(void); 
+
+private:
 // ------ For estimation of a minimal string mass ---------------
    G4double Mass_of_light_quark;
    G4double Mass_of_heavy_quark;
@@ -99,6 +124,12 @@ private:
    G4double BaryonWeight[3][3][3][4];
 
    G4double Prob_QQbar[3];
+
+// ------ To improve the code structure
+   G4ParticleDefinition * FS_LeftHadron[35], * FS_RightHadron[35];
+   G4double FS_Weight[35];
+   G4int NumberOf_FS;
+
 };
 
 //**************************************************************************************************************
