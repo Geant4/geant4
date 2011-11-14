@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 14th, 2011 A.Howard - B01-V09-04-00
+- migrated B01DetectorConstruction.cc to new G4Exception
+
 Mar 25th, 2010 G.Cosmo - B01-V09-03-00
 - Migrated physics list to use particle-based multiple-scattering processes.
 
