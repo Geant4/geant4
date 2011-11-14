@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14 November 11: V.Ivanchenko (emstand-V09-04-52)
+- G4SeltzerBergerModel - fixed cross section for positrons 
+
+12 November 11: V.Ivanchenko (emstand-V09-04-51)
+- G4SeltzerBergerModel - added correction for cross section for positrons
+
 11 November 11: V.Ivanchenko (emstand-V09-04-50)
 - G4eeToTwoGammaModel, G4eSingleCoulombScatteringModel, G4eCoulombScatteringModel,
   G4eBremsstrahlungRelModel, G4eBremsstrahlungModel, G4eBremsstrahlung,
