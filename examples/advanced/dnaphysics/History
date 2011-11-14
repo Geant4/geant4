@@ -5,6 +5,9 @@
                        Package History file
                        --------------------
 
+05 November 2011- tag dnaphysics-V09-04-08 - S. Incerti  
+- removed export=root option in HistoManager.cc
+
 24 August2011 - tag dnaphysics-V09-04-07 - S. Incerti
 - Added Auger production to dna.mac
 

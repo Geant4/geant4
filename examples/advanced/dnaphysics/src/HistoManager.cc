@@ -52,7 +52,7 @@ HistoManager::HistoManager()
  
   fileName[0] = "dna";
   fileType    = "root";
-  fileOption  = "--noErrors export=root uncompress";
+  fileOption  = "";
   ntupl0=0;
   
 }
