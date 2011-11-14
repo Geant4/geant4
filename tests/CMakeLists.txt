@@ -22,13 +22,13 @@ if(GEANT4_BUILD_EXAMPLES)
                           ${CMAKE_SOURCE_DIR}/examples/novice/N02/exampleN02.in
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/novice/N02
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/novice/N02
-                  BUILD exampleN02 PROJECT N02)
+                  BUILD exampleN02 PROJECT N02 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
   GEANT4_ADD_TEST(example-nov-n03 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/novice/N03/exampleN03 
                           ${CMAKE_SOURCE_DIR}/examples/novice/N03/exampleN03.in
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/novice/N03
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/novice/N03
-                  BUILD exampleN03 PROJECT N03)
+                  BUILD exampleN03 PROJECT N03 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
   GEANT4_ADD_TEST(example-nov-n04 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/novice/N04/exampleN04 
                           ${CMAKE_SOURCE_DIR}/examples/novice/N04/exampleN04.in
@@ -41,49 +41,49 @@ if(GEANT4_BUILD_EXAMPLES)
                           ${CMAKE_SOURCE_DIR}/examples/novice/N05/exampleN05.in
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/novice/N05
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/novice/N05
-                  BUILD exampleN05 PROJECT N05)
+                  BUILD exampleN05 PROJECT N05 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
   GEANT4_ADD_TEST(example-nov-n06 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/novice/N06/exampleN06 
                           ${CMAKE_SOURCE_DIR}/examples/novice/N06/exampleN06.in
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/novice/N06
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/novice/N06
-                  BUILD exampleN06 PROJECT N06)
+                  BUILD exampleN06 PROJECT N06 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
   GEANT4_ADD_TEST(example-nov-n07 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/novice/N07/exampleN07 
                           ${CMAKE_SOURCE_DIR}/examples/novice/N07/exampleN07.in
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/novice/N07
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/novice/N07
-                  BUILD exampleN07 PROJECT N07)
+                  BUILD exampleN07 PROJECT N07 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
   #---Extended-----------------------------------------------------------------------------------------
   GEANT4_ADD_TEST(example-ext-analysis-a01 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/analysis/A01/A01app 
                           ${CMAKE_SOURCE_DIR}/examples/extended/analysis/A01/test.in
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/analysis/A01
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/analysis/A01
-                  BUILD A01app PROJECT A01)
+                  BUILD A01app PROJECT A01 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
   GEANT4_ADD_TEST(example-ext-analysis-anaex01 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/analysis/AnaEx01/AnaEx01 
                           ${CMAKE_SOURCE_DIR}/examples/extended/analysis/AnaEx01/AnaEx01.in
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/analysis/AnaEx01
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/analysis/AnaEx01
-                  BUILD AnaEx01)
+                  BUILD AnaEx01 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
   GEANT4_ADD_TEST(example-ext-analysis-anaex02 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/analysis/AnaEx02/AnaEx02 
                           ${CMAKE_SOURCE_DIR}/examples/extended/analysis/AnaEx02/AnaEx02.in
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/analysis/AnaEx02
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/analysis/AnaEx02
-                  BUILD AnaEx02)
+                  BUILD AnaEx02 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
   GEANT4_ADD_TEST(example-ext-analysis-n03con 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/analysis/N03Con/exampleN03Con 
                           ${CMAKE_SOURCE_DIR}/examples/extended/analysis/N03Con/exampleN03Con.in
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/analysis/N03Con
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/analysis/N03Con
-                  BUILD exampleN03Con)
+                  BUILD exampleN03Con ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
   GEANT4_ADD_TEST(example-ext-biasing-b01 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/biasing/B01/exampleB01
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/biasing/B01
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/biasing/B01
-                  BUILD exampleB01)
+                  BUILD exampleB01 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
   GEANT4_ADD_TEST(example-ext-biasing-b02 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/biasing/B02/exampleB02
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/biasing/B02
@@ -94,7 +94,7 @@ if(GEANT4_BUILD_EXAMPLES)
                           ${CMAKE_SOURCE_DIR}/examples/extended/biasing/ReverseMC01/run_adjoint_simulation_electron.g4mac
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/biasing/ReverseMC01
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/biasing/ReverseMC01
-                  BUILD exampleRMC01)
+                  BUILD exampleRMC01 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
   foreach(_i 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18)
     GEANT4_ADD_TEST(example-ext-electromagnetic-testem${_i}
                     COMMAND ${CMAKE_BINARY_DIR}/examples/extended/electromagnetic/TestEm${_i}/TestEm${_i} 
@@ -211,7 +211,7 @@ if(GEANT4_BUILD_EXAMPLES)
                           ${CMAKE_SOURCE_DIR}/examples/extended/optical/LXe/LXe.in
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/optical/LXe
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/optical/LXe
-                  BUILD LXe)
+                  BUILD LXe ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
   GEANT4_ADD_TEST(example-ext-optical-wls 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/optical/wls/wls
                           ${CMAKE_SOURCE_DIR}/examples/extended/optical/wls/wls.in
@@ -223,7 +223,7 @@ if(GEANT4_BUILD_EXAMPLES)
                           ${CMAKE_SOURCE_DIR}/examples/extended/parameterisations/gflash/test.mac
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/parameterisations/gflash
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/parameterisations/gflash
-                  BUILD ExGflash)
+                  BUILD ExGflash ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
   if(GEANT4_USE_GDML)
     GEANT4_ADD_TEST(example-ext-persistency-gdml-g01 
                     PRECMD  ${CMAKE_COMMAND} -E remove -f g01.gdml
@@ -248,7 +248,7 @@ if(GEANT4_BUILD_EXAMPLES)
                           ${CMAKE_SOURCE_DIR}/examples/extended/persistency/P03/batch.mac
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/persistency/P03
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/persistency/P03
-                  BUILD textGeom)
+                  BUILD textGeom ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
   GEANT4_ADD_TEST(example-ext-polarisation-pol01 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/polarisation/Pol01/pol01
                           ${CMAKE_SOURCE_DIR}/examples/extended/polarisation/Pol01/pol01.in
@@ -271,25 +271,25 @@ if(GEANT4_BUILD_EXAMPLES)
                   POSTCMD ${CMAKE_COMMAND} -E compare_files sample.err ${CMAKE_SOURCE_DIR}/examples/extended/runAndEvent/RE01/sample.err
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/runAndEvent/RE01
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/runAndEvent/RE01
-                  BUILD RE01)
+                  BUILD RE01 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
   GEANT4_ADD_TEST(example-ext-runandevent-re02 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/runAndEvent/RE02/exampleRE02
                           ${CMAKE_SOURCE_DIR}/examples/extended/runAndEvent/RE02/run.mac
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/runAndEvent/RE02
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/runAndEvent/RE02
-                  BUILD exampleRE02)
+                  BUILD exampleRE02 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
   GEANT4_ADD_TEST(example-ext-runandevent-re02-run3 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/runAndEvent/RE02/exampleRE02
                           ${CMAKE_SOURCE_DIR}/examples/extended/runAndEvent/RE02/run3.mac
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/runAndEvent/RE02
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/runAndEvent/RE02
-                  DEPENDS example-ext-runandevent-re02)
+                  DEPENDS example-ext-runandevent-re02 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
   GEANT4_ADD_TEST(example-ext-runandevent-re02-run4 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/runAndEvent/RE02/exampleRE02
                           ${CMAKE_SOURCE_DIR}/examples/extended/runAndEvent/RE02/run4.mac
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/runAndEvent/RE02
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/runAndEvent/RE02
-                  DEPENDS example-ext-runandevent-re02)
+                  DEPENDS example-ext-runandevent-re02 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
   GEANT4_ADD_TEST(example-ext-visualization-uservisaction-build
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/visualization/userVisAction
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/visualization/userVisAction
@@ -299,14 +299,14 @@ if(GEANT4_BUILD_EXAMPLES)
                           ${CMAKE_SOURCE_DIR}/examples/extended/visualization/userVisAction/userVisAction.in
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/visualization/userVisAction
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/visualization/userVisAction
-                  DEPENDS example-ext-visualization-uservisaction-build)
+                  DEPENDS example-ext-visualization-uservisaction-build ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
   foreach(_i 1 2)
     GEANT4_ADD_TEST(example-ext-visualization-uservisaction-run${_i}
                     COMMAND ${CMAKE_BINARY_DIR}/examples/extended/visualization/userVisAction/userVisAction
                             ${CMAKE_SOURCE_DIR}/examples/extended/visualization/userVisAction/run${_i}.mac
                     SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/visualization/userVisAction
                     BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/visualization/userVisAction
-                    DEPENDS example-ext-visualization-uservisaction-build)
+                    DEPENDS example-ext-visualization-uservisaction-build ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
   endforeach()
 
 
@@ -316,7 +316,7 @@ if(GEANT4_BUILD_EXAMPLES)
                           ${CMAKE_SOURCE_DIR}/examples/advanced/amsEcal/run1.mac
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/amsEcal
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/amsEcal
-                  BUILD amsEcal)
+                  BUILD amsEcal ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
   GEANT4_ADD_TEST(example-adv-dnaphysics 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/dnaphysics/DNAPhysics 
                           ${CMAKE_SOURCE_DIR}/examples/advanced/dnaphysics/dna.mac
