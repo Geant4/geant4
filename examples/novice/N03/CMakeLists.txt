@@ -6,6 +6,10 @@ include(${Geant4_USE_FILE})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${Geant4_INCLUDE_DIR})
 file(GLOB sources ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cc)
 
-add_executable(exampleN03 EXCLUDE_FROM_ALL exampleN03.cc ${sources})
+add_executable(exampleN03 exampleN03.cc ${sources})
 target_link_libraries(exampleN03 ${Geant4_LIBRARIES})
+
+add_custom_target(N03 DEPENDS exampleN03)
+
+install(TARGETS exampleN03 DESTINATION bin )
 

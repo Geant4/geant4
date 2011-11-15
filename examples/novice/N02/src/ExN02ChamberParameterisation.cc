@@ -55,7 +55,9 @@ ExN02ChamberParameterisation::ExN02ChamberParameterisation(
    if( NoChambers > 0 ){
       fHalfLengthIncr =  0.5 * (lengthFinal-lengthInitial)/NoChambers;
       if (spacingZ < widthChamber) {
-       G4Exception("ExN02ChamberParameterisation construction: Width>Spacing");
+       G4Exception("ExN02ChamberParameterisation::ExN02ChamberParameterisation()",
+                   "InvalidSetup", FatalException,
+                   "Width>Spacing");
       }
    }
    

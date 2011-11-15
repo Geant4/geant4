@@ -16,9 +16,9 @@
 /run/setCutForRegion Calor-B 2 mm
 /run/setCutForRegion Calor-C 2 cm
 
-### 1 event 
+### 10 event 
 #/tracking/verbose 1
-/run/beamOn 1
+/run/beamOn 10
 
 ### dump couples
 /run/dumpRegion
@@ -27,30 +27,24 @@
 ### set range cut for Calor-A same as the stored one
 /run/setCutForRegion Calor-A 0.2 mm
 
-### 1 event 
+### 10 event 
 #/tracking/verbose 1
-/run/beamOn 1
+/run/beamOn 10
 
 ### dump couples
 /run/dumpRegion
 /run/dumpCouples
 
-###  10 events
-/tracking/verbose 0
-/run/beamOn 10
 
 ###Modify Absorber material
 /N07/setAbsMat Tungsten 
 /N07/setGapMat Water 
 
-### 1 event 
+### 10 event 
 #/tracking/verbose 1
-/run/beamOn 1
+/run/beamOn 10
 
 ### dump couples
 /run/dumpRegion
 /run/dumpCouples
 
-###  10 events
-/tracking/verbose 0
-/run/beamOn 10

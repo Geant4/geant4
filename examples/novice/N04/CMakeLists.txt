@@ -6,7 +6,12 @@ include(${Geant4_USE_FILE})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${Geant4_INCLUDE_DIR})
 file(GLOB sources ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cc)
 
-add_executable(exampleN04 EXCLUDE_FROM_ALL exampleN04.cc ${sources})
+add_executable(exampleN04 exampleN04.cc ${sources})
 target_link_libraries(exampleN04 ${Geant4_LIBRARIES})
 
 configure_file(pythia_event.data pythia_event.data COPYONLY)
+
+add_custom_target(N04 DEPENDS exampleN04)
+
+install(TARGETS exampleN04 DESTINATION bin )
+
