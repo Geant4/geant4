@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 15, 2011  G.Cosmo               geom-csg-V09-04-11
+- Correction in G4CutTubs for missing implementation of GetCubicVolume()
+  and GetSurfaceArea() utility methods, to be temporarly replaced by
+  default G4VSolid implementation.
+
 November 2, 2011  G.Cosmo                geom-csg-V09-04-10
 - Removed declaration of methods not implemented in G4CutTubs and included
   by mistake.

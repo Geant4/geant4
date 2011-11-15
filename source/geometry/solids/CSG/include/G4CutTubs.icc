@@ -35,6 +35,16 @@
 // Implementation of inline methods of G4CutTubs
 // --------------------------------------------------------------------
 
+inline G4double G4CutTubs::GetCubicVolume()
+{
+  return G4VSolid::GetCubicVolume();
+}
+
+inline G4double G4CutTubs::GetSurfaceArea()
+{
+  return G4VSolid::GetSurfaceArea();
+}
+
 inline
 G4ThreeVector G4CutTubs::GetLowNorm () const
 {
