@@ -101,7 +101,6 @@ class HadronPhysicsFTF_BIC : public G4VPhysicsConstructor
     G4FTFPAntiBarionBuilder * theFTFPAntiBaryon;
 
     G4bool QuasiElastic;
-    G4VCrossSectionDataSet * theCHIPSInelastic;
 };
 
 #endif

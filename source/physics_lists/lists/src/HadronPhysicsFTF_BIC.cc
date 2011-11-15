@@ -115,7 +115,6 @@ HadronPhysicsFTF_BIC::~HadronPhysicsFTF_BIC()
    delete theAntiBaryon;
    delete theFTFPAntiBaryon;
   
-   delete theCHIPSInelastic;
 }
 
 void HadronPhysicsFTF_BIC::ConstructParticle()

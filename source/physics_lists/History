@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15-11-2011, G.Folger                   (phys-lists-V09-04-73)
+-  lists/*/HadronPhysicsFTF_BIC: fix bug wrongly deleting theCHIPSInelastic
+    and remove theCHIPSInelastic as data-member.
+
 12-11-2011, V.Ivanchenko               (phys-lists-V09-04-72)
 - G4HadronElasticXS - use G4BGGHadronElasticXS proton cross section
 
