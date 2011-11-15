@@ -56,6 +56,9 @@ Extended level examples
    - Histogramming through the AIDA interface
  biasing
    - Examples of event biasing, scoring and reverse-MC
+ common
+   - A set of common classes which can be reused in other examples demonstrating
+     just a particular feature  
  electromagnetic
    - Specific EM physics simulation with histogramming
  errorpropagation
