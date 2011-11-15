@@ -26,6 +26,10 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+12th November 2011  John Allison  (visman-V09-04-12)
+- G4VisListManager<T>::SetCurrent:
+  o Changed "Fatal" to "JustWarning" for non-existent model.
+
 11th November 2011  John Allison  (visman-V09-04-11)
 - G4VisModelManager.hh: Coverity fix.
 

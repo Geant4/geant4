@@ -106,10 +106,10 @@ G4VisListManager<T>::SetCurrent(const G4String& name)
   if (iter != fMap.end()) fpCurrent = fMap[name];
   else {
     G4ExceptionDescription ed;
-    ed << "Key "<<name<<" has not been registered";
+    ed << "Key \"" << name << "\" has not been registered";
     G4Exception
       ("G4VisListManager<T>::SetCurrent(T* ptr) ",
-       "visman0102", FatalErrorInArgument, ed, "Non-existent name");
+       "visman0102", JustWarning, ed, "Non-existent name");
   }
 }
 
