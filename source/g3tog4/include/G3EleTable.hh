@@ -42,6 +42,7 @@
 #ifndef G4ELETABLE_HH
 #define G4ELETABLE_HH 1
 
+#include "G3toG4Defs.hh"
 #include "globals.hh"
 #include "G4Element.hh"
 
@@ -67,5 +68,5 @@ private:
 
 };
 
-extern G3EleTable G3Ele;
+extern DLL_API G3EleTable G3Ele;
 #endif

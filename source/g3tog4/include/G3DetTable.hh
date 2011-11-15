@@ -33,6 +33,7 @@
 #define G3DETTABLE_HH 1
 
 #include <map>
+#include "G3toG4Defs.hh"
 #include "globals.hh"
 #include "G3DetTableEntry.hh"
 
@@ -50,5 +51,5 @@ public:
   void PrintAll();
 };
 
-extern G3DetTable G3Det;
+extern DLL_API G3DetTable G3Det;
 #endif

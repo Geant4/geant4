@@ -41,6 +41,7 @@
 #define G3MATTABLE_HH 1
 
 #include "G3MatTableEntry.hh"
+#include "G3toG4Defs.hh"
 
 #include "globals.hh"
 
@@ -67,6 +68,6 @@ class G3MatTable
     G3MaterialVector*  fMatVector;
 };
 
-extern G3MatTable G3Mat;
+extern DLL_API G3MatTable G3Mat;
 
 #endif

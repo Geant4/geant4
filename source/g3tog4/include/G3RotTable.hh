@@ -41,6 +41,7 @@
 #define G3ROTTABLEH_HH 1
 
 #include "G3RotTableEntry.hh"
+#include "G3toG4Defs.hh"
 
 #include "globals.hh"
 
@@ -68,6 +69,6 @@ class G3RotTable
     G3RotMatrixVector*  fRotVector;
 };
 
-extern G3RotTable G3Rot;
+extern DLL_API G3RotTable G3Rot;
 
 #endif

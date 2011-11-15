@@ -36,9 +36,10 @@
 #define G3SENSVOLVECTOR_HH 1
 
 #include <vector>
+#include "G3toG4Defs.hh"
 #include "G4LogicalVolume.hh"
 
 typedef std::vector<G4LogicalVolume*> G3SensVolVector;
 
-extern G3SensVolVector G3SensVol;
+extern DLL_API G3SensVolVector G3SensVol;
 #endif

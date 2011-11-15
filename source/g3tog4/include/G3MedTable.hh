@@ -43,6 +43,7 @@
 #define G3MEDTABLE_HH 1
 
 #include "G3MedTableEntry.hh"
+#include "G3toG4Defs.hh"
 
 #include "globals.hh"
 
@@ -74,5 +75,5 @@ class G3MedTable
     G3MediumVector*  fMedVector;
 };
 
-extern G3MedTable G3Med;
+extern DLL_API G3MedTable G3Med;
 #endif

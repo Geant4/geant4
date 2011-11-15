@@ -25,6 +25,7 @@ GLOBLIBS += libG4intercoms.lib libG4global.lib
 
 include $(G4INSTALL)/config/architecture.gmk
 
+CPPFLAGS  += -DG3TOG4_EXPORT
 CPPFLAGS  += \
              -I$(G4BASE)/global/management/include \
              -I$(G4BASE)/global/HEPGeometry/include \

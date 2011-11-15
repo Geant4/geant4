@@ -3,6 +3,10 @@ $Id: History,v 1.63 2008-11-17 08:34:11 gcosmo Exp $
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
 
+g3tog4-V09-04-04 15-Nov-2011 G.Cosmo
+- Added export flag for extern symbols to allow for generation of DLLs
+  on Windows with CMake.
+
 g3tog4-V09-04-03 11-Nov-2011 G.Folger
 - make safe to compile with -j and drop compilation of fortran
 

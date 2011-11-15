@@ -52,6 +52,7 @@
 
 #include <map>
 #include "G3VolTableEntry.hh"
+#include "G3toG4Defs.hh"
 
 class G4LogicalVolume;
 class G4Material;
@@ -82,6 +83,6 @@ private:
   G4int _NG3Pos;
 };
 
-extern G3VolTable G3Vol;
+extern DLL_API G3VolTable G3Vol;
 
 #endif
