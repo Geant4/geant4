@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc1-1-g42ec38e
+// INCL++ revision: v5.0_rc1-3-gba0205b
 //
 #define INCLXX_IN_GEANT4_MODE 1
 

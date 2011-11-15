@@ -16,6 +16,12 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+14 November 2011 - Pekka Kaitaniemi (hadr-inclxx-V09-04-10)
+-----------------------------------------------------------
+- Corrected the order in which the INCL++ model and projectile are created in
+	the interface. This actually is a better fix to the FPE problem than tag
+	hadr-inclxx-V09-04-09.
+
 10 November 2011 - Pekka Kaitaniemi (hadr-inclxx-V09-04-09)
 -----------------------------------------------------------
 - Added safeguard against FPE in G4INCLCrossSections.cc

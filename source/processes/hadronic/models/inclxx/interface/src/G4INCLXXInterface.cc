@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc1-1-g42ec38e
+// INCL++ revision: v5.0_rc1-3-gba0205b
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -122,8 +122,8 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
   // produce a valid cascade.
   G4bool eventIsOK = false;
   do {
-    G4INCL::Particle *theProjectile = G4INCLXXFactory::createProjectile(aTrack);
     G4INCL::INCL *theINCLModel = G4INCLXXFactory::createModel(theNucleus);
+    G4INCL::Particle *theProjectile = G4INCLXXFactory::createProjectile(aTrack);
 
     if(dumpInput) {
       G4cout << theINCLModel->configToString() << G4endl;
