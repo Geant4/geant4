@@ -1,0 +1,3 @@
+- Keep magnetic field ? (Will be in tracker)
+- What to do with vis.tutor?
+- RANDOM NUMBERS HANDLING - keep it here?

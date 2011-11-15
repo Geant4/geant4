@@ -1,0 +1,43 @@
+# $Id: heprep.mac,v 1.2 2003-12-01 21:09:28 perl Exp $
+#
+# Macro file for "exampleN03.cc"
+#
+# can be run in batch, without graphic
+# or interactively: Idle> /control/execute heprep.mac
+#
+# Produces heprep2 file(s)
+#
+/control/verbose 0
+/control/saveHistory
+#
+/run/verbose 0
+/event/verbose 0
+/tracking/verbose 0
+#
+# muon 300 MeV to the direction (1.,0.,0.)
+# 3 events
+#
+# Create a scene containing the detector.
+/vis/scene/create
+/vis/scene/add/volume world
+#
+# Open a HepRep version 2 file suitable for viewing in WIRED.
+/vis/open HepRepXML
+#
+# Output an empty detector
+/vis/viewer/flush
+#
+# Include trajectories in the image.
+/tracking/storeTrajectory 1
+/vis/scene/add/trajectories
+#
+# If multiple events in one run, accumulate all events into a single
+# graphical image.  If this line is commented out, each event will instead
+# appear in a separate image.
+/vis/scene/endOfEventAction accumulate
+#
+# At end of each run, an automatic flush causes graphical output.
+# This run will make an image with one event.
+/run/beamOn 1
+# This run will make an image with ten events.
+/run/beamOn 10

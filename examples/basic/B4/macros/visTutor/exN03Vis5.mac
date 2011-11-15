@@ -1,0 +1,70 @@
+#######################################################################
+#  MACRO FILE NAME: exN03Vis5.mac                                     #
+#                                                                     #
+#  AUTHOR(S): Guy Barrand                                             #
+#                                                                     #
+#  DATE: June 09, 2000                                                #
+#                                                                     #
+#  CONTENTS: A basic macro for demonstrating Inventor driver          #
+#                                                                     #
+#  USAGE:  % $G4BINDIR/exampleN03  visTutor/exN03Vis5.mac             #
+#                                                                     #
+#  REQUIRED PLATFORMS & SOFTWARES: Unix, Motif, X-window, OpenGL,     #
+#                                  HEPVis                             #
+#                                  Inventor (TGS or SoFree)           #
+#                                                                     #
+#  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
+#  (See geant4/source/visualization/README for details.)              #
+#                                                                     #
+#    % setenv G4VIS_BUILD_OIX_DRIVER       1                          # 
+#                                                                     #
+#  ENVIRONMENTAL VARIABLES (C-MACROS) FOR COMPILATION:                #
+#  (See geant4/source/visualization/README for details.)              #
+#                                                                     #
+#    % setenv G4VIS_USE_OIX                1                          #
+#                                                                     # 
+#  ADDITIONAL NOTES:                                                  #
+#                                                                     # 
+#######################################################################
+
+# Create "scene-0" 
+/vis/scene/create
+
+# Invoke the OpenInventor driver 
+/vis/sceneHandler/create OIX
+/vis/viewer/create
+
+# Add the world volume to the current scene
+/vis/scene/add/volume
+#/vis/scene/add/volume Layer
+# Name of the absorbers = name of their material (Lead) !
+#/vis/scene/add/volume Lead
+# Name of the gaps = name of their material (liquidArgon) !
+#/vis/scene/add/volume liquidArgon
+#/vis/scene/add/trajectories
+/tracking/storeTrajectory 1
+
+# Bird-eye view of events
+/vis/viewer/reset
+/vis/viewer/set/viewpointThetaPhi   45 45 
+
+/vis/scene/notifyHandlers
+
+/control/verbose 2
+#######################################################################
+#   Controls on an Inventor examiner viewer are :                     #
+#  - in picking mode (cursor is the upper left arrow)                 #
+#   Ctrl + pick a volume : see daughters.                             #
+#   Shift + pick a volume : see mother.                               #
+#  - in viewing mode (cursor is the hand)                             #
+#   Left-button + pointer move : rotate.                              #
+#   Ctrl+Left-button + pointer move : pane.                           #
+#   Ctrl+Shift+Left-button + pointer move : scale.                    #
+#   Middle-button + pointer move : pane.                              #
+#                                                                     #
+#######################################################################
+
+/vis/viewer/update
+
+/run/beamOn 1
+

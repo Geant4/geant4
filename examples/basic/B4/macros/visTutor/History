@@ -1,0 +1,39 @@
+====================================
+examples/basic/B4/visTutor/History
+====================================
+
+24th November 2008 Laurent Garnier
+- exNo3Vis14.mac,exNo3Vis15.mac : Change OGLSQT by OGLSQt
+
+3rd May 2005  John Allison  (examples-V07-00-03)
+- Replaced vis manager with G4VisExecutive.
+
+10-12-04 Joseph Perl
+- exNo3Vis5.mac: changed name in comments in header from ...Vis6 to ...Vis5.
+- exNo3Vis6.mac: changed name in comments in header from ...Vis7 to ...Vis6.
+- exNo3Vis7.mac: changed name in comments in header from ...Vis8 to ...Vis7.
+- exNo3Vis8.mac: changed name in comments in header from ...Vis9 to ...Vis8.
+- exNo3Tree1.mac: changed name in comments in header from ...Tree0 to ...Tree1.
+
+27-11-03 Gabriele Cosmo 
+- removed script exN03Vis5.mac of OPACS and renamed scripts 6/7/8/9 to
+  5/6/7/8 respectively. Added scripts to gui.mac.
+
+14-11-01 Satoshi Tanaka (exN03VisTutor-V03-02-02)
+- exN03Vis8.mac : Batch visualization with the DAWNFILE driver
+- exN03Vis9.mac : Multi-page PostScript file generation (old exN03Vis8.mac)
+
+08-11-01 Satoshi Tanaka (exN03VisTutor-V03-02-01a)
+- /vis/viewer/viewpointThetaPhi ==> /vis/viewer/set/viewpointThetaPhi
+
+07-11-01 Satoshi Tanaka (exN03VisTutor-V03-02-01)
+- Macros are rewritten with /vis/viewer/flush
+- Comments are updated.
+
+18-09-01 Satoshi Tanaka (exN03VisTutor-V03-02-00)
+- Updation for automatic visualization at Hebden Bridge mini-workshop.
+- /vis/viewer/flush and /vis/flushAll are not included yet.
+  (To be included in the next tag.) 
+- /vis/drawTree may still require /vis/scene/notifyHandlers.
+  (John Allison will revise the /vis/drawTree command soon.)
+
