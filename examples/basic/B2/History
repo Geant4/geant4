@@ -14,7 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+15/11/11 I. Hrivnacova (exbasic-V09-04-01)
+- Migration to new G4Exception in B2aDetectorConstruction.cc
+  and B2bChamberParameterisation.cc.
+    
 14/11/11 I. Hrivnacova (exbasic-V09-04-00)
 - The first tagged version of the new B2 example created from N02
   example by P. Gumplinger.

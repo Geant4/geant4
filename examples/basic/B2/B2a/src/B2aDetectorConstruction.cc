@@ -238,7 +238,9 @@ G4VPhysicalVolume* B2aDetectorConstruction::DefineVolumes()
   if( fNbOfChambers > 0 ){
     rmaxIncr =  0.5 * (lastLength-firstLength)/(fNbOfChambers-1);
     if (chamberSpacing  < chamberWidth) {
-       G4Exception("B2aDetectorConstruction: Width>Spacing");
+       G4Exception("B2aDetectorConstruction::DefineVolumes()",
+                   "InvalidSetup", FatalException,
+                   "Width>Spacing");
     }
   }
 

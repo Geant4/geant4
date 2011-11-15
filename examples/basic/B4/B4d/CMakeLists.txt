@@ -6,6 +6,8 @@ include(${Geant4_USE_FILE})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${Geant4_INCLUDE_DIR})
 file(GLOB sources ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cc)
 
-add_executable(exampleB4d EXCLUDE_FROM_ALL exampleB4d.cc ${sources})
+add_executable(exampleB4d exampleB4d.cc ${sources})
 target_link_libraries(exampleB4d ${Geant4_LIBRARIES})
+
+install(TARGETS exampleB4d DESTINATION bin )
 

@@ -52,7 +52,9 @@ B2bChamberParameterisation::B2bChamberParameterisation(
    if( noChambers > 0 ){
       fRmaxIncr =  0.5 * (lengthFinal-lengthInitial)/(noChambers-1);
       if (spacingZ < widthChamber) {
-         G4Exception("B2bChamberParameterisation construction: Width>Spacing");
+         G4Exception("B2bChamberParameterisation::B2bChamberParameterisation()",
+                     "InvalidSetup", FatalException,
+                     "Width>Spacing");
       }
    }
 }
