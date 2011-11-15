@@ -23,63 +23,58 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4StepLimiterBuilder.cc,v 1.3 2008-08-05 10:38:35 vnivanch Exp $
+// $Id: StepLimiterPerRegion.hh,v 1.3 2008-08-05 10:38:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//---------------------------------------------------------------------------
-//
-// ClassName:   G4StepLimiterBuilder
-//
-// Author:      V.Ivanchenko 24.11.2004
-//
-// Modified:
-//
-//----------------------------------------------------------------------------
-//
-//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4StepLimiterBuilder.hh"
+#ifndef StepLimiterPerRegion_h
+#define StepLimiterPerRegion_h 1
+
+#include "globals.hh"
+#include "G4VDiscreteProcess.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4ProcessManager.hh"
-#include "G4StepLimiterPerRegion.hh"
+#include "G4Step.hh"
+
+class StepLimiterMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4StepLimiterBuilder::G4StepLimiterBuilder(const G4String& name)
-   :  G4VPhysicsConstructor(name)
+class StepLimiterPerRegion : public G4VDiscreteProcess
 {
-  stepMax = new G4StepLimiterPerRegion();
-}
+public:
+
+  StepLimiterPerRegion(const G4String& processName = "UserMaxStep");
+  virtual ~StepLimiterPerRegion();
+
+  G4bool IsApplicable(const G4ParticleDefinition&);
+
+  void SetMaxStep(G4double);
+
+  G4double GetMaxStep() {return MaxChargedStep;};
+
+  G4double PostStepGetPhysicalInteractionLength( const G4Track& track,
+			                       G4double previousStepSize,
+			                       G4ForceCondition* condition);
+
+  G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+
+  G4double GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*)
+  {return 0.;};    
+
+private:
+
+  StepLimiterPerRegion & operator=(const StepLimiterPerRegion &right);
+  StepLimiterPerRegion(const StepLimiterPerRegion&);
+
+  G4double MaxChargedStep;
+  G4double ProposedStep;
+
+  StepLimiterMessenger*  pMess;
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4StepLimiterBuilder::~G4StepLimiterBuilder()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4StepLimiterBuilder::ConstructParticle()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4StepLimiterBuilder::ConstructProcess()
-{
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-
-    if (stepMax->IsApplicable(*particle) && !particle->IsShortLived()) {
-
-      pmanager->AddDiscreteProcess(stepMax);
-
-    }
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#endif
 

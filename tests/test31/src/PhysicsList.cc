@@ -51,7 +51,7 @@
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
 
-#include "G4StepLimiterBuilder.hh"
+#include "StepLimiterBuilder.hh"
 #include "G4DecayPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4HadronInelasticQBBC.hh"
@@ -167,7 +167,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
 
   } else if (name == "step_limit" && !stepLimiterIsRegisted && emBuilderIsRegisted) {
-    RegisterPhysics(new G4StepLimiterBuilder());
+    RegisterPhysics(new StepLimiterBuilder());
     stepLimiterIsRegisted = true;
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
 

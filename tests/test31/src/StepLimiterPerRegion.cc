@@ -23,44 +23,66 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4StepLimiterMessenger.cc,v 1.2 2006-06-29 21:58:01 gunter Exp $
+// $Id: StepLimiterPerRegion.cc,v 1.2 2006-06-29 21:58:03 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4StepLimiterMessenger.hh"
-
-#include "G4StepLimiterPerRegion.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
-#include "globals.hh"
+#include "StepLimiterPerRegion.hh"
+#include "StepLimiterMessenger.hh"
+#include "G4VPhysicalVolume.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4StepLimiterMessenger::G4StepLimiterMessenger(G4StepLimiterPerRegion* stepM)
-:stepLimiter(stepM)
+StepLimiterPerRegion::StepLimiterPerRegion(const G4String& processName)
+ : G4VDiscreteProcess(processName),
+   MaxChargedStep(DBL_MAX)
 {
-  stepMaxCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/stepMax",this);
-  stepMaxCmd->SetGuidance("Set max allowed step length for the default region");
-  stepMaxCmd->SetParameterName("mxStep",false);
-  stepMaxCmd->SetRange("mxStep>0.");
-  stepMaxCmd->SetUnitCategory("Length");
-  stepMaxCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  pMess = new StepLimiterMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4StepLimiterMessenger::~G4StepLimiterMessenger()
-{
-  delete stepMaxCmd;
+StepLimiterPerRegion::~StepLimiterPerRegion() 
+{ 
+  delete pMess; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4StepLimiterMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+G4bool StepLimiterPerRegion::IsApplicable(const G4ParticleDefinition& particle)
 {
-  if (command == stepMaxCmd)
-    { stepLimiter->SetMaxStep(stepMaxCmd->GetNewDoubleValue(newValue));}
+  return (particle.GetPDGCharge() != 0. && !(particle.IsShortLived()));
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void StepLimiterPerRegion::SetMaxStep(G4double step) 
+{
+  MaxChargedStep = step;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double StepLimiterPerRegion::PostStepGetPhysicalInteractionLength(
+                                              const G4Track&,
+                                                    G4double,
+                                                    G4ForceCondition* condition )
+{
+  // condition is set to "Not Forced"
+  *condition = NotForced;
+  ProposedStep = MaxChargedStep;
+
+  return ProposedStep;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4VParticleChange* StepLimiterPerRegion::PostStepDoIt(const G4Track& aTrack, const G4Step&)
+{
+  aParticleChange.Initialize(aTrack);
+  return &aParticleChange;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

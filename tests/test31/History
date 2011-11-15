@@ -15,7 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-30-09-2011 G.Folger (test31-V09-04-02)
+15-11-11  V.Ivant (test31-V09-04-03)
+- rename step limiter classes to avoid clash with class name in kernel
+
+30-09-11 G.Folger (test31-V09-04-02)
 - Fix gcc46 compilation warning in src/test31PrimaryGeneratorAction.cc and
    src/test31Histo.cc
 

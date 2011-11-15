@@ -23,36 +23,55 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4StepLimiterMessenger.hh,v 1.2 2006-06-29 21:56:31 gunter Exp $
+//
+// $Id: StepLimiterBuilder.hh,v 1.2 2006-06-29 21:56:29 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef G4StepLimiterMessenger_h
-#define G4StepLimiterMessenger_h 1
+#ifndef StepLimiterBuilder_h
+#define StepLimiterBuilder_h 1
 
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
-#include "G4UImessenger.hh"
-
-class G4StepLimiterPerRegion;
-class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4StepLimiterMessenger: public G4UImessenger
+class StepLimiterPerRegion;
+
+class StepLimiterBuilder : public G4VPhysicsConstructor
 {
 public:
-  G4StepLimiterMessenger(G4StepLimiterPerRegion*);
-  ~G4StepLimiterMessenger();
+  StepLimiterBuilder(const G4String& name = "stepLimiter");
+  virtual ~StepLimiterBuilder();
 
-  void SetNewValue(G4UIcommand*, G4String);
+public:
+  // This method is dummy for physics
+  virtual void ConstructParticle();
+
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type
+  virtual void ConstructProcess();
 
 private:
-  G4StepLimiterPerRegion* stepLimiter;
-  G4UIcmdWithADoubleAndUnit* stepMaxCmd;
+
+   // hide assignment operator
+  StepLimiterBuilder & operator=(const StepLimiterBuilder &right);
+  StepLimiterBuilder(const StepLimiterBuilder&);
+
+  StepLimiterPerRegion* stepMax;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+
+
+
+
+
+
+
+
