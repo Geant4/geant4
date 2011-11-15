@@ -625,37 +625,37 @@ G4double G4PenelopeBremsstrahlungFS::SampleGammaEnergy(G4double energy,const G4M
     {    
       G4double pt = pbcut + G4UniformRand()*(pCumulative - pbcut);
 
-      //Try to protect against numerical rounding
-      if ((pCumulative-pbcut)<0) 
-	//the < should never be: could happen only for numerical rounding
-	{	  
-	  //the two numbers are very different: real problem
-	  if ((pCumulative-pbcut)< -1e-5*pCumulative)
-	    {
-	      G4cout << "pCumulative = " << pCumulative << G4endl;
-	      G4cout << "pbcut = " << pbcut << G4endl;
-	      G4Exception("G4PenelopeBremsstrahlungFS::SampleGammaEnergy()",
-			  "em2015",FatalException,
-			  "Invalid call, pCumulative and pbcut are very different");
-	    }
-	  else //ok, pCumulative=pbcut
-	    pt = pbcut;
-	}
-
       //find where it is
       size_t ibin = 0;
       if (pt < (*theVec)[0])
 	ibin = 0;
       else if (pt > (*theVec)[nBinsX-1])
 	{
-	  G4ExceptionDescription ed;
-	  ed << "Crash at (pt > (*theVec)[nBinsX-1]) with pt = " << pt << 
-	    " , (*theVec)[nBinsX-1]=" << (*theVec)[nBinsX-1] << " and nBinsX = " << 
-	    nBinsX << G4endl;
-	  ed << "Material: " << mat->GetName() << ", energy = " << energy/keV << " keV" << 
-	    G4endl;
-	  G4Exception("G4PenelopeBremsstrahlungFS::SampleGammaEnergy()",
+	  //We observed problems due to numerical rounding here (STT). 
+	  //delta here is a tiny positive number
+	  G4double delta = pt-(*theVec)[nBinsX-1];
+	  if (delta < pt*1e-10) // very small! Numerical rounding only
+	    {
+	      ibin = nBinsX-1;
+	      G4ExceptionDescription ed;
+	      ed << "Found that (pt > (*theVec)[nBinsX-1]) with pt = " << pt << 
+		" , (*theVec)[nBinsX-1] = " << (*theVec)[nBinsX-1] << " and delta = " << 
+		(pt-(*theVec)[nBinsX-1]) << G4endl;
+	      ed << "Possible symptom of problem with numerical precision" << G4endl;
+	      G4Exception("G4PenelopeBremsstrahlungFS::SampleGammaEnergy()",
+			  "em2015",JustWarning,ed);
+	    }
+	  else //real problem
+	    {
+	      G4ExceptionDescription ed;
+	      ed << "Crash at (pt > (*theVec)[nBinsX-1]) with pt = " << pt << 
+		" , (*theVec)[nBinsX-1]=" << (*theVec)[nBinsX-1] << " and nBinsX = " << 
+		nBinsX << G4endl;
+	      ed << "Material: " << mat->GetName() << ", energy = " << energy/keV << " keV" << 
+		G4endl;
+	      G4Exception("G4PenelopeBremsstrahlungFS::SampleGammaEnergy()",
 		      "em2015",FatalException,ed);	  
+	    }
 	}
       else
 	{

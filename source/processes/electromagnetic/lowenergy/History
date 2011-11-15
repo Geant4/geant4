@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14.11.2011  L. Pandola tag emlowen-V09-04-80
+            Added further protection in G4PenelopeBremsstrahlungFS.cc to 
+	    avoid exception em2015. The problem looks to be 
+            system-dependent
 
 13.11.2011  S. Incerti tag emlowen-V09-04-79
 	    Adapted form factor ionization cross sections for the new 
