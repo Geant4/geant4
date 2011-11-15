@@ -1,0 +1,8 @@
+# Macro file for the initialization phase of "exampleN03.cc"
+# when running in interactive mode without visualization
+#
+# Sets some default verbose
+#
+/control/saveHistory
+/control/verbose 1
+/run/verbose 1

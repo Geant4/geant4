@@ -1,0 +1,17 @@
+
+# Default initialization
+/control/execute init_vis.mac
+
+# Select method
+/transform/setMethod WithDirectMatrix
+#/transform/setMethod WitInverseMatrix
+#/transform/setMethod WithAxialRotations
+#/transform/setMethod WithEulerAngles
+#/transform/setMethod WithReflections
+
+# Initialize (build geometry)
+/run/initialize
+/vis/viewer/flush
+
+
+ 
