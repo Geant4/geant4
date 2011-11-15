@@ -10,3 +10,9 @@ Debugging tool for overlapping geometries.
 See notes included in the package for details on how to use it, known
 limitations and defined commands.
 
+
+Transforms
+----------
+This extended example demonstrates various ways of definition of 
+3D transformations for placing volumes. 
+
