@@ -340,10 +340,14 @@ void G4OpenGLStoredQtViewer::ShowView (
 
 }
 void G4OpenGLStoredQtViewer::DrawText(const char * ,double /* x */,double /* y */,double /* z */, double /* size */){
+  static G4bool warned = false;
+  if (!warned) {
+    warned = true;
     G4cerr <<
       "Text is not implemented in Qt Stored mode, please use Immediate"
       "\n  mode if you want to see it."
 	   << G4endl;
+  }
 }
 
 

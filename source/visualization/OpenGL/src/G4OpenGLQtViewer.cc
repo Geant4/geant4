@@ -517,7 +517,11 @@ void G4OpenGLQtViewer::createRadioAction(QAction *action1,QAction *action2, cons
    Slot activate when mouseAction->rotate menu is set 
  */
 void G4OpenGLQtViewer::actionMouseRotate() {
+#if QT_VERSION >= 0x040400
   Q_EMIT toggleMouseAction(STYLE1);
+#else
+  emit( toggleMouseAction(STYLE1));
+#endif
 }
 
 
@@ -525,7 +529,11 @@ void G4OpenGLQtViewer::actionMouseRotate() {
    Slot activate when mouseAction->rotate menu is set 
  */
 void G4OpenGLQtViewer::actionMouseMove() {
+#if QT_VERSION >= 0x040400
   Q_EMIT toggleMouseAction(STYLE2);
+#else
+  emit( toggleMouseAction(STYLE2));
+#endif
 }
 
 
@@ -533,7 +541,11 @@ void G4OpenGLQtViewer::actionMouseMove() {
    Slot activate when mouseAction->zoom menu is set 
  */
 void G4OpenGLQtViewer::actionMousePick() {
+#if QT_VERSION >= 0x040400
   Q_EMIT toggleMouseAction(STYLE3);
+#else
+  emit( toggleMouseAction(STYLE3));
+#endif
 }
 
 
@@ -541,28 +553,44 @@ void G4OpenGLQtViewer::actionMousePick() {
    Slot activate when drawing->wireframe menu is set 
  */
 void G4OpenGLQtViewer::actionDrawingWireframe() {
+#if QT_VERSION >= 0x040400
   Q_EMIT toggleDrawingAction(1);
+#else
+  emit( toggleDrawingAction(1));
+#endif
 }
 
 /**
    Slot activate when drawing->line removal menu is set 
  */
 void G4OpenGLQtViewer::actionDrawingLineRemoval() {
+#if QT_VERSION >= 0x040400
   Q_EMIT toggleDrawingAction(2);
+#else
+  emit( toggleDrawingAction(2));
+#endif
 }
 
 /**
    Slot activate when drawing->surface removal menu is set 
  */
 void G4OpenGLQtViewer::actionDrawingSurfaceRemoval() {
+#if QT_VERSION >= 0x040400
   Q_EMIT toggleDrawingAction(3);
+#else
+  emit( toggleDrawingAction(3));
+#endif
 }
 
 /**
    Slot activate when drawing->wireframe menu is set 
  */
 void G4OpenGLQtViewer::actionDrawingLineSurfaceRemoval() {
+#if QT_VERSION >= 0x040400
   Q_EMIT toggleDrawingAction(4);
+#else
+  emit( toggleDrawingAction(4));
+#endif
 }
 
 

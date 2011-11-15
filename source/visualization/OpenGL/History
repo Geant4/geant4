@@ -17,15 +17,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-12th November 2011  John Allison (opengl-V09-04-22)
+14th November 2011  Laurent Garnier  (opengl-V09-04-23)
+- G4OpenGLQtViewer.cc : Fix a Q_EMIT macro if Qt version < 4.4
+
+13th November 2011  John Allison
+- G4OpenGLStoredQtViewer::DrawText: Limited warnings.
+
+12th November 2011  John Allison  (opengl-V09-04-22)
 - G4OpenGLQtViewer.cc: Fixed default auxiliary edge tick-mark.
 - G4OpenGLStoredQtSceneHandler::ExtraTOProcessing:
   o Suppressed debug printing.
 
-11th November 2011  John Allison (opengl-V09-04-21)
+11th November 2011  John Allison  (opengl-V09-04-21)
 - G4OpenGLViewer.cc: Coverity fix.
 
-11th November 2011  John Allison (opengl-V09-04-20)
+11th November 2011  John Allison  (opengl-V09-04-20)
 - G4OpenGLStoredQtSceneHandler.hh/cc: Protected with
   #ifdef G4VIS_BUILD_OPENGLQT_DRIVER
 - G4OpenGLQtViewer::viewComponentItemChanged:
