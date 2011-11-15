@@ -58,10 +58,6 @@
 #include "G4Polyhedra.hh"
 #include "G4ThreeVector.hh"
 
-// debugging:
-//#define OLAPDEBUG1
-//#define OlapDetConstr_debug
-
 OlapDetConstr::OlapDetConstr(G4VUserDetectorConstruction * aGeometry,
                              G4VPhysicalVolume *aWorld) :
   theTheta(0),
@@ -103,17 +99,6 @@ OlapDetConstr::OlapDetConstr(G4VUserDetectorConstruction * aGeometry,
 
 OlapDetConstr::~OlapDetConstr()
 {
-   //delete theNewWorld;
-   //delete theNewLV; not the owner!
-   //delete theFullGeometry;
-   //delete visMother;
-   //delete visDaughterA;
-   //delete visDaughterB;
-   //delete visWorld;
-   
-   //delete visFullWorld;
-   //delete visInvisible;
-   //delete visFirstLevel;
 }
 
 
@@ -128,12 +113,13 @@ void OlapDetConstr::SetRotation(G4double t, G4double p, G4double a)
 G4VPhysicalVolume * OlapDetConstr::Construct()
 {
    if (!theWorld)
-        theWorld = theFullGeometry->Construct();
+   {
+     theWorld = theFullGeometry->Construct();
+   }
    if (!theWorld)
    {
-     G4cerr << "OlapDetConstr::Construct(): could not create full world." << G4endl;
-     G4cerr << "                            exiting ..." << G4endl;
-     G4Exception("ERROR - OlapDetConstr::Construct()");
+     G4Exception("OlapDetConstr::Construct()", "InvalidSetup", FatalException,
+                 "Cannot create full world. Exiting...");
    }  
    
    // logical volume which will have a box with its dimensions derived from
@@ -150,8 +136,8 @@ G4VPhysicalVolume * OlapDetConstr::Construct()
    theNewWorld =
       new G4PVPlacement( 0,               // rotation
                          G4ThreeVector(), // translation
-                            "NewWorld", // name of phys = name of logical!!!
-                         theNewWorldLV,     // own logical vol
+                         "NewWorld",      // name of phys = name of logical!!!
+                         theNewWorldLV,   // own logical vol
                          0, false, 0      // no mother, not MANY, cpNr=0
                        );  
    
@@ -162,7 +148,7 @@ G4VPhysicalVolume * OlapDetConstr::Construct()
    
    theNewLV = theWorld->GetLogicalVolume();
    nrLV = G4LogicalVolumeStore::GetInstance()->size();
-   G4cout << "OlapDetConstr::Construct(): nr of lvs=" << nrLV << G4endl;
+
    return theWorld;
 }
 
@@ -170,13 +156,6 @@ G4VPhysicalVolume * OlapDetConstr::Construct()
 G4VPhysicalVolume * OlapDetConstr::SetNewWorld(G4LogicalVolume * aMotherLV,
                                                G4bool debugFlag)
 {
-   if (debugFlag)
-   {
-      G4cout << "mother: " << aMotherLV->GetName() << " : " 
-             << aMotherLV->GetSolid()->GetName() << G4endl;
-      return 0;
-   }
-   
    //ML: ResetColors(theNewLV);
    theNewLV = aMotherLV;
    
@@ -192,9 +171,6 @@ G4VPhysicalVolume * OlapDetConstr::SetNewWorld(G4LogicalVolume * aMotherLV,
    {
      OlapGenerator * aNonConstGen = const_cast<OlapGenerator*>(aGen);
         
-     // 'optimal' extent
-     // aNonConstGen->SetExtent(theNewLV->GetSolid()->GetExtent());
-        
      // extent which allows arbitrary rotations ...
      G4Box * bx = dynamic_cast<G4Box*>
                 (theNewWorld->GetLogicalVolume()->GetSolid());
@@ -202,8 +178,8 @@ G4VPhysicalVolume * OlapDetConstr::SetNewWorld(G4LogicalVolume * aMotherLV,
    }
    else
    {
-      G4cerr << "Warning: Primary generator is not OlapGenerator!" << G4endl
-                   << "Overlap Detection will not work!" << G4endl;
+      G4cout << "Warning: Primary generator is not OlapGenerator!" << G4endl
+             << "Overlap Detection will not work!" << G4endl;
    }
    return theNewWorld;
 }
@@ -313,22 +289,6 @@ void OlapDetConstr::ConstructNewWorld()
    // delete the current NewWorld
    DeleteNewWorld();
 
-   #ifdef OlapDetConstr_debug
-   G4int checkb = G4LogicalVolumeStore::GetInstance()->size();  
-     G4cerr << "OlapDetConstr::ConstructNewWorld():"
-            << " nr of lvs after DeleteNewWorld is: " << checkb << G4endl;
-   #endif
-   
-   #ifdef somewhen_but_not_now
-   OlapManager * m = OlapManager::GetOlapManager();
-   // If polymode is set, don't create a overlap-detection world
-   // but draw the outlines of the mother polycone/-hedra (if it is one)
-   if (m->IsPolyMode())
-   {
-      DrawPolyOutline();
-      return;
-   }
-   #endif
    G4int nr = theNewLV->GetNoDaughters();
    
    // create a NewWorld with a 2% larger extent than the
@@ -357,11 +317,6 @@ void OlapDetConstr::ConstructNewWorld()
    theNewWorldBox->SetYHalfLength(worldDim);
    theNewWorldBox->SetZHalfLength(worldDim);
       
-   //G4LogicalVolume * aInbetweenLV =
-   // new G4LogicalVolume(theNewWorldBox, theNewLV->GetMaterial(), "INBETWEEN");
-   
-   //aInbetweenLV->SetVisAttributes(visWorld);
-                            
    // create the mother with one layer of daughters
    G4LogicalVolume * aNewMotherLV =
      new G4LogicalVolume(theNewLV->GetSolid(),
@@ -369,16 +324,10 @@ void OlapDetConstr::ConstructNewWorld()
                          theNewLV->GetName()
                          );
    
-   //LM
    // below the mother is fixed colored instead as taken from vis-atts of the
    // full detector
-   //aNewMotherLV->SetVisAttributes(visMother);
    aNewMotherLV->SetVisAttributes(theNewLV->GetVisAttributes());
 
-#ifdef OLAPDEBUG2
-   G4cout << " mother: " << theNewLV->GetName() << G4endl;
-#endif          
- 
    delete theNewWorldRot;
    G4ThreeVector rotAxis(std::cos(thePhi)*std::sin(theTheta),
                          std::sin(thePhi)*std::sin(theTheta),
@@ -386,33 +335,24 @@ void OlapDetConstr::ConstructNewWorld()
    
    theNewWorldRot = new G4RotationMatrix(rotAxis,theAlpha);
    
-   /*
-   new G4PVPlacement( theNewWorldRot, G4ThreeVector(), aInbetweenLV,
-                      theNewLV->GetName(),
-                      theNewWorldLV, false, 0);
-   */
-                                                                                                      
    // G4VPhysicalVolume * aNewMotherPV =
    new G4PVPlacement( theNewWorldRot,   // rotation
-                      pos, // translation
+                      pos,              // translation
                       aNewMotherLV,     // own logical vol
                       theNewLV->GetName(), // name of phys = name of logical!!!
                       
                       theNewWorldLV,    // mother logical vol
                       //aInbetweenLV,
                       
-                      false, 0      // not MANY, cpNr=0
+                      false, 0          // not MANY, cpNr=0
                       );  
 
   
   // loop over daughters an copy them into the new world ...
   //      - but don't iterate recursively over deeper layers of daughters!
-  for (G4int i=0; i<nr; i++) {
-    
+  for (G4int i=0; i<nr; i++)
+  {
     G4VPhysicalVolume * pv = theNewLV->GetDaughter(i);
-    #ifdef OLAPDEBUG2
-      G4cout << i << " ";
-    #endif  
 
     // ---------------------------------------------------------------
     // only do the stuff, if OlapManager.NoOlapMap[lv] is set to false!
@@ -429,9 +369,8 @@ void OlapDetConstr::ConstructNewWorld()
                           pv->GetLogicalVolume()->GetName()
                           );
                           
-  //LM                          
-  // take vis atts from whole detector instead of fixed values!
-  myLogical->SetVisAttributes(pv->GetLogicalVolume()->GetVisAttributes());
+    // take vis atts from whole detector instead of fixed values!
+    myLogical->SetVisAttributes(pv->GetLogicalVolume()->GetVisAttributes());
       
     // select between placements, replicas and parameterizations
     G4PVPlacement * pvPlace; 
@@ -446,12 +385,6 @@ void OlapDetConstr::ConstructNewWorld()
                           false,         // not many
                           pvPlace->GetCopyNo()
                         );  
-       #ifdef OLAPDEBUG2
-         G4cout << "  daughter: " << i << " " << pvPlace->GetName()
-                << " lv=" << pv->GetLogicalVolume()->GetName() 
-                << " solid=" << pv->GetLogicalVolume()->GetSolid()->GetEntityType() << G4endl;
-       #endif
-       
     } 
     else if ( pv->IsReplicated() && ! pv->GetParameterisation() ) // Replicas
     {
@@ -470,13 +403,6 @@ void OlapDetConstr::ConstructNewWorld()
                         aWidth,
                         anOffset
                       );        
-                        
-       #ifdef OLAPDEBUG2
-         G4cout << "  repl.daughter: " << i << " " << pv->GetName()
-                << " lv=" << pv->GetLogicalVolume()->GetName() 
-                << " solid=" << pv->GetLogicalVolume()->GetSolid()->GetEntityType() << G4endl;         
-       #endif                  
-           
     }
     else if ( pv->IsReplicated() && pv->GetParameterisation() )
     {
@@ -495,36 +421,14 @@ void OlapDetConstr::ConstructNewWorld()
                               nReplicas,
                               pParam
                             );
-       #ifdef OLAPDEBUG2
-         G4cout << "  param.daughter: " << i << " " << pv->GetName() 
-                << " lv=" << pv->GetLogicalVolume()->GetName() 
-                << " solid="
-                << pv->GetLogicalVolume()->GetSolid()->GetEntityType()
-                << G4endl;
-       #endif                  
-    
     }// end:placement?replica?parameterisation
     
   } // end:Loop over Daughters                                    
-
-   #ifdef OlapDetConstr_debug
-   G4int check = G4LogicalVolumeStore::GetInstance()->size();  
-   G4cerr << "OlapDetConstr::ConstructNewWorld():"
-          << " nr of lvs after construction is: " << check
-          << G4endl << G4endl;            
-   #endif
-   
 }
 
 
 void OlapDetConstr::DeleteNewWorld()
 {
-   #ifdef OlapDetConstr_debug
-   G4int checkb = G4LogicalVolumeStore::GetInstance()->size();  
-   G4cerr << "OlapDetConstr::DeleteNewWorld():"
-            << " nr of lvs before delete is: " << checkb << G4endl;
-   #endif
-
    G4int nr = theNewWorldLV->GetNoDaughters();
    
    if (nr==0)
@@ -536,10 +440,9 @@ void OlapDetConstr::DeleteNewWorld()
      
    if (nr>1 || nr<0)  // only one daughter is allowed!!!!
    {  
-      G4cerr << "OlapDetConstr::DeleteNewWorld(): "
-             << "too many daughters in NewWorldLV!" << nr << G4endl;
-      G4cerr << "                                 exiting ..." << G4endl;
-      G4Exception("ERROR - OlapDetConstr::DeleteNewWorld()");
+     G4Exception("OlapDetConstr::DeleteNewWorld()",
+                 "InvalidSetup", FatalException,
+                 "Too many daughters in NewWorldLV! Exiting...");
    }
       
    G4LogicalVolume * aMother;
@@ -552,11 +455,6 @@ void OlapDetConstr::DeleteNewWorld()
    {
      aDaughter = aMother->GetDaughter(i);
      G4LogicalVolume * tmp = aDaughter->GetLogicalVolume();
-     //aMother->RemoveDaughter(aDaughter);
-     #ifdef OlapDetConstr_debug
-       G4cerr << "    deleting: i=" << i << " of " << nrd 
-              << " : vol=" << tmp->GetName() << G4endl;
-     #endif
      delete tmp;
      delete aDaughter;
    }  
@@ -565,15 +463,6 @@ void OlapDetConstr::DeleteNewWorld()
    theNewWorldLV->RemoveDaughter(aDaughter);
    delete aDaughter;
    delete aMother;
-
-   #ifdef OlapDetConstr_debug
-   G4int check = G4LogicalVolumeStore::GetInstance()->size();  
-   if (check!=nrLV) {
-     G4cerr << "OlapDetConstr::DeleteNewWorld():"
-            << " nr of lvs should be: " << nrLV << " but is: "
-            << check << G4endl;
-   }            
-   #endif
 }
 
 

@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 15th, 2011 G.Cosmo    - olapex-V09-04-01 
+- Get rid of obsolete G4Exception signature. Some code cleanup.
+
 October 3rd, 2011 G.Folger     - olapex-V09-04-00 
 - Fix gcc46 compilation warning in OlapEventAction
 
