@@ -23,61 +23,36 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4StepLimiterPerRegion.hh,v 1.4 2007-05-16 16:27:53 vnivanch Exp $
+// $Id: StepLimiterMessenger.hh,v 1.2 2006-06-29 21:56:31 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef StepMax_h
-#define StepMax_h 1
+#ifndef StepLimiterMessenger_h
+#define StepLimiterMessenger_h 1
 
 #include "globals.hh"
-#include "G4VDiscreteProcess.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4Step.hh"
+#include "G4UImessenger.hh"
 
-class G4StepLimiterMessenger;
-class G4VPhysicalVolume;
+class StepLimiterPerRegion;
+class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4StepLimiterPerRegion : public G4VDiscreteProcess
+class StepLimiterMessenger: public G4UImessenger
 {
 public:
+  StepLimiterMessenger(StepLimiterPerRegion*);
+  ~StepLimiterMessenger();
 
-  G4StepLimiterPerRegion(const G4String& processName = "ElectronKiller");
-  virtual ~G4StepLimiterPerRegion();
-
-  G4bool IsApplicable(const G4ParticleDefinition&);
-
-  void SetMaxStep(G4double);
-
-  G4double GetMaxStep() {return MaxChargedStep;};
-
-  G4double PostStepGetPhysicalInteractionLength( const G4Track& track,
-			                       G4double previousStepSize,
-			                       G4ForceCondition* condition);
-
-  G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
-
-  G4double GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*)
-  {return 0.;};    // it is not needed here !
+  void SetNewValue(G4UIcommand*, G4String);
 
 private:
-
-  G4StepLimiterPerRegion & operator=(const G4StepLimiterPerRegion &right);
-  G4StepLimiterPerRegion(const G4StepLimiterPerRegion&);
-
-  G4double MaxChargedStep;
-  G4double ProposedStep;
-
-  G4VPhysicalVolume* gasVolume;
-
-  G4StepLimiterMessenger*  pMess;
+  StepLimiterPerRegion* stepLimiter;
+  G4UIcmdWithADoubleAndUnit* stepMaxCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

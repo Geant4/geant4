@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15-11-11  V.Ivant (gtherapy-V09-04-00)
+- rename step limiter classes to avoid clash with class name in kernel
+
 01-11-10  J.Allison (gtherapy-V09-03-05)
 - Introduced G4UIExecutive.
 

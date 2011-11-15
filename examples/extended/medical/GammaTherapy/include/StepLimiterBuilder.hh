@@ -23,44 +23,55 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4StepLimiterMessenger.cc,v 1.2 2006-06-29 17:27:50 gunter Exp $
+//
+// $Id: StepLimiterBuilder.hh,v 1.2 2006-06-29 21:56:29 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4StepLimiterMessenger.hh"
+#ifndef StepLimiterBuilder_h
+#define StepLimiterBuilder_h 1
 
-#include "G4StepLimiterPerRegion.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4StepLimiterMessenger::G4StepLimiterMessenger(G4StepLimiterPerRegion* stepM)
-:stepLimiter(stepM)
+class StepLimiterPerRegion;
+
+class StepLimiterBuilder : public G4VPhysicsConstructor
 {
-  stepMaxCmd = new G4UIcmdWithADoubleAndUnit("/testem/stepMax",this);
-  stepMaxCmd->SetGuidance("Set max allowed step length for the default region");
-  stepMaxCmd->SetParameterName("mxStep",false);
-  stepMaxCmd->SetRange("mxStep>0.");
-  stepMaxCmd->SetUnitCategory("Length");
-  stepMaxCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-}
+public:
+  StepLimiterBuilder(const G4String& name = "stepLimiter");
+  virtual ~StepLimiterBuilder();
+
+public:
+  // This method is dummy for physics
+  virtual void ConstructParticle();
+
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type
+  virtual void ConstructProcess();
+
+private:
+
+   // hide assignment operator
+  StepLimiterBuilder & operator=(const StepLimiterBuilder &right);
+  StepLimiterBuilder(const StepLimiterBuilder&);
+
+  StepLimiterPerRegion* stepMax;
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4StepLimiterMessenger::~G4StepLimiterMessenger()
-{
-  delete stepMaxCmd;
-}
+#endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4StepLimiterMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
-{
-  if (command == stepMaxCmd)
-    { stepLimiter->SetMaxStep(stepMaxCmd->GetNewDoubleValue(newValue));}
-}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+
+
+
+

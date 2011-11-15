@@ -23,71 +23,58 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4StepLimiterPerRegion.cc,v 1.4 2007-05-16 16:27:53 vnivanch Exp $
+// $Id: StepLimiterPerRegion.hh,v 1.3 2008-08-05 10:38:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4StepLimiterPerRegion.hh"
-#include "G4StepLimiterMessenger.hh"
-#include "G4VPhysicalVolume.hh"
-#include "Histo.hh"
+#ifndef StepLimiterPerRegion_h
+#define StepLimiterPerRegion_h 1
+
+#include "globals.hh"
+#include "G4VDiscreteProcess.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4Step.hh"
+
+class StepLimiterMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4StepLimiterPerRegion::G4StepLimiterPerRegion(const G4String& processName)
- : G4VDiscreteProcess(processName),
-   MaxChargedStep(DBL_MAX)
+class StepLimiterPerRegion : public G4VDiscreteProcess
 {
-  pMess = new G4StepLimiterMessenger(this);
-  gasVolume = Histo::GetPointer()->GasVolume();
-}
+public:
+
+  StepLimiterPerRegion(const G4String& processName = "UserMaxStep");
+  virtual ~StepLimiterPerRegion();
+
+  G4bool IsApplicable(const G4ParticleDefinition&);
+
+  void SetMaxStep(G4double);
+
+  G4double GetMaxStep() {return MaxChargedStep;};
+
+  G4double PostStepGetPhysicalInteractionLength( const G4Track& track,
+			                       G4double previousStepSize,
+			                       G4ForceCondition* condition);
+
+  G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+
+  G4double GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*)
+  {return 0.;};    
+
+private:
+
+  StepLimiterPerRegion & operator=(const StepLimiterPerRegion &right);
+  StepLimiterPerRegion(const StepLimiterPerRegion&);
+
+  G4double MaxChargedStep;
+  G4double ProposedStep;
+
+  StepLimiterMessenger*  pMess;
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4StepLimiterPerRegion::~G4StepLimiterPerRegion() 
-{ 
-  delete pMess; 
-}
+#endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4bool G4StepLimiterPerRegion::IsApplicable(const G4ParticleDefinition& particle)
-{
-  return (particle.GetPDGCharge() != 0. && !(particle.IsShortLived()));
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4StepLimiterPerRegion::SetMaxStep(G4double step) 
-{
-  MaxChargedStep = step;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4StepLimiterPerRegion::PostStepGetPhysicalInteractionLength(
-                                              const G4Track& aTrack,
-                                                    G4double,
-                                                    G4ForceCondition* condition )
-{
-  // condition is set to "Not Forced"
-  *condition = NotForced;
-  ProposedStep = MaxChargedStep;
-  if(aTrack.GetVolume() == gasVolume) ProposedStep = 0.0;
-  return ProposedStep;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4VParticleChange* G4StepLimiterPerRegion::PostStepDoIt(const G4Track& aTrack, 
-							const G4Step&)
-{
-  aParticleChange.Initialize(aTrack);
-  if(aTrack.GetVolume() == gasVolume) 
-    aParticleChange.ProposeTrackStatus(fStopAndKill);
-  return &aParticleChange;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

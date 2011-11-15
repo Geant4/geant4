@@ -24,12 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepLimiterBuilder.cc,v 1.3 2006-06-29 17:27:48 gunter Exp $
+// $Id: StepLimiterBuilder.cc,v 1.3 2008-08-05 10:38:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4StepLimiterBuilder
+// ClassName:   StepLimiterBuilder
 //
 // Author:      V.Ivanchenko 24.11.2004
 //
@@ -41,43 +41,44 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4StepLimiterBuilder.hh"
+#include "StepLimiterBuilder.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
-#include "G4StepLimiterPerRegion.hh"
-
-#include "G4Electron.hh"
-#include "G4Positron.hh"
+#include "StepLimiterPerRegion.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4StepLimiterBuilder::G4StepLimiterBuilder(const G4String& name)
+StepLimiterBuilder::StepLimiterBuilder(const G4String& name)
    :  G4VPhysicsConstructor(name)
 {
-  stepMax = new G4StepLimiterPerRegion();
+  stepMax = new StepLimiterPerRegion();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4StepLimiterBuilder::~G4StepLimiterBuilder()
+StepLimiterBuilder::~StepLimiterBuilder()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4StepLimiterBuilder::ConstructParticle()
+void StepLimiterBuilder::ConstructParticle()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4StepLimiterBuilder::ConstructProcess()
+void StepLimiterBuilder::ConstructProcess()
 {
-  G4ParticleDefinition* particle = G4Electron::Electron();
-  G4ProcessManager* pmanager = particle->GetProcessManager();
-  pmanager->AddDiscreteProcess(stepMax);
+  theParticleIterator->reset();
+  while( (*theParticleIterator)() ){
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ProcessManager* pmanager = particle->GetProcessManager();
 
-  particle = G4Positron::Positron();
-  pmanager = particle->GetProcessManager();
-  pmanager->AddDiscreteProcess(stepMax);
+    if (stepMax->IsApplicable(*particle) && !particle->IsShortLived()) {
+
+      pmanager->AddDiscreteProcess(stepMax);
+
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
