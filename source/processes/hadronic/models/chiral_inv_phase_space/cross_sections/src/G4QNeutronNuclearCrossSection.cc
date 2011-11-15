@@ -1340,12 +1340,39 @@ G4double G4QNeutronNuclearCrossSection::CrossSectionFormula(G4int tZ, G4int tN,
   G4double sigma=0.;
   if(tZ==1 && !tN)                        // np interaction from G4QuasiElasticRatios
   {
+
+    G4double El(0.), To(0.);              // Uzhi
+    if(P<0.1)                             // Copied from G4QuasiElasticRatios Uzhi / start
+    {
+      G4double p2=P*P;
+      El=1./(0.00012+p2*(0.051+0.1*p2));
+      To=El;
+    }
+    else if(P>1000.)
+    {
+      G4double lp=std::log(P)-3.5;
+      G4double lp2=lp*lp;
+      El=0.0557*lp2+6.72;
+      To=0.3   *lp2+38.2;
+    }
+    else
+    {
+      G4double p2=P*P;
+      G4double LE=1./(0.00012+p2*(0.051+0.1*p2));
+      G4double lp=std::log(P)-3.5;
+      G4double lp2=lp*lp;
+      G4double rp2=1./p2;
+      El=LE+(0.0557*lp2+6.72+30./P)/(1.+0.49*rp2/P);
+      To=LE+(0.3   *lp2+38.2)/(1.+0.54*rp2*rp2);
+    }                                   // Copied from G4QuasiElasticRatios Uzhi / end
+/*                                      // Uzhi
     G4double p2=P*P;
     G4double lp=lP-3.5;
     G4double lp2=lp*lp;
     G4double rp2=1./p2;
     G4double El=(.0557*lp2+6.72+32.6/P)/(1.+rp2/P);
     G4double To=(.3*lp2+38.2+52.7*rp2)/(1.+2.72*rp2*rp2);
+*/                                      // Uzhi
     sigma=To-El;
   }
   else if(tZ<97 && tN<152)                // General solution
