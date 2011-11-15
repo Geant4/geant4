@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15th November 2011  John Allison  (opengl-V09-04-25)
+- (opengl-V09-04-24 was a mis-tag.)
+- G4OpenGLStoredQtSceneHandler::ExtraTOProcessing: Fixed compiler warning.
+- G4OpenGLSceneHandler::AddPrimitivesCircle, AddPrimitivesSquare and
+  AddCircleSquareVector:
+  o Changed pass-by-value to pass-by-reference to avoid copying.
+
 14th November 2011  Laurent Garnier  (opengl-V09-04-23)
 - G4OpenGLQtViewer.cc : Fix a Q_EMIT macro if Qt version < 4.4
 

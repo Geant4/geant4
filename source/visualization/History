@@ -24,6 +24,16 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+15th November 2011  John Allison (vis-V09-04-18)
+- opengl-V09-04-25: Fix compiler warning + cosmetics.
+
+14th November 2011  Gabriele Cosmo (vis-V09-04-17)
+- Tagged
+
+14th November 2011  John Allison and Laurent Garnier
+- visman-V09-04-12: Changed "Fatal" to "JustWarning" for non-existent model.
+- opengl-V09-04-23: Bug fix for Qt < 4.4 and warning message improvement.
+
 12th November 2011  John Allison
 - opengl-V09-04-22: Minor fixes, suppression of debug printing.
 

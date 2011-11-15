@@ -62,8 +62,8 @@ public:
   void AddPrimitive (const G4Text&);
   void AddPrimitive (const G4Circle&);
   void AddPrimitive (const G4Square&);
-  void AddPrimitivesCircle (std::vector <G4VMarker>);
-  void AddPrimitivesSquare (std::vector <G4VMarker>);
+  void AddPrimitivesCircle (const std::vector <G4VMarker>&);
+  void AddPrimitivesSquare (const std::vector <G4VMarker>&);
   void AddPrimitive (const G4Scale&);
   void AddPrimitive (const G4Polyhedron&);
   void AddPrimitive (const G4NURBS&);
@@ -113,7 +113,7 @@ protected:
 private:
 
   void AddCircleSquare (const G4VMarker&, G4OpenGLBitMapStore::Shape);
-  void AddCircleSquareVector (std::vector <G4VMarker>, G4OpenGLBitMapStore::Shape);
+  void AddCircleSquareVector (const std::vector <G4VMarker>&, G4OpenGLBitMapStore::Shape);
 
   void DrawXYPolygon
   (G4OpenGLBitMapStore::Shape,

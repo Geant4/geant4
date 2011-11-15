@@ -308,12 +308,12 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Square& square) {
   AddCircleSquare (square, G4OpenGLBitMapStore::square);
 }
 
-void G4OpenGLSceneHandler::AddPrimitivesCircle (std::vector <G4VMarker> marker) {
+void G4OpenGLSceneHandler::AddPrimitivesCircle (const std::vector <G4VMarker>& marker) {
   glEnable (GL_POINT_SMOOTH);
   AddCircleSquareVector (marker, G4OpenGLBitMapStore::square);
 }
 
-void G4OpenGLSceneHandler::AddPrimitivesSquare (std::vector <G4VMarker> marker) {
+void G4OpenGLSceneHandler::AddPrimitivesSquare (const std::vector <G4VMarker>& marker) {
   glDisable (GL_POINT_SMOOTH);
   AddCircleSquareVector (marker, G4OpenGLBitMapStore::circle);
 }
@@ -328,7 +328,7 @@ void G4OpenGLSceneHandler::AddCircleSquare
 }
  
 void G4OpenGLSceneHandler::AddCircleSquareVector
-(std::vector <G4VMarker> marker,
+(const std::vector <G4VMarker>& marker,
  G4OpenGLBitMapStore::Shape shape) {
 
   if (marker.size() == 0) {

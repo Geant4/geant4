@@ -123,7 +123,7 @@ void G4OpenGLStoredQtSceneHandler::ExtraPOProcessing
 }
 
 void G4OpenGLStoredQtSceneHandler::ExtraTOProcessing
-(size_t currentTOListIndex)
+(size_t)
 {
   //G4cout << "G4OpenGLStoredQtSceneHandler::ExtraTOProcessing: index: "
   //	 << currentTOListIndex << G4endl;
