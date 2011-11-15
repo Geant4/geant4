@@ -104,7 +104,7 @@ const G4String& G4MolecularDecayTable::GetExcitedState(const G4ElectronOccupancy
     G4String errMsg = "Excited state not found";
     G4Exception("G4MolecularDecayTable::GetExcitedState(const G4ElectronOccupancy*)",
                 "G4MolecularDecayTable001",FatalErrorInArgument, errMsg);
-    exit(-1); // makes coverity happy
+    return it_exstates->second;  // fake return statement
 }
 
 const G4ElectronOccupancy& G4MolecularDecayTable::GetElectronOccupancy(const G4String& exState) const

@@ -48,10 +48,10 @@
 
 using namespace std;
 
-const DisplacementType G4DNAMolecularDecayDisplacer::Ionisation_DissociationDecay(G4VMolecularDecayDisplacer::AddDisplacement());
-const DisplacementType G4DNAMolecularDecayDisplacer::A1B1_DissociationDecay(G4VMolecularDecayDisplacer::AddDisplacement());
-const DisplacementType G4DNAMolecularDecayDisplacer::B1A1_DissociationDecay(G4VMolecularDecayDisplacer::AddDisplacement());
-const DisplacementType G4DNAMolecularDecayDisplacer::AutoIonisation(G4VMolecularDecayDisplacer::AddDisplacement());
+const DisplacementType G4DNAMolecularDecayDisplacer::Ionisation_DissociationDecay = G4VMolecularDecayDisplacer::AddDisplacement();
+const DisplacementType G4DNAMolecularDecayDisplacer::A1B1_DissociationDecay = G4VMolecularDecayDisplacer::AddDisplacement();
+const DisplacementType G4DNAMolecularDecayDisplacer::B1A1_DissociationDecay = G4VMolecularDecayDisplacer::AddDisplacement();
+const DisplacementType G4DNAMolecularDecayDisplacer::AutoIonisation = G4VMolecularDecayDisplacer::AddDisplacement();
 
 G4DNAMolecularDecayDisplacer::G4DNAMolecularDecayDisplacer() :
     G4VMolecularDecayDisplacer()

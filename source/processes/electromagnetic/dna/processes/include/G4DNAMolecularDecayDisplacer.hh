@@ -51,10 +51,17 @@ public :
     virtual G4ThreeVector GetMotherMoleculeDisplacement(const G4MolecularDecayChannel*) const;
     G4ThreeVector radialDistributionOfElectron() const;
 
-    static const DisplacementType Ionisation_DissociationDecay;
-    static const DisplacementType A1B1_DissociationDecay;
-    static const DisplacementType B1A1_DissociationDecay;
-    static const DisplacementType AutoIonisation;
+#if defined G4EM_ALLOC_EXPORT
+    G4DLLEXPORT static const DisplacementType Ionisation_DissociationDecay;
+    G4DLLEXPORT static const DisplacementType A1B1_DissociationDecay;
+    G4DLLEXPORT static const DisplacementType B1A1_DissociationDecay;
+    G4DLLEXPORT static const DisplacementType AutoIonisation;
+#else
+    G4DLLIMPORT static const DisplacementType Ionisation_DissociationDecay;
+    G4DLLIMPORT static const DisplacementType A1B1_DissociationDecay;
+    G4DLLIMPORT static const DisplacementType B1A1_DissociationDecay;
+    G4DLLIMPORT static const DisplacementType AutoIonisation;
+#endif
 
 private :
     G4ThreeVector radialDistributionOfProducts(G4double) const;

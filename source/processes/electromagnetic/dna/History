@@ -13,6 +13,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15.11.2011  G.Cosmo             tag emdna-V09-04-45
+            Fixes to initialisation of static data in G4VMolecularDecayDisplacer
+            and G4DNAMolecularDecayDisplacer, to allow generation of DLLs on
+            Windows.
+            Fixed compilation warning on icc compiler in
+            G4MolecularDecayTable.cc
+
 10.11.2011  M.K.                tag emdna-V09-04-44
             Fix a bug in G4DNATransformElectronModel
 

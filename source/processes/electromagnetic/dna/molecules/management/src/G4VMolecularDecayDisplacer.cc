@@ -2,7 +2,7 @@
 #include "G4Molecule.hh"
 
 DisplacementType G4VMolecularDecayDisplacer::Last = 0;
-const DisplacementType G4VMolecularDecayDisplacer::NoDisplacement(G4VMolecularDecayDisplacer::AddDisplacement());
+const DisplacementType G4VMolecularDecayDisplacer::NoDisplacement = G4VMolecularDecayDisplacer::AddDisplacement();
 
 G4VMolecularDecayDisplacer::G4VMolecularDecayDisplacer()
 {

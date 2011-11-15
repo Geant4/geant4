@@ -55,7 +55,11 @@ public :
     inline void SetVerbose(G4int);
     virtual ~G4VMolecularDecayDisplacer();
 
-    static const DisplacementType NoDisplacement;
+#if defined G4EM_ALLOC_EXPORT
+    G4DLLEXPORT static const DisplacementType NoDisplacement;
+#else
+    G4DLLIMPORT static const DisplacementType NoDisplacement;
+#endif
 
 protected :
     G4VMolecularDecayDisplacer();
