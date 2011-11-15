@@ -93,19 +93,19 @@ G4bool G4ExceptionHandler::Notify(const char* originOfException,
   {
    case FatalException:
     G4cerr << es_banner << message.str() << "*** Fatal Exception *** core dump ***"
-           << ee_banner;
+           << ee_banner << G4endl;
     abortionForCoreDump = true;
     break;
    case FatalErrorInArgument:
     G4cerr << es_banner << message.str() << "*** Fatal Error In Argument *** core dump ***"
-           << ee_banner;
+           << ee_banner << G4endl;
     abortionForCoreDump = true;
     break;
    case RunMustBeAborted:
     if(aps==G4State_GeomClosed || aps==G4State_EventProc)
     {
       G4cerr << es_banner << message.str() << "*** Run Must Be Aborted ***"
-             << ee_banner;
+             << ee_banner << G4endl;
       G4RunManager::GetRunManager()->AbortRun(false);
     }
     abortionForCoreDump = false;
@@ -114,14 +114,14 @@ G4bool G4ExceptionHandler::Notify(const char* originOfException,
     if(aps==G4State_EventProc)
     {
       G4cerr << es_banner << message.str() << "*** Event Must Be Aborted ***"
-             << ee_banner;
+             << ee_banner << G4endl;
       G4RunManager::GetRunManager()->AbortEvent();
     }
     abortionForCoreDump = false;
     break;
    default:
     G4cout << ws_banner << message.str() << "*** This is just a warning message. ***"
-           << we_banner;
+           << we_banner << G4endl;
     abortionForCoreDump = false;
     break;
   }
