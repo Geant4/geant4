@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 15, 2011 G.Cosmo (global-V09-04-22)
+- Removed call to obsolete G4Exception signature in G4Timer and G4SliceTimer.
+- Added new line to G4Exception notification to properly flush buffer.
+
 November 10, 2011 V.Ivantchenko (global-V09-04-21)
 - Fixed Coverity defects on G4Physics2DVector.
 

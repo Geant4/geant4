@@ -39,9 +39,6 @@
 
 #undef times
 
-// Global error function
-void G4Exception(const char* s=0);
-
 #if defined(IRIX6_2)
 #  if defined(_XOPEN_SOURCE) && (_XOPEN_SOURCE_EXTENDED==1)
 #    define __vfork vfork
@@ -74,7 +71,6 @@ G4double G4SliceTimer::GetRealElapsed() const
 {
     return fRealElapsed/sysconf(_SC_CLK_TCK);
 }
-
 
 G4double G4SliceTimer::GetSystemElapsed() const
 {

@@ -71,24 +71,24 @@ void G4Exception(const char* originOfException,
     {
      case FatalException:
       G4cerr << es_banner << message.str() << "*** Fatal Exception ***"
-             << ee_banner;
+             << ee_banner << G4endl;
       break;
      case FatalErrorInArgument:
       G4cerr << es_banner << message.str() << "*** Fatal Error In Argument ***"
-             << ee_banner;
+             << ee_banner << G4endl;
       break;
      case RunMustBeAborted:
       G4cerr << es_banner << message.str() << "*** Run Must Be Aborted ***"
-             << ee_banner;
+             << ee_banner << G4endl;
       break;
      case EventMustBeAborted:
       G4cerr << es_banner << message.str() << "*** Event Must Be Aborted ***"
-             << ee_banner;
+             << ee_banner << G4endl;
       break;
      default:
       G4cout << ws_banner << message.str()
              << "*** This is just a warning message. ***"
-             << we_banner;
+             << we_banner << G4endl;
       toBeAborted = false;
       break;
     }
