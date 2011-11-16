@@ -15,6 +15,18 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 16th 2011 G.Folger        (test19-V09-04-05)
+- Migrate to new G4Exception
+
+Nov 8, 2011  Mikhail Kossov (test19-V09-04-04)
+- Navigator is out of all loops (for 9.4-ref10)
+
+Nov 1, 2011  Mikhail Kossov (test19-V09-04-03)
+- bug fix in debug print (200*(27^2))/200-((200*27)/200)^2=1.8*10^-12<0
+
+Nov 1, 2011  Mikhail Kossov (test19-V09-04-02)
+- the dE2+dP2 limit is increased from .27 to .5 MeV2 (for rescattering)
+
 Sept 30th 2011 G.Folger        (test19-V09-04-01)
              Fix gcc46 compilation warning in test19.cc
 

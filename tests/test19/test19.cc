@@ -46,7 +46,8 @@
 
 //#define pdebug
 #define nout
-//#define inter
+#define inter
+//#define pverb
 //#define pscan
 //#define csdebug
 //#define masstest
@@ -376,9 +377,12 @@ int main()
   G4RunManager* runManager = new G4RunManager;
   runManager->SetUserInitialization(new Test19PhysicsList);
   Test19MagneticField* fpMagField = new Test19MagneticField();
-  G4ThreeVector fieldValue(10.*tesla/3.,0.,0.);  // For all tests the B-field=(3.333*tesla, 0., 0.) 
+  G4ThreeVector fieldValue(10.*tesla/3.,0.,0.); // For all B-field=(3.333*tesla, 0., 0.) 
   fpMagField->SetFieldValue(fieldValue);
   G4StateManager::GetStateManager()->SetNewState(G4State_Init); // To let create ions
+  //#ifdef pverb
+  G4cout<<"Test19: The Run Manager is defined "<<G4endl;
+  //#endif
 #ifdef debug
   G4cout<<"Test19: Prepare G4QHBook files or ntuples"<<G4endl;
 #endif
@@ -644,6 +648,30 @@ int main()
 #ifdef debug
   G4cout<<"Test19:--***-- process is created --***--" << G4endl; // only one run
 #endif
+  // ----------- Geometry definition (simple BOX) ----------------
+  G4double dimX = 100.*cm;
+  G4double dimY = 100.*cm;
+  G4double dimZ = 100.*cm;
+  G4Box* sFrame = new G4Box ("Box",dimX, dimY, dimZ);
+  // Zero,Zero,Zero position
+  G4LogicalVolume* lFrame = new G4LogicalVolume(sFrame,material,"Box",0,0,0);
+  G4PVPlacement* pFrame = new G4PVPlacement(0,G4ThreeVector(),"Box", lFrame,0,false,0);
+  assert(pFrame);
+  //#ifdef pverb
+  G4cout<<"Test19: Box geometry is defined "<<G4endl;
+  //#endif
+  G4Navigator* nav = new G4Navigator;
+  //#ifdef pverb
+  G4cout<<"Test19: The Navigator is defined "<<G4endl;
+  //#endif
+  nav->SetWorldVolume(pFrame);
+  //#ifdef pverb
+  G4cout<<"Test19: The Box frame is set "<<G4endl;
+  //#endif
+  G4TouchableHandle touch(nav->CreateTouchableHistory());
+  //#ifdef pverb
+  G4cout<<"Test19: The TouchableHandle is defined "<<G4endl;
+  //#endif
 #ifdef hdebug
   G4Timer* timer = new G4Timer();
   timer->Start();
@@ -720,8 +748,10 @@ int main()
    //else if(pPDG==-16) part=G4AntiNeutrinoTau::AntiNeutrinoTau(); // anti-tau_neutrino
    else if(pPDG!=-3222) // Leave defaulf definition for Anti Sigma+ projectile
    {
-     G4cerr<<"***Test19: "<<pPDG<<" is a PDG code of not supported particle"<<G4endl;
-     G4Exception("***Test19: OnFlight Process is called for not supported particle");
+     G4ExceptionDescription desc;
+     desc<<"***Test19: OnFlight Process is called for not supported particle"<< G4endl;
+     desc<<"***Test19: "<<pPDG<<" is a PDG code of not supported particle"<<G4endl;
+     G4Exception("Test19","Test19-01",FatalException,desc);
    }
    G4double pMass = part->GetPDGMass();                 // Mass of the projectile
    //
@@ -758,15 +788,6 @@ int main()
      G4cout<<"Test19:Material "<<nameMat<<" is not defined in the Test19Material"<<G4endl;
      exit(1);
    }
-   // ----------- Geometry definition (simple BOX) ----------------
-   G4double dimX = 100.*cm;
-   G4double dimY = 100.*cm;
-   G4double dimZ = 100.*cm;
-   G4Box* sFrame = new G4Box ("Box",dimX, dimY, dimZ);
-   // Zero,Zero,Zero position
-   G4LogicalVolume* lFrame = new G4LogicalVolume(sFrame,material,"Box",0,0,0);
-   G4PVPlacement* pFrame = new G4PVPlacement(0,G4ThreeVector(),"Box", lFrame,0,false,0);
-   assert(pFrame);
 #ifdef pverb
    G4cout<<"Test19:###### Start new run #####" << G4endl; // only one run
 #endif
@@ -862,18 +883,6 @@ int main()
      step->SetStepLength(theStep);    // Step is set byCard above
 #ifdef pverb
      G4cout<<"Test19: The end point is defined and filled in the step "<<G4endl;
-#endif
-     G4Navigator* nav = new G4Navigator;
-#ifdef pverb
-     G4cout<<"Test19: The Navigator is defined "<<G4endl;
-#endif
-     nav->SetWorldVolume(pFrame);
-#ifdef pverb
-     G4cout<<"Test19: The Box frame is set "<<G4endl;
-#endif
-     G4TouchableHandle touch(nav->CreateTouchableHistory());
-#ifdef pverb
-     G4cout<<"Test19: The TouchableHandle is defined "<<G4endl;
 #endif
      G4Timer* timer = new G4Timer();
      timer->Start();
@@ -1448,7 +1457,7 @@ int main()
         G4double ss=std::fabs(totSum.t())+std::fabs(totSum.x())+
                     std::fabs(totSum.y())+std::fabs(totSum.z());
 #ifdef inter
-	  G4double misr=.27;
+	  G4double misr=.5;
 #else
 	  G4double misr=-DBL_MAX;
 #endif
@@ -1612,7 +1621,8 @@ int main()
         if(prtf)
 #endif
 #ifdef chips
-        if (totCharge || totBaryN || ss>.27 || alarm || (nGamma && !EGamma))// OnlyForCHIPS
+	  if(totCharge || totBaryN || ss>.5 || alarm || (nGamma && !EGamma)) //OnlyForCHIPS
+        //if (totBaryN || ss>.5 || alarm || (nGamma && !EGamma)) // OnlyForCHIPS
         {
           G4cout<<"*Warning*Test19:#"<<iter<<":n="<<nSec<<",4M="<<totSum<<",Ch="<<totCharge
                 <<",BaryN="<<totBaryN<<", R="<<Residual<<",D2="<<ss<<",nN="<<curN<<G4endl;
@@ -1652,8 +1662,7 @@ int main()
             G4cout<<"Test19:#"<<indx<<",PDG="<<c<<",m="<<m<<",4M="<<lorV<<",T="<<e
                   <<", d4M="<<totSum<<", S="<<cST<<", C="<<cCG<<", B="<<cBN<<G4endl;
           }
-          if(sr>misr)G4Exception("***Test19:ALARM/baryn/chrg/energy/mom isn't conserved");
-          //G4Exception("***Test19: ALARM/baryn/chrg/energy/mom is not conserved");
+          if(sr>misr)G4Exception("***Test19","Test19-02",FatalException,"ALARM/baryn/chrg/energy/mom isn't conserved");
         }
 #endif
 #ifndef nout
@@ -1669,9 +1678,19 @@ int main()
       } // End of Check for DoNothing
      } // End of the LOOP over events
 #ifdef pdebug
+     G4cout<<"Test19: *** End of the Loop over Events ***"<<G4endl;
+     G4cout<<"Test19: sKE="<<sumKE<<",s2KE="<<su2KE<<", nE="<<nEvt<<", p="<<pvE<<G4endl;
+     G4cout<<"Test19: sAB="<<sumAB<<",sEAB="<<sEnAB<<", sEH="<<sEnH<<G4endl;
      G4double meanVE=sumKE/nEvt;
      G4double rmsVE=su2KE/nEvt;
-     rmsVE=std::sqrt(rmsVE-meanVE*meanVE);
+     G4cout<<"Test19: mVE="<<meanVE<<", rmsVE="<<rmsVE<<", mVe2="<<meanVE*meanVE<<G4endl;
+     G4double srms=rmsVE-meanVE*meanVE;
+     if(srms<=0.000000001)
+     {
+       rmsVE=0.;
+       G4cout<<"Test19: ??????? srms="<<srms<<G4endl;
+     }
+     else rmsVE=std::sqrt(srms);
      G4cout<<">Mean>Test19:RVE="<<meanVE/pvE<<",RMSVE="<<rmsVE/pvE<<",NAB="
            <<sumAB<<",RAB="<<sEnAB/nEvt/pvE<<",HAB="<<sEnH/nEvt/pvE<<G4endl;
 #endif
@@ -1691,15 +1710,13 @@ int main()
            <<",d="<<exr-dEl/dTot<<",ra="<<(exr-.178)/.822<<G4endl;
      for(G4int ir=0; ir<nT; ir++) G4cout<<tVal[ir]<<" "<<tSig[ir]<<G4endl;// Print t-vectors
 #endif
-#ifdef pverb
      G4cout<<"Test19: ########## End of run ##########"<<G4endl;
-#endif
-     delete step;   // The G4Step delets aPoint and bPoint (can be necessary in Loop)
+     //delete step;   // The G4Step delets aPoint and bPoint (can be necessary in Loop)
     } // End of the target LOOP
    } // End of the Energy LOOP
-   delete gTrack; // The G4Track delets the G4DynamicParticle
+   //delete gTrack; // The G4Track delets the G4DynamicParticle
   } // End of the projectile LOOP
-  delete proc;
+  //delete proc;
   //delete man;      // == Should not be uncommented unless definition above is commented!
   //delete pFrame;   // This
   //delete lFrame;   // is
@@ -1815,12 +1832,10 @@ int main()
     low=hx;
   }
 #endif
-#ifdef pverb
   G4cout<<"###### End of Test19 #####"<<G4endl;
-#endif
   //exit(1); // Never do this !
   //return no_of_errors;
   //return 0;
   //abort();
-  //return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }
