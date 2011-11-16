@@ -921,8 +921,10 @@ int main()
    else if(pPDG==2112) part=G4Neutron::Neutron();    // Definition of Neutron projectile
    else if(pPDG!=-3222) // Leave defaulf definition for Anti Sigma+ projectile
    {
-     G4cerr<<"***Test49: "<<pPDG<<" is a PDG code of not supported particle"<<G4endl;
-     G4Exception("***Test49: OnFlight Process is called for not supported particle");
+     G4ExceptionDescription desc;
+     desc<<"OnFlight Process is called for not supported particle"<<G4endl;
+     desc<<"***Test49: "<<pPDG<<" is a PDG code of not supported particle"<<G4endl;
+     G4Exception("***Test49","Test49-01",FatalException, desc);
    }
    G4double pMass = part->GetPDGMass();                 // Mass of the projectile
    //
@@ -1557,7 +1559,7 @@ int main()
               G4cerr<<"Test49:#"<<indx<<",PDG="<<c<<",m="<<m<<",4M="<<lorV<<",T="<<e
                     <<", d4M="<<totSum<<", S="<<cST<<", C="<<cCG<<", B="<<cBN<<G4endl;
             }
-            if(sr>misr)G4Exception("**Test49:ALARM/baryn/chrg/energy/mom isn't conserved");
+            if(sr>misr)G4Exception("**Test49","Test49-02",FatalException,"ALARM/baryn/chrg/energy/mom isn't conserved");
           }
         }
         ntp->FillEvt(aChange,dParticle); // Fill the simulated event in the ASCII "ntuple"
