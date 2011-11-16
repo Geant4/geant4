@@ -63,6 +63,7 @@ GEANT4_DEFINE_MODULE(NAME G3toG4
         G3VolTableEntry.hh
         G3toG4.hh
         G3toG4BuildTree.hh
+        G3toG4Defs.hh
         G3toG4MANY.hh
         G3toG4MakeSolid.hh
         G3toG4RotationMatrix.hh

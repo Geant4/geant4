@@ -3,6 +3,9 @@ $Id: History,v 1.63 2008-11-17 08:34:11 gcosmo Exp $
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
 
+g3tog4-V09-04-06 16-Nov-2011 B.Morgan
+- Added G3toG4Defs.hh to sources.cmake
+
 g3tog4-V09-04-05 16-Nov-2011 G.Cosmo
 - Fixed signature in PG4gsdet() for unresolved symbol in building DLLs
   on Windows.
