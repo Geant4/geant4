@@ -156,6 +156,12 @@ G4VPhysicalVolume * OlapDetConstr::Construct()
 G4VPhysicalVolume * OlapDetConstr::SetNewWorld(G4LogicalVolume * aMotherLV,
                                                G4bool debugFlag)
 {
+   if (debugFlag)
+   {
+      G4cout << "Mother: " << aMotherLV->GetName() << " : " 
+             << aMotherLV->GetSolid()->GetName() << G4endl;
+   }
+
    //ML: ResetColors(theNewLV);
    theNewLV = aMotherLV;
    

@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 16th, 2011 G.Cosmo    - olapex-V09-04-02
+- Fixed compilation warning for unused parameter.
+
 November 15th, 2011 G.Cosmo    - olapex-V09-04-01 
 - Get rid of obsolete G4Exception signature. Some code cleanup.
 
