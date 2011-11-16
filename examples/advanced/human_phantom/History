@@ -18,6 +18,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 3, 2011, G.Folger, tag human_phantom-V09-04-03
+- Add batch.mac to allow testing without display.
+
 November 3, 2011, F. Romano, tag human_phantom-V09-04-02
 - Migration to new G4Exception scheme
 
