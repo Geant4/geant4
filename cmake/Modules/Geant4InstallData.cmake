@@ -36,13 +36,13 @@ if(${CMAKE_VERSION} VERSION_GREATER 2.7)
     include(ExternalProject)
     set(_urlprefix "http://geant4.cern.ch/support/source")
     set(_datasets 
-      G4NDL/3.14/G4NDL/tar.gz 
+      G4NDL/3.16/G4NDL/tar.gz 
       G4EMLOW/6.23/G4EMLOW/tar.gz 
-      PhotonEvaporation/2.1/G4PhotonEvaporation/tar.gz
+      PhotonEvaporation/2.2/G4PhotonEvaporation/tar.gz
       RadioactiveDecay/3.3/G4RadioactiveDecay/tar.gz
       G4ABLA/3.0/G4ABLA/tar.gz
-      G4NEUTRONXS/1.0/G4NEUTRONXS/tar.gz
-      G4PII/1.2/G4PII/tar.gz
+      G4NEUTRONXS/1.1/G4NEUTRONXS/tar.gz
+      G4PII/1.3/G4PII/tar.gz
       RealSurface/1.0/RealSurface/tar.gz
     )
 

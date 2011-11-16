@@ -29,6 +29,10 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 15th 2011 - G.Folger (cmake-V09-04-33)
+- Modules/Geant4InstallData.cmake: update data libraries version for 9.5
+
 November 8th 2011 - B.Morgan (cmake-V09-04-32)
 - Templates/Geant4Config.cmake.in [BUGFIX #1196, #1261]: Added support for 
   G4OpenInventor as a component, named 'vis_openinventor'. Prtected inclusion of
