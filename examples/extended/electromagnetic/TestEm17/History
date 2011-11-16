@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16-10-11 V.Ivanchenko (testem17-V09-04-02)
+- Fixed README (A.Bogdanov)
      
 08-11-11 mma (testem17-V09-04-01)
 - modify SteppingVerbose for OutOfWorld
