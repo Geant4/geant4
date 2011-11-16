@@ -48,10 +48,12 @@ GEANT4_DEFINE_MODULE(NAME G4scoring
     HEADERS
         G4EnergySplitter.hh
         G4EnergySplitter.icc
+        G4ParallelWorldProcess.hh
         G4ParallelWorldScoringProcess.hh
         G4ScoreSplittingProcess.hh
     SOURCES
         G4EnergySplitter.cc
+        G4ParallelWorldProcess.cc
         G4ParallelWorldScoringProcess.cc
         G4ScoreSplittingProcess.cc
     GRANULAR_DEPENDENCIES
