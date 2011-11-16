@@ -118,8 +118,12 @@ void Tst33AppStarterMessenger::SetNewValue(G4UIcommand* pCmd,
       poa = onBoundaryAndCollision;
     }
     else {
-      G4cout << "first arg: " << ipoa << ", second arg: " << zeroWindow << G4endl;
-      G4Exception("Tst33AppStarterMessenger::SetNewValue: Tst33/WeightWindow:  first argument has to be 1: onBoundary, 2: onCollisions, 3: onBiundaryAndCollisions" );
+      G4ExceptionDescription desc;
+      desc << "Tst33/WeightWindow:  first argument has to be 1:"
+           << " onBoundary, 2: onCollisions, 3: onBoundaryAndCollisions" << G4endl;
+      desc << "first arg is : " << ipoa << ", second arg is: " << zeroWindow << G4endl;
+      G4Exception("Tst33AppStarterMessenger::SetNewValue()", "TST33-02", 
+               FatalException, desc);
     }
     
     fAppStarter.CreateWeightWindowStore(poa, zeroWindow);

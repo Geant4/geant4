@@ -506,7 +506,10 @@ void Tst33AppStarter::PostRun() {
 
 void Tst33AppStarter::NewFailed(const G4String &function, 
 				const G4String &cl){
-  G4Exception("Tst33AppStarter::" + function + ": new failed to create: " + cl + "!");
+    G4String where="Tst33AppStarter::"+ function +"()";
+    G4ExceptionDescription what;
+    what << "new failed to create: "<< cl << "!";				
+    G4Exception(where, "TST33-01",FatalException, what);
 }
 
 

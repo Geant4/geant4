@@ -109,7 +109,8 @@ void Tst33SlobedConcreteShield::Construct(){
     G4PVPlacement(0, G4ThreeVector(0,0,0), worldCylinder_log,
 		  name, 0, false, 0, true);
   if (!fWorldVolume) {
-    G4Exception("Tst33SlobedConcreteShield::Construct: new failed to create G4PVPlacement!");
+    G4Exception("Tst33SlobedConcreteShield::Construct()",
+        "TST33-09", FatalException, " new failed to create G4PVPlacement!");
   }
   fPVolumeStore.AddPVolume(G4GeometryCell(*fWorldVolume, -1));
 

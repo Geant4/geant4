@@ -81,7 +81,8 @@ void Tst33MaterialFactory::FillElementMap(const G4String &name,
   else {
     fMapSymbolElement[symbol] = new G4Element(name, symbol, Z, A);
     if (!fMapSymbolElement[symbol]) {
-      G4Exception("Tst33MaterialFactory::FillElementMap: new failed to create G4Element!");
+      G4Exception("Tst33MaterialFactory::FillElementMap()", "TST33-05", 
+                   FatalException, " new failed to create G4Element!");
     }
   }
   return;

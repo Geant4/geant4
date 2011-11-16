@@ -85,7 +85,8 @@ CreateScorer(Tst33VGeometry *samplegeo,
   
   G4CellScorerStore *cs_store = new G4CellScorerStore();
   if (!cs_store) {
-    G4Exception("Tst33ScorerBuilder::CreateScorer: new failed to create G4CellScorerStore!");
+    G4Exception("Tst33ScorerBuilder::CreateScorer()",
+        "TST33-08", FatalException, " new failed to create G4CellScorerStore!");
   }
   cs_store->AddCellScorer(gWorldCell);
   

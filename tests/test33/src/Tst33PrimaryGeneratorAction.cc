@@ -44,7 +44,8 @@ Tst33PrimaryGeneratorAction::Tst33PrimaryGeneratorAction()
   fParticleGun(new G4ParticleGun(1))
 {
   if (!fParticleGun) {
-    G4Exception("Tst33PrimaryGeneratorAction::Tst33PrimaryGeneratorAction: new failed to create G4ParticleGun!");
+    G4Exception("Tst33PrimaryGeneratorAction::Tst33PrimaryGeneratorAction()",
+        "TST33-06", FatalException, " new failed to create G4ParticleGun!");
   }
   fParticleGun->SetParticleDefinition(G4Neutron::NeutronDefinition());
   //  fParticleGun->SetParticleDefinition(G4Gamma::GammaDefinition());

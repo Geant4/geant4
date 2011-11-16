@@ -76,7 +76,8 @@ GetGeometryCell(G4int i, const G4String &nameExt) const {
   if (pCell == fSetGeometryCell.end()) {
     G4cout << "Tst33PVolumeStore::GetGeometryCell: no G4GeometryCell named: " 
 	   << cellName << ", found" << G4endl;
-    G4Exception("G4GeometryCell not found");
+    G4Exception("Tst33PVolumeStore::GetGeometryCell()",
+        "TST33-07", FatalException, "G4GeometryCell not found");
   }
   return *pCell;
 }

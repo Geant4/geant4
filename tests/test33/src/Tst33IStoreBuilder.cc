@@ -58,7 +58,8 @@ G4VIStore *Tst33IStoreBuilder::CreateIStore(Tst33VGeometry *samplegeo) {
   G4IStore *istore=0;
   istore = new G4IStore(pworld);
   if (!istore) {
-    G4Exception("Tst33IStoreBuilder::CreateIStore new failed to create G4IStore!");
+    G4Exception("Tst33IStoreBuilder::CreateIStore()", "TST33-04", 
+                   FatalException, " new failed to create G4IStore!");
     }
   // adding GeometryCell for world volume. ReplicaNumer = 0, since  "geomvol-V05-00-01 !
   G4GeometryCell gWorldCell(pworld, 0);
