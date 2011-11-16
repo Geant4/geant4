@@ -86,10 +86,10 @@ XrayFluoPrimaryGeneratorAction::XrayFluoPrimaryGeneratorAction(XrayFluoDetectorC
 }
 
 
+#ifdef G4ANALYSIS_USE     
 void XrayFluoPrimaryGeneratorAction::ActivatePhaseSpace(G4String fileName) {
 
   // load phase-space
-#ifdef G4ANALYSIS_USE     
   phaseSpaceGunFlag = true;
 
   // reads the data stored on disk form previous runs 
@@ -101,6 +101,8 @@ void XrayFluoPrimaryGeneratorAction::ActivatePhaseSpace(G4String fileName) {
   particleTypes = analysis->GetEmittedParticleTypes();
   detectorPosition = XrayFluoDetector->GetDetectorPosition();
   detectorPosition.setR(detectorPosition.r()-(5.*cm)); // 5 cm before the detector, so in front of it.
+#else     
+void XrayFluoPrimaryGeneratorAction::ActivatePhaseSpace(G4String ) {
 #endif
 
 }

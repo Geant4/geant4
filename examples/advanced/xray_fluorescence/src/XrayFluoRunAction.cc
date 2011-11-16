@@ -227,8 +227,10 @@ void XrayFluoRunAction::ReadData(G4double unitE, G4String fileName)
   
   if (! (lsdp->is_open()) )
     {
-      G4String excep = "XrayFluoRunAction - data file: " + name + " not found";
-      G4Exception(excep);
+      G4ExceptionDescription execp;
+      execp <<  "XrayFluoRunAction - data file: " + name + " not found";
+      G4Exception("XrayFluoRunAction::ReadData()","example-xray_fluorescence04",
+	  FatalException, execp);
     }
   G4double a = 0;
   G4int k = 1;

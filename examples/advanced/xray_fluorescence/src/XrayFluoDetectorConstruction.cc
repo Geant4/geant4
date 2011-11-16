@@ -178,8 +178,10 @@ void XrayFluoDetectorConstruction::SetDetectorType(G4String type)
        }*/
   else 
     {
-      G4String excep = type + "detector type unknown";
-      G4Exception(excep);
+      G4ExceptionDescription execp;
+      execp << type + "detector type unknown";
+      G4Exception("XrayFluoDataSet::LoadData()","example-xray_fluorescence06",
+	  FatalException, execp);
     }
 }
 

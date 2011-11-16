@@ -324,8 +324,10 @@ void XrayFluoSiLiDetectorType::LoadResponseData(G4String fileName)
   
   if (! (lsdp->is_open()) )
     {
-      G4String excep = "XrayFluoSiLiDetectorType - data file: " + dirFile + " not found";
-      G4Exception(excep);
+      G4ExceptionDescription execp;
+      execp <<  "XrayFluoSiLiDetectorType - data file: " + dirFile + " not found";
+      G4Exception("XrayFluoSiLiDetectorType::LoadResponseData()","example-xray_fluorescence07",
+	  FatalException, execp);
 	}
   G4double a = 0;
   G4int k = 1;

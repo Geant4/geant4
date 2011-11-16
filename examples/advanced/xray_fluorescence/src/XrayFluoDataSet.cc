@@ -157,8 +157,10 @@ G4bool XrayFluoDataSet::LoadData(const G4String& fileName)
   
   if (! (lsdp->is_open()) )
 	{
-	  G4String excep = "XrayFluoDataSet - data file: " + dirFile + " not found";
-	  G4Exception(excep);
+	  G4ExceptionDescription execp;
+	  execp << "XrayFluoDataSet - data file: " + dirFile + " not found"<<G4endl;
+	  G4Exception("XrayFluoDataSet::LoadData()","example-xray_fluorescence01",
+	  FatalException, execp);
 	}
   G4double a = 0;
   G4int k = 1;

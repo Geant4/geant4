@@ -19,6 +19,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16-11-2011 G.Folger  Tag: XrayFluo-V09-04-04
+migrate to new G4Exception
 
 03-11-2011 A.Mantero Tag: XrayFluo-V09-04-03
 update for README file
