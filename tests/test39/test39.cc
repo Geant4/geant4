@@ -484,8 +484,10 @@ int main()
    else if(pPDG==2112) part=G4Neutron::Neutron();    // Definition of Neutron projectile
    else if(pPDG!=-3222) // Leave defaulf definition for Anti Sigma+ projectile
    {
-     G4cerr<<"***Test39: "<<pPDG<<" is a PDG code of not supported particle"<<G4endl;
-     G4Exception("***Test39: OnFlight Process is called for not supported particle");
+     G4ExceptionDescription desc;
+     desc<<"***Test39: OnFlight Process is called for not supported particle"<<G4endl;
+     desc<<"***Test39: "<<pPDG<<" is a PDG code of not supported particle"<<G4endl;
+     G4Exception("***Test39","Test39-01",FatalException,desc);
    }
    // Not for CHIPS & not for GHAD/G4LElasic: only for G4UHadronElastic of V. Ivanchenko
    ///proc->BuildPhysicsTable(*part);//NotNecessary forG4LElastic&CHIPS. Only forNewEl V.I.
@@ -1163,7 +1165,7 @@ int main()
                 <<", d4M="<<totSum<<G4endl;
         }
         if(sr>.27)
-          G4Exception("***Test39: ALARM or baryn/charge/energy/momentum is not conserved");
+          G4Exception("***Test39","Test39-02",FatalException,"ALARM or baryn/charge/energy/momentum is not conserved");
       }
 #ifndef nout
       ntp->FillEvt(aChange); // Fill the simulated event in the ASCII "ntuple"
