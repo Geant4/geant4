@@ -66,6 +66,9 @@ include(Geant4MacroUtilities)
 # - Provide an 'uninstall' target.
 include(CMakeUninstallTarget)
 
+# - Provide the 'validate_sources' target.
+include(Geant4ValidateSources)
+
 # - Provide standard install directories permitting customization.
 include(Geant4InstallDirs)
 
