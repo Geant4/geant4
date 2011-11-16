@@ -220,7 +220,7 @@ G4ErrorTarget* BuildTarget( G4int iTarget )
   }else if( iTarget == 4 ) {
     target = new G4ErrorTrackLengthTarget(223.*cm);
   }else {
-    G4Exception("exG4eReco::BuildTarget. Target type has to be between 1 and 4");
+    G4Exception("exG4eReco","Fatal error in Argument",FatalErrorInArgument,"Target type has to be between 1 and 4");
   }
   return target;
 }

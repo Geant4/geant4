@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct 3, 2011  G.Folger (exerrprop-V09-04-01)
+- Fix one left old style G4Exception.
+
 Oct 3, 2011  G.Folger (exerrprop-V09-04-00)
 - Fix gcc46 compilation warning in errprop.cc
 
