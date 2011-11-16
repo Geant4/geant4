@@ -133,15 +133,15 @@ void RichTbSteppingAction::RichTbGenericHisto(const G4Step* aStep)
       if(PhotonEnergy > 0.0 )
       {
 
-        const G4double PhotonWavelength =  
-                       PhotMomWaveConv*1.0*eV/ PhotonEnergy;    
-
         G4String tpreVol = pPreStepPoint -> GetPhysicalVolume()->GetName();
         G4String tpostVol = pPostStepPoint -> GetPhysicalVolume()->GetName();
 
         // First for the mirror volume
 
 #ifdef G4ANALYSIS_USE
+        const G4double PhotonWavelength =  
+                       PhotMomWaveConv*1.0*eV/ PhotonEnergy;    
+
 	RichTbAnalysisManager * analysis =
 	   RichTbAnalysisManager::getInstance();
 	if(tpreVol ==  VolNameE && tpostVol ==  VolNameF )

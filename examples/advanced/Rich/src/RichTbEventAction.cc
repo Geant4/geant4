@@ -65,7 +65,11 @@ RichTbEventAction::~RichTbEventAction()
 {
 }
 
+#ifdef G4ANALYSIS_USE
 void RichTbEventAction::BeginOfEventAction(const G4Event* evt)
+#else
+void RichTbEventAction::BeginOfEventAction(const G4Event*)
+#endif
 {
 
   G4SDManager * SDman = G4SDManager::GetSDMpointer();
