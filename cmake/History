@@ -30,6 +30,9 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 16th 2011 - G.Folger (cmake-V09-04-34)
+- Modules/Geant4InstallData.cmake: correct data file name 
+
 November 15th 2011 - G.Folger (cmake-V09-04-33)
 - Modules/Geant4InstallData.cmake: update data libraries version for 9.5
 
