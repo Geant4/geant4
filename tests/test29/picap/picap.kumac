@@ -1,4 +1,4 @@
-macro run1 z=6 f=5 n=1 que=atsbhpd
+macro run1 z=6 f=2 n=1 que=atsbhpd
  nEvts = 2000 * [f]
 if [z] = 1 then
  exec pica ^7!Li   li0304  3  4   [nEvts]  [n]  [que]
@@ -546,6 +546,8 @@ macro chips targ=C file=c0606 np=6 nn=6 runn=2000 next=3 dir=./
 *      shell rm chips_[file].log
       wait ' ' 2
       shell ../test29 | > chips_[file].log
+* For Bertini
+*      shell ../../test19/test19 | > chips_[file].log
       wait ' ' 2
 	  exec makehbk
       wait ' ' 2
@@ -560,6 +562,12 @@ macro readpar  pf=chipstest.in
 return
 *
 macro writepar pf=chipstest.in
+* For Bertini
+*  ve/cr   wrk(1) R 0.001
+*  ve/copy wrk(1:1) momb
+*  ve/write temp,ssse,eepr,nop,momb,enb,pdgpr,pdgtg,nevnt,freeN,freeD,clustP,rM,sA_
+*              [pf] 'F7.2,F5.2,F5.2,I4,F6.3,F6.0,2I9,I9,5F5.2' 'OC'
+*
   ve/write temp,ssse,eepr,nop,momb,enb,pdgpr,pdgtg,nevnt,freeN,freeD,clustP,rM,sA_
               [pf] 'F7.2,F5.2,F5.2,I4,F6.0,F6.0,2I9,I9,5F5.2' 'OC'
 return

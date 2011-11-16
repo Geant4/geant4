@@ -15,6 +15,16 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 16th 2011 G.Folger        (test29-V09-04-04)
+- Migarte to new G4Exception
+
+Nov 8th 2011 Mikhail Kossov tag (test29-V09-04-03)
+- Navigator is out of all loops (for 9.4-ref10)
+
+Nov 4th 2011 Mikhail Kossov tag (test29-V09-04-02)
+- With implementation of rescattering the sqEM limit is
+  increased from .27 to .5
+
 Sept 30th 2011 G.Folger tag    (test29-V09-04-01)
 - Fix gcc46 compilation warning in test29.cc
 	     

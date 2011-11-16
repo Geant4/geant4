@@ -45,7 +45,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 
 //#define pdebug
-//#define nout
+#define nout
 #define inter
 //#define pverb
 //#define pscan
@@ -453,6 +453,34 @@ int main()
   // Only for CHIPS
   proc->SetParameters(temperature, ssin2g, eteps, fN, fD, cP, rM, nop, sA);
   //
+  // Geometry
+
+  G4double dimX = 100.0*cm;
+  G4double dimY = 100.0*cm;
+  G4double dimZ = 100.0*cm;
+
+  G4Box* sFrame = new G4Box ("Box",dimX, dimY, dimZ);
+  G4LogicalVolume* lFrame = new G4LogicalVolume(sFrame,material,"Box",0,0,0);
+  G4PVPlacement* pFrame = new G4PVPlacement(0,G4ThreeVector(),"Box",lFrame,0,false,0);
+
+  assert(pFrame);
+  //#ifdef pverb
+  G4cout<<"Test29: Geometry is defined "<<G4endl;
+  //#endif
+  //const G4RotationMatrix* rotation=pFrame->GetFrameRotation();
+  G4Navigator* nav = new G4Navigator;
+  //#ifdef pverb
+  G4cout<<"Test29: The Navigator is defined "<<G4endl;
+  //#endif
+  nav->SetWorldVolume(pFrame);
+  //#ifdef pverb
+  G4cout<<"Test29: The Box frame is set "<<G4endl;
+  //#endif
+  //G4VTouchable* vtouch = nav->CreateTouchableHistory();
+  G4TouchableHandle touch(nav->CreateTouchableHistory());
+  //#ifdef pverb
+  G4cout<<"Test29: The TouchableHandle is defined "<<G4endl;
+  //#endif
   G4int nTot=npart*tgm;
   G4int nCur=0;
   for(G4int pnb=0; pnb<npart; pnb++) // LOOP over particles
@@ -475,8 +503,10 @@ int main()
    else if(pPDG==-2112) part=G4AntiNeutron::AntiNeutron();// Define AntiNeutron projectile
    else if(pPDG!=-3222) // Leave defaulf definition for Anti Sigma+ projectile
    {
-     G4cerr<<"***Test29: pPDG="<<pPDG<<" is a PDG code of not negative particle"<<G4endl;
-     G4Exception("***Test29: At Rest Process is called for not negative particle");
+     G4ExceptionDescription desc;
+     desc<<"***Test29: At Rest Process is called for not negative particle"<<G4endl;
+     desc<<"***Test29: pPDG="<<pPDG<<" is a PDG code of not negative particle"<<G4endl;
+     G4Exception("***Test29", "Test29-01",FatalException, desc);
    }
    G4double pMass = part->GetPDGMass();                 // Mass of the projectile
    //
@@ -526,20 +556,6 @@ int main()
     G4cout<<"Test29: The direction:"<<aDirection<<G4endl;
     G4cout<<"Test29: The time:     "<<aTime/ns<<" ns"<<G4endl;
 #endif
-    // Geometry
-
-    G4double dimX = 100.0*cm;
-    G4double dimY = 100.0*cm;
-    G4double dimZ = 100.0*cm;
-
-    G4Box* sFrame = new G4Box ("Box",dimX, dimY, dimZ);
-    G4LogicalVolume* lFrame = new G4LogicalVolume(sFrame,material,"Box",0,0,0);
-    G4PVPlacement* pFrame = new G4PVPlacement(0,G4ThreeVector(),"Box",lFrame,0,false,0);
-
-    assert(pFrame);
-
-    //const G4RotationMatrix* rotation=pFrame->GetFrameRotation();
-
     // Step Definition
     G4Step* step = new G4Step();
     step->SetTrack(gTrack);          // Step is initialized by the Track (?)
@@ -567,19 +583,6 @@ int main()
     step->SetStepLength(theStep);    // Step is set byCard above
 #ifdef pverb
     G4cout<<"Test29: The end point is defined and filled in the step "<<G4endl;
-#endif
-    G4Navigator* nav = new G4Navigator;
-#ifdef pverb
-    G4cout<<"Test29: The Navigator is defined "<<G4endl;
-#endif
-    nav->SetWorldVolume(pFrame);
-#ifdef pverb
-    G4cout<<"Test29: The Box frame is set "<<G4endl;
-#endif
-    //G4VTouchable* vtouch = nav->CreateTouchableHistory();
-    G4TouchableHandle touch(nav->CreateTouchableHistory());
-#ifdef pverb
-    G4cout<<"Test29: The TouchableHandle is defined "<<G4endl;
 #endif
     G4Timer* timer = new G4Timer();
     timer->Start();
@@ -793,8 +796,8 @@ int main()
       G4cout<<"TEST29:r4M="<<totSum<<ss<<",rChg="<<totCharge<<",rBaryN="<<totBaryN<<G4endl;
 #endif
       // Only for CHIPS
-      if (totBaryN || ss>.27 || alarm || (nGamma && !EGamma))
-      ///////////////if (totCharge ||totBaryN || ss>.27 || alarm || (nGamma && !EGamma))
+      if (totBaryN || ss>.5 || alarm || (nGamma && !EGamma)) // muCap: chargeNoncons onHlev
+      //if (totCharge ||totBaryN || ss>.5 || alarm || (nGamma && !EGamma))
       // for others no conservation checks
       //if (1>2)
       //
@@ -832,9 +835,9 @@ int main()
                 <<",r4M="<<totSum<<G4endl;
         }
 #ifdef inter
-        if(sr>.27)
+        if(sr>.5)
 #endif
-          G4Exception("***Test29: ALARM or baryn/charge/energy/momentum is not conserved");
+          G4Exception("***Test29", "Test29-02",FatalException, "ALARM or baryn/charge/energy/momentum is not conserved");
       }
 #ifndef nout
       if(npart==1) ntp->FillEvt(aChange); // Fill the simulated event in the ASCII "ntuple"
@@ -849,24 +852,24 @@ int main()
     // Stop the timer to estimate the speed of the generation
     timer->Stop();
     G4cout<<"Test29:CalculationTimePerEvent= "<<timer->GetUserElapsed()/nEvt<<" s"<<G4endl;
-    delete timer;
-#ifdef pverb
+    //delete timer;
+    //#ifdef pverb
     G4cerr<<"Test29: ########## End of run ##########"<<G4endl;
-#endif
+    //#endif
     //delete aPoint;
     //delete bPoint;
-    delete step;  // The G4Step delets aPoint and bPoint
+    //delete step;  // The G4Step delets aPoint and bPoint
    }
-   delete gTrack; // The G4Track delets the G4DynamicParticle
+   //delete gTrack; // The G4Track delets the G4DynamicParticle
   } // End of the projectile LOOP
-  delete proc;
+  //delete proc;
 #ifndef nout
-  delete ntp; // Delete the class to fill the#of events
+  G4cout << "###### NTUPLE is written: Before delete ntp #####" << G4endl;
+  //delete ntp; // Delete the class to fill the#of events
 #endif
-  //delete phys;
-  delete runManager;
-#ifdef pverb
+  //delete nav;
+  //delete runManager;
   G4cout << "###### End of Test29 #####" << G4endl;
-#endif
   //exit(1); // Never do this !
+  return EXIT_SUCCESS;
 }
