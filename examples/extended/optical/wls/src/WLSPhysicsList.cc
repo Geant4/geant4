@@ -208,8 +208,10 @@ void WLSPhysicsList::RemoveFromPhysicsList(const G4String& name)
         }
     }
     if (!success) {
-       std::ostringstream message;
-       message << "PhysicsList::RemoveFromEMPhysicsList "<< name << "not found";       G4Exception(message.str().c_str());
+       G4ExceptionDescription message;
+       message << "PhysicsList::RemoveFromEMPhysicsList "<< name << "not found";
+       G4Exception("example WLSPhysicsList::RemoveFromPhysicsList()",
+       "ExamWLSPhysicsList01",FatalException,message);
     }
 }
 

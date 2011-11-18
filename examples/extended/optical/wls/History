@@ -16,6 +16,10 @@ track of all tags.
  
      ----------------------------------------------------------
 
+Nov 18th, 2011 Gunter Folger    (WLS-V09-04-03)
+-----------------------------------------------
+    migrate to new G4Exception
+
 Oct 14th, 2011 Peter Gumpinger  (WLS-V09-04-02)
 -----------------------------------------------
     modify to work with materials-V09-04-15
