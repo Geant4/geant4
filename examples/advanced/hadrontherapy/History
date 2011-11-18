@@ -8,6 +8,11 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
              History file of the Hadrontherapy application
          ====================================================
 
+14.11.2011 G.A.P.Cirrone; Tag: hadrontherapy-V09-04-05
+	   - Corrected macro files for a double call to the Decay physics
+	   - Added the complete physics to the batch.mac file
+	   - Improved and corrected the hadron_therapy.mac file
+
 14.11.2011 G.A.P.Cirrone; Tag: hadrontherapy-V09-04-04
 	   - Warnings removed.
 	   - A batch.mac file is added to permit batch runs without visualisation.

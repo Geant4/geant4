@@ -18,15 +18,13 @@
 # Set of the physic models
 #
 /Physics/addPhysics  standard_opt3                    # Electromagnetic model
-#/Physics/addPhysics Em_extra_physics			#
-#/Physics/addPhysics Elastic                             # Hadronic elastic model
-#/Physics/addPhysics decay
-#/Physics/addPhysics radioactive_decay
-#/Physics/addPhysics Stopping_physics
-#/Physics/addPhysics Neutron_tracking_cut
-#/Physics/addPhysics binary                              # Hadronic inelastic model
+/Physics/addPhysics Em_extra_physics			#
+/Physics/addPhysics Elastic                             # Hadronic elastic model
+/Physics/addPhysics radioactive_decay
+/Physics/addPhysics Stopping_physics
+/Physics/addPhysics Neutron_tracking_cut
+/Physics/addPhysics binary                              # Hadronic inelastic model
 
-#/Physics/addPhysics local_ion_ion_inelastic            # Optional Hadronic inelastic model for ions (local physic list)
 
 ##########################
 # Initialisation procedure
@@ -60,3 +58,4 @@
 # during the run
 # 
 /event/printEventNumber 100
+/run/beamOn 1000
