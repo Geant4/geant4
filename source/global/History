@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 17, 2011 G.Folger (global-V09-04-23)
+- Added G4lrint(), G4lint(), G4rint() as global utility functions in
+  templates.hh for generic use.
+
 November 15, 2011 G.Cosmo (global-V09-04-22)
 - Removed call to obsolete G4Exception signature in G4Timer and G4SliceTimer.
 - Added new line to G4Exception notification to properly flush buffer.

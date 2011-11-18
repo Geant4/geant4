@@ -119,14 +119,16 @@ typedef float Float;
 //---------------------------------
 
 template <class T>
-inline void G4SwapPtr(T*& a, T*& b) {
+inline void G4SwapPtr(T*& a, T*& b)
+{
   T* tmp= a;
   a = b;
   b = tmp;
 }
 
 template <class T>
-inline void G4SwapObj(T* a, T* b) {
+inline void G4SwapObj(T* a, T* b)
+{
   T tmp= *a;
   *a = *b;
   *b = tmp;
@@ -151,11 +153,27 @@ inline T sqr(const T& x)
   #ifdef abs
     #undef abs
   #endif
+
 template <class T>
 inline T std::abs(const T& a)
 {
   return a < 0 ? -a : a;
 }
 #endif
+
+inline int G4lrint(double ad)
+{
+  return (ad>0) ? static_cast<int>(ad+.5) : static_cast<int>(ad-.5);
+}
+
+inline int G4lint(double ad)
+{
+  return (ad>0) ? static_cast<int>(ad) : static_cast<int>(ad-1.);
+}
+
+inline int G4rint(double ad)
+{
+  return (ad>0) ? static_cast<int>(ad+1) : static_cast<int>(ad);
+}
 
 #endif // templates_h
