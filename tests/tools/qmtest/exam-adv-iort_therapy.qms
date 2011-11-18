@@ -2,12 +2,12 @@
 <!DOCTYPE extension PUBLIC "-//QM/2.4/Extension//EN" "http://www.codesourcery.com/qm/dtds/2.4/-//qm/2.4/extension//en.dtd">
 <extension class="explicit_suite.ExplicitSuite" kind="suite">
   <argument name="suite_ids">
-    <set>
-      <text>testbuildall</text>
-      <text>testrunall</text>
-    </set>
+    <set/>
   </argument>
   <argument name="test_ids">
-    <set/>
+    <set>
+      <text>exam-adv-iort_therapy-build</text>
+      <text>exam-adv-iort_therapy-run</text>
+    </set>
   </argument>
 </extension>

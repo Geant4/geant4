@@ -25,7 +25,7 @@
     <set/>
   </argument>
   <argument name="command">
-    <text>cd $G4INSTALL/examples/advanced/hadrontherapy;$G4BIN/$G4SYSTEM/Hadrontherapy</text>
+    <text>cd $G4INSTALL/examples/advanced/hadrontherapy;$G4BIN/$G4SYSTEM/Hadrontherapy batch.mac</text>
   </argument>
   <argument name="stderr">
     <text/>

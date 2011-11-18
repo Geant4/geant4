@@ -3,14 +3,14 @@
 <extension class="explicit_suite.ExplicitSuite" kind="suite">
   <argument name="suite_ids">
     <set>
-      <text>tests_common</text>
-      <text>examples_nov_common</text>
-      <text>examples_basic_common</text>
-      <text>examples_adv_common</text>
-      <text>examples_ext_common</text>
-      <text>benchmarks_common</text>
-      
-      <text>examples_fullCLHEP</text>
+	  <text>exam-basic-B1</text>
+	  <text>exam-basic-B2a</text>
+	  <text>exam-basic-B2b</text>
+	  <text>exam-basic-B3</text>
+	  <text>exam-basic-B4a</text>
+	  <text>exam-basic-B4b</text>
+	  <text>exam-basic-B4c</text>
+	  <text>exam-basic-B4d</text>
     </set>
   </argument>
   <argument name="test_ids">

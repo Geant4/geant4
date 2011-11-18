@@ -3,14 +3,23 @@
 <extension class="explicit_suite.ExplicitSuite" kind="suite">
   <argument name="suite_ids">
     <set>
+      <text>exam-adv-air_shower</text>
       <text>exam-adv-amsEcal</text>
       <text>exam-adv-dnaphysics</text>
       <text>exam-adv-gammaray_telescope</text>
+      <text>exam-adv-hadrontherapy</text>
+      <text>exam-adv-human_phantom</text>
       <text>exam-adv-microdosimetry</text>
+      <text>exam-adv-purging_magnet</text>
+      <text>exam-adv-radioprotection</text>
+      <text>exam-adv-rich</text>
+      <text>exam-adv-xray_fluorescence</text>
     </set>
   </argument>
   <argument name="test_ids">
     <set>
+       <text>exam-adv-iort_therapy-build</text>
+       <text>exam-adv-medical_linac-build</text>
        <text>exam-adv-microbeam-build</text>
     </set>   
   </argument>

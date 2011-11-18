@@ -25,7 +25,7 @@
     <set/>
   </argument>
   <argument name="command">
-    <text>cd $G4INSTALL/examples/advanced/human_phantom;$G4BIN/$G4SYSTEM/phantom default.mac</text>
+    <text>cd $G4INSTALL/examples/advanced/human_phantom;$G4BIN/$G4SYSTEM/phantom batch.mac</text>
   </argument>
   <argument name="stderr">
     <text/>

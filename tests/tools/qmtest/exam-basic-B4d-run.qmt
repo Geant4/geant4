@@ -12,7 +12,7 @@
   </argument>
   <argument name="prerequisites">
     <set>
-      <tuple><text>exam-adv-xray_fluorescence-build</text><enumeral>PASS</enumeral></tuple>
+      <tuple><text>exam-basic-B4d-build</text><enumeral>PASS</enumeral></tuple>
     </set>
   </argument>
   <argument name="stdin">
@@ -22,12 +22,10 @@
     <integer>0</integer>
   </argument>
   <argument name="environment">
-    <set>
-	   <text>XRAYDATA=$G4INSTALL/examples/advanced/xray_fluorescence</text>
-	</set>
+    <set/>
   </argument>
   <argument name="command">
-    <text>cd $G4INSTALL/examples/advanced/xray_fluorescence;$G4BIN/$G4SYSTEM/XrayFluo  livermore.mac 1</text>
+    <text>cd $G4INSTALL/examples/basic/B4/B4d;$G4BIN/$G4SYSTEM/exampleB4d exampleB4.in</text>
   </argument>
   <argument name="stderr">
     <text/>

@@ -2,18 +2,12 @@
 <!DOCTYPE extension PUBLIC "-//QM/2.4/Extension//EN" "http://www.codesourcery.com/qm/dtds/2.4/-//qm/2.4/extension//en.dtd">
 <extension class="explicit_suite.ExplicitSuite" kind="suite">
   <argument name="suite_ids">
-    <set>
-      <text>tests_common</text>
-      <text>examples_nov_common</text>
-      <text>examples_basic_common</text>
-      <text>examples_adv_common</text>
-      <text>examples_ext_common</text>
-      <text>benchmarks_common</text>
-      
-      <text>examples_fullCLHEP</text>
-    </set>
+    <set/>
   </argument>
   <argument name="test_ids">
-    <set/>
+    <set>
+      <text>exam-basic-B4c-build</text>
+      <text>exam-basic-B4c-run</text>
+    </set>
   </argument>
 </extension>

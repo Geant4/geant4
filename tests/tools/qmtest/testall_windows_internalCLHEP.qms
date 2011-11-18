@@ -5,6 +5,7 @@
     <set>
       <text>tests_common</text>
       <text>examples_nov_common</text>
+      <text>examples_basic_common</text>
       <text>examples_adv_common</text>
       <text>examples_ext_common</text>
       <text>benchmarks_common</text>

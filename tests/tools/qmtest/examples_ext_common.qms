@@ -56,6 +56,7 @@
       <text>exam-ext-radioactivedecay-rdecay02</text>
       <text>exam-ext-runandevent-re01</text>
       <text>exam-ext-runandevent-re02</text>
+	  <text>exam-ext-runandevent-re04</text>
       <text>exam-ext-visualization-uservisaction</text>
     </set>
   </argument>
