@@ -118,7 +118,7 @@ G4bool G4SimpleLocator::EstimateIntersectionPoint(
   //
   static G4int max_no_seen= -1; 
 
-  NormalAtEntry = GetGlobalSurfaceNormal( CurrentE_Point, validNormalAtE); 
+  NormalAtEntry = GetSurfaceNormal( CurrentE_Point, validNormalAtE); 
 
 #ifdef G4DEBUG_FIELD
   static G4double tolerance = 1.0e-8; 

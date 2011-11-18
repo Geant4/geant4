@@ -938,7 +938,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
       { 
         fGrandMotherExitNormal *= (*mRot).inverse();
       }
-      fValidExitNormal = true; // Added to fix JA - 2011.10.25
+      //  Do not set fValidExitNormal -- this signifies that the solid is convex!
     }
   }
   fStepEndPoint= pGlobalpoint+Step*pDirection; 
@@ -1199,8 +1199,8 @@ G4ThreeVector G4Navigator::GetLocalExitNormal( G4bool* valid )
     }
     else if ( fExiting ) 
     {
-      ExitNormal = fGrandMotherExitNormal;
-      *valid = fValidExitNormal;
+        ExitNormal = fGrandMotherExitNormal;
+        *valid = true;
     }
     else  // ie  ( fBlockedPhysicalVolume == 0 )
     {

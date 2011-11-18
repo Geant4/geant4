@@ -170,7 +170,7 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
   }
 #endif
 
-  NormalAtEntry = GetGlobalSurfaceNormal(CurrentE_Point, validNormalAtE); 
+  NormalAtEntry = GetSurfaceNormal(CurrentE_Point, validNormalAtE); 
 
   // Intermediates Points on the Track = Subdivided Points must be stored.
   // Give the initial values to 'InterMedFt'

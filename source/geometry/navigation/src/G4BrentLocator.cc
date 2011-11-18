@@ -177,7 +177,7 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
 
   G4bool Second_half = false;     // First half or second half of divided step
 
-  NormalAtEntry = GetGlobalSurfaceNormal(CurrentE_Point, validNormalAtE); 
+  NormalAtEntry = GetSurfaceNormal(CurrentE_Point, validNormalAtE); 
 
   // We need to know this for the 'final_section':
   // real 'final_section' or first half 'final_section'
