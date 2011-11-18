@@ -18,6 +18,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 17, 2011, G.Folger, tag human_phantom-V09-04-04
+- Fix compilation warning at end of G4HumanPhantomConstruction::Construct().
+   (delete must be before return) 
+
 November 3, 2011, G.Folger, tag human_phantom-V09-04-03
 - Add batch.mac to allow testing without display.
 
