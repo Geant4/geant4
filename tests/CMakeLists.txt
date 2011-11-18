@@ -9,7 +9,56 @@ endforeach()
 
 
 #---Add tests for the examples-----------------------------------------------------------------------
-if(GEANT4_BUILD_EXAMPLES)
+#---Basic-----------------------------------------------------------------------------------------
+  GEANT4_ADD_TEST(example-bas-b1 
+                  COMMAND ${CMAKE_BINARY_DIR}/examples/basic/B1/exampleB1 
+                          ${CMAKE_SOURCE_DIR}/examples/basic/B1/exampleB1.in
+                  SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/basic/B1
+                  BINARY_DIR ${CMAKE_BINARY_DIR}/examples/basic/B1
+                  BUILD exampleB1 PROJECT B1 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+  GEANT4_ADD_TEST(example-bas-b2a 
+                  COMMAND ${CMAKE_BINARY_DIR}/examples/basic/B2/B2a/exampleB2a
+                          ${CMAKE_SOURCE_DIR}/examples/basic/B2/B2a/exampleB2.in
+                  SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/basic/B2/B2a
+                  BINARY_DIR ${CMAKE_BINARY_DIR}/examples/basic/B2/B2a
+                  BUILD exampleB2a PROJECT B2a ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+  GEANT4_ADD_TEST(example-bas-b2b 
+                  COMMAND ${CMAKE_BINARY_DIR}/examples/basic/B2/B2b/exampleB2b
+                          ${CMAKE_SOURCE_DIR}/examples/basic/B2/B2b/exampleB2.in
+                  SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/basic/B2/B2b
+                  BINARY_DIR ${CMAKE_BINARY_DIR}/examples/basic/B2/B2b
+                  BUILD exampleB2b PROJECT B2b ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+  GEANT4_ADD_TEST(example-bas-b3 
+                  COMMAND ${CMAKE_BINARY_DIR}/examples/basic/B3/exampleB3 
+                          ${CMAKE_SOURCE_DIR}/examples/basic/B3/exampleB3.in
+                  SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/basic/B3
+                  BINARY_DIR ${CMAKE_BINARY_DIR}/examples/basic/B3
+                  BUILD exampleB3 PROJECT B3 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+  GEANT4_ADD_TEST(example-bas-b4a 
+                  COMMAND ${CMAKE_BINARY_DIR}/examples/basic/B4/B4a/exampleB4a
+                          ${CMAKE_SOURCE_DIR}/examples/basic/B4/B4a/exampleB4.in
+                  SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/basic/B4/B4a
+                  BINARY_DIR ${CMAKE_BINARY_DIR}/examples/basic/B4/B4a
+                  BUILD exampleB4a PROJECT B4a ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+  GEANT4_ADD_TEST(example-bas-b4b 
+                  COMMAND ${CMAKE_BINARY_DIR}/examples/basic/B4/B4b/exampleB4b
+                          ${CMAKE_SOURCE_DIR}/examples/basic/B4/B4b/exampleB4.in
+                  SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/basic/B4/B4b
+                  BINARY_DIR ${CMAKE_BINARY_DIR}/examples/basic/B4/B4b
+                  BUILD exampleB4b PROJECT B4b ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+  GEANT4_ADD_TEST(example-bas-b4c 
+                  COMMAND ${CMAKE_BINARY_DIR}/examples/basic/B4/B4c/exampleB4c
+                          ${CMAKE_SOURCE_DIR}/examples/basic/B4/B4c/exampleB4.in
+                  SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/basic/B4/B4c
+                  BINARY_DIR ${CMAKE_BINARY_DIR}/examples/basic/B4/B4c
+                  BUILD exampleB4c PROJECT B4c ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+  GEANT4_ADD_TEST(example-bas-b4d 
+                  COMMAND ${CMAKE_BINARY_DIR}/examples/basic/B4/B4d/exampleB4d
+                          ${CMAKE_SOURCE_DIR}/examples/basic/B4/B4d/exampleB4.in
+                  SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/basic/B4/B4d
+                  BINARY_DIR ${CMAKE_BINARY_DIR}/examples/basic/B4/B4d
+                  BUILD exampleB4d PROJECT B4d ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+
   #---Novice-----------------------------------------------------------------------------------------
   GEANT4_ADD_TEST(example-nov-n01 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/novice/N01/exampleN01 
@@ -351,5 +400,5 @@ if(GEANT4_BUILD_EXAMPLES)
                     BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/nanobeam
                     BUILD Nanobeam  ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
   endif()
-endif()
+
 
