@@ -95,9 +95,9 @@ HistoManager::~HistoManager()
 
 void HistoManager::bookHisto()
 { 
-  nHisto = 13;
-  histo->add1D("0","e0, Evis in central crystal (GeV)",nBins,0.,2.*GeV,GeV);
-  histo->add1D("1","e9, Evis in 3x3 (GeV)",nBins,0.,2.0*GeV,GeV);
+  nHisto = 14;
+  histo->add1D("0","e0, Evis in central crystal (GeV)",nBins,0.,maxEnergy,GeV);
+  histo->add1D("1","e9, Evis in 3x3 (GeV)",nBins,0.,maxEnergy,GeV);
   histo->add1D("2","e25, Evis in 5x5 (GeV)",nBins,0.,maxEnergy,GeV);
   histo->add1D("3","E0/E3x3;",nBins,0.55,1.05,1);
   histo->add1D("4","E0/E5x5",nBins,0.55,1.05,1);
@@ -109,6 +109,7 @@ void HistoManager::bookHisto()
   histo->add1D("10","Energy computed (GeV)",nBins,0.,maxEnergy,GeV);
   histo->add1D("11","Energy computed (GeV)",nBins,0.,maxEnergy,GeV);
   histo->add1D("12","Energy deposition total (GeV)",nBins,0.,maxEnergy,GeV);
+  histo->add1D("13","ECAL hits log10(edep/MeV)",100,-6.,4.,1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -366,8 +367,9 @@ void HistoManager::AddEcalHit(const G4ParticleDefinition* part,
   n_step++;
   E[copyNo] += edep;
   //  G4cout << "### edep= " << edep << "   #copyNo =" << copyNo << G4endl;
-  if(part->GetPDGMass() < MeV) Eecal += edep;
+  if(part->GetPDGMass() < MeV) { Eecal += edep; }
   //  G4cout << "### Eecal= " << Eecal << G4endl;
+  if(edep > eV) { histo->fill(13,log10(edep/MeV),1.0); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -378,7 +380,7 @@ void HistoManager::AddHcalHit(const G4ParticleDefinition* part,
 {
   n_step++;
   Ehcal += edep;
-  if(part->GetPDGMass() < MeV) Eehcal += edep;
+  if(part->GetPDGMass() < MeV) { Eehcal += edep; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

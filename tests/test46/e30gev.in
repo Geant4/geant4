@@ -5,19 +5,14 @@
 /run/verbose 1
 /tracking/verbose 0
 #/testCalorim/ecalMaterial G4_AIR
-/testCalorim/nbins 100
+/testCalorim/nbins 500
 /testCalorim/maxE 60. GeV
 /testCalorim/factEcal 1.03  
 /testCalorim/factHcal 100.0
 #######
-/testhadr/PrintModulo 100
+/testhadr/PrintModulo 1000
 /run/initialize
 /run/setCut 1 mm
 /run/setCutForRegion HcalRegion 1 mm
 /gun/energy 30. GeV
 /run/beamOn 10000
-
-
-
-
-
