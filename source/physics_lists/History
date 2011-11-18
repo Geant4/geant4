@@ -15,6 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18-11-2011, V.Ivanchenko               (phys-lists-V09-04-74)
+- fix in all EM builders - return back old method of definition of
+  high energy model per particle type, new method provoke 
+  enegry non-conservation in hadron calorimetery
+
 15-11-2011, G.Folger                   (phys-lists-V09-04-73)
 -  lists/*/HadronPhysicsFTF_BIC: fix bug wrongly deleting theCHIPSInelastic
     and remove theCHIPSInelastic as data-member.

@@ -157,12 +157,6 @@ void G4EmStandardPhysics::ConstructParticle()
 void G4EmStandardPhysics::ConstructProcess()
 {
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
-  G4MuBremsstrahlungModel* mu_brem = new G4MuBremsstrahlungModel();
-  G4MuPairProductionModel* mu_pair = new G4MuPairProductionModel();
-  G4hBremsstrahlungModel*  pi_brem = new G4hBremsstrahlungModel();
-  G4hPairProductionModel*  pi_pair = new G4hPairProductionModel();
-  G4hBremsstrahlungModel*  k_brem  = new G4hBremsstrahlungModel();
-  G4hPairProductionModel*  k_pair  = new G4hPairProductionModel();
 
   // Add standard EM Processes
   theParticleIterator->reset();
@@ -200,8 +194,6 @@ void G4EmStandardPhysics::ConstructProcess()
 
       G4MuBremsstrahlung* mub = new G4MuBremsstrahlung();
       G4MuPairProduction* mup = new G4MuPairProduction();
-      mub->SetEmModel(mu_brem);
-      mup->SetEmModel(mu_pair);
 
       ph->RegisterProcess(msc, particle);
       ph->RegisterProcess(new G4MuIonisation(), particle);
@@ -225,8 +217,6 @@ void G4EmStandardPhysics::ConstructProcess()
 
       G4hBremsstrahlung* pib = new G4hBremsstrahlung();
       G4hPairProduction* pip = new G4hPairProduction();
-      pib->SetEmModel(pi_brem);
-      pip->SetEmModel(pi_pair);
 
       ph->RegisterProcess(new G4hMultipleScattering(), particle);
       ph->RegisterProcess(new G4hIonisation(), particle);
@@ -238,8 +228,6 @@ void G4EmStandardPhysics::ConstructProcess()
 
       G4hBremsstrahlung* kb = new G4hBremsstrahlung();
       G4hPairProduction* kp = new G4hPairProduction();
-      kb->SetEmModel(k_brem);
-      kp->SetEmModel(k_pair);
 
       ph->RegisterProcess(new G4hMultipleScattering(), particle);
       ph->RegisterProcess(new G4hIonisation(), particle);
