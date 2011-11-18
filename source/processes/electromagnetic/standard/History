@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17 November 11: V.Ivanchenko (emstand-V09-04-53)
+- G4SeltzerBergerModel - suppress warning printed for low-energy
+    electrons (E < 1 keV)
+
 14 November 11: V.Ivanchenko (emstand-V09-04-52)
 - G4SeltzerBergerModel - fixed cross section for positrons 
 
