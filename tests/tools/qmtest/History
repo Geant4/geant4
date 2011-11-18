@@ -12,6 +12,16 @@ $Id$
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16-Nov-2011, G.Folger               (testtools-QMtest-V09-04-15)
+- add new basic examples
+
+16-Nov-2011, G.Folger               (testtools-QMtest-V09-04-14)
+- add more of advanced/extended examples:
+    adv: air_shower, hadrontherapy, human_phantom, purging_magnet,
+	     radioprotection, rich, xray_fluorescence
+	  build only, waiting for batch.mac:  iort_therapy-build, medical_linac-build
+	ext: runandevent/RE04
+		
 10-Nov-2011, G.Folger               (testtools-QMtest-V09-04-13)
 - remove tests of unsupported lists QGSP_BERT_TRV and QGSP_BERT_NOLEP
     from testing using HadCalCMS benchmark. 
