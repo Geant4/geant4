@@ -14,6 +14,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+17 Nov 2011  Gunter Folger              (hadr-util-V09-04-05)
+-------------------------------------------------------------
+- removed G4lrint(), G4lint(), and G4rint(); these are now in global
+
 15 Sep 2011  Gabriele Cosmo             (hadr-util-V09-04-04)
 -------------------------------------------------------------
 - Changed DLL export flag for symbols to G4HADRONIC_ALLOC_EXPORT.
