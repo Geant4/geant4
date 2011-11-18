@@ -63,7 +63,7 @@ This example simulates a simplified fixed target experiment.
         - at Begin and End of each track (class TrackingAction, not used here)
 	- at End of each step (class SteppingAction, not used here)
 
-\section B2_s5 USER' LIMITS
+\section B2_s5 USER LIMITS
  
     This example also illustrates how to introduce tracking constraints
     like maximum step length, minimum kinetic energy etc. via the G4UserLimits
@@ -112,10 +112,10 @@ This example simulates a simplified fixed target experiment.
 \section B2_A VISUALISATION
 
    The visualization manager is set via the G4VisExecutive class
-   in the main() function in exampleB2a.cc (or exampleB2b.cc).    
+   in the main () function in exampleB2a.cc (or exampleB2b.cc).    
    The initialisation of the drawing is done via a set of /vis/ commands
    in the macro vis.mac. This macro is automatically read from
-   the main function when the example is used in interactive running mode.
+   the main () function when the example is used in interactive running mode.
 
    By default, vis.mac opens an OpenGL viewer.
    The user can switch to other graphics systems by commenting out this line
@@ -147,7 +147,7 @@ This example simulates a simplified fixed target experiment.
 \section B2_B USER INTERFACES
  
    The user command interface is set via the G4UIExecutive class
-   in the the main() function in exampleB2a.cc 
+   in the the main () function in exampleB2a.cc 
    The selection of the user command interface is then done automatically 
    according to the Geant4 configuration. The default command interface, 
    called G4UIterminal, is done via a standard G4cin/G4cout.

@@ -64,9 +64,9 @@
 #/vis/filtering/trajectories/particleFilter-0/invert true
 #
 # Many other options are available with /vis/modeling and /vis/filtering.
-# For example, to select colour by particle ID:
+# For example, to select or override default colours with:
 #/vis/modeling/trajectories/create/drawByParticleID
-#/vis/modeling/trajectories/drawByParticleID-0/set e- blue
+#/vis/modeling/trajectories/drawByParticleID-0/set e+ yellow
 #
 # To superimpose all of the events from a given run:
 /vis/scene/endOfEventAction accumulate

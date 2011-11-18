@@ -31,7 +31,7 @@
    The particle's type and the physic processes which will be available
    in this example are set in the QGSP_BIC_EMY physics list. This physics
    list requires data files for low energy electromagnetic processes which
-   path is defined via the G4LEDATA envirnoment variable.    
+   path is defined via the G4LEDATA environment variable.    
  
    In addition the build-in interactive command:
 \verbatim
@@ -50,7 +50,7 @@
 \section B1_s4 DETECTOR RESPONSE
 
    This example demonstrates a simple scoring implemented directly
-   in the user action classes. Altenative ways of scoring via
+   in the user action classes. Alternative ways of scoring via
    Geant4 classes can be found in the other examples.   
    
    Here, the energy deposit in a selected volume is accumulated step by step
@@ -65,10 +65,10 @@ The following paragraphs are common to all basic examples
 \section B1_A VISUALISATION
 
    The visualization manager is set via the G4VisExecutive class
-   in the main() function in exampleB1.cc.    
+   in the main () function in exampleB1.cc.    
    The initialisation of the drawing is done via a set of /vis/ commands
    in the macro vis.mac. This macro is automatically read from
-   the main function when the example is used in interactive running mode.
+   the main () function when the example is used in interactive running mode.
 
    By default, vis.mac opens an OpenGL viewer.
    The user can switch to other graphics systems by commenting out this line
@@ -100,7 +100,7 @@ The following paragraphs are common to all basic examples
 \section B1_B USER INTERFACES
  
    The user command interface is set via the G4UIExecutive class
-   in the the main() function in exampleB1.cc 
+   in the the main () function in exampleB1.cc 
    The selection of the user command interface is then done automatically 
    according to the Geant4 configuration. The default command interface, 
    called G4UIterminal, is done via a standard G4cin/G4cout.

@@ -53,7 +53,8 @@
 
 # Set camera 
 /vis/viewer/reset 
-/vis/viewer/set/viewpointThetaPhi 70 20
+#/vis/viewer/set/viewpointThetaPhi 70 20
+/vis/viewer/set/viewpointThetaPhi 160. 200.
 
 # Create an empty scene and add the detector geometry to it
 /vis/drawVolume
@@ -84,6 +85,7 @@
 /vis/open DAWNFILE
 
 # Add the world volume to the current scene
+/vis/viewer/set/viewpointThetaPhi 90. 180.
 /vis/drawVolume
 
 # Add trajectories to the current scene
@@ -95,7 +97,7 @@
 # Set camera 
 /vis/viewer/reset 
 /vis/viewer/zoom              1.5
-/vis/viewer/set/viewpointThetaPhi 70 20
+/vis/viewer/set/viewpointThetaPhi 160. 200.
 /vis/viewer/set/projection perspective 30 deg
 /run/beamOn
 

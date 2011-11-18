@@ -116,7 +116,7 @@ $Id$
      objects, one associated with the Absorber volume and another one with Gap
      in B4cDetectorConstruction.
      
-     In contrary to the N2 example (Tracker) where a new hit is created
+     In contrary to the B2 example (Tracker) where a new hit is created
      with each track passing the sensitive volume (in the calorimeter), only one
      hit is created for each calorimeter layer and one more hit to account for
      the total quantities in all layers. In addition to the variants a and b,

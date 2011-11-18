@@ -121,7 +121,7 @@
      objects, one associated with the Absorber volume and another one with Gap
      in B4cDetectorConstruction.
      
-     In contrary to the N2 example (Tracker) where a new hit is created
+     In contrary to the B2 example (Tracker) where a new hit is created
      with each track passing the sensitive volume (in the calorimeter), only one
      hit is created for each calorimeter layer and one more hit to account for
      the total quantities in all layers. In addition to the variants a and b,
@@ -179,10 +179,10 @@ The following paragraphs are common to all basic examples
 \section B4_A VISUALISATION
 
    The visualization manager is set via the G4VisExecutive class
-   in the main() function in exampleB4a.cc (or in b, c, d variants).    
+   in the main () function in exampleB4a.cc (or in b, c, d variants).    
    The initialisation of the drawing is done via a set of /vis/ commands
    in the macro vis.mac. This macro is automatically read from
-   the main function when the example is used in interactive running mode.
+   the main () function when the example is used in interactive running mode.
 
    By default, vis.mac opens an OpenGL viewer.
    The user can switch to other graphics systems by commenting out this line
@@ -214,7 +214,7 @@ The following paragraphs are common to all basic examples
 \section B4_B USER INTERFACES
  
    The user command interface is set via the G4UIExecutive class
-   in the the main() function in exampleB4a.cc 
+   in the the main () function in exampleB4a.cc 
    The selection of the user command interface is then done automatically 
    according to the Geant4 configuration. The default command interface, 
    called G4UIterminal, is done via a standard G4cin/G4cout.

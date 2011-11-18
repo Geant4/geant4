@@ -32,7 +32,7 @@ $Id$
    The particle's type and the physic processes which will be available
    in this example are set in the QGSP_BIC_EMY physics list. This physics
    list requires data files for low energy electromagnetic processes which
-   path is defined via the G4LEDATA envirnoment variable.
+   path is defined via the G4LEDATA environment variable.
  
    In addition the build-in interactive command:
                /process/(in)activate processName
@@ -78,7 +78,7 @@ $Id$
    (since they require no external libraries), but the OGL driver requires:
      1- the visualisation & interfaces categories have been compiled
         with the environment variable G4VIS_BUILD_OPENGLX_DRIVER.
-     2- exampleN2.cc has been compiled with G4VIS_USE_OPENGLX.
+     2- exampleB1.cc has been compiled with G4VIS_USE_OPENGLX.
    (This is best done through Configure or CMake.)
 
    For more information on visualization, including information on how to

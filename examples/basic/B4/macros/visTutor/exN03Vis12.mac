@@ -26,6 +26,7 @@
 /vis/viewer/set/autoRefresh false
 /vis/verbose errors
 
+/vis/viewer/set/viewpointThetaPhi 90. 180.
 /vis/drawVolume
 /vis/scene/add/eventID
 /vis/scene/add/trajectories rich
@@ -106,7 +107,7 @@
 
 /control/alias timeRange 0.1
 /vis/ogl/set/displayHeadTime true
-/vis/ogl/set/displayLightFront true -90 0 0 mm
+/vis/ogl/set/displayLightFront true 0 0 -90 mm
 /vis/verbose warnings
 /control/verbose 0
 /control/loop visTutor/exN03Vis12.loop startTime -{timeRange} 0.7 0.001

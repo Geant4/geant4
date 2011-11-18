@@ -46,7 +46,7 @@
 
 # Bird-eye view of events
 /vis/viewer/reset
-/vis/viewer/set/viewpointThetaPhi   45 45 
+/vis/viewer/set/viewpointThetaPhi   135 225 
 
 /vis/scene/notifyHandlers
 

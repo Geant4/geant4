@@ -27,6 +27,7 @@
 /vis/viewer/set/autoRefresh false
 /vis/verbose errors
 
+/vis/viewer/set/viewpointThetaPhi 90. 180.
 /vis/drawVolume
 /vis/scene/add/eventID
 /vis/scene/add/trajectories rich
@@ -67,11 +68,11 @@
 # their time range overlaps the viewer's time range.  To mitigate this
 # effect of discrete time intervals, advance the light front by half the
 # trajectories interval...
-/vis/ogl/set/displayLightFront true -90 0 0 mm -{halfInterval} ns
+/vis/ogl/set/displayLightFront true 0 0 -90 mm -{halfInterval} ns
 /vis/viewer/panTo -9 0 cm
 /vis/viewer/zoomTo 2
 /control/alias timeRange 0.1
-/control/alias dx 0.3
+/control/alias dz 0.3
 # Switch off auto-refresh to avoid refresh on /vis/viewer/pan in loop.
 # (Then force refresh in loop.)
 /vis/viewer/set/autoRefresh 0

@@ -15,7 +15,7 @@
    crystals is and it is still called 'Crystal' hereafter.
 
    Crystals are circularly arranged to form a ring. Few rings make up the full
-   detector (gamma camera). This is done by positionnning of Crystals in 
+   detector (gamma camera). This is done by positionning Crystals in 
    Ring with an appropriate rotation matrix. Several copies of Ring are 
    then placed in the full detector.  
 
@@ -79,10 +79,10 @@ The following paragraphs are common to all basic examples
 \section B3_A VISUALISATION
 
    The visualization manager is set via the G4VisExecutive class
-   in the main() function in exampleB3.cc.    
+   in the main () function in exampleB3.cc.    
    The initialisation of the drawing is done via a set of /vis/ commands
    in the macro vis.mac. This macro is automatically read from
-   the main function when the example is used in interactive running mode.
+   the main () function when the example is used in interactive running mode.
 
    By default, vis.mac opens an OpenGL viewer.
    The user can switch to other graphics systems by commenting out this line
@@ -114,7 +114,7 @@ The following paragraphs are common to all basic examples
 \section B3_B USER INTERFACES
  
    The user command interface is set via the G4UIExecutive class
-   in the the main() function in exampleB3.cc 
+   in the the main () function in exampleB3.cc 
    The selection of the user command interface is then done automatically 
    according to the Geant4 configuration. The default command interface, 
    called G4UIterminal, is done via a standard G4cin/G4cout.
