@@ -854,7 +854,7 @@ int main()
     G4cout<<"Test29:CalculationTimePerEvent= "<<timer->GetUserElapsed()/nEvt<<" s"<<G4endl;
     //delete timer;
     //#ifdef pverb
-    G4cerr<<"Test29: ########## End of run ##########"<<G4endl;
+    G4cout<<"Test29: ########## End of run ##########"<<G4endl;
     //#endif
     //delete aPoint;
     //delete bPoint;
