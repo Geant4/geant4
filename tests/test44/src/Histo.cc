@@ -136,7 +136,9 @@ void Histo::book()
   if(m_ROOT_file) {
     G4cout << "[Histo::book] File created: " << nam << G4endl;
   } else {
-    G4Exception("[Histo::book] ERROR: file " + nam + " has not been created!");
+    G4cout << "[Histo::book] ERROR: file " << nam 
+	   << " has not been created!" << G4endl;
+    exit(1);
   }
 
   // Creating an 1-dimensional histograms in the root directory of the tree

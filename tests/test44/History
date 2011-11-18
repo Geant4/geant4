@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17-11-11  V.Ivant (test44-V09-04-03)
+- Removed call to obsolete G4Exception 
+
 22-04-11  V.Ivant (test44-V09-04-02)
 - Removed obsolete includes
 
