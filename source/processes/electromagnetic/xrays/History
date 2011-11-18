@@ -17,6 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18 November 11: G.Folger     (xrays-V09-04-10)
+- G4VXTRenergyLoss.cc: migrate to new g4Exception, fix compilation warning
+
+16 November 11: P.Gumplinger (xrays-V09-04-09)
+- remove reminder message from G4Cerenkov constructor
+- G4VXTRenergyLoss.cc - changed:
+    result=x1+(position-y1)*(x2-x1)/(y2-y1)->result=x1+(x2-x1)*G4UniformRand();
+  and added:
+    if(fAngleRadDistr) {  angleSum  += ......
+
 13 October 11: P.Gumplinger (xrays-V09-04-08)
 - modify to work with materials-V09-04-14
 
