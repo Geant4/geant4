@@ -15,7 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-08-April-10 A.Ivant (test45-V09-04-00)
+17-Nov-11 V.Ivant (test45-V09-04-01)
+- removed obsolete G4Exception
+
+08-April-11 A.Ivant (test45-V09-04-00)
 - 0-80 MeV for pn_dn_050+ 110d in HistoManager.
 
 09-November-10 M.Asai (test45-V09-03-00)
