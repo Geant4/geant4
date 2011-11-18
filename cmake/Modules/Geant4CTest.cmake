@@ -16,11 +16,13 @@ else()
   set(GEANT4_DATA_DIR "" CACHE PATH "Directory where the Geant4 data is located")
 endif()
 
-if(NOT GEANT4_DATA_DIR)
-  message("GEANT4_DATA_DIR not defined! This may cause many Geant4 tests to fail")
-endif()
-
 set(Geant4_DIR ${CMAKE_BINARY_DIR} CACHE PATH "Current build directory")
+
+
+if(NOT GEANT4_DATA_DIR)
+  message(WARNING "GEANT4_DATA_DIR not defined! This may cause many Geant4 tests to fail")
+  return()
+endif()
 
 #---Helper function to locate the most recent version of a dataset-----------------------------------
 function(GEANT4_LATEST_VERSION dir name var)

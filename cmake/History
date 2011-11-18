@@ -30,6 +30,9 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 18th 2011 - B.Morgan (cmake-V09-04-36)
+- Modules/Geant4CTest.cmake : Added some protection if GEANT4_DATA_DIR not defined
+
 November 16th 2011 - B.Morgan (cmake-V09-04-35)
 - Templates/geant4_validate_sources.cmake.in : Added two VRML icc files
   to false positive list. These are in VRML's src/ directory for internal
