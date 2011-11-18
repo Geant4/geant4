@@ -64,12 +64,12 @@ struct _ListRef
 class G4TrackListNode
 {
      friend class G4TrackList;
-     friend class G4TrackList_Boundary;
 
 public :
      G4Track* GetTrack() { return fTrack; }
      G4TrackListNode* GetNext() { return fNext;}
      G4TrackListNode* GetPrevious() { return fPrevious;}
+     bool IsAttached() const { return fAttachedToList;}
 
 protected:
         /** Default constructor */
@@ -96,16 +96,7 @@ class G4TrackList
         G4TrackListNode *                   fFinish;
         G4ReferenceCountedHandle<_ListRef>  fListRef;
 
-        struct G4TrackList_Boundary
-        {
-            G4TrackListNode fEmptyNode;
-            // Must be empty and link to the last non-empty node of the list
-            // and to the first non-empty node of the list (begin())
-            inline G4TrackList_Boundary():fEmptyNode(){;}
-            ~G4TrackList_Boundary(){;}
-        };
-
-        G4TrackList_Boundary fBoundary;
+        G4TrackListNode fBoundary;
 
     public:
         typedef G4TrackList_iterator iterator;
@@ -129,12 +120,6 @@ class G4TrackList
         inline iterator end();
         // return an iterator that contains an empty node
         // use for boundary checking only
-
-        // TODO
-        /*inline reverse_iterator rbegin()
-        inline reverse_iterator rend();
-        // return an iterator that contains an empty node
-        // use for boundary checking only*/
 
         inline void push_front(G4Track* __track);
         inline void push_back(G4Track* __track);
@@ -258,7 +243,7 @@ inline G4TrackList::iterator G4TrackList::begin()
 { return iterator(fStart); }
 
 G4TrackList::iterator G4TrackList::end()
-{ return iterator( &(fBoundary.fEmptyNode) ); }
+{ return iterator( &(fBoundary) ); }
 // return an iterator that contains an empty node
 // use for boundary checking only
 

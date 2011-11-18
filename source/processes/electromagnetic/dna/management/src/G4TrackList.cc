@@ -79,9 +79,9 @@ G4TrackList::G4TrackList() : fBoundary()
     fStart      = 0;
     fFinish     = 0;
     fNbTracks   = 0 ;
-    fBoundary.fEmptyNode.SetPrevious(&fBoundary.fEmptyNode);
-    fBoundary.fEmptyNode.SetNext(&fBoundary.fEmptyNode);
-    fBoundary.fEmptyNode.fAttachedToList = true;
+    fBoundary.SetPrevious(&fBoundary);
+    fBoundary.SetNext(&fBoundary);
+    fBoundary.fAttachedToList = true;
 }
 
 // should not be used
@@ -109,7 +109,7 @@ G4TrackList::~G4TrackList()
         G4TrackListNode * __nextStackedTrack;
 
         // delete tracks in the stack
-        while(  __stackedTrack && __stackedTrack != &(fBoundary.fEmptyNode) )
+        while(  __stackedTrack && __stackedTrack != &(fBoundary) )
         {
             __nextStackedTrack = __stackedTrack->GetNext();
             G4Track* __track = __stackedTrack->GetTrack();
@@ -172,20 +172,20 @@ void G4TrackList::Hook(G4TrackListNode* __position, G4TrackListNode* __toHook)
         //        G4cout << "fNbTracks == 0" << G4endl;
         fStart = __toHook;
         fFinish = __toHook;
-        __toHook->SetNext(&fBoundary.fEmptyNode);
-        __toHook->SetPrevious(&fBoundary.fEmptyNode);
-        fBoundary.fEmptyNode.SetNext(__toHook);
-        fBoundary.fEmptyNode.SetPrevious(__toHook);
+        __toHook->SetNext(&fBoundary);
+        __toHook->SetPrevious(&fBoundary);
+        fBoundary.SetNext(__toHook);
+        fBoundary.SetPrevious(__toHook);
     }
-    else if( __position == &fBoundary.fEmptyNode)
+    else if( __position == &fBoundary)
     {
         // DEBUG
-        //        G4cout << "__position == &fBoundary.fEmptyNode" << G4endl;
+        //        G4cout << "__position == &fBoundary" << G4endl;
         fFinish->SetNext( __toHook );
         __toHook->SetPrevious( fFinish );
 
-        __toHook->SetNext(&fBoundary.fEmptyNode);
-        fBoundary.fEmptyNode.SetPrevious( __toHook );
+        __toHook->SetNext(&fBoundary);
+        fBoundary.SetPrevious( __toHook );
 
         fFinish = __toHook;
     }
@@ -193,8 +193,8 @@ void G4TrackList::Hook(G4TrackListNode* __position, G4TrackListNode* __toHook)
     {
         // DEBUG
         //        G4cout << "__position == fStart" << G4endl;
-        __toHook->SetPrevious( &fBoundary.fEmptyNode );
-        fBoundary.fEmptyNode.SetNext(__toHook);
+        __toHook->SetPrevious( &fBoundary );
+        fBoundary.SetNext(__toHook);
         __toHook->SetNext(fStart);
         fStart->SetPrevious(__toHook);
         fStart = __toHook;
@@ -345,7 +345,7 @@ void G4TrackList::remove(G4Track* __track)
 G4TrackList::iterator
 G4TrackList::pop(iterator __first, iterator __last)
 {
-    if(fNbTracks == 0) return iterator(&fBoundary.fEmptyNode);
+    if(fNbTracks == 0) return iterator(&fBoundary);
 
     while (__first != __last)
     {
@@ -359,7 +359,7 @@ G4TrackList::pop(iterator __first, iterator __last)
 G4TrackList::iterator
 G4TrackList::erase(iterator __first, iterator __last)
 {
-    if(fNbTracks == 0) return iterator(&fBoundary.fEmptyNode);
+    if(fNbTracks == 0) return iterator(&fBoundary);
 
     while (__first != __last)
     {
@@ -379,18 +379,18 @@ void G4TrackList::transferTo(G4TrackList* __destination)
         __destination->fFinish      =    this->fFinish ;
         __destination->fNbTracks    =    this->fNbTracks;
 
-        __destination->fBoundary.fEmptyNode.SetNext(fStart);
-        __destination->fBoundary.fEmptyNode.SetPrevious(fFinish);
+        __destination->fBoundary.SetNext(fStart);
+        __destination->fBoundary.SetPrevious(fFinish);
 
-        __destination->fFinish->SetNext(&__destination->fBoundary.fEmptyNode);
-        __destination->fStart->SetPrevious(&__destination->fBoundary.fEmptyNode);
+        __destination->fFinish->SetNext(&__destination->fBoundary);
+        __destination->fStart->SetPrevious(&__destination->fBoundary);
     }
     else
     {
         this->fStart->SetPrevious(__destination->fFinish);
         __destination->fFinish->SetNext(this->fStart);
-        __destination->fBoundary.fEmptyNode.SetPrevious(this->fFinish);
-        this->fFinish->SetNext(&__destination->fBoundary.fEmptyNode);
+        __destination->fBoundary.SetPrevious(this->fFinish);
+        this->fFinish->SetNext(&__destination->fBoundary);
 
         __destination->fFinish = this->fFinish;
         __destination->fNbTracks += this->fNbTracks;
@@ -399,8 +399,8 @@ void G4TrackList::transferTo(G4TrackList* __destination)
     fNbTracks = 0;
     fStart = 0;
     fFinish = 0;
-    this->fBoundary.fEmptyNode.SetPrevious(&this->fBoundary.fEmptyNode);
-    this->fBoundary.fEmptyNode.SetNext(&this->fBoundary.fEmptyNode);
+    this->fBoundary.SetPrevious(&this->fBoundary);
+    this->fBoundary.SetNext(&this->fBoundary);
 
     fListRef->fTrackList = __destination;
 }

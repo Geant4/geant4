@@ -155,7 +155,7 @@ void G4DNAChemistryManager::CreateWaterMolecule(ElectronicModification modificat
         }
 
         fOutput << setw(11) << left << theIncomingTrack->GetTrackID()
-                << setw(10) << "H20"
+                << setw(10) << "H2O"
                 << left << modification
                 << internal <<":"
                 << right <<electronicLevel
@@ -201,7 +201,7 @@ void G4DNAChemistryManager::CreateSolvatedElectron(const G4Track* theIncomingTra
         fOutput << setw(11)<< theIncomingTrack->GetTrackID()
                 << setw(10)<< "e_aq"
                 << setw(14)<< -1
-                << setw(13)<< -1.
+                << setw(13)<< theIncomingTrack->GetKineticEnergy() /eV
                 << setw(22)<< (theIncomingTrack->GetPosition().x())/nanometer
                 << setw(22)<< (theIncomingTrack->GetPosition().y())/nanometer
                 << setw(22)<< (theIncomingTrack->GetPosition().z())/nanometer  ;

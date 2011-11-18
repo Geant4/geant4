@@ -60,9 +60,8 @@ G4DNAMolecularDecayDisplacer::G4DNAMolecularDecayDisplacer() :
 G4DNAMolecularDecayDisplacer::~G4DNAMolecularDecayDisplacer()
 {;}
 
-G4ThreeVector G4DNAMolecularDecayDisplacer::GetMotherMoleculeDisplacement(const G4MolecularDecayChannel* theDecayChannel/*, G4Molecule* theMotherMolecule*/) const
+G4ThreeVector G4DNAMolecularDecayDisplacer::GetMotherMoleculeDisplacement(const G4MolecularDecayChannel* theDecayChannel) const
 {
-//    G4String decayChannelName = theDecayChannel->GetName();
     G4int decayType = theDecayChannel -> GetDisplacementType();
 
     G4double RMSMotherMoleculeDisplacement=0;
@@ -70,22 +69,18 @@ G4ThreeVector G4DNAMolecularDecayDisplacer::GetMotherMoleculeDisplacement(const 
     if(decayType == Ionisation_DissociationDecay)
     {
         RMSMotherMoleculeDisplacement =  2.0 * nanometer ;
-//        break;
     }
     else if(decayType == A1B1_DissociationDecay)
     {
         RMSMotherMoleculeDisplacement = 0. * nanometer ;
-//        break;
     }
     else if(decayType == B1A1_DissociationDecay)
     {
         RMSMotherMoleculeDisplacement = 0. * nanometer ;
-//        break;
     }
     else if(decayType == AutoIonisation)
     {
         RMSMotherMoleculeDisplacement = 2.0 * nanometer ;
-//        break;
     }
 
 
@@ -139,26 +134,7 @@ vector<G4ThreeVector> G4DNAMolecularDecayDisplacer::GetProductsDisplacement(cons
             G4double theRMSDisplacement;
             const G4Molecule* product = theDecayChannel->GetProduct(i);
             theRMSDisplacement = theRMSmap[product->GetDefinition()];
-            //            theRMSDisplacement = theRMSmap[product->GetMoleculeID()];
 
-            /*
-                if(RdmValue< 0.5){
-                 if((*ProductsVector)[i]->GetName() == "H3O"){
-                  theRMSDisplacement = 0*nanometer;
-                 }
-                 else if((*ProductsVector)[i]->GetName() == "OH"){
-                  theRMSDisplacement = 0.8 * nanometer;
-                 }
-                }
-                else {
-                 if((*ProductsVector)[i]->GetName() == "H3O"){
-                  theRMSDisplacement = 0.8*nanometer;
-                 }
-                 else if((*ProductsVector)[i]->GetName() == "OH"){
-                  theRMSDisplacement = 0. * nanometer;
-                 }
-                }
-                */
             if(theRMSDisplacement==0)
             {
                 theProductDisplacementVector[i] = G4ThreeVector();
@@ -169,8 +145,6 @@ vector<G4ThreeVector> G4DNAMolecularDecayDisplacer::GetProductsDisplacement(cons
                 theProductDisplacementVector[i] = RandDirection;
             }
         }
-
-        //        break;
     }
     else if(decayType == A1B1_DissociationDecay)
     {
@@ -178,7 +152,6 @@ vector<G4ThreeVector> G4DNAMolecularDecayDisplacer::GetProductsDisplacement(cons
             G4cout<<"A1B1_DissociationDecay"<<G4endl;
         G4double theRMSDisplacement = 2.4 * nanometer;
         G4ThreeVector RandDirection = radialDistributionOfProducts(theRMSDisplacement);
-        // G4cout<<"G4DNAMolecularDecayDisplacer :: RandDirection = "<< RandDirection << G4endl;
 
         for(G4int i =0 ; i < nbProducts ; i++)
         {
@@ -186,17 +159,12 @@ vector<G4ThreeVector> G4DNAMolecularDecayDisplacer::GetProductsDisplacement(cons
             if(product->GetDefinition()== G4OH::Definition())
             {
                 theProductDisplacementVector[i] = -1./18.*RandDirection;
-
-                // G4cout<<"G4DNAMolecularDecayDisplacer :: OH = " << theProductDisplacementVector[i]  << G4endl;
-
             }
             else if(product->GetDefinition() == G4Hydrogen::Definition())
             {
                 theProductDisplacementVector[i] = +17./18.*RandDirection;
-                // G4cout<<"G4DNAMolecularDecayDisplacer :: H = " << theProductDisplacementVector[i]  << G4endl;
             }
         }
-        //        break;
     }
     else if(decayType == B1A1_DissociationDecay)
     {
@@ -234,8 +202,6 @@ vector<G4ThreeVector> G4DNAMolecularDecayDisplacer::GetProductsDisplacement(cons
                 NbOfOH ++;
             }
         }
-
-        //        break;
     }
     else if(decayType == AutoIonisation)
     {
@@ -278,8 +244,6 @@ vector<G4ThreeVector> G4DNAMolecularDecayDisplacer::GetProductsDisplacement(cons
                 theProductDisplacementVector[i]=radialDistributionOfElectron();
             }
         }
-
-        //        break;
     }
 
     return theProductDisplacementVector;

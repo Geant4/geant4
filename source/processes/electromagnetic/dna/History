@@ -13,6 +13,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+18.11.2011  M.K                 tag emdna-V09-04-46
+            Fix compilation error in G4TrackList on macOs
+            Clean G4DNAMolecularDecayDisplacer from comments
+            Correct a typo in G4DNAChemistryManager (H20 -> H2O)
 
 15.11.2011  G.Cosmo             tag emdna-V09-04-45
             Fixes to initialisation of static data in G4VMolecularDecayDisplacer
