@@ -132,6 +132,7 @@ if(GEANT4_ENABLE_TESTING)
   endif()
 endif()
 if(GEANT4_BUILD_EXAMPLES)
+  set(Geant4_DIR ${CMAKE_BINARY_DIR} CACHE PATH "Current build directory")
   add_subdirectory(examples)
 endif()
 #-----------------------------------------------------------------------------
