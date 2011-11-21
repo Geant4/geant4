@@ -137,6 +137,7 @@ G4UrbanMscModel95::G4UrbanMscModel95(const G4String& nam)
   fParticleChange = 0;
   theLambdaTable = 0;
   couple = 0;
+  samplez = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -164,7 +165,7 @@ void G4UrbanMscModel95::Initialise(const G4ParticleDefinition* p,
 
   fParticleChange = GetParticleChangeForMSC();
 
-  samplez = true;
+  //samplez = true;
 
   isInitialized = true;
 }
@@ -666,14 +667,21 @@ G4double G4UrbanMscModel95::ComputeGeomPathLength(G4double)
   if (tPathLength < currentRange*dtrl) {
     if(tau < taulim) zmean = tPathLength*(1.-0.5*tau) ;
     else             zmean = lambda0*(1.-exp(-tau));
+    zPathLength = zmean ;
+    return zPathLength;    
+
   } else if(currentKinEnergy < mass || tPathLength == currentRange)  {
     par1 = 1./currentRange ;
     par2 = 1./(par1*lambda0) ;
     par3 = 1.+par2 ;
     if(tPathLength < currentRange)
       zmean = (1.-exp(par3*log(1.-tPathLength/currentRange)))/(par1*par3) ;
-    else
+    else {
       zmean = 1./(par1*par3) ;
+    }
+    zPathLength = zmean ;
+    return zPathLength;    
+
   } else {
     G4double T1 = GetEnergy(particle,currentRange-tPathLength,couple);
     G4double lambda1 = GetLambda(T1);

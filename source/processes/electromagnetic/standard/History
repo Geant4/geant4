@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18 November 11: V.Ivanchenko (emstand-V09-04-54)
+- G4UrbanMscModel95 - optimized "samplez" sampling - applied it 
+    only for for medium step size, not apply to small steps and 
+    on steps equal to electron range
+
 17 November 11: V.Ivanchenko (emstand-V09-04-53)
 - G4SeltzerBergerModel - suppress warning printed for low-energy
     electrons (E < 1 keV)
