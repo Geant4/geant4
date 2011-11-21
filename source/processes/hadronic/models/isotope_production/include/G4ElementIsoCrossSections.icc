@@ -41,7 +41,7 @@ G4ElementIsoCrossSections<IsoIsoCrossSectionType>::
   {
     delete theData[i];
   }
-  delete theData;
+  delete [] theData;
 }
 
 template <class IsoIsoCrossSectionType>

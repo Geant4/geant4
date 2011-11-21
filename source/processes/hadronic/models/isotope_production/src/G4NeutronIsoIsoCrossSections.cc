@@ -45,7 +45,7 @@ G4NeutronIsoIsoCrossSections::
   {
     delete theProductionData[i];
   }
-  delete theProductionData;
+  delete [] theProductionData;
 }
 
 void G4NeutronIsoIsoCrossSections::
