@@ -1495,6 +1495,10 @@ SKIP_FUNCTION_MACROS   = YES
 # If a tag file is not located in the directory in which doxygen
 # is run, you must also specify the path to the tagfile here.
 
+# The geant4.tag file has to be downloaded from:
+# http://www-geant4.kek.jp/Reference/"version number"/geant4.tag
+# before generation of documentation
+# 
 TAGFILES               = geant4.tag=http://www-geant4.kek.jp/Reference/9.4.p02
 
 # When a file name is specified after GENERATE_TAGFILE, doxygen will create
