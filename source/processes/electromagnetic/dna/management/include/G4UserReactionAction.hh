@@ -54,7 +54,8 @@ public:
    // In this method, the user can use :
    // G4ITStepManager::Instance()->GetGlobalTime(), to know the current simulation time
    // G4ITStepManager::Instance()->GetMinTime(), to know the selected minimum time
-   virtual void StepAction(){;}
+   // WARNING : The call of this method happens before the call of DoIT methods
+   virtual void TimeStepAction(){;}
 
    // This method enables to kill products right after they are generated
    virtual void UserReactionAction(const G4Track& /*trackA*/,const G4Track& /*trackB*/,

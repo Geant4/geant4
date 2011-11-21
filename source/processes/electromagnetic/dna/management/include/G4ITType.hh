@@ -45,31 +45,31 @@ struct G4ITType
 private :
     friend G4ITType operator +(const G4ITType& left,const int& right);
     friend G4ITType operator -(const G4ITType& left,const int& right);
-    int i;
+    int fValue;
 
 public :
 
     static size_t size();
 
-    G4ITType(const int d_ = 0) : i(d_) {;}
-    G4ITType(const G4ITType & d_) : i(d_.i){;}
+    G4ITType(const int d_ = 0) : fValue(d_) {;}
+    G4ITType(const G4ITType & d_) : fValue(d_.fValue){;}
     G4ITType & operator=(const G4ITType & rhs);
-    inline G4ITType & operator=(const int & rhs) { i = rhs; return *this;}
-    inline operator int & () { return i; }
-    inline operator const int & () const { return i; }
-    inline bool operator==(const G4ITType & rhs) const { return i == rhs.i; }
-    inline bool operator==(const int & rhs) const { return i == rhs; }
-    inline bool operator<(const G4ITType & rhs) const { return i < rhs.i; }
-    inline void operator++() { i++; }
+    inline G4ITType & operator=(const int & rhs) { fValue = rhs; return *this;}
+    inline operator int & () { return fValue; }
+    inline operator const int & () const { return fValue; }
+    inline bool operator==(const G4ITType & rhs) const { return fValue == rhs.fValue; }
+    inline bool operator==(const int & rhs) const { return fValue == rhs; }
+    inline bool operator<(const G4ITType & rhs) const { return fValue < rhs.fValue; }
+    inline void operator++() { fValue++; }
 };
 
 inline G4ITType operator +(const G4ITType& left,const int& right) {
-    G4ITType output( left.i + right );
+    G4ITType output( left.fValue + right );
     return output;
 }
 
 inline G4ITType operator -(const G4ITType& left,const int& right) {
-    G4ITType output( left.i - right );
+    G4ITType output( left.fValue - right );
     return output;
 }
 
@@ -78,13 +78,14 @@ class G4ITTypeManager
 private:
     static G4ITTypeManager* fInstance ;
     G4ITType fLastType;
+    G4ITTypeManager();
+    virtual ~G4ITTypeManager();
 
 public :
     G4ITType NewType() ;
-    static size_t size();
+    size_t size() const;
     static G4ITTypeManager* Instance();
-    G4ITTypeManager();
-    virtual ~G4ITTypeManager();
+    static void DeleteInstance();
 };
 
 #define ITDef(T)\

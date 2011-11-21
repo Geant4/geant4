@@ -83,7 +83,6 @@ G4ThreeVector G4DNAMolecularDecayDisplacer::GetMotherMoleculeDisplacement(const 
         RMSMotherMoleculeDisplacement = 2.0 * nanometer ;
     }
 
-
     if(RMSMotherMoleculeDisplacement==0)
     {
         return G4ThreeVector(0,0,0);
@@ -97,9 +96,6 @@ G4ThreeVector G4DNAMolecularDecayDisplacer::GetMotherMoleculeDisplacement(const 
 
 vector<G4ThreeVector> G4DNAMolecularDecayDisplacer::GetProductsDisplacement(const G4MolecularDecayChannel* theDecayChannel) const
 {
-    // DEBUG
-    // G4cout<<"G4DNAMolecularDecayDisplacer::GetProductsDisplacement"<<G4endl;
-
     G4int nbProducts = theDecayChannel -> GetNbProducts();
     vector<G4ThreeVector> theProductDisplacementVector (nbProducts);
 

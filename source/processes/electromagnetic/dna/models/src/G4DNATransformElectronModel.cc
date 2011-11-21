@@ -2,17 +2,13 @@
 #include "G4ParticleChangeForGamma.hh"
 #include "G4Electron.hh"
 #include "G4NistManager.hh"
-#include "G4Molecule.hh"
-#include "G4Electron_aq.hh"
-#include "G4ITStepManager.hh"
-#include "G4ITManager.hh"
 #include "G4DNAChemistryManager.hh"
 
 G4DNATransformElectronModel::G4DNATransformElectronModel(const G4ParticleDefinition*,
-        const G4String& nam):
-    G4VEmModel(nam),isInitialised(false)
+                                                         const G4String& nam):
+    G4VEmModel(nam),fIsInitialised(false)
 {
-    verboseLevel = 0 ;
+    fVerboseLevel = 0 ;
     SetLowEnergyLimit(0.*eV);
     SetHighEnergyLimit(0.025*eV);
     fParticleChangeForGamma = 0;
@@ -24,10 +20,12 @@ G4DNATransformElectronModel::~G4DNATransformElectronModel()
 
 //______________________________________________________________________
 void G4DNATransformElectronModel::Initialise(const G4ParticleDefinition* particleDefinition,
-        const G4DataVector& /*cuts*/)
+                                             const G4DataVector&)
 {
-    if (verboseLevel > 1)
+#ifdef G4VERBOSE
+    if (fVerboseLevel)
         G4cout << "Calling G4DNATransformElectronModel::Initialise()" << G4endl;
+#endif
 
     if (particleDefinition != G4Electron::ElectronDefinition())
     {
@@ -38,9 +36,9 @@ void G4DNATransformElectronModel::Initialise(const G4ParticleDefinition* particl
         return;
     }
 
-    if(!isInitialised)
+    if(!fIsInitialised)
     {
-        isInitialised = true;
+        fIsInitialised = true;
         fParticleChangeForGamma = GetParticleChangeForGamma();
         fNistWater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
     }
@@ -48,13 +46,15 @@ void G4DNATransformElectronModel::Initialise(const G4ParticleDefinition* particl
 
 //______________________________________________________________________
 G4double G4DNATransformElectronModel::CrossSectionPerVolume(const G4Material* material,
-        const G4ParticleDefinition* /*particleDefinition*/,
-        G4double ekin,
-        G4double,
-        G4double)
+                                                            const G4ParticleDefinition*,
+                                                            G4double ekin,
+                                                            G4double,
+                                                            G4double)
 {
-    if (verboseLevel > 1)
+#if G4VERBOSE
+    if (fVerboseLevel > 1)
         G4cout << "Calling CrossSectionPerVolume() of G4DNATransformElectronModel" << G4endl;
+#endif
 
     if(ekin > HighEnergyLimit())
     {
@@ -74,13 +74,15 @@ G4double G4DNATransformElectronModel::CrossSectionPerVolume(const G4Material* ma
 
 //______________________________________________________________________
 void G4DNATransformElectronModel::SampleSecondaries(std::vector<G4DynamicParticle*>* /*fvect*/,
-        const G4MaterialCutsCouple* /*couple*/,
-        const G4DynamicParticle* particle,
-        G4double,
-        G4double)
+                                                    const G4MaterialCutsCouple*,
+                                                    const G4DynamicParticle* particle,
+                                                    G4double,
+                                                    G4double)
 {
-    if (verboseLevel > 0)
+#if G4VERBOSE
+    if (fVerboseLevel)
         G4cout << "Calling SampleSecondaries() of G4DNATransformElectronModel" << G4endl;
+#endif
 
     G4double k = particle->GetKineticEnergy();
 

@@ -60,6 +60,9 @@ public :
                                    const G4DynamicParticle*,
                                    G4double tmin,
                                    G4double maxEnergy);
+
+    inline void SetVerbose(int);
+
 protected:
 
     G4ParticleChangeForGamma* fParticleChangeForGamma;
@@ -67,12 +70,17 @@ protected:
 private:
 
     G4Material* fNistWater;
-    G4bool isInitialised;
-    G4int verboseLevel;
+    G4bool fIsInitialised;
+    G4int fVerboseLevel;
 
     G4DNATransformElectronModel & operator=(const  G4DNATransformElectronModel &right);
     G4DNATransformElectronModel(const  G4DNATransformElectronModel&);
 
 };
+
+inline void G4DNATransformElectronModel::SetVerbose(int flag)
+{
+    fVerboseLevel = flag ;
+}
 
 #endif

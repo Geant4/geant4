@@ -72,13 +72,15 @@ G4DNAMoleculeEncounterStepper::G4DNAMoleculeEncounterStepper(const G4DNAMolecule
 
 void G4DNAMoleculeEncounterStepper::PrepareForAllProcessors()
 {
-//    G4cout << "G4DNAMoleculeEncounterStepper::PrepareForAllProcessors" << G4endl;
+    // DEBUG
+    //    G4cout << "G4DNAMoleculeEncounterStepper::PrepareForAllProcessors" << G4endl;
     G4ITManager<G4Molecule>::Instance()->UpdatePositionMap();
 }
 
 G4double G4DNAMoleculeEncounterStepper::CalculateStep(const G4Track& trackA, const G4double& userMinTimeStep)
 {
-//    G4cout << "G4MoleculeEncounterStepper::CalculateStep, time :" << G4ITStepManager::Instance()->GetGlobalTime()  << G4endl;
+    // DEBUG
+    //    G4cout << "G4MoleculeEncounterStepper::CalculateStep, time :" << G4ITStepManager::Instance()->GetGlobalTime()  << G4endl;
     fUserMinTimeStep = userMinTimeStep ;
     if(fReactants) fReactants = 0 ;
 
@@ -93,7 +95,19 @@ G4double G4DNAMoleculeEncounterStepper::CalculateStep(const G4Track& trackA, con
 
     if(!reactivesVector)
     {
-        // G4cout << "G4MoleculeEncounterStepper::CalculateStep will return DBL_MAX" << G4endl;
+#ifdef G4VERBOSE
+        //    DEBUG
+        if(fVerbose > 1)
+        {
+            G4cout << "!!!!!!!!!!!!!!!!!!!!"<<G4endl;
+            G4cout << "!!! WARNING" << G4endl;
+            G4cout << "G4MoleculeEncounterStepper::CalculateStep will return infinity for the reaction because the molecule "
+                   << moleculeA->GetName()
+                   << " does not have any reactants given in the reaction table."
+                   << G4endl;
+            G4cout << "!!!!!!!!!!!!!!!!!!!!"<<G4endl;
+        }
+#endif
         return DBL_MAX;
     }
 
@@ -102,13 +116,20 @@ G4double G4DNAMoleculeEncounterStepper::CalculateStep(const G4Track& trackA, con
 
     if(nbReactives == 0)
     {
-        G4cout << "!!!!!!!!!!!!!!!!!!!!"<<G4endl;
-        G4cout << "!!! WARNING" << G4endl;
-        G4cout << "Return for molecule " << moleculeA -> GetName ()  << G4endl ;
-        G4cout << "G4MoleculeEncounterStepper::CalculateStep will return DBL_MAX" << G4endl;
-        G4cout << "because "<< moleculeA -> GetName () << " does not have any reactants "
-               << "given in the reaction table." << G4endl;
-        G4cout << "!!!!!!!!!!!!!!!!!!!!"<<G4endl;
+#ifdef G4VERBOSE
+        //    DEBUG
+        if(fVerbose)
+        {
+            G4cout << "!!!!!!!!!!!!!!!!!!!!"<<G4endl;
+            G4cout << "!!! WARNING" << G4endl;
+            G4cout << "G4MoleculeEncounterStepper::CalculateStep will return infinity for the reaction because the molecule "
+                   << moleculeA->GetName()
+                   << " does not have any reactants given in the reaction table."
+                   << "This message can also result from a wrong implementation of the reaction table."
+                   << G4endl;
+            G4cout << "!!!!!!!!!!!!!!!!!!!!"<<G4endl;
+        }
+#endif
         return DBL_MAX;
     }
     // DEBUG
@@ -124,11 +145,13 @@ G4double G4DNAMoleculeEncounterStepper::CalculateStep(const G4Track& trackA, con
     fSampledMinTimeStep = DBL_MAX;
     G4bool hasAlreadyReachNullTime = false;
 
-    if(fVerbose>=4)
+#ifdef G4VERBOSE
+    if(fVerbose)
     {
         G4cout << "___________________________________" << G4endl;
         G4cout << "Incident molecule : " << moleculeA->GetName() << G4endl;
     }
+#endif
     //__________________________________________________________________
     // Start looping on possible reactants
     for (G4int i=0 ; i<nbReactives ; i++)
@@ -151,8 +174,16 @@ G4double G4DNAMoleculeEncounterStepper::CalculateStep(const G4Track& trackA, con
 
         if(!results)
         {
+#ifdef G4VERBOSE
             // DEBUG
-            //                G4cout << " Pas de molecule trouvée : " << moleculeB->GetName() << G4endl;
+            if(fVerbose > 1)
+            {
+                G4cout << "No molecule " << moleculeB->GetName()
+                       << " found to react with "
+                       << moleculeA->GetName()
+                       << G4endl;
+            }
+#endif
             continue ;
         }
 
@@ -170,31 +201,47 @@ G4double G4DNAMoleculeEncounterStepper::CalculateStep(const G4Track& trackA, con
                 continue ;
             }
 
-            if (reactiveB->GetTrack()->GetTrackStatus() != fAlive)
+            G4Track *trackB = reactiveB->GetTrack();
+
+            if(trackB == 0)
             {
-                G4ExceptionDescription exceptionDescription ("The track status of one of the nearby reactants is not fAlive");
+                G4ExceptionDescription exceptionDescription ;
+                exceptionDescription << "The reactant B found using the ITManager does not have a valid track "
+                                     << " attached to it. If this is done on purpose, please do not record this "
+                                     << " molecule in the ITManager."
+                                     << G4endl;
                 G4Exception("G4DNAMoleculeEncounterStepper::CalculateStep","MoleculeEncounterStepper001",
                             FatalErrorInArgument,exceptionDescription);
                 continue ;
             }
 
-            G4Track *trackB = reactiveB->GetTrack();
+            if (trackB->GetTrackStatus() != fAlive)
+            {
+                G4ExceptionDescription exceptionDescription ;
+                exceptionDescription << "The track status of one of the nearby reactants is not fAlive" << G4endl;
+                exceptionDescription << "The incomming trackID "
+                                     << "(trackA entering in G4DNAMoleculeEncounterStepper and "
+                                     << "for which you are looking reactant for) is : "
+                                     << trackA.GetTrackID() << G4endl;
+                exceptionDescription << "And the trackID of the reactant (trackB) is: "
+                                     << trackB->GetTrackID() << G4endl;
+                G4Exception("G4DNAMoleculeEncounterStepper::CalculateStep","MoleculeEncounterStepper002",
+                            FatalErrorInArgument,exceptionDescription);
+                continue ;
+            }
 
             if(trackB == &trackA)
             {
                 // DEBUG
-                G4cerr << "Molecule B is of type : "
-                       << moleculeB->GetName()
-                       << " trackID : "
-                       << trackB->GetTrackID()<< G4endl;
-                G4cerr << "Molecule A is of type : "
-                       << moleculeA->GetName()
-                       << " trackID : "
-                       << trackA.GetTrackID() << G4endl;
+                G4ExceptionDescription exceptionDescription ;
+                exceptionDescription << "A track is reacting with itself (which is impossible) ie trackA == trackB"
+                                     << G4endl ;
+                exceptionDescription << "Molecule A (and B) is of type : "
+                                     << moleculeA->GetName()
+                                     << " with trackID : "
+                                     << trackA.GetTrackID() << G4endl;
 
-                G4ExceptionDescription exceptionDescription ("The track you are requested nearby reactants for ");
-                exceptionDescription << " and the nearby reactant returned by the ITManager are the same" ;
-                G4Exception("G4DNAMoleculeEncounterStepper::CalculateStep","MoleculeEncounterStepper002",
+                G4Exception("G4DNAMoleculeEncounterStepper::CalculateStep","MoleculeEncounterStepper003",
                             FatalErrorInArgument,exceptionDescription);
 
             }
@@ -202,35 +249,37 @@ G4double G4DNAMoleculeEncounterStepper::CalculateStep(const G4Track& trackA, con
             if(fabs(trackB->GetGlobalTime() - trackA.GetGlobalTime()) > trackA.GetGlobalTime()*(1-1/100) )
             {
                 // DEBUG
-                G4cerr<< "trackB->GetGlobalTime() != trackA.GetGlobalTime()"
-                      << G4endl;
+                G4ExceptionDescription exceptionDescription;
+                exceptionDescription << "The interacting tracks are not synchronized in time"<< G4endl;
+                exceptionDescription<< "trackB->GetGlobalTime() != trackA.GetGlobalTime()"
+                                    << G4endl;
 
-                G4cerr << "trackID : " << trackA.GetTrackID()
-                       << "\t Name :" << moleculeA->GetName()
-                       <<"\t trackA->GetGlobalTime() = "
-                       << G4BestUnit(trackA.GetGlobalTime(), "Time") << G4endl;
+                exceptionDescription << "trackA : trackID : " << trackA.GetTrackID()
+                                     << "\t Name :" << moleculeA->GetName()
+                                     <<"\t trackA->GetGlobalTime() = "
+                                    << G4BestUnit(trackA.GetGlobalTime(), "Time") << G4endl;
 
-                G4cerr << "trackID : " << trackB->GetTrackID()
-                       << "\t Name :" << moleculeB->GetName()
-                       << "\t trackB->GetGlobalTime() = "
-                       << G4BestUnit(trackB->GetGlobalTime(), "Time")<< G4endl;
+                exceptionDescription << "trackB : trackID : " << trackB->GetTrackID()
+                                     << "\t Name :" << moleculeB->GetName()
+                                     << "\t trackB->GetGlobalTime() = "
+                                     << G4BestUnit(trackB->GetGlobalTime(), "Time")<< G4endl;
 
-                G4ExceptionDescription exceptionDescription ("The tracks are not synchronized in time");
-                G4Exception("G4DNAMoleculeEncounterStepper::CalculateStep","MoleculeEncounterStepper003",
+                G4Exception("G4DNAMoleculeEncounterStepper::CalculateStep","MoleculeEncounterStepper004",
                             FatalErrorInArgument,exceptionDescription);
             }
 
             G4double r2 = results->GetDistanceSqr() ;
-
-            if(fVerbose>=4)
+#ifdef G4VERBOSE
+            if(fVerbose > 1)
             {
                 G4cout <<"Reaction : Interaction Range = "
                       << G4BestUnit(R, "Length")<<G4endl;
                 G4cout <<"Real distance between reactants  = "
-                       << G4BestUnit((trackA.GetPosition() - trackB->GetPosition()).mag(), "Length")<<G4endl;
+                      << G4BestUnit((trackA.GetPosition() - trackB->GetPosition()).mag(), "Length")<<G4endl;
                 G4cout <<"Distance between reactants calculated by nearest neighbor algorithm = "
-                       << G4BestUnit(sqrt(r2), "Length")<<G4endl;
+                      << G4BestUnit(sqrt(r2), "Length")<<G4endl;
             }
+#endif
 
             if(r2 <= R*R)
             {
@@ -272,8 +321,13 @@ G4double G4DNAMoleculeEncounterStepper::CalculateStep(const G4Track& trackA, con
         }
     }
 
+#ifdef G4VERBOSE
     //    DEBUG
-//    G4cout << "G4MoleculeEncounterStepper::CalculateStep will return :"
-//           << G4BestUnit(fSampledMinTimeStep, "Time")<< G4endl;
+    if(fVerbose)
+    {
+        G4cout << "G4MoleculeEncounterStepper::CalculateStep will finally return :"
+               << G4BestUnit(fSampledMinTimeStep, "Time")<< G4endl;
+    }
+#endif
     return fSampledMinTimeStep ;
 }

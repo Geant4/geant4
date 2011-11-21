@@ -36,7 +36,7 @@
 
 using namespace std;
 
-G4AllITManager* G4AllITManager::fInstance(0);
+auto_ptr<G4AllITManager> G4AllITManager::fInstance(0);
 
 G4AllITManager::G4AllITManager()
 {
@@ -45,8 +45,13 @@ G4AllITManager::G4AllITManager()
 
 G4AllITManager* G4AllITManager::Instance()
 {
-    if(!fInstance) fInstance = new G4AllITManager();
-    return fInstance ;
+    if(fInstance.get() == 0) fInstance = auto_ptr<G4AllITManager>(new G4AllITManager());
+    return fInstance.get() ;
+}
+
+void G4AllITManager::DeleteInstance()
+{
+    fInstance.reset();
 }
 
 G4AllITManager::~G4AllITManager()
@@ -61,6 +66,7 @@ G4AllITManager::~G4AllITManager()
         it++;
         fITSubManager.erase(it_tmp);
     }
+    fInstance.release();
 }
 
 void  G4AllITManager::UpdatePositionMap()
@@ -85,13 +91,16 @@ void  G4AllITManager::CreateTree()
 
 template<typename T>  G4ITManager<T>* G4AllITManager::Instance()
 {
-    if(!fInstance) return 0;
     return G4ITManager<T>::Instance();
 }
 
 G4VITManager* G4AllITManager::GetInstance(G4ITType type)
 {
-    return fITSubManager[type];
+    map<G4ITType, G4VITManager*>::iterator it = fITSubManager.find(type);
+
+    if(it == fITSubManager.end()) return 0;
+
+    return it->second;
 }
 
 void G4AllITManager::RegisterManager(G4VITManager* manager)
@@ -101,30 +110,14 @@ void G4AllITManager::RegisterManager(G4VITManager* manager)
 
 G4ITBox* G4AllITManager::GetBox(const G4Track* track)
 {
-    return fITSubManager[GetIT(track)->GetITType()]->GetBox(track);
+    map<G4ITType, G4VITManager*>::iterator it = fITSubManager.find(GetIT(track)->GetITType());
+
+    if(it == fITSubManager.end()) return 0;
+
+    return it->second->GetBox(track);
 }
 
 void G4AllITManager::Push(G4Track* track)
 {
     fITSubManager[GetIT(track)->GetITType()]->Push(track);
-}
-
-template<typename T> std::vector<pair<G4IT*, double> >* G4AllITManager::FindNearest(const G4ThreeVector& pos, const T* it)
-{
-    return G4ITManager<T>::Instance()->FindNearest(pos,it);
-}
-
-template<typename T> std::vector<pair<G4IT*, double> >* G4AllITManager::FindNearest(const T* it0, const T* it)
-{
-    return G4ITManager<T>::Instance()->FindNearest(it0, it) ;
-}
-
-template<typename T> std::vector<pair<G4IT*, double> >* G4AllITManager::FindNearestInRange(const G4ThreeVector& pos, const T* it, G4double range)
-{
-    return G4ITManager<T>::Instance()->FindNearestInRange(pos, it, range);
-}
-
-template<typename T> std::vector<pair<G4IT*, double> >* G4AllITManager::FindNearestInRange(const T* it0, const T* it, G4double range)
-{
-    return G4ITManager<T>::Instance()->FindNearestInRange(it0, it, range);
 }

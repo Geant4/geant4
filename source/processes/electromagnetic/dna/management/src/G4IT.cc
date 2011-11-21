@@ -64,6 +64,8 @@ G4IT::G4IT() : G4VUserTrackInformation("G4IT"),
     fITBox=0;
     fKDNode = 0 ;
     fTrackNode = 0;
+    fParentID_A = 0;
+    fParentID_B = 0;
 }
 
 // Use only by inheriting classes
@@ -74,6 +76,8 @@ G4IT::G4IT(const G4IT& /*right*/) : G4VUserTrackInformation("G4IT"),
     fITBox=0;
     fKDNode = 0 ;
     fTrackNode = 0;
+    fParentID_A = 0;
+    fParentID_B = 0;
 }
 
 // Should not be used
@@ -88,6 +92,8 @@ G4IT& G4IT::operator=(const G4IT& right)
     fITBox = 0;
     fKDNode = 0 ;
     fTrackNode = 0;
+    fParentID_A = 0;
+    fParentID_B = 0;
     return *this;
 }
 
@@ -98,6 +104,8 @@ G4IT::G4IT(G4Track * aTrack) : G4VUserTrackInformation("G4IT"),
     fTrack = aTrack;
     fKDNode = 0 ;
     fTrackNode = 0;
+    fParentID_A = 0;
+    fParentID_B = 0;
     RecordCurrentPositionNTime();
 }
 

@@ -75,9 +75,10 @@ public:
     void Initialize();
 
     void StartTracking(G4Track*);
-    void TrackBanner(G4Track* track);
+    void TrackBanner(G4Track* track, const G4String& message = "");
     void AppendTrajectory(G4Track* track, G4Step* step);
     void EndTracking(G4Track*);
+    inline void SetVerbose(int);
 
     // if not set, will use tracking action of standard G4TrackingManager
 /***
@@ -92,5 +93,10 @@ public:
       return fpUserTrackingAction;
   }
 ***/
+
+inline void G4ITTrackingManager::SetVerbose(int flag)
+{
+    fVerboseLevel = flag;
+}
 
 #endif // G4ITTRACKINGMANAGER_HH

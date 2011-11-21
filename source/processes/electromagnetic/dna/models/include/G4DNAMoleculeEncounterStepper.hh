@@ -58,6 +58,10 @@ public:
     inline void SetReactionModel(G4VDNAReactionModel*);
     inline G4VDNAReactionModel* GetReactionModel();
 
+    inline void SetVerbose(int);
+    // Final time returned when reaction is avalaible in the reaction table = 1
+    // All details = 2
+
 private:
     G4DNAMoleculeEncounterStepper& operator=(const G4DNAMoleculeEncounterStepper&);
     const G4DNAMolecularReactionTable*& fMolecularReactionTable ;
@@ -73,6 +77,11 @@ inline void G4DNAMoleculeEncounterStepper::SetReactionModel(G4VDNAReactionModel*
 inline G4VDNAReactionModel* G4DNAMoleculeEncounterStepper::GetReactionModel()
 {
     return fReactionModel;
+}
+
+inline void G4DNAMoleculeEncounterStepper::SetVerbose(int flag)
+{
+    fVerbose = flag;
 }
 
 #endif // G4MOLECULEENCOUNTERSTEPPER_H

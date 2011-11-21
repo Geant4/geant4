@@ -45,7 +45,7 @@ size_t G4ITType::size()
 G4ITType& G4ITType::operator=(const G4ITType & rhs)
 {
     if (this == &rhs) return *this;
-    i = rhs.i;
+    fValue = rhs.fValue;
     return *this;
 }
 
@@ -58,15 +58,20 @@ G4ITTypeManager*  G4ITTypeManager::Instance()
     return fInstance;
 }
 
+void G4ITTypeManager::DeleteInstance()
+{
+    delete fInstance ;
+}
+
 G4ITTypeManager::G4ITTypeManager()
 { fLastType = 0;}
 
 G4ITTypeManager::~G4ITTypeManager()
 {;}
 
-size_t G4ITTypeManager::size()
+size_t G4ITTypeManager::size() const
 {
-    return fInstance->fLastType;
+    return fLastType;
 }
 
 G4ITType G4ITTypeManager::NewType()

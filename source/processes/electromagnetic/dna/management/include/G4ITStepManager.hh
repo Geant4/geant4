@@ -74,16 +74,24 @@ public :
     void ClearList();
     void SetEndTime(const double);
 
+    inline void SetTimeTolerance(double);
+    // Two tracks below the time tolerance are supposed to be
+    // in the same time slice
+    inline double GetTimeTolerance();
+
     inline G4ITModelHandler* GetModelHandler();
     inline void     SetTimeSteps(std::map<double,double>*);
     inline G4int    GetNbSteps();
     inline G4double GetEndTime();
-    inline G4double GetMinTimeStep();
+    inline G4double GetTimeStep();
     inline G4double GetGlobalTime();
-    inline void     SetUserAction(G4UserReactionAction* /*userITAction*/);
+    inline void     SetUserAction(G4UserReactionAction*);
     inline G4UserReactionAction* GetUserITAction();
 
     inline void SetVerbose(int);
+    // 1 : Reaction information
+    // 2 : (1) + step information
+    // 3 : (2) + trackList processing info + push track info
     inline int GetVerbose();
 
 protected:
@@ -96,7 +104,7 @@ protected:
     void CalculateMinStep() ;
     void ComputeInteractionLength();
     void DoIt();
-    void ComputeInteractionBetweenTracks();
+    void ComputeTrackReaction();
     void MergeSecondariesWithMainList();
 
     void PushSecondaries(G4ITStepProcessor*);
@@ -125,6 +133,7 @@ private:
     int fNbSteps ;
 
     // Time members
+    double fTimeTolerance;
     double fGlobalTime;
     double fTmpGlobalTime ;
     double fEndTime ;       // fEndTime : stores the biggest global time steps here (for synchronizing tracks)
@@ -134,7 +143,7 @@ private:
     bool fComputeTimeStep;
     bool fComputeReaction;
 
-    double fMinTimeStep ; // The selected minimum time step
+    double fTimeStep ; // The selected minimum time step
 
     // User steps
     bool fUsePreDefinedTimeSteps ;
@@ -149,7 +158,7 @@ private:
     // Flag : if the step is lead by the interaction with the matter and NOT by tracks' reaction
 
     G4TrackList*                    fpMainList ;
-    G4TrackList                     fSecondaries ; //merge
+    G4TrackList                     fSecondaries ; //to merge with fpMainList
     G4TrackList*                    fpWaitingList ; // Waiting queue of currentList
     std::map<double,G4TrackList* >  fDelayedList ;
     G4TrackList                     fToBeKilledList ;
@@ -187,9 +196,9 @@ inline G4double G4ITStepManager::GetEndTime()
     return fEndTime;
 } 
 
-inline G4double G4ITStepManager::GetMinTimeStep()
+inline G4double G4ITStepManager::GetTimeStep()
 {
-    return fMinTimeStep ;
+    return fTimeStep ;
 }
 
 
@@ -216,6 +225,16 @@ inline void G4ITStepManager::SetVerbose(int verbose)
 inline int G4ITStepManager::GetVerbose()
 {
     return fVerbose ;
+}
+
+inline void G4ITStepManager::SetTimeTolerance(double time)
+{
+    fTimeTolerance = time;
+}
+
+inline double G4ITStepManager::GetTimeTolerance()
+{
+    return fTimeTolerance;
 }
 
 #endif

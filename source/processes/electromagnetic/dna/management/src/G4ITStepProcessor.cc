@@ -60,7 +60,6 @@ G4ITStepProcessor::G4ITStepProcessor()
 {
     verboseLevel = 0 ;
 //    fpUserSteppingAction = 0 ;
-//    fpUserTrackingAction = 0;
     fpTrackingManager = 0;
     fpNavigator = 0;
     fpTouchableHandle = 0;
@@ -101,7 +100,6 @@ G4ITStepProcessor::G4ITStepProcessor(const G4ITStepProcessor& rhs)
 {
     verboseLevel = rhs.verboseLevel ;
 //    fpUserSteppingAction = 0 ;
-//    fpUserTrackingAction = 0;
     fpTrackingManager = 0;
     fpNavigator = 0;
     fpTouchableHandle = 0;

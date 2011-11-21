@@ -97,6 +97,13 @@ G4ITTrackingManager::~G4ITTrackingManager()
 //___________________________________________________
 void G4ITTrackingManager::StartTracking(G4Track* track)
 {
+#ifdef G4VERBOSE
+    if(fVerboseLevel)
+    {
+        TrackBanner(track, "G4ITTrackingManager::StartTracking : ");
+    }
+#endif
+
 /***
     if(fVerboseLevel>0 && (G4VSteppingVerbose::GetSilent()!=1) ) TrackBanner(track);
 
@@ -144,11 +151,14 @@ void G4ITTrackingManager::AppendTrajectory(G4Track* /***track***/, G4Step* /***s
 ***/
 }
 //___________________________________________________
-void G4ITTrackingManager::EndTracking(G4Track* /***track***/)
+void G4ITTrackingManager::EndTracking(G4Track* track)
 {
-    // DEBUG
-    //    G4cout << "G4ITTrackingManager::EndTracking" << G4endl;
-
+#ifdef G4VERBOSE
+    if(fVerboseLevel)
+    {
+        TrackBanner(track, "G4ITTrackingManager::EndTracking : ");
+    }
+#endif
     // Post tracking user intervention process.
 /***
     if( fpUserTrackingAction != 0 ) {
@@ -197,18 +207,20 @@ void G4ITTrackingManager::EndTracking(G4Track* /***track***/)
 }
 
 
-void G4ITTrackingManager::TrackBanner(G4Track* track)
+void G4ITTrackingManager::TrackBanner(G4Track* track, const G4String& message)
 {
     G4cout << G4endl;
     G4cout << "*******************************************************"
            << "**************************************************"
            << G4endl;
-    G4cout << "* G4Track Information: "
-           << "  Particle = " << track->GetDefinition()->GetParticleName()
+    if(message != "")
+        G4cout << message ;
+    G4cout << " * G4Track Information: "
+           << "   Particle : " << track->GetDefinition()->GetParticleName()
            << ","
-           << "   Track ID = " << track->GetTrackID()
+           << "   Track ID : " << track->GetTrackID()
            << ","
-           << "   Parent ID = " << track->GetParentID()
+           << "   Parent ID : " << track->GetParentID()
            << G4endl;
     G4cout << "*******************************************************"
            << "**************************************************"

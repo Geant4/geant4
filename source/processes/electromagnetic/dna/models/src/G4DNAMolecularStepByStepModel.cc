@@ -40,5 +40,7 @@ void G4DNAMolecularStepByStepModel::Initialize()
 
 void G4DNAMolecularStepByStepModel::PrintInfo()
 {
+#ifdef G4VERBOSE
     G4cout << "DNAMolecularStepByStepModel will be used" << G4endl;
+#endif
 }

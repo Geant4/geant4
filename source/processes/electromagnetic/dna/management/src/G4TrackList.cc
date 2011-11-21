@@ -131,6 +131,11 @@ G4TrackList::~G4TrackList()
     fNbTracks = 0;
 }
 
+bool G4TrackList::Holds(const G4Track* track) const
+{
+    return (GetIT(track)->GetTrackListNode()->fListRef->fTrackList == this)  ;
+}
+
 G4TrackListNode* G4TrackList::Flag(G4Track* __track)
 {
     G4IT* __iTrack = GetIT(__track);
@@ -138,6 +143,7 @@ G4TrackListNode* G4TrackList::Flag(G4Track* __track)
 
     if(__trackListNode != 0)
     {
+        // Suggestion move the node to this list
         if(__trackListNode->fAttachedToList)
         {
             G4ExceptionDescription exceptionDescription ;
@@ -261,9 +267,16 @@ void G4TrackList::CheckFlag(G4TrackListNode* __trackListNode)
 {
     if(__trackListNode -> fListRef->fTrackList != this)
     {
+        G4Track* track = __trackListNode->GetTrack();
         G4ExceptionDescription exceptionDescription ;
-        exceptionDescription << "This track "<< GetIT(__trackListNode->GetTrack())->GetName() ;
-        exceptionDescription << " is not correctly linked to a TrackList ";
+        exceptionDescription
+                << "The track "<< GetIT(track)->GetName()
+                << " with trackID " << track->GetTrackID()
+                << " is not correctly linked to a TrackList."
+                << G4endl
+                << "You are probably trying to withdraw this track "
+                << "from the list but it probably does not belong to "
+                << "this track list." << G4endl;
         G4Exception("G4TrackList::CheckFlag","G4TrackList002",
                     FatalErrorInArgument,exceptionDescription);
     }

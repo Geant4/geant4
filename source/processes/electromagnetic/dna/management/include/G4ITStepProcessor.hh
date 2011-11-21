@@ -190,7 +190,6 @@ private:
   G4TrackVector*          fpSecondary ;
 
 //  G4UserSteppingAction*   fpUserSteppingAction;
-//  G4UserTrackingAction*   fpUserTrackingAction;
 
   G4bool                  KillVerbose;
 

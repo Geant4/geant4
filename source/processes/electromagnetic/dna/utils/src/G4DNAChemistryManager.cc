@@ -55,6 +55,7 @@ G4DNAChemistryManager::G4DNAChemistryManager() :
 {
     fExcitationLevel = 0;
     fIonisationLevel = 0;
+    fWriteFile       = false;
 }
 
 G4DNAChemistryManager* G4DNAChemistryManager::Instance()
@@ -87,23 +88,23 @@ void G4DNAChemistryManager::WriteInto(const G4String& output,
                                       ios_base::openmode mode)
 {
     fOutput.open(output.data(), mode);
-    fOutput << std::setprecision(2) << std::scientific;
+    fOutput << std::setprecision(6) << std::scientific;
 
-    fOutput << setw(11) << left << "Parent ID"
+    fOutput << setw(11) << left << "#Parent ID"
             << setw(10) << "Molecule"
             << setw(14) << "Elec Modif"
             << setw(13) << "Energy (eV)"
             << setw(22) << "X pos of parent [nm]"
             << setw(22) << "Y pos of parent [nm]"
             << setw(22) << "Z pos of parent [nm]"
-            << setw(12) << "X pos [nm]"
-            << setw(12) << "Y pos [nm]"
-            << setw(12) << "Z pos [nm]"
+            << setw(14) << "X pos [nm]"
+            << setw(14) << "Y pos [nm]"
+            << setw(14) << "Z pos [nm]"
             << G4endl
-            << setw(21) << ""
+            << setw(21) << "#"
             << setw(13) << "1)io/ex=0/1"
             << G4endl
-            << setw(21) << ""
+            << setw(21) << "#"
             << setw(13) << "2)level=0...5"
             << G4endl;
     fWriteFile = true;
@@ -161,7 +162,9 @@ void G4DNAChemistryManager::CreateWaterMolecule(ElectronicModification modificat
                 << right <<electronicLevel
                 << left
                 << setw(11) << ""
+                << std::setprecision(2) << std::fixed
                 << setw(13) << energy/eV
+                << std::setprecision(6) << std::scientific
                 << setw(22) << (theIncomingTrack->GetPosition().x())/nanometer
                 << setw(22) << (theIncomingTrack->GetPosition().y())/nanometer
                 << setw(22) << (theIncomingTrack->GetPosition().z())/nanometer
@@ -201,16 +204,18 @@ void G4DNAChemistryManager::CreateSolvatedElectron(const G4Track* theIncomingTra
         fOutput << setw(11)<< theIncomingTrack->GetTrackID()
                 << setw(10)<< "e_aq"
                 << setw(14)<< -1
-                << setw(13)<< theIncomingTrack->GetKineticEnergy() /eV
+                << std::setprecision(2) << std::fixed
+                << setw(13)<< theIncomingTrack->GetKineticEnergy()/eV
+                << std::setprecision(6) << std::scientific
                 << setw(22)<< (theIncomingTrack->GetPosition().x())/nanometer
                 << setw(22)<< (theIncomingTrack->GetPosition().y())/nanometer
                 << setw(22)<< (theIncomingTrack->GetPosition().z())/nanometer  ;
 
         if(finalPosition != 0)
         {
-            fOutput<< setw(12)<< (finalPosition->x())/nanometer << "\t"
-                   << setw(12)<< (finalPosition->y())/nanometer << "\t"
-                   << setw(12)<< (finalPosition->z())/nanometer ;
+            fOutput<< setw(14)<< (finalPosition->x())/nanometer
+                   << setw(14)<< (finalPosition->y())/nanometer
+                   << setw(14)<< (finalPosition->z())/nanometer ;
         }
 
         fOutput << G4endl;

@@ -40,17 +40,13 @@
 #include "G4ParticleChangeForGamma.hh"
 #include "G4Electron.hh"
 #include "G4NistManager.hh"
-#include "G4Molecule.hh"
-#include "G4Electron_aq.hh"
-#include "G4ITManager.hh"
-#include "G4ITStepManager.hh"
 #include "G4DNAChemistryManager.hh"
 
 G4DNASancheSolvatationModel::G4DNASancheSolvatationModel(const G4ParticleDefinition*,
-        const G4String& nam):
-    G4VEmModel(nam),isInitialised(false)
+                                                         const G4String& nam):
+    G4VEmModel(nam),fIsInitialised(false)
 {
-    verboseLevel = 0 ;
+    fVerboseLevel = 0 ;
     SetLowEnergyLimit(0.025*eV);
     G4WaterExcitationStructure exStructure ;
     SetHighEnergyLimit(exStructure.ExcitationEnergy(0));
@@ -63,11 +59,12 @@ G4DNASancheSolvatationModel::~G4DNASancheSolvatationModel()
 
 //______________________________________________________________________
 void G4DNASancheSolvatationModel::Initialise(const G4ParticleDefinition* particleDefinition,
-        const G4DataVector& /*cuts*/)
+                                             const G4DataVector&)
 {
-    if (verboseLevel > 1)
+#ifdef G4VERBOSE
+    if (fVerboseLevel)
         G4cout << "Calling G4SancheSolvatationModel::Initialise()" << G4endl;
-
+#endif
     if (particleDefinition != G4Electron::ElectronDefinition())
     {
         G4ExceptionDescription exceptionDescription ;
@@ -77,9 +74,9 @@ void G4DNASancheSolvatationModel::Initialise(const G4ParticleDefinition* particl
         return;
     }
 
-    if(!isInitialised)
+    if(!fIsInitialised)
     {
-        isInitialised = true;
+        fIsInitialised = true;
         fParticleChangeForGamma = GetParticleChangeForGamma();
         fNistWater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
     }
@@ -87,13 +84,15 @@ void G4DNASancheSolvatationModel::Initialise(const G4ParticleDefinition* particl
 
 //______________________________________________________________________
 G4double G4DNASancheSolvatationModel::CrossSectionPerVolume(const G4Material* material,
-        const G4ParticleDefinition*,
-        G4double ekin,
-        G4double,
-        G4double)
+                                                            const G4ParticleDefinition*,
+                                                            G4double ekin,
+                                                            G4double,
+                                                            G4double)
 {
-    if (verboseLevel > 1)
+#ifdef G4VERBOSE
+    if (fVerboseLevel > 1)
         G4cout << "Calling CrossSectionPerVolume() of G4SancheSolvatationModel" << G4endl;
+#endif
 
     if(ekin > HighEnergyLimit())
     {
@@ -111,14 +110,14 @@ G4double G4DNASancheSolvatationModel::CrossSectionPerVolume(const G4Material* ma
 }
 
 //______________________________________________________________________
-G4ThreeVector G4DNASancheSolvatationModel::radialDistributionOfProducts(G4double expectationValue) const
+G4ThreeVector G4DNASancheSolvatationModel::RadialDistributionOfProducts(G4double expectationValue) const
 {
     G4double sigma = sqrt(1.57)/2*expectationValue;
 
     G4double XValueForfMax = sqrt(2.*sigma*sigma);
     G4double fMaxValue = sqrt(2./3.14) * 1./(sigma*sigma*sigma) *
-                         (XValueForfMax*XValueForfMax)*
-                         exp(-1./2. * (XValueForfMax*XValueForfMax)/(sigma*sigma));
+            (XValueForfMax*XValueForfMax)*
+            exp(-1./2. * (XValueForfMax*XValueForfMax)/(sigma*sigma));
 
     G4double R;
 
@@ -159,24 +158,25 @@ G4ThreeVector G4DNASancheSolvatationModel::radialDistributionOfProducts(G4double
 }
 
 //______________________________________________________________________
-void G4DNASancheSolvatationModel::SampleSecondaries(std::vector<G4DynamicParticle*>* /*fvect*/,
-        const G4MaterialCutsCouple* /*couple*/,
-        const G4DynamicParticle* particle,
-        G4double,
-        G4double)
+void G4DNASancheSolvatationModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
+                                                    const G4MaterialCutsCouple*,
+                                                    const G4DynamicParticle* particle,
+                                                    G4double,
+                                                    G4double)
 {
-    if (verboseLevel > 0)
+#ifdef G4VERBOSE
+    if (fVerboseLevel)
         G4cout << "Calling SampleSecondaries() of G4SancheSolvatationModel" << G4endl;
-
+#endif
     G4double k = particle->GetKineticEnergy();
 
     if (k <= HighEnergyLimit())
     {
         G4double r_mean =
-            (-0.003*pow(k/eV,6) + 0.0749*pow(k/eV,5) - 0.7197*pow(k/eV,4)
-             + 3.1384*pow(k/eV,3) - 5.6926*pow(k/eV,2) + 5.6237*k/eV - 0.7883)*nanometer;
+                (-0.003*pow(k/eV,6) + 0.0749*pow(k/eV,5) - 0.7197*pow(k/eV,4)
+                 + 3.1384*pow(k/eV,3) - 5.6926*pow(k/eV,2) + 5.6237*k/eV - 0.7883)*nanometer;
 
-        G4ThreeVector displacement = radialDistributionOfProducts (r_mean);
+        G4ThreeVector displacement = RadialDistributionOfProducts (r_mean);
         //______________________________________________________________
         const G4Track * theIncomingTrack = fParticleChangeForGamma->GetCurrentTrack();
         G4ThreeVector finalPosition(theIncomingTrack->GetPosition()+displacement);

@@ -54,129 +54,156 @@ class G4TrackList_Boundary;
 struct _ListRef
 {
     friend class G4TrackList ;
-    protected :
+protected :
     inline _ListRef(G4TrackList* __list) :fTrackList(__list)
     {;}
 
     G4TrackList* fTrackList;
 };
 
+/**
+  * G4TrackListNode is the entity actually stored
+  * by the G4TrackList. A G4TrackListNode should
+  * belong only to one list. Also, a track
+  * should belong only to one list.
+  */
+
 class G4TrackListNode
 {
-     friend class G4TrackList;
+    friend class G4TrackList;
 
 public :
-     G4Track* GetTrack() { return fTrack; }
-     G4TrackListNode* GetNext() { return fNext;}
-     G4TrackListNode* GetPrevious() { return fPrevious;}
-     bool IsAttached() const { return fAttachedToList;}
+    G4Track* GetTrack() { return fTrack; }
+    G4TrackListNode* GetNext() { return fNext;}
+    G4TrackListNode* GetPrevious() { return fPrevious;}
+    bool IsAttached() { return fAttachedToList;}
 
 protected:
-        /** Default constructor */
-        G4TrackListNode(G4Track* track= 0);
-        /** Default destructor */
-        ~G4TrackListNode();
+    /** Default constructor */
+    G4TrackListNode(G4Track* track= 0);
+    /** Default destructor */
+    ~G4TrackListNode();
+    void SetNext(G4TrackListNode* node) { fNext = node;}
+    void SetPrevious(G4TrackListNode* node) { fPrevious = node;}
+    void SetAttachedToList(bool flag) { fAttachedToList = flag;}
 
-        bool fAttachedToList;
-        G4ReferenceCountedHandle<_ListRef> fListRef;
-        void SetNext(G4TrackListNode* node) { fNext = node;}
-        void SetPrevious(G4TrackListNode* node) { fPrevious = node;}
-
-        G4Track*         fTrack;
-        G4TrackListNode* fPrevious;
-        G4TrackListNode* fNext;
+    bool fAttachedToList;
+    G4ReferenceCountedHandle<_ListRef> fListRef;
+    G4Track*         fTrack;
+    G4TrackListNode* fPrevious;
+    G4TrackListNode* fNext;
 };
 
 struct G4TrackList_iterator ;
+
+/**
+  * G4TrackList is used by G4ITStepManager to save
+  * G4IT tracks only. Its advantage lies to a fast
+  * search of a track in this list.
+  */
+
 class G4TrackList
 {
-    private :
-        G4int                               fNbTracks;
-        G4TrackListNode *                   fStart;
-        G4TrackListNode *                   fFinish;
-        G4ReferenceCountedHandle<_ListRef>  fListRef;
+private :
+    G4int                               fNbTracks;
+    G4TrackListNode *                   fStart;
+    G4TrackListNode *                   fFinish;
+    G4ReferenceCountedHandle<_ListRef>  fListRef;
 
-        G4TrackListNode fBoundary;
+    G4TrackListNode fBoundary;
+    // Must be empty and link to the last non-empty node of the list
+    // and to the first non-empty node of the list (begin())
+    // The iterator returned by end() is linked to this empty node
 
-    public:
-        typedef G4TrackList_iterator iterator;
+public:
+    typedef G4TrackList_iterator iterator;
 
-        G4TrackList();
-        ~G4TrackList();
+    G4TrackList();
+    ~G4TrackList();
 
-        inline G4Track* back()
-        {
-            if(fNbTracks != 0)
-             return fFinish->GetTrack();
-            else return 0 ;
-        }
-        inline G4int size()
-        {
-            return fNbTracks;
-        }
-        inline bool empty();
-        iterator insert(iterator /*position*/, G4Track*);
-        inline iterator begin();
-        inline iterator end();
-        // return an iterator that contains an empty node
-        // use for boundary checking only
+    inline G4Track* back()
+    {
+        if(fNbTracks != 0)
+            return fFinish->GetTrack();
+        else return 0 ;
+    }
+    inline G4int size() const
+    {
+        return fNbTracks;
+    }
+    inline bool empty() const;
+    iterator insert(iterator /*position*/, G4Track*);
+    inline iterator begin();
+    inline iterator end();
+    /**
+     * return an iterator that contains an empty node
+     * use for boundary checking only
+     */
 
-        inline void push_front(G4Track* __track);
-        inline void push_back(G4Track* __track);
-        G4Track* pop_back();
+    bool Holds(const G4Track*) const;
 
-        void remove(G4Track*);
+    inline void push_front(G4Track* __track);
+    inline void push_back(G4Track* __track);
+    G4Track* pop_back();
 
-        iterator pop(G4Track*);
-        iterator pop(iterator __first, iterator __last);
-        iterator erase(G4Track*);
-        /**
-         * Complexity = constant
-         * By storing the node inside the object, we avoid
-         * searching through all the container.
-         */
+    void remove(G4Track*);
 
-        iterator erase(iterator __first, iterator __last);
-        /**
-         * Complexity = linear in size between __first and __last
-         */
-        void transferTo(G4TrackList*);
-        /**
-         * Complexity = constant
-         */
+    iterator pop(G4Track*);
+    iterator pop(iterator __first, iterator __last);
+    iterator erase(G4Track*);
+    /**
+     * Complexity = constant
+     * By storing the node inside the object, we avoid
+     * searching through all the container.
+     */
 
-    protected:
-        G4TrackListNode* CreateNode(G4Track*);
-        G4TrackListNode* Flag(G4Track*);
-        G4TrackListNode* Unflag(G4Track*);
-        void CheckFlag(G4TrackListNode*);
-        void DeleteTrack(G4Track*);
+    iterator erase(iterator __first, iterator __last);
+    /**
+     * Complexity = linear in size between __first and __last
+     */
+    void transferTo(G4TrackList*);
+    /**
+     * Complexity = constant
+     */
 
-        void Hook(G4TrackListNode* /*position*/, G4TrackListNode* /*toHook*/);
-        void Unhook(G4TrackListNode*);
-        G4TrackListNode* EraseTrackListNode(G4Track*);
+protected:
+    G4TrackListNode* CreateNode(G4Track*);
+    G4TrackListNode* Flag(G4Track*);
+    G4TrackListNode* Unflag(G4Track*);
+    void CheckFlag(G4TrackListNode*);
+    void DeleteTrack(G4Track*);
 
-    private:
-        G4TrackList(const G4TrackList& other);
-        G4TrackList & operator=
-                          (const G4TrackList &right);
-        G4int operator==(const G4TrackList &right) const;
-        G4int operator!=(const G4TrackList &right) const;
+    void Hook(G4TrackListNode* /*position*/, G4TrackListNode* /*toHook*/);
+    void Unhook(G4TrackListNode*);
+    G4TrackListNode* EraseTrackListNode(G4Track*);
+
+private:
+    G4TrackList(const G4TrackList& other);
+    G4TrackList & operator=
+    (const G4TrackList &right);
+    G4int operator==(const G4TrackList &right) const;
+    G4int operator!=(const G4TrackList &right) const;
 };
+
+/**
+  * G4TrackList_iterator enables to go through
+  * the tracks contained by a list.
+  */
 
 struct G4TrackList_iterator
 {
+    friend class G4TrackList;
     typedef G4TrackList_iterator                    _Self;
     typedef G4TrackListNode                          _Node;
 
     G4TrackList_iterator()
-    : fNode() { }
+        : fNode() { }
 
     explicit
     G4TrackList_iterator(_Node* __x)
-    : fNode(__x) { }
+        : fNode(__x) { }
 
-    _Node* GetStackedTrack()
+    _Node* GetNode()
     { return fNode; }
 
     G4Track*
@@ -228,21 +255,22 @@ struct G4TrackList_iterator
     bool
     operator!=(const _Self& __x) const
     {
-         return (fNode != __x.fNode);
+        return (fNode != __x.fNode);
     }
 
+private:
     // The only member points to the G4TrackList_iterator element.
     _Node* fNode;
 };
 
-inline bool G4TrackList::empty()
+inline bool G4TrackList::empty() const
 { return (fNbTracks == 0); }
 
 
 inline G4TrackList::iterator G4TrackList::begin()
 { return iterator(fStart); }
 
-G4TrackList::iterator G4TrackList::end()
+inline G4TrackList::iterator G4TrackList::end()
 { return iterator( &(fBoundary) ); }
 // return an iterator that contains an empty node
 // use for boundary checking only

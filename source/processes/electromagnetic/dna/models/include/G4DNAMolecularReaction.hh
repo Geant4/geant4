@@ -77,13 +77,15 @@ class G4DNAMolecularReaction : public G4VITReactionProcess
         inline void SetReactionTable(const G4DNAMolecularReactionTable*);
 
         inline void SetVerbose(int);
+        // 1 : only when make reaction is called
+        // 2 : both make reaction + test reactibility are called
 
     protected:
         const G4DNAMolecularReactionTable*& fMolReactionTable;
         G4VDNAReactionModel* fReactionModel;
         G4int fVerbose;
-        G4double R ;
-        G4double r;
+        G4double fReactionRadius ;
+        G4double fDistance;
     private:
 };
 

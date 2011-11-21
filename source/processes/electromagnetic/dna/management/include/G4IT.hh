@@ -111,6 +111,9 @@ public :
     void TakeOutBox();
     inline void SetNode(G4KDNode*);
 
+    inline void SetParentID(int,int);
+    inline void GetParentID(int&,int&);
+
     inline const G4ThreeVector&    GetPreStepPosition() const;
     inline G4double                GetPreStepLocalTime() const;
     inline G4double                GetPreStepGlobalTime() const;
@@ -133,6 +136,9 @@ private :
     G4IT*       fPreviousIT;
     G4IT*       fNextIT;
     G4KDNode*   fKDNode ;
+
+    int fParentID_A;
+    int fParentID_B;
 
     G4TrackingInformation* fTrackingInformation ;
     G4TrackListNode* fTrackNode;
@@ -194,6 +200,18 @@ inline G4Track* G4IT::GetTrack()
 inline const G4Track* G4IT::GetTrack() const
 {
     return fTrack;
+}
+
+inline void G4IT::SetParentID(int p_a, int p_b)
+{
+    fParentID_A = p_a;
+    fParentID_B = p_b;
+}
+
+inline void G4IT::GetParentID(int& p_a,int&p_b)
+{
+    p_a = fParentID_A;
+    p_b = fParentID_B ;
 }
 
 inline G4double G4IT::GetPreStepGlobalTime() const

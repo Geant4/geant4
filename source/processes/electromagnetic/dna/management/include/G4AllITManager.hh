@@ -42,6 +42,7 @@
 #include <vector>
 #include "G4ITType.hh"
 #include "G4ThreeVector.hh"
+#include <memory>
 
 class G4IT;
 class G4VITManager;
@@ -49,18 +50,22 @@ class G4ITBox;
 class G4Track;
 template<typename T> class G4ITManager;
 
+/**
+  * Holds all IT Manager, and take care of deleting them
+  * when AllITManager is deleted
+  * Set general verbose for all IT Manager
+  */
+
 class G4AllITManager
 {
-private :
-    static G4AllITManager* fInstance;
-    G4AllITManager();
-
-    std::map<G4ITType, G4VITManager*> fITSubManager ;
-
-    int fVerbose ;
-
 public :
     static G4AllITManager* Instance();
+    static void DeleteInstance();
+    /**
+      * To delete the Instance you should use DeleteInstance()
+      * rather than the destructor
+      */
+
     ~G4AllITManager();
 
     template<typename T>  G4ITManager<T>* Instance();
@@ -71,6 +76,10 @@ public :
     void RegisterManager(G4VITManager* manager);
     void Push(G4Track* track);
 
+    /**
+     * Set General verbose for all IT Manager
+     * See ITManager builder
+     */
     void SetVerboseLevel(G4int level)
     {
         fVerbose = level;
@@ -83,11 +92,42 @@ public :
     void UpdatePositionMap();
     void CreateTree();
 
-    template<typename T> std::vector<std::pair<G4IT*, double> >* FindNearest(const G4ThreeVector& pos, const T* it);
-    template<typename T> std::vector<std::pair<G4IT*, double> >* FindNearest(const T* it0, const T* it);
-    template<typename T> std::vector<std::pair<G4IT*, double> >* FindNearestInRange(const G4ThreeVector& pos,
-            const T* it, G4double range);
-    template<typename T> std::vector<std::pair<G4IT*, double> >* FindNearestInRange(const T* it0, const T* it, G4double range);
+    template<typename T> inline std::vector<std::pair<G4IT*, double> >* FindNearest(const G4ThreeVector& pos, const T* it);
+    template<typename T> inline std::vector<std::pair<G4IT*, double> >* FindNearest(const T* it0, const T* it);
+    template<typename T> inline std::vector<std::pair<G4IT*, double> >* FindNearestInRange(const G4ThreeVector& pos,
+                                                                                           const T* it, G4double range);
+    template<typename T> inline std::vector<std::pair<G4IT*, double> >* FindNearestInRange(const T* it0, const T* it, G4double range);
+
+private :
+    G4AllITManager();
+    static std::auto_ptr<G4AllITManager> fInstance;
+    std::map<G4ITType, G4VITManager*> fITSubManager ;
+
+    int fVerbose ;
 };
+
+template<typename T>
+inline std::vector<std::pair<G4IT*, double> >* G4AllITManager::FindNearest(const G4ThreeVector& pos, const T* it)
+{
+    return G4ITManager<T>::Instance()->FindNearest(pos,it);
+}
+
+template<typename T>
+inline std::vector<std::pair<G4IT*, double> >* G4AllITManager::FindNearest(const T* it0, const T* it)
+{
+    return G4ITManager<T>::Instance()->FindNearest(it0, it) ;
+}
+
+template<typename T>
+inline std::vector<std::pair<G4IT*, double> >* G4AllITManager::FindNearestInRange(const G4ThreeVector& pos, const T* it, G4double range)
+{
+    return G4ITManager<T>::Instance()->FindNearestInRange(pos, it, range);
+}
+
+template<typename T>
+inline std::vector<std::pair<G4IT*, double> >* G4AllITManager::FindNearestInRange(const T* it0, const T* it, G4double range)
+{
+    return G4ITManager<T>::Instance()->FindNearestInRange(it0, it, range);
+}
 
 #endif

@@ -44,7 +44,7 @@
 using namespace std;
 
 G4DNAMolecularDecay::G4DNAMolecularDecay(const G4String& processName,
-                                                 G4ProcessType type) : G4VITRestProcess(processName, type)
+                                         G4ProcessType type) : G4VITRestProcess(processName, type)
 {
     // set Process Sub Type
     SetProcessSubType(59); // DNA sub-type
@@ -93,14 +93,14 @@ G4bool G4DNAMolecularDecay::IsApplicable(const G4ParticleDefinition& aParticleTy
 {
     if(aParticleType.GetParticleType()=="Molecule")
     {
-        #ifdef G4VERBOSE
+#ifdef G4VERBOSE
         if(fVerbose>1)
         {
             G4cout<<"G4MolecularDecay::IsApplicable(";
             G4cout<<aParticleType.GetParticleName()<<",";
             G4cout<<aParticleType.GetParticleType()<<")"<<G4endl;
         }
-        #endif
+#endif
         return(true);
     }
     else
@@ -110,7 +110,7 @@ G4bool G4DNAMolecularDecay::IsApplicable(const G4ParticleDefinition& aParticleTy
 }
 
 G4double G4DNAMolecularDecay::GetMeanLifeTime(const G4Track& track  ,
-                                                  G4ForceCondition*)
+                                              G4ForceCondition*)
 {
     G4double output = GetMolecule(track)-> GetDecayTime() - track.GetProperTime() ;
     return (output > 0 ? output : 0 );
@@ -127,10 +127,10 @@ G4VParticleChange* G4DNAMolecularDecay::DecayIt(
     const G4Molecule * theMotherMolecule = GetMolecule(track);
     const G4MoleculeDefinition* moleculeDefinition = theMotherMolecule->GetDefinition();
 
-//    DEBUG
-//        G4cout <<"Calling G4MolecularDecayProcess::DecayIt"<<G4endl;
-//        G4cout << "The mother molecule state : " << G4endl;
-//        theMotherMolecule -> PrintState();
+    //    DEBUG
+    //        G4cout <<"Calling G4MolecularDecayProcess::DecayIt"<<G4endl;
+    //        G4cout << "The mother molecule state : " << G4endl;
+    //        theMotherMolecule -> PrintState();
 
     if(moleculeDefinition-> GetDecayTable())
     {
@@ -138,8 +138,8 @@ G4VParticleChange* G4DNAMolecularDecay::DecayIt(
                 (theMotherMolecule -> GetDecayChannel());
 
         G4int DecayVectorSize = DecayVector-> size();
-//        DEBUG
-//            G4cout<< "Number of decay channels : " << DecayVectorSize<<G4endl;
+        //        DEBUG
+        //            G4cout<< "Number of decay channels : " << DecayVectorSize<<G4endl;
         G4double RdmValue = G4UniformRand();
 
         const G4MolecularDecayChannel* decayChannel(0);
@@ -153,16 +153,16 @@ G4VParticleChange* G4DNAMolecularDecay::DecayIt(
         }
         while(i< DecayVectorSize);
 
-//        DEBUG
-//            G4cout<< "Selected Decay channel : " << decayChannel->GetName()<<G4endl;
+        //        DEBUG
+        //            G4cout<< "Selected Decay channel : " << decayChannel->GetName()<<G4endl;
 
         G4double decayEnergy = decayChannel->GetEnergy();
         G4int nbProducts = decayChannel->GetNbProducts();
 
         if(decayEnergy)
         {
-//            DEBUG
-//                G4cout<<"Deposit energy :" <<decayChannel->GetEnergy()/eV << " eV"<<G4endl;
+            //            DEBUG
+            //                G4cout<<"Deposit energy :" <<decayChannel->GetEnergy()/eV << " eV"<<G4endl;
 
             aParticleChange.ProposeLocalEnergyDeposit(decayChannel->GetEnergy());
         }
@@ -170,8 +170,8 @@ G4VParticleChange* G4DNAMolecularDecay::DecayIt(
         if(nbProducts)
         {
 
-//            DEBUG
-//                G4cout<<"Number of products :" <<nbProducts<<G4endl;
+            //            DEBUG
+            //                G4cout<<"Number of products :" <<nbProducts<<G4endl;
 
             vector<G4ThreeVector> ProductsDisplacement(nbProducts);
             G4ThreeVector theMotherMoleculeDisplacement;
@@ -231,12 +231,12 @@ G4VParticleChange* G4DNAMolecularDecay::DecayIt(
                 G4cout<<"-------------"<<G4endl;
 #endif
         }
-//        DEBUG
-//        else if(decayEnergy)
-//        {
-//            G4cout << "No products for this channel" << G4endl ;
-//            G4cout<<"-------------"<<G4endl;
-//        }
+        //        DEBUG
+        //        else if(decayEnergy)
+        //        {
+        //            G4cout << "No products for this channel" << G4endl ;
+        //            G4cout<<"-------------"<<G4endl;
+        //        }
         else if(!decayEnergy && !nbProducts)
         {
             G4String errMsg = "There is no products and no energy specified in the molecular decay channel";

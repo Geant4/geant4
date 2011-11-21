@@ -61,17 +61,24 @@ public :
                                    G4double tmin,
                                    G4double maxEnergy);
 
+    inline void SetVerbose(int);
+
 protected:
-    G4ThreeVector radialDistributionOfProducts(G4double Rrms) const ;
+    G4ThreeVector RadialDistributionOfProducts(G4double Rrms) const ;
     G4ParticleChangeForGamma* fParticleChangeForGamma;
     G4Material* fNistWater ;
 
-    G4bool isInitialised;
-    G4int verboseLevel;
+    G4bool fIsInitialised;
+    G4int fVerboseLevel;
 
 private :
     G4DNASancheSolvatationModel & operator=(const  G4DNASancheSolvatationModel &right);
     G4DNASancheSolvatationModel(const  G4DNASancheSolvatationModel&);
 };
+
+inline void G4DNASancheSolvatationModel::SetVerbose(int flag)
+{
+    fVerboseLevel = flag;
+}
 
 #endif
