@@ -102,6 +102,14 @@ G4LEDeuteronInelastic::ApplyYourself(const G4HadProjectile& aTrack,
   theParticleChange.SetEnergyChange( vec[0]->GetKineticEnergy() );
   delete vec[0];
 
+  if (vecLen <= 1) 
+    {
+      theParticleChange.SetStatusChange(isAlive);
+      theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
+      theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit()); 
+      return &theParticleChange;      
+    }
+
   G4DynamicParticle* pd;
   for (G4int i=1; i<vecLen; ++i) {
     pd = new G4DynamicParticle();

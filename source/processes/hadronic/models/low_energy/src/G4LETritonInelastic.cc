@@ -92,14 +92,14 @@ G4LETritonInelastic::ApplyYourself(const G4HadProjectile& aTrack,
     massVec[2] = targetNucleus.AtomicMass( A+2.0, Z     );
     massVec[3] = targetNucleus.AtomicMass( A+1.0, Z     );
     massVec[4] = theAtomicMass;
-    massVec[5] = 0.;
+    massVec[5] = massVec[3]; //0.;
     if (A > 1.0 && Z > 1.0) 
-        massVec[5] = targetNucleus.AtomicMass( A-1.0, Z-1.0 );
+      massVec[5] = targetNucleus.AtomicMass( A-1.0, Z-1.0 );
     massVec[6] = targetNucleus.AtomicMass( A+1.0, Z+1.0 );
     massVec[7] = massVec[3];
-    massVec[8] = 0.;
+    massVec[8] = massVec[2]; //0.;
     if (Z > 1.0) 
-        massVec[8] = targetNucleus.AtomicMass( A+1.0, Z-1.0 );
+      massVec[8] = targetNucleus.AtomicMass( A+1.0, Z-1.0 );
     
     G4FastVector<G4ReactionProduct,4> vec;  // vec will contain the secondary particles
     G4int vecLen = 0;
@@ -110,10 +110,20 @@ G4LETritonInelastic::ApplyYourself(const G4HadProjectile& aTrack,
                                          targetNucleus, theAtomicMass, massVec );
     if(triton_debug)std::cout << "running LETritonInelastic 4"<<std::endl;
     //
+    //    G4cout << "0  E(MeV)= " << vec[0]->GetKineticEnergy() << G4endl;
     G4double p = vec[0]->GetMomentum().mag();
     theParticleChange.SetMomentumChange( vec[0]->GetMomentum()*(1./p) );
     theParticleChange.SetEnergyChange( vec[0]->GetKineticEnergy() );
     delete vec[0];
+
+    if (vecLen <= 1) 
+    {
+      theParticleChange.SetStatusChange(isAlive);
+      theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
+      theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit()); 
+      return &theParticleChange;      
+    }
+
     //
     G4DynamicParticle *pd;
     for( G4int i=1; i<vecLen; ++i )
@@ -122,6 +132,8 @@ G4LETritonInelastic::ApplyYourself(const G4HadProjectile& aTrack,
       pd->SetDefinition( vec[i]->GetDefinition() );
       pd->SetMomentum( vec[i]->GetMomentum() );
       theParticleChange.AddSecondary( pd );
+      //G4cout << "i  E(MeV)= " << pd->GetKineticEnergy() 
+      //	     << "  " << pd->GetDefinition()->GetParticleName() << G4endl;
       delete vec[i];
     }
     
