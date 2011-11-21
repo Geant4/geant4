@@ -292,20 +292,20 @@ void Tst11DetectorConstruction::defineTKMaterials()
    G4Element* elTSDW = 
               new G4Element( "TS_D_of_Heavy_Water" , "D_HEAVY_WATER" , 1.0 , 1875.61/931.494 *g/mole );
 
-   G4Element* elTSHZrH = 
-              new G4Element( "TS_H_of_Zirconium_Hydride", "H_ZrH" , 1.0 , 1.0079*g/mole );
-   G4Element* elTSZrZrH = 
-              new G4Element( "TS_Zr_of_Zirconium_Hydride" , "Zr_ZrH" , 40.0 , 91.224*g/mole );
+   //G4Element* elTSHZrH = 
+   //           new G4Element( "TS_H_of_Zirconium_Hydride", "H_ZrH" , 1.0 , 1.0079*g/mole );
+   //G4Element* elTSZrZrH = 
+   //           new G4Element( "TS_Zr_of_Zirconium_Hydride" , "Zr_ZrH" , 40.0 , 91.224*g/mole );
 
    G4Element* elTSBeBeO = 
               new G4Element( "TS_Be_of_Beryllium_Oxide" , "Be_BeO" , 4 , 9.012182*g/mole );
    G4Element* elTSOBeO = 
               new G4Element( "TS_O_of_Beryllium_Oxide" , "O_BeO" , 8 , 15.9994*g/mole );
 
-   G4Element* elTSOUO2 = 
-              new G4Element( "TS_O_of_Uranium_Dioxide" , "O_UO2" , 8 , 15.9994*g/mole );
-   G4Element* elTSUUO2 = 
-              new G4Element( "TS_U_of_Uranium_Dioxide" , "U_UO2" , 92 , 238.02891*g/mole );
+   //G4Element* elTSOUO2 = 
+   //           new G4Element( "TS_O_of_Uranium_Dioxide" , "O_UO2" , 8 , 15.9994*g/mole );
+   //G4Element* elTSUUO2 = 
+   //           new G4Element( "TS_U_of_Uranium_Dioxide" , "U_UO2" , 92 , 238.02891*g/mole );
 
    G4Element* elTSBe = 
               new G4Element( "TS_Beryllium_Metal" , "Be" , 4 , 9.012182*g/mole );
@@ -345,17 +345,17 @@ void Tst11DetectorConstruction::defineTKMaterials()
    matD2O_TS -> AddElement(elTSDW,natoms=2);
    matD2O_TS -> AddElement(nistMan->FindOrBuildElement( "O" ), natoms = 1);
 
-   G4Material* matZrH_TS = new G4Material( "ZrH_TS" , density = 5.60*g/cm3 , ncomponents= 2 );
-   matZrH_TS -> AddElement(elTSHZrH,natoms=1);
-   matZrH_TS -> AddElement(elTSZrZrH, natoms = 1);
+   //G4Material* matZrH_TS = new G4Material( "ZrH_TS" , density = 5.60*g/cm3 , ncomponents= 2 );
+   //matZrH_TS -> AddElement(elTSHZrH,natoms=1);
+   //matZrH_TS -> AddElement(elTSZrZrH, natoms = 1);
 
    G4Material* matBeO_TS = new G4Material( "Beryllium_Oxide_TS" , density = 3.02*g/cm3 , ncomponents= 2 );
    matBeO_TS -> AddElement(elTSBeBeO,natoms=1);
    matBeO_TS -> AddElement(elTSOBeO, natoms = 1);
 
-   G4Material* matUO2_TS = new G4Material( "Uranium_Dioxide_TS" , density = 10.97*g/cm3 , ncomponents= 2 );
-   matUO2_TS -> AddElement(elTSOUO2,natoms=1);
-   matUO2_TS -> AddElement(elTSUUO2, natoms = 1);
+   //G4Material* matUO2_TS = new G4Material( "Uranium_Dioxide_TS" , density = 10.97*g/cm3 , ncomponents= 2 );
+   //matUO2_TS -> AddElement(elTSOUO2,natoms=1);
+   //matUO2_TS -> AddElement(elTSUUO2, natoms = 1);
 
 
    G4Material* matTSBeMetal = new G4Material( "Be_TS" , density = 1.848*g/cm3 , ncomponents= 1 );
@@ -374,7 +374,7 @@ void Tst11DetectorConstruction::defineTKMaterials()
    nistMan->FindOrBuildMaterial( "G4_POLYETHYLENE" ); 
 
    nistMan->FindOrBuildMaterial( "G4_BERYLLIUM_OXIDE" );
-   nistMan->FindOrBuildMaterial( "G4_URANIUM_OXIDE" );
+   //nistMan->FindOrBuildMaterial( "G4_URANIUM_OXIDE" );
 
 }
 

@@ -249,11 +249,11 @@ int main (int argc, char** argv) {
    TK_materialNameList.push_back ( "G4_GRAPHITE" ); 
 
    TK_materialNameList.push_back ( "Heavy_Water_TS" ); 
-   TK_materialNameList.push_back ( "ZrH_TS" ); 
+   //TK_materialNameList.push_back ( "ZrH_TS" ); 
    TK_materialNameList.push_back ( "Beryllium_Oxide_TS" ); 
    TK_materialNameList.push_back ( "G4_BERYLLIUM_OXIDE" ); 
-   TK_materialNameList.push_back ( "Uranium_Dioxide_TS" ); 
-   TK_materialNameList.push_back ( "G4_URANIUM_OXIDE" ); 
+   //TK_materialNameList.push_back ( "Uranium_Dioxide_TS" ); 
+   //TK_materialNameList.push_back ( "G4_URANIUM_OXIDE" ); 
 
    TK_materialNameList.push_back ( "Be_TS" ); 
    TK_materialNameList.push_back ( "Al_TS" ); 
