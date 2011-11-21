@@ -62,6 +62,10 @@ cppflags="${cppflags} -I../.."
 files=${exa}.cpp
 
 if [ ${exa} = "rpawdemo" ] ; then
+  use_inflate=yes
+fi
+
+if [ "${use_inflate}" = "yes" ] ; then
   files="${files} ../../inlib/csz/inflate.c"
 fi
 

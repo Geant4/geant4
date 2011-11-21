@@ -26,6 +26,13 @@ inline void clear(std::vector<T*>& a_vec){
 }
 
 template <class T>
+inline void raw_clear(std::vector<T*>& a_vec){
+  typedef typename std::vector<T*>::iterator it_t;
+  for(it_t it = a_vec.begin();it!=a_vec.end();++it) delete *it;
+  a_vec.clear();
+}
+
+template <class T>
 inline void append(std::vector<T>& a_vec,const std::vector<T>& a_from) {
   typedef typename std::vector<T>::size_type sz_t;
   sz_t vsize = a_vec.size();
@@ -34,6 +41,19 @@ inline void append(std::vector<T>& a_vec,const std::vector<T>& a_from) {
   sz_t offset = vsize; 
   for(sz_t index=0;index<number;index++,offset++) {
     a_vec[offset] = a_from[index];
+  }
+}
+
+template <class T>
+inline void remove(std::vector<T*>& a_vec,T* a_elem) {
+  typedef typename std::vector<T*>::iterator it_t;
+  it_t it;
+  for(it=a_vec.begin();it!=a_vec.end();) {
+    if(*it==a_elem) {
+      it = a_vec.erase(it);
+    } else { 
+      ++it;
+    }
   }
 }
 

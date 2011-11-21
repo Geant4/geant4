@@ -387,10 +387,10 @@ inline void CHPWDF(char* a_pwd) { //must be 1024 allocated.
 #else
   hcdir_(a_pwd,a2,l,1);
 #endif
-  int len=0;
+  /*int len=0;*/
  {for(int i=l-1;i>0;i--) {
     if(a_pwd[i]==0) continue;
-    if(a_pwd[i]!=' ') {len=i;break;}
+    if(a_pwd[i]!=' ') {/*len=i;*/break;}
     a_pwd[i] = 0;
   }}
 }

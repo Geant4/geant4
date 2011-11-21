@@ -42,7 +42,7 @@ protected:
   public: //iobj
     virtual void* cast(cid a_class) const {
       if(void* p = cmp_cast<leaf>(this,a_class)) {return p;}
-      else return 0;
+      return 0;
     }
   public:
     virtual std::string s_def() const = 0;
@@ -75,7 +75,7 @@ public:
   public: //iobj
     virtual void* cast(cid a_class) const {
       if(void* p = cmp_cast< column<T> >(this,a_class)) {return p;}
-      else return leaf::cast(a_class);
+      return leaf::cast(a_class);
     }
     virtual const std::string& name() const {return m_name;}
     virtual std::string aida_type() const {return s_aida_type(T());}
@@ -115,7 +115,7 @@ public:
   public: //iobj
     virtual void* cast(cid a_class) const {
       if(void* p = cmp_cast<sub_ntuple>(this,a_class)) {return p;}
-      else return 0;
+      return 0;
     }
     virtual const std::string& name() const {return m_name;}
     virtual std::string aida_type() const {return "ITuple";}

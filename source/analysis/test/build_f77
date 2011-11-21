@@ -129,6 +129,15 @@ echo "build hbook.f ..."
 
 ${f77_compiler} ${f77flags} -c -o hbook.o hbook.f
 ${f77_compiler} ${f77flags} -o ./tools_test_hbook hbook.o ${f77_objs} ${f77_libs}
+
+# ////////////////////////////////////
+# /// minuit.f ///////////////////////
+# ////////////////////////////////////
+echo "build minuit.f ..."
+
+${f77_compiler} ${f77flags} -c -o minuit.o minuit.f
+${f77_compiler} ${f77flags} -o ./tools_test_minuit minuit.o ${f77_objs} ${f77_libs}
+
 # ////////////////////////////////////
 # /// hbooknt.f //////////////////////
 # ////////////////////////////////////

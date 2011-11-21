@@ -12,6 +12,7 @@ void hfn_(){}
 void hbook2_(){}
 void hbook1_(){}
 void hfill_(){}
+void hx_(){}
 
 void hcdir_(){}
 void hmdir_(){}
@@ -37,3 +38,8 @@ void rndm_(){}
 
 /*commons :*/
 int hcbook_[51];
+
+/*minuit :*/
+void mninit_(){}
+void mnparm_(){}
+void mnexcm_(){}

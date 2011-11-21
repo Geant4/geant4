@@ -159,13 +159,13 @@ protected:
     mins.push_back(aXmin);
     std::vector<TC> maxs;
     maxs.push_back(aXmax);
-    this->configure(1,ns,mins,maxs);
+    parent::configure(1,ns,mins,maxs);
   }
   b1(const std::string& a_title,const std::vector<TC>& aEdges) {
     parent::m_title = a_title;
     std::vector< std::vector<TC> > edges(1);
     edges[0] = aEdges;
-    this->configure(1,edges);
+    parent::configure(1,edges);
   }
 
   virtual ~b1(){}

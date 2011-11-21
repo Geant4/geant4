@@ -18,6 +18,8 @@ inline double pi()      {return 3.1415926535897931160E0;}
 inline double two_pi()  {return 6.2831853071795862320E0;}
 inline double half_pi() {return 1.5707963267948965580E0;}
 
+inline double deg2rad() {return pi()/180.0;}
+
 template <class T>
 inline T power(const T& a_A,unsigned int a_B){
   T v = 1;
