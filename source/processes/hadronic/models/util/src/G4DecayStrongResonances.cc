@@ -75,12 +75,13 @@ G4DecayStrongResonances::Propagate(G4KineticTrackVector* theSecondaries,
     it->SetMass(aSecondary->GetDefinition()->GetPDGMass());
     it->SetTotalEnergy(aSecondary->Get4Momentum().t());
     it->SetMomentum(aSecondary->Get4Momentum().vect());
-    
+    delete aSecondary;
     try	{ theResult->push_back(it); }
     catch(...){
       throw G4HadronicException(__FILE__, __LINE__, "DecayStrongRes: push to result failed - out of mem.");
     }
   }
+  delete theSecondaries;
 
   return theResult;
 }
