@@ -19,6 +19,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/intercoms/include \
             -I$(G4BASE)/geometry/volumes/include \
             -I$(G4BASE)/geometry/management/include \
+            -I$(G4BASE)/processes/cuts/include \
             -I$(G4BASE)/processes/management/include \
             -I$(G4BASE)/processes/electromagnetic/lowenergy/include/ \
             -I$(G4BASE)/processes/electromagnetic/utils/include/ \

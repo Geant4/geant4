@@ -51,9 +51,13 @@
 //            2) verbose control
 //
 // 17 October 2011, L. Desorgher
-//			  -Allow the atomic relaxation after de-excitation of exited nuclei even for beta and alpha
+//			  -Allow the atomic relaxation after de-excitation of exited 
+//                          nuclei even for beta and alpha
 //			    decay. Bug found and solution proposed by Ko Abe.
 //			  -Set halflifethreshold by default to a negative value
+//
+// 20 November 2011, V.Ivanchenko
+//                        - Migration to new design of atomic deexcitation
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ///////////////////////////////////////////////////////////////////////////////
@@ -71,9 +75,14 @@
 
 #include "G4BetaFermiFunction.hh"
 #include "G4PhotonEvaporation.hh"
-#include "G4AtomicTransitionManager.hh"
-#include "G4AtomicShell.hh"
-#include "G4AtomicDeexcitation.hh"
+
+#include "G4VAtomDeexcitation.hh"
+#include "G4AtomicShells.hh"
+#include "G4LossTableManager.hh"
+
+//#include "G4AtomicTransitionManager.hh"
+//#include "G4AtomicShell.hh"
+//#include "G4AtomicDeexcitation.hh"
 
 const G4double G4NuclearDecayChannel:: pTolerance = 0.001;
 const G4double G4NuclearDecayChannel:: levelTolerance = 2.0*keV;
@@ -425,7 +434,36 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double theParentMass)
   // now apply ARM if it is requested and there is a vaccancy
   if (applyARM && eShell != -1) {
     G4int aZ = daughterZ;
-    if (aZ > 5 && aZ < 100) {  // only applies to 5< Z <100 
+
+    // V.Ivanchenko migration to new interface to deexcitation
+    // no check on index of G4MaterialCutsCouple, simplified 
+    // check on secondary energy Esec < 0.1 keV
+    G4VAtomDeexcitation* atomDeex = G4LossTableManager::Instance()->AtomDeexcitation();
+    if (atomDeex && aZ > 5 && aZ < 100) {  // only applies to 5< Z <100 
+      if (eShell >= G4AtomicShells::GetNumberOfShells(aZ)){
+    	  eShell = G4AtomicShells::GetNumberOfShells(aZ)-1;
+      }
+      G4AtomicShellEnumerator as = G4AtomicShellEnumerator(eShell);
+      const G4AtomicShell* shell = atomDeex->GetAtomicShell(aZ, as);    
+      std::vector<G4DynamicParticle*> armProducts;
+      const G4double deexLimit = 0.1*keV;
+      atomDeex->GenerateParticles(&armProducts, shell, aZ, deexLimit, deexLimit);
+      
+      size_t narm = armProducts.size();
+      if(narm > 0) {
+	G4ThreeVector bst = dynamicDaughter->Get4Momentum().boostVector();
+	for (size_t i = 0; i<narm; ++i) {
+          G4DynamicParticle* dp = armProducts[i];
+          G4LorentzVector lv = dp->Get4Momentum().boost(bst);
+          dp->Set4Momentum(lv);
+	  products->PushProducts(dp);
+	}
+      }
+    }
+  }
+  /*
+
+    if (atomDeex && aZ > 5 && aZ < 100) {  // only applies to 5< Z <100 
       // Retrieve the corresponding identifier and binding energy of the selected shell
       const G4AtomicTransitionManager* transitionManager = G4AtomicTransitionManager::Instance();
 
@@ -433,7 +471,7 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double theParentMass)
       //this to avoid a warning from transitionManager(otherwise the output is the same)
       //Correction to Bug 1662. L Desorgher (04/02/2011)
       if (eShell >= transitionManager->NumberOfShells(aZ)){
-    	  eShell=transitionManager->NumberOfShells(aZ)-1;
+      	  eShell=transitionManager->NumberOfShells(aZ)-1;
       }
 
       const G4AtomicShell* shell = transitionManager->Shell(aZ, eShell);
@@ -475,7 +513,7 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double theParentMass)
       delete atomDeex;
     }
   }
-
+  */
   return products;
 }
 
