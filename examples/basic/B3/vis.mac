@@ -34,7 +34,7 @@
 ##/vis/viewer/set/viewpointThetaPhi 90. 180.
 #
 # Specify zoom value:
-#/vis/viewer/zoom 2.
+/vis/viewer/zoom 1.4
 #
 # Specify style (surface, wireframe, auxiliary edges,...)
 #/vis/viewer/set/style wireframe
@@ -64,9 +64,13 @@
 #/vis/filtering/trajectories/particleFilter-0/invert true
 #
 # Many other options are available with /vis/modeling and /vis/filtering.
-# For example, to select or override default colours with:
+# For example, to select colour by particle ID:
 /vis/modeling/trajectories/create/drawByParticleID
-/vis/modeling/trajectories/drawByParticleID-0/set e+ yellow
+/vis/modeling/trajectories/drawByParticleID-0/default/setDrawStepPts true
+#/vis/modeling/trajectories/drawByParticleID-0/default/setStepPtsSize 1
+# To select or override default colours (note: e+ is blue by default):
+#/vis/modeling/trajectories/list
+#/vis/modeling/trajectories/drawByParticleID-0/set e+ yellow
 #
 # To superimpose all of the events from a given run:
 /vis/scene/endOfEventAction accumulate
