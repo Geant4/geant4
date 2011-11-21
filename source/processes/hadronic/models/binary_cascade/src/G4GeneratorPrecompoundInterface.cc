@@ -121,7 +121,9 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 			exciton3Momentum += mom;
 			exEnergy += (e - mass);
 		}
+		delete aTrack;
 	}
+	delete theSecondaries;
 
 	// loop over wounded nucleus
 	G4Nucleon * theCurrentNucleon =
