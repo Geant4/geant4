@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21-November-2011: G.Cosmo (externals-V09-04-11)
+- Use USE flags in main GNUmakefile for selection of packages,
+  for backwards compatibility.
+
 07-November-2011: G.Cosmo (externals-V09-04-10)
 - Updated CLHEP module to version 2.1.1.0.
 - Abilited possibility to force building of internal 'expat' module also
