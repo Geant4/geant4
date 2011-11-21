@@ -39,6 +39,7 @@
 #include "G4PhotoElectricEffect.hh"
 
 #include "G4CoulombScattering.hh"
+#include "G4eCoulombScatteringModel.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -84,13 +85,25 @@ void PhysListEmStandardSS::ConstructProcess()
       
     } else if (particleName == "e-") {
       //electron
-      pmanager->AddDiscreteProcess(new G4CoulombScattering);            
+      G4CoulombScattering* cs = new G4CoulombScattering();
+      G4eCoulombScatteringModel* model = new G4eCoulombScatteringModel();
+      model->SetLowEnergyThreshold(10*eV);
+      model->SetPolarAngleLimit(0.0);
+      cs->AddEmModel(0, model);
+      pmanager->AddDiscreteProcess(cs);            
+
       pmanager->AddProcess(new G4eIonisation,        -1, 1, 1);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1, 2, 2);
 	    
     } else if (particleName == "e+") {
       //positron
-      pmanager->AddDiscreteProcess(new G4CoulombScattering);            
+      G4CoulombScattering* cs = new G4CoulombScattering();
+      G4eCoulombScatteringModel* model = new G4eCoulombScatteringModel();
+      model->SetLowEnergyThreshold(10*eV);
+      model->SetPolarAngleLimit(0.0);
+      cs->AddEmModel(0, model);
+      pmanager->AddDiscreteProcess(cs);            
+
       pmanager->AddProcess(new G4eIonisation,        -1, 1, 1);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1, 2, 2);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1, 3);
@@ -98,13 +111,25 @@ void PhysListEmStandardSS::ConstructProcess()
     } else if (particleName == "mu+" || 
                particleName == "mu-"    ) {
       //muon
-      pmanager->AddDiscreteProcess(new G4CoulombScattering);              
+      G4CoulombScattering* cs = new G4CoulombScattering();
+      G4eCoulombScatteringModel* model = new G4eCoulombScatteringModel();
+      model->SetLowEnergyThreshold(100*eV);
+      model->SetPolarAngleLimit(0.0);
+      cs->AddEmModel(0, model);
+      pmanager->AddDiscreteProcess(cs);            
+
       pmanager->AddProcess(new G4MuIonisation,       -1, 1, 1);
       pmanager->AddProcess(new G4MuBremsstrahlung,   -1, 2, 2);
       pmanager->AddProcess(new G4MuPairProduction,   -1, 3, 3);
              
     } else if (particleName == "alpha" || particleName == "He3") {
-      pmanager->AddDiscreteProcess(new G4CoulombScattering);          
+      G4CoulombScattering* cs = new G4CoulombScattering();
+      G4eCoulombScatteringModel* model = new G4eCoulombScatteringModel();
+      model->SetLowEnergyThreshold(100*eV);
+      model->SetPolarAngleLimit(0.0);
+      cs->AddEmModel(0, model);
+      pmanager->AddDiscreteProcess(cs);            
+
       pmanager->AddProcess(new G4ionIonisation,      -1, 1, 1);
 
     } else if (particleName == "GenericIon" ) { 
