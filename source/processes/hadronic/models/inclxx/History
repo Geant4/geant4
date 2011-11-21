@@ -16,6 +16,11 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+21 November 2011 - Pekka Kaitaniemi (hadr-inclxx-V09-04-11)
+-----------------------------------------------------------
+- Fixed local energy logic
+- Fixed separation energy in cluster emission
+
 14 November 2011 - Pekka Kaitaniemi (hadr-inclxx-V09-04-10)
 -----------------------------------------------------------
 - Corrected the order in which the INCL++ model and projectile are created in

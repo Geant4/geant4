@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc1-3-gba0205b
+// INCL++ revision: v5.0_rc3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -174,14 +174,18 @@ namespace G4INCL {
       // at the collision poG4int, and clean up after yourself afterwards.
       ThreeVector mom1, mom2, pos1, pos2;
       G4double energy1 = 0.0, energy2 = 0.0;
-      const G4bool hasLocalEnergy = ((theLocalEnergyType == FirstCollisionLocalEnergy &&
-            theNucleus->getStore()->getBook()->getAcceptedCollisions()==0) ||
-          theLocalEnergyType == AlwaysLocalEnergy);
-      const G4bool hasLocalEnergyDelta = ((theLocalEnergyDeltaType == FirstCollisionLocalEnergy &&
-            theNucleus->getStore()->getBook()->getAcceptedCollisions()==0) ||
-          theLocalEnergyDeltaType == AlwaysLocalEnergy);
-      const G4bool p1HasLocalEnergy = (p1->isNucleon() && hasLocalEnergy) || (p1->isDelta() && hasLocalEnergyDelta);
-      const G4bool p2HasLocalEnergy = (p2->isNucleon() && hasLocalEnergy) || (p2->isDelta() && hasLocalEnergyDelta);
+      G4bool hasLocalEnergy;
+      if(p1->isPion() || p2->isPion())
+        hasLocalEnergy = ((theLocalEnergyDeltaType == FirstCollisionLocalEnergy &&
+              theNucleus->getStore()->getBook()->getAcceptedCollisions()==0) ||
+            theLocalEnergyDeltaType == AlwaysLocalEnergy);
+      else
+        hasLocalEnergy = ((theLocalEnergyType == FirstCollisionLocalEnergy &&
+              theNucleus->getStore()->getBook()->getAcceptedCollisions()==0) ||
+            theLocalEnergyType == AlwaysLocalEnergy);
+      const G4bool p1HasLocalEnergy = (hasLocalEnergy && !p1->isPion());
+      const G4bool p2HasLocalEnergy = (hasLocalEnergy && !p2->isPion());
+
       if(p1HasLocalEnergy) {
         mom1 = p1->getMomentum();
         pos1 = p1->getPosition();

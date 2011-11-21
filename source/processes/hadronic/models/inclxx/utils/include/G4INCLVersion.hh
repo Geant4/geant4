@@ -30,10 +30,10 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc1-3-gba0205b
+// INCL++ revision: v5.0_rc3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
 
-#define G4INCL_VERSION_ID "v5.0_rc1-3-gba02"
+#define G4INCL_VERSION_ID "v5.0_rc3"

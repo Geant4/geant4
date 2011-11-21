@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc1-3-gba0205b
+// INCL++ revision: v5.0_rc3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -82,8 +82,10 @@ namespace G4INCL {
       theZ += p->getZ();
       theA += p->getA();
       theStore->particleHasEntered(p);
-      theNpInitial += Math::heaviside(ParticleTable::getIsospin(p->getType()));
-      theNnInitial += Math::heaviside(-ParticleTable::getIsospin(p->getType()));
+      if(p->isNucleon()) {
+        theNpInitial += Math::heaviside(ParticleTable::getIsospin(p->getType()));
+        theNnInitial += Math::heaviside(-ParticleTable::getIsospin(p->getType()));
+      }
     };
 
     /**
@@ -136,10 +138,8 @@ namespace G4INCL {
         if((*i)->isNucleon() || (*i)->isResonance())
           S += ParticleTable::getSeparationEnergy((*i)->getType());
         else if((*i)->isCluster()) {
-	  Cluster *clusterOut = dynamic_cast<Cluster*>((*i));
-          ParticleList const *components = clusterOut->getParticles();
-          for(ParticleIter in = components->begin(); in != components->end(); ++in)
-            S += ParticleTable::getSeparationEnergy((*in)->getType());
+          S += (*i)->getZ() * ParticleTable::getSeparationEnergy(Proton)
+            + ((*i)->getA() - (*i)->getZ()) * ParticleTable::getSeparationEnergy(Neutron);
         }
 
       S -= theNpInitial * ParticleTable::getSeparationEnergy(Proton);
