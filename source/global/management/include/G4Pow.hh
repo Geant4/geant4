@@ -34,8 +34,9 @@
 // Class description:
 //
 // Utility singleton class for the fast computation of log and pow
-// functions. Integer argument should in the interval 0-255, no
+// functions. Integer argument should in the interval 0-512, no
 // check is performed inside these methods for performance reasons.
+// For factorial integer argument should be in the interval 0-170
 // Computations with double arguments are fast for the interval
 // 0.5-255.5, standard library is used in the opposite case
 

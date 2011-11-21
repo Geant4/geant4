@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 19, 2011 V.Ivantchenko (global-V09-04-24)
+- G4Pow: reduced vector for factorial from 512 to 170 (result should be
+  below DBL_MAX). Fixed computation of log(factorial).
+
 November 17, 2011 G.Folger (global-V09-04-23)
 - Added G4lrint(), G4lint(), G4rint() as global utility functions in
   templates.hh for generic use.
