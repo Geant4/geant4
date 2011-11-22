@@ -15,15 +15,6 @@
 ##########################
 # Set of the physic models
 #
-#/physic/addPhysics standard_opt3                       # Electromagnetic model
-#/physic/addPhysics elastic                             # Hadronic elastic model
-#/physic/addPhysics binary                              # Hadronic inelastic model
-#/physic/addPhysics local_ion_ion_inelastic             # Hadronic inelastic model for ions (local physic list)
-#/Physics/addPhysics radioactive_decay
-
-#
-# Or alternatively:
-#
 /Physics/addPhysics QGSP_BIC_EMY
 
 # Initialize geometry and physic 

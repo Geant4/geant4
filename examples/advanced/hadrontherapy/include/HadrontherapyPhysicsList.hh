@@ -1,4 +1,3 @@
-//
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -81,6 +80,8 @@ private:
   G4String                             emName;
   G4VPhysicsConstructor*               emPhysicsList;
   G4VPhysicsConstructor*               decPhysicsList;
+  G4VPhysicsConstructor*  raddecayList;
+
   std::vector<G4VPhysicsConstructor*>  hadronPhys;
 
   HadrontherapyStepMax* stepMaxProcess;
