@@ -16,7 +16,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-7th November 2011 Gunter Folger  (config-V09-04-17)
+22nd November 2011 Gabriele Cosmo (config-V09-04-18)
+- Archived Configure scripts.
+
+10th November 2011 Gunter Folger
+- Allow use of Qt libraries not installed as Framework in Darwin-g++.gmk.
+
+7th November 2011 Gabriele Cosmo (config-V09-04-17)
 - Abilited possibility to force building of internal 'expat' module also
   for Linux and Mac, through use of G4LIB_BUILD_EXPAT flag.
 

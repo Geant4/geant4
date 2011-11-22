@@ -112,12 +112,23 @@ ifeq ($(G4SYSTEM),Darwin-g++)
       QTLIBPATH  := -F$(QTHOME)/lib
     endif
   endif
+
+  QT_AS_FRAMEWORK := $(shell test -d $(QTLIBPATH)/QtCore.framework && echo yes)
+
   ifndef QTLIBS
-    QTLIBS    := $(QTLIBPATH) -framework QtCore -framework QtGui
+    ifdef QT_AS_FRAMEWORK
+       QTLIBS    := $(QTLIBPATH) -framework QtCore -framework QtGui
+    else
+       QTLIBS    := -L$(QTHOME)/lib -lQtCore -lQtGui
+    endif   
   endif
-  ifndef GLQTLIBS
-    GLQTLIBS    := $(QTLIBPATH) -framework QtCore -framework QtGui
-    GLQTLIBS    += -framework QtOpenGL
+  ifndef GLQTLIBS  
+    ifdef QT_AS_FRAMEWORK
+      GLQTLIBS    := $(QTLIBPATH) -framework QtCore -framework QtGui
+      GLQTLIBS    += -framework QtOpenGL
+    else
+      GLQTLIBS    := -L$(QTHOME)/lib -lQtCore -lQtGui -lQtOpenGL
+    endif   
   endif
 
 #------ Wt Setup block ------------------------------------------------------
