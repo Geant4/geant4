@@ -53,6 +53,7 @@ void G4DecayKineticTracks::Decay(G4KineticTrackVector *tracks) const {
     if (daughters) {
       tracks->insert(tracks->end(), daughters->begin(), daughters->end());
       delete track;		// Remove parent track
+      delete daughters;
       (*tracks)[i] = NULL;	// Flag parent's slot for removal
     }
   }
