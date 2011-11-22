@@ -439,24 +439,26 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double theParentMass)
     // no check on index of G4MaterialCutsCouple, simplified 
     // check on secondary energy Esec < 0.1 keV
     G4VAtomDeexcitation* atomDeex = G4LossTableManager::Instance()->AtomDeexcitation();
-    if (atomDeex && aZ > 5 && aZ < 100) {  // only applies to 5< Z <100 
-      if (eShell >= G4AtomicShells::GetNumberOfShells(aZ)){
+    if (atomDeex) {
+      if(atomDeex->IsFluoActive() && aZ > 5 && aZ < 100) {  // only applies to 5< Z <100 
+        if (eShell >= G4AtomicShells::GetNumberOfShells(aZ)){
     	  eShell = G4AtomicShells::GetNumberOfShells(aZ)-1;
-      }
-      G4AtomicShellEnumerator as = G4AtomicShellEnumerator(eShell);
-      const G4AtomicShell* shell = atomDeex->GetAtomicShell(aZ, as);    
-      std::vector<G4DynamicParticle*> armProducts;
-      const G4double deexLimit = 0.1*keV;
-      atomDeex->GenerateParticles(&armProducts, shell, aZ, deexLimit, deexLimit);
+        }
+	G4AtomicShellEnumerator as = G4AtomicShellEnumerator(eShell);
+	const G4AtomicShell* shell = atomDeex->GetAtomicShell(aZ, as);    
+	std::vector<G4DynamicParticle*> armProducts;
+	const G4double deexLimit = 0.1*keV;
+	atomDeex->GenerateParticles(&armProducts, shell, aZ, deexLimit, deexLimit);
       
-      size_t narm = armProducts.size();
-      if(narm > 0) {
-	G4ThreeVector bst = dynamicDaughter->Get4Momentum().boostVector();
-	for (size_t i = 0; i<narm; ++i) {
-          G4DynamicParticle* dp = armProducts[i];
-          G4LorentzVector lv = dp->Get4Momentum().boost(bst);
-          dp->Set4Momentum(lv);
-	  products->PushProducts(dp);
+	size_t narm = armProducts.size();
+	if(narm > 0) {
+	  G4ThreeVector bst = dynamicDaughter->Get4Momentum().boostVector();
+	  for (size_t i = 0; i<narm; ++i) {
+            G4DynamicParticle* dp = armProducts[i];
+            G4LorentzVector lv = dp->Get4Momentum().boost(bst);
+            dp->Set4Momentum(lv);
+	    products->PushProducts(dp);
+	  }
 	}
       }
     }

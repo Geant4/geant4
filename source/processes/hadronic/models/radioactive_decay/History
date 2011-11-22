@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20 November 2011  V.Ivanchenko(radioactive_decay-V09-04-13)
+---------------------------------
+-- G4NuclearDecayChannel.cc: add check if deexcitation is enabled
+
 20 November 2011  V.Ivanchenko(radioactive_decay-V09-04-12)
 ---------------------------------
 -- G4NuclearDecayChannel.cc:
