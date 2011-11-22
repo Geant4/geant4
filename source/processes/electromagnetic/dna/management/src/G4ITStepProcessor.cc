@@ -639,21 +639,21 @@ G4StepStatus G4ITStepProcessor::DoStepping()
     }
     else if(fTimeStep > 0.) // Bye, because PostStepIL can return 0 => time =0
     {
-
         if(fpITrack == 0)
         {
-            G4cerr << " !!! Track status : "<<  fpTrack->GetTrackStatus() << G4endl;
-            G4cerr << " !!! Particle Name : "<< fpTrack -> GetDefinition() -> GetParticleName() << G4endl;
-
             G4ExceptionDescription exceptionDescription ;
             exceptionDescription
-            << "No G4ITStepProcessor::fpITrack found";
+            << " !!! TrackID : "<<  fpTrack->GetTrackID() << G4endl
+            << " !!! Track status : "<<  fpTrack->GetTrackStatus() << G4endl
+            << " !!! Particle Name : "<< fpTrack -> GetDefinition() -> GetParticleName() << G4endl
+            << "No G4ITStepProcessor::fpITrack found" << G4endl;
+
             G4Exception("G4ITStepProcessor::DoStepping","ITStepProcessor002",
                         FatalErrorInArgument,exceptionDescription);
             return fUndefined; // to make coverity happy
         }
 
-        if(! fpITrack->GetTrackingInfo()->IsLeadingStep())
+        if(fpITrack->GetTrackingInfo()->IsLeadingStep() == false)
         {
             // In case the track has NOT the minimum step length
             // Given the final step time, the transportation

@@ -13,7 +13,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-18.11.2011  M.K                 tag emdna-V09-04-48
+21.11.2011  M.K                 tag emdna-V09-04-49
+            Correct a wrong condition in the step manager
+            Avoid the call of Green brownian bridge when
+            the time step is equal to zero (bug)
+            Give priority to G4Processes over reaction processes
+            when the time steps returned by the time stepper
+            and the processes are equal
+            Improve verbose
+
+21.11.2011  M.K                 tag emdna-V09-04-48
             Fix incoherent management of time and secondaries in management/
             Avoid memory leak related to the management of ITs
             Correct verbose in new models & process

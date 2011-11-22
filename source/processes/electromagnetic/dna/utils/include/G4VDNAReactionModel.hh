@@ -23,7 +23,9 @@ public :
     virtual G4double GetReactionRadius(const G4Molecule*, const G4Molecule*) = 0;
     virtual G4double GetReactionRadius(const int) = 0;
     virtual G4bool FindReaction(const G4Track&, const G4Track&,
-                                const G4double, G4double&, const G4bool) = 0;
+                                const G4double /*reactionRadius*/,
+                                G4double& /*separationDistance*/,  // To be calculated
+                                const G4bool /*hasReachedUserTimeLimit*/) = 0;
 
     inline void SetReactionTable(const G4DNAMolecularReactionTable*);
     inline const G4DNAMolecularReactionTable* GetReactionTable();

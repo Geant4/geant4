@@ -66,8 +66,9 @@ class G4DNAMolecularReaction : public G4VITReactionProcess
          */
         virtual G4bool TestReactibility(const G4Track&,
                                         const G4Track&,
-                                        const double stepTime,
-                                        const bool userStepTimeLimit) /*const*/ ;
+                                        const double currentStepTime,
+                                        const double previousStepTime,
+                                        bool userStepTimeLimit) /*const*/ ;
 
         /** Will generate the products of the two given tracks
          */

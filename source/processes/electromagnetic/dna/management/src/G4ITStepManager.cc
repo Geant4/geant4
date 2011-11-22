@@ -78,6 +78,10 @@ G4ITStepManager::G4ITStepManager()
     fpUserTimeSteps = 0;
 
     fTimeStep = DBL_MAX ;
+    fTSTimeStep = DBL_MAX;
+    fILTimeStep = DBL_MAX;
+    fPreviousStepTime = DBL_MAX;
+
     fComputeTimeStep = false;
     fComputeReaction = false;
     fTimeTolerance = 1 * picosecond;
@@ -189,6 +193,9 @@ void G4ITStepManager::Initialize()
 void G4ITStepManager::Reset()
 {
     fTimeStep = DBL_MAX ;
+    fTSTimeStep = DBL_MAX;
+    fILTimeStep = DBL_MAX;
+    fPreviousStepTime = DBL_MAX;
     fGlobalTime = -1 ;
     fInteractionStep = true ;
 
@@ -201,7 +208,11 @@ void G4ITStepManager::Process()
 
 #ifdef G4VERBOSE
     if(fVerbose)
+    {
         G4cout << "*** G4ITStepManager starts processing "<< G4endl;
+        if(fVerbose > 1)
+            G4cout  << "______________________________________________________________________" << G4endl;
+    }
 #endif
 
     fpTrackingManager->Initialize();
@@ -210,6 +221,7 @@ void G4ITStepManager::Process()
 
     // ___________________
     fRunning = true ;
+    fPreviousStepTime = DBL_MAX;
     if(fpUserReactionAction) fpUserReactionAction->StartProcessing();
 
     if(fDelayedList.empty() == false)     SynchronizeTracks() ;
@@ -220,7 +232,10 @@ void G4ITStepManager::Process()
 
 #ifdef G4VERBOSE
     if(fVerbose)
+    {
         G4cout << "*** G4ITStepManager ends at time : " << G4BestUnit(fGlobalTime,"Time") << G4endl;
+        G4cout  << "___________________________________" << G4endl;
+    }
 #endif
 
     // ___________________
@@ -372,6 +387,10 @@ void G4ITStepManager::DoProcess()
 void G4ITStepManager::Stepping()
 {
     fTimeStep = DBL_MAX ;
+
+    fTSTimeStep = DBL_MAX;
+    fILTimeStep = DBL_MAX;
+
     fInteractionStep = false ;
     fReachedUserTimeLimit = false;
 
@@ -379,65 +398,123 @@ void G4ITStepManager::Stepping()
 #ifdef G4VERBOSE
     if(fVerbose > 1)
     {
-        G4cout  << G4endl;
-        G4cout  //<< "\33[1;31m"
-                << "___________________________________" << G4endl;
+//        G4cout  << "\33[1;31m";
         G4cout  << "*** Start Of Step N°" << fNbSteps+1 << " ***" << G4endl;
         G4cout  << "Current Global time : " << G4BestUnit(fGlobalTime, "Time") <<G4endl;
-        G4cout  //<< "\33[0m"
-                << G4endl;
+//        G4cout  << "\33[0m";
     }
 #endif
 
+    if(fUsePreDefinedTimeSteps)
+    {
+        FindUserPreDefinedTimeStep();
 
-    FindUserPreDefinedTimeStep();
+#ifdef G4VERBOSE
+        if(fVerbose > 1)
+        {
+//            G4cout  << "\33[1;31m";
+            G4cout  << "*** At time : " << G4BestUnit(fGlobalTime, "Time")
+                    << " the chosen user time step is : " << G4BestUnit(fDefinedMinTimeStep, "Time")
+                    << " ***" << G4endl;
+//            G4cout  << "\33[0m";
+        }
+#endif
+    }
+    else fDefinedMinTimeStep = 0 ;
+
 
     if(fComputeTimeStep)
     {
-        CalculateMinStep() ; // => at least N (N = nb of tracks) loops
+        CalculateMinTimeStep() ; // => at least N (N = nb of tracks) loops
     }
     else
     {
-        fTimeStep = fDefinedMinTimeStep ;
+        fTSTimeStep = fDefinedMinTimeStep ;
     }
 
 #ifdef G4VERBOSE
     if(fVerbose > 1)
     {
-        G4cout  << G4endl;
 //        G4cout  << "\33[1;31m";
-        G4cout  << "*** Time stepper returned : " << G4BestUnit(fTimeStep, "Time") << " ***" << G4endl;
-        G4cout  //<< "\33[0m"
-                << G4endl;
+        G4cout  << "*** Time stepper returned : " << G4BestUnit(fTSTimeStep, "Time") << " ***" << G4endl;
+//        G4cout  << "\33[0m";
     }
 #endif
 
-    if(fTimeStep > 0)
+
+    // Call IL even if fTSTimeStep == 0
+    // if fILTimeStep == 0 give the priority to DoIt processes
+    ComputeInteractionLength(); // => at least N loops
+    // All process returns the physical step of interaction
+    // using the approximation : E = cste along the step
+    // Only the transportation calculates the corresponding
+    // time step
+
+#ifdef G4VERBOSE
+    if(fVerbose > 1)
     {
+//        G4cout  << "\33[1;31m";
+        G4cout  << "*** The minimum time returned by the processes is : " << G4BestUnit(fILTimeStep, "Time") << " ***" << G4endl;
+//        G4cout  << "\33[0m";
+    }
+#endif
 
-        ComputeInteractionLength(); // => at least N loops
-        // All process returns the physical step of interaction
-        // using the approximation : E = cste along the step
-        // Only the transportation calculates the corresponding
-        // time step
 
+    if(fILTimeStep <= fTSTimeStep) // Give the priority to the IL
+    {
+        fInteractionStep = true ;
+        fReactingTracks.clear(); // Give the priority to the IL
 
-        fReachedUserTimeLimit  = (fTimeStep <= fDefinedMinTimeStep)    ? true : false;
+        fTimeStep = fILTimeStep;
+    }
+    else
+    {
+        fInteractionStep = false ;
+        if(fLeadingTracks.empty() == false)
+        {
+            std::vector<G4Track*>::iterator fLeadingTracks_i = fLeadingTracks.begin();
 
-        if(fpUserReactionAction) fpUserReactionAction->TimeStepAction();
+            while(fLeadingTracks_i != fLeadingTracks.end())
+            {
+                G4Track* track = *fLeadingTracks_i;
+                if(track)
+                {
+                    G4IT* ITrack = GetIT(*fLeadingTracks_i) ;
+                    if(ITrack)
+                    {
+                        GetIT(*fLeadingTracks_i)->GetTrackingInfo()->SetLeadingStep(false);
+                    }
+                }
 
+                fLeadingTracks_i++;
+                continue ;
+            }
+
+            fLeadingTracks.clear();
+        }
+
+        fTimeStep = fTSTimeStep;
+    }
+
+    fReachedUserTimeLimit = ((fTimeStep <= fDefinedMinTimeStep) ||
+                             ((fTimeStep > fDefinedMinTimeStep) &&
+                              fabs(fTimeStep-fDefinedMinTimeStep) < fTimeTolerance)) ?
+                true : false;
+
+    if(fpUserReactionAction) fpUserReactionAction->TimeStepAction();
+
+    // if fTSTimeStep > 0 => needs to call the transportation process
+    // if fILTimeStep < fTSTimeStep => call DoIt processes
+    // if fILTimeStep == fTSTimeStep => give the priority to the DoIt processes
+    if(fTSTimeStep > 0 || fILTimeStep <= fTSTimeStep)
+    {
         DoIt();
-
-        fGlobalTime += fTimeStep ;
 
         MergeSecondariesWithMainList();
         KillTracks();
     }
-    else
-    {
-        fReachedUserTimeLimit = (fTimeStep == fDefinedMinTimeStep)    ?  true : false;
-        if(fpUserReactionAction) fpUserReactionAction->TimeStepAction();
-    }
+
+    fGlobalTime += fTimeStep ;
 
     ComputeTrackReaction();
 
@@ -446,6 +523,8 @@ void G4ITStepManager::Stepping()
     KillTracks();
 
     fNbSteps++;
+
+    fPreviousStepTime = fTimeStep;
 
     // End of step
 #ifdef G4VERBOSE
@@ -458,9 +537,8 @@ void G4ITStepManager::Stepping()
                 << G4BestUnit(fTimeStep,"Time")<<G4endl;
         if(fReachedUserTimeLimit) G4cout << "It has also reached the user time limit" << G4endl;
         G4cout  << "Next global time : " << G4BestUnit(fGlobalTime,"Time") << G4endl;
-        G4cout  << "___________________________________"
-//                << "\33[0m"
-                << G4endl;
+        G4cout  << "______________________________________________________________________"<< G4endl;
+//        G4cout  << "\33[0m" ;
     }
 #endif
 
@@ -469,70 +547,53 @@ void G4ITStepManager::Stepping()
 
 void G4ITStepManager::FindUserPreDefinedTimeStep()
 {
-    if(fUsePreDefinedTimeSteps)
+
+    if(fpUserTimeSteps == 0)
     {
-        if(fpUserTimeSteps == 0)
-        {
-            G4ExceptionDescription exceptionDescription ;
-            exceptionDescription << "You are asking to use user defined steps but you did not give any.";
-            G4Exception("G4ITStepManager::FindUserPreDefinedTimeStep","ITStepManager004",
-                        FatalErrorInArgument,exceptionDescription);
-            return ; // makes coverity happy
-        }
-        map<double, double>::iterator fpUserTimeSteps_i   = fpUserTimeSteps->upper_bound(fGlobalTime) ;
-        map<double, double>::iterator fpUserTimeSteps_low = fpUserTimeSteps->lower_bound(fGlobalTime) ;
-
-        // DEBUG
-        //        G4cout << "fGlobalTime : " << G4BestUnit(fGlobalTime,"Time") << G4endl;
-        //        G4cout << "fpUserTimeSteps_i : "
-        //        <<"<"<<G4BestUnit(fpUserTimeSteps_i->first,"Time")<<", "<< G4BestUnit(fpUserTimeSteps_i->second,"Time")<<">"
-        //        << "\t fpUserTimeSteps_low : "
-        //        <<"<"<<G4BestUnit(fpUserTimeSteps_low->first,"Time")<<", "<< G4BestUnit(fpUserTimeSteps_low->second,"Time")<<">"
-        //        << G4endl;
-
-
-        if(fpUserTimeSteps_i == fpUserTimeSteps->end())
-        {
-            fpUserTimeSteps_i --;
-        }
-        else if(fabs(fGlobalTime - fpUserTimeSteps_low->first) < fTimeTolerance )
-        {
-            // Case : fGlobalTime = X picosecond
-            // and fpUserTimeSteps_low->first = X picosecond
-            // but the precision is not good enough
-            fpUserTimeSteps_i = fpUserTimeSteps_low;
-        }
-        else if(fpUserTimeSteps_i == fpUserTimeSteps_low)
-        {
-            // "Normal" cases
-            fpUserTimeSteps_i--;
-        }
-        else
-        {
-            fpUserTimeSteps_i = fpUserTimeSteps_low;
-            //fDefinedMinTimeStep = fpUserTimeSteps_low->second ;
-        }
-
-        fDefinedMinTimeStep = fpUserTimeSteps_i->second ;
-
-    #ifdef G4VERBOSE
-        if(fVerbose > 1)
-        {
-            G4cout  << G4endl;
-//            G4cout  << "\33[1;31m";
-            G4cout  << "*** A time : " << G4BestUnit(fGlobalTime, "Time")
-                    << " the chosen user time step is : " << G4BestUnit(fDefinedMinTimeStep, "Time")
-                    << " ***" << G4endl;
-            G4cout  // << "\33[0m"
-                    << G4endl;
-        }
-    #endif
+        G4ExceptionDescription exceptionDescription ;
+        exceptionDescription << "You are asking to use user defined steps but you did not give any.";
+        G4Exception("G4ITStepManager::FindUserPreDefinedTimeStep","ITStepManager004",
+                    FatalErrorInArgument,exceptionDescription);
+        return ; // makes coverity happy
     }
-    else fDefinedMinTimeStep = 0 ;
+    map<double, double>::iterator fpUserTimeSteps_i   = fpUserTimeSteps->upper_bound(fGlobalTime) ;
+    map<double, double>::iterator fpUserTimeSteps_low = fpUserTimeSteps->lower_bound(fGlobalTime) ;
+
+    // DEBUG
+    //        G4cout << "fGlobalTime : " << G4BestUnit(fGlobalTime,"Time") << G4endl;
+    //        G4cout << "fpUserTimeSteps_i : "
+    //        <<"<"<<G4BestUnit(fpUserTimeSteps_i->first,"Time")<<", "<< G4BestUnit(fpUserTimeSteps_i->second,"Time")<<">"
+    //        << "\t fpUserTimeSteps_low : "
+    //        <<"<"<<G4BestUnit(fpUserTimeSteps_low->first,"Time")<<", "<< G4BestUnit(fpUserTimeSteps_low->second,"Time")<<">"
+    //        << G4endl;
+
+
+    if(fpUserTimeSteps_i == fpUserTimeSteps->end())
+    {
+        fpUserTimeSteps_i --;
+    }
+    else if(fabs(fGlobalTime - fpUserTimeSteps_low->first) < fTimeTolerance )
+    {
+        // Case : fGlobalTime = X picosecond
+        // and fpUserTimeSteps_low->first = X picosecond
+        // but the precision is not good enough
+        fpUserTimeSteps_i = fpUserTimeSteps_low;
+    }
+    else if(fpUserTimeSteps_i == fpUserTimeSteps_low)
+    {
+        // "Normal" cases
+        fpUserTimeSteps_i--;
+    }
+    else
+    {
+        fpUserTimeSteps_i = fpUserTimeSteps_low;
+    }
+
+    fDefinedMinTimeStep = fpUserTimeSteps_i->second ;
 }
 //_________________________________________________________________________
 
-void G4ITStepManager::CalculateMinStep()
+void G4ITStepManager::CalculateMinTimeStep()
 {
 
     if(fpMasterModelProcessor == 0)
@@ -569,6 +630,7 @@ void G4ITStepManager::CalculateMinStep()
             continue ;
         }
         ExtractTimeStepperData(fpModelProcessor) ;
+
         fpModelProcessor->CalculateTimeStep(track, fDefinedMinTimeStep);
     }
 
@@ -587,9 +649,9 @@ void G4ITStepManager::ExtractTimeStepperData(G4ITModelProcessor* MP)
 
     const std::vector<std::vector<G4VITModel*> >* model = MP->GetCurrentModel();
 
-    for(int i = 0 ; i < (int) model->size() ; i++)
+    for(unsigned i = 0 ; i < model->size() ; i++)
     {
-        for(int j = 0 ; j < (int) (*model)[i].size() ; j++)
+        for(unsigned j = 0 ; j < (*model)[i].size() ; j++)
         {
             G4VITModel* mod = (*model)[i][j];
 
@@ -603,7 +665,7 @@ void G4ITStepManager::ExtractTimeStepperData(G4ITModelProcessor* MP)
             G4double sampledMinTimeStep (stepper -> GetSampledMinTimeStep()) ;
             G4TrackVectorHandle reactants (stepper -> GetReactants());
 
-            if(sampledMinTimeStep < fTimeStep)
+            if(sampledMinTimeStep < fTSTimeStep)
             {
                 /*
                 // DEBUG SPECIAL CASE
@@ -617,7 +679,7 @@ void G4ITStepManager::ExtractTimeStepperData(G4ITModelProcessor* MP)
                 }
 */
 
-                fTimeStep = sampledMinTimeStep ;
+                fTSTimeStep = sampledMinTimeStep ;
                 fReactingTracks.clear();
                 if(bool(reactants) )
                 {
@@ -625,7 +687,7 @@ void G4ITStepManager::ExtractTimeStepperData(G4ITModelProcessor* MP)
                     stepper -> ResetReactants();
                 }
             }
-            else if(fTimeStep == sampledMinTimeStep )
+            else if(fTSTimeStep == sampledMinTimeStep )
             {
                 /*
                 // DEBUG SPECIAL CASE
@@ -683,7 +745,6 @@ void G4ITStepManager::ExtractILData(G4ITStepProcessor* SP)
     }
     if(track->GetTrackStatus() == fStopAndKill)
     {
-
         fpMainList->pop(track);
         EndTracking(track);
         return ;
@@ -694,20 +755,16 @@ void G4ITStepManager::ExtractILData(G4ITStepProcessor* SP)
         SP->CleanProcessor();
         return;
     }
-    else if( SP -> GetInteractionTime() < fTimeStep)
+    else if( SP -> GetInteractionTime() < fILTimeStep)
     {
-        if(fInteractionStep == false)
-        {
-            fInteractionStep = true ;
-        }
-        else
+        if(fLeadingTracks.empty() == false)
         {
             std::vector<G4Track*>::iterator fLeadingTracks_i = fLeadingTracks.begin();
 
             while(fLeadingTracks_i != fLeadingTracks.end())
             {
                 G4Track* track = *fLeadingTracks_i;
-                if(!track)
+                if(track)
                 {
                     G4IT* ITrack = GetIT(*fLeadingTracks_i) ;
                     if(ITrack)
@@ -727,17 +784,13 @@ void G4ITStepManager::ExtractILData(G4ITStepProcessor* SP)
         //               << SP -> GetInteractionTime() << " against fTimeStep : "
         //               << fTimeStep << " the trackID is : " << track->GetTrackID() << G4endl;
 
-        fTimeStep =  SP -> GetInteractionTime() ;
+        fILTimeStep =  SP -> GetInteractionTime() ;
 
         GetIT(track)->GetTrackingInfo()->SetLeadingStep(true);
         fLeadingTracks.push_back(track);
     }
-    else if(fTimeStep == SP -> GetInteractionTime() )
+    else if(fILTimeStep == SP -> GetInteractionTime() )
     {
-        if(fInteractionStep == false)
-        {
-            fInteractionStep = true ;
-        }
 
         //        G4cout << "Will set leading step to true for time  :"
         //               << SP -> GetInteractionTime() << " against fTimeStep : "
@@ -775,6 +828,7 @@ void G4ITStepManager::DoIt()
             G4Exception("G4ITStepManager::DoIt","ITStepManager009",
                         FatalErrorInArgument,exceptionDescription);
         }
+
         fpStepProcessor -> Stepping(track, fTimeStep) ;
 
         ExtractDoItData(fpStepProcessor) ;
@@ -863,6 +917,7 @@ void G4ITStepManager::ComputeTrackReaction()
     {
         fpModelProcessor->FindReaction(&fReactingTracks,
                                        fTimeStep,
+                                       fPreviousStepTime,
                                        fReachedUserTimeLimit);
         // TODO
         // A ne faire uniquement si le temps choisis est celui calculé par le time stepper

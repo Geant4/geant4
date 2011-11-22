@@ -307,31 +307,13 @@ G4double G4DNABrownianTransportation::AlongStepGetPhysicalInteractionLength(
         // The safety at the initial point has been re-calculated:
         //
         currentSafety = newSafety ;
-
-
-        if(currentSafety <= currentMinimumStep)
-        {
-            // Determiner temps de parcours à partir de la distance calculée
-            // => méthode inverse : d_99
-            G4double diffusionCoefficient = GetMolecule(track)
-                    ->GetDiffusionCoefficient();
-            // TODO
-            //    G4double diffusionCoefficient = GetITBrownianObject(track)
-            //                                    ->GetDiffusionCoefficient(track.GetMaterial());
-
-            // 99 % of the space step distribution is lower than
-            // d_99 = 8 * sqrt(D*t)
-            // where t is the corresponding time step
-            // so by inversion :
-            State(theInteractionTimeLeft)     = (currentSafety*currentSafety)/(64 * diffusionCoefficient);
-        }
     }
 
     if(currentSafety <= currentMinimumStep)
     {
         geometryStepLength = currentSafety;
 
-        // Remember brownian motion # straight trajectories
+        // Remember : brownian motion # straight trajectories
         State(fGeometryLimitedStep) = true ;
         //        State(endpointDistance) = currentSafety ;
 
@@ -352,6 +334,7 @@ G4double G4DNABrownianTransportation::AlongStepGetPhysicalInteractionLength(
         // so by inversion :
         State(theInteractionTimeLeft)     = (currentSafety*currentSafety)/(64 * diffusionCoefficient);
     }
+    /*
     else
     {
         //        // TODO !!!
@@ -364,7 +347,7 @@ G4double G4DNABrownianTransportation::AlongStepGetPhysicalInteractionLength(
         //        // However, at present time, in DNA no other processes are used in combinaison
         //        // with the brownian motion, so this is not a problem, because the calculated
         //        // position will not be used
-    }
+    }*/
 
     // Momentum direction, energy and polarisation are unchanged by transport
     //

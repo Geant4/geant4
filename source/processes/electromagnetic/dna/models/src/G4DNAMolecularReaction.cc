@@ -85,8 +85,9 @@ G4DNAMolecularReaction& G4DNAMolecularReaction::operator=(const G4DNAMolecularRe
 
 G4bool G4DNAMolecularReaction::TestReactibility(const G4Track& trackA,
                                                 const G4Track& trackB,
-                                                const double /*stepTime*/,
-                                                const bool userStepTimeLimit) /*const*/
+                                                const double currentStepTime,
+                                                const double /*previousStepTime*/,
+                                                bool userStepTimeLimit) /*const*/
 {
     G4Molecule* moleculeA = GetMolecule(trackA);
     G4Molecule* moleculeB = GetMolecule(trackB);
@@ -112,7 +113,12 @@ G4bool G4DNAMolecularReaction::TestReactibility(const G4Track& trackA,
 
     fDistance = -1 ; // separation distance
 
-    G4bool output = (fReactionModel->FindReaction(trackA, trackB, fReactionRadius, fDistance, userStepTimeLimit));
+    if(currentStepTime == 0.)
+    {
+        userStepTimeLimit = false;
+    }
+
+    G4bool output = fReactionModel->FindReaction(trackA, trackB, fReactionRadius,fDistance, userStepTimeLimit);
 
 #ifdef G4VERBOSE
     //    DEBUG

@@ -188,7 +188,8 @@ void G4ITModelProcessor::DoCalculateStep()
 
 //______________________________________________________________________________
 void G4ITModelProcessor::FindReaction(std::map<G4Track*, G4TrackVectorHandle>* tracks,
-                                      const double stepTime,
+                                      const double currentStepTime,
+                                      const double previousStepTime,
                                       const bool reachedUserStepTimeLimit)
 {
     // DEBUG
@@ -205,6 +206,7 @@ void G4ITModelProcessor::FindReaction(std::map<G4Track*, G4TrackVectorHandle>* t
         G4Track* trackA = tracks_i->first;
 
         if(trackA == 0)         continue;
+
         std::map<const G4Track*, G4bool>::iterator it_hasReacted = fHasReacted.find(trackA);
         if(it_hasReacted != fHasReacted.end()) continue;
         if(trackA->GetTrackStatus() == fStopAndKill) continue;
@@ -258,7 +260,9 @@ void G4ITModelProcessor::FindReaction(std::map<G4Track*, G4TrackVectorHandle>* t
                     process = model[ITypeB]->GetReactionProcess();
             }
 
-            if(process && process -> TestReactibility(*trackA, *trackB, stepTime, reachedUserStepTimeLimit))
+            if(process && process -> TestReactibility(*trackA, *trackB,
+                                                      currentStepTime, previousStepTime,
+                                                      reachedUserStepTimeLimit))
             {
                 changes = process->MakeReaction(*trackA, *trackB);
             }

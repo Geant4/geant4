@@ -93,6 +93,7 @@ public :
     //____________________________________________________________
     // Reaction process part
     void FindReaction(std::map<G4Track*, G4TrackVectorHandle>*,
+                      const double currentStepTime,
                       const double previousStepTime,
                       const bool reachedUserStepTimeLimit) ;
 

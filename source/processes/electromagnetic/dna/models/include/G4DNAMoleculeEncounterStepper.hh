@@ -44,6 +44,8 @@
 class G4VDNAReactionModel;
 class G4DNAMolecularReactionTable;
 
+class G4Molecule;
+
 class G4DNAMoleculeEncounterStepper : public G4VITTimeStepper
 {
 public:
@@ -63,6 +65,12 @@ public:
     // All details = 2
 
 private:
+
+    void RetrieveResults(const G4Track&, const G4Molecule*, const G4Molecule*, const G4double /*reactionRange*/,
+                         G4KDTreeResultHandle&, G4bool iterate = true);
+
+    G4bool fHasAlreadyReachedNullTime;
+
     G4DNAMoleculeEncounterStepper& operator=(const G4DNAMoleculeEncounterStepper&);
     const G4DNAMolecularReactionTable*& fMolecularReactionTable ;
     G4VDNAReactionModel* fReactionModel;

@@ -81,8 +81,9 @@ public:
 
     virtual G4bool TestReactibility(const G4Track&,
                                     const G4Track&,
-                                    const double stepTime,
-                                    const bool reachedUserStepTimeLimit) = 0;
+                                    const double /*currentStepTime*/,
+                                    const double /*previousStepTime*/,
+                                    bool /*reachedUserStepTimeLimit*/) = 0;
 
     virtual G4ITReactionChange* MakeReaction(const G4Track&, const G4Track&) = 0;
 

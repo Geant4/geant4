@@ -77,22 +77,23 @@ public :
     inline void SetTimeTolerance(double);
     // Two tracks below the time tolerance are supposed to be
     // in the same time slice
-    inline double GetTimeTolerance();
+    inline double GetTimeTolerance() const;
 
     inline G4ITModelHandler* GetModelHandler();
     inline void     SetTimeSteps(std::map<double,double>*);
-    inline G4int    GetNbSteps();
-    inline G4double GetEndTime();
-    inline G4double GetTimeStep();
-    inline G4double GetGlobalTime();
+    inline G4int    GetNbSteps() const;
+    inline G4double GetEndTime() const;
+    inline G4double GetTimeStep() const;
+    inline G4double GetPreviousTimeStep() const;
+    inline G4double GetGlobalTime() const;
     inline void     SetUserAction(G4UserReactionAction*);
-    inline G4UserReactionAction* GetUserITAction();
+    inline G4UserReactionAction* GetUserITAction() const;
 
     inline void SetVerbose(int);
     // 1 : Reaction information
     // 2 : (1) + step information
     // 3 : (2) + trackList processing info + push track info
-    inline int GetVerbose();
+    inline int GetVerbose() const;
 
 protected:
 
@@ -101,7 +102,7 @@ protected:
     void Stepping();
 
     void FindUserPreDefinedTimeStep();
-    void CalculateMinStep() ;
+    void CalculateMinTimeStep() ;
     void ComputeInteractionLength();
     void DoIt();
     void ComputeTrackReaction();
@@ -138,12 +139,16 @@ private:
     double fTmpGlobalTime ;
     double fEndTime ;       // fEndTime : stores the biggest global time steps here (for synchronizing tracks)
     double fTmpEndTime ;    // fTmpEndTime : Stores the biggest end time here (for synchronizing tracks)
+    double fPreviousStepTime;
 
     // Flags
     bool fComputeTimeStep;
     bool fComputeReaction;
 
     double fTimeStep ; // The selected minimum time step
+
+    double fTSTimeStep; // Time calculated by the time stepper in CalculateMinTimeStep()
+    double fILTimeStep; // Time calculated by the interaction length methods in ComputeInteractionLength()
 
     // User steps
     bool fUsePreDefinedTimeSteps ;
@@ -186,23 +191,23 @@ inline void G4ITStepManager::SetTimeSteps(std::map<double,double>* steps)
     fpUserTimeSteps = steps ;
 }
 
-inline G4int G4ITStepManager::GetNbSteps()
+inline G4int G4ITStepManager::GetNbSteps() const
 {
     return fNbSteps;
 }
 
-inline G4double G4ITStepManager::GetEndTime()
+inline G4double G4ITStepManager::GetEndTime() const
 {
     return fEndTime;
 } 
 
-inline G4double G4ITStepManager::GetTimeStep()
+inline G4double G4ITStepManager::GetTimeStep() const
 {
     return fTimeStep ;
 }
 
 
-inline G4double G4ITStepManager::GetGlobalTime()
+inline G4double G4ITStepManager::GetGlobalTime() const
 {
     return fGlobalTime ;
 }
@@ -212,7 +217,7 @@ inline void G4ITStepManager::SetUserAction(G4UserReactionAction* userITAction)
     fpUserReactionAction = userITAction;
 }
 
-inline G4UserReactionAction* G4ITStepManager::GetUserITAction()
+inline G4UserReactionAction* G4ITStepManager::GetUserITAction() const
 {
     return fpUserReactionAction;
 }
@@ -222,7 +227,7 @@ inline void G4ITStepManager::SetVerbose(int verbose)
     fVerbose = verbose;
 }
 
-inline int G4ITStepManager::GetVerbose()
+inline int G4ITStepManager::GetVerbose() const
 {
     return fVerbose ;
 }
@@ -232,9 +237,14 @@ inline void G4ITStepManager::SetTimeTolerance(double time)
     fTimeTolerance = time;
 }
 
-inline double G4ITStepManager::GetTimeTolerance()
+inline double G4ITStepManager::GetTimeTolerance() const
 {
     return fTimeTolerance;
+}
+
+inline G4double G4ITStepManager::GetPreviousTimeStep() const
+{
+    return fPreviousStepTime;
 }
 
 #endif
