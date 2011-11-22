@@ -15,6 +15,9 @@ and keep track of all category-tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22.11.2011    C.Andenna, G.A.P.Cirrone, medical_linac-V09-04-02
+	      - Warnings removed
+
 04.11.2011    F.Romano, tag medical_linac-V09-04-01
              - Migration to new G4Exception scheme
 
