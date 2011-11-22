@@ -1,0 +1,14 @@
+#!/bin/sh
+
+input_dir=`pwd`
+
+for x in `ls -1 *.in | awk -F. '{ print $1 }'`
+do
+  echo $x;
+  
+  [ ! -d $G4WORKDIR/$x.dir ] && mkdir $G4WORKDIR/$x.dir;
+  (cd $G4WORKDIR/$x.dir; rm *;\
+    $G4BIN/Linux-g++/BinaryLightIonReaction < $input_dir/$x.in >& run.log; \
+    grep -q "Light-ION-SUCESS" run.log && rm core.*
+  )
+done
