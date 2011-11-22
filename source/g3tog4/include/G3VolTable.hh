@@ -83,6 +83,6 @@ private:
   G4int _NG3Pos;
 };
 
-extern DLL_API G3VolTable G3Vol;
+extern G3G4DLL_API G3VolTable G3Vol;
 
 #endif

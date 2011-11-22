@@ -35,11 +35,10 @@
 #include "G3toG4Defs.hh"
 #include "globals.hh"
 
-extern DLL_API char gSeparator; 
-
-extern DLL_API G4int Ipar[1000];
-extern DLL_API G4double Rpar[1000];
-extern DLL_API G4String Spar[1000];
+extern G3G4DLL_API char gSeparator;
+extern G3G4DLL_API G4int Ipar[1000];
+extern G3G4DLL_API G4double Rpar[1000];
+extern G3G4DLL_API G4String Spar[1000];
 
 void G3fillParams(G4String *tokens, const char *ptypes);
 // G4bool G3NegVolPars(G4double pars[], G4int* np, G4String vol, G4String moth,

@@ -69,6 +69,6 @@ class G3RotTable
     G3RotMatrixVector*  fRotVector;
 };
 
-extern DLL_API G3RotTable G3Rot;
+extern G3G4DLL_API G3RotTable G3Rot;
 
 #endif

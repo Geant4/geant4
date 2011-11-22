@@ -68,6 +68,6 @@ class G3MatTable
     G3MaterialVector*  fMatVector;
 };
 
-extern DLL_API G3MatTable G3Mat;
+extern G3G4DLL_API G3MatTable G3Mat;
 
 #endif

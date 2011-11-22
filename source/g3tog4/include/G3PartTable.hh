@@ -59,6 +59,6 @@ private:
   void HashID(G4int partid, G4String& _HID);
 };
 
-extern DLL_API G3PartTable G3Part;
+extern G3G4DLL_API G3PartTable G3Part;
 
 #endif

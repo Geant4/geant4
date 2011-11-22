@@ -75,5 +75,5 @@ class G3MedTable
     G3MediumVector*  fMedVector;
 };
 
-extern DLL_API G3MedTable G3Med;
+extern G3G4DLL_API G3MedTable G3Med;
 #endif

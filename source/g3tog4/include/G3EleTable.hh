@@ -68,5 +68,5 @@ private:
 
 };
 
-extern DLL_API G3EleTable G3Ele;
+extern G3G4DLL_API G3EleTable G3Ele;
 #endif

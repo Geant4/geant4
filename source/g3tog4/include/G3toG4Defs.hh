@@ -8,15 +8,15 @@
   //
   #if defined G4LIB_BUILD_DLL
     #if defined G3TOG4_EXPORT
-      #define DLL_API __declspec( dllexport )
+      #define G3G4DLL_API __declspec( dllexport )
     #else
-      #define DLL_API __declspec( dllimport )
+      #define G3G4DLL_API __declspec( dllimport )
     #endif
   #else
-    #define DLL_API
+    #define G3G4DLL_API
   #endif
 #else
-  #define DLL_API
+  #define G3G4DLL_API
 #endif
 
 #endif /* G3TOG4_DEFS_H */

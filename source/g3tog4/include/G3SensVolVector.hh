@@ -41,5 +41,5 @@
 
 typedef std::vector<G4LogicalVolume*> G3SensVolVector;
 
-extern DLL_API G3SensVolVector G3SensVol;
+extern G3G4DLL_API G3SensVolVector G3SensVol;
 #endif

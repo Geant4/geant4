@@ -51,5 +51,5 @@ public:
   void PrintAll();
 };
 
-extern DLL_API G3DetTable G3Det;
+extern G3G4DLL_API G3DetTable G3Det;
 #endif
