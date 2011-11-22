@@ -64,10 +64,7 @@ G4GeneratorPrecompoundInterface::G4GeneratorPrecompoundInterface(G4VPreCompoundM
 }
          
 G4GeneratorPrecompoundInterface::~G4GeneratorPrecompoundInterface()
-{
-   delete theDeExcitation->GetExcitationHandler();
-   delete theDeExcitation;
-}
+{}
 
 
   // choose to calculate excitation energy from energy balance
