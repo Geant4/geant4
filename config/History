@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22nd November 2011 Gabriele Cosmo (config-V09-04-19)
+- Corrected path in Darwin-g++ setup introduced in previous tag.
+
 22nd November 2011 Gabriele Cosmo (config-V09-04-18)
 - Archived Configure scripts.
 

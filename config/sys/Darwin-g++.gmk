@@ -113,7 +113,7 @@ ifeq ($(G4SYSTEM),Darwin-g++)
     endif
   endif
 
-  QT_AS_FRAMEWORK := $(shell test -d $(QTLIBPATH)/QtCore.framework && echo yes)
+  QT_AS_FRAMEWORK := $(shell test -d $(QTHOME)/lib/QtCore.framework && echo yes)
 
   ifndef QTLIBS
     ifdef QT_AS_FRAMEWORK
