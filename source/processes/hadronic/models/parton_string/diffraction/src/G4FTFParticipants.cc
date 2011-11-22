@@ -57,6 +57,8 @@ G4FTFParticipants::G4FTFParticipants()
 
 G4FTFParticipants::G4FTFParticipants(const G4FTFParticipants &): G4VParticipants()
 {
+	G4Exception("G4FTFParticipants::G4FTFParticipants()","HAD_FTF_001",
+	        FatalException," Must not use copy ctor()");
 }
 
 
@@ -69,6 +71,8 @@ G4FTFParticipants::~G4FTFParticipants()
 
 void G4FTFParticipants::SetProjectileNucleus(G4V3DNucleus * aNucleus)
 {
+  if (theProjectileNucleus) delete theProjectileNucleus;
+  
   theProjectileNucleus = aNucleus;
 }
 

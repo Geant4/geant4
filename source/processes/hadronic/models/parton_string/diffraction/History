@@ -15,6 +15,9 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+22-November 2011, V. Uzhinsky& G.Folger (hadr-string-diff-V09-04-10)
+   Fix memory leak in G4FTFParticipants.cc
+
 1 November 2011, V. Uzhinsky (hadr-string-diff-V09-04-09)
    AjustNucleusFor Annih was closed in Get String. It is need to think 
    a little bit.
