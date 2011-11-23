@@ -16,9 +16,17 @@ $Id$
 
   - analysis
     - ExG4HbookManager - the analysis manager class for HBOOK
+      As this class requires CERNLIB libraries, its compilation
+      is optional. To build it, the following environment variables
+      must be defined:
+      G4_USE_HBOOK = 1
+      CERNLIB = path to the CERNLIB installation
   
   - detectorConstruction
     - two simple detector construction classes with a messenger
+  
+  - physicsList
+    - ExG4PhysicsList00 - physics list with geantino and chargedgeantino only
   
   - primaryGenerator
     - two simple primary generator classes (with G4ParticleGun and

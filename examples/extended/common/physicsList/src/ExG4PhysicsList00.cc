@@ -25,42 +25,45 @@
 //
 // $Id$
 //
-/// \file ExG4PrimaryGeneratorAction01.hh
-/// \brief Definition of the ExG4PrimaryGeneratorAction01 class
+/// \file ExG4PhysicsList00.cc
+/// \brief Implementation of the ExG4PhysicsList00 class
 
-#ifndef ExG4PrimaryGeneratorAction01_h
-#define ExG4PrimaryGeneratorAction01_h 1
+#include "ExG4PhysicsList00.hh"
+#include "G4Geantino.hh"
+#include "G4ChargedGeantino.hh"
 
-#include "G4VUserPrimaryGeneratorAction.hh"
-#include "G4ThreeVector.hh"
-#include "globals.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4ParticleGun;
-class G4Event;
 
-/// \ingroup primary_generator
-/// \brief The primary generator class with particle gun
-///
-/// \author I. Hrivnacova; IPN Orsay
+ExG4PhysicsList00::ExG4PhysicsList00()
+  : G4VUserPhysicsList()
+{}
 
-class ExG4PrimaryGeneratorAction01 : public G4VUserPrimaryGeneratorAction
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+ExG4PhysicsList00::~ExG4PhysicsList00()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ExG4PhysicsList00::ConstructParticle()
 {
-  public:
-    ExG4PrimaryGeneratorAction01(
-      const G4String& particleName = "geantino",
-      G4double energy = 1.*MeV,
-      G4ThreeVector position= G4ThreeVector(0,0,0),
-      G4ThreeVector momentumDirection = G4ThreeVector(0,0,1));    
-    ~ExG4PrimaryGeneratorAction01();
+  // In this method, static member functions should be called
+  // for all particles which you want to use.
+  // This ensures that objects of these particle types will be
+  // created in the program. 
 
-    // methods
-    virtual void GeneratePrimaries(G4Event*);
+  G4Geantino::GeantinoDefinition();
+  G4ChargedGeantino::ChargedGeantinoDefinition();
+}
 
-  private:
-    // data members
-    G4ParticleGun*  fParticleGun; //pointer a to G4 service class
-};
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+void ExG4PhysicsList00::ConstructProcess()
+{
+  // Define transportation process
 
+  AddTransportation();
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

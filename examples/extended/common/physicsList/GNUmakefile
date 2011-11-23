@@ -1,9 +1,9 @@
-# $Id: GNUmakefile,v 1.4 2010-11-08 10:38:44 maire Exp $
+# $Id: GNUmakefile,v 1.1 1999-01-07 16:05:40 gunter Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
 
-name := testAnalysis
+name := testPhysicsList
 G4TARGET := $(name)
 G4EXLIB := true
 
@@ -12,16 +12,6 @@ ifndef G4INSTALL
 endif
 
 .PHONY: all
-all: hbook lib bin
-
-# HBOOK support
-include GNUmakefile.tools_hbook
+all: lib bin
 
 include $(G4INSTALL)/config/binmake.gmk
-
-visclean:
-	rm -f g4*.prim g4*.eps g4*.wrl
-	rm -f .DAWN_*
-
-histclean:
-	rm ${G4WORKDIR}/tmp/${G4SYSTEM}/${G4TARGET}/HistoManager.o

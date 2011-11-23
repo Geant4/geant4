@@ -24,43 +24,34 @@
 // ********************************************************************
 //
 // $Id$
-//
-/// \file ExG4PrimaryGeneratorAction01.hh
-/// \brief Definition of the ExG4PrimaryGeneratorAction01 class
+// 
+/// \file ExG4PhysicsList00.hh
+/// \brief Definition of the ExG4PhysicsList00 class
 
-#ifndef ExG4PrimaryGeneratorAction01_h
-#define ExG4PrimaryGeneratorAction01_h 1
+#ifndef ExG4PhysicsList00_h
+#define ExG4PhysicsList00_h 1
 
-#include "G4VUserPrimaryGeneratorAction.hh"
-#include "G4ThreeVector.hh"
-#include "globals.hh"
+#include "G4VUserPhysicsList.hh"
 
-class G4ParticleGun;
-class G4Event;
+/// Physics list with geantino and charged geantino only
 
-/// \ingroup primary_generator
-/// \brief The primary generator class with particle gun
-///
-/// \author I. Hrivnacova; IPN Orsay
-
-class ExG4PrimaryGeneratorAction01 : public G4VUserPrimaryGeneratorAction
+class ExG4PhysicsList00: public G4VUserPhysicsList
 {
   public:
-    ExG4PrimaryGeneratorAction01(
-      const G4String& particleName = "geantino",
-      G4double energy = 1.*MeV,
-      G4ThreeVector position= G4ThreeVector(0,0,0),
-      G4ThreeVector momentumDirection = G4ThreeVector(0,0,1));    
-    ~ExG4PrimaryGeneratorAction01();
+    ExG4PhysicsList00();
+    ~ExG4PhysicsList00();
 
-    // methods
-    virtual void GeneratePrimaries(G4Event*);
-
-  private:
-    // data members
-    G4ParticleGun*  fParticleGun; //pointer a to G4 service class
+  protected:
+    // Construct particle and physics process
+    void ConstructParticle();
+    void ConstructProcess();
 };
 
 #endif
+
+
+
+
+
 
 
