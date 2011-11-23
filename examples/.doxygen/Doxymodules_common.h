@@ -33,6 +33,16 @@
 
 /** @} */
 
+/** @defgroup extended_common_physicsList physicsList
+ *  The primary generator classes of generic use in examples 
+ *  @ingroup extended_common
+ *  @{
+ */
+
+  class ExG4PhysicsList00{};
+
+/** @} */
+
 /** @defgroup extended_common_primaryGenerator primaryGenerator
  *  The primary generator classes of generic use in examples 
  *  @ingroup extended_common
