@@ -320,8 +320,6 @@ ElconeRead(const xercesc::DOMElement* const elconeElement)
       if (attName=="zcut") { zcut = eval.Evaluate(attValue); }
    }
 
-   dx *= lunit;
-   dy *= lunit;
    zmax *= lunit;
    zcut *= lunit;
 
