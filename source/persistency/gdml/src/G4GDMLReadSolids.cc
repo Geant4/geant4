@@ -848,6 +848,7 @@ QuadrangularRead(const xercesc::DOMElement* const quadrangularElement)
    G4ThreeVector vertex3;
    G4ThreeVector vertex4;
    G4FacetVertexType type = ABSOLUTE;
+   G4double lunit = 1.0;
 
    const xercesc::DOMNamedNodeMap* const attributes
          = quadrangularElement->getAttributes();
@@ -880,11 +881,14 @@ QuadrangularRead(const xercesc::DOMElement* const quadrangularElement)
         { vertex3 = GetPosition(GenerateName(attValue)); } else
       if (attName=="vertex4")
         { vertex4 = GetPosition(GenerateName(attValue)); } else
+      if (attName=="lunit")
+        { lunit = eval.Evaluate(attValue); } else
       if (attName=="type")
         { if (attValue=="RELATIVE") { type = RELATIVE; } }
    }
 
-   return new G4QuadrangularFacet(vertex1,vertex2,vertex3,vertex4,type);
+   return new G4QuadrangularFacet(vertex1*lunit,vertex2*lunit,
+                                  vertex3*lunit,vertex4*lunit,type);
 }
 
 void G4GDMLReadSolids::
@@ -1073,7 +1077,7 @@ TessellatedRead(const xercesc::DOMElement* const tessellatedElement)
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
-      if (attName=="name") { name = GenerateName(attValue); }
+      if (attName=="name")  { name = GenerateName(attValue); }
    }
    
    G4TessellatedSolid *tessellated = new G4TessellatedSolid(name);
@@ -1109,6 +1113,7 @@ void G4GDMLReadSolids::TetRead(const xercesc::DOMElement* const tetElement)
    G4ThreeVector vertex2;
    G4ThreeVector vertex3;
    G4ThreeVector vertex4;
+   G4double lunit = 1.0;
    
    const xercesc::DOMNamedNodeMap* const attributes
          = tetElement->getAttributes();
@@ -1135,6 +1140,8 @@ void G4GDMLReadSolids::TetRead(const xercesc::DOMElement* const tetElement)
 
       if (attName=="name")
         { name = GenerateName(attValue); } else
+      if (attName=="lunit")
+        { lunit = eval.Evaluate(attValue); } else
       if (attName=="vertex1")
         { vertex1 = GetPosition(GenerateName(attValue)); } else
       if (attName=="vertex2")
@@ -1145,7 +1152,7 @@ void G4GDMLReadSolids::TetRead(const xercesc::DOMElement* const tetElement)
         { vertex4 = GetPosition(GenerateName(attValue)); }
    }
 
-   new G4Tet(name,vertex1,vertex2,vertex3,vertex4);
+   new G4Tet(name,vertex1*lunit,vertex2*lunit,vertex3*lunit,vertex4*lunit);
 }
 
 void G4GDMLReadSolids::TorusRead(const xercesc::DOMElement* const torusElement)
@@ -1396,6 +1403,7 @@ TriangularRead(const xercesc::DOMElement* const triangularElement)
    G4ThreeVector vertex2;
    G4ThreeVector vertex3;
    G4FacetVertexType type = ABSOLUTE;
+   G4double lunit = 1.0;
 
    const xercesc::DOMNamedNodeMap* const attributes
          = triangularElement->getAttributes();
@@ -1426,11 +1434,13 @@ TriangularRead(const xercesc::DOMElement* const triangularElement)
         { vertex2 = GetPosition(GenerateName(attValue)); } else
       if (attName=="vertex3")
         { vertex3 = GetPosition(GenerateName(attValue)); } else
+      if (attName=="lunit")
+        { lunit = eval.Evaluate(attValue); } else
       if (attName=="type")
         { if (attValue=="RELATIVE") { type = RELATIVE; } }
    }
 
-   return new G4TriangularFacet(vertex1,vertex2,vertex3,type);
+   return new G4TriangularFacet(vertex1*lunit,vertex2*lunit,vertex3*lunit,type);
 }
 
 void G4GDMLReadSolids::TubeRead(const xercesc::DOMElement* const tubeElement)
