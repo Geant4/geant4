@@ -1257,14 +1257,14 @@ GenTrapRead(const xercesc::DOMElement* const gtrapElement)
 
    dz *= lunit;
    std::vector<G4TwoVector> vertices;
-   vertices.push_back(G4TwoVector(v1x,v1y));
-   vertices.push_back(G4TwoVector(v2x,v2y));
-   vertices.push_back(G4TwoVector(v3x,v3y));
-   vertices.push_back(G4TwoVector(v4x,v4y));
-   vertices.push_back(G4TwoVector(v5x,v5y));
-   vertices.push_back(G4TwoVector(v6x,v6y));
-   vertices.push_back(G4TwoVector(v7x,v7y));
-   vertices.push_back(G4TwoVector(v8x,v8y));
+   vertices.push_back(G4TwoVector(v1x*lunit,v1y*lunit));
+   vertices.push_back(G4TwoVector(v2x*lunit,v2y*lunit));
+   vertices.push_back(G4TwoVector(v3x*lunit,v3y*lunit));
+   vertices.push_back(G4TwoVector(v4x*lunit,v4y*lunit));
+   vertices.push_back(G4TwoVector(v5x*lunit,v5y*lunit));
+   vertices.push_back(G4TwoVector(v6x*lunit,v6y*lunit));
+   vertices.push_back(G4TwoVector(v7x*lunit,v7y*lunit));
+   vertices.push_back(G4TwoVector(v8x*lunit,v8y*lunit));
    new G4GenericTrap(name,dz,vertices);
 }
 
