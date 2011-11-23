@@ -23,7 +23,7 @@
   </argument>
   <argument name="environment">
     <set>
-	   <text>XRAYDATA=$G4INSTALL/examples/advanced/xray_fluorescence</text>
+	   <text>XRAYDATA=.</text>
 	</set>
   </argument>
   <argument name="command">

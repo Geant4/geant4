@@ -12,6 +12,10 @@ $Id$
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23-Nov-2011, G.Folger               (testtools-QMtest-V09-04-16)
+-  disable Rich ( cannot work)
+   try to use . as path to data files (QMtest does not expand $variable)
+
 16-Nov-2011, G.Folger               (testtools-QMtest-V09-04-15)
 - add new basic examples
 
