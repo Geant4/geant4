@@ -1,0 +1,83 @@
+$Id$
+
+///\file "extended/.README"
+///\brief Geant4 Extended Examples README page
+
+/*! \page README_extended Geant4 Extended Examples
+
+The set of "extended" examples is covering various 
+use-cases and may require some additional libraries besides of Geant4. 
+
+\section ext_s1 Extended level examples:
+
+- analysis
+   - Histogramming through the AIDA interface
+- biasing
+   - Examples of event biasing, scoring and reverse-MC-
+- common
+   - A set of common classes which can be reused in other examples demonstrating
+     just a particular feature  
+- electromagnetic
+   - Specific EM physics simulation with histogramming
+- errorpropagation
+   - Use of the error propagation utility (Geant4e)
+- eventgenerator
+   - Applications using interface to HepMC
+- exoticphysics
+   - Exotic simulation applications (classical magnetic monopole, etc...)
+- field
+   - Specific simulation setups in magnetic field
+- g3tog3
+   - Examples of usage of the g3tog4 converter tool
+- geometry
+   - Specific geometry examples and tools: OLAP tool for detection
+     of overlapping geometries
+- hadronic
+   - Specific hadronic physics simulation with histogramming
+- medical
+   - Specific examples for medical physics applications
+- optical
+   - Examples of generic optical processes simulation setups
+- parallel
+   - Examples of event-level parallelism in Geant4 using the
+     TOP-C distribution, and MPI technique
+- parameterisations
+   - Examples for fast shower parameterisations according to specific models
+- persistency
+   - Persistency of geometry (GDML or ASCII) and simulation output
+- radioactivedecay
+   - Examples to simulate the decays of radioactive isotopes and
+     induced radioactivity resulted from nuclear interactions
+- runAndEvent
+   - Examples to demonstrate how to connect the information between
+     primary particles and hits and utilize user-information classes
+- visualization
+   - Specific visualization features and graphical customisations
+
+<hr>
+
+\section ext_s2 Common classes for extended examples:
+
+In order to reduce code duplication and to reduce the number of variants of 
+the code of same kind, we define a set of common classes which
+can be reused in "feature" examples demonstrating just a particular feature.
+This module is going to be enhanced in future. Currently it provides 
+the following sets of classes:
+
+- \ref extended_common_analysis :
+  ExG4HbookAnalysisManager - the analysis manager class for HBOOK
+
+- \ref extended_common_detectorConstruction :
+  two simple detector construction classes with a messenger
+
+- \ref extended_common_physicsList :
+  ExG4PhysicsList00 - physics list with geantino and chargedgeantino only
+
+- \ref extended_common_primaryGenerator :
+  two simple primary generator classes (with G4ParticleGun and
+  G4ParticleGeneralSource)
+
+- \ref extended_common_userActions :
+  event action and run action classes with messengers
+
+*/
