@@ -38,17 +38,20 @@
 # Geant4_DEFINITIONS component
 #
 # If you specify components and use the REQUIRED option to find_package, then
-# the module will issue a FATAL_ERROR if this build of Genat4 does not have 
+# the module will issue a FATAL_ERROR if this build of Geant does not have 
 # the requested component(s).
 #
 # The list of components available generally corresponds to the optional extras
 # that Geant4 can be built with and are:
 #
 #  gdml              (GDML support)
-#  ui_tcsh           (TCsh Style Command Line Application Interface)
-#  ui_win32          (WIN32 Style Command Line Application Interface)
+#
+#  ui_tcsh           (TCsh Style Application Command Line Interface)
+#  ui_win32          (WIN32 Style Application Command Line Interface)
+#
 #  motif             (Motif-X11/OpenGL Graphical User Interface)
 #  qt                (Qt4/OpenGL Graphical User Interface)
+#
 #  vis_network_dawn  (Client/Server network interface to DAWN visualization)
 #  vis_network_vrml  (Client/Server network interface to VRML visualization)
 #  vis_opengl_x11    (OpenGL visualization with X11 interface)
@@ -56,6 +59,15 @@
 #  vis_raytracer_x11 (RayTracer visualization with X11 interface)
 #  vis_openinventor  (OpenInventor visualization)
 #
+# In addition, two 'shorthand' components are defined to help activate all
+# available User Interface and Visualization drivers:
+# 
+#  ui_all            (All available UI drivers)
+#  vis_all           (All available Vis drivers)
+#
+# These never result in a FATAL_ERROR, even if the REQUIRED find_package 
+# argument is set. This is because these options do not depend on specific
+# components being available.
 #
 # ===========================================================================
 # Variables used by this module which can change the default behaviour of
@@ -180,7 +192,7 @@ endif()
 # - UI : TCSH
 set(Geant4_ui_tcsh_FOUND @UNIX@)
 if(Geant4_ui_tcsh_FOUND)
-  if(Geant4_FIND_REQUIRED_ui_tcsh)
+  if(Geant4_FIND_REQUIRED_ui_tcsh OR Geant4_FIND_REQUIRED_ui_all)
     list(APPEND Geant4_DEFINITIONS -DG4UI_USE_TCSH)
   endif()
   list(REMOVE_ITEM Geant4_FIND_COMPONENTS ui_tcsh)
@@ -189,7 +201,7 @@ endif()
 # - UI : win32
 set(Geant4_ui_win32_FOUND @WIN32@)
 if(Geant4_ui_win32_FOUND)
-  if(Geant4_FIND_REQUIRED_ui_win32)
+  if(Geant4_FIND_REQUIRED_ui_win32 OR Geant4_FIND_REQUIRED_ui_all)
     list(APPEND 
       Geant4_DEFINITIONS 
       -DG4INTY_USE_WIN32
@@ -203,7 +215,7 @@ endif()
 # - Visualization : Network DAWN
 set(Geant4_vis_dawn_network_FOUND @GEANT4_USE_NETWORK_DAWN@)
 if(Geant4_vis_dawn_network_FOUND)
-  if(Geant4_FIND_REQUIRED_vis_dawn_network)
+  if(Geant4_FIND_REQUIRED_vis_dawn_network OR Geant4_FIND_REQUIRED_vis_all)
     list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_DAWN)
   endif()
   list(REMOVE_ITEM Geant4_FIND_COMPONENTS vis_dawn_network)
@@ -212,7 +224,7 @@ endif()
 # - Visualization : Network VRML
 set(Geant4_vis_vrml_network_FOUND @GEANT4_USE_NETWORK_VRML@)
 if(Geant4_vis_vrml_network_FOUND)
-  if(Geant4_FIND_REQUIRED_vis_vrml_network)
+  if(Geant4_FIND_REQUIRED_vis_vrml_network OR Geant4_FIND_REQUIRED_vis_all)
     list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_VRML)
   endif()
   list(REMOVE_ITEM Geant4_FIND_COMPONENTS vis_vrml_network)
@@ -225,7 +237,7 @@ endif()
 # - Visualization : RayTracerX
 set(Geant4_vis_raytracer_x11_FOUND @GEANT4_USE_RAYTRACER_X11@)
 if(Geant4_vis_raytracer_x11_FOUND)
-  if(Geant4_FIND_REQUIRED_vis_raytracer_x11)
+  if(Geant4_FIND_REQUIRED_vis_raytracer_x11 OR Geant4_FIND_REQUIRED_vis_all)
     list(APPEND
       Geant4_DEFINITIONS
       -DG4INTY_USE_XT
@@ -236,10 +248,11 @@ if(Geant4_vis_raytracer_x11_FOUND)
 endif()
 
 
-# - Qt
+# - Qt (UI and Vis!)
 set(Geant4_qt_FOUND @GEANT4_USE_QT@)
 if(Geant4_qt_FOUND)
-  if(Geant4_FIND_REQUIRED_qt)
+  if(Geant4_FIND_REQUIRED_qt OR Geant4_FIND_REQUIRED_ui_all OR
+      Geant4_FIND_REQUIRED_vis_all)
     list(APPEND 
       Geant4_DEFINITIONS 
       -DG4INTY_USE_QT
@@ -251,10 +264,11 @@ if(Geant4_qt_FOUND)
   list(REMOVE_ITEM Geant4_FIND_COMPONENTS qt)
 endif()
 
-# - Motif
+# - Motif (UI and Vis!)
 set(Geant4_motif_FOUND @GEANT4_USE_XM@)
 if(Geant4_motif_FOUND)
-  if(Geant4_FIND_REQUIRED_motif)
+  if(Geant4_FIND_REQUIRED_motif OR Geant4_FIND_REQUIRED_ui_all OR
+      Geant4_FIND_REQUIRED_vis_all)
     list(APPEND
       Geant4_DEFINITIONS
       -DG4INTY_USE_XT
@@ -270,7 +284,7 @@ endif()
 # - OpenGL X11
 set(Geant4_vis_opengl_x11_FOUND @GEANT4_USE_OPENGL_X11@)
 if(Geant4_vis_opengl_x11_FOUND)
-  if(Geant4_FIND_REQUIRED_vis_opengl_x11)
+  if(Geant4_FIND_REQUIRED_vis_opengl_x11 OR Geant4_FIND_REQUIRED_vis_all)
     list(APPEND
       Geant4_DEFINITIONS
       -DG4INTY_USE_XT
@@ -285,7 +299,7 @@ endif()
 # - OpenGL Win32
 set(Geant4_vis_opengl_win32_FOUND @GEANT4_USE_OPENGL_WIN32@)
 if(Geant4_vis_opengl_win32_FOUND)
-  if(Geant4_FIND_REQUIRED_vis_opengl_win32)
+  if(Geant4_FIND_REQUIRED_vis_opengl_win32 OR Geant4_FIND_REQUIRED_vis_all)
     list(APPEND
       Geant4_DEFINITIONS
       -DG4INTY_USE_WIN32
@@ -300,7 +314,7 @@ endif()
 # - OpenInventor
 set(Geant4_vis_openinventor_FOUND @GEANT4_USE_INVENTOR@)
 if(Geant4_vis_openinventor_FOUND)
-  if(Geant4_FIND_REQUIRED_vis_openinventor)
+  if(Geant4_FIND_REQUIRED_vis_openinventor OR Geant4_FIND_REQUIRED_vis_all)
     if(UNIX AND NOT WIN32)
       list(APPEND Geant4_DEFINITIONS
         -DG4INTY_USE_XT
@@ -412,11 +426,13 @@ set(Geant4_USE_FILE ${_thisdir}/UseGeant4.cmake)
 
 #----------------------------------------------------------------------------
 # Finally, handle any remaining components.
-# We should have dealt with all available components above, and removed them
-# from the list of FIND_COMPONENTS so any left we either didn't find or don't
-# know about. Emit a warning if REQUIRED isn't set, or FATAL_ERROR otherwise
+# We should have dealt with all available components above, except for ui_all
+# and vis_all, and removed them from the list of FIND_COMPONENTS so any left 
+# we either didn't find or don't know about. Emit a warning if REQUIRED isn't 
+# set, or FATAL_ERROR otherwise
 #
 list(REMOVE_DUPLICATES Geant4_FIND_COMPONENTS)
+list(REMOVE_ITEM Geant4_FIND_COMPONENTS ui_all vis_all)
 
 foreach(_remaining ${Geant4_FIND_COMPONENTS})
     if(Geant4_FIND_REQUIRED)
