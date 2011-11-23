@@ -312,7 +312,7 @@ Tst10DetectorConstruction::SelectDetector( const G4String& val )
   
   else
   {
-    G4Exception("Tst10DetectorConstruction::SelectDetector() - Invalid shape!");
+    G4Exception("Tst10DetectorConstruction::SelectDetector","Tst10_01",FatalException, "Invalid shape!");
   }
 
   G4Box * Hall
