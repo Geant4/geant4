@@ -188,6 +188,10 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
 G4VParticleChange*
 G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
 {
+  // if primary is not Alive then do nothing
+  theTotalResult->Initialize(aTrack);
+  if(aTrack.GetTrackStatus() != fAlive) { return theTotalResult; }
+
   // Find cross section at end of step and check if <= 0
   //
   const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
@@ -212,7 +216,6 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
   if (GetElementCrossSection(aParticle, anElement, aMaterial) <= 0.0) {
     // No interaction
     //theTotalResult->Clear();
-    theTotalResult->Initialize(aTrack);
     return theTotalResult;
   }    
 
@@ -231,7 +234,6 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
     }
     // No warning for fStopButAlive which is a legal status here
     // theTotalResult->Clear();
-    theTotalResult->Initialize(aTrack);
     return theTotalResult;
   }
 
@@ -241,7 +243,7 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
   G4double kineticEnergy = originalEnergy;
 
   // Get kinetic energy per nucleon for ions
-  if(aParticle->GetParticleDefinition()->GetBaryonNumber() > 1.5)
+  if(aParticle->GetParticleDefinition()->GetBaryonNumber() > 1.5) 
           kineticEnergy/=aParticle->GetParticleDefinition()->GetBaryonNumber();
 
   try
