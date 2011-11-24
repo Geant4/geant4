@@ -435,7 +435,7 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double theParentMass)
   if (applyARM && eShell != -1) {
     G4int aZ = daughterZ;
 
-    // V.Ivanchenko migration to new interface to deexcitation
+    // V.Ivanchenko migration to new interface to atomic deexcitation
     // no check on index of G4MaterialCutsCouple, simplified 
     // check on secondary energy Esec < 0.1 keV
     G4VAtomDeexcitation* atomDeex = G4LossTableManager::Instance()->AtomDeexcitation();
@@ -449,17 +449,20 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double theParentMass)
 	std::vector<G4DynamicParticle*> armProducts;
 	const G4double deexLimit = 0.1*keV;
 	atomDeex->GenerateParticles(&armProducts, shell, aZ, deexLimit, deexLimit);
-      
 	size_t narm = armProducts.size();
 	if(narm > 0) {
+	  //L.Desorgher need of initialisation of  dynamicDaughter in some decay cases (for example Hg194)
+	  dynamicDaughter = products->PopProducts();
 	  G4ThreeVector bst = dynamicDaughter->Get4Momentum().boostVector();
 	  for (size_t i = 0; i<narm; ++i) {
-            G4DynamicParticle* dp = armProducts[i];
+		    G4DynamicParticle* dp = armProducts[i];
             G4LorentzVector lv = dp->Get4Momentum().boost(bst);
             dp->Set4Momentum(lv);
 	    products->PushProducts(dp);
 	  }
+	  products->PushProducts(dynamicDaughter);
 	}
+
       }
     }
   }
