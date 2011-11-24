@@ -8,6 +8,12 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
              History file of the Hadrontherapy application
          ====================================================
 
+21.11.2011 G.Folger;      Tag: hadrontherapy-V09-04-07
+	   - remove #include for not needed unistd.h in 
+	      HadrontherapyInteractionParameters; unistd.h does not exist on Windows
+	   - Fix compilation error when G4ANALYSIS_USE_ROOT is set in 
+	       HadrontherapyMatrix::TotalEnergyDeposit()
+
 21.11.2011 G.A.P.Cirrone; Tag: hadrontherapy-V09-04-06
 	   - Updated and cleaned physics
 	   - Updated macro files;

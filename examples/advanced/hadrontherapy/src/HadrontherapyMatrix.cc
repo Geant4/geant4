@@ -404,8 +404,8 @@ void HadrontherapyMatrix::TotalEnergyDeposit()
 	    for(G4int j = 0; j < numberOfVoxelAlongY; j++) 
 		for(G4int k = 0; k < numberOfVoxelAlongZ; k++)
 		{
-		  //G4int n = Index(i,j,k);
 #ifdef G4ANALYSIS_USE_ROOT
+		    G4int n = Index(i,j,k);
 		    if (analysis -> IsTheTFile() )
 		    {
 			analysis -> FillEnergyDeposit(i, j, k, matrix[n]/massOfVoxel/doseUnit);
