@@ -14,6 +14,15 @@
 /run/initialize
 /run/setCutForRegion Target 50 cm
 /run/setCutForRegion Detector 50 cm
+
+#
+#Next lines needed to have  atomic relaxation working 
+#
+/process/em/fluo true
+/process/em/auger true
+
+
+
 /grdm/analogueMC 0
 /grdm/verbose 0
 /grdm/noVolumes

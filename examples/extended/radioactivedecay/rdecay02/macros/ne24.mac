@@ -27,6 +27,14 @@
 /grdm/noVolumes
 /grdm/selectVolume Target
 
+
+#
+#Next lines needed to have  atomic relaxation working 
+#
+/process/em/fluo true
+/process/em/auger true
+
+
 /grdm/analogueMC 0
 /grdm/nucleusLimits 24 24 10 10
 /gps/position 0 0 0

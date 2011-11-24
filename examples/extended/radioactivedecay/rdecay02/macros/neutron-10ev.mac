@@ -20,6 +20,15 @@
 /grdm/noVolumes
 /grdm/selectVolume Target
 
+#
+#Next lines needed to have  atomic relaxation working 
+#
+/process/em/fluo true
+/process/em/auger true
+
+
+
+
 /tracking/verbose 0
 /gps/particle neutron 
 /gps/energy 10 eV

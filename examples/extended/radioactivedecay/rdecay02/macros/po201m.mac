@@ -42,6 +42,14 @@
 /grdm/verbose 0
 
 #
+#Next lines needed to have  atomic relaxation working 
+#
+/process/em/fluo true
+/process/em/auger true
+
+
+
+#
 /gps/position 0 0 0
 /gps/energy 0 keV
 # complete chain decays in VR mode

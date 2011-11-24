@@ -14,6 +14,15 @@
 #
 /gps/particle ion
 /gps/energy 0 keV
+
+#
+#Next lines needed to have  atomic relaxation working 
+#
+/process/em/fluo true
+/process/em/auger true
+
+
+
 # first isotope Cf240 with strength of 2.
 /gps/source/intensity 2.
 /gps/ion 98 240

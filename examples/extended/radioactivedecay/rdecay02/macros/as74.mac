@@ -38,6 +38,17 @@
 #
 /grdm/nucleusLimits 74 74 33 33 
 /gps/ion 33 74 0 0
+
+
+#
+#Next lines needed to have  atomic relaxation working 
+#
+/process/em/fluo true
+/process/em/auger true
+
+
+
+
 # 
 #  Analogue MC
 /histo/fileName as74

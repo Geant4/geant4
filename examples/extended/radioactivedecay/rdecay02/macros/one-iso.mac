@@ -15,6 +15,15 @@
 /grdm/fBeta 0
 /grdm/verbose 5
 /grdm/analogueMC 1
+
+#
+#Next lines needed to have  atomic relaxation working 
+#
+/process/em/fluo true
+/process/em/auger true
+
+
+
 #
 /histo/fileName one-iso
 #

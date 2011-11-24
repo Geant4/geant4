@@ -35,6 +35,14 @@
 /process/inactivate CoulombScat
 /process/inactivate Decay
 
+
+
+#
+#Next lines needed to have  atomic relaxation working 
+#
+/process/em/fluo true
+/process/em/auger true
+
 /run/verbose 0
 /event/verbose 0
 /grdm/verbose 0

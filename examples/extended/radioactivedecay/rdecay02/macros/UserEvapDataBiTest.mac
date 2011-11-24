@@ -40,6 +40,15 @@
 /process/inactivate Decay
 
 /run/verbose 0
+
+#
+#Next lines needed to have  atomic relaxation working 
+#
+/process/em/fluo true
+/process/em/auger true
+
+
+
 /event/verbose 0
 /grdm/verbose 0
 /grdm/noVolumes
