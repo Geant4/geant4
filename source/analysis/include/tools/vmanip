@@ -33,6 +33,15 @@ inline void raw_clear(std::vector<T*>& a_vec){
 }
 
 template <class T>
+inline void copy(std::vector<T*>& a_to,const std::vector<T*>& a_from){
+  raw_clear<T>(a_to);
+  typedef typename std::vector<T*>::const_iterator it_t;
+  for(it_t it = a_from.begin();it!=a_from.end();++it) {
+    a_to.push_back((*it)->copy());
+  }
+}
+
+template <class T>
 inline void append(std::vector<T>& a_vec,const std::vector<T>& a_from) {
   typedef typename std::vector<T>::size_type sz_t;
   sz_t vsize = a_vec.size();

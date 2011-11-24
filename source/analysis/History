@@ -17,6 +17,11 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 24 2001 I.Hrivnacova (analysis-V09-04-12)
+- Updated to g4tools-1.0.4 (G. Barrand): 
+  - Fix in tools/vdata:
+    Adding a protection against an empty vector 
+ 
 November 19 2001 I.Hrivnacova (analysis-V09-04-11)
 - Updated to g4tools-1.0.3 (G. Barrand): 
   - Removed warning in CHBOOK/CHPWDF
