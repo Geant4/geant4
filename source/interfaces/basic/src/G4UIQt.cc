@@ -44,6 +44,7 @@
 #include "G4Qt.hh"
 
 #include <qapplication.h>
+#include <qmessagebox.h>
 #include <qlineedit.h>
 #include <qwidget.h>
 #include <qmenubar.h>
@@ -721,6 +722,7 @@ G4int G4UIQt::ReceiveG4cerr (
  
   QStringList result = newStr.filter(fCoutFilter->text());
 
+  QMessageBox::critical(fMainWindow, "Error",aString.data());
   QColor previousColor = fCoutTBTextArea->textColor();
   fCoutTBTextArea->setTextColor(Qt::red);
   fCoutTBTextArea->append(result.join("\n"));
