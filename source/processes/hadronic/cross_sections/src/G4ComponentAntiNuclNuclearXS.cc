@@ -301,6 +301,8 @@ G4double G4ComponentAntiNuclNuclearXS::GetAntiHadronNucleonTotCrSc
   momentum=std::sqrt(Energy*Energy-Pmass*Pmass)/std::abs(theParticle->GetBaryonNumber());
   G4double Plab = momentum / GeV;
 
+  if(Plab < 100.*MeV) Plab=100.*MeV/GeV;    // Uzhi 24 Nov. 2011
+
  G4double   B, SigAss;
  G4double   C, d1, d2, d3  ;
 

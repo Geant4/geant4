@@ -13,7 +13,12 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+24 November 2011 Vladimir Uzhinsky  (hadr-cross-V09-04-32)
+- G4ComponentAntiNuclNuclearXS
+  AntiBaryon-Nucleon cross sections at low energies are fixed
+  at value they have at 100 MeV/c of projectile/antinucleon.
 
+------------------------------------------------------------
 12 October 2011 Vladimir Ivanchenko  (hadr-cross-V09-04-31)
 ------------------------------------------------------------
 - G4UPiNuclearCrossSection - fixed Barashenkov data for pi+
