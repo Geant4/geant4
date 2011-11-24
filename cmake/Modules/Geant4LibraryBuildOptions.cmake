@@ -114,8 +114,11 @@ endif()
 # Build options for building examples and tests
 option(GEANT4_BUILD_EXAMPLES "Build all the examples of the project" OFF)
 GEANT4_ADD_FEATURE(GEANT4_BUILD_EXAMPLES "Build all the examples of the project")
+mark_as_advanced(GEANT4_BUILD_EXAMPLES)
+
 option(GEANT4_ENABLE_TESTING "Enable and define all the tests of the project" OFF)
 GEANT4_ADD_FEATURE(GEANT4_ENABLE_TESTING "Enable and define all the tests of the project")
+mark_as_advanced(GEANT4_ENABLE_TESTING)
 
 
 # On WIN32, we need to build the genwindef application to create export

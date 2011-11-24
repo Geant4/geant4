@@ -30,9 +30,38 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 23rd 2011 - B.Morgan (cmake-V09-04-38)
+- Modules/Geant4LibraryBuildOptions.cmake : Marked GEANT4_ENABLE_TESTING and
+  GEANT4_BUILD_EXAMPLES options as advanced because these are for developers and
+  system testing only.
+- Templates/geant4-env-skeleton.in (NEWFILE) : New shell skeleton file for core
+  environment setup of geant4, just PATH, (DY)LD_LIBRARY_PATH and data libraries
+  if installed.
+- Templates/geant4-environment-skeleton.in : RENAMED -> geant4make-skeleton.in
+- Templates/geant4-environment-skeleton.in : Added expansion variable to handle
+  G4WORKDIR setup. Added expansion variables for data library setup.
+  Added expansion variable to provide a self location block.
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : Added a function to
+  conditional set environment variables. Added setup of G4WORKDIR.
+  Added setup of data library variables if they've been installed.
+  Added self location capability so that scripts can find themselves and
+  consequently locate library and include directories relative to the determined
+  location.
+  Moved installation of of backwared compatible toolchain files to a directory
+  named 'geant4make' under the main data directory. This helps to partition the
+  setup script and gmk files into their own, isolated location.
+  Configure new 'geant4.(c)sh' setup script from geant4-env-skeleton.in file.
+- Modules/Geant4InstallData.cmake : Set name of list holding dataset information
+  to GEANT4_DATASETS just to mark it as usable elsewhere. Added environment
+  variable name to end of dataset information strings to help in setting them up
+  in configuration of shell scripts.
+  Marked GEANT4_INSTALL_EXAMPLES option as advanced.
+
+
 November 22nd 2011 - B.Morgan (cmake-V09-04-37)
 - Templates/Geant4Config.cmake : Added 'ui_all' and 'vis_all' components to
   allow simple selection of all available UI and Vis components.
+
 
 November 18th 2011 - P.Mato (cmake-V09-04-36)
 - Modules/Geant4CTest.cmake : Added some protection if GEANT4_DATA_DIR not defined

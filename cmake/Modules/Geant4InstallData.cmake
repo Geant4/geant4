@@ -12,7 +12,8 @@
 #----------------------------------------------------------------------------
 # Install examples if requested
 #
-option(GEANT4_INSTALL_EXAMPLES "Install all Geant4 examples" OFF)
+option(GEANT4_INSTALL_EXAMPLES "Install source code for Geant4 examples" OFF)
+mark_as_advanced(GEANT4_INSTALL_EXAMPLES)
 
 if(GEANT4_INSTALL_EXAMPLES)
     install(DIRECTORY examples
@@ -35,18 +36,18 @@ if(${CMAKE_VERSION} VERSION_GREATER 2.7)
   if(GEANT4_INSTALL_DATA)
     include(ExternalProject)
     set(_urlprefix "http://geant4.cern.ch/support/source")
-    set(_datasets 
-      G4NDL/3.16/G4NDL/tar.gz 
-      G4EMLOW/6.23/G4EMLOW/tar.gz 
-      PhotonEvaporation/2.2/PhotonEvaporation/tar.gz
-      RadioactiveDecay/3.3/G4RadioactiveDecay/tar.gz
-      G4ABLA/3.0/G4ABLA/tar.gz
-      G4NEUTRONXS/1.1/G4NEUTRONXS/tar.gz
-      G4PII/1.3/G4PII/tar.gz
-      RealSurface/1.0/RealSurface/tar.gz
+    set(GEANT4_DATASETS
+      G4NDL/3.16/G4NDL/tar.gz/G4NEUTRONHPDATA
+      G4EMLOW/6.23/G4EMLOW/tar.gz/G4LEDATA
+      PhotonEvaporation/2.2/PhotonEvaporation/tar.gz/G4LEVELGAMMADATA
+      RadioactiveDecay/3.3/G4RadioactiveDecay/tar.gz/G4RADIOACTIVEDATA
+      G4ABLA/3.0/G4ABLA/tar.gz/G4ABLADATA
+      G4NEUTRONXS/1.1/G4NEUTRONXS/tar.gz/G4NEUTRONXSDATA
+      G4PII/1.3/G4PII/tar.gz/G4PIIDATA
+      RealSurface/1.0/RealSurface/tar.gz/G4REALSURFACEDATA
     )
 
-    foreach(_ds ${_datasets})
+    foreach(_ds ${GEANT4_DATASETS})
       string(REPLACE "/" ";" _tuple ${_ds})
       list(GET _tuple 0 _name)
       list(GET _tuple 1 _vers)
