@@ -30,6 +30,13 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 24th 2011 - B.Morgan (cmake-V09-04-39)
+- Modules/Geant4InstallData.cmake : Updated data library versions
+  G4NDL -> 4.0
+  RadioactiveDecay - > 3.4
+  Added GEANT4_ADD_FEATURE reporting for data and example code install.
+
+
 November 23rd 2011 - B.Morgan (cmake-V09-04-38)
 - Modules/Geant4LibraryBuildOptions.cmake : Marked GEANT4_ENABLE_TESTING and
   GEANT4_BUILD_EXAMPLES options as advanced because these are for developers and
