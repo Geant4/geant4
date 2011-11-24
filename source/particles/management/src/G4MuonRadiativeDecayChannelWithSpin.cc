@@ -28,7 +28,7 @@
 //
 //      History:
 //               01 August 2007 P.Gumplinger
-//               10 August 2011 M. Ding - Tsinghua Univ.
+//               10 August 2011 D. Mingming - Center for HEP, Tsinghua Univ.
 //               References:
 //                    TRIUMF/TWIST Technote TN-55:
 //                    "Radiative muon decay" by P. Depommier and A. Vacheret

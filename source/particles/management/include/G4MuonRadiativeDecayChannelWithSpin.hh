@@ -28,7 +28,7 @@
 //
 //      History:
 //               25 July 2007   P.Gumplinger - Triumf
-//               10 August 2011 M. Ding - Tsinghua Univ.
+//               10 August 2011 D. Mingming - Center for HEP, Tsinghua Univ.
 //
 //               Samples Radiative Muon Decay
 //               References:

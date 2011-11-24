@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- 23 Nov. 2011 P.Gumplinger (particles-V09-04-22)
+- this is a correction of a comment only; credit should go to
+  D. Mingming in G4MuonRadiativeDecayChannelWithSpin.hh
+
 - 12 Nov. 2011 H.Kurashige (particles-V09-04-21)
 - Fix obsolete G4Exception in G4DynamicParticle
 
