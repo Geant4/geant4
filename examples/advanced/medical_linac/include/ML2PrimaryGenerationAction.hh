@@ -93,7 +93,7 @@ public:
 		}
 	};
 	inline void setRotation(G4RotationMatrix *val){this->rm=val;};
-	inline G4double getNrecycling(){return this->nRecycling;};
+	inline G4int getNrecycling(){return this->nRecycling;};
 	inline G4int getSourceTypeName(){return this->idParticleSource;};
 
 private:

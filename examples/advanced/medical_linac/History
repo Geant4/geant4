@@ -15,6 +15,10 @@ and keep track of all category-tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24.11.2011    G.Folger,                 medical_linac-V09-04-03
+	      - Warning removed for gcc41: correct return type of 
+	        ML2PrimaryGenerationAction::getNrecycling to G4int.
+
 22.11.2011    C.Andenna, G.A.P.Cirrone, medical_linac-V09-04-02
 	      - Warnings removed
 
