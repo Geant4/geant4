@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23rd Nov 2011 Peter Gumplinger (fieldex-V09-04-01)
+- Add README file to the new field example field06 and correct a small
+  mistake in F06ExtraPhysics.cc
+
 7th Nov 2011 Peter Gumplinger (fieldex-V09-04-00)
 -------------------------------------------------
 - Add new field example field06. This example excercises the gravity field.

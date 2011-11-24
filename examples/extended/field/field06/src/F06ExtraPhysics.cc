@@ -84,7 +84,7 @@ void F06ExtraPhysics::AddBetaDecay()
         particle->SetPDGStable(false);
 
         G4DecayTable * table = new G4DecayTable();
-        G4VDecayChannel* mode = new G4NeutronBetaDecayChannel("neutron",0.5);
+        G4VDecayChannel* mode = new G4NeutronBetaDecayChannel("neutron",1.00);
         table->Insert(mode);
         particle->SetDecayTable(table);
 
