@@ -6,7 +6,7 @@
 
 #include "buffer"
 #include "../vmanip"
-#include "../vdata"
+//#include "../vdata"
 
 namespace tools {
 namespace wroot {
@@ -157,12 +157,12 @@ inline bool AttMarker_stream(buffer& a_buffer) {
   return true;
 }
 
-template <class T>
-inline bool Array_stream(buffer& a_buffer,const std::vector<T>& a_v) {
-  if(!a_buffer.write((int)a_v.size())) return false;
-  if(!a_buffer.write_fast_array(vec_data(a_v),a_v.size())) return false;
-  return true;
-}
+//template <class T>
+//inline bool Array_stream(buffer& a_buffer,const std::vector<T>& a_v) {
+//  if(!a_buffer.write((int)a_v.size())) return false;
+//  if(!a_buffer.write_fast_array(vec_data(a_v),a_v.size())) return false;
+//  return true;
+//}
 
 }}
 

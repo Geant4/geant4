@@ -78,7 +78,7 @@ inline bool axis_stream(buffer& a_buffer,
     //  ArrayT<double> dummy(v);
     //  if(!dummy.stream(a_buffer)) return false; //TArrayD
     //} else {
-      if(!Array_stream(a_buffer,a_axis.edges())) return false; //TArrayD
+      if(!a_buffer.write_array(a_axis.edges())) return false; //TArrayD
     //}
 
     if(!a_buffer.write((int)0)) return false; //fFirst
@@ -159,10 +159,10 @@ inline bool TH_write_1D(buffer& a_buffer,
     if(!a_buffer.write((double)-1111)) return false; //fMinimum
     if(!a_buffer.write((double)0)) return false; //NormFactor
 
-    if(!Array_stream(a_buffer,std::vector<double>()))
+    if(!a_buffer.write_array(std::vector<double>()))
       return false; //fContour TArrayD
 
-    if(!Array_stream(a_buffer,a_data.m_bin_Sw2)) return false; //fSumw2 TArrayD
+    if(!a_buffer.write_array(a_data.m_bin_Sw2)) return false; //fSumw2 TArrayD
 
     // store annotation on fOption    
     // but try to fool ROOT in order that it does not
@@ -204,7 +204,7 @@ inline bool TH1F_stream(buffer& a_buffer,
   if(!a_buffer.write_version(1)) return false;
   hd_data data = a_h.get_histo_data();
   if(!TH_write_1D(a_buffer,data,a_name)) return false;
-  if(!Array_stream(a_buffer,convert<double,float>(data.m_bin_Sw)))
+  if(!a_buffer.write_array(convert<double,float>(data.m_bin_Sw)))
     return false; //TH1D::TArrayD::fArray
   return true;
 }
@@ -215,7 +215,7 @@ inline bool TH1D_stream(buffer& a_buffer,
   if(!a_buffer.write_version(1)) return false;
   hd_data data = a_h.get_histo_data();
   if(!TH_write_1D(a_buffer,data,a_name)) return false;
-  if(!Array_stream(a_buffer,data.m_bin_Sw)) return false; //fArray TArrayD
+  if(!a_buffer.write_array(data.m_bin_Sw)) return false; //fArray TArrayD
   return true;
 }
 
@@ -225,7 +225,7 @@ inline bool TH2F_stream(buffer& a_buffer,
   if(!a_buffer.write_version(3)) return false;
   hd_data data = a_h.get_histo_data();
   if(!TH_write_2D(a_buffer,data,a_name)) return false;
-  if(!Array_stream(a_buffer,convert<double,float>(data.m_bin_Sw)))
+  if(!a_buffer.write_array(convert<double,float>(data.m_bin_Sw)))
     return false; //fArray TArrayD
   return true;
 }
@@ -236,7 +236,7 @@ inline bool TH2D_stream(buffer& a_buffer,
   if(!a_buffer.write_version(3)) return false;
   hd_data data = a_h.get_histo_data();
   if(!TH_write_2D(a_buffer,data,a_name)) return false;
-  if(!Array_stream(a_buffer,data.m_bin_Sw)) return false; //fArray TArrayD
+  if(!a_buffer.write_array(data.m_bin_Sw)) return false; //fArray TArrayD
   return true;
 }
 
@@ -276,7 +276,7 @@ inline bool TProfile_stream(buffer& a_buffer,
     if(!TH1D_stream(a_buffer,h,a_name)) return false;
 
     //TProfile specific :
-    if(!Array_stream(a_buffer,vbins)) return false; //fBinEntries TArrayD
+    if(!a_buffer.write_array(vbins)) return false; //fBinEntries TArrayD
 
     int errorMode = 0;
     if(!a_buffer.write(errorMode)) return false;

@@ -13,6 +13,7 @@
 #endif
 
 #include <cstring> //memcpy
+#include <vector>
 
 namespace tools {
 namespace wroot {
@@ -194,6 +195,18 @@ public:
     } else {
       ::memcpy(m_pos,a_a,l);
       m_pos += l;
+    }
+    return true;
+  }
+
+  template <class T>
+  bool write(const std::vector<T>& a_v) {
+    if(a_v.empty()) return true;
+    uint32 n = a_v.size();
+    uint32 l = n * sizeof(T);
+    if(!check_eob(l,"array")) return false;
+    for(uint32 i=0;i<n;i++) {
+      if(!write(a_v[i])) return false;
     }
     return true;
   }

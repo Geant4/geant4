@@ -70,9 +70,9 @@ public: //iobject
     m_leaves.clear();} //WARNING : important.
 
     // fIndexValues (TArrayD).
-    if(!Array_stream(a_buffer,std::vector<double>())) return false; //TArrayD
+    if(!a_buffer.write_array(std::vector<double>())) return false; //TArrayD
     // fIndex (TArrayI).
-    if(!Array_stream(a_buffer,std::vector<int>())) return false; //TArrayI
+    if(!a_buffer.write_array(std::vector<int>())) return false; //TArrayI
 
     if(!a_buffer.set_byte_count(c)) return false;
     return true;

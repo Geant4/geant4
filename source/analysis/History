@@ -17,6 +17,13 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 24 2001 I.Hrivnacova (analysis-V09-04-14)
+- Updated to g4tools-1.0.5 (G. Barrand): 
+  - wroot : streamers, buffer, wbuf, named :
+            arrange to avoid the usage of the std::vector<>::data() method 
+            which is quite not portable for the moment.
+ - remove the no more needed (and problematic) tools/vdata file. 
+
 November 24 2001 I.Hrivnacova (analysis-V09-04-13)
 - tools/vdata: restored protection __GXX_EXPERIMENTAL_CXX0X__
   which got lost with update to  g4tools-1.0.4

@@ -138,9 +138,25 @@ public:
   }
 
   template <class T>
+  bool write_fast_array(const std::vector<T>& a_v) {
+    if(a_v.empty()) return true;
+    uint32 l = a_v.size() * sizeof(T);
+    if((m_pos+l)>m_max) {
+      if(!expand(m_size+l)) return false;
+    }
+    return m_wb.write<T>(a_v);
+  }
+
+  template <class T>
   bool write_array(const T* a_a,uint32 a_n) {
     if(!write(a_n)) return false;
     return write_fast_array(a_a,a_n);
+  }
+
+  template <class T>
+  bool write_array(const std::vector<T> a_v) {
+    if(!write((uint32)a_v.size())) return false;
+    return write_fast_array(a_v);
   }
 
 public:
