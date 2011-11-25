@@ -17,6 +17,25 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 24th, 2011 - J.Apostolakis (geomnav-V09-04-12)
+-----------------------------------
+ G4VIntersectionLocator: Use only 'last' Normal.
+   Disable fallback of using helper Navigator, as it appears 
+   to cause problems in the presence of additional geometries.
+
+November 23rd, 2011 - J.Apostolakis (geomnav-V09-04-11)
+-----------------------------------
+ G4MultiNavigator: adapt to revisions of intersection logic,
+   to provide Exit Surface Normal for step ending on boundary.
+   First implementation of methods GetGlobalExitNormal,
+     GetLocalExitNormal and GetLocalExitNormalAndCheck.
+   The Local methods are not adapted for this case - they complain:
+    - warn if one navigator  limited the step;
+    - fail report error if multiple navigators limited the step.
+
+   Added data members to record number of Navigators which limited
+    the step in the last call to ComputeStep ( fNoLimitingStep ),
+    and the id in case of just one having limited it (fIdNavLimiting).
 
 November 18th, 2011 - J.Apostolakis (geomnav-V09-04-10)
 -----------------------------------

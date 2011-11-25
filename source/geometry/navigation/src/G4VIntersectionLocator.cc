@@ -32,6 +32,7 @@
 // ---------------------------------------------------------------------------
  
 #include <iomanip>
+#include <sstream>
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -440,12 +441,15 @@ G4ThreeVector G4VIntersectionLocator::GetSurfaceNormal(const G4ThreeVector &Curr
   if  ( validNormalLast
    && ( std::fabs(NormalAtEntryLast.mag2() - 1.0) > perThousand ) )
   {
-    G4cerr << "G4VIntersectionLocator::GetSurfaceNormal -- identified problem."
-           << G4endl;
-    G4cerr << "PROBLEM: Normal is not unit - mag = " << NormalAtEntryLast.mag()
-           << G4endl; 
-    G4cerr << "   at trial intersection point " << CurrentInt_Point << G4endl;
-    G4cerr << "   Obtained from Get *Last* Surface Normal." << G4endl; 
+    std::ostringstream message; 
+    message << "G4VIntersectionLocator::GetSurfaceNormal -- identified problem."
+            << G4endl;
+    message << "PROBLEM: Normal is not unit - magnitude = " << NormalAtEntryLast.mag()
+            << G4endl; 
+    message << "   at trial intersection point " << CurrentInt_Point << G4endl;
+    message << "   Obtained from Get *Last* Surface Normal." << G4endl; 
+    G4Exception("G4VIntersectionLocator::GetGlobalSurfaceNormal()", "GeomNav1002",
+                JustWarning, message);
   }
 #endif
 
@@ -453,28 +457,6 @@ G4ThreeVector G4VIntersectionLocator::GetSurfaceNormal(const G4ThreeVector &Curr
   {
     NormalAtEntry=NormalAtEntryLast;  
     validNormal  = validNormalLast; 
-  }
-  else
-  {
-    G4bool validNormalNew;
-
-    NormalAtEntryGlobal =
-      GetGlobalSurfaceNormal(CurrentInt_Point, validNormalNew); 
-    
-    NormalAtEntry = NormalAtEntryGlobal; 
-    validNormal   = validNormalNew; 
-
-#ifdef DEBUG_FIELD
-    if   ( validNormalNew
-      && ( std::fabs(NormalAtEntryGlobal.mag2()-1.0) > perThousand ) )   
-    {
-      G4cerr << "G4VIntersectionLocator::GetSurfaceNormal -- identified problem." << G4endl;
-      G4cerr << "ERROR: Normal is not unit vector - magnitude = " 
-             <<  NormalAtEntryGlobal.mag() << G4endl; 
-      G4cerr << "  at point " << CurrentInt_Point << G4endl;
-      G4cerr << "  Obtained from Get *Global* Surface Normal " << G4endl; 
-    }
-#endif
   }
   return NormalAtEntry; 
 }
@@ -493,21 +475,24 @@ GetGlobalSurfaceNormal(const G4ThreeVector &CurrentE_Point,
 #ifdef DEBUG_FIELD
   if( validNormal && ( std::fabs(globalNormal.mag2() - 1.0) > perThousand ) ) 
   {
-    G4cerr << "****************************************************************"
-           << G4endl;
-    G4cerr << " Bad Normal in G4VIntersectionLocator::GetGlobalSurfaceNormal"
-           << G4endl;
-    G4cerr << "  * Constituents: " << G4endl;
-    G4cerr << "    Local  Normal= " << localNormal << G4endl;
-    G4cerr << "    Transform: " << G4endl
-           << "      Net Translation= " << localToGlobal.NetTranslation()
-           << G4endl
-           << "      Net Rotation   = " << localToGlobal.NetRotation()
-           << G4endl;
-    G4cerr << "  * Result: " << G4endl;
-    G4cerr << "     Global Normal= " << localNormal << G4endl;
-    G4cerr << "****************************************************************"
-           << G4endl;
+    std::ostringstream message; 
+    message << "****************************************************************"
+            << G4endl;
+    message << " Bad Normal in G4VIntersectionLocator::GetGlobalSurfaceNormal"
+            << G4endl;
+    message << "  * Constituents: " << G4endl;
+    message << "    Local  Normal= " << localNormal << G4endl;
+    message << "    Transform: " << G4endl
+            << "      Net Translation= " << localToGlobal.NetTranslation()
+            << G4endl
+            << "      Net Rotation   = " << localToGlobal.NetRotation()
+            << G4endl;
+    message << "  * Result: " << G4endl;
+    message << "     Global Normal= " << localNormal << G4endl;
+    message << "****************************************************************"
+            << G4endl;
+    G4Exception("G4VIntersectionLocator::GetGlobalSurfaceNormal()", "GeomNav1002",
+                JustWarning, message);
   }
 #endif
 

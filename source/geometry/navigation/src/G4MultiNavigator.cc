@@ -81,6 +81,9 @@ G4MultiNavigator::G4MultiNavigator()
       fLastMassWorld = pWorld; 
     }
   }
+
+  fNoLimitingStep= -1; 
+  fIdNavLimiting= -1; 
 }
 
 G4MultiNavigator::~G4MultiNavigator() 
@@ -94,6 +97,9 @@ G4double G4MultiNavigator::ComputeStep(const G4ThreeVector &pGlobalPoint,
 {
   G4double safety= 0.0, step=0.0;
   G4double minSafety= kInfinity, minStep= kInfinity;
+
+  fNoLimitingStep= -1; 
+  fIdNavLimiting= -1;     // Reset for new step
 
 #ifdef G4DEBUG_NAVIGATION
   if( fVerbose > 2 )
@@ -523,6 +529,10 @@ void G4MultiNavigator::WhichLimited()
   {
     fLimitedStep[ last ] = kUnique; 
   }
+
+  fNoLimitingStep= noLimited;  
+
+  return;
 }
 
 // -----------------------------------------------------------------------
@@ -675,4 +685,146 @@ G4MultiNavigator::ResetHierarchyAndLocate(const G4ThreeVector &point,
                                                ignoreDirection=false);
    }
    return massVolume; 
+}
+
+// -----------------  ooooooOOOOOOOOOOOOOOOoooooo -------------------------------------
+
+G4ThreeVector 
+G4MultiNavigator::GetGlobalExitNormal(const G4ThreeVector &argPoint,
+                                                    G4bool* argpObtained) // const
+{
+  G4ThreeVector normalGlobalCrd(0.0, 0.0, 0.0); 
+  G4bool isObtained= false; 
+  // These default values will be used if fNoLimitingStep== 0
+  G4int  firstNavigatorId= -1;
+  G4bool        oneObtained= false;
+    
+  if( fNoLimitingStep==1 )
+  { 
+    // Only message the Navigator which limited the step!
+    normalGlobalCrd= fpNavigator[ fIdNavLimiting ]->GetGlobalExitNormal( argPoint, &isObtained); 
+    *argpObtained= isObtained; 
+  }
+  else 
+  {
+    if( fNoLimitingStep > 1 )
+    { 
+      std::vector<G4Navigator*>::iterator pNavIter= 
+        pTransportManager->GetActiveNavigatorsIterator(); 
+
+      for ( register int num=0; num< fNoActiveNavigators ; ++pNavIter,++num )
+      {
+        G4ThreeVector oneNormal;
+        if( fLimitedStep[ num ] ) 
+        { 
+          G4ThreeVector newNormal= (*pNavIter)-> GetGlobalExitNormal( argPoint, &oneObtained );
+          if( oneObtained )
+          {
+            // Keep first one - only if it is valid (ie not null)
+            if( !isObtained && (newNormal.mag2() != 0.0) )
+            {
+              normalGlobalCrd= newNormal; 
+              isObtained =     oneObtained;
+              firstNavigatorId= num; 
+            }else{
+              // Check for clash
+              G4double dotNewPrevious= newNormal.dot( normalGlobalCrd );
+              G4double productMagSq= normalGlobalCrd.mag2() * newNormal.mag2(); 
+              if( productMagSq > 0.0 ) 
+              {
+                G4double productMag= std::sqrt( productMagSq ); 
+                dotNewPrevious /= productMag; // Normalise
+                if( dotNewPrevious < (1 - perThousand) ) 
+                {
+                  if( dotNewPrevious <= 0.0 )
+                  {
+                    std::ostringstream message;
+                    message << "Clash of Normal from different Navigators!" << G4endl
+                            << "        Previous Navigator Id = " << firstNavigatorId << G4endl
+                            << "        Current  Navigator Id = " << num << G4endl;
+                    message << "  Dot product of 2 normals = " << dotNewPrevious << G4endl;
+                    message << "        Normal (previous) = " << normalGlobalCrd << G4endl;
+                    message << "        Normal (current)  = " << newNormal       << G4endl;
+                    G4Exception("G4MultiNavigator::GetGlobalExitNormal()", "GeomNav0002",
+                                FatalException, message); 
+                  }
+                }
+                else
+                {
+                  // Close agreement - Do not change 
+                }
+              }
+            }
+          }
+        }
+      } // end for over the Navigators
+
+      // Report if no Normal was obtained
+      if( !oneObtained ) 
+      {
+        std::ostringstream message;
+        message << "No Normal obtained despite having " << fNoLimitingStep
+                << " candidate Navigators limiting the step!" << G4endl;
+        G4Exception("G4MultiNavigator::GetGlobalExitNormal()", "GeomNav0002",
+                    JustWarning, message); 
+      }
+
+    } // end if ( fNoLimiting > 1 ) 
+  } // end else
+
+  *argpObtained= isObtained;
+  return normalGlobalCrd;
+}
+
+// -----------------  ooooooOOOOOOOOOOOOOOOoooooo -------------------------------------
+
+G4ThreeVector 
+G4MultiNavigator::GetLocalExitNormal(G4bool* argpObtained)
+{
+  // If it is the mass navigator, then expect
+  G4ThreeVector normalGlobalCrd(0.0, 0.0, 0.0); 
+  G4bool isObtained= false; 
+  // These default values will be used if fNoLimitingStep== 0
+
+  if( fNoLimitingStep==1 )
+  { 
+    // Only message the Navigator which limited the step!
+    normalGlobalCrd= fpNavigator[ fIdNavLimiting ]->GetLocalExitNormal( &isObtained); 
+    *argpObtained= isObtained;
+
+    G4int static numberWarnings= 0;
+    G4int noWarningsStart= 10, noModuloWarnings=100; 
+    numberWarnings++; 
+    if( (numberWarnings < noWarningsStart ) || (numberWarnings%noModuloWarnings==0) ) 
+    {
+    std::ostringstream message;
+    message << "Cannot obtain normal in local coordinates of two or more coordinate systems." << G4endl;
+    G4Exception("G4MultiNavigator::GetGlobalExitNormal()", "GeomNav0002",
+                JustWarning, message);       
+    }
+  }
+  else
+  {
+    if( fNoLimitingStep > 1 ) 
+    {
+        // Does not make sense - cannot obtain *local* normal in several coordinate systems
+        std::ostringstream message;
+        message << "Cannot obtain normal in local coordinates of two or more coordinate systems." << G4endl;
+        G4Exception("G4MultiNavigator::GetGlobalExitNormal()", "GeomNav0002",
+                    FatalException, message);       
+    }
+  }
+    
+  *argpObtained= isObtained;
+  return normalGlobalCrd; 
+}
+
+
+// -----------------  ooooooOOOOOOOOOOOOOOOoooooo -------------------------------------
+
+G4ThreeVector 
+G4MultiNavigator::GetLocalExitNormalAndCheck(const G4ThreeVector &, // point,
+                                                   G4bool* obtained)
+{
+  return G4MultiNavigator::GetLocalExitNormal( obtained);
 }
