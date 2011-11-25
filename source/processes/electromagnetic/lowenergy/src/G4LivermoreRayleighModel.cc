@@ -26,8 +26,9 @@
 // $Id: G4LivermoreRayleighModel.cc,v 1.9 2010-12-27 17:45:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Author: Sebastien Inserti
+// Author: Sebastien Incerti
 //         30 October 2008
+//         on base of G4LowEnergyRayleigh developed by A.Forti and M.G.Pia
 //
 // History:
 // --------

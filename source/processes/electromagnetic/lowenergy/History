@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25.11.2011  V.Ivanchenko tag emlowen-V09-04-81
+            Minor cleanup of comments
+
 14.11.2011  L. Pandola tag emlowen-V09-04-80
             Added further protection in G4PenelopeBremsstrahlungFS.cc to 
 	    avoid exception em2015. The problem looks to be 
@@ -419,7 +422,7 @@ committal in the CVS repository !
             Energy ranges adapted accordingly.
 
 10.11.2010, V. Ivanchenko, tag emlowen-V09-03-55
-            F.Longo and G.Depaiola provided new models:
+            F.Longo and G.Depaola provided new models:
             G4BoldyshevTripletModel, G4LivermoreGammaConversionModelRC,
             G4LivermoreNuclearGammaConversionModel; 
             G4LivermorePolarizedGammaConversionModel - fixed element

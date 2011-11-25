@@ -26,9 +26,9 @@
 // $Id: G4LivermoreComptonModel.hh,v 1.3 2009-04-17 10:29:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
-// Author: Sebastien Inserti
+// Author: Sebastien Incerti
 //         30 October 2008
+//         on base of G4LowEnergyCompton developed by A.Forti and M.G.Pia
 //
 // Modified:
 // --------

@@ -26,18 +26,8 @@
 // $Id: G4LivermoreNuclearGammaConversionModel.cc,v 1.1 2010-11-10 17:09:16 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// Authors: G.Depaola & F.Longo
 //
-// Author: Sebastien Inserti
-//         30 October 2008
-//
-// History:
-// --------
-// 12 Apr 2009   V Ivanchenko Cleanup initialisation and generation of secondaries:
-//                  - apply internal high-energy limit only in constructor 
-//                  - do not apply low-energy limit (default is 0)
-//                  - use CLHEP electron mass for low-enegry limit
-//                  - remove MeanFreePath method and table
-
 
 #include "G4LivermoreNuclearGammaConversionModel.hh"
 

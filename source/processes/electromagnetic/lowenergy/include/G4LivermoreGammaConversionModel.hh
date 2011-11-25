@@ -26,6 +26,10 @@
 // $Id: G4LivermoreGammaConversionModel.hh,v 1.3 2009-04-17 10:29:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// Author: Sebastien Incerti
+//         30 October 2008
+//         on base of G4LowEnergyGammaConversion developed by A.Forti and M.G.Pia
+//
 
 #ifndef G4LivermoreGammaConversionModel_h
 #define G4LivermoreGammaConversionModel_h 1

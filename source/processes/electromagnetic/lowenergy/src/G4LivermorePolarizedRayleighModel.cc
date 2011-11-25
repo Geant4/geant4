@@ -26,6 +26,10 @@
 // $Id: G4LivermorePolarizedRayleighModel.cc,v 1.5 2009-05-02 15:20:53 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// Author: Sebastien Incerti
+//         30 October 2008
+//         on base of G4LowEnergyPolarizedRayleigh developed by R. Capra
+//
 // History:
 // --------
 // 02 May 2009   S Incerti as V. Ivanchenko proposed in G4LivermoreRayleighModel.cc

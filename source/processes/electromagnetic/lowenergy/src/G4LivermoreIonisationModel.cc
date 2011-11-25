@@ -27,6 +27,7 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
+//         on base of G4LowEnergyIonisation developed by A.Forti and V.Ivanchenko
 //
 // History:
 // --------

@@ -27,8 +27,9 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// Author: Sebastien Inserti
+// Author: Sebastien Incerti
 //         30 October 2008
+//         on base of G4LowEnergyPhotoElectric developed by A.Forti and M.G.Pia
 //
 // History:
 // --------

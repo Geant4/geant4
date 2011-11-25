@@ -26,6 +26,9 @@
 // $Id: G4LivermoreGammaConversionModelRC.hh,v 1.1 2010-11-10 17:12:21 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// Author: Francesco Longo & Gerardo Depaola
+//         on base of G4LivermoreGammaConversionModel
+//
 
 #ifndef G4LivermoreGammaConversionModelRC_h
 #define G4LivermoreGammaConversionModelRC_h 1

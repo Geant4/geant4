@@ -26,6 +26,8 @@
 // $Id: G4LivermorePolarizedComptonModel.hh,v 1.3 2009-05-02 15:20:52 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// Authors: G.Depaola & F.Longo
+//
 
 #ifndef G4LivermorePolarizedComptonModel_h
 #define G4LivermorePolarizedComptonModel_h 1
