@@ -611,13 +611,13 @@ void IORTDetectorConstruction::UpdateGeometry()
     
 
     // Round to nearest integer number of voxel 
-    numberOfVoxelsAlongX = lrint(detectorSizeX / sizeOfVoxelAlongX);
+    numberOfVoxelsAlongX = G4lrint(detectorSizeX / sizeOfVoxelAlongX);
     sizeOfVoxelAlongX = ( detectorSizeX / numberOfVoxelsAlongX );
 
-    numberOfVoxelsAlongY = lrint(detectorSizeY / sizeOfVoxelAlongY);
+    numberOfVoxelsAlongY = G4lrint(detectorSizeY / sizeOfVoxelAlongY);
     sizeOfVoxelAlongY = ( detectorSizeY / numberOfVoxelsAlongY );
 
-    numberOfVoxelsAlongZ = lrint(detectorSizeZ / sizeOfVoxelAlongZ);
+    numberOfVoxelsAlongZ = G4lrint(detectorSizeZ / sizeOfVoxelAlongZ);
     sizeOfVoxelAlongZ = ( detectorSizeZ / numberOfVoxelsAlongZ );
 
     //G4cout << "*************** DetectorToWorldPosition " << GetDetectorToWorldPosition()/cm << "\n";

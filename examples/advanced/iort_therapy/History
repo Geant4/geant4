@@ -7,6 +7,10 @@ carlo.casarino@polooncologicocefalu.it
              History file of the IORT application
          ====================================================
 
+24.11.2011 - G.Folger;      Tag: iort_therapy-V09-04-08
+	        Use G4lrint() in place of lrint()
+17.11.2011 - G.A.P.Cirrone; Tag: iort_therapy-V09-04-07
+	        Warnings removed
 07.11.2011 - G.A.P.Cirrone; Tag: iort_therapy-V09-04-06
 	        Macro file corrected
 07.11.2011 - G.A.P.Cirrone; Tag: iort_therapy-V09-04-05
@@ -23,6 +27,7 @@ carlo.casarino@polooncologicocefalu.it
 	     	First tag proposed to the Geant4 repository
 08.09.2011 - G.Russo, C.Casarino, G.C. Candiano, G.A.P. Cirrone, F.Romano
              	Created, first version.
+
 
 
 

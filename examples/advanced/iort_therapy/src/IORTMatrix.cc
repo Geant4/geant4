@@ -173,7 +173,7 @@ G4bool IORTMatrix::Fill(G4int trackID,
     {
 		if (ionStore[l].PDGencoding == PDGencoding ) 
 		{   // Is it a primary or a secondary particle? 
-			if ( trackID ==1 && ionStore[l].isPrimary || trackID !=1 && !ionStore[l].isPrimary)
+		  if ( ((trackID == 1) && (ionStore[l].isPrimary)) || ((trackID !=1) && (!ionStore[l].isPrimary)))
 			{
 				if (energyDeposit > 0.) ionStore[l].dose[Index(i, j, k)] += energyDeposit/massOfVoxel;
 				
