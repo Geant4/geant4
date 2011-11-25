@@ -734,6 +734,20 @@ void G4UrbanMscModel90::SampleScattering(const G4DynamicParticle* dynParticle,
   // protection against 'bad' cth values
   if(std::abs(cth) > 1.) return;
 
+  const G4double checkEnergy = GeV;
+  if(kineticEnergy > checkEnergy && cth < 0.0 
+     && tPathLength < taulim*lambda0) {
+    G4ExceptionDescription ed;
+    ed << dynParticle->GetDefinition()->GetParticleName()
+       << " E(MeV)= " << kineticEnergy/MeV
+       << " Step(mm)= " << tPathLength/mm
+       << " in " << CurrentCouple()->GetMaterial()->GetName()
+       << " scattering angle is set to zero" << G4endl;
+    G4Exception("G4UrbanMscModel90::SampleScattering","em0004",JustWarning,
+                ed,"Please, send bug report in the case of this message");
+    return;
+  }
+
   G4double sth  = sqrt((1.0 - cth)*(1.0 + cth));
   G4double phi  = twopi*G4UniformRand();
   G4double dirx = sth*cos(phi);
@@ -848,7 +862,7 @@ G4double G4UrbanMscModel90::SampleCosineTheta(G4double trueStepLength,
       G4double theta0 = ComputeTheta0(trueStepLength,KineticEnergy);
 
       // protexction for very small angles
-      if(theta0 < tausmall) return cth;
+      if(theta0*theta0 < tausmall) return cth;
 
       G4double sth = sin(0.5*theta0);
       a = 0.25/(sth*sth);

@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25 November 11: V.Ivanchenko (emstand-V09-04-55)
+- G4UrbanMscModel90, G4UrbanMscModel93, G4UrbanMscModel95 - added
+  protection against numerical problems of sampling scattering with 
+  small step at high energy to avoid reflection back;
+  added G4Exception to control reflection back - it issues a warning  
+
 18 November 11: V.Ivanchenko (emstand-V09-04-54)
 - G4UrbanMscModel95 - optimized "samplez" sampling - applied it 
     only for for medium step size, not apply to small steps and 
