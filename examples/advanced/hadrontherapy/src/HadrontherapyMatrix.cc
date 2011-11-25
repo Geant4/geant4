@@ -39,7 +39,6 @@
 #include "G4ParticleGun.hh"
 
 #include <fstream>
-#include <unistd.h>
 #include <iostream>
 #include <sstream>
 #include <iomanip>
