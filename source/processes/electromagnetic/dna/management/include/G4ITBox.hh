@@ -40,6 +40,12 @@
 
 #include "G4IT.hh"
 
+/**
+  * A G4ITBox contains all IT of the same kind.
+  * eg : all °OH
+  * It behaves just like a stack.
+  */
+
 class G4ITBox
 {
 
@@ -50,6 +56,13 @@ public :
     void ResetStack();
     void Push(G4IT*);
     void Extract(G4IT*);
+
+    /** The FindIT methods are used for check only.
+      * Those methods are not effective due to the
+      * linear search. It is better to use GetIT(track)
+      * in order to retrieve the IT and GetIT(track)->GetBox()
+      * in order to check which is the box pointer.
+      */
     G4IT* FindIT(const G4Track&) ;
     const G4IT* FindIT(const G4Track&) const;
     void TransferTo(G4ITBox*);

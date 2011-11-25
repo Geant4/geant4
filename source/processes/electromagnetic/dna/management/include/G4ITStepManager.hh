@@ -87,7 +87,7 @@ public :
     inline G4double GetPreviousTimeStep() const;
     inline G4double GetGlobalTime() const;
     inline void     SetUserAction(G4UserReactionAction*);
-    inline G4UserReactionAction* GetUserITAction() const;
+    inline G4UserReactionAction* GetUserReactionAction() const;
 
     inline void SetVerbose(int);
     // 1 : Reaction information
@@ -217,7 +217,7 @@ inline void G4ITStepManager::SetUserAction(G4UserReactionAction* userITAction)
     fpUserReactionAction = userITAction;
 }
 
-inline G4UserReactionAction* G4ITStepManager::GetUserITAction() const
+inline G4UserReactionAction* G4ITStepManager::GetUserReactionAction() const
 {
     return fpUserReactionAction;
 }

@@ -8,6 +8,12 @@ class G4DNAMolecularReactionTable;
 class G4Molecule;
 class G4Track;
 
+/**
+  * G4VDNAReactionModel is an interface used by the G4DNAMolecularReaction process.
+  * It defines how the reaction radius should be calculated and whether two molecules
+  * can indeed react.
+  */
+
 class G4VDNAReactionModel
 {
 public :
@@ -16,7 +22,7 @@ public :
     virtual ~G4VDNAReactionModel();
 
     /** This macro is defined in AddClone_def **/
-    ParentToClone(G4VDNAReactionModel)
+    G4IT_TO_BE_CLONED(G4VDNAReactionModel)
 
     virtual void Initialise(const G4Molecule*, const G4Track&) {;}
     virtual void InitialiseToPrint(const G4Molecule*) = 0 ;

@@ -47,6 +47,11 @@
 class G4VDNAReactionModel ;
 class G4DNAMolecularReactionTable;
 
+/**
+  * G4DNAMolecularReactionData contains the information
+  * relative to a given reaction (eg : °OH + °OH -> H2O2)
+  */
+
 class G4DNAMolecularReactionData
 {
 public :
@@ -97,6 +102,11 @@ struct compMoleculeP
     }
 };
 
+/**
+  * G4DNAMolecularReactionTable sorts out the G4DNAMolecularReactionData
+  * for bimolecular reaction
+  */
+
 class G4DNAMolecularReactionTable : public G4ITReactionTable
 {
 protected:
@@ -108,14 +118,15 @@ public :
     static void DeleteInstance();
     virtual ~G4DNAMolecularReactionTable();
 
-    /** Define a reaction :
+    /**
+    * Define a reaction :
     * First argument : reaction rate
     * Second argument : reactant 1
     * Third argument : reactant 2
     * Fourth argument : a std std::vector holding the molecular products
     * if this last argument is NULL then it will be interpreted as
     * a reaction giving no products
-    **/
+    */
     void SetReaction(G4double observedReactionRate,
                      const G4Molecule* reactive1, const G4Molecule* reactive2);
 
@@ -124,7 +135,9 @@ public :
     const G4DNAMolecularReactionData* GetReactionData(const G4Molecule*, const G4Molecule*) const;
 
     //_________________________________________________________________
-    /** Given a molecule's type, it returns with which a reaction is allowed*/
+    /**
+     * Given a molecule's type, it returns with which a reaction is allowed
+     */
     const std::vector<const G4Molecule*>* CanReactWith(const G4Molecule* aMolecule) const ;
     const std::map<const G4Molecule*, const G4DNAMolecularReactionData*, compMoleculeP>* GetReativesNData(const G4Molecule* aMolecule) const ;
     const std::vector<const G4DNAMolecularReactionData*>* GetReactionData(const G4Molecule*) const ;

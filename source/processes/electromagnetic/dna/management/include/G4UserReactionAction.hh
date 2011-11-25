@@ -42,6 +42,14 @@
 #include "G4Track.hh"
 #include "G4TrackFastVector.hh"
 
+/**
+  * G4UserReactionAction is used by G4ITStepManager.
+  * - StartProcessing called before processing
+  * - TimeStepAction called at every global step
+  * - UserReactionAction called when a reaction occurs
+  * - EndProcessing called after processing
+  */
+
 class G4UserReactionAction
 {
 public:
@@ -51,13 +59,16 @@ public:
 
    virtual void StartProcessing(){;}
 
-   // In this method, the user can use :
-   // G4ITStepManager::Instance()->GetGlobalTime(), to know the current simulation time
-   // G4ITStepManager::Instance()->GetMinTime(), to know the selected minimum time
-   // WARNING : The call of this method happens before the call of DoIT methods
+   /** In this method, the user can use :
+    * G4ITStepManager::Instance()->GetGlobalTime(), to know the current simulation time
+    * G4ITStepManager::Instance()->GetMinTime(), to know the selected minimum time
+    * WARNING : The call of this method happens before the call of DoIT methods
+    */
    virtual void TimeStepAction(){;}
 
-   // This method enables to kill products right after they are generated
+   /**
+    * This method enables to kill products right after they are generated
+    */
    virtual void UserReactionAction(const G4Track& /*trackA*/,const G4Track& /*trackB*/,
                                    const G4TrackFastVector& /*products*/,
                                    int /*nbProducts*/){;}

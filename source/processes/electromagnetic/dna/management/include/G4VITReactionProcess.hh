@@ -44,6 +44,11 @@
 #include "G4ITReactionTable.hh"
 #include "AddClone_def.hh"
 
+/**
+ * G4VITReactionProcess defines the reaction between two G4IT.
+ * It should be stored in a G4VITModel.
+ */
+
 class G4VITReactionProcess
 {
 public:
@@ -63,7 +68,7 @@ public:
          * implemented.
          * This macro is defined in AddClone_def
          */
-    ParentToClone(G4VITReactionProcess)
+    G4IT_TO_BE_CLONED(G4VITReactionProcess)
 
     /** Assignment operator
          *  \param other Object to assign from

@@ -46,7 +46,7 @@ class G4DNABrownianTransportation : public G4ITTransportation
 {
 public:
     G4DNABrownianTransportation(const G4String& aName =  "DNABrownianTransportation", G4int verbosityLevel= 1);
-    AddClone(G4VITProcess,G4DNABrownianTransportation)
+    G4IT_ADD_CLONE(G4VITProcess,G4DNABrownianTransportation)
     virtual ~G4DNABrownianTransportation();
     G4DNABrownianTransportation(const G4DNABrownianTransportation& other);
     G4DNABrownianTransportation& operator=(const G4DNABrownianTransportation& other);

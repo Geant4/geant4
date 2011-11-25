@@ -227,9 +227,6 @@ void G4ITStepManager::Process()
     if(fDelayedList.empty() == false)     SynchronizeTracks() ;
     DoProcess() ;
 
-    if(fpUserReactionAction) fpUserReactionAction->EndProcessing();
-    EndTracking();
-
 #ifdef G4VERBOSE
     if(fVerbose)
     {
@@ -237,6 +234,9 @@ void G4ITStepManager::Process()
         G4cout  << "___________________________________" << G4endl;
     }
 #endif
+
+    if(fpUserReactionAction) fpUserReactionAction->EndProcessing();
+    EndTracking();
 
     // ___________________
     fRunning = false;

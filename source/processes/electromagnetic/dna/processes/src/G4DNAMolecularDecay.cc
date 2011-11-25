@@ -186,9 +186,10 @@ G4VParticleChange* G4DNAMolecularDecay::DecayIt(
             }
             else
             {
-                G4String errMsg = "No G4MolecularDecayProcess::theDecayDisplacementMap[" ;
-                errMsg += theMotherMolecule->GetName() +"]" ;
-                G4Exception("G4MolecularDecayProcess::DecayIt","",FatalErrorInArgument, errMsg);
+                G4ExceptionDescription errMsg;
+                errMsg << "No G4MolecularDecayProcess::theDecayDisplacementMap["
+                       << theMotherMolecule->GetName() +"]" ;
+                G4Exception("G4MolecularDecayProcess::DecayIt","DNAMolecularDecay001",FatalErrorInArgument, errMsg);
             }
 
             aParticleChange.SetNumberOfSecondaries(nbProducts);
@@ -198,7 +199,7 @@ G4VParticleChange* G4DNAMolecularDecay::DecayIt(
             {
                 G4cout<<"Decay Process : "
                      << theMotherMolecule->GetName()
-                     << "(trackID :" << track.GetTrackID() << ") "
+                     << " (trackID :" << track.GetTrackID() << ") "
                      << decayChannel->GetName()
                      << G4endl;
             }
@@ -239,8 +240,9 @@ G4VParticleChange* G4DNAMolecularDecay::DecayIt(
         //        }
         else if(!decayEnergy && !nbProducts)
         {
-            G4String errMsg = "There is no products and no energy specified in the molecular decay channel";
-            G4Exception("G4MolecularDecayProcess::DecayIt","",FatalErrorInArgument, errMsg);
+            G4ExceptionDescription errMsg;
+            errMsg << "There is no products and no energy specified in the molecular decay channel";
+            G4Exception("G4MolecularDecayProcess::DecayIt","DNAMolecularDecay002",FatalErrorInArgument, errMsg);
         }
     }
 

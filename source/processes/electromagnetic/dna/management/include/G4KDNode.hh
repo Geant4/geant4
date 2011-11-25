@@ -42,8 +42,10 @@
 
 class G4KDTree;
 
-//°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
-// This class is only for internal use
+/**
+  * G4KDNode stores one entity in G4KDTree
+  * This class is for internal use only
+  */
 class G4KDNode
 {
 

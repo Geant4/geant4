@@ -53,7 +53,7 @@
 
 using namespace std;
 
-double G4Molecule::fgTemperature = 310;
+double G4Molecule::fgTemperature = 310*kelvin;
 // 37°C, used to shoot an energy
 
 ITImp(G4Molecule)

@@ -44,6 +44,13 @@
 
 typedef G4ReferenceCountedHandle< std::vector<G4Track*> > G4TrackVectorHandle;
 
+/**
+  * Before stepping all tracks G4ITStepManager calls all the G4VITModel
+  * which may contain a G4VITTimeStepper (optionnal).
+  * G4VITTimeStepper returns what should be the next global time step.
+  * Time step that will be used to step all tracks.
+  */
+
 class G4VITTimeStepper
 {
 public:
@@ -54,7 +61,7 @@ public:
     G4VITTimeStepper& operator=(const G4VITTimeStepper& other);
 
     /** This macro defined in AddClone_def **/
-    ParentToClone(G4VITTimeStepper)
+    G4IT_TO_BE_CLONED(G4VITTimeStepper)
 
     // First initialization (done once for all at the begin of the run)
     // eg. check if the reaction table is given ...

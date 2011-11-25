@@ -44,6 +44,16 @@
 #include "G4DNAMolecularReaction.hh"
 #include "G4DNAMolecularReactionTable.hh"
 
+/**
+  * G4DNAMolecularStepByStepModel :
+  *  - TimeStepper : G4DNAMolecularEncounterStepper
+  *  - ReactionProcess : G4DNAMolecularReaction
+  * Before each step, the next minimum encounter time is calculated for each
+  * pair of molecule. The minimum time step is selected. All the molecules are stepped
+  * within this time step. Then, only the relevant pair of molecules are checked for
+  * reaction.
+  */
+
 class G4DNAMolecularStepByStepModel : public G4VITModel
 {
 public:
@@ -63,7 +73,7 @@ public:
         return *this;
     }
 
-    AddClone(G4VITModel, G4DNAMolecularStepByStepModel)
+    G4IT_ADD_CLONE(G4VITModel, G4DNAMolecularStepByStepModel)
 
     virtual void PrintInfo();
     virtual void Initialize();

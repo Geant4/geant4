@@ -42,8 +42,12 @@
 #include "G4VITReactionProcess.hh"
 #include "G4ITReactionTable.hh"
 
-/** Define what to do before stepping and after stepping.
-*/
+/**
+ * Define what to do before stepping and after stepping.
+ * The concrete implementation of G4VITModel defines the interaction
+ * between two G4IT types. The type might be just equal like :
+ * Molecule + Molecule, or different : Molecule + Atom.
+ */
 
 class G4VITModel
 {
@@ -54,7 +58,7 @@ public:
     virtual ~G4VITModel();
 
     /* Macro define in AddClone_def*/
-    ParentToClone(G4VITModel)
+    G4IT_TO_BE_CLONED(G4VITModel)
 
     void IsApplicable(G4ITType& type1, G4ITType& type2) ;
     void virtual PrintInfo(){;}

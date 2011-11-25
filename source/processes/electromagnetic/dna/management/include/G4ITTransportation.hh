@@ -58,7 +58,7 @@ public:  // with description
 
     G4ITTransportation(const G4ITTransportation&);
 
-    AddClone(G4VITProcess, G4ITTransportation)
+    G4IT_ADD_CLONE(G4VITProcess, G4ITTransportation)
 
     virtual void BuildPhysicsTable(const G4ParticleDefinition&){;}
 

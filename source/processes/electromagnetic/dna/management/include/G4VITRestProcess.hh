@@ -42,6 +42,10 @@
 
 #include "G4VITProcess.hh"
 
+/**
+  * Identical to G4VRestProcess with dependency from G4VITProcess
+  */
+
 class G4VITRestProcess : public G4VITProcess
 {
   //  Abstract class which defines the public behavior of

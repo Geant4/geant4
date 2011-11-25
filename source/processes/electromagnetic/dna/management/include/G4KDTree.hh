@@ -38,14 +38,6 @@
 #ifndef G4KDTREE_HH
 #define G4KDTREE_HH
 
-/*
- * This this file was inspired from an existing algorithm for kdtree's
- * algorithm written by Tamas Nepusz <tamas@cs.rhul.ac.uk> and under
- * Copyright (C) 2007-2009 John Tsiombikas <nuclear@siggraph.org>
- * The original open-source version of this code
- * may be found at http://code.google.com/p/kdtree/
-*/
-
 #include <vector>
 #include "G4KDTreeResult.hh"
 
@@ -57,6 +49,12 @@ void Free(G4KDNode*&);
 void* GetData(G4KDNode*);
 const double* GetNodePosition(G4KDNode*);
 //__________________________________
+
+/**
+  * G4KDTree is used by the ITManager to locate the neareast neighbours.
+  * A kdtree sorts out node in such a way that it reduces the number of node check.
+  * The results of this search can be retrieved by G4KDTreeResultHandle.
+  */
 
 class G4KDTree
 {

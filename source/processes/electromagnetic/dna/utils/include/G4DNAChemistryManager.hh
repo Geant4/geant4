@@ -53,6 +53,15 @@ enum ElectronicModification
     fExcitedMolecule
 };
 
+/**
+  * G4DNAChemistryManager is called from the physics models.
+  * It creates the water molecules and the solvated electrons and
+  * and send them to G4ITStepManager to be treated in the chemistry stage.
+  * For this, the fActiveChemistry flag needs to be on.
+  * The user can also ask to create a file containing a information about the
+  * creation of water molecules and solvated electrons.
+  */
+
 class G4DNAChemistryManager
 {
 public:

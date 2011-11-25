@@ -68,6 +68,13 @@ typedef class std::vector<int, std::allocator<int> > G4SelectedAtRestDoItVector;
 typedef class std::vector<int, std::allocator<int> > G4SelectedAlongStepDoItVector;
 typedef class std::vector<int, std::allocator<int> > G4SelectedPostStepDoItVector;
 
+
+/**
+  * Its role is the same as G4StepManager :
+  * - Find the minimum physical length and corresponding time step
+  * - Step one track BUT on a given time step.
+  */
+
 class G4ITStepProcessor
 {
 

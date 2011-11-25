@@ -81,12 +81,20 @@ G4double G4DNAMoleculeEncounterStepper::CalculateStep(const G4Track& trackA, con
 {
     // DEBUG
     //    G4cout << "G4MoleculeEncounterStepper::CalculateStep, time :" << G4ITStepManager::Instance()->GetGlobalTime()  << G4endl;
-    fUserMinTimeStep = userMinTimeStep ;
-    if(fReactants) fReactants = 0 ;
-
-    fReactants = new vector<G4Track*>();
 
     G4Molecule* moleculeA = GetMolecule(trackA);
+
+
+#ifdef G4VERBOSE
+    if(fVerbose)
+    {
+        G4cout << "_______________________________________________________________________" << G4endl;
+        G4cout << "G4DNAMoleculeEncounterStepper::CalculateStep" << G4endl;
+        G4cout << "Incident molecule : " << moleculeA->GetName()
+               << " (" << trackA.GetTrackID() << ") "
+               << G4endl;
+    }
+#endif
 
     //__________________________________________________________________
     // Retrieve general informations for making reactions
@@ -111,7 +119,6 @@ G4double G4DNAMoleculeEncounterStepper::CalculateStep(const G4Track& trackA, con
         return DBL_MAX;
     }
 
-    fReactionModel -> Initialise(moleculeA, trackA) ;
     G4int nbReactives = reactivesVector->size();
 
     if(nbReactives == 0)
@@ -142,18 +149,15 @@ G4double G4DNAMoleculeEncounterStepper::CalculateStep(const G4Track& trackA, con
     //        }
     //    }
 
-    fSampledMinTimeStep = DBL_MAX;
-//    G4bool hasAlreadyReachNullTime = false;
+    fUserMinTimeStep = userMinTimeStep ;
+    if(fReactants) fReactants = 0 ;
+    fReactants = new vector<G4Track*>();
 
+    fSampledMinTimeStep = DBL_MAX;
     fHasAlreadyReachedNullTime = false;
 
-#ifdef G4VERBOSE
-    if(fVerbose)
-    {
-        G4cout << "___________________________________" << G4endl;
-        G4cout << "Incident molecule : " << moleculeA->GetName() << G4endl;
-    }
-#endif
+    fReactionModel -> Initialise(moleculeA, trackA) ;
+
     //__________________________________________________________________
     // Start looping on possible reactants
     for (G4int i=0 ; i<nbReactives ; i++)
@@ -171,7 +175,6 @@ G4double G4DNAMoleculeEncounterStepper::CalculateStep(const G4Track& trackA, con
                                       -> FindNearest(moleculeA, moleculeB));
 
         RetrieveResults(trackA,moleculeA,moleculeB,R,results, true);
-
     }
 
 #ifdef G4VERBOSE
@@ -180,6 +183,20 @@ G4double G4DNAMoleculeEncounterStepper::CalculateStep(const G4Track& trackA, con
     {
         G4cout << "G4MoleculeEncounterStepper::CalculateStep will finally return :"
                << G4BestUnit(fSampledMinTimeStep, "Time")<< G4endl;
+
+        if(fVerbose > 1)
+        {
+            G4cout << "TrackA: " << moleculeA->GetName() << " (" << trackA.GetTrackID() << ") can react with: ";
+
+            vector<G4Track*>::iterator it;
+            for(it = fReactants->begin() ; it != fReactants->end() ; it++)
+            {
+                G4Track* trackB = *it;
+                G4cout << GetMolecule(trackB)->GetName() << " ("
+                       << trackB->GetTrackID() << ") \t ";
+            }
+            G4cout << G4endl;
+        }
     }
 #endif
     return fSampledMinTimeStep ;
@@ -231,7 +248,7 @@ void G4DNAMoleculeEncounterStepper::RetrieveResults(const G4Track& trackA, const
                                  << " attached to it. If this is done on purpose, please do not record this "
                                  << " molecule in the ITManager."
                                  << G4endl;
-            G4Exception("G4DNAMoleculeEncounterStepper::CalculateStep","MoleculeEncounterStepper001",
+            G4Exception("G4DNAMoleculeEncounterStepper::RetrieveResults","MoleculeEncounterStepper001",
                         FatalErrorInArgument,exceptionDescription);
             continue ;
         }
@@ -246,7 +263,7 @@ void G4DNAMoleculeEncounterStepper::RetrieveResults(const G4Track& trackA, const
                                  << trackA.GetTrackID() << G4endl;
             exceptionDescription << "And the trackID of the reactant (trackB) is: "
                                  << trackB->GetTrackID() << G4endl;
-            G4Exception("G4DNAMoleculeEncounterStepper::CalculateStep","MoleculeEncounterStepper002",
+            G4Exception("G4DNAMoleculeEncounterStepper::RetrieveResults","MoleculeEncounterStepper002",
                         FatalErrorInArgument,exceptionDescription);
             continue ;
         }
@@ -262,7 +279,7 @@ void G4DNAMoleculeEncounterStepper::RetrieveResults(const G4Track& trackA, const
                                  << " with trackID : "
                                  << trackA.GetTrackID() << G4endl;
 
-            G4Exception("G4DNAMoleculeEncounterStepper::CalculateStep","MoleculeEncounterStepper003",
+            G4Exception("G4DNAMoleculeEncounterStepper::RetrieveResults","MoleculeEncounterStepper003",
                         FatalErrorInArgument,exceptionDescription);
 
         }
@@ -285,7 +302,7 @@ void G4DNAMoleculeEncounterStepper::RetrieveResults(const G4Track& trackA, const
                                  << "\t trackB->GetGlobalTime() = "
                                  << G4BestUnit(trackB->GetGlobalTime(), "Time")<< G4endl;
 
-            G4Exception("G4DNAMoleculeEncounterStepper::CalculateStep","MoleculeEncounterStepper004",
+            G4Exception("G4DNAMoleculeEncounterStepper::RetrieveResults","MoleculeEncounterStepper004",
                         FatalErrorInArgument,exceptionDescription);
         }
 
@@ -293,12 +310,17 @@ void G4DNAMoleculeEncounterStepper::RetrieveResults(const G4Track& trackA, const
 #ifdef G4VERBOSE
         if(fVerbose > 1)
         {
-            G4cout <<"Reaction : Interaction Range = "
-                  << G4BestUnit(R, "Length")<<G4endl;
-            G4cout <<"Real distance between reactants  = "
+            G4cout << "\t ************************************************** " << G4endl;
+            G4cout <<"\t Reaction between "
+                  << moleculeA->GetName() << " (" << trackA.GetTrackID() << ") "
+                   << " & " << moleculeB->GetName() << " (" << trackB->GetTrackID() << "), "
+                   << "Interaction Range = "
+                   << G4BestUnit(R, "Length")<<G4endl;
+            G4cout <<"\t Real distance between reactants  = "
                   << G4BestUnit((trackA.GetPosition() - trackB->GetPosition()).mag(), "Length")<<G4endl;
-            G4cout <<"Distance between reactants calculated by nearest neighbor algorithm = "
+            G4cout <<"\t Distance between reactants calculated by nearest neighbor algorithm = "
                   << G4BestUnit(sqrt(r2), "Length")<<G4endl;
+//            G4cout << " ***** " << G4endl;
         }
 #endif
 

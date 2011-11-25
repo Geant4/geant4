@@ -37,6 +37,10 @@
 #ifndef G4ITREACTIONTABLE_H
 #define G4ITREACTIONTABLE_H
 
+/**
+  * Free interface to define reaction information
+  */
+
 class G4ITReactionTable
 {
     public:

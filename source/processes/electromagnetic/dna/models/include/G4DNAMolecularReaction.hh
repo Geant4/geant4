@@ -43,6 +43,14 @@
 class G4DNAMolecularReactionTable;
 class G4VDNAReactionModel;
 
+/**
+  * G4DNAMolecularReaction is the reaction process
+  * used in G4DNAMolecularStepByStepModel between
+  * two molecules.
+  * After the global track steps, it test whether
+  * the molecules can react. If so, the reaction is made.
+  */
+
 class G4DNAMolecularReaction : public G4VITReactionProcess
 {
     public:
@@ -60,7 +68,7 @@ class G4DNAMolecularReaction : public G4VITReactionProcess
          */
         G4DNAMolecularReaction& operator=(const G4DNAMolecularReaction& other);
 
-        AddClone(G4VITReactionProcess, G4DNAMolecularReaction)
+        G4IT_ADD_CLONE(G4VITReactionProcess, G4DNAMolecularReaction)
 
         /** Given two tracks, it tells you whether they can react
          */

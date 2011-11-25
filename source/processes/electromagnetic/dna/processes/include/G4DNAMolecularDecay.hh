@@ -45,6 +45,13 @@ class G4ParticleChange;
 class G4VMolecularDecayDisplacer;
 class G4MoleculeDefinition;
 
+/**
+  * G4DNAMolecularDecay should be called only for molecules.
+  * It will dissociate the molecules using the decay associated to
+  * this molecule and if a displacement scheme has been registered,
+  * it will place the products to the expected position.
+  */
+
 class G4DNAMolecularDecay: public G4VITRestProcess
 {
 public:
@@ -53,7 +60,7 @@ public:
 
     virtual ~G4DNAMolecularDecay();
 
-    AddClone(G4VITProcess, G4DNAMolecularDecay)
+    G4IT_ADD_CLONE(G4VITProcess, G4DNAMolecularDecay)
 
     virtual G4bool IsApplicable(const G4ParticleDefinition&);
 

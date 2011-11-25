@@ -42,6 +42,10 @@
 #include "G4ParticleChange.hh"
 #include "G4TrackFastVector.hh"
 
+/** Similar to G4ParticleChange, but deal with two tracks
+  * rather than one.
+  */
+
 class G4ITReactionChange
 {
 public:

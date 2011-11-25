@@ -52,6 +52,13 @@ struct G4ProcessState_Lock{
 #define InitProcessState(destination,source) \
     destination(reference_cast(destination,source))
 
+/**
+ * G4VITProcess inherits from G4VProcess.
+ * A G4VITProcess is able to save its current state for a given track into G4IT.
+ * This state may be retrieve latter on to be used by the G4VITProcess.
+ * Each G4VITProcess is tagged.
+ */
+
 class G4VITProcess : public G4VProcess
 {
 public:
@@ -67,7 +74,7 @@ public:
     G4int operator==(const G4VITProcess &right) const;
     G4int operator!=(const G4VITProcess &right) const;
 
-    ParentToClone(G4VITProcess)
+    G4IT_TO_BE_CLONED(G4VITProcess)
 
     G4int GetProcessID()
     {

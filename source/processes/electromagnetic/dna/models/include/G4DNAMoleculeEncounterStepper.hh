@@ -46,13 +46,24 @@ class G4DNAMolecularReactionTable;
 
 class G4Molecule;
 
+/**
+  * Given a molecule G4DNAMoleculeEncounterStepper will calculate for its possible reactants
+  * what will be the minimum encounter time and the associated molecules.*
+  *
+  * This model includes dynamical time steps as explained in
+  * "Computer-Aided Stochastic Modeling of the Radiolysis of Liquid Water",
+  * V. Michalik, M. Begusová, E. A. Bigildeev,
+  * Radiation Research, Vol. 149, No. 3 (Mar., 1998), pp. 224-236
+  *
+  */
+
 class G4DNAMoleculeEncounterStepper : public G4VITTimeStepper
 {
 public:
     G4DNAMoleculeEncounterStepper();
     virtual ~G4DNAMoleculeEncounterStepper();
     G4DNAMoleculeEncounterStepper(const G4DNAMoleculeEncounterStepper&);
-    AddClone(G4VITTimeStepper,G4DNAMoleculeEncounterStepper)
+    G4IT_ADD_CLONE(G4VITTimeStepper,G4DNAMoleculeEncounterStepper)
 
     virtual void PrepareForAllProcessors();
     virtual G4double CalculateStep(const G4Track&, const G4double&);

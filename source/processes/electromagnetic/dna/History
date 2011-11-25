@@ -13,6 +13,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+21.11.2011  M.K                 tag emdna-V09-04-50
+            Change the name of macros in AddClone_def.hh to
+            avoid conflicts with ROOT.
+            Add short class description (comments added in the new files)
+            in JavaDoc style for doxygen use.
+
 21.11.2011  M.K                 tag emdna-V09-04-49
             Correct a wrong condition in the step manager
             Avoid the call of Green brownian bridge when

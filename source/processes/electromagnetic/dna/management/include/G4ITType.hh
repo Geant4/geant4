@@ -40,6 +40,12 @@
 
 #include <cstddef>
 
+/**
+  * Tag the G4IT
+  * Should be automatically setup by G4IT
+  * using : ITDef(MyIT) and ITImp(MyIT)
+  */
+
 struct G4ITType
 {
 private :

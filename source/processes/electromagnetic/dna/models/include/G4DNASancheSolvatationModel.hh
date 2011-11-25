@@ -40,6 +40,13 @@
 
 #include "G4VEmModel.hh"
 
+/**
+  * When an electron reaches the highest energy domain of G4DNASancheSolvatationModel,
+  * it is then automatically converted into a solvated electron and displace from its original
+  * position using a published thermalization statistic.
+  *
+  */
+
 class G4DNASancheSolvatationModel : public G4VEmModel
 {
 public :

@@ -50,6 +50,11 @@ class G4KDTreeResult;
 typedef G4ReferenceCountedHandle<G4KDTreeResult> G4KDTreeResultHandle;
 typedef G4ReferenceCountedHandle<ResNode> ResNodeHandle;
 
+/**
+  * G4KDTreeResult enables to go through the nearest entities found
+  * by G4KDTree.
+  */
+
 class G4KDTreeResult : protected std::list<ResNode>
 {
 protected :

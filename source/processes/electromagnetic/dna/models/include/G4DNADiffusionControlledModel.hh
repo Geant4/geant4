@@ -44,6 +44,16 @@
 
 class G4DNAMolecularReactionData;
 
+/**
+  * G4DNADiffusionControlledModel should be used
+  * for very fast reactions : the reactions between
+  * reactants occuring at encounter.
+  * When the time step is constrained this model
+  * uses brownian bridge : "Absorbing (Smoluchowski) boundary condition"
+  * Reference : On the simulation of diffusion processes close to boundaries,
+  * N. J. B. Green, Molecular Physics, 65: 6, 1399 — 1408(1988)
+  */
+
 class G4DNADiffusionControlledModel : public G4VDNAReactionModel
 {
 public :
@@ -52,7 +62,7 @@ public :
 
     G4DNADiffusionControlledModel(const G4DNADiffusionControlledModel&);
 
-    AddClone(G4VDNAReactionModel, G4DNADiffusionControlledModel)
+    G4IT_ADD_CLONE(G4VDNAReactionModel, G4DNADiffusionControlledModel)
 
     virtual void Initialise(const G4Molecule*, const G4Track&) ;
     virtual void InitialiseToPrint(const G4Molecule*) ;

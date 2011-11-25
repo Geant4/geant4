@@ -45,6 +45,12 @@
 #include "G4KDTree.hh"
 #include "G4Track.hh"
 
+/**
+  * G4VITManager is just a virtual interface for G4ITManager.
+  * For more details, please have a look at the description
+  * of ITManager.
+  */
+
 class G4VITManager
 {    
 protected :
@@ -133,7 +139,7 @@ public :
 };
 
 /**
-  * G4VITManager is able to save into different boxes
+  * G4ITManager is able to save into different boxes
   * the ITs that will be used in the simulation.
   * It is a stack-like.
   * Those boxes are used to fill a tree which helps

@@ -40,6 +40,13 @@
 
 #include "G4VEmModel.hh"
 
+
+/**
+  * When an electron reaches the highest energy domain of G4DNATransformElectronModel,
+  * it is then automatically converted into a solvated electron without thermalization
+  * displacement (assumed to be already thermalized).
+  */
+
 class G4DNATransformElectronModel: public G4VEmModel
 {
 public :

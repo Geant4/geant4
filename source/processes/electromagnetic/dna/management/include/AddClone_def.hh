@@ -38,10 +38,10 @@
 #ifndef ADDClone_DEF
 #define ADDClone_DEF
 
-#define ParentToClone(parent_class) \
-    virtual parent_class* Clone() const = 0;
+#define G4IT_TO_BE_CLONED(parent_class) \
+    virtual parent_class* Clone() const { return 0;}
 
-#define AddClone(parent_class, kid_class) \
+#define G4IT_ADD_CLONE(parent_class, kid_class) \
     virtual parent_class* Clone() const {\
         return new kid_class(*this);\
     }
