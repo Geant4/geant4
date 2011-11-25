@@ -13,6 +13,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+25.11.2011  M.K                 tag emdna-V09-04-51
+            Correct a typo in previous tag
+
+25.11.2011  M.K                 tag emdna-V09-04-51
+            Place the reaction products at the reaction site
+            rather than center of mass in DNAMolecularReaction
+
 21.11.2011  M.K                 tag emdna-V09-04-50
             Change the name of macros in AddClone_def.hh to
             avoid conflicts with ROOT.

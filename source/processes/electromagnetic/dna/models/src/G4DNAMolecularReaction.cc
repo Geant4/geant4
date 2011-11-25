@@ -179,13 +179,19 @@ G4ITReactionChange* G4DNAMolecularReaction::MakeReaction(const G4Track& trackA, 
 
     if (nbProducts)
     {
+        G4double D1 = moleculeA->GetDiffusionCoefficient();
+        G4double D2 = moleculeB->GetDiffusionCoefficient();
+        G4double sqrD1 = sqrt(D1);
+        G4double sqrD2 = sqrt(D2);
+        G4double numerator = sqrD1 + sqrD2;
+        G4ThreeVector reactionSite = sqrD1/numerator * trackA.GetPosition()
+                                   + sqrD2/numerator * trackB.GetPosition()  ;
+
         for (G4int j=0 ; j < nbProducts; j++)
         {
             G4Molecule* product = new G4Molecule(*reactionData->GetProduct(j));
             G4Track* productTrack = product->BuildTrack(trackA.GetGlobalTime(),
-                                                        (moleculeA->GetMass()*trackA.GetPosition()
-                                                         +moleculeB->GetMass()*trackB.GetPosition())/
-                                                        (moleculeA->GetMass()+moleculeB->GetMass()) );
+                                                        reactionSite);
 
             productTrack->SetTrackStatus(fAlive);
 
