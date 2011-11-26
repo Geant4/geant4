@@ -1,0 +1,454 @@
+
+                       geant4-09-05-ref-00
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o 
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+cmake                                            cmake-V09-04-39
+-----
+- Added 'ui_all' and 'vis_all' components to allow simple selection of all
+  available UI and Vis components.
+- Added support for OpenInventor visualization driver, with new CMake option
+  GEANT4_USE_INVENTOR to enable build. Addressing problem reports #1196, #1261.
+- Added setup of installed scripts to use self location functionality in
+  'geant4-config' when installation is relocatable.
+- Added a function to conditional set environment variables. Added setup of
+  G4WORKDIR. Added setup of data library variables if they've been installed.
+  Added GEANT4_ADD_FEATURE reporting for data and example code install.
+- Marked GEANT4_ENABLE_TESTING and GEANT4_BUILD_EXAMPLES options as advanced.
+- Added some protection if GEANT4_DATA_DIR not defined.
+- Updated references to data libraries version for 9.5.
+
+config                                           config-V09-04-19
+------
+- Abilited possibility to force building of internal 'expat' module also
+  for Linux and Mac, through use of G4LIB_BUILD_EXPAT flag.
+- Allow use of Qt libraries not installed as Framework in Darwin-g++.gmk.
+- Archived Configure scripts.
+
+analysis                                         analysis-V09-04-14
+--------
+- Updated to g4tools-1.0.5.
+
+digits_hits                                      digits_hits-V09-04-08
+-----------
+- G4THitsMap: removed the print-out of total value, to avoid inconsistency
+  caused by a class <T> which does not have += operator or cannot be
+  initilized to 0. Addressing to the problem report #1258.
+- Migrated code to new G4Exception scheme.
+
+error_propagation                                error_propagation-V09-04-04
+-----------------
+- Added method GetTranfMat() in G4ErrorFreeTrajectoryState.
+  Addresses problem report #1248.
+- Migrated code to new G4Exception scheme.
+
+event                                            event-V09-04-09
+-----
+- G4ParticleGun: added "const" qualifier to accessors.
+- Fixed Coverity defects and some code cleanup.
+- Migrated code to new G4Exception scheme.
+
+externals                                        externals-V09-04-11
+---------
+- Updated CLHEP module to version 2.1.1.0.
+- Abilited possibility to force building of internal 'expat' module also
+  for Linux and Mac, through use of G4LIB_BUILD_EXPAT flag.
+
+g3tog4                                           g3tog4-V09-04-07
+------
+- Added export flag for extern symbols to allow for generation of DLLs
+  on Windows; allow build of DLL, if selected.
+  Fixed signature in PG4gsdet() for unresolved symbol in building DLLs.
+- Make safe to compile with -j and drop compilation of Fortran code.
+
+geometry/magneticfield                           field-V09-04-06
+----------------------
+- Added (uniform) gravity field capability.
+  Added new classes G4EqGravityField, G4UniformGravityField.
+- G4Field: revised to improve ability to detect gravity field.
+  Added new method IsGravityActive().
+
+geometry/navigation                              geomnav-V09-04-12
+-------------------
+- Revised all Locator classes to use GetLastSurfaceNormal()
+  Fixes last hard cases of stuck tracks in ATLAS setup.
+- Minor fix in G4Navigator::GetLocalExitNormal().
+- Adapted G4MultiNavigator to revisions of intersection logic to provide
+  Exit Surface Normal for step ending on boundary.
+- Trivial fixes for Coverity defects in G4GeomTestPoint and G4GeomTestVolPoint.
+- Some code cleanup...
+
+geometry/solids/BREPS                            breps-V09-04-04
+---------------------
+- Fixed trivial Coverity defect on assignment operators to G4PointRat.
+
+geometry/solids/CSG                              geom-csg-V09-04-11
+-------------------
+- Correction in G4CutTubs for missing implementation of GetCubicVolume()
+  and GetSurfaceArea() utility methods, to be temporarly replaced by
+  default G4VSolid implementation.
+
+geometry/solids/specific                         geom-specific-V09-04-09
+------------------------
+- Fixed trivial Coverity defects on assignment operators...
+
+global                                           global-V09-04-24
+------
+- Removed obsolete G4Exception signature.
+  Updated banner and some cleanup.
+- G4Pow: reduced vector for factorial from 512 to 170 (result should be
+  below DBL_MAX). Fixed computation of log(factorial).
+- Added G4lrint(), G4lint(), G4rint() as global utility functions in
+  templates.hh for generic use.
+- Fixed Coverity defects on G4Physics2DVector.
+- Changed date for release 9.5.
+
+graphics_reps                                    greps-V09-04-10
+-------------
+- G4Colour: removed "using std::map" statement from header.
+  Added GetMap() so that current colour map options can be listed.
+- Fixed most Coverity warnings.
+
+intercoms                                        intercoms-V09-04-01
+---------
+- Updated G4Exception ID to have it sequential in UI.
+
+interfaces                                       interfaces-V09-04-12
+----------
+- Fix for displaying a QMessageBox on G4err output, to allow proper detection
+  of G4Exceptions coming from kernel.
+- Code quality improvements by Coverity.
+- Migrated code to new G4Exception scheme.
+
+materials                                        materials-V09-04-17
+---------
+- G4SandiaTable, G4IonisParamElm, G4IonisParamMat, G4OpticalSurface:
+  fixed problems reported by Coverity, mainly in assignment operator.
+
+particles                                        particles-V09-04-22
+---------
+- Fixed bug in G4IsotopeMagneticMoment constructors.
+- Fixed defects on assignment operators reported by Coverity.
+- Migrated code to new G4Exception scheme.
+
+persistency/ascii                                ascii-V09-04-08
+-----------------
+- Migrated code to new G4Exception scheme.
+
+persistency/gdml                                 gdml-V09-04-10
+----------------
+- Fixes in reader to properly consider units in import for G4GenericTrap,
+  G4EllipticalTube, G4TessellatedSolid and G4Tet.
+
+physics_lists                                    phys-lists-V09-04-74
+-------------
+- Updated mu+-, pi+-, kaon+-, configuration reusing the same Bremsstrahlung
+  and pair production models for particle and anti-particle; by this some
+  memory is saved and expected reduction of initialisation time.
+- Fix in all EM builders to return back to old method of definition of
+  high-energy model per particle type; the new method causes energy
+  non-conservation in hadron calorimetery.
+- Implemented changes of support-level:
+  o marked unsupported: QGSP_BERT_NOLEP, QGSP_BERT_TRV,
+  o marked supported: Shielding
+  o marked experimental: CHIPS.
+- G4PhysListFactory: implemented selection of EM builder via physics-list name.
+- EM variants (EMV, EMX, EMY) are now available only from physics-list
+  factory, with the exception of FTFP_BERT_EMV and QGSP_BIC_EMY.
+  The following now raise G4Exception explaining what is needed to do:
+  FTFP_BERT_EMX, QGSP_BERT_EMX, QGSP_BERT_EMV
+- FTF_BIC: removed use of LEP for Kaons; this required new builders
+  G4KaonBuilder, G4FTFBinaryPionBuilder,  G4FTFBinaryKaonBuilder,
+  G4BinaryPionBuilder, G4BertiniKaonBuilder.
+- G4DataQuestionaire: updated for use more datasets.
+  Updated lists to ask for check datasets needed:
+  QGSP_BIC_HP, Shielding, QGSP_BERT_EMV, QGSP_INCL_ABLA
+- G4HadronElasticXS: use G4BGGHadronElasticXS proton cross-section.
+- G4HadronInelasticQBBC: use CHIPS x-sections for kaons; use Bertini up to
+  12 GeV, FTFP down to 3 GeV. Code cleanup in QBBC.
+- HadronPhysicsFTF_BIC: fixed bug for wrong deletion.
+- Added G4DNAEmPhysicsChemistry builder.
+  Added class G4StepLimiterBuilder to builders.
+- Removed He3 from elastic builders, because cross-section is
+  still unavailable.
+- G4DataQuestionaire: fixed typo in new abla part; replaced G4cout by
+  G4ExceptionDescription.
+- Bug fix of casting in G4OpticalPhysicsMessenger and G4OpticalPhysics.
+- Fixed wrong default signature in G4NeutronLENDBuilder.
+
+####################
+
+processes/electromagnetic/dna                    emdna-V09-04-37
+-----------------------------
+- First prototype classes for water radiolysis and radiation chemistry.
+- G4DNAIonisation: added models for C/N/O/Fe.
+  Added electron solvatation process & models.
+- Extension of ionisation by HZE.
+- Reorganised module structure in sub-modules.
+
+processes/electromagnetic/lowenergy              emlowen-V09-04-72
+-----------------------------------
+- Added FormFactor*CrossSection classes according to A.Taborda et al.
+  X-Ray Spectrom,and made modifications accordingly.
+- Bug fix in G4PenelopeOscillatorManager, which caused a G4Exception for
+  some materials.
+- Bug fix in G4PenelopePhotoElectricModel, which caused a potential violation
+  of energy conservation in high-Z materials.
+- Added additional verbosity and protection in G4PenelopeBremsstrahlungFS.
+- Updated of G4UAtomDeexcitationto remove runtime warning if Deexcitation
+  is not used. Fixed Coverity defects.
+
+processes/electromagnetic/standard               emstand-V09-04-49
+----------------------------------
+- G4eCoulombScatteringModel: renamed local member and set method
+  SetLowEnergyThreshold() to avoid bas class method hiding.
+  Addressing problem report #1256.
+- G4SeltzerBergerModel: new class implementing new model for Bremsstrahlung,
+  according to S.M.Seltzer and M.J.Berger, Atomic data and Nuclear Data
+  Tables 35 (1986) 345. Requires new G4EMLOW data set 6.23.
+  Updated G4eBremsstrahlungRelModel accordingly.
+- G4ScreeningMottCrossSection, G4eSingleCoulombScatteringModel: new classes
+  implementing single scattering model for electron-nuclei interaction,
+  suitable for high-energy electrons, low scattering angles and light
+  target materials..
+- G4eCoulombScatteringModel: increased low-limit from 10 eV to 1 keV.
+- G4eeToTwoGammaModel: added polarization.
+- Migrated code to new G4Exception scheme.
+
+processes/electromagnetic/utils                  emutils-V09-04-49
+-------------------------------
+- G4VEnergyLossProcess, G4VEmProcess, G4EmBiasingManager: fixed
+  initialisation and improved cout for usage of secondary biasing.
+  G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering,
+  G4LossTableBuilder - fixed initialisation for the case of usage
+  of variable density materials and sessions with multiple runs.
+- G4LossTableBuilder: fixed initialisation logic for usage by
+  G4EnergyLossForExtrapolator.
+- G4VEnergyLossProcess, G4VEmProcess, G4EmProcessOptions,
+  G4EnergyLossMessenger: added a flag of change of weight for cross-section
+  biasing and forced interaction option.
+- G4VEnergyLossProcess, G4EmBiasingManager, G4EmProcessOptions,
+  G4EnergyLossMessenger: added upper limit in energy for secondary particle
+  biasing and updated UI commands.
+
+processes/electromagnetic/xrays                  xrays-V09-04-08
+-------------------------------
+- Migrated code to new G4Exception scheme.
+
+processes/decay                                  decay-V09-04-02
+---------------
+- Migrated code to new G4Exception scheme.
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V09-04-28)
+  o Switch from Description() to CrossSectionDescription(std::ostream&).
+  o Modified p-p cross sections in G4GGNuclNuclCrossSection,
+    G4GlauberGribovCrossSection and G4HadronNucleonXsc to include
+    latest TOTEM data at 7 TeV.
+  o G4ElectroNuclearCrossSection - removed not needed G4Exception
+  o G4HadronCrossSection: code cleanup.
+  o G4ElectroNuclearCrossSection: corrected numerical instability adding
+    numerical protections in methods computing equivalent photon energy,
+    Q^2, and virtual factor.
+  o Migrated code to new G4Exception scheme.
+- models/binary_cascade (had-binary-V09-04-08)
+  o G4BinaryCascade: revised calculation of excitation energy when used for
+    rescattering, removing systematic energy non-conservation.
+    More changes/fixes for use with propagate interface. Code cleanup.
+  o G4GeneratorPrecompoundInterface: reduced problem of energy
+    non-conservation. Fix to add fragment nucleus to reaction products
+    when no de-excitation.
+  o Some code cleanup in G4BinaryCascade, mostly ApplyCollision().
+- models/cascade (hadr-casc-V09-04-39)
+  o G4CascadeGamNChannel, G4CascadeGamPChannel: new final state tables for
+    gamma-nucleon interactions, with final states up to 9-body, using the
+    same energy binning as pion-nucleon.
+    G4CascadeChannelTables: added new gamma-nucleon interaction states.
+  o G4CascadParticle: in getPathToTheNextZone(), check for zero momentum
+    (pp < 1e-9) and return zero path-length; this will support capture at rest.
+  o G4NucleiModel:  Change kaon potential to be positive, not negative, so
+    slow kaons will occasionally be captured.
+- models/chiral_inv_phase_space/cross_sections (hadr-chips-cs-V09-04-01)
+  o G4QKaonPlusElasticCrossSection and G4QPionMinusNuclearCrossSection
+    have been corrected for a right reproduction of K+N and Pi-N cross
+    sections.
+- models/chiral_inv_phase_space/processes (hadr-chips-proc-V09-04-05)
+  o Migrated code to new G4Exception scheme.
+- models/coherent_elastic (hadr-cohe-V09-04-16)
+  o G4AntiNuclElastic: removed internal low and high energy limits.
+  o G4WHadronElasticProcess: added protection for very low primary energy
+    after scattering.
+  o Complete migration to integer Z and A in G4LEpp, G4LEnp.
+    Fixed Coverity reports in G4NuclNuclDiffuseElastic and G4DiffuseElastic.
+- models/de_excitation (hadr-deex-V09-04-20)
+  o G4NuclearLevelStore (photo-evaporation): added method to include user's
+    evaportation data file; the given data will be used for the treatment of
+    the photo evaporation of the given isotope instead of using the file
+    provided in the photo-evaporation database.
+- models/high_energy (hadr-hep-V09-04-03)
+  o Replaced Description() with ModelDescription(std::ostream&) in all models.
+- models/incl (hadr-incl-V09-04-06)
+  o Fixed compilation warnings.
+- models/inclxx (hadr-inclxx-V09-04-05)
+  o First version of INCL++ intra-nuclear cascade model based on INCL4.6
+    cascade model. Supported projectiles: protons, neutrons, pions up to 3 GeV.
+    Uses G4ExcitationHandler for de-excitation.
+- models/lll_fission (hadr-lllfis-V09-04-00)
+  o Enabled to handle excited isomer nuclei as targets.
+- models/low_energy (hadr-lep-V09-04-04)
+  o Replaced Description() with ModelDescription(std::ostream&) in all models.
+- models/management (hadr-modman-V09-04-04)
+  o G4VIntraNuclearTransportModel: fixed initialisation of PrimaryProjectile.
+  o Added virtual method ModelDescription() to G4HadronicInteraction.
+- models/neutron_hp (hadr-hpn-V09-04-28)
+  o Enabled to handle excited isomer nuclei as targets.
+  o Migrated G4NeutronHPFastLegendre to high order (>30) Legendre polynominal.
+  o Enabled to use Thermal Scattering Model and Data with NIST Materials.
+  o Added protection for production of 0 kinetic energy neutron in
+    G4NeutronHPElasticFS.
+- models/parton_string/diffraction (hadr-string-diff-V09-04-09)
+  o Added protection in G4FTFModel to avoid crash when using Fritiof
+    for nuclear capture of anti-protons at rest.
+  o Bug fixes in FTFmodel and FTFparameters for anti-baryon.
+- models/quasi_elastic (hadr-qelastic-V09-04-02)
+  o New module including the quasi-elastic model extracted from CHIPS.
+    It is used by all physics-lists and it now made independent from CHIPS.
+- models/radioactive_decay (radioactive_decay-V09-04-10)
+  o G4RadioactiveDecay: added possibility for the user to load its own decay
+    file. Set 'halflifethreshold' negative by default to allow the tracking
+    of all excited nuclei resulting from a radioactive decay.
+  o G4RadioactiveDecayChannel: correction to allow the atomic relaxation of
+    de-excited nuclei produce also during beta and alpha decay.
+  o G4RadioactiveDecayMessenger: added macro commands for setting files.
+- processes (hadr-proc-V09-04-06)
+  o Replaced Description() with ModelDescription(std::ostream&) in all models.
+- stopping (hadr-stopping-V09-04-04)
+  o Added class G4FTFCaptureAtRest to handle nuclear capture of anti-protons
+    at rest with Fritiof.
+
+processes/management                             procman-V09-04-06
+--------------------
+- Added b-flavor baryons in G4ParticleTypes.
+- Migrated code to new G4Exception scheme.
+
+processes/optical                                op-V09-04-02
+-----------------
+- Migrated code to new G4Exception scheme.
+
+run                                              run-V09-04-23
+---
+- Migrated code to new G4Exception scheme.
+
+track                                            track-V09-04-12
+-----
+- Updated classes according to changes made to 'materials' module.
+
+visualization                                    vis-V09-04-09
+-------------
+- management:
+  o Introduced 'RefreshIfRequired' in viewer commands.
+  o Added virtual function ResetView() in G4VViewer.
+    Do not set auto-refresh for viewers that are not auto-refresh by default.
+- modeling:
+  o Improved warning messages.
+- gMocren:
+  o Fixed Coverity defects.
+- HepRep:
+  o Fixed warning on gcc-4.6.
+- OpenGL:
+  o Xm: fixed consistency and rest issue with control panels.
+  o Stored mode: improved efficiency for handling transients (trajectories).
+  o Fixed problem of missing trajectories drawing on Mac.
+    Fixed slow drawing on Mac, by reducing the frequency of glFlush.
+  o Fixed inconsistent parameters on Xm panels.
+  o Fixed compilation warnings.
+
+environments                                     envs-V09-04-01
+------------
+- G4Py: included support for OSX Lion. Migrated to new G4Exception scheme.
+
+data sets
+---------
+- G4EMLOW-6.23:
+  o Added Bremsstrahlung data files into new sub-directory brem_SB.
+    Data are published in S.M.Seltzer and M.J.Berger Atom. Data and
+    Nucl. Data Tables 35 (1986) 345-418.
+  o Added ecpssr Form Factor calculations from Reis.
+
+examples                                         examples-V09-04-10
+--------
+- Updated reference outputs.
+- advanced/ChargeExchangeMC (ChargeExchangeMC-V09-04-05)
+  o Implemented new framework for easy creation of various scene primitives.
+  o Added new algorithms for energy deposit collection strategies.
+  o Added new reconstruction parameter: expected momentum at the center of
+    the taget
+  o Optimized calculation of physical values. Code cleanup.
+- advanced/hadrontherapy (hadrontherapy-V09-04-02)
+  o Fixed warnings.
+- extended/analysis/A01 (exampleA01-V09-04-00)
+  o Corrected order of filling x and y for Cloud2D.
+- extended/electromagnetic/TestEm1 (testem1-V09-04-04)
+- extended/electromagnetic/TestEm2 (testem2-V09-04-06)
+  o Set msc95 as default in PhysListEmStandard.
+- extended/electromagnetic/TestEm3 (testem3-V09-04-07)
+  o Set msc95 as default in PhysListEmStandard.
+    Removed PhysListEmStandardGS and PhysListEmStandardWVI.
+  o Use track weight in SteppingAction and added Russian roulette biasing
+    option test in TestEm3.in macro.
+- extended/electromagnetic/TestEm5 (testem5-V09-04-10)
+  o Set msc95 as default in PhysListEmStandard.
+- extended/electromagnetic/TestEm7 (testem7-V09-04-12)
+  o Set msc95 as default in PhysListEmStandard.
+  o Added Water_1.05 material and test of variable density option in
+    TestEm7.in macro and DetectorConstruction.
+- extended/electromagnetic/TestEm9 (testem9-V09-04-03)
+  o Set msc95 as default in PhysListEmStandard.
+  o Fixed gcc-4.6 compilation warnings.
+- extended/electromagnetic/TestEm11 (testem11-V09-04-06)
+- extended/electromagnetic/TestEm12 (testem12-V09-04-07)
+  o Set msc95 as default in PhysListEmStandard.
+    Removed PhysListEmStandardGS and PhysListEmStandardWVI.
+- extended/medical/electronScattering (electronScattering-V09-04-05)
+  o Set msc95 as default in PhysListEmStandard.
+    Removed PhysListEmStandardGS and PhysListEmStandardWVI.
+  o RunAction: disabled storing of random seeds.
+- extended/medical/electronScattering2 (exampleES2-V09-04-04)
+  o Updated PhysListEmStandard to match version in electronScattering.
+  o Corrected physics-list setting in macros.
+- extended/optical/wls (WLS-V09-04-02)
+  o Updated according to changes in 'materials' module.
+  o Fixed gcc-4.6 compilation warnings.
+- extended/runAndEvent/RE02 (exampleRE02-V09-04-00)
+  o Fixed gcc-4.6 compilation warnings.
+- novice/N06 (exampleN06-V09-04-00)
+  o Use Spline interpolation for some property-vectors.
+  o Updated according to changes in 'materials' module.
+
+tests                                            tests-V09-04-10
+-----
+- Updated reference outputs and tools.
+- tests/test10 (test10-V09-04-02)
+  o Added G4CutTubs shape to the test suite.
+- tests/test11 (test11-V09-04-04)
+  o Added NIST Thermal Materials.
+    Changed checking elements (H, C, Al, Fe, Ag, Pb and U).
+  o Cosmetic change in XS output.
+- tests/test30 (test30-V09-04-10)
+  o Fixed analysis of hadron elastic in main().
+    Sort out elastic cross-sections according to builders;
+    fixed call sequence in the event loop.
+  o Migration to integer Z and A in Test30VSecondaryGenerator and corrected
+    initialization.
+  o Migrated to new G4Exception scheme.
+- tests/test69 (test69-V09-04-00)
+  o New test for INCL++ cascade model.
