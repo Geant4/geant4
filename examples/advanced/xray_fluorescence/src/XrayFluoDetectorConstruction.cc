@@ -91,7 +91,7 @@ XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
   NbOfPixelRows     =  1; // should be 1
   NbOfPixelColumns  =  1; // should be 1
   NbOfPixels        =  NbOfPixelRows*NbOfPixelColumns;
-  PixelSizeXY       =  std::sqrt(40) * mm;
+  PixelSizeXY       =  std::sqrt(40.) * mm;
   PixelThickness = 2.7 * mm; //should be 3.5 mm
 
   G4cout << "PixelThickness(mm): "<< PixelThickness/mm << G4endl;
