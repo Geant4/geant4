@@ -78,7 +78,9 @@ G4LowEnergyRayleigh::G4LowEnergyRayleigh(const G4String& processName)
   if (lowEnergyLimit < intrinsicLowEnergyLimit ||
       highEnergyLimit > intrinsicHighEnergyLimit)
     {
-      G4Exception("G4LowEnergyRayleigh::G4LowEnergyRayleigh - energy limit outside intrinsic process validity range");
+      G4Exception("G4LowEnergyRayleigh::G4LowEnergyRayleigh()",
+                  "OutOfRange", FatalException,
+                  "Energy limit outside intrinsic process validity range!");
     }
 
   crossSectionHandler = new G4RDCrossSectionHandler();

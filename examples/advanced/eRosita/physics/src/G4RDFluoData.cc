@@ -74,7 +74,8 @@ G4int G4RDFluoData::VacancyId(G4int vacancyIndex) const
 {
   G4int n = -1;
   if (vacancyIndex<0 || vacancyIndex>=numberOfVacancies)
-    {G4Exception("G4RDFluoData::vacancyIndex outside boundaries");}
+    {G4Exception("G4RDFluoData::VacancyId()", "OutOfRange",
+                 FatalException, "VacancyIndex outside boundaries!");}
   else
     {
       std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator pos;
@@ -92,7 +93,8 @@ size_t G4RDFluoData::NumberOfTransitions(G4int vacancyIndex) const
 {
   G4int n = 0;
   if (vacancyIndex<0 || vacancyIndex>=numberOfVacancies)
-    {G4Exception("G4RDFluoData::vacancyIndex outside boundaries");}
+    {G4Exception("G4RDFluoData::NumberOfTransitions()", "OutOfRange",
+                 FatalException, "VacancyIndex outside boundaries!");}
   else
     {
       n = nInitShells[vacancyIndex]-1;
@@ -107,7 +109,8 @@ G4int G4RDFluoData::StartShellId(G4int initIndex, G4int vacancyIndex) const
  G4int n = -1;
 
  if (vacancyIndex<0 || vacancyIndex>=numberOfVacancies)
-    {G4Exception("G4RDFluoData::vacancyIndex outside boundaries");}
+    {G4Exception("G4RDFluoData::StartShellId()", "OutOfRange",
+                 FatalException, "VacancyIndex outside boundaries!");}
  else
    {
      std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator pos;
@@ -133,7 +136,8 @@ G4double G4RDFluoData::StartShellEnergy(G4int initIndex, G4int vacancyIndex) con
   G4double n = -1;
   
   if (vacancyIndex<0 || vacancyIndex>=numberOfVacancies)
-    {G4Exception("G4RDFluoData::vacancyIndex outside boundaries");}
+    {G4Exception("G4RDFluoData::StartShellEnergy()", "OutOfRange",
+                 FatalException, "VacancyIndex outside boundaries!");}
  else
    {
      std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator pos;
@@ -157,7 +161,8 @@ G4double G4RDFluoData::StartShellProb(G4int initIndex, G4int vacancyIndex) const
   G4double n = -1;
 
   if (vacancyIndex<0 || vacancyIndex>=numberOfVacancies)
-    {G4Exception("G4RDFluoData::vacancyIndex outside boundaries");}
+    {G4Exception("G4RDFluoData::StartShellProb()", "OutOfRange",
+                 FatalException, "VacancyIndex outside boundaries!");}
   else
     {
      std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator pos;
@@ -192,8 +197,9 @@ void G4RDFluoData::LoadData(G4int Z)
   char* path = getenv("G4LEDATA");
   if (!path)
     { 
-      G4String excep("G4RDEMDataSet - G4LEDATA environment variable not set");
-      G4Exception(excep);
+      G4String excep("G4LEDATA environment variable not set!");
+      G4Exception("G4RDEMDataSet::LoadData()", "InvalidSetup",
+                  FatalException, excep);
     }
   
   G4String pathString(path);
@@ -204,8 +210,9 @@ void G4RDFluoData::LoadData(G4int Z)
   
   if (! (lsdp->is_open()) )
     {
-      G4String excep = "G4RDFluoData - data file: " + dirFile + " not found";
-      G4Exception(excep);
+      G4String excep = "Data file: " + dirFile + " not found";
+      G4Exception("G4RDEMDataSet::LoadData()", "DataNotFound",
+                  FatalException, excep);
     }
   
   G4double a = 0;
@@ -322,42 +329,3 @@ void G4RDFluoData::PrintData()
 	     << G4endl;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

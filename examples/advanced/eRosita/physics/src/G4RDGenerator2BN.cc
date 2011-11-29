@@ -359,8 +359,7 @@ G4double G4RDGenerator2BN::Generate2BN(G4double Ek, G4double k) const
 {
 
   G4double Eel;
-  G4double kmin2; 
-  G4double kmax, t;
+  G4double t;
   G4double cte2;
   G4double y, u;
   G4double fk, ft;
@@ -374,9 +373,6 @@ G4double G4RDGenerator2BN::Generate2BN(G4double Ek, G4double k) const
   // find table index
   index = G4int(std::log10(Ek)*100) - index_min;
   Eel = Ek + electron_mass_c2;
-
-  kmax = Ek;
-  kmin2 = kcut;
 
   c = ctab[index];
   A = Atab[index];

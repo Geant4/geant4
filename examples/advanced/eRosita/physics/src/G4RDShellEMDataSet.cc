@@ -54,7 +54,9 @@ G4RDShellEMDataSet::G4RDShellEMDataSet(G4int zeta, G4RDVDataSetAlgorithm* algo,
   unitEnergies(eUnit),
   unitData(dataUnit)
 {
-  if (algorithm == 0) G4Exception("G4RDShellEMDataSet::G4RDShellEMDataSet - interpolation == 0");
+  if (algorithm == 0)
+    G4Exception("G4RDShellEMDataSet::G4RDShellEMDataSet()", "InvalidSetup",
+                FatalException, "Interpolation == 0!");
 }
 
 
@@ -114,9 +116,10 @@ void G4RDShellEMDataSet::SetEnergiesData(G4DataVector* energies,
     }
 
   std::ostringstream message;
-  message << "G4RDShellEMDataSet::SetEnergiesData - component " << componentId << " not found";
+  message << "Component " << componentId << " not found";
  
-  G4Exception(message.str().c_str());
+  G4Exception("G4RDShellEMDataSet::SetEnergiesData()", "DataNotFound",
+              FatalException, message.str().c_str());
 }
 
 
@@ -129,10 +132,11 @@ G4bool G4RDShellEMDataSet::LoadData(const G4String& file)
 
   if (!in.is_open())
     {
-      G4String message("G4RDShellEMDataSet::LoadData - data file \"");
+      G4String message("Data file \"");
       message += fullFileName;
       message += "\" not found";
-      G4Exception(message);
+      G4Exception("G4RDShellEMDataSet::LoadData()", "DataNotFound",
+                  FatalException, message);
     }
 
   G4DataVector* energies = 0;
@@ -186,10 +190,11 @@ G4bool G4RDShellEMDataSet::SaveData(const G4String& file) const
 
   if (!out.is_open())
     {
-      G4String message("G4RDEMDataSet::SaveData - cannot open \"");
+      G4String message("Cannot open \"");
       message += fullFileName;
       message += "\"";
-      G4Exception(message);
+      G4Exception("G4RDEMDataSet::SaveData()", "CannotOpenFile",
+                  FatalException, message);
     }
  
   const size_t n = NumberOfComponents();
@@ -265,7 +270,8 @@ G4String G4RDShellEMDataSet::FullFileName(const G4String& fileName) const
 {
   char* path = getenv("G4LEDATA");
   if (!path)
-    G4Exception("G4RDShellEMDataSet::FullFileName - G4LEDATA environment variable not set");
+    G4Exception("G4RDShellEMDataSet::FullFileName()", "InvalidSetup",
+                FatalException, "G4LEDATA environment variable not set!");
   
   std::ostringstream fullFileName;
  

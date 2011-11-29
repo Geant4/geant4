@@ -91,8 +91,9 @@ G4RDPhotoElectricAngularGeneratorPolarized::G4RDPhotoElectricAngularGeneratorPol
     char* path = getenv("G4LEDATA");
     if (!path)
       {
-        G4String excep = "G4RDEMDataSet - G4LEDATA environment variable not set";
-        G4Exception(excep);
+        G4String excep = "G4LEDATA environment variable not set!";
+        G4Exception("G4RDPhotoElectricAngularGeneratorPolarized()",
+                    "InvalidSetup", FatalException, excep);
       }
 
     G4String pathString(path);
@@ -101,8 +102,9 @@ G4RDPhotoElectricAngularGeneratorPolarized::G4RDPhotoElectricAngularGeneratorPol
     infile = fopen(dirFile,"r"); 
     if (infile == 0)
       {
-	G4String excep = "G4RDPhotoElectricAngularGeneratorPolarized - data file: " + dirFile + " not found";
-	G4Exception(excep);
+	G4String excep = "Data file: " + dirFile + " not found";
+	G4Exception("G4RDPhotoElectricAngularGeneratorPolarized()",
+                    "DataNotFound", FatalException, excep);
       }
 
     // Read parameters into tables. The parameters are function of incident electron energy and shell level

@@ -203,7 +203,8 @@ G4RDAtomicShell* G4RDAtomicTransitionManager::Shell(G4int Z, size_t shellIndex) 
     }
   else
     {
-      G4Exception("G4RDAtomicTransitionManager:Z not found");
+      G4Exception("G4RDAtomicTransitionManager::Shell()",
+                  "InvalidSetup", FatalException, "Z not found!");
       return 0;
     } 
 }
@@ -220,7 +221,9 @@ const G4RDFluoTransition* G4RDAtomicTransitionManager::ReachableShell(G4int Z,si
       std::vector<G4RDFluoTransition*> v = (*pos).second;      
       if (shellIndex < v.size()) return(v[shellIndex]);
       else {
-	G4Exception("G4RDAtomicTransitionManager:reachable shell not found");
+	G4Exception("G4RDAtomicTransitionManager::ReachableShell()",
+                    "InvalidCondition", FatalException,
+                    "Reachable shell not found!");
 	return 0;
       }
   }
@@ -326,7 +329,8 @@ std::map<G4int,std::vector<G4RDFluoTransition*>,std::less<G4int> >::iterator pos
       
     }
     else {
-      G4Exception( "G4RDAtomicTransitionManager: shell not found" );
+      G4Exception("G4RDAtomicTransitionManager::TotalRadiativeTransitionProbability()",
+                  "InvalidCondition", FatalException, "Shell not found!" );
       return 0;
       
     }
@@ -370,7 +374,8 @@ G4double G4RDAtomicTransitionManager::TotalNonRadiativeTransitionProbability(G4i
       return totalNonRadTransProb;    }
     
     else {
-      G4Exception( "shell not found");
+      G4Exception("G4RDAtomicTransitionManager::TotalNonRadiativeTransitionProbability()",
+                  "InvalidCondition", FatalException, "Shell not found!");
       return 0;
     }
   }

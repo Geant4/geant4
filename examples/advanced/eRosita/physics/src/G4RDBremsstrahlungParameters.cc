@@ -109,7 +109,8 @@ void G4RDBremsstrahlungParameters::LoadData(const G4String& name)
 
   const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
   if (materialTable == 0)
-     G4Exception("G4RDCrossSectionHandler: no MaterialTable found)");
+     G4Exception("G4RDBremsstrahlungParameters::LoadData()",
+                 "DataNotFound", FatalException, "No MaterialTable found!");
 
   G4int nMaterials = G4Material::GetNumberOfMaterials();
 
@@ -141,8 +142,9 @@ void G4RDBremsstrahlungParameters::LoadData(const G4String& name)
   char* path = getenv("G4LEDATA");
   if (path == 0)
     {
-      G4String excep("G4RDBremsstrahlungParameters - G4LEDATA environment variable not set");
-      G4Exception(excep);
+      G4String excep("G4LEDATA environment variable not set!");
+      G4Exception("G4RDBremsstrahlungParameters::LoadData()",
+                  "InvalidSetup", FatalException, excep);
     }
 
   G4String pathString_a(path);
@@ -152,9 +154,10 @@ void G4RDBremsstrahlungParameters::LoadData(const G4String& name)
 
   if (! (lsdp_a->is_open()) )
     {
-      G4String stringConversion2("G4RDBremsstrahlungParameters: cannot open file ");
+      G4String stringConversion2("Cannot open file ");
       G4String excep = stringConversion2 + name_a;
-      G4Exception(excep);
+      G4Exception("G4RDBremsstrahlungParameters::LoadData()",
+                  "FileNotFound", FatalException, excep);
   }
 
   // The file is organized into two columns:
@@ -163,12 +166,8 @@ void G4RDBremsstrahlungParameters::LoadData(const G4String& name)
   // The file terminates with the pattern: -1   -1
   //                                       -2   -2
 
-  G4DataVector* energies;
-  G4DataVector* data;
   G4double ener = 0.0;
   G4double sum = 0.0;
-  energies   = new G4DataVector();
-  data       = new G4DataVector();
   G4int z    = 0;
 
   std::vector<G4DataVector*> a;
@@ -244,10 +243,11 @@ G4double G4RDBremsstrahlungParameters::ParameterC(G4int id) const
   G4int n = paramC.size();
   if (id < 0 || id >= n)
     {
-      G4String stringConversion1("G4RDBremsstrahlungParameters::ParameterC - wrong id = ");
+      G4String stringConversion1("Wrong id = ");
       G4String stringConversion2(id);
       G4String ex = stringConversion1 + stringConversion2;
-      G4Exception(ex);
+      G4Exception("G4RDBremsstrahlungParameters::ParameterC()",
+                  "InvalidSetup", FatalException, ex);
     }
 
   return paramC[id];

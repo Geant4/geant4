@@ -166,8 +166,9 @@ void G4RDVCrossSectionHandler::LoadData(const G4String& fileName)
       char* path = getenv("G4LEDATA");
       if (!path)
 	{ 
-	  G4String excep = "G4RDVCrossSectionHandler - G4LEDATA environment variable not set";
-	  G4Exception(excep);
+	  G4String excep = "G4LEDATA environment variable not set!";
+	  G4Exception("G4RDVCrossSectionHandler::LoadData()",
+                      "InvalidSetup", FatalException, excep);
 	}
       
       std::ostringstream ost;
@@ -177,8 +178,9 @@ void G4RDVCrossSectionHandler::LoadData(const G4String& fileName)
       
       if (! (lsdp->is_open()) )
 	{
-	  G4String excep = "G4RDVCrossSectionHandler - data file: " + ost.str() + " not found";
-	  G4Exception(excep);
+	  G4String excep = "Data file: " + ost.str() + " not found!";
+	  G4Exception("G4RDVCrossSectionHandler::LoadData()",
+                      "DataNotFound", FatalException, excep);
 	}
       G4double a = 0;
       G4int k = 1;
@@ -238,8 +240,9 @@ void G4RDVCrossSectionHandler::LoadShellData(const G4String& fileName)
       char* path = getenv("G4LEDATA");
       if (!path)
 	{ 
-	  G4String excep = "G4RDVCrossSectionHandler - G4LEDATA environment variable not set";
-	  G4Exception(excep);
+	  G4String excep = "G4LEDATA environment variable not set!";
+	  G4Exception("G4RDVCrossSectionHandler::LoadShellData()",
+                      "InvalidSetup", FatalException, excep);
 	}
       
       std::ostringstream ost;
@@ -251,8 +254,9 @@ void G4RDVCrossSectionHandler::LoadShellData(const G4String& fileName)
       
       if (! (lsdp->is_open()) )
 	{
-	  G4String excep = "G4RDVCrossSectionHandler - data file: " + ost.str() + " not found";
-	  G4Exception(excep);
+	  G4String excep = "Data file: " + ost.str() + " not found!";
+	  G4Exception("G4RDVCrossSectionHandler::LoadShellData()",
+                      "DataNotFound", FatalException, excep);
 	}
       G4double a = 0;
       G4int k = 1;
@@ -445,7 +449,8 @@ G4RDVEMDataSet* G4RDVCrossSectionHandler::BuildMeanFreePathForMaterials(const G4
   crossSections = BuildCrossSectionsForMaterials(energyVector,energyCuts);
 
   if (crossSections == 0)
-    G4Exception("G4RDVCrossSectionHandler::BuildMeanFreePathForMaterials, crossSections = 0");
+    G4Exception("G4RDVCrossSectionHandler::BuildMeanFreePathForMaterials()",
+                "InvalidCondition", FatalException, "CrossSections = 0!");
 
   G4RDVDataSetAlgorithm* algo = CreateInterpolation();
   G4RDVEMDataSet* materialSet = new G4RDCompositeEMDataSet(algo);
@@ -620,7 +625,8 @@ void G4RDVCrossSectionHandler::ActiveElements()
 {
   const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
   if (materialTable == 0)
-    G4Exception("G4RDVCrossSectionHandler::ActiveElements - no MaterialTable found)");
+    G4Exception("G4RDVCrossSectionHandler::ActiveElements",
+                "InvalidSetup", FatalException, "No MaterialTable found!");
 
   G4int nMaterials = G4Material::GetNumberOfMaterials();
 

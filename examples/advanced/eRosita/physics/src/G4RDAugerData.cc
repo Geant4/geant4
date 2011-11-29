@@ -118,10 +118,13 @@ G4int G4RDAugerData::VacancyId(G4int Z, G4int vacancyIndex) const
 
   G4int n = 0;
   if (vacancyIndex<0 || vacancyIndex>=numberOfVacancies[Z])
-    {G4Exception("G4RDAugerData::vacancyIndex outside boundaries");}
+    {G4Exception("G4RDAugerData::VacancyId()", "OutOfRange",
+                 FatalException, "VacancyIndex outside boundaries!");}
   else {
     trans_Table::const_iterator element = augerTransitionTable.find(Z);
-    if (element == augerTransitionTable.end()) {G4Exception("G4RDAugerData::augerTransitionTable: Data not Loaded");}
+    if (element == augerTransitionTable.end())
+      {G4Exception("G4RDAugerData::VacancyId()", "NoDataFound",
+                   FatalException, "Data not loaded!");}
     std::vector<G4RDAugerTransition> dataSet = (*element).second;
     n = (G4int) dataSet[vacancyIndex].FinalShellId();
   }
@@ -138,10 +141,13 @@ size_t G4RDAugerData::NumberOfTransitions(G4int Z, G4int vacancyIndex) const
 {
   G4int n = 0;
   if (vacancyIndex<0 || vacancyIndex>=numberOfVacancies[Z])
-    {G4Exception("G4RDAugerData::vacancyIndex outside boundaries");}
+    {G4Exception("G4RDAugerData::NumberOfTransitions()", "OutOfRange",
+                 FatalException, "VacancyIndex outside boundaries!");}
   else {
     trans_Table::const_iterator element = augerTransitionTable.find(Z);
-    if (element == augerTransitionTable.end()) {G4Exception("G4RDAugerData::augerTransitionTable: Data not Loaded");}
+    if (element == augerTransitionTable.end())
+      {G4Exception("G4RDAugerData::NumberOfTransitions()", "NoDataFound",
+                   FatalException, "Data not loaded!");}
     std::vector<G4RDAugerTransition> dataSet = (*element).second;
     n = (G4int)dataSet[vacancyIndex].TransitionOriginatingShellIds()->size();
   }
@@ -154,10 +160,13 @@ size_t G4RDAugerData::NumberOfAuger(G4int Z, G4int initIndex, G4int vacancyId) c
 {
   size_t n = 0;
   if (initIndex<0 || initIndex>=numberOfVacancies[Z])
-    {G4Exception("G4RDAugerData::vacancyIndex outside boundaries");}
+    {G4Exception("G4RDAugerData::NumberOfAuger()", "OutOfRange",
+                 FatalException, "VacancyIndex outside boundaries!");}
   else {
     trans_Table::const_iterator element = augerTransitionTable.find(Z);
-    if (element == augerTransitionTable.end()) {G4Exception("G4RDAugerData::augerTransitionTable: Data not Loaded");}
+    if (element == augerTransitionTable.end())
+      {G4Exception("G4RDAugerData::NumberOfAuger()", "NoDataFound",
+                   FatalException, "Data not loaded!");}
     std::vector<G4RDAugerTransition> dataSet = (*element).second;
     const std::vector<G4int>* temp =  dataSet[initIndex].AugerOriginatingShellIds(vacancyId);
     n = temp->size();
@@ -169,10 +178,13 @@ size_t G4RDAugerData::AugerShellId(G4int Z, G4int vacancyIndex, G4int transId, G
 {
   size_t n = 0;  
   if (vacancyIndex<0 || vacancyIndex>=numberOfVacancies[Z])
-    {G4Exception("G4RDAugerData::vacancyIndex outside boundaries");}
+    {G4Exception("G4RDAugerData::AugerShellId()", "OutOfRange",
+                 FatalException, "VacancyIndex outside boundaries!");}
   else {
     trans_Table::const_iterator element = augerTransitionTable.find(Z);
-    if (element == augerTransitionTable.end()) {G4Exception("G4RDAugerData::augerTransitionTable: Data not Loaded");}
+    if (element == augerTransitionTable.end())
+      {G4Exception("G4RDAugerData::AugerShellId()", "NoDataFound",
+                   FatalException, "Data not loaded!");}
     std::vector<G4RDAugerTransition> dataSet = (*element).second;
     n = dataSet[vacancyIndex].AugerOriginatingShellId(augerIndex,transId);
   }
@@ -183,11 +195,14 @@ G4int G4RDAugerData::StartShellId(G4int Z, G4int vacancyIndex, G4int transitionS
 {
   G4int n = 0; 
 
-   if (vacancyIndex<0 || vacancyIndex>=numberOfVacancies[Z]) 
-     {G4Exception("G4RDAugerData::vacancyIndex outside boundaries");}
+  if (vacancyIndex<0 || vacancyIndex>=numberOfVacancies[Z]) 
+    {G4Exception("G4RDAugerData::StartShellId()", "OutOfRange",
+                 FatalException, "VacancyIndex outside boundaries!");}
   else {
     trans_Table::const_iterator element = augerTransitionTable.find(Z);
-    if (element == augerTransitionTable.end()) {G4Exception("G4RDAugerData::augerTransitionTable: Data not Loaded");}
+    if (element == augerTransitionTable.end())
+      {G4Exception("G4RDAugerData::StartShellId()", "NoDataFound",
+                   FatalException, "Data not loaded!");}
     std::vector<G4RDAugerTransition> dataSet = (*element).second;
      n = dataSet[vacancyIndex].TransitionOriginatingShellId(transitionShellIndex);
   }
@@ -201,10 +216,13 @@ G4double G4RDAugerData::StartShellEnergy(G4int Z, G4int vacancyIndex, G4int tran
   G4double energy = 0;
   
   if (vacancyIndex<0 || vacancyIndex>=numberOfVacancies[Z])
-    {G4Exception("G4RDAugerData::vacancyIndex outside boundaries");}
+    {G4Exception("G4RDAugerData::StartShellEnergy()", "OutOfRange",
+                 FatalException, "VacancyIndex outside boundaries!");}
   else {
     trans_Table::const_iterator element = augerTransitionTable.find(Z);
-    if (element == augerTransitionTable.end()) {G4Exception("G4RDAugerData::augerTransitionTable: Data not Loaded");}
+    if (element == augerTransitionTable.end())
+      {G4Exception("G4RDAugerData::StartShellEnergy()", "NoDataFound",
+                   FatalException, "Data not loaded!");}
     std::vector<G4RDAugerTransition> dataSet = (*element).second;
     energy = dataSet[vacancyIndex].AugerTransitionEnergy(augerIndex,transitionId);
       
@@ -217,11 +235,14 @@ G4double G4RDAugerData::StartShellProb(G4int Z, G4int vacancyIndex,G4int transit
 {
   G4double prob = 0;
     
-    if (vacancyIndex<0 || vacancyIndex>=numberOfVacancies[Z]) 
-      {G4Exception("G4RDAugerData::vacancyIndex outside boundaries");}
+  if (vacancyIndex<0 || vacancyIndex>=numberOfVacancies[Z]) 
+    {G4Exception("G4RDAugerData::StartShellProb()", "OutOfRange",
+                 FatalException, "VacancyIndex outside boundaries!");}
   else {
     trans_Table::const_iterator element = augerTransitionTable.find(Z);
-    if (element == augerTransitionTable.end()) {G4Exception("G4RDAugerData::augerTransitionTable: Data not Loaded");}
+    if (element == augerTransitionTable.end())
+      {G4Exception("G4RDAugerData::StartShellProb()", "NoDataFound",
+                   FatalException, "Data not loaded!");}
     std::vector<G4RDAugerTransition> dataSet = (*element).second;
     prob = dataSet[vacancyIndex].AugerTransitionProbability(augerIndex, transitionId);
 
@@ -247,8 +268,9 @@ std::vector<G4RDAugerTransition> G4RDAugerData::LoadData(G4int Z)
     char* path = getenv("G4LEDATA");
     if (!path)
       { 
-	G4String excep = "G4RDEMDataSet - G4LEDATA environment variable not set";
-	G4Exception(excep);
+	G4String excep = "G4LEDATA environment variable not set";
+	G4Exception("G4RDAugerData::LoadData()", "InvalidSetup",
+                    FatalException, excep);
       }
   
     G4String pathString(path);
@@ -258,8 +280,9 @@ std::vector<G4RDAugerTransition> G4RDAugerData::LoadData(G4int Z)
   
     if (! (lsdp->is_open()) )
       {
-	G4String excep = "G4RDAugerData - data file: " + dirFile + " not found";
-	G4Exception(excep);
+	G4String excep = "Data file: " + dirFile + " not found!";
+	G4Exception("G4RDAugerData::LoadData()", "DataNotFound",
+                    FatalException, excep);
       }
  
 

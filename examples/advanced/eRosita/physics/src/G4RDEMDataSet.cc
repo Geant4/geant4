@@ -58,7 +58,9 @@ G4RDEMDataSet::G4RDEMDataSet(G4int Z,
   pdf(0),
   randomSet(random)
 {
-  if (algorithm == 0) G4Exception("G4RDEMDataSet::G4RDEMDataSet - interpolation == 0");
+  if (algorithm == 0)
+    G4Exception("G4RDEMDataSet::G4RDEMDataSet()",
+                "InvalidSetup", FatalException, "Interpolation == 0!");
   if (randomSet) BuildPdf();
 }
 
@@ -78,15 +80,19 @@ G4RDEMDataSet::G4RDEMDataSet(G4int argZ,
   pdf(0),
   randomSet(random)
 {
-  if (algorithm == 0) G4Exception("G4RDEMDataSet::G4RDEMDataSet - interpolation == 0");
+  if (algorithm == 0)
+    G4Exception("G4RDEMDataSet::G4RDEMDataSet()",
+                "InvalidSetup", FatalException, "Interpolation == 0!");
 
   if ((energies == 0) ^ (data == 0))
-    G4Exception("G4RDEMDataSet::G4RDEMDataSet - different size for energies and data (zero case)");
+    G4Exception("G4RDEMDataSet::G4RDEMDataSet()", "InvalidSetup",
+           FatalException, "Different size for energies and data (zero case)!");
 
   if (energies == 0) return;
   
   if (energies->size() != data->size()) 
-    G4Exception("G4RDEMDataSet::G4RDEMDataSet - different size for energies and data");
+    G4Exception("G4RDEMDataSet::G4RDEMDataSet()", "InvalidSetup",
+           FatalException, "Different size for energies and data!");
 
   if (randomSet) BuildPdf();
 }
@@ -101,7 +107,9 @@ G4RDEMDataSet::~G4RDEMDataSet()
 
 G4double G4RDEMDataSet::FindValue(G4double energy, G4int /* componentId */) const
 {
-  if (!energies) G4Exception("G4RDEMDataSet::FindValue - energies == 0");
+  if (!energies)
+    G4Exception("G4RDEMDataSet::FindValue()", "InvalidSetup",
+                FatalException, "Energies == 0!");
   if (energies->empty()) return 0;
   if (energy <= (*energies)[0]) return (*data)[0];
 
@@ -143,12 +151,14 @@ void G4RDEMDataSet::SetEnergiesData(G4DataVector* dataX,
   data = dataY;
  
   if ((energies == 0) ^ (data==0)) 
-    G4Exception("G4RDEMDataSet::SetEnergiesData - different size for energies and data (zero case)");
+    G4Exception("G4RDEMDataSet::SetEnergiesData()", "InvalidSetup",
+       FatalException, "Different size for energies and data (zero case)!");
 
   if (energies == 0) return;
   
   if (energies->size() != data->size()) 
-    G4Exception("G4RDEMDataSet::SetEnergiesData - different size for energies and data");
+    G4Exception("G4RDEMDataSet::SetEnergiesData()", "InvalidSetup",
+       FatalException, "Different size for energies and data!");
 }
 
 G4bool G4RDEMDataSet::LoadData(const G4String& fileName)
@@ -164,10 +174,11 @@ G4bool G4RDEMDataSet::LoadData(const G4String& fileName)
 
   if (!in.is_open())
     {
-      G4String message("G4RDEMDataSet::LoadData - data file \"");
+      G4String message("Data file \"");
       message += fullFileName;
       message += "\" not found";
-      G4Exception(message);
+      G4Exception("G4RDEMDataSet::LoadData()", "DataNotFound",
+                  FatalException, message);
     }
 
   G4DataVector* argEnergies=new G4DataVector;
@@ -210,10 +221,11 @@ G4bool G4RDEMDataSet::SaveData(const G4String& name) const
 
   if (!out.is_open())
     {
-      G4String message("G4RDEMDataSet::SaveData - cannot open \"");
+      G4String message("Cannot open \"");
       message+=fullFileName;
       message+="\"";
-      G4Exception(message);
+      G4Exception("G4RDEMDataSet::SaveData()", "CannotOpenFile",
+                  FatalException, message);
     }
  
   out.precision(10);
@@ -304,7 +316,8 @@ G4String G4RDEMDataSet::FullFileName(const G4String& name) const
 {
   char* path = getenv("G4LEDATA");
   if (!path)
-    G4Exception("G4RDEMDataSet::FullFileName - G4LEDATA environment variable not set");
+    G4Exception("G4RDEMDataSet::FullFileName()", "InvalidSetup",
+                FatalException, "G4LEDATA environment variable not set!");
   
   std::ostringstream fullFileName;
   fullFileName << path << '/' << name << z << ".dat";
@@ -348,7 +361,8 @@ G4double G4RDEMDataSet::RandomSelect(G4int /* componentId */) const
   // Random select a X value according to the cumulative probability distribution
   // derived from the data
 
-  if (!pdf) G4Exception("G4RDEMDataSet::RandomSelect - PDF has not been created for this data set");
+  if (!pdf) G4Exception("G4RDEMDataSet::RandomSelect()", "InvalidSetup",
+           FatalException, "PDF has not been created for this data set");
 
   G4double value = 0.;
   G4double x = G4UniformRand();

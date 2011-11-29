@@ -102,7 +102,9 @@ G4LowEnergyPhotoElectric::G4LowEnergyPhotoElectric(const G4String& processName)
   if (lowEnergyLimit < intrinsicLowEnergyLimit || 
       highEnergyLimit > intrinsicHighEnergyLimit)
     {
-      G4Exception("G4LowEnergyPhotoElectric::G4LowEnergyPhotoElectric - energy limit outside intrinsic process validity range");
+      G4Exception("G4LowEnergyPhotoElectric::G4LowEnergyPhotoElectric()",
+                  "OutOfRange", FatalException,
+                  "Energy limit outside intrinsic process validity range!");
     }
 
   crossSectionHandler = new G4RDCrossSectionHandler();
@@ -385,7 +387,9 @@ void G4LowEnergyPhotoElectric::SetAngularGenerator(const G4String& name)
     }
   else
     {
-      G4Exception("G4LowEnergyPhotoElectric::SetAngularGenerator - generator does not exist");
+      G4Exception("G4LowEnergyPhotoElectric::SetAngularGenerator()",
+                  "InvalidSetup", FatalException,
+                  "Generator does not exist!");
     }
 
   ElectronAngularGenerator->PrintGeneratorInformation();

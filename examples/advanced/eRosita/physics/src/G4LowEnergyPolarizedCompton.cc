@@ -94,7 +94,9 @@ G4LowEnergyPolarizedCompton::G4LowEnergyPolarizedCompton(const G4String& process
   if (lowEnergyLimit < intrinsicLowEnergyLimit ||
       highEnergyLimit > intrinsicHighEnergyLimit)
     {
-      G4Exception("G4LowEnergyPolarizedCompton::G4LowEnergyPolarizedCompton - energy outside intrinsic process validity range");
+      G4Exception("G4LowEnergyPolarizedCompton::G4LowEnergyPolarizedCompton()",
+                  "OutOfRange", FatalException,
+                  "Energy outside intrinsic process validity range!");
     }
 
   crossSectionHandler = new G4RDCrossSectionHandler;

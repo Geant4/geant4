@@ -90,7 +90,9 @@ size_t G4RDDopplerProfile::NumberOfProfiles(G4int Z) const
 const G4RDVEMDataSet* G4RDDopplerProfile::Profiles(G4int Z) const
 {
   std::map<G4int,G4RDVEMDataSet*,std::less<G4int> >::const_iterator pos;
-  if (Z < zMin || Z > zMax) G4Exception("G4RDDopplerProfile::Profiles - Z outside boundaries");
+  if (Z < zMin || Z > zMax)
+    G4Exception("G4RDDopplerProfile::Profiles()", "OutOfRange",
+                FatalException, "Z outside boundaries!");
   pos = profileMap.find(Z);
   G4RDVEMDataSet* dataSet = (*pos).second;
   return dataSet;
@@ -124,8 +126,9 @@ void G4RDDopplerProfile::LoadBiggsP(const G4String& fileName)
   char* path = getenv("G4LEDATA");
   if (!path)
     { 
-      G4String excep("G4RDEMDataSet - G4LEDATA environment variable not set");
-      G4Exception(excep);
+      G4String excep("G4LEDATA environment variable not set!");
+      G4Exception("G4RDDopplerProfile::LoadBiggsP()",
+                  "InvalidSetup", FatalException, excep);
     }
   
   G4String pathString(path);
@@ -135,10 +138,11 @@ void G4RDDopplerProfile::LoadBiggsP(const G4String& fileName)
 
   if (! (lsdp->is_open()) )
     {
-      G4String s1("G4RDDopplerProfile::LoadBiggsP data file: ");
+      G4String s1("Data file: ");
       G4String s2(" not found");
       G4String excep = s1 + dirFile + s2;
-      G4Exception(excep);
+      G4Exception("G4RDDopplerProfile::LoadBiggsP()",
+                  "DataNotFound", FatalException, excep);
     }
 
   G4double p;
@@ -150,7 +154,8 @@ void G4RDDopplerProfile::LoadBiggsP(const G4String& fileName)
 
   // Make sure that the number of data loaded corresponds to the number in Biggs' paper
   if (biggsP.size() != nBiggs)
-    G4Exception("G4RDDopplerProfile::LoadBiggsP - Number of momenta read in is not 31");
+    G4Exception("G4RDDopplerProfile::LoadBiggsP()", "InvalidCondition",
+                FatalException, "Number of momenta read in is not 31!");
 }
 
 
@@ -163,8 +168,9 @@ void G4RDDopplerProfile::LoadProfile(const G4String& fileName,G4int Z)
   char* path = getenv("G4LEDATA");
   if (!path)
     { 
-      G4String excep("G4RDEMDataSet - G4LEDATA environment variable not set");
-      G4Exception(excep);
+      G4String excep("G4LEDATA environment variable not set!");
+      G4Exception("G4RDDopplerProfile::LoadProfile()",
+                  "InvalidSetup", FatalException, excep);
     }
   
   G4String pathString(path);
@@ -174,10 +180,11 @@ void G4RDDopplerProfile::LoadProfile(const G4String& fileName,G4int Z)
 
   if (! (lsdp->is_open()) )
     {
-      G4String s1("G4RDDopplerProfile::LoadProfile data file: ");
+      G4String s1("Data file: ");
       G4String s2(" not found");
       G4String excep = s1 + dirFile + s2;
-      G4Exception(excep);
+      G4Exception("G4RDDopplerProfile::LoadProfile()",
+                  "DataNotFound", FatalException, excep);
     }
 
   G4double p;

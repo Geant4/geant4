@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28.11.2011, G.Cosmo, tag eRosita V09-04-01
+            Migration to new G4Exception signature and compilation warnings
+            correction on gcc-4.6.
+
 28.11.2011, MGP, tag eRosita V09-04-00
             Code reorganized in application and physics directories
             physics/ contains a copy of original electron/photon processes

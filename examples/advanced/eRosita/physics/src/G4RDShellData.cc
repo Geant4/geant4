@@ -100,7 +100,9 @@ size_t G4RDShellData::NumberOfShells(G4int Z) const
 const std::vector<G4double>& G4RDShellData::ShellIdVector(G4int Z) const
 {
   std::map<G4int,std::vector<G4double>*,std::less<G4int> >::const_iterator pos;
-  if (Z < zMin || Z > zMax) G4Exception("G4RDShellData::ShellIdVector - Z outside boundaries");
+  if (Z < zMin || Z > zMax)
+    G4Exception("G4RDShellData::ShellIdVector()", "OutOfRange",
+                FatalException, "Z outside boundaries!");
   pos = idMap.find(Z);
   std::vector<G4double>* dataSet = (*pos).second;
   return *dataSet;
@@ -110,7 +112,9 @@ const std::vector<G4double>& G4RDShellData::ShellIdVector(G4int Z) const
 const std::vector<G4double>& G4RDShellData::ShellVector(G4int Z) const
 {
   std::map<G4int,std::vector<G4double>*,std::less<G4int> >::const_iterator pos;
-  if (Z < zMin || Z > zMax) G4Exception("G4RDShellData::ShellVector - Z outside boundaries");
+  if (Z < zMin || Z > zMax)
+    G4Exception("G4RDShellData::ShellVector()", "OutOfRange",
+                FatalException, "Z outside boundaries!");
   pos = occupancyPdfMap.find(Z);
   std::vector<G4double>* dataSet = (*pos).second;
   return *dataSet;
@@ -243,8 +247,9 @@ void G4RDShellData::LoadData(const G4String& fileName)
   char* path = getenv("G4LEDATA");
   if (!path)
     { 
-      G4String excep("G4RDEMDataSet - G4LEDATA environment variable not set");
-      G4Exception(excep);
+      G4String excep("G4LEDATA environment variable not set!");
+      G4Exception("G4RDShellData::LoadData()", "InvalidSetup",
+                  FatalException, excep);
     }
   
   G4String pathString(path);
@@ -254,10 +259,11 @@ void G4RDShellData::LoadData(const G4String& fileName)
 
   if (! (lsdp->is_open()) )
     {
-      G4String s1("G4RDShellData - data file: ");
+      G4String s1("Data file: ");
       G4String s2(" not found");
       G4String excep = s1 + dirFile + s2;
-      G4Exception(excep);
+      G4Exception("G4RDShellData::LoadData()", "DataNotFound",
+                  FatalException, excep);
     }
 
   G4double a = 0;
@@ -354,7 +360,9 @@ void G4RDShellData::LoadData(const G4String& fileName)
 
 G4int G4RDShellData::SelectRandomShell(G4int Z) const
 {
-  if (Z < zMin || Z > zMax) G4Exception("G4RDShellData::RandomSelect - Z outside boundaries");
+  if (Z < zMin || Z > zMax)
+    G4Exception("G4RDShellData::SelectRandomShell()", "OutOfRange",
+                FatalException, "Z outside boundaries!");
 
   G4int shellIndex = 0;    
   std::vector<G4double> prob = ShellVector(Z);

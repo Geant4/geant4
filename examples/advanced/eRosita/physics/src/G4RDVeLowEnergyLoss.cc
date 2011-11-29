@@ -74,7 +74,8 @@ G4RDVeLowEnergyLoss::G4RDVeLowEnergyLoss()
      nmaxCont1(4),
      nmaxCont2(16)
 {
-  G4Exception("G4RDVeLowEnergyLoss:: default constructor is called");
+  G4Exception("G4RDVeLowEnergyLoss::G4RDVeLowEnergyLoss()", "InvalidCall",
+              FatalException, "Default constructor is called!");
 }
 
 //
@@ -323,8 +324,9 @@ G4PhysicsTable* G4RDVeLowEnergyLoss::BuildProperTimeTable(G4PhysicsTable* theDED
 //    
 
 void G4RDVeLowEnergyLoss::BuildLabTimeVector(G4PhysicsTable* theDEDXTable,
-					   G4double, // lowestKineticEnergy
-					   G4double highestKineticEnergy, G4int TotBin,
+					   G4double, // lowestKineticEnergy,
+					   G4double, // highestKineticEnergy,
+                                           G4int TotBin,
 					   G4int materialIndex, G4PhysicsLogVector* timeVector)
 //  create lab time vector for a material
 {
@@ -332,7 +334,7 @@ void G4RDVeLowEnergyLoss::BuildLabTimeVector(G4PhysicsTable* theDEDXTable,
   G4int nbin=100;
   G4bool isOut;
   G4double tlim=5.*keV,parlowen=0.4,ppar=0.5-parlowen ;
-  G4double losslim,clim,taulim,timelim,ltaulim,ltaumax,
+  G4double losslim,clim,taulim,timelim,
            LowEdgeEnergy,tau,Value ;
 
   G4PhysicsVector* physicsVector= (*theDEDXTable)[materialIndex];
@@ -341,8 +343,6 @@ void G4RDVeLowEnergyLoss::BuildLabTimeVector(G4PhysicsTable* theDEDXTable,
   losslim = physicsVector->GetValue(tlim,isOut);
   taulim=tlim/ParticleMass ;
   clim=std::sqrt(ParticleMass*tlim/2.)/(c_light*losslim*ppar) ;
-  ltaulim = std::log(taulim);
-  ltaumax = std::log(highestKineticEnergy/ParticleMass) ;
 
   G4int i=-1;
   G4double oldValue = 0. ;
@@ -384,15 +384,16 @@ void G4RDVeLowEnergyLoss::BuildLabTimeVector(G4PhysicsTable* theDEDXTable,
 //    
 
 void G4RDVeLowEnergyLoss::BuildProperTimeVector(G4PhysicsTable* theDEDXTable,
-					      G4double, // lowestKineticEnergy
-					      G4double highestKineticEnergy, G4int TotBin,
+					      G4double, // lowestKineticEnergy,
+					      G4double, // highestKineticEnergy,
+                                              G4int TotBin,
 					      G4int materialIndex, G4PhysicsLogVector* timeVector)
 //  create proper time vector for a material
 {
   G4int nbin=100;
   G4bool isOut;
   G4double tlim=5.*keV,parlowen=0.4,ppar=0.5-parlowen ;
-  G4double losslim,clim,taulim,timelim,ltaulim,ltaumax,
+  G4double losslim,clim,taulim,timelim,
            LowEdgeEnergy,tau,Value ;
 
   G4PhysicsVector* physicsVector= (*theDEDXTable)[materialIndex];
@@ -402,8 +403,6 @@ void G4RDVeLowEnergyLoss::BuildProperTimeVector(G4PhysicsTable* theDEDXTable,
   losslim = physicsVector->GetValue(tlim,isOut);
   taulim=tlim/ParticleMass ;
   clim=std::sqrt(ParticleMass*tlim/2.)/(c_light*losslim*ppar) ;
-  ltaulim = std::log(taulim);
-  ltaumax = std::log(highestKineticEnergy/ParticleMass) ;
 
   G4int i=-1;
   G4double oldValue = 0. ;

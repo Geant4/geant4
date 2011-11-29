@@ -85,7 +85,9 @@ G4LowEnergyGammaConversion::G4LowEnergyGammaConversion(const G4String& processNa
   if (lowEnergyLimit < intrinsicLowEnergyLimit || 
       highEnergyLimit > intrinsicHighEnergyLimit)
     {
-      G4Exception("G4LowEnergyGammaConversion::G4LowEnergyGammaConversion - energy limit outside intrinsic process validity range");
+      G4Exception("G4LowEnergyGammaConversion::G4LowEnergyGammaConversion()",
+                  "OutOfRange", FatalException,
+                  "Energy limit outside intrinsic process validity range!");
     }
 
   // The following pointer is owned by G4DataHandler

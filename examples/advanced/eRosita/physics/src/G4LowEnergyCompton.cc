@@ -78,7 +78,9 @@ G4LowEnergyCompton::G4LowEnergyCompton(const G4String& processName)
   if (lowEnergyLimit < intrinsicLowEnergyLimit ||
       highEnergyLimit > intrinsicHighEnergyLimit)
     {
-      G4Exception("G4LowEnergyCompton::G4LowEnergyCompton - energy outside intrinsic process validity range");
+      G4Exception("G4LowEnergyCompton::G4LowEnergyCompton()",
+                  "OutOfRange", FatalException,
+                  "Energy outside intrinsic process validity range!");
     }
 
   crossSectionHandler = new G4RDCrossSectionHandler;

@@ -426,7 +426,8 @@ void G4LowEnergyBremsstrahlung::SetAngularGenerator(const G4String& name)
     }
   else
     {
-      G4Exception("G4LowEnergyBremsstrahlung::SetAngularGenerator - generator does not exist");
+      G4Exception("G4LowEnergyBremsstrahlung::SetAngularGenerator()",
+                  "InvalidSetup", FatalException, "Generator does not exist!");
     }
 
   angularDistribution->PrintGeneratorInformation();

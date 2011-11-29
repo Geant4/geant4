@@ -88,7 +88,9 @@ std::vector<G4DynamicParticle*>* G4RDAtomicDeexcitation::GenerateParticles(G4int
 	    }
 	  else
 	    {
-	      G4Exception("G4RDAtomicDeexcitation: starting shell uncorrect: check it");
+	      G4Exception("G4RDAtomicDeexcitation::GenerateParticles()",
+                          "InvalidSetup", FatalException,
+                          "Starting shell uncorrect: check it!");
 	    }
 	}
       else 
@@ -113,7 +115,9 @@ std::vector<G4DynamicParticle*>* G4RDAtomicDeexcitation::GenerateParticles(G4int
 	    }
 	  else
 	    {
-	      G4Exception("G4RDAtomicDeexcitation: starting shell uncorrect: check it");
+	      G4Exception("G4RDAtomicDeexcitation::GenerateParticles()",
+                          "InvalidSetup", FatalException,
+                          "Starting shell uncorrect: check it!");
 	    }
 	}
       counter++;
@@ -130,10 +134,12 @@ std::vector<G4DynamicParticle*>* G4RDAtomicDeexcitation::GenerateParticles(G4int
 G4int G4RDAtomicDeexcitation::SelectTypeOfTransition(G4int Z, G4int shellId)
 {
   if (shellId <=0 ) 
-    {G4Exception("G4RDAtomicDeexcitation: zero or negative shellId");}
+    {
+      G4Exception("G4RDAtomicDeexcitation::SelectTypeOfTransition()",
+                  "InvalidCondition", FatalException,
+                  "Zero or negative shellId!");
+    }
 
-  G4bool fluoTransitionFoundFlag = false;
-  
   const G4RDAtomicTransitionManager*  transitionManager = 
         G4RDAtomicTransitionManager::Instance();
   G4int provShellId = -1;
@@ -180,8 +186,6 @@ G4int G4RDAtomicDeexcitation::SelectTypeOfTransition(G4int Z, G4int shellId)
 	 if(partialProb <= partSum)
 	   {
 	     provShellId = aShell->OriginatingShellId(transProb);
-	     fluoTransitionFoundFlag = true;
-
 	     break;
 	   }
 	 transProb++;
@@ -279,7 +283,11 @@ G4DynamicParticle* G4RDAtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
 
 
   if (shellId <=0 ) 
-    {G4Exception("G4RDAtomicDeexcitation: zero or negative shellId");}
+    {
+      G4Exception("G4RDAtomicDeexcitation::GenerateAuger()",
+                  "InvalidCondition", FatalException,
+                  "Zero or negative shellId!");
+    }
   
   // G4int provShellId = -1;
   G4int maxNumOfShells = transitionManager->NumberOfReachableAugerShells(Z);  

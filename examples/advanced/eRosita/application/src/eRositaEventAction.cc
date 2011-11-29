@@ -60,8 +60,9 @@ void eRositaEventAction::BeginOfEventAction(const G4Event* evt)
 }
 
  
-void eRositaEventAction::EndOfEventAction(const G4Event* evt)
+void eRositaEventAction::EndOfEventAction(const G4Event*) // evt)
 {
+/*
   G4int event_id = evt->GetEventID();
   
   // get number of stored trajectories
@@ -77,5 +78,6 @@ void eRositaEventAction::EndOfEventAction(const G4Event* evt)
     //G4cout << "    " << n_trajectories 
     // 	   << " trajectories stored in this event." << G4endl;
   }
+*/
 }
 
