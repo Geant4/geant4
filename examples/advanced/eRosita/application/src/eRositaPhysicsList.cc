@@ -187,7 +187,7 @@ void eRositaPhysicsList::ConstructEM()
 
       // photon   
 
-      G4LowEnergyPhotoElectric* photoelectric = new G4LowEnergyPhotoElectric();
+      G4LowEnergyPhotoElectric* photoelectric = new G4LowEnergyPhotoElectric;
       photoelectric->ActivateAuger(true);
       photoelectric->SetCutForLowEnSecPhotons(0.250 * keV);
       photoelectric->SetCutForLowEnSecElectrons(0.250 * keV);

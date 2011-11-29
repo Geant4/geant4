@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28.11.2011, MGP, tag eRosita V09-04-00
+            Code reorganized in application and physics directories
+            physics/ contains a copy of original electron/photon processes
+            based on EEDP/EPDL/EADL data libraries
+            Limited testing due to last minute rush imposed by external 
+            circumstances outside the authors' control 
+
  6.12.2010, MGP, tag eRosita-V09-03-09
             Improvements to visualisation provided by Georg Weidenspointner
 

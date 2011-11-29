@@ -9,13 +9,21 @@ name := eRosita
 
 G4TARGET := $(name)
 G4EXLIB := true
+SUBDIRS := physics 
+
+# ifdef G4ANALYSIS_USE
+#  SUBDIRS += analysis
+# endif
+
+SUBDIRS += application
+
 
 ifndef G4INSTALL
   G4INSTALL = ../..
 endif
 
-.PHONY: all
-all: lib bin
+.PHONY: all makesub clean cleansub
+all: makesub lib bin
 
 include $(G4INSTALL)/config/binmake.gmk
 
@@ -24,3 +32,25 @@ ifdef G4ANALYSIS_USE
  LDFLAGS  += `aida-config --lib`
  LOADLIBS += `aida-config --lib`
 endif
+
+
+CPPFLAGS += -I./physics/include \
+            -I./application/include
+            
+            
+
+makesub:
+	@for dir in $(SUBDIRS); do ( \
+		echo Entering $$dir ... ; \
+		cd $$dir; \
+		$(MAKE) obj );\
+	done
+
+clean:: cleansub
+
+cleansub:
+	@for dir in $(SUBDIRS); do ( \
+		echo Entering $$dir ...; \
+		cd $$dir; \
+		$(MAKE) clean );\
+	done
