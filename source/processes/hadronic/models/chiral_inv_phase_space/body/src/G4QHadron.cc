@@ -281,8 +281,11 @@ void G4QHadron::SetQPDG(const G4QPDGCode& newQPDG)
   else if(PDG>80000000) DefineQC(PDG);
   else
   {
-    G4cerr<<"***G4QHadron::SetQPDG: QPDG="<<newQPDG<<G4endl;
-    throw G4QException("***G4QHadron::SetQPDG: Impossible QPDG Probably a Chipolino");
+    // G4cerr<<"***G4QHadron::SetQPDG: QPDG="<<newQPDG<<G4endl;
+    // throw G4QException("***G4QHadron::SetQPDG: Impossible QPDG Probably a Chipolino");
+    G4ExceptionDescription ed;
+    ed << "Impossible QPDG Probably a Chipolino:  QPDG=" << newQPDG << G4endl;
+    G4Exception("G4QHadron::SetQPDG()", "HAD_CHPS_0000", FatalException, ed);
   }
 }
 
@@ -1049,8 +1052,12 @@ G4double G4QHadron::RandomizeMass(G4QParticle* pPart, G4double maxM)
   }
   else if(width<0.)
   {
-    G4cerr<<"***G4QHadron::RandM: width="<<width<<"<0,PDGC="<<theQPDG.GetPDGCode()<<G4endl;
-    throw G4QException("G4QHadron::RandomizeMass: with the width of the Hadron < 0.");
+    // G4cerr<<"***G4QHadron::RandM: width="<<width<<"<0,PDGC="<<theQPDG.GetPDGCode()<<G4endl;
+    // throw G4QException("G4QHadron::RandomizeMass: with the width of the Hadron < 0.");
+    G4ExceptionDescription ed;
+    ed << "width of the Hadron < 0. : width=" << width << "<0,PDGC="
+       << theQPDG.GetPDGCode() << G4endl;
+    G4Exception("G4QHadron::RandomizeMass()", "HAD_CHPS_0000", FatalException, ed);
   }
   G4double minM = pPart->MinMassOfFragm();
   if(minM>maxM)

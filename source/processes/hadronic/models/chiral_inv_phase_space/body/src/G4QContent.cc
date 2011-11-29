@@ -83,8 +83,11 @@ G4QContent::G4QContent(std::pair<G4int,G4int> PP): nD(0),nU(0),nS(0),nAD(0),nAU(
   G4int P2=PP.second;
   if(!P1 || !P2)
   {
-    G4cerr<<"***G4QContent::Constr(pair): Zero parton P1="<<P1<<", P2="<<P2<<G4endl;
-    G4Exception("G4QContent::Constructor(pair):","72",FatalException,"WrongPartonPair");
+    // G4cerr<<"***G4QContent::Constr(pair): Zero parton P1="<<P1<<", P2="<<P2<<G4endl;
+    // G4Exception("G4QContent::Constructor(pair):","72",FatalException,"WrongPartonPair");
+    G4ExceptionDescription ed;
+    ed << "Wrong parton pair: zero parton P1=" << P1 << ", P2=" << P2 << G4endl;
+    G4Exception("G4QContent::G4QContent()", "HAD_CHPS_0072", FatalException, ed);
   }
 #ifdef debug
   G4cout<<"G4QContent::PairConstr: P1="<<P1<<", P2="<<P2<<G4endl;
@@ -201,8 +204,11 @@ G4QContent::G4QContent(std::pair<G4int,G4int> PP): nD(0),nU(0),nS(0),nAD(0),nAU(
   }
   if(!suc)
   {
-    G4cerr<<"***G4QContent::Constr(pair): Impossible partons, P1="<<P1<<",P2="<<P2<<G4endl;
-    G4Exception("G4QContent::Constructor(pair):","72",FatalException,"ImpossibPartonPair");
+    // G4cerr<<"***G4QContent::Constr(pair): Impossible partons, P1="<<P1<<",P2="<<P2<<G4endl;
+    // G4Exception("G4QContent::Constructor(pair):","72",FatalException,"ImpossibPartonPair");
+    G4ExceptionDescription ed;
+    ed << "Impossible parton pair, P1=" << P1 << ",P2=" << P2 << G4endl;
+    G4Exception("G4QContent::G4QContent()", "HAD_CHPS_0073", FatalException, ed);
   }
 #ifdef debug
   G4cout<<"G4QContent::PCo:2:"<<nD<<","<<nU<<","<<nS<<","<<nAD<<","<<nAU<<","<<nAS<<G4endl;
@@ -1184,8 +1190,12 @@ G4int G4QContent::GetBaryonNumber() const
   //#ifdef erdebug
   if(b%3)
   {
-     G4cerr<<"-Warning-G4QContent::GetBaryonNumber="<<b<<"/3 isn't anIntegerValue"<<G4endl;
-     G4Exception("G4QContent::GetBaryonNumber:","72",FatalException,"Wrong Baryon Number");
+     // G4cerr<<"-Warning-G4QContent::GetBaryonNumber="<<b<<"/3 isn't anIntegerValue"<<G4endl;
+     // G4Exception("G4QContent::GetBaryonNumber:","72",FatalException,"Wrong Baryon Number");
+     G4ExceptionDescription ed;
+     ed << "Wrong Baryon Number: warning " << b << "/3 isn't an integer"
+        << G4endl;
+     G4Exception("G4QContent::GetBaryonNumber()", "HAD_CHPS_0072", FatalException, ed);
   }
   //#endif
   return b/3;
