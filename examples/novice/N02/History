@@ -14,7 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+29-11-11 Ben Morgan (exampleN02-V09-04-04)
+- CMakeLists.txt edited to add standard UI/Vis activation and copying of scripts
+  to build directory, plus comments and neatification.
+
 15-11-11 G.Cosmo (exampleN02-V09-04-03)
 - Get rid of call to obsolete G4Exception signature in
   ExN02ChamberParameterisation.cc.
