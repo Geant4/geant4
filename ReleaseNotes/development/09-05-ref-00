@@ -583,7 +583,7 @@ examples                                         examples-V09-05-00
     in a parallel world. 
 - extended/visualization/userVisAction (exam-ext-vis-UVA-V09-04-00)
   o Migrated to new G4Exception scheme.
-- novice (exnovice-V09-04-00)
+- novice (exnovice-V09-04-01)
   o Added CMake scripts. Migrated to new G4Exception scheme.
 
 tests                                            tests-V09-05-00
