@@ -461,7 +461,7 @@ data sets
 - G4NEUTRONXS-1.1:
   o Evaluated cross section data derived from G4NDL-4.0.
 - RadioactiveDecay-3.4:
-  o 
+  o New spontaneous fission capability and upgrade to forbidden beta decays.
 
 examples                                         examples-V09-05-00
 --------
@@ -471,6 +471,8 @@ examples                                         examples-V09-05-00
   o Migrated to new G4Exception scheme.
 - advanced/dnaphysics (dnaphysics-V09-04-08)
   o Removed one analysis option in HistoManager.
+- advanced/eRosita (eRosita-V09-04-00)
+  o Imported old Livermore EM low-energy processes.
 - advanced/hadrontherapy (hadrontherapy-V09-04-08)
   o Added complete physics to the batch.mac file for batch runs.
   o Migrated to new G4Exception scheme.
@@ -490,7 +492,7 @@ examples                                         examples-V09-05-00
   o Fixed compilation warnings.
   o Migrated to new G4Exception scheme.
 - advanced/radioprotection (radioprotection-V09-04-02)
-- advanced/xray_fluorescence (XrayFluo-V09-04-04)
+- advanced/xray_fluorescence (XrayFluo-V09-04-05)
   o Migrated to new G4Exception scheme.
 - basic (exbasic-V09-04-04)
   o New set of basic examples B1-2-3-4 oriented to "novice" users and covering
