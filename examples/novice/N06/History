@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29 November 2011 Ben Morgan (exampleN06-V09-04-01)
+- CMakeLists.txt edited to add standard UI/Vis activation and copying of scripts
+  to build directory, plus comments and neatification.
+
 14th October 2011 P. Gumplinger (exampleN06-V09-04-00)
 - modify to work with materials-V09-04-15 and use spline interpolation
   for some of the G4MaterialPropertyVector (e.g. G4PhysicsOrderedFreeVector)
