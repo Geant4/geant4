@@ -471,7 +471,7 @@ examples                                         examples-V09-05-00
   o Migrated to new G4Exception scheme.
 - advanced/dnaphysics (dnaphysics-V09-04-08)
   o Removed one analysis option in HistoManager.
-- advanced/eRosita (eRosita-V09-04-00)
+- advanced/eRosita (eRosita-V09-04-01)
   o Imported old Livermore EM low-energy processes.
 - advanced/hadrontherapy (hadrontherapy-V09-04-08)
   o Added complete physics to the batch.mac file for batch runs.
@@ -494,7 +494,7 @@ examples                                         examples-V09-05-00
 - advanced/radioprotection (radioprotection-V09-04-02)
 - advanced/xray_fluorescence (XrayFluo-V09-04-05)
   o Migrated to new G4Exception scheme.
-- basic (exbasic-V09-04-04)
+- basic (exbasic-V09-04-05)
   o New set of basic examples B1-2-3-4 oriented to "novice" users and covering
     many basic general use-cases typical of an "application"-oriented kind of
     development.
