@@ -25,10 +25,10 @@
     <set/>
   </argument>
   <argument name="command">
-    <text>cd $G4INSTALL/examples/extended/runAndEvent/RE04;$G4BIN/$G4SYSTEM/RE04 batch.mac</text>
+    <text>cd $G4INSTALL/examples/extended/runAndEvent/RE04;$G4BIN/$G4SYSTEM/RE04 score.mac</text>
   </argument>
   <argument name="stderr">
-    <text/>
+    <text>G4VScoringMesh::DrawColorChart(): no visualization system</text> 
   </argument>
   <argument name="resources">
     <set/>

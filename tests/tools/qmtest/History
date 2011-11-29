@@ -12,6 +12,10 @@ $Id$
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28-Nov-2011, G.Folger               (testtools-QMtest-V09-04-18)
+-  corrent exam-ext-runandevent-re044-run1-run.qmt to use proper macro and 
+     make vis error message an expected stderr.
+
 24-Nov-2011, G.Folger               (testtools-QMtest-V09-04-17)
 -  fix typo in exam-ext-runandevent-re04.qms
 
