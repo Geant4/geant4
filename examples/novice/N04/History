@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29-11-11 Ben Morgan (exampleN04-V09-04-02)
+- CMakeLists.txt edited to add standard UI/Vis activation and copying of scripts
+  to build directory, plus comments and neatification.
+
 30-09-2011 G.Folger        (exampleN04-V09-04-01)
 - Fix gcc46 compilation warning in ExN04DetectorConstruction.cc
 
