@@ -37,10 +37,14 @@ include_directories(${CMAKE_SOURCE_DIR}/source/visualization/modeling/include)
 
 
 #----------------------------------------------------------------------------
-# Generic Inventor Headers, base library and Geant4 defines
+# Generic Inventor Headers, base library, OpenGL and Geant4 defines
 #
 include_directories(${INVENTOR_INCLUDE_DIR})
-set(G4VIS_MODULE_OPENINVENTOR_LINK_LIBRARIES ${INVENTOR_LIBRARIES})
+set(G4VIS_MODULE_OPENINVENTOR_LINK_LIBRARIES ${INVENTOR_LIBRARY})
+
+include_directories(${OPENGL_INCLUDE_DIR})
+list(APPEND G4VIS_MODULE_OPENINVENTOR_LINK_LIBRARIES ${OPENGL_LIBRARIES})
+
 add_definitions(-DG4VIS_BUILD_OI_DRIVER)
 
 

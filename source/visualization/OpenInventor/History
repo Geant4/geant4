@@ -20,6 +20,10 @@ committal in the CVS repository !
 History file for visualization/OpenInventor
 -------------------------------------------
 
+30th November 2011 Ben Morgan (openinventor-V09-04-03)
+- sources.cmake : Added inclusion and linking to Inventor base library and
+  OpenGL. Needed on Mac to correctly find X11 GL.
+
 8th November 2011 Ben Morgan (openinventor-V09-04-02)
 - source.cmake [BUGFIX #1196]: Added support for CMake build of OpenInventor 
   driver (NB requires cotag cmake-V09-04-32).
