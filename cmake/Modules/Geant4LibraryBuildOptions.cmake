@@ -67,10 +67,12 @@ endif()
 # Global libraries are built by default, but we provide an option to switch to
 # granular format. Granular format is only intended for developers, so we
 # mark this option as advanced and warn the user.
-option(GEANT4_BUILD_GRANULAR_LIBS "Build Geant4 with granular libraries" OFF)
-mark_as_advanced(GEANT4_BUILD_GRANULAR_LIBS)
-GEANT4_ADD_FEATURE(GEANT4_BUILD_GRANULAR_LIBS "Build granular Geant4 libraries")
+# REMOVED IN 9.5 RELEASE
+#option(GEANT4_BUILD_GRANULAR_LIBS "Build Geant4 with granular libraries" OFF)
+#mark_as_advanced(GEANT4_BUILD_GRANULAR_LIBS)
+#GEANT4_ADD_FEATURE(GEANT4_BUILD_GRANULAR_LIBS "Build granular Geant4 libraries")
 
+# Still warn, because the variable can still be set from the command line!
 if(GEANT4_BUILD_GRANULAR_LIBS)
     message(WARNING " Granular libraries are only intended for developers!")
 endif()

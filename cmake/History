@@ -30,6 +30,12 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 30th 2011 - B.Morgan (cmake-V09-04-41)
+- Modules/Geant4LibraryBuildOptions.cmake : Commented out
+  GEANT4_BUILD_GRANULAR_LIBS option to restrict these builds for 9.5. Current
+  granular build is not tested and broken in several places, so we want to
+  prevent its use for now.
+
 November 29th 2011 - B.Morgan (cmake-V09-04-40)
 - Modules/Geant4InterfaceOptions.cmake : Added ability for Mac to concurrently 
   build mixed Qt and X11 OpenGL driver. Xt library adde to X11 libraries, but
