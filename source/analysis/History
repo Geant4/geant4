@@ -17,6 +17,10 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 30th 2011 B.Morgan (analysis-V09-04-15)
+- CMakeLists.txt : Updated to build G4analysis in granular as well as global
+  mode.
+
 November 24 2001 I.Hrivnacova (analysis-V09-04-14)
 - Updated to g4tools-1.0.5 (G. Barrand): 
   - wroot : streamers, buffer, wbuf, named :

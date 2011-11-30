@@ -62,10 +62,17 @@ set(G4analysis_SOURCES
 # Now add the library targets
 #
 include(Geant4MacroLibraryTargets)
-GEANT4_LIBRARY_TARGET(NAME G4analysis 
+if(GEANT4_BUILD_GRANULAR_LIBS)
+  GEANT4_LIBRARY_TARGET(NAME G4analysis 
+    SOURCES ${G4analysis_SOURCES} ${G4analysis_HEADERS}
+    GEANT4_LINK_LIBRARIES G4globman
+    )
+else()
+  GEANT4_LIBRARY_TARGET(NAME G4analysis 
     SOURCES ${G4analysis_SOURCES} ${G4analysis_HEADERS}
     GEANT4_LINK_LIBRARIES G4global
     )
+endif()
 
 #----------------------------------------------------------------------------
 # Ensure the header directory gets added to the list of ones to export
