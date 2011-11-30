@@ -444,7 +444,7 @@ visualization                                    vis-V09-04-18
   o Fixed circles/squares problem.
   o Improvements in ogl/print and gl2ps.
   o Fixed compiler warning plus cosmetics.
-- OpenInventor (openinventor-V09-04-03):
+- OpenInventor (openinventor-V09-04-04):
   o Added support for CMake build of OpenInventor.
 - XXX:
   o Implemented simple ad hoc tree and removed include/tree.
