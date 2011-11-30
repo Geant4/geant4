@@ -83,7 +83,8 @@ endif()
 #
 # X11 options - we only need this for Xm UI
 #
-if(UNIX AND GEANT4_USE_XM)
+if(UNIX)
+  if(GEANT4_USE_XM OR GEANT4_USE_INVENTOR)
     # Add the sources
     list(APPEND G4INTERFACES_COMMON_MODULE_HEADERS G4Xt.hh)
     list(APPEND G4INTERFACES_COMMON_MODULE_SOURCES G4Xt.cc)
@@ -101,6 +102,7 @@ if(UNIX AND GEANT4_USE_XM)
     list(APPEND G4INTERFACES_COMMON_MODULE_LINK_LIBRARIES
         "${X11_LIBRARIES}"
     )
+  endif()
 endif()
 
 

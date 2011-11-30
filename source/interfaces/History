@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29 November 2011 Ben Morgan (interfaces-V09-04-13)
+- common/source.cmake : Ensure G4Xt gets built for OpenInventor
+
 23 November 2011 Laurent Garnier (interfaces-V09-04-12)
 - Fix for displing a QMessageBox on G4err output
 
