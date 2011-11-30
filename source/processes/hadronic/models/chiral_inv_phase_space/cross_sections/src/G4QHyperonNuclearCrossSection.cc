@@ -1,4 +1,4 @@
-
+//
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -22,7 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
 //
 // The lust update: M.V. Kossov, CERN/ITEP(Moscow) 17-June-02
 // GEANT4 tag $Name: not supported by cvs2svn $
