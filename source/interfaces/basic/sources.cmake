@@ -125,7 +125,7 @@ if(UNIX)
 
         # Need the X11 and Motif libraries
         list(APPEND G4INTERFACES_BASIC_MODULE_LINK_LIBRARIES
-            "${X11_LIBRARIES};${MOTIF_LIBRARIES}"
+            "${MOTIF_LIBRARIES};${X11_LIBRARIES}"
         )
     endif()
 endif()

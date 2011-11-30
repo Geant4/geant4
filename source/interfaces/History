@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30th November 2011 Ben Morgan (interfaces-V09-04-14)
+- basic/sources.cmake : Ensure Motif libraries linked before X11 libraries to 
+  prevent item 321 in the Motif FAQ regarding 'non-widget child "dsm"' errors. 
+
 29 November 2011 Ben Morgan (interfaces-V09-04-13)
 - common/source.cmake : Ensure G4Xt gets built for OpenInventor
 
