@@ -20,6 +20,11 @@ committal in the CVS repository !
 History file for visualization/OpenInventor
 -------------------------------------------
 
+30th November 2011 Ben Morgan (openinventor-V09-04-04)
+- sources.cmake : Added explicit inclusion and linking of X11 and Motif
+  libraries. Appears needed so that OpenGL X11/XM and OpenInventor can
+  co-exist.
+
 30th November 2011 Ben Morgan (openinventor-V09-04-03)
 - sources.cmake : Added inclusion and linking to Inventor base library and
   OpenGL. Needed on Mac to correctly find X11 GL.

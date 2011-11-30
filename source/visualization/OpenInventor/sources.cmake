@@ -102,9 +102,6 @@ if(UNIX)
     G4OpenInventorXtViewer.cc
     )
 
-  # Add the includes for SoXt
-  #include_directories(
-
   # Add the definitions for SoXt
   add_definitions(-DG4INTY_BUILD_XT)
   add_definitions(-DG4VIS_BUILD_OIX_DRIVER)
@@ -113,6 +110,14 @@ if(UNIX)
   list(APPEND G4VIS_MODULE_OPENINVENTOR_LINK_LIBRARIES
     ${INVENTOR_SOXT_LIBRARY}
     )
+
+  # We also need Xm and X11
+  include_directories(${X11_INCLUDE_DIR})
+  include_directories(${MOTIF_INCLUDE_DIR})
+  list(APPEND G4VIS_MODULE_OPENINVENTOR_LINK_LIBRARIES
+   ${MOTIF_LIBRARIES}
+   ${X11_LIBRARIES}
+   )
 endif()
 
 
