@@ -1028,11 +1028,11 @@ G4bool G4QuasiElRatios::RelDecayIn2(G4LorentzVector& theMomentum, G4LorentzVecto
                                      G4LorentzVector& dir, G4double maxCost, G4double minCost)
 {
     G4double fM2 = f4Mom.m2();
-    G4double fM  = sqrt(fM2);              // Mass of the 1st Hadron
+    G4double fM  = std::sqrt(fM2);              // Mass of the 1st Hadron
     G4double sM2 = s4Mom.m2();
-    G4double sM  = sqrt(sM2);              // Mass of the 2nd Hadron
+    G4double sM  = std::sqrt(sM2);              // Mass of the 2nd Hadron
     G4double iM2 = theMomentum.m2();
-    G4double iM  = sqrt(iM2);              // Mass of the decaying hadron
+    G4double iM  = std::sqrt(iM2);              // Mass of the decaying hadron
     G4double vP  = theMomentum.rho();      // Momentum of the decaying hadron
     G4double dE  = theMomentum.e();        // Energy of the decaying hadron
     if(dE<vP)
@@ -1066,7 +1066,7 @@ G4bool G4QuasiElRatios::RelDecayIn2(G4LorentzVector& theMomentum, G4LorentzVecto
     if(maxCost<-1.) maxCost=-1.;
     if(minCost> 1.) minCost= 1.;
     if(minCost> maxCost) minCost=maxCost;
-    if(fabs(iM-fM-sM)<.00000001)
+    if(std::fabs(iM-fM-sM)<.00000001)
     {
         G4double fR=fM/iM;
         G4double sR=sM/iM;
@@ -1085,7 +1085,7 @@ G4bool G4QuasiElRatios::RelDecayIn2(G4LorentzVector& theMomentum, G4LorentzVecto
     {
         p2=0.;
     }
-    G4double p  = sqrt(p2);
+    G4double p  = std::sqrt(p2);
     G4double ct = maxCost;
     if(maxCost>minCost)
     {
@@ -1094,18 +1094,18 @@ G4bool G4QuasiElRatios::RelDecayIn2(G4LorentzVector& theMomentum, G4LorentzVecto
     }
     G4double phi= twopi*G4UniformRand();  // @@ Change 360.*deg to M_TWOPI (?)
     G4double ps=0.;
-    if(fabs(ct)<1.) ps = p * sqrt(1.-ct*ct);
+    if(std::fabs(ct)<1.) ps = p * std::sqrt(1.-ct*ct);
     else
     {
         if(ct>1.) ct=1.;
         if(ct<-1.) ct=-1.;
     }
-    G4ThreeVector pVect=(ps*sin(phi))*vz+(ps*cos(phi))*vy+p*ct*vx;
+    G4ThreeVector pVect=(ps*std::sin(phi))*vz+(ps*std::cos(phi))*vy+p*ct*vx;
     
     f4Mom.setVect(pVect);
-    f4Mom.setE(sqrt(fM2+p2));
+    f4Mom.setE(std::sqrt(fM2+p2));
     s4Mom.setVect((-1)*pVect);
-    s4Mom.setE(sqrt(sM2+p2));
+    s4Mom.setE(std::sqrt(sM2+p2));
     
     if(f4Mom.e()+.001<f4Mom.rho())G4cerr<<"*G4QH::RDIn2:*Boost* f4M="<<f4Mom<<",e-p="
         <<f4Mom.e()-f4Mom.rho()<<G4endl;

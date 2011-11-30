@@ -83,7 +83,7 @@ namespace G4INCL {
         }
 
 #ifndef INCLXX_IN_GEANT4_MODE
-        log(InfoMsg, __FILE__,__LINE__) << "# Logging enabled!" << std::endl;
+        std::log(InfoMsg, __FILE__,__LINE__) << "# Logging enabled!" << std::endl;
 #endif
       };
       ~LoggerSlave() {
@@ -132,7 +132,7 @@ namespace G4INCL {
     public:
       /// \brief Log a message.
       static LoggerSlave const &log(const MessageType type, const std::string &fileName, const G4int lineNumber) {
-        return theLoggerSlave->log(type, fileName, lineNumber);
+        return theLoggerSlave->std::log(type, fileName, lineNumber);
       }
 
       /// \brief Log a data block.

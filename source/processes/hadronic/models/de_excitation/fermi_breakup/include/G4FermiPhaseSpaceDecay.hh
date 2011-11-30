@@ -122,7 +122,7 @@ G4FermiPhaseSpaceDecay::IsotropicVector(G4double Magnitude) const
   // By default Magnitude = 1.0
 {
   G4double CosTheta = 2.0*G4UniformRand() - 1.0;
-  G4double SinTheta = sqrt((1. - CosTheta)*(1. + CosTheta));
+  G4double SinTheta = std::sqrt((1. - CosTheta)*(1. + CosTheta));
   G4double Phi = twopi*G4UniformRand();
   G4ThreeVector Vector(Magnitude*std::cos(Phi)*SinTheta,
 		       Magnitude*std::sin(Phi)*SinTheta,

@@ -690,21 +690,21 @@ void testDistanceToInPV(G4int testCase)
 
 
     
-    assert( std::fabs(solid->DistanceToIn(outside_points[0],  diry) - 0.01*tan(42.*deg) )< kCarTolerance );
+    assert( std::fabs(solid->DistanceToIn(outside_points[0],  diry) - 0.01*std::tan(42.*deg) )< kCarTolerance );
     assert( solid->DistanceToIn(outside_points[0], -diry) == kInfinity );
     assert( solid->DistanceToIn(outside_points[0],  dirz) == kInfinity );
     assert( solid->DistanceToIn(outside_points[0], -dirz) == kInfinity );
 
     assert( std::fabs(solid->DistanceToIn(outside_points[1],  dirx) - 0.1 )< kCarTolerance );
     assert( solid->DistanceToIn(outside_points[1], -dirx) == kInfinity );
-    assert( std::fabs(solid->DistanceToIn(outside_points[1],  diry) - 0.1*tan(42.*deg) )< kCarTolerance );
+    assert( std::fabs(solid->DistanceToIn(outside_points[1],  diry) - 0.1*std::tan(42.*deg) )< kCarTolerance );
     assert( solid->DistanceToIn(outside_points[1], -diry) == kInfinity );
     assert( solid->DistanceToIn(outside_points[1],  dirz) == kInfinity );
     assert( solid->DistanceToIn(outside_points[1], -dirz) == kInfinity );
 
     assert( std::fabs(solid->DistanceToIn(outside_points[2],  dirx) - 1.0 )< kCarTolerance );
     assert( solid->DistanceToIn(outside_points[2], -dirx) == kInfinity );
-    assert( std::fabs(solid->DistanceToIn(outside_points[2],  diry) - 1.0*tan(42.*deg) )< kCarTolerance );
+    assert( std::fabs(solid->DistanceToIn(outside_points[2],  diry) - 1.0*std::tan(42.*deg) )< kCarTolerance );
     assert( solid->DistanceToIn(outside_points[2], -diry) == kInfinity );
     assert( solid->DistanceToIn(outside_points[2],  dirz) == kInfinity );
     assert( solid->DistanceToIn(outside_points[2], -dirz) == kInfinity );
@@ -744,14 +744,14 @@ void testDistanceToInPV(G4int testCase)
 
     assert( std::fabs(solid->DistanceToIn(outside_points[4],  dirx) - 0.0001 )< kCarTolerance );
     assert( solid->DistanceToIn(outside_points[4], -dirx) == kInfinity );
-    assert( std::fabs(solid->DistanceToIn(outside_points[4],  diry) - 0.0001*tan(42.*deg) )< kCarTolerance );
+    assert( std::fabs(solid->DistanceToIn(outside_points[4],  diry) - 0.0001*std::tan(42.*deg) )< kCarTolerance );
     assert( solid->DistanceToIn(outside_points[4], -diry) == kInfinity );
     assert( solid->DistanceToIn(outside_points[4],  dirz) == kInfinity );
     assert( solid->DistanceToIn(outside_points[4], -dirz) == kInfinity );
 
     assert( std::fabs(solid->DistanceToIn(outside_points[5],  dirx) - 0.0001 )< kCarTolerance );
     assert( solid->DistanceToIn(outside_points[5], -dirx) == kInfinity );
-    assert( std::fabs(solid->DistanceToIn(outside_points[5],  diry) - 0.0001*tan(42.*deg) )< kCarTolerance );
+    assert( std::fabs(solid->DistanceToIn(outside_points[5],  diry) - 0.0001*std::tan(42.*deg) )< kCarTolerance );
     assert( solid->DistanceToIn(outside_points[5], -diry) == kInfinity );
     assert( solid->DistanceToIn(outside_points[5],  dirz) == kInfinity );
     assert( solid->DistanceToIn(outside_points[5], -dirz) == kInfinity );
@@ -798,7 +798,7 @@ void testDistanceToInPV(G4int testCase)
     assert(     solid->DistanceToIn(outside_points[9], -dirx) == kInfinity );
     assert(     solid->DistanceToIn(outside_points[9],  diry) == kInfinity );
     assert( 
-      std::fabs(solid->DistanceToIn(outside_points[9], -diry) - 0.010*14./cos(42.*deg) )< kCarTolerance );
+      std::fabs(solid->DistanceToIn(outside_points[9], -diry) - 0.010*14./std::cos(42.*deg) )< kCarTolerance );
     assert(     solid->DistanceToIn(outside_points[9],  dirz) == kInfinity );
     assert(     solid->DistanceToIn(outside_points[9], -dirz) == kInfinity );
 

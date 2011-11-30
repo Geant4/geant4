@@ -122,12 +122,12 @@ int tpia_decayChannel_sampleProductsAtE( statusMessageReporting *smr, tpia_decay
                     productDatas[n].genre = nextProduct->genre; }
                 else {
                     productDatas[n].kineticEnergy = decaySamplingInfo->Ep;
-                    p = sqrt( decaySamplingInfo->Ep * ( decaySamplingInfo->Ep + 2. * product->productID->fullMass_MeV ) );
+                    p = std::sqrt( decaySamplingInfo->Ep * ( decaySamplingInfo->Ep + 2. * product->productID->fullMass_MeV ) );
                     productDatas[n].pz_vz = p * decaySamplingInfo->mu;
-                    p = sqrt( 1. - decaySamplingInfo->mu * decaySamplingInfo->mu ) * p;
+                    p = std::sqrt( 1. - decaySamplingInfo->mu * decaySamplingInfo->mu ) * p;
                     phi = 2. * M_PI * tpia_misc_drng( decaySamplingInfo->rng, decaySamplingInfo->rngState );
-                    productDatas[n].px_vx = p * sin( phi );
-                    productDatas[n].py_vy = p * cos( phi );
+                    productDatas[n].px_vx = p * std::sin( phi );
+                    productDatas[n].py_vy = p * std::cos( phi );
                 }
                 n++;
             }

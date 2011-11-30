@@ -169,7 +169,7 @@ G4bool G4FTFAnnihilation::
                                      // mb anti-quark-quark annihilation
       if(SqrtS < MesonProdThreshold)
       {
-       X_b=3.13+140.*pow((MesonProdThreshold - SqrtS)/GeV,2.5); 
+       X_b=3.13+140.*std::pow((MesonProdThreshold - SqrtS)/GeV,2.5); 
       } 
       else
       {

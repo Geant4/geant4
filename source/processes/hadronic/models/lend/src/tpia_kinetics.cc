@@ -56,12 +56,12 @@ int tpia_kinetics_2BodyReaction( statusMessageReporting *smr, tpia_decayChannel 
     m4 = pp4->productID->fullMass_MeV;
     mi = m1 + m2;
     mf = m3 + m4;
-    beta = sqrt( K * ( K + 2. * m1 ) ) / ( K + mi );
+    beta = std::sqrt( K * ( K + 2. * m1 ) ) / ( K + mi );
     x = K * m2 / ( mi * mi );
     if( x < 2e-5 ) {                                        /* Kp is the total kinetic energy for m3 and m4 in the COM frame. */
         Kp = mi - mf + K * m2 / mi * ( 1 - 0.5 * x * ( 1 - x ) ); }
     else {
-        Kp = sqrt( mi * mi + 2 * K * m2 ) - mf;
+        Kp = std::sqrt( mi * mi + 2 * K * m2 ) - mf;
     }
     if( Kp < 0 ) Kp = 0.;           /* ???? There needs to be a better test here. */
     outgoingData[0].decayChannel = &(pp3->decayChannel);
@@ -83,16 +83,16 @@ int tpia_kinetics_COMKineticEnergy2LabEnergyAndMomentum( statusMessageReporting 
 */
     double x, v_p, p, pp3, pp4, px3, py3, pz3, pz4, pz, p_perp2, E3, E4, gamma, m3cc2 = m3cc * m3cc, m4cc2 = m4cc * m4cc;
 
-    p = sqrt( e_kinetic_com * ( e_kinetic_com + 2. * m3cc ) * ( e_kinetic_com + 2. * m4cc )  * ( e_kinetic_com + 2. * ( m3cc + m4cc ) ) ) /
+    p = std::sqrt( e_kinetic_com * ( e_kinetic_com + 2. * m3cc ) * ( e_kinetic_com + 2. * m4cc )  * ( e_kinetic_com + 2. * ( m3cc + m4cc ) ) ) /
             ( 2. * ( e_kinetic_com + m3cc + m4cc ) );
-    py3 = p * sqrt( 1 - mu * mu );
-    px3 = py3 * cos( phi );
-    py3 *= sin( phi );
+    py3 = p * std::sqrt( 1 - mu * mu );
+    px3 = py3 * std::cos( phi );
+    py3 *= std::sin( phi );
     pz = p * mu;
     if( tpia_frame_getColumn( NULL, &(outgoingData[0].frame), 0 ) == tpia_referenceFrame_lab ) {
-        E3 = sqrt( p * p + m3cc2 );
-        E4 = sqrt( p * p + m4cc2 );
-        gamma = sqrt( 1. / ( 1. - beta * beta ) );
+        E3 = std::sqrt( p * p + m3cc2 );
+        E4 = std::sqrt( p * p + m4cc2 );
+        gamma = std::sqrt( 1. / ( 1. - beta * beta ) );
         pz3 = gamma * (  pz + beta * E3 );
         pz4 = gamma * ( -pz + beta * E4 ); }
     else {
@@ -112,7 +112,7 @@ int tpia_kinetics_COMKineticEnergy2LabEnergyAndMomentum( statusMessageReporting 
     if( x < 1e-5 ) {
         outgoingData[0].kineticEnergy = m3cc * x  * ( 1 - 0.5 * x * ( 1 - x ) ); }
     else {
-        outgoingData[0].kineticEnergy = sqrt( m3cc2 + pp3 ) - m3cc;
+        outgoingData[0].kineticEnergy = std::sqrt( m3cc2 + pp3 ) - m3cc;
     }
     outgoingData[1].px_vx = -px3;
     outgoingData[1].py_vy = -py3;
@@ -122,16 +122,16 @@ int tpia_kinetics_COMKineticEnergy2LabEnergyAndMomentum( statusMessageReporting 
     if( x < 1e-5 ) {
         outgoingData[1].kineticEnergy = m4cc * x  * ( 1 - 0.5 * x * ( 1 - x ) ); }
     else {
-        outgoingData[1].kineticEnergy = sqrt( m4cc2 + pp4 ) - m4cc;
+        outgoingData[1].kineticEnergy = std::sqrt( m4cc2 + pp4 ) - m4cc;
     }
 
     if( outgoingData[0].isVelocity ) {
-        v_p = tpia_speedOfLight_cm_sec / sqrt( pp3 + m3cc2 );
+        v_p = tpia_speedOfLight_cm_sec / std::sqrt( pp3 + m3cc2 );
         outgoingData[0].px_vx *= v_p;
         outgoingData[0].py_vy *= v_p;
         outgoingData[0].pz_vz *= v_p;
 
-        v_p = tpia_speedOfLight_cm_sec / sqrt( pp4 + m4cc2 );
+        v_p = tpia_speedOfLight_cm_sec / std::sqrt( pp4 + m4cc2 );
         outgoingData[1].px_vx *= v_p;
         outgoingData[1].py_vy *= v_p;
         outgoingData[1].pz_vz *= v_p;

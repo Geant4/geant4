@@ -62,7 +62,7 @@ G4bool G4DNADiffusionControlledModel::FindReaction(const G4Track& __trackA,
 
     for(; k < 3 ; k++)
     {
-        __postStepSeparation += pow(__trackA.GetPosition()[k] - __trackB.GetPosition()[k],2);
+        __postStepSeparation += std::pow(__trackA.GetPosition()[k] - __trackB.GetPosition()[k],2);
 
         if(__postStepSeparation > __R2)
         {
@@ -75,7 +75,7 @@ G4bool G4DNADiffusionControlledModel::FindReaction(const G4Track& __trackA,
     {
          // The loop was not break
          // => __r^2 < __R^2
-        __r = sqrt(__postStepSeparation);
+        __r = std::sqrt(__postStepSeparation);
         return true;
     }
     else if(__alongStepReaction == true)
@@ -87,10 +87,10 @@ G4bool G4DNADiffusionControlledModel::FindReaction(const G4Track& __trackA,
         // Continue loop
         for(; k < 3 ; k++)
         {
-            __postStepSeparation += pow(__trackA.GetPosition()[k] - __trackB.GetPosition()[k],2);
+            __postStepSeparation += std::pow(__trackA.GetPosition()[k] - __trackB.GetPosition()[k],2);
         }
         // Use Green approach : the Brownian bridge
-        __r = (__postStepSeparation = sqrt(__postStepSeparation) );
+        __r = (__postStepSeparation = std::sqrt(__postStepSeparation) );
 
         G4Molecule* __moleculeA = GetMolecule(__trackA);
         G4Molecule* __moleculeB = GetMolecule(__trackB);
@@ -111,7 +111,7 @@ G4bool G4DNADiffusionControlledModel::FindReaction(const G4Track& __trackA,
 
         G4double __preStepSeparation = (__preStepPositionA - __preStepPositionB).mag();
 
-        G4double __probabiltyOfEncounter =  exp(-(__preStepSeparation - __R)*(__postStepSeparation - __R)
+        G4double __probabiltyOfEncounter =  std::exp(-(__preStepSeparation - __R)*(__postStepSeparation - __R)
                                         / (__D* (__trackB.GetStep()->GetDeltaTime())));
         G4double __selectedPOE = G4UniformRand();
 

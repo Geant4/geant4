@@ -112,12 +112,12 @@ G4double G4DNASancheSolvatationModel::CrossSectionPerVolume(const G4Material* ma
 //______________________________________________________________________
 G4ThreeVector G4DNASancheSolvatationModel::RadialDistributionOfProducts(G4double expectationValue) const
 {
-    G4double sigma = sqrt(1.57)/2*expectationValue;
+    G4double sigma = std::sqrt(1.57)/2*expectationValue;
 
-    G4double XValueForfMax = sqrt(2.*sigma*sigma);
-    G4double fMaxValue = sqrt(2./3.14) * 1./(sigma*sigma*sigma) *
+    G4double XValueForfMax = std::sqrt(2.*sigma*sigma);
+    G4double fMaxValue = std::sqrt(2./3.14) * 1./(sigma*sigma*sigma) *
             (XValueForfMax*XValueForfMax)*
-            exp(-1./2. * (XValueForfMax*XValueForfMax)/(sigma*sigma));
+            std::exp(-1./2. * (XValueForfMax*XValueForfMax)/(sigma*sigma));
 
     G4double R;
 
@@ -136,7 +136,7 @@ G4ThreeVector G4DNASancheSolvatationModel::RadialDistributionOfProducts(G4double
         }
 
         R = expectationValue + sign*3.*sigma* G4UniformRand();
-        G4double f = sqrt(2./3.14) * 1/pow(sigma, 3) * R*R * exp(-1./2. * R*R/(sigma*sigma));
+        G4double f = std::sqrt(2./3.14) * 1/std::pow(sigma, 3) * R*R * std::exp(-1./2. * R*R/(sigma*sigma));
 
         if(aRandomfValue < f)
         {
@@ -146,11 +146,11 @@ G4ThreeVector G4DNASancheSolvatationModel::RadialDistributionOfProducts(G4double
     while(1);
 
     G4double costheta = (2.*G4UniformRand()-1.);
-    G4double theta = acos (costheta);
+    G4double theta = std::acos (costheta);
     G4double phi = 2.*pi*G4UniformRand();
 
-    G4double xDirection = R*cos(phi)* sin(theta);
-    G4double yDirection = R*sin(theta)*sin(phi);
+    G4double xDirection = R*std::cos(phi)* std::sin(theta);
+    G4double yDirection = R*std::sin(theta)*std::sin(phi);
     G4double zDirection = R*costheta;
     G4ThreeVector RandDirection = G4ThreeVector(xDirection, yDirection, zDirection);
 
@@ -173,8 +173,8 @@ void G4DNASancheSolvatationModel::SampleSecondaries(std::vector<G4DynamicParticl
     if (k <= HighEnergyLimit())
     {
         G4double r_mean =
-                (-0.003*pow(k/eV,6) + 0.0749*pow(k/eV,5) - 0.7197*pow(k/eV,4)
-                 + 3.1384*pow(k/eV,3) - 5.6926*pow(k/eV,2) + 5.6237*k/eV - 0.7883)*nanometer;
+                (-0.003*std::pow(k/eV,6) + 0.0749*std::pow(k/eV,5) - 0.7197*std::pow(k/eV,4)
+                 + 3.1384*std::pow(k/eV,3) - 5.6926*std::pow(k/eV,2) + 5.6237*k/eV - 0.7883)*nanometer;
 
         G4ThreeVector displacement = RadialDistributionOfProducts (r_mean);
         //______________________________________________________________
