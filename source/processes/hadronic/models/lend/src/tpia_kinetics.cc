@@ -34,7 +34,7 @@
 # <<END-copyright>>
 */
 #include <string.h>
-#include <math.h>
+#include <cmath>
 #include <tpia_target.h>
 
 #if defined __cplusplus

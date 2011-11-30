@@ -37,7 +37,7 @@
 #ifdef WIN32
    #define _USE_MATH_DEFINES
 #endif
-#include <math.h>
+#include <cmath>
 #include "tpia_target.h"
 
 #if defined __cplusplus
