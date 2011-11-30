@@ -328,6 +328,8 @@ if(Geant4_vis_openinventor_FOUND)
         -DG4VIS_USE_OIWIN32
         )
     endif()
+
+    set(_geant4_use_inventor_library ON)
   endif()
 
   list(REMOVE_ITEM Geant4_FIND_COMPONENTS vis_openinventor)
@@ -373,7 +375,7 @@ if(_geant4_use_opengl_library)
 endif()
 
 # G4OpenInventor if it's requested.
-if(Geant4_FIND_REQUIRED_vis_openinventor)
+if(_geant4_use_inventor_library)
   list(APPEND _geant4_internal_libraries
     G4OpenInventor${_geant4_lib_use_suffix}
     )

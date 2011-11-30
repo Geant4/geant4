@@ -30,6 +30,14 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 29th 2011 - B.Morgan (cmake-V09-04-40)
+- Modules/Geant4InterfaceOptions.cmake : Added ability for Mac to concurrently 
+  build mixed Qt and X11 OpenGL driver. Xt library adde to X11 libraries, but
+  only on Mac when Xm is built. Linking Xt on Linux causes runtime errors.
+- Templates Geant4Config.cmake.in : Fixed bug that prevented OpenInventor
+  library being appended to output when vis_all was set.
+
+
 November 24th 2011 - B.Morgan (cmake-V09-04-39)
 - Modules/Geant4InstallData.cmake : Updated data library versions
   G4NDL -> 4.0

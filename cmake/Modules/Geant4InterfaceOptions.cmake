@@ -13,10 +13,6 @@
 #  G4UIXm  : UNIX (Requires : Qt4)
 #  G4UIXaw : DEPRECATED
 #
-# CONFLICT : On Mac OS X, can only have X11 support or Qt support, not both.
-#            This is more for OpenGL, but for clarity, we simplify the
-#            interfaces.
-#
 # Vis Category: Always built on supported platforms
 #  DAWNFILE : UNIX, Win32
 #  ...
@@ -27,49 +23,32 @@
 #  VRML
 #
 # Vis Category : Built on supported platforms when Third Party Library available
-#  OpenGL : UNIX, WIN32...
-#  OpenInventor :
+#  OpenGL : UNIX, WIN32
+#  OpenInventor : UNIX WIN32
 #
 # Rather than separate the UI and visualization options, we simply ask if
 # the user wants to build support for a particular tool, e.g. Qt.
 #
 # Specific UI/Vis options are also handled here.
 #
-# These options are highly platform dependent, and there are even significant
-# variations on each platform, so we split things up by platform.
-# This gives the logic:
-#
-#  Linux:
-#    X11, Xm, Qt, 
-#
-# $Id: Geant4InterfaceOptions.cmake,v 1.5 2010-11-26 18:52:16 bmorgan Exp $
-# GEANT4 Tag $Name: not supported by cvs2svn $
-#
-
-#----------------------------------------------------------------------------
-# MACRO _clear_opengl_variables
-# - Clear all cached variables used in finding OpenGL to help in switching
-# between Framework and X11 OpenGL.
-macro(_clear_opengl_variables)
-    set(OPENGL_INCLUDE_DIR OPENGL_INCLUDE_DIR-NOTFOUND)
-    set(OPENGL_gl_LIBRARY OPENGL_gl_LIBRARY-NOTFOUND)
-    set(OPENGL_glu_LIBRARY OPENGL_glu_LIBRARY-NOTFOUND)
-endmacro()
 
 
 #----------------------------------------------------------------------------
-# Configure OpenInventor support (CROSSPLATFORM??)
+# Configure OpenInventor support
 #
 option(GEANT4_USE_INVENTOR "Build Geant4 OpenInventor Visualization Driver" OFF)
 
 if(GEANT4_USE_INVENTOR)
+  # Always need Inventor and OpenGL
   find_package(Inventor REQUIRED)
+  find_package(OpenGL REQUIRED)
 
   # On UNIX, we also require Xm and X11...
   if(UNIX)
     find_package(Motif REQUIRED)
     find_package(X11 REQUIRED)
   endif()
+
 
   GEANT4_ADD_FEATURE(
     GEANT4_USE_INVENTOR "Build OpenInventor Driver"
@@ -79,87 +58,81 @@ endif()
 
 #----------------------------------------------------------------------------
 # Configure Qt Support if needed (CROSSPLATFORM).
-# We do this first as the preferred interface, and also because on Mac OS X
-# the user has to make a choice between Qt and X11 based interfaces.
-# If the user chooses to use Qt, set a variable to prevent querying for
-# X11 based OpenGL drivers.
 #
-if(UNIX AND APPLE)
-    # Option for Qt first, but we're going to default to X11 because this
-    # is guaranteed to be installed
-    option(GEANT4_USE_QT "Build Geant4 with Qt support (DISABLES X11 support)" OFF)
+option(GEANT4_USE_QT "Build Geant4 with Qt4 support" OFF)
 
-    # Now, the other X11 based G/UIs are dependent on GEANT4_USE_QT being OFF
-    CMAKE_DEPENDENT_OPTION(
-        GEANT4_USE_OPENGL_X11 
-        "Build Geant4 OpenGL driver with X11 support" OFF 
-        "NOT GEANT4_USE_QT" OFF
-    )
-
-    CMAKE_DEPENDENT_OPTION(
-        GEANT4_USE_XM
-        "Build Geant4 with Xm (X11-Motif) support" OFF 
-        "NOT GEANT4_USE_QT" OFF
-    )
-
-else()
-    # On Windows and non-Apple Unices, we can always enable Qt support.
-    option(GEANT4_USE_QT "Build Geant4 with Qt support" OFF)
-    # On non-Apple Unices, we can also always choose X11/Xm
-    if(UNIX)
-        option(
-            GEANT4_USE_OPENGL_X11 
-            "Build Geant4 OpenGL driver with X11 support" 
-            OFF
-        )
-        option(
-            GEANT4_USE_XM
-            "Build Geant4 with Xm (X11-Motif) support"
-        )
-    endif()
-endif()
-
-
-#----------------------------------------------------------------------------
-# If Qt support requested, find Qt4
-#
 if(GEANT4_USE_QT)
-    # Find and configure Qt and OpenGL - require 4
-    # This is fine on Mac OS X because Qt will use Framework GL.
-    # On WIN32 only, set QT_USE_IMPORTED_TARGETS. The Qt4 module will otherwise
-    # set QT_LIBRARIES using the 'optimized A; debug Ad' technique. CMake
-    # will then complain because when building DLLs we reset 
-    # LINK_INTERFACE_LIBRARIES and this cannot be passed a link of this form.
-    # This means we have to recreate the imported targets later though...
-    if(WIN32)
-        set(QT_USE_IMPORTED_TARGETS ON)
-    endif()
+  # Find and configure Qt and OpenGL - require 4
+  # This is fine on Mac OS X because Qt will use Framework GL.
+  # On WIN32 only, set QT_USE_IMPORTED_TARGETS. The Qt4 module will otherwise
+  # set QT_LIBRARIES using the 'optimized A; debug Ad' technique. CMake
+  # will then complain because when building DLLs we reset 
+  # LINK_INTERFACE_LIBRARIES and this cannot be passed a link of this form.
+  # This means we have to recreate the imported targets later though...
+  if(WIN32)
+    set(QT_USE_IMPORTED_TARGETS ON)
+  endif()
 
-    find_package(Qt4 REQUIRED COMPONENTS QtCore QtGui QtOpenGL)
+  find_package(Qt4 REQUIRED COMPONENTS QtCore QtGui QtOpenGL)
+  find_package(OpenGL REQUIRED)
 
-    # Only clear on non WIN32 - doesn't seem to like this reset?
-    if(NOT WIN32)
-        _clear_opengl_variables()
-    endif()
-    find_package(OpenGL REQUIRED)
-
-    # OpenGL part of Qt is in OpenGL component so mark the need to
-    # add OpenGL.
-    set(GEANT4_USE_OPENGL TRUE)
-    GEANT4_ADD_FEATURE(GEANT4_USE_QT "Build Geant4 with Qt support")
+  # OpenGL part of Qt is in OpenGL component so mark the need to
+  # add OpenGL.
+  set(GEANT4_USE_OPENGL ON)
+  GEANT4_ADD_FEATURE(GEANT4_USE_QT "Build Geant4 with Qt support")
 endif()
 
 
 #----------------------------------------------------------------------------
-# If X11/Xm were requested, find X11, Xm and OpenGL as needed.
+# Unix platforms only
 #
-# - Find X11 and OpenGL
-if(GEANT4_USE_OPENGL_X11 OR GEANT4_USE_XM)
-    # Always need X11
+if(UNIX)
+  #-------------------------------------------------------------------------
+  # Support for Client/Server DAWN driver
+  # mark as advanced because user should know what they're doing to use this
+  option(GEANT4_USE_NETWORKDAWN "Build Dawn driver with Client/Server support" OFF)
+  #
+  # Possible headers checks for needed network parts?
+  #
+  GEANT4_ADD_FEATURE(GEANT4_USE_NETWORKDAWN "Build Dawn driver with Client/Server support")
+  mark_as_advanced(GEANT4_USE_NETWORKDAWN)
+
+  #--------------------------------------------------------------------------
+  # Support for Client/Server VRML driver
+  # mark as advanced because user should know what they're doing to use this
+  option(GEANT4_USE_NETWORKVRML "Build VRML driver with Client/Server support" OFF)
+  #
+  # Possible header checks for needed network parts?
+  #
+  GEANT4_ADD_FEATURE(GEANT4_USE_NETWORKVRML "Build VRML driver with Client/Server support")
+  mark_as_advanced(GEANT4_USE_NETWORKVRML)
+
+
+  #--------------------------------------------------------------------------
+  # Configure Xm support if requested
+  #
+  option(GEANT4_USE_XM "Build Geant4 with Motif (X11) support" OFF)
+
+  #--------------------------------------------------------------------------
+  # Configure OpenGL X11 support if requested
+  #
+  option(GEANT4_USE_OPENGL_X11 "Build Geant4 OpenGL driver with X11 support"
+    OFF)
+
+  #--------------------------------------------------------------------------
+  # X11 Support for RayTracer driver
+  #
+  option(GEANT4_USE_RAYTRACER_X11 "Build RayTracer driver with X11 support" OFF)
+
+  #----------------------------------------------------------------------------
+  # Now configure needed X11, Motif and OpenGL packages
+  #
+  # - X11
+  if(GEANT4_USE_XM OR GEANT4_USE_OPENGL_X11 OR GEANT4_USE_RAYTRACER_X11)
     find_package(X11 REQUIRED)
 
-    #--------------------------------------------------------------------
-    # We also need Xmu... Just add it in here, copying pattern from 
+    # We also require Xmu, which isn't found by default
+    # Just the search in here, copying pattern from 
     # FindX11. We don't add it to X11 libraries because it's only
     # needed in the OpenGL driver.
     #
@@ -186,131 +159,122 @@ if(GEANT4_USE_OPENGL_X11 OR GEANT4_USE_XM)
     find_path(X11_Xmu_INCLUDE_PATH X11/Xmu/Xmu.h ${X11_INC_SEARCH_PATH})
     find_library(X11_Xmu_LIBRARY Xmu ${X11_SEARCH_PATH})
     if(X11_Xmu_LIBRARY-NOTFOUND OR X11_Xmu_INCLUDE_PATH-NOTFOUND)
-        message(FATAL_ERROR "could not find X11 Xmu library and/or headers")
+      message(FATAL_ERROR "could not find X11 Xmu library and/or headers")
     endif()
 
     mark_as_advanced(X11_Xmu_INCLUDE_PATH X11_Xmu_LIBRARY)
     set(CMAKE_FIND_FRAMEWORK ${CMAKE_FIND_FRAMEWORK_SAVE})
     # END of finding Xmu
 
-    # Now for OpenGL - On non-Apple UNIX, just use find_package, otherwise
-    # use a direct search
-    if(UNIX AND NOT APPLE)
-        find_package(OpenGL REQUIRED)
-    else()
-        # - In case we've previously run with Qt enabled, clear the cache
-        # of OpenGL variables
-        _clear_opengl_variables()
-
-        # - This is for X11 drivers, so we DON't want Framework!
-        set(CMAKE_FIND_FRAMEWORK_SAVE ${CMAKE_FIND_FRAMEWORK})
-        set(CMAKE_FIND_FRAMEWORK NEVER)
-
-        find_path(OPENGL_INCLUDE_DIR GL/gl.h
-            PATHS /usr/X11R6/include
-            NO_DEFAULT_PATH
-            )
-
-        find_library(OPENGL_gl_LIBRARY GL
-            PATHS /usr/X11R6/lib
-            NO_DEFAULT_PATH
-            )
-
-        find_library(OPENGL_glu_LIBRARY GLU
-            PATHS /usr/X11R6/lib
-            NO_DEFAULT_PATH
-            )
-
-        mark_as_advanced(OPENGL_INCLUDE_DIR OPENGL_gl_LIBRARY OPENGL_glu_LIBRARY)
-        if(NOT OPENGL_INCLUDE_DIR)
-            message(FATAL_ERROR "OpenGL GL/gl.h NOTFOUND")
-        endif()
-
-        if(NOT OPENGL_gl_LIBRARY)
-            message(FATAL_ERROR "OpenGL GL Library NOTFOUND")
-        endif()
-
-        if(NOT OPENGL_glu_LIBRARY)
-            message(FATAL_ERROR "OpenGL GLU Library NOTFOUND")
-        endif()
-
-        # Now set the standard variables...
-        set(OPENGL_LIBRARIES ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY})
-
-        set(CMAKE_FIND_FRAMEWORK ${CMAKE_FIND_FRAMEWORK_SAVE})
+    # Check for additional required X11 libraries
+    # - Xt
+    if(NOT X11_Xt_FOUND)
+      message(FATAL_ERROR "could not find X11 Xt library and/or headers")
     endif()
 
-    # Both X11 and Xm are in the OpenGL component, so mark this are needed
+    # Create final list of X11 libraries needed for Geant4
+    # - Motif
+    if(GEANT4_USE_XM AND APPLE)
+      set(X11_LIBRARIES ${X11_LIBRARIES} ${X11_Xt_LIB})
+    endif()
+
+    # - If we got to this point, RayTracer is o.k., so add the feature
+    GEANT4_ADD_FEATURE(GEANT4_USE_RAYTRACER_X11 "Build RayTracer driver with X11 support")
+  endif()
+
+  #- OpenGL : we also do this for Inventor so that we pick up Mac X11 GL...
+  if(GEANT4_USE_INVENTOR OR GEANT4_USE_XM OR GEANT4_USE_OPENGL_X11)
+    # - Find native GL first
+    find_package(OpenGL REQUIRED)
+
+    # - If we're on Apple, also find the X11 GL libraries and append them.
+    if(APPLE)
+      # - This is for X11 GL drivers, so we DON'T want Framework!
+      set(CMAKE_FIND_FRAMEWORK_SAVE ${CMAKE_FIND_FRAMEWORK})
+      set(CMAKE_FIND_FRAMEWORK NEVER)
+
+      find_path(OPENGL_X11_INCLUDE_DIR GL/gl.h
+        PATHS /usr/X11R6/include
+        NO_DEFAULT_PATH
+        )
+
+      find_library(OPENGL_X11_gl_LIBRARY GL
+        PATHS /usr/X11R6/lib
+        NO_DEFAULT_PATH
+        )
+
+      find_library(OPENGL_X11_glu_LIBRARY GLU
+        PATHS /usr/X11R6/lib
+        NO_DEFAULT_PATH
+        )
+
+      mark_as_advanced(
+        OPENGL_X11_INCLUDE_DIR 
+        OPENGL_X11_gl_LIBRARY 
+        OPENGL_X11_glu_LIBRARY
+        )
+
+      if(NOT OPENGL_X11_INCLUDE_DIR)
+        message(FATAL_ERROR "Apple X11 OpenGL GL/gl.h NOTFOUND")
+      endif()
+
+      if(NOT OPENGL_X11_gl_LIBRARY)
+        message(FATAL_ERROR "Apple X11 OpenGL GL Library NOTFOUND")
+      endif()
+
+      if(NOT OPENGL_X11_glu_LIBRARY)
+        message(FATAL_ERROR "Apple X11 OpenGL GLU Library NOTFOUND")
+      endif()
+
+      # Append the X11 GL libraries to the native paths
+      set(OPENGL_INCLUDE_DIR ${OPENGL_INCLUDE_DIR} ${OPENGL_X11_INCLUDE_DIR})
+      set(OPENGL_LIBRARIES ${OPENGL_LIBRARIES} 
+        ${OPENGL_X11_gl_LIBRARY}
+        ${OPENGL_X11_glu_LIBRARY}
+        )
+
+      # Restore framework search
+      set(CMAKE_FIND_FRAMEWORK ${CMAKE_FIND_FRAMEWORK_SAVE})
+    endif()
+
+    # Add feature for X11 GL
+    GEANT4_ADD_FEATURE(GEANT4_USE_OPENGL_X11 "Build Geant4 OpenGL driver with X11 support")
+  endif()
+
+  # - Add need for OpenGL in X11 case
+  if(GEANT4_USE_OPENGL_X11 OR GEANT4_USE_XM)
     set(GEANT4_USE_OPENGL ON)
+  endif()
 
-    # Add the OpenGL X11 driver as a feature
-    GEANT4_ADD_FEATURE(
-        GEANT4_USE_OPENGL_X11 "Build Geant4 OpenGL driver with X11 Support"
-    )
-endif()
-
-# - Find Motif if needed
-if(GEANT4_USE_XM)
+  # - Motif last of all, then can add the feature
+  if(GEANT4_USE_XM)
     find_package(Motif REQUIRED)
     GEANT4_ADD_FEATURE(GEANT4_USE_XM "Build Geant4 with Xm Support")
-endif()
-
-#----------------------------------------------------------------------------
-# Now configure other UNIX only drivers
-#
-if(UNIX)
-    #------------------------------------------------------------------------
-    # X11 Support for RayTracer driver
-    # We can use this on all Unices because only X11 is used.
-    option(GEANT4_USE_RAYTRACER_X11 "Build RayTracer driver with X11 support" OFF)
-
-    if(GEANT4_USE_RAYTRACER_X11)
-        # Find and configure X11...
-        find_package(X11 REQUIRED)
-        GEANT4_ADD_FEATURE(GEANT4_USE_RAYTRACER_X11 "Build RayTracer driver with X11 support")
-    endif()
-
-    #-------------------------------------------------------------------------
-    # Support for Client/Server DAWN driver
-    # mark as advanced because user should know what they're doing to use this
-    option(GEANT4_USE_NETWORKDAWN "Build Dawn driver with Client/Server support" OFF)
-    #
-    # Possible headers checks for needed network parts?
-    #
-    GEANT4_ADD_FEATURE(GEANT4_USE_NETWORKDAWN "Build Dawn driver with Client/Server support")
-
-    mark_as_advanced(GEANT4_USE_NETWORKDAWN)
-
-    #--------------------------------------------------------------------------
-    # Support for Client/Server VRML driver
-    # mark as advanced because user should know what they're doing to use this
-    option(GEANT4_USE_NETWORKVRML "Build VRML driver with Client/Server support" OFF)
-    #
-    # Possible header checks for needed network parts?
-    #
-    GEANT4_ADD_FEATURE(GEANT4_USE_NETWORKVRML "Build VRML driver with Client/Server support")
-    mark_as_advanced(GEANT4_USE_NETWORKVRML)
+  endif()
+  
 endif()
 
 
-
-
 #----------------------------------------------------------------------------
-# Configure Windows OpenGL
+# Windows platforms only
 #
 if(WIN32)
-    option(GEANT4_USE_OPENGL_WIN32 "Build OpenGL driver with Win32 support")
+  #----------------------------------------------------------------------------
+  # OpenGL Win32...
+  #
+  option(GEANT4_USE_OPENGL_WIN32 "Build OpenGL driver with Win32 support")
 
-    if(GEANT4_USE_OPENGL_WIN32)
-        # Just need OpenGL and on Windows, this should be easy...
-        find_package(OpenGL REQUIRED)
+  if(GEANT4_USE_OPENGL_WIN32)
+    # Just need OpenGL and on Windows, this should be easy...
+    find_package(OpenGL REQUIRED)
 
-        # This is part of the G4OpenGL component, so mark it as needed
-        set(GEANT4_USE_OPENGL ON)
-        GEANT4_ADD_FEATURE(
-            GEANT4_USE_OPENGL_WIN32 "Build OpenGL driver with Win32 support"
-        )
-    endif()
+    # This is part of the G4OpenGL component, so mark it as needed
+    set(GEANT4_USE_OPENGL ON)
+    GEANT4_ADD_FEATURE(
+      GEANT4_USE_OPENGL_WIN32 "Build OpenGL driver with Win32 support"
+      )
+  endif()
 endif()
 
+# - and we're done...
 
