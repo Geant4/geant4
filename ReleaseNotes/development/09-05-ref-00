@@ -144,7 +144,7 @@ intercoms                                        intercoms-V09-04-01
 ---------
 - Updated G4Exception ID to have it sequential in UI.
 
-interfaces                                       interfaces-V09-04-13
+interfaces                                       interfaces-V09-04-14
 ----------
 - Fix for displaying a QMessageBox on G4err output, to allow proper detection
   of G4Exceptions coming from kernel.
@@ -437,7 +437,7 @@ visualization                                    vis-V09-04-18
   o Fixes to gl2ps.
 - HepRep:
   o Added /vis/heprep/scale and /vis/heprep/center commands.
-- OpenGL (opengl-V09-04-26):
+- OpenGL (opengl-V09-04-27):
   o Use program loop to call display lists for "permanent objects"
     instead of using a "top display list".
   o Qt improvements. Bug fix for Qt < 4.4.
