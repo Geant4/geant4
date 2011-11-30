@@ -174,6 +174,13 @@ if(GEANT4_USE_XM)
         G4OpenGLXmWindowHandlingCallbacks.cc
     )
 
+    # Special case of building Xm without X11
+    if(NOT GEANT4_USE_OPENGL_X11)
+      list(APPEND G4VIS_MODULE_OPENGL_HEADERS G4OpenGLXViewer.hh)
+      list(APPEND G4VIS_MODULE_OPENGL_SOURCES G4OpenGLXViewer.cc)
+      add_definitions(-DG4VIS_BUILD_OPENGLX_DRIVER)
+    endif()
+
     # Add the includes for X11, Xmu and Motif
     include_directories(
         ${X11_INCLUDE_DIR} 

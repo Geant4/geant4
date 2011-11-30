@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19th November 2011 Ben Morgan (opengl-V09-04-26)
+- sources.cmake : Ensure that G4OpenGLXViewer is built when
+  only Xm driver is enabled.
+
 15th November 2011  John Allison  (opengl-V09-04-25)
 - (opengl-V09-04-24 was a mis-tag.)
 - G4OpenGLStoredQtSceneHandler::ExtraTOProcessing: Fixed compiler warning.
