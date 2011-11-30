@@ -33,7 +33,7 @@ Major development/fixes included since the last development tag are:
 
 Summarised, the list of changes is the following:
 
-cmake                                            cmake-V09-04-40
+cmake                                            cmake-V09-04-41
 -----
 - Added 'ui_all' and 'vis_all' components to allow simple selection of all
   available UI and Vis components.
