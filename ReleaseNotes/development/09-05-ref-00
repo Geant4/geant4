@@ -437,7 +437,7 @@ visualization                                    vis-V09-04-18
   o Fixes to gl2ps.
 - HepRep:
   o Added /vis/heprep/scale and /vis/heprep/center commands.
-- OpenGL (opengl-V09-04-27):
+- OpenGL (opengl-V09-04-28):
   o Use program loop to call display lists for "permanent objects"
     instead of using a "top display list".
   o Qt improvements. Bug fix for Qt < 4.4.
