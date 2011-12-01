@@ -4,15 +4,13 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-10    (4-November-2011)
+ Geant4 version Name: geant4-09-05-ref-00    (2-December-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
 SimpleBox is now made of Pb
-
-<<< Geant4 Physics List engine packaging library: PACK 5.5
 <<< Geant4 Physics List simulation engine: QGSP_INCL_ABLA 0.2
 
 *=====================================================================
@@ -313,6 +311,10 @@ hPairProd:   for  pi-    SubType= 4
 
                                   Hadronic Processes for <anti_neutron>
                                   -----------------------------------
+          hadElastic  Models:                 hElasticLHEP: Emin(GeV)=    0  Emax(GeV)= 100000
+
+          hadElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
+
 AntiNeutronInelastic  Models:     G4LEAntiNeutronInelastic: Emin(GeV)=    0  Emax(GeV)= 25
                                   G4HEAntiNeutronInelastic: Emin(GeV)=   20  Emax(GeV)= 100000
 
@@ -512,7 +514,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.26s Real=0.26s Sys=0s
+  User=0.34s Real=0.34s Sys=0s
 #
 # neutron at 1 GeV in Th
 #
@@ -550,7 +552,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.21s Real=0.2s Sys=0s
+  User=0.27s Real=0.27s Sys=0s
 #
 # pi+ at 1 GeV in Th
 #
@@ -588,7 +590,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.41s Real=1.42s Sys=0s
+  User=1.14s Real=1.15s Sys=0.01s
 #
 # pi- at 1 GeV in Th
 #
@@ -626,7 +628,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.39s Real=1.38s Sys=0s
+  User=0.93s Real=0.93s Sys=0s
 #
 # proton at 1 GeV in U
 #
@@ -923,7 +925,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.31s Real=0.31s Sys=0s
+  User=0.24s Real=0.24s Sys=0s
 #
 # neutron at 1 GeV in U
 #
@@ -966,7 +968,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.29s Real=0.29s Sys=0s
+  User=0.24s Real=0.24s Sys=0s
 #
 # pi+ at 1 GeV in U
 #
@@ -1009,7 +1011,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.42s Real=1.42s Sys=0s
+  User=1.4s Real=1.4s Sys=0s
 #
 # pi- at 1 GeV in U
 #
@@ -1052,7 +1054,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.92s Real=0.92s Sys=0s
+  User=1.15s Real=1.16s Sys=0s
 #
 # proton at 1 GeV in Pb
 #
@@ -1354,7 +1356,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.21s Real=0.2s Sys=0s
+  User=0.23s Real=0.23s Sys=0s
 #
 # neutron at 1 GeV in Pb
 #
@@ -1402,7 +1404,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.25s Real=0.25s Sys=0s
+  User=0.27s Real=0.26s Sys=0s
 #
 # pi+ at 1 GeV in Pb
 #
@@ -1450,7 +1452,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.52s Real=1.53s Sys=0s
+  User=0.77s Real=0.77s Sys=0s
 #
 # pi- at 1 GeV in Pb
 #
@@ -1498,7 +1500,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.34s Real=1.34s Sys=0s
+  User=0.91s Real=0.92s Sys=0s
 #
 # proton at 1 GeV in Cu
 #
@@ -1805,7 +1807,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.06s Real=0.06s Sys=0.01s
+  User=0.06s Real=0.06s Sys=0s
 #
 # neutron at 1 GeV in Cu
 #
@@ -1858,7 +1860,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.05s Real=0.05s Sys=0s
+  User=0.06s Real=0.06s Sys=0s
 #
 # pi+ at 1 GeV in Cu
 #
@@ -1911,7 +1913,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.16s Real=0.16s Sys=0s
+  User=0.45s Real=0.44s Sys=0s
 #
 # pi- at 1 GeV in Cu
 #
@@ -1964,7 +1966,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.21s Real=0.22s Sys=0s
+  User=0.19s Real=0.19s Sys=0s
 #
 # proton at 1 GeV in Si
 #
@@ -2392,7 +2394,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.1s Real=0.09s Sys=0s
+  User=0.12s Real=0.11s Sys=0s
 #
 # pi- at 1 GeV in Si
 #
@@ -2450,7 +2452,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.17s Real=0.17s Sys=0s
+  User=0.09s Real=0.1s Sys=0s
 #
 # proton at 1 GeV in C
 #
@@ -2767,7 +2769,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.03s Real=0.03s Sys=0s
+  User=0.03s Real=52.47s Sys=0.01s
 #
 # neutron at 1 GeV in C
 #
@@ -2893,7 +2895,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.1s Real=0.1s Sys=0s
+  User=0.11s Real=0.11s Sys=0s
 #
 # pi- at 1 GeV in C
 #
@@ -2956,7 +2958,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.07s Real=0.07s Sys=0s
+  User=0.06s Real=0.07s Sys=0s
 #
 # Deuteron at 1 GeV/nucleon on Pb
 #
@@ -3019,7 +3021,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.41s Real=0.41s Sys=0s
+  User=0.34s Real=0.34s Sys=0s
 #
 # Alpha at 500 MeV/nucleon on Pb
 #
@@ -3082,7 +3084,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.33s Real=0.33s Sys=0s
+  User=0.29s Real=0.28s Sys=0s
 #
 # Carbon at 290 MeV/nucleon on C
 #
@@ -3146,7 +3148,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.05s Real=0.05s Sys=0s
+  User=0.05s Real=0.06s Sys=0s
 #
 # Carbon at 500 MeV/nucleon on Pb
 #
@@ -3206,16 +3208,16 @@ Index : 5     used in the geometry : No      recalculation needed : No
 ====================================================================
 
 Start Run processing.
-Warning: No rms and binding for projectile ion A = 5 Z = 3
-Warning: Using probably bad values rms = 2.44 binding = 92.17
-Warning: No rms and binding for projectile ion A = 5 Z = 3
-Warning: Using probably bad values rms = 2.44 binding = 92.17
-Warning: No rms and binding for projectile ion A = 5 Z = 3
-Warning: Using probably bad values rms = 2.44 binding = 92.17
+Error! Projectile He6[0.0] not defined!
+Error! Projectile He6[0.0] not defined!
+Error! Projectile He6[0.0] not defined!
+Error! Projectile He6[0.0] not defined!
+Error! Projectile He6[0.0] not defined!
+Error! Projectile He6[0.0] not defined!
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.2s Real=0.2s Sys=0s
+  User=0.31s Real=0.32s Sys=0s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.

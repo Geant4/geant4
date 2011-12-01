@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-10    (4-November-2011)
+ Geant4 version Name: geant4-09-05-ref-00    (2-December-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -46,6 +46,15 @@ userDetector->Construct() start.
 World is registered to the default region.
 physicsList->Construct() start.
 physicsList->Construct() start.
+ ********************************************************** 
+ *                  W A R N I N G ! ! !                   * 
+ ********************************************************** 
+ *                                                        * 
+ *  Class G4AtomicDeexcitation is obsolete. It has been   * 
+ * discontinued and is going to be removed by next Geant4 * 
+ *     release please migrate to G4UAtomDeexcitation.     * 
+ *                                                        * 
+ ********************************************************** 
 Livermore Polarized PhotoElectric is constructed 
 Energy range: 0.25 keV - 100 GeV
 physicsList->CheckParticleList() start.
@@ -115,15 +124,16 @@ eIoni:   for  e-    SubType= 2
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       LowEnergyIoni :  Emin=        0 eV    Emax=        1 MeV
-        MollerBhabha :  Emin=        1 MeV   Emax=       10 TeV
+       LowEnergyIoni :  Emin=        0 eV    Emax=      100 keV
+        MollerBhabha :  Emin=      100 keV   Emax=       10 TeV
 
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           LowEnBrem :  Emin=        0 eV    Emax=        1 GeV
+           LowEnBrem :  Emin=        0 eV    Emax=       25 MeV
+             eBremSB :  Emin=       25 MeV   Emax=        1 GeV   AngularGenUrban
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
 
 eIoni:   for  e+    SubType= 2
@@ -394,18 +404,18 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   3 kByte
-    Total CPU time elapsed for geometry optimisation: 0.01 seconds
+    Total CPU time elapsed for geometry optimisation: 0 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-     100.00         0.01         0.00            3k Calorimeter
+       0.00         0.00         0.00            3k Calorimeter
        0.00         0.00         0.00            0k Layer
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      92.05          2k         1       50         50         0.01    Calorimeter
+      92.05          2k         1       50         50         0.00    Calorimeter
        7.95          0k         1        3          4         0.00    Layer
 ### Run 0 start.
 
@@ -421,13 +431,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.09s Real=0.1s Sys=0.01s
+  User=0.11s Real=0.11s Sys=0s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 7.8436 MeV :  1.718 MeV      2.19 +- 0.219 %      5.67 mm  +-  1.4 mm 
-   liquidArgon: 1.8561 MeV :  1.634 MeV     8.802 +- 0.8802 %      9.09 mm  +- 8.42 mm 
+          Lead: 7.9276 MeV :  1.884 MeV     2.377 +- 0.2377 %      5.71 mm  +- 1.52 mm 
+   liquidArgon: 1.9397 MeV :  1.871 MeV     9.646 +- 0.9646 %      9.76 mm  +- 9.58 mm 
 
 ------------------------------------------------------------
  Beam particle gamma  E = 10 MeV
@@ -435,15 +445,15 @@ Run Summary
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 7.8436 MeV
-liquidArgon:	 1.85607 MeV
+      Lead:	 7.92763 MeV
+liquidArgon:	 1.93974 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1067958163, 512303301
+ Current couple of seeds = 2029474606, 150532342
 ----------------------------------------
 #
 #/run/particle/storePhysicsTable data_stand

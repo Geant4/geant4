@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-10    (4-November-2011)
+ Geant4 version Name: geant4-09-05-ref-00    (2-December-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -122,15 +122,16 @@ eIoni:   for  e-    SubType= 2
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       LowEnergyIoni :  Emin=        0 eV    Emax=        1 MeV
-        MollerBhabha :  Emin=        1 MeV   Emax=       10 TeV
+       LowEnergyIoni :  Emin=        0 eV    Emax=      100 keV
+        MollerBhabha :  Emin=      100 keV   Emax=       10 TeV
 
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           LowEnBrem :  Emin=        0 eV    Emax=        1 GeV
+           LowEnBrem :  Emin=        0 eV    Emax=       25 MeV   AngularGen2BS
+             eBremSB :  Emin=       25 MeV   Emax=        1 GeV   AngularGenUrban
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
 
 eIoni:   for  e+    SubType= 2
@@ -389,7 +390,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.87s Real=1.89s Sys=0.03s
+  User=2.07s Real=2.12s Sys=0.02s
 
  The run consists of 1000 C12[0.0] of 144 MeV through 20 cm  of G4_Al (density: 2.699 g/cm3 )
 

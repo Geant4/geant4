@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-10    (4-November-2011)
+ Geant4 version Name: geant4-09-05-ref-00    (2-December-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -128,8 +128,8 @@ eBrem:   for  e-    SubType= 3
       Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
-            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGen2BS
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGen2BS
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -377,25 +377,24 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ### Run 0 start.
 Start Run processing.
-EvtNo= 728  length= 0.0100233  xend= 0.00366202
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.92s Real=1.92s Sys=0s
+  User=1.91s Real=1.91s Sys=0s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 999 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 8.99488 +- 0.0151409  microns 
-    CSDA  Range  in absorber = 8.91888 +- 0.0147481  microns 
+ end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
+    Track Length in absorber = 9.03483 +- 0.0153291  microns 
+    CSDA  Range  in absorber = 8.95404 +- 0.0154499  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = -0.0641207 +- 0.0151409 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.0498796 +- 0.0147481 microns 
+    Track Length (G4 - ICRU49) = -0.0241719 +- 0.0153291 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.0850436 +- 0.0154499 microns 
 
-Average Number electrons per event = 219.613
-Average Number photons per event   = 0.001001
+Average Number electrons per event = 219.206
+Average Number photons per event   = 0.002
 
 #/tracking/verbose 0
 /gun/particle anti_proton
@@ -421,21 +420,20 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ### Run 1 start.
 Start Run processing.
-EvtNo= 30  length= 0.0123367  xend= 0.00286147
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.39s Real=2.39s Sys=0s
+  User=2.32s Real=2.33s Sys=0s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 999 for anti_proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 13.2712 +- 0.0393283  microns 
-    CSDA  Range  in absorber = 11.6604 +- 0.0151552  microns 
+ end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
+    Track Length in absorber = 13.3251 +- 0.0416376  microns 
+    CSDA  Range  in absorber = 11.667 +- 0.0144704  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
-Average Number electrons per event = 274.119
-Average Number photons per event   = 0.003003
+Average Number electrons per event = 273.986
+Average Number photons per event   = 0.002
 
 #
 /testem/phys/setCuts 0.003 mm
@@ -481,8 +479,8 @@ eBrem:   for  e-    SubType= 3
       Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
-            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGen2BS
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGen2BS
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -733,12 +731,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.41s Real=0.41s Sys=0s
+  User=0.44s Real=0.44s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for C12[0.0] with Ekin = 6 MeV p= 366.244 MeV/c
-    Track Length in absorber = 7.66968 +- 0.00519475  microns 
-    CSDA  Range  in absorber = 7.63269 +- 0.00519699  microns 
+    Track Length in absorber = 7.66562 +- 0.00543607  microns 
+    CSDA  Range  in absorber = 7.62159 +- 0.00661911  microns 
 
     Energy deposit in absorber = 6  MeV 
 
@@ -800,8 +798,8 @@ eBrem:   for  e-    SubType= 3
       Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
-            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGen2BS
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGen2BS
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -1052,21 +1050,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.47s Real=2.47s Sys=0s
+  User=2.45s Real=2.5s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.02015 +- 0.0154712  microns 
-    CSDA  Range  in absorber = 8.94321 +- 0.0151682  microns 
+    Track Length in absorber = 8.99299 +- 0.0148993  microns 
+    CSDA  Range  in absorber = 8.91288 +- 0.0149534  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = -0.0388496 +- 0.0154712 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.0742117 +- 0.0151682 microns 
+    Track Length (G4 - ICRU49) = -0.0660064 +- 0.0148993 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.0438817 +- 0.0149534 microns 
 
-Average Number electrons per event = 220.348
-Average Number photons per event   = 0.016
+Average Number electrons per event = 220.058
+Average Number photons per event   = 0.015
 
 #
 /process/em/auger true
@@ -1095,21 +1093,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.5s Real=2.49s Sys=0s
+  User=2.5s Real=2.5s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.02979 +- 0.0153193  microns 
-    CSDA  Range  in absorber = 8.95197 +- 0.014875  microns 
+    Track Length in absorber = 9.02532 +- 0.0143762  microns 
+    CSDA  Range  in absorber = 8.94788 +- 0.0143348  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = -0.0292146 +- 0.0153193 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.0829684 +- 0.014875 microns 
+    Track Length (G4 - ICRU49) = -0.0336788 +- 0.0143762 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.0788808 +- 0.0143348 microns 
 
-Average Number electrons per event = 223.012
-Average Number photons per event   = 0.017
+Average Number electrons per event = 221.382
+Average Number photons per event   = 0.02
 
 #
 G4 kernel has come to Quit state.
