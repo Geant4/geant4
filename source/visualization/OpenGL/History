@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30th november Laurent Garnier  (opengl-V09-04-28)
+- Fix pop up warning box at beggining
+- Fix unitialize value before Gl init
+
 30th November 2011 Ben Morgan (opengl-V09-04-27)
 - sources.cmake : Ensure that Motif libraries appear before X11 libraries in
   link line. Prevents item 321 in the Motif FAQ regarding "non-widget child 

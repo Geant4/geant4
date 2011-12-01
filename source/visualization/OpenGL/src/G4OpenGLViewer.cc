@@ -189,6 +189,9 @@ void G4OpenGLViewer::ResizeGLView()
 #endif
   // Check size
   GLint dims[2];
+  dims[0] = 0;
+  dims[1] = 0;
+
   glGetIntegerv(GL_MAX_VIEWPORT_DIMS, dims);
 
   if ((dims[0] !=0 ) && (dims[1] !=0)) {

@@ -67,7 +67,7 @@ void G4OpenGLStoredQtViewer::Initialise() {
 #endif
   fReadyToPaint = false;
   CreateMainWindow (this,QString(GetName()));
-  CreateFontLists ();
+  //  CreateFontLists ();
 
   glDrawBuffer (GL_BACK);
 
