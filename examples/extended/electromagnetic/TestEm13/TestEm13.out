@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-00    (17-December-2010)
+ Geant4 version Name: geant4-09-05-ref-00    (2-December-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -13,54 +13,54 @@
 
 ***** Table : Nb of materials = 15 *****
 
- Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
- Material: H2liquid     density: 70.800 mg/cm3  RadL:   8.923 m    Nucl.Int.Length:   4.993 m    Imean:  19.200 eV 
+ Material: H2liquid    density: 70.800 mg/cm3  RadL:   8.923 m    Nucl.Int.Length:   4.993 m    Imean:  19.200 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:    Water H_2O   density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.537 cm   Imean:  75.000 eV 
+ Material:    Water H_2O   density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.537 cm   Imean:  78.000 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
 
- Material: liquidArgon     density:  1.390 g/cm3   RadL:  14.065 cm   Nucl.Int.Length:  86.006 cm   Imean: 188.000 eV 
+ Material: liquidArgon    density:  1.390 g/cm3   RadL:  14.065 cm   Nucl.Int.Length:  86.006 cm   Imean: 188.000 eV 
    --->  Element: liquidArgon ( )   Z = 18.0   N =  40.0   A =  39.95 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:   Carbon     density:  2.267 g/cm3   RadL:  18.833 cm   Nucl.Int.Length:  35.376 cm   Imean:  81.000 eV 
+ Material:   Carbon    density:  2.267 g/cm3   RadL:  18.833 cm   Nucl.Int.Length:  35.376 cm   Imean:  81.000 eV 
    --->  Element: Carbon ( )   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material: Aluminium     density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.860 cm   Imean: 166.000 eV 
+ Material: Aluminium    density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.860 cm   Imean: 166.000 eV 
    --->  Element: Aluminium ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:  Silicon     density:  2.330 g/cm3   RadL:   9.368 cm   Nucl.Int.Length:  45.761 cm   Imean: 173.000 eV 
+ Material:  Silicon    density:  2.330 g/cm3   RadL:   9.368 cm   Nucl.Int.Length:  45.761 cm   Imean: 173.000 eV 
    --->  Element: Silicon ( )   Z = 14.0   N =  28.1   A =  28.09 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material: Germanium     density:  5.323 g/cm3   RadL:   2.301 cm   Nucl.Int.Length:  27.333 cm   Imean: 350.000 eV 
+ Material: Germanium    density:  5.323 g/cm3   RadL:   2.301 cm   Nucl.Int.Length:  27.333 cm   Imean: 350.000 eV 
    --->  Element: Germanium ( )   Z = 32.0   N =  72.6   A =  72.61 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:      NaI     density:  3.670 g/cm3   RadL:   2.586 cm   Nucl.Int.Length:  42.858 cm   Imean: 452.000 eV 
+ Material:      NaI    density:  3.670 g/cm3   RadL:   2.586 cm   Nucl.Int.Length:  42.858 cm   Imean: 452.000 eV 
    --->  Element: Sodium (Na)   Z = 11.0   N =  23.0   A =  22.99 g/mole  ElmMassFraction:  15.34 %  ElmAbundance  50.00 %
    --->  Element: Iodine (I)   Z = 53.0   N = 126.9   A = 126.90 g/mole  ElmMassFraction:  84.66 %  ElmAbundance  50.00 %
 
- Material:   Iodine     density:  4.930 g/cm3   RadL:   1.720 cm   Nucl.Int.Length:  35.657 cm   Imean: 491.000 eV 
+ Material:   Iodine    density:  4.930 g/cm3   RadL:   1.720 cm   Nucl.Int.Length:  35.657 cm   Imean: 491.000 eV 
    --->  Element: Iodine (I)   Z = 53.0   N = 126.9   A = 126.90 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:      BGO     density:  7.100 g/cm3   RadL:   1.123 cm   Nucl.Int.Length:  22.788 cm   Imean: 473.785 eV 
+ Material:      BGO    density:  7.100 g/cm3   RadL:   1.123 cm   Nucl.Int.Length:  22.788 cm   Imean: 473.785 eV 
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  15.41 %  ElmAbundance  63.16 %
    --->  Element: Germanium (Ge)   Z = 32.0   N =  72.6   A =  72.59 g/mole  ElmMassFraction:  17.48 %  ElmAbundance  15.79 %
    --->  Element: Bismuth (Bi)   Z = 83.0   N = 209.0   A = 208.98 g/mole  ElmMassFraction:  67.10 %  ElmAbundance  21.05 %
 
- Material:     Iron     density:  7.870 g/cm3   RadL:   1.759 cm   Nucl.Int.Length:  16.969 cm   Imean: 286.000 eV 
+ Material:     Iron    density:  7.870 g/cm3   RadL:   1.759 cm   Nucl.Int.Length:  16.969 cm   Imean: 286.000 eV 
    --->  Element: Iron ( )   Z = 26.0   N =  55.8   A =  55.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material: Tungsten     density: 19.300 g/cm3   RadL:   3.504 mm   Nucl.Int.Length:  10.306 cm   Imean: 727.000 eV 
+ Material: Tungsten    density: 19.300 g/cm3   RadL:   3.504 mm   Nucl.Int.Length:  10.306 cm   Imean: 727.000 eV 
    --->  Element: Tungsten ( )   Z = 74.0   N = 183.8   A = 183.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:     Lead     density: 11.350 g/cm3   RadL:   5.612 mm   Nucl.Int.Length:  18.258 cm   Imean: 823.000 eV 
+ Material:     Lead    density: 11.350 g/cm3   RadL:   5.612 mm   Nucl.Int.Length:  18.258 cm   Imean: 823.000 eV 
    --->  Element: Lead ( )   Z = 82.0   N = 207.2   A = 207.19 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:  Uranium     density: 18.950 g/cm3   RadL:   3.166 mm   Nucl.Int.Length:  11.447 cm   Imean: 890.000 eV 
+ Material:  Uranium    density: 18.950 g/cm3   RadL:   3.166 mm   Nucl.Int.Length:  11.447 cm   Imean: 890.000 eV 
    --->  Element: Uranium ( )   Z = 92.0   N = 238.0   A = 238.03 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
 
@@ -88,164 +88,173 @@ physicsList->setCut() start.
 
 phot:   for  gamma    SubType= 12
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :   Emin=        0 eV       Emax=         10 TeV
+       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV  FluoActive
 
 compt:   for  gamma    SubType= 13
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Klein-Nishina :   Emin=        0 eV       Emax=         10 TeV
+        KleinNishina :  Emin=        0 eV    Emax=       10 TeV  FluoActive
 
 conv:   for  gamma    SubType= 14
       Lambda tables from 1.022 MeV to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :   Emin=        0 eV       Emax=         10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       10 TeV
+
+### ===  Deexcitation model UAtomDeexcitation is activated for regions:
+          DefaultRegionForTheWorld
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 0, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :   Emin=        0 eV       Emax=         10 TeV
+        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
 
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 0, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :   Emin=        0 eV       Emax=         10 TeV
+        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
 
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            eplus2gg :   Emin=        0 eV       Emax=         10 TeV
+            eplus2gg :  Emin=        0 eV    Emax=       10 TeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 0, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 0, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :   Emin=        0 eV       Emax=          2 MeV
-          BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
+               Bragg :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
 
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 0, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 0, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            BraggIon :   Emin=        0 eV       Emax=          2 MeV
-          BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
+            BraggIon :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 0, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 0, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :   Emin=        0 eV       Emax=          2 MeV
-          BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
 
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 0, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 0, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :   Emin=        0 eV       Emax=    1.05231 MeV
-          BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
+               Bragg :  Emin=        0 eV    Emax=  1.05231 MeV
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
 
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 0, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 0, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :   Emin=        0 eV       Emax=    1.05231 MeV
-          BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 0, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :   Emin=        0 eV       Emax=        200 keV
-          BetheBloch :   Emin=      200 keV      Emax=          1 GeV
-        MuBetheBloch :   Emin=        1 GeV      Emax=         10 TeV
+               Bragg :  Emin=        0 eV    Emax=      200 keV
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
 
 muBrems:   for  mu+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :   Emin=        0 eV       Emax=         10 TeV
+              MuBrem :  Emin=        0 eV    Emax=       10 TeV
 
 muPairProd:   for  mu+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :   Emin=        0 eV       Emax=         10 TeV
+          muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 muIoni:   for  mu-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 0, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :   Emin=        0 eV       Emax=        200 keV
-          BetheBloch :   Emin=      200 keV      Emax=          1 GeV
-        MuBetheBloch :   Emin=        1 GeV      Emax=         10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=      200 keV
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
 
 muBrems:   for  mu-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :   Emin=        0 eV       Emax=         10 TeV
+              MuBrem :  Emin=        0 eV    Emax=       10 TeV
 
 muPairProd:   for  mu-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :   Emin=        0 eV       Emax=         10 TeV
+          muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 0, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 0, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :   Emin=        0 eV       Emax=    297.505 keV
-          BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
+               Bragg :  Emin=        0 eV    Emax=  297.505 keV
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 0, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 0, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :   Emin=        0 eV       Emax=    297.505 keV
-          BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 
-Region <DefaultRegionForTheWorld> -- appears in <Water> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <Water> world volume
+ This region is in the mass world.
  Root logical volume(s) : Water 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Water 
- Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 0 fm 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  2.93991 keV    e-  349.408 keV    e+  341.455 keV proton 0 eV 
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  2.93991 keV    e-  349.408 keV    e+  341.455 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -286,40 +295,47 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=6.37s Real=6.38s Sys=0s
+  User=4.91s Real=4.92s Sys=0s
 
  The run consists of 1000000 gamma of 100 keV through 1 cm  of Water (density: 1 g/cm3 )
 
- Process calls frequency --->	Transportation = 848441	compt = 149125	phot = 2434
+ Process calls frequency --->	Transportation = 849332	compt = 148274	phot = 2394
 
- Nb of incident particles unaltered after 1 cm  of Water : 848441 over 1000000 incident particles.  Ratio = 84.844 %
- ---> CrossSection per volume:	0.16435 cm^-1 	CrossSection per mass: 0.16435 cm2/g
+ Nb of incident particles unaltered after 1 cm  of Water : 849332 over 1000000 incident particles.  Ratio = 84.933 %
+ ---> CrossSection per volume:	0.16331 cm^-1 	CrossSection per mass: 0.16331 cm2/g
 
  Verification from G4EmCalculator: 
-	compt= 0.1623 cm2/g	phot= 0.0026853 cm2/g	total= 0.16499 cm2/g
-	Expected ratio of transmitted particles= 84.791 %
+	compt= 0.16103 cm2/g	phot= 0.0026853 cm2/g	total= 0.16372 cm2/g
+	Expected ratio of transmitted particles= 84.898 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1922923057, 1535294815
+ Current couple of seeds = 1346311652, 1371428520
 ----------------------------------------
 #
 /gun/particle e-
 /gun/energy 100 MeV
 /run/beamOn 1000000
 
-Region <DefaultRegionForTheWorld> -- appears in <Water> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <Water> world volume
+ This region is in the mass world.
  Root logical volume(s) : Water 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Water 
- Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 0 fm 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  2.93991 keV    e-  349.408 keV    e+  341.455 keV proton 0 eV 
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  2.93991 keV    e-  349.408 keV    e+  341.455 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -329,7 +345,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1922923057, 1535294815
+ Current couple of seeds = 1346311652, 1371428520
 ----------------------------------------
 Start Run processing.
 
@@ -355,22 +371,22 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=7.08s Real=7.08s Sys=0s
+  User=5.49s Real=5.5s Sys=0s
 
  The run consists of 1000000 e- of 100 MeV through 1 cm  of Water (density: 1 g/cm3 )
 
- Process calls frequency --->	Transportation = 540804	eBrem = 277603	eIoni = 181593
+ Process calls frequency --->	Transportation = 534548	eBrem = 284772	eIoni = 180680
 
- Nb of incident particles unaltered after 1 cm  of Water : 540804 over 1000000 incident particles.  Ratio = 54.08 %
- ---> CrossSection per volume:	0.6147 cm^-1 	CrossSection per mass: 0.6147 cm2/g
+ Nb of incident particles unaltered after 1 cm  of Water : 534548 over 1000000 incident particles.  Ratio = 53.455 %
+ ---> CrossSection per volume:	0.62633 cm^-1 	CrossSection per mass: 0.62633 cm2/g
 
  Verification from G4EmCalculator: 
-	eBrem= 0.37212 cm2/g	eIoni= 0.24337 cm2/g	total= 0.61549 cm2/g
-	Expected ratio of transmitted particles= 54.037 %
+	eBrem= 0.38383 cm2/g	eIoni= 0.24337 cm2/g	total= 0.6272 cm2/g
+	Expected ratio of transmitted particles= 53.408 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 490323513, 1321056075
+ Current couple of seeds = 856007873, 317911616
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

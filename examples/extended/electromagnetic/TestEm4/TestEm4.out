@@ -4,13 +4,13 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-00    (17-December-2010)
+ Geant4 version Name: geant4-09-05-ref-00    (2-December-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
- Material: FluorCarbonate     density:  1.610 g/cm3   RadL:  22.435 cm   Nucl.Int.Length:  54.516 cm   Imean:  99.957 eV 
+ Material: FluorCarbonate    density:  1.610 g/cm3   RadL:  22.435 cm   Nucl.Int.Length:  54.516 cm   Imean:  99.957 eV 
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  38.74 %  ElmAbundance  50.00 %
    --->  Element: Fluorine (N)   Z =  9.0   N =  19.0   A =  18.99 g/mole  ElmMassFraction:  61.26 %  ElmAbundance  50.00 %
 PhysicsList::SetCuts:CutLength : 1 (mm)
@@ -20,70 +20,76 @@ PhysicsList::SetCuts:CutLength : 1 (mm)
 
 phot:   for  gamma    SubType= 12
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :   Emin=        0 eV       Emax=         10 TeV
+       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV
 
 compt:   for  gamma    SubType= 13
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Klein-Nishina :   Emin=        0 eV       Emax=         10 TeV
+       Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
 conv:   for  gamma    SubType= 14
       Lambda tables from 1.022 MeV to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :   Emin=        0 eV       Emax=         10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc93 :   Emin=        0 eV       Emax=         10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :   Emin=        0 eV       Emax=         10 TeV
+        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
 
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :   Emin=        0 eV       Emax=         10 TeV
+        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
 
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            eplus2gg :   Emin=        0 eV       Emax=         10 TeV
+            eplus2gg :  Emin=        0 eV    Emax=       10 TeV
 
-Region <DefaultRegionForTheWorld> -- appears in <C6F6> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <C6F6> world volume
+ This region is in the mass world.
  Root logical volume(s) : C6F6 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : FluorCarbonate 
- Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 0 fm 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : FluorCarbonate
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  3.64604 keV    e-  433.376 keV    e+  419.056 keV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -125,11 +131,11 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=3.08s Real=7.19s Sys=4.05s
+  User=3.28s Real=5.73s Sys=2.44s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 548758087, 1436551020
+ Current couple of seeds = 197647939, 629120238
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

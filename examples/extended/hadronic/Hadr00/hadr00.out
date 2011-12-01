@@ -4,17 +4,18 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-10    (4-November-2011)
+ Geant4 version Name: geant4-09-05-ref-00    (2-December-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
 ### G4PhysListFactory WARNING:  environment variable PHYSLIST is not defined
-    Default Physics Lists QGSP_BERT is instantiated
+    Default Physics Lists FTFP_BERT is instantiated
+G4PhysListFactory::GetReferencePhysList <FTFP_BERT>  EMoption= 0
+<<< Geant4 Physics List simulation engine: FTFP_BERT 1.3
 
-<<< Geant4 Physics List engine packaging library: PACK 5.5
-<<< Geant4 Physics List simulation engine: QGSP_BERT 3.4
+<<< Reference Physics List FTFP_BERT is built
 
 /run/verbose 1
 /tracking/verbose 0
@@ -300,12 +301,28 @@ hPairProd:   for  pi-    SubType= 4
 ============================================================================================
              HADRONIC PROCESSES SUMMARY (verbose level 1)
 
+                                  Hadronic Processes for <GenericIon>
+                                  -----------------------------------
+        ionInelastic  Models:               Binary Cascade: Emin(GeV)=    0  Emax(GeV)= 4
+                                                      FTFP: Emin(GeV)=    2  Emax(GeV)= 100000
+
+        ionInelastic  Crs sctns:          AxenWellischIonH: Emin(GeV)=    0  Emax(GeV)= 100000
+                                         TripathiLightIons: Emin(GeV)=    0  Emax(GeV)= 100000
+                                                  Tripathi: Emin(GeV)=    0  Emax(GeV)= 100000
+                                                  IonsShen: Emin(GeV)=    0  Emax(GeV)= 100000
+                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+
+
                                   Hadronic Processes for <anti_neutron>
                                   -----------------------------------
-AntiNeutronInelastic  Models:     G4LEAntiNeutronInelastic: Emin(GeV)=    0  Emax(GeV)= 25
-                                  G4HEAntiNeutronInelastic: Emin(GeV)=   20  Emax(GeV)= 100000
+          hadElastic  Models:                 hElasticLHEP: Emin(GeV)=    0  Emax(GeV)= 100000
 
-AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+          hadElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
+
+AntiNeutronInelastic  Models:                         FTFP: Emin(GeV)=    0  Emax(GeV)= 100000
+
+AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
+                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 
                                   Hadronic Processes for <anti_proton>
@@ -316,10 +333,10 @@ AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Ema
           hadElastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
                                             GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
- AntiProtonInelastic  Models:      G4LEAntiProtonInelastic: Emin(GeV)=    0  Emax(GeV)= 25
-                                   G4HEAntiProtonInelastic: Emin(GeV)=   20  Emax(GeV)= 100000
+ AntiProtonInelastic  Models:                         FTFP: Emin(GeV)=    0  Emax(GeV)= 100000
 
- AntiProtonInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+ AntiProtonInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
+                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 
                                   Hadronic Processes for <e->
@@ -345,11 +362,11 @@ AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Ema
 
           hadElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
-   KaonPlusInelastic  Models:                         QGSP: Emin(GeV)=   12  Emax(GeV)= 100000
-                                     G4LEKaonPlusInelastic: Emin(GeV)=  9.5  Emax(GeV)= 25
-                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 9.9
+   KaonPlusInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
+                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 5
 
-   KaonPlusInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+   KaonPlusInelastic  Crs sctns:          CHIPSInelasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
+                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 
                                   Hadronic Processes for <kaon->
@@ -358,11 +375,11 @@ AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Ema
 
           hadElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
-  KaonMinusInelastic  Models:                         QGSP: Emin(GeV)=   12  Emax(GeV)= 100000
-                                    G4LEKaonMinusInelastic: Emin(GeV)=  9.5  Emax(GeV)= 25
-                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 9.9
+  KaonMinusInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
+                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 5
 
-  KaonMinusInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+  KaonMinusInelastic  Crs sctns:          CHIPSInelasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
+                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 
                                   Hadronic Processes for <lambda>
@@ -371,10 +388,11 @@ AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Ema
 
           hadElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
-     LambdaInelastic  Models:          G4LELambdaInelastic: Emin(GeV)=    0  Emax(GeV)= 25
-                                       G4HELambdaInelastic: Emin(GeV)=   20  Emax(GeV)= 100000
+     LambdaInelastic  Models:               BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 6
+                                                      FTFP: Emin(GeV)=    2  Emax(GeV)= 100000
 
-     LambdaInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+     LambdaInelastic  Crs sctns:          CHIPSInelasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
+                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 
                      Hadronic Processes for <mu->
@@ -387,9 +405,8 @@ AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Ema
           hadElastic  Crs sctns:            CHIPSElasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
                                             GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
-    NeutronInelastic  Models:                         QGSP: Emin(GeV)=   12  Emax(GeV)= 100000
-                                      G4LENeutronInelastic: Emin(GeV)=  9.5  Emax(GeV)= 25
-                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 9.9
+    NeutronInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
+                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 5
 
     NeutronInelastic  Crs sctns:      G4CrossSectionPairGG: Emin(GeV)=    0  Emax(GeV)= 100000
                          G4CrossSectionPairGG: Wellisch-Laidlaw cross sections 
@@ -413,9 +430,8 @@ AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Ema
           hadElastic  Crs sctns:       Barashenkov-Glauber: Emin(GeV)=    0  Emax(GeV)= 100000
                                             GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
-   PionPlusInelastic  Models:                         QGSP: Emin(GeV)=   12  Emax(GeV)= 100000
-                                     G4LEPionPlusInelastic: Emin(GeV)=  9.5  Emax(GeV)= 25
-                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 9.9
+   PionPlusInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
+                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 5
 
    PionPlusInelastic  Crs sctns:      G4CrossSectionPairGG: Emin(GeV)=    0  Emax(GeV)= 100000
                          G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
@@ -431,9 +447,8 @@ AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Ema
           hadElastic  Crs sctns:       Barashenkov-Glauber: Emin(GeV)=    0  Emax(GeV)= 100000
                                             GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
-  PionMinusInelastic  Models:                         QGSP: Emin(GeV)=   12  Emax(GeV)= 100000
-                                    G4LEPionMinusInelastic: Emin(GeV)=  9.5  Emax(GeV)= 25
-                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 9.9
+  PionMinusInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
+                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 5
 
   PionMinusInelastic  Crs sctns:      G4CrossSectionPairGG: Emin(GeV)=    0  Emax(GeV)= 100000
                          G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
@@ -448,9 +463,8 @@ AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Ema
           hadElastic  Crs sctns:            CHIPSElasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
                                             GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
-     ProtonInelastic  Models:                         QGSP: Emin(GeV)=   12  Emax(GeV)= 100000
-                                       G4LEProtonInelastic: Emin(GeV)=  9.5  Emax(GeV)= 25
-                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 9.9
+     ProtonInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
+                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 5
 
      ProtonInelastic  Crs sctns:      G4CrossSectionPairGG: Emin(GeV)=    0  Emax(GeV)= 100000
                          G4CrossSectionPairGG: Axen-Wellisch cross sections 
@@ -491,7 +505,7 @@ EventAction: Event # 0 started
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.09s Real=0.1s Sys=0s
+  User=0.05s Real=0.05s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ### Fill Cross Sections for proton off Al

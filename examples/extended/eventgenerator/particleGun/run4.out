@@ -1,0 +1,50 @@
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+*************************************************************
+ Geant4 version Name: geant4-09-05-ref-00    (2-December-2011)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+/run/verbose 1
+#
+/gunExample/selectGunAction 4
+#
+/gunExample/histo/setFileName run4
+###/gunExample/histo/setFileType hbook
+/gunExample/histo/setFileType root
+/gunExample/histo/setHisto 4 100 0. 10. mm
+----> SetHisto 4: vertex posi: radial  distr dN/dv = f(r) (mm);  100 bins from 0 mm to 10 mm
+/gunExample/histo/setHisto 5 90 0. 180 deg
+----> SetHisto 5: vertex posi: angular distr dN/dv = f(theta) (deg);  90 bins from 0 deg to 180 deg
+/gunExample/histo/setHisto 6 180 0. 360 deg
+----> SetHisto 6: vertex posi: angular distr dN/dv = f(phi) (deg);  180 bins from 0 deg to 360 deg
+/gunExample/histo/setHisto 7 90 0. 180 deg
+----> SetHisto 7: moment dir: angular distr dN/dOmega = f(alpha)  (deg);  90 bins from 0 deg to 180 deg
+/gunExample/histo/setHisto 8 180 0. 360 deg
+----> SetHisto 8: moment dir: angular distr dN/dOmega = f(psi)  (deg);  180 bins from 0 deg to 360 deg
+#
+/run/beamOn 1000000
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_AIR
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000000
+  User=5.53s Real=5.55s Sys=0s
+G4 kernel has come to Quit state.
+

@@ -1,0 +1,128 @@
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+*************************************************************
+ Geant4 version Name: geant4-09-05-ref-00    (2-December-2011)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+/run/verbose 2
+#
+/gun/particle ion
+/gun/ion 10 24
+#
+/rdecay01/fullChain false
+#
+/rdecay01/histo/setFileName run1
+###/rdecay01/histo/setFileType hbook
+/rdecay01/histo/setFileType root
+/rdecay01/histo/setHisto 1 100 0. 2000 keV
+----> SetHisto 1: energy spectrum: e+ e- (keV);  100 bins from 0 keV to 2000 keV
+/rdecay01/histo/setHisto 2 100 0. 2000 keV
+----> SetHisto 2: energy spectrum: nu_e anti_nu_e (keV);  100 bins from 0 keV to 2000 keV
+/rdecay01/histo/setHisto 3 100 0. 1000 keV
+----> SetHisto 3: energy spectrum: gamma (keV);  100 bins from 0 keV to 1000 keV
+/rdecay01/histo/setHisto 5 100 0. 200 eV
+----> SetHisto 5: energy spectrum: ions (eV);  100 bins from 0 eV to 200 eV
+/rdecay01/histo/setHisto 6 100 1. 2.5 MeV
+----> SetHisto 6: total kinetic energy (Q) (MeV);  100 bins from 1 MeV to 2.5 MeV
+/rdecay01/histo/setHisto 7 100 0. 1 eV
+----> SetHisto 7: momentum balance (eV);  100 bins from 0 eV to 1 eV
+/rdecay01/histo/setHisto 8 100 0. 70 min
+----> SetHisto 8: total time of life of decay chain (min);  100 bins from 0 min to 70 min
+#
+/rdecay01/event/printModulo 10000
+#
+/run/beamOn 100000
+
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_AIR 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_AIR
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   0 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
+Start Run processing.
+
+ end of event      0 : Ne24[0.0] ---> Na24[472.2]
+
+ end of event  10000 : Ne24[0.0] ---> Na24[472.2]
+
+ end of event  20000 : Ne24[0.0] ---> Na24[472.2]
+
+ end of event  30000 : Ne24[0.0] ---> Na24[1346.6]
+
+ end of event  40000 : Ne24[0.0] ---> Na24[472.2]
+
+ end of event  50000 : Ne24[0.0] ---> Na24[472.2]
+
+ end of event  60000 : Ne24[0.0] ---> Na24[472.2]
+
+ end of event  70000 : Ne24[0.0] ---> Na24[472.2]
+
+ end of event  80000 : Ne24[0.0] ---> Na24[472.2]
+
+ end of event  90000 : Ne24[0.0] ---> Na24[472.2]
+Run terminated.
+Run Summary
+  Number of events processed : 100000
+  User=2.56s Real=2.6s Sys=0s
+
+ ======================== run summary ======================
+ The run was 100000 Ne24[0.0] of 0 eV 
+ ===========================================================
+
+ Nb of generated particles: 
+
+   Na24[1346.6]:    7943  Emean =  27.49 eV 	( 0.06607 eV  --> 53.72 eV )
+    Na24[472.2]:   92057  Emean =  72.73 eV 	( 0.005133 eV  --> 134.8 eV )
+      Ne24[0.0]:  100000  Emean =      0 eV 	( 0 eV  --> 0 eV )
+      anti_nu_e:  100000  Emean =  1.128 MeV	( 27.83 keV --> 1.998 MeV)
+             e-:  100000  Emean =  800.7 keV	( 82.78 eV  --> 1.97 MeV)
+
+   Ekin Total (Q): mean =  1.928 MeV	( 1.123 MeV --> 1.998 MeV)
+
+   Momentum balance (excluding gamma desexcitation): mean = 0.01527 eV 	( 0 eV  --> 0.5493 eV )
+
+   Total time of life : mean =  4.899 min  half-life =  3.396 min   ( 10.4 ms  --> 50.72 min)
+
+   Activity of Ne24[0.0] = 8.537e+19 Bq/g   (2.307e+09 Ci/g) 
+
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
+G4 kernel has come to Quit state.
+EventManager deleted.
+UImanager deleted.
+Units table cleared.
+StateManager deleted.
+RunManagerKernel is deleted.
+RunManager is deleting.
+

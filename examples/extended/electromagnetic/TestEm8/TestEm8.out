@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-10    (4-November-2011)
+ Geant4 version Name: geant4-09-05-ref-00    (2-December-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -607,31 +607,31 @@ RunAction: End of run actions are started
  ================== run summary =====================
    End of Run TotNbofEvents = 1000
 
-   Mean energy deposit in absorber = 15.164 +- 0.25159 keV;    RMS/Emean = 0.52467
-   Mean number of steps in absorber= 1.23;  mean number of ion-clusters = 814.85
+   Mean energy deposit in absorber = 14.76 +- 0.23856 keV;    RMS/Emean = 0.51111
+   Mean number of steps in absorber= 1.222;  mean number of ion-clusters = 772.05
 
- ====== Energy deposit distribution   Noverflows= 0.013 ====== 
+ ====== Energy deposit distribution   Noverflows= 0.008 ====== 
  bin nb      Elow      entries     normalized 
     0         0           0           0
-    1         3           2       0.002
-    2         6         114       0.114
-    3         9         243       0.243
-    4        12         256       0.256
-    5        15         163       0.163
-    6        18          76       0.076
-    7        21          38       0.038
-    8        24          28       0.028
-    9        27          16       0.016
-   10        30           9       0.009
-   11        33          10        0.01
-   12        36           5       0.005
-   13        39           7       0.007
-   14        42           6       0.006
-   15        45           4       0.004
-   16        48           2       0.002
-   17        51           2       0.002
-   18        54           2       0.002
-   19        57           4       0.004
+    1         3           3       0.003
+    2         6         115       0.115
+    3         9         282       0.282
+    4        12         245       0.245
+    5        15         141       0.141
+    6        18          89       0.089
+    7        21          44       0.044
+    8        24          18       0.018
+    9        27          19       0.019
+   10        30           4       0.004
+   11        33           8       0.008
+   12        36           4       0.004
+   13        39           1       0.001
+   14        42           4       0.004
+   15        45           2       0.002
+   16        48           3       0.003
+   17        51           3       0.003
+   18        54           4       0.004
+   19        57           3       0.003
  ================== run end ==========================
 #
 UserDetectorConstruction deleted.
