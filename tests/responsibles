@@ -134,6 +134,7 @@ examples/advanced            cirrone@lns.infn.it             Pablo Cirrone
   gammaray_telescope         longof@ts.infn.it               Francesco Longo
   hadrontherapy              cirrone@lns.infn.it             Pablo Cirrone
   human_phantom              susanna@uow.edu.au              Susanna Guatelli
+  iort_therapy               cirrone@lns.infn.it             Pablo Cirrone
   lAr_calorimeter            Andrea.Dotti@cern.ch            Andrea Dotti
   medical_linac              cirrone@lns.infn.it             Pablo Cirrone
   microbeam                  incerti@cenbg.in2p3.fr          Sebastien Incerti
@@ -141,10 +142,10 @@ examples/advanced            cirrone@lns.infn.it             Pablo Cirrone
   nanobeam                   incerti@cenbg.in2p3.fr          Sebastien Incerti
   purging_magnet             John.Apostolakis@cern.ch        John Apostolakis
   radioprotection            cirrone@lns.infn.it             Pablo Cirrone
-  Rich                       Andrea.Dotti@cern.ch            Andrea Dotti
   underground_physics        Alexander.Howard@cern.ch        Alexander Howard 
   xray_fluorescence          Alfonso.Mantero@ge.infn.it      Alfonso Mantero
   xray_telescope             Giovanni.Santin@esa.int         Giovanni Santin
+examples/basic               ivana@ipno.in2p3.fr             Ivana Hrivnakova
 examples/extended
   analysis:
     A01                      perl@slac.stanford.edu          Joseph Perl
@@ -154,6 +155,7 @@ examples/extended
   biasing
     B01, B02                 Alexander.Howard@cern.ch        Alexander Howard
     ReverseMC01              desorgher@spaceit.ch            Laurent Desorgher
+  common                     ivana@ipno.in2p3.fr             Ivana Hrivnakova
   electromagnetic:
     TestEm1,2,5,6,7,9        Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
     TestEm3,4                Michel.Maire@lapp.in2p3.fr      Michel Maire
@@ -170,10 +172,11 @@ examples/extended
   field:
     BlineTracer              desorgher@spaceit.ch            Laurent Desorgher
     field01,02,03            John.Apostolakis@cern.ch        John Apostolakis
-    field04,05               gum@triumf.ca                   Peter Gumplinger
+    field04,05,06            gum@triumf.ca                   Peter Gumplinger
   g3tog4:
     clGeometry, cltog4       ivana@ipno.in2p3.fr             Ivana Hrivnakova
   geometry/olap              Gabriele.Cosmo@cern.ch          Gabriele Cosmo
+  geometry/transforms        Michel.Maire@lapp.in2p3.fr      Michel Maire
   hadronic:
     Hadr00                   Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
     Hadr01                   Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
@@ -256,17 +259,18 @@ tests                        Gunter.Folger@cern.ch           Gunter Folger
       test47                 Sunanda.Banerjee@cern.ch        Sunanda Banerjee
       test49                 Mikhail.Kossov@cern.ch          Mikhail Kossov
       test50                 incerti@cenbg.in2p3.fr          Sebastien Incerti
-      test52                 Anton.Lechner@cern.ch	     Anton Lechner
+      test52                 Anton.Lechner@cern.ch	         Anton Lechner
       test53                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test54                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
-      test55                 Anton.Lechner@cern.ch	     Anton Lechner
+      test55                 Anton.Lechner@cern.ch	         Anton Lechner
       test56                 alfonso.mantero@gmail.com       Alfonso Mantero
       test58                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test60                 incerti@cenbg.in2p3.fr          Sebastien Incerti
       test61                 tkoi@slac.stanford.edu          Tatsumi Koi
       test62                 kaitanie@cc.helsinki.fi	     Pekka Kaitaniemi
       test65                 tkoi@slac.stanford.edu          Tatsumi Koi
-      test67		     pandola@lngs.infn.it	     Luciano Pandola
-      test69		     kaitanie@cc.helsinki.fi	     Pekka Kaitaniemi
+      test67                 pandola@lngs.infn.it            Luciano Pandola
+      test69                 kaitanie@cc.helsinki.fi         Pekka Kaitaniemi
+      test70                 kara@cenbg.in2p3.fr             Mathieu Karamitros
       test201                barrand@lal.in2p3.fr            Guy Barrand
       test202                John.Allison@man.ac.uk          John Allison
