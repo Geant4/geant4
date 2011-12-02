@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+tests-V09-05-00 2nd December 2011  Gabriele Cosmo
+- Updated reference outputs according to reference tag geant4-09-05-ref-00.
+- Updated general CMake scripts (P.Mato).
+- Includes tags: test10-V09-04-03, test11-V09-04-07, test19-V09-04-05,
+                 test29-V09-04-05, test31-V09-04-03, test33-V09-04-00,
+                 test39-V09-04-03, test44-V09-04-03, test45-V09-04-01,
+                 test46-V09-04-02, test49-V09-04-05, test58-V09-04-03,
+                 test61-V09-04-01, test67-V09-04-11.
+                
 tests-V09-04-10 7th November 2011  Gabriele Cosmo
 - Updated reference outputs according to reference tag geant4-09-04-ref-10.
 - Includes tags: test10-V09-04-02, test11-V09-04-04, test30-V09-04-10,
