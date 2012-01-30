@@ -17,6 +17,29 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30th December 2011  John Allison  (greps-V09-05-02)
+- G4VVisManager.hh: Improved comments for Added Begin/EndDraw(2D).
+
+28th December 2011  John Allison  (greps-V09-05-01)
+- G4VVisManager.hh: Added Begin/EndDraw(2D), optional methods for
+  bracketing Draw methods to improve drawing speed.
+
+15th December 2011  John Allison  (greps-V09-05-00)
+- G4Colour.hh: Cosmetics.
+- Tagged.
+
+8th December 2011  John Allison
+- G4Visible.hh: Cosmetic improvement to comments.
+- G4NURBS.cc: G4Exception id's changed to 900x.
+- HepPolyhedron.cc: G4Exception id's changed to 100x.
+
+17th November 2011  John Allison
+- G4Colour: operator<<:
+  o Added colour name if in colour map, e.g., (1,0,0,1) (red).
+- BooleanProcessor.src: Saved one instruction.
+  o No need to evaluate "point *= (1./nnode)" unless nnode > 1.
+  o (Also suppresses Coverity warning about division by zero.)
+
 11th November 2011  John Allison  (greps-V09-04-10)
 - Fixed most Coverity warnings.
 

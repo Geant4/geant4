@@ -396,7 +396,7 @@ void G4NURBS::Conscheck() const
 	 << G4NURBS::Tochar(dir) 
 	 << " direction must be >= 1" << G4endl;
       G4Exception("G4NURBS::Conscheck()",
-		  "greps1001", FatalException, ed);
+		  "greps9001", FatalException, ed);
     }
     if (m[dir].nbrCtrlPts<=0)
     {
@@ -405,7 +405,7 @@ void G4NURBS::Conscheck() const
              << G4NURBS::Tochar(dir) 
              << " direction must be >= 1" << G4endl;
       G4Exception("G4NURBS::Conscheck()",
-		  "greps1002", FatalException, ed);
+		  "greps9002", FatalException, ed);
     }
   }  // end of dummy
 }
@@ -434,7 +434,7 @@ G4NURBS::G4NURBS ( t_order in_Uorder, t_order in_Vorder,
        << "\teven if they are defined later, the array must be allocated."
        << G4endl;
     G4Exception("G4NURBS::G4NURBS()",
-		"greps1003", FatalException, ed);
+		"greps9003", FatalException, ed);
   }
   //mnbralias = 0;
 
@@ -453,7 +453,7 @@ G4NURBS::G4NURBS ( t_order in_Uorder, t_order in_Vorder,
 	   << " direction."
 	   << G4endl;
         G4Exception("G4NURBS::G4NURBS()",
-		    "greps1004", FatalException, ed);
+		    "greps9004", FatalException, ed);
       }
       //m[dir].nbralias = 0;
     }  // end of knots-making
@@ -500,7 +500,7 @@ G4NURBS::G4NURBS( t_order in_Uorder, t_order in_Vorder,
 	 << " knots vector)"
 	 << G4endl;
       G4Exception("G4NURBS::G4NURBS()",
-		  "greps1005", FatalException, ed);
+		  "greps9005", FatalException, ed);
     }
     //m[dir].nbralias = 0;
   }

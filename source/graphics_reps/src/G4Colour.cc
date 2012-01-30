@@ -54,8 +54,19 @@ G4Colour::operator G4ThreeVector() {
 }
 
 std::ostream& operator << (std::ostream& os, const G4Colour& c) {
-  return os << '(' << c.red << ',' << c.green << ',' << c.blue
+  os << '(' << c.red << ',' << c.green << ',' << c.blue
 	    << ',' << c.alpha << ')';
+  const std::map<G4String, G4Colour>& colourMap = G4Colour::GetMap();
+  // Reverse iterator to pick up English spelling of grey!!  :)
+  std::map<G4String, G4Colour>::const_reverse_iterator ri;
+  for (ri = colourMap.rbegin(); ri != colourMap.rend(); ++ri) {
+    if (c == ri->second) {
+      os << " (" << ri->first << ')';
+      break;
+    }
+  }
+  
+  return os;
 }
 
 G4bool G4Colour::operator != (const G4Colour& c) const {
@@ -97,8 +108,8 @@ G4Colour::InitialiseColourMap()
 {
   // Standard colours
   AddToMap("white",   G4Colour::White());
-  AddToMap("gray",    G4Colour::Gray());
   AddToMap("grey",    G4Colour::Grey());
+  AddToMap("gray",    G4Colour::Gray());
   AddToMap("black",   G4Colour::Black());
   AddToMap("red",     G4Colour::Red());
   AddToMap("green",   G4Colour::Green());

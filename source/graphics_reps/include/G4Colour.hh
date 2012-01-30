@@ -81,18 +81,23 @@
 #include <map>
 
 class G4Colour {
-  friend std::ostream& operator << (std::ostream& os, const G4Colour& c);
+
+  friend std::ostream& operator << (std::ostream&, const G4Colour&);
 
 public: // With description
 
   G4Colour (G4double r = 1., G4double g = 1., G4double b = 1.,
 	    G4double a = 1.);
+
   G4Colour (G4ThreeVector);
   // Converts the components of the 3-vector into red, green, blue.
   // The opacity, alpha = 1.
+
   operator G4ThreeVector();
   // Converts red, green, blue into the components of a 3-vector.
+
   G4bool operator != (const G4Colour& c) const;
+  G4bool operator == (const G4Colour& c) const {return !(operator != (c));}
   G4double GetRed   () const;
   G4double GetGreen () const;
   G4double GetBlue  () const;
@@ -125,7 +130,6 @@ private:
 
   static std::map<G4String, G4Colour> fColourMap;
   static G4bool fInitColourMap;
-
   static void InitialiseColourMap();
     
 };

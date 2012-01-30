@@ -186,6 +186,23 @@ public: // With description
     const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
 
   //////////////////////////////////////////////////////////////////////
+  // Optional methods that you may use to bracket a series of Draw
+  // messages that have identical objectTransformation to improve
+  // drawing speed.  Use Begin/EndDraw for a series of Draw messages,
+  // Begin/EndDraw2D for a series of Draw2D messages.  Do not mix Draw
+  // and Draw2D messages.
+
+  virtual void BeginDraw
+  (const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
+
+  virtual void EndDraw () = 0;
+
+  virtual void BeginDraw2D
+  (const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
+
+  virtual void EndDraw2D () = 0;
+
+  //////////////////////////////////////////////////////////////////////
   // Other methods...
 
   virtual void GeometryHasChanged () = 0;

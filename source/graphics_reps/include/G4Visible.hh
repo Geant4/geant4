@@ -65,7 +65,6 @@ public: // With description
   const G4VisAttributes* GetVisAttributes () const;
 
   void SetVisAttributes (const G4VisAttributes*);
-  void SetVisAttributes (const G4VisAttributes&);
   // The G4VisAttributes object is not stored in a G4Visible; only a
   // reference, a const pointer, is kept.  Therefore the
   // G4VisAttributes object to which it refers must have a life long
@@ -73,6 +72,10 @@ public: // With description
   // G4Visible object is created on the heap (using `new') then the
   // associated G4VisAttributes object would normally also be created
   // on the heap and managed in the same way.
+
+  void SetVisAttributes (const G4VisAttributes&);
+  // A copy of the G4VisAttributes object is created on the heap to
+  // ensure a long life.
 
 protected:
 
