@@ -33,14 +33,16 @@
 //      History: first implementation, A. Feliciello, 30th June 1998
 //               Removed delete of DeExcitation model, deleted elsewhere.
 //                  F.W.Jones, 06-JUL-99
+//      V.Ivanchenko 03.01.2012
+//          Added G4VPreCompoundModel pointer to the constructor and cleanup
 // -----------------------------------------------------------------------------
 
 #include "G4VIntraNuclearTransportModel.hh"
 
-G4VIntraNuclearTransportModel::G4VIntraNuclearTransportModel(const G4String& modName) 
-  : G4HadronicInteraction(modName),
-    theTransportModelName(modName), the3DNucleus(0), theDeExcitation(0),
-    thePrimaryProjectile(0)
+G4VIntraNuclearTransportModel::G4VIntraNuclearTransportModel(
+        const G4String& modName, G4VPreCompoundModel* ptr) 
+  : G4HadronicInteraction(modName),theTransportModelName(modName), 
+    the3DNucleus(0),theDeExcitation(ptr),thePrimaryProjectile(0)
 {}
 
 G4VIntraNuclearTransportModel::~G4VIntraNuclearTransportModel()

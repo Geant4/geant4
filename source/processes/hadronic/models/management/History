@@ -14,6 +14,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+18 January 2012 - Vladimir Ivanchenko (hadr-modman-V09-05-00)
+------------------------------------------------------------
+- G4VIntraNuclearTransportModel - include pointer to G4VPreCompoundModel
+    in the constructor and cleanup
+- G4VPreCompoundModel - include pointer of G4ExcitationHandler in 
+    the constructor and cleanup
+ 
 3 November 2011 - Dennis Wright    (hadr-modman-V09-04-05)
 ----------------------------------------------------------
 - add constructor and virtual destructor to G4VIsotopeProduction to 
