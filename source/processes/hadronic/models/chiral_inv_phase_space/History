@@ -18,12 +18,34 @@ Summarize all code modifications & keep track of all tags in this file.
 
 <<-!- History (please, make changes only with Mikhail.Kossov@cern.ch approval)
 
-27-May-2011 M.Kosov [The main changes ar in body] (hadr-chips-V09-04-02)
-------------------------------------------------------------------------
+13-Jan-2012 G.Cosmo (hadr-chips-V09-05-00)
+--------------------------------------------------------------------------
+Includes "hadr-chips-body-V09-05-02" for one workaround fix to a line of
+code in G4QFreeScattering.cc to allow compilation on MacOSX-Lion.
+Removes directories laying on the trunk and not getting compiled...
+
+8-Nov-2011 M.Kosov [6 of 8 warnings are fixed] (hadr-chips-V09-04-06)
+---------------------------------------------------------------------
+Mutual CHIPS tag: 6 of 8 warnings collected by Andrea are fixed. 2 need devel.
+
+6-Nov-2011 M.Kosov [EMcorrection + QFIn for Omega-] (hadr-chips-V09-04-05)
+--------------------------------------------------------------------------
+Mutual CHIPS tag: Two bug fixes for G4QEnvironment, CHIPS 1.2 for G4.9.5
+
+4-Nov-2011 M.Kosov [rescattering for srange primary] (hadr-chips-V09-04-04)
+---------------------------------------------------------------------------
+Mutual CHIPS tag: Bug fix for Grean Line parameter tuning (stopping) for 9.5
+
+4-Nov-2011 M.Kosov (hadr-chips-V09-04-03)
+-------------------------------------------------------------------------
+Mutual CHIPS tag: Grean Line parameter tuning (stopping) for 9.5.0
+
+27-May-2011 M.Kosov [The main changes are in body] (hadr-chips-V09-04-02)
+-------------------------------------------------------------------------
 Mutual CHIPS tag: Further tuning of the Quasmon/Evaporation transition
 
-16-May-2011 M.Kosov [The main changes ar in body] (hadr-chips-V09-04-01)
-------------------------------------------------------------------------
+16-May-2011 M.Kosov [The main changes are in body] (hadr-chips-V09-04-01)
+-------------------------------------------------------------------------
 Mutual CHIPS tag: Tuning of the Quasmon/Evaporation transition to meet
                   Requirements of the LHS Calorimeter response level
                 + In G4QEnvironment fix for the Current/Last delete bug

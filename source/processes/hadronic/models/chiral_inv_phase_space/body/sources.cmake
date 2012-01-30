@@ -38,23 +38,22 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_body_ci
     HEADERS
         G4Chips.hh
         G4QBesIKJY.hh
-        G4QCHIPSWorld.hh
         G4QCandidate.hh
         G4QCandidateVector.hh
         G4QChipolino.hh
+        G4QCHIPSWorld.hh
         G4QContent.hh
         G4QDecayChan.hh
         G4QDecayChanVector.hh
         G4QEnvironment.hh
         G4QException.hh
+        G4QFreeScattering.hh
         G4QHadron.hh
         G4QHadronVector.hh
         G4QInteraction.hh
         G4QInteractionVector.hh
         G4QIsotope.hh
         G4QNucleus.hh
-        G4QPDGCode.hh
-        G4QPDGCodeVector.hh
         G4QParentCluster.hh
         G4QParentClusterVector.hh
         G4QParticle.hh
@@ -63,9 +62,12 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_body_ci
         G4QPartonPair.hh
         G4QPartonPairVector.hh
         G4QPartonVector.hh
+        G4QPDGCode.hh
+        G4QPDGCodeVector.hh
         G4QProbability.hh
         G4QString.hh
         G4QStringVector.hh
+	G4QThd.hh
         G4Quasmon.hh
         G4QuasmonVector.hh
     SOURCES
@@ -77,6 +79,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_body_ci
         G4QDecayChan.cc
         G4QEnvironment.cc
         G4QException.cc
+	G4QFreeScattering.cc
         G4QHadron.cc
         G4QInteraction.cc
         G4QIsotope.cc

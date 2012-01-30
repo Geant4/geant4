@@ -69,9 +69,9 @@ G4bool   G4QInelastic::manualFlag=false; // If false then standard parameters ar
 G4double G4QInelastic::Temperature=140.; // Critical Temperature (sensitive at High En)
 G4double G4QInelastic::SSin2Gluons=0.3;  // Supression of s-quarks (in respect to u&d)
 G4double G4QInelastic::EtaEtaprime=0.3;  // Supression of eta mesons (gg->qq/3g->qq)
-G4double G4QInelastic::freeNuc=.5;       // Percentage of free nucleons on the surface
-G4double G4QInelastic::freeDib=.05;      // Percentage of free diBaryons on the surface
-G4double G4QInelastic::clustProb=5.;     // Nuclear clusterization parameter
+G4double G4QInelastic::freeNuc=.04;       // Percentage of free nucleons on the surface
+G4double G4QInelastic::freeDib=.08;      // Percentage of free diBaryons on the surface
+G4double G4QInelastic::clustProb=4.;     // Nuclear clusterization parameter
 G4double G4QInelastic::mediRatio=1.;     // medium/vacuum hadronization ratio
 //G4int    G4QInelastic::nPartCWorld=152;// The#of particles initialized in CHIPS World
 //G4int    G4QInelastic::nPartCWorld=122;// The#of particles initialized in CHIPS World
@@ -769,12 +769,13 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
     return 0;
   }
   nOfNeutrons=N;                           // Remember it for the energy-momentum check
-  G4double am=Z+N;
+  //G4double am=Z+N;
+  G4int am=Z+N;
   //G4double dd=0.025;
   //G4double sr=std::sqrt(am);
   //G4double dsr=0.01*(sr+sr);
   //if(dsr<dd)dsr=dd;
-  //G4double medRA=mediRatio*pow(am,third);
+  //G4double medRA=mediRatio*G4QThd(am);
   G4double medRA=mediRatio;
   if(manualFlag) G4QNucleus::SetParameters(freeNuc,freeDib,clustProb,medRA); // ManualP
   //else if(projPDG==-2212)G4QNucleus::SetParameters(1.-dsr-dsr,dd+dd,5.,9.);//aP ClustPars
@@ -933,7 +934,8 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
     //
     // Scatter the lepton ( @@ make the same thing for real photons)
     // At this point we have photonEnergy and photonQ2 (with notDefinedPhi)->SelectProjPart
-    G4double absEn = std::pow(am,third)*GeV;  // @@(b) Mean Energy Absorbed by a Nucleus
+    G4double absEn = G4QThd(am)*GeV;     // @@(b) Mean Energy Absorbed by a Nucleus
+    //G4double absEn = std::pow(am,third)*GeV;  // @@(b) Mean Energy Absorbed by a Nucleus
     if(am>1 && absEn < photonEnergy)     // --> the absorption of energy can happen
     //if(absEn < photonEnergy)             // --> the absorption of energy can happen
     {
@@ -1486,7 +1488,8 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
      qepart=qepart/clProb[0]-qepart;// Add QE for 2N, 3N, & 4N clusters (N is made in G4QF)
      G4double pickup=1.-qepart;  // Estimate the rest of the cross-section
      G4double thresh=100.;
-     if(momentum > thresh) pickup*=50./momentum/std::pow(G4double(Z+N),third);// 50 is Par
+     //if(momentum >thresh) pickup*=50./momentum/std::pow(G4double(Z+N),third);// 50 is Par
+     if(momentum > thresh) pickup*=50./momentum/G4QThd(Z+N);// 50 is Par
      // pickup = 0.;               // To exclude the pickup process
      if (N) pickup+=qepart;
      else   pickup =qepart;
@@ -1923,9 +1926,13 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
         G4ThreeVector vedm=vx*dmom*cost+vy*tdom*std::sin(phi)+vz*tdom*std::cos(phi);// bQFN
         G4LorentzVector bqf(vedm,den);      // 4-mom of the bQF nucleon
         r4M=t4M-bqf;                         // 4mom of the residual nucleus
+#ifdef debug
         if(std::fabs(r4M.m()-rM)>.001) G4cout<<"G4QIn::PSD: rM="<<rM<<"#"<<r4M.m()<<G4endl;
+#endif
         G4LorentzVector f4M=proj4M+bqf;      // Prototype of 4-mom of Deuteron
+#ifdef debug
         if(std::fabs(f4M.m()-mPUF)>.001)G4cout<<"G4QI::PSD:m="<<mPUF<<"#"<<f4M.m()<<G4endl;
+#endif
         aParticleChange.ProposeEnergy(0.);   // @@ ??
         aParticleChange.ProposeTrackStatus(fStopAndKill);// projectile nucleon is killed
         aParticleChange.SetNumberOfSecondaries(2); 

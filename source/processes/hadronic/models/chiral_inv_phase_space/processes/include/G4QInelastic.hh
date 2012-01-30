@@ -77,6 +77,7 @@
 #include "globals.hh"
 #include "G4ios.hh"
 #include "Randomize.hh" 
+#include "G4QThd.hh"
 #include "G4VDiscreteProcess.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
