@@ -56,6 +56,7 @@
 #include "G4IonProtonCrossSection.hh"
 
 #include "G4PreCompoundModel.hh"
+#include "G4ExcitationHandler.hh"
 #include "G4FTFBuilder.hh"
 #include "G4HadronicInteraction.hh"
 #include "G4BuilderType.hh"
@@ -101,12 +102,11 @@ void G4IonFTFPBinaryCascadePhysics::ConstructProcess()
 
   G4double emax = 100.*TeV;
 
-  G4PreCompoundModel* thePreCompound = 
-    new G4PreCompoundModel(new G4ExcitationHandler());
+  G4ExcitationHandler* handler = new G4ExcitationHandler();
+  G4PreCompoundModel* thePreCompound = new G4PreCompoundModel(handler);
 
   // Binary Cascade
-  theIonBC = new G4BinaryLightIonReaction();
-  theIonBC->SetPrecompound(thePreCompound);
+  theIonBC = new G4BinaryLightIonReaction(thePreCompound);
   theIonBC->SetMinEnergy(0.0);
   theIonBC->SetMaxEnergy(4*GeV);
 

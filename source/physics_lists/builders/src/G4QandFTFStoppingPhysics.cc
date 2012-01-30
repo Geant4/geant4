@@ -73,10 +73,10 @@ G4QandFTFStoppingPhysics::G4QandFTFStoppingPhysics( const G4String& name,
 
 G4QandFTFStoppingPhysics::~G4QandFTFStoppingPhysics() {
   if(wasActivated) {
-    if ( muProcess ) delete muProcess;
-    delete hProcess;
-    delete hFTFProcess;
-    delete hBertProcess;
+    //if ( muProcess ) delete muProcess;
+    //delete hProcess;
+    //delete hFTFProcess;
+    //delete hBertProcess;
   }
 }
 

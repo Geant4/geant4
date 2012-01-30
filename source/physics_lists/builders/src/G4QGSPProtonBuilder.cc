@@ -102,7 +102,7 @@ G4QGSPProtonBuilder::~G4QGSPProtonBuilder()
    delete theStringModel;
    delete theModel;
    delete theQGSM;
-   delete theHandler;
+   //delete theHandler;
  }
 
  // 2002 by J.P. Wellisch

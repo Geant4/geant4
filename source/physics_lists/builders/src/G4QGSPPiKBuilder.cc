@@ -90,7 +90,7 @@ G4QGSPPiKBuilder::
   delete theStringModel;
   delete theModel;
   delete theQGSM;
-  delete theHandler;
+  //delete theHandler;
 }
 
 void G4QGSPPiKBuilder::

@@ -86,7 +86,7 @@ G4QGSPNeutronBuilder::~G4QGSPNeutronBuilder()
   if ( theProjectileDiffraction ) delete theProjectileDiffraction;
   delete theModel;
   delete theQGSM;
-  delete theHandler;
+  //delete theHandler;
 }
 
 void G4QGSPNeutronBuilder::

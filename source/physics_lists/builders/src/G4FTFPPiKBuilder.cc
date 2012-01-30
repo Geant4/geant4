@@ -82,7 +82,7 @@ G4FTFPPiKBuilder::~G4FTFPPiKBuilder()
   delete theStringModel;
   delete theModel;
   if ( theQuasiElastic ) delete theQuasiElastic;
-  delete theHandler;
+  //delete theHandler;
   delete theLund;
 }
 

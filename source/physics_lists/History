@@ -15,6 +15,16 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23-01-2012 M.Karamitros               (phys-lists-V09-05-01)
+- change G4WaterExcitation -> G4DNAWaterExcitation in G4EmDNAPhysicsChemistry
+
+- G4FTFBuilder, G4QandFTFStoppingPhysics - reduced number of deleted 
+    objects to avoid double deletion
+
+18-01-2012, V.Ivanchenko               (phys-lists-V09-05-00)
+- Do not delete G4ExcitationHandler in hadronic builders to avoid
+  double deletion
+
 18-11-2011, V.Ivanchenko               (phys-lists-V09-04-74)
 - fix in all EM builders - return back old method of definition of
   high energy model per particle type, new method provoke 

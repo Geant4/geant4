@@ -100,7 +100,7 @@ G4HyperonFTFPBuilder::~G4HyperonFTFPBuilder()
   delete theStringDecay;
   delete theCascade;
   delete thePreEquilib;
-  delete theHandler;
+  //  delete theHandler;
   delete theBertini;
   delete AntiHyperonFTFP;
   

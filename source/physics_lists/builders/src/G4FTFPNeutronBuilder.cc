@@ -83,7 +83,7 @@ G4FTFPNeutronBuilder::
   delete thePreEquilib;
   delete theCascade;
   if ( theQuasiElastic ) delete theQuasiElastic;
-  delete theHandler;
+  //delete theHandler;
   delete theLund;
 }
 

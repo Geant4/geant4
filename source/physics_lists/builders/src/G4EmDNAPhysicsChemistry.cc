@@ -27,7 +27,7 @@
 #include "G4DNAMolecularDecayDisplacer.hh"
 #include "G4DNAChemistryManager.hh"
 #include "G4ITStepManager.hh"
-#include "G4WaterExcitationStructure.hh"
+#include "G4DNAWaterExcitationStructure.hh"
 #include "G4ProcessManager.hh"
 
 #include "G4DNAGenericIonsManager.hh"
@@ -175,7 +175,7 @@ void G4EmDNAPhysicsChemistry::ConstructDecayChannels()
     //////////////////////////////////////////////////////////
     //            EXCITATIONS                               //
     //////////////////////////////////////////////////////////
-    G4WaterExcitationStructure waterExcitation;
+    G4DNAWaterExcitationStructure waterExcitation;
     //--------------------------------------------------------
     //---------------Excitation on the fifth layer------------
 
@@ -183,16 +183,11 @@ void G4EmDNAPhysicsChemistry::ConstructDecayChannels()
     decCh2 = new G4MolecularDecayChannel("A^1B_1_DissociativeDecay");
     //Decay 1
     decCh1->SetEnergy(waterExcitation.ExcitationEnergy(0));
-
-    // G4WaterExcitationStructure gives back the energy excitation in eV
-    // while common unit used in Geant4 is MeV.
-    // Also, G4WaterExcitationStructure count down the level of energy, it
-    // so starts on the fifth level : 0
     decCh1->SetProbability(0.35);
     decCh1 -> SetDisplacementType(G4DNAMolecularDecayDisplacer::NoDisplacement);
 
-    decCh2->AddProduct(OH);//it should work.
-    decCh2->AddProduct(H);//it should work.
+    decCh2->AddProduct(OH);
+    decCh2->AddProduct(H);
     decCh2->SetProbability(0.65);
     decCh2 -> SetDisplacementType(G4DNAMolecularDecayDisplacer::A1B1_DissociationDecay);
 

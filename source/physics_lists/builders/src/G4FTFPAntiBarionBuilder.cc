@@ -84,7 +84,7 @@ G4FTFPAntiBarionBuilder::~G4FTFPAntiBarionBuilder()
   delete theModel;
   if ( theQuasiElastic ) delete theQuasiElastic;
   delete thePreEquilib;
-  delete theHandler;
+  //delete theHandler;
   delete theLund;
   delete theAntiNucleonXS;
   delete theAntiNucleonData;

@@ -43,8 +43,6 @@
 #include "globals.hh"
 #include "G4VHadronPhysics.hh"
 
-class G4ExcitationHandler;
-class G4Evaporation;
 class G4ComponentAntiNuclNuclearXS;
 
 class G4HadronInelasticQBBC : public G4VHadronPhysics
@@ -72,8 +70,6 @@ private:
   G4HadronInelasticQBBC(G4HadronInelasticQBBC &);
   G4HadronInelasticQBBC & operator=(const G4HadronInelasticQBBC &right);
 
-  G4ExcitationHandler*  theHandler;
-  G4Evaporation*        theEvaporation;
   G4ComponentAntiNuclNuclearXS* theAntiNuclXS;
 
   G4String htype;

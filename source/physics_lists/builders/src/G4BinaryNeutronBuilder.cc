@@ -47,7 +47,7 @@ G4BinaryNeutronBuilder()
  {
    theMin = 0;
    theMax = 9.9*GeV;
-   theModel = new G4BinaryCascade;
+   theModel = new G4BinaryCascade();
  }
 
  void G4BinaryNeutronBuilder::

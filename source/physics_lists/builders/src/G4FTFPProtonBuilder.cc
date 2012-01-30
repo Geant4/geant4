@@ -92,7 +92,7 @@ G4FTFPProtonBuilder::
   delete theModel;
   delete theCascade;
   if ( theQuasiElastic ) delete theQuasiElastic;
-  delete theHandler;
+  //delete theHandler;
   delete theLund;
 }
 

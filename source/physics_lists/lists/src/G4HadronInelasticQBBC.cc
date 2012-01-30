@@ -78,8 +78,6 @@ G4HadronInelasticQBBC::G4HadronInelasticQBBC(G4int ver)
   : G4VHadronPhysics("hInelastic"),verbose(ver),wasActivated(false)
 {
   htype = "QBBC";
-  theHandler = 0;
-  theEvaporation = 0;
   theAntiNuclXS = 0;
 }
 
@@ -88,14 +86,10 @@ G4HadronInelasticQBBC::G4HadronInelasticQBBC(const G4String& name, G4int ver,
   : G4VHadronPhysics("hInelastic"),verbose(ver),wasActivated(false)
 {
   htype = name;
-  theHandler = 0;
-  theEvaporation = 0;
 }
 
 G4HadronInelasticQBBC::~G4HadronInelasticQBBC()
 {
-  delete theHandler;
-  delete theEvaporation;
   delete theAntiNuclXS;
 }
 
@@ -111,9 +105,12 @@ void G4HadronInelasticQBBC::ConstructProcess()
 
   G4double emax = 100.*TeV;
 
+
+  //G4cout << "G4HadronInelasticQBBC::ConstructProcess new PRECO"<< G4endl;
+
   // PreCompound and Evaporation models are instantiated here
-  theHandler = new G4ExcitationHandler();
-  G4PreCompoundModel* thePreCompound = new G4PreCompoundModel(theHandler);
+  G4ExcitationHandler* handler = new G4ExcitationHandler();
+  G4PreCompoundModel* thePreCompound = new G4PreCompoundModel(handler);
 
   // configure models
   //G4HadronicInteraction* theQGSP = 
@@ -130,8 +127,8 @@ void G4HadronInelasticQBBC::ConstructProcess()
   G4HadronicInteraction* theBERT1 = 
     NewModel(new G4CascadeInterface(),0.0*GeV,12.0*GeV);
 
-  G4BinaryCascade* bic = new G4BinaryCascade();
-  bic->SetDeExcitation(thePreCompound);
+  //G4cout << "G4HadronInelasticQBBC::ConstructProcess new Binary"<< G4endl;
+  G4BinaryCascade* bic = new G4BinaryCascade(thePreCompound);
   G4HadronicInteraction* theBIC = NewModel(bic,0.0,1.5*GeV);
 
   G4QInelastic* theCHIPS = new G4QInelastic();

@@ -45,7 +45,7 @@
 G4BinaryProtonBuilder::
 G4BinaryProtonBuilder() 
 {
-  theModel = new G4BinaryCascade;
+  theModel = new G4BinaryCascade();
   theMin = 0;
   theMax = 9.9*GeV;
 }

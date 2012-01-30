@@ -48,7 +48,7 @@ G4BinaryPiKBuilder()
   thePiData = new G4PiNuclearCrossSection;
   theMin = 0*GeV;
   theMax = 1.3*GeV;
-  theModel = new G4BinaryCascade;
+  theModel = new G4BinaryCascade();
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax); 
 }
