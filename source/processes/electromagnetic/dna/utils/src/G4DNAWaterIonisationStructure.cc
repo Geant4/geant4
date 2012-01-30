@@ -23,34 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 
-#ifndef G4WATERIONISATIONSTRUCTURE_HH
-#define G4WATERIONISATIONSTRUCTURE_HH 1
- 
-#include "globals.hh"
-#include <vector>
+#include "G4DNAWaterIonisationStructure.hh"
 
- 
-class G4WaterIonisationStructure
+G4DNAWaterIonisationStructure::G4DNAWaterIonisationStructure(): nLevels(5)
 {
-public:
-  
-  G4WaterIonisationStructure();
-  
-  virtual ~G4WaterIonisationStructure();
-  
-  G4double IonisationEnergy(G4int level);
+  energyConstant.push_back(10.79*eV);
+  energyConstant.push_back(13.39*eV);
+  energyConstant.push_back(16.05*eV);
+  energyConstant.push_back(32.30*eV);
+  energyConstant.push_back(539.0*eV);
 
-  G4int NumberOfLevels() { return nLevels; }
-  
-  // Copy constructor and assignment operator to be added here
-    
-private:
-   
- // Number of Ionisation levels of the water molecule
- G4int nLevels;
+  nLevels = energyConstant.size();
+}
 
-  std::vector<G4double> energyConstant;
-  
-};
 
-#endif
+G4DNAWaterIonisationStructure::~G4DNAWaterIonisationStructure()
+{ }
+ 
+
+G4double G4DNAWaterIonisationStructure::IonisationEnergy(G4int level)
+{
+  G4double ionisation = 0.;
+
+  if (level >=0 && level < nLevels) ionisation = energyConstant[level];
+
+  return ionisation;
+}

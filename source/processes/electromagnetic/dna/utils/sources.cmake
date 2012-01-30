@@ -52,17 +52,17 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-utils
         G4DNACrossSectionDataSet.hh
         G4DNAGenericIonsManager.hh
         G4DNAMolecularReactionTable.hh
+        G4DNAWaterExcitationStructure.hh
+        G4DNAWaterIonisationStructure.hh
         G4VDNAReactionModel.hh
-        G4WaterExcitationStructure.hh
-        G4WaterIonisationStructure.hh
     SOURCES
         G4DNAChemistryManager.cc
         G4DNACrossSectionDataSet.cc
         G4DNAGenericIonsManager.cc
         G4DNAMolecularReactionTable.cc
+        G4DNAWaterExcitationStructure.cc
+        G4DNAWaterIonisationStructure.cc
         G4VDNAReactionModel.cc
-        G4WaterExcitationStructure.cc
-        G4WaterIonisationStructure.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

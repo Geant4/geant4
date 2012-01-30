@@ -68,7 +68,7 @@
 #include "globals.hh"
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
+#include <cmath>
 #include "G4KDTree.hh"
 #include "G4KDNode.hh"
 #include "G4KDTreeResult.hh"

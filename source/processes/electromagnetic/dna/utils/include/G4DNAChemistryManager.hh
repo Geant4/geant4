@@ -44,8 +44,8 @@
 #include <memory>
 
 class G4Track;
-class G4WaterExcitationStructure;
-class G4WaterIonisationStructure;
+class G4DNAWaterExcitationStructure;
+class G4DNAWaterIonisationStructure;
 
 enum ElectronicModification
 {
@@ -107,8 +107,8 @@ public:
                                 G4ThreeVector* finalPosition = 0);
 
 protected :
-    G4WaterExcitationStructure* GetExcitationLevel();
-    G4WaterIonisationStructure* GetIonisationLevel();
+    G4DNAWaterExcitationStructure* GetExcitationLevel();
+    G4DNAWaterIonisationStructure* GetIonisationLevel();
 
 private:
     G4DNAChemistryManager();
@@ -118,8 +118,8 @@ private:
     std::ofstream  fOutput;
     G4bool fWriteFile;
 
-    G4WaterExcitationStructure* fExcitationLevel;
-    G4WaterIonisationStructure* fIonisationLevel;
+    G4DNAWaterExcitationStructure* fExcitationLevel;
+    G4DNAWaterIonisationStructure* fIonisationLevel;
 };
 
 inline G4bool G4DNAChemistryManager::IsChemistryActived()

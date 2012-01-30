@@ -23,34 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 
-#ifndef G4WATEREXCITATIONSTRUCTURE_HH
-#define G4WATEREXCITATIONSTRUCTURE_HH 1
- 
-#include "globals.hh"
-#include <vector>
+#include "G4DNAWaterExcitationStructure.hh"
 
- 
-class G4WaterExcitationStructure
+G4DNAWaterExcitationStructure::G4DNAWaterExcitationStructure(): nLevels(5)
 {
-public:
-  
-  G4WaterExcitationStructure();
-  
-  virtual ~G4WaterExcitationStructure();
-  
-  G4double ExcitationEnergy(G4int level);
+  energyConstant.push_back(8.22*eV);
+  energyConstant.push_back(10.00*eV);
+  energyConstant.push_back(11.24*eV);
+  energyConstant.push_back(12.61*eV);
+  energyConstant.push_back(13.77*eV);
 
-  G4int NumberOfLevels() { return nLevels; }
-  
-  // Copy constructor and assignment operator to be added here
-    
-private:
-   
- // Number of excitation levels of the water molecule
- G4int nLevels;
+  nLevels = energyConstant.size();
+}
 
-  std::vector<G4double> energyConstant;
-  
-};
 
-#endif
+G4DNAWaterExcitationStructure::~G4DNAWaterExcitationStructure()
+{ }
+ 
+
+G4double G4DNAWaterExcitationStructure::ExcitationEnergy(G4int level)
+{
+  G4double excitation = 0.;
+
+  if (level >=0 && level < nLevels) excitation = energyConstant[level];
+
+  return excitation;
+}

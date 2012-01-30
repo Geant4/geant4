@@ -40,7 +40,7 @@
 #include "G4Proton.hh"
 #include "G4LogLogInterpolation.hh"
 
-#include "G4WaterIonisationStructure.hh"
+#include "G4DNAWaterIonisationStructure.hh"
 #include "G4VAtomDeexcitation.hh"
 #include "G4NistManager.hh"
 
@@ -96,7 +96,7 @@ private:
   
   // Final state
   
-  G4WaterIonisationStructure waterStructure;
+  G4DNAWaterIonisationStructure waterStructure;
 
   G4double RandomizeEjectedElectronEnergy(G4ParticleDefinition* particleDefinition, 
 					  G4double incomingParticleEnergy, 

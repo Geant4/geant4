@@ -38,7 +38,7 @@
 #include "G4LogLogInterpolation.hh"
 #include "G4Electron.hh"
 #include "G4Proton.hh"
-#include "G4WaterExcitationStructure.hh"
+#include "G4DNAWaterExcitationStructure.hh"
 #include "G4NistManager.hh"
 
 class G4DNABornExcitationModel : public G4VEmModel
@@ -93,7 +93,7 @@ private:
   
   // Final state
 
-  G4WaterExcitationStructure waterStructure;
+  G4DNAWaterExcitationStructure waterStructure;
    
   //
   

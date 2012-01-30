@@ -40,8 +40,8 @@
 #include "G4ITStepManager.hh"
 #include "G4H2O.hh"
 #include "G4DNAMolecularReactionTable.hh"
-#include "G4WaterExcitationStructure.hh"
-#include "G4WaterIonisationStructure.hh"
+#include "G4DNAWaterExcitationStructure.hh"
+#include "G4DNAWaterIonisationStructure.hh"
 #include "G4Electron_aq.hh"
 #include "G4ITManager.hh"
 #include "G4MolecularConfiguration.hh"
@@ -119,20 +119,20 @@ void G4DNAChemistryManager::CloseFile()
     fWriteFile = false;
 }
 
-G4WaterExcitationStructure* G4DNAChemistryManager::GetExcitationLevel()
+G4DNAWaterExcitationStructure* G4DNAChemistryManager::GetExcitationLevel()
 {
     if(!fExcitationLevel)
     {
-        fExcitationLevel = new G4WaterExcitationStructure;
+        fExcitationLevel = new G4DNAWaterExcitationStructure;
     }
     return fExcitationLevel;
 }
 
-G4WaterIonisationStructure* G4DNAChemistryManager::GetIonisationLevel()
+G4DNAWaterIonisationStructure* G4DNAChemistryManager::GetIonisationLevel()
 {
     if(!fIonisationLevel)
     {
-        fIonisationLevel = new G4WaterIonisationStructure;
+        fIonisationLevel = new G4DNAWaterIonisationStructure;
     }
     return fIonisationLevel;
 }
@@ -224,7 +224,15 @@ void G4DNAChemistryManager::CreateSolvatedElectron(const G4Track* theIncomingTra
     if(fActiveChemistry)
     {
         G4Molecule* e_aq = new G4Molecule(G4Electron_aq::Definition());
-        G4Track * e_aqTrack = e_aq->BuildTrack(picosecond,theIncomingTrack->GetPosition());
+        G4Track * e_aqTrack(0);
+        if(finalPosition)
+        {
+             e_aqTrack  = e_aq->BuildTrack(picosecond,*finalPosition);
+        }
+        else
+        {
+            e_aqTrack  = e_aq->BuildTrack(picosecond,theIncomingTrack->GetPosition());
+        }
         e_aqTrack -> SetTrackStatus(fAlive);
         e_aqTrack -> SetParentID(theIncomingTrack->GetTrackID());
         G4ITStepManager::Instance()->PushTrack(e_aqTrack);

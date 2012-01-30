@@ -37,7 +37,7 @@
 #include "G4Proton.hh"
 #include "G4DNAGenericIonsManager.hh"
 #include "G4DNAEmfietzoglouExcitationModel.hh"
-#include "G4WaterExcitationStructure.hh"
+#include "G4DNAWaterExcitationStructure.hh"
 #include "Randomize.hh"
 #include "G4NistManager.hh"
 
@@ -90,7 +90,7 @@ private:
 
   G4int nLevels;
 
-  G4WaterExcitationStructure waterExcitation;
+  G4DNAWaterExcitationStructure waterExcitation;
   
   G4double S_1s(G4double t, 
 		G4double energyTransferred, 

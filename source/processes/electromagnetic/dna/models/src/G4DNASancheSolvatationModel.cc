@@ -36,7 +36,7 @@
 // -------------------------------------------------------------------
 
 #include "G4DNASancheSolvatationModel.hh"
-#include "G4WaterExcitationStructure.hh"
+#include "G4DNAWaterExcitationStructure.hh"
 #include "G4ParticleChangeForGamma.hh"
 #include "G4Electron.hh"
 #include "G4NistManager.hh"
@@ -47,8 +47,8 @@ G4DNASancheSolvatationModel::G4DNASancheSolvatationModel(const G4ParticleDefinit
     G4VEmModel(nam),fIsInitialised(false)
 {
     fVerboseLevel = 0 ;
-    SetLowEnergyLimit(0.025*eV);
-    G4WaterExcitationStructure exStructure ;
+    SetLowEnergyLimit(0.);
+    G4DNAWaterExcitationStructure exStructure ;
     SetHighEnergyLimit(exStructure.ExcitationEnergy(0));
     fParticleChangeForGamma = 0;
 }
@@ -177,6 +177,7 @@ void G4DNASancheSolvatationModel::SampleSecondaries(std::vector<G4DynamicParticl
                  + 3.1384*std::pow(k/eV,3) - 5.6926*std::pow(k/eV,2) + 5.6237*k/eV - 0.7883)*nanometer;
 
         G4ThreeVector displacement = RadialDistributionOfProducts (r_mean);
+
         //______________________________________________________________
         const G4Track * theIncomingTrack = fParticleChangeForGamma->GetCurrentTrack();
         G4ThreeVector finalPosition(theIncomingTrack->GetPosition()+displacement);

@@ -37,7 +37,7 @@
 
 #include "G4DNAElectronSolvatation.hh"
 #include "G4Electron.hh"
-#include "G4WaterExcitationStructure.hh"
+#include "G4DNAWaterExcitationStructure.hh"
 
 G4DNAElectronSolvatation::G4DNAElectronSolvatation(const G4String& processName,
         G4ProcessType type):G4VEmProcess (processName, type),

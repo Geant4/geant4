@@ -13,7 +13,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-25.11.2011  M.K                 tag emdna-V09-04-51
+
+18.01.2012  S.I.                tag emdna-V09-05-02
+            Removal of G4Water* classes in utils
+
+11.01.2012  M.K                 tag emdna-V09-05-01
+            Bug fix in G4DNAChemistryManager::CreateSolvatedElectron
+            concerning the final position of the solvated electron
+            using Sanche thermalization
+
+16.12.2011  S.I                 tag emdna-V09-05-00
+            Updated source of cross section file for elastic scattering
+
+25.11.2011  M.K                 tag emdna-V09-04-52
             Correct a typo in previous tag
 
 25.11.2011  M.K                 tag emdna-V09-04-51

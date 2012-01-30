@@ -34,7 +34,7 @@
 #include "G4ParticleChangeForGamma.hh"
 #include "G4ProductionCutsTable.hh"
 
-#include "G4WaterExcitationStructure.hh"
+#include "G4DNAWaterExcitationStructure.hh"
 #include <deque>
 #include "Randomize.hh"
 #include "G4Electron.hh"
@@ -88,7 +88,7 @@ private:
   
   G4int nLevels;
 
-  G4WaterExcitationStructure waterExcitation;
+  G4DNAWaterExcitationStructure waterExcitation;
   
   //
    
