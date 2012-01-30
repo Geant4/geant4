@@ -47,7 +47,6 @@
 
 class G4ParticleGun;
 class HistoManager;
-class G4ParticleTable;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -67,8 +66,6 @@ private:
 
   G4ParticleGun*   particleGun;
   HistoManager*    histo; 
-  G4ParticleTable* pTable;
-  G4String         pname;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

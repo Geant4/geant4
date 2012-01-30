@@ -82,6 +82,8 @@ HistoManager::HistoManager()
   factorEcal = 1.05;
   factorHcal = 105.0;
   factorHcal0= 105.0;
+  worldZ = 100.*mm;
+  sizeXY = 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -369,7 +371,7 @@ void HistoManager::AddEcalHit(const G4ParticleDefinition* part,
   //  G4cout << "### edep= " << edep << "   #copyNo =" << copyNo << G4endl;
   if(part->GetPDGMass() < MeV) { Eecal += edep; }
   //  G4cout << "### Eecal= " << Eecal << G4endl;
-  if(edep > eV) { histo->fill(13,log10(edep/MeV),1.0); }
+  if(edep > eV) { histo->fill(13,std::log10(edep/MeV),1.0); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -429,6 +431,20 @@ void HistoManager::SetWorldLength(G4double val)
 G4double HistoManager::GetWorldLength() const
 {
   return worldZ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void HistoManager::SetBeamSizeXY(G4double val)
+{
+  sizeXY = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double HistoManager::GetBeamSizeXY() const
+{
+  return sizeXY;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

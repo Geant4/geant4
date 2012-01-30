@@ -97,6 +97,9 @@ public:
   void SetWorldLength(G4double val); 
   G4double GetWorldLength() const;
 
+  void SetBeamSizeXY(G4double val); 
+  G4double GetBeamSizeXY() const;
+
   void SetVerbose(G4int val);        
   G4int GetVerbose() const;
 
@@ -116,6 +119,7 @@ private:
 
   G4double beamEnergy;
   G4double worldZ;
+  G4double sizeXY;
   G4double primaryKineticEnergy;
   G4double currentKinEnergy;
 

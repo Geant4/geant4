@@ -70,6 +70,7 @@ private:
   G4UIdirectory*             testDir;
   G4UIcmdWithAString*        matCmd;
   G4UIcmdWithAString*        mat1Cmd;
+  G4UIcmdWithADoubleAndUnit* bCmd;
   G4UIcmdWithADoubleAndUnit* rCmd;
   G4UIcmdWithADoubleAndUnit* eCmd;
   G4UIcmdWithADoubleAndUnit* rCmd1;

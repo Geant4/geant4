@@ -5,10 +5,11 @@
 /run/verbose 1
 /tracking/verbose 0
 #/testCalorim/ecalMaterial G4_AIR
-/testCalorim/nbins 500
+/testCalorim/nbins 100
 /testCalorim/maxE 60. GeV
 /testCalorim/factEcal 1.03  
 /testCalorim/factHcal 100.0
+/testCalorim/beamSizeXY 20. mm
 #######
 /testhadr/PrintModulo 1000
 /run/initialize

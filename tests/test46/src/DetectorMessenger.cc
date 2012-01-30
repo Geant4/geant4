@@ -68,6 +68,12 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   mat1Cmd->SetParameterName("wMaterial",false);
   mat1Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  bCmd = new G4UIcmdWithADoubleAndUnit("/testCalorim/beamSizeXY",this);
+  bCmd->SetGuidance("Set width of the beam");
+  bCmd->SetParameterName("beamW",false);
+  bCmd->SetUnitCategory("Length"); 
+  bCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
   rCmd = new G4UIcmdWithADoubleAndUnit("/testCalorim/crystalWidth",this);
   rCmd->SetGuidance("Set width of the Ecal");
   rCmd->SetParameterName("crystalW",false);
@@ -145,6 +151,7 @@ DetectorMessenger::~DetectorMessenger()
 {
   delete matCmd;
   delete mat1Cmd;
+  delete bCmd;
   delete rCmd;
   delete rCmd1;
   delete lCmd;
@@ -168,6 +175,8 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     Detector->SetEcalMaterial(newValue);
   else if( command == mat1Cmd )
     Detector->SetWorldMaterial(newValue);
+  else if( command == bCmd ) 
+    HistoManager::GetPointer()->SetBeamSizeXY(bCmd->GetNewDoubleValue(newValue));
   else if( command == rCmd ) 
     Detector->SetCrystalWidth(rCmd->GetNewDoubleValue(newValue));
   else if( command == rCmd1 ) 
