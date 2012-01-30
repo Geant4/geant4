@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -49,7 +49,7 @@ namespace G4INCL {
   }
 
   G4double KinematicsUtils::getLocalEnergy(Nucleus const * const n, Particle * const p) {
-    // assert(!p->isPion()); // No local energy for pions
+// assert(!p->isPion()); // No local energy for pions
 
     G4double vloc = 0.0;
     const G4double r = p->getPosition().mag();
@@ -58,7 +58,7 @@ namespace G4INCL {
     // Local energy is constant outside the surface
     if(r > n->getDensity()->getMaximumRadius()) {
       WARN("Tried to evaluate local energy for a particle outside the maximum radius."
-            << std::endl << p->prG4int() << std::endl
+            << std::endl << p->print() << std::endl
             << "Maximum radius = " << n->getDensity()->getMaximumRadius() << std::endl);
       return 0.0;
     }

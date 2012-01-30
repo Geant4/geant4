@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -141,22 +141,25 @@ namespace G4INCL {
     /// \brief Returns the list of particles that make up the cluster
     ParticleList getParticleList() const { return particles; }
 
-    std::string prG4int() const {
+    std::string print() const {
       std::stringstream ss;
       ss << "Cluster (ID = " << ID << ") type = ";
       ss << ParticleTable::getName(theType);
       ss << std::endl
+        << "   A = " << theA << std::endl
+        << "   Z = " << theZ << std::endl
+        << "   mass = " << getMass() << std::endl
         << "   energy = " << theEnergy << std::endl
         << "   momentum = "
-        << theMomentum.prG4int()
+        << theMomentum.print()
         << std::endl
         << "   position = "
-        << thePosition.prG4int()
+        << thePosition.print()
         << std::endl
         << "Contains the following particles:"
         << std::endl;
       for(ParticleIter i=particles.begin(); i!=particles.end(); ++i)
-        ss << (*i)->prG4int();
+        ss << (*i)->print();
       return ss.str();
     }
 

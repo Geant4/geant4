@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,7 @@
 #include "G4INCLParticleTable.hh"
 #include "G4INCLStandaloneParticleDataSource.hh"
 #include <algorithm>
-// Assert is banned for now, for G4 compatibility reasons...
-//#include <cassert>
+// #include <cassert>
 
 namespace G4INCL {
 
@@ -207,6 +206,8 @@ namespace G4INCL {
       return std::string("pi0");
     } else if(p == G4INCL::PiMinus) {
       return std::string("pi-");
+    } else if(p == G4INCL::Composite) {
+      return std::string("composite");
     }
     return std::string("unknown");
   }
@@ -255,8 +256,8 @@ namespace G4INCL {
   }
 
   G4double ParticleTable::getMass(const G4int A, const G4int Z) {
-    //    assert(A>0 && Z>=0 && Z<=A);
-    if(A<=clusterTableASize && Z<=clusterTableZSize)
+// assert(A>0 && Z>=0 && Z<=A);
+    if(A<clusterTableASize && Z<clusterTableZSize)
       // should return the correct masses for protons and neutrons, too
       return Z*protonMass + (A-Z)*neutronMass - binding[Z][A];
     else
@@ -264,7 +265,7 @@ namespace G4INCL {
   }
 
   G4double ParticleTable::getClusterRMS(const G4int A, const G4int Z) {
-    //    assert(A>0 && Z>=0 && Z<=A && A<=maxClusterMass && Z<=maxClusterCharge);
+// assert(A>0 && Z>=0 && Z<=A && A<=maxClusterMass && Z<=maxClusterCharge);
     return rmsc[Z][A];
   }
 

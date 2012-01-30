@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -61,7 +61,7 @@ namespace G4INCL {
      *
      * This method places Particle p on the surface of Nucleus n and modifies
      * the direction of its momentum to be tangent to the Coulomb trajectory in
-     * that poG4int.
+     * that point.
      *
      * The input particle has to be prepared with its asymptotic momentum. Its
      * position is used only for the purpose of computing the asymptotic impact

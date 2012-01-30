@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -61,9 +61,9 @@
 using namespace std;
 
 /**
- * <h1>INCL G4intra-nuclear cascade with G4ExcitationHandler for de-excitation</h1>
+ * <h1>INCL intra-nuclear cascade with G4ExcitationHandler for de-excitation</h1>
  *
- * Interface for INCL. This G4interface handles basic hadron
+ * Interface for INCL. This interface handles basic hadron
  * bullet particles (protons, neutrons, pions).
  *
  * Example usage in case of protons:

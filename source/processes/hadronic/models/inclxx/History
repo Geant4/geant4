@@ -16,6 +16,17 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+16 January 2012 - Davide Mancusi (hadr-inclxx-V09-05-01)
+-----------------------------------------------------------
+- Better (iterative) determination of the remnant recoil at the the end of the
+  cascade.
+- Isospin-dependent back-to-spectator.
+- Cache NuclearDensity objects for better performance (although we do not
+  really exploit this in G4 yet).
+- Bugfix:
+  o Minor bug for negative incident pions -- integration over impact-parameter
+    distribution was incomplete.
+
 21 November 2011 - Pekka Kaitaniemi (hadr-inclxx-V09-04-11)
 -----------------------------------------------------------
 - Fixed local energy logic

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -344,17 +344,17 @@ namespace G4INCL {
       else return false;
     }
 
-    std::string prG4int() const {
+    std::string print() const {
       std::stringstream ss;
       ss << "Particle (ID = " << ID << ") type = ";
       ss << ParticleTable::getName(theType);
       ss << std::endl
         << "   energy = " << theEnergy << std::endl
         << "   momentum = "
-        << theMomentum.prG4int()
+        << theMomentum.print()
         << std::endl
         << "   position = "
-        << thePosition.prG4int()
+        << thePosition.print()
         << std::endl;
       return ss.str();
     };
@@ -375,7 +375,7 @@ namespace G4INCL {
     long getID() const { return ID; };
 
     /**
-     * Return a NULL poG4inter
+     * Return a NULL pointer
      */
     ParticleList const *getParticles() const {
       WARN("Particle::getParticles() method was called on a Particle object" << std::endl);

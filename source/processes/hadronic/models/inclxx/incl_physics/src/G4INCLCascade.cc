@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -64,6 +64,8 @@
 #include "G4INCLClustering.hh"
 #include "G4INCLClusteringModelIntercomparison.hh"
 #include "G4INCLClusteringModelNone.hh"
+
+#include "G4INCLRootFinder.hh"
 
 #include <cstring>
 #include <cstdlib>
@@ -127,7 +129,7 @@ namespace G4INCL {
 
     // Propagation model is responsible for finding avatars and
     // transporting the particles. In principle this step is "hidden"
-    // behind an abstract G4interface and the rest of the system does not
+    // behind an abstract interface and the rest of the system does not
     // care how the transportation and avatar finding is done. This
     // should allow us to "easily" experiment with different avatar
     // finding schemes and even to support things like curved
@@ -174,10 +176,12 @@ namespace G4INCL {
     G4INCL::ParticleTable::deletePDS();
     G4INCL::Clustering::deleteClusteringModel();
     G4INCL::Logger::deleteLoggerSlave();
+    G4INCL::NuclearDensityFactory::clearCache();
     delete avatarAction;
     delete propagationAction;
     delete eventAction;
     delete propagationModel;
+    delete theConfig;
   }
 
   void INCL::setTarget(G4int A, G4int Z) {
@@ -192,12 +196,20 @@ namespace G4INCL {
     // Set the maximum impact parameter
     // TODO: for natural target abundances, make this the largest impact
     // parameter for all the isotopes.
-    // TODO: reduce the maximum impact parameter for Coulomb-distorted
-    // trajectories. Make this dependent on the configuration choice for
-    // Coulomb distortion.
-    NuclearDensity const * const density = NuclearDensityFactory::createDensity(A,Z);
-    maxImpactParameter = density->getMaximumRadius();
-    delete density;
+    Nucleus *aNucleus = new Nucleus(A, Z, theConfig);
+    G4double kineticEnergy = theConfig->getProjectileKineticEnergy();
+    G4INCL::ParticleType projectileType = theConfig->getProjectileType();
+    G4double projectileMass = ParticleTable::getMass(projectileType);
+    G4double energy = kineticEnergy + projectileMass;
+    G4double momentumZ = std::sqrt(energy*energy - projectileMass*projectileMass);
+    G4INCL::ThreeVector position(0.0, 0.0, 0.0); // Irrelevant at this point...
+    G4INCL::ThreeVector momentum(0.0, 0.0, momentumZ);
+    G4INCL::Particle *projectile = new G4INCL::Particle(projectileType, energy,
+							momentum, position);
+    maxImpactParameter = CoulombDistortion::maxImpactParameter(projectile, aNucleus);
+
+    delete projectile;
+    delete aNucleus;
 
     // Set the geometric cross section
     theGlobalInfo.geometricCrossSection =
@@ -247,7 +259,7 @@ namespace G4INCL {
     // Assign the nucleus to the propagation model
     //    propagationModel->setNucleus(theNucleus);
 
-    // Shortcut poG4inter
+    // Shortcut pointer
     Nucleus *nucleus = propagationModel->getNucleus();
 
     // Reset theEventInfo
@@ -301,7 +313,7 @@ namespace G4INCL {
       propagationAction->beforePropagationAction(propagationModel);
 
       // Get the avatar with the smallest time and propagate particles
-      // to that poG4int in time.
+      // to that point in time.
       G4INCL::IAvatar *avatar = propagationModel->propagate();
 
       // Run book keeping actions that should take place after propagation:
@@ -314,8 +326,8 @@ namespace G4INCL {
 
       // Channel is responsible for calculating the outcome of the
       // selected avatar. There are different kinds of channels. The
-      // class IChannel is, again, an abstract G4interface that defines
-      // the externally observable behavior of all G4interaction
+      // class IChannel is, again, an abstract interface that defines
+      // the externally observable behavior of all interaction
       // channels.
       // The handling of the channel is transparent to the API.
       // Final state tells what changed...
@@ -370,49 +382,97 @@ namespace G4INCL {
       nucleus->fillEventInfo(&theEventInfo);
       //      theEventInfo.fillFromNucleus(nucleus);
       theEventInfo.stoppingTime = propagationModel->getCurrentTime();
+
+      // Check if we have an absorption:
+      if(theEventInfo.nucleonAbsorption) theGlobalInfo.nNucleonAbsorptions++;
+      if(theEventInfo.pionAbsorption) theGlobalInfo.nPionAbsorptions++;
     }
 
     return theEventInfo;
   }
 
   void INCL::rescaleOutgoingForRecoil() {
-    Nucleus *nucleus = propagationModel->getNucleus();
+    class RecoilFunctor : public RootFunctor {
+      public:
+        /** \brief Prepare for calling the () operator and scaleParticleEnergies
+         *
+         * The constructor sets the private class members.
+         */
+        RecoilFunctor(Nucleus * const n, const EventInfo &ei) :
+          nucleus(n),
+          outgoingParticles(n->getStore()->getOutgoingParticles()),
+          theEventInfo(ei) {
+            for(ParticleIter p=outgoingParticles.begin(); p!=outgoingParticles.end(); ++p) {
+              particleMomenta.push_back((*p)->getMomentum());
+              particleKineticEnergies.push_back((*p)->getKineticEnergy());
+            }
+          }
+        virtual ~RecoilFunctor() {}
 
-    G4double sumKineticEnergies = 0.0;
-    // Sum up the kinetic energies of the outgoing particles
-    ParticleList outgoingParticles = nucleus->getStore()->getOutgoingParticles();
-    for( ParticleIter i = outgoingParticles.begin(); i != outgoingParticles.end(); ++i )
-      sumKineticEnergies += (*i)->getKineticEnergy();
+        /** \brief Compute the energy-conservation violation.
+         *
+         * \param x scale factor for the particle energies
+         * \return the energy-conservation violation
+         */
+        G4double operator()(const G4double x) const {
+          scaleParticleEnergies(x);
+          return nucleus->getConservationBalance(theEventInfo).energy;
+        }
 
-    // If there is too little outgoing energy, we stop here.
-    if(sumKineticEnergies <= 0.001) return;
-    // The rescaling factor
-    G4double rescale = 1. - nucleus->getRecoilEnergy()/sumKineticEnergies;
-    if(rescale < 0.0) {
-      WARN("Cannot accommodate remnant recoil by scaling outgoing energies. rescale = " << rescale << std::endl);
-      rescale = 0.0;
+        /// \brief Clean up after root finding
+        void cleanUp(const G4bool success) const {
+          if(!success)
+            scaleParticleEnergies(1.);
+        }
+
+      private:
+        /// \brief Pointer to the nucleus
+        Nucleus *nucleus;
+        /// \brief List of final-state particles.
+        ParticleList const &outgoingParticles;
+        // \brief Reference to the EventInfo object
+        EventInfo const &theEventInfo;
+        /// \brief Initial momenta of the outgoing particles
+        std::list<ThreeVector> particleMomenta;
+        /// \brief Initial kinetic energies of the outgoing particles
+        std::list<G4double> particleKineticEnergies;
+
+        /** \brief Scale the kinetic energies of the outgoing particles.
+         *
+         * \param alpha scale factor
+         */
+        void scaleParticleEnergies(const G4double rescale) const {
+          // Rescale the energies (and the momenta) of the outgoing particles.
+          ThreeVector pBalance = nucleus->getIncomingMomentum();
+          std::list<ThreeVector>::const_iterator iP = particleMomenta.begin();
+          std::list<G4double>::const_iterator iE = particleKineticEnergies.begin();
+          for( ParticleIter i = outgoingParticles.begin(); i != outgoingParticles.end(); ++i, ++iP, ++iE)
+          {
+            const G4double mass = (*i)->getMass();
+            const G4double newKineticEnergy = (*iE) * rescale;
+
+            (*i)->setMomentum(*iP);
+            (*i)->setEnergy(mass + newKineticEnergy);
+            (*i)->adjustMomentumFromEnergy();
+
+            pBalance -= (*i)->getMomentum();
+          }
+
+          nucleus->setRecoilMomentum(pBalance);
+          const G4double remnantMass = ParticleTable::getMass(nucleus->getA(),nucleus->getZ()) + nucleus->getExcitationEnergy();
+          const G4double pRem2 = pBalance.mag2();
+          const G4double recoilEnergy = pRem2/
+            (std::sqrt(pRem2+remnantMass*remnantMass) + remnantMass);
+          nucleus->setRecoilEnergy(recoilEnergy);
+        }
+    } theRecoilFunctor(propagationModel->getNucleus(), theEventInfo);
+
+    // Apply the root-finding algorithm
+    const G4bool success = RootFinder::solve(&theRecoilFunctor, 1.0);
+    if(!success) {
+      WARN("Couldn't accommodate remnant recoil while satisfying energy conservation, root-finding algorithm failed." << std::endl);
     }
 
-    // Rescale the energies (and the momenta) of the outgoing particles.
-    ThreeVector pBalance = nucleus->getIncomingMomentum();
-    for( ParticleIter i = outgoingParticles.begin(); i != outgoingParticles.end(); ++i )
-    {
-      const G4double mass = (*i)->getMass();
-      const G4double newKineticEnergy = (*i)->getKineticEnergy() * rescale;
-
-      (*i)->setEnergy(mass + newKineticEnergy);
-      (*i)->adjustMomentumFromEnergy();
-      //nucleus->updatePotentialEnergy(*i);
-
-      pBalance -= (*i)->getMomentum();
-    }
-
-    nucleus->setRecoilMomentum(pBalance);
-    const G4double remnantMass = ParticleTable::getMass(nucleus->getA(),nucleus->getZ()) + nucleus->getExcitationEnergy();
-    const G4double pRem2 = pBalance.mag2();
-    const G4double recoilEnergy = pRem2/
-      (std::sqrt(pRem2+remnantMass*remnantMass) + remnantMass);
-    nucleus->setRecoilEnergy(recoilEnergy);
   }
 
   void INCL::globalConservationChecks() {
@@ -420,61 +480,24 @@ namespace G4INCL {
 
     /* FIXME: This version of the energy-conservation check only uses kinetic
        energies, to mimic what INCL4.5 does. This is unsatisfactory because it
-       does not take G4into account the particle masses. At some poG4int, it would
+       does not take into account the particle masses. At some point, it would
        be nice to have real energy conservation, with real masses. When ready
        to do so, have a look at the status of the code at commit
        aad75d09b8a52d28b8eb1bd38bdf347e63b802db (or possibly simply revert the
        following commit). */
-
-    // Initialise balance variables with the incoming values
-    G4int ZBalance = theEventInfo.Zp + theEventInfo.Zt;
-    G4int ABalance = theEventInfo.Ap + theEventInfo.At;
-
-    G4double projectileMass = 0.0;
-    // FIXME: since we are not using total energies, we must set the projectile
-    // mass to zero if the projectile is a pion.
-    if(theEventInfo.projectileType != PiPlus &&
-       theEventInfo.projectileType != PiZero &&
-       theEventInfo.projectileType != PiMinus)
-      projectileMass = ParticleTable::getMass(theEventInfo.projectileType);
-
-    G4double EBalance = nucleus->getInitialEnergy() - ParticleTable::getMass(theEventInfo.At, theEventInfo.Zt) - projectileMass;
-    ThreeVector pBalance = nucleus->getIncomingMomentum();
-
-    // Process outgoing particles
-    ParticleList outgoingParticles = nucleus->getStore()->getOutgoingParticles();
-    for( ParticleIter i = outgoingParticles.begin(); i != outgoingParticles.end(); ++i ) {
-      ZBalance -= (*i)->getZ();
-      ABalance -= (*i)->getA();
-      if((*i)->isPion()) // Ugly: we should calculate everything using total energies! (FIXME)
-        EBalance -= (*i)->getEnergy();
-      else
-        EBalance -= (*i)->getKineticEnergy();
-      pBalance -= (*i)->getMomentum();
-    }
-
-    EBalance -= nucleus->computeSeparationEnergyBalance();
-
-    // Remnant contribution, if present
-    if(nucleus->hasRemnant()) {
-      ZBalance -= nucleus->getZ();
-      ABalance -= nucleus->getA();
-      EBalance -= //ParticleTable::getMass(nucleus->getA(),nucleus->getZ()) +
-        nucleus->getExcitationEnergy() + nucleus->getRecoilEnergy();
-      pBalance -= nucleus->getRecoilMomentum();
-    }
+    Nucleus::ConservationBalance theBalance = nucleus->getConservationBalance(theEventInfo);
 
     // Global conservation checks
-    const G4double pLongBalance = pBalance.getZ();
-    const G4double pTransBalance = pBalance.perp();
-    if(ZBalance != 0) {
-      ERROR("Violation of charge conservation! ZBalance = " << ZBalance << std::endl);
+    const G4double pLongBalance = theBalance.momentum.getZ();
+    const G4double pTransBalance = theBalance.momentum.perp();
+    if(theBalance.Z != 0) {
+      ERROR("Violation of charge conservation! ZBalance = " << theBalance.Z << std::endl);
     }
-    if(ABalance != 0) {
-      ERROR("Violation of baryon-number conservation! ABalance = " << ABalance << std::endl);
+    if(theBalance.A != 0) {
+      ERROR("Violation of baryon-number conservation! ABalance = " << theBalance.A << std::endl);
     }
-    if(std::abs(EBalance)>10.0) {
-      WARN("Violation of energy conservation > 10 MeV. EBalance = " << EBalance << std::endl);
+    if(std::abs(theBalance.energy)>10.0) {
+      WARN("Violation of energy conservation > 10 MeV. EBalance = " << theBalance.energy << std::endl);
     }
     if(std::abs(pLongBalance)>5.0) {
       WARN("Violation of longitudinal momentum conservation > 5.0 MeV. pLongBalance = " << pLongBalance << std::endl);
@@ -484,7 +507,7 @@ namespace G4INCL {
     }
 
     // Feed the EventInfo variables
-    theEventInfo.EBalance = EBalance;
+    theEventInfo.EBalance = theBalance.energy;
     theEventInfo.pLongBalance = pLongBalance;
     theEventInfo.pTransBalance = pTransBalance;
   }
@@ -502,6 +525,10 @@ namespace G4INCL {
   }
 
   void INCL::finaliseGlobalInfo() {
+    theGlobalInfo.nucleonAbsorptionCrossSection = theGlobalInfo.geometricCrossSection *
+      ((G4double) theGlobalInfo.nNucleonAbsorptions) / ((G4double) theGlobalInfo.nShots);
+    theGlobalInfo.pionAbsorptionCrossSection = theGlobalInfo.geometricCrossSection *
+      ((G4double) theGlobalInfo.nPionAbsorptions) / ((G4double) theGlobalInfo.nShots);
     theGlobalInfo.reactionCrossSection = theGlobalInfo.geometricCrossSection *
       ((G4double) (theGlobalInfo.nShots - theGlobalInfo.nTransparents)) /
       ((G4double) theGlobalInfo.nShots);

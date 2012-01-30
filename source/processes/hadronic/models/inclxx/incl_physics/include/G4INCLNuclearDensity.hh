@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -105,20 +105,20 @@ namespace G4INCL {
 
   private:
     /**
-     * New implementation of the density G4interpolation function
+     * New implementation of the density interpolation function
      * without gotos.
      */
     G4double getDensityNew(G4double) const;
 
     /**
      * Direct translation of the FORTRAN version of the density
-     * G4interpolation routine.
+     * interpolation routine.
      */
     G4double getDensityLegacy(G4double) const;
 
     void initializeDensity();
     void initializeFirstDerivative();
-    G4double G4integrate(G4double ami, G4double ama, G4double step) const;
+    G4double integrate(G4double ami, G4double ama, G4double step) const;
     void initMaterial(G4int iamat, G4int izmat);
 
     G4int theA, theZ;

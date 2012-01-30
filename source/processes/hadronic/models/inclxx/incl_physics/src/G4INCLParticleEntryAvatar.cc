@@ -30,19 +30,46 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
 
-/** \file G4INCLICoulomb.cc
- * \brief Abstract G4interface for Coulomb distortion.
- *
- * Created on: 14 February 2011
- *     Author: Davide Mancusi
- */
+#include "G4INCLParticleEntryAvatar.hh"
+#include "G4INCLIChannel.hh"
+#include "G4INCLParticleEntryChannel.hh"
 
-#include "G4INCLICoulomb.hh"
+namespace G4INCL {
+  //  ParticleEntryAvatar::ParticleEntryAvatar()
+  //  {
+  //  }
 
-const G4double G4INCL::ICoulomb::eSquared = 1.439964; // e^2/(4 pi epsilon_0) [MeV fm]
+  ParticleEntryAvatar::ParticleEntryAvatar(G4double time,
+					   G4INCL::Nucleus *nucleus,
+					   G4INCL::Particle *particle)
+    :IAvatar(time), theNucleus(nucleus), theParticle(particle)
+  {
+    setType(ParticleEntryAvatarType);
+  }
+
+  ParticleEntryAvatar::~ParticleEntryAvatar()
+  {}
+
+  std::string ParticleEntryAvatar::dump() const {
+    std::stringstream ss;
+    ss << "(avatar " << theTime <<" 'particle-entry" << std::endl
+      << "(list " << std::endl
+       << theParticle->dump()
+      << "))" << std::endl;
+    return ss.str();
+  }
+
+  FinalState* ParticleEntryAvatar::postInteraction(FinalState *fs) {
+    return fs;
+  }
+
+  IChannel* ParticleEntryAvatar::getChannel() const {
+    return new ParticleEntryChannel(theNucleus, theParticle);
+  }
+}

@@ -36,46 +36,34 @@
 
 #include "globals.hh"
 
-/*
- * G4INCLBinaryCollisionAvatar.hh
- *
- *  Created on: Jun 5, 2009
- *      Author: Pekka Kaitaniemi
- */
-
-#ifndef G4INCLBINARYCOLLISIONAVATAR_HH_
-#define G4INCLBINARYCOLLISIONAVATAR_HH_
-
 #include "G4INCLParticle.hh"
+#include "G4INCLIChannel.hh"
 #include "G4INCLNucleus.hh"
-#include "G4INCLFinalState.hh"
-#include "G4INCLInteractionAvatar.hh"
+
+#ifndef G4INCLParticleEntry_hh
+#define G4INCLParticleEntry_hh 1
 
 namespace G4INCL {
+  class FinalState;
 
-  class BinaryCollisionAvatar: public G4INCL::InteractionAvatar {
+  class ParticleEntryChannel : public IChannel {
   public:
-    BinaryCollisionAvatar(G4double, G4double, G4INCL::Nucleus*, G4INCL::Particle*, G4INCL::Particle*);
-    virtual ~BinaryCollisionAvatar();
-    G4INCL::IChannel* getChannel() const;
-    ParticleList getParticles() const {
-      ParticleList theParticleList;
-      theParticleList.push_back(particle1);
-      theParticleList.push_back(particle2);
-      return theParticleList;
-    };
+    ParticleEntryChannel(Nucleus *n, Particle *p);
+    virtual ~ParticleEntryChannel();
 
-    virtual void preInteraction();
-    virtual FinalState *postInteraction(FinalState *);
+    FinalState* getFinalState();
 
-    std::string dump() const;
-
-    static const G4double cutNN;
-    static const G4double cutNNSquared;
   private:
-    G4double theCrossSection;
-  };
+    /** \brief Modify particle that enters the nucleus.
+     *
+     * Modify the particle momentum and/or position when the particle enters
+     * the nucleus.
+     */
+    void particleEnters();
 
+    Nucleus *theNucleus;
+    Particle *theParticle;
+  };
 }
 
-#endif /* G4INCLBINARYCOLLISIONAVATAR_HH_ */
+#endif

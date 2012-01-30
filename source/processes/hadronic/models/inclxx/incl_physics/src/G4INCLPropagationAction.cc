@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -38,7 +38,7 @@
 
 #include "G4INCLPropagationAction.hh"
 #include "G4INCLLogger.hh"
-//#include <cassert>
+// #include <cassert>
 
 namespace G4INCL {
 
@@ -60,7 +60,7 @@ namespace G4INCL {
     ++stepCounter; // Increment the step counter
 
 #ifdef INCL_DEBUG_LOG
-    //   DATABLOCK(pm->getNucleus()->getStore()->prG4intParticleConfiguration());
+    //   DATABLOCK(pm->getNucleus()->getStore()->printParticleConfiguration());
 #endif
   }
 }

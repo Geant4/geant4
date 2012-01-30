@@ -30,14 +30,14 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
 
 /** \file G4INCLINuclearPotential.cc
- * \brief Abstract G4interface to the nuclear potential.
+ * \brief Abstract interface to the nuclear potential.
  *
  * NuclearPotential-like classes should provide access to the value of the
  * potential of a particle in a particular context. For example, an instance of

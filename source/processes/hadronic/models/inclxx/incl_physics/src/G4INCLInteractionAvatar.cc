@@ -30,14 +30,14 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
 
 /* \file G4INCLInteractionAvatar.cc
- * \brief Virtual class for G4interaction avatars.
+ * \brief Virtual class for interaction avatars.
  *
  * This class is inherited by decay and collision avatars. The goal is to
  * provide a uniform treatment of common physics, such as Pauli blocking,
@@ -176,7 +176,7 @@ namespace G4INCL {
         (*i)->setOutOfWell();
         fs->addOutgoingParticle(*i);
         DEBUG("Pion was created outside its potential well." << std::endl
-            << (*i)->prG4int());
+            << (*i)->print());
       }
 
     // Try to enforce energy conservation
@@ -284,12 +284,13 @@ namespace G4INCL {
     // Collision accepted!
     for( ParticleIter i = modifiedAndCreated.begin(); i != modifiedAndCreated.end(); ++i ) {
       if(!(*i)->isOutOfWell()) {
-        // Decide if the particle should be made G4into a spectator
+        // Decide if the particle should be made into a spectator
+        // (Back to spectator)
         G4bool goesBackToSpectator = false;
         if((*i)->isNucleon() && theNucleus->getStore()->getConfig()->getBackToSpectator()) {
-          const G4double threshold = (*i)->getPotentialEnergy()
-            - ParticleTable::getSeparationEnergy((*i)->getType())
-            + theNucleus->getStore()->getConfig()->getBackToSpectatorThreshold();
+          G4double threshold = (*i)->getPotentialEnergy();
+          if((*i)->getType()==Proton)
+            threshold += theNucleus->getTransmissionBarrier(*i);
           if((*i)->getKineticEnergy() < threshold)
             goesBackToSpectator = true;
         }
@@ -353,7 +354,7 @@ namespace G4INCL {
     // Apply the root-finding algorithm
     const G4bool success = RootFinder::solve(violationEFunctor, 1.0);
     if(!success) {
-      WARN("Couldn't enforce energy conservation after an G4interaction, root-finding algorithm failed." << std::endl);
+      WARN("Couldn't enforce energy conservation after an interaction, root-finding algorithm failed." << std::endl);
     }
     delete violationEFunctor;
     return success;
@@ -406,7 +407,7 @@ namespace G4INCL {
         (*i)->setPotentialEnergy(0.);
 
       if(shouldUseLocalEnergy && !(*i)->isPion() && theNucleus) { // This translates AECSVT's loops 1, 3 and 4
-        // assert(theNucleus); // Local energy without a nucleus doesn't make sense
+// assert(theNucleus); // Local energy without a nucleus doesn't make sense
         const G4double energy = (*i)->getEnergy(); // Store the energy of the particle
         G4double locE = KinematicsUtils::getLocalEnergy(theNucleus, *i); // Initial value of local energy
         G4double locEOld;
@@ -442,9 +443,9 @@ namespace G4INCL {
     theMomentum(theParticle->getMomentum()),
     energyThreshold(KinematicsUtils::energy(theMomentum,ParticleTable::effectiveDeltaDecayThreshold))
   {
-    // assert(theNucleus);
-    // assert(finalState->getModifiedParticles().size()==1);
-    // assert(theParticle->isDelta());
+// assert(theNucleus);
+// assert(finalState->getModifiedParticles().size()==1);
+// assert(theParticle->isDelta());
   }
 
   G4double InteractionAvatar::ViolationEEnergyFunctor::operator()(const G4double alpha) const {

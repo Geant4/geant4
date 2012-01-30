@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -53,7 +53,7 @@ namespace G4INCL {
 
     /**
      * Propagation model takes care of transporting the particles until something
-     * G4interesting (i.e. an avatar) happens. This avatar is then returned back to the INCL
+     * interesting (i.e. an avatar) happens. This avatar is then returned back to the INCL
      * kernel for further processing.
      *
      * The propagation model idea abstracts the details of propagation. This allows us to
@@ -69,12 +69,12 @@ namespace G4INCL {
       /**
        * Set the nucleus for the propagation model.
        *
-       * @param nucleus PoG4inter to the nucleus
+       * @param nucleus Pointer to the nucleus
        */
       virtual void setNucleus(G4INCL::Nucleus *nucleus) = 0;
 
       /**
-       * Get a poG4inter to the nucleus.
+       * Get a pointer to the nucleus.
        *
        * @return G4INCL::Nuleus*
        */

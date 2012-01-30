@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -68,12 +68,12 @@ namespace G4INCL {
       const G4double ZOverA = ((G4double) theDensity->getZ()) / ((G4double) theDensity->getA());
 
       const G4double mp = ParticleTable::getMass(Proton);
-      fermiMomentum[Proton] = Pf * Math::pow13(2.*ZOverA);
+      fermiMomentum[Proton] = PhysicalConstants::Pf * Math::pow13(2.*ZOverA);
       fermiEnergy[Proton] = std::sqrt(fermiMomentum[Proton]*fermiMomentum[Proton] + mp*mp) - mp;
       vProton = fermiEnergy[Proton] + ParticleTable::getSeparationEnergy(Proton);
 
       const G4double mn = ParticleTable::getMass(Neutron);
-      fermiMomentum[Neutron] = Pf * Math::pow13(2.*(1.-ZOverA));
+      fermiMomentum[Neutron] = PhysicalConstants::Pf * Math::pow13(2.*(1.-ZOverA));
       fermiEnergy[Neutron] = std::sqrt(fermiMomentum[Neutron]*fermiMomentum[Neutron] + mn*mn) - mn;
       vNeutron = fermiEnergy[Neutron] + ParticleTable::getSeparationEnergy(Neutron);
 

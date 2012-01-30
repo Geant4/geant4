@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -90,20 +90,20 @@ namespace G4INCL {
     return created;
   }
 
-  std::string FinalState::prG4int() const {
+  std::string FinalState::print() const {
     std::stringstream ss;
     ss << "Modified particles:" << std::endl;
     for(ParticleIter iter = modified.begin(); iter != modified.end(); ++iter)
-      ss << (*iter)->prG4int();
+      ss << (*iter)->print();
     ss << "Outgoing particles:" << std::endl;
     for(ParticleIter iter = outgoing.begin(); iter != outgoing.end(); ++iter)
-      ss << (*iter)->prG4int();
+      ss << (*iter)->print();
     ss << "Destroyed particles:" << std::endl;
     for(ParticleIter iter = destroyed.begin(); iter != destroyed.end(); ++iter)
-      ss << (*iter)->prG4int();
+      ss << (*iter)->print();
     ss << "Created particles:" << std::endl;
     for(ParticleIter iter = created.begin(); iter != created.end(); ++iter)
-      ss << (*iter)->prG4int();
+      ss << (*iter)->print();
     return ss.str();
   }
 

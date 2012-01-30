@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -67,7 +67,7 @@ namespace G4INCL {
         impactParameter(0.0), nCollisions(0), stoppingTime(0.0),
         EBalance(0.0), pLongBalance(0.0), pTransBalance(0.0),
         nCascadeParticles(0), nRemnants(0), nParticles(0),
-        transparent(false), nDecays(0),
+        transparent(false), nucleonAbsorption(false), pionAbsorption(false), nDecays(0),
         nBlockedCollisions(0), nBlockedDecays(0),
         effectiveImpactParameter(0.0),
         deltasInside(false),
@@ -116,6 +116,10 @@ namespace G4INCL {
 
       /** \brief True if the event is transparent */
       Bool_t transparent;
+      /** \brief True if the event is absorption */
+      Bool_t nucleonAbsorption;
+      /** \brief True if the event is absorption */
+      Bool_t pionAbsorption;
       /** \brief Number of accepted Delta decays */
       Int_t nDecays;
       /** \brief Number of two-body collisions blocked by Pauli or CDPP */
@@ -227,6 +231,8 @@ namespace G4INCL {
         nRemnants = 0;
         nParticles = 0;
         transparent = true;
+	nucleonAbsorption = false;
+	pionAbsorption = false;
         forcedDeltasInside = false;
         forcedDeltasOutside = false;
         deltasInside = false;

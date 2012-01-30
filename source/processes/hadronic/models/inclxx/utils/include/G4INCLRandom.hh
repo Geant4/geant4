@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -98,7 +98,7 @@ namespace G4INCL {
     static G4double shoot() {return theGenerator->flat(); };
 
     /**
-     * Return a random number in the ]0,1] G4interval
+     * Return a random number in the ]0,1] interval
      */
     static G4double shoot0() {
       G4double r;

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -185,7 +185,7 @@ namespace G4INCL {
       return w;
     };
 
-    std::string prG4int() const {
+    std::string print() const {
       std::stringstream ss;
       ss <<"(x = " << x << "   y = " << y << "   z = " << z <<")";
       return ss.str();
@@ -413,7 +413,7 @@ namespace G4INCL {
       return std::atan2(y, x);
     }
 
-    std::string prG4int() const {
+    std::string print() const {
       std::stringstream ss;
       ss <<" (x = " << x << " y = " << y << " z = " << z << ")" << std::endl;
       return ss.str();

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -70,7 +70,7 @@ namespace G4INCL {
      *
      * If a root is found, it can be retrieved using the getSolution() method,
      *
-     * \param f poG4inter to a RootFunctor
+     * \param f pointer to a RootFunctor
      * \param x0 initial value of the function argument
      * \return true if a root was found
      */
@@ -90,7 +90,7 @@ namespace G4INCL {
      *
      * Tries to find a bracketing value for the function root.
      *
-     * \param f poG4inter to a RootFunctor
+     * \param f pointer to a RootFunctor
      * \param x0 starting value
      * \return if the root could be bracketed, returns two values of x
      *   bracketing the root, as a pair. If the bracketing failed, returns a

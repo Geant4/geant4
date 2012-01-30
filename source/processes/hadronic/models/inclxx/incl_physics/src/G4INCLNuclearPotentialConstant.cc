@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -71,12 +71,12 @@ namespace G4INCL {
 
     void NuclearPotentialConstant::initialize() {
       const G4double mp = ParticleTable::getMass(Proton);
-      fermiMomentum[Proton] = Pf;
-      fermiEnergy[Proton] = std::sqrt(PfSquared + mp*mp) - mp;
+      fermiMomentum[Proton] = PhysicalConstants::Pf;
+      fermiEnergy[Proton] = std::sqrt(PhysicalConstants::PfSquared + mp*mp) - mp;
 
       const G4double mn = ParticleTable::getMass(Neutron);
-      fermiMomentum[Neutron] = Pf;
-      fermiEnergy[Neutron] = std::sqrt(PfSquared + mn*mn) - mn;
+      fermiMomentum[Neutron] = PhysicalConstants::Pf;
+      fermiEnergy[Neutron] = std::sqrt(PhysicalConstants::PfSquared + mn*mn) - mn;
 
       fermiEnergy[DeltaPlusPlus] = fermiEnergy.find(Proton)->second;
       fermiEnergy[DeltaPlus] = fermiEnergy.find(Proton)->second;

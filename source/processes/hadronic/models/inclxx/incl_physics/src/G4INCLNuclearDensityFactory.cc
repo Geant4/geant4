@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -40,10 +40,19 @@
 
 namespace G4INCL {
 
+  std::map<G4int,NuclearDensity*> NuclearDensityFactory::nuclearDensityCache;
+
   NuclearDensity* NuclearDensityFactory::createDensity(G4int A, G4int Z) {
-    IFunction1D *densityFunction = NuclearDensityFactory::createDensityFunction(A, Z);
-    NuclearDensity *density = new NuclearDensity(A, Z, densityFunction);
-    return density;
+    const G4int nuclideID = 1000*Z + A; // MCNP-style nuclide IDs
+    const std::map<G4int,NuclearDensity*>::const_iterator mapEntry = nuclearDensityCache.find(nuclideID);
+    if(mapEntry == nuclearDensityCache.end()) {
+      IFunction1D *densityFunction = NuclearDensityFactory::createDensityFunction(A, Z);
+      NuclearDensity *density = new NuclearDensity(A, Z, densityFunction);
+      nuclearDensityCache[nuclideID] = density;
+      return density;
+    } else {
+      return mapEntry->second;
+    }
   }
 
   IFunction1D* NuclearDensityFactory::createDensityFunction(G4int A, G4int Z) {
@@ -63,9 +72,5 @@ namespace G4INCL {
     }
     return 0;
   }
-
-  // We will not construct any instances of this class
-  NuclearDensityFactory::NuclearDensityFactory() {}
-  NuclearDensityFactory::~NuclearDensityFactory() {}
 
 }

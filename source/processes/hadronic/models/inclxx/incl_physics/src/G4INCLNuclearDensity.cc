@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -98,13 +98,13 @@ namespace G4INCL {
     G4double step = 0.2;
     if (iamat >= 19) {
       step = 0.2;
-      res_dws = G4integrate(0.0, 13.5, step);
+      res_dws = integrate(0.0, 13.5, step);
     }
     else { 
       // preparation de la distribution m.h.o.:
       if(iamat >= 6) {
 	step=0.1;
-	res_dws = G4integrate(0.0, 10.0, step);
+	res_dws = integrate(0.0, 10.0, step);
       }
       else {
 	// preparation de la distribution gaussienne:
@@ -135,7 +135,7 @@ namespace G4INCL {
 	if(step >= 0.05) {
 	  step = 0.05;
 	}
-	res_dws = G4integrate(0.0, rcour, step);
+	res_dws = integrate(0.0, rcour, step);
 	f_r = res_dws/fnor;
 
 	if(f_r >= 0.0)  { // Safeguard against negative f_r
@@ -150,16 +150,16 @@ namespace G4INCL {
 	  //	  y.push_back(rcour);
 	  if(std::abs(f_r) > 0.01) {
 	    ERROR("i = " << i <<  " f_r " << f_r
-		      << " poG4int has been skipped." << std::endl);
+		      << " point has been skipped." << std::endl);
 	  }
 	}
       }
     }
-    //	      numberOfPoG4ints = j;
+    //	      numberOfPoints = j;
     x[x.size() - 1] = 1.0; // Set the last value to 1.0 (y = rmax)
   }
 
-  G4double NuclearDensity::G4integrate(G4double ami, G4double ama, G4double step) const {
+  G4double NuclearDensity::integrate(G4double ami, G4double ama, G4double step) const {
     G4double res = 0.0;
     G4double x1[5];
     for(G4int init_i = 0; init_i < 5; init_i++) {
@@ -187,7 +187,7 @@ namespace G4INCL {
     res = 0.0;
 
     if(nb < 10) {
-      ERROR("Not enough G4integration poG4ints" << std::endl);
+      ERROR("Not enough integration points" << std::endl);
       return 0.0;
     }
   
@@ -218,7 +218,7 @@ namespace G4INCL {
 
   void NuclearDensity::initializeFirstDerivative() {
     if(x.empty()) {
-      ERROR("INCL::NuclearDensity: No datapoG4ints in the nuclear density"
+      ERROR("INCL::NuclearDensity: No datapoints in the nuclear density"
         << std::endl);
       return;
     }

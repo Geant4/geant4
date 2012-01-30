@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -38,7 +38,7 @@
 
 #include "G4INCLXXInterface.hh"
 #include "G4INCLXXFactory.hh"
-#include "math.h"
+#include <cmath>
 #include "G4GenericIon.hh"
 #include "CLHEP/Random/Random.h"
 #include "G4INCLConfig.hh"

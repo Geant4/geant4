@@ -36,36 +36,26 @@
 
 #include "globals.hh"
 
-/*
- * G4INCLBinaryCollisionAvatar.hh
- *
- *  Created on: Jun 5, 2009
- *      Author: Pekka Kaitaniemi
- */
+#ifndef G4INCLParticleEntryAvatar_hh
+#define G4INCLParticleEntryAvatar_hh 1
 
-#ifndef G4INCLBINARYCOLLISIONAVATAR_HH_
-#define G4INCLBINARYCOLLISIONAVATAR_HH_
-
+#include "G4INCLIAvatar.hh"
 #include "G4INCLParticle.hh"
 #include "G4INCLNucleus.hh"
-#include "G4INCLFinalState.hh"
-#include "G4INCLInteractionAvatar.hh"
 
 namespace G4INCL {
-
-  class BinaryCollisionAvatar: public G4INCL::InteractionAvatar {
+  class ParticleEntryAvatar: public G4INCL::IAvatar {
   public:
-    BinaryCollisionAvatar(G4double, G4double, G4INCL::Nucleus*, G4INCL::Particle*, G4INCL::Particle*);
-    virtual ~BinaryCollisionAvatar();
-    G4INCL::IChannel* getChannel() const;
+    ParticleEntryAvatar(G4double, G4INCL::Nucleus*, G4INCL::Particle*);
+    virtual ~ParticleEntryAvatar();
+    virtual G4INCL::IChannel* getChannel() const;
     ParticleList getParticles() const {
       ParticleList theParticleList;
-      theParticleList.push_back(particle1);
-      theParticleList.push_back(particle2);
+      theParticleList.push_back(theParticle);
       return theParticleList;
     };
 
-    virtual void preInteraction();
+    virtual void preInteraction() {};
     virtual FinalState *postInteraction(FinalState *);
 
     std::string dump() const;
@@ -73,9 +63,9 @@ namespace G4INCL {
     static const G4double cutNN;
     static const G4double cutNNSquared;
   private:
-    G4double theCrossSection;
+    Nucleus *theNucleus;
+    Particle *theParticle;
   };
-
 }
 
-#endif /* G4INCLBINARYCOLLISIONAVATAR_HH_ */
+#endif

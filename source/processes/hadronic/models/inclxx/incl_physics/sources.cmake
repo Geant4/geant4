@@ -93,6 +93,8 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
 			 G4INCLNuclearPotentialEnergyIsospin.hh
 			 G4INCLNuclearPotentialIsospin.hh
 			 G4INCLNucleus.hh
+			 G4INCLParticleEntryAvatar.hh
+			 G4INCLParticleEntryChannel.hh
 			 G4INCLPauliBlocking.hh
 			 G4INCLPauliGlobal.hh
 			 G4INCLPauliStandard.hh
@@ -124,7 +126,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
 			 G4INCLElasticChannel.cc
 			 G4INCLEventAction.cc
 			 G4INCLIClusteringModel.cc
-			 G4INCLICoulomb.cc
 			 G4INCLInteractionAvatar.cc
 			 G4INCLINuclearPotential.cc
 			 G4INCLIPropagationModel.cc
@@ -135,6 +136,8 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
 			 G4INCLNuclearPotentialEnergyIsospin.cc
 			 G4INCLNuclearPotentialIsospin.cc
 			 G4INCLNucleus.cc
+			 G4INCLParticleEntryAvatar.cc
+			 G4INCLParticleEntryChannel.cc
 			 G4INCLPauliBlocking.cc
 			 G4INCLPauliGlobal.cc
 			 G4INCLPauliStandard.cc

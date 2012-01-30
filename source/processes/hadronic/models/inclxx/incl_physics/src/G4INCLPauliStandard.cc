@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -60,7 +60,7 @@ namespace G4INCL {
     const G4double maxVolR = rbl;
     const G4double maxVolP = pbl;
     G4double vol = std::pow(4.*Math::pi/3.0, 2)
-      * std::pow(maxVolR*maxVolP/(Math::twoPi*hc), 3);
+      * std::pow(maxVolR*maxVolP/(Math::twoPi*PhysicalConstants::hc), 3);
 
     const G4double rdeq = nucleus->getDensity()->getMaximumRadius();
     const G4double rs = particle->getPosition().mag();

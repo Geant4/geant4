@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -51,19 +51,32 @@ namespace G4INCL {
   Store::~Store() {
     theBook->reset();
     delete theBook;
-#ifdef INCLXX_IN_GEANT4_MODE
-    delete theConfig;
-#endif
     theBook = 0;
     clear();
   }
 
   void Store::add(Particle *p) {
-    particles[p->getID()]=p;
+    const long ID = p->getID();
+    particles[ID]=p;
     inside.push_back(p);
 
-    std::vector<long> *aIDs = new std::vector<long>;
-    particleAvatarConnections[p->getID()] = aIDs;
+    if(particleAvatarConnections.find(ID)==particleAvatarConnections.end()) {
+      std::vector<long> *aIDs = new std::vector<long>;
+      particleAvatarConnections[ID] = aIDs;
+    }
+  }
+
+  void Store::addParticleEntryAvatar(IAvatar *a) {
+    // Add the avatar to the avatar map
+    avatars[a->getID()]=a;
+    avatarList.push_back(a);
+
+    ParticleList pList = a->getParticles();
+    for(ParticleIter i = pList.begin(); i != pList.end(); ++i) {
+      addIncomingParticle((*i));
+      // Connect each particle to the avatar
+      connectParticleAndAvatar((*i)->getID(), a->getID());
+    }
   }
 
   void Store::add(IAvatar *a) {
@@ -426,7 +439,7 @@ namespace G4INCL {
     in.close();
   }
 
-  std::string Store::prG4intParticleConfiguration() {
+  std::string Store::printParticleConfiguration() {
     std::stringstream ss;
     G4int A = 0, Z = 0;
     for(ParticleIter i = inside.begin(); i != inside.end(); ++i) {
@@ -439,7 +452,7 @@ namespace G4INCL {
       }
     }
     // Note: Projectile A and Z are set to 0 (we don't really know
-    // anything about them at this poG4int).
+    // anything about them at this point).
     ss << "0 0 " << A << " " << Z << " "
 	      << "100.0" << " "
 	      << "0.0" << std::endl;
@@ -479,11 +492,11 @@ namespace G4INCL {
 
   void Store::writeParticles(std::string filename) {
     std::ofstream out(filename.c_str());
-    out << prG4intParticleConfiguration();
+    out << printParticleConfiguration();
     out.close();
   }
 
-  std::string Store::prG4intAvatars() {
+  std::string Store::printAvatars() {
     std::stringstream ss;
     std::list<IAvatar*>::const_iterator i;
     for(i = avatarList.begin(); i != avatarList.end(); ++i) {

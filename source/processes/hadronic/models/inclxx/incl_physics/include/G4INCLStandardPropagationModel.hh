@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -112,7 +112,7 @@ namespace G4INCL {
        *
        * Returns the reflection time of a particle on the potential wall.
        *
-       * \param aParticle poG4inter to the particle
+       * \param aParticle pointer to the particle
        */
       G4double getReflectionTime(G4INCL::Particle const * const aParticle);
 
@@ -135,7 +135,7 @@ namespace G4INCL {
        * of the updatedParticles and one of the particles ONLY IF the latter
        * does not belong to updatedParticles.
        *
-       * If you G4intend to generate all possible collisions among particles in a
+       * If you intend to generate all possible collisions among particles in a
        * list, use generateCollisions().
        *
        * \param updatedParticles list of updated particles

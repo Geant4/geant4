@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -59,7 +59,7 @@ namespace G4INCL {
   class Clustering {
   public:
     /**
-     * Choose a cluster candidate to be produced. At this poG4int we
+     * Choose a cluster candidate to be produced. At this point we
      * don't yet decide if it can pass through the Coulomb barrier or
      * not.
      */

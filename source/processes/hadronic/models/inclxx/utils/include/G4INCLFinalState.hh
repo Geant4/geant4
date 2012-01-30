@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -54,7 +54,7 @@ namespace G4INCL {
   enum FinalStateValidity {ValidFS, PauliBlockedFS, NoEnergyConservationFS};
 
   /**
-   * Final state of an G4interaction
+   * Final state of an interaction
    */
   class FinalState {
   public:
@@ -82,7 +82,7 @@ namespace G4INCL {
     void makePauliBlocked() { validity = PauliBlockedFS; }
     void makeNoEnergyConservation() { validity = NoEnergyConservationFS; }
 
-    std::string prG4int() const;
+    std::string print() const;
 
   private:
     ParticleList outgoing, created, destroyed, modified;

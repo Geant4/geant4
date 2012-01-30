@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -41,6 +41,7 @@
 
 #include "G4INCLNuclearDensity.hh"
 #include "G4INCLParticleTable.hh"
+#include <map>
 
 namespace G4INCL {
 
@@ -48,10 +49,19 @@ namespace G4INCL {
   public:
     static NuclearDensity* createDensity(G4int A, G4int Z);
     static IFunction1D* createDensityFunction(G4int A, G4int Z);
+    static void clearCache() {
+      typedef std::map<G4int,NuclearDensity*>::const_iterator MapIter;
+      for(MapIter i = nuclearDensityCache.begin(); i!=nuclearDensityCache.end(); ++i)
+        delete i->second;
+      nuclearDensityCache.clear();
+    }
 
-    //  protected:
-    NuclearDensityFactory();
-    ~NuclearDensityFactory();
+  protected:
+    // We will not construct any instances of this class
+    NuclearDensityFactory() {}
+    ~NuclearDensityFactory() {}
+
+    static std::map<G4int,NuclearDensity*> nuclearDensityCache;
 
   };
 }

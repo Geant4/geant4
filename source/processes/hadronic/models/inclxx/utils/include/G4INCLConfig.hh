@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -173,9 +173,6 @@ namespace G4INCL {
     /// \brief Get back-to-spectator
     G4bool getBackToSpectator() const { return backToSpectator; }
 
-    /// \brief Get back-to-spectator
-    G4float getBackToSpectatorThreshold() const { return backToSpectatorThreshold; }
-
     /// \brief Echo the input options.
     std::string const echo() const;
 
@@ -235,7 +232,6 @@ namespace G4INCL {
     G4int clusterMaxMass;
 
     G4bool backToSpectator;
-    G4float backToSpectatorThreshold;
   };
 
 }

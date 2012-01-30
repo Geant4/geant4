@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -47,7 +47,7 @@
 #include "G4INCLParticleTable.hh"
 #include "G4INCLKinematicsUtils.hh"
 #include "G4INCLRandom.hh"
-//#include <cassert>
+// #include <cassert>
 
 namespace G4INCL {
 
@@ -66,7 +66,7 @@ namespace G4INCL {
     switch(theDecayMode) {
       default:
         ERROR("Unrecognized cluster-decay mode: " << theDecayMode << std::endl
-            << c->prG4int());
+            << c->print());
       case ParticleTable::StableCluster:
         // For stable clusters, just return
         return;
@@ -107,7 +107,7 @@ namespace G4INCL {
         break;
       default:
         ERROR("Unrecognized cluster-decay mode in two-body decay: " << theDecayMode << std::endl
-            << c->prG4int());
+            << c->print());
         return;
     }
     decayParticle->makeParticipant();
@@ -130,7 +130,7 @@ namespace G4INCL {
     c->setMass(daughterMass);
 
     const G4double decayMass = decayParticle->getMass();
-    // assert(motherMass > daughterMass + decayMass); // Q-value should be >0
+// assert(motherMass > daughterMass + decayMass); // Q-value should be >0
 
     // Decay kinematics in the mother rest frame
     const G4double pCM = KinematicsUtils::momentumInCM(motherMass, daughterMass, decayMass);
@@ -166,7 +166,7 @@ namespace G4INCL {
         break;
       default:
         ERROR("Unrecognized cluster-decay mode in three-body decay: " << theDecayMode << std::endl
-            << c->prG4int());
+            << c->print());
         return;
     }
     decayParticle1->makeParticipant();
@@ -193,7 +193,7 @@ namespace G4INCL {
 
     // Q-values
     const G4double qValue = motherMass - daughterMass - decayMass1 - decayMass2;
-    // assert(qValue > 0.); // Q-value should be >0
+// assert(qValue > 0.); // Q-value should be >0
     const G4double qValueB = qValue * Random::shoot();
 
     // The decay particles behave as if they had more mass until the second

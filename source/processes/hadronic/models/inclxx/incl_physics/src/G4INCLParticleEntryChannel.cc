@@ -36,46 +36,63 @@
 
 #include "globals.hh"
 
-/*
- * G4INCLBinaryCollisionAvatar.hh
- *
- *  Created on: Jun 5, 2009
- *      Author: Pekka Kaitaniemi
- */
-
-#ifndef G4INCLBINARYCOLLISIONAVATAR_HH_
-#define G4INCLBINARYCOLLISIONAVATAR_HH_
-
-#include "G4INCLParticle.hh"
-#include "G4INCLNucleus.hh"
-#include "G4INCLFinalState.hh"
-#include "G4INCLInteractionAvatar.hh"
+#include "G4INCLParticleEntryChannel.hh"
+#include "G4INCLRootFinder.hh"
 
 namespace G4INCL {
 
-  class BinaryCollisionAvatar: public G4INCL::InteractionAvatar {
-  public:
-    BinaryCollisionAvatar(G4double, G4double, G4INCL::Nucleus*, G4INCL::Particle*, G4INCL::Particle*);
-    virtual ~BinaryCollisionAvatar();
-    G4INCL::IChannel* getChannel() const;
-    ParticleList getParticles() const {
-      ParticleList theParticleList;
-      theParticleList.push_back(particle1);
-      theParticleList.push_back(particle2);
-      return theParticleList;
-    };
+  ParticleEntryChannel::ParticleEntryChannel(Nucleus *n, Particle *p)
+    :theNucleus(n), theParticle(p)
+  {}
 
-    virtual void preInteraction();
-    virtual FinalState *postInteraction(FinalState *);
+  ParticleEntryChannel::~ParticleEntryChannel()
+  {}
 
-    std::string dump() const;
+  FinalState* ParticleEntryChannel::getFinalState() {
+    const G4double energyBefore = theParticle->getEnergy();
+    particleEnters();
+    theNucleus->insertParticipant(theParticle);
 
-    static const G4double cutNN;
-    static const G4double cutNNSquared;
-  private:
-    G4double theCrossSection;
-  };
+    FinalState *fs = new FinalState();
+    fs->addModifiedParticle(theParticle);
+    fs->setTotalEnergyBeforeInteraction(energyBefore);
+    return fs;
+  }
+
+  void ParticleEntryChannel::particleEnters() {
+
+    // TODO: this is the place to add refraction
+
+    // Add the nuclear potential to the kinetic energy when entering the
+    // nucleus
+
+    class IncomingEFunctor : public RootFunctor {
+      public:
+        IncomingEFunctor(Particle * const p, NuclearPotential::INuclearPotential const * const np) :
+          theParticle(p), thePotential(np) {
+            theEnergy=theParticle->getEnergy();
+          }
+        ~IncomingEFunctor() {}
+        G4double operator()(const G4double v) const {
+          theParticle->setEnergy(theEnergy + v);
+          theParticle->setPotentialEnergy(v);
+          // Scale the particle momentum
+          theParticle->adjustMomentumFromEnergy();
+          return v - thePotential->computePotentialEnergy(theParticle);
+        }
+        void cleanUp(const G4bool /*success*/) const {}
+      private:
+        Particle *theParticle;
+        NuclearPotential::INuclearPotential const *thePotential;
+        G4double theEnergy;
+    } theIncomingEFunctor(theParticle,theNucleus->getPotential());
+
+    G4double v = theNucleus->getPotential()->computePotentialEnergy(theParticle);
+    G4bool success = RootFinder::solve(&theIncomingEFunctor, v);
+    if(!success) {
+      WARN("Couldn't compute the potential for incoming particle, root-finding algorithm failed." << std::endl);
+    }
+  }
 
 }
 
-#endif /* G4INCLBINARYCOLLISIONAVATAR_HH_ */

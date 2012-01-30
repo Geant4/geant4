@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -58,7 +58,6 @@
 #include "G4INCLNuclearPotentialEnergyIsospin.hh"
 #include "G4INCLKinematicsUtils.hh"
 #include "G4INCLDecayAvatar.hh"
-#include "G4INCLRootFinder.hh"
 #include "G4INCLCluster.hh"
 #include "G4INCLClusterDecay.hh"
 #include <iterator>
@@ -116,7 +115,8 @@ namespace G4INCL {
   Nucleus::~Nucleus() {
     delete theStore;
     delete thePotential;
-    delete theDensity;
+    /* We don't delete the density here any more -- the Factory is caching them
+    delete theDensity;*/
   }
 
   void Nucleus::initializeParticles()
@@ -140,99 +140,6 @@ namespace G4INCL {
     initialInternalEnergy = computeTotalEnergy();
     initialCenterOfMass = computeCenterOfMass();
   }
-
-  G4double Nucleus::getTransmissionProbability(Particle const * const particle) {
-    //        NOUVEAU BARR RELATIVISTE ATTENTION AUX ENTREES SORTIES!
-    //      (06/2005)
-    //
-    //  ATTENTION ICI BARR de version AB different de version TA ...et l'appel est
-    //  probablement version TA!
-    //    BARR=TRANSMISSION PROBABILITY FOR A PARTICLE (Nucleon, cluster or
-    //    pion) of kinetic energy E on the edge of the (attractive) well of
-    //    depth V0 felt by the particle.
-    //          IZ is the isospin of the particle,
-    //          IZN the instantaneous charge of the nucleus and R the radius of
-    //        the well.
-    //          IA is the mass number of the particle, and MRE its mass energy.
-    //
-    //      Modified 9/10/2002 for clusters (d,t,3He,4He) (IZ=isospin,IA=A)
-    //      IZ must be correct so that charge Q=(IA+IZ)/2.
-    //      Modified 4/2004 for relativistic expressions and pions.
-
-    G4double E = particle->getKineticEnergy();
-
-    G4int izn = theZ;
-    G4int iq = particle->getZ();
-
-    G4double v0ia = particle->getPotentialEnergy();
-    /* This isn't really a radius, it's the poG4int where we wish to compute the
-     * value of the barrier. */
-    G4double r = theDensity->getTransmissionRadius(particle);
-
-    G4double barr = 0.0;
-    G4double b = 0.0, px = 0.0, g = 0.0;
-    G4double x = 0.0;
-
-    G4double mre = particle->getMass();
-
-    if (E > v0ia) goto barr12;
-    return 0.0;
-
-barr12:
-    x=std::sqrt((2.*mre*E+E*E)*(2.*mre*(E-v0ia)+std::pow(E-v0ia, 2)));
-    barr=4.*x/(2.*mre*(2.*E-v0ia)+E*E+std::pow(E-v0ia, 2)+2.*x);
-    if (iq > 0 && iq < izn) goto barr22;
-    return barr;
-
-barr22:
-    b=iq*(izn-iq)*1.44/r;
-    px=std::sqrt((E-v0ia)/b);
-
-    if (px < 1.0) goto barr32;
-    return barr;
-
-barr32:
-    g=iq*(izn-iq)/137.03*std::sqrt(2.*mre/(E-v0ia)/(1.+(E-v0ia)/2./mre))
-      *(std::acos(px)-px*std::sqrt(1.-px*px));
-    if (g > 35.) {
-      barr=0.;
-    } else {
-      barr=barr*std::exp(-2.*g);
-    }
-    return barr;
-  }
-
-  /*
-    G4double Nucleus::getTransmissionProbability(Particle *p) {
-    //    const G4double energy = p->getEnergy() - p->getMass();
-    const G4double energy = p->getKineticEnergy();
-    const G4double V0 = 45.0; // FIXME:
-    
-
-    if(energy <= V0) return 0.0;
-
-    const G4double x = std::sqrt(energy * (energy - V0));
-    const G4double barr = (4.0*x/(energy + energy - V0 + x + x));
-
-    if(p->getZ() <= 0) return barr;
-
-    const G4double b = theZ*1.44/(getRadius() * getRadius());
-    const G4double px = std::sqrt((energy - V0)/b);
-    
-    if(px >= 1.0) return barr;
-
-    const G4double g = theZ/137.03 * std::sqrt(2.0*ProtonMass/(energy - V0))
-    * (std::acos(px) - px*std::sqrt(1.0 - px*px));
-
-    if(g > 35.0) {
-    return 0.0;
-    } else {
-    return barr * std::exp(-2.0*g);
-    }
-
-    return 0.0;
-    }
-  */
 
   std::string Nucleus::dump() {
     std::stringstream ss;
@@ -298,9 +205,9 @@ barr32:
       if(std::abs(totalEnergy - finalstate->getTotalEnergyBeforeInteraction()) > 0.1) {
         ERROR("Energy nonconservation! Energy at the beginning of the event = "
             << finalstate->getTotalEnergyBeforeInteraction()
-            <<" and after G4interaction = "
+            <<" and after interaction = "
             << totalEnergy << std::endl
-            << finalstate->prG4int());
+            << finalstate->print());
       }
     } else if(validity == PauliBlockedFS) {
       blockedDelta = finalstate->getBlockedDelta();
@@ -378,7 +285,7 @@ barr32:
     return totalEnergy - initialInternalEnergy - separationEnergies;
   }
 
-  std::string Nucleus::prG4int()
+  std::string Nucleus::print()
   {
     std::stringstream ss;
     ss << "Particles in the nucleus:" << std::endl
@@ -387,56 +294,19 @@ barr32:
     ParticleList participants = theStore->getParticipants();
     for(ParticleIter p = participants.begin(); p != participants.end(); ++p) {
       ss << "index = " << counter << std::endl
-        << (*p)->prG4int();
+        << (*p)->print();
       counter++;
     }
     ss <<"Spectators:" << std::endl;
     ParticleList spectators = theStore->getSpectators();
     for(ParticleIter p = spectators.begin(); p != spectators.end(); ++p)
-      ss << (*p)->prG4int();
+      ss << (*p)->print();
     ss <<"Outgoing:" << std::endl;
     ParticleList outgoing = theStore->getOutgoingParticles();
     for(ParticleIter p = outgoing.begin(); p != outgoing.end(); ++p)
-      ss << (*p)->prG4int();
+      ss << (*p)->print();
 
     return ss.str();
-  }
-
-  Particle *Nucleus::particleEnters(Particle *particle) {
-
-    // TODO: this is the place to add refraction
-
-    // Add the nuclear potential to the kinetic energy when entering the
-    // nucleus
-
-    class IncomingEFunctor : public RootFunctor {
-      public:
-        IncomingEFunctor(Particle * const p, NuclearPotential::INuclearPotential const * const np) :
-          theParticle(p), thePotential(np) {
-            theEnergy=theParticle->getEnergy();
-          }
-        ~IncomingEFunctor() {}
-        G4double operator()(const G4double v) const {
-          theParticle->setEnergy(theEnergy + v);
-          theParticle->setPotentialEnergy(v);
-          // Scale the particle momentum
-          theParticle->adjustMomentumFromEnergy();
-          return v - thePotential->computePotentialEnergy(theParticle);
-        }
-        void cleanUp(const G4bool /*success*/) const {}
-      private:
-        Particle *theParticle;
-        NuclearPotential::INuclearPotential const *thePotential;
-        G4double theEnergy;
-    } theIncomingEFunctor(particle,thePotential);
-
-    G4double v = thePotential->computePotentialEnergy(particle);
-    G4bool success = RootFinder::solve(&theIncomingEFunctor, v);
-    if(!success) {
-      WARN("Couldn't compute the potential for incoming particle, root-finding algorithm failed." << std::endl);
-    }
-
-    return particle;
   }
 
   G4bool Nucleus::decayOutgoingDeltas() {
@@ -481,9 +351,9 @@ barr32:
 
     // Loop over the deltas, make them decay
     for(ParticleIter i = deltas.begin(); i != deltas.end(); ++i) {
-      // Create a forced-decay avatar. Note the last G4boolean parameter. Note
+      // Create a forced-decay avatar. Note the last boolean parameter. Note
       // also that if the remnant is unphysical we more or less explicitly give
-      // up energy conservation and CDPP by passing a NULL poG4inter for the
+      // up energy conservation and CDPP by passing a NULL pointer for the
       // nucleus.
       IAvatar *decay;
       if(unphysicalRemnant)
@@ -555,26 +425,6 @@ barr32:
     }
   }
 
-  Particle *Nucleus::particleLeaves(Particle *particle) {
-
-    // TODO: this is the place to add refraction
-
-    // Subtract the nuclear potential from the kinetic energy when leaving the
-    // nucleus
-    const G4double v = particle->getPotentialEnergy();
-
-    // Scaling factor for the particle momentum
-    const G4double gpsg = std::sqrt((std::pow(particle->getEnergy() - v, 2)
-          - particle->getMass() * particle->getMass())
-        / particle->getMomentum().mag2());
-    particle->setMomentum(particle->getMomentum() * gpsg);
-    particle->setEnergy(particle->getEnergy() - v);
-    particle->setPotentialEnergy(0.);
-
-    return particle;
-
-  }
-
   G4bool Nucleus::isEventTransparent() const {
 
     if(isForcedTransparent()) return true;
@@ -599,7 +449,7 @@ barr32:
 
   void Nucleus::computeOneNucleonRecoilKinematics() {
     // We should be here only if the nucleus contains only one nucleon
-    // assert(theStore->getParticles().size()==1);
+// assert(theStore->getParticles().size()==1);
 
     DEBUG("Computing one-nucleon recoil kinematics" << std::endl);
 
@@ -740,7 +590,7 @@ barr32:
       }
 
       // We should have made at least one successful iteration here
-      // assert(minMomenta.size()==outgoing.size());
+// assert(minMomenta.size()==outgoing.size());
 
       // Apply the optimal momenta
       DEBUG("Applying the solution" << std::endl);
@@ -748,7 +598,7 @@ barr32:
       for(ParticleIter i=outgoing.begin(); i!=outgoing.end(); ++i, ++v) {
         (*i)->setMomentum(*v);
         (*i)->adjustEnergyFromMomentum();
-        DATABLOCK((*i)->prG4int());
+        DATABLOCK((*i)->print());
       }
 
     }
@@ -757,10 +607,36 @@ barr32:
 
   void Nucleus::fillEventInfo(EventInfo *eventInfo) {
     eventInfo->nParticles = 0;
+    G4bool isNucleonAbsorption = false;
+
+    G4bool isPionAbsorption = false;
+    // It is possible to have pion absorption event only if the
+    // projectile is pion.
+    if(eventInfo->projectileType == PiPlus ||
+       eventInfo->projectileType == PiMinus ||
+       eventInfo->projectileType == PiZero) {
+      isPionAbsorption = true;
+    }
 
     // Outgoing particles
     ParticleList outgoingParticles = getStore()->getOutgoingParticles();
+
+    // Check if we have a nucleon absorption event: nucleon projectile
+    // and no ejected particles.
+    if(outgoingParticles.size() == 0 &&
+       (eventInfo->projectileType == Proton ||
+	eventInfo->projectileType == Neutron)) {
+      isNucleonAbsorption = true;
+    }
+
     for( ParticleIter i = outgoingParticles.begin(); i != outgoingParticles.end(); ++i ) {
+      // We have a pion absorption event only if the projectile is
+      // pion and there are no ejected pions.
+      if(isPionAbsorption) {
+	if((*i)->isPion()) {
+	  isPionAbsorption = false;
+	}
+      }
       eventInfo->A[eventInfo->nParticles] = (*i)->getA();
       eventInfo->Z[eventInfo->nParticles] = (*i)->getZ();
       eventInfo->emissionTime[eventInfo->nParticles] = (*i)->getEmissionTime();
@@ -775,7 +651,8 @@ barr32:
       //      std::strcpy(eventInfo->history[eventInfo->nParticles],"");
       eventInfo->nParticles++;
     }
-
+    eventInfo->nucleonAbsorption = isNucleonAbsorption;
+    eventInfo->pionAbsorption = isPionAbsorption;
     eventInfo->nCascadeParticles = eventInfo->nParticles;
 
     // Remnant characteristics
@@ -788,9 +665,9 @@ barr32:
 	WARN("Negative excitation energy! EStarRem = " << eventInfo->EStarRem[0] << std::endl);
       }
       if(eventInfo->ARem[0]%2==0) { // even-A nucleus
-	eventInfo->JRem[0] = (G4int) (getSpin().mag()/hc + 0.5);
+	eventInfo->JRem[0] = (G4int) (getSpin().mag()/PhysicalConstants::hc + 0.5);
       } else { // odd-A nucleus
-	eventInfo->JRem[0] = ((G4int) (getSpin().mag()/hc)) + 0.5;
+	eventInfo->JRem[0] = ((G4int) (getSpin().mag()/PhysicalConstants::hc)) + 0.5;
       }
       eventInfo->EKinRem[0] = getRecoilEnergy();
       ThreeVector mom = getRecoilMomentum();
@@ -813,6 +690,49 @@ barr32:
     eventInfo->nReflectionAvatars = getStore()->getBook()->getAvatars(SurfaceAvatarType);
     eventInfo->nCollisionAvatars = getStore()->getBook()->getAvatars(CollisionAvatarType);
     eventInfo->nDecayAvatars = getStore()->getBook()->getAvatars(DecayAvatarType);
+  }
+
+  Nucleus::ConservationBalance Nucleus::getConservationBalance(const EventInfo &theEventInfo) const {
+    ConservationBalance theBalance;
+    // Initialise balance variables with the incoming values
+    theBalance.Z = theEventInfo.Zp + theEventInfo.Zt;
+    theBalance.A = theEventInfo.Ap + theEventInfo.At;
+
+    G4double projectileMass = 0.0;
+    // FIXME: since we are not using total energies, we must set the projectile
+    // mass to zero if the projectile is a pion.
+    if(theEventInfo.projectileType != PiPlus &&
+       theEventInfo.projectileType != PiZero &&
+       theEventInfo.projectileType != PiMinus)
+      projectileMass = ParticleTable::getMass(theEventInfo.projectileType);
+
+    theBalance.energy = getInitialEnergy() - ParticleTable::getMass(theEventInfo.At, theEventInfo.Zt) - projectileMass;
+    theBalance.momentum = getIncomingMomentum();
+
+    // Process outgoing particles
+    ParticleList outgoingParticles = theStore->getOutgoingParticles();
+    for( ParticleIter i = outgoingParticles.begin(); i != outgoingParticles.end(); ++i ) {
+      theBalance.Z -= (*i)->getZ();
+      theBalance.A -= (*i)->getA();
+      if((*i)->isPion()) // Ugly: we should calculate everything using total energies! (FIXME)
+        theBalance.energy -= (*i)->getEnergy();
+      else
+        theBalance.energy -= (*i)->getKineticEnergy();
+      theBalance.momentum -= (*i)->getMomentum();
+    }
+
+    theBalance.energy -= computeSeparationEnergyBalance();
+
+    // Remnant contribution, if present
+    if(hasRemnant()) {
+      theBalance.Z -= getZ();
+      theBalance.A -= getA();
+      theBalance.energy -= //ParticleTable::getMass(getA(),getZ()) +
+        getExcitationEnergy() + getRecoilEnergy();
+      theBalance.momentum -= getRecoilMomentum();
+    }
+
+    return theBalance;
   }
 
 }

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -45,10 +45,23 @@
 namespace G4INCL {
   class Particle;
 
-  const G4double hc = 197.328;
-  //  const G4double Pf = 1.36828*hc;
-  const G4double Pf = 1.37*hc;
-  const G4double PfSquared = Pf*Pf;
+  namespace PhysicalConstants {
+    /// \brief \f$\hbar c\f$ [MeV*fm]
+    const G4double hc = 197.328;
+
+    /// \brief Fermi momentum [MeV/c]
+    const G4double Pf = 1.37*hc;
+    //  const G4double Pf = 1.36828*hc;
+
+    /// \brief Fermi momentum squared [(MeV/c)^2]
+    const G4double PfSquared = Pf*Pf;
+
+    /** \brief Coulomb conversion factor [MeV*fm]
+     *
+     * \f[ e^2/(4 pi epsilon_0) \f]
+     */
+    const G4double eSquared = 1.439964;
+  }
 
   namespace Math {
     const G4double pi = 3.14159265358979323846264338328;

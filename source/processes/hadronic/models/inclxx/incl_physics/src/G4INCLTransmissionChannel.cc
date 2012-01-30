@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -46,6 +46,23 @@ namespace G4INCL {
 
   TransmissionChannel::~TransmissionChannel() {}
 
+  void TransmissionChannel::particleLeaves() {
+
+    // TODO: this is the place to add refraction
+
+    // Subtract the nuclear potential from the kinetic energy when leaving the
+    // nucleus
+    const G4double v = theParticle->getPotentialEnergy();
+
+    // Scaling factor for the particle momentum
+    const G4double gpsg = std::sqrt((std::pow(theParticle->getEnergy() - v, 2)
+          - theParticle->getMass() * theParticle->getMass())
+        / theParticle->getMomentum().mag2());
+    theParticle->setMomentum(theParticle->getMomentum() * gpsg);
+    theParticle->setEnergy(theParticle->getEnergy() - v);
+    theParticle->setPotentialEnergy(0.);
+  }
+
   FinalState* TransmissionChannel::getFinalState() {
     FinalState *fs = new FinalState;
     G4double initialEnergy = 0.0;
@@ -58,7 +75,7 @@ namespace G4INCL {
       initialEnergy = theParticle->getEnergy() - theParticle->getPotentialEnergy();
     }
     fs->setTotalEnergyBeforeInteraction(initialEnergy);
-    theNucleus->particleLeaves(theParticle);
+    particleLeaves();
     fs->addOutgoingParticle(theParticle); // We write the particle down as outgoing
     return fs;
   }

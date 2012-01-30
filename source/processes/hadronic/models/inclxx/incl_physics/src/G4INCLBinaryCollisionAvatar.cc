@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -58,7 +58,7 @@
 #include "G4INCLLogger.hh"
 #include <string>
 #include <sstream>
-//#include <cassert>
+// #include <cassert>
 
 namespace G4INCL {
 
@@ -128,11 +128,11 @@ namespace G4INCL {
       }
 
       if(isElastic) { // Elastic NN channel
-        DEBUG("NN G4interaction: elastic channel chosen" << std::endl);
+        DEBUG("NN interaction: elastic channel chosen" << std::endl);
         return new ElasticChannel(theNucleus, particle1, particle2);
       } else { // Delta production
         // Inelastic NN channel
-        DEBUG("NN G4interaction: inelastic channel chosen" << std::endl);
+        DEBUG("NN interaction: inelastic channel chosen" << std::endl);
         return new DeltaProductionChannel(particle1, particle2, theNucleus);
       }
     } else if((particle1->isNucleon() && particle2->isDelta()) ||
@@ -149,14 +149,14 @@ namespace G4INCL {
       }
 
       if(isElastic) { // Elastic N Delta channel
-        DEBUG("NDelta G4interaction: elastic channel chosen" << std::endl);
+        DEBUG("NDelta interaction: elastic channel chosen" << std::endl);
         return new ElasticChannel(theNucleus, particle1, particle2);
       } else { // Recombination
-        DEBUG("NDelta G4interaction: recombination channel chosen" << std::endl);
+        DEBUG("NDelta interaction: recombination channel chosen" << std::endl);
         return new RecombinationChannel(theNucleus, particle1, particle2);
       }
     } else if(particle1->isDelta() && particle2->isDelta()) {
-        DEBUG("DeltaDelta G4interaction: elastic channel chosen" << std::endl);
+        DEBUG("DeltaDelta interaction: elastic channel chosen" << std::endl);
         return new ElasticChannel(theNucleus, particle1, particle2);
     } else if((particle1->isNucleon() && particle2->isPion()) ||
 	      (particle1->isPion() && particle2->isNucleon())) {
@@ -164,9 +164,9 @@ namespace G4INCL {
     } else {
       DEBUG("BinaryCollisionAvatar can only handle nucleons (for the moment)."
 	      << std::endl
-	      << particle1->prG4int()
+	      << particle1->print()
 	      << std::endl
-	      << particle2->prG4int()
+	      << particle2->print()
 	      << std::endl);
       InteractionAvatar::restoreParticles();
       return NULL;

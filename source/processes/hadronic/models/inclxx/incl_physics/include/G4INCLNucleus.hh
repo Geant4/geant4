@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -87,11 +87,6 @@ namespace G4INCL {
         theNnInitial += Math::heaviside(-ParticleTable::getIsospin(p->getType()));
       }
     };
-
-    /**
-     * Calculate the transmission probability for particle p
-     */
-    G4double getTransmissionProbability(Particle const * const p);
 
     /**
      * Apply reaction final state information to the nucleus.
@@ -251,7 +246,7 @@ namespace G4INCL {
     /**
      * Mark a particle as a participant.
      *
-     * @param p poG4inter to a particle
+     * @param p pointer to a particle
      */
     void participate(G4INCL::Particle *p);
 
@@ -271,32 +266,12 @@ namespace G4INCL {
       return false;
     }
 
-    /** \brief Modify particle that enters the nucleus.
-     *
-     * Modify the particle momentum and/or position when the particle enters
-     * the nucleus.
-     *
-     * \param particle poG4inter to entering particle
-     * \return poG4inter to modified particle
-     */
-    Particle *particleEnters(Particle *particle);
-
-    /** \brief Modify particle that leaves the nucleus.
-     *
-     * Modify the particle momentum and/or position when the particle leaves
-     * the nucleus.
-     *
-     * \param particle poG4inter to leaving particle
-     * \return poG4inter to modified particle
-     */
-    Particle *particleLeaves(Particle *particle);
-
     /** \brief Get the maximum allowed radius for a given particle.
      * 
      * Calls the NuclearDensity::getMaxRFromP() method for nucleons and deltas,
      * and the NuclearDensity::getTrasmissionRadius() method for pions.
      *
-     * \param particle poG4inter to a particle
+     * \param particle pointer to a particle
      * \return surface radius
      */
     G4double getSurfaceRadius(Particle const * const particle) const {
@@ -311,9 +286,9 @@ namespace G4INCL {
     }
 
     /**
-     * PrG4int the nucleus info
+     * Print the nucleus info
      */
-    std::string prG4int();
+    std::string print();
 
     std::string dump();
 
@@ -345,6 +320,23 @@ namespace G4INCL {
      */
     //    void fillEventInfo(Results::EventInfo *eventInfo);
     void fillEventInfo(EventInfo *eventInfo);
+
+    /// \brief Get the transmission barrier
+    G4double getTransmissionBarrier(Particle const * const p) {
+      const G4double theTransmissionRadius = theDensity->getTransmissionRadius(p);
+      const G4double theParticleZ = p->getZ();
+      return PhysicalConstants::eSquared*(theZ-theParticleZ)*theParticleZ/theTransmissionRadius;
+    }
+
+    /// \brief Struct for conservation laws
+    struct ConservationBalance {
+      ThreeVector momentum;
+      G4double energy;
+      G4int Z, A;
+    };
+
+    /// \brief Compute charge, mass, energy and momentum balance
+    ConservationBalance getConservationBalance(EventInfo const &theEventInfo) const;
 
   private:
     /** \brief Compute the recoil kinematics for a 1-nucleon remnant.

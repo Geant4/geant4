@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -64,19 +64,19 @@ void TerminationSignalHandler(G4int sig)
       message = "Integer overflow.";
       break;
     case FPE_FLTDIV:
-      message = "Floating poG4int divide by zero.";
+      message = "Floating point divide by zero.";
       break;
     case FPE_FLTOVF:
-      message = "Floating poG4int overflow.";
+      message = "Floating point overflow.";
       break;
     case FPE_FLTUND:
-      message = "Floating poG4int underflow.";
+      message = "Floating point underflow.";
       break;
     case FPE_FLTRES:
-      message = "Floating poG4int inexact result.";
+      message = "Floating point inexact result.";
       break;
     case FPE_FLTINV:
-      message = "Floating poG4int invalid operation.";
+      message = "Floating point invalid operation.";
       break;
     case FPE_FLTSUB:
       message = "Subscript out of range.";

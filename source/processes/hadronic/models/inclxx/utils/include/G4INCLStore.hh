@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -79,9 +79,14 @@ namespace G4INCL {
      * Particle objects don't know anything about avatars so this
      * method will only do two things:
      * 1. add the particle to the particle map ParticleID -> Particle*
-     * 2. add an empty entry for this particle G4into map AvatarID -> [ParticleID]
+     * 2. add an empty entry for this particle into map AvatarID -> [ParticleID]
      */
     void add(Particle *p);
+
+    /**
+     *
+     */
+    void addParticleEntryAvatar(IAvatar *a);
 
     /**
      * Add one avatar to the store
@@ -140,7 +145,7 @@ namespace G4INCL {
 
     /** \brief Add the particle to the outgoing particle list.
      *
-     * \param p poG4inter to the particle to be added
+     * \param p pointer to the particle to be added
      */
     void addToOutgoing(Particle *p) { outgoing.push_back(p); }
 
@@ -152,7 +157,7 @@ namespace G4INCL {
 
     /** \brief Move a particle from incoming to inside
      *
-     * \param particle poG4inter to a particle
+     * \param particle pointer to a particle
      **/
     void particleHasEntered(Particle * const particle);
 
@@ -184,7 +189,7 @@ namespace G4INCL {
     ParticleList const & getParticles() const { return inside; }
 
     /**
-     * Return the poG4inter to the Book object which keeps track of
+     * Return the pointer to the Book object which keeps track of
      * various counters.
      */
     Book* getBook() {return theBook; };
@@ -273,19 +278,19 @@ namespace G4INCL {
     G4double getLoadedStoppingTime() { return loadedStoppingTime; };
 
     /**
-     * PrG4int the nucleon configuration of the nucleus.
+     * Print the nucleon configuration of the nucleus.
      */
-    std::string prG4intParticleConfiguration();
+    std::string printParticleConfiguration();
 
     /**
-     * PrG4int the nucleon configuration of the nucleus.
+     * Print the nucleon configuration of the nucleus.
      */
     void writeParticles(std::string filename);
 
     /**
-     * PrG4int the list of avatars
+     * Print the list of avatars
      */
-    std::string prG4intAvatars();
+    std::string printAvatars();
 
     G4bool containsCollisions() const;
 
@@ -295,8 +300,8 @@ namespace G4INCL {
    * avatarComparisonPredicate is used by the std::sort or std::min_element
    * functions to compare the avatar objects according to their time.
    *
-   * \param lhs poG4inter to the first avatar
-   * \param rhs poG4inter to the second avatar
+   * \param lhs pointer to the first avatar
+   * \param rhs pointer to the second avatar
    * \return true iff lhs' time is smaller than rhs'.
    */
     static G4bool avatarComparisonPredicate(IAvatar *lhs, IAvatar *rhs) {
@@ -312,7 +317,7 @@ namespace G4INCL {
      * Adapted from  STL's binary_search algorithm, as seen on
      * http://www.cplusplus.com/reference/algorithm/binary_search/.
      *
-     * \param avatar a poG4inter to the searched avatar.
+     * \param avatar a pointer to the searched avatar.
      * \return an iterator to the IAvatarIter, if the avatar is found; otherwise,
      *         IAvatarList.end().
      */
@@ -419,7 +424,7 @@ namespace G4INCL {
     G4double loadedStoppingTime;
 
     /**
-     * PoG4inter to the Config object
+     * Pointer to the Config object
      */
     Config const * const theConfig;
 

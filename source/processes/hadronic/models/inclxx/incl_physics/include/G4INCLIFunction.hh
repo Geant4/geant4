@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -42,7 +42,7 @@
 namespace G4INCL {
 
   /**
-   * 1D function G4interface
+   * 1D function interface
    */
   class IFunction1D {
   public:

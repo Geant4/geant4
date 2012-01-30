@@ -30,14 +30,14 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
 
 /** \file G4INCLINuclearPotential.hh
- * \brief Abstract G4interface to the nuclear potential.
+ * \brief Abstract interface to the nuclear potential.
  *
  * NuclearPotential-like classes should provide access to the value of the
  * potential of a particle in a particular context. For example, an instance of
@@ -70,7 +70,7 @@ namespace G4INCL {
             const G4double r = 1.12*Math::pow13((G4double)theDensity->getA());
 
             const G4double xsi = 1. - 2.*ZOverA;
-            const G4double vc = 1.8*theDensity->getZ()/r; // 1.8 = 1.44*1.25
+            const G4double vc = 1.25*PhysicalConstants::eSquared*theDensity->getZ()/r;
             vPiPlus = vPionDefault + 71.*xsi - vc;
             vPiZero = vPionDefault;
             vPiMinus = vPionDefault - 71.*xsi + vc;
@@ -99,7 +99,7 @@ namespace G4INCL {
 
         /** \brief Return the Fermi energy for a particle.
          *
-         * \param p poG4inter to a Particle
+         * \param p pointer to a Particle
          * \return Fermi energy for that particle type
          **/
         inline G4double getFermiEnergy(const Particle * const p) const { return fermiEnergy.find(p->getType())->second; }
@@ -113,7 +113,7 @@ namespace G4INCL {
 
         /** \brief Return the Fermi momentum for a particle.
          *
-         * \param p poG4inter to a Particle
+         * \param p pointer to a Particle
          * \return Fermi momentum for that particle type
          **/
         inline G4double getFermiMomentum(const Particle * const p) const {
@@ -130,14 +130,14 @@ namespace G4INCL {
          * \return Fermi momentum for that particle type
          **/
         inline G4double getFermiMomentum(const ParticleType t) const {
-          // assert(t!=DeltaPlusPlus && t!=DeltaPlus && t!=DeltaZero && t!=DeltaMinus);
+// assert(t!=DeltaPlusPlus && t!=DeltaPlus && t!=DeltaZero && t!=DeltaMinus);
           return fermiMomentum.find(t)->second;
         }
 
       protected:
         /// \brief Compute the potential energy for the given pion.
         G4double computePionPotentialEnergy(const Particle * const p) const {
-          // assert(p->getType()==PiPlus || p->getType()==PiZero || p->getType()==PiMinus);
+// assert(p->getType()==PiPlus || p->getType()==PiZero || p->getType()==PiMinus);
           if(pionPotential && !p->isOutOfWell()) {
             switch( p->getType() ) {
               case PiPlus:

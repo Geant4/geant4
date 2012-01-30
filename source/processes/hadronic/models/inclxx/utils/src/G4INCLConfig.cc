@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -76,11 +76,10 @@ namespace G4INCL {
      potentialString("isospin-energy"), potentialType(IsospinEnergyPotential),
      pionPotential(true),
      localEnergyBBString("first-collision"), localEnergyBBType(FirstCollisionLocalEnergy),
-     localEnergyPiString("first-collision"), localEnergyPiType(FirstCollisionLocalEnergy),
-     clusterAlgorithmString("G4intercomparison"), clusterAlgorithmType(IntercomparisonClusterAlgorithm),
+     localEnergyPiString("never"), localEnergyPiType(NeverLocalEnergy),
+     clusterAlgorithmString("intercomparison"), clusterAlgorithmType(IntercomparisonClusterAlgorithm),
      clusterMaxMass(8),
-     backToSpectator(true),
-     backToSpectatorThreshold(18.)
+     backToSpectator(true)
   {
     //    std::cout << echo() << std::endl;
   }
@@ -112,8 +111,7 @@ namespace G4INCL {
       boost::program_options::options_description genericOptDesc("Generic options");
       genericOptDesc.add_options()
         ("help,h", "produce this help message")
-        ("version", "prG4int version string and exit")
-        ("verbosity,v", boost::program_options::value<G4int>(&verbosity)->default_value(4), verbosityDescription.str().c_str())
+        ("version", "print version string and exit")
         ;
 
       // Run-specific options
@@ -137,6 +135,7 @@ namespace G4INCL {
         ("random-seed-2", boost::program_options::value<G4int>(&randomSeed2)->default_value(777), "second seed for the random-number generator")
         ("ablav3p-cxx-datafile-path", boost::program_options::value<std::string>(&ablav3pCxxDataFilePath)->default_value("./ablaxx/data/G4ABLA3.0/"))
         ("abla07-datafile-path", boost::program_options::value<std::string>(&abla07DataFilePath)->default_value("./smop/tables/"))
+        ("verbosity,v", boost::program_options::value<G4int>(&verbosity)->default_value(4), verbosityDescription.str().c_str())
         ;
 
       // Physics options
@@ -153,12 +152,11 @@ namespace G4INCL {
         ("potential", boost::program_options::value<std::string>(&potentialString)->default_value("isospin-energy"), "nucleon potential:\n  \tisospin-energy (default)\n  \tisospin\n  \tconstant")
         ("pion-potential", boost::program_options::value<G4bool>(&pionPotential)->default_value("true"), "whether to use a pion potential:\n  \ttrue, 1 (default)\n  \tfalse, 0")
         ("local-energy-BB", boost::program_options::value<std::string>(&localEnergyBBString)->default_value("first-collision"), "local energy in baryon-baryon collisions:\n  \talways\n  \tfirst-collision (default)\n  \tnever")
-        ("local-energy-pi", boost::program_options::value<std::string>(&localEnergyPiString)->default_value("first-collision"), "local energy in pi-N collisions and in delta decays:\n  \talways\n  \tfirst-collision (default)\n  \tnever")
+        ("local-energy-pi", boost::program_options::value<std::string>(&localEnergyPiString)->default_value("never"), "local energy in pi-N collisions and in delta decays:\n  \talways\n  \tfirst-collision\n  \tnever (default)")
         ("de-excitation", boost::program_options::value<std::string>(&deExcitationString)->default_value("none"), "which de-excitation model to use:\n  \tnone (default)\n  \tABLAv3p\n  \tABLA07")
-        ("cluster-algorithm", boost::program_options::value<std::string>(&clusterAlgorithmString)->default_value("G4intercomparison"), "clustering algorithm for production of composites:\n  \tG4intercomparison (default)\n  \tnone")
+        ("cluster-algorithm", boost::program_options::value<std::string>(&clusterAlgorithmString)->default_value("intercomparison"), "clustering algorithm for production of composites:\n  \tintercomparison (default)\n  \tnone")
         ("cluster-max-mass", boost::program_options::value<G4int>(&clusterMaxMass)->default_value(8), "maximum mass of produced composites:\n  \tminimum 2\n  \tmaximum 12")
         ("back-to-spectator", boost::program_options::value<G4bool>(&backToSpectator)->default_value("true"), "whether to use back-to-spectator:\n  \ttrue, 1 (default)\n  \tfalse, 0")
-        ("back-to-spectator-threshold", boost::program_options::value<G4float>(&backToSpectatorThreshold)->default_value(18.), "threshold for back-to-spectator, in MeV, measured from the Fermi energy")
         ;
 
       // Select options allowed on the command line
@@ -174,7 +172,7 @@ namespace G4INCL {
       visibleOptions.add(genericOptDesc).add(runOptDesc).add(physicsOptDesc);
 
       // Declare input-file as a positional option (if we just provide a file
-      // name on the command line, it should be G4interpreted as an input-file
+      // name on the command line, it should be interpreted as an input-file
       // option).
       boost::program_options::positional_options_description p;
       p.add("input-file", 1);
@@ -232,7 +230,7 @@ namespace G4INCL {
        * Process the options
        * *******************/
 
-      // -h/--help: prG4int the help message and exit successfully
+      // -h/--help: print the help message and exit successfully
       if(variablesMap.count("help")) {
         std::cout << "Usage: INCLCascade [options] <input_file>" << std::endl;
         std::cout << std::endl << "Options marked with a * are compulsory, i.e. they must be provided either on\nthe command line or in the input file." << std::endl;
@@ -240,7 +238,7 @@ namespace G4INCL {
         std::exit(EXIT_SUCCESS);
       }
 
-      // --version: prG4int the version string and exit successfully
+      // --version: print the version string and exit successfully
       if(variablesMap.count("version")) {
         std::cout <<"INCL++ version " << getVersionID() << std::endl;
         std::exit(EXIT_SUCCESS);
@@ -366,8 +364,8 @@ namespace G4INCL {
         else {
           std::cerr << "Unrecognized local-energy-pi type. Must be one of:" << std::endl
             << "  always" << std::endl
-            << "  first-collision (default)" << std::endl
-            << "  never" << std::endl;
+            << "  first-collision" << std::endl
+            << "  never (default)" << std::endl;
           std::cerr << suggestHelpMsg;
           std::exit(EXIT_FAILURE);
         }
@@ -406,12 +404,12 @@ namespace G4INCL {
             clusterAlgorithmNorm.begin(), ::tolower);
         if(clusterAlgorithmNorm=="none")
           clusterAlgorithmType = NoClusterAlgorithm;
-        else if(clusterAlgorithmNorm=="G4intercomparison")
+        else if(clusterAlgorithmNorm=="intercomparison")
           clusterAlgorithmType = IntercomparisonClusterAlgorithm;
         else {
           std::cerr << "Unrecognized cluster algorithm. "
             << "Must be one of:" << std::endl
-            << "  G4intercomparison (default)" << std::endl
+            << "  intercomparison (default)" << std::endl
             << "  none" << std::endl;
           std::cerr << suggestHelpMsg;
           std::exit(EXIT_FAILURE);
@@ -467,10 +465,10 @@ namespace G4INCL {
       potentialString("isospin-energy"), potentialType(IsospinEnergyPotential),
       pionPotential(true),
       localEnergyBBString("first-collision"), localEnergyBBType(FirstCollisionLocalEnergy),
-      localEnergyPiString("first-collision"), localEnergyPiType(FirstCollisionLocalEnergy),
-      clusterAlgorithmString("G4intercomparison"), clusterAlgorithmType(IntercomparisonClusterAlgorithm),
+      localEnergyPiString("never"), localEnergyPiType(NeverLocalEnergy),
+      clusterAlgorithmString("intercomparison"), clusterAlgorithmType(IntercomparisonClusterAlgorithm),
       clusterMaxMass(8),
-      backToSpectator(true), backToSpectatorThreshold(18.)
+      backToSpectator(true)
     {}
 #endif
 
@@ -499,7 +497,7 @@ namespace G4INCL {
       << "# Run options" << std::endl
       << "title = " << title << "\t# run title" << std::endl
       << "output = " << outputFileRoot << "\t# root for generating output file names. Suffixes (.root, .out, etc.) will be appended to this root. Defaults to the input file name" << std::endl
-      << "logfile = " << logFileName << "\t# log file name. Defaults to <output_root>.log. Use `-' if you want to redirect logging to stdout" << std::endl
+      << "logfile = " << logFileName << "\t# log file name. Defaults to `<output_root>.log'. Use `-' if you want to redirect logging to stdout" << std::endl
       << "number-shots = " << nShots << "\t# * number of shots" << std::endl
       << "ablav3p-cxx-datafile-path = " << ablav3pCxxDataFilePath << std::endl
       << "abla07-datafile-path = " << abla07DataFilePath << std::endl
@@ -515,12 +513,11 @@ namespace G4INCL {
       << "potential = " << potentialString << "\t# nucleon potential. Must be one of: isospin-energy (default), isospin, constant" << std::endl
       << "pion-potential = " << pionPotential << "\t# whether to use a pion potential" << std::endl
       << "local-energy-BB = " << localEnergyBBString << "\t# local energy in baryon-baryon collisions. Must be one of: always, first-collision (default), never" << std::endl
-      << "local-energy-pi = " << localEnergyPiString << "\t# local energy in pi-N collisions and in delta decays. Must be one of: always, first-collision (default), never" << std::endl
+      << "local-energy-pi = " << localEnergyPiString << "\t# local energy in pi-N collisions and in delta decays. Must be one of: always, first-collision, never (default)" << std::endl
       << "de-excitation = " << deExcitationString << "\t # which de-excitation model to use. Must be one of: none (default), ABLAv3p, ABLA07" << std::endl
-      << "cluster-algorithm = " << clusterAlgorithmString << "\t# clustering algorithm for production of composites. Must be one of: G4intercomparison (default), none" << std::endl
+      << "cluster-algorithm = " << clusterAlgorithmString << "\t# clustering algorithm for production of composites. Must be one of: intercomparison (default), none" << std::endl
       << "cluster-max-mass = " << clusterMaxMass << "\t# maximum mass of produced composites. Must be between 2 and 12 (included)" << std::endl
       << "back-to-spectator = " << backToSpectator << "\t# whether to use back-to-spectator" << std::endl
-      << "back-to-spectator-threshold = " << backToSpectatorThreshold << "\t# threshold for back-to-spectator, in MeV, measured from the Fermi energy" << std::endl
       << std::endl << "# Technical options " << std::endl
       << "verbosity = " << verbosity << "\t# from 0 (quiet) to 10 (most verbose)" << std::endl
       << "verbose-event = " << verboseEvent << "\t# request verbose logging for the specified event only" << std::endl

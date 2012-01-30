@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -57,7 +57,7 @@ namespace G4INCL {
    * Surface avatar
    *
    * The reflection avatar is created when a particle reaches the boundary of the nucleus.
-   * At this poG4int it can either be reflected from the boundary or exit the nucleus.
+   * At this point it can either be reflected from the boundary or exit the nucleus.
    */
   class SurfaceAvatar: public G4INCL::IAvatar {
   public:
@@ -77,6 +77,9 @@ namespace G4INCL {
     }
 
     std::string dump() const;
+
+    /// \brief Calculate the transmission probability for the particle
+    G4double getTransmissionProbability(Particle const * const particle) const;
 
   private:
     G4INCL::Particle *theParticle;

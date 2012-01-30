@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -110,7 +110,7 @@ namespace G4INCL {
     const G4double p2 = theMomentum.mag2();
     G4double newp2 = theEnergy*theEnergy - theMass*theMass;
     if( newp2<0.0 ) {
-      ERROR("Particle has E^2 < m^2." << std::endl << prG4int());
+      ERROR("Particle has E^2 < m^2." << std::endl << print());
       newp2 = 0.0;
       theEnergy = theMass;
     }

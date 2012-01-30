@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -42,7 +42,7 @@
 #include "G4INCLPauliBlocking.hh"
 #include <sstream>
 #include <string>
-//#include <cassert>
+// #include <cassert>
 
 namespace G4INCL {
 
@@ -74,7 +74,7 @@ namespace G4INCL {
 
   FinalState *DecayAvatar::postInteraction(FinalState *fs) {
     // Make sure we have at least two particles in the final state
-    // assert(fs->getModifiedParticles().size() + fs->getCreatedParticles().size() - fs->getDestroyedParticles().size() >= 2);
+// assert(fs->getModifiedParticles().size() + fs->getCreatedParticles().size() - fs->getDestroyedParticles().size() >= 2);
 
     if(!forced) { // Normal decay
 

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -89,9 +89,9 @@ namespace G4INCL {
       const GlobalInfo &getGlobalInfo() const { return theGlobalInfo; }
 
       /** \brief Final calculations before returning the global information */
-    G4bool processEvent() { return false; }
+      G4bool processEvent() { return false; }
 
-    std::string configToString() { return theConfig->echo(); }
+      std::string configToString() { return theConfig->echo(); }
 
     private:
       IPropagationModel *propagationModel;

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -212,12 +212,7 @@ namespace G4INCL {
     const G4double cosEscapeAngle = pos.dot(mom) / std::sqrt(pos.mag2()*mom.mag2());
     if(cosEscapeAngle < limitCosEscapeAngle)
       return false;
-
-    // Check if the cluster can penetrate the Coulomb barrier
-    const G4double transmissionProbability = theNucleus->getTransmissionProbability(c);
-    const G4double x = Random::shoot();
-
-    return (x <= transmissionProbability);
+    return true;
   }
 
 }

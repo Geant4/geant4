@@ -30,14 +30,14 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
 
 /** \file G4INCLICoulomb.hh
- * \brief Abstract G4interface for Coulomb distortion.
+ * \brief Abstract interface for Coulomb distortion.
  *
  * Created on: 14 February 2011
  *     Author: Davide Mancusi
@@ -55,18 +55,12 @@ namespace G4INCL {
     ICoulomb() {}
     virtual ~ICoulomb() {}
 
-    /** \brief Coulomb conversion factor, in MeV*fm.
-     *
-     * \f[ e^2/(4 pi epsilon_0) \f]
-     */
-    static const G4double eSquared;
-
     /** \brief Modify the momentum of an incoming particle and position it on
      *         the surface of the nucleus.
      *
      * This method places Particle p on the surface of Nucleus n and modifies
      * the direction of its momentum to be tangent to the Coulomb trajectory in
-     * that poG4int.
+     * that point.
      *
      * The input particle has to be prepared with its asymptotic momentum. Its
      * position is used only for the purpose of computing the asymptotic impact

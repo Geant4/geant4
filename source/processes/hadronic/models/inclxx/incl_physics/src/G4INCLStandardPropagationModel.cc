@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -55,6 +55,7 @@
 #include "G4INCLKinematicsUtils.hh"
 #include "G4INCLCoulombDistortion.hh"
 #include "G4INCLDeltaDecayChannel.hh"
+#include "G4INCLParticleEntryAvatar.hh"
 
 namespace G4INCL {
 
@@ -90,7 +91,7 @@ namespace G4INCL {
       maximumTime = temfin;
 
       // If Coulomb is activated, do not process events with impact
-      // parameter larger than the maximum impact parameter, taking G4into
+      // parameter larger than the maximum impact parameter, taking into
       // account Coulomb distortion.
       if(impactParameter>CoulombDistortion::maxImpactParameter(p,theNucleus))
         return false;
@@ -106,10 +107,23 @@ namespace G4INCL {
       theNucleus->setInitialEnergy(p->getEnergy() + ParticleTable::getMass(theNucleus->getA(),theNucleus->getZ()));
 
       CoulombDistortion::bringToSurface(p, theNucleus);
+      //      theNucleus->getStore()->addIncomingParticle(p); // puts the particle in the waiting list
 
-      theNucleus->getStore()->addIncomingParticle(p); // puts the particle in the waiting list
-      theNucleus->particleEnters(p); // removes the particle from the waiting list and changes its kinetic energy
-      theNucleus->insertParticipant(p);
+      if(firstAvatar) { // When we propagate particles for the first time we create the full list of avatars.
+	generateAllAvatars();
+/*        if(!theNucleus->getStore()->containsCollisions()) {
+          theNucleus->forceTransparent();
+          return NULL;
+        }*/
+        firstAvatar = false;
+      }
+
+      // In the caswe of the single projectile particle we have only
+      // one ParticleEntryAvatar at time t = 0.0 (i.e. when we "start
+      // the clock" for INCL avatar processing).
+      IAvatar* theEntryAvatar = new ParticleEntryAvatar(0.0, theNucleus, p);
+      theNucleus->getStore()->addParticleEntryAvatar(theEntryAvatar);
+
       return true;
     }
 
@@ -171,7 +185,7 @@ namespace G4INCL {
       if(t>maximumTime || t<currentTime) return NULL;
 
       // Local energy. Jump through some hoops to calculate the cross section
-      // at the collision poG4int, and clean up after yourself afterwards.
+      // at the collision point, and clean up after yourself afterwards.
       ThreeVector mom1, mom2, pos1, pos2;
       G4double energy1 = 0.0, energy2 = 0.0;
       G4bool hasLocalEnergy;
@@ -257,7 +271,7 @@ namespace G4INCL {
       const G4double T5 = T3*T3 + (r*r-T4)/T2;
       if(T5 < 0.0) {
         ERROR("Imaginary reflection time! Delta = " << T5 << " for particle: " << std::endl
-          << aParticle->prG4int());
+          << aParticle->print());
         time = 10000.0;
       } else {
         time = currentTime + (-T3 + std::sqrt(T5)) * aParticle->getEnergy();
@@ -384,6 +398,9 @@ namespace G4INCL {
     G4INCL::IAvatar* StandardPropagationModel::propagate()
     {
       if(firstAvatar) { // When we propagate particles for the first time we create the full list of avatars.
+	WARN("Actually the avatar list should have been populated already in the"
+	     << "shootProjectile() method. I hope you're"
+	     << "running only a unit test...");
 	generateAllAvatars();
 /*        if(!theNucleus->getStore()->containsCollisions()) {
           theNucleus->forceTransparent();
@@ -403,7 +420,7 @@ namespace G4INCL {
           generateAllAvatars(true);
         }
 #else
-        // Deltas are created by transforming nucleon G4into a delta for
+        // Deltas are created by transforming nucleon into a delta for
         // efficiency reasons
         Particle * const blockedDelta = theNucleus->getBlockedDelta();
         ParticleList updatedParticles = theNucleus->getUpdatedParticles();
@@ -422,12 +439,12 @@ namespace G4INCL {
       if(theAvatar == 0) return 0; // Avatar list is empty
       //      theAvatar->dispose();
 
-      theNucleus->getStore()->timeStep(theAvatar->getTime() - currentTime);
-
-      if(theAvatar->getTime() <= currentTime) {
+      if(theAvatar->getTime() < currentTime) {
         ERROR("Avatar time = " << theAvatar->getTime() << ", currentTime = " << currentTime << std::endl);
         return 0;
-      } else {
+      } else if(theAvatar->getTime() > currentTime) {
+        theNucleus->getStore()->timeStep(theAvatar->getTime() - currentTime);
+
         currentTime = theAvatar->getTime();
         theNucleus->getStore()->getBook()->setCurrentTime(currentTime);
       }

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -40,7 +40,7 @@
 #include "G4INCLKinematicsUtils.hh"
 #include "G4INCLParticleTable.hh"
 #include "G4INCLLogger.hh"
-//#include <cassert>
+// #include <cassert>
 
 namespace G4INCL {
 
@@ -67,7 +67,7 @@ namespace G4INCL {
     // NEW FIT BY J.VANDERMEULEN  + FIT BY Th AOUST ABOVE (3,3) RES
     //                              CONST AT LOW AND VERY HIGH ENERGY
     //      COMMON/BL8/RATHR,RAMASS                                           REL21800
-    //      G4integer f17
+    //      integer f17
     // RATHR and RAMASS are always 0.0!!!
 
     G4double x = KinematicsUtils::totalEnergyInCM(particle1, particle2);
@@ -187,7 +187,7 @@ namespace G4INCL {
   }
 
   G4double CrossSections::deltaProduction(Particle const * const p1, Particle const * const p2) {
-    // assert(p1->isNucleon() && p2->isNucleon());
+// assert(p1->isNucleon() && p2->isNucleon());
     const G4double sqrts = KinematicsUtils::totalEnergyInCM(p1,p2);
     if(sqrts < ParticleTable::effectivePionMass + 2*ParticleTable::effectiveNucleonMass + 50.) { // approximately yields INCL4.6's hard-coded threshold in collis, 2065 MeV
       return 0.0;
@@ -200,7 +200,7 @@ namespace G4INCL {
 
   G4double CrossSections::deltaProduction(const G4int isospin, const G4double pLab) {
     G4double xs = 0.0;
-    // assert(isospin==-2 || isospin==0 || isospin==2);
+// assert(isospin==-2 || isospin==0 || isospin==2);
 
     const G4double momentumGeV = 0.001 * pLab;
     if(pLab < 800.0) {
@@ -272,7 +272,7 @@ namespace G4INCL {
       return CrossSections::elasticProtonNeutron(momentum);
     } else {
       ERROR("G4INCL::CrossSections::elasticNN: Bad input!" << std::endl
-        << p1->prG4int() << p2->prG4int() << std::endl);
+        << p1->print() << p2->print() << std::endl);
     }
     return 0.0;
   }
@@ -359,7 +359,7 @@ namespace G4INCL {
 	return (3.68 + 0.76*x) * 1.0e-6;
       }
     }
-    return 0.0; // Should never reach this poG4int
+    return 0.0; // Should never reach this point
   }
 }
 

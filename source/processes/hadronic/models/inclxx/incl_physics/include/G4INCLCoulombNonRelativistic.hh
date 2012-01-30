@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -49,6 +49,7 @@
 #include "G4INCLParticle.hh"
 #include "G4INCLNucleus.hh"
 #include "G4INCLICoulomb.hh"
+#include "G4INCLGlobals.hh"
 
 namespace G4INCL {
 
@@ -84,7 +85,7 @@ namespace G4INCL {
   private:
     /** \brief Return the "Coulomb factor". */
     G4double coulombFactor(Particle const * const p, Nucleus const * const n) const {
-      return eSquared * p->getZ() * n->getZ() / p->getKineticEnergy();
+      return PhysicalConstants::eSquared * p->getZ() * n->getZ() / p->getKineticEnergy();
     }
   };
 }

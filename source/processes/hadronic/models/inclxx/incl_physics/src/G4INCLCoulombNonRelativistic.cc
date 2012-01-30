@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0_rc3
+// INCL++ revision: v5.1_rc1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -107,7 +107,7 @@ namespace G4INCL {
 
       const G4double tcos=1.-0.000001;
 
-      const G4double et1 = eSquared * nucleus->getZ();
+      const G4double et1 = PhysicalConstants::eSquared * nucleus->getZ();
       const G4double transmissionRadius =
         nucleus->getDensity()->getTransmissionRadius(*particle);
 
