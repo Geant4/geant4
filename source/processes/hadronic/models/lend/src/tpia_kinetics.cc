@@ -79,7 +79,7 @@ int tpia_kinetics_COMKineticEnergy2LabEnergyAndMomentum( statusMessageReporting 
 /*
 *   beta            the velocity/speedOflight of the com frame relative to the lab frame.
 *   e_kinetic_com   Total kinetic energy (K1 + K2) in the COM frame.
-*   mu              cos( theta ) in the COM frame.
+*   mu              std::cos( theta ) in the COM frame.
 */
     double x, v_p, p, pp3, pp4, px3, py3, pz3, pz4, pz, p_perp2, E3, E4, gamma, m3cc2 = m3cc * m3cc, m4cc2 = m4cc * m4cc;
 

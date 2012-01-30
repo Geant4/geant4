@@ -114,10 +114,12 @@ char *xDataMisc_getAbsPath( statusMessageReporting *smr, const char *fileName ) 
 *   User must free returned string.
 */
     int n = strlen( fileName ) + 1, nCwd = 0;
-    char *absPath, cwd[4 * 1024] = "", *p, *needle;
+    //char *absPath, cwd[4 * 1024] = "", *p, *needle;
+    char *absPath, cwd[4 * 1024 + 1] = "", *p, *needle;
 
     if( fileName[0] != '/' ) {
-        if( getcwd( cwd, sizeof( cwd ) + 1 ) == NULL ) {
+        //if( getcwd( cwd, sizeof( cwd ) + 1 ) == NULL ) {
+        if( getcwd( cwd, sizeof( cwd ) ) == NULL ) {
             smr_setMessageError( smr, NULL, __FILE__, __LINE__, -1, "hardwired cwd too small" );
             return( NULL );
         }

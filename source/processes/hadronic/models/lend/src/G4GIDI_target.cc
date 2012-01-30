@@ -61,7 +61,6 @@
 
 #include <iostream>
 #include <stdlib.h>
-#include <math.h>
 
 #include "G4GIDI_target.hh"
 #include "G4GIDI_mass.hh"
