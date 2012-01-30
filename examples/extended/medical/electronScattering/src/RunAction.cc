@@ -101,9 +101,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   // normalize histograms
   //
   G4double fac = 1./(double(TotNbofEvents));
-  histoManager->Scale(1,fac);
-  histoManager->Scale(2,fac);
-  histoManager->Scale(3,fac);
+  histoManager->Normalize(1,fac);
+  histoManager->Normalize(2,fac);
+  histoManager->Normalize(3,fac);
   
   ComputeFluenceError();
   PrintFluence(TotNbofEvents);

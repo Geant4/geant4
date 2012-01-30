@@ -101,18 +101,16 @@ $Id: README,v 1.1 2009-09-19 16:09:43 maire Exp $
 	3	"(charged particles): d(N/cost)/dS at Scoring plane"
 	4	"(charged particles): normalized d(N/cost)/dS at Scoring plane"
 
- The histograms can be viewed using ROOT or PAW. See below the note on AIDA.
+ The histograms can be viewed using ROOT or PAW.
  
  One can control the name and format of the histograms file with the command:
  /testem/histo/setFileName  name  (default nrccBenchmark)
- /testem/histo/setFileType  type  (choice: hbook, root(default), XML)  
+ /testem/histo/setFileType  type  (choice: hbook, root(default), xml)  
    
  It is also possible to print selected histograms on an ascii file:
  /testem/histo/printHisto id
  All selected histos will be written on a file name.ascii (default nrccBenchmark)
- 	
- Note that, by default, histograms are disabled. To activate them, uncomment 
- the flag G4ANALYSIS_USE in GNUmakefile. 	
+
 	
  8- HOW TO START ?
  
@@ -129,16 +127,3 @@ $Id: README,v 1.1 2009-09-19 16:09:43 maire Exp $
 	Idle> control/execute vis.mac
 	Idle> run/beamOn 5
 	....
-
- 9- USING HISTOGRAMS
-	
-  Note that, by default, histograms are disabled. To activate them, uncomment
-  the flag G4ANALYSIS_USE in GNUmakefile.
- 
-  Before compilation of the example it is optimal to clean up old files:
-  	gmake histclean
-  	gmake
-	 		    
-  To use histograms, at least one of the AIDA implementations should be 
-  available. See InstallAida.txt
-  

@@ -30,8 +30,7 @@
 /gun/particle e- 
 /gun/energy 13 MeV
 #
-/testem/histo/setFileName results/Be1.local
-/testem/histo/setFileType root
+/testem/histo/setFileName results/Be1_local
 /testem/histo/setHisto 3 120 0. 240. mm		#d(N/cost)/dS = f(r)
 /testem/histo/setHisto 4 120 0. 240. mm		#normalized d(N/cost)/dS = f(r)
 ###/testem/histo/printHisto 3

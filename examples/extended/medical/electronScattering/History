@@ -15,6 +15,18 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+19-01-12 mma (electronScattering-V09-05-01)        
+- electronScattering.in : correct fileName for histograms
+     
+16-01-12 mma (electronScattering-V09-05-00)        
+- HistoManager.hh and .cc : migrate to new g4tools histogramming system
+  Do not need aida anymore, nor G4ANALYSIS_USE
+- HistoManager : histId and histPt
+- SetHisto() : simplification of Unit handling (HistoManager and HistoMessenger)  
+- HistoMessenger.hh and .cc : suppress fileType command
+- HistoManager and HistoMessenger : coding conventions
+- Update Readme and all macros accordingly
+     
 08-11-11 mma (electronScattering-V09-04-07)
 - modify SteppingVerbose for OutOfWorld
           
