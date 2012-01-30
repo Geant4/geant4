@@ -1,0 +1,106 @@
+
+                    Geant4 Isotope Production Models
+                    --------------------------------
+
+ As of January 2012, the use of the isotope production models had been
+ largely superseded, as most inelastic models automatically place the
+ residual nucleus on the final state stack where it is readily available
+ to users.  Exceptions are the Low Energy Parameterized (LEP) models
+ which do not create residual nuclei.  As a result, the isotope
+ production models are now used only in conjunction with the LEP models,
+ and the infrastructure for isotope production has been moved from the
+ process level (G4HadronicProcess) to the model level
+ (G4InelasticInteraction).
+
+
+ Physics List
+ ------------
+ As before, isotope production can be invoked from the physics list, but
+ with some changes.  To enable isotope production, your physics list must
+ have the following lines:
+
+ for neutrons:
+
+   if (particleName == "neutron") {
+     G4NeutronInelasticProcess* theInelasticProcess =
+                                       new G4NeutronInelasticProcess();
+     G4LENeutronInelastic* theLEInelasticModel = new G4LENeutronInelastic;
+
+     // Turn on isotope production
+     theLEInelasticModel->TurnOnIsotopeProduction();
+     G4NeutronIsotopeProduction* aProductionModel =
+                                         new G4NeutronIsotopeProduction();
+     // Assign a specific model to handle production
+     theLEInelasticModel->RegisterIsotopeProductionModel(aProductionModel);
+
+     theInelasticProcess->RegisterMe(theLEInelasticModel);
+     pmanager->AddDiscreteProcess(theInelasticProcess);
+   }
+
+ The line 
+     theLEInelasticModel->TurnOnIsotopeProduction();
+
+ activates for the neutron inelastic model the generic isotope production
+ based on the incident particle, target nucleus and produced secondaries.
+ It is valid for all incident energies, but does not take into account the
+ detailed production cross sections found, for example, in G4NDL.
+
+ If you have an improved model, for example G4NeutronIsotopeProduction,
+ it can be added in the subsequent lines:
+
+     G4NeutronIsotopeProduction* aProductionModel =
+                                         new G4NeutronIsotopeProduction();
+     theLEInelasticModel->RegisterIsotopeProductionModel(aProductionModel);
+
+ Within its energy range of validity, this model will now override the
+ generic model.  Outside that range, the generic model again takes over.
+ The G4NeutronIsotopeProduction model depends on the G4NDL database so you
+ must set the environment variable G4NEUTRONHPDATA to point to it.
+
+ A similar procedure must be followed for each low energy parameterized
+ model you wish to enable for isotope production, for example
+       G4LENeutronInelastic
+       G4LEProtonInelastic
+       G4LEPionPlusInelastic
+       ...
+       ...
+
+ Currently Geant4 provides only one detailed isotope production model that
+ applies to incident neutrons, as well as a prototype for protons.  Others
+ must be developed by users. 
+
+
+ Stepping Action
+ ---------------
+
+ The user's SteppingAction must also be modified to include the headers
+
+   #include "G4IsoParticleChange.hh"
+   #include "G4InelasticInteraction.hh"
+
+ and to add some output lines to 
+ void MySteppingAction::UserSteppingAction(const G4Step* theStep).
+
+ An example would be:
+
+   G4String procName =
+     theStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName();
+
+   if (procName == "NeutronInelastic" || procName == "ProtonInelastic") {
+     // Look only when neutron or proton initiated the isotope production
+
+     G4IsoParticleChange* isotopeProdInfo =
+             G4InelasticInteraction::GetIsotopeProductionInfo();
+     if (isotopeProdInfo) {
+       // Be sure that an isotope was created
+
+       G4cout << " Production model: " << isotopeProdInfo->GetProducer() << G4endl;
+       G4cout << " target nucleus (A,Z) : "
+              << isotopeProdInfo-> GetMotherNucleus().GetA_asInt() << " , "
+              << isotopeProdInfo-> GetMotherNucleus().GetZ_asInt() << G4endl; 
+       G4cout << " produced isotope: " << isotopeProdInfo-> GetIsotope() << G4endl;
+       G4cout << " production time: " << isotopeProdInfo->GetProductionTime() << G4endl;
+       G4cout << " parent particle: " << isotopeProdInfo->GetParentParticle()->GetParticleName() 
+     }
+   }
+
