@@ -1163,6 +1163,12 @@ G4bool   G4ProductionCutsTable::RetrieveCutsInfo(const G4String& directory,
   G4int numberOfCouples;    
   if (ascii) {
     fIn >> numberOfCouples;
+    if (fIn.fail()) {
+      G4Exception( "G4ProductionCutsTable::RetrieveCutsInfo()",
+		   "ProcCuts103",
+		   JustWarning, "Bad Data Format");
+      return false;
+    }
   } else {
     fIn.read( (char*)(&numberOfCouples), sizeof (G4int));
   }
@@ -1178,6 +1184,12 @@ G4bool   G4ProductionCutsTable::RetrieveCutsInfo(const G4String& directory,
       G4double rcut, ecut;
       if (ascii) {
         fIn >> rcut >> ecut;
+	if (fIn.fail()) {
+	  G4Exception( "G4ProductionCutsTable::RetrieveCutsInfo()",
+		       "ProcCuts103",
+		       JustWarning, "Bad Data Format");
+	  return false;
+	}
         rcut *= mm;
         ecut *= keV;
       } else {
