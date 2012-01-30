@@ -31,7 +31,7 @@
 //
 //
 // Modified:
-// (30 June 1998) by V. Lara:
+// 30 June 1998 by V. Lara:
 //      -Modified the Transform method for use G4ParticleTable and 
 //       therefore G4IonTable. It makes possible to convert all kind 
 //       of fragments (G4Fragment) produced in deexcitation to 
@@ -40,25 +40,28 @@
 //              Evaporation: G4Evaporation
 //              MultiFragmentation: G4StatMF 
 //              Fermi Breakup model: G4FermiBreakUp
-// (24 Jul 2008) by M. A. Cortes Giraldo:
+// 24 Jul 2008 by M. A. Cortes Giraldo:
 //      -Max Z,A for Fermi Break-Up turns to 9,17 by default
 //      -BreakItUp() reorganised and bug in Evaporation loop fixed
 //      -Transform() optimised
 // (September 2008) by J. M. Quesada. External choices have been added for :
 //      -inverse cross section option (default OPTxs=3)
 //      -superimposed Coulomb barrier (if useSICB is set true, by default it is false) 
-// (September 2009) by J. M. Quesada: 
+// September 2009 by J. M. Quesada: 
 //      -according to Igor Pshenichnov, SMM will be applied (just in case) only once.
-// (27 Nov 2009) by V.Ivanchenko: 
+// 27 Nov 2009 by V.Ivanchenko: 
 //      -cleanup the logic, reduce number internal vectors, fixed memory leak.
-// (11 May 2010) by V.Ivanchenko: 
+// 11 May 2010 by V.Ivanchenko: 
 //      -FermiBreakUp activated, used integer Z and A, used BreakUpFragment method for 
 //       final photon deexcitation; used check on adundance of a fragment, decay 
 //       unstable fragments with A <5
-// (22 March 2011) by V.Ivanchenko: general cleanup and addition of a condition: 
+// 22 March 2011 by V.Ivanchenko: general cleanup and addition of a condition: 
 //       products of Fermi Break Up cannot be further deexcited by this model 
-// (30 March 2011) by V.Ivanchenko removed private inline methods, moved Set methods 
+// 30 March 2011 by V.Ivanchenko removed private inline methods, moved Set methods 
 //       to the source
+// 23 January 2012 by V.Ivanchenko general cleanup including destruction of 
+//    objects, propagate G4PhotonEvaporation pointer to G4Evaporation class and 
+//    not delete it here 
 
 #include "G4ExcitationHandler.hh"
 #include "G4LorentzVector.hh"
@@ -83,25 +86,23 @@
 
 G4ExcitationHandler::G4ExcitationHandler():
   maxZForFermiBreakUp(9),maxAForFermiBreakUp(17),minEForMultiFrag(4*GeV),
-  minExcitation(keV),MyOwnEvaporationClass(true),
-  MyOwnPhotonEvaporationClass(true),OPTxs(3),useSICB(false)
+  minExcitation(keV),OPTxs(3),useSICB(false),isEvapLocal(true)
 {                                                                          
   theTableOfIons = G4ParticleTable::GetParticleTable()->GetIonTable();
   
-  theEvaporation = new G4Evaporation;
   theMultiFragmentation = new G4StatMF;
   theFermiModel = new G4FermiBreakUp;
   thePhotonEvaporation = new G4PhotonEvaporation;
+  theEvaporation = new G4Evaporation(thePhotonEvaporation);
   thePool = G4FermiFragmentsPool::Instance();
   SetParameters();
 }
 
 G4ExcitationHandler::~G4ExcitationHandler()
 {
-  if(MyOwnEvaporationClass) { delete theEvaporation; }
+  if(isEvapLocal) { delete theEvaporation; }
   delete theMultiFragmentation;
   delete theFermiModel;
-  if(MyOwnPhotonEvaporationClass) { delete thePhotonEvaporation; }
 }
 
 void G4ExcitationHandler::SetParameters()
@@ -253,7 +254,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
 	  A = (*j)->GetA_asInt();
 	  G4double exEnergy = (*j)->GetExcitationEnergy();
 
-	  if(A <= 1) { theResults.push_back(*j); }                // gamma, p, n
+	  if(A <= 1) { theResults.push_back(*j); }    // gamma, p, n
 
 	  // evaporation is not possible
 	  else if(1 == nsec) { 
@@ -385,40 +386,40 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
   return theReactionProductVector;
 }
 
-void G4ExcitationHandler::SetEvaporation(G4VEvaporation *const  value)
+void G4ExcitationHandler::SetEvaporation(G4VEvaporation* ptr)
 {
-  if(value && value != theEvaporation) {
-    if(MyOwnEvaporationClass) { delete theEvaporation; }
-    theEvaporation = value;
-    MyOwnEvaporationClass = false;
+  if(ptr && ptr != theEvaporation) {
+    delete theEvaporation; 
+    theEvaporation = ptr;
+    thePhotonEvaporation = ptr->GetPhotonEvaporation();
     SetParameters();
+    isEvapLocal = false;
   }
 }
 
 void 
-G4ExcitationHandler::SetMultiFragmentation(G4VMultiFragmentation *const  value)
+G4ExcitationHandler::SetMultiFragmentation(G4VMultiFragmentation* ptr)
 {
-  if(value && value != theMultiFragmentation) {
+  if(ptr && ptr != theMultiFragmentation) {
     delete theMultiFragmentation;
-    theMultiFragmentation = value;
+    theMultiFragmentation = ptr;
   }
 }
 
-void G4ExcitationHandler::SetFermiModel(G4VFermiBreakUp *const  value)
+void G4ExcitationHandler::SetFermiModel(G4VFermiBreakUp* ptr)
 {
-  if(value && value != theFermiModel) {
+  if(ptr && ptr != theFermiModel) {
     delete theFermiModel;
-    theFermiModel = value;
+    theFermiModel = ptr;
   }
 }
 
 void 
-G4ExcitationHandler::SetPhotonEvaporation(G4VEvaporationChannel *const  value)
+G4ExcitationHandler::SetPhotonEvaporation(G4VEvaporationChannel* ptr)
 {
-  if(value && value != thePhotonEvaporation) {
-    if(MyOwnPhotonEvaporationClass) { delete thePhotonEvaporation; }
-    thePhotonEvaporation = value;
-    MyOwnPhotonEvaporationClass = false;
+  if(ptr && ptr != thePhotonEvaporation) {
+    thePhotonEvaporation = ptr;
+    theEvaporation->SetPhotonEvaporation(ptr);
   }
 }
 

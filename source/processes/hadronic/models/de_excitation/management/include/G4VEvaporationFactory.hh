@@ -29,7 +29,10 @@
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
-
+//
+// Modifications:
+// 23 January 2012 by V.Ivanchenko added pointer of G4VPhotonEvaporation to 
+//    the constructor
 
 #ifndef G4VEvaporationFactory_hh
 #define G4VEvaporationFactory_hh 1
@@ -41,7 +44,7 @@ class G4VEvaporationFactory
 {
 public:
 
-  G4VEvaporationFactory();
+  G4VEvaporationFactory(G4VEvaporationChannel* photoEvaporation);
 
   virtual ~G4VEvaporationFactory();
 
@@ -53,6 +56,10 @@ private:
   const G4VEvaporationFactory & operator=(const G4VEvaporationFactory & val);
   G4bool operator==(const G4VEvaporationFactory & val) const;
   G4bool operator!=(const G4VEvaporationFactory & val) const;
+
+protected:
+
+  G4VEvaporationChannel* thePhotonEvaporation;
 
 };
 

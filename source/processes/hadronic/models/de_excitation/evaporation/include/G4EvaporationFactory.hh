@@ -29,6 +29,10 @@
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
+//
+// Modifications:
+// 23 January 2012 by V.Ivanchenko added pointer of G4VPhotonEvaporation to 
+//    the constructor
 
 
 #ifndef G4EvaporationFactory_hh
@@ -42,6 +46,8 @@ class G4EvaporationFactory : public G4VEvaporationFactory
 public:
 
   G4EvaporationFactory();
+
+  G4EvaporationFactory(G4VEvaporationChannel* photoEvaporation);
 
   virtual ~G4EvaporationFactory();
 

@@ -28,6 +28,10 @@
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
+//
+// Modifications:
+//
+// 23 January 2012 V.Ivanchenko added pointer of G4VPhotonEvaporation 
 
 #include "G4EvaporationGEMFactory.hh"
 
@@ -99,9 +103,9 @@
 #include "G4Mg28GEMChannel.hh"
 
 #include "G4CompetitiveFission.hh"
-#include "G4PhotonEvaporation.hh"
 
-G4EvaporationGEMFactory::G4EvaporationGEMFactory()
+G4EvaporationGEMFactory::G4EvaporationGEMFactory(G4VEvaporationChannel* ptr)
+  : G4VEvaporationFactory(ptr)
 {} 
   
 G4EvaporationGEMFactory::~G4EvaporationGEMFactory() 
@@ -113,7 +117,7 @@ std::vector<G4VEvaporationChannel*> * G4EvaporationGEMFactory::GetChannel()
     new std::vector<G4VEvaporationChannel*>;
   theChannel->reserve(68);
 
-  theChannel->push_back( new G4PhotonEvaporation() );  // Photon Channel
+  theChannel->push_back( thePhotonEvaporation );  // Photon Channel
   theChannel->push_back( new G4CompetitiveFission() ); // Fission Channel
 
   theChannel->push_back( new G4NeutronGEMChannel() );  // n

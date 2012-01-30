@@ -31,9 +31,13 @@
 // by J. M. Quesada (July 2009) on base of V. Lara code
 // V.Ivanchenko cleanup
 //
-// new hybrid Default-GEM evaoration model:
+// new hybrid Default-GEM evaporation model:
 //      - default evaporation for n,p,d,t and alpha particles
 //      - GEM evaporation for light nuclei evaporation (2<Z<13,4<A<29) 
+//
+// Modifications:
+// 23 January 2012 by V.Ivanchenko added pointer of G4VPhotonEvaporation to 
+//    the constructor
 
 
 #ifndef G4EvaporationDefaultGEMFactory_h
@@ -45,7 +49,7 @@ class G4EvaporationDefaultGEMFactory : public G4VEvaporationFactory
 {
 public:
 
-  G4EvaporationDefaultGEMFactory();
+  G4EvaporationDefaultGEMFactory(G4VEvaporationChannel* photoEvaporation);
 
   virtual ~G4EvaporationDefaultGEMFactory();
 

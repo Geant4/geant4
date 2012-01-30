@@ -29,10 +29,15 @@
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998) writen from G4Evaporation.cc (May 1998)
 //
+// Modifications:
+//
+// 23 January 2012 V.Ivanchenko added pointer of G4VPhotonEvaporation 
 
 #include "G4VEvaporation.hh"
+#include "G4VEvaporationChannel.hh"
 
-G4VEvaporation::G4VEvaporation():OPTxs(3),useSICB(false)
+G4VEvaporation::G4VEvaporation()
+  :thePhotonEvaporation(0),OPTxs(3),useSICB(false)
 {}
 
 G4VEvaporation::~G4VEvaporation() 
@@ -41,6 +46,13 @@ G4VEvaporation::~G4VEvaporation()
 void G4VEvaporation::Initialise()
 {}
 
+void G4VEvaporation::SetPhotonEvaporation(G4VEvaporationChannel* ptr)
+{
+  if(thePhotonEvaporation != ptr) {
+    delete thePhotonEvaporation;
+    thePhotonEvaporation = ptr;
+  }
+}
 
 
 

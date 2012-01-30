@@ -29,6 +29,10 @@
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
+//
+// Modifications:
+//
+// 23 January 2012 V.Ivanchenko added pointer of G4VPhotonEvaporation 
 
 #include "G4EvaporationFactory.hh"
 
@@ -43,6 +47,11 @@
 #include "G4PhotonEvaporation.hh"
 
 G4EvaporationFactory::G4EvaporationFactory()
+  : G4VEvaporationFactory(new G4PhotonEvaporation())
+{}
+
+G4EvaporationFactory::G4EvaporationFactory(G4VEvaporationChannel* ptr)
+  : G4VEvaporationFactory(ptr)
 {}
 
 G4EvaporationFactory::~G4EvaporationFactory()
@@ -54,7 +63,7 @@ std::vector<G4VEvaporationChannel*>* G4EvaporationFactory::GetChannel()
     new std::vector<G4VEvaporationChannel*>;
   theChannel->reserve(8);
 
-  theChannel->push_back( new G4PhotonEvaporation() );          // Photon Channel
+  theChannel->push_back( thePhotonEvaporation );          // Photon Channel
   theChannel->push_back( new G4CompetitiveFission() );         // Fission Channel
 
   theChannel->push_back( new G4NeutronEvaporationChannel() );  // n

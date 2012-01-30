@@ -35,6 +35,7 @@
 // 11/05/2010 V.Ivanchenko - rewrited technical part do not "new" and "delete" 
 //                           of small objects
 // 22/04/2011 V.Ivanchenko - added maxZ and maxA for FermiBreakUp model
+// 23/01/2012 V.Ivanchenko added pointer of G4VPhotonEvaporation to the constructor
 
 #ifndef G4Evaporation_h
 #define G4Evaporation_h 1
@@ -45,6 +46,7 @@
 #include "G4VEvaporationChannel.hh"
 #include "G4Fragment.hh"
 #include "G4UnstableFragmentBreakUp.hh"
+#include <vector>
 
 class G4VEvaporationFactory;
 class G4NistManager;
@@ -54,7 +56,8 @@ class G4Evaporation : public G4VEvaporation
 public:
 
   G4Evaporation();
-  G4Evaporation(std::vector<G4VEvaporationChannel*> * aChannelsVector);
+  G4Evaporation(G4VEvaporationChannel* photoEvaporation);
+  //G4Evaporation(std::vector<G4VEvaporationChannel*>* aChannelsVector);
 	 
   virtual ~G4Evaporation();
 
@@ -66,9 +69,13 @@ public:
   void SetGEMChannel();
   void SetCombinedChannel();
 
+  virtual void SetPhotonEvaporation(G4VEvaporationChannel* ptr);
+
 private:
 
   void CleanChannels();
+
+  void SetParameters();
 
   void InitialiseEvaporation();
 
@@ -78,12 +85,12 @@ private:
   G4bool operator==(const G4Evaporation &right) const;
   G4bool operator!=(const G4Evaporation &right) const;
 
-  std::vector<G4VEvaporationChannel*> * theChannels;
+  std::vector<G4VEvaporationChannel*>* theChannels;
   std::vector<G4double>   probabilities;
   G4VEvaporationFactory* theChannelFactory;
-  G4int nChannels;
-  G4int maxZforFBU;
-  G4int maxAforFBU;
+  size_t   nChannels;
+  G4int    maxZforFBU;
+  G4int    maxAforFBU;
   G4double minExcitation;
   G4NistManager* nist;
   G4UnstableFragmentBreakUp unstableBreakUp;
