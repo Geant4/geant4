@@ -45,6 +45,7 @@ int main()
 
   G4cout << "System time: " << timer.GetSystemElapsed() << G4endl
          << "User time:   " << timer.GetUserElapsed() << G4endl;
+  G4cout << "Clock time:  " << timer.GetClockTime() << G4endl;
 
   return 0;
 }

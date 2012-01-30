@@ -24,40 +24,67 @@
 // ********************************************************************
 //
 //
-// $Id: G4Timer.icc,v 1.2 2006-06-29 19:03:17 gunter Exp $
+// $Id:$
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// ------------------------------------------------------------
-//      GEANT 4 class inline implementation
-// ------------------------------------------------------------
+// ----------------------------------------------------------------------
+// Class G4StatDouble
+//
+// Class description:
+//
+// Class providing simple "one variable statistics" capability.
 
-inline
-void G4Timer::Start()
+// Original Author: Giovanni Santin (ESA) - October 2005 in GRAS tool
+// Adaptation and comments by: John Apostolakis (CERN) - November 2011
+
+#ifndef G4StatDouble_h
+#define G4StatDouble_h 1
+
+#include "globals.hh"
+
+class G4StatDouble 
 {
-  fValidTimes=false;
-  fStartRealTime=times(&fStartTimes);
-}
 
-inline
-void G4Timer::Stop()
-{
-  fEndRealTime=times(&fEndTimes);
-  fValidTimes=true;
-}
+  public:
+    G4StatDouble();
+    virtual ~G4StatDouble();
 
-inline
-G4bool G4Timer::IsValid() const
-{
-  return fValidTimes;
-}
+  public:
 
-inline const char* G4Timer::GetClockTime() const
-{
-  time_t rawtime;
-  struct tm * timeinfo;
+    void reset();
+    void fill(G4double x, G4double weight=1.);
+      // Add new data point: value "x" with weight
+    void scale(G4double);
+      // Reset scale
 
-  time ( &rawtime );
-  timeinfo = localtime ( &rawtime );
-  return asctime (timeinfo);
-}
+    G4double mean() const;
+    G4double rms();
+      // The moments
+
+    G4double mean(G4double ext_sum_w) const;
+      // Mean scaled to sum of weights
+    G4double rms(G4double ext_sum_w, G4int ext_n);
+      // RMS  scaled to sum of weights
+
+    inline G4int    n()       const { return m_n; }
+    inline G4double sum_w()   const { return m_sum_w; }
+    inline G4double sum_w2()  const { return m_sum_w2; }
+    inline G4double sum_wx()  const { return m_sum_wx; }
+    inline G4double sum_wx2() const { return m_sum_wx2; }
+
+  protected:
+
+    G4double rms(G4double sum_wx, G4double sum_wx2, G4double sum_w, G4int n);
+
+  protected:
+
+    G4double m_sum_wx;
+    G4double m_sum_wx2;
+    G4int    m_n;
+    G4double m_sum_w;
+    G4double m_sum_w2;
+    G4double m_scale;
+};
+
+#endif

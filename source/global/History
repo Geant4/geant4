@@ -17,6 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+January 10, 2012 G.Cosmo (global-V09-05-00)
+- Added GetClockTime() function to G4Timer to print the actual clock time.
+- Fixed compilation errors in G4StatDouble for constness in signature of
+  rms() methods.
+
+November 24, 2011 J.Apostolakis
+- Introduced G4StatDouble class in HEPNumerics module, a class providing
+  simple "one variable statistics" capability; adapted from the original
+  code by G.Santin included in the GRAS tool.
+
 November 19, 2011 V.Ivantchenko (global-V09-04-24)
 - G4Pow: reduced vector for factorial from 512 to 170 (result should be
   below DBL_MAX). Fixed computation of log(factorial).

@@ -117,6 +117,7 @@ class G4Timer
     inline void Start();
     inline void Stop();
     inline G4bool IsValid() const;
+    inline const char* GetClockTime() const;
     G4double GetRealElapsed() const;
     G4double GetSystemElapsed() const;
     G4double GetUserElapsed() const;
