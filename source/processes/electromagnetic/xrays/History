@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20 December 11: V. Grichine  (xrays-V09-05-00)
+- G4VXTRenergyLoss.cc and regular XTR radiators/models were updated for more 
+  accurate angular distribution of XTR
+
 18 November 11: G.Folger     (xrays-V09-04-10)
 - G4VXTRenergyLoss.cc: migrate to new g4Exception, fix compilation warning
 

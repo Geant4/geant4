@@ -55,6 +55,8 @@ public:
                         const G4String & processName = "XTRegularModel");
   virtual ~G4XTRRegularRadModel ();
 
+  G4double SpectralXTRdEdx(G4double energy);
+
   // Pure virtual function from base class
 
   G4double GetStackFactor( G4double energy, G4double gamma, G4double varAngle);

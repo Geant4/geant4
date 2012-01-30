@@ -70,6 +70,7 @@
 class G4SandiaTable;
 class G4VParticleChange;
 class G4PhysicsFreeVector;
+class G4PhysicsLinearVector;
 
 class G4VXTRenergyLoss : public G4VDiscreteProcess  // G4VContinuousProcess
 {
@@ -96,8 +97,10 @@ public:
                            G4ForceCondition* condition);
 
   void BuildPhysicsTable(const G4ParticleDefinition&);
-  void BuildTable() ;
   void BuildEnergyTable() ;
+  void BuildAngleForEnergyBank() ;
+
+  void BuildTable(){} ;
   void BuildAngleTable() ;
   void BuildGlobalAngleTable() ;
 
@@ -229,6 +232,8 @@ protected:
 
   G4ParticleChange fParticleChange;
 
+  // G4double fEnergyForAngle;
+  // G4PhysicsLinearVector* fAngleVector;
   G4PhysicsTable*                    fAngleForEnergyTable;
   std::vector<G4PhysicsTable*>       fAngleBank;
 
