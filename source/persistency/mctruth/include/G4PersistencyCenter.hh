@@ -64,7 +64,6 @@ class G4PersistencyCenter
 {
     public: // With description
       G4PersistencyCenter();
-      G4PersistencyCenter(const G4PersistencyCenter&);
       // Constructor
 
       ~G4PersistencyCenter();
