@@ -123,6 +123,7 @@ DetectorMessenger::~DetectorMessenger()
   delete mat1Cmd;
   delete rCmd;
   delete lCmd;
+  delete binCmd;
   delete nOfAbsCmd;
   delete updateCmd;
   delete testDir;
