@@ -38,6 +38,8 @@
 #include "G4THitsMap.hh"
 #include "globals.hh"
 
+class B4dEventActionMessenger;
+
 /// Event action class
 ///
 /// In EndOfEventAction(), it prints the accumulated quantities of the energy 
@@ -69,7 +71,7 @@ private:
                             G4double gapEdep, G4double gapTrackLength) const;
   
   // data members                   
-  B4dEventActionMessenger  fMessenger;
+  B4dEventActionMessenger*  fMessenger;
   G4int  fPrintModulo;
 };
 

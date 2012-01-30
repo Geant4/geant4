@@ -34,7 +34,7 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
-#include "B4bEventActionMessenger.hh"
+class B4bEventActionMessenger;
 
 /// Event action class
 ///
@@ -63,7 +63,7 @@ class B4bEventAction : public G4UserEventAction
                               G4double gapEdep, G4double gapTrackLength) const;
     
     // data members
-    B4bEventActionMessenger  fMessenger;
+    B4bEventActionMessenger*  fMessenger;
                      
     G4int  fPrintModulo;
 };

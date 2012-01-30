@@ -29,6 +29,7 @@
 /// \brief Implementation of the B4cDetectorConstruction class
 
 #include "B4cDetectorConstruction.hh"
+#include "B4cDetectorMessenger.hh"
 #include "B4cCalorimeterSD.hh"
 #include "G4Material.hh"
 #include "G4NistManager.hh"
@@ -53,10 +54,11 @@
 
 B4cDetectorConstruction::B4cDetectorConstruction()
  : G4VUserDetectorConstruction(),
-   fMessenger(this),
+   fMessenger(0),
    fMagField(0),
    fCheckOverlaps(true)
 {
+  fMessenger = new B4cDetectorMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
