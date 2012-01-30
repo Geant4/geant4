@@ -19,6 +19,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25-12-2011 P. Mato  Tag: XrayFluo-V09-05-00
+Added CMakeLists.txt file.
+
 25-11-2011 G.Folger  Tag: XrayFluo-V09-04-05
 fix compilation error on Windows.
 
