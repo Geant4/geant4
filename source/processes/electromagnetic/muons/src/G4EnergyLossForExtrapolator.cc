@@ -559,6 +559,7 @@ void G4EnergyLossForExtrapolator::ComputeTrasportXS(const G4ParticleDefinition* 
   for(G4int i=0; i<nmat; i++) {  
 
     const G4Material* mat = (*mtable)[i];
+    msc->SetCurrentCouple(couples[i]);
     if(1<verbose)
       G4cout << "i= " << i << "  mat= " << mat->GetName() << G4endl;
     G4PhysicsVector* aVector = (*table)[i];
