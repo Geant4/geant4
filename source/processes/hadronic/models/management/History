@@ -14,6 +14,18 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+22 January 2012 - Dennis Wright  (hadr-modman-V09-05-01)
+--------------------------------------------------------
+- move G4InelasticInteraction.hh, .cc to models/low_energy
+- G4IsoParticleChange.hh : move from /management to /models/management,
+    remove Set and GetProductionPosition methods, and change Set
+    and GetParentParticle argument from G4DynamicParticle to 
+    G4ParticleDefinition.
+- G4VIsotopeProduction.hh : replace G4Track argument in GetIsotope 
+    with G4HadProjectile  
+- G4VHighEnergyGenerator.hh, .cc : add virtual method
+    PartonStringModelDescription
+
 18 January 2012 - Vladimir Ivanchenko (hadr-modman-V09-05-00)
 ------------------------------------------------------------
 - G4VIntraNuclearTransportModel - include pointer to G4VPreCompoundModel

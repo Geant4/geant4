@@ -75,4 +75,8 @@ void G4VHighEnergyGenerator::SetEnergyMomentumCheckLevels(
 	epCheckLevels.second=absoluteLevel;
 }
 
+void G4VHighEnergyGenerator::PartonStringModelDescription(std::ostream& outFile) const
+{
+  outFile << " Parton-string models description not written yet \n";
+}
 

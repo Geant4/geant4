@@ -44,7 +44,7 @@ GEANT4_DEFINE_MODULE(NAME G4had_mod_man
     HEADERS
         G4HadronicInteraction.hh
         G4HadronicInteractionRegistry.hh
-        G4InelasticInteraction.hh
+        G4IsoParticleChange.hh
         G4V3DNucleus.hh
         G4VCrossSectionBase.hh
         G4VHighEnergyGenerator.hh
@@ -56,7 +56,6 @@ GEANT4_DEFINE_MODULE(NAME G4had_mod_man
     SOURCES
         G4HadronicInteraction.cc
         G4HadronicInteractionRegistry.cc
-        G4InelasticInteraction.cc
         G4V3DNucleus.cc
         G4VCrossSectionBase.cc
         G4VHighEnergyGenerator.cc
