@@ -17,6 +17,22 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27 January 12: V.Ivanchenko (emstand-V09-05-02)
+- G4WentzeVIModel - added G4Exception to identify misuse of transport
+    cross section computation
+
+26 January 12: V.Ivanchenko (emstand-V09-05-01)
+- G4WentzelOKandVIxSection - fixed incorrect selection of limit
+    on minimal angle (affect large angle scattering of muons)
+
+12 January 12: V.Ivanchenko (emstand-V09-05-00)
+- G4UniversalFluctuation - (L.Urban) fixed sampling at small steps
+    (below 10 um) in heavy media reported at 8th Space User Workshop 
+    (Tsukuba, December, 2012) about shift in range of 3 MeV muons
+- G4GoudsmitSaundersonTable, G4GoudsmitSaundersonMscModel - fixed 
+    compillation problem at Ubuntu; the problem was in non-accurate 
+    usage of fscanf function reading data file
+ 
 25 November 11: V.Ivanchenko (emstand-V09-04-55)
 - G4UrbanMscModel90, G4UrbanMscModel93, G4UrbanMscModel95 - added
   protection against numerical problems of sampling scattering with 

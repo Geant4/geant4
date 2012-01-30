@@ -186,10 +186,10 @@ G4WentzelOKandVIxSection::SetupKinematic(G4double ekin, const G4Material* mat)
     invbeta2 = 1.0 +  mass*mass/mom2;
     factB = spin/invbeta2;
     cosTetMaxNuc = cosThetaMax;
-    if(std::fabs(cosThetaMax) < 1.0) {
+    //if(std::fabs(cosThetaMax) < 1.0) {
       cosTetMaxNuc = 
 	std::max(cosThetaMax,1.-factorA2*mat->GetIonisation()->GetInvA23()/mom2);
-    }
+      //}
   } 
   return cosTetMaxNuc;
 }

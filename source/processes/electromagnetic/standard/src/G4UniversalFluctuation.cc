@@ -61,6 +61,7 @@
 // 14-06-10 fixed tail distribution - do not use uniform function (L.Urban)
 // 08-08-10 width correction algorithm has bee modified -->
 //          better results for thin targets (L.Urban)
+// 12-01-12 fix to cure small step results (L.Urban) 
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -166,21 +167,6 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
 	loss = CLHEP::RandGamma::shoot(lambda,lambda);
       }
       loss *= meanLoss;  
-      /*
-      siga = sqrt(siga);
-      G4double twomeanLoss = meanLoss + meanLoss;
-      if (twomeanLoss < siga) {
-        G4double x;
-        do {
-          loss = twomeanLoss*G4UniformRand();
-       	  x = (loss - meanLoss)/siga;
-        } while (1.0 - 0.5*x*x < G4UniformRand());
-      } else {
-        do {
-          loss = G4RandGauss::shoot(meanLoss,siga);
-        } while (loss < 0. || loss > twomeanLoss);
-      }
-      */
       return loss;
     }
   }
@@ -209,11 +195,11 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
   if(tmax > ipotFluct) {
     G4double w2 = log(2.*electron_mass_c2*beta2*gam2)-beta2;
 
-    if(w2 > ipotLogFluct && w2 > e2LogFluct && tmax> ipotFluct)  {
+    if(w2 > ipotLogFluct)  {
       G4double C = meanLoss*(1.-rate)/(w2-ipotLogFluct);
       a1 = C*f1Fluct*(w2-e1LogFluct)/e1Fluct;
-      a2 = C*f2Fluct*(w2-e2LogFluct)/e2Fluct;
-         
+      if(w2 > e2LogFluct)
+        a2 = C*f2Fluct*(w2-e2LogFluct)/e2Fluct;
 
   if(a1 < nmaxCont) 
   { 

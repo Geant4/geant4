@@ -784,40 +784,79 @@ void G4GoudsmitSaundersonMscModel::LoadELSEPAXSections()
   // Read parameters from tables and take logarithms
   G4float aRead;
   for(G4int i=0 ; i<106 ;i++){
-    fscanf(infile,"%f\t",&aRead);
-    if(aRead > 0.0) aRead = log(aRead);
-    else  aRead = 0.0;
+    if(1 == fscanf(infile,"%f\t",&aRead)) {
+      if(aRead > 0.0) { aRead = log(aRead); }
+      else            { aRead = 0.0; }
+    } else {
+      G4ExceptionDescription ed;
+      ed << "Error reading <" + dirFile + "> loop #1 i= " << i << G4endl;
+      G4Exception("G4GoudsmitSaundersonMscModel::LoadELSEPAXSections()",
+		  "em0003",FatalException,ed);
+      return;
+    }
     ener[i]=aRead;
   }        
   for(G4int j=0;j<103;j++){
     for(G4int i=0;i<106;i++){
-      fscanf(infile,"%f\t",&aRead);
-      if(aRead > 0.0) aRead = log(aRead);
-      else  aRead = 0.0;
+      if(1 == fscanf(infile,"%f\t",&aRead)) {
+	if(aRead > 0.0) { aRead = log(aRead); }
+	else            { aRead = 0.0; }
+      } else {
+	G4ExceptionDescription ed;
+	ed << "Error reading <" + dirFile + "> loop #2 j= " << j 
+	   << "; i= " << i << G4endl;
+	G4Exception("G4GoudsmitSaundersonMscModel::LoadELSEPAXSections()",
+		    "em0003",FatalException,ed);
+	return;
+      }
       TCSE[j][i]=aRead;
     }        
   }
   for(G4int j=0;j<103;j++){
     for(G4int i=0;i<106;i++){
-      fscanf(infile,"%f\t",&aRead);
-      if(aRead > 0.0) aRead = log(aRead);
-      else  aRead = 0.0;
+      if(1 == fscanf(infile,"%f\t",&aRead)) {
+	if(aRead > 0.0) { aRead = log(aRead); }
+	else            { aRead = 0.0; }
+      } else {
+	G4ExceptionDescription ed;
+	ed << "Error reading <" + dirFile + "> loop #3 j= " << j 
+	   << "; i= " << i << G4endl;
+	G4Exception("G4GoudsmitSaundersonMscModel::LoadELSEPAXSections()",
+		    "em0003",FatalException,ed);
+	return;
+      }
       FTCSE[j][i]=aRead;      
     }        
   }    
   for(G4int j=0;j<103;j++){
     for(G4int i=0;i<106;i++){
-      fscanf(infile,"%f\t",&aRead);
-      if(aRead > 0.0) aRead = log(aRead);
-      else  aRead = 0.0;
+      if(1 == fscanf(infile,"%f\t",&aRead)) {
+	if(aRead > 0.0) { aRead = log(aRead); }
+	else            { aRead = 0.0; }
+      } else {
+	G4ExceptionDescription ed;
+	ed << "Error reading <" + dirFile + "> loop #4 j= " << j 
+	   << "; i= " << i << G4endl;
+	G4Exception("G4GoudsmitSaundersonMscModel::LoadELSEPAXSections()",
+		    "em0003",FatalException,ed);
+	return;
+      }
       TCSP[j][i]=aRead;      
     }        
   }
   for(G4int j=0;j<103;j++){
     for(G4int i=0;i<106;i++){
-      fscanf(infile,"%f\t",&aRead);
-      if(aRead > 0.0) aRead = log(aRead);
-      else  aRead = 0.0;
+      if(1 == fscanf(infile,"%f\t",&aRead)) {
+	if(aRead > 0.0) { aRead = log(aRead); }
+	else            { aRead = 0.0; }
+      } else {
+	G4ExceptionDescription ed;
+	ed << "Error reading <" + dirFile + "> loop #5 j= " << j 
+	   << "; i= " << i << G4endl;
+	G4Exception("G4GoudsmitSaundersonMscModel::LoadELSEPAXSections()",
+		    "em0003",FatalException,ed);
+	return;
+      }
       FTCSP[j][i]=aRead;      
     }        
   }

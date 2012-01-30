@@ -142,6 +142,11 @@ G4double G4WentzelVIModel::ComputeCrossSectionPerAtom(
   G4double xsec = 0.0;
   if(p != particle) { SetupParticle(p); }
   if(kinEnergy < lowEnergyLimit) { return xsec; }
+  if(!CurrentCouple()) {
+    G4Exception("G4WentzelVIModel::ComputeCrossSectionPerAtom", "em0011",
+		FatalException, " G4MaterialCutsCouple is not defined");
+    return 0.0;
+  }
   DefineMaterial(CurrentCouple());
   cosTetMaxNuc = wokvi->SetupKinematic(kinEnergy, currentMaterial);
   if(cosTetMaxNuc < 1.0) {
