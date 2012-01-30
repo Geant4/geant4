@@ -23,11 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoMessenger.hh,v 1.2 2007-11-12 18:19:30 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
+// $Id: HistoMessenger.hh,v 1.1 2010-09-16 16:26:13 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+// 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
 #ifndef HistoMessenger_h
 #define HistoMessenger_h 1
@@ -56,14 +57,12 @@ class HistoMessenger: public G4UImessenger
 
   private:
 
-   HistoManager*           histoManager;
+   HistoManager*           fHistoManager;
    
-   G4UIdirectory*          histoDir;   
-   G4UIcmdWithAString*     factoryCmd;
-   G4UIcmdWithAString*     typeCmd;
-   G4UIcommand*            histoCmd;
-   G4UIcmdWithAnInteger*   prhistoCmd;      
-   G4UIcmdWithAnInteger*   rmhistoCmd;
+   G4UIdirectory*          fHistoDir;   
+   G4UIcmdWithAString*     fFileNameCmd;
+   G4UIcommand*            fHistoCmd;
+   G4UIcmdWithAnInteger*   fPrtHistoCmd;   
 
 };
 

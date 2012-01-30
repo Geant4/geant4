@@ -13,7 +13,6 @@
 /run/initialize
 #
 /testem/histo/setFileName fanocavity2
-/testem/histo/setFileType hbook
 /testem/histo/setHisto  1 200 -10 +10 mm	#interaction point
 /testem/histo/setHisto  2 125  0  1250 keV	#energy spectrum
 /testem/histo/setHisto  3 100  0  100 deg	#theta distribution
