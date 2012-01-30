@@ -59,8 +59,6 @@ public:
   ////////////////////////////////////////////////////////////////
   // Functions not used but required by the abstract interface.
 
-  virtual void BeginPrimitives (const G4Transform3D&) {}
-  virtual void EndPrimitives () {}
   virtual void AddPrimitive (const G4Polyline&)   {}
   virtual void AddPrimitive (const G4Text&)       {}
   virtual void AddPrimitive (const G4Circle&)     {}
