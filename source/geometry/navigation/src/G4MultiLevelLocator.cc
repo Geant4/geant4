@@ -234,7 +234,7 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
       G4ThreeVector  NewMomentumDir= ApproxIntersecPointV.GetMomentumDir(); 
       G4double       MomDir_dot_Norm= NewMomentumDir.dot( NormalAtEntry ) ;
       
-#ifdef  DEBUG_FIELD
+#ifdef G4DEBUG_FIELD
       if( VerboseLevel > 3 )
       { 
          G4ThreeVector  ChordAB           = Point_B - Point_A;
@@ -607,7 +607,7 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
 
       if( (Second_half)&&(depth!=0) )
       {
-        // Second part of curve (InterMed[depth],Intermed[depth-1])                       ) 
+        // Second part of curve (InterMed[depth],Intermed[depth-1])) 
         // On the depth-1 level normally we are on the 'second_half'
 
         Second_half = true;
