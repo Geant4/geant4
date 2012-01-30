@@ -31,8 +31,6 @@
 // Andrew Walkden  10th February 1997
 // OpenGL graphics system factory.
 
-#if defined (G4VIS_BUILD_OPENGLX_DRIVER) || defined (G4VIS_USE_OPENGLX)
-
 #ifndef G4OPENGLSTOREDX_HH
 #define G4OPENGLSTOREDX_HH
 
@@ -45,7 +43,5 @@ public:
   G4VSceneHandler* CreateSceneHandler (const G4String& name = "");
   G4VViewer*  CreateViewer  (G4VSceneHandler&, const G4String& name = "");
 };
-
-#endif
 
 #endif

@@ -96,7 +96,9 @@ G4VisManager::G4VisManager (const G4String& verbosityString):
   fEventKeepingSuspended    (false),
   fKeptLastEvent            (false),
   fpRequestedEvent (0),
-  fAbortReviewKeptEvents    (false)
+  fAbortReviewKeptEvents    (false),
+  fIsDrawGroup              (false),
+  fDrawGroupNestingDepth    (0)
   // All other objects use default constructors.
 {
   fpTrajDrawModelMgr = new G4VisModelManager<G4VTrajectoryModel>("/vis/modeling/trajectories");
@@ -471,184 +473,233 @@ void G4VisManager::SelectTrajectoryModel(const G4String& model)
    fpTrajDrawModelMgr->SetCurrent(model);
 }
 
-void G4VisManager::Draw (const G4Circle& circle,
-			 const G4Transform3D& objectTransform) {
+void G4VisManager::BeginDraw (const G4Transform3D& objectTransform)
+{
+  fDrawGroupNestingDepth++;
+  if (fDrawGroupNestingDepth > 1) {
+    G4Exception
+      ("G4VSceneHandler::BeginDraw",
+       "visman0008", JustWarning,
+       "Nesting detected. It is illegal to nest Begin/EndDraw."
+       "\n Ignored");
+    return;
+  }
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
     fpSceneHandler -> BeginPrimitives (objectTransform);
-    fpSceneHandler -> AddPrimitive (circle);
+    fIsDrawGroup = true;
+  }
+}
+
+void G4VisManager::EndDraw ()
+{
+  fDrawGroupNestingDepth--;
+  if (fDrawGroupNestingDepth != 0) {
+    if (fDrawGroupNestingDepth < 0) fDrawGroupNestingDepth = 0;
+    return;
+  }
+  if (IsValidView ()) {
     fpSceneHandler -> EndPrimitives ();
   }
+  fIsDrawGroup = false;
+}
+
+void G4VisManager::BeginDraw2D (const G4Transform3D& objectTransform)
+{
+  fDrawGroupNestingDepth++;
+  if (fDrawGroupNestingDepth > 1) {
+    G4Exception
+      ("G4VSceneHandler::BeginDraw2D",
+       "visman0009", JustWarning,
+       "Nesting detected. It is illegal to nest Begin/EndDraw2D."
+       "\n Ignored");
+    return;
+  }
+  if (IsValidView ()) {
+    ClearTransientStoreIfMarked();
+    fpSceneHandler -> BeginPrimitives2D (objectTransform);
+    fIsDrawGroup = true;
+  }
+}
+
+void G4VisManager::EndDraw2D ()
+{
+  fDrawGroupNestingDepth--;
+  if (fDrawGroupNestingDepth != 0) {
+    if (fDrawGroupNestingDepth < 0) fDrawGroupNestingDepth = 0;
+    return;
+  }
+  if (IsValidView ()) {
+    fpSceneHandler -> EndPrimitives2D ();
+  }
+  fIsDrawGroup = false;
+}
+
+template <class T> void G4VisManager::DrawT
+(const T& graphics_primitive, const G4Transform3D& objectTransform) {
+  if (fIsDrawGroup) {
+    if (objectTransform != fpSceneHandler->GetObjectTransformation()) {
+      G4Exception
+	("G4VSceneHandler::DrawT",
+	 "visman0010", FatalException,
+	 "Different transform detected in Begin/EndDraw group.");
+    }
+    fpSceneHandler -> AddPrimitive (graphics_primitive);
+  } else {
+    if (IsValidView ()) {
+      ClearTransientStoreIfMarked();
+      fpSceneHandler -> BeginPrimitives (objectTransform);
+      fpSceneHandler -> AddPrimitive (graphics_primitive);
+      fpSceneHandler -> EndPrimitives ();
+    }
+  }
+}
+
+template <class T> void G4VisManager::DrawT2D
+(const T& graphics_primitive, const G4Transform3D& objectTransform) {
+  if (fIsDrawGroup) {
+    if (objectTransform != fpSceneHandler->GetObjectTransformation()) {
+      G4Exception
+	("G4VSceneHandler::DrawT",
+	 "visman0011", FatalException,
+	 "Different transform detected in Begin/EndDraw2D group.");
+    }
+    fpSceneHandler -> AddPrimitive (graphics_primitive);
+  } else {
+    if (IsValidView ()) {
+      ClearTransientStoreIfMarked();
+      fpSceneHandler -> BeginPrimitives2D (objectTransform);
+      fpSceneHandler -> AddPrimitive (graphics_primitive);
+      fpSceneHandler -> EndPrimitives2D ();
+    }
+  }
+}
+
+void G4VisManager::Draw (const G4Circle& circle,
+			 const G4Transform3D& objectTransform)
+{
+  DrawT (circle, objectTransform);
 }
 
 void G4VisManager::Draw (const G4NURBS& nurbs,
-			 const G4Transform3D& objectTransform) {
-  if (IsValidView ()) {
-    ClearTransientStoreIfMarked();
-    fpSceneHandler -> BeginPrimitives (objectTransform);
-    fpSceneHandler -> AddPrimitive (nurbs);
-    fpSceneHandler -> EndPrimitives ();
-  }
+			 const G4Transform3D& objectTransform)
+{
+  DrawT (nurbs, objectTransform);
 }
 
 void G4VisManager::Draw (const G4Polyhedron& polyhedron,
-			 const G4Transform3D& objectTransform) {
-  if (IsValidView ()) {
-    ClearTransientStoreIfMarked();
-    fpSceneHandler -> BeginPrimitives (objectTransform);
-    fpSceneHandler -> AddPrimitive (polyhedron);
-    fpSceneHandler -> EndPrimitives ();
-  }
+			 const G4Transform3D& objectTransform)
+{
+  DrawT (polyhedron, objectTransform);
 }
 
 void G4VisManager::Draw (const G4Polyline& line,
-			 const G4Transform3D& objectTransform) {
-  if (IsValidView ()) {
-    ClearTransientStoreIfMarked();
-    fpSceneHandler -> BeginPrimitives (objectTransform);
-    fpSceneHandler -> AddPrimitive (line);
-    fpSceneHandler -> EndPrimitives ();
-  }
+			 const G4Transform3D& objectTransform)
+{
+  DrawT (line, objectTransform);
 }
 
 void G4VisManager::Draw (const G4Polymarker& polymarker,
-			 const G4Transform3D& objectTransform) {
-  if (IsValidView ()) {
-    ClearTransientStoreIfMarked();
-    fpSceneHandler -> BeginPrimitives (objectTransform);
-    fpSceneHandler -> AddPrimitive (polymarker);
-    fpSceneHandler -> EndPrimitives ();
-  }
+			 const G4Transform3D& objectTransform)
+{
+  DrawT (polymarker, objectTransform);
 }
 
 void G4VisManager::Draw (const G4Scale& scale,
-			 const G4Transform3D& objectTransform) {
-  if (IsValidView ()) {
-    ClearTransientStoreIfMarked();
-    fpSceneHandler -> BeginPrimitives (objectTransform);
-    fpSceneHandler -> AddPrimitive (scale);
-    fpSceneHandler -> EndPrimitives ();
-  }
+			 const G4Transform3D& objectTransform)
+{
+  DrawT (scale, objectTransform);
 }
 
 void G4VisManager::Draw (const G4Square& square,
-			 const G4Transform3D& objectTransform) {
-  if (IsValidView ()) {
-    ClearTransientStoreIfMarked();
-    fpSceneHandler -> BeginPrimitives (objectTransform);
-    fpSceneHandler -> AddPrimitive (square);
-    fpSceneHandler -> EndPrimitives ();
-  }
+			 const G4Transform3D& objectTransform)
+{
+  DrawT (square, objectTransform);
 }
 
 void G4VisManager::Draw (const G4Text& text,
-			 const G4Transform3D& objectTransform) {
-  if (IsValidView ()) {
-    ClearTransientStoreIfMarked();
-    fpSceneHandler -> BeginPrimitives (objectTransform);
-    fpSceneHandler -> AddPrimitive (text);
-    fpSceneHandler -> EndPrimitives ();
-  }
+			 const G4Transform3D& objectTransform)
+{
+  DrawT (text, objectTransform);
 }
 
 void G4VisManager::Draw2D (const G4Circle& circle,
 			   const G4Transform3D& objectTransform)
 {
-  if (IsValidView()) {
-    ClearTransientStoreIfMarked();
-    fpSceneHandler -> BeginPrimitives2D(objectTransform);
-    fpSceneHandler -> AddPrimitive(circle);
-    fpSceneHandler -> EndPrimitives2D();
-  }
+  DrawT2D (circle, objectTransform);
 }
 
 void G4VisManager::Draw2D (const G4NURBS& nurbs,
 			   const G4Transform3D& objectTransform)
 {
-  if (IsValidView()) {
-    ClearTransientStoreIfMarked();
-    fpSceneHandler -> BeginPrimitives2D(objectTransform);
-    fpSceneHandler -> AddPrimitive(nurbs);
-    fpSceneHandler -> EndPrimitives2D();
-  }
+  DrawT2D (nurbs, objectTransform);
 }
 
 void G4VisManager::Draw2D (const G4Polyhedron& polyhedron,
 			   const G4Transform3D& objectTransform)
 {
-  if (IsValidView()) {
-    ClearTransientStoreIfMarked();
-    fpSceneHandler -> BeginPrimitives2D(objectTransform);
-    fpSceneHandler -> AddPrimitive(polyhedron);
-    fpSceneHandler -> EndPrimitives2D();
-  }
+  DrawT2D (polyhedron, objectTransform);
 }
 
 void G4VisManager::Draw2D (const G4Polyline& line,
 			   const G4Transform3D& objectTransform)
 {
-  if (IsValidView()) {
-    ClearTransientStoreIfMarked();
-    fpSceneHandler -> BeginPrimitives2D(objectTransform);
-    fpSceneHandler -> AddPrimitive(line);
-    fpSceneHandler -> EndPrimitives2D();
-  }
+  DrawT2D (line, objectTransform);
 }
 
 void G4VisManager::Draw2D (const G4Polymarker& polymarker,
 			   const G4Transform3D& objectTransform)
 {
-  if (IsValidView()) {
-    ClearTransientStoreIfMarked();
-    fpSceneHandler -> BeginPrimitives2D(objectTransform);
-    fpSceneHandler -> AddPrimitive(polymarker);
-    fpSceneHandler -> EndPrimitives2D();
-  }
+  DrawT2D (polymarker, objectTransform);
 }
 
 void G4VisManager::Draw2D (const G4Square& square,
 			   const G4Transform3D& objectTransform)
 {
-  if (IsValidView()) {
-    ClearTransientStoreIfMarked();
-    fpSceneHandler -> BeginPrimitives2D(objectTransform);
-    fpSceneHandler -> AddPrimitive(square);
-    fpSceneHandler -> EndPrimitives2D();
-  }
+  DrawT2D (square, objectTransform);
 }
 
 void G4VisManager::Draw2D (const G4Text& text,
 			   const G4Transform3D& objectTransform)
 {
-  if (IsValidView()) {
-    ClearTransientStoreIfMarked();
-    fpSceneHandler -> BeginPrimitives2D(objectTransform);
-    fpSceneHandler -> AddPrimitive(text);
-    fpSceneHandler -> EndPrimitives2D();
-  }
+  DrawT2D (text, objectTransform);
 }
 
 void G4VisManager::Draw (const G4VHit& hit) {
-  if (IsValidView ()) {
-    ClearTransientStoreIfMarked();
+  if (fIsDrawGroup) {
     fpSceneHandler -> AddCompound (hit);
+  } else {
+    if (IsValidView ()) {
+      ClearTransientStoreIfMarked();
+      fpSceneHandler -> AddCompound (hit);
+    }
   }
 }
 
 void G4VisManager::Draw (const G4VDigi& digi) {
-  if (IsValidView ()) {
-    ClearTransientStoreIfMarked();
+  if (fIsDrawGroup) {
     fpSceneHandler -> AddCompound (digi);
+  } else {
+    if (IsValidView ()) {
+      ClearTransientStoreIfMarked();
+      fpSceneHandler -> AddCompound (digi);
+    }
   }
 }
 
 void G4VisManager::Draw (const G4VTrajectory& traj,
 			 G4int i_mode) {
-  if (IsValidView ()) {
-    ClearTransientStoreIfMarked();
+  if (fIsDrawGroup) {
     fpSceneHandler -> SetModel (&dummyTrajectoriesModel);
     dummyTrajectoriesModel.SetDrawingMode(i_mode);
     fpSceneHandler -> AddCompound (traj);
+  } else {
+    if (IsValidView ()) {
+      ClearTransientStoreIfMarked();
+      fpSceneHandler -> SetModel (&dummyTrajectoriesModel);
+      dummyTrajectoriesModel.SetDrawingMode(i_mode);
+      fpSceneHandler -> AddCompound (traj);
+    }
   }
 }
 
@@ -663,11 +714,17 @@ void G4VisManager::Draw (const G4LogicalVolume& logicalVol,
 void G4VisManager::Draw (const G4VSolid& solid,
 			 const G4VisAttributes& attribs,
 			 const G4Transform3D& objectTransform) {
-  if (IsValidView ()) {
-    ClearTransientStoreIfMarked();
+  if (fIsDrawGroup) {
     fpSceneHandler -> PreAddSolid (objectTransform, attribs);
     solid.DescribeYourselfTo (*fpSceneHandler);
     fpSceneHandler -> PostAddSolid ();
+  } else {
+    if (IsValidView ()) {
+      ClearTransientStoreIfMarked();
+      fpSceneHandler -> PreAddSolid (objectTransform, attribs);
+      solid.DescribeYourselfTo (*fpSceneHandler);
+      fpSceneHandler -> PostAddSolid ();
+    }
   }
 }
 
@@ -1383,7 +1440,17 @@ void G4VisManager::EndOfEvent ()
   const G4Event* currentEvent = eventManager->GetConstCurrentEvent();
   if (!currentEvent) return;
 
+  // We are about to draw the event (trajectories, etc.), but first we
+  // have to clear the previous event(s) if necessary.  If this event
+  // needs to be drawn afresh, e.g., the first event or any event when
+  // "accumulate" is not requested, the old event has to be cleared.
+  // We have postponed this so that, for normal viewers like OGL, the
+  // previous event(s) stay on screen until this new event comes
+  // along.  For a file-writing viewer the geometry has to be drawn.
+  // See, for example, G4HepRepFileSceneHandler::ClearTransientStore.
   ClearTransientStoreIfMarked();
+
+  // Now draw the event...
   fpSceneHandler->DrawEvent(currentEvent);
 
   G4int nEventsToBeProcessed = 0;
@@ -1401,8 +1468,10 @@ void G4VisManager::EndOfEvent ()
 
     // Unless last event (in which case wait end of run)...
     if (eventID < nEventsToBeProcessed - 1) {
+      // ShowView guarantees the view comes to the screen.  No action
+      // is taken for normal viewers like OGL, but file-writing
+      // viewers have to close the file.
       fpViewer->ShowView();
-      fpViewer->DrawView();
       fpSceneHandler->SetMarkForClearingTransientStore(true);
     } else {  // Last event...
       // Keep, but only if user has not kept any...
@@ -1447,6 +1516,9 @@ void G4VisManager::EndOfRun ()
     if (!fpSceneHandler->GetMarkForClearingTransientStore()) {
       if (fpScene->GetRefreshAtEndOfRun()) {
 	fpSceneHandler->DrawEndOfRunModels();
+	// ShowView guarantees the view comes to the screen.  No
+	// action is taken for normal viewers like OGL, but
+	// file-writing viewers have to close the file.
 	fpViewer->ShowView();
 	fpSceneHandler->SetMarkForClearingTransientStore(true);
       }

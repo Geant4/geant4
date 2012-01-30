@@ -32,8 +32,6 @@
 // A template for a sophisticated graphics driver with a scene graph.
 //?? Lines or sections marked like this require specialisation for your driver.
 
-#ifdef G4VIS_BUILD_XXXSG_DRIVER
-
 #include "G4XXXSG.hh"
 #include "G4XXXSGSceneHandler.hh"
 #include "G4XXXSGViewer.hh"
@@ -73,5 +71,3 @@ G4VViewer* G4XXXSG::CreateViewer(G4VSceneHandler& scene,
   }
   return pView;
 }
-
-#endif

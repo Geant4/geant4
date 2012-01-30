@@ -17,6 +17,40 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+2nd January 2012  John Allison  (opengl-V09-05-01)
+- G4OpenGLImmediate/StoredQt/X/Xm/Wt.hh:
+  o Removed #ifdef G4VIS... protection from header files so that they
+    can be used for a possible dynamic library.  Of course, the
+    protection remains on the implementation files.
+
+16th December 2011  John Allison  (opengl-V09-05-00)
+- G4OpenGLStoredSceneHandler.cc:
+  o Corrected treatment of colour for transient objects that got
+    slightly mangled in the changes of 15th Decemeber.  Colour should
+    *not* be in the display list since in some circumstances we modify
+    it (fade by time).  Instead it is kept in the TO object.
+
+15th December 2011  John Allison
+- The following changes from vis-V09-04-11-branch:
+27th October 2001 JA (on vis-V09-04-11-branch).
+- Transferred LoadAtts to sub-classes.
+- G4OpenGLStoredViewer.cc: Improved drawing loop.
+- G4OpenGLStoredSceneHandler.hh:
+  o Removed fAddPrimitivePreambleNestingDepth.  (Care in
+    G4OpenGLSceneHandler means it is no longer needed.)
+26th October 2001 JA (on vis-V09-04-11-branch).
+- Minor changes and exposure of some debug statements.
+25th October 2001 JA vis-V09-04-11-01 (on vis-V09-04-11-branch).
+  o G4OpenGLSceneHandler:
+    . Needs G4Polymarker::G4Polymarker (const G4VMarker&).
+    . Reworked AddPrimitive for G4Polymarker, G4Circle and G4Square.
+    . Instead of polymarker calling multiple circles/squares, circles
+      and squares create a polymarker of size 1 and call polymarker.
+    . Removed AddCircleSquare, AddCircleSquareVector and DrawXYPolygon.
+  o G4OpenGLBitMapStore: Removed.
+    . No longer needed.  Circles and squares are drawn as GL_POINTS.  (Why
+      did I not notice this option before; would have saved a lot of trouble.)
+
 30th november Laurent Garnier  (opengl-V09-04-28)
 - Fix pop up warning box at beggining
 - Fix unitialize value before Gl init

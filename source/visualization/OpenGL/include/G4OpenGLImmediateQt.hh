@@ -30,8 +30,6 @@
 // 
 // OpenGLImmediateQt graphics system factory.
 
-#if defined (G4VIS_BUILD_OPENGLQT_DRIVER) || defined (G4VIS_USE_OPENGLQT)
-
 #ifndef G4OPENGLIMMEDIATEQT_HH
 #define G4OPENGLIMMEDIATEQT_HH
 
@@ -43,7 +41,5 @@ public:
   G4VSceneHandler* CreateSceneHandler (const G4String& name = "");
   G4VViewer*  CreateViewer  (G4VSceneHandler&, const G4String& name = "");
 };
-
-#endif
 
 #endif

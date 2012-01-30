@@ -29,8 +29,6 @@
 //
 // OpenInventor graphics system factory.
 
-#if defined (G4VIS_BUILD_OIWIN32_DRIVER) || defined (G4VIS_USE_OIWIN32)
-
 #ifndef G4OPENINVENTORWIN_HH
 #define G4OPENINVENTORWIN_HH
 
@@ -46,7 +44,5 @@ private:
 private:
   bool fInited;
 };
-
-#endif
 
 #endif

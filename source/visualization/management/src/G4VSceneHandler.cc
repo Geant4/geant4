@@ -146,6 +146,8 @@ void G4VSceneHandler::PostAddSolid () {
 
 void G4VSceneHandler::BeginPrimitives
 (const G4Transform3D& objectTransformation) {
+  //static G4int count = 0;
+  //G4cout << "G4VSceneHandler::BeginPrimitives: " << count++ << G4endl;
   fNestingDepth++;
   if (fNestingDepth > 1)
     G4Exception
@@ -938,9 +940,8 @@ G4double G4VSceneHandler::GetMarkerSize
     // Draw in screen coordinates.
     markerSizeType = screen;
   }
-  if (size <= 1.) size = 1.;
   size *= fpViewer -> GetViewParameters().GetGlobalMarkerScale();
-  if (size <= 1.) size = 1.;
+  if (markerSizeType == screen && size < 1.) size = 1.;
   return size;
 }
 

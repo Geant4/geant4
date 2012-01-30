@@ -20,6 +20,10 @@ committal in the CVS repository !
 History file for visualization/XXX sub-category (a template graphics system)
 ---------------------------------------------------------------------------
 
+3rd January 2011  John Allison  (visXXX-V09-05-00)
+- Removed #ifdef ...XXXSG... protections.
+  o No longer any reliance on imported tree code; own tree code example used. 
+
 11th November 2011  John Allison  (visXXX-V09-04-01)
 - G4XXXSGSceneHandler.cc: Fixed compiler warnings.
 

@@ -61,22 +61,33 @@ G4TrajectoriesModel::~G4TrajectoriesModel () {}
 
 void G4TrajectoriesModelDebugG4AttValues(const G4VTrajectory*);
 
-void G4TrajectoriesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler) {
+#include "G4VVisManager.hh"
+void G4TrajectoriesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
+{
   const G4Event* event = fpMP->GetEvent();
-  if (event) {
-    G4TrajectoryContainer* TC = event -> GetTrajectoryContainer ();
-    if (TC) {
-      for (G4int iT = 0; iT < TC->entries(); iT++) {
-	fpCurrentTrajectory = (*TC) [iT];
-	// Debug trajectory:
-	// fpCurrentTrajectory->ShowTrajectory(); G4cout << G4endl;
-	// Debug G4AttValues:
-	// G4TrajectoriesModelDebugG4AttValues(fpCurrentTrajectory);
-	if (fpCurrentTrajectory)
-	  sceneHandler.AddCompound (*fpCurrentTrajectory);
-      }
-    }
+  if (!event) return;
+
+  G4TrajectoryContainer* TC = event -> GetTrajectoryContainer ();
+  if (!TC) return;
+
+  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
+  if (!pVVisManager) return;
+
+  pVVisManager->BeginDraw();
+  // The use of Begin/EndDraw (optional methods to improve drawing
+  // speed) assumes all trajectories are drawn with the same
+  // transformation.  If not, a fatal exception with be raised in
+  // G4VisManager::DrawT.
+  for (G4int iT = 0; iT < TC->entries(); iT++) {
+    fpCurrentTrajectory = (*TC) [iT];
+    // Debug trajectory:
+    // fpCurrentTrajectory->ShowTrajectory(); G4cout << G4endl;
+    // Debug G4AttValues:
+    // G4TrajectoriesModelDebugG4AttValues(fpCurrentTrajectory);
+    if (fpCurrentTrajectory)
+      sceneHandler.AddCompound (*fpCurrentTrajectory);
   }
+  pVVisManager->EndDraw();
 }
 
 G4bool G4TrajectoriesModel::IsDrawingModeSet() const

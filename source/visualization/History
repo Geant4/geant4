@@ -24,6 +24,49 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+3rd January 2012  John Allison  (vis-V09-05-04)
+- modeling-V09-05-01: Validates geometry in all worlds.
+
+3rd January 2012  John Allison  (vis-V09-05-03)
+- opengl-V09-05-01 and openinventor-V09-05-00:
+  o Removed #ifdef G4VIS... protection from header files so that they
+    can be used for a possible dynamic library.  Of course, the
+    protection remains on the implementation files.
+
+3rd January 2012  John Allison  (vis-V09-05-02)
+- visman-V09-05-01:
+  o /vis/scene/notifyHandlers:
+    . Downgraded "scene has changed" from WARNING to NOTE. 
+  o G4VisManager::EndOfEvent: Removed unwarranted DrawView.  It was
+    causing two copies of the geometry to be drawn.
+- visXXX-V09-05-00:
+  o Removed #ifdef ...XXXSG... protections.
+    . No longer any reliance on imported tree code; own tree code used. 
+- opengl-V09-05-00:
+  o Corrected treatment of colour for transient objects.
+  o G4OpenGLSceneHandler: Significant rationalisation.
+
+30th December 2011  John Allison  (vis-V09-05-01 co-works greps-V09-05-02)
+- modeling-V09-05-00: G4TrajectoriesModel::DescribeYourselfTo:
+  o Used Begin/EndDraw to improve drawing speed.
+    . Assumes all trajectories are drawn with the same transformation.
+      If not, a fatal exception with be raised in G4VisManager::DrawT.
+  o Changed FatalException to JustWarning in
+    G4AttributeFilterT<T>::AddInterval and AddValue.
+- visman-V09-05-00:
+  o G4VisManager: Implemented Begin/EndDraw(2D).
+    . Note that this forces all thus-bracketed Draw messages to have the
+      same transformation.  If an attempt to change the transformation
+      is detected, a fatal exception is raised.
+  o G4VSceneHandler: Added Get/SetObjectTransformation.
+  o Marker size bug fix.
+
+2nd December 2011  John Allison (vis-V09-05-00)
+- Corresponds to geant4-09-05-ref-00.
+- opengl-V09-04-26 and 27: CMake improvements (Ben Morgan).
+- opengl-V09-04-28: Qt fixes (Laurent Garnier).
+- openinventor-V09-04-03 and 04: CMake improvements (Ben Morgan).
+
 15th November 2011  John Allison (vis-V09-04-18)
 - opengl-V09-04-25: Fix compiler warning + cosmetics.
 
@@ -72,7 +115,11 @@ History file for visualization category
 5th November 2011  Joseph Perl (vis-V09-04-12)
 - global tag for release 9.5
 - On top of vis-V09-04-11:
-  o modeling-V09-04-04  o visman-V09-04-08  o vis-HepRep-V09-04-03  o vistest-V09-04-01  o opengl-V09-04-16
+  o modeling-V09-04-04
+  o visman-V09-04-08
+  o vis-HepRep-V09-04-03
+  o vistest-V09-04-01
+  o opengl-V09-04-16
 
 4th November 2011  John Allison
 - visman-V09-04-08 (needs greps-V09-04-09):
@@ -102,6 +149,9 @@ History file for visualization category
 
 25th October 2011  John Allison
 - vistest-V09-04-00: Minor improvements.
+
+25th October 2011  John Allison  (vis-V09-04-11-01 on vis-V09-04-11-branch)
+- OpenGL: Reworked AddPrimitive for G4Polymarker.
 
 25th October 2011  John Allison  (vis-V09-04-11)
 - Another interim tag.

@@ -30,8 +30,6 @@
 // 
 // OpenGLStoredWin32 graphics system factory.
 
-#if defined (G4VIS_BUILD_OPENGLWIN32_DRIVER) || defined (G4VIS_USE_OPENGLWIN32)
-
 #ifndef G4OPENGLSTOREDWIN32_HH
 #define G4OPENGLSTOREDWIN32_HH
 
@@ -43,7 +41,5 @@ public:
   G4VSceneHandler* CreateSceneHandler (const G4String& name = "");
   G4VViewer*  CreateViewer  (G4VSceneHandler&, const G4String& name = "");
 };
-
-#endif
 
 #endif

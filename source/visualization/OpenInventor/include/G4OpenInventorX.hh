@@ -31,8 +31,6 @@
 // Andrew Walkden  27th March 1996
 // OpenInventor graphics system factory.
 
-#if defined (G4VIS_BUILD_OIX_DRIVER) || defined (G4VIS_USE_OIX)
-
 #ifndef G4OPENINVENTORX_HH
 #define G4OPENINVENTORX_HH
 
@@ -45,7 +43,5 @@ public:
   G4OpenInventorX () {}
   virtual ~G4OpenInventorX () {}
 };
-
-#endif
 
 #endif

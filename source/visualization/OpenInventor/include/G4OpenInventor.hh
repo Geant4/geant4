@@ -33,8 +33,6 @@
 #ifndef G4OPENINVENTOR_HH
 #define G4OPENINVENTOR_HH
 
-#if defined(G4VIS_BUILD_OI_DRIVER) || defined(G4VIS_USE_OI)
-
 #include "G4VGraphicsSystem.hh"
 
 class G4VInteractorManager;
@@ -52,7 +50,5 @@ private:
 private:
   G4VInteractorManager* interactorManager;
 };
-
-#endif
 
 #endif

@@ -51,7 +51,6 @@ set(G4VIS_MODULE_OPENGL_HEADERS
     G4OpenGLViewer.hh
     G4OpenGLStoredViewer.hh
     G4OpenGLStoredSceneHandler.hh
-    G4OpenGLBitMapStore.hh
     G4OpenGLFontBaseStore.hh
     G4OpenGLSceneHandler.hh
     G4OpenGLSceneHandler.icc
@@ -65,7 +64,6 @@ set(G4VIS_MODULE_OPENGL_SOURCES
     G4OpenGLViewer.cc
     G4OpenGLStoredViewer.cc
     G4OpenGLStoredSceneHandler.cc
-    G4OpenGLBitMapStore.cc
     G4OpenGLFontBaseStore.cc
     G4OpenGLSceneHandler.cc
     G4OpenGLViewerMessenger.cc

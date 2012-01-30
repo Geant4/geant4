@@ -250,25 +250,25 @@ public: // With description
   void Draw (const G4Text&,
     const G4Transform3D& objectTransformation = G4Transform3D());
 
-  virtual void Draw2D (const G4Circle&,
+  void Draw2D (const G4Circle&,
     const G4Transform3D& objectTransformation = G4Transform3D());
 
-  virtual void Draw2D (const G4NURBS&,
+  void Draw2D (const G4NURBS&,
     const G4Transform3D& objectTransformation = G4Transform3D());
 
-  virtual void Draw2D (const G4Polyhedron&,
+  void Draw2D (const G4Polyhedron&,
     const G4Transform3D& objectTransformation = G4Transform3D());
 
-  virtual void Draw2D (const G4Polyline&,
+  void Draw2D (const G4Polyline&,
     const G4Transform3D& objectTransformation = G4Transform3D());
 
-  virtual void Draw2D (const G4Polymarker&,
+  void Draw2D (const G4Polymarker&,
     const G4Transform3D& objectTransformation = G4Transform3D());
 
-  virtual void Draw2D (const G4Square&,
+  void Draw2D (const G4Square&,
     const G4Transform3D& objectTransformation = G4Transform3D());
 
-  virtual void Draw2D (const G4Text&,
+  void Draw2D (const G4Text&,
     const G4Transform3D& objectTransformation = G4Transform3D());
 
   ////////////////////////////////////////////////////////////////////
@@ -296,6 +296,23 @@ public: // With description
 
   void Draw (const G4VSolid&, const G4VisAttributes&,
     const G4Transform3D& objectTransformation = G4Transform3D());
+
+  //////////////////////////////////////////////////////////////////////
+  // Optional methods that you may use to bracket a series of Draw
+  // messages that have identical objectTransformation to improve
+  // drawing speed.  Use Begin/EndDraw for a series of Draw messages,
+  // Begin/EndDraw2D for a series of Draw2D messages.  Do not mix Draw
+  // and Draw2D messages.
+
+  void BeginDraw
+  (const G4Transform3D& objectTransformation = G4Transform3D());
+
+  void EndDraw ();
+
+  void BeginDraw2D
+  (const G4Transform3D& objectTransformation = G4Transform3D());
+
+  void EndDraw2D ();
 
   ////////////////////////////////////////////////////////////////////////
   // Now other pure virtual functions of G4VVisManager...
@@ -432,6 +449,13 @@ protected:
 
 private:
 
+  // Function templates to implement the Draw methods (to avoid source
+  // code duplication).
+  template <class T> void DrawT
+  (const T& graphics_primitive, const G4Transform3D& objectTransform);
+  template <class T> void DrawT2D
+  (const T& graphics_primitive, const G4Transform3D& objectTransform);
+
   void PrintAvailableModels            (Verbosity) const;
   void PrintAvailableColours           (Verbosity) const;
   void PrintInvalidPointers            () const;
@@ -465,6 +489,8 @@ private:
   const G4Event*        fpRequestedEvent; // If non-zero, scene handler uses.
   G4bool                fAbortReviewKeptEvents;
   G4ViewParameters      fDefaultViewParameters;
+  G4bool                fIsDrawGroup;
+  G4int                 fDrawGroupNestingDepth;
 
   // Trajectory draw model manager
   G4VisModelManager<G4VTrajectoryModel>* fpTrajDrawModelMgr;

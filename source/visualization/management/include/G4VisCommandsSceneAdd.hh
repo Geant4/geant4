@@ -131,6 +131,8 @@ public:
 private:
   G4VisCommandSceneAddLogo (const G4VisCommandSceneAddLogo&);
   G4VisCommandSceneAddLogo& operator = (const G4VisCommandSceneAddLogo&);
+  // Direction of outward-facing normal to front face of logo.
+  enum Direction {autoDirection, X, minusX, Y, minusY, Z, minusZ};
   class G4Logo {
   public:
     G4Logo(G4double height, const G4VisAttributes&);

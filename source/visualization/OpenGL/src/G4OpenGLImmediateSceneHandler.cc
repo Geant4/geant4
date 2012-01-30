@@ -53,6 +53,7 @@
 #include "G4Square.hh"
 #include "G4Scale.hh"
 #include "G4Polyhedron.hh"
+#include "G4AttHolder.hh"
 
 G4OpenGLImmediateSceneHandler::G4OpenGLImmediateSceneHandler
 (G4VGraphicsSystem& system,const G4String& name):
@@ -66,9 +67,12 @@ G4OpenGLImmediateSceneHandler::~G4OpenGLImmediateSceneHandler ()
 
 void G4OpenGLImmediateSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
 {
+  // Loads G4Atts for picking...
   if (fpViewer->GetViewParameters().IsPicking()) {
     glLoadName(++fPickName);
-    fPickMap[fPickName] = 0;
+    G4AttHolder* holder = new G4AttHolder;
+    LoadAtts(visible, holder);
+    fPickMap[fPickName] = holder;
   }
 
   const G4Colour& c = GetColour (visible);

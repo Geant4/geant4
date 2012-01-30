@@ -74,8 +74,7 @@ G4OpenGLSceneHandler::G4OpenGLSceneHandler (G4VGraphicsSystem& system,
   // glFlush take about 90% time.  Dividing glFlush number by 100 will
   // change the first vis time from 100% to 10+90/100 = 10,9%.
   fNbListsBeforeFlush(100),
-  fNbListsToBeFlush(0),
-  fProcessingPolymarker(false)
+  fNbListsToBeFlush(0)
 {}
 
 G4OpenGLSceneHandler::~G4OpenGLSceneHandler ()
@@ -173,13 +172,6 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
   G4int nPoints = line.size ();
   if (nPoints <= 0) return;
 
-  // Loads G4Atts for picking...
-  if (fpViewer->GetViewParameters().IsPicking()) {
-    G4AttHolder* holder = new G4AttHolder;
-    LoadAtts(line, holder);
-    fPickMap[fPickName] = holder;
-  }
-
   // Note: colour treated in sub-class.
 
   if (fpViewer -> GetViewParameters ().IsMarkerNotHidden ())
@@ -211,137 +203,8 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
 
 void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
 {
-  G4int nPoints = polymarker.size ();
-  if (nPoints <= 0) return;
-
-  fProcessingPolymarker = true;
-
-  // Loads G4Atts for picking...
-  if (fpViewer->GetViewParameters().IsPicking()) {
-    G4AttHolder* holder = new G4AttHolder;
-    LoadAtts(polymarker, holder);
-    fPickMap[fPickName] = holder;
-  }
-
-  switch (polymarker.GetMarkerType()) {
-  default:
-  case G4Polymarker::dots:
-    {
-      for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
-        G4Circle dot (polymarker);
-        dot.SetPosition (polymarker[iPoint]);
-        dot.SetWorldSize  (0.);
-        dot.SetScreenSize (0.1);  // Very small circle.
-        G4OpenGLSceneHandler::AddPrimitive (dot);
-      }
-    }
-    break;
-  case G4Polymarker::circles:
-    {
-      std::vector <G4VMarker> circleV; 
-      for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
-        G4Circle circle (polymarker);
-        // If not already drawn
-        circle.SetPosition (polymarker[iPoint]);
-        circleV.push_back(circle);
-        //      G4OpenGLSceneHandler::AddPrimitive (circle);
-      }
-      G4OpenGLSceneHandler::AddPrimitivesCircle (circleV);
-    }
-    break;
-  case G4Polymarker::squares:
-    {
-      std::vector <G4VMarker> squareV; 
-      for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
-        G4Square square (polymarker);
-        square.SetPosition (polymarker[iPoint]);
-        squareV.push_back(square);
-        //      G4OpenGLSceneHandler::AddPrimitive (square);
-      }
-      G4OpenGLSceneHandler::AddPrimitivesSquare (squareV);
-    }
-    break;
-  }
-
-  fProcessingPolymarker = false;
-}
-
-void G4OpenGLSceneHandler::AddPrimitive (const G4Text& text) {
-
-  // Loads G4Atts for picking...
-  if (fpViewer->GetViewParameters().IsPicking()) {
-    G4AttHolder* holder = new G4AttHolder;
-    LoadAtts(text, holder);
-    fPickMap[fPickName] = holder;
-  }
-
-  const G4Colour& c = GetTextColour (text);  // Picks up default if none.
-  MarkerSizeType sizeType;
-  G4double size = GetMarkerSize (text, sizeType);
-  G4ThreeVector position (text.GetPosition ());
-  G4String textString = text.GetText();
-
-  G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
-  if ( pGLViewer ) {
-    const char* textCString = textString.c_str();
-    GLfloat color[4]; /* Ask OpenGL for the current color */
-    glGetFloatv(GL_CURRENT_COLOR, color);
-    
-    // Change to new color
-    glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
-    
-    // set position
-    glRasterPos3d( position.x(),position.y(),position.z() );
-
-    pGLViewer->DrawText(textCString,position.x(),position.y(),position.z(),size);
-    glColor3d (color[0], color[1], color[2]);
-  }
-}
-
-void G4OpenGLSceneHandler::AddPrimitive (const G4Circle& circle) {
-  glEnable (GL_POINT_SMOOTH);
-  AddCircleSquare (circle, G4OpenGLBitMapStore::circle);
-}
-
-void G4OpenGLSceneHandler::AddPrimitive (const G4Square& square) {
-  glDisable (GL_POINT_SMOOTH);
-  AddCircleSquare (square, G4OpenGLBitMapStore::square);
-}
-
-void G4OpenGLSceneHandler::AddPrimitivesCircle (const std::vector <G4VMarker>& marker) {
-  glEnable (GL_POINT_SMOOTH);
-  AddCircleSquareVector (marker, G4OpenGLBitMapStore::square);
-}
-
-void G4OpenGLSceneHandler::AddPrimitivesSquare (const std::vector <G4VMarker>& marker) {
-  glDisable (GL_POINT_SMOOTH);
-  AddCircleSquareVector (marker, G4OpenGLBitMapStore::circle);
-}
-
-void G4OpenGLSceneHandler::AddCircleSquare
-(const G4VMarker& marker,
- G4OpenGLBitMapStore::Shape shape) {
-
-  std::vector <G4VMarker> circleVector;
-  circleVector.push_back(marker);
-  AddCircleSquareVector(circleVector,shape);
-}
- 
-void G4OpenGLSceneHandler::AddCircleSquareVector
-(const std::vector <G4VMarker>& marker,
- G4OpenGLBitMapStore::Shape shape) {
-
-  if (marker.size() == 0) {
+  if (polymarker.size() == 0) {
     return;
-  }
-
-  if (!fProcessingPolymarker) {  // Polymarker has already loaded atts.
-    // Loads G4Atts for picking...
-    if (fpViewer->GetViewParameters().IsPicking()) {
-      G4AttHolder* holder = new G4AttHolder;
-      LoadAtts(marker[0], holder);
-      fPickMap[fPickName] = holder;
-    }
   }
 
   // Note: colour treated in sub-class.
@@ -356,7 +219,7 @@ void G4OpenGLSceneHandler::AddCircleSquareVector
   
   // Get vis attributes - pick up defaults if none.
   const G4VisAttributes* pVA =
-    fpViewer -> GetApplicableVisAttributes (marker[0].GetVisAttributes ());
+    fpViewer -> GetApplicableVisAttributes (polymarker.GetVisAttributes ());
 
   G4double lineWidth = GetLineWidth(pVA);
   G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
@@ -364,7 +227,7 @@ void G4OpenGLSceneHandler::AddCircleSquareVector
     pGLViewer->ChangeLineWidth(lineWidth);
   }
 
-  G4VMarker::FillStyle style = marker[0].GetFillStyle();
+  G4VMarker::FillStyle style = polymarker.GetFillStyle();
 
   // G4bool filled = false;  Not actually used - comment out to prevent compiler warnings (JA).
   static G4bool hashedWarned = false;
@@ -374,7 +237,6 @@ void G4OpenGLSceneHandler::AddCircleSquareVector
     glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
     //filled = false;
     break;
-    
   case G4VMarker::hashed:
     if (!hashedWarned) {
       G4cout << "Hashed fill style in G4OpenGLSceneHandler."
@@ -384,90 +246,121 @@ void G4OpenGLSceneHandler::AddCircleSquareVector
     }
     // Maybe use
     //glPolygonStipple (fStippleMaskHashed);
-    // Drop through to filled...
-    
+    // Drop through to filled...  
   case G4VMarker::filled:
     glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
     //filled = true;
     break;
-    
   }
-
-
 
   MarkerSizeType sizeType;
-  G4double size = GetMarkerSize(marker[0], sizeType);
+  G4double size = GetMarkerSize(polymarker, sizeType);
 
   // Draw...
-   if (sizeType == world) {  // Size specified in world coordinates.
+  if (sizeType == world) {  // Size specified in world coordinates.
 
-     for (unsigned int a=0;a<marker.size();a++) {
-       G4Point3D centre = marker[a].GetPosition();
-       // A few useful quantities...
-       DrawXYPolygon (shape, size, centre, pVA);
-     }
-   } else { // Size specified in screen (window) coordinates.
-     // A few useful quantities...
-     G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
-     if ( pGLViewer ) {
-       pGLViewer->ChangePointSize(size);
-     }
-     //Antialiasing only for circles
-     //Transparency
-     glEnable(GL_BLEND);
-     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-          
-     glBegin (GL_POINTS);
-     for (unsigned int a=0;a<marker.size();a++) {
-       G4Point3D centre = marker[a].GetPosition();
-       glVertex3f(centre.x(),centre.y(),centre.z());
-     }
-     glEnd();     
-     // L. GARNIER 1 March 2009
-     // Old method, we draw a bitmap instead of a GL_POINT. 
-     // I remove it because it cost in term of computing performances
-     // and gl2ps can't draw bitmaps
+    G4int nSides;
+    G4double startPhi;
+    switch (polymarker.GetMarkerType()) {
+    default:
+    case G4Polymarker::dots:
+      size = 1.;
+      // Drop through to circles
+    case G4Polymarker::circles:
+      nSides = GetNoOfSides(pVA);
+      startPhi = 0.;
+      break;
+    case G4Polymarker::squares:
+      nSides = 4;
+      startPhi = -pi / 4.;
+      break;
+    }
 
-     //      glRasterPos3d(centre.x(),centre.y(),centre.z());
-     //      const GLubyte* marker =
-     //        G4OpenGLBitMapStore::GetBitMap(shape, size, filled);
-     //      glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-     //      glBitmap(GLsizei(size), GLsizei(size), size/2., size/2., 0., 0., marker);
-   }
+    const G4Vector3D& viewpointDirection =
+      fpViewer -> GetViewParameters().GetViewpointDirection();
+    const G4Vector3D& up = fpViewer->GetViewParameters().GetUpVector();
+    const G4double dPhi = twopi / nSides;
+    const G4double radius = size / 2.;
+    G4Vector3D start = radius * (up.cross(viewpointDirection)).unit();
+    G4double phi;
+    G4int i;
+    for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
+      glBegin (GL_POLYGON);
+      for (i = 0, phi = startPhi; i < nSides; i++, phi += dPhi) {
+	G4Vector3D r = start; r.rotate(phi, viewpointDirection);
+	G4Vector3D p = polymarker[iPoint] + r;
+	glVertex3d (p.x(), p.y(), p.z());
+      }
+      glEnd ();
+    }
+
+  } else { // Size specified in screen (window) coordinates.
+
+    G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
+    if ( pGLViewer ) {
+      pGLViewer->ChangePointSize(size);
+    }
+    //Antialiasing only for circles
+    switch (polymarker.GetMarkerType()) {
+    default:
+    case G4Polymarker::dots:
+    case G4Polymarker::circles:
+      glEnable (GL_POINT_SMOOTH); break;
+    case G4Polymarker::squares:
+      glDisable (GL_POINT_SMOOTH); break;
+    }
+    //Transparency
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+      
+    glBegin (GL_POINTS);
+    for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
+      G4Point3D centre = polymarker[iPoint];
+      glVertex3d(centre.x(),centre.y(),centre.z());
+    }
+    glEnd();     
+  }
 }
 
-void G4OpenGLSceneHandler::DrawXYPolygon
-(G4OpenGLBitMapStore::Shape shape,
- G4double size,
- const G4Point3D& centre,
- const G4VisAttributes* pApplicableVisAtts)
-{
-  G4int nSides;
-  G4double startPhi;
-  if (shape == G4OpenGLBitMapStore::circle) {
-    nSides = GetNoOfSides(pApplicableVisAtts);
-    startPhi = 0.;
-  } else {
-    nSides = 4;
-    startPhi = -pi / 4.;
-  }
+void G4OpenGLSceneHandler::AddPrimitive (const G4Text& text) {
 
-  const G4Vector3D& viewpointDirection =
-    fpViewer -> GetViewParameters().GetViewpointDirection();
-  const G4Vector3D& up = fpViewer->GetViewParameters().GetUpVector();
-  const G4double dPhi = twopi / nSides;
-  const G4double radius = size / 2.;
-  G4Vector3D start = radius * (up.cross(viewpointDirection)).unit();
-  G4double phi;
-  G4int i;
+  const G4Colour& c = GetTextColour (text);  // Picks up default if none.
+  MarkerSizeType sizeType;
+  G4double size = GetMarkerSize (text, sizeType);
+  G4ThreeVector position (text.GetPosition ());
+  G4String textString = text.GetText();
 
-  glBegin (GL_POLYGON);
-  for (i = 0, phi = startPhi; i < nSides; i++, phi += dPhi) {
-    G4Vector3D r = start; r.rotate(phi, viewpointDirection);
-    G4Vector3D p = centre + r;
-    glVertex3d (p.x(), p.y(), p.z());
+  G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
+  if ( pGLViewer ) {
+    const char* textCString = textString.c_str();
+    GLfloat color[4];  // Ask OpenGL for the current color
+    glGetFloatv(GL_CURRENT_COLOR, color);
+    
+    // Change to new color
+    glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
+    
+    // set position
+    glRasterPos3d( position.x(),position.y(),position.z() );
+
+    pGLViewer->DrawText(textCString,position.x(),position.y(),position.z(),size);
+    glColor3d (color[0], color[1], color[2]);
   }
-  glEnd ();
+}
+
+void G4OpenGLSceneHandler::AddPrimitive (const G4Circle& circle) {
+  G4Polymarker oneCircle(circle);
+  oneCircle.push_back(circle.GetPosition());
+  oneCircle.SetMarkerType(G4Polymarker::circles);
+  // Call this AddPrimitive to avoid re-doing sub-class code.
+  G4OpenGLSceneHandler::AddPrimitive(oneCircle);
+}
+
+void G4OpenGLSceneHandler::AddPrimitive (const G4Square& square) {
+  G4Polymarker oneSquare(square);
+  oneSquare.push_back(square.GetPosition());
+  oneSquare.SetMarkerType(G4Polymarker::squares);
+  // Call this AddPrimitive to avoid re-doing sub-class code.
+  G4OpenGLSceneHandler::AddPrimitive(oneSquare);
 }
 
 void G4OpenGLSceneHandler::AddPrimitive (const G4Scale& scale)
@@ -482,13 +375,6 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   // Draw each facet individually
   
   if (polyhedron.GetNoFacets() == 0) return;
-
-  // Loads G4Atts for picking...
-  if (fpViewer->GetViewParameters().IsPicking()) {
-    G4AttHolder* holder = new G4AttHolder;
-    LoadAtts(polyhedron, holder);
-    fPickMap[fPickName] = holder;
-  }
 
   // Get vis attributes - pick up defaults if none.
   const G4VisAttributes* pVA =
@@ -782,13 +668,6 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 //Method for handling G4NURBS objects for drawing solids.
 //Knots and Ctrl Pnts MUST be arrays of GLfloats.
 void G4OpenGLSceneHandler::AddPrimitive (const G4NURBS& nurb) {
-
-  // Loads G4Atts for picking...
-  if (fpViewer->GetViewParameters().IsPicking()) {
-    G4AttHolder* holder = new G4AttHolder;
-    LoadAtts(nurb, holder);
-    fPickMap[fPickName] = holder;
-  }
 
   GLUnurbsObj *gl_nurb;
   gl_nurb = gluNewNurbsRenderer ();

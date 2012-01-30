@@ -72,7 +72,7 @@
 #include "G4SmoothTrajectory.hh"
 #include "G4SmoothTrajectoryPoint.hh"
 #include "G4AttDef.hh"
-#include "G4ios.hh"
+
 #include <sstream>
 
 // Local function with some frequently used error printing...
@@ -160,7 +160,6 @@ void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand*, G4String newValue) {
   else G4VisCommandsSceneAddUnsuccessful(verbosity);
   UpdateVisManagerScene (currentSceneName);
 }
-
 
 ////////////// /vis/scene/add/digis ///////////////////////////////////////
 
@@ -620,11 +619,7 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
 G4VisCommandSceneAddLogo::G4VisCommandSceneAddLogo () {
   G4bool omitable;
   fpCommand = new G4UIcommand ("/vis/scene/add/logo", this);
-  fpCommand -> SetGuidance 
-    ("Adds a G4 logo to the current scene.");
-  fpCommand -> SetGuidance 
-    ("The placement, if automatic, is similar to that of scale -"
-     "\n\"help /vis/scene/add/scale\" for more information.");
+  fpCommand -> SetGuidance ("Adds a G4 logo to the current scene.");
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("height", 'd', omitable = true);
   parameter->SetDefaultValue (1.);
@@ -633,8 +628,12 @@ G4VisCommandSceneAddLogo::G4VisCommandSceneAddLogo () {
   parameter->SetDefaultValue ("m");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("direction", 's', omitable = true);
-  parameter->SetGuidance ("'x', 'y' or 'z' - otherwise defaults to 'x'.");
-  parameter->SetDefaultValue ("x");
+  parameter->SetGuidance ("auto|[-]x|[-]y|[-]z - defaults to auto.");
+  parameter->SetGuidance
+    ("Direction of outward-facing normal to front face of logo.");
+  parameter->SetGuidance
+    ("If automatic, faces the user in the current viewer.");
+  parameter->SetDefaultValue ("auto");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("red", 'd', omitable = true);
   parameter->SetDefaultValue (0.);
@@ -648,6 +647,10 @@ G4VisCommandSceneAddLogo::G4VisCommandSceneAddLogo () {
   parameter =  new G4UIparameter ("auto|manual", 's', omitable = true);
   parameter->SetGuidance
     ("Automatic placement or manual placement at (xmid,ymid,zmid).");
+  parameter->SetGuidance
+    ("If automatic, place at bottom right of screen when viewed from");
+  parameter->SetGuidance
+    ("logo direction.");
   parameter -> SetParameterCandidates("auto manual");
   parameter->SetDefaultValue  ("auto");
   fpCommand->SetParameter     (parameter);
@@ -698,19 +701,40 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
   G4double unit = G4UIcommand::ValueOf(positionUnit);
   xmid *= unit; ymid *= unit; zmid *= unit;
 
-  G4Scale::Direction logoDirection (G4Scale::x);
-  if (direction(0) == 'y') logoDirection = G4Scale::y;
-  if (direction(0) == 'z') logoDirection = G4Scale::z;
+  Direction logoDirection (autoDirection);
+  if (direction == "auto") logoDirection = autoDirection;
+  else if (direction(0) == 'x') logoDirection = X;
+  else if (direction(0) == 'y') logoDirection = Y;
+  else if (direction(0) == 'z') logoDirection = Z;
+  else if (direction(0) == '-') {
+    if (direction(1) == 'x') logoDirection = minusX;
+    else if (direction(1) == 'y') logoDirection = minusY;
+    else if (direction(1) == 'z') logoDirection = minusZ;
+  } else {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<	"ERROR: Unrecogniseed direction: \""
+	     << direction << "\"." << G4endl;
+      return;
+    }
+  }
+
+  G4VViewer* pViewer = fpVisManager->GetCurrentViewer();
+  if (logoDirection == autoDirection) {  // Takes cue from viewer.
+    if (!pViewer) {
+      if (verbosity >= G4VisManager::errors) {
+	G4cout << 
+	  "ERROR: G4VisCommandsViewerSet::SetNewValue: no viewer."
+          "\n  Auto direction needs a viewer."
+	       << G4endl;
+      }
+      return;
+    }
+  }
 
   G4bool autoPlacing = false; if (auto_manual == "auto") autoPlacing = true;
   // Parameters read and interpreted.
 
-  // Useful constants, etc...
-  const G4double halfHeight(height / 2.);
-  const G4double comfort(0.01);  // 0.15 seems too big.  0.05 might be better.
-  const G4double onePlusComfort(1. + comfort);
-  const G4double freeHeightFraction (1. + 2. * comfort);
-
+  // Current scene extent
   const G4VisExtent& sceneExtent = pScene->GetExtent();  // Existing extent.
   const G4double xmin = sceneExtent.GetXmin();
   const G4double xmax = sceneExtent.GetXmax();
@@ -718,6 +742,7 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
   const G4double ymax = sceneExtent.GetYmax();
   const G4double zmin = sceneExtent.GetZmin();
   const G4double zmax = sceneExtent.GetZmax();
+  const G4double diameter = 2. * sceneExtent.GetExtentRadius();
 
   // Test existing extent and issue warnings...
   G4bool worried = false;
@@ -730,14 +755,25 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
 	     << G4endl;
     }
   }
+
+  // Useful constants, etc...
+  const G4double halfHeight(height / 2.);
+  const G4double comfort(0.01);  // 0.15 seems too big.  0.05 might be better.
+  const G4double freeHeightFraction (1. + 2. * comfort);
+
   // Test existing scene for room...
   G4bool room = true;
   switch (logoDirection) {
-  case G4Scale::x:
+  case autoDirection:
+    if (freeHeightFraction * diameter < height) room = false; break;
+  case X:
+  case minusX:
     if (freeHeightFraction * (xmax - xmin) < height) room = false; break;
-  case G4Scale::y:
+  case Y:
+  case minusY:
     if (freeHeightFraction * (ymax - ymin) < height) room = false; break;
-  case G4Scale::z:
+  case Z:
+  case minusZ:
     if (freeHeightFraction * (zmax - zmin) < height) room = false; break;
   }
   if (!room) {
@@ -760,75 +796,90 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
     }
   }
 
-  // Now figure out the extent...
-  //
-  // From the G4Scale.hh:
-  //
-  // This creates a representation of annotated line in the specified
-  // direction with tick marks at the end.  If autoPlacing is true it
-  // is required to be centred at the front, right, bottom corner of
-  // the world space, comfortably outside the existing bounding
-  // box/sphere so that existing objects do not obscure it.  Otherwise
-  // it is required to be drawn with mid-point at (xmid, ymid, zmid).
-  //
-  // The auto placing algorithm might be:
-  //   x = xmin + (1 + comfort) * (xmax - xmin)
-  //   y = ymin - comfort * (ymax - ymin)
-  //   z = zmin + (1 + comfort) * (zmax - zmin)
-  //   if direction == x then (x - length,y,z) to (x,y,z)
-  //   if direction == y then (x,y,z) to (x,y + length,z)
-  //   if direction == z then (x,y,z - length) to (x,y,z)
-  //
-  // End of clip from G4Scale.hh:
+  if (logoDirection == autoDirection) {
+    // Take cue from viewer
+    const G4Vector3D& vp =
+      pViewer->GetViewParameters().GetViewpointDirection();
+    if (vp.x() > vp.y() && vp.x() > vp.z()) logoDirection = X;
+    else if (vp.x() < vp.y() && vp.x() < vp.z()) logoDirection = minusX;
+    else if (vp.y() > vp.x() && vp.y() > vp.z()) logoDirection = Y;
+    else if (vp.y() < vp.x() && vp.y() < vp.z()) logoDirection = minusY;
+    else if (vp.z() > vp.x() && vp.z() > vp.y()) logoDirection = Z;
+    else if (vp.z() < vp.x() && vp.z() < vp.y()) logoDirection = minusZ;
+  }
+  if (logoDirection == autoDirection) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout << 
+	"ERROR: Something wrong with logic for auto direction."
+	     << G4endl;
+    }
+    return;
+  }
 
   G4double sxmid(xmid), symid(ymid), szmid(zmid);
   if (autoPlacing) {
-    sxmid = xmin + onePlusComfort * (xmax - xmin);
-    symid = ymin - comfort * (ymax - ymin);
-    szmid = zmin + onePlusComfort * (zmax - zmin);
+    // Aim to place at bottom right of screen when viewed from logoDirection.
+    // Give some comfort zone.
+    const G4double xComfort = comfort * (xmax - xmin);
+    const G4double yComfort = comfort * (ymax - ymin);
+    const G4double zComfort = comfort * (zmax - zmin);
     switch (logoDirection) {
-    case G4Scale::x:
-      sxmid -= halfHeight;
+    case autoDirection:  // Shouldn't happen - see code above.
       break;
-    case G4Scale::y:
-      symid += halfHeight;
+    case X:  // y-axis up, z-axis to left?
+      sxmid = xmax + halfHeight + xComfort;
+      symid = ymin - yComfort;
+      szmid = zmin - zComfort;
       break;
-    case G4Scale::z:
-      szmid -= halfHeight;
+    case minusX:  // y-axis up, z-axis to right?
+      sxmid = xmin - halfHeight - xComfort;
+      symid = ymin - yComfort;
+      szmid = zmax + zComfort;
+      break;
+    case Y:  // z-axis up, x-axis to left?
+      sxmid = xmin - xComfort;
+      symid = ymax + halfHeight + yComfort;
+      szmid = zmin - zComfort;
+      break;
+    case minusY:  // z-axis up, x-axis to right?
+      sxmid = xmax + xComfort;
+      symid = ymin - halfHeight - yComfort;
+      szmid = zmin - zComfort;
+      break;
+    case Z:  // y-axis up, x-axis to right?
+      sxmid = xmax + xComfort;
+      symid = ymin - yComfort;
+      szmid = zmax + halfHeight + zComfort;
+      break;
+    case minusZ:  // y-axis up, x-axis to left?
+      sxmid = xmin - xComfort;
+      symid = ymin - yComfort;
+      szmid = zmin - halfHeight - zComfort;
       break;
     }
   }
 
-  /* sxmin, etc., not actually used.  Comment out to prevent compiler
-     warnings but keep in case need in future.  Extract transform into
-     reduced code below.
-  G4double sxmin(sxmid), sxmax(sxmid);
-  G4double symin(symid), symax(symid);
-  G4double szmin(szmid), szmax(szmid);
   G4Transform3D transform;
   switch (logoDirection) {
-  case G4Scale::x:
-    sxmin = sxmid - halfHeight;
-    sxmax = sxmid + halfHeight;
+  case autoDirection:  // Shouldn't happen - see code above.
     break;
-  case G4Scale::y:
-    symin = symid - halfHeight;
-    symax = symid + halfHeight;
-    transform = G4RotateZ3D(halfpi);
-    break;
-  case G4Scale::z:
-    szmin = szmid - halfHeight;
-    szmax = szmid + halfHeight;
+  case X:  // y-axis up, z-axis to left?
     transform = G4RotateY3D(halfpi);
     break;
-  }
-  */
-  G4Transform3D transform;
-  switch (logoDirection) {
-  case G4Scale::x: break;
-  case G4Scale::y: break;
-  case G4Scale::z:
-    transform = G4RotateY3D(halfpi);
+  case minusX:  // y-axis up, z-axis to right?
+    transform = G4RotateY3D(-halfpi);
+    break;
+  case Y:  // z-axis up, x-axis to left?
+    transform = G4RotateX3D(-halfpi) * G4RotateZ3D(pi);
+    break;
+  case minusY:  // z-axis up, x-axis to right?
+    transform = G4RotateX3D(halfpi);
+    break;
+  case Z:  // y-axis up, x-axis to right?
+    // No transformation required.
+    break;
+  case minusZ:  // y-axis up, x-axis to left?
+    transform = G4RotateY3D(pi);
     break;
   }
   transform = G4Translate3D(sxmid,symid,szmid) * transform;
@@ -855,19 +906,8 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
   if (successful) {
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "G4 Logo of height " << userHeight << ' ' << userHeightUnit
-	     << ", ";
-      switch (logoDirection) {
-      case G4Scale::x:
-	G4cout << 'x';
-	break;
-      case G4Scale::y:
-	G4cout << 'y';
-	break;
-      case G4Scale::z:
-	G4cout << 'z';
-	break;
-      }
-      G4cout << "-direction, added to scene \"" << currentSceneName << "\"";
+	     << ", " << direction << "-direction, added to scene \""
+	     << currentSceneName << "\"";
       if (verbosity >= G4VisManager::parameters) {
 	G4cout << "\n  with extent " << extent
 	       << "\n  at " << transform.getRotation()

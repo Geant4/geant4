@@ -40,7 +40,6 @@
 #include "globals.hh"
 
 #include "G4VSceneHandler.hh"
-#include "G4OpenGLBitMapStore.hh"
 #include "G4OpenGL.hh"
 
 #include <map>
@@ -110,22 +109,7 @@ protected:
   // Effective number of stored list
   G4int fNbListsToBeFlush;
 
-private:
-
-  void AddCircleSquare (const G4VMarker&, G4OpenGLBitMapStore::Shape);
-  void AddCircleSquareVector (const std::vector <G4VMarker>&, G4OpenGLBitMapStore::Shape);
-
-  void DrawXYPolygon
-  (G4OpenGLBitMapStore::Shape,
-   G4double size,
-   const G4Point3D& centre,
-   const G4VisAttributes* pApplicableVisAtts);
-  // Draws in world coordinates a polygon in the screen plane knowing
-  // viewpoint direction and up vector.
-
   static const GLubyte fStippleMaskHashed [128];
-
-  G4bool fProcessingPolymarker;
 };
 
 #include "G4OpenGLSceneHandler.icc"

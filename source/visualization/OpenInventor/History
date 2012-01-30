@@ -20,6 +20,12 @@ committal in the CVS repository !
 History file for visualization/OpenInventor
 -------------------------------------------
 
+3rd January 2012  John Allison  (openinventor-V09-05-00)
+- G4OpeninventorX//Xt/Win/Win32:
+  o Removed #ifdef G4VIS... protection from header files so that they
+    can be used for a possible dynamic library.  Of course, the
+    protection remains on the implementation files.
+
 30th November 2011 Ben Morgan (openinventor-V09-04-04)
 - sources.cmake : Added explicit inclusion and linking of X11 and Motif
   libraries. Appears needed so that OpenGL X11/XM and OpenInventor can

@@ -208,6 +208,7 @@ public: // With description
   G4bool              IsReadyForTransients () const;
   G4bool              GetTransientsDrawnThisEvent () const;
   G4bool              GetTransientsDrawnThisRun   () const;
+  const G4Transform3D& GetObjectTransformation    () const;
   void          SetName          (const G4String&);
   void          SetCurrentViewer (G4VViewer*);
   void          SetScene         (G4Scene*);
@@ -218,6 +219,7 @@ public: // With description
   // next call to BeginPrimitives().  Maintained by vis manager.
   void          SetTransientsDrawnThisEvent      (G4bool);
   void          SetTransientsDrawnThisRun        (G4bool);
+  void          SetObjectTransformation          (const G4Transform3D&);
   // Maintained by vis manager.
 
   //////////////////////////////////////////////////////////////

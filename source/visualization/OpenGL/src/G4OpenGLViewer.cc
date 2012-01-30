@@ -431,17 +431,21 @@ void G4OpenGLViewer::Pick(GLdouble x, GLdouble y)
   if (hits < 0)
     G4cout << "Too many hits.  Zoom in to reduce overlaps." << G4endl;
   else if (hits > 0) {
-    //G4cout << hits << " hit(s)" << G4endl;
+    G4cout << hits << " hit(s)" << G4endl;
     GLuint* p = selectBuffer;
     for (GLint i = 0; i < hits; ++i) {
       GLuint nnames = *p++;
-      p++; //OR GLuint zmin = *p++;
-      p++; //OR GLuint zmax = *p++;
+      // This bit of debug code or...
+      //GLuint zmin = *p++;
+      //GLuint zmax = *p++;
       //G4cout << "Hit " << i << ": " << nnames << " names"
       //     << "\nzmin: " << zmin << ", zmax: " << zmax << G4endl;
+      // ...just increment the pointer
+      p++;
+      p++;
       for (GLuint j = 0; j < nnames; ++j) {
 	GLuint name = *p++;
-	//G4cout << "Name " << j << ": PickName: " << name << G4endl;
+	G4cout << "Name " << j << ": PickName: " << name << G4endl;
 	std::map<GLuint, G4AttHolder*>::iterator iter =
 	  fOpenGLSceneHandler.fPickMap.find(name);
 	if (iter != fOpenGLSceneHandler.fPickMap.end()) {

@@ -32,8 +32,6 @@
 // A template for a sophisticated graphics driver with a scene graph.
 //?? Lines or sections marked like this require specialisation for your driver.
 
-#if defined (G4VIS_BUILD_XXXSG_DRIVER) || (G4VIS_USE_XXXSG)
-
 #ifndef G4XXXSG_HH
 #define G4XXXSG_HH
 
@@ -46,7 +44,5 @@ public:
   G4VSceneHandler* CreateSceneHandler(const G4String& name = "");
   G4VViewer* CreateViewer (G4VSceneHandler&, const G4String& name = "");
 };
-
-#endif
 
 #endif

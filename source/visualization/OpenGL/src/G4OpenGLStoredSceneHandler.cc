@@ -55,6 +55,7 @@
 #include "G4AttHolder.hh"
 #include "G4OpenGLTransform3D.hh"
 #include "G4OpenGLViewer.hh"
+#include "G4AttHolder.hh"
 
 G4OpenGLStoredSceneHandler::PO::PO
 (G4int id,
@@ -78,7 +79,6 @@ G4OpenGLStoredSceneHandler::G4OpenGLStoredSceneHandler
 (G4VGraphicsSystem& system,
  const G4String& name):
 G4OpenGLSceneHandler (system, fSceneIdCount++, name),
-fAddPrimitivePreambleNestingDepth (0),
 fTopPODL (0)
 {}
 
@@ -118,20 +118,19 @@ void G4OpenGLStoredSceneHandler::EndPrimitives2D ()
 
 void G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
 {
-  // Track nesting depth to avoid recursive calls, for example, from a
-  // G4Polymarker that invokes a G4Circle...
-  fAddPrimitivePreambleNestingDepth++;
-  if (fAddPrimitivePreambleNestingDepth > 1) return;
+  // Loads G4Atts for picking...
+  if (fpViewer->GetViewParameters().IsPicking()) {
+    glLoadName(++fPickName);
+    G4AttHolder* holder = new G4AttHolder;
+    LoadAtts(visible, holder);
+    fPickMap[fPickName] = holder;
+  }
+
+  const G4Colour& c = GetColour (visible);
 
   // Because of our need to control colour of transients (display by
   // time fading), display lists may only cover a single primitive.
   // So display list setup is here.
-
-  if (fpViewer->GetViewParameters().IsPicking()) {
-    fPickMap[++fPickName] = 0;
-  }
-
-  const G4Colour& c = GetColour (visible);
 
   if (fMemoryForDisplayLists) {
     fDisplayListId = glGenLists (1);
@@ -163,6 +162,10 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
       G4OpenGLTransform3D oglt (*fpObjectTransformation);
       glMultMatrixd (oglt.GetGLMatrix ());
       glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
+      // For transient objects, colour, transformation, are kept in
+      // the TO, so should *not* be in the display list.  As mentioned
+      // above, in some cases (display-by-time fading) we need to have
+      // independent control of colour.
       glNewList (fDisplayListId, GL_COMPILE_AND_EXECUTE);
     }
     else {
@@ -226,7 +229,6 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePostamble()
   if (fReadyForTransients || !fMemoryForDisplayLists) {
     glPopMatrix();
   }
-  fAddPrimitivePreambleNestingDepth--;
 }
 
 void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Polyline& polyline)

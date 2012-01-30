@@ -26,6 +26,35 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+3rd January 2012  John Allison (visman-V09-05-01)
+- G4VisCommandsScene.cc: /vis/scene/notifyHandlers:
+  o Downgraded "scene has changed" from WARNING to NOTE. 
+
+2nd January 2012  John Allison
+- G4VisManager::EndOfEvent: Removed unwarranted DrawView.  It was
+  causing two copies of the geometry to be drawn.
+
+30th December 2011  John Allison  (visman-V09-05-00)
+- G4VisManager: Implemented Begin/EndDraw(2D).
+  o Note that this forces all thus-bracketed Draw messages to have the
+    same transformation.  If an attempt to change the transformation
+    is detected, a fatal exception is raised.
+- G4VSceneHandler: Added Get/SetObjectTransformation.
+
+12th December 2011  John Allison
+- G4VSceneHandler::GetMarkerSize: Bug fix:
+  o Bug: If size < 1., size = 1. for all markers.
+  o Fix: Applies only to "screen-size" markers.
+- G4VisCommandSceneAddLogo: Improvements to /vis/scene/add/logo:
+  o In "auto" mode, logo is placed front-bottom-right facing the viewer
+    regardless of currenrt viewpoint direction.  (Many examples set the
+    viewpoint direction to (-1,0,0) so that the y-axis is up and the
+    z-axis horizontal; the beam is usually fired down the z-axis.  This
+    improvement puts the G4 logo in a sensible place.)
+  o More choices for facing direction:
+    . auto|[-]x|[-]y|[-]z - defaults to auto
+    . If automatic, faces the user.
+
 12th November 2011  John Allison  (visman-V09-04-12)
 - G4VisListManager<T>::SetCurrent:
   o Changed "Fatal" to "JustWarning" for non-existent model.

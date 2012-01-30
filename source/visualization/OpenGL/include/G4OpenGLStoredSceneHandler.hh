@@ -87,7 +87,6 @@ protected:
   static G4int  fDisplayListId;  // Workspace.
   static G4bool fMemoryForDisplayLists;  // avoid memory overflow
   static G4int  fDisplayListLimit;       // avoid memory overflow
-  G4int fAddPrimitivePreambleNestingDepth;
   
   // PODL = Persistent Object Display List.
   GLint  fTopPODL;                  // List which calls the other PODLs.
