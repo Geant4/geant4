@@ -55,14 +55,14 @@
 
 //---------------------------------------------------------------------------
 G4ErrorPropagator::G4ErrorPropagator()
-  : theInitialTrajState(0), theFinalTrajState(0)
+  : theStepLength(0.), theInitialTrajState(0),
+    theFinalTrajState(0), theStepN(0), theG4Track(0)
 {
   verbose =  G4ErrorPropagatorData::verbose();
 #ifdef G4EVERBOSE
    if(verbose >= 5) { G4cout << "G4ErrorPropagator " << this << G4endl; }
 #endif
 
-  theG4Track = 0;
   fpSteppingManager = G4EventManager::GetEventManager()
                     ->GetTrackingManager()->GetSteppingManager();
   thePropIsInitialized = false;
@@ -169,6 +169,8 @@ G4int G4ErrorPropagator::Propagate( G4ErrorTrajState* currentTS,
   theG4Track->GetDefinition()->GetProcessManager()->EndTracking();
 
   InvokePostUserTrackingAction( theG4Track );
+
+  // delete currentTS_FREE;
 
   return ierr;
 }

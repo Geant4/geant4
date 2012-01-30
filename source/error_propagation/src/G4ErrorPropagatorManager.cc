@@ -58,6 +58,8 @@
 #include "G4ChordFinder.hh"
 #include "G4EquationOfMotion.hh"
 #include "G4FieldManager.hh"
+#include "G4PropagatorInField.hh"
+#include "G4RunManager.hh"
 #include "G4VParticleChange.hh"
 
 G4ErrorPropagatorManager*
@@ -106,6 +108,11 @@ G4ErrorPropagatorManager::G4ErrorPropagatorManager()
 //-----------------------------------------------------------------------
 G4ErrorPropagatorManager::~G4ErrorPropagatorManager()
 {
+  delete theEquationOfMotion;
+  delete theG4ErrorPropagationNavigator;
+  delete thePropagator;
+  delete theG4ErrorRunManagerHelper;
+  delete theG4ErrorPropagatorManager;
 }
 
 
@@ -147,6 +154,10 @@ void G4ErrorPropagatorManager::StartNavigator()
     theG4ErrorPropagationNavigator->SetVerboseLevel( verb );   
     
     transportationManager->SetNavigatorForTracking(theG4ErrorPropagationNavigator);
+    transportationManager->GetPropagatorInField()->GetIntersectionLocator()
+                         ->SetNavigatorFor(theG4ErrorPropagationNavigator);
+    G4EventManager::GetEventManager()->GetTrackingManager()->GetSteppingManager()
+                         ->SetNavigator(theG4ErrorPropagationNavigator);
     //  G4ThreeVector center(0,0,0);
     //  theG4ErrorPropagationNavigator->LocateGlobalPointAndSetup(center,0,false);
     

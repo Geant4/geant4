@@ -509,6 +509,7 @@ G4ErrorMatrix & G4ErrorMatrix::operator=(const G4ErrorSymMatrix &m1)
 
 G4ErrorSymMatrix & G4ErrorSymMatrix::operator=(const G4ErrorSymMatrix &m1)
 {
+   if (&m1 == this) { return *this; }
    if(m1.nrow != nrow)
    {
       nrow = m1.nrow;
