@@ -13,6 +13,19 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      
+16-01-12 mma (particleGunExample-V09-05-01) 
+- HistoManager : histId and histPt
+- SetHisto() : simplification of Unit handling (HistoManager and HistoMessenger)
+- HistoManager and HistoMessenger : coding conventions
+- Functions Normalize() and saveAscii() re-activated
+       
+11-01-12 mma (particleGunExample-V09-05-00)
+- HistoManager.hh and .cc : migrate to new g4tools histogramming system
+  Do not need aida anymore, nor G4ANALYSIS_USE
+- Functions Normalize() and saveAscii() temporarily empty  
+- HistoMessenger.hh and .cc : suppress fileType command
+- Update Readme and all macros accordingly
+      
 08-11-11 mma (particleGunExample-V09-04-01)
 - modify SteppingVerbose for OutOfWorld
           
