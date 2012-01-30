@@ -8,6 +8,9 @@ $Id: History,v 1.25 2010-11-09 14:50:21 allison Exp $
                            History file
                            ------------
 
+08.12.2011 - P. Mato (air_shower-V09-05-00)
+	     Added CMakeLists.txt file
+
 31.10.2011 - L.Pandola (air_shower-V09-04-01)
 	     Migrated G4Exceptions to the new scheme
 
