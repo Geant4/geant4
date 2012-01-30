@@ -70,18 +70,6 @@
 
 static const char* G4Hadronic_Random_File = getenv("G4HADRONIC_RANDOM_FILE");
 
-// Initialize static variables for isotope production
-
-G4IsoParticleChange * G4HadronicProcess::theIsoResult = 0;
-G4IsoParticleChange * G4HadronicProcess::theOldIsoResult = 0;
-G4bool G4HadronicProcess::isoIsEnabled = true;
-
-void G4HadronicProcess::
-EnableIsotopeProductionGlobally()  {isoIsEnabled = true;}
-
-void G4HadronicProcess::
-DisableIsotopeProductionGlobally() {isoIsEnabled = false;}
-
 //////////////////////////////////////////////////////////////////
 
 G4HadronicProcess::G4HadronicProcess(const G4String& processName,
@@ -89,7 +77,6 @@ G4HadronicProcess::G4HadronicProcess(const G4String& processName,
  :G4VDiscreteProcess(processName, aType)
 {
   ModelingState = 0;
-  isoIsOnAnyway = -1;
   theTotalResult = new G4ParticleChange();
   theTotalResult->SetSecondaryWeightByProcess(true);
   theInteraction = 0;
@@ -121,18 +108,14 @@ G4HadronicProcess::G4HadronicProcess(const G4String& processName,
   }  
 }
 
+
 G4HadronicProcess::~G4HadronicProcess()
 { 
   G4HadronicProcessStore::Instance()->DeRegister(this);
   delete theTotalResult;
-
-  std::for_each(theProductionModels.begin(),
-                theProductionModels.end(), G4Delete());
- 
-  delete theOldIsoResult; 
-  delete theIsoResult;
   delete theCrossSectionDataStore;
 }
+
 
 void G4HadronicProcess::RegisterMe( G4HadronicInteraction *a )
 { 
@@ -311,18 +294,6 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
   result->SetTrafoToLab(thePro.GetTrafoToLab());
 
   ClearNumberOfInteractionLengthLeft();
-  /*
-  if(isoIsOnAnyway!=-1)
-  {
-    if(isoIsEnabled||isoIsOnAnyway)
-    {
-      result = DoIsotopeCounting(result, aTrack, targetNucleus);
-    }
-  }
-  // Put hadronic final state particles into G4ParticleChange
-
-  FillTotalResult(result, aTrack);
-  */
 
   // VI: new method   
   FillResult(result, aTrack);
@@ -339,100 +310,6 @@ void G4HadronicProcess::ProcessDescription(std::ostream& outFile) const
   outFile << "The description for this process has not been written yet.\n"; 
 }
 
-
-G4HadFinalState* 
-G4HadronicProcess::DoIsotopeCounting(G4HadFinalState * aResult,
-                                     const G4Track & aTrack,
-                                     const G4Nucleus & aNucleus)
-{
-  // get the PC from iso-production
-  delete theOldIsoResult;
-  theOldIsoResult = 0;
-  delete theIsoResult;
-  theIsoResult = new G4IsoParticleChange;
-  G4bool done = false;
-  G4IsoResult * anIsoResult = 0;
-  for(unsigned int i=0; i<theProductionModels.size(); i++)
-  {
-    anIsoResult = theProductionModels[i]->GetIsotope(aTrack, aNucleus);
-    if(anIsoResult!=0)
-    {
-      done = true;
-      break;
-    }
-  }
-
-  // If no production models active, use default iso production
-  if(!done) anIsoResult = ExtractResidualNucleus(aTrack, aNucleus, aResult); 
-
-  // Add all info explicitely and add typename from model called.
-  theIsoResult->SetIsotope(anIsoResult->GetIsotope());
-  theIsoResult->SetProductionPosition(aTrack.GetPosition());
-  theIsoResult->SetProductionTime(aTrack.GetGlobalTime());
-  theIsoResult->SetParentParticle(*aTrack.GetDynamicParticle());
-  theIsoResult->SetMotherNucleus(anIsoResult->GetMotherNucleus());
-  theIsoResult->SetProducer(typeid(*theInteraction).name());
-  
-  delete anIsoResult;
-
-  // If isotope production is enabled the GetIsotopeProductionInfo() 
-  // method must be called or else a memory leak will result
-  //
-  // The following code will fix the memory leak, but remove the 
-  // isotope information:
-  //
-  //  if(theIsoResult) {
-  //    delete theIsoResult;
-  //    theIsoResult = 0;
-  //  }
-  
-  return aResult;
-}
-
-G4IsoResult* 
-G4HadronicProcess::ExtractResidualNucleus(const G4Track&,
-                                          const G4Nucleus& aNucleus,
-                                          G4HadFinalState* aResult)
-{
-  G4double A = aNucleus.GetA_asInt();
-  G4double Z = aNucleus.GetZ_asInt();
-  G4double bufferA = 0;
-  G4double bufferZ = 0;
-  
-  // loop over aResult, and decrement A, Z accordingly
-  // cash the max
-  for(G4int i=0; i<aResult->GetNumberOfSecondaries(); ++i)
-  {
-    G4HadSecondary* aSecTrack = aResult->GetSecondary(i);
-    const G4ParticleDefinition* part = aSecTrack->GetParticle()->GetParticleDefinition(); 
-    G4double Q = part->GetPDGCharge()/eplus;
-    G4double N = part->GetBaryonNumber();
-    if(bufferA < N)
-    {
-      bufferA = N;
-      bufferZ = Q;
-    }
-    Z -= Q;
-    A -= N;
-  }
-  
-  // if the fragment was part of the final state, it is 
-  // assumed to be the heaviest secondary.
-  if(A<0.1)
-  {
-    A = bufferA;
-    Z = bufferZ;
-  }
-  
-  // prepare the IsoResult.
-
-  std::ostringstream ost1;
-  ost1 <<Z<<"_"<<A;
-  G4String biff = ost1.str();
-  G4IsoResult * theResult = new G4IsoResult(biff, aNucleus);
-
-  return theResult;
-}
 
 G4double G4HadronicProcess::XBiasSurvivalProbability()
 {
@@ -504,21 +381,19 @@ G4HadronicProcess::FillResult(G4HadFinalState * aR, const G4Track & aT)
   G4int nSec = aR->GetNumberOfSecondaries();
   theTotalResult->SetNumberOfSecondaries(nSec);
  
-  if(nSec > 0) {
+  if (nSec > 0) {
     G4double time0 = aT.GetGlobalTime();
-    for(G4int i=0; i<nSec; ++i)
-      {
-	G4LorentzVector theM = aR->GetSecondary(i)->GetParticle()->Get4Momentum();
-	theM.rotate(rotation, it);
-	theM *= aR->GetTrafoToLab();
-	aR->GetSecondary(i)->GetParticle()->Set4Momentum(theM);
-	G4double time = aR->GetSecondary(i)->GetTime();
-	if(time<time0) { time = time0; }
+    for (G4int i = 0; i < nSec; ++i) {
+      G4LorentzVector theM = aR->GetSecondary(i)->GetParticle()->Get4Momentum();
+      theM.rotate(rotation, it);
+      theM *= aR->GetTrafoToLab();
+      aR->GetSecondary(i)->GetParticle()->Set4Momentum(theM);
+      G4double time = aR->GetSecondary(i)->GetTime();
+      if (time < time0) time = time0;
 
-	G4Track* track = new G4Track(aR->GetSecondary(i)->GetParticle(),
-				     time,
-				     aT.GetPosition());
-	G4double newWeight = aT.GetWeight()*aR->GetSecondary(i)->GetWeight();
+      G4Track* track = new G4Track(aR->GetSecondary(i)->GetParticle(),
+                                   time, aT.GetPosition());
+      G4double newWeight = aT.GetWeight()*aR->GetSecondary(i)->GetWeight();
 	// G4cout << "#### ParticleDebug "
 	// <<GetProcessName()<<" "
 	// <<aR->GetSecondary(i)->GetParticle()->GetDefinition()->GetParticleName()<<" "
@@ -529,20 +404,20 @@ G4HadronicProcess::FillResult(G4HadFinalState * aR, const G4Track & aT)
 	// <<aR->GetSecondary(i)->GetWeight()<<" "
 	// <<aR->GetSecondary(i)->GetParticle()->Get4Momentum()<<" "
 	// <<G4endl;
-	track->SetWeight(newWeight);
-	track->SetTouchableHandle(aT.GetTouchableHandle());
-	theTotalResult->AddSecondary(track);
-	if(G4HadronicProcess_debug_flag) {
-	  G4double e = track->GetKineticEnergy();
-          if(e <= 0.0) {
-	    G4ExceptionDescription ed;
-	    DumpState(aT,"Secondary has zero energy",ed);
-            ed << "Secondary " << track->GetDefinition()->GetParticleName() 
-	       << G4endl;
-	    G4Exception("G4HadronicProcess::FillResults", "had011", JustWarning,ed);
-	  }
-	}
+      track->SetWeight(newWeight);
+      track->SetTouchableHandle(aT.GetTouchableHandle());
+      theTotalResult->AddSecondary(track);
+      if (G4HadronicProcess_debug_flag) {
+        G4double e = track->GetKineticEnergy();
+        if (e <= 0.0) {
+          G4ExceptionDescription ed;
+          DumpState(aT,"Secondary has zero energy",ed);
+          ed << "Secondary " << track->GetDefinition()->GetParticleName() 
+             << G4endl;
+          G4Exception("G4HadronicProcess::FillResults", "had011", JustWarning,ed);
+        }
       }
+    }
   }
 
   aR->Clear();
@@ -550,7 +425,7 @@ G4HadronicProcess::FillResult(G4HadFinalState * aR, const G4Track & aT)
 }
 
 void 
-G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
+G4HadronicProcess::FillTotalResult(G4HadFinalState* aR, const G4Track& aT)
 {
   theTotalResult->Clear();
   theTotalResult->ProposeLocalEnergyDeposit(0.);
@@ -688,14 +563,6 @@ G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
 
   aR->Clear();
   return;
-}
-
-G4IsoParticleChange* G4HadronicProcess::GetIsotopeProductionInfo() 
-{ 
-  G4IsoParticleChange * anIsoResult = theIsoResult;
-  if(theIsoResult) theOldIsoResult = theIsoResult;
-  theIsoResult = 0;
-  return anIsoResult;
 }
 
 

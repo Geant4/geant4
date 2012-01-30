@@ -52,8 +52,6 @@
 #include "G4Nucleus.hh" 
 #include "G4ReactionProduct.hh"
 #include <vector>
-#include "G4VIsotopeProduction.hh"
-#include "G4IsoParticleChange.hh"
 #include "G4VCrossSectionDataSet.hh"
 #include "G4VLeadingParticleBiasing.hh"
 
@@ -152,18 +150,6 @@ protected:
 
 public:
 
-  // Methods for isotope production    
-  static void EnableIsotopeProductionGlobally();
-  static void DisableIsotopeProductionGlobally();
-    
-  void EnableIsotopeCounting()  {isoIsOnAnyway = 1;}
-  void DisableIsotopeCounting() {isoIsOnAnyway = -1;}
-    
-  void RegisterIsotopeProductionModel(G4VIsotopeProduction * aModel)
-  { theProductionModels.push_back(aModel); }
-
-  static G4IsoParticleChange * GetIsotopeProductionInfo();
-
   void BiasCrossSectionByFactor(G4double aScale);
 
   // Energy-momentum non-conservation limits and reporting
@@ -212,14 +198,6 @@ private:
 
   void FillResult(G4HadFinalState * aR, const G4Track & aT);
 
-  G4HadFinalState * DoIsotopeCounting(G4HadFinalState * aResult,
-				      const G4Track & aTrack,
-				      const G4Nucleus & aNucleus);
-                                          
-  G4IsoResult * ExtractResidualNucleus(const G4Track & aTrack,
-				       const G4Nucleus & aNucleus,
-				       G4HadFinalState * aResult);
-
   inline G4double GetTotalNumberOfInteractionLengthTraversed()
   { return theInitialNumberOfInteractionLength
       -G4VProcess::theNumberOfInteractionLengthLeft;
@@ -234,13 +212,13 @@ private:
     
   G4EnergyRangeManager theEnergyRangeManager;
     
-  G4HadronicInteraction *theInteraction;
+  G4HadronicInteraction* theInteraction;
 
   G4CrossSectionDataStore* theCrossSectionDataStore;
  
   G4Nucleus targetNucleus;
     
-  G4HadronicProcess *dispatch;
+  G4HadronicProcess* dispatch;
 
   bool G4HadronicProcess_debug_flag;
 
@@ -249,20 +227,10 @@ private:
   std::pair<G4double, G4double> epCheckLevels;
   G4bool levelsSetByProcess;
 
-  // swiches for isotope production    
-  static G4bool isoIsEnabled; // true or false; local swich overrides
-  G4int isoIsOnAnyway; // true(1), false(-1) or default(0)
-    
-  G4IsoParticleChange theIsoPC;
-  std::vector<G4VIsotopeProduction *> theProductionModels;
-    
   std::vector<G4VLeadingParticleBiasing *> theBias;
 
-  static G4IsoParticleChange* theIsoResult;
-  static G4IsoParticleChange* theOldIsoResult;
-    
   G4ParticleChange* theTotalResult; 
-    
+  
   G4double theInitialNumberOfInteractionLength;   
 
   G4double aScaleFactor;

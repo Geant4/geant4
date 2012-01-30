@@ -53,7 +53,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_mgt
         G4HadronicProcess.hh
         G4HadronicProcessStore.hh
         G4HadronicProcessType.hh
-        G4IsoParticleChange.hh
         G4NoModelFound.hh
         G4VLeadingParticleBiasing.hh
     SOURCES
