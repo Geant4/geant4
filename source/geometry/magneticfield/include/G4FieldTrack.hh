@@ -174,6 +174,7 @@ class  G4FieldTrack
                                 G4double electric_dipole_moment= 0.0,  
                                 G4double magnetic_charge= 0.0);  
            inline G4ChargeState( const G4ChargeState& right ); 
+           inline G4ChargeState& operator = ( const G4ChargeState& right );
 
            inline void SetCharge(G4double charge){ fCharge= charge; }
 

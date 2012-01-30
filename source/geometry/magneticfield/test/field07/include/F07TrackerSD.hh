@@ -24,56 +24,39 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimpleRunge.hh,v 1.8 2006-06-29 18:23:23 gunter Exp $
+// $Id: F07TrackerSD.hh,v 1.7 2006-06-29 17:47:56 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
-// class G4SimpleRunge
-//
-// Class description:
-//
-// Simple Runge:
-//
-//        x_1 = x_0 + h * ( dx( t_0+h/2, x_0 + h/2 * dx( t_0, x_0) ) )
-//
-// Second order solver.
-// Takes the derivative at a position to be assumed at the middle of the
-// Step and adds it to the current position.
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// History:
-// - Created. W.Wander <wwc@mit.edu>, 12/09/97
-// -------------------------------------------------------------------
+#ifndef F07TrackerSD_h
+#define F07TrackerSD_h 1
 
-#ifndef G4SIMPLERUNGE_HH
-#define G4SIMPLERUNGE_HH
+#include "G4VSensitiveDetector.hh"
+#include "F07TrackerHit.hh"
 
-#include "G4MagErrorStepper.hh"
+class G4Step;
+class G4HCofThisEvent;
 
-class G4SimpleRunge : public G4MagErrorStepper
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class F07TrackerSD : public G4VSensitiveDetector
 {
+  public:
+      F07TrackerSD(G4String);
+     ~F07TrackerSD();
 
-  public:  // with description
-
-    G4SimpleRunge(G4EquationOfMotion *EquationRhs, G4int numberOfVariables = 6) ;
-   ~G4SimpleRunge();
-      // Constructor and destructor.
-
-    void DumbStepper( const G4double y[],
-                      const G4double dydx[],
-                            G4double h,
-                            G4double yout[]);
-
-  public:  // without description
-  
-    G4int IntegratorOrder() const { return 2; }
+      void Initialize(G4HCofThisEvent*);
+      G4bool ProcessHits(G4Step*, G4TouchableHistory*);
+      void EndOfEvent(G4HCofThisEvent*);
 
   private:
+      F07TrackerHitsCollection* trackerCollection;
 
-    G4int fNumberOfVariables ;
-
-    G4double* dydxTemp;
-    G4double* yTemp;
-      // scratch space    
 };
 
-#endif /* G4SIMPLERUNGE_HH */
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#endif
+

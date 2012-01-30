@@ -24,56 +24,50 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimpleRunge.hh,v 1.8 2006-06-29 18:23:23 gunter Exp $
+// $Id: F07PhysicsList.hh,v 1.12 2008-09-22 16:41:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
-// class G4SimpleRunge
-//
-// Class description:
-//
-// Simple Runge:
-//
-//        x_1 = x_0 + h * ( dx( t_0+h/2, x_0 + h/2 * dx( t_0, x_0) ) )
-//
-// Second order solver.
-// Takes the derivative at a position to be assumed at the middle of the
-// Step and adds it to the current position.
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// History:
-// - Created. W.Wander <wwc@mit.edu>, 12/09/97
-// -------------------------------------------------------------------
+#ifndef F07PhysicsList_h
+#define F07PhysicsList_h 1
 
-#ifndef G4SIMPLERUNGE_HH
-#define G4SIMPLERUNGE_HH
+#include "G4VUserPhysicsList.hh"
+#include "globals.hh"
 
-#include "G4MagErrorStepper.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4SimpleRunge : public G4MagErrorStepper
+class F07PhysicsList: public G4VUserPhysicsList
 {
+  public:
+    F07PhysicsList();
+   ~F07PhysicsList();
 
-  public:  // with description
+  protected:
+    // Construct particle and physics
+    void ConstructParticle();
+    void ConstructProcess();
+ 
+    void SetCuts();
 
-    G4SimpleRunge(G4EquationOfMotion *EquationRhs, G4int numberOfVariables = 6) ;
-   ~G4SimpleRunge();
-      // Constructor and destructor.
+   
+  protected:
+    // these methods Construct particles 
+    void ConstructBosons();
+    void ConstructLeptons();
+    void ConstructMesons();
+    void ConstructBaryons();
 
-    void DumbStepper( const G4double y[],
-                      const G4double dydx[],
-                            G4double h,
-                            G4double yout[]);
-
-  public:  // without description
-  
-    G4int IntegratorOrder() const { return 2; }
-
-  private:
-
-    G4int fNumberOfVariables ;
-
-    G4double* dydxTemp;
-    G4double* yTemp;
-      // scratch space    
+  protected:
+  // these methods Construct physics processes and register them
+    void ConstructGeneral();
+    void ConstructEM();
+    void AddStepMax();
 };
 
-#endif /* G4SIMPLERUNGE_HH */
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#endif
+
+ 

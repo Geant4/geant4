@@ -24,56 +24,46 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimpleRunge.hh,v 1.8 2006-06-29 18:23:23 gunter Exp $
+// $Id: F07MagneticField.hh,v 1.8 2007-08-22 13:11:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// class G4SimpleRunge
-//
-// Class description:
-//
-// Simple Runge:
-//
-//        x_1 = x_0 + h * ( dx( t_0+h/2, x_0 + h/2 * dx( t_0, x_0) ) )
-//
-// Second order solver.
-// Takes the derivative at a position to be assumed at the middle of the
-// Step and adds it to the current position.
+//    A class for control of the Magnetic Field of the detector.
+//  The field is assumed to be uniform.
+// 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// History:
-// - Created. W.Wander <wwc@mit.edu>, 12/09/97
-// -------------------------------------------------------------------
+#ifndef F07MagneticField_H
+#define F07MagneticField_H
 
-#ifndef G4SIMPLERUNGE_HH
-#define G4SIMPLERUNGE_HH
+#include "G4UniformMagField.hh"
 
-#include "G4MagErrorStepper.hh"
+class G4FieldManager;
 
-class G4SimpleRunge : public G4MagErrorStepper
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+
+class F07MagneticField: public G4UniformMagField
 {
-
-  public:  // with description
-
-    G4SimpleRunge(G4EquationOfMotion *EquationRhs, G4int numberOfVariables = 6) ;
-   ~G4SimpleRunge();
-      // Constructor and destructor.
-
-    void DumbStepper( const G4double y[],
-                      const G4double dydx[],
-                            G4double h,
-                            G4double yout[]);
-
-  public:  // without description
+  public:
   
-    G4int IntegratorOrder() const { return 2; }
+   F07MagneticField(G4ThreeVector);  //  The value of the field
+   F07MagneticField();               //  A zero field
+  ~F07MagneticField();  
+      
+   //Set the field (fieldValue,0,0)
+   void SetMagFieldValue(G4double fieldValue);
+   void SetMagFieldValue(G4ThreeVector fieldVector);
+      
+   G4ThreeVector GetConstantFieldValue();
 
-  private:
+  protected:
 
-    G4int fNumberOfVariables ;
-
-    G4double* dydxTemp;
-    G4double* yTemp;
-      // scratch space    
+      // Find the global Field Manager
+      G4FieldManager* GetGlobalFieldManager();   // static 
 };
 
-#endif /* G4SIMPLERUNGE_HH */
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#endif

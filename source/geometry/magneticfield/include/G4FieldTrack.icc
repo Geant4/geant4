@@ -53,6 +53,19 @@ G4ChargeState::G4ChargeState(
   fMagneticCharge= right.fMagneticCharge;
 }
 
+inline G4FieldTrack::G4ChargeState& G4FieldTrack::
+G4ChargeState::operator = ( const G4FieldTrack::G4ChargeState& right )
+{ 
+  if (&right == this) return *this;
+
+  fCharge= right.fCharge;
+  fMagn_dipole= right.fMagn_dipole; 
+  fElec_dipole= right.fElec_dipole;
+  fMagneticCharge= right.fMagneticCharge;
+
+  return *this;
+}
+
 inline void
 G4FieldTrack::InitialiseSpin( const G4ThreeVector& Spin )
 {

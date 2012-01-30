@@ -1,0 +1,13 @@
+foreach incfl ( include/ExN02[^CD]* include/ExN02DetectorMessenger.hh )
+   set newfl=`echo $incfl | perl -pe 's/ExN02/F07/;'`
+   perl -pe 's/exampleN02/field07/g; s/[eE]xN02/F07/g;' $incfl > =1/$newfl
+   echo "Created $newfl"
+end
+
+foreach srcfl ( src/ExN02[^C]* )
+   set newfl=`echo $srcfl | perl -pe 's/ExN02/F07/;'`
+   perl -pe 's/exampleN02/field07/g; s/[eE]xN02/F07/g; s/N02/F07/g;' $srcfl > =1/$newfl
+   echo "Done " $newfl
+end
+
+perl -pe 's/exampleN02/field07/g; s/[Ee]xN02/Fld07/g;' exampleN02.cc > ! =1/field07.cc

@@ -24,56 +24,39 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimpleRunge.hh,v 1.8 2006-06-29 18:23:23 gunter Exp $
+// $Id: F07RunAction.cc,v 1.9 2006-06-29 17:48:16 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
-//
-// class G4SimpleRunge
-//
-// Class description:
-//
-// Simple Runge:
-//
-//        x_1 = x_0 + h * ( dx( t_0+h/2, x_0 + h/2 * dx( t_0, x_0) ) )
-//
-// Second order solver.
-// Takes the derivative at a position to be assumed at the middle of the
-// Step and adds it to the current position.
+// 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// History:
-// - Created. W.Wander <wwc@mit.edu>, 12/09/97
-// -------------------------------------------------------------------
+#include "F07RunAction.hh"
 
-#ifndef G4SIMPLERUNGE_HH
-#define G4SIMPLERUNGE_HH
+#include "G4Run.hh"
 
-#include "G4MagErrorStepper.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4SimpleRunge : public G4MagErrorStepper
+F07RunAction::F07RunAction()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+F07RunAction::~F07RunAction()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void F07RunAction::BeginOfRunAction(const G4Run* aRun)
 {
+  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
+}
 
-  public:  // with description
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-    G4SimpleRunge(G4EquationOfMotion *EquationRhs, G4int numberOfVariables = 6) ;
-   ~G4SimpleRunge();
-      // Constructor and destructor.
+void F07RunAction::EndOfRunAction(const G4Run*)
+{ }
 
-    void DumbStepper( const G4double y[],
-                      const G4double dydx[],
-                            G4double h,
-                            G4double yout[]);
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-  public:  // without description
-  
-    G4int IntegratorOrder() const { return 2; }
 
-  private:
 
-    G4int fNumberOfVariables ;
-
-    G4double* dydxTemp;
-    G4double* yTemp;
-      // scratch space    
-};
-
-#endif /* G4SIMPLERUNGE_HH */

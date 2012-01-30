@@ -24,56 +24,38 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimpleRunge.hh,v 1.8 2006-06-29 18:23:23 gunter Exp $
+// $Id: F07RunAction.hh,v 1.8 2006-06-29 17:47:45 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
-//
-// class G4SimpleRunge
-//
-// Class description:
-//
-// Simple Runge:
-//
-//        x_1 = x_0 + h * ( dx( t_0+h/2, x_0 + h/2 * dx( t_0, x_0) ) )
-//
-// Second order solver.
-// Takes the derivative at a position to be assumed at the middle of the
-// Step and adds it to the current position.
+// 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// History:
-// - Created. W.Wander <wwc@mit.edu>, 12/09/97
-// -------------------------------------------------------------------
+#ifndef F07RunAction_h
+#define F07RunAction_h 1
 
-#ifndef G4SIMPLERUNGE_HH
-#define G4SIMPLERUNGE_HH
+#include "G4UserRunAction.hh"
+#include "globals.hh"
 
-#include "G4MagErrorStepper.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4SimpleRunge : public G4MagErrorStepper
+class G4Run;
+
+class F07RunAction : public G4UserRunAction
 {
+  public:
+    F07RunAction();
+   ~F07RunAction();
 
-  public:  // with description
-
-    G4SimpleRunge(G4EquationOfMotion *EquationRhs, G4int numberOfVariables = 6) ;
-   ~G4SimpleRunge();
-      // Constructor and destructor.
-
-    void DumbStepper( const G4double y[],
-                      const G4double dydx[],
-                            G4double h,
-                            G4double yout[]);
-
-  public:  // without description
-  
-    G4int IntegratorOrder() const { return 2; }
-
-  private:
-
-    G4int fNumberOfVariables ;
-
-    G4double* dydxTemp;
-    G4double* yTemp;
-      // scratch space    
+  public:
+    void BeginOfRunAction(const G4Run*);
+    void EndOfRunAction(const G4Run*);
 };
 
-#endif /* G4SIMPLERUNGE_HH */
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#endif
+
+
+
+
+

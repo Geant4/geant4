@@ -24,56 +24,54 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimpleRunge.hh,v 1.8 2006-06-29 18:23:23 gunter Exp $
+// $Id: F07EventAction.cc,v 1.11 2006-06-29 17:48:05 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
-// class G4SimpleRunge
-//
-// Class description:
-//
-// Simple Runge:
-//
-//        x_1 = x_0 + h * ( dx( t_0+h/2, x_0 + h/2 * dx( t_0, x_0) ) )
-//
-// Second order solver.
-// Takes the derivative at a position to be assumed at the middle of the
-// Step and adds it to the current position.
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
+#include "F07EventAction.hh"
 
-// History:
-// - Created. W.Wander <wwc@mit.edu>, 12/09/97
-// -------------------------------------------------------------------
+#include "G4Event.hh"
+#include "G4EventManager.hh"
+#include "G4TrajectoryContainer.hh"
+#include "G4Trajectory.hh"
+#include "G4ios.hh"
 
-#ifndef G4SIMPLERUNGE_HH
-#define G4SIMPLERUNGE_HH
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
+F07EventAction::F07EventAction()
+{}
 
-#include "G4MagErrorStepper.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
+F07EventAction::~F07EventAction()
+{}
 
-class G4SimpleRunge : public G4MagErrorStepper
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
+void F07EventAction::BeginOfEventAction(const G4Event*)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
+void F07EventAction::EndOfEventAction(const G4Event* evt)
 {
-
-  public:  // with description
-
-    G4SimpleRunge(G4EquationOfMotion *EquationRhs, G4int numberOfVariables = 6) ;
-   ~G4SimpleRunge();
-      // Constructor and destructor.
-
-    void DumbStepper( const G4double y[],
-                      const G4double dydx[],
-                            G4double h,
-                            G4double yout[]);
-
-  public:  // without description
+  G4int event_id = evt->GetEventID();
   
-    G4int IntegratorOrder() const { return 2; }
+  // get number of stored trajectories
+  //
+  G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
+  G4int n_trajectories = 0;
+  if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
+  
+  // periodic printing
+  //
+  if (event_id < 100 || event_id%100 == 0) {
+    G4cout << ">>> Event " << evt->GetEventID() << G4endl;
+    G4cout << "    " << n_trajectories 
+	   << " trajectories stored in this event." << G4endl;
+  }
+}
 
-  private:
-
-    G4int fNumberOfVariables ;
-
-    G4double* dydxTemp;
-    G4double* yTemp;
-      // scratch space    
-};
-
-#endif /* G4SIMPLERUNGE_HH */
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

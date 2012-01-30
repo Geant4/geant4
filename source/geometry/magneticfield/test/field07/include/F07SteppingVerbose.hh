@@ -24,56 +24,37 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimpleRunge.hh,v 1.8 2006-06-29 18:23:23 gunter Exp $
+// $Id: F07SteppingVerbose.hh,v 1.8 2006-06-29 17:47:50 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+//   This class manages the verbose outputs in G4SteppingManager. 
+//   It inherits from G4SteppingVerbose.
+//   It shows how to extract informations during the tracking of a particle.
 //
-// class G4SimpleRunge
-//
-// Class description:
-//
-// Simple Runge:
-//
-//        x_1 = x_0 + h * ( dx( t_0+h/2, x_0 + h/2 * dx( t_0, x_0) ) )
-//
-// Second order solver.
-// Takes the derivative at a position to be assumed at the middle of the
-// Step and adds it to the current position.
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// History:
-// - Created. W.Wander <wwc@mit.edu>, 12/09/97
-// -------------------------------------------------------------------
+class F07SteppingVerbose;
 
-#ifndef G4SIMPLERUNGE_HH
-#define G4SIMPLERUNGE_HH
+#ifndef F07SteppingVerbose_h
+#define F07SteppingVerbose_h 1
 
-#include "G4MagErrorStepper.hh"
+#include "G4SteppingVerbose.hh"
 
-class G4SimpleRunge : public G4MagErrorStepper
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class F07SteppingVerbose : public G4SteppingVerbose 
 {
+ public:
+   
+  F07SteppingVerbose();
+ ~F07SteppingVerbose();
 
-  public:  // with description
+  void StepInfo();
+  void TrackingStarted();
 
-    G4SimpleRunge(G4EquationOfMotion *EquationRhs, G4int numberOfVariables = 6) ;
-   ~G4SimpleRunge();
-      // Constructor and destructor.
-
-    void DumbStepper( const G4double y[],
-                      const G4double dydx[],
-                            G4double h,
-                            G4double yout[]);
-
-  public:  // without description
-  
-    G4int IntegratorOrder() const { return 2; }
-
-  private:
-
-    G4int fNumberOfVariables ;
-
-    G4double* dydxTemp;
-    G4double* yTemp;
-      // scratch space    
 };
 
-#endif /* G4SIMPLERUNGE_HH */
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#endif

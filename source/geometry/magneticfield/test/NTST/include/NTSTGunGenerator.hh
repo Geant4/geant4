@@ -73,14 +73,14 @@ public:
   virtual const G4ThreeVector& GetMeanVertex()   const {return MeanVertex;}
   virtual const G4ThreeVector& GetRmsVertex()    const {return RmsVertex;}
   virtual const G4ThreeVector& GetPolarization() const {return Polarization;}
-  virtual const G4double       GetPlow()         const {return Plow;}
-  virtual const G4double       GetPhigh()        const {return Phigh;}
-  virtual const G4double       GetCoslow()       const {return Coslow;}
-  virtual const G4double       GetCoshigh()      const {return Coshigh;}
-  virtual const G4double       GetPhilow()       const {return Philow; }
-  virtual const G4double       GetPhihigh()      const {return Phihigh;}
-  virtual const G4double       GetT0()           const {return T0;}
-  virtual const G4int          GetNumberOfParticles() const {return N;}
+  virtual       G4double       GetPlow()         const {return Plow;}
+  virtual       G4double       GetPhigh()        const {return Phigh;}
+  virtual       G4double       GetCoslow()       const {return Coslow;}
+  virtual       G4double       GetCoshigh()      const {return Coshigh;}
+  virtual       G4double       GetPhilow()       const {return Philow; }
+  virtual       G4double       GetPhihigh()      const {return Phihigh;}
+  virtual       G4double       GetT0()           const {return T0;}
+  virtual       G4int          GetNumberOfParticles() const {return N;}
 
 protected:
   inline  G4double Gauss(){

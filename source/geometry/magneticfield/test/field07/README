@@ -1,0 +1,11 @@
+
+  Test the robustness of propagation in the presence of a large
+  number of boundaries.
+
+  As an option, introduce a parallel geometry in order to trigger 
+  the use of CoupledTransportation.
+
+
+
+- Implementation  
+   Started from ExampleN02 on November 25th, 2011.

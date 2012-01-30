@@ -24,56 +24,45 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimpleRunge.hh,v 1.8 2006-06-29 18:23:23 gunter Exp $
+// $Id: F07DetectorMessenger.hh,v 1.9 2008-09-22 16:41:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
-// class G4SimpleRunge
-//
-// Class description:
-//
-// Simple Runge:
-//
-//        x_1 = x_0 + h * ( dx( t_0+h/2, x_0 + h/2 * dx( t_0, x_0) ) )
-//
-// Second order solver.
-// Takes the derivative at a position to be assumed at the middle of the
-// Step and adds it to the current position.
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// History:
-// - Created. W.Wander <wwc@mit.edu>, 12/09/97
-// -------------------------------------------------------------------
+#ifndef F07DetectorMessenger_h
+#define F07DetectorMessenger_h 1
 
-#ifndef G4SIMPLERUNGE_HH
-#define G4SIMPLERUNGE_HH
+#include "globals.hh"
+#include "G4UImessenger.hh"
 
-#include "G4MagErrorStepper.hh"
+class F07DetectorConstruction;
+class G4UIdirectory;
+class G4UIcmdWithAString;
+class G4UIcmdWithADoubleAndUnit;
 
-class G4SimpleRunge : public G4MagErrorStepper
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class F07DetectorMessenger: public G4UImessenger
 {
-
-  public:  // with description
-
-    G4SimpleRunge(G4EquationOfMotion *EquationRhs, G4int numberOfVariables = 6) ;
-   ~G4SimpleRunge();
-      // Constructor and destructor.
-
-    void DumbStepper( const G4double y[],
-                      const G4double dydx[],
-                            G4double h,
-                            G4double yout[]);
-
-  public:  // without description
-  
-    G4int IntegratorOrder() const { return 2; }
-
+  public:
+    F07DetectorMessenger(F07DetectorConstruction*);
+   ~F07DetectorMessenger();
+    
+    void SetNewValue(G4UIcommand*, G4String);
+    
   private:
-
-    G4int fNumberOfVariables ;
-
-    G4double* dydxTemp;
-    G4double* yTemp;
-      // scratch space    
+    F07DetectorConstruction* myDetector;
+    
+    G4UIdirectory*             F07Dir;
+    G4UIdirectory*             detDir;
+    G4UIcmdWithAString*        TargMatCmd;
+    G4UIcmdWithAString*        ChamMatCmd;    
+    G4UIcmdWithADoubleAndUnit* FieldCmd;
+    G4UIcmdWithADoubleAndUnit* StepMaxCmd;    
 };
 
-#endif /* G4SIMPLERUNGE_HH */
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#endif
+

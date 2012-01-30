@@ -24,56 +24,39 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimpleRunge.hh,v 1.8 2006-06-29 18:23:23 gunter Exp $
+// $Id: F07PrimaryGeneratorAction.hh,v 1.7 2006-06-29 17:47:43 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
-// class G4SimpleRunge
-//
-// Class description:
-//
-// Simple Runge:
-//
-//        x_1 = x_0 + h * ( dx( t_0+h/2, x_0 + h/2 * dx( t_0, x_0) ) )
-//
-// Second order solver.
-// Takes the derivative at a position to be assumed at the middle of the
-// Step and adds it to the current position.
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
+#ifndef F07PrimaryGeneratorAction_h
+#define F07PrimaryGeneratorAction_h 1
 
-// History:
-// - Created. W.Wander <wwc@mit.edu>, 12/09/97
-// -------------------------------------------------------------------
+#include "G4VUserPrimaryGeneratorAction.hh"
 
-#ifndef G4SIMPLERUNGE_HH
-#define G4SIMPLERUNGE_HH
+class F07DetectorConstruction;
+class G4ParticleGun;
+class G4Event;
 
-#include "G4MagErrorStepper.hh"
-
-class G4SimpleRunge : public G4MagErrorStepper
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
+class F07PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
+  public:
+    F07PrimaryGeneratorAction(F07DetectorConstruction*);    
+   ~F07PrimaryGeneratorAction();
 
-  public:  // with description
-
-    G4SimpleRunge(G4EquationOfMotion *EquationRhs, G4int numberOfVariables = 6) ;
-   ~G4SimpleRunge();
-      // Constructor and destructor.
-
-    void DumbStepper( const G4double y[],
-                      const G4double dydx[],
-                            G4double h,
-                            G4double yout[]);
-
-  public:  // without description
-  
-    G4int IntegratorOrder() const { return 2; }
+  public:
+    void GeneratePrimaries(G4Event*);
 
   private:
-
-    G4int fNumberOfVariables ;
-
-    G4double* dydxTemp;
-    G4double* yTemp;
-      // scratch space    
+    G4ParticleGun* particleGun;
+    F07DetectorConstruction* myDetector;
 };
 
-#endif /* G4SIMPLERUNGE_HH */
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#endif
+
+

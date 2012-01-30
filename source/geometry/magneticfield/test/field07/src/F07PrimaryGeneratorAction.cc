@@ -24,56 +24,56 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimpleRunge.hh,v 1.8 2006-06-29 18:23:23 gunter Exp $
+// $Id: F07PrimaryGeneratorAction.cc,v 1.7 2006-06-29 17:48:13 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
-// class G4SimpleRunge
-//
-// Class description:
-//
-// Simple Runge:
-//
-//        x_1 = x_0 + h * ( dx( t_0+h/2, x_0 + h/2 * dx( t_0, x_0) ) )
-//
-// Second order solver.
-// Takes the derivative at a position to be assumed at the middle of the
-// Step and adds it to the current position.
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// History:
-// - Created. W.Wander <wwc@mit.edu>, 12/09/97
-// -------------------------------------------------------------------
+#include "F07PrimaryGeneratorAction.hh"
+#include "F07DetectorConstruction.hh"
 
-#ifndef G4SIMPLERUNGE_HH
-#define G4SIMPLERUNGE_HH
+#include "G4Event.hh"
+#include "G4ParticleGun.hh"
+#include "G4ParticleTable.hh"
+#include "G4ParticleDefinition.hh"
+#include "globals.hh"
 
-#include "G4MagErrorStepper.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4SimpleRunge : public G4MagErrorStepper
+F07PrimaryGeneratorAction::F07PrimaryGeneratorAction(
+                                               F07DetectorConstruction* myDC)
+:myDetector(myDC)
 {
+  G4int n_particle = 1;
+  particleGun = new G4ParticleGun(n_particle);
 
-  public:  // with description
+// default particle
 
-    G4SimpleRunge(G4EquationOfMotion *EquationRhs, G4int numberOfVariables = 6) ;
-   ~G4SimpleRunge();
-      // Constructor and destructor.
-
-    void DumbStepper( const G4double y[],
-                      const G4double dydx[],
-                            G4double h,
-                            G4double yout[]);
-
-  public:  // without description
+  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+  G4ParticleDefinition* particle = particleTable->FindParticle("proton");
   
-    G4int IntegratorOrder() const { return 2; }
+  particleGun->SetParticleDefinition(particle);
+  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+  particleGun->SetParticleEnergy(3.0*GeV);
+}
 
-  private:
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-    G4int fNumberOfVariables ;
+F07PrimaryGeneratorAction::~F07PrimaryGeneratorAction()
+{
+  delete particleGun;
+}
 
-    G4double* dydxTemp;
-    G4double* yTemp;
-      // scratch space    
-};
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif /* G4SIMPLERUNGE_HH */
+void F07PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
+{ 
+  G4double position = -0.5*(myDetector->GetWorldFullLength());
+  particleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,position));
+  
+  particleGun->GeneratePrimaryVertex(anEvent);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
