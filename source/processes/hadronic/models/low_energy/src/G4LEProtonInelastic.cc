@@ -79,7 +79,8 @@ G4LEProtonInelastic::ApplyYourself(const G4HadProjectile& aTrack,
   }
 
   if (originalIncident->GetKineticEnergy()/GeV < 0.01+2.*G4UniformRand()/9.) {
-    SlowProton( originalIncident, targetNucleus );
+    SlowProton(originalIncident, targetNucleus);
+    if (isotopeProduction) DoIsotopeCounting(originalIncident, targetNucleus);
     delete originalTarget;
     return &theParticleChange;
   }
@@ -117,7 +118,8 @@ G4LEProtonInelastic::ApplyYourself(const G4HadProjectile& aTrack,
   }
   const G4double cutOff = 0.1;
   if (modifiedOriginal.GetKineticEnergy()/MeV <= cutOff) {
-    SlowProton( originalIncident, targetNucleus );
+    SlowProton( originalIncident, targetNucleus);
+    if (isotopeProduction) DoIsotopeCounting(originalIncident, targetNucleus);
     delete originalTarget;
     return &theParticleChange;
   }
@@ -145,7 +147,8 @@ G4LEProtonInelastic::ApplyYourself(const G4HadProjectile& aTrack,
   SetUpChange(vec, vecLen,
               currentParticle, targetParticle,
               incidentHasChanged);
-    
+
+  if (isotopeProduction) DoIsotopeCounting(originalIncident, targetNucleus);    
   delete originalTarget;
   return &theParticleChange;
 }

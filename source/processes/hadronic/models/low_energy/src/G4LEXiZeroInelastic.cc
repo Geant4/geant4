@@ -62,79 +62,74 @@ G4LEXiZeroInelastic::ApplyYourself(const G4HadProjectile& aTrack,
   // create the target particle
   G4DynamicParticle* originalTarget = targetNucleus.ReturnTargetParticle();
     
-    if( verboseLevel > 1 )
-    {
-      const G4Material *targetMaterial = aTrack.GetMaterial();
-      G4cout << "G4LEXiZeroInelastic::ApplyYourself called" << G4endl;
-      G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
-      G4cout << "target material = " << targetMaterial->GetName() << ", ";
-      G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
+  if (verboseLevel > 1) {
+    const G4Material *targetMaterial = aTrack.GetMaterial();
+    G4cout << "G4LEXiZeroInelastic::ApplyYourself called" << G4endl;
+    G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
+    G4cout << "target material = " << targetMaterial->GetName() << ", ";
+    G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
            << G4endl;
-    }
-    //
-    // Fermi motion and evaporation
-    // As of Geant3, the Fermi energy calculation had not been Done
-    //
-    G4double ek = originalIncident->GetKineticEnergy()/MeV;
-    G4double amas = originalIncident->GetDefinition()->GetPDGMass()/MeV;
-    G4ReactionProduct modifiedOriginal;
-    modifiedOriginal = *originalIncident;
+  }
+
+  // Fermi motion and evaporation
+  // As of Geant3, the Fermi energy calculation had not been done
+  G4double ek = originalIncident->GetKineticEnergy()/MeV;
+  G4double amas = originalIncident->GetDefinition()->GetPDGMass()/MeV;
+  G4ReactionProduct modifiedOriginal;
+  modifiedOriginal = *originalIncident;
     
-    G4double tkin = targetNucleus.Cinema( ek );
-    ek += tkin;
-    modifiedOriginal.SetKineticEnergy( ek*MeV );
-    G4double et = ek + amas;
-    G4double p = std::sqrt( std::abs((et-amas)*(et+amas)) );
-    G4double pp = modifiedOriginal.GetMomentum().mag()/MeV;
-    if( pp > 0.0 )
-    {
-      G4ThreeVector momentum = modifiedOriginal.GetMomentum();
-      modifiedOriginal.SetMomentum( momentum * (p/pp) );
-    }
-    //
-    // calculate black track energies
-    //
-    tkin = targetNucleus.EvaporationEffects( ek );
-    ek -= tkin;
-    modifiedOriginal.SetKineticEnergy( ek*MeV );
-    et = ek + amas;
-    p = std::sqrt( std::abs((et-amas)*(et+amas)) );
-    pp = modifiedOriginal.GetMomentum().mag()/MeV;
-    if( pp > 0.0 )
-    {
-      G4ThreeVector momentum = modifiedOriginal.GetMomentum();
-      modifiedOriginal.SetMomentum( momentum * (p/pp) );
-    }
-    G4ReactionProduct currentParticle = modifiedOriginal;
-    G4ReactionProduct targetParticle;
-    targetParticle = *originalTarget;
-    currentParticle.SetSide( 1 ); // incident always goes in forward hemisphere
-    targetParticle.SetSide( -1 );  // target always goes in backward hemisphere
-    G4bool incidentHasChanged = false;
-    G4bool targetHasChanged = false;
-    G4bool quasiElastic = false;
-    G4FastVector<G4ReactionProduct,GHADLISTSIZE> vec;  // vec will contain the secondary particles
-    G4int vecLen = 0;
-    vec.Initialize( 0 );
+  G4double tkin = targetNucleus.Cinema(ek);
+  ek += tkin;
+  modifiedOriginal.SetKineticEnergy(ek*MeV);
+  G4double et = ek + amas;
+  G4double p = std::sqrt(std::abs((et-amas)*(et+amas)) );
+  G4double pp = modifiedOriginal.GetMomentum().mag()/MeV;
+  if (pp > 0.0) {
+    G4ThreeVector momentum = modifiedOriginal.GetMomentum();
+    modifiedOriginal.SetMomentum( momentum * (p/pp) );
+  }
+
+  // calculate black track energies
+  tkin = targetNucleus.EvaporationEffects(ek);
+  ek -= tkin;
+  modifiedOriginal.SetKineticEnergy(ek*MeV);
+  et = ek + amas;
+  p = std::sqrt( std::abs((et-amas)*(et+amas)) );
+  pp = modifiedOriginal.GetMomentum().mag()/MeV;
+  if (pp > 0.0) {
+    G4ThreeVector momentum = modifiedOriginal.GetMomentum();
+    modifiedOriginal.SetMomentum( momentum * (p/pp) );
+  }
+  G4ReactionProduct currentParticle = modifiedOriginal;
+  G4ReactionProduct targetParticle;
+  targetParticle = *originalTarget;
+  currentParticle.SetSide(1); // incident always goes in forward hemisphere
+  targetParticle.SetSide(-1);  // target always goes in backward hemisphere
+  G4bool incidentHasChanged = false;
+  G4bool targetHasChanged = false;
+  G4bool quasiElastic = false;
+  G4FastVector<G4ReactionProduct,GHADLISTSIZE> vec;  // vec will contain the secondary particles
+  G4int vecLen = 0;
+  vec.Initialize(0);
     
-    const G4double cutOff = 0.1;
-    if( currentParticle.GetKineticEnergy()/MeV > cutOff )
-      Cascade( vec, vecLen,
-               originalIncident, currentParticle, targetParticle,
-               incidentHasChanged, targetHasChanged, quasiElastic );
+  const G4double cutOff = 0.1;
+  if (currentParticle.GetKineticEnergy()/MeV > cutOff)
+    Cascade(vec, vecLen, originalIncident, currentParticle, targetParticle,
+            incidentHasChanged, targetHasChanged, quasiElastic);
     
-    CalculateMomenta( vec, vecLen,
-                      originalIncident, originalTarget, modifiedOriginal,
-                      targetNucleus, currentParticle, targetParticle,
-                      incidentHasChanged, targetHasChanged, quasiElastic );
-    
-    SetUpChange( vec, vecLen,
-                 currentParticle, targetParticle,
-                 incidentHasChanged );
-    
-    delete originalTarget;
-    return &theParticleChange;
+  CalculateMomenta(vec, vecLen, originalIncident, originalTarget,
+                   modifiedOriginal, targetNucleus, currentParticle,
+                   targetParticle, incidentHasChanged, targetHasChanged,
+                   quasiElastic);
+
+  SetUpChange(vec, vecLen, currentParticle, targetParticle, incidentHasChanged);
+
+  if (isotopeProduction) DoIsotopeCounting(originalIncident, targetNucleus);
+
+  delete originalTarget;
+  return &theParticleChange;
 }
+
  
 void G4LEXiZeroInelastic::Cascade(
    G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,

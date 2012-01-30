@@ -55,7 +55,7 @@ G4HadFinalState*
 G4LEAntiOmegaMinusInelastic::ApplyYourself(const G4HadProjectile& aTrack,
                                            G4Nucleus& targetNucleus)
 { 
-  const G4HadProjectile *originalIncident = &aTrack;
+  const G4HadProjectile* originalIncident = &aTrack;
   if (originalIncident->GetKineticEnergy()<= 0.1*MeV) {
     theParticleChange.SetStatusChange(isAlive);
     theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
@@ -81,107 +81,103 @@ G4LEAntiOmegaMinusInelastic::ApplyYourself(const G4HadProjectile& aTrack,
   G4ReactionProduct modifiedOriginal;
   modifiedOriginal = *originalIncident;
     
-    G4double tkin = targetNucleus.Cinema( ek );
-    ek += tkin;
-    modifiedOriginal.SetKineticEnergy( ek*MeV );
-    G4double et = ek + amas;
-    G4double p = std::sqrt( std::abs((et-amas)*(et+amas)) );
-    G4double pp = modifiedOriginal.GetMomentum().mag()/MeV;
-    if( pp > 0.0 )
-    {
-      G4ThreeVector momentum = modifiedOriginal.GetMomentum();
-      modifiedOriginal.SetMomentum( momentum * (p/pp) );
-    }
-    //
-    // calculate black track energies
-    //
-    tkin = targetNucleus.EvaporationEffects( ek );
-    ek -= tkin;
-    modifiedOriginal.SetKineticEnergy( ek*MeV );
-    et = ek + amas;
-    p = std::sqrt( std::abs((et-amas)*(et+amas)) );
-    pp = modifiedOriginal.GetMomentum().mag()/MeV;
-    if( pp > 0.0 )
-    {
-      G4ThreeVector momentum = modifiedOriginal.GetMomentum();
-      modifiedOriginal.SetMomentum( momentum * (p/pp) );
-    }
-    G4ReactionProduct currentParticle = modifiedOriginal;
-    G4ReactionProduct targetParticle;
-    targetParticle = *originalTarget;
-    currentParticle.SetSide( 1 ); // incident always goes in forward hemisphere
-    targetParticle.SetSide( -1 );  // target always goes in backward hemisphere
-    G4bool incidentHasChanged = false;
-    G4bool targetHasChanged = false;
-    G4bool quasiElastic = false;
-    G4FastVector<G4ReactionProduct,GHADLISTSIZE> vec;  // vec will contain the secondary particles
-    G4int vecLen = 0;
-    vec.Initialize( 0 );
+  G4double tkin = targetNucleus.Cinema( ek );
+  ek += tkin;
+  modifiedOriginal.SetKineticEnergy( ek*MeV );
+  G4double et = ek + amas;
+  G4double p = std::sqrt( std::abs((et-amas)*(et+amas)) );
+  G4double pp = modifiedOriginal.GetMomentum().mag()/MeV;
+  if (pp > 0.0) {
+    G4ThreeVector momentum = modifiedOriginal.GetMomentum();
+    modifiedOriginal.SetMomentum( momentum * (p/pp) );
+  }
+
+  // calculate black track energies
+  tkin = targetNucleus.EvaporationEffects( ek );
+  ek -= tkin;
+  modifiedOriginal.SetKineticEnergy( ek*MeV );
+  et = ek + amas;
+  p = std::sqrt( std::abs((et-amas)*(et+amas)) );
+  pp = modifiedOriginal.GetMomentum().mag()/MeV;
+  if (pp > 0.0) {
+    G4ThreeVector momentum = modifiedOriginal.GetMomentum();
+    modifiedOriginal.SetMomentum( momentum * (p/pp) );
+  }
+  G4ReactionProduct currentParticle = modifiedOriginal;
+  G4ReactionProduct targetParticle;
+  targetParticle = *originalTarget;
+  currentParticle.SetSide( 1 ); // incident always goes in forward hemisphere
+  targetParticle.SetSide( -1 );  // target always goes in backward hemisphere
+  G4bool incidentHasChanged = false;
+  G4bool targetHasChanged = false;
+  G4bool quasiElastic = false;
+  G4FastVector<G4ReactionProduct,GHADLISTSIZE> vec;  // vec will contain the secondary particles
+  G4int vecLen = 0;
+  vec.Initialize( 0 );
         
-    const G4double cutOff = 0.1;
-    const G4double anni = std::min( 1.3*currentParticle.GetTotalMomentum()/GeV, 0.4 );
+  const G4double cutOff = 0.1;
+  const G4double anni = std::min( 1.3*currentParticle.GetTotalMomentum()/GeV, 0.4 );
     
-    if( (currentParticle.GetKineticEnergy()/MeV > cutOff) || (G4UniformRand() > anni) )
-      Cascade( vec, vecLen,
-               originalIncident, currentParticle, targetParticle,
-               incidentHasChanged, targetHasChanged, quasiElastic );
+  if ((currentParticle.GetKineticEnergy()/MeV > cutOff) || (G4UniformRand() > anni) )
+    Cascade(vec, vecLen, originalIncident, currentParticle, targetParticle,
+            incidentHasChanged, targetHasChanged, quasiElastic);
     
-    CalculateMomenta( vec, vecLen,
-                      originalIncident, originalTarget, modifiedOriginal,
-                      targetNucleus, currentParticle, targetParticle,
-                      incidentHasChanged, targetHasChanged, quasiElastic );
+  CalculateMomenta(vec, vecLen, originalIncident, originalTarget,
+                   modifiedOriginal, targetNucleus, currentParticle,
+                   targetParticle, incidentHasChanged, targetHasChanged,
+                   quasiElastic);
     
-    SetUpChange( vec, vecLen,
-                 currentParticle, targetParticle,
-                 incidentHasChanged );
-    
-    delete originalTarget;
-    return &theParticleChange;
+  SetUpChange(vec, vecLen, currentParticle, targetParticle, incidentHasChanged);
+
+  if (isotopeProduction) DoIsotopeCounting(originalIncident, targetNucleus);
+
+  delete originalTarget;
+  return &theParticleChange;
 }
  
 void G4LEAntiOmegaMinusInelastic::Cascade(
-   G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
+   G4FastVector<G4ReactionProduct,GHADLISTSIZE>& vec,
    G4int& vecLen,
-   const G4HadProjectile *originalIncident,
-   G4ReactionProduct &currentParticle,
-   G4ReactionProduct &targetParticle,
-   G4bool &incidentHasChanged,
-   G4bool &targetHasChanged,
-   G4bool &quasiElastic )
+   const G4HadProjectile* originalIncident,
+   G4ReactionProduct& currentParticle,
+   G4ReactionProduct& targetParticle,
+   G4bool& incidentHasChanged,
+   G4bool& targetHasChanged,
+   G4bool& quasiElastic)
 {
-    // derived from original FORTRAN code CASOM by H. Fesefeldt (31-Jan-1989)
-    //
-    // AntiOmegaMinus undergoes interaction with nucleon within a nucleus.  Check if it is
-    // energetically possible to produce pions/kaons.  In not, assume nuclear excitation
-    // occurs and input particle is degraded in energy. No other particles are produced.
-    // If reaction is possible, find the correct number of pions/protons/neutrons
-    // produced using an interpolation to multiplicity data.  Replace some pions or
-    // protons/neutrons by kaons or strange baryons according to the average
-    // multiplicity per Inelastic reaction.
-    //
-    const G4double mOriginal = originalIncident->GetDefinition()->GetPDGMass()/MeV;
-    const G4double etOriginal = originalIncident->GetTotalEnergy()/MeV;
-//    const G4double pOriginal = originalIncident->GetTotalMomentum()/MeV;
-    const G4double targetMass = targetParticle.GetMass()/MeV;
-    G4double centerofmassEnergy = std::sqrt( mOriginal*mOriginal +
-                                        targetMass*targetMass +
-                                        2.0*targetMass*etOriginal );
-    G4double availableEnergy = centerofmassEnergy-(targetMass+mOriginal);
-    if( availableEnergy <= G4PionPlus::PionPlus()->GetPDGMass()/MeV )
-    {  // not energetically possible to produce pion(s)
-      quasiElastic = true;
-      return;
-    }
-    static G4bool first = true;
-    const G4int numMul = 1200;
-    const G4int numSec = 60;
-    static G4double protmul[numMul], protnorm[numSec]; // proton constants
-    static G4double neutmul[numMul], neutnorm[numSec]; // neutron constants
-    // np = number of pi+, nm = number of pi-, nz = number of pi0
-    G4int counter, nt=0, np=0, nm=0, nz=0;
-    G4double test;
-    const G4double c = 1.25;    
-    const G4double b[] = { 0.7, 0.7 };
+  // derived from original FORTRAN code CASOM by H. Fesefeldt (31-Jan-1989)
+  //
+  // AntiOmegaMinus undergoes interaction with nucleon within a nucleus.  Check if it is
+  // energetically possible to produce pions/kaons.  In not, assume nuclear excitation
+  // occurs and input particle is degraded in energy. No other particles are produced.
+  // If reaction is possible, find the correct number of pions/protons/neutrons
+  // produced using an interpolation to multiplicity data.  Replace some pions or
+  // protons/neutrons by kaons or strange baryons according to the average
+  // multiplicity per Inelastic reaction.
+
+  const G4double mOriginal = originalIncident->GetDefinition()->GetPDGMass()/MeV;
+  const G4double etOriginal = originalIncident->GetTotalEnergy()/MeV;
+  const G4double targetMass = targetParticle.GetMass()/MeV;
+  G4double centerofmassEnergy = std::sqrt(mOriginal*mOriginal +
+                                          targetMass*targetMass +
+                                          2.0*targetMass*etOriginal);
+  G4double availableEnergy = centerofmassEnergy-(targetMass+mOriginal);
+  if (availableEnergy <= G4PionPlus::PionPlus()->GetPDGMass()/MeV) {
+    // not energetically possible to produce pion(s)
+    quasiElastic = true;
+    return;
+  }
+  static G4bool first = true;
+  const G4int numMul = 1200;
+  const G4int numSec = 60;
+  static G4double protmul[numMul], protnorm[numSec]; // proton constants
+  static G4double neutmul[numMul], neutnorm[numSec]; // neutron constants
+
+  // np = number of pi+, nm = number of pi-, nz = number of pi0
+  G4int counter, nt=0, np=0, nm=0, nz=0;
+  G4double test;
+  const G4double c = 1.25;    
+  const G4double b[] = { 0.7, 0.7 };
     if( first )       // compute normalization constants, this will only be Done once
     {
       first = false;

@@ -51,7 +51,7 @@ G4LEDeuteronInelastic::ApplyYourself(const G4HadProjectile& aTrack,
                                      G4Nucleus& targetNucleus)
 { 
   theParticleChange.Clear();
-  const G4HadProjectile *originalIncident = &aTrack;
+  const G4HadProjectile* originalIncident = &aTrack;
     
   if (verboseLevel > 1) {
     const G4Material *targetMaterial = aTrack.GetMaterial();
@@ -106,7 +106,8 @@ G4LEDeuteronInelastic::ApplyYourself(const G4HadProjectile& aTrack,
     {
       theParticleChange.SetStatusChange(isAlive);
       theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
-      theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit()); 
+      theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
+      if (isotopeProduction) DoIsotopeCounting(originalIncident, targetNucleus);
       return &theParticleChange;      
     }
 
@@ -119,6 +120,7 @@ G4LEDeuteronInelastic::ApplyYourself(const G4HadProjectile& aTrack,
     delete vec[i];
   }
 
+  if (isotopeProduction) DoIsotopeCounting(originalIncident, targetNucleus); 
   return &theParticleChange;
 }
  

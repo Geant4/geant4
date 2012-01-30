@@ -77,8 +77,7 @@ G4LELambdaInelastic::ApplyYourself(const G4HadProjectile& aTrack,
   }    
 
   // Fermi motion and evaporation
-  // As of Geant3, the Fermi energy calculation had not been Done
-
+  // As of Geant3, the Fermi energy calculation had not been done
   G4double ek = originalIncident->GetKineticEnergy()/MeV;
   G4double amas = originalIncident->GetDefinition()->GetPDGMass()/MeV;
   G4ReactionProduct modifiedOriginal;
@@ -96,49 +95,47 @@ G4LELambdaInelastic::ApplyYourself(const G4HadProjectile& aTrack,
   }
 
   // calculate black track energies
+  tkin = targetNucleus.EvaporationEffects(ek);
+  ek -= tkin;
+  modifiedOriginal.SetKineticEnergy(ek*MeV);
+  et = ek + amas;
+  p = std::sqrt( std::abs((et-amas)*(et+amas)) );
+  pp = modifiedOriginal.GetMomentum().mag()/MeV;
+  if (pp > 0.0) {
+    G4ThreeVector momentum = modifiedOriginal.GetMomentum();
+    modifiedOriginal.SetMomentum( momentum * (p/pp) );
+  }
+    
+  G4ReactionProduct currentParticle = modifiedOriginal;
+  G4ReactionProduct targetParticle;
+  targetParticle = *originalTarget;
+  currentParticle.SetSide(1); // incident always goes in forward hemisphere
+  targetParticle.SetSide(-1);  // target always goes in backward hemisphere
+  G4bool incidentHasChanged = false;
+  G4bool targetHasChanged = false;
+  G4bool quasiElastic = false;
+  G4FastVector<G4ReactionProduct,GHADLISTSIZE> vec;  // vec will contain the secondary particles
+  G4int vecLen = 0;
+  vec.Initialize(0);
+    
+  const G4double cutOff = 0.1;
+  if (currentParticle.GetKineticEnergy()/MeV > cutOff)
+    Cascade(vec, vecLen, originalIncident, currentParticle, targetParticle,
+            incidentHasChanged, targetHasChanged, quasiElastic);
+    
+  CalculateMomenta(vec, vecLen, originalIncident, originalTarget,
+                   modifiedOriginal, targetNucleus, currentParticle,
+                   targetParticle, incidentHasChanged, targetHasChanged,
+                   quasiElastic);
+    
+  SetUpChange(vec, vecLen, currentParticle, targetParticle, incidentHasChanged);
 
-    tkin = targetNucleus.EvaporationEffects( ek );
-    ek -= tkin;
-    modifiedOriginal.SetKineticEnergy( ek*MeV );
-    et = ek + amas;
-    p = std::sqrt( std::abs((et-amas)*(et+amas)) );
-    pp = modifiedOriginal.GetMomentum().mag()/MeV;
-    if( pp > 0.0 )
-    {
-      G4ThreeVector momentum = modifiedOriginal.GetMomentum();
-      modifiedOriginal.SetMomentum( momentum * (p/pp) );
-    }
-    
-    G4ReactionProduct currentParticle = modifiedOriginal;
-    G4ReactionProduct targetParticle;
-    targetParticle = *originalTarget;
-    currentParticle.SetSide( 1 ); // incident always goes in forward hemisphere
-    targetParticle.SetSide( -1 );  // target always goes in backward hemisphere
-    G4bool incidentHasChanged = false;
-    G4bool targetHasChanged = false;
-    G4bool quasiElastic = false;
-    G4FastVector<G4ReactionProduct,GHADLISTSIZE> vec;  // vec will contain the secondary particles
-    G4int vecLen = 0;
-    vec.Initialize( 0 );
-    
-    const G4double cutOff = 0.1;
-    if( currentParticle.GetKineticEnergy()/MeV > cutOff )
-      Cascade( vec, vecLen,
-               originalIncident, currentParticle, targetParticle,
-               incidentHasChanged, targetHasChanged, quasiElastic );
-    
-    CalculateMomenta( vec, vecLen,
-                      originalIncident, originalTarget, modifiedOriginal,
-                      targetNucleus, currentParticle, targetParticle,
-                      incidentHasChanged, targetHasChanged, quasiElastic );
-    
-    SetUpChange( vec, vecLen,
-                 currentParticle, targetParticle,
-                 incidentHasChanged );
-    
+  if (isotopeProduction) DoIsotopeCounting(originalIncident, targetNucleus);
+
   delete originalTarget;
   return &theParticleChange;
 }
+
  
 void G4LELambdaInelastic::Cascade(
    G4FastVector<G4ReactionProduct,GHADLISTSIZE>& vec,
@@ -148,7 +145,7 @@ void G4LELambdaInelastic::Cascade(
    G4ReactionProduct& targetParticle,
    G4bool& incidentHasChanged,
    G4bool& targetHasChanged,
-   G4bool& quasiElastic )
+   G4bool& quasiElastic)
 {
   // derived from original FORTRAN code CASL0 by H. Fesefeldt (13-Sep-1987)
   //
@@ -172,16 +169,17 @@ void G4LELambdaInelastic::Cascade(
     quasiElastic = true;
     return;
   }
-    static G4bool first = true;
-    const G4int numMul = 1200;
-    const G4int numSec = 60;
-    static G4double protmul[numMul], protnorm[numSec]; // proton constants
-    static G4double neutmul[numMul], neutnorm[numSec]; // neutron constants
-    // np = number of pi+, nm = number of pi-, nz = number of pi0
-    G4int counter, nt=0, np=0, nm=0, nz=0;
-    G4double test;
-    const G4double c = 1.25;    
-    const G4double b[] = { 0.70, 0.35 };
+  static G4bool first = true;
+  const G4int numMul = 1200;
+  const G4int numSec = 60;
+  static G4double protmul[numMul], protnorm[numSec]; // proton constants
+  static G4double neutmul[numMul], neutnorm[numSec]; // neutron constants
+
+  // np = number of pi+, nm = number of pi-, nz = number of pi0
+  G4int counter, nt=0, np=0, nm=0, nz=0;
+  G4double test;
+  const G4double c = 1.25;    
+  const G4double b[] = { 0.70, 0.35 };
     if( first ) {      // compute normalization constants, this will only be Done once
       first = false;
       G4int i;

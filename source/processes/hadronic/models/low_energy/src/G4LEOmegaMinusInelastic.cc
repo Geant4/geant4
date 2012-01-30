@@ -79,62 +79,59 @@ G4LEOmegaMinusInelastic::ApplyYourself(const G4HadProjectile& aTrack,
   G4double ek = originalIncident->GetKineticEnergy();
   G4double amas = originalIncident->GetDefinition()->GetPDGMass();
     
-    G4double tkin = targetNucleus.Cinema( ek );
-    ek += tkin;
-    currentParticle.SetKineticEnergy( ek );
-    G4double et = ek + amas;
-    G4double p = std::sqrt( std::abs((et-amas)*(et+amas)) );
-    G4double pp = currentParticle.GetMomentum().mag();
-    if( pp > 0.0 )
-    {
-      G4ThreeVector momentum = currentParticle.GetMomentum();
-      currentParticle.SetMomentum( momentum * (p/pp) );
-    }
-    
-    // calculate black track energies
-    
-    tkin = targetNucleus.EvaporationEffects( ek );
-    ek -= tkin;
-    currentParticle.SetKineticEnergy( ek );
-    et = ek + amas;
-    p = std::sqrt( std::abs((et-amas)*(et+amas)) );
-    pp = currentParticle.GetMomentum().mag();
-    if( pp > 0.0 )
-    {
-      G4ThreeVector momentum = currentParticle.GetMomentum();
-      currentParticle.SetMomentum( momentum * (p/pp) );
-    }
+  G4double tkin = targetNucleus.Cinema(ek);
+  ek += tkin;
+  currentParticle.SetKineticEnergy(ek);
+  G4double et = ek + amas;
+  G4double p = std::sqrt( std::abs((et-amas)*(et+amas)) );
+  G4double pp = currentParticle.GetMomentum().mag();
+  if (pp > 0.0) {
+    G4ThreeVector momentum = currentParticle.GetMomentum();
+    currentParticle.SetMomentum( momentum * (p/pp) );
+  }
+  
+  // calculate black track energies  
+  tkin = targetNucleus.EvaporationEffects( ek );
+  ek -= tkin;
+  currentParticle.SetKineticEnergy( ek );
+  et = ek + amas;
+  p = std::sqrt( std::abs((et-amas)*(et+amas)) );
+  pp = currentParticle.GetMomentum().mag();
+  if (pp > 0.0) {
+    G4ThreeVector momentum = currentParticle.GetMomentum();
+    currentParticle.SetMomentum( momentum * (p/pp) );
+  }
 
-    G4ReactionProduct modifiedOriginal = currentParticle;
+  G4ReactionProduct modifiedOriginal = currentParticle;
 
-    currentParticle.SetSide( 1 ); // incident always goes in forward hemisphere
-    targetParticle.SetSide( -1 );  // target always goes in backward hemisphere
-    G4bool incidentHasChanged = false;
-    G4bool targetHasChanged = false;
-    G4bool quasiElastic = false;
-    G4FastVector<G4ReactionProduct,GHADLISTSIZE> vec;  // vec will contain the secondary particles
-    G4int vecLen = 0;
-    vec.Initialize( 0 );
+  currentParticle.SetSide(1); // incident always goes in forward hemisphere
+  targetParticle.SetSide(-1);  // target always goes in backward hemisphere
+  G4bool incidentHasChanged = false;
+  G4bool targetHasChanged = false;
+  G4bool quasiElastic = false;
+  G4FastVector<G4ReactionProduct,GHADLISTSIZE> vec;  // vec will contain the secondary particles
+  G4int vecLen = 0;
+  vec.Initialize( 0 );
 
-    const G4double cutOff = 0.1*MeV;
-    if( currentParticle.GetKineticEnergy() > cutOff )
-      Cascade( vec, vecLen,
-               originalIncident, currentParticle, targetParticle,
-               incidentHasChanged, targetHasChanged, quasiElastic );
+  const G4double cutOff = 0.1*MeV;
+  if (currentParticle.GetKineticEnergy() > cutOff)
+    Cascade(vec, vecLen, originalIncident, currentParticle, targetParticle,
+            incidentHasChanged, targetHasChanged, quasiElastic);
     
-    CalculateMomenta( vec, vecLen,
-                      originalIncident, originalTarget, modifiedOriginal,
-                      targetNucleus, currentParticle, targetParticle,
-                      incidentHasChanged, targetHasChanged, quasiElastic );
+  CalculateMomenta(vec, vecLen, originalIncident, originalTarget,
+                   modifiedOriginal, targetNucleus, currentParticle,
+                   targetParticle, incidentHasChanged, targetHasChanged,
+                   quasiElastic);
     
-    SetUpChange( vec, vecLen,
-                 currentParticle, targetParticle,
-                 incidentHasChanged );
-    
-    delete originalTarget;
-    return &theParticleChange;
+  SetUpChange(vec, vecLen, currentParticle, targetParticle, incidentHasChanged);
+
+  if (isotopeProduction) DoIsotopeCounting(originalIncident, targetNucleus);
+
+  delete originalTarget;
+  return &theParticleChange;
 }
- 
+
+
 void G4LEOmegaMinusInelastic::Cascade(
    G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
    G4int& vecLen,

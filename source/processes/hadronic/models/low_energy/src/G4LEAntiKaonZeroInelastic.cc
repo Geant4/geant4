@@ -125,7 +125,8 @@ G4LEAntiKaonZeroInelastic::ApplyYourself(const G4HadProjectile& aTrack,
     throw G4HadReentrentException(__FILE__, __LINE__, "Bailing out");
   }
   SetUpChange(vec, vecLen, currentParticle, targetParticle, incidentHasChanged);
-    
+
+  if (isotopeProduction) DoIsotopeCounting(originalIncident, targetNucleus);    
   delete originalTarget;
   return &theParticleChange;
 }

@@ -67,8 +67,7 @@ G4LEAntiNeutronInelastic::ApplyYourself(const G4HadProjectile& aTrack,
   const G4HadProjectile* originalIncident = &aTrack;
 
   // create the target particle
-
-  G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
+  G4DynamicParticle* originalTarget = targetNucleus.ReturnTargetParticle();
     
   if (verboseLevel > 1) {
     const G4Material *targetMaterial = aTrack.GetMaterial();
@@ -81,70 +80,65 @@ G4LEAntiNeutronInelastic::ApplyYourself(const G4HadProjectile& aTrack,
 
   // Fermi motion and evaporation
   // As of Geant3, the Fermi energy calculation had not been Done
-
   G4double ek = originalIncident->GetKineticEnergy()/MeV;
   G4double amas = originalIncident->GetDefinition()->GetPDGMass()/MeV;
   G4ReactionProduct modifiedOriginal;
   modifiedOriginal = *originalIncident;
     
-    G4double tkin = targetNucleus.Cinema( ek );
-    ek += tkin;
-    modifiedOriginal.SetKineticEnergy( ek*MeV );
-    G4double et = ek + amas;
-    G4double p = std::sqrt( std::abs((et-amas)*(et+amas)) );
-    G4double pp = modifiedOriginal.GetMomentum().mag()/MeV;
-    if( pp > 0.0 )
-    {
-      G4ThreeVector momentum = modifiedOriginal.GetMomentum();
-      modifiedOriginal.SetMomentum( momentum * (p/pp) );
-    }
-    //
-    // calculate black track energies
-    //
-    tkin = targetNucleus.EvaporationEffects( ek );
-    ek -= tkin;
-    modifiedOriginal.SetKineticEnergy( ek*MeV );
-    et = ek + amas;
-    p = std::sqrt( std::abs((et-amas)*(et+amas)) );
-    pp = modifiedOriginal.GetMomentum().mag()/MeV;
-    if( pp > 0.0 )
-    {
-      G4ThreeVector momentum = modifiedOriginal.GetMomentum();
-      modifiedOriginal.SetMomentum( momentum * (p/pp) );
-    }
+  G4double tkin = targetNucleus.Cinema(ek);
+  ek += tkin;
+  modifiedOriginal.SetKineticEnergy(ek*MeV);
+  G4double et = ek + amas;
+  G4double p = std::sqrt( std::abs((et-amas)*(et+amas)) );
+  G4double pp = modifiedOriginal.GetMomentum().mag()/MeV;
+  if (pp > 0.0) {
+    G4ThreeVector momentum = modifiedOriginal.GetMomentum();
+    modifiedOriginal.SetMomentum( momentum * (p/pp) );
+  }
+
+  // calculate black track energies
+  tkin = targetNucleus.EvaporationEffects(ek);
+  ek -= tkin;
+  modifiedOriginal.SetKineticEnergy(ek*MeV);
+  et = ek + amas;
+  p = std::sqrt( std::abs((et-amas)*(et+amas)) );
+  pp = modifiedOriginal.GetMomentum().mag()/MeV;
+  if (pp > 0.0) {
+    G4ThreeVector momentum = modifiedOriginal.GetMomentum();
+    modifiedOriginal.SetMomentum( momentum * (p/pp) );
+  }
     
-    G4ReactionProduct currentParticle = modifiedOriginal;
-    G4ReactionProduct targetParticle;
-    targetParticle = *originalTarget;
-    currentParticle.SetSide( 1 ); // incident always goes in forward hemisphere
-    targetParticle.SetSide( -1 );  // target always goes in backward hemisphere
-    G4bool incidentHasChanged = false;
-    G4bool targetHasChanged = false;
-    G4bool quasiElastic = false;
-    G4FastVector<G4ReactionProduct,GHADLISTSIZE> vec;  // vec will contain the secondary particles
-    G4int vecLen = 0;
-    vec.Initialize( 0 );
+  G4ReactionProduct currentParticle = modifiedOriginal;
+  G4ReactionProduct targetParticle;
+  targetParticle = *originalTarget;
+  currentParticle.SetSide(1); // incident always goes in forward hemisphere
+  targetParticle.SetSide(-1);  // target always goes in backward hemisphere
+  G4bool incidentHasChanged = false;
+  G4bool targetHasChanged = false;
+  G4bool quasiElastic = false;
+  G4FastVector<G4ReactionProduct,GHADLISTSIZE> vec;  // vec will contain the secondary particles
+  G4int vecLen = 0;
+  vec.Initialize(0);
     
-    const G4double cutOff = 0.1*MeV;
-    const G4double anni = std::min( 1.3*currentParticle.GetTotalMomentum()/GeV, 0.4 );
+  const G4double cutOff = 0.1*MeV;
+  const G4double anni = std::min(1.3*currentParticle.GetTotalMomentum()/GeV, 0.4);
     
-    if( (currentParticle.GetKineticEnergy()/MeV > cutOff) ||
-        (G4UniformRand() > anni) )
-      Cascade( vec, vecLen,
-               originalIncident, currentParticle, targetParticle,
-               incidentHasChanged, targetHasChanged, quasiElastic );
-    else
-      quasiElastic = true;
+  if ((currentParticle.GetKineticEnergy()/MeV > cutOff) ||
+      (G4UniformRand() > anni) )
+    Cascade(vec, vecLen, originalIncident, currentParticle, targetParticle,
+            incidentHasChanged, targetHasChanged, quasiElastic);
+  else
+    quasiElastic = true;
     
-    CalculateMomenta( vec, vecLen,
-                      originalIncident, originalTarget, modifiedOriginal,
-                      targetNucleus, currentParticle, targetParticle,
-                      incidentHasChanged, targetHasChanged, quasiElastic );
+  CalculateMomenta(vec, vecLen, originalIncident, originalTarget,
+                   modifiedOriginal, targetNucleus, currentParticle,
+                   targetParticle, incidentHasChanged, targetHasChanged,
+                   quasiElastic);
     
-    SetUpChange( vec, vecLen,
-                 currentParticle, targetParticle,
-                 incidentHasChanged );
-    
+  SetUpChange(vec, vecLen, currentParticle, targetParticle, incidentHasChanged);
+
+  if (isotopeProduction) DoIsotopeCounting(originalIncident, targetNucleus);
+
   delete originalTarget;
   return &theParticleChange;
 }
@@ -180,117 +174,98 @@ void G4LEAntiNeutronInelastic::Cascade(
                                         2.0*targetMass*etOriginal );
   G4double availableEnergy = centerofmassEnergy-(targetMass+mOriginal);
     
-    static G4bool first = true;
-    const G4int numMul = 1200;
-    const G4int numMulA = 400;
-    const G4int numSec = 60;
-    static G4double protmul[numMul], protnorm[numSec]; // proton constants
-    static G4double neutmul[numMul], neutnorm[numSec]; // neutron constants
-    static G4double protmulA[numMulA], protnormA[numSec]; // proton constants
-    static G4double neutmulA[numMulA], neutnormA[numSec]; // neutron constants
-    // np = number of pi+, nm = number of pi-, nz = number of pi0
-    G4int counter, nt=0, np=0, nm=0, nz=0;
-    G4double test;
-    const G4double c = 1.25;    
-    const G4double b[] = { 0.70, 0.70 };
-    if( first )       // compute normalization constants, this will only be Done once
-    {
-      first = false;
-      G4int i;
-      for( i=0; i<numMul; ++i )protmul[i] = 0.0;
-      for( i=0; i<numSec; ++i )protnorm[i] = 0.0;
-      counter = -1;
-      for( np=0; np<(numSec/3); ++np )
-      {
-        for( nm=std::max(0,np-2); nm<=np; ++nm )
-        {
-          for( nz=0; nz<numSec/3; ++nz )
-          {
-            if( ++counter < numMul )
-            {
-              nt = np+nm+nz;
-              if( nt>0 && nt<=numSec )
-              {
-                protmul[counter] = Pmltpc(np,nm,nz,nt,b[0],c);
-                protnorm[nt-1] += protmul[counter];
-              }
-            }
-          }
-        }
-      }
-      for( i=0; i<numMul; ++i )neutmul[i] = 0.0;
-      for( i=0; i<numSec; ++i )neutnorm[i] = 0.0;
-      counter = -1;
-      for( np=0; np<numSec/3; ++np )
-      {
-        for( nm=std::max(0,np-1); nm<=(np+1); ++nm )
-        {
-          for( nz=0; nz<numSec/3; ++nz )
-          {
-            if( ++counter < numMul )
-            {
-              nt = np+nm+nz;
-              if( (nt>0) && (nt<=numSec) )
-              {
-                neutmul[counter] = Pmltpc(np,nm,nz,nt,b[1],c);
-                neutnorm[nt-1] += neutmul[counter];
-              }
-            }
-          }
-        }
-      }
-      for( i=0; i<numSec; ++i )
-      {
-        if( protnorm[i] > 0.0 )protnorm[i] = 1.0/protnorm[i];
-        if( neutnorm[i] > 0.0 )neutnorm[i] = 1.0/neutnorm[i];
-      }
-      //
-      // do the same for annihilation channels
-      //
-      for( i=0; i<numMulA; ++i )protmulA[i] = 0.0;
-      for( i=0; i<numSec; ++i )protnormA[i] = 0.0;
-      counter = -1;
-      for( np=1; np<(numSec/3); ++np )
-      {
-        nm = np-1;
-        for( nz=0; nz<numSec/3; ++nz )
-        {
-          if( ++counter < numMulA )
-          {
+  static G4bool first = true;
+  const G4int numMul = 1200;
+  const G4int numMulA = 400;
+  const G4int numSec = 60;
+  static G4double protmul[numMul], protnorm[numSec]; // proton constants
+  static G4double neutmul[numMul], neutnorm[numSec]; // neutron constants
+  static G4double protmulA[numMulA], protnormA[numSec]; // proton constants
+  static G4double neutmulA[numMulA], neutnormA[numSec]; // neutron constants
+
+  // np = number of pi+, nm = number of pi-, nz = number of pi0
+  G4int counter, nt=0, np=0, nm=0, nz=0;
+  G4double test;
+  const G4double c = 1.25;    
+  const G4double b[] = { 0.70, 0.70 };
+
+  if (first) {      // compute normalization constants (only be done once)
+    first = false;
+    G4int i;
+    for( i=0; i<numMul; ++i )protmul[i] = 0.0;
+    for( i=0; i<numSec; ++i )protnorm[i] = 0.0;
+    counter = -1;
+    for (np = 0; np < (numSec/3); ++np) {
+      for (nm = std::max(0,np-2); nm <= np; ++nm) {
+        for (nz = 0; nz < numSec/3; ++nz) {
+          if (++counter < numMul) {
             nt = np+nm+nz;
-            if( nt>1 && nt<=numSec )
-            {
-              protmulA[counter] = Pmltpc(np,nm,nz,nt,b[0],c);
-              protnormA[nt-1] += protmulA[counter];
+            if (nt > 0 && nt <= numSec) {
+              protmul[counter] = Pmltpc(np,nm,nz,nt,b[0],c);
+              protnorm[nt-1] += protmul[counter];
             }
           }
         }
       }
-      for( i=0; i<numMulA; ++i )neutmulA[i] = 0.0;
-      for( i=0; i<numSec; ++i )neutnormA[i] = 0.0;
-      counter = -1;
-      for( np=0; np<numSec/3; ++np )
-      {
-        nm = np;
-        for( nz=0; nz<numSec/3; ++nz )
-        {
-          if( ++counter < numMulA )
-          {
+    }
+    for (i = 0; i < numMul; ++i) neutmul[i] = 0.0;
+    for (i = 0; i < numSec; ++i) neutnorm[i] = 0.0;
+    counter = -1;
+    for (np = 0; np < numSec/3; ++np) {
+      for (nm = std::max(0,np-1); nm <= (np+1); ++nm) {
+        for (nz = 0; nz < numSec/3; ++nz) {
+          if (++counter < numMul) {
             nt = np+nm+nz;
-            if( nt>1 && nt<=numSec )
-            {
-              neutmulA[counter] = Pmltpc(np,nm,nz,nt,b[1],c);
-              neutnormA[nt-1] += neutmulA[counter];
+            if ( (nt > 0) && (nt <= numSec) ) {
+              neutmul[counter] = Pmltpc(np,nm,nz,nt,b[1],c);
+              neutnorm[nt-1] += neutmul[counter];
             }
           }
         }
       }
-      for( i=0; i<numSec; ++i )
-      {
-        if( protnormA[i] > 0.0 )protnormA[i] = 1.0/protnormA[i];
-        if( neutnormA[i] > 0.0 )neutnormA[i] = 1.0/neutnormA[i];
+    }
+    for (i = 0; i < numSec; ++i) {
+      if (protnorm[i] > 0.0) protnorm[i] = 1.0/protnorm[i];
+      if (neutnorm[i] > 0.0) neutnorm[i] = 1.0/neutnorm[i];
+    }
+
+    // do the same for annihilation channels
+    for( i=0; i<numMulA; ++i )protmulA[i] = 0.0;
+    for( i=0; i<numSec; ++i )protnormA[i] = 0.0;
+    counter = -1;
+    for (np = 1; np < (numSec/3); ++np) {
+      nm = np-1;
+      for (nz = 0; nz < numSec/3; ++nz) {
+        if (++counter < numMulA) {
+          nt = np+nm+nz;
+          if (nt > 1 && nt <= numSec) {
+            protmulA[counter] = Pmltpc(np,nm,nz,nt,b[0],c);
+            protnormA[nt-1] += protmulA[counter];
+          }
+        }
       }
-    }   // end of initialization
+    }
+    for (i = 0; i < numMulA; ++i) neutmulA[i] = 0.0;
+    for (i = 0; i < numSec; ++i) neutnormA[i] = 0.0;
+    counter = -1;
+    for (np = 0; np < numSec/3; ++np) {
+      nm = np;
+      for (nz = 0; nz < numSec/3; ++nz) {
+        if (++counter < numMulA) {
+          nt = np+nm+nz;
+          if (nt > 1 && nt <= numSec) {
+            neutmulA[counter] = Pmltpc(np,nm,nz,nt,b[1],c);
+            neutnormA[nt-1] += neutmulA[counter];
+          }
+        }
+      }
+    }
+    for (i = 0; i < numSec; ++i) {
+      if (protnormA[i] > 0.0) protnormA[i] = 1.0/protnormA[i];
+      if (neutnormA[i] > 0.0) neutnormA[i] = 1.0/neutnormA[i];
+    }
+  }   // end of initialization
+
     const G4double expxu = 82.;           // upper bound for arg. of exp
     const G4double expxl = -expxu;        // lower bound for arg. of exp
     G4ParticleDefinition *aNeutron = G4Neutron::Neutron();

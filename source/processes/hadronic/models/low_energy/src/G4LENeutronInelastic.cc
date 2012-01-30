@@ -54,95 +54,84 @@ G4LENeutronInelastic::ApplyYourself(const G4HadProjectile& aTrack,
   const G4HadProjectile *originalIncident = &aTrack;
 
   // Create the target particle
-
-  G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
+  G4DynamicParticle* originalTarget = targetNucleus.ReturnTargetParticle();
     
   if (verboseLevel > 1) {
-    const G4Material *targetMaterial = aTrack.GetMaterial();
+    const G4Material* targetMaterial = aTrack.GetMaterial();
     G4cout << "G4LENeutronInelastic::ApplyYourself called" << G4endl;
     G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
     G4cout << "target material = " << targetMaterial->GetName() << ", ";
     G4cout << "target particle = " << originalTarget->GetDefinition()->GetParticleName()
            << G4endl;
   }
-/* not true, for example for Fe56, etc..
-    if( originalIncident->GetKineticEnergy()/MeV < 0.000001 )
-      throw G4HadronicException(__FILE__, __LINE__, "G4LENeutronInelastic: should be capture process!");
-    if( originalIncident->Get4Momentum().vect().mag()/MeV < 0.000001 )
-      throw G4HadronicException(__FILE__, __LINE__, "G4LENeutronInelastic: should be capture process!");
-*/
-    
+ 
   G4ReactionProduct modifiedOriginal;
   modifiedOriginal = *originalIncident;
   G4ReactionProduct targetParticle;
   targetParticle = *originalTarget;
   if (originalIncident->GetKineticEnergy()/GeV < 0.01 + 2.*G4UniformRand()/9.) {
-    SlowNeutron( originalIncident, modifiedOriginal, targetParticle, targetNucleus );
+    SlowNeutron(originalIncident, modifiedOriginal, targetParticle, targetNucleus);
+    if (isotopeProduction) DoIsotopeCounting(originalIncident, targetNucleus);
     delete originalTarget;
     return &theParticleChange;
   }
 
   // Fermi motion and evaporation
   // As of Geant3, the Fermi energy calculation had not been done
-
   G4double ek = originalIncident->GetKineticEnergy()/MeV;
   G4double amas = originalIncident->GetDefinition()->GetPDGMass()/MeV;
     
-    G4double tkin = targetNucleus.Cinema( ek );
-    ek += tkin;
-    modifiedOriginal.SetKineticEnergy( ek*MeV );
-    G4double et = ek + amas;
-    G4double p = std::sqrt( std::abs((et-amas)*(et+amas)) );
-    G4double pp = modifiedOriginal.GetMomentum().mag()/MeV;
-    if( pp > 0.0 )
-    {
-      G4ThreeVector momentum = modifiedOriginal.GetMomentum();
-      modifiedOriginal.SetMomentum( momentum * (p/pp) );
-    }
-    //
-    // calculate black track energies
-    //
-    tkin = targetNucleus.EvaporationEffects( ek );
-    ek -= tkin;
-    modifiedOriginal.SetKineticEnergy( ek*MeV );
-    et = ek + amas;
-    p = std::sqrt( std::abs((et-amas)*(et+amas)) );
-    pp = modifiedOriginal.GetMomentum().mag()/MeV;
-    if( pp > 0.0 )
-    {
-      G4ThreeVector momentum = modifiedOriginal.GetMomentum();
-      modifiedOriginal.SetMomentum( momentum * (p/pp) );
-    }
-    const G4double cutOff = 0.1;
-    if( modifiedOriginal.GetKineticEnergy()/MeV <= cutOff )
-    {
-      SlowNeutron( originalIncident, modifiedOriginal, targetParticle, targetNucleus );
-      delete originalTarget;
-      return &theParticleChange;
-    }
-    G4ReactionProduct currentParticle = modifiedOriginal;
-    currentParticle.SetSide( 1 ); // incident always goes in forward hemisphere
-    targetParticle.SetSide( -1 );  // target always goes in backward hemisphere
-    G4bool incidentHasChanged = false;
-    G4bool targetHasChanged = false;
-    G4bool quasiElastic = false;
-    G4FastVector<G4ReactionProduct,GHADLISTSIZE> vec;  // vec will contain the secondary particles
-    G4int vecLen = 0;
-    vec.Initialize( 0 );
+  G4double tkin = targetNucleus.Cinema(ek);
+  ek += tkin;
+  modifiedOriginal.SetKineticEnergy( ek*MeV );
+  G4double et = ek + amas;
+  G4double p = std::sqrt( std::abs((et-amas)*(et+amas)) );
+  G4double pp = modifiedOriginal.GetMomentum().mag()/MeV;
+  if (pp > 0.0) {
+    G4ThreeVector momentum = modifiedOriginal.GetMomentum();
+    modifiedOriginal.SetMomentum(momentum * (p/pp) );
+  }
+
+  // calculate black track energies
+  tkin = targetNucleus.EvaporationEffects( ek );
+  ek -= tkin;
+  modifiedOriginal.SetKineticEnergy( ek*MeV );
+  et = ek + amas;
+  p = std::sqrt( std::abs((et-amas)*(et+amas)) );
+  pp = modifiedOriginal.GetMomentum().mag()/MeV;
+  if (pp > 0.0) {
+    G4ThreeVector momentum = modifiedOriginal.GetMomentum();
+    modifiedOriginal.SetMomentum(momentum * (p/pp) );
+  }
+  const G4double cutOff = 0.1;
+  if (modifiedOriginal.GetKineticEnergy()/MeV <= cutOff) {
+    SlowNeutron(originalIncident, modifiedOriginal, targetParticle, targetNucleus);
+    if (isotopeProduction) DoIsotopeCounting(originalIncident, targetNucleus);
+    delete originalTarget;
+    return &theParticleChange;
+  }
+
+  G4ReactionProduct currentParticle = modifiedOriginal;
+  currentParticle.SetSide(1);  // incident always goes in forward hemisphere
+  targetParticle.SetSide(-1);  // target always goes in backward hemisphere
+  G4bool incidentHasChanged = false;
+  G4bool targetHasChanged = false;
+  G4bool quasiElastic = false;
+  G4FastVector<G4ReactionProduct,GHADLISTSIZE> vec;  // vec will contain the secondary particles
+  G4int vecLen = 0;
+  vec.Initialize(0);
     
-    Cascade( vec, vecLen,
-             originalIncident, currentParticle, targetParticle,
-             incidentHasChanged, targetHasChanged, quasiElastic );
+  Cascade(vec, vecLen, originalIncident, currentParticle, targetParticle,
+          incidentHasChanged, targetHasChanged, quasiElastic);
     
-    CalculateMomenta( vec, vecLen,
-                      originalIncident, originalTarget, modifiedOriginal,
-                      targetNucleus, currentParticle, targetParticle,
-                      incidentHasChanged, targetHasChanged, quasiElastic );
+  CalculateMomenta(vec, vecLen, originalIncident, originalTarget,
+                   modifiedOriginal, targetNucleus, currentParticle,
+                   targetParticle, incidentHasChanged, targetHasChanged,
+                   quasiElastic);
     
-    SetUpChange( vec, vecLen,
-                 currentParticle, targetParticle,
-                 incidentHasChanged );
-    
+  SetUpChange(vec, vecLen, currentParticle, targetParticle, incidentHasChanged);
+   
+  if (isotopeProduction) DoIsotopeCounting(originalIncident, targetNucleus); 
   delete originalTarget;
   return &theParticleChange;
 }
