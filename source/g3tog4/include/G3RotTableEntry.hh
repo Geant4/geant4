@@ -54,7 +54,7 @@ class G3RotTableEntry
     virtual ~G3RotTableEntry();
     
     // operators
-    const G3RotTableEntry& operator=(const G3RotTableEntry& right);
+    G3RotTableEntry& operator=(const G3RotTableEntry& right);
     G4int operator==(const G3RotTableEntry& right) const;
     G4int operator!=(const G3RotTableEntry& right) const;
 

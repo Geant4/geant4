@@ -46,9 +46,9 @@ G3MatTableEntry::G3MatTableEntry(const G3MatTableEntry& right)
 G3MatTableEntry::~G3MatTableEntry()
 {}
 
-const G3MatTableEntry& 
-G3MatTableEntry::operator=(const G3MatTableEntry& right)
-{ 
+G3MatTableEntry& G3MatTableEntry::operator=(const G3MatTableEntry& right)
+{
+  if (&right == this)  { return *this; }
   fID = right.GetID();
   fMaterial = right.GetMaterial();     
   return *this;

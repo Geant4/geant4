@@ -57,7 +57,7 @@ class G3MedTableEntry
     virtual ~G3MedTableEntry();
     
     // operators
-    const G3MedTableEntry& operator=(const G3MedTableEntry& right);
+    G3MedTableEntry& operator=(const G3MedTableEntry& right);
     G4int operator==(const G3MedTableEntry& right) const;
     G4int operator!=(const G3MedTableEntry& right) const;
 

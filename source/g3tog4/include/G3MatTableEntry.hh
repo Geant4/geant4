@@ -53,7 +53,7 @@ class G3MatTableEntry
     virtual ~G3MatTableEntry();
     
     // operators
-    const G3MatTableEntry& operator=(const G3MatTableEntry& right);
+    G3MatTableEntry& operator=(const G3MatTableEntry& right);
     G4int operator==(const G3MatTableEntry& right) const;
     G4int operator!=(const G3MatTableEntry& right) const;
 

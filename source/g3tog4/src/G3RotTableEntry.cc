@@ -46,9 +46,9 @@ G3RotTableEntry::G3RotTableEntry(const G3RotTableEntry& right)
 G3RotTableEntry::~G3RotTableEntry()
 {}
 
-const G3RotTableEntry& 
-G3RotTableEntry::operator=(const G3RotTableEntry& right)
+G3RotTableEntry& G3RotTableEntry::operator=(const G3RotTableEntry& right)
 { 
+  if (&right == this)  { return *this; }
   fID = right.GetID();
   fMatrix = right.GetMatrix();     
   return *this;
