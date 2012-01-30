@@ -930,7 +930,10 @@ generateParticleFate(G4CascadParticle& cparticle,
 
       EPCoutput.reset();
       theEPCollider->collide(&bullet, &target, EPCoutput);
-      
+
+      // If collision failed, exit loop over partners
+      if (EPCoutput.numberOfOutgoingParticles() == 0) break;
+
       if (verboseLevel > 2) {
 	EPCoutput.printCollisionOutput();
 #ifdef G4CASCADE_CHECK_ECONS
@@ -1038,7 +1041,7 @@ generateParticleFate(G4CascadParticle& cparticle,
 	balance.okay();		// Report violations, but don't act on them
       }
 #endif
-    }
+    }	// if (no_interaction)
   }	// if (npart == 1) [else]
 
   return;

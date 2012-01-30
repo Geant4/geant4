@@ -15,6 +15,38 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+25 January 2012  Michael Kelsey (hadr-casc-V09-05-04)
+-----------------------------------------------------
+- G4CascadeInterface.cc: Check for no-interaction in retryInelasticProton,
+  both in return value and in debugging report.
+
+25 January 2012  Michael Kelsey (hadr-casc-V09-05-03)
+-----------------------------------------------------
+- G4NucleiModel.hh:  In getPotential() add test for ip==9 (photon) to return
+  zero potential.  Otherwise it will return the 7 MeV flat pion potential,
+  which is not correct.
+
+20 January 2012  Vladimir Ivantchenko (hadr-casc-V09-05-02)
+-----------------------------------------------------------
+- G4PreCompoundDeexcitation.cc: Do not delete pre-compound model and excitation
+  handler to avoid double deletion
+
+ 6 January 2012  Dennis Wright (hadr-casc-V09-05-01)
+----------------------------------------------------
+- G4ElementaryParticleCollider.cc:  add angular distributions for elastic and 
+  inelastic 2-body final states of gamma p and gamma n reactions.
+ 
+19 December 2011  Michael Kelsey (hadr-casc-V09-05-00)
+------------------------------------------------------
+- G4ElementaryParticle.cc:  Expand diagnostics in getMomModuleFor2toMany(),
+  in generateSCMfinalState(), defer "particles.resize()" action until after
+  final-state properties have been validated.  In case no final state can be
+  generated, this ensures that the failure propagates back up the calling
+  chain, instead of simply looping forever.
+
+- G4NucleiModel.cc:  If G4ElementaryParticle::collide() returns empty
+  output, stop propagating.
+
 7 November 2011  Michael Kelsey (hadr-casc-V09-04-41)
 -----------------------------------------------------
 - G4NucleiModel.cc:  Due to some validation discrepancies, revert structure

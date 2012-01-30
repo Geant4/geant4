@@ -92,6 +92,7 @@
 // 20110802  M. Kelsey -- Use new decay handler for Propagate interface
 // 20110922  M. Kelsey -- Follow migration of G4InuclParticle::print(), use
 //		G4ExceptionDescription for reporting before throwing exception
+// 20120125  M. Kelsey -- In retryInelasticProton() check for empty output
 
 #include "G4CascadeInterface.hh"
 #include "globals.hh"
@@ -211,7 +212,7 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
   counter++;
   G4cerr << "Reaction number "<< counter << " "
 	 << aTrack.GetDefinition()->GetParticleName() << " "
-	 << aTrack.GetKineticEnergy() << G4endl;
+	 << aTrack.GetKineticEnergy() << " MeV" << G4endl;
 #endif
 
   if (!randomFile.empty()) {		// User requested random-seed capture
@@ -631,19 +632,24 @@ G4bool G4CascadeInterface::retryInelasticProton() const {
   // Report on all retry conditions, in order of return logic
   G4cout << " retryInelasticProton: number of Tries "
 	 << ((numberOfTries < maximumTries) ? "RETRY (t)" : "EXIT (f)")
-	 << "\n retryInelasticProton: AND collision type "
-	 << ((out.size() == 2) ? "ELASTIC (t)" : "INELASTIC (f)")
-	 << "\n retryInelasticProton: AND Leading particles bullet "
-	 << ((out[0].getDefinition() == bullet->getDefinition() ||
-	      out[1].getDefinition() == bullet->getDefinition())
-	     ? "YES (t)" : "NO (f)")
-	 << G4endl;
+	 << "\n retryInelasticProton: AND collision type ";
+  if (out.empty()) G4cout << "FAILED" << G4endl;
+  else {
+    G4cout << (out.size() == 2 ? "ELASTIC (t)" : "INELASTIC (f)")
+	   << "\n retryInelasticProton: AND Leading particles bullet "
+	   << (out.size() >= 2 &&
+	       (out[0].getDefinition() == bullet->getDefinition() ||
+		out[1].getDefinition() == bullet->getDefinition())
+	       ? "YES (t)" : "NO (f)")
+	   << G4endl;
+  }
 #endif
 
   return ( (numberOfTries < maximumTries) &&
-	   (out.size() == 2) &&
-	   (out[0].getDefinition() == bullet->getDefinition() ||
-	    out[1].getDefinition() == bullet->getDefinition())
+	   (out.empty() ||
+	    (out.size() == 2 &&
+	     (out[0].getDefinition() == bullet->getDefinition() ||
+	      out[1].getDefinition() == bullet->getDefinition())))
 	   );
 }
 

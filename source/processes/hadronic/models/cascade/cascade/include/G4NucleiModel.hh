@@ -59,6 +59,7 @@
 // 20110808  M. Kelsey -- Pass buffer into generateParticleFate instead of
 //		returning a vector to be copied.
 // 20110823  M. Kelsey -- Remove local cross-section tables entirely
+// 20120125  M. Kelsey -- Add special case for photons to have zero potential.
 
 #ifndef G4NUCLEI_MODEL_HH
 #define G4NUCLEI_MODEL_HH
@@ -102,6 +103,7 @@ public:
   G4double getFermiKinetic(G4int ip, G4int izone) const;
 
   G4double getPotential(G4int ip, G4int izone) const {
+    if (ip == 9) return 0.0;		// Special case for photons
     G4int ip0 = ip < 3 ? ip - 1 : 2;
     if (ip > 10 && ip < 18) ip0 = 3;
     if (ip > 20) ip0 = 4;

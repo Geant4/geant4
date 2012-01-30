@@ -38,6 +38,7 @@
 //		replace getDeexcitationFragments() with deExcite().
 // 20110214  M. Kelsey -- Follow G4InuclParticle::Model enumerator migration
 // 20110803  M. Kelsey -- Add post-deexcitation diagnostic messages
+// 20120120  V. Ivanchenko -- Pre-compound model and its handler should not be deleted here
 
 #include "G4PreCompoundDeexcitation.hh"
 #include "globals.hh"
@@ -60,8 +61,10 @@ G4PreCompoundDeexcitation::G4PreCompoundDeexcitation()
 
 G4PreCompoundDeexcitation::~G4PreCompoundDeexcitation() {
   // we need to delete here because G4PreComp does NOT delete it
-  delete theExcitationHandler;
-  delete theDeExcitation;
+  // all objects following G4HadronicInteraction interface are
+  // deleted 
+  //delete theExcitationHandler;
+  //delete theDeExcitation;
 }
 
 // Main processing
