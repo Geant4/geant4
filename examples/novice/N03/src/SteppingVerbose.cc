@@ -77,23 +77,14 @@ void SteppingVerbose::StepInfo()
 	<< std::setw(6) << G4BestUnit(fStep->GetTotalEnergyDeposit(),"Energy")
 	<< std::setw(6) << G4BestUnit(fStep->GetStepLength(),"Length")
 	<< std::setw(6) << G4BestUnit(fTrack->GetTrackLength(),"Length")
-	<< "  ";
+	<< std::setw(10) << fTrack->GetVolume()->GetName();
 
-    // if( fStepStatus != fWorldBoundary){ 
-    if( fTrack->GetNextVolume() != 0 ) { 
-      G4cout << std::setw(10) << fTrack->GetVolume()->GetName();
-    } else {
-      G4cout << std::setw(10) << "OutOfWorld";
-    }
-
-    if(fStep->GetPostStepPoint()->GetProcessDefinedStep() != NULL){
-      G4cout << "  " 
-             << std::setw(10) << fStep->GetPostStepPoint()
-	                            ->GetProcessDefinedStep()->GetProcessName();
-    } else {
-      G4cout << "   UserLimit";
-    }
-
+    const G4VProcess* process 
+                      = fStep->GetPostStepPoint()->GetProcessDefinedStep();
+    G4String procName = " UserLimit";
+    if (process) procName = process->GetProcessName();
+    if (fStepStatus == fWorldBoundary) procName = "OutOfWorld";
+    G4cout << "   " << std::setw(10) << procName;
     G4cout << G4endl;
 
     if( verboseLevel == 2 ){
@@ -103,7 +94,7 @@ void SteppingVerbose::StepInfo()
       if(tN2ndariesTot>0){
 	G4cout << "\n    :----- List of secondaries ----------------"
 	       << G4endl;
-
+        G4cout.precision(4);
 	for(size_t lp1=(*fSecondary).size()-tN2ndariesTot; 
                         lp1<(*fSecondary).size(); lp1++){
 	  G4cout << "   "
@@ -118,7 +109,7 @@ void SteppingVerbose::StepInfo()
 	  G4cout << G4endl;
 	}
               
-	G4cout << "    :------------------------------------------"
+	G4cout << "    :------------------------------------------\n"
 	       << G4endl;
       }
     }
@@ -155,14 +146,8 @@ G4int prec = G4cout.precision(3);
 	<< std::setw(6) << G4BestUnit(fStep->GetTotalEnergyDeposit(),"Energy")
 	<< std::setw(6) << G4BestUnit(fStep->GetStepLength(),"Length")
 	<< std::setw(6) << G4BestUnit(fTrack->GetTrackLength(),"Length")
-	<< "  ";
-
-    if(fTrack->GetNextVolume()){
-      G4cout << std::setw(10) << fTrack->GetVolume()->GetName();
-    } else {
-      G4cout << std::setw(10) << "OutOfWorld";
-    }
-    G4cout  << "    initStep" << G4endl;
+	<< std::setw(10) << fTrack->GetVolume()->GetName()
+        << "   initStep" << G4endl;	
   }
   G4cout.precision(prec);
 }
