@@ -32,18 +32,11 @@
 
 #include "G4VEvaporationFactory.hh"
 
-G4VEvaporationFactory::G4VEvaporationFactory() : channel(0) 
+G4VEvaporationFactory::G4VEvaporationFactory()
 {}
 
 G4VEvaporationFactory::~G4VEvaporationFactory()
-{
-  if (channel != 0) {
-    size_t n = channel->size();
-    for(size_t i=0; i<n; ++i) { delete (*channel)[i]; }
-    delete channel;
-    channel = 0;
-  }
-}
+{}
 
 
 

@@ -32,25 +32,25 @@
 
 
 #ifndef G4EvaporationGEMFactory_hh
-#define G4EvaporationGEMFactory_hh
-
+#define G4EvaporationGEMFactory_hh 1
 
 #include "G4VEvaporationFactory.hh"
 
 class G4EvaporationGEMFactory : public G4VEvaporationFactory
 {
 public:
+
   G4EvaporationGEMFactory();
+
   virtual ~G4EvaporationGEMFactory(); 
+
+  virtual std::vector<G4VEvaporationChannel*>* GetChannel();
 
 private:
   G4EvaporationGEMFactory(const G4EvaporationGEMFactory & );
   const G4EvaporationGEMFactory & operator=(const G4EvaporationGEMFactory & val);
   G4bool operator==(const G4EvaporationGEMFactory & val) const;
   G4bool operator!=(const G4EvaporationGEMFactory & val) const;
-
-private:
-  std::vector<G4VEvaporationChannel*> * CreateChannel();
 
 };
 

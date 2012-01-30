@@ -13,20 +13,26 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+06 January 2012 Vladimir Ivanchenko (hadr-deex-V09-05-00)
+----------------------------------------------------------
+- G4VEvaporationFactory, G4Evaporation, G4EvaporationGEMFactory,
+  G4EvaporationFactory, G4EvaporationDefaultGEMFactory - added proper 
+  destruction of decay channels after run 
+
 03 November 2011 Laurent Desorgher (hadr-deex-V09-04-21)
 ----------------------------------------------------------
-- Extend the use of G4PhotoEvaporation to Z>100. Note that for Z>100 at the moment the binding 
-  energy of the vacant e- shell left after internal  conversion is set as 0. and the atomic relaxation 
-  will not be simulated later on. 
- 
-     
+- Extend the use of G4PhotoEvaporation to Z>100. Note that for Z>100 at the 
+  moment the binding energy of the vacant e- shell left after internal conversion 
+  is set as 0 and the atomic relaxation will not be simulated later on. 
+      
 17 October 2011 Laurent Desorgher (hadr-deex-V09-04-20)
 ----------------------------------------------------------
-- G4NuclearLevelStore (photo-evaporation) 
-					  - add AddUserEvaporationDataFile(G4int Z, G4int A,G4String filename)
-					  	The given data file will be used for the treatment of the photo evaporation 
-					  	of the given isotope instead of using the file provided in the photo evaporation 
-					  	database.
+- G4NuclearLevelStore (photo-evaporation):
+  add AddUserEvaporationDataFile(G4int Z, G4int A,G4String filename)
+  The given data file will be used for the treatment of the photo evaporation 
+  of the given isotope instead of using the file provided in the photo evaporation 
+  database.
 
 30 September 2011 Vladimir Ivanchenko (hadr-deex-V09-04-19)
 ----------------------------------------------------------

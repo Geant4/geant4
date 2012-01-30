@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id: G4Evaporation.hh,v 1.12 2010-05-11 11:34:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -61,7 +60,15 @@ public:
 
   virtual void Initialise();
 
+  G4FragmentVector * BreakItUp(const G4Fragment &theNucleus);
+
+  void SetDefaultChannel();
+  void SetGEMChannel();
+  void SetCombinedChannel();
+
 private:
+
+  void CleanChannels();
 
   void InitialiseEvaporation();
 
@@ -70,14 +77,6 @@ private:
   const G4Evaporation & operator=(const G4Evaporation &right);
   G4bool operator==(const G4Evaporation &right) const;
   G4bool operator!=(const G4Evaporation &right) const;
-
-public:
-
-  G4FragmentVector * BreakItUp(const G4Fragment &theNucleus);
-
-  void SetDefaultChannel();
-  void SetGEMChannel();
-  void SetCombinedChannel();
 
   std::vector<G4VEvaporationChannel*> * theChannels;
   std::vector<G4double>   probabilities;

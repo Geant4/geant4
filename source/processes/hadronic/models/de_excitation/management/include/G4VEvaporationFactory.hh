@@ -32,7 +32,7 @@
 
 
 #ifndef G4VEvaporationFactory_hh
-#define G4VEvaporationFactory_hh
+#define G4VEvaporationFactory_hh 1
 
 #include "G4VEvaporationChannel.hh"
 #include <vector>
@@ -40,30 +40,20 @@
 class G4VEvaporationFactory
 {
 public:
+
   G4VEvaporationFactory();
+
   virtual ~G4VEvaporationFactory();
 
-  inline std::vector<G4VEvaporationChannel*> * GetChannel();
+  virtual std::vector<G4VEvaporationChannel*> * GetChannel() = 0;
 
 private:
+
   G4VEvaporationFactory(const G4VEvaporationFactory & );
   const G4VEvaporationFactory & operator=(const G4VEvaporationFactory & val);
   G4bool operator==(const G4VEvaporationFactory & val) const;
   G4bool operator!=(const G4VEvaporationFactory & val) const;
 
-protected:
-  virtual std::vector<G4VEvaporationChannel*> * CreateChannel() = 0;
-
-private:
-  std::vector<G4VEvaporationChannel*>* channel;
-
 };
-
-inline std::vector<G4VEvaporationChannel*> * 
-G4VEvaporationFactory::GetChannel()
-{
-  if (channel == 0) { channel = CreateChannel(); }
-  return channel;
-}
 
 #endif

@@ -114,8 +114,7 @@ G4EvaporationDefaultGEMFactory::G4EvaporationDefaultGEMFactory()
 G4EvaporationDefaultGEMFactory::~G4EvaporationDefaultGEMFactory()
 {}
 
-std::vector<G4VEvaporationChannel*> * 
-G4EvaporationDefaultGEMFactory::CreateChannel()
+std::vector<G4VEvaporationChannel*>* G4EvaporationDefaultGEMFactory::GetChannel()
 {
   std::vector<G4VEvaporationChannel*> * theChannel = 
     new std::vector<G4VEvaporationChannel*>;

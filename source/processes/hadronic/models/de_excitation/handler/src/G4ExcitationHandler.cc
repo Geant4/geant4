@@ -82,8 +82,8 @@
 #include <list>
 
 G4ExcitationHandler::G4ExcitationHandler():
-  maxZForFermiBreakUp(9),maxAForFermiBreakUp(17),minEForMultiFrag(4.0*GeV),
-  minExcitation(CLHEP::keV),MyOwnEvaporationClass(true),
+  maxZForFermiBreakUp(9),maxAForFermiBreakUp(17),minEForMultiFrag(4*GeV),
+  minExcitation(keV),MyOwnEvaporationClass(true),
   MyOwnPhotonEvaporationClass(true),OPTxs(3),useSICB(false)
 {                                                                          
   theTableOfIons = G4ParticleTable::GetParticleTable()->GetIonTable();
@@ -116,17 +116,17 @@ void G4ExcitationHandler::SetParameters()
 G4ReactionProductVector * 
 G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
 {	
+  //G4cout << "@@@@@@@@@@ Start G4Excitation Handler @@@@@@@@@@@@@" << G4endl;
   
   // Variables existing until end of method
   G4Fragment * theInitialStatePtr = new G4Fragment(theInitialState);
 
   G4FragmentVector * theTempResult = 0;      // pointer which receives temporal results
   std::list<G4Fragment*> theEvapList;        // list to apply Evaporation or Fermi Break-Up
-  std::list<G4Fragment*> thePhotoEvapList;  // list to apply PhotonEvaporation
+  std::list<G4Fragment*> thePhotoEvapList;   // list to apply PhotonEvaporation
   std::list<G4Fragment*> theResults;         // list to store final result
   //
-  //  G4cout << "@@@@@@@@@@ Start G4Excitation Handler @@@@@@@@@@@@@" << G4endl;  
-  // G4cout << theInitialState << G4endl;  
+  //G4cout << theInitialState << G4endl;  
   
   // Variables to describe the excited configuration
   G4double exEnergy = theInitialState.GetExcitationEnergy();

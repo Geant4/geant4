@@ -46,7 +46,10 @@ class G4EvaporationDefaultGEMFactory : public G4VEvaporationFactory
 public:
 
   G4EvaporationDefaultGEMFactory();
+
   virtual ~G4EvaporationDefaultGEMFactory();
+
+  virtual std::vector<G4VEvaporationChannel*>* GetChannel();
 
 private:
 
@@ -54,8 +57,6 @@ private:
   const G4EvaporationDefaultGEMFactory & operator=(const G4EvaporationDefaultGEMFactory & val);
   G4bool operator==(const G4EvaporationDefaultGEMFactory & val) const;
   G4bool operator!=(const G4EvaporationDefaultGEMFactory & val) const;
-
-  std::vector<G4VEvaporationChannel*> * CreateChannel();
 
 };
 

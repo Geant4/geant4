@@ -54,17 +54,17 @@
 #include "G4NistManager.hh"
 #include "G4FermiFragmentsPool.hh"
 
-G4Evaporation::G4Evaporation() 
+G4Evaporation::G4Evaporation()  
+  : theChannels(0)
 {
-  //theChannelFactory = new G4EvaporationFactory();
   theChannelFactory = new G4EvaporationDefaultGEMFactory();
   InitialiseEvaporation();
   maxZforFBU = G4FermiFragmentsPool::Instance()->GetMaxZ();
   maxAforFBU = G4FermiFragmentsPool::Instance()->GetMaxA();
 }
 
-G4Evaporation::G4Evaporation(std::vector<G4VEvaporationChannel*> * aChannelsVector) 
-  : theChannels(aChannelsVector), theChannelFactory(0), nChannels(0)
+G4Evaporation::G4Evaporation(std::vector<G4VEvaporationChannel*>* channels) 
+  : theChannels(channels), theChannelFactory(0)
 {
   InitialiseEvaporation();
   maxZforFBU = G4FermiFragmentsPool::Instance()->GetMaxZ();
@@ -73,15 +73,30 @@ G4Evaporation::G4Evaporation(std::vector<G4VEvaporationChannel*> * aChannelsVect
 
 G4Evaporation::~G4Evaporation()
 {
-  if (theChannels != 0) { theChannels = 0; }
-  if (theChannelFactory != 0) { delete theChannelFactory; }
+  CleanChannels();
+  delete theChannelFactory; 
+}
+
+void G4Evaporation::CleanChannels()
+{
+  if (theChannels) { 
+    std::vector<G4VEvaporationChannel*>::iterator i;
+    for (i=theChannels->begin(); i != theChannels->end(); ++i) 
+      {
+        delete (*i);
+      }
+    delete theChannels;
+  }
 }
 
 void G4Evaporation::InitialiseEvaporation()
 {
   nist = G4NistManager::Instance();
   minExcitation = CLHEP::keV;
-  if(theChannelFactory) { theChannels = theChannelFactory->GetChannel(); }
+  if(theChannelFactory) {
+    CleanChannels();
+    theChannels = theChannelFactory->GetChannel();
+  } 
   nChannels = theChannels->size();
   probabilities.resize(nChannels, 0.0);
   Initialise();
@@ -102,21 +117,21 @@ void G4Evaporation::Initialise()
 
 void G4Evaporation::SetDefaultChannel()
 {
-  if (theChannelFactory != 0) delete theChannelFactory;
+  delete theChannelFactory;
   theChannelFactory = new G4EvaporationFactory();
   InitialiseEvaporation();
 }
 
 void G4Evaporation::SetGEMChannel()
 {
-  if (theChannelFactory != 0) delete theChannelFactory;
+  delete theChannelFactory;
   theChannelFactory = new G4EvaporationGEMFactory();
   InitialiseEvaporation();
 }
 
 void G4Evaporation::SetCombinedChannel()
 {
-  if (theChannelFactory != 0) delete theChannelFactory;
+  delete theChannelFactory;
   theChannelFactory = new G4EvaporationDefaultGEMFactory();
   InitialiseEvaporation();
 }
