@@ -74,6 +74,17 @@ G4VModularPhysicsList & G4VModularPhysicsList::operator=(const G4VModularPhysics
     fDisplayThreshold = right.fDisplayThreshold;
     fIsPhysicsTableBuilt = right.fIsPhysicsTableBuilt;
     fDisableCheckParticleList = right.fDisableCheckParticleList;
+    verboseLevel = right.verboseLevel;
+    
+    if(physicsVector !=0) {
+      G4PhysConstVector::iterator itr;
+      for (itr = physicsVector->begin(); itr!= physicsVector->end(); ++itr) {
+	delete (*itr);
+      }
+      physicsVector->clear();
+      delete physicsVector;
+    }
+    physicsVector = new G4PhysConstVector();
   }
   return *this;
 }

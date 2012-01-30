@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Dec. 9th, 2011, H.Kurashige (run-V09-05-00)
+- Fix Coverity defects in assignment operator of G4VModularPhysicsList
+
 Nov. 15th, 2011, M.Asai (run-V09-04-27)
 - Added new line to G4ExceptionHandler notification to properly flush buffer.
 
