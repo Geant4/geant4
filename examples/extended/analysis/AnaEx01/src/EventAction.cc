@@ -85,7 +85,7 @@ void EventAction::EndOfEventAction(const G4Event*)
   histoManager->FillNtuple(1, EnergyGap);
   histoManager->FillNtuple(2, TrackLAbs);
   histoManager->FillNtuple(3, TrackLGap);
-  histoManager->AddRowNtuple();  
+  histoManager->AddRowNtuple();    
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

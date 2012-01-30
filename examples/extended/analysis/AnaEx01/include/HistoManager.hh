@@ -23,54 +23,58 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.1 2010-11-08 10:38:44 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
+// $Id: HistoManager.hh,v 1.1 2010-09-16 16:26:13 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+// 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
 #ifndef HistoManager_h
 #define HistoManager_h 1
 
 #include "globals.hh"
+#include "g4analysis_defs.hh"
+
+#include "ExG4HbookAnalysisManager.hh"
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-namespace AIDA {
- class IAnalysisFactory;
- class ITree;
- class IHistogram1D;
- class ITuple;
-} 
-  const G4int MaxHisto = 5;
+using namespace G4Root;
+//using namespace G4Xml;
+//using namespace G4Hbook;
+
+const G4int MaxHisto = 5;
+const G4int MaxNtCol = 4;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class HistoManager
 {
   public:
-  
+
     HistoManager();
    ~HistoManager();
-   
+
     void book();
     void save();
 
-    void FillHisto(G4int id, G4double bin, G4double weight = 1.0);
+    void FillHisto(G4int id, G4double e, G4double weight = 1.0);
     void Normalize(G4int id, G4double fac);    
 
     void FillNtuple(G4int column, G4double value);
     void AddRowNtuple();
     
-    void PrintStatistic();
-        
+    void PrintStatistic();        
+
   private:
-  
-    AIDA::IAnalysisFactory*  af;        
-    AIDA::ITree*             tree;
-    
-    AIDA::IHistogram1D*      histo[MaxHisto];            
-    AIDA::ITuple*      	     ntupl;    
+
+    G4String      fileName;
+
+    G4int         fHistId[MaxHisto];
+    G4AnaH1*      fHistPt[MaxHisto];
+    G4int         fNtColId[MaxNtCol];    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
