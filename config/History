@@ -16,6 +16,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27th January 2012 Gunter Folger  (config-V09-05-03)
+- for WIN-VC increase stack size of executable to 12M
+
+9th December 2011 Gabriele Cosmo (config-V09-05-02)
+- Corrected condition for determining QT_AS_FRAMEWORK flag depending on
+  how QTHOME is defined in Darwin setups. Addresses problem report #1267.
+
+8th December 2011 Gabriele Cosmo (config-V09-05-01)
+- Added Darwin-clang experimental configuration. Requires explicit addition
+  of -lstdc++ to LDLIBS in architecture.gmk.
+
+8th December 2011 Gabriele Cosmo (config-V09-05-00)
+- Removed unnecessary 'gcov' linkage for dynamic libraries in Darwin-g++.gmk.
+
 22nd November 2011 Gabriele Cosmo (config-V09-04-19)
 - Corrected path in Darwin-g++ setup introduced in previous tag.
 

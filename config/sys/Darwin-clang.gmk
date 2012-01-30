@@ -1,16 +1,12 @@
 #
 # ------ MacOS-X ------
-#                                 MacOS 10.7 gcc-4.2
+#                                 MacOS 10.7 clang-3.0
 #
-# Original author: Helmut Burkhardt - CERN
-#       Revisions: Guy Barrand - LAL
-#                  Gabriele Cosmo - CERN
-#                  Laurent Garnier - LAL
+# Original author: Gabriele Cosmo - CERN
 #
-ifeq ($(G4SYSTEM),Darwin-g++)
-  CXX       := g++
-  CXXFLAGS  := -Wall -ansi -pedantic -Wno-non-virtual-dtor -Wno-long-long
-# CXXFLAGS  += -Wunused-parameter -Winline -Wunreachable-code
+ifeq ($(G4SYSTEM),Darwin-clang)
+  CXX       := clang
+  CXXFLAGS  := -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long
   CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -pipe
   ifdef G4OPTIMISE
     CXXFLAGS  += -O2
@@ -35,7 +31,7 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   endif
   FC := gfortran
   FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
-  LDFLAGS += -bind_at_load -arch_multiple
+  LDFLAGS += -bind_at_load
   FCLIBS := -lg2c -lnsl
   SHEXT   := dylib
   ifndef X11FLAGS
@@ -62,25 +58,16 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   DLDLIBS   := -ldl
   ifndef OGLHOME
     OGLHOME  := /usr/X11R6
-#   OGLHOME  := /System/Library/Frameworks/OpenGL.framework
   endif
   ifndef OGLFLAGS
     OGLFLAGS  := -I$(OGLHOME)/include 
-#   OGLFLAGS := -I$(OGLHOME)/Headers 
   endif
   ifndef OGLLIBS
     QTGLPATH  := $(shell test -f /System/Library/Frameworks/OpenGL.framework/OpenGL && echo "/System/Library/Frameworks/OpenGL.framework")
     ifeq ($(QTGLPATH),/System/Library/Frameworks/OpenGL.framework)
-      DARWIN_VERSION = $(shell uname -r | sed 's/\([0-9]*\).[0-9]*.[0-9]*/\1/')
-      ifeq ($(DARWIN_VERSION),9)
-        # the following lines are for building on MacOSX 10.5 "Leopard"
-        OGLLIBS := -Wl,$(QTGLPATH)/Versions/A/Libraries/libGL.dylib -L$(OGLHOME)/lib -lGLU -lGL
-      else
-        # the following lines are for building on MacOSX > 10.5
-        OGLLIBS := -F/System/Library/Frameworks -framework OpenGL -framework AGL 
-        ifeq ($(G4VIS_USE_OPENGLX),1)
-          OGLLIBS += -L$(OGLHOME)/lib -lGLU -lGL
-        endif
+      OGLLIBS := -F/System/Library/Frameworks -framework OpenGL -framework AGL 
+      ifeq ($(G4VIS_USE_OPENGLX),1)
+        OGLLIBS += -L$(OGLHOME)/lib -lGLU -lGL
       endif
     else
       OGLLIBS := -L$(OGLHOME)/lib -lGLU -lGL
