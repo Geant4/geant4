@@ -18,6 +18,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 8, 2011, P. Mato, tag human_phantom-V09-05-00
+- Added CMakeLists.txt file
+
+
 November 17, 2011, G.Folger, tag human_phantom-V09-04-04
 - Fix compilation warning at end of G4HumanPhantomConstruction::Construct().
    (delete must be before return) 
