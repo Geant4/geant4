@@ -56,7 +56,8 @@
 
 G4Penelope01GammaConversionModel::G4Penelope01GammaConversionModel(const G4ParticleDefinition*,
 								   const G4String& nam)
-  :G4VEmModel(nam),fTheScreeningRadii(0),crossSectionHandler(0),isInitialised(false)
+  :G4VEmModel(nam),fParticleChange(0),fTheScreeningRadii(0),crossSectionHandler(0),
+   isInitialised(false)
 {
   fIntrinsicLowEnergyLimit = 2.0*electron_mass_c2;
   fIntrinsicHighEnergyLimit = 100.0*GeV;

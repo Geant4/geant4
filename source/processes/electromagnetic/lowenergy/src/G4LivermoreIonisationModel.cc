@@ -73,8 +73,10 @@
 
 
 G4LivermoreIonisationModel::G4LivermoreIonisationModel(const G4ParticleDefinition*,
-  const G4String& nam) : G4VEmModel(nam), isInitialised(false),
-			 crossSectionHandler(0), energySpectrum(0)
+						       const G4String& nam) : 
+  G4VEmModel(nam), fParticleChange(0), 
+  isInitialised(false),
+  crossSectionHandler(0), energySpectrum(0)
 {
   fIntrinsicLowEnergyLimit = 10.0*eV;
   fIntrinsicHighEnergyLimit = 100.0*GeV;

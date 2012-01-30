@@ -636,7 +636,7 @@ G4double G4PenelopeBremsstrahlungFS::SampleGammaEnergy(G4double energy,const G4M
 	  G4double delta = pt-(*theVec)[nBinsX-1];
 	  if (delta < pt*1e-10) // very small! Numerical rounding only
 	    {
-	      ibin = nBinsX-1;
+	      ibin = nBinsX-2;
 	      G4ExceptionDescription ed;
 	      ed << "Found that (pt > (*theVec)[nBinsX-1]) with pt = " << pt << 
 		" , (*theVec)[nBinsX-1] = " << (*theVec)[nBinsX-1] << " and delta = " << 

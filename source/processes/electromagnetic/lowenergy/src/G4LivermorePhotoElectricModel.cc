@@ -73,7 +73,7 @@ using namespace std;
 
 G4LivermorePhotoElectricModel::G4LivermorePhotoElectricModel(
            const G4ParticleDefinition*, const G4String& nam)
-  : G4VEmModel(nam),isInitialised(false),crossSectionHandler(0),
+  : G4VEmModel(nam),fParticleChange(0),isInitialised(false),crossSectionHandler(0),
     shellCrossSectionHandler(0),fAtomDeexcitation(0),fElectronAngularGenerator(0)
 {
   lowEnergyLimit  = 250 * eV; 

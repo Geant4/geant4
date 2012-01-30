@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
+// 
 // History:
 // -----------
 //  01 Oct 2011   A.M., S.I. - 1st implementation

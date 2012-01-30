@@ -57,7 +57,8 @@
 
 G4Penelope01RayleighModel::G4Penelope01RayleighModel(const G4ParticleDefinition*,
 						     const G4String& nam)
-  :G4VEmModel(nam),samplingFunction_x(0),samplingFunction_xNoLog(0),
+  :G4VEmModel(nam),fParticleChange(0),samplingFunction_x(0),
+   samplingFunction_xNoLog(0),
    theMaterial(0),
    isInitialised(false)
 {
@@ -65,6 +66,7 @@ G4Penelope01RayleighModel::G4Penelope01RayleighModel(const G4ParticleDefinition*
   fIntrinsicHighEnergyLimit = 100.0*GeV;
   //  SetLowEnergyLimit(fIntrinsicLowEnergyLimit);
   SetHighEnergyLimit(fIntrinsicHighEnergyLimit);
+  factorE=0;
   //
   verboseLevel= 0;
   // Verbosity scale:

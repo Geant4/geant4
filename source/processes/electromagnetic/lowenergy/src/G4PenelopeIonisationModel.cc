@@ -62,7 +62,7 @@
  
 G4PenelopeIonisationModel::G4PenelopeIonisationModel(const G4ParticleDefinition*,
 						     const G4String& nam)
-  :G4VEmModel(nam),isInitialised(false),
+  :G4VEmModel(nam),fParticleChange(0),isInitialised(false),
    kineticEnergy1(0.*eV),
    cosThetaPrimary(1.0),
    energySecondary(0.*eV),

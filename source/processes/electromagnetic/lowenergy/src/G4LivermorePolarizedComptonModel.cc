@@ -49,7 +49,8 @@ using namespace std;
 
 G4LivermorePolarizedComptonModel::G4LivermorePolarizedComptonModel(const G4ParticleDefinition*,
                                              const G4String& nam)
-:G4VEmModel(nam),isInitialised(false),meanFreePathTable(0),scatterFunctionData(0),crossSectionHandler(0)
+  :G4VEmModel(nam),fParticleChange(0),isInitialised(false),
+   meanFreePathTable(0),scatterFunctionData(0),crossSectionHandler(0)
 {
   lowEnergyLimit = 250 * eV; 
   highEnergyLimit = 100 * GeV;

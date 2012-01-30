@@ -48,7 +48,7 @@
 
 G4PenelopeAnnihilationModel::G4PenelopeAnnihilationModel(const G4ParticleDefinition*,
                                              const G4String& nam)
-  :G4VEmModel(nam),isInitialised(false)
+  :G4VEmModel(nam),fParticleChange(0),isInitialised(false)
 {
   fIntrinsicLowEnergyLimit = 0.0;
   fIntrinsicHighEnergyLimit = 100.0*GeV;

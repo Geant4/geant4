@@ -57,6 +57,11 @@ public:
   G4double CalculateMomentum(G4double UpperLimit,G4int MomentumOrder);
   
 private:
+  //assignment operator
+  G4PenelopeInterpolator & operator=(const G4PenelopeInterpolator &right);
+  //copy constructor
+  G4PenelopeInterpolator(const G4PenelopeInterpolator&);
+
   G4int FindBin(G4double xx);
   //coefficients
   G4DataVector* a;

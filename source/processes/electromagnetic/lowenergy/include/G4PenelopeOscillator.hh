@@ -54,7 +54,7 @@ class G4PenelopeOscillator
   ~G4PenelopeOscillator(){;};
 
   //I need to overload the following operators: > < == =
-  const G4PenelopeOscillator& operator=(const G4PenelopeOscillator&);
+  G4PenelopeOscillator& operator=(const G4PenelopeOscillator&);
   int operator==(const G4PenelopeOscillator&) const;
   int operator>(const G4PenelopeOscillator&) const;
   int operator<(const G4PenelopeOscillator&) const;

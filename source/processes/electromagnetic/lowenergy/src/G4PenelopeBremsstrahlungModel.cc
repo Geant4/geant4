@@ -54,7 +54,7 @@
  
 G4PenelopeBremsstrahlungModel::G4PenelopeBremsstrahlungModel(const G4ParticleDefinition*,
 							     const G4String& nam)
-  :G4VEmModel(nam),isInitialised(false),energyGrid(0),  
+  :G4VEmModel(nam),fParticleChange(0),isInitialised(false),energyGrid(0),  
    XSTableElectron(0),XSTablePositron(0)
   
 {

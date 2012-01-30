@@ -51,7 +51,8 @@ using namespace std;
 
 G4LivermorePolarizedRayleighModel::G4LivermorePolarizedRayleighModel(const G4ParticleDefinition*,
                                              const G4String& nam)
-:G4VEmModel(nam),isInitialised(false),crossSectionHandler(0),formFactorData(0)
+  :G4VEmModel(nam),fParticleChange(0),isInitialised(false),
+   crossSectionHandler(0),formFactorData(0)
 {
   lowEnergyLimit = 250 * eV; 
   highEnergyLimit = 100 * GeV;
