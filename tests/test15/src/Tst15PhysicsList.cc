@@ -253,7 +253,7 @@ void Tst15PhysicsList::ConstructEM()
 }
 
 
-// Hadron Processes
+// Hadronic Processes
 
 #include "G4HadronElasticProcess.hh"
 
@@ -363,8 +363,7 @@ void Tst15PhysicsList::ConstructEM()
 
 void Tst15PhysicsList::ConstructHad()
 {
-   G4HadronElasticProcess* theElasticProcess = 
-                                    new G4HadronElasticProcess;
+   G4HadronElasticProcess* theElasticProcess = new G4HadronElasticProcess;
    G4LElastic* theElasticModel = new G4LElastic;
    theElasticProcess->RegisterMe(theElasticModel);
 
@@ -377,7 +376,7 @@ void Tst15PhysicsList::ConstructHad()
       if (particleName == "pi+") {
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4PionPlusInelasticProcess* theInelasticProcess = 
-                                new G4PionPlusInelasticProcess("inelastic");
+                                        new G4PionPlusInelasticProcess();
          G4LEPionPlusInelastic* theLEInelasticModel = 
                                 new G4LEPionPlusInelastic;
          theInelasticProcess->RegisterMe(theLEInelasticModel);
@@ -389,7 +388,7 @@ void Tst15PhysicsList::ConstructHad()
       else if (particleName == "pi-") {
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4PionMinusInelasticProcess* theInelasticProcess = 
-                                new G4PionMinusInelasticProcess("inelastic");
+                                         new G4PionMinusInelasticProcess();
          G4LEPionMinusInelastic* theLEInelasticModel = 
                                 new G4LEPionMinusInelastic;
          theInelasticProcess->RegisterMe(theLEInelasticModel);
@@ -409,7 +408,7 @@ void Tst15PhysicsList::ConstructHad()
       else if (particleName == "kaon+") {
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4KaonPlusInelasticProcess* theInelasticProcess = 
-                                  new G4KaonPlusInelasticProcess("inelastic");
+                                        new G4KaonPlusInelasticProcess();
          G4LEKaonPlusInelastic* theLEInelasticModel = 
                                   new G4LEKaonPlusInelastic;
          theInelasticProcess->RegisterMe(theLEInelasticModel);
@@ -421,7 +420,7 @@ void Tst15PhysicsList::ConstructHad()
       else if (particleName == "kaon0S") {
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4KaonZeroSInelasticProcess* theInelasticProcess = 
-                             new G4KaonZeroSInelasticProcess("inelastic");
+                                         new G4KaonZeroSInelasticProcess();
          G4LEKaonZeroSInelastic* theLEInelasticModel = 
                              new G4LEKaonZeroSInelastic;
          theInelasticProcess->RegisterMe(theLEInelasticModel);
@@ -433,7 +432,7 @@ void Tst15PhysicsList::ConstructHad()
       else if (particleName == "kaon0L") {
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4KaonZeroLInelasticProcess* theInelasticProcess = 
-                             new G4KaonZeroLInelasticProcess("inelastic");
+                                         new G4KaonZeroLInelasticProcess();
          G4LEKaonZeroLInelastic* theLEInelasticModel = 
                              new G4LEKaonZeroLInelastic;
          theInelasticProcess->RegisterMe(theLEInelasticModel);
@@ -445,9 +444,9 @@ void Tst15PhysicsList::ConstructHad()
       else if (particleName == "kaon-") {
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4KaonMinusInelasticProcess* theInelasticProcess = 
-                                 new G4KaonMinusInelasticProcess("inelastic");
-         G4LEKaonMinusInelastic* theLEInelasticModel = 
-                                 new G4LEKaonMinusInelastic;
+                                         new G4KaonMinusInelasticProcess();
+         G4LEKaonMinusInelastic* theLEInelasticModel =
+                                      new G4LEKaonMinusInelastic;
          theInelasticProcess->RegisterMe(theLEInelasticModel);
          G4HEKaonMinusInelastic* theHEInelasticModel = 
                                  new G4HEKaonMinusInelastic;
@@ -462,9 +461,11 @@ void Tst15PhysicsList::ConstructHad()
       else if (particleName == "proton") {
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4ProtonInelasticProcess* theInelasticProcess = 
-                                    new G4ProtonInelasticProcess("inelastic");
+                                      new G4ProtonInelasticProcess();
          G4LEProtonInelastic* theLEInelasticModel = new G4LEProtonInelastic;
+         theLEInelasticModel->TurnOnIsotopeProduction();
          theInelasticProcess->RegisterMe(theLEInelasticModel);
+
          G4HEProtonInelastic* theHEInelasticModel = new G4HEProtonInelastic;
          theInelasticProcess->RegisterMe(theHEInelasticModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
@@ -472,36 +473,37 @@ void Tst15PhysicsList::ConstructHad()
       else if (particleName == "anti_proton") {
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4AntiProtonInelasticProcess* theInelasticProcess = 
-                                new G4AntiProtonInelasticProcess("inelastic");
-         G4LEAntiProtonInelastic* theLEInelasticModel = 
-                                new G4LEAntiProtonInelastic;
+                                          new G4AntiProtonInelasticProcess();
+         G4LEAntiProtonInelastic* theLEInelasticModel =
+                                       new G4LEAntiProtonInelastic;
          theInelasticProcess->RegisterMe(theLEInelasticModel);
          G4HEAntiProtonInelastic* theHEInelasticModel = 
                                 new G4HEAntiProtonInelastic;
          theInelasticProcess->RegisterMe(theHEInelasticModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
       }
+
       else if (particleName == "neutron") {
          pmanager->AddDiscreteProcess(theElasticProcess);
-         G4NeutronInelasticProcess* theInelasticProcess = 
-                                    new G4NeutronInelasticProcess("inelastic");
-         G4LENeutronInelastic* theLEInelasticModel = 
-                                    new G4LENeutronInelastic;
+         G4NeutronInelasticProcess* theInelasticProcess =
+                                       new G4NeutronInelasticProcess();
+         G4LENeutronInelastic* theLEInelasticModel = new G4LENeutronInelastic;
+         // Turn on default isotope production
+         theLEInelasticModel->TurnOnIsotopeProduction();
+         G4NeutronIsotopeProduction* aProductionModel = 
+                                             new G4NeutronIsotopeProduction();
+         // Override it with specific model
+         theLEInelasticModel->RegisterIsotopeProductionModel(aProductionModel);
          theInelasticProcess->RegisterMe(theLEInelasticModel);
-         G4HENeutronInelastic* theHEInelasticModel = 
-                                    new G4HENeutronInelastic;
+
+         G4HENeutronInelastic* theHEInelasticModel = new G4HENeutronInelastic;
          theInelasticProcess->RegisterMe(theHEInelasticModel);
-          // here the iso-prod stuff....
-         G4NeutronIsotopeProduction * aProductionModel = new G4NeutronIsotopeProduction;
-         theInelasticProcess->RegisterIsotopeProductionModel(aProductionModel);
-         G4HadronicProcess::EnableIsotopeProductionGlobally();
-          // Now fill process manager.
          pmanager->AddDiscreteProcess(theInelasticProcess);
-      }  
+      } 
       else if (particleName == "anti_neutron") {
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4AntiNeutronInelasticProcess* theInelasticProcess = 
-                               new G4AntiNeutronInelasticProcess("inelastic");
+                                           new G4AntiNeutronInelasticProcess();
          G4LEAntiNeutronInelastic* theLEInelasticModel = 
                                new G4LEAntiNeutronInelastic;
          theInelasticProcess->RegisterMe(theLEInelasticModel);
@@ -513,7 +515,7 @@ void Tst15PhysicsList::ConstructHad()
       else if (particleName == "lambda") {
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4LambdaInelasticProcess* theInelasticProcess = 
-                                    new G4LambdaInelasticProcess("inelastic");
+                                      new G4LambdaInelasticProcess();
          G4LELambdaInelastic* theLEInelasticModel = new G4LELambdaInelastic;
          theInelasticProcess->RegisterMe(theLEInelasticModel);
          G4HELambdaInelastic* theHEInelasticModel = new G4HELambdaInelastic;
@@ -523,7 +525,7 @@ void Tst15PhysicsList::ConstructHad()
       else if (particleName == "anti_lambda") {
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4AntiLambdaInelasticProcess* theInelasticProcess = 
-                                new G4AntiLambdaInelasticProcess("inelastic");
+                                          new G4AntiLambdaInelasticProcess();
          G4LEAntiLambdaInelastic* theLEInelasticModel = 
                                 new G4LEAntiLambdaInelastic;
          theInelasticProcess->RegisterMe(theLEInelasticModel);
@@ -535,7 +537,7 @@ void Tst15PhysicsList::ConstructHad()
       else if (particleName == "sigma+") {
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4SigmaPlusInelasticProcess* theInelasticProcess = 
-                                 new G4SigmaPlusInelasticProcess("inelastic");
+                                 new G4SigmaPlusInelasticProcess();
          G4LESigmaPlusInelastic* theLEInelasticModel = 
                                  new G4LESigmaPlusInelastic;
          theInelasticProcess->RegisterMe(theLEInelasticModel);
@@ -547,7 +549,7 @@ void Tst15PhysicsList::ConstructHad()
       else if (particleName == "sigma-") {
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4SigmaMinusInelasticProcess* theInelasticProcess = 
-                                 new G4SigmaMinusInelasticProcess("inelastic");
+                                 new G4SigmaMinusInelasticProcess();
          G4LESigmaMinusInelastic* theLEInelasticModel = 
                                  new G4LESigmaMinusInelastic;
          theInelasticProcess->RegisterMe(theLEInelasticModel);
@@ -559,7 +561,7 @@ void Tst15PhysicsList::ConstructHad()
       else if (particleName == "anti_sigma+") {
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4AntiSigmaPlusInelasticProcess* theInelasticProcess = 
-                             new G4AntiSigmaPlusInelasticProcess("inelastic");
+                             new G4AntiSigmaPlusInelasticProcess();
          G4LEAntiSigmaPlusInelastic* theLEInelasticModel = 
                                  new G4LEAntiSigmaPlusInelastic;
          theInelasticProcess->RegisterMe(theLEInelasticModel);
@@ -571,7 +573,7 @@ void Tst15PhysicsList::ConstructHad()
       else if (particleName == "anti_sigma-") {
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4AntiSigmaMinusInelasticProcess* theInelasticProcess = 
-                            new G4AntiSigmaMinusInelasticProcess("inelastic");
+                            new G4AntiSigmaMinusInelasticProcess();
          G4LEAntiSigmaMinusInelastic* theLEInelasticModel = 
                                  new G4LEAntiSigmaMinusInelastic;
          theInelasticProcess->RegisterMe(theLEInelasticModel);
@@ -583,7 +585,7 @@ void Tst15PhysicsList::ConstructHad()
       else if (particleName == "xi0") {
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4XiZeroInelasticProcess* theInelasticProcess = 
-                            new G4XiZeroInelasticProcess("inelastic");
+                            new G4XiZeroInelasticProcess();
          G4LEXiZeroInelastic* theLEInelasticModel = 
                                  new G4LEXiZeroInelastic;
          theInelasticProcess->RegisterMe(theLEInelasticModel);
@@ -595,7 +597,7 @@ void Tst15PhysicsList::ConstructHad()
       else if (particleName == "xi-") {
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4XiMinusInelasticProcess* theInelasticProcess = 
-                            new G4XiMinusInelasticProcess("inelastic");
+                            new G4XiMinusInelasticProcess();
          G4LEXiMinusInelastic* theLEInelasticModel = 
                                  new G4LEXiMinusInelastic;
          theInelasticProcess->RegisterMe(theLEInelasticModel);
@@ -607,7 +609,7 @@ void Tst15PhysicsList::ConstructHad()
       else if (particleName == "anti_xi0") {
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4AntiXiZeroInelasticProcess* theInelasticProcess = 
-                            new G4AntiXiZeroInelasticProcess("inelastic");
+                            new G4AntiXiZeroInelasticProcess();
          G4LEAntiXiZeroInelastic* theLEInelasticModel = 
                                  new G4LEAntiXiZeroInelastic;
          theInelasticProcess->RegisterMe(theLEInelasticModel);
@@ -619,7 +621,7 @@ void Tst15PhysicsList::ConstructHad()
       else if (particleName == "anti_xi-") {
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4AntiXiMinusInelasticProcess* theInelasticProcess = 
-                            new G4AntiXiMinusInelasticProcess("inelastic");
+                            new G4AntiXiMinusInelasticProcess();
          G4LEAntiXiMinusInelastic* theLEInelasticModel = 
                                  new G4LEAntiXiMinusInelastic;
          theInelasticProcess->RegisterMe(theLEInelasticModel);
@@ -631,7 +633,7 @@ void Tst15PhysicsList::ConstructHad()
       else if (particleName == "deuteron") {
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4DeuteronInelasticProcess* theInelasticProcess = 
-                            new G4DeuteronInelasticProcess("inelastic");
+                                        new G4DeuteronInelasticProcess();
          G4LEDeuteronInelastic* theLEInelasticModel = 
                                  new G4LEDeuteronInelastic;
          theInelasticProcess->RegisterMe(theLEInelasticModel);
@@ -640,7 +642,7 @@ void Tst15PhysicsList::ConstructHad()
       else if (particleName == "triton") {
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4TritonInelasticProcess* theInelasticProcess = 
-                            new G4TritonInelasticProcess("inelastic");
+                                      new G4TritonInelasticProcess();
          G4LETritonInelastic* theLEInelasticModel = 
                                  new G4LETritonInelastic;
          theInelasticProcess->RegisterMe(theLEInelasticModel);
@@ -649,7 +651,7 @@ void Tst15PhysicsList::ConstructHad()
       else if (particleName == "alpha") {
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4AlphaInelasticProcess* theInelasticProcess = 
-                            new G4AlphaInelasticProcess("inelastic");
+                                     new G4AlphaInelasticProcess();
          G4LEAlphaInelastic* theLEInelasticModel = 
                                  new G4LEAlphaInelastic;
          theInelasticProcess->RegisterMe(theLEInelasticModel);
@@ -658,7 +660,7 @@ void Tst15PhysicsList::ConstructHad()
       else if (particleName == "omega-") {
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4OmegaMinusInelasticProcess* theInelasticProcess = 
-                            new G4OmegaMinusInelasticProcess("inelastic");
+                            new G4OmegaMinusInelasticProcess();
          G4LEOmegaMinusInelastic* theLEInelasticModel = 
                                  new G4LEOmegaMinusInelastic;
          theInelasticProcess->RegisterMe(theLEInelasticModel);
@@ -670,7 +672,7 @@ void Tst15PhysicsList::ConstructHad()
       else if (particleName == "anti_omega-") {
          pmanager->AddDiscreteProcess(theElasticProcess);
          G4AntiOmegaMinusInelasticProcess* theInelasticProcess = 
-                            new G4AntiOmegaMinusInelasticProcess("inelastic");
+                            new G4AntiOmegaMinusInelasticProcess();
          G4LEAntiOmegaMinusInelastic* theLEInelasticModel = 
                                  new G4LEAntiOmegaMinusInelastic;
          theInelasticProcess->RegisterMe(theLEInelasticModel);

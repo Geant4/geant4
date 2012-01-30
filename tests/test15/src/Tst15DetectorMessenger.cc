@@ -47,10 +47,10 @@ Tst15DetectorMessenger::Tst15DetectorMessenger(Tst15DetectorConstruction * myDC)
 
   selMatCmd = new G4UIcmdWithAString("/mydet/SelectMaterial",this);
   selMatCmd->SetGuidance("Select Material of the SimpleBox.");
-  selMatCmd->SetGuidance("  Choice : Air, Al, Pb, U (default)");
+  selMatCmd->SetGuidance("  Choice : Air, C, Al, Pb, U (default)");
   selMatCmd->SetParameterName("choice",true);
   selMatCmd->SetDefaultValue("Pb");
-  selMatCmd->SetCandidates("Air Al Pb U");
+  selMatCmd->SetCandidates("Air C Al Pb U");
   selMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   myDetector->SelectMaterial(defParam="Pb");

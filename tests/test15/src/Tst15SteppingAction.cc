@@ -30,73 +30,41 @@
 #include "G4Step.hh"
 #include "G4StepPoint.hh"
 #include "G4TrackStatus.hh"
-#include "G4TrackVector.hh"
-#include "G4VPhysicalVolume.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
+#include "G4IsoParticleChange.hh"
+#include "G4InelasticInteraction.hh"
 #include "G4ios.hh"
 #include <iomanip>
 
 Tst15SteppingAction::Tst15SteppingAction()
-{;}
+{}
 
 Tst15SteppingAction::~Tst15SteppingAction()
-{;}
+{}
 
 void Tst15SteppingAction::UserSteppingAction(const G4Step* theStep)
 {
-  G4SteppingManager * SM = fpSteppingManager;
-  G4Track * theTrack = theStep->GetTrack();
-
-  // check if it is alive
-  if(theTrack->GetTrackStatus()==fAlive) { return; }
-
-      G4cout << std::setw( 5) << "#Step#" << " "
-        << std::setw( 9) << "X(mm)" << " "
-          << std::setw( 9) << "Y(mm)" << " "
-            << std::setw( 9) << "Z(mm)" << " "
-              << std::setw( 9) << "KineE(MeV)" << " "
-                << std::setw( 9) << "dE(MeV)" << " "
-                  << std::setw( 9) << "StepLeng" << " "
-                    << std::setw( 9) << "TrackLeng" << " "
-                        << std::setw(10) << "ProcName" << G4endl;
-    G4cout.precision(3);
-    G4cout << std::setw( 5) << theTrack->GetCurrentStepNumber() << " "
-      << std::setw( 9) << theTrack->GetPosition().x() / mm << " "
-        << std::setw( 9) << theTrack->GetPosition().y() / mm << " "
-          << std::setw( 9) << theTrack->GetPosition().z() / mm << " "
-             << std::setw( 9) << theTrack->GetKineticEnergy() / MeV << " "
-              << std::setw( 9) << theStep->GetTotalEnergyDeposit() /MeV << " "
-                << std::setw( 9) << theStep->GetStepLength() / mm << " "
-                  << std::setw( 9) << theTrack->GetTrackLength() / mm << " ";
-    if(theStep->GetPostStepPoint()->GetProcessDefinedStep() != 0){
-      G4cout << theStep->GetPostStepPoint()->GetProcessDefinedStep()
-        ->GetProcessName();
-    } else {
-      G4cout << "User Limit";
+  // Is track alive?
+  G4Track* theTrack = theStep->GetTrack();
+  if (theTrack->GetTrackStatus() != fAlive) {
+    // No, print isotope production information
+    G4String procName =
+      theStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName();
+    if (procName == "NeutronInelastic" || procName == "ProtonInelastic") {
+      G4IsoParticleChange* isotopeProdInfo =
+        G4InelasticInteraction::GetIsotopeProductionInfo();
+      if (isotopeProdInfo) {
+        G4cout << " Production model: " << isotopeProdInfo->GetProducer() << G4endl;
+        G4cout << " target nucleus (A,Z) : "
+               << isotopeProdInfo->GetMotherNucleus().GetA_asInt() << " , "
+               << isotopeProdInfo->GetMotherNucleus().GetZ_asInt() << G4endl; 
+        G4cout << " produced isotope: " << isotopeProdInfo->GetIsotope() << G4endl;
+        G4cout << " production time: " << isotopeProdInfo->GetProductionTime() << G4endl;
+        G4cout << " parent particle: "
+               << isotopeProdInfo->GetParentParticle()->GetParticleName() << G4endl;
+      } 
     }
-    G4cout << G4endl;
-
-   G4TrackVector* fSecondary = SM->GetfSecondary();
-       G4cout << "   -- List of secondaries generated : "
-         << "(x,y,z,kE,t,PID) --" << G4endl;
-       for(size_t lp1=0;lp1<(*fSecondary).size(); lp1++){
-         G4cout << "      "
-           << std::setw( 9)
-             << (*fSecondary)[lp1]->GetPosition().x() / mm << " "
-               << std::setw( 9)
-                 << (*fSecondary)[lp1]->GetPosition().y() / mm << " "
-                   << std::setw( 9)
-                     << (*fSecondary)[lp1]->GetPosition().z() / mm << " "
-                       << std::setw( 9)
-                         << (*fSecondary)[lp1]->GetKineticEnergy() / MeV << " "
-                           << std::setw( 9)
-                             << (*fSecondary)[lp1]->GetGlobalTime() / ns << " "
-                               << std::setw(18)
-                                 << (*fSecondary)[lp1]->GetDefinition()
-                                   ->GetParticleName();
-         G4cout << G4endl;
-       }
-
+  }
 }
 

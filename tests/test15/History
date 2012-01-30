@@ -15,6 +15,20 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23 Jan 2011  Dennis Wright  (test15-V09-05-00)
+----------------------------------------------
+- Tst15DetectorConstruction : add C material
+- Tst15DetectorMessenger : add C material choice
+- Tst15PhysicsList.cc :
+    Remove "inelastic" name from argument of all process constructors.
+    Move isotope production calls from process to model.
+    Enable isotope production for models G4LENeutronInelastic and
+      G4LEProtonInelastic.
+
+- Tst15SteppingAction.cc :
+    Change from listing secondaries to printing out isotope information
+    using updated G4IsoParticleChange class.
+ 
 29 Mar 2011, Gunter Folger              (test15-V09-04-00)
 - Correct GNUmakefile_hadronic_exerciser to work with global shared libs.
 

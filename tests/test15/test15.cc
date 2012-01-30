@@ -56,7 +56,7 @@ int main(int argc,char** argv) {
   // UserAction classes
   runManager->SetUserAction(new Tst15RunAction);
   runManager->SetUserAction(new Tst15PrimaryGeneratorAction);
-  //runManager->SetUserAction(new Tst15SteppingAction);
+  runManager->SetUserAction(new Tst15SteppingAction);
 
   if(argc==1)
   {

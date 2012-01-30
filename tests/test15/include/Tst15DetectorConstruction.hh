@@ -53,16 +53,17 @@ class Tst15DetectorConstruction : public G4VUserDetectorConstruction
   private:
      void SelectMaterialPointer();
 
-     G4LogicalVolume*   simpleBoxLog;
+     G4LogicalVolume* simpleBoxLog;
      G4Material* selectedMaterial;
      G4Material* Air;
+     G4Material* C;
      G4Material* Al;
      G4Material* Pb;
      G4Material* U;
      G4Element* elN;
      G4Element* elO;
      G4String materialChoice;
-     Tst15DetectorMessenger * detectorMessenger;
+     Tst15DetectorMessenger* detectorMessenger;
 };
 
 #endif

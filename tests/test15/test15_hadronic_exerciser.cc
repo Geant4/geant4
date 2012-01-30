@@ -71,7 +71,7 @@ int main (int argc, char** argv) {
   G4int N = 10;
   if (argc > 1) {
     if (strcmp (argv[1], "large_N") == 0) {
-      N = 200;
+      N = 100;
     }
   }
 

@@ -8,22 +8,18 @@ $Id: README,v 1.3 2010-03-18 20:49:46 dennis Exp $
                                  Test15
                                  ------
 
-Description:  test of the G4NeutronIsotopeProduction model.
-              All electromagnetic, hadronic and decay processes are included.
-              Most electromagnetic models are essentially turned off by setting 
-              the production threshold to 1 m.
+Description:  This is a test of the G4NeutronIsotopeProduction model.  All
+              electromagnetic, hadronic and decay processes are included.  Most
+              electromagnetic models are essentially turned off by setting the
+              production threshold to 1 m.
               The LEP and HEP hadronic models are used, as well as the 
               G4NeutronIsotopeProduction model which is assigned to neutrons. 
-
-              Detector is a simple box of air, aluminum, lead or uranium.
+              Generic (default) isotope production is turned on for protons.
+              The detector is a simple box of air, aluminum, lead or uranium.
          
-Usage:        auto-generated file provides input for proton runs with incident 
-              energy of 10 GeV for each material.
-              4 runs in all, with 10 or optionally, 200 events per run.
-
-              Verbose atepping action available but not currently
-              used.
-
+Usage:        An auto-generated file provides input for proton runs with incident 
+              energy of 10 GeV for each material.  There are 4 runs in all, with
+              10 or optionally, 200 events per run.
 
 Running:      Build both test15 and test15_hadronic_exerciser.
               Then generate the input file:

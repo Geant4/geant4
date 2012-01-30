@@ -44,7 +44,8 @@
 #include "G4ios.hh"
 
 Tst15DetectorConstruction::Tst15DetectorConstruction()
-  : simpleBoxLog(0),selectedMaterial(0),Air(0),Al(0),Pb(0),U(0),elN(0),elO(0)
+ : simpleBoxLog(0), selectedMaterial(0),
+   Air(0), C(0), Al(0), Pb(0), U(0), elN(0), elO(0)
 {
   detectorMessenger = new Tst15DetectorMessenger(this);
   materialChoice = "Pb";
@@ -54,7 +55,7 @@ Tst15DetectorConstruction::~Tst15DetectorConstruction()
 {
   delete detectorMessenger;
   delete Pb;  delete Al;  delete Air;  delete U;
-  delete elO;  delete elN;
+  delete elO;  delete elN; delete C;
 }
 
 void Tst15DetectorConstruction::SelectMaterial(G4String val)
@@ -84,6 +85,13 @@ void Tst15DetectorConstruction::SelectMaterialPointer()
     Air->AddElement(elO, .3);
   }
 
+  if (!C)
+  {
+    a = 12.01*g/mole;
+    density = 2.2*g/cm3;
+    C = new G4Material(name="Graphite", z=6., a, density);
+  }
+
   if(!Al)
   {
     a = 26.98*g/mole;
@@ -105,14 +113,17 @@ void Tst15DetectorConstruction::SelectMaterialPointer()
     U  = new G4Material(name="Lead", z=92., a, density);
   }
 
-  if(materialChoice=="Air")
-  { selectedMaterial = Air; }
-  else if(materialChoice=="Al")
-  { selectedMaterial = Al; }
-  else if(materialChoice=="Pb")
-  { selectedMaterial = Pb; }
-  else
-  { selectedMaterial = U; }
+  if (materialChoice=="Air") {
+    selectedMaterial = Air;
+  } else if (materialChoice=="C") {
+    selectedMaterial = C;
+  } else if (materialChoice=="Al") {
+    selectedMaterial = Al;
+  } else if (materialChoice=="Pb") {
+    selectedMaterial = Pb;
+  } else {
+    selectedMaterial = U;
+  }
 
   if(simpleBoxLog)
   { simpleBoxLog->SetMaterial(selectedMaterial); }
