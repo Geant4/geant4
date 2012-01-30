@@ -47,7 +47,7 @@
 #include "G4FTFModel.hh"
 
 G4VDMuonNuclearModel::G4VDMuonNuclearModel()
- : G4InelasticInteraction("G4VDMuonNuclearModel")
+ : G4HadronicInteraction("G4VDMuonNuclearModel")
 {
   SetMinEnergy(0.0);
   SetMaxEnergy(1*PeV);

@@ -38,7 +38,7 @@
 #define G4VDMuonNuclearModel_h 1 
 
 #include "G4KokoulinMuonNuclearXS.hh"
-#include "G4InelasticInteraction.hh"
+#include "G4HadronicInteraction.hh"
 
 class G4CascadeInterface;
 class G4TheoFSGenerator; 
@@ -50,7 +50,7 @@ class G4ExcitedStringDecay;
 class G4FTFModel;
 
 
-class G4VDMuonNuclearModel : public G4InelasticInteraction
+class G4VDMuonNuclearModel : public G4HadronicInteraction
 {
   public:
     
