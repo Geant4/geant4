@@ -1,4 +1,3 @@
-$Id: History,v 1.25 2010-11-09 14:50:21 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -7,6 +6,9 @@ $Id: History,v 1.25 2010-11-09 14:50:21 allison Exp $
 
                            History file
                            ------------
+
+18.01.2011 - G.Folger (air_shower-V09-05-01)
+             fix compilation warnings from gcc4.6: variables set but not used.
 
 08.12.2011 - P. Mato (air_shower-V09-05-00)
 	     Added CMakeLists.txt file
