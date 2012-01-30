@@ -43,6 +43,7 @@
 //                      - emission and transition classes created at initialisation
 //                      - options are set at initialisation
 //                      - do not use copy-constructors for G4Fragment  
+// 03.01.2012 V.Ivanchenko Added pointer to G4ExcitationHandler to the constructor
 
 #include "G4PreCompoundModel.hh"
 #include "G4PreCompoundEmission.hh"
@@ -60,12 +61,13 @@
 #include "G4ParticleTable.hh"
 #include "G4LorentzVector.hh"
 
-G4PreCompoundModel::G4PreCompoundModel(G4ExcitationHandler * const value) 
-  : G4VPreCompoundModel(value), useHETCEmission(false), useGNASHTransition(false), 
-    OPTxs(3), useSICB(false), useNGB(false), useSCO(false), useCEMtr(true),
-    maxZ(3), maxA(5) 
+G4PreCompoundModel::G4PreCompoundModel(G4ExcitationHandler* ptr) 
+  : G4VPreCompoundModel(ptr,"PRECO"), useHETCEmission(false), 
+    useGNASHTransition(false), OPTxs(3), useSICB(false), 
+    useNGB(false), useSCO(false), useCEMtr(true), maxZ(3), maxA(5) 
 				      //maxZ(9), maxA(17)
 {
+  if(!ptr) { SetExcitationHandler(new G4ExcitationHandler()); }
   theParameters = G4PreCompoundParameters::GetAddress();
 
   theEmission = new G4PreCompoundEmission();
@@ -87,6 +89,7 @@ G4PreCompoundModel::~G4PreCompoundModel()
 {
   delete theEmission;
   delete theTransition;
+  delete GetExcitationHandler();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -343,7 +346,3 @@ void G4PreCompoundModel::UseCEMtr()
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-

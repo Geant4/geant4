@@ -45,6 +45,7 @@
 //                - CEM transition probabilities (if useCEMtr=true)
 // 30.10.2009 J.M.Quesada CEM transition probabilities are set as default
 // 20.08.2010 V.Ivanchenko Cleanup of the code - changed data members and inline methods
+// 03.01.2012 V.Ivanchenko Added pointer to G4ExcitationHandler to the constructor
 
 #ifndef G4PreCompoundModel_h
 #define G4PreCompoundModel_h 1
@@ -64,7 +65,7 @@ class G4PreCompoundModel : public G4VPreCompoundModel
 { 
 public:
 
-  G4PreCompoundModel(G4ExcitationHandler * const value); 
+  G4PreCompoundModel(G4ExcitationHandler* ptr = 0); 
 
   virtual ~G4PreCompoundModel();
 
@@ -93,7 +94,7 @@ private:
   void PerformEquilibriumEmission(const G4Fragment & aFragment, 
 				  G4ReactionProductVector * theResult) const;
 
-  G4PreCompoundModel();
+  //  G4PreCompoundModel();
   G4PreCompoundModel(const G4PreCompoundModel &);
   const G4PreCompoundModel& operator=(const G4PreCompoundModel &right);
   G4bool operator==(const G4PreCompoundModel &right) const;

@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+18-January 2011 V.Ivanchenko hadr-pre-V09-05-00
+-----------------------------------------------
+G4PreCompoundModel - added pointer to G4ExcitationHandler to the 
+   constructor; added deletion of G4ExcitationHandler in the destructor 
+
 31-October 2011 V.Ivanchenko hadr-pre-V09-04-06
 20-October 2011 V.Ivanchenko hadr-pre-V09-04-05
 ----------------------------------------------
