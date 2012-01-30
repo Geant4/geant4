@@ -1,0 +1,27 @@
+$Id: History,v 1.122 2010-10-29 13:21:59 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Ctests History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+ctests-V09-05-02 19th January 2012  Pere Mato
+- Fixed example-ext-medical-electronScattering by creating the needed directory
+
+ctests-V09-05-01 15th December 2011  Pere Mato
+- Removed project statement to avoid failures on Windows
+
+ctests-V09-05-00 13th December 2011  Pere Mato
+- Created as new category to collect all the CTest tests (mainly for Examples)
