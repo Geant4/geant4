@@ -242,6 +242,7 @@ class G4VTwistedFaceted: public G4VSolid
       }
       LastVector& operator=(const LastVector& r)
       {
+        if (&r == this)  { return *this; }
         p = r.p; vec = r.vec;
         delete [] surface; surface = new G4VTwistSurface*[1];
         surface[0] = r.surface[0];

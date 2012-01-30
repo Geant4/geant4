@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13-Dec-2011  G.Cosmo (geom-specific-V09-05-01)
+- Fixed trivial Coverity defects in G4TwistedTubs and G4VTwisteFaceted for
+  missing protection against self-assignment.
+
+09-Dec-2011  T.Nikitina (geom-specific-V09-05-00)
+- Fix in G4EllipticalCone in DistanceToIn(p,v) to exclude imaginary solution
+  (virtual cone) when distance is calculated.
+
 10-Nov-2011  G.Cosmo (geom-specific-V09-04-09)
 - Fixed trivial Coverity defects on assignment operators...
 
