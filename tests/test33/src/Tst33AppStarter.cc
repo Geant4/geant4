@@ -86,6 +86,7 @@ Tst33AppStarter::Tst33AppStarter()
   fDetectorConstruction((new Tst33DetectorConstruction)),
   fSampler(0),
   fScorer(0),
+  fScorerStore(0),  
   fCell_19_Scorer(0),
   fIStore(0),
   fWWStore(0),

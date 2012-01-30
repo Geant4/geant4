@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+January 10th, 2012 P. Mato - test33-V09-05-00
+- Fixed uninitialized member variable resposible of the test failure on Windows
+
 November 16th, 2011 G.Folger - test33-V09-04-00
 - Migrated to new G4Exception
 
