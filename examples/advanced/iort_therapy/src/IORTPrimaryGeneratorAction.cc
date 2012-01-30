@@ -193,7 +193,7 @@ while (true)  {
   Mx =  CLHEP::RandFlat::shoot(0.9,1);
   My =  CLHEP::RandFlat::shoot(-0.1,0.1);
   Mz =  CLHEP::RandFlat::shoot(-0.1,0.1);
-  condizione = sqrt(Mx*Mx + My*My + Mz*Mz);
+  condizione = std::sqrt(Mx*Mx + My*My + Mz*Mz);
 
  
   if (condizione < 1)  {
@@ -202,7 +202,7 @@ while (true)  {
     Mz = Mz/condizione;
 
 
-    if (Mx > cos(Theta)) { 
+    if (Mx > std::cos(Theta)) { 
       break;
         }
     }

@@ -7,6 +7,11 @@ carlo.casarino@polooncologicocefalu.it
              History file of the IORT application
          ====================================================
 
+15.12.2011 - P. Mato;      Tag: iort_therapy-V09-05-01
+            Tagged changes made by Gunter (windows line endings, 
+            invalid header files, etc.)
+24.11.2011 - P. Mato;      Tag: iort_therapy-V09-05-00
+	        Added CMakeLists.txt file
 24.11.2011 - G.Folger;      Tag: iort_therapy-V09-04-08
 	        Use G4lrint() in place of lrint()
 17.11.2011 - G.A.P.Cirrone; Tag: iort_therapy-V09-04-07

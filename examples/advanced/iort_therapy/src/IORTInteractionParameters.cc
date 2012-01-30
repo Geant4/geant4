@@ -59,8 +59,7 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
-#include <math.h>
-#include <unistd.h>
+#include <cmath>
 
 #include <vector>
 
