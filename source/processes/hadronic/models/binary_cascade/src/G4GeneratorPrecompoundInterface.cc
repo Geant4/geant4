@@ -60,12 +60,12 @@ G4GeneratorPrecompoundInterface::G4GeneratorPrecompoundInterface(G4VPreCompoundM
   proton = G4Proton::Proton();
   neutron = G4Neutron::Neutron();
   if(p) { SetDeExcitation(p); }
-  else  { SetDeExcitation(new G4PreCompoundModel(new G4ExcitationHandler())); }
+  else  { SetDeExcitation(new G4PreCompoundModel()); }
 }
          
 G4GeneratorPrecompoundInterface::~G4GeneratorPrecompoundInterface()
-{}
-
+{
+}
 
   // choose to calculate excitation energy from energy balance
 #define exactExcitationEnergy

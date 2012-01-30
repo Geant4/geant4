@@ -35,15 +35,20 @@
 #include "G4VNuclearDensity.hh"
 #include "G4FermiMomentum.hh"
 #include "G4HadTmpUtil.hh"
+#include "G4PreCompoundModel.hh"
 #include <cmath>
  
-G4BinaryLightIonReaction::G4BinaryLightIonReaction()
-    : G4HadronicInteraction("Binary Cascade"), theModel() , 
-      theHandler(0) , theProjectileFragmentation(0)
+G4BinaryLightIonReaction::G4BinaryLightIonReaction(G4VPreCompoundModel* ptr)
+    : G4HadronicInteraction("Binary Cascade"), 
+      theProjectileFragmentation(ptr)
 {
-    theHandler= new G4ExcitationHandler; 
-    SetPrecompound(new G4PreCompoundModel(theHandler));
+  if(!ptr) { theProjectileFragmentation = new G4PreCompoundModel(); } 
+  theModel = new G4BinaryCascade(theProjectileFragmentation);
+  theHandler = theProjectileFragmentation->GetExcitationHandler();
 }
+
+G4BinaryLightIonReaction::~G4BinaryLightIonReaction()
+{}
   
 G4HadFinalState *G4BinaryLightIonReaction::
   ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
@@ -190,7 +195,7 @@ G4HadFinalState *G4BinaryLightIonReaction::
 	debug.push_back(tmpV);
 	debug.dump();
 
-	result=theModel.Propagate(initalState, fancyNucleus);
+	result=theModel->Propagate(initalState, fancyNucleus);
 	debug.push_back("################# Result size");
 	if (result) {
 	   debug.push_back(result->size());

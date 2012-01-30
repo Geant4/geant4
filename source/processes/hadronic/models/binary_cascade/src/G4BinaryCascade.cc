@@ -56,6 +56,8 @@
 
 #include "G4FermiPhaseSpaceDecay.hh"
 
+#include "G4PreCompoundModel.hh"
+
 #include <algorithm>
 #include "G4ShortLivedConstructor.hh"
 #include <typeinfo>
@@ -89,8 +91,8 @@
 //  C O N S T R U C T O R S   A N D   D E S T R U C T O R S
 //
 
-G4BinaryCascade::G4BinaryCascade() : 
-G4VIntraNuclearTransportModel("Binary Cascade")
+G4BinaryCascade::G4BinaryCascade(G4VPreCompoundModel* ptr) : 
+  G4VIntraNuclearTransportModel("Binary Cascade", ptr)
 {
 	// initialise the resonance sector
 	G4ShortLivedConstructor ShortLived;
@@ -112,8 +114,9 @@ G4VIntraNuclearTransportModel("Binary Cascade")
 	theCutOnP = 90*MeV;
 	theCutOnPAbsorb= 0*MeV;   // No Absorption of slow Mesons, other than above G4MesonAbsorption
 
-	theExcitationHandler = new G4ExcitationHandler;
-	SetDeExcitation(new G4PreCompoundModel(theExcitationHandler));
+	if(!ptr) { SetDeExcitation(new G4PreCompoundModel()); }
+	theExcitationHandler = GetDeExcitation()->GetExcitationHandler();
+	    //SetDeExcitation(new G4PreCompoundModel(theExcitationHandler));
 	SetMinEnergy(0.0*GeV);
 	SetMaxEnergy(10.1*GeV);
 	//PrintWelcomeMessage();
@@ -123,12 +126,12 @@ G4VIntraNuclearTransportModel("Binary Cascade")
 	SetEnergyMomentumCheckLevels(1*perCent, 1*MeV);
 }
 
-
+/*
 G4BinaryCascade::G4BinaryCascade(const G4BinaryCascade& )
 : G4VIntraNuclearTransportModel("Binary Cascade")
 {
 }
-
+*/
 
 G4BinaryCascade::~G4BinaryCascade()
 {
@@ -140,7 +143,7 @@ G4BinaryCascade::~G4BinaryCascade()
 	delete theCollisionMgr;
 	std::for_each(theImR.begin(), theImR.end(), Delete<G4BCAction>());
 	delete theLateParticle;
-	delete theExcitationHandler;
+	//delete theExcitationHandler;
 	delete theH1Scatterer;
 }
 
@@ -610,24 +613,27 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 	if(fragment)                                                            // Uzhi
 	{                                                                       // Uzhi
 		if(fragment->GetA() >1.5)                                          // Uzhi
-		{
-			if (theDeExcitation)                // pre-compound
-			{
-				// G4cout << " going to preco with fragment 4 mom " << fragment->GetMomentum() << G4endl;
-				pFragment=fragment->GetMomentum();
-				precompoundProducts= theDeExcitation->DeExcite(*fragment);
-				delete fragment;
-				fragment=0;
-			} else if (theExcitationHandler)    // de-excitation
-			{
-				// G4cout << " going to de-excit with fragment 4 mom " << fragment->GetMomentum() << G4endl;
-				pFragment=fragment->GetMomentum();
-				precompoundProducts=theExcitationHandler->BreakItUp(*fragment);
-				delete fragment;
-				fragment=0;
-			}
-		} else
-		{                                   // fragment->GetA() < 1.5
+		  {
+		    if (theDeExcitation)                // pre-compound
+		      {
+			// G4cout << " going to preco with fragment 4 mom " << fragment->GetMomentum() << G4endl;
+			pFragment=fragment->GetMomentum();
+			precompoundProducts= theDeExcitation->DeExcite(*fragment);
+			delete fragment;
+			fragment=0;
+			
+		      } 
+		    else if (theExcitationHandler)    // de-excitation
+		      {
+			// G4cout << " going to de-excit with fragment 4 mom " << fragment->GetMomentum() << G4endl;
+			pFragment=fragment->GetMomentum();
+			precompoundProducts=theExcitationHandler->BreakItUp(*fragment);
+			delete fragment;
+			fragment=0;
+		      }
+		    
+		  } else
+		  {                                   // fragment->GetA() < 1.5
 			precompoundProducts = new G4ReactionProductVector();
 			std::vector<G4KineticTrack *>::iterator i;
 			if ( theTargetList.size() == 1 )

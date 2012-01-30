@@ -34,6 +34,7 @@
 //      Author: Alessandro Brunengo (Alessandro.Brunengo@ge.infn.it)       
 // 
 //      Creation date: 8 June 2000
+//
 // -----------------------------------------------------------------------------
 
 #ifndef G4BinaryCascade_hh
@@ -68,14 +69,9 @@ class G4BinaryCascade : public G4VIntraNuclearTransportModel
 {
 public:
 
-  G4BinaryCascade();
-  G4BinaryCascade(const G4BinaryCascade & right);
+  G4BinaryCascade(G4VPreCompoundModel* ptr = 0);
 
   virtual ~G4BinaryCascade();
-
-  const G4BinaryCascade& operator=(G4BinaryCascade & right);
-  G4int operator==(G4BinaryCascade& right) {return (this == &right);}
-  G4int operator!=(G4BinaryCascade& right) {return (this != &right);}
 
   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, 
                                               G4Nucleus& theNucleus);
@@ -85,6 +81,11 @@ public:
   virtual void ModelDescription(std::ostream&) const;
 
 private:
+
+  G4BinaryCascade(const G4BinaryCascade & right);
+  const G4BinaryCascade& operator=(G4BinaryCascade & right);
+  G4int operator==(G4BinaryCascade& right) {return (this == &right);}
+  G4int operator!=(G4BinaryCascade& right) {return (this != &right);}
 
   G4int GetTotalCharge(std::vector<G4KineticTrack *> & aV)
   {

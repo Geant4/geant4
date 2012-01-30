@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 #ifndef G4BinaryLightIonReaction_h
-#define G4BinaryLightIonReaction_h
+#define G4BinaryLightIonReaction_h 1
 
 #include "G4BinaryCascade.hh"
 #include "G4PreCompoundModel.hh"
@@ -34,30 +34,30 @@
 class G4BinaryLightIonReaction : public G4HadronicInteraction 
 {
   public:
-    G4BinaryLightIonReaction();
-    virtual ~G4BinaryLightIonReaction(){}
+    G4BinaryLightIonReaction(G4VPreCompoundModel* ptr = 0);
+    virtual ~G4BinaryLightIonReaction();
     G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, 
                                               G4Nucleus& theNucleus);
-    void SetPrecompound(G4VPreCompoundModel* const  value);
-    void SetDeExcitation(G4ExcitationHandler* const  value);
+    inline void SetPrecompound(G4VPreCompoundModel* ptr);
+    inline void SetDeExcitation(G4ExcitationHandler* ptr);
 
   private:
-    G4BinaryCascade theModel;
+    G4BinaryCascade* theModel;
     G4ExcitationHandler* theHandler;
     G4VPreCompoundModel* theProjectileFragmentation;
     G4HadFinalState theResult;
     G4bool EnergyAndMomentumCorrector(G4ReactionProductVector* products,
     				G4LorentzVector& TotalCollisionMom);
 };
-inline void G4BinaryLightIonReaction::SetPrecompound(G4VPreCompoundModel* const  value)
+inline void G4BinaryLightIonReaction::SetPrecompound(G4VPreCompoundModel* ptr)
 {
-   if (theProjectileFragmentation) delete theProjectileFragmentation; 
-   theProjectileFragmentation = value;
+  if(ptr) { theProjectileFragmentation = ptr; }
+  theHandler = theProjectileFragmentation->GetExcitationHandler();
 }
-inline void G4BinaryLightIonReaction::SetDeExcitation(G4ExcitationHandler* const  value)
+inline void G4BinaryLightIonReaction::SetDeExcitation(G4ExcitationHandler* ptr)
 {
-   if (theHandler) delete theHandler; 
-   theHandler = value;
+  theProjectileFragmentation->SetExcitationHandler(ptr);
+  theHandler = ptr;
 }
 
 #endif
