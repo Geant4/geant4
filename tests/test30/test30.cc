@@ -1259,7 +1259,7 @@ int main(int argc, char** argv)
 	G4ParticleChange* bChange = dynamic_cast<G4ParticleChange*>(aChange);
         G4double ekin = bChange->GetEnergy();
         G4ThreeVector dir = *(bChange->GetMomentumDirection());
-        G4double mom = sqrt(ekin*(ekin + 2*m));
+        G4double mom = std::sqrt(ekin*(ekin + 2*m));
 
         theta = dir.theta();
         G4double cost  = std::cos(theta);
@@ -1287,7 +1287,7 @@ int main(int argc, char** argv)
 		 << "  p(MeV)= " << mom/MeV
 		 << "  m(MeV)= " << mass/MeV
 		 << "  Etot(MeV)= " << (ekin+mass)/MeV
-                 << "  std::sin(tet)= " << sin(theta)
+                 << "  std::sin(tet)= " << std::sin(theta)
                  << "  phi(deg)= " << dir.phi()/degree
                  << G4endl;
         }

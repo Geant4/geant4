@@ -98,8 +98,8 @@ Test30Physics::Test30Physics()
 Test30Physics::~Test30Physics()
 {
   //delete theDeExcitation;
-  delete thePreCompound;
-  delete theProcess;
+  //delete thePreCompound;
+  //delete theProcess;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
