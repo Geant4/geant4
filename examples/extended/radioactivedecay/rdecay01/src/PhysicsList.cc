@@ -34,8 +34,10 @@
 #include "G4UnitsTable.hh"
 #include "G4ParticleTypes.hh"
 #include "G4IonConstructor.hh"
-#include "G4ProcessManager.hh"
+#include "G4PhysicsListHelper.hh"
 #include "G4RadioactiveDecay.hh"
+#include "G4UAtomicDeexcitation.hh"
+#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -95,9 +97,18 @@ void PhysicsList::ConstructProcess()
   radioactiveDecay->SetHLThreshold(-1.*s);
   radioactiveDecay->SetICM(true);		//Internal Conversion
   radioactiveDecay->SetARM(false);		//Atomic Rearangement
+  
+  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();  
+  ph->RegisterProcess(radioactiveDecay, G4GenericIon::GenericIon());
       
-  G4ProcessManager* pmanager = G4GenericIon::GenericIon()->GetProcessManager();  
-  pmanager->AddProcess(radioactiveDecay, 0, -1, 1);    
+  // Deexcitation (in case of Atomic Rearangement)
+  //
+  G4UAtomicDeexcitation* de = new G4UAtomicDeexcitation();
+  de->SetFluo(true);
+  de->SetAuger(true);   
+  de->SetPIXE(false);  
+  G4LossTableManager::Instance()->SetAtomDeexcitation(de);
+  de->InitialiseAtomicDeexcitation();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

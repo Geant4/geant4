@@ -103,25 +103,12 @@ $Id: README,v 1.2 2010-09-17 11:21:45 maire Exp $
    where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
    
    One can control the name of the histograms file with the command:
-   /rdecay1/histo/setFileName  name  (default particleGun)
+   /rdecay1/histo/setFileName  name  (default rdecay1)
    
-   It is possible to choose the format of the histogram file (hbook, root, XML)
-   with the command /rdecay1/histo/setFileType (root by default)
+   It is possible to choose the format of the histogram file : root (default),
+   hbook, xml, csv, by using namespace in HistoManager.hh
    
    It is also possible to print selected histograms on an ascii file:
    /rdecay1/histo/printHisto id
-   All selected histos will be written on a file name.ascii (default RDecay1)
+   All selected histos will be written on a file name.ascii (default rdecay1)
 
-  Note that, by default, histograms are disabled. To activate them, uncomment
-  the flag G4ANALYSIS_USE in GNUmakefile.
- 
-  Before compilation of the example it is optimal to clean up old files:
-  	gmake histclean
-  	gmake 
-
- 8- Using histograms
-    ---------------- 
-
-  To use histograms, at least one of the AIDA implementations should be 
-  available. See the file InstallAida.txt
-  

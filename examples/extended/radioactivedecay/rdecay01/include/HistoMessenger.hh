@@ -57,15 +57,12 @@ class HistoMessenger: public G4UImessenger
 
   private:
 
-   HistoManager*           histoManager;
+   HistoManager*           fHistoManager;
    
-   G4UIdirectory*          histoDir;   
-   G4UIcmdWithAString*     factoryCmd;
-   G4UIcmdWithAString*     typeCmd;
-   G4UIcmdWithAString*     optionCmd;   
-   G4UIcommand*            histoCmd;
-   G4UIcmdWithAnInteger*   prhistoCmd;   
-   G4UIcmdWithAnInteger*   rmhistoCmd;
+   G4UIdirectory*          fHistoDir;   
+   G4UIcmdWithAString*     fFileNameCmd;
+   G4UIcommand*            fHistoCmd;
+   G4UIcmdWithAnInteger*   fPrtHistoCmd;   
 
 };
 

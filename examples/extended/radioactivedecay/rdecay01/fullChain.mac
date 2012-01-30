@@ -7,8 +7,6 @@
 /rdecay01/fullChain true
 #
 /rdecay01/histo/setFileName run2
-###/rdecay01/histo/setFileType hbook
-/rdecay01/histo/setFileType root
 /rdecay01/histo/setHisto 1  100  0. 4000 keV	#e+ e-
 /rdecay01/histo/setHisto 2  100  0. 4000 keV	#neutrino
 /rdecay01/histo/setHisto 3  100  0. 4000 keV	#gamma
@@ -21,3 +19,9 @@
 /rdecay01/event/printModulo 10000
 #  
 /run/beamOn 100000
+
+#limit the chain
+#
+###/grdm/nucleusLimits 234 238 90 92
+#
+###/run/beamOn 1

@@ -7,8 +7,6 @@
 /rdecay01/fullChain false
 #
 /rdecay01/histo/setFileName run1
-###/rdecay01/histo/setFileType hbook
-/rdecay01/histo/setFileType root
 /rdecay01/histo/setHisto 1  100  0. 2000 keV	#e+ e-
 /rdecay01/histo/setHisto 2  100  0. 2000 keV	#neutrino
 /rdecay01/histo/setHisto 3  100  0. 1000 keV	#gamma

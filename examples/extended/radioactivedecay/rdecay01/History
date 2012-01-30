@@ -15,6 +15,35 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+25-01-12 mma (rdecay01-V09-05-05) 
+- HistoManager : add protections for histo file management 
+    
+15-01-12 mma (rdecay01-V09-05-04) 
+- HistoManager : histId and histPt
+- SetHisto() : simplification of Unit handling (HistoManager and HistoMessenger)
+- HistoManager and HistoMessenger : coding conventions
+       
+13-01-12 mma (rdecay01-V09-05-03)
+- Functions Normalize() and saveAscii() re-activated  
+- RunAction.cc : normalize histos 1 to 5
+     
+10-01-12 mma (rdecay01-V09-05-02)
+- HistoManager.hh and .cc : migrate to new g4tools histogramming system
+  Do not need aida anymore, nor G4ANALYSIS_USE
+- Functions Normalize() and saveAscii() temporarily empty  
+- HistoMessenger.hh and .cc : suppress fileType command
+- Update Readme and all macros accordingly
+  
+02-01-12 mma (rdecay01-V09-05-01)
+- PhysicsList : use G4PhysicsHelper
+- RunAction : cosmetic in Activity calculation
+- fullChain.mac : example of command /grdm/nuleusLimits
+- new macro electronicCapture.mac
+
+19-12-11 V.Ivanchenko (rdecay01-V09-05-00)
+- RunAction : added protections against division by zero
+- PhysicsList : added atomic deexcitation
+     
 08-11-11 mma (rdecay01-V09-04-06)
 - modify SteppingVerbose for OutOfWorld
           
