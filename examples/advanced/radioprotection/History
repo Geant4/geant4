@@ -9,6 +9,9 @@ $Id: History,v 1.28 2010-11-18 16:23:42 allison Exp $
                       Category History file
                       ---------------------
 
+08.12.2011 P. Mato. tag radioprotection-V09-05-00
+           Added CMakeLists.txt file
+
 31.10.2011 L. Pandola. Migrated G4Exceptions to the new scheme
 	   tag radioprotection-V09-04-02
 
