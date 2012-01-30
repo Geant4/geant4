@@ -14,6 +14,19 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+20 January 2012 Vladimir Ivanchenko (hadr-stopping-V09-05-01)
+------------------------------------------------------------
+-  G4FTFCaptureAtRest - fixed typo;
+
+20 January 2012 Vladimir Ivanchenko (hadr-stopping-V09-05-00)
+------------------------------------------------------------
+-  G4FTFCaptureAtRest - changed initialisation of de-excitation;
+     removed double deletion of objects; added registration
+     in G4HadronicProcessStore; added sub-type definition
+-  G4PiMinusAbsorptionBertini - temporary do not use native pre-compound 
+     but Bertini pre-compound due to double deletion of objects;
+     after fix of Bertini this should be return back
+
 09 November 2011 Gunter Folger     (hadr-stopping-V09-04-07)
 ------------------------------------------------------------
 -  fix stupid typo in sources.cmake

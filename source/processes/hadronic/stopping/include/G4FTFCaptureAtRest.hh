@@ -68,6 +68,8 @@ public:
 
   virtual G4bool IsApplicable( const G4ParticleDefinition&  );
 
+  virtual void PreparePhysicsTable(const G4ParticleDefinition& );
+
   G4VParticleChange* AtRestDoIt( const G4Track& , const G4Step&  ); 
 
 protected:                         
@@ -92,7 +94,7 @@ private:
   G4FTFModel * theStringModel;
   G4ExcitedStringDecay * theStringDecay;
   G4LundStringFragmentation * theLund;
-  G4ExcitationHandler * theHandler;
+  //G4ExcitationHandler * theHandler;
 
   G4double theMin;
   G4double theMax;

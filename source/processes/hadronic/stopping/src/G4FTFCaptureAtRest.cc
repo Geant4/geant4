@@ -56,6 +56,8 @@
 #include "G4ExcitedStringDecay.hh"
 #include "G4TheoFSGenerator.hh"
 
+#include "G4HadronicProcessStore.hh"
+
 
 G4FTFCaptureAtRest::G4FTFCaptureAtRest( const G4String& processName )
   : G4VRestProcess( processName, fHadronic ) {
@@ -63,6 +65,8 @@ G4FTFCaptureAtRest::G4FTFCaptureAtRest( const G4String& processName )
   // Create the FTFP final-state model. 
   // (We follow what it is done in the class G4FTFPAntiBarionBuilder
   // except quasi-elastic which is not needed at rest.)
+
+  SetProcessSubType(fHadronAtRest);
 
   theMin =   0.0*GeV;
   theMax = 100.0*TeV;
@@ -72,24 +76,30 @@ G4FTFCaptureAtRest::G4FTFCaptureAtRest( const G4String& processName )
   theStringDecay = new G4ExcitedStringDecay( theLund = new G4LundStringFragmentation );
   theStringModel->SetFragmentationModel( theStringDecay );
 
-  theCascade = new G4GeneratorPrecompoundInterface; // Not a cascade - goes straight to Preco 
-  thePreEquilib = new G4PreCompoundModel( theHandler = new G4ExcitationHandler );
-  theCascade->SetDeExcitation( thePreEquilib );  
+  // Not a cascade - goes straight to Preco
+  // V.I. changed initialisation of deexcitation 
+  thePreEquilib = new G4PreCompoundModel( /*theHandler = new G4ExcitationHandler*/ );
+  theCascade = new G4GeneratorPrecompoundInterface(thePreEquilib); 
+  //thePreEquilib = new G4PreCompoundModel( /*theHandler = new G4ExcitationHandler*/ );
+  //theCascade->SetDeExcitation( thePreEquilib );  
 
   theModel->SetHighEnergyGenerator( theStringModel );
   theModel->SetTransport( theCascade );
   theModel->SetMinEnergy( theMin );
   theModel->SetMaxEnergy( 100*TeV );
+
+  G4HadronicProcessStore::Instance()->RegisterExtraProcess(this);
 }
 
 
 G4FTFCaptureAtRest::~G4FTFCaptureAtRest() {
-  delete theCascade;
+  G4HadronicProcessStore::Instance()->DeRegisterExtraProcess(this);
+  //delete theCascade;
   delete theStringDecay;
-  delete theStringModel;
-  delete theModel;
-  delete thePreEquilib;
-  delete theHandler;
+  //delete theStringModel;
+  //delete theModel;
+  //delete thePreEquilib;
+  //  delete theHandler;
   delete theLund;
 }
 
@@ -105,6 +115,11 @@ G4bool G4FTFCaptureAtRest::IsApplicable( const G4ParticleDefinition& particle ) 
   // be captured in a nucleus.
   if ( particle == *( G4AntiProton::AntiProton() ) ) return true;
   return false;
+}
+
+void G4FTFCaptureAtRest::PreparePhysicsTable(const G4ParticleDefinition& p) 
+{
+  G4HadronicProcessStore::Instance()->RegisterParticleForExtraProcess(this, &p);
 }
 
 
