@@ -46,6 +46,23 @@ G4VUserTrackInformation::~G4VUserTrackInformation()
   if (pType!=0) delete pType;
 }
 
+G4VUserTrackInformation::G4VUserTrackInformation(const  G4VUserTrackInformation& right) 
+  :pType(0)
+{
+  pType = new G4String(*(right.pType));
+}
+
+
+G4VUserTrackInformation& G4VUserTrackInformation::operator=(const G4VUserTrackInformation& right)
+{
+  if (this != &right) {
+    if (pType !=0) delete pType;
+    pType = new G4String(*(right.pType));
+  }
+  return *this;
+}
+  
+
 const G4String& G4VUserTrackInformation::GetType() const
 {
   static const G4String NOTYPE="NONE";

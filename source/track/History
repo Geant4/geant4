@@ -17,6 +17,24 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- January 21st, 2011 H.Kurashige  (track-V09-05-03)
+- G4Track::CalculateVelocityForOpticalPhoton() has been reverted
+  Modification of Optical process solves Problem #1275
+
+- January 9th, 2011 H.Kurashige  (track-V09-05-02)
+- Use GetNextMaterial instead of GetMaterial 
+  in G4Track::CalculateVelocityForOpticalPhoton()
+   (Problem #1275)
+
+- December 22nd, 2011 H.Kurashige  (track-V09-05-01)
+- Set 'false' to SecondaryWeightByProcess in default 
+  (Problem #1273)
+
+- December 9th, 2011 H.Kurashige  (track-V09-05-00)
+- Fix Coverity defects
+  (Modify copy constructor/assignment operator for G4VParticleChange and derived classes)
+  (Add copy constructor/assignment operator for G4VUserTrackInformation)
+
 - November 9th, 2011 H.Kurashige  (track-V09-04-13)
 - Fix Coverity defects
   (copy constructor/assignment operator for G4Step/G4StepPoint)

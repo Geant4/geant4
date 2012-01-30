@@ -45,7 +45,8 @@
 const G4double G4VParticleChange::accuracyForWarning = 1.0e-9;
 const G4double G4VParticleChange::accuracyForException = 0.001;
 
-G4VParticleChange::G4VParticleChange():
+G4VParticleChange::G4VParticleChange()
+  :theListOfSecondaries(0),
    theNumberOfSecondaries(0),
    theSizeOftheListOfSecondaries(G4TrackFastVectorSize),
    theStatusChange(fAlive),
@@ -58,7 +59,7 @@ G4VParticleChange::G4VParticleChange():
    theParentWeight(1.0),
    isParentWeightSetByProcess(true),
    isParentWeightProposed(false),
-   fSetSecondaryWeightByProcess(true),
+   fSetSecondaryWeightByProcess(false),
    verboseLevel(1), 
    debugFlag(false)
 {
@@ -85,25 +86,30 @@ G4VParticleChange::~G4VParticleChange() {
   delete theListOfSecondaries; 
 }
 
-// copy and assignment operators are implemented as "shallow copy"
-G4VParticleChange::G4VParticleChange(const G4VParticleChange &right):
-  theListOfSecondaries(right.theListOfSecondaries),
-  theNumberOfSecondaries(right.theNumberOfSecondaries),
-  theSizeOftheListOfSecondaries(right.theSizeOftheListOfSecondaries),
-  theStatusChange( right.theStatusChange),
-  theSteppingControlFlag(right.theSteppingControlFlag),
-  theLocalEnergyDeposit(right.theLocalEnergyDeposit),
-  theNonIonizingEnergyDeposit(right.theNonIonizingEnergyDeposit),
-  theTrueStepLength(right.theTrueStepLength),
-  theFirstStepInVolume( right.theFirstStepInVolume),
-  theLastStepInVolume(right.theLastStepInVolume),
-  theParentWeight(right.theParentWeight),
-  isParentWeightSetByProcess(true),
-  isParentWeightProposed(false),
-  fSetSecondaryWeightByProcess(right.fSetSecondaryWeightByProcess),
-  verboseLevel(right.verboseLevel),
-  debugFlag(right.debugFlag)
+G4VParticleChange::G4VParticleChange(const G4VParticleChange &right)
+  :theListOfSecondaries(0),
+   theNumberOfSecondaries(0),
+   theSizeOftheListOfSecondaries(G4TrackFastVectorSize),
+   theStatusChange( right.theStatusChange),
+   theSteppingControlFlag(right.theSteppingControlFlag),
+   theLocalEnergyDeposit(right.theLocalEnergyDeposit),
+   theNonIonizingEnergyDeposit(right.theNonIonizingEnergyDeposit),
+   theTrueStepLength(right.theTrueStepLength),
+   theFirstStepInVolume( right.theFirstStepInVolume),
+   theLastStepInVolume(right.theLastStepInVolume),
+   theParentWeight(right.theParentWeight),
+   isParentWeightSetByProcess(true),
+   isParentWeightProposed(false),
+   fSetSecondaryWeightByProcess(right.fSetSecondaryWeightByProcess),
+   verboseLevel(right.verboseLevel),
+   debugFlag(right.debugFlag)
 {
+  theListOfSecondaries =  new G4TrackFastVector();
+  theNumberOfSecondaries = right.theNumberOfSecondaries;
+  for (G4int index = 0; index<theNumberOfSecondaries; index++){
+    G4Track* newTrack =  new G4Track(*((*right.theListOfSecondaries)[index] ));
+    theListOfSecondaries->SetElement(index, newTrack);			    
+  }
 }
 
 
@@ -122,10 +128,13 @@ G4VParticleChange & G4VParticleChange::operator=(const G4VParticleChange &right)
       }
     }
     delete theListOfSecondaries; 
-    
-    theListOfSecondaries = right.theListOfSecondaries;
+      
+    theListOfSecondaries =  new G4TrackFastVector();
     theNumberOfSecondaries = right.theNumberOfSecondaries;
-    theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
+   for (G4int index = 0; index<theNumberOfSecondaries; index++){
+    G4Track* newTrack =  new G4Track(*((*right.theListOfSecondaries)[index] ));
+    theListOfSecondaries->SetElement(index, newTrack);			    
+  }
     theStatusChange = right.theStatusChange;
     theSteppingControlFlag = right.theSteppingControlFlag;
     theLocalEnergyDeposit = right.theLocalEnergyDeposit;

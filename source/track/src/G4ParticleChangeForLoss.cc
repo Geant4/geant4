@@ -108,10 +108,12 @@ G4ParticleChangeForLoss & G4ParticleChangeForLoss::operator=(
        }
     }
     delete theListOfSecondaries; 
-
-    theListOfSecondaries = right.theListOfSecondaries;
-    theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
+    theListOfSecondaries =  new G4TrackFastVector();
     theNumberOfSecondaries = right.theNumberOfSecondaries;
+    for (G4int index = 0; index<theNumberOfSecondaries; index++){
+      G4Track* newTrack =  new G4Track(*((*right.theListOfSecondaries)[index] ));
+      theListOfSecondaries->SetElement(index, newTrack);			    }
+
     theStatusChange = right.theStatusChange;
     theLocalEnergyDeposit = right.theLocalEnergyDeposit;
     theSteppingControlFlag = right.theSteppingControlFlag;

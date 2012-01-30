@@ -208,7 +208,7 @@ class G4VParticleChange
 
     void     SetSecondaryWeightByProcess(G4bool);
     G4bool   IsSecondaryWeightSetByProcess() const;  
-    // In default (fSecondaryWeightByProcess flag is true), 
+    // In default (fSecondaryWeightByProcess flag is false), 
     // the weight of secondary tracks will not be changed 
     // (i.e. the process determine the secodary weight)
     // If fSecondaryWeightByProcess flag is false, the weight of 
