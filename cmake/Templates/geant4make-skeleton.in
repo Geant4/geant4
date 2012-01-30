@@ -116,6 +116,7 @@
 # User's G4WORKDIR
 #
 @GEANT4_TC_G4WORKDIR_SETUP@
+@GEANT4_TC_G4WORKDIR_PATH_SETUP@
 
 #----------------------------------------------------------------------------
 # Library build setup

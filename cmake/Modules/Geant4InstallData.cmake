@@ -39,7 +39,7 @@ if(${CMAKE_VERSION} VERSION_GREATER 2.7)
     set(_urlprefix "http://geant4.cern.ch/support/source")
     set(GEANT4_DATASETS
       G4NDL/4.0/G4NDL/tar.gz/G4NEUTRONHPDATA
-      G4EMLOW/6.23/G4EMLOW/tar.gz/G4LEDATA
+      G4EMLOW/6.24/G4EMLOW/tar.gz/G4LEDATA
       PhotonEvaporation/2.2/PhotonEvaporation/tar.gz/G4LEVELGAMMADATA
       RadioactiveDecay/3.4/G4RadioactiveDecay/tar.gz/G4RADIOACTIVEDATA
       G4ABLA/3.0/G4ABLA/tar.gz/G4ABLADATA

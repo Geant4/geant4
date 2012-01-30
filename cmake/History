@@ -30,6 +30,21 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+January 25th, 2011 - Gunter Folger (cmake-V09-05-02)
+- Switch to G4EMLOW6.24
+
+December 13th 2011 - P. mato (cmake-V09-05-01)
+- Templates/UseGeant4_internal.cmake: Avoid prepending configuration tag for existing commands
+
+December 6th 2011 - B.Morgan (cmake-V09-05-00)
+- Modules/Geant4ToolchainBackwardCompatibility.cmake [BUGFIX #1265]: Added
+  setting of expansion variable needed to prepend path with G4WORKDIR path.
+- Templates/geant4make-skeleton.in [BUGFIX #1265] : Added expansion variable for
+  path setup to G4WORKDIR directory for executables.
+- Templates/geant4-env-skeleton.in [BUGFIX #1265] : Added needed '@' symbol 
+  to end of GEANT4_TC_SHELL_PROGRAM used as shbang.
+
+
 November 30th 2011 - B.Morgan (cmake-V09-04-41)
 - Modules/Geant4LibraryBuildOptions.cmake : Commented out
   GEANT4_BUILD_GRANULAR_LIBS option to restrict these builds for 9.5. Current
