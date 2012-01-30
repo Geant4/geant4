@@ -13,6 +13,9 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+30 Nov. 2011 - V. Uzhinsky (hadr-cohe-V09-04-22)
+- G4AntiNuclElastic - bug is fixed, check of |cosTheta|<1 introduced.
+------------------------------------------------------
 24 Nov. 2011 - V. Uzhinsky (hadr-cohe-V09-04-21)
 - G4AntiNuclElastic - bug is fixed, Plab/baryon was inserted
 ------------------------------------------------------
