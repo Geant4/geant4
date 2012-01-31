@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-00    (2-December-2011)
+ Geant4 version Name: geant4-09-05-ref-01    (31-January-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -337,7 +337,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0.01s Real=0s Sys=0.01s
     1000.000           1           0     Na24[0.0]
          348           1    4.61e+04     e-
     1.04e+03           1    4.61e+04     anti_nu_e
@@ -385,7 +385,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0.01s
+  User=0s Real=0.01s Sys=0s
        1e+03           1           0     Ne24[0.0]
          678           1       179.1     e-
     1.32e+03           1       179.1     anti_nu_e
@@ -598,7 +598,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
        1e+03           1           0     Cr46[0.0]
     3.09e+03           1    0.004846     e+
          511           1    0.004846     gamma

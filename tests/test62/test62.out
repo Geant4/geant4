@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-00    (2-December-2011)
+ Geant4 version Name: geant4-09-05-ref-01    (31-January-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -514,7 +514,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.34s Real=0.34s Sys=0s
+  User=0.35s Real=0.35s Sys=0s
 #
 # neutron at 1 GeV in Th
 #
@@ -590,7 +590,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.14s Real=1.15s Sys=0.01s
+  User=1.18s Real=1.18s Sys=0s
 #
 # pi- at 1 GeV in Th
 #
@@ -628,7 +628,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.93s Real=0.93s Sys=0s
+  User=0.95s Real=0.95s Sys=0s
 #
 # proton at 1 GeV in U
 #
@@ -925,7 +925,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.24s Real=0.24s Sys=0s
+  User=0.24s Real=0.24s Sys=0.01s
 #
 # neutron at 1 GeV in U
 #
@@ -968,7 +968,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.24s Real=0.24s Sys=0s
+  User=0.25s Real=0.26s Sys=0s
 #
 # pi+ at 1 GeV in U
 #
@@ -1011,7 +1011,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.4s Real=1.4s Sys=0s
+  User=1.44s Real=1.43s Sys=0s
 #
 # pi- at 1 GeV in U
 #
@@ -1054,7 +1054,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.15s Real=1.16s Sys=0s
+  User=0.97s Real=0.97s Sys=0s
 #
 # proton at 1 GeV in Pb
 #
@@ -1356,7 +1356,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.23s Real=0.23s Sys=0s
+  User=0.31s Real=0.31s Sys=0s
 #
 # neutron at 1 GeV in Pb
 #
@@ -1404,7 +1404,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.27s Real=0.26s Sys=0s
+  User=0.26s Real=0.26s Sys=0s
 #
 # pi+ at 1 GeV in Pb
 #
@@ -1452,7 +1452,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.77s Real=0.77s Sys=0s
+  User=1.22s Real=1.22s Sys=0s
 #
 # pi- at 1 GeV in Pb
 #
@@ -1500,7 +1500,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.91s Real=0.92s Sys=0s
+  User=0.62s Real=0.63s Sys=0s
 #
 # proton at 1 GeV in Cu
 #
@@ -1807,7 +1807,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.06s Real=0.06s Sys=0s
+  User=0.05s Real=0.06s Sys=0s
 #
 # neutron at 1 GeV in Cu
 #
@@ -1860,7 +1860,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.06s Real=0.06s Sys=0s
+  User=0.06s Real=0.05s Sys=0s
 #
 # pi+ at 1 GeV in Cu
 #
@@ -1913,7 +1913,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.45s Real=0.44s Sys=0s
+  User=0.19s Real=0.19s Sys=0s
 #
 # pi- at 1 GeV in Cu
 #
@@ -1966,7 +1966,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.19s Real=0.19s Sys=0s
+  User=0.21s Real=0.22s Sys=0s
 #
 # proton at 1 GeV in Si
 #
@@ -2278,7 +2278,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.03s Real=0.03s Sys=0s
+  User=0.03s Real=0.04s Sys=0s
 #
 # neutron at 1 GeV in Si
 #
@@ -2336,7 +2336,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.03s Real=0.04s Sys=0s
+  User=0.04s Real=0.03s Sys=0s
 #
 # pi+ at 1 GeV in Si
 #
@@ -2394,7 +2394,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.12s Real=0.11s Sys=0s
+  User=0.11s Real=0.12s Sys=0s
 #
 # pi- at 1 GeV in Si
 #
@@ -2452,7 +2452,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.09s Real=0.1s Sys=0s
+  User=0.17s Real=0.16s Sys=0s
 #
 # proton at 1 GeV in C
 #
@@ -2769,7 +2769,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.03s Real=52.47s Sys=0.01s
+  User=0.03s Real=0.12s Sys=0s
 #
 # neutron at 1 GeV in C
 #
@@ -2895,7 +2895,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.11s Real=0.11s Sys=0s
+  User=0.06s Real=0.07s Sys=0s
 #
 # pi- at 1 GeV in C
 #
@@ -2958,7 +2958,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.06s Real=0.07s Sys=0s
+  User=0.09s Real=0.09s Sys=0s
 #
 # Deuteron at 1 GeV/nucleon on Pb
 #
@@ -3021,7 +3021,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.34s Real=0.34s Sys=0s
+  User=0.37s Real=0.37s Sys=0s
 #
 # Alpha at 500 MeV/nucleon on Pb
 #
@@ -3084,7 +3084,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.29s Real=0.28s Sys=0s
+  User=0.29s Real=0.29s Sys=0s
 #
 # Carbon at 290 MeV/nucleon on C
 #
@@ -3148,7 +3148,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.05s Real=0.06s Sys=0s
+  User=0.05s Real=0.05s Sys=0s
 #
 # Carbon at 500 MeV/nucleon on Pb
 #
@@ -3208,16 +3208,10 @@ Index : 5     used in the geometry : No      recalculation needed : No
 ====================================================================
 
 Start Run processing.
-Error! Projectile He6[0.0] not defined!
-Error! Projectile He6[0.0] not defined!
-Error! Projectile He6[0.0] not defined!
-Error! Projectile He6[0.0] not defined!
-Error! Projectile He6[0.0] not defined!
-Error! Projectile He6[0.0] not defined!
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.31s Real=0.32s Sys=0s
+  User=0.25s Real=0.25s Sys=0s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.

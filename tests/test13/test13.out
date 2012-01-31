@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-00    (2-December-2011)
+ Geant4 version Name: geant4-09-05-ref-01    (31-January-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -534,9 +534,9 @@ Idle> /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 Idle> /run/beamOn 100
  Process: inelastic , Model: TheoFSGenerator
- Primary: proton (2212), E= 1.00063e+06, target nucleus (13,27)
- relative limit 0.02 relative value = 0.000163773 pass
- absolute limit (MeV) 150 absolute value (MeV) = 163.723 fail
+ Primary: proton (2212), E= 1.00077e+06, target nucleus (13,27)
+ relative limit 0.02 relative value = 0.000208666 pass
+ absolute limit (MeV) 150 absolute value (MeV) = 208.63 fail
 Idle> #
 Idle> # proton at 100 GeV in Air
 Idle> #

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-00    (2-December-2011)
+ Geant4 version Name: geant4-09-05-ref-01    (31-January-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -777,8 +777,8 @@ hPairProd:   for  pi-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 G4Fragment::CalculateExcitationEnergy(): WARNING 
-Fragment: A =  26, Z =  12, U = -3.643e-01 MeV
-          P = (-9.101e+01,-6.395e+00,1.109e+02) MeV   E = 2.420e+04 MeV
+Fragment: A =  26, Z =  12, U = -8.829e-01 MeV
+          P = (-9.162e+01,1.010e+02,-1.647e+02) MeV   E = 2.420e+04 MeV
 
 Idle> #
 Idle> # neutron at 100 GeV in Al

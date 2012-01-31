@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-00    (2-December-2011)
+ Geant4 version Name: geant4-09-05-ref-01    (31-January-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -357,7 +357,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.61s Real=1.74s Sys=0.01s
+  User=1.57s Real=1.6s Sys=0.01s
 #
 # neutron at 10 GeV in U
 #
@@ -395,7 +395,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.75s Real=2.1s Sys=0.01s
+  User=1.71s Real=1.72s Sys=0.01s
 #
 # pi+ at 10 GeV in U
 #
@@ -433,7 +433,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.29s Real=1.36s Sys=0.01s
+  User=1.25s Real=1.29s Sys=0s
 #
 # pi- at 10 GeV in U
 #
@@ -471,7 +471,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.64s Real=2.82s Sys=0.01s
+  User=1.61s Real=1.62s Sys=0.01s
 #
 # proton at 10 GeV in Cu
 #
@@ -687,7 +687,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.49s Real=0.56s Sys=0s
+  User=0.47s Real=0.47s Sys=0s
 #
 # neutron at 10 GeV in Cu
 #
@@ -730,7 +730,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.51s Real=0.53s Sys=0.01s
+  User=0.5s Real=0.5s Sys=0s
 #
 # pi+ at 10 GeV in Cu
 #
@@ -773,7 +773,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.51s Real=0.53s Sys=0s
+  User=0.49s Real=0.49s Sys=0s
 #
 # pi- at 10 GeV in Cu
 #
@@ -816,7 +816,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.58s Real=0.58s Sys=0s
+  User=0.55s Real=0.56s Sys=0.01s
 #
 # proton at 10 GeV in Si
 #
@@ -1037,7 +1037,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.18s Real=0.22s Sys=0s
+  User=0.18s Real=0.18s Sys=0s
 #
 # neutron at 10 GeV in Si
 #
@@ -1085,7 +1085,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.22s Real=0.24s Sys=0.01s
+  User=0.21s Real=0.21s Sys=0s
 #
 # pi+ at 10 GeV in Si
 #
@@ -1133,7 +1133,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.27s Real=0.26s Sys=0s
+  User=0.25s Real=0.25s Sys=0s
 #
 # pi- at 10 GeV in Si
 #
@@ -1181,7 +1181,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.3s Real=0.3s Sys=0s
+  User=0.29s Real=0.29s Sys=0s
 #
 # proton at 10 GeV in H
 #
@@ -1407,7 +1407,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # neutron at 10 GeV in H
 #
