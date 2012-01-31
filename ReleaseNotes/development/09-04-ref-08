@@ -18,6 +18,7 @@ Major development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(o)  Fixes included in release 9.4.p03
 
 Summarised, the list of changes is the following:
 
@@ -35,7 +36,7 @@ cmake                                            cmake-V09-04-21
 
 config                                           config-V09-04-14
 ------
-- Darwin-g++.gmk: modified OGLLIBS settings to support MacOSX 10.7 Lion
+- Darwin-g++.gmk: modified OGLLIBS settings to support MacOSX 10.7 Lion      (o)
   for proper configuration of OpenGL libraries in combination with Qt.
 - Updated binmake.gmk to add new electromagnetic/dna modules.
 
@@ -85,19 +86,19 @@ geometry/solids/CSG                              geom-csg-V09-04-05
 geometry/solids/specific                         geom-specific-V09-04-07
 ------------------------
 - Migrated to new G4Exception scheme for warnings and errors.
-- Fix in G4TriangularFacet::Intersect() to take into account geometrical
+- Fix in G4TriangularFacet::Intersect() to take into account geometrical     (o)
   tolerance and cases of zero distance from surface's facet; fixed tests
   where square root was compared to half Cartesian tolerance; now compared
   to kCarTolerance. Addressing problem report #1242.
-- Fix in G4TessellatedSolid::DistanceToOut(p) and DistanceToIn(p) to exactly
+- Fix in G4TessellatedSolid::DistanceToOut(p) and DistanceToIn(p) to exactly (o)
   compute distance from facet avoiding use of 'outgoing' flag shortcut variant.
 - Addressing problem report #1242.
-- Fix in G4Paraboloid::DistanceToIn(p,v) and DistanceToIn(p) to properly
+- Fix in G4Paraboloid::DistanceToIn(p,v) and DistanceToIn(p) to properly     (o)
   take into account tolerance and provide better estimation of distance
   respectively. Addresses problem report #1234.
-- Added SetReferences() and InvertFacets() to G4GenericTrap::CreatePolyhedron()
-  for proper visualisation of Boolean compositions with G4GenericTrap.
-- Added SetReferences() to G4TessellatedSolid::CreatePolyhedron()
+- Added SetReferences() and InvertFacets() to CreatePolyhedron() in          (o)
+  G4GenericTrap for proper visualisation of Boolean compositions.
+- Added SetReferences() to G4TessellatedSolid::CreatePolyhedron()            (o)
   for proper visualisation of Boolean compositions with G4TessellatedSolid.
 - Addresses problem report #1235.
 
@@ -118,7 +119,7 @@ global                                           global-V09-04-16
 
 graphics_reps                                    greps-V09-04-04
 -------------
-- G4PolyhedronArbitrary: added SetReferences() and InvertFacets() methods.
+- G4PolyhedronArbitrary: added SetReferences() and InvertFacets() methods.   (o)
   SetReferences() is necessary at the end to complete the polyhedron,
   in particular if the polyhedron suffers subsequent Boolean operations.
 
@@ -135,7 +136,7 @@ particles                                        particles-V09-04-17
 
 persistency/ascii                                ascii-V09-04-06
 -----------------
-- Fixed bug on the usage of units. Addressing problem report #1240.
+- Fixed bug on the usage of units. Addressing problem report #1240.          (o)
 
 physics_lists                                    phys-lists-V09-04-43
 -------------
@@ -195,7 +196,7 @@ processes/electromagnetic/utils                  emutils-V09-04-44
   G4EmModelManager.
 - G4EnergyLossMessenger, G4EmProcessOptions: added new UI commands
   for cross section biasing and forced interaction
-- G4EmModelManager: bug fix in cross-section computation for the case
+- G4EmModelManager: bug fix in cross-section computation for the case        (o)
   of more than 1 model; effect is seen for results when low cuts are used
   for low-energy physics-lists.
 
@@ -318,7 +319,7 @@ processes/scoring                                procscore-V09-04-02
 
 processes/transportation                         transport-V09-04-08
 ------------------------
-- Modified calcuation of 'deltaTime' for optical photons in G4Transportation
+- Modified calcuation of 'deltaTime' for optical photons in G4Transportation (o)
   (and G4CoupledTtansportation). The final velocity obtained by G4Track
   CalculateVelocityForOpticalPhoton() should be used instead of the initial
   velocity of the step. Addressing problem report #1239.
@@ -335,13 +336,14 @@ run                                              run-V09-04-20
 
 track                                            track-V09-04-08
 -----
-- Modify G4Step::InitializeStep() to set correct velocity for optical photons.
+- Modify G4Step::InitializeStep() to set correct velocity for optical
+  photons.
 - Modified G4ParticleChangeForTransport to fix a bug of wrong velocity
   in 'PostStepPoint' after Along/PostStepDoIt().
-- Added G4VelocityTable as singleton to avoid unnecessary creation of
+- Added G4VelocityTable as singleton to avoid unnecessary creation of        (o)
   G4PhysicsVector objects in the event loop.
 
-visualization/OpenGL                             opengl-V09-04-07
+visualization/OpenGL                             opengl-V09-04-07            (o)
 --------------------
 - Fix in G4OpenGL header for proper inclusion of <OpenGL/gl.h> and
   <OpenGL/glu.h> for Qt build, when GL/X11 is not selected.

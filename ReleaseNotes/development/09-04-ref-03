@@ -26,6 +26,7 @@ Major development/fixes included since the last development tag are:
 
 (o)  Fixes included in release 9.4.p01
 (+)  Fixes included in release 9.4.p02
+(*)  Fixes included in release 9.4.p03
 
 Summarised, the list of changes is the following:
 
@@ -65,7 +66,7 @@ source/global                                    global-V09-04-04           (+)
 - Added more G4 types for random classes in Randomize.hh.
 - Use G4UniformRand() in G4Poisson.
 
-graphics_reps                                    greps-V09-04-02
+graphics_reps                                    greps-V09-04-02            (*)
 -------------
 - Consistently make use of G4 types in HepPolyhedron and BooleanProcessor,
   to allow for centralized control of CLHEP types.

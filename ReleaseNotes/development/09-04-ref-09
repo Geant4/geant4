@@ -12,6 +12,7 @@ Major development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(o)  Fixes included in release 9.4.p03
 
 Summarised, the list of changes is the following:
 
@@ -27,7 +28,7 @@ cmake                                            cmake-V09-04-28
 
 config                                           config-V09-04-15
 ------
-- G4UI_BUILD.gmk: added setting of G4INTY_BUILD_XT for OPENGLXM and OIX.
+- G4UI_BUILD.gmk: added setting of G4INTY_BUILD_XT for OPENGLXM and OIX.     (o)
   Visualization drivers need Xt, so this covers the case when the user does
   not build Xt from G4UI_BUILD flags. Addressing problem report #1250.
 
@@ -36,7 +37,7 @@ externals                                        externals-V09-04-09
 - Added missing export statements for static symbols required for DLL build
   of internal CLHEP module.
 
-geometry/solids/CSG                              geom-csg-V09-04-08
+geometry/solids/CSG                              geom-csg-V09-04-08          (o)
 -------------------
 - G4Sphere: fix for setting of relative radial tolerances when setters
   for radiuses are explicitely called (affecting parameterisations on
@@ -57,7 +58,7 @@ interfaces                                       interfaces-V09-04-05
 ----------
 - Added a flag in G4Qt to know if there is an external Qapp started.
 
-parameterisations/gflash                         gflash-V09-04-01
+parameterisations/gflash                         gflash-V09-04-01            (o)
 ------------------------
 - Fixed bug in G4FlashShowerModel::ModelTrigger() for energy condition.
 
@@ -163,7 +164,7 @@ track                                            track-V09-04-10
 -----
 - Modified G4ParticleChangeForTransport to fix a bug of wrong velocity
   in PostStepPoint after Along/PostStepDoIt().
-- Fix problems related to treatment of weight in G4ParticleChange.
+- Fix problems related to treatment of weight in G4ParticleChange.           (o)
   (addressing problem report #1243), to always set the parent track's weight
   to the value set by ProposeParentWeight() and  ProposeWeight() methods for
   all particle change classes.

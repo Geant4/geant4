@@ -17,6 +17,7 @@ Major development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(o)  Fixes included in release 9.4.p03
 
 Summarised, the list of changes is the following:
 
@@ -68,16 +69,16 @@ g3tog4                                           g3tog4-V09-04-02
 - Fixed Coverity defects.
 - Use canonic indexed form for G4Exception.
 
-geometry/divisions                               geomdiv-V09-04-00
+geometry/divisions                               geomdiv-V09-04-00           (o)
 ------------------
 - Optimise initialization of phi angles in parameterisation for tubs and cons.
 
-geometry/solids/Boolean                          geom-bool-V09-04-01
+geometry/solids/Boolean                          geom-bool-V09-04-01         (o)
 -----------------------
 - Corrected protection in G4SubtractionSolid::DistanceToIn(p,v) introduced
   in previous tag and relaxed to not cause event abortion.
 
-geometry/volumes                                 geomvol-V09-04-00
+geometry/volumes                                 geomvol-V09-04-00           (o)
 ----------------
 - Use WIN32 instead of G4LIB_BUILD_DLL as flag for protecting allocator
   choice in G4NavigationHistory on Windows.
@@ -85,10 +86,10 @@ geometry/volumes                                 geomvol-V09-04-00
 global                                           global-V09-04-12
 ------
 - Added two new G4Exception signatures.
-- Added missing post-const qualifier to G4String::compareTo() methods
+- Added missing post-const qualifier to G4String::compareTo() methods        (o)
 - Updated date and version.
 
-parameterisations/gflash                         gflash-V09-04-00
+parameterisations/gflash                         gflash-V09-04-00            (o)
 ------------------------
 - Fixed Coverity defects, mainly related to uninitialised static data.
 
@@ -99,7 +100,7 @@ particles                                        particles-V09-04-11
 
 persistency/ascii                                ascii-V09-04-05
 -----------------
-- Fixed case of dereferencing null pointer in G4tgbGeometryDumper
+- Fixed case of dereferencing null pointer in G4tgbGeometryDumper            (o)
   DumpRotationMatrix() method.
 
 physics_lists                                    phys-lists-V09-04-39
@@ -124,7 +125,7 @@ physics_lists                                    phys-lists-V09-04-39
 - Removed multiple implementations of FindInelasticProcess() method, now
   included in class PhysListUtil.
 
-processes/decay                                  decay-V09-04-01
+processes/decay                                  decay-V09-04-01             (o)
 -----------------
 - Fix in G4Decay to propose the final local time rather than the global time
   so that local time can be updated properly. Addressing problem report #1224.
@@ -135,7 +136,7 @@ processes/electromagnetic/dna                    emdna-V09-04-10
   G4DNADingfelderChargeIncreaseModel and G4DNADingflederChargeDecreaseModel.
 - Upgrade to ionisation classes for Auger e-.
 
-processes/electromagnetic/highenergy             emhighenergy-V09-04-00
+processes/electromagnetic/highenergy             emhighenergy-V09-04-00      (o)
 ------------------------------------
 - Removed include of unused header in G4GammaConversionToMuons.
 
@@ -169,7 +170,7 @@ processes/electromagnetic/utils                  emutils-V09-04-34
   Fixed smoothing function for cross section computations
 - G4VEmModel, G4VAtomDeexcitation: cleanup of method names and comments.
 
-processes/electromagnetic/xrays                  xrays-V09-04-05
+processes/electromagnetic/xrays                  xrays-V09-04-05             (o)
 -------------------------------
 - G4SynchrotronRadiation, G4SynchrotronRadiationInMat: fixed length of C-arrays
   for the interface with EM field. Addressing problem report #1236.
@@ -245,8 +246,8 @@ processes/transportation                         transport-V09-04-07
 
 run                                              run-V09-04-15
 ---
-- Fixed bug in constructor of G4VUserPhysicsList reported by ATLAS for setting
-  of 'DefaultCutValue' flag.
+- Fixed bug in constructor of G4VUserPhysicsList reported by ATLAS for
+  setting of 'DefaultCutValue' flag.
 - Fixed potential case of deferencing null pointer in G4VModularPhysicsList
   RemovePhysics().
 
@@ -261,7 +262,7 @@ examples                                         examples-V09-04-07
 - Updated reference outputs.
 - advanced/nanobeam (nanobeam-V09-04-01)
   o Updated README for use with full version of CLHEP.
-- novice/N04 (exampleN04-V09-04-00)
+- novice/N04 (exampleN04-V09-04-00)                                          (o)
   o Optimised initialisation of Phi angles in parameterisations to avoid
     recomputation of trigonometry.
 

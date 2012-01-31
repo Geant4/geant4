@@ -24,6 +24,7 @@ Major development/fixes included since the last development tag are:
 ---------- Reference-tag 'Release Notes' -----------
 
 (+)  Fixes included in release 9.4.p02
+(o)  Fixes included in release 9.4.p03
 
 Summarised, the list of changes is the following:
 
@@ -117,7 +118,7 @@ global                                           global-V09-04-07            (+)
 - Fixed compilation warnings from gcc-4.6.0 for variables set but not used
   in G4AnalyticalPolSolver.
 
-graphics_reps                                    greps-V09-04-03
+graphics_reps                                    greps-V09-04-03             (o)
 -------------
 - BooleanProcessor: changed cout to G4cout, etc. Fixed Coverity warnings.
 
@@ -349,7 +350,7 @@ run                                              run-V09-04-06
 - Removed unnecessary AtRest GPIL in G4ParallelWorldScoringProcess.
 - Extension of CMake scripts for DLL support.
 
-track                                            track-V09-04-02
+track                                            track-V09-04-02             (o)
 -----
 - Fixed minor memory leak in G4Step.
 - Renamed GetVelocity to CalculateVelocity() in G4Track; added accessor

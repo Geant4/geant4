@@ -30,6 +30,7 @@ Major development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(o)  Fixes included in release 9.4.p03
 
 Summarised, the list of changes is the following:
 
@@ -53,7 +54,7 @@ config                                           config-V09-04-19
 ------
 - Abilited possibility to force building of internal 'expat' module also
   for Linux and Mac, through use of G4LIB_BUILD_EXPAT flag.
-- Allow use of Qt libraries not installed as Framework in Darwin-g++.gmk.
+- Allow use of Qt libraries not installed as Framework in Darwin-g++.gmk.    (o)
 - Archived Configure scripts.
 
 analysis                                         analysis-V09-04-15
@@ -69,7 +70,7 @@ digits_hits                                      digits_hits-V09-04-08
 
 error_propagation                                error_propagation-V09-04-04
 -----------------
-- Added method GetTranfMat() in G4ErrorFreeTrajectoryState.
+- Added method GetTranfMat() in G4ErrorFreeTrajectoryState.                  (o)
   Addresses problem report #1248.
 - Migrated code to new G4Exception scheme.
 
@@ -101,10 +102,10 @@ geometry/magneticfield                           field-V09-04-06
 
 geometry/navigation                              geomnav-V09-04-12
 -------------------
-- Revised all locator classes to use GetLastSurfaceNormal()
+- Revised all locator classes to use GetLastSurfaceNormal()                  (o)
   Fixes last hard cases of stuck tracks in ATLAS setup.
-- Minor fix in G4Navigator::GetLocalExitNormal().
-- Adapted G4MultiNavigator to revisions of intersection logic to provide
+- Minor fix in G4Navigator::GetLocalExitNormal().                            (o)
+- Adapted G4MultiNavigator to revisions of intersection logic to provide     (o)
   Exit Surface Normal for step ending on boundary.
 - Trivial fixes for Coverity defects in G4GeomTestPoint and G4GeomTestVolPoint.
 - Some code cleanup...
@@ -168,7 +169,7 @@ persistency/ascii                                ascii-V09-04-08
 
 persistency/gdml                                 gdml-V09-04-10
 ----------------
-- Fixes in reader to properly consider units in import for G4GenericTrap,
+- Fixes in reader to properly consider units in import for G4GenericTrap,    (o)
   G4EllipticalTube, G4TessellatedSolid and G4Tet.
 
 physics_lists                                    phys-lists-V09-04-74
@@ -254,7 +255,7 @@ processes/electromagnetic/polarisation           empolar-V09-04-04
 
 processes/electromagnetic/standard               emstand-V09-04-55
 ----------------------------------
-- G4UrbanMscModel90, G4UrbanMscModel93, G4UrbanMscModel95: added protection
+- G4UrbanMscModel90, G4UrbanMscModel93, G4UrbanMscModel95: added protection  (o)
   against numerical problems of sampling scattering with small steps at high
   energy to avoid back-reflection. Added G4Exception warning to control
   back-reflection.
@@ -293,11 +294,11 @@ processes/hadronic
     (V.Grichine)
   o Fixed typo for Al in G4NucleonNuclearCrossSection.
 - management (hadr-man-V09-04-23)
-  o G4HadronicProcess: changed order of checks; first track status, then
+  o G4HadronicProcess: changed order of checks; first track status, then     (o)
     value of cross-section to remove potential numerical problem of
     cross-section computation for zero kinetic energy hadrons.
-    Added change status if final energy of primary particle is zero
-    Added protected method GetTargetNucleusPointer().
+  o Added change status if final energy of primary particle is zero
+  o Added protected method GetTargetNucleusPointer().
 - models/binary_cascade (had-binary-V09-04-14)
   o Fixed memory leak in G4GeneratorPrecompoundInterface to correctly
     delete kinetic track.
@@ -560,7 +561,7 @@ examples                                         examples-V09-05-00
   o Exercise the optics_engine in input macro.
 - extended/optical/wls (WLS-V09-04-03)
   o Migrated to new G4Exception scheme.
-- extended/parameterisations/gflash (exgflash-V09-04-01)
+- extended/parameterisations/gflash (exgflash-V09-04-01)                     (o)
   o Fixed bug in ExGflashSensitiveDetector::Initialize() for creation of
     new hits collection.
 - extended/persistency/gdml/G02 (G02-V09-04-01)
