@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-00    (2-December-2011)
+ Geant4 version Name: geant4-09-05-ref-01    (31-January-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -90,13 +90,13 @@ G3VolTable element  24 name TUB1 has 1 daughters
 G3VolTable element  25 name TUB2 has 1 daughters
 Call List file read completed. Build geometry
 G3toG4 top level volume is HALL
-Top-level G3toG4 logical volume HALL G4VisAttributes: invisible, daughters visible, colour: (1,1,1,1)
+Top-level G3toG4 logical volume HALL G4VisAttributes: invisible, daughters visible, colour: (1,1,1,1) (white)
   linestyle: solid, line width: 1
   drawing style: not forced, auxiliary edge visibility: not forced
   line segments per circle: not forced.
   time range: (-1.79769e+308,1.79769e+308)
   G4AttValue pointer is zero, G4AttDef pointer is zero
-Top-level G3toG4 logical volume HALL G4VisAttributes: invisible, daughters visible, colour: (1,1,1,1)
+Top-level G3toG4 logical volume HALL G4VisAttributes: invisible, daughters visible, colour: (1,1,1,1) (white)
   linestyle: solid, line width: 1
   drawing style: not forced, auxiliary edge visibility: not forced
   line segments per circle: not forced.

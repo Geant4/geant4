@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-00    (2-December-2011)
+ Geant4 version Name: geant4-09-05-ref-01    (31-January-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -397,7 +397,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=8.87s Real=9.17s Sys=0.28s
+  User=8.34s Real=8.87s Sys=0.52s
 
  The run consists of 10000 proton of 160 MeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
@@ -457,7 +457,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.16s Real=5.23s Sys=0.02s
+  User=4.97s Real=5.01s Sys=0.05s
 
  The run consists of 1000 C12[0.0] of 3.5 GeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
@@ -836,18 +836,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.22s Real=3.26s Sys=0.03s
+  User=3.24s Real=3.3s Sys=0.06s
 
  The run consists of 1000 kaon+ of 100 MeV through 20 cm  of G4_Cu (density: 8.96 g/cm3 )
 
- Projected Range= 2.07361 cm    rms= 1.42236 mm 
- Mean number of primary steps = 19.702
- Total energy deposit= 286.224 MeV
- niel energy deposit = 0 eV 
+ Projected Range= 2.07979 cm    rms= 1.02274 mm 
+ Mean number of primary steps = 19.734
+ Total energy deposit= 289.471 MeV
+ niel energy deposit = 1.17253 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1793375777, 1392371202
+ Current couple of seeds = 550833258, 785643063
 ----------------------------------------
 /testem/det/setMat TechVacuum
 /testem/det/update
@@ -1200,7 +1200,7 @@ Index : 3     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1793375777, 1392371202
+ Current couple of seeds = 550833258, 785643063
 ----------------------------------------
 ----> SetHisto 1: Edep (MeV/mm) along absorber  (mm);  100 bins from 0 mm to 200 mm
 Start Run processing.
@@ -1213,14 +1213,14 @@ Run Summary
 
  The run consists of 100 alpha of 265 eV  through 20 cm  of TechVacuum (density: 0.01 kg/m3 )
 
- Projected Range= 302.14 um    rms= 155.8 um 
- Mean number of primary steps = 7.35
- Total energy deposit= 265 eV 
- niel energy deposit = 241.928 eV 
+ Projected Range= 325.651 um    rms= 134.913 um 
+ Mean number of primary steps = 7.55
+ Total energy deposit= 264.444 eV 
+ niel energy deposit = 246.109 eV 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 870927184, 923040305
+ Current couple of seeds = 1502512910, 1379819585
 ----------------------------------------
 /testem/det/setMat G4_WATER
 /testem/det/update
@@ -1573,7 +1573,7 @@ Index : 3     used in the geometry : No      recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 870927184, 923040305
+ Current couple of seeds = 1502512910, 1379819585
 ----------------------------------------
 ----> SetHisto 1: Edep (MeV/mm) along absorber  (mm);  100 bins from 0 mm to 200 mm
 Start Run processing.
@@ -1582,18 +1582,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.02s Real=0.03s Sys=0s
+  User=0.03s Real=0.04s Sys=0.01s
 
  The run consists of 100 alpha of 100 MeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
- Projected Range= 6.41793 mm    rms= 43.0352 um 
- Mean number of primary steps = 36.46
+ Projected Range= 6.42597 mm    rms= 46.8876 um 
+ Mean number of primary steps = 36.48
  Total energy deposit= 100 MeV
- niel energy deposit = 58.3131 keV
+ niel energy deposit = 58.3569 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1332765007, 527450628
+ Current couple of seeds = 1176099810, 1075331638
 ----------------------------------------
 /testem/det/setMat Water_1.05
 /gun/particle proton
@@ -1905,7 +1905,7 @@ Index : 4     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1332765007, 527450628
+ Current couple of seeds = 1176099810, 1075331638
 ----------------------------------------
 ----> SetHisto 1: Edep (MeV/mm) along absorber  (mm);  200 bins from 0 mm to 200 mm
 Start Run processing.
@@ -1914,18 +1914,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.78s Real=0.8s Sys=0.02s
+  User=0.77s Real=0.84s Sys=0.05s
 
  The run consists of 1000 proton of 160 MeV through 20 cm  of Water_1.05 (density: 1.05 g/cm3 )
 
- Projected Range= 16.8837 cm    rms= 5.35886 mm 
- Mean number of primary steps = 178.066
+ Projected Range= 16.8924 cm    rms= 2.56388 mm 
+ Mean number of primary steps = 178.079
  Total energy deposit= 160 MeV
  niel energy deposit = 0 eV 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1224127273, 1933896197
+ Current couple of seeds = 1301518772, 634631156
 ----------------------------------------
 G4 kernel has come to Quit state.
 

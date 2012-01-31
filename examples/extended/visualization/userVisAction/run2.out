@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-00    (2-December-2011)
+ Geant4 version Name: geant4-09-05-ref-01    (31-January-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -463,7 +463,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
  This region is in the mass world.
@@ -506,7 +506,7 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 ### Run 1 start.
 Start Run processing.
 
--------->Hits Collection: in this event they are 132 hits in the tracker chambers: 
+-------->Hits Collection: in this event they are 126 hits in the tracker chambers: 
   trackID: 1  chamberNb: 0  energy deposit: 96.181165251259 keV  position: 0.0035425923139226 0.17894146155319 -1.4 m  
   trackID: 1  chamberNb: 1  energy deposit: 98.602267217233 keV  position: 0.61595909012967 43.087176648437 -60 cm 
   trackID: 1  chamberNb: 2  energy deposit: 32.397736710289 keV  position: 0.85450546078354 74.188101949566 7.6648943480515 cm 
@@ -564,87 +564,81 @@ Start Run processing.
   trackID: 6  chamberNb: 3  energy deposit: 864.21524725646 eV   position: 0.40219287730405 1.3130051004043 0.99967446760656 m  
   trackID: 6  chamberNb: 3  energy deposit: 2.3067249853563 keV  position: 0.40206409481194 1.3130872359414 0.99961802114144 m  
   trackID: 6  chamberNb: 3  energy deposit: 1.8492390475877 keV  position: 0.40195054666349 1.3128828396352 0.99953809435005 m  
-  trackID: 6  chamberNb: 3  energy deposit: 833.26262985484 eV   position: 0.40178241651588 1.3127845376756 0.99961798635082 m  
-  trackID: 6  chamberNb: 3  energy deposit: 1.2032100239246 keV  position: 0.40175912861594 1.3129279926771 0.99975292977998 m  
-  trackID: 6  chamberNb: 3  energy deposit: 1.7358517229033 keV  position: 0.40170060443063 1.3128433554197 0.99960119840518 m  
-  trackID: 6  chamberNb: 3  energy deposit: 3.0941208341796 keV  position: 0.40168223034811 1.3128288601751 0.99960909413303 m  
-  trackID: 11  chamberNb: 3  energy deposit: 174.59822568632 eV   position: 0.47430987103778 1.3143299005163 0.99998210441596 m  
-  trackID: 11  chamberNb: 3  energy deposit: 296.82965633658 eV   position: 0.47437352894005 1.3143704981796 0.99995811487942 m  
-  trackID: 11  chamberNb: 3  energy deposit: 35.310451061337 eV   position: 0.4744585312506 1.314379616407 0.99995580838162 m  
-  trackID: 11  chamberNb: 3  energy deposit: 300.24119602109 eV   position: 0.47453095514629 1.3143954324051 0.99991463053627 m  
-  trackID: 11  chamberNb: 3  energy deposit: 324.14767719757 eV   position: 0.47460091513544 1.3144194228428 0.99996746658932 m  
-  trackID: 11  chamberNb: 3  energy deposit: 446.64849291094 eV   position: 0.47467238945663 1.3143776496904 0.99994764092378 m  
-  trackID: 11  chamberNb: 3  energy deposit: 218.14572848335 eV   position: 0.47472871550878 1.3143224103832 0.99996121461305 m  
-  trackID: 11  chamberNb: 3  energy deposit: 310.02425213264 eV   position: 0.47477116647149 1.3143310440692 1 m  
-  trackID: 11  chamberNb: 3  energy deposit: 81.764413442378 eV   position: 0.47516223730555 1.314095155892 0.99995672428252 m  
-  trackID: 11  chamberNb: 3  energy deposit: 261.07659908784 eV   position: 0.47522248727223 1.3140925945582 0.9999505002744 m  
-  trackID: 11  chamberNb: 3  energy deposit: 564.95475413728 eV   position: 0.47524362058659 1.3141172921542 0.99999622799638 m  
-  trackID: 11  chamberNb: 3  energy deposit: 75.628803747833 eV   position: 0.47388527802536 1.3136590505584 0.99999995486589 m  
-  trackID: 11  chamberNb: 3  energy deposit: 0.52015863005996 eV   position: 0.47388520985331 1.3136590663645 1 m  
-  trackID: 11  chamberNb: 3  energy deposit: 432.30996836862 eV   position: 0.47363305786097 1.3135156546643 0.99997753377714 m  
-  trackID: 11  chamberNb: 3  energy deposit: 1.1737070690876 keV  position: 0.47361359045737 1.3135304573534 0.9999807615709 m  
-  trackID: 11  chamberNb: 3  energy deposit: 31.739447530109 eV   position: 0.47364841830376 1.3135082481576 0.99999971975098 m  
-  trackID: 11  chamberNb: 3  energy deposit: 7.9113897341647 eV   position: 0.47364834466242 1.3135073400036 1 m  
-  trackID: 11  chamberNb: 3  energy deposit: 11.986596690322 eV   position: 0.47363458000869 1.313390271988 0.999993888887 m  
-  trackID: 11  chamberNb: 3  energy deposit: 24.211020993887 eV   position: 0.47363209356182 1.3133736021753 0.9999882782472 m  
-  trackID: 11  chamberNb: 3  energy deposit: 2.6427136993426 keV  position: 0.47360705395041 1.3133775521353 0.99996178413533 m  
-  trackID: 11  chamberNb: 3  energy deposit: 451.46217903147 eV   position: 0.47361927393976 1.313375546826 0.9999502400045 m  
-  trackID: 11  chamberNb: 3  energy deposit: 104.5858321209 eV   position: 0.47362003769304 1.3133590180897 0.99994470119983 m  
-  trackID: 11  chamberNb: 3  energy deposit: 168.15260904994 eV   position: 0.4736145786055 1.3133428503118 0.99994620314555 m  
-  trackID: 11  chamberNb: 3  energy deposit: 24.2520033024 eV   position: 0.47360445405781 1.3133369338261 0.99995449442482 m  
-  trackID: 11  chamberNb: 3  energy deposit: 112.51796437764 eV   position: 0.47360042665057 1.3133447781735 0.99996389285029 m  
-  trackID: 11  chamberNb: 3  energy deposit: 109.42850337606 eV   position: 0.47359151549804 1.3133344956068 0.99996692609992 m  
-  trackID: 11  chamberNb: 3  energy deposit: 93.319114949239 eV   position: 0.47358487972865 1.3133215327763 0.99996195289303 m  
-  trackID: 11  chamberNb: 3  energy deposit: 937.6604179094 eV   position: 0.47357357751374 1.3133115756112 0.9999588452759 m  
-  trackID: 11  chamberNb: 3  energy deposit: 160.10372018409 eV   position: 0.47358992177285 1.3133140145702 0.99995610194377 m  
-  trackID: 11  chamberNb: 3  energy deposit: 161.69411033088 eV   position: 0.47360227949578 1.3133134991912 0.99994782905039 m  
-  trackID: 11  chamberNb: 3  energy deposit: 197.13250961942 eV   position: 0.47361425936946 1.3133120813513 0.99995310798705 m  
-  trackID: 11  chamberNb: 3  energy deposit: 343.92849668662 eV   position: 0.47361348265851 1.3133103763222 0.99995479220811 m  
-  trackID: 10  chamberNb: 3  energy deposit: 10.538400300066 keV  position: 0.031386492331581 1.3259355756061 0.97149314672597 m  
-  trackID: 10  chamberNb: 3  energy deposit: 11.801169650589 keV  position: 0.037814772236041 1.3276299505999 0.97822075190189 m  
-  trackID: 10  chamberNb: 3  energy deposit: 8.5146378675926 keV  position: 0.047006529931405 1.3278352421389 0.98412910227739 m  
-  trackID: 10  chamberNb: 3  energy deposit: 3.3203564684814 keV  position: 0.038528022041635 1.3263244752106 0.98512437763073 m  
-  trackID: 10  chamberNb: 3  energy deposit: 29.322030823725 keV  position: 0.036690200096403 1.3285123110726 0.97837759419544 m  
-  trackID: 10  chamberNb: 3  energy deposit: 10.678856159333 keV  position: 0.04257531496465 1.3272718675675 0.97789750540397 m  
-  trackID: 10  chamberNb: 3  energy deposit: 32.79617315838 keV  position: 0.045210400186031 1.3240974701147 0.97881690705717 m  
-  trackID: 10  chamberNb: 3  energy deposit: 7.2474802755473 keV  position: 0.045814395148209 1.3260746479664 0.97806970733757 m  
-  trackID: 10  chamberNb: 3  energy deposit: 9.3949462626142 keV  position: 0.04592621607212 1.3252660191619 0.97686036773952 m  
-  trackID: 10  chamberNb: 3  energy deposit: 9.6003729725285 keV  position: 0.04525137679726 1.3249485100722 0.9758466771095 m  
-  trackID: 10  chamberNb: 3  energy deposit: 3.8652304347127 keV  position: 0.045251452175066 1.3249808497159 0.97584372146548 m  
-  trackID: 9  chamberNb: 3  energy deposit: 8.8053216528443 keV  position: 0.0023773134633394 1.3268572595852 0.98079079576051 m  
-  trackID: 9  chamberNb: 3  energy deposit: 6.4528589628541 keV  position: 0.0032380189989229 1.3284051486346 0.98300531998184 m  
-  trackID: 9  chamberNb: 3  energy deposit: 7.7320622054825 keV  position: 0.0047196323177779 1.3281238685961 0.98387585902108 m  
-  trackID: 9  chamberNb: 3  energy deposit: 3.1616883002148 keV  position: 0.0046692874822552 1.3295738331861 0.98541889593717 m  
-  trackID: 9  chamberNb: 3  energy deposit: 2.8863643700046 keV  position: 0.0052418981079152 1.3278257072464 0.98382076935166 m  
-  trackID: 9  chamberNb: 3  energy deposit: 4.8870046994764 keV  position: 0.0041533751686205 1.3309571000618 0.98439969513752 m  
-  trackID: 9  chamberNb: 3  energy deposit: 4.520301047954 keV  position: 0.0064451790581272 1.3294166337 0.98487834757074 m  
-  trackID: 9  chamberNb: 3  energy deposit: 14.232311174249 keV  position: 0.0051026291323305 1.3291995619142 0.98434774374624 m  
-  trackID: 9  chamberNb: 3  energy deposit: 4.354335860395 keV  position: 0.006588971354544 1.3275347521578 0.98395730057049 m  
-  trackID: 9  chamberNb: 3  energy deposit: 6.5662055029459 keV  position: 0.0082167229782734 1.3276366396936 0.98461927056038 m  
-  trackID: 9  chamberNb: 3  energy deposit: 5.1580653461762 keV  position: 0.0073695550828112 1.3285699362939 0.98450334147893 m  
-  trackID: 9  chamberNb: 3  energy deposit: 9.0563210895638 keV  position: 0.0082100346526143 1.3280910159963 0.98452290290039 m  
-  trackID: 9  chamberNb: 3  energy deposit: 771.38488704218 eV   position: 0.0082075557235489 1.3280874484788 0.98452355776445 m  
-  trackID: 5  chamberNb: 3  energy deposit: 3.8504466933794 keV  position: 0.013322120900135 1.240728661534 0.86777819099194 m  
-  trackID: 5  chamberNb: 3  energy deposit: 11.799030997544 keV  position: 0.014919439184175 1.237676813542 0.86895470839593 m  
-  trackID: 5  chamberNb: 3  energy deposit: 3.3322394772618 keV  position: 0.015189337307628 1.2386909708821 0.86822454271333 m  
-  trackID: 5  chamberNb: 3  energy deposit: 5.5748679597987 keV  position: 0.01544002011925 1.2366960116185 0.86731314263196 m  
-  trackID: 5  chamberNb: 3  energy deposit: 9.1256413088325 keV  position: 0.014659549341837 1.2375983237712 0.86625018439948 m  
-  trackID: 5  chamberNb: 3  energy deposit: 8.6595983562147 keV  position: 0.014122931944704 1.2384260885105 0.86611215836574 m  
-  trackID: 5  chamberNb: 3  energy deposit: 2.0141841510039 keV  position: 0.014128603983872 1.2384318983751 0.86612296069877 m  
-  trackID: 4  chamberNb: 2  energy deposit: 12.883631363808 keV  position: 1.0589547007985 73.879041245322 7.6827771476565 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 6.1980752551977 keV  position: 1.1500534672769 74.047695506883 7.8088574535286 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 6.9889269577977 keV  position: 1.0102512875768 74.121450335592 7.6469033371666 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 14.374097944338 keV  position: 0.64230118337042 74.145295386005 7.6944754565061 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 8.7617317461759 keV  position: 0.72085783336314 73.994339821368 7.6959740831481 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 3.4650192426103 keV  position: 0.64420299183791 73.904105991762 7.8060034031151 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 7.5190979772831 keV  position: 0.65731623636457 73.776357904611 7.7355878137908 cm 
-  trackID: 4  chamberNb: 2  energy deposit: 9.1587087571066 keV  position: 0.65143520154902 73.783619071521 7.7295129183502 cm 
+  trackID: 6  chamberNb: 3  energy deposit: 1.5307028173738 keV  position: 0.40178228070316 1.3127828945724 0.99961477700902 m  
+  trackID: 6  chamberNb: 3  energy deposit: 1.6699684385828 keV  position: 0.40175986913401 1.3129790530501 0.99975112521024 m  
+  trackID: 6  chamberNb: 3  energy deposit: 3.6657739549056 keV  position: 0.4017697743479 1.3129686333422 0.99977795319253 m  
+  trackID: 11  chamberNb: 3  energy deposit: 106.51170274703 eV   position: 0.47840195696223 1.3140645490976 0.99991856909166 m  
+  trackID: 11  chamberNb: 3  energy deposit: 324.98360324567 eV   position: 0.47850695557948 1.3140767096012 0.99985662792891 m  
+  trackID: 11  chamberNb: 3  energy deposit: 442.54617861001 eV   position: 0.47860024800966 1.3141482599716 0.99981758169027 m  
+  trackID: 11  chamberNb: 3  energy deposit: 228.40100116547 eV   position: 0.47870617235362 1.3141916196308 0.99977413752412 m  
+  trackID: 11  chamberNb: 3  energy deposit: 610.24938431408 eV   position: 0.47882163765262 1.3142434983933 0.99976110784877 m  
+  trackID: 11  chamberNb: 3  energy deposit: 252.84071782438 eV   position: 0.47893494865395 1.3143148372941 0.99977521984428 m  
+  trackID: 11  chamberNb: 3  energy deposit: 851.3905995913 eV   position: 0.4790615353574 1.3142754362691 0.99977970483561 m  
+  trackID: 11  chamberNb: 3  energy deposit: 532.44473971373 eV   position: 0.47908433470943 1.3141549649722 0.99984144117055 m  
+  trackID: 11  chamberNb: 3  energy deposit: 808.80808894636 eV   position: 0.47905995431604 1.3140209566863 0.999870155817 m  
+  trackID: 11  chamberNb: 3  energy deposit: 930.76232800743 eV   position: 0.47900449013155 1.3139126789193 0.99985403999908 m  
+  trackID: 11  chamberNb: 3  energy deposit: 449.39536014622 eV   position: 0.47900293891731 1.3138212818886 0.99974363739878 m  
+  trackID: 11  chamberNb: 3  energy deposit: 170.99965263959 eV   position: 0.47910756150418 1.3137515322288 0.99970468687639 m  
+  trackID: 11  chamberNb: 3  energy deposit: 365.6016522991 eV   position: 0.4791882889747 1.3138146945636 0.99963580102256 m  
+  trackID: 11  chamberNb: 3  energy deposit: 363.74192287043 eV   position: 0.47918726723937 1.3139223017797 0.99961175388085 m  
+  trackID: 11  chamberNb: 3  energy deposit: 252.00755548437 eV   position: 0.47912273264462 1.3140242423593 0.99964665876075 m  
+  trackID: 11  chamberNb: 3  energy deposit: 686.0597244824 eV   position: 0.47910119194192 1.3141740864792 0.99963816240846 m  
+  trackID: 11  chamberNb: 3  energy deposit: 1.579199973931 keV  position: 0.47921263681614 1.3141653561509 0.99958017999938 m  
+  trackID: 11  chamberNb: 3  energy deposit: 381.00948537407 eV   position: 0.47909290048578 1.3142176728789 0.99957833867304 m  
+  trackID: 11  chamberNb: 3  energy deposit: 528.98297835745 eV   position: 0.47910747981601 1.3143264027478 0.99961338355267 m  
+  trackID: 11  chamberNb: 3  energy deposit: 587.51294936184 eV   position: 0.47919404265932 1.314403974807 0.99965903418986 m  
+  trackID: 11  chamberNb: 3  energy deposit: 696.37967484287 eV   position: 0.47925664619031 1.3145314164892 0.9996817739193 m  
+  trackID: 11  chamberNb: 3  energy deposit: 704.63914066388 eV   position: 0.47927880403244 1.3145169857579 0.99977606122828 m  
+  trackID: 11  chamberNb: 3  energy deposit: 1.5961001068122 keV  position: 0.47921427926919 1.3144458657056 0.99986882363881 m  
+  trackID: 11  chamberNb: 3  energy deposit: 235.51592027602 eV   position: 0.47916234697389 1.3143536833634 0.99989010420756 m  
+  trackID: 11  chamberNb: 3  energy deposit: 1.0896840690218 keV  position: 0.47908409018564 1.3143521708178 0.9999577265152 m  
+  trackID: 11  chamberNb: 3  energy deposit: 90.665899049135 eV   position: 0.47908320730823 1.3143579442933 1 m  
+  trackID: 11  chamberNb: 3  energy deposit: 156.39755178998 eV   position: 0.47921006250752 1.3141443066388 0.99999287124218 m  
+  trackID: 11  chamberNb: 3  energy deposit: 60.652099322522 eV   position: 0.47921842345456 1.3141442281275 0.99999973624617 m  
+  trackID: 11  chamberNb: 3  energy deposit: 4.035091610684 eV   position: 0.47921869994819 1.3141443415552 1 m  
+  trackID: 10  chamberNb: 3  energy deposit: 15.073172991986 keV  position: 0.034089257747076 1.3272524787192 0.97833348887249 m  
+  trackID: 10  chamberNb: 3  energy deposit: 8.6767253903852 keV  position: 0.042126849702627 1.3253357820077 0.9821028226988 m  
+  trackID: 10  chamberNb: 3  energy deposit: 11.917337552224 keV  position: 0.047337876895688 1.3180487293267 0.98107709182177 m  
+  trackID: 10  chamberNb: 3  energy deposit: 8.6249725173316 keV  position: 0.040769572309588 1.3221646888944 0.97882823940641 m  
+  trackID: 10  chamberNb: 3  energy deposit: 17.438555834794 keV  position: 0.034905348441557 1.3227755560818 0.98470283165285 m  
+  trackID: 10  chamberNb: 3  energy deposit: 5.2343070697874 keV  position: 0.038760326347646 1.3207508651088 0.98466221456492 m  
+  trackID: 10  chamberNb: 3  energy deposit: 8.5100998013244 keV  position: 0.036339560411903 1.3221495634756 0.98326142516289 m  
+  trackID: 10  chamberNb: 3  energy deposit: 10.717216783454 keV  position: 0.03514082443794 1.3204385532939 0.98574205492318 m  
+  trackID: 10  chamberNb: 3  energy deposit: 4.3351390233874 keV  position: 0.03471610780105 1.3211839890779 0.98497131749152 m  
+  trackID: 10  chamberNb: 3  energy deposit: 8.4777901678692 keV  position: 0.031846134241191 1.3198201555182 0.98664497154506 m  
+  trackID: 10  chamberNb: 3  energy deposit: 8.5470930807357 keV  position: 0.034047320692423 1.3189951725666 0.9863934585606 m  
+  trackID: 10  chamberNb: 3  energy deposit: 5.7451064097387 keV  position: 0.036239906620079 1.3189905985026 0.98652929991203 m  
+  trackID: 10  chamberNb: 3  energy deposit: 9.8748420747971 keV  position: 0.035617839004881 1.3199879205104 0.98770695209208 m  
+  trackID: 10  chamberNb: 3  energy deposit: 13.907295675755 keV  position: 0.03552988914706 1.319797814335 0.98768929622043 m  
+  trackID: 9  chamberNb: 3  energy deposit: 11.891126858413 keV  position: 0.0029130255966379 1.3261387364767 0.98350945777355 m  
+  trackID: 9  chamberNb: 3  energy deposit: 4.0884134711863 keV  position: 0.0023852792797189 1.327972139915 0.9833614836908 m  
+  trackID: 9  chamberNb: 3  energy deposit: 6.3899188034244 keV  position: 0.0037157484537027 1.3276391557879 0.98196318885682 m  
+  trackID: 9  chamberNb: 3  energy deposit: 9.5702726575082 keV  position: 0.0059804901805582 1.3289499946388 0.97943589308632 m  
+  trackID: 9  chamberNb: 3  energy deposit: 9.5078189384412 keV  position: 0.0027149383887173 1.3310547504597 0.98133342211149 m  
+  trackID: 9  chamberNb: 3  energy deposit: 8.3652462025649 keV  position: 0.0047610748380962 1.3319849983071 0.98328676433042 m  
+  trackID: 9  chamberNb: 3  energy deposit: 8.9558053180771 keV  position: 0.0059029075955822 1.3312370474325 0.98281616376521 m  
+  trackID: 9  chamberNb: 3  energy deposit: 8.7830771269635 keV  position: 0.0067055803545639 1.3316985282964 0.98303638170992 m  
+  trackID: 9  chamberNb: 3  energy deposit: 11.032545722624 keV  position: 0.0067762080470863 1.3317607359642 0.98292089888897 m  
+  trackID: 5  chamberNb: 3  energy deposit: 10.353749174376 keV  position: 0.010995879481474 1.2399554426566 0.86077833630023 m  
+  trackID: 5  chamberNb: 3  energy deposit: 6.3353369278917 keV  position: 0.012832787498157 1.2393157827704 0.8623616115912 m  
+  trackID: 5  chamberNb: 3  energy deposit: 9.6184851074546 keV  position: 0.012979659223944 1.2380097775259 0.86422226401549 m  
+  trackID: 5  chamberNb: 3  energy deposit: 11.134453072342 keV  position: 0.013561543435445 1.2395814097709 0.86373451712249 m  
+  trackID: 5  chamberNb: 3  energy deposit: 6.9139846619704 keV  position: 0.013538990471171 1.2396041402784 0.86366709248934 m  
+  trackID: 4  chamberNb: 2  energy deposit: 7.6483492998452 keV  position: 1.3616189443216 73.984792960076 7.1727341857274 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 11.363751915975 keV  position: 1.0049335660373 73.788341602704 6.8180807880346 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 8.8090017530073 keV  position: 0.93779355810857 73.945502964728 6.6153823392754 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 5.7465342700552 keV  position: 1.162210602467 74.115640470522 6.4868619005132 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 8.9648860130642 keV  position: 1.1023832658052 73.969888904582 6.6782472587403 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 9.1381204086121 keV  position: 1.1050944976033 73.876602262619 6.7569412532832 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 3.9115352087658 keV  position: 1.0580073127613 73.778694239966 6.7012566785616 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 6.7126313344272 keV  position: 1.17044935727 73.850938378349 6.6497009324233 cm 
+  trackID: 4  chamberNb: 2  energy deposit: 7.0544790405645 keV  position: 1.1748284401347 73.848945714846 6.6556921002278 cm 
 >>> Event 0
     0 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.02s Real=0.03s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 Graphics systems deleted.
 Visualization Manager deleting...
 UserDetectorConstruction deleted.
