@@ -1,0 +1,342 @@
+
+                       geant4-09-05-ref-01
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o Fix in G4UniversalFluctuation for sampling at small steps (below 10 um)
+   in heavy media, causing shift in range of 3 MeV muons.
+ o Fix of velocity computation for optical photons.
+ o Added angular distributions for elastic and inelastic 2-body final states
+   of gamma p and gamma n reactions in Bertini cascade model.
+ o Moved isotope production infrastructure from process to model level in
+   hadronics.
+ o New data set G4EMLOW-6.24.
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+(o)  Fixes included in release 9.4.p03
+
+Summarised, the list of changes is the following:
+
+cmake                                            cmake-V09-04-41
+-----
+- Added setting of expansion variable needed to prepend path with G4WORKDIR
+  path. Addressing problem report #1265.
+- Updated to data set G4EMLOW-6.24
+
+config                                           config-V09-05-03
+------
+- Corrected condition for determining QT_AS_FRAMEWORK flag depending on      (o)
+  how QTHOME is defined in Darwin setups. Addresses problem report #1267.
+- Removed unnecessary 'gcov' linkage for dynamic libraries in                (o)
+  Darwin-g++.gmk.
+- Added Darwin-clang experimental configuration. Requires explicit addition
+  of -lstdc++ to LDLIBS in architecture.gmk.
+- Increased stack size of executable to 12M for WIN32-VC setup.
+
+error_propagation                                error_propagation-V09-05-01
+-----------------
+- Set navigator to stepping manager and field locators; fixing crash on Windows.
+- Fixed minor Coverity defects.
+
+g3tog4                                           g3tog4-V09-05-00
+------
+- Fixed minor Coverity defects.
+
+geometry/magneticfield                           field-V09-05-00
+----------------------
+- Fixed Coverity defects in G4SimpleRunge (removed spurious pointer
+  data member) and G4FieldTrack (missing G4ChargeState::operator=()).
+
+geometry/navigation                              geomnav-V09-05-00
+-------------------
+- Fixed left over debug flags for field check in locator classes.
+  Some code cleanup.
+
+geometry/solids/specific                         geom-specific-V09-05-01
+------------------------
+- Fix in G4EllipticalCone in DistanceToIn(p,v) to exclude imaginary          (o)
+  solution (virtual cone) when distance is calculated.
+- Fixed trivial Coverity defects in G4TwistedTubs and G4VTwisteFaceted for
+  missing protection against self-assignment.
+
+global                                           global-V09-05-00
+------
+- Introduced G4StatDouble class in HEPNumerics module, a class providing
+  simple "one variable statistics" capability; adapted from the original
+  code included in the GRAS tool.
+- Added GetClockTime() function to G4Timer to print the actual clock time.
+- Fixed compilation errors in G4StatDouble for constness in signature of
+  rms() methods.
+
+graphics_reps                                    greps-V09-05-02
+-------------
+- G4VVisManager: Added Begin/EndDraw(2D), optional methods for
+  bracketing Draw() methods to improve drawing speed.
+- G4Colour: in operator<<(), added colour name if in colour map.
+- BooleanProcessor: saved one instruction and fixed some Coverity defects.
+- Change G4Exception ID in G4NURBS and HepPolyhedron.
+- Some code cleanup.
+
+materials                                        materials-V09-05-02
+---------
+- G4MaterialPropertiesTable: minor cosmetic changes to GetProperty(),
+  GetConstProperty() and ConstPropertyExists() methods.
+- G4OpticalSurface: fixed compilation warning on Ubuntu.
+- Fixed Coverity defects.
+
+persistency/mctruth                              mctruth-V09-05-00
+-------------------
+- Removed fake copy-constructor. Fixing Coverity defect.
+
+physics_lists                                    phys-lists-V09-05-01
+-------------
+- Changed G4WaterExcitation to G4DNAWaterExcitation in G4EmDNAPhysicsChemistry.
+- Reduced number of deleted objects in hadronic builders to avoid cases of
+  double deletion.
+
+processes/cuts                                   procuts-V09-05-00
+--------------
+- Fixed Coverity defect in G4ProductionCutsTable::RetrieveCutsInfo(). 
+
+processes/electromagnetic/dna                    emdna-V09-05-02
+-----------------------------
+- Bug fix in G4DNAChemistryManager::CreateSolvatedElectron() concerning the
+  final position of the solvated electron using Sanche thermalization.
+- Updated source of cross-section file for elastic scattering.
+- Removed G4Water* classes in 'utils' module.
+
+processes/electromagnetic/lowenergy              emlowen-V09-05-01
+-----------------------------------
+- Fixed Coverity defects in Penelope classes and related.
+
+processes/electromagnetic/muons                  emmuons-V09-05-00
+-------------------------------
+- Fixed initialisation of transport cross-section in
+  G4EnergyLossForExtrapolator.
+
+processes/electromagnetic/standard               emstand-V09-05-02
+----------------------------------
+- G4UniversalFluctuation: fixed sampling at small steps (below 10 um) in
+  heavy media reported at 8th Space User Workshop (Tsukuba, Japan) about
+  shift in range of 3 MeV muons
+- G4WentzelOKandVIxSection: fixed incorrect selection of limit
+  on minimal angle (affect large angle scattering of muons).
+- G4WentzeVIModel added G4Exception to identify misuse of transport
+  cross-section computation.
+- G4GoudsmitSaundersonTable, G4GoudsmitSaundersonMscModel: fixed 
+  compilation warnings on Ubuntu.
+
+processes/electromagnetic/xrays                  xrays-V09-05-00
+-------------------------------
+- Updated G4VXTRenergyLoss and regular XTR radiators/models for more 
+  accurate angular distribution of XTR.
+
+processes/hadronic
+------------------
+- management (hadr-man-V09-05-00)
+  o Moved isotope production infrastructure from process to model level;
+    now done only for LEP models. Updated G4HadronicProcess accordingly.
+  o G4IsoParticleChange: moved to models/management module.
+- models/binary_cascade (had-binary-V09-04-14)
+  o G4BinaryCascade, G4BinaryLightIonReaction, G4GeneratorPrecompoundInterface:
+    added pointer to G4VPreCompoundModel in the constructor, for proper
+    instantiation of G4PreCompoundModel.
+  o Fixed minor leak in G4GeneratorPrecompoundInterface.
+- models/cascade (hadr-casc-V09-05-04)
+  o G4CascadeInterface: check for no-interaction in retryInelasticProton(),
+    both in return value and in debugging report.
+  o G4NucleiModel: in getPotential() added test for ip==9 (photon) to return
+    zero potential. Return empty output (stop propagating) in case of particle
+    collision.
+  o G4ElementaryParticleCollider: added angular distributions for elastic and 
+    inelastic 2-body final states of gamma p and gamma n reactions.
+  o G4ElementaryParticle: expanded diagnostics in getMomModuleFor2toMany(),
+    in generateSCMfinalState(), defer "particles.resize()" action until after
+    final-state properties have been validated. In case no final state can be
+    generated, this ensures that the failure propagates back up the calling
+    chain, instead of simply looping forever.
+  o G4PreCompoundDeexcitation: avoid deleting pre-compound model and
+    excitation handler to avoid double deletion.
+- models/chiral_inv_phase_space (hadr-chips-V09-05-00)
+  o New tuning for stopping in CHIPS. Added rescattering to allow for wider
+    energy resolution.
+  o Fixed charge non-conservation problem in G4QFreeScattering.
+- models/coherent_elastic (hadr-cohe-V09-04-22)
+  o Fixed bug in G4AntiNuclElastic; introduced check of |cosTheta|<1.
+- models/de_excitation (hadr-deex-V09-05-02)
+  o G4ExcitationHandler: propagate G4VPhotonEvaporation pointer to
+    G4Evaporation and do not delete it; this allows usin the same gamma 
+    evaporation object inside G4Evaporation class and G4ExcitationHandler;
+    added access methods to de-excitation components.
+  o G4VEvaporationFactory, G4Evaporation, G4EvaporationGEMFactory,
+    G4EvaporationFactory, G4EvaporationDefaultGEMFactory: proper deletion
+    of decay channels after run. Simplified constructors.
+  o G4Evaporation: cleanup logic of initialisation and setup options;
+    always define photon evaporation channel as first; removed obsolete
+    constructor
+- models/inclxx (hadr-inclxx-V09-05-01)
+  o Better (iterative) determination of the remnant recoil at the the end
+    of the cascade. Isospin-dependent back-to-spectator.
+  o Minor bug for negative incident pions: integration over impact-parameter
+    distribution was incomplete.
+  o Cache nuclear-density objects for better performance.
+- models/isotope_production (hadr-isopro-V09-05-00)
+  o Change GetIsotope() interface argument to use G4HadProjectile instead 
+    of G4Track. Classes affected: G4NeutronIsotopeProduction and
+    G4ProtonIsotopeProduction.
+- models/lend (hadr-lend-V09-05-00)
+  o Fixed compilation warnings on Ubuntu; cleanup of header files inclusion.
+- models/low_energy (hadr-lep-V09-05-00)
+  o Moved G4InelasticInteraction class to this module from 'management'. 
+  o In ApplyYourself() method of all G4LEXXXInelastic classes, added call
+    to DoIsotopeCounting(), conditional upon isotope production mode being
+    turned on.
+- models/management (hadr-modman-V09-04-05)
+  o Moved G4InelasticInteraction class to 'low_energy' model.
+  o G4IsoParticleChange: moved from main 'management' module; removed Set
+    and GetProductionPosition() methods, and changed Set and
+    GetParentParticle() argument from G4DynamicParticle to G4ParticleDefinition.
+  o G4VIsotopeProduction: replace G4Track argument in GetIsotope() with 
+    G4HadProjectile.
+  o G4VHighEnergyGenerator: added virtual method PartonStringModelDescription().
+  o G4VIntraNuclearTransportModel, G4VPreCompoundModel: cleanup for objec
+    construction/deletion.
+- models/neutron_hp (hadr-hpn-V09-05-00)
+  o Fixed warning message in G4NeutronHPInelastic.
+- models/photolepton_hadron/muon_nuclear (hadr-munuclear-V09-05-00)
+  o Modified base class for G4VDMuonNuclearModel to be G4HadronicInteraction
+    instead of G4InelasticInteraction.
+- models/pre_equilibrium (hadr-pre-V09-05-00)
+  o G4PreCompoundModel: properly deal with instantiation and deletion of
+    G4ExcitationHandler in constructor and destructor.
+- stopping (hadr-stopping-V09-05-01)
+  o G4FTFCaptureAtRest: modified initialisation of de-excitation; fixed
+    potential cases of double deletion of objects; added registration
+    in G4HadronicProcessStore and added sub-type definition.
+  o G4PiMinusAbsorptionBertini: temporarily use Bertini pre-compound instead
+    of native pre-compound.
+
+processes/optical                                op-V09-05-00
+-----------------
+- G4OpBoundaryProcess: call ProposeVelocity() for particle-change at every
+  invocation of DoIt(); for Fresnel refraction calculate final velocity
+  locally.  Addressing problem report #1275.
+
+run                                              run-V09-05-00
+---
+- Fixed Coverity defects in assignment operator of G4VModularPhysicsList.
+
+track                                            track-V09-05-03
+-----
+- Reverted change in G4Track::CalculateVelocityForOpticalPhoton(), according
+  to fix in G4OpBoundaryProcess, to address problem report #1275.
+- Set 'false' to 'SecondaryWeightByProcess' as default.
+  Addressing problem report #1273.
+- Fixed Coverity defects related to copy constructor and assignment operator.
+
+tracking                                         tracking-V09-05-00
+--------
+- Remove not defined method GetNavigator() and moved SetNavigator() to public
+  in G4SteppingManager.
+
+visualization                                    vis-V09-05-04
+-------------
+- management:
+  o G4VisManager::EndOfEvent: removed unwarranted DrawView().
+    It was causing two copies of the geometry to be drawn.
+  o G4VisManager: implemented Begin/EndDraw(2D).
+    This forces all thus-bracketed Draw messages to have the same
+    transformation. If an attempt to change the transformation is detected,
+    a fatal exception is raised.
+  o G4VSceneHandler: Added Get/SetObjectTransformation.
+  o Marker size bug fix.
+- modeling:
+  o Validating geometry in all worlds.
+  o Use Begin/EndDraw to improve drawing speed. Assumes all trajectories
+    are drawn with the same transformation.
+- OpenGL:
+  o Corrected treatment of colour for transient objects.
+  o Significant rationalisation in G4OpenGLSceneHandler.
+  o Removed #ifdef G4VIS... protection from header files.
+- OpenInventor:
+  o Removed #ifdef G4VIS... protection from header files.
+- Tree (vistree-V09-05-00)
+  o G4VTreeSceneHandler: removed empty implementations of Begin/EndPrimitives(),
+    which allows objects to pick up the default (and correct non-empty default
+    implementations in G4VSceneHandler).
+- XXX:
+  o Removed #ifdef ...XXXSG... protections.
+
+data sets
+---------
+- G4EMLOW-6.24:
+  o Updated high granularity electron elastic cross-section data 
+  o Updated data for Goudsmith-Sounderson model.
+
+examples                                         examples-V09-05-01
+--------
+- Updated reference outputs.
+- advanced/air_shower (air_shower-V09-05-01)
+  o Fixed compilation warnings on gcc-4.6.
+  o Added CMakeLists.txt file.
+- advanced/hadrontherapy (hadrontherapy-V09-05-00)
+- advanced/human_phantom (human_phantom-V09-05-00)
+- advanced/iort_therapy (iort_therapy-V09-05-01)
+- advanced/medical_linac (medical_linac-V09-05-00)
+- advanced/purging_magnet (purtag-V09-05-00)
+- advanced/radioprotection (radioprotection-V09-05-00)
+  o Added CMakeLists.txt file.
+- advanced/xray_fluorescence (XrayFluo-V09-05-01)
+  o Fixed induced memory corruption problem in XrayFluoNistMaterials, only
+    intermittently visible on MacOSX.
+  o Added CMakeLists.txt file.
+- basic/B4 (exampleB4-V09-05-00)
+  o Fixed compiler warning on Windows.
+- extended/analysis/AnaEx01 (AnaEx01-V09-05-01)
+  o Added hbook option to HistoManager.
+    Migrated to new g4tools histogramming system.
+- extended/eventgenerator/particleGun (particleGunExample-V09-05-01)
+  o Migrated to new g4tools histogramming system.
+  o Simplified unit handling in HistoManager and HistoMessenger.
+- extended/hadronic/Hadr01 (exHadr01-V09-05-00)
+  o DetectorMessenger: fixed deletion of objects.
+- extended/medical/electronScattering (electronScattering-V09-05-01)
+- extended/medical/fanoCavity (fano-V09-05-00)
+- extended/medical/fanoCavity2 (fano2-V09-05-00)
+  o Migrated to new g4tools histogramming system.
+- extended/radioactivedecay/rdecay01 (rdecay01-V09-05-05)
+  o Migrated to new g4tools histogramming system.
+  o Simplified unit handling in HistoManager and HistoMessenger.
+  o PhysicsList: use G4PhysicsHelper. Added atomic de-excitation.
+  o RunAction : added protections against division by zero.
+  o fullChain.mac: added example of command /grdm/nuleusLimits.
+    New macro electronicCapture.mac
+- novice/N02 (exampleN02-V09-05-00)
+- novice/N03 (exampleN03-V09-05-00)
+  o Modified SteppingVerbose to correctly treat 'OutOfWorld' case.
+- novice/N06 (exampleN06-V09-05-00)
+  o Set '/tracking/verbose 3' in input macros to also test timing of
+    optical photons.
+
+tests                                            tests-V09-05-01
+-----
+- Updated reference outputs and tools.
+- tests/ctests (ctests-V09-05-02)
+  o Placeholder for tests and examples handling trough CTest.
+- tests/test15 (test15-V09-05-00)
+  o Tst15DetectorConstruction, Tst15DetectorMessenger: added C material.
+  o Tst15PhysicsList: removed "inelastic" name from argument of all process
+    constructors. Moved isotope production calls from process to model.
+    Enabled isotope production for models G4LENeutronInelastic and
+    G4LEProtonInelastic.
+  o Tst15SteppingAction: changed from listing secondaries to printing out
+    isotope information using updated G4IsoParticleChange class.
+- tests/test30 (test30-V09-05-00)
+  o Test30Physics do not delete model and process to avoid double deletion.
+- tests/test33 (test33-V09-05-00)
+  o Fixed uninitialized member variable responsible for failure on Windows.
+- tests/test46 (test46-V09-05-00)
+  o Added option of beam uniform smearing over central crystal.
