@@ -47,9 +47,9 @@ pdefPionMinus(G4PionMinus::PionMinus())
         G4cout << GetProcessName() << " is created "<< G4endl;
     }
     SetProcessSubType(fHadronAtRest);
-    
+   
     cascade = new G4CascadeInterface;
-    //cascade->usePreCompoundDeexcitation();
+    cascade->usePreCompoundDeexcitation();
     
     G4HadronicProcessStore::Instance()->RegisterExtraProcess(this);
 }
