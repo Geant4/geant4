@@ -52,6 +52,11 @@
 #define G4VEmAngularDistribution_h 1
 
 #include "globals.hh"
+#include "Randomize.hh"
+#include "G4ThreeVector.hh"
+#include "G4DynamicParticle.hh"
+
+class G4Material;
 
 class G4VEmAngularDistribution
 {
@@ -61,10 +66,22 @@ public:
 
   virtual ~G4VEmAngularDistribution();
 
-  // method for bremsstrahlung
+  virtual void Initialise();
+
+  // old interface method for bremsstrahlung
   virtual G4double PolarAngle(const G4double initial_energy,
 			      const G4double final_energy,
                               const G4int Z) = 0;
+
+  virtual G4double SampleCosinePolarAngle(const G4DynamicParticle* dp,
+					  G4double out_energy,
+					  G4int Z,
+					  const G4Material* mat = 0);
+
+  inline G4ThreeVector SampleDirection(const G4DynamicParticle* dp,
+				       G4double out_energy,
+				       G4int Z,
+				       const G4Material* mat = 0);
 
   inline const G4String& GetName() const;
 
@@ -76,6 +93,20 @@ private:
 
   G4String fName;
 };
+
+inline G4ThreeVector
+G4VEmAngularDistribution::SampleDirection(const G4DynamicParticle* dp,
+					  G4double out_energy,
+					  G4int Z,
+					  const G4Material* mat)
+{
+  G4double cost = SampleCosinePolarAngle(dp, out_energy, Z, mat);
+  if(cost > 1.0) { cost = 1.0; }
+  else if(cost < -1.0) { cost = -1.0; }
+  G4double sint = sqrt((1. - cost)*(1 + cost));
+  G4double phi  = twopi*G4UniformRand(); 
+  return G4ThreeVector(sint*cos(phi),sint*sin(phi),cost);
+}
 
 inline const G4String& G4VEmAngularDistribution::GetName() const
 {

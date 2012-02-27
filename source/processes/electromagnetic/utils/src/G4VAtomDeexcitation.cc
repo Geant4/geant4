@@ -96,7 +96,19 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
   size_t nRegions = activeRegions.size();
 
   // There is no active regions
-  if(0 == nRegions) { return; }
+  if(0 == nRegions) { 
+
+    // if there is a request for deexcitation then activate 
+    // world volume
+    if(isActive) { 
+      SetDeexcitationActiveRegion("World",isActive,flagAuger,flagPIXE);
+      nRegions = 1;
+
+      // no deexcitation
+    } else { 
+      return; 
+    }
+  }
 
   if(0 < verbose) {
     G4cout << G4endl;

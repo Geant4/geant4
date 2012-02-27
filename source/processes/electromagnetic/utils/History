@@ -17,6 +17,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 February 12: V.Ivant (emutils-V09-05-02)
+- G4VEmAngularDistribution added new method Initialise 
+
+21 February 12: V.Ivant (emutils-V09-05-01)
+- G4VEmAngularDistribution added two new methods SampleCosinePolarAngle
+    and SampleDirection
+
+7 February 12: V.Ivant (emutils-V09-05-00)
+- G4VAtomDeexcitation - add activation of deexcitation for the world
+    if deexcitation is activated but G4Regions for deexcitation 
+    are not defined
+
 10 November 11: V.Ivant (emutils-V09-04-51)
 - G4LossTableManager, G4EmModelManager - fixed defects reported by 
     Coverity - private assignment operator and copy constructor added
