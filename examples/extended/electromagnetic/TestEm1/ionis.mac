@@ -29,7 +29,6 @@
 /gun/energy 200 MeV
 #
 /testem/histo/setFileName ionis
-/testem/histo/setFileType hbook
 /testem/histo/setHisto 1 100 0   50 cm		#track length of primary
 /testem/histo/setHisto 2 100 0  100 none	#nb steps of primary
 /testem/histo/setHisto 3 200 0   50 mm		#step size of primary

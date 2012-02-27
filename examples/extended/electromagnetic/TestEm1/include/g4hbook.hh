@@ -23,53 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: EventAction.hh,v 1.3 2006-06-29 16:36:10 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// 
+// $Id$
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// Author: Ivana Hrivnacova, 15/06/2011  (ivana@ipno.in2p3.fr)
 
-#ifndef EventAction_h
-#define EventAction_h 1
+#ifndef g4hbook_h
+#define g4hbook_h
 
-#include "G4UserEventAction.hh"
-#include "globals.hh"
+#include "g4hbook_defs.hh"
 
-class HistoManager;
-class EventActionMessenger;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class EventAction : public G4UserEventAction
-{
-  public:
-    EventAction(HistoManager*);
-   ~EventAction();
-
-  public:
-    void BeginOfEventAction(const G4Event*);
-    void   EndOfEventAction(const G4Event*);
-    
-    void AddEdep(G4double Edep)    {TotalEnergyDeposit += Edep;};      
-    G4double GetEnergyDeposit()    {return TotalEnergyDeposit;};    
-    void SetDrawFlag(G4String val) {drawFlag = val;};
-    void SetPrintModulo(G4int val) {printModulo = val;};
-            
-    
-  private:
-    G4double                  TotalEnergyDeposit;   
-    G4String                  drawFlag;
-    G4int                     printModulo;
-    
-    HistoManager*          histoManager;                        
-    EventActionMessenger*  eventMessenger;
-};
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+using namespace G4Hbook;
 
 #endif
 
-    
+  

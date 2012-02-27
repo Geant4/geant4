@@ -1,0 +1,41 @@
+# $Id: gammaconversion.mac,v 1.2 2009-09-15 12:51:49 maire Exp $
+#
+# Macro file for "TestEm1.cc"
+#
+#  Photon 100 keV; photoelectric effect
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat Chromium
+/testem/det/setSize 100 m
+#
+/testem/phys/addPhysics local
+#
+/run/initialize
+#
+# no Compton nor conversion
+/process/inactivate compt
+/process/inactivate conv
+#
+/process/em/deexcitation world true true true
+/process/em/fluo false
+/process/em/auger false
+#
+# prevent ionisation and bremsstrahlung production
+/testem/phys/setCuts 10 um
+#
+# no multiple scattering
+/process/inactivate msc
+#
+/testem/gun/setDefault 
+/gun/particle gamma
+/gun/energy 100 keV
+# spread beam spot
+###/testem/gun/rndm 0.8
+#
+###/control/execute vis.mac
+#
+/tracking/verbose 2
+#
+/run/beamOn 1

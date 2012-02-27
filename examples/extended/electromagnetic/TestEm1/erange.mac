@@ -33,7 +33,6 @@
 /run/beamOn 5
 #
 ###/testem/histo/setFileName std.1km
-###/testem/histo/setFileType hbook
 ###/testem/histo/setHisto 1 200 0 2000 um		# csda range
 ###/testem/histo/setHisto 1 250 0 5000 um
 #

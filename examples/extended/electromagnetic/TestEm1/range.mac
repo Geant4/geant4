@@ -32,7 +32,6 @@
 /gun/energy 100 MeV
 #
 /testem/histo/setFileName range
-/testem/histo/setFileType hbook
 /testem/histo/setHisto 1 150 70 85 mm	# csda range
 #	 
 /testem/event/printModulo 4000

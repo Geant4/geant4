@@ -123,7 +123,9 @@ void DetectorConstruction::DefineMaterials()
   new G4Material("Aluminium"  , z=13., a= 26.98*g/mole, density= 2.700*g/cm3);
 
   new G4Material("Silicon"    , z=14., a= 28.09*g/mole, density= 2.330*g/cm3);
-
+  
+  new G4Material("Chromium"   , z=24., a= 51.99*g/mole, density= 7.140*g/cm3);
+  
   new G4Material("Germanium"  , z=32., a= 72.61*g/mole, density= 5.323*g/cm3);
   
   G4Material* BGO = 
@@ -135,7 +137,9 @@ void DetectorConstruction::DefineMaterials()
   new G4Material("Iron"       , z=26., a= 55.85*g/mole, density= 7.870*g/cm3);
 
   new G4Material("Tungsten"   , z=74., a=183.85*g/mole, density= 19.30*g/cm3);
-
+  
+  new G4Material("Gold"       , z=79., a=196.97*g/mole, density= 19.32*g/cm3);
+  
   new G4Material("Lead"       , z=82., a=207.19*g/mole, density= 11.35*g/cm3);
 
   new G4Material("Uranium"    , z=92., a=238.03*g/mole, density= 18.95*g/cm3);

@@ -23,53 +23,46 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: EventAction.hh,v 1.3 2006-06-29 16:36:10 gunter Exp $
+// $Id: StackingAction.cc,v 1.8 2009-03-06 18:04:23 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef EventAction_h
-#define EventAction_h 1
+#include "StackingAction.hh"
+#include "HistoManager.hh"
 
-#include "G4UserEventAction.hh"
-#include "globals.hh"
-
-class HistoManager;
-class EventActionMessenger;
+#include "G4Track.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class EventAction : public G4UserEventAction
+StackingAction::StackingAction(HistoManager* histo)
+:histoManager(histo)
+{ }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+StackingAction::~StackingAction()
+{ }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4ClassificationOfNewTrack
+StackingAction::ClassifyNewTrack(const G4Track* track)
 {
-  public:
-    EventAction(HistoManager*);
-   ~EventAction();
+  //keep primary particle
+  if (track->GetParentID() == 0) return fUrgent;
 
-  public:
-    void BeginOfEventAction(const G4Event*);
-    void   EndOfEventAction(const G4Event*);
-    
-    void AddEdep(G4double Edep)    {TotalEnergyDeposit += Edep;};      
-    G4double GetEnergyDeposit()    {return TotalEnergyDeposit;};    
-    void SetDrawFlag(G4String val) {drawFlag = val;};
-    void SetPrintModulo(G4int val) {printModulo = val;};
-            
-    
-  private:
-    G4double                  TotalEnergyDeposit;   
-    G4String                  drawFlag;
-    G4int                     printModulo;
-    
-    HistoManager*          histoManager;                        
-    EventActionMessenger*  eventMessenger;
-};
+  //
+  //energy spectrum of secondaries
+  //
+  G4double energy = track->GetKineticEnergy();
+  G4double charge = track->GetDefinition()->GetPDGCharge();
+
+  if (charge != 0.) histoManager->FillHisto(5,energy);
+  else              histoManager->FillHisto(6,energy);
+   
+  return fUrgent;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#endif
-
-    

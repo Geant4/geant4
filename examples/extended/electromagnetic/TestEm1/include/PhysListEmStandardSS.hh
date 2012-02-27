@@ -23,53 +23,44 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: EventAction.hh,v 1.3 2006-06-29 16:36:10 gunter Exp $
+// $Id: PhysListEmStandardSS.hh,v 1.1 2006-08-10 08:45:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef EventAction_h
-#define EventAction_h 1
+#ifndef PhysListEmStandardSS_h
+#define PhysListEmStandardSS_h 1
 
-#include "G4UserEventAction.hh"
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
-class HistoManager;
-class EventActionMessenger;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class EventAction : public G4UserEventAction
+class PhysListEmStandardSS : public G4VPhysicsConstructor
 {
-  public:
-    EventAction(HistoManager*);
-   ~EventAction();
+public: 
+  PhysListEmStandardSS(const G4String& name = "standardSS");
+  virtual ~PhysListEmStandardSS();
 
-  public:
-    void BeginOfEventAction(const G4Event*);
-    void   EndOfEventAction(const G4Event*);
-    
-    void AddEdep(G4double Edep)    {TotalEnergyDeposit += Edep;};      
-    G4double GetEnergyDeposit()    {return TotalEnergyDeposit;};    
-    void SetDrawFlag(G4String val) {drawFlag = val;};
-    void SetPrintModulo(G4int val) {printModulo = val;};
-            
-    
-  private:
-    G4double                  TotalEnergyDeposit;   
-    G4String                  drawFlag;
-    G4int                     printModulo;
-    
-    HistoManager*          histoManager;                        
-    EventActionMessenger*  eventMessenger;
+public: 
+  // This method is dummy for physics
+  void ConstructParticle() {};
+ 
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type 
+  void ConstructProcess();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 
-    
+
+
+
+
+
+
+

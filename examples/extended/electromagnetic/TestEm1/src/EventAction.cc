@@ -35,14 +35,15 @@
 #include "EventAction.hh"
 
 #include "EventActionMessenger.hh"
+#include "HistoManager.hh"
 
 #include "G4Event.hh"
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction()
-:drawFlag("none"),printModulo(10000),eventMessenger(0)
+EventAction::EventAction(HistoManager* histo)
+:drawFlag("none"),printModulo(10000),histoManager(histo),eventMessenger(0)
 {
   eventMessenger = new EventActionMessenger(this);
 }
@@ -73,6 +74,8 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
 
 void EventAction::EndOfEventAction(const G4Event*)
 {
+  histoManager->FillHisto(4,TotalEnergyDeposit);
+  
   if (drawFlag != "none") G4cout << " Energy deposit: "
                                  << G4BestUnit(TotalEnergyDeposit,"Energy")
                                  << G4endl;

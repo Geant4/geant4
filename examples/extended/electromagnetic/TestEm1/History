@@ -15,6 +15,29 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+22-02-12 mma (testem1-V09-05-03)   
+- file G4HbookAnalysisManager renamed ExG4HbookAnalysisManager
+     
+18-02-12 mma (testem1-V09-05-02)     
+- HistoManager.hh : add hbook option.
+  New files :  GNUmakefile.tools_hbook and G4HbookAnalysisManager.hh .cc
+       
+17-02-12 mma (testem1-V09-05-01)
+- HistoManager.hh and .cc : migrate to new g4tools histogramming system
+  Do not need aida anymore, nor G4ANALYSIS_USE
+- HistoMessenger.hh and .cc : suppress fileType command
+- Update Readme and all macros accordingly
+       
+05-02-12 mma (testem1-V09-05-00)     
+- new histograms :
+	4	"total energy deposit"
+	5	"energy of charged secondaries at creation"
+	6	"energy of neutral secondaries at creation"
+- add class StackingAction	
+		     
+25-01-12 mma
+- add PhysListEmStandardSS
+     
 08-11-11 mma (testem1-V09-04-05)
 - modify SteppingVerbose for OutOfWorld
      

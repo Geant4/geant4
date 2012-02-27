@@ -23,53 +23,35 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: EventAction.hh,v 1.3 2006-06-29 16:36:10 gunter Exp $
+// $Id: StackingAction.hh,v 1.4 2006-09-25 17:06:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef EventAction_h
-#define EventAction_h 1
+#ifndef StackingAction_h
+#define StackingAction_h 1
 
-#include "G4UserEventAction.hh"
+#include "G4UserStackingAction.hh"
 #include "globals.hh"
 
 class HistoManager;
-class EventActionMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class EventAction : public G4UserEventAction
+class StackingAction : public G4UserStackingAction
 {
   public:
-    EventAction(HistoManager*);
-   ~EventAction();
-
-  public:
-    void BeginOfEventAction(const G4Event*);
-    void   EndOfEventAction(const G4Event*);
-    
-    void AddEdep(G4double Edep)    {TotalEnergyDeposit += Edep;};      
-    G4double GetEnergyDeposit()    {return TotalEnergyDeposit;};    
-    void SetDrawFlag(G4String val) {drawFlag = val;};
-    void SetPrintModulo(G4int val) {printModulo = val;};
-            
+    StackingAction(HistoManager* );
+   ~StackingAction();
+     
+    G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
     
   private:
-    G4double                  TotalEnergyDeposit;   
-    G4String                  drawFlag;
-    G4int                     printModulo;
-    
-    HistoManager*          histoManager;                        
-    EventActionMessenger*  eventMessenger;
+    HistoManager* histoManager;        
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 
-    
