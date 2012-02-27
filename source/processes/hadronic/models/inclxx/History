@@ -16,6 +16,23 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+9 February 2012 - Davide Mancusi (hadr-inclxx-V09-05-04,hadr-inclxx-V09-05-05)
+-----------------------------------------------------------
+- Fix compiler warning about an unused function parameter.
+
+6 February 2012 - Davide Mancusi (hadr-inclxx-V09-05-03)
+-----------------------------------------------------------
+- Bugfix:
+  o Sampling of the impact-parameter distribution was incomplete for
+    nucleon-induced reactions and incoming kinetic energies below ~40 MeV.
+
+2 February 2012 - Davide Mancusi (hadr-inclxx-V09-05-02)
+-----------------------------------------------------------
+- Bugfixes:
+  o Do nothing if the projectile is below the Coulomb barrier.
+  o Always apply numerical solutions (used to lead to some minor violations of
+    energy conservation).
+
 16 January 2012 - Davide Mancusi (hadr-inclxx-V09-05-01)
 -----------------------------------------------------------
 - Better (iterative) determination of the remnant recoil at the the end of the

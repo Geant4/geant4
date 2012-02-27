@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1_rc1
+// INCL++ revision: v5.0.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -284,6 +284,20 @@ namespace G4INCL {
     theEventInfo.At = nucleus->getA();
     theEventInfo.Zt = nucleus->getZ();
 
+    // Do nothing below the Coulomb barrier
+    if(maxImpactParameter<=0.) {
+      // Increment the global counter for the number of transparents
+      theGlobalInfo.nTransparents++;
+
+      // Fill in the event information
+      theEventInfo.transparent = true;
+
+      // Delete the projectile!
+      delete projectile;
+
+      return theEventInfo;
+    }
+
     // Randomly draw an impact parameter
     G4double impactParameter = maxImpactParameter * std::sqrt(Random::shoot());
     // Fill in the event information
@@ -469,7 +483,10 @@ namespace G4INCL {
 
     // Apply the root-finding algorithm
     const G4bool success = RootFinder::solve(&theRecoilFunctor, 1.0);
-    if(!success) {
+    if(success) {
+      std::pair<G4double,G4double> theSolution = RootFinder::getSolution();
+      theRecoilFunctor(theSolution.first); // Apply the solution
+    } else {
       WARN("Couldn't accommodate remnant recoil while satisfying energy conservation, root-finding algorithm failed." << std::endl);
     }
 

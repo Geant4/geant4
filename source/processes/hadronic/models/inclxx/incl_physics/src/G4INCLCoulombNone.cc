@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1_rc1
+// INCL++ revision: v5.0.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -54,7 +54,7 @@ namespace G4INCL {
       ThreeVector positionTransverse = p->getTransversePosition();
       const G4double impactParameter = positionTransverse.mag();
 
-      G4double radius = n->getSurfaceRadius(p);
+      G4double radius = n->getDensity()->getMaximumRadius();
       const G4double radius2 = radius*radius;
       G4double distanceZ2 = radius2 - impactParameter * impactParameter;
       if(distanceZ2 < 0.0) distanceZ2 = 0.0;

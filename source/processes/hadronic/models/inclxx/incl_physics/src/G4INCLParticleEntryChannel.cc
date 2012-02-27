@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1_rc1
+// INCL++ revision: v5.0.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -89,7 +89,10 @@ namespace G4INCL {
 
     G4double v = theNucleus->getPotential()->computePotentialEnergy(theParticle);
     G4bool success = RootFinder::solve(&theIncomingEFunctor, v);
-    if(!success) {
+    if(success) { // Apply the solution
+      std::pair<G4double,G4double> theSolution = RootFinder::getSolution();
+      theIncomingEFunctor(theSolution.first);
+    } else {
       WARN("Couldn't compute the potential for incoming particle, root-finding algorithm failed." << std::endl);
     }
   }

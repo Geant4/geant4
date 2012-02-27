@@ -43,11 +43,13 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_interface
     HEADERS
-    G4INCLXXFactory.hh
-    G4INCLXXInterface.hh
+        G4INCLXXFactory.hh
+        G4INCLXXInterface.hh
+
     SOURCES
-    G4INCLXXFactory.cc
-    G4INCLXXInterface.cc
+        G4INCLXXInterface.cc
+        G4INCLXXFactory.cc
+
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons
@@ -64,14 +66,14 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_interface
         G4procman
         G4track
         G4volumes
+        utils
+        physics
+
     GLOBAL_DEPENDENCIES
         G4geometry
         G4global
         G4materials
         G4particles
         G4track
-    LINK_LIBRARIES
-)
 
-# List any source specific properties here
-
+LINK_LIBRARIES)# List any source specific properties here

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1_rc1
+// INCL++ revision: v5.0.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -55,7 +55,7 @@ namespace G4INCL {
     ThreeVector positionTransverse = p->getTransversePosition();
     const G4double impactParameter = positionTransverse.mag();
 
-    const G4double radius = n->getSurfaceRadius(p);
+    const G4double radius = n->getDensity()->getMaximumRadius();
 
     // No distortion for neutral particles
     G4double newImpactParameter;
@@ -146,7 +146,7 @@ namespace G4INCL {
   G4double CoulombNonRelativistic::maxImpactParameter(Particle const * const p,
       Nucleus const * const n) const {
     const G4double theCoulombFactor = coulombFactor(p, n);
-    const G4double rMax = n->getSurfaceRadius(p);
+    const G4double rMax = n->getDensity()->getMaximumRadius();
     const G4double theMaxImpactParameterSquared = rMax*(rMax-theCoulombFactor);
     return (theMaxImpactParameterSquared>0. ?
         std::sqrt(theMaxImpactParameterSquared) : 0.);

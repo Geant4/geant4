@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1_rc1
+// INCL++ revision: v5.0.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -353,7 +353,10 @@ namespace G4INCL {
 
     // Apply the root-finding algorithm
     const G4bool success = RootFinder::solve(violationEFunctor, 1.0);
-    if(!success) {
+    if(success) { // Apply the solution
+      std::pair<G4double,G4double> theSolution = RootFinder::getSolution();
+      (*violationEFunctor)(theSolution.first);
+    } else {
       WARN("Couldn't enforce energy conservation after an interaction, root-finding algorithm failed." << std::endl);
     }
     delete violationEFunctor;
