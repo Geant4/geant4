@@ -36,60 +36,41 @@
 
 #include "Randomize.hh"
 
-#ifdef G4ANALYSIS_USE
-#include "AIDA/AIDA.h"
-#endif
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction()
-:af(0), tree(0)
 {
-  histo[0] = 0;
+  // Create analysis manager
+  // The choice of analysis technology is done via selection of a namespace
+  //
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   
-#ifdef G4ANALYSIS_USE 
- // Creating the analysis factory
- af = AIDA_createAnalysisFactory();
- 
- if (af) {
-   // Creating the tree factory
-   AIDA::ITreeFactory* tf = af->createTreeFactory();
- 
-   // Creating a tree mapped to an hbook file.
-   G4bool readOnly  = false;
-   G4bool createNew = true;
-   G4String options =  "";
-   //tree = tf->create("testem4.hbook","hbook",readOnly,createNew, options);
-   tree = tf->create("testem4.root","root",readOnly,createNew, options);
-   //tree = tf->create("testem4.XML" ,"XML" ,readOnly,createNew, options);
-   delete tf;
-   
-   if (tree) {
-     // Creating a histogram factory
-     AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);
-
-     // Creating the histogram
-     histo[0]=hf->createHistogram1D
-                         ("1","total energy deposit in C6F6(MeV)",100,0.,10.);
-
-     delete hf;
-     G4cout << "\n----> Histogram tree is opened" << G4endl;
-   }
- }
-#endif  
+  // Open an output file
+  //
+  G4String fileName = "testem4";
+  analysisManager->OpenFile(fileName);    
+  analysisManager->SetVerboseLevel(1);
+  G4String extension = analysisManager->GetFileType();
+  fileName = fileName + "." + extension;
+    
+  // Creating histograms
+  //
+  analysisManager->SetFirstHistoId(1);  
+  analysisManager->CreateH1("1","energy (MeV) deposited in C6F6",100,0.,10.);
+  
+  G4cout << "\n----> Histogram file is opened in " << fileName << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::~RunAction()
 {
-#ifdef G4ANALYSIS_USE
-  tree->commit();       // Writing the histograms to the file
-  tree->close();        // and closing the tree (and the file)
-    
-  delete tree;
-  delete af;
-#endif
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  
+  analysisManager->Write();
+  analysisManager->CloseFile();
+
+  delete G4AnalysisManager::Instance();    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

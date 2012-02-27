@@ -12,9 +12,10 @@ ifndef G4INSTALL
 endif
 
 .PHONY: all
-all: lib bin
+all: hbook lib bin
 
-#### G4ANALYSIS_USE := true
+#### G4_USE_HBOOK := true
+include GNUmakefile.tools_hbook
 
 include $(G4INSTALL)/config/architecture.gmk
 

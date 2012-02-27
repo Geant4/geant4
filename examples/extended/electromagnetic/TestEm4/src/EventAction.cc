@@ -37,10 +37,6 @@
 #include "G4Event.hh"
 #include "G4UnitsTable.hh"
 
-#ifdef G4ANALYSIS_USE
-  #include "AIDA/IHistogram1D.h"
-#endif
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::EventAction(RunAction* run)
@@ -77,10 +73,9 @@ void EventAction::EndOfEventAction( const G4Event*)
   if (drawFlag != "none") 
     G4cout << " Energy deposit: " 
            << G4BestUnit(TotalEnergyDeposit,"Energy") << G4endl;
-	   
-#ifdef G4ANALYSIS_USE
-  Run->GetHisto(0)->fill(TotalEnergyDeposit/MeV);
-#endif
+
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->FillH1(1, TotalEnergyDeposit/MeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

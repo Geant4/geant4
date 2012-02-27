@@ -23,40 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.7 2006-06-29 16:53:43 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// $Id$
 
-#ifndef RunAction_h
-#define RunAction_h 1
+// Author: Ivana Hrivnacova, 15/06/2011  (ivana@ipno.in2p3.fr)
 
-#include "G4UserRunAction.hh"
-#include "globals.hh"
+#ifndef g4hbook_defs_h
+#define g4hbook_defs_h
 
-#include "g4root.hh"
-////#include "g4xml.hh"
-////#include "g4hbook.hh"
+#include <tools/hbook/h1>
+#include <tools/hbook/h2>
+#include <tools/hbook/wntuple>
+#include "ExG4HbookAnalysisManager.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+namespace G4Hbook {
 
-class G4Run;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class RunAction : public G4UserRunAction
-{
-  public:
-    RunAction();
-   ~RunAction();
-
-  public:
-    void BeginOfRunAction(const G4Run*);
-    void   EndOfRunAction(const G4Run*);
-};
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+  typedef tools::hbook::h1  G4AnaH1;
+  typedef tools::hbook::h2  G4AnaH2;    
+  typedef tools::hbook::wntuple  G4Ntuple; 
+  typedef ExG4HbookAnalysisManager G4AnalysisManager; 
+} 
 
 #endif
 
+  
