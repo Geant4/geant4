@@ -72,7 +72,7 @@ class ExG4HbookAnalysisManager : public G4VAnalysisManager
     
     // static methods
     static ExG4HbookAnalysisManager* Instance();
-   
+  
     // Methods to manipulate files
     virtual G4bool OpenFile(const G4String& fileName);
     virtual G4bool Write();
@@ -103,12 +103,37 @@ class ExG4HbookAnalysisManager : public G4VAnalysisManager
     // Access methods
     virtual tools::hbook::h1*  GetH1(G4int id, G4bool warn = true) const;
     virtual tools::hbook::h2*  GetH2(G4int id, G4bool warn = true) const;
+    virtual tools::hbook::wntuple* GetNtuple() const;
     //tools::hbook::h1*  GetH1(const G4String& name, G4bool warn = true) const;
+    
+    // HBOOK does not allow IDs the same IDs for H1 and H2,
+    // and also IDs starting from 0; thats why there is defined an offset
+    // with respect to the G4AnalysisManager generic Ids.
+    // The default values of these offsets can be changed by the user.
+    //
+    // Set the offset of HBOOK ID for H1
+    // ( default value = firstHistoID if firstHistoID > 0; otherwise = 1)
+    G4bool SetH1HbookIdOffset(G4int offset);
+    //
+    // Set the offset of HBOOK ID for H2
+    // ( default value = firstHistoID + 100 if firstHistoID > 0; otherwise = 101 )
+    G4bool SetH2HbookIdOffset(G4int offset);
+    //
+    // Set the HBOOK ID for the ntuple 
+    // (default value = 1 )
+    G4bool SetNtupleHbookId(G4int ntupleId);
+    
+    G4int  GetH1HbookIdOffset() const;
+    G4int  GetH2HbookIdOffset() const;
+    G4int  GetNtupleHbookId() const;
         
   private:
     // static data members
     //
     static ExG4HbookAnalysisManager* fgInstance;
+    static const G4int fgkDefaultH2HbookIdOffset;
+    static const G4int fgkDefaultNtupleHbookId;
+    static const G4String fgkDefaultNtupleDirectoryName;
     
     // methods
     //
@@ -118,21 +143,39 @@ class ExG4HbookAnalysisManager : public G4VAnalysisManager
  
     // data members
     //
+    G4int fH1HbookIdOffset;
+    G4int fH2HbookIdOffset;
+    G4int fNtupleHbookId;
+
     tools::hbook::wfile*  fFile;
     
     std::vector<tools::hbook::h1*>         fH1Vector;            
     std::map<G4String, tools::hbook::h1*>  fH1MapByName;            
 
-     std::vector<tools::hbook::h2*>        fH2Vector;            
+    std::vector<tools::hbook::h2*>         fH2Vector;            
     std::map<G4String, tools::hbook::h2*>  fH2MapByName;            
 
-   G4String  fNtupleName;
+    G4String  fNtupleName;
     G4String  fNtupleTitle;
     tools::hbook::wntuple*  fNtuple; 
     std::map<G4int, tools::hbook::wntuple::column<int>* >    fNtupleIColumnMap;           
     std::map<G4int, tools::hbook::wntuple::column<float>* >  fNtupleFColumnMap;           
     std::map<G4int, tools::hbook::wntuple::column<double>* > fNtupleDColumnMap;           
 };
+
+// inline functions
+
+inline G4int ExG4HbookAnalysisManager::GetH1HbookIdOffset() const {
+  return fH1HbookIdOffset;
+}  
+
+inline G4int ExG4HbookAnalysisManager::GetH2HbookIdOffset() const {
+  return fH2HbookIdOffset;
+}  
+
+inline G4int ExG4HbookAnalysisManager::GetNtupleHbookId() const {
+  return fNtupleHbookId;
+}  
 
 #endif 
 

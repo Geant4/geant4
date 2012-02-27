@@ -1,0 +1,32 @@
+$Id$
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    extended/commmon/analysis History file
+                    --------------------------------------
+
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+23/02/2012 I. Hrivnacova (excommon-analysis-V09-05-01)
+- Added functions to customize the HBOOK IDs by user:
+     G4bool SetH1HbookIdOffset(G4int offset);
+     G4bool SetH2HbookIdOffset(G4int offset);
+     G4bool SetNtupleHbookId(G4int ntupleId);
+  and appropriate data members and their getters
+- Added setting locks introduced in the base class
+- Fixed handling of directories for both histograms and ntuple
+
+14/02/2012 I. Hrivnacova (excommon-analysis-V09-05-00)
+- Adding defs include files for Hbook manager
+- Adding GetNtuple() function to specific managers
+- Increased granularity of verbose levels (now 3 levels are available)
+- Making creating directories optional
