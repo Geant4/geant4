@@ -13,6 +13,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      
+14-02-12 mma (particleGunExample-V09-05-02)
+- HistoManager : new handle namespace and fileName[2]
+                 no subdirectory in histos file
+- HistoManager : add protections for histo file management
+      
 16-01-12 mma (particleGunExample-V09-05-01) 
 - HistoManager : histId and histPt
 - SetHisto() : simplification of Unit handling (HistoManager and HistoMessenger)
