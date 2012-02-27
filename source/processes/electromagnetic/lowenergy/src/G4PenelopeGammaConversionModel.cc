@@ -537,7 +537,7 @@ void G4PenelopeGammaConversionModel::InitializeScreeningFunctions(const G4Materi
       for (G4int i=0;i<nElements;i++)
 	{
 	  G4double Zelement = (*elementVector)[i]->GetZ();
-	  G4double Aelement = (*elementVector)[i]->GetA();
+	  G4double Aelement = (*elementVector)[i]->GetAtomicMassAmu();
 	  atot += Aelement*fractionVector[i];
 	  zeff += Zelement*Aelement*fractionVector[i]; //average with the number of nuclei
 	}

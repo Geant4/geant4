@@ -47,7 +47,7 @@
 #include "G4VEmModel.hh"
 #include "G4DataVector.hh"
 #include "G4ParticleChangeForLoss.hh"
-#include "G4AtomicDeexcitation.hh"
+#include "G4VAtomDeexcitation.hh"
 
 class G4PhysicsFreeVector;
 class G4PhysicsLogVector;
@@ -105,8 +105,6 @@ public:
   void SetVerbosityLevel(G4int lev){verboseLevel = lev;};
   G4int GetVerbosityLevel(){return verboseLevel;};
 
-  void ActivateAuger(G4bool);
-
   G4double GetDensityCorrection(const G4Material*,G4double energy);
 
 protected:
@@ -145,8 +143,8 @@ private:
   G4int verboseLevel;
 
   G4bool isInitialised;
- 
-  G4AtomicDeexcitation deexcitationManager;
+  G4VAtomDeexcitation* fAtomDeexcitation;
+
 
   G4double kineticEnergy1;
   G4double cosThetaPrimary;

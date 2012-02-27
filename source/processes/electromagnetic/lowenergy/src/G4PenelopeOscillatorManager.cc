@@ -443,7 +443,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
     {
       //G4int iZ = (G4int) (*elementVector)[i]->GetZ();
       G4double fraction = fractionVector[i];
-      G4double atomicWeigth = (*elementVector)[i]->GetA()/(g/mole);
+      G4double atomicWeigth = (*elementVector)[i]->GetAtomicMassAmu();
       StechiometricFactors->push_back(fraction/atomicWeigth);
     }      
   //Find max
@@ -488,7 +488,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
     {
       G4int iZ = (G4int) (*elementVector)[i]->GetZ();
       totalZ += iZ * (*StechiometricFactors)[i];
-      totalMolecularWeight += (*elementVector)[i]->GetA() * (*StechiometricFactors)[i];
+      totalMolecularWeight += (*elementVector)[i]->GetAtomicMassAmu() * (*StechiometricFactors)[i];
       meanExcitationEnergy += iZ*std::log(meanAtomExcitationEnergy[iZ-1])*(*StechiometricFactors)[i];
       /*
       G4cout << iZ << " " << (*StechiometricFactors)[i] << " " << totalZ << " " << 

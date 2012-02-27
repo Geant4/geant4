@@ -17,6 +17,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20.02.2012  L. Pandola tag emlowen-V09-05-04
+	    Make a consistent use of G4Element::GetA() and 
+            G4Element::GetAtomicMassAmu() in the Penelope models
+
+09.02.2012  L. Pandola  tag emlowen-V09-05-03
+	    Get rid of the compiler warning (gcc-4.6) which caused 
+            the rejection of tag emlowen-V09-05-02
+
+27.01.2012  L. Pandola  tag emlowen-V09-05-02
+	    Remove in G4PenelopeIonisationModel the dependency on the 
+	    obsolete G4AtomicDeexcitation (gets rid of warning on screen)
+
 24.01.2012  L. Pandola  tag emlowen-V09-05-01
 	    Fix all remaining defects reported by the Coverity 
 	    analysis
