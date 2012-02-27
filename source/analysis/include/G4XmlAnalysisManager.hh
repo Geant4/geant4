@@ -80,6 +80,8 @@ class G4XmlAnalysisManager : public G4VAnalysisManager
     // Access methods
     virtual tools::histo::h1d* GetH1(G4int id, G4bool warn = true) const;
     virtual tools::histo::h2d* GetH2(G4int id, G4bool warn = true) const;
+    virtual tools::waxml::ntuple* GetNtuple() const;
+
     //tools::histo::h1d*  GetH1D(const G4String& name, G4bool warn = true) const;
         // later
         

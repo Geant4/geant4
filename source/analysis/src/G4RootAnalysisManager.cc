@@ -98,6 +98,72 @@ G4RootAnalysisManager::~G4RootAnalysisManager()
 //
 
 //_____________________________________________________________________________
+G4bool G4RootAnalysisManager::CreateHistoDirectory()
+{
+  if ( fHistoDirectoryName == "" ) {
+    // Do not create a new directory if its name is not set
+    fHistoDirectory = &(fFile->dir());
+    return true;
+  }  
+  
+#ifdef G4VERBOSE
+  if ( fpVerboseL3 ) 
+    fpVerboseL3->Message("create", "directory for histograms", fHistoDirectoryName);
+#endif
+  
+  fHistoDirectory = fFile->dir().mkdir(fHistoDirectoryName);
+  if ( ! fHistoDirectory ) {
+    G4ExceptionDescription description;
+    description << "      " 
+                << "cannot create directory " << fHistoDirectoryName;
+    G4Exception("G4RootAnalysisManager::CreateHistoDirectory()",
+              "Analysis_W002", JustWarning, description);
+    return false;       
+  }       
+#ifdef G4VERBOSE
+  else {
+    if ( fpVerboseL1 ) 
+      fpVerboseL1->Message("create", "directory for histograms", fHistoDirectoryName);
+  }    
+#endif
+  return true;
+}
+
+//_____________________________________________________________________________
+G4bool G4RootAnalysisManager::CreateNtupleDirectory()
+{
+  if ( fNtupleDirectoryName == "" ) {
+    // Do not create a new directory if its name is not set
+    fNtupleDirectory = &(fFile->dir());
+    return true;
+  }  
+  
+#ifdef G4VERBOSE
+  if ( fpVerboseL3 ) 
+    fpVerboseL3
+      ->Message("create", "directory for ntuples", fNtupleDirectoryName);
+#endif
+
+  fNtupleDirectory = fFile->dir().mkdir(fNtupleDirectoryName);
+  if ( ! fNtupleDirectory ) {
+    G4ExceptionDescription description;
+    description << "      " 
+                << "cannot create directory " << fNtupleDirectoryName;
+    G4Exception("G4RootAnalysisManager::CreateNtupleDirectory()",
+                "Analysis_W002", JustWarning, description);
+    return false;       
+  }       
+#ifdef G4VERBOSE
+  else {
+    if ( fpVerboseL1 ) 
+      fpVerboseL1
+        ->Message("create", "directory for ntuples", fNtupleDirectoryName);
+  }    
+#endif
+  return true;
+}
+
+//_____________________________________________________________________________
 tools::wroot::ntuple::column<int>*    
 G4RootAnalysisManager::GetNtupleIColumn(G4int id) const
 {
@@ -158,14 +224,24 @@ G4bool G4RootAnalysisManager::OpenFile(const G4String& fileName)
 {
   // Add file extension .root if no extension is given
   G4String name(fileName);
-  if ( name.find(".") == std::string::npos ) name.append(".root");
+  if ( name.find(".") == std::string::npos ) { 
+    name.append(".");
+    name.append(GetFileType());
+  }  
   
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("open", "analysis file", name);
+  if ( fpVerboseL3 ) 
+    fpVerboseL3->Message("open", "analysis file", name);
 #endif
   
   fFile = new tools::wroot::file(std::cout, name);
+  if ( ! fFile->is_open() ) {
+    G4ExceptionDescription description;
+    description << "      " << "Cannot open file " << fileName;
+    G4Exception("G4RootAnalysisManager::OpenFile()",
+                "Analysis_W001", JustWarning, description);
+    return false;
+  }
 
 #ifdef G4VERBOSE
   if ( fpVerboseL1 ) 
@@ -182,8 +258,8 @@ G4bool G4RootAnalysisManager::Write()
   std::map<G4String, tools::histo::h1d*>::iterator it;
   for ( it = fH1MapByName.begin(); it != fH1MapByName.end(); it++ ) {
 #ifdef G4VERBOSE
-    if ( fpVerboseL2 ) 
-      fpVerboseL2->Message("write", "h1d", it->first);
+    if ( fpVerboseL3 ) 
+      fpVerboseL3->Message("write", "h1d", it->first);
 #endif
     G4bool result
       = to(*fHistoDirectory,*(it->second),it->first);
@@ -200,8 +276,8 @@ G4bool G4RootAnalysisManager::Write()
   std::map<G4String, tools::histo::h2d*>::iterator it2;
   for ( it2 = fH2MapByName.begin(); it2 != fH2MapByName.end(); it2++ ) {
 #ifdef G4VERBOSE
-    if ( fpVerboseL2 ) 
-      fpVerboseL2->Message("write", "h2d", it2->first);
+    if ( fpVerboseL3 ) 
+      fpVerboseL3->Message("write", "h2d", it2->first);
 #endif
     G4bool result
       = to(*fHistoDirectory,*(it2->second),it2->first);
@@ -215,8 +291,8 @@ G4bool G4RootAnalysisManager::Write()
   }
 
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("write", "file", "");
+  if ( fpVerboseL3 ) 
+    fpVerboseL3->Message("write", "file", "");
 #endif
 
   unsigned int n;
@@ -234,8 +310,8 @@ G4bool G4RootAnalysisManager::Write()
 G4bool G4RootAnalysisManager::CloseFile()
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("close", "file", "");
+  if ( fpVerboseL3 ) 
+    fpVerboseL3->Message("close", "file", "");
 #endif
 
   fFile->close();  
@@ -254,36 +330,20 @@ G4int G4RootAnalysisManager::CreateH1(const G4String& name,  const G4String& tit
 {
 
   if ( ! fHistoDirectory ) {
-#ifdef G4VERBOSE
-    if ( fpVerboseL2 ) 
-      fpVerboseL2->Message("create", "directory for histograms", fHistoDirectoryName);
-#endif
-  
-    fHistoDirectory = fFile->dir().mkdir(fHistoDirectoryName);
-    if ( ! fHistoDirectory ) {
-      G4ExceptionDescription description;
-      description << "      " 
-                  << "cannot create directory " << fHistoDirectoryName;
-      G4Exception("G4RootAnalysisManager::CreateH1()",
-                "Analysis_W002", JustWarning, description);
-      return -1;       
-    }       
-#ifdef G4VERBOSE
-    else {
-      if ( fpVerboseL1 ) 
-        fpVerboseL1->Message("create", "directory for histograms", fHistoDirectoryName);
-    }    
-#endif
- }
+    if ( ! CreateHistoDirectory() ) return -1;
+  }
 
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("create", "H1", name);
+  if ( fpVerboseL3 ) 
+    fpVerboseL3->Message("create", "H1", name);
 #endif
   G4int index = fH1Vector.size();
   tools::histo::h1d* h1 = new tools::histo::h1d(title, nbins, xmin, xmax);
   fH1Vector.push_back(h1);
   fH1MapByName[name] = h1;
+
+  fLockFirstHistoId = true;
+  fLockHistoDirectoryName = true;
 #ifdef G4VERBOSE
   if ( fpVerboseL1 ) 
     fpVerboseL1->Message("create", "H1", name);
@@ -299,36 +359,21 @@ G4int G4RootAnalysisManager::CreateH2(const G4String& name,  const G4String& tit
 {
 
   if ( ! fHistoDirectory ) {
-#ifdef G4VERBOSE
-    if ( fpVerboseL2 ) 
-      fpVerboseL2->Message("create", "directory for histograms", fHistoDirectoryName);
-#endif
-    fHistoDirectory = fFile->dir().mkdir(fHistoDirectoryName);
-    if ( ! fHistoDirectory ) {
-      G4ExceptionDescription description;
-      description << "      " 
-                  << "cannot create directory " << fHistoDirectoryName;
-      G4Exception("G4RootAnalysisManager::CreateH2()",
-                "Analysis_W002", JustWarning, description);
-      return -1;       
-    }       
-#ifdef G4VERBOSE
-    else {
-      if ( fpVerboseL1 ) 
-        fpVerboseL1->Message("create", "directory for histograms", fHistoDirectoryName);
-    }    
-#endif
+    if ( ! CreateHistoDirectory() ) return -1;
   }
 
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("create", "H2", name);
+  if ( fpVerboseL3 ) 
+    fpVerboseL3->Message("create", "H2", name);
 #endif
   G4int index = fH2Vector.size();
   tools::histo::h2d* h2 
     = new tools::histo::h2d(title, nxbins, xmin, xmax, nybins, ymin, ymax);
   fH2Vector.push_back(h2);
   fH2MapByName[name] = h2;
+
+  fLockFirstHistoId = true;
+  fLockHistoDirectoryName = true;
 #ifdef G4VERBOSE
   if ( fpVerboseL1 ) 
     fpVerboseL1->Message("create", "H2", name);
@@ -351,37 +396,19 @@ void G4RootAnalysisManager::CreateNtuple(const G4String& name,
   }
 
   if ( ! fNtupleDirectory ) {
-#ifdef G4VERBOSE
-    if ( fpVerboseL2 ) 
-      fpVerboseL2
-        ->Message("create", "directory for ntuples", fNtupleDirectoryName);
-#endif
-    fNtupleDirectory = fFile->dir().mkdir(fNtupleDirectoryName);
-    if ( ! fNtupleDirectory ) {
-      G4ExceptionDescription description;
-      description << "      " 
-                  << "cannot create directory " << fNtupleDirectoryName;
-      G4Exception("G4RootAnalysisManager::CreateNtuple()",
-                  "Analysis_W002", JustWarning, description);
-      return;       
-    }       
-#ifdef G4VERBOSE
-    else {
-      if ( fpVerboseL1 ) 
-        fpVerboseL1
-          ->Message("create", "directory for ntuples", fNtupleDirectoryName);
-    }    
-#endif
+    if ( ! CreateNtupleDirectory() ) return;
   }
 
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("create", "ntuple", name);
+  if ( fpVerboseL3 ) 
+    fpVerboseL3->Message("create", "ntuple", name);
 #endif
 
   fNtuple = new tools::wroot::ntuple(*fNtupleDirectory, name, title);
   fNtupleName = name;
   fNtupleTitle = title;
+
+  fLockNtupleDirectoryName = true;
 
 #ifdef G4VERBOSE
   if ( fpVerboseL1 ) 
@@ -393,40 +420,42 @@ void G4RootAnalysisManager::CreateNtuple(const G4String& name,
 G4int G4RootAnalysisManager::CreateNtupleIColumn(const G4String& name)
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("create", "ntuple I column", name);
+  if ( fpVerboseL3 ) 
+    fpVerboseL3->Message("create", "ntuple I column", name);
 #endif
 
   G4int index = fNtuple->columns().size();
   tools::wroot::ntuple::column<int>* column = fNtuple->create_column<int>(name);  
   fNtupleIColumnMap[index] = column;
+  fLockFirstNtupleColumnId = true;
 
 #ifdef G4VERBOSE
   if ( fpVerboseL1 ) 
     fpVerboseL1->Message("create", "ntuple I column", name);
 #endif
 
-  return index + fFirstNtupleId;       
+  return index + fFirstNtupleColumnId;       
 }                                         
 
 //_____________________________________________________________________________
 G4int G4RootAnalysisManager::CreateNtupleFColumn(const G4String& name)
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("create", "ntuple F column", name);
+  if ( fpVerboseL3 ) 
+    fpVerboseL3->Message("create", "ntuple F column", name);
 #endif
 
   G4int index = fNtuple->columns().size();
   tools::wroot::ntuple::column<float>* column = fNtuple->create_column<float>(name);  
   fNtupleFColumnMap[index] = column;
+  fLockFirstNtupleColumnId = true;
 
 #ifdef G4VERBOSE
   if ( fpVerboseL1 ) 
     fpVerboseL1->Message("create", "ntuple F column", name);
 #endif
 
-  return index + fFirstNtupleId;       
+  return index + fFirstNtupleColumnId;       
 }                                         
 
 
@@ -434,20 +463,21 @@ G4int G4RootAnalysisManager::CreateNtupleFColumn(const G4String& name)
 G4int G4RootAnalysisManager::CreateNtupleDColumn(const G4String& name)   
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("create", "ntuple D column", name);
+  if ( fpVerboseL3 ) 
+    fpVerboseL3->Message("create", "ntuple D column", name);
 #endif
 
   G4int index = fNtuple->columns().size();
   tools::wroot::ntuple::column<double>* column = fNtuple->create_column<double>(name);  
   fNtupleDColumnMap[index] = column;
+  fLockFirstNtupleColumnId = true;
 
 #ifdef G4VERBOSE
   if ( fpVerboseL1 ) 
     fpVerboseL1->Message("create", "ntuple D column", name);
 #endif
 
-  return index + fFirstNtupleId;       
+  return index + fFirstNtupleColumnId;       
 }                                         
 
 //_____________________________________________________________________________
@@ -459,14 +489,6 @@ void G4RootAnalysisManager::FinishNtuple()
 //_____________________________________________________________________________
 G4bool G4RootAnalysisManager::FillH1(G4int id, G4double value, G4double weight)
 {
-#ifdef G4VERBOSE
-  if ( fpVerboseL2 ) {
-    G4ExceptionDescription description;
-    description << " id " << id << " value " << value;
-    fpVerboseL2->Message("fill", "H1", description);
-  }  
-#endif
-
   tools::histo::h1d* h1d = GetH1(id);
   if ( ! h1d ) {
     G4ExceptionDescription description;
@@ -478,10 +500,10 @@ G4bool G4RootAnalysisManager::FillH1(G4int id, G4double value, G4double weight)
 
   h1d->fill(value, weight);
 #ifdef G4VERBOSE
-  if ( fpVerboseL1 ) {
+  if ( fpVerboseL3 ) {
     G4ExceptionDescription description;
     description << " id " << id << " value " << value;
-    fpVerboseL1->Message("fill", "H1", description);
+    fpVerboseL3->Message("fill", "H1", description);
   }  
 #endif
   return true;
@@ -493,11 +515,11 @@ G4bool G4RootAnalysisManager::FillH2(G4int id,
                                      G4double weight)
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) {
+  if ( fpVerboseL3 ) {
     G4ExceptionDescription description;
     description << " id " << id 
                 << " xvalue " << xvalue << " yvalue " << yvalue;
-    fpVerboseL2->Message("fill", "H2", description);
+    fpVerboseL3->Message("fill", "H2", description);
   }  
 #endif
 
@@ -512,11 +534,11 @@ G4bool G4RootAnalysisManager::FillH2(G4int id,
 
   h2d->fill(xvalue, yvalue, weight);
 #ifdef G4VERBOSE
-  if ( fpVerboseL1 ) {
+  if ( fpVerboseL2 ) {
     G4ExceptionDescription description;
     description << " id " << id 
                 << " xvalue " << xvalue << " yvalue " << yvalue;
-    fpVerboseL1->Message("fill", "H2", description);
+    fpVerboseL2->Message("fill", "H2", description);
   }  
 #endif
   return true;
@@ -526,10 +548,10 @@ G4bool G4RootAnalysisManager::FillH2(G4int id,
 G4bool G4RootAnalysisManager::FillNtupleIColumn(G4int id, G4int value)
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) {
+  if ( fpVerboseL3 ) {
     G4ExceptionDescription description;
     description << " id " << id << " value " << value;
-    fpVerboseL2->Message("fill", "ntuple I column", description);
+    fpVerboseL3->Message("fill", "ntuple I column", description);
   }  
 #endif
 
@@ -544,10 +566,10 @@ G4bool G4RootAnalysisManager::FillNtupleIColumn(G4int id, G4int value)
   
   column->fill(value);
 #ifdef G4VERBOSE
-  if ( fpVerboseL1 ) {
+  if ( fpVerboseL2 ) {
     G4ExceptionDescription description;
     description << " id " << id << " value " << value;
-    fpVerboseL1->Message("fill", "ntuple I column", description);
+    fpVerboseL2->Message("fill", "ntuple I column", description);
   }  
 #endif
   return true;       
@@ -556,10 +578,10 @@ G4bool G4RootAnalysisManager::FillNtupleIColumn(G4int id, G4int value)
 G4bool G4RootAnalysisManager::FillNtupleFColumn(G4int id, G4float value)
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) {
+  if ( fpVerboseL3 ) {
     G4ExceptionDescription description;
     description << " id " << id << " value " << value;
-    fpVerboseL2->Message("fill", "ntuple F column", description);
+    fpVerboseL3->Message("fill", "ntuple F column", description);
   }  
 #endif
 
@@ -574,10 +596,10 @@ G4bool G4RootAnalysisManager::FillNtupleFColumn(G4int id, G4float value)
   
   column->fill(value);
 #ifdef G4VERBOSE
-  if ( fpVerboseL1 ) {
+  if ( fpVerboseL2 ) {
     G4ExceptionDescription description;
     description << " id " << id << " value " << value;
-    fpVerboseL1->Message("fill", "ntuple F column", description);
+    fpVerboseL2->Message("fill", "ntuple F column", description);
   }  
 #endif
   return true;       
@@ -586,10 +608,10 @@ G4bool G4RootAnalysisManager::FillNtupleFColumn(G4int id, G4float value)
 G4bool G4RootAnalysisManager::FillNtupleDColumn(G4int id, G4double value)
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) {
+  if ( fpVerboseL3 ) {
     G4ExceptionDescription description;
     description << " id " << id << " value " << value;
-    fpVerboseL2->Message("fill", "ntuple D column", description);
+    fpVerboseL3->Message("fill", "ntuple D column", description);
   }  
 #endif
 
@@ -604,10 +626,10 @@ G4bool G4RootAnalysisManager::FillNtupleDColumn(G4int id, G4double value)
   
   column->fill(value);
 #ifdef G4VERBOSE
-  if ( fpVerboseL1 ) {
+  if ( fpVerboseL2 ) {
     G4ExceptionDescription description;
     description << " id " << id << " value " << value;
-    fpVerboseL1->Message("fill", "ntuple D column", description);
+    fpVerboseL2->Message("fill", "ntuple D column", description);
   }  
 #endif
   return true;       
@@ -617,8 +639,8 @@ G4bool G4RootAnalysisManager::FillNtupleDColumn(G4int id, G4double value)
 G4bool G4RootAnalysisManager::AddNtupleRow()
 { 
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 )
-    fpVerboseL2->Message("add", "ntuple row", "");
+  if ( fpVerboseL3 )
+    fpVerboseL3->Message("add", "ntuple row", "");
 #endif
 
   if ( ! fNtuple ) {
@@ -637,8 +659,8 @@ G4bool G4RootAnalysisManager::AddNtupleRow()
                 "Analysis_W004", JustWarning, description);
   }         
 #ifdef G4VERBOSE
-  if ( fpVerboseL1 )
-    fpVerboseL1->Message("add", "ntuple row", "", result);
+  if ( fpVerboseL2 )
+    fpVerboseL2->Message("add", "ntuple row", "", result);
 #endif
 
   return result;
@@ -676,4 +698,9 @@ tools::histo::h2d*  G4RootAnalysisManager::GetH2(G4int id, G4bool warn) const
   return fH2Vector[index];
 }
 
+//_____________________________________________________________________________
+tools::wroot::ntuple* G4RootAnalysisManager::GetNtuple() const
+{
+  return fNtuple;
+}  
 

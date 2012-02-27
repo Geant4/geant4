@@ -81,6 +81,9 @@ class G4RootAnalysisManager : public G4VAnalysisManager
     // Access methods
     virtual tools::histo::h1d*  GetH1(G4int id, G4bool warn = true) const;
     virtual tools::histo::h2d*  GetH2(G4int id, G4bool warn = true) const;
+    virtual tools::wroot::ntuple* GetNtuple() const;
+
+    // Do we want also access via names?
     //tools::histo::h1d*  GetH1D(const G4String& name, G4bool warn = true) const;
         // later
         
@@ -91,6 +94,8 @@ class G4RootAnalysisManager : public G4VAnalysisManager
 
     // methods
     //
+    G4bool CreateHistoDirectory();
+    G4bool CreateNtupleDirectory();
     tools::wroot::ntuple::column<int>*    GetNtupleIColumn(G4int id) const;
     tools::wroot::ntuple::column<float>*  GetNtupleFColumn(G4int id) const;
     tools::wroot::ntuple::column<double>* GetNtupleDColumn(G4int id) const;

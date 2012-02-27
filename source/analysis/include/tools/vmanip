@@ -69,9 +69,9 @@ inline void remove(std::vector<T*>& a_vec,T* a_elem) {
 template <class T>
 inline void unique(std::vector<T>& a_vec) {
   typedef typename std::vector<T>::iterator it_t;
-  it_t it,it2; //Android : it2=it+1 does not compile with inlib/stl.
+  it_t it,it2;
   for(it=a_vec.begin();it!=a_vec.end();++it) {
-    it2 = it;it2++; //Android : it2=it+1 does not compile.
+    it2 = it;it2++; //TOOLS_STL : it2=it+1 does not compile.
     for(;it2!=a_vec.end();) {
       if(*it2==*it) {
         it2 = a_vec.erase(it2);

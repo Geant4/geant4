@@ -155,11 +155,14 @@ G4bool G4XmlAnalysisManager::OpenFile(const G4String& fileName)
 {
   // Add file extension .Xml if no extension is given
   G4String name(fileName);
-  if ( name.find(".") == std::string::npos ) name.append(".xml");
+  if ( name.find(".") == std::string::npos ) { 
+    name.append(".");
+    name.append(GetFileType());
+  }  
 
  #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("open", "analysis file", name);
+  if ( fpVerboseL3 ) 
+    fpVerboseL3->Message("open", "analysis file", name);
 #endif
   
   fFile = new std::ofstream(name);
@@ -190,11 +193,13 @@ G4bool G4XmlAnalysisManager::Write()
   std::map<G4String, tools::histo::h1d*>::iterator it;
   for ( it = fH1MapByName.begin(); it != fH1MapByName.end(); it++ ) {
 #ifdef G4VERBOSE
-    if ( fpVerboseL2 ) 
-      fpVerboseL2->Message("write", "h1d", it->first);
+    if ( fpVerboseL3 ) 
+      fpVerboseL3->Message("write", "h1d", it->first);
 #endif
+    G4String path = "/";
+    path.append(fHistoDirectoryName);
     G4bool result
-      = tools::waxml::write(*fFile, *(it->second), fHistoDirectoryName, it->first);
+      = tools::waxml::write(*fFile, *(it->second), path, it->first);
     if ( ! result ) {
       G4ExceptionDescription description;
       description << "      " << "saving histo " << it->first << " failed";
@@ -202,16 +207,19 @@ G4bool G4XmlAnalysisManager::Write()
                 "Analysis_W003", JustWarning, description);
       return false;       
     } 
+    fLockHistoDirectoryName = true;
   }
  
   std::map<G4String, tools::histo::h2d*>::iterator it2;
   for ( it2 = fH2MapByName.begin(); it2 != fH2MapByName.end(); it2++ ) {
 #ifdef G4VERBOSE
-    if ( fpVerboseL2 ) 
-      fpVerboseL2->Message("write", "h2d", it2->first);
+    if ( fpVerboseL3 ) 
+      fpVerboseL3->Message("write", "h2d", it2->first);
 #endif
+    G4String path = "/";
+    path.append(fHistoDirectoryName);
     G4bool result
-      = tools::waxml::write(*fFile, *(it2->second), fHistoDirectoryName, it2->first);
+      = tools::waxml::write(*fFile, *(it2->second), path, it2->first);
     if ( ! result ) {
       G4ExceptionDescription description;
       description << "      " << "saving histo " << it2->first << " failed";
@@ -219,6 +227,7 @@ G4bool G4XmlAnalysisManager::Write()
                 "Analysis_W003", JustWarning, description);
       return false;       
     } 
+    fLockHistoDirectoryName = true;
   }
 
 #ifdef G4VERBOSE
@@ -232,8 +241,8 @@ G4bool G4XmlAnalysisManager::Write()
 G4bool G4XmlAnalysisManager::CloseFile()
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("close", "file", "");
+  if ( fpVerboseL3 ) 
+    fpVerboseL3->Message("close", "file", "");
 #endif
 
   tools::waxml::end(*fFile);
@@ -252,13 +261,14 @@ G4int G4XmlAnalysisManager::CreateH1(const G4String& name, const G4String& title
                                G4int nbins, G4double xmin, G4double xmax)
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("create", "H1", name);
+  if ( fpVerboseL3 ) 
+    fpVerboseL3->Message("create", "H1", name);
 #endif
   G4int index = fH1Vector.size();
   tools::histo::h1d* h1 = new tools::histo::h1d(title, nbins, xmin, xmax);
   fH1Vector.push_back(h1);
   fH1MapByName[name] = h1;
+  fLockFirstHistoId = true;
 #ifdef G4VERBOSE
   if ( fpVerboseL1 ) 
     fpVerboseL1->Message("create", "H1", name);
@@ -272,14 +282,15 @@ G4int G4XmlAnalysisManager::CreateH2(const G4String& name, const G4String& title
                                G4int nybins, G4double ymin, G4double ymax)
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("create", "H2", name);
+  if ( fpVerboseL3 ) 
+    fpVerboseL3->Message("create", "H2", name);
 #endif
   G4int index = fH2Vector.size();
   tools::histo::h2d* h2 
     = new tools::histo::h2d(title, nxbins, xmin, xmax, nybins, ymin, ymax);
   fH2Vector.push_back(h2);
   fH2MapByName[name] = h2;
+  fLockFirstHistoId = true;
 #ifdef G4VERBOSE
   if ( fpVerboseL1 ) 
     fpVerboseL1->Message("create", "H2", name);
@@ -302,8 +313,8 @@ void G4XmlAnalysisManager::CreateNtuple(const G4String& name,
   }
 
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("create", "ntuple", name);
+  if ( fpVerboseL3 ) 
+    fpVerboseL3->Message("create", "ntuple", name);
 #endif
 
   fNtuple = new tools::waxml::ntuple(*fFile);
@@ -320,79 +331,83 @@ void G4XmlAnalysisManager::CreateNtuple(const G4String& name,
 G4int G4XmlAnalysisManager::CreateNtupleIColumn(const G4String& name)
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("create", "ntuple I column", name);
+  if ( fpVerboseL3 ) 
+    fpVerboseL3->Message("create", "ntuple I column", name);
 #endif
 
   G4int index = fNtuple->columns().size();
   tools::waxml::ntuple::column<int>* column = fNtuple->create_column<int>(name);  
   fNtupleIColumnMap[index] = column;
+  fLockFirstNtupleColumnId = true;
 
 #ifdef G4VERBOSE
   if ( fpVerboseL1 ) 
     fpVerboseL1->Message("create", "ntuple I column", name);
 #endif
 
-  return index + fFirstNtupleId;       
+  return index + fFirstNtupleColumnId;       
 }                                         
 
 //_____________________________________________________________________________
 G4int G4XmlAnalysisManager::CreateNtupleFColumn(const G4String& name)
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("create", "ntuple F column", name);
+  if ( fpVerboseL3 ) 
+    fpVerboseL3->Message("create", "ntuple F column", name);
 #endif
 
   G4int index = fNtuple->columns().size();
   tools::waxml::ntuple::column<float>* column = fNtuple->create_column<float>(name);  
   fNtupleFColumnMap[index] = column;
+  fLockFirstNtupleColumnId = true;
 
 #ifdef G4VERBOSE
   if ( fpVerboseL1 ) 
     fpVerboseL1->Message("create", "ntuple F column", name);
 #endif
 
-  return index + fFirstNtupleId;       
+  return index + fFirstNtupleColumnId;       
 }                                         
 
 //_____________________________________________________________________________
 G4int G4XmlAnalysisManager::CreateNtupleDColumn(const G4String& name)   
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("create", "ntuple D column", name);
+  if ( fpVerboseL3 ) 
+    fpVerboseL3->Message("create", "ntuple D column", name);
 #endif
 
   G4int index = fNtuple->columns().size();
   tools::waxml::ntuple::column<double>* column = fNtuple->create_column<double>(name);  
   fNtupleDColumnMap[index] = column;
+  fLockFirstNtupleColumnId = true;
 
 #ifdef G4VERBOSE
   if ( fpVerboseL1 ) 
     fpVerboseL1->Message("create", "ntuple D column", name);
 #endif
 
-  return index + fFirstNtupleId;       
+  return index + fFirstNtupleColumnId;       
 }                                         
 
 //_____________________________________________________________________________
 void G4XmlAnalysisManager::FinishNtuple()
 { 
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("finish", "ntuple", fNtupleName);
+  if ( fpVerboseL3 ) 
+    fpVerboseL3->Message("finish", "ntuple", fNtupleName);
 #endif
 
   G4String path = "/";
   path.append(fNtupleDirectoryName);
   fNtuple->write_header(path, fNtupleName, fNtupleTitle);  
 
+  fLockNtupleDirectoryName = true;
+
 #ifdef G4VERBOSE
   if ( fpVerboseL1 ) 
     fpVerboseL1->Message("finish", "ntuple", fNtupleName);
 #endif
-
 }
    
   
@@ -400,10 +415,10 @@ void G4XmlAnalysisManager::FinishNtuple()
 G4bool G4XmlAnalysisManager::FillH1(G4int id, G4double value, G4double weight)
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) {
+  if ( fpVerboseL3 ) {
     G4ExceptionDescription description;
     description << " id " << id << " value " << value;
-    fpVerboseL2->Message("fill", "H1", description);
+    fpVerboseL3->Message("fill", "H1", description);
   }  
 #endif
 
@@ -418,10 +433,10 @@ G4bool G4XmlAnalysisManager::FillH1(G4int id, G4double value, G4double weight)
 
   h1d->fill(value, weight);
 #ifdef G4VERBOSE
-  if ( fpVerboseL1 ) {
+  if ( fpVerboseL2 ) {
     G4ExceptionDescription description;
     description << " id " << id << " value " << value;
-    fpVerboseL1->Message("fill", "H1", description);
+    fpVerboseL2->Message("fill", "H1", description);
   }  
 #endif
   return true;
@@ -433,11 +448,11 @@ G4bool G4XmlAnalysisManager::FillH2(G4int id,
                                     G4double weight)
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) {
+  if ( fpVerboseL3 ) {
     G4ExceptionDescription description;
     description << " id " << id 
                 << " xvalue " << xvalue << " yvalue " << yvalue;
-    fpVerboseL2->Message("fill", "H2", description);
+    fpVerboseL3->Message("fill", "H2", description);
   }  
 #endif
 
@@ -452,11 +467,11 @@ G4bool G4XmlAnalysisManager::FillH2(G4int id,
 
   h2d->fill(xvalue, yvalue, weight);
 #ifdef G4VERBOSE
-  if ( fpVerboseL1 ) {
+  if ( fpVerboseL2 ) {
     G4ExceptionDescription description;
     description << " id " << id 
                 << " xvalue " << xvalue << " yvalue " << yvalue;
-    fpVerboseL1->Message("fill", "H2", description);
+    fpVerboseL2->Message("fill", "H2", description);
   }  
 #endif
   return true;
@@ -466,10 +481,10 @@ G4bool G4XmlAnalysisManager::FillH2(G4int id,
 G4bool G4XmlAnalysisManager::FillNtupleIColumn(G4int id, G4int value)
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) {
+  if ( fpVerboseL3 ) {
     G4ExceptionDescription description;
     description << " id " << id << " value " << value;
-    fpVerboseL2->Message("fill", "ntuple I column", description);
+    fpVerboseL3->Message("fill", "ntuple I column", description);
   }  
 #endif
 
@@ -484,10 +499,10 @@ G4bool G4XmlAnalysisManager::FillNtupleIColumn(G4int id, G4int value)
   
   column->fill(value);
 #ifdef G4VERBOSE
-  if ( fpVerboseL1 ) {
+  if ( fpVerboseL2 ) {
     G4ExceptionDescription description;
     description << " id " << id << " value " << value;
-    fpVerboseL1->Message("fill", "ntuple I column", description);
+    fpVerboseL2->Message("fill", "ntuple I column", description);
   }  
 #endif
   return true;       
@@ -496,10 +511,10 @@ G4bool G4XmlAnalysisManager::FillNtupleIColumn(G4int id, G4int value)
 G4bool G4XmlAnalysisManager::FillNtupleFColumn(G4int id, G4float value)
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) {
+  if ( fpVerboseL3 ) {
     G4ExceptionDescription description;
     description << " id " << id << " value " << value;
-    fpVerboseL2->Message("fill", "ntuple F column", description);
+    fpVerboseL3->Message("fill", "ntuple F column", description);
   }  
 #endif
 
@@ -514,10 +529,10 @@ G4bool G4XmlAnalysisManager::FillNtupleFColumn(G4int id, G4float value)
   
   column->fill(value);
 #ifdef G4VERBOSE
-  if ( fpVerboseL1 ) {
+  if ( fpVerboseL2 ) {
     G4ExceptionDescription description;
     description << " id " << id << " value " << value;
-    fpVerboseL1->Message("fill", "ntuple F column", description);
+    fpVerboseL2->Message("fill", "ntuple F column", description);
   }  
 #endif
   return true;       
@@ -527,10 +542,10 @@ G4bool G4XmlAnalysisManager::FillNtupleFColumn(G4int id, G4float value)
 G4bool G4XmlAnalysisManager::FillNtupleDColumn(G4int id, G4double value)
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) {
+  if ( fpVerboseL3 ) {
     G4ExceptionDescription description;
     description << " id " << id << " value " << value;
-    fpVerboseL2->Message("fill", "ntuple D column", description);
+    fpVerboseL3->Message("fill", "ntuple D column", description);
   }  
 #endif
 
@@ -545,10 +560,10 @@ G4bool G4XmlAnalysisManager::FillNtupleDColumn(G4int id, G4double value)
   
   column->fill(value);
 #ifdef G4VERBOSE
-  if ( fpVerboseL1 ) {
+  if ( fpVerboseL2 ) {
     G4ExceptionDescription description;
     description << " id " << id << " value " << value;
-    fpVerboseL1->Message("fill", "ntuple D column", description);
+    fpVerboseL2->Message("fill", "ntuple D column", description);
   }  
 #endif
   return true;       
@@ -558,8 +573,8 @@ G4bool G4XmlAnalysisManager::FillNtupleDColumn(G4int id, G4double value)
 G4bool G4XmlAnalysisManager::AddNtupleRow()
 { 
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 )
-    fpVerboseL2->Message("add", "ntuple row", "");
+  if ( fpVerboseL3 )
+    fpVerboseL3->Message("add", "ntuple row", "");
 #endif
 
   if ( ! fNtuple ) {
@@ -572,8 +587,8 @@ G4bool G4XmlAnalysisManager::AddNtupleRow()
   
   fNtuple->add_row();
 #ifdef G4VERBOSE
-  if ( fpVerboseL1 )
-    fpVerboseL1->Message("add", "ntuple row", "");
+  if ( fpVerboseL2 )
+    fpVerboseL2->Message("add", "ntuple row", "");
 #endif
 
   return true;
@@ -610,4 +625,11 @@ tools::histo::h2d*  G4XmlAnalysisManager::GetH2(G4int id, G4bool warn) const
   }
   return fH2Vector[index];
 }
+
+//_____________________________________________________________________________
+tools::waxml::ntuple* G4XmlAnalysisManager::GetNtuple() const
+{
+  return fNtuple;
+}  
+
 

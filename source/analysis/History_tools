@@ -1,0 +1,19 @@
+
+ 1.1.0 : 8 Feb 2012 : G.Barrand :
+ - split the fill_infos() function in wroot/infos.
+   It was too long and induces warning with icc and g++.
+
+ 1.0.6 : 8 Feb 2012 : G.Barrand :
+ - build from code of inexlib-1.3.
+ - histo : some "this->" changed to "parent::".
+   "this->" is needed only when invoking virtual methods.
+ - have snpf to avoid too much #ifdef WIN32 for [v]snprintf.
+ - have "typedef cid" in a standalone cid file.
+ - remove some remaining inline keyword within class.
+ - test/cpp/use_clang : to build with clang. Tested with
+   clang-3.0 on MacOSX. To use clang :
+     cd test/cpp
+     ./build -clang
+ - add this history file.
+
+

@@ -45,8 +45,8 @@ class G4VAnalysisManager
     virtual G4bool CloseFile() = 0; 
     
     // Methods for handling directories
-    virtual void SetHistoDirectoryName(const G4String& dirName);
-    virtual void SetNtupleDirectoryName(const G4String& dirName);
+    virtual G4bool SetHistoDirectoryName(const G4String& dirName);
+    virtual G4bool SetNtupleDirectoryName(const G4String& dirName);
     
     // Methods for handling histogrammes, ntuples
     virtual G4int CreateH1(const G4String& name, const G4String& title,
@@ -64,8 +64,8 @@ class G4VAnalysisManager
     // The ids of histograms and ntuples are generated automatically
     // starting from 0; with following functions it is possible to
     // change the first Id to start from other value
-    virtual void SetFirstHistoId(G4int firstId);
-    virtual void SetFirstNtupleId(G4int firstId);
+    virtual G4bool SetFirstHistoId(G4int firstId);
+    virtual G4bool SetFirstNtupleColumnId(G4int firstId);
   
     // Methods to fill histogrammes, ntuples
     virtual G4bool FillH1(G4int id, G4double value, G4double weight) = 0;
@@ -80,39 +80,38 @@ class G4VAnalysisManager
     virtual G4int GetVerboseLevel() const;
     virtual void  SetVerboseLevel(G4int verboseLevel);
     
+    // The manager type (starts with an uppercase letter)
+    G4String GetType() const;                 
+    // The manager file type (starts with a lowercase letter)
+    G4String GetFileType() const;                 
+    
   protected:
     G4int    fVerboseLevel;
     G4int    fFirstHistoId;
-    G4int    fFirstNtupleId;
+    G4int    fFirstNtupleColumnId;
     G4String fHistoDirectoryName;
-    G4String fNtupleDirectoryName;      
+    G4String fNtupleDirectoryName; 
+    G4bool   fLockFirstHistoId;     
+    G4bool   fLockFirstNtupleColumnId;     
+    G4bool   fLockHistoDirectoryName;     
+    G4bool   fLockNtupleDirectoryName;     
     G4AnalysisVerbose  fVerboseL1;
     G4AnalysisVerbose  fVerboseL2;
+    G4AnalysisVerbose  fVerboseL3;
     G4AnalysisVerbose* fpVerboseL1;
     G4AnalysisVerbose* fpVerboseL2;
+    G4AnalysisVerbose* fpVerboseL3;
 };
 
 // inline functions
 
-inline void G4VAnalysisManager::SetHistoDirectoryName(const G4String& dirName) {
-  fHistoDirectoryName = dirName;
-}  
-
-inline void G4VAnalysisManager::SetNtupleDirectoryName(const G4String& dirName) {
-  fNtupleDirectoryName = dirName;
-}  
-
-inline void G4VAnalysisManager::SetFirstHistoId(G4int firstId) {
-  fFirstHistoId = firstId;
-}  
-
-inline void G4VAnalysisManager::SetFirstNtupleId(G4int firstId) {
-  fFirstNtupleId = firstId;
-}
-
 inline G4int G4VAnalysisManager::GetVerboseLevel() const {
   return fVerboseLevel;
 }  
+
+inline  G4String G4VAnalysisManager::GetType() const {
+  return fVerboseL1.GetType();
+}                 
 
 #endif
 

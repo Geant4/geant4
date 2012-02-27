@@ -6,7 +6,7 @@
 
 #include "base_cloud"
 
-#include <tools/mnmx>
+#include "../mnmx"
 
 #include "h1d"
 
@@ -114,7 +114,7 @@ public:
 
   bool convert(unsigned int aBins,double aLowerEdge,double aUpperEdge){
     if(m_histo) return true;
-    m_histo = new histo::h1d(this->title(),aBins,aLowerEdge,aUpperEdge);
+    m_histo = new histo::h1d(base_cloud::title(),aBins,aLowerEdge,aUpperEdge);
     if(!m_histo) return false;
     bool status = fill_histogram(*m_histo);
     clear();
@@ -123,7 +123,7 @@ public:
 
   bool convert(const std::vector<double>& aEdges) {
     if(m_histo) return true;
-    m_histo = new histo::h1d(this->title(),aEdges);
+    m_histo = new histo::h1d(base_cloud::title(),aEdges);
     if(!m_histo) return false;
     bool status = fill_histogram(*m_histo);
     clear();

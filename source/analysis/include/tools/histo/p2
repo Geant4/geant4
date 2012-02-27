@@ -57,7 +57,7 @@ public:
     for(bn_t ibin=0;ibin<parent::m_bin_number;ibin++) {
       m_bin_Svw[ibin] *= aFactor;
     }
-    this->update_fast_getters();
+    parent::update_fast_getters();
     return true;
   }
   bool scale(TW aFactor) {return multiply(aFactor);}
@@ -87,7 +87,7 @@ public:
       m_bin_Svw[ibin] = 0;
       m_bin_Sv2w[ibin] = 0;
     }
-    this->update_fast_getters();
+    parent::update_fast_getters();
     return true;
   }
 
@@ -190,7 +190,7 @@ public:
       m_bin_Svw[ibin] += a_histo.m_bin_Svw[ibin];      
       m_bin_Sv2w[ibin] += a_histo.m_bin_Sv2w[ibin];      
     }
-    this->update_fast_getters();
+    parent::update_fast_getters();
     return true;
   }
   bool subtract(const p2& a_histo){
@@ -199,7 +199,7 @@ public:
       m_bin_Svw[ibin] -= a_histo.m_bin_Svw[ibin];      
       m_bin_Sv2w[ibin] -= a_histo.m_bin_Sv2w[ibin];      
     }
-    this->update_fast_getters();
+    parent::update_fast_getters();
     return true;
   }
 

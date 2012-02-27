@@ -21,12 +21,16 @@
 #include <errno.h>
 #include <sys/stat.h>
 
-#if defined(WIN32) && !defined(__GNUC__)
+#ifdef WIN32
+#ifndef __GNUC__
 #include <direct.h>
 #define ssize_t int
 #include <io.h>
 // disable the warning about the usage of "this" in the constructor.
 #pragma warning(disable:4355)
+#endif
+#else
+#include <unistd.h>
 #endif
 
 namespace tools {
@@ -331,6 +335,10 @@ public:
     // level = 9 maximal compression level but slow.
     m_compress = a_level;
     if(m_compress>9) m_compress = 9;
+  }
+
+  bool is_open() const {
+    return (m_file==not_open()?false:true);
   }
 
   void close() {

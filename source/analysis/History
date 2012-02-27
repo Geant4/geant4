@@ -17,6 +17,25 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+February 23, 2012 I.Hrivnacova (analysis-V09-05-01)
+- Adding locks for functions which define directory names,
+  setting Ids etc. so that these parameters cannot be changed once
+  they were used
+- Changed return type for the functions with locks to G4bool
+- Renamed FirstNtupleId data member and its setter to FirstNtupleColumnId 
+  to better reflect its meaning  
+- Adding W009-W012 warning in exception_classification.txt
+
+February 14, 2012 I.Hrivnacova (analysis-V09-05-00)
+- Updated to g4tools-1.1.0 (G. Barrand) - see History_tools
+- Adding defs include files per manager type
+- Adding GetNtuple() function to specific managers
+- Adding GetType() function  to G4VAnalysisManager
+- Increased granularity of verbose levels (now 3 levels are available)
+- Adding test for result of openning file in Root manager
+  (which was not provided in previous versions of g4tools)
+- Making creating directories optional
+
 November 30th 2011 B.Morgan (analysis-V09-04-15)
 - CMakeLists.txt : Updated to build G4analysis in granular as well as global
   mode.

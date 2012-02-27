@@ -106,7 +106,9 @@ public:
     return vec;
   }
 
-  bool add(const std::string& a_key,const std::string& a_value,bool a_override = true){
+  bool add(const std::string& a_key,
+           const std::string& a_value = "",
+           bool a_override = true){
     if(a_override) {
       for(std::vector<arg>::iterator it = m_args.begin();
           it!=m_args.end();++it) {
@@ -264,9 +266,7 @@ public:
     std::vector<arg> args;
     if(a_skip_first) args.push_back(*(m_args.begin()));
     //first pass :
-    //FIXME : Android : with inlib/stl/vector having
-    //        const_iterator does not compile.
-   {std::vector<arg>::iterator it = m_args.begin();
+   {std::vector<arg>::const_iterator it = m_args.begin();
     if(a_skip_first) it++;
     for(;it!=m_args.end();++it) {
       if( ((*it).first.find('-')==0) || (*it).second.size() ) {
@@ -274,9 +274,7 @@ public:
       }
     }}
     //second pass :
-    //FIXME : Android : with inlib/stl/vector having
-    //        const_iterator does not compile.
-   {std::vector<arg>::iterator it = m_args.begin();
+   {std::vector<arg>::const_iterator it = m_args.begin();
     if(a_skip_first) it++;
     for(;it!=m_args.end();++it) {
       if( ((*it).first.find('-')==0) || (*it).second.size() ) {

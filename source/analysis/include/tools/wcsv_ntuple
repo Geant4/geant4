@@ -35,29 +35,29 @@ public:
     }
     virtual const std::string& name() const {return m_name;}
   public:
-    inline column(std::ostream& a_writer,
+    column(std::ostream& a_writer,
                   const std::string& a_name,
                   const T& a_def)
     :m_writer(a_writer)
     ,m_name(a_name),m_def(a_def),m_tmp(a_def)
     {}
-    inline virtual ~column(){}
+    virtual ~column(){}
   protected:
-    inline column(const column& a_from)
+    column(const column& a_from)
     :icol(a_from)
     ,m_writer(a_from.m_writer)
     ,m_name(a_from.m_name) 
     ,m_def(a_from.m_def)
     ,m_tmp(a_from.m_tmp)
     {}
-    inline column& operator=(const column& a_from){
+    column& operator=(const column& a_from){
       m_name = a_from.m_name;
       m_def = a_from.m_def;
       m_tmp = a_from.m_tmp;
       return *this;
     }
   public:
-    inline bool fill(const T& a_value) {m_tmp = a_value;return true;}
+    bool fill(const T& a_value) {m_tmp = a_value;return true;}
   protected:
     std::ostream& m_writer;
     std::string m_name;
@@ -67,25 +67,25 @@ public:
 
 
 public:
-  inline ntuple(std::ostream& a_writer,char a_sep = ',')
+  ntuple(std::ostream& a_writer,char a_sep = ',')
   :m_writer(a_writer)
   ,m_sep(a_sep)
   {}
-  inline virtual ~ntuple() {
+  virtual ~ntuple() {
     tools::clear<icol>(m_cols);
   }
 protected:
-  inline ntuple(const ntuple& a_from)
+  ntuple(const ntuple& a_from)
   :m_writer(a_from.m_writer)
   ,m_sep(a_from.m_sep)
   {}
-  inline ntuple& operator=(const ntuple& a_from){
+  ntuple& operator=(const ntuple& a_from){
     m_sep = a_from.m_sep;
     return *this;
   }
 public:
   template <class T>
-  inline column<T>* create_column(const std::string& a_name,
+  column<T>* create_column(const std::string& a_name,
                                   const T& a_def = T()) {
     if(find_named<icol>(m_cols,a_name)) return 0;
     column<T>* col = new column<T>(m_writer,a_name,a_def);
@@ -94,7 +94,7 @@ public:
     return col;
   }
 
-  inline bool add_row() {
+  bool add_row() {
     if(m_cols.empty()) return false;
     std::vector<icol*>::iterator it;
     it=m_cols.begin();
@@ -108,7 +108,7 @@ public:
     return true;
   }
 
-  inline const std::vector<icol*>& columns() const {return m_cols;}
+  const std::vector<icol*>& columns() const {return m_cols;}
 protected:
   std::ostream& m_writer;
   char m_sep;

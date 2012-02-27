@@ -25,45 +25,15 @@
 //
 // $Id$
 
-// Author: Ivana Hrivnacova, 17/10/2011  (ivana@ipno.in2p3.fr)
+// Author: Ivana Hrivnacova, 15/06/2011  (ivana@ipno.in2p3.fr)
 
-#ifndef G4AnalysisVerbose_h
-#define G4AnalysisVerbose_h 1
+#ifndef g4xml_h
+#define g4xml_h
 
-#include "globals.hh"
+#include "g4xml_defs.hh"
 
-class G4AnalysisVerbose
-{
-  public:
-    G4AnalysisVerbose(const G4String& type, G4int verboseLevel);
-    virtual ~G4AnalysisVerbose();
-
-    void Message(const G4String& action, 
-                 const G4String& object, 
-                 const G4String& objectName,
-                 G4bool success = true);
-
-    void Message(const G4String& action, 
-                 const G4String& object, 
-                 G4ExceptionDescription& description,
-                 G4bool success = true);
-                 
-    G4String GetType() const;                 
-        
-  private:
-    // data members
-    //
-    G4String fType;
-    G4String fToBeDoneText;
-    G4String fDoneText;
-    G4String fFailureText;
-};
-
-// inline functions
-
-inline  G4String G4AnalysisVerbose::GetType() const {
-  return fType;
-}  
+using namespace G4Xml;
 
 #endif
 
+  

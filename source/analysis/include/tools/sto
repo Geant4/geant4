@@ -39,6 +39,7 @@ namespace tools {
 
 template <class T>
 inline bool to(const std::string& a_s,T& a_v) {
+  if(a_s.empty()) {a_v = T();return false;} //for TOOLS_STL istringstream.
   std::istringstream strm(a_s.c_str());
   std::streampos pb = strm.tellg();
   strm >> a_v;

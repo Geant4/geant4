@@ -36,14 +36,19 @@
 G4VAnalysisManager::G4VAnalysisManager(const G4String& type)
   : fVerboseLevel(0),
     fFirstHistoId(0),
-    fFirstNtupleId(0),
-    //fHistoDirectoryName("histograms"), 
-    fHistoDirectoryName("histo"), 
-    fNtupleDirectoryName("ntuple"),
+    fFirstNtupleColumnId(0),
+    fHistoDirectoryName(""), 
+    fNtupleDirectoryName(""),
+    fLockFirstHistoId(false),
+    fLockFirstNtupleColumnId(false),
+    fLockHistoDirectoryName(false), 
+    fLockNtupleDirectoryName(false),
     fVerboseL1(type,1),
     fVerboseL2(type,2),
+    fVerboseL3(type,3),
     fpVerboseL1(0),
-    fpVerboseL2(0)
+    fpVerboseL2(0),
+    fpVerboseL3(0)
 {}
 
 //_____________________________________________________________________________
@@ -60,19 +65,93 @@ void G4VAnalysisManager::SetVerboseLevel(G4int verboseLevel)
   if ( verboseLevel == 0 ) {
     fpVerboseL1 = 0;
     fpVerboseL2 = 0;
+    fpVerboseL3 = 0;
   }
   else if ( verboseLevel == 1 ) {  
     fpVerboseL1 = &fVerboseL1;
     fpVerboseL2 = 0;
+    fpVerboseL3 = 0;
+  }
+  else if ( verboseLevel == 2 ) {  
+    fpVerboseL1 = &fVerboseL1;
+    fpVerboseL2 = &fVerboseL2;
+    fpVerboseL3 = 0;
   }
   else {
     fpVerboseL1 = &fVerboseL1;
     fpVerboseL2 = &fVerboseL2;
+    fpVerboseL3 = &fVerboseL3;
   }
-
-  G4cout << "fpVerboseL1: " << fpVerboseL1 << G4endl;
-  G4cout << "fpVerboseL2: " << fpVerboseL2 << G4endl;
-
 }  
 
+//_____________________________________________________________________________
+G4bool G4VAnalysisManager::SetHistoDirectoryName(const G4String& dirName) 
+{
+  if ( fLockHistoDirectoryName ) {
+    G4ExceptionDescription description;
+    description 
+      << "Cannot set Histo directory name as its value was already used.";
+    G4Exception("G4VAnalysisManager::SetHistoDirectoryName()",
+                "Analysis_W009", JustWarning, description);
+    return false;
+  }              
+
+  fHistoDirectoryName = dirName;
+  return true;
+}  
+
+//_____________________________________________________________________________
+G4bool G4VAnalysisManager::SetNtupleDirectoryName(const G4String& dirName) 
+{
+  if ( fLockNtupleDirectoryName ) {
+    G4ExceptionDescription description;
+    description 
+      << "Cannot set Ntuple directory name as its value was already used.";
+    G4Exception("G4VAnalysisManager::SetNtupleDirectoryName()",
+                "Analysis_W010", JustWarning, description);
+    return false;
+  }              
+
+  fNtupleDirectoryName = dirName;
+  return true;
+}  
+
+//_____________________________________________________________________________
+G4bool G4VAnalysisManager::SetFirstHistoId(G4int firstId) 
+{
+  if ( fLockFirstHistoId ) {
+    G4ExceptionDescription description;
+    description 
+      << "Cannot set FirstHistoId as its value was already used.";
+    G4Exception("G4VAnalysisManager::SetFirstHistoId()",
+                "Analysis_W009", JustWarning, description);
+    return false;
+  }              
+
+  fFirstHistoId = firstId;
+  return true;
+}  
+
+//_____________________________________________________________________________
+G4bool G4VAnalysisManager::SetFirstNtupleColumnId(G4int firstId) 
+{
+  if ( fLockFirstNtupleColumnId ) {
+    G4ExceptionDescription description;
+    description 
+      << "Cannot set FirstNtupleColumnId as its value was already used.";
+    G4Exception("G4VAnalysisManager::SetFirstHistoId()",
+                "Analysis_W010", JustWarning, description);
+    return false;
+  }              
+
+  fFirstNtupleColumnId = firstId;
+  return true;
+}
+
+//_____________________________________________________________________________
+G4String G4VAnalysisManager::GetFileType() const {
+  G4String fileType = fVerboseL1.GetType();
+  fileType.toLower();
+  return fileType;
+}                 
 

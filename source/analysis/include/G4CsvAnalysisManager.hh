@@ -75,6 +75,9 @@ class G4CsvAnalysisManager : public G4VAnalysisManager
     virtual G4bool FillNtupleFColumn(G4int id, G4float value);
     virtual G4bool FillNtupleDColumn(G4int id, G4double value);
     virtual G4bool AddNtupleRow();
+
+    // Access methods
+    virtual tools::wcsv::ntuple* GetNtuple() const;
         
   private:
     // static data members

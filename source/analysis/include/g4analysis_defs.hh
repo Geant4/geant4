@@ -30,31 +30,9 @@
 #ifndef g4analysis_defs_h
 #define g4analysis_defs_h
 
-#include "tools/histo/h1d"
-#include "G4XmlAnalysisManager.hh"
-
-namespace G4Xml {
-
-  typedef tools::histo::h1d  G4AnaH1;
-  typedef G4XmlAnalysisManager G4AnalysisManager; 
-}  
-
-#include "G4CsvAnalysisManager.hh"
-
-namespace G4Csv {
-
-  typedef G4CsvAnalysisManager G4AnalysisManager; 
-}  
-
-
-#include "tools/histo/h1d"
-#include "G4RootAnalysisManager.hh"
-
-namespace G4Root {
-
-  typedef tools::histo::h1d  G4AnaH1;
-  typedef G4RootAnalysisManager G4AnalysisManager; 
-} 
+#include "g4csv_defs.hh"
+#include "g4xml_defs.hh"
+#include "g4root_defs.hh"
 
 #endif
 

@@ -6,7 +6,7 @@
 
 #include "base_cloud"
 
-#include <tools/mnmx>
+#include "../mnmx"
 
 #include "h3d"
 
@@ -255,10 +255,10 @@ bool c3d::convert(
 ,unsigned int aBinsZ,double aLowerEdgeZ,double aUpperEdgeZ 
 ) { 
   if(m_histo) return true; // Done.
-  m_histo = new histo::h3d(this->title(),
-                              aBinsX,aLowerEdgeX,aUpperEdgeX,
-                              aBinsY,aLowerEdgeY,aUpperEdgeY,
-                              aBinsZ,aLowerEdgeZ,aUpperEdgeZ);
+  m_histo = new histo::h3d(base_cloud::title(),
+                           aBinsX,aLowerEdgeX,aUpperEdgeX,
+                           aBinsY,aLowerEdgeY,aUpperEdgeY,
+                           aBinsZ,aLowerEdgeZ,aUpperEdgeZ);
   if(!m_histo) return false;
   bool status = fill_histogram(*m_histo);
   clear();
@@ -396,7 +396,7 @@ bool c3d::convert(
 ,const std::vector<double>& aEdgesZ
 ) { 
   if(m_histo) return true;
-  m_histo = new histo::h3d(this->title(),
+  m_histo = new histo::h3d(base_cloud::title(),
                            aEdgesX,aEdgesY,aEdgesZ);
   if(!m_histo) return false;
   bool status = fill_histogram(*m_histo);

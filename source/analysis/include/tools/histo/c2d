@@ -6,7 +6,7 @@
 
 #include "base_cloud"
 
-#include <tools/mnmx>
+#include "../mnmx"
 
 #include "h2d"
 
@@ -200,9 +200,9 @@ bool c2d::convert(
 ,unsigned int aBinsY,double aLowerEdgeY,double aUpperEdgeY 
 ) { 
   if(m_histo) return true; // Done.
-  m_histo = new histo::h2d(this->title(),
-                              aBinsX,aLowerEdgeX,aUpperEdgeX,
-                              aBinsY,aLowerEdgeY,aUpperEdgeY);
+  m_histo = new histo::h2d(base_cloud::title(),
+                           aBinsX,aLowerEdgeX,aUpperEdgeX,
+                           aBinsY,aLowerEdgeY,aUpperEdgeY);
   if(!m_histo) return false;
   bool status = fill_histogram(*m_histo);
   clear();
@@ -295,8 +295,8 @@ bool c2d::fill(double aX,double aY,double aW){
 inline
 bool c2d::convert(const std::vector<double>& aEdgesX,const std::vector<double>& aEdgesY) { 
   if(m_histo) return true;
-  m_histo = new histo::h2d(this->title(),
-                                aEdgesX,aEdgesY);
+  m_histo = new histo::h2d(base_cloud::title(),
+                           aEdgesX,aEdgesY);
   if(!m_histo) return false;
   bool status = fill_histogram(*m_histo);
   clear();
