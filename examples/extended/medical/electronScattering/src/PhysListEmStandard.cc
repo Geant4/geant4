@@ -180,7 +180,7 @@ void PhysListEmStandard::ConstructProcess()
   
   //multiple coulomb scattering
   //
-  emOptions.SetMscStepLimitation(fUseSafety);  //default
+  emOptions.SetMscStepLimitation(fUseDistanceToBoundary);  //default fUseSafety
     
   // Deexcitation
   //
