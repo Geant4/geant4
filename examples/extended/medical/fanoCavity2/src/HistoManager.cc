@@ -38,7 +38,9 @@
 
 HistoManager::HistoManager()
 {
-  fileName = "fanocavity2";
+  fileName[0]  = "fanocavity2";
+  factoryOn = false;
+  fNbHist   = 0;
 
   // histograms
   for (G4int k=0; k<MaxHisto; k++) {
@@ -64,41 +66,57 @@ HistoManager::~HistoManager()
 
 void HistoManager::book()
 {
+  // if no histos, do nothing
+  if (fNbHist == 0) return;
+  
   // Create or get analysis manager
   // The choice of analysis technology is done via selection of a namespace
   // in HistoManager.hh
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->SetVerboseLevel(1);
+  G4String extension = analysisManager->GetFileType();
+  fileName[1] = fileName[0] + "." + extension;
   
   // Open an output file
   //
-  analysisManager->OpenFile(fileName);
-  analysisManager->SetFirstHistoId(1);
+  G4bool fileOpen = analysisManager->OpenFile(fileName[0]);
+  if (!fileOpen) {
+    G4cout << "\n---> HistoManager::book(): cannot open " << fileName[1] 
+           << G4endl;
+    return;
+  }  
 
   // create selected histograms
+  //
+  analysisManager->SetFirstHistoId(1);
+    
   for (G4int k=0; k<MaxHisto; k++) {
     if (fExist[k]) {
       fHistId[k] = analysisManager->CreateH1( fLabel[k], fTitle[k],
-                                                  fNbins[k], fVmin[k], fVmax[k]);
-      fHistPt[k] = analysisManager->GetH1(fHistId[k]);						  						  
+                                              fNbins[k], fVmin[k], fVmax[k]);
+      fHistPt[k] = analysisManager->GetH1(fHistId[k]);
+      factoryOn = true;
     }
   }
-  
-  G4cout << "\n----> Histogram Tree is opened in " << fileName << G4endl;
+
+  if (factoryOn)  
+    G4cout << "\n----> Histogram file is opened in " << fileName[1] << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HistoManager::save()
 {
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();    
-  analysisManager->Write();
-  analysisManager->CloseFile();
-  saveAscii();                    // Write fAscii file, if any
-  G4cout << "\n----> Histogram Tree is saved in " << fileName << G4endl;
+  if (factoryOn) {
+    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();    
+    analysisManager->Write();
+    analysisManager->CloseFile();
+    saveAscii();                    // Write fAscii file, if any
+    G4cout << "\n----> Histograms are saved in " << fileName[1] << G4endl;
       
-  // complete cleanup
-  //
-  delete G4AnalysisManager::Instance();         
+    delete G4AnalysisManager::Instance();
+    factoryOn = false;
+  }         
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -111,7 +129,7 @@ void HistoManager::FillHisto(G4int ih, G4double e, G4double weight)
     return;
   }
 
-  if (fExist[ih]) fHistPt[ih]->fill(e/fUnit[ih], weight);
+  if (fHistPt[ih]) fHistPt[ih]->fill(e/fUnit[ih], weight);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -157,6 +175,8 @@ void HistoManager::SetHisto(G4int ih,
   fVmin[ih]  = vmin;
   fVmax[ih]  = vmax;
   fWidth[ih] = fUnit[ih]*(vmax-vmin)/nbins;
+  
+  fNbHist++;
 
   G4cout << "----> SetHisto " << ih << ": " << titl << ";  "
          << nbins << " bins from "
@@ -174,7 +194,7 @@ void HistoManager::Normalize(G4int ih, G4double fac)
     return;
   }
 
-  if (fExist[ih]) fHistPt[ih]->scale(fac);
+  if (fHistPt[ih]) fHistPt[ih]->scale(fac);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -195,13 +215,19 @@ void HistoManager::saveAscii()
 {
  if (!fAscii[0]) return;
  
- G4String name = fileName + ".fAscii";
+ G4String name = fileName[0] + ".ascii";
  std::ofstream File(name, std::ios::out);
+ if (!File) {
+   G4cout 
+       << "\n---> HistoManager::saveAscii(): cannot open " << name << G4endl;
+    return;
+  }  
+
  File.setf( std::ios::scientific, std::ios::floatfield );
   
  //write selected histograms
  for (G4int ih=0; ih<MaxHisto; ih++) {
-    if (fExist[ih] && fAscii[ih]) {
+    if (fHistPt[ih] && fAscii[ih]) {
           
       File << "\n  1D histogram " << ih << ": " << fTitle[ih] 
            << "\n \n \t     X \t\t     Y" << G4endl;
