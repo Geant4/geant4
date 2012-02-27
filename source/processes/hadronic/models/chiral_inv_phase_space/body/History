@@ -7,14 +7,17 @@ History file for  hadronic/models/chiral_inv_phase_space/body  directory.
 	
 Summarize all code modifications & keep track of all tags in this file.
 
-****************************************************************************
-*** Geant4 developers can not make changes in this directory or make the ***
-*** History records without permision of M.Kosov: Mikhail.Kossov@cern.ch ***
-****************************************************************************
-
      -----------------------------------------------------------------
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
+
+14-Feb-2012 V.Ivanchenko (hadr-chips-body-V09-05-03)
+--------------------------------------------------------------------------
+- In G4QFreeScattering.cc class in methods FetchElTot() and CalcElTotXS() the
+  Fatal exceptions for wrong PDG code are substituted by JustWarning; the
+  reason - this class is not responsible for generation of wrong particle
+  type and return probability value for quasi-free scattering; the output
+  will be unchanged and QGSC Physics List will continue to run.
 
 13-Jan-2012 G.Cosmo (hadr-chips-body-V09-05-02)
 --------------------------------------------------------------------------

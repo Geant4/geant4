@@ -359,9 +359,12 @@ std::pair<G4double,G4double> G4QFreeScattering::GetElTotXS(G4double p, G4int PDG
   else if ( PDG >  3000 && PDG <  3335) ind=6; // @@ for all hyperons - take Lambda
   else if ( PDG > -3335 && PDG < -2000) ind=7; // @@ for all anti-baryons (anti-p/anti-n)
   else {
+    // VI changed Fatal to Warning, because this method cannot do better
+    //    source of problem in classes which make this call
+    ind = 0;
     G4cout<<"*Error*G4QFreeScattering::CalcElTotXS: PDG="<<PDG
           <<", while it is defined only for p,n,hyperons,anti-baryons,pi,K/antiK"<<G4endl;
-    G4Exception("G4QFreeScattering::CalcElTotXS:","22",FatalException,"CHIPS_crash");
+    G4Exception("G4QFreeScattering::CalcElTotXS:","22",JustWarning,"CHIPS_crash");
   }
   return CalcElTot(p,ind); // This is a slow direct method, better use FetchElTot
 }
@@ -423,9 +426,12 @@ std::pair<G4double,G4double> G4QFreeScattering::FetchElTot(G4double p, G4int PDG
   else if ( PDG > -3335 && PDG < -2000) ind=7; // @@ for all anti-baryons (anti-p/anti-n)
   else
   {
+    // VI changed Fatal to Warning, because this method cannot do better
+    //    source of problem in classes which make this call
+    ind = 0;
     G4cout<<"*Error*G4QFreeScattering::FetchElTot: PDG="<<PDG
           <<", while it is defined only for p,n,hyperons,anti-baryons,pi,K/antiK"<<G4endl;
-    G4Exception("G4QFreeScattering::FetchElTot:","22",FatalException,"CHIPS_crash");
+    G4Exception("G4QFreeScattering::FetchElTot:","22",JustWarning,"CHIPS problem");
   }
   if(nDB && lastI==ind && p>0. && p==lastP) return lastR;  // VI do not use toler
   //  if(nDB && lastI==ind && p>0. && std::fabs(p-lastP)/p<toler) return lastR;
