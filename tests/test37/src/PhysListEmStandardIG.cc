@@ -87,7 +87,7 @@ void PhysListEmStandardIG::ConstructProcess()
       
     } else if (particleName == "e-") {
       //electron
-      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      G4MuMultipleScattering* msc = new G4MuMultipleScattering();
       msc->AddEmModel(0,new G4WentzelVIModel());
       //      msc->SetRangeFactor(0.1);
       pmanager->AddProcess(msc,                     -1, 1,1);
@@ -97,7 +97,7 @@ void PhysListEmStandardIG::ConstructProcess()
 	    
     } else if (particleName == "e+") {
       //positron
-      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      G4MuMultipleScattering* msc = new G4MuMultipleScattering();
       msc->AddEmModel(0,new G4WentzelVIModel());
       //      msc->SetRangeFactor(0.1);
       pmanager->AddProcess(msc,                     -1, 1,1);

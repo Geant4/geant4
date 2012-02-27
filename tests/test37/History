@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09-02-12  V.Ivanchenko (test37-V09-05-00)
+- Fixed IG Physics List - use G4MuMultipleScattering for e- (only this
+    Physics List allowing combination with single scattering so far)
+
 20-07-11  G.Cosmo (test37-V09-04-02)
 - Removed vis setup.
 
