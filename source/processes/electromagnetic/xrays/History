@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08 February 12: V. Grichine (xrays-V09-05-01)
+- G4SynchrotronRadiarion and G4SynchrotronRadiarionInMat was modified to 
+  provide more realistic angualr distribution for secondary SR gammas 
+  accordong to simplified dipole busted approach.
+
 20 December 11: V. Grichine  (xrays-V09-05-00)
 - G4VXTRenergyLoss.cc and regular XTR radiators/models were updated for more 
   accurate angular distribution of XTR

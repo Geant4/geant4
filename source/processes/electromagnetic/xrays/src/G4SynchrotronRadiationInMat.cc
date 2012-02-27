@@ -321,15 +321,33 @@ G4SynchrotronRadiationInMat::PostStepDoIt(const G4Track& trackData,
       G4ParticleMomentum 
       particleDirection = aDynamicParticle->GetMomentumDirection();
 
-      // M-C of its direction
+      // M-C of its direction, simplified dipole busted approach
       
-      G4double Teta = G4UniformRand()/gamma ;    // Very roughly
+      // G4double Teta = G4UniformRand()/gamma ;    // Very roughly
+
+      G4double cosTheta, sinTheta, fcos, beta;
+
+  do
+  { 
+    cosTheta = 1. - 2.*G4UniformRand();
+    fcos     = (1 + cosTheta*cosTheta)*0.5;
+  }
+  while( fcos < G4UniformRand() );
+
+  beta = std::sqrt(1. - 1./(gamma*gamma));
+
+  cosTheta = (cosTheta + beta)/(1. + beta*cosTheta);
+
+  if( cosTheta >  1. ) cosTheta =  1.;
+  if( cosTheta < -1. ) cosTheta = -1.;
+
+  sinTheta = std::sqrt(1. - cosTheta*cosTheta );
 
       G4double Phi  = twopi * G4UniformRand() ;
 
-      G4double dirx = std::sin(Teta)*std::cos(Phi) , 
-               diry = std::sin(Teta)*std::sin(Phi) , 
-               dirz = std::cos(Teta) ;
+      G4double dirx = sinTheta*std::cos(Phi) , 
+               diry = sinTheta*std::sin(Phi) , 
+               dirz = cosTheta;
 
       G4ThreeVector gammaDirection ( dirx, diry, dirz);
       gammaDirection.rotateUz(particleDirection);   
