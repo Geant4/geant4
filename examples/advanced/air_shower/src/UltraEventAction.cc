@@ -112,11 +112,9 @@ if(HCE){
 
     for(G4int iHit=0; iHit<nOptHits; iHit++){
 
+#ifdef G4ANALYSIS_USE
       G4double HitEnergy ;
       HitEnergy = (*OpticalHitsColl)[iHit]->GetEnergy() ;
-      G4ThreeVector HitPos = (*OpticalHitsColl)[iHit]->GetPosition()/cm;
-
-#ifdef G4ANALYSIS_USE
       UltraAnalysisManager* analysis = UltraAnalysisManager::getInstance();
       analysis->FillHistogram(1,HitEnergy/eV);
 #endif
