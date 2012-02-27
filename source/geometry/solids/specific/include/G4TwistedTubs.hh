@@ -308,6 +308,7 @@ class G4TwistedTubs : public G4VSolid
       LastValue(const LastValue& r) : p(r.p), value(r.value){}
       LastValue& operator=(const LastValue& r)
       {
+        if (this == &r)  { return *this; }
         p = r.p; value = r.value;
         return *this;
       }
