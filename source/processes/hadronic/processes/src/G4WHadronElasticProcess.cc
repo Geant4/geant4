@@ -179,7 +179,6 @@ G4VParticleChange* G4WHadronElasticProcess::PostStepDoIt(
       G4Exception("G4WHadronElasticProcess::PostStepDoIt", "had006", 
 		  FatalException, ed);
     }
-  hadi->ApplyYourself(thePro, *targetNucleus);
 
   // directions
   G4ThreeVector indir = track.GetMomentumDirection();
@@ -240,6 +239,9 @@ G4VParticleChange* G4WHadronElasticProcess::PostStepDoIt(
       // G4cout << "recoil rotated " << pdir << G4endl;
       p->SetMomentumDirection(pdir);
       aParticleChange.AddSecondary(p);
+    } else {
+      edep += p->GetKineticEnergy();
+      delete p;
     }
   }
   aParticleChange.ProposeLocalEnergyDeposit(edep);
