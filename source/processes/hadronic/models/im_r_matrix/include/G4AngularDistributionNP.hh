@@ -41,7 +41,8 @@ class G4AngularDistributionNP : public G4VAngularDistribution
 {
  private:
 
-   enum { NENERGY=22, NANGLE=180 };
+//   enum { NENERGY=22, NANGLE=180 };
+   enum { NENERGY=39, NANGLE=180 };
 
  public:
 
