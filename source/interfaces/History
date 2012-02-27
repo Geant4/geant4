@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+1st February 2012  John Allison (interfaces-V09-05-00)
+- Added moc to svn:ignore property in subdirectory basic.
+
 30th November 2011 Ben Morgan (interfaces-V09-04-14)
 - basic/sources.cmake : Ensure Motif libraries linked before X11 libraries to 
   prevent item 321 in the Motif FAQ regarding 'non-widget child "dsm"' errors. 
