@@ -41,6 +41,7 @@
 #include "G4PhotoElectricEffect.hh"
 
 #include "G4eMultipleScattering.hh"
+#include "G4MuMultipleScattering.hh"
 #include "G4WentzelVIModel.hh"
 #include "G4CoulombScattering.hh"
 
@@ -95,7 +96,7 @@ void PhysListEmStandard_WVI::ConstructProcess()
     } else if (particleName == "e-") {
       //electron
 
-      G4eMultipleScattering* eMsc = new G4eMultipleScattering();
+      G4MuMultipleScattering* eMsc = new G4MuMultipleScattering();
       eMsc->AddEmModel(1, new G4WentzelVIModel()); 
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetEmModel(new MyMollerBhabhaModel);
@@ -108,7 +109,7 @@ void PhysListEmStandard_WVI::ConstructProcess()
     } else if (particleName == "e+") {
       //positron
 
-      G4eMultipleScattering* pMsc = new G4eMultipleScattering();
+      G4MuMultipleScattering* pMsc = new G4MuMultipleScattering();
       pMsc->AddEmModel(1, new G4WentzelVIModel());
       G4eIonisation* pIoni = new G4eIonisation();
       pIoni->SetEmModel(new MyMollerBhabhaModel);
