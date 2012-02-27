@@ -17,6 +17,33 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 February 12: V.Ivanchenko (emstand-V09-05-10)
+- G4UrbanMscModel93, G4UrbanMscModel95 - fixed G4Exception printout
+
+14 February 12: V.Ivanchenko (emstand-V09-05-09)
+- previous tags were rejected by mistake
+
+12 February 12: V.Ivanchenko (emstand-V09-05-08)
+- G4WentzelOKandVIxSection, G4WentzelVIModel - cleanup of previous modifications
+
+10 February 12: V.Ivanchenko (emstand-V09-05-07)
+- G4WentzelVIModel - improved algorithm of sampling of scattering angle and 
+    displacement: chice between 1 or 2 sub-steps
+
+09 February 12: V.Ivanchenko (emstand-V09-05-06)
+- G4WentzelOKandVIxSection - fixed typo
+
+09 February 12: V.Ivanchenko (emstand-V09-05-05)
+- G4UniversalFluctuation L.Urban improved parameterisation for 
+    thin gas layers
+- G4WentzelOKandVIxSection - different screening functions for 
+    e+- and heavy particles
+
+31 January 12: V.Ivanchenko (emstand-V09-05-04)
+31 January 12: V.Ivanchenko (emstand-V09-05-03)
+- G4WentzeVIModel - fixed bug in computation of lateral displacement
+    (Leif Raedel report# 1114 in HyperNews forum) 
+
 27 January 12: V.Ivanchenko (emstand-V09-05-02)
 - G4WentzeVIModel - added G4Exception to identify misuse of transport
     cross section computation

@@ -732,7 +732,7 @@ void G4UrbanMscModel90::SampleScattering(const G4DynamicParticle* dynParticle,
 
   G4double cth  = SampleCosineTheta(tPathLength,kineticEnergy);
   // protection against 'bad' cth values
-  if(std::abs(cth) > 1.) return;
+  if(std::fabs(cth) > 1.) return;
 
   const G4double checkEnergy = GeV;
   if(kineticEnergy > checkEnergy && cth < 0.0 

@@ -827,7 +827,7 @@ void G4UrbanMscModel93::SampleScattering(const G4DynamicParticle* dynParticle,
   G4double cth  = SampleCosineTheta(tPathLength,kineticEnergy);
 
   // protection against 'bad' cth values
-  if(std::abs(cth) > 1.) return;
+  if(std::fabs(cth) > 1.) return;
 
   const G4double checkEnergy = GeV;
   if(kineticEnergy > checkEnergy && cth < 0.0 
@@ -838,7 +838,7 @@ void G4UrbanMscModel93::SampleScattering(const G4DynamicParticle* dynParticle,
        << " Step(mm)= " << tPathLength/mm
        << " in " << CurrentCouple()->GetMaterial()->GetName()
        << " scattering angle is set to zero" << G4endl;
-    G4Exception("G4UrbanMscModel90::SampleScattering","em0004",JustWarning,
+    G4Exception("G4UrbanMscModel93::SampleScattering","em0004",JustWarning,
                 ed,"Please, send bug report in the case of this message");
     return;
   }

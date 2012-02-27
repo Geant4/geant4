@@ -119,8 +119,8 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
   currentCouple = 0;
   cosThetaMin = cos(PolarAngleLimit());
   wokvi->Initialise(p, cosThetaMin);
-  /*
-  G4cout << "G4eCoulombScatteringModel: "  
+  /*  
+  G4cout << "G4eCoulombScatteringModel: " << particle->GetParticleName()
          << "  1-cos(ThetaLimit)= " << 1 - cosThetaMin
 	 << "  cos(thetaMax)= " <<  cosThetaMax
 	 << G4endl;
@@ -169,12 +169,11 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
     if(xsec > 0.0) { elecRatio /= xsec; }  
   }
   /*
+  if(p->GetParticleName() == "e-") 
   G4cout << "e(MeV)= " << kinEnergy/MeV << " xsec(b)= " << xsec/barn  
 	 << " 1-cosTetMinNuc= " << 1-cosTetMinNuc
-	 << " 1-cosTetMaxNuc2= " << 1-cosTetMaxNuc2
-	 << " 1-cosTetMaxElec= " << 1-cosTetMaxElec
-	 << " screenZ= " << screenZ
-	 << " formfactA= " << formfactA << G4endl;
+	 << " 1-cosTetMaxNuc= " << 1-cosTetMaxNuc
+	 << G4endl;
   */
   return xsec;  
 }
