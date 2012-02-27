@@ -17,11 +17,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-- January 21st, 2011 H.Kurashige  (track-V09-05-03)
+- February 3rd, 2012 J.Apostolakis  (track-V09-05-04)
+- G4FieldTrackUpdator::Update method must reset the RestMass, 
+   because it is used to Initialise each track by ParallelWorldScoringProcess,
+   (as well as update during stepping a track.)
+    Requires tag  'field-V09-05-03' of geometry/magneticfield
+
+- January 21st, 2012 H.Kurashige    (track-V09-05-03)
 - G4Track::CalculateVelocityForOpticalPhoton() has been reverted
   Modification of Optical process solves Problem #1275
 
-- January 9th, 2011 H.Kurashige  (track-V09-05-02)
+- January 9th, 2012 H.Kurashige  (track-V09-05-02)
 - Use GetNextMaterial instead of GetMaterial 
   in G4Track::CalculateVelocityForOpticalPhoton()
    (Problem #1275)
