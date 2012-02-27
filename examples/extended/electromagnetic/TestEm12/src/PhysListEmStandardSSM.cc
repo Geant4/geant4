@@ -23,13 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardSS.cc,v 1.11 2011-01-05 19:08:45 vnivanch Exp $
+// $Id: PhysListEmStandardSSM.cc,v 1.2 2011-01-05 19:07:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
-#include "PhysListEmStandardSS.hh"
+#include "PhysListEmStandardSSM.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
@@ -40,6 +40,7 @@
 
 #include "G4CoulombScattering.hh"
 #include "G4eCoulombScatteringModel.hh"
+#include "G4eSingleCoulombScatteringModel.hh"
 #include "G4IonCoulombScatteringModel.hh"
 
 #include "G4eIonisation.hh"
@@ -57,18 +58,18 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysListEmStandardSS::PhysListEmStandardSS(const G4String& name)
+PhysListEmStandardSSM::PhysListEmStandardSSM(const G4String& name)
    :  G4VPhysicsConstructor(name)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysListEmStandardSS::~PhysListEmStandardSS()
+PhysListEmStandardSSM::~PhysListEmStandardSSM()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysListEmStandardSS::ConstructProcess()
+void PhysListEmStandardSSM::ConstructProcess()
 {
   // Add standard EM Processes
 
@@ -90,19 +91,26 @@ void PhysListEmStandardSS::ConstructProcess()
       pmanager->AddProcess(new G4eBremsstrahlung,    -1, 2, 2);
 
       G4CoulombScattering* cs = new G4CoulombScattering();
-      G4eCoulombScatteringModel* model = 
-	new G4eCoulombScatteringModel();
-      model->SetLowEnergyThreshold(10*eV);
+      G4eSingleCoulombScatteringModel* model = 
+	new G4eSingleCoulombScatteringModel();
+      //model->SetLowEnergyThreshold(10*eV);
       model->SetPolarAngleLimit(0.0);
       cs->AddEmModel(0, model);
       pmanager->AddDiscreteProcess(cs);            
 	    
     } else if (particleName == "e+") {
       //positron
+
       pmanager->AddProcess(new G4eIonisation,        -1, 1, 1);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1, 2, 2);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1, 3);
-      pmanager->AddDiscreteProcess(new G4CoulombScattering);            
+
+      G4CoulombScattering* cs = new G4CoulombScattering();
+      G4eSingleCoulombScatteringModel* model = 
+	new G4eSingleCoulombScatteringModel();
+      model->SetPolarAngleLimit(0.0);
+      cs->AddEmModel(0, model);
+      pmanager->AddDiscreteProcess(cs);            
             
     } else if (particleName == "mu+" || 
                particleName == "mu-"    ) {
@@ -110,19 +118,24 @@ void PhysListEmStandardSS::ConstructProcess()
       pmanager->AddProcess(new G4MuIonisation,       -1, 1, 1);
       pmanager->AddProcess(new G4MuBremsstrahlung,   -1, 2, 2);
       pmanager->AddProcess(new G4MuPairProduction,   -1, 3, 3);
-      pmanager->AddDiscreteProcess(new G4CoulombScattering);              
+      G4CoulombScattering* cs = new G4CoulombScattering();
+      G4eCoulombScatteringModel* model = new G4eCoulombScatteringModel();
+      model->SetPolarAngleLimit(0.0);
+      cs->AddEmModel(0, model);
+      pmanager->AddDiscreteProcess(cs);            
+
              
     } else if (particleName == "alpha" || particleName == "He3") {
       pmanager->AddProcess(new G4ionIonisation,      -1, 1, 1);
       G4CoulombScattering* cs = new G4CoulombScattering();
-      //cs->AddEmModel(0, new G4IonCoulombScatteringModel());
+      cs->AddEmModel(0, new G4IonCoulombScatteringModel());
       cs->SetBuildTableFlag(false);
-      pmanager->AddDiscreteProcess(cs);
+      pmanager->AddDiscreteProcess(cs);            
 
     } else if (particleName == "GenericIon" ) { 
       pmanager->AddProcess(new G4ionIonisation,      -1, 1, 1);      
       G4CoulombScattering* cs = new G4CoulombScattering();
-      //cs->AddEmModel(0, new G4IonCoulombScatteringModel());
+      cs->AddEmModel(0, new G4IonCoulombScatteringModel());
       cs->SetBuildTableFlag(false);
       pmanager->AddDiscreteProcess(cs);
      
@@ -130,38 +143,12 @@ void PhysListEmStandardSS::ConstructProcess()
 	       (particle->GetPDGCharge() != 0.0) && 
 	       (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
-      G4CoulombScattering* cs = new G4CoulombScattering();
       pmanager->AddProcess(new G4hIonisation,        -1, 1, 1);
-      cs->SetBuildTableFlag(false);
-      pmanager->AddDiscreteProcess(cs);
+      pmanager->AddDiscreteProcess(new G4CoulombScattering);            
     }
   }
-  
-  // Em options
-  //
-  // Main options and setting parameters are shown here.
-  // Several of them have default values.
-  //
-  G4EmProcessOptions emOptions;
-  
-  //physics tables
-  //
-  emOptions.SetMinEnergy(100*eV);	//default    
-  emOptions.SetMaxEnergy(100*TeV);	//default  
-  emOptions.SetDEDXBinning(12*20);	//default=12*7  
-  emOptions.SetLambdaBinning(12*20);	//default=12*7
-  //  emOptions.SetSplineFlag(true);	//default
-      
-  //energy loss
-  //
-  //emOptions.SetStepFunction(0.2, 100*um);	//default=(0.2, 1*mm)      
-  //emOptions.SetLinearLossLimit(1.e-2);		//default
-   
-  //ionization
-  //
-  emOptions.SetSubCutoff(false);	//default  
-
   // scattering
+  G4EmProcessOptions emOptions;
   emOptions.SetPolarAngleLimit(0.0);
 }
 

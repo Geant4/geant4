@@ -118,7 +118,8 @@ $Id: README,v 1.11 2009-09-22 15:18:20 maire Exp $
      In RunAction::BeginOfRun() the stepMax value is passed from the 
      HistoManager to the StepMax process. 
      A boolean UI command allows to desactivate this mechanism.
-     	
+     Another UI command allows to define directly a stepMax value.
+      	
  7- HISTOGRAMS
  
    Testem12 has several predefined 1D histograms : 

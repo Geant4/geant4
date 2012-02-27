@@ -40,7 +40,6 @@
 #include "G4eMultipleScattering.hh"
 #include "G4WentzelVIModel.hh"
 #include "G4CoulombScattering.hh"
-#include "G4eCoulombScatteringModel.hh"
 #include "G4IonCoulombScatteringModel.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -95,34 +94,22 @@ void PhysListEmStandardWVI::ConstructProcess()
       
     } else if (particleName == "e-") {
       //electron
-      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      G4MuMultipleScattering* msc = new G4MuMultipleScattering();
       msc->AddEmModel(0, new G4WentzelVIModel());
       pmanager->AddProcess(msc,                       -1, 1, 1);      
       pmanager->AddProcess(new G4eIonisation,         -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3, 3);
-
-      G4CoulombScattering* cs = new G4CoulombScattering();
-      G4eCoulombScatteringModel* model = new G4eCoulombScatteringModel();
-      model->SetLowEnergyThreshold(10*eV);
-      model->SetPolarAngleLimit(0.2);
-      cs->AddEmModel(0, model);
-      pmanager->AddDiscreteProcess(cs);            
+      pmanager->AddProcess(new G4CoulombScattering,   -1,-1, 4);
       	    
     } else if (particleName == "e+") {
       //positron
-      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      G4MuMultipleScattering* msc = new G4MuMultipleScattering();
       msc->AddEmModel(0, new G4WentzelVIModel());
       pmanager->AddProcess(msc,                       -1, 1, 1);            
       pmanager->AddProcess(new G4eIonisation,         -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3, 3);
       pmanager->AddProcess(new G4eplusAnnihilation,    0,-1, 4);
-
-      G4CoulombScattering* cs = new G4CoulombScattering();
-      G4eCoulombScatteringModel* model = new G4eCoulombScatteringModel();
-      model->SetLowEnergyThreshold(10*eV);
-      model->SetPolarAngleLimit(0.2);
-      cs->AddEmModel(0, model);
-      pmanager->AddDiscreteProcess(cs);            
+      pmanager->AddProcess(new G4CoulombScattering,   -1,-1, 5);
                   
     } else if (particleName == "mu+" || 
                particleName == "mu-"    ) {
@@ -133,31 +120,19 @@ void PhysListEmStandardWVI::ConstructProcess()
       pmanager->AddProcess(new G4MuIonisation,         -1, 2, 2);
       pmanager->AddProcess(new G4MuBremsstrahlung,     -1, 3, 3);
       pmanager->AddProcess(new G4MuPairProduction,     -1, 4, 4);
-
-      G4CoulombScattering* cs = new G4CoulombScattering();
-      G4eCoulombScatteringModel* model = new G4eCoulombScatteringModel();
-      model->SetLowEnergyThreshold(100*eV);
-      model->SetPolarAngleLimit(0.2);
-      cs->AddEmModel(0, model);
-      pmanager->AddDiscreteProcess(cs);            
+      pmanager->AddProcess(new G4CoulombScattering,    -1,-1, 5);
                    
     } else if( particleName == "proton" ||
                particleName == "pi-" ||
                particleName == "pi+"    ) {
       //proton
-      G4hMultipleScattering* msc = new G4hMultipleScattering();
+      G4MuMultipleScattering* msc = new G4MuMultipleScattering();
       msc->AddEmModel(0, new G4WentzelVIModel());
-      pmanager->AddProcess(msc,                       -1, 1, 1);
+      pmanager->AddProcess(msc,                       -1, 1, 1);                
       pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
       pmanager->AddProcess(new G4hBremsstrahlung,     -1, 3, 3);
       pmanager->AddProcess(new G4hPairProduction,     -1, 4, 4);
-
-      G4CoulombScattering* cs = new G4CoulombScattering();
-      G4eCoulombScatteringModel* model = new G4eCoulombScatteringModel();
-      model->SetLowEnergyThreshold(100*eV);
-      model->SetPolarAngleLimit(0.2);
-      cs->AddEmModel(0, model);
-      pmanager->AddDiscreteProcess(cs);            
+      pmanager->AddProcess(new G4CoulombScattering,   -1,-1, 5);            
      
     } else if( particleName == "alpha" || 
 	       particleName == "He3"    ) {
@@ -184,13 +159,7 @@ void PhysListEmStandardWVI::ConstructProcess()
       msc->AddEmModel(0, new G4WentzelVIModel());
       pmanager->AddProcess(msc,                       -1, 1, 1);
       pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
-
-      G4CoulombScattering* cs = new G4CoulombScattering();
-      G4eCoulombScatteringModel* model = new G4eCoulombScatteringModel();
-      model->SetLowEnergyThreshold(100*eV);
-      model->SetPolarAngleLimit(0.2);
-      cs->AddEmModel(0, model);
-      pmanager->AddDiscreteProcess(cs);            
+      pmanager->AddProcess(new G4CoulombScattering,   -1,-1, 3);
     }
   }
 

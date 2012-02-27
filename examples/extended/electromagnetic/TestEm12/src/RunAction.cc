@@ -100,7 +100,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   //set StepMax from histos
   //
   G4double stepMax = histoManager->ComputeStepMax(csdaRange);
-  physics->GetStepMaxProcess()->SetMaxStep(stepMax);
+  physics->GetStepMaxProcess()->SetMaxStep2(stepMax);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

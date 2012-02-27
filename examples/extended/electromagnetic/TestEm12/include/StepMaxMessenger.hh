@@ -37,6 +37,7 @@
 
 class StepMax;
 class G4UIcmdWithABool;
+class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -50,7 +51,8 @@ class StepMaxMessenger: public G4UImessenger
     
   private:
     StepMax* stepMax;
-    G4UIcmdWithABool* StepMaxCmd;
+    G4UIcmdWithADoubleAndUnit* StepMax1Cmd;    
+    G4UIcmdWithABool*          StepMax2Cmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

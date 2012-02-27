@@ -15,6 +15,17 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09-02-12 V.Ivant (testem12-V09-05-02)
+- PhysListEmStandard,PhysListEmStandardSS,PhysListEmStandardSSI,
+  PhysListEmStandardWVI - more correct process order  
+     
+06-02-12 mma (testem12-V09-05-01)
+- modify StepMax mechanism. Add command /testem/StepMax
+
+29-01-12 S. Incerti, V. Ivantchenko (testem12-V09-05-00)
+- Added new physics list: PhysListEmStandardSSM, which uses 
+   G4eSingleCoulombScatteringModel
+
 21-11-11 V.Ivant (testem12-V09-04-10)
 - PhysListEmStandardGS, PhysListEmStandardWVI - low energy threshold
    for Coulomb scattering model is reduced to 10 eV for e+- and to
