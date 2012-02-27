@@ -112,10 +112,20 @@ void G4ParallelWorldProcess::StartTracking(G4Track* trk)
   fGhostPreStepPoint->SetStepStatus(fUndefined);
   fGhostPostStepPoint->SetStepStatus(fUndefined);
 
+//  G4VPhysicalVolume* thePhys = fNewGhostTouchable->GetVolume();
+//  G4cout << "======= G4ParallelWorldProcess::StartTracking() =======" << G4endl;
+//  if(thePhys)
+//  {
+//    G4cout << " --- Parallel world volume : " << thePhys->GetName() << G4endl;
+//    G4Material* ghostMaterial = thePhys->GetLogicalVolume()->GetMaterial();
+//    if(ghostMaterial)
+//    { G4cout << " --- Material : " << ghostMaterial->GetName() << G4endl; }
+//  }
+
   if(layeredMaterialFlag)
   {
-    G4StepPoint* realWorldPreStepPoint = trk->GetStep()->GetPreStepPoint();
-    SwitchMaterial(realWorldPreStepPoint);
+    G4StepPoint* realWorldPostStepPoint = trk->GetStep()->GetPostStepPoint();
+    SwitchMaterial(realWorldPostStepPoint);
   }
 }
 
