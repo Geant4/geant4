@@ -65,7 +65,7 @@ void TargetSD::Initialize(G4HCofThisEvent*)
 G4bool TargetSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
-  if(edep > 0.0) { theHisto->AddEnergy(edep, aStep); }
+  theHisto->AddEnergy(edep, aStep); 
   return true;
 }
 

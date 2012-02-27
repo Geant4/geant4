@@ -71,8 +71,6 @@ HistoManager::HistoManager()
 
   histo   = new Histo();
   elIonPair = G4LossTableManager::Instance()->ElectronIonPair();
-
-  bookHisto();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -90,7 +88,9 @@ void HistoManager::bookHisto()
     "Energy deposition in detector (keV)",nBinsE,0.0,maxEnergy/keV,1.0);
 
   histo->add1D("11",
-    "Number of primary clusters",nBinsCluster,-0.5,G4double(nBinsCluster)-0.5,1.0);
+    "Number of primary clusters",nBinsCluster,-0.5,nBinsCluster-0.5,1.0);
+
+  histo->book();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -103,13 +103,15 @@ void HistoManager::BeginOfRun()
   nTotCluster = 0;
   overflow = 0;
 
-  histo->book();
+  bookHisto();
 
   Egas.resize(nBinsE,0.0);
 
   if(verbose > 0) {
     G4cout << "HistoManager: Histograms are booked and run has been started"
            << G4endl;
+    G4cout << " nBinsCluster= " << nBinsCluster << "    nBinsE= " <<  nBinsE
+	   << "   Emax(keV)= " << maxEnergy/keV << G4endl;
   }
 }
 

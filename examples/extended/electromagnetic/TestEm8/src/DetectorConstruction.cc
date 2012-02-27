@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.2 2010-10-27 14:52:07 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.3 2010-11-21 13:00:29 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -115,6 +115,7 @@ void DetectorConstruction::DefineMaterials()
   G4Element* elC  = manager->FindOrBuildElement(6);
   G4Element* elO  = manager->FindOrBuildElement(8);
   G4Element* elF  = manager->FindOrBuildElement(9);
+  G4Element* elNe  = manager->FindOrBuildElement(10);
   G4Element* elXe = manager->FindOrBuildElement(54);
   //
   // simple gases at STP conditions 
@@ -204,12 +205,20 @@ void DetectorConstruction::DefineMaterials()
 				       ncomponents=2);
   Kr20CO2->AddMaterial( Kr,            fractionmass = 0.89 ) ;
   Kr20CO2->AddMaterial( CarbonDioxide, fractionmass = 0.11 ) ;
+
+  // ALICE mixture TPC_Ne-CO2-2
+  density = 0.939*mg/cm3 ;      
+  G4Material* NeCO2 = new G4Material(name="TPC_Ne-CO2-2", density, 
+					    ncomponents=3);
+  NeCO2->AddElement( elNe, fractionmass = 0.8039 ) ;
+  NeCO2->AddElement( elO,  fractionmass = 0.1426 ) ;
+  NeCO2->AddElement( elC,  fractionmass = 0.0535 ) ;
    
   fGasMat = XeCH4C3H8;
   fWindowMat = Mylar;
   fWorldMaterial = empty; 
 
-  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+  // G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 
 /////////////////////////////////////////////////////////////////////////
