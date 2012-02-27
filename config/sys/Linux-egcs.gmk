@@ -31,6 +31,7 @@ ifeq ($(G4SYSTEM),Linux-egcs)
   FCLIBS := -lg2c -lnsl
   ECHO    := /bin/echo -e
   SHEXT   := so
+  LOADLIBS += -lm -lstdc++
   ifndef X11FLAGS
     X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
   endif

@@ -26,6 +26,7 @@ ifeq ($(G4SYSTEM),SUN-CC)
   ECHO   := /bin/echo
   GREP   := /usr/xpg4/bin/grep
   FCLIBS := -lM77 -lF77 -lsunmath
+  LOADLIBS += -lm -lstdc++
   ifndef X11FLAGS
     X11FLAGS  := -I/usr/openwin/include/X11/extensions -I/usr/openwin/include/X11
     X11FLAGS  += -I/usr/openwin/include

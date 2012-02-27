@@ -240,7 +240,6 @@ ifeq (,$(findstring WIN32-VC,$(G4SYSTEM)))
   ifndef G4LIB_USE_ZLIB
     LOADLIBS += -lz
   endif
-  LOADLIBS += -lm -lstdc++
 endif
 
 # Graphic variables...

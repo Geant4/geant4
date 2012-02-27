@@ -38,6 +38,7 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   LDFLAGS += -bind_at_load -arch_multiple
   FCLIBS := -lg2c -lnsl
   SHEXT   := dylib
+  LOADLIBS += -lm -lstdc++
   ifndef X11FLAGS
     X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
   endif

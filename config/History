@@ -16,8 +16,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16th February 2012 Gabriele Cosmo  (config-V09-05-05)
+- Moved basic "-lm -lstdc++" link options in LOADLIBS within platform specific
+  configuration scripts. Avoid using "-lm" on Linux-icc platform.
+
+2nd February 2012 Gabriele Cosmo  (config-V09-05-04)
+- Corrected debug compilation option in WIN32-VC, to use -MDd instead of -MD.
+
 27th January 2012 Gunter Folger  (config-V09-05-03)
-- for WIN-VC increase stack size of executable to 12M
+- For WIN32-VC increase stack size of executable to 12Mb.
 
 9th December 2011 Gabriele Cosmo (config-V09-05-02)
 - Corrected condition for determining QT_AS_FRAMEWORK flag depending on

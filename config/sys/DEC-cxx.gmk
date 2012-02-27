@@ -18,6 +18,7 @@ ifeq ($(G4SYSTEM),DEC-cxx)
   G4RUNPATHOPTION := -rpath
   FC		:= f77
   FCLIBS	:= -lUfor -lfor -lFutil -lots
+  LOADLIBS      += -lm -lstdc++
   ifndef X11FLAGS
     X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
   endif
