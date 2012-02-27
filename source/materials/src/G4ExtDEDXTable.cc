@@ -415,26 +415,28 @@ G4bool G4ExtDEDXTable::RetrievePhysicsTable(
   ifilestream.open( fileName, std::ios::in );
   if( ! ifilestream ) {
 #ifdef G4VERBOSE
-    G4cout << "G4ExtDEDXTable::RetrievePhysicsVector() " 
+    G4cout << "G4ExtDEDXTable::RetrievePhysicsTable() " 
 	   << " Cannot open file "<< fileName 
 	   << G4endl;
 #endif
     return false;
   }   
 
-  std::string::size_type nmbVectors;
+  //std::string::size_type nmbVectors;
+  G4int nmbVectors;
   ifilestream >> nmbVectors;
 
-  if(nmbVectors == std::string::npos) {
+  //  if(nmbVectors == std::string::npos) {
+  if(nmbVectors <= 0) {
 #ifdef G4VERBOSE
-    G4cout << "G4ExtDEDXTable::RetrievePhysicsVector() " 
+    G4cout << "G4ExtDEDXTable::RetrievePhysicsTable() " 
 	   << " The file is corrupted " << G4endl;
 #endif
     return false;
   }  
 
-  size_t nm = size_t(nmbVectors);
-  for(size_t i = 0; i<nm; ++i) {
+  //size_t nm = size_t(nmbVectors);
+  for(G4int i = 0; i<nmbVectors; ++i) {
 
     G4String line = "";
     while( line.empty() ) {

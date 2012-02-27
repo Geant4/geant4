@@ -45,6 +45,7 @@
 // 27.07.07 V.Ivanchneko add matIndex vector to control built materials
 // 28.07.07 V.Ivanchneko add BuildMaterial method using Nist index
 // 29.04.10 V.Ivanchneko add GetMeanIonisationEnergy method using Nist index
+// 09.02.12 P.Gumplinger add ConstructNewIdealGasMaterial
 //
 //----------------------------------------------------------------------------
 //
@@ -87,8 +88,8 @@ public:
 				    G4bool    isotopes = true,
 				    G4State   state    = kStateSolid,     
 				    G4double  temp     = STP_Temperature,  
-				    G4double  pressure = STP_Pressure); 
-				      
+				    G4double  pressure = STP_Pressure);
+
   // construct a G4Material from scratch by fraction mass
   //
   G4Material* ConstructNewMaterial (const G4String& name,
@@ -108,6 +109,15 @@ public:
 				      G4double temp, G4double pres, 
 				      G4bool isotopes = true);
 
+  // Construct an ideal gas G4Material from scratch by atom count
+  //
+  G4Material* ConstructNewIdealGasMaterial(const G4String& name,
+                                           const std::vector<G4String>& elm,
+                                           const std::vector<G4int>& nbAtoms,
+                                           G4bool    isotopes = true,
+                                           G4double  temp     = STP_Temperature,
+                                           G4double  pressure = STP_Pressure); 
+				      
   // verbosity level defined by G4NistManager
   //
   void SetVerbose(G4int val);
@@ -116,6 +126,7 @@ public:
   // "simple" - only pure materials in basic state (Z = 1, ..., 98)
   // "compound" - NIST compounds
   // "hep" - HEP materials and compounds
+  // "biochemical" - bio-chemical materials 
   // "all" - all
   //
   void ListMaterials(const G4String&);

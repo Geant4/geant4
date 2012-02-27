@@ -85,6 +85,7 @@ G4NistMessenger::G4NistMessenger(G4NistManager* man)
   lisMatCmd->SetGuidance("simple - simple NIST materials.");
   lisMatCmd->SetGuidance("compound - compound NIST materials.");
   lisMatCmd->SetGuidance("hep - HEP materials.");
+  lisMatCmd->SetGuidance("biomedical - biomedical materials.");
   lisMatCmd->SetGuidance("all - list of all Geant4 materials.");
   lisMatCmd->SetParameterName("list", true);
   lisMatCmd->SetCandidates("simple compound hep all");

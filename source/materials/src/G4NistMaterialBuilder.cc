@@ -53,7 +53,8 @@
 // 14.06.11 A.Ivantchenko updated body materials (G4_....ICRP)
 //                    according ICRU Report 46 (1992) instead of 1975 
 //                    data from ICRU Report 37 used previously
-// 26.10.11 new scheme for G4Exception  (mma) 
+// 26.10.11 new scheme for G4Exception  (mma)
+// 09.02.12 P.Gumplinger add ConstructNewIdealGasMaterial
 //
 // -------------------------------------------------------------------
 //
@@ -249,6 +250,7 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
   G4bool stp = true;
   if(state == kStateGas && temp != STP_Temperature && pres != STP_Pressure)
     { stp = false; }
+
   AddMaterial(name,dens*cm3/g,0,0.,nm,state,stp);
   if(!stp) { AddGas(name,temp,pres); }
 
@@ -356,6 +358,69 @@ G4Material* G4NistMaterialBuilder::ConstructNewGasMaterial(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4Material* G4NistMaterialBuilder::ConstructNewIdealGasMaterial(
+                                      const G4String& name,
+                                      const std::vector<G4String>& elm,
+                                      const std::vector<G4int>& nbAtoms,
+                                      G4bool isotopes,
+                                      G4double temp,
+                                      G4double pres)
+{
+  G4State state = kStateGas;
+
+  // Material is in DB
+  G4Material* mat = FindOrBuildMaterial(name);
+  if(mat) {
+    G4cout << "G4NistMaterialBuilder::ConstructNewMaterial:"
+           << "  WARNING: the material <" << name
+           << "> is already exist" << G4endl;
+    G4cout << "      New material will NOT be built!"
+           << G4endl;
+    return mat;
+  }
+
+  // Material not in DB
+  G4int nm = elm.size();
+  if(nm == 0) {
+    G4cout << "G4NistMaterialBuilder::ConstructNewMaterial:"
+           << "  WARNING: empty list of elements for " << name
+           << G4endl;
+    G4cout << "      New material will NOT be built!"
+           << G4endl;
+    return 0;
+  }
+
+  // add parameters of material into internal vectors
+  // density in g/cm3, mean ionisation potential is not defined
+  G4bool stp = true;
+  if(temp != STP_Temperature && pres != STP_Pressure)
+    { stp = false; }
+
+  G4double massPerMole = 0;
+
+  G4int Z = 0;
+  for (G4int i=0; i<nm; ++i) {
+    Z = elmBuilder->GetZ(elm[i]);
+    massPerMole += nbAtoms[i] * elmBuilder->GetAtomicMassAmu(Z) * amu_c2;
+  }
+
+  G4double dens = massPerMole / (Avogadro*k_Boltzmann*temp/pres);
+
+  if (nm == 1) { AddMaterial(name,dens,Z,0.,nm,state,stp); }
+  else {
+    AddMaterial(name,dens,0,0.,nm,state,stp);
+    for (G4int i=0; i<nm; ++i) {
+      AddElementByAtomCount(elmBuilder->GetZ(elm[i]), nbAtoms[i]);
+    }
+  }
+
+  if(!stp) { AddGas(name,temp,pres); }
+
+  return BuildMaterial(nMaterials-1, isotopes);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4NistMaterialBuilder::AddMaterial(const G4String& nameMat, G4double dens,
 					G4int Z, G4double pot, 
 					G4int ncomp, G4State state, 
@@ -363,6 +428,9 @@ void G4NistMaterialBuilder::AddMaterial(const G4String& nameMat, G4double dens,
 {
   // add parameters of material into internal vectors
   // density in g/cm3, mean ionisation potential in eV
+
+  // if ncomp == 1 then Z should be defined and 
+  // AddElement should not be applied
 
   if (nCurrent != 0) {
     G4cout << "G4NistMaterialBuilder::AddMaterial WARNING: previous "
@@ -386,7 +454,7 @@ void G4NistMaterialBuilder::AddMaterial(const G4String& nameMat, G4double dens,
   STP.push_back(stp);
   matIndex.push_back(-1);
 
-  if (ncomp == 1) {
+  if (ncomp == 1 && Z > 0) {
     elements.push_back(Z);
     fractions.push_back(1.0);
     ++nComponents;
@@ -585,17 +653,17 @@ void G4NistMaterialBuilder::AddElementByWeightFraction(const G4String& name,
 
 void G4NistMaterialBuilder::AddElementByAtomCount(G4int Z, G4int nb)
 {
-  G4double w = nb*elmBuilder->GetA(Z);
+  G4double w = nb*elmBuilder->GetAtomicMassAmu(Z);
   AddElementByWeightFraction(Z, w);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4NistMaterialBuilder::AddElementByAtomCount(const G4String& name,
-                                                     G4int nb)
+						  G4int nb)
 {
   G4int Z = elmBuilder->GetZ(name);
-  G4double w = nb*elmBuilder->GetA(Z);
+  G4double w = nb*elmBuilder->GetAtomicMassAmu(Z);
   AddElementByWeightFraction(Z, w);
 }
 

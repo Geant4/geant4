@@ -65,6 +65,9 @@
 G4NistElementBuilder::G4NistElementBuilder(G4int vb):
   verbose(vb), first(true)
 {
+  nFirstIsotope[0] = 0;
+  nIsotopes[0] = 0;
+  relAbundance[0] = 0.0;
   Initialise();
   for(G4int i=0; i<maxNumElements; ++i) {elmIndex[i] = -1;}
 }
@@ -81,6 +84,15 @@ G4int G4NistElementBuilder::GetZ(const G4String& name)
   G4int Z = maxNumElements;
   do {--Z;} while( Z>0 && elmSymbol[Z] != name);
   return Z;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4NistElementBuilder::GetAtomicMassAmu(const G4String& name)
+{
+  G4int Z = maxNumElements;
+  do {--Z;} while( Z>0 && elmSymbol[Z] != name);
+  return GetAtomicMassAmu(Z);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

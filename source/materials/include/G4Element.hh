@@ -123,13 +123,20 @@ public:  // with description
   virtual ~G4Element();
   
   //
-  // retrieval methods
+  // Retrieval methods
   //
   inline const G4String& GetName()   const {return fName;}
   inline const G4String& GetSymbol() const {return fSymbol;}
-  inline G4double GetZ()      const {return fZeff;}     //atomic number
-  inline G4double GetN()      const {return fNeff;}     //number of nucleons
-  inline G4double GetA()      const {return fAeff;}     //mass of a mole
+
+  // Atomic number
+  inline G4double GetZ()             const {return fZeff;}    
+
+  // Atomic weight in atomic units
+  inline G4double GetN()             const {return fNeff;}     
+  inline G4double GetAtomicMassAmu() const {return fNeff;}     
+
+  // Mass of a mole in Geant4 units for atoms with atomic shell
+  inline G4double GetA()             const {return fAeff;}    
 
   inline G4bool   GetNaturalAbandancesFlag();
 

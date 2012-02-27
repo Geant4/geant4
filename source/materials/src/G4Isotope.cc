@@ -196,20 +196,20 @@ size_t G4Isotope::GetNumberOfIsotopes()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4Isotope* G4Isotope::GetIsotope(G4String isotopeName, G4bool warning)
+G4Isotope* G4Isotope::GetIsotope(const G4String& isotopeName, G4bool warning)
 {  
   // search the isotope by its name 
   for (size_t J=0 ; J<theIsotopeTable.size() ; J++)
    {
-    if (theIsotopeTable[J]->GetName() == isotopeName)
-      return theIsotopeTable[J];
+     if (theIsotopeTable[J]->GetName() == isotopeName)
+       { return theIsotopeTable[J]; }
    }
    
   // the isotope does not exist in the table
   if (warning) {
-  G4cout << "\n---> warning from G4Isotope::GetIsotope(). The isotope: "
-         << isotopeName << " does not exist in the table. Return NULL pointer."
-	 << G4endl;
+    G4cout << "\n---> warning from G4Isotope::GetIsotope(). The isotope: "
+	   << isotopeName << " does not exist in the table. Return NULL pointer."
+	   << G4endl;
   }     
   return 0;          
 }

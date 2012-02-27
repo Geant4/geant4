@@ -91,7 +91,7 @@ G4NistManager::G4NistManager()
 
   // compute frequently used values for mean atomic numbers
   for(G4int j=1; j<101; ++j) {
-    G4double A = elmBuilder->GetA(j);
+    G4double A = elmBuilder->GetAtomicMassAmu(j);
     POWERA27[j] = std::pow(A,0.27);
     LOGAZ[j]    = std::log(A);
   }

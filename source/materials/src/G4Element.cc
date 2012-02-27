@@ -163,12 +163,13 @@ void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
 
     fNeff = fAeff = 0.0;
     for (size_t i=0;i<fNumberOfIsotopes;i++) {
-      fNeff +=  fRelativeAbundanceVector[i]*(*theIsotopeVector)[i]->GetN();
+      //      fNeff +=  fRelativeAbundanceVector[i]*(*theIsotopeVector)[i]->GetN();
       fAeff +=  fRelativeAbundanceVector[i]*(*theIsotopeVector)[i]->GetA();
       wtSum +=  fRelativeAbundanceVector[i];
     }
-    fNeff /=  wtSum;
-    fAeff /=  wtSum;
+    //fNeff /=  wtSum;
+    fAeff  /= wtSum;
+    fNeff   = fAeff/(g/mole);
       
     fNbOfAtomicShells = G4AtomicShells::GetNumberOfShells(iz);
     fAtomicShells     = new G4double[fNbOfAtomicShells];
