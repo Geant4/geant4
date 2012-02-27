@@ -192,17 +192,14 @@ void G4ConvergenceTester::calStat()
 
    mean_1 = ( sum + largest ) / ( n + 1 );
 
-   sum_x2 = 0.0;
    for ( it = nonzero_histories.begin() ; it != nonzero_histories.end() ; it++ )
    {
       xi = it->second;
-      sum_x2 += xi * xi;
       var_1 += ( xi - mean_1 ) * ( xi - mean_1 );
       shift_1 += ( xi - mean_1 ) * ( xi - mean_1 ) * ( xi - mean_1 );
       vov_1 += ( xi - mean_1 ) * ( xi - mean_1 ) * ( xi - mean_1 ) * ( xi - mean_1 );
    }
    xi = largest;
-   sum_x2 += xi * xi;
    var_1 += ( xi - mean_1 ) * ( xi - mean_1 );
    shift_1 += ( xi - mean_1 ) * ( xi - mean_1 ) * ( xi - mean_1 );
    vov_1 += ( xi - mean_1 ) * ( xi - mean_1 ) * ( xi - mean_1 ) * ( xi - mean_1 );
