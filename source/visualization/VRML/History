@@ -20,6 +20,10 @@ committal in the CVS repository !
 History file for visualization/VRML sub-category
 ------------------------------------------------
 
+13th January 2012  John Allison  (VRML-V09-05-00)
+- G4VRML1/2FileSceneHandler.cc
+  o Fixed Ubuntu warning about ignoring return value of system call.
+
 27th December 2010  John Allison  (VRML-V09-04-00)
 - Tagged.
 

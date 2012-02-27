@@ -39,6 +39,7 @@ class G4UIcmdWithAString;
 
 #include "G4Transform3D.hh"
 #include "G4VisAttributes.hh"
+#include "G4Text.hh"
 
 class G4VisCommandSceneAddAxes: public G4VVisCommandScene {
 public:
@@ -49,6 +50,30 @@ public:
 private:
   G4VisCommandSceneAddAxes (const G4VisCommandSceneAddAxes&);
   G4VisCommandSceneAddAxes& operator = (const G4VisCommandSceneAddAxes&);
+  G4UIcommand* fpCommand;
+};
+
+class G4VisCommandSceneAddDate: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneAddDate ();
+  virtual ~G4VisCommandSceneAddDate ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneAddDate (const G4VisCommandSceneAddDate&);
+  G4VisCommandSceneAddDate& operator = (const G4VisCommandSceneAddDate&);
+  struct Date {
+    Date
+    (G4VisManager* vm, G4int size,
+     G4double x, G4double y, G4Text::Layout layout):
+      fpVisManager(vm), fSize(size),
+      fX(x), fY(y), fLayout(layout) {}
+    void operator()(G4VGraphicsScene&, const G4Transform3D&);
+    G4VisManager* fpVisManager;
+    G4int fSize;
+    G4double fX, fY;
+    G4Text::Layout fLayout;
+  };
   G4UIcommand* fpCommand;
 };
 
@@ -74,12 +99,33 @@ private:
   G4VisCommandSceneAddEventID (const G4VisCommandSceneAddEventID&);
   G4VisCommandSceneAddEventID& operator = (const G4VisCommandSceneAddEventID&);
   struct EventID {
-    EventID(G4VisManager* vm, G4int size, G4double x, G4double y):
-      fpVisManager(vm), fSize(size), fX(x), fY(y) {}
+    EventID(G4VisManager* vm, G4int size,
+	    G4double x, G4double y, G4Text::Layout layout):
+      fpVisManager(vm), fSize(size),
+      fX(x), fY(y), fLayout(layout) {}
     void operator()(G4VGraphicsScene&, const G4Transform3D&);
     G4VisManager* fpVisManager;
     G4int fSize;
     G4double fX, fY;
+    G4Text::Layout fLayout;
+  };
+  G4UIcommand* fpCommand;
+};
+
+class G4VisCommandSceneAddFrame: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneAddFrame ();
+  virtual ~G4VisCommandSceneAddFrame ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneAddFrame (const G4VisCommandSceneAddFrame&);
+  G4VisCommandSceneAddFrame& operator = (const G4VisCommandSceneAddFrame&);
+  struct Frame {
+    Frame(G4double size, G4int width): fSize(size), fWidth(width) {}
+    void operator()(G4VGraphicsScene&, const G4Transform3D&);
+    G4double fSize;
+    G4int fWidth;
   };
   G4UIcommand* fpCommand;
 };

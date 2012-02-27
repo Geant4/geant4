@@ -17,6 +17,93 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13th February 2012  John Allison  (opengl-V09-05-04)
+- G4OpenGLStoredQtSceneHandler.cc: Added #include <typeinfo> for gcc 4.3.
+
+11th February 2012  John Allison  (opengl-V09-05-03)
+- Merged vis-V09-05-04-2ndbranch (tag vis-V09-05-04-2ndbranch-08) to trunk.
+- G4OpenGLQtViewer : Remove unused method CreateFontLists()
+- Exchange a GL_FRONT to GL_BACK drawing in the case of out of memory
+  for display list.
+- G4OpenGLViewer.cc: Bug fix in error message: maximum window size exceeded.
+
+7th February 2012  John Allison  (vis-V09-05-04-2ndbranch-opengl-06)
+- Needs greps-V09-05-05:
+  o (G4VisAttributes and G4Visible copy constructor and assignment operator.)
+
+7th February 2012  John Allison  (vis-V09-05-04-2ndbranch-opengl-05)
+- PO/TOList: Changed G4Text* to G4TextPlus* (includes object transform
+  and 2D flag).
+
+4th February 2012  John Allison  (vis-V09-05-04-2ndbranch-opengl-04)
+- Needs greps-V09-05-04 (G4Text copy constructor).
+- PO/TOList: Changed G4TextModel* to G4Text*.
+
+2nd February 2012  John Allison  (vis-V09-05-04-2ndbranch-opengl-03)
+- G4OpenGLStoredSceneHandler.cc:
+  o Removed glDrawBuffer(GL_FRONT) when no memory for display lists.
+- G4OpenGLStoredViewer.cc:
+  o Remove tempMFDL and associated code (see 1st February).The
+    following renders it unnecessary.
+  o When re-using AddPrimitive, by-pass the stored AddPrimitive to
+    avoid making more display lists and other stuff in
+    AddPrimitivePreamble, etc.  Use
+      static_cast<G4OpenGLSceneHandler&>(fSceneHandler).
+        G4OpenGLSceneHandler::AddPrimitive(...).
+  o Fixes StoredQt text problem.
+
+1st February 2012  John Allison  (vis-V09-05-04-2ndbranch-opengl-02)
+- G4OpenGLStoredViewer::DrawDisplayLists:
+  o Some systems, notably Qt, re-use model->DescribeYourselfTo(sceneHandler)
+    but we don't want to create any further display lists, so...
+      G4bool tempMFDL = fG4OpenGLStoredSceneHandler.fMemoryForDisplayLists;
+      fG4OpenGLStoredSceneHandler.fMemoryForDisplayLists = false;
+   ...and restore at the end.
+  o However, back to square one... Text not drawn.  Why not?
+    G4OpenGLQtViewer::DrawText get called so why doesn't it draw?
+    (It seemed that without this fix, DescribeYourselfTo was creating
+    a TO - again and again - and getting drawn that way.  But why
+    does it not get drawn this way???)
+
+31st January 2012  John Allison  (vis-V09-05-04-2ndbranch-opengl-01)
+- G4OpenGLStoredQtViewer:
+  o Removed DrawText, thereby allowing base class implementation
+    G4OpenGLQtViewer::DrawText to operate.  Fixes text problem altogther!!
+
+31st January 2012  John Allison  (vis-V09-05-04-2ndbranch-opengl-00)
+- Special case text: skeleton.  Some systems, notabley Qt, process
+  text in a special way; it cannot be stored in display lists.  So the
+  text model pointer is stored in the PO/TO and processed separately.
+  (PO = Persistent object, TO = transient object.)  The nested classes
+  G4OpenGLStoredSceneHandler::PO and TO keep relevent information,
+  e.g., the display list index or, in this case, when relevant, a
+  pointer to the G4TextModel.
+  o G4OpenGLStoredSceneHandler:
+    . Added a G4TextModel* to PO and TO.
+  o G4OpenGLStoredViewer::DrawDisplayLists:
+    . If PO or TO has a G4TextModel*, DescribeYourselfTo(fSceneHandler).
+  o G4OpenGLStoredQtSceneHandler::ExtraPO/TOProcessing:
+    . Stores the G4TextModel pointer in the current PO/TO.
+  o G4OpenGLStoredQtViewer::DrawText:
+    . Added temporary print statement (prints text).
+
+17th January 2012  Laurent Garnier
+- G4OpenGLStoredQtSceneHandler : Add ProcessText method
+- G4OpenGLStoredViewer : Remove DrawOutOfDisplayLists method (moved in G4OpenGLStoredViewerQt)
+- G4OpenGLStoredQtViewer : Add DrawOutOfDisplayLists method
+ 
+13th January 2012  John Allison (opengl-V09-05-02)
+- Tagged.
+
+3rd January 2012 Laurent Garnier
+- G4OpenGLStoredViewer : add a method DrawOutOfDisplayLists () in order, for
+  the moment, to be able to redraw text outside of display list
+- G4OpenGLQtViewer : Remove unused method CreateFontLists()
+- G4OpenGLStoredQtViewer : In ComputeView method, after DrawDisplayLists, now we call DrawOutOfDisplayLists in order to draw text. Also remove DrawText (only print a warning message)
+- G4OpenGLViewer : Better information message
+- G4OpenGLStoredSceneHandler : Add text in store mode special case for Qt viewer.
+  Exchange a GL_FRONT to GL_BACK drawing in the case of out of memory for display list
+
 2nd January 2012  John Allison  (opengl-V09-05-01)
 - G4OpenGLImmediate/StoredQt/X/Xm/Wt.hh:
   o Removed #ifdef G4VIS... protection from header files so that they

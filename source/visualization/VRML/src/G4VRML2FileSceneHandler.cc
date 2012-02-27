@@ -222,7 +222,7 @@ void G4VRML2FileSceneHandler::closePort()
 	  }
 	} else {
 		sprintf( command, "%s %s", viewer, fVRMLFileName  );   
-		system( command );
+		(void) system( command );
 	}
 }
 

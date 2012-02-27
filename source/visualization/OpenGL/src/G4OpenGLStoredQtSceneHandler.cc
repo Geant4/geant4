@@ -35,9 +35,10 @@
 #include "G4OpenGLStoredQtSceneHandler.hh"
 
 #include "G4PhysicalVolumeModel.hh"
+#include "G4Text.hh"
 #include "G4VPhysicalVolume.hh"
-#include "G4LogicalVolume.hh"
 #include "G4OpenGLQtViewer.hh"
+#include <typeinfo>
 
 G4OpenGLStoredQtSceneHandler::G4OpenGLStoredQtSceneHandler
 (G4VGraphicsSystem& system,
@@ -49,12 +50,21 @@ G4OpenGLStoredQtSceneHandler::~G4OpenGLStoredQtSceneHandler ()
 {}
 
 void G4OpenGLStoredQtSceneHandler::ExtraPOProcessing
-(size_t currentPOListIndex)
+(const G4Visible& visible, size_t currentPOListIndex)
 {
+  try
+    {
+      const G4Text& g4Text = dynamic_cast<const G4Text&>(visible);
+      G4TextPlus* pG4TextPlus = new G4TextPlus(g4Text);
+      pG4TextPlus->fObjectTransform =
+	fpObjectTransformation? *fpObjectTransformation: G4Transform3D();
+      pG4TextPlus->fProcessing2D = fProcessing2D;
+      fPOList[currentPOListIndex].fpG4TextPlus = pG4TextPlus;
+    }
+  catch (std::bad_cast) {}  // No special action if not text.  Just carry on.
 
   G4PhysicalVolumeModel* pPVModel =
     dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
-  
   if (pPVModel) {
 
     // This call comes from a G4PhysicalVolumeModel.  drawnPVPath is
@@ -123,10 +133,21 @@ void G4OpenGLStoredQtSceneHandler::ExtraPOProcessing
 }
 
 void G4OpenGLStoredQtSceneHandler::ExtraTOProcessing
-(size_t)
+(const G4Visible& visible, size_t currentTOListIndex)
 {
   //G4cout << "G4OpenGLStoredQtSceneHandler::ExtraTOProcessing: index: "
   //	 << currentTOListIndex << G4endl;
+
+  try
+    {
+      const G4Text& g4Text = dynamic_cast<const G4Text&>(visible);
+      G4TextPlus* pG4TextPlus = new G4TextPlus(g4Text);
+      pG4TextPlus->fObjectTransform =
+	fpObjectTransformation? *fpObjectTransformation: G4Transform3D();
+      pG4TextPlus->fProcessing2D = fProcessing2D;
+      fTOList[currentTOListIndex].fpG4TextPlus = pG4TextPlus;
+    }
+  catch (std::bad_cast) {}  // Do nothing if not text.
 }
 
 void G4OpenGLStoredQtSceneHandler::ClearStore () {

@@ -57,23 +57,86 @@
 #include "G4OpenGLViewer.hh"
 #include "G4AttHolder.hh"
 
-G4OpenGLStoredSceneHandler::PO::PO
-(G4int id,
- const G4Transform3D& tr):
-  fDisplayListId(id),
-  fTransform(tr),
-  fPickName(0)
+G4OpenGLStoredSceneHandler::PO::PO():
+  fDisplayListId(0),
+  fPickName(0),
+  fpG4TextPlus(0)
 {}
 
-G4OpenGLStoredSceneHandler::TO::TO
-(G4int id,
- const G4Transform3D& tr):
+G4OpenGLStoredSceneHandler::PO::PO(const G4OpenGLStoredSceneHandler::PO& po):
+  fDisplayListId(po.fDisplayListId),
+  fTransform(po.fTransform),
+  fPickName(po.fPickName),
+  fpG4TextPlus(po.fpG4TextPlus? new G4TextPlus(*po.fpG4TextPlus): 0)
+{}
+
+G4OpenGLStoredSceneHandler::PO::PO(G4int id, const G4Transform3D& tr):
+  fDisplayListId(id),
+  fTransform(tr),
+  fPickName(0),
+  fpG4TextPlus(0)
+{}
+
+G4OpenGLStoredSceneHandler::PO::~PO()
+{
+  delete fpG4TextPlus;
+}
+
+G4OpenGLStoredSceneHandler::PO& G4OpenGLStoredSceneHandler::PO::operator=
+  (const G4OpenGLStoredSceneHandler::PO& rhs)
+{
+  if (&rhs == this) return *this;
+  fDisplayListId = rhs.fDisplayListId;
+  fTransform = rhs.fTransform;
+  fPickName = rhs.fPickName;
+  fpG4TextPlus = rhs.fpG4TextPlus? new G4TextPlus(*rhs.fpG4TextPlus): 0;
+  return *this;
+}
+
+G4OpenGLStoredSceneHandler::TO::TO():
+  fDisplayListId(0),
+  fPickName(0),
+  fStartTime(-DBL_MAX),
+  fEndTime(DBL_MAX),
+  fpG4TextPlus(0)
+{}
+
+G4OpenGLStoredSceneHandler::TO::TO(const G4OpenGLStoredSceneHandler::TO& to):
+  fDisplayListId(to.fDisplayListId),
+  fPickName(to.fPickName),
+  fStartTime(to.fStartTime),
+  fEndTime(to.fEndTime),
+  fColour(to.fColour),
+  fpG4TextPlus(to.fpG4TextPlus? new G4TextPlus(*to.fpG4TextPlus): 0)
+{}
+
+G4OpenGLStoredSceneHandler::TO::TO(G4int id, const G4Transform3D& tr):
   fDisplayListId(id),
   fTransform(tr),
   fPickName(0),
   fStartTime(-DBL_MAX),
-  fEndTime(DBL_MAX)
+  fEndTime(DBL_MAX),
+  fpG4TextPlus(0)
 {}
+
+G4OpenGLStoredSceneHandler::TO::~TO()
+{
+  delete fpG4TextPlus;
+}
+
+G4OpenGLStoredSceneHandler::TO& G4OpenGLStoredSceneHandler::TO::operator=
+  (const G4OpenGLStoredSceneHandler::TO& rhs)
+{
+  if (&rhs == this) return *this;
+  fDisplayListId = rhs.fDisplayListId;
+  fTransform = rhs.fTransform;
+  fPickName = rhs.fPickName;
+  fStartTime = rhs.fStartTime;
+  fEndTime = rhs.fEndTime;
+  fColour = rhs.fColour;
+  fpG4TextPlus = rhs.fpG4TextPlus? new G4TextPlus(*rhs.fpG4TextPlus): 0;
+  return *this;
+}
 
 G4OpenGLStoredSceneHandler::G4OpenGLStoredSceneHandler
 (G4VGraphicsSystem& system,
@@ -156,8 +219,8 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
 	fpViewer->GetApplicableVisAttributes(visible.GetVisAttributes());
       to.fStartTime = pVA->GetStartTime();
       to.fEndTime = pVA->GetEndTime();
-      ExtraTOProcessing(fTOList.size());  // Pass TO list index of next item.
       fTOList.push_back(to);
+      ExtraTOProcessing(visible, fTOList.size() - 1);  // Pass TO list index
       glPushMatrix();
       G4OpenGLTransform3D oglt (*fpObjectTransformation);
       glMultMatrixd (oglt.GetGLMatrix ());
@@ -171,13 +234,17 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
     else {
       PO po(fDisplayListId, *fpObjectTransformation);
       po.fPickName = fPickName;
-      ExtraPOProcessing(fPOList.size());  // Pass PO list index of next item.
       fPOList.push_back(po);
+      ExtraPOProcessing(visible, fPOList.size() - 1);  // Pass PO list index
       glNewList (fDisplayListId, GL_COMPILE);
       glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
     }
   } else {
-    glDrawBuffer (GL_FRONT);
+    glDrawBuffer (GL_BACK);
+    // Laurent Garnier 01/2012 : Not sure it was working with a front buffer. 
+    // Moreover, because this is the "outside of list" drawing, it will not be redraw
+    // when moving scene, so...
+    //    glDrawBuffer (GL_FRONT);
     glPushMatrix();
     G4OpenGLTransform3D oglt (*fpObjectTransformation);
     glMultMatrixd (oglt.GetGLMatrix ());
@@ -465,8 +532,9 @@ void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid)
 	fPickMap[++fPickName] = holder;
 	po.fPickName = fPickName;
       }
-      ExtraPOProcessing(fPOList.size());  // Pass PO list index of next item.
       fPOList.push_back(po);
+      // Pass a dummy G4Visible.  Not needed for G4PhysicalVolumeModel.
+      ExtraPOProcessing(G4Visible(), fPOList.size() - 1);  // Pass PO list index
     }
     else {
       G4VSceneHandler::RequestPrimitives (solid);

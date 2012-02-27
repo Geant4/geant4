@@ -1223,10 +1223,12 @@ void G4VisManager::RegisterMessengers () {
   directory -> SetGuidance ("Add model to current scene.");
   fDirectoryList.push_back (directory);
   RegisterMessenger(new G4VisCommandSceneAddAxes);
+  RegisterMessenger(new G4VisCommandSceneAddDate);
+  RegisterMessenger(new G4VisCommandSceneAddDigis);
   RegisterMessenger(new G4VisCommandSceneAddEventID);
+  RegisterMessenger(new G4VisCommandSceneAddFrame);
   RegisterMessenger(new G4VisCommandSceneAddGhosts);
   RegisterMessenger(new G4VisCommandSceneAddHits);
-  RegisterMessenger(new G4VisCommandSceneAddDigis);
   RegisterMessenger(new G4VisCommandSceneAddLogicalVolume);
   RegisterMessenger(new G4VisCommandSceneAddLogo);
   RegisterMessenger(new G4VisCommandSceneAddPSHits);

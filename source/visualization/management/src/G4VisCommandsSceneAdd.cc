@@ -72,6 +72,8 @@
 #include "G4SmoothTrajectory.hh"
 #include "G4SmoothTrajectoryPoint.hh"
 #include "G4AttDef.hh"
+#include "G4Timer.hh"
+#include "G4Polyline.hh"
 
 #include <sstream>
 
@@ -161,6 +163,94 @@ void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand*, G4String newValue) {
   UpdateVisManagerScene (currentSceneName);
 }
 
+////////////// /vis/scene/add/date ///////////////////////////////////////
+
+G4VisCommandSceneAddDate::G4VisCommandSceneAddDate () {
+  G4bool omitable;
+  fpCommand = new G4UIcommand ("/vis/scene/add/date", this);
+  fpCommand -> SetGuidance ("Adds date to current scene.");
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter ("size", 'i', omitable = true);
+  parameter -> SetGuidance ("Screen size of text in pixels.");
+  parameter -> SetDefaultValue (18);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("x-position", 'd', omitable = true);
+  parameter -> SetGuidance ("x screen position in range -1 < x < 1.");
+  parameter -> SetDefaultValue (0.95);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("y-position", 'd', omitable = true);
+  parameter -> SetGuidance ("y screen position in range -1 < y < 1.");
+  parameter -> SetDefaultValue (0.9);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("layout", 's', omitable = true);
+  parameter -> SetGuidance ("Layout, i.e., adjustment: left|centre|right.");
+  parameter -> SetDefaultValue ("right");
+  fpCommand -> SetParameter (parameter);
+}
+
+G4VisCommandSceneAddDate::~G4VisCommandSceneAddDate () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandSceneAddDate::GetCurrentValue (G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandSceneAddDate::SetNewValue (G4UIcommand*, G4String newValue)
+{
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+  G4bool warn(verbosity >= G4VisManager::warnings);
+
+  G4Scene* pScene = fpVisManager->GetCurrentScene();
+  if (!pScene) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<	"ERROR: No current scene.  Please create one." << G4endl;
+    }
+    return;
+  }
+
+  G4int size;
+  G4double x, y;
+  G4String layoutString;
+  std::istringstream is(newValue);
+  is >> size >> x >> y >> layoutString;
+  G4Text::Layout layout = G4Text::right;
+  if (layoutString(0) == 'l') layout = G4Text::left;
+  else if (layoutString(0) == 'c') layout = G4Text::centre;
+  else if (layoutString(0) == 'r') layout = G4Text::right;
+
+  Date* date = new Date(fpVisManager, size, x, y, layout);
+  G4VModel* model =
+    new G4CallbackModel<G4VisCommandSceneAddDate::Date>(date);
+  model->SetGlobalDescription("Date");
+  model->SetGlobalTag("Date");
+  const G4String& currentSceneName = pScene -> GetName ();
+  G4bool successful = pScene -> AddRunDurationModel (model, warn);
+  if (successful) {
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Date will be drawn in scene \""
+	     << currentSceneName << "\"."
+	     << G4endl;
+    }
+  }
+  else G4VisCommandsSceneAddUnsuccessful(verbosity);
+  UpdateVisManagerScene (currentSceneName);
+}
+
+void G4VisCommandSceneAddDate::Date::operator()
+  (G4VGraphicsScene& sceneHandler, const G4Transform3D&)
+{
+  G4Timer t;
+  G4Text text(t.GetClockTime(), G4Point3D(fX, fY, 0.));
+  text.SetScreenSize(fSize);
+  text.SetLayout(fLayout);
+  G4VisAttributes textAtts(G4Colour(0.,1.,1));
+  text.SetVisAttributes(textAtts);
+  sceneHandler.BeginPrimitives2D();
+  sceneHandler.AddPrimitive(text);
+  sceneHandler.EndPrimitives2D();
+}
+
 ////////////// /vis/scene/add/digis ///////////////////////////////////////
 
 G4VisCommandSceneAddDigis::G4VisCommandSceneAddDigis () {
@@ -228,6 +318,10 @@ G4VisCommandSceneAddEventID::G4VisCommandSceneAddEventID () {
   parameter -> SetGuidance ("y screen position in range -1 < y < 1.");
   parameter -> SetDefaultValue (0.9);
   fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("layout", 's', omitable = true);
+  parameter -> SetGuidance ("Layout, i.e., adjustment: left|centre|right.");
+  parameter -> SetDefaultValue ("left");
+  fpCommand -> SetParameter (parameter);
 }
 
 G4VisCommandSceneAddEventID::~G4VisCommandSceneAddEventID () {
@@ -253,10 +347,16 @@ void G4VisCommandSceneAddEventID::SetNewValue (G4UIcommand*, G4String newValue)
 
   G4int size;
   G4double x, y;
+  G4String layoutString;
   std::istringstream is(newValue);
-  is >> size >> x >> y;
+  is >> size >> x >> y >> layoutString;
 
-  EventID* eventID = new EventID(fpVisManager, size, x, y);
+  G4Text::Layout layout = G4Text::right;
+  if (layoutString(0) == 'l') layout = G4Text::left;
+  else if (layoutString(0) == 'c') layout = G4Text::centre;
+  else if (layoutString(0) == 'r') layout = G4Text::right;
+
+  EventID* eventID = new EventID(fpVisManager, size, x, y, layout);
   G4VModel* model =
     new G4CallbackModel<G4VisCommandSceneAddEventID::EventID>(eventID);
   model->SetGlobalDescription("EventID");
@@ -314,17 +414,100 @@ void G4VisCommandSceneAddEventID::EventID::operator()
       }
       if (eventID < nEvents - 1) return;  // Not last event.
       else {
-	oss << "Run " << runID << " (" << nEvents << " accumulated events)";
+	oss << "Run " << runID << " (" << nEvents << " event";
+	if (nEvents != 1) oss << 's';
+	oss << ')';
       }
     }
     G4Text text(oss.str(), G4Point3D(fX, fY, 0.));
     text.SetScreenSize(fSize);
+    text.SetLayout(fLayout);
     G4VisAttributes textAtts(G4Colour(0.,1.,1));
     text.SetVisAttributes(textAtts);
     sceneHandler.BeginPrimitives2D();
     sceneHandler.AddPrimitive(text);
     sceneHandler.EndPrimitives2D();
   }
+}
+
+////////////// /vis/scene/add/frame ///////////////////////////////////////
+
+G4VisCommandSceneAddFrame::G4VisCommandSceneAddFrame () {
+  fpCommand = new G4UIcommand("/vis/scene/add/frame", this);
+  fpCommand -> SetGuidance ("Adds frame to current scene.");
+  G4bool omitable;
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter ("size", 'd', omitable = true);
+  parameter -> SetGuidance ("Size of frame.  1 = full window.");
+  parameter -> SetParameterRange ("size > 0 and size <=1");
+  parameter -> SetDefaultValue (0.97);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("width", 'i', omitable = true);
+  parameter -> SetGuidance ("Width of frame in pixels.");
+  parameter -> SetParameterRange ("width > 0");
+  parameter -> SetDefaultValue (2);
+  fpCommand -> SetParameter (parameter);
+}
+
+G4VisCommandSceneAddFrame::~G4VisCommandSceneAddFrame () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandSceneAddFrame::GetCurrentValue (G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandSceneAddFrame::SetNewValue (G4UIcommand*, G4String newValue)
+{
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+  G4bool warn(verbosity >= G4VisManager::warnings);
+
+  G4Scene* pScene = fpVisManager->GetCurrentScene();
+  if (!pScene) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<	"ERROR: No current scene.  Please create one." << G4endl;
+    }
+    return;
+  }
+
+  G4double size;
+  G4int width;
+  std::istringstream is(newValue);
+  is >> size >> width;
+
+  Frame* frame = new Frame(size, width);
+  G4VModel* model =
+    new G4CallbackModel<G4VisCommandSceneAddFrame::Frame>(frame);
+  model->SetGlobalDescription("Frame");
+  model->SetGlobalTag("Frame");
+  const G4String& currentSceneName = pScene -> GetName ();
+  G4bool successful = pScene -> AddRunDurationModel (model, warn);
+  if (successful) {
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Frame will be drawn in scene \""
+	     << currentSceneName << "\"."
+	     << G4endl;
+    }
+  }
+  else G4VisCommandsSceneAddUnsuccessful(verbosity);
+  UpdateVisManagerScene (currentSceneName);
+}
+
+void G4VisCommandSceneAddFrame::Frame::operator()
+  (G4VGraphicsScene& sceneHandler, const G4Transform3D&)
+{
+  G4Polyline frame;
+  frame.push_back(G4Point3D( fSize,  fSize, 0.));
+  frame.push_back(G4Point3D(-fSize,  fSize, 0.));
+  frame.push_back(G4Point3D(-fSize, -fSize, 0.));
+  frame.push_back(G4Point3D( fSize, -fSize, 0.));
+  frame.push_back(G4Point3D( fSize,  fSize, 0.));
+  G4VisAttributes va;
+  va.SetLineWidth(fWidth);
+  frame.SetVisAttributes(va);
+  sceneHandler.BeginPrimitives2D();
+  sceneHandler.AddPrimitive(frame);
+  sceneHandler.EndPrimitives2D();
 }
 
 ////////////// /vis/scene/add/ghosts ///////////////////////////////////////

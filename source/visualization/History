@@ -24,6 +24,104 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+13th February 2012  John Allison  (vis-V09-05-07)
+- visman-V09-05-05: Small improvement to /vis/scene/add/eventID.
+- opengl-V09-05-04: Fix compilation error with gcc 4.3.
+
+11th February 2012  John Allison  (vis-V09-05-06)
+- Needs global-V09-05-00 and greps-V09-05-05.
+- Merged vis-V09-05-04-2ndbranch (tag vis-V09-05-04-2ndbranch-08) to trunk.
+  Includes:
+  o visman-V09-05-04: essentially same as visman-V09-05-03.
+  o opengl-V09-05-03: Fixes text in Qt.  Other small improvements.
+
+11th February 2012  John Allison  (vis-V09-05-04-2ndbranch-08)
+- Tagged
+
+9th February 2012  John Allison
+- visman-V09-05-03:
+  o Added /vis/scene/add/date and /vis/scene/add/frame.
+  o /vis/scene/add/eventID: Added layout parameter.
+
+8th February 2012  John Allison
+- raytracer-V09-05-01: Adopt fix proposed by jasondet@gmail.com for
+  up-vector bug #1274.
+
+7th February 2012  John Allison
+- raytracer-V09-05-00: Fix up-vector bug #1274.  Also other small fixes.
+
+7th February 2012  John Allison  (vis-V09-05-04-2ndbranch-07)
+- Needs greps-V09-05-05: Fixes to copy constructors.
+- vis-V09-05-04-2ndbranch-opengl-06: Uses above copy contructors.
+
+7th February 2012  John Allison  (vis-V09-05-04-2ndbranch-06)
+- vis-V09-05-04-2ndbranch-opengl-05:
+  o PO/TOList: Changed G4Text* to G4TextPlus*.
+
+4th February 2012  John Allison  (vis-V09-05-04-2ndbranch-05)
+- Needs greps-V09-05-04 (G4Text copy constructor).
+- vis-V09-05-04-2ndbranch-opengl-04:
+  o PO/TOList: Changed G4TextModel* to G4Text*.
+  o Fixes a problem with TO text.
+
+2nd February 2012  John Allison  (vis-V09-05-04-2ndbranch-04)
+- vis-V09-05-04-2ndbranch-opengl-03:
+  o Removed glDrawBuffer(GL_FRONT) when no memory for display lists.
+  o G4OpenGLStoredViewer.cc:
+    . When re-using AddPrimitive, by-pass the stored AddPrimitive to
+      avoid making more display lists and other stuff in
+      AddPrimitivePreamble, etc.  Use
+        static_cast<G4OpenGLSceneHandler&>(fSceneHandler).
+          G4OpenGLSceneHandler::AddPrimitive(...).
+    . Fixes StoredQt text problem.
+
+1st February 2012  John Allison
+- vis-V09-05-04-2ndbranch-opengl-02: G4OpenGLStoredViewer::DrawDisplayLists:
+  o Some systems, notably Qt, re-use model->DescribeYourselfTo(sceneHandler)
+    but we don't want to create any further display lists, so...
+      G4bool tempMFDL = fG4OpenGLStoredSceneHandler.fMemoryForDisplayLists;
+      fG4OpenGLStoredSceneHandler.fMemoryForDisplayLists = false;
+  o But text problem has come back!!!
+
+31st January 2012  John Allison  (vis-V09-05-04-2ndbranch-03)
+- vis-V09-05-04-2ndbranch-opengl-01:
+  o G4OpenGLStoredQtViewer: Removed DrawText.  Fixes stored text problem.
+
+31st January 2012  John Allison  (vis-V09-05-04-2ndbranch-02)
+- vis-V09-05-04-2ndbranch-opengl-00:
+  o Special case text: skeleton.  Some systems, notabley Qt, process
+    text in a special way; it cannot be stored in display lists.  So the
+    text model pointer is stored in the PO/TO and processed separately.
+    (PO = Persistent object, TO = transient object.)  The nested classes
+    G4OpenGLStoredSceneHandler::PO and TO keep relevent information,
+    e.g., the display list index or, in this case, when relevant, a
+    pointer to the G4TextModel.
+
+30th January 2012  John Allison  (vis-V09-05-04-2ndbranch-01)
+- VRML-V09-05-00, DAWN-V09-05-00:
+  o Fixed Ubuntu warning about ignoring return value of system call.
+- vistree-V09-05-00:
+  o G4VTreeSceneHandler.hh:
+    . Removed empty implementations of Begin/EndPrimitives, so now
+      picks up the default (and correct non-empty default
+      implementations in G4VSceneHandler).  The problem is that
+      objectTransformation must be set to something.  This was causing a
+      G4Exception in G4VisManager::DrawT.
+
+13th January 2012  John Allison  (vis-V09-05-05)
+- DAWN-V09-05-00, VRML-V09-05-00:
+  o Fixed Ubuntu warnings about ignoring return value of system call.
+- visman-V09-05-02, opengl-V09-05-02 (Laurent Garnier):
+  o Fixes for Qt Stored text.
+
+12th January 2012  John Allison
+- vistree-V09-05-00: G4VTreeSceneHandler.hh:
+  o Removed empty implementations of Begin/EndPrimitives, so now
+    picks up the default (and correct non-empty default
+    implementations in G4VSceneHandler).  The problem is that
+    objectTransformation must be set to something.  This was causing a
+    G4Exception in G4VisManager::DrawT.
+
 3rd January 2012  John Allison  (vis-V09-05-04)
 - modeling-V09-05-01: Validates geometry in all worlds.
 

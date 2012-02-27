@@ -46,8 +46,8 @@ public:
 
   // Two virtual functions for extra processing in a sub-class, for
   // example, to make a display tree.
-  void ExtraPOProcessing(size_t currentPOListIndex);
-  void ExtraTOProcessing(size_t currentTOListIndex);
+  void ExtraPOProcessing(const G4Visible&, size_t currentPOListIndex);
+  void ExtraTOProcessing(const G4Visible&, size_t currentTOListIndex);
 
   void ClearStore ();
   void ClearTransientStore ();

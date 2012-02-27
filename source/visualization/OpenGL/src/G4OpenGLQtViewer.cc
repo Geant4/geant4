@@ -2260,12 +2260,6 @@ void G4OpenGLQtViewer::DrawText(const char * textString,double x,double y,double
     fWindow->renderText(x,y,z, textString,font);
   }
 }
-        
-/** Initialise the display liste BEFORE any other OpenGL call */
-void G4OpenGLQtViewer::CreateFontLists () {
-  //  fWindow->makeCurrent();
-  DrawText("",0.0,0.0,0.0,1.0);
-}
 
 
 void G4OpenGLQtViewer::ResetView () {

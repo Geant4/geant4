@@ -67,7 +67,6 @@ void G4OpenGLStoredQtViewer::Initialise() {
 #endif
   fReadyToPaint = false;
   CreateMainWindow (this,QString(GetName()));
-  //  CreateFontLists ();
 
   glDrawBuffer (GL_BACK);
 
@@ -339,16 +338,5 @@ void G4OpenGLStoredQtViewer::ShowView (
   glFlush();
 
 }
-void G4OpenGLStoredQtViewer::DrawText(const char * ,double /* x */,double /* y */,double /* z */, double /* size */){
-  static G4bool warned = false;
-  if (!warned) {
-    warned = true;
-    G4cerr <<
-      "Text is not implemented in Qt Stored mode, please use Immediate"
-      "\n  mode if you want to see it."
-	   << G4endl;
-  }
-}
-
 
 #endif

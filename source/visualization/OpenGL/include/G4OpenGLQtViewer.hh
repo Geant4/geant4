@@ -113,7 +113,6 @@ public:
 
 protected:
   void CreateGLQtContext ();
-  void CreateFontLists ();
   virtual void CreateMainWindow (QGLWidget*,QString);
   void G4manageContextMenuEvent(QContextMenuEvent *e);
   void rotateQtScene(float, float);

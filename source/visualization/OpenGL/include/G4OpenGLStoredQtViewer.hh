@@ -60,7 +60,6 @@ public:
   void paintGL();
   void updateQWidget();
   void ShowView ();
-  void DrawText(const char * ,double x,double y,double z, double size);
 
 protected:
 

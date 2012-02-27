@@ -26,6 +26,26 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+13th February 2012  John Allison  (visman-V09-05-05)
+- G4VisCommandsSceneAdd.cc: Small improvement to /vis/scene/add/eventID.
+
+11th February 2012  John Allison  (visman-V09-05-04)
+- Merged vis-V09-05-04-2ndbranch (tag vis-V09-05-04-2ndbranch-08) to trunk.
+
+9th February 2012  John Allison (visman-V09-05-03)
+- Needs global-V09-05-00 (for date).
+- Added /vis/scene/add/date and /vis/scene/add/frame.
+- /vis/scene/add/eventID: Added layout parameter.
+
+17th January 2012  Laurent Garnier
+- Removed ProcessText.
+
+13th January 2012  John Allison (visman-V09-05-02)
+- Tagged.
+
+3rd January 2012 Laurent Garnier
+- G4VSceneHandler : Add ProcessText method in order to draw text
+
 3rd January 2012  John Allison (visman-V09-05-01)
 - G4VisCommandsScene.cc: /vis/scene/notifyHandlers:
   o Downgraded "scene has changed" from WARNING to NOTE. 

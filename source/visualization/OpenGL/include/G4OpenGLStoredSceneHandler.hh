@@ -38,6 +38,7 @@
 
 #include "globals.hh"
 #include "G4OpenGLSceneHandler.hh"
+#include "G4Text.hh"
 #include <map>
 #include <vector>
 
@@ -79,8 +80,10 @@ protected:
 
   // Two virtual functions for extra processing in a sub-class, for
   // example, to make a display tree.
-  virtual void ExtraPOProcessing(size_t) {}
-  virtual void ExtraTOProcessing(size_t) {}
+  virtual void ExtraPOProcessing
+  (const G4Visible&, size_t /*currentPOListIndex*/) {}
+  virtual void ExtraTOProcessing
+  (const G4Visible&, size_t /*currentTOListIndex*/) {}
 
   static G4int  fSceneIdCount;   // static counter for OpenGLStored scenes.
   // Display list management.  All static since there's only one OGL store.
@@ -89,24 +92,46 @@ protected:
   static G4int  fDisplayListLimit;       // avoid memory overflow
   
   // PODL = Persistent Object Display List.
-  GLint  fTopPODL;                  // List which calls the other PODLs.
+  // This was made redundant when the PO list was unwrapped 27th
+  // October 2011, but keep it for now in case we need to wrap it
+  // again.
+  GLint  fTopPODL;              // List which calls the other PODLs.
+
+  // G4Text plus transform and 2/3D.
+  struct G4TextPlus {
+    G4TextPlus(const G4Text& text): fG4Text(text) {}
+    G4Text fG4Text;
+    G4Transform3D fObjectTransform;
+    G4bool fProcessing2D;
+  };
+
   // PO = Persistent Object, i.e., run-durantion object, e.g., geometry.
   struct PO {
+    PO();
+    PO(const PO&);
     PO(G4int id, const G4Transform3D& tr = G4Transform3D());
+    ~PO();
+    PO& operator= (const PO&);
     G4int fDisplayListId;
     G4Transform3D fTransform;
     GLuint fPickName;
+    G4TextPlus* fpG4TextPlus;
   };
   std::vector<PO> fPOList; 
   
   // TO = Transient Object, e.g., trajectories.
   struct TO {
+    TO();
+    TO(const TO&);
     TO(G4int id, const G4Transform3D& tr = G4Transform3D());
+    ~TO();
+    TO& operator= (const TO&);
     G4int fDisplayListId;
     G4Transform3D fTransform;
     GLuint fPickName;
     G4double fStartTime, fEndTime;  // Time range (e.g., for trajectory steps).
     G4Colour fColour;
+    G4TextPlus* fpG4TextPlus;
   };
   std::vector<TO> fTOList; 
   

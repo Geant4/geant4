@@ -190,7 +190,7 @@ void G4DAWNFILEViewer::ShowView( void )
 			G4cout << "File  " << fSceneHandler.GetG4PrimFileName() ;
 			G4cout << "  is generated." << G4endl;
 			G4cout << GetG4PrimViewerInvocation() << G4endl;
-			system( GetG4PrimViewerInvocation() );
+			(void) system( GetG4PrimViewerInvocation() );
 
 		} else { // no view, i.e., only file generation
 			G4cout << "File  " << fSceneHandler.GetG4PrimFileName() ; 

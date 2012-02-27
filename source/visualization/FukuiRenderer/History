@@ -20,6 +20,10 @@ committal in the CVS repository !
 History file for visualization/FukuiRenderer sub-category
 ---------------------------------------------------------
 
+13th January 2012  John Allison  (DAWN-V09-05-00)
+- G4DAWNFILEViewer.cc:
+  o Fixed Ubuntu warning about ignoring return value of system call.
+
 17th May 2010  John Allison  (DAWN-V09-04-00)
 - G4FRSceneFunc.icc: Fixed gcc-4.6.0 warning.
 

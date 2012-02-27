@@ -197,11 +197,11 @@ void G4OpenGLViewer::ResizeGLView()
   if ((dims[0] !=0 ) && (dims[1] !=0)) {
 
     if (fWinSize_x > (unsigned)dims[0]) {
-      G4cerr << "Try to resize view greater than max X viewport dimension. Desired size "<<dims[0] <<" is resize to "<<  dims[0] << G4endl;
+      G4cerr << "Try to resize view greater than max X viewport dimension. Desired size "<<fWinSize_x <<" is resize to "<<  dims[0] << G4endl;
       fWinSize_x = dims[0];
     }
     if (fWinSize_y > (unsigned)dims[1]) {
-      G4cerr << "Try to resize view greater than max Y viewport dimension. Desired size "<<dims[0] <<" is resize to "<<  dims[1] << G4endl;
+      G4cerr << "Try to resize view greater than max Y viewport dimension. Desired size "<<fWinSize_y <<" is resize to "<<  dims[1] << G4endl;
       fWinSize_y = dims[1];
     }
   }

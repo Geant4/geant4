@@ -129,8 +129,16 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
 
 void G4OpenGLStoredViewer::DrawDisplayLists () {
 #ifdef G4DEBUG_VIS_OGL
-      printf("G4OpenGLStoredViewer::DrawDisplayLists \n");
+  printf("G4OpenGLStoredViewer::DrawDisplayLists \n");
 #endif
+
+  // Temporarily disable display list creation because we wish to
+  // re-use G4OpenGLStoredSceneHandler::AddPrimitive without creating
+  // new display lists.  But if we do re-use
+  // G4OpenGLStoredSceneHandler::AddPrimitive, we must supply an
+  // object transform and 2D if applicable.
+  G4bool tempMFDL = fG4OpenGLStoredSceneHandler.fMemoryForDisplayLists;
+  fG4OpenGLStoredSceneHandler.fMemoryForDisplayLists = false;
 
   const G4Planes& cutaways = fVP.GetCutawayPlanes();
   G4bool cutawayUnion = fVP.IsCutaway() &&
@@ -164,7 +172,17 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 	G4OpenGLTransform3D oglt (po.fTransform);
 	glMultMatrixd (oglt.GetGLMatrix ());
 	if (isPicking) glLoadName(po.fPickName);
-	glCallList (po.fDisplayListId);
+	if (po.fpG4TextPlus) {
+	  // Re-use G4OpenGLStoredSceneHandler::AddPrimitive...
+	  fG4OpenGLStoredSceneHandler.fpObjectTransformation =
+	    &po.fpG4TextPlus->fObjectTransform;
+	  fG4OpenGLStoredSceneHandler.fProcessing2D =
+	    po.fpG4TextPlus->fProcessing2D;
+	  fG4OpenGLStoredSceneHandler.AddPrimitive(po.fpG4TextPlus->fG4Text);
+	  fG4OpenGLStoredSceneHandler.fProcessing2D = false;
+	} else {
+	  glCallList (po.fDisplayListId);
+	}
 	glPopMatrix();
       }
     }
@@ -182,7 +200,7 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 	if (fVP.IsPicking()) glLoadName(to.fPickName);
 	const G4Colour& c = to.fColour;
 	if (fFadeFactor > 0. && to.fEndTime < fEndTime) {
-	  // Brightnes scaling factor
+	  // Brightness scaling factor
 	  G4double bsf = 1. - fFadeFactor *
 	    ((fEndTime - to.fEndTime) / (fEndTime - fStartTime));
 	  const G4Colour& bg = fVP.GetBackgroundColour();
@@ -193,7 +211,17 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 	} else {
 	  glColor3d(c.GetRed(), c.GetGreen(), c.GetBlue());
 	}
-	glCallList (to.fDisplayListId);
+	if (to.fpG4TextPlus) {
+	  // Re-use G4OpenGLStoredSceneHandler::AddPrimitive...
+	  fG4OpenGLStoredSceneHandler.fpObjectTransformation =
+	    &to.fpG4TextPlus->fObjectTransform;
+	  fG4OpenGLStoredSceneHandler.fProcessing2D =
+	    to.fpG4TextPlus->fProcessing2D;
+	  fG4OpenGLStoredSceneHandler.AddPrimitive(to.fpG4TextPlus->fG4Text);
+	  fG4OpenGLStoredSceneHandler.fProcessing2D = false;
+	} else {
+	  glCallList (to.fDisplayListId);
+	}
 	glPopMatrix();
       }
     }
@@ -280,6 +308,9 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
       }
     }
   }
+
+  // Restore current flag...
+  fG4OpenGLStoredSceneHandler.fMemoryForDisplayLists = tempMFDL;
 }
 
 #endif
