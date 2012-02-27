@@ -85,36 +85,36 @@ void PhysListEmStandardSS::ConstructProcess()
       
     } else if (particleName == "e-") {
       //electron
-      pmanager->AddDiscreteProcess(new G4CoulombScattering);            
       pmanager->AddProcess(new G4eIonisation,        -1, 1, 1);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1, 2, 2);
+      pmanager->AddDiscreteProcess(new G4CoulombScattering);            
 	    
     } else if (particleName == "e+") {
       //positron
-      pmanager->AddDiscreteProcess(new G4CoulombScattering);            
       pmanager->AddProcess(new G4eIonisation,        -1, 1, 1);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1, 2, 2);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1, 3);
+      pmanager->AddDiscreteProcess(new G4CoulombScattering);            
             
     } else if (particleName == "mu+" || 
                particleName == "mu-"    ) {
       //muon
-      pmanager->AddDiscreteProcess(new G4CoulombScattering);              
       pmanager->AddProcess(new G4MuIonisation,       -1, 1, 1);
       pmanager->AddProcess(new G4MuBremsstrahlung,   -1, 2, 2);
       pmanager->AddProcess(new G4MuPairProduction,   -1, 3, 3);
+      pmanager->AddDiscreteProcess(new G4CoulombScattering);              
              
     } else if (particleName == "alpha" || particleName == "He3") {
       pmanager->AddProcess(new G4ionIonisation,      -1, 1, 1);
       G4CoulombScattering* cs = new G4CoulombScattering();
-      cs->AddEmModel(0, new G4IonCoulombScatteringModel());
+      //cs->AddEmModel(0, new G4IonCoulombScatteringModel());
       cs->SetBuildTableFlag(false);
       pmanager->AddDiscreteProcess(cs);
 
     } else if (particleName == "GenericIon" ) { 
       pmanager->AddProcess(new G4ionIonisation,      -1, 1, 1);      
       G4CoulombScattering* cs = new G4CoulombScattering();
-      cs->AddEmModel(0, new G4IonCoulombScatteringModel());
+      //cs->AddEmModel(0, new G4IonCoulombScatteringModel());
       cs->SetBuildTableFlag(false);
       pmanager->AddDiscreteProcess(cs);
      
@@ -122,8 +122,10 @@ void PhysListEmStandardSS::ConstructProcess()
 	       (particle->GetPDGCharge() != 0.0) && 
 	       (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
-      pmanager->AddDiscreteProcess(new G4CoulombScattering);            
+      G4CoulombScattering* cs = new G4CoulombScattering();
       pmanager->AddProcess(new G4hIonisation,        -1, 1, 1);
+      cs->SetBuildTableFlag(false);
+      pmanager->AddDiscreteProcess(cs);
     }
   }
   
