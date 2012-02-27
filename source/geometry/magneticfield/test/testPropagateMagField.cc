@@ -245,6 +245,8 @@ G4VPhysicalVolume* BuildGeometry()
 #include "G4NystromRK4.hh"
 #include "G4HelixMixedStepper.hh"
 
+#include "globals.hh"
+
 G4UniformMagField      uniformMagField(10.*tesla, 0., 0.); 
 // G4CachedMagneticField  myMagField( &uniformMagField, 1.0 * cm); 
 // G4String   fieldName("Uniform 10Tesla"); 
@@ -279,10 +281,16 @@ G4FieldManager* SetupField(G4int type)
       case 12: pStepper = new G4ConstRK4( fEquation ); break;
       case 13: pStepper = new G4NystromRK4( fEquation ); break; 
       default: 
-        pStepper = 0;
-        G4cerr << " Stepper type provided is " << type << G4endl;
-        G4Exception(" Invalid value of stepper type"); 
-        break; 
+          pStepper = 0;   // Can use default= new G4ClassicalRK4( fEquation );
+          G4ExceptionDescription ErrorMsg;
+          ErrorMsg << " Incorrect Stepper type requested. Value was id= " 
+                   << type << G4endl;
+          ErrorMsg << " NO replacement stepper chosen! " << G4endl;
+          G4Exception("application::SetupField",
+                      "Runtime Error",
+                      FatalErrorInArgument,       //  use JustWarning,
+                      " Invalid value of stepper type" );
+          break; 
     }
     
     pFieldMgr= G4TransportationManager::GetTransportationManager()->

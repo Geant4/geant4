@@ -31,13 +31,13 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "Fld07DetectorConstruction.hh"
-#include "Fld07PhysicsList.hh"
-#include "Fld07PrimaryGeneratorAction.hh"
-#include "Fld07RunAction.hh"
-#include "Fld07EventAction.hh"
-#include "Fld07SteppingAction.hh"
-#include "Fld07SteppingVerbose.hh"
+#include "F07DetectorConstruction.hh"
+#include "F07PhysicsList.hh"
+#include "F07PrimaryGeneratorAction.hh"
+#include "F07RunAction.hh"
+#include "F07EventAction.hh"
+#include "F07SteppingAction.hh"
+#include "F07SteppingVerbose.hh"
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -56,7 +56,7 @@ int main(int argc,char** argv)
 {
   // User Verbose output class
   //
-  G4VSteppingVerbose* verbosity = new Fld07SteppingVerbose;
+  G4VSteppingVerbose* verbosity = new F07SteppingVerbose();
   G4VSteppingVerbose::SetInstance(verbosity);
   
   // Run manager
@@ -65,24 +65,24 @@ int main(int argc,char** argv)
 
   // User Initialization classes (mandatory)
   //
-  Fld07DetectorConstruction* detector = new Fld07DetectorConstruction;
+  F07DetectorConstruction* detector = new F07DetectorConstruction();
   runManager->SetUserInitialization(detector);
   //
-  G4VUserPhysicsList* physics = new Fld07PhysicsList;
+  G4VUserPhysicsList* physics = new F07PhysicsList();
   runManager->SetUserInitialization(physics);
    
   // User Action classes
   //
-  G4VUserPrimaryGeneratorAction* gen_action = new Fld07PrimaryGeneratorAction(detector);
+  G4VUserPrimaryGeneratorAction* gen_action = new F07PrimaryGeneratorAction(detector);
   runManager->SetUserAction(gen_action);
   //
-  G4UserRunAction* run_action = new Fld07RunAction;
+  G4UserRunAction* run_action = new F07RunAction;
   runManager->SetUserAction(run_action);
   //
-  G4UserEventAction* event_action = new Fld07EventAction;
+  G4UserEventAction* event_action = new F07EventAction;
   runManager->SetUserAction(event_action);
   //
-  G4UserSteppingAction* stepping_action = new Fld07SteppingAction;
+  G4UserSteppingAction* stepping_action = new F07SteppingAction;
   runManager->SetUserAction(stepping_action);
 
   // Initialize G4 kernel

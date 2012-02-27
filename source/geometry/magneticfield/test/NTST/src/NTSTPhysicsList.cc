@@ -44,6 +44,7 @@
 #include "G4ios.hh"
 #include "NTSTLooperDeath.hh"
 #include <iomanip>                
+#include "globals.hh"   // For G4Exception
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -188,7 +189,14 @@ void NTSTPhysicsList::ConstructProcess()
 
 void  NTSTPhysicsList::AddBgsTransportation()
 {
-  G4Exception("BgsTransportation is not enabled in this version -- due to migration to Touchable Handles");
+  G4ExceptionDescription BgsDescription; // td::ostringstream 
+  BgsDescription << "BgsTransportation is not enabled in this version -- due to migration to Touchable Handles" << G4endl;
+   
+  G4Exception("NTSTPhysicsList::AddBgsTransportation()",
+              "001-Obsolete Condition",
+              FatalException,
+              BgsDescription);
+          // "BgsTransportation is not enabled in this version -- due to migration to Touchable Handles");
 #if 0
   // BgsTransportation *theTransportationProcess= new BgsTransportation();
   
@@ -201,7 +209,10 @@ void  NTSTPhysicsList::AddBgsTransportation()
       // Add transportation process for all particles other than  "shortlived"
       if ( pmanager == 0) {
 	// Error !! no process manager
-	G4Exception("G4VUserPhysicsList::AddTransportation : no process manager!");
+         G4Exception("NTSTPhysicsList::AddBgsTransportation()",
+                     "001-Obsolete Condition",
+                     FatalException,
+                    "Invalid process manager!");
       } else {
 	// add transportation with ordering = ( -1, "first", "first" )
 	pmanager ->AddProcess(theTransportationProcess);

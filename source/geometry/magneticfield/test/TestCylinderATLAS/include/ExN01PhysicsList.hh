@@ -24,54 +24,59 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mag_UsualEqRhs.hh,v 1.7 2006-06-29 18:23:12 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: ExN01PhysicsList.hh,v 1.6 2006/06/29 17:47:15 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01-patch-01-ref $
 //
+// 
 //
-// class G4Mag_UsualEqRhs
+// ExN01PhysicsList
+//  Construct/define particles and physics processes
 //
-// Class description:
+//  Particle defined in ExampleN01
+//    geantino
 //
-// This is the standard right-hand side for equation of motion.
-// The only case another is required is when using a moving reference
-// frame ... or extending the class to include additional Forces,
-// eg an electric field
+//  Process defined in ExampleN01
+//    transportation
+//
 
-// History:
-// - Created: J. Apostolakis, January 13th 1997.
-// --------------------------------------------------------------------
+#ifndef ExN01PhysicsList_h
+#define ExN01PhysicsList_h 1
 
-#ifndef G4MAG_USUAL_EQRHS
-#define G4MAG_USUAL_EQRHS
+#include "G4VUserPhysicsList.hh"
+#include "globals.hh"
 
-#include "G4Mag_EqRhs.hh"
-
-class G4MagneticField;
-
-class G4Mag_UsualEqRhs : public G4Mag_EqRhs
+class ExN01PhysicsList: public G4VUserPhysicsList
 {
-   public:  // with description
+  public:
+    ExN01PhysicsList();
+    ~ExN01PhysicsList();
+ protected:
+    // Construct particle and physics
+    void ConstructParticle();
+    void ConstructProcess();
+ 
+    void SetCuts();
 
-     G4Mag_UsualEqRhs( G4MagneticField* MagField );
-    ~G4Mag_UsualEqRhs();
-       // Constructor and destructor. No actions.
+   
+  protected:
+    // these methods Construct particles 
+    void ConstructBosons();
+    void ConstructLeptons();
+    void ConstructMesons();
+    void ConstructBaryons();
 
-     void EvaluateRhsGivenB( const G4double y[],
-                             const G4double B[3],
-                                   G4double dydx[] ) const;
-       // Given the value of the magnetic field B, this function 
-       // calculates the value of the derivative dydx.
-
-     virtual void SetChargeMomentumMass( G4double particleCharge, // in e+ units
-                                         G4double MomentumXc,
-                                         G4double mass);
-     
-  private:
-
-    G4double  fInvCurrentMomentumXc;   // OBSOLETE:
-                            // This extra state was meant to save a square root 
-                            // in a critical method.   But its use reduced
-                            // robustness (it was unstable for large steps.)
+  protected:
+    // these methods Construct physics processes and register them
+    void ConstructGeneral();
+    void ConstructEM();
+ 
 };
 
-#endif /* G4MAG_USUAL_EQRHS */
+#endif
+
+
+
+
+
+
+

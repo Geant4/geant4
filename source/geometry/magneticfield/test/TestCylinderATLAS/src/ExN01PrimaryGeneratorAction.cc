@@ -24,54 +24,49 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mag_UsualEqRhs.hh,v 1.7 2006-06-29 18:23:12 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: ExN01PrimaryGeneratorAction.cc,v 1.6 2006/06/29 17:47:23 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01-patch-01-ref $
 //
-//
-// class G4Mag_UsualEqRhs
-//
-// Class description:
-//
-// This is the standard right-hand side for equation of motion.
-// The only case another is required is when using a moving reference
-// frame ... or extending the class to include additional Forces,
-// eg an electric field
 
-// History:
-// - Created: J. Apostolakis, January 13th 1997.
-// --------------------------------------------------------------------
+#include "ExN01PrimaryGeneratorAction.hh"
 
-#ifndef G4MAG_USUAL_EQRHS
-#define G4MAG_USUAL_EQRHS
+#include "G4Event.hh"
+#include "G4ParticleGun.hh"
+#include "G4ParticleTable.hh"
+#include "G4ParticleDefinition.hh"
+#include "globals.hh"
 
-#include "G4Mag_EqRhs.hh"
-
-class G4MagneticField;
-
-class G4Mag_UsualEqRhs : public G4Mag_EqRhs
+ExN01PrimaryGeneratorAction::ExN01PrimaryGeneratorAction()
 {
-   public:  // with description
+  G4int n_particle = 1;
+  particleGun = new G4ParticleGun(n_particle);
 
-     G4Mag_UsualEqRhs( G4MagneticField* MagField );
-    ~G4Mag_UsualEqRhs();
-       // Constructor and destructor. No actions.
+  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+  G4String particleName;
+  particleGun->SetParticleDefinition(particleTable->FindParticle(particleName="e-"));
+  ////First Test =No Intersection
+  G4double momen=(0.3*2.*0.70001)*GeV;
+  G4double kinEnergy=std::sqrt((momen*momen+0.000510999*0.000510999*GeV)*(1.+0.01*0.01));
+  particleGun->SetParticleEnergy(kinEnergy);
+  
+  particleGun->SetParticlePosition(G4ThreeVector(-70.1381368117*cm+1*mm, 0.0*cm,-0.0*cm));
+ 
+    G4cout<<"Energy="<<kinEnergy/GeV<<"  Radius="<<momen/0.6/mm<<G4endl;
+   
+}
 
-     void EvaluateRhsGivenB( const G4double y[],
-                             const G4double B[3],
-                                   G4double dydx[] ) const;
-       // Given the value of the magnetic field B, this function 
-       // calculates the value of the derivative dydx.
+ExN01PrimaryGeneratorAction::~ExN01PrimaryGeneratorAction()
+{
+  delete particleGun;
+}
 
-     virtual void SetChargeMomentumMass( G4double particleCharge, // in e+ units
-                                         G4double MomentumXc,
-                                         G4double mass);
-     
-  private:
+void ExN01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
+{
+ 
+  G4ThreeVector v(0.0,1.0,0.01);
+ 
+  particleGun->SetParticleMomentumDirection(v.unit());
+  particleGun->GeneratePrimaryVertex(anEvent);
+}
 
-    G4double  fInvCurrentMomentumXc;   // OBSOLETE:
-                            // This extra state was meant to save a square root 
-                            // in a critical method.   But its use reduced
-                            // robustness (it was unstable for large steps.)
-};
 
-#endif /* G4MAG_USUAL_EQRHS */

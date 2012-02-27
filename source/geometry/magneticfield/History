@@ -17,6 +17,28 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+February  2nd,  2012 J.Apostolakis - field-V09-05-03
+----------------------------------
+- G4FieldTrack: 
+    Added new (inline) method to set the Rest Mass. Needed in order to 
+       reset this - and keep reuse the same G4FieldTrack in a client
+       (across tracks.)
+    Made SetCurvePnt() method private.
+    Simplified implementation of constructors.  Gain of 1 square root and 
+       1 division per call.
+
+February  3rd,  2012 G.Cosmo - field-V09-05-02
+----------------------------
+- Removed tests in CMakeLists.txt causing catastrophic failure in system
+  testing!
+
+February  2nd,  2012 J.Apostolakis - field-V09-05-01
+----------------------------------
+- G4Mag_UsualEqRhs: in SetChargeMomentumMass() method, fixed problem with
+  division by zero; stopped updating 'fInvCurrentMomentumXc' (data member
+  is obsolete).
+- Added tests in CMakeLists.txt
+
 December 13th,  2011 G.Cosmo - field-V09-05-00
 ----------------------------
 - Fixed Coverity defects in G4SimpleRunge (removed spurious pointer

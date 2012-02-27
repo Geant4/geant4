@@ -14,3 +14,6 @@ file(GLOB sources ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cc)
 add_executable(field07 EXCLUDE_FROM_ALL field07.cc ${sources})
 target_link_libraries(field07 ${Geant4_LIBRARIES})
 
+#---Test definitions----------------------------------------------------------------------------------
+GEANT4_ADD_TEST(field07-run COMMAND field07 ${CMAKE_CURRENT_SOURCE_DIR}/field07.in
+                       BUILD field07)

@@ -24,54 +24,38 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mag_UsualEqRhs.hh,v 1.7 2006-06-29 18:23:12 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: ExN03SteppingAction.hh,v 1.9 2006/06/29 17:48:49 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01-patch-01-ref $
 //
 //
-// class G4Mag_UsualEqRhs
-//
-// Class description:
-//
-// This is the standard right-hand side for equation of motion.
-// The only case another is required is when using a moving reference
-// frame ... or extending the class to include additional Forces,
-// eg an electric field
-
-// History:
-// - Created: J. Apostolakis, January 13th 1997.
-// --------------------------------------------------------------------
-
-#ifndef G4MAG_USUAL_EQRHS
-#define G4MAG_USUAL_EQRHS
-
-#include "G4Mag_EqRhs.hh"
-
-class G4MagneticField;
-
-class G4Mag_UsualEqRhs : public G4Mag_EqRhs
-{
-   public:  // with description
-
-     G4Mag_UsualEqRhs( G4MagneticField* MagField );
-    ~G4Mag_UsualEqRhs();
-       // Constructor and destructor. No actions.
-
-     void EvaluateRhsGivenB( const G4double y[],
-                             const G4double B[3],
-                                   G4double dydx[] ) const;
-       // Given the value of the magnetic field B, this function 
-       // calculates the value of the derivative dydx.
-
-     virtual void SetChargeMomentumMass( G4double particleCharge, // in e+ units
-                                         G4double MomentumXc,
-                                         G4double mass);
+                                                                                                     
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+                                                                                                     
+ #ifndef ExN01SteppingAction_h
+ #define ExN01SteppingAction_h 1
+ 
+ #include "G4UserSteppingAction.hh"
+ 
+ class ExN01DetectorConstruction;
+ class ExN01EventAction;
+ 
+ //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
+ class ExN01SteppingAction : public G4UserSteppingAction
+ {
+   public:
+     ExN01SteppingAction(ExN01DetectorConstruction*, ExN01EventAction*);
+    ~ExN01SteppingAction();
+ 
+     void UserSteppingAction(const G4Step*);
      
-  private:
-
-    G4double  fInvCurrentMomentumXc;   // OBSOLETE:
-                            // This extra state was meant to save a square root 
-                            // in a critical method.   But its use reduced
-                            // robustness (it was unstable for large steps.)
-};
-
-#endif /* G4MAG_USUAL_EQRHS */
+   private:
+     ExN01DetectorConstruction* detector;
+     ExN01EventAction*          event_action;  
+ };
+ 
+ //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
+ #endif
+ 

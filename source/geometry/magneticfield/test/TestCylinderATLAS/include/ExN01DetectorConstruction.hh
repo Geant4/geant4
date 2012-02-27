@@ -24,54 +24,43 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mag_UsualEqRhs.hh,v 1.7 2006-06-29 18:23:12 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: ExN01DetectorConstruction.hh,v 1.6 2006/06/29 17:47:13 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01-patch-01-ref $
 //
-//
-// class G4Mag_UsualEqRhs
-//
-// Class description:
-//
-// This is the standard right-hand side for equation of motion.
-// The only case another is required is when using a moving reference
-// frame ... or extending the class to include additional Forces,
-// eg an electric field
 
-// History:
-// - Created: J. Apostolakis, January 13th 1997.
-// --------------------------------------------------------------------
+#ifndef ExN01DetectorConstruction_H
+#define ExN01DetectorConstruction_H 1
 
-#ifndef G4MAG_USUAL_EQRHS
-#define G4MAG_USUAL_EQRHS
+class G4LogicalVolume;
+class G4VPhysicalVolume;
 
-#include "G4Mag_EqRhs.hh"
+#include "G4VUserDetectorConstruction.hh"
 
-class G4MagneticField;
-
-class G4Mag_UsualEqRhs : public G4Mag_EqRhs
+class ExN01DetectorConstruction : public G4VUserDetectorConstruction
 {
-   public:  // with description
+  public:
 
-     G4Mag_UsualEqRhs( G4MagneticField* MagField );
-    ~G4Mag_UsualEqRhs();
-       // Constructor and destructor. No actions.
+    ExN01DetectorConstruction();
+    ~ExN01DetectorConstruction();
 
-     void EvaluateRhsGivenB( const G4double y[],
-                             const G4double B[3],
-                                   G4double dydx[] ) const;
-       // Given the value of the magnetic field B, this function 
-       // calculates the value of the derivative dydx.
+    G4VPhysicalVolume* Construct();
 
-     virtual void SetChargeMomentumMass( G4double particleCharge, // in e+ units
-                                         G4double MomentumXc,
-                                         G4double mass);
-     
   private:
+    
+    // Logical volumes
+    //
+    G4LogicalVolume* experimentalHall_log;
+    G4LogicalVolume* tracker_log;
+    G4LogicalVolume* calorimeterBlock_log;
+    G4LogicalVolume* calorimeterLayer_log;
 
-    G4double  fInvCurrentMomentumXc;   // OBSOLETE:
-                            // This extra state was meant to save a square root 
-                            // in a critical method.   But its use reduced
-                            // robustness (it was unstable for large steps.)
+    // Physical volumes
+    //
+    G4VPhysicalVolume* experimentalHall_phys;
+    G4VPhysicalVolume* calorimeterLayer_phys;
+    G4VPhysicalVolume* calorimeterBlock_phys;
+    G4VPhysicalVolume* tracker_phys;
 };
 
-#endif /* G4MAG_USUAL_EQRHS */
+#endif
+

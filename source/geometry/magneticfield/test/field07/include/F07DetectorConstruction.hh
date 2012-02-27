@@ -87,11 +87,11 @@ class F07DetectorConstruction : public G4VUserDetectorConstruction
      G4VPhysicalVolume* physiTracker;  // pointer to the physical Tracker
 
 #if 0
-     std::vector<G4Box*>             solidChambers;  // pointer to the solid Chamber
-     std::vector<G4LogicalVolume*>   logicChambers;  // pointer to the logical Chamber
-     std::vector<G4VPhysicalVolume*> physiChambers;  // pointer to the physical Chamber
+     std::vector<G4Box*>             solidChambers;    // Store for the solids Chamber
+     std::vector<G4VPhysicalVolume*> physicalChambers; // Store for the physical Chamber
+     std::vector<G4LogicalVolume*>   logicalChambers;  // Store to the logical Chamber
 #endif
-    
+  
      // Pointers to the key materials in the setup - can be changed
      G4Material*        fTargetMaterial;  
      G4Material*        fChamberAbsorberMat;
@@ -111,8 +111,9 @@ class F07DetectorConstruction : public G4VUserDetectorConstruction
      G4double fTrackerRadius;          // Full Radius of Tracker
 
      unsigned int fNbOfChambers;     // Nb of chambers in the tracker region
+     G4double fDeltaRadius;          // Delta of radius of chambers
      G4double fForwardSphereRadius;    // Outer radius of forward chambers
-     G4double ChamberSpacing;	       // distance between chambers
+     // G4double fChamberSpacing;	   // ??? distance between chambers
 
      G4double fTargetLength;           // Full length           of Target
      G4double fTargetMaxRadius;        // Maximum Radial extent of Target
