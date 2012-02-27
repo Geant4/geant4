@@ -30,6 +30,9 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+February 10th, 2011 - Pere Mato (cmake-V09-05-03)
+- Added function REFLEX_GENERATE_DICTIONARY() in FindROOT.cmake
+
 January 25th, 2011 - Gunter Folger (cmake-V09-05-02)
 - Switch to G4EMLOW6.24
 
