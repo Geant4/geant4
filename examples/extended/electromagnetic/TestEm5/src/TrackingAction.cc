@@ -176,8 +176,8 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   //
   if ((aTrack->GetParentID() == 1) && charged) {
     G4double xVertex = (aTrack->GetVertexPosition()).x();
-    histoManager->FillHisto(4, xVertex);
-    if (notabsor) histoManager->FillHisto(5, xVertex); 
+    histoManager->FillHisto(6, xVertex);
+    if (notabsor) histoManager->FillHisto(7, xVertex); 
   }
 }
 

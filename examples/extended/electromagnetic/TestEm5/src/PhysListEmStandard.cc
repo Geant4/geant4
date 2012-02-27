@@ -49,6 +49,7 @@
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
+#include "G4CoulombScattering.hh"
 
 #include "G4hMultipleScattering.hh"
 #include "G4hIonisation.hh"
@@ -124,6 +125,7 @@ void PhysListEmStandard::ConstructProcess()
       ph->RegisterProcess(muIoni, particle);
       ph->RegisterProcess(new G4MuBremsstrahlung(), particle);
       ph->RegisterProcess(new G4MuPairProduction(), particle);
+      ph->RegisterProcess(new G4CoulombScattering(), particle);
                    
     } else if( particleName == "proton" ||
                particleName == "pi-" ||
@@ -139,7 +141,7 @@ void PhysListEmStandard::ConstructProcess()
     } else if( particleName == "alpha" || 
 	       particleName == "He3"    ) {
 
-      ph->RegisterProcess(new G4hMultipleScattering(), particle);           
+      ph->RegisterProcess(new G4hMultipleScattering(), particle);
       G4ionIonisation* ionIoni = new G4ionIonisation();
       ionIoni->SetStepFunction(0.1, 1*um);
       ph->RegisterProcess(ionIoni, particle);
@@ -181,7 +183,7 @@ void PhysListEmStandard::ConstructProcess()
   //multiple coulomb scattering
   //
   emOptions.SetMscStepLimitation(fUseDistanceToBoundary);  //default=fUseSafety
-    
+       
   // Deexcitation
   //
   G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();

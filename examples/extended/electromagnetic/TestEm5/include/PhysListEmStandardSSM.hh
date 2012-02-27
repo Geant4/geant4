@@ -23,74 +23,44 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StackingAction.cc,v 1.8 2009-03-06 18:04:23 maire Exp $
+// $Id: PhysListEmStandardSSM.hh,v 1.1 2010-05-25 20:57:05 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "StackingAction.hh"
+#ifndef PhysListEmStandardSSM_h
+#define PhysListEmStandardSSM_h 1
 
-#include "RunAction.hh"
-#include "EventAction.hh"
-#include "HistoManager.hh"
-#include "StackingMessenger.hh"
-
-#include "G4Track.hh"
+#include "G4VPhysicsConstructor.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StackingAction::StackingAction(RunAction* RA, EventAction* EA, HistoManager* HM)
-:runaction(RA), eventaction(EA), histoManager(HM)
+class PhysListEmStandardSSM : public G4VPhysicsConstructor
 {
-  killSecondary  = 0;
-  stackMessenger = new StackingMessenger(this);
-}
+public: 
+  PhysListEmStandardSSM(const G4String& name = "standardSSM");
+  virtual ~PhysListEmStandardSSM();
+
+public: 
+  // This method is dummy for physics
+  void ConstructParticle() {};
+ 
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type 
+  void ConstructProcess();
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StackingAction::~StackingAction()
-{
-  delete stackMessenger;
-}
+#endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ClassificationOfNewTrack
-StackingAction::ClassifyNewTrack(const G4Track* aTrack)
-{
-  //keep primary particle
-  if (aTrack->GetParentID() == 0) return fUrgent;
 
-  //count secondary particles
-  runaction->CountParticles(aTrack->GetDefinition());
 
-  //
-  //energy spectrum of secondaries
-  //
-  G4double energy = aTrack->GetKineticEnergy();
-  G4double charge = aTrack->GetDefinition()->GetPDGCharge();
 
-  if (charge != 0.) {
-    histoManager->FillHisto(2,energy);
-    histoManager->FillHisto(4, std::log10(energy/MeV));
-  }
 
-  if (aTrack->GetDefinition() == G4Gamma::Gamma()) {
-    histoManager->FillHisto(3,energy);
-    histoManager->FillHisto(5, std::log10(energy/MeV));
-  }  
 
-  //stack or delete secondaries
-  G4ClassificationOfNewTrack status = fUrgent;
-  if (killSecondary) {
-    if (killSecondary == 1) {
-     eventaction->AddEnergy(energy);
-    }  
-     status = fKill;
-  }
-    
-  return status;
-}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

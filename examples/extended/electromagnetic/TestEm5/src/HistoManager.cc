@@ -176,10 +176,12 @@ void HistoManager::SetHisto(G4int ih,
                 { "dummy",						//0
                   "energy deposit in absorber",				//1
                   "energy of charged secondaries at creation",		//2
-                  "energy of gammas at creation (std::log10(ekin/MeV))",//3
-                  "x_vertex of charged secondaries (all)",		//4
-                  "x_vertex of charged secondaries (not absorbed)",	//5
-		  "dummy","dummy","dummy","dummy",			//6-9
+		  "energy of neutral secondaries at creation",		//3
+		  "energy of charged at creation(std::log10(ekin/MeV))",//4
+                  "energy of neutral at creation(std::log10(ekin/MeV))",//5
+                  "x_vertex of charged secondaries (all)",		//6
+                  "x_vertex of charged secondaries (not absorbed)",	//7
+		  "dummy","dummy",					//8-9
 		  "(transmit, charged) : kinetic energy at exit",	//10
 		  "(transmit, charged) : ener fluence: dE(MeV)/dOmega",	//11
 		  "(transmit, charged) : space angle: dN/dOmega",	//12
@@ -208,7 +210,8 @@ void HistoManager::SetHisto(G4int ih,
   G4double vmin = valmin, vmax = valmax;
   Unit[ih] = 1.;
 
-  if (ih == 3) { vmin = std::log10(valmin/MeV); vmax = std::log10(valmax/MeV);}
+  if ((ih == 4) || (ih == 5)) 
+    { vmin = std::log10(valmin/MeV); vmax = std::log10(valmax/MeV);}
   else if (unit != "none") {
     titl = title[ih] + " (" + unit + ")";
     Unit[ih] = G4UnitDefinition::GetValueOf(unit);
