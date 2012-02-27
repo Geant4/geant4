@@ -80,10 +80,11 @@ $Id: README,v 1.17 2010-11-08 10:38:44 maire Exp $
  One can control the name of the histograms file and its format:
  default name     : AnaEx01   
  The format of the histogram file can be : root (default),
- hbook, xml, csv, by using namespace in HistoManager.hh 
+ hbook, xml, csv. Include correct g4nnn.hh in HistoManager.hh 
  
  Using hbook format
  ------------------
  
- Need special treatement : *before* compiling,
- activate G4_USE_HBOOK in GNUmakefile and namespace G4Hbook in HistoManager.cc
+ Need a special treatement : the Cern Library must be installed and the
+ environment variable CERNLIB correctly set. Then, *before* compiling,
+ activate G4_USE_HBOOK in GNUmakefile and  g4hbook.hh in HistoManager.hh

@@ -41,6 +41,9 @@ extern "C" int setpawc();
 extern "C" int setntuc();
 
 ExG4HbookAnalysisManager* ExG4HbookAnalysisManager::fgInstance = 0;
+const G4int ExG4HbookAnalysisManager::fgkDefaultH2HbookIdOffset = 100;
+const G4int ExG4HbookAnalysisManager::fgkDefaultNtupleHbookId = 1;
+const G4String ExG4HbookAnalysisManager::fgkDefaultNtupleDirectoryName = "ntuple";
 
 //_____________________________________________________________________________
 ExG4HbookAnalysisManager* ExG4HbookAnalysisManager::Instance()
@@ -55,6 +58,9 @@ ExG4HbookAnalysisManager* ExG4HbookAnalysisManager::Instance()
 //_____________________________________________________________________________
 ExG4HbookAnalysisManager::ExG4HbookAnalysisManager()
  : G4VAnalysisManager("Hbook"),
+   fH1HbookIdOffset(-1),
+   fH2HbookIdOffset(-1),
+   fNtupleHbookId(-1),
    fFile(0),
    fH1Vector(),
    fH1MapByName(),    
@@ -77,7 +83,7 @@ ExG4HbookAnalysisManager::ExG4HbookAnalysisManager()
   }              
    
   fgInstance = this;
-   
+  
   // Initialize HBOOK :
   tools::hbook::CHLIMIT(setpawc());
   setntuc(); //for ntuple.
@@ -164,11 +170,14 @@ ExG4HbookAnalysisManager::GetNtupleDColumn(G4int id) const
 G4bool ExG4HbookAnalysisManager::OpenFile(const G4String& fileName)
 {
   G4String name(fileName);
-  if ( name.find(".") == std::string::npos ) name.append(".hbook");
+  if ( name.find(".") == std::string::npos ) { 
+    name.append(".");
+    name.append(GetFileType());
+  }  
   
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("open", "analysis file", name);
+  if ( fpVerboseL3 ) 
+    fpVerboseL3->Message("open", "analysis file", name);
 #endif
   
   tools::hbook::CHCDIR("//PAWC"," ");
@@ -189,15 +198,15 @@ G4bool ExG4HbookAnalysisManager::OpenFile(const G4String& fileName)
   //   - be in the directory //PAWC/LUN1.
 
   // create an "histo" HBOOK directory both in memory and in the file :
-  tools::hbook::CHCDIR("//PAWC/LUN1"," ");
-  tools::hbook::CHMDIR(fHistoDirectoryName.data()," ");
-  tools::hbook::CHCDIR("//LUN1"," ");
-  tools::hbook::CHMDIR("histo"," ");
-/*
-  G4String histoPath = "//PAWC/LUN1/";
-  histoPath.append(fHistoDirectoryName.data());
-  tools::hbook::CHCDIR(histoPath.data()," ");
-*/
+  if ( fHistoDirectoryName != "" ) {
+    tools::hbook::CHCDIR("//PAWC/LUN1"," ");
+    tools::hbook::CHMDIR(fHistoDirectoryName.data()," ");
+    tools::hbook::CHCDIR("//LUN1"," ");
+    tools::hbook::CHMDIR(fHistoDirectoryName.data()," ");
+  }
+  
+  fLockHistoDirectoryName = true;
+
   // the five upper lines could have been done with :
   //fFile->cd_home();
   //fFile->mkcd("histo");
@@ -214,8 +223,8 @@ G4bool ExG4HbookAnalysisManager::OpenFile(const G4String& fileName)
 G4bool ExG4HbookAnalysisManager::Write() 
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("write", "file", "");
+  if ( fpVerboseL3 ) 
+    fpVerboseL3->Message("write", "file", "");
 #endif
 
   // ntuple 
@@ -235,8 +244,8 @@ G4bool ExG4HbookAnalysisManager::Write()
 G4bool ExG4HbookAnalysisManager::CloseFile()
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("close", "file", "");
+  if ( fpVerboseL3 ) 
+    fpVerboseL3->Message("close", "file", "");
 #endif
 
   //WARNING : have to delete the ntuple before closing the file.
@@ -258,27 +267,54 @@ G4int ExG4HbookAnalysisManager::CreateH1(const G4String& name, const G4String& t
                                G4int nbins, G4double xmin, G4double xmax)
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("create", "H1", name);
+  if ( fpVerboseL3 ) 
+    fpVerboseL3->Message("create", "H1", name);
 #endif
 
   // Go to histograms directory
-  G4String histoPath = "//PAWC/LUN1/";
-  histoPath.append(fHistoDirectoryName.data());
-  tools::hbook::CHCDIR(histoPath.data()," ");
+  if ( fHistoDirectoryName != "" ) {
+    G4String histoPath = "//PAWC/LUN1/";
+    histoPath.append(fHistoDirectoryName.data());
+    tools::hbook::CHCDIR(histoPath.data()," ");
+  }  
 
+  // Set  fH1HbookIdOffset if needed
+  if (  fH1Vector.size() == 0 ) {
+    if ( fH1HbookIdOffset == -1 ) {
+      if ( fFirstHistoId > 0 ) 
+        fH1HbookIdOffset = 0;
+      else
+        fH1HbookIdOffset = 1;
+          
+      if ( fH1HbookIdOffset > 0 ) {
+        G4ExceptionDescription description;
+        description << "H1 will be defined in HBOOK with ID = G4_firstHistoId + 1";
+        G4Exception("ExG4HbookAnalysisManager::CreateH1()",
+                    "Analysis_W011", JustWarning, description);
+      }              
+    }
+  }  
+  
+  // Create histogram    
   G4int index = fH1Vector.size();
-  G4int pawIndex = ( fH1Vector.size() + fH2Vector.size() + 1 )*10;
-  tools::hbook::h1* h1 = new tools::hbook::h1(pawIndex, title, nbins, xmin, xmax);
+  G4int hbookIndex = fH1HbookIdOffset + fH1Vector.size() + fFirstHistoId;
+  tools::hbook::h1* h1 = new tools::hbook::h1(hbookIndex, title, nbins, xmin, xmax);
   fH1Vector.push_back(h1);
   fH1MapByName[name] = h1;
  
-  // Return to //PAWC/LUN1 :
-  tools::hbook::CHCDIR("//PAWC/LUN1"," ");
+  if ( fHistoDirectoryName != "" ) {
+    // Return to //PAWC/LUN1 :
+    tools::hbook::CHCDIR("//PAWC/LUN1"," ");
+  }  
+  
+  fLockFirstHistoId = true;
 
 #ifdef G4VERBOSE
-  if ( fpVerboseL1 ) 
-    fpVerboseL1->Message("create", "H1", name);
+  if ( fpVerboseL1 ) { 
+    G4ExceptionDescription description;
+    description << " name : " << name << " hbook index : " << hbookIndex; 
+    fpVerboseL1->Message("create", "H1", description);
+  }  
 #endif
 
   return index + fFirstHistoId;
@@ -290,28 +326,56 @@ G4int ExG4HbookAnalysisManager::CreateH2(const G4String& name, const G4String& t
                                G4int nybins, G4double ymin, G4double ymax)
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("create", "H2", name);
+  if ( fpVerboseL3 ) 
+    fpVerboseL3->Message("create", "H2", name);
 #endif
 
   // Go to histograms directory
-  G4String histoPath = "//PAWC/LUN1/";
-  histoPath.append(fHistoDirectoryName.data());
-  tools::hbook::CHCDIR(histoPath.data()," ");
+  if ( fHistoDirectoryName != "" ) {
+    G4String histoPath = "//PAWC/LUN1/";
+    histoPath.append(fHistoDirectoryName.data());
+    tools::hbook::CHCDIR(histoPath.data()," ");
+  }  
+
+  // Set fH2HbookIdOffset if needed
+  if (  fH2Vector.size() == 0 ) {
+    if ( fH2HbookIdOffset == -1 ) { 
+      if ( fFirstHistoId > 0 ) 
+        fH2HbookIdOffset = fgkDefaultH2HbookIdOffset;
+      else
+        fH2HbookIdOffset = fgkDefaultH2HbookIdOffset + 1;
+           
+      if ( fH2HbookIdOffset != fgkDefaultH2HbookIdOffset ) {
+        G4ExceptionDescription description;
+        description 
+          << "H2 will be defined in HBOOK with ID = " 
+          << fgkDefaultH2HbookIdOffset << " + G4_firstHistoId + 1";
+        G4Exception("ExG4HbookAnalysisManager::CreateH2()",
+                    "Analysis_W011", JustWarning, description);
+      }
+    }                
+  }    
 
   G4int index = fH2Vector.size();
-  G4int pawIndex = ( fH1Vector.size() + fH2Vector.size() + 1 )*10;
+  G4int hbookIndex = fH2HbookIdOffset + fH2Vector.size() + fFirstHistoId;
   tools::hbook::h2* h2 
-    = new tools::hbook::h2(pawIndex, title, nxbins, xmin, xmax, nybins, ymin, ymax);
+    = new tools::hbook::h2(hbookIndex, title, nxbins, xmin, xmax, nybins, ymin, ymax);
   fH2Vector.push_back(h2);
   fH2MapByName[name] = h2;
  
   // Return to //PAWC/LUN1 :
-  tools::hbook::CHCDIR("//PAWC/LUN1"," ");
+  if ( fHistoDirectoryName != "" ) {
+    tools::hbook::CHCDIR("//PAWC/LUN1"," ");
+  }  
+
+  fLockFirstHistoId = true;
 
 #ifdef G4VERBOSE
-  if ( fpVerboseL1 ) 
-    fpVerboseL1->Message("create", "H2", name);
+  if ( fpVerboseL1 ) {
+    G4ExceptionDescription description;
+    description << " name : " << name << " hbook index : " << hbookIndex; 
+    fpVerboseL1->Message("create", "H2", description);
+  }  
 #endif
 
   return index + fFirstHistoId;
@@ -322,8 +386,8 @@ void ExG4HbookAnalysisManager::CreateNtuple(const G4String& name,
                                           const G4String& title)
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("create", "ntuple", name);
+  if ( fpVerboseL3 ) 
+    fpVerboseL3->Message("create", "ntuple", name);
 #endif
 
   if ( fNtuple ) {
@@ -336,21 +400,25 @@ void ExG4HbookAnalysisManager::CreateNtuple(const G4String& name,
     return;       
   }
 
-  // create an "ntuple" directory both in memory and in the file :
+  // Create an "ntuple" directory both in memory and in the file
   fFile->cd_home();      //go under //PAWC/LUN1
-  //fFile->cd_up();      //could have been ok too.
-  fFile->mkcd("ntuple"); //create  //LUN1/ntuple and //PAWC/LUN1/ntuple
+  if ( fNtupleDirectoryName == "" )
+    fFile->mkcd(fgkDefaultNtupleDirectoryName.data());
+  else  
+    fFile->mkcd(fNtupleDirectoryName.data());
 
+  // Define ntuple ID in HBOOK
+  if ( fNtupleHbookId == -1 ) fNtupleHbookId = fgkDefaultNtupleHbookId;
+  
   // We should be under //PAWC/LUN1/ntuple
-  G4int pawIndex = ( fH1Vector.size() + fH2Vector.size() + 1 )*10;
-  fNtuple = new tools::hbook::wntuple(pawIndex, name);
+  fNtuple = new tools::hbook::wntuple(fNtupleHbookId, name);
   fNtupleName = name;
   fNtupleTitle = title;
 
 #ifdef G4VERBOSE
   if ( fpVerboseL1 ) {
     G4ExceptionDescription description;
-    description << " name : " << name << " index : " << pawIndex; 
+    description << " name : " << name << " hbook index : " << fNtupleHbookId; 
     fpVerboseL1->Message("create", "ntuple", description);
   }  
 #endif
@@ -360,40 +428,42 @@ void ExG4HbookAnalysisManager::CreateNtuple(const G4String& name,
 G4int ExG4HbookAnalysisManager::CreateNtupleIColumn(const G4String& name)
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("create", "ntuple I column", name);
+  if ( fpVerboseL3 ) 
+    fpVerboseL3->Message("create", "ntuple I column", name);
 #endif
 
   G4int index = fNtuple->columns().size();
   tools::hbook::wntuple::column<int>* column = fNtuple->create_column<int>(name);  
   fNtupleIColumnMap[index] = column;
+  fLockFirstNtupleColumnId = true;
 
 #ifdef G4VERBOSE
   if ( fpVerboseL1 ) 
     fpVerboseL1->Message("create", "ntuple I column", name);
 #endif
 
-  return index + fFirstNtupleId;       
+  return index + fFirstNtupleColumnId;       
 }                                         
 
 //_____________________________________________________________________________
 G4int ExG4HbookAnalysisManager::CreateNtupleFColumn(const G4String& name)
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("create", "ntuple F column", name);
+  if ( fpVerboseL3 ) 
+    fpVerboseL3->Message("create", "ntuple F column", name);
 #endif
 
   G4int index = fNtuple->columns().size();
   tools::hbook::wntuple::column<float>* column = fNtuple->create_column<float>(name);  
   fNtupleFColumnMap[index] = column;
+  fLockFirstNtupleColumnId = true;
 
 #ifdef G4VERBOSE
   if ( fpVerboseL1 ) 
     fpVerboseL1->Message("create", "ntuple F column", name);
 #endif
 
-  return index + fFirstNtupleId;       
+  return index + fFirstNtupleColumnId;       
 }                                         
 
 
@@ -401,28 +471,29 @@ G4int ExG4HbookAnalysisManager::CreateNtupleFColumn(const G4String& name)
 G4int ExG4HbookAnalysisManager::CreateNtupleDColumn(const G4String& name) 
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("create", "ntuple D column", name);
+  if ( fpVerboseL3 ) 
+    fpVerboseL3->Message("create", "ntuple D column", name);
 #endif
 
   G4int index = fNtuple->columns().size();
   tools::hbook::wntuple::column<double>* column = fNtuple->create_column<double>(name);  
   fNtupleDColumnMap[index] = column;
+  fLockFirstNtupleColumnId = true;
 
 #ifdef G4VERBOSE
   if ( fpVerboseL1 ) 
     fpVerboseL1->Message("create", "ntuple D column", name);
 #endif
 
-  return index + fFirstNtupleId;       
+  return index + fFirstNtupleColumnId;       
 }                                         
 
 //_____________________________________________________________________________
 void ExG4HbookAnalysisManager::FinishNtuple()
 { 
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("finish", "ntuple", fNtupleName);
+  if ( fpVerboseL3 ) 
+    fpVerboseL3->Message("finish", "ntuple", fNtupleName);
 #endif
 
   // Return to //PAWC/LUN1 :
@@ -439,10 +510,10 @@ void ExG4HbookAnalysisManager::FinishNtuple()
 G4bool ExG4HbookAnalysisManager::FillH1(G4int id, G4double value, G4double weight)
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) {
+  if ( fpVerboseL3 ) {
     G4ExceptionDescription description;
     description << " id " << id << " value " << value;
-    fpVerboseL2->Message("fill", "H1", description);
+    fpVerboseL3->Message("fill", "H1", description);
   }  
 #endif
 
@@ -457,10 +528,10 @@ G4bool ExG4HbookAnalysisManager::FillH1(G4int id, G4double value, G4double weigh
 
   h1->fill(value, weight);
 #ifdef G4VERBOSE
-  if ( fpVerboseL1 ) {
+  if ( fpVerboseL2 ) {
     G4ExceptionDescription description;
     description << " id " << id << " value " << value;
-    fpVerboseL1->Message("fill", "H1", description);
+    fpVerboseL2->Message("fill", "H1", description);
   }  
 #endif
   return true;
@@ -472,11 +543,11 @@ G4bool ExG4HbookAnalysisManager::FillH2(G4int id,
                                        G4double weight)
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) {
+  if ( fpVerboseL3 ) {
     G4ExceptionDescription description;
     description << " id " << id 
                 << " xvalue " << xvalue << " yvalue " << yvalue;
-    fpVerboseL2->Message("fill", "H2", description);
+    fpVerboseL3->Message("fill", "H2", description);
   }  
 #endif
 
@@ -491,11 +562,11 @@ G4bool ExG4HbookAnalysisManager::FillH2(G4int id,
 
   h2->fill(xvalue, yvalue, weight);
 #ifdef G4VERBOSE
-  if ( fpVerboseL1 ) {
+  if ( fpVerboseL2 ) {
     G4ExceptionDescription description;
     description << " id " << id 
                 << " xvalue " << xvalue << " yvalue " << yvalue;
-    fpVerboseL1->Message("fill", "H2", description);
+    fpVerboseL2->Message("fill", "H2", description);
   }  
 #endif
   return true;
@@ -505,10 +576,10 @@ G4bool ExG4HbookAnalysisManager::FillH2(G4int id,
 G4bool ExG4HbookAnalysisManager::FillNtupleIColumn(G4int id, G4int value)
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) {
+  if ( fpVerboseL3 ) {
     G4ExceptionDescription description;
     description << " id " << id << " value " << value;
-    fpVerboseL2->Message("fill", "ntuple I column", description);
+    fpVerboseL3->Message("fill", "ntuple I column", description);
   }  
 #endif
 
@@ -523,10 +594,10 @@ G4bool ExG4HbookAnalysisManager::FillNtupleIColumn(G4int id, G4int value)
   
   column->fill(value);
  #ifdef G4VERBOSE
-  if ( fpVerboseL1 ) {
+  if ( fpVerboseL2 ) {
     G4ExceptionDescription description;
     description << " id " << id << " value " << value;
-    fpVerboseL1->Message("fill", "ntuple I column", description);
+    fpVerboseL2->Message("fill", "ntuple I column", description);
   }  
 #endif
  return true;       
@@ -535,10 +606,10 @@ G4bool ExG4HbookAnalysisManager::FillNtupleIColumn(G4int id, G4int value)
 G4bool ExG4HbookAnalysisManager::FillNtupleFColumn(G4int id, G4float value)
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) {
+  if ( fpVerboseL3 ) {
     G4ExceptionDescription description;
     description << " id " << id << " value " << value;
-    fpVerboseL2->Message("fill", "ntuple F column", description);
+    fpVerboseL3->Message("fill", "ntuple F column", description);
   }  
 #endif
 
@@ -553,10 +624,10 @@ G4bool ExG4HbookAnalysisManager::FillNtupleFColumn(G4int id, G4float value)
   
   column->fill(value);
 #ifdef G4VERBOSE
-  if ( fpVerboseL1 ) {
+  if ( fpVerboseL2 ) {
     G4ExceptionDescription description;
     description << " id " << id << " value " << value;
-    fpVerboseL1->Message("fill", "ntuple F column", description);
+    fpVerboseL2->Message("fill", "ntuple F column", description);
   }  
 #endif
   return true;       
@@ -565,10 +636,10 @@ G4bool ExG4HbookAnalysisManager::FillNtupleFColumn(G4int id, G4float value)
 G4bool ExG4HbookAnalysisManager::FillNtupleDColumn(G4int id, G4double value)
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) {
+  if ( fpVerboseL3 ) {
     G4ExceptionDescription description;
     description << " id " << id << " value " << value;
-    fpVerboseL2->Message("fill", "ntuple D column", description);
+    fpVerboseL3->Message("fill", "ntuple D column", description);
   }  
 #endif
 
@@ -583,10 +654,10 @@ G4bool ExG4HbookAnalysisManager::FillNtupleDColumn(G4int id, G4double value)
   
   column->fill(value);
 #ifdef G4VERBOSE
-  if ( fpVerboseL1 ) {
+  if ( fpVerboseL2 ) {
     G4ExceptionDescription description;
     description << " id " << id << " value " << value;
-    fpVerboseL1->Message("fill", "ntuple D column", description);
+    fpVerboseL2->Message("fill", "ntuple D column", description);
   }  
 #endif
   return true;       
@@ -596,8 +667,8 @@ G4bool ExG4HbookAnalysisManager::FillNtupleDColumn(G4int id, G4double value)
 G4bool ExG4HbookAnalysisManager::AddNtupleRow()
 { 
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 )
-    fpVerboseL2->Message("add", "ntuple row", "");
+  if ( fpVerboseL3 )
+    fpVerboseL3->Message("add", "ntuple row", "");
 #endif
 
   //G4cout << "Hbook: Going to add Ntuple row ..." << G4endl;
@@ -612,8 +683,8 @@ G4bool ExG4HbookAnalysisManager::AddNtupleRow()
   //fNtuple->add_row_fast();
   fNtuple->add_row();
 #ifdef G4VERBOSE
-  if ( fpVerboseL1 )
-    fpVerboseL1->Message("add", "ntuple row", "");
+  if ( fpVerboseL2 )
+    fpVerboseL2->Message("add", "ntuple row", "");
 #endif
   return true;
 }
@@ -648,6 +719,84 @@ tools::hbook::h2*  ExG4HbookAnalysisManager::GetH2(G4int id, G4bool warn) const
     return 0;         
   }
   return fH2Vector[index];
+}
+
+//_____________________________________________________________________________
+tools::hbook::wntuple* ExG4HbookAnalysisManager::GetNtuple() const
+{
+  return fNtuple;
+}
+
+//_____________________________________________________________________________
+G4bool ExG4HbookAnalysisManager::SetH1HbookIdOffset(G4int offset) 
+{
+  if ( fH1Vector.size() ) {
+    G4ExceptionDescription description;
+    description 
+      << "Cannot set H1HbookIdOffset as some H1 histogramms already exist.";
+    G4Exception("G4HbookAnalysisManager::SetH1HbookIdOffset()",
+                 "Analysis_W009", JustWarning, description);
+    return false;             
+  }
+  
+  if ( fFirstHistoId + offset < 1 ) {
+    G4ExceptionDescription description;
+    description << "The first histogram HBOOK id must be >= 1.";
+    G4Exception("G4HbookAnalysisManager::SetH1HbookIdOffset()",
+                 "Analysis_W009", JustWarning, description);
+    return false;             
+  }
+  
+  fH1HbookIdOffset = offset;
+  return true;
+}  
+
+//_____________________________________________________________________________
+G4bool ExG4HbookAnalysisManager::SetH2HbookIdOffset(G4int offset) 
+{
+  if ( fH2Vector.size() ) {
+    G4ExceptionDescription description;
+    description 
+      << "Cannot set H2HbookIdOffset as some H2 histogramms already exist.";
+    G4Exception("G4HbookAnalysisManager::SetH2HbookIdOffset()",
+                 "Analysis_W009", JustWarning, description);
+    return false;             
+  }
+
+  if ( fFirstHistoId + offset < 1 ) {
+    G4ExceptionDescription description;
+    description << "The first histogram HBOOK id must be >= 1.";
+    G4Exception("G4HbookAnalysisManager::SetH1HbookIdOffset()",
+                 "Analysis_W009", JustWarning, description);
+    return false;             
+  }
+  
+  fH2HbookIdOffset = offset;
+  return true;
+}  
+
+//_____________________________________________________________________________
+G4bool ExG4HbookAnalysisManager::SetNtupleHbookId(G4int ntupleId)
+{
+  if ( fNtuple ) {
+    G4ExceptionDescription description;
+    description 
+      << "Cannot set NtupleHbookId as an ntuple already exists.";
+    G4Exception("G4HbookAnalysisManager::SetNtupleHbookId()",
+                 "Analysis_W010", JustWarning, description);
+    return false;             
+  }
+
+  if ( ntupleId < 1 ) {
+    G4ExceptionDescription description;
+    description << "The ntuple HBOOK id must be >= 1.";
+    G4Exception("G4HbookAnalysisManager::SetNtupleHbookId()",
+                 "Analysis_W010", JustWarning, description);
+    return false;             
+  }
+  
+  fNtupleHbookId = ntupleId;
+  return true;
 }
 
 #endif

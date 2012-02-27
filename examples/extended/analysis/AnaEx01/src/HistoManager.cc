@@ -37,8 +37,9 @@
 
 HistoManager::HistoManager()
 {
-  fileName = "AnaEx01";
-
+  fileName[0] = "AnaEx01";
+  factoryOn = false;
+  
   // histograms
   for (G4int k=0; k<MaxHisto; k++) {
     fHistId[k] = 0;
@@ -63,58 +64,69 @@ void HistoManager::book()
   // The choice of analysis technology is done via selection of a namespace
   // in HistoManager.hh
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  
+  analysisManager->SetVerboseLevel(1);
+  G4String extension = analysisManager->GetFileType();
+  fileName[1] = fileName[0] + "." + extension;
+      
   // Open an output file
   //
-  analysisManager->OpenFile(fileName);
-
+  G4bool fileOpen = analysisManager->OpenFile(fileName[0]);
+  if (!fileOpen) {
+    G4cout << "\n---> HistoManager::book(): cannot open " << fileName[1] 
+           << G4endl;
+    return;
+  }
+  
+  // Create directories 
+  analysisManager->SetHistoDirectoryName("histo");
+  analysisManager->SetNtupleDirectoryName("ntuple");
+    
   // create selected histograms
   //
   analysisManager->SetFirstHistoId(1);
   
-  fHistId[1] = analysisManager->CreateH1("1","Edep in absorber",
+  fHistId[1] = analysisManager->CreateH1("1","Edep in absorber (MeV)",
                                               100, 0., 800*MeV);
   fHistPt[1] = analysisManager->GetH1(fHistId[1]);
   					 
-  fHistId[2] = analysisManager->CreateH1("2","Edep in gap",
+  fHistId[2] = analysisManager->CreateH1("2","Edep in gap (MeV)",
                                               100, 0., 100*MeV);
   fHistPt[2] = analysisManager->GetH1(fHistId[2]);
   					 
-  fHistId[3] = analysisManager->CreateH1("3","trackL in absorber",
+  fHistId[3] = analysisManager->CreateH1("3","trackL in absorber (mm)",
                                               100, 0., 1*m);
   fHistPt[3] = analysisManager->GetH1(fHistId[3]);
   					 
-  fHistId[4] = analysisManager->CreateH1("4","trackL in gap",
+  fHistId[4] = analysisManager->CreateH1("4","trackL in gap (mm)",
                                               100, 0., 50*cm);
   fHistPt[4] = analysisManager->GetH1(fHistId[4]);
   				
   // Create 1 ntuple
-  //
-  analysisManager->SetFirstNtupleId(0);
-    
+  //    
   analysisManager->CreateNtuple("101", "Edep and TrackL");
   fNtColId[0] = analysisManager->CreateNtupleDColumn("Eabs");
   fNtColId[1] = analysisManager->CreateNtupleDColumn("Egap");
   fNtColId[2] = analysisManager->CreateNtupleDColumn("Labs");
   fNtColId[3] = analysisManager->CreateNtupleDColumn("Lgap");
   analysisManager->FinishNtuple();
-          
-  G4cout << "\n----> Histogram Tree is opened in " << fileName << G4endl;
+  
+  factoryOn = true;       
+  G4cout << "\n----> Histogram Tree is opened in " << fileName[1] << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HistoManager::save()
 {
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();    
-  analysisManager->Write();
-  analysisManager->CloseFile();
-  
-  G4cout << "\n----> Histogram Tree is saved in " << fileName << G4endl;
+  if (factoryOn) {
+    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();    
+    analysisManager->Write();
+    analysisManager->CloseFile();  
+    G4cout << "\n----> Histogram Tree is saved in " << fileName[1] << G4endl;
       
-  // complete cleanup
-  //
-  delete G4AnalysisManager::Instance();         
+    delete G4AnalysisManager::Instance();
+    factoryOn = false;
+  }                    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -169,7 +181,7 @@ void HistoManager::AddRowNtuple()
 
 void HistoManager::PrintStatistic()
 {
-  if(fHistPt[1]) {
+  if(factoryOn) {
     G4cout << "\n ----> print histograms statistic \n" << G4endl;
     
     G4cout 

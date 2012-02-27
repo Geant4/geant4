@@ -23,58 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: HistoManager.hh,v 1.1 2010-09-16 16:26:13 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-// 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+// $Id$
 
-#ifndef HistoManager_h
-#define HistoManager_h 1
+// Author: Ivana Hrivnacova, 15/06/2011  (ivana@ipno.in2p3.fr)
 
-#include "globals.hh"
+#ifndef g4hbook_defs_h
+#define g4hbook_defs_h
 
-#include "g4root.hh"
-////#include "g4xml.hh"
-////#include "g4hbook.hh"
+#include <tools/hbook/h1>
+#include <tools/hbook/h2>
+#include <tools/hbook/wntuple>
+#include "ExG4HbookAnalysisManager.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+namespace G4Hbook {
 
-const G4int MaxHisto = 5;
-const G4int MaxNtCol = 4;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class HistoManager
-{
-  public:
-
-    HistoManager();
-   ~HistoManager();
-
-    void book();
-    void save();
-
-    void FillHisto(G4int id, G4double e, G4double weight = 1.0);
-    void Normalize(G4int id, G4double fac);    
-
-    void FillNtuple(G4int column, G4double value);
-    void AddRowNtuple();
-    
-    void PrintStatistic();        
-
-  private:
-
-    G4String      fileName[2];
-    G4bool        factoryOn;    
-
-    G4int         fHistId[MaxHisto];
-    G4AnaH1*      fHistPt[MaxHisto];
-    G4int         fNtColId[MaxNtCol];
-};
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+  typedef tools::hbook::h1  G4AnaH1;
+  typedef tools::hbook::h2  G4AnaH2;    
+  typedef tools::hbook::wntuple  G4Ntuple; 
+  typedef ExG4HbookAnalysisManager G4AnalysisManager; 
+} 
 
 #endif
 
+  
