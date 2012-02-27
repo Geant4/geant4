@@ -143,8 +143,8 @@ void G4IonFTFPBinaryCascadePhysics::AddProcess(const G4String& name,
   G4ProcessManager* pManager = part->GetProcessManager();
   pManager->AddDiscreteProcess(hadi);
   hadi->AddDataSet(fShen);
-  hadi->AddDataSet(fTripathi);
-  hadi->AddDataSet(fTripathiLight);
+  //hadi->AddDataSet(fTripathi);
+  //hadi->AddDataSet(fTripathiLight);
   if(isIon) { hadi->AddDataSet(fIonH); }
   hadi->RegisterMe(theIonBC);
   hadi->RegisterMe(theFTFP);

@@ -133,8 +133,8 @@ void G4IonBinaryCascadePhysics::AddProcess(const G4String& name,
   G4ProcessManager* pManager = p->GetProcessManager();
   pManager->AddDiscreteProcess(hadi);
   hadi->AddDataSet(fShen);
-  hadi->AddDataSet(fTripathi);
-  hadi->AddDataSet(fTripathiLight);
+  //hadi->AddDataSet(fTripathi);
+  //hadi->AddDataSet(fTripathiLight);
   if(p == G4GenericIon::GenericIon()) { hadi->AddDataSet(fIonH); }
   hmodel->SetMinEnergy(eminBIC);
   hmodel->SetMaxEnergy(emax);

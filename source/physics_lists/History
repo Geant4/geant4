@@ -15,7 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-23-01-2012 M.Karamitros               (phys-lists-V09-05-01)
+22-02-2012, V.Ivanchenko               (phys-lists-V09-05-02)
+- G4IonBinaryCascadePhysics, G4IonFTFPBinaryCascadePhysics - Tripathi
+    cross sections are commented out, only Shen and Ion/proton are used
+
+23-01-2012 M.Karamitros                (phys-lists-V09-05-01)
 - change G4WaterExcitation -> G4DNAWaterExcitation in G4EmDNAPhysicsChemistry
 
 - G4FTFBuilder, G4QandFTFStoppingPhysics - reduced number of deleted 
