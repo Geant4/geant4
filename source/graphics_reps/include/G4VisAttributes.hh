@@ -73,11 +73,12 @@ public: // With description
   enum ForcedDrawingStyle {wireframe, solid};
 
   G4VisAttributes ();
+  G4VisAttributes (const G4VisAttributes&);
   G4VisAttributes (G4bool visibility);
   G4VisAttributes (const G4Colour& colour);
   G4VisAttributes (G4bool visibility, const G4Colour& colour);
-
-  // Compiler defaults for copy constructor and assigment operator are OK.
+  ~G4VisAttributes ();
+  G4VisAttributes& operator= (const G4VisAttributes&);
 
   static const G4VisAttributes Invisible;
 

@@ -43,7 +43,7 @@ G4Visible::G4Visible ():
 G4Visible::G4Visible (const G4Visible& visible){
   fAllocatedVisAttributes = visible.fAllocatedVisAttributes;
   if (fAllocatedVisAttributes)
-    fpVisAttributes = new G4VisAttributes(visible.fpVisAttributes);
+    fpVisAttributes = new G4VisAttributes(*visible.fpVisAttributes);
   else fpVisAttributes = visible.fpVisAttributes;
 }
 
@@ -61,7 +61,7 @@ G4Visible& G4Visible::operator= (const G4Visible& rhs) {
   fAllocatedVisAttributes = rhs.fAllocatedVisAttributes;
   if (fAllocatedVisAttributes) {
     delete fpVisAttributes;
-    fpVisAttributes = new G4VisAttributes(rhs.fpVisAttributes);
+    fpVisAttributes = new G4VisAttributes(*rhs.fpVisAttributes);
   }
   else fpVisAttributes = rhs.fpVisAttributes;
   return *this;

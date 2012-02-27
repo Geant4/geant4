@@ -79,7 +79,9 @@ public: // With description
   G4Text (const G4String& text);
   G4Text (const G4String& text, const G4Point3D& position);
   G4Text (const G4VMarker&);
-  ~G4Text ();
+  G4Text (const G4Text&);
+  virtual ~G4Text ();
+  G4Text& operator= (const G4Text&);
 
   G4String GetText   () const;
   Layout   GetLayout () const;
@@ -90,7 +92,7 @@ public: // With description
   void SetText   (const G4String& text);
   void SetLayout (Layout);
 
-  void SetOffset ( double dx,  double dy ) ;   
+  void SetOffset (double dx, double dy) ;   
 
 private:
   G4String fText;

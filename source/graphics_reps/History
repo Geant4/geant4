@@ -17,6 +17,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+7th February 2012  John Allison  (greps-V09-05-05)
+- G4VisAttributes:
+  o Added copy constructor and assignment operator.
+- G4Visible.cc:
+  o Fixed bug in copy constructor and assignment operator.
+
+4th February 2012  John Allison  (greps-V09-05-04)
+- Added G4Text::G4Text(const G4Text& text) (copy contructor).
+- Added G4Text& operator=(const G4Text& text) (assignment operator).
+
+1st February 2012  John Allison  (greps-V09-05-03)
+- BooleanProcessor.src:
+  o Explicit conversion from size_t to int when using ExtEdge constructor.
+
 30th December 2011  John Allison  (greps-V09-05-02)
 - G4VVisManager.hh: Improved comments for Added Begin/EndDraw(2D).
 

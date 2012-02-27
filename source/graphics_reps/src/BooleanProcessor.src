@@ -1550,9 +1550,9 @@ void BooleanProcessor::mergeContours(int ix, int iy, int kext, int kint)
             }
           }
           i = edges[i1int].iface1;
-          edges.push_back(ExtEdge(k[1], k[4], i, -(edges.size()+1), -1));
+          edges.push_back(ExtEdge(k[1], k[4], i, -(int(edges.size())+1), -1));
           edges.back().inext = i2int;
-          edges.push_back(ExtEdge(k[4], k[1], i, -(edges.size()-1), -1));
+          edges.push_back(ExtEdge(k[4], k[1], i, -(int(edges.size())-1), -1));
           edges.back().inext = edges[i1ext].inext;
           edges[i1ext].inext = edges.size()-2;
           edges[i1int].inext = edges.size()-1;
@@ -1704,13 +1704,13 @@ void BooleanProcessor::triangulateContour(int ix, int iy, int ihead)
     int iface2 = faces.size();
 
     edges[ipnext].inext = edges.size();
-    edges.push_back(ExtEdge(i1, i3, iface1, -(edges.size()+1), -1));
+    edges.push_back(ExtEdge(i1, i3, iface1, -(int(edges.size())+1), -1));
     edges.back().inext = edges[iedge2].inext;
 
     //   A D D   N E W   T R I A N G L E   T O   T H E   L I S T
 
     edges[iedge2].inext = edges.size();
-    edges.push_back(ExtEdge(i3, i1, iface2, -(edges.size()-1), -1));
+    edges.push_back(ExtEdge(i3, i1, iface2, -(int(edges.size())-1), -1));
     faces.push_back(ExtFace(edges,0)); //G.Barrand : ok ?
     faces.back().iold   = iedge1;
     faces.back().inew   = ORIGINAL_FACE;
