@@ -18,8 +18,7 @@
 #
 /run/initialize
 #
-/testem/histo/setFileName tileCal/mu.1mm
-/testem/histo/setFileType root
+/testem/histo/setFileName mu.1mm
 /testem/histo/setHisto 1 100  500.  1000.  MeV
 /testem/histo/setHisto 2 100    0.    50.  MeV
 #

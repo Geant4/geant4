@@ -18,7 +18,6 @@
 /gun/energy 1 GeV
 #
 /testem/histo/setFileName testem3
-/testem/histo/setFileType root
 /testem/histo/setHisto 1 100 700. 1000. MeV	#edep in absor1
 /testem/histo/setHisto 2 100   0.  300. MeV	#edep in absor2
 /testem/histo/setHisto 11 52   0.   52.  none	#long. profile in absor1

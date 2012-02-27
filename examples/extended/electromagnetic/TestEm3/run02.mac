@@ -24,7 +24,6 @@
 /gun/energy 1 GeV
 #
 /testem/histo/setFileName run02
-/testem/histo/setFileType hbook
 /testem/histo/setHisto 1 100 900. 1000. MeV
 /testem/histo/setHisto 2 100   0.   50. MeV
 #

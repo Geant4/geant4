@@ -23,24 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard.cc,v 1.24 2009-11-15 22:10:03 maire Exp $
+// $Id: PhysListEmStandardWVI.cc,v 1.1 2010-11-19 15:59:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
-#include "PhysListEmStandard.hh"
+#include "PhysListEmStandardWVI.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
-#include "G4PhysicsListHelper.hh"
 
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
-#include "G4RayleighScattering.hh"
-#include "G4KleinNishinaModel.hh"
 
 #include "G4eMultipleScattering.hh"
+#include "G4WentzelVIModel.hh"
+#include "G4CoulombScattering.hh"
+#include "G4IonCoulombScatteringModel.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
@@ -62,105 +62,104 @@
 #include "G4EmProcessOptions.hh"
 #include "G4MscStepLimitType.hh"
 
-#include "G4LossTableManager.hh"
-#include "G4UAtomicDeexcitation.hh"
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysListEmStandard::PhysListEmStandard(const G4String& name)
+PhysListEmStandardWVI::PhysListEmStandardWVI(const G4String& name)
    :  G4VPhysicsConstructor(name)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysListEmStandard::~PhysListEmStandard()
+PhysListEmStandardWVI::~PhysListEmStandardWVI()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysListEmStandard::ConstructProcess()
+void PhysListEmStandardWVI::ConstructProcess()
 {
-  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
-  
   // Add standard EM Processes
   //
+
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
      
     if (particleName == "gamma") {
-
-      ////ph->RegisterProcess(new G4RayleighScattering, particle);      
-      ph->RegisterProcess(new G4PhotoElectricEffect, particle);      
-      G4ComptonScattering* cs   = new G4ComptonScattering;
-      cs->SetModel(new G4KleinNishinaModel());
-      ph->RegisterProcess(cs, particle);
-      ph->RegisterProcess(new G4GammaConversion, particle);
-     
+      // gamma
+      pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
+      pmanager->AddDiscreteProcess(new G4ComptonScattering);
+      pmanager->AddDiscreteProcess(new G4GammaConversion);
+      
     } else if (particleName == "e-") {
-    
-      ph->RegisterProcess(new G4eMultipleScattering(), particle);            
-      G4eIonisation* eIoni = new G4eIonisation();
-      eIoni->SetStepFunction(0.1, 100*um);      
-      ph->RegisterProcess(eIoni, particle);
-      ph->RegisterProcess(new G4eBremsstrahlung(), particle);      
-	    
+      //electron
+      G4MuMultipleScattering* msc = new G4MuMultipleScattering();
+      msc->AddEmModel(0, new G4WentzelVIModel());
+      pmanager->AddProcess(msc,                       -1, 1, 1);      
+      pmanager->AddProcess(new G4eIonisation,         -1, 2, 2);
+      pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3, 3);
+      pmanager->AddProcess(new G4CoulombScattering,   -1,-1, 4);
+      	    
     } else if (particleName == "e+") {
-
-      ph->RegisterProcess(new G4eMultipleScattering(), particle);                  
-      G4eIonisation* eIoni = new G4eIonisation();
-      eIoni->SetStepFunction(0.1, 100*um);      
-      ph->RegisterProcess(eIoni, particle);
-      ph->RegisterProcess(new G4eBremsstrahlung(), particle);
-      ph->RegisterProcess(new G4eplusAnnihilation(), particle);
+      //positron
+      G4MuMultipleScattering* msc = new G4MuMultipleScattering();
+      msc->AddEmModel(0, new G4WentzelVIModel());
+      pmanager->AddProcess(msc,                       -1, 1, 1);            
+      pmanager->AddProcess(new G4eIonisation,         -1, 2, 2);
+      pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3, 3);
+      pmanager->AddProcess(new G4eplusAnnihilation,    0,-1, 4);
+      pmanager->AddProcess(new G4CoulombScattering,   -1,-1, 5);
                   
     } else if (particleName == "mu+" || 
                particleName == "mu-"    ) {
-
-      ph->RegisterProcess(new G4MuMultipleScattering(), particle);
-      G4MuIonisation* muIoni = new G4MuIonisation();
-      muIoni->SetStepFunction(0.1, 50*um);      
-      ph->RegisterProcess(muIoni, particle);
-      ph->RegisterProcess(new G4MuBremsstrahlung(), particle);
-      ph->RegisterProcess(new G4MuPairProduction(), particle);
+      //muon
+      G4MuMultipleScattering* msc = new G4MuMultipleScattering();
+      msc->AddEmModel(0, new G4WentzelVIModel());
+      pmanager->AddProcess(msc,                        -1, 1, 1);        
+      pmanager->AddProcess(new G4MuIonisation,         -1, 2, 2);
+      pmanager->AddProcess(new G4MuBremsstrahlung,     -1, 3, 3);
+      pmanager->AddProcess(new G4MuPairProduction,     -1, 4, 4);
+      pmanager->AddProcess(new G4CoulombScattering,    -1,-1, 5);
                    
     } else if( particleName == "proton" ||
                particleName == "pi-" ||
                particleName == "pi+"    ) {
-
-      ph->RegisterProcess(new G4hMultipleScattering(), particle);      
-      G4hIonisation* hIoni = new G4hIonisation();
-      hIoni->SetStepFunction(0.1, 20*um);
-      ph->RegisterProcess(hIoni, particle);
-      ph->RegisterProcess(new G4hBremsstrahlung(), particle);
-      ph->RegisterProcess(new G4hPairProduction(), particle);            
+      //proton
+      G4MuMultipleScattering* msc = new G4MuMultipleScattering();
+      msc->AddEmModel(0, new G4WentzelVIModel());
+      pmanager->AddProcess(msc,                       -1, 1, 1);                
+      pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
+      pmanager->AddProcess(new G4hBremsstrahlung,     -1, 3, 3);
+      pmanager->AddProcess(new G4hPairProduction,     -1, 4, 4);
+      pmanager->AddProcess(new G4CoulombScattering,   -1,-1, 5);            
      
     } else if( particleName == "alpha" || 
 	       particleName == "He3"    ) {
-
-      ph->RegisterProcess(new G4hMultipleScattering(), particle);           
-      G4ionIonisation* ionIoni = new G4ionIonisation();
-      ionIoni->SetStepFunction(0.1, 1*um);
-      ph->RegisterProcess(ionIoni, particle);
-      ph->RegisterProcess(new G4NuclearStopping(), particle);      
+      //alpha
+      G4hMultipleScattering* msc = new G4hMultipleScattering();
+      pmanager->AddProcess(msc,                       -1, 1, 1);
+      pmanager->AddProcess(new G4ionIonisation,       -1, 2, 2);
+      pmanager->AddProcess(new G4NuclearStopping,     -1, 3,-1);
             
     } else if( particleName == "GenericIon" ) {
-
-      ph->RegisterProcess(new G4hMultipleScattering(), particle);          
+      //Ions
+      G4hMultipleScattering* msc = new G4hMultipleScattering();
+      pmanager->AddProcess(msc,                       -1, 1, 1);
       G4ionIonisation* ionIoni = new G4ionIonisation();
       ionIoni->SetEmModel(new G4IonParametrisedLossModel());
-      ionIoni->SetStepFunction(0.1, 1*um);
-      ph->RegisterProcess(ionIoni, particle);
-      ph->RegisterProcess(new G4NuclearStopping(), particle);                   
+      pmanager->AddProcess(ionIoni,                   -1, 2, 2);
+      pmanager->AddProcess(new G4NuclearStopping,     -1, 3,-1);      
       
     } else if ((!particle->IsShortLived()) &&
 	       (particle->GetPDGCharge() != 0.0) && 
 	       (particle->GetParticleName() != "chargedgeantino")) {
-	       
       //all others charged particles except geantino
-      ph->RegisterProcess(new G4hMultipleScattering(), particle);
-      ph->RegisterProcess(new G4hIonisation(), particle);
+      G4hMultipleScattering* msc = new G4hMultipleScattering();
+      msc->AddEmModel(0, new G4WentzelVIModel());
+      pmanager->AddProcess(msc,                       -1, 1, 1);
+      pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
+      pmanager->AddProcess(new G4CoulombScattering,   -1,-1, 3);
     }
   }
 
@@ -170,25 +169,10 @@ void PhysListEmStandard::ConstructProcess()
   // Several of them have default values.
   //
   G4EmProcessOptions emOptions;
-  
-  //physics tables
-  //
-  emOptions.SetMinEnergy(10*eV);	//default 100 eV   
-  emOptions.SetMaxEnergy(10*TeV);	//default 100 TeV 
-  emOptions.SetDEDXBinning(12*10);	//default=12*7
-  emOptions.SetLambdaBinning(12*10);	//default=12*7
-  
+      
   //multiple coulomb scattering
   //
-  emOptions.SetMscStepLimitation(fUseDistanceToBoundary);  //default fUseSafety
-    
-  // Deexcitation
-  //
-  G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
-  de->SetFluo(true);
-  de->SetAuger(false);   
-  de->SetPIXE(false);  
-  G4LossTableManager::Instance()->SetAtomDeexcitation(de);
+  emOptions.SetPolarAngleLimit(pi);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

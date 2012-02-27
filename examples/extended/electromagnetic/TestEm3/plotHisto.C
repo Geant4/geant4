@@ -16,5 +16,5 @@
   c1->SetLogy(1);
   c1->cd();
   c1->Update(); 
-  hist3->Draw("HIST");    
+  hist3->Draw("HIST");      
 }  

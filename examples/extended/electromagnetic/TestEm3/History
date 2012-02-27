@@ -15,6 +15,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+27-02-12 mma (testem3-V09-05-00)
+- HistoManager.hh and .cc : migrate to new g4tools histogramming system
+  Do not need aida anymore, nor G4ANALYSIS_USE
+- HistoMessenger.hh and .cc : suppress fileType command
+- Update Readme and all macros accordingly
+- remove unused macros
+- add PhysListEmStandardWVI;    SetPolarAngle = pi
+     
 08-11-11 mma (testem3-V09-04-08)
 - modify SteppingVerbose for OutOfWorld
      

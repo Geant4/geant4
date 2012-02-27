@@ -24,49 +24,44 @@
 // ********************************************************************
 //
 //
-// $Id: HistoMessenger.hh,v 1.1 2010-09-16 16:26:13 gcosmo Exp $
+// $Id: PhysListEmStandardWVI.hh,v 1.1 2010-11-19 15:59:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef HistoMessenger_h
-#define HistoMessenger_h 1
+#ifndef PhysListEmStandardWVI_h
+#define PhysListEmStandardWVI_h 1
 
-#include "G4UImessenger.hh"
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class HistoManager;
-class G4UIdirectory;
-class G4UIcommand;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class HistoMessenger: public G4UImessenger
+class PhysListEmStandardWVI : public G4VPhysicsConstructor
 {
-  public:
+  public: 
+    PhysListEmStandardWVI(const G4String& name = "standardWVI");
+   ~PhysListEmStandardWVI();
 
-   HistoMessenger(HistoManager* );
-  ~HistoMessenger();
-
-   void SetNewValue(G4UIcommand* ,G4String );
-
-  private:
-
-   HistoManager*           fHistoManager;
-   
-   G4UIdirectory*          fHistoDir;   
-   G4UIcmdWithAString*     fFileNameCmd;
-   G4UIcommand*            fHistoCmd;
-   G4UIcmdWithAnInteger*   fPrtHistoCmd;   
-
+  public: 
+    // This method is dummy for physics
+    void ConstructParticle() {};
+ 
+    // This method will be invoked in the Construct() method.
+    // each physics process will be instantiated and
+    // registered to the process manager of each particle type 
+    void ConstructProcess();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+
+
+
+
+
+
+
 

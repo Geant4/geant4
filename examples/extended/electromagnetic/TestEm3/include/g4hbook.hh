@@ -23,50 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: HistoMessenger.hh,v 1.1 2010-09-16 16:26:13 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-// 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+// $Id$
 
-#ifndef HistoMessenger_h
-#define HistoMessenger_h 1
+// Author: Ivana Hrivnacova, 15/06/2011  (ivana@ipno.in2p3.fr)
 
-#include "G4UImessenger.hh"
-#include "globals.hh"
+#ifndef g4hbook_h
+#define g4hbook_h
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "g4hbook_defs.hh"
 
-class HistoManager;
-class G4UIdirectory;
-class G4UIcommand;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class HistoMessenger: public G4UImessenger
-{
-  public:
-
-   HistoMessenger(HistoManager* );
-  ~HistoMessenger();
-
-   void SetNewValue(G4UIcommand* ,G4String );
-
-  private:
-
-   HistoManager*           fHistoManager;
-   
-   G4UIdirectory*          fHistoDir;   
-   G4UIcmdWithAString*     fFileNameCmd;
-   G4UIcommand*            fHistoCmd;
-   G4UIcmdWithAnInteger*   fPrtHistoCmd;   
-
-};
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+using namespace G4Hbook;
 
 #endif
 
+  

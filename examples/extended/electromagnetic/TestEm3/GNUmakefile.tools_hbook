@@ -1,0 +1,48 @@
+# $Id$
+# --------------------------------------------------------------
+# GNUmakefile for ing4 HBOOK support. 
+# --------------------------------------------------------------
+
+ifdef G4_USE_HBOOK
+
+include $(G4INSTALL)/config/architecture.gmk
+
+CPPFLAGS += -DG4_USE_HBOOK
+EXTRALIBS += $(G4TMPDIR)/exe/close.o $(G4TMPDIR)/exe/setpawc.o $(G4TMPDIR)/exe/setntuc.o
+EXTRALIBS += -L${CERNLIB}/lib  -lpacklib -lmathlib -lgfortran -lcrypt 
+
+#FC=gfortran
+
+hbook: close.o setpawc.o setntuc.o
+	(mv *.o  $(G4TMPDIR)/exe);    
+
+close.o : $(G4BASE)/analysis/include/tools/hbook/close.f
+	@echo Compiling close.f
+ifdef CPPVERBOSE
+	$(FC) -c $(G4BASE)/analysis/include/tools/hbook/close.f
+else
+	@$(FC) -c $(G4BASE)/analysis/include/tools/hbook/close.f
+endif
+
+setpawc.o : $(G4BASE)/analysis/include/tools/hbook/setpawc.f
+	@echo Compiling setpawc.f
+ifdef CPPVERBOSE
+	$(FC) -c $(G4BASE)/analysis/include/tools/hbook/setpawc.f
+else
+	@$(FC) -c $(G4BASE)/analysis/include/tools/hbook/setpawc.f
+endif
+
+setntuc.o : $(G4BASE)/analysis/include/tools/hbook/setntuc.f
+	@echo Compiling setntuc.f
+ifdef CPPVERBOSE
+	$(FC) -c $(G4BASE)/analysis/include/tools/hbook/setntuc.f
+else
+	@$(FC) -c $(G4BASE)/analysis/include/tools/hbook/setntuc.f
+endif
+
+else
+hbook: 
+        
+endif
+                  
+
