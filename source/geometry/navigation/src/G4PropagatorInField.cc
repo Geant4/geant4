@@ -229,8 +229,8 @@ G4PropagatorInField::ComputeStep(
       //
       if( stepTrial > 100.0*fZeroStepThreshold )
         decreaseFactor = 0.35;     // Try decreasing slower
-      else if( stepTrial > 100.0*fZeroStepThreshold )
-        decreaseFactor= 0.5;       // Try yet slower decreases
+      else if( stepTrial > 30.0*fZeroStepThreshold )
+        decreaseFactor= 0.5;       // Try yet slower decrease
       else if( stepTrial > 10.0*fZeroStepThreshold )
         decreaseFactor= 0.75;      // Try even slower decreases
       else
