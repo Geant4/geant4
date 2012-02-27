@@ -33,31 +33,42 @@
 
 #include "StepMax.hh"
 #include "G4UIcmdWithABool.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StepMaxMessenger::StepMaxMessenger(StepMax* stepM)
 :stepMax(stepM)
-{ 
-  StepMaxCmd = new G4UIcmdWithABool("/testem/applyStepMax",this);
-  StepMaxCmd->SetGuidance("apply StepMax computed from histograms");
-  StepMaxCmd->SetParameterName("mxStep",true);
-  StepMaxCmd->SetDefaultValue(true);
+{
+  StepMax1Cmd = new G4UIcmdWithADoubleAndUnit("/testem/stepMax",this);
+  StepMax1Cmd->SetGuidance("Set max allowed step length");
+  StepMax1Cmd->SetParameterName("mxStep1",false);
+  StepMax1Cmd->SetRange("mxStep1>0.");
+  StepMax1Cmd->SetUnitCategory("Length");
+   
+  StepMax2Cmd = new G4UIcmdWithABool("/testem/applyAutomaticStepMax",this);
+  StepMax2Cmd->SetGuidance("apply StepMax computed from histograms");
+  StepMax2Cmd->SetParameterName("mxStep2",true);
+  StepMax2Cmd->SetDefaultValue(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StepMaxMessenger::~StepMaxMessenger()
 {
-  delete StepMaxCmd;
+  delete StepMax1Cmd;
+  delete StepMax2Cmd;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void StepMaxMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 { 
-  if (command == StepMaxCmd)
-    { stepMax->ApplyMaxStep(StepMaxCmd->GetNewBoolValue(newValue));}
+  if (command == StepMax1Cmd)
+    { stepMax->SetMaxStep1(StepMax1Cmd->GetNewDoubleValue(newValue));}
+    
+  if (command == StepMax2Cmd)
+    { stepMax->ApplyMaxStep2(StepMax2Cmd->GetNewBoolValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

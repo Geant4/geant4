@@ -103,7 +103,7 @@ $Id: README,v 1.11 2009-09-22 14:20:31 maire Exp $
 
  6- TRACKING  and STEP MAX
  
- Testem11 computes the total energy deposited along the trajectory of 
+ Testem11 computes the distribution of energy deposited along the trajectory of 
  the incident particle : the so-called longitudinal energy profile,
  or depth dose distribution.
  The energy deposited (edep) is randomly distribued along the step (see
@@ -120,6 +120,7 @@ $Id: README,v 1.11 2009-09-22 14:20:31 maire Exp $
  StepMax is evaluated at RunAction::BeginOfRun(),
  and passed to the StepMax process. 
  A boolean UI command allows to desactivate this mechanism.
+ Another UI command allows to define directly a stepMax value.
      	
  7- HISTOGRAMS
  

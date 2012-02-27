@@ -26,7 +26,7 @@
 /testem/histo/setHisto 4 100 0.  200. um	#true step length
 /testem/histo/setHisto 5 100 0.    1. mm	#proj range
 #
-/testem/applyStepMax false
+/testem/applyAutomaticStepMax false
 #
 /testem/event/printModulo 10000
 #

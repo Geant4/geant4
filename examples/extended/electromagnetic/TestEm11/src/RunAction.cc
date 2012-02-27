@@ -120,7 +120,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
       }			      
     }        
   }     
-  physics->GetStepMaxProcess()->SetMaxStep(stepMax);           
+  physics->GetStepMaxProcess()->SetMaxStep2(stepMax);           
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
