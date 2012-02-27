@@ -681,7 +681,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
 	{
 	  vertexType = ABSOLUTE;
 	} 
-	else if( solParam[jj+11] == 0 ) 
+	else if( solParam[jj+11] == 1 )  
 	{
 	  vertexType = RELATIVE;
 	} 
@@ -708,7 +708,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
 	{
 	  vertexType = ABSOLUTE;
 	}
-	else if( solParam[jj+14] == 0 ) 
+	else if( solParam[jj+14] == 1 )
 	{
 	  vertexType = RELATIVE;
 	} 
