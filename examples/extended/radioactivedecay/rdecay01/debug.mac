@@ -3,8 +3,7 @@
 /tracking/verbose 2
 #
 /gun/particle ion
-##/gun/ion 10 24
-/gun/ion 77 192
+/gun/ion 95 241
 #
 /rdecay01/fullChain true
 #  

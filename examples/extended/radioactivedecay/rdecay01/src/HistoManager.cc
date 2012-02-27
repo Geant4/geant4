@@ -38,7 +38,7 @@
 
 HistoManager::HistoManager()
 {
-  fileName  = "rdecay1";
+  fileName[0]  = "rdecay1";
   factoryOn = false;
   fNbHist   = 0;
 
@@ -73,12 +73,16 @@ void HistoManager::book()
   // The choice of analysis technology is done via selection of a namespace
   // in HistoManager.hh
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->SetVerboseLevel(1);
+  G4String extension = analysisManager->GetFileType();
+  fileName[1] = fileName[0] + "." + extension;
   
   // Open an output file
   //
-  G4bool fileOpen = analysisManager->OpenFile(fileName);
+  G4bool fileOpen = analysisManager->OpenFile(fileName[0]);
   if (!fileOpen) {
-    G4cout << "\n---> HistoManager::book(): cannot open " << fileName << G4endl;
+    G4cout << "\n---> HistoManager::book(): cannot open " << fileName[1] 
+           << G4endl;
     return;
   }  
 
@@ -96,7 +100,7 @@ void HistoManager::book()
   }
 
   if (factoryOn)  
-    G4cout << "\n----> Histogram file is opened in " << fileName << G4endl;
+    G4cout << "\n----> Histogram file is opened in " << fileName[1] << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -108,7 +112,7 @@ void HistoManager::save()
     analysisManager->Write();
     analysisManager->CloseFile();
     saveAscii();                    // Write fAscii file, if any
-    G4cout << "\n----> Histograms are saved in " << fileName << G4endl;
+    G4cout << "\n----> Histograms are saved in " << fileName[1] << G4endl;
       
     delete G4AnalysisManager::Instance();
     factoryOn = false;
@@ -208,7 +212,7 @@ void HistoManager::saveAscii()
 {
  if (!fAscii[0]) return;
  
- G4String name = fileName + ".ascii";
+ G4String name = fileName[0] + ".ascii";
  std::ofstream File(name, std::ios::out);
  if (!File) {
    G4cout 
