@@ -93,7 +93,7 @@ void PhysListEmStandardWVI::ConstructProcess()
       
     } else if (particleName == "e-") {
       //electron
-      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      G4MuMultipleScattering* msc = new G4MuMultipleScattering();
       msc->AddEmModel(0, new G4WentzelVIModel());
       pmanager->AddProcess(msc,                       -1, 1, 1);      
       pmanager->AddProcess(new G4eIonisation,         -1, 2, 2);
@@ -102,7 +102,7 @@ void PhysListEmStandardWVI::ConstructProcess()
       	    
     } else if (particleName == "e+") {
       //positron
-      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      G4MuMultipleScattering* msc = new G4MuMultipleScattering();
       msc->AddEmModel(0, new G4WentzelVIModel());
       pmanager->AddProcess(msc,                       -1, 1, 1);            
       pmanager->AddProcess(new G4eIonisation,         -1, 2, 2);
@@ -126,32 +126,26 @@ void PhysListEmStandardWVI::ConstructProcess()
                particleName == "pi+"    ) {
       //proton
       G4hMultipleScattering* msc = new G4hMultipleScattering();
-      msc->AddEmModel(0, new G4WentzelVIModel());
-      pmanager->AddProcess(msc,                       -1, 1, 1);                
+      pmanager->AddProcess(msc,                       -1, 1, 1);
       pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
       pmanager->AddProcess(new G4hBremsstrahlung,     -1, 3, 3);
       pmanager->AddProcess(new G4hPairProduction,     -1, 4, 4);
-      pmanager->AddProcess(new G4CoulombScattering,   -1,-1, 5);            
      
     } else if( particleName == "alpha" || 
 	       particleName == "He3"    ) {
       //alpha
       G4hMultipleScattering* msc = new G4hMultipleScattering();
-      msc->AddEmModel(0, new G4WentzelVIModel());
       pmanager->AddProcess(msc,                       -1, 1, 1);
       pmanager->AddProcess(new G4ionIonisation,       -1, 2, 2);
-      pmanager->AddProcess(new G4CoulombScattering,   -1,-1, 3);
       pmanager->AddProcess(new G4NuclearStopping,     -1, 3,-1);
             
     } else if( particleName == "GenericIon" ) {
       //Ions
       G4hMultipleScattering* msc = new G4hMultipleScattering();
-      msc->AddEmModel(0, new G4WentzelVIModel());
       pmanager->AddProcess(msc,                       -1, 1, 1);
       G4ionIonisation* ionIoni = new G4ionIonisation();
       ionIoni->SetEmModel(new G4IonParametrisedLossModel());
       pmanager->AddProcess(ionIoni,                   -1, 2, 2);
-      pmanager->AddProcess(new G4CoulombScattering,   -1,-1, 3);            
       pmanager->AddProcess(new G4NuclearStopping,     -1, 3,-1);      
       
     } else if ((!particle->IsShortLived()) &&
@@ -159,10 +153,8 @@ void PhysListEmStandardWVI::ConstructProcess()
 	       (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
       G4hMultipleScattering* msc = new G4hMultipleScattering();
-      msc->AddEmModel(0, new G4WentzelVIModel());
       pmanager->AddProcess(msc,                       -1, 1, 1);      
       pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
-      pmanager->AddProcess(new G4CoulombScattering,   -1,-1, 3);                  
     }
   }
 
