@@ -41,7 +41,6 @@ test17 ## LowEnergy e.m. (protons, antiprotons and ions).
 test18 ## Radioactive decay.
 test19 ## discrete process verification test for Physics On Flight
 test20 ## Pi0 production test 
-test21 ## CHIPS as intra-nuclear transport, with photo/lepton + T>1GeV cut.
 test22 ## Gamma and electro-nuclear physics.
 test23 ## Muon capture for CHIPS, stopping.
 test24 ## Binary cascade hadronic model.
