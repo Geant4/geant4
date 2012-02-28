@@ -232,7 +232,7 @@ tests                        Gunter.Folger@cern.ch           Gunter Folger
       test18                 flei@space.qinetiq.com          Fan Lei
       test19                 Mikhail.Kossov@cern.ch          Mikhail Kossov
       test20                 (not currently used - see tests/GNUmakefile)
-      test21                 dwright@slac.stanford.edu       Dennis Wright
+      test21                 (not currently used - see tests/GNUmakefile)
       test22                 dwright@slac.stanford.edu       Dennis Wright
       test23                 dwright@slac.stanford.edu       Dennis Wright
       test24                 Gunter.Folger@cern.ch           Gunter Folger
