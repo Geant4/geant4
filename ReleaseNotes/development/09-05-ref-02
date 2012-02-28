@@ -1,0 +1,241 @@
+
+                       geant4-09-05-ref-02
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o Updated analysis module to g4tools-1.1.0. Added more features.
+ o Fixed bug in G4WentzeVIModel in computation of lateral displacement.
+   and improved parameterisation for thin gas layers in G4UniversalFluctuation.
+ o Fixes in G4WHadronElasticProcess to remove unnecessary calls responsible
+   for run-time memory growth, particularly when using HP physics.
+ o Fix in G4ParallelWorldProcess for incorrect initialization for secondary
+   tracks.
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+cmake                                            cmake-V09-05-03
+-----
+- Added function REFLEX_GENERATE_DICTIONARY() for generating dictionaries.
+
+config                                           config-V09-05-05
+------
+- Corrected debug compilation option in WIN32-VC, to use -MDd instead of -MD
+- Moved basic "-lm -lstdc++" link options in LOADLIBS within platform specific
+  configuration scripts. Avoid using "-lm" on Linux-icc platform.
+
+analysis                                         analysis-V09-05-01
+--------
+- Updated to g4tools-1.1.0.
+- Adding defs include files per manager type; GetNtuple() function to
+  specific managers; GetType() function to G4VAnalysisManager.
+- Increased granularity of verbose levels (now 3 levels are available).
+- Making creating directories optional. Adding locks for functions which
+  define directory names, setting Ids etc. so that these parameters cannot
+  be changed once they were used. Changed return type for the functions with
+  locks to G4bool.
+
+geometry/magneticfield                           field-V09-05-03
+----------------------
+- G4FieldTrack: added new (inline) method to set the Rest Mass. Needed in
+  order to reset this and keep reuse across tracks the same G4FieldTrack
+  object. Simplified implementation of constructors.
+- Fixed problem with division by zero in method
+  G4Mag_UsualEqRhs::SetChargeMomentumMass().
+- Added tests in CMakeLists.txt
+
+geometry/navigation                              geomnav-V09-05-01
+-------------------
+- Corrected redundant condition in G4PropagatorInField. Revised threshold
+  for decreaseFactor=0.5 from 100 to 30 times the zero-step threshold.
+
+geometry/solids/specific                         geom-specific-V09-05-02
+------------------------
+- Fixed trivial Coverity defects in G4TwistedTubs and G4VTwisteFaceted for
+  missing protection against self-assignment.
+
+global                                           global-V09-05-01
+------
+- Corrected cases of variables never read in G4ConvergenceTester and
+  G4DataInterpolation.
+
+graphics_reps                                    greps-V09-05-05
+-------------
+- G4VisAttributes: added copy constructor and assignment operator.
+- G4Visible: fixed bug in copy constructor and assignment operator.
+- Added copy constructor and assignment operator to G4Text.
+- BooleanProcessor: fixed explicit conversion from size_t to int when using
+  ExtEdge constructor.
+
+interfaces                                       interfaces-V09-05-00
+----------
+- Added moc to svn:ignore property in subdirectory basic.
+
+materials                                        materials-V09-05-10
+---------
+- G4Element, G4Isotope, G4NistManager, G4NistMaterialBuilder,
+  G4NistElement: added/reviewed methods GetA(), GetAtomicMassAmu().
+- G4IonisParamMat: more safe computation of element index and
+  indentification of Hydrogen and Helium.
+- Added method ConstructNewIdealGasMaterial() in G4NistManager and
+  G4NistMaterialBuilder; cleanup logic of AddMaterial() method.
+  Added GetA() in G4NistElementBuilder.
+
+persistency/ascii                                ascii-V09-04-09
+-----------------
+- Bug correction in G4Tessellated vertex type in G4tbgVolume.
+  Addressing problem report #1270.
+
+physics_lists                                    phys-lists-V09-05-02
+-------------
+- G4IonBinaryCascadePhysics, G4IonFTFPBinaryCascadePhysics: commented out
+  Tripathi cross-sections; only Shen and Ion/proton are used.
+
+processes/electromagnetic/lowenergy              emlowen-V09-05-04
+-----------------------------------
+- Make a consistent use of G4Element::GetA() and G4Element::GetAtomicMassAmu()
+  in Penelope models.
+- Removed dependency on obsolete G4AtomicDeexcitationin in
+  G4PenelopeIonisationModel.
+
+processes/electromagnetic/standard               emstand-V09-05-10
+----------------------------------
+- G4WentzeVIModel: fixed bug in computation of lateral displacement.
+  Following report #1114 in HyperNews forum.
+  Improved algorithm of sampling of scattering angle and displacement: choice
+  between 1 or 2 sub-steps.
+- G4WentzelOKandVIxSection: different screening functions for e+- and heavy
+  particles.
+- G4UniversalFluctuation: improved parameterisation for thin gas layers.
+- G4UrbanMscModel93, G4UrbanMscModel95 - fixed G4Exception printout.
+
+processes/electromagnetic/utils                  emutils-V09-05-02
+-------------------------------
+- G4VAtomDeexcitation: corrected activation of de-excitation for the case
+  when specific de-excitation regions are not defined.
+- G4VEmAngularDistribution added  methods SampleCosinePolarAngle(),
+  SampleDirection() and Initialise().
+
+processes/electromagnetic/xrays                  xrays-V09-05-01
+-------------------------------
+- Modified G4SynchrotronRadiation and G4SynchrotronRadiationInMat to
+  provide more realistic angular distribution for secondary SR gammas
+  according to simplified dipole busted approach.
+
+processes/hadronic
+------------------
+- models/chiral_inv_phase_space/body (hadr-chips-body-V09-05-03)
+  o Relaxed exception to warning in G4QFreeScattering in methods FetchElTot()
+    and CalcElTotXS(), for wrong PDG code detection.
+- models/cim_r_matrix (hadr-im_r-V09-05-00)
+  o Incorporate new data from extended nucleon-nucleon elastic scattering
+    data (SAID evaluation). These double differential elastic cross-sections
+    now cover energies up to 5 GeV.
+- models/inclxx (hadr-inclxx-V09-05-05)
+  o Fixed sampling of the impact-parameter distribution for nucleon-induced
+    reactions and incoming kinetic energies below ~40 MeV.
+  o Always apply numerical solutions (used to lead to some minor violations
+    of energy conservation).
+  o Do nothing if the projectile is below the Coulomb barrier.
+- processes (hadr-proc-V09-05-01)
+  o Fixes in G4WHadronElasticProcess to remove unnecessary calls responsible
+    for run-time memory growth. Addressing problem report #1286.
+- stopping (hadr-stopping-V09-05-02)
+  o G4PiMinusAbsorptionBertini: return back to usage of native pre-compound
+    de-excitation for the Bertini cascade.
+
+processes/scoring                                procscore-V09-05-00
+-----------------
+-  Bug fix G4ParallelWorldProcess for incorrect initialization for
+   secondary tracks.
+
+track                                            track-V09-05-04
+-----
+- Fix to reset 'RestMass' in G4FieldTrackUpdator::Update() method
+  as it is used to initialise each track by ParallelWorldScoringProcess.
+
+visualization                                    vis-V09-05-07
+-------------
+- management:
+  o Fixes for Qt Stored text.
+  o Small improvement to /vis/scene/add/eventID. Added layout parameter.
+  o Added /vis/scene/add/date and /vis/scene/add/frame.
+- FukuiRenderer, VRML:
+  o Fixed Ubuntu warnings about ignoring return value of system call.
+- OpenGL:
+  o Fixes for Qt Stored text.
+- Raytracer:
+  o Fix for up-vector. Addressing problem report #1274.
+
+examples                                         examples-V09-05-02
+--------
+- Updated reference outputs.
+- advanced/air_shower (air_shower-V09-05-02)
+  o Fixed more compilation warnings on gcc-4.6.
+- advanced/microbeam (microbeam-V09-05-00)
+  o Added description of composition of cell.
+- extended/analysis/AnaEx01 (AnaEx01-V09-05-01)
+  o HistoManager: added protections for histo file management; suppress
+    SetFirstNtupleId()
+  o Renamed G4HbookAnalysisManager to ExG4HbookAnalysisManager.
+- extended/common/analysis (excommon-analysis-V09-05-01)
+  o Added functions to customize the HBOOK IDs by user.
+  o Added setting locks introduced in the base class.
+  o Fixed handling of directories for both histograms and ntuple.
+  o Added GetNtuple() function to specific managers.
+    Increased granularity of verbose levels (now 3 levels are available).
+  o Making creating directories optional.
+- extended/electromagnetic/TestEm1 (testem1-V09-05-03)
+  o HistoManager: migrated to use g4tools histogramming system.
+  o New histograms for "total energy deposit", "energy of charged
+    secondaries at creation", "energy of neutral secondaries at creation".
+  o Added StackingAction class.
+  o Renamed G4HbookAnalysisManager to ExG4HbookAnalysisManager.
+  o Updated Readme and all macros accordingly.
+- extended/electromagnetic/TestEm3 (testem3-V09-05-00)
+  o HistoManager: migrated to use g4tools histogramming system.
+  o Added PhysListEmStandardWVI.
+  o Updated Readme and all macros accordingly.
+- extended/electromagnetic/TestEm4 (testem4-V09-05-02)
+  o RunAction: migrated to use g4tools histogramming system.
+  o Renamed G4HbookAnalysisManager to ExG4HbookAnalysisManager.
+- extended/electromagnetic/TestEm5 (testem5-V09-05-02)
+  o New histograms/ modified numbering.
+  o PhysListEmStandardSSM: added alternative single scattering models.
+  o PhysListEmStandardWVI, PhysListEmStandardSS: more correct process
+    order and WVI model.
+- extended/electromagnetic/TestEm7 (testem7-V09-05-00)
+  o PhysListEmStandard, PhysListEmStandardSS: more correct process order.
+- extended/electromagnetic/TestEm8 (testem8-V09-05-00)
+  o DetectorConstruction: added gas of ALICE TPC and macro testALICE.mac.
+  o TargetSD: added zero-energy steps to histograms and step counters.
+  o HistoManager: book histograms at begin of run not earlier.
+- extended/electromagnetic/TestEm11 (testem11-V09-05-01)
+- extended/electromagnetic/TestEm12 (testem12-V09-05-02)
+  o Modified StepMax mechanism; added command /testem/StepMax.
+  o PhysListEmStandard, PhysListEmStandardSS: more correct process order.
+- extended/eventgenerator/particleGun (particleGunExample-V09-05-02)
+  o HistoManager: added protections for histo file management.
+- extended/medical/electronScattering (electronScattering-V09-05-04)
+  o PhysListEmStandardWVI, PhysListEmStandardSS: more correct process order
+    and fixed initialisation.
+  o HistoManager: added protections for histo file management.
+- extended/medical/electronScattering2 (exampleES2-V09-05-04)
+  o PhysListEmStandardWVI, PhysListEmStandardSS: more correct process order
+    and fixed initialisation.
+- extended/medical/fanoCavity (fano-V09-05-04)
+- extended/medical/fanoCavity2 (fano2-V09-05-03)
+  o PhysListEmStandard_WVI: more safe initialisation method.
+  o HistoManager: added protections for histo file management.
+- extended/radioactivedecay/rdecay01 (rdecay01-V09-05-07)
+  o HistoManager: added protections for histo file management.
+
+tests                                            tests-V09-05-02
+-----
+- Updated reference outputs and tools.
+- tests/test37 (test37-V09-05-00)
+  o Fixed IG Physics List, use G4MuMultipleScattering for e- (only this
+    Physics List allowing combination with single scattering so far).
