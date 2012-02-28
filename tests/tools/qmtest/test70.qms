@@ -6,10 +6,8 @@
   </argument>
   <argument name="test_ids">
     <set>
-      <text>bench-calo-FullCMS-build</text>
-      <text>bench-calo-FullCMS-run1-LHEP</text>
-      <text>bench-calo-FullCMS-run1-FTFP_BERT</text>
-      <text>bench-calo-FullCMS-run1-QGSP_BERT</text>
+      <text>test70-build</text>
+      <text>test70-run</text>
     </set>
   </argument>
 </extension>

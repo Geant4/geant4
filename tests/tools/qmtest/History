@@ -12,8 +12,15 @@ $Id$
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28-Feb-2011, G.Folger               (testtools-QMtest-V09-05-01)
+-  add FTFP_BERT to testing in FullCMS benchmark
+-  disable test21 (testing QGSC like PL), and test70 until fixed
+
+1-Feb-2011, G.Folger                (testtools-QMtest-V09-05-00)
+-  add new test70
+
 28-Nov-2011, G.Folger               (testtools-QMtest-V09-04-18)
--  corrent exam-ext-runandevent-re044-run1-run.qmt to use proper macro and 
+-  corrent exam-ext-runandevent-re04-run1-run.qmt to use proper macro and 
      make vis error message an expected stderr.
 
 24-Nov-2011, G.Folger               (testtools-QMtest-V09-04-17)
