@@ -235,7 +235,7 @@ examples                                         examples-V09-05-02
 
 tests                                            tests-V09-05-02
 -----
-- Updated reference outputs and tools.
+- Updated reference outputs and tools. Archived test21.
 - tests/test37 (test37-V09-05-00)
   o Fixed IG Physics List, use G4MuMultipleScattering for e- (only this
     Physics List allowing combination with single scattering so far).
