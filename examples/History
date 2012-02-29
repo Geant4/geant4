@@ -17,6 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29th February 2012  Gabriele Cosmo (examples-V09-05-02)
+- Updated reference outputs according to reference tag geant4-09-05-ref-02.
+- Includes tags: air_shower-V09-05-02, microbeam-V09-05-00, AnaEx01-V09-05-03,
+                 excommon-analysis-V09-05-01, testem1-V09-05-03,
+                 testem3-V09-05-00, testem4-V09-05-02, testem5-V09-05-02,
+                 testem7-V09-05-00, testem8-V09-05-00, testem11-V09-05-01,
+                 testem12-V09-05-02, particleGunExample-V09-05-02,
+                 electronScattering-V09-05-04, exampleES2-V09-05-04,
+                 fano-V09-05-04, fano2-V09-05-03, rdecay01-V09-05-07.
+
 31st January 2012  Gabriele Cosmo (examples-V09-05-01)
 - Updated reference outputs according to reference tag geant4-09-05-ref-01.
 - Includes tags: air_shower-V09-05-01, hadrontherapy-V09-05-00
