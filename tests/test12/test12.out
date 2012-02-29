@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-01    (31-January-2012)
+ Geant4 version Name: geant4-09-05-ref-02    (29-February-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -293,8 +293,6 @@ hPairProd:   for  pi-    SubType= 4
                                                       FTFP: Emin(GeV)=    2  Emax(GeV)= 100000
 
         ionInelastic  Crs sctns:          AxenWellischIonH: Emin(GeV)=    0  Emax(GeV)= 100000
-                                         TripathiLightIons: Emin(GeV)=    0  Emax(GeV)= 100000
-                                                  Tripathi: Emin(GeV)=    0  Emax(GeV)= 100000
                                                   IonsShen: Emin(GeV)=    0  Emax(GeV)= 100000
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
@@ -490,6 +488,10 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 100
+G4Fragment::CalculateExcitationEnergy(): WARNING 
+Fragment: A = 206, Z =  80, U = -1.413e-01 MeV
+          P = (-1.951e-01,4.041e+02,-1.997e+02) MeV   E = 1.918e+05 MeV
+
 Idle> #
 Idle> # kaon- at 100 GeV in Pb
 Idle> #
@@ -776,10 +778,6 @@ hPairProd:   for  pi-    SubType= 4
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
-G4Fragment::CalculateExcitationEnergy(): WARNING 
-Fragment: A =  26, Z =  12, U = -8.829e-01 MeV
-          P = (-9.162e+01,1.010e+02,-1.647e+02) MeV   E = 2.420e+04 MeV
-
 Idle> #
 Idle> # neutron at 100 GeV in Al
 Idle> #

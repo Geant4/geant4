@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-01    (31-January-2012)
+ Geant4 version Name: geant4-09-05-ref-02    (29-February-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -338,6 +338,10 @@ hIoni:   for  pi-    SubType= 2
 Event number 0
 Event number 1
 Event number 2
+G4Fragment::CalculateExcitationEnergy(): WARNING 
+Fragment: A =  26, Z =  12, U = -2.496e-01 MeV
+          P = (-4.433e+01,1.067e+02,5.055e+01) MeV   E = 2.420e+04 MeV
+
 Event number 3
 Event number 4
 #

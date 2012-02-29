@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-01    (31-January-2012)
+ Geant4 version Name: geant4-09-05-ref-02    (29-February-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -14,7 +14,7 @@
 ***** Table : Nb of materials = 4 *****
 
  Material: Germanium    density:  5.323 g/cm3   RadL:   2.301 cm   Nucl.Int.Length:  27.334 cm   Imean: 350.000 eV 
-   --->  Element: Ge (Ge)   Z = 32.0   N =  72.7   A =  72.61 g/mole
+   --->  Element: Ge (Ge)   Z = 32.0   N =  72.6   A =  72.61 g/mole
    --->  Isotope:  Ge70   Z = 32   N =  70   A =  69.92 g/mole   abundance:  20.84 %
    --->  Isotope:  Ge72   Z = 32   N =  72   A =  71.92 g/mole   abundance:  27.54 %
    --->  Isotope:  Ge73   Z = 32   N =  73   A =  72.92 g/mole   abundance:   7.73 %
@@ -39,24 +39,6 @@
 
 
 Using geometry#3
- ********************************************************** 
- *                  W A R N I N G ! ! !                   * 
- ********************************************************** 
- *                                                        * 
- *  Class G4AtomicDeexcitation is obsolete. It has been   * 
- * discontinued and is going to be removed by next Geant4 * 
- *     release please migrate to G4UAtomDeexcitation.     * 
- *                                                        * 
- ********************************************************** 
- ********************************************************** 
- *                  W A R N I N G ! ! !                   * 
- ********************************************************** 
- *                                                        * 
- *  Class G4AtomicDeexcitation is obsolete. It has been   * 
- * discontinued and is going to be removed by next Geant4 * 
- *     release please migrate to G4UAtomDeexcitation.     * 
- *                                                        * 
- ********************************************************** 
 PhysicsList::SetCuts:CutLength : 1 mm 
 
 phot:   for  gamma    SubType= 12
@@ -371,8 +353,8 @@ Index : 3     used in the geometry : Yes     recalculation needed : No
 Choosing random seed according to time(0) 
 
 --------- Ranecu engine status ---------
- Initial seed (index) = 92
- Current couple of seeds = 1674501269, 993535200
+ Initial seed (index) = 160
+ Current couple of seeds = 1167095056, 1706666189
 ----------------------------------------
 Primary energy: 45 keV 
 
@@ -1586,5 +1568,5 @@ Primary energy: 2000 keV
 
 ---> Begin Of Event: 99000
 Execution terminated
-User=23.19s Real=23.39s Sys=0.02s
+User=24.18s Real=24.27s Sys=0.03s
 

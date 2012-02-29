@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-01    (31-January-2012)
+ Geant4 version Name: geant4-09-05-ref-02    (29-February-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -37,7 +37,7 @@ userDetector->Construct() start.
    --->  Isotope: Pb208   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material: liquidArgon    density:  1.390 g/cm3   RadL:  14.064 cm   Nucl.Int.Length:  86.001 cm   Imean: 188.000 eV 
-   --->  Element: Ar (Ar)   Z = 18.0   N =  40.0   A =  39.95 g/mole
+   --->  Element: Ar (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole
    --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
    --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
    --->  Isotope:  Ar40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
@@ -431,13 +431,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.1s Real=0.1s Sys=0s
+  User=0.09s Real=0.1s Sys=0s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 7.8233 MeV :  1.999 MeV     2.556 +- 0.2556 %      5.66 mm  +- 1.56 mm 
-   liquidArgon: 1.9526 MeV :  1.976 MeV     10.12 +- 1.012 %      9.76 mm  +- 1.02 cm 
+          Lead: 8.1899 MeV :  1.583 MeV     1.933 +- 0.1933 %      5.94 mm  +- 1.16 mm 
+   liquidArgon: 1.5585 MeV :  1.569 MeV     10.07 +- 1.007 %      7.65 mm  +- 7.93 mm 
 
 ------------------------------------------------------------
  Beam particle gamma  E = 10 MeV
@@ -445,15 +445,15 @@ Run Summary
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 7.82326 MeV
-liquidArgon:	 1.9526 MeV
+      Lead:	 8.1899 MeV
+liquidArgon:	 1.55855 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1975734267, 1029690416
+ Current couple of seeds = 1468694028, 1410533629
 ----------------------------------------
 #
 #/run/particle/storePhysicsTable data_stand
