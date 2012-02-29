@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-01    (31-January-2012)
+ Geant4 version Name: geant4-09-05-ref-02    (29-February-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -114,8 +114,6 @@ Detector cuts are set
         ionInelastic  Models:               Binary Cascade: Emin(GeV)=    0  Emax(GeV)= 20
 
         ionInelastic  Crs sctns:          AxenWellischIonH: Emin(GeV)=    0  Emax(GeV)= 100000
-                                         TripathiLightIons: Emin(GeV)=    0  Emax(GeV)= 100000
-                                                  Tripathi: Emin(GeV)=    0  Emax(GeV)= 100000
                                                   IonsShen: Emin(GeV)=    0  Emax(GeV)= 100000
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 

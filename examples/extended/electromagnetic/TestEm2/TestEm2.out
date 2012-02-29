@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-01    (31-January-2012)
+ Geant4 version Name: geant4-09-05-ref-02    (29-February-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -64,7 +64,7 @@ Absorber is 17.8491 cm  of G4_PbWO4
    --->  Isotope: Pb206   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
    --->  Isotope: Pb207   Z = 82   N = 207   A = 206.98 g/mole   abundance:  22.10 %
    --->  Isotope: Pb208   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %  ElmMassFraction:  45.54 %  ElmAbundance  16.67 %
-   --->  Element: W (W)   Z = 74.0   N = 183.9   A = 183.84 g/mole
+   --->  Element: W (W)   Z = 74.0   N = 183.8   A = 183.84 g/mole
    --->  Isotope:  W180   Z = 74   N = 180   A = 179.95 g/mole   abundance:   0.12 %
    --->  Isotope:  W182   Z = 74   N = 182   A = 181.95 g/mole   abundance:  26.50 %
    --->  Isotope:  W183   Z = 74   N = 183   A = 182.95 g/mole   abundance:  14.31 %
@@ -362,24 +362,24 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=4.36s Real=4.37s Sys=0.01s
+  User=4.64s Real=4.65s Sys=0s
 
  SUMMARY 
 
- energy deposit :   95.06 % E0 +-    0.82 % E0
- charged traklen:  482.52 radl +-    4.70 radl
- neutral traklen: 4246.64 radl +-  132.07 radl
+ energy deposit :   95.11 % E0 +-    0.86 % E0
+ charged traklen:  482.70 radl +-    4.46 radl
+ neutral traklen: 4213.00 radl +-  117.96 radl
 
- 90.00 % confinement: radius = 2.92 radl  (2.61 cm )
+ 90.00 % confinement: radius = 2.90 radl  (2.59 cm )
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1023933870, 2107881803
+ Current couple of seeds = 69353858, 245617215
 ----------------------------------------
 
 <<<<ACCEPTANCE>>>> 100 events for Total Energy in Absorber
-Edep: 0.950631  delEdep= 0.00163137 nrms= 1.98947
-Erms: 0.0082225  delErms= 2.2504e-05 nrms= 0.0274439
+Edep: 0.951052  delEdep= 0.00205204 nrms= 2.50249
+Erms: 0.00857344  delErms= 0.00037344 nrms= 0.455414
 <<<<END>>>>   IS ACCEPTED
 
 G4 kernel has come to Quit state.

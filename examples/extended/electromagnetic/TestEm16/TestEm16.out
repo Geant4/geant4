@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-01    (31-January-2012)
+ Geant4 version Name: geant4-09-05-ref-02    (29-February-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -221,17 +221,17 @@ G4SynchrotronRadiation::GetRandomEnergySR :
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.27s Real=0.28s Sys=0s
+  User=0.32s Real=0.32s Sys=0s
 Summary for synchrotron radiation :
-  Number of photons = 64554
-  Emean             = 20.24 +/- 0.1449 keV
-  E_rms             = 36.82 keV
-  Energy Max / Mean = 29.54
-  MeanFreePath      = 16.2 cm 
+  Number of photons = 65065
+  Emean             = 20.16 +/- 0.1452 keV
+  E_rms             = 37.05 keV
+  Energy Max / Mean = 32.53
+  MeanFreePath      = 16.08 cm 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1554742231, 6856043
+ Current couple of seeds = 860561151, 265400964
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

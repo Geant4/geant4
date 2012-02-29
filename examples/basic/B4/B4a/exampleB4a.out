@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-01    (31-January-2012)
+ Geant4 version Name: geant4-09-05-ref-02    (29-February-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -336,8 +336,6 @@ hPairProd:   for  pi-    SubType= 4
                                                       FTFP: Emin(GeV)=    2  Emax(GeV)= 100000
 
         ionInelastic  Crs sctns:          AxenWellischIonH: Emin(GeV)=    0  Emax(GeV)= 100000
-                                         TripathiLightIons: Emin(GeV)=    0  Emax(GeV)= 100000
-                                                  Tripathi: Emin(GeV)=    0  Emax(GeV)= 100000
                                                   IonsShen: Emin(GeV)=    0  Emax(GeV)= 100000
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
@@ -505,15 +503,15 @@ AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Ema
 
 ---> Begin of event: 0
 ---> End of event: 0
-   Absorber: total energy: 268.403 MeV       total track length: 18.7966 cm 
-        Gap: total energy:  16.043 MeV       total track length: 8.44236 cm 
+   Absorber: total energy: 279.067 MeV       total track length: 20.1915 cm 
+        Gap: total energy: 8.87203 MeV       total track length: 4.32088 cm 
 
  ----> print histograms statistic 
 
- EAbs : mean = 268.403 MeV rms = 0 eV 
- EGap : mean = 16.043 MeV rms = 0 eV 
- LAbs : mean = 18.7966 cm  rms = 0 fm 
- LGap : mean = 8.44236 cm  rms = 0 fm 
+ EAbs : mean = 279.067 MeV rms = 0 eV 
+ EGap : mean = 8.87203 MeV rms = 0 eV 
+ LAbs : mean = 20.1915 cm  rms = 0 fm 
+ LGap : mean = 4.32088 cm  rms = 0 fm 
      Transportation,                msc,              hIoni,            ionIoni
               eIoni,              eBrem,            annihil,               phot
               compt,               conv,             hBrems,          hPairProd
@@ -787,15 +785,15 @@ hPairProd:   for  pi-    SubType= 4
 
 ---> Begin of event: 0
 ---> End of event: 0
-   Absorber: total energy: 273.428 MeV       total track length:  19.135 cm 
-        Gap: total energy: 19.0033 MeV       total track length: 9.92949 cm 
+   Absorber: total energy:  284.31 MeV       total track length: 19.9558 cm 
+        Gap: total energy: 11.0546 MeV       total track length: 5.60399 cm 
 
  ----> print histograms statistic 
 
- EAbs : mean = 273.428 MeV rms = 0 eV 
- EGap : mean = 19.0033 MeV rms = 0 eV 
- LAbs : mean = 19.135 cm  rms = 0 fm 
- LGap : mean = 9.92949 cm  rms = 0 fm 
+ EAbs : mean = 284.31 MeV rms = 0 eV 
+ EGap : mean = 11.0546 MeV rms = 0 eV 
+ LAbs : mean = 19.9558 cm  rms = 0 fm 
+ LGap : mean = 5.60399 cm  rms = 0 fm 
 
 phot:   for  gamma    SubType= 12
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -1054,15 +1052,15 @@ hPairProd:   for  pi-    SubType= 4
 
 ---> Begin of event: 0
 ---> End of event: 0
-   Absorber: total energy:  457.92 MeV       total track length: 33.0991 cm 
-        Gap: total energy: 23.6496 MeV       total track length: 12.1326 cm 
+   Absorber: total energy: 472.286 MeV       total track length: 33.1613 cm 
+        Gap: total energy: 14.9064 MeV       total track length: 7.10961 cm 
 
  ----> print histograms statistic 
 
- EAbs : mean = 457.92 MeV rms = 0 eV 
- EGap : mean = 23.6496 MeV rms = 0 eV 
- LAbs : mean = 33.0991 cm  rms = 0 fm 
- LGap : mean = 12.1326 cm  rms = 0 fm 
+ EAbs : mean = 472.286 MeV rms = 0 eV 
+ EGap : mean = 14.9064 MeV rms = 0 eV 
+ LAbs : mean = 33.1613 cm  rms = 0 fm 
+ LGap : mean = 7.10961 cm  rms = 0 fm 
 Graphics systems deleted.
 Visualization Manager deleting...
 

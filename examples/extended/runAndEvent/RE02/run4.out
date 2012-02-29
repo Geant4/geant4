@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-01    (31-January-2012)
+ Geant4 version Name: geant4-09-05-ref-02    (29-February-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -82,7 +82,7 @@ The materials defined are :
    --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
    --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
    --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  23.18 %  ElmAbundance  21.07 %
-   --->  Element: Ar (Ar)   Z = 18.0   N =  40.0   A =  39.95 g/mole
+   --->  Element: Ar (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole
    --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
    --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
    --->  Isotope:  Ar40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %  ElmMassFraction:   1.28 %  ElmAbundance   0.47 %
@@ -749,7 +749,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.29s Real=0.29s Sys=0s
+  User=0.3s Real=0.3s Sys=0s
 =============================================================
  Number of event processed : 10000
 =============================================================

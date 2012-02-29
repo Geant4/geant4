@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-01    (31-January-2012)
+ Geant4 version Name: geant4-09-05-ref-02    (29-February-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -82,7 +82,7 @@ The materials defined are :
    --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
    --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
    --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  23.18 %  ElmAbundance  21.07 %
-   --->  Element: Ar (Ar)   Z = 18.0   N =  40.0   A =  39.95 g/mole
+   --->  Element: Ar (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole
    --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
    --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
    --->  Isotope:  Ar40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %  ElmMassFraction:   1.28 %  ElmAbundance   0.47 %
@@ -747,25 +747,25 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=22.74s Real=22.75s Sys=0.02s
+  User=24.46s Real=24.56s Sys=0.02s
 =============================================================
  Number of event processed : 10000
 =============================================================
 #Z Cell#       totalEDep      protonEDep protonNStep  chargedPassCellFlux     chargedCellFlux     chargedSurfFlux    gammaSurfCurr000    gammaSurfCurr001    gammaSurfCurr002    gammaSurfCurr003
-     0             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
-     1             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-     2             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+     0             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+     1       382.766 keV           0 eV            0               0 /cm2         1.8142 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+     2             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2
      3             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
      4             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-     5             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-     6       98.7653 keV           0 eV            0               0 /cm2       0.335959 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2              0 /cm2
-     7       544.138 keV           0 eV            0               0 /cm2        3.35383 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-     8             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2
+     5             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2
+     6             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+     7             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2
+     8             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
      9             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     10             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    11             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
-    12       1.22621 MeV           0 eV            0               0 /cm2        12.1728 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
-    13       782.422 keV           0 eV            0               0 /cm2        3.60228 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2             25 /cm2
+    11             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2
+    12       1.33015 MeV           0 eV            0               0 /cm2        12.6899 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
+    13       332.899 keV           0 eV            0               0 /cm2        1.32637 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2
     14             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     15             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     16             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
@@ -774,33 +774,33 @@ Run Summary
     19             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     20             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     21             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    22             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    23             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2             25 /cm2
+    22       153.371 keV           0 eV            0               0 /cm2       0.172474 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
+    23       1.15258 MeV           0 eV            0               0 /cm2        9.87594 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2
     24             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     25             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     26             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    27             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
-    28       666.038 keV           0 eV            0               0 /cm2        4.89192 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    29             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    30             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2
-    31             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    32             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    33             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
-    34             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
-    35             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
+    27             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2
+    28       540.206 keV           0 eV            0               0 /cm2        2.56525 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
+    29       924.213 keV           0 eV            0               0 /cm2        4.19039 /cm2              0 /cm2              0 /cm2              0 /cm2             75 /cm2              0 /cm2
+    30             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+    31             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
+    32             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2
+    33       510.999 keV           0 eV            0               0 /cm2         2.5159 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+    34             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+    35             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     36             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     37             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     38             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    39             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
+    39             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     40             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    41             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
+    41             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     42             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    43             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2
+    43             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     44             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     45             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     46             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     47             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    48             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2
+    48             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     49             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     50             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     51             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
@@ -821,7 +821,7 @@ Run Summary
     66             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     67             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     68             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    69             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+    69             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
     70             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     71             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     72             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
@@ -976,7 +976,7 @@ RunManager is deleting.
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-01    (31-January-2012)
+ Geant4 version Name: geant4-09-05-ref-02    (29-February-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -1054,7 +1054,7 @@ The materials defined are :
    --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
    --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
    --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  23.18 %  ElmAbundance  21.07 %
-   --->  Element: Ar (Ar)   Z = 18.0   N =  40.0   A =  39.95 g/mole
+   --->  Element: Ar (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole
    --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
    --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
    --->  Isotope:  Ar40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %  ElmMassFraction:   1.28 %  ElmAbundance   0.47 %
@@ -1721,7 +1721,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.29s Real=0.29s Sys=0s
+  User=0.3s Real=0.3s Sys=0s
 =============================================================
  Number of event processed : 10000
 =============================================================
@@ -1950,7 +1950,7 @@ RunManager is deleting.
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-01    (31-January-2012)
+ Geant4 version Name: geant4-09-05-ref-02    (29-February-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -2028,7 +2028,7 @@ The materials defined are :
    --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
    --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
    --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  23.18 %  ElmAbundance  21.07 %
-   --->  Element: Ar (Ar)   Z = 18.0   N =  40.0   A =  39.95 g/mole
+   --->  Element: Ar (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole
    --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
    --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
    --->  Isotope:  Ar40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %  ElmMassFraction:   1.28 %  ElmAbundance   0.47 %
@@ -2550,8 +2550,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0   -0.328  -0.0616     -197     0.268        0        0         0 PhantomSens initStep
     1   -0.331   -0.071     -197     0.227   0.0412   0.0185    0.0185 PhantomSens msc
-    2   -0.322  -0.0686     -197    0.0987    0.128   0.0126    0.0311 PhantomSens msc
-    3   -0.321  -0.0701     -197         0   0.0987   0.0268     0.058 PhantomSens eIoni
+    2   -0.322  -0.0695     -197     0.193   0.0341   0.0126    0.0311 PhantomSens msc
+    3   -0.323  -0.0754     -197     0.164   0.0288   0.0167    0.0478 PhantomSens msc
+    4   -0.322  -0.0816     -197     0.134   0.0302   0.0172     0.065 PhantomSens msc
+    5    -0.32  -0.0793     -197         0    0.134   0.0435     0.108 PhantomSens eIoni
 >>> Event 2
 
 *********************************************************************************************************
@@ -2559,120 +2561,27 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     2.62     2.55   -1e+03     0.356        0        0         0       World initStep
-    1     2.62     2.55     -249      0.25        0      751       751       World compt
-    2   -1e+03     16.7      182      0.25        0 1.09e+03  1.84e+03  OutOfWorld Transportation
+    0   -0.679    0.471   -1e+03     0.356        0        0         0       World initStep
+    1   -0.679    0.471     -200     0.356        0      800       800 PhantomSens Transportation
+    2   -0.679    0.471     -199     0.353        0     1.46       801 PhantomSens compt
+    3   -0.751    0.412     -198     0.353        0    0.553       802 PhantomSens Transportation
+    4   -0.965    0.237     -196         0    0.088     1.65       804 PhantomSens phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -0.965    0.237     -196     0.265        0        0         0 PhantomSens initStep
+    1   -0.971    0.233     -196         0    0.265    0.124     0.124 PhantomSens eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     2.62     2.55     -249     0.106        0        0         0       World initStep
-    1       13     2.19     -240    0.0994  0.00514     13.8      13.8       World eIoni
-    2     21.9     2.48     -207    0.0866   0.0127     36.1      49.9       World eIoni
-    3     22.2     1.11     -200    0.0831   0.0035      7.8      57.7 PhantomSens Transportation
-    4     22.2     1.11     -200    0.0807  0.00238 0.000815      57.7 PhantomSens msc
-    5     22.2     1.11     -200    0.0789   0.0018 0.000815      57.7 PhantomSens msc
-    6     22.2     1.11     -200    0.0781 0.000792 0.000741      57.7       World Transportation
-    7     22.2     1.11     -200    0.0781        0        0      57.7 PhantomSens Transportation
-    8     22.2     1.11     -200    0.0765  0.00166 0.000737      57.7 PhantomSens msc
-    9     22.2     1.11     -200    0.0745  0.00198 0.000737      57.7 PhantomSens msc
-   10     22.2     1.11     -200     0.074 0.000493 0.000737      57.7 PhantomSens msc
-   11     22.2     1.11     -200    0.0695  0.00455 0.000737      57.7 PhantomSens msc
-   12     22.2     1.11     -200    0.0694 2.04e-05 2.17e-05      57.7       World Transportation
-   13     25.3    -17.3     -202     0.063  0.00648     19.9      77.6       World eIoni
-   14     34.6    -24.1     -200    0.0433  0.00455     12.1      89.7       World eIoni
-   15     34.6    -25.9     -200    0.0414  0.00196     1.86      91.6 PhantomSens Transportation
-   16     34.6    -25.9     -200    0.0414        0        0      91.6       World Transportation
-   17     34.4    -33.3     -200    0.0371  0.00431     8.77       100       World eIoni
-   18       34    -33.7     -200    0.0338 0.000988    0.661       101       World eIoni
-   19     33.8    -33.7     -200    0.0337 7.34e-05     0.17       101 PhantomSens Transportation
-   20     33.8    -33.7     -200    0.0331 0.000595 0.000188       101 PhantomSens msc
-   21     33.8    -33.7     -200    0.0328 0.000272 0.000188       101 PhantomSens msc
-   22     33.8    -33.7     -200    0.0327 0.000133 0.000188       101 PhantomSens msc
-   23     33.8    -33.7     -200    0.0326 0.000111 0.000188       101 PhantomSens msc
-   24     33.8    -33.7     -200     0.032 0.000569 0.000188       101 PhantomSens msc
-   25     33.8    -33.7     -200    0.0316 0.000432 0.000188       101 PhantomSens msc
-   26     33.8    -33.7     -200    0.0291   0.0025 0.000188       101 PhantomSens msc
-   27     33.8    -33.7     -200    0.0285 0.000569 0.000188       101 PhantomSens msc
-   28     33.8    -33.7     -200    0.0279 0.000581 0.000188       101 PhantomSens msc
-   29     33.8    -33.7     -200    0.0271 0.000846 0.000188       101 PhantomSens msc
-   30     33.8    -33.7     -200    0.0266 0.000542 0.000188       101 PhantomSens msc
-   31     33.8    -33.7     -200    0.0263 0.000276 0.000188       101 PhantomSens msc
-   32     33.8    -33.7     -200     0.025  0.00128 0.000188       101 PhantomSens msc
-   33     33.8    -33.7     -200    0.0243 0.000742 0.000188       101 PhantomSens msc
-   34     33.8    -33.7     -200    0.0231  0.00111 0.000188       101 PhantomSens msc
-   35     33.8    -33.7     -200     0.023 0.000183 6.55e-05       101       World Transportation
-   36     33.2    -34.3     -201    0.0221  0.00088     1.53       103       World msc
-   37     32.4    -34.7     -202    0.0211 0.000972     1.53       104       World msc
-   38     31.5    -34.1     -203    0.0196  0.00149     1.53       106       World msc
-   39       31    -32.7     -204     0.017  0.00262     1.53       107       World msc
-   40       31    -32.1     -205    0.0137  0.00212     1.42       109       World eIoni
-   41     31.1    -32.8     -206    0.0113  0.00237     1.53       110       World msc
-   42     32.1    -32.5     -207   0.00726  0.00409     1.53       112       World msc
-   43     32.8    -31.9     -207   0.00133  0.00593     1.36       113       World eIoni
-   44     32.8    -31.9     -207         0  0.00133   0.0864       113       World eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 2
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0       31    -32.1     -205   0.00116        0        0         0       World initStep
-    1       31    -32.1     -205         0  0.00116   0.0705    0.0705       World eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 5,   Parent ID = 2
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0       34    -33.7     -200    0.0023        0        0         0       World initStep
-    1       34    -33.7     -200    0.0022 0.000104    0.069     0.069       World msc
-    2       34    -33.7     -200   0.00172 0.000481    0.069     0.138       World msc
-    3       34    -33.8     -200  0.000756 0.000963    0.069     0.207       World msc
-    4       34    -33.8     -200         0 0.000756   0.0388     0.246       World eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 2
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     34.6    -24.1     -200    0.0151        0        0         0       World initStep
-    1     34.8    -24.1     -200    0.0137 0.000328    0.218     0.218       World eIoni
-    2     35.1    -24.1     -200    0.0125  0.00118    0.282       0.5 PhantomSens Transportation
-    3     35.1    -24.1     -200    0.0121 0.000394 3.93e-05       0.5 PhantomSens msc
-    4     35.1    -24.1     -200     0.012 7.68e-05 3.93e-05       0.5 PhantomSens msc
-    5     35.1    -24.1     -200    0.0119 0.000103 3.93e-05       0.5 PhantomSens msc
-    6     35.1    -24.1     -200    0.0118 0.000134 3.93e-05       0.5 PhantomSens msc
-    7     35.1    -24.1     -200    0.0118        0 1.09e-05       0.5       World Transportation
-    8     35.1    -24.1     -200    0.0111 0.000665    0.243     0.743       World msc
-    9     35.2    -24.1     -200    0.0105 0.000644    0.243     0.987       World msc
-   10     35.2    -24.1     -201    0.0101 0.000422    0.243      1.23       World msc
-   11     35.2    -23.8     -201   0.00866  0.00139    0.243      1.47       World msc
-   12     35.4    -23.9     -201   0.00842 0.000242    0.243      1.72       World msc
-   13     35.5    -24.1     -200   0.00794 0.000484    0.243      1.96       World msc
-   14     35.7    -24.2     -200   0.00664  0.00129    0.243       2.2       World msc
-   15     35.7    -24.3     -201   0.00549  0.00116    0.243      2.44       World msc
-   16     35.7    -24.6     -201   0.00409   0.0014    0.243      2.69       World msc
-   17     35.6    -24.7     -201    0.0026   0.0015    0.243      2.93       World msc
-   18     35.7    -24.8     -201         0   0.0026    0.247      3.18       World eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 7,   Parent ID = 4
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     34.8    -24.1     -200   0.00108        0        0         0       World initStep
-    1     34.8    -24.1     -200         0  0.00108   0.0635    0.0635       World eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 2
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0       13     2.19     -240   0.00106        0        0         0       World initStep
-    1       13     2.21     -240         0  0.00106   0.0624    0.0624       World eIoni
+    0   -0.679    0.471     -199   0.00347        0        0         0 PhantomSens initStep
+    1   -0.679    0.471     -199         0  0.00347  0.00016   0.00016 PhantomSens eIoni
 >>> Event 3
 
 *********************************************************************************************************
@@ -2680,17 +2589,71 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -1.79     3.68   -1e+03     0.356        0        0         0       World initStep
-    1    -1.79     3.68     -200     0.356        0      800       800 PhantomSens Transportation
-    2    -1.79     3.68     -199         0    0.088    0.542       801 PhantomSens phot
+    0     3.99     -3.7   -1e+03     0.356        0        0         0       World initStep
+    1     3.99     -3.7     -200     0.356        0      800       800 PhantomSens Transportation
+    2     3.99     -3.7     -198     0.356        0        2       802 PhantomSens Transportation
+    3     3.99     -3.7     -196     0.356        0        2       804 PhantomSens Transportation
+    4     3.99     -3.7     -196     0.227        0    0.461       804 PhantomSens compt
+    5        4    -3.71     -196     0.227        0   0.0113       804 PhantomSens Transportation
+    6     4.33       -4     -195     0.227        0     0.45       805 PhantomSens Transportation
+    7        6    -5.44     -195     0.227        0     2.24       807 PhantomSens Transportation
+    8     6.65       -6     -195     0.227        0     0.87       808 PhantomSens Transportation
+    9        8    -7.17     -195     0.227        0     1.82       810 PhantomSens Transportation
+   10     8.96       -8     -194     0.227        0     1.29       811 PhantomSens Transportation
+   11     9.97    -8.88     -194         0    0.088     1.36       813 PhantomSens phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0     9.97    -8.88     -194     0.139        0        0         0 PhantomSens initStep
+    1     9.98    -8.88     -194     0.128   0.0113  0.00861   0.00861 PhantomSens msc
+    2     9.98    -8.87     -194     0.118  0.00949  0.00567    0.0143 PhantomSens msc
+    3     9.98    -8.87     -194     0.108   0.0105  0.00446    0.0187 PhantomSens msc
+    4     9.98    -8.87     -194    0.0973   0.0104  0.00372    0.0225 PhantomSens msc
+    5     9.98    -8.87     -194      0.08   0.0173  0.00418    0.0266 PhantomSens msc
+    6     9.98    -8.87     -194    0.0775  0.00247  0.00419    0.0308 PhantomSens msc
+    7     9.98    -8.87     -194    0.0712  0.00635   0.0032     0.034 PhantomSens msc
+    8     9.99    -8.87     -194    0.0629  0.00829  0.00346    0.0375 PhantomSens msc
+    9     9.99    -8.87     -194     0.055  0.00788  0.00336    0.0408 PhantomSens msc
+   10     9.99    -8.87     -194    0.0486  0.00639    0.003    0.0438 PhantomSens msc
+   11     9.99    -8.87     -194         0   0.0486  0.00851    0.0524 PhantomSens eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -1.79     3.68     -199     0.268        0        0         0 PhantomSens initStep
-    1     -1.8     3.68     -199         0    0.268    0.126     0.126 PhantomSens eIoni
+    0     3.99     -3.7     -196     0.129        0        0         0 PhantomSens initStep
+    1     3.99     -3.7     -196     0.127  0.00163  0.00252   0.00252 PhantomSens msc
+    2     3.99     -3.7     -196     0.127 0.000516  0.00164   0.00416 PhantomSens msc
+    3     3.99     -3.7     -196     0.121  0.00558  0.00251   0.00667 PhantomSens msc
+    4     3.99     -3.7     -196     0.114  0.00759  0.00241   0.00908 PhantomSens msc
+    5     3.99     -3.7     -196     0.111  0.00296  0.00176    0.0108 PhantomSens msc
+    6     3.99     -3.7     -196     0.101  0.00933  0.00164    0.0125 PhantomSens msc
+    7     3.99     -3.7     -196    0.0988  0.00243  0.00164    0.0141 PhantomSens msc
+    8     3.99     -3.7     -196    0.0968  0.00208  0.00164    0.0158 PhantomSens msc
+    9        4     -3.7     -196    0.0913  0.00548  0.00164    0.0174 PhantomSens msc
+   10        4     -3.7     -196    0.0865  0.00479  0.00164     0.019 PhantomSens msc
+   11        4     -3.7     -196    0.0851  0.00142  0.00164    0.0207 PhantomSens msc
+   12        4     -3.7     -196    0.0818  0.00326  0.00164    0.0223 PhantomSens msc
+   13        4     -3.7     -196     0.079  0.00284  0.00164     0.024 PhantomSens msc
+   14        4     -3.7     -196    0.0755  0.00349  0.00095    0.0249 PhantomSens Transportation
+   15        4     -3.7     -196    0.0734  0.00208  0.00386    0.0288 PhantomSens msc
+   16        4    -3.71     -196    0.0686  0.00476  0.00386    0.0326 PhantomSens msc
+   17     4.01    -3.71     -196    0.0668  0.00184  0.00386    0.0365 PhantomSens msc
+   18     4.01    -3.71     -196    0.0644  0.00242  0.00386    0.0403 PhantomSens msc
+   19     4.01    -3.71     -196    0.0626  0.00177  0.00386    0.0442 PhantomSens msc
+   20     4.01    -3.71     -196    0.0611  0.00149  0.00386    0.0481 PhantomSens msc
+   21     4.02    -3.72     -196    0.0575  0.00365  0.00386    0.0519 PhantomSens msc
+   22     4.02    -3.72     -196    0.0557  0.00175  0.00386    0.0558 PhantomSens msc
+   23     4.02    -3.72     -196    0.0506  0.00511  0.00386    0.0596 PhantomSens msc
+   24     4.03    -3.72     -196    0.0489  0.00171  0.00431    0.0639 PhantomSens msc
+   25     4.03    -3.72     -196    0.0419  0.00706  0.00518    0.0691 PhantomSens msc
+   26     4.03    -3.72     -196    0.0354  0.00641  0.00562    0.0747 PhantomSens msc
+   27     4.03    -3.72     -196     0.031  0.00447  0.00675    0.0815 PhantomSens msc
+   28     4.03    -3.73     -196         0    0.031   0.0187       0.1 PhantomSens eIoni
 >>> Event 4
 
 *********************************************************************************************************
@@ -2698,32 +2661,18 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -2.72    -3.82   -1e+03     0.356        0        0         0       World initStep
-    1    -2.72    -3.82     -200     0.356        0      800       800 PhantomSens Transportation
-    2    -2.72    -3.82     -198     0.356        0        2       802 PhantomSens Transportation
-    3    -2.72    -3.82     -196     0.356        0        2       804 PhantomSens Transportation
-    4    -2.72    -3.82     -194     0.356        0        2       806 PhantomSens Transportation
-    5    -2.72    -3.82     -192     0.356        0        2       808 PhantomSens Transportation
-    6    -2.72    -3.82     -190     0.356        0        2       810 PhantomSens Transportation
-    7    -2.72    -3.82     -190     0.167        0    0.439       810 PhantomSens compt
-    8     -2.8       -4     -190     0.167        0    0.249       811 PhantomSens Transportation
-    9    -2.83    -4.06     -190         0    0.088   0.0791       811 PhantomSens phot
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -2.83    -4.06     -190    0.0788        0        0         0 PhantomSens initStep
-    1    -2.82    -4.06     -190         0   0.0788   0.0187    0.0187 PhantomSens eIoni
+    0     -2.7     1.29   -1e+03     0.356        0        0         0       World initStep
+    1     -2.7     1.29     -200     0.356        0      800       800 PhantomSens Transportation
+    2     -2.7     1.29     -198     0.356        0        2       802 PhantomSens Transportation
+    3     -2.7     1.29     -198         0    0.088    0.144       802 PhantomSens phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -2.72    -3.82     -190     0.189        0        0         0 PhantomSens initStep
-    1    -2.72    -3.82     -190         0    0.189   0.0747    0.0747 PhantomSens eIoni
+    0     -2.7     1.29     -198     0.268        0        0         0 PhantomSens initStep
+    1     -2.7     1.29     -198         0    0.268    0.126     0.126 PhantomSens eIoni
 >>> Event 5
 
 *********************************************************************************************************
@@ -2731,30 +2680,21 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -3.69    -3.47   -1e+03     0.356        0        0         0       World initStep
-    1    -3.69    -3.47     -200     0.356        0      800       800 PhantomSens Transportation
-    2    -3.69    -3.47     -198     0.176        0      1.6       802 PhantomSens compt
-    3       -2    -2.51     -199     0.176        0     2.21       804 PhantomSens Transportation
-    4    -1.95    -2.48     -199         0    0.088   0.0659       804 PhantomSens phot
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -1.95    -2.48     -199     0.088        0        0         0 PhantomSens initStep
-    1    -1.95    -2.48     -199         0    0.088   0.0223    0.0223 PhantomSens eIoni
+    0     -1.9    -4.39   -1e+03     0.356        0        0         0       World initStep
+    1     -1.9    -4.39     -200     0.356        0      800       800 PhantomSens Transportation
+    2     -1.9    -4.39     -200         0    0.088   0.0814       800 PhantomSens phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -3.69    -3.47     -198      0.18        0        0         0 PhantomSens initStep
-    1    -3.69    -3.52     -198     0.155   0.0252   0.0922    0.0922 PhantomSens msc
-    2    -3.66    -3.53     -198     0.136   0.0188   0.0565     0.149 PhantomSens msc
-    3    -3.61    -3.53     -198      0.11   0.0257   0.0698     0.218 PhantomSens msc
-    4     -3.6    -3.52     -198         0     0.11     0.17     0.388 PhantomSens eIoni
+    0     -1.9    -4.39     -200     0.268        0        0         0 PhantomSens initStep
+    1    -1.91    -4.41     -200     0.249   0.0195   0.0244    0.0244 PhantomSens msc
+    2    -1.92     -4.4     -200     0.217   0.0312   0.0185     0.043 PhantomSens msc
+    3    -1.92     -4.4     -200     0.185   0.0324   0.0222    0.0652 PhantomSens msc
+    4    -1.93     -4.4     -200     0.159   0.0263   0.0172    0.0824 PhantomSens msc
+    5    -1.92     -4.4     -200         0    0.159   0.0569     0.139 PhantomSens eIoni
 >>> Event 6
 
 *********************************************************************************************************
@@ -2762,27 +2702,30 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -0.46    -3.03   -1e+03     0.356        0        0         0       World initStep
-    1    -0.46    -3.03     -200     0.356        0      800       800 PhantomSens Transportation
-    2    -0.46    -3.03     -198     0.356        0        2       802 PhantomSens Transportation
-    3    -0.46    -3.03     -197      0.25        0     1.17       803 PhantomSens compt
-    4   -0.802       -3     -197         0    0.088    0.374       804 PhantomSens phot
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -0.802       -3     -197     0.162        0        0         0 PhantomSens initStep
-    1   -0.805       -3     -197         0    0.162   0.0587    0.0587 PhantomSens eIoni
+    0   0.0486   -0.166   -1e+03     0.356        0        0         0       World initStep
+    1   0.0486   -0.166     -200     0.356        0      800       800 PhantomSens Transportation
+    2   0.0486   -0.166     -198     0.356        0        2       802 PhantomSens Transportation
+    3   0.0486   -0.166     -196     0.356        0        2       804 PhantomSens Transportation
+    4   0.0486   -0.166     -194     0.356        0        2       806 PhantomSens Transportation
+    5   0.0486   -0.166     -193         0    0.088     1.34       807 PhantomSens phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -0.46    -3.03     -197     0.106        0        0         0 PhantomSens initStep
-    1   -0.459    -3.03     -197         0    0.106   0.0302    0.0302 PhantomSens eIoni
+    0   0.0486   -0.166     -193     0.268        0        0         0 PhantomSens initStep
+    1   0.0459   -0.176     -193      0.25   0.0182   0.0146    0.0146 PhantomSens msc
+    2   0.0484   -0.184     -193     0.237   0.0133  0.00981    0.0244 PhantomSens msc
+    3   0.0433   -0.192     -193     0.223   0.0137  0.00976    0.0342 PhantomSens msc
+    4   0.0397     -0.2     -193     0.216  0.00657   0.0105    0.0447 PhantomSens msc
+    5   0.0405   -0.194     -193     0.203   0.0132  0.00868    0.0534 PhantomSens msc
+    6   0.0473   -0.199     -193     0.191   0.0117  0.00899    0.0624 PhantomSens msc
+    7   0.0514   -0.196     -193     0.179   0.0125  0.00846    0.0708 PhantomSens msc
+    8   0.0462   -0.194     -193      0.15   0.0285   0.0119    0.0828 PhantomSens msc
+    9   0.0512   -0.204     -193     0.122   0.0279   0.0122     0.095 PhantomSens msc
+   10   0.0476   -0.202     -193     0.116  0.00651   0.0095     0.104 PhantomSens msc
+   11   0.0482   -0.204     -193         0    0.116   0.0347     0.139 PhantomSens eIoni
 >>> Event 7
 
 *********************************************************************************************************
@@ -2790,18 +2733,36 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -1.45     1.51   -1e+03     0.356        0        0         0       World initStep
-    1    -1.45     1.51     -200     0.356        0      800       800 PhantomSens Transportation
-    2    -1.45     1.51     -198     0.356        0        2       802 PhantomSens Transportation
-    3    -1.45     1.51     -198         0    0.088     0.32       802 PhantomSens phot
+    0     -4.6     3.89   -1e+03     0.356        0        0         0       World initStep
+    1     -4.6     3.89     -200     0.356        0      800       800 PhantomSens Transportation
+    2     -4.6     3.89     -198     0.356        0        2       802 PhantomSens Transportation
+    3     -4.6     3.89     -198     0.247        0    0.245       802 PhantomSens compt
+    4     -4.6      3.9     -198      0.21        0   0.0162       802 PhantomSens compt
+    5    -4.51     3.95     -198         0    0.088    0.106       802 PhantomSens phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -4.51     3.95     -198     0.122        0        0         0 PhantomSens initStep
+    1    -4.52     3.96     -198         0    0.122   0.0376    0.0376 PhantomSens eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0     -4.6      3.9     -198     0.037        0        0         0 PhantomSens initStep
+    1     -4.6      3.9     -198         0    0.037  0.00547   0.00547 PhantomSens eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -1.45     1.51     -198     0.268        0        0         0 PhantomSens initStep
-    1    -1.45     1.51     -198         0    0.268    0.126     0.126 PhantomSens eIoni
+    0     -4.6     3.89     -198     0.109        0        0         0 PhantomSens initStep
+    1     -4.6     3.89     -198         0    0.109   0.0315    0.0315 PhantomSens eIoni
 >>> Event 8
 
 *********************************************************************************************************
@@ -2809,22 +2770,22 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -0.286    0.868   -1e+03     0.356        0        0         0       World initStep
-    1   -0.286    0.868     -200     0.356        0      800       800 PhantomSens Transportation
-    2   -0.286    0.868     -198         0    0.088     1.66       802 PhantomSens phot
+    0     3.69     2.95   -1e+03     0.356        0        0         0       World initStep
+    1     3.69     2.95     -200     0.356        0      800       800 PhantomSens Transportation
+    2     3.69     2.95     -199         0    0.088     1.19       801 PhantomSens phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -0.286    0.868     -198     0.268        0        0         0 PhantomSens initStep
-    1   -0.284     0.87     -198         0    0.268    0.126     0.126 PhantomSens eIoni
+    0     3.69     2.95     -199     0.268        0        0         0 PhantomSens initStep
+    1     3.69     2.94     -199         0    0.268    0.126     0.126 PhantomSens eIoni
 >>> Event 9
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 =============================================================
  Number of event processed : 10
 =============================================================

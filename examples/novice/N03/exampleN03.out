@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-01    (31-January-2012)
+ Geant4 version Name: geant4-09-05-ref-02    (29-February-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -67,7 +67,7 @@
  Material: G4_SODIUM_IODIDE    density:  3.667 g/cm3   RadL:   2.588 cm   Nucl.Int.Length:  42.894 cm   Imean: 452.000 eV 
    --->  Element: Na (Na)   Z = 11.0   N =  23.0   A =  22.99 g/mole
    --->  Isotope:  Na23   Z = 11   N =  23   A =  22.99 g/mole   abundance: 100.00 %  ElmMassFraction:  15.34 %  ElmAbundance  50.00 %
-   --->  Element: I (I)   Z = 53.0   N = 127.0   A = 126.90 g/mole
+   --->  Element: I (I)   Z = 53.0   N = 126.9   A = 126.90 g/mole
    --->  Isotope:  I127   Z = 53   N = 127   A = 126.90 g/mole   abundance: 100.00 %  ElmMassFraction:  84.66 %  ElmAbundance  50.00 %
 
 
@@ -369,16 +369,16 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy:  275.96 MeV       total track length: 19.3348 cm 
-        Gap: total energy: 12.9452 MeV       total track length: 6.41166 cm 
+   Absorber: total energy: 274.851 MeV       total track length: 19.5656 cm 
+        Gap: total energy: 12.2436 MeV       total track length: 5.86519 cm 
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 275.96 MeV +- 0 eV 
- mean Energy in Gap      : 12.9452 MeV +- 0 eV 
+ mean Energy in Absorber : 274.851 MeV +- 0 eV 
+ mean Energy in Gap      : 12.2436 MeV +- 0 eV 
 
- mean trackLength in Absorber : 19.3348 cm  +- 0 fm 
- mean trackLength in Gap      : 6.41166 cm  +- 0 fm 
+ mean trackLength in Absorber : 19.5656 cm  +- 0 fm 
+ mean trackLength in Gap      : 5.86519 cm  +- 0 fm 
 ------------------------------------------------------------
 
      Transportation,                msc,              hIoni,            ionIoni
@@ -610,19 +610,19 @@ hPairProd:   for  pi-    SubType= 4
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1243148963, 1428612916
+ Current couple of seeds = 259493108, 1175025521
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 267.596 MeV       total track length: 19.0105 cm 
-        Gap: total energy: 18.3157 MeV       total track length: 9.04798 cm 
+   Absorber: total energy: 280.242 MeV       total track length: 19.9388 cm 
+        Gap: total energy: 17.4514 MeV       total track length: 8.41099 cm 
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 267.596 MeV +- 0 eV 
- mean Energy in Gap      : 18.3157 MeV +- 0 eV 
+ mean Energy in Absorber : 280.242 MeV +- 0 eV 
+ mean Energy in Gap      : 17.4514 MeV +- 0 eV 
 
- mean trackLength in Absorber : 19.0105 cm  +- 0 fm 
- mean trackLength in Gap      : 9.04798 cm  +- 0 fm 
+ mean trackLength in Absorber : 19.9388 cm  +- 0 fm 
+ mean trackLength in Gap      : 8.41099 cm  +- 0 fm 
 ------------------------------------------------------------
 
 
@@ -853,19 +853,19 @@ hPairProd:   for  pi-    SubType= 4
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 639276636, 881114081
+ Current couple of seeds = 1707586161, 1247922194
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy:  411.74 MeV       total track length: 96.8217 cm 
-        Gap: total energy: 81.1709 MeV       total track length:  2.2769 m  
+   Absorber: total energy: 405.564 MeV       total track length: 94.4284 cm 
+        Gap: total energy: 90.3903 MeV       total track length: 2.54197 m  
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 411.74 MeV +- 0 eV 
- mean Energy in Gap      : 81.1709 MeV +- 0 eV 
+ mean Energy in Absorber : 405.564 MeV +- 0 eV 
+ mean Energy in Gap      : 90.3903 MeV +- 0 eV 
 
- mean trackLength in Absorber : 96.8217 cm  +- 0 fm 
- mean trackLength in Gap      : 2.2769 m   +- 0 fm 
+ mean trackLength in Absorber : 94.4284 cm  +- 0 fm 
+ mean trackLength in Gap      : 2.54197 m   +- 0 fm 
 ------------------------------------------------------------
 
 Graphics systems deleted.

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-01    (31-January-2012)
+ Geant4 version Name: geant4-09-05-ref-02    (29-February-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -330,8 +330,6 @@ hPairProd:   for  pi-    SubType= 4
         ionInelastic  Models:               Binary Cascade: Emin(GeV)=    0  Emax(GeV)= 20
 
         ionInelastic  Crs sctns:          AxenWellischIonH: Emin(GeV)=    0  Emax(GeV)= 100000
-                                         TripathiLightIons: Emin(GeV)=    0  Emax(GeV)= 100000
-                                                  Tripathi: Emin(GeV)=    0  Emax(GeV)= 100000
                                                   IonsShen: Emin(GeV)=    0  Emax(GeV)= 100000
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
@@ -518,7 +516,7 @@ AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Ema
 
 --------------------End of Run------------------------------
  The run consists of 1000 gamma of 6 MeV
- Dose in scoring volume Shape2 : 40.3414 picoGy  +- 3.76585 picoGy 
+ Dose in scoring volume Shape2 : 44.4997 picoGy  +- 3.93043 picoGy 
 ------------------------------------------------------------
 
 ### Run 1 start.
@@ -545,7 +543,7 @@ AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Ema
 
 --------------------End of Run------------------------------
  The run consists of 1000 proton of 210 MeV
- Dose in scoring volume Shape2 : 5.08846 nanoGy  +- 145.612 picoGy 
+ Dose in scoring volume Shape2 : 4.73437 nanoGy  +- 147.61 picoGy 
 ------------------------------------------------------------
 
 Graphics systems deleted.
