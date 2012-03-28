@@ -88,11 +88,6 @@ G4PhotonEvaporation::~G4PhotonEvaporation()
   delete _contDeexcitation;
 }
 
-void G4PhotonEvaporation::Initialize(const G4Fragment& fragment)
-{
-  _nucleus = const_cast<G4Fragment*>(&fragment);
-}
-
 G4Fragment* G4PhotonEvaporation::EmittedFragment(G4Fragment* nucleus)
 {
   //G4cout << "G4PhotonEvaporation::EmittedFragment" << G4endl;
@@ -287,8 +282,10 @@ G4FragmentVector* G4PhotonEvaporation::BreakItUp(const G4Fragment& nucleus)
   return products;
 }
 
-G4double G4PhotonEvaporation::GetEmissionProbability() const
+G4double 
+G4PhotonEvaporation::GetEmissionProbability(G4Fragment* theNucleus)
 {
+  _nucleus = theNucleus;
   G4double prob = 
     _probAlgorithm->EmissionProbability(*_nucleus,_nucleus->GetExcitationEnergy());
   return prob;

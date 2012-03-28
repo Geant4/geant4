@@ -23,82 +23,89 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UnstableFragmentBreakUp.hh,v 1.2 2010-05-11 11:26:15 vnivanch Exp $
+// $Id: G4LevelReader.hh,v 1.6 2010-11-17 16:50:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
-//      GEANT 4 header file
+//      GEANT4 header file 
 //
-//      CERN, Geneva, Switzerland
+//      File name:     G4NucLevel
 //
-//      File name:     G4UnstableFragmentBreakUp
-//
-//      Author:        Vladimir Ivanchenko
-//
-//      Creation date: 7 May 2010
-//
-//  Modifications:
+//      Author:        V.Ivanchenko
 // 
-// -------------------------------------------------------------------
-//  This class providing decay of any fragment on light nucleons using 
-//  taking into account only binding energy, for example, it may decay
-//  2n -> n + n or 2p -> p + p      
+//      Creation date: 4 January 2012
 //
+//      Modifications:
+//      
+// -------------------------------------------------------------------
+//
+// Helper class to read Geant4 nuclear level database ignoring 
+// information on electron internal conversion probabilities
+// 
 
-#ifndef G4UnstableFragmentBreakUp_h
-#define G4UnstableFragmentBreakUp_h 1
+#ifndef G4LEVELREADER_HH
+#define G4LEVELREADER_HH 1
 
 #include "globals.hh"
-#include "G4VEvaporationChannel.hh"
+#include "G4NucLevel.hh"
+#include <vector>
+#include <fstream>
 
-class G4Fragment;
-class G4NistManager;
-
-class G4UnstableFragmentBreakUp : public G4VEvaporationChannel 
+class G4LevelReader 
 {
 
 public:
 
-  G4UnstableFragmentBreakUp();
+  G4LevelReader();
 
-  virtual ~G4UnstableFragmentBreakUp();
+  ~G4LevelReader();
+  
+  void FillLevels(G4int Z, G4int A,
+		  std::vector<G4NucLevel*>* levels,
+		  const G4String& filename); 
 
-  // decay fragment on light ions
-  virtual G4FragmentVector* BreakUpFragment(G4Fragment* fragment);
-
-  // dummy virtual methods
-  virtual G4Fragment* EmittedFragment(G4Fragment* fragment);
-
-  virtual G4FragmentVector * BreakUp(const G4Fragment& fragment);
-
-  virtual G4double GetEmissionProbability(G4Fragment* fragment);
-
-  inline void SetVerboseLevel(G4int val);
-
+  inline void SetVerbose(G4int val);
+  
 private:
 
-  G4UnstableFragmentBreakUp(const G4UnstableFragmentBreakUp & right);
-  const G4UnstableFragmentBreakUp & operator = (const G4UnstableFragmentBreakUp & right);
+  G4bool Read(std::ifstream& aDataFile);
 
-  G4bool operator == (const G4UnstableFragmentBreakUp & right) const;
-  G4bool operator != (const G4UnstableFragmentBreakUp & right) const;
+  G4bool ReadDataItem(std::istream& dataFile, G4double& x);
 
-  G4int verbose;
+  void MakeNewLevel(std::vector<G4NucLevel*>* levels);
+  
+  G4LevelReader(const G4LevelReader & right);  
+  const G4LevelReader& operator=(const G4LevelReader &right);
+  G4bool operator==(const G4LevelReader &right) const;
+  G4bool operator!=(const G4LevelReader &right) const;
 
-  static G4int Zfr[6];
-  static G4int Afr[6];
-  static G4double masses[6];
+  size_t   nLevels;
+  size_t   nLevelMax;
+  G4int    fVerbose;
+  G4double fMinProbability;
+  G4double fLevelEnergy;
+  G4double fNewEnergy;
+  G4double fDeltaEnergy;
+  G4double fNewTime;
+  G4double fHalfLifeTime;
+  G4double fProbability;
+  G4double fICC;
+  G4double fx;
 
-  G4NistManager* fNistManager;
+  std::vector<G4double> eGamma;
+  std::vector<G4double> wGamma;
+  std::vector<G4double> kICC;
+
+  // Buffers for reading data file
+  char buffer[30];	
+
 };
 
-inline void G4UnstableFragmentBreakUp::SetVerboseLevel(G4int val)
+inline void G4LevelReader::SetVerbose(G4int val)
 {
-  verbose = val;
+  fVerbose = val;
 }
 
+
 #endif
-
-
-

@@ -64,10 +64,10 @@ G4GEMChannel::~G4GEMChannel()
   if (MyOwnLevelDensity) { delete theLevelDensityPtr; }
 }
 
-void G4GEMChannel::Initialize(const G4Fragment & fragment)
+G4double G4GEMChannel::GetEmissionProbability(G4Fragment* fragment)
 {
-  G4int anA = fragment.GetA_asInt();
-  G4int aZ  = fragment.GetZ_asInt();
+  G4int anA = fragment->GetA_asInt();
+  G4int aZ  = fragment->GetZ_asInt();
   ResidualA = anA - A;
   ResidualZ = aZ - Z;
   //G4cout << "G4GEMChannel::Initialize: Z= " << aZ << " A= " << anA
@@ -90,7 +90,7 @@ void G4GEMChannel::Initialize(const G4Fragment & fragment)
       // param for protons must be the same)   
       //    G4double ExEnergy = fragment.GetExcitationEnergy() -
       //    G4PairingCorrection::GetInstance()->GetPairingCorrection(ResidualA,ResidualZ);
-      G4double ExEnergy = fragment.GetExcitationEnergy() -
+      G4double ExEnergy = fragment->GetExcitationEnergy() -
 	G4PairingCorrection::GetInstance()->GetPairingCorrection(anA,aZ);
 
       //G4cout << "Eexc(MeV)= " << ExEnergy/MeV << G4endl;
@@ -110,7 +110,7 @@ void G4GEMChannel::Initialize(const G4Fragment & fragment)
 
 	//Maximal kinetic energy (JMQ : at the Coulomb barrier)
 	MaximalKineticEnergy = 
-	  CalcMaximalKineticEnergy(fragment.GetGroundStateMass()+ExEnergy);
+	  CalcMaximalKineticEnergy(fragment->GetGroundStateMass()+ExEnergy);
 	//G4cout << "MaxE(MeV)= " << MaximalKineticEnergy/MeV << G4endl;
 		
 	// Emission probability
@@ -122,12 +122,13 @@ void G4GEMChannel::Initialize(const G4Fragment & fragment)
 	  { 
 	    // Total emission probability for this channel
 	    EmissionProbability = 
-	      theEvaporationProbabilityPtr->EmissionProbability(fragment,MaximalKineticEnergy);
+	      theEvaporationProbabilityPtr->EmissionProbability(*fragment,
+								MaximalKineticEnergy);
 	  }
       }
     }   
-    //G4cout << "Prob= " << EmissionProbability << G4endl;
-    return;
+  //G4cout << "Prob= " << EmissionProbability << G4endl;
+  return EmissionProbability;
 }
 
 G4FragmentVector * G4GEMChannel::BreakUp(const G4Fragment & theNucleus)

@@ -111,24 +111,6 @@ class G4WilsonAblationModel : public G4VEvaporation
     std::vector<G4VEvaporationChannel*> * theChannels;
     G4VEvaporationFactory * theChannelFactory;
 
-  class SumProbabilities : public std::binary_function<G4double,G4double,G4double>
-  {
-  public:
-    SumProbabilities() : total(0.0) {}
-    G4double operator() (G4double& /* probSoFar */, G4VEvaporationChannel*& frag)
-    { 
-      G4double temp_prob = frag->GetEmissionProbability();
-      if(temp_prob >= 0.0) total += temp_prob;
-      //      total += frag->GetEmissionProbability();
-      return total;
-    }
-    
-    G4double GetTotal() { return total; }
-  public:
-    G4double total;
-    
-  };
-
 };
 ////////////////////////////////////////////////////////////////////////////////
 //

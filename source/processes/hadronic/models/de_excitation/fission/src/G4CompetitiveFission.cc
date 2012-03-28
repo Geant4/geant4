@@ -66,11 +66,11 @@ G4CompetitiveFission::~G4CompetitiveFission()
     if (MyOwnLevelDensity) delete theLevelDensityPtr;
 }
 
-void G4CompetitiveFission::Initialize(const G4Fragment & fragment)
+G4double G4CompetitiveFission::GetEmissionProbability(G4Fragment* fragment)
 {
-  G4int anA = fragment.GetA_asInt();
-  G4int aZ  = fragment.GetZ_asInt();
-  G4double ExEnergy = fragment.GetExcitationEnergy() - 
+  G4int anA = fragment->GetA_asInt();
+  G4int aZ  = fragment->GetZ_asInt();
+  G4double ExEnergy = fragment->GetExcitationEnergy() - 
     G4PairingCorrection::GetInstance()->GetFissionPairingCorrection(anA,aZ);
   
 
@@ -82,13 +82,14 @@ void G4CompetitiveFission::Initialize(const G4Fragment & fragment)
     LevelDensityParameter = 
       theLevelDensityPtr->LevelDensityParameter(anA,aZ,ExEnergy);
     FissionProbability = 
-      theFissionProbabilityPtr->EmissionProbability(fragment,MaximalKineticEnergy);
+      theFissionProbabilityPtr->EmissionProbability(*fragment,MaximalKineticEnergy);
     }
   else {
     MaximalKineticEnergy = -1000.0*MeV;
     LevelDensityParameter = 0.0;
     FissionProbability = 0.0;
   }
+  return FissionProbability;
 }
 
 G4FragmentVector * G4CompetitiveFission::BreakUp(const G4Fragment & theNucleus)

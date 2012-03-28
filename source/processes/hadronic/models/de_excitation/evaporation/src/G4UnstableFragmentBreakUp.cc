@@ -72,9 +72,6 @@ G4UnstableFragmentBreakUp::G4UnstableFragmentBreakUp()
 G4UnstableFragmentBreakUp::~G4UnstableFragmentBreakUp()
 {}
 
-void G4UnstableFragmentBreakUp::Initialize(const G4Fragment&)
-{}
-
 G4Fragment* G4UnstableFragmentBreakUp::EmittedFragment(G4Fragment*)
 {
   return 0;
@@ -159,7 +156,7 @@ G4FragmentVector* G4UnstableFragmentBreakUp::BreakUp(const G4Fragment&)
   return 0;
 }
 
-G4double G4UnstableFragmentBreakUp::GetEmissionProbability() const
+G4double G4UnstableFragmentBreakUp::GetEmissionProbability(G4Fragment*)
 {
   return 0.0;
 }

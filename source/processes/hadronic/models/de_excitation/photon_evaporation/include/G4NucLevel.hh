@@ -23,82 +23,94 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UnstableFragmentBreakUp.hh,v 1.2 2010-05-11 11:26:15 vnivanch Exp $
+// $Id: G4NucLevel.hh,v 1.7 2010-11-17 19:17:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
-//      GEANT 4 header file
+//      GEANT4 header file 
 //
-//      CERN, Geneva, Switzerland
+//      File name:     G4NucLevel
 //
-//      File name:     G4UnstableFragmentBreakUp
-//
-//      Author:        Vladimir Ivanchenko
-//
-//      Creation date: 7 May 2010
-//
-//  Modifications:
+//      Author:        V.Ivanchenko
 // 
+//      Creation date: 4 January 2012
+//
+//      Modifications:
+//      
 // -------------------------------------------------------------------
-//  This class providing decay of any fragment on light nucleons using 
-//  taking into account only binding energy, for example, it may decay
-//  2n -> n + n or 2p -> p + p      
+//
+//  Container class keeping information about gamma transition
+//  and for a given nuclear level
 //
 
-#ifndef G4UnstableFragmentBreakUp_h
-#define G4UnstableFragmentBreakUp_h 1
+#ifndef G4NUCLEVEL_HH
+#define G4NUCLEVEL_HH 1
 
 #include "globals.hh"
-#include "G4VEvaporationChannel.hh"
+#include "Randomize.hh"
+#include <vector>
 
-class G4Fragment;
-class G4NistManager;
-
-class G4UnstableFragmentBreakUp : public G4VEvaporationChannel 
+class G4NucLevel 
 {
-
 public:
 
-  G4UnstableFragmentBreakUp();
+  G4NucLevel(G4double energy, G4double halfLife,
+	     const std::vector<G4double>& eGamma,
+	     const std::vector<G4double>& wGamma);
 
-  virtual ~G4UnstableFragmentBreakUp();
+  ~G4NucLevel();
 
-  // decay fragment on light ions
-  virtual G4FragmentVector* BreakUpFragment(G4Fragment* fragment);
+  inline G4double LevelEnergy() const;
 
-  // dummy virtual methods
-  virtual G4Fragment* EmittedFragment(G4Fragment* fragment);
+  inline G4double LevelHalfLife() const;
 
-  virtual G4FragmentVector * BreakUp(const G4Fragment& fragment);
+  inline G4double SampleEnergy() const;
 
-  virtual G4double GetEmissionProbability(G4Fragment* fragment);
+private:  
 
-  inline void SetVerboseLevel(G4int val);
+  G4NucLevel(const G4NucLevel &right);
+  G4bool operator==(const G4NucLevel &right) const;
+  G4bool operator!=(const G4NucLevel &right) const;
+  G4bool operator<(const G4NucLevel &right) const;
+  const G4NucLevel& operator=(const G4NucLevel &right);
+  
+  std::vector<G4double> fTransitionEnergy;
+  std::vector<G4double> fCumProbability;
 
-private:
-
-  G4UnstableFragmentBreakUp(const G4UnstableFragmentBreakUp & right);
-  const G4UnstableFragmentBreakUp & operator = (const G4UnstableFragmentBreakUp & right);
-
-  G4bool operator == (const G4UnstableFragmentBreakUp & right) const;
-  G4bool operator != (const G4UnstableFragmentBreakUp & right) const;
-
-  G4int verbose;
-
-  static G4int Zfr[6];
-  static G4int Afr[6];
-  static G4double masses[6];
-
-  G4NistManager* fNistManager;
+  G4double fEnergy;
+  G4double fHalfLifeTime;
+  size_t   nTransitions;
 };
 
-inline void G4UnstableFragmentBreakUp::SetVerboseLevel(G4int val)
+inline G4double G4NucLevel::LevelEnergy() const
 {
-  verbose = val;
+  return fEnergy;
 }
 
+inline G4double G4NucLevel::LevelHalfLife() const
+{
+  return fHalfLifeTime;
+}
+
+inline G4double G4NucLevel::SampleEnergy() const
+{
+  G4double e = 0.0;
+  G4double x = G4UniformRand();
+  for(size_t i=0; i<nTransitions; ++i) {
+    if(x < fCumProbability[i]) {
+      e = fTransitionEnergy[i];
+      break;
+    }
+  }
+  return e;
+}
+
+
 #endif
+
+
+
 
 
 

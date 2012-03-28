@@ -80,8 +80,6 @@ public:
 
     virtual ~G4PhotonEvaporation();
 
-    virtual void Initialize(const G4Fragment & fragment);
-
     virtual G4Fragment* EmittedFragment(G4Fragment* theNucleus);
 
     virtual G4FragmentVector* BreakUpFragment(G4Fragment* theNucleus);
@@ -90,7 +88,7 @@ public:
 
     virtual G4FragmentVector * BreakUp(const G4Fragment & nucleus);
 
-    virtual G4double GetEmissionProbability() const;
+    virtual G4double GetEmissionProbability(G4Fragment* theNucleus);
 
     virtual void SetEmissionStrategy(G4VEmissionProbability * probAlgorithm);
 

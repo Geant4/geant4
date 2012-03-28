@@ -23,82 +23,91 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UnstableFragmentBreakUp.hh,v 1.2 2010-05-11 11:26:15 vnivanch Exp $
+// $Id: G4LevelManager.hh,v 1.6 2010-11-17 16:50:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
-//      GEANT 4 header file
+//      GEANT4 header file 
 //
-//      CERN, Geneva, Switzerland
+//      File name:     G4NucLevel
 //
-//      File name:     G4UnstableFragmentBreakUp
-//
-//      Author:        Vladimir Ivanchenko
-//
-//      Creation date: 7 May 2010
-//
-//  Modifications:
+//      Author:        V.Ivanchenko
 // 
-// -------------------------------------------------------------------
-//  This class providing decay of any fragment on light nucleons using 
-//  taking into account only binding energy, for example, it may decay
-//  2n -> n + n or 2p -> p + p      
+//      Creation date: 4 January 2012
 //
+//      Modifications:
+//      
+// -------------------------------------------------------------------
+//
+// Nuclear level manager for photon de-excitation process 
+// Providing management of levels for high energy generators
+// The internal conversion is excluded because there are no atomic shell
+// 
 
-#ifndef G4UnstableFragmentBreakUp_h
-#define G4UnstableFragmentBreakUp_h 1
+#ifndef G4LEVELMANAGER_HH
+#define G4LEVELMANAGER_HH 1
 
 #include "globals.hh"
-#include "G4VEvaporationChannel.hh"
+#include "G4NucLevel.hh"
+#include <vector>
 
-class G4Fragment;
-class G4NistManager;
+class G4LevelReader;
 
-class G4UnstableFragmentBreakUp : public G4VEvaporationChannel 
+class G4LevelManager 
 {
 
 public:
 
-  G4UnstableFragmentBreakUp();
+  G4LevelManager(G4int Z, G4int A, G4LevelReader& reader,
+		 const G4String& filename);   
 
-  virtual ~G4UnstableFragmentBreakUp();
+  ~G4LevelManager();
+  
+  inline G4int NumberOfLevels() const;
 
-  // decay fragment on light ions
-  virtual G4FragmentVector* BreakUpFragment(G4Fragment* fragment);
+  inline const G4NucLevel* GetLevel(G4int i) const;
 
-  // dummy virtual methods
-  virtual G4Fragment* EmittedFragment(G4Fragment* fragment);
-
-  virtual G4FragmentVector * BreakUp(const G4Fragment& fragment);
-
-  virtual G4double GetEmissionProbability(G4Fragment* fragment);
-
-  inline void SetVerboseLevel(G4int val);
-
+  inline const G4NucLevel* NearestLevel(G4double energy) const;
+  
 private:
 
-  G4UnstableFragmentBreakUp(const G4UnstableFragmentBreakUp & right);
-  const G4UnstableFragmentBreakUp & operator = (const G4UnstableFragmentBreakUp & right);
+  G4LevelManager(const G4LevelManager & right);  
+  const G4LevelManager& operator=(const G4LevelManager &right);
+  G4bool operator==(const G4LevelManager &right) const;
+  G4bool operator!=(const G4LevelManager &right) const;
 
-  G4bool operator == (const G4UnstableFragmentBreakUp & right) const;
-  G4bool operator != (const G4UnstableFragmentBreakUp & right) const;
-
-  G4int verbose;
-
-  static G4int Zfr[6];
-  static G4int Afr[6];
-  static G4double masses[6];
-
-  G4NistManager* fNistManager;
+  std::vector<G4NucLevel*> fLevel;
+  G4int    nLevels;
+  G4int    theZ;
+  G4int    theA;
+  G4double fEdiffMax;
 };
 
-inline void G4UnstableFragmentBreakUp::SetVerboseLevel(G4int val)
+inline G4int G4LevelManager::NumberOfLevels() const
 {
-  verbose = val;
+  return nLevels;
+}
+
+inline const G4NucLevel* G4LevelManager::GetLevel(G4int i) const
+{
+  return fLevel[i];
+}
+
+inline const G4NucLevel* 
+G4LevelManager::NearestLevel(G4double energy) const
+{   
+  const G4NucLevel* p = 0;
+  if(energy < fLevel[nLevels-1]->LevelEnergy() + fEdiffMax) {
+    for(G4int i=nLevels-1; i>=0; --i) {
+      p = fLevel[i];
+      G4double lEnergy = p->LevelEnergy();
+      if(0 == i || energy > lEnergy) { break; }
+      if(lEnergy - energy <= 0.5*(lEnergy - fLevel[i-1]->LevelEnergy()))  
+	{ break; }
+    }
+  }
+  return p;
 }
 
 #endif
-
-
-

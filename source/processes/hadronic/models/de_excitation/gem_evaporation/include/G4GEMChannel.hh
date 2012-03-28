@@ -58,9 +58,9 @@ public:
   // destructor
   virtual ~G4GEMChannel();
     
-  void Initialize(const G4Fragment & fragment);
+  virtual G4double GetEmissionProbability(G4Fragment* theNucleus);
 
-  G4FragmentVector * BreakUp(const G4Fragment & theNucleus);
+  virtual G4FragmentVector * BreakUp(const G4Fragment & theNucleus);
 
   inline void SetLevelDensityParameter(G4VLevelDensityParameter * aLevelDensity)
   {
@@ -69,9 +69,6 @@ public:
     MyOwnLevelDensity = false;
   }
 
-  inline G4double GetEmissionProbability(void) const
-  { return EmissionProbability; }
-  
   inline G4double GetMaximalKineticEnergy(void) const
   { return MaximalKineticEnergy; }
   

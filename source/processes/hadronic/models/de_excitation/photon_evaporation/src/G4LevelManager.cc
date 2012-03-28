@@ -23,82 +23,38 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UnstableFragmentBreakUp.hh,v 1.2 2010-05-11 11:26:15 vnivanch Exp $
+// $Id: G4LevelManager.cc,v 1.14 2010-11-17 16:50:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
-//      GEANT 4 header file
+//      GEANT4 header file 
 //
-//      CERN, Geneva, Switzerland
+//      File name:     G4NucLevel
 //
-//      File name:     G4UnstableFragmentBreakUp
-//
-//      Author:        Vladimir Ivanchenko
-//
-//      Creation date: 7 May 2010
-//
-//  Modifications:
+//      Author:        V.Ivanchenko
 // 
-// -------------------------------------------------------------------
-//  This class providing decay of any fragment on light nucleons using 
-//  taking into account only binding energy, for example, it may decay
-//  2n -> n + n or 2p -> p + p      
+//      Creation date: 4 January 2012
 //
+//      Modifications:
+//      
+// -------------------------------------------------------------------
 
-#ifndef G4UnstableFragmentBreakUp_h
-#define G4UnstableFragmentBreakUp_h 1
+#include "G4LevelManager.hh"
+#include "G4LevelReader.hh"
 
-#include "globals.hh"
-#include "G4VEvaporationChannel.hh"
-
-class G4Fragment;
-class G4NistManager;
-
-class G4UnstableFragmentBreakUp : public G4VEvaporationChannel 
-{
-
-public:
-
-  G4UnstableFragmentBreakUp();
-
-  virtual ~G4UnstableFragmentBreakUp();
-
-  // decay fragment on light ions
-  virtual G4FragmentVector* BreakUpFragment(G4Fragment* fragment);
-
-  // dummy virtual methods
-  virtual G4Fragment* EmittedFragment(G4Fragment* fragment);
-
-  virtual G4FragmentVector * BreakUp(const G4Fragment& fragment);
-
-  virtual G4double GetEmissionProbability(G4Fragment* fragment);
-
-  inline void SetVerboseLevel(G4int val);
-
-private:
-
-  G4UnstableFragmentBreakUp(const G4UnstableFragmentBreakUp & right);
-  const G4UnstableFragmentBreakUp & operator = (const G4UnstableFragmentBreakUp & right);
-
-  G4bool operator == (const G4UnstableFragmentBreakUp & right) const;
-  G4bool operator != (const G4UnstableFragmentBreakUp & right) const;
-
-  G4int verbose;
-
-  static G4int Zfr[6];
-  static G4int Afr[6];
-  static G4double masses[6];
-
-  G4NistManager* fNistManager;
-};
-
-inline void G4UnstableFragmentBreakUp::SetVerboseLevel(G4int val)
-{
-  verbose = val;
+G4LevelManager::G4LevelManager(G4int Z, G4int A, G4LevelReader& reader,
+			       const G4String& filename) 
+  : theZ(Z),theA(A),fEdiffMax(100*keV)
+{ 
+  reader.FillLevels(Z, A, &fLevel, filename);
+  nLevels = fLevel.size();
 }
 
-#endif
-
-
+G4LevelManager::~G4LevelManager()
+{
+  if(nLevels > 0) {
+    for(G4int i=0; i<nLevels; ++i) { delete fLevel[i]; }
+  }
+}
 

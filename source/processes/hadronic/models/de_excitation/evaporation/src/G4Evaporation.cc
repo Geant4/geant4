@@ -213,8 +213,7 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
 
     // loop over evaporation channels
     for(i=0; i<nChannels; ++i) {
-      (*theChannels)[i]->Initialize(*theResidualNucleus);
-      prob = (*theChannels)[i]->GetEmissionProbability();
+      prob = (*theChannels)[i]->GetEmissionProbability(theResidualNucleus);
       //G4cout << "  Channel# " << i << "  prob= " << prob << G4endl; 
 
       totprob += prob;

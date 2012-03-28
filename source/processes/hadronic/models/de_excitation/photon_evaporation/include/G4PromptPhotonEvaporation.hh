@@ -23,82 +23,106 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UnstableFragmentBreakUp.hh,v 1.2 2010-05-11 11:26:15 vnivanch Exp $
+// $Id: G4PromptPhotonEvaporation.hh,v 1.8 2010-11-17 16:50:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
-//      GEANT 4 header file
+//      GEANT4 class file
 //
 //      CERN, Geneva, Switzerland
 //
-//      File name:     G4UnstableFragmentBreakUp
+//      File name:     G4PromptPhotonEvaporation
 //
-//      Author:        Vladimir Ivanchenko
+//      Author:        Vladimir Ivantchenko
 //
-//      Creation date: 7 May 2010
+//      Creation date: 20 December 2011
 //
-//  Modifications:
+//Modifications:
+//
 // 
 // -------------------------------------------------------------------
-//  This class providing decay of any fragment on light nucleons using 
-//  taking into account only binding energy, for example, it may decay
-//  2n -> n + n or 2p -> p + p      
-//
 
-#ifndef G4UnstableFragmentBreakUp_h
-#define G4UnstableFragmentBreakUp_h 1
+#ifndef G4PROMPTPHOTONEVAPORATION_HH
+#define G4PROMPTPHOTONEVAPORATION_HH 1
 
 #include "globals.hh"
 #include "G4VEvaporationChannel.hh"
 
 class G4Fragment;
-class G4NistManager;
+class G4NuclearLevelManager;
+class G4NuclearLevelStore;
 
-class G4UnstableFragmentBreakUp : public G4VEvaporationChannel 
-{
+class G4PromptPhotonEvaporation : public G4VEvaporationChannel {
 
 public:
 
-  G4UnstableFragmentBreakUp();
+  G4PromptPhotonEvaporation();
 
-  virtual ~G4UnstableFragmentBreakUp();
+  virtual ~G4PromptPhotonEvaporation();
 
-  // decay fragment on light ions
-  virtual G4FragmentVector* BreakUpFragment(G4Fragment* fragment);
+  virtual G4double GetEmissionProbability(G4Fragment* theNucleus);
 
-  // dummy virtual methods
-  virtual G4Fragment* EmittedFragment(G4Fragment* fragment);
+  // one photon emission
+  virtual G4Fragment* EmittedFragment(G4Fragment* theNucleus);
 
-  virtual G4FragmentVector * BreakUp(const G4Fragment& fragment);
+  // full fragment de-excitation by photon emission
+  virtual G4FragmentVector* BreakUpFragment(G4Fragment* theNucleus);
 
-  virtual G4double GetEmissionProbability(G4Fragment* fragment);
+  // obsolete method
+  virtual G4FragmentVector* BreakUp(const G4Fragment& theNucleus);
 
-  inline void SetVerboseLevel(G4int val);
+  inline void SetVerboseLevel(G4int verbose);
 
+  inline void SetICM(G4bool);
+
+  inline void RDMForced (G4bool);
+  
+  inline void SetMaxHalfLife(G4double);
+ 
 private:
 
-  G4UnstableFragmentBreakUp(const G4UnstableFragmentBreakUp & right);
-  const G4UnstableFragmentBreakUp & operator = (const G4UnstableFragmentBreakUp & right);
+  G4PromptPhotonEvaporation(const G4PromptPhotonEvaporation & right);
+  const G4PromptPhotonEvaporation & operator = (const G4PromptPhotonEvaporation & right);
 
-  G4bool operator == (const G4UnstableFragmentBreakUp & right) const;
-  G4bool operator != (const G4UnstableFragmentBreakUp & right) const;
+  G4int    fVerbose;
+  G4bool   fICM;
+  G4bool   fRDM;
+  G4double fMaxHalfTime;
+  G4double fEmissionProbability;
 
-  G4int verbose;
+  G4NuclearLevelManager* levelManager;
+  G4NuclearLevelStore* fNuclearLevelStore;
 
-  static G4int Zfr[6];
-  static G4int Afr[6];
-  static G4double masses[6];
+  const G4Fragment* nucleus;
 
-  G4NistManager* fNistManager;
+  G4int    theZ;
+  G4int    theA;
+  G4double fEnergyFermi;
+  G4double fExcEnergyMax;
+
+  G4double gammaE;
+
 };
 
-inline void G4UnstableFragmentBreakUp::SetVerboseLevel(G4int val)
+inline void G4PromptPhotonEvaporation::SetVerboseLevel(G4int verbose)
 {
-  verbose = val;
+  fVerbose = verbose;
+}
+
+inline void G4PromptPhotonEvaporation::SetICM(G4bool val)
+{
+  fICM = val;
+}
+
+inline void G4PromptPhotonEvaporation::RDMForced (G4bool val)
+{
+  fRDM = val;
+}
+  
+inline void G4PromptPhotonEvaporation::SetMaxHalfLife(G4double val)
+{
+  fMaxHalfTime = val;
 }
 
 #endif
-
-
-

@@ -505,31 +505,28 @@ void G4WilsonAblationModel::SelectSecondariesByEvaporation
     }
     G4int nChannels = theChannels.size();
 
+    G4double totalProb = 0.0;
+    G4int ich = 0;
+    G4double probEvapType[6] = {0.0};
     std::vector<G4VEvaporationChannel*>::iterator iterEv;
-    for (iterEv=theChannels.begin(); iterEv!=theChannels.end(); iterEv++)
-      (*iterEv)->Initialize(*intermediateNucleus);
-    G4double totalProb = std::accumulate(theChannels.begin(),
-      theChannels.end(), 0.0, SumProbabilities());
-    if (totalProb > 0.0)
-    {
+    for (iterEv=theChannels.begin(); iterEv!=theChannels.end(); iterEv++) {
+      totalProb += (*iterEv)->GetEmissionProbability(intermediateNucleus);
+      probEvapType[ich] = totalProb;
+      ++ich;
+    }
+    if (totalProb > 0.0) {
 //
 //
 // The emission probability for at least one of the evaporation channels is
 // positive, therefore work out which one should be selected and decay
 // the nucleus.
 //
-      G4double totalProb1      = 0.0;
-      G4double probEvapType[6] = {0.0};
-      for (G4int ich=0; ich<nChannels; ich++)
-      {
-        totalProb1      += theChannels[ich]->GetEmissionProbability();
-        probEvapType[ich]  = totalProb1 / totalProb;
-      }
-      G4double xi = G4UniformRand();
+      G4double xi = totalProb*G4UniformRand();
       G4int i     = 0;
-      for (i=0; i<nChannels; i++)
-        if (xi < probEvapType[i]) break;
-      if (i > nChannels) i = nChannels - 1;
+      for (i=0; i<nChannels; i++) {
+        if (xi < probEvapType[i]) { break; }
+      }
+      if (i >= nChannels) { i = nChannels - 1; }
       G4FragmentVector *evaporationResult = theChannels[i]->
         BreakUp(*intermediateNucleus);
       fragmentVector->push_back((*evaporationResult)[0]);
