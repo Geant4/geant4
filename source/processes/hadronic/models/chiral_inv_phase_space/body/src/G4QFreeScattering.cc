@@ -80,7 +80,7 @@ std::pair<G4double,G4double> G4QFreeScattering::CalcElTot(G4double p, G4int I)
   G4double To=0.;                      // prototype of the total hN cross-section
   if(p<=0.)
   {
-    G4cout<<"-Warning-G4QFreeScattering::CalcElTot: p="<<p<<" is zero or negative"<<G4endl;
+    //G4cout<<"-Warning-G4QFreeScattering::CalcElTot: p="<<p<<" is 0 or negative"<<G4endl;
     return std::make_pair(El,To);
   }
   if     (!I)                          // pp/nn
@@ -1289,7 +1289,7 @@ G4QHadronVector* G4QFreeScattering::InElF(G4int NPDG, G4LorentzVector N4M,
       }
     }
   }
-  else if (pPDG == 3312) // Om- -N
+  else if (pPDG == 3334) // Om- -N
   {
     if(Z) // OmM-p
     {

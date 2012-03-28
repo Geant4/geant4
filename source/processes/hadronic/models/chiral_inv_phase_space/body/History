@@ -11,6 +11,13 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+6-Mar-2012 V.Ivanchenko (hadr-chips-body-V09-05-04)
+--------------------------------------------------------------------------
+- In G4QFreeScattering.cc misprint for Omega- (3334) is corrected + one
+  p=0 warning is closed.
+- In G4QEnvironment.cc a worning of failed correction is closed, as anothe
+  correction makes job.
+
 14-Feb-2012 V.Ivanchenko (hadr-chips-body-V09-05-03)
 --------------------------------------------------------------------------
 - In G4QFreeScattering.cc class in methods FetchElTot() and CalcElTotXS() the

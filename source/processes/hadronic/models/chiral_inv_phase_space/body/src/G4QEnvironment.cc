@@ -10557,8 +10557,9 @@ void G4QEnvironment::CheckMassShell(G4QHadronVector* HV)
 		  }
             }
           } // End of the searching LOOP for the rest of hadrons
-          if(nj<0) G4cout<<"-W-G4QE::ChkMShell:NotCorr, M2="<<qM2<<", GSM2="<<qGM2<<G4endl;
-          else                                                  // It's possible to correct
+          //if(nj<0) G4cout<<"-W-G4QE::ChkMShell:NotCorr,M2="<<qM2<<",GSM2="<<qGM2<<G4endl;
+          //else                                                // It's possible to correct
+          if(nj >= 0)                                           // It's possible to correct
           {
             G4QHadron* jnH = (*HV)[nj];                         // Pointer to j-th QHadron
             G4LorentzVector j4M = jnH->Get4Momentum();          // Get 4-mom of the Hadron
