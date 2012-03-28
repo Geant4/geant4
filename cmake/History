@@ -30,10 +30,24 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-February 10th, 2011 - Pere Mato (cmake-V09-05-03)
+March 22nd, 2012 - Pere Mato (cmake-V09-05-07)
+- genwindef/LibSymbolInfo.cpp : filter the symbols giving problems when building G4clhep for Win64 (second attempt)
+
+March 22nd, 2012 - Pere Mato (cmake-V09-05-06)
+- genwindef/LibSymbolInfo.cpp : filter the symbols giving problems when building G4clhep for Win64
+
+March 7th, 2012 - Pere Mato (cmake-V09-05-05)
+- Modules/Geant4MakeRules_cxx.cmake : added link flag "-i-dynamic" to avoid link ICC warnings of the sort
+                                      "warning: feupdateenv is not implemented and will always fail"
+
+March 6th, 2012 - Pere Mato (cmake-V09-05-04)
+- Modules/Geant4LibraryBuildOptions.cmake : matching "icc" in addition to "icpc" to detect Intel compiler
+- Modules/Geant4MakeRules_cxx.cmake : change ICC option from -Wnon-virtual-dtor to -Wno-non-virtual-dtor 
+
+February 10th, 2012 - Pere Mato (cmake-V09-05-03)
 - Added function REFLEX_GENERATE_DICTIONARY() in FindROOT.cmake
 
-January 25th, 2011 - Gunter Folger (cmake-V09-05-02)
+January 25th, 2012 - Gunter Folger (cmake-V09-05-02)
 - Switch to G4EMLOW6.24
 
 December 13th 2011 - P. mato (cmake-V09-05-01)
