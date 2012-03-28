@@ -38,7 +38,6 @@
 #include "G4UserSteppingAction.hh"
 
 class EventAction;
-class G4SteppingVerbose2;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -51,8 +50,7 @@ class SteppingAction : public G4UserSteppingAction
     void UserSteppingAction(const G4Step*);
     
   private:
-    EventAction* eventAction;
-    G4SteppingVerbose2* myVerbose;    
+    EventAction* fEventAction;
 };
 
 #endif
