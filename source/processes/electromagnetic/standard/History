@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28 March 12: V.Ivanchenko (emstand-V09-05-14)
+- source.cmake fixed - G4UrbanMscModel92 was forgotten
+
 15 March 12: V.Ivanchenko (emstand-V09-05-13)
 - G4GoudsmitSaundersonMscModel - fixed FPE bug - lateral displacemnt 
     should not be sampled for plural scattering
