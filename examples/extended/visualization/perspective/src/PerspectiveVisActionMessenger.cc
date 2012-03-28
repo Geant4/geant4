@@ -48,6 +48,8 @@ PerspectiveVisActionMessenger::PerspectiveVisActionMessenger
   fpCommandOS = new G4UIcmdWithAString ("/perspectiveDemo/optionString", this);
   fpCommandOS -> SetGuidance
     ("Option string - any combination of \"x\", \"y\", \"z\", \"a[ll]\".");
+  fpCommandOS -> SetGuidance
+    ("Controls direction of perspective lines.");
   fpCommandOS -> SetParameterName ("option-string", omitable = true);
   fpCommandOS -> SetDefaultValue("all");
 
