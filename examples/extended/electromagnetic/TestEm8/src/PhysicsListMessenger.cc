@@ -93,7 +93,6 @@ PhysicsListMessenger::~PhysicsListMessenger()
 void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
                                           G4String newValue)
 {       
-  G4cout << "PhysicsListMessenger::SetNewValue" << G4endl;
   HistoManager* man = HistoManager::GetPointer();
   if( command == eCmd )
    { man->SetMaxEnergy(eCmd->GetNewDoubleValue(newValue));}

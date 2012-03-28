@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29-02-12 V.Ivant (testem8-V09-05-01)
+- PhysicsListMessenger - removed test cout
+- DetectorConstruction - uncomment material printout
+
 01-02-12 V.Ivant (testem8-V09-05-00)
 - DetectorConstruction - added gas of ALICE TPC and macro testALICE.mac
 - TragetSD - added zero-energy steps to histograms and step counters
