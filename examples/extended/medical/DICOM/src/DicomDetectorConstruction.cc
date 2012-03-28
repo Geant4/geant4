@@ -114,13 +114,13 @@ void DicomDetectorConstruction::InitialisationOfMaterials()
                                    z = 17.0, a = 35.453* g/mole );
   G4Element* elK = new G4Element( name = "Potassium",
                                   symbol = "P",
-                                  z = 19.0, a = 30.0983* g/mole );
+                                  z = 19.0, a = 39.0983* g/mole );
   G4Element* elP = new G4Element( name = "Phosphorus",
                                   symbol = "P",
-                                  z = 30.0, a = 30.973976* g/mole );
+                                  z = 15.0, a = 30.973976* g/mole );
   G4Element* elFe = new G4Element( name = "Iron",
                                    symbol = "Fe",
-                                   z = 26, a = 56.845* g/mole );
+                                   z = 26, a = 55.845* g/mole );
   G4Element* elMg = new G4Element( name = "Magnesium",
                                    symbol = "Mg",
                                    z = 12.0, a = 24.3050* g/mole );
