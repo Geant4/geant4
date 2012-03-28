@@ -75,15 +75,25 @@ public:
 protected:
 
   void RequestPrimitives (const G4VSolid& solid);
-  void AddPrimitivePreamble(const G4Visible& visible);
+  // G4OpenGLStoredSceneHandler's version of RequestPrimitives that
+  // intercepts repeated solids, but otherwise calls the base class
+  // method.
+
+  G4bool AddPrimitivePreamble(const G4Visible& visible);
+  // Return false if no further processing required.
+
   void AddPrimitivePostamble();
 
   // Two virtual functions for extra processing in a sub-class, for
-  // example, to make a display tree.
-  virtual void ExtraPOProcessing
-  (const G4Visible&, size_t /*currentPOListIndex*/) {}
-  virtual void ExtraTOProcessing
-  (const G4Visible&, size_t /*currentTOListIndex*/) {}
+  // example, to make a display tree.  They are to return true if the
+  // visible object uses gl commands for drawing.  This is
+  // predominantly true; a notable exception is Qt text.  In that
+  // case, a display list does not need to be created; all relevant
+  // information is assumed to be stored in the PO/TOList.
+  virtual G4bool ExtraPOProcessing
+  (const G4Visible&, size_t /*currentPOListIndex*/) {return true;}
+  virtual G4bool ExtraTOProcessing
+  (const G4Visible&, size_t /*currentTOListIndex*/) {return true;}
 
   static G4int  fSceneIdCount;   // static counter for OpenGLStored scenes.
   // Display list management.  All static since there's only one OGL store.
@@ -101,7 +111,6 @@ protected:
   struct G4TextPlus {
     G4TextPlus(const G4Text& text): fG4Text(text) {}
     G4Text fG4Text;
-    G4Transform3D fObjectTransform;
     G4bool fProcessing2D;
   };
 

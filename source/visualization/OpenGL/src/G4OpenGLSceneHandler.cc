@@ -185,10 +185,11 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
     fpViewer -> GetApplicableVisAttributes (line.GetVisAttributes ());
 
   G4double lineWidth = GetLineWidth(pVA);
+  // Need access to method in G4OpenGLViewer.  static_cast doesn't work
+  // with a virtual base class, so use dynamic_cast.  No need to test
+  // the outcome since viewer is guaranteed to be a G4OpenGLViewer.
   G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
-  if ( pGLViewer ) {
-    pGLViewer->ChangeLineWidth(lineWidth);
-  }
+  pGLViewer->ChangeLineWidth(lineWidth);
 
   glBegin (GL_LINE_STRIP);
   for (G4int iPoint = 0; iPoint < nPoints; iPoint++) {
@@ -222,10 +223,11 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
     fpViewer -> GetApplicableVisAttributes (polymarker.GetVisAttributes ());
 
   G4double lineWidth = GetLineWidth(pVA);
+  // Need access to method in G4OpenGLViewer.  static_cast doesn't work
+  // with a virtual base class, so use dynamic_cast.  No need to test
+  // the outcome since viewer is guaranteed to be a G4OpenGLViewer.
   G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
-  if ( pGLViewer ) {
-    pGLViewer->ChangeLineWidth(lineWidth);
-  }
+  pGLViewer->ChangeLineWidth(lineWidth);
 
   G4VMarker::FillStyle style = polymarker.GetFillStyle();
 
@@ -296,10 +298,8 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
 
   } else { // Size specified in screen (window) coordinates.
 
-    G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
-    if ( pGLViewer ) {
-      pGLViewer->ChangePointSize(size);
-    }
+    pGLViewer->ChangePointSize(size);
+
     //Antialiasing only for circles
     switch (polymarker.GetMarkerType()) {
     default:
@@ -327,24 +327,20 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Text& text) {
   const G4Colour& c = GetTextColour (text);  // Picks up default if none.
   MarkerSizeType sizeType;
   G4double size = GetMarkerSize (text, sizeType);
-  G4ThreeVector position (text.GetPosition ());
+  G4Point3D position (text.GetPosition ());
   G4String textString = text.GetText();
+  const char* textCString = textString.c_str();
+  
+  glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
 
+  // Set position for raster-style drawers (X, Xm)
+  glRasterPos3d( position.x(),position.y(),position.z() );
+
+  // Need access to method in G4OpenGLViewer.  static_cast doesn't work
+  // with a virtual base class, so use dynamic_cast.  No need to test
+  // the outcome since viewer is guaranteed to be a G4OpenGLViewer.
   G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
-  if ( pGLViewer ) {
-    const char* textCString = textString.c_str();
-    GLfloat color[4];  // Ask OpenGL for the current color
-    glGetFloatv(GL_CURRENT_COLOR, color);
-    
-    // Change to new color
-    glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
-    
-    // set position
-    glRasterPos3d( position.x(),position.y(),position.z() );
-
-    pGLViewer->DrawText(textCString,position.x(),position.y(),position.z(),size);
-    glColor3d (color[0], color[1], color[2]);
-  }
+  pGLViewer->DrawText(textCString,position.x(),position.y(),position.z(),size);
 }
 
 void G4OpenGLSceneHandler::AddPrimitive (const G4Circle& circle) {
@@ -388,8 +384,8 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   // Need access to data in G4OpenGLViewer.  static_cast doesn't work
   // with a virtual base class, so use dynamic_cast.  No need to test
   // the outcome since viewer is guaranteed to be a G4OpenGLViewer.
-  G4OpenGLViewer* pViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
-  const G4bool& transparency_enabled = pViewer->transparency_enabled;
+  G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
+  const G4bool& transparency_enabled = pGLViewer->transparency_enabled;
   const G4Colour& c = pVA->GetColour();
   GLfloat materialColour [4];
   materialColour [0] = c.GetRed ();
@@ -402,17 +398,14 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   }
 
   G4double lineWidth = GetLineWidth(pVA);
-  G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
-  if ( pGLViewer ) {
-    pGLViewer->ChangeLineWidth(lineWidth);
-  }
+  pGLViewer->ChangeLineWidth(lineWidth);
 
   GLfloat clear_colour[4];
   glGetFloatv (GL_COLOR_CLEAR_VALUE, clear_colour);
 
   G4bool isAuxEdgeVisible = GetAuxEdgeVisible (pVA);
 
-  G4bool clipping = pViewer->fVP.IsSection() || pViewer->fVP.IsCutaway();
+  G4bool clipping = pGLViewer->fVP.IsSection() || pGLViewer->fVP.IsCutaway();
 
   // Lighting disabled unless otherwise requested
   glDisable (GL_LIGHTING);

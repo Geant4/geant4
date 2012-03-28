@@ -113,7 +113,7 @@ public:
 private:
 	void SendMaterialNode( const G4VisAttributes*  pAV ); 
 	void SendMaterialNode();
-	void SendMatrixTransformNode(const G4Transform3D *);
+	void SendMatrixTransformNode(const G4Transform3D &);
 	void SendCubeNode(G4double, G4double, G4double);
 	void SendCylinderNode(G4double, G4double);
 	void SendSphereNode(G4double);

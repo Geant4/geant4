@@ -1084,8 +1084,8 @@ void G4OpenGLQtViewer::G4MouseReleaseEvent()
     // try to addapt speed move/rotate looking to drawing speed
     float correctionFactor = 5;
     while (fAutoMove) {
-      if ( lastMoveTime.elapsed () >= (int)(1000/fNbMaxFramesPerSec)) {
-        float lTime = 1000/((float)lastMoveTime.elapsed ());
+      if ( lastMoveTime.elapsed() >= (int)(1000/fNbMaxFramesPerSec)) {
+        float lTime = 1000/lastMoveTime.elapsed();
         if (((((float)delta.x())/correctionFactor)*lTime > fNbMaxAnglePerSec) ||
             ((((float)delta.x())/correctionFactor)*lTime < -fNbMaxAnglePerSec) ) {
           correctionFactor = (float)delta.x()*(lTime/fNbMaxAnglePerSec);
@@ -1108,6 +1108,7 @@ void G4OpenGLQtViewer::G4MouseReleaseEvent()
         // SHIFT + Click and move camera point of view
         // CTRL + Click and zoom mouse to zoom in/out
 
+        lastMoveTime.start();
         if (fMouseAction == STYLE1) {  // rotate
           if (fNoKeyPress) {
             rotateQtScene(((float)delta.x())/correctionFactor,((float)delta.y())/correctionFactor);
@@ -1116,14 +1117,13 @@ void G4OpenGLQtViewer::G4MouseReleaseEvent()
           }
 #ifdef G4DEBUG_VIS_OGL
           fNbRotation ++;
-          fTimeRotation += lastMoveTime.elapsed ();
-      printf("G4OpenGLQtViewer %d \n",fTimeRotation/fNbRotation);
+          fTimeRotation += lastMoveTime.elapsed();
+      printf("G4OpenGLQtViewer %f \n",fTimeRotation/fNbRotation);
 #endif
           
         } else if (fMouseAction == STYLE2) {  // move
           moveScene(-((float)delta.x())/correctionFactor,-((float)delta.y())/correctionFactor,0,true);
         }
-        lastMoveTime.start();
       }
       ((QApplication*)G4Qt::getInstance ())->processEvents();
     }

@@ -26,6 +26,56 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+26th March 2012  John Allison  (visman-V09-05-10)
+- G4VisCommandsSet.cc: Added #include <cctype> for strict Windows compiler.
+
+23rd March 2012  John Allison  (visman-V09-05-09.  Needs greps-V09-05-06.)
+- Added /vis/set/textLayout and tidied.
+- Modified list of "current quantities" for vis commands.
+  From G4VVisCommands.hh:
+  // Current quantities for use in appropriate commands
+  static G4Colour                   fCurrentColour;
+  static G4Colour                   fCurrentTextColour;
+  static G4Text::Layout             fCurrentTextLayout;
+  static G4double                   fCurrentLineThickness;
+  static G4VisAttributes::LineStyle fCurrentLineStyle;
+  static G4VMarker::FillStyle       fCurrentFillStyle;
+  static G4VMarker::SizeType        fCurrentSizeType;
+  The default values are (from G4VVisCommands.cc):
+  G4VVisCommand::fCurrentColour = G4Colour::White();
+  G4VVisCommand::fCurrentTextColour = G4Colour::Blue();
+  G4VVisCommand::fCurrentTextLayout = G4Text::left;
+  G4VVisCommand::fCurrentLineThickness = 1.;
+  G4VVisCommand::fCurrentLineStyle = G4VisAttributes::unbroken;
+  G4VVisCommand::fCurrentFillStyle = G4VMarker::filled;
+  G4VVisCommand::fCurrentSizeType = G4VMarker::screen;
+
+21st March 2012  John Allison  (visman-V09-05-08)
+- Introduced concept of "current quantities" for use in vis commands.
+- Added /vis/set/textColour, the first command in the series that
+  will allow the user to change the above current quantities for use by
+  subsequent commands.
+- Some tidying of the vis command structure:
+  o Moved /vis/default/ to /vis/viewer/default/ (it is specific to viewers).
+- Files removed:
+  o G4VisCommandsDefault.hh/cc
+- New files:
+  o G4VisCommandsViewerDefault.hh/cc
+  o G4VisCommandsSet.hh/cc
+
+7th March 2012  John Allison  (visman-V09-05-07)
+- G4VisCommandsSceneAdd:
+  o Added /vis/scene/add/logo2D and text2D.
+  o Improved /vis/scene/add/axes, logo and scale:
+    . Size computed automatically by default.
+  o /vis/scene/add/date:
+    . Placed left-adjusted to centre of screen pending implementation
+      of right-adjustment.
+  o Tidied.
+
+28th February 2012  John Allison  (visman-V09-05-06)
+- Migrated to G4VScenehandler::fObjectTransformation.
+
 13th February 2012  John Allison  (visman-V09-05-05)
 - G4VisCommandsSceneAdd.cc: Small improvement to /vis/scene/add/eventID.
 

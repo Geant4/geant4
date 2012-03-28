@@ -148,9 +148,6 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
   printf("G4OpenGLStoredViewer::DrawDisplayLists");
 #endif
   for (size_t i = 0; i < nPasses; ++i) {
-#ifdef G4DEBUG_VIS_OGL
-    printf("+");
-#endif
 
     if (cutawayUnion) {
       double a[4];
@@ -168,69 +165,75 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
       if (POSelected(i)) {
 	G4OpenGLStoredSceneHandler::PO& po =
 	  fG4OpenGLStoredSceneHandler.fPOList[i];
-	glPushMatrix();
-	G4OpenGLTransform3D oglt (po.fTransform);
-	glMultMatrixd (oglt.GetGLMatrix ());
 	if (isPicking) glLoadName(po.fPickName);
 	if (po.fpG4TextPlus) {
 	  // Re-use G4OpenGLStoredSceneHandler::AddPrimitive...
-	  fG4OpenGLStoredSceneHandler.fpObjectTransformation =
-	    &po.fpG4TextPlus->fObjectTransform;
+	  fG4OpenGLStoredSceneHandler.fObjectTransformation = po.fTransform;
 	  fG4OpenGLStoredSceneHandler.fProcessing2D =
 	    po.fpG4TextPlus->fProcessing2D;
 	  fG4OpenGLStoredSceneHandler.AddPrimitive(po.fpG4TextPlus->fG4Text);
 	  fG4OpenGLStoredSceneHandler.fProcessing2D = false;
 	} else {
+	  glPushMatrix();
+	  G4OpenGLTransform3D oglt (po.fTransform);
+	  glMultMatrixd (oglt.GetGLMatrix ());
 	  glCallList (po.fDisplayListId);
+	  glPopMatrix();
 	}
-	glPopMatrix();
       }
     }
 
+    G4Transform3D lastMatrixTransform;
+    G4bool first = true;
+
     for (size_t i = 0; i < fG4OpenGLStoredSceneHandler.fTOList.size(); ++i) {
-#ifdef G4DEBUG_VIS_OGL
-      printf("-");
-#endif
       G4OpenGLStoredSceneHandler::TO& to =
 	fG4OpenGLStoredSceneHandler.fTOList[i];
       if (to.fEndTime >= fStartTime && to.fStartTime <= fEndTime) {
-	glPushMatrix();
-	G4OpenGLTransform3D oglt (to.fTransform);
-	glMultMatrixd (oglt.GetGLMatrix ());
 	if (fVP.IsPicking()) glLoadName(to.fPickName);
-	const G4Colour& c = to.fColour;
-	if (fFadeFactor > 0. && to.fEndTime < fEndTime) {
-	  // Brightness scaling factor
-	  G4double bsf = 1. - fFadeFactor *
-	    ((fEndTime - to.fEndTime) / (fEndTime - fStartTime));
-	  const G4Colour& bg = fVP.GetBackgroundColour();
-	  glColor3d
-	    (bsf * c.GetRed() + (1. - bsf) * bg.GetRed(),
-	     bsf * c.GetGreen() + (1. - bsf) * bg.GetGreen(),
-	     bsf * c.GetBlue() + (1. - bsf) * bg.GetBlue());
-	} else {
-	  glColor3d(c.GetRed(), c.GetGreen(), c.GetBlue());
-	}
 	if (to.fpG4TextPlus) {
 	  // Re-use G4OpenGLStoredSceneHandler::AddPrimitive...
-	  fG4OpenGLStoredSceneHandler.fpObjectTransformation =
-	    &to.fpG4TextPlus->fObjectTransform;
+	  fG4OpenGLStoredSceneHandler.fObjectTransformation = to.fTransform;
 	  fG4OpenGLStoredSceneHandler.fProcessing2D =
 	    to.fpG4TextPlus->fProcessing2D;
 	  fG4OpenGLStoredSceneHandler.AddPrimitive(to.fpG4TextPlus->fG4Text);
 	  fG4OpenGLStoredSceneHandler.fProcessing2D = false;
 	} else {
-	  glCallList (to.fDisplayListId);
+	  if (to.fTransform != lastMatrixTransform) {
+	    if (! first) {
+	      glPopMatrix();
+	    }
+	    first = false;
+	    glPushMatrix();
+	    G4OpenGLTransform3D oglt (to.fTransform);
+	    glMultMatrixd (oglt.GetGLMatrix ());
+	  }
+	  const G4Colour& c = to.fColour;
+	  if (fFadeFactor > 0. && to.fEndTime < fEndTime) {
+	    // Brightness scaling factor
+	    G4double bsf = 1. - fFadeFactor *
+	      ((fEndTime - to.fEndTime) / (fEndTime - fStartTime));
+	    const G4Colour& bg = fVP.GetBackgroundColour();
+	    glColor3d
+	      (bsf * c.GetRed() + (1. - bsf) * bg.GetRed(),
+	       bsf * c.GetGreen() + (1. - bsf) * bg.GetGreen(),
+	       bsf * c.GetBlue() + (1. - bsf) * bg.GetBlue());
+	  } else {
+	    glColor3d(c.GetRed(), c.GetGreen(), c.GetBlue());
+	  }
+          glCallList (to.fDisplayListId);
 	}
-	glPopMatrix();
+        if (to.fTransform != lastMatrixTransform) {
+          lastMatrixTransform = to.fTransform;
+        }
       }
+    }
+    if (! first) {
+      glPopMatrix();
     }
 
     if (cutawayUnion) glDisable (GL_CLIP_PLANE2);
   }
-#ifdef G4DEBUG_VIS_OGL
-  printf("\n");
-#endif
 
   // Display time at "head" of time range, which is fEndTime...
   if (fDisplayHeadTime && fEndTime < DBL_MAX) {

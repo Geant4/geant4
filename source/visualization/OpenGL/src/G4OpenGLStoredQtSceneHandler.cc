@@ -49,18 +49,18 @@ G4OpenGLStoredSceneHandler (system, name)
 G4OpenGLStoredQtSceneHandler::~G4OpenGLStoredQtSceneHandler ()
 {}
 
-void G4OpenGLStoredQtSceneHandler::ExtraPOProcessing
+G4bool G4OpenGLStoredQtSceneHandler::ExtraPOProcessing
 (const G4Visible& visible, size_t currentPOListIndex)
 {
-  try
-    {
-      const G4Text& g4Text = dynamic_cast<const G4Text&>(visible);
-      G4TextPlus* pG4TextPlus = new G4TextPlus(g4Text);
-      pG4TextPlus->fObjectTransform =
-	fpObjectTransformation? *fpObjectTransformation: G4Transform3D();
-      pG4TextPlus->fProcessing2D = fProcessing2D;
-      fPOList[currentPOListIndex].fpG4TextPlus = pG4TextPlus;
-    }
+  G4bool usesGLCommands = true;
+
+  try {
+    const G4Text& g4Text = dynamic_cast<const G4Text&>(visible);
+    G4TextPlus* pG4TextPlus = new G4TextPlus(g4Text);
+    pG4TextPlus->fProcessing2D = fProcessing2D;
+    fPOList[currentPOListIndex].fpG4TextPlus = pG4TextPlus;
+    usesGLCommands = false;
+  }
   catch (std::bad_cast) {}  // No special action if not text.  Just carry on.
 
   G4PhysicalVolumeModel* pPVModel =
@@ -130,24 +130,26 @@ void G4OpenGLStoredQtSceneHandler::ExtraPOProcessing
       }
     }
   }
+
+  return usesGLCommands;
 }
 
-void G4OpenGLStoredQtSceneHandler::ExtraTOProcessing
+G4bool G4OpenGLStoredQtSceneHandler::ExtraTOProcessing
 (const G4Visible& visible, size_t currentTOListIndex)
 {
-  //G4cout << "G4OpenGLStoredQtSceneHandler::ExtraTOProcessing: index: "
-  //	 << currentTOListIndex << G4endl;
 
-  try
-    {
-      const G4Text& g4Text = dynamic_cast<const G4Text&>(visible);
-      G4TextPlus* pG4TextPlus = new G4TextPlus(g4Text);
-      pG4TextPlus->fObjectTransform =
-	fpObjectTransformation? *fpObjectTransformation: G4Transform3D();
-      pG4TextPlus->fProcessing2D = fProcessing2D;
-      fTOList[currentTOListIndex].fpG4TextPlus = pG4TextPlus;
-    }
+  G4bool usesGLCommands = true;
+
+  try {
+    const G4Text& g4Text = dynamic_cast<const G4Text&>(visible);
+    G4TextPlus* pG4TextPlus = new G4TextPlus(g4Text);
+    pG4TextPlus->fProcessing2D = fProcessing2D;
+    fTOList[currentTOListIndex].fpG4TextPlus = pG4TextPlus;
+    usesGLCommands = false;
+  }
   catch (std::bad_cast) {}  // Do nothing if not text.
+
+  return usesGLCommands;
 }
 
 void G4OpenGLStoredQtSceneHandler::ClearStore () {

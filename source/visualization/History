@@ -24,6 +24,52 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+26th March 2012  John Allison  (vis-V09-05-12)
+- visman-V09-05-10:
+  o G4VisCommandsSet.cc: Added #include <cctype> for strict Windows compiler.
+
+23rd March 2012  John Allison  (vis-V09-05-11 - needs greps-V09-05-06)
+- visman-V09-05-09: Added /vis/set/textLayout.
+- modeling-V09-05-03: G4AxesModel: Augmented global description.
+
+21st March 2012  John Allison
+- visman-V09-05-08:
+  o Introduced concept of "current quantities" for use in vis commands.
+  o Added /vis/set/textColour, the first command in the series that
+    will allow the user to change the above current quantities for use by
+    subsequent commands.
+
+7th March 2012  John Allison  (vis-V09-05-10)
+- modeling-V09-05-02: G4CallbackModel: Add destructor.
+- visman-V09-05-07:
+  o Added /vis/scene/add/logo2D and text2D.
+  o Improved /vis/scene/add/axes, logo and scale:
+    . Size computed automatically by default.
+
+6th March 2012  John Allison
+- opengl-V09-05-08: Fix problem with persistent text.
+
+29th February 2012  John Allison  (vis-V09-05-09)
+- opengl-V09-05-07: Fixed minor problem with text:
+
+28th February 2012  John Allison  (vis-V09-05-08)
+- visman-V09-05-06: Migrated to G4VScenehandler::fObjectTransformation.
+- opengl-V09-05-06:
+  o Migrated to G4VScenehandler::fObjectTransformation.
+  o Improved rendering speed (Laurent Garnier).
+- DAWN-V09-05-01
+- VRML-V09-05-01: Migrated to G4VScenehandler::fObjectTransformation.
+- vis-HepRep-V09-05-00: Migrated to G4VScenehandler::fObjectTransformation.
+- gMocren-V09-05-00: Migrated to G4VScenehandler::fObjectTransformation.
+
+27th February 2012  John Allison  (visJAfpObjectTranformation)
+- Private tag of code before change of fpObjectTranformation.
+
+14th February 2012  John Allison
+- opengl-V09-05-05:
+  o Fixed bug in TO copy constructor that affected position of stored text.
+  o General tidy.
+
 13th February 2012  John Allison  (vis-V09-05-07)
 - visman-V09-05-05: Small improvement to /vis/scene/add/eventID.
 - opengl-V09-05-04: Fix compilation error with gcc 4.3.

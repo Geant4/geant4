@@ -103,6 +103,7 @@ G4OpenGLStoredSceneHandler::TO::TO():
 
 G4OpenGLStoredSceneHandler::TO::TO(const G4OpenGLStoredSceneHandler::TO& to):
   fDisplayListId(to.fDisplayListId),
+  fTransform(to.fTransform),
   fPickName(to.fPickName),
   fStartTime(to.fStartTime),
   fEndTime(to.fEndTime),
@@ -179,7 +180,7 @@ void G4OpenGLStoredSceneHandler::EndPrimitives2D ()
   G4OpenGLSceneHandler::EndPrimitives2D ();
 }
 
-void G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
+G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
 {
   // Loads G4Atts for picking...
   if (fpViewer->GetViewParameters().IsPicking()) {
@@ -210,9 +211,10 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
       fMemoryForDisplayLists = false;
     }
   }
+
   if (fMemoryForDisplayLists) {
     if (fReadyForTransients) {
-      TO to(fDisplayListId, *fpObjectTransformation);
+      TO to(fDisplayListId, fObjectTransformation);
       to.fPickName = fPickName;
       to.fColour = c;
       const G4VisAttributes* pVA =
@@ -220,33 +222,46 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
       to.fStartTime = pVA->GetStartTime();
       to.fEndTime = pVA->GetEndTime();
       fTOList.push_back(to);
-      ExtraTOProcessing(visible, fTOList.size() - 1);  // Pass TO list index
-      glPushMatrix();
-      G4OpenGLTransform3D oglt (*fpObjectTransformation);
-      glMultMatrixd (oglt.GetGLMatrix ());
-      glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
       // For transient objects, colour, transformation, are kept in
       // the TO, so should *not* be in the display list.  As mentioned
       // above, in some cases (display-by-time fading) we need to have
-      // independent control of colour.
+      // independent control of colour.  But for now transform and set
+      // colour for immediate display.
+      glPushMatrix();
+      G4OpenGLTransform3D oglt (fObjectTransformation);
+      glMultMatrixd (oglt.GetGLMatrix ());
+      glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
+      (void) ExtraTOProcessing(visible, fTOList.size() - 1);
+      // Ignore result of the above.  If this visible does not use gl
+      // commands, a display list is created that is empty and not
+      // used.
       glNewList (fDisplayListId, GL_COMPILE_AND_EXECUTE);
-    }
-    else {
-      PO po(fDisplayListId, *fpObjectTransformation);
+    } else {
+      PO po(fDisplayListId, fObjectTransformation);
       po.fPickName = fPickName;
       fPOList.push_back(po);
-      ExtraPOProcessing(visible, fPOList.size() - 1);  // Pass PO list index
+      G4bool usesGLCommands = ExtraPOProcessing(visible, fPOList.size() - 1);
+      // Transients are displayed as they come (GL_COMPILE_AND_EXECUTE
+      // above) but persistents are compiled into display lists
+      // (GL_COMPILE only) and then drawn from the display lists with
+      // their fObjectTransformation as stored in fPOList.  Thus,
+      // there is no need to do glMultMatrixd here.  If
+      // ExtraPOProcessing says the visible object does not use gl
+      // commands, simply return and abandon further processing.  It
+      // is assumed that all relevant information is kept in the
+      // POList.
+      if (!usesGLCommands) return false;
       glNewList (fDisplayListId, GL_COMPILE);
       glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
     }
-  } else {
+  } else {  // Out of memory (or being used when display lists not required).
     glDrawBuffer (GL_BACK);
     // Laurent Garnier 01/2012 : Not sure it was working with a front buffer. 
     // Moreover, because this is the "outside of list" drawing, it will not be redraw
     // when moving scene, so...
     //    glDrawBuffer (GL_FRONT);
     glPushMatrix();
-    G4OpenGLTransform3D oglt (*fpObjectTransformation);
+    G4OpenGLTransform3D oglt (fObjectTransformation);
     glMultMatrixd (oglt.GetGLMatrix ());
     glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
   }
@@ -261,10 +276,11 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
     glMatrixMode (GL_MODELVIEW);
     glPushMatrix();
     glLoadIdentity();
-    G4OpenGLTransform3D oglt (*fpObjectTransformation);
+    G4OpenGLTransform3D oglt (fObjectTransformation);
     glMultMatrixd (oglt.GetGLMatrix ());
-    glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
   }
+
+  return true;
 }
 
 void G4OpenGLStoredSceneHandler::AddPrimitivePostamble()
@@ -300,16 +316,20 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePostamble()
 
 void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Polyline& polyline)
 {
-  AddPrimitivePreamble(polyline);
-  G4OpenGLSceneHandler::AddPrimitive(polyline);
-  AddPrimitivePostamble();
+  G4bool furtherprocessing = AddPrimitivePreamble(polyline);
+  if (furtherprocessing) {
+    G4OpenGLSceneHandler::AddPrimitive(polyline);
+    AddPrimitivePostamble();
+  }
 }
 
 void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
 {
-  AddPrimitivePreamble(polymarker);
-  G4OpenGLSceneHandler::AddPrimitive(polymarker);
-  AddPrimitivePostamble();
+  G4bool furtherprocessing = AddPrimitivePreamble(polymarker);
+  if (furtherprocessing) {
+    G4OpenGLSceneHandler::AddPrimitive(polymarker);
+    AddPrimitivePostamble();
+  }
 }
 
 void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Text& text)
@@ -317,23 +337,29 @@ void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Text& text)
   // Note: colour is still handled in
   // G4OpenGLSceneHandler::AddPrimitive(const G4Text&), so it still
   // gets into the display list
-  AddPrimitivePreamble(text);
-  G4OpenGLSceneHandler::AddPrimitive(text);
-  AddPrimitivePostamble();
+  G4bool furtherprocessing = AddPrimitivePreamble(text);
+  if (furtherprocessing) {
+    G4OpenGLSceneHandler::AddPrimitive(text);
+    AddPrimitivePostamble();
+  }
 }
 
 void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Circle& circle)
 {
-  AddPrimitivePreamble(circle);
-  G4OpenGLSceneHandler::AddPrimitive(circle);
-  AddPrimitivePostamble();
+  G4bool furtherprocessing = AddPrimitivePreamble(circle);
+  if (furtherprocessing) {
+    G4OpenGLSceneHandler::AddPrimitive(circle);
+    AddPrimitivePostamble();
+  }
 }
 
 void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Square& square)
 {
-  AddPrimitivePreamble(square);
-  G4OpenGLSceneHandler::AddPrimitive(square);
-  AddPrimitivePostamble();
+  G4bool furtherprocessing = AddPrimitivePreamble(square);
+  if (furtherprocessing) {
+    G4OpenGLSceneHandler::AddPrimitive(square);
+    AddPrimitivePostamble();
+  }
 }
 
 void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Scale& scale)
@@ -347,9 +373,11 @@ void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron)
   // Note: colour is still handled in
   // G4OpenGLSceneHandler::AddPrimitive(const G4Polyhedron&), so it still
   // gets into the display list
-  AddPrimitivePreamble(polyhedron);
-  G4OpenGLSceneHandler::AddPrimitive(polyhedron);
-  AddPrimitivePostamble();
+  G4bool furtherprocessing = AddPrimitivePreamble(polyhedron);
+  if (furtherprocessing) {
+    G4OpenGLSceneHandler::AddPrimitive(polyhedron);
+    AddPrimitivePostamble();
+  }
 }
 
 void G4OpenGLStoredSceneHandler::AddPrimitive (const G4NURBS& nurbs)
@@ -357,9 +385,11 @@ void G4OpenGLStoredSceneHandler::AddPrimitive (const G4NURBS& nurbs)
   // Note: colour is still handled in
   // G4OpenGLSceneHandler::AddPrimitive(const G4NURBS&), so it still
   // gets into the display list
-  AddPrimitivePreamble(nurbs);
-  G4OpenGLSceneHandler::AddPrimitive(nurbs);
-  AddPrimitivePostamble();
+  G4bool furtherprocessing = AddPrimitivePreamble(nurbs);
+  if (furtherprocessing) {
+    G4OpenGLSceneHandler::AddPrimitive(nurbs);
+    AddPrimitivePostamble();
+  }
 }
 
 void G4OpenGLStoredSceneHandler::BeginModeling () {
@@ -477,8 +507,11 @@ void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid)
 
   if (!fSecondPass) {
     G4bool transparency_enabled = true;
+    // Need access to method in G4OpenGLViewer.  static_cast doesn't work
+    // with a virtual base class, so use dynamic_cast.  No need to test
+    // the outcome since viewer is guaranteed to be a G4OpenGLViewer.
     G4OpenGLViewer* pViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
-    if (pViewer) transparency_enabled = pViewer->transparency_enabled;
+    transparency_enabled = pViewer->transparency_enabled;
     if (transparency_enabled && opacity < 1.) {
       // On first pass, transparent objects are not drawn, but flag is set...
       fSecondPassRequested = true;
@@ -517,7 +550,7 @@ void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid)
 	// ...and if the solid has already been rendered...
 	(fSolidMap.find (pSolid) != fSolidMap.end ())) {
       fDisplayListId = fSolidMap [pSolid];
-      PO po(fDisplayListId,*fpObjectTransformation);
+      PO po(fDisplayListId,fObjectTransformation);
       if (fpViewer->GetViewParameters().IsPicking()) {
 	G4AttHolder* holder = new G4AttHolder;
 	// Load G4Atts from G4VisAttributes, if any...
@@ -533,8 +566,11 @@ void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid)
 	po.fPickName = fPickName;
       }
       fPOList.push_back(po);
-      // Pass a dummy G4Visible.  Not needed for G4PhysicalVolumeModel.
-      ExtraPOProcessing(G4Visible(), fPOList.size() - 1);  // Pass PO list index
+      // No need to test if gl commands are used (result of
+      // ExtraPOProcessing) because we have already decided they will
+      // not, at least not here.  Also, pass a dummy G4Visible since
+      // not relevant for G4PhysicalVolumeModel.
+      (void) ExtraPOProcessing(G4Visible(), fPOList.size() - 1);
     }
     else {
       G4VSceneHandler::RequestPrimitives (solid);

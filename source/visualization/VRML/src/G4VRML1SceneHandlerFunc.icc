@@ -114,7 +114,7 @@ void G4VRML1SCENEHANDLER::AddSolid(const G4Tubs& tubs)
 	if ( r == 0.0 && dp >= 360. * deg ) {
 		// Send a built-in VRML node (Cylinder)
 		fDest << "Separator {" << "\n";
-		SendMatrixTransformNode( fpObjectTransformation );
+		SendMatrixTransformNode( fObjectTransformation );
 
 		fDest << "\t" << "DEF " << fCurrentDEF << " Separator {" << "\n";
 		SendMaterialNode();
@@ -155,7 +155,7 @@ void G4VRML1SCENEHANDLER::AddSolid(const G4Cons& cons)
 	if ( r1 == 0.0 && r2 == 0.0 && R1 == R2 && dp >= 360. * deg) {
 		// Send a built-in VRML node (Cylinder)
 		fDest << "Separator {" << "\n";
-		SendMatrixTransformNode( fpObjectTransformation );
+		SendMatrixTransformNode( fObjectTransformation );
 
 		fDest << "\t" << "DEF " << fCurrentDEF << " Separator {" << "\n";
 		SendMaterialNode();
@@ -186,7 +186,7 @@ void G4VRML1SCENEHANDLER::AddSolid(const G4Box& box)
 	fDest << "Separator {" << "\n";
 
 	//fDest << "\t" << "renderCulling ON" << "\n";
-	SendMatrixTransformNode( fpObjectTransformation );
+	SendMatrixTransformNode( fObjectTransformation );
 
 	fDest << "\t" << "DEF " << fCurrentDEF << " Separator {" << "\n";
 	SendMaterialNode();
@@ -221,7 +221,7 @@ void G4VRML1SCENEHANDLER::AddSolid(const G4Sphere& sphere)
 	if ( (dphi >= 360. * deg) && (dtheta >= 180. * deg) && (rmin == 0.0)  ) {
 		// Send a built-in VRML node (Sphere)
 		fDest << "Separator {" << "\n";
-		SendMatrixTransformNode( fpObjectTransformation );
+		SendMatrixTransformNode( fObjectTransformation );
 
 		fDest << "\t" << "DEF " << fCurrentDEF << " Separator {" << "\n";
 		SendMaterialNode();
@@ -247,7 +247,7 @@ void G4VRML1SCENEHANDLER::AddPrimitive(const G4Polyline& polyline)
 
 	fDest << "Separator {" << "\n";
 
-	SendMatrixTransformNode (fpObjectTransformation );
+	SendMatrixTransformNode (fObjectTransformation );
 
 	SendMaterialNode( polyline.GetVisAttributes() );
 
@@ -290,7 +290,7 @@ void G4VRML1SCENEHANDLER::AddPrimitive(const G4Polyhedron& polyhedron)
 
 	fDest << "Separator {" << "\n";
 
-	SendMatrixTransformNode( fpObjectTransformation );
+	SendMatrixTransformNode( fObjectTransformation );
 
 	fDest << "\t";
 	if (fCurrentDEF != "")
@@ -459,7 +459,6 @@ void G4VRML1SCENEHANDLER::EndModeling()
 void G4VRML1SCENEHANDLER::BeginPrimitives(const G4Transform3D& objectTransformation)
 {
   G4VSceneHandler::BeginPrimitives (objectTransformation);
-  fpObjectTransformation = &objectTransformation;
 #if defined DEBUG_SCENE_FUNC
   if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** BeginPrimitives " << "\n" ;
@@ -509,7 +508,7 @@ void G4VRML1SCENEHANDLER::SendMaterialNode()
 }
 
 
-void G4VRML1SCENEHANDLER::SendMatrixTransformNode(const G4Transform3D *trans)
+void G4VRML1SCENEHANDLER::SendMatrixTransformNode(const G4Transform3D& trans)
 {
 	G4Point3D  B  (0.0, 0.0, 0.0);
 
@@ -521,13 +520,13 @@ void G4VRML1SCENEHANDLER::SendMatrixTransformNode(const G4Transform3D *trans)
 	G4Vector3D e3 (0.0, 0.0, 1.0);
 
 		//----- transformed origin of body coord
-	B.transform(*trans);
+	B.transform(trans);
 
 		//----- transformed base vectors of body coord
-	x1.transform(*trans);
+	x1.transform(trans);
 	e1 = x1 - B;
 
-	y1.transform(*trans);
+	y1.transform(trans);
  	e2 = y1 - B;
 
 	e3 = e1.cross(e2);
@@ -625,7 +624,7 @@ G4VRML1SCENEHANDLER::SendMarkerWorldPosition ( const G4VMarker& mark )
 {
 	G4Point3D point = mark.GetPosition();
 
-	SendMatrixTransformNode( fpObjectTransformation );
+	SendMatrixTransformNode( fObjectTransformation );
 
 	fDest << "\t\t" << "Transform {" << "\n";
 	fDest << "\t\t\t" << "translation ";

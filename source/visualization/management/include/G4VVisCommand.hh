@@ -36,6 +36,9 @@
 #include "G4VisManager.hh"
 #include "G4UImessenger.hh"
 #include "G4ThreeVector.hh"
+#include "G4Text.hh"
+#include "G4VisAttributes.hh"
+#include "G4VMarker.hh"
 #include <vector>
 
 class G4UIcommand;
@@ -62,6 +65,15 @@ protected:
 
   // Data members.
   static G4VisManager* fpVisManager;
+
+  // Current quantities for use in appropriate commands
+  static G4Colour                   fCurrentColour;
+  static G4Colour                   fCurrentTextColour;
+  static G4Text::Layout             fCurrentTextLayout;
+  static G4double                   fCurrentLineThickness;
+  static G4VisAttributes::LineStyle fCurrentLineStyle;
+  static G4VMarker::FillStyle       fCurrentFillStyle;
+  static G4VMarker::SizeType        fCurrentSizeType;
 };
 
 #include "G4VVisCommand.icc"

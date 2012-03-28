@@ -24,41 +24,42 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsDefault.hh,v 1.3 2006-06-29 21:28:34 gunter Exp $
+// $Id: G4VisCommands.hh,v 1.8 2009-03-09 12:42:00 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
-// /vis/default commands - John Allison  30th October 2011
+// /vis/set - John Allison  21st March 2012
+// Set quantities for use in appropriate commands.
 
-#ifndef G4VISCOMMANDSDEFAULT_HH
-#define G4VISCOMMANDSDEFAULT_HH
+#ifndef G4VISCOMMANDSSET_HH
+#define G4VISCOMMANDSSET_HH
 
 #include "G4VVisCommand.hh"
 
+class G4UIcommand;
 class G4UIcmdWithAString;
-class G4UIcmdWithABool;
 
-class G4VisCommandDefaultStyle: public G4VVisCommand {
+class G4VisCommandSetTextColour: public G4VVisCommand {
 public:
-  G4VisCommandDefaultStyle();
-  virtual ~G4VisCommandDefaultStyle();
-  G4String GetCurrentValue(G4UIcommand* command);
-  void SetNewValue(G4UIcommand* command, G4String newValue);
+  G4VisCommandSetTextColour ();
+  virtual ~G4VisCommandSetTextColour ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
 private:
-  G4VisCommandDefaultStyle(const G4VisCommandDefaultStyle&);
-  G4VisCommandDefaultStyle& operator=(const G4VisCommandDefaultStyle&);
-  G4UIcmdWithAString* fpCommand;
+  G4VisCommandSetTextColour (const G4VisCommandSetTextColour&);
+  G4VisCommandSetTextColour& operator = (const G4VisCommandSetTextColour&);
+  G4UIcommand* fpCommand;
 };
 
-class G4VisCommandDefaultHiddenEdge: public G4VVisCommand {
+class G4VisCommandSetTextLayout: public G4VVisCommand {
 public:
-  G4VisCommandDefaultHiddenEdge();
-  virtual ~G4VisCommandDefaultHiddenEdge();
-  G4String GetCurrentValue(G4UIcommand* command);
-  void SetNewValue(G4UIcommand* command, G4String newValue);
+  G4VisCommandSetTextLayout ();
+  virtual ~G4VisCommandSetTextLayout ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
 private:
-  G4VisCommandDefaultHiddenEdge(const G4VisCommandDefaultHiddenEdge&);
-  G4VisCommandDefaultHiddenEdge& operator=(const G4VisCommandDefaultHiddenEdge&);
-  G4UIcmdWithABool* fpCommand;
+  G4VisCommandSetTextLayout (const G4VisCommandSetTextLayout&);
+  G4VisCommandSetTextLayout& operator = (const G4VisCommandSetTextLayout&);
+  G4UIcmdWithAString* fpCommand;
 };
 
 #endif

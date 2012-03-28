@@ -757,7 +757,6 @@ void G4GMocrenFileSceneHandler::BeginPrimitives (const G4Transform3D& objectTran
   GFBeginModeling();
 
   G4VSceneHandler::BeginPrimitives (objectTransformation);
-  fpObjectTransformation = &objectTransformation;
 
 }
 
@@ -796,7 +795,7 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
     G4cout << "-------" << G4endl;
     G4cout << "    " << box.GetName() << G4endl;
     G4Polyhedron * poly = box.CreatePolyhedron();
-    poly->Transform(*fpObjectTransformation);
+    poly->Transform(fObjectTransformation);
     //G4int nv = poly->GetNoVertices();
     G4Point3D v1, v2;
     G4int next;
@@ -858,7 +857,7 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
   //-- check the parameterised volume
   if(box.GetName() == volName) {
     
-    kVolumeTrans3D = *fpObjectTransformation;
+    kVolumeTrans3D = fObjectTransformation;
     // coordination system correction for gMocren
     G4ThreeVector raxis(1., 0., 0.), dummy(0.,0.,0.); 
     G4RotationMatrix rot(raxis, pi*rad);
@@ -1254,7 +1253,7 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
     }
 
 
-    kVolumeTrans3D = *fpObjectTransformation;
+    kVolumeTrans3D = fObjectTransformation;
 
     // translation for the scoring mesh
     G4ThreeVector sbth = scoringBox->GetTranslation();
@@ -1768,7 +1767,7 @@ void G4GMocrenFileSceneHandler::AddDetector(const G4VSolid & solid) {
   std::vector<G4float *> dedges;
   G4Polyhedron * poly = solid.CreatePolyhedron();
   detector.polyhedron = poly;
-  detector.transform3D = *fpObjectTransformation;
+  detector.transform3D = fObjectTransformation;
 
   // retrieve color
   unsigned char uccolor[3] = {30, 30, 30};

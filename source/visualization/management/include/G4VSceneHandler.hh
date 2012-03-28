@@ -85,7 +85,7 @@ public: // With description
   // suggestions.  If not, please implement the base class invocation.
 
   virtual void PreAddSolid (const G4Transform3D& objectTransformation,
-			   const G4VisAttributes& visAttribs);
+			    const G4VisAttributes&);
   // objectTransformation is the transformation in the world
   // coordinate system of the object about to be added, and visAttribs
   // is its visualization attributes.
@@ -344,11 +344,11 @@ protected:
   G4bool             fTransientsDrawnThisRun;    // manager.
   G4bool             fProcessingSolid; // True if within Pre/PostAddSolid.
   G4bool             fSecondPassRequested;
-  G4bool             fSecondPass;    // ...in process.
-  G4VModel*          fpModel;        // Current model.
-  const G4Transform3D* fpObjectTransformation; // Current accumulated
-					       // object transformation.
-  G4int              fNestingDepth; // For Begin/EndPrimitives.
+  G4bool             fSecondPass;       // ...in process.
+  G4VModel*          fpModel;           // Current model.
+  G4Transform3D fObjectTransformation;  // Current accumulated
+					// object transformation.
+  G4int              fNestingDepth;     // For Begin/EndPrimitives.
   const G4VisAttributes* fpVisAttribs;  // Working vis attributes.
   const G4Transform3D fIdentityTransformation;
 

@@ -152,7 +152,7 @@ void G4VRML2SCENEHANDLER::AddPrimitive(const G4Polyline& polyline)
 	for (i = 0, e = polyline.size(); e; i++, e--) {
 
 		G4Point3D point = polyline[i];
-		point.transform( *fpObjectTransformation );
+		point.transform( fObjectTransformation );
 
 		fDest << "\t\t\t\t";
 		fDest <<                  point.x() << " ";
@@ -221,7 +221,7 @@ void G4VRML2SCENEHANDLER::AddPrimitive(const G4Polyhedron& polyhedron)
 	for (i = 1, j = polyhedron.GetNoVertices(); j; j--, i++) {
 		G4Point3D point = polyhedron.GetVertex(i);
 
-		point.transform( *fpObjectTransformation );
+		point.transform( fObjectTransformation );
 
 		fDest << "\t\t\t\t\t";
 		fDest <<                   point.x() << " ";
@@ -433,7 +433,6 @@ void G4VRML2SCENEHANDLER::EndModeling()
 void G4VRML2SCENEHANDLER::BeginPrimitives(const G4Transform3D& objectTransformation)
 {
   G4VSceneHandler::BeginPrimitives (objectTransformation);
-  fpObjectTransformation = &objectTransformation;
 #if defined DEBUG_SCENE_FUNC
   if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** BeginPrimitives " << "\n" ;
@@ -567,7 +566,7 @@ G4VRML2SCENEHANDLER::SendMarkerWorldPosition ( const G4VMarker& mark )
 {
 	G4Point3D point = mark.GetPosition();
 
-	point.transform( *fpObjectTransformation );
+	point.transform( fObjectTransformation );
 
 	fDest << "   translation ";
 	fDest <<      point.x() << " " << point.y() << " " << point.z() << "\n";
@@ -581,7 +580,7 @@ void  G4VRML2SCENEHANDLER::GetMarkerWorldPosition    (	const G4VMarker&  mark ,
 {
 	G4Point3D point = mark.GetPosition();
 
-	point.transform( *fpObjectTransformation );
+	point.transform( fObjectTransformation );
 
 	*pX = point.x() ;
 	*pY = point.y() ;

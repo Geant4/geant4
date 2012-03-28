@@ -38,13 +38,18 @@
 #include "G4VisAttributes.hh"
 #include "G4Polyline.hh"
 #include "G4Colour.hh"
+#include "G4UnitsTable.hh"
 
 G4AxesModel::~G4AxesModel () {}
 
 G4AxesModel::G4AxesModel
 (G4double x0, G4double y0, G4double z0, G4double length):
   fX0(x0), fY0(y0), fZ0(z0), fLength(length) {
-  fGlobalTag = "G4AxesModel";
+  std::ostringstream oss;
+  oss << "G4AxesModel: "
+      << G4BestUnit(G4ThreeVector(x0,y0,z0), "Length")
+      << G4BestUnit(length, "Length");
+  fGlobalTag = oss.str();
   fGlobalDescription = fGlobalTag;
 }
 

@@ -431,8 +431,6 @@ void G4FRSCENEHANDLER::BeginPrimitives (const G4Transform3D& objectTransformatio
   FRBeginModeling();
 
   G4VSceneHandler::BeginPrimitives (objectTransformation);
-  fpObjectTransformation = &objectTransformation;
-
 }
 
 
@@ -1006,12 +1004,12 @@ G4FRSCENEHANDLER::SendTransformedCoordinates()
 	G4Vector3D y_unit_vec( 0.0 , 1.0 , 0.0 ); 
 
 		//----- transformed origin
-	zero.transform( *fpObjectTransformation );
+	zero.transform( fObjectTransformation );
 
 		//----- transformed base vectors
-	x1.transform( *fpObjectTransformation );
+	x1.transform( fObjectTransformation );
 	x_unit_vec = x1 - zero ;
-	y1.transform( *fpObjectTransformation );
+	y1.transform( fObjectTransformation );
  	y_unit_vec = y1 - zero ;
 
 		//----- send transformed origin

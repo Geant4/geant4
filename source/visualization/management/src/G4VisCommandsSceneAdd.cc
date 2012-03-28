@@ -26,7 +26,7 @@
 //
 // $Id: G4VisCommandsSceneAdd.cc,v 1.85 2010-12-11 16:50:10 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-// /vis/scene commands - John Allison  9th August 1998
+// /vis/scene/add commands - John Allison  9th August 1998
 
 #include "G4VisCommandsSceneAdd.hh"
 
@@ -74,6 +74,7 @@
 #include "G4AttDef.hh"
 #include "G4Timer.hh"
 #include "G4Polyline.hh"
+#include "G4UnitsTable.hh"
 
 #include <sstream>
 
@@ -107,7 +108,9 @@ G4VisCommandSceneAddAxes::G4VisCommandSceneAddAxes () {
   parameter->SetDefaultValue (0.);
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("length", 'd', omitable = true);
-  parameter->SetDefaultValue (1.);
+  parameter->SetDefaultValue (-1.);
+  parameter->SetGuidance
+    ("If negative, length automatic, about 25% of scene extent.");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("unit", 's', omitable = true);
   parameter->SetDefaultValue  ("m");
@@ -141,7 +144,13 @@ void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand*, G4String newValue) {
   is >> x0 >> y0 >> z0 >> length >> unitString;
 
   G4double unit = G4UIcommand::ValueOf(unitString);
-  x0 *= unit; y0 *= unit; z0 *= unit; length *= unit;
+  x0 *= unit; y0 *= unit; z0 *= unit;
+  const G4VisExtent& sceneExtent = pScene->GetExtent();  // Existing extent.
+  if (length < 0.) {
+    length = 0.5 * sceneExtent.GetExtentRadius();
+  } else {
+    length *= unit;
+  }
 
   G4VModel* model = new G4AxesModel(x0, y0, z0, length);
 
@@ -176,7 +185,7 @@ G4VisCommandSceneAddDate::G4VisCommandSceneAddDate () {
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("x-position", 'd', omitable = true);
   parameter -> SetGuidance ("x screen position in range -1 < x < 1.");
-  parameter -> SetDefaultValue (0.95);
+  parameter -> SetDefaultValue (0.0);  // Would prefer 0.95 right.
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("y-position", 'd', omitable = true);
   parameter -> SetGuidance ("y screen position in range -1 < y < 1.");
@@ -184,7 +193,7 @@ G4VisCommandSceneAddDate::G4VisCommandSceneAddDate () {
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("layout", 's', omitable = true);
   parameter -> SetGuidance ("Layout, i.e., adjustment: left|centre|right.");
-  parameter -> SetDefaultValue ("right");
+  parameter -> SetDefaultValue ("left");  // Would prefer right.
   fpCommand -> SetParameter (parameter);
 }
 
@@ -223,12 +232,12 @@ void G4VisCommandSceneAddDate::SetNewValue (G4UIcommand*, G4String newValue)
   G4VModel* model =
     new G4CallbackModel<G4VisCommandSceneAddDate::Date>(date);
   model->SetGlobalDescription("Date");
-  model->SetGlobalTag("Date");
+  model->SetGlobalTag(model->GetGlobalDescription());
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddRunDurationModel (model, warn);
   if (successful) {
     if (verbosity >= G4VisManager::confirmations) {
-      G4cout << "Date will be drawn in scene \""
+      G4cout << "Date has been added to scene \""
 	     << currentSceneName << "\"."
 	     << G4endl;
     }
@@ -287,7 +296,7 @@ void G4VisCommandSceneAddDigis::SetNewValue (G4UIcommand*, G4String) {
   G4bool successful = pScene -> AddEndOfEventModel (model, warn);
   if (successful) {
     if (verbosity >= G4VisManager::confirmations) {
-      G4cout << "Digis will be drawn in scene \""
+      G4cout << "Digis, if any, will be drawn at end of run in scene \""
 	     << currentSceneName << "\"."
 	     << G4endl;
     }
@@ -360,12 +369,12 @@ void G4VisCommandSceneAddEventID::SetNewValue (G4UIcommand*, G4String newValue)
   G4VModel* model =
     new G4CallbackModel<G4VisCommandSceneAddEventID::EventID>(eventID);
   model->SetGlobalDescription("EventID");
-  model->SetGlobalTag("EventID");
+  model->SetGlobalTag(model->GetGlobalDescription());
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddEndOfEventModel (model, warn);
   if (successful) {
     if (verbosity >= G4VisManager::confirmations) {
-      G4cout << "EventID will be drawn in scene \""
+      G4cout << "EventID has been added to scene \""
 	     << currentSceneName << "\"."
 	     << G4endl;
     }
@@ -478,13 +487,13 @@ void G4VisCommandSceneAddFrame::SetNewValue (G4UIcommand*, G4String newValue)
   Frame* frame = new Frame(size, width);
   G4VModel* model =
     new G4CallbackModel<G4VisCommandSceneAddFrame::Frame>(frame);
-  model->SetGlobalDescription("Frame");
-  model->SetGlobalTag("Frame");
+  model->SetGlobalDescription("Frame" + newValue);
+  model->SetGlobalTag(model->GetGlobalDescription());
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddRunDurationModel (model, warn);
   if (successful) {
     if (verbosity >= G4VisManager::confirmations) {
-      G4cout << "Frame will be drawn in scene \""
+      G4cout << "Frame has been added to scene \""
 	     << currentSceneName << "\"."
 	     << G4endl;
     }
@@ -660,7 +669,7 @@ void G4VisCommandSceneAddHits::SetNewValue (G4UIcommand*, G4String) {
   G4bool successful = pScene -> AddEndOfEventModel (model, warn);
   if (successful) {
     if (verbosity >= G4VisManager::confirmations) {
-      G4cout << "Hits will be drawn in scene \""
+      G4cout << "Hits, if any, will be drawn at end of run in scene \""
 	     << currentSceneName << "\"."
 	     << G4endl;
     }
@@ -808,7 +817,10 @@ G4VisCommandSceneAddLogo::G4VisCommandSceneAddLogo () {
   parameter->SetDefaultValue (1.);
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("unit", 's', omitable = true);
-  parameter->SetDefaultValue ("m");
+  parameter->SetGuidance ("auto or valid length unit - defaults to auto.");
+  parameter->SetGuidance
+    ("If automatic, roughly one tenth of scene extent.");
+  parameter->SetDefaultValue ("auto");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("direction", 's', omitable = true);
   parameter->SetGuidance ("auto|[-]x|[-]y|[-]z - defaults to auto.");
@@ -831,7 +843,7 @@ G4VisCommandSceneAddLogo::G4VisCommandSceneAddLogo () {
   parameter->SetGuidance
     ("Automatic placement or manual placement at (xmid,ymid,zmid).");
   parameter->SetGuidance
-    ("If automatic, place at bottom right of screen when viewed from");
+    ("If automatic, placed at bottom right of screen when viewed from");
   parameter->SetGuidance
     ("logo direction.");
   parameter -> SetParameterCandidates("auto manual");
@@ -880,7 +892,14 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
      >> auto_manual
      >> xmid >> ymid >> zmid >> positionUnit;
 
-  G4double height = userHeight * G4UIcommand::ValueOf(userHeightUnit);
+  G4double height = userHeight;
+  const G4VisExtent& sceneExtent = pScene->GetExtent();  // Existing extent.
+  if (userHeightUnit == "auto") {
+    height *= 0.2 * sceneExtent.GetExtentRadius();
+  } else {
+    height *= G4UIcommand::ValueOf(userHeightUnit);
+  }
+
   G4double unit = G4UIcommand::ValueOf(positionUnit);
   xmid *= unit; ymid *= unit; zmid *= unit;
 
@@ -906,7 +925,7 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
     if (!pViewer) {
       if (verbosity >= G4VisManager::errors) {
 	G4cout << 
-	  "ERROR: G4VisCommandsViewerSet::SetNewValue: no viewer."
+	  "ERROR: G4VisCommandSceneAddLogo::SetNewValue: no viewer."
           "\n  Auto direction needs a viewer."
 	       << G4endl;
       }
@@ -918,7 +937,6 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
   // Parameters read and interpreted.
 
   // Current scene extent
-  const G4VisExtent& sceneExtent = pScene->GetExtent();  // Existing extent.
   const G4double xmin = sceneExtent.GetXmin();
   const G4double xmax = sceneExtent.GetXmax();
   const G4double ymin = sceneExtent.GetYmin();
@@ -1073,8 +1091,8 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
   G4Logo* logo = new G4Logo(height,visAtts);
   G4VModel* model =
     new G4CallbackModel<G4VisCommandSceneAddLogo::G4Logo>(logo);
-  model->SetGlobalDescription("G4Logo");
-  model->SetGlobalTag("G4Logo");
+  model->SetGlobalDescription("G4Logo" + newValue);
+  model->SetGlobalTag(model->GetGlobalDescription());
   model->SetTransformation(transform);
   // Note: it is the responsibility of the model to act upon this, but
   // the extent is in local coordinates...
@@ -1181,6 +1199,93 @@ void G4VisCommandSceneAddLogo::G4Logo::operator()
   sceneHandler.EndPrimitives();
 }
 
+////////////// /vis/scene/add/logo2D ///////////////////////////////////////
+
+G4VisCommandSceneAddLogo2D::G4VisCommandSceneAddLogo2D () {
+  G4bool omitable;
+  fpCommand = new G4UIcommand ("/vis/scene/add/logo2D", this);
+  fpCommand -> SetGuidance ("Adds 2D logo to current scene.");
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter ("size", 'i', omitable = true);
+  parameter -> SetGuidance ("Screen size of text in pixels.");
+  parameter -> SetDefaultValue (48);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("x-position", 'd', omitable = true);
+  parameter -> SetGuidance ("x screen position in range -1 < x < 1.");
+  parameter -> SetDefaultValue (-0.9);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("y-position", 'd', omitable = true);
+  parameter -> SetGuidance ("y screen position in range -1 < y < 1.");
+  parameter -> SetDefaultValue (-0.9);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("layout", 's', omitable = true);
+  parameter -> SetGuidance ("Layout, i.e., adjustment: left|centre|right.");
+  parameter -> SetDefaultValue ("left");
+  fpCommand -> SetParameter (parameter);
+}
+
+G4VisCommandSceneAddLogo2D::~G4VisCommandSceneAddLogo2D () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandSceneAddLogo2D::GetCurrentValue (G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandSceneAddLogo2D::SetNewValue (G4UIcommand*, G4String newValue)
+{
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+  G4bool warn(verbosity >= G4VisManager::warnings);
+
+  G4Scene* pScene = fpVisManager->GetCurrentScene();
+  if (!pScene) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<	"ERROR: No current scene.  Please create one." << G4endl;
+    }
+    return;
+  }
+
+  G4int size;
+  G4double x, y;
+  G4String layoutString;
+  std::istringstream is(newValue);
+  is >> size >> x >> y >> layoutString;
+  G4Text::Layout layout = G4Text::right;
+  if (layoutString(0) == 'l') layout = G4Text::left;
+  else if (layoutString(0) == 'c') layout = G4Text::centre;
+  else if (layoutString(0) == 'r') layout = G4Text::right;
+
+  Logo2D* logo2D = new Logo2D(fpVisManager, size, x, y, layout);
+  G4VModel* model =
+    new G4CallbackModel<G4VisCommandSceneAddLogo2D::Logo2D>(logo2D);
+  model->SetGlobalDescription("Logo2D" + newValue);
+  model->SetGlobalTag(model->GetGlobalDescription());
+  const G4String& currentSceneName = pScene -> GetName ();
+  G4bool successful = pScene -> AddRunDurationModel (model, warn);
+  if (successful) {
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "2D logo has been added to scene \""
+	     << currentSceneName << "\"."
+	     << G4endl;
+    }
+  }
+  else G4VisCommandsSceneAddUnsuccessful(verbosity);
+  UpdateVisManagerScene (currentSceneName);
+}
+
+void G4VisCommandSceneAddLogo2D::Logo2D::operator()
+  (G4VGraphicsScene& sceneHandler, const G4Transform3D&)
+{
+  G4Text text("Geant4", G4Point3D(fX, fY, 0.));
+  text.SetScreenSize(fSize);
+  text.SetLayout(fLayout);
+  G4VisAttributes textAtts(G4Colour::Brown());
+  text.SetVisAttributes(textAtts);
+  sceneHandler.BeginPrimitives2D();
+  sceneHandler.AddPrimitive(text);
+  sceneHandler.EndPrimitives2D();
+}
+
 ////////////// /vis/scene/add/psHits ///////////////////////////////////////
 
 G4VisCommandSceneAddPSHits::G4VisCommandSceneAddPSHits () {
@@ -1252,11 +1357,16 @@ G4VisCommandSceneAddScale::G4VisCommandSceneAddScale () {
   parameter->SetDefaultValue (1.);
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("unit", 's', omitable = true);
-  parameter->SetDefaultValue ("m");
+  parameter->SetGuidance ("auto or valid length unit - defaults to auto.");
+  parameter->SetGuidance
+    ("If automatic, roughly one tenth of scene extent.");
+  parameter->SetDefaultValue ("auto");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("direction", 's', omitable = true);
-  parameter->SetGuidance ("'x', 'y' or 'z' - otherwise defaults to 'x'.");
-  parameter->SetDefaultValue ("x");
+  parameter->SetGuidance ("auto|x|y|z - defaults to auto.");
+  parameter->SetGuidance
+    ("If automatic, roughly in the plane of the current view.");
+  parameter->SetDefaultValue ("auto");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("red", 'd', omitable = true);
   parameter->SetDefaultValue (1.);
@@ -1270,6 +1380,8 @@ G4VisCommandSceneAddScale::G4VisCommandSceneAddScale () {
   parameter =  new G4UIparameter ("auto|manual", 's', omitable = true);
   parameter->SetGuidance
     ("Automatic placement or manual placement at (xmid,ymid,zmid).");
+  parameter->SetGuidance
+    ("If automatic, placed at bottom left of current view.");
   parameter -> SetParameterCandidates("auto manual");
   parameter->SetDefaultValue  ("auto");
   fpCommand->SetParameter     (parameter);
@@ -1316,17 +1428,57 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
      >> auto_manual
      >> xmid >> ymid >> zmid >> positionUnit;
 
-  G4double length = userLength * G4UIcommand::ValueOf(userLengthUnit);
+  G4double length = userLength;
+  const G4VisExtent& sceneExtent = pScene->GetExtent();  // Existing extent.
+  if (userLengthUnit == "auto") {
+    length *= sceneExtent.GetExtentRadius();
+    G4double intLog10Length = std::floor(std::log10(length));
+    length = std::pow(10,intLog10Length);
+  } else {
+    length *= G4UIcommand::ValueOf(userLengthUnit);
+  }
+  G4String annotation = G4BestUnit(length,"Length");
+
   G4double unit = G4UIcommand::ValueOf(positionUnit);
   xmid *= unit; ymid *= unit; zmid *= unit;
-
-  std::ostringstream oss;
-  oss << userLength << ' ' << userLengthUnit;
-  G4String annotation(oss.str());
 
   G4Scale::Direction scaleDirection (G4Scale::x);
   if (direction(0) == 'y') scaleDirection = G4Scale::y;
   if (direction(0) == 'z') scaleDirection = G4Scale::z;
+
+  G4VViewer* pViewer = fpVisManager->GetCurrentViewer();
+  if (!pViewer) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout << 
+	"ERROR: G4VisCommandSceneAddScale::SetNewValue: no viewer."
+	"\n  Auto direction needs a viewer."
+	     << G4endl;
+    }
+    return;
+  }
+
+  const G4Vector3D& vp =
+    pViewer->GetViewParameters().GetViewpointDirection();
+  const G4Vector3D& up =
+    pViewer->GetViewParameters().GetUpVector();
+
+  if (direction == "auto") {  // Takes cue from viewer.
+    if (std::abs(vp.x()) > std::abs(vp.y()) &&
+	std::abs(vp.x()) > std::abs(vp.z())) {  // x viewpoint
+      if (std::abs(up.y()) > std::abs(up.z())) scaleDirection = G4Scale::z;
+	  else scaleDirection = G4Scale::y;
+    }
+    else if (std::abs(vp.y()) > std::abs(vp.x()) &&
+	     std::abs(vp.y()) > std::abs(vp.z())) {  // y viewpoint
+      if (std::abs(up.x()) > std::abs(up.z())) scaleDirection = G4Scale::z;
+	  else scaleDirection = G4Scale::x;
+    }
+    else if (std::abs(vp.z()) > std::abs(vp.x()) &&
+	     std::abs(vp.z()) > std::abs(vp.y())) {  // z viewpoint
+      if (std::abs(up.y()) > std::abs(up.x())) scaleDirection = G4Scale::x;
+	  else scaleDirection = G4Scale::y;
+    }
+  }
 
   G4bool autoPlacing = false; if (auto_manual == "auto") autoPlacing = true;
   // Parameters read and interpreted.
@@ -1334,10 +1486,8 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
   // Useful constants, etc...
   const G4double halfLength(length / 2.);
   const G4double comfort(0.01);  // 0.15 seems too big.  0.05 might be better.
-  const G4double onePlusComfort(1. + comfort);
   const G4double freeLengthFraction (1. + 2. * comfort);
 
-  const G4VisExtent& sceneExtent = pScene->GetExtent();  // Existing extent.
   const G4double xmin = sceneExtent.GetXmin();
   const G4double xmax = sceneExtent.GetXmax();
   const G4double ymin = sceneExtent.GetYmin();
@@ -1427,6 +1577,51 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4double sxmid(xmid), symid(ymid), szmid(zmid);
   if (autoPlacing) {
+    // Aim to place at bottom right of screen in current view.
+    // Give some comfort zone.
+    const G4double xComfort = comfort * (xmax - xmin);
+    const G4double yComfort = comfort * (ymax - ymin);
+    const G4double zComfort = comfort * (zmax - zmin);
+    switch (scaleDirection) {
+    case G4Scale::x:
+      if (vp.z() > 0.) {
+	sxmid = xmax + xComfort;
+	symid = ymin - yComfort;
+	szmid = zmin - zComfort;
+      } else {
+	sxmid = xmin - xComfort;
+	symid = ymin - yComfort;
+	szmid = zmax + zComfort;
+      }
+      break;
+    case G4Scale::y:
+      if (vp.x() > 0.) {
+	sxmid = xmin - xComfort;
+	symid = ymax + yComfort;
+	szmid = zmin - zComfort;
+      } else {
+	sxmid = xmax + xComfort;
+	symid = ymin - yComfort;
+	szmid = zmin - zComfort;
+      }
+      break;
+    case G4Scale::z:
+      if (vp.x() > 0.) {
+	sxmid = xmax + xComfort;
+	symid = ymin - yComfort;
+	szmid = zmax + zComfort;
+      } else {
+	sxmid = xmin - xComfort;
+	symid = ymin - yComfort;
+	szmid = zmax + zComfort;
+      }
+      break;
+    }
+  }
+
+  /* Old code - kept for future reference.
+  G4double sxmid(xmid), symid(ymid), szmid(zmid);
+  if (autoPlacing) {
     sxmid = xmin + onePlusComfort * (xmax - xmin);
     symid = ymin - comfort * (ymax - ymin);
     szmid = zmin + onePlusComfort * (zmax - zmin);
@@ -1442,6 +1637,7 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
       break;
     }
   }
+  */
 
   /* sxmin, etc., not actually used.  Comment out to prevent compiler
      warnings but keep in case need in future.  Extract transform and
@@ -1521,8 +1717,11 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
 G4VisCommandSceneAddText::G4VisCommandSceneAddText () {
   G4bool omitable;
   fpCommand = new G4UIcommand ("/vis/scene/add/text", this);
+  fpCommand -> SetGuidance ("Adds text to current scene.");
   fpCommand -> SetGuidance
-    ("Adds text to current scene.");
+    ("Use \"/vis/set/textColour\" to set colour.");
+  fpCommand -> SetGuidance
+    ("Use \"/vis/set/textLayout\" to set layout:");
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("x", 'd', omitable = true);
   parameter->SetDefaultValue (0);
@@ -1592,6 +1791,9 @@ void G4VisCommandSceneAddText::SetNewValue (G4UIcommand*, G4String newValue) {
   x *= unit; y *= unit; z *= unit;
 
   G4Text g4text(text, G4Point3D(x,y,z));
+  G4VisAttributes visAtts(fCurrentTextColour);
+  g4text.SetVisAttributes(visAtts);
+  g4text.SetLayout(fCurrentTextLayout);
   g4text.SetScreenSize(font_size);
   g4text.SetOffset(x_offset,y_offset);
   G4VModel* model = new G4TextModel(g4text);
@@ -1606,6 +1808,111 @@ void G4VisCommandSceneAddText::SetNewValue (G4UIcommand*, G4String newValue) {
   }
   else G4VisCommandsSceneAddUnsuccessful(verbosity);
   UpdateVisManagerScene (currentSceneName);
+}
+
+
+////////////// /vis/scene/add/text2D //////////////////////////////////
+
+G4VisCommandSceneAddText2D::G4VisCommandSceneAddText2D () {
+  G4bool omitable;
+  fpCommand = new G4UIcommand ("/vis/scene/add/text2D", this);
+  fpCommand -> SetGuidance ("Adds 2D text to current scene.");
+  fpCommand -> SetGuidance
+    ("Use \"/vis/set/textColour\" to set colour.");
+  fpCommand -> SetGuidance
+    ("Use \"/vis/set/textLayout\" to set layout:");
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter ("x", 'd', omitable = true);
+  parameter->SetDefaultValue (0);
+  parameter->SetGuidance ("x");
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("y", 'd', omitable = true);
+  parameter->SetDefaultValue (0);
+  parameter->SetGuidance ("y");
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("font_size", 'd', omitable = true);
+  parameter->SetDefaultValue (12);
+  parameter->SetGuidance ("pixels");
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("x_offset", 'd', omitable = true);
+  parameter->SetDefaultValue (0);
+  parameter->SetGuidance ("pixels");
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("y_offset", 'd', omitable = true);
+  parameter->SetDefaultValue (0);
+  parameter->SetGuidance ("pixels");
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("text", 's', omitable = true);
+  parameter->SetGuidance ("The rest of the line is text.");
+  parameter->SetDefaultValue ("Hello G4");
+  fpCommand->SetParameter (parameter);
+}
+
+G4VisCommandSceneAddText2D::~G4VisCommandSceneAddText2D () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandSceneAddText2D::GetCurrentValue (G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandSceneAddText2D::SetNewValue (G4UIcommand*, G4String newValue) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+  G4bool warn = verbosity >= G4VisManager::warnings;
+
+  G4Scene* pScene = fpVisManager->GetCurrentScene();
+  if (!pScene) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<	"ERROR: No current scene.  Please create one." << G4endl;
+    }
+    return;
+  }
+
+  G4Tokenizer next(newValue);
+  G4double x = StoD(next());
+  G4double y = StoD(next());
+  G4double font_size = StoD(next());
+  G4double x_offset = StoD(next());
+  G4double y_offset = StoD(next());
+  G4String text = next("\n");
+
+  G4Text g4text(text, G4Point3D(x,y,0.));
+  G4VisAttributes visAtts(fCurrentTextColour);
+  g4text.SetVisAttributes(visAtts);
+  g4text.SetLayout(fCurrentTextLayout);
+  g4text.SetScreenSize(font_size);
+  g4text.SetOffset(x_offset,y_offset);
+  G4Text2D* g4text2D = new G4Text2D(g4text);
+  G4VModel* model =
+    new G4CallbackModel<G4VisCommandSceneAddText2D::G4Text2D>(g4text2D);
+  std::ostringstream oss;
+  oss << "G4Text2D: " << newValue;
+  G4String description = oss.str();
+  model->SetGlobalDescription(oss.str());
+  model->SetGlobalTag(model->GetGlobalDescription());
+  const G4String& currentSceneName = pScene -> GetName ();
+  G4bool successful = pScene -> AddRunDurationModel (model, warn);
+  if (successful) {
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "2D text \"" << text
+	     << "\" has been added to scene \"" << currentSceneName << "\"."
+	     << G4endl;
+    }
+  }
+  else G4VisCommandsSceneAddUnsuccessful(verbosity);
+  UpdateVisManagerScene (currentSceneName);
+}
+
+G4VisCommandSceneAddText2D::G4Text2D::G4Text2D(const G4Text& text):
+  fText(text)
+{}
+
+void G4VisCommandSceneAddText2D::G4Text2D::operator()
+  (G4VGraphicsScene& sceneHandler, const G4Transform3D& transform) {
+  sceneHandler.BeginPrimitives2D(transform);
+  sceneHandler.AddPrimitive(fText);
+  sceneHandler.EndPrimitives2D();
 }
 
 
@@ -1853,7 +2160,7 @@ void G4VisCommandSceneAddUserAction::SetNewValue (G4UIcommand*,
 
   G4VModel* model = new G4CallbackModel<G4VUserVisAction>(visAction);
   model->SetGlobalDescription("Vis User Action");
-  model->SetGlobalTag("Vis User Action");
+  model->SetGlobalTag(model->GetGlobalDescription());
   model->SetExtent(extent);
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddRunDurationModel (model, warn);

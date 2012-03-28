@@ -20,6 +20,14 @@ committal in the CVS repository !
 History file for visualization/modeling
 ---------------------------------------
 
+23rd March 2012  John Allison  (modeling-V09-05-03)
+- G4AxesModel: Augmented global description to allow more than one
+  set of axes to be added to scene if significantly different.
+
+7th March 2012  John Allison  (modeling-V09-05-02)
+- G4CallbackModel: Delete function in destructor.  (Good practice
+  to delete all stuff created on the heap.)
+
 3rd January 2012  John Allison  (modeling-V09-05-01)
 - Tagged.
 

@@ -20,6 +20,9 @@ committal in the CVS repository !
 History file for visualization/VRML sub-category
 ------------------------------------------------
 
+28th February 2012  John Allison  (VRML-V09-05-01)
+- Migrated to G4VScenehandler::fObjectTransformation.
+
 13th January 2012  John Allison  (VRML-V09-05-00)
 - G4VRML1/2FileSceneHandler.cc
   o Fixed Ubuntu warning about ignoring return value of system call.

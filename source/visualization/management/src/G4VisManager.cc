@@ -33,13 +33,14 @@
 
 #include "G4VisCommands.hh"
 #include "G4VisCommandsCompound.hh"
-#include "G4VisCommandsDefault.hh"
 #include "G4VisCommandsGeometry.hh"
 #include "G4VisCommandsGeometrySet.hh"
+#include "G4VisCommandsSet.hh"
 #include "G4VisCommandsScene.hh"
 #include "G4VisCommandsSceneAdd.hh"
 #include "G4VisCommandsSceneHandler.hh"
 #include "G4VisCommandsViewer.hh"
+#include "G4VisCommandsViewerDefault.hh"
 #include "G4VisCommandsViewerSet.hh"
 #include "G4UImanager.hh"
 #include "G4VisStateDependent.hh"
@@ -175,7 +176,10 @@ G4VisManager::G4VisManager (const G4String& verbosityString):
   directory -> SetGuidance ("Visualization commands.");
   fDirectoryList.push_back (directory);
 
-  // Instantiate top level basic commands
+  // Instantiate *basic* top level commands so that they can be used
+  // immediately after instantiation of the vis manager.  Other top
+  // level and lower level commands are instantiated later in
+  // RegisterMessengers.
   G4VVisCommand::SetVisManager (this);  // Sets shared pointer
   RegisterMessenger(new G4VisCommandVerbose);
   RegisterMessenger(new G4VisCommandInitialize);
@@ -1171,7 +1175,12 @@ void G4VisManager::RegisterMessengers () {
 
   G4UIcommand* directory;
 
-  // Top level commands...
+  // *Basic* top level commands were instantiated in the constructor
+  // so that they can be used immediately after instantiation of the
+  // vis manager.  Other top level and lower level commands are
+  // instantiated here.
+
+  // Other top level commands...
   RegisterMessenger(new G4VisCommandAbortReviewKeptEvents);
   RegisterMessenger(new G4VisCommandEnable);
   RegisterMessenger(new G4VisCommandList);
@@ -1183,12 +1192,6 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandDrawVolume);
   RegisterMessenger(new G4VisCommandOpen);
   RegisterMessenger(new G4VisCommandSpecify);
-
-  directory = new G4UIdirectory ("/vis/default/");
-  directory -> SetGuidance("Set default values for future operations.");
-  fDirectoryList.push_back (directory);
-  RegisterMessenger(new G4VisCommandDefaultHiddenEdge);
-  RegisterMessenger(new G4VisCommandDefaultStyle);
 
   directory = new G4UIdirectory ("/vis/geometry/");
   directory -> SetGuidance("Operations on vis attributes of Geant4 geometry.");
@@ -1208,6 +1211,12 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandGeometrySetForceSolid);
   RegisterMessenger(new G4VisCommandGeometrySetForceWireframe);
   RegisterMessenger(new G4VisCommandGeometrySetVisibility);
+
+  directory = new G4UIdirectory ("/vis/set/");
+  directory -> SetGuidance("Set quantities for use in appropriate commands.");
+  fDirectoryList.push_back (directory);
+  RegisterMessenger(new G4VisCommandSetTextColour);
+  RegisterMessenger(new G4VisCommandSetTextLayout);
 
   directory = new G4UIdirectory ("/vis/scene/");
   directory -> SetGuidance ("Operations on Geant4 scenes.");
@@ -1231,9 +1240,11 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandSceneAddHits);
   RegisterMessenger(new G4VisCommandSceneAddLogicalVolume);
   RegisterMessenger(new G4VisCommandSceneAddLogo);
+  RegisterMessenger(new G4VisCommandSceneAddLogo2D);
   RegisterMessenger(new G4VisCommandSceneAddPSHits);
   RegisterMessenger(new G4VisCommandSceneAddScale);
   RegisterMessenger(new G4VisCommandSceneAddText);
+  RegisterMessenger(new G4VisCommandSceneAddText2D);
   RegisterMessenger(new G4VisCommandSceneAddTrajectories);
   RegisterMessenger(new G4VisCommandSceneAddUserAction);
   RegisterMessenger(new G4VisCommandSceneAddVolume);
@@ -1267,6 +1278,12 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandViewerSelect);
   RegisterMessenger(new G4VisCommandViewerUpdate);
   RegisterMessenger(new G4VisCommandViewerZoom);
+
+  directory = new G4UIdirectory ("/vis/viewer/default/");
+  directory -> SetGuidance("Set default values for future viewers.");
+  fDirectoryList.push_back (directory);
+  RegisterMessenger(new G4VisCommandViewerDefaultHiddenEdge);
+  RegisterMessenger(new G4VisCommandViewerDefaultStyle);
 
   directory = new G4UIdirectory ("/vis/viewer/set/");
   directory -> SetGuidance ("Set view parameters of current viewer.");

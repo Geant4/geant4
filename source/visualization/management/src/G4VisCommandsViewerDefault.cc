@@ -29,18 +29,18 @@
 
 // /vis/default commands - John Allison  30th October 2011
 
-#include "G4VisCommandsDefault.hh"
+#include "G4VisCommandsViewerDefault.hh"
 
 #include "G4VisManager.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithABool.hh"
 
-////////////// /vis/default/hiddenEdge ///////////////////////////////////////
+////////////// /vis/viewer/default/hiddenEdge ///////////////////////////////////////
 
-G4VisCommandDefaultHiddenEdge::G4VisCommandDefaultHiddenEdge()
+G4VisCommandViewerDefaultHiddenEdge::G4VisCommandViewerDefaultHiddenEdge()
 {
   G4bool omitable;
-  fpCommand = new G4UIcmdWithABool("/vis/default/hiddenEdge", this);
+  fpCommand = new G4UIcmdWithABool("/vis/viewer/default/hiddenEdge", this);
   fpCommand->SetGuidance("Default hiddenEdge drawing for future viewers.");
   fpCommand->SetGuidance
     ("Edges become hidden/seen in wireframe or surface mode.");
@@ -48,17 +48,17 @@ G4VisCommandDefaultHiddenEdge::G4VisCommandDefaultHiddenEdge()
   fpCommand->SetDefaultValue(true);
 }
 
-G4VisCommandDefaultHiddenEdge::~G4VisCommandDefaultHiddenEdge()
+G4VisCommandViewerDefaultHiddenEdge::~G4VisCommandViewerDefaultHiddenEdge()
 {
   delete fpCommand;
 }
 
-G4String G4VisCommandDefaultHiddenEdge::GetCurrentValue(G4UIcommand*)
+G4String G4VisCommandViewerDefaultHiddenEdge::GetCurrentValue(G4UIcommand*)
 {
   return "";
 }
 
-void G4VisCommandDefaultHiddenEdge::SetNewValue(G4UIcommand*, G4String newValue)
+void G4VisCommandViewerDefaultHiddenEdge::SetNewValue(G4UIcommand*, G4String newValue)
 {
   // Follows /vis/viewer/set/hiddenEdge
 
@@ -103,31 +103,31 @@ void G4VisCommandDefaultHiddenEdge::SetNewValue(G4UIcommand*, G4String newValue)
   }
 }
 
-////////////// /vis/default/style ///////////////////////////////////////
+////////////// /vis/viewer/default/style ///////////////////////////////////////
 
-G4VisCommandDefaultStyle::G4VisCommandDefaultStyle()
+G4VisCommandViewerDefaultStyle::G4VisCommandViewerDefaultStyle()
 {
   G4bool omitable;
-  fpCommand = new G4UIcmdWithAString("/vis/default/style", this);
+  fpCommand = new G4UIcmdWithAString("/vis/viewer/default/style", this);
   fpCommand->SetGuidance("Default drawing style for future viewers.");
   fpCommand->SetGuidance
     ("Set style of drawing - w[ireframe] or s[urface].");
   fpCommand->SetGuidance 
-    ("(Default hidden line drawing is controlled by \"/vis/default/hiddenEdge\".)");
+    ("(Default hidden line drawing is controlled by \"/vis/viewer/default/hiddenEdge\".)");
   fpCommand->SetParameterName ("style",omitable = false);
 }
 
-G4VisCommandDefaultStyle::~G4VisCommandDefaultStyle()
+G4VisCommandViewerDefaultStyle::~G4VisCommandViewerDefaultStyle()
 {
   delete fpCommand;
 }
 
-G4String G4VisCommandDefaultStyle::GetCurrentValue(G4UIcommand*)
+G4String G4VisCommandViewerDefaultStyle::GetCurrentValue(G4UIcommand*)
 {
   return "";
 }
 
-void G4VisCommandDefaultStyle::SetNewValue(G4UIcommand*, G4String newValue)
+void G4VisCommandViewerDefaultStyle::SetNewValue(G4UIcommand*, G4String newValue)
 {
   // Follows /vis/viewer/set/style
 

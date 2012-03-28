@@ -581,11 +581,17 @@ void G4VisCommandsViewerSet::SetNewValue
     G4Colour colour(0.,0.,0.);  // Default black and opaque.
     const size_t iPos0 = 0;
     if (std::isalpha(redOrString[iPos0])) {
-      G4Colour::GetColour(redOrString, colour); // Remains default (black) if
-						// not found.
+      if (!G4Colour::GetColour(redOrString, colour)) {
+	if (verbosity >= G4VisManager::warnings) {
+	  G4cout << "WARNING: Text colour \"" << redOrString
+		 << "\" not found.  Defaulting to black and opaque."
+		 << G4endl;
+	}
+      }
     } else {
       colour = G4Colour(G4UIcommand::ConvertTo3Vector(newValue));
     }
+    // Add opacity
     colour = G4Colour(colour.GetRed(), colour.GetGreen(), colour.GetBlue(), opacity);
     vp.SetBackgroundColour(colour);
     if (verbosity >= G4VisManager::confirmations) {
@@ -692,11 +698,17 @@ void G4VisCommandsViewerSet::SetNewValue
     G4Colour colour(1.,1.,1.);  // Default white and opaque.
     const size_t iPos0 = 0;
     if (std::isalpha(redOrString[iPos0])) {
-      G4Colour::GetColour(redOrString, colour); // Remains default (white) if
-						// not found.
+      if (!G4Colour::GetColour(redOrString, colour)) {
+	if (verbosity >= G4VisManager::warnings) {
+	  G4cout << "WARNING: Text colour \"" << redOrString
+		 << "\" not found.  Defaulting to white and opaque."
+		 << G4endl;
+	}
+      }
     } else {
       colour = G4Colour(G4UIcommand::ConvertTo3Vector(newValue));
     }
+    // Add opacity
     colour = G4Colour(colour.GetRed(), colour.GetGreen(), colour.GetBlue(), opacity);
     G4VisAttributes va = vp.GetDefaultVisAttributes();
     va.SetColour(colour);
@@ -717,11 +729,17 @@ void G4VisCommandsViewerSet::SetNewValue
     G4Colour colour(1.,1.,1.);  // Default white and opaque.
     const size_t iPos0 = 0;
     if (std::isalpha(redOrString[iPos0])) {
-      G4Colour::GetColour(redOrString, colour); // Remains default (white) if
-						// not found.
+      if (!G4Colour::GetColour(redOrString, colour)) {
+	if (verbosity >= G4VisManager::warnings) {
+	  G4cout << "WARNING: Text colour \"" << redOrString
+		 << "\" not found.  Defaulting to white and opaque."
+		 << G4endl;
+	}
+      }
     } else {
       colour = G4Colour(G4UIcommand::ConvertTo3Vector(newValue));
     }
+    // Add opacity
     colour = G4Colour(colour.GetRed(), colour.GetGreen(), colour.GetBlue(), opacity);
     G4VisAttributes va = vp.GetDefaultTextVisAttributes();
     va.SetColour(colour);

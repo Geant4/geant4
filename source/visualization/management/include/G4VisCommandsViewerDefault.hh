@@ -24,56 +24,41 @@
 // ********************************************************************
 //
 //
-// $Id: G4CallbackModel.hh,v 1.5 2006-06-29 21:30:10 gunter Exp $
+// $Id: G4VisCommandsDefault.hh,v 1.3 2006-06-29 21:28:34 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
-// 
-// John Allison  31st December 1997.
-//
-// Class Description:
-//
-// G4CallbackModel calls a user-defined function containing, for
-// example, calls to the Draw methods of G4VVisManager or the
-// *Primitive* methods of G4VGraphicsScene.  This allows the user to
-// add his own graphical objects to a scene.  The idea is that the
-// callback function is invoked by the vis system to refresh the
-// screen or remake a graphical database whenever required.  The
-// function class must contain:
-//
-//   void operator()(G4VGraphicsScene&, const G4Transform3D&)
-//
-// A base class G4VUserVisAction is provided in the visualisation
-// category.  A G4CallbackModel is made by instantiating this template
-// with a pointer to the function object.  The G4VisManager does this
-// for the user if he/she registers it (SetUserAction) and issues the
-// command /vis/scene/add/userAction.  See the User Guide for
-// Application Developers, Section 8.8.7 and 8.8.8.
 
-#ifndef G4CALLBACKMODEL_HH
-#define G4CALLBACKMODEL_HH
+// /vis/viewer/default commands - John Allison  30th October 2011
 
-#include "G4VModel.hh"
+#ifndef G4VISCOMMANDSVIEWERDEFAULT_HH
+#define G4VISCOMMANDSVIEWERDEFAULT_HH
 
-template <class F> class G4CallbackModel: public G4VModel {
+#include "G4VVisCommand.hh"
 
- public:
-  G4CallbackModel(F* function):
-    fFunction(function) {}
-  ~G4CallbackModel() {delete fFunction;}
-  void DescribeYourselfTo(G4VGraphicsScene& sceneHandler) {
-    (*fFunction)(sceneHandler, fTransform);
-  }
+class G4UIcmdWithAString;
+class G4UIcmdWithABool;
 
-protected:
-
-  F* fFunction;
-
+class G4VisCommandViewerDefaultHiddenEdge: public G4VVisCommand {
+public:
+  G4VisCommandViewerDefaultHiddenEdge();
+  virtual ~G4VisCommandViewerDefaultHiddenEdge();
+  G4String GetCurrentValue(G4UIcommand* command);
+  void SetNewValue(G4UIcommand* command, G4String newValue);
 private:
+  G4VisCommandViewerDefaultHiddenEdge(const G4VisCommandViewerDefaultHiddenEdge&);
+  G4VisCommandViewerDefaultHiddenEdge& operator=(const G4VisCommandViewerDefaultHiddenEdge&);
+  G4UIcmdWithABool* fpCommand;
+};
 
-  // Private copy constructor and assigment operator - copying and
-  // assignment not allowed.  Keeps CodeWizard happy.
-  G4CallbackModel (const G4CallbackModel&);
-  G4CallbackModel& operator = (const G4CallbackModel&);
+class G4VisCommandViewerDefaultStyle: public G4VVisCommand {
+public:
+  G4VisCommandViewerDefaultStyle();
+  virtual ~G4VisCommandViewerDefaultStyle();
+  G4String GetCurrentValue(G4UIcommand* command);
+  void SetNewValue(G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandViewerDefaultStyle(const G4VisCommandViewerDefaultStyle&);
+  G4VisCommandViewerDefaultStyle& operator=(const G4VisCommandViewerDefaultStyle&);
+  G4UIcmdWithAString* fpCommand;
 };
 
 #endif

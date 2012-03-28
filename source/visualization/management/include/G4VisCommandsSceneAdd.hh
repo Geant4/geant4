@@ -179,8 +179,7 @@ private:
   G4VisCommandSceneAddLogo& operator = (const G4VisCommandSceneAddLogo&);
   // Direction of outward-facing normal to front face of logo.
   enum Direction {autoDirection, X, minusX, Y, minusY, Z, minusZ};
-  class G4Logo {
-  public:
+  struct G4Logo {
     G4Logo(G4double height, const G4VisAttributes&);
     ~G4Logo();
     void operator()(G4VGraphicsScene&, const G4Transform3D&);
@@ -188,6 +187,30 @@ private:
     G4double fHeight;
     G4VisAttributes fVisAtts;
     G4Polyhedron *fpG, *fp4;
+  };
+  G4UIcommand* fpCommand;
+};
+
+class G4VisCommandSceneAddLogo2D: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneAddLogo2D ();
+  virtual ~G4VisCommandSceneAddLogo2D ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneAddLogo2D (const G4VisCommandSceneAddLogo2D&);
+  G4VisCommandSceneAddLogo2D& operator = (const G4VisCommandSceneAddLogo2D&);
+  struct Logo2D {
+    Logo2D
+    (G4VisManager* vm, G4int size,
+     G4double x, G4double y, G4Text::Layout layout):
+      fpVisManager(vm), fSize(size),
+      fX(x), fY(y), fLayout(layout) {}
+    void operator()(G4VGraphicsScene&, const G4Transform3D&);
+    G4VisManager* fpVisManager;
+    G4int fSize;
+    G4double fX, fY;
+    G4Text::Layout fLayout;
   };
   G4UIcommand* fpCommand;
 };
@@ -225,6 +248,24 @@ public:
 private:
   G4VisCommandSceneAddText (const G4VisCommandSceneAddText&);
   G4VisCommandSceneAddText& operator = (const G4VisCommandSceneAddText&);
+  G4UIcommand* fpCommand;
+};
+
+class G4VisCommandSceneAddText2D: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneAddText2D ();
+  virtual ~G4VisCommandSceneAddText2D ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneAddText2D (const G4VisCommandSceneAddText2D&);
+  G4VisCommandSceneAddText2D& operator = (const G4VisCommandSceneAddText2D&);
+  struct G4Text2D {
+    G4Text2D(const G4Text&);
+    void operator()(G4VGraphicsScene&, const G4Transform3D&);
+  private:
+    G4Text fText;
+  };
   G4UIcommand* fpCommand;
 };
 

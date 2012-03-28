@@ -17,6 +17,46 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+6th March 2012  John Allison  (opengl-V09-05-08)
+- Fix problem with persistent text that does not use gl commands,
+  e.g., Qt text.
+
+29th February 2012  John Allison  (opengl-V09-05-07)
+- Fixed minor problem with text:
+  o Cleaned up display list drawing.  If special text (G4TextPlus), do
+    not push, mult and pop matrix here (it is done in G4VScenehandler
+    when it is re-used for text).
+  o No need for transform in G4TextPlus.
+
+28th February 2012  John Allison  (opengl-V09-05-06)
+- Migrated to G4VScenehandler::fObjectTransformation.
+
+28th February 2012  Laurent Garnier
+- G4OpenGLStoredViewer.cc : Change matrix comparison
+
+22th February 2012  Laurent Garnier
+- G4OpenGLQtViewer.cc: fix a problem in max frame per second on little scenes
+
+20th February 2012  Laurent Garnier
+- G4OpenGLStoredViewer.cc : OpenGL optimisation. Small thing, but 50% 
+  faster when rotating
+
+14th February 2012  John Allison  (opengl-V09-05-05)
+- G4OpenGLStoredSceneHandler.cc:
+  o Fixed bug in TO copy constructor.
+  o This was causing text to be displayed in the wrong place.  Probably
+    other transients too!!
+- G4OpenGLSceneHandler.cc:
+  o General tidy.
+  o Several functions need to access data and/or methods in G4OpenGLViewer.
+    static_cast doesn't work with a virtual base class, so use dynamic_cast.
+    No need to test the outcome since viewer is guaranteed to be a
+    G4OpenGLViewer.  Make usage consistent.
+  o G4OpenGLSceneHandler::AddPrimitive (const G4Circle& text):
+    . Removed glGetFloatv(GL_CURRENT_COLOR, color).
+    . There is no need to save current colour; colour is defined for
+      every primitive before drawing.
+
 13th February 2012  John Allison  (opengl-V09-05-04)
 - G4OpenGLStoredQtSceneHandler.cc: Added #include <typeinfo> for gcc 4.3.
 

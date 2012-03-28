@@ -100,7 +100,6 @@ G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4S
   fSecondPassRequested   (false),
   fSecondPass            (false),
   fpModel                (0),
-  fpObjectTransformation (0),
   fNestingDepth          (0),
   fpVisAttribs           (0)
 {
@@ -128,14 +127,13 @@ G4VSceneHandler::~G4VSceneHandler () {
 }
 
 void G4VSceneHandler::PreAddSolid (const G4Transform3D& objectTransformation,
-                                  const G4VisAttributes& visAttribs) {
-  fpObjectTransformation = &objectTransformation;
+				   const G4VisAttributes& visAttribs) {
+  fObjectTransformation = objectTransformation;
   fpVisAttribs = &visAttribs;
   fProcessingSolid = true;
 }
 
 void G4VSceneHandler::PostAddSolid () {
-  fpObjectTransformation = 0;
   fpVisAttribs = 0;
   fProcessingSolid = false;
   if (fReadyForTransients) {
@@ -154,7 +152,7 @@ void G4VSceneHandler::BeginPrimitives
       ("G4VSceneHandler::BeginPrimitives",
        "visman0003", FatalException,
        "Nesting detected. It is illegal to nest Begin/EndPrimitives.");
-  fpObjectTransformation = &objectTransformation;
+  fObjectTransformation = objectTransformation;
 }
 
 void G4VSceneHandler::EndPrimitives () {
@@ -162,7 +160,6 @@ void G4VSceneHandler::EndPrimitives () {
     G4Exception("G4VSceneHandler::EndPrimitives",
 		"visman0004", FatalException, "Nesting error.");
   fNestingDepth--;
-  fpObjectTransformation = 0;
   if (fReadyForTransients) {
     fTransientsDrawnThisEvent = true;
     fTransientsDrawnThisRun = true;
@@ -177,7 +174,7 @@ void G4VSceneHandler::BeginPrimitives2D
       ("G4VSceneHandler::BeginPrimitives2D",
        "visman0005", FatalException,
        "Nesting detected. It is illegal to nest Begin/EndPrimitives.");
-  fpObjectTransformation = &objectTransformation;
+  fObjectTransformation = objectTransformation;
 }
 
 void G4VSceneHandler::EndPrimitives2D () {
@@ -185,7 +182,6 @@ void G4VSceneHandler::EndPrimitives2D () {
     G4Exception("G4VSceneHandler::EndPrimitives2D",
 		"visman0006", FatalException, "Nesting error.");
   fNestingDepth--;
-  fpObjectTransformation = 0;
   if (fReadyForTransients) {
     fTransientsDrawnThisEvent = true;
     fTransientsDrawnThisRun = true;
@@ -488,7 +484,7 @@ void G4VSceneHandler::SetScene (G4Scene* pScene) {
 }
 
 void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
-  BeginPrimitives (*fpObjectTransformation);
+  BeginPrimitives (fObjectTransformation);
   G4NURBS* pNURBS = 0;
   G4Polyhedron* pPolyhedron = 0;
   switch (fpViewer -> GetViewParameters () . GetRepStyle ()) {
