@@ -81,3 +81,11 @@ std::ostream& operator<< (std::ostream& os, const G4Text& text)
      << (const G4VMarker&)text;
   return os;
 }
+
+std::ostream& operator<< (std::ostream& os, G4Text::Layout layout)
+{
+  if (layout == G4Text::left) os << "left";
+  if (layout == G4Text::centre) os << "centre";
+  if (layout == G4Text::right) os << "right";
+  return os;
+}

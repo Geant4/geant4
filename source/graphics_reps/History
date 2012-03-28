@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23rd Marche 2012  John Allison  (greps-V09-05-06)
+- G4Colour: Added brown (colour of G4 logo).
+- G4Text: Added operator<<(...,G4Text::Layout).  This produces meaningful
+  word instead of the integer value of the enumerator.
+
 7th February 2012  John Allison  (greps-V09-05-05)
 - G4VisAttributes:
   o Added copy constructor and assignment operator.

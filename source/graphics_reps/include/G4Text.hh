@@ -103,5 +103,6 @@ private:
 #include "G4Text.icc"
 
 std::ostream& operator<< (std::ostream& os, const G4Text&);
+std::ostream& operator<< (std::ostream& os, G4Text::Layout);
 
 #endif

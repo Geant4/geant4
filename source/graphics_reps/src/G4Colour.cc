@@ -111,6 +111,7 @@ G4Colour::InitialiseColourMap()
   AddToMap("grey",    G4Colour::Grey());
   AddToMap("gray",    G4Colour::Gray());
   AddToMap("black",   G4Colour::Black());
+  AddToMap("brown",   G4Colour::Brown());
   AddToMap("red",     G4Colour::Red());
   AddToMap("green",   G4Colour::Green());
   AddToMap("blue",    G4Colour::Blue());

@@ -54,6 +54,7 @@
 //      G4Colour  white   (1.0, 1.0, 1.0) ;  // white
 //      G4Colour  gray    (0.5, 0.5, 0.5) ;  // gray
 //      G4Colour  black   (0.0, 0.0, 0.0) ;  // black
+//      G4Colour  brown   (0.45,0.25,0.0) ;  // G4 logo brown
 //      G4Colour  red     (1.0, 0.0, 0.0) ;  // red
 //      G4Colour  green   (0.0, 1.0, 0.0) ;  // green
 //      G4Colour  blue    (0.0, 0.0, 1.0) ;  // blue
@@ -107,6 +108,7 @@ public: // With description
   static G4Colour Gray();
   static G4Colour Grey();
   static G4Colour Black();
+  static G4Colour Brown();  // G4 logo brown
   static G4Colour Red();
   static G4Colour Green();
   static G4Colour Blue(); 
@@ -142,6 +144,7 @@ inline G4Colour G4Colour::White()   {return G4Colour(1.0, 1.0, 1.0);}
 inline G4Colour G4Colour::Gray()    {return G4Colour(0.5, 0.5, 0.5);}
 inline G4Colour G4Colour::Grey()    {return G4Colour(0.5, 0.5, 0.5);}
 inline G4Colour G4Colour::Black()   {return G4Colour(0.0, 0.0, 0.0);}
+inline G4Colour G4Colour::Brown()   {return G4Colour(0.45,0.25,0.0);}
 inline G4Colour G4Colour::Red()     {return G4Colour(1.0, 0.0, 0.0);}
 inline G4Colour G4Colour::Green()   {return G4Colour(0.0, 1.0, 0.0);}
 inline G4Colour G4Colour::Blue()    {return G4Colour(0.0, 0.0, 1.0);} 
