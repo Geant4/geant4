@@ -18,7 +18,6 @@
 /gun/energy 10 MeV
 #
 /testem/histo/setFileName electron
-/testem/histo/setFileType root
 # 
 /testem/histo/setHisto 1 100 0 10 MeV	#continuous eLoss 
 /testem/histo/setHisto 2 100 0 10 MeV	#secondary  eLoss

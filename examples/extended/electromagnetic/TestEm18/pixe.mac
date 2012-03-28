@@ -18,7 +18,6 @@
 /gun/energy 10 MeV
 #
 /testem/histo/setFileName pixe
-/testem/histo/setFileType root
 # 
 /testem/histo/setHisto 3 100 0 10 MeV	#total eLoss
 /testem/histo/setHisto 5 100 0 100 keV	#gamma energy spectrum
