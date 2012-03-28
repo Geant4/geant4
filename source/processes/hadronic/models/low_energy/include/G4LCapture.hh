@@ -77,6 +77,8 @@ class G4LCapture : public G4HadronicInteraction
     // void Description() const;
     virtual void ModelDescription(std::ostream& outFile) const;
 
+    virtual std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
+
   private:
 
     // Computes atomic mass in GeV using method from G4LFission

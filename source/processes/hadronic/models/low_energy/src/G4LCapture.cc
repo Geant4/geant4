@@ -190,3 +190,8 @@ G4LCapture::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleu
   }
   return &theParticleChange;
 }
+
+std::pair<G4double, G4double> G4LCapture::GetFatalEnergyCheckLevels() const
+{
+	return std::pair<G4double, G4double>(5*perCent,250*GeV);  // max energy non-conservation is mass of heavy nucleus
+}

@@ -14,6 +14,20 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+19 March 2012 - Gunter Folger   (hadr-lep-V09-05-04)
+-  also relax limits on check for "catastrophic" energy non-conservation
+    for G4Lelastic.
+      (tag hadr-lep-V09-05-04 had .cc not committed)
+    
+19 March 2012 - Gunter Folger   (hadr-lep-V09-05-02)
+-  also relax limits on check for "catastrophic" energy non-conservation
+    for G4LCapture.
+    
+16 March 2012 - Gunter Folger   (hadr-lep-V09-05-01)
+----------------------------------------------------
+-  relax limits on check for "catastrophic" energy non-conservation,
+    allow deviation by the mass of heavy nucleus.
+
 22 January 2012 - Dennis Wright (hadr-lep-V09-05-00)
 ----------------------------------------------------
 - moved G4InelasticInteraction to this directory 

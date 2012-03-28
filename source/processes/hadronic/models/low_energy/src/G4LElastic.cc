@@ -469,3 +469,8 @@ G4LElastic::Defs1(G4double p, G4double px, G4double py, G4double pz,
        *pznew = cost*pz;
    }
 }
+
+std::pair<G4double, G4double> G4LElastic::GetFatalEnergyCheckLevels() const
+{
+	return std::pair<G4double, G4double>(5*perCent,250*GeV);  // max energy non-conservation is mass of heavy nucleus
+}

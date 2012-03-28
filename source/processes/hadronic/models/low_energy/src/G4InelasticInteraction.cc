@@ -545,3 +545,7 @@ G4InelasticInteraction::ExtractResidualNucleus(const G4Nucleus& aNucleus)
   return theResult;
 }
 
+std::pair<G4double, G4double> G4InelasticInteraction::GetFatalEnergyCheckLevels() const
+{
+	return std::pair<G4double, G4double>(5*perCent,250*GeV);  // max energy non-conservation is mass of heavy nucleus
+}
