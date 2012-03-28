@@ -23,7 +23,6 @@
 /gun/energy 766 keV
 #
 /testem/histo/setFileName bichsel
-/testem/histo/setFileType hbook
 /testem/histo/setHisto 12 100   0  9 deg	#space angle  
 /testem/histo/setHisto 13 100  -9 +9 deg	#projected angle  
 #

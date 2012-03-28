@@ -270,17 +270,17 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4double binWidth = histoManager->GetBinWidth(ih);
   G4double unit     = histoManager->GetHistoUnit(ih);  
   G4double fac = unit/(TotNbofEvents*binWidth);
-  histoManager->Scale(ih,fac);
+  histoManager->Normalize(ih,fac);
     
   ih = 10;
   binWidth = histoManager->GetBinWidth(ih);
   unit     = histoManager->GetHistoUnit(ih);  
   fac = unit/(TotNbofEvents*binWidth);
-  histoManager->Scale(ih,fac);
+  histoManager->Normalize(ih,fac);
     
   ih = 12;
   fac = 1./TotNbofEvents;
-  histoManager->Scale(ih,fac);
+  histoManager->Normalize(ih,fac);
       
   // save histograms
   histoManager->save();

@@ -29,7 +29,6 @@
 /gun/energy 1 MeV
 #
 /testem/histo/setFileName berger/local
-/testem/histo/setFileType root
 /testem/histo/setHisto 1 105  0  1.05 MeV	#energy deposit  
 #
 /testem/event/printModulo 100000

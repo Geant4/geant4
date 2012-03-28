@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+       
+04-03-12 mma (testem5-V09-05-03)
+- HistoManager.hh and .cc : migrate to new g4tools histogramming system
+  Do not need aida anymore, nor G4ANALYSIS_USE
+- HistoMessenger.hh and .cc : suppress fileType command
+- Update Readme and all macros accordingly
 
 09-02-12 V.Ivant (testem5-V09-05-02)
 - PhysListEmStandardSSM - added alternative single scattering models 

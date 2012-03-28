@@ -73,12 +73,12 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
 
   if (charge != 0.) {
     histoManager->FillHisto(2,energy);
-    histoManager->FillHisto(4, std::log10(energy/MeV));
+    histoManager->FillHisto(4,energy);
   }
 
   if (aTrack->GetDefinition() == G4Gamma::Gamma()) {
     histoManager->FillHisto(3,energy);
-    histoManager->FillHisto(5, std::log10(energy/MeV));
+    histoManager->FillHisto(5,energy);
   }  
 
   //stack or delete secondaries

@@ -23,50 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: HistoMessenger.hh,v 1.1 2010-09-16 16:26:13 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-// 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+// $Id$
 
-#ifndef HistoMessenger_h
-#define HistoMessenger_h 1
+// Author: Ivana Hrivnacova, 15/06/2011  (ivana@ipno.in2p3.fr)
 
-#include "G4UImessenger.hh"
-#include "globals.hh"
+#ifndef g4hbook_defs_h
+#define g4hbook_defs_h
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include <tools/hbook/h1>
+#include <tools/hbook/h2>
+#include <tools/hbook/wntuple>
+#include "ExG4HbookAnalysisManager.hh"
 
-class HistoManager;
-class G4UIdirectory;
-class G4UIcommand;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
+namespace G4Hbook {
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class HistoMessenger: public G4UImessenger
-{
-  public:
-
-   HistoMessenger(HistoManager* );
-  ~HistoMessenger();
-
-   void SetNewValue(G4UIcommand* ,G4String );
-
-  private:
-
-   HistoManager*           fHistoManager;
-   
-   G4UIdirectory*          fHistoDir;   
-   G4UIcmdWithAString*     fFileNameCmd;
-   G4UIcommand*            fHistoCmd;
-   G4UIcmdWithAnInteger*   fPrtHistoCmd;   
-
-};
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+  typedef tools::hbook::h1  G4AnaH1;
+  typedef tools::hbook::h2  G4AnaH2;    
+  typedef tools::hbook::wntuple  G4Ntuple; 
+  typedef ExG4HbookAnalysisManager G4AnalysisManager; 
+} 
 
 #endif
 
+  

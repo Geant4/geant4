@@ -49,7 +49,6 @@
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
-#include "G4CoulombScattering.hh"
 
 #include "G4hMultipleScattering.hh"
 #include "G4hIonisation.hh"
@@ -125,7 +124,6 @@ void PhysListEmStandard::ConstructProcess()
       ph->RegisterProcess(muIoni, particle);
       ph->RegisterProcess(new G4MuBremsstrahlung(), particle);
       ph->RegisterProcess(new G4MuPairProduction(), particle);
-      ph->RegisterProcess(new G4CoulombScattering(), particle);
                    
     } else if( particleName == "proton" ||
                particleName == "pi-" ||

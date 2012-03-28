@@ -20,7 +20,6 @@
 /gun/energy 20 keV
 #
 /testem/histo/setFileName acosta
-/testem/histo/setFileType hbook
 /testem/histo/setHisto 40 40 0 20 keV	#energy at exit. (reflect,neutral)
 #
 /testem/phys/setGCut 1 um

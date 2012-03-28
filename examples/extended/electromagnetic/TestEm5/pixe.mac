@@ -24,7 +24,6 @@
 /gun/energy 20 MeV
 # 
 /testem/histo/setFileName pixe
-/testem/histo/setFileType root
 /testem/histo/setHisto  3 100 0 100 keV	#gamma: energy at vertex
 /testem/histo/setHisto  5 100 1 100 keV	#gamma: energy at vertex (log scale)	
 /testem/histo/setHisto 20 100 0 100 keV	#gamma: energy at exit

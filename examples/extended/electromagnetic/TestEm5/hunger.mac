@@ -21,7 +21,6 @@
 /gun/energy 41 keV
 #
 /testem/histo/setFileName hunger
-/testem/histo/setFileType hbook
 /testem/histo/setHisto 30  50 0.0 50 keV	#energy reflected_charged
 #
 ###/testem/stepMax 1 um

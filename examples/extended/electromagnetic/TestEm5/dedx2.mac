@@ -24,7 +24,6 @@
 /gun/energy 1 MeV
 #
 /testem/histo/setFileName dedx2
-/testem/histo/setFileType hbook
 /testem/histo/setHisto 1 100 0. 10. keV		#energy in absorber
 #
 /run/beamOn 10000

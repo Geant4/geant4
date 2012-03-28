@@ -26,7 +26,6 @@
 /gun/energy 25 GeV
 #
 /testem/histo/setFileName anthony
-/testem/histo/setFileType hbook
 /testem/histo/setHisto 20  80 1.e-4 1. GeV	#gamma energy at exit  
 #
 /run/beamOn 100000

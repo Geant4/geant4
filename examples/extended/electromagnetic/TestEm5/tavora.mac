@@ -20,7 +20,6 @@
 /gun/energy 35 keV
 #
 /testem/histo/setFileName tavora
-/testem/histo/setFileType hbook
 /testem/histo/setHisto 30  40 0.0 40 keV	#energy reflected_charged
 #
 /testem/stepMax 50 nm
