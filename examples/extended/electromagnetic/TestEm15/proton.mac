@@ -18,7 +18,6 @@
 /gun/energy 100 MeV
 #
 /testem/histo/setFileName proton
-/testem/histo/setFileType hbook
 /testem/histo/setHisto 1  100  0     10 cm	#true step length
 /testem/histo/setHisto 2  100  0     10 cm	#geom step length
 /testem/histo/setHisto 3  100  0     1.1 none	#ratio geom/true
