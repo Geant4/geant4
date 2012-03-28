@@ -183,12 +183,12 @@ void G4IonCoulombScatteringModel::SampleSecondaries(
 
 	G4double xsec= ComputeCrossSectionPerAtom(particle,kinEnergy, Z,
                                 kinEnergy, cutEnergy, kinEnergy) ;
-	if(xsec == 0.0)return;
+	if(xsec == 0.0) { return; }
     
 	//scattering angle, z1 == (1-cost)
   	G4double z1 = ioncross->SampleCosineTheta(); 
-
-  	if(z1 <= 0.0) { return; }
+        if(z1 > 2.0)      { z1 = 2.0; }
+        else if(z1 < 0.0) { z1 = 0.0; }
 
   	G4double cost = 1.0 - z1;
   	G4double sint = sqrt(z1*(1.0 + cost));
@@ -222,17 +222,23 @@ void G4IonCoulombScatteringModel::SampleSecondaries(
   
 	fParticleChange->ProposeMomentumDirection(newDirection);   
   
+	// V.Ivanchenko fix of final energies after scattering
 	// recoil.......................................
-	G4double trec =(1.0 - cost)* m2*(etot*etot - mass*mass )/
-				(mass*mass + m2*m2+ 2.*m2*etot);
+	//G4double trec =(1.0 - cost)* m2*(etot*etot - mass*mass )/
+	//			(mass*mass + m2*m2+ 2.*m2*etot);
+        //G4double finalT = kinEnergy - trec;
 
-        G4double finalT = kinEnergy - trec;
-
+	// new computation
+        G4double finalT = gam*(eCM + bet*pzCM) - mass;
+        G4double trec = kinEnergy - finalT;
 
   	if(finalT <= lowEnergyLimit) { 
-    		trec = kinEnergy;  
-    		finalT = 0.0;
-  		} 
+	  trec = kinEnergy;  
+	  finalT = 0.0;
+	} else if(trec < 0.0) {
+	  trec = 0.0;  
+	  finalT = kinEnergy;
+	}
     
   	fParticleChange->SetProposedKineticEnergy(finalT);
 

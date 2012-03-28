@@ -17,6 +17,22 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15 March 12: V.Ivanchenko (emstand-V09-05-13)
+- G4GoudsmitSaundersonMscModel - fixed FPE bug - lateral displacemnt 
+    should not be sampled for plural scattering
+
+12 March 12: V.Ivanchenko (emstand-V09-05-12)
+- G4UrbanMscModel92, G4UrbanMscModel93, G4UrbanMscModel95 - a protection
+    against big scattering angles for e+- (E > 20 MeV) is added; the
+    protection cut tail of scattering angles to avoid artifitial scattering
+    of high energy e+-; in the case of E > 1 GeV and cosTheta<0 a
+    Warning will be printed out
+- G4WentzelVIModel - fixed bug in lateral displacement sampling
+
+07 March 12: V.Ivanchenko (emstand-V09-05-11)
+- G4IonCoulombScatteringModel - fixed numerical problem for small
+    scattering angles
+
 21 February 12: V.Ivanchenko (emstand-V09-05-10)
 - G4UrbanMscModel93, G4UrbanMscModel95 - fixed G4Exception printout
 

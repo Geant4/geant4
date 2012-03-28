@@ -85,6 +85,7 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4SeltzerBergerModel.hh
         G4UniversalFluctuation.hh
         G4UrbanMscModel90.hh
+        G4UrbanMscModel92.hh
         G4UrbanMscModel93.hh
         G4UrbanMscModel95.hh
         G4WaterStopping.hh
@@ -145,6 +146,7 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4SeltzerBergerModel.cc
         G4UniversalFluctuation.cc
         G4UrbanMscModel90.cc
+        G4UrbanMscModel92.cc
         G4UrbanMscModel93.cc
         G4UrbanMscModel95.cc
         G4WaterStopping.cc

@@ -245,8 +245,6 @@ G4double G4IonCoulombCrossSection::SampleCosineTheta()
 
     		z1 = x1*x2/(x1 + G4UniformRand()*dx) - screenZ;
                 //grej = 1.0/(1.0 + z1);
-  
-
   return z1;
 }
 

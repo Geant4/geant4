@@ -423,7 +423,6 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
 
   // start a loop 
   G4double x2 = x0;
-  G4double tet2 = x0*invlambda;
   G4double step, z;
   G4bool singleScat;
   do {
@@ -458,8 +457,8 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
       x2 -= step; 
 
     // multiple scattering
-    } else {
-      do { z = -tet2*log(G4UniformRand()); } while (z >= 1.0); 
+    } else if(step > 0.0) {
+      do { z = -step*invlambda*log(G4UniformRand()); } while (z >= 1.0); 
 
       cost = 1.0 - 2.0*z/*factCM*/;
       if(cost > 1.0)       { cost = 1.0; }
@@ -470,12 +469,12 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
       G4double vy1 = sint*sin(phi);
 
       // lateral displacement  
-      if (latDisplasment && safety > tlimitminfix) {
-	G4double rms = invsqrt12*sqrt(2.0*tet2);
-	G4double dx = x0*(0.5*vx1 + rms*G4RandGauss::shoot(0.0,1.0));
-	G4double dy = x0*(0.5*vy1 + rms*G4RandGauss::shoot(0.0,1.0));
+      if (latDisplasment && safety > tlimitminfix && step > tlimitminfix) {
+	G4double rms = invsqrt12*sqrt(2.0*step*invlambda);
+	G4double dx = step*(0.5*vx1 + rms*G4RandGauss::shoot(0.0,1.0));
+	G4double dy = step*(0.5*vy1 + rms*G4RandGauss::shoot(0.0,1.0));
 	G4double dz;
-	G4double d = (dx*dx + dy*dy)/(x0*x0);
+	G4double d = (dx*dx + dy*dy)/(step*step);
 	if(d < numlimit)  { dz = -0.5*x0*d*(1.0 + 0.25*d); }
 	else if(d < 1.0)  { dz = -x0*(1.0 - sqrt(1.0 - d));}
 	else              { dx = dy = dz = 0.0; }

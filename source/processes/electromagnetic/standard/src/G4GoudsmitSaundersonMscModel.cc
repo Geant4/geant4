@@ -220,11 +220,13 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
 
   G4double epsilon1=G4UniformRand();
   G4double expn = std::exp(-lambdan);
+
+  // V.Ivanchenko added logical variable
+  G4bool sampleDisplacement = latDisplasment;
   if(epsilon1<expn)// no scattering 
     {return;}
   else if((epsilon1<((1.+lambdan)*expn))||(lambdan<1.))//single or plural scattering (Rutherford DCS's)
     {
-
       G4double xi=G4UniformRand();
       xi= 2.*scrA*xi/(1.-xi + scrA);
       if(xi<0.)xi=0.;
@@ -234,6 +236,7 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
       G4double phi0=CLHEP::twopi*G4UniformRand(); 
       us=wss*cos(phi0);
       vs=wss*sin(phi0);
+      sampleDisplacement = false;
     }
   else // multiple scattering
     {
@@ -274,7 +277,8 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
   newDirection.rotateUz(oldDirection);
   fParticleChange->ProposeMomentumDirection(newDirection);
   
-  if((safety > tlimitminfix)&&latDisplasment)
+  // V.Ivanchenko added check on logical variable
+  if(sampleDisplacement && (safety > tlimitminfix))
     { 
       if(Qn1<0.02)// corresponding to error less than 1% in the exact formula of <z>
       z_coord = 1.0 - Qn1*(0.5 - Qn1/6.);
