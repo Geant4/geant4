@@ -52,6 +52,7 @@
 
 #include "G4DPMJET2_5CrossSection.hh"
 #include "G4ParticleTable.hh"
+#include "G4DynamicParticle.hh"
 #include "G4IonTable.hh"
 
 #include "G4HadronicException.hh"
