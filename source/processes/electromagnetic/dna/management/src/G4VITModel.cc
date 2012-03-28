@@ -37,9 +37,9 @@
 G4VITModel::G4VITModel(const G4String& aName)
 {
     //ctor
-    fTimeStepper        = 0;
-    fReactionProcess    = 0;
-    fReactionTable      = 0;
+    fpTimeStepper        = 0;
+    fpReactionProcess    = 0;
+    fpReactionTable      = 0;
 
     fType1              = -1;
     fType2              = -1;
@@ -49,8 +49,8 @@ G4VITModel::G4VITModel(const G4String& aName)
 G4VITModel::~G4VITModel()
 {
     //dtor
-    if(fTimeStepper)        delete fTimeStepper;
-    if(fReactionProcess)    delete fReactionProcess;
+    if(fpTimeStepper)        delete fpTimeStepper;
+    if(fpReactionProcess)    delete fpReactionProcess;
     //if(fReactionTable)      delete fReactionTable;
     // Let the concrete class delete the reactionTable
 }
@@ -61,9 +61,9 @@ G4VITModel::G4VITModel(const G4VITModel& other)
     fName               = other.fName;
     fType1              = other.fType1;
     fType2              = other.fType2;
-    fReactionTable      = 0;
-    fTimeStepper     = other.fTimeStepper->Clone();
-    fReactionProcess = other.fReactionProcess->Clone();
+    fpReactionTable      = 0;
+    fpTimeStepper     = other.fpTimeStepper->Clone();
+    fpReactionProcess = other.fpReactionProcess->Clone();
 }
 
 // should not be used
@@ -74,11 +74,11 @@ G4VITModel& G4VITModel::operator=(const G4VITModel& rhs)
     fName               = rhs.fName;
     fType1              = rhs.fType1;
     fType2              = rhs.fType2;
-    fReactionTable      = 0;
-    if(fTimeStepper) delete fTimeStepper;
-    fTimeStepper        = rhs.fTimeStepper->Clone();
-    if(fReactionProcess) delete fReactionProcess;
-    fReactionProcess    = rhs.fReactionProcess->Clone();
+    fpReactionTable      = 0;
+    if(fpTimeStepper) delete fpTimeStepper;
+    fpTimeStepper        = rhs.fpTimeStepper->Clone();
+    if(fpReactionProcess) delete fpReactionProcess;
+    fpReactionProcess    = rhs.fpReactionProcess->Clone();
 
     //assignment operator
     return *this;
@@ -93,8 +93,8 @@ void G4VITModel::IsApplicable(G4ITType& type1, G4ITType& type2)
 
 void G4VITModel::Initialize()
 {
-    fReactionProcess->SetReactionTable(fReactionTable);
-    fTimeStepper->SetReactionTable(fReactionTable);
-    fTimeStepper->Initialize();
-    fReactionProcess->Initialize();
+    fpReactionProcess->SetReactionTable(fpReactionTable);
+    fpTimeStepper->SetReactionTable(fpReactionTable);
+    fpTimeStepper->Initialize();
+    fpReactionProcess->Initialize();
 }

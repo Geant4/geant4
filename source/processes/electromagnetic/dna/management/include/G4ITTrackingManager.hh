@@ -48,19 +48,6 @@ class G4UserTrackingAction;
 class G4Step;
 class G4Track;
 
-class G4Trajectory_Lock
-{
-    friend class G4ITTrackingManager;
-
-    G4Trajectory_Lock()
-    /*** : fpTrajectory(0)***/
-    {;}
-    ~G4Trajectory_Lock()
-    {;}
-
-    /***G4VTrajectory* fpTrajectory;***/
-};
-
 class G4ITTrackingManager
 {
     int fStoreTrajectory;

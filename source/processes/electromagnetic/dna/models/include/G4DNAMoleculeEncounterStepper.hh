@@ -65,7 +65,8 @@ public:
     G4DNAMoleculeEncounterStepper(const G4DNAMoleculeEncounterStepper&);
     G4IT_ADD_CLONE(G4VITTimeStepper,G4DNAMoleculeEncounterStepper)
 
-    virtual void PrepareForAllProcessors();
+    virtual void Prepare();
+//    virtual void PrepareForAllProcessors();
     virtual G4double CalculateStep(const G4Track&, const G4double&);
 
     inline void SetReactionModel(G4VDNAReactionModel*);

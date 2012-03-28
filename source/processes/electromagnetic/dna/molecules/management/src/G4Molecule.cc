@@ -134,9 +134,9 @@ G4Molecule::G4Molecule() : G4VUserTrackInformation("G4Molecule"), G4IT()
 G4Molecule::~G4Molecule()
 //////////////////////////
 {
-    if(fTrack!=NULL)
+    if(fpTrack!=NULL)
     {
-        fTrack = 0;
+        fpTrack = 0;
     }
     fMolecularConfiguration = 0;
     fDynamicParticle = 0;
@@ -269,7 +269,7 @@ void G4Molecule::PrintState() const
 
 G4Track * G4Molecule::BuildTrack(G4double globalTime, const G4ThreeVector& Position)
 {
-    if(fTrack != 0)
+    if(fpTrack != 0)
     {
         G4Exception("G4Molecule::BuildTrack","Molecule001",
                     FatalErrorInArgument,"A track was already assigned to this molecule");
@@ -293,10 +293,10 @@ G4Track * G4Molecule::BuildTrack(G4double globalTime, const G4ThreeVector& Posit
             KineticEnergy);
 
     //Set the Track
-    fTrack = new G4Track(fDynamicParticle, globalTime, Position);
-    fTrack -> SetUserInformation (this);
+    fpTrack = new G4Track(fDynamicParticle, globalTime, Position);
+    fpTrack -> SetUserInformation (this);
 
-    return fTrack;
+    return fpTrack;
 }
 
 G4double G4Molecule::GetKineticEnergy() const

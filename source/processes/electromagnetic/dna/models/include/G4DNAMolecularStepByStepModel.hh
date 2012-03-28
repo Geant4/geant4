@@ -89,8 +89,8 @@ protected:
 inline void G4DNAMolecularStepByStepModel::SetReactionModel(G4VDNAReactionModel* reactionModel)
 {
     fReactionModel = reactionModel;
-    ((G4DNAMolecularReaction*)      fReactionProcess)-> SetReactionModel(reactionModel);
-    ((G4DNAMoleculeEncounterStepper*) 	fTimeStepper)	 -> SetReactionModel(reactionModel);
+    ((G4DNAMolecularReaction*)      fpReactionProcess)-> SetReactionModel(reactionModel);
+    ((G4DNAMoleculeEncounterStepper*) 	fpTimeStepper)	 -> SetReactionModel(reactionModel);
 }
 
 inline G4VDNAReactionModel* G4DNAMolecularStepByStepModel::GetReactionModel()

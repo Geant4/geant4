@@ -51,6 +51,7 @@ G4DNASancheSolvatationModel::G4DNASancheSolvatationModel(const G4ParticleDefinit
     G4DNAWaterExcitationStructure exStructure ;
     SetHighEnergyLimit(exStructure.ExcitationEnergy(0));
     fParticleChangeForGamma = 0;
+    fNistWater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
 }
 
 //______________________________________________________________________
@@ -78,7 +79,6 @@ void G4DNASancheSolvatationModel::Initialise(const G4ParticleDefinition* particl
     {
         fIsInitialised = true;
         fParticleChangeForGamma = GetParticleChangeForGamma();
-        fNistWater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
     }
 }
 

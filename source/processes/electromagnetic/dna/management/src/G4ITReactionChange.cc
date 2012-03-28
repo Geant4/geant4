@@ -52,7 +52,10 @@ G4ITReactionChange::~G4ITReactionChange()
 
 // Should not be used
 G4ITReactionChange::G4ITReactionChange(const G4ITReactionChange& /*other*/) :
-    fSecondaries(0)
+    fSecondaries(0),
+    fNumberOfSecondaries(0),
+    fKillParents(false),
+    fParticleChangeIsSet(false)
 {
     //copy ctor
 }

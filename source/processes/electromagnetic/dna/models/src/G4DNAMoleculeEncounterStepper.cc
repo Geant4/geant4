@@ -45,16 +45,20 @@ using namespace std;
 
 G4DNAMoleculeEncounterStepper::G4DNAMoleculeEncounterStepper() :
     G4VITTimeStepper(),
-    fMolecularReactionTable(reference_cast<const G4DNAMolecularReactionTable*>(fReactionTable)),
-    fReactionModel(0),fVerbose(0)
-{}
+    fMolecularReactionTable(reference_cast<const G4DNAMolecularReactionTable*>(fpReactionTable)),
+    fReactionModel(0)
+{
+    fVerbose = 0;
+    fHasAlreadyReachedNullTime = false;
+}
 
 G4DNAMoleculeEncounterStepper& G4DNAMoleculeEncounterStepper::operator=(const G4DNAMoleculeEncounterStepper& rhs)
 {
     if(this == &rhs) return *this;
-    fReactionModel = 0;
-    fVerbose = rhs.fVerbose;
-    fMolecularReactionTable = rhs.fMolecularReactionTable;
+    fReactionModel              = 0;
+    fVerbose                    = rhs.fVerbose;
+    fMolecularReactionTable     = rhs.fMolecularReactionTable;
+    fHasAlreadyReachedNullTime  = false;
     return *this;
 }
 
@@ -63,17 +67,19 @@ G4DNAMoleculeEncounterStepper::~G4DNAMoleculeEncounterStepper()
 
 G4DNAMoleculeEncounterStepper::G4DNAMoleculeEncounterStepper(const G4DNAMoleculeEncounterStepper& right) :
     G4VITTimeStepper(right),
-    fMolecularReactionTable(reference_cast<const G4DNAMolecularReactionTable*>(fReactionTable))
+    fMolecularReactionTable(reference_cast<const G4DNAMolecularReactionTable*>(fpReactionTable))
 {
-    fVerbose                 = right.fVerbose ;
-    fMolecularReactionTable  = right.fMolecularReactionTable;
-    fReactionModel           = 0;
+    fVerbose                    = right.fVerbose ;
+    fMolecularReactionTable     = right.fMolecularReactionTable;
+    fReactionModel              = 0;
+    fHasAlreadyReachedNullTime  = false;
 }
 
-void G4DNAMoleculeEncounterStepper::PrepareForAllProcessors()
+void G4DNAMoleculeEncounterStepper::Prepare()
 {
     // DEBUG
     //    G4cout << "G4DNAMoleculeEncounterStepper::PrepareForAllProcessors" << G4endl;
+    G4VITTimeStepper::Prepare();
     G4ITManager<G4Molecule>::Instance()->UpdatePositionMap();
 }
 

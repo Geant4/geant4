@@ -96,15 +96,17 @@ const vector<const G4MolecularDecayChannel*>* G4MolecularDecayTable::GetDecayCha
 const G4String& G4MolecularDecayTable::GetExcitedState(const G4ElectronOccupancy* conf) const
 {
     statesMap::const_iterator it_exstates  = fExcitedStatesMap.find(*conf);
-    if(it_exstates != fExcitedStatesMap.end())
+
+    if(it_exstates == fExcitedStatesMap.end())
     {
-        return it_exstates->second;
+        G4String errMsg = "Excited state not found";
+        G4Exception("G4MolecularDecayTable::GetExcitedState(const G4ElectronOccupancy*)",
+                    "G4MolecularDecayTable001",FatalErrorInArgument, errMsg);
+        exit(-1); //coverity
+//        return *(new G4String("IM FAKE"));  // fake return statement
     }
 
-    G4String errMsg = "Excited state not found";
-    G4Exception("G4MolecularDecayTable::GetExcitedState(const G4ElectronOccupancy*)",
-                "G4MolecularDecayTable001",FatalErrorInArgument, errMsg);
-    return it_exstates->second;  // fake return statement
+    return it_exstates->second;
 }
 
 const G4ElectronOccupancy& G4MolecularDecayTable::GetElectronOccupancy(const G4String& exState) const
@@ -121,6 +123,7 @@ const G4ElectronOccupancy& G4MolecularDecayTable::GetElectronOccupancy(const G4S
         G4String errMsg = "Excited state" + exState + " not found";
         G4Exception("G4MolecularDecayTable::GetElectronOccupancy(const G4String&)",
                     "G4MolecularDecayTable002",FatalErrorInArgument, errMsg);
+        exit(-1); //coverity
     }
     return *conf;
 }
@@ -133,6 +136,8 @@ void G4MolecularDecayTable::AddExcitedState(const G4String& label)
         G4String errMsg = "Excited state" + label + " already registered in the decay table.";
         G4Exception("G4MolecularDecayTable::AddExcitedState",
                     "G4MolecularDecayTable003",FatalErrorInArgument, errMsg);
+        exit(-1); //coverity
+        return;
     }
     fDecayChannelsMap[label] ;
 }

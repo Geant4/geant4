@@ -52,10 +52,20 @@ typedef std::vector<G4int>
         G4SelectedAlongStepDoItVector;
 typedef std::vector<G4int>
         G4SelectedPostStepDoItVector;
+typedef std::vector<G4int>
+        G4SelectedPostStepAtTimeDoItVector;
 
 class G4Trajectory_Lock;
 class G4Track;
 struct G4ProcessState_Lock;
+class G4TrackingInformation;
+
+class G4ITStepProcessorState_Lock{
+    friend class G4TrackingInformation;
+protected :
+    inline virtual ~G4ITStepProcessorState_Lock(){;}
+};
+
 
 /** The class G4TrackingInformation (hold by G4IT)
  *  emcompasses processes informations computed
@@ -82,10 +92,13 @@ public:
          * computed at the InteractionLegth stage in the track.
          */
 
-    G4ProcessState_Lock* GetProcessState(G4int index);
+    G4ProcessState_Lock* GetProcessState(size_t index);
 
     inline void RecordProcessState(G4ProcessState_Lock*,
-                                   G4int index);
+                                   size_t index);
+
+    void SetStepProcessorState(G4ITStepProcessorState_Lock*);
+    G4ITStepProcessorState_Lock* GetStepProcessorState();
 
     inline G4Trajectory_Lock* GetTrajectory_Lock()
     {
@@ -108,15 +121,6 @@ protected:
     friend class G4ITStepProcessor;
     //_______________________________________________________
     G4bool                          fStepLeader ;
-    G4StepStatus                    fStepStatus;
-
-    //_______________________________________________________
-    G4double    fPhysicalStep ;
-    G4double    fSafety;
-    G4double    fPreviousStepSize;
-    //_______________________________________________________
-    G4TouchableHandle fTouchableHandle;
-
     //_______________________________________________________
     G4Trajectory_Lock* fpTrajectory_Lock;
 
@@ -126,16 +130,14 @@ protected:
     G4double        fRecordedTrackGlobalTime;
 
     //_______________________________________________________
-    G4SelectedAtRestDoItVector      fSelectedAtRestDoItVector;
-    G4SelectedAlongStepDoItVector   fSelectedAlongStepDoItVector;
-    G4SelectedPostStepDoItVector    fSelectedPostStepDoItVector;
-
-    //_______________________________________________________
     /** Holds the information related to processes
       *  Indexed on GetPhysIntVector
       * (cf. G4ITStepProcessor header)
       */
     std::vector<G4ProcessState_Lock*> fProcessState;
+
+    //_______________________________________________________
+    G4ITStepProcessorState_Lock* fpStepProcessorState;
 
     //_______________________________________________________
     /** Copy constructor
@@ -150,8 +152,18 @@ protected:
     G4TrackingInformation& operator=(const G4TrackingInformation& other);
 };
 
+inline void G4TrackingInformation::SetStepProcessorState(G4ITStepProcessorState_Lock* state)
+{
+    fpStepProcessorState = state;
+}
+
+inline G4ITStepProcessorState_Lock* G4TrackingInformation::GetStepProcessorState()
+{
+    return fpStepProcessorState;
+}
+
 inline void G4TrackingInformation::RecordProcessState(G4ProcessState_Lock* state,
-                               G4int index)
+                               size_t index)
 {
     fProcessState[index] = state;
 }

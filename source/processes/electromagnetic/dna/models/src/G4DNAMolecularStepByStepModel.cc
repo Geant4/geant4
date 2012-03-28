@@ -28,10 +28,10 @@
 
 G4DNAMolecularStepByStepModel::G4DNAMolecularStepByStepModel(const G4String& name) :
     G4VITModel(name),
-    fMolecularReactionTable(reference_cast<const G4DNAMolecularReactionTable*>(fReactionTable))
+    fMolecularReactionTable(reference_cast<const G4DNAMolecularReactionTable*>(fpReactionTable))
 {
-    fTimeStepper = new G4DNAMoleculeEncounterStepper();
-    fReactionProcess = new G4DNAMolecularReaction();
+    fpTimeStepper = new G4DNAMoleculeEncounterStepper();
+    fpReactionProcess = new G4DNAMolecularReaction();
 
     fType1 = G4Molecule::ITType();
     fType2 = G4Molecule::ITType();
@@ -45,21 +45,21 @@ G4DNAMolecularStepByStepModel::~G4DNAMolecularStepByStepModel()
 
 G4DNAMolecularStepByStepModel::G4DNAMolecularStepByStepModel(const G4DNAMolecularStepByStepModel& right):
     G4VITModel(right),
-    fMolecularReactionTable(reference_cast<const G4DNAMolecularReactionTable*>(fReactionTable))
+    fMolecularReactionTable(reference_cast<const G4DNAMolecularReactionTable*>(fpReactionTable))
 {
-        fReactionTable = right.fReactionTable;
+        fpReactionTable = right.fpReactionTable;
         if(right.fReactionModel)
         {
             fReactionModel = right.fReactionModel->Clone();
-            ((G4DNAMolecularReaction*)  fReactionProcess)->SetReactionModel(fReactionModel);
-            ((G4DNAMoleculeEncounterStepper*) 	fTimeStepper)->SetReactionModel(fReactionModel);
+            ((G4DNAMolecularReaction*)  fpReactionProcess)->SetReactionModel(fReactionModel);
+            ((G4DNAMoleculeEncounterStepper*) 	fpTimeStepper)->SetReactionModel(fReactionModel);
         }
         else fReactionModel = 0;
 }
 
 void G4DNAMolecularStepByStepModel::Initialize()
 {
-    fReactionModel ->SetReactionTable((const G4DNAMolecularReactionTable*)fReactionTable);
+    fReactionModel ->SetReactionTable((const G4DNAMolecularReactionTable*)fpReactionTable);
     G4VITModel::Initialize();
 }
 

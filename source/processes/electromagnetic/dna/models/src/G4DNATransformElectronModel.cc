@@ -37,6 +37,7 @@ G4DNATransformElectronModel::G4DNATransformElectronModel(const G4ParticleDefinit
     SetLowEnergyLimit(0.*eV);
     SetHighEnergyLimit(0.025*eV);
     fParticleChangeForGamma = 0;
+    fNistWater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
 }
 
 //______________________________________________________________________
@@ -65,7 +66,6 @@ void G4DNATransformElectronModel::Initialise(const G4ParticleDefinition* particl
     {
         fIsInitialised = true;
         fParticleChangeForGamma = GetParticleChangeForGamma();
-        fNistWater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
     }
 }
 

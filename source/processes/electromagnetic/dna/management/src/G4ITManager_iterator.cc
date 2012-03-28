@@ -84,8 +84,8 @@ G4VITManager::iterator& G4VITManager::iterator::operator++(G4int)
 
 G4bool G4VITManager::iterator::end()
 {
-    if(fNextIT) return true;
-    return false ;
+    if(fNextIT) return false;
+    return true ;
 }
 
 //______________________________________________________________________

@@ -52,7 +52,7 @@ class G4VSensitiveDetector;
 
 G4ITTransportation::G4ITTransportation(const G4String& aName, int verboseLevel) :
     G4VITProcess(aName, fTransportation),
-    InitProcessState(fTransportationState, fState),
+    InitProcessState(fTransportationState, fpState),
     fThreshold_Warning_Energy( 100 * MeV ),
     fThreshold_Important_Energy( 250 * MeV ),
     fThresholdTrials( 10 ),
@@ -85,7 +85,7 @@ G4ITTransportation::G4ITTransportation(const G4String& aName, int verboseLevel) 
 
 G4ITTransportation::G4ITTransportation(const G4ITTransportation& right) :
     G4VITProcess(right),
-    InitProcessState(fTransportationState, fState)
+    InitProcessState(fTransportationState, fpState)
 {
     // Copy attributes
     fVerboseLevel               = right.fVerboseLevel ;
@@ -855,7 +855,7 @@ G4ITTransportation::StartTracking(G4Track* track)
 {
     G4VProcess::StartTracking(track);
     if(fInstantiateProcessState)
-        G4VITProcess::fState = new G4ITTransportationState();
+        G4VITProcess::fpState = new G4ITTransportationState();
         // Will set in the same time fTransportationState
 
     // The actions here are those that were taken in AlongStepGPIL

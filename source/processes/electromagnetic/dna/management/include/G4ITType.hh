@@ -82,7 +82,7 @@ inline G4ITType operator -(const G4ITType& left,const int& right) {
 class G4ITTypeManager
 {
 private:
-    static G4ITTypeManager* fInstance ;
+    static G4ITTypeManager* fgInstance ;
     G4ITType fLastType;
     G4ITTypeManager();
     virtual ~G4ITTypeManager();

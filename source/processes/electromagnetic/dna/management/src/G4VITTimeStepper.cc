@@ -42,7 +42,7 @@ G4VITTimeStepper::G4VITTimeStepper()
     fVerbose = 0;
     fReactants = 0;
     fSampledMinTimeStep = 0 ;
-    fReactionTable      = 0;
+    fpReactionTable      = 0;
 }
 
 G4VITTimeStepper::~G4VITTimeStepper()
@@ -58,7 +58,7 @@ G4VITTimeStepper& G4VITTimeStepper::operator=(const G4VITTimeStepper& rhs)
 G4VITTimeStepper::G4VITTimeStepper(const G4VITTimeStepper& right)
 {
     fVerbose            = right.fVerbose ;
-    fReactionTable      = right.fReactionTable ;
+    fpReactionTable      = right.fpReactionTable ;
     fReactants          = 0;
     fSampledMinTimeStep = 0 ;
 }

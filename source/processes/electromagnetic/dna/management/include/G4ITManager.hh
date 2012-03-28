@@ -204,6 +204,8 @@ public :
             G4ExceptionDescription exceptionDescription ("You are requested a bad IT");
             G4Exception("G4ITManager::GetBox","ITManager001",
                         FatalErrorInArgument,exceptionDescription);
+            exit(-1); // coverity
+            return 0; // coverity
         }
 
         return GetBox(myIT);

@@ -82,8 +82,7 @@ public:
     void InitializeStepper(const G4double& currentGlobalTime,
                            const G4double& userMinTime);
 protected :
-    const G4Track* fTrack;
-    G4double fUserMinTimeStep;
+
     inline void SetTrack(const G4Track*);
 
 public :
@@ -108,7 +107,7 @@ public :
 
     const G4Track* GetTrack() const
     {
-        return fTrack;
+        return fpTrack;
     }
 
 
@@ -127,6 +126,9 @@ protected:
     // Members
     G4bool fInitialized;
     G4ITModelHandler* fpModelHandler ;
+
+    const G4Track* fpTrack;
+    G4double fUserMinTimeStep;
 
     // Attributes for interaction between many IT types
     // eg : electron/proton
@@ -152,7 +154,7 @@ protected:
 
 inline void G4ITModelProcessor::SetTrack(const G4Track* track)
 {
-    fTrack = track;
+    fpTrack = track;
 }
 
 inline const std::vector<std::vector<G4VITModel*> >* G4ITModelProcessor::GetCurrentModel()
@@ -174,6 +176,6 @@ inline void G4ITModelProcessor::SetModelHandler(G4ITModelHandler* modelHandler)
 
 inline void G4ITModelProcessor::CleanProcessor()
 {
-    fTrack = 0;
+    fpTrack = 0;
 }
 #endif // G4ITMODELPROCESSOR_H

@@ -47,6 +47,19 @@
 #include "G4RichTrajectory.hh"
 ***/
 
+class G4Trajectory_Lock
+{
+    friend class G4ITTrackingManager;
+
+    G4Trajectory_Lock()
+    /*** : fpTrajectory(0)***/
+    {;}
+    ~G4Trajectory_Lock()
+    {;}
+
+    /***G4VTrajectory* fpTrajectory;***/
+};
+
 G4ITTrackingManager::G4ITTrackingManager()
 {
 /***

@@ -13,6 +13,20 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+14.03.2012  M.K			tag emdna-V09-05-05
+            *   int G4VITProcess::fProcessID
+                int G4VITProcess::fNbProcess
+            -> become size_t + related changes
+            *   when a poststep process proposes an IL < 0
+            => considered as a time, and transportation::computestep
+            is used
+
+14.03.2012  M.K			tag emdna-V09-05-04
+            Fix compilation warning
+
+14.03.2012  M.K			tag emdna-V09-05-03
+	    Improve the management of information in G4ITStepProcessor
+	    Fix coverity warnings
 
 18.01.2012  S.I.                tag emdna-V09-05-02
             Removal of G4Water* classes in utils

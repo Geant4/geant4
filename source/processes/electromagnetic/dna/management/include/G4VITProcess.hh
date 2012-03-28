@@ -76,19 +76,19 @@ public:
 
     G4IT_TO_BE_CLONED(G4VITProcess)
 
-    G4int GetProcessID()
+    size_t GetProcessID()
     {
         return fProcessID;
     }
 
     G4ProcessState_Lock* GetProcessState()
     {
-        return fState;
+        return fpState;
     }
 
     void SetProcessState(G4ProcessState_Lock* aProcInfo)
     {
-        fState = (G4ProcessState*) aProcInfo;
+        fpState = (G4ProcessState*) aProcInfo;
     }
 
     //__________________________________
@@ -103,7 +103,9 @@ public:
     */
     virtual void  ResetNumberOfInteractionLengthLeft();
 
-    inline static int GetMaxProcessIndex();
+    inline G4bool ProposesTimeStep();
+
+    inline static const size_t& GetMaxProcessIndex();
 
 protected:  // with description
 
@@ -131,7 +133,7 @@ protected:  // with description
         // The InteractionLength in the current material
     };
 
-    G4ProcessState* fState ;
+    G4ProcessState* fpState ;
 
     inline virtual void ClearInteractionTimeLeft();
 
@@ -156,12 +158,13 @@ protected:  // with description
     G4bool InstantiateProcessState() { return fInstantiateProcessState; }
 
 private :
-    const G4int fProcessID; // During all the simulation will identify a
+    const size_t fProcessID; // During all the simulation will identify a
     // process, so if two identical process are created using a copy constructor
     // they will have the same fProcessID
-    static G4int fNbProcess ;
+    static size_t fNbProcess ;
 
     G4bool fInstantiateProcessState;
+    G4bool fProposesTimeStep;
     //_________________________________________________
     // Redefine needed members and method of G4VProcess
     G4double*          theNumberOfInteractionLengthLeft;
@@ -171,28 +174,33 @@ private :
 
 inline void G4VITProcess::ClearInteractionTimeLeft()
 {
-    fState->theInteractionTimeLeft = -1.0;
+    fpState->theInteractionTimeLeft = -1.0;
 }
 
 inline void G4VITProcess::ClearNumberOfInteractionLengthLeft()
 {
-    fState->theNumberOfInteractionLengthLeft =  -1.0;
+    fpState->theNumberOfInteractionLengthLeft =  -1.0;
 }
 
 inline void G4VITProcess::ResetNumberOfInteractionLengthLeft()
 {
-    fState->theNumberOfInteractionLengthLeft =  -std::log( G4UniformRand() );
+    fpState->theNumberOfInteractionLengthLeft =  -std::log( G4UniformRand() );
 }
 
 inline G4double G4VITProcess::GetInteractionTimeLeft()
 {
-    if(fState)
-        return fState->theInteractionTimeLeft ;
+    if(fpState)
+        return fpState->theInteractionTimeLeft ;
 
     return -1 ;
 }
 
-inline int G4VITProcess::GetMaxProcessIndex()
+inline G4bool G4VITProcess::ProposesTimeStep()
+{
+    return fProposesTimeStep;
+}
+
+inline const size_t& G4VITProcess::GetMaxProcessIndex()
 {
     return fNbProcess ;
 }

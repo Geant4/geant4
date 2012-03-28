@@ -43,6 +43,7 @@
 #include "G4ITTrackingManager.hh"
 #include "G4TrackingInformation.hh"
 #include "G4UnitsTable.hh"
+#include "G4ITStepStatus.hh"
 
 using namespace std;
 
@@ -75,6 +76,8 @@ G4ITStepManager::G4ITStepManager()
     fpMainList = 0 ;
     fpWaitingList = 0 ;
 
+    fITStepStatus = eUndefined;
+
     fpUserTimeSteps = 0;
 
     fTimeStep = DBL_MAX ;
@@ -91,10 +94,10 @@ G4ITStepManager::G4ITStepManager()
     fUsePreDefinedTimeSteps = false;
 
     fpStepProcessor = 0 ;
-    fpMasterStepProcessor = 0 ;
+//    fpMasterStepProcessor = 0 ;
 
     fpModelProcessor= 0;
-    fpMasterModelProcessor= 0;
+//    fpMasterModelProcessor= 0;
 
     fNbSteps = 0;
 
@@ -118,8 +121,11 @@ G4ITStepManager::G4ITStepManager()
 
 G4ITStepManager::~G4ITStepManager()
 {
-    if(fpMasterStepProcessor) delete fpMasterStepProcessor ;
-    if(fpMasterModelProcessor) delete fpMasterModelProcessor ;
+    if(fpStepProcessor) delete fpStepProcessor ;
+    if(fpModelProcessor) delete fpModelProcessor ;
+    if(fpModelHandler) delete fpModelHandler;
+//    if(fpMasterStepProcessor) delete fpMasterStepProcessor ;
+//    if(fpMasterModelProcessor) delete fpMasterModelProcessor ;
     G4ITTypeManager::DeleteInstance();
     ClearList();
     if(fpTrackingManager) delete fpTrackingManager;
@@ -165,22 +171,32 @@ void G4ITStepManager::Initialize()
     {
         delete fpStepProcessor ;
     }
-    if(fpMasterModelProcessor)
+    if(fpModelProcessor)
     {
-        delete fpMasterModelProcessor;
+        delete fpModelProcessor;
     }
+//    if(fpMasterModelProcessor)
+//    {
+//        delete fpMasterModelProcessor;
+//    }
 
     //______________________________________________________________
 
-    fpMasterModelProcessor = new G4ITModelProcessor();
-    fpMasterModelProcessor->SetModelHandler(fpModelHandler);
-    fpModelProcessor      = fpMasterModelProcessor;
+    fpModelProcessor = new G4ITModelProcessor();
+    fpModelProcessor->SetModelHandler(fpModelHandler);
+
+//    fpMasterModelProcessor = new G4ITModelProcessor();
+//    fpMasterModelProcessor->SetModelHandler(fpModelHandler);
+//    fpModelProcessor      = fpMasterModelProcessor;
 
     //______________________________________________________________
 
-    fpMasterStepProcessor = new G4ITStepProcessor();
-    fpMasterStepProcessor->SetTrackingManager(fpTrackingManager);
-    fpStepProcessor = fpMasterStepProcessor ;
+    fpStepProcessor = new G4ITStepProcessor();
+    fpStepProcessor->SetTrackingManager(fpTrackingManager);
+
+//    fpMasterStepProcessor = new G4ITStepProcessor();
+//    fpMasterStepProcessor->SetTrackingManager(fpTrackingManager);
+//    fpStepProcessor = fpMasterStepProcessor ;
 
     if(fpModelHandler->GetTimeStepComputerFlag()) fComputeTimeStep = true;
     if(fpModelHandler->GetReactionProcessFlag())  fComputeReaction = true;
@@ -198,6 +214,7 @@ void G4ITStepManager::Reset()
     fPreviousStepTime = DBL_MAX;
     fGlobalTime = -1 ;
     fInteractionStep = true ;
+    fITStepStatus = eUndefined;
 
     fNbSteps = 0;
 }
@@ -216,8 +233,11 @@ void G4ITStepManager::Process()
 #endif
 
     fpTrackingManager->Initialize();
-    fpMasterModelProcessor->Initialize();
-    fpMasterStepProcessor->Initialize();
+    fpModelProcessor->Initialize();
+    fpStepProcessor->Initialize();
+
+//    fpMasterModelProcessor->Initialize();
+//    fpMasterStepProcessor->Initialize();
 
     // ___________________
     fRunning = true ;
@@ -394,6 +414,8 @@ void G4ITStepManager::Stepping()
     fInteractionStep = false ;
     fReachedUserTimeLimit = false;
 
+    fITStepStatus = eUndefined;
+
     // Start of step
 #ifdef G4VERBOSE
     if(fVerbose > 1)
@@ -466,6 +488,7 @@ void G4ITStepManager::Stepping()
         fReactingTracks.clear(); // Give the priority to the IL
 
         fTimeStep = fILTimeStep;
+        fITStepStatus = eInteractionWithMedium;
     }
     else
     {
@@ -494,6 +517,7 @@ void G4ITStepManager::Stepping()
         }
 
         fTimeStep = fTSTimeStep;
+        fITStepStatus = eCollisionBetweenTracks;
     }
 
     fReachedUserTimeLimit = ((fTimeStep <= fDefinedMinTimeStep) ||
@@ -596,7 +620,8 @@ void G4ITStepManager::FindUserPreDefinedTimeStep()
 void G4ITStepManager::CalculateMinTimeStep()
 {
 
-    if(fpMasterModelProcessor == 0)
+    if(fpModelProcessor == 0)
+//        if(fpMasterModelProcessor == 0)
     {
         G4ExceptionDescription exceptionDescription ;
         exceptionDescription << "There is no G4ITModelProcessor to hande IT reaction. ";
@@ -608,7 +633,8 @@ void G4ITStepManager::CalculateMinTimeStep()
         return ; // makes coverity happy
     }
 
-    fpMasterModelProcessor -> InitializeStepper(fGlobalTime, fDefinedMinTimeStep) ;
+    fpModelProcessor -> InitializeStepper(fGlobalTime, fDefinedMinTimeStep) ;
+//    fpMasterModelProcessor -> InitializeStepper(fGlobalTime, fDefinedMinTimeStep) ;
 
     G4TrackList::iterator      fpMainList_i = fpMainList->begin();
     for( ; fpMainList_i != fpMainList->end() ; fpMainList_i++)
@@ -723,6 +749,7 @@ void G4ITStepManager::ExtractTimeStepperData(G4ITModelProcessor* MP)
 void G4ITStepManager::ComputeInteractionLength()
 {
     G4TrackList::iterator fpMainList_i = fpMainList->begin();
+    fpStepProcessor -> SetPreviousStepTime(fPreviousStepTime);
 
     for( ; fpMainList_i != fpMainList->end() ; fpMainList_i++)
     {
@@ -994,7 +1021,7 @@ void G4ITStepManager::ComputeTrackReaction()
             {
 #ifdef G4VERBOSE
                 if(fVerbose)
-                    G4cout<<"No product vector" ;
+                    G4cout<<"No product" ;
 #endif
             }
 #ifdef G4VERBOSE

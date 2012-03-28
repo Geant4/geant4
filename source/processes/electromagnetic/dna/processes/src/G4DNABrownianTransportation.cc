@@ -76,6 +76,9 @@ G4DNABrownianTransportation::G4DNABrownianTransportation(const G4DNABrownianTran
     //copy ctor
     fpSafetyHelper = G4TransportationManager::GetTransportationManager()
             ->GetSafetyHelper();
+    SetProcessSubType(61);
+    verboseLevel = right.verboseLevel;
+    fNistWater = right.fNistWater;
 }
 
 G4DNABrownianTransportation& G4DNABrownianTransportation::operator=(const G4DNABrownianTransportation& rhs)

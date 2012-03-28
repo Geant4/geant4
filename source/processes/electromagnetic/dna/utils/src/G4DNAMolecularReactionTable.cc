@@ -398,6 +398,7 @@ G4DNAMolecularReactionTable::CanReactWith(const G4Molecule * aMolecule) const
         G4String errMsg = "No reaction table was implemented for this molecule Definition : "
                 + aMolecule -> GetName();
         G4Exception("G4MolecularInteractionTable::CanReactWith","",FatalErrorInArgument, errMsg);
+        return 0;
     }
     else
     {

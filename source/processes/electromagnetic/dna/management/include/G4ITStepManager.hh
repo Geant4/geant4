@@ -38,18 +38,22 @@
 #ifndef G4ITStepManager_h
 #define G4ITStepManager_h
 
-#include "globals.hh"
-#include "G4TrackList.hh"
-#include "G4ITModelHandler.hh"
 #include <vector>
 #include <map>
 #include <memory>
+
+#include "globals.hh"
+
+#include "G4TrackList.hh"
+#include "G4ITModelHandler.hh"
+#include "G4ITStepStatus.hh"
 
 class G4ITTrackingManager;
 class G4ITModelProcessor;
 class G4ITStepProcessor;
 class G4Track ;
 class G4UserReactionAction;
+
 
 /**
   * G4ITStepManager enables to synchronize in time
@@ -88,6 +92,8 @@ public :
     inline G4double GetGlobalTime() const;
     inline void     SetUserAction(G4UserReactionAction*);
     inline G4UserReactionAction* GetUserReactionAction() const;
+
+    inline G4ITStepStatus GetStatus() const;
 
     inline void SetVerbose(int);
     // 1 : Reaction information
@@ -133,6 +139,8 @@ private:
     int fNbTracks ;
     int fNbSteps ;
 
+    G4ITStepStatus fITStepStatus;
+
     // Time members
     double fTimeTolerance;
     double fGlobalTime;
@@ -169,10 +177,10 @@ private:
     G4TrackList                     fToBeKilledList ;
 
     G4ITStepProcessor* fpStepProcessor ;
-    G4ITStepProcessor* fpMasterStepProcessor ;
+//    G4ITStepProcessor* fpMasterStepProcessor ;
 
     G4ITModelProcessor* fpModelProcessor;
-    G4ITModelProcessor* fpMasterModelProcessor;
+//    G4ITModelProcessor* fpMasterModelProcessor;
 
     G4ITModelHandler* fpModelHandler;
 
@@ -245,6 +253,11 @@ inline double G4ITStepManager::GetTimeTolerance() const
 inline G4double G4ITStepManager::GetPreviousTimeStep() const
 {
     return fPreviousStepTime;
+}
+
+inline G4ITStepStatus G4ITStepManager::GetStatus() const
+{
+    return fITStepStatus;
 }
 
 #endif
