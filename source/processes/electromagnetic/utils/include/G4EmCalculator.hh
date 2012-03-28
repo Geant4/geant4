@@ -69,6 +69,9 @@ class G4ParticleDefinition;
 class G4PhysicsTable;
 class G4VEmModel;
 class G4VEnergyLossProcess;
+class G4VEmProcess;
+class G4VMultipleScattering;
+class G4VProcess;
 class G4ionEffectiveCharge;
 class G4Region;
 class G4Element;
@@ -241,6 +244,18 @@ private:
                            G4double kinEnergy);
 
   G4VEnergyLossProcess* FindEnergyLossProcess(const G4ParticleDefinition*);
+
+  G4VEnergyLossProcess* FindEnLossProcess(const G4ParticleDefinition*,
+					  const G4String& processName);
+
+  G4VEmProcess* FindDiscreteProcess(const G4ParticleDefinition*,
+				    const G4String& processName);
+
+  G4VMultipleScattering* FindMscProcess(const G4ParticleDefinition*,
+					const G4String& processName);
+
+  G4bool ActiveForParticle(const G4ParticleDefinition* part,
+			   G4VProcess* proc);
 
   G4EmCalculator & operator=(const  G4EmCalculator &right);
   G4EmCalculator(const  G4EmCalculator&);

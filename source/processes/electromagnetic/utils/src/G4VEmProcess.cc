@@ -136,7 +136,7 @@ G4VEmProcess::~G4VEmProcess()
 {
   if(1 < verboseLevel) {
     G4cout << "G4VEmProcess destruct " << GetProcessName() 
-	   << G4endl;
+	   << "  " << this << "  " <<  theLambdaTable <<G4endl;
   }
   Clear();
   if(theLambdaTable) {
@@ -313,7 +313,7 @@ void G4VEmProcess::BuildLambdaTable()
   if(1 < verboseLevel) {
     G4cout << "G4EmProcess::BuildLambdaTable() for process "
            << GetProcessName() << " and particle "
-           << particle->GetParticleName()
+           << particle->GetParticleName() << "  " << this
            << G4endl;
   }
 
@@ -333,11 +333,12 @@ void G4VEmProcess::BuildLambdaTable()
     
   for(size_t i=0; i<numOfCouples; ++i) {
 
-    if (/*theLambdaTable->GetFlag(i)*/bld->GetFlag(i)) {
+    if (bld->GetFlag(i)) {
 
       // create physics vector and fill it
       const G4MaterialCutsCouple* couple = 
 	theCoupleTable->GetMaterialCutsCouple(i);
+      delete (*theLambdaTable)[i];
 
       // if start from zero then change the scale
       if(startFromNull) {

@@ -140,7 +140,7 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
 	  G4int nelm = mat->GetNumberOfElements();
           if(deRegions[j]) {
 	    for(G4int k=0; k<nelm; ++k) {
-	      G4int Z = (G4int)((*theElementVector)[k])->GetZ();
+	      G4int Z = G4int(((*theElementVector)[k])->GetZ()+0.5);
 	      if(Z > 5 && Z < 93) { activeZ[Z] = true; }
 	    }
 	  }
@@ -238,7 +238,7 @@ G4VAtomDeexcitation::AlongStepDeexcitation(std::vector<G4Track*>& tracks,
 
   // loop over deexcitations
   for(G4int i=0; i<nelm; ++i) {
-    G4int Z = G4int((*theElementVector)[i]->GetZ());
+    G4int Z = G4int((*theElementVector)[i]->GetZ()+0.5);
     if(Z >= 93)     { continue; } 
     if(!activeZ[Z]) { continue; }
     G4int nshells = std::min(9,(*theElementVector)[i]->GetNbOfAtomicShells());

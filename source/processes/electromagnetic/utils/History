@@ -17,6 +17,28 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19 March 12: V.Ivant (emutils-V09-05-06)
+- G4EmCalculator - fixed compillation warning at gcc 4.6
+
+15 March 12: V.Ivant (emutils-V09-05-05)
+- G4LossTableManager - added a check and protection against double
+    registration of the same process; this addition allows to use
+    the same EM energy loss process for different particle types
+- G4EmCalculator - modifed method to access a process taking into account 
+    that the same process may used by different particle type;
+    added new methods ActiveForParticle, FindEnLossProcess,
+    FindDiscreteProcess, FindMscProcess
+
+5 March 12: V.Ivant (emutils-V09-05-04)
+- G4VEnergyLossProcess fixed crash due to apply G4hIonisation for ions;
+- G4VEnergyLossProcess, G4VEmProcess, G4LossTableBuilder - delete old 
+     G4PhysicsVectors if new vectors are built between runs
+- G4VAtomDeexcitation - use safe method to extract integer Z
+
+29 February 12: V.Ivant (emutils-V09-05-03)
+- G4VEnergyLossProcess fixed computation of delta-electron cross section 
+    for ions and very small cuts (about 1 um), reported by Sergio Ibarmia 
+
 21 February 12: V.Ivant (emutils-V09-05-02)
 - G4VEmAngularDistribution added new method Initialise 
 

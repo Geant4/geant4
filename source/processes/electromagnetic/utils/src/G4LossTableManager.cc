@@ -217,6 +217,14 @@ void G4LossTableManager::Clear()
 
 void G4LossTableManager::Register(G4VEnergyLossProcess* p)
 {
+  if(!p) { return; }
+  for (G4int i=0; i<n_loss; ++i) {
+    if(loss_vector[i] == p) { return; }
+  }
+  if(verbose > 1) {
+    G4cout << "G4LossTableManager::Register G4VEnergyLossProcess : " 
+	   << p->GetProcessName() << "  idx= " << n_loss << G4endl;
+  }
   ++n_loss;
   loss_vector.push_back(p);
   part_vector.push_back(0);
@@ -234,15 +242,13 @@ void G4LossTableManager::Register(G4VEnergyLossProcess* p)
   if(integralActive)       { p->SetIntegral(integral); }
   if(minEnergyActive)      { p->SetMinKinEnergy(minKinEnergy); }
   if(maxEnergyActive)      { p->SetMaxKinEnergy(maxKinEnergy); }
-  if(verbose > 1) 
-    G4cout << "G4LossTableManager::Register G4VEnergyLossProcess : " 
-	   << p->GetProcessName() << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void G4LossTableManager::DeRegister(G4VEnergyLossProcess* p)
 {
+  if(!p) { return; }
   for (G4int i=0; i<n_loss; ++i) {
     if(loss_vector[i] == p) { loss_vector[i] = 0; }
   }
@@ -252,17 +258,23 @@ void G4LossTableManager::DeRegister(G4VEnergyLossProcess* p)
 
 void G4LossTableManager::Register(G4VMultipleScattering* p)
 {
-  msc_vector.push_back(p);
+  if(!p) { return; }
+  G4int n = msc_vector.size();
+  for (G4int i=0; i<n; ++i) {
+    if(msc_vector[i] == p) { return; }
+  }
   if(verbose > 1) {
     G4cout << "G4LossTableManager::Register G4VMultipleScattering : " 
-	   << p->GetProcessName() << G4endl;
+	   << p->GetProcessName() << "  idx= " << msc_vector.size() << G4endl;
   }
+  msc_vector.push_back(p);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void G4LossTableManager::DeRegister(G4VMultipleScattering* p)
 {
+  if(!p) { return; }
   size_t msc = msc_vector.size();
   for (size_t i=0; i<msc; ++i) {
     if(msc_vector[i] == p) { msc_vector[i] = 0; }
@@ -273,17 +285,23 @@ void G4LossTableManager::DeRegister(G4VMultipleScattering* p)
 
 void G4LossTableManager::Register(G4VEmProcess* p)
 {
-  emp_vector.push_back(p);
+  if(!p) { return; }
+  G4int n = emp_vector.size();
+  for (G4int i=0; i<n; ++i) {
+    if(emp_vector[i] == p) { return; }
+  }
   if(verbose > 1) {
     G4cout << "G4LossTableManager::Register G4VEmProcess : " 
-	   << p->GetProcessName() << G4endl;
+	   << p->GetProcessName() << "  idx= " << emp_vector.size() << G4endl;
   }
+  emp_vector.push_back(p);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void G4LossTableManager::DeRegister(G4VEmProcess* p)
 {
+  if(!p) { return; }
   size_t emp = emp_vector.size();
   for (size_t i=0; i<emp; ++i) {
     if(emp_vector[i] == p) { emp_vector[i] = 0; }
@@ -345,7 +363,16 @@ void G4LossTableManager::RegisterIon(const G4ParticleDefinition* ion,
 void G4LossTableManager::RegisterExtraParticle(
      const G4ParticleDefinition* part,
      G4VEnergyLossProcess* p)
-{
+{ 
+  if(!p || !part) { return; }
+  for (G4int i=0; i<n_loss; ++i) {
+    if(loss_vector[i] == p) { return; }
+  }
+  if(verbose > 1) {
+    G4cout << "G4LossTableManager::RegisterExtraParticle "
+	   << part->GetParticleName() << "  G4VEnergyLossProcess : " 
+	   << p->GetProcessName() << "  idx= " << n_loss << G4endl;
+  }
   ++n_loss;
   loss_vector.push_back(p);
   part_vector.push_back(part);
@@ -366,7 +393,8 @@ G4LossTableManager::PreparePhysicsTable(const G4ParticleDefinition* particle,
   if (1 < verbose) {
     G4cout << "G4LossTableManager::PreparePhysicsTable for " 
 	   << particle->GetParticleName() 
-	   << " and " << p->GetProcessName() << " run= " << run << G4endl;
+	   << " and " << p->GetProcessName() << " run= " << run 
+	   << "   loss_vector " << loss_vector.size() << G4endl;
   }
   if(!startInitialisation) { tableBuilder->SetInitialisationFlag(false); }
 
@@ -443,8 +471,7 @@ void G4LossTableManager::BuildPhysicsTable(
   if(1 < verbose) {
     G4cout << "### G4LossTableManager::BuildDEDXTable() is requested for "
            << aParticle->GetParticleName()
-	   << " and process " << p->GetProcessName()
-           << G4endl;
+	   << " and process " << p->GetProcessName() << G4endl;
   }
   // clear configurator
   if(0 == run && startInitialisation) {
