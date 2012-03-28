@@ -27,6 +27,8 @@
 // $Id: RE02RunAction.hh,v 1.3 2006-11-18 01:37:23 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
+//  
+//
 
 #ifndef RE02RunAction_h
 #define RE02RunAction_h 1
@@ -63,7 +65,7 @@ public:
   // Utility method for converting segment number of
   // water phantom to copyNo of HitsMap.
   G4int CopyNo(G4int ix, G4int iy, G4int iz)
-  {  return (iy*(fNx*fNy)+ix*fNz+iz); }
+  {  return (iy*(fNx*fNz)+ix*fNz+iz); }
 
 
 private:
