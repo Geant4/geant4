@@ -54,7 +54,7 @@
 G4QGSBuilder::G4QGSBuilder(const G4String& aName, G4PreCompoundModel* p,
 			   G4bool quasiel, G4bool diff) 
   : G4VHadronModelBuilder(aName), 
-    theQGStringModel(0), theQGStringDecay(0), 
+    theQGStringModel(0), theQGStringDecay(0), theQuasiElastic(0), 
     theProjectileDiffraction(0),thePreCompound(p),theQGSM(0), 
     quasielFlag(quasiel), diffFlag(diff)
 {}

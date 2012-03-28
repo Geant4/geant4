@@ -61,12 +61,24 @@ G4IonPhysics::G4IonPhysics(G4int)
 		   , wasActivated(false)
 {
   SetPhysicsType(bIons);
+  fDeuteronProcess = 0;
+  fDeuteronModel = 0;
+  fTritonProcess = 0;
+  fTritonModel = 0;
+  fAlphaProcess = 0;
+  fAlphaModel = 0;
 }
 
 G4IonPhysics::G4IonPhysics(const G4String& name)
                   :  G4VPhysicsConstructor(name), wasActivated(false)
 {
   SetPhysicsType(bIons);
+  fDeuteronProcess = 0;
+  fDeuteronModel = 0;
+  fTritonProcess = 0;
+  fTritonModel = 0;
+  fAlphaProcess = 0;
+  fAlphaModel = 0;
 }
 
 G4IonPhysics::~G4IonPhysics()

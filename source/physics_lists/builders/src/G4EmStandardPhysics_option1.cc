@@ -164,6 +164,15 @@ void G4EmStandardPhysics_option1::ConstructProcess()
 {
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
 
+  G4MuBremsstrahlung* mub = new G4MuBremsstrahlung();
+  G4MuPairProduction* mup = new G4MuPairProduction();
+  G4hBremsstrahlung* pib = new G4hBremsstrahlung();
+  G4hPairProduction* pip = new G4hPairProduction();
+  G4hBremsstrahlung* kb = new G4hBremsstrahlung();
+  G4hPairProduction* kp = new G4hPairProduction();
+  G4hBremsstrahlung* pb = new G4hBremsstrahlung();
+  G4hPairProduction* pp = new G4hPairProduction();
+
   // Add standard EM Processes
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
@@ -210,9 +219,6 @@ void G4EmStandardPhysics_option1::ConstructProcess()
       G4MuMultipleScattering* msc = new G4MuMultipleScattering();
       msc->AddEmModel(0, new G4WentzelVIModel());
 
-      G4MuBremsstrahlung* mub = new G4MuBremsstrahlung();
-      G4MuPairProduction* mup = new G4MuPairProduction();
-
       ph->RegisterProcess(msc, particle);
       ph->RegisterProcess(new G4MuIonisation(), particle);
       ph->RegisterProcess(mub, particle);
@@ -233,9 +239,6 @@ void G4EmStandardPhysics_option1::ConstructProcess()
     } else if (particleName == "pi+" || 
 	       particleName == "pi-" ) {
 
-      G4hBremsstrahlung* pib = new G4hBremsstrahlung();
-      G4hPairProduction* pip = new G4hPairProduction();
-
       ph->RegisterProcess(new G4hMultipleScattering(), particle);
       ph->RegisterProcess(new G4hIonisation(), particle);
       ph->RegisterProcess(pib, particle);
@@ -244,20 +247,19 @@ void G4EmStandardPhysics_option1::ConstructProcess()
     } else if (particleName == "kaon+" ||
                particleName == "kaon-" ) {
 
-      G4hBremsstrahlung* kb = new G4hBremsstrahlung();
-      G4hPairProduction* kp = new G4hPairProduction();
-
       ph->RegisterProcess(new G4hMultipleScattering(), particle);
       ph->RegisterProcess(new G4hIonisation(), particle);
       ph->RegisterProcess(kb, particle);
       ph->RegisterProcess(kp, particle);
 
-    } else if (particleName == "proton" ) {
+      //    } else if (particleName == "proton" ) {
+    } else if (particleName == "proton" ||
+	       particleName == "anti_proton") {
 
       ph->RegisterProcess(new G4hMultipleScattering(), particle);
       ph->RegisterProcess(new G4hIonisation(), particle);
-      ph->RegisterProcess(new G4hBremsstrahlung(), particle);
-      ph->RegisterProcess(new G4hPairProduction(), particle);
+      ph->RegisterProcess(pb, particle);
+      ph->RegisterProcess(pp, particle);
 
     } else if (particleName == "B+" ||
 	       particleName == "B-" ||
@@ -270,7 +272,6 @@ void G4EmStandardPhysics_option1::ConstructProcess()
                particleName == "anti_deuteron" ||
                particleName == "anti_lambda_c+" ||
                particleName == "anti_omega-" ||
-	       particleName == "anti_proton" ||
                particleName == "anti_sigma_c+" ||
                particleName == "anti_sigma_c++" ||
                particleName == "anti_sigma+" ||

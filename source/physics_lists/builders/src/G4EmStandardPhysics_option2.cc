@@ -172,6 +172,15 @@ void G4EmStandardPhysics_option2::ConstructProcess()
 {
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
 
+  G4MuBremsstrahlung* mub = new G4MuBremsstrahlung();
+  G4MuPairProduction* mup = new G4MuPairProduction();
+  G4hBremsstrahlung* pib = new G4hBremsstrahlung();
+  G4hPairProduction* pip = new G4hPairProduction();
+  G4hBremsstrahlung* kb = new G4hBremsstrahlung();
+  G4hPairProduction* kp = new G4hPairProduction();
+  G4hBremsstrahlung* pb = new G4hBremsstrahlung();
+  G4hPairProduction* pp = new G4hPairProduction();
+
   // Add standard EM Processes
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
@@ -227,9 +236,6 @@ void G4EmStandardPhysics_option2::ConstructProcess()
       G4MuMultipleScattering* msc = new G4MuMultipleScattering();
       msc->AddEmModel(0, new G4WentzelVIModel());
 
-      G4MuBremsstrahlung* mub = new G4MuBremsstrahlung();
-      G4MuPairProduction* mup = new G4MuPairProduction();
-
       ph->RegisterProcess(msc, particle);
       ph->RegisterProcess(new G4MuIonisation(), particle);
       ph->RegisterProcess(mub, particle);
@@ -257,9 +263,6 @@ void G4EmStandardPhysics_option2::ConstructProcess()
       G4MuMultipleScattering* msc = new G4MuMultipleScattering();
       msc->AddEmModel(0, new G4WentzelVIModel());
 
-      G4hBremsstrahlung* pib = new G4hBremsstrahlung();
-      G4hPairProduction* pip = new G4hPairProduction();
-
       ph->RegisterProcess(msc, particle);
       ph->RegisterProcess(new G4hIonisation(), particle);
       ph->RegisterProcess(pib, particle);
@@ -271,9 +274,6 @@ void G4EmStandardPhysics_option2::ConstructProcess()
       G4MuMultipleScattering* msc = new G4MuMultipleScattering();
       msc->AddEmModel(0, new G4WentzelVIModel());
 
-      G4hBremsstrahlung* kb = new G4hBremsstrahlung();
-      G4hPairProduction* kp = new G4hPairProduction();
-
       ph->RegisterProcess(msc, particle);
       ph->RegisterProcess(new G4hIonisation(), particle);
       ph->RegisterProcess(kb, particle);
@@ -284,9 +284,6 @@ void G4EmStandardPhysics_option2::ConstructProcess()
 
       G4MuMultipleScattering* msc = new G4MuMultipleScattering();
       msc->AddEmModel(0, new G4WentzelVIModel());
-
-      G4hBremsstrahlung* pb = new G4hBremsstrahlung();
-      G4hPairProduction* pp = new G4hPairProduction();
 
       ph->RegisterProcess(msc, particle);
       ph->RegisterProcess(new G4hIonisation(), particle);

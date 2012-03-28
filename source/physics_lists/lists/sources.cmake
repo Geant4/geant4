@@ -122,7 +122,6 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         FTFP_BERT_TRV.hh
         FTFP_BERT_TRV.icc
         G4HadronInelasticQBBC.hh
-        G4HadronInelasticQLHEP.hh
         G4PhysListFactory.hh
         G4VHadronPhysics.hh
         HadronPhysicsCHIPS.hh
@@ -197,7 +196,6 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
 	G4PhysListUtil.hh
     SOURCES
         G4HadronInelasticQBBC.cc
-        G4HadronInelasticQLHEP.cc
         G4PhysListFactory.cc
         G4VHadronPhysics.cc
         HadronPhysicsCHIPS.cc

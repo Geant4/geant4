@@ -69,6 +69,9 @@ public:
 
 private:
 
+  G4HadronElasticPhysicsXS(G4HadronElasticPhysicsXS &);
+  G4HadronElasticPhysicsXS & operator=(const G4HadronElasticPhysicsXS &right);
+
   G4int    verbose;
   G4bool   wasActivated;
   G4HadronElasticPhysics* mainElasticBuilder;

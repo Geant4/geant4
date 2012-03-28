@@ -71,6 +71,12 @@ G4IonInclAblaPhysics::G4IonInclAblaPhysics(G4int ver)
   emaxLHEP   = 1.*TeV;
   emin       = 0.*MeV;
   SetPhysicsType(bIons);
+  fLEDModel = 0;
+  fLETModel = 0;
+  fLEAModel = 0;
+  fTripathi = 0; 
+  fTripathiLight = 0;
+  fShen = 0;
   if(verbose > 1) G4cout << "### G4IonInclAblaPhysics" << G4endl;
 }
 
@@ -86,6 +92,12 @@ G4IonInclAblaPhysics::G4IonInclAblaPhysics(const G4String& name,
   emaxLHEP   = 1.*TeV;
   emin       = 0.*MeV;
   SetPhysicsType(bIons);
+  fLEDModel = 0;
+  fLETModel = 0;
+  fLEAModel = 0;
+  fTripathi = 0; 
+  fTripathiLight = 0;
+  fShen = 0;
   if(verbose > 1) G4cout << "### G4IonInclAblaPhysics" << G4endl;
 }
 

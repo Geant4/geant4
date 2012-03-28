@@ -117,8 +117,8 @@ void G4IonFTFPBinaryCascadePhysics::ConstructProcess()
   theFTFP->SetMaxEnergy(emax);
 
   fShen = new G4IonsShenCrossSection();
-  fTripathi = new G4TripathiCrossSection();
-  fTripathiLight = new G4TripathiLightCrossSection();
+  //fTripathi = new G4TripathiCrossSection();
+  //fTripathiLight = new G4TripathiLightCrossSection();
   fIonH = new G4IonProtonCrossSection();
 
   AddProcess("dInelastic", G4Deuteron::Deuteron(),false);

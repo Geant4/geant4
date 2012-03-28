@@ -50,6 +50,7 @@ G4NeutronTrackingCut::G4NeutronTrackingCut(G4int ver)
 {
   timeLimit          = 10.*microsecond;
   kineticEnergyLimit = 0.0;
+  pNeutronKiller     = 0;
 }
 
 G4NeutronTrackingCut::G4NeutronTrackingCut(const G4String& name, G4int ver)
@@ -57,14 +58,12 @@ G4NeutronTrackingCut::G4NeutronTrackingCut(const G4String& name, G4int ver)
 {
   timeLimit          = 10.*microsecond;
   kineticEnergyLimit = 0.0;
+  pNeutronKiller     = 0;
 }
 
 G4NeutronTrackingCut::~G4NeutronTrackingCut()
 {
-  if(wasActivated) 
-  {
-    delete pNeutronKiller;
-  }    
+  delete pNeutronKiller;
 }
 
 void G4NeutronTrackingCut::ConstructParticle()

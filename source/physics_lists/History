@@ -15,6 +15,20 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19-03-2012, V.Ivanchenko               (phys-lists-V09-05-05)
+- previous tag was rejected by mistake
+
+15-03-2012, V.Ivanchenko               (phys-lists-V09-05-04)
+- In all EM builders use the same bremsstrahlung and e+e- pair 
+    production processes to mu+/mu-, pi+/pi-, K+K-, proton/anti_proton;
+    expected reduction of memory for physics tables and initialisation 
+    time for EM physics
+
+01-03-2012, V.Ivanchenko               (phys-lists-V09-05-03)
+- Fixed Coverity warnings in G4HadronInelasticQBBC, all elastic builders, 
+  all ion builders, G4NeutronTrackingCut, G4StepLimiterBuilder;
+- G4HadronInelasticQLHEP - remove obsolete
+
 22-02-2012, V.Ivanchenko               (phys-lists-V09-05-02)
 - G4IonBinaryCascadePhysics, G4IonFTFPBinaryCascadePhysics - Tripathi
     cross sections are commented out, only Shen and Ion/proton are used

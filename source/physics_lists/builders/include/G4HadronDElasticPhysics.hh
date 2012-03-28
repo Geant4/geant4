@@ -62,6 +62,9 @@ public:
 
 private:
 
+  G4HadronDElasticPhysics(G4HadronDElasticPhysics &);
+  G4HadronDElasticPhysics & operator=(const G4HadronDElasticPhysics &right);
+
   G4int    verbose;
   G4bool   wasActivated;
 };

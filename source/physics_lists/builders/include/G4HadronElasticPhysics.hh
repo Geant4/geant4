@@ -78,6 +78,10 @@ public:
 
 private:
 
+  // copy constructor and hide assignment operator
+  G4HadronElasticPhysics(G4HadronElasticPhysics &);
+  G4HadronElasticPhysics & operator=(const G4HadronElasticPhysics &right);
+
   G4int    verbose;
   G4bool   wasActivated;
 

@@ -63,6 +63,13 @@
 G4IonBinaryCascadePhysics::G4IonBinaryCascadePhysics(G4int ver)
   :  G4VPhysicsConstructor("IonBinaryCascade"), verbose(ver), wasActivated(false)
 {
+  fLEDModel = 0;
+  fLETModel = 0;
+  fLEAModel = 0;
+  fTripathi = 0; 
+  fTripathiLight = 0;
+  fShen = 0;
+  fIonH = 0;
   emax     = 20.*GeV;
   emaxLHEP = 1.*TeV;
   eminBIC  = 0.*MeV;
@@ -74,6 +81,13 @@ G4IonBinaryCascadePhysics::G4IonBinaryCascadePhysics(const G4String& name,
 						     G4int ver)
   :  G4VPhysicsConstructor(name), verbose(ver), wasActivated(false)
 {
+  fLEDModel = 0;
+  fLETModel = 0;
+  fLEAModel = 0;
+  fTripathi = 0; 
+  fTripathiLight = 0;
+  fShen = 0;
+  fIonH = 0;
   emax     = 20.*GeV;
   emaxLHEP = 1.*TeV;
   eminBIC  = 0.*MeV;
@@ -107,8 +121,8 @@ void G4IonBinaryCascadePhysics::ConstructProcess()
   G4BinaryLightIonReaction* fBC= new G4BinaryLightIonReaction();
   model_list.push_back(fBC);
   fShen = new G4IonsShenCrossSection;
-  fTripathi = new G4TripathiCrossSection;
-  fTripathiLight = new G4TripathiLightCrossSection;
+  //fTripathi = new G4TripathiCrossSection;
+  //fTripathiLight = new G4TripathiLightCrossSection;
   fIonH = new G4IonProtonCrossSection;
 
   fLEDModel = new G4LEDeuteronInelastic();

@@ -64,6 +64,9 @@ public:
 
 private:
 
+  G4HadronElasticPhysicsLHEP(G4HadronElasticPhysicsLHEP &);
+  G4HadronElasticPhysicsLHEP & operator=(const G4HadronElasticPhysicsLHEP &right);
+
   G4int    verbose;
   G4bool   wasActivated;
 };

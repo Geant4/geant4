@@ -86,6 +86,7 @@ G4HadronInelasticQBBC::G4HadronInelasticQBBC(const G4String& name, G4int ver,
   : G4VHadronPhysics("hInelastic"),verbose(ver),wasActivated(false)
 {
   htype = name;
+  theAntiNuclXS = 0;
 }
 
 G4HadronInelasticQBBC::~G4HadronInelasticQBBC()

@@ -79,6 +79,8 @@ G4HadronElasticPhysics::G4HadronElasticPhysics(G4int ver)
     G4cout << "### G4HadronElasticPhysics: " << GetPhysicsName() 
 	   << G4endl; 
   }
+  neutronProcess = 0;
+  neutronModel = 0;
 }
 
 G4HadronElasticPhysics::G4HadronElasticPhysics(const G4String&,
@@ -90,6 +92,8 @@ G4HadronElasticPhysics::G4HadronElasticPhysics(const G4String&,
     G4cout << "### G4HadronElasticPhysics: " << GetPhysicsName() 
 	   << G4endl; 
   }
+  neutronProcess = 0;
+  neutronModel = 0;
 }
 
 G4HadronElasticPhysics::~G4HadronElasticPhysics()

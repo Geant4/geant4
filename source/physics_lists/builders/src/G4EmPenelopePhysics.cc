@@ -185,6 +185,15 @@ void G4EmPenelopePhysics::ConstructProcess()
 {
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
 
+  G4MuBremsstrahlung* mub = new G4MuBremsstrahlung();
+  G4MuPairProduction* mup = new G4MuPairProduction();
+  G4hBremsstrahlung* pib = new G4hBremsstrahlung();
+  G4hPairProduction* pip = new G4hPairProduction();
+  G4hBremsstrahlung* kb = new G4hBremsstrahlung();
+  G4hPairProduction* kp = new G4hPairProduction();
+  G4hBremsstrahlung* pb = new G4hBremsstrahlung();
+  G4hPairProduction* pp = new G4hPairProduction();
+
   // Add Penelope EM Processes
 
   theParticleIterator->reset();
@@ -302,9 +311,6 @@ void G4EmPenelopePhysics::ConstructProcess()
       G4MuIonisation* muIoni = new G4MuIonisation();
       muIoni->SetStepFunction(0.2, 50*um);          
 
-      G4MuBremsstrahlung* mub = new G4MuBremsstrahlung();
-      G4MuPairProduction* mup = new G4MuPairProduction();
-
       ph->RegisterProcess(msc, particle);
       ph->RegisterProcess(muIoni, particle);
       ph->RegisterProcess(mub, particle);
@@ -341,9 +347,6 @@ void G4EmPenelopePhysics::ConstructProcess()
       G4hIonisation* hIoni = new G4hIonisation();
       hIoni->SetStepFunction(0.2, 50*um);
 
-      G4hBremsstrahlung* pib = new G4hBremsstrahlung();
-      G4hPairProduction* pip = new G4hPairProduction();
-
       ph->RegisterProcess(new G4hMultipleScattering(), particle);
       ph->RegisterProcess(hIoni, particle);
       ph->RegisterProcess(pib, particle);
@@ -355,23 +358,21 @@ void G4EmPenelopePhysics::ConstructProcess()
       G4hIonisation* hIoni = new G4hIonisation();
       hIoni->SetStepFunction(0.2, 50*um);
 
-      G4hBremsstrahlung* kb = new G4hBremsstrahlung();
-      G4hPairProduction* kp = new G4hPairProduction();
-
       ph->RegisterProcess(new G4hMultipleScattering(), particle);
       ph->RegisterProcess(hIoni, particle);
       ph->RegisterProcess(kb, particle);
       ph->RegisterProcess(kp, particle);
 
-    } else if (particleName == "proton" ) {
+    } else if (particleName == "proton" ||
+	       particleName == "anti_proton") {
 
       G4hIonisation* hIoni = new G4hIonisation();
       hIoni->SetStepFunction(0.2, 50*um);
 
       ph->RegisterProcess(new G4hMultipleScattering(), particle);
       ph->RegisterProcess(hIoni, particle);
-      ph->RegisterProcess(new G4hBremsstrahlung(), particle);
-      ph->RegisterProcess(new G4hPairProduction(), particle);
+      ph->RegisterProcess(pb, particle);
+      ph->RegisterProcess(pp, particle);
 
     } else if (particleName == "B+" ||
 	       particleName == "B-" ||
@@ -384,7 +385,6 @@ void G4EmPenelopePhysics::ConstructProcess()
                particleName == "anti_deuteron" ||
                particleName == "anti_lambda_c+" ||
                particleName == "anti_omega-" ||
-               particleName == "anti_proton" ||
                particleName == "anti_sigma_c+" ||
                particleName == "anti_sigma_c++" ||
                particleName == "anti_sigma+" ||

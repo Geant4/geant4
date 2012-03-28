@@ -65,6 +65,9 @@ public:
 
 private:
 
+  G4HadronQElasticPhysics(G4HadronQElasticPhysics &);
+  G4HadronQElasticPhysics & operator=(const G4HadronQElasticPhysics &right);
+
   G4String mname;
 
   G4int    verbose;

@@ -63,6 +63,12 @@
 G4IonQMDPhysics::G4IonQMDPhysics(G4int ver)
   :  G4VPhysicsConstructor("IonQMD"), verbose(ver), wasActivated(false)
 {
+  fLEDModel = 0;
+  fLETModel = 0;
+  fLEAModel = 0;
+  fTripathi = 0; 
+  fTripathiLight = 0;
+  fShen = 0;
   eminBIC  = 0.*MeV;
   eminQMD  = 100.*MeV;
   emaxQMD  = 10.*GeV;
@@ -76,6 +82,12 @@ G4IonQMDPhysics::G4IonQMDPhysics(const G4String& name,
 						     G4int ver)
   :  G4VPhysicsConstructor(name), verbose(ver), wasActivated(false)
 {
+  fLEDModel = 0;
+  fLETModel = 0;
+  fLEAModel = 0;
+  fTripathi = 0; 
+  fTripathiLight = 0;
+  fShen = 0;
   eminBIC  = 0.*MeV;
   eminQMD  = 100.*MeV;
   emaxQMD  = 10.*GeV;

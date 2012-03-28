@@ -39,6 +39,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4StepLimiter;
+class G4UserSpecialCuts;
 
 class G4StepLimiterBuilder : public G4VPhysicsConstructor
 {
@@ -64,6 +65,7 @@ private:
   G4StepLimiterBuilder(const G4StepLimiterBuilder&);
 
   G4StepLimiter* fStepLimiter;
+  G4UserSpecialCuts* fUserSpecialCuts;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
