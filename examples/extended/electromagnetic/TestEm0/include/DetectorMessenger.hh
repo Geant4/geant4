@@ -52,11 +52,11 @@ class DetectorMessenger: public G4UImessenger
     
   private:
   
-    DetectorConstruction*   Detector;
+    DetectorConstruction*      fDetector;
     
-    G4UIdirectory*             testemDir;
-    G4UIdirectory*             detDir;
-    G4UIcmdWithAString*        MaterCmd;
+    G4UIdirectory*             fTestemDir;
+    G4UIdirectory*             fDetDir;
+    G4UIcmdWithAString*        fMaterCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+26-03-12 mma (testem0-V09-05-00)
+- all classes : apply G4 coding conventions
+     
 31-05-11 mma (testem0-V09-04-00)
 - DetectorConstruction : for Water, set I = 78 eV (instead of 75 eV)
      

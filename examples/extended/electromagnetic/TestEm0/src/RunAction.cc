@@ -44,7 +44,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
-:detector(det), primary(kin)
+:fDetector(det), fPrimary(kin)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,14 +64,14 @@ void RunAction::BeginOfRunAction(const G4Run*)
   //  emCal.SetVerbose(2);
      
   // get particle 
-  G4ParticleDefinition* particle = primary->GetParticleGun()
+  G4ParticleDefinition* particle = fPrimary->GetParticleGun()
                                           ->GetParticleDefinition();
   G4String partName = particle->GetParticleName();
   G4double charge   = particle->GetPDGCharge();    
-  G4double energy   = primary->GetParticleGun()->GetParticleEnergy();
+  G4double energy   = fPrimary->GetParticleGun()->GetParticleEnergy();
  
   // get material
-  G4Material* material = detector->GetMaterial();
+  G4Material* material = fDetector->GetMaterial();
   G4String matName     = material->GetName();
   G4double density     = material->GetDensity();
   G4double radl        = material->GetRadlen();  
@@ -86,11 +86,11 @@ void RunAction::BeginOfRunAction(const G4Run*)
   GetCuts();
   if (charge != 0.) {
    G4cout << "\n  Range cuts : \t gamma "  
-                      << std::setw(8) << G4BestUnit(rangeCut[0],"Length")
-          << "\t e- " << std::setw(8) << G4BestUnit(rangeCut[1],"Length");
+                      << std::setw(8) << G4BestUnit(fRangeCut[0],"Length")
+          << "\t e- " << std::setw(8) << G4BestUnit(fRangeCut[1],"Length");
    G4cout << "\n Energy cuts : \t gamma " 
-                      << std::setw(8) << G4BestUnit(energyCut[0],"Energy")
-	  << "\t e- " << std::setw(8) << G4BestUnit(energyCut[1],"Energy")
+                      << std::setw(8) << G4BestUnit(fEnergyCut[0],"Energy")
+	  << "\t e- " << std::setw(8) << G4BestUnit(fEnergyCut[1],"Energy")
 	  << G4endl;
    }
    
@@ -116,8 +116,8 @@ void RunAction::BeginOfRunAction(const G4Run*)
   size_t length = plist->size();
   for (size_t j=0; j<length; j++) {
      procName = (*plist)[j]->GetProcessName();
-     cut = energyCut[1];
-     if ((procName == "eBrem")||(procName == "muBrems")) cut = energyCut[0];
+     cut = fEnergyCut[1];
+     if ((procName == "eBrem")||(procName == "muBrems")) cut = fEnergyCut[0];
      if (((*plist)[j]->GetProcessType() == fElectromagnetic) &&
          (procName != "msc")) {
        emName.push_back(procName);
@@ -298,21 +298,21 @@ void RunAction::GetCuts()
   G4int index = 0;
   for (size_t i=0; i<numOfCouples; i++) {
      couple = theCoupleTable->GetMaterialCutsCouple(i);
-     if (couple->GetMaterial() == detector->GetMaterial()) {index = i; break;}
+     if (couple->GetMaterial() == fDetector->GetMaterial()) {index = i; break;}
   }
   
-  rangeCut[0] =
+  fRangeCut[0] =
          (*(theCoupleTable->GetRangeCutsVector(idxG4GammaCut)))[index];
-  rangeCut[1] =      
+  fRangeCut[1] =      
          (*(theCoupleTable->GetRangeCutsVector(idxG4ElectronCut)))[index];
-  rangeCut[2] =      
+  fRangeCut[2] =      
          (*(theCoupleTable->GetRangeCutsVector(idxG4PositronCut)))[index]; 
 
-  energyCut[0] =
+  fEnergyCut[0] =
          (*(theCoupleTable->GetEnergyCutsVector(idxG4GammaCut)))[index];
-  energyCut[1] =      
+  fEnergyCut[1] =      
          (*(theCoupleTable->GetEnergyCutsVector(idxG4ElectronCut)))[index];
-  energyCut[2] =      
+  fEnergyCut[2] =      
          (*(theCoupleTable->GetEnergyCutsVector(idxG4PositronCut)))[index];
 
 }
@@ -326,7 +326,7 @@ void RunAction::CriticalEnergy()
   //
   G4EmCalculator emCal;
     
-  const G4Material* material = detector->GetMaterial();
+  const G4Material* material = fDetector->GetMaterial();
   const G4double radl = material->GetRadlen();
   G4double ekin = 5*MeV;
   G4double deioni;

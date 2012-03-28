@@ -57,10 +57,10 @@ class RunAction : public G4UserRunAction
     void CriticalEnergy();
                                     
   private:
-    DetectorConstruction*   detector;
-    PrimaryGeneratorAction* primary;
-    G4double  rangeCut[3];
-    G4double energyCut[3];
+    DetectorConstruction*   fDetector;
+    PrimaryGeneratorAction* fPrimary;
+    G4double  fRangeCut[3];
+    G4double fEnergyCut[3];
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

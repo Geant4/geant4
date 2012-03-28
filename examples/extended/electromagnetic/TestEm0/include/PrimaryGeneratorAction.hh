@@ -51,11 +51,11 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     void SetDefaultKinematic();
     void GeneratePrimaries(G4Event*);
     
-    G4ParticleGun* GetParticleGun() {return particleGun;}
+    G4ParticleGun* GetParticleGun() {return fParticleGun;}
 
   private:
-    G4ParticleGun*             particleGun;
-    DetectorConstruction*      Detector;  
+    G4ParticleGun*             fParticleGun;
+    DetectorConstruction*      fDetector;  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
