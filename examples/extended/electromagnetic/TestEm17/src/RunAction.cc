@@ -42,10 +42,6 @@
 
 #include "Randomize.hh"
 
-#ifdef G4ANALYSIS_USE
- #include "AIDA/AIDA.h"
-#endif
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim,
@@ -65,7 +61,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   
   // save Rndm status
-  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+  G4RunManager::GetRunManager()->SetRandomNumberStore(false);
   CLHEP::HepRandom::showEngineStatus();
 
   ProcCounter = new ProcessesCount;
@@ -175,12 +171,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double RunAction::ComputeTheory(G4String process,
-#ifdef G4ANALYSIS_USE
-       G4int NbOfMu)
-#else
-       G4int /* NbOfMu */)
-#endif       
+G4double RunAction::ComputeTheory(G4String process, G4int NbOfMu)    
 {   
   G4Material* material = detector->GetMaterial();
   G4double ekin = primary->GetParticleGun()->GetParticleEnergy();
@@ -200,19 +191,18 @@ G4double RunAction::ComputeTheory(G4String process,
   
   G4int nbOfBins = 100;
   G4double binMin = -10., binMax = 0., binWidth = (binMax-binMin)/nbOfBins;
-    
-#ifdef G4ANALYSIS_USE
-
-  G4double length = detector->GetSize();
 
   //create histo for theoritical crossSections, with same bining as simulation
   //
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+    
   const G4String label[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
                     "10", "11", "12", "13", "14", "15", "16", "17", "18", "19"};
 		      
-  AIDA::IHistogram1D* histoMC = 0; AIDA::IHistogram1D* histoTh = 0;  
+  G4AnaH1* histoTh = 0;
+  ////G4AnaH1* histoMC = 0;     
   if (histoManager->HistoExist(id)) {
-    histoMC  = histoManager->GetHisto(id);  
+    ////histoMC  = analysisManager->GetH1(id);  
     nbOfBins = histoManager->GetNbins(id);
     binMin   = histoManager->GetVmin (id);
     binMax   = histoManager->GetVmax (id);
@@ -220,10 +210,10 @@ G4double RunAction::ComputeTheory(G4String process,
     
     G4String labelTh = label[MaxHisto + id];
     G4String titleTh = histoManager->GetTitle(id) + " (Th)";
-    histoTh = histoManager->GetHistogramFactory()
-          ->createHistogram1D(labelTh,titleTh,nbOfBins,binMin,binMax);    
+    G4int histThId   = analysisManager
+                       ->CreateH1(labelTh,titleTh,nbOfBins,binMin,binMax);
+    histoTh = analysisManager->GetH1(histThId);
   }
-#endif
   
   //compute and plot differential crossSection, as function of energy transfert.
   //compute and return integrated crossSection for a given process.
@@ -232,26 +222,23 @@ G4double RunAction::ComputeTheory(G4String process,
   // 
   G4double lgeps, etransf, sigmaE, dsigma;
   G4double sigmaTot = 0.;
-  const G4double ln10 = std::log(10.);
-    
+  const G4double ln10 = std::log(10.);  
+  G4double length = detector->GetSize();
+      
   for (G4int ibin=0; ibin<nbOfBins; ibin++) {
     lgeps = binMin + (ibin+0.5)*binWidth;
     etransf = ekin*std::pow(10.,lgeps);
     sigmaE = crossSections.CR_Macroscopic(process,material,ekin,etransf);
     dsigma = sigmaE*etransf*binWidth*ln10;
     if (etransf > cut) sigmaTot += dsigma;    
-#ifdef G4ANALYSIS_USE
     G4double NbProcess = NbOfMu*length*dsigma;
-    if (histoTh) histoTh->fill(lgeps,NbProcess);
-#endif     
+    if (histoTh) histoTh->fill(lgeps, NbProcess);
   }
   
-#ifdef G4ANALYSIS_USE 
   //compare simulation and theory
   //
-  if (histoMC && histoTh) histoManager->GetHistogramFactory()
-                     ->divide(label[2*MaxHisto+id], *histoMC, *histoTh);
-#endif
+  ////if (histoMC && histoTh) histoManager->GetHistogramFactory()
+  ////                   ->divide(label[2*MaxHisto+id], *histoMC, *histoTh);
    
   //return integrated crossSection
   //

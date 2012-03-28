@@ -23,7 +23,6 @@
 /gun/energy 10 TeV
 #
 /testem/histo/setFileName ioni
-/testem/histo/setFileType hbook
 /testem/histo/setHisto 1 100 -10. 0.
 #
 /testem/event/printModulo 1000
