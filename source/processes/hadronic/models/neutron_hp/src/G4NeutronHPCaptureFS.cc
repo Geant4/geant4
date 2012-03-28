@@ -109,7 +109,8 @@
         G4ParticleTable* theTable = G4ParticleTable::GetParticleTable();
         if( (*i)->GetMomentum().mag() > 10*MeV ) theOne->SetDefinition( theTable->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ)) );
 
-        if ( (*i)->GetExcitationEnergy() > 0 )
+        //if ( (*i)->GetExcitationEnergy() > 0 )
+        if ( (*i)->GetExcitationEnergy() > 1.0e-2*eV )
         {
            G4double ex = (*i)->GetExcitationEnergy();
            G4ReactionProduct* aPhoton = new G4ReactionProduct;
